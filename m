@@ -2,40 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 220065BD3AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 19:27:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BDEF5BD3AE
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 19:28:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231259AbiISR1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 13:27:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34622 "EHLO
+        id S231279AbiISR2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 13:28:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbiISR1k (ORCPT
+        with ESMTP id S229940AbiISR2f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 13:27:40 -0400
-Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C9DDB13DC1;
-        Mon, 19 Sep 2022 10:27:38 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="5.93,328,1654527600"; 
-   d="scan'208";a="133293979"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie5.idc.renesas.com with ESMTP; 20 Sep 2022 02:27:38 +0900
-Received: from localhost.localdomain (unknown [10.226.92.28])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 828EA40041A0;
-        Tue, 20 Sep 2022 02:27:35 +0900 (JST)
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     conor.dooley@microchip.com
-Cc:     brgl@bgdev.pl, dmitry.torokhov@gmail.com, linus.walleij@linaro.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        michael@walle.cc, Biju Das <biju.das.jz@bp.renesas.com>
-Subject: Re: [PATCH] gpiolib: fix OOB access in quirk callbacks
-Date:   Mon, 19 Sep 2022 18:27:32 +0100
-Message-Id: <1041bfe5-6515-feea-36d6-47f8f28938b6@samsung.com> (raw)
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220916110118.446132-1-michael@walle.cc>
-References: <960a9d86-7814-3b2f-d5a0-9bc2b316d12b@microchip.com>
+        Mon, 19 Sep 2022 13:28:35 -0400
+Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16EB3222B0;
+        Mon, 19 Sep 2022 10:28:34 -0700 (PDT)
+Message-ID: <783eb0b0-adce-ba31-0b2a-dbc93ea86b23@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1663608512;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mzsyDUbKLp8t5bBv48E8iUXBg//fLeG88S+gA9efcu4=;
+        b=sM0T4N5jV0UHdyNcbNBPtxcn7iB2dRvR+bcUvCS7BmGnmZzYJysFPyXnanGP/yN7VwZP3u
+        KsaVdTtlb46Z+cdinMBhy+b0sZOkYLVRMIfAAbxXnWEevI7Dy9gk4Fn8qPEpVPGUfTmYJh
+        a8imSdrAu2/JeGc0HpLdLyLpGIZTcMc=
+Date:   Mon, 19 Sep 2022 10:28:25 -0700
 MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next v3 1/2] bpf, cgroup: Don't populate
+ prog_attach_flags array when effective query
+Content-Language: en-US
+To:     Pu Lehui <pulehui@huaweicloud.com>,
+        Stanislav Fomichev <sdf@google.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Pu Lehui <pulehui@huawei.com>
+References: <20220914161742.3180731-1-pulehui@huaweicloud.com>
+ <20220914161742.3180731-2-pulehui@huaweicloud.com>
+ <9b66564e-2582-03b2-56f1-8037f8aca886@linux.dev>
+ <037a6a32-5143-ddad-4a43-bd815280a0ef@huaweicloud.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <037a6a32-5143-ddad-4a43-bd815280a0ef@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -43,79 +62,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16.09.2022 13:01, Michael Walle wrote:
-> Commit a2b5e207cade ("gpiolib: rework quirk handling in of_find_gpio()")
-> introduced an array of quirk functions which get iterated over. But a
-> sentinal value is missing. Add it.
->
-> Fixes: a2b5e207cade ("gpiolib: rework quirk handling in of_find_gpio()")
-> Signed-off-by: Michael Walle <michael@walle.cc>
+On 9/19/22 6:32 AM, Pu Lehui wrote:
+> 
+> 
+> On 2022/9/17 8:03, Martin KaFai Lau wrote:
+>> On 9/14/22 9:17 AM, Pu Lehui wrote:
+>>> From: Pu Lehui <pulehui@huawei.com>
+>>>
+>>> Attach flags is only valid for attached progs of this layer cgroup,
+>>> but not for effective progs. For querying with EFFECTIVE flags,
+>>> exporting attach flags does not make sense. so we don't need to
+>>> populate prog_attach_flags array when effective query.
+>>
+>> prog_attach_flags has been added to 6.0 which is in rc5.  It is still 
+>> doable (and cleaner) to reject prog_attach_flags when it is an 
+>> effective_query.  This should be done regardless of 'type == 
+>> BPF_LSM_CGROUP' or not.  Something like:
+>>
+>> if (effective_query && prog_attach_flags)
+>>      return -EINVAL;
+>>
+>> Otherwise, the whole prog_attach_flags needs to be set to 0 during 
+>> effective_query.  Please target the change to the bpf tree instead of 
+>> bpf-next such that this uapi bit can be fixed before 6.0.
+>>
+> 
+> Okay, will handle in next version.
 
-This fixes the boot issue on RZ/G2L board since next-20220916.
+Thanks.  It will also be useful to comment the uapi's bpf.h and mention
+prog_attach_flags should not be set during effective_query.
 
-Tested-by: Biju Das <biju.das.jz@bp.renesas.com>
+> 
+>> Also, the effective_query issue is not limited to the 
+>> prog_attach_flags? For the older uattr->query.attach_flags, it should 
+>> be set to 0 also when it is an effective_query, right?
+> 
+> For output uattr->query.attach_flags, we certainly don't need to copy it 
+> to userspace when effective query. Since we do not utilize 
+> uattr->query.attach_flags in the cgroup query function, should we need 
+> to take it as input and reject when it is non-zero in effective query? 
+> Something like:
+> if (effective_query && (prog_attach_flags || attr->query.attach_flags))
 
-> ---
-> FWIW here is the kernel oops backtrace:
-> [    4.108706] Internal error: SP/PC alignment exception: 8a000000 [#1] SMP
-> [    4.115470] Modules linked in:
-> [    4.118549] CPU: 1 PID: 1 Comm: swapper/0 Not tainted 6.0.0-rc5-next-20220916-00091-g6cae0fcbd5e7 #1821
-> [    4.128033] Hardware name: Kontron KBox A-230-LS (DT)
-> [    4.133127] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [    4.140154] pc : 0x61722d6f697067
-> [    4.143495] lr : of_find_gpio+0x138/0x174
-> [    4.147546] sp : ffff80000a24b680
-> [    4.150884] x29: ffff80000a24b680 x28: 0000000000000000 x27: ffff80000996044c
-> [    4.158090] x26: 0000000000000001 x25: ffff80000970f588 x24: ffff800009297968
-> [    4.165295] x23: ffff80000a24b770 x22: 0000000000000000 x21: ffff0020009a7010
-> [    4.172500] x20: ffff8000097752f8 x19: fffffffffffffffe x18: 0000000000000000
-> [    4.179703] x17: ffff8000085fb9d0 x16: ffff8000085fb264 x15: ffff8000085f96ac
-> [    4.186907] x14: 0000000000000000 x13: ffff80000884b3e8 x12: ffff80000884ab04
-> [    4.194111] x11: ffff80000884aa54 x10: 0000000000025080 x9 : ffff8000085fce78
-> [    4.201316] x8 : 0101010101010101 x7 : ffff800009750268 x6 : 051f521459491b57
-> [    4.208520] x5 : 571b495914521f05 x4 : 6e61722d6f697067 x3 : ffff80000a24b6d4
-> [    4.215724] x2 : 0000000000000000 x1 : ffff8000097752f8 x0 : ffff00207f7e4b20
-> [    4.222928] Call trace:
-> [    4.225389]  0x61722d6f697067
-> [    4.228377]  gpiod_get_index+0x12c/0x440
-> [    4.232334]  devm_gpiod_get_index+0x34/0xf0
-> [    4.236553]  devm_gpiod_get_optional+0x20/0x40
-> [    4.241036]  uart_get_rs485_mode+0x104/0x180
-> [    4.245345]  serial8250_register_8250_port+0x198/0x484
-> [    4.250532]  of_platform_serial_probe+0x358/0x640
-> [    4.255279]  platform_probe+0x70/0xe0
-> [    4.258973]  really_probe+0xc4/0x2e4
-> [    4.262577]  __driver_probe_device+0x80/0xec
-> [    4.266882]  driver_probe_device+0x44/0x150
-> [    4.271100]  __driver_attach+0x88/0x1a0
-> [    4.274967]  bus_for_each_dev+0x78/0xdc
-> [    4.278833]  driver_attach+0x2c/0x40
-> [    4.282437]  bus_add_driver+0x15c/0x210
-> [    4.286303]  driver_register+0x80/0x13c
-> [    4.290170]  __platform_driver_register+0x30/0x3c
-> [    4.294915]  of_platform_serial_driver_init+0x24/0x30
-> [    4.300013]  do_one_initcall+0x4c/0x240
-> [    4.303882]  kernel_init_freeable+0x29c/0x30c
-> [    4.308276]  kernel_init+0x2c/0x140
-> [    4.311793]  ret_from_fork+0x10/0x20
-> [    4.315401] Code: bad PC value
->
->   drivers/gpio/gpiolib-of.c | 1 +
->   1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
-> index 95be5f0d2623..0e4e1291604d 100644
-> --- a/drivers/gpio/gpiolib-of.c
-> +++ b/drivers/gpio/gpiolib-of.c
-> @@ -498,6 +498,7 @@ static const of_find_gpio_quirk of_find_gpio_quirks[] = {
->   	of_find_regulator_gpio,
->   	of_find_arizona_gpio,
->   	of_find_usb_gpio,
-> +	NULL
->   };
->   
->   struct gpio_desc *of_find_gpio(struct device *dev, const char *con_id,
+No.  I don't think the zero attr->query.attach_flags can be enforced 
+now.  It is used as an output value only and its input value has never 
+been checked.  Although the bpftool always sets it to 0 before the 
+query, checking zero now does not gain much while there is a slight 
+chance of breaking other users.
 
-Best regards
--- 
-Biju
+Only need to set/output uattr->query.attach_flags as 0 during 
+effective_query.
+
+> 
+> For both output and input scenarios, we are faced with the problem that 
+> there is a ambiguity in attach_flags being 0. When we do not copy to the 
+> userspace, libbpf will set it to 0 by default, and 0 can mean NONE flag 
+> attach, or no attach prog. The same is true for input scenarios.
+> 
+> So should we need to define NONE attach flag and redefine the others? 
+> Such as follow:
+> #define BPF_F_ALLOW_NONE        (1U << 0)
+
+I would not change the uapi for this.  0 implicitly means no flags or 
+none.  Regardless, this change does not belong to the bpf tree where 
+this fix will be landing.
+
+> #define BPF_F_ALLOW_OVERRIDE    (1U << 1)
+> #define BPF_F_ALLOW_MULTI       (1U << 2)
+> #define BPF_F_REPLACE           (1U << 3)
+> 
+> And then attach flags being 0 certainly means no attach any prog.
+> 
+
