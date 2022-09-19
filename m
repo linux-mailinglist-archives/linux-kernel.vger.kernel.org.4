@@ -2,234 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 746D25BD7B8
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 00:56:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E4985BD7C2
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 01:02:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230003AbiISW4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 18:56:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48794 "EHLO
+        id S229766AbiISXCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 19:02:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbiISW41 (ORCPT
+        with ESMTP id S229548AbiISXCB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 18:56:27 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A70445F54
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 15:56:23 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id sb3so2051735ejb.9
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 15:56:23 -0700 (PDT)
+        Mon, 19 Sep 2022 19:02:01 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 996CE43E50
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 16:01:59 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id c11so609716qtw.8
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 16:01:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lixom-net.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=5S9VBftUHA8Ab+AfT1DhnDF/jWnQCvfphMhw9w+YVhc=;
-        b=pT3AVw/XaQKfMJa28M67X6CWfwalI0Uvo6unsRjOTD2Z+d/hMLJagRy91+fB9mWt/H
-         RvjlLsn+3FsNx74QkbruJHKtTQ+30w35PYmoN36zBZvRhmzaaut2t/ejO0VHEYQ77EDj
-         OXDYFEqkBBbGSPaGws21i+7eNFUtsVpC10Ocfp53V0C+AqpxtnC2gWLf09NvoZb8DNZe
-         nefkWz5Q2xpTnqPE/9sJZpmszdShkKibcjHKjjaL4N2+oQKOJucjE0sZV5m8l2gxJQLL
-         eUTG5Bs9Z5UoBJW4L2zlLkhjGsOc0HVn5guvp/vsJvOqjFnEQJHDOGaHy7aMupntX7WF
-         7vTQ==
+        d=google.com; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date;
+        bh=xixo44lTcERHPiUV64xTDRqasHw9DlQyVVg8mpJU9es=;
+        b=AgcVBHh0Hw9LMN3EKAyNefT6Y8I8kX0c8Hih+eW5gYpAM+bvvfQMe4A3kV5CH89Fzq
+         0gQQDRzPET7tFaAMhsDE9ZzQA5NhHbKpj7bed/yRGTBX0hETdK9Gf9pHdAZknnFA9yRj
+         SHnp0B0Us1AUQUod4cBI4+D316FWpO/dKexSTqaQPCZiiEpYhLekHLbITzKvDzNJl4Bx
+         lo1nvff+zjopDK3RHPeWBq/xC+Q/nZIt05shBR2esadkg7leu8eUMq695diDosIWpat5
+         jHEP4W3/hXbE0dfpXOGP/EYHzY8r18TZS+El7G3hVR3IxIxIjOC8B0XkVV9Qvt/Gwyy0
+         52DQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=5S9VBftUHA8Ab+AfT1DhnDF/jWnQCvfphMhw9w+YVhc=;
-        b=mMiakDLwNtZ8kRm1Ma1n6SyV5Qie1kcMVN62ReIitWmXRRo7PWwMX3OW4DMmk4GUJn
-         XdNK5q7Vvd4S5DGv1jvyMoHZy7DzcgCyhthjDXWFZjMf8t4uy5K4pykBs+z/1KOa7nL/
-         GcfHUR7X1U739sgQJfiP3xbiFaJtg/gHAR78HBCH71Izkix4W/4ycsHhj25HYhQ6qycK
-         2aIAdkfj5pZY1o/H/8014n3zJOlMl6qGp84PbvEhKaWsukxNI4NcucGDJHSlZx0KVrbK
-         DeFwZR/tdsxDwzO+VV8+2Z4oQFKQDWVrLtIlRKLVc3VL+UsWUYDIKm/jZato401Io+wR
-         5TNw==
-X-Gm-Message-State: ACrzQf1xjeZsYqgjQXM2SJi+uSmm4BtOTFWLoZmU8slMnvGpSZonZZ9A
-        CpHwWKwygO9USLxf9Ughx3RJ+WTXDl2Qy2XhXs1iWA==
-X-Google-Smtp-Source: AMsMyM5kdxcAfNB78ChbidtnpNAMschNYMIGpvHRr7zgKTZ4CCEGx6bhJgHHTNr9SAgKH+LAmfDCBtvH2R9hQBackB8=
-X-Received: by 2002:a17:906:ef8c:b0:77c:8f77:330 with SMTP id
- ze12-20020a170906ef8c00b0077c8f770330mr14503775ejb.604.1663628181793; Mon, 19
- Sep 2022 15:56:21 -0700 (PDT)
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date;
+        bh=xixo44lTcERHPiUV64xTDRqasHw9DlQyVVg8mpJU9es=;
+        b=DAkHhUpIS8nmGLRk0hlg21ARVUCQUaDP1nht4QUiKyA01//pneh42lf6JfCPZ9bcOd
+         qMu7fF2EhMnOpqfcGHSvNUOKSw3wE7TV6YkOF6k9ipprOuC74ae7k36Z/FnY8r/mc5ov
+         bP8LcvoY3ptTLUTkI8mBjPn18DF8RtuoMZpcrQEQGfL6qj3rTB12wcjzKslJ/HWa4+ch
+         IgnF/ItWnWBicAqKW3n5YW5kn7Ml/igJfU9XvYtofRuq4m6L07cdq+oOovWy6EnYtCk1
+         WtoXt73g2ytGk7pF7ugGwBLi7a4j9uOSClX3Qr7q1wZK6EipsSJSE9c6LvJCiUTKmTmI
+         yv9A==
+X-Gm-Message-State: ACrzQf3yU0RX2xfbz3KXNrXY7VFIzWGSHc0G1sOfcqaR6cGK4XQ8hF8d
+        /T8xWY9UJSRgxsuLSR6BjIBX2g==
+X-Google-Smtp-Source: AMsMyM4ouUmlUEH1L7eYlmBEN7b4vAmMYcNn5lPDnA9AHYvbCCciVxwIStA540FoBADTcmr54usBmg==
+X-Received: by 2002:a05:622a:1015:b0:35c:e915:3b61 with SMTP id d21-20020a05622a101500b0035ce9153b61mr6086559qte.572.1663628518654;
+        Mon, 19 Sep 2022 16:01:58 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id cc19-20020a05622a411300b0031e9ab4e4cesm8099175qtb.26.2022.09.19.16.01.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Sep 2022 16:01:57 -0700 (PDT)
+Date:   Mon, 19 Sep 2022 16:01:39 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Keith Busch <kbusch@kernel.org>
+cc:     Hugh Dickins <hughd@google.com>, Jens Axboe <axboe@kernel.dk>,
+        Yu Kuai <yukuai1@huaweicloud.com>, Jan Kara <jack@suse.cz>,
+        Liu Song <liusong@linux.alibaba.com>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH next] sbitmap: fix lockup while swapping
+In-Reply-To: <YyjdiKC0YYUkI+AI@kbusch-mbp>
+Message-ID: <f2d130d2-f3af-d09d-6fd7-10da28d26ba9@google.com>
+References: <aef9de29-e9f5-259a-f8be-12d1b734e72@google.com> <YyjdiKC0YYUkI+AI@kbusch-mbp>
 MIME-Version: 1.0
-References: <20220701012647.2007122-1-saravanak@google.com>
- <YwS5J3effuHQJRZ5@kroah.com> <CAOesGMivJ5Q-jdeGKw32yhjmNiYctHjpEAnoMMRghYqWD2m2tw@mail.gmail.com>
- <YygsEtxKz8dsEstc@kroah.com>
-In-Reply-To: <YygsEtxKz8dsEstc@kroah.com>
-From:   Olof Johansson <olof@lixom.net>
-Date:   Mon, 19 Sep 2022 15:56:09 -0700
-Message-ID: <CAOesGMh5GHCONTQ9M1Ro7zW-hkL_1F7Xt=xRV0vYSfPY=7LYkQ@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] Fix console probe delay when stdout-path isn't set
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Saravana Kannan <saravanak@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Al Cooper <alcooperx@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Tobias Klauser <tklauser@distanz.ch>,
-        Russell King <linux@armlinux.org.uk>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Richard Genoud <richard.genoud@gmail.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Alexander Shiyan <shc_work@mail.ru>,
-        Baruch Siach <baruch@tkos.co.il>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Karol Gugala <kgugala@antmicro.com>,
-        Mateusz Holenko <mholenko@antmicro.com>,
-        Gabriel Somlo <gsomlo@gmail.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Taichi Sugaya <sugaya.taichi@socionext.com>,
-        Takao Orito <orito.takao@socionext.com>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Pali Rohar <pali@kernel.org>,
-        Andreas Farber <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hammer Hsieh <hammerh0314@gmail.com>,
-        Peter Korsgaard <jacmet@sunsite.dk>,
-        Timur Tabi <timur@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Rob Herring <robh@kernel.org>,
-        sascha hauer <sha@pengutronix.de>, peng fan <peng.fan@nxp.com>,
-        kevin hilman <khilman@kernel.org>,
-        ulf hansson <ulf.hansson@linaro.org>,
-        len brown <len.brown@intel.com>, pavel machek <pavel@ucw.cz>,
-        joerg roedel <joro@8bytes.org>, will deacon <will@kernel.org>,
-        andrew lunn <andrew@lunn.ch>,
-        heiner kallweit <hkallweit1@gmail.com>,
-        eric dumazet <edumazet@google.com>,
-        jakub kicinski <kuba@kernel.org>,
-        paolo abeni <pabeni@redhat.com>,
-        linus walleij <linus.walleij@linaro.org>,
-        hideaki yoshifuji <yoshfuji@linux-ipv6.org>,
-        david ahern <dsahern@kernel.org>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org,
-        linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-actions@lists.infradead.org,
-        linux-unisoc@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        sparclinux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 1:44 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Sun, Sep 18, 2022 at 08:44:27PM -0700, Olof Johansson wrote:
-> > On Tue, Aug 23, 2022 at 8:37 AM Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > On Thu, Jun 30, 2022 at 06:26:38PM -0700, Saravana Kannan wrote:
-> > > > These patches are on top of driver-core-next.
-> > > >
-> > > > Even if stdout-path isn't set in DT, this patch should take console
-> > > > probe times back to how they were before the deferred_probe_timeout
-> > > > clean up series[1].
-> > >
-> > > Now dropped from my queue due to lack of a response to other reviewer's
-> > > questions.
-> >
-> > What happened to this patch? I have a 10 second timeout on console
-> > probe on my SiFive Unmatched, and I don't see this flag being set for
-> > the serial driver. In fact, I don't see it anywhere in-tree. I can't
-> > seem to locate another patchset from Saravana around this though, so
-> > I'm not sure where to look for a missing piece for the sifive serial
-> > driver.
-> >
-> > This is the second boot time regression (this one not fatal, unlike
-> > the Layerscape PCIe one) from the fw_devlink patchset.
-> >
-> > Greg, can you revert the whole set for 6.0, please? It's obviously
-> > nowhere near tested enough to go in and I expect we'll see a bunch of
-> > -stable fixups due to this if we let it remain in.
->
-> What exactly is "the whole set"?  I have the default option fix queued
-> up and will send that to Linus later this week (am traveling back from
-> Plumbers still), but have not heard any problems about any other issues
-> at all other than your report.
+On Mon, 19 Sep 2022, Keith Busch wrote:
+> On Sun, Sep 18, 2022 at 02:10:51PM -0700, Hugh Dickins wrote:
+> > I have almost no grasp of all the possible sbitmap races, and their
+> > consequences: but using the same !waitqueue_active() check as used
+> > elsewhere, fixes the lockup and shows no adverse consequence for me.
+> 
+>  
+> > Fixes: 4acb83417cad ("sbitmap: fix batched wait_cnt accounting")
+> > Signed-off-by: Hugh Dickins <hughd@google.com>
+> > ---
+> > 
+> >  lib/sbitmap.c |    2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > --- a/lib/sbitmap.c
+> > +++ b/lib/sbitmap.c
+> > @@ -620,7 +620,7 @@ static bool __sbq_wake_up(struct sbitmap
+> >  		 * function again to wakeup a new batch on a different 'ws'.
+> >  		 */
+> >  		if (cur == 0)
+> > -			return true;
+> > +			return !waitqueue_active(&ws->wait);
+> 
+> If it's 0, that is supposed to mean another thread is about to make it not zero
+> as well as increment the wakestate index. That should be happening after patch
+> 48c033314f37 was included, at least.
 
-I stand corrected in this case, the issue on the Hifive Unmatched was
-a regression due to a PWM clock change -- I just sent a patch for that
-(serial driver fix).
+I believe that the thread about to make wait_cnt not zero (and increment the
+wakestate index) is precisely this interrupted thread: the backtrace shows
+that it had just done its wakeups, so has not yet reached making wait_cnt
+not zero; and I suppose that either its wakeups did not empty the waitqueue
+completely, or another waiter got added as soon as it dropped the spinlock.
 
-So it seems like as long as the fw_devlink.strict=1 patch is reverted,
-things are back to a working state here.
+> 
+> Prior to 4acb83417cad, the code would also return 'true' if the count was
+> already zero, and this batched code wasn't supposed to behave any different in
+> that condition.
 
-I still struggle with how the fw_devlink patchset is expected to work
-though, since DT is expected to describe the hardware configuration,
-and it has no knowledge of whether there are drivers that will be
-bound to any referenced supplier devnodes. It's not going to work well
-to assume that they will always be bound, and to add 10 second
-timeouts for those cases isn't a good solution. Seems like the number
-of special cases will keep adding up.
+In principle yes, but in practice no.  Prior to 4acb83417cad, the swapping
+load would run okayish for a few minutes, before freezing up mysteriously
+(presumably due to missed wakeups).  The "ish" in "okayish" because the
+system time was abnormally high, and occasionally there was an odd message
+from systemd about killing its journal or something - 4acb83417cad saved
+me from having to investigate that further.
 
-The whole design feels like it's falling short, and it's been patched
-here and there to deal with the shortcomings, instead of revisiting
-the full solution. (The patches are the console one, and another to
-deal with nfsroot boots).
+Prior to 4acb83417cad, it never locked up looping on wait_cnt < 0;
+after 4acb83417cad, it would lock up on wait_cnt 0 in a few seconds.
 
-As long as it doesn't keep regressing others, I suppose the work to
-redesign it can happen in-tree, but it's not usually how we try to do
-it for new functionality. Especially since it's still being iterated
-on (with active patch sets posted around -rc1 for improvements).
+But in writing that, and remembering the abnormal systime, I begin to
+suspect that it might have often been in a tight loop on wait_cnt < 0,
+but the batch accounting sufficiently wrong that it always got rescued
+by an unrelated wakeup (shifting wakestate index), before any lockup
+ever got observed and reported.  Or something like that.
 
-Oh, and one more thing for the future -- the main patch that changes
-behavior due to dependency tracking is 2f8c3ae8288e, named "driver
-core: Add wait_for_init_devices_probe helper function". It's easy to
-overlook this when looking at a list of patches since it's said to
-just introduce a helper.
+(And I'm trying to avoid making a fool of myself with the arithmetic:
+how quickly would wait_cnt 0 have got decremented to positive before?)
 
+I won't mind Jens deleting that "Fixes: 4acb83417cad" if it's unfair.
 
--Olof
+> 
+> Anyway, I don't think the waitqueue_active criteria of the current waitstate is
+> correct either. The next waitstate may have waiters too, so we still may need
+> to account for this batch's count in order to wake them.
+
+I cannot usefully comment on that, it's all rather too subtle for me.
+
+But I did wonder if each of those !waitqueue_active()s would be better
+replaced just by "false"s: we only get that far into __sbq_wake_up() if
+waitqueue_active(), so the !waitqueue_active() case reflects a race:
+a possible race, yes, but a race that wants precise accounting at a
+few imprecise locations?
+
+Hugh
