@@ -2,64 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A3A45BC272
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 07:12:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C2A75BC269
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 07:08:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbiISFMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 01:12:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36358 "EHLO
+        id S229746AbiISFHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 01:07:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbiISFMn (ORCPT
+        with ESMTP id S229571AbiISFHo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 01:12:43 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2036E1ADAE;
-        Sun, 18 Sep 2022 22:12:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663564363; x=1695100363;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=TK+uOfCqtjxOwrtXY/qUnGfyOWvcOwn1Cd85+GtTggI=;
-  b=Fg89/ou5DGBv/JfV2G8kCuI4fb9uQDzqHl58cSi1VmboqPel1FPtRfB4
-   a5MXT/FIAlCRhKyEqWpnMLvIpjhKgi1S+b3nWzcv1Oo+tGxA5GMWe8dry
-   4L6YIrnmErFTQbS7N7ZYb+JIXhE3Rn22Kf+dC4RhM8fLB8ZnfY88WXeyk
-   7nKlwO1tYEzQ4iP3RlwWJQhqp4l0L3XYI/5iKifV0pYxN9rjbHcqJKwNr
-   Hs+oLOj98PNKf0ZIN/seqm8nzxhr8RHWqRwjxafVHgtkCepj1BmrYTxvA
-   eiLVErNumD3R2GgU4dwQz8A0wQuJiOwsjhtuwM6rZGGSh5vttT08NE1Nd
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10474"; a="299298753"
-X-IronPort-AV: E=Sophos;i="5.93,325,1654585200"; 
-   d="scan'208";a="299298753"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2022 22:12:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,325,1654585200"; 
-   d="scan'208";a="595937514"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orsmga006.jf.intel.com with ESMTP; 18 Sep 2022 22:12:39 -0700
-Date:   Mon, 19 Sep 2022 13:02:59 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Tom Rix <trix@redhat.com>
-Cc:     Russ Weight <russell.h.weight@intel.com>, mdf@kernel.org,
-        hao.wu@intel.com, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lgoncalv@redhat.com,
-        marpagan@redhat.com, matthew.gerlach@linux.intel.com,
-        basheer.ahmed.muddebihal@intel.com, tianfei.zhang@intel.com,
-        kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] fpga: m10bmc-sec: Fix possible memory leak of
- flash_buf
-Message-ID: <Yyf4AwlHMKuna/pY@yilunxu-OptiPlex-7050>
-References: <20220916235205.106873-1-russell.h.weight@intel.com>
- <f1e92634-8f96-6a3b-52e9-e83fa879ca39@redhat.com>
+        Mon, 19 Sep 2022 01:07:44 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75EEE15A08;
+        Sun, 18 Sep 2022 22:07:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=h1YHy6hTGkkSVKDBgNw+1SM6XfvubP16+GdVJs2Vlis=; b=tIiU0zPoHPIAWHtkysP4lX6f+N
+        SAHFJhRyDYZRhBkM9w3UgCJsMtan8c5LULuiDjIwVF25BggwjLvdFq+fcUemtgE5OIg/c5bUfGOOt
+        b+MuwaryZjKXKEiXrD2j5G+bgiIDKIICcHypb8R6G2C5TpgYyRCZdUHW4x7/qle74anrJfd1SWDCe
+        YLrbU062DcbGqqdXWOojA7CvLgkVeOC6/ng3SRyNAzQ68mWRFxZBahVbRkq8igzJFRRAPaTrSVyot
+        m6oEtf3Ck9uaZJMRqJW52V1CE+oPhyvGDg9wRdBOXGgmfBSeO6e4OQKWHr4u/9ODZqhKFx8vZfaMt
+        FI9gIcgQ==;
+Received: from [2601:1c2:d80:3110::a2e7]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oa90H-007wla-TG; Mon, 19 Sep 2022 05:07:33 +0000
+Message-ID: <1d5125da-f855-2828-1184-e855c02434d7@infradead.org>
+Date:   Sun, 18 Sep 2022 22:07:32 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f1e92634-8f96-6a3b-52e9-e83fa879ca39@redhat.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v4] liquidio: CN23XX: delete repeated words, add missing
+ words and fix typo in comment
+Content-Language: en-US
+To:     Ruffalo Lavoisier <ruffalolavoisier@gmail.com>,
+        Derek Chickles <dchickles@marvell.com>,
+        Satanand Burla <sburla@marvell.com>,
+        Felix Manlunas <fmanlunas@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220919014813.32709-1-RuffaloLavoisier@gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220919014813.32709-1-RuffaloLavoisier@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,50 +59,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-16 at 17:20:43 -0700, Tom Rix wrote:
+Hi,
+
+On 9/18/22 18:48, Ruffalo Lavoisier wrote:
+> - Delete the repeated word 'to' in the comment.
 > 
-> On 9/16/22 4:52 PM, Russ Weight wrote:
-> > There is an error check following the allocation of flash_buf that returns
-> > without freeing flash_buf. It makes more sense to do the error check
-> > before the allocation and the reordering eliminates the memory leak.
-> > 
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> > Fixes: 154afa5c31cd ("fpga: m10bmc-sec: expose max10 flash update count")
-> > Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-> Reviewed-by: Tom Rix <trix@redhat.com>
-
-Acked-by: Xu Yilun <yilun.xu@intel.com>
-
-Applied to for-6.0
-
-> > Cc: <stable@vger.kernel.org>
-> > ---
-> >   drivers/fpga/intel-m10-bmc-sec-update.c | 8 ++++----
-> >   1 file changed, 4 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/drivers/fpga/intel-m10-bmc-sec-update.c b/drivers/fpga/intel-m10-bmc-sec-update.c
-> > index 526c8cdd1474..79d48852825e 100644
-> > --- a/drivers/fpga/intel-m10-bmc-sec-update.c
-> > +++ b/drivers/fpga/intel-m10-bmc-sec-update.c
-> > @@ -148,10 +148,6 @@ static ssize_t flash_count_show(struct device *dev,
-> >   	stride = regmap_get_reg_stride(sec->m10bmc->regmap);
-> >   	num_bits = FLASH_COUNT_SIZE * 8;
-> > -	flash_buf = kmalloc(FLASH_COUNT_SIZE, GFP_KERNEL);
-> > -	if (!flash_buf)
-> > -		return -ENOMEM;
-> > -
-> >   	if (FLASH_COUNT_SIZE % stride) {
-> >   		dev_err(sec->dev,
-> >   			"FLASH_COUNT_SIZE (0x%x) not aligned to stride (0x%x)\n",
-> > @@ -160,6 +156,10 @@ static ssize_t flash_count_show(struct device *dev,
-> >   		return -EINVAL;
-> >   	}
-> > +	flash_buf = kmalloc(FLASH_COUNT_SIZE, GFP_KERNEL);
-> > +	if (!flash_buf)
-> > +		return -ENOMEM;
-> > +
-> >   	ret = regmap_bulk_read(sec->m10bmc->regmap, STAGING_FLASH_COUNT,
-> >   			       flash_buf, FLASH_COUNT_SIZE / stride);
-> >   	if (ret) {
+> - Add the missing 'use' word within the sentence.
 > 
+> - Correct spelling on 'malformation'.
+> 
+> Signed-off-by: Ruffalo Lavoisier <RuffaloLavoisier@gmail.com>
+> ---
+> I'm sorry, can you explain exactly which part and how to fix it? I didn't quite understand. <this need> How can I fix this part?
+
+All that you need to do is edit the 2 lines that contain "this need" to be "this needs".
+
+> 
+>  drivers/net/ethernet/cavium/liquidio/cn23xx_pf_regs.h | 2 +-
+>  drivers/net/ethernet/cavium/liquidio/cn23xx_vf_regs.h | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/cavium/liquidio/cn23xx_pf_regs.h b/drivers/net/ethernet/cavium/liquidio/cn23xx_pf_regs.h
+> index 3f1c189646f4..244e27ea079c 100644
+> --- a/drivers/net/ethernet/cavium/liquidio/cn23xx_pf_regs.h
+> +++ b/drivers/net/ethernet/cavium/liquidio/cn23xx_pf_regs.h
+> @@ -88,7 +88,7 @@
+>  #define    CN23XX_SLI_PKT_IN_JABBER                0x29170
+>  /* The input jabber is used to determine the TSO max size.
+>   * Due to H/W limitation, this need to be reduced to 60000
+
+    * Due to H/W limitation, this needs to be reduced to 60000
+
+> - * in order to to H/W TSO and avoid the WQE malfarmation
+> + * in order to use H/W TSO and avoid the WQE malformation
+>   * PKO_BUG_24989_WQE_LEN
+>   */
+>  #define    CN23XX_DEFAULT_INPUT_JABBER             0xEA60 /*60000*/
+> diff --git a/drivers/net/ethernet/cavium/liquidio/cn23xx_vf_regs.h b/drivers/net/ethernet/cavium/liquidio/cn23xx_vf_regs.h
+> index d33dd8f4226f..e85449249670 100644
+> --- a/drivers/net/ethernet/cavium/liquidio/cn23xx_vf_regs.h
+> +++ b/drivers/net/ethernet/cavium/liquidio/cn23xx_vf_regs.h
+> @@ -37,7 +37,7 @@
+>  
+>  /* The input jabber is used to determine the TSO max size.
+>   * Due to H/W limitation, this need to be reduced to 60000
+
+    * Due to H/W limitation, this needs to be reduced to 60000
+
+> - * in order to to H/W TSO and avoid the WQE malfarmation
+> + * in order to use H/W TSO and avoid the WQE malformation
+>   * PKO_BUG_24989_WQE_LEN
+>   */
+>  #define    CN23XX_DEFAULT_INPUT_JABBER             0xEA60 /*60000*/
+
+-- 
+~Randy
