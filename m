@@ -2,103 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D34E25BCA0E
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 12:55:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AAC05BCA19
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 12:57:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbiISKzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 06:55:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47844 "EHLO
+        id S229812AbiISK5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 06:57:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229839AbiISKyP (ORCPT
+        with ESMTP id S229606AbiISK4z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 06:54:15 -0400
-Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5247127B34
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 03:50:16 -0700 (PDT)
-Received: by mail-ed1-x543.google.com with SMTP id b35so40701466edf.0
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 03:50:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date;
-        bh=0VQuOBOAInh/oCFmAgnHFTRx83AeymR8zc8R+S3NTFU=;
-        b=bhrz7rkefUtPJx/8fYirhYCJBGMwYebU341OgUhc60sQ5UpLJ7XtJYM888lwDnURzH
-         B1M9DK+VZNhXDRxMyuSH6Hrjn4J24BrRSWLt7pdh+vW/xMEHX3gs5Bb9P5vH6+YiZGLR
-         guuaF5QIz2yFu7pLUzleRIcaajWmGa9gnGg6QS0hKzlOAEtJqFyGRAPaR5pYWKz2mXZf
-         2Bk88D5VwHuqtlEb//KNJcMeUcHvhzMzsKgpAhc47Pf15WMm1ZOpULDQRnDi4PJI8485
-         gcw36wrzSkNjmYMycfjLrJvXW4LX/9kKcW+cvDQydrxayXbGrxNyjTHdhkZeJtlGTnM+
-         zvyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=0VQuOBOAInh/oCFmAgnHFTRx83AeymR8zc8R+S3NTFU=;
-        b=omfrSSxEEwR8YRTaU7G7BTphxoWa0Sat5nZGJbvJPKLAzagSFG53F8rCq5EiGZX5F4
-         ZqErzeDbOGICnndhgHxEBkKnba2hkestnVVprYwK0Venv7PTtbt3wz+Vf9CjgrsTJqWo
-         Utk8VyG8BDQ5iSnGkC6v8Z0G+XbosFxzD00hgIwOAjG1993MhP6Xd6O01Ow3jYuapimJ
-         1gxGwKngqVhXNpYcLW3/S2BLhMy7jTfRNhbl55DD7aaLU6q4P7v43iRMlKPTLWnYHSCS
-         +g15P8yhyGRyYVWloVH99/chcBpceYckBTbxvjS0zCbIHJeNlXDK9+KNC9X9nIHZFkSc
-         llIQ==
-X-Gm-Message-State: ACrzQf2racBAtF9eOS5I0KD1tgX3DKI9Wlo5GhuKlcByZLqmylUmsmYV
-        0GziigWPxt4vj48kgFE6K4q1d9HMRrZiR9FEwLg=
-X-Google-Smtp-Source: AMsMyM4G71PLyfiAhMrom7idEIMicuoJmc0L3JjOVYKZBwaXjRmVnZ8RO1oZsFwkaws3I5ux9sHkccULqKEasV46oBo=
-X-Received: by 2002:aa7:d617:0:b0:44e:d2de:3fe1 with SMTP id
- c23-20020aa7d617000000b0044ed2de3fe1mr15302383edr.104.1663584616384; Mon, 19
- Sep 2022 03:50:16 -0700 (PDT)
+        Mon, 19 Sep 2022 06:56:55 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ECE4237C1;
+        Mon, 19 Sep 2022 03:54:21 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28J9kqLx014354;
+        Mon, 19 Sep 2022 10:54:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=wlBMZgu5seAGCbtVWgfXhdZUSvDR2GJql8BQ9Wt/s9w=;
+ b=ca+cSSozUCP0SsFJ7HxEiL4XkBoSXdaOZ+vST5CHnPD58tvdiJTdVBn7se208/DyA37O
+ owItzjDfvX0oq5/Fh7eWHTZrBHKBa8RT7LfiwQGvDfAk9+PhEkoQUo/QWOzTC0k3Py/2
+ nzP5HpdeUV6qw6yhavfUK0h5YkqGQeShR4HvgEk/1uqMo3j/faXFh2+PMXOge22qM0VC
+ dPslFR0rVkH1SmwrbpPnai+1vUgbwx5DIEBTbp24+5ldc4lKRX5fQwax+sOlzIvSrOXr
+ B10aSJRzXiS/A/sh5DLK10SLBHCo1YNdYip55FJMC6WDk5vS3W6c75PkH+OY4vuEIwaH 5w== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jn6dh3tvh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 19 Sep 2022 10:54:17 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28JAsGi8015936
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 19 Sep 2022 10:54:16 GMT
+Received: from deesin-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Mon, 19 Sep 2022 03:54:13 -0700
+From:   Deepak Kumar Singh <quic_deesin@quicinc.com>
+To:     <bjorn.andersson@linaro.org>, <arnaud.pouliquen@foss.st.com>,
+        <swboyd@chromium.org>, <quic_clew@quicinc.com>,
+        <mathieu.poirier@linaro.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>,
+        Deepak Kumar Singh <quic_deesin@quicinc.com>
+Subject: [PATCH V4 0/2] rpmsg_char/ctrl driver fixes
+Date:   Mon, 19 Sep 2022 16:23:58 +0530
+Message-ID: <1663584840-15762-1-git-send-email-quic_deesin@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Received: by 2002:a17:906:a24e:b0:77f:b065:93f0 with HTTP; Mon, 19 Sep 2022
- 03:50:15 -0700 (PDT)
-Reply-To: davidbeames02@gmail.com
-From:   David Beames <incglobal108@gmail.com>
-Date:   Mon, 19 Sep 2022 12:50:15 +0200
-Message-ID: <CAN7_iphbD7f39HO-p2kM6p=XEvFUAJsTN1uBeSSjM4jpPs4tzQ@mail.gmail.com>
-Subject: REF/UPDATE
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNCLAIMED_MONEY,UNDISC_FREEM
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:543 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5025]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [incglobal108[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [davidbeames02[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [incglobal108[at]gmail.com]
-        *  2.4 UNCLAIMED_MONEY BODY: People just leave money laying around
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  3.0 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *******
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: gIJ4V1AQ9okYKX2_nDv92p-yCR1mQlEP
+X-Proofpoint-ORIG-GUID: gIJ4V1AQ9okYKX2_nDv92p-yCR1mQlEP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-19_05,2022-09-16_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ adultscore=0 mlxlogscore=551 spamscore=0 mlxscore=0 impostorscore=0
+ malwarescore=0 bulkscore=0 priorityscore=1501 clxscore=1015 phishscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209190072
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Good Day
+Change from v4:
+Corrcted mistaked in commit message for patch2.
 
-Reply by Email to confirm names, last name, and phone number,
-in-respect to an unclaimed Fund in our claims file record,
+Deepak Kumar Singh (2):
+  rpmsg: glink: Add lock to avoid race when rpmsg device is released
+  rpmsg: glink: Add lock to rpmsg_ctrldev_remove
 
-Yours Sincerely,
-David Beames
+ drivers/rpmsg/rpmsg_char.c | 8 ++++++++
+ drivers/rpmsg/rpmsg_ctrl.c | 2 ++
+ 2 files changed, 10 insertions(+)
+
+-- 
+2.7.4
+
