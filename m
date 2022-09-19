@@ -2,168 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAE8A5BD6AA
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 23:56:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63C1C5BD6B2
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 00:00:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbiISV4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 17:56:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38064 "EHLO
+        id S229570AbiISWAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 18:00:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbiISV4E (ORCPT
+        with ESMTP id S229498AbiISWAT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 17:56:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18DA04622C
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 14:56:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663624562;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cYvxKc5DlaYhK9l6PE82liKF9DEhv340Jc5UQRPm/Ms=;
-        b=g+SGR57mEwiw2zO4vLYpl74dWZdcpSR6jtgVkj59kxXGYgDLAqJwIgrrRtW0AxonTpNiot
-        TrhooJoWUMbMZzStyxfHL1xKqYngCWOlXhQm5VcIiFwpwlFomAEtgSKfk5/KiKdAXiDpXG
-        h8J5zpDuT5Cy7JLqF3nATelDcgyRIKE=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-331-9IlhLMZVNI2wO58mAxm7uQ-1; Mon, 19 Sep 2022 17:55:57 -0400
-X-MC-Unique: 9IlhLMZVNI2wO58mAxm7uQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2EAA5382578E;
-        Mon, 19 Sep 2022 21:55:57 +0000 (UTC)
-Received: from cantor.redhat.com (unknown [10.2.16.57])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8E80940C2064;
-        Mon, 19 Sep 2022 21:55:56 +0000 (UTC)
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org
-Cc:     Fenghua Yu <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH 2/2] dmaengine: idxd: track enabled workqueues in bitmap
-Date:   Mon, 19 Sep 2022 14:55:53 -0700
-Message-Id: <20220919215553.600246-3-jsnitsel@redhat.com>
-In-Reply-To: <20220919215553.600246-1-jsnitsel@redhat.com>
-References: <20220919215553.600246-1-jsnitsel@redhat.com>
+        Mon, 19 Sep 2022 18:00:19 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 058B63F1EF
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 15:00:14 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id t70so624377pgc.5
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 15:00:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=95/m5BGPP8JYpHfpydKzQVCEG4c57A7mXTDcVh2ppNE=;
+        b=u/LdhXQjH7o5JF2wg9FhfHl6LJAMMIMNNcyOwvWBVIbXzLqhy2CrqV20Za/oJ8uoi5
+         tfi6StioCLaozC37RUCcqfx5IIU0A4ChfQQEDNBEfZS28rpYkmC7Vg6oiiJfjeHErX0l
+         mKSpb0sWy8bMBruZiYLOBj+o3FI1MRTymcakMlzcTwdQtqfCJKN/3b1LsHKJDljiUKFx
+         KnDdR6FFHEKs+CYYSmK+BnV20m5zp6mX/4klXjWzQMlExdg6HVhu6vNNXtqkMpIepXx1
+         PuOj1H9vp/QTa8wLL0tHhlVQ8iBJnAOqR3ByvHcyeEOKzQTIlV+y7R3dsvDHftfchd+T
+         SNAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=95/m5BGPP8JYpHfpydKzQVCEG4c57A7mXTDcVh2ppNE=;
+        b=vFriAH8LbWAd7RXFdTzeJyiBGgfJkohFidUMm2q79dr5tPa0yZ7h00UFyn8daJfgx+
+         gKm/nS660+kG0y5i/2ZBvmd75W6dy/s3Iaw0NV+voBPW2LVecIYi/b+iUcv9eU44p3yt
+         a7oRh/bncU+7IC8Wmdo4VJ8LdUwiX5gzk2eWUbSjMacejnbdh6Gf+/qV/I0f7+/JaAX7
+         cbYZKDMBbDCsuX5GKgS5R8DPOfdGZk1NTvQGUufRnN4iOlW/yxE9layI/ElGBN8Rw9eq
+         QYYoxzp9mciSrX5WA4W54pdPIn5D98oOGyHPiyubpPix0hPA9GgfFLNCOcwudy+wY5ff
+         K42w==
+X-Gm-Message-State: ACrzQf2dXr/Tp34fSS/iC+DTfHWXXoUMXGC2C2v3rK+cy8fXv0ixjKfV
+        NNyPVvtyD+bi+ITWUf4fNT2faQ==
+X-Google-Smtp-Source: AMsMyM7kRFFaKR6Z1lEjLZ69gbYTx9CSweklloxSQv6ziROLKqNidW65YvH6MyPLw69ISwozh4lUuA==
+X-Received: by 2002:a65:58c8:0:b0:438:aecf:5cc8 with SMTP id e8-20020a6558c8000000b00438aecf5cc8mr17423172pgu.18.1663624813409;
+        Mon, 19 Sep 2022 15:00:13 -0700 (PDT)
+Received: from desktop.hsd1.or.comcast.net ([2601:1c0:4c81:c480:feaa:14ff:fe3a:b225])
+        by smtp.gmail.com with ESMTPSA id j13-20020a170902da8d00b0017887d6aa1dsm6614270plx.146.2022.09.19.15.00.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Sep 2022 15:00:12 -0700 (PDT)
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Tadeusz Struk <tadeusz.struk@linaro.org>,
+        "Dmitry Vyukov" <dvyukov@google.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        PaX Team <pageexec@freemail.hu>,
+        syzbot+23f57c5ae902429285d7@syzkaller.appspotmail.com
+Subject: [PATCH v2] usb: mon: make mmapped memory read only
+Date:   Mon, 19 Sep 2022 14:59:57 -0700
+Message-Id: <20220919215957.205681-1-tadeusz.struk@linaro.org>
+X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20220916224741.2269649-1-tadeusz.struk@linaro.org>
+References: <20220916224741.2269649-1-tadeusz.struk@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that idxd_wq_disable_cleanup() sets the workqueue state to
-IDXD_WQ_DISABLED, use a bitmap to track which workqueues have been
-enabled. This will then be used to determine which workqueues
-should be re-enabled when attempting a software reset to recover
-from a device halt state.
+Syzbot found an issue in usbmon module, where the user space client
+can corrupt the monitor's internal memory, causing the usbmon module
+to crash the kernel with segfault, UAF, etc.
+The reproducer mmaps the /dev/usbmon memory to user space, and
+overwrites it with arbitrary data, which causes all kinds of issues.
+Return an -EPERM error from mon_bin_mmap() if the flag VM_WRTIE is set.
+Also clear VM_MAYWRITE to make it impossible to change it to writable
+later.
 
-Cc: Fenghua Yu <fenghua.yu@intel.com>
-Cc: Dave Jiang <dave.jiang@intel.com>
-Cc: Vinod Koul <vkoul@kernel.org>
-Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
+Cc: "Dmitry Vyukov" <dvyukov@google.com>
+Cc: <linux-usb@vger.kernel.org>
+Cc: <linux-kernel@vger.kernel.org>
+Cc: <stable@vger.kernel.org>
+Fixes: 6f23ee1fefdc ("USB: add binary API to usbmon")
+
+For the VM_MAYWRITE part:
+Suggested-by: PaX Team <pageexec@freemail.hu>
+
+Link: https://syzkaller.appspot.com/bug?id=2eb1f35d6525fa4a74d75b4244971e5b1411c95a
+Reported-by: syzbot+23f57c5ae902429285d7@syzkaller.appspotmail.com
+Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
 ---
- drivers/dma/idxd/device.c | 2 ++
- drivers/dma/idxd/idxd.h   | 2 ++
- drivers/dma/idxd/init.c   | 6 ++++++
- drivers/dma/idxd/irq.c    | 4 ++--
- drivers/dma/idxd/sysfs.c  | 1 +
- 5 files changed, 13 insertions(+), 2 deletions(-)
+v2:
+   Return an error instead of quietly clearing the flag,
+   when VM_WRTIE is set. Also clear VM_MAYWRITE.
+---
+ drivers/usb/mon/mon_bin.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/dma/idxd/device.c b/drivers/dma/idxd/device.c
-index 31911e255ac1..f0c7d6d348e3 100644
---- a/drivers/dma/idxd/device.c
-+++ b/drivers/dma/idxd/device.c
-@@ -196,6 +196,7 @@ int idxd_wq_enable(struct idxd_wq *wq)
- 	}
- 
- 	wq->state = IDXD_WQ_ENABLED;
-+	set_bit(wq->id, idxd->wq_enable_map);
- 	dev_dbg(dev, "WQ %d enabled\n", wq->id);
- 	return 0;
- }
-@@ -223,6 +224,7 @@ int idxd_wq_disable(struct idxd_wq *wq, bool reset_config)
- 
- 	if (reset_config)
- 		idxd_wq_disable_cleanup(wq);
-+	clear_bit(wq->id, idxd->wq_enable_map);
- 	wq->state = IDXD_WQ_DISABLED;
- 	dev_dbg(dev, "WQ %d disabled\n", wq->id);
- 	return 0;
-diff --git a/drivers/dma/idxd/idxd.h b/drivers/dma/idxd/idxd.h
-index fed0dfc1eaa8..f527a7f88b92 100644
---- a/drivers/dma/idxd/idxd.h
-+++ b/drivers/dma/idxd/idxd.h
-@@ -11,6 +11,7 @@
- #include <linux/idr.h>
- #include <linux/pci.h>
- #include <linux/ioasid.h>
-+#include <linux/bitmap.h>
- #include <linux/perf_event.h>
- #include <uapi/linux/idxd.h>
- #include "registers.h"
-@@ -299,6 +300,7 @@ struct idxd_device {
- 	int rdbuf_limit;
- 	int nr_rdbufs;		/* non-reserved read buffers */
- 	unsigned int wqcfg_size;
-+	unsigned long *wq_enable_map;
- 
- 	union sw_err_reg sw_err;
- 	wait_queue_head_t cmd_waitq;
-diff --git a/drivers/dma/idxd/init.c b/drivers/dma/idxd/init.c
-index aa3478257ddb..7e27e69ff741 100644
---- a/drivers/dma/idxd/init.c
-+++ b/drivers/dma/idxd/init.c
-@@ -151,6 +151,12 @@ static int idxd_setup_wqs(struct idxd_device *idxd)
- 	if (!idxd->wqs)
- 		return -ENOMEM;
- 
-+	idxd->wq_enable_map = bitmap_zalloc_node(idxd->max_wqs, GFP_KERNEL, dev_to_node(dev));
-+	if (!idxd->wq_enable_map) {
-+		kfree(idxd->wqs);
-+		return -ENOMEM;
-+	}
+diff --git a/drivers/usb/mon/mon_bin.c b/drivers/usb/mon/mon_bin.c
+index f48a23adbc35..094e812e9e69 100644
+--- a/drivers/usb/mon/mon_bin.c
++++ b/drivers/usb/mon/mon_bin.c
+@@ -1268,6 +1268,11 @@ static int mon_bin_mmap(struct file *filp, struct vm_area_struct *vma)
+ {
+ 	/* don't do anything here: "fault" will set up page table entries */
+ 	vma->vm_ops = &mon_bin_vm_ops;
 +
- 	for (i = 0; i < idxd->max_wqs; i++) {
- 		wq = kzalloc_node(sizeof(*wq), GFP_KERNEL, dev_to_node(dev));
- 		if (!wq) {
-diff --git a/drivers/dma/idxd/irq.c b/drivers/dma/idxd/irq.c
-index 743ead5ebc57..8efaf137fc65 100644
---- a/drivers/dma/idxd/irq.c
-+++ b/drivers/dma/idxd/irq.c
-@@ -49,9 +49,9 @@ static void idxd_device_reinit(struct work_struct *work)
- 		goto out;
- 
- 	for (i = 0; i < idxd->max_wqs; i++) {
--		struct idxd_wq *wq = idxd->wqs[i];
-+		if (test_bit(i, idxd->wq_enable_map)) {
-+			struct idxd_wq *wq = idxd->wqs[i];
- 
--		if (wq->state == IDXD_WQ_ENABLED) {
- 			rc = idxd_wq_enable(wq);
- 			if (rc < 0) {
- 				dev_warn(dev, "Unable to re-enable wq %s\n",
-diff --git a/drivers/dma/idxd/sysfs.c b/drivers/dma/idxd/sysfs.c
-index 3f262a57441b..3325b16ed959 100644
---- a/drivers/dma/idxd/sysfs.c
-+++ b/drivers/dma/idxd/sysfs.c
-@@ -1405,6 +1405,7 @@ static void idxd_conf_device_release(struct device *dev)
- 	struct idxd_device *idxd = confdev_to_idxd(dev);
- 
- 	kfree(idxd->groups);
-+	bitmap_free(idxd->wq_enable_map);
- 	kfree(idxd->wqs);
- 	kfree(idxd->engines);
- 	ida_free(&idxd_ida, idxd->id);
++	if (vma->vm_flags & VM_WRITE)
++		return -EPERM;
++
++	vma->vm_flags &= ~VM_MAYWRITE;
+ 	vma->vm_flags |= VM_DONTEXPAND | VM_DONTDUMP;
+ 	vma->vm_private_data = filp->private_data;
+ 	mon_bin_vma_open(vma);
 -- 
-2.37.2
-
+2.37.3
