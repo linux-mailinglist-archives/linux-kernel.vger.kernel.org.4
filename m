@@ -2,69 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64A885BC499
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 10:46:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B4C15BC49B
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 10:47:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230022AbiISIqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 04:46:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41372 "EHLO
+        id S229931AbiISIr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 04:47:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbiISIqh (ORCPT
+        with ESMTP id S229737AbiISIrY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 04:46:37 -0400
+        Mon, 19 Sep 2022 04:47:24 -0400
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27F40DEC7;
-        Mon, 19 Sep 2022 01:46:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F8CE09F;
+        Mon, 19 Sep 2022 01:47:22 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id D33EE224BA;
-        Mon, 19 Sep 2022 08:46:34 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id AAC5F224BA;
+        Mon, 19 Sep 2022 08:47:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1663577194; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1663577241; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=MX4uu+xV6DLjOCDILEIy5h7UKehnk580AmudT0PwRB8=;
-        b=USmhped1YHzxlWo96BPqhJbJTFtcnwTr58J6Fpr40ZzJ1IdafHl63rqXOzNQ5bmyKFQzCu
-        mq1D/W2BUC6ta11Tg6sakJlxxlitpIV+qacLelKIA42ErJW1Iz7p8tDuaxeQzI6EtoAjBZ
-        riA4lTSKNQO8McJR08NOSU2txHhCEsA=
+        bh=ff0uszg6kyjjELlo/PJR1UpnAEFAdUb1P9UtheARqeY=;
+        b=ybSjSH+xjpYZL9EWarkl3iGp0mLiDA5WSleqvEt2dyXx6+UJSDixMbiD54XnJ6Q8VC8bW7
+        NAyJSs056lV36Snr29IfLMDw2LQqGVjcKTFBNyCcL1lCvqGdkXZPDeuOVRhbttdaS/NHJ6
+        6bGMccorMoy4Lr0SysybNOf0CpiG29g=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1663577194;
+        s=susede2_ed25519; t=1663577241;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=MX4uu+xV6DLjOCDILEIy5h7UKehnk580AmudT0PwRB8=;
-        b=qIm6o08ANkq1myxnyaVyQr6nYEdLIScM8eQG7ZDNHzrD0BXMiTyqwXV6yMBimN78OvvMWK
-        3RvNkrL/gt5vplCg==
+        bh=ff0uszg6kyjjELlo/PJR1UpnAEFAdUb1P9UtheARqeY=;
+        b=ae0bScQ44D8sXI7cvTQwCfPfacrwk658Bz6JTu2BJ8PA9p3aHNAuA1lJH8PxI1Ndabwhfl
+        GMvUwT+u/tPdx0BA==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BD0A713A96;
-        Mon, 19 Sep 2022 08:46:34 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9BD2C13A96;
+        Mon, 19 Sep 2022 08:47:21 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id alMWLmosKGOXQgAAMHmgww
-        (envelope-from <jack@suse.cz>); Mon, 19 Sep 2022 08:46:34 +0000
+        id nuz/JZksKGPzQgAAMHmgww
+        (envelope-from <jack@suse.cz>); Mon, 19 Sep 2022 08:47:21 +0000
 Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id E23DEA0682; Mon, 19 Sep 2022 10:46:33 +0200 (CEST)
-Date:   Mon, 19 Sep 2022 10:46:33 +0200
+        id 31B7FA0682; Mon, 19 Sep 2022 10:47:21 +0200 (CEST)
+Date:   Mon, 19 Sep 2022 10:47:21 +0200
 From:   Jan Kara <jack@suse.cz>
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     tj@kernel.org, axboe@kernel.dk, paolo.valente@linaro.org,
-        jack@suse.cz, cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
-        yi.zhang@huawei.com
-Subject: Re: [patch v11 5/6] block, bfq: cleanup bfq_weights_tree add/remove
- apis
-Message-ID: <20220919084633.nmzastqkjool5jnc@quack3>
-References: <20220916071942.214222-1-yukuai1@huaweicloud.com>
- <20220916071942.214222-6-yukuai1@huaweicloud.com>
+To:     Ye Bin <yebin10@huawei.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jack@suse.cz
+Subject: Re: [PATCH -next v2 1/2] ext4: factor out ext4_fc_disabled()
+Message-ID: <20220919084721.ofhjs2ah4aihwpyd@quack3>
+References: <20220916083836.388347-1-yebin10@huawei.com>
+ <20220916083836.388347-2-yebin10@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220916071942.214222-6-yukuai1@huaweicloud.com>
+In-Reply-To: <20220916083836.388347-2-yebin10@huawei.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -74,158 +72,149 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 16-09-22 15:19:41, Yu Kuai wrote:
-> From: Yu Kuai <yukuai3@huawei.com>
+On Fri 16-09-22 16:38:35, Ye Bin wrote:
+> Factor out ext4_fc_disabled(). No functional change.
 > 
-> The 'bfq_data' and 'rb_root_cached' can both be accessed through
-> 'bfq_queue', thus only pass 'bfq_queue' as parameter.
-> 
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> Signed-off-by: Ye Bin <yebin10@huawei.com>
 
-Looks good. Feel free to add:
+Looks nice. Feel free to add:
 
 Reviewed-by: Jan Kara <jack@suse.cz>
 
 								Honza
+
 > ---
->  block/bfq-iosched.c | 19 +++++++++----------
->  block/bfq-iosched.h | 10 +++-------
->  block/bfq-wf2q.c    | 18 ++++++------------
->  3 files changed, 18 insertions(+), 29 deletions(-)
+>  fs/ext4/fast_commit.c | 38 +++++++++++++++-----------------------
+>  1 file changed, 15 insertions(+), 23 deletions(-)
 > 
-> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-> index 6d95b0e488a8..4ad4fa0dad4a 100644
-> --- a/block/bfq-iosched.c
-> +++ b/block/bfq-iosched.c
-> @@ -870,9 +870,9 @@ static bool bfq_asymmetric_scenario(struct bfq_data *bfqd,
->   * In most scenarios, the rate at which nodes are created/destroyed
->   * should be low too.
->   */
-> -void bfq_weights_tree_add(struct bfq_data *bfqd, struct bfq_queue *bfqq,
-> -			  struct rb_root_cached *root)
-> +void bfq_weights_tree_add(struct bfq_queue *bfqq)
->  {
-> +	struct rb_root_cached *root = &bfqq->bfqd->queue_weights_tree;
->  	struct bfq_entity *entity = &bfqq->entity;
->  	struct rb_node **new = &(root->rb_root.rb_node), *parent = NULL;
->  	bool leftmost = true;
-> @@ -944,13 +944,14 @@ void bfq_weights_tree_add(struct bfq_data *bfqd, struct bfq_queue *bfqq,
->   * See the comments to the function bfq_weights_tree_add() for considerations
->   * about overhead.
->   */
-> -void __bfq_weights_tree_remove(struct bfq_data *bfqd,
-> -			       struct bfq_queue *bfqq,
-> -			       struct rb_root_cached *root)
-> +void __bfq_weights_tree_remove(struct bfq_queue *bfqq)
->  {
-> +	struct rb_root_cached *root;
+> diff --git a/fs/ext4/fast_commit.c b/fs/ext4/fast_commit.c
+> index b7414a5812f6..eadab945b856 100644
+> --- a/fs/ext4/fast_commit.c
+> +++ b/fs/ext4/fast_commit.c
+> @@ -229,6 +229,12 @@ __releases(&EXT4_SB(inode->i_sb)->s_fc_lock)
+>  	finish_wait(wq, &wait.wq_entry);
+>  }
+>  
+> +static bool ext4_fc_disabled(struct super_block *sb)
+> +{
+> +	return (!test_opt2(sb, JOURNAL_FAST_COMMIT) ||
+> +		(EXT4_SB(sb)->s_mount_state & EXT4_FC_REPLAY));
+> +}
 > +
->  	if (!bfqq->weight_counter)
+>  /*
+>   * Inform Ext4's fast about start of an inode update
+>   *
+> @@ -240,8 +246,7 @@ void ext4_fc_start_update(struct inode *inode)
+>  {
+>  	struct ext4_inode_info *ei = EXT4_I(inode);
+>  
+> -	if (!test_opt2(inode->i_sb, JOURNAL_FAST_COMMIT) ||
+> -	    (EXT4_SB(inode->i_sb)->s_mount_state & EXT4_FC_REPLAY))
+> +	if (ext4_fc_disabled(inode->i_sb))
 >  		return;
 >  
-> +	root = &bfqq->bfqd->queue_weights_tree;
->  	bfqq->weight_counter->num_active--;
->  	if (bfqq->weight_counter->num_active > 0)
->  		goto reset_entity_pointer;
-> @@ -967,11 +968,9 @@ void __bfq_weights_tree_remove(struct bfq_data *bfqd,
->   * Invoke __bfq_weights_tree_remove on bfqq and decrement the number
->   * of active groups for each queue's inactive parent entity.
->   */
-> -void bfq_weights_tree_remove(struct bfq_data *bfqd,
-> -			     struct bfq_queue *bfqq)
-> +void bfq_weights_tree_remove(struct bfq_queue *bfqq)
+>  restart:
+> @@ -265,8 +270,7 @@ void ext4_fc_stop_update(struct inode *inode)
 >  {
-> -	__bfq_weights_tree_remove(bfqd, bfqq,
-> -				  &bfqd->queue_weights_tree);
-> +	__bfq_weights_tree_remove(bfqq);
->  }
+>  	struct ext4_inode_info *ei = EXT4_I(inode);
 >  
->  /*
-> @@ -6220,7 +6219,7 @@ static void bfq_completed_request(struct bfq_queue *bfqq, struct bfq_data *bfqd)
->  		bfqq->budget_timeout = jiffies;
+> -	if (!test_opt2(inode->i_sb, JOURNAL_FAST_COMMIT) ||
+> -	    (EXT4_SB(inode->i_sb)->s_mount_state & EXT4_FC_REPLAY))
+> +	if (ext4_fc_disabled(inode->i_sb))
+>  		return;
 >  
->  		bfq_del_bfqq_in_groups_with_pending_reqs(bfqq);
-> -		bfq_weights_tree_remove(bfqd, bfqq);
-> +		bfq_weights_tree_remove(bfqq);
+>  	if (atomic_dec_and_test(&ei->i_fc_updates))
+> @@ -283,8 +287,7 @@ void ext4_fc_del(struct inode *inode)
+>  	struct ext4_sb_info *sbi = EXT4_SB(inode->i_sb);
+>  	struct ext4_fc_dentry_update *fc_dentry;
+>  
+> -	if (!test_opt2(inode->i_sb, JOURNAL_FAST_COMMIT) ||
+> -	    (EXT4_SB(inode->i_sb)->s_mount_state & EXT4_FC_REPLAY))
+> +	if (ext4_fc_disabled(inode->i_sb))
+>  		return;
+>  
+>  restart:
+> @@ -337,8 +340,7 @@ void ext4_fc_mark_ineligible(struct super_block *sb, int reason, handle_t *handl
+>  	struct ext4_sb_info *sbi = EXT4_SB(sb);
+>  	tid_t tid;
+>  
+> -	if (!test_opt2(sb, JOURNAL_FAST_COMMIT) ||
+> -	    (EXT4_SB(sb)->s_mount_state & EXT4_FC_REPLAY))
+> +	if (ext4_fc_disabled(sb))
+>  		return;
+>  
+>  	ext4_set_mount_flag(sb, EXT4_MF_FC_INELIGIBLE);
+> @@ -493,10 +495,8 @@ void __ext4_fc_track_unlink(handle_t *handle,
+>  void ext4_fc_track_unlink(handle_t *handle, struct dentry *dentry)
+>  {
+>  	struct inode *inode = d_inode(dentry);
+> -	struct ext4_sb_info *sbi = EXT4_SB(inode->i_sb);
+>  
+> -	if (!test_opt2(inode->i_sb, JOURNAL_FAST_COMMIT) ||
+> -	    (sbi->s_mount_state & EXT4_FC_REPLAY))
+> +	if (ext4_fc_disabled(inode->i_sb))
+>  		return;
+>  
+>  	if (ext4_test_mount_flag(inode->i_sb, EXT4_MF_FC_INELIGIBLE))
+> @@ -522,10 +522,8 @@ void __ext4_fc_track_link(handle_t *handle,
+>  void ext4_fc_track_link(handle_t *handle, struct dentry *dentry)
+>  {
+>  	struct inode *inode = d_inode(dentry);
+> -	struct ext4_sb_info *sbi = EXT4_SB(inode->i_sb);
+>  
+> -	if (!test_opt2(inode->i_sb, JOURNAL_FAST_COMMIT) ||
+> -	    (sbi->s_mount_state & EXT4_FC_REPLAY))
+> +	if (ext4_fc_disabled(inode->i_sb))
+>  		return;
+>  
+>  	if (ext4_test_mount_flag(inode->i_sb, EXT4_MF_FC_INELIGIBLE))
+> @@ -551,10 +549,8 @@ void __ext4_fc_track_create(handle_t *handle, struct inode *inode,
+>  void ext4_fc_track_create(handle_t *handle, struct dentry *dentry)
+>  {
+>  	struct inode *inode = d_inode(dentry);
+> -	struct ext4_sb_info *sbi = EXT4_SB(inode->i_sb);
+>  
+> -	if (!test_opt2(inode->i_sb, JOURNAL_FAST_COMMIT) ||
+> -	    (sbi->s_mount_state & EXT4_FC_REPLAY))
+> +	if (ext4_fc_disabled(inode->i_sb))
+>  		return;
+>  
+>  	if (ext4_test_mount_flag(inode->i_sb, EXT4_MF_FC_INELIGIBLE))
+> @@ -576,7 +572,6 @@ static int __track_inode(struct inode *inode, void *arg, bool update)
+>  
+>  void ext4_fc_track_inode(handle_t *handle, struct inode *inode)
+>  {
+> -	struct ext4_sb_info *sbi = EXT4_SB(inode->i_sb);
+>  	int ret;
+>  
+>  	if (S_ISDIR(inode->i_mode))
+> @@ -588,8 +583,7 @@ void ext4_fc_track_inode(handle_t *handle, struct inode *inode)
+>  		return;
 >  	}
 >  
->  	now_ns = ktime_get_ns();
-> diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
-> index 257acb54c6dc..4bb58ab0c90a 100644
-> --- a/block/bfq-iosched.h
-> +++ b/block/bfq-iosched.h
-> @@ -973,13 +973,9 @@ struct bfq_queue *bic_to_bfqq(struct bfq_io_cq *bic, bool is_sync);
->  void bic_set_bfqq(struct bfq_io_cq *bic, struct bfq_queue *bfqq, bool is_sync);
->  struct bfq_data *bic_to_bfqd(struct bfq_io_cq *bic);
->  void bfq_pos_tree_add_move(struct bfq_data *bfqd, struct bfq_queue *bfqq);
-> -void bfq_weights_tree_add(struct bfq_data *bfqd, struct bfq_queue *bfqq,
-> -			  struct rb_root_cached *root);
-> -void __bfq_weights_tree_remove(struct bfq_data *bfqd,
-> -			       struct bfq_queue *bfqq,
-> -			       struct rb_root_cached *root);
-> -void bfq_weights_tree_remove(struct bfq_data *bfqd,
-> -			     struct bfq_queue *bfqq);
-> +void bfq_weights_tree_add(struct bfq_queue *bfqq);
-> +void __bfq_weights_tree_remove(struct bfq_queue *bfqq);
-> +void bfq_weights_tree_remove(struct bfq_queue *bfqq);
->  void bfq_bfqq_expire(struct bfq_data *bfqd, struct bfq_queue *bfqq,
->  		     bool compensate, enum bfqq_expiration reason);
->  void bfq_put_queue(struct bfq_queue *bfqq);
-> diff --git a/block/bfq-wf2q.c b/block/bfq-wf2q.c
-> index 5e8224c96921..124aaea6196e 100644
-> --- a/block/bfq-wf2q.c
-> +++ b/block/bfq-wf2q.c
-> @@ -707,7 +707,6 @@ __bfq_entity_update_weight_prio(struct bfq_service_tree *old_st,
->  		struct bfq_queue *bfqq = bfq_entity_to_bfqq(entity);
->  		unsigned int prev_weight, new_weight;
->  		struct bfq_data *bfqd = NULL;
-> -		struct rb_root_cached *root;
->  #ifdef CONFIG_BFQ_GROUP_IOSCHED
->  		struct bfq_sched_data *sd;
->  		struct bfq_group *bfqg;
-> @@ -770,19 +769,15 @@ __bfq_entity_update_weight_prio(struct bfq_service_tree *old_st,
->  		 * queue, remove the entity from its old weight counter (if
->  		 * there is a counter associated with the entity).
->  		 */
-> -		if (prev_weight != new_weight && bfqq) {
-> -			root = &bfqd->queue_weights_tree;
-> -			__bfq_weights_tree_remove(bfqd, bfqq, root);
-> -		}
-> +		if (prev_weight != new_weight && bfqq)
-> +			__bfq_weights_tree_remove(bfqq);
->  		entity->weight = new_weight;
->  		/*
->  		 * Add the entity, if it is not a weight-raised queue,
->  		 * to the counter associated with its new weight.
->  		 */
-> -		if (prev_weight != new_weight && bfqq && bfqq->wr_coeff == 1) {
-> -			/* If we get here, root has been initialized. */
-> -			bfq_weights_tree_add(bfqd, bfqq, root);
-> -		}
-> +		if (prev_weight != new_weight && bfqq && bfqq->wr_coeff == 1)
-> +			bfq_weights_tree_add(bfqq);
+> -	if (!test_opt2(inode->i_sb, JOURNAL_FAST_COMMIT) ||
+> -	    (sbi->s_mount_state & EXT4_FC_REPLAY))
+> +	if (ext4_fc_disabled(inode->i_sb))
+>  		return;
 >  
->  		new_st->wsum += entity->weight;
+>  	if (ext4_test_mount_flag(inode->i_sb, EXT4_MF_FC_INELIGIBLE))
+> @@ -634,15 +628,13 @@ static int __track_range(struct inode *inode, void *arg, bool update)
+>  void ext4_fc_track_range(handle_t *handle, struct inode *inode, ext4_lblk_t start,
+>  			 ext4_lblk_t end)
+>  {
+> -	struct ext4_sb_info *sbi = EXT4_SB(inode->i_sb);
+>  	struct __track_range_args args;
+>  	int ret;
 >  
-> @@ -1687,7 +1682,7 @@ void bfq_del_bfqq_busy(struct bfq_queue *bfqq, bool expiration)
->  		 * Next function is invoked last, because it causes bfqq to be
->  		 * freed. DO NOT use bfqq after the next function invocation.
->  		 */
-> -		bfq_weights_tree_remove(bfqd, bfqq);
-> +		bfq_weights_tree_remove(bfqq);
->  	}
->  }
+>  	if (S_ISDIR(inode->i_mode))
+>  		return;
 >  
-> @@ -1708,8 +1703,7 @@ void bfq_add_bfqq_busy(struct bfq_queue *bfqq)
->  	if (!bfqq->dispatched) {
->  		bfq_add_bfqq_in_groups_with_pending_reqs(bfqq);
->  		if (bfqq->wr_coeff == 1)
-> -			bfq_weights_tree_add(bfqd, bfqq,
-> -					     &bfqd->queue_weights_tree);
-> +			bfq_weights_tree_add(bfqq);
->  	}
+> -	if (!test_opt2(inode->i_sb, JOURNAL_FAST_COMMIT) ||
+> -	    (sbi->s_mount_state & EXT4_FC_REPLAY))
+> +	if (ext4_fc_disabled(inode->i_sb))
+>  		return;
 >  
->  	if (bfqq->wr_coeff > 1)
+>  	if (ext4_test_mount_flag(inode->i_sb, EXT4_MF_FC_INELIGIBLE))
 > -- 
 > 2.31.1
 > 
