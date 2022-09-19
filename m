@@ -2,128 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72B2D5BC1A0
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 05:07:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E3E45BC1A6
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 05:12:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbiISDHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 23:07:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57946 "EHLO
+        id S229662AbiISDMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 23:12:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbiISDHE (ORCPT
+        with ESMTP id S229825AbiISDLz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 23:07:04 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9441A80A
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 20:07:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663556823; x=1695092823;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=c31qxJtvgoDpOS/gJgKtkSFopOmafvLrhHFZkQo7SZk=;
-  b=HUoK0X+s7PGsl4rdy5w9+Z9rY8T3znH08KQVvjVwS1XminVzEmnA9187
-   1UwxQXQTl6causGqlpELRbVWvvHHIv4gO96K5RT+C/mQBB8V4F2iK45w5
-   jINw61eIReOeXhOcJm4t6r+jne+Sfx6Dxq3s2gV4sojiv10qQxHG27Czq
-   QnTitnCsU+6Ex7vDD6djayjP9MkP0mwLNKTh0r2ttkRx7mvrVPD3yN1x+
-   olETtYqxW+w322KOghXll57kUcPoXw0GHrMmAoP5ij1BRlRX3Rl8eh+cc
-   A6Epq9hlOyGpe6EQECtrcwD/FHHbezLcoVmIhQTlttRuTK7s8G+BDlsXq
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10474"; a="286337675"
-X-IronPort-AV: E=Sophos;i="5.93,325,1654585200"; 
-   d="scan'208";a="286337675"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2022 20:07:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,325,1654585200"; 
-   d="scan'208";a="569476714"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 18 Sep 2022 20:07:00 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oa77b-0001gj-2r;
-        Mon, 19 Sep 2022 03:06:59 +0000
-Date:   Mon, 19 Sep 2022 11:06:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Jason A. Donenfeld" <zx2c4@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [linux-stable-rc:linux-5.15.y 9182/9999]
- lib/crypto/blake2s-selftest.c:632:1: warning: the frame size of 1096 bytes
- is larger than 1024 bytes
-Message-ID: <202209191132.J3LdusQD-lkp@intel.com>
+        Sun, 18 Sep 2022 23:11:55 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 258321A3A4;
+        Sun, 18 Sep 2022 20:11:54 -0700 (PDT)
+Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MW8kD0D5QzlVyk;
+        Mon, 19 Sep 2022 11:07:48 +0800 (CST)
+Received: from dggpeml500008.china.huawei.com (7.185.36.147) by
+ dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 19 Sep 2022 11:11:52 +0800
+Received: from huawei.com (10.67.175.34) by dggpeml500008.china.huawei.com
+ (7.185.36.147) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 19 Sep
+ 2022 11:11:51 +0800
+From:   Ren Zhijie <renzhijie2@huawei.com>
+To:     <njavali@marvell.com>, <GR-QLogic-Storage-Upstream@marvell.com>,
+        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <aeasi@marvell.com>, <dwagner@suse.de>,
+        <himanshu.madhani@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Ren Zhijie <renzhijie2@huawei.com>
+Subject: [PATCH -next] scsi: qla2xxx: Fix build error implicit-function-declaration
+Date:   Mon, 19 Sep 2022 11:08:10 +0800
+Message-ID: <20220919030810.1626-1-renzhijie2@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.175.34]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500008.china.huawei.com (7.185.36.147)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jason,
+If CONFIG_TRACING is not set,
+make ARCH=x86_64 CROSS_COMPILE=x86_64-linux-gnu-,
+will be failed, like this:
 
-FYI, the error/warning still remains.
+drivers/scsi/qla2xxx/qla_os.c: In function ‘qla_trace_init’:
+drivers/scsi/qla2xxx/qla_os.c:2854:18: error: implicit declaration of function ‘trace_array_get_by_name’; did you mean ‘trace_array_set_clr_event’? [-Werror=implicit-function-declaration]
+  qla_trc_array = trace_array_get_by_name("qla2xxx");
+                  ^~~~~~~~~~~~~~~~~~~~~~~
+                  trace_array_set_clr_event
+drivers/scsi/qla2xxx/qla_os.c:2854:16: error: assignment makes pointer from integer without a cast [-Werror=int-conversion]
+  qla_trc_array = trace_array_get_by_name("qla2xxx");
+                ^
+drivers/scsi/qla2xxx/qla_os.c: In function ‘qla_trace_uninit’:
+drivers/scsi/qla2xxx/qla_os.c:2869:2: error: implicit declaration of function ‘trace_array_put’; did you mean ‘trace_seq_putc’? [-Werror=implicit-function-declaration]
+  trace_array_put(qla_trc_array);
+  ^~~~~~~~~~~~~~~
+  trace_seq_putc
+cc1: all warnings being treated as errors
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-head:   d766f744e4827dc41ef6c01403a96b7bb3938132
-commit: 3dd33a09f5dc12ccb0902923c4c784eb0f8c7554 [9182/9999] crypto: blake2s - remove shash module
-config: mips-randconfig-r032-20220919 (https://download.01.org/0day-ci/archive/20220919/202209191132.J3LdusQD-lkp@intel.com/config)
-compiler: mipsel-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=3dd33a09f5dc12ccb0902923c4c784eb0f8c7554
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc linux-5.15.y
-        git checkout 3dd33a09f5dc12ccb0902923c4c784eb0f8c7554
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash lib/crypto/
+To fix this error, wrap up all the relevant code with CONFIG_TRACING.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Fixes: 8bfc149ba24c ("scsi: qla2xxx: Enhance driver tracing with separate tunable and more")
+Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
+---
+ drivers/scsi/qla2xxx/qla_os.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-All warnings (new ones prefixed by >>):
-
-   lib/crypto/blake2s-selftest.c: In function 'blake2s_selftest':
->> lib/crypto/blake2s-selftest.c:632:1: warning: the frame size of 1096 bytes is larger than 1024 bytes [-Wframe-larger-than=]
-     632 | }
-         | ^
-
-
-vim +632 lib/crypto/blake2s-selftest.c
-
-3dd33a09f5dc12 Jason A. Donenfeld 2022-05-28  614  
-3dd33a09f5dc12 Jason A. Donenfeld 2022-05-28  615  		memcpy(&state1, &state, sizeof(state1));
-3dd33a09f5dc12 Jason A. Donenfeld 2022-05-28  616  		blake2s_compress(&state1, blocks, 1, BLAKE2S_BLOCK_SIZE);
-3dd33a09f5dc12 Jason A. Donenfeld 2022-05-28  617  		for (l = 1; l < TEST_ALIGNMENT; ++l) {
-3dd33a09f5dc12 Jason A. Donenfeld 2022-05-28  618  			memcpy(unaligned_block + l, blocks,
-3dd33a09f5dc12 Jason A. Donenfeld 2022-05-28  619  			       BLAKE2S_BLOCK_SIZE);
-3dd33a09f5dc12 Jason A. Donenfeld 2022-05-28  620  			memcpy(&state2, &state, sizeof(state2));
-3dd33a09f5dc12 Jason A. Donenfeld 2022-05-28  621  			blake2s_compress(&state2, unaligned_block + l, 1,
-3dd33a09f5dc12 Jason A. Donenfeld 2022-05-28  622  					 BLAKE2S_BLOCK_SIZE);
-3dd33a09f5dc12 Jason A. Donenfeld 2022-05-28  623  			if (memcmp(&state1, &state2, sizeof(state1))) {
-3dd33a09f5dc12 Jason A. Donenfeld 2022-05-28  624  				pr_err("blake2s random compress align %d self-test %d: FAIL\n",
-3dd33a09f5dc12 Jason A. Donenfeld 2022-05-28  625  				       l, i + 1);
-3dd33a09f5dc12 Jason A. Donenfeld 2022-05-28  626  				success = false;
-3dd33a09f5dc12 Jason A. Donenfeld 2022-05-28  627  			}
-3dd33a09f5dc12 Jason A. Donenfeld 2022-05-28  628  		}
-3dd33a09f5dc12 Jason A. Donenfeld 2022-05-28  629  	}
-3dd33a09f5dc12 Jason A. Donenfeld 2022-05-28  630  
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  631  	return success;
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08 @632  }
-
-:::::: The code at line 632 was first introduced by commit
-:::::: 66d7fb94e4ffe5acc589e0b2b4710aecc1f07a28 crypto: blake2s - generic C library implementation and selftest
-
-:::::: TO: Jason A. Donenfeld <Jason@zx2c4.com>
-:::::: CC: Herbert Xu <herbert@gondor.apana.org.au>
-
+diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
+index 2c85f3cce726..e445105ee16d 100644
+--- a/drivers/scsi/qla2xxx/qla_os.c
++++ b/drivers/scsi/qla2xxx/qla_os.c
+@@ -37,7 +37,9 @@ static int apidev_major;
+  */
+ struct kmem_cache *srb_cachep;
+ 
++#ifdef CONFIG_TRACING
+ static struct trace_array *qla_trc_array;
++#endif
+ 
+ int ql2xfulldump_on_mpifail;
+ module_param(ql2xfulldump_on_mpifail, int, S_IRUGO | S_IWUSR);
+@@ -2848,6 +2850,7 @@ static void qla2x00_iocb_work_fn(struct work_struct *work)
+ 	spin_unlock_irqrestore(&vha->work_lock, flags);
+ }
+ 
++#ifdef CONFIG_TRACING
+ static void
+ qla_trace_init(void)
+ {
+@@ -2868,7 +2871,7 @@ qla_trace_uninit(void)
+ 		return;
+ 	trace_array_put(qla_trc_array);
+ }
+-
++#endif
+ /*
+  * PCI driver interface
+  */
+@@ -8209,7 +8212,9 @@ qla2x00_module_init(void)
+ 	BUILD_BUG_ON(sizeof(sw_info_t) != 32);
+ 	BUILD_BUG_ON(sizeof(target_id_t) != 2);
+ 
++#ifdef CONFIG_TRACING
+ 	qla_trace_init();
++#endif
+ 
+ 	/* Allocate cache for SRBs. */
+ 	srb_cachep = kmem_cache_create("qla2xxx_srbs", sizeof(srb_t), 0,
+@@ -8290,7 +8295,9 @@ qla2x00_module_init(void)
+ destroy_cache:
+ 	kmem_cache_destroy(srb_cachep);
+ 
++#ifdef CONFIG_TRACING
+ 	qla_trace_uninit();
++#endif
+ 	return ret;
+ }
+ 
+@@ -8309,7 +8316,9 @@ qla2x00_module_exit(void)
+ 	fc_release_transport(qla2xxx_transport_template);
+ 	qlt_exit();
+ 	kmem_cache_destroy(srb_cachep);
++#ifdef CONFIG_TRACING
+ 	qla_trace_uninit();
++#endif
+ }
+ 
+ module_init(qla2x00_module_init);
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.17.1
+
