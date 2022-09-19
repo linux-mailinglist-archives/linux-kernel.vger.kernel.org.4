@@ -2,99 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31BED5BD3C0
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 19:32:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73BB75BD3C2
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 19:33:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230121AbiISRcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 13:32:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42092 "EHLO
+        id S230351AbiISRdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 13:33:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbiISRcm (ORCPT
+        with ESMTP id S230076AbiISRdf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 13:32:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 238FD31DC2;
-        Mon, 19 Sep 2022 10:32:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B1AEF61BD4;
-        Mon, 19 Sep 2022 17:32:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE097C433C1;
-        Mon, 19 Sep 2022 17:32:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663608760;
-        bh=TB+0gRSIN5rcKrjh40MuTk8n8S3NBnRNudCQ11g3VQY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=O0pmtZQoaOtjsmjSOBs8DglqGNou81tOxyfEbcewNAAhJntyY/ukqaKZpN2xNC6GP
-         tS3s9K9ayax6mIIcNAVRTzkFymC6+r47W+ZVjfeJpgInWCg7bdvQZWK+OylIKmk7Kw
-         HvtKXvYFQZCcPYskb5yJSQ8O1WNzqKrRBSeHkHOVAOpeCj+0vyQvY+SmYfrMc6LrI5
-         iSHHzfSHrIrm8Orx94SzEKUj1UaJPgNW2cwLCHi7pYe67n2yNhq8TAK/G8SJE3JbGv
-         JaiTD6X7YtyRAn2klgr5xoZM2qGXwynR99CewVitDEQJk+DB8cIYxJpmerQFp9x4iW
-         Zzs2bZQ2StdQw==
-Date:   Mon, 19 Sep 2022 12:32:38 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Yicong Yang <yangyicong@huawei.com>
-Cc:     acme@kernel.org, peterz@infradead.org,
-        alexander.shishkin@linux.intel.com, leo.yan@linaro.org,
-        james.clark@arm.com, will@kernel.org, mathieu.poirier@linaro.org,
-        mark.rutland@arm.com, suzuki.poulose@arm.com,
-        jonathan.cameron@huawei.com, john.garry@huawei.com,
-        mike.leach@linaro.org, gregkh@linuxfoundation.org,
-        lorenzo.pieralisi@arm.com, shameerali.kolothum.thodi@huawei.com,
-        mingo@redhat.com, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, prime.zeng@huawei.com,
-        zhangshaokun@hisilicon.com, linuxarm@huawei.com,
-        yangyicong@hisilicon.com, liuqi6124@gmail.com
-Subject: Re: [PATCH v13 3/3] perf tool: Add support for parsing HiSilicon
- PCIe Trace packet
-Message-ID: <20220919173238.GA1014074@bhelgaas>
+        Mon, 19 Sep 2022 13:33:35 -0400
+Received: from smtp.smtpout.orange.fr (smtp-21.smtpout.orange.fr [80.12.242.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB143D594
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 10:33:33 -0700 (PDT)
+Received: from [192.168.1.18] ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id aKeAoPhYzAOp2aKeAoyF6y; Mon, 19 Sep 2022 19:33:31 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Mon, 19 Sep 2022 19:33:31 +0200
+X-ME-IP: 90.11.190.129
+Message-ID: <e4914aa5-3e42-235c-fd9e-65a907a92842@wanadoo.fr>
+Date:   Mon, 19 Sep 2022 19:33:30 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220919090045.6778-4-yangyicong@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] Input: applespi - avoid wasting some memory
+Content-Language: en-US
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-input@vger.kernel.org
+References: <0db94f84920663f3bd45a73e2ae73950627a377f.1663506472.git.christophe.jaillet@wanadoo.fr>
+ <YygUFr5cSpZhYKOA@hovoldconsulting.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <YygUFr5cSpZhYKOA@hovoldconsulting.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 05:00:45PM +0800, Yicong Yang wrote:
-> From: Qi Liu <liuqi115@huawei.com>
+Le 19/09/2022 à 09:02, Johan Hovold a écrit :
+> On Sun, Sep 18, 2022 at 03:08:17PM +0200, Christophe JAILLET wrote:
+>> When the 'struct applespi_data' structure is allocated at the beginning of
+>> applespi_probe(), 2504 bytes are allocated.
+>>
+>> Because of the way memory is allocated, it ends to a 4096 bytes allocation.
+>> So, about 1500 bytes are wasted.
+>>
+>> Later in this function, when 'tx_buffer', 'tx_status', 'rx_buffer' and
+>> 'msg_buf' are allocated, 256, 4, 256 and 512 bytes are requested (~1 ko).
+>> A devm_ memory allocation has a small overhead of 40 bytes. So, for the
+>> same reason as above, it ends to allocate 512, 64, 512 and 1024 (~2 ko).
+>>
+>> All that said, defining these 4 arrays as part of 'struct applespi_data'
+>> saves 2 ko of runtime memory.
+>>
+>> 3504 bytes are now requested, and 4096 really allocated. All these 4
+>> arrays fit in the 'wasted' memory of the first allocation.
+>>
+>> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+>> ---
+>> Compile tested only.
+>> ---
+>>   drivers/input/keyboard/applespi.c | 23 ++++-------------------
+>>   1 file changed, 4 insertions(+), 19 deletions(-)
+>>
+>> diff --git a/drivers/input/keyboard/applespi.c b/drivers/input/keyboard/applespi.c
+>> index fab5473ae5da..bee4ccfa2b05 100644
+>> --- a/drivers/input/keyboard/applespi.c
+>> +++ b/drivers/input/keyboard/applespi.c
+>> @@ -373,11 +373,11 @@ struct applespi_data {
+>>   	struct input_dev		*keyboard_input_dev;
+>>   	struct input_dev		*touchpad_input_dev;
+>>   
+>> -	u8				*tx_buffer;
+>> -	u8				*tx_status;
+>> -	u8				*rx_buffer;
+>> +	u8				tx_buffer[APPLESPI_PACKET_SIZE];
+>> +	u8				tx_status[APPLESPI_STATUS_SIZE];
+>> +	u8				rx_buffer[APPLESPI_PACKET_SIZE];
+>>   
+>> -	u8				*msg_buf;
+>> +	u8				msg_buf[MAX_PKTS_PER_MSG * APPLESPI_PACKET_SIZE];
+>>   	unsigned int			saved_msg_len;
+>>   
+>>   	struct applespi_tp_info		tp_info;
 > 
-> Add support for using 'perf report --dump-raw-trace' to parse PTT packet.
+> This kind of change is generally broken in case DMA can be involved.
 > 
-> Example usage:
+> Allocating the transfer buffers separately makes sure that alignment
+> requirements are met and avoids hard-to-debug memory corruption issues.
 > 
-> Output will contain raw PTT data and its textual representation, such
-> as:
+> Johan
 > 
-> 0 0 0x5810 [0x30]: PERF_RECORD_AUXTRACE size: 0x400000  offset: 0
-> ref: 0xa5d50c725  idx: 0  tid: -1  cpu: 0
-> .
-> . ... HISI PTT data: size 4194304 bytes
-> .  00000000: 00 00 00 00                                 Prefix
-> .  00000004: 08 20 00 60                                 Header DW0
-> .  00000008: ff 02 00 01                                 Header DW1
-> .  0000000c: 20 08 00 00                                 Header DW2
-> .  00000010: 10 e7 44 ab                                 Header DW3
-> .  00000014: 2a a8 1e 01                                 Time
-> .  00000020: 00 00 00 00                                 Prefix
-> .  00000024: 01 00 00 60                                 Header DW0
-> .  00000028: 0f 1e 00 01                                 Header DW1
-> .  0000002c: 04 00 00 00                                 Header DW2
-> .  00000030: 40 00 81 02                                 Header DW3
-> .  00000034: ee 02 00 00                                 Time
 
-This is great!  Is there a way to actually decode the TLP headers?
-E.g., something along the lines of what this does?
-https://github.com/NetTLP/wireshark-nettlp/blob/master/plugins/nettlp.lua
+Got it. I'll keep away from it.
 
-If there is, it might be nice if the commit log included a hint about
-how to do more decoding.
+Thanks for the feed-back and explanation.
 
-Bjorn
+CJ
