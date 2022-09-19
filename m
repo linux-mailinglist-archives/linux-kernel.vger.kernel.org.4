@@ -2,358 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B39BE5BD240
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 18:33:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DA2B5BD246
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 18:34:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbiISQdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 12:33:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35418 "EHLO
+        id S230047AbiISQeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 12:34:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229985AbiISQdi (ORCPT
+        with ESMTP id S229686AbiISQeL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 12:33:38 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A1931366
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 09:33:37 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id a10so1688460ljq.0
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 09:33:37 -0700 (PDT)
+        Mon, 19 Sep 2022 12:34:11 -0400
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E18F03C8DA
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 09:34:06 -0700 (PDT)
+Received: by mail-ot1-x336.google.com with SMTP id u6-20020a056830118600b006595e8f9f3fso7982475otq.1
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 09:34:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=defqrUNEvG4bqkKB1gVSiJ34xF9WDZALwjbZ1clCYn8=;
-        b=gwgb7Ee3X2GnNkAKQt20mMDAAvkQhhW+K5/IkDLGRwbuHHgLs7LalQJoy0lUubxVDM
-         jUW7jUFlVYVrZ1ZyaRsKdfEhZ6fetjTremEoxiuLLMeqeqpn/OjqMEFvoVgOXfvJf3mi
-         J+ec9gkM30ZOnFX1ivKXe1i7LMQntCxmbhJ17soRsMnuWVyESLd784mRxRdw4Mb5LjjB
-         7ShaofOahIs3ELU+L7jg2PVN860zUJitRcLNRByrmN2V+syKbCAMwv8Nu69cBsZuj3nz
-         yLqbua6r8Yw8RDTnJ1CpQyty1B/ii7oixRwMWTrjAiTDeFTsvLmgXh/NS8qhVoERh795
-         1j5A==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=ZLiOCNNF7wdWCABGAiGK8/oWijAvCIwWJHaJzbioRxM=;
+        b=nY+pSkSNHqCwgtOKWBI3vQ+7D3KMosqNkG9NQy+uhbnu5FMJZkFy8tjyyEXUhOBDv+
+         nYPaJDkq+xFcrYLY0JkhfgmUY+NcDQQpL0Im6CoXPfPRUE8ZYzmm/q2rVBZAEldwA5wY
+         JD4qMfqJrkDkjjXkUm7bQqhDzMraaOF45/LpssN8HoilzMlg10z2/G1F9aGRVva3fwSi
+         2hYDZ3ECKF18w+c1Vlumuks5PYGholLxd6uMqdKLLxWQX2IVeBKvFgdIwWBOr9QvrZ+M
+         +mm6RcrmwWSq/ApAM0DtxDlSd0tEtWOGUDZPHVHxq39ofhSbwjC30rR1zeVEK0Y69xUL
+         nMCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=defqrUNEvG4bqkKB1gVSiJ34xF9WDZALwjbZ1clCYn8=;
-        b=oQDu0JwiGjSrwqmdVAvtf2it0q24AHVC8dXH/UfwsEZ/HSBJzSlSKw9jTT3bbJIsiw
-         bp+2Y0QcBA6T3sUqwzmaAVoSz04bYTobGU6JF1SMIWb64acI6ODfMtWVVMnwWITO/P36
-         A2KFPl9ughw680sV2PVRw3WXN7hFNNpVfW/fMLSPuBnUCwnhng91jp62EwRxbdRbEVLK
-         ektRD0DQNE7CdObws++dxQJq/2C4odXwt7eUxtFXRPLYaUJc2e7BJ6yxhpelA2QXLwQ3
-         1AlRYw4LNGiUxeoBNo3Z8cQHzLgoyEO9WvW5FwTfeCdGUhuimPVUpNz3NGqTPEqZK7Fg
-         MZCg==
-X-Gm-Message-State: ACrzQf3VDGZ7Yl8tDm4do3Z1lMd3f9bWKZUs93hNxhXtMrCTRLWEHrbj
-        Gfk7XLeOcvxzgnf3ZzcNyhlQ0A==
-X-Google-Smtp-Source: AMsMyM7rr3C1nw8vqmYa1ZnQn8ctVmWSYwb7aWn+DMjJkWd7yEP/GJ89KLP+cOjdOg3CaMqr0UWK+A==
-X-Received: by 2002:a2e:bc11:0:b0:26c:565:12f6 with SMTP id b17-20020a2ebc11000000b0026c056512f6mr5259650ljf.91.1663605215900;
-        Mon, 19 Sep 2022 09:33:35 -0700 (PDT)
-Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id 11-20020a05651c128b00b0026c35c4720esm1883010ljc.24.2022.09.19.09.33.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 09:33:35 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] arm64: dts: qcom: correct white-space before {
-Date:   Mon, 19 Sep 2022 18:33:33 +0200
-Message-Id: <20220919163333.129989-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=ZLiOCNNF7wdWCABGAiGK8/oWijAvCIwWJHaJzbioRxM=;
+        b=2I1eoRDCj+YMfUrIT+E30ygOfeD9BuC0qrXUUBpf8wZSZCRIXv6Mx9guLgte6/UnMc
+         jlNJmKLuIC5ba0JyTOYVogLNb4OaJzX3b3GD9RYiv69+eQ4jWWKzoqi9YiQ2BhS0X4cW
+         2pStqdi8vg1+CRsyrFxY/FY5X34V3KH2KMlaF+aYmqjvHwEVIOItaoZzsMJfDLT54Otk
+         PziIDsloj90Vhwjqbe0xFekgP3g+XPzfBwaoEpovEUnN8AMpbHNGurGM2IMRFRkeMPZE
+         LP34xwIXEAJr6+CJm7STz5ZtoJMfmrP3rRXNVAM0O22iguv/XdjvbE/c5SqqyY0XID7F
+         m1+Q==
+X-Gm-Message-State: ACrzQf10j0vo/wSd1TAaBBmd+rnNNGIQ2S2o+PKDJNBKRjS3L7hoIjar
+        ItrEipW/kYqkJL2wrtpl/ZfdIRKF0OFpXYN2sic=
+X-Google-Smtp-Source: AMsMyM4sipQbglJKguzhieKBP2oCrd47THdmXYiXWCu3NuliJqL9QXCYcig3ahqFxzgD4GZoMeUgxmjQRxKFfln6t1Y=
+X-Received: by 2002:a9d:376:0:b0:655:b4bc:fd6e with SMTP id
+ 109-20020a9d0376000000b00655b4bcfd6emr8479616otv.233.1663605245951; Mon, 19
+ Sep 2022 09:34:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CADnq5_O0W-ipCCy3hsub5GwirjDTM76Xn3kAxgyZT5V+vDguSA@mail.gmail.com>
+ <20220918120926.10322-1-user@am64>
+In-Reply-To: <20220918120926.10322-1-user@am64>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Mon, 19 Sep 2022 12:33:54 -0400
+Message-ID: <CADnq5_Py+dgAxa5Y1tzbWx6xRt1g2LQ1JsiJD6ewYYTzjjaPcw@mail.gmail.com>
+Subject: Re: [PATCH] drm/amdgpu: use dirty framebuffer helper
+To:     root <arthur.marsh@internode.on.net>
+Cc:     Xinhui.Pan@amd.com, airlied@linux.ie, alexander.deucher@amd.com,
+        amd-gfx@lists.freedesktop.org, aurabindo.pillai@amd.com,
+        christian.koenig@amd.com, dri-devel@lists.freedesktop.org,
+        greenfoo@u92.eu, guchun.chen@amd.com, hamza.mahfooz@amd.com,
+        linux-kernel@vger.kernel.org, seanpaul@chromium.org
+Content-Type: multipart/mixed; boundary="000000000000bb74c905e90a4789"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add missing space or remove redundant one before opening {.
+--000000000000bb74c905e90a4789
+Content-Type: text/plain; charset="UTF-8"
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm64/boot/dts/qcom/msm8996.dtsi                 | 2 +-
- arch/arm64/boot/dts/qcom/msm8998.dtsi                 | 8 ++++----
- arch/arm64/boot/dts/qcom/qrb5165-rb5.dts              | 4 ++--
- arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi   | 2 +-
- arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi | 2 +-
- arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi          | 8 ++++----
- arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi            | 6 +++---
- arch/arm64/boot/dts/qcom/sdm845-db845c.dts            | 8 ++++----
- arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts  | 4 ++--
- arch/arm64/boot/dts/qcom/sdm850-samsung-w737.dts      | 6 +++---
- 10 files changed, 25 insertions(+), 25 deletions(-)
+On Sun, Sep 18, 2022 at 8:09 AM root <arthur.marsh@internode.on.net> wrote:
+>
+> Hi, I recently experienced lock-ups that only responded to magic sysreq
+> reboots when the amdgpu module was loading on my pc (Athlon II X4 640 CPU,
+> with Radeon R7 250 - Cape Verde).
+>
+> .config has:
+>
+> CONFIG_DRM_AMDGPU=m
+> CONFIG_DRM_AMDGPU_SI=y
+> # CONFIG_DRM_AMDGPU_CIK is not set
+> # CONFIG_DRM_AMDGPU_USERPTR is not set
+>
+> kernel command line has:
+>
+> amdgpu.audio=1 amdgpu.si_support=1 radeon.si_support=0 page_owner=on \
+> amdgpu.gpu_recovery=1
+>
+> Bisecting lead to:
+>
+> commit 66f99628eb24409cb8feb5061f78283c8b65f820
+> Author: Hamza Mahfooz <hamza.mahfooz@amd.com>
+> Date:   Tue Sep 6 15:01:49 2022 -0400
+>
+>     drm/amdgpu: use dirty framebuffer helper
+>
+>     Currently, we aren't handling DRM_IOCTL_MODE_DIRTYFB. So, use
+>     drm_atomic_helper_dirtyfb() as the dirty callback in the amdgpu_fb_funcs
+>     struct.
+>
+>     Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
+>     Acked-by: Alex Deucher <alexander.deucher@amd.com>
+>     Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c
+> index c20922a5af9f..5b09c8f4fe95 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c
+> @@ -38,6 +38,7 @@
+>  #include <linux/pci.h>
+>  #include <linux/pm_runtime.h>
+>  #include <drm/drm_crtc_helper.h>
+> +#include <drm/drm_damage_helper.h>
+>  #include <drm/drm_edid.h>
+>  #include <drm/drm_gem_framebuffer_helper.h>
+>  #include <drm/drm_fb_helper.h>
+> @@ -496,6 +497,7 @@ bool amdgpu_display_ddc_probe(struct amdgpu_connector *amdgpu_connector,
+>  static const struct drm_framebuffer_funcs amdgpu_fb_funcs = {
+>         .destroy = drm_gem_fb_destroy,
+>         .create_handle = drm_gem_fb_create_handle,
+> +       .dirty = drm_atomic_helper_dirtyfb,
+>  };
+>
+>  uint32_t amdgpu_display_supported_domains(struct amdgpu_device *adev,
+>
+> After doing a git bisect reset, git pull and reverting the patch above, I
+> rebuilt the kernel and am successfully running with the amdgpu module loaded
+> and using the Radeon R7 250 GPU.
+>
+> I am happy to supply any further configuration details.
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-index 1e6b70582866..6a0420c079f5 100644
---- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-@@ -1498,7 +1498,7 @@ blsp2_i2c3_sleep: blsp2-i2c3-sleep {
- 				bias-disable;
- 			};
- 
--			wcd_intr_default: wcd-intr-default{
-+			wcd_intr_default: wcd-intr-default {
- 				pins = "gpio54";
- 				function = "gpio";
- 				drive-strength = <2>;
-diff --git a/arch/arm64/boot/dts/qcom/msm8998.dtsi b/arch/arm64/boot/dts/qcom/msm8998.dtsi
-index d463a66715ea..7e2a8b168d91 100644
---- a/arch/arm64/boot/dts/qcom/msm8998.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8998.dtsi
-@@ -1903,7 +1903,7 @@ etm5: etm@7c40000 {
- 
- 			cpu = <&CPU4>;
- 
--			port{
-+			port {
- 				etm4_out: endpoint {
- 					remote-endpoint = <&apss_funnel_in4>;
- 				};
-@@ -1920,7 +1920,7 @@ etm6: etm@7d40000 {
- 
- 			cpu = <&CPU5>;
- 
--			port{
-+			port {
- 				etm5_out: endpoint {
- 					remote-endpoint = <&apss_funnel_in5>;
- 				};
-@@ -1937,7 +1937,7 @@ etm7: etm@7e40000 {
- 
- 			cpu = <&CPU6>;
- 
--			port{
-+			port {
- 				etm6_out: endpoint {
- 					remote-endpoint = <&apss_funnel_in6>;
- 				};
-@@ -1954,7 +1954,7 @@ etm8: etm@7f40000 {
- 
- 			cpu = <&CPU7>;
- 
--			port{
-+			port {
- 				etm7_out: endpoint {
- 					remote-endpoint = <&apss_funnel_in7>;
- 				};
-diff --git a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
-index bf8077a1cf9a..3d1bd8e3fc73 100644
---- a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
-+++ b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
-@@ -1007,7 +1007,7 @@ can@0 {
- };
- 
- &swr0 {
--	left_spkr: wsa8810-left{
-+	left_spkr: wsa8810-left {
- 		compatible = "sdw10217211000";
- 		reg = <0 3>;
- 		powerdown-gpios = <&tlmm 130 GPIO_ACTIVE_HIGH>;
-@@ -1016,7 +1016,7 @@ left_spkr: wsa8810-left{
- 		#sound-dai-cells = <0>;
- 	};
- 
--	right_spkr: wsa8810-right{
-+	right_spkr: wsa8810-right {
- 		compatible = "sdw10217211000";
- 		reg = <0 4>;
- 		powerdown-gpios = <&tlmm 130 GPIO_ACTIVE_HIGH>;
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi
-index 7ee407f7b6bb..1ce73187a562 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi
-@@ -181,7 +181,7 @@ &sound_multimedia0_codec {
- /* PINCTRL - modifications to sc7180-trogdor.dtsi */
- 
- &en_pp3300_dx_edp {
--	pinmux  {
-+	pinmux {
- 		pins = "gpio67";
- 	};
- 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi
-index 1bd6c7dcd9e9..7fcff4eddd3a 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi
-@@ -189,7 +189,7 @@ pinconf {
- 	};
- };
- 
--&sec_mi2s_active{
-+&sec_mi2s_active {
- 	pinmux {
- 		pins = "gpio49", "gpio50", "gpio51", "gpio52";
- 		function = "mi2s_1";
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-index b5f534db135a..6ea62ce138ce 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-@@ -1220,7 +1220,7 @@ pinconf {
- 	};
- 
- 	ap_suspend_l_neuter: ap-suspend-l-neuter {
--		pinmux  {
-+		pinmux {
- 			pins = "gpio27";
- 			function = "gpio";
- 		};
-@@ -1365,7 +1365,7 @@ pinconf {
- 	};
- 
- 	pen_rst_odl: pen-rst-odl {
--		pinmux  {
-+		pinmux {
- 			pins = "gpio18";
- 			function = "gpio";
- 		};
-@@ -1489,7 +1489,7 @@ pinconf {
- 	};
- 
- 	ts_int_l: ts-int-l {
--		pinmux  {
-+		pinmux {
- 			pins = "gpio9";
- 			function = "gpio";
- 		};
-@@ -1501,7 +1501,7 @@ pinconf {
- 	};
- 
- 	ts_reset_l: ts-reset-l {
--		pinmux  {
-+		pinmux {
- 			pins = "gpio8";
- 			function = "gpio";
- 		};
-diff --git a/arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi b/arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi
-index b5eb8f7eca1d..d46a6d2a7912 100644
---- a/arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi
-@@ -1341,7 +1341,7 @@ pinconf {
- 	};
- 
- 	pen_rst_l: pen-rst-l {
--		pinmux  {
-+		pinmux {
- 			pins = "gpio23";
- 			function = "gpio";
- 		};
-@@ -1408,7 +1408,7 @@ pinconf {
- 	};
- 
- 	ts_int_l: ts-int-l {
--		pinmux  {
-+		pinmux {
- 			pins = "gpio125";
- 			function = "gpio";
- 		};
-@@ -1420,7 +1420,7 @@ pinconf {
- 	};
- 
- 	ts_reset_l: ts-reset-l {
--		pinmux  {
-+		pinmux {
- 			pins = "gpio118";
- 			function = "gpio";
- 		};
-diff --git a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
-index 132417e2d11e..feb1396fadb6 100644
---- a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
-+++ b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
-@@ -1076,7 +1076,7 @@ &venus {
- 	status = "okay";
- };
- 
--&wcd9340{
-+&wcd9340 {
- 	pinctrl-0 = <&wcd_intr_default>;
- 	pinctrl-names = "default";
- 	clock-names = "extclk";
-@@ -1089,7 +1089,7 @@ &wcd9340{
- 	vdd-io-supply = <&vreg_s4a_1p8>;
- 
- 	swm: swm@c85 {
--		left_spkr: wsa8810-left{
-+		left_spkr: wsa8810-left {
- 			compatible = "sdw10217201000";
- 			reg = <0 1>;
- 			powerdown-gpios = <&wcdgpio 1 GPIO_ACTIVE_HIGH>;
-@@ -1098,7 +1098,7 @@ left_spkr: wsa8810-left{
- 			#sound-dai-cells = <0>;
- 		};
- 
--		right_spkr: wsa8810-right{
-+		right_spkr: wsa8810-right {
- 			compatible = "sdw10217201000";
- 			powerdown-gpios = <&wcdgpio 1 GPIO_ACTIVE_HIGH>;
- 			reg = <0 2>;
-@@ -1126,7 +1126,7 @@ &qup_spi2_default {
- 	drive-strength = <16>;
- };
- 
--&qup_uart3_default{
-+&qup_uart3_default {
- 	pinmux {
- 		pins = "gpio41", "gpio42", "gpio43", "gpio44";
- 		function = "qup3";
-diff --git a/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts b/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts
-index be59a8ba9c1f..761927535778 100644
---- a/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts
-+++ b/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts
-@@ -783,7 +783,7 @@ &wcd9340{
- 	qcom,mbhc-headphone-vthreshold-microvolt = <50000>;
- 
- 	swm: swm@c85 {
--		left_spkr: wsa8810-left{
-+		left_spkr: wsa8810-left {
- 			compatible = "sdw10217211000";
- 			reg = <0 3>;
- 			powerdown-gpios = <&wcdgpio 1 GPIO_ACTIVE_HIGH>;
-@@ -792,7 +792,7 @@ left_spkr: wsa8810-left{
- 			#sound-dai-cells = <0>;
- 		};
- 
--		right_spkr: wsa8810-right{
-+		right_spkr: wsa8810-right {
- 			compatible = "sdw10217211000";
- 			powerdown-gpios = <&wcdgpio 2 GPIO_ACTIVE_HIGH>;
- 			reg = <0 4>;
-diff --git a/arch/arm64/boot/dts/qcom/sdm850-samsung-w737.dts b/arch/arm64/boot/dts/qcom/sdm850-samsung-w737.dts
-index f954fe5cb61a..7e92438034e8 100644
---- a/arch/arm64/boot/dts/qcom/sdm850-samsung-w737.dts
-+++ b/arch/arm64/boot/dts/qcom/sdm850-samsung-w737.dts
-@@ -574,7 +574,7 @@ pinconf {
- 	};
- 
- 	pen_rst_l: pen-rst-l {
--		pinmux  {
-+		pinmux {
- 			pins = "gpio21";
- 			function = "gpio";
- 		};
-@@ -715,7 +715,7 @@ &wcd9340{
- 	qcom,mbhc-headphone-vthreshold-microvolt = <50000>;
- 
- 	swm: swm@c85 {
--		left_spkr: wsa8810-left{
-+		left_spkr: wsa8810-left {
- 			compatible = "sdw10217211000";
- 			reg = <0 3>;
- 			powerdown-gpios = <&wcdgpio 1 GPIO_ACTIVE_HIGH>;
-@@ -724,7 +724,7 @@ left_spkr: wsa8810-left{
- 			#sound-dai-cells = <0>;
- 		};
- 
--		right_spkr: wsa8810-right{
-+		right_spkr: wsa8810-right {
- 			compatible = "sdw10217211000";
- 			powerdown-gpios = <&wcdgpio 2 GPIO_ACTIVE_HIGH>;
- 			reg = <0 4>;
--- 
-2.34.1
+Does the attached patch help?
 
+Alex
+
+
+>
+> Arthur Marsh.
+
+--000000000000bb74c905e90a4789
+Content-Type: text/x-patch; charset="US-ASCII"; 
+	name="0001-drm-amdgpu-don-t-register-a-dirty-callback-for-non-a.patch"
+Content-Disposition: attachment; 
+	filename="0001-drm-amdgpu-don-t-register-a-dirty-callback-for-non-a.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_l88zlnu70>
+X-Attachment-Id: f_l88zlnu70
+
+RnJvbSA1ZTQ5YzY4YzFhYzFmYmI5OGIxYzg0NDA3NDg1YWJmYjdkMzA5NzgzIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBBbGV4IERldWNoZXIgPGFsZXhhbmRlci5kZXVjaGVyQGFtZC5j
+b20+CkRhdGU6IE1vbiwgMTkgU2VwIDIwMjIgMTI6MjY6MjAgLTA0MDAKU3ViamVjdDogW1BBVENI
+XSBkcm0vYW1kZ3B1OiBkb24ndCByZWdpc3RlciBhIGRpcnR5IGNhbGxiYWNrIGZvciBub24tYXRv
+bWljCgpTb21lIGFzaWNzIHN0aWxsIHN1cHBvcnQgbm9uLWF0b21pYyBjb2RlIHBhdGhzLgoKRml4
+ZXM6IDY2Zjk5NjI4ZWIyNDQwICgiZHJtL2FtZGdwdTogdXNlIGRpcnR5IGZyYW1lYnVmZmVyIGhl
+bHBlciIpClJlcG9ydGVkLWJ5OiBBcnRodXIgTWFyc2ggPGFydGh1ci5tYXJzaEBpbnRlcm5vZGUu
+b24ubmV0PgpTaWduZWQtb2ZmLWJ5OiBBbGV4IERldWNoZXIgPGFsZXhhbmRlci5kZXVjaGVyQGFt
+ZC5jb20+Ci0tLQogZHJpdmVycy9ncHUvZHJtL2FtZC9hbWRncHUvYW1kZ3B1X2Rpc3BsYXkuYyB8
+IDExICsrKysrKysrKystCiAxIGZpbGUgY2hhbmdlZCwgMTAgaW5zZXJ0aW9ucygrKSwgMSBkZWxl
+dGlvbigtKQoKZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2RybS9hbWQvYW1kZ3B1L2FtZGdwdV9k
+aXNwbGF5LmMgYi9kcml2ZXJzL2dwdS9kcm0vYW1kL2FtZGdwdS9hbWRncHVfZGlzcGxheS5jCmlu
+ZGV4IDViMDljOGY0ZmU5NS4uMjM5OThmNzI3YzdmIDEwMDY0NAotLS0gYS9kcml2ZXJzL2dwdS9k
+cm0vYW1kL2FtZGdwdS9hbWRncHVfZGlzcGxheS5jCisrKyBiL2RyaXZlcnMvZ3B1L2RybS9hbWQv
+YW1kZ3B1L2FtZGdwdV9kaXNwbGF5LmMKQEAgLTM5LDYgKzM5LDcgQEAKICNpbmNsdWRlIDxsaW51
+eC9wbV9ydW50aW1lLmg+CiAjaW5jbHVkZSA8ZHJtL2RybV9jcnRjX2hlbHBlci5oPgogI2luY2x1
+ZGUgPGRybS9kcm1fZGFtYWdlX2hlbHBlci5oPgorI2luY2x1ZGUgPGRybS9kcm1fZHJ2Lmg+CiAj
+aW5jbHVkZSA8ZHJtL2RybV9lZGlkLmg+CiAjaW5jbHVkZSA8ZHJtL2RybV9nZW1fZnJhbWVidWZm
+ZXJfaGVscGVyLmg+CiAjaW5jbHVkZSA8ZHJtL2RybV9mYl9oZWxwZXIuaD4KQEAgLTQ5Nyw2ICs0
+OTgsMTEgQEAgYm9vbCBhbWRncHVfZGlzcGxheV9kZGNfcHJvYmUoc3RydWN0IGFtZGdwdV9jb25u
+ZWN0b3IgKmFtZGdwdV9jb25uZWN0b3IsCiBzdGF0aWMgY29uc3Qgc3RydWN0IGRybV9mcmFtZWJ1
+ZmZlcl9mdW5jcyBhbWRncHVfZmJfZnVuY3MgPSB7CiAJLmRlc3Ryb3kgPSBkcm1fZ2VtX2ZiX2Rl
+c3Ryb3ksCiAJLmNyZWF0ZV9oYW5kbGUgPSBkcm1fZ2VtX2ZiX2NyZWF0ZV9oYW5kbGUsCit9Owor
+CitzdGF0aWMgY29uc3Qgc3RydWN0IGRybV9mcmFtZWJ1ZmZlcl9mdW5jcyBhbWRncHVfZmJfZnVu
+Y3NfYXRvbWljID0geworCS5kZXN0cm95ID0gZHJtX2dlbV9mYl9kZXN0cm95LAorCS5jcmVhdGVf
+aGFuZGxlID0gZHJtX2dlbV9mYl9jcmVhdGVfaGFuZGxlLAogCS5kaXJ0eSA9IGRybV9hdG9taWNf
+aGVscGVyX2RpcnR5ZmIsCiB9OwogCkBAIC0xMTAyLDcgKzExMDgsMTAgQEAgc3RhdGljIGludCBh
+bWRncHVfZGlzcGxheV9nZW1fZmJfdmVyaWZ5X2FuZF9pbml0KHN0cnVjdCBkcm1fZGV2aWNlICpk
+ZXYsCiAJaWYgKHJldCkKIAkJZ290byBlcnI7CiAKLQlyZXQgPSBkcm1fZnJhbWVidWZmZXJfaW5p
+dChkZXYsICZyZmItPmJhc2UsICZhbWRncHVfZmJfZnVuY3MpOworCWlmIChkcm1fZHJ2X3VzZXNf
+YXRvbWljX21vZGVzZXQoZGV2KSkKKwkJcmV0ID0gZHJtX2ZyYW1lYnVmZmVyX2luaXQoZGV2LCAm
+cmZiLT5iYXNlLCAmYW1kZ3B1X2ZiX2Z1bmNzX2F0b21pYyk7CisJZWxzZQorCQlyZXQgPSBkcm1f
+ZnJhbWVidWZmZXJfaW5pdChkZXYsICZyZmItPmJhc2UsICZhbWRncHVfZmJfZnVuY3MpOwogCWlm
+IChyZXQpCiAJCWdvdG8gZXJyOwogCi0tIAoyLjM3LjMKCg==
+--000000000000bb74c905e90a4789--
