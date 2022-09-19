@@ -2,162 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E5C55BD602
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 23:00:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6FE55BD601
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 23:00:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229575AbiISVAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 17:00:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60718 "EHLO
+        id S229924AbiISVAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 17:00:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbiISVAQ (ORCPT
+        with ESMTP id S229781AbiISVAK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 17:00:16 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 338F03F1D4;
-        Mon, 19 Sep 2022 14:00:11 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 28JL06mJ130937;
-        Mon, 19 Sep 2022 16:00:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1663621206;
-        bh=d2Rg6H9N+CllSV5fv0RsOmYsBarSCuaGQm0TWpbzIY4=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=LMJ4Cu1ao53rPwAUZFDqPkZiG1hcoPbGOz18B1yFsBs04VSr0H9f6wOxC4+dliwTx
-         aAX+n2ocylgQ+3fKAKTzr2+9uJgPhU7H5dozBUjGEVMm7oXRzdVUAx+HcCW2Ng1ppb
-         /9QyUu2lfCgji+LTggMezLbvpy3ROrN708V3lMrQ=
-Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 28JL06aF006018
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 19 Sep 2022 16:00:06 -0500
-Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Mon, 19
- Sep 2022 16:00:05 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Mon, 19 Sep 2022 16:00:06 -0500
-Received: from ubuntu.ent.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 28JKxoAL014294;
-        Mon, 19 Sep 2022 16:00:01 -0500
-From:   Matt Ranostay <mranostay@ti.com>
-To:     <nm@ti.com>, <vkoul@kernel.org>
-CC:     <dmaengine@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Matt Ranostay <mranostay@ti.com>
-Subject: [PATCH RESEND 2/2] dmaengine: ti: k3-psil: add additional TX threads for j7200
-Date:   Mon, 19 Sep 2022 13:59:31 -0700
-Message-ID: <20220919205931.8397-3-mranostay@ti.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220919205931.8397-1-mranostay@ti.com>
-References: <20220919205931.8397-1-mranostay@ti.com>
+        Mon, 19 Sep 2022 17:00:10 -0400
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82EB63AB09;
+        Mon, 19 Sep 2022 14:00:08 -0700 (PDT)
+Received: by mail-qv1-f46.google.com with SMTP id c6so660113qvn.6;
+        Mon, 19 Sep 2022 14:00:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=9mdmrFgEg5jnYr/4Ig+o/fAymm12WeUIHo2kO/DiSd0=;
+        b=yrHWwfy3RNaJNYUH7X8T1l3Z+6cFgbhz8SZZ9VNwc/9d3SUCAECdpRcMjmkj0RajvP
+         QtpDTAJFcoCqeFwr5W7lKiahqM+Kb6RHGh2A0d7pI4ZLzR66drCwae59UNA1LfnMoAPT
+         JYx/dMduzxt+zj4O5D+Si7s6GwVsu/5Yt//uQ6k+EV2uuMUoxJm19nzfNrcxjgVsIaWC
+         HqpplZb2ggWOSUOuXmaiTV107+3PnHwkWT9blj1d78Z73ST1yFjD0wUY/K9oiW+aPFbe
+         uhxX9BSCwL1KAyeH8B1qbdg5ZG8y8JRwNMNe9pOZPNd3Qz+uzFOjJTxysQjy66UCtkBk
+         EpyA==
+X-Gm-Message-State: ACrzQf0AX9D/TJQ9DyJ/PwRix/o7ETLVM/yXzV8yTz3faPs1cRI613+D
+        EWW6siAdEtQ3vYQt0l4AOyA=
+X-Google-Smtp-Source: AMsMyM7DGMx5PnIoDTJ28SK1r5efErX/SDEwEhDCz0aR7TT2M/c59tQLI+pDt0hF/4zN2zoJSSdcyA==
+X-Received: by 2002:a05:6214:400c:b0:4ac:8066:991d with SMTP id kd12-20020a056214400c00b004ac8066991dmr16039924qvb.112.1663621207446;
+        Mon, 19 Sep 2022 14:00:07 -0700 (PDT)
+Received: from maniforge.dhcp.thefacebook.com ([2620:10d:c091:480::148f])
+        by smtp.gmail.com with ESMTPSA id y15-20020a05620a44cf00b006bc56c063fcsm14344790qkp.62.2022.09.19.14.00.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Sep 2022 14:00:07 -0700 (PDT)
+Date:   Mon, 19 Sep 2022 16:00:05 -0500
+From:   David Vernet <void@manifault.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, bpf@vger.kernel.org, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org, tj@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com
+Subject: Re: [PATCH v5 3/4] bpf: Add libbpf logic for user-space ring buffer
+Message-ID: <YyjYVUetY0OL/9sX@maniforge.dhcp.thefacebook.com>
+References: <20220902234317.2518808-1-void@manifault.com>
+ <20220902234317.2518808-4-void@manifault.com>
+ <CAEf4Bzbz_7eVSOY0iGp0YkADx80TgZw8cV6NvSm6V1EF=xKo4A@mail.gmail.com>
+ <YyjPcSoBWYtjYIVj@maniforge.dhcp.thefacebook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75 autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YyjPcSoBWYtjYIVj@maniforge.dhcp.thefacebook.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add matching PSI-L threads mapping for transmission DMA channels
-on the J7200 platform.
+On Mon, Sep 19, 2022 at 03:22:09PM -0500, David Vernet wrote:
 
-Signed-off-by: Matt Ranostay <mranostay@ti.com>
----
- drivers/dma/ti/k3-psil-j7200.c | 67 ++++++++++++++++++++++++++++++++++
- 1 file changed, 67 insertions(+)
+[...]
 
-diff --git a/drivers/dma/ti/k3-psil-j7200.c b/drivers/dma/ti/k3-psil-j7200.c
-index 5ea63ea74822..e3feff869991 100644
---- a/drivers/dma/ti/k3-psil-j7200.c
-+++ b/drivers/dma/ti/k3-psil-j7200.c
-@@ -143,6 +143,57 @@ static struct psil_ep j7200_src_ep_map[] = {
- 
- /* PSI-L destination thread IDs, used for TX (DMA_MEM_TO_DEV) */
- static struct psil_ep j7200_dst_ep_map[] = {
-+	/* PDMA_MCASP - McASP0-2 */
-+	PSIL_PDMA_MCASP(0xc400),
-+	PSIL_PDMA_MCASP(0xc401),
-+	PSIL_PDMA_MCASP(0xc402),
-+	/* PDMA_SPI_G0 - SPI0-3 */
-+	PSIL_PDMA_XY_PKT(0xc600),
-+	PSIL_PDMA_XY_PKT(0xc601),
-+	PSIL_PDMA_XY_PKT(0xc602),
-+	PSIL_PDMA_XY_PKT(0xc603),
-+	PSIL_PDMA_XY_PKT(0xc604),
-+	PSIL_PDMA_XY_PKT(0xc605),
-+	PSIL_PDMA_XY_PKT(0xc606),
-+	PSIL_PDMA_XY_PKT(0xc607),
-+	PSIL_PDMA_XY_PKT(0xc608),
-+	PSIL_PDMA_XY_PKT(0xc609),
-+	PSIL_PDMA_XY_PKT(0xc60a),
-+	PSIL_PDMA_XY_PKT(0xc60b),
-+	PSIL_PDMA_XY_PKT(0xc60c),
-+	PSIL_PDMA_XY_PKT(0xc60d),
-+	PSIL_PDMA_XY_PKT(0xc60e),
-+	PSIL_PDMA_XY_PKT(0xc60f),
-+	/* PDMA_SPI_G1 - SPI4-7 */
-+	PSIL_PDMA_XY_PKT(0xc610),
-+	PSIL_PDMA_XY_PKT(0xc611),
-+	PSIL_PDMA_XY_PKT(0xc612),
-+	PSIL_PDMA_XY_PKT(0xc613),
-+	PSIL_PDMA_XY_PKT(0xc614),
-+	PSIL_PDMA_XY_PKT(0xc615),
-+	PSIL_PDMA_XY_PKT(0xc616),
-+	PSIL_PDMA_XY_PKT(0xc617),
-+	PSIL_PDMA_XY_PKT(0xc618),
-+	PSIL_PDMA_XY_PKT(0xc619),
-+	PSIL_PDMA_XY_PKT(0xc61a),
-+	PSIL_PDMA_XY_PKT(0xc61b),
-+	PSIL_PDMA_XY_PKT(0xc61c),
-+	PSIL_PDMA_XY_PKT(0xc61d),
-+	PSIL_PDMA_XY_PKT(0xc61e),
-+	PSIL_PDMA_XY_PKT(0xc61f),
-+	/* PDMA_USART_G0 - UART0-1 */
-+	PSIL_PDMA_XY_PKT(0xc700),
-+	PSIL_PDMA_XY_PKT(0xc701),
-+	/* PDMA_USART_G1 - UART2-3 */
-+	PSIL_PDMA_XY_PKT(0xc702),
-+	PSIL_PDMA_XY_PKT(0xc703),
-+	/* PDMA_USART_G2 - UART4-9 */
-+	PSIL_PDMA_XY_PKT(0xc704),
-+	PSIL_PDMA_XY_PKT(0xc705),
-+	PSIL_PDMA_XY_PKT(0xc706),
-+	PSIL_PDMA_XY_PKT(0xc707),
-+	PSIL_PDMA_XY_PKT(0xc708),
-+	PSIL_PDMA_XY_PKT(0xc709),
- 	/* CPSW5 */
- 	PSIL_ETHERNET(0xca00),
- 	PSIL_ETHERNET(0xca01),
-@@ -161,6 +212,22 @@ static struct psil_ep j7200_dst_ep_map[] = {
- 	PSIL_ETHERNET(0xf005),
- 	PSIL_ETHERNET(0xf006),
- 	PSIL_ETHERNET(0xf007),
-+	/* MCU_PDMA_MISC_G0 - SPI0 */
-+	PSIL_PDMA_XY_PKT(0xf100),
-+	PSIL_PDMA_XY_PKT(0xf101),
-+	PSIL_PDMA_XY_PKT(0xf102),
-+	PSIL_PDMA_XY_PKT(0xf103),
-+	/* MCU_PDMA_MISC_G1 - SPI1-2 */
-+	PSIL_PDMA_XY_PKT(0xf200),
-+	PSIL_PDMA_XY_PKT(0xf201),
-+	PSIL_PDMA_XY_PKT(0xf202),
-+	PSIL_PDMA_XY_PKT(0xf203),
-+	PSIL_PDMA_XY_PKT(0xf204),
-+	PSIL_PDMA_XY_PKT(0xf205),
-+	PSIL_PDMA_XY_PKT(0xf206),
-+	PSIL_PDMA_XY_PKT(0xf207),
-+	/* MCU_PDMA_MISC_G2 - UART0 */
-+	PSIL_PDMA_XY_PKT(0xf300),
- 	/* SA2UL */
- 	PSIL_SA2UL(0xf500, 1),
- 	PSIL_SA2UL(0xf501, 1),
--- 
-2.37.2
+> > > +       timeout_ns = timeout_ms * ns_per_ms;
+> > > +       do {
+> > > +               __u64 ns_remaining = timeout_ns - ns_elapsed;
+> > > +               int cnt, ms_remaining;
+> > > +               void *sample;
+> > > +               struct timespec curr;
+> > > +
+> > > +               sample = user_ring_buffer__reserve(rb, size);
+> > > +               if (sample)
+> > > +                       return sample;
+> > > +               else if (errno != ENOSPC)
+> > > +                       return NULL;
+> > > +
+> > > +               ms_remaining = timeout_ms == -1 ? -1 : ns_remaining / ns_per_ms;
+> > 
+> > ok, so you've special-cased timeout_ms == -1 but still didn't do
+> > max(0, ns_remaining). Can you prove that ns_elapsed will never be
+> > bigger than timeout_ns due to various delays in waking up this thread?
+> > If not, let's please have max(0) otherwise we can accidentally
+> > epoll_wait(-1).
+> 
+> Yes you're right, this was an oversight. Thanks for catching this!
 
+Wait, actually, this can't happen because of the while check at the end of
+the loop:
+
+while (ns_elapsed <= timeout_ns)
+
+So I don't think the max is necessary to prevent underflowing, but I do
+think we need to have one more attempt to invoke
+user_ring_buffer__reserve() at the end of the function to account for
+wakeup delays after epoll_wait() returns. Otherwise, we might think we've
+timed out when there's actually a sample left in the buffer. I also still
+think your suggestion below for cleaning up makes sense, so I'll still add
+it in v6, but I think I can leave off the max() call.
+
+> 
+> > > +               /* The kernel guarantees at least one event notification
+> > > +                * delivery whenever at least one sample is drained from the
+> > > +                * ring buffer in an invocation to bpf_ringbuf_drain(). Other
+> > > +                * additional events may be delivered at any time, but only one
+> > > +                * event is guaranteed per bpf_ringbuf_drain() invocation,
+> > > +                * provided that a sample is drained, and the BPF program did
+> > > +                * not pass BPF_RB_NO_WAKEUP to bpf_ringbuf_drain().
+> > > +                */
+> > > +               cnt = epoll_wait(rb->epoll_fd, &rb->event, 1, ms_remaining);
+> > > +               if (cnt < 0)
+> > > +                       return NULL;
+> > > +
+> > > +               if (timeout_ms == -1)
+> > > +                       continue;
+> > > +
+> > > +               err = clock_gettime(CLOCK_MONOTONIC, &curr);
+> > > +               if (err)
+> > > +                       return NULL;
+> > > +
+> > > +               ns_elapsed = ns_elapsed_timespec(&start, &curr);
+> > 
+> > nit: if you move re-calculation of ms_remaining and ns_remaining to
+> > here, I think overall loop logic will be even more straightforwad. You
+> > can initialize ms_remaining to -1 if timeout_ms < 0 and never
+> > recalculate it, right? Note that you can also do ns_elapsed conversion
+> > to ms right here and then keep everything else in ms (so no need for
+> > timeout_ns, ns_remaining, etc).
+> 
+> Sounds good, let me give this a shot in v6.
+> 
+> Thanks for another detailed review!
