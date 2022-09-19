@@ -2,156 +2,330 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 713B65BCD9F
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 15:50:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C9E85BCDA5
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 15:50:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231126AbiISNtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 09:49:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58818 "EHLO
+        id S231162AbiISNus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 09:50:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230154AbiISNtc (ORCPT
+        with ESMTP id S231183AbiISNuk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 09:49:32 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3CF2DAA3;
-        Mon, 19 Sep 2022 06:49:23 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3E06D9BA;
-        Mon, 19 Sep 2022 15:49:20 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1663595360;
-        bh=N1LVG0MXObEOzn3wAb8ucps7CX6MhaStUY9Gll/LMYI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZrZP6r3x5Ai0F1Y3DZPRAorq0kuyTi7Kphb86o1+MgIxakQCZFkLY35TYczLuZbcX
-         JnTDMYDaja2NkwTvQsJfcqLsa7wdr39DLxlbkXjG+trokP2E+JZxQBt41t3wJ21zin
-         5WcZ4H3K9RFp1OXDokRGtuVubRBWxyZibbHd77JI=
-Date:   Mon, 19 Sep 2022 16:49:06 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Mikhail Rudenko <mike.rudenko@gmail.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Mon, 19 Sep 2022 09:50:40 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9130A31371
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 06:50:24 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oaHA2-0002QG-Lv; Mon, 19 Sep 2022 15:50:10 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oaHA2-001fvx-Kk; Mon, 19 Sep 2022 15:50:09 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oaHA0-001ytC-9p; Mon, 19 Sep 2022 15:50:08 +0200
+Date:   Mon, 19 Sep 2022 15:50:08 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Shawn Tu <shawnx.tu@intel.com>, Jimmy Su <jimmy.su@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>, Arec Kao <arec.kao@intel.com>,
-        Marek Vasut <marex@denx.de>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] Add Omnivision OV4689 image sensor driver
-Message-ID: <YyhzUvu0Ky8+VohC@pendragon.ideasonboard.com>
-References: <20220911200147.375198-1-mike.rudenko@gmail.com>
- <CAPY8ntCA3jbpBOiNfoft58sHPeTFSLoLop0VUmkOCWP3cX_rdw@mail.gmail.com>
- <87czbwp9xx.fsf@gmail.com>
- <YygOzWAHyoP+KwTv@paasikivi.fi.intel.com>
- <87wn9zreic.fsf@gmail.com>
- <YyhE5voxRz7gEYHY@paasikivi.fi.intel.com>
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v10 3/4] pwm: add microchip soft ip corePWM driver
+Message-ID: <20220919135008.sahwmwbfwvgplji4@pengutronix.de>
+References: <20220824091215.141577-1-conor.dooley@microchip.com>
+ <20220824091215.141577-4-conor.dooley@microchip.com>
+ <20220915072152.y346csakn7wetpz5@pengutronix.de>
+ <YyhmZBmfJvJ9/vBg@wendy>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="yjnvpolgdstr7x3j"
 Content-Disposition: inline
-In-Reply-To: <YyhE5voxRz7gEYHY@paasikivi.fi.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YyhmZBmfJvJ9/vBg@wendy>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-On Mon, Sep 19, 2022 at 10:31:02AM +0000, Sakari Ailus wrote:
-> On Mon, Sep 19, 2022 at 10:01:06AM +0300, Mikhail Rudenko wrote:
-> > On 2022-09-19 at 06:40 GMT, Sakari Ailus wrote:
-> > > On Fri, Sep 16, 2022 at 12:27:42AM +0300, Mikhail Rudenko wrote:
-> > >> On 2022-09-14 at 10:58 +01, Dave Stevenson wrote:
-> > >> > On Sun, 11 Sept 2022 at 21:02, Mikhail Rudenko wrote:
-> > >> >>
-> > >> >> Hello,
-> > >> >>
-> > >> >> this series implements support for Omnivision OV4689 image
-> > >> >> sensor. The Omnivision OV4689 is a high performance, 1/3-inch, 4
-> > >> >> megapixel image sensor. Ihis chip supports high frame rate speeds up
-> > >> >> to 90 fps at 2688x1520 resolution. It is programmable through an I2C
-> > >> >> interface, and sensor output is sent via 1/2/4 lane MIPI CSI-2
-> > >> >> connection.
-> > >> >>
-> > >> >> The driver is based on Rockchip BSP kernel [1]. It implements 4-lane CSI-2
-> > >> >> and single 2688x1520 @ 30 fps mode. The driver was tested on Rockchip
-> > >> >> 3399-based FriendlyElec NanoPi M4 board with MCAM400 camera
-> > >> >> module.
-> > >> >> While porting the driver, I stumbled upon two issues:
-> > 
-> > [snip]
-> > 
-> > >> >> (2) The original driver exposes analog gain range 0x0 - 0x7ff, but the
-> > >> >> gain is not linear across that range. Instead, it is piecewise linear
-> > >> >> (and discontinuous). 0x0-0xff register values result in 0x-2x gain,
-> > >> >> 0x100-0x1ff to 0x-4x, 0x300-0x3ff to 0x-8x, and 0x700-0x7ff to 0x-16x,
-> > >> >> with more linear segments in between. Rockchip's camera engine code
-> > >> >> chooses one of the above segments depenging on the desired gain
-> > >> >> value. The question is, how should we proceed keeping in mind
-> > >> >> libcamera use case? Should the whole 0x0-0x7ff be exposed as-is and
-> > >> >> libcamera will do the mapping, or the driver will do the mapping
-> > >> >> itself and expose some logical gain units not tied to the actual gain
-> > >> >> register value? Meanwhile, this driver conservatively exposes only
-> > >> >> 0x0-0xf8 gain register range.
-> > >> >
-> > >> > The datasheet linked above says "for the gain formula, please contact
-> > >> > your local OmniVision FAE" :-(
-> > >> > I would assume that the range is from 1x rather than 0x - people
-> > >> > rarely want a totally black image that 0x would give. Or is it ranges
-> > >> > of 1x - 2x, 2x - 4x, 4x - 8x, and 8x - 16x?
-> > >>
-> > >> A picture is worth a thousand words, so I've attached the results of my
-> > >> experimentation with the gain register. They were obtained with Rockchip
-> > >> 3399, with AEC, AGC and black level subtraction disabled. The image was
-> > >> converted from 10-bit RGGB to 8-bit YUV 4:2:0 by the Rockchip ISP.
+--yjnvpolgdstr7x3j
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Is that full or limited range YUV ?
+On Mon, Sep 19, 2022 at 01:53:56PM +0100, Conor Dooley wrote:
+> Hey Uwe,
+> Thanks (as always). I've switched up my email setup a bit so I hope
+> that I've not mangled anything here.
+>=20
+> On Thu, Sep 15, 2022 at 09:21:52AM +0200, Uwe Kleine-K=F6nig wrote:
+> > Hello,
+> >=20
+> > On Wed, Aug 24, 2022 at 10:12:14AM +0100, Conor Dooley wrote:
+> > > Add a driver that supports the Microchip FPGA "soft" PWM IP core.
+> > >=20
+> > > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> > > ---
+> > >  drivers/pwm/Kconfig              |  10 +
+> > >  drivers/pwm/Makefile             |   1 +
+> > >  drivers/pwm/pwm-microchip-core.c | 402 +++++++++++++++++++++++++++++=
+++
+> > >  3 files changed, 413 insertions(+)
+> > >  create mode 100644 drivers/pwm/pwm-microchip-core.c
+> > >=20
+>=20
+> > > +static int mchp_core_pwm_apply(struct pwm_chip *chip, struct pwm_dev=
+ice *pwm,
+> > > +			       const struct pwm_state *state)
+> > > +{
+> > > +	struct mchp_core_pwm_chip *mchp_core_pwm =3D to_mchp_core_pwm(chip);
+> > > +	struct pwm_state current_state =3D pwm->state;
+> > > +	bool period_locked;
+> > > +	u64 duty_steps;
+> > > +	u16 prescale;
+> > > +	u8 period_steps;
+> > > +	int ret;
+> > > +
+> > > +	mutex_lock(&mchp_core_pwm->lock);
+> > > +
+> > > +	if (!state->enabled) {
+> > > +		mchp_core_pwm_enable(chip, pwm, false, current_state.period);
+> > > +		mutex_unlock(&mchp_core_pwm->lock);
+> > > +		return 0;
+> > > +	}
+> > > +
+> > > +	/*
+> > > +	 * If the only thing that has changed is the duty cycle or the pola=
+rity,
+> > > +	 * we can shortcut the calculations and just compute/apply the new =
+duty
+> > > +	 * cycle pos & neg edges
+> > > +	 * As all the channels share the same period, do not allow it to be
+> > > +	 * changed if any other channels are enabled.
+> > > +	 * If the period is locked, it may not be possible to use a period
+> > > +	 * less than that requested. In that case, we just abort.
+> > > +	 */
+> > > +	period_locked =3D mchp_core_pwm->channel_enabled & ~(1 << pwm->hwpw=
+m);
+> > > +
+> > > +	if (period_locked) {
+> > > +		u16 hw_prescale;
+> > > +		u8 hw_period_steps;
+> > > +
+> > > +		mchp_core_pwm_calc_period(chip, state, (u8 *)&prescale, &period_st=
+eps);
+> >=20
+> > Huh, if (u8 *)&prescale works depends on endianness.
+>=20
+> Big endian? What's that? ;)
+> I think the cast can just be dropped and the u16 used directly instead.
+>=20
+> >=20
+> > > +		hw_prescale =3D readb_relaxed(mchp_core_pwm->base + MCHPCOREPWM_PR=
+ESCALE);
+> > > +		hw_period_steps =3D readb_relaxed(mchp_core_pwm->base + MCHPCOREPW=
+M_PERIOD);
+> > > +
+> > > +		if ((period_steps + 1) * (prescale + 1) <
+> > > +		    (hw_period_steps + 1) * (hw_prescale + 1)) {
+> > > +			mutex_unlock(&mchp_core_pwm->lock);
+> > > +			return -EINVAL;
+> > > +		}
+> > > +
+> > > +		/*
+> > > +		 * It is possible that something could have set the period_steps
+> >=20
+> > My German feel for the English language says s/could have/has/
+>=20
+> What I wrote is _fine_ but the could is redudant given the possible.
+> I'll change it over.
+>=20
+> > > +		 * register to 0xff, which would prevent us from setting a 100%
+> >=20
+> > For my understanding: It would also prevent a 0% relative duty, right?
+>=20
+> Yeah, I guess the comment could reflect that.
+>=20
+> >=20
+> > > +		 * duty cycle, as explained in the mchp_core_pwm_calc_period()
+> >=20
+> > s/duty/relative duty/; s/the //
+> >=20
+> > > +		 * above.
+> > > +		 * The period is locked and we cannot change this, so we abort.
+> > > +		 */
+> > > +		if (period_steps =3D=3D MCHPCOREPWM_PERIOD_STEPS_MAX) {
+> >=20
+> > Don't you need to check hw_period_steps =3D=3D MCHPCOREPWM_PERIOD_STEPS=
+_MAX
+> > here?
+>=20
+> D'oh.
+>=20
+> >=20
+> > > +			mutex_unlock(&mchp_core_pwm->lock);
+> > > +			return -EINVAL;
+> > > +		}
+> > > +
+> > > +		prescale =3D hw_prescale;
+> > > +		period_steps =3D hw_period_steps;
+> > > +	} else if (!current_state.enabled || current_state.period !=3D stat=
+e->period) {
+> > > +		ret =3D mchp_core_pwm_calc_period(chip, state, (u8 *)&prescale, &p=
+eriod_steps);
+> >=20
+> > ret is only used in this block, so the declaration can go into here,
+> > too.
+> >=20
+> > > +		if (ret) {
+> > > +			mutex_unlock(&mchp_core_pwm->lock);
+> > > +			return ret;
+> > > +		}
+> > > +		mchp_core_pwm_apply_period(mchp_core_pwm, prescale, period_steps);
+> > > +	} else {
+> > > +		prescale =3D readb_relaxed(mchp_core_pwm->base + MCHPCOREPWM_PRESC=
+ALE);
+> > > +		period_steps =3D readb_relaxed(mchp_core_pwm->base + MCHPCOREPWM_P=
+ERIOD);
+> > > +		/*
+> > > +		 * As above, it is possible that something could have set the
+> > > +		 * period_steps register to 0xff, which would prevent us from
+> > > +		 * setting a 100% duty cycle, as explained above.
+> > > +		 * As the period is not locked, we are free to fix this.
+> > > +		 */
+> >=20
+> > Are you sure this is safe? I think it isn't. Consider:
+> >=20
+> > 	pwm_apply_state(mypwm, { .duty =3D 0, .period =3D A, .enabled =3D true=
+, });
+> > 	pwm_apply_state(mypwm, { .duty =3D 0, .period =3D B, .enabled =3D fals=
+e, });
+> > 	pwm_apply_state(mypwm, { .duty =3D 0, .period =3D B, .enabled =3D true=
+, });
+> >=20
+> > Then you have in the third call prescale and period_steps still
+> > corresponding to A because you didn't update these registers in the 2nd
+> > call as you exited early.
+>=20
+> Riiight. I think I am a little confused here - this comment does not
+> refer to my comment but rather to the whole logic I have?
+>=20
+> As in, what you're concerned about is the early exit if the state is
+> disabled & that I take the values in the hardware as accurate?
 
-> > > Based on that it looks like their medication may have been a little too
-> > > strong.
-> > >
-> > > Could this be implemented so that the control value would be linear linear
-> > > but its range would correspond 1x--16x values?
-> > >
-> > > libcamera will be able to cope with that.
-> > 
-> > According to the following fragment of the Rockchip camera engine sensor
-> > configuration file for ov4689 [1]
-> > 
-> >     <Linear index="1" type="double" size="[4 7]">
-> >        [1 2 128 0 1 128 255
-> >         2 4 64 -248 1 376 504
-> >         4 8 32 -756 1 884 1012
-> >         8 16 16 -1784 1 1912 2040]
-> >     </Linear>,
-> > 
-> > it uses gain register value range 128-255 for gain 1x-2x, 376-504 for
-> > gain 2x-4x, 884-1024 for 4x-8x, and 1912-2040 for 8x-16x. Do you suggest
+No, the thing I'm concerned about is assuming MCHPCOREPWM_PRESCALE and
+MCHPCOREPWM_PERIOD correspond to state->period. So I'd drop the last
+block use the 2nd last instead without further condition.
 
-That looks *really* weird. I would have understood [384, 511], [896,
-1023] and [1920, 2047], but not those intervals.
+> What makes sense to me to do here (assuming I understood correctly)
+> is to compare state->period against what is in the hardare rather than
+> against what the pwm core thinks?
+> Or else I could stop exiting early if the pwm is to be disabled &
+> instead allow the period and duty to be set so that the state of the
+> hardware is as close to the pwm core's representation of it as possible.
 
-The driver hardcodes bit 0x3503[2] to 1, which means "sensor gain
-format". Maybe setting it to 0 ("real gain format") would produce saner
-results ?
+exiting early is fine.
+=20
+> > > [...]
+> > > +	period_steps =3D PREG_TO_VAL(readb_relaxed(mchp_core_pwm->base + MC=
+HPCOREPWM_PERIOD));
+> > > +	state->period =3D period_steps * prescale * NSEC_PER_SEC;
+> >=20
+> > This is broken on 32 bit archs (here: arm):
+> >=20
+> > $ cat test.c
+> > #include <inttypes.h>
+> > #include <stdio.h>
+> > #include <stdlib.h>
+> >=20
+> > int main(int argc, char *argv[])
+> > {
+> > 	uint8_t period_steps =3D atoi(argv[1]);
+> > 	uint16_t prescale =3D atoi(argv[2]);
+> > 	uint64_t period;
+> >=20
+> > 	period =3D period_steps * prescale * 1000000000L;
+> >=20
+> > 	printf("period_steps =3D %" PRIu8 "\n", period_steps);
+> > 	printf("prescale =3D %" PRIu16 "\n", prescale);
+> > 	printf("period =3D %" PRIu64 "\n", period);
+> >=20
+> > 	return 0;
+> > }
+> >=20
+> > $ make test
+> > cc     test.c   -o test
+> >=20
+> > $ ./test 255 65535
+> > period_steps =3D 255
+> > prescale =3D 65535
+> > period =3D 18446744073018591744
+> >=20
+> > The problem is that the result of 16711425 * 1000000000L isn't affected
+> > by the type of period and so it's promoted to L which isn't big enough
+> > to hold 16711425000000000 where longs are only 32 bit wide.
+>=20
+> I don't think this is ever going to be hit in the wild, since prescale
+> comes from the hardware where it is limited to 255 - but preventing the
+> issue seems trivially done by splitting the multiplication so no reason
+> not to. Thanks for providing the test program btw :)
 
-> > to implement this calculation in the sensor driver and expose some
-> > linear "logical" gain to userspace (ranging, e.g., 128-2048 for gains
-> > 1x-16x)?
-> 
-> Yes. This way the user space can somehow work without knowing this special
-> implementation, even though the granularity changes over the range. I guess
-> the granularity would need to be known in libcamera but that's a separate
-> issue.
+Even 255 * 255 * 1000000000 overflows. With a maintainer's hat on, it is
+very valuable to prevent such issues because your driver might be used
+as a template for the next driver.
 
-I can live with that.
+> > > +	state->period =3D DIV64_U64_ROUND_UP(state->period, clk_get_rate(mc=
+hp_core_pwm->clk));
+> > > +
+> > > +	posedge =3D readb_relaxed(mchp_core_pwm->base + MCHPCOREPWM_POSEDGE=
+(pwm->hwpwm));
+> > > +	negedge =3D readb_relaxed(mchp_core_pwm->base + MCHPCOREPWM_NEGEDGE=
+(pwm->hwpwm));
+> > > +
+> > > +	if ((negedge =3D=3D posedge) && state->enabled) {
+> >=20
+> > Why do you need that state->enabled?
+>=20
+> Because I was running into conflicts between the reporting here and some
+> of the checks that I have added to prevent the PWM being put into an
+> invalid state. On boot both negedge and posedge will be zero & this was
+> preventing me from setting the period at all.
 
--- 
-Regards,
+I don't understood that.
+=20
+Best regards
+Uwe
 
-Laurent Pinchart
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--yjnvpolgdstr7x3j
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmMoc40ACgkQwfwUeK3K
+7AnWqQf/euRAqgVV+WmeX3jxNeE9x9t586LeUuGK145SnL9adalZFxcJJ0fB875y
+U0T5p2i2KkSPbnI10pJUYLXCcgPnHFgSJsY8CVOBUvSYcSsI2Hz3yPIv1x6v+HZf
+5AAflaZXpahU37PHuKHyx2WZb64WuMoGwpikrfO2744VC0b5kSlM5MvuvhIs939L
+WWY5kq0Qh+A+VDZHmpJYRRI9JDctd4kDcEatvTPHuRmXDd4omDDdbqXj1INK67ML
+NFXsvw4584d8UiDzNMEyaL5YVUUT2Ta+x3iwX8MnnFJquNremvbX4Sapho3vPu83
+NBXqmVZ5ohCpuG42AtSx0hw/2VO6aQ==
+=V/4c
+-----END PGP SIGNATURE-----
+
+--yjnvpolgdstr7x3j--
