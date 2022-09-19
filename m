@@ -2,104 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C28EB5BD48A
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 20:10:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41DFA5BD48C
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 20:10:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbiISSKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 14:10:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60472 "EHLO
+        id S229839AbiISSKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 14:10:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbiISSJ3 (ORCPT
+        with ESMTP id S229873AbiISSKD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 14:09:29 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01A1F476C6
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 11:08:40 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-12b542cb1d3so498396fac.13
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 11:08:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=TJiXMkCUTojlXKbQiyFacYe67YzyD0jjA+qabTsDbHM=;
-        b=ju2bOaIH0x2rfWBR2EkNKXtD+zFlJlrmslGAw5GPkTydyo40nU2mIIXyv2TelU5tHO
-         XqrygKYF6N7ls5CstZqbkxAOXW7kG8TPicncmVypRq0wuO5k4e/KQxMyaLj94h/heLnA
-         3YqZUWkGMtKcZBkuNQZZt0/JtAaUyY32r+kErbm8hAv6ZAzapfJeonMQ+Ld+gt0hoHSC
-         YriET+StwTfUXoXl/oTAlgLYp2Dncrqm1FhtXPMPPSRVSsen4yUPFaR0F9F2xUnMD0IR
-         Sv9+pHEbDmVPfSX0JGHO+IRu0eHP86NFLmrK6CycdkinEcxd9nuqVsEwxUEXfP7uPxlp
-         SNyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=TJiXMkCUTojlXKbQiyFacYe67YzyD0jjA+qabTsDbHM=;
-        b=4etEvprjtkSdysHoHX2afrAyhluZBjBqULy97Egvq47FQMh9pvgSsmXeNDi/t/RBPa
-         4rvgkhPuAHLs1q52aOLnB3p/Yvh8OCxA22Cisv18qgNhxx068ng3RQlWKyINojIvfF9n
-         40pcz7xgi2eoP6XvhiVgfPwgDK5ZRp3MY6//cSQ0m/psjjKSNwpa6TMUAW3DXlWgLfic
-         MVZ/PhMGXmPzgLX5Tnr88l66sonGAUt2xebXRb2CrtlLwJ+qeK+cGI/oEBcHmxZ2qFPZ
-         clvoaBC6YlCaKvFgXDZxB7dKPtT1VKMZTqWQF25s+VvYCyrv9sw5fmUHeTky0luKphaO
-         t2CA==
-X-Gm-Message-State: ACgBeo0zREow17V22pVsdWsuJglfbeEBrWMi3B8FofLXV4VJ4hDso868
-        ZvpJo+OVooheYiIWVxZWlj1Nci0+tcuc9FHK5D28gA==
-X-Google-Smtp-Source: AA6agR5v80bCpuIGZxW8+dnb0Fm/3JglgbXD42nIcGRa2wRJbTpJtPkJJrNswQZmAUSCoovE0ee1n9GMUxUu1co/F/w=
-X-Received: by 2002:a05:6870:580c:b0:12a:f136:a8f5 with SMTP id
- r12-20020a056870580c00b0012af136a8f5mr15701327oap.269.1663610919985; Mon, 19
- Sep 2022 11:08:39 -0700 (PDT)
+        Mon, 19 Sep 2022 14:10:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52AD0476CF;
+        Mon, 19 Sep 2022 11:09:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CF85A61975;
+        Mon, 19 Sep 2022 18:09:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A38BC433B5;
+        Mon, 19 Sep 2022 18:09:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663610960;
+        bh=VJm+P9KFcr5097FWH1+8BCAEzA4C9xFzKzMDnxTKqNQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=iHPt++Lfp10tqX3ervJ3BdILDePf09F+JHOUg0RBs9ttbfSOhRjMMsTX6EEZjhJb0
+         4sTOzoTUvIu7NRQ1/vz+raiCODi445KFJlzGRAchy6kOGW2rJ/+BHt6eTWklxoC28F
+         vwu1N+XIaBFvpsRg1Eb1DbSatbPy9QECA4w/lZIwNQdeuaKpXQAPKbETDdnum+nkbR
+         GfM7BX104wVkNydQlhhHWaS5fgq2Lz+RzF0QzEeZOUrHJmXSY4Ws144Th7sBNGuigi
+         TBENKJftU0E+mR2hrTxNJyTijq/qEdn2ET1GGUxGmLjBamLOwIRJ0gMX1VvlYSMIBj
+         kSH+GLgM5baRA==
+Received: by mail-ej1-f49.google.com with SMTP id dv25so480981ejb.12;
+        Mon, 19 Sep 2022 11:09:20 -0700 (PDT)
+X-Gm-Message-State: ACrzQf0WJk169yrrAbur7z/nGwdwgHzI6crQwETwKh9PxJZnDguUdZZf
+        5nIb98s7jkTp+iW4/SzetuvcRPxUMhidT5wFcdY=
+X-Google-Smtp-Source: AMsMyM5vduYtNbA9i0oVFZCeILZpBKOFQ21px7Kkm37BzUnXENP7tzg+7WcF3NsEUgSyBv0V61lIqk5BOTzEp5w7rxg=
+X-Received: by 2002:a17:907:2c67:b0:77d:740a:e9b1 with SMTP id
+ ib7-20020a1709072c6700b0077d740ae9b1mr13382038ejc.614.1663610958458; Mon, 19
+ Sep 2022 11:09:18 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210201051039.255478-1-like.xu@linux.intel.com>
- <CALMp9eRC2APJgB3Y7S4MWsTs9wom3iQycd60kM2eJg39N_L4Ag@mail.gmail.com> <ec0f97e9-33b7-61d8-25b8-50175544dbdd@gmail.com>
-In-Reply-To: <ec0f97e9-33b7-61d8-25b8-50175544dbdd@gmail.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Mon, 19 Sep 2022 11:08:28 -0700
-Message-ID: <CALMp9eRAv_7UOL8K+15_UsV9ML5M3rnh-Rz2C1GtTkZCHt4Yjg@mail.gmail.com>
-Subject: Re: [PATCH v14 00/11] KVM: x86/pmu: Guest Last Branch Recording Enabling
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, ak@linux.intel.com,
-        wei.w.wang@intel.com, kan.liang@intel.com,
-        alex.shi@linux.alibaba.com, kvm@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org
+References: <1661280664-10588-1-git-send-email-ssengar@linux.microsoft.com> <PUZP153MB0749E4AA8A8039412DC87080BE4D9@PUZP153MB0749.APCP153.PROD.OUTLOOK.COM>
+In-Reply-To: <PUZP153MB0749E4AA8A8039412DC87080BE4D9@PUZP153MB0749.APCP153.PROD.OUTLOOK.COM>
+From:   Song Liu <song@kernel.org>
+Date:   Mon, 19 Sep 2022 11:09:06 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW7Mubp18wkG43HDgjwq=MVx21Bkj2JrEBaMJVFT2cAZkA@mail.gmail.com>
+Message-ID: <CAPhsuW7Mubp18wkG43HDgjwq=MVx21Bkj2JrEBaMJVFT2cAZkA@mail.gmail.com>
+Subject: Re: [PATCH v2] md : Replace snprintf with scnprintf
+To:     Saurabh Singh Sengar <ssengar@microsoft.com>
+Cc:     Saurabh Sengar <ssengar@linux.microsoft.com>,
+        "shli@fb.com" <shli@fb.com>, "neilb@suse.com" <neilb@suse.com>,
+        "linux-raid@vger.kernel.org" <linux-raid@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "guoqing.jiang@linux.dev" <guoqing.jiang@linux.dev>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 12:26 AM Like Xu <like.xu.linux@gmail.com> wrote:
+On Mon, Sep 19, 2022 at 9:47 AM Saurabh Singh Sengar
+<ssengar@microsoft.com> wrote:
 >
-> On 14/9/2022 7:42 am, Jim Mattson wrote:
-> > How does live migration work? I don't see any mechanism for recording
-> > the current LBR MSRs on suspend or restoring them on resume.
+> Is this queued  for 6.0 ?
+
+This is queued for 6.1.
+
+Thanks,
+Song
+
 >
-> Considering that LBR is still a model specific feature, migration is less
-> valuable unless
-> both LBR_FMT values of the migration side are the same, the compatibility check
-> (based on cpu models) is required (gathering dust in my to-do list);
-
-This seems like a problem best solved in the control plane.
-
-> and there is another dusty missing piece is how to ensure that vcpu can get LBR
-> hardware in
-> vmx transition when KVM lbr event fails in host lbr event competition, the
-> complexity here is
-> that the host and guest may have different LBR filtering options.
-
-In case of a conflict, who currently wins? The host or the guest? I'd
-like the guest to win, but others may feel differently. Maybe we need
-a configuration knob?
-
-> The good news is the Architecture LBR will add save/restore support since Paolo
-> is not averse to
-> putting more msr's into msrs_to_save_all[], perhaps a dynamic addition mechanism
-> is a prerequisite.
+> > -----Original Message-----
+> > From: Saurabh Sengar <ssengar@linux.microsoft.com>
+> > Sent: Wednesday, August 24, 2022 12:21 AM
+> > To: song@kernel.org; shli@fb.com; neilb@suse.com; linux-
+> > raid@vger.kernel.org; linux-kernel@vger.kernel.org; Saurabh Singh Senga=
+r
+> > <ssengar@microsoft.com>; Michael Kelley (LINUX)
+> > <mikelley@microsoft.com>; guoqing.jiang@linux.dev
+> > Subject: [PATCH v2] md : Replace snprintf with scnprintf
+> >
+> > Current code produces a warning as shown below when total characters in
+> > the constituent block device names plus the slashes exceeds 200.
+> > snprintf() returns the number of characters generated from the given in=
+put,
+> > which could cause the expression =E2=80=9C200 =E2=80=93 len=E2=80=9D to=
+ wrap around to a large
+> > positive number. Fix this by using scnprintf() instead, which returns t=
+he
+> > actual number of characters written into the buffer.
+> >
+> > [ 1513.267938] ------------[ cut here ]------------ [ 1513.267943] WARN=
+ING:
+> > CPU: 15 PID: 37247 at <snip>/lib/vsprintf.c:2509 vsnprintf+0x2c8/0x510 =
+[
+> > 1513.267944] Modules linked in:  <snip> [ 1513.267969] CPU: 15 PID: 372=
+47
+> > Comm: mdadm Not tainted 5.4.0-1085-azure #90~18.04.1-Ubuntu [
+> > 1513.267969] Hardware name: Microsoft Corporation Virtual Machine/Virtu=
+al
+> > Machine, BIOS Hyper-V UEFI Release v4.1 05/09/2022 [ 1513.267971] RIP:
+> > 0010:vsnprintf+0x2c8/0x510 <-snip-> [ 1513.267982] Call Trace:
+> > [ 1513.267986]  snprintf+0x45/0x70
+> > [ 1513.267990]  ? disk_name+0x71/0xa0
+> > [ 1513.267993]  dump_zones+0x114/0x240 [raid0] [ 1513.267996]  ?
+> > _cond_resched+0x19/0x40 [ 1513.267998]  raid0_run+0x19e/0x270 [raid0] [
+> > 1513.268000]  md_run+0x5e0/0xc50 [ 1513.268003]  ?
+> > security_capable+0x3f/0x60 [ 1513.268005]  do_md_run+0x19/0x110 [
+> > 1513.268006]  md_ioctl+0x195e/0x1f90 [ 1513.268007]
+> > blkdev_ioctl+0x91f/0x9f0 [ 1513.268010]  block_ioctl+0x3d/0x50 [
+> > 1513.268012]  do_vfs_ioctl+0xa9/0x640 [ 1513.268014]  ? __fput+0x162/0x=
+260
+> > [ 1513.268016]  ksys_ioctl+0x75/0x80 [ 1513.268017]
+> > __x64_sys_ioctl+0x1a/0x20 [ 1513.268019]  do_syscall_64+0x5e/0x200 [
+> > 1513.268021]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+> >
+> > Fixes: 766038846e875 ("md/raid0: replace printk() with pr_*()")
+> > Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+> > Acked-by: Guoqing Jiang <guoqing.jiang@linux.dev>
+> > Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+> > ---
+> > V2 :
+> >       - Rebase
+> >
+> >  drivers/md/raid0.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/md/raid0.c b/drivers/md/raid0.c index 78addfe..857=
+c493
+> > 100644
+> > --- a/drivers/md/raid0.c
+> > +++ b/drivers/md/raid0.c
+> > @@ -47,7 +47,7 @@ static void dump_zones(struct mddev *mddev)
+> >               int len =3D 0;
+> >
+> >               for (k =3D 0; k < conf->strip_zone[j].nb_dev; k++)
+> > -                     len +=3D snprintf(line+len, 200-len, "%s%pg", k?"=
+/":"",
+> > +                     len +=3D scnprintf(line+len, 200-len, "%s%pg", k?=
+"/":"",
+> >                               conf->devlist[j * raid_disks + k]->bdev);
+> >               pr_debug("md: zone%d=3D[%s]\n", j, line);
+> >
+> > --
+> > 1.8.3.1
 >
-> Please let me know what your priority preferences are for these tasks above.
