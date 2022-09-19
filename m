@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E1B15BC1EF
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 06:07:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D47145BC1F3
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 06:09:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbiISEHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 00:07:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46156 "EHLO
+        id S229619AbiISEJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 00:09:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbiISEHI (ORCPT
+        with ESMTP id S229483AbiISEJB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 00:07:08 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 502871A078
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 21:07:07 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id k21so16246266pls.11
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 21:07:07 -0700 (PDT)
+        Mon, 19 Sep 2022 00:09:01 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9FB5BF78
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 21:09:00 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id i15-20020a17090a4b8f00b0020073b4ac27so4912652pjh.3
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 21:09:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :from:to:cc:subject:date;
-        bh=88NVVVQ2B32kV1LLC8ocgurk1Nd2TGC/t8d76Ycn7R0=;
-        b=lt4+S6pAdv6T7RtMNADaDkPlLrWbyGc7TNjUXTpNjcTpmaK0v0jLrfFXBriNN5S/J0
-         anmr3yHoiQfjOfU6WZaSZPHEc70CdFP2T7AbxfPVweQlgz01hE/FzpcIPA79PMC6POiV
-         1smpOvkRSsTA4jAdGx4AJo1PWedF9qhqkSMYKTLHaSVnyKCQILtf/G5PJX07qrwB0XyI
-         8fVmMTHXrC1eyWfsC5H4zhAQvgGN7XZfEs0U03I6giO4TGvPtnTOnivgPe3B8AopYzDP
-         Wd4mc9QDPfCfZbJcarxZM6i/xDdhNjKkmg2YpAY4NA+t+JISWzLKr2SmFx44L9w5tIJ3
-         HQMw==
+        bh=vKVWMBC/lzkC1dBkLl/PpdF7wlteKW3GRb48j93XLSY=;
+        b=p3C+Ao+yYwbUhf+o8rEnuJMcZWEGEUBeUFxlvEGwN161ugqeabJHLaCSbIl8UJmfpe
+         H4cmVlADg7g34lIkR3fCVhqXhCfePyqkQco8HyHOn8wutusfSKN5q85tiEVHgsQLTMuN
+         fo+X32L00vDfZYOY+g1kI4/0HN4MmYK8QkzmgXTs29+4lFQXd/XuqfucUwcO3Yt1K6qm
+         Em1oulLusf3dGqkKccIBh7/flk71vTsgLPsByPyG0KmgGtpuTEO5X1pUzY097rwj14bQ
+         132tgs0hIUYhp/vPAHuW3G4FZGzExnua19zltfhgEG/bTd0tNThdo1dZhFoW6aZJMicD
+         G6GA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=88NVVVQ2B32kV1LLC8ocgurk1Nd2TGC/t8d76Ycn7R0=;
-        b=hvRCvnvmVoDlc2N7gDf9Ed1xzCgoYUestwtFd8xVLVkodaujtPNTOg2IN3i1zAxPzz
-         QabENtWp9uiHjXhjzGs2eW7zp21yE0zZMxa+VvzDmDAsvi4rZuTbgX6Ymv/XmlzZ74Rv
-         b85HZpUhIF3CUQHpYv3Kt8xRqtFSjNovALnteODW0P62/vfkiJWoi87fJsKT3jAmXZ3c
-         f0Expan99qRf7GzVzyGyZnA1w8vjKJ7KAv8bNvZ0V1AVcK/nnrE8+LbJkWOpYgkdKxuJ
-         w60j/zzeaU7MRSbYOIi0+qWOYYFBmNaCYtknMaKpdms5yvugAHvXywTK2UjoMK3PIvPK
-         c8uQ==
-X-Gm-Message-State: ACrzQf0PF6Bs21RrrPR0lo/CYxSfegOukHrhftgN/2sbSf1A6mm5RNgR
-        hr/Q3f5V+HxYvlwP5gcdzVk=
-X-Google-Smtp-Source: AMsMyM7hndYNjY0wBGCp6C7BtndE1yy9u3hVEULUV8ttv+FiPtb9YKpbqCxzv4NiN/XfC3feMC7Bvw==
-X-Received: by 2002:a17:90b:3c8a:b0:200:b874:804 with SMTP id pv10-20020a17090b3c8a00b00200b8740804mr29357368pjb.151.1663560426568;
-        Sun, 18 Sep 2022 21:07:06 -0700 (PDT)
+        bh=vKVWMBC/lzkC1dBkLl/PpdF7wlteKW3GRb48j93XLSY=;
+        b=Rbtg3VmO5hU2wQm06ySdbxdTwzagDQIO23qfr+TUG7RRBoX0V7IWbBowwpMOuPLGD3
+         +pwXFNnzcANQqEcoPX7xei5kbMXSILaIvu5y+4kk/bw50fAmjmmLgLSdKsydHhMMON8g
+         fhoAA9SwTFRg0pbsnPEMJEC/6/amBpc1jpOejWkqnw13bnBUAX/nPuVQov0fwrJG+6Pw
+         skNk9yZxghVM6h45jHDVQRdMiEhF4aI2WwPDN1kagamSMSRiU7o/S5Tr4DaQ7j6q2JBR
+         4FytHX8SypaGeuyaLSU9XCmcAFRI2Fx0M//ZQl3umpVdTczBXKUWE/H2EXDESvTMpSes
+         lICg==
+X-Gm-Message-State: ACrzQf2I6ZMIbCDlbsFCH8RKRGEkyJHXx1Mhre1QP60UmQh1wCpvbzYi
+        k+wmtJUxGca3VVLmbFPOhmY=
+X-Google-Smtp-Source: AMsMyM4DkiTRsG5AMCceEzMxJnyp/OmT4CgxZo5vqI1rygXhrtwd9KjJuG4reCMga3fSwYYGFq1TBQ==
+X-Received: by 2002:a17:90a:31c5:b0:200:a749:4857 with SMTP id j5-20020a17090a31c500b00200a7494857mr18417232pjf.148.1663560540187;
+        Sun, 18 Sep 2022 21:09:00 -0700 (PDT)
 Received: from ubuntu ([175.124.254.119])
-        by smtp.gmail.com with ESMTPSA id ij4-20020a170902ab4400b00177e5d83d3dsm19227775plb.170.2022.09.18.21.07.04
+        by smtp.gmail.com with ESMTPSA id w28-20020a637b1c000000b004393cb720afsm11513991pgc.38.2022.09.18.21.08.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Sep 2022 21:07:06 -0700 (PDT)
-Date:   Sun, 18 Sep 2022 21:07:01 -0700
+        Sun, 18 Sep 2022 21:08:59 -0700 (PDT)
+Date:   Sun, 18 Sep 2022 21:08:54 -0700
 From:   Hyunwoo Kim <imv4bel@gmail.com>
-To:     laforge@gnumonks.org
+To:     lkundrak@v3.sk
 Cc:     linux-kernel@vger.kernel.org, imv4bel@gmail.com, arnd@arndb.de,
         gregkh@linuxfoundation.org, linux@dominikbrodowski.net
-Subject: [PATCH v3] char: pcmcia: cm4000_cs: Fix use-after-free in cm4000_fops
-Message-ID: <20220919040701.GA302806@ubuntu>
+Subject: [PATCH v3] char: pcmcia: scr24x_cs: Fix use-after-free in scr24x_fops
+Message-ID: <20220919040854.GA302968@ubuntu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -68,148 +68,160 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A race condition may occur if the user physically removes the pcmcia
-device while calling open() for this char device node.
+A race condition may occur if the user physically removes the
+pcmcia device while calling open() for this char device node.
 
-This is a race condition between the cmm_open() function and the
-cm4000_detach() function, which may eventually result in UAF.
+This is a race condition between the scr24x_open() function and
+the scr24x_remove() function, which may eventually result in UAF.
 
-So, add a refcount check to cm4000_detach() to free the "dev" structure
-after the char device node is close()d.
+So, add a mutex to the scr24x_open() and scr24x_remove() functions
+to avoid race contidion of krefs.
 
 Signed-off-by: Hyunwoo Kim <imv4bel@gmail.com>
 ---
- drivers/char/pcmcia/cm4000_cs.c | 58 +++++++++++++++++++++++----------
- 1 file changed, 41 insertions(+), 17 deletions(-)
+ drivers/char/pcmcia/scr24x_cs.c | 72 +++++++++++++++++++++++----------
+ 1 file changed, 51 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/char/pcmcia/cm4000_cs.c b/drivers/char/pcmcia/cm4000_cs.c
-index adaec8fd4b16..7103812b4019 100644
---- a/drivers/char/pcmcia/cm4000_cs.c
-+++ b/drivers/char/pcmcia/cm4000_cs.c
-@@ -55,6 +55,7 @@
- 	} while (0)
+diff --git a/drivers/char/pcmcia/scr24x_cs.c b/drivers/char/pcmcia/scr24x_cs.c
+index 1bdce08fae3d..57fe08b3c03a 100644
+--- a/drivers/char/pcmcia/scr24x_cs.c
++++ b/drivers/char/pcmcia/scr24x_cs.c
+@@ -33,6 +33,7 @@
  
- static DEFINE_MUTEX(cmm_mutex);
-+static DEFINE_MUTEX(remove_mutex);
- 
- #define	T_1SEC		(HZ)
- #define	T_10MSEC	msecs_to_jiffies(10)
-@@ -103,7 +104,8 @@ static int major;		/* major number we get from the kernel */
- #define REG_STOPBITS(x)		(x + 7)
- 
- struct cm4000_dev {
--	struct pcmcia_device *p_dev;
-+	struct pcmcia_device	*p_dev;
-+	struct kref		refcnt;
- 
- 	unsigned char atr[MAX_ATR];
- 	unsigned char rbuf[512];
-@@ -146,6 +148,9 @@ struct cm4000_dev {
- 
- #define	ZERO_DEV(dev)	memset(&((dev)->init), 0, sizeof((dev)->init))
- 
-+static void stop_monitor(struct cm4000_dev *dev);
-+static void cm4000_delete(struct kref *kref);
-+
- static struct pcmcia_device *dev_table[CM4000_MAX_DEV];
- static struct class *cmm_class;
- 
-@@ -416,6 +421,30 @@ static struct card_fixup card_fixups[] = {
- 	},
+ struct scr24x_dev {
+ 	struct device *dev;
++	struct pcmcia_device *p_dev;
+ 	struct cdev c_dev;
+ 	unsigned char buf[CCID_MAX_LEN];
+ 	int devno;
+@@ -42,15 +43,31 @@ struct scr24x_dev {
  };
  
-+
-+static void cm4000_delete(struct kref *kref)
-+{
-+	struct cm4000_dev *dev = container_of(kref, struct cm4000_dev, refcnt);
+ #define SCR24X_DEVS 8
+-static DECLARE_BITMAP(scr24x_minors, SCR24X_DEVS);
++static struct pcmcia_device *dev_table[SCR24X_DEVS];
++static DEFINE_MUTEX(remove_mutex);
+ 
+ static struct class *scr24x_class;
+ static dev_t scr24x_devt;
+ 
+ static void scr24x_delete(struct kref *kref)
+ {
+-	struct scr24x_dev *dev = container_of(kref, struct scr24x_dev,
+-								refcnt);
++	struct scr24x_dev *dev = container_of(kref, struct scr24x_dev, refcnt);
 +	struct pcmcia_device *link = dev->p_dev;
 +	int devno;
 +
-+	/* find device */
-+	for (devno = 0; devno < CM4000_MAX_DEV; devno++)
++	for (devno = 0; devno < SCR24X_DEVS; devno++) {
 +		if (dev_table[devno] == link)
 +			break;
-+	if (devno == CM4000_MAX_DEV)
++	}
++	if (devno == SCR24X_DEVS)
 +		return;
 +
-+	stop_monitor(dev);
-+
-+	cm4000_release(link);
-+
-+	dev_table[devno] = NULL;
-+	kfree(dev);
-+
-+	device_destroy(cmm_class, MKDEV(major, devno));
-+}
-+
- static void set_cardparameter(struct cm4000_dev *dev)
++	device_destroy(scr24x_class, MKDEV(MAJOR(scr24x_devt), dev->devno));
++	mutex_lock(&dev->lock);
++	pcmcia_disable_device(link);
++	cdev_del(&dev->c_dev);
++	dev->dev = NULL;
++	mutex_unlock(&dev->lock);
+ 
+ 	kfree(dev);
+ }
+@@ -73,11 +90,23 @@ static int scr24x_wait_ready(struct scr24x_dev *dev)
+ 
+ static int scr24x_open(struct inode *inode, struct file *filp)
  {
- 	int i;
-@@ -1629,6 +1658,7 @@ static int cmm_open(struct inode *inode, struct file *filp)
- 	if (minor >= CM4000_MAX_DEV)
- 		return -ENODEV;
- 
+-	struct scr24x_dev *dev = container_of(inode->i_cdev,
+-				struct scr24x_dev, c_dev);
++	struct scr24x_dev *dev;
++	struct pcmcia_device *link;
++	int minor = iminor(inode);
++
++	if (minor >= SCR24X_DEVS)
++		return -ENODEV;
++
 +	mutex_lock(&remove_mutex);
- 	mutex_lock(&cmm_mutex);
- 	link = dev_table[minor];
- 	if (link == NULL || !pcmcia_dev_present(link)) {
-@@ -1673,8 +1703,12 @@ static int cmm_open(struct inode *inode, struct file *filp)
++	link = dev_table[minor];
++	if (link == NULL) {
++		mutex_unlock(&remove_mutex);
++		return -ENODEV;
++	}
  
- 	DEBUGP(2, dev, "<- cmm_open\n");
- 	ret = stream_open(inode, filp);
-+
-+	kref_get(&dev->refcnt);
- out:
- 	mutex_unlock(&cmm_mutex);
+ 	kref_get(&dev->refcnt);
+ 	filp->private_data = dev;
 +	mutex_unlock(&remove_mutex);
+ 
+ 	return stream_open(inode, filp);
+ }
+@@ -232,24 +261,31 @@ static int scr24x_config_check(struct pcmcia_device *link, void *priv_data)
+ static int scr24x_probe(struct pcmcia_device *link)
+ {
+ 	struct scr24x_dev *dev;
+-	int ret;
++	int i, ret;
 +
++	for (i = 0; i < SCR24X_DEVS; i++) {
++		if (dev_table[i] == NULL)
++			break;
++	}
++
++	if (i == SCR24X_DEVS)
++		return -ENODEV;
+ 
+ 	dev = kzalloc(sizeof(*dev), GFP_KERNEL);
+ 	if (!dev)
+ 		return -ENOMEM;
+ 
+-	dev->devno = find_first_zero_bit(scr24x_minors, SCR24X_DEVS);
+-	if (dev->devno >= SCR24X_DEVS) {
+-		ret = -EBUSY;
+-		goto err;
+-	}
++	dev->devno = i;
+ 
+ 	mutex_init(&dev->lock);
+ 	kref_init(&dev->refcnt);
+ 
+ 	link->priv = dev;
++	dev->p_dev = link;
+ 	link->config_flags |= CONF_ENABLE_IRQ | CONF_AUTO_SET_IO;
+ 
++	dev_table[i] = link;
++
+ 	ret = pcmcia_loop_config(link, scr24x_config_check, NULL);
+ 	if (ret < 0)
+ 		goto err;
+@@ -282,8 +318,8 @@ static int scr24x_probe(struct pcmcia_device *link)
+ 	return 0;
+ 
+ err:
+-	if (dev->devno < SCR24X_DEVS)
+-		clear_bit(dev->devno, scr24x_minors);
++	dev_table[i] = NULL;
++
+ 	kfree (dev);
  	return ret;
  }
- 
-@@ -1703,6 +1737,8 @@ static int cmm_close(struct inode *inode, struct file *filp)
- 	link->open = 0;		/* only one open per device */
- 	wake_up(&dev->devq);	/* socket removed? */
- 
-+	kref_put(&dev->refcnt, cm4000_delete);
-+
- 	DEBUGP(2, dev, "cmm_close\n");
- 	return 0;
- }
-@@ -1808,6 +1844,7 @@ static int cm4000_probe(struct pcmcia_device *link)
- 	init_waitqueue_head(&dev->ioq);
- 	init_waitqueue_head(&dev->atrq);
- 	init_waitqueue_head(&dev->readq);
-+	kref_init(&dev->refcnt);
- 
- 	ret = cm4000_config(link, i);
- 	if (ret) {
-@@ -1824,23 +1861,10 @@ static int cm4000_probe(struct pcmcia_device *link)
- static void cm4000_detach(struct pcmcia_device *link)
+@@ -292,15 +328,9 @@ static void scr24x_remove(struct pcmcia_device *link)
  {
- 	struct cm4000_dev *dev = link->priv;
--	int devno;
--
--	/* find device */
--	for (devno = 0; devno < CM4000_MAX_DEV; devno++)
--		if (dev_table[devno] == link)
--			break;
--	if (devno == CM4000_MAX_DEV)
--		return;
--
--	stop_monitor(dev);
--
--	cm4000_release(link);
+ 	struct scr24x_dev *dev = (struct scr24x_dev *)link->priv;
  
--	dev_table[devno] = NULL;
--	kfree(dev);
+-	device_destroy(scr24x_class, MKDEV(MAJOR(scr24x_devt), dev->devno));
+-	mutex_lock(&dev->lock);
+-	pcmcia_disable_device(link);
+-	cdev_del(&dev->c_dev);
+-	clear_bit(dev->devno, scr24x_minors);
+-	dev->dev = NULL;
+-	mutex_unlock(&dev->lock);
 -
--	device_destroy(cmm_class, MKDEV(major, devno));
 +	mutex_lock(&remove_mutex);
-+	kref_put(&dev->refcnt, cm4000_delete);
+ 	kref_put(&dev->refcnt, scr24x_delete);
 +	mutex_unlock(&remove_mutex);
- 
- 	return;
  }
+ 
+ static const struct pcmcia_device_id scr24x_ids[] = {
 -- 
 2.25.1
 
