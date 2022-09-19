@@ -2,142 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E4B65BD83C
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 01:27:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8BCC5BD840
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 01:28:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbiISX1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 19:27:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56348 "EHLO
+        id S229640AbiISX2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 19:28:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiISX1l (ORCPT
+        with ESMTP id S229520AbiISX17 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 19:27:41 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E9174E843
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 16:27:39 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id i14-20020a5d934e000000b006892db5bcd4so517937ioo.22
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 16:27:39 -0700 (PDT)
+        Mon, 19 Sep 2022 19:27:59 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 270354E86E
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 16:27:58 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id c24so691749plo.3
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 16:27:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=xMvfvNVQtD64q8tGiwGnOVfsRnwh7XTr2/3zVgHXpHc=;
+        b=ng9M6AZxxJGzK2DAPzv8G7JXiiarrTi2EMXAAzkq7M3NSGLurxQGcSaW77aXCx6J4E
+         QPVxrAEGAzOCDZfT/cmnUZNFawji6hYzBjlgVu3TkqtmkLv5Aj9w8c3Q+ILb1cl3z5iz
+         OqNlPhBne/YqnrsipEwB4Lb8Z2jRB+5Twv2AvZ+jGxsSm9l96Y4EKSIBQiLXBaMVck5k
+         /IyfGXoAHGe+8Ml6mEx87gJVKkUfV+tryOIUNk/dG1GPofPD2233LRO+K2VdqDHsrAY+
+         w2tlZNeVZkntM3l2/ULU7Qu4PgUAYz5MaSCb28QXY+2Q4HbslxwNAGxtnhreAsMDHuYl
+         wADw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=QcDADadZBFn2stVq46mmrKDcyHCKkZFC4s8yQUc8C/I=;
-        b=z2NDc/NcAb96WcSsyYaxKXaZoOjfzeH/039DPF8Mu/7LsHsbjq6/ksv+lEKxVDUY3X
-         ANFxIhloB43fPpiOBVQGZwaCFnf7zaQWZEqlp96stOuvvEN9rk8paahlZKeE+VSTFmfD
-         Qdiyc0I6NTQeabuJnmkywf3EUrAlxy7X3n61WySk402GO/GTM2N8agJzONzOmxv+a5Kl
-         MtXlLeLK/XWxWWgnD9r7PGSxzice2EP3vJQ+jp9FM3bHInjkWgCBcjcOsmL/RWi/tbf9
-         gMZzRmBMSVNEbqZi1cRVhktd7HRY6NRHWgT7LTDR/zpMiPForAaWU879mcR4/2owxT2P
-         tinw==
-X-Gm-Message-State: ACrzQf2SgC2COF3b8W2Xe7b3US+YrWUZi6LYGKaZBeDBEbrrQqx3jz6v
-        8sbS2zg0sPSWtnzPdG7lEhp874fg9332YPpHBotJf/b/Cjrr
-X-Google-Smtp-Source: AMsMyM7PZX8XNoVmOsMUB4zWdDvfVHmxf5heips0o6pfeb/pk5VnKxrKYxlVA0hTE6CeIhPMImoiFa665BtAybSm9ylUDI5LaRsv
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=xMvfvNVQtD64q8tGiwGnOVfsRnwh7XTr2/3zVgHXpHc=;
+        b=Q9VHOTuMXkIiUCyWgQ7jtlvdJzl83IBeCNxcSyHILF5L/+SoKvNQHyKjIIHS/HO44y
+         4u93SetU+oqHS7qhJ2Ah4YSh8/XCi21H6slS/5rknPJKLhw4kyhyeQtbLxA6nG76oG5l
+         FDHN0vUdEV2FxBkNC8lqGlP1h1dIb1naMGrYBmoXMEbbFLACgvp9U0SXW1yFe4dovWUd
+         y0VQuEDEuUu7WpnCT4MK9npjPYPrTF5hnpfc4B6j2MQSaWrvqeqWyZMDo5z11tUzaFy1
+         K73IqnjO3LDAXsZYDP2d1m+hyFF92RRTXdy4FUIkIa81LjIAS7ksNWb3qaDaTT/mZ5nB
+         9f+w==
+X-Gm-Message-State: ACrzQf1U3MHYG6TQDAEs1uWt1OBZNkxOhn3lXUuURAM9S9o71GfzYOGj
+        yDgg6D5Cml0dL0H59g/L8z0glq4FNNxIm27tZDA=
+X-Google-Smtp-Source: AMsMyM7GnTGHon8J8F1T8/dNI1bf94Yvt5qoyN9JWoUnWvn6jgbH2UTtMgBP/cAsJEGf9x8UlwJyGq5TMFcU9mjz1oo=
+X-Received: by 2002:a17:902:ccc2:b0:178:29e1:899e with SMTP id
+ z2-20020a170902ccc200b0017829e1899emr2090041ple.114.1663630077367; Mon, 19
+ Sep 2022 16:27:57 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:490:b0:678:d781:446d with SMTP id
- y16-20020a056602049000b00678d781446dmr8343778iov.115.1663630058719; Mon, 19
- Sep 2022 16:27:38 -0700 (PDT)
-Date:   Mon, 19 Sep 2022 16:27:38 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b010bd05e9100e11@google.com>
-Subject: [syzbot] memory leak in do_replace
-From:   syzbot <syzbot+a24c5252f3e3ab733464@syzkaller.appspotmail.com>
-To:     bridge@lists.linux-foundation.org, coreteam@netfilter.org,
-        davem@davemloft.net, edumazet@google.com, fw@strlen.de,
-        kadlec@netfilter.org, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, pabeni@redhat.com,
-        pablo@netfilter.org, razor@blackwall.org, roopa@nvidia.com,
-        syzkaller-bugs@googlegroups.com
+References: <CABXGCsM58-8fxVKAVkwsshg+33B_1_t_WesG160AtVBe1ZvKiw@mail.gmail.com>
+ <be6f1ce4-46b1-7a80-230c-b99f203ce8ad@riseup.net> <CABXGCsMFYnE+Wn2EAWuC8DSVj=TVprj6ABZwRK-hXcw-1hnMyw@mail.gmail.com>
+ <CABXGCsMpGabZ32j_ObEHa_har2W8M8RWuqnx3d=yJT2NX_ztNg@mail.gmail.com>
+ <20220817160751.moqhebkiuiydraka@mail.igalia.com> <CABXGCsOM9An-+EeaGWm0OA1FN2p94=BF210Lhy0tiO6ye9onWQ@mail.gmail.com>
+ <dd2ee57a-2ab2-db94-36d9-8faced18fe61@riseup.net> <CABXGCsMc_D_iJ-r-_s8q13Vq6dgfQg1tnp-0aojfv5Q8izTrfw@mail.gmail.com>
+ <a588de9f-958a-fce9-b4d3-2ea45d092b44@riseup.net> <CABXGCsMwTWbgZ-98gcQFbCN3rqzAt01ROpqUpL1d+3gjbwUcpA@mail.gmail.com>
+In-Reply-To: <CABXGCsMwTWbgZ-98gcQFbCN3rqzAt01ROpqUpL1d+3gjbwUcpA@mail.gmail.com>
+From:   Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Date:   Tue, 20 Sep 2022 04:27:45 +0500
+Message-ID: <CABXGCsMr5AZDoxhQSoHCibDOakimp5ukt=eMsUpPsYVnpL04ng@mail.gmail.com>
+Subject: Re: [BUG][5.20] refcount_t: underflow; use-after-free
+To:     =?UTF-8?B?TWHDrXJhIENhbmFs?= <mairacanal@riseup.net>
+Cc:     Melissa Wen <mwen@igalia.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi!
+Unfortunately the use-after-free issue still happens on the 6.0-rc5 kernel.
+The issue became hard to repeat. I spent the whole day at the computer
+when use-after-free again happened, I was playing the game Tiny Tina's
+Wonderlands.
+Therefore, forget about repeatability. It remains only to hope for
+logs and tracing.
+I didn't see anything new in the logs. It seems that we need to
+somehow expand the logging so that the next time this happens we have
+more information.
 
-syzbot found the following issue on:
+Sep 18 20:52:16 primary-ws gnome-shell[2388]:
+meta_window_set_stack_position_no_sync: assertion
+'window->stack_position >=3D 0' failed
+Sep 18 20:52:27 primary-ws gnome-shell[2388]:
+meta_window_set_stack_position_no_sync: assertion
+'window->stack_position >=3D 0' failed
+Sep 18 20:53:44 primary-ws gnome-shell[2388]: Window manager warning:
+Window 0x4e00003 sets an MWM hint indicating it isn't resizable, but
+sets min size 1 x 1 and max size 2147483647 x 2147483647; this doesn't
+make much sense.
+Sep 18 20:53:45 primary-ws kernel: umip_printk: 11 callbacks suppressed
+Sep 18 20:53:45 primary-ws kernel: umip: Wonderlands.exe[213853]
+ip:14ebb0d03 sp:4ee528: SGDT instruction cannot be used by
+applications.
+Sep 18 20:53:45 primary-ws kernel: umip: Wonderlands.exe[213853]
+ip:14ebb0d03 sp:4ee528: For now, expensive software emulation returns
+the result.
+Sep 18 20:53:53 primary-ws gnome-shell[2388]:
+meta_window_set_stack_position_no_sync: assertion
+'window->stack_position >=3D 0' failed
+Sep 18 20:53:53 primary-ws kernel: umip: Wonderlands.exe[213853]
+ip:14ebb0d03 sp:4ee528: SGDT instruction cannot be used by
+applications.
+Sep 18 20:53:53 primary-ws kernel: umip: Wonderlands.exe[213853]
+ip:14ebb0d03 sp:4ee528: For now, expensive software emulation returns
+the result.
+Sep 18 20:54:15 primary-ws kernel: umip: Wonderlands.exe[214194]
+ip:15a270815 sp:6eaef490: SGDT instruction cannot be used by
+applications.
+Sep 18 20:56:01 primary-ws kernel: umip_printk: 15 callbacks suppressed
+Sep 18 20:56:01 primary-ws kernel: umip: Wonderlands.exe[213853]
+ip:15e3a82b0 sp:4ed178: SGDT instruction cannot be used by
+applications.
+Sep 18 20:56:01 primary-ws kernel: umip: Wonderlands.exe[213853]
+ip:15e3a82b0 sp:4ed178: For now, expensive software emulation returns
+the result.
+Sep 18 20:56:03 primary-ws kernel: umip: Wonderlands.exe[213853]
+ip:15e3a82b0 sp:4edbe8: SGDT instruction cannot be used by
+applications.
+Sep 18 20:56:03 primary-ws kernel: umip: Wonderlands.exe[213853]
+ip:15e3a82b0 sp:4edbe8: For now, expensive software emulation returns
+the result.
+Sep 18 20:56:03 primary-ws kernel: umip: Wonderlands.exe[213853]
+ip:15e3a82b0 sp:4ebf18: SGDT instruction cannot be used by
+applications.
+Sep 18 20:57:55 primary-ws kernel: ------------[ cut here ]------------
+Sep 18 20:57:55 primary-ws kernel: refcount_t: underflow; use-after-free.
+Sep 18 20:57:55 primary-ws kernel: WARNING: CPU: 22 PID: 235114 at
+lib/refcount.c:28 refcount_warn_saturate+0xba/0x110
+Sep 18 20:57:55 primary-ws kernel: Modules linked in: tls uinput
+rfcomm snd_seq_dummy snd_hrtimer nft_objref nf_conntrack_netbios_ns
+nf_conntrack_broadcast nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 nft_fib
+nft_reject_inet nf_reject_ipv4 nf_>
+Sep 18 20:57:55 primary-ws kernel:  asus_wmi ledtrig_audio
+sparse_keymap platform_profile irqbypass rfkill mc rapl snd_timer
+video wmi_bmof pcspkr snd k10temp i2c_piix4 soundcore acpi_cpufreq
+zram amdgpu drm_ttm_helper ttm iommu_v2 crct1>
+Sep 18 20:57:55 primary-ws kernel: Unloaded tainted modules:
+amd64_edac():1 amd64_edac():1 amd64_edac():1 amd64_edac():1
+amd64_edac():1 amd64_edac():1 amd64_edac():1 amd64_edac():1
+amd64_edac():1 pcc_cpufreq():1 pcc_cpufreq():1 amd64_eda>
+Sep 18 20:57:55 primary-ws kernel:  pcc_cpufreq():1 pcc_cpufreq():1
+fjes():1 fjes():1 pcc_cpufreq():1 fjes():1 fjes():1 fjes():1 fjes():1
+fjes():1
+Sep 18 20:57:55 primary-ws kernel: CPU: 22 PID: 235114 Comm:
+kworker/22:0 Tainted: G        W    L    -------  ---
+6.0.0-0.rc5.20220914git3245cb65fd91.39.fc38.x86_64 #1
+Sep 18 20:57:55 primary-ws kernel: Hardware name: System manufacturer
+System Product Name/ROG STRIX X570-I GAMING, BIOS 4403 04/27/2022
+Sep 18 20:57:55 primary-ws kernel: Workqueue: events
+drm_sched_entity_kill_jobs_work [gpu_sched]
+Sep 18 20:57:55 primary-ws kernel: RIP: 0010:refcount_warn_saturate+0xba/0x=
+110
+Sep 18 20:57:55 primary-ws kernel: Code: 01 01 e8 69 6b 6f 00 0f 0b e9
+32 38 a5 00 80 3d 4d 7d be 01 00 75 85 48 c7 c7 80 b7 8e 95 c6 05 3d
+7d be 01 01 e8 46 6b 6f 00 <0f> 0b e9 0f 38 a5 00 80 3d 28 7d be 01 00
+0f 85 5e ff ff ff 48 c7
+Sep 18 20:57:55 primary-ws kernel: RSP: 0018:ffffa1a853ccbe60 EFLAGS: 00010=
+286
+Sep 18 20:57:55 primary-ws kernel: RAX: 0000000000000026 RBX:
+ffff8e0e60a96c28 RCX: 0000000000000000
+Sep 18 20:57:55 primary-ws kernel: RDX: 0000000000000001 RSI:
+ffffffff958d255c RDI: 00000000ffffffff
+Sep 18 20:57:55 primary-ws kernel: RBP: ffff8e19a83f5600 R08:
+0000000000000000 R09: ffffa1a853ccbd10
+Sep 18 20:57:55 primary-ws kernel: R10: 0000000000000003 R11:
+ffff8e19ee2fffe8 R12: ffff8e19a83fc800
+Sep 18 20:57:55 primary-ws kernel: R13: ffff8e0d44a4b440 R14:
+ffff8e19a83fc805 R15: ffff8e0e60a96c30
+Sep 18 20:57:55 primary-ws kernel: FS:  0000000000000000(0000)
+GS:ffff8e19a8200000(0000) knlGS:0000000000000000
+Sep 18 20:57:55 primary-ws kernel: CS:  0010 DS: 0000 ES: 0000 CR0:
+0000000080050033
+Sep 18 20:57:55 primary-ws kernel: CR2: 00001adc05fb2000 CR3:
+00000002cf050000 CR4: 0000000000350ee0
+Sep 18 20:57:55 primary-ws kernel: Call Trace:
+Sep 18 20:57:55 primary-ws kernel:  <TASK>
+Sep 18 20:57:55 primary-ws kernel:  process_one_work+0x2a0/0x600
+Sep 18 20:57:55 primary-ws kernel:  worker_thread+0x4f/0x3a0
+Sep 18 20:57:55 primary-ws kernel:  ? process_one_work+0x600/0x600
+Sep 18 20:57:55 primary-ws kernel:  kthread+0xf5/0x120
+Sep 18 20:57:55 primary-ws kernel:  ? kthread_complete_and_exit+0x20/0x20
+Sep 18 20:57:55 primary-ws kernel:  ret_from_fork+0x22/0x30
+Sep 18 20:57:55 primary-ws kernel:  </TASK>
+Sep 18 20:57:55 primary-ws kernel: irq event stamp: 63606683
+Sep 18 20:57:55 primary-ws kernel: hardirqs last  enabled at
+(63606691): [<ffffffff9418ce0e>] __up_console_sem+0x5e/0x70
+Sep 18 20:57:55 primary-ws kernel: hardirqs last disabled at
+(63606698): [<ffffffff9418cdf3>] __up_console_sem+0x43/0x70
+Sep 18 20:57:55 primary-ws kernel: softirqs last  enabled at
+(63490566): [<ffffffff940ff749>] __irq_exit_rcu+0xf9/0x170
+Sep 18 20:57:55 primary-ws kernel: softirqs last disabled at
+(63490561): [<ffffffff940ff749>] __irq_exit_rcu+0xf9/0x170
+Sep 18 20:57:55 primary-ws kernel: ---[ end trace 0000000000000000 ]---
+Sep 18 20:57:56 primary-ws abrt-dump-journal-oops[1409]:
+abrt-dump-journal-oops: Found oopses: 1
+Sep 18 20:57:56 primary-ws abrt-dump-journal-oops[1409]:
+abrt-dump-journal-oops: Creating problem directories
+Sep 18 20:57:57 primary-ws abrt-notification[261766]: [=F0=9F=A1=95] System
+encountered a non-fatal error in kthread_complete_and_exit()
+Sep 18 20:57:57 primary-ws abrt-dump-journal-oops[1409]: Reported 1
+kernel oopses to Abrt
+Sep 18 20:58:23 primary-ws gsd-power[2776]: Failed to acquire idle
+monitor proxy: Timeout was reached
+Sep 18 20:58:23 primary-ws gsd-power[2776]: Error setting property
+'PowerSaveMode' on interface org.gnome.Mutter.DisplayConfig: Timeout
+was reached (g-io-error-quark, 24)
+Sep 18 20:58:53 primary-ws gsd-power[2776]: Failed to acquire idle
+monitor proxy: Timeout was reached
+Sep 18 20:58:53 primary-ws gsd-power[2776]: Error setting property
+'PowerSaveMode' on interface org.gnome.Mutter.DisplayConfig: Timeout
+was reached (g-io-error-quark, 24)
+Sep 18 20:58:54 primary-ws gsd-power[2776]: Failed to acquire idle
+monitor proxy: Timeout was reached
 
-HEAD commit:    3245cb65fd91 Merge tag 'devicetree-fixes-for-6.0-2' of git..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=17a88ef7080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a4afe4efcad47dde
-dashboard link: https://syzkaller.appspot.com/bug?extid=a24c5252f3e3ab733464
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14b0e87f080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1100f1d8880000
+Full kernel log: https://pastebin.com/nj2syLPM
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/2d6c9d59c55a/disk-3245cb65.raw.xz
-vmlinux: https://storage.googleapis.com/0f52632026ad/vmlinux-3245cb65.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+a24c5252f3e3ab733464@syzkaller.appspotmail.com
-
-executing program
-executing program
-executing program
-executing program
-BUG: memory leak
-unreferenced object 0xffffc90000ded000 (size 4096):
-  comm "syz-executor317", pid 3615, jiffies 4294946120 (age 22.550s)
-  hex dump (first 32 bytes):
-    90 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff8153105f>] __vmalloc_node_range+0xb3f/0xbd0 mm/vmalloc.c:3224
-    [<ffffffff81531239>] __vmalloc_node mm/vmalloc.c:3261 [inline]
-    [<ffffffff81531239>] __vmalloc+0x49/0x50 mm/vmalloc.c:3275
-    [<ffffffff83e28027>] do_replace+0x197/0x340 net/bridge/netfilter/ebtables.c:1131
-    [<ffffffff83e2880c>] do_ebt_set_ctl+0x22c/0x310 net/bridge/netfilter/ebtables.c:2520
-    [<ffffffff83a3fb68>] nf_setsockopt+0x68/0xa0 net/netfilter/nf_sockopt.c:101
-    [<ffffffff83bb5d69>] ip_setsockopt+0x259/0x2040 net/ipv4/ip_sockglue.c:1444
-    [<ffffffff83bcbe10>] tcp_setsockopt+0x70/0x1430 net/ipv4/tcp.c:3789
-    [<ffffffff8425d1d8>] smc_setsockopt+0xd8/0x5c0 net/smc/af_smc.c:2941
-    [<ffffffff8386dd2b>] __sys_setsockopt+0x1ab/0x380 net/socket.c:2252
-    [<ffffffff8386df22>] __do_sys_setsockopt net/socket.c:2263 [inline]
-    [<ffffffff8386df22>] __se_sys_setsockopt net/socket.c:2260 [inline]
-    [<ffffffff8386df22>] __x64_sys_setsockopt+0x22/0x30 net/socket.c:2260
-    [<ffffffff845eab35>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff845eab35>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84800087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-BUG: memory leak
-unreferenced object 0xffffc90000df5000 (size 4096):
-  comm "syz-executor317", pid 3615, jiffies 4294946120 (age 22.550s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff8153105f>] __vmalloc_node_range+0xb3f/0xbd0 mm/vmalloc.c:3224
-    [<ffffffff81531239>] __vmalloc_node mm/vmalloc.c:3261 [inline]
-    [<ffffffff81531239>] __vmalloc+0x49/0x50 mm/vmalloc.c:3275
-    [<ffffffff83e28071>] do_replace+0x1e1/0x340 net/bridge/netfilter/ebtables.c:1138
-    [<ffffffff83e2880c>] do_ebt_set_ctl+0x22c/0x310 net/bridge/netfilter/ebtables.c:2520
-    [<ffffffff83a3fb68>] nf_setsockopt+0x68/0xa0 net/netfilter/nf_sockopt.c:101
-    [<ffffffff83bb5d69>] ip_setsockopt+0x259/0x2040 net/ipv4/ip_sockglue.c:1444
-    [<ffffffff83bcbe10>] tcp_setsockopt+0x70/0x1430 net/ipv4/tcp.c:3789
-    [<ffffffff8425d1d8>] smc_setsockopt+0xd8/0x5c0 net/smc/af_smc.c:2941
-    [<ffffffff8386dd2b>] __sys_setsockopt+0x1ab/0x380 net/socket.c:2252
-    [<ffffffff8386df22>] __do_sys_setsockopt net/socket.c:2263 [inline]
-    [<ffffffff8386df22>] __se_sys_setsockopt net/socket.c:2260 [inline]
-    [<ffffffff8386df22>] __x64_sys_setsockopt+0x22/0x30 net/socket.c:2260
-    [<ffffffff845eab35>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff845eab35>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84800087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+--=20
+Best Regards,
+Mike Gavrilov.
