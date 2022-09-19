@@ -2,142 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51CD55BC46D
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 10:38:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 557F85BC470
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 10:38:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229996AbiISIiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 04:38:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58428 "EHLO
+        id S230008AbiISIiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 04:38:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229999AbiISIiS (ORCPT
+        with ESMTP id S229997AbiISIiw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 04:38:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD02A1E3FB;
-        Mon, 19 Sep 2022 01:38:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 59A3761519;
-        Mon, 19 Sep 2022 08:38:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4C5FC433D6;
-        Mon, 19 Sep 2022 08:38:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663576695;
-        bh=heo7YO9Z/Mn7auLgacdl566kMb7P9+5y2s1cnvWWhNs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=uTRUGIbB/a+yr6sQn5wS+gyN3Xv7qSHcczusIx9S/VcHwA5TeOBrrF+FMvoksUBR3
-         Meu+wDm+BNyFMTCU0sJjW+FF6K/137aKqFQzjILAgO1SKBofcOQK7rigqkcBYbSmzS
-         AjA3QmvYiO+ivlH1Fzjcqq8IgyXMaX+zMwxuFKsUrmFpiWGit83q41mSrjZzZc73g0
-         d2jtyoNBgZXoHOH7M3qSD263CD4BfK4y1I/oRek25g1Ern3INBBBr+qyZFnrm/9awY
-         Ix3dRl55JGnY6Zd7RpsPK7Lhk17DY1GNoc+G+PovFICRqooNDJVq+sDjzQblFcAgYs
-         cDQnrzv3JgQog==
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-1274ec87ad5so60954978fac.0;
-        Mon, 19 Sep 2022 01:38:15 -0700 (PDT)
-X-Gm-Message-State: ACrzQf0OKfinoTzx6oQMwDLwUJCJWEeC6k9Q66nb/jajpI0iB7KpALE5
-        qxpoS64nLXMcdQF5IOESVs+1YG2Raux8A2FPzMw=
-X-Google-Smtp-Source: AMsMyM7ABtP0qSS4TeNjY3/uJch3CvccZb+T2Wqml4QNq4ZCaawYjQENTRVHMje/Mc+dM1SGFVjGsCi0SpAccjiDCdc=
-X-Received: by 2002:a05:6870:5803:b0:12c:c3e0:99dc with SMTP id
- r3-20020a056870580300b0012cc3e099dcmr4442166oap.19.1663576694922; Mon, 19 Sep
- 2022 01:38:14 -0700 (PDT)
+        Mon, 19 Sep 2022 04:38:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B48115A0A
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 01:38:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663576731;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=h/1dK0PxjoGznFpiAoqtIHG4VWSzhz2ih+XQXjO5ifg=;
+        b=JtKYF1N9hVJ/qaUW9Fsr4ELAWFxHo4HVcd93Wkn/C62UEKhaA0Mhtq2/GtQ3MTFCEMD+eH
+        G5od157Kf3fOwoWoiv/WzWh159KecF/7hlNVKCdyjhPKMWZrTQauAfJSC8jwTMs3Le4lZj
+        A0ulKHO4az1CDqcs6JEDBjvmRGNrg2w=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-495-7al0CRBcN4CKGc-fKMR1lQ-1; Mon, 19 Sep 2022 04:38:49 -0400
+X-MC-Unique: 7al0CRBcN4CKGc-fKMR1lQ-1
+Received: by mail-wr1-f70.google.com with SMTP id d9-20020adfa349000000b0022ad6fb2845so1298403wrb.17
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 01:38:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=h/1dK0PxjoGznFpiAoqtIHG4VWSzhz2ih+XQXjO5ifg=;
+        b=EQWibJxIkoyq5Fkrl7+4uYg5YBFKsGSDno/yTGlbUDod8cbOWqEcssHkHimDWmJ899
+         Gjnqpf4RqS1uNiauyXX91uN0NuA4YN4rVZ9Geqb6wW/sOb6tL9HLQqkSq4JwR3rxh85Q
+         kCz07hA/JikQK5SJfrXETWXCot01p9Ubpjx64ZqRdDPPsRNsRUMpU0oZ5MQYbzVGlnvD
+         6gewpzjVjGICyWPSFtf6yIxKQjC8XRHNq9tKV566M/Ek1rAi+fUjwEm85DScShpz+5qL
+         n8BzN4H+fd1NzoPHgrdJfiHUVlXpimrvhcK4gdXNjAaPwcaXotWSs+rcbDH+u1897kIt
+         EXdA==
+X-Gm-Message-State: ACrzQf3V2gtP18+7aHkql7/saeszALXLY93jLOibkVvcmYdbavy35wkf
+        3vHnWQZEW8MxKRANyRTWwqefHeQkB0HGVoqV8nKkxDnGY5SpQYLHiiDNOxSik7zWhEaVMiyRlRt
+        I5/nUsG1rtj2OXjh6sik3Qg8k
+X-Received: by 2002:a05:600c:4841:b0:3b4:76f0:99f with SMTP id j1-20020a05600c484100b003b476f0099fmr12138978wmo.85.1663576728601;
+        Mon, 19 Sep 2022 01:38:48 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM68ak8tki3cJednv9FaWTNBlfIi+u7t4wN8VfYwATW5egZksWN115favkIGDmHtsK0hme9WQA==
+X-Received: by 2002:a05:600c:4841:b0:3b4:76f0:99f with SMTP id j1-20020a05600c484100b003b476f0099fmr12138972wmo.85.1663576728388;
+        Mon, 19 Sep 2022 01:38:48 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c703:c100:c136:f914:345f:f5f3? (p200300cbc703c100c136f914345ff5f3.dip0.t-ipconnect.de. [2003:cb:c703:c100:c136:f914:345f:f5f3])
+        by smtp.gmail.com with ESMTPSA id c11-20020a05600c0a4b00b003b47e8a5d22sm14764593wmq.23.2022.09.19.01.38.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Sep 2022 01:38:47 -0700 (PDT)
+Message-ID: <826cd775-14d2-12ae-2e96-cf0766aa1502@redhat.com>
+Date:   Mon, 19 Sep 2022 10:38:47 +0200
 MIME-Version: 1.0
-References: <20220908022506.1275799-1-guoren@kernel.org> <20220908022506.1275799-9-guoren@kernel.org>
- <4babce64-e96d-454c-aa35-243b3f2dc315@www.fastmail.com> <CAJF2gTQAMCjNyqrSOvqDAKR5Z-PZiTVxmoK9cvNAVQs+k2fZBg@mail.gmail.com>
- <8817af55-de0d-4e8f-a41b-25d01d5fa968@www.fastmail.com> <CAJF2gTRnY+vc2nKbqubTZvv+FWVgO3yCK4LcwpeNgx51JuETzw@mail.gmail.com>
- <7409c92a-68df-4406-bd86-835d9a959ef5@www.fastmail.com> <CAJF2gTRxt_b2TswE6YJgmFZeRyVzV7fQdMX+7Ptrfa_k=auSjg@mail.gmail.com>
- <2b06f28d-a13d-4c86-af04-39e383aaf07b@www.fastmail.com>
-In-Reply-To: <2b06f28d-a13d-4c86-af04-39e383aaf07b@www.fastmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Mon, 19 Sep 2022 16:38:02 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRzC9ES1EK3X4tHchTZMfbGJk2QLbD8VG=5x5bWD7Er0w@mail.gmail.com>
-Message-ID: <CAJF2gTRzC9ES1EK3X4tHchTZMfbGJk2QLbD8VG=5x5bWD7Er0w@mail.gmail.com>
-Subject: Re: [PATCH V4 8/8] riscv: Add config of thread stack size
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        "Conor.Dooley" <conor.dooley@microchip.com>,
-        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        Jisheng Zhang <jszhang@kernel.org>, lazyparser@gmail.com,
-        falcon@tinylab.org, Huacai Chen <chenhuacai@kernel.org>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Andreas Schwab <schwab@suse.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Content-Language: en-US
+To:     Michael Nazzareno Trimarchi <michael@amarulasolutions.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <CAOf5uwk=Tx+W-JuJBXUYjt2BLmSvr9Q153D1RTyJG_cmeO4AUw@mail.gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: Correlation CMA size and FORCE_MAX_ZONEORDER
+In-Reply-To: <CAOf5uwk=Tx+W-JuJBXUYjt2BLmSvr9Q153D1RTyJG_cmeO4AUw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 4:25 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Mon, Sep 12, 2022, at 6:14 AM, Guo Ren wrote:
-> > On Mon, Sep 12, 2022 at 2:40 AM Arnd Bergmann <arnd@arndb.de> wrote:
-> >> On Sun, Sep 11, 2022, at 1:35 AM, Guo Ren wrote:
-> >> > On Sun, Sep 11, 2022 at 12:07 AM Arnd Bergmann <arnd@arndb.de> wrote:
-> >> >>
-> >> >> That sounds like a really bad idea, why would you want to risk
-> >> >> using such a small stack without CONFIG_VMAP_STACK?
-> >> >>
-> >> >> Are you worried about increased memory usage or something else?
-> >> > The requirement is from [1], and I think disabling CONFIG_VMAP_STACK
-> >> > would be the last step after serious testing.
-> >>
-> >> I still don't see why you need to turn off VMAP_STACK at all
-> >> if it works. The only downside I can see with using VMAP_STACK
-> >> on a 64-bit system is that it may expose bugs with device
-> >> drivers that do DMA to stack data. Once you have tested the
-> >> system successfully, you can also assume that you have no such
-> >> drivers.
-> > 1st, VMAP_STACK could be enabled&disabled in arch/Kconfig. If we don't
-> > force users to enable VMAP_STACK, why couldn't user adjust
-> > THREAD_SIZE?
->
-> Turning off VMAP_STACK is harmless and may help debug issues
-> with VMAP_STACK itself. It's also required on architectures
-> that don't have KASAN_VMALLOC or something else that conflicts
-> with it.
->
-> Changing THREAD_SIZE is also fine, as long as VMAP_STACK catches
-> the inevitable overflows. I would not object to having an
-> option that allows setting the stack size larger than the
-> default without VMAP_STACK, as long as setting it lower requires
-> using VMAP_STACK. That would however add a lot more complexity
-> and probably doesn't do what you want either.
-Thx for the detailed clarification, I agree with the point. I've put
-an EXPERT on config.
+On 15.09.22 23:36, Michael Nazzareno Trimarchi wrote:
+> Hi all
 
->
-> > 2nd, VMAP_STACK is not free, we still need 1KB shadow_stack.
-> > The EXPERT is enough for your concern.
->
-> It's actually more than the 1KB: you need both 1KB of shadow
-> stack and 4KB per CPU for the actual overflow_stack. If you
-> are micro-optimizing at this level, then a possible option
-> may be to change the handle_kernel_stack_overflow() function
-> to not preserve the task stack and just panic() without
-> showing the backtrace. That way you don't see which code
-> caused the issue, but at least you avoid corrupting random
-> data.
-Thx for the detailed explanation, the handle_kernel_stack_overflow()
-is a novel idea, which I will consider later.
+Hi,
 
->
->      Arnd
+> 
+> Working on a small device with 128MB of memory and using imx_v6_v7
+> defconfig I found that CMA_SIZE_MBYTES, CMA_SIZE_PERCENTAGE
+> are not respected. The calculation done does not allow the requested
+> size. I think that this should be somehow documented and described but
+> I did not
+> find the documentation. Does it work this way?
+> 
+> With CMA_SIZE of 8MB I need to have FORCE_MAX_ZONEORDER=12 if I have
+> the default FORCE_MAX_ZONEORDER=14 the min size is 32Mb
 
+The underlying constraint is that CMA regions require a certain minimum 
+alignment+size. They cannot be arbitrarily in size.
 
+CMA_MIN_ALIGNMENT_BYTES expresses that, and corresponds in upstream 
+kernels to the size of a single pageblock.
 
---
-Best Regards
- Guo Ren
+In previous kernels, it used to be the size of the largest buddy 
+allocation granularity (derived from MAX_ORDER, derived from 
+FORCE_MAX_ZONEORDER).
+
+On upstream kernels, the FORCE_MAX_ZONEORDER constraint should no longer 
+apply. On most archs, the minimum alignment+size should be 2 MiB 
+(x86-64, aarch64 with 4k base pages) -- the size of a single pageblock.
+
+So far the theory. Are you still running into this limitation on 
+upstream kernels?
+
+-- 
+Thanks,
+
+David / dhildenb
+
