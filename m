@@ -2,204 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25C855BC0FC
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 03:27:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 237135BC102
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 03:28:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbiISB1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 21:27:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58506 "EHLO
+        id S229626AbiISB17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 21:27:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbiISB05 (ORCPT
+        with ESMTP id S229562AbiISB15 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 21:26:57 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA1FF18383;
-        Sun, 18 Sep 2022 18:26:49 -0700 (PDT)
-X-UUID: 35544346aa4344c4aaffec1f52702330-20220919
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=s3/mQJDAI8RaGvwS50/sSfM3dEzv5HFd1WDBKbk/QrE=;
-        b=RbZFb2KOPK+WwjuvFG4JxLna+rt5kZNqAuQcbOeDV+6sE0EWr9wdNH8mZjoOpT1Q/6iSSK56onFlz0QMx0SsWTLr4w3iDjpIUWApLmDOBgO7VjsEnNFjQxhjcEAWAC17vJrvSnsNv+iSo/tJsz3PLLcJ5k9uNCRNVK24C0zjoC0=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:cbf665b8-85a3-48b8-807a-56898a6583b8,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:28,RULE:Release_Ham,ACTIO
-        N:release,TS:73
-X-CID-INFO: VERSION:1.1.11,REQID:cbf665b8-85a3-48b8-807a-56898a6583b8,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:28,RULE:Spam_GS981B3D,ACTIO
-        N:quarantine,TS:73
-X-CID-META: VersionHash:39a5ff1,CLOUDID:d610d0f6-6e85-48d9-afd8-0504bbfe04cb,B
-        ulkID:2209160605436LY6U0LQ,BulkQuantity:208,Recheck:0,SF:28|17|19|48|823|8
-        24,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:40|20,QS:nil,BEC:nil
-        ,COL:0
-X-UUID: 35544346aa4344c4aaffec1f52702330-20220919
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
-        (envelope-from <jason-jh.lin@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1177479252; Mon, 19 Sep 2022 09:26:37 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Mon, 19 Sep 2022 09:26:35 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Mon, 19 Sep 2022 09:26:35 +0800
-Message-ID: <871b6996647bdc71723569a56e7f238f325fa9c7.camel@mediatek.com>
-Subject: Re: [PATCH v2 1/6] dt-bindings: arm: mediatek: mmsys: change
- compatible for MT8195
-From:   Jason-JH Lin <jason-jh.lin@mediatek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-CC:     CK Hu <ck.hu@mediatek.com>, Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        Singo Chang <singo.chang@mediatek.com>,
-        Nancy Lin <nancy.lin@mediatek.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Mon, 19 Sep 2022 09:26:35 +0800
-In-Reply-To: <17cacc6f-173f-ad6c-9056-1b17635c984d@linaro.org>
-References: <20220915161817.10307-1-jason-jh.lin@mediatek.com>
-         <20220915161817.10307-2-jason-jh.lin@mediatek.com>
-         <e6921ed7-a14c-aadb-abd4-1e7ee0a63be9@gmail.com>
-         <f30bd382eb8923256d6f39342ec7832774c0f547.camel@mediatek.com>
-         <17cacc6f-173f-ad6c-9056-1b17635c984d@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Sun, 18 Sep 2022 21:27:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B793918378
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 18:27:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663550874;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mTlHJkSe2zwoVsxiCcbcUXVRXRosTOKrm+znhbWqwWI=;
+        b=jEltpuvKknpBGp2cG2u1cMyzrj1eg8rsEbnPgeJTzymA+xbTg4qpVQzwSDC8k1GqfwwpHV
+        EVDA875PpEGOdw3uImdznLxY5NikTzuCor4FOAi2MfF1hecXUISC+AsfZe43vtfjPREsDJ
+        zyzH/Ezs6zBMHF1v+FuEBZoqEpTAe+A=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-464-Iy3PoTvROFe09ARVEqroCA-1; Sun, 18 Sep 2022 21:27:51 -0400
+X-MC-Unique: Iy3PoTvROFe09ARVEqroCA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 568FE85A583;
+        Mon, 19 Sep 2022 01:27:50 +0000 (UTC)
+Received: from [10.64.54.126] (vpn2-54-126.bne.redhat.com [10.64.54.126])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id A6E5A40C6EC2;
+        Mon, 19 Sep 2022 01:27:42 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH v2 2/5] KVM: arm64: Enable ring-based dirty memory
+ tracking
+To:     kernel test robot <lkp@intel.com>, kvmarm@lists.cs.columbia.edu
+Cc:     kbuild-all@lists.01.org, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, catalin.marinas@arm.com,
+        linux-kselftest@vger.kernel.org, bgardon@google.com,
+        shuah@kernel.org, corbet@lwn.net, maz@kernel.org,
+        drjones@redhat.com, will@kernel.org, zhenyzha@redhat.com,
+        dmatlack@google.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, pbonzini@redhat.com,
+        peterx@redhat.com, oliver.upton@linux.dev, shan.gavin@gmail.com
+References: <20220916045135.154505-3-gshan@redhat.com>
+ <202209180726.FLL69aKA-lkp@intel.com>
+From:   Gavin Shan <gshan@redhat.com>
+Message-ID: <fbf2bbe6-06d7-8e06-3f7f-04ca01d604c0@redhat.com>
+Date:   Mon, 19 Sep 2022 11:27:40 +1000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
+In-Reply-To: <202209180726.FLL69aKA-lkp@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,RDNS_NONE,SPF_HELO_PASS,SPF_PASS,
-        UNPARSEABLE_RELAY,URIBL_CSS autolearn=no autolearn_force=no
-        version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
-
-Thanks for the reviews.
-
-On Sun, 2022-09-18 at 10:31 +0100, Krzysztof Kozlowski wrote:
-> On 16/09/2022 04:34, Jason-JH Lin wrote:
-> > Hi Matthias,
-> > 
-> > Thanks for the review.
-> > 
-> > On Fri, 2022-09-16 at 00:05 +0200, Matthias Brugger wrote:
-> > > 
-> > > On 15/09/2022 18:18, Jason-JH.Lin wrote:
-> > > > For previous MediaTek SoCs, such as MT8173, there are 2 display
-> > > > HW
-> > > > pipelines binding to 1 mmsys with the same power domain, the
-> > > > same
-> > > > clock driver and the same mediatek-drm driver.
-> > > > 
-> > > > For MT8195, VDOSYS0 and VDOSYS1 are 2 display HW pipelines
-> > > > binding
-> > > > to
-> > > > 2 different power domains, different clock drivers and
-> > > > different
-> > > > mediatek-drm drivers.
-> > > > 
-> > > > Moreover, Hardware pipeline of VDOSYS0 has these components:
-> > > > COLOR,
-> > > > CCORR, AAL, GAMMA, DITHER. They are related to the PQ (Picture
-> > > > Quality)
-> > > > and they makes VDOSYS0 supports PQ function while they are not
-> > > > including in VDOSYS1.
-> > > > 
-> > > > Hardware pipeline of VDOSYS1 has the component ETHDR (HDR
-> > > > related
-> > > > component). It makes VDOSYS1 supports the HDR function while
-> > > > it's
-> > > > not
-> > > > including in VDOSYS0.
-> > > > 
-> > > > To summarize0:
-> > > > Only VDOSYS0 can support PQ adjustment.
-> > > > Only VDOSYS1 can support HDR adjustment.
-> > > > 
-> > > > Therefore, we need to separate these two different mmsys
-> > > > hardwares
-> > > > to
-> > > > 2 different compatibles for MT8195.
-> > > > 
-> > > > Fixes: 81c5a41d10b9 ("dt-bindings: arm: mediatek: mmsys: add
-> > > > mt8195
-> > > > SoC binding")
-> > > > Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
-> > > > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> > > > ---
-> > > >  
-> > > > .../devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml       
-> > > >  |
-> > > > 2 +-
-> > > >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > > > 
-> > > > diff --git
-> > > > a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys
-> > > > .yam
-> > > > l
-> > > > b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys
-> > > > .yam
-> > > > l
-> > > > index 6ad023eec193..0e267428eaa6 100644
-> > > > ---
-> > > > a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys
-> > > > .yam
-> > > > l
-> > > > +++
-> > > > b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys
-> > > > .yam
-> > > > l
-> > > > @@ -31,7 +31,7 @@ properties:
-> > > >                 - mediatek,mt8183-mmsys
-> > > >                 - mediatek,mt8186-mmsys
-> > > >                 - mediatek,mt8192-mmsys
-> > > > -              - mediatek,mt8195-mmsys
-> > > > +              - mediatek,mt8195-vdosys0
-> > > 
-> > > Nack, we miss the fallback compatible, as I already said twice.
-> > > 
-> > > Regards,
-> > > Matthias
-> > 
-> > I'm sorry this happened again.
-> > I'll keep the compatible "mediatek,mt8195-mmsys" at next version.
-> > 
-> > The patch "dt-bindings: arm: mediatek: mmsys: remove the unused
-> > compatible for mt8195" should be sent after accepting the vdosys1
-> > series, right?
+On 9/18/22 1:10 AM, kernel test robot wrote:
+> Thank you for the patch! Perhaps something to improve:
 > 
-> I don't think there will be no such patch...
+> [auto build test WARNING on kvm/queue]
+> [also build test WARNING on kvmarm/next linus/master v6.0-rc5 next-20220916]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
 > 
-> You need to add a bindings change which will accept device nodes
-> like:
-> foo {
->   compatible = "mediatek,mt8195-vdosys0", "mediatek,mt8195-mmsys";
+> url:    https://github.com/intel-lab-lkp/linux/commits/Gavin-Shan/KVM-arm64-Enable-ring-based-dirty-memory-tracking/20220916-125417
+> base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
+> config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220918/202209180726.FLL69aKA-lkp@intel.com/config)
+> compiler: aarch64-linux-gcc (GCC) 12.1.0
+> reproduce (this is a W=1 build):
+>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>          chmod +x ~/bin/make.cross
+>          # https://github.com/intel-lab-lkp/linux/commit/a1a4cd8f6a5e8927f800baff7d965870a1b7d7ba
+>          git remote add linux-review https://github.com/intel-lab-lkp/linux
+>          git fetch --no-tags linux-review Gavin-Shan/KVM-arm64-Enable-ring-based-dirty-memory-tracking/20220916-125417
+>          git checkout a1a4cd8f6a5e8927f800baff7d965870a1b7d7ba
+>          # save the config file
+>          mkdir build_dir && cp config build_dir/.config
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 > 
-> }
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
 > 
-> Example-schema shows how to do it.
+> All warnings (new ones prefixed by >>):
+> 
+>>> arch/arm64/kvm/../../../virt/kvm/dirty_ring.c:14:12: warning: no previous prototype for 'kvm_cpu_dirty_log_size' [-Wmissing-prototypes]
+>        14 | int __weak kvm_cpu_dirty_log_size(void)
+>           |            ^~~~~~~~~~~~~~~~~~~~~~
+> 
+> 
 
-OK, I got the point!
-I'll fix it at the next version.
-Thank you very much!
+[...]
 
-Regards,
-Jason-JH.Lin
+Thanks for reporting the issue. The weak function needn't to be overrided by
+ARM64. In v3, I will have a separate patch to fix the issue by moving its
+declaration to kvm_dirty_ring.h.
 
-> 
-> Best regards,
-> Krzysztof
--- 
-Jason-JH Lin <jason-jh.lin@mediatek.com>
+Thanks,
+Gavin
+
 
