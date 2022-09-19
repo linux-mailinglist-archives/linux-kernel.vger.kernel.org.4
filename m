@@ -2,106 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC61B5BCCD2
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 15:19:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDA545BCCE4
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 15:20:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230439AbiISNTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 09:19:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43058 "EHLO
+        id S229733AbiISNT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 09:19:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230368AbiISNTI (ORCPT
+        with ESMTP id S230441AbiISNTk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 09:19:08 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9A1129818;
-        Mon, 19 Sep 2022 06:19:06 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id q35-20020a17090a752600b002038d8a68fbso3132473pjk.0;
-        Mon, 19 Sep 2022 06:19:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date;
-        bh=6sojfB0EzarM+k/PZBtiMXpeN1oQ0x+sgKh5POxkET4=;
-        b=pC9aUZj8uxvkyE0WOYKlTkPDbfsZME97W5me+CBvNLN5DoZ7d0OO6m8KZbAq5XQswC
-         m20L97rAYXd0dUEotuALnX9fu6eMHwsu0MZIezud5fQxn2/nZMGNy6gZu7YijbGAJZ2p
-         8ySqyYEtnfxeh+A38Kj2arg73xMIUZnPQ8KgcehtCkfzy4VN3SfRet6cxTrsfrMEp0Lm
-         S3z0ZEg3NYP5taWsmyR7xuBIQv/ilisWSuuEfQFpPyTh+972V8WW+vIRK8dAwDEloz8l
-         yd23IDQTnv3tL9+oCvLybm59w7PLpIieRwPIB2rNILHHnXrFuChPONRZHkOtGVo9phUH
-         0sQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=6sojfB0EzarM+k/PZBtiMXpeN1oQ0x+sgKh5POxkET4=;
-        b=lKtHLToyWALXTbHvHZ2RE2eotQOJLRASGQFJZOebfwO052kfOVL+ju5iV9FsYlzD0o
-         pcn8tM5VSjDfLILHTLSF7E3S2Qg+CjHn1EtnErk2vvRIyXBtWkYNZsaXCO4cDf6HLoQH
-         QYNa6lK8BjnjzrqSxn/YoAybPK6ehRSHczFXJ8mOZaiTUy8fBRKJRCxyBRn9jOIpWFlb
-         Ln7Kdu738IEuDbtQXnU1KP153JfBbD7k5WIUijldHr4OnAlefVPvxHx4mFUWPjWWWWcr
-         oO+O1Ozqb+a+36h7efzpdDlg0BRylNsaHOfexWuWgbsKYA6IO8Z8wQ0V8IyH/U4puXLq
-         tVWQ==
-X-Gm-Message-State: ACrzQf0KQH1rCZDIKiD+JpsXuw3gUf6nOfawRp/Ybg2P779gUiU4BC5H
-        xzNecnPzxxsexM+TYGc+ujs=
-X-Google-Smtp-Source: AMsMyM6JaSPlEVM4mfSkdT3DBrLxFCCWZoBo/g1FoEpLYVeyAGh7ayjz3yx9xdtULFqJd1HLIgMYuA==
-X-Received: by 2002:a17:902:db0a:b0:178:2636:b6de with SMTP id m10-20020a170902db0a00b001782636b6demr13047042plx.58.1663593546222;
-        Mon, 19 Sep 2022 06:19:06 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j15-20020a170903024f00b00176e8f85147sm20042216plh.83.2022.09.19.06.19.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 06:19:05 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 19 Sep 2022 06:19:04 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Eliav Farber <farbere@amazon.com>
-Cc:     jdelvare@suse.com, robh+dt@kernel.org, p.zabel@pengutronix.de,
-        rtanwar@maxlinear.com, andriy.shevchenko@intel.com,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hhhawa@amazon.com, jonnyc@amazon.com,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v5 17/21] hwmon: (mr75203) add support for series 6
- temperature equation
-Message-ID: <20220919131904.GA3547146@roeck-us.net>
-References: <20220908152449.35457-1-farbere@amazon.com>
- <20220908152449.35457-18-farbere@amazon.com>
+        Mon, 19 Sep 2022 09:19:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDFFD2727;
+        Mon, 19 Sep 2022 06:19:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A417961C83;
+        Mon, 19 Sep 2022 13:19:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D334CC433D6;
+        Mon, 19 Sep 2022 13:19:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663593571;
+        bh=CWxeSKy8kiP3vLBtnTdjMO9HxV48EKwdW/OqmPtC6l0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QSt/tYd0fqkRxl3AMLkOfW8jOo29uPNAUTrqCEiKcW4GPIFYazQI+7GdaoR9WjHP/
+         C3f1Cn90J1fcSJRomBPO2R4SafD0GeCOnjMu8GrC0DI9SRc41HhHQAuGu6/ePf7CIl
+         1tpNMlSYxVEEkgVVGnt9sORkREiG3UwgD6k+rAvp+k8Ymdzy6EmONNUtQQ0FPwJrZz
+         E4kynvoBow0vT5f8AL2kEtRjwbRixVHhtNIY4x7IXbFVctpkPsLDVFZ3AmASNufD84
+         LJuwBz9RlC4vCLjpY3pQPKjt4W7RUs6cFBM07ypkDZ4M4AFgldiHx3H7zbxKMROjNw
+         AklJSa90tpIbg==
+Date:   Mon, 19 Sep 2022 15:19:27 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
+        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
+        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
+        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
+        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
+        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
+        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
+        dinguyen@kernel.org, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
+        James.Bottomley@HansenPartnership.com, deller@gmx.de,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, pv-drivers@vmware.com,
+        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
+        gregkh@linuxfoundation.org, mturquette@baylibre.com,
+        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
+        sudeep.holla@arm.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
+        anup@brainfault.org, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, jacob.jun.pan@linux.intel.com,
+        atishp@atishpatra.org, Arnd Bergmann <arnd@arndb.de>,
+        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, dennis@kernel.org, tj@kernel.org,
+        cl@linux.com, rostedt@goodmis.org, pmladek@suse.com,
+        senozhatsky@chromium.org, john.ogness@linutronix.de,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, fweisbec@gmail.com,
+        ryabinin.a.a@gmail.com, glider@google.com, andreyknvl@gmail.com,
+        dvyukov@google.com, vincenzo.frascino@arm.com,
+        Andrew Morton <akpm@linux-foundation.org>, jpoimboe@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-perf-users@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-arch@vger.kernel.org, kasan-dev@googlegroups.com,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: [PATCH v2 03/44] cpuidle/poll: Ensure IRQ state is invariant
+Message-ID: <20220919131927.GA58444@lothringen>
+References: <20220919095939.761690562@infradead.org>
+ <20220919101520.534233547@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220908152449.35457-18-farbere@amazon.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220919101520.534233547@infradead.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 08, 2022 at 03:24:45PM +0000, Eliav Farber wrote:
-> The current equation used in code is aligned to series 5:
-> T = G + H * (n / cal5 - 0.5) + J * F
-> Where:
-> G = 60, H = 200, cal5 = 4094, J = -0.1, F = frequency clock in MHz
-> 
-> Series 6 has a slightly different equation:
-> T = G + H * (n / cal5 - 0.5)
-> and a different set of coefficients:
-> G = 57.4, H = 249.4, cal5 = 4096
-> 
-> This change supports equation and coefficients for both series.
-> (for series 6, J is set to 0).
-> 
-> The series is determined according to “moortec,ts-series” property in
-> the device tree.
-> If absent, series 5 is assumed to be the default.
-> 
-> Signed-off-by: Eliav Farber <farbere@amazon.com>
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On Mon, Sep 19, 2022 at 11:59:42AM +0200, Peter Zijlstra wrote:
+> cpuidle_state::enter() methods should be IRQ invariant
 
-Applied to hwmon-next.
+Got a bit confused with the invariant thing since the first chunck I
+see in this patch is a conversion to an non-traceable local_irq_enable().
 
-Thanks,
-Guenter
+Maybe just add a short mention about that and why?
+
+Thanks.
+
+> 
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  drivers/cpuidle/poll_state.c |    4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> --- a/drivers/cpuidle/poll_state.c
+> +++ b/drivers/cpuidle/poll_state.c
+> @@ -17,7 +17,7 @@ static int __cpuidle poll_idle(struct cp
+>  
+>  	dev->poll_time_limit = false;
+>  
+> -	local_irq_enable();
+> +	raw_local_irq_enable();
+>  	if (!current_set_polling_and_test()) {
+>  		unsigned int loop_count = 0;
+>  		u64 limit;
+> @@ -36,6 +36,8 @@ static int __cpuidle poll_idle(struct cp
+>  			}
+>  		}
+>  	}
+> +	raw_local_irq_disable();
+> +
+>  	current_clr_polling();
+>  
+>  	return index;
+> 
+> 
