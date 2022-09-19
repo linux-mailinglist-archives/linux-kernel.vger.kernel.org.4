@@ -2,77 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73F925BC401
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 10:08:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91B1C5BC407
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 10:09:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbiISIIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 04:08:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50440 "EHLO
+        id S229941AbiISIIw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 04:08:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbiISIIJ (ORCPT
+        with ESMTP id S229911AbiISIIs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 04:08:09 -0400
-Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B381FCCE
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 01:08:07 -0700 (PDT)
-Received: by mail-vk1-xa2d.google.com with SMTP id g85so7986086vkf.10
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 01:08:07 -0700 (PDT)
+        Mon, 19 Sep 2022 04:08:48 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E60E4AE5C;
+        Mon, 19 Sep 2022 01:08:46 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id lc7so62685922ejb.0;
+        Mon, 19 Sep 2022 01:08:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=2SOaDgh3Xbp2cThKaHYYChzQVSEAWBeCFOscJLAXKq8=;
-        b=nHCnfixG5nHOuGtmx95HZlP65DGnRnP1CQjYW7DVa8V9MnP0vzYYYpll38e3dolBVD
-         LgCSmSi83HyDS3EZqMlDEeK5g+EXm8xuvyrayZi2cQzzpSrQvalzfBZ4Qsz/KUpNyssX
-         zsFoPz7Kph+i7oq3lWE9NQKZJZ4McxevcCymVrgXqEuG34IIDzWt+NddALK4cZe6OHHJ
-         79qWGjJI1/b3613bekRh8Oynh2KP8XTHRFaYWJ8MztJUhPDikbpAh95LDGMUZ39Zv3hK
-         hQRIOlNxeAN9MbDxqT1XnDt3RkqDQO1pfHzRLz7WEMyIHaw7Df2wYMqQk6ZUamS+wKjB
-         WKgA==
+        bh=ChpUK8RSwNQblLECjo619xEoogvtragMFjPnBad9ZaU=;
+        b=FMzLWCE7rLj2pgkd68HYS/SItV62aOhHh72mwmlPFqrj4eO9IX65qn3Zh4HDfO9k5e
+         PUBwQjlj3VkA+GmSGy6CZGBvcR63+5gTUjfr5jfChj5HkhlBOX8sW6nS1g5YTxypi51J
+         F6q1Mh7uL5yIS+6JYhuLQDED634sMj/+l5jke0fhGXXn8PWpt+lCZdf9v9+gX0mKGGz6
+         +nH8cRN/fbxRO7DTksMtKsLaPPc9cRX+i9r46/Sw+Z6o3QsqcSmIm3lN0yjVWb35uEV3
+         vg0/yGUCpuQl/AYj1Zxa3uiYyz4WOCF7KIZCSY0/1ImtprpiVSkoi9cuUbO5NTiPM/Qt
+         re9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=2SOaDgh3Xbp2cThKaHYYChzQVSEAWBeCFOscJLAXKq8=;
-        b=vrvkt7zIzl0gpTGQ/EuP7oHxGYGFg8kqI6WYqerGzC7TBCX1Ve4aAGKvum6xMQ2tnX
-         IZodFXfEuNOJB5KX5yHg72WRpcvW3IwzAjW/hFxdOC9ozBZr3FZojZ4DAXYYHLDVS/Y9
-         EcQ6FUNUG8LS/x6jasDX034pXEv4D9slsahBzhX7oFZAeTua5vhuW0BvUkX9Bi5Ze+6A
-         bgJABQJxqxrItC+LE4JCGjDSf9Wa8uU52N4ZRYkVxYuBhRhYqCcU6ZgTAkUJ+O7qZeLL
-         RJ4nQX5XHR3jOjJmH9OfbdjnYMEfbLvIw4mQJCRHOFfXXItlOikrmKKSqyWTTus299j8
-         foNQ==
-X-Gm-Message-State: ACrzQf3Lz8+arz842+f3yMTpTJSWQ83uKwfJgfDCK0riDlkE6K9B7lLe
-        6N3NmC2OhTx0LIqTTq0VTSgzwn3x9eaBf9ru12fZqg==
-X-Google-Smtp-Source: AMsMyM5OpGGORvjPdU0tcNC3Zx3GYKq0LbUwwMIOZOSE6B+3As6v4tDvuUjlbuLi/L6740/3JevWmF+XwaeL5c7IKaU=
-X-Received: by 2002:a05:6122:10e4:b0:3a3:e3:d448 with SMTP id
- m4-20020a05612210e400b003a300e3d448mr5281172vko.29.1663574886403; Mon, 19 Sep
- 2022 01:08:06 -0700 (PDT)
+        bh=ChpUK8RSwNQblLECjo619xEoogvtragMFjPnBad9ZaU=;
+        b=IqAVUfAqbu9t1pGZ79+jboXZ/SLufmE3ulSC6y+d8W1BMSEKA6AfW+xoJjRYFpEKj7
+         8JOs92QhJ4sz5KNxJcFT4jXbKKRMf+veKr9zr9tgXD6JUHjw4FvofkWWkpe6n/Anxuvj
+         Zh9eS1gp30CM669cbsR8uNGFcHOzxWWArxAJCOiipzmuRBcpxwf+IwLpFEZNsSg367lO
+         ppRPD7D8sOqa1NEMu9PD6usU35oxrhD1HVknpQw9bGbfe8BdGHvGVSg87EHhpfIEhm+s
+         ZOPvtc3lN7MIEOUdg9AdhibQ4lhPnRDRvoAN+R+ieVspgxTNwVhPP5oDrUsxB3A80rJ1
+         79fw==
+X-Gm-Message-State: ACrzQf3HV0ilzORLgkeDLunaShm//L8qttteR4VrxkNt5pwy9dQaNmCf
+        iJeitg+SAr3ux5f39mlCdpY/fDzxc0574//USYg=
+X-Google-Smtp-Source: AMsMyM5242Sp3awy87MF1zpXSy90hM10NPZ7trT1hjEMEGgJXs96bbayN5mV0CoPsW2kwA51bNRbAoVIo3ZNiig6AhU=
+X-Received: by 2002:a17:907:847:b0:77f:f489:cc25 with SMTP id
+ ww7-20020a170907084700b0077ff489cc25mr11844533ejb.80.1663574925462; Mon, 19
+ Sep 2022 01:08:45 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1662411799.git.andreyknvl@google.com> <CA+fCnZdok0KzOfYmXHQMNFmiuU1H26y8=PaRZ+F0YqTbgxH1Ww@mail.gmail.com>
- <CANpmjNM3RqQpvxvZ4+J9DYvMjcZwWjwEGakQb8U4DL+Eu=6K5A@mail.gmail.com> <20220912130643.b7ababbaa341bf07a0a43089@linux-foundation.org>
-In-Reply-To: <20220912130643.b7ababbaa341bf07a0a43089@linux-foundation.org>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Mon, 19 Sep 2022 02:07:30 -0600
-Message-ID: <CAOUHufZg_FfKvNAsTmJvWA5MoMWQAjSpOHvWi=BAmsUPd3CZmg@mail.gmail.com>
-Subject: Re: [PATCH mm v3 00/34] kasan: switch tag-based modes to stack ring
- from per-object metadata
-To:     Andrey Konovalov <andreyknvl@gmail.com>
-Cc:     Marco Elver <elver@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Florian Mayer <fmayer@google.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        andrey.konovalov@linux.dev
+References: <20220916133521.73183-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <YyZS38Wo7rDsNRm2@pendragon.ideasonboard.com>
+In-Reply-To: <YyZS38Wo7rDsNRm2@pendragon.ideasonboard.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Mon, 19 Sep 2022 09:08:18 +0100
+Message-ID: <CA+V-a8vvNHFt818wryyuhWxPtay4czjWXiH=AWEKiJ1AzB46mA@mail.gmail.com>
+Subject: Re: [PATCH] media: dt-bindings: i2c: ovti,ov5640: Drop ref to video-interface-devices.yaml
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,52 +73,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 2:06 PM Andrew Morton <akpm@linux-foundation.org> wrote:
->
-> On Mon, 12 Sep 2022 11:39:07 +0200 Marco Elver <elver@google.com> wrote:
->
-> >
-> > ...
-> >
-> > > Hi Andrew,
-> > >
-> > > Could you consider picking up this series into mm?
-> > >
-> > > Most of the patches have a Reviewed-by tag from Marco, and I've
-> > > addressed the last few comments he had in v3.
-> > >
-> > > Thanks!
-> >
-> > I see them in -next, so they've been picked up?
->
-> yup.
->
-> > FWIW, my concerns have been addressed, so for patches that don't yet
-> > have my Reviewed:
-> >
-> >
-> > Acked-by: Marco Elver <elver@google.com>
->
-> Updated, thanks.
+Hi Laurent,
 
-Hit the following with the latest mm-unstable. Please take a look. Thanks.
+Thank you for the review.
 
-BUG: rwlock bad magic on CPU#0, swapper/0, ffffffdc589d8218
-CPU: 0 PID: 0 Comm: swapper Not tainted 6.0.0-rc3-lockdep+ #36
-Call trace:
- dump_backtrace+0xfc/0x14c
- show_stack+0x24/0x58
- dump_stack_lvl+0x7c/0xa0
- dump_stack+0x18/0x44
- rwlock_bug+0x88/0x8c
- do_raw_read_unlock+0x7c/0x90
- _raw_read_unlock_irqrestore+0x54/0xa0
- save_stack_info+0x100/0x118
- kasan_save_alloc_info+0x20/0x2c
- __kasan_slab_alloc+0x90/0x94
- early_kmem_cache_node_alloc+0x8c/0x1a8
- __kmem_cache_create+0x1ac/0x338
- create_boot_cache+0xac/0xec
- kmem_cache_init+0x8c/0x174
- mm_init+0x3c/0x78
- start_kernel+0x188/0x49c
+On Sun, Sep 18, 2022 at 12:06 AM Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
+>
+> Hi Prabhakar,
+>
+> Thank you for the patch.
+>
+> On Fri, Sep 16, 2022 at 02:35:21PM +0100, Prabhakar wrote:
+> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> >
+> > video-interface-devices.yaml isn't used so just drop it from the
+> > DT binding doc.
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > ---
+> >  Documentation/devicetree/bindings/media/i2c/ovti,ov5640.yaml | 3 ---
+> >  1 file changed, 3 deletions(-)
+> >
+> > diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov5640.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov5640.yaml
+> > index 540fd69ac39f..ce99aada75ad 100644
+> > --- a/Documentation/devicetree/bindings/media/i2c/ovti,ov5640.yaml
+> > +++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov5640.yaml
+> > @@ -9,9 +9,6 @@ title: OmniVision OV5640 Image Sensor Device Tree Bindings
+> >  maintainers:
+> >    - Steve Longerbeam <slongerbeam@gmail.com>
+> >
+> > -allOf:
+> > -  - $ref: /schemas/media/video-interface-devices.yaml#
+> > -
+>
+> The rotation property listed in this binding uses the definition from
+> video-interface-devices.yaml. I don't think just dropping this is the
+> right solution. Changing additionaProperties to unevaluatedProperties
+> seems a better option.
+>
+Agreed, I missed rotation was used from video-interface-devices.yaml.
+Agreed the changing additionaProperties to unevaluatedProperties seems
+a better option.
+
+Cheers,
+Prabhakar
