@@ -2,301 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFBF65BC359
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 09:07:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D57C5BC35C
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 09:08:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbiISHHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 03:07:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47154 "EHLO
+        id S229905AbiISHIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 03:08:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229827AbiISHHE (ORCPT
+        with ESMTP id S229810AbiISHIU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 03:07:04 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1C5C15FC7
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 00:07:03 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28J44Ip4010901;
-        Mon, 19 Sep 2022 07:06:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=apL1ap4jky84AethjsdOSKCPtGVBdqAWIK1p77PB8Sw=;
- b=famm+QqHa13DtIquwUd/XzIGpgoddseEqB3u5eI+9WmBrMrzEdINu1xKxepN1zObAuiC
- 5dh+IYiOeMgAaBOpUvPLdnPem4XzEAYAUmixiuPGFrOWAY9eI+i7ymINo1BhVtJ+NU/k
- p6R9dvLYu9xPL+ip1HEeoAMrp/d5FabwvMn7ZLwA5zghTVSthn8Er6M62ptc1Rhr+S3I
- 67iegYXw3GlgVn+qm3dwzSX4yZGQG0OBg8c8s3t+ICdTixcuU7iepC4kdwLqCEHmK3s4
- wLb5nhanp8J3E9LUPqFk+QXd2lRBrHSapu9pGbBvQg8FPTgK4pTmKfcY1ZJgc/3SROC/ 5w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3jph30bs64-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 19 Sep 2022 07:06:28 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28J6HKLc009049;
-        Mon, 19 Sep 2022 07:06:28 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3jph30bs5f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 19 Sep 2022 07:06:28 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28J757xL006131;
-        Mon, 19 Sep 2022 07:06:26 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma04fra.de.ibm.com with ESMTP id 3jn5v91fwb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 19 Sep 2022 07:06:26 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28J76NPU43319734
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 19 Sep 2022 07:06:23 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CA8BD42047;
-        Mon, 19 Sep 2022 07:06:23 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 24A2C42045;
-        Mon, 19 Sep 2022 07:06:18 +0000 (GMT)
-Received: from [9.43.61.137] (unknown [9.43.61.137])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 19 Sep 2022 07:06:17 +0000 (GMT)
-Message-ID: <78100f92-afd7-52b6-d5e5-17eb2de72a9a@linux.ibm.com>
-Date:   Mon, 19 Sep 2022 12:36:16 +0530
+        Mon, 19 Sep 2022 03:08:20 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 335CC1CB28
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 00:08:18 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id r7so4928217wrm.2
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 00:08:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=wEdLDJgFEyr3Rx0kdQrhspWlZowoghD3V/H8ktxN3TY=;
+        b=OgBqv3IZzdUFqvuLhn6EFV4R9bDvxhESon8U4vW40j+TSLmigg9qsdpoGxMi5BPLLg
+         0unGK3NEoyGanilR3J1V/VKvExTq6SrFYMDXmYaiIPnSEozEMMSwmhzdYDM+gIrOaaMg
+         Ji3IDXFgdCSA73EiM4w021yuoCXfNAJVAHRUc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=wEdLDJgFEyr3Rx0kdQrhspWlZowoghD3V/H8ktxN3TY=;
+        b=Xx6yq9vTkzZiBqPqL6JRCyFrTpB4igHeGidiPTqccACrlHzCCpPaVVExa8Sz4vRlrg
+         of4TV4LDJmSGy9RnGeyaFvXUmXFh2iHfRUyhUbedSTypuHUAoxu2cwGnYB/CDejnYsC5
+         cC+9i6Hs1UJRVGpBkwgiCeA5w9aWp1UMl17m5YaslCcDgtHUNpEq0GG68NhHkI588WEH
+         n1jX9DLe+aUK+9lJ5y61ezv5LuwuPGosX5fpZndnBvRWYVUUFZ/O9YZNL0gtrCigSF/N
+         UmBB66Xmd3eBaoEmsoTVnW7nGOmpQtWEGwItAz1hxGNYZWJjHnUAbefMlw2F26+QQWR6
+         aVKQ==
+X-Gm-Message-State: ACrzQf3+PRQDsY/bXSikRmxG7U9OsbI3GVJFsQl4ulQtY6Mpp5LOs/3r
+        stux+uMQOnn7yJs1ykIP7/J3KQ==
+X-Google-Smtp-Source: AMsMyM5WuE0u/PpMDPiqFT5hqYfJFSqTAYnpfKtBn+3NHLlEFItVukIyZebdE5bJbyYXtyGz31yIfg==
+X-Received: by 2002:adf:f3d2:0:b0:22a:e5d2:5c with SMTP id g18-20020adff3d2000000b0022ae5d2005cmr6872977wrp.131.1663571296615;
+        Mon, 19 Sep 2022 00:08:16 -0700 (PDT)
+Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-56-12.cust.vodafonedsl.it. [188.217.56.12])
+        by smtp.gmail.com with ESMTPSA id bk23-20020a0560001d9700b0022b014fb0b7sm2088897wrb.110.2022.09.19.00.08.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Sep 2022 00:08:16 -0700 (PDT)
+Date:   Mon, 19 Sep 2022 09:08:13 +0200
+From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+To:     Mikhail Rudenko <mike.rudenko@gmail.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Christian Hemp <c.hemp@phytec.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Marek Vasut <marex@denx.de>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] media: i2c: add support for ov4689
+Message-ID: <20220919070813.GA3958@tom-ThinkPad-T14s-Gen-2i>
+References: <20220911200147.375198-1-mike.rudenko@gmail.com>
+ <20220911200147.375198-3-mike.rudenko@gmail.com>
+ <20220914155122.GA9874@tom-ThinkPad-T14s-Gen-2i>
+ <87k064pa2v.fsf@gmail.com>
+ <20220916133401.GB2701@tom-ThinkPad-T14s-Gen-2i>
+ <87r10bo1k5.fsf@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH v12 7/7] x86/crash: Add x86 crash hotplug support
-To:     Eric DeVolder <eric.devolder@oracle.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        kexec@lists.infradead.org, ebiederm@xmission.com,
-        dyoung@redhat.com, bhe@redhat.com, vgoyal@redhat.com
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com,
-        nramas@linux.microsoft.com, thomas.lendacky@amd.com,
-        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
-        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
-References: <20220909210509.6286-1-eric.devolder@oracle.com>
- <20220909210509.6286-8-eric.devolder@oracle.com>
-Content-Language: en-US
-From:   Sourabh Jain <sourabhjain@linux.ibm.com>
-In-Reply-To: <20220909210509.6286-8-eric.devolder@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: U2h9PPsJ5beRGFeCmQgsZkOg4m_EEH2L
-X-Proofpoint-ORIG-GUID: JN_t5p287PK97cVCV0eUgWrWmT-IEx3S
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-19_03,2022-09-16_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 impostorscore=0
- priorityscore=1501 suspectscore=0 mlxlogscore=999 malwarescore=0
- phishscore=0 adultscore=0 spamscore=0 lowpriorityscore=0 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209190046
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87r10bo1k5.fsf@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Mikhail,
 
-On 10/09/22 02:35, Eric DeVolder wrote:
-> For x86_64, when CPU or memory is hot un/plugged, the crash
-> elfcorehdr, which describes the CPUs and memory in the system,
-> must also be updated.
->
-> When loading the crash kernel via kexec_load or kexec_file_load,
-> the elfcorehdr is identified at run time in
-> crash_core:handle_hotplug_event().
->
-> To update the elfcorehdr for x86_64, a new elfcorehdr must be
-> generated from the available CPUs and memory. The new elfcorehdr
-> is prepared into a buffer, and then installed over the top of
-> the existing elfcorehdr.
->
-> In the patch 'kexec: exclude elfcorehdr from the segment digest'
-> the need to update purgatory due to the change in elfcorehdr was
-> eliminated.  As a result, no changes to purgatory or boot_params
-> (as the elfcorehdr= kernel command line parameter pointer
-> remains unchanged and correct) are needed, just elfcorehdr.
->
-> To accommodate a growing number of resources via hotplug, the
-> elfcorehdr segment must be sufficiently large enough to accommodate
-> changes, see the CRASH_MAX_MEMORY_RANGES configure item.
->
-> With this change, crash hotplug for kexec_file_load syscall
-> is supported. The kexec_load is also supported, but also
-> requires a corresponding change to userspace kexec-tools.
->
-> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
-> Acked-by: Baoquan He <bhe@redhat.com>
-> ---
->   arch/x86/Kconfig             |  11 ++++
->   arch/x86/include/asm/kexec.h |  20 +++++++
->   arch/x86/kernel/crash.c      | 102 +++++++++++++++++++++++++++++++++++
->   3 files changed, 133 insertions(+)
->
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index f9920f1341c8..cdfc9b2fdf98 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -2056,6 +2056,17 @@ config CRASH_DUMP
->   	  (CONFIG_RELOCATABLE=y).
->   	  For more details see Documentation/admin-guide/kdump/kdump.rst
->   
-> +config CRASH_MAX_MEMORY_RANGES
-> +	depends on CRASH_DUMP && KEXEC_FILE && (HOTPLUG_CPU || MEMORY_HOTPLUG)
-> +	int
-> +	default 32768
-> +	help
-> +	  For the kexec_file_load path, specify the maximum number of
-> +	  memory regions, eg. as represented by the 'System RAM' entries
-> +	  in /proc/iomem, that the elfcorehdr buffer/segment can accommodate.
-> +	  This value is combined with NR_CPUS and multiplied by Elf64_Phdr
-> +	  size to determine the final buffer size.
-> +
->   config KEXEC_JUMP
->   	bool "kexec jump"
->   	depends on KEXEC && HIBERNATION
-> diff --git a/arch/x86/include/asm/kexec.h b/arch/x86/include/asm/kexec.h
-> index a3760ca796aa..432073385b2d 100644
-> --- a/arch/x86/include/asm/kexec.h
-> +++ b/arch/x86/include/asm/kexec.h
-> @@ -212,6 +212,26 @@ typedef void crash_vmclear_fn(void);
->   extern crash_vmclear_fn __rcu *crash_vmclear_loaded_vmcss;
->   extern void kdump_nmi_shootdown_cpus(void);
->   
-> +void *arch_map_crash_pages(unsigned long paddr, unsigned long size);
-> +#define arch_map_crash_pages arch_map_crash_pages
-> +
-> +void arch_unmap_crash_pages(void **ptr);
-> +#define arch_unmap_crash_pages arch_unmap_crash_pages
-> +
-> +void arch_crash_handle_hotplug_event(struct kimage *image,
-> +		unsigned int hp_action);
-> +#define arch_crash_handle_hotplug_event arch_crash_handle_hotplug_event
-> +
-> +#ifdef CONFIG_HOTPLUG_CPU
-> +static inline int crash_hotplug_cpu_support(void) { return 1; }
-> +#define crash_hotplug_cpu_support crash_hotplug_cpu_support
-> +#endif
-> +
-> +#ifdef CONFIG_MEMORY_HOTPLUG
-> +static inline int crash_hotplug_memory_support(void) { return 1; }
-> +#define crash_hotplug_memory_support crash_hotplug_memory_support
-> +#endif
-> +
->   #endif /* __ASSEMBLY__ */
->   
->   #endif /* _ASM_X86_KEXEC_H */
-> diff --git a/arch/x86/kernel/crash.c b/arch/x86/kernel/crash.c
-> index 9ceb93c176a6..8fc7d678ac72 100644
-> --- a/arch/x86/kernel/crash.c
-> +++ b/arch/x86/kernel/crash.c
-> @@ -25,6 +25,7 @@
->   #include <linux/slab.h>
->   #include <linux/vmalloc.h>
->   #include <linux/memblock.h>
-> +#include <linux/highmem.h>
->   
->   #include <asm/processor.h>
->   #include <asm/hardirq.h>
-> @@ -397,7 +398,18 @@ int crash_load_segments(struct kimage *image)
->   	image->elf_headers = kbuf.buffer;
->   	image->elf_headers_sz = kbuf.bufsz;
->   
-> +#if defined(CONFIG_HOTPLUG_CPU) || defined(CONFIG_MEMORY_HOTPLUG)
-> +	/* Ensure elfcorehdr segment large enough for hotplug changes */
-> +	kbuf.memsz =
-> +		(CONFIG_NR_CPUS_DEFAULT + CONFIG_CRASH_MAX_MEMORY_RANGES) *
-> +			sizeof(Elf64_Phdr);
-> +	/* Mark as usable to crash kernel, else crash kernel fails on boot */
-> +	image->elf_headers_sz = kbuf.memsz;
-> +	image->elfcorehdr_index = image->nr_segments;
-> +	image->elfcorehdr_index_valid = true;
-> +#else
->   	kbuf.memsz = kbuf.bufsz;
-> +#endif
->   	kbuf.buf_align = ELF_CORE_HEADER_ALIGN;
->   	kbuf.mem = KEXEC_BUF_MEM_UNKNOWN;
->   	ret = kexec_add_buffer(&kbuf);
-> @@ -412,3 +424,93 @@ int crash_load_segments(struct kimage *image)
->   	return ret;
->   }
->   #endif /* CONFIG_KEXEC_FILE */
-> +
-> +#if defined(CONFIG_HOTPLUG_CPU) || defined(CONFIG_MEMORY_HOTPLUG)
-> +/*
-> + * NOTE: The addresses and sizes passed to this routine have
-> + * already been fully aligned on page boundaries. There is no
-> + * need for massaging the address or size.
-> + */
-> +void *arch_map_crash_pages(unsigned long paddr, unsigned long size)
-> +{
-> +	void *ptr = NULL;
-> +
-> +	if (size > 0) {
-> +		struct page *page = pfn_to_page(paddr >> PAGE_SHIFT);
-> +
-> +		ptr = kmap_local_page(page);
-> +	}
-> +
-> +	return ptr;
-> +}
-> +
-> +void arch_unmap_crash_pages(void **ptr)
-> +{
-> +	if (ptr) {
-> +		if (*ptr)
-> +			kunmap_local(*ptr);
-> +		*ptr = NULL;
-> +	}
-> +}
-> +
-> +/**
-> + * arch_crash_handle_hotplug_event() - Handle hotplug elfcorehdr changes
-> + * @image: the active struct kimage
-> + * @hp_action: the hot un/plug action being handled
-> + *
-> + * To accurately reflect hot un/plug changes, the new elfcorehdr
-> + * is prepared in a kernel buffer, and then it is written on top
-> + * of the existing/old elfcorehdr.
-> + */
-> +void arch_crash_handle_hotplug_event(struct kimage *image,
-> +	unsigned int hp_action)
-> +{
-> +	struct kexec_segment *ksegment;
-> +	unsigned char *ptr = NULL;
-> +	unsigned long elfsz = 0;
-> +	void *elfbuf = NULL;
-> +	unsigned long mem, memsz;
-> +
-> +	/*
-> +	 * Elfcorehdr_index_valid checked in crash_core:handle_hotplug_event()
-> +	 */
-> +	ksegment = &image->segment[image->elfcorehdr_index];
-> +	mem = ksegment->mem;
-> +	memsz = ksegment->memsz;
-> +
-> +	/*
-> +	 * Create the new elfcorehdr reflecting the changes to CPU and/or
-> +	 * memory resources.
-> +	 */
-> +	if (prepare_elf_headers(image, &elfbuf, &elfsz)) {
-> +		pr_err("crash hp: unable to prepare elfcore headers");
-> +		goto out;
+On Fri, Sep 16, 2022 at 04:44:31PM +0300, Mikhail Rudenko wrote:
+> 
+> On 2022-09-16 at 15:34 +02, Tommaso Merciai <tommaso.merciai@amarulasolutions.com> wrote:
+> > Hi Mikhail,
+> >
+> > On Thu, Sep 15, 2022 at 11:50:23PM +0300, Mikhail Rudenko wrote:
+> >>
+> >> Hi Tommaso,
+> >>
+> >> On 2022-09-14 at 17:51 +02, Tommaso Merciai <tommaso.merciai@amarulasolutions.com> wrote:
+> >> > Hi Mikhail,
+> >> > I do a first round on reviewing your driver :)
+> >> >
+> >> > On Sun, Sep 11, 2022 at 11:01:35PM +0300, Mikhail Rudenko wrote:
+> 
+> <snip>
+> 
+> >> >> +
+> >> >> +	ov4689->xvclk = devm_clk_get(dev, "xvclk");
+> >> >> +	if (IS_ERR(ov4689->xvclk)) {
+> >> >> +		dev_err(dev, "Failed to get xvclk\n");
+> >> >> +		return -EINVAL;
+> >> >> +	}
+> >> >
+> >> > ^ I think is better to use devm_clk_get_optional instead of clck_get.
+> >> > clck_get can fail in CPU's that use ACPI
+> >> >
+> >> >> +
+> >> >> +	ret = clk_set_rate(ov4689->xvclk, OV4689_XVCLK_FREQ);
+> >> >> +	if (ret < 0) {
+> >> >> +		dev_err(dev, "Failed to set xvclk rate (24MHz)\n");
+> >> >> +		return ret;
+> >> >> +	}
+> >> >> +	if (clk_get_rate(ov4689->xvclk) != OV4689_XVCLK_FREQ)
+> >> >> +		dev_warn(dev, "xvclk mismatched, modes are based on 24MHz\n");
+> >> >
+> >> >
+> >> > What do you think about?
+> >> > Thanks.
+> >>
+> >> Unfortunately, I have no experience with ACPI-based devices. :(
+> >>
+> >> Do you mean that in the case of an ACPI device and devm_clk_get_optional
+> >> returning NULL we should assume that the clock is already enabled and
+> >> will stay enabled during sensor operation? How should we distinguish it
+> >> from the case of an OF-based system and clock just missing from device
+> >> tree?
+> >
+> > Not exaclty :)
+> >
+> > I copy comment from [1]
+> >
+> > if you use ov5693->xvclk to identify the ACPI vs OF use case shouldn't
+> > you use the get_optionl() version ? Otherwise in the ACPI case you will have
+> > -ENOENT if there's not 'xvclk' property and bail out.
+> >
+> > Unless my understanding is wrong on ACPI we have "clock-frequency" and
+> > on OF "xvclk" with an "assigned-clock-rates",
+> >
+> > [1] https://patchwork.linuxtv.org/project/linux-media/patch/20220627150453.220292-5-tommaso.merciai@amarulasolutions.com/
+> >
+> > Let me know if you need more details.
+> 
+> Thanks for the pointer! I'll try to implement something along the lines
+> of your ov5693 series.
+> 
+> But I'm not sure that will be enough to support ACPI systems
+> correctly. What about lanes number and link frequency checks? Should
+> they be made conditional on CONFIG_OF? Anything else I don't know?
 
-On PowerPC, while preparing the elf core header the memblock structure 
-is used to prepare program header for memory regions of elfcorehdr. 
-Since the above arch specific hotplug handler gets invoked when memory 
-is marked offline (MEM_OFFLINE) which is before memblock structure gets 
-updated so on PowerPC the above handler may not work for memory hotplug 
-case.
+In my opinion, lanes number and link frequency checks are ok :)
+We don't need conditional CONFIG_OF.
 
-Just wondering which data structure is used to get the list of memory 
-regions while preparing program header for memory regions of elfcorehdr 
-on other architectures?
+fwnode* function support both ACPI and dts.
 
 Thanks,
-Sourabh Jain
+Tommaso
+
+> 
+> >
+> > Regards,
+> > Tommaso
+> >
+> --
+> Best regards,
+> Mikhail Rudenko
+
+-- 
+Tommaso Merciai
+Embedded Linux Engineer
+tommaso.merciai@amarulasolutions.com
+__________________________________
+
+Amarula Solutions SRL
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+T. +39 042 243 5310
+info@amarulasolutions.com
+www.amarulasolutions.com
