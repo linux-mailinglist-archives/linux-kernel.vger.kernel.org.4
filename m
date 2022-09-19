@@ -2,94 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 401255BCB8E
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 14:13:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FF075BCBA3
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 14:18:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229918AbiISMNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 08:13:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45478 "EHLO
+        id S229901AbiISMSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 08:18:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbiISMNT (ORCPT
+        with ESMTP id S229606AbiISMSa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 08:13:19 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 299A2AE5A
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 05:13:16 -0700 (PDT)
-Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:a78:dc38:d663:4e37])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5B26B66019EE;
-        Mon, 19 Sep 2022 13:13:13 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1663589593;
-        bh=0ExZBX4ZBR0DoaPRlH8a5BMVZUgZpBnkAA1zeufhj+8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=OXmGJ+jmWQ4GDb8m1enGjTWYIOPeRNAUlDbyt7SMsyXMybTbF9Ef1RF6kXXEoV7Gx
-         s/mmhd3q47BpWL7vEO4Wc7nSxVDUWmAq/QdYYp4Vt99/wLlWd8H+iHsnOyV1HHmyQ8
-         X0e2d9AR059l7g283E2vr4OPPeH+V9Z+GVmJruOz4FzDANz9uqo3TWz6JI2V7djHXk
-         HAJU4rMxQD5dCi3kutGfvY/AeVl4aXGAixc2V5jZzBqqsYUk+eftv4dvF86Se5v9xa
-         8/vv2gTGjBO1CetvWHKRqxhWvPhGxSqjghcrEOj7euF6o2RqUHSAjlXFJW0H2SGK5h
-         T45ygJcST2dWA==
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-To:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v3] soc: imx: imx8m-blk-ctrl: Defer probe if 'bus' genpd is not yet ready
-Date:   Mon, 19 Sep 2022 14:13:02 +0200
-Message-Id: <20220919121302.597993-1-benjamin.gaignard@collabora.com>
-X-Mailer: git-send-email 2.32.0
+        Mon, 19 Sep 2022 08:18:30 -0400
+Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE511DF16;
+        Mon, 19 Sep 2022 05:18:25 -0700 (PDT)
+Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169]) (authenticated)
+        by conssluserg-05.nifty.com with ESMTP id 28JCHxhu019959;
+        Mon, 19 Sep 2022 21:17:59 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 28JCHxhu019959
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1663589879;
+        bh=8aWuQLPgUjO2hHTxhxUtJFCPMusYzMKoXSzZIe6HxdA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Ruc0JgvNiI9SIk8G1CCrirmc/BevOwTVD5nwrpVJek1jkSh9INKB9qpO3wo2l7cVg
+         +/HVuWbF4Jll7/WmujvHpc839rhzH0CAZ3ygAu6EIE7tTWAu3xcRVO3mIDZ94Pj6SA
+         W6ZpGMelTdbRKoM7YnUMw454UbPWeirRHJsCEEJ04m5cCqbVHDeBC9wSIt9UB+g/Rg
+         211LNQ9Lv64NKMXnxt8esFQtg5BThox4qLz077yKC+4+UbAGztH5gfL255ZtI38agi
+         CgYlFqqSwXwiAg9vXfggOkawPPllKTGRnw7zOzjkkbagcYIBohhrgxUA3GuB8gra+K
+         3YNdQsnoiYuGw==
+X-Nifty-SrcIP: [209.85.167.169]
+Received: by mail-oi1-f169.google.com with SMTP id o64so481537oib.12;
+        Mon, 19 Sep 2022 05:17:59 -0700 (PDT)
+X-Gm-Message-State: ACgBeo0eFjwET1EXIN+OIii/ZEfiA6zh7qNX250ti+Sm1mIDOgrBw3BG
+        P2hFb1Eb/P4juNCbjkcn4GDIiJkHEuFk1HBCCb4=
+X-Google-Smtp-Source: AA6agR5fCHiLt8KV0h3AaofSngs2QdHWjXGKyrzvVJlIx/iHDXkG8XPEuzGsNgncjjO04CTaMIj0HVFHj810SyI0/Zk=
+X-Received: by 2002:a05:6808:1b85:b0:34d:8ce1:d5b0 with SMTP id
+ cj5-20020a0568081b8500b0034d8ce1d5b0mr11850446oib.194.1663589878451; Mon, 19
+ Sep 2022 05:17:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220906061313.1445810-1-masahiroy@kernel.org>
+ <20220906061313.1445810-8-masahiroy@kernel.org> <CAMuHMdUpY92WGNqTOV0-jaB+q1q0nS4wxkhrC8jb-uGU9KbogQ@mail.gmail.com>
+In-Reply-To: <CAMuHMdUpY92WGNqTOV0-jaB+q1q0nS4wxkhrC8jb-uGU9KbogQ@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Mon, 19 Sep 2022 21:17:22 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATqy4DCAB2LuK7dpiYDjRciXHE_E6gAvHHfvYAfe9CqGg@mail.gmail.com>
+Message-ID: <CAK7LNATqy4DCAB2LuK7dpiYDjRciXHE_E6gAvHHfvYAfe9CqGg@mail.gmail.com>
+Subject: Re: [PATCH v2 7/8] kbuild: use obj-y instead extra-y for objects
+ placed at the head
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Depending of the boot sequence 'bus' genpd could be probed after imx8m-blk-ctrl
-which led driver probe to fail. Change the returned error to allow
-to defer the probe in this case.
+On Mon, Sep 19, 2022 at 5:10 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>
+> Hi Yamada-san,
+>
+> On Tue, Sep 6, 2022 at 8:15 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> > The objects placed at the head of vmlinux need special treatments:
+> >
+> >  - arch/$(SRCARCH)/Makefile adds them to head-y in order to place
+> >    them before other archives in the linker command line.
+> >
+> >  - arch/$(SRCARCH)/kernel/Makefile adds them to extra-y instead of
+> >    obj-y to avoid them going into built-in.a.
+> >
+> > This commit gets rid of the latter.
+> >
+> > Create vmlinux.a to collect all the objects that are unconditionally
+> > linked to vmlinux. The objects listed in head-y are moved to the head
+> > of vmlinux.a by using 'ar m'.
+> >
+> > With this, arch/$(SRCARCH)/kernel/Makefile can consistently use obj-y
+> > for builtin objects.
+> >
+> > There is no *.o that is directly linked to vmlinux. Drop unneeded code
+> > in scripts/clang-tools/gen_compile_commands.py.
+> >
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
----
-v3:
-- only return -EPROBE_DEFER if 'bus' device hasn't be found.
 
-v2:
-- keep dev_err_probe only change the return value.
 
- drivers/soc/imx/imx8m-blk-ctrl.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/soc/imx/imx8m-blk-ctrl.c b/drivers/soc/imx/imx8m-blk-ctrl.c
-index dff7529268e4..1c195e9e8895 100644
---- a/drivers/soc/imx/imx8m-blk-ctrl.c
-+++ b/drivers/soc/imx/imx8m-blk-ctrl.c
-@@ -214,9 +214,14 @@ static int imx8m_blk_ctrl_probe(struct platform_device *pdev)
- 		return -ENOMEM;
- 
- 	bc->bus_power_dev = genpd_dev_pm_attach_by_name(dev, "bus");
--	if (IS_ERR(bc->bus_power_dev))
--		return dev_err_probe(dev, PTR_ERR(bc->bus_power_dev),
--				     "failed to attach power domain \"bus\"\n");
-+	if (IS_ERR(bc->bus_power_dev)) {
-+		if (PTR_ERR(bc->bus_power_dev) == -ENODEV)
-+			return dev_err_probe(dev, -EPROBE_DEFER,
-+					     "failed to attach power domain \"bus\"\n");
-+		else
-+			return dev_err_probe(dev, PTR_ERR(bc->bus_power_dev),
-+					     "failed to attach power domain \"bus\"\n");
-+	}
- 
- 	for (i = 0; i < bc_data->num_domains; i++) {
- 		const struct imx8m_blk_ctrl_domain_data *data = &bc_data->domains[i];
--- 
-2.32.0
+Thanks for the report.
 
+I will squash the following:
+
+
+
+diff --git a/arch/m68k/kernel/Makefile b/arch/m68k/kernel/Makefile
+index 1755e6cd309f..af015447dfb4 100644
+--- a/arch/m68k/kernel/Makefile
++++ b/arch/m68k/kernel/Makefile
+@@ -16,7 +16,7 @@ obj-$(CONFIG_SUN3X)   := head.o
+ obj-$(CONFIG_VIRT)     := head.o
+ obj-$(CONFIG_SUN3)     := sun3-head.o
+
+-obj-y  := entry.o irq.o module.o process.o ptrace.o
++obj-y  += entry.o irq.o module.o process.o ptrace.o
+ obj-y  += setup.o signal.o sys_m68k.o syscalltable.o time.o traps.o
+
+ obj-$(CONFIG_MMU_MOTOROLA) += ints.o vectors.o
+
+
+
+
+
+
+
+
+
+
+
+
+--
+Best Regards
+Masahiro Yamada
