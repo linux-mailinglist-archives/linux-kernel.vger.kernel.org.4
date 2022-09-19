@@ -2,114 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2576B5BD38D
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 19:23:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A7035BD393
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 19:25:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230300AbiISRW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 13:22:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55820 "EHLO
+        id S230522AbiISRY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 13:24:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbiISRW5 (ORCPT
+        with ESMTP id S229617AbiISRYv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 13:22:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35AB43A48A
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 10:22:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DF18DB8069D
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 17:22:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B5B8C433D6;
-        Mon, 19 Sep 2022 17:22:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663608173;
-        bh=HQIglUDLQBaVF3vEx2t8CopF+c8dwQhHTb2AFxrgu3c=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cv58B3MTc5nooSeZ9Qg1zHKNeXUqEIGH1PDfcEBDT9ZrVx8Rps0eTWEhDjl/WApmd
-         Jkb3WSKtiQBsPBPGn7fZ9/3C2okpojKRa9Rkc9tLvwYdSREFXA74/mB67mujbBBpMQ
-         sjz9o1utC+J0Cmu+DLwJN+/MFZBq0+Ed95XWkP7D+T7LmltXLzxTsz8olcNEQ8u4XD
-         EW0Vd4aj3mYE9eT/jNvNi1vOs1xJWOA71NKadjoBr14D/QIe6KIYtwh4H6MQAQ0eTH
-         gfIOOyxcRtkvnY0Ii2OyQV9QhirDOxWsQkfDDU4+PTK0ARp4NU36auS4CQHmQaMC4A
-         dpWYps+/xMzmg==
-From:   SeongJae Park <sj@kernel.org>
-To:     Xin Hao <xhao@linux.alibaba.com>
-Cc:     sj@kernel.org, akpm@linux-foundation.org, damon@lists.linux.dev,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 2/2] mm/damon/sysfs: use kzmalloc instead kmalloc to simplify codes
-Date:   Mon, 19 Sep 2022 17:22:51 +0000
-Message-Id: <20220919172251.61428-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220919151201.66696-2-xhao@linux.alibaba.com>
-References: 
+        Mon, 19 Sep 2022 13:24:51 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F374D12741;
+        Mon, 19 Sep 2022 10:24:50 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d24so5359192pls.4;
+        Mon, 19 Sep 2022 10:24:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=yLXbhdZTFJDz1Eruum+B2eKRMi+oFeTFSm6260p2MLc=;
+        b=CLcyONO1tRPGjoZAaIYtpv+BQUg6p73mrNktcLcwmrzTHqJzD2K7NR1GfWPSCBGPxE
+         Yu2F92jKgBwkknxARDrGTifPH6MQk386kI0Sw7CZHJdP07ZR75qOh2W14DeRRgakdUNR
+         nF3ibbpOsfMGK52NKZ0rwKUS2aAELJihMdlQ89i1XsXj7HqtU5/QYt5ETDqhUqRWVbFq
+         UaDax9f6skaAn+5zG+0Tcq/K/IbZ5LemJiiSqoQxvnP9sAZ8NoZ41jC8Aw1ldsY98lkA
+         Y2sEvfDJAtYboaLm00hKcoCpOi7+rvCaHRpeZmD820MlkgG1eYb5KrMTIbFAU5Rw8Xk2
+         /1Yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=yLXbhdZTFJDz1Eruum+B2eKRMi+oFeTFSm6260p2MLc=;
+        b=eSrt3RXlvXNIjZM/hvTHYdeDE9nYW8Y7OH4NscBZ8wqj9Y6/Bc7PwCsvxPXfMIZb+u
+         huwarC4UJ/4ghjHLUChHwkedTbAEw3hjVubYmY/zjmUl6WHf4+5tMqzLEdR50OLXsMpn
+         RWbJER7e00EROZiDwu3pNgG/a5QcM6JHoVEY+2siIt2GaMwSL2Q3ajKyyrMMA46zkOkO
+         JO0esQaObPbIoOyr0lfL3+fMir7Ul6slubexQAI8T0RZY+RNb4uhwhAGQqRAqqduJNFo
+         cTcjB1G3O9KX6Eq7ixyWLfqY207MXYVDTZv+3vU9XksvhHPdJXSEM4k1vdLTyD6qJop5
+         DR6A==
+X-Gm-Message-State: ACrzQf0+03JA2krE/QWOechyfJyqEfrJGeUMK60eKG6y9cp4bdqKeb0o
+        SQG/wxqk7xhd8EaHGDLwgmuqMIjHXdQ=
+X-Google-Smtp-Source: AMsMyM6VM/BivqDfuJDvVl6ZNbzXY/5NA1f7mD4YYRuIqm7xUhTzEi114h9ynNOaChL++gsvhYqEiw==
+X-Received: by 2002:a17:902:e94f:b0:16d:847b:3343 with SMTP id b15-20020a170902e94f00b0016d847b3343mr774637pll.103.1663608290154;
+        Mon, 19 Sep 2022 10:24:50 -0700 (PDT)
+Received: from localhost.localdomain (KD027092233113.ppp-bb.dion.ne.jp. [27.92.233.113])
+        by smtp.gmail.com with ESMTPSA id h7-20020aa796c7000000b0053f2505318asm21226480pfq.142.2022.09.19.10.24.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Sep 2022 10:24:49 -0700 (PDT)
+From:   Akinobu Mita <akinobu.mita@gmail.com>
+To:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, corbet@lwn.net, david@redhat.com,
+        osalvador@suse.de, shuah@kernel.org,
+        Zhao Gongyi <zhaogongyi@huawei.com>,
+        Wei Yongjun <weiyongjun1@huawei.com>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        akpm@linux-foundation.org
+Cc:     Akinobu Mita <akinobu.mita@gmail.com>
+Subject: [PATCH 0/3] fix error when writing negative value to simple attribute files
+Date:   Tue, 20 Sep 2022 02:24:15 +0900
+Message-Id: <20220919172418.45257-1-akinobu.mita@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 19 Sep 2022 23:12:01 +0800 Xin Hao <xhao@linux.alibaba.com> wrote:
+The simple attribute files do not accept a negative value since the
+commit 488dac0c9237 ("libfs: fix error cast of negative value in
+simple_attr_write()"), but some attribute files want to accept
+a negative value.
 
-> In damon_sysfs_access_pattern_alloc() adn damon_sysfs_attrs_alloc(),
-> we can use kzmalloc to alloc instance of the related structs, This makes
-> the function code much cleaner.
+Akinobu Mita (3):
+  libfs: add DEFINE_SIMPLE_ATTRIBUTE_SIGNED for signed value
+  lib/notifier-error-inject: fix error when writing -errno to debugfs
+    file
+  debugfs: fix error when writing negative value to atomic_t debugfs
+    file
 
-This definitely makes the code cleaner, thank you.  But, the initial intent of
-the code is to initialize the fiedls that really need to be initialized at the
-point, for the efficiency and also for making it clear which field is needed to
-be initialized to what value here.  It's also intended to make readers wonder
-about where and how the remaining fields are initialized.
+ .../fault-injection/fault-injection.rst       | 10 +++----
+ fs/debugfs/file.c                             | 28 +++++++++++++++----
+ fs/libfs.c                                    | 22 +++++++++++++--
+ include/linux/debugfs.h                       | 19 +++++++++++--
+ include/linux/fs.h                            | 12 ++++++--
+ lib/notifier-error-inject.c                   |  2 +-
+ 6 files changed, 73 insertions(+), 20 deletions(-)
 
-So, to my humble eyes, this change looks like making the code a little bit
-inefficient and unclear, sorry.
+-- 
+2.34.1
 
-
-Thanks,
-SJ
-
-> 
-> Signed-off-by: Xin Hao <xhao@linux.alibaba.com>
-> ---
->  mm/damon/sysfs.c | 15 ++-------------
->  1 file changed, 2 insertions(+), 13 deletions(-)
-> 
-> diff --git a/mm/damon/sysfs.c b/mm/damon/sysfs.c
-> index b852a75b9f39..06154ece7960 100644
-> --- a/mm/damon/sysfs.c
-> +++ b/mm/damon/sysfs.c
-> @@ -657,13 +657,7 @@ struct damon_sysfs_access_pattern {
->  static
->  struct damon_sysfs_access_pattern *damon_sysfs_access_pattern_alloc(void)
->  {
-> -	struct damon_sysfs_access_pattern *access_pattern =
-> -		kmalloc(sizeof(*access_pattern), GFP_KERNEL);
-> -
-> -	if (!access_pattern)
-> -		return NULL;
-> -	access_pattern->kobj = (struct kobject){};
-> -	return access_pattern;
-> +	return kzalloc(sizeof(struct damon_sysfs_access_pattern), GFP_KERNEL);
->  }
->  
->  static int damon_sysfs_access_pattern_add_range_dir(
-> @@ -1620,12 +1614,7 @@ struct damon_sysfs_attrs {
->  
->  static struct damon_sysfs_attrs *damon_sysfs_attrs_alloc(void)
->  {
-> -	struct damon_sysfs_attrs *attrs = kmalloc(sizeof(*attrs), GFP_KERNEL);
-> -
-> -	if (!attrs)
-> -		return NULL;
-> -	attrs->kobj = (struct kobject){};
-> -	return attrs;
-> +	return kzalloc(sizeof(struct damon_sysfs_attrs), GFP_KERNEL);
->  }
->  
->  static int damon_sysfs_attrs_add_dirs(struct damon_sysfs_attrs *attrs)
-> -- 
-> 2.31.0
