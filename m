@@ -2,175 +2,555 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 454165BD5C9
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 22:43:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B45EA5BD5CB
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 22:43:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbiISUnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 16:43:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40622 "EHLO
+        id S229839AbiISUni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 16:43:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbiISUnQ (ORCPT
+        with ESMTP id S229694AbiISUnd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 16:43:16 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3963C48E84
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 13:43:14 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id dv25so1364436ejb.12
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 13:43:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=axFkS9Utlog4o8yvW7z9cdhHkfxEIm+Wjlvn5hdmsPA=;
-        b=Bol7xpNVdUt4dkpqIrlKRbKtSZ69qX8bFD7bM+UNptU6uew8jXanmgFFa2RaCjw/0K
-         Viuw5KoW880GDkvlaepJfO1oNA6zu651EVs7nm6Ol+j+Qse3GrQl7IegVb+xVn3hyBjy
-         DGilG+n8/9qEUM0E90L3OPfddms9ynHNQP4ec=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=axFkS9Utlog4o8yvW7z9cdhHkfxEIm+Wjlvn5hdmsPA=;
-        b=Vj7LT/bE62AhBOH/R3GqbPe4Z/2Mpyd+7XxJnuV8txOe7dOfHNJuglPM556A9MyG48
-         6NGyspJ3fl6EwiVROIc3sNQhIpLFb53B5ArjsN1cdSMKPAOWSOdx6ShNLSYV018DghJL
-         WuN91DUsXwcZdvvOZoNZSiviQcv4/xqvRV3Zw1hWGap95C5M+0u61r4eDkQ1sxKSJz29
-         I5XTlAumWtgQKkRF0sdR9YKjFwrqBXkRwojnwPOWQhNwXHFEr1fj6n/BmJwYcqRP2jdh
-         WZW/GsKXtiAb257iaF/aQMhgEYMHlgeoEZUyW08/TQvoFBtus3cz2/8gnlmYp+36YCDK
-         iWtw==
-X-Gm-Message-State: ACrzQf1VgjFTQUqjnICbayefGym50corz1AAmEcPqdIW5tYvpazKFcaU
-        XSWjXkWQ4496fnSvXNurqw3SWiXmDn9+EnHC2hg=
-X-Google-Smtp-Source: AMsMyM7PoMpkY3MdJRew0B1y2AdgZ+gR8bAjGODzNYPo6CD78IAp9d7CjUYSJxVKEkIU9j3voJx+wA==
-X-Received: by 2002:a17:907:3fa1:b0:77b:6f08:a2f9 with SMTP id hr33-20020a1709073fa100b0077b6f08a2f9mr14321548ejc.52.1663620192215;
-        Mon, 19 Sep 2022 13:43:12 -0700 (PDT)
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com. [209.85.218.45])
-        by smtp.gmail.com with ESMTPSA id fs33-20020a170907602100b00780f24b797dsm4719531ejc.108.2022.09.19.13.43.11
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Sep 2022 13:43:11 -0700 (PDT)
-Received: by mail-ej1-f45.google.com with SMTP id sb3so1412243ejb.9
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 13:43:11 -0700 (PDT)
-X-Received: by 2002:a2e:b4ad:0:b0:26c:24f:b260 with SMTP id
- q13-20020a2eb4ad000000b0026c024fb260mr5573619ljm.173.1663620181394; Mon, 19
- Sep 2022 13:43:01 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220805154231.31257-13-ojeda@kernel.org> <Yu5Bex9zU6KJpcEm@yadro.com>
- <CANiq72=3j2NM2kS8iw14G6MnGirb0=O6XQyCsY9vVgsZ1DfLaQ@mail.gmail.com>
- <Yu6BXwtPZwYPIDT6@casper.infradead.org> <Yyh3kFUvt2aMh4nq@wedsonaf-dev>
- <CAHk-=wgaBaVaK2K=N05fwWSSLM6YJx=yLmP4f7j6d6o=nCAtdw@mail.gmail.com>
- <CAHk-=whTDbFZKB4KJ6=74hoLcerTm3JuN3PV8G6ktcz+Xm1qew@mail.gmail.com> <YyivY6WIl/ahZQqy@wedsonaf-dev>
-In-Reply-To: <YyivY6WIl/ahZQqy@wedsonaf-dev>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 19 Sep 2022 13:42:44 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whm5Ujw-yroDPZWRsHK76XxZWF1E9806jNOicVTcQC6jw@mail.gmail.com>
-Message-ID: <CAHk-=whm5Ujw-yroDPZWRsHK76XxZWF1E9806jNOicVTcQC6jw@mail.gmail.com>
-Subject: Re: [PATCH v9 12/27] rust: add `kernel` crate
-To:     Wedson Almeida Filho <wedsonaf@gmail.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Konstantin Shelekhin <k.shelekhin@yadro.com>, ojeda@kernel.org,
-        alex.gaynor@gmail.com, ark.email@gmail.com,
-        bjorn3_gh@protonmail.com, bobo1239@web.de, bonifaido@gmail.com,
-        boqun.feng@gmail.com, davidgow@google.com, dev@niklasmohrin.de,
-        dsosnowski@dsosnowski.pl, foxhlchen@gmail.com, gary@garyguo.net,
-        geofft@ldpreload.com, gregkh@linuxfoundation.org,
-        jarkko@kernel.org, john.m.baublitz@gmail.com,
-        leseulartichaut@gmail.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, m.falkowski@samsung.com,
-        me@kloenk.de, milan@mdaverde.com, mjmouse9999@gmail.com,
-        patches@lists.linux.dev, rust-for-linux@vger.kernel.org,
-        thesven73@gmail.com, viktor@v-gar.de,
-        Andreas Hindborg <andreas.hindborg@wdc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Mon, 19 Sep 2022 16:43:33 -0400
+Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D559C4A81E;
+        Mon, 19 Sep 2022 13:43:31 -0700 (PDT)
+Received: from mx0.riseup.net (mx0-pn.riseup.net [10.0.1.42])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
+         client-signature RSA-PSS (2048 bits) client-digest SHA256)
+        (Client CN "mx0.riseup.net", Issuer "R3" (not verified))
+        by mx1.riseup.net (Postfix) with ESMTPS id 4MWc8M2d8qzDqQx;
+        Mon, 19 Sep 2022 20:43:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1663620211; bh=moP01r7W2CTQ+bvdQLlQMHQhiuiCi4RIylpN/PDDHXM=;
+        h=Subject:From:In-Reply-To:Date:Cc:References:To:From;
+        b=OavO9UljfoqQMuph/JKLxgSCLMFRb4JfEwu1tHdXWGvZyEgx+t2j7cUuGXbYEG2Yb
+         x1OOVfBQpXlmwP6j73sfkcdK3qiKBPzmRcbr3CBjzkgtDKxb6lP9LOTsfzJ8qamXSR
+         eH/fXg1/tWmhxIYndT5d9+0glHjQLdQjdvru3Jj0=
+Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
+         client-signature RSA-PSS (2048 bits) client-digest SHA256)
+        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
+        by mx0.riseup.net (Postfix) with ESMTPS id 4MWc8K61z5z9s8h;
+        Mon, 19 Sep 2022 20:43:29 +0000 (UTC)
+X-Riseup-User-ID: 9B18A1EBE9B10BAB879071F7D5E57B7DABD350312A8BBE900DA00F59CBB39DFE
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by fews1.riseup.net (Postfix) with ESMTPSA id 4MWc8B3bqnz5vRK;
+        Mon, 19 Sep 2022 20:43:22 +0000 (UTC)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: [PATCH i-g-t v2 3/4] lib/igt_kmod: add compatibility for KUnit
+From:   Isabella Basso <isabbasso@riseup.net>
+In-Reply-To: <CABVgOS=HO9XAf8C5X7ZD6aTW37r06ify==7AW9a8cpKsgLVfFw@mail.gmail.com>
+Date:   Mon, 19 Sep 2022 17:43:19 -0300
+Cc:     igt-dev@lists.freedesktop.org,
+        Magali Lemes <magalilemes00@gmail.com>,
+        =?utf-8?Q?Ma=C3=ADra_Canal?= <maira.canal@usp.br>,
+        Tales Aparecida <tales.aparecida@gmail.com>,
+        Rodrigo Siqueira <rodrigo.siqueira@amd.com>,
+        Melissa Wen <mwen@igalia.com>,
+        =?utf-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@riseup.net>,
+        Trevor Woerner <twoerner@gmail.com>,
+        leandro.ribeiro@collabora.com, n@nfraprado.net,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org,
+        ML dri-devel <dri-devel@lists.freedesktop.org>,
+        daniel@fooishbar.org, kernel list <linux-kernel@vger.kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <D53B4EB1-1A95-48F1-BF49-8EC0CC7B5418@riseup.net>
+References: <20220829000920.38185-1-isabbasso@riseup.net>
+ <20220829000920.38185-4-isabbasso@riseup.net>
+ <CABVgOS=HO9XAf8C5X7ZD6aTW37r06ify==7AW9a8cpKsgLVfFw@mail.gmail.com>
+To:     David Gow <davidgow@google.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 11:05 AM Wedson Almeida Filho
-<wedsonaf@gmail.com> wrote:
->
-> As you know, we're trying to guarantee the absence of undefined
-> behaviour for code written in Rust. And the context is _really_
-> important, so important that leaving it up to comments isn't enough.
+Hi, David
 
-You need to realize that
+> Am 01/09/2022 um 3:37 AM schrieb 'David Gow' via KUnit Development =
+<kunit-dev@googlegroups.com>:
+>=20
+> On Mon, Aug 29, 2022 at 8:10 AM Isabella Basso <isabbasso@riseup.net> =
+wrote:
+>>=20
+>> This adds functions for both executing the tests as well as parsing =
+(K)TAP
+>> kmsg output, as per the KTAP spec [1].
+>>=20
+>> [1] https://www.kernel.org/doc/html/latest/dev-tools/ktap.html
+>>=20
+>> Signed-off-by: Isabella Basso <isabbasso@riseup.net>
+>> ---
+>=20
+> Thanks very much for sending these patches out again.
+>=20
+> Alas, I don't have a particularly useful igt setup to test this
+> properly, but I've left a couple of notes from trying it on my laptop
+> here.
 
- (a) reality trumps fantasy
+Thanks for the review, it=E2=80=99s much appreciated! If you have the =
+time I=E2=80=99ve left a
+note at the bottom with a very simple way to run the tests, but I can =
+also
+provide you with a pastebin of the results if you prefer.
 
- (b) kernel needs trump any Rust needs
+>=20
+>> lib/igt_kmod.c | 290 =
++++++++++++++++++++++++++++++++++++++++++++++++++
+>> lib/igt_kmod.h |   2 +
+>> 2 files changed, 292 insertions(+)
+>>=20
+>> diff --git a/lib/igt_kmod.c b/lib/igt_kmod.c
+>> index 97cac7f5..93cdfcc5 100644
+>> --- a/lib/igt_kmod.c
+>> +++ b/lib/igt_kmod.c
+>> @@ -25,6 +25,7 @@
+>> #include <signal.h>
+>> #include <errno.h>
+>> #include <sys/utsname.h>
+>> +#include <limits.h>
+>>=20
+>> #include "igt_aux.h"
+>> #include "igt_core.h"
+>> @@ -32,6 +33,8 @@
+>> #include "igt_sysfs.h"
+>> #include "igt_taints.h"
+>>=20
+>> +#define BUF_LEN 4096
+>> +
+>> /**
+>>  * SECTION:igt_kmod
+>>  * @short_description: Wrappers around libkmod for module =
+loading/unloading
+>> @@ -713,6 +716,293 @@ void igt_kselftest_get_tests(struct kmod_module =
+*kmod,
+>>        kmod_module_info_free_list(pre);
+>> }
+>>=20
+>> +/**
+>> + * lookup_value:
+>> + * @haystack: the string to search in
+>> + * @needle: the string to search for
+>> + *
+>> + * Returns: the value of the needle in the haystack, or -1 if not =
+found.
+>> + */
+>> +static long lookup_value(const char *haystack, const char *needle)
+>> +{
+>> +       const char *needle_rptr;
+>> +       char *needle_end;
+>> +       long num;
+>> +
+>> +       needle_rptr =3D strcasestr(haystack, needle);
+>> +
+>> +       if (needle_rptr =3D=3D NULL)
+>> +               return -1;
+>> +
+>> +       /* skip search string and whitespaces after it */
+>> +       needle_rptr +=3D strlen(needle);
+>> +
+>> +       num =3D strtol(needle_rptr, &needle_end, 10);
+>> +
+>> +       if (needle_rptr =3D=3D needle_end)
+>> +               return -1;
+>> +
+>> +       if (num =3D=3D LONG_MIN || num =3D=3D LONG_MAX)
+>> +               return 0;
+>> +
+>> +       return num > 0 ? num : 0;
+>> +}
+>> +
+>> +static int find_next_tap_subtest(char *record, char *test_name,
+>> +                                bool is_subtest)
+>> +{
+>> +       const char *name_lookup_str,
+>> +             *lend, *version_rptr, *name_rptr;
+>> +       long test_count;
+>> +
+>> +       name_lookup_str =3D "test: ";
+>> +
+>> +       version_rptr =3D strcasestr(record, "TAP version ");
+>> +       name_rptr =3D strcasestr(record, name_lookup_str);
+>> +
+>> +       /*
+>> +        * total test count will almost always appear as 0..N at the =
+beginning
+>> +        * of a run, so we use it as indication of a run
+>> +        */
+>> +       test_count =3D lookup_value(record, "..");
+>> +
+>> +       /* no count found, so this is probably not starting a =
+(sub)test */
+>> +       if (test_count < 0) {
+>> +               if (name_rptr !=3D NULL) {
+>> +                       if (test_name[0] =3D=3D '\0')
+>> +                               strncpy(test_name,
+>> +                                       name_rptr + =
+strlen(name_lookup_str),
+>> +                                       BUF_LEN);
+>> +                       else if (strcmp(test_name, name_rptr + =
+strlen(name_lookup_str)) =3D=3D 0)
+>> +                               return 0;
+>> +                       else
+>> +                               test_name[0] =3D '\0';
+>> +
+>> +               }
+>> +               return -1;
+>> +       }
+>> +
+>> +       /*
+>> +        * "(K)TAP version XX" should be the first line on all =
+(sub)tests as per
+>> +        * =
+https://www.kernel.org/doc/html/latest/dev-tools/ktap.html#version-lines
+>> +        * but actually isn't, as it currently depends on whoever =
+writes the
+>> +        * test to print this info
+>=20
+> FYI: we're really trying to fix cases of "missing version lines",
+> largely by making the kunit_test_suites() macro work in more
+> circumstances.
+>=20
+> So while it may be worth still handling the case where this is
+> missing, I don't think there are any tests in the latest versions of
+> the kernel which should have this missing.
 
-And the *reality* is that there are no absolute guarantees.  Ever. The
-"Rust is safe" is not some kind of absolute guarantee of code safety.
-Never has been. Anybody who believes that should probably re-take
-their kindergarten year, and stop believing in the Easter bunny and
-Santa Claus.
+I=E2=80=99m not sure if I totally get how these work. Every time I run a =
+KUnit test I
+get something like this: https://pastebin.com/7Ff31PMC
 
-Even "safe" rust code in user space will do things like panic when
-things go wrong (overflows, allocation failures, etc). If you don't
-realize that that is NOT some kind of true safely, I don't know what
-to say.
+As you can see it has been loaded as a module, just like we intend to do =
+it
+from IGT, and I see no version lines whatsoever. Am I doing something =
+wrong?
 
-Not completing the operation at all, is *not* really any better than
-getting the wrong answer, it's only more debuggable.
+>=20
+>> +        */
+>> +       if (version_rptr =3D=3D NULL)
+>> +               igt_info("Missing test version string\n");
+>> +
+>> +       if (name_rptr =3D=3D NULL) {
+>> +               /* we have to keep track of the name string, as it =
+might be
+>> +                * contained in a line read previously */
+>> +               if (test_name[0] =3D=3D '\0') {
+>> +                       igt_info("Missing test name string\n");
+>> +
+>> +                       if (is_subtest)
+>> +                               igt_info("Running %ld subtests...\n", =
+test_count);
+>> +                       else
+>> +                               igt_info("Running %ld tests...\n", =
+test_count);
+>> +               } else {
+>> +                       lend =3D strchrnul(test_name, '\n');
+>> +
+>> +                       if (*lend =3D=3D '\0') {
+>> +                               if (is_subtest)
+>> +                                       igt_info("Executing %ld =
+subtests in: %s\n",
+>> +                                                test_count, =
+test_name);
+>> +                               else
+>> +                                       igt_info("Executing %ld tests =
+in: %s\n",
+>> +                                                test_count, =
+test_name);
+>> +                               return test_count;
+>> +                       }
+>> +
+>> +                       if (is_subtest)
+>> +                               igt_info("Executing %ld subtests in: =
+%.*s\n",
+>> +                                        test_count, (int)(lend - =
+test_name),
+>> +                                        test_name);
+>> +                       else
+>> +                               igt_info("Executing %ld tests in: =
+%.*s\n",
+>> +                                        test_count, (int)(lend - =
+test_name),
+>> +                                        test_name);
+>> +                       test_name[0] =3D '\0';
+>> +               }
+>> +       } else {
+>> +               name_rptr +=3D strlen(name_lookup_str);
+>> +               lend =3D strchrnul(name_rptr, '\n');
+>> +               /*
+>> +                * as the test count comes after the test name we =
+need not check
+>> +                * for a long line again
+>> +                */
+>> +               if (is_subtest)
+>> +                       igt_info("Executing %ld subtests in: %.*s\n",
+>> +                                test_count, (int)(lend - name_rptr),
+>> +                                name_rptr);
+>> +               else
+>> +                       igt_info("Executing %ld tests in: %.*s\n",
+>> +                                test_count, (int)(lend - name_rptr),
+>> +                                name_rptr);
+>> +       }
+>> +
+>> +       return test_count;
+>> +}
+>> +
+>> +static void parse_kmsg_for_tap(const char *lstart, char *lend,
+>> +                              int *sublevel, bool *failed_tests)
+>> +{
+>> +       const char *nok_rptr, *comment_start, *value_parse_start;
+>> +
+>> +       nok_rptr =3D strstr(lstart, "not ok ");
+>> +       if (nok_rptr !=3D NULL) {
+>> +               igt_warn("kmsg> %.*s\n",
+>> +                        (int)(lend - lstart), lstart);
+>> +               *failed_tests =3D true;
+>> +               return;
+>> +       }
+>> +
+>> +       comment_start =3D strchrnul(lstart, '#');
+>> +
+>> +       /* check if we're still in a subtest */
+>> +       if (*comment_start !=3D '\0') {
+>> +               comment_start++;
+>> +               value_parse_start =3D comment_start;
+>> +
+>> +               if (lookup_value(value_parse_start, "fail: ") > 0) {
+>> +                       igt_warn("kmsg> %.*s\n",
+>> +                                (int)(lend - comment_start), =
+comment_start);
+>> +                       *failed_tests =3D true;
+>> +                       (*sublevel)--;
+>> +                       return;
+>> +               }
+>> +       }
+>> +
+>> +       igt_info("kmsg> %.*s\n",
+>> +                (int)(lend - lstart), lstart);
+>> +}
+>> +
+>> +static void igt_kunit_subtests(int fd, char *record,
+>> +                              int *sublevel, bool *failed_tests)
+>> +{
+>> +       char test_name[BUF_LEN + 1], *lend;
+>> +
+>> +       lend =3D NULL;
+>> +       test_name[0] =3D '\0';
+>> +       test_name[BUF_LEN] =3D '\0';
+>> +
+>> +       while (*sublevel >=3D 0) {
+>> +               const char *lstart;
+>> +               ssize_t r;
+>> +
+>> +               if (lend !=3D NULL && *lend !=3D '\0')
+>> +                       lseek(fd, (int) (lend - record), SEEK_CUR);
+>> +
+>> +               r =3D read(fd, record, BUF_LEN);
+>> +
+>> +               if (r <=3D 0) {
+>> +                       switch (errno) {
+>> +                       case EINTR:
+>> +                               continue;
+>> +                       case EPIPE:
+>> +                               igt_warn("kmsg truncated: too many =
+messages. \
+>> +                                        You may want to increase =
+log_buf_len \
+>> +                                        in your boot options\n");
+>> +                               continue;
+>> +                       case !EAGAIN:
+>> +                               igt_warn("kmsg truncated: unknown =
+error (%m)\n");
+>> +                               *sublevel =3D -1;
+>> +                       default:
+>> +                               break;
+>> +                       }
+>> +                       break;
+>> +               }
+>> +
+>> +               lend =3D strchrnul(record, '\n');
+>> +
+>> +               /* in case line > 4096 */
+>> +               if (*lend =3D=3D '\0')
+>> +                       continue;
+>> +
+>> +               if (find_next_tap_subtest(record, test_name, =
+*sublevel > 0) !=3D -1)
+>> +                       (*sublevel)++;
+>> +
+>> +               if (*sublevel > 0) {
+>> +                       lstart =3D strchrnul(record, ';');
+>> +
+>> +                       if (*lstart =3D=3D '\0') {
+>> +                               igt_warn("kmsg truncated: output =
+malformed (%m)\n");
+>> +                               igt_fail(IGT_EXIT_FAILURE);
+>> +                       }
+>> +
+>> +                       lstart++;
+>> +                       while (isspace(*lstart))
+>> +                               lstart++;
+>> +
+>> +                       parse_kmsg_for_tap(lstart, lend, sublevel, =
+failed_tests);
+>> +               }
+>> +       }
+>> +
+>> +       if (*failed_tests || *sublevel < 0)
+>> +               igt_fail(IGT_EXIT_FAILURE);
+>> +       else
+>> +               igt_success();
+>> +}
+>> +
+>> +/**
+>> + * igt_kunit:
+>> + * @module_name: the name of the module
+>> + * @opts: options to load the module
+>> + *
+>> + * Loads the kunit module, parses its dmesg output, then unloads it
+>> + */
+>> +void igt_kunit(const char *module_name, const char *opts)
+>> +{
+>> +       struct igt_ktest tst;
+>> +       char record[BUF_LEN + 1];
+>> +       bool failed_tests =3D false;
+>> +       int sublevel =3D 0;
+>> +
+>> +       record[BUF_LEN] =3D '\0';
+>> +
+>> +       /* get normalized module name */
+>> +       if (igt_ktest_init(&tst, module_name) !=3D 0) {
+>> +               igt_warn("Unable to initialize ktest for %s\n", =
+module_name);
+>> +               return;
+>> +       }
+>> +
+>> +       if (igt_ktest_begin(&tst) !=3D 0) {
+>> +               igt_warn("Unable to begin ktest for %s\n", =
+module_name);
+>> +
+>> +               igt_ktest_fini(&tst);
+>> +               return;
+>> +       }
+>> +
+>> +       if (tst.kmsg < 0) {
+>> +               igt_warn("Could not open /dev/kmsg");
+>> +               goto unload;
+>> +       }
+>> +
+>> +       if (lseek(tst.kmsg, 0, SEEK_END)) {
+>> +               igt_warn("Could not seek the end of /dev/kmsg");
+>> +               goto unload;
+>> +       }
+>> +
+>> +       /* The kunit module is required for running any kunit tests =
+*/
+>> +       if (igt_kmod_load("kunit", NULL) !=3D 0) {
+>> +               igt_warn("Unable to load kunit module\n");
+>> +               goto unload;
+>> +       }
+>=20
+> Do you want to _require_ KUnit be built as a module, rather than =
+built-in here?
 
-In the kernel, "panic and stop" is not an option (it's actively worse
-than even the wrong answer, since it's really not debugable), so the
-kernel version of "panic" is "WARN_ON_ONCE()" and continue with the
-wrong answer.
+This line is a little misleading because, for our purposes, only the =
+thing to
+be tested has to be built as a module, but we can use this function for =
+both
+validating a built-in module as well as modprobe-ing it if it's =
+=E2=80=9Estandalone" (I
+tested both cases as well). I=E2=80=99ll change the comment and the =
+warning in v3
+to clarify this.
 
-So this is something that I really *need* the Rust people to
-understand. That whole reality of "safe" not being some absolute
-thing, and the reality that the kernel side *requires* slightly
-different rules than user space traditionally does.
+The actual problem would be to unload something that=E2=80=99s built-in, =
+so that=E2=80=99s why
+I added a check in the unload function in the previous patch.
 
-> I don't care as much about allocation flags as I do about sleeping in an
-> rcu read-side critical region. When CONFIG_PREEMPT=n, if some CPU makes
-> the mistake of sleeping between rcu_read_lock()/rcu_read_unlock(), RCU
-> will take that as a quiescent state, which may cause unsuspecting code
-> waiting for a grace period to wake up too early and potentially free
-> memory that is still in use, which is obviously undefined behaviour.
+> Equally, does this need to mark a failure (or at least "SKIPPED")
+> rather than success, in the case it fails.
 
-So?
+That=E2=80=99s a good point, will change in v3.
 
-You had a bug. Shit happens. We have a lot of debugging tools that
-will give you a *HUGE* warning when said shit happens, including
-sending automated reports to the distro maker. And then you fix the
-bug.
+>> +
+>> +       if (igt_kmod_load(module_name, opts) !=3D 0) {
+>> +               igt_warn("Unable to load %s module\n", module_name);
+>> +               goto unload;
+>> +       }
+>=20
+> As above, should this record a failure, or skip?
 
-Think of that "debugging tools give a huge warning" as being the
-equivalent of std::panic in standard rust. Yes, the kernel will
-continue (unless you have panic-on-warn set), because the kernel
-*MUST* continue in order for that "report to upstream" to have a
-chance of happening.
+Ack.
 
-So it's technically a veryu different implementation from std:panic,
-but you should basically see it as exactly that: a *technical*
-difference, not a conceptual one. The rules for how the kernel deals
-with bugs is just different, because we don't have core-files and
-debuggers in the general case.
+>> +
+>> +       igt_kunit_subtests(tst.kmsg, record, &sublevel, =
+&failed_tests);
+>> +unload:
+>> +       igt_kmod_unload("kunit", 0);
+>=20
+> Do you want to unconditionally unload the KUnit module here? It's safe
+> (maybe even safer) to leave it loaded between runs of KUnit tests.
 
-(And yes, you can have a kernel debugger, and you can just have the
-WARN_ON_ONCE trigger the debugger, but think of all those billions of
-devices that are in normal users hands).
+That=E2=80=99s a great point. The user should be safe using KUnit as =
+built-in in that
+case, but I=E2=80=99ll remove this line as it is unnecessary.
 
-And yes, in certain configurations, even those warnings will be turned
-off because the state tracking isn't done. Again, that's just reality.
-You don't need to use those configurations yourself if you don't like
-them, but that does *NOT* mean that you get to say "nobody else gets
-to use those configurations either".
+> Equally, how would you handle the case where KUnit is already loaded?
 
-Deal with it.
+That=E2=80=99s not a problem as pointed out above, kmod handles that =
+without trouble.
 
-Or, you know, if you can't deal with the rules that the kernel
-requires, then just don't do kernel programming.
+>> +
+>> +       igt_ktest_end(&tst);
+>> +
+>> +       igt_ktest_fini(&tst);
+>> +}
+>> +
+>> static int open_parameters(const char *module_name)
+>> {
+>>        char path[256];
+>> diff --git a/lib/igt_kmod.h b/lib/igt_kmod.h
+>> index ceb10cd0..737143c1 100644
+>> --- a/lib/igt_kmod.h
+>> +++ b/lib/igt_kmod.h
+>> @@ -45,6 +45,8 @@ int __igt_i915_driver_unload(char **whom);
+>> int igt_amdgpu_driver_load(const char *opts);
+>> int igt_amdgpu_driver_unload(void);
+>>=20
+>> +void igt_kunit(const char *module_name, const char *opts);
+>> +
+>> void igt_kselftests(const char *module_name,
+>>                    const char *module_options,
+>>                    const char *result_option,
+>> --
+>> 2.37.2
+>>=20
+>=20
+> Regardless, thanks very much. Hopefully I'll get a chance to play with
+> igt a bit more and actually get the tests running. :-)
 
-Because in the end it really is that simple.  I really need you to
-understand that Rust in the kernel is dependent on *kernel* rules. Not
-some other random rules that exist elsewhere.
+That shouldn=E2=80=99t be too difficult, when you compile IGT as per the =
+docs you can
+just run e.g. `sudo ./build/tests/drm_buddy` and that should do it :).
 
-                Linus
+Cheers,
+--
+Isabella Basso
+
+>=20
+> Cheers,
+> -- David
+
