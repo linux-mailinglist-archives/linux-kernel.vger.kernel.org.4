@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C0C25BC33E
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 08:58:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 017045BC33F
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 08:59:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229912AbiISG6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 02:58:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35564 "EHLO
+        id S229929AbiISG64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 02:58:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbiISG6a (ORCPT
+        with ESMTP id S229854AbiISG6c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 02:58:30 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 511591D0EC;
+        Mon, 19 Sep 2022 02:58:32 -0400
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 217CC1D0CF;
         Sun, 18 Sep 2022 23:58:28 -0700 (PDT)
 Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MWFp5279tzKPvv;
-        Mon, 19 Sep 2022 14:56:29 +0800 (CST)
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4MWFp62DK9z6SCHb;
+        Mon, 19 Sep 2022 14:56:30 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP2 (Coremail) with SMTP id Syh0CgAnenMPEyhjBBpFBA--.10045S6;
+        by APP2 (Coremail) with SMTP id Syh0CgAnenMPEyhjBBpFBA--.10045S7;
         Mon, 19 Sep 2022 14:58:26 +0800 (CST)
 From:   Yu Kuai <yukuai1@huaweicloud.com>
 To:     paolo.valente@linaro.org, axboe@kernel.dk
 Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
         yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com
-Subject: [PATCH v2 2/3] block: add a helper to check elevator name
-Date:   Mon, 19 Sep 2022 15:09:15 +0800
-Message-Id: <20220919070916.2738443-3-yukuai1@huaweicloud.com>
+Subject: [PATCH v2 3/3] blk-wbt: don't enable throttling if default elevator is bfq
+Date:   Mon, 19 Sep 2022 15:09:16 +0800
+Message-Id: <20220919070916.2738443-4-yukuai1@huaweicloud.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220919070916.2738443-1-yukuai1@huaweicloud.com>
 References: <20220919070916.2738443-1-yukuai1@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgAnenMPEyhjBBpFBA--.10045S6
-X-Coremail-Antispam: 1UD129KBjvdXoWrKr4rur18CF45WFyxtr1UKFg_yoWxKrb_G3
-        y8K34kX398JrnayF1UtFyYqryUWws5JryfWw1xtF1kAF4rWF1Fy3yxAr1UCrZrXFWjka45
-        Cr48ur1UZr1jgjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb-kFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXwA2048vs2IY02
-        0Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM2
-        8EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AI
-        xVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20x
-        vE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xv
-        r2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48JMxC20s
-        026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_
-        JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
-        v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xva
-        j40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JV
-        W8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjYiiDUUUUU==
+X-CM-TRANSID: Syh0CgAnenMPEyhjBBpFBA--.10045S7
+X-Coremail-Antispam: 1UD129KBjvJXoWxAw1kCw15ZF47CFyxtrykGrg_yoW5uFWkp3
+        y7GF4FkFWIgFW09FWxJrnrXw43Gw4kCry7Gry8C3yFvry2krZFqa1vkF1UZF1vvrZ7CFsF
+        vr48trZrWF40gw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9m14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JrWl82xGYIkIc2
+        x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+        Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS
+        0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
+        IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
+        Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxGrwCFx2
+        IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
+        6r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
+        AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IY
+        s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr
+        0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUd8n5UUUUU=
 X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
@@ -62,30 +62,106 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Yu Kuai <yukuai3@huawei.com>
 
-The helper will be used in later patch to make sure wbt is not enabled
-if default io scheduler is bfq.
+Commit b5dc5d4d1f4f ("block,bfq: Disable writeback throttling") tries to
+disable wbt for bfq, it's done by calling wbt_disable_default() in
+bfq_init_queue(). However, wbt is still enabled if default elevator is
+bfq:
+
+device_add_disk
+ elevator_init_mq
+  bfq_init_queue
+   wbt_disable_default -> done nothing
+
+ blk_register_queue
+  wbt_enable_default -> wbt is enabled
+
+Fix the problem by checking elevator name if wbt_enable_default() is
+called from blk_register_queue().
 
 Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 ---
- block/elevator.h | 5 +++++
- 1 file changed, 5 insertions(+)
+ block/bfq-iosched.c | 2 +-
+ block/blk-sysfs.c   | 2 +-
+ block/blk-wbt.c     | 6 +++++-
+ block/blk-wbt.h     | 5 +++--
+ 4 files changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/block/elevator.h b/block/elevator.h
-index 3f0593b3bf9d..2ddc738cae97 100644
---- a/block/elevator.h
-+++ b/block/elevator.h
-@@ -104,6 +104,11 @@ struct elevator_queue
- 	DECLARE_HASHTABLE(hash, ELV_HASH_BITS);
- };
+diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+index 7ea427817f7f..f769c90744fd 100644
+--- a/block/bfq-iosched.c
++++ b/block/bfq-iosched.c
+@@ -7045,7 +7045,7 @@ static void bfq_exit_queue(struct elevator_queue *e)
+ #endif
  
-+static inline bool check_elevator_name(struct elevator_queue *elevator,
-+				       const char *name)
-+{
-+	return elevator && !strcmp(elevator->type->elevator_name, name);
-+}
+ 	blk_stat_disable_accounting(bfqd->queue);
+-	wbt_enable_default(bfqd->queue);
++	wbt_enable_default(bfqd->queue, false);
+ 
+ 	kfree(bfqd);
+ }
+diff --git a/block/blk-sysfs.c b/block/blk-sysfs.c
+index 1955bb6a284d..3e8adb95ff02 100644
+--- a/block/blk-sysfs.c
++++ b/block/blk-sysfs.c
+@@ -850,7 +850,7 @@ int blk_register_queue(struct gendisk *disk)
+ 		goto put_dev;
+ 
+ 	blk_queue_flag_set(QUEUE_FLAG_REGISTERED, q);
+-	wbt_enable_default(q);
++	wbt_enable_default(q, true);
+ 	blk_throtl_register_queue(q);
+ 
+ 	/* Now everything is ready and send out KOBJ_ADD uevent */
+diff --git a/block/blk-wbt.c b/block/blk-wbt.c
+index 68851c2c02d2..c6256e7c9e8e 100644
+--- a/block/blk-wbt.c
++++ b/block/blk-wbt.c
+@@ -27,6 +27,7 @@
+ 
+ #include "blk-wbt.h"
+ #include "blk-rq-qos.h"
++#include "elevator.h"
+ 
+ #define CREATE_TRACE_POINTS
+ #include <trace/events/wbt.h>
+@@ -643,10 +644,13 @@ void wbt_set_write_cache(struct request_queue *q, bool write_cache_on)
  /*
-  * block elevator interface
+  * Enable wbt if defaults are configured that way
   */
+-void wbt_enable_default(struct request_queue *q)
++void wbt_enable_default(struct request_queue *q, bool check_elevator)
+ {
+ 	struct rq_qos *rqos = wbt_rq_qos(q);
+ 
++	if (check_elevator && check_elevator_name(q->elevator, "bfq"))
++		return;
++
+ 	/* Throttling already enabled? */
+ 	if (rqos) {
+ 		if (RQWB(rqos)->enable_state == WBT_STATE_OFF_DEFAULT)
+diff --git a/block/blk-wbt.h b/block/blk-wbt.h
+index e42465ddcbb6..eb028febaff0 100644
+--- a/block/blk-wbt.h
++++ b/block/blk-wbt.h
+@@ -90,7 +90,7 @@ static inline unsigned int wbt_inflight(struct rq_wb *rwb)
+ 
+ int wbt_init(struct request_queue *);
+ void wbt_disable_default(struct request_queue *);
+-void wbt_enable_default(struct request_queue *);
++void wbt_enable_default(struct request_queue *, bool);
+ 
+ u64 wbt_get_min_lat(struct request_queue *q);
+ void wbt_set_min_lat(struct request_queue *q, u64 val);
+@@ -109,7 +109,8 @@ static inline int wbt_init(struct request_queue *q)
+ static inline void wbt_disable_default(struct request_queue *q)
+ {
+ }
+-static inline void wbt_enable_default(struct request_queue *q)
++static inline void wbt_enable_default(struct request_queue *q,
++				      bool check_elevator)
+ {
+ }
+ static inline void wbt_set_write_cache(struct request_queue *q, bool wc)
 -- 
 2.31.1
 
