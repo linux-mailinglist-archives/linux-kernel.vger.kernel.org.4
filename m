@@ -2,83 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A62B5BC392
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 09:39:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A85B5BC39B
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 09:46:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbiISHjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 03:39:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47368 "EHLO
+        id S229551AbiISHqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 03:46:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbiISHjM (ORCPT
+        with ESMTP id S229519AbiISHqK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 03:39:12 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 352A81EAEA;
-        Mon, 19 Sep 2022 00:39:09 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id b75so22021489pfb.7;
-        Mon, 19 Sep 2022 00:39:09 -0700 (PDT)
+        Mon, 19 Sep 2022 03:46:10 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5DD9E011;
+        Mon, 19 Sep 2022 00:46:09 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id k21so16623771pls.11;
+        Mon, 19 Sep 2022 00:46:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=6BbzpneSCd/fog8Z/llAh0YBRR0NTGGPNcaoP0oTmv8=;
-        b=VOiVHDSbwRDnYIfB5vTjxTI5vzhffyTYBtu46285qGH5XdyYmi9H1r8raFz9isX8H8
-         WVL8MMC1JJQMBkSv9JxyQts8iUskqIaXL0ycoZjcWjafWH3ykpva81ljhI2v+Ql0VQ/n
-         dJQIhI1ePbYnwermbk/av1N5+6XX0dx/p4Wm0Nq6xQmdMYoLxXdIVSDj2BqU8Q19z1f1
-         tsTkHHxGZOQA5nBs8D5OIqHld4XC9SKyIVT2hVCm1HClSl5S4mPUzjDWM5eq64aVnVA1
-         cSd3fBAbmlC97PSar1kcmXmu6+UaOIuhue9kIUteI6qssI4wbJ/Diu1uakyvwrktcVzH
-         dJ/A==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=gAkzmhXcqtjmvSRkHVORefNwog8X+aVSSm3LuKdW6DI=;
+        b=Uqmz0waUd4zJCkKEDwaBWvTsdxxaMn9Taw+H+ScxfAK4NZsG+FFqLLJc7Arjx7Dk64
+         5ReaME/LhaJImv8VF+rDTxvsC3lTBU8fv92VWfEbqzZZsiA7h3oI4sYfkAL+/TPyycOZ
+         /H/HPwdJ53KaNk6dSgVCQMRyOTPqQgbWT9mQeIgPWvUPCC5G4NlM2W6ucplgUq1qAKMi
+         dW+dWBZuT/wiAsSIsCJHg8WoAgvm17WwZqEa5oumHEVfntt0LdEFXGsIUSL73V+f5U89
+         znzGpSu/nAXHkVN1Ge8p6CrNWAFWewpdXir5kC1nckwdSaSKyvcxULa7NwWXws/Sv97X
+         cMLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=6BbzpneSCd/fog8Z/llAh0YBRR0NTGGPNcaoP0oTmv8=;
-        b=YbbRDEmPCxiFMPwc8keMd/T15w9rzy3jFJvbTh2LiPvER3FuPoa2uoez1EhhcOzKdt
-         2z+dMk1B4mLuf0b3M7rSSlhhCeyA2prTZ4pH+uw5zSolxQl3Kxvdc9HB5fId4slBITO4
-         JO+wwAIBfKMpLECaZ6uaRrmaMktDUhoDCLW5p12sitYzKwGGUq59TSY45KhjkAXZDwdp
-         UqACG8wVudxAn1/u89hQWFQBreVqxkXDom20y/pwRJzYz5d/P9f775Egw5wbdjph4hdG
-         F9pvDUoykKxXbGV7ji+yKdAws0bzMzDWNbf1HqY1JzXEonMGx7xQQzdY+hKnmzba2lAJ
-         Mn4g==
-X-Gm-Message-State: ACrzQf2JvMstCs34afOwaVDgYU+crCbr9FqBkdPutkTl8FzfEGzZmCzQ
-        VED21qA8CBo4/a74iq1A5so=
-X-Google-Smtp-Source: AMsMyM6VXcd32oAHHS8h4UvkKOe1Ubw+usoTz+8u0qNTPfO0fik9WsVLsHzt4VGQxx6aVKgWQ797Tg==
-X-Received: by 2002:a65:6042:0:b0:439:2032:225 with SMTP id a2-20020a656042000000b0043920320225mr14325350pgp.469.1663573148841;
-        Mon, 19 Sep 2022 00:39:08 -0700 (PDT)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id b26-20020a62a11a000000b00540a3252191sm19541622pff.28.2022.09.19.00.39.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Sep 2022 00:39:08 -0700 (PDT)
-Message-ID: <2a419402-c9ed-02a4-cdf6-00395fffad47@gmail.com>
-Date:   Mon, 19 Sep 2022 15:38:57 +0800
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=gAkzmhXcqtjmvSRkHVORefNwog8X+aVSSm3LuKdW6DI=;
+        b=o/75uqlB0MbnaZq6dJqIehlUnw+KlKo8r6NyEo0uAwma3/SaCoYcYPoZ7gl22DmMRc
+         gW7meEulBLutn832CqPTnQtCNUsXlezJA/pSIsTUbsOxfbHBefRgkB0nJhAQWpth1who
+         cXTcMkvaISOHuBTFAdHJTYJTzBGOg8bda3Zwy1UT6H6dXto0VutI9bLsi6ozAksqHYmX
+         gs3ibq9aK4qakBkAQv4BX+cvZqyjTFhj+DLFbzCY9rZZstXMU6c8V1JxXHo3UfCQlVon
+         rqQyx0iHCobK3Kyjo1mH3DOIsiPKfSraNz/JkAqalGOJy83DsJN/rX3/LwlnhewkuBOq
+         UP+g==
+X-Gm-Message-State: ACrzQf3bB/cxn1+dJF+b1OmdHsftreI6+oSInAqj7Z5mgk7601ZqdUgj
+        cRiOahqK8pKFQL3AsbmRKjng0bts7M3pMA==
+X-Google-Smtp-Source: AMsMyM68i6nTyyr7bMcX1cdM3g+VtSxGG2C/v5JW6XP/9qol09g14gay3UyCIvryIXyCptFe25LK3g==
+X-Received: by 2002:a17:902:8217:b0:176:e41d:b804 with SMTP id x23-20020a170902821700b00176e41db804mr11564987pln.111.1663573568977;
+        Mon, 19 Sep 2022 00:46:08 -0700 (PDT)
+Received: from localhost.localdomain (lily-optiplex-3070.dynamic.ucsd.edu. [2607:f720:1300:3033::1:4dd])
+        by smtp.googlemail.com with ESMTPSA id u11-20020a17090a450b00b001fd7fe7d369sm5934801pjg.54.2022.09.19.00.46.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Sep 2022 00:46:08 -0700 (PDT)
+From:   Li Zhong <floridsleeves@gmail.com>
+To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Cc:     jgg@ziepe.ca, william.xuanziyang@huawei.com, pabeni@redhat.com,
+        kuba@kernel.org, edumazet@google.com, davem@davemloft.net,
+        Li Zhong <floridsleeves@gmail.com>
+Subject: [PATCH v1] net/8021q/vlan: check the return value of vlan_vid_add()
+Date:   Mon, 19 Sep 2022 00:46:00 -0700
+Message-Id: <20220919074600.1576168-1-floridsleeves@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.0
-Subject: Re: [RFC PATCH 0/9] kvm: implement atomic memslot updates
-Content-Language: en-US
-To:     Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-References: <20220909104506.738478-1-eesposit@redhat.com>
- <YxtOEgJhe4EcAJsE@google.com>
- <5f0345d2-d4d1-f4fe-86ba-6e22561cb6bd@redhat.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-In-Reply-To: <5f0345d2-d4d1-f4fe-86ba-6e22561cb6bd@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,20 +69,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/9/2022 12:13 am, Emanuele Giuseppe Esposito wrote:
-> 
-> Am 09/09/2022 um 16:30 schrieb Sean Christopherson:
->> On Fri, Sep 09, 2022, Emanuele Giuseppe Esposito wrote:
->>> KVM is currently capable of receiving a single memslot update through
->>> the KVM_SET_USER_MEMORY_REGION ioctl.
->>> The problem arises when we want to atomically perform multiple updates,
->>> so that readers of memslot active list avoid seeing incomplete states.
->>>
->>> For example, in RHBZhttps://bugzilla.redhat.com/show_bug.cgi?id=1979276
+Check the return value of vlan_vid_add() which could fail and return
+error code.
 
-Oh, thanks for stepping up to try to address it.
+Signed-off-by: Li Zhong <floridsleeves@gmail.com>
+---
+ net/8021q/vlan.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-As it turns out, this issue was discovered "long" before
-https://bugzilla.kernel.org/show_bug.cgi?id=213781
+diff --git a/net/8021q/vlan.c b/net/8021q/vlan.c
+index e40aa3e3641c..e96aefd00a6e 100644
+--- a/net/8021q/vlan.c
++++ b/net/8021q/vlan.c
+@@ -382,7 +382,10 @@ static int vlan_device_event(struct notifier_block *unused, unsigned long event,
+ 	    (dev->features & NETIF_F_HW_VLAN_CTAG_FILTER)) {
+ 		pr_info("adding VLAN 0 to HW filter on device %s\n",
+ 			dev->name);
+-		vlan_vid_add(dev, htons(ETH_P_8021Q), 0);
++		int err = vlan_vid_add(dev, htons(ETH_P_8021Q), 0);
++
++		if (err)
++			return notifier_from_errno(err);
+ 	}
+ 	if (event == NETDEV_DOWN &&
+ 	    (dev->features & NETIF_F_HW_VLAN_CTAG_FILTER))
+-- 
+2.25.1
 
-As a comment, relevant selftests are necessary and required.
