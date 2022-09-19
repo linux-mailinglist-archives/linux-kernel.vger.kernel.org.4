@@ -2,90 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 778995BCF46
+	by mail.lfdr.de (Postfix) with ESMTP id 2B03F5BCF45
 	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 16:39:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229912AbiISOjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 10:39:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43626 "EHLO
+        id S230121AbiISOjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 10:39:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbiISOjL (ORCPT
+        with ESMTP id S230078AbiISOjP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 10:39:11 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 985BA2D1D9;
-        Mon, 19 Sep 2022 07:39:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=YjclUMktNx88A5Ga2p1PmOfLVjv8YGj91znNKqBCP+E=; b=G7lVOz/mIap1ssllZ8n+ISK8rk
-        8n80KY1FsEieWlq/84fHEK1/1T7cel3/JjAJZRyoWkJMMI1b1DBWlEQAuWtIQ9KHpJWcgyaK0rALw
-        VqJWxpVeSXuuS+TwAEldjl2HFe6TT98FhhXPwbUxTo/7+LUTxaAHXj/tf92DTtV0fSlopt4tsja0O
-        h8At168E9JoSjWikFLYiBAqvxhQjy5Pdz0ZzY33DYkP102+afhnDF5haSUapgGYVFN4rlhD5mbSzy
-        3esophHivZdt/4Bhcr3izF+dFKnAd515JNsSw85x8qn8MbtbjmHugHDDMuhkjf1k5/sMZ6a2MQbhi
-        9zmEVW3A==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oaHvN-004mJj-9C; Mon, 19 Sep 2022 14:39:05 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5C8F23001F3;
-        Mon, 19 Sep 2022 16:39:02 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 173372BAC7767; Mon, 19 Sep 2022 16:39:02 +0200 (CEST)
-Date:   Mon, 19 Sep 2022 16:39:02 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Li Zhong <floridsleeves@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        bpf@vger.kernel.org, namhyung@kernel.org, jolsa@kernel.org,
-        alexander.shishkin@linux.intel.com, mark.rutland@arm.com,
-        acme@kernel.org, mingo@redhat.com
-Subject: Re: [PATCH v1] kernel/events/core: check return value of
- task_function_call()
-Message-ID: <Yyh/BmvAHNMlENFw@hirez.programming.kicks-ass.net>
-References: <20220917014746.3828349-1-floridsleeves@gmail.com>
+        Mon, 19 Sep 2022 10:39:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32228B85A;
+        Mon, 19 Sep 2022 07:39:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B1E25B81BB2;
+        Mon, 19 Sep 2022 14:39:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64C85C433D6;
+        Mon, 19 Sep 2022 14:39:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663598350;
+        bh=EYlJ8II0nMQUwIjH0JUADdeT52M2bVXh8wZ8I7YWDZQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=s3+f9C0KTVjmYUPiubcRMi8XIY5SJMP0244Vb1fXbwXdFHK2Bm2BwTTQiaCHZh9e8
+         gk+RkXTCbQvo+kjvjvWXHkL/k/NseZ0cbkyw2yDh2rZtKAxwlQOJfRciHvpbPx0lTm
+         fDHS2etEOvPkeXqxMZO/oK5HOJhYIwkHmqYibhK+OB+2c+J+ST7lgkwPFAFcYkZbFW
+         MXfD5dFjyN8rnPvB9qABtdA2rx/c5tMG/PNclmQth0MoJSBvpOxArLP6yCDHF7fpUw
+         gdJXH8PHYrPCe2KnzR/yv4vNUQpksjg/NG4m1Xvw5PY6ek342QURnNGyGExrAr8OtZ
+         QX22S+N/3elJw==
+Date:   Mon, 19 Sep 2022 16:39:07 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
+        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
+        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
+        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
+        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
+        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
+        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
+        dinguyen@kernel.org, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
+        James.Bottomley@HansenPartnership.com, deller@gmx.de,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, pv-drivers@vmware.com,
+        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
+        gregkh@linuxfoundation.org, mturquette@baylibre.com,
+        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
+        sudeep.holla@arm.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
+        anup@brainfault.org, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, jacob.jun.pan@linux.intel.com,
+        atishp@atishpatra.org, Arnd Bergmann <arnd@arndb.de>,
+        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, dennis@kernel.org, tj@kernel.org,
+        cl@linux.com, rostedt@goodmis.org, pmladek@suse.com,
+        senozhatsky@chromium.org, john.ogness@linutronix.de,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, fweisbec@gmail.com,
+        ryabinin.a.a@gmail.com, glider@google.com, andreyknvl@gmail.com,
+        dvyukov@google.com, vincenzo.frascino@arm.com,
+        Andrew Morton <akpm@linux-foundation.org>, jpoimboe@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-perf-users@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-arch@vger.kernel.org, kasan-dev@googlegroups.com
+Subject: Re: [PATCH v2 10/44] cpuidle,armada: Push RCU-idle into driver
+Message-ID: <20220919143907.GB61009@lothringen>
+References: <20220919095939.761690562@infradead.org>
+ <20220919101521.004425686@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220917014746.3828349-1-floridsleeves@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220919101521.004425686@infradead.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 06:47:46PM -0700, Li Zhong wrote:
-> Check the return value of task_function_call(), which could be error
-> code when the execution fails.
+On Mon, Sep 19, 2022 at 11:59:49AM +0200, Peter Zijlstra wrote:
+> Doing RCU-idle outside the driver, only to then temporarily enable it
+> again before going idle is daft.
 
-How is terminating the cgroup task iteration a useful thing? Also coding
-style fail for not adding { }
+Ah wait, now I see, that's cpu_pm_enter()/cpu_pm_exit() -> cpu_pm_notify*() the culprits.
+Might be worth adding a short note about that on your changelogs.
 
-> Signed-off-by: Li Zhong <floridsleeves@gmail.com>
+> 
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 > ---
->  kernel/events/core.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  drivers/cpuidle/cpuidle-mvebu-v7.c |    7 +++++++
+>  1 file changed, 7 insertions(+)
 > 
-> diff --git a/kernel/events/core.c b/kernel/events/core.c
-> index 2621fd24ad26..ac0cf611b12a 100644
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
-> @@ -13520,7 +13520,8 @@ static void perf_cgroup_attach(struct cgroup_taskset *tset)
->  	struct cgroup_subsys_state *css;
+> --- a/drivers/cpuidle/cpuidle-mvebu-v7.c
+> +++ b/drivers/cpuidle/cpuidle-mvebu-v7.c
+> @@ -36,7 +36,10 @@ static int mvebu_v7_enter_idle(struct cp
+>  	if (drv->states[index].flags & MVEBU_V7_FLAG_DEEP_IDLE)
+>  		deepidle = true;
 >  
->  	cgroup_taskset_for_each(task, css, tset)
-> -		task_function_call(task, __perf_cgroup_move, task);
-> +		if (!task_function_call(task, __perf_cgroup_move, task))
-> +			return;
->  }
->  
->  struct cgroup_subsys perf_event_cgrp_subsys = {
-> -- 
-> 2.25.1
-> 
+> +	ct_idle_enter();
+>  	ret = mvebu_v7_cpu_suspend(deepidle);
+> +	ct_idle_exit();
+
+And then yes of course:
+
+Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
