@@ -2,143 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ABE55BD254
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 18:37:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E0455BD259
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 18:38:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbiISQha convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 19 Sep 2022 12:37:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40764 "EHLO
+        id S229622AbiISQim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 12:38:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiISQh1 (ORCPT
+        with ESMTP id S229528AbiISQig (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 12:37:27 -0400
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9A837FB8;
-        Mon, 19 Sep 2022 09:37:26 -0700 (PDT)
-Received: by mail-qt1-f181.google.com with SMTP id r20so20281449qtn.12;
-        Mon, 19 Sep 2022 09:37:26 -0700 (PDT)
+        Mon, 19 Sep 2022 12:38:36 -0400
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 738213BC70;
+        Mon, 19 Sep 2022 09:38:35 -0700 (PDT)
+Received: by mail-pg1-f180.google.com with SMTP id t70so27249556pgc.5;
+        Mon, 19 Sep 2022 09:38:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=6fQ+1twC0Ji8Gsk3L6i3tph/pC38VH4wEOFGFdDw050=;
-        b=Mmr7bRrel8/ocNZnroABkTKsQvtzI/A+XjVlKf4dB+F4JziCKqx3RYhb+xpvYOWrY4
-         DTJc8O26uemqlYgwZ/dYblrzVdpXamOqBGJMqheWYs0nGZMJRxWZe/8TBcPLDg3/A+1G
-         LR2fRbJaTB6L7+G9R471Jhp59Qs/zT7h+2DKbHusFxGgnJRUJST/vb14DqLZjqSdPRnQ
-         bYen9qJXycNNZ88J+zgxobw+CfCsTWJk7rn0latnKc3GU822GWa1+5x6ssA6RbQjh/qX
-         cZbjl2FzlvB89R1MYGvSEAklM8ALVqi5u2lZHL9+CE9s4O8tagyRZO7xke7X2GjT43Ea
-         m02w==
-X-Gm-Message-State: ACrzQf17fZvKBjdwCqwKUN1Ik2yP/E5SShAYEB9y2FgeWM7c2rWjIskl
-        /zWcoFB3UUmP1G5W+QFKHBQjuCW/kS6r1wo1znA=
-X-Google-Smtp-Source: AMsMyM7blqbSOQF2Eb+/gT/WjwNk4M3+7d9RSV0hwBTX8X90/fo4L+7TFwDreiiSDssZGSjBiZZcyiQJ08xH1VjMZaU=
-X-Received: by 2002:a05:622a:104:b0:35c:cb31:c0d9 with SMTP id
- u4-20020a05622a010400b0035ccb31c0d9mr15708109qtw.49.1663605445534; Mon, 19
- Sep 2022 09:37:25 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=CAjB6oP9WAe1W6cMuPIXOBqiG3Ye8XvaCJwLL7WLSyc=;
+        b=LOl0D+2D22fjtNXx3oIAj1kbfZCzefH4n/x3mpnnJ83JwTiHUJ7rIHp6rbI0mjfN9q
+         xN0PCnPpUMD2g/aD37jydaTM8rvRgQB26I05SpyOyHQJg6HlcGAicTUNYvnyDBN0/WT7
+         XWQzZKJTNCspWvXOd0SUqFn2ZHx4Bhn6ykN46NeKqQ8V55KyzTfKLq3ovncHhf+VwqIJ
+         1BCpNqlM+0Vru7OLSrKknlJR3XWR6XO84iHeu0A/dDwSBXfO0ncww2QTj6S951UlNa7h
+         RYjms0WbVevA9nR/8milu2+aBNcs35VM/Tm7TojSUUkwrM2e1kchQVUTlzqa/xvTxfC9
+         oSEg==
+X-Gm-Message-State: ACrzQf3UscQVsvbVGLN2HMXUpdI07YT8x7fJjGXPBl4mYOdqkMZ5xY0k
+        FxGF/lXlfOsX3ZcdYMhJXcc=
+X-Google-Smtp-Source: AMsMyM4pUblTaj/zOW/XcUYO/LvXZRrtb3Ma4FsiIOf/wNcgI4lSDVZyLlfoI0Kn7oOzr78je+Ogxg==
+X-Received: by 2002:a63:dd01:0:b0:439:34d8:82d5 with SMTP id t1-20020a63dd01000000b0043934d882d5mr16253418pgg.530.1663605514839;
+        Mon, 19 Sep 2022 09:38:34 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:9b5b:c086:d392:8ccb? ([2620:15c:211:201:9b5b:c086:d392:8ccb])
+        by smtp.gmail.com with ESMTPSA id h9-20020a056a00000900b0053e5daf1a25sm20674917pfk.45.2022.09.19.09.38.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Sep 2022 09:38:34 -0700 (PDT)
+Message-ID: <44b01c70-1b3c-36e6-cb59-6a7c27ae26f5@acm.org>
+Date:   Mon, 19 Sep 2022 09:38:32 -0700
 MIME-Version: 1.0
-References: <20220913163147.24258-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20220913163147.24258-1-andriy.shevchenko@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 19 Sep 2022 18:37:14 +0200
-Message-ID: <CAJZ5v0hC5Tif=nR2CjDcStUp+SZx3v7d7RCykzcYGYDHsNcYsg@mail.gmail.com>
-Subject: Re: [PATCH v3 0/8] ACPI: unify _UID handling as integer
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Mark Brown <broonie@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Elie Morisse <syniurge@gmail.com>,
-        Nehal Shah <nehal-bakulchandra.shah@amd.com>,
-        Shyam Sundar S K <shyam-sundar.s-k@amd.com>,
-        Khalil Blaiech <kblaiech@nvidia.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Robert Moore <robert.moore@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH] block/blk-rq-qos: delete useless enmu RQ_QOS_IOPRIO
+Content-Language: en-US
+To:     Jan Kara <jack@suse.cz>
+Cc:     Li Jinlin <lijinlin3@huawei.com>, axboe@kernel.dk,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linfeilong@huawei.com
+References: <20220916023241.32926-1-lijinlin3@huawei.com>
+ <f2b8a99d-f6bd-4581-c651-d5b62d6cff21@acm.org>
+ <20220916215824.kfxvesl3l6tjqciw@quack3>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20220916215824.kfxvesl3l6tjqciw@quack3>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 6:32 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> This series is about unification on how we handle ACPI _UID when
-> it's known to be an integer-in-the-string.
->
-> The idea of merging either all via ACPI tree, or taking ACPI stuff
-> for the v6.1 while the rest may be picked up later on by respective
-> maintainers separately (currently only perf patch is not tagged).
->
-> Partially compile-tested (x86-64).
->
-> Changelog v3:
-> - fixed dev_dbg() specifier to be in align with the variable type (LKP)
-> - made use of temporary dev variable beyond the ACPI scope (LKP)
-> - added tags to I²C patches (Wolfram)
+On 9/16/22 14:58, Jan Kara wrote:
+> On Fri 16-09-22 07:12:23, Bart Van Assche wrote:
+>> Jan, please Cc me on future blk-ioprio patches - I just noticed that I was
+>> not Cc-ed on commit 82b74cac2849 ("blk-ioprio: Convert from rqos policy to
+>> direct call").
+> 
+> Well, you were on CC of the whole patchset which this patch was part of - see
+> [1]. So maybe you've missed it among other patches.
+> 
+> [1] https://lore.kernel.org/all/20220623074450.30550-1-jack@suse.cz/
 
-I've replaced the previous version of this patch series in my tree
-with this one.
+Hi Jan,
 
-Thanks!
+Hmm, you are right. Looking back at that patch series, what I remember 
+is that I looked at the first two patches, noticed that these were 
+outside my area of expertise and skipped the other patches. I will pay 
+more attention in the future.
 
+Bart.
 
-> Changelog v2:
-> - rebased pxa2xx patch to be applied against current Linux kernel code
-> - fixed uninitialized variable adev in use (mlxbf)
-> - dropped unneeded temporary variable adev (qcom_l2_pmu)
-> - changed type for ret in patch 8 (Hans)
-> - swapped conditions to check ret == 0 first (Ard)
-> - added tags (Mark, Ard, Hans)
->
-> Andy Shevchenko (8):
->   ACPI: utils: Add acpi_dev_uid_to_integer() helper to get _UID as
->     integer
->   ACPI: LPSS: Refactor _UID handling to use acpi_dev_uid_to_integer()
->   ACPI: x86: Refactor _UID handling to use acpi_dev_uid_to_integer()
->   i2c: amd-mp2-plat: Refactor _UID handling to use
->     acpi_dev_uid_to_integer()
->   i2c: mlxbf: Refactor _UID handling to use acpi_dev_uid_to_integer()
->   perf: qcom_l2_pmu: Refactor _UID handling to use
->     acpi_dev_uid_to_integer()
->   spi: pxa2xx: Refactor _UID handling to use acpi_dev_uid_to_integer()
->   efi/dev-path-parser: Refactor _UID handling to use
->     acpi_dev_uid_to_integer()
->
->  drivers/acpi/acpi_lpss.c               | 15 +++++------
->  drivers/acpi/utils.c                   | 24 +++++++++++++++++
->  drivers/acpi/x86/utils.c               | 14 +++++++---
->  drivers/firmware/efi/dev-path-parser.c | 10 ++++---
->  drivers/i2c/busses/i2c-amd-mp2-plat.c  | 27 +++++++------------
->  drivers/i2c/busses/i2c-mlxbf.c         | 20 +++++---------
->  drivers/perf/qcom_l2_pmu.c             | 10 +++----
->  drivers/spi/spi-pxa2xx.c               | 37 +++++++-------------------
->  include/acpi/acpi_bus.h                |  1 +
->  include/linux/acpi.h                   |  5 ++++
->  10 files changed, 83 insertions(+), 80 deletions(-)
->
-> --
-> 2.35.1
->
