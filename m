@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1BBD5BCD7B
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 15:46:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F5555BCD7C
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 15:46:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229884AbiISNp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 09:45:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54794 "EHLO
+        id S230177AbiISNqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 09:46:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230177AbiISNpw (ORCPT
+        with ESMTP id S229611AbiISNqQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 09:45:52 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7718A17066
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 06:45:51 -0700 (PDT)
+        Mon, 19 Sep 2022 09:46:16 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 146FB303ED
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 06:46:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663595151; x=1695131151;
+  t=1663595165; x=1695131165;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=YM1dRxbPZHCQXuHcTFNhP5mVRzQg8TEYi3/O2RyVXbk=;
-  b=mdDIeNVH1lUortLCdmIDyhs9OmG956eSIzei2lBSlzFCNcL7BD+6VcAK
-   Ys4CcZCwnlVt4Uucx2CxF9XAdT0CD93h0a15ePHkZK1eyqgGfnGzKU24l
-   45IKuN/H2GyceCYUD8x3Jfp8YunEvI78Q9jYNDSi0tnW4VEvIdosHwljG
-   l0we+aw6PQp0nmuYd+QkAFGWr6aidAtboGgH95OHUQ2TGd6VHEEWEP2pB
-   0Lqyut1N5wTdUtBrNj8KncsSB8MyBETFg7QfbfJLYibTxf4PpCp0GQsgZ
-   AyVTU5GBdl2YqjUehHyJhqIgEYCGxfDzdNwHJVOThODUQg1IaMp1i2MtE
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="279131316"
+  bh=XxfXVawkIpRkw9Sta27sG26kldmJgVeo7UfKSRubE1M=;
+  b=T3hP3hvg1kJzPt1LlBXMSBm8xkM9G+VyTBTogOwlSCKYjoAJ5V37UQDJ
+   IZVZ7LQDT3cLk3dENUYPFWq1MDbsuVqhLz+PntFf0uLu/wdSU+yX2OwBd
+   d0gEZHsOZ+0JJtAinzJWpUxE8BZBPCgoQLkBHhRUQPVduxbyXTF9K5cfC
+   k5ufiUGIKp2kRZxNjj6KR42aQcxglw/uAm5WV9ttzLAxaNOc6gNdO5RSj
+   VYXxmH2lFG1D41XyHzDhOsihLDCtg+lKQjNl2eArh+Ekar4+cLqP6cquM
+   6tpgTBlumkSFagWd19fLVGDANJBmuZMBAnWY5FyQT9MGXB/nZrNOA2V3e
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="279784133"
 X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
-   d="scan'208";a="279131316"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 06:45:51 -0700
+   d="scan'208";a="279784133"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 06:46:00 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
-   d="scan'208";a="744120637"
+   d="scan'208";a="722303636"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga004.jf.intel.com with ESMTP; 19 Sep 2022 06:45:47 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 19 Sep 2022 06:45:56 -0700
 Received: from andy by smile.fi.intel.com with local (Exim 4.96)
         (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oaH5l-004Zc7-0N;
-        Mon, 19 Sep 2022 16:45:45 +0300
-Date:   Mon, 19 Sep 2022 16:45:44 +0300
+        id 1oaH5u-004ZcK-1U;
+        Mon, 19 Sep 2022 16:45:54 +0300
+Date:   Mon, 19 Sep 2022 16:45:54 +0300
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Yury Norov <yury.norov@gmail.com>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
@@ -58,16 +58,16 @@ Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Valentin Schneider <vschneid@redhat.com>,
         Sven Schnelle <svens@linux.ibm.com>,
         Russell King <linux@armlinux.org.uk>
-Subject: Re: [PATCH v4 2/4] lib/find_bit: create find_first_zero_bit_le()
-Message-ID: <YyhyiFsV0z21jI0b@smile.fi.intel.com>
+Subject: Re: [PATCH v4 3/4] lib/find_bit: optimize find_next_bit() functions
+Message-ID: <YyhykvFCOskPAp59@smile.fi.intel.com>
 References: <20220915020730.852234-1-yury.norov@gmail.com>
- <20220915020730.852234-3-yury.norov@gmail.com>
+ <20220915020730.852234-4-yury.norov@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220915020730.852234-3-yury.norov@gmail.com>
+In-Reply-To: <20220915020730.852234-4-yury.norov@gmail.com>
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,31 +75,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 07:07:28PM -0700, Yury Norov wrote:
-> find_first_zero_bit_le() is an alias to find_next_zero_bit_le(),
-> despite that 'next' is known to be slower than 'first' version.
+On Wed, Sep 14, 2022 at 07:07:29PM -0700, Yury Norov wrote:
+> Over the past couple years, the function _find_next_bit() was extended
+> with parameters that modify its behavior to implement and- zero- and le-
+> flavors. The parameters are passed at compile time, but current design
+> prevents a compiler from optimizing out the conditionals.
 > 
-> Now that we have common FIND_FIRST_BIT() macro helper, it's trivial
-> to implement find_first_zero_bit_le() as a real function.
+> As find_next_bit() API grows, I expect that more parameters will be added.
+> Current design would require more conditional code in _find_next_bit(),
+> which would bloat the helper even more and make it barely readable.
+> 
+> This patch replaces _find_next_bit() with a macro FIND_NEXT_BIT, and adds
+> a set of wrappers, so that the compile-time optimizations become possible.
+> 
+> The common logic is moved to the new macro, and all flavors may be
+> generated by providing a FETCH macro parameter, like in this example:
+> 
+>   #define FIND_NEXT_BIT(FETCH, MUNGE, size, start) ...
+> 
+>   find_next_xornot_and_bit(addr1, addr2, addr3, size, start)
+>   {
+> 	return FIND_NEXT_BIT(addr1[idx] ^ ~addr2[idx] & addr3[idx],
+> 				/* nop */, size, start);
+>   }
+> 
+> The FETCH may be of any complexity, as soon as it only refers the bitmap(s)
+> and an iterator idx.
+> 
+> MUNGE is here to support _le code generation for BE builds. May be
+> empty.
+> 
+> I ran find_bit_benchmark 16 times on top of 6.0-rc2 and 16 times on top
+> of 6.0-rc2 + this series. The results for kvm/x86_64 are:
+> 
+>                       v6.0-rc2  Optimized       Difference  Z-score
+> Random dense bitmap         ns         ns        ns      %
+> find_next_bit:          787735     670546    117189   14.9     3.97
+> find_next_zero_bit:     777492     664208    113284   14.6    10.51
+> find_last_bit:          830925     687573    143352   17.3     2.35
+> find_first_bit:        3874366    3306635    567731   14.7     1.84
+> find_first_and_bit:   40677125   37739887   2937238    7.2     1.36
+> find_next_and_bit:      347865     304456     43409   12.5     1.35
+> 
+> Random sparse bitmap
+> find_next_bit:           19816      14021      5795   29.2     6.10
+> find_next_zero_bit:    1318901    1223794     95107    7.2     1.41
+> find_last_bit:           14573      13514      1059    7.3     6.92
+> find_first_bit:        1313321    1249024     64297    4.9     1.53
+> find_first_and_bit:       8921       8098       823    9.2     4.56
+> find_next_and_bit:        9796       7176      2620   26.7     5.39
+> 
+> Where the statistics is significant (z-score > 3), the improvement
+> is ~15%.
+> 
+> According to the bloat-o-meter, the Image size is 10-11K less:
+> 
+> x86_64/defconfig:
+> add/remove: 32/14 grow/shrink: 61/782 up/down: 6344/-16521 (-10177)
+> 
+> arm64/defconfig:
+> add/remove: 3/2 grow/shrink: 50/714 up/down: 608/-11556 (-10948)
 
 ...
 
-> +#ifdef __BIG_ENDIAN
+>  /*
 
-Probably you want to add a blank line here.
+Seems like you wanted this to be a kernel doc, but it isn't right now.
 
-> +#ifndef find_first_zero_bit_le
-> +/*
-> + * Find the first cleared bit in an LE memory region.
-> + */
-> +unsigned long _find_first_zero_bit_le(const unsigned long *addr, unsigned long size)
-> +{
-> +	return FIND_FIRST_BIT(~addr[idx], swab, size);
-> +}
-> +EXPORT_SYMBOL(_find_first_zero_bit_le);
-> +#endif
-> +
-> +#endif /* __BIG_ENDIAN */
+> - * This is a common helper function for find_next_bit, find_next_zero_bit, and
+> - * find_next_and_bit. The differences are:
+> - *  - The "invert" argument, which is XORed with each fetched word before
+> - *    searching it for one bits.
+> - *  - The optional "addr2", which is anded with "addr1" if present.
+> + * Common helper for find_next_bit() function family
+
+In such case this should start with a name of the macro
+
+ * FIND_NEXT_BIT - ...
+
+> + * @FETCH: The expression that fetches and pre-processes each word of bitmap(s)
+> + * @MUNGE: The expression that post-processes a word containing found bit (may be empty)
+> + * @size: The bitmap size in bits
+> + * @start: The bitnumber to start searching at
+>   */
+
+...
+
+> +#define FIND_NEXT_BIT(FETCH, MUNGE, size, start)				\
+> +({										\
+> +	unsigned long mask, idx, tmp, sz = (size), __start = (start);		\
+> +										\
+> +	if (unlikely(__start >= sz))						\
+> +		goto out;							\
+> +										\
+> +	mask = MUNGE(BITMAP_FIRST_WORD_MASK(__start));				\
+> +	idx = __start / BITS_PER_LONG;						\
+> +										\
+> +	for (tmp = (FETCH) & mask; !tmp; tmp = (FETCH)) {			\
+> +		if ((idx + 1) * BITS_PER_LONG >= sz)				\
+> +			goto out;						\
+> +		idx++;								\
+> +	}									\
+> +										\
+> +	sz = min(idx * BITS_PER_LONG + __ffs(MUNGE(tmp)), sz);			\
+> +out:										\
+
+I dunno if GCC expression limits the scope of goto labels, but on the safe side
+you can add a prefix to it, so it becomes:
+
+FIND_NEXT_BIT_out:
+
+(or alike).
+
+> +	sz;									\
+> +})
+
+...
+
+> +unsigned long _find_next_zero_bit_le(const unsigned long *addr, unsigned
+> +		long size, unsigned long offset)
+
+Usually we don't split parameters between lines.
+
+...
+
+> +unsigned long _find_next_bit_le(const unsigned long  *addr, unsigned
+> +		long size, unsigned long offset)
+
+Ditto.
 
 -- 
 With Best Regards,
