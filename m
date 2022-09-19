@@ -2,135 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D1635BC3BC
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 09:53:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D3615BC3D4
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 09:59:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229937AbiISHxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 03:53:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59868 "EHLO
+        id S229948AbiISH65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 03:58:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbiISHxg (ORCPT
+        with ESMTP id S229898AbiISH6Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 03:53:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5465B1EECD
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 00:53:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663574014;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+jF6oIsWPK5kJUJRdE/upBDeiuSKze81vSXS8eDi/Hk=;
-        b=ZZDrBdKzym1mD4alGg84DqFBg0uvQoLvDJq/JFc0Pu31uE+eDmEClTzJ/TvHFZq3ZN6aQr
-        GPz5t+O+u0W0yJC0UlxmN7SLQRL13Vdtd0E2XnPPO/PCEgWyUwT7JgEaW06A93GJCaarxB
-        QMdOHSZ2kjENMdER9sN++WUYL9Fnljk=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-249-dupUdTGUN-6NhKaMqca80g-1; Mon, 19 Sep 2022 03:53:32 -0400
-X-MC-Unique: dupUdTGUN-6NhKaMqca80g-1
-Received: by mail-wm1-f72.google.com with SMTP id ay29-20020a05600c1e1d00b003b49a9f987cso4294885wmb.8
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 00:53:32 -0700 (PDT)
+        Mon, 19 Sep 2022 03:58:16 -0400
+Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 367171EEF8;
+        Mon, 19 Sep 2022 00:58:15 -0700 (PDT)
+Received: by mail-qv1-f52.google.com with SMTP id l14so12858596qvq.8;
+        Mon, 19 Sep 2022 00:58:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=+jF6oIsWPK5kJUJRdE/upBDeiuSKze81vSXS8eDi/Hk=;
-        b=Gq8wcvAMWTUcA3FI8091LG/9NR5Lw59fD7MzisqwFdrCep5I3nqPU4786tep7bMFXZ
-         NxMOUUj4EyNpvtl2iT8UIm3DMgO9+DsgExwxJpe9ELPcjAXe6vmXA66KfUHNvmVwYTrW
-         H3Wz1Dgo5UtTziNgYq+uZaaV39CieyFGaHF5D9PCzVGj3xIeDecs1lt6GDBxnDvU1pZq
-         ayCKbaYUmlWl3iIOr60WffepXNUapiE/NOuS3c3uXB1NLPWEG5YQR7yDlH/6emgnVpgG
-         GFBLNcu2vGUvLD8NHVh6dlC35Oqg60VEuaZv8Bm2MF3Dzw+sN6ASC1MwCDzUpmIyn6lj
-         E7gg==
-X-Gm-Message-State: ACrzQf1DjDOLjOZoJk96/gxNjzl7zDrHgzjXz0jFVOAMXWKyQhVWyLBs
-        CMiQSl54M/oGxfqlm659VkOpW57812mta1jPtAw5+7sZZyCBBT5xwW2DoYWrK7tK7vzu8HP8LIt
-        QYPBFVkrDqtPxFP2xPNlqenw8
-X-Received: by 2002:a5d:64a4:0:b0:22a:85a3:55bd with SMTP id m4-20020a5d64a4000000b0022a85a355bdmr9940654wrp.340.1663574011283;
-        Mon, 19 Sep 2022 00:53:31 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6cl/99Fb6zf0Iio6HOH0AZbm1zMjRncUlMjPbnKoJ7GvYswGK8HUjr6ToG6Z5yuJljlakZTw==
-X-Received: by 2002:a5d:64a4:0:b0:22a:85a3:55bd with SMTP id m4-20020a5d64a4000000b0022a85a355bdmr9940641wrp.340.1663574011014;
-        Mon, 19 Sep 2022 00:53:31 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c703:c100:c136:f914:345f:f5f3? (p200300cbc703c100c136f914345ff5f3.dip0.t-ipconnect.de. [2003:cb:c703:c100:c136:f914:345f:f5f3])
-        by smtp.gmail.com with ESMTPSA id k24-20020adfd238000000b0022ad393ba3csm12594453wrh.107.2022.09.19.00.53.29
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=KKxwW22QapRcZpKvTVaesc2qXSXnP+OfFDAXgdUxUEQ=;
+        b=Q+jR8uW5jtw7QssRCfQjrVvgHZc9j7f75pvbmUSspp0aqU4bpNQ4eq6Y8SxicoIAhV
+         Jp+9sX19PPId0PaNQvYfW66HK97w2po7E5xdRiBTmS51kCDppXo72qqbI30DMlDvrPBz
+         zx5g4Z/zQ3CU4rPCWHrnvgE/QqKLY/64kA8EsiDtPPG6p5hymdM/9P68v3okzncoKYoI
+         +F1+Gsr7e68c3nHqpuCPBnkj4ANU4yokGlkN21o4+eSKduWVIH58HVwPIpZwktG4/stE
+         hTIPT8t/s8GqGY0V9dQTiyyLYfEgDQ/vLqYSJa8furmNIW/k+j7j/fdgb2S4PBqnHBBi
+         eH/g==
+X-Gm-Message-State: ACrzQf0/HZDCqU82UdDDeiErPC7fay+EO0dqO/gTGMrmFxW2Fls9E/4D
+        yl3R5KlRcYx8AM2T7kI1ny1OFMsZvcSQBQ==
+X-Google-Smtp-Source: AMsMyM6Dm/E7NPv4Ku1nXM/6vdKuP3hxC5P+9txaY2TG7AVa+dB1ETFEkqE2PXhGgq9bWNV7K3jGfQ==
+X-Received: by 2002:a05:6214:2a89:b0:4ac:8360:6c65 with SMTP id jr9-20020a0562142a8900b004ac83606c65mr13159334qvb.110.1663574293776;
+        Mon, 19 Sep 2022 00:58:13 -0700 (PDT)
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
+        by smtp.gmail.com with ESMTPSA id u18-20020a05622a011200b0035ba4e53500sm10409139qtw.56.2022.09.19.00.58.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Sep 2022 00:53:30 -0700 (PDT)
-Message-ID: <37b3162e-7b3a-919f-80e2-f96eca7d4b4c@redhat.com>
-Date:   Mon, 19 Sep 2022 09:53:29 +0200
+        Mon, 19 Sep 2022 00:58:13 -0700 (PDT)
+Received: by mail-yb1-f172.google.com with SMTP id 130so41330301ybw.8;
+        Mon, 19 Sep 2022 00:58:13 -0700 (PDT)
+X-Received: by 2002:a25:8e84:0:b0:696:466c:baa with SMTP id
+ q4-20020a258e84000000b00696466c0baamr12533972ybl.604.1663574293041; Mon, 19
+ Sep 2022 00:58:13 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [RFC PATCH 0/9] kvm: implement atomic memslot updates
-Content-Language: en-US
-To:     Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     kvm@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
-References: <20220909104506.738478-1-eesposit@redhat.com>
- <YxtOEgJhe4EcAJsE@google.com>
- <5f0345d2-d4d1-f4fe-86ba-6e22561cb6bd@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <5f0345d2-d4d1-f4fe-86ba-6e22561cb6bd@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220919105839.496f1b72@canb.auug.org.au>
+In-Reply-To: <20220919105839.496f1b72@canb.auug.org.au>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 19 Sep 2022 09:58:01 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVQmG6hjyw0g8L2AAuUSoQ9xH=C9zrV=QUoVWp_HM62BQ@mail.gmail.com>
+Message-ID: <CAMuHMdVQmG6hjyw0g8L2AAuUSoQ9xH=C9zrV=QUoVWp_HM62BQ@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the drm tree with Linus' tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Dave Airlie <airlied@redhat.com>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18.09.22 18:13, Emanuele Giuseppe Esposito wrote:
-> 
-> 
-> Am 09/09/2022 um 16:30 schrieb Sean Christopherson:
->> On Fri, Sep 09, 2022, Emanuele Giuseppe Esposito wrote:
->>> KVM is currently capable of receiving a single memslot update through
->>> the KVM_SET_USER_MEMORY_REGION ioctl.
->>> The problem arises when we want to atomically perform multiple updates,
->>> so that readers of memslot active list avoid seeing incomplete states.
->>>
->>> For example, in RHBZ https://bugzilla.redhat.com/show_bug.cgi?id=1979276
->>
->> I don't have access.  Can you provide a TL;DR?
-> 
-> You should be able to have access to it now.
-> 
->>
->>> we see how non atomic updates cause boot failure, because vcpus
->>> will se a partial update (old memslot delete, new one not yet created)
->>> and will crash.
->>
->> Why not simply pause vCPUs in this scenario?  This is an awful lot of a complexity
->> to take on for something that appears to be solvable in userspace.
->>
-> 
-> I think it is not that easy to solve in userspace: see
-> https://lore.kernel.org/qemu-devel/20200312161217.3590-1-david@redhat.com/
-> 
-> 
-> "Using pause_all_vcpus()/resume_all_vcpus() is not possible, as it will
-> temporarily drop the BQL - something most callers can't handle (esp.
-> when called from vcpu context e.g., in virtio code)."
+Hi Stephen,
 
-Can you please comment on the bigger picture? The patch from me works 
-around *exactly that*, and for that reason, contains that comment.
+On Mon, Sep 19, 2022 at 3:07 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> Today's linux-next merge of the drm tree got a conflict in:
+>
+>   drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c
+>
+> between commit:
+>
+>   41012d715d5d ("drm/amd/display: Mark dml30's UseMinimumDCFCLK() as noinline for stack usage")
+>
+> from Linus' tree and commit:
+>
+>   a0f7e7f759cf ("drm/amd/display: fix i386 frame size warning")
+>
+> from the drm tree.
+>
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>
+> --
+> Cheers,
+> Stephen Rothwell
+>
+> diff --cc drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c
+> index 1cb858dd6ea0,b7fa003ffe06..000000000000
+> --- a/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c
+> @@@ -6610,66 -6497,11 +6497,11 @@@ static double CalculateUrgentLatency
+>         return ret;
+>   }
+>
+>  -static void UseMinimumDCFCLK(
+>  +static noinline_for_stack void UseMinimumDCFCLK(
 
--- 
-Thanks,
+While this looks like the correct merge resolution, it does mean that
+both stack size mitigations are now applied, and probably one of them
+can be dropped?
 
-David / dhildenb
+>                 struct display_mode_lib *mode_lib,
+> -               int MaxInterDCNTileRepeaters,
+> +               struct vba_vars_st *v,
+>                 int MaxPrefetchMode,
+> -               double FinalDRAMClockChangeLatency,
+> -               double SREnterPlusExitTime,
+> -               int ReturnBusWidth,
+> -               int RoundTripPingLatencyCycles,
+> -               int ReorderingBytes,
+> -               int PixelChunkSizeInKByte,
+> -               int MetaChunkSize,
+> -               bool GPUVMEnable,
+> -               int GPUVMMaxPageTableLevels,
+> -               bool HostVMEnable,
+> -               int NumberOfActivePlanes,
+> -               double HostVMMinPageSize,
+> -               int HostVMMaxNonCachedPageTableLevels,
+> -               bool DynamicMetadataVMEnabled,
+> -               enum immediate_flip_requirement ImmediateFlipRequirement,
+> -               bool ProgressiveToInterlaceUnitInOPP,
+> -               double MaxAveragePercentOfIdealSDPPortBWDisplayCanUseInNormalSystemOperation,
+> -               double PercentOfIdealDRAMFabricAndSDPPortBWReceivedAfterUrgLatencyPixelMixedWithVMData,
+> -               double PercentOfIdealDRAMFabricAndSDPPortBWReceivedAfterUrgLatencyVMDataOnly,
+> -               double PercentOfIdealDRAMFabricAndSDPPortBWReceivedAfterUrgLatencyPixelDataOnly,
+> -               int VTotal[],
+> -               int VActive[],
+> -               int DynamicMetadataTransmittedBytes[],
+> -               int DynamicMetadataLinesBeforeActiveRequired[],
+> -               bool Interlace[],
+> -               double RequiredDPPCLK[][2][DC__NUM_DPP__MAX],
+> -               double RequiredDISPCLK[][2],
+> -               double UrgLatency[],
+> -               unsigned int NoOfDPP[][2][DC__NUM_DPP__MAX],
+> -               double ProjectedDCFCLKDeepSleep[][2],
+> -               double MaximumVStartup[][2][DC__NUM_DPP__MAX],
+> -               double TotalVActivePixelBandwidth[][2],
+> -               double TotalVActiveCursorBandwidth[][2],
+> -               double TotalMetaRowBandwidth[][2],
+> -               double TotalDPTERowBandwidth[][2],
+> -               unsigned int TotalNumberOfActiveDPP[][2],
+> -               unsigned int TotalNumberOfDCCActiveDPP[][2],
+> -               int dpte_group_bytes[],
+> -               double PrefetchLinesY[][2][DC__NUM_DPP__MAX],
+> -               double PrefetchLinesC[][2][DC__NUM_DPP__MAX],
+> -               unsigned int swath_width_luma_ub_all_states[][2][DC__NUM_DPP__MAX],
+> -               unsigned int swath_width_chroma_ub_all_states[][2][DC__NUM_DPP__MAX],
+> -               int BytePerPixelY[],
+> -               int BytePerPixelC[],
+> -               int HTotal[],
+> -               double PixelClock[],
+> -               double PDEAndMetaPTEBytesPerFrame[][2][DC__NUM_DPP__MAX],
+> -               double DPTEBytesPerRow[][2][DC__NUM_DPP__MAX],
+> -               double MetaRowBytes[][2][DC__NUM_DPP__MAX],
+> -               bool DynamicMetadataEnable[],
+> -               double VActivePixelBandwidth[][2][DC__NUM_DPP__MAX],
+> -               double VActiveCursorBandwidth[][2][DC__NUM_DPP__MAX],
+> -               double ReadBandwidthLuma[],
+> -               double ReadBandwidthChroma[],
+> -               double DCFCLKPerState[],
+> -               double DCFCLKState[][2])
+> +               int ReorderingBytes)
+>   {
+>         double   NormalEfficiency = 0;
+>         double   PTEEfficiency = 0;
 
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
