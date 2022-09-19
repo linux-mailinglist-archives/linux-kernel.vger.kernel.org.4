@@ -2,290 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C707A5BD131
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 17:39:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ED945BD132
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 17:39:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbiISPjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 11:39:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50202 "EHLO
+        id S230098AbiISPjq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 11:39:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbiISPjI (ORCPT
+        with ESMTP id S229947AbiISPjm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 11:39:08 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 452A032BB3
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 08:39:04 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id d16so14999333ils.8
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 08:39:04 -0700 (PDT)
+        Mon, 19 Sep 2022 11:39:42 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F46463E4
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 08:39:40 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id c7so22947382ljm.12
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 08:39:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=BX7NuzQ6XgAPzRdnKZ+P3fDJ1+/q78cG6We8i9CBSbc=;
-        b=BDV0fOA4UWJzf7YXD7DEM9JCmyp3gP414pyuW6wGq3ERmQkzQyIx8kaUZRrG849JVV
-         izx74sgrQJZbdI6D9S3QS0KEtV4ouzSjz3E/ypCO1vxDH6BPvEOugRL54JSS6e5g+zYl
-         RDDP1Jd0lWgRkZeTsIN7v28nC1GfBfxBjLGi8=
+        bh=BjstHUcG1b9c4lXIMYaiIxLcV+RFGNGSeHkYMGDVm24=;
+        b=lNXQ1tnAZnbdX3F2/TDyMxjxK9ZTpUFY+3AJ0Va+/QFk6CQ2Bb9/zaT/H5tK9wyUNh
+         u/fJBm36WLNpQpzQ03RTy1T3kEV2M6/TZ+IKfH6hmgXjU2goSkHZTa9IH+RkRixp6l+m
+         GlPOyfWLVPsH641paiEb5vptDq5NpAdZlalNyf2TnudeXrzHiCyygKcNZVACtfRnbbM2
+         E1eA/TkxvmWRqccEgYOziXU/nfcpUQQLG2XLlvnehxPahKxrxiE6EZaCHrfLq9Hggjr2
+         eH07CC68KvazOZAQkDSWSWaVZjuW/+B3V3+2EnumE+M6ea99tCkH7pMFCxrBR+CHAo7u
+         /ohg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=BX7NuzQ6XgAPzRdnKZ+P3fDJ1+/q78cG6We8i9CBSbc=;
-        b=cM4j9U4M3kV60+CJfvnXiI6/jXi92jJbfeG2aA4rR16NShFm3qJvQ9r1GGicRxBEQ5
-         +L90RXdjrOgzzbeZe0bDDgiNpoGQAObC/34p5dCSgF4UaOCThVpWFmva5APZmkSl9KC1
-         ZhXHMt7W5KzcDoP+Bfpc1lc8A1zU9+oVz+L7+3ZOylos635t47thNipgDVFY34v58S6X
-         b4w6LTk4N5APjsxxN3sgvJCWxCH64rIib8jLFfNk6qoAHtjgxQbfiH5l9aZthIhbZBxB
-         XSKhpleZMfwqUyI3p2jm8GXsP7d0ou6VUMehS6LVqBCEekJwgjeN6+NAISWs9HXNXF1R
-         O8uQ==
-X-Gm-Message-State: ACrzQf3clGpESNC9FzmH8NYWRcDnYvxlcDBQ40GzhH7Su9XX47WKBQLp
-        4GyMnhvOXShiXyoXMdv5OaEbE3PnBNRdKQ==
-X-Google-Smtp-Source: AMsMyM7FKaEn9J9M5ltej5E198ZNdgB5MxDlA+WjZGKIP35HyOkZ4606JvVh7hFB08KkILLKg4u9Sw==
-X-Received: by 2002:a05:6e02:168f:b0:2eb:1c2c:33a5 with SMTP id f15-20020a056e02168f00b002eb1c2c33a5mr7461897ila.98.1663601943418;
-        Mon, 19 Sep 2022 08:39:03 -0700 (PDT)
-Received: from mail-io1-f54.google.com (mail-io1-f54.google.com. [209.85.166.54])
-        by smtp.gmail.com with ESMTPSA id p22-20020a02b016000000b00358422fcc7bsm5586335jah.120.2022.09.19.08.39.02
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Sep 2022 08:39:03 -0700 (PDT)
-Received: by mail-io1-f54.google.com with SMTP id n81so22750265iod.6
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 08:39:02 -0700 (PDT)
-X-Received: by 2002:a05:6638:4110:b0:35a:6d6b:57f7 with SMTP id
- ay16-20020a056638411000b0035a6d6b57f7mr8368005jab.134.1663601942057; Mon, 19
- Sep 2022 08:39:02 -0700 (PDT)
+        bh=BjstHUcG1b9c4lXIMYaiIxLcV+RFGNGSeHkYMGDVm24=;
+        b=C18osnUqdUqCvByUuVwpJ/1pykW6h7b72ZF6REKn5AyTyyw4Ekv03FHSfp+/T9mlnR
+         TO0OaJnURa55kXEQXrw11idc6ojOAbbct0WtsqAHEUOREoazADbw+Ft6Rh/v56HhovA3
+         xilX2kl1J1JfRHvob+2+SxfZQPFC33GpJusN4+KKSme/va4zulQS5oq9NcyHlWtjp721
+         5EMnYzkd6/cBRdoPXvylRCcQtQONde2mqL8CAFFGEl5UYnFE4F3rfiqWHwqVA/JEM9WS
+         yhX526kq3g70TVj+QrEIOjc2wwUrDLaIpZSpF7wsml3vRdZS9YEM6jui98ic7LDv9Gyp
+         DaoQ==
+X-Gm-Message-State: ACrzQf3mSbDBTZymRRUbe54ULnP7BS9yoY2u64vTXFNhlPznRpSK0TLq
+        YcPSgvvlkbcXtyhf2Mw1wi4UPIRD1z5JdUXRtnr6JQ==
+X-Google-Smtp-Source: AMsMyM5j7eq6Wj2UNHu8v8Z/Pc35FCfhaCw9MLQKGUzd1DSvzwpWWbOzbaBLSwZKf4K2fPVO0eIcrN3uHW/iSR+8nG0=
+X-Received: by 2002:a2e:bf01:0:b0:25f:df1a:f39d with SMTP id
+ c1-20020a2ebf01000000b0025fdf1af39dmr5735699ljr.365.1663601978334; Mon, 19
+ Sep 2022 08:39:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220914235801.1731478-1-rrangel@chromium.org>
- <20220914155914.v3.7.I8af4282adc72eb9f247adcd03676a43893a020a6@changeid> <Yyg8XZHrPZaKcWHa@smile.fi.intel.com>
-In-Reply-To: <Yyg8XZHrPZaKcWHa@smile.fi.intel.com>
-From:   Raul Rangel <rrangel@chromium.org>
-Date:   Mon, 19 Sep 2022 09:38:51 -0600
-X-Gmail-Original-Message-ID: <CAHQZ30C3AhB4avt2--Wz5b0NpwCRP80QybE9J6cCqq24Zx5rZA@mail.gmail.com>
-Message-ID: <CAHQZ30C3AhB4avt2--Wz5b0NpwCRP80QybE9J6cCqq24Zx5rZA@mail.gmail.com>
-Subject: Re: [PATCH v3 07/13] i2c: acpi: Use ACPI wake capability bit to set wake_irq
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        linux-input <linux-input@vger.kernel.org>,
-        "jingle.wu" <jingle.wu@emc.com.tw>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Tim Van Patten <timvp@google.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20220916080305.29574-1-vincent.guittot@linaro.org>
+ <20220916080305.29574-6-vincent.guittot@linaro.org> <073938c4-ab23-2270-8e60-291f2901e230@arm.com>
+In-Reply-To: <073938c4-ab23-2270-8e60-291f2901e230@arm.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Mon, 19 Sep 2022 17:39:26 +0200
+Message-ID: <CAKfTPtCWE5O4TeTBG8hgar8w56-WzvmX7aR9D7dXN_vJ5LCLyQ@mail.gmail.com>
+Subject: Re: [PATCH v4 5/8] sched/fair: Take into account latency priority at wakeup
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, parth@linux.ibm.com,
+        qais.yousef@arm.com, chris.hyser@oracle.com,
+        valentin.schneider@arm.com, patrick.bellasi@matbug.net,
+        David.Laight@aculab.com, pjt@google.com, pavel@ucw.cz,
+        tj@kernel.org, qperret@google.com, tim.c.chen@linux.intel.com,
+        joshdon@google.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 3:54 AM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
+On Mon, 19 Sept 2022 at 12:05, Dietmar Eggemann
+<dietmar.eggemann@arm.com> wrote:
 >
-> On Wed, Sep 14, 2022 at 05:57:55PM -0600, Raul E Rangel wrote:
-> > Device tree already has a mechanism to pass the wake_irq. It does this
-> > by looking for the wakeup-source property and setting the
-> > I2C_CLIENT_WAKE flag. This CL adds the ACPI equivalent. It uses the
-> > ACPI interrupt wake flag to determine if the interrupt can be used to
-> > wake the system. Previously the i2c drivers had to make assumptions and
-> > blindly enable the wake IRQ. This can cause spurious wake events. e.g.,
-> > If there is a device with an Active Low interrupt and the device gets
-> > powered off while suspending, the interrupt line will go low since it's
-> > no longer powered and wakes the system. For this reason we should
-> > respect the board designers wishes and honor the wake bit defined on the
-> > interrupt.
+> On 16/09/2022 10:03, Vincent Guittot wrote:
 >
-> Okay, let's go with this variant, but I'm afraid that in time we may come up
-> to the proposed (generic structure for ACPI IRQ parameters which can be used
-> in a few places).
+> [...]
 >
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > @@ -4512,7 +4519,7 @@ int sched_fork(unsigned long clone_flags, struct task_struct *p)
+> >       p->prio = current->normal_prio;
+> >
+> >       /* Propagate the parent's latency requirements to the child as well */
+> > -     p->latency_nice = current->latency_nice;
+> > +     p->latency_prio = current->latency_prio;
 >
-> > Signed-off-by: Raul E Rangel <rrangel@chromium.org>
-> > ---
-> >
-> > Changes in v3:
-> > - Convert wake_capable to bool
-> > - Only update wake_capable pointer once
-> > - Move wake_capable local into local block
-> >
-> > Changes in v2:
-> > - Look at wake_cabple bit for IRQ/Interrupt resources
-> >
-> >  drivers/i2c/i2c-core-acpi.c | 33 ++++++++++++++++++++++++---------
-> >  drivers/i2c/i2c-core-base.c |  8 +++++++-
-> >  drivers/i2c/i2c-core.h      |  4 ++--
-> >  3 files changed, 33 insertions(+), 12 deletions(-)
-> >
-> > diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
-> > index c762a879c4cc6b..b3d68a9659ff4f 100644
-> > --- a/drivers/i2c/i2c-core-acpi.c
-> > +++ b/drivers/i2c/i2c-core-acpi.c
-> > @@ -137,6 +137,11 @@ static const struct acpi_device_id i2c_acpi_ignored_device_ids[] = {
-> >       {}
-> >  };
-> >
-> > +struct i2c_acpi_irq_context {
-> > +     int irq;
-> > +     bool wake_capable;
-> > +};
-> > +
-> >  static int i2c_acpi_do_lookup(struct acpi_device *adev,
-> >                             struct i2c_acpi_lookup *lookup)
-> >  {
-> > @@ -170,11 +175,14 @@ static int i2c_acpi_do_lookup(struct acpi_device *adev,
-> >
-> >  static int i2c_acpi_add_resource(struct acpi_resource *ares, void *data)
-> >  {
-> > -     int *irq = data;
-> > +     struct i2c_acpi_irq_context *irq_ctx = data;
-> >       struct resource r;
-> >
-> > -     if (*irq <= 0 && acpi_dev_resource_interrupt(ares, 0, &r))
-> > -             *irq = i2c_dev_irq_from_resources(&r, 1);
-> > +     if (irq_ctx->irq <= 0 && acpi_dev_resource_interrupt(ares, 0, &r)) {
-> > +             irq_ctx->irq = i2c_dev_irq_from_resources(&r, 1);
-> > +             irq_ctx->wake_capable =
-> > +                     !!(r.flags & IORESOURCE_IRQ_WAKECAPABLE);
-> > +     }
+> Isn't here a `set_latency_offset(p)` missing here?
+
+Hmm, I think it's the opposite and the line above is a nop from the
+beginning (i.e. patch 2).
 
 >
-> Maybe
->
->         if (irq_ctx->irq > 0)
->                 return 1;
->
->         if (!acpi_dev_resource_interrupt(ares, 0, &r))
->                 return 1;
->
->         irq_ctx->irq = i2c_dev_irq_from_resources(&r, 1);
->         irq_ctx->wake_capable = !!(r.flags & IORESOURCE_IRQ_WAKECAPABLE);
->
-> ?
->
-> >       return 1; /* No need to add resource to the list */
-> >  }
->
-
-Done
-
-> Also not sure why the callback is not called i2c_acpi_add_irq_resource().
-> But it probably can be done in a separate change.
->
-
-I had the same thought. I went ahead and added it into this change
-since I already
-refactored the logic like you suggested above.
-
-> > @@ -182,31 +190,38 @@ static int i2c_acpi_add_resource(struct acpi_resource *ares, void *data)
-> >  /**
-> >   * i2c_acpi_get_irq - get device IRQ number from ACPI
-> >   * @client: Pointer to the I2C client device
-> > + * @wake_capable: Set to true if the IRQ is wake capable
-> >   *
-> >   * Find the IRQ number used by a specific client device.
-> >   *
-> >   * Return: The IRQ number or an error code.
-> >   */
-> > -int i2c_acpi_get_irq(struct i2c_client *client)
-> > +int i2c_acpi_get_irq(struct i2c_client *client, bool *wake_capable)
-> >  {
-> >       struct acpi_device *adev = ACPI_COMPANION(&client->dev);
-> >       struct list_head resource_list;
-> > -     int irq = -ENOENT;
-> > +     struct i2c_acpi_irq_context irq_ctx = {
-> > +             .irq = -ENOENT,
-> > +     };
-> >       int ret;
 > >
-> >       INIT_LIST_HEAD(&resource_list);
+> >       uclamp_fork(p);
 > >
-> >       ret = acpi_dev_get_resources(adev, &resource_list,
-> > -                                  i2c_acpi_add_resource, &irq);
-> > +                                  i2c_acpi_add_resource, &irq_ctx);
-> >       if (ret < 0)
-> >               return ret;
-> >
-> >       acpi_dev_free_resource_list(&resource_list);
-> >
-> > -     if (irq == -ENOENT)
-> > -             irq = acpi_dev_gpio_irq_get(adev, 0);
-> > +     if (irq_ctx.irq == -ENOENT)
-> > +             irq_ctx.irq = acpi_dev_gpio_irq_wake_get(adev, 0,
-> > +                                                      &irq_ctx.wake_capable);
-> > +
-> > +     if (wake_capable)
-> > +             *wake_capable = irq_ctx.wake_capable;
-> >
-> > -     return irq;
-> > +     return irq_ctx.irq;
+>
+> [...]
+>
+> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> > index e8c1b889dcbb..a20eadb0af97 100644
+> > --- a/kernel/sched/fair.c
+> > +++ b/kernel/sched/fair.c
+> > @@ -4574,6 +4574,8 @@ dequeue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
+> >               update_idle_cfs_rq_clock_pelt(cfs_rq);
 > >  }
 > >
-> >  static int i2c_acpi_get_info(struct acpi_device *adev,
-> > diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-> > index 91007558bcb260..c4debd46c6340f 100644
-> > --- a/drivers/i2c/i2c-core-base.c
-> > +++ b/drivers/i2c/i2c-core-base.c
-> > @@ -487,8 +487,14 @@ static int i2c_device_probe(struct device *dev)
-> >                       if (irq == -EINVAL || irq == -ENODATA)
-> >                               irq = of_irq_get(dev->of_node, 0);
-> >               } else if (ACPI_COMPANION(dev)) {
-> > -                     irq = i2c_acpi_get_irq(client);
-> > +                     bool wake_capable;
-> > +
-> > +                     irq = i2c_acpi_get_irq(client, &wake_capable);
+> > +static long wakeup_latency_gran(struct sched_entity *curr, struct sched_entity *se);
 >
-> > +
+> minor: `struct sched_entity *curr` ... doesn't have to be current
+> (cfs_rq->curr). Isn't this more like `struct sched_entity *sea, struct
+> sched_entity *seb`? Anyway, it's already the case for
+> `wakeup_preempt_entity`.
 >
-> Unneeded blank line.
+> [...]
 >
-Done
-
-> > +                     if (irq > 0 && wake_capable)
-> > +                             client->flags |= I2C_CLIENT_WAKE;
-> >               }
->
-> > +
->
-> Ditto. (This even looks like a stray change)
->
-Done
-> >               if (irq == -EPROBE_DEFER) {
-> >                       status = irq;
-> >                       goto put_sync_adapter;
-> > diff --git a/drivers/i2c/i2c-core.h b/drivers/i2c/i2c-core.h
-> > index 87e2c914f1c57b..1247e6e6e97517 100644
-> > --- a/drivers/i2c/i2c-core.h
-> > +++ b/drivers/i2c/i2c-core.h
-> > @@ -61,11 +61,11 @@ static inline int __i2c_check_suspended(struct i2c_adapter *adap)
-> >  #ifdef CONFIG_ACPI
-> >  void i2c_acpi_register_devices(struct i2c_adapter *adap);
-> >
-> > -int i2c_acpi_get_irq(struct i2c_client *client);
-> > +int i2c_acpi_get_irq(struct i2c_client *client, bool *wake_capable);
-> >  #else /* CONFIG_ACPI */
-> >  static inline void i2c_acpi_register_devices(struct i2c_adapter *adap) { }
-> >
-> > -static inline int i2c_acpi_get_irq(struct i2c_client *client)
-> > +static inline int i2c_acpi_get_irq(struct i2c_client *client, bool *wake_capable)
-> >  {
-> >       return 0;
+> > @@ -5732,6 +5735,35 @@ static int sched_idle_cpu(int cpu)
 > >  }
-> > --
-> > 2.37.3.968.ga6b4b080e4-goog
+> >  #endif
 > >
+> > +static void set_next_buddy(struct sched_entity *se);
+> > +
+> > +static void check_preempt_from_others(struct cfs_rq *cfs, struct sched_entity *se)
 >
-> --
-> With Best Regards,
-> Andy Shevchenko
+> minor: Why `struct cfs_rq *cfs` and not `struct cfs_rq *cfs_rq` ?
 >
+> Using `cfs_rq` would make it more consistent when looking for things
+> like `cfs_rq->nr_running` for example.
 >
+> > +{
+> > +     struct sched_entity *next;
+> > +
+> > +     if (se->latency_offset >= 0)
+> > +             return;
+> > +
+> > +     if (cfs->nr_running <= 1)
+> > +             return;
+> > +     /*
+> > +      * When waking from idle, we don't need to check to preempt at wakeup
+>
+> s/idle/others ?
 
-I'll send out a V4 series in a few minutes with all the latest changes.
-Thanks!
+yes, I forgot to update the comment
+
+>
+> > +      * the idle thread and don't set next buddy as a candidate for being
+> > +      * picked in priority.
+> > +      * In case of simultaneous wakeup from idle, the latency sensitive tasks
+> > +      * lost opportunity to preempt non sensitive tasks which woke up
+> > +      * simultaneously.
+> > +      */
+>
+> The position of this comment block within this function is somehow
+> misleading since it describes the reason for the function rather then a
+> particular condition within this function. Wouldn't it be more readable
+> when it would be a function header comment instead?
+
+I put it after the usual early return tests to put the comment close
+to the useful part: the use of next buddy and __pick_first_entity()
+
+>
+> [...]
+>
+> > @@ -7148,6 +7181,22 @@ balance_fair(struct rq *rq, struct task_struct *prev, struct rq_flags *rf)
+> >  }
+> >  #endif /* CONFIG_SMP */
+> >
+> > +static long wakeup_latency_gran(struct sched_entity *curr, struct sched_entity *se)
+> > +{
+> > +     long latency_offset = se->latency_offset;
+> > +
+> > +     /*
+> > +      * A negative latency weigth means that the sched_entity has latency
+>
+> s/weigth/latency_offset ?
+
+yes
+
+>
+>
+> > +      * requirement that needs to be evaluated versus other entity.
+> > +      * Otherwise, use the latency weight to evaluate how much scheduling
+> > +      * delay is acceptable by se.
+> > +      */
+> > +     if ((se->latency_offset < 0) || (curr->latency_offset < 0))
+> > +             latency_offset -= curr->latency_offset;
+>
+> I still don't get the rationale behind why when either one (se or curr)
+> of the latency_nice values is negative, we use the diff between them but
+> if not, we only care about se's value. Why don't you always use the diff
+> between se and curr? Since we have a range [-20 ... 19] why shouldn't we
+> use the difference between let's say se = 19 and curr = 5?
+> You discussed this with Tao Zhou on the v1 but I didn't understand it fully.
+
+Let say that current has a latency nice prio of 19 and a task A with a
+latency nice of 10 wakes up. Both tasks don't care about scheduling
+latency (current more than task A). If we use the diff, the output of
+wakeup_latency_gran() would be negative (-10ms) which reflects the
+fact that the waking task is sensitive to the latency and wants to
+preempt current even if its vruntime is after. But obviously both
+current and task A don't care to preempt at wakeup.
+
+>
+> [...]
