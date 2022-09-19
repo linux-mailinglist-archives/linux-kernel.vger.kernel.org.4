@@ -2,319 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C87D5BC5C8
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 11:52:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B7D35BC5D0
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 11:54:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbiISJwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 05:52:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49070 "EHLO
+        id S229567AbiISJyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 05:54:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbiISJw1 (ORCPT
+        with ESMTP id S229682AbiISJyV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 05:52:27 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01AAC13CDF
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 02:52:25 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id AF83221D88;
-        Mon, 19 Sep 2022 09:52:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1663581144; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ni1KGj6fHNi2L8wZnDcDKSF7+VC35L2jQ93te+J2OPo=;
-        b=jqw9eWwRlKsDUFZ3uQnMSehEr1B4GflMhccfF1aPb7DzrTUOwajxaAps6+HbC0nR6RJ4Hu
-        9NdUEw2VaS1+7qJAk1RW8vEv+odB+L9CVM+W7DukB0+I7xqPQTTETD7zZ4wvSwqFlVAYlQ
-        9DdxIO0/fdF7SCjhJnA8qbbsdMyQB2s=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 714AE13ABD;
-        Mon, 19 Sep 2022 09:52:24 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id /TXzGdg7KGMzYQAAMHmgww
-        (envelope-from <jgross@suse.com>); Mon, 19 Sep 2022 09:52:24 +0000
-Message-ID: <cd175db2-432d-af09-7634-fbedd7c4febb@suse.com>
-Date:   Mon, 19 Sep 2022 11:52:23 +0200
+        Mon, 19 Sep 2022 05:54:21 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A8D412AD1;
+        Mon, 19 Sep 2022 02:54:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663581260; x=1695117260;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=J84tZUNo70mPEn5i619JIcO867QIpVxzMSvGnO/5+I8=;
+  b=bsKaM9zDaIbwkwleTrglfuDwMot7CaoLbHG9DnScRE3TePWPrxjw9SWl
+   zFD+CVTPQNm7qODXYw5wnZzt5QkMWRmVvbIUscTkud5+7Iz2AZWBJWS57
+   0GFHR/pdcQk1WRILBOCK7QgUe3zbEPcB3Z6ZK9GknTtIeQACQZQjL0Kmt
+   FN2EXLqR1LEbhUmLPRkQmOwxa5Fgo8itoLg2OEEGA9xdTl6y4YluMSiD5
+   OuSTSt8Q3kmeBDBlSh9jJvkYrncW9fr0p+qW/h9OxcTPnGs/XqEbwcRY8
+   FTMIwH4zPfm+/hEZ/GXIKsvbxsqsb6exOKxzDYluJkaqWLU6JwHyAmGOD
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10474"; a="363314046"
+X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
+   d="scan'208";a="363314046"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 02:54:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
+   d="scan'208";a="793795409"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga005.jf.intel.com with ESMTP; 19 Sep 2022 02:54:16 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oaDTh-004VMM-2h;
+        Mon, 19 Sep 2022 12:54:13 +0300
+Date:   Mon, 19 Sep 2022 12:54:13 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Raul E Rangel <rrangel@chromium.org>
+Cc:     linux-acpi@vger.kernel.org, linux-input@vger.kernel.org,
+        jingle.wu@emc.com.tw, rafael@kernel.org, mario.limonciello@amd.com,
+        hdegoede@redhat.com, linus.walleij@linaro.org, timvp@google.com,
+        dmitry.torokhov@gmail.com, Bartosz Golaszewski <brgl@bgdev.pl>,
+        Len Brown <lenb@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 05/13] gpiolib: acpi: Add wake_capable variants of
+ acpi_dev_gpio_irq_get
+Message-ID: <Yyg8RU2k6ZCRuqri@smile.fi.intel.com>
+References: <20220914235801.1731478-1-rrangel@chromium.org>
+ <20220914155914.v3.5.I4ff95ba7e884a486d7814ee888bf864be2ebdef4@changeid>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 1/2] xen/gntdev: Prevent leaking grants
-To:     "M. Vefa Bicakci" <m.v.b@runbox.com>,
-        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
-Cc:     Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Demi Marie Obenour <demi@invisiblethingslab.com>,
-        Gerd Hoffmann <kraxel@redhat.com>
-References: <20220912040002.198191-1-m.v.b@runbox.com>
- <20220912040002.198191-2-m.v.b@runbox.com>
-Content-Language: en-US
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <20220912040002.198191-2-m.v.b@runbox.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------aFjZl0pJMi9O2HQyrVB08eZJ"
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220914155914.v3.5.I4ff95ba7e884a486d7814ee888bf864be2ebdef4@changeid>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------aFjZl0pJMi9O2HQyrVB08eZJ
-Content-Type: multipart/mixed; boundary="------------eV0m9qh006RDgFkMVNGTjRkm";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: "M. Vefa Bicakci" <m.v.b@runbox.com>, xen-devel@lists.xenproject.org,
- linux-kernel@vger.kernel.org
-Cc: Stefano Stabellini <sstabellini@kernel.org>,
- Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
- Demi Marie Obenour <demi@invisiblethingslab.com>,
- Gerd Hoffmann <kraxel@redhat.com>
-Message-ID: <cd175db2-432d-af09-7634-fbedd7c4febb@suse.com>
-Subject: Re: [PATCH 1/2] xen/gntdev: Prevent leaking grants
-References: <20220912040002.198191-1-m.v.b@runbox.com>
- <20220912040002.198191-2-m.v.b@runbox.com>
-In-Reply-To: <20220912040002.198191-2-m.v.b@runbox.com>
+On Wed, Sep 14, 2022 at 05:57:53PM -0600, Raul E Rangel wrote:
+> The ACPI spec defines the SharedAndWake and ExclusiveAndWake share type
+> keywords. This is an indication that the GPIO IRQ can also be used as a
+> wake source. This change exposes the wake_capable bit so drivers can
+> correctly enable wake functionality instead of making an assumption.
 
---------------eV0m9qh006RDgFkMVNGTjRkm
-Content-Type: multipart/mixed; boundary="------------0HZAFkn1IrghtMNUXP7cOlbR"
+With two nit-picks below
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
---------------0HZAFkn1IrghtMNUXP7cOlbR
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+> Signed-off-by: Raul E Rangel <rrangel@chromium.org>
+> ---
+> 
+> Changes in v3:
+> - Kept `acpi_dev_gpio_irq_get_by` unchanged to avoid having to touch
+>   unrelated drivers.
+> - Converted wake_capable parameter to bool.
+> 
+> Changes in v2:
+> - Fixed call site in mlxbf_gige_probe
+> 
+>  drivers/gpio/gpiolib-acpi.c | 17 ++++++++++++++---
+>  drivers/gpio/gpiolib-acpi.h |  2 ++
+>  include/linux/acpi.h        | 22 ++++++++++++++++++----
+>  3 files changed, 34 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/gpio/gpiolib-acpi.c b/drivers/gpio/gpiolib-acpi.c
+> index 9be1376f9a627f..c703f095993a2c 100644
+> --- a/drivers/gpio/gpiolib-acpi.c
+> +++ b/drivers/gpio/gpiolib-acpi.c
+> @@ -741,6 +741,8 @@ static int acpi_populate_gpio_lookup(struct acpi_resource *ares, void *data)
+>  		lookup->info.pin_config = agpio->pin_config;
+>  		lookup->info.debounce = agpio->debounce_timeout;
+>  		lookup->info.gpioint = gpioint;
+> +		lookup->info.wake_capable = agpio->wake_capable ==
+> +					    ACPI_WAKE_CAPABLE;
 
-T24gMTIuMDkuMjIgMDY6MDAsIE0uIFZlZmEgQmljYWtjaSB3cm90ZToNCj4gUHJpb3IgdG8g
-dGhpcyBjb21taXQsIGlmIGEgZ3JhbnQgbWFwcGluZyBvcGVyYXRpb24gZmFpbGVkIHBhcnRp
-YWxseSwNCj4gc29tZSBvZiB0aGUgZW50cmllcyBpbiB0aGUgbWFwX29wcyBhcnJheSB3b3Vs
-ZCBiZSBpbnZhbGlkLCB3aGVyZWFzIGFsbA0KPiBvZiB0aGUgZW50cmllcyBpbiB0aGUga21h
-cF9vcHMgYXJyYXkgd291bGQgYmUgdmFsaWQuIFRoaXMgaW4gdHVybiB3b3VsZA0KPiBjYXVz
-ZSB0aGUgZm9sbG93aW5nIGxvZ2ljIGluIGdudGRldl9tYXBfZ3JhbnRfcGFnZXMgdG8gYmVj
-b21lIGludmFsaWQ6DQo+IA0KPiAgICBmb3IgKGkgPSAwOyBpIDwgbWFwLT5jb3VudDsgaSsr
-KSB7DQo+ICAgICAgaWYgKG1hcC0+bWFwX29wc1tpXS5zdGF0dXMgPT0gR05UU1Rfb2theSkg
-ew0KPiAgICAgICAgbWFwLT51bm1hcF9vcHNbaV0uaGFuZGxlID0gbWFwLT5tYXBfb3BzW2ld
-LmhhbmRsZTsNCj4gICAgICAgIGlmICghdXNlX3B0ZW1vZCkNCj4gICAgICAgICAgYWxsb2Nl
-ZCsrOw0KPiAgICAgIH0NCj4gICAgICBpZiAodXNlX3B0ZW1vZCkgew0KPiAgICAgICAgaWYg
-KG1hcC0+a21hcF9vcHNbaV0uc3RhdHVzID09IEdOVFNUX29rYXkpIHsNCj4gICAgICAgICAg
-aWYgKG1hcC0+bWFwX29wc1tpXS5zdGF0dXMgPT0gR05UU1Rfb2theSkNCj4gICAgICAgICAg
-ICBhbGxvY2VkKys7DQo+ICAgICAgICAgIG1hcC0+a3VubWFwX29wc1tpXS5oYW5kbGUgPSBt
-YXAtPmttYXBfb3BzW2ldLmhhbmRsZTsNCj4gICAgICAgIH0NCj4gICAgICB9DQo+ICAgIH0N
-Cj4gICAgLi4uDQo+ICAgIGF0b21pY19hZGQoYWxsb2NlZCwgJm1hcC0+bGl2ZV9ncmFudHMp
-Ow0KPiANCj4gQXNzdW1lIHRoYXQgdXNlX3B0ZW1vZCBpcyB0cnVlIChpLmUuLCB0aGUgZG9t
-YWluIG1hcHBpbmcgdGhlIGdyYW50ZWQNCj4gcGFnZXMgaXMgYSBwYXJhdmlydHVhbGl6ZWQg
-ZG9tYWluKS4gSW4gdGhlIGNvZGUgZXhjZXJwdCBhYm92ZSwgbm90ZSB0aGF0DQo+IHRoZSAi
-YWxsb2NlZCIgdmFyaWFibGUgaXMgb25seSBpbmNyZW1lbnRlZCB3aGVuIGJvdGgga21hcF9v
-cHNbaV0uc3RhdHVzDQo+IGFuZCBtYXBfb3BzW2ldLnN0YXR1cyBhcmUgc2V0IHRvIEdOVFNU
-X29rYXkgKGkuZS4sIGJvdGggbWFwcGluZw0KPiBvcGVyYXRpb25zIGFyZSBzdWNjZXNzZnVs
-KS4gIEhvd2V2ZXIsIGFzIGFsc28gbm90ZWQgYWJvdmUsIHRoZXJlIGFyZQ0KPiBjYXNlcyB3
-aGVyZSBhIGdyYW50IG1hcHBpbmcgb3BlcmF0aW9uIGZhaWxzIHBhcnRpYWxseSwgYnJlYWtp
-bmcgdGhlDQo+IGFzc3VtcHRpb24gb2YgdGhlIGNvZGUgZXhjZXJwdCBhYm92ZS4NCj4gDQo+
-IFRoZSBhZm9yZW1lbnRpb25lZCBjYXVzZXMgbWFwLT5saXZlX2dyYW50cyB0byBiZSBpbmNv
-cnJlY3RseSBzZXQuIEluDQo+IHNvbWUgY2FzZXMsIGFsbCBvZiB0aGUgbWFwX29wcyBtYXBw
-aW5ncyBmYWlsLCBidXQgYWxsIG9mIHRoZSBrbWFwX29wcw0KPiBtYXBwaW5ncyBzdWNjZWVk
-LCBtZWFuaW5nIHRoYXQgbGl2ZV9ncmFudHMgbWF5IHJlbWFpbiB6ZXJvLiBUaGlzIGluIHR1
-cm4NCj4gbWFrZXMgaXQgaW1wb3NzaWJsZSB0byB1bm1hcCB0aGUgc3VjY2Vzc2Z1bGx5IGdy
-YW50LW1hcHBlZCBwYWdlcyBwb2ludGVkDQo+IHRvIGJ5IGttYXBfb3BzLCBiZWNhdXNlIHVu
-bWFwX2dyYW50X3BhZ2VzIGhhcyB0aGUgZm9sbG93aW5nIHNuaXBwZXQgb2YNCj4gY29kZSBh
-dCBpdHMgYmVnaW5uaW5nOg0KPiANCj4gICAgaWYgKGF0b21pY19yZWFkKCZtYXAtPmxpdmVf
-Z3JhbnRzKSA9PSAwKQ0KPiAgICAgIHJldHVybjsgLyogTm90aGluZyB0byBkbyAqLw0KPiAN
-Cj4gSW4gb3RoZXIgY2FzZXMgd2hlcmUgb25seSBzb21lIG9mIHRoZSBtYXBfb3BzIG1hcHBp
-bmdzIGZhaWwgYnV0IGFsbA0KPiBrbWFwX29wcyBtYXBwaW5ncyBzdWNjZWVkLCBsaXZlX2dy
-YW50cyBpcyBtYWRlIHBvc2l0aXZlLCBidXQgd2hlbiB0aGUNCj4gdXNlciByZXF1ZXN0cyB1
-bm1hcHBpbmcgdGhlIGdyYW50LW1hcHBlZCBwYWdlcywgX191bm1hcF9ncmFudF9wYWdlc19k
-b25lDQo+IHdpbGwgdGhlbiBtYWtlIG1hcC0+bGl2ZV9ncmFudHMgbmVnYXRpdmUsIGJlY2F1
-c2UgdGhlIGxhdHRlciBmdW5jdGlvbg0KPiBkb2VzIG5vdCBjaGVjayBpZiBhbGwgb2YgdGhl
-IHBhZ2VzIHRoYXQgd2VyZSByZXF1ZXN0ZWQgdG8gYmUgdW5tYXBwZWQNCj4gd2VyZSBhY3R1
-YWxseSB1bm1hcHBlZCwgYW5kIHRoZSBzYW1lIGZ1bmN0aW9uIHVuY29uZGl0aW9uYWxseSBz
-dWJ0cmFjdHMNCj4gImRhdGEtPmNvdW50IiAoaS5lLiwgYSB2YWx1ZSB0aGF0IGNhbiBiZSBn
-cmVhdGVyIHRoYW4gbWFwLT5saXZlX2dyYW50cykNCj4gZnJvbSBtYXAtPmxpdmVfZ3JhbnRz
-LiBUaGUgc2lkZSBlZmZlY3RzIG9mIGEgbmVnYXRpdmUgbGl2ZV9ncmFudHMgdmFsdWUNCj4g
-aGF2ZSBub3QgYmVlbiBzdHVkaWVkLg0KPiANCj4gVGhlIG5ldCBlZmZlY3Qgb2YgYWxsIG9m
-IHRoaXMgaXMgdGhhdCBncmFudCByZWZlcmVuY2VzIGFyZSBsZWFrZWQgaW4gb25lDQo+IG9m
-IHRoZSBhYm92ZSBjb25kaXRpb25zLiBJbiBRdWJlcyBPUyB2NC4xICh3aGljaCB1c2VzIFhl
-bidzIGdyYW50DQo+IG1lY2hhbmlzbSBleHRlbnNpdmVseSBmb3IgWDExIEdVSSBpc29sYXRp
-b24pLCB0aGlzIGlzc3VlIG1hbmlmZXN0cw0KPiBpdHNlbGYgd2l0aCB3YXJuaW5nIG1lc3Nh
-Z2VzIGxpa2UgdGhlIGZvbGxvd2luZyB0byBiZSBwcmludGVkIG91dCBieSB0aGUNCj4gTGlu
-dXgga2VybmVsIGluIHRoZSBWTSB0aGF0IGhhZCBncmFudGVkIHBhZ2VzICh0aGF0IGNvbnRh
-aW4gWDExIEdVSQ0KPiB3aW5kb3cgZGF0YSkgdG8gZG9tMDogImcuZS4gMHgxMjM0IHN0aWxs
-IHBlbmRpbmciLCBlc3BlY2lhbGx5IGFmdGVyIHRoZQ0KPiB1c2VyIHJhcGlkbHkgcmVzaXpl
-cyBHVUkgVk0gd2luZG93cyAoY2F1c2luZyBzb21lIGdyYW50LW1hcHBpbmcNCj4gb3BlcmF0
-aW9ucyB0byBwYXJ0aWFsbHkgb3IgY29tcGxldGVseSBmYWlsLCBkdWUgdG8gdGhlIGZhY3Qg
-dGhhdCB0aGUgVk0NCj4gdW5zaGFyZXMgc29tZSBvZiB0aGUgcGFnZXMgYXMgcGFydCBvZiB0
-aGUgd2luZG93IHJlc2l6aW5nLCBtYWtpbmcgdGhlDQo+IHBhZ2VzIGltcG9zc2libGUgdG8g
-Z3JhbnQtbWFwIGZyb20gZG9tMCkuDQo+IA0KPiBUaGUgZml4IGZvciB0aGlzIGlzc3VlIGlu
-dm9sdmVzIGNvdW50aW5nIGFsbCBzdWNjZXNzZnVsIG1hcF9vcHMgYW5kDQo+IGttYXBfb3Bz
-IG1hcHBpbmdzIHNlcGFyYXRlbHksIGFuZCB0aGVuIGFkZGluZyB0aGUgc3VtIHRvIGxpdmVf
-Z3JhbnRzLg0KPiBEdXJpbmcgdW5tYXBwaW5nLCBvbmx5IHRoZSBudW1iZXIgb2Ygc3VjY2Vz
-c2Z1bGx5IHVubWFwcGVkIGdyYW50cyBpcw0KPiBzdWJ0cmFjdGVkIGZyb20gbGl2ZV9ncmFu
-dHMuIFRvIGRldGVybWluZSB3aGljaCBncmFudHMgd2VyZSBzdWNjZXNzZnVsbHkNCj4gdW5t
-YXBwZWQsIHRoZWlyIHN0YXR1cyBmaWVsZHMgYXJlIHNldCB0byBhbiBhcmJpdHJhcnkgcG9z
-aXRpdmUgbnVtYmVyDQo+ICgxKSwgYXMgd2FzIGRvbmUgaW4gY29tbWl0IGViZWUwZWFiMDg1
-OSAoIlhlbi9nbnRkZXY6IGNvcnJlY3QgZXJyb3INCj4gY2hlY2tpbmcgaW4gZ250ZGV2X21h
-cF9ncmFudF9wYWdlcygpIikuIFRoZSBjb2RlIGlzIGFsc28gbW9kaWZpZWQgdG8NCj4gY2hl
-Y2sgZm9yIG5lZ2F0aXZlIGxpdmVfZ3JhbnRzIHZhbHVlcyBhZnRlciB0aGUgc3VidHJhY3Rp
-b24gYW5kIHdhcm4gdGhlDQo+IHVzZXIuDQo+IA0KPiBMaW5rOiBodHRwczovL2dpdGh1Yi5j
-b20vUXViZXNPUy9xdWJlcy1pc3N1ZXMvaXNzdWVzLzc2MzENCj4gRml4ZXM6IGRiZTk3Y2Zm
-N2RkOSAoInhlbi9nbnRkZXY6IEF2b2lkIGJsb2NraW5nIGluIHVubWFwX2dyYW50X3BhZ2Vz
-KCkiKQ0KPiBDYzogc3RhYmxlQHZnZXIua2VybmVsLm9yZw0KPiBTaWduZWQtb2ZmLWJ5OiBN
-LiBWZWZhIEJpY2FrY2kgPG0udi5iQHJ1bmJveC5jb20+DQo+IC0tLQ0KPiAgIGRyaXZlcnMv
-eGVuL2dudGRldi5jIHwgMzIgKysrKysrKysrKysrKysrKysrKysrKysrKysrLS0tLS0NCj4g
-ICAxIGZpbGUgY2hhbmdlZCwgMjcgaW5zZXJ0aW9ucygrKSwgNSBkZWxldGlvbnMoLSkNCj4g
-DQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3hlbi9nbnRkZXYuYyBiL2RyaXZlcnMveGVuL2du
-dGRldi5jDQo+IGluZGV4IDg0YjE0M2VlZjM5NS4uNDg1ZmE5YzYzMGFhIDEwMDY0NA0KPiAt
-LS0gYS9kcml2ZXJzL3hlbi9nbnRkZXYuYw0KPiArKysgYi9kcml2ZXJzL3hlbi9nbnRkZXYu
-Yw0KPiBAQCAtMzY3LDggKzM2Nyw3IEBAIGludCBnbnRkZXZfbWFwX2dyYW50X3BhZ2VzKHN0
-cnVjdCBnbnRkZXZfZ3JhbnRfbWFwICptYXApDQo+ICAgCWZvciAoaSA9IDA7IGkgPCBtYXAt
-PmNvdW50OyBpKyspIHsNCj4gICAJCWlmIChtYXAtPm1hcF9vcHNbaV0uc3RhdHVzID09IEdO
-VFNUX29rYXkpIHsNCj4gICAJCQltYXAtPnVubWFwX29wc1tpXS5oYW5kbGUgPSBtYXAtPm1h
-cF9vcHNbaV0uaGFuZGxlOw0KPiAtCQkJaWYgKCF1c2VfcHRlbW9kKQ0KPiAtCQkJCWFsbG9j
-ZWQrKzsNCj4gKwkJCWFsbG9jZWQrKzsNCj4gICAJCX0gZWxzZSBpZiAoIWVycikNCj4gICAJ
-CQllcnIgPSAtRUlOVkFMOw0KPiAgIA0KPiBAQCAtMzc3LDggKzM3Niw3IEBAIGludCBnbnRk
-ZXZfbWFwX2dyYW50X3BhZ2VzKHN0cnVjdCBnbnRkZXZfZ3JhbnRfbWFwICptYXApDQo+ICAg
-DQo+ICAgCQlpZiAodXNlX3B0ZW1vZCkgew0KPiAgIAkJCWlmIChtYXAtPmttYXBfb3BzW2ld
-LnN0YXR1cyA9PSBHTlRTVF9va2F5KSB7DQo+IC0JCQkJaWYgKG1hcC0+bWFwX29wc1tpXS5z
-dGF0dXMgPT0gR05UU1Rfb2theSkNCj4gLQkJCQkJYWxsb2NlZCsrOw0KPiArCQkJCWFsbG9j
-ZWQrKzsNCj4gICAJCQkJbWFwLT5rdW5tYXBfb3BzW2ldLmhhbmRsZSA9IG1hcC0+a21hcF9v
-cHNbaV0uaGFuZGxlOw0KPiAgIAkJCX0gZWxzZSBpZiAoIWVycikNCj4gICAJCQkJZXJyID0g
-LUVJTlZBTDsNCj4gQEAgLTM5NCw4ICszOTIsMTMgQEAgc3RhdGljIHZvaWQgX191bm1hcF9n
-cmFudF9wYWdlc19kb25lKGludCByZXN1bHQsDQo+ICAgCXVuc2lnbmVkIGludCBpOw0KPiAg
-IAlzdHJ1Y3QgZ250ZGV2X2dyYW50X21hcCAqbWFwID0gZGF0YS0+ZGF0YTsNCj4gICAJdW5z
-aWduZWQgaW50IG9mZnNldCA9IGRhdGEtPnVubWFwX29wcyAtIG1hcC0+dW5tYXBfb3BzOw0K
-PiArCWludCBzdWNjZXNzZnVsX3VubWFwcyA9IDA7DQo+ICsJaW50IGxpdmVfZ3JhbnRzOw0K
-PiAgIA0KPiAgIAlmb3IgKGkgPSAwOyBpIDwgZGF0YS0+Y291bnQ7IGkrKykgew0KPiArCQlp
-ZiAobWFwLT51bm1hcF9vcHNbb2Zmc2V0ICsgaV0uc3RhdHVzID09IEdOVFNUX29rYXkpDQo+
-ICsJCQlzdWNjZXNzZnVsX3VubWFwcysrOw0KDQpTaG91bGRuJ3QgdGhpcyB0ZXN0IGluY2x1
-ZGUgIiYmIGhhbmRsZSAhPSBJTlZBTElEX0dSQU5UX0hBTkRMRSIgPw0KDQpUaGlzIHNob3Vs
-ZCBlbmFibGUgeW91IHRvIGRyb3Agc2V0dGluZyBzdGF0dXMgdG8gMSBiZWxvdy4NCg0KPiAr
-DQo+ICAgCQlXQVJOX09OKG1hcC0+dW5tYXBfb3BzW29mZnNldCArIGldLnN0YXR1cyAhPSBH
-TlRTVF9va2F5ICYmDQo+ICAgCQkJbWFwLT51bm1hcF9vcHNbb2Zmc2V0ICsgaV0uaGFuZGxl
-ICE9IElOVkFMSURfR1JBTlRfSEFORExFKTsNCj4gICAJCXByX2RlYnVnKCJ1bm1hcCBoYW5k
-bGU9JWQgc3Q9JWRcbiIsDQo+IEBAIC00MDMsNiArNDA2LDkgQEAgc3RhdGljIHZvaWQgX191
-bm1hcF9ncmFudF9wYWdlc19kb25lKGludCByZXN1bHQsDQo+ICAgCQkJbWFwLT51bm1hcF9v
-cHNbb2Zmc2V0K2ldLnN0YXR1cyk7DQo+ICAgCQltYXAtPnVubWFwX29wc1tvZmZzZXQraV0u
-aGFuZGxlID0gSU5WQUxJRF9HUkFOVF9IQU5ETEU7DQo+ICAgCQlpZiAodXNlX3B0ZW1vZCkg
-ew0KPiArCQkJaWYgKG1hcC0+a3VubWFwX29wc1tvZmZzZXQgKyBpXS5zdGF0dXMgPT0gR05U
-U1Rfb2theSkNCj4gKwkJCQlzdWNjZXNzZnVsX3VubWFwcysrOw0KPiArDQo+ICAgCQkJV0FS
-Tl9PTihtYXAtPmt1bm1hcF9vcHNbb2Zmc2V0ICsgaV0uc3RhdHVzICE9IEdOVFNUX29rYXkg
-JiYNCj4gICAJCQkJbWFwLT5rdW5tYXBfb3BzW29mZnNldCArIGldLmhhbmRsZSAhPSBJTlZB
-TElEX0dSQU5UX0hBTkRMRSk7DQo+ICAgCQkJcHJfZGVidWcoImt1bm1hcCBoYW5kbGU9JXUg
-c3Q9JWRcbiIsDQo+IEBAIC00MTEsMTEgKzQxNywxNSBAQCBzdGF0aWMgdm9pZCBfX3VubWFw
-X2dyYW50X3BhZ2VzX2RvbmUoaW50IHJlc3VsdCwNCj4gICAJCQltYXAtPmt1bm1hcF9vcHNb
-b2Zmc2V0K2ldLmhhbmRsZSA9IElOVkFMSURfR1JBTlRfSEFORExFOw0KPiAgIAkJfQ0KPiAg
-IAl9DQo+ICsNCj4gICAJLyoNCj4gICAJICogRGVjcmVhc2UgdGhlIGxpdmUtZ3JhbnQgY291
-bnRlci4gIFRoaXMgbXVzdCBoYXBwZW4gYWZ0ZXIgdGhlIGxvb3AgdG8NCj4gICAJICogcHJl
-dmVudCBwcmVtYXR1cmUgcmV1c2Ugb2YgdGhlIGdyYW50cyBieSBnbnR0YWJfbW1hcCgpLg0K
-PiAgIAkgKi8NCj4gLQlhdG9taWNfc3ViKGRhdGEtPmNvdW50LCAmbWFwLT5saXZlX2dyYW50
-cyk7DQo+ICsJbGl2ZV9ncmFudHMgPSBhdG9taWNfc3ViX3JldHVybihzdWNjZXNzZnVsX3Vu
-bWFwcywgJm1hcC0+bGl2ZV9ncmFudHMpOw0KPiArCWlmIChXQVJOX09OKGxpdmVfZ3JhbnRz
-IDwgMCkpDQo+ICsJCXByX2VycigiJXM6IGxpdmVfZ3JhbnRzIGJlY2FtZSBuZWdhdGl2ZSAo
-JWQpIGFmdGVyIHVubWFwcGluZyAlZCBwYWdlcyFcbiIsDQo+ICsJCSAgICAgICBfX2Z1bmNf
-XywgbGl2ZV9ncmFudHMsIHN1Y2Nlc3NmdWxfdW5tYXBzKTsNCj4gICANCj4gICAJLyogUmVs
-ZWFzZSByZWZlcmVuY2UgdGFrZW4gYnkgX191bm1hcF9ncmFudF9wYWdlcyAqLw0KPiAgIAln
-bnRkZXZfcHV0X21hcChOVUxMLCBtYXApOw0KPiBAQCAtNDI0LDYgKzQzNCw4IEBAIHN0YXRp
-YyB2b2lkIF9fdW5tYXBfZ3JhbnRfcGFnZXNfZG9uZShpbnQgcmVzdWx0LA0KPiAgIHN0YXRp
-YyB2b2lkIF9fdW5tYXBfZ3JhbnRfcGFnZXMoc3RydWN0IGdudGRldl9ncmFudF9tYXAgKm1h
-cCwgaW50IG9mZnNldCwNCj4gICAJCQkgICAgICAgaW50IHBhZ2VzKQ0KPiAgIHsNCj4gKwlp
-bnQgaWR4Ow0KPiArDQo+ICAgCWlmIChtYXAtPm5vdGlmeS5mbGFncyAmIFVOTUFQX05PVElG
-WV9DTEVBUl9CWVRFKSB7DQo+ICAgCQlpbnQgcGdubyA9IChtYXAtPm5vdGlmeS5hZGRyID4+
-IFBBR0VfU0hJRlQpOw0KPiAgIA0KPiBAQCAtNDM2LDYgKzQ0OCwxNiBAQCBzdGF0aWMgdm9p
-ZCBfX3VubWFwX2dyYW50X3BhZ2VzKHN0cnVjdCBnbnRkZXZfZ3JhbnRfbWFwICptYXAsIGlu
-dCBvZmZzZXQsDQo+ICAgCQl9DQo+ICAgCX0NCj4gICANCj4gKwkvKiBTZXQgYWxsIHVubWFw
-L2t1bm1hcCBzdGF0dXMgZmllbGRzIHRvIGFuIGFyYml0cmFyeSBwb3NpdGl2ZSB2YWx1ZSwN
-Cj4gKwkgKiBzbyB0aGF0IGl0IGlzIHBvc3NpYmxlIHRvIGRldGVybWluZSB3aGljaCBncmFu
-dHMgd2VyZSBzdWNjZXNzZnVsbHkNCj4gKwkgKiB1bm1hcHBlZCBieSBpbnNwZWN0aW5nIHRo
-ZSBzdGF0dXMgZmllbGRzLg0KPiArCSAqLw0KPiArCWZvciAoaWR4ID0gb2Zmc2V0OyBpZHgg
-PCBvZmZzZXQgKyBwYWdlczsgaWR4KyspIHsNCj4gKwkJbWFwLT51bm1hcF9vcHNbaWR4XS5z
-dGF0dXMgPSAxOw0KPiArCQlpZiAodXNlX3B0ZW1vZCkNCj4gKwkJCW1hcC0+a3VubWFwX29w
-c1tpZHhdLnN0YXR1cyA9IDE7DQo+ICsJfQ0KPiArDQo+ICAgCW1hcC0+dW5tYXBfZGF0YS51
-bm1hcF9vcHMgPSBtYXAtPnVubWFwX29wcyArIG9mZnNldDsNCj4gICAJbWFwLT51bm1hcF9k
-YXRhLmt1bm1hcF9vcHMgPSB1c2VfcHRlbW9kID8gbWFwLT5rdW5tYXBfb3BzICsgb2Zmc2V0
-IDogTlVMTDsNCj4gICAJbWFwLT51bm1hcF9kYXRhLnBhZ2VzID0gbWFwLT5wYWdlcyArIG9m
-ZnNldDsNCg0KSnVlcmdlbg0K
---------------0HZAFkn1IrghtMNUXP7cOlbR
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+Can be still on one line.
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+>  		/*
+>  		 * Polarity and triggering are only specified for GpioInt
+> @@ -987,10 +989,12 @@ struct gpio_desc *acpi_node_get_gpiod(struct fwnode_handle *fwnode,
+>  }
+>  
+>  /**
+> - * acpi_dev_gpio_irq_get_by() - Find GpioInt and translate it to Linux IRQ number
+> + * acpi_dev_gpio_irq_wake_get_by() - Find GpioInt and translate it to Linux IRQ
+> + *                                   number
+>   * @adev: pointer to a ACPI device to get IRQ from
+>   * @name: optional name of GpioInt resource
+>   * @index: index of GpioInt resource (starting from %0)
+> + * @wake_capable: Set to true if the IRQ is wake capable
+>   *
+>   * If the device has one or more GpioInt resources, this function can be
+>   * used to translate from the GPIO offset in the resource to the Linux IRQ
+> @@ -1002,9 +1006,13 @@ struct gpio_desc *acpi_node_get_gpiod(struct fwnode_handle *fwnode,
+>   * The function takes optional @name parameter. If the resource has a property
+>   * name, then only those will be taken into account.
+>   *
+> + * The GPIO is considered wake capable if the GpioInt resource specifies
+> + * SharedAndWake or ExclusiveAndWake.
+> + *
+>   * Return: Linux IRQ number (> %0) on success, negative errno on failure.
+>   */
+> -int acpi_dev_gpio_irq_get_by(struct acpi_device *adev, const char *name, int index)
+> +int acpi_dev_gpio_irq_wake_get_by(struct acpi_device *adev, const char *name,
+> +				  int index, bool *wake_capable)
+>  {
+>  	int idx, i;
+>  	unsigned int irq_flags;
+> @@ -1061,13 +1069,16 @@ int acpi_dev_gpio_irq_get_by(struct acpi_device *adev, const char *name, int ind
+>  				dev_dbg(&adev->dev, "IRQ %d already in use\n", irq);
+>  			}
+>  
+> +			if (wake_capable)
+> +				*wake_capable = info.wake_capable;
+> +
+>  			return irq;
+>  		}
+>  
+>  	}
+>  	return -ENOENT;
+>  }
+> -EXPORT_SYMBOL_GPL(acpi_dev_gpio_irq_get_by);
+> +EXPORT_SYMBOL_GPL(acpi_dev_gpio_irq_wake_get_by);
+>  
+>  static acpi_status
+>  acpi_gpio_adr_space_handler(u32 function, acpi_physical_address address,
+> diff --git a/drivers/gpio/gpiolib-acpi.h b/drivers/gpio/gpiolib-acpi.h
+> index e476558d947136..1ac6816839dbce 100644
+> --- a/drivers/gpio/gpiolib-acpi.h
+> +++ b/drivers/gpio/gpiolib-acpi.h
+> @@ -18,6 +18,7 @@ struct acpi_device;
+>   * @pin_config: pin bias as provided by ACPI
+>   * @polarity: interrupt polarity as provided by ACPI
+>   * @triggering: triggering type as provided by ACPI
+> + * @wake_capable: wake capability as provided by ACPI
+>   * @debounce: debounce timeout as provided by ACPI
+>   * @quirks: Linux specific quirks as provided by struct acpi_gpio_mapping
+>   */
+> @@ -28,6 +29,7 @@ struct acpi_gpio_info {
+>  	int pin_config;
+>  	int polarity;
+>  	int triggering;
+> +	bool wake_capable;
+>  	unsigned int debounce;
+>  	unsigned int quirks;
+>  };
+> diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+> index 6f64b2f3dc5479..d3121cef6cc3bc 100644
+> --- a/include/linux/acpi.h
+> +++ b/include/linux/acpi.h
+> @@ -1202,7 +1202,8 @@ bool acpi_gpio_get_irq_resource(struct acpi_resource *ares,
+>  				struct acpi_resource_gpio **agpio);
+>  bool acpi_gpio_get_io_resource(struct acpi_resource *ares,
+>  			       struct acpi_resource_gpio **agpio);
+> -int acpi_dev_gpio_irq_get_by(struct acpi_device *adev, const char *name, int index);
+> +int acpi_dev_gpio_irq_wake_get_by(struct acpi_device *adev, const char *name,
+> +				  int index, bool *wake_capable);
+>  #else
+>  static inline bool acpi_gpio_get_irq_resource(struct acpi_resource *ares,
+>  					      struct acpi_resource_gpio **agpio)
+> @@ -1214,16 +1215,29 @@ static inline bool acpi_gpio_get_io_resource(struct acpi_resource *ares,
+>  {
+>  	return false;
+>  }
+> -static inline int acpi_dev_gpio_irq_get_by(struct acpi_device *adev,
+> -					   const char *name, int index)
+> +static inline int acpi_dev_gpio_irq_wake_get_by(struct acpi_device *adev,
+> +						const char *name, int index,
+> +						bool *wake_capable)
+>  {
+>  	return -ENXIO;
+>  }
+>  #endif
+>  
+> +static inline int acpi_dev_gpio_irq_get_by(struct acpi_device *adev,
+> +					   const char *name, int index)
+> +{
+> +	return acpi_dev_gpio_irq_wake_get_by(adev, name, index, NULL);
+> +}
+> +
+>  static inline int acpi_dev_gpio_irq_get(struct acpi_device *adev, int index)
+>  {
+> -	return acpi_dev_gpio_irq_get_by(adev, NULL, index);
+> +	return acpi_dev_gpio_irq_wake_get_by(adev, NULL, index, NULL);
+> +}
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
+> +static inline int acpi_dev_gpio_irq_wake_get(struct acpi_device *adev,
+> +					     int index, bool *wake_capable)
+> +{
+> +	return acpi_dev_gpio_irq_wake_get_by(adev, NULL, index, wake_capable);
+>  }
 
---------------0HZAFkn1IrghtMNUXP7cOlbR--
+I would put this first in the group of these three helpers, so irq_get_by and
+irq_get will be the last (from more parameters to less parameters).
 
---------------eV0m9qh006RDgFkMVNGTjRkm--
+>  /* Device properties */
+> -- 
+> 2.37.3.968.ga6b4b080e4-goog
+> 
 
---------------aFjZl0pJMi9O2HQyrVB08eZJ
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+-- 
+With Best Regards,
+Andy Shevchenko
 
------BEGIN PGP SIGNATURE-----
 
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmMoO9cFAwAAAAAACgkQsN6d1ii/Ey+0
-1Af/Wi78cbkhn3nEileqiP0UGFhY9yc3IvgkOFjUqjxi4McywcXaERTJzYh7fasUjR9UP1Wmgf+H
-ywbUqZUgLuLLYhZm+vu8KwU7J6Yo1jg4p/Adu9OoWqoXlIbvOFAq1m/vzHcekdJiEgCqKUkGz3zm
-JDrtXtDenTlrol4xUnx2WsGJzN2eu2/PuJ7Zmwuh+XrCP0X2gsMVc+hrvd9zarIEbuhB3oLa5MIk
-XedWX+DqbOm/j7TGM9r9OsdAU5S89QsM0o+/X/w2HWjCY5EMFMlN9uJVl6bEDy42q45YGw25DCps
-UgBKaI+xLR6WP3jQTkv7Wpbas39Kc2yjxfGixMAP8A==
-=T19P
------END PGP SIGNATURE-----
-
---------------aFjZl0pJMi9O2HQyrVB08eZJ--
