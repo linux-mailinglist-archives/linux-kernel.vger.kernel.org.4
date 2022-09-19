@@ -2,49 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C0CE5BCB80
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 14:11:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 979575BCB83
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 14:12:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229706AbiISMK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 08:10:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38552 "EHLO
+        id S229795AbiISML4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 08:11:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbiISMKm (ORCPT
+        with ESMTP id S229492AbiISMLw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 08:10:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80FAABE3B
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 05:10:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1B008B80B9F
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 12:10:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6A84C433D7;
-        Mon, 19 Sep 2022 12:10:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663589436;
-        bh=npGHN7HHyR8hLnEhBAAJizVKYBg45PPtv2ub8B2Q/sE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Hhcd3oR6HcRVkAxarghcxLf7scxeIt7YnaIA/iIkbu48ruqUfVv1rZ2sA+9+5RfTk
-         VIq9GXIE5KLBXfNVzNx4o3Js0R8xxtQQ7Guh1eRRod+sb1fn5o54aYMC6pZL06YZMr
-         k+finZt7Ar7F/ahudUbiMO0bP6IzhApEmkyh4ZH4A0uCDUF8IgJeZAeKFZ9tkJCwUJ
-         dEPMyTOU1Za8Uy46P7hSBKMn6jIijONShUlL6xXSHtp+WEY+CgjVtPl5rW48PNcGJM
-         xMIJvBtvSPAczuCj86B6kZJALhIUEdkAT91xL+uHuCooc9S0l1o0t96pEEcPJS9lpD
-         KlROrlk73OjxQ==
-From:   Oded Gabbay <ogabbay@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Ofir Bitton <obitton@habana.ai>
-Subject: [PATCH 2/2] habanalabs/gaudi2: allow user to flush PCIE by read
-Date:   Mon, 19 Sep 2022 15:10:25 +0300
-Message-Id: <20220919121025.58172-2-ogabbay@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220919121025.58172-1-ogabbay@kernel.org>
-References: <20220919121025.58172-1-ogabbay@kernel.org>
+        Mon, 19 Sep 2022 08:11:52 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53A706336
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 05:11:49 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id x94so23645191ede.11
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 05:11:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=Ln9eCZg3JCRSYyz/HKit63Du7UIDQCuIqXf0yoCJcGg=;
+        b=WMHa5XQCoDJLDFkBicjNLjiHCMr5dTosReCupwwQ6XQQFcrOhiwFDnbizK0vBoV+ea
+         AKx94QFVuvyNv7UQqc8LPm/YM1YWV5sKH0ssjh/nqpycRaSFeoHJ/DazEi21OvtDyph1
+         8OYleUUodbBbAjre77f8Km8kEKBmJgHalciL8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=Ln9eCZg3JCRSYyz/HKit63Du7UIDQCuIqXf0yoCJcGg=;
+        b=whEG6YLuGdStG/HQ8/KoxAE0QaEjWqHyhf70NTAL3w7dnPmk31Vjiu0N+QPMF4QPP7
+         yxd7RY0LiABdxuafyaom/gr1G8RZ8dB3idaTi+3V8jIGufg9+gCrGmtKWR33HMVE5OVM
+         UvhiWbc/PlUuZwMhmpt30sCGTv3Vy9I2IlNWLOfoAwpOSdun0W0dg2rEJP1Qb4O/gUBv
+         fGhKPHXlG4jAB5+I/b+V0yojvPzadXPawevJ7llrbseqDLzinwTgI6U0JIGlowLcsiB0
+         1KpoMRn0hP/00hlQuJ6rL4SEm9mQhSQWoZs+RqJEBKGb8p81Q68z/y5VNgK4PzWRo349
+         vWjA==
+X-Gm-Message-State: ACrzQf3XC18m25LkWnWusZI/9Q7yPtsm1knTitKJK0rTE17LgNvXs0FV
+        Ax6DOFWmUy3GUUIG49yze+V7weBmxSutIpaT+wzWfQ==
+X-Google-Smtp-Source: AMsMyM5VQSboATLz5pfJxAoVqo6nY3tJjbrE8GZXGThEsLXV+/BQ6M7/nVltCi+dkEjDWRWgrIqMr1902V4dsBDMEkY=
+X-Received: by 2002:a05:6402:1e8c:b0:44f:f70:e75e with SMTP id
+ f12-20020a0564021e8c00b0044f0f70e75emr14721178edf.405.1663589507768; Mon, 19
+ Sep 2022 05:11:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <CAOf5uwk=Tx+W-JuJBXUYjt2BLmSvr9Q153D1RTyJG_cmeO4AUw@mail.gmail.com>
+ <826cd775-14d2-12ae-2e96-cf0766aa1502@redhat.com> <CAOf5uwmKfcC0OiiuN82tUzcE1XkPuA3N3u+o3Ue_ZPNJqeSM+g@mail.gmail.com>
+ <4475783a-73c1-94f1-804e-507abeb84ab1@redhat.com> <CAOf5uwk8RLRrMa3vM-1+k0oi8XfnWVZH6_uc_UtagWYFVrMYKQ@mail.gmail.com>
+ <c2efeb24-0da0-ee25-7cb9-2b9b05523f25@redhat.com> <CAOf5uwkq0aLg8KQB1HFRqPafXpk0_YohW_U_O5=8oQWcui-avQ@mail.gmail.com>
+ <04907907-8eab-01ef-8341-e2fecb10b601@redhat.com> <CAOf5uwnd85N-dvBXtZunYgx8Bd58JNDVNx3TezHKFHzpV42WtA@mail.gmail.com>
+ <f87c0619-684c-9c32-fbc0-15ed6191d342@redhat.com>
+In-Reply-To: <f87c0619-684c-9c32-fbc0-15ed6191d342@redhat.com>
+From:   Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+Date:   Mon, 19 Sep 2022 14:11:36 +0200
+Message-ID: <CAOf5uw=fw9Zi5UTKO_HGmg66eaCxrLoNyk3psRU6ZrJOn-CkAg@mail.gmail.com>
+Subject: Re: Correlation CMA size and FORCE_MAX_ZONEORDER
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Mike Rapoport <rppt@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,250 +68,243 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ofir Bitton <obitton@habana.ai>
+Hi
 
-In order for the user to flush PCIE he needs to read some register
-from PCIE block. The chosen register is SPECIAL_GLBL_SPARE_0 and
-hence needs to be unsecured.
+On Mon, Sep 19, 2022 at 2:08 PM David Hildenbrand <david@redhat.com> wrote:
+>
+> On 19.09.22 13:59, Michael Nazzareno Trimarchi wrote:
+> > Hi David
+> >
+> >
+> > On Mon, Sep 19, 2022 at 1:28 PM David Hildenbrand <david@redhat.com> wrote:
+> >>
+> >> On 19.09.22 13:17, Michael Nazzareno Trimarchi wrote:
+> >>> Hi
+> >>>
+> >>> On Mon, Sep 19, 2022 at 1:03 PM David Hildenbrand <david@redhat.com> wrote:
+> >>>>
+> >>>> On 19.09.22 11:57, Michael Nazzareno Trimarchi wrote:
+> >>>>> Hi
+> >>>>>
+> >>>>> On Mon, Sep 19, 2022 at 11:31 AM David Hildenbrand <david@redhat.com> wrote:
+> >>>>>>
+> >>>>>> On 19.09.22 11:17, Michael Nazzareno Trimarchi wrote:
+> >>>>>>> Hi David
+> >>>>>>>
+> >>>>>>> On Mon, Sep 19, 2022 at 10:38 AM David Hildenbrand <david@redhat.com> wrote:
+> >>>>>>>>
+> >>>>>>>> On 15.09.22 23:36, Michael Nazzareno Trimarchi wrote:
+> >>>>>>>>> Hi all
+> >>>>>>>>
+> >>>>>>>> Hi,
+> >>>>>>>>
+> >>>>>>>>>
+> >>>>>>>>> Working on a small device with 128MB of memory and using imx_v6_v7
+> >>>>>>>>> defconfig I found that CMA_SIZE_MBYTES, CMA_SIZE_PERCENTAGE
+> >>>>>>>>> are not respected. The calculation done does not allow the requested
+> >>>>>>>>> size. I think that this should be somehow documented and described but
+> >>>>>>>>> I did not
+> >>>>>>>>> find the documentation. Does it work this way?
+> >>>>>>>>>
+> >>>>>>>>> With CMA_SIZE of 8MB I need to have FORCE_MAX_ZONEORDER=12 if I have
+> >>>>>>>>> the default FORCE_MAX_ZONEORDER=14 the min size is 32Mb
+> >>>>>>>>
+> >>>>>>>> The underlying constraint is that CMA regions require a certain minimum
+> >>>>>>>> alignment+size. They cannot be arbitrarily in size.
+> >>>>>>>>
+> >>>>>>>> CMA_MIN_ALIGNMENT_BYTES expresses that, and corresponds in upstream
+> >>>>>>>> kernels to the size of a single pageblock.
+> >>>>>>>>
+> >>>>>>>> In previous kernels, it used to be the size of the largest buddy
+> >>>>>>>> allocation granularity (derived from MAX_ORDER, derived from
+> >>>>>>>> FORCE_MAX_ZONEORDER).
+> >>>>>>>>
+> >>>>>>>> On upstream kernels, the FORCE_MAX_ZONEORDER constraint should no longer
+> >>>>>>>> apply. On most archs, the minimum alignment+size should be 2 MiB
+> >>>>>>>> (x86-64, aarch64 with 4k base pages) -- the size of a single pageblock.
+> >>>>>>>>
+> >>>>>>>> So far the theory. Are you still running into this limitation on
+> >>>>>>>> upstream kernels?
+> >>>>>>>>
+> >>>>>>>
+> >>>>>>> I can run 6-rc2 on my board. I test again but according to it, if I
+> >>>>>>> put 4M as CMA in cma=4M in boot
+> >>>>>>> parameters, the result is 32Mb of CMA. Apart of that seems that
+> >>>>>>> process lime tiny membench can not even start
+> >>>>>>> to mblock memory
+> >>>>>>>
+> >>>>>>
+> >>>>>> The CMA alignemnt change went into v5.19. If "cma=4M" still gives you >
+> >>>>>> 4M, can you post /proc/meminfo and the early console output?
+> >>>>>>
+> >>>>>
+> >>>>> cat /proc/cmdline
+> >>>>> cma=4M mtdparts=gpmi-nand:4m(nandboot),1m(env),24m(kernel),1m(nanddtb),-(rootfs)
+> >>>>> root=ubi0:root rw ubi.mtd=ro
+> >>>>> otfs rootfstype=ubifs rootwait=1
+> >>>>> # cat /proc/meminfo
+> >>>>> MemTotal:         109560 kB
+> >>>>> MemFree:           56084 kB
+> >>>>> MemAvailable:      56820 kB
+> >>>>> Buffers:               0 kB
+> >>>>> Cached:            39680 kB
+> >>>>> SwapCached:            0 kB
+> >>>>> Active:               44 kB
+> >>>>> Inactive:            644 kB
+> >>>>> Active(anon):         44 kB
+> >>>>> Inactive(anon):      644 kB
+> >>>>> Active(file):          0 kB
+> >>>>> Inactive(file):        0 kB
+> >>>>> Unevictable:       39596 kB
+> >>>>> Mlocked:               0 kB
+> >>>>> HighTotal:             0 kB
+> >>>>> HighFree:              0 kB
+> >>>>> LowTotal:         109560 kB
+> >>>>> LowFree:           56084 kB
+> >>>>> SwapTotal:             0 kB
+> >>>>> SwapFree:              0 kB
+> >>>>> Dirty:                 0 kB
+> >>>>> Writeback:             0 kB
+> >>>>> AnonPages:           628 kB
+> >>>>> Mapped:             1480 kB
+> >>>>> Shmem:                84 kB
+> >>>>> KReclaimable:       4268 kB
+> >>>>> Slab:               8456 kB
+> >>>>> SReclaimable:       4268 kB
+> >>>>> SUnreclaim:         4188 kB
+> >>>>> KernelStack:         392 kB
+> >>>>> PageTables:           88 kB
+> >>>>> NFS_Unstable:          0 kB
+> >>>>> Bounce:                0 kB
+> >>>>> WritebackTmp:          0 kB
+> >>>>> CommitLimit:       54780 kB
+> >>>>> Committed_AS:       1876 kB
+> >>>>> VmallocTotal:     901120 kB
+> >>>>> VmallocUsed:        2776 kB
+> >>>>> VmallocChunk:          0 kB
+> >>>>> Percpu:               72 kB
+> >>>>> CmaTotal:          32768 kB
+> >>>>> CmaFree:           32484 kB
+> >>>>> # uname -a
+> >>>>> Linux buildroot 6.0.0-rc5 #20 SMP Mon Sep 19 11:51:26 CEST 2022 armv7l GNU/Linux
+> >>>>> #
+> >>>>>
+> >>>>> Then here https://pastebin.com/6MUB2VBM dmesg
+> >>>>>
+> >>>>> CONFIG_ARM_MODULE_PLTS=y
+> >>>>> CONFIG_FORCE_MAX_ZONEORDER=14
+> >>>>> CONFIG_ALIGNMENT_TRAP=y
+> >>>>> ...
+> >>>>> CONFIG_CMA
+> >>>>> CONFIG_CMA_AREAS=7
+> >>>>> ...
+> >>>>>
+> >>>>> CONFIG_CMA_SIZE_MBYTES=8
+> >>>>> CONFIG_CMA_SIZE_SEL_MBYTES=y
+> >>>>>
+> >>>>
+> >>>> Thanks!
+> >>>>
+> >>>> I assume that in your setup, the pageblock size depends on MAX_ORDER
+> >>>> and, therefore, FORCE_MAX_ZONEORDER.
+> >>>>
+> >>>> This should be the case especially if CONFIG_HUGETLB_PAGE is not defined
+> >>>> (include/linux/pageblock-flags.h).
+> >>>>
+> >>>> In contrast to what I remember, the pageblock size does not seem to
+> >>>> depend on the THP size (weird) as well.
+> >>>>
+> >>>>
+> >>>> So, yes, that limitation is still in effect for some kernel configs.
+> >>>>
+> >>>> One could make the pageblock size configurable (similar to
+> >>>> CONFIG_HUGETLB_PAGE_SIZE_VARIABLE) or simply default to a smaller
+> >>>> pageblock size as default with CONFIG_CMA and !CONFIG_HUGETLB_PAGE.
+> >>>>
+> >>>> I imagine something reasonable might be to set the pageblock size to
+> >>>> 2MiB without CONFIG_HUGETLB_PAGE but with CONFIG_CMA.
+> >>>>
+> >>>
+> >>> I don't think making more configuration options makes things clear.
+> >>
+> >> Yes, in an ideal case it should be automatic.
+> >>
+> >>> When we enable some configuration
+> >>> we can force down the configuration. You need to explain clearly how
+> >>> you envision it. FORCE_MAX_ZONEORDER
+> >>> for me is the largest allocation that you can get from a zone (ex CMA
+> >>> one). Any request allocation that is align to the
+> >>
+> >> FORCE_MAX_ZONEORDER is just a way to increase/decrease the maximum
+> >> allocation size of the buddy in general.
+> >>
+> >>> CMA align and can fit inside a region should be allowed
+> >>>
+> >>> What am I missing?
+> >>
+> >> I think that the issue is that the CMA alignments nowadays depend on the
+> >> pageblock size. And the pageblock size depends on *some* configurations
+> >> on the maximum allocation size of the buddy.
+> >>
+> >> Documenting the interaction between FORCE_MAX_ZONEORDER and CMA size
+> >> alignment is not trivial.
+> >>
+> >> For example, with CONFIG_HUGETLB_PAGE there might not be such an
+> >> interaction. With CONFIG_HUGETLB_PAGE, there clearly is one.
+> >>
+> >>
+> >> Let me phrase it this way: is it good enough in you setup to get 32mb vs
+> >> 8mb or do you want/need to reduce it without adjusting
+> >> FORCE_MAX_ZONEORDER ?
+> >
+> > Wait we have:
+> > - CMA kconfig alignment that in most config we have not considered
+> > natural dma alignment but is put to 1Mb in a lot of embedded
+> > - We have CMA_SIZE, CMA_SIZE_PERCENTAGE etc. Those seems that are not
+> > effect if ZONEORDER is not reasonable and without
+> > HUGETLB_PAGE
+> > - etc
+> >
+> > Changing MAX_ZONEORDER is ok and yes if you have an IOT device that
+> > you know about your CMA allocation, it makes no sense to have
+> > it 32MB for a 128Mb device. What I point out is that I need to figure
+> > it out because in Kconfig there is no mention of it. Should it be
+> > added there?
+>
+> Something like
+>
+> "Note that in some configurations, the CMA size must be aligned to the
+> maximum allocation granularity of the buddy allocator, consequently
+> depending on FORCE_MAX_ZONEORDER. The requested CMA size might get
+> increased accordingly."
+>
+> Maybe we'd want some kind of a warning in the kernel as well. If someone
+> specifies "cma=2MB" but gets 32MB or more that might be a problem.
+>
+> Does something like that make sense to you?
 
-Signed-off-by: Ofir Bitton <obitton@habana.ai>
-Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
-Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
----
- .../misc/habanalabs/gaudi2/gaudi2_security.c  |   7 +-
- .../include/gaudi2/asic_reg/gaudi2_regs.h     |   1 +
- .../gaudi2/asic_reg/pcie_wrap_special_regs.h  | 185 ++++++++++++++++++
- 3 files changed, 192 insertions(+), 1 deletion(-)
- create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/pcie_wrap_special_regs.h
+Yes we need to warn the user and add to Kconfig. Maybe wait for other
+to get a feedback
 
-diff --git a/drivers/misc/habanalabs/gaudi2/gaudi2_security.c b/drivers/misc/habanalabs/gaudi2/gaudi2_security.c
-index c4165db06db2..c6906fb14229 100644
---- a/drivers/misc/habanalabs/gaudi2/gaudi2_security.c
-+++ b/drivers/misc/habanalabs/gaudi2/gaudi2_security.c
-@@ -2559,6 +2559,10 @@ static const u32 gaudi2_pb_pcie[] = {
- 	mmPCIE_WRAP_BASE,
- };
- 
-+static const u32 gaudi2_pb_pcie_unsecured_regs[] = {
-+	mmPCIE_WRAP_SPECIAL_GLBL_SPARE_0,
-+};
-+
- static const u32 gaudi2_pb_thermal_sensor0[] = {
- 	mmDCORE0_XFT_BASE,
- 	mmDCORE0_TSTDVS_BASE,
-@@ -3418,7 +3422,8 @@ static int gaudi2_init_protection_bits(struct hl_device *hdev)
- 	rc |= hl_init_pb(hdev, HL_PB_SHARED, HL_PB_NA,
- 			HL_PB_SINGLE_INSTANCE, HL_PB_NA,
- 			gaudi2_pb_pcie, ARRAY_SIZE(gaudi2_pb_pcie),
--			NULL, HL_PB_NA);
-+			gaudi2_pb_pcie_unsecured_regs,
-+			ARRAY_SIZE(gaudi2_pb_pcie_unsecured_regs));
- 
- 	/* Thermal Sensor.
- 	 * Skip when security is enabled in F/W, because the blocks are protected by privileged RR.
-diff --git a/drivers/misc/habanalabs/include/gaudi2/asic_reg/gaudi2_regs.h b/drivers/misc/habanalabs/include/gaudi2/asic_reg/gaudi2_regs.h
-index bfda4223bdc8..6aa1b1412462 100644
---- a/drivers/misc/habanalabs/include/gaudi2/asic_reg/gaudi2_regs.h
-+++ b/drivers/misc/habanalabs/include/gaudi2/asic_reg/gaudi2_regs.h
-@@ -132,6 +132,7 @@
- #include "dcore0_mme_ctrl_lo_arch_tensor_a_regs.h"
- #include "dcore0_mme_ctrl_lo_arch_tensor_b_regs.h"
- #include "dcore0_mme_ctrl_lo_arch_tensor_cout_regs.h"
-+#include "pcie_wrap_special_regs.h"
- 
- #include "pdma0_qm_masks.h"
- #include "pdma0_core_masks.h"
-diff --git a/drivers/misc/habanalabs/include/gaudi2/asic_reg/pcie_wrap_special_regs.h b/drivers/misc/habanalabs/include/gaudi2/asic_reg/pcie_wrap_special_regs.h
-new file mode 100644
-index 000000000000..46558e7a7f63
---- /dev/null
-+++ b/drivers/misc/habanalabs/include/gaudi2/asic_reg/pcie_wrap_special_regs.h
-@@ -0,0 +1,185 @@
-+/* SPDX-License-Identifier: GPL-2.0
-+ *
-+ * Copyright 2016-2020 HabanaLabs, Ltd.
-+ * All Rights Reserved.
-+ *
-+ */
-+
-+/************************************
-+ ** This is an auto-generated file **
-+ **       DO NOT EDIT BELOW        **
-+ ************************************/
-+
-+#ifndef ASIC_REG_PCIE_WRAP_SPECIAL_REGS_H_
-+#define ASIC_REG_PCIE_WRAP_SPECIAL_REGS_H_
-+
-+/*
-+ *****************************************
-+ *   PCIE_WRAP_SPECIAL
-+ *   (Prototype: SPECIAL_REGS)
-+ *****************************************
-+ */
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_PRIV_0 0x4C01E80
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_PRIV_1 0x4C01E84
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_PRIV_2 0x4C01E88
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_PRIV_3 0x4C01E8C
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_PRIV_4 0x4C01E90
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_PRIV_5 0x4C01E94
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_PRIV_6 0x4C01E98
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_PRIV_7 0x4C01E9C
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_PRIV_8 0x4C01EA0
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_PRIV_9 0x4C01EA4
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_PRIV_10 0x4C01EA8
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_PRIV_11 0x4C01EAC
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_PRIV_12 0x4C01EB0
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_PRIV_13 0x4C01EB4
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_PRIV_14 0x4C01EB8
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_PRIV_15 0x4C01EBC
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_PRIV_16 0x4C01EC0
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_PRIV_17 0x4C01EC4
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_PRIV_18 0x4C01EC8
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_PRIV_19 0x4C01ECC
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_PRIV_20 0x4C01ED0
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_PRIV_21 0x4C01ED4
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_PRIV_22 0x4C01ED8
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_PRIV_23 0x4C01EDC
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_PRIV_24 0x4C01EE0
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_PRIV_25 0x4C01EE4
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_PRIV_26 0x4C01EE8
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_PRIV_27 0x4C01EEC
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_PRIV_28 0x4C01EF0
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_PRIV_29 0x4C01EF4
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_PRIV_30 0x4C01EF8
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_PRIV_31 0x4C01EFC
-+
-+#define mmPCIE_WRAP_SPECIAL_MEM_GW_DATA 0x4C01F00
-+
-+#define mmPCIE_WRAP_SPECIAL_MEM_GW_REQ 0x4C01F04
-+
-+#define mmPCIE_WRAP_SPECIAL_MEM_NUMOF 0x4C01F0C
-+
-+#define mmPCIE_WRAP_SPECIAL_MEM_ECC_SEL 0x4C01F10
-+
-+#define mmPCIE_WRAP_SPECIAL_MEM_ECC_CTL 0x4C01F14
-+
-+#define mmPCIE_WRAP_SPECIAL_MEM_ECC_ERR_MASK 0x4C01F18
-+
-+#define mmPCIE_WRAP_SPECIAL_MEM_ECC_GLBL_ERR_MASK 0x4C01F1C
-+
-+#define mmPCIE_WRAP_SPECIAL_MEM_ECC_ERR_STS 0x4C01F20
-+
-+#define mmPCIE_WRAP_SPECIAL_MEM_ECC_ERR_ADDR 0x4C01F24
-+
-+#define mmPCIE_WRAP_SPECIAL_MEM_RM 0x4C01F28
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_ERR_MASK 0x4C01F40
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_ERR_ADDR 0x4C01F44
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_ERR_CAUSE 0x4C01F48
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_SPARE_0 0x4C01F60
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_SPARE_1 0x4C01F64
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_SPARE_2 0x4C01F68
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_SPARE_3 0x4C01F6C
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_SEC_0 0x4C01F80
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_SEC_1 0x4C01F84
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_SEC_2 0x4C01F88
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_SEC_3 0x4C01F8C
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_SEC_4 0x4C01F90
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_SEC_5 0x4C01F94
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_SEC_6 0x4C01F98
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_SEC_7 0x4C01F9C
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_SEC_8 0x4C01FA0
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_SEC_9 0x4C01FA4
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_SEC_10 0x4C01FA8
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_SEC_11 0x4C01FAC
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_SEC_12 0x4C01FB0
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_SEC_13 0x4C01FB4
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_SEC_14 0x4C01FB8
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_SEC_15 0x4C01FBC
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_SEC_16 0x4C01FC0
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_SEC_17 0x4C01FC4
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_SEC_18 0x4C01FC8
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_SEC_19 0x4C01FCC
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_SEC_20 0x4C01FD0
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_SEC_21 0x4C01FD4
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_SEC_22 0x4C01FD8
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_SEC_23 0x4C01FDC
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_SEC_24 0x4C01FE0
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_SEC_25 0x4C01FE4
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_SEC_26 0x4C01FE8
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_SEC_27 0x4C01FEC
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_SEC_28 0x4C01FF0
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_SEC_29 0x4C01FF4
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_SEC_30 0x4C01FF8
-+
-+#define mmPCIE_WRAP_SPECIAL_GLBL_SEC_31 0x4C01FFC
-+
-+#endif /* ASIC_REG_PCIE_WRAP_SPECIAL_REGS_H_ */
+Michael
+
+>
+> --
+> Thanks,
+>
+> David / dhildenb
+>
+
+
 -- 
-2.25.1
+Michael Nazzareno Trimarchi
+Co-Founder & Chief Executive Officer
+M. +39 347 913 2170
+michael@amarulasolutions.com
+__________________________________
 
+Amarula Solutions BV
+Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
+T. +31 (0)85 111 9172
+info@amarulasolutions.com
+www.amarulasolutions.com
