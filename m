@@ -2,555 +2,672 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B45EA5BD5CB
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 22:43:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 927E85BD5CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 22:45:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229839AbiISUni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 16:43:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40884 "EHLO
+        id S229838AbiISUpc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 16:45:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbiISUnd (ORCPT
+        with ESMTP id S229698AbiISUp3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 16:43:33 -0400
-Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D559C4A81E;
-        Mon, 19 Sep 2022 13:43:31 -0700 (PDT)
-Received: from mx0.riseup.net (mx0-pn.riseup.net [10.0.1.42])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mx0.riseup.net", Issuer "R3" (not verified))
-        by mx1.riseup.net (Postfix) with ESMTPS id 4MWc8M2d8qzDqQx;
-        Mon, 19 Sep 2022 20:43:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1663620211; bh=moP01r7W2CTQ+bvdQLlQMHQhiuiCi4RIylpN/PDDHXM=;
-        h=Subject:From:In-Reply-To:Date:Cc:References:To:From;
-        b=OavO9UljfoqQMuph/JKLxgSCLMFRb4JfEwu1tHdXWGvZyEgx+t2j7cUuGXbYEG2Yb
-         x1OOVfBQpXlmwP6j73sfkcdK3qiKBPzmRcbr3CBjzkgtDKxb6lP9LOTsfzJ8qamXSR
-         eH/fXg1/tWmhxIYndT5d9+0glHjQLdQjdvru3Jj0=
-Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx0.riseup.net (Postfix) with ESMTPS id 4MWc8K61z5z9s8h;
-        Mon, 19 Sep 2022 20:43:29 +0000 (UTC)
-X-Riseup-User-ID: 9B18A1EBE9B10BAB879071F7D5E57B7DABD350312A8BBE900DA00F59CBB39DFE
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews1.riseup.net (Postfix) with ESMTPSA id 4MWc8B3bqnz5vRK;
-        Mon, 19 Sep 2022 20:43:22 +0000 (UTC)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH i-g-t v2 3/4] lib/igt_kmod: add compatibility for KUnit
-From:   Isabella Basso <isabbasso@riseup.net>
-In-Reply-To: <CABVgOS=HO9XAf8C5X7ZD6aTW37r06ify==7AW9a8cpKsgLVfFw@mail.gmail.com>
-Date:   Mon, 19 Sep 2022 17:43:19 -0300
-Cc:     igt-dev@lists.freedesktop.org,
-        Magali Lemes <magalilemes00@gmail.com>,
-        =?utf-8?Q?Ma=C3=ADra_Canal?= <maira.canal@usp.br>,
-        Tales Aparecida <tales.aparecida@gmail.com>,
-        Rodrigo Siqueira <rodrigo.siqueira@amd.com>,
-        Melissa Wen <mwen@igalia.com>,
-        =?utf-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@riseup.net>,
-        Trevor Woerner <twoerner@gmail.com>,
-        leandro.ribeiro@collabora.com, n@nfraprado.net,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org,
-        ML dri-devel <dri-devel@lists.freedesktop.org>,
-        daniel@fooishbar.org, kernel list <linux-kernel@vger.kernel.org>
+        Mon, 19 Sep 2022 16:45:29 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26BC64A13E
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 13:45:26 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id kr11so1441734ejc.8
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 13:45:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=WnevHGZQneBwmhff1l52cnQESSdtlV5X3NztfaFuYL8=;
+        b=IBwAVUCZ8W5/Q9Cldx3f9lZcMPhLY4WCnLwvsLELOZWoLMrev/aoaNIi3Di3zG7QOD
+         hV4E0Efwg/959P0D21WxEDzflRL/5D4Qy6RMGCNxF94L7ALCCfwDC33YqjeI1Mpr+ypk
+         JFzdZWxdcNO6OftL0X/5scBtMXpVv9XLQjsQutf9xYZOByWDKrJQNrh82CrN5nYcjS+v
+         OH/ys6Za3pi4vE8IXSo4SIK9zDeZ4Tv257+obIUmAdkAoAZMCbbcmcGivNqX1BNqkDsq
+         RwEuMc/ic24j5MKKXAF33N7YMCysX3MQQ5W3JjUvkcAookMTjwSjwT/ALSEoIn+LSuHF
+         Iiww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=WnevHGZQneBwmhff1l52cnQESSdtlV5X3NztfaFuYL8=;
+        b=jWUc3JPeP2nph7HNspZ2cY+UNKrfBCqCCUBJf9DLx38zZT4S3ej8rDJey94tIh3Hwy
+         Oo8HS9YrK7mmXZnqEOzKKHTLmuXFVzrGeoNFdtrMieiS8UL67bVojXrXUVDXPeaos6lm
+         WV8Z9+I3XxNSLM8tboUOWTtSv5ZgcX6HDtM2OxnB04Hge+tN/6PTNmozcYyEb9aV8Rnh
+         1bzc4Vb+C5wzoar6qMue6Pb/EKxxsg/mL4TbNz+6ClP3QvkBr5ra5OSuTGuCCrEiYrqs
+         2JgmN9yPY/yjhZfVN+2Eam3WZmfbajo8mjs8ifUxRtfId8m/65iqDp+X6tuWRLnI74Q+
+         +pYg==
+X-Gm-Message-State: ACrzQf0HqhTKF3H9hleDd8lT9bxziWpGeKQtj1Qzy4OFi620Ws+lPAv0
+        CTF9ytqYQKgswb25oMOsvfz3CVMaZr3mx0Dnk6Tmfg==
+X-Google-Smtp-Source: AMsMyM76rqA/7vzl3M35a8URKb//s3n2RMh81mvBx3haA7dXQk2fp2ZE056GeNDAPVit+6F0MP1cYYGgh99Gf1+ME7M=
+X-Received: by 2002:a17:907:728d:b0:77e:143b:a86 with SMTP id
+ dt13-20020a170907728d00b0077e143b0a86mr13695069ejc.770.1663620325214; Mon, 19
+ Sep 2022 13:45:25 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220607045650.4999-1-p-mohan@ti.com> <20220607045650.4999-3-p-mohan@ti.com>
+ <20220712175949.GB2945984@p14s> <20220714172015.GA3106020@p14s>
+ <20c544ef-40b3-dcbc-1f29-aac140725b57@ti.com> <7e7ed572-93fe-a9c8-f11e-d555e5113fd1@ti.com>
+ <20220906192827.GA65147@p14s> <694da03a-e34d-1939-8b01-a75bc25495e0@ti.com>
+ <992019ad-5c58-d420-8a18-a82228f8e086@smile.fr> <a0b99322-5886-6a56-74e4-e78dcb32ffa0@ti.com>
+In-Reply-To: <a0b99322-5886-6a56-74e4-e78dcb32ffa0@ti.com>
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+Date:   Mon, 19 Sep 2022 14:45:13 -0600
+Message-ID: <CANLsYkykPRn2Jj_5oSm4sLBx3rQnJozJ9cL=R1WUR7oXUF6jPA@mail.gmail.com>
+Subject: Re: [PATCH v5 2/6] remoteproc: pru: Add APIs to get and put the PRU cores
+To:     Md Danish Anwar <a0501179@ti.com>
+Cc:     Romain Naour <romain.naour@smile.fr>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Md Danish Anwar <danishanwar@ti.com>,
+        linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        nm@ti.com, ssantosh@kernel.org, s-anna@ti.com,
+        linux-arm-kernel@lists.infradead.org, rogerq@kernel.org,
+        grygorii.strashko@ti.com, vigneshr@ti.com, robh@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <D53B4EB1-1A95-48F1-BF49-8EC0CC7B5418@riseup.net>
-References: <20220829000920.38185-1-isabbasso@riseup.net>
- <20220829000920.38185-4-isabbasso@riseup.net>
- <CABVgOS=HO9XAf8C5X7ZD6aTW37r06ify==7AW9a8cpKsgLVfFw@mail.gmail.com>
-To:     David Gow <davidgow@google.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, David
+On Tue, 13 Sept 2022 at 05:40, Md Danish Anwar <a0501179@ti.com> wrote:
+>
+> Hi Mathieu,
+>
+> On 12/09/22 18:54, Romain Naour wrote:
+> > Hi Danish, All,
+> >
+> > Le 07/09/2022 =C3=A0 11:24, Md Danish Anwar a =C3=A9crit :
+> >> Hi Mathieu,
+> >>
+> >> On 07/09/22 00:58, Mathieu Poirier wrote:
+> >>> On Fri, Sep 02, 2022 at 03:09:04PM +0530, Md Danish Anwar wrote:
+> >>>> Hi Mathieu,
+> >>>>
+> >>>>
+> >>>> On 15/07/22 11:52, Kishon Vijay Abraham I wrote:
+> >>>>> +Danish
+> >>>>>
+> >>>>> Hi Mathieu,
+> >>>>>
+> >>>>> On 14/07/22 22:50, Mathieu Poirier wrote:
+> >>>>>> On Tue, Jul 12, 2022 at 11:59:49AM -0600, Mathieu Poirier wrote:
+> >>>>>>> Hi Puranjay,
+> >>>>>
+> >>>>> Removed Puranjay (as he is no longer with TI) and adding Danish.
+> >>>>>
+> >>>>> Regards,
+> >>>>> Kishon
+> >>>>>>>
+> >>>>>>> On Tue, Jun 07, 2022 at 10:26:46AM +0530, Puranjay Mohan wrote:
+> >>>>>>>> From: Tero Kristo <t-kristo@ti.com>
+> >>>>>>>>
+> >>>>>>>> Add two new APIs, pru_rproc_get() and pru_rproc_put(), to the PR=
+U
+> >>>>>>>> driver to allow client drivers to acquire and release the remote=
+proc
+> >>>>>>>> device associated with a PRU core. The PRU cores are treated as
+> >>>>>>>> resources with only one client owning it at a time.
+> >>>>>>>>
+> >>>>>>>> The pru_rproc_get() function returns the rproc handle correspond=
+ing
+> >>>>>>>> to a PRU core identified by the device tree "ti,prus" property u=
+nder
+> >>>>>>>> the client node. The pru_rproc_put() is the complementary functi=
+on
+> >>>>>>>> to pru_rproc_get().
+> >>>>>>>>
+> >>>>>>>> Co-developed-by: Suman Anna <s-anna@ti.com>
+> >>>>>>>> Signed-off-by: Suman Anna <s-anna@ti.com>
+> >>>>>>>> Signed-off-by: Tero Kristo <t-kristo@ti.com>
+> >>>>>>>> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org=
+>
+> >>>>>>>> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+> >>>>>>>> Co-developed-by: Puranjay Mohan <p-mohan@ti.com>
+> >>>>>>>> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
+> >>>>>>>> ---
+> >>>>>>>>   drivers/remoteproc/pru_rproc.c | 138 +++++++++++++++++++++++++=
+++++++--
+> >>>>>>>>   include/linux/pruss.h          |  56 +++++++++++++
+> >>>>>>>>   2 files changed, 189 insertions(+), 5 deletions(-)
+> >>>>>>>>   create mode 100644 include/linux/pruss.h
+> >>>>>>>>
+> >>>>>>>> diff --git a/drivers/remoteproc/pru_rproc.c b/drivers/remoteproc=
+/pru_rproc.c
+> >>>>>>>> index 1777a01fa84e..7a35b400287a 100644
+> >>>>>>>> --- a/drivers/remoteproc/pru_rproc.c
+> >>>>>>>> +++ b/drivers/remoteproc/pru_rproc.c
+> >>>>>>>> @@ -2,12 +2,13 @@
+> >>>>>>>>   /*
+> >>>>>>>>    * PRU-ICSS remoteproc driver for various TI SoCs
+> >>>>>>>>    *
+> >>>>>>>> - * Copyright (C) 2014-2020 Texas Instruments Incorporated - htt=
+ps://www.ti.com/
+> >>>>>>>> + * Copyright (C) 2014-2022 Texas Instruments Incorporated - htt=
+ps://www.ti.com/
+> >>>>>>>>    *
+> >>>>>>>>    * Author(s):
+> >>>>>>>>    *   Suman Anna <s-anna@ti.com>
+> >>>>>>>>    *   Andrew F. Davis <afd@ti.com>
+> >>>>>>>>    *   Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org> for Texa=
+s Instruments
+> >>>>>>>> + *    Puranjay Mohan <p-mohan@ti.com>
+> >>>>>>>>    */
+> >>>>>>>>   #include <linux/bitops.h>
+> >>>>>>>> @@ -16,6 +17,7 @@
+> >>>>>>>>   #include <linux/module.h>
+> >>>>>>>>   #include <linux/of_device.h>
+> >>>>>>>>   #include <linux/of_irq.h>
+> >>>>>>>> +#include <linux/pruss.h>
+> >>>>>>>>   #include <linux/pruss_driver.h>
+> >>>>>>>>   #include <linux/remoteproc.h>
+> >>>>>>>> @@ -111,6 +113,8 @@ struct pru_private_data {
+> >>>>>>>>    * @rproc: remoteproc pointer for this PRU core
+> >>>>>>>>    * @data: PRU core specific data
+> >>>>>>>>    * @mem_regions: data for each of the PRU memory regions
+> >>>>>>>> + * @client_np: client device node
+> >>>>>>>> + * @lock: mutex to protect client usage
+> >>>>>>>>    * @fw_name: name of firmware image used during loading
+> >>>>>>>>    * @mapped_irq: virtual interrupt numbers of created fw specif=
+ic mapping
+> >>>>>>>>    * @pru_interrupt_map: pointer to interrupt mapping descriptio=
+n (firmware)
+> >>>>>>>> @@ -126,6 +130,8 @@ struct pru_rproc {
+> >>>>>>>>        struct rproc *rproc;
+> >>>>>>>>        const struct pru_private_data *data;
+> >>>>>>>>        struct pruss_mem_region mem_regions[PRU_IOMEM_MAX];
+> >>>>>>>> +      struct device_node *client_np;
+> >>>>>>>> +      struct mutex lock; /* client access lock */
+> >>>>>>>>        const char *fw_name;
+> >>>>>>>>        unsigned int *mapped_irq;
+> >>>>>>>>        struct pru_irq_rsc *pru_interrupt_map;
+> >>>>>>>> @@ -146,6 +152,125 @@ void pru_control_write_reg(struct pru_rpro=
+c *pru, unsigned int reg, u32 val)
+> >>>>>>>>        writel_relaxed(val, pru->mem_regions[PRU_IOMEM_CTRL].va +=
+ reg);
+> >>>>>>>>   }
+> >>>>>>>> +static struct rproc *__pru_rproc_get(struct device_node *np, in=
+t index)
+> >>>>>>>> +{
+> >>>>>>>> +      struct device_node *rproc_np =3D NULL;
+> >>>>>>>> +      struct platform_device *pdev;
+> >>>>>>>> +      struct rproc *rproc;
+> >>>>>>>> +
+> >>>>>>>> +      rproc_np =3D of_parse_phandle(np, "ti,prus", index);
+> >>>>>>>> +      if (!rproc_np || !of_device_is_available(rproc_np))
+> >>>>>>>> +              return ERR_PTR(-ENODEV);
+> >>>>>>>> +
+> >>>>>>>> +      pdev =3D of_find_device_by_node(rproc_np);
+> >>>>>>>> +      of_node_put(rproc_np);
+> >>>>>>>> +
+> >>>>>>>> +      if (!pdev || !(&pdev->dev) || !((&pdev->dev)->driver))
+> >>>>>>>> +              /* probably PRU not yet probed */
+> >>>>>>>> +              return ERR_PTR(-EPROBE_DEFER);
+> >>>>>>>> +
+> >>>>>>>> +      /* make sure it is PRU rproc */
+> >>>>>>>> +      if (!is_pru_rproc(&pdev->dev)) {
+> >>>>>>>> +              put_device(&pdev->dev);
+> >>>>>>>> +              return ERR_PTR(-ENODEV);
+> >>>>>>>> +      }
+> >>>>>>>> +
+> >>>>>>>> +      rproc =3D platform_get_drvdata(pdev);
+> >>>>>>>> +      put_device(&pdev->dev);
+> >>>>>>>> +      if (!rproc)
+> >>>>>>>> +              return ERR_PTR(-EPROBE_DEFER);
+> >>>>>>>> +
+> >>>>>>>> +      get_device(&rproc->dev);
+> >>>>>>>> +
+> >>>>>>>> +      return rproc;
+> >>>>>>>> +}
+> >>>>>>>> +
+> >>>>>>>> +/**
+> >>>>>>>> + * pru_rproc_get() - get the PRU rproc instance from a device n=
+ode
+> >>>>>>>> + * @np: the user/client device node
+> >>>>>>>> + * @index: index to use for the ti,prus property
+> >>>>>>>> + * @pru_id: optional pointer to return the PRU remoteproc proce=
+ssor id
+> >>>>>>>> + *
+> >>>>>>>> + * This function looks through a client device node's "ti,prus"=
+ property at
+> >>>>>>>> + * index @index and returns the rproc handle for a valid PRU re=
+mote processor if
+> >>>>>>>> + * found. The function allows only one user to own the PRU rpro=
+c resource at a
+> >>>>>>>> + * time. Caller must call pru_rproc_put() when done with using =
+the rproc, not
+> >>>>>>>> + * required if the function returns a failure.
+> >>>>>>>> + *
+> >>>>>>>> + * When optional @pru_id pointer is passed the PRU remoteproc p=
+rocessor id is
+> >>>>>>>> + * returned.
+> >>>>>>>> + *
+> >>>>>>>> + * Return: rproc handle on success, and an ERR_PTR on failure u=
+sing one
+> >>>>>>>> + * of the following error values
+> >>>>>>>> + *    -ENODEV if device is not found
+> >>>>>>>> + *    -EBUSY if PRU is already acquired by anyone
+> >>>>>>>> + *    -EPROBE_DEFER is PRU device is not probed yet
+> >>>>>>>> + */
+> >>>>>>>> +struct rproc *pru_rproc_get(struct device_node *np, int index,
+> >>>>>>>> +                          enum pruss_pru_id *pru_id)
+> >>>>>>>> +{
+> >>>>>>>> +      struct rproc *rproc;
+> >>>>>>>> +      struct pru_rproc *pru;
+> >>>>>>>> +      struct device *dev;
+> >>>>>>>> +
+> >>>>>>>> +      try_module_get(THIS_MODULE);
+> >>>>>>>
+> >>>>>>> There should be a module_put() in pru_rproc_put()...
+> >>>>>>
+> >>>>>> ... and in the error path of this function.
+> >>>>>>
+> >>>>>>>
+> >>>>>>> More comments to come tomorrow.  I'm especially worried about thi=
+s API racing
+> >>>>>>> with a remote processor being removed or detached.
+> >>>>>>>
+> >>>>>>
+> >>>>>> Looking at what is done in wkup_m3_ipc_probe(), it should be possi=
+ble to call
+> >>>>>> rproc_get_by_handle() here and that would make sure the remote pro=
+cessor doesn't
+> >>>>>> go away before the end of the function.
+> >>>>>>
+> >>>>>> More comments to come...
+> >>>>
+> >>>> It is possible to call rproc_get_by_handle() here instead of
+> >>>> __pru_get_proc(), but that would not provide multiple functionality.
+> >>>>
+> >>>> The API rproc_get_by_handle() returns rproc handle on success, and N=
+ULL on
+> >>>> failure where as __pru_get_proc() returns ERR_PTR on failure which p=
+rovides
+> >>>> multiple functionality and opportunity for us to distinguish between
+> >>>> multiple errors.
+> >>>>
+> >>>> So we have these three options.
+> >>>>
+> >>>> 1. If we're using the API rproc_get_by_handle() and we want the mult=
+iple
+> >>>> ERR_PTR on failure then we will need to change the API rproc_get_by_=
+handle()
+> >>>> and also all the functions that uses rproc_get_by_handle().
+> >>>>
+> >>>
+> >>> Not optimal.
+> >>>
+> >>>> 2. Keep the API rproc_get_by_handle() as it is. That will restrict u=
+s from
+> >>>> using multiple ERR_PTR on different kinds of error.
+> >>>>
+> >>>
+> >>> Not optimal.
+> >>>
+> >>>> 3. Instead of using rproc_get_by_handle(), keep using __pru_get_proc=
+(). This
+> >>>> will make sure we have the proper ERR_PTR to retrun for different ki=
+nds of
+> >>>> errors.
+> >>>>
+> >>>
+> >>> Unacceptable for the reason I already stated.
+> >>>
+> >>>> Please let me know which option to continue with.
+> >>>
+> >>> I suggest building a wrapper that does everything you want around rpr=
+oc_get_by_phandle().
+>
+> We can introduce a new API __rproc_get_by_phandle() similar to the API
+> rproc_get_by_phandle(). The new API __rproc_get_by_phandle() will do all =
+the
+> functionality of getting the rproc. On success it will return rproc and o=
+n
+> failure it will return the different ERR_PTR.
+> If rproc is not probed yet, it will return ERR_PTR(-EPROBE_DEFER).
+>
+> This will make sure that we're getting different error codes for differen=
+t
+> errors from pru_rproc_get().
+>
+> The old API rproc_get_by_handle() will invoke the new API. On success the=
+ new
+> API will return rproc and the old API will also return rproc. On failure =
+the
+> new API will return different error codes while the old API will preserve=
+ it's
+> nature and return NULL.
 
-> Am 01/09/2022 um 3:37 AM schrieb 'David Gow' via KUnit Development =
-<kunit-dev@googlegroups.com>:
->=20
-> On Mon, Aug 29, 2022 at 8:10 AM Isabella Basso <isabbasso@riseup.net> =
-wrote:
->>=20
->> This adds functions for both executing the tests as well as parsing =
-(K)TAP
->> kmsg output, as per the KTAP spec [1].
->>=20
->> [1] https://www.kernel.org/doc/html/latest/dev-tools/ktap.html
->>=20
->> Signed-off-by: Isabella Basso <isabbasso@riseup.net>
->> ---
->=20
-> Thanks very much for sending these patches out again.
->=20
-> Alas, I don't have a particularly useful igt setup to test this
-> properly, but I've left a couple of notes from trying it on my laptop
-> here.
+I meant to create a wrapper around rproc_get_by_handle() that is local
+to pru_rproc.c.  That way you can enact the behavior you want without
+having to constrain others in this specific design.
 
-Thanks for the review, it=E2=80=99s much appreciated! If you have the =
-time I=E2=80=99ve left a
-note at the bottom with a very simple way to run the tests, but I can =
-also
-provide you with a pastebin of the results if you prefer.
+Thanks,
+Mathieu
 
->=20
->> lib/igt_kmod.c | 290 =
-+++++++++++++++++++++++++++++++++++++++++++++++++
->> lib/igt_kmod.h |   2 +
->> 2 files changed, 292 insertions(+)
->>=20
->> diff --git a/lib/igt_kmod.c b/lib/igt_kmod.c
->> index 97cac7f5..93cdfcc5 100644
->> --- a/lib/igt_kmod.c
->> +++ b/lib/igt_kmod.c
->> @@ -25,6 +25,7 @@
->> #include <signal.h>
->> #include <errno.h>
->> #include <sys/utsname.h>
->> +#include <limits.h>
->>=20
->> #include "igt_aux.h"
->> #include "igt_core.h"
->> @@ -32,6 +33,8 @@
->> #include "igt_sysfs.h"
->> #include "igt_taints.h"
->>=20
->> +#define BUF_LEN 4096
->> +
->> /**
->>  * SECTION:igt_kmod
->>  * @short_description: Wrappers around libkmod for module =
-loading/unloading
->> @@ -713,6 +716,293 @@ void igt_kselftest_get_tests(struct kmod_module =
-*kmod,
->>        kmod_module_info_free_list(pre);
->> }
->>=20
->> +/**
->> + * lookup_value:
->> + * @haystack: the string to search in
->> + * @needle: the string to search for
->> + *
->> + * Returns: the value of the needle in the haystack, or -1 if not =
-found.
->> + */
->> +static long lookup_value(const char *haystack, const char *needle)
->> +{
->> +       const char *needle_rptr;
->> +       char *needle_end;
->> +       long num;
->> +
->> +       needle_rptr =3D strcasestr(haystack, needle);
->> +
->> +       if (needle_rptr =3D=3D NULL)
->> +               return -1;
->> +
->> +       /* skip search string and whitespaces after it */
->> +       needle_rptr +=3D strlen(needle);
->> +
->> +       num =3D strtol(needle_rptr, &needle_end, 10);
->> +
->> +       if (needle_rptr =3D=3D needle_end)
->> +               return -1;
->> +
->> +       if (num =3D=3D LONG_MIN || num =3D=3D LONG_MAX)
->> +               return 0;
->> +
->> +       return num > 0 ? num : 0;
->> +}
->> +
->> +static int find_next_tap_subtest(char *record, char *test_name,
->> +                                bool is_subtest)
->> +{
->> +       const char *name_lookup_str,
->> +             *lend, *version_rptr, *name_rptr;
->> +       long test_count;
->> +
->> +       name_lookup_str =3D "test: ";
->> +
->> +       version_rptr =3D strcasestr(record, "TAP version ");
->> +       name_rptr =3D strcasestr(record, name_lookup_str);
->> +
->> +       /*
->> +        * total test count will almost always appear as 0..N at the =
-beginning
->> +        * of a run, so we use it as indication of a run
->> +        */
->> +       test_count =3D lookup_value(record, "..");
->> +
->> +       /* no count found, so this is probably not starting a =
-(sub)test */
->> +       if (test_count < 0) {
->> +               if (name_rptr !=3D NULL) {
->> +                       if (test_name[0] =3D=3D '\0')
->> +                               strncpy(test_name,
->> +                                       name_rptr + =
-strlen(name_lookup_str),
->> +                                       BUF_LEN);
->> +                       else if (strcmp(test_name, name_rptr + =
-strlen(name_lookup_str)) =3D=3D 0)
->> +                               return 0;
->> +                       else
->> +                               test_name[0] =3D '\0';
->> +
->> +               }
->> +               return -1;
->> +       }
->> +
->> +       /*
->> +        * "(K)TAP version XX" should be the first line on all =
-(sub)tests as per
->> +        * =
-https://www.kernel.org/doc/html/latest/dev-tools/ktap.html#version-lines
->> +        * but actually isn't, as it currently depends on whoever =
-writes the
->> +        * test to print this info
->=20
-> FYI: we're really trying to fix cases of "missing version lines",
-> largely by making the kunit_test_suites() macro work in more
-> circumstances.
->=20
-> So while it may be worth still handling the case where this is
-> missing, I don't think there are any tests in the latest versions of
-> the kernel which should have this missing.
-
-I=E2=80=99m not sure if I totally get how these work. Every time I run a =
-KUnit test I
-get something like this: https://pastebin.com/7Ff31PMC
-
-As you can see it has been loaded as a module, just like we intend to do =
-it
-from IGT, and I see no version lines whatsoever. Am I doing something =
-wrong?
-
->=20
->> +        */
->> +       if (version_rptr =3D=3D NULL)
->> +               igt_info("Missing test version string\n");
->> +
->> +       if (name_rptr =3D=3D NULL) {
->> +               /* we have to keep track of the name string, as it =
-might be
->> +                * contained in a line read previously */
->> +               if (test_name[0] =3D=3D '\0') {
->> +                       igt_info("Missing test name string\n");
->> +
->> +                       if (is_subtest)
->> +                               igt_info("Running %ld subtests...\n", =
-test_count);
->> +                       else
->> +                               igt_info("Running %ld tests...\n", =
-test_count);
->> +               } else {
->> +                       lend =3D strchrnul(test_name, '\n');
->> +
->> +                       if (*lend =3D=3D '\0') {
->> +                               if (is_subtest)
->> +                                       igt_info("Executing %ld =
-subtests in: %s\n",
->> +                                                test_count, =
-test_name);
->> +                               else
->> +                                       igt_info("Executing %ld tests =
-in: %s\n",
->> +                                                test_count, =
-test_name);
->> +                               return test_count;
->> +                       }
->> +
->> +                       if (is_subtest)
->> +                               igt_info("Executing %ld subtests in: =
-%.*s\n",
->> +                                        test_count, (int)(lend - =
-test_name),
->> +                                        test_name);
->> +                       else
->> +                               igt_info("Executing %ld tests in: =
-%.*s\n",
->> +                                        test_count, (int)(lend - =
-test_name),
->> +                                        test_name);
->> +                       test_name[0] =3D '\0';
->> +               }
->> +       } else {
->> +               name_rptr +=3D strlen(name_lookup_str);
->> +               lend =3D strchrnul(name_rptr, '\n');
->> +               /*
->> +                * as the test count comes after the test name we =
-need not check
->> +                * for a long line again
->> +                */
->> +               if (is_subtest)
->> +                       igt_info("Executing %ld subtests in: %.*s\n",
->> +                                test_count, (int)(lend - name_rptr),
->> +                                name_rptr);
->> +               else
->> +                       igt_info("Executing %ld tests in: %.*s\n",
->> +                                test_count, (int)(lend - name_rptr),
->> +                                name_rptr);
->> +       }
->> +
->> +       return test_count;
->> +}
->> +
->> +static void parse_kmsg_for_tap(const char *lstart, char *lend,
->> +                              int *sublevel, bool *failed_tests)
->> +{
->> +       const char *nok_rptr, *comment_start, *value_parse_start;
->> +
->> +       nok_rptr =3D strstr(lstart, "not ok ");
->> +       if (nok_rptr !=3D NULL) {
->> +               igt_warn("kmsg> %.*s\n",
->> +                        (int)(lend - lstart), lstart);
->> +               *failed_tests =3D true;
->> +               return;
->> +       }
->> +
->> +       comment_start =3D strchrnul(lstart, '#');
->> +
->> +       /* check if we're still in a subtest */
->> +       if (*comment_start !=3D '\0') {
->> +               comment_start++;
->> +               value_parse_start =3D comment_start;
->> +
->> +               if (lookup_value(value_parse_start, "fail: ") > 0) {
->> +                       igt_warn("kmsg> %.*s\n",
->> +                                (int)(lend - comment_start), =
-comment_start);
->> +                       *failed_tests =3D true;
->> +                       (*sublevel)--;
->> +                       return;
->> +               }
->> +       }
->> +
->> +       igt_info("kmsg> %.*s\n",
->> +                (int)(lend - lstart), lstart);
->> +}
->> +
->> +static void igt_kunit_subtests(int fd, char *record,
->> +                              int *sublevel, bool *failed_tests)
->> +{
->> +       char test_name[BUF_LEN + 1], *lend;
->> +
->> +       lend =3D NULL;
->> +       test_name[0] =3D '\0';
->> +       test_name[BUF_LEN] =3D '\0';
->> +
->> +       while (*sublevel >=3D 0) {
->> +               const char *lstart;
->> +               ssize_t r;
->> +
->> +               if (lend !=3D NULL && *lend !=3D '\0')
->> +                       lseek(fd, (int) (lend - record), SEEK_CUR);
->> +
->> +               r =3D read(fd, record, BUF_LEN);
->> +
->> +               if (r <=3D 0) {
->> +                       switch (errno) {
->> +                       case EINTR:
->> +                               continue;
->> +                       case EPIPE:
->> +                               igt_warn("kmsg truncated: too many =
-messages. \
->> +                                        You may want to increase =
-log_buf_len \
->> +                                        in your boot options\n");
->> +                               continue;
->> +                       case !EAGAIN:
->> +                               igt_warn("kmsg truncated: unknown =
-error (%m)\n");
->> +                               *sublevel =3D -1;
->> +                       default:
->> +                               break;
->> +                       }
->> +                       break;
->> +               }
->> +
->> +               lend =3D strchrnul(record, '\n');
->> +
->> +               /* in case line > 4096 */
->> +               if (*lend =3D=3D '\0')
->> +                       continue;
->> +
->> +               if (find_next_tap_subtest(record, test_name, =
-*sublevel > 0) !=3D -1)
->> +                       (*sublevel)++;
->> +
->> +               if (*sublevel > 0) {
->> +                       lstart =3D strchrnul(record, ';');
->> +
->> +                       if (*lstart =3D=3D '\0') {
->> +                               igt_warn("kmsg truncated: output =
-malformed (%m)\n");
->> +                               igt_fail(IGT_EXIT_FAILURE);
->> +                       }
->> +
->> +                       lstart++;
->> +                       while (isspace(*lstart))
->> +                               lstart++;
->> +
->> +                       parse_kmsg_for_tap(lstart, lend, sublevel, =
-failed_tests);
->> +               }
->> +       }
->> +
->> +       if (*failed_tests || *sublevel < 0)
->> +               igt_fail(IGT_EXIT_FAILURE);
->> +       else
->> +               igt_success();
->> +}
->> +
->> +/**
->> + * igt_kunit:
->> + * @module_name: the name of the module
->> + * @opts: options to load the module
->> + *
->> + * Loads the kunit module, parses its dmesg output, then unloads it
->> + */
->> +void igt_kunit(const char *module_name, const char *opts)
->> +{
->> +       struct igt_ktest tst;
->> +       char record[BUF_LEN + 1];
->> +       bool failed_tests =3D false;
->> +       int sublevel =3D 0;
->> +
->> +       record[BUF_LEN] =3D '\0';
->> +
->> +       /* get normalized module name */
->> +       if (igt_ktest_init(&tst, module_name) !=3D 0) {
->> +               igt_warn("Unable to initialize ktest for %s\n", =
-module_name);
->> +               return;
->> +       }
->> +
->> +       if (igt_ktest_begin(&tst) !=3D 0) {
->> +               igt_warn("Unable to begin ktest for %s\n", =
-module_name);
->> +
->> +               igt_ktest_fini(&tst);
->> +               return;
->> +       }
->> +
->> +       if (tst.kmsg < 0) {
->> +               igt_warn("Could not open /dev/kmsg");
->> +               goto unload;
->> +       }
->> +
->> +       if (lseek(tst.kmsg, 0, SEEK_END)) {
->> +               igt_warn("Could not seek the end of /dev/kmsg");
->> +               goto unload;
->> +       }
->> +
->> +       /* The kunit module is required for running any kunit tests =
-*/
->> +       if (igt_kmod_load("kunit", NULL) !=3D 0) {
->> +               igt_warn("Unable to load kunit module\n");
->> +               goto unload;
->> +       }
->=20
-> Do you want to _require_ KUnit be built as a module, rather than =
-built-in here?
-
-This line is a little misleading because, for our purposes, only the =
-thing to
-be tested has to be built as a module, but we can use this function for =
-both
-validating a built-in module as well as modprobe-ing it if it's =
-=E2=80=9Estandalone" (I
-tested both cases as well). I=E2=80=99ll change the comment and the =
-warning in v3
-to clarify this.
-
-The actual problem would be to unload something that=E2=80=99s built-in, =
-so that=E2=80=99s why
-I added a check in the unload function in the previous patch.
-
-> Equally, does this need to mark a failure (or at least "SKIPPED")
-> rather than success, in the case it fails.
-
-That=E2=80=99s a good point, will change in v3.
-
->> +
->> +       if (igt_kmod_load(module_name, opts) !=3D 0) {
->> +               igt_warn("Unable to load %s module\n", module_name);
->> +               goto unload;
->> +       }
->=20
-> As above, should this record a failure, or skip?
-
-Ack.
-
->> +
->> +       igt_kunit_subtests(tst.kmsg, record, &sublevel, =
-&failed_tests);
->> +unload:
->> +       igt_kmod_unload("kunit", 0);
->=20
-> Do you want to unconditionally unload the KUnit module here? It's safe
-> (maybe even safer) to leave it loaded between runs of KUnit tests.
-
-That=E2=80=99s a great point. The user should be safe using KUnit as =
-built-in in that
-case, but I=E2=80=99ll remove this line as it is unnecessary.
-
-> Equally, how would you handle the case where KUnit is already loaded?
-
-That=E2=80=99s not a problem as pointed out above, kmod handles that =
-without trouble.
-
->> +
->> +       igt_ktest_end(&tst);
->> +
->> +       igt_ktest_fini(&tst);
->> +}
->> +
->> static int open_parameters(const char *module_name)
->> {
->>        char path[256];
->> diff --git a/lib/igt_kmod.h b/lib/igt_kmod.h
->> index ceb10cd0..737143c1 100644
->> --- a/lib/igt_kmod.h
->> +++ b/lib/igt_kmod.h
->> @@ -45,6 +45,8 @@ int __igt_i915_driver_unload(char **whom);
->> int igt_amdgpu_driver_load(const char *opts);
->> int igt_amdgpu_driver_unload(void);
->>=20
->> +void igt_kunit(const char *module_name, const char *opts);
->> +
->> void igt_kselftests(const char *module_name,
->>                    const char *module_options,
->>                    const char *result_option,
->> --
->> 2.37.2
->>=20
->=20
-> Regardless, thanks very much. Hopefully I'll get a chance to play with
-> igt a bit more and actually get the tests running. :-)
-
-That shouldn=E2=80=99t be too difficult, when you compile IGT as per the =
-docs you can
-just run e.g. `sudo ./build/tests/drm_buddy` and that should do it :).
-
-Cheers,
---
-Isabella Basso
-
->=20
-> Cheers,
-> -- David
-
+>
+> The API __rproc_get_by_handle will look like this.
+>
+> struct rproc *__rproc_get_by_handle(phandle phandle)
+> {
+>         struct rproc *rproc =3D NULL, *r;
+>         struct device_node *np;
+>
+>         np =3D of_find_node_by_phandle(phandle);
+>         if (!np)
+>                 return NULL;
+>
+>         rcu_read_lock();
+>         list_for_each_entry_rcu(r, &rproc_list, node) {
+>                 if (r->dev.parent && r->dev.parent->of_node =3D=3D np) {
+>                         /*prevent underlying implementation from being re=
+moved */
+>                         if (!try_module_get(r->dev.parent->driver->owner)=
+) {
+>                                 dev_err(&r->dev, "can't get owner\n");
+>                                 break;
+>                         }
+>
+>                         rproc =3D r;
+>                         get_device(&rproc->dev);
+>                         break;
+>                 }
+>         }
+>         rcu_read_unlock();
+>
+>         of_node_put(np);
+>
+>         if(!rproc)
+>                 return ERR_PTR(-EPROBE_DEFER);
+>
+>         return rproc;
+> }
+>
+> The API rproc_get_by_handle() will look like this.
+>
+> struct rproc *rproc_get_by_phandle(phandle phandle)
+> {
+>         struct rproc *rproc =3D NULL;
+>
+>         rproc =3D __rproc_get_by_handle(phandle);
+>
+>         if(!rproc || IS_ERR(rproc))
+>                 return NULL;
+>
+>         return rproc;
+> }
+>
+> This way in pru_rproc_get(), we'll get the rproc by phandle and we'll sti=
+ll
+> return different error codes depending upon failure cases. We'll also be =
+able
+> to preserve the actual functionality of rproc_get_by_phandle() so that th=
+e
+> other APIs using rproc_get_by_phandle() won't get affected.
+>
+> Please let me know if this looks good.
+>
+> >>>
+> >>
+> >> Sure, I'll do that. I'll share this change in v6 of this patch series.
+> >
+> > I'm able to test the TI prueth driver from the ti-linux-5.10.y tree [1]=
+ on a
+> > AM5749 cpu (custom board). But I need a more recent kernel (at least 5.=
+15) to
+> > support other devices recently added to the Linux kernel (wifi6 module =
+and an
+> > ethernet switch). Also it would be nice if this driver is finally merge=
+d in the
+> > Linux kernel.
+> >
+> > Maybe I can help to test this series but I noticed it only provide the =
+driver
+> > for TI AM654x cpus [2]. Can you also provide patches for basic EMAC sup=
+port with
+> > the TI AM574x too? (I don't need advanced features like frame timestamp=
+ing, HSR
+> > etc).
+> >
+> > Also, what about patches present in the ti-linux-kernel tree and not in=
+cluded
+> > this this series? Especially patches that modify the kernel network sta=
+ck [3]
+> > (net/rpmsg: add support for new rpmsg sockets). Is this new socket prot=
+ocol
+> > really needed?
+> >
+> > Notice the patch adding the rpmsg sockets [3] already conflict with the=
+ upstream
+> > kernel since the AF_MCTP definition now use the value temporarly used b=
+y
+> > AF_RPMSG [4].
+> >
+> > Can you send an updated version of the complete series?
+> >
+> > Thanks!
+> >
+> > [1] https://git.ti.com/cgit/ti-linux-kernel/ti-linux-kernel/log/?h=3Dti=
+-linux-5.10.y
+> >
+> > [2] https://lore.kernel.org/linux-remoteproc/20220406094358.7895-1-p-mo=
+han@ti.com/
+> >
+> > [3]
+> > https://git.ti.com/cgit/ti-linux-kernel/ti-linux-kernel/commit/?h=3Dti-=
+linux-5.10.y&id=3Df4b978a978c38149f712ddd137f12ed5fb914161
+> >
+> > [4]
+> > https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit=
+/?id=3Dbc49d8169aa72295104f1558830c568efb946315
+> >
+> > Best regards,
+> > Romain
+> >
+> >
+> >>
+> >>>>
+> >>>> Thanks,
+> >>>> Danish
+> >>>>
+> >>>>
+> >>>>>>
+> >>>>>>
+> >>>>>>> Thanks,
+> >>>>>>> Mathieu
+> >>>>>>>
+> >>>>>>>> +
+> >>>>>>>> +      rproc =3D __pru_rproc_get(np, index);
+> >>>>>>>> +      if (IS_ERR(rproc))
+> >>>>>>>> +              return rproc;
+> >>>>>>>> +
+> >>>>>>>> +      pru =3D rproc->priv;
+> >>>>>>>> +      dev =3D &rproc->dev;
+> >>>>>>>> +
+> >>>>>>>> +      mutex_lock(&pru->lock);
+> >>>>>>>> +
+> >>>>>>>> +      if (pru->client_np) {
+> >>>>>>>> +              mutex_unlock(&pru->lock);
+> >>>>>>>> +              put_device(dev);
+> >>>>>>>> +              return ERR_PTR(-EBUSY);
+> >>>>>>>> +      }
+> >>>>>>>> +
+> >>>>>>>> +      pru->client_np =3D np;
+> >>>>>>>> +
+> >>>>>>>> +      mutex_unlock(&pru->lock);
+> >>>>>>>> +
+> >>>>>>>> +      if (pru_id)
+> >>>>>>>> +              *pru_id =3D pru->id;
+> >>>>>>>> +
+> >>>>>>>> +      return rproc;
+> >>>>>>>> +}
+> >>>>>>>> +EXPORT_SYMBOL_GPL(pru_rproc_get);
+> >>>>>>>> +
+> >>>>>>>> +/**
+> >>>>>>>> + * pru_rproc_put() - release the PRU rproc resource
+> >>>>>>>> + * @rproc: the rproc resource to release
+> >>>>>>>> + *
+> >>>>>>>> + * Releases the PRU rproc resource and makes it available to ot=
+her
+> >>>>>>>> + * users.
+> >>>>>>>> + */
+> >>>>>>>> +void pru_rproc_put(struct rproc *rproc)
+> >>>>>>>> +{
+> >>>>>>>> +      struct pru_rproc *pru;
+> >>>>>>>> +
+> >>>>>>>> +      if (IS_ERR_OR_NULL(rproc) || !is_pru_rproc(rproc->dev.par=
+ent))
+> >>>>>>>> +              return;
+> >>>>>>>> +
+> >>>>>>>> +      pru =3D rproc->priv;
+> >>>>>>>> +
+> >>>>>>>> +      mutex_lock(&pru->lock);
+> >>>>>>>> +
+> >>>>>>>> +      if (!pru->client_np) {
+> >>>>>>>> +              mutex_unlock(&pru->lock);
+> >>>>>>>> +              return;
+> >>>>>>>> +      }
+> >>>>>>>> +
+> >>>>>>>> +      pru->client_np =3D NULL;
+> >>>>>>>> +      mutex_unlock(&pru->lock);
+> >>>>>>>> +
+> >>>>>>>> +      put_device(&rproc->dev);
+> >>>>>>>> +}
+> >>>>>>>> +EXPORT_SYMBOL_GPL(pru_rproc_put);
+> >>>>>>>> +
+> >>>>>>>>   static inline u32 pru_debug_read_reg(struct pru_rproc *pru, un=
+signed int reg)
+> >>>>>>>>   {
+> >>>>>>>>        return readl_relaxed(pru->mem_regions[PRU_IOMEM_DEBUG].va=
+ + reg);
+> >>>>>>>> @@ -438,7 +563,7 @@ static void *pru_d_da_to_va(struct pru_rproc=
+ *pru, u32 da, size_t len)
+> >>>>>>>>        dram0 =3D pruss->mem_regions[PRUSS_MEM_DRAM0];
+> >>>>>>>>        dram1 =3D pruss->mem_regions[PRUSS_MEM_DRAM1];
+> >>>>>>>>        /* PRU1 has its local RAM addresses reversed */
+> >>>>>>>> -      if (pru->id =3D=3D 1)
+> >>>>>>>> +      if (pru->id =3D=3D PRUSS_PRU1)
+> >>>>>>>>                swap(dram0, dram1);
+> >>>>>>>>        shrd_ram =3D pruss->mem_regions[PRUSS_MEM_SHRD_RAM2];
+> >>>>>>>> @@ -747,14 +872,14 @@ static int pru_rproc_set_id(struct pru_rpr=
+oc *pru)
+> >>>>>>>>        case RTU0_IRAM_ADDR_MASK:
+> >>>>>>>>                fallthrough;
+> >>>>>>>>        case PRU0_IRAM_ADDR_MASK:
+> >>>>>>>> -              pru->id =3D 0;
+> >>>>>>>> +              pru->id =3D PRUSS_PRU0;
+> >>>>>>>>                break;
+> >>>>>>>>        case TX_PRU1_IRAM_ADDR_MASK:
+> >>>>>>>>                fallthrough;
+> >>>>>>>>        case RTU1_IRAM_ADDR_MASK:
+> >>>>>>>>                fallthrough;
+> >>>>>>>>        case PRU1_IRAM_ADDR_MASK:
+> >>>>>>>> -              pru->id =3D 1;
+> >>>>>>>> +              pru->id =3D PRUSS_PRU1;
+> >>>>>>>>                break;
+> >>>>>>>>        default:
+> >>>>>>>>                ret =3D -EINVAL;
+> >>>>>>>> @@ -816,6 +941,8 @@ static int pru_rproc_probe(struct platform_d=
+evice *pdev)
+> >>>>>>>>        pru->pruss =3D platform_get_drvdata(ppdev);
+> >>>>>>>>        pru->rproc =3D rproc;
+> >>>>>>>>        pru->fw_name =3D fw_name;
+> >>>>>>>> +      pru->client_np =3D NULL;
+> >>>>>>>> +      mutex_init(&pru->lock);
+> >>>>>>>>        for (i =3D 0; i < ARRAY_SIZE(mem_names); i++) {
+> >>>>>>>>                res =3D platform_get_resource_byname(pdev, IORESO=
+URCE_MEM,
+> >>>>>>>> @@ -903,7 +1030,7 @@ MODULE_DEVICE_TABLE(of, pru_rproc_match);
+> >>>>>>>>   static struct platform_driver pru_rproc_driver =3D {
+> >>>>>>>>        .driver =3D {
+> >>>>>>>> -              .name   =3D "pru-rproc",
+> >>>>>>>> +              .name   =3D PRU_RPROC_DRVNAME,
+> >>>>>>>>                .of_match_table =3D pru_rproc_match,
+> >>>>>>>>                .suppress_bind_attrs =3D true,
+> >>>>>>>>        },
+> >>>>>>>> @@ -915,5 +1042,6 @@ module_platform_driver(pru_rproc_driver);
+> >>>>>>>>   MODULE_AUTHOR("Suman Anna <s-anna@ti.com>");
+> >>>>>>>>   MODULE_AUTHOR("Andrew F. Davis <afd@ti.com>");
+> >>>>>>>>   MODULE_AUTHOR("Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org=
+>");
+> >>>>>>>> +MODULE_AUTHOR("Puranjay Mohan <p-mohan@ti.com>");
+> >>>>>>>>   MODULE_DESCRIPTION("PRU-ICSS Remote Processor Driver");
+> >>>>>>>>   MODULE_LICENSE("GPL v2");
+> >>>>>>>> diff --git a/include/linux/pruss.h b/include/linux/pruss.h
+> >>>>>>>> new file mode 100644
+> >>>>>>>> index 000000000000..fdc719b43db0
+> >>>>>>>> --- /dev/null
+> >>>>>>>> +++ b/include/linux/pruss.h
+> >>>>>>>> @@ -0,0 +1,56 @@
+> >>>>>>>> +/* SPDX-License-Identifier: GPL-2.0-only */
+> >>>>>>>> +/**
+> >>>>>>>> + * PRU-ICSS Subsystem user interfaces
+> >>>>>>>> + *
+> >>>>>>>> + * Copyright (C) 2015-2022 Texas Instruments Incorporated - htt=
+p://www.ti.com
+> >>>>>>>> + *    Suman Anna <s-anna@ti.com>
+> >>>>>>>> + */
+> >>>>>>>> +
+> >>>>>>>> +#ifndef __LINUX_PRUSS_H
+> >>>>>>>> +#define __LINUX_PRUSS_H
+> >>>>>>>> +
+> >>>>>>>> +#include <linux/device.h>
+> >>>>>>>> +#include <linux/types.h>
+> >>>>>>>> +
+> >>>>>>>> +#define PRU_RPROC_DRVNAME "pru-rproc"
+> >>>>>>>> +
+> >>>>>>>> +/*
+> >>>>>>>> + * enum pruss_pru_id - PRU core identifiers
+> >>>>>>>> + */
+> >>>>>>>> +enum pruss_pru_id {
+> >>>>>>>> +      PRUSS_PRU0 =3D 0,
+> >>>>>>>> +      PRUSS_PRU1,
+> >>>>>>>> +      PRUSS_NUM_PRUS,
+> >>>>>>>> +};
+> >>>>>>>> +
+> >>>>>>>> +struct device_node;
+> >>>>>>>> +
+> >>>>>>>> +#if IS_ENABLED(CONFIG_PRU_REMOTEPROC)
+> >>>>>>>> +
+> >>>>>>>> +struct rproc *pru_rproc_get(struct device_node *np, int index,
+> >>>>>>>> +                          enum pruss_pru_id *pru_id);
+> >>>>>>>> +void pru_rproc_put(struct rproc *rproc);
+> >>>>>>>> +
+> >>>>>>>> +#else
+> >>>>>>>> +
+> >>>>>>>> +static inline struct rproc *
+> >>>>>>>> +pru_rproc_get(struct device_node *np, int index, enum pruss_pru=
+_id *pru_id)
+> >>>>>>>> +{
+> >>>>>>>> +      return ERR_PTR(-EOPNOTSUPP);
+> >>>>>>>> +}
+> >>>>>>>> +
+> >>>>>>>> +static inline void pru_rproc_put(struct rproc *rproc) { }
+> >>>>>>>> +
+> >>>>>>>> +#endif /* CONFIG_PRU_REMOTEPROC */
+> >>>>>>>> +
+> >>>>>>>> +static inline bool is_pru_rproc(struct device *dev)
+> >>>>>>>> +{
+> >>>>>>>> +      const char *drv_name =3D dev_driver_string(dev);
+> >>>>>>>> +
+> >>>>>>>> +      if (strncmp(drv_name, PRU_RPROC_DRVNAME, sizeof(PRU_RPROC=
+_DRVNAME)))
+> >>>>>>>> +              return false;
+> >>>>>>>> +
+> >>>>>>>> +      return true;
+> >>>>>>>> +}
+> >>>>>>>> +
+> >>>>>>>> +#endif /* __LINUX_PRUSS_H */
+> >>>>>>>> --
+> >>>>>>>> 2.17.1
+> >>>>>>>>
+> >>
+> >
