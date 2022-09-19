@@ -2,71 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DB9F5BC1EE
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 06:07:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E1B15BC1EF
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 06:07:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbiISEHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 00:07:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45966 "EHLO
+        id S229656AbiISEHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 00:07:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbiISEG5 (ORCPT
+        with ESMTP id S229612AbiISEHI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 00:06:57 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA07FAE45
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 21:06:56 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id t190so2598691pgd.9
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 21:06:56 -0700 (PDT)
+        Mon, 19 Sep 2022 00:07:08 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 502871A078
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 21:07:07 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id k21so16246266pls.11
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Sep 2022 21:07:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=SKc7ienc320bxaSqnsDwmqqYkrQ1W8qMLxdfUMOcQck=;
-        b=DECwdbcvfv16bsFM6nQM3ZpFsiauW9Lcnmm7X25+4NjijLsN0W7qZnWHpH30YQd8+E
-         jPfWmJthrHrMEIlMUM2Eci3dKz9BqZMkG1smGXBsb2WX0NWTjlKivSaVWwjeEZRzh4YR
-         KZNYjOj/iyZ7hL8ehQ9Y2R+bETbPoJ8KgYhzeHtgKyBhKc6ufsu5pa1bCyK/Xqiu7KUI
-         48K/om1UZh+qzvEA4J8Rouun5he6FIZkaY4YPy1V5epuH0VM23cq8tgfSvZ6NTeBBkeJ
-         0QLfGLEOyX7HSZd4yzZ2Gg5t+JU+c0Mc635qpX8IkKvfBHuoqfBnYhUs4X+YpILo3JpM
-         3OZQ==
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date;
+        bh=88NVVVQ2B32kV1LLC8ocgurk1Nd2TGC/t8d76Ycn7R0=;
+        b=lt4+S6pAdv6T7RtMNADaDkPlLrWbyGc7TNjUXTpNjcTpmaK0v0jLrfFXBriNN5S/J0
+         anmr3yHoiQfjOfU6WZaSZPHEc70CdFP2T7AbxfPVweQlgz01hE/FzpcIPA79PMC6POiV
+         1smpOvkRSsTA4jAdGx4AJo1PWedF9qhqkSMYKTLHaSVnyKCQILtf/G5PJX07qrwB0XyI
+         8fVmMTHXrC1eyWfsC5H4zhAQvgGN7XZfEs0U03I6giO4TGvPtnTOnivgPe3B8AopYzDP
+         Wd4mc9QDPfCfZbJcarxZM6i/xDdhNjKkmg2YpAY4NA+t+JISWzLKr2SmFx44L9w5tIJ3
+         HQMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=SKc7ienc320bxaSqnsDwmqqYkrQ1W8qMLxdfUMOcQck=;
-        b=XMJ9XT4FE3Nu6mR4yyhHhAohQI9RLIaPPuo4YEm3WjCHE8iedVatWBrNhNonSSi3r3
-         Jb65LPzXsYuX/GVhJa3GKjDKUsQfRFmzgPrwYgdySlgWY5O7lw8fpg9ZA1pnGSxRLfyq
-         liEkZ44puQUjpPngB5c721CeIDgTvLUZZh/7YcoyUjxrrrShw+U8/Y1JqXtmA2LoRJNi
-         Nq5EH7Yzh6PfofLkJkKit85zg+XK2QurqU8Lio1RB4apBr3WKZ/73zNMnmZgvNLJ4C7F
-         1byjuu9wntmJZnr12Vq9XjeP/VkOS1axzD9l3MCV5TpNx1YlrsBd8guokKmBbcICpnJp
-         16ZQ==
-X-Gm-Message-State: ACrzQf0pRwn6anUXnQMptVixu94gAnkkC13NIjJwNspU9/Mao8hXo8yG
-        BZxoBfSp59d6h7w1Do1US5c=
-X-Google-Smtp-Source: AMsMyM607ldQAjae/oC+IOSLwU4EIw4Kh0YWOWFDmzUKOlIanKieGq3odU2ZiCYGog40IJ07068esg==
-X-Received: by 2002:a63:1351:0:b0:439:14a8:87 with SMTP id 17-20020a631351000000b0043914a80087mr14233930pgt.66.1663560416330;
-        Sun, 18 Sep 2022 21:06:56 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f4-20020a170902ce8400b0016dc6279ab7sm19388796plg.149.2022.09.18.21.06.54
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=88NVVVQ2B32kV1LLC8ocgurk1Nd2TGC/t8d76Ycn7R0=;
+        b=hvRCvnvmVoDlc2N7gDf9Ed1xzCgoYUestwtFd8xVLVkodaujtPNTOg2IN3i1zAxPzz
+         QabENtWp9uiHjXhjzGs2eW7zp21yE0zZMxa+VvzDmDAsvi4rZuTbgX6Ymv/XmlzZ74Rv
+         b85HZpUhIF3CUQHpYv3Kt8xRqtFSjNovALnteODW0P62/vfkiJWoi87fJsKT3jAmXZ3c
+         f0Expan99qRf7GzVzyGyZnA1w8vjKJ7KAv8bNvZ0V1AVcK/nnrE8+LbJkWOpYgkdKxuJ
+         w60j/zzeaU7MRSbYOIi0+qWOYYFBmNaCYtknMaKpdms5yvugAHvXywTK2UjoMK3PIvPK
+         c8uQ==
+X-Gm-Message-State: ACrzQf0PF6Bs21RrrPR0lo/CYxSfegOukHrhftgN/2sbSf1A6mm5RNgR
+        hr/Q3f5V+HxYvlwP5gcdzVk=
+X-Google-Smtp-Source: AMsMyM7hndYNjY0wBGCp6C7BtndE1yy9u3hVEULUV8ttv+FiPtb9YKpbqCxzv4NiN/XfC3feMC7Bvw==
+X-Received: by 2002:a17:90b:3c8a:b0:200:b874:804 with SMTP id pv10-20020a17090b3c8a00b00200b8740804mr29357368pjb.151.1663560426568;
+        Sun, 18 Sep 2022 21:07:06 -0700 (PDT)
+Received: from ubuntu ([175.124.254.119])
+        by smtp.gmail.com with ESMTPSA id ij4-20020a170902ab4400b00177e5d83d3dsm19227775plb.170.2022.09.18.21.07.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Sep 2022 21:06:55 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 18 Sep 2022 21:06:53 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        =?iso-8859-1?B?Q3Pza+Fz?= Bence <csokas.bence@prolan.hu>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: Re: Linux 6.0-rc6
-Message-ID: <20220919040653.GA1840059@roeck-us.net>
-References: <CAHk-=wi=gtuSO8Yz8LDubkMk7TiMsZxpypt9S10jeZRkyaBFnA@mail.gmail.com>
+        Sun, 18 Sep 2022 21:07:06 -0700 (PDT)
+Date:   Sun, 18 Sep 2022 21:07:01 -0700
+From:   Hyunwoo Kim <imv4bel@gmail.com>
+To:     laforge@gnumonks.org
+Cc:     linux-kernel@vger.kernel.org, imv4bel@gmail.com, arnd@arndb.de,
+        gregkh@linuxfoundation.org, linux@dominikbrodowski.net
+Subject: [PATCH v3] char: pcmcia: cm4000_cs: Fix use-after-free in cm4000_fops
+Message-ID: <20220919040701.GA302806@ubuntu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wi=gtuSO8Yz8LDubkMk7TiMsZxpypt9S10jeZRkyaBFnA@mail.gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,44 +68,157 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Sep 18, 2022 at 01:56:17PM -0700, Linus Torvalds wrote:
-> So this is an artificially small -rc release, because this past week
-> we had the Maintainers' Summit in Dublin (along with OSS EU and LPC
-> 2022), so we've had a lot of maintainers traveling.
-> 
-> Or - putting my ridiculously optimistic hat on - maybe things are just
-> so nice and stable that there just weren't all that many fixes?
-> 
-> Yeah, I know which scenario I'm betting on, but hope springs eternal.
-> 
-> Regardless, things look fine. I am expecting rc7 to be larger than
-> usual due to pull requests having shifted one week later, and in the
-> worst case that might mean that I might feel like we need an extra
-> rc8, but for now I'm going to assume it's not going to be _that_
-> noticeable and hope we'll just keep to the regular schedule.
-> 
-> But it would be lovely if everybody gave this some extra tender loving
-> care in the form of extra testing...
-> 
+A race condition may occur if the user physically removes the pcmcia
+device while calling open() for this char device node.
 
-Build results:
-	total: 149 pass: 149 fail: 0
-Qemu test results:
-	total: 490 pass: 489 fail: 1
-Failed tests:
-	mcf5208evb:m5208:m5208evb_defconfig:initrd
+This is a race condition between the cmm_open() function and the
+cm4000_detach() function, which may eventually result in UAF.
 
-TL;DR: Patches / reverts needed to fix known regressions
+So, add a refcount check to cm4000_detach() to free the "dev" structure
+after the char device node is close()d.
 
-Revert "net: fec: Use a spinlock to guard `fep->ptp_clk_on`"
-Revert "fec: Restart PPS after link state change"
-    revert b353b241f1eb
-    revert f79959220fa5
-    Rationale:
-	The patches result in various tracebacks and crashes.
-	https://lore.kernel.org/netdev/20220827160922.642zlcd5foopozru@pengutronix.de/
+Signed-off-by: Hyunwoo Kim <imv4bel@gmail.com>
+---
+ drivers/char/pcmcia/cm4000_cs.c | 58 +++++++++++++++++++++++----------
+ 1 file changed, 41 insertions(+), 17 deletions(-)
 
-The need to revert those patches has been discussed repeatedly,
-so going into details seems pointless.
+diff --git a/drivers/char/pcmcia/cm4000_cs.c b/drivers/char/pcmcia/cm4000_cs.c
+index adaec8fd4b16..7103812b4019 100644
+--- a/drivers/char/pcmcia/cm4000_cs.c
++++ b/drivers/char/pcmcia/cm4000_cs.c
+@@ -55,6 +55,7 @@
+ 	} while (0)
+ 
+ static DEFINE_MUTEX(cmm_mutex);
++static DEFINE_MUTEX(remove_mutex);
+ 
+ #define	T_1SEC		(HZ)
+ #define	T_10MSEC	msecs_to_jiffies(10)
+@@ -103,7 +104,8 @@ static int major;		/* major number we get from the kernel */
+ #define REG_STOPBITS(x)		(x + 7)
+ 
+ struct cm4000_dev {
+-	struct pcmcia_device *p_dev;
++	struct pcmcia_device	*p_dev;
++	struct kref		refcnt;
+ 
+ 	unsigned char atr[MAX_ATR];
+ 	unsigned char rbuf[512];
+@@ -146,6 +148,9 @@ struct cm4000_dev {
+ 
+ #define	ZERO_DEV(dev)	memset(&((dev)->init), 0, sizeof((dev)->init))
+ 
++static void stop_monitor(struct cm4000_dev *dev);
++static void cm4000_delete(struct kref *kref);
++
+ static struct pcmcia_device *dev_table[CM4000_MAX_DEV];
+ static struct class *cmm_class;
+ 
+@@ -416,6 +421,30 @@ static struct card_fixup card_fixups[] = {
+ 	},
+ };
+ 
++
++static void cm4000_delete(struct kref *kref)
++{
++	struct cm4000_dev *dev = container_of(kref, struct cm4000_dev, refcnt);
++	struct pcmcia_device *link = dev->p_dev;
++	int devno;
++
++	/* find device */
++	for (devno = 0; devno < CM4000_MAX_DEV; devno++)
++		if (dev_table[devno] == link)
++			break;
++	if (devno == CM4000_MAX_DEV)
++		return;
++
++	stop_monitor(dev);
++
++	cm4000_release(link);
++
++	dev_table[devno] = NULL;
++	kfree(dev);
++
++	device_destroy(cmm_class, MKDEV(major, devno));
++}
++
+ static void set_cardparameter(struct cm4000_dev *dev)
+ {
+ 	int i;
+@@ -1629,6 +1658,7 @@ static int cmm_open(struct inode *inode, struct file *filp)
+ 	if (minor >= CM4000_MAX_DEV)
+ 		return -ENODEV;
+ 
++	mutex_lock(&remove_mutex);
+ 	mutex_lock(&cmm_mutex);
+ 	link = dev_table[minor];
+ 	if (link == NULL || !pcmcia_dev_present(link)) {
+@@ -1673,8 +1703,12 @@ static int cmm_open(struct inode *inode, struct file *filp)
+ 
+ 	DEBUGP(2, dev, "<- cmm_open\n");
+ 	ret = stream_open(inode, filp);
++
++	kref_get(&dev->refcnt);
+ out:
+ 	mutex_unlock(&cmm_mutex);
++	mutex_unlock(&remove_mutex);
++
+ 	return ret;
+ }
+ 
+@@ -1703,6 +1737,8 @@ static int cmm_close(struct inode *inode, struct file *filp)
+ 	link->open = 0;		/* only one open per device */
+ 	wake_up(&dev->devq);	/* socket removed? */
+ 
++	kref_put(&dev->refcnt, cm4000_delete);
++
+ 	DEBUGP(2, dev, "cmm_close\n");
+ 	return 0;
+ }
+@@ -1808,6 +1844,7 @@ static int cm4000_probe(struct pcmcia_device *link)
+ 	init_waitqueue_head(&dev->ioq);
+ 	init_waitqueue_head(&dev->atrq);
+ 	init_waitqueue_head(&dev->readq);
++	kref_init(&dev->refcnt);
+ 
+ 	ret = cm4000_config(link, i);
+ 	if (ret) {
+@@ -1824,23 +1861,10 @@ static int cm4000_probe(struct pcmcia_device *link)
+ static void cm4000_detach(struct pcmcia_device *link)
+ {
+ 	struct cm4000_dev *dev = link->priv;
+-	int devno;
+-
+-	/* find device */
+-	for (devno = 0; devno < CM4000_MAX_DEV; devno++)
+-		if (dev_table[devno] == link)
+-			break;
+-	if (devno == CM4000_MAX_DEV)
+-		return;
+-
+-	stop_monitor(dev);
+-
+-	cm4000_release(link);
+ 
+-	dev_table[devno] = NULL;
+-	kfree(dev);
+-
+-	device_destroy(cmm_class, MKDEV(major, devno));
++	mutex_lock(&remove_mutex);
++	kref_put(&dev->refcnt, cm4000_delete);
++	mutex_unlock(&remove_mutex);
+ 
+ 	return;
+ }
+-- 
+2.25.1
 
-Guenter
+
+Dear,
+
+
+I fixed the wrong patch referencing "dev" after kref_put() in the previous version of the patch.
+
+
+Regards,
+Hyunwoo Kim.
