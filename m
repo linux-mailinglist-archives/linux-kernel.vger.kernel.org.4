@@ -2,137 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D28205BC594
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 11:38:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94AA05BC597
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 11:39:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbiISJio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 05:38:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57928 "EHLO
+        id S230303AbiISJjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 05:39:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbiISJim (ORCPT
+        with ESMTP id S229911AbiISJi7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 05:38:42 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 715F31D323
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 02:38:41 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id n23-20020a056602341700b00689fc6dbfd6so14357953ioz.8
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 02:38:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=aYNZr1TPBrm6w20i5gYjOP6/MXpZsLtQYWBpTiGRct8=;
-        b=QBMmkQActbNQJMN3drvg+A+9p6RhyILWuyh+Et9791sPkKldgsbNV1pEZeSB5GIUfW
-         IsxREoa95d3sSr/EwPfAHoFe0eBrz63e+CNxWZ7iEIcK5p7TIsS3mda727yvEz+w59oq
-         lEFanK+7kQgmBgdo0BCJYToqUdlrSK3MBZjtoxTNS2prNkPwPSIkrTyTojUxa3t5R/sa
-         3g4EoJKa1muV5TaFdbpVDyJEtOlH33qYhvVfdbppxIH8hASTvKYE6DDO+4qCqPGGTz4L
-         itxAvfZlPK4zbqVrvpDMefNF90mvb2umOjKrQRfe/EpG13izRewZXS8oZIoO9YBq/fA+
-         CQLA==
-X-Gm-Message-State: ACrzQf3//jZkMJJZFYyhrE2XMazOmjiBfHgJbuDQxy9IH23Ultdibo8k
-        ncKYGWmnHtHFVwalGIliXGwGVBo5T3y10f66nT95tDxpZbfv
-X-Google-Smtp-Source: AMsMyM7HzEqOPfosAxzjSIpMd1iL4aYwIL0WtmD6u90nAUUwruIRNNqMWyltZxPuCwQ1k2SfX3oEEko6ercQzCygrk+plCKJdPNl
+        Mon, 19 Sep 2022 05:38:59 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D7681D326;
+        Mon, 19 Sep 2022 02:38:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663580334; x=1695116334;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=R1MYk/RS+n6sVXOzJchwTA3Il/9YNlT42pXH67QWPx8=;
+  b=A1iF1LUa6lBFMuHyoNPY5DHKQ8FTfntfi0yUF8GcnkV2fbTyNQFfLl9+
+   rR+fLYXCKwTekJcKyPKCsqbqWV2s8L7u5PNZ3hENQyESt6cC7/jMx6Pgr
+   XHRqwt39DU29G10nxsPnF23m9COV2n6EtCWSqtWmy2EnI6Vyh2rW4i562
+   5OMaCg8B8DDMrStGE+Wgysf5/pkZulUChNteG5oJs73HI6KFWg5nfHKeR
+   zGWociRnvhCUF7yMTyW6uCvTv+l2SeJr9g/+C6FGSx2GV5FO9bfMzxhUt
+   hgvrwr5NtqP9fjJuUJBdWQ+yTqf8fGYrASzD6QT5DHk45dtVbiBXSpZiS
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10474"; a="300727065"
+X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
+   d="scan'208";a="300727065"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 02:38:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,327,1654585200"; 
+   d="scan'208";a="620790946"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by fmsmga007.fm.intel.com with ESMTP; 19 Sep 2022 02:38:47 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 19 Sep 2022 02:38:46 -0700
+Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 19 Sep 2022 02:38:46 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Mon, 19 Sep 2022 02:38:46 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.108)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Mon, 19 Sep 2022 02:38:46 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ecEtSdN8+AkvqgV5HBUZtCyvAwZQGn6niLXXCyTG0lEVKrnEFUnScwvDIWWQZJpo5xxvCbWuIEwL5a+kB6dIRj2I3Y6YId/P2C0b2iZFhmI5PIIsgGTs9qeZ8D8kUPYaBdNm0zlLGKz2Qjj9eeR+P0DC7ZL8rU0VEHjlsRbCoZalv0rSUEyxhg9JlI6P9DNuNeKuarFgIOGqdJ3iuhm1QtZOB8Wlvbl/laeTSlUIAWboBQ4PbGII6ovTCpk/BKcjpC5kRfsgNmoLl/YrCPI+m+lSoNpfT5SNCfXBdhhR3fP3Tu5k8oeO4utQO2/Y8jyMgJVACy91OzuQRMl2o0vEOA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=m8DCEeAlmvTOUFGiNKUW3kquElmKTSb0BdytTm0evoI=;
+ b=cwzxcLC1Nhg2AHlgcU2gIREb5HnX3dAAiT/5aO3Gfa5RxXXQaQkKLN3WO+RD52mYqcOSj677aggHLwwPFzPGhMgpYNVAWNjHHgFWw6d2qJj+6SEaHIwFJQvcth+o/k/eb/HtCDkZjkTKYHPr4hGKsqd9xA0yJB4DIn4xVpYx8okh9L6nsF6R78V4FzG32BFmle+bRi3HtuAzIbjHJhecqP6Xt6AaJOYMI19RfLP3dsl0KeB8jaNFl4De6arWhHa96bV9d5FSvEQwZtLPoWOcATKVIQ3P70WmzAlLySPlpZMeaXUcqaK+WYw0trOLLjEeoZi6OfYrvoKwdOY8igjqjw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from CY5PR11MB6366.namprd11.prod.outlook.com (2603:10b6:930:3a::8)
+ by PH0PR11MB5095.namprd11.prod.outlook.com (2603:10b6:510:3b::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.21; Mon, 19 Sep
+ 2022 09:38:44 +0000
+Received: from CY5PR11MB6366.namprd11.prod.outlook.com
+ ([fe80::c431:f74d:4292:f2e0]) by CY5PR11MB6366.namprd11.prod.outlook.com
+ ([fe80::c431:f74d:4292:f2e0%5]) with mapi id 15.20.5632.021; Mon, 19 Sep 2022
+ 09:38:44 +0000
+From:   "Cabiddu, Giovanni" <giovanni.cabiddu@intel.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Linux Crypto List <linux-crypto@vger.kernel.org>
+CC:     "Muszynski, Damian" <damian.muszynski@intel.com>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "Cabiddu, Giovanni" <giovanni.cabiddu@intel.com>
+Subject: RE: linux-next: Fixes tag needs some work in the crypto tree
+Thread-Topic: linux-next: Fixes tag needs some work in the crypto tree
+Thread-Index: AQHYy6vb/RWvImBQ1kGnd9Z6lSNu263mf11g
+Date:   Mon, 19 Sep 2022 09:38:44 +0000
+Message-ID: <CY5PR11MB6366B542EEDCEFCC97F00D2C824D9@CY5PR11MB6366.namprd11.prod.outlook.com>
+References: <20220919081259.714b81f8@canb.auug.org.au>
+In-Reply-To: <20220919081259.714b81f8@canb.auug.org.au>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-version: 11.6.500.17
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CY5PR11MB6366:EE_|PH0PR11MB5095:EE_
+x-ms-office365-filtering-correlation-id: 591df070-4f19-45d0-fbf8-08da9a22bed6
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: VW76HhfZ94seaKvckora/AO0DtjHdYias+5Vh9Bw0OdZtOBU0XXSspw3uEViyWCbM75vNONoJQz0QC3xKwHlYstWx2kPT0V1V0ikT4vcgLbAtPqjskn0nwHyYg4xugLPoY4VLc4ORZisKUVL1i3iBZSDUsOaag3n5/p3eO/SpBuebhsRgGnPENQtkQIzD9HCbu3rKv/NuNtQ2IrTLUKXDKmstSl+uGB08a3KoGlOrYiH7nZU4cIbpGVz+L3RqEY+/AAErqPKjpo4D4zuZRZmWynkNjvgTeWHloCHubkvkyxzPzr3VTYoW4bS7Gu0CsD63ps6rDu5ZmSDZnmAsyR/AvkXd1GrYOueLpIyXIJqvjWvxQiqPlqhCbPTKS2wF3AZW4tAvX64H1M2zJE39XM5GbI7XNQ5mMNapKZgU8F4o3yvBrQ6rgXSJstFRa3iuwVA7nFqGjN9CnUVk5bCb37AbJrnum5ZqzLDRjTl2ZKG8h9JrV0t0uc2/BZfgegGxvlhIeMPMExOvVpGXhYZRCAR4CYQxFxsjyX30QdwWtH2ItnfTyhZHIjDlZEOy7HzptmJUJq8mj6BQn71fXBOKaEWO5PoU/pcYaDedrEOA/P5YLh0P4Z3ZKvMaNVdnEyilE1CVwfrPzGZ2aAxyZdM82+sPbWzlsgnwDbFzdPTJG1+21jxgvhWO+648gmfuOdtF/CSWnt9kLKvm2NxRhOT8zUonK/AJImZHgpBFkVECNvBj57AWkKMHZKmkTaZdTgVxqYwNp8AoGGALKGt+u9pw6d65A==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6366.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(346002)(39850400004)(366004)(396003)(376002)(451199015)(122000001)(66446008)(86362001)(33656002)(38100700002)(38070700005)(82960400001)(55016003)(2906002)(5660300002)(4744005)(478600001)(66946007)(66556008)(4326008)(64756008)(66476007)(110136005)(52536014)(8676002)(8936002)(76116006)(316002)(54906003)(186003)(83380400001)(41300700001)(71200400001)(107886003)(7696005)(53546011)(6506007)(26005)(9686003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?BusX/JLFqz9s2PzwfeuhjDYIkWKLtcVAaqViydqW8lRAEg9xvrXeqTFTvPOj?=
+ =?us-ascii?Q?1uPSu9rQUjmVIondwdQmWyFSgLIsfhj+ajZlyWmXwFYJsO2hRbj6trKu8yKj?=
+ =?us-ascii?Q?8C93wNjfR77Kb8s1Q6KKYt1uP3vFB/YdfgpC3Lq7j7qwqEooLGZXi6Tsmjg5?=
+ =?us-ascii?Q?uVJ5gSYvz29cuq4K1do9mPTmJDh9F8/N5QaaKwNn+tGv+5l+3xGfU9qrXXYB?=
+ =?us-ascii?Q?syk3FwQYr+YPzwV/njxCRreAZSOZtJDJpGgFACO4zjuLkh1a5RNQn9QzqLs+?=
+ =?us-ascii?Q?LLEr553EDUhRHfM7wvO5jMBdq6X5mlp3KhNdJIxaGWqgxH+L74MrnCCSCYwD?=
+ =?us-ascii?Q?ZsJpOx74QrMrZtYd1gE44Lfjc4tKdysqgWUqTQTDcIG14yRTVRwvkI3bUE2d?=
+ =?us-ascii?Q?lkKPwhAW0WTt0WmgH8YLpflNGCFTMYobzmoY9JL7RcjTuhLebyPwUrSooBpQ?=
+ =?us-ascii?Q?vOyM6rraM4p7ngeRcmGnUGA1kNvyrRS5/qmM2FB5d+JBf9POhDWGDWIu4c8/?=
+ =?us-ascii?Q?Edfb/wVNdH2030L8nI78+roAYstxl0SqoZX4ozrGykOqSd7wo8SEO/Jp/dVi?=
+ =?us-ascii?Q?3661augzqoo20urk6IRe7T813zT+ovdpXw+VnkiHpHvpjQdNtVjAvjidajoa?=
+ =?us-ascii?Q?HkkkXtIkM9JrCJvHErwqnyh0LAAJl4QmYb+e+KcAopJl/kXjp6sTs9pYThmA?=
+ =?us-ascii?Q?Nd3HoN6t/5JxYQ6Y0d629+ex3wbHb5csR8Ra/4NhYU2o56342W13fOC1ThT2?=
+ =?us-ascii?Q?MhNNLGoGKWy87t+15tAkQwsQybp/MJ7OCpIY2iihKpqjhL689bMwp+TZX+1T?=
+ =?us-ascii?Q?4IauzP6v9FgFbvRC6ppC/eK0RQsIItiaHjh5GcFlc6usUbPRYGzUXOJ+tarb?=
+ =?us-ascii?Q?uGTwWIYqkGfCSjF70i2xFWWqFhABWLAudHo51GPgYgTK3prq7EOdM/IuEhFP?=
+ =?us-ascii?Q?MrOvrSL+yQ8Ynxu8fv62B/skxRVzbjJBooLA2YUmFgDuD5LeRT6PixxsfVDK?=
+ =?us-ascii?Q?Tmy7n0ttT7dnfOqm4KqUBcxxhAGDShvKaQNIGOrvek53SaPZk2fOJvFsVv0r?=
+ =?us-ascii?Q?vhGKP/BjGeGlf6YpjCNKVKJKbtaku9mLdpMZ/vzvgg7O7ayro3XJfZ9AdV1p?=
+ =?us-ascii?Q?AeQ2+CfVY+wBtrE8l51TO6DzoNAF9O3dQK3NhKUtYsdovHReTH0CLHodjL33?=
+ =?us-ascii?Q?01jxEOl8RcZFLwLipEd7RRC5dhuJh7vpIzaDYJHV4S7RpwDAH9Ovxqzp9UG0?=
+ =?us-ascii?Q?44KHLJ9ss1kEvEJdD/WnndCEEawipIMB8s9Xd2z4fzhzp0mFXwAtqls0eX0u?=
+ =?us-ascii?Q?xEo9Y7lwdNzknkvkUYjKkBW3vpOl8PTUsrYj0wpPLjpWSXwJz+izf9Bof0Hk?=
+ =?us-ascii?Q?MGbLksVtHDpASVfVMwYEB69pp4YNI0qBjCFOh34xfAgG74sAQyzuKNx9YlIw?=
+ =?us-ascii?Q?+vf9iPOSufYB07DMFUGg4qweLGgJZiIwPJYRqjhDjDGHXPydY8ma4jiawHLU?=
+ =?us-ascii?Q?LAicHBpWbaI9Tsb5C4NL8QIPKVQwMDFuyitV1v39V4t2okfSz4+27mtTMM+l?=
+ =?us-ascii?Q?NLVWfEdQsnYuZiZ/xIufoxSF8Quvh1LE6sOVr/+tEGZKJa3sQj63JtxgtpkZ?=
+ =?us-ascii?Q?kw=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-Received: by 2002:a02:9509:0:b0:349:b6cb:9745 with SMTP id
- y9-20020a029509000000b00349b6cb9745mr7844464jah.281.1663580320843; Mon, 19
- Sep 2022 02:38:40 -0700 (PDT)
-Date:   Mon, 19 Sep 2022 02:38:40 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000014512a05e9047a38@google.com>
-Subject: [syzbot] WARNING: suspicious RCU usage in evict
-From:   syzbot <syzbot+45df7ccc8b5bade4f745@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6366.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 591df070-4f19-45d0-fbf8-08da9a22bed6
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Sep 2022 09:38:44.7355
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: iNu88NOXBZhZIgAK1IAPXGKoKKSz3FhbLM9MYjiFWIz0wIZCZkX7JhOD5n4EisEeay2rWKfJRukSexpAT3atl2rRNamL5Y5duBUBVuoswbY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB5095
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+My bad. Apologies.
 
-syzbot found the following issue on:
+@Herbert, can this be replaced in your history? The correct tag is
+    Fixes: d370cec32194 ("crypto: qat - Intel(R) QAT crypto interface")
 
-HEAD commit:    6879c2d3b960 Merge tag 'pinctrl-v6.0-2' of git://git.kerne..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=12739ff7080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=98a30118ec9215e9
-dashboard link: https://syzkaller.appspot.com/bug?extid=45df7ccc8b5bade4f745
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+Thanks,
 
-Unfortunately, I don't have any reproducer for this issue yet.
+--=20
+Giovanni
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/19b2347a4079/disk-6879c2d3.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/51b0418505d4/vmlinux-6879c2d3.xz
+-----Original Message-----
+From: Stephen Rothwell <sfr@canb.auug.org.au>=20
+Sent: Sunday, September 18, 2022 11:13 PM
+To: Herbert Xu <herbert@gondor.apana.org.au>; Linux Crypto List <linux-cryp=
+to@vger.kernel.org>
+Cc: Muszynski, Damian <damian.muszynski@intel.com>; Cabiddu, Giovanni <giov=
+anni.cabiddu@intel.com>; Linux Kernel Mailing List <linux-kernel@vger.kerne=
+l.org>; Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the crypto tree
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+45df7ccc8b5bade4f745@syzkaller.appspotmail.com
+Hi all,
 
-loop1: detected capacity change from 0 to 4095
-ntfs3: loop1: RAW NTFS volume: Filesystem size 0.00 Gb > volume size 0.00 Gb. Mount in read-only
-=============================
-WARNING: suspicious RCU usage
-6.0.0-rc5-syzkaller-00089-g6879c2d3b960 #0 Not tainted
------------------------------
-include/trace/events/lock.h:69 suspicious rcu_dereference_check() usage!
+In commit
 
-other info that might help us debug this:
+  cf5bb835b7c8 ("crypto: qat - fix DMA transfer direction")
 
+Fixes tag
 
-rcu_scheduler_active = 2, debug_locks = 1
-2 locks held by syz-executor.1/7588:
- #0: ffff8880740ce0e0 (&type->s_umount_key#51/1){+.+.}-{3:3}, at: alloc_super+0x22e/0xb60 fs/super.c:228
- #1: ffff888032493df0 (&sb->s_type->i_lock_key#33){+.+.}-{2:2}, at: spin_lock include/linux/spinlock.h:349 [inline]
- #1: ffff888032493df0 (&sb->s_type->i_lock_key#33){+.+.}-{2:2}, at: inode_wait_for_writeback+0x1a/0x30 fs/fs-writeback.c:1472
+  Fixes: d370cec ("crypto: qat - Intel(R) QAT crypto interface")
 
-stack backtrace:
-CPU: 0 PID: 7588 Comm: syz-executor.1 Not tainted 6.0.0-rc5-syzkaller-00089-g6879c2d3b960 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- trace_lock_release include/trace/events/lock.h:69 [inline]
- lock_release.cold+0x1f/0x4e kernel/locking/lockdep.c:5677
- __raw_spin_unlock include/linux/spinlock_api_smp.h:141 [inline]
- _raw_spin_unlock+0x12/0x40 kernel/locking/spinlock.c:186
- evict+0x2b7/0x6b0 fs/inode.c:662
- iput_final fs/inode.c:1748 [inline]
- iput.part.0+0x55d/0x810 fs/inode.c:1774
- iput+0x58/0x70 fs/inode.c:1764
- ntfs_fill_super+0x2e89/0x37f0 fs/ntfs3/super.c:1190
- get_tree_bdev+0x440/0x760 fs/super.c:1323
- vfs_get_tree+0x89/0x2f0 fs/super.c:1530
- do_new_mount fs/namespace.c:3040 [inline]
- path_mount+0x1326/0x1e20 fs/namespace.c:3370
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f27b3c8a93a
-Code: 48 c7 c2 b8 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 b8 04 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f27b4e7ff88 EFLAGS: 00000202 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 0000000020000200 RCX: 00007f27b3c8a93a
-RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007f27b4e7ffe0
-RBP: 00007f27b4e80020 R08: 00007f27b4e80020 R09: 0000000020000000
-R10: 0000000000000000 R11: 0000000000000202 R12: 0000000020000000
-R13: 0000000020000100 R14: 00007f27b4e7ffe0 R15: 0000000020003580
- </TASK>
-ntfs3: loop1: Failed to load $UpCase.
+has these problem(s):
 
+  - SHA1 should be at least 12 digits long
+    This can be fixed for the future by setting core.abbrev to 12 (or
+    more) or (for git v2.11 or later) just making sure it is not set
+    (or set to "auto").
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+--=20
+Cheers,
+Stephen Rothwell
