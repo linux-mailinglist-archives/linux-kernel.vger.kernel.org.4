@@ -2,802 +2,695 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFD655BC146
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 04:14:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA67C5BC148
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 04:14:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbiISCOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Sep 2022 22:14:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38020 "EHLO
+        id S229572AbiISCOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Sep 2022 22:14:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbiISCOH (ORCPT
+        with ESMTP id S229561AbiISCOj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Sep 2022 22:14:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F76E13D3F;
-        Sun, 18 Sep 2022 19:14:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F18A061172;
-        Mon, 19 Sep 2022 02:14:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B13EC433B5;
-        Mon, 19 Sep 2022 02:14:01 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org, Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH V2] LoongArch: Refactor cache probe and flush methods
-Date:   Mon, 19 Sep 2022 10:13:05 +0800
-Message-Id: <20220919021305.2869400-1-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.31.1
-MIME-Version: 1.0
+        Sun, 18 Sep 2022 22:14:39 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E236B5FFD;
+        Sun, 18 Sep 2022 19:14:36 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28J0xSPj017415;
+        Mon, 19 Sep 2022 02:13:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : content-transfer-encoding : content-type :
+ mime-version; s=corp-2022-7-12;
+ bh=+n+/uWnjuyeXFq1S9aw5kcdCKfUB29VeInWt9twX/YI=;
+ b=ZeGdgGZh5ym3tXYQuotze5NjF1r+PZ353US2jxoI10rwXUURgtfFSO6NM0UmZB38ASDk
+ 3vRUrm0MQp9SyNaRaLEWCML9k9Y+Xh4NqP2LU7KpbVw9PBhyEglhayMv83ECJwGs8nHe
+ 28+01N9Qalm6b+Gm2oRwomjdvazf46gD1p2Uksu/xu6JrTwf1LCEuFU2HTNwcQDPXW5L
+ C5eJg9FGATcdw0TZSPFdhXPVTd5FcC8rOwL5LOXh8owfkijcLzxOzXZAeWTK9zFI1T+X
+ o4SdS4bRsaZnpRqBbMutzgt7aG013eSMr/U52egOheGj6BpW5ELiksKmNpyS1tSJlA5e MQ== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3jn6f0ae6f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 19 Sep 2022 02:13:59 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 28IKP3sw016823;
+        Mon, 19 Sep 2022 02:13:57 GMT
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2171.outbound.protection.outlook.com [104.47.57.171])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3jp3cka3q1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 19 Sep 2022 02:13:57 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GzW1ASYvVaKBDZ0OvHHQnWAiRtvW7zgH/zvJEdQl1TY32drx6Iguv0EUXFwt41wZ+TKZ7Jv0HL91U2bCkeRXcWVp3BON7EabwEpRXQIu6vKNZtN177BssWLKZaoyYIyZUTHlJRlIEVMDnMb2TYvIHk+jM660mVh5FxTYb1kPpmTs1DydOPsnDirIJJFBjUmywNiemuwKqv/w4H4FfZJAGltt4S1/x5pNEjMuDHti+meiTB+5MIj9D3B0WneqfVz69YoakpAm6XrlZoVGqsJaCmnzffJ1U2t2yFadwEfdGV6lfhq3VL2KuagqSuaOfKXqdykZQk7wpiu9R+s176YgjQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+n+/uWnjuyeXFq1S9aw5kcdCKfUB29VeInWt9twX/YI=;
+ b=kawj5f8fOw0HH3M3fcmw5BJSy5nhFOvn1K0Wl+st/lt4oT2CcnjJEqJcyWg+eCKeczPQfTwls41go5oSW9QLxGVsVlPjFdYTAYqFxDw6poJYZhpmKGmLCL63Y7aZ2ub9Mm4/6mirwZzDHRw267caz8jOoPZYh8uB+Hfik24lSbAJuwNs+G68w7n4Gtln5lRDusOnxFQzpO9z3QR1wp2GdigqC2rZIsUvuEixNOr8tNS24P47iCRYgziralKV6LEwbRuVMBTnHPt/LT2nXDJrdXnbgLDlpLxLFKU7EGcPox14JgrkpTsXRB0Kw7zy6NHzs5OnS3L0/zBcCLdMX3xJ7Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+n+/uWnjuyeXFq1S9aw5kcdCKfUB29VeInWt9twX/YI=;
+ b=wPssv+xry9SsTeOniEa5cc+gAAkpXotlPOjFO4LxyxSangFwe95krYQHida1AN/9W2Cw5q2KF0rzA3KuPPLwlDLkaN/N8kA1pdh6FK2d14TYsg07sHL6YG2iDzGV494A3m6KhAL1yr1BCyzKb8HlJ9N8Nnw8MkiITNffHOWAOEE=
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
+ by DM4PR10MB6695.namprd10.prod.outlook.com (2603:10b6:8:111::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.19; Mon, 19 Sep
+ 2022 02:13:54 +0000
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::e9d2:a804:e53a:779a]) by BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::e9d2:a804:e53a:779a%7]) with mapi id 15.20.5632.021; Mon, 19 Sep 2022
+ 02:13:54 +0000
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-ia64@vger.kernel.org
+Cc:     Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Hildenbrand <david@redhat.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>
+Subject: [PATCH v3] hugetlb: simplify hugetlb handling in follow_page_mask
+Date:   Sun, 18 Sep 2022 19:13:48 -0700
+Message-Id: <20220919021348.22151-1-mike.kravetz@oracle.com>
+X-Mailer: git-send-email 2.37.3
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: MW4PR02CA0024.namprd02.prod.outlook.com
+ (2603:10b6:303:16d::9) To BY5PR10MB4196.namprd10.prod.outlook.com
+ (2603:10b6:a03:20d::23)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|DM4PR10MB6695:EE_
+X-MS-Office365-Filtering-Correlation-Id: c8c0b56c-0401-447a-00c9-08da99e49a15
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: PB+Qb4Vi4Nu5C8loD+cNzu8smdf3vL3m4cJmkg/9xQsMNP5bWl05eD8N2VRdfZFCmZEvaGTTr8WLgpIxBR7kD0/N42VXmJVg4qRVsZNpvxxsgsDqlavj4j/AJOxPM0UXP+qVj+xyLKgznauVaDkSLfFPbQBRNRaaDknLDwn+gsuxDpWDS51G7AzhoFMINnmpti7z1l7B/HcLANEfp6cmMeHcce07uH+29EJsJXkgyr0gTBkqWY6giXh8D5Vf9XoWudCJMu5cKl6t8dYL2iyv2mNooeopHY8pGAE8gxfnFPz1LHb6mLHbxQM7iucReDU63PNl4nqcD/2i9S7uisJtrM5mpQQqCGc0QlBGYi6yGclHYjj0i9ak5ZoiDH5QVpJbWXbtJTdgVwP7iguwNL+26mSlP6fJSDcN5xxVhSktSpb6An5rmV7Cp0rJq1iQnCodho53lccvTa6Pnekbe+JC4tsb09HYSwPeNxNG7ffbew1KJxX0RvwFdAuPsWpNXmxSLJn4Vze6fxXfquRmL5BOfdNnQIgN3rwoaPa8WeAyAVQN2Ac/4B6v20ZVcKdIZ7n+GmsPxrNwZ3pLJTgx4AP6PM/MD0wUigUMqZA9hAtbEuXVuOvysr8vjVhGwyleD9FCvPMcsvuwpY1L3C4MdjPDINVkzZ++5sA5d+88q/zW+Zm3TOinPcEGDrSTdAlegGiSNWVFZ9ueeDV5q6gY/UGYovX2TP6KvZKU2zUzw7caj2g=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(396003)(136003)(346002)(366004)(376002)(451199015)(36756003)(5660300002)(7416002)(54906003)(107886003)(6666004)(86362001)(316002)(38100700002)(2906002)(83380400001)(30864003)(6486002)(966005)(8936002)(186003)(1076003)(44832011)(2616005)(6506007)(4326008)(6512007)(26005)(41300700001)(478600001)(8676002)(66556008)(66476007)(66946007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?LD7Q6cFRAdHFtEaFDxBRo7LVWPBSrz3lhU9zWTs8FQSKbDs8lVZFZicIT3Rf?=
+ =?us-ascii?Q?SliUK/bHYnU7S+u4XDTIPaJZtz0mzrJ8s88X693S9g7X0B9MGozQ8AA6nzYf?=
+ =?us-ascii?Q?ehN5a6v1+LikEYJUazxOQjOCtJ9rcG2v4BeNYF4hHqH+N+IZgn+qOYh8UiiI?=
+ =?us-ascii?Q?Ev0+4rf1knlJmfytOVIYu//mURJK6si2iPbMgTlBpV2JaQzX3SPLITACMU/Z?=
+ =?us-ascii?Q?ogLjOmZBi84rjlW8F6ytVHlxhk6Baqq5X8bE/dzmVOo0FTqcRCqR53C2xq8u?=
+ =?us-ascii?Q?xO5G0wVdbImxSCkM1yA9e8EkX4c6d0TdAUfGpUm+ayDFAvc/0Retsyos1IG3?=
+ =?us-ascii?Q?zzLlu692HV6RnvTqtup+RjOyXyPlwF+0KK/F6xobPF+EnYyO5UTC4gYe9Q3M?=
+ =?us-ascii?Q?dR7DZHdvM+1z69ojbsKVUbx2+DjJIvnp/NLh6q0DHofurACWtfysl9iJG/cY?=
+ =?us-ascii?Q?DHIqqWiGinSjjA6SgsVEuuj85axsPtGMgK+78IwoO0pXCz06poNHe9klZyFK?=
+ =?us-ascii?Q?EpLJSB7JLVOLNMtPaJJnCRsrCcpI9ZHyd0KOfvFYd9iPoBSCOpj5Rrbimuj4?=
+ =?us-ascii?Q?koXyVKXJOOSTCox4vLfLyN889gykoDGpDDf584+HSEGJ8nRd6kxRGTQ+uRZr?=
+ =?us-ascii?Q?eUtcqygpB4/S0125e5RN3rG9InNXayuoHDg+Q5iT+juWzLZfICutKfx8b7Y3?=
+ =?us-ascii?Q?UUS61QEU0Ujg9KB5moM8sIhJDANNQYEOGF+bix2H+1Hqv5iRMorCTCRcy/g3?=
+ =?us-ascii?Q?/tfQ1MyJlH/Y7f04lzhTQTc/Eq6Tnfc4HRv9E6KNbCMzxUMFReKfuQ2Xc+d3?=
+ =?us-ascii?Q?TH7eQjyavjLZXFSMH/ic1zebfuE++Ji8eTJDd1cBpb5lN06cbjtk/412QknM?=
+ =?us-ascii?Q?Ja1Q+BcjRMKmkiLOi35ofBPSsmMHWkL3dOLKp9hTQW+JmAM0f37e9ksMc5pP?=
+ =?us-ascii?Q?oOBGRnyHlC4Hu+8cNbDiyWHIfQD1P2ybDDR8VDXspo9/Esh6pQ9ACobyKNrh?=
+ =?us-ascii?Q?u0fPybN2FuZARK+iD+I3N0AYa1vC5mXacC3qpgo5eIKRGo5TZyz+sKu48Uqm?=
+ =?us-ascii?Q?UsqTZNNm/45eaZq3UgikHRfYvS4eFAXvJAcjRbXGu2eLdNVLfS7CKXNpIRZf?=
+ =?us-ascii?Q?6RAlzr98B18xVlp5QjotZPoVf5p1XaO22JKqhfGwIQnMJUADXSayXLlPLC6/?=
+ =?us-ascii?Q?ijZ3aqCw9fi4yIaGJ9ZKlvvRxB2A9KnRTkxQiBUOO61fZSSCCH4GvQGPTN/v?=
+ =?us-ascii?Q?FT3gibA3MhJc29CNuuctfhdiHxOR2ZpkXn78OVD5QOw3yyH40OyBZL3JtbO2?=
+ =?us-ascii?Q?fJ1rdnFhK2iGluLmTcC01t9J9n4TKg/4O1rBflkrwWrxLodYQFUYj48gmCA7?=
+ =?us-ascii?Q?QVkMrktK996Jg5mgMKhJWvpISac4m0uyefQEZN1vmF0onPCyW12YqDyI0PZM?=
+ =?us-ascii?Q?ALaSkRPo4dJ5ehsSe/NNXBlBia1z91KG8FP4IFR46WW3nW/fnVGZrEEgTluQ?=
+ =?us-ascii?Q?QuIPNQ/0wGiiJajGGhoPct1qErhlTVWOB+XtuUkEikzCfDLckjHJQwoGISt/?=
+ =?us-ascii?Q?VK/Xsxsnp/NgbGlQAsJU/A/2YDFnSX0gUgrWz4Y6Aej+D9IxPB8bVMtqkL90?=
+ =?us-ascii?Q?ow=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c8c0b56c-0401-447a-00c9-08da99e49a15
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Sep 2022 02:13:54.6627
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ynqcBUjz6nGB7Vf0uW19aQ2axI3qODI5dio/E9zJiUFQpZkLPiFYzF6PA0d/EUaL1huPAW5ArWBMu1HCSj0QtA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR10MB6695
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-19_01,2022-09-16_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxlogscore=999
+ spamscore=0 adultscore=0 mlxscore=0 malwarescore=0 bulkscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209190014
+X-Proofpoint-GUID: 261M04K4m6PIQhIx26I4MvueCZS8DL-o
+X-Proofpoint-ORIG-GUID: 261M04K4m6PIQhIx26I4MvueCZS8DL-o
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Current cache probe and flush methods have some drawbacks:
-1, Assume there are 3 cache levels and only 3 levels;
-2, Assume L1 = I + D, L2 = V, L3 = S, V is exclusive, S is inclusive.
+During discussions of this series [1], it was suggested that hugetlb
+handling code in follow_page_mask could be simplified.  At the beginning
+of follow_page_mask, there currently is a call to follow_huge_addr which
+'may' handle hugetlb pages.  ia64 is the only architecture which provides
+a follow_huge_addr routine that does not return error.  Instead, at each
+level of the page table a check is made for a hugetlb entry.  If a hugetlb
+entry is found, a call to a routine associated with that entry is made.
 
-However, the fact is I + D, I + D + V, I + D + S and I + D + V + S are
-all valid. So, refactor the cache probe and flush methods to adapt more
-types of cache hierarchy.
+Currently, there are two checks for hugetlb entries at each page table
+level.  The first check is of the form:
+        if (p?d_huge())
+                page = follow_huge_p?d();
+the second check is of the form:
+        if (is_hugepd())
+                page = follow_huge_pd().
 
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+We can replace these checks, as well as the special handling routines
+such as follow_huge_p?d() and follow_huge_pd() with a single routine to
+handle hugetlb vmas.
+
+A new routine hugetlb_follow_page_mask is called for hugetlb vmas at the
+beginning of follow_page_mask.  hugetlb_follow_page_mask will use the
+existing routine huge_pte_offset to walk page tables looking for hugetlb
+entries.  huge_pte_offset can be overwritten by architectures, and already
+handles special cases such as hugepd entries.
+
+[1] https://lore.kernel.org/linux-mm/cover.1661240170.git.baolin.wang@linux.alibaba.com/
+
+Suggested-by: David Hildenbrand <david@redhat.com>
+Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
 ---
-V2: Fix build errors and warnings reported by kernel test robot.
+v3 -	Change WARN_ON_ONCE() to BUILD_BUG() as reminded by Christophe Leroy
+v2 -    Added WARN_ON_ONCE() and updated comment as suggested by David
+        Fixed build issue found by kernel test robot
+        Added vma (pmd sharing) locking to hugetlb_follow_page_mask
+        ReBased on Baolin's patch to fix issues with CONT_* entries
 
- arch/loongarch/include/asm/cacheflush.h   |  87 +++++----
- arch/loongarch/include/asm/cacheops.h     |  36 ++--
- arch/loongarch/include/asm/cpu-features.h |   5 -
- arch/loongarch/include/asm/cpu-info.h     |  21 ++-
- arch/loongarch/include/asm/loongarch.h    |  33 +---
- arch/loongarch/include/asm/setup.h        |   2 +
- arch/loongarch/kernel/cacheinfo.c         |  98 +++-------
- arch/loongarch/kernel/traps.c             |   3 -
- arch/loongarch/mm/cache.c                 | 211 ++++++++++++----------
- arch/loongarch/pci/pci.c                  |   7 +-
- 10 files changed, 236 insertions(+), 267 deletions(-)
+ arch/ia64/mm/hugetlbpage.c    |  15 ---
+ arch/powerpc/mm/hugetlbpage.c |  37 -------
+ include/linux/hugetlb.h       |  50 ++--------
+ mm/gup.c                      |  80 +++------------
+ mm/hugetlb.c                  | 182 ++++++++++++----------------------
+ 5 files changed, 86 insertions(+), 278 deletions(-)
 
-diff --git a/arch/loongarch/include/asm/cacheflush.h b/arch/loongarch/include/asm/cacheflush.h
-index 670900141b7c..0681788eb474 100644
---- a/arch/loongarch/include/asm/cacheflush.h
-+++ b/arch/loongarch/include/asm/cacheflush.h
-@@ -6,10 +6,33 @@
- #define _ASM_CACHEFLUSH_H
- 
- #include <linux/mm.h>
--#include <asm/cpu-features.h>
-+#include <asm/cpu-info.h>
- #include <asm/cacheops.h>
- 
--extern void local_flush_icache_range(unsigned long start, unsigned long end);
-+static inline bool cache_present(struct cache_desc *cdesc)
-+{
-+	return cdesc->flags & CACHE_PRESENT;
-+}
-+
-+static inline bool cache_private(struct cache_desc *cdesc)
-+{
-+	return cdesc->flags & CACHE_PRIVATE;
-+}
-+
-+static inline bool cache_inclusive(struct cache_desc *cdesc)
-+{
-+	return cdesc->flags & CACHE_INCLUSIVE;
-+}
-+
-+static inline unsigned int cpu_last_level_cache_line_size(void)
-+{
-+	int cache_present = boot_cpu_data.cache_leaves_present;
-+
-+	return boot_cpu_data.cache_leaves[cache_present - 1].linesz;
-+}
-+
-+asmlinkage void __flush_cache_all(void);
-+void local_flush_icache_range(unsigned long start, unsigned long end);
- 
- #define flush_icache_range	local_flush_icache_range
- #define flush_icache_user_range	local_flush_icache_range
-@@ -35,44 +58,30 @@ extern void local_flush_icache_range(unsigned long start, unsigned long end);
- 	:								\
- 	: "i" (op), "ZC" (*(unsigned char *)(addr)))
- 
--static inline void flush_icache_line_indexed(unsigned long addr)
--{
--	cache_op(Index_Invalidate_I, addr);
--}
--
--static inline void flush_dcache_line_indexed(unsigned long addr)
--{
--	cache_op(Index_Writeback_Inv_D, addr);
--}
--
--static inline void flush_vcache_line_indexed(unsigned long addr)
--{
--	cache_op(Index_Writeback_Inv_V, addr);
--}
--
--static inline void flush_scache_line_indexed(unsigned long addr)
--{
--	cache_op(Index_Writeback_Inv_S, addr);
--}
--
--static inline void flush_icache_line(unsigned long addr)
--{
--	cache_op(Hit_Invalidate_I, addr);
--}
--
--static inline void flush_dcache_line(unsigned long addr)
--{
--	cache_op(Hit_Writeback_Inv_D, addr);
--}
--
--static inline void flush_vcache_line(unsigned long addr)
--{
--	cache_op(Hit_Writeback_Inv_V, addr);
--}
--
--static inline void flush_scache_line(unsigned long addr)
-+static inline void flush_cache_line(int leaf, unsigned long addr)
- {
--	cache_op(Hit_Writeback_Inv_S, addr);
-+	switch (leaf) {
-+	case Cache_LEAF0:
-+		cache_op(Index_Writeback_Inv_LEAF0, addr);
-+		break;
-+	case Cache_LEAF1:
-+		cache_op(Index_Writeback_Inv_LEAF1, addr);
-+		break;
-+	case Cache_LEAF2:
-+		cache_op(Index_Writeback_Inv_LEAF2, addr);
-+		break;
-+	case Cache_LEAF3:
-+		cache_op(Index_Writeback_Inv_LEAF3, addr);
-+		break;
-+	case Cache_LEAF4:
-+		cache_op(Index_Writeback_Inv_LEAF4, addr);
-+		break;
-+	case Cache_LEAF5:
-+		cache_op(Index_Writeback_Inv_LEAF5, addr);
-+		break;
-+	default:
-+		break;
-+	}
- }
- 
- #include <asm-generic/cacheflush.h>
-diff --git a/arch/loongarch/include/asm/cacheops.h b/arch/loongarch/include/asm/cacheops.h
-index dc280efecebd..0f4a86f8e2be 100644
---- a/arch/loongarch/include/asm/cacheops.h
-+++ b/arch/loongarch/include/asm/cacheops.h
-@@ -8,16 +8,18 @@
- #define __ASM_CACHEOPS_H
- 
- /*
-- * Most cache ops are split into a 2 bit field identifying the cache, and a 3
-+ * Most cache ops are split into a 3 bit field identifying the cache, and a 2
-  * bit field identifying the cache operation.
-  */
--#define CacheOp_Cache			0x03
--#define CacheOp_Op			0x1c
-+#define CacheOp_Cache			0x07
-+#define CacheOp_Op			0x18
- 
--#define Cache_I				0x00
--#define Cache_D				0x01
--#define Cache_V				0x02
--#define Cache_S				0x03
-+#define Cache_LEAF0			0x00
-+#define Cache_LEAF1			0x01
-+#define Cache_LEAF2			0x02
-+#define Cache_LEAF3			0x03
-+#define Cache_LEAF4			0x04
-+#define Cache_LEAF5			0x05
- 
- #define Index_Invalidate		0x08
- #define Index_Writeback_Inv		0x08
-@@ -25,13 +27,17 @@
- #define Hit_Writeback_Inv		0x10
- #define CacheOp_User_Defined		0x18
- 
--#define Index_Invalidate_I		(Cache_I | Index_Invalidate)
--#define Index_Writeback_Inv_D		(Cache_D | Index_Writeback_Inv)
--#define Index_Writeback_Inv_V		(Cache_V | Index_Writeback_Inv)
--#define Index_Writeback_Inv_S		(Cache_S | Index_Writeback_Inv)
--#define Hit_Invalidate_I		(Cache_I | Hit_Invalidate)
--#define Hit_Writeback_Inv_D		(Cache_D | Hit_Writeback_Inv)
--#define Hit_Writeback_Inv_V		(Cache_V | Hit_Writeback_Inv)
--#define Hit_Writeback_Inv_S		(Cache_S | Hit_Writeback_Inv)
-+#define Index_Writeback_Inv_LEAF0	(Cache_LEAF0 | Index_Writeback_Inv)
-+#define Index_Writeback_Inv_LEAF1	(Cache_LEAF1 | Index_Writeback_Inv)
-+#define Index_Writeback_Inv_LEAF2	(Cache_LEAF2 | Index_Writeback_Inv)
-+#define Index_Writeback_Inv_LEAF3	(Cache_LEAF3 | Index_Writeback_Inv)
-+#define Index_Writeback_Inv_LEAF4	(Cache_LEAF4 | Index_Writeback_Inv)
-+#define Index_Writeback_Inv_LEAF5	(Cache_LEAF5 | Index_Writeback_Inv)
-+#define Hit_Writeback_Inv_LEAF0		(Cache_LEAF0 | Hit_Writeback_Inv)
-+#define Hit_Writeback_Inv_LEAF1		(Cache_LEAF1 | Hit_Writeback_Inv)
-+#define Hit_Writeback_Inv_LEAF2		(Cache_LEAF2 | Hit_Writeback_Inv)
-+#define Hit_Writeback_Inv_LEAF3		(Cache_LEAF3 | Hit_Writeback_Inv)
-+#define Hit_Writeback_Inv_LEAF4		(Cache_LEAF4 | Hit_Writeback_Inv)
-+#define Hit_Writeback_Inv_LEAF5		(Cache_LEAF5 | Hit_Writeback_Inv)
- 
- #endif	/* __ASM_CACHEOPS_H */
-diff --git a/arch/loongarch/include/asm/cpu-features.h b/arch/loongarch/include/asm/cpu-features.h
-index a8d87c40a0eb..b07974218393 100644
---- a/arch/loongarch/include/asm/cpu-features.h
-+++ b/arch/loongarch/include/asm/cpu-features.h
-@@ -19,11 +19,6 @@
- #define cpu_has_loongarch32		(cpu_data[0].isa_level & LOONGARCH_CPU_ISA_32BIT)
- #define cpu_has_loongarch64		(cpu_data[0].isa_level & LOONGARCH_CPU_ISA_64BIT)
- 
--#define cpu_icache_line_size()		cpu_data[0].icache.linesz
--#define cpu_dcache_line_size()		cpu_data[0].dcache.linesz
--#define cpu_vcache_line_size()		cpu_data[0].vcache.linesz
--#define cpu_scache_line_size()		cpu_data[0].scache.linesz
--
- #ifdef CONFIG_32BIT
- # define cpu_has_64bits			(cpu_data[0].isa_level & LOONGARCH_CPU_ISA_64BIT)
- # define cpu_vabits			31
-diff --git a/arch/loongarch/include/asm/cpu-info.h b/arch/loongarch/include/asm/cpu-info.h
-index b6c4f96079df..cd73a6f57fe3 100644
---- a/arch/loongarch/include/asm/cpu-info.h
-+++ b/arch/loongarch/include/asm/cpu-info.h
-@@ -10,18 +10,28 @@
- 
- #include <asm/loongarch.h>
- 
-+/* cache_desc->flags */
-+enum {
-+	CACHE_PRESENT	= (1 << 0),
-+	CACHE_PRIVATE	= (1 << 1),	/* core private cache */
-+	CACHE_INCLUSIVE	= (1 << 2),	/* include the inner level caches */
-+};
-+
- /*
-  * Descriptor for a cache
-  */
- struct cache_desc {
--	unsigned int waysize;	/* Bytes per way */
-+	unsigned char type;
-+	unsigned char level;
- 	unsigned short sets;	/* Number of lines per set */
- 	unsigned char ways;	/* Number of ways */
- 	unsigned char linesz;	/* Size of line in bytes */
--	unsigned char waybit;	/* Bits to select in a cache set */
- 	unsigned char flags;	/* Flags describing cache properties */
- };
- 
-+#define CACHE_LEVEL_MAX		3
-+#define CACHE_LEAVES_MAX	6
-+
- struct cpuinfo_loongarch {
- 	u64			asid_cache;
- 	unsigned long		asid_mask;
-@@ -40,11 +50,8 @@ struct cpuinfo_loongarch {
- 	int			tlbsizemtlb;
- 	int			tlbsizestlbsets;
- 	int			tlbsizestlbways;
--	struct cache_desc	icache; /* Primary I-cache */
--	struct cache_desc	dcache; /* Primary D or combined I/D cache */
--	struct cache_desc	vcache; /* Victim cache, between pcache and scache */
--	struct cache_desc	scache; /* Secondary cache */
--	struct cache_desc	tcache; /* Tertiary/split secondary cache */
-+	int			cache_leaves_present; /* number of cache_leaves[] elements */
-+	struct cache_desc	cache_leaves[CACHE_LEAVES_MAX];
- 	int			core;   /* physical core number in package */
- 	int			package;/* physical package number */
- 	int			vabits; /* Virtual Address size in bits */
-diff --git a/arch/loongarch/include/asm/loongarch.h b/arch/loongarch/include/asm/loongarch.h
-index 3ba4f7e87cd2..7f8d57a61c8b 100644
---- a/arch/loongarch/include/asm/loongarch.h
-+++ b/arch/loongarch/include/asm/loongarch.h
-@@ -187,36 +187,15 @@ static inline u32 read_cpucfg(u32 reg)
- #define  CPUCFG16_L3_DINCL		BIT(16)
- 
- #define LOONGARCH_CPUCFG17		0x11
--#define  CPUCFG17_L1I_WAYS_M		GENMASK(15, 0)
--#define  CPUCFG17_L1I_SETS_M		GENMASK(23, 16)
--#define  CPUCFG17_L1I_SIZE_M		GENMASK(30, 24)
--#define  CPUCFG17_L1I_WAYS		0
--#define  CPUCFG17_L1I_SETS		16
--#define  CPUCFG17_L1I_SIZE		24
--
- #define LOONGARCH_CPUCFG18		0x12
--#define  CPUCFG18_L1D_WAYS_M		GENMASK(15, 0)
--#define  CPUCFG18_L1D_SETS_M		GENMASK(23, 16)
--#define  CPUCFG18_L1D_SIZE_M		GENMASK(30, 24)
--#define  CPUCFG18_L1D_WAYS		0
--#define  CPUCFG18_L1D_SETS		16
--#define  CPUCFG18_L1D_SIZE		24
--
- #define LOONGARCH_CPUCFG19		0x13
--#define  CPUCFG19_L2_WAYS_M		GENMASK(15, 0)
--#define  CPUCFG19_L2_SETS_M		GENMASK(23, 16)
--#define  CPUCFG19_L2_SIZE_M		GENMASK(30, 24)
--#define  CPUCFG19_L2_WAYS		0
--#define  CPUCFG19_L2_SETS		16
--#define  CPUCFG19_L2_SIZE		24
--
- #define LOONGARCH_CPUCFG20		0x14
--#define  CPUCFG20_L3_WAYS_M		GENMASK(15, 0)
--#define  CPUCFG20_L3_SETS_M		GENMASK(23, 16)
--#define  CPUCFG20_L3_SIZE_M		GENMASK(30, 24)
--#define  CPUCFG20_L3_WAYS		0
--#define  CPUCFG20_L3_SETS		16
--#define  CPUCFG20_L3_SIZE		24
-+#define  CPUCFG_CACHE_WAYS_M		GENMASK(15, 0)
-+#define  CPUCFG_CACHE_SETS_M		GENMASK(23, 16)
-+#define  CPUCFG_CACHE_LSIZE_M		GENMASK(30, 24)
-+#define  CPUCFG_CACHE_WAYS	 	0
-+#define  CPUCFG_CACHE_SETS		16
-+#define  CPUCFG_CACHE_LSIZE		24
- 
- #define LOONGARCH_CPUCFG48		0x30
- #define  CPUCFG48_MCSR_LCK		BIT(0)
-diff --git a/arch/loongarch/include/asm/setup.h b/arch/loongarch/include/asm/setup.h
-index 6d7d2a3e23dd..ca373f8e3c4d 100644
---- a/arch/loongarch/include/asm/setup.h
-+++ b/arch/loongarch/include/asm/setup.h
-@@ -13,7 +13,9 @@
- 
- extern unsigned long eentry;
- extern unsigned long tlbrentry;
-+extern void tlb_init(int cpu);
- extern void cpu_cache_init(void);
-+extern void cache_error_setup(void);
- extern void per_cpu_trap_init(int cpu);
- extern void set_handler(unsigned long offset, void *addr, unsigned long len);
- extern void set_merr_handler(unsigned long offset, void *addr, unsigned long len);
-diff --git a/arch/loongarch/kernel/cacheinfo.c b/arch/loongarch/kernel/cacheinfo.c
-index 4662b06269f4..c7988f757281 100644
---- a/arch/loongarch/kernel/cacheinfo.c
-+++ b/arch/loongarch/kernel/cacheinfo.c
-@@ -5,73 +5,34 @@
-  * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-  */
- #include <linux/cacheinfo.h>
-+#include <linux/topology.h>
- #include <asm/bootinfo.h>
- #include <asm/cpu-info.h>
- 
--/* Populates leaf and increments to next leaf */
--#define populate_cache(cache, leaf, c_level, c_type)		\
--do {								\
--	leaf->type = c_type;					\
--	leaf->level = c_level;					\
--	leaf->coherency_line_size = c->cache.linesz;		\
--	leaf->number_of_sets = c->cache.sets;			\
--	leaf->ways_of_associativity = c->cache.ways;		\
--	leaf->size = c->cache.linesz * c->cache.sets *		\
--		c->cache.ways;					\
--	if (leaf->level > 2)					\
--		leaf->size *= nodes_per_package;		\
--	leaf++;							\
--} while (0)
--
- int init_cache_level(unsigned int cpu)
- {
--	struct cpuinfo_loongarch *c = &current_cpu_data;
-+	int cache_present = current_cpu_data.cache_leaves_present;
- 	struct cpu_cacheinfo *this_cpu_ci = get_cpu_cacheinfo(cpu);
--	int levels = 0, leaves = 0;
--
--	/*
--	 * If Dcache is not set, we assume the cache structures
--	 * are not properly initialized.
--	 */
--	if (c->dcache.waysize)
--		levels += 1;
--	else
--		return -ENOENT;
--
--
--	leaves += (c->icache.waysize) ? 2 : 1;
--
--	if (c->vcache.waysize) {
--		levels++;
--		leaves++;
--	}
- 
--	if (c->scache.waysize) {
--		levels++;
--		leaves++;
--	}
-+	this_cpu_ci->num_levels =
-+		current_cpu_data.cache_leaves[cache_present - 1].level;
-+	this_cpu_ci->num_leaves = cache_present;
- 
--	if (c->tcache.waysize) {
--		levels++;
--		leaves++;
--	}
--
--	this_cpu_ci->num_levels = levels;
--	this_cpu_ci->num_leaves = leaves;
+diff --git a/arch/ia64/mm/hugetlbpage.c b/arch/ia64/mm/hugetlbpage.c
+index f993cb36c062..380d2f3966c9 100644
+--- a/arch/ia64/mm/hugetlbpage.c
++++ b/arch/ia64/mm/hugetlbpage.c
+@@ -91,21 +91,6 @@ int prepare_hugepage_range(struct file *file,
  	return 0;
  }
  
- static inline bool cache_leaves_are_shared(struct cacheinfo *this_leaf,
- 					   struct cacheinfo *sib_leaf)
+-struct page *follow_huge_addr(struct mm_struct *mm, unsigned long addr, int write)
+-{
+-	struct page *page;
+-	pte_t *ptep;
+-
+-	if (REGION_NUMBER(addr) != RGN_HPAGE)
+-		return ERR_PTR(-EINVAL);
+-
+-	ptep = huge_pte_offset(mm, addr, HPAGE_SIZE);
+-	if (!ptep || pte_none(*ptep))
+-		return NULL;
+-	page = pte_page(*ptep);
+-	page += ((addr & ~HPAGE_MASK) >> PAGE_SHIFT);
+-	return page;
+-}
+ int pmd_huge(pmd_t pmd)
  {
--	return !((this_leaf->level == 1) || (this_leaf->level == 2));
-+	return (!(*(unsigned char *)(this_leaf->priv) & CACHE_PRIVATE)
-+		&& !(*(unsigned char *)(sib_leaf->priv) & CACHE_PRIVATE));
+ 	return 0;
+diff --git a/arch/powerpc/mm/hugetlbpage.c b/arch/powerpc/mm/hugetlbpage.c
+index bc84a594ca62..b0e037c75c12 100644
+--- a/arch/powerpc/mm/hugetlbpage.c
++++ b/arch/powerpc/mm/hugetlbpage.c
+@@ -506,43 +506,6 @@ void hugetlb_free_pgd_range(struct mmu_gather *tlb,
+ 	} while (addr = next, addr != end);
  }
  
- static void cache_cpumap_setup(unsigned int cpu)
- {
--	struct cpu_cacheinfo *this_cpu_ci = get_cpu_cacheinfo(cpu);
--	struct cacheinfo *this_leaf, *sib_leaf;
- 	unsigned int index;
-+	struct cacheinfo *this_leaf, *sib_leaf;
-+	struct cpu_cacheinfo *this_cpu_ci = get_cpu_cacheinfo(cpu);
- 
- 	for (index = 0; index < this_cpu_ci->num_leaves; index++) {
- 		unsigned int i;
-@@ -85,8 +46,10 @@ static void cache_cpumap_setup(unsigned int cpu)
- 		for_each_online_cpu(i) {
- 			struct cpu_cacheinfo *sib_cpu_ci = get_cpu_cacheinfo(i);
- 
--			if (i == cpu || !sib_cpu_ci->info_list)
--				continue;/* skip if itself or no cacheinfo */
-+			if (i == cpu || !sib_cpu_ci->info_list ||
-+				(cpu_to_node(i) != cpu_to_node(cpu)))
-+				continue;
-+
- 			sib_leaf = sib_cpu_ci->info_list + index;
- 			if (cache_leaves_are_shared(this_leaf, sib_leaf)) {
- 				cpumask_set_cpu(cpu, &sib_leaf->shared_cpu_map);
-@@ -98,31 +61,24 @@ static void cache_cpumap_setup(unsigned int cpu)
- 
- int populate_cache_leaves(unsigned int cpu)
- {
--	int level = 1, nodes_per_package = 1;
--	struct cpuinfo_loongarch *c = &current_cpu_data;
-+	int i, cache_present = current_cpu_data.cache_leaves_present;
- 	struct cpu_cacheinfo *this_cpu_ci = get_cpu_cacheinfo(cpu);
- 	struct cacheinfo *this_leaf = this_cpu_ci->info_list;
+-struct page *follow_huge_pd(struct vm_area_struct *vma,
+-			    unsigned long address, hugepd_t hpd,
+-			    int flags, int pdshift)
+-{
+-	pte_t *ptep;
+-	spinlock_t *ptl;
+-	struct page *page = NULL;
+-	unsigned long mask;
+-	int shift = hugepd_shift(hpd);
+-	struct mm_struct *mm = vma->vm_mm;
 -
--	if (loongson_sysconf.nr_nodes > 1)
--		nodes_per_package = loongson_sysconf.cores_per_package
--					/ loongson_sysconf.cores_per_node;
+-retry:
+-	/*
+-	 * hugepage directory entries are protected by mm->page_table_lock
+-	 * Use this instead of huge_pte_lockptr
+-	 */
+-	ptl = &mm->page_table_lock;
+-	spin_lock(ptl);
 -
--	if (c->icache.waysize) {
--		populate_cache(dcache, this_leaf, level, CACHE_TYPE_DATA);
--		populate_cache(icache, this_leaf, level++, CACHE_TYPE_INST);
+-	ptep = hugepte_offset(hpd, address, pdshift);
+-	if (pte_present(*ptep)) {
+-		mask = (1UL << shift) - 1;
+-		page = pte_page(*ptep);
+-		page += ((address & mask) >> PAGE_SHIFT);
+-		if (flags & FOLL_GET)
+-			get_page(page);
 -	} else {
--		populate_cache(dcache, this_leaf, level++, CACHE_TYPE_UNIFIED);
-+	struct cache_desc *cd, *cdesc = current_cpu_data.cache_leaves;
-+
-+	for (i = 0; i < cache_present; i++) {
-+		cd = cdesc + i;
-+
-+		this_leaf->type = cd->type;
-+		this_leaf->level = cd->level;
-+		this_leaf->coherency_line_size = cd->linesz;
-+		this_leaf->number_of_sets = cd->sets;
-+		this_leaf->ways_of_associativity = cd->ways;
-+		this_leaf->size = cd->linesz * cd->sets * cd->ways;
-+		this_leaf->priv = &cd->flags;
-+		this_leaf++;
- 	}
+-		if (is_hugetlb_entry_migration(*ptep)) {
+-			spin_unlock(ptl);
+-			__migration_entry_wait(mm, ptep, ptl);
+-			goto retry;
+-		}
+-	}
+-	spin_unlock(ptl);
+-	return page;
+-}
+-
+ bool __init arch_hugetlb_valid_size(unsigned long size)
+ {
+ 	int shift = __ffs(size);
+diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+index cfe15b32e2d4..32d45e96a894 100644
+--- a/include/linux/hugetlb.h
++++ b/include/linux/hugetlb.h
+@@ -149,6 +149,8 @@ int move_hugetlb_page_tables(struct vm_area_struct *vma,
+ 			     unsigned long len);
+ int copy_hugetlb_page_range(struct mm_struct *, struct mm_struct *,
+ 			    struct vm_area_struct *, struct vm_area_struct *);
++struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
++				unsigned long address, unsigned int flags);
+ long follow_hugetlb_page(struct mm_struct *, struct vm_area_struct *,
+ 			 struct page **, struct vm_area_struct **,
+ 			 unsigned long *, unsigned long *, long, unsigned int,
+@@ -209,17 +211,6 @@ int huge_pmd_unshare(struct mm_struct *mm, struct vm_area_struct *vma,
+ 				unsigned long addr, pte_t *ptep);
+ void adjust_range_if_pmd_sharing_possible(struct vm_area_struct *vma,
+ 				unsigned long *start, unsigned long *end);
+-struct page *follow_huge_addr(struct mm_struct *mm, unsigned long address,
+-			      int write);
+-struct page *follow_huge_pd(struct vm_area_struct *vma,
+-			    unsigned long address, hugepd_t hpd,
+-			    int flags, int pdshift);
+-struct page *follow_huge_pmd_pte(struct vm_area_struct *vma, unsigned long address,
+-				 int flags);
+-struct page *follow_huge_pud(struct mm_struct *mm, unsigned long address,
+-				pud_t *pud, int flags);
+-struct page *follow_huge_pgd(struct mm_struct *mm, unsigned long address,
+-			     pgd_t *pgd, int flags);
  
--	if (c->vcache.waysize)
--		populate_cache(vcache, this_leaf, level++, CACHE_TYPE_UNIFIED);
--
--	if (c->scache.waysize)
--		populate_cache(scache, this_leaf, level++, CACHE_TYPE_UNIFIED);
--
--	if (c->tcache.waysize)
--		populate_cache(tcache, this_leaf, level++, CACHE_TYPE_UNIFIED);
--
- 	cache_cpumap_setup(cpu);
- 	this_cpu_ci->cpu_map_populated = true;
- 
-diff --git a/arch/loongarch/kernel/traps.c b/arch/loongarch/kernel/traps.c
-index aa1c95aaf595..950af620e7d0 100644
---- a/arch/loongarch/kernel/traps.c
-+++ b/arch/loongarch/kernel/traps.c
-@@ -631,9 +631,6 @@ asmlinkage void noinstr do_vint(struct pt_regs *regs, unsigned long sp)
- 	irqentry_exit(regs, state);
+ void hugetlb_vma_lock_read(struct vm_area_struct *vma);
+ void hugetlb_vma_unlock_read(struct vm_area_struct *vma);
+@@ -272,6 +263,12 @@ static inline void adjust_range_if_pmd_sharing_possible(
+ {
  }
  
--extern void tlb_init(int cpu);
--extern void cache_error_setup(void);
--
- unsigned long eentry;
- unsigned long tlbrentry;
- 
-diff --git a/arch/loongarch/mm/cache.c b/arch/loongarch/mm/cache.c
-index e8c68dcf6ab2..72685a48eaf0 100644
---- a/arch/loongarch/mm/cache.c
-+++ b/arch/loongarch/mm/cache.c
-@@ -6,8 +6,8 @@
-  * Copyright (C) 1994 - 2003, 06, 07 by Ralf Baechle (ralf@linux-mips.org)
-  * Copyright (C) 2007 MIPS Technologies, Inc.
-  */
-+#include <linux/cacheinfo.h>
- #include <linux/export.h>
--#include <linux/fcntl.h>
- #include <linux/fs.h>
- #include <linux/highmem.h>
- #include <linux/kernel.h>
-@@ -16,14 +16,21 @@
- #include <linux/sched.h>
- #include <linux/syscalls.h>
- 
-+#include <asm/bootinfo.h>
- #include <asm/cacheflush.h>
- #include <asm/cpu.h>
- #include <asm/cpu-features.h>
--#include <asm/dma.h>
- #include <asm/loongarch.h>
-+#include <asm/numa.h>
- #include <asm/processor.h>
- #include <asm/setup.h>
- 
-+void cache_error_setup(void)
++static inline struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
++				unsigned long address, unsigned int flags)
 +{
-+	extern char __weak except_vec_cex;
-+	set_merr_handler(0x0, &except_vec_cex, 0x80);
++	BUILD_BUG(); /* should never be compiled in if !CONFIG_HUGETLB_PAGE*/
 +}
 +
- /*
-  * LoongArch maintains ICache/DCache coherency by hardware,
-  * we just need "ibar" to avoid instruction hazard here.
-@@ -34,109 +41,121 @@ void local_flush_icache_range(unsigned long start, unsigned long end)
+ static inline long follow_hugetlb_page(struct mm_struct *mm,
+ 			struct vm_area_struct *vma, struct page **pages,
+ 			struct vm_area_struct **vmas, unsigned long *position,
+@@ -282,12 +279,6 @@ static inline long follow_hugetlb_page(struct mm_struct *mm,
+ 	return 0;
  }
- EXPORT_SYMBOL(local_flush_icache_range);
  
--void cache_error_setup(void)
+-static inline struct page *follow_huge_addr(struct mm_struct *mm,
+-					unsigned long address, int write)
 -{
--	extern char __weak except_vec_cex;
--	set_merr_handler(0x0, &except_vec_cex, 0x80);
+-	return ERR_PTR(-EINVAL);
 -}
 -
--static unsigned long icache_size __read_mostly;
--static unsigned long dcache_size __read_mostly;
--static unsigned long vcache_size __read_mostly;
--static unsigned long scache_size __read_mostly;
--
--static char *way_string[] = { NULL, "direct mapped", "2-way",
--	"3-way", "4-way", "5-way", "6-way", "7-way", "8-way",
--	"9-way", "10-way", "11-way", "12-way",
--	"13-way", "14-way", "15-way", "16-way",
--};
--
--static void probe_pcache(void)
-+static void flush_cache_leaf(unsigned int leaf)
+ static inline int copy_hugetlb_page_range(struct mm_struct *dst,
+ 					  struct mm_struct *src,
+ 					  struct vm_area_struct *dst_vma,
+@@ -320,31 +311,6 @@ static inline void hugetlb_show_meminfo_node(int nid)
  {
--	struct cpuinfo_loongarch *c = &current_cpu_data;
--	unsigned int lsize, sets, ways;
--	unsigned int config;
--
--	config = read_cpucfg(LOONGARCH_CPUCFG17);
--	lsize = 1 << ((config & CPUCFG17_L1I_SIZE_M) >> CPUCFG17_L1I_SIZE);
--	sets  = 1 << ((config & CPUCFG17_L1I_SETS_M) >> CPUCFG17_L1I_SETS);
--	ways  = ((config & CPUCFG17_L1I_WAYS_M) >> CPUCFG17_L1I_WAYS) + 1;
--
--	c->icache.linesz = lsize;
--	c->icache.sets = sets;
--	c->icache.ways = ways;
--	icache_size = sets * ways * lsize;
--	c->icache.waysize = icache_size / c->icache.ways;
--
--	config = read_cpucfg(LOONGARCH_CPUCFG18);
--	lsize = 1 << ((config & CPUCFG18_L1D_SIZE_M) >> CPUCFG18_L1D_SIZE);
--	sets  = 1 << ((config & CPUCFG18_L1D_SETS_M) >> CPUCFG18_L1D_SETS);
--	ways  = ((config & CPUCFG18_L1D_WAYS_M) >> CPUCFG18_L1D_WAYS) + 1;
--
--	c->dcache.linesz = lsize;
--	c->dcache.sets = sets;
--	c->dcache.ways = ways;
--	dcache_size = sets * ways * lsize;
--	c->dcache.waysize = dcache_size / c->dcache.ways;
--
--	c->options |= LOONGARCH_CPU_PREFETCH;
--
--	pr_info("Primary instruction cache %ldkB, %s, %s, linesize %d bytes.\n",
--		icache_size >> 10, way_string[c->icache.ways], "VIPT", c->icache.linesz);
--
--	pr_info("Primary data cache %ldkB, %s, %s, %s, linesize %d bytes\n",
--		dcache_size >> 10, way_string[c->dcache.ways], "VIPT", "no aliases", c->dcache.linesz);
-+	int i, j, nr_nodes;
-+	uint64_t addr = CSR_DMW0_BASE;
-+	struct cache_desc *cdesc = current_cpu_data.cache_leaves + leaf;
-+
-+	nr_nodes = cache_private(cdesc) ? 1 : loongson_sysconf.nr_nodes;
-+
-+	do {
-+		for (i = 0; i < cdesc->sets; i++) {
-+			for (j = 0; j < cdesc->ways; j++) {
-+				flush_cache_line(leaf, addr);
-+				addr++;
-+			}
-+
-+			addr -= cdesc->ways;
-+			addr += cdesc->linesz;
-+		}
-+		addr += (1ULL << NODE_ADDRSPACE_SHIFT);
-+	} while (--nr_nodes > 0);
  }
  
--static void probe_vcache(void)
-+asmlinkage __visible void __flush_cache_all(void)
- {
--	struct cpuinfo_loongarch *c = &current_cpu_data;
--	unsigned int lsize, sets, ways;
--	unsigned int config;
--
--	config = read_cpucfg(LOONGARCH_CPUCFG19);
--	lsize = 1 << ((config & CPUCFG19_L2_SIZE_M) >> CPUCFG19_L2_SIZE);
--	sets  = 1 << ((config & CPUCFG19_L2_SETS_M) >> CPUCFG19_L2_SETS);
--	ways  = ((config & CPUCFG19_L2_WAYS_M) >> CPUCFG19_L2_WAYS) + 1;
--
--	c->vcache.linesz = lsize;
--	c->vcache.sets = sets;
--	c->vcache.ways = ways;
--	vcache_size = lsize * sets * ways;
--	c->vcache.waysize = vcache_size / c->vcache.ways;
--
--	pr_info("Unified victim cache %ldkB %s, linesize %d bytes.\n",
--		vcache_size >> 10, way_string[c->vcache.ways], c->vcache.linesz);
-+	int leaf;
-+	struct cache_desc *cdesc = current_cpu_data.cache_leaves;
-+	unsigned int cache_present = current_cpu_data.cache_leaves_present;
-+
-+	leaf = cache_present - 1;
-+	if (cache_inclusive(cdesc + leaf)) {
-+		flush_cache_leaf(leaf);
-+		return;
-+	}
-+
-+	for (leaf = 0; leaf < cache_present; leaf++)
-+		flush_cache_leaf(leaf);
- }
- 
--static void probe_scache(void)
+-static inline struct page *follow_huge_pd(struct vm_area_struct *vma,
+-				unsigned long address, hugepd_t hpd, int flags,
+-				int pdshift)
 -{
--	struct cpuinfo_loongarch *c = &current_cpu_data;
--	unsigned int lsize, sets, ways;
--	unsigned int config;
--
--	config = read_cpucfg(LOONGARCH_CPUCFG20);
--	lsize = 1 << ((config & CPUCFG20_L3_SIZE_M) >> CPUCFG20_L3_SIZE);
--	sets  = 1 << ((config & CPUCFG20_L3_SETS_M) >> CPUCFG20_L3_SETS);
--	ways  = ((config & CPUCFG20_L3_WAYS_M) >> CPUCFG20_L3_WAYS) + 1;
--
--	c->scache.linesz = lsize;
--	c->scache.sets = sets;
--	c->scache.ways = ways;
--	/* 4 cores. scaches are shared */
--	scache_size = lsize * sets * ways;
--	c->scache.waysize = scache_size / c->scache.ways;
--
--	pr_info("Unified secondary cache %ldkB %s, linesize %d bytes.\n",
--		scache_size >> 10, way_string[c->scache.ways], c->scache.linesz);
+-	return NULL;
 -}
-+#define L1IUPRE		(1 << 0)
-+#define L1IUUNIFY	(1 << 1)
-+#define L1DPRE		(1 << 2)
-+
-+#define LXIUPRE		(1 << 0)
-+#define LXIUUNIFY	(1 << 1)
-+#define LXIUPRIV	(1 << 2)
-+#define LXIUINCL	(1 << 3)
-+#define LXDPRE		(1 << 4)
-+#define LXDPRIV		(1 << 5)
-+#define LXDINCL		(1 << 6)
-+
-+#define populate_cache_properties(cfg0, cdesc, level, leaf)				\
-+do {											\
-+	unsigned int cfg1;								\
-+											\
-+	cfg1 = read_cpucfg(LOONGARCH_CPUCFG17 + leaf);					\
-+	if (level == 1)	{								\
-+		cdesc->flags |= CACHE_PRIVATE;						\
-+	} else {									\
-+		if (cfg0 & LXIUPRIV)							\
-+			cdesc->flags |= CACHE_PRIVATE;					\
-+		if (cfg0 & LXIUINCL)							\
-+			cdesc->flags |= CACHE_INCLUSIVE;				\
-+	}										\
-+	cdesc->level = level;								\
-+	cdesc->flags |= CACHE_PRESENT;							\
-+	cdesc->ways = ((cfg1 & CPUCFG_CACHE_WAYS_M) >> CPUCFG_CACHE_WAYS) + 1;		\
-+	cdesc->sets = 1 << ((cfg1 & CPUCFG_CACHE_SETS_M) >> CPUCFG_CACHE_SETS);		\
-+	cdesc->linesz = 1 << ((cfg1 & CPUCFG_CACHE_LSIZE_M) >> CPUCFG_CACHE_LSIZE);	\
-+	cdesc++; leaf++;								\
-+} while (0)
- 
- void cpu_cache_init(void)
- {
--	probe_pcache();
--	probe_vcache();
--	probe_scache();
 -
-+	unsigned int leaf = 0, level = 1;
-+	unsigned int config = read_cpucfg(LOONGARCH_CPUCFG16);
-+	struct cache_desc *cdesc = current_cpu_data.cache_leaves;
-+
-+	if (config & L1IUPRE) {
-+		if (config & L1IUUNIFY)
-+			cdesc->type = CACHE_TYPE_UNIFIED;
-+		else
-+			cdesc->type = CACHE_TYPE_INST;
-+		populate_cache_properties(config, cdesc, level, leaf);
-+	}
-+
-+	if (config & L1DPRE) {
-+		cdesc->type = CACHE_TYPE_DATA;
-+		populate_cache_properties(config, cdesc, level, leaf);
-+	}
-+
-+	config = config >> 3;
-+	for (level = 2; level <= CACHE_LEVEL_MAX; level++) {
-+		if (!config)
-+			break;
-+
-+		if (config & LXIUPRE) {
-+			if (config & LXIUUNIFY)
-+				cdesc->type = CACHE_TYPE_UNIFIED;
-+			else
-+				cdesc->type = CACHE_TYPE_INST;
-+			populate_cache_properties(config, cdesc, level, leaf);
-+		}
-+
-+		if (config & LXDPRE) {
-+			cdesc->type = CACHE_TYPE_DATA;
-+			populate_cache_properties(config, cdesc, level, leaf);
-+		}
-+
-+		config = config >> 7;
-+	}
-+
-+	BUG_ON(leaf > CACHE_LEAVES_MAX);
-+
-+	current_cpu_data.cache_leaves_present = leaf;
-+	current_cpu_data.options |= LOONGARCH_CPU_PREFETCH;
- 	shm_align_mask = PAGE_SIZE - 1;
+-static inline struct page *follow_huge_pmd_pte(struct vm_area_struct *vma,
+-				unsigned long address, int flags)
+-{
+-	return NULL;
+-}
+-
+-static inline struct page *follow_huge_pud(struct mm_struct *mm,
+-				unsigned long address, pud_t *pud, int flags)
+-{
+-	return NULL;
+-}
+-
+-static inline struct page *follow_huge_pgd(struct mm_struct *mm,
+-				unsigned long address, pgd_t *pgd, int flags)
+-{
+-	return NULL;
+-}
+-
+ static inline int prepare_hugepage_range(struct file *file,
+ 				unsigned long addr, unsigned long len)
+ {
+diff --git a/mm/gup.c b/mm/gup.c
+index bfded683e64e..b580b5510a60 100644
+--- a/mm/gup.c
++++ b/mm/gup.c
+@@ -537,18 +537,6 @@ static struct page *follow_page_pte(struct vm_area_struct *vma,
+ 	if (WARN_ON_ONCE((flags & (FOLL_PIN | FOLL_GET)) ==
+ 			 (FOLL_PIN | FOLL_GET)))
+ 		return ERR_PTR(-EINVAL);
+-
+-	/*
+-	 * Considering PTE level hugetlb, like continuous-PTE hugetlb on
+-	 * ARM64 architecture.
+-	 */
+-	if (is_vm_hugetlb_page(vma)) {
+-		page = follow_huge_pmd_pte(vma, address, flags);
+-		if (page)
+-			return page;
+-		return no_page_table(vma, flags);
+-	}
+-
+ retry:
+ 	if (unlikely(pmd_bad(*pmd)))
+ 		return no_page_table(vma, flags);
+@@ -680,20 +668,6 @@ static struct page *follow_pmd_mask(struct vm_area_struct *vma,
+ 	pmdval = READ_ONCE(*pmd);
+ 	if (pmd_none(pmdval))
+ 		return no_page_table(vma, flags);
+-	if (pmd_huge(pmdval) && is_vm_hugetlb_page(vma)) {
+-		page = follow_huge_pmd_pte(vma, address, flags);
+-		if (page)
+-			return page;
+-		return no_page_table(vma, flags);
+-	}
+-	if (is_hugepd(__hugepd(pmd_val(pmdval)))) {
+-		page = follow_huge_pd(vma, address,
+-				      __hugepd(pmd_val(pmdval)), flags,
+-				      PMD_SHIFT);
+-		if (page)
+-			return page;
+-		return no_page_table(vma, flags);
+-	}
+ retry:
+ 	if (!pmd_present(pmdval)) {
+ 		/*
+@@ -783,20 +757,6 @@ static struct page *follow_pud_mask(struct vm_area_struct *vma,
+ 	pud = pud_offset(p4dp, address);
+ 	if (pud_none(*pud))
+ 		return no_page_table(vma, flags);
+-	if (pud_huge(*pud) && is_vm_hugetlb_page(vma)) {
+-		page = follow_huge_pud(mm, address, pud, flags);
+-		if (page)
+-			return page;
+-		return no_page_table(vma, flags);
+-	}
+-	if (is_hugepd(__hugepd(pud_val(*pud)))) {
+-		page = follow_huge_pd(vma, address,
+-				      __hugepd(pud_val(*pud)), flags,
+-				      PUD_SHIFT);
+-		if (page)
+-			return page;
+-		return no_page_table(vma, flags);
+-	}
+ 	if (pud_devmap(*pud)) {
+ 		ptl = pud_lock(mm, pud);
+ 		page = follow_devmap_pud(vma, address, pud, flags, &ctx->pgmap);
+@@ -816,7 +776,6 @@ static struct page *follow_p4d_mask(struct vm_area_struct *vma,
+ 				    struct follow_page_context *ctx)
+ {
+ 	p4d_t *p4d;
+-	struct page *page;
+ 
+ 	p4d = p4d_offset(pgdp, address);
+ 	if (p4d_none(*p4d))
+@@ -825,14 +784,6 @@ static struct page *follow_p4d_mask(struct vm_area_struct *vma,
+ 	if (unlikely(p4d_bad(*p4d)))
+ 		return no_page_table(vma, flags);
+ 
+-	if (is_hugepd(__hugepd(p4d_val(*p4d)))) {
+-		page = follow_huge_pd(vma, address,
+-				      __hugepd(p4d_val(*p4d)), flags,
+-				      P4D_SHIFT);
+-		if (page)
+-			return page;
+-		return no_page_table(vma, flags);
+-	}
+ 	return follow_pud_mask(vma, address, p4d, flags, ctx);
  }
  
-diff --git a/arch/loongarch/pci/pci.c b/arch/loongarch/pci/pci.c
-index e9b7c34d9b6d..2726639150bc 100644
---- a/arch/loongarch/pci/pci.c
-+++ b/arch/loongarch/pci/pci.c
-@@ -9,6 +9,7 @@
- #include <linux/types.h>
- #include <linux/pci.h>
- #include <linux/vgaarb.h>
-+#include <asm/cacheflush.h>
- #include <asm/loongson.h>
+@@ -870,10 +821,18 @@ static struct page *follow_page_mask(struct vm_area_struct *vma,
  
- #define PCI_DEVICE_ID_LOONGSON_HOST     0x7a00
-@@ -45,12 +46,10 @@ static int __init pcibios_init(void)
- 	unsigned int lsize;
+ 	ctx->page_mask = 0;
  
- 	/*
--	 * Set PCI cacheline size to that of the highest level in the
-+	 * Set PCI cacheline size to that of the last level in the
- 	 * cache hierarchy.
- 	 */
--	lsize = cpu_dcache_line_size();
--	lsize = cpu_vcache_line_size() ? : lsize;
--	lsize = cpu_scache_line_size() ? : lsize;
-+	lsize = cpu_last_level_cache_line_size();
+-	/* make this handle hugepd */
+-	page = follow_huge_addr(mm, address, flags & FOLL_WRITE);
+-	if (!IS_ERR(page)) {
+-		WARN_ON_ONCE(flags & (FOLL_GET | FOLL_PIN));
++	/*
++	 * Call hugetlb_follow_page_mask for hugetlb vmas as it will use
++	 * special hugetlb page table walking code.  This eliminates the
++	 * need to check for hugetlb entries in the general walking code.
++	 *
++	 * hugetlb_follow_page_mask is only for follow_page() handling here.
++	 * Ordinary GUP uses follow_hugetlb_page for hugetlb processing.
++	 */
++	if (is_vm_hugetlb_page(vma)) {
++		page = hugetlb_follow_page_mask(vma, address, flags);
++		if (!page)
++			page = no_page_table(vma, flags);
+ 		return page;
+ 	}
  
- 	BUG_ON(!lsize);
+@@ -882,21 +841,6 @@ static struct page *follow_page_mask(struct vm_area_struct *vma,
+ 	if (pgd_none(*pgd) || unlikely(pgd_bad(*pgd)))
+ 		return no_page_table(vma, flags);
  
+-	if (pgd_huge(*pgd)) {
+-		page = follow_huge_pgd(mm, address, pgd, flags);
+-		if (page)
+-			return page;
+-		return no_page_table(vma, flags);
+-	}
+-	if (is_hugepd(__hugepd(pgd_val(*pgd)))) {
+-		page = follow_huge_pd(vma, address,
+-				      __hugepd(pgd_val(*pgd)), flags,
+-				      PGDIR_SHIFT);
+-		if (page)
+-			return page;
+-		return no_page_table(vma, flags);
+-	}
+-
+ 	return follow_p4d_mask(vma, address, pgd, flags, ctx);
+ }
+ 
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index 9b8526d27c29..1e5ab2d8356f 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -6133,6 +6133,72 @@ static inline bool __follow_hugetlb_must_fault(unsigned int flags, pte_t *pte,
+ 	return false;
+ }
+ 
++struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
++				unsigned long address, unsigned int flags)
++{
++	struct hstate *h = hstate_vma(vma);
++	struct mm_struct *mm = vma->vm_mm;
++	unsigned long haddr = address & huge_page_mask(h);
++	struct page *page = NULL;
++	spinlock_t *ptl;
++	pte_t *pte, entry;
++
++	/*
++	 * FOLL_PIN is not supported for follow_page(). Ordinary GUP goes via
++	 * follow_hugetlb_page().
++	 */
++	if (WARN_ON_ONCE(flags & FOLL_PIN))
++		return NULL;
++
++retry:
++	/*
++	 * vma lock prevents racing with another thread doing a pmd unshare.
++	 * This keeps pte as returned by huge_pte_offset valid.
++	 */
++	hugetlb_vma_lock_read(vma);
++
++	pte = huge_pte_offset(mm, haddr, huge_page_size(h));
++	if (!pte) {
++		hugetlb_vma_unlock_read(vma);
++		return NULL;
++	}
++
++	ptl = huge_pte_lock(h, mm, pte);
++	entry = huge_ptep_get(pte);
++	if (pte_present(entry)) {
++		page = pte_page(entry) +
++				((address & ~huge_page_mask(h)) >> PAGE_SHIFT);
++		/*
++		 * Note that page may be a sub-page, and with vmemmap
++		 * optimizations the page struct may be read only.
++		 * try_grab_page() will increase the ref count on the
++		 * head page, so this will be OK.
++		 *
++		 * try_grab_page() should always succeed here, because we hold
++		 * the ptl lock and have verified pte_present().
++		 */
++		if (WARN_ON_ONCE(!try_grab_page(page, flags))) {
++			page = NULL;
++			goto out;
++		}
++	} else {
++		if (is_hugetlb_entry_migration(entry)) {
++			spin_unlock(ptl);
++			hugetlb_vma_unlock_read(vma);
++			__migration_entry_wait_huge(pte, ptl);
++			goto retry;
++		}
++		/*
++		 * hwpoisoned entry is treated as no_page_table in
++		 * follow_page_mask().
++		 */
++	}
++out:
++	spin_unlock(ptl);
++	hugetlb_vma_unlock_read(vma);
++	return page;
++}
++
+ long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
+ 			 struct page **pages, struct vm_area_struct **vmas,
+ 			 unsigned long *position, unsigned long *nr_pages,
+@@ -7123,122 +7189,6 @@ __weak unsigned long hugetlb_mask_last_page(struct hstate *h)
+  * These functions are overwritable if your architecture needs its own
+  * behavior.
+  */
+-struct page * __weak
+-follow_huge_addr(struct mm_struct *mm, unsigned long address,
+-			      int write)
+-{
+-	return ERR_PTR(-EINVAL);
+-}
+-
+-struct page * __weak
+-follow_huge_pd(struct vm_area_struct *vma,
+-	       unsigned long address, hugepd_t hpd, int flags, int pdshift)
+-{
+-	WARN(1, "hugepd follow called with no support for hugepage directory format\n");
+-	return NULL;
+-}
+-
+-struct page * __weak
+-follow_huge_pmd_pte(struct vm_area_struct *vma, unsigned long address, int flags)
+-{
+-	struct hstate *h = hstate_vma(vma);
+-	struct mm_struct *mm = vma->vm_mm;
+-	struct page *page = NULL;
+-	spinlock_t *ptl;
+-	pte_t *ptep, pte;
+-
+-	/*
+-	 * FOLL_PIN is not supported for follow_page(). Ordinary GUP goes via
+-	 * follow_hugetlb_page().
+-	 */
+-	if (WARN_ON_ONCE(flags & FOLL_PIN))
+-		return NULL;
+-
+-retry:
+-	ptep = huge_pte_offset(mm, address, huge_page_size(h));
+-	if (!ptep)
+-		return NULL;
+-
+-	ptl = huge_pte_lock(h, mm, ptep);
+-	pte = huge_ptep_get(ptep);
+-	if (pte_present(pte)) {
+-		page = pte_page(pte) +
+-			((address & ~huge_page_mask(h)) >> PAGE_SHIFT);
+-		/*
+-		 * try_grab_page() should always succeed here, because: a) we
+-		 * hold the pmd (ptl) lock, and b) we've just checked that the
+-		 * huge pmd (head) page is present in the page tables. The ptl
+-		 * prevents the head page and tail pages from being rearranged
+-		 * in any way. So this page must be available at this point,
+-		 * unless the page refcount overflowed:
+-		 */
+-		if (WARN_ON_ONCE(!try_grab_page(page, flags))) {
+-			page = NULL;
+-			goto out;
+-		}
+-	} else {
+-		if (is_hugetlb_entry_migration(pte)) {
+-			spin_unlock(ptl);
+-			__migration_entry_wait_huge(ptep, ptl);
+-			goto retry;
+-		}
+-		/*
+-		 * hwpoisoned entry is treated as no_page_table in
+-		 * follow_page_mask().
+-		 */
+-	}
+-out:
+-	spin_unlock(ptl);
+-	return page;
+-}
+-
+-struct page * __weak
+-follow_huge_pud(struct mm_struct *mm, unsigned long address,
+-		pud_t *pud, int flags)
+-{
+-	struct page *page = NULL;
+-	spinlock_t *ptl;
+-	pte_t pte;
+-
+-	if (WARN_ON_ONCE(flags & FOLL_PIN))
+-		return NULL;
+-
+-retry:
+-	ptl = huge_pte_lock(hstate_sizelog(PUD_SHIFT), mm, (pte_t *)pud);
+-	if (!pud_huge(*pud))
+-		goto out;
+-	pte = huge_ptep_get((pte_t *)pud);
+-	if (pte_present(pte)) {
+-		page = pud_page(*pud) + ((address & ~PUD_MASK) >> PAGE_SHIFT);
+-		if (WARN_ON_ONCE(!try_grab_page(page, flags))) {
+-			page = NULL;
+-			goto out;
+-		}
+-	} else {
+-		if (is_hugetlb_entry_migration(pte)) {
+-			spin_unlock(ptl);
+-			__migration_entry_wait(mm, (pte_t *)pud, ptl);
+-			goto retry;
+-		}
+-		/*
+-		 * hwpoisoned entry is treated as no_page_table in
+-		 * follow_page_mask().
+-		 */
+-	}
+-out:
+-	spin_unlock(ptl);
+-	return page;
+-}
+-
+-struct page * __weak
+-follow_huge_pgd(struct mm_struct *mm, unsigned long address, pgd_t *pgd, int flags)
+-{
+-	if (flags & (FOLL_GET | FOLL_PIN))
+-		return NULL;
+-
+-	return pte_page(*(pte_t *)pgd) + ((address & ~PGDIR_MASK) >> PAGE_SHIFT);
+-}
+-
+ int isolate_hugetlb(struct page *page, struct list_head *list)
+ {
+ 	int ret = 0;
 -- 
-2.31.1
+2.37.2
 
