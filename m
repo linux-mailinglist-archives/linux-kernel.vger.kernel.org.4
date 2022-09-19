@@ -2,204 +2,1935 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 137F25BD35D
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 19:09:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD4535BD361
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 19:11:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231335AbiISRJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 13:09:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57948 "EHLO
+        id S231216AbiISRLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 13:11:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231310AbiISRJZ (ORCPT
+        with ESMTP id S231192AbiISRKz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 13:09:25 -0400
-Received: from EUR02-HE1-obe.outbound.protection.outlook.com (mail-eopbgr10075.outbound.protection.outlook.com [40.107.1.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D9B33E23;
-        Mon, 19 Sep 2022 10:07:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=V0PboRH8/60syC8YaBcTvfQ8Y1CQDedlHdZJOqvh7pVFTtIlzExXbLI11rEHvuwpzsf7ESLCwi/l7FHvO0/xaGJqtGUejvQSOLTtfTJ0EeE4i815IP+CuYymFVX0NVoH8UUHAZX/nSk1aQqsjJvQuhs4+21OJHuW71nSdyCMXcg8KtCS8Ye5VWeCTnrfvXnvpNpJlwZxGMTFC6K3e1C8R3MVkvslnSUmNqdT3yqk4CGvKvGrODQNyX2qc9cyMpkwkTMVwAsyUwQ5JmgvNXaK/E8EBscnLlNGghXKVSAgZQKwoOMGpR+Qf8/MLAEVhOkfAAvCVfgwkLqRW4IPyplWYg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6axv+Qg44AHoMtqzhKah5cG9+QPhsCU5hgkWxITKglk=;
- b=LmlpmKKTkHOdq6fG/UoRxOibpPd5pQXf6fzxi2ehwsWCd71sa4V1BNhATOESZxp2pfTwxYOHarDSjH34D5mpxkt3KHdHV8rjtmvWOoRk/gpFM3N78wFI6JMPiuYShSseoNAQ5tLdhQjzOPPEe2MIOg/oA9oRN4vcjLg/j+g435XXHeV6dmYprsAiPKCKO7hdPfn6EM/DKrdjC9BB0SZaGBl19LTPgUXMlbIhVvk6u4QCH1X+jYbn/LQK4ha2IE6ALtOuwy+SwZ/c7gt2h3osbVBrXA8yIslANsE4WEEBukKYscPry5h6xixQukOGQckwOdD5wVNfI6pAwMtcg2/ioQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6axv+Qg44AHoMtqzhKah5cG9+QPhsCU5hgkWxITKglk=;
- b=KBz2Rp0+YQ5XYN5C7ufkT5qFrs6T3X1B4Jul83H6MCgkWFefIMj/yR8u+xa5WtQAtntiRlXL+2S8lbxEkrCg7VUEvwZAS9gX09jAvXVPzzdv5FhbygrqV1/DMflDgIVmKlCNPJwkkfMu8akBOaeMsnt23Yl944a4wR+3E73UoCk=
-Received: from AM9PR04MB8793.eurprd04.prod.outlook.com (2603:10a6:20b:408::22)
- by DU0PR04MB9658.eurprd04.prod.outlook.com (2603:10a6:10:31f::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.21; Mon, 19 Sep
- 2022 17:07:26 +0000
-Received: from AM9PR04MB8793.eurprd04.prod.outlook.com
- ([fe80::5a3:ff70:317d:a99e]) by AM9PR04MB8793.eurprd04.prod.outlook.com
- ([fe80::5a3:ff70:317d:a99e%7]) with mapi id 15.20.5632.021; Mon, 19 Sep 2022
- 17:07:26 +0000
-From:   Frank Li <frank.li@nxp.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-CC:     "maz@kernel.org" <maz@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kw@linux.com" <kw@linux.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        Peng Fan <peng.fan@nxp.com>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        "jdmason@kudzu.us" <jdmason@kudzu.us>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "kishon@ti.com" <kishon@ti.com>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "ntb@lists.linux.dev" <ntb@lists.linux.dev>,
-        "lznuaa@gmail.com" <lznuaa@gmail.com>,
-        "imx@lists.linux.dev" <imx@lists.linux.dev>,
-        "manivannan.sadhasivam@linaro.org" <manivannan.sadhasivam@linaro.org>
-Subject: RE: [EXT] Re: [PATCH v11 5/6] PCI: endpoint: cleanup pci-epf-vntb.c
-Thread-Topic: [EXT] Re: [PATCH v11 5/6] PCI: endpoint: cleanup pci-epf-vntb.c
-Thread-Index: AQHYzD5I49XpqyS34k2wlhkG3fCe1K3m+tOAgAAAdNA=
-Date:   Mon, 19 Sep 2022 17:07:26 +0000
-Message-ID: <AM9PR04MB87937614E6564FDBD98D3D93884D9@AM9PR04MB8793.eurprd04.prod.outlook.com>
-References: <20220919154038.187168-6-Frank.Li@nxp.com>
- <20220919170253.GA1011825@bhelgaas>
-In-Reply-To: <20220919170253.GA1011825@bhelgaas>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AM9PR04MB8793:EE_|DU0PR04MB9658:EE_
-x-ms-office365-filtering-correlation-id: 2826352e-9a4e-4880-eb55-08da9a616d59
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: uhYcstgHlUMWe9jSv3CUMDSCtpPiMl/a4TdqZ6w1jRsPe6CxdCPInGORIQP/QnPPrYHf7RgPtdpxja+WaCebkmu+3cLW1lIq/SWAyWJuViBNzimPA5F/YoBX7WGJp7NrFa+Ppy8Hk+luPN4wf48vEMMQBjX6Zk1g2IRT9lN6EiSxvD7XpzeRbeJsMz35q4Jyq9WQEf6VU2iDLw98EM+ToRGw9MZOHXqxMuLVw5YSIjEySqB8oOTO/sthjmNQc5dBgJbQlsWQnZ8szUf1vklxk+nala5N58YgawLv3QKI2mrm9S2fwvM+LdEIHz/B5+L3kXLvm4QW6UwBFEuKxJ/rZSZ5WR87IQ7mnyAPqKqkPFKlCELPkOseEPUjE/qxAjY1SaFZqjSkF7AEieyDGFvWOS4GNd6bMb8CEsi6pZpOA8uJAp/9GuT5hbQGP2kwP123xjHwobXbMdzk6zGInbmrv6ANu/Yi43J2xCwUAnwrvwOE13Er9eqTtSs9LjH5lHr72IPJOD/XU0cAosxtwzqA91JDzOwzOVw6m2HIquhdg5BMrtPBe9Ysaq0kTqa/kx+eiFaVPOhRnmDDSjmTANaEnXqU5MKM6bzoPo9GqmiEpqusUBpHiV96IswCuyfsKNN3cY0egYTBzu/uPJpoPdgGXx9RZBSfgsdKWDtabmPECAFxRHDQHLbdorJ2CbX77PhJLZsVf/22KdNKcQAn68yirFm4MvFFrC0FXk0FbVTpana0ObkwPO4bbTxVaYp5PDAF0sWZ7umYzUy6aAWADN2xgA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8793.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(39860400002)(396003)(136003)(376002)(346002)(451199015)(41300700001)(5660300002)(44832011)(7416002)(8936002)(52536014)(122000001)(38070700005)(8676002)(53546011)(4326008)(2906002)(55236004)(66946007)(64756008)(66446008)(66476007)(76116006)(66556008)(38100700002)(6916009)(316002)(33656002)(83380400001)(54906003)(71200400001)(7696005)(9686003)(6506007)(26005)(86362001)(55016003)(186003)(478600001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?uPCmv5neIIK+TneJTLRSM82z3xt2KeN4QSnDiIqqcKKgELaLIAAVqi1kg8OL?=
- =?us-ascii?Q?4F7xxjYjGBMsIwXoqooVIj1h4qv4dm8iZnIelyuQHe0jO7MCHT4CpJXhgebG?=
- =?us-ascii?Q?JMPPSw1rsEKsfnxQ4UCarBkZUXUGvy95ZAGugVLCUFYDdb5YqyiQ9Z3d1pOQ?=
- =?us-ascii?Q?hvR7hqh9pvzQUyvn5C5myVVZPBZVNpfjn95FGQwVQRSGLiEqVZa6OpqIVBTw?=
- =?us-ascii?Q?k7mr/m2PHnnju9t4c3xvAhu2uQQuh70w2X7OzElKAj93CO3gY5HDm3EFHxuK?=
- =?us-ascii?Q?x+tg4ZU8ao6CMi0aOhtTTbEK+BYrrjtl9KuKE9JrfxTP7g7VAxvK2AQlol48?=
- =?us-ascii?Q?zTm20dUlgpEUThl5EgAkcCwm10aQRPouuu8fwwBQIfrFIgHYpS2r6rr3IBxG?=
- =?us-ascii?Q?y9shlLhEzdFuKqBys3762tXeZ2GRDQCG8TYg/5OQ4/TqVj6Xuxk2XyR/DLgd?=
- =?us-ascii?Q?iRO01UC9tv32sKr/z5+C4kLL5/pcapNhLdUFr2z/Ch8CbHGOst+XadauuqNm?=
- =?us-ascii?Q?4qKBGStTUsdnagUrb2dUX+2QO8GCUd1JVl+8CGlQ2NjK3RSR+vbQrBA7fYBf?=
- =?us-ascii?Q?84x9Z8flRcLXXT/UWI3NvU7ByeANj/ZM5I/x9Rzn5Fb70v73evpwAWC4hUzG?=
- =?us-ascii?Q?69sjMRSSG12Q0zjpAHsJ6GAzRGkAe33PcSesG1TXYioba5Z9plwoH3TM8HvX?=
- =?us-ascii?Q?RajUY4ZRBVWySseMnVgPrOWU6F60/JIjZEoxxYsax68iWL4Mj3wSJ5xMjuTv?=
- =?us-ascii?Q?acDzwAVYaIGdNy40zj6ddIu5+XwGwWC1RfNFH2Jvdk3mvjEvarwRsb8DwJRs?=
- =?us-ascii?Q?m/kUyuBhb+5zou9bvewebDd2ytbzQeAs7w07GWRqZZlF7t4BPMu8AlR4scEy?=
- =?us-ascii?Q?/HkF+1bXFNBeGGnRqtc9ht8SdoMib4HIbzMFMfPDBKfcSDnvHA9RUkYV4uHJ?=
- =?us-ascii?Q?m3edSY+zBVAIOMnhgx7PQk22YUkpdZlxs6NaApSAPOS/k3OY1WZhKpe31uTG?=
- =?us-ascii?Q?Gc615ChKMkyr4FY9q74TuqksXE+GlKJ/zzlQDmDsHVcI0BYUWnkEiy04a85G?=
- =?us-ascii?Q?vhi5QNOVsCpuKhJ5lxOx5plF7lB7dp/NgxRes3Fwl5j71Ch0+6k8RFjOXUXM?=
- =?us-ascii?Q?nx04gN9bBGXa7tHertS/8pDlH5P0nbAOa2XDJ/fhOomq/eLqKRsmIQBK8HQb?=
- =?us-ascii?Q?U4MmhvDVgH3XgT1+qqZKpE9z+kAmrujvKQ4m64d8gxIMltoxH8u1HCa+6CG1?=
- =?us-ascii?Q?LbD9xRanqxHW+7J3WOlzcSrYsqOWzcR5W2lMFvx1KOuBdtmsdXMUwvevigSu?=
- =?us-ascii?Q?P+wa04cxVsio6FnFJumPgT97tNGtWHh5hJ/rdGDL+bCt4C4sF51xsZ7Yz10+?=
- =?us-ascii?Q?UWW7NUyI3s7++L3DVOXvQHW3+/VKifqb0jgX4g9hchfZuzGs/59/3uGR03U4?=
- =?us-ascii?Q?k1Ize9KKFiMWzvxPnDqW5bB512itCM2R9g6f9zWkdtjslB1NrVyeoIAPmAjt?=
- =?us-ascii?Q?lVTgGMQdI6oqb5C0mVtVOBcc81l1YZeE1KWD5JGx5hcOg2o7EwTrQ8Jr0AaA?=
- =?us-ascii?Q?Ulb1YDuPeQb/3mZqKqYQDI/qWdbpZ2rJ6A+G2P5G?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 19 Sep 2022 13:10:55 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99D0D40E1C
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 10:09:10 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id z25so48048122lfr.2
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 10:09:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=lVb+lu7bLuWuM7w2KiNdYfUMl0n4GRTV+2oijrejTlk=;
+        b=Zj2lO6kdMeCmh7Bm4j7RB0qDEH8nyx0mlDIkz0gRRN77Qy+hHRChhAvw+iM/9qDYRB
+         QCRBApyVEwD08Gr8XZfu9+SPIZX6VP6v7eQu4X0u5ngrLldoXguX2ATJ8+T5faNrjhBp
+         sSLsjbMxOoOnkF/lqWu1bsb62lss6+tp9gVlE70Rhqd23136Cj187Bo8GatuWb4SLU3B
+         Tz3c5MSazXi6H59bpuL8M17LU+go3IigRRdjwRr0gV1aJrvzWXLljPzFCapqtZGMk1Wy
+         9C9tM+MDPCCRt7KT9ctc3zAhpSg4UqOKZhXRPpGrDjpplsu0Nh4TsZMMCXNu4PjAW1kH
+         ZO7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=lVb+lu7bLuWuM7w2KiNdYfUMl0n4GRTV+2oijrejTlk=;
+        b=lfAoYvA4kM50aEXSouZbvNEiJM7F19GHCI/otbPfCxfj/ewbiXH8NppwdM6PTncZlR
+         ItO24UG/PcIJc1/I1O5ZB89ysVoYAo+aK1akmM/0HhAPb/6qvOb8b7pq95GChybaeelp
+         mtGPn5ZXWIbIqu1btQpxuV9NR+YOAB7RGBuZoXxV1dLOFNMUw8YeymsAYXN6H3Zd4Iqz
+         PvEdOEN1PJnc+9daI7I0sIVejeqnvq5uvopNpD3pC9VBd7MC0MYFPUp8CIy2pVTzv4d4
+         iBfU2nMMbHQUiWbgtTTU9rVDNXis7BvtUSEJ1cob0NrcQT+howJ1fcW8EySBUPnq2zlQ
+         VFOQ==
+X-Gm-Message-State: ACrzQf1w1zHzQXAsG9Hww802ZOcokQxw8CfzOEafNKo9U0ukf2BbEgYc
+        SmtzHAg53IOcc/Fr6QPzrCFjUg==
+X-Google-Smtp-Source: AMsMyM4Lqv3V4HTNpij3bewW0+kWGfuXjph1gAaMah9LuiMCxtmvkmBws50sWVJQ1YNICioZZYfMgA==
+X-Received: by 2002:a05:6512:1047:b0:49f:5309:3a0c with SMTP id c7-20020a056512104700b0049f53093a0cmr5575385lfb.683.1663607295274;
+        Mon, 19 Sep 2022 10:08:15 -0700 (PDT)
+Received: from krzk-bin (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id w9-20020a05651234c900b00499bf7605afsm5129838lfr.143.2022.09.19.10.08.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Sep 2022 10:08:14 -0700 (PDT)
+Date:   Mon, 19 Sep 2022 19:08:12 +0200
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Sergiu Moga <sergiu.moga@microchip.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
+        alexandre.belloni@bootlin.com, nicolas.ferre@microchip.com,
+        richard.genoud@gmail.com, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jirislaby@kernel.org,
+        devicetree@vger.kernel.org, claudiu.beznea@microchip.com,
+        lee@kernel.org, kavyasree.kotagiri@microchip.com,
+        robh+dt@kernel.org, gregkh@linuxfoundation.org,
+        radu_nicolae.pirea@upb.ro, krzysztof.kozlowski+dt@linaro.org
+Subject: Re: [PATCH v4 2/9] dt-bindings: serial: atmel,at91-usart: convert to
+ json-schema
+Message-ID: <20220919170812.l2sj7vyjks62ej44@krzk-bin>
+References: <20220919150846.1148783-1-sergiu.moga@microchip.com>
+ <20220919150846.1148783-3-sergiu.moga@microchip.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8793.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2826352e-9a4e-4880-eb55-08da9a616d59
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Sep 2022 17:07:26.3148
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: iAWWJPFJ5Lil8T+9eNsNQEij8ty/Xg+76qM5EnZvTTC/57rKYe1cKKH2hMySjPb7JjfQnjKMdj4TXn8ieX6PuQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR04MB9658
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220919150846.1148783-3-sergiu.moga@microchip.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 19 Sep 2022 18:08:40 +0300, Sergiu Moga wrote:
+> Convert at91 USART DT Binding for Atmel/Microchip SoCs to
+> json-schema format. Furthermore, move this binding to the
+> serial directory, since binding directories match hardware,
+> unlike the driver subsystems which match Linux convention.
+> 
+> Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+> 
+> 
+> v1 -> v2:
+> - only do what the commit says, split the addition of other compatibles and
+> properties in other patches
+> - remove unnecessary "|"'s
+> - mention header in `atmel,usart-mode`'s description
+> - place `if:` under `allOf:`
+> - respect order of spi0's DT properties: compatible, then reg then the reset of properties
+> 
+> v2 -> v3:
+> - Previously [PATCH 5]
+> - Check value of `atmel,usart-mode` instead of the node regex
+> - Define all properties top level and disallow them explicitly for other type,
+> since additionalProperties:false conflicts with referencing other schemas
+> - Remove useless else if: after else:
+> 
+> 
+> v3 -> v4:
+> - add R-b tag, this was previously [PATCH 6]
+> 
+> 
+> 
+> 
+>  .../devicetree/bindings/mfd/atmel-usart.txt   |  98 ----------
+>  .../bindings/serial/atmel,at91-usart.yaml     | 182 ++++++++++++++++++
+>  2 files changed, 182 insertions(+), 98 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/mfd/atmel-usart.txt
+>  create mode 100644 Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml
+> 
+
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
+
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
+
+Full log is available here: https://patchwork.ozlabs.org/patch/
 
 
-> -----Original Message-----
-> From: Bjorn Helgaas <helgaas@kernel.org>
-> Sent: Monday, September 19, 2022 12:03 PM
-> To: Frank Li <frank.li@nxp.com>
-> Cc: maz@kernel.org; tglx@linutronix.de; robh+dt@kernel.org;
-> krzysztof.kozlowski+dt@linaro.org; shawnguo@kernel.org;
-> s.hauer@pengutronix.de; kw@linux.com; bhelgaas@google.com; linux-
-> kernel@vger.kernel.org; devicetree@vger.kernel.org; linux-arm-
-> kernel@lists.infradead.org; linux-pci@vger.kernel.org; Peng Fan
-> <peng.fan@nxp.com>; Aisheng Dong <aisheng.dong@nxp.com>;
-> jdmason@kudzu.us; kernel@pengutronix.de; festevam@gmail.com; dl-linux-
-> imx <linux-imx@nxp.com>; kishon@ti.com; lorenzo.pieralisi@arm.com;
-> ntb@lists.linux.dev; lznuaa@gmail.com; imx@lists.linux.dev;
-> manivannan.sadhasivam@linaro.org
-> Subject: [EXT] Re: [PATCH v11 5/6] PCI: endpoint: cleanup pci-epf-vntb.c
->=20
-> Caution: EXT Email
->=20
-> In subject (I mentioned this last time, too):
->=20
->   PCI: endpoint: pci-epf-vntb: Clean up
->=20
-> On Mon, Sep 19, 2022 at 10:40:37AM -0500, Frank Li wrote:
-> > Remove unused field: epf_db_phy.
-> > Remove __iomem before epf_db.
-> > Change epf_db to u32* from void *
-> > Remove dupicate check if (readl(ntb->epf_db + i * 4)).
->=20
-> s/dupicate/duplicate/
->=20
-> > Using sizeof(u32) instead of number 4 at all place.
-> >
-> > Clean up sparse build warning
-> >   Using  epf_db[i] instead of readl() because epf_db is located in loca=
-l
-> memory
-> >   and allocated by dma_alloc_coherent()
->=20
-> Is "Using epf_db[i] ..." an sparse warning?  The indentation suggests
-> that it is, but it doesn't seem related.
+serial@200: $nodename:0: 'serial@200' does not match '^spi(@.*|-[0-9a-f])*$'
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-sam9x60ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_icp.dtb
+	arch/arm/boot/dts/at91-sama5d2_icp.dtb
+	arch/arm/boot/dts/at91-sama5d2_icp.dtb
+	arch/arm/boot/dts/at91-sama5d2_icp.dtb
+	arch/arm/boot/dts/at91-sama5d2_icp.dtb
+	arch/arm/boot/dts/at91-sama5d2_ptc_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_ptc_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_ptc_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_ptc_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_ptc_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_xplained.dtb
+	arch/arm/boot/dts/at91-sama5d2_xplained.dtb
+	arch/arm/boot/dts/at91-sama5d2_xplained.dtb
+	arch/arm/boot/dts/at91-sama5d2_xplained.dtb
+	arch/arm/boot/dts/at91-sama5d2_xplained.dtb
+	arch/arm/boot/dts/at91-sama7g5ek.dtb
+	arch/arm/boot/dts/at91-sama7g5ek.dtb
+	arch/arm/boot/dts/at91-sama7g5ek.dtb
+	arch/arm/boot/dts/at91-sama7g5ek.dtb
+	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dtb
+	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dtb
+	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dtb
+	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dtb
+	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dtb
+	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dtb
+	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dtb
+	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dtb
+	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dtb
+	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dtb
+	arch/arm/boot/dts/lan966x-pcb8291.dtb
+	arch/arm/boot/dts/lan966x-pcb8291.dtb
+	arch/arm/boot/dts/lan966x-pcb8291.dtb
+	arch/arm/boot/dts/lan966x-pcb8291.dtb
+	arch/arm/boot/dts/lan966x-pcb8291.dtb
+	arch/arm/boot/dts/lan966x-pcb8309.dtb
+	arch/arm/boot/dts/lan966x-pcb8309.dtb
+	arch/arm/boot/dts/lan966x-pcb8309.dtb
+	arch/arm/boot/dts/lan966x-pcb8309.dtb
+	arch/arm/boot/dts/lan966x-pcb8309.dtb
 
-[Frank Li] sparse warning about __IOMEM.  Dma_alloc_conherece()
-Return void *.  Not void __IOMEM *. =20
+serial@200: '#address-cells' is a required property
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-sam9x60ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_icp.dtb
+	arch/arm/boot/dts/at91-sama5d2_xplained.dtb
+	arch/arm/boot/dts/at91-sama7g5ek.dtb
+	arch/arm/boot/dts/at91-sama7g5ek.dtb
+	arch/arm/boot/dts/at91-sama7g5ek.dtb
+	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dtb
+	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dtb
+	arch/arm/boot/dts/lan966x-pcb8291.dtb
+	arch/arm/boot/dts/lan966x-pcb8309.dtb
 
-Readl() use void __IOMEM *.=20
+serial@200: atmel,fifo-size: False schema does not allow [[16]]
+	arch/arm/boot/dts/at91-sama7g5ek.dtb
+	arch/arm/boot/dts/at91-sama7g5ek.dtb
 
-Epf_db[i] is more simple and have not memory order risk here.   =20
+serial@200: atmel,fifo-size: False schema does not allow [[32]]
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_icp.dtb
+	arch/arm/boot/dts/at91-sama5d2_icp.dtb
+	arch/arm/boot/dts/at91-sama5d2_icp.dtb
+	arch/arm/boot/dts/at91-sama5d2_icp.dtb
+	arch/arm/boot/dts/at91-sama5d2_icp.dtb
+	arch/arm/boot/dts/at91-sama5d2_ptc_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_ptc_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_ptc_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_ptc_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_ptc_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_xplained.dtb
+	arch/arm/boot/dts/at91-sama5d2_xplained.dtb
+	arch/arm/boot/dts/at91-sama5d2_xplained.dtb
+	arch/arm/boot/dts/at91-sama5d2_xplained.dtb
+	arch/arm/boot/dts/at91-sama5d2_xplained.dtb
+	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dtb
+	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dtb
+	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dtb
+	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dtb
+	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dtb
+	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dtb
+	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dtb
+	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dtb
+	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dtb
+	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dtb
+	arch/arm/boot/dts/lan966x-pcb8291.dtb
+	arch/arm/boot/dts/lan966x-pcb8291.dtb
+	arch/arm/boot/dts/lan966x-pcb8291.dtb
+	arch/arm/boot/dts/lan966x-pcb8291.dtb
+	arch/arm/boot/dts/lan966x-pcb8291.dtb
+	arch/arm/boot/dts/lan966x-pcb8309.dtb
+	arch/arm/boot/dts/lan966x-pcb8309.dtb
+	arch/arm/boot/dts/lan966x-pcb8309.dtb
+	arch/arm/boot/dts/lan966x-pcb8309.dtb
+	arch/arm/boot/dts/lan966x-pcb8309.dtb
 
->=20
-> > Replace pci_epc_mem_free_addr() with pci_epf_free_space() at error
-> handle path
-> > to match pci_epf_alloc_space().
-> >
-> > Cleanup warning found by scripts/kernel-doc
-> > Fix indentation of the struct epf_ntb_ctrl
-> > Consildate term
->=20
-> s/Consildate/Consolidate/
->=20
-> >   host, host1 to HOST
-> >   vhost, vHost, Vhost, VHOST2 to VHOST
+serial@200: 'atmel,usart-mode' is a required property
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-sam9x60ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_icp.dtb
+	arch/arm/boot/dts/at91-sama5d2_xplained.dtb
+	arch/arm/boot/dts/at91-sama7g5ek.dtb
+	arch/arm/boot/dts/at91-sama7g5ek.dtb
+	arch/arm/boot/dts/at91-sama7g5ek.dtb
+	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dtb
+	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dtb
+	arch/arm/boot/dts/lan966x-pcb8291.dtb
+	arch/arm/boot/dts/lan966x-pcb8309.dtb
+
+serial@200: atmel,use-dma-rx: False schema does not allow True
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-sam9x60ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_icp.dtb
+	arch/arm/boot/dts/at91-sama7g5ek.dtb
+	arch/arm/boot/dts/at91-sama7g5ek.dtb
+	arch/arm/boot/dts/at91-sama7g5ek.dtb
+	arch/arm/boot/dts/at91-sama7g5ek.dtb
+
+serial@200: atmel,use-dma-tx: False schema does not allow True
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-sam9x60ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_icp.dtb
+	arch/arm/boot/dts/at91-sama7g5ek.dtb
+	arch/arm/boot/dts/at91-sama7g5ek.dtb
+	arch/arm/boot/dts/at91-sama7g5ek.dtb
+	arch/arm/boot/dts/at91-sama7g5ek.dtb
+
+serial@200: compatible: 'oneOf' conditional failed, one must be fixed:
+	arch/arm/boot/dts/at91-sam9x60ek.dtb
+
+serial@200: '#size-cells' is a required property
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-sam9x60ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_icp.dtb
+	arch/arm/boot/dts/at91-sama5d2_xplained.dtb
+	arch/arm/boot/dts/at91-sama7g5ek.dtb
+	arch/arm/boot/dts/at91-sama7g5ek.dtb
+	arch/arm/boot/dts/at91-sama7g5ek.dtb
+	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dtb
+	arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dtb
+	arch/arm/boot/dts/lan966x-pcb8291.dtb
+	arch/arm/boot/dts/lan966x-pcb8309.dtb
+
+serial@200: Unevaluated properties are not allowed ('compatible' was unexpected)
+	arch/arm/boot/dts/at91-sam9x60ek.dtb
+
+serial@f001c000: $nodename:0: 'serial@f001c000' does not match '^spi(@.*|-[0-9a-f])*$'
+	arch/arm/boot/dts/at91-dvk_som60.dtb
+	arch/arm/boot/dts/at91-gatwick.dtb
+	arch/arm/boot/dts/at91-kizbox2-2.dtb
+	arch/arm/boot/dts/at91-nattis-2-natte-2.dtb
+	arch/arm/boot/dts/at91-sama5d3_ksz9477_evb.dtb
+	arch/arm/boot/dts/at91-sama5d3_xplained.dtb
+	arch/arm/boot/dts/at91-tse850-3.dtb
+	arch/arm/boot/dts/at91-wb50n.dtb
+	arch/arm/boot/dts/sama5d31ek.dtb
+	arch/arm/boot/dts/sama5d33ek.dtb
+	arch/arm/boot/dts/sama5d34ek.dtb
+	arch/arm/boot/dts/sama5d35ek.dtb
+	arch/arm/boot/dts/sama5d36ek_cmp.dtb
+	arch/arm/boot/dts/sama5d36ek.dtb
+
+serial@f001c000: '#address-cells' is a required property
+	arch/arm/boot/dts/at91-dvk_som60.dtb
+	arch/arm/boot/dts/at91-gatwick.dtb
+	arch/arm/boot/dts/at91-nattis-2-natte-2.dtb
+	arch/arm/boot/dts/at91-sama5d3_xplained.dtb
+	arch/arm/boot/dts/at91-tse850-3.dtb
+	arch/arm/boot/dts/at91-wb50n.dtb
+
+serial@f001c000: 'atmel,usart-mode' is a required property
+	arch/arm/boot/dts/at91-dvk_som60.dtb
+	arch/arm/boot/dts/at91-gatwick.dtb
+	arch/arm/boot/dts/at91-nattis-2-natte-2.dtb
+	arch/arm/boot/dts/at91-sama5d3_xplained.dtb
+	arch/arm/boot/dts/at91-tse850-3.dtb
+	arch/arm/boot/dts/at91-wb50n.dtb
+
+serial@f001c000: atmel,use-dma-rx: False schema does not allow True
+	arch/arm/boot/dts/at91-dvk_som60.dtb
+	arch/arm/boot/dts/at91-gatwick.dtb
+	arch/arm/boot/dts/at91-kizbox2-2.dtb
+	arch/arm/boot/dts/at91-nattis-2-natte-2.dtb
+	arch/arm/boot/dts/at91-tse850-3.dtb
+	arch/arm/boot/dts/at91-wb50n.dtb
+
+serial@f001c000: atmel,use-dma-tx: False schema does not allow True
+	arch/arm/boot/dts/at91-dvk_som60.dtb
+	arch/arm/boot/dts/at91-gatwick.dtb
+	arch/arm/boot/dts/at91-kizbox2-2.dtb
+	arch/arm/boot/dts/at91-wb50n.dtb
+
+serial@f001c000: '#size-cells' is a required property
+	arch/arm/boot/dts/at91-dvk_som60.dtb
+	arch/arm/boot/dts/at91-gatwick.dtb
+	arch/arm/boot/dts/at91-nattis-2-natte-2.dtb
+	arch/arm/boot/dts/at91-sama5d3_xplained.dtb
+	arch/arm/boot/dts/at91-tse850-3.dtb
+	arch/arm/boot/dts/at91-wb50n.dtb
+
+serial@f0020000: $nodename:0: 'serial@f0020000' does not match '^spi(@.*|-[0-9a-f])*$'
+	arch/arm/boot/dts/at91-dvk_som60.dtb
+	arch/arm/boot/dts/at91-gatwick.dtb
+	arch/arm/boot/dts/at91-kizbox2-2.dtb
+	arch/arm/boot/dts/at91-nattis-2-natte-2.dtb
+	arch/arm/boot/dts/at91-sama5d3_ksz9477_evb.dtb
+	arch/arm/boot/dts/at91-sama5d3_xplained.dtb
+	arch/arm/boot/dts/at91-tse850-3.dtb
+	arch/arm/boot/dts/at91-wb50n.dtb
+	arch/arm/boot/dts/sama5d31ek.dtb
+	arch/arm/boot/dts/sama5d33ek.dtb
+	arch/arm/boot/dts/sama5d34ek.dtb
+	arch/arm/boot/dts/sama5d35ek.dtb
+	arch/arm/boot/dts/sama5d36ek_cmp.dtb
+	arch/arm/boot/dts/sama5d36ek.dtb
+
+serial@f0020000: '#address-cells' is a required property
+	arch/arm/boot/dts/at91-dvk_som60.dtb
+	arch/arm/boot/dts/at91-gatwick.dtb
+	arch/arm/boot/dts/at91-kizbox2-2.dtb
+	arch/arm/boot/dts/at91-sama5d3_xplained.dtb
+	arch/arm/boot/dts/at91-wb50n.dtb
+	arch/arm/boot/dts/sama5d31ek.dtb
+	arch/arm/boot/dts/sama5d33ek.dtb
+	arch/arm/boot/dts/sama5d34ek.dtb
+	arch/arm/boot/dts/sama5d35ek.dtb
+	arch/arm/boot/dts/sama5d36ek_cmp.dtb
+	arch/arm/boot/dts/sama5d36ek.dtb
+
+serial@f0020000: 'atmel,usart-mode' is a required property
+	arch/arm/boot/dts/at91-dvk_som60.dtb
+	arch/arm/boot/dts/at91-gatwick.dtb
+	arch/arm/boot/dts/at91-kizbox2-2.dtb
+	arch/arm/boot/dts/at91-sama5d3_xplained.dtb
+	arch/arm/boot/dts/at91-wb50n.dtb
+	arch/arm/boot/dts/sama5d31ek.dtb
+	arch/arm/boot/dts/sama5d33ek.dtb
+	arch/arm/boot/dts/sama5d34ek.dtb
+	arch/arm/boot/dts/sama5d35ek.dtb
+	arch/arm/boot/dts/sama5d36ek_cmp.dtb
+	arch/arm/boot/dts/sama5d36ek.dtb
+
+serial@f0020000: atmel,use-dma-rx: False schema does not allow True
+	arch/arm/boot/dts/at91-gatwick.dtb
+	arch/arm/boot/dts/at91-kizbox2-2.dtb
+	arch/arm/boot/dts/at91-wb50n.dtb
+
+serial@f0020000: atmel,use-dma-tx: False schema does not allow True
+	arch/arm/boot/dts/at91-gatwick.dtb
+	arch/arm/boot/dts/at91-kizbox2-2.dtb
+	arch/arm/boot/dts/at91-wb50n.dtb
+
+serial@f0020000: '#size-cells' is a required property
+	arch/arm/boot/dts/at91-dvk_som60.dtb
+	arch/arm/boot/dts/at91-gatwick.dtb
+	arch/arm/boot/dts/at91-kizbox2-2.dtb
+	arch/arm/boot/dts/at91-sama5d3_xplained.dtb
+	arch/arm/boot/dts/at91-wb50n.dtb
+	arch/arm/boot/dts/sama5d31ek.dtb
+	arch/arm/boot/dts/sama5d33ek.dtb
+	arch/arm/boot/dts/sama5d34ek.dtb
+	arch/arm/boot/dts/sama5d35ek.dtb
+	arch/arm/boot/dts/sama5d36ek_cmp.dtb
+	arch/arm/boot/dts/sama5d36ek.dtb
+
+serial@f0020000: Unevaluated properties are not allowed ('dcd-gpios', 'dsr-gpios', 'dtr-gpios', 'rng-gpios' were unexpected)
+	arch/arm/boot/dts/at91-gatwick.dtb
+	arch/arm/boot/dts/at91-wb50n.dtb
+
+serial@f0024000: $nodename:0: 'serial@f0024000' does not match '^spi(@.*|-[0-9a-f])*$'
+	arch/arm/boot/dts/at91-dvk_som60.dtb
+	arch/arm/boot/dts/at91-gatwick.dtb
+	arch/arm/boot/dts/at91-kizbox2-2.dtb
+	arch/arm/boot/dts/at91-nattis-2-natte-2.dtb
+	arch/arm/boot/dts/at91-sama5d3_ksz9477_evb.dtb
+	arch/arm/boot/dts/at91-sama5d3_xplained.dtb
+	arch/arm/boot/dts/at91-tse850-3.dtb
+	arch/arm/boot/dts/at91-wb50n.dtb
+	arch/arm/boot/dts/sama5d31ek.dtb
+	arch/arm/boot/dts/sama5d33ek.dtb
+	arch/arm/boot/dts/sama5d34ek.dtb
+	arch/arm/boot/dts/sama5d35ek.dtb
+	arch/arm/boot/dts/sama5d36ek_cmp.dtb
+	arch/arm/boot/dts/sama5d36ek.dtb
+
+serial@f0024000: '#address-cells' is a required property
+	arch/arm/boot/dts/at91-dvk_som60.dtb
+	arch/arm/boot/dts/at91-sama5d3_xplained.dtb
+
+serial@f0024000: 'atmel,usart-mode' is a required property
+	arch/arm/boot/dts/at91-dvk_som60.dtb
+	arch/arm/boot/dts/at91-sama5d3_xplained.dtb
+
+serial@f0024000: '#size-cells' is a required property
+	arch/arm/boot/dts/at91-dvk_som60.dtb
+	arch/arm/boot/dts/at91-sama5d3_xplained.dtb
+
+serial@f8004000: $nodename:0: 'serial@f8004000' does not match '^spi(@.*|-[0-9a-f])*$'
+	arch/arm/boot/dts/at91-sama5d4ek.dtb
+	arch/arm/boot/dts/at91-sama5d4_ma5d4evk.dtb
+	arch/arm/boot/dts/at91-sama5d4_xplained.dtb
+	arch/arm/boot/dts/at91-vinco.dtb
+
+serial@f8004000: '#address-cells' is a required property
+	arch/arm/boot/dts/at91-sama5d4_xplained.dtb
+
+serial@f8004000: 'atmel,usart-mode' is a required property
+	arch/arm/boot/dts/at91-sama5d4_xplained.dtb
+
+serial@f8004000: atmel,use-dma-rx: False schema does not allow True
+	arch/arm/boot/dts/at91-sama5d4_xplained.dtb
+
+serial@f8004000: atmel,use-dma-tx: False schema does not allow True
+	arch/arm/boot/dts/at91-sama5d4_xplained.dtb
+
+serial@f8004000: '#size-cells' is a required property
+	arch/arm/boot/dts/at91-sama5d4_xplained.dtb
+
+serial@f801c000: $nodename:0: 'serial@f801c000' does not match '^spi(@.*|-[0-9a-f])*$'
+	arch/arm/boot/dts/at91-ariag25.dtb
+	arch/arm/boot/dts/at91-ariettag25.dtb
+	arch/arm/boot/dts/at91-cosino_mega2560.dtb
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-kizboxmini-base.dtb
+	arch/arm/boot/dts/at91-kizboxmini-mb.dtb
+	arch/arm/boot/dts/at91-kizboxmini-rd.dtb
+	arch/arm/boot/dts/at91sam9g15ek.dtb
+	arch/arm/boot/dts/at91sam9g25ek.dtb
+	arch/arm/boot/dts/at91sam9g25-gardena-smart-gateway.dtb
+	arch/arm/boot/dts/at91sam9g35ek.dtb
+	arch/arm/boot/dts/at91sam9n12ek.dtb
+	arch/arm/boot/dts/at91sam9x25ek.dtb
+	arch/arm/boot/dts/at91sam9x35ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_icp.dtb
+	arch/arm/boot/dts/at91-sama5d2_ptc_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_xplained.dtb
+	arch/arm/boot/dts/at91-smartkiz.dtb
+	arch/arm/boot/dts/at91-wb45n.dtb
+
+serial@f801c000: '#address-cells' is a required property
+	arch/arm/boot/dts/at91-ariag25.dtb
+	arch/arm/boot/dts/at91-cosino_mega2560.dtb
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-kizboxmini-base.dtb
+	arch/arm/boot/dts/at91-kizboxmini-mb.dtb
+	arch/arm/boot/dts/at91sam9g15ek.dtb
+	arch/arm/boot/dts/at91sam9g25ek.dtb
+	arch/arm/boot/dts/at91sam9g35ek.dtb
+	arch/arm/boot/dts/at91sam9x25ek.dtb
+	arch/arm/boot/dts/at91sam9x35ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_icp.dtb
+	arch/arm/boot/dts/at91-sama5d2_ptc_ek.dtb
+	arch/arm/boot/dts/at91-smartkiz.dtb
+	arch/arm/boot/dts/at91-wb45n.dtb
+
+serial@f801c000: 'atmel,usart-mode' is a required property
+	arch/arm/boot/dts/at91-ariag25.dtb
+	arch/arm/boot/dts/at91-cosino_mega2560.dtb
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-kizboxmini-base.dtb
+	arch/arm/boot/dts/at91-kizboxmini-mb.dtb
+	arch/arm/boot/dts/at91sam9g15ek.dtb
+	arch/arm/boot/dts/at91sam9g25ek.dtb
+	arch/arm/boot/dts/at91sam9g35ek.dtb
+	arch/arm/boot/dts/at91sam9x25ek.dtb
+	arch/arm/boot/dts/at91sam9x35ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_icp.dtb
+	arch/arm/boot/dts/at91-sama5d2_ptc_ek.dtb
+	arch/arm/boot/dts/at91-smartkiz.dtb
+	arch/arm/boot/dts/at91-wb45n.dtb
+
+serial@f801c000: atmel,use-dma-rx: False schema does not allow True
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-kizboxmini-base.dtb
+	arch/arm/boot/dts/at91-kizboxmini-mb.dtb
+	arch/arm/boot/dts/at91-kizboxmini-rd.dtb
+	arch/arm/boot/dts/at91sam9g15ek.dtb
+	arch/arm/boot/dts/at91sam9g25ek.dtb
+	arch/arm/boot/dts/at91sam9g25-gardena-smart-gateway.dtb
+	arch/arm/boot/dts/at91sam9g35ek.dtb
+	arch/arm/boot/dts/at91sam9x25ek.dtb
+	arch/arm/boot/dts/at91sam9x35ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_icp.dtb
+	arch/arm/boot/dts/at91-sama5d2_ptc_ek.dtb
+	arch/arm/boot/dts/at91-smartkiz.dtb
+
+serial@f801c000: atmel,use-dma-tx: False schema does not allow True
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-kizboxmini-base.dtb
+	arch/arm/boot/dts/at91-kizboxmini-mb.dtb
+	arch/arm/boot/dts/at91-kizboxmini-rd.dtb
+	arch/arm/boot/dts/at91sam9g15ek.dtb
+	arch/arm/boot/dts/at91sam9g25ek.dtb
+	arch/arm/boot/dts/at91sam9g25-gardena-smart-gateway.dtb
+	arch/arm/boot/dts/at91sam9g35ek.dtb
+	arch/arm/boot/dts/at91sam9x25ek.dtb
+	arch/arm/boot/dts/at91sam9x35ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_icp.dtb
+	arch/arm/boot/dts/at91-sama5d2_ptc_ek.dtb
+	arch/arm/boot/dts/at91-smartkiz.dtb
+
+serial@f801c000: '#size-cells' is a required property
+	arch/arm/boot/dts/at91-ariag25.dtb
+	arch/arm/boot/dts/at91-cosino_mega2560.dtb
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-kizboxmini-base.dtb
+	arch/arm/boot/dts/at91-kizboxmini-mb.dtb
+	arch/arm/boot/dts/at91sam9g15ek.dtb
+	arch/arm/boot/dts/at91sam9g25ek.dtb
+	arch/arm/boot/dts/at91sam9g35ek.dtb
+	arch/arm/boot/dts/at91sam9x25ek.dtb
+	arch/arm/boot/dts/at91sam9x35ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_icp.dtb
+	arch/arm/boot/dts/at91-sama5d2_ptc_ek.dtb
+	arch/arm/boot/dts/at91-smartkiz.dtb
+	arch/arm/boot/dts/at91-wb45n.dtb
+
+serial@f8020000: $nodename:0: 'serial@f8020000' does not match '^spi(@.*|-[0-9a-f])*$'
+	arch/arm/boot/dts/at91-ariag25.dtb
+	arch/arm/boot/dts/at91-ariettag25.dtb
+	arch/arm/boot/dts/at91-cosino_mega2560.dtb
+	arch/arm/boot/dts/at91-dvk_som60.dtb
+	arch/arm/boot/dts/at91-gatwick.dtb
+	arch/arm/boot/dts/at91-kizbox2-2.dtb
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-kizboxmini-base.dtb
+	arch/arm/boot/dts/at91-kizboxmini-mb.dtb
+	arch/arm/boot/dts/at91-kizboxmini-rd.dtb
+	arch/arm/boot/dts/at91-nattis-2-natte-2.dtb
+	arch/arm/boot/dts/at91sam9g15ek.dtb
+	arch/arm/boot/dts/at91sam9g25ek.dtb
+	arch/arm/boot/dts/at91sam9g25-gardena-smart-gateway.dtb
+	arch/arm/boot/dts/at91sam9g35ek.dtb
+	arch/arm/boot/dts/at91sam9n12ek.dtb
+	arch/arm/boot/dts/at91sam9x25ek.dtb
+	arch/arm/boot/dts/at91sam9x35ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_icp.dtb
+	arch/arm/boot/dts/at91-sama5d2_ptc_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_xplained.dtb
+	arch/arm/boot/dts/at91-sama5d3_ksz9477_evb.dtb
+	arch/arm/boot/dts/at91-sama5d3_xplained.dtb
+	arch/arm/boot/dts/at91-smartkiz.dtb
+	arch/arm/boot/dts/at91-tse850-3.dtb
+	arch/arm/boot/dts/at91-wb45n.dtb
+	arch/arm/boot/dts/at91-wb50n.dtb
+	arch/arm/boot/dts/sama5d31ek.dtb
+	arch/arm/boot/dts/sama5d33ek.dtb
+	arch/arm/boot/dts/sama5d34ek.dtb
+	arch/arm/boot/dts/sama5d35ek.dtb
+	arch/arm/boot/dts/sama5d36ek_cmp.dtb
+	arch/arm/boot/dts/sama5d36ek.dtb
+
+serial@f8020000: '#address-cells' is a required property
+	arch/arm/boot/dts/at91-ariag25.dtb
+	arch/arm/boot/dts/at91-cosino_mega2560.dtb
+	arch/arm/boot/dts/at91-dvk_som60.dtb
+	arch/arm/boot/dts/at91-kizbox2-2.dtb
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_icp.dtb
+	arch/arm/boot/dts/at91-sama5d2_xplained.dtb
+
+serial@f8020000: 'atmel,usart-mode' is a required property
+	arch/arm/boot/dts/at91-ariag25.dtb
+	arch/arm/boot/dts/at91-cosino_mega2560.dtb
+	arch/arm/boot/dts/at91-dvk_som60.dtb
+	arch/arm/boot/dts/at91-kizbox2-2.dtb
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_icp.dtb
+	arch/arm/boot/dts/at91-sama5d2_xplained.dtb
+
+serial@f8020000: atmel,use-dma-rx: False schema does not allow True
+	arch/arm/boot/dts/at91-kizbox2-2.dtb
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_icp.dtb
+	arch/arm/boot/dts/at91-sama5d2_xplained.dtb
+
+serial@f8020000: atmel,use-dma-tx: False schema does not allow True
+	arch/arm/boot/dts/at91-kizbox2-2.dtb
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_icp.dtb
+	arch/arm/boot/dts/at91-sama5d2_xplained.dtb
+
+serial@f8020000: '#size-cells' is a required property
+	arch/arm/boot/dts/at91-ariag25.dtb
+	arch/arm/boot/dts/at91-cosino_mega2560.dtb
+	arch/arm/boot/dts/at91-dvk_som60.dtb
+	arch/arm/boot/dts/at91-kizbox2-2.dtb
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_icp.dtb
+	arch/arm/boot/dts/at91-sama5d2_xplained.dtb
+
+serial@f8024000: $nodename:0: 'serial@f8024000' does not match '^spi(@.*|-[0-9a-f])*$'
+	arch/arm/boot/dts/at91-ariag25.dtb
+	arch/arm/boot/dts/at91-ariettag25.dtb
+	arch/arm/boot/dts/at91-cosino_mega2560.dtb
+	arch/arm/boot/dts/at91-dvk_som60.dtb
+	arch/arm/boot/dts/at91-gatwick.dtb
+	arch/arm/boot/dts/at91-kizbox2-2.dtb
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-kizboxmini-base.dtb
+	arch/arm/boot/dts/at91-kizboxmini-mb.dtb
+	arch/arm/boot/dts/at91-kizboxmini-rd.dtb
+	arch/arm/boot/dts/at91-nattis-2-natte-2.dtb
+	arch/arm/boot/dts/at91sam9g15ek.dtb
+	arch/arm/boot/dts/at91sam9g25ek.dtb
+	arch/arm/boot/dts/at91sam9g25-gardena-smart-gateway.dtb
+	arch/arm/boot/dts/at91sam9g35ek.dtb
+	arch/arm/boot/dts/at91sam9n12ek.dtb
+	arch/arm/boot/dts/at91sam9x25ek.dtb
+	arch/arm/boot/dts/at91sam9x35ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_icp.dtb
+	arch/arm/boot/dts/at91-sama5d2_ptc_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_xplained.dtb
+	arch/arm/boot/dts/at91-sama5d3_ksz9477_evb.dtb
+	arch/arm/boot/dts/at91-sama5d3_xplained.dtb
+	arch/arm/boot/dts/at91-smartkiz.dtb
+	arch/arm/boot/dts/at91-tse850-3.dtb
+	arch/arm/boot/dts/at91-wb45n.dtb
+	arch/arm/boot/dts/at91-wb50n.dtb
+	arch/arm/boot/dts/sama5d31ek.dtb
+	arch/arm/boot/dts/sama5d33ek.dtb
+	arch/arm/boot/dts/sama5d34ek.dtb
+	arch/arm/boot/dts/sama5d35ek.dtb
+	arch/arm/boot/dts/sama5d36ek_cmp.dtb
+	arch/arm/boot/dts/sama5d36ek.dtb
+
+serial@f8024000: '#address-cells' is a required property
+	arch/arm/boot/dts/at91-ariag25.dtb
+	arch/arm/boot/dts/at91-cosino_mega2560.dtb
+	arch/arm/boot/dts/at91-dvk_som60.dtb
+	arch/arm/boot/dts/at91-gatwick.dtb
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_ptc_ek.dtb
+	arch/arm/boot/dts/at91-wb50n.dtb
+
+serial@f8024000: 'atmel,usart-mode' is a required property
+	arch/arm/boot/dts/at91-ariag25.dtb
+	arch/arm/boot/dts/at91-cosino_mega2560.dtb
+	arch/arm/boot/dts/at91-dvk_som60.dtb
+	arch/arm/boot/dts/at91-gatwick.dtb
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_ptc_ek.dtb
+	arch/arm/boot/dts/at91-wb50n.dtb
+
+serial@f8024000: atmel,use-dma-rx: False schema does not allow True
+	arch/arm/boot/dts/at91-gatwick.dtb
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_ptc_ek.dtb
+	arch/arm/boot/dts/at91-wb50n.dtb
+
+serial@f8024000: atmel,use-dma-tx: False schema does not allow True
+	arch/arm/boot/dts/at91-gatwick.dtb
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_ptc_ek.dtb
+	arch/arm/boot/dts/at91-wb50n.dtb
+
+serial@f8024000: '#size-cells' is a required property
+	arch/arm/boot/dts/at91-ariag25.dtb
+	arch/arm/boot/dts/at91-cosino_mega2560.dtb
+	arch/arm/boot/dts/at91-dvk_som60.dtb
+	arch/arm/boot/dts/at91-gatwick.dtb
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_ptc_ek.dtb
+	arch/arm/boot/dts/at91-wb50n.dtb
+
+serial@f8028000: $nodename:0: 'serial@f8028000' does not match '^spi(@.*|-[0-9a-f])*$'
+	arch/arm/boot/dts/at91-ariag25.dtb
+	arch/arm/boot/dts/at91-ariettag25.dtb
+	arch/arm/boot/dts/at91-dvk_som60.dtb
+	arch/arm/boot/dts/at91-gatwick.dtb
+	arch/arm/boot/dts/at91-kizbox2-2.dtb
+	arch/arm/boot/dts/at91-kizboxmini-base.dtb
+	arch/arm/boot/dts/at91-kizboxmini-mb.dtb
+	arch/arm/boot/dts/at91-kizboxmini-rd.dtb
+	arch/arm/boot/dts/at91-nattis-2-natte-2.dtb
+	arch/arm/boot/dts/at91sam9g25ek.dtb
+	arch/arm/boot/dts/at91sam9g25-gardena-smart-gateway.dtb
+	arch/arm/boot/dts/at91sam9n12ek.dtb
+	arch/arm/boot/dts/at91sam9x25ek.dtb
+	arch/arm/boot/dts/at91-sama5d3_ksz9477_evb.dtb
+	arch/arm/boot/dts/at91-sama5d3_xplained.dtb
+	arch/arm/boot/dts/at91-smartkiz.dtb
+	arch/arm/boot/dts/at91-tse850-3.dtb
+	arch/arm/boot/dts/at91-wb45n.dtb
+	arch/arm/boot/dts/at91-wb50n.dtb
+	arch/arm/boot/dts/sama5d31ek.dtb
+	arch/arm/boot/dts/sama5d35ek.dtb
+	arch/arm/boot/dts/sama5d36ek_cmp.dtb
+	arch/arm/boot/dts/sama5d36ek.dtb
+
+serial@f8028000: '#address-cells' is a required property
+	arch/arm/boot/dts/at91-ariag25.dtb
+	arch/arm/boot/dts/at91sam9g25-gardena-smart-gateway.dtb
+	arch/arm/boot/dts/at91-wb45n.dtb
+
+serial@f8028000: 'atmel,usart-mode' is a required property
+	arch/arm/boot/dts/at91-ariag25.dtb
+	arch/arm/boot/dts/at91sam9g25-gardena-smart-gateway.dtb
+	arch/arm/boot/dts/at91-wb45n.dtb
+
+serial@f8028000: '#size-cells' is a required property
+	arch/arm/boot/dts/at91-ariag25.dtb
+	arch/arm/boot/dts/at91sam9g25-gardena-smart-gateway.dtb
+	arch/arm/boot/dts/at91-wb45n.dtb
+
+serial@f802c000: $nodename:0: 'serial@f802c000' does not match '^spi(@.*|-[0-9a-f])*$'
+	arch/arm/boot/dts/at91-sama5d4ek.dtb
+	arch/arm/boot/dts/at91-sama5d4_ma5d4evk.dtb
+	arch/arm/boot/dts/at91-sama5d4_xplained.dtb
+	arch/arm/boot/dts/at91-vinco.dtb
+
+serial@f802c000: '#address-cells' is a required property
+	arch/arm/boot/dts/at91-sama5d4_ma5d4evk.dtb
+
+serial@f802c000: 'atmel,usart-mode' is a required property
+	arch/arm/boot/dts/at91-sama5d4_ma5d4evk.dtb
+
+serial@f802c000: '#size-cells' is a required property
+	arch/arm/boot/dts/at91-sama5d4_ma5d4evk.dtb
+
+serial@f8030000: $nodename:0: 'serial@f8030000' does not match '^spi(@.*|-[0-9a-f])*$'
+	arch/arm/boot/dts/at91-sama5d4ek.dtb
+	arch/arm/boot/dts/at91-sama5d4_ma5d4evk.dtb
+	arch/arm/boot/dts/at91-sama5d4_xplained.dtb
+	arch/arm/boot/dts/at91-vinco.dtb
+
+serial@f8030000: '#address-cells' is a required property
+	arch/arm/boot/dts/at91-sama5d4_ma5d4evk.dtb
+
+serial@f8030000: 'atmel,usart-mode' is a required property
+	arch/arm/boot/dts/at91-sama5d4_ma5d4evk.dtb
+
+serial@f8030000: '#size-cells' is a required property
+	arch/arm/boot/dts/at91-sama5d4_ma5d4evk.dtb
+
+serial@f8040000: $nodename:0: 'serial@f8040000' does not match '^spi(@.*|-[0-9a-f])*$'
+	arch/arm/boot/dts/at91-ariag25.dtb
+	arch/arm/boot/dts/at91-ariettag25.dtb
+	arch/arm/boot/dts/at91-cosino_mega2560.dtb
+	arch/arm/boot/dts/at91-kizboxmini-base.dtb
+	arch/arm/boot/dts/at91-kizboxmini-mb.dtb
+	arch/arm/boot/dts/at91-kizboxmini-rd.dtb
+	arch/arm/boot/dts/at91sam9g15ek.dtb
+	arch/arm/boot/dts/at91sam9g25ek.dtb
+	arch/arm/boot/dts/at91sam9g25-gardena-smart-gateway.dtb
+	arch/arm/boot/dts/at91sam9g35ek.dtb
+	arch/arm/boot/dts/at91sam9x25ek.dtb
+	arch/arm/boot/dts/at91sam9x35ek.dtb
+	arch/arm/boot/dts/at91-smartkiz.dtb
+	arch/arm/boot/dts/at91-wb45n.dtb
+
+serial@f8040000: '#address-cells' is a required property
+	arch/arm/boot/dts/at91-smartkiz.dtb
+
+serial@f8040000: 'atmel,usart-mode' is a required property
+	arch/arm/boot/dts/at91-smartkiz.dtb
+
+serial@f8040000: '#size-cells' is a required property
+	arch/arm/boot/dts/at91-smartkiz.dtb
+
+serial@f8044000: $nodename:0: 'serial@f8044000' does not match '^spi(@.*|-[0-9a-f])*$'
+	arch/arm/boot/dts/at91-ariag25.dtb
+	arch/arm/boot/dts/at91-ariettag25.dtb
+	arch/arm/boot/dts/at91-cosino_mega2560.dtb
+	arch/arm/boot/dts/at91-kizboxmini-base.dtb
+	arch/arm/boot/dts/at91-kizboxmini-mb.dtb
+	arch/arm/boot/dts/at91-kizboxmini-rd.dtb
+	arch/arm/boot/dts/at91sam9g15ek.dtb
+	arch/arm/boot/dts/at91sam9g25ek.dtb
+	arch/arm/boot/dts/at91sam9g25-gardena-smart-gateway.dtb
+	arch/arm/boot/dts/at91sam9g35ek.dtb
+	arch/arm/boot/dts/at91sam9x25ek.dtb
+	arch/arm/boot/dts/at91sam9x35ek.dtb
+	arch/arm/boot/dts/at91-smartkiz.dtb
+	arch/arm/boot/dts/at91-wb45n.dtb
+
+serial@fc004000: $nodename:0: 'serial@fc004000' does not match '^spi(@.*|-[0-9a-f])*$'
+	arch/arm/boot/dts/at91-sama5d4ek.dtb
+	arch/arm/boot/dts/at91-sama5d4_ma5d4evk.dtb
+	arch/arm/boot/dts/at91-sama5d4_xplained.dtb
+	arch/arm/boot/dts/at91-vinco.dtb
+
+serial@fc008000: $nodename:0: 'serial@fc008000' does not match '^spi(@.*|-[0-9a-f])*$'
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_icp.dtb
+	arch/arm/boot/dts/at91-sama5d2_ptc_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_xplained.dtb
+	arch/arm/boot/dts/at91-sama5d4ek.dtb
+	arch/arm/boot/dts/at91-sama5d4_ma5d4evk.dtb
+	arch/arm/boot/dts/at91-sama5d4_xplained.dtb
+	arch/arm/boot/dts/at91-vinco.dtb
+
+serial@fc008000: '#address-cells' is a required property
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_icp.dtb
+	arch/arm/boot/dts/at91-sama5d2_xplained.dtb
+	arch/arm/boot/dts/at91-sama5d4ek.dtb
+	arch/arm/boot/dts/at91-vinco.dtb
+
+serial@fc008000: 'atmel,usart-mode' is a required property
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_icp.dtb
+	arch/arm/boot/dts/at91-sama5d2_xplained.dtb
+	arch/arm/boot/dts/at91-sama5d4ek.dtb
+	arch/arm/boot/dts/at91-vinco.dtb
+
+serial@fc008000: atmel,use-dma-rx: False schema does not allow True
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_icp.dtb
+	arch/arm/boot/dts/at91-sama5d2_xplained.dtb
+
+serial@fc008000: atmel,use-dma-tx: False schema does not allow True
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_icp.dtb
+	arch/arm/boot/dts/at91-sama5d2_xplained.dtb
+
+serial@fc008000: '#size-cells' is a required property
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_icp.dtb
+	arch/arm/boot/dts/at91-sama5d2_xplained.dtb
+	arch/arm/boot/dts/at91-sama5d4ek.dtb
+	arch/arm/boot/dts/at91-vinco.dtb
+
+serial@fc00c000: $nodename:0: 'serial@fc00c000' does not match '^spi(@.*|-[0-9a-f])*$'
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_icp.dtb
+	arch/arm/boot/dts/at91-sama5d2_ptc_ek.dtb
+	arch/arm/boot/dts/at91-sama5d2_xplained.dtb
+	arch/arm/boot/dts/at91-sama5d4ek.dtb
+	arch/arm/boot/dts/at91-sama5d4_ma5d4evk.dtb
+	arch/arm/boot/dts/at91-sama5d4_xplained.dtb
+	arch/arm/boot/dts/at91-vinco.dtb
+
+serial@fc00c000: '#address-cells' is a required property
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d4ek.dtb
+	arch/arm/boot/dts/at91-sama5d4_xplained.dtb
+	arch/arm/boot/dts/at91-vinco.dtb
+
+serial@fc00c000: 'atmel,usart-mode' is a required property
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d4ek.dtb
+	arch/arm/boot/dts/at91-sama5d4_xplained.dtb
+	arch/arm/boot/dts/at91-vinco.dtb
+
+serial@fc00c000: atmel,use-dma-rx: False schema does not allow True
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d4_xplained.dtb
+
+serial@fc00c000: atmel,use-dma-tx: False schema does not allow True
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d4_xplained.dtb
+
+serial@fc00c000: '#size-cells' is a required property
+	arch/arm/boot/dts/at91-kizbox3-hs.dtb
+	arch/arm/boot/dts/at91-sama5d27_som1_ek.dtb
+	arch/arm/boot/dts/at91-sama5d4ek.dtb
+	arch/arm/boot/dts/at91-sama5d4_xplained.dtb
+	arch/arm/boot/dts/at91-vinco.dtb
+
+serial@fc010000: $nodename:0: 'serial@fc010000' does not match '^spi(@.*|-[0-9a-f])*$'
+	arch/arm/boot/dts/at91-sama5d4ek.dtb
+	arch/arm/boot/dts/at91-sama5d4_ma5d4evk.dtb
+	arch/arm/boot/dts/at91-sama5d4_xplained.dtb
+	arch/arm/boot/dts/at91-vinco.dtb
+
+serial@fc010000: '#address-cells' is a required property
+	arch/arm/boot/dts/at91-sama5d4ek.dtb
+	arch/arm/boot/dts/at91-sama5d4_xplained.dtb
+	arch/arm/boot/dts/at91-vinco.dtb
+
+serial@fc010000: 'atmel,usart-mode' is a required property
+	arch/arm/boot/dts/at91-sama5d4ek.dtb
+	arch/arm/boot/dts/at91-sama5d4_xplained.dtb
+	arch/arm/boot/dts/at91-vinco.dtb
+
+serial@fc010000: '#size-cells' is a required property
+	arch/arm/boot/dts/at91-sama5d4ek.dtb
+	arch/arm/boot/dts/at91-sama5d4_xplained.dtb
+	arch/arm/boot/dts/at91-vinco.dtb
+
+serial@fc010000: Unevaluated properties are not allowed ('linux,rs485-enabled-at-boot-time' was unexpected)
+	arch/arm/boot/dts/at91-vinco.dtb
+
+serial@fc069000: $nodename:0: 'serial@fc069000' does not match '^spi(@.*|-[0-9a-f])*$'
+	arch/arm/boot/dts/at91-sama5d4ek.dtb
+	arch/arm/boot/dts/at91-sama5d4_ma5d4evk.dtb
+	arch/arm/boot/dts/at91-sama5d4_xplained.dtb
+	arch/arm/boot/dts/at91-vinco.dtb
+
+serial@fff8c000: $nodename:0: 'serial@fff8c000' does not match '^spi(@.*|-[0-9a-f])*$'
+	arch/arm/boot/dts/at91sam9263ek.dtb
+	arch/arm/boot/dts/at91sam9m10g45ek.dtb
+	arch/arm/boot/dts/pm9g45.dtb
+	arch/arm/boot/dts/tny_a9263.dtb
+	arch/arm/boot/dts/usb_a9263.dtb
+
+serial@fff8c000: '#address-cells' is a required property
+	arch/arm/boot/dts/at91sam9263ek.dtb
+
+serial@fff8c000: 'atmel,usart-mode' is a required property
+	arch/arm/boot/dts/at91sam9263ek.dtb
+
+serial@fff8c000: atmel,use-dma-rx: False schema does not allow True
+	arch/arm/boot/dts/at91sam9263ek.dtb
+	arch/arm/boot/dts/at91sam9m10g45ek.dtb
+	arch/arm/boot/dts/pm9g45.dtb
+	arch/arm/boot/dts/tny_a9263.dtb
+	arch/arm/boot/dts/usb_a9263.dtb
+
+serial@fff8c000: atmel,use-dma-tx: False schema does not allow True
+	arch/arm/boot/dts/at91sam9263ek.dtb
+	arch/arm/boot/dts/at91sam9m10g45ek.dtb
+	arch/arm/boot/dts/pm9g45.dtb
+	arch/arm/boot/dts/tny_a9263.dtb
+	arch/arm/boot/dts/usb_a9263.dtb
+
+serial@fff8c000: '#size-cells' is a required property
+	arch/arm/boot/dts/at91sam9263ek.dtb
+
+serial@fff90000: $nodename:0: 'serial@fff90000' does not match '^spi(@.*|-[0-9a-f])*$'
+	arch/arm/boot/dts/at91sam9263ek.dtb
+	arch/arm/boot/dts/at91sam9m10g45ek.dtb
+	arch/arm/boot/dts/pm9g45.dtb
+	arch/arm/boot/dts/tny_a9263.dtb
+	arch/arm/boot/dts/usb_a9263.dtb
+
+serial@fff90000: '#address-cells' is a required property
+	arch/arm/boot/dts/at91sam9m10g45ek.dtb
+
+serial@fff90000: 'atmel,usart-mode' is a required property
+	arch/arm/boot/dts/at91sam9m10g45ek.dtb
+
+serial@fff90000: atmel,use-dma-rx: False schema does not allow True
+	arch/arm/boot/dts/at91sam9263ek.dtb
+	arch/arm/boot/dts/at91sam9m10g45ek.dtb
+	arch/arm/boot/dts/pm9g45.dtb
+	arch/arm/boot/dts/tny_a9263.dtb
+	arch/arm/boot/dts/usb_a9263.dtb
+
+serial@fff90000: atmel,use-dma-tx: False schema does not allow True
+	arch/arm/boot/dts/at91sam9263ek.dtb
+	arch/arm/boot/dts/at91sam9m10g45ek.dtb
+	arch/arm/boot/dts/pm9g45.dtb
+	arch/arm/boot/dts/tny_a9263.dtb
+	arch/arm/boot/dts/usb_a9263.dtb
+
+serial@fff90000: '#size-cells' is a required property
+	arch/arm/boot/dts/at91sam9m10g45ek.dtb
+
+serial@fff94000: $nodename:0: 'serial@fff94000' does not match '^spi(@.*|-[0-9a-f])*$'
+	arch/arm/boot/dts/at91sam9263ek.dtb
+	arch/arm/boot/dts/at91sam9m10g45ek.dtb
+	arch/arm/boot/dts/pm9g45.dtb
+	arch/arm/boot/dts/tny_a9263.dtb
+	arch/arm/boot/dts/usb_a9263.dtb
+
+serial@fff94000: atmel,use-dma-rx: False schema does not allow True
+	arch/arm/boot/dts/at91sam9263ek.dtb
+	arch/arm/boot/dts/at91sam9m10g45ek.dtb
+	arch/arm/boot/dts/pm9g45.dtb
+	arch/arm/boot/dts/tny_a9263.dtb
+	arch/arm/boot/dts/usb_a9263.dtb
+
+serial@fff94000: atmel,use-dma-tx: False schema does not allow True
+	arch/arm/boot/dts/at91sam9263ek.dtb
+	arch/arm/boot/dts/at91sam9m10g45ek.dtb
+	arch/arm/boot/dts/pm9g45.dtb
+	arch/arm/boot/dts/tny_a9263.dtb
+	arch/arm/boot/dts/usb_a9263.dtb
+
+serial@fff98000: $nodename:0: 'serial@fff98000' does not match '^spi(@.*|-[0-9a-f])*$'
+	arch/arm/boot/dts/at91sam9m10g45ek.dtb
+	arch/arm/boot/dts/pm9g45.dtb
+
+serial@fff98000: atmel,use-dma-rx: False schema does not allow True
+	arch/arm/boot/dts/at91sam9m10g45ek.dtb
+	arch/arm/boot/dts/pm9g45.dtb
+
+serial@fff98000: atmel,use-dma-tx: False schema does not allow True
+	arch/arm/boot/dts/at91sam9m10g45ek.dtb
+	arch/arm/boot/dts/pm9g45.dtb
+
+serial@fffb0000: $nodename:0: 'serial@fffb0000' does not match '^spi(@.*|-[0-9a-f])*$'
+	arch/arm/boot/dts/aks-cdu.dtb
+	arch/arm/boot/dts/animeo_ip.dtb
+	arch/arm/boot/dts/at91-foxg20.dtb
+	arch/arm/boot/dts/at91-kizbox.dtb
+	arch/arm/boot/dts/at91-lmu5000.dtb
+	arch/arm/boot/dts/at91-q5xr5.dtb
+	arch/arm/boot/dts/at91-qil_a9260.dtb
+	arch/arm/boot/dts/at91sam9260ek.dtb
+	arch/arm/boot/dts/at91sam9261ek.dtb
+	arch/arm/boot/dts/at91sam9g20ek_2mmc.dtb
+	arch/arm/boot/dts/at91sam9g20ek.dtb
+	arch/arm/boot/dts/at91-sam9_l9260.dtb
+	arch/arm/boot/dts/at91sam9rlek.dtb
+	arch/arm/boot/dts/ethernut5.dtb
+	arch/arm/boot/dts/evk-pro3.dtb
+	arch/arm/boot/dts/tny_a9260.dtb
+	arch/arm/boot/dts/tny_a9g20.dtb
+	arch/arm/boot/dts/usb_a9260.dtb
+	arch/arm/boot/dts/usb_a9g20.dtb
+	arch/arm/boot/dts/usb_a9g20_lpw.dtb
+
+serial@fffb0000: '#address-cells' is a required property
+	arch/arm/boot/dts/aks-cdu.dtb
+	arch/arm/boot/dts/animeo_ip.dtb
+	arch/arm/boot/dts/at91-foxg20.dtb
+	arch/arm/boot/dts/at91-lmu5000.dtb
+	arch/arm/boot/dts/at91-q5xr5.dtb
+	arch/arm/boot/dts/at91-qil_a9260.dtb
+	arch/arm/boot/dts/at91sam9260ek.dtb
+	arch/arm/boot/dts/at91sam9g20ek_2mmc.dtb
+	arch/arm/boot/dts/at91sam9g20ek.dtb
+	arch/arm/boot/dts/at91sam9rlek.dtb
+	arch/arm/boot/dts/ethernut5.dtb
+	arch/arm/boot/dts/evk-pro3.dtb
+
+serial@fffb0000: 'atmel,usart-mode' is a required property
+	arch/arm/boot/dts/aks-cdu.dtb
+	arch/arm/boot/dts/animeo_ip.dtb
+	arch/arm/boot/dts/at91-foxg20.dtb
+	arch/arm/boot/dts/at91-lmu5000.dtb
+	arch/arm/boot/dts/at91-q5xr5.dtb
+	arch/arm/boot/dts/at91-qil_a9260.dtb
+	arch/arm/boot/dts/at91sam9260ek.dtb
+	arch/arm/boot/dts/at91sam9g20ek_2mmc.dtb
+	arch/arm/boot/dts/at91sam9g20ek.dtb
+	arch/arm/boot/dts/at91sam9rlek.dtb
+	arch/arm/boot/dts/ethernut5.dtb
+	arch/arm/boot/dts/evk-pro3.dtb
+
+serial@fffb0000: atmel,use-dma-rx: False schema does not allow True
+	arch/arm/boot/dts/aks-cdu.dtb
+	arch/arm/boot/dts/animeo_ip.dtb
+	arch/arm/boot/dts/at91-foxg20.dtb
+	arch/arm/boot/dts/at91-kizbox.dtb
+	arch/arm/boot/dts/at91-lmu5000.dtb
+	arch/arm/boot/dts/at91-q5xr5.dtb
+	arch/arm/boot/dts/at91-qil_a9260.dtb
+	arch/arm/boot/dts/at91sam9260ek.dtb
+	arch/arm/boot/dts/at91sam9261ek.dtb
+	arch/arm/boot/dts/at91sam9g20ek_2mmc.dtb
+	arch/arm/boot/dts/at91sam9g20ek.dtb
+	arch/arm/boot/dts/at91-sam9_l9260.dtb
+	arch/arm/boot/dts/at91sam9rlek.dtb
+	arch/arm/boot/dts/ethernut5.dtb
+	arch/arm/boot/dts/evk-pro3.dtb
+	arch/arm/boot/dts/tny_a9260.dtb
+	arch/arm/boot/dts/tny_a9g20.dtb
+	arch/arm/boot/dts/usb_a9260.dtb
+	arch/arm/boot/dts/usb_a9g20.dtb
+	arch/arm/boot/dts/usb_a9g20_lpw.dtb
+
+serial@fffb0000: atmel,use-dma-tx: False schema does not allow True
+	arch/arm/boot/dts/aks-cdu.dtb
+	arch/arm/boot/dts/animeo_ip.dtb
+	arch/arm/boot/dts/at91-foxg20.dtb
+	arch/arm/boot/dts/at91-kizbox.dtb
+	arch/arm/boot/dts/at91-lmu5000.dtb
+	arch/arm/boot/dts/at91-q5xr5.dtb
+	arch/arm/boot/dts/at91-qil_a9260.dtb
+	arch/arm/boot/dts/at91sam9260ek.dtb
+	arch/arm/boot/dts/at91sam9261ek.dtb
+	arch/arm/boot/dts/at91sam9g20ek_2mmc.dtb
+	arch/arm/boot/dts/at91sam9g20ek.dtb
+	arch/arm/boot/dts/at91-sam9_l9260.dtb
+	arch/arm/boot/dts/at91sam9rlek.dtb
+	arch/arm/boot/dts/ethernut5.dtb
+	arch/arm/boot/dts/evk-pro3.dtb
+	arch/arm/boot/dts/tny_a9260.dtb
+	arch/arm/boot/dts/tny_a9g20.dtb
+	arch/arm/boot/dts/usb_a9260.dtb
+	arch/arm/boot/dts/usb_a9g20.dtb
+	arch/arm/boot/dts/usb_a9g20_lpw.dtb
+
+serial@fffb0000: '#size-cells' is a required property
+	arch/arm/boot/dts/aks-cdu.dtb
+	arch/arm/boot/dts/animeo_ip.dtb
+	arch/arm/boot/dts/at91-foxg20.dtb
+	arch/arm/boot/dts/at91-lmu5000.dtb
+	arch/arm/boot/dts/at91-q5xr5.dtb
+	arch/arm/boot/dts/at91-qil_a9260.dtb
+	arch/arm/boot/dts/at91sam9260ek.dtb
+	arch/arm/boot/dts/at91sam9g20ek_2mmc.dtb
+	arch/arm/boot/dts/at91sam9g20ek.dtb
+	arch/arm/boot/dts/at91sam9rlek.dtb
+	arch/arm/boot/dts/ethernut5.dtb
+	arch/arm/boot/dts/evk-pro3.dtb
+
+serial@fffb0000: Unevaluated properties are not allowed ('linux,rs485-enabled-at-boot-time' was unexpected)
+	arch/arm/boot/dts/animeo_ip.dtb
+
+serial@fffb4000: $nodename:0: 'serial@fffb4000' does not match '^spi(@.*|-[0-9a-f])*$'
+	arch/arm/boot/dts/aks-cdu.dtb
+	arch/arm/boot/dts/animeo_ip.dtb
+	arch/arm/boot/dts/at91-foxg20.dtb
+	arch/arm/boot/dts/at91-kizbox.dtb
+	arch/arm/boot/dts/at91-lmu5000.dtb
+	arch/arm/boot/dts/at91-q5xr5.dtb
+	arch/arm/boot/dts/at91-qil_a9260.dtb
+	arch/arm/boot/dts/at91sam9260ek.dtb
+	arch/arm/boot/dts/at91sam9261ek.dtb
+	arch/arm/boot/dts/at91sam9g20ek_2mmc.dtb
+	arch/arm/boot/dts/at91sam9g20ek.dtb
+	arch/arm/boot/dts/at91-sam9_l9260.dtb
+	arch/arm/boot/dts/at91sam9rlek.dtb
+	arch/arm/boot/dts/ethernut5.dtb
+	arch/arm/boot/dts/evk-pro3.dtb
+	arch/arm/boot/dts/tny_a9260.dtb
+	arch/arm/boot/dts/tny_a9g20.dtb
+	arch/arm/boot/dts/usb_a9260.dtb
+	arch/arm/boot/dts/usb_a9g20.dtb
+	arch/arm/boot/dts/usb_a9g20_lpw.dtb
+
+serial@fffb4000: '#address-cells' is a required property
+	arch/arm/boot/dts/aks-cdu.dtb
+	arch/arm/boot/dts/animeo_ip.dtb
+	arch/arm/boot/dts/at91-foxg20.dtb
+	arch/arm/boot/dts/at91-qil_a9260.dtb
+	arch/arm/boot/dts/at91sam9260ek.dtb
+	arch/arm/boot/dts/at91sam9g20ek_2mmc.dtb
+	arch/arm/boot/dts/at91sam9g20ek.dtb
+	arch/arm/boot/dts/ethernut5.dtb
+
+serial@fffb4000: 'atmel,usart-mode' is a required property
+	arch/arm/boot/dts/aks-cdu.dtb
+	arch/arm/boot/dts/animeo_ip.dtb
+	arch/arm/boot/dts/at91-foxg20.dtb
+	arch/arm/boot/dts/at91-qil_a9260.dtb
+	arch/arm/boot/dts/at91sam9260ek.dtb
+	arch/arm/boot/dts/at91sam9g20ek_2mmc.dtb
+	arch/arm/boot/dts/at91sam9g20ek.dtb
+	arch/arm/boot/dts/ethernut5.dtb
+
+serial@fffb4000: atmel,use-dma-rx: False schema does not allow True
+	arch/arm/boot/dts/aks-cdu.dtb
+	arch/arm/boot/dts/animeo_ip.dtb
+	arch/arm/boot/dts/at91-foxg20.dtb
+	arch/arm/boot/dts/at91-kizbox.dtb
+	arch/arm/boot/dts/at91-lmu5000.dtb
+	arch/arm/boot/dts/at91-q5xr5.dtb
+	arch/arm/boot/dts/at91-qil_a9260.dtb
+	arch/arm/boot/dts/at91sam9260ek.dtb
+	arch/arm/boot/dts/at91sam9261ek.dtb
+	arch/arm/boot/dts/at91sam9g20ek_2mmc.dtb
+	arch/arm/boot/dts/at91sam9g20ek.dtb
+	arch/arm/boot/dts/at91-sam9_l9260.dtb
+	arch/arm/boot/dts/at91sam9rlek.dtb
+	arch/arm/boot/dts/ethernut5.dtb
+	arch/arm/boot/dts/evk-pro3.dtb
+	arch/arm/boot/dts/tny_a9260.dtb
+	arch/arm/boot/dts/tny_a9g20.dtb
+	arch/arm/boot/dts/usb_a9260.dtb
+	arch/arm/boot/dts/usb_a9g20.dtb
+	arch/arm/boot/dts/usb_a9g20_lpw.dtb
+
+serial@fffb4000: atmel,use-dma-tx: False schema does not allow True
+	arch/arm/boot/dts/aks-cdu.dtb
+	arch/arm/boot/dts/animeo_ip.dtb
+	arch/arm/boot/dts/at91-foxg20.dtb
+	arch/arm/boot/dts/at91-kizbox.dtb
+	arch/arm/boot/dts/at91-lmu5000.dtb
+	arch/arm/boot/dts/at91-q5xr5.dtb
+	arch/arm/boot/dts/at91-qil_a9260.dtb
+	arch/arm/boot/dts/at91sam9260ek.dtb
+	arch/arm/boot/dts/at91sam9261ek.dtb
+	arch/arm/boot/dts/at91sam9g20ek_2mmc.dtb
+	arch/arm/boot/dts/at91sam9g20ek.dtb
+	arch/arm/boot/dts/at91-sam9_l9260.dtb
+	arch/arm/boot/dts/at91sam9rlek.dtb
+	arch/arm/boot/dts/ethernut5.dtb
+	arch/arm/boot/dts/evk-pro3.dtb
+	arch/arm/boot/dts/tny_a9260.dtb
+	arch/arm/boot/dts/tny_a9g20.dtb
+	arch/arm/boot/dts/usb_a9260.dtb
+	arch/arm/boot/dts/usb_a9g20.dtb
+	arch/arm/boot/dts/usb_a9g20_lpw.dtb
+
+serial@fffb4000: '#size-cells' is a required property
+	arch/arm/boot/dts/aks-cdu.dtb
+	arch/arm/boot/dts/animeo_ip.dtb
+	arch/arm/boot/dts/at91-foxg20.dtb
+	arch/arm/boot/dts/at91-qil_a9260.dtb
+	arch/arm/boot/dts/at91sam9260ek.dtb
+	arch/arm/boot/dts/at91sam9g20ek_2mmc.dtb
+	arch/arm/boot/dts/at91sam9g20ek.dtb
+	arch/arm/boot/dts/ethernut5.dtb
+
+serial@fffb4000: Unevaluated properties are not allowed ('linux,rs485-enabled-at-boot-time', 'rs485-rts-delay' were unexpected)
+	arch/arm/boot/dts/aks-cdu.dtb
+
+serial@fffb4000: Unevaluated properties are not allowed ('linux,rs485-enabled-at-boot-time' was unexpected)
+	arch/arm/boot/dts/animeo_ip.dtb
+
+serial@fffb8000: $nodename:0: 'serial@fffb8000' does not match '^spi(@.*|-[0-9a-f])*$'
+	arch/arm/boot/dts/aks-cdu.dtb
+	arch/arm/boot/dts/animeo_ip.dtb
+	arch/arm/boot/dts/at91-foxg20.dtb
+	arch/arm/boot/dts/at91-kizbox.dtb
+	arch/arm/boot/dts/at91-lmu5000.dtb
+	arch/arm/boot/dts/at91-q5xr5.dtb
+	arch/arm/boot/dts/at91-qil_a9260.dtb
+	arch/arm/boot/dts/at91sam9260ek.dtb
+	arch/arm/boot/dts/at91sam9261ek.dtb
+	arch/arm/boot/dts/at91sam9g20ek_2mmc.dtb
+	arch/arm/boot/dts/at91sam9g20ek.dtb
+	arch/arm/boot/dts/at91-sam9_l9260.dtb
+	arch/arm/boot/dts/at91sam9rlek.dtb
+	arch/arm/boot/dts/ethernut5.dtb
+	arch/arm/boot/dts/evk-pro3.dtb
+	arch/arm/boot/dts/tny_a9260.dtb
+	arch/arm/boot/dts/tny_a9g20.dtb
+	arch/arm/boot/dts/usb_a9260.dtb
+	arch/arm/boot/dts/usb_a9g20.dtb
+	arch/arm/boot/dts/usb_a9g20_lpw.dtb
+
+serial@fffb8000: '#address-cells' is a required property
+	arch/arm/boot/dts/aks-cdu.dtb
+	arch/arm/boot/dts/animeo_ip.dtb
+	arch/arm/boot/dts/at91-foxg20.dtb
+	arch/arm/boot/dts/at91-lmu5000.dtb
+	arch/arm/boot/dts/at91-qil_a9260.dtb
+	arch/arm/boot/dts/evk-pro3.dtb
+
+serial@fffb8000: 'atmel,usart-mode' is a required property
+	arch/arm/boot/dts/aks-cdu.dtb
+	arch/arm/boot/dts/animeo_ip.dtb
+	arch/arm/boot/dts/at91-foxg20.dtb
+	arch/arm/boot/dts/at91-lmu5000.dtb
+	arch/arm/boot/dts/at91-qil_a9260.dtb
+	arch/arm/boot/dts/evk-pro3.dtb
+
+serial@fffb8000: atmel,use-dma-rx: False schema does not allow True
+	arch/arm/boot/dts/aks-cdu.dtb
+	arch/arm/boot/dts/animeo_ip.dtb
+	arch/arm/boot/dts/at91-foxg20.dtb
+	arch/arm/boot/dts/at91-kizbox.dtb
+	arch/arm/boot/dts/at91-lmu5000.dtb
+	arch/arm/boot/dts/at91-q5xr5.dtb
+	arch/arm/boot/dts/at91-qil_a9260.dtb
+	arch/arm/boot/dts/at91sam9260ek.dtb
+	arch/arm/boot/dts/at91sam9261ek.dtb
+	arch/arm/boot/dts/at91sam9g20ek_2mmc.dtb
+	arch/arm/boot/dts/at91sam9g20ek.dtb
+	arch/arm/boot/dts/at91-sam9_l9260.dtb
+	arch/arm/boot/dts/at91sam9rlek.dtb
+	arch/arm/boot/dts/ethernut5.dtb
+	arch/arm/boot/dts/evk-pro3.dtb
+	arch/arm/boot/dts/tny_a9260.dtb
+	arch/arm/boot/dts/tny_a9g20.dtb
+	arch/arm/boot/dts/usb_a9260.dtb
+	arch/arm/boot/dts/usb_a9g20.dtb
+	arch/arm/boot/dts/usb_a9g20_lpw.dtb
+
+serial@fffb8000: atmel,use-dma-tx: False schema does not allow True
+	arch/arm/boot/dts/aks-cdu.dtb
+	arch/arm/boot/dts/animeo_ip.dtb
+	arch/arm/boot/dts/at91-foxg20.dtb
+	arch/arm/boot/dts/at91-kizbox.dtb
+	arch/arm/boot/dts/at91-lmu5000.dtb
+	arch/arm/boot/dts/at91-q5xr5.dtb
+	arch/arm/boot/dts/at91-qil_a9260.dtb
+	arch/arm/boot/dts/at91sam9260ek.dtb
+	arch/arm/boot/dts/at91sam9261ek.dtb
+	arch/arm/boot/dts/at91sam9g20ek_2mmc.dtb
+	arch/arm/boot/dts/at91sam9g20ek.dtb
+	arch/arm/boot/dts/at91-sam9_l9260.dtb
+	arch/arm/boot/dts/at91sam9rlek.dtb
+	arch/arm/boot/dts/ethernut5.dtb
+	arch/arm/boot/dts/evk-pro3.dtb
+	arch/arm/boot/dts/tny_a9260.dtb
+	arch/arm/boot/dts/tny_a9g20.dtb
+	arch/arm/boot/dts/usb_a9260.dtb
+	arch/arm/boot/dts/usb_a9g20.dtb
+	arch/arm/boot/dts/usb_a9g20_lpw.dtb
+
+serial@fffb8000: '#size-cells' is a required property
+	arch/arm/boot/dts/aks-cdu.dtb
+	arch/arm/boot/dts/animeo_ip.dtb
+	arch/arm/boot/dts/at91-foxg20.dtb
+	arch/arm/boot/dts/at91-lmu5000.dtb
+	arch/arm/boot/dts/at91-qil_a9260.dtb
+	arch/arm/boot/dts/evk-pro3.dtb
+
+serial@fffb8000: Unevaluated properties are not allowed ('linux,rs485-enabled-at-boot-time', 'rs485-rts-delay' were unexpected)
+	arch/arm/boot/dts/aks-cdu.dtb
+
+serial@fffbc000: $nodename:0: 'serial@fffbc000' does not match '^spi(@.*|-[0-9a-f])*$'
+	arch/arm/boot/dts/at91sam9rlek.dtb
+
+serial@fffbc000: atmel,use-dma-rx: False schema does not allow True
+	arch/arm/boot/dts/at91sam9rlek.dtb
+
+serial@fffbc000: atmel,use-dma-tx: False schema does not allow True
+	arch/arm/boot/dts/at91sam9rlek.dtb
+
+serial@fffc0000: $nodename:0: 'serial@fffc0000' does not match '^spi(@.*|-[0-9a-f])*$'
+	arch/arm/boot/dts/at91rm9200ek.dtb
+	arch/arm/boot/dts/mpa1600.dtb
+
+serial@fffc0000: atmel,use-dma-rx: False schema does not allow True
+	arch/arm/boot/dts/at91rm9200ek.dtb
+	arch/arm/boot/dts/mpa1600.dtb
+
+serial@fffc0000: atmel,use-dma-tx: False schema does not allow True
+	arch/arm/boot/dts/at91rm9200ek.dtb
+	arch/arm/boot/dts/mpa1600.dtb
+
+serial@fffc4000: $nodename:0: 'serial@fffc4000' does not match '^spi(@.*|-[0-9a-f])*$'
+	arch/arm/boot/dts/at91rm9200ek.dtb
+	arch/arm/boot/dts/mpa1600.dtb
+
+serial@fffc4000: '#address-cells' is a required property
+	arch/arm/boot/dts/at91rm9200ek.dtb
+
+serial@fffc4000: 'atmel,usart-mode' is a required property
+	arch/arm/boot/dts/at91rm9200ek.dtb
+
+serial@fffc4000: atmel,use-dma-rx: False schema does not allow True
+	arch/arm/boot/dts/at91rm9200ek.dtb
+	arch/arm/boot/dts/mpa1600.dtb
+
+serial@fffc4000: atmel,use-dma-tx: False schema does not allow True
+	arch/arm/boot/dts/at91rm9200ek.dtb
+	arch/arm/boot/dts/mpa1600.dtb
+
+serial@fffc4000: '#size-cells' is a required property
+	arch/arm/boot/dts/at91rm9200ek.dtb
+
+serial@fffc8000: $nodename:0: 'serial@fffc8000' does not match '^spi(@.*|-[0-9a-f])*$'
+	arch/arm/boot/dts/at91rm9200ek.dtb
+	arch/arm/boot/dts/mpa1600.dtb
+
+serial@fffc8000: atmel,use-dma-rx: False schema does not allow True
+	arch/arm/boot/dts/at91rm9200ek.dtb
+	arch/arm/boot/dts/mpa1600.dtb
+
+serial@fffc8000: atmel,use-dma-tx: False schema does not allow True
+	arch/arm/boot/dts/at91rm9200ek.dtb
+	arch/arm/boot/dts/mpa1600.dtb
+
+serial@fffcc000: $nodename:0: 'serial@fffcc000' does not match '^spi(@.*|-[0-9a-f])*$'
+	arch/arm/boot/dts/at91rm9200ek.dtb
+	arch/arm/boot/dts/mpa1600.dtb
+
+serial@fffcc000: atmel,use-dma-rx: False schema does not allow True
+	arch/arm/boot/dts/at91rm9200ek.dtb
+	arch/arm/boot/dts/mpa1600.dtb
+
+serial@fffcc000: atmel,use-dma-tx: False schema does not allow True
+	arch/arm/boot/dts/at91rm9200ek.dtb
+	arch/arm/boot/dts/mpa1600.dtb
+
+serial@fffd0000: $nodename:0: 'serial@fffd0000' does not match '^spi(@.*|-[0-9a-f])*$'
+	arch/arm/boot/dts/aks-cdu.dtb
+	arch/arm/boot/dts/animeo_ip.dtb
+	arch/arm/boot/dts/at91-foxg20.dtb
+	arch/arm/boot/dts/at91-kizbox.dtb
+	arch/arm/boot/dts/at91-lmu5000.dtb
+	arch/arm/boot/dts/at91-q5xr5.dtb
+	arch/arm/boot/dts/at91-qil_a9260.dtb
+	arch/arm/boot/dts/at91sam9260ek.dtb
+	arch/arm/boot/dts/at91sam9g20ek_2mmc.dtb
+	arch/arm/boot/dts/at91sam9g20ek.dtb
+	arch/arm/boot/dts/at91-sam9_l9260.dtb
+	arch/arm/boot/dts/ethernut5.dtb
+	arch/arm/boot/dts/evk-pro3.dtb
+	arch/arm/boot/dts/tny_a9260.dtb
+	arch/arm/boot/dts/tny_a9g20.dtb
+	arch/arm/boot/dts/usb_a9260.dtb
+	arch/arm/boot/dts/usb_a9g20.dtb
+	arch/arm/boot/dts/usb_a9g20_lpw.dtb
+
+serial@fffd0000: '#address-cells' is a required property
+	arch/arm/boot/dts/aks-cdu.dtb
+	arch/arm/boot/dts/at91-foxg20.dtb
+	arch/arm/boot/dts/at91-kizbox.dtb
+
+serial@fffd0000: 'atmel,usart-mode' is a required property
+	arch/arm/boot/dts/aks-cdu.dtb
+	arch/arm/boot/dts/at91-foxg20.dtb
+	arch/arm/boot/dts/at91-kizbox.dtb
+
+serial@fffd0000: atmel,use-dma-rx: False schema does not allow True
+	arch/arm/boot/dts/aks-cdu.dtb
+	arch/arm/boot/dts/animeo_ip.dtb
+	arch/arm/boot/dts/at91-foxg20.dtb
+	arch/arm/boot/dts/at91-kizbox.dtb
+	arch/arm/boot/dts/at91-lmu5000.dtb
+	arch/arm/boot/dts/at91-q5xr5.dtb
+	arch/arm/boot/dts/at91-qil_a9260.dtb
+	arch/arm/boot/dts/at91sam9260ek.dtb
+	arch/arm/boot/dts/at91sam9g20ek_2mmc.dtb
+	arch/arm/boot/dts/at91sam9g20ek.dtb
+	arch/arm/boot/dts/at91-sam9_l9260.dtb
+	arch/arm/boot/dts/ethernut5.dtb
+	arch/arm/boot/dts/evk-pro3.dtb
+	arch/arm/boot/dts/tny_a9260.dtb
+	arch/arm/boot/dts/tny_a9g20.dtb
+	arch/arm/boot/dts/usb_a9260.dtb
+	arch/arm/boot/dts/usb_a9g20.dtb
+	arch/arm/boot/dts/usb_a9g20_lpw.dtb
+
+serial@fffd0000: atmel,use-dma-tx: False schema does not allow True
+	arch/arm/boot/dts/aks-cdu.dtb
+	arch/arm/boot/dts/animeo_ip.dtb
+	arch/arm/boot/dts/at91-foxg20.dtb
+	arch/arm/boot/dts/at91-kizbox.dtb
+	arch/arm/boot/dts/at91-lmu5000.dtb
+	arch/arm/boot/dts/at91-q5xr5.dtb
+	arch/arm/boot/dts/at91-qil_a9260.dtb
+	arch/arm/boot/dts/at91sam9260ek.dtb
+	arch/arm/boot/dts/at91sam9g20ek_2mmc.dtb
+	arch/arm/boot/dts/at91sam9g20ek.dtb
+	arch/arm/boot/dts/at91-sam9_l9260.dtb
+	arch/arm/boot/dts/ethernut5.dtb
+	arch/arm/boot/dts/evk-pro3.dtb
+	arch/arm/boot/dts/tny_a9260.dtb
+	arch/arm/boot/dts/tny_a9g20.dtb
+	arch/arm/boot/dts/usb_a9260.dtb
+	arch/arm/boot/dts/usb_a9g20.dtb
+	arch/arm/boot/dts/usb_a9g20_lpw.dtb
+
+serial@fffd0000: '#size-cells' is a required property
+	arch/arm/boot/dts/aks-cdu.dtb
+	arch/arm/boot/dts/at91-foxg20.dtb
+	arch/arm/boot/dts/at91-kizbox.dtb
+
+serial@fffd0000: Unevaluated properties are not allowed ('linux,rs485-enabled-at-boot-time', 'rs485-rts-delay' were unexpected)
+	arch/arm/boot/dts/aks-cdu.dtb
+
+serial@fffd4000: $nodename:0: 'serial@fffd4000' does not match '^spi(@.*|-[0-9a-f])*$'
+	arch/arm/boot/dts/aks-cdu.dtb
+	arch/arm/boot/dts/animeo_ip.dtb
+	arch/arm/boot/dts/at91-foxg20.dtb
+	arch/arm/boot/dts/at91-kizbox.dtb
+	arch/arm/boot/dts/at91-lmu5000.dtb
+	arch/arm/boot/dts/at91-q5xr5.dtb
+	arch/arm/boot/dts/at91-qil_a9260.dtb
+	arch/arm/boot/dts/at91sam9260ek.dtb
+	arch/arm/boot/dts/at91sam9g20ek_2mmc.dtb
+	arch/arm/boot/dts/at91sam9g20ek.dtb
+	arch/arm/boot/dts/at91-sam9_l9260.dtb
+	arch/arm/boot/dts/ethernut5.dtb
+	arch/arm/boot/dts/evk-pro3.dtb
+	arch/arm/boot/dts/tny_a9260.dtb
+	arch/arm/boot/dts/tny_a9g20.dtb
+	arch/arm/boot/dts/usb_a9260.dtb
+	arch/arm/boot/dts/usb_a9g20.dtb
+	arch/arm/boot/dts/usb_a9g20_lpw.dtb
+
+serial@fffd4000: '#address-cells' is a required property
+	arch/arm/boot/dts/at91-foxg20.dtb
+	arch/arm/boot/dts/at91-lmu5000.dtb
+
+serial@fffd4000: 'atmel,usart-mode' is a required property
+	arch/arm/boot/dts/at91-foxg20.dtb
+	arch/arm/boot/dts/at91-lmu5000.dtb
+
+serial@fffd4000: atmel,use-dma-rx: False schema does not allow True
+	arch/arm/boot/dts/aks-cdu.dtb
+	arch/arm/boot/dts/animeo_ip.dtb
+	arch/arm/boot/dts/at91-foxg20.dtb
+	arch/arm/boot/dts/at91-kizbox.dtb
+	arch/arm/boot/dts/at91-lmu5000.dtb
+	arch/arm/boot/dts/at91-q5xr5.dtb
+	arch/arm/boot/dts/at91-qil_a9260.dtb
+	arch/arm/boot/dts/at91sam9260ek.dtb
+	arch/arm/boot/dts/at91sam9g20ek_2mmc.dtb
+	arch/arm/boot/dts/at91sam9g20ek.dtb
+	arch/arm/boot/dts/at91-sam9_l9260.dtb
+	arch/arm/boot/dts/ethernut5.dtb
+	arch/arm/boot/dts/evk-pro3.dtb
+	arch/arm/boot/dts/tny_a9260.dtb
+	arch/arm/boot/dts/tny_a9g20.dtb
+	arch/arm/boot/dts/usb_a9260.dtb
+	arch/arm/boot/dts/usb_a9g20.dtb
+	arch/arm/boot/dts/usb_a9g20_lpw.dtb
+
+serial@fffd4000: atmel,use-dma-tx: False schema does not allow True
+	arch/arm/boot/dts/aks-cdu.dtb
+	arch/arm/boot/dts/animeo_ip.dtb
+	arch/arm/boot/dts/at91-foxg20.dtb
+	arch/arm/boot/dts/at91-kizbox.dtb
+	arch/arm/boot/dts/at91-lmu5000.dtb
+	arch/arm/boot/dts/at91-q5xr5.dtb
+	arch/arm/boot/dts/at91-qil_a9260.dtb
+	arch/arm/boot/dts/at91sam9260ek.dtb
+	arch/arm/boot/dts/at91sam9g20ek_2mmc.dtb
+	arch/arm/boot/dts/at91sam9g20ek.dtb
+	arch/arm/boot/dts/at91-sam9_l9260.dtb
+	arch/arm/boot/dts/ethernut5.dtb
+	arch/arm/boot/dts/evk-pro3.dtb
+	arch/arm/boot/dts/tny_a9260.dtb
+	arch/arm/boot/dts/tny_a9g20.dtb
+	arch/arm/boot/dts/usb_a9260.dtb
+	arch/arm/boot/dts/usb_a9g20.dtb
+	arch/arm/boot/dts/usb_a9g20_lpw.dtb
+
+serial@fffd4000: '#size-cells' is a required property
+	arch/arm/boot/dts/at91-foxg20.dtb
+	arch/arm/boot/dts/at91-lmu5000.dtb
+
+serial@fffd8000: $nodename:0: 'serial@fffd8000' does not match '^spi(@.*|-[0-9a-f])*$'
+	arch/arm/boot/dts/aks-cdu.dtb
+	arch/arm/boot/dts/animeo_ip.dtb
+	arch/arm/boot/dts/at91-foxg20.dtb
+	arch/arm/boot/dts/at91-kizbox.dtb
+	arch/arm/boot/dts/at91-lmu5000.dtb
+	arch/arm/boot/dts/at91-q5xr5.dtb
+	arch/arm/boot/dts/at91-qil_a9260.dtb
+	arch/arm/boot/dts/at91sam9260ek.dtb
+	arch/arm/boot/dts/at91sam9g20ek_2mmc.dtb
+	arch/arm/boot/dts/at91sam9g20ek.dtb
+	arch/arm/boot/dts/at91-sam9_l9260.dtb
+	arch/arm/boot/dts/ethernut5.dtb
+	arch/arm/boot/dts/evk-pro3.dtb
+	arch/arm/boot/dts/tny_a9260.dtb
+	arch/arm/boot/dts/tny_a9g20.dtb
+	arch/arm/boot/dts/usb_a9260.dtb
+	arch/arm/boot/dts/usb_a9g20.dtb
+	arch/arm/boot/dts/usb_a9g20_lpw.dtb
+
+serial@fffd8000: '#address-cells' is a required property
+	arch/arm/boot/dts/at91-foxg20.dtb
+	arch/arm/boot/dts/at91-lmu5000.dtb
+
+serial@fffd8000: 'atmel,usart-mode' is a required property
+	arch/arm/boot/dts/at91-foxg20.dtb
+	arch/arm/boot/dts/at91-lmu5000.dtb
+
+serial@fffd8000: atmel,use-dma-rx: False schema does not allow True
+	arch/arm/boot/dts/aks-cdu.dtb
+	arch/arm/boot/dts/animeo_ip.dtb
+	arch/arm/boot/dts/at91-foxg20.dtb
+	arch/arm/boot/dts/at91-kizbox.dtb
+	arch/arm/boot/dts/at91-lmu5000.dtb
+	arch/arm/boot/dts/at91-q5xr5.dtb
+	arch/arm/boot/dts/at91-qil_a9260.dtb
+	arch/arm/boot/dts/at91sam9260ek.dtb
+	arch/arm/boot/dts/at91sam9g20ek_2mmc.dtb
+	arch/arm/boot/dts/at91sam9g20ek.dtb
+	arch/arm/boot/dts/at91-sam9_l9260.dtb
+	arch/arm/boot/dts/ethernut5.dtb
+	arch/arm/boot/dts/evk-pro3.dtb
+	arch/arm/boot/dts/tny_a9260.dtb
+	arch/arm/boot/dts/tny_a9g20.dtb
+	arch/arm/boot/dts/usb_a9260.dtb
+	arch/arm/boot/dts/usb_a9g20.dtb
+	arch/arm/boot/dts/usb_a9g20_lpw.dtb
+
+serial@fffd8000: atmel,use-dma-tx: False schema does not allow True
+	arch/arm/boot/dts/aks-cdu.dtb
+	arch/arm/boot/dts/animeo_ip.dtb
+	arch/arm/boot/dts/at91-foxg20.dtb
+	arch/arm/boot/dts/at91-kizbox.dtb
+	arch/arm/boot/dts/at91-lmu5000.dtb
+	arch/arm/boot/dts/at91-q5xr5.dtb
+	arch/arm/boot/dts/at91-qil_a9260.dtb
+	arch/arm/boot/dts/at91sam9260ek.dtb
+	arch/arm/boot/dts/at91sam9g20ek_2mmc.dtb
+	arch/arm/boot/dts/at91sam9g20ek.dtb
+	arch/arm/boot/dts/at91-sam9_l9260.dtb
+	arch/arm/boot/dts/ethernut5.dtb
+	arch/arm/boot/dts/evk-pro3.dtb
+	arch/arm/boot/dts/tny_a9260.dtb
+	arch/arm/boot/dts/tny_a9g20.dtb
+	arch/arm/boot/dts/usb_a9260.dtb
+	arch/arm/boot/dts/usb_a9g20.dtb
+	arch/arm/boot/dts/usb_a9g20_lpw.dtb
+
+serial@fffd8000: '#size-cells' is a required property
+	arch/arm/boot/dts/at91-foxg20.dtb
+	arch/arm/boot/dts/at91-lmu5000.dtb
+
+serial@ffffee00: $nodename:0: 'serial@ffffee00' does not match '^spi(@.*|-[0-9a-f])*$'
+	arch/arm/boot/dts/at91-dvk_som60.dtb
+	arch/arm/boot/dts/at91-gatwick.dtb
+	arch/arm/boot/dts/at91-kizbox2-2.dtb
+	arch/arm/boot/dts/at91-nattis-2-natte-2.dtb
+	arch/arm/boot/dts/at91sam9263ek.dtb
+	arch/arm/boot/dts/at91sam9m10g45ek.dtb
+	arch/arm/boot/dts/at91-sama5d3_ksz9477_evb.dtb
+	arch/arm/boot/dts/at91-sama5d3_xplained.dtb
+	arch/arm/boot/dts/at91-tse850-3.dtb
+	arch/arm/boot/dts/at91-wb50n.dtb
+	arch/arm/boot/dts/pm9g45.dtb
+	arch/arm/boot/dts/sama5d31ek.dtb
+	arch/arm/boot/dts/sama5d33ek.dtb
+	arch/arm/boot/dts/sama5d34ek.dtb
+	arch/arm/boot/dts/sama5d35ek.dtb
+	arch/arm/boot/dts/sama5d36ek_cmp.dtb
+	arch/arm/boot/dts/sama5d36ek.dtb
+	arch/arm/boot/dts/tny_a9263.dtb
+	arch/arm/boot/dts/usb_a9263.dtb
+
+serial@ffffee00: '#address-cells' is a required property
+	arch/arm/boot/dts/at91-dvk_som60.dtb
+	arch/arm/boot/dts/at91-gatwick.dtb
+	arch/arm/boot/dts/at91-kizbox2-2.dtb
+	arch/arm/boot/dts/at91-nattis-2-natte-2.dtb
+	arch/arm/boot/dts/at91sam9263ek.dtb
+	arch/arm/boot/dts/at91sam9m10g45ek.dtb
+	arch/arm/boot/dts/at91-sama5d3_ksz9477_evb.dtb
+	arch/arm/boot/dts/at91-sama5d3_xplained.dtb
+	arch/arm/boot/dts/at91-tse850-3.dtb
+	arch/arm/boot/dts/at91-wb50n.dtb
+	arch/arm/boot/dts/pm9g45.dtb
+	arch/arm/boot/dts/sama5d31ek.dtb
+	arch/arm/boot/dts/sama5d33ek.dtb
+	arch/arm/boot/dts/sama5d34ek.dtb
+	arch/arm/boot/dts/sama5d35ek.dtb
+	arch/arm/boot/dts/sama5d36ek_cmp.dtb
+	arch/arm/boot/dts/sama5d36ek.dtb
+	arch/arm/boot/dts/tny_a9263.dtb
+	arch/arm/boot/dts/usb_a9263.dtb
+
+serial@ffffee00: 'atmel,usart-mode' is a required property
+	arch/arm/boot/dts/at91-dvk_som60.dtb
+	arch/arm/boot/dts/at91-gatwick.dtb
+	arch/arm/boot/dts/at91-kizbox2-2.dtb
+	arch/arm/boot/dts/at91-nattis-2-natte-2.dtb
+	arch/arm/boot/dts/at91sam9263ek.dtb
+	arch/arm/boot/dts/at91sam9m10g45ek.dtb
+	arch/arm/boot/dts/at91-sama5d3_ksz9477_evb.dtb
+	arch/arm/boot/dts/at91-sama5d3_xplained.dtb
+	arch/arm/boot/dts/at91-tse850-3.dtb
+	arch/arm/boot/dts/at91-wb50n.dtb
+	arch/arm/boot/dts/pm9g45.dtb
+	arch/arm/boot/dts/sama5d31ek.dtb
+	arch/arm/boot/dts/sama5d33ek.dtb
+	arch/arm/boot/dts/sama5d34ek.dtb
+	arch/arm/boot/dts/sama5d35ek.dtb
+	arch/arm/boot/dts/sama5d36ek_cmp.dtb
+	arch/arm/boot/dts/sama5d36ek.dtb
+	arch/arm/boot/dts/tny_a9263.dtb
+	arch/arm/boot/dts/usb_a9263.dtb
+
+serial@ffffee00: atmel,use-dma-rx: False schema does not allow True
+	arch/arm/boot/dts/at91-nattis-2-natte-2.dtb
+
+serial@ffffee00: '#size-cells' is a required property
+	arch/arm/boot/dts/at91-dvk_som60.dtb
+	arch/arm/boot/dts/at91-gatwick.dtb
+	arch/arm/boot/dts/at91-kizbox2-2.dtb
+	arch/arm/boot/dts/at91-nattis-2-natte-2.dtb
+	arch/arm/boot/dts/at91sam9263ek.dtb
+	arch/arm/boot/dts/at91sam9m10g45ek.dtb
+	arch/arm/boot/dts/at91-sama5d3_ksz9477_evb.dtb
+	arch/arm/boot/dts/at91-sama5d3_xplained.dtb
+	arch/arm/boot/dts/at91-tse850-3.dtb
+	arch/arm/boot/dts/at91-wb50n.dtb
+	arch/arm/boot/dts/pm9g45.dtb
+	arch/arm/boot/dts/sama5d31ek.dtb
+	arch/arm/boot/dts/sama5d33ek.dtb
+	arch/arm/boot/dts/sama5d34ek.dtb
+	arch/arm/boot/dts/sama5d35ek.dtb
+	arch/arm/boot/dts/sama5d36ek_cmp.dtb
+	arch/arm/boot/dts/sama5d36ek.dtb
+	arch/arm/boot/dts/tny_a9263.dtb
+	arch/arm/boot/dts/usb_a9263.dtb
+
+serial@fffff200: $nodename:0: 'serial@fffff200' does not match '^spi(@.*|-[0-9a-f])*$'
+	arch/arm/boot/dts/aks-cdu.dtb
+	arch/arm/boot/dts/animeo_ip.dtb
+	arch/arm/boot/dts/at91-ariag25.dtb
+	arch/arm/boot/dts/at91-ariettag25.dtb
+	arch/arm/boot/dts/at91-cosino_mega2560.dtb
+	arch/arm/boot/dts/at91-foxg20.dtb
+	arch/arm/boot/dts/at91-kizbox.dtb
+	arch/arm/boot/dts/at91-kizboxmini-base.dtb
+	arch/arm/boot/dts/at91-kizboxmini-mb.dtb
+	arch/arm/boot/dts/at91-kizboxmini-rd.dtb
+	arch/arm/boot/dts/at91-lmu5000.dtb
+	arch/arm/boot/dts/at91-q5xr5.dtb
+	arch/arm/boot/dts/at91-qil_a9260.dtb
+	arch/arm/boot/dts/at91rm9200ek.dtb
+	arch/arm/boot/dts/at91sam9260ek.dtb
+	arch/arm/boot/dts/at91sam9261ek.dtb
+	arch/arm/boot/dts/at91sam9g15ek.dtb
+	arch/arm/boot/dts/at91sam9g20ek_2mmc.dtb
+	arch/arm/boot/dts/at91sam9g20ek.dtb
+	arch/arm/boot/dts/at91sam9g25ek.dtb
+	arch/arm/boot/dts/at91sam9g25-gardena-smart-gateway.dtb
+	arch/arm/boot/dts/at91sam9g35ek.dtb
+	arch/arm/boot/dts/at91-sam9_l9260.dtb
+	arch/arm/boot/dts/at91sam9n12ek.dtb
+	arch/arm/boot/dts/at91sam9rlek.dtb
+	arch/arm/boot/dts/at91sam9x25ek.dtb
+	arch/arm/boot/dts/at91sam9x35ek.dtb
+	arch/arm/boot/dts/at91-sam9x60ek.dtb
+	arch/arm/boot/dts/at91-smartkiz.dtb
+	arch/arm/boot/dts/at91-wb45n.dtb
+	arch/arm/boot/dts/ethernut5.dtb
+	arch/arm/boot/dts/evk-pro3.dtb
+	arch/arm/boot/dts/mpa1600.dtb
+	arch/arm/boot/dts/tny_a9260.dtb
+	arch/arm/boot/dts/tny_a9g20.dtb
+	arch/arm/boot/dts/usb_a9260.dtb
+	arch/arm/boot/dts/usb_a9g20.dtb
+	arch/arm/boot/dts/usb_a9g20_lpw.dtb
+
+serial@fffff200: '#address-cells' is a required property
+	arch/arm/boot/dts/aks-cdu.dtb
+	arch/arm/boot/dts/at91-ariag25.dtb
+	arch/arm/boot/dts/at91-ariettag25.dtb
+	arch/arm/boot/dts/at91-cosino_mega2560.dtb
+	arch/arm/boot/dts/at91-foxg20.dtb
+	arch/arm/boot/dts/at91-kizbox.dtb
+	arch/arm/boot/dts/at91-kizboxmini-base.dtb
+	arch/arm/boot/dts/at91-kizboxmini-mb.dtb
+	arch/arm/boot/dts/at91-kizboxmini-rd.dtb
+	arch/arm/boot/dts/at91-lmu5000.dtb
+	arch/arm/boot/dts/at91-q5xr5.dtb
+	arch/arm/boot/dts/at91-qil_a9260.dtb
+	arch/arm/boot/dts/at91rm9200ek.dtb
+	arch/arm/boot/dts/at91sam9260ek.dtb
+	arch/arm/boot/dts/at91sam9261ek.dtb
+	arch/arm/boot/dts/at91sam9g15ek.dtb
+	arch/arm/boot/dts/at91sam9g20ek_2mmc.dtb
+	arch/arm/boot/dts/at91sam9g20ek.dtb
+	arch/arm/boot/dts/at91sam9g25ek.dtb
+	arch/arm/boot/dts/at91sam9g25-gardena-smart-gateway.dtb
+	arch/arm/boot/dts/at91sam9g35ek.dtb
+	arch/arm/boot/dts/at91-sam9_l9260.dtb
+	arch/arm/boot/dts/at91sam9n12ek.dtb
+	arch/arm/boot/dts/at91sam9rlek.dtb
+	arch/arm/boot/dts/at91sam9x25ek.dtb
+	arch/arm/boot/dts/at91sam9x35ek.dtb
+	arch/arm/boot/dts/at91-sam9x60ek.dtb
+	arch/arm/boot/dts/at91-smartkiz.dtb
+	arch/arm/boot/dts/at91-wb45n.dtb
+	arch/arm/boot/dts/ethernut5.dtb
+	arch/arm/boot/dts/evk-pro3.dtb
+	arch/arm/boot/dts/mpa1600.dtb
+	arch/arm/boot/dts/tny_a9260.dtb
+	arch/arm/boot/dts/tny_a9g20.dtb
+	arch/arm/boot/dts/usb_a9260.dtb
+	arch/arm/boot/dts/usb_a9g20.dtb
+	arch/arm/boot/dts/usb_a9g20_lpw.dtb
+
+serial@fffff200: 'atmel,usart-mode' is a required property
+	arch/arm/boot/dts/aks-cdu.dtb
+	arch/arm/boot/dts/at91-ariag25.dtb
+	arch/arm/boot/dts/at91-ariettag25.dtb
+	arch/arm/boot/dts/at91-cosino_mega2560.dtb
+	arch/arm/boot/dts/at91-foxg20.dtb
+	arch/arm/boot/dts/at91-kizbox.dtb
+	arch/arm/boot/dts/at91-kizboxmini-base.dtb
+	arch/arm/boot/dts/at91-kizboxmini-mb.dtb
+	arch/arm/boot/dts/at91-kizboxmini-rd.dtb
+	arch/arm/boot/dts/at91-lmu5000.dtb
+	arch/arm/boot/dts/at91-q5xr5.dtb
+	arch/arm/boot/dts/at91-qil_a9260.dtb
+	arch/arm/boot/dts/at91rm9200ek.dtb
+	arch/arm/boot/dts/at91sam9260ek.dtb
+	arch/arm/boot/dts/at91sam9261ek.dtb
+	arch/arm/boot/dts/at91sam9g15ek.dtb
+	arch/arm/boot/dts/at91sam9g20ek_2mmc.dtb
+	arch/arm/boot/dts/at91sam9g20ek.dtb
+	arch/arm/boot/dts/at91sam9g25ek.dtb
+	arch/arm/boot/dts/at91sam9g25-gardena-smart-gateway.dtb
+	arch/arm/boot/dts/at91sam9g35ek.dtb
+	arch/arm/boot/dts/at91-sam9_l9260.dtb
+	arch/arm/boot/dts/at91sam9n12ek.dtb
+	arch/arm/boot/dts/at91sam9rlek.dtb
+	arch/arm/boot/dts/at91sam9x25ek.dtb
+	arch/arm/boot/dts/at91sam9x35ek.dtb
+	arch/arm/boot/dts/at91-sam9x60ek.dtb
+	arch/arm/boot/dts/at91-smartkiz.dtb
+	arch/arm/boot/dts/at91-wb45n.dtb
+	arch/arm/boot/dts/ethernut5.dtb
+	arch/arm/boot/dts/evk-pro3.dtb
+	arch/arm/boot/dts/mpa1600.dtb
+	arch/arm/boot/dts/tny_a9260.dtb
+	arch/arm/boot/dts/tny_a9g20.dtb
+	arch/arm/boot/dts/usb_a9260.dtb
+	arch/arm/boot/dts/usb_a9g20.dtb
+	arch/arm/boot/dts/usb_a9g20_lpw.dtb
+
+serial@fffff200: compatible: 'oneOf' conditional failed, one must be fixed:
+	arch/arm/boot/dts/at91-sam9x60ek.dtb
+
+serial@fffff200: '#size-cells' is a required property
+	arch/arm/boot/dts/aks-cdu.dtb
+	arch/arm/boot/dts/at91-ariag25.dtb
+	arch/arm/boot/dts/at91-ariettag25.dtb
+	arch/arm/boot/dts/at91-cosino_mega2560.dtb
+	arch/arm/boot/dts/at91-foxg20.dtb
+	arch/arm/boot/dts/at91-kizbox.dtb
+	arch/arm/boot/dts/at91-kizboxmini-base.dtb
+	arch/arm/boot/dts/at91-kizboxmini-mb.dtb
+	arch/arm/boot/dts/at91-kizboxmini-rd.dtb
+	arch/arm/boot/dts/at91-lmu5000.dtb
+	arch/arm/boot/dts/at91-q5xr5.dtb
+	arch/arm/boot/dts/at91-qil_a9260.dtb
+	arch/arm/boot/dts/at91rm9200ek.dtb
+	arch/arm/boot/dts/at91sam9260ek.dtb
+	arch/arm/boot/dts/at91sam9261ek.dtb
+	arch/arm/boot/dts/at91sam9g15ek.dtb
+	arch/arm/boot/dts/at91sam9g20ek_2mmc.dtb
+	arch/arm/boot/dts/at91sam9g20ek.dtb
+	arch/arm/boot/dts/at91sam9g25ek.dtb
+	arch/arm/boot/dts/at91sam9g25-gardena-smart-gateway.dtb
+	arch/arm/boot/dts/at91sam9g35ek.dtb
+	arch/arm/boot/dts/at91-sam9_l9260.dtb
+	arch/arm/boot/dts/at91sam9n12ek.dtb
+	arch/arm/boot/dts/at91sam9rlek.dtb
+	arch/arm/boot/dts/at91sam9x25ek.dtb
+	arch/arm/boot/dts/at91sam9x35ek.dtb
+	arch/arm/boot/dts/at91-sam9x60ek.dtb
+	arch/arm/boot/dts/at91-smartkiz.dtb
+	arch/arm/boot/dts/at91-wb45n.dtb
+	arch/arm/boot/dts/ethernut5.dtb
+	arch/arm/boot/dts/evk-pro3.dtb
+	arch/arm/boot/dts/mpa1600.dtb
+	arch/arm/boot/dts/tny_a9260.dtb
+	arch/arm/boot/dts/tny_a9g20.dtb
+	arch/arm/boot/dts/usb_a9260.dtb
+	arch/arm/boot/dts/usb_a9g20.dtb
+	arch/arm/boot/dts/usb_a9g20_lpw.dtb
+
+serial@fffff200: Unevaluated properties are not allowed ('compatible' was unexpected)
+	arch/arm/boot/dts/at91-sam9x60ek.dtb
