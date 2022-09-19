@@ -2,79 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 403C15BCB14
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 13:53:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C6BE5BCB1C
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Sep 2022 13:53:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbiISLxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 07:53:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45292 "EHLO
+        id S230034AbiISLxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 07:53:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbiISLxD (ORCPT
+        with ESMTP id S229942AbiISLxN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 07:53:03 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 362EF2B273
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 04:53:00 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id 13so34828790ejn.3
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 04:53:00 -0700 (PDT)
+        Mon, 19 Sep 2022 07:53:13 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A3B32B63D
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 04:53:11 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id w8so46495912lft.12
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 04:53:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=nT165KwVdFzwm9eF9hv47+7oQR3xfKBQSGECoZbQrwQ=;
-        b=yxgCOqzLUyZrbNS4xKX5orKTBMvizkj8LApdrsboHhv1LbRJsGmwXA8RGbPu3gBBuh
-         FedWCjxfgxuqKWro5LoPnoe3uzhqQB/ZerkOoD9pRkTkAfS9FTvSU5tpyLNoeK32LfEx
-         Ypyx8Wrwn9iVFWdoiWr0/wRotNyfEZ132Ie443HVgprSsl2dE2weO7eimWWW6CWzTCLj
-         kib2TaC0B9G+aTGGOHtFDfg/3WEjtyxfzvur9/gSU8g8fugCT6EUxHgOVKcoYSHzkaJp
-         tnc7CYpvrdFe73phEFjpXjxJlQxep7v13tdy/Me5WvgM7VsuuQHw1lBt+11ZMfNJ8AVU
-         bO0g==
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=B6qYgq4tZVjjKBdLQA77w07q/sp4ao3eYtkYwlJCGPI=;
+        b=XwquBQPtdvbakJD6j/fG9HvmxdVvgha8hwkeOcfCmTMp3ZCVhS0V35T+dLtI4bvIvZ
+         Cjv7GrzWqO9l51NSVr4/eFeOQ8oobBOXvvZ0INp1IBRtcQUtw3MJOiZTVobzY8fLLHpi
+         RM51l+vvhP2IOku2whKFq7PSlOtDwWbzx1ZTqtFgVPCf5PMxAgzKiIS8bSFWRcuowM53
+         nX+Rv5u46hlPwUaUEfg1kucyCWZenLMR6TnnO+DhkZ5cp/j03bmLPcHgGSHW29xb5NHn
+         dLP7/MjXRh1y5rbhhXwB87sxeLrhB7DE86OZcghtegA5KdLhrAeHR0TTEjoq2ZaCXQwU
+         XSVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=nT165KwVdFzwm9eF9hv47+7oQR3xfKBQSGECoZbQrwQ=;
-        b=B2HJw2aLQiN/KMwyHrm5XbgHwhkCbjQiFpdMb3FO69ZAKgL6/x7+aX5FoMJdMnp+zK
-         mR42mlo/5ebYi533c+gP7jprzKXLX51HgJBECLxydRo17M91ZFlc7NX3UKXfWkiPg9Wu
-         kkFKdGQdEe6V6aey9t5yxF2iKb9TwRatOhw/oydVihOh/3qzQXxy8rzPazYzxVXWfwRb
-         ce5U9hkoSrN0+VM9J6FGOgbZUM2gaD9o7wpUnDhYFsjvxm0nZU7zWGS5C0mKdS9KPM8+
-         lUNzSUaB2RQaRGFVPGGHPYC4ztUdpEi97FFMneD2ktPmIlpIk6SDgVOXgTyGPvgqNv6x
-         gvsg==
-X-Gm-Message-State: ACrzQf1QjweZBRiXGlEIvR1zay9cOB+aYnTe6H/TBGPl+PEByiO6G5U8
-        CwJQYXsJoaQ2fDdHb0UEEuFWfal5bZ5Pl0dDua1Muw==
-X-Google-Smtp-Source: AMsMyM5ygi7n4k1vCY3ONaJjWG8v/roOjtXTbkg/tYw05LbaZacpnV8RloAcNYT8n3C/14MsyoxS3UvBxJzajdsfuqA=
-X-Received: by 2002:a17:906:58c8:b0:6fe:91d5:18d2 with SMTP id
- e8-20020a17090658c800b006fe91d518d2mr12779573ejs.190.1663588378814; Mon, 19
- Sep 2022 04:52:58 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=B6qYgq4tZVjjKBdLQA77w07q/sp4ao3eYtkYwlJCGPI=;
+        b=HG2qJYi638mveu1oAY/WyK1AofiPhZsH6BcTWNegLfloREyrERlFQz4gtK/JwJtagK
+         9nMb45WxM4b5H61yr8FdFcXgLBXCpEZcGXY0bAMSoLUJtPF6sNrDyjhzbAGJEPcv6gJU
+         4Z88Zx8ODzNzuJQIwE1PFI2j0fWTSCeM1XsZ77KrTcNh52CYVbwzXvtfYp8T1g5KaR4w
+         KbtN97GFfP16gx6tEv/dKLqrzQ3KSCnKmIgr5hI6txnW7WMMMH2q10QiscAF6xYa1DV7
+         fcPRUmIthYHrfDGsxtifrc4TFupuyiIRg+V132/nWMpfJwGF4Xohu9iIQskFfSPUJ7rz
+         NLeQ==
+X-Gm-Message-State: ACrzQf1RXujjlifPKbtQv0ur1CgnoHmLfbPrNO7n6rUFVlthZgnAiefU
+        L3cDq5YVMn9dgfut/ina/2uWjQ==
+X-Google-Smtp-Source: AMsMyM6JZ3UfeH6M8omR0Zt1TEDfX5GQ9ftvQ8Y5pDm5vECfEUfq19pM7T0gGok8g7xxQwrbwC22YA==
+X-Received: by 2002:a19:5e50:0:b0:497:a331:91d9 with SMTP id z16-20020a195e50000000b00497a33191d9mr6253444lfi.162.1663588389325;
+        Mon, 19 Sep 2022 04:53:09 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id s30-20020a05651c201e00b0026acc9edecdsm4893992ljo.47.2022.09.19.04.53.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Sep 2022 04:53:08 -0700 (PDT)
+Message-ID: <b70df37b-e803-acca-e7e1-5b4526e76776@linaro.org>
+Date:   Mon, 19 Sep 2022 13:53:08 +0200
 MIME-Version: 1.0
-References: <20220912210624.4527-1-quic_amelende@quicinc.com>
-In-Reply-To: <20220912210624.4527-1-quic_amelende@quicinc.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 19 Sep 2022 13:52:46 +0200
-Message-ID: <CACRpkdYb+RRspmF_tDrD8ESQCNBBNaTDXbVuPhW-keWJ1owBtg@mail.gmail.com>
-Subject: Re: [PATCH v2 0/4] Add Support for Qualcomm SPMI GPIOs
-To:     Anjelique Melendez <quic_amelende@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, konrad.dybcio@somainline.org,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_collinsd@quicinc.com, quic_jprakash@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH] dt-bindings: thermal: qcom-spmi-adc-tm5: add qcom,adc-tm7
+Content-Language: en-US
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220828081022.96813-1-krzysztof.kozlowski@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220828081022.96813-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 11:06 PM Anjelique Melendez
-<quic_amelende@quicinc.com> wrote:
+On 28/08/2022 10:10, Krzysztof Kozlowski wrote:
+> The qcom,adc-tm7 compatible is already used in PMK8350 so add it to the
+> Qualcomm PMIC Thermal Monitoring ADC.  Based on downstream sources, the
+> new compatible for TM7 differs from older TM5 by allowing configuring
+> per sensor decimation, time measurement and number of sample averaging -
+> unlike one configuration per entire device.  This was not reflected in
+> the bindings, therefore comment the new compatible as incomplete as it
+> might change and its ABI is no stable.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 
-> This series provides support and fixes for Qualcomm SPMI GPIOs.
+Bjorn, Daniel,
 
-Patches applied for next!
+Anyone picking this patch?
 
-Yours,
-Linus Walleij
+Best regards,
+Krzysztof
