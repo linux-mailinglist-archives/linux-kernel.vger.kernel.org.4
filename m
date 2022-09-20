@@ -2,62 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E6CE5BE8E5
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 16:27:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30C305BE8E8
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 16:28:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230464AbiITO1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 10:27:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55042 "EHLO
+        id S231325AbiITO2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 10:28:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229984AbiITO1q (ORCPT
+        with ESMTP id S229984AbiITO2E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 10:27:46 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C28D7226;
-        Tue, 20 Sep 2022 07:27:45 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id q21so4084906edc.9;
-        Tue, 20 Sep 2022 07:27:45 -0700 (PDT)
+        Tue, 20 Sep 2022 10:28:04 -0400
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 118C6226;
+        Tue, 20 Sep 2022 07:28:04 -0700 (PDT)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-127d10b4f19so4415748fac.9;
+        Tue, 20 Sep 2022 07:28:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date;
-        bh=Liib93EzAVK4sIXWmleEPgo27rMYZRDPIdCFkLHuB5M=;
-        b=dMG2QRyt14LehNiiB+J9RwfNaOh3XMRlofrRUiXp8eEerZ/Y/yxuZlzRufNhvJsiIP
-         79tJAxppdISgWCmQUPj002Y1c1meWmKOfisjkkJ+LG5hzbQ25z6HR9rXB3z0HcpLxQAw
-         +gJELaz3TPiaWSd1DRz3dn39Pt5ocYQkl9aQ9xpL7rXGI8rKQMzDsa2xl4EMlcFGOFzH
-         wcY3BMLtXDBa6rWTP6Qv1rSXWLw8jCVg9cyGMueXO/XLJIPTdY/uigEm9bHlwW38NEXm
-         YBtt/Wbx9bp3/NG7czzZQuhwGu3nklQFFfn9ixLnTHQ+aDQIPl9biEExxyYaon6aAkYz
-         Aing==
+        bh=eIBCdRZ91e6B9az9bnty9SmfU59aOEZQ/+8nwcyHTOw=;
+        b=IyOmUaPi8ehKws+AiyBpdlKelCC9fvz2Voejsb65/WgZLtv10tIaPF8EveAV8DdBgx
+         xHlwwmd/mwufZtvPfcy+aLzer76SvgdASR27mRr9X+BXDsI+j4Eec4NmT4KWaZK4mhYu
+         a+BmtSO+lqioiXkOcQWiogrx0rhNq3p1WtBiiafa/iO+9CQiGaIVbvoHnTB1ejGGK6M3
+         IlTLKEPfGWi8qzTeBIr3J4QgeHj5gBmYjRyqAhIlFrve2HEyORNsaKVJAb35VOHpR87Y
+         F4W2KCMijl+K7/OqhcdkKRkqRg0ej/mFwbaKc/0MmIsSxMswFcoBdyKCzljLkpOvRJNi
+         G6VQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=Liib93EzAVK4sIXWmleEPgo27rMYZRDPIdCFkLHuB5M=;
-        b=7lRqj3pg4v1NtnM78s5Z0jOwJ5lUMWZtfMnMJy08ThEXosATRic0ybK+ZCKkH5bZj5
-         PgMDcMzvdFyW0M8XEEvDAB7V0e+ynsFx5jine6ClgK6dErsSNE/fb+zjQYBUU+NOIG7d
-         meb9Hiw+BqeYdnIJ0dq5eegPQGEsoPqDrhEe6XI8AKskaQ/QYib8y2lUqqmq4Zr5ofm8
-         diaIxk/bL/7SHvEg8OskyqLFTWOjKjhPALS96brgkg2OiraRIvAvi0yvMW8tVGJGsbps
-         +hWq0TNZKgPfwpSAqAgAvhZ30T0zYM2z0cSFyHbbgyjJPXPpbLPXuOYeEX9+lKpKnqyj
-         CbwQ==
-X-Gm-Message-State: ACrzQf3MbuLxcl4JUKs7/Y3GKQhrufQMWznQ887ONOhAIkB5YbhUTobL
-        MnkNx2DQX54m0etj0hyXt8E=
-X-Google-Smtp-Source: AMsMyM7coyvmIfxhR6pD9GxGAVD7jsOgaRM34Cdu4jxKnWEkpw364h10JilpoeF3EBQetit6MVb/bw==
-X-Received: by 2002:a05:6402:298e:b0:451:129e:1b35 with SMTP id eq14-20020a056402298e00b00451129e1b35mr20165670edb.79.1663684064221;
-        Tue, 20 Sep 2022 07:27:44 -0700 (PDT)
-Received: from localhost.localdomain (84-72-105-84.dclient.hispeed.ch. [84.72.105.84])
-        by smtp.gmail.com with ESMTPSA id s4-20020a1709066c8400b0077fb63da010sm971442ejr.114.2022.09.20.07.27.43
+        bh=eIBCdRZ91e6B9az9bnty9SmfU59aOEZQ/+8nwcyHTOw=;
+        b=eQ/dyWUPTOY3KfRuQkwWANXCz3IwrW+I4V20UwDD6ojyugvhWRvukAbIN9GSnVTLiD
+         NY+7mPQW5WaeXKtfU98FU2aQLCoHiCAqOPClj/RKX/izBWF0rXsj6LdGIDCPzmmradBr
+         OYQVb3R/q0IyQJ/clZL26UgxgEIl+fSg8RO+X9mh2WKSgLVNwcpCCe9t7KQwpNOAdfZl
+         0Sj6hmc2MlIuvr9D4IDxxi+dVYPkY0UfnB0A77FMv6WQ1lyy4smt7yvCBVT8eVzmRrg2
+         EB4XfS+h/2aZ/i8aQxLbDpAI/OE3jRLL0L7y2qxqmiHRYEydYhmyms6xRBz7t0tDdK9q
+         WK+A==
+X-Gm-Message-State: ACrzQf2A1GwO2yRaAbcDjTuUCFPeUtRAD+OhB1F93X9sCsR15GfRq2eM
+        Y0zZHZ/IT6G9KoKJS5lvo2qLnTeaAEQ2Vg==
+X-Google-Smtp-Source: AMsMyM7BPX3OjSWMrCTfcCxF36VS5tVznjT+tOzXDN85FdBggDWFZNPUtVIE0Ifev7tysBfxJ0bOPw==
+X-Received: by 2002:a05:6870:b508:b0:12d:1c59:90d9 with SMTP id v8-20020a056870b50800b0012d1c5990d9mr2256678oap.199.1663684083277;
+        Tue, 20 Sep 2022 07:28:03 -0700 (PDT)
+Received: from macondo.. ([2804:431:e7cc:3499:63b7:66da:c087:3355])
+        by smtp.gmail.com with ESMTPSA id l7-20020a056830268700b0065a193c08absm42860otu.34.2022.09.20.07.28.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 07:27:43 -0700 (PDT)
-From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] gpiolib: Fix missing array end sentinel in quirks array
-Date:   Tue, 20 Sep 2022 16:27:18 +0200
-Message-Id: <20220920142718.633062-1-frattaroli.nicolas@gmail.com>
-X-Mailer: git-send-email 2.37.3
+        Tue, 20 Sep 2022 07:28:02 -0700 (PDT)
+From:   Rafael Mendonca <rafaelmendsr@gmail.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Rafael Mendonca <rafaelmendsr@gmail.com>,
+        Tommaso Merciai <tommaso.merciai@amarulasolutions.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] media: i2c: ov5648: Free V4L2 fwnode data on unbind
+Date:   Tue, 20 Sep 2022 11:27:48 -0300
+Message-Id: <20220920142749.738715-1-rafaelmendsr@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -70,30 +72,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Without the sentinel, the loop never actually terminates if there
-are no quirks, and wreaks havoc across the kernel resulting in a
-juicy panic.
+The V4L2 fwnode data structure doesn't get freed on unbind, which leads to
+a memleak.
 
-Fix this by adding a NULL at the end.
-
-Fixes: a2b5e207cade ("gpiolib: rework quirk handling in of_find_gpio()")
-Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+Fixes: e43ccb0a045f ("media: i2c: Add support for the OV5648 image sensor")
+Signed-off-by: Rafael Mendonca <rafaelmendsr@gmail.com>
+Reviewed-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+Reviewed-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 ---
- drivers/gpio/gpiolib-of.c | 1 +
+v1->v2
+- Remove empty line before call to free
+---
+ drivers/media/i2c/ov5648.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
-index 95be5f0d2623..1b60cd04883f 100644
---- a/drivers/gpio/gpiolib-of.c
-+++ b/drivers/gpio/gpiolib-of.c
-@@ -498,6 +498,7 @@ static const of_find_gpio_quirk of_find_gpio_quirks[] = {
- 	of_find_regulator_gpio,
- 	of_find_arizona_gpio,
- 	of_find_usb_gpio,
-+	NULL,
- };
+diff --git a/drivers/media/i2c/ov5648.c b/drivers/media/i2c/ov5648.c
+index dfcd33e9ee13..220c53565b0a 100644
+--- a/drivers/media/i2c/ov5648.c
++++ b/drivers/media/i2c/ov5648.c
+@@ -2597,6 +2597,7 @@ static int ov5648_remove(struct i2c_client *client)
+ 	v4l2_ctrl_handler_free(&sensor->ctrls.handler);
+ 	mutex_destroy(&sensor->mutex);
+ 	media_entity_cleanup(&subdev->entity);
++	v4l2_fwnode_endpoint_free(&sensor->endpoint);
  
- struct gpio_desc *of_find_gpio(struct device *dev, const char *con_id,
+ 	return 0;
+ }
 -- 
-2.37.3
+2.34.1
 
