@@ -2,120 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 659275BE5A7
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 14:23:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B55535BE5AB
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 14:24:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231195AbiITMXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 08:23:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35342 "EHLO
+        id S230225AbiITMYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 08:24:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230495AbiITMX1 (ORCPT
+        with ESMTP id S229717AbiITMYL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 08:23:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE2A475389
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 05:23:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663676605;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ITgZ+FEhdrS2y8XEyUzkVY3PfF+vnYBUViWp7eHKbVA=;
-        b=EEPRPztfhOM4l8U7nHFWB8ye50Bk1ZMvAqrgz7Fvpg4yUO8DTa4vuFdnzctqsLQm8sdik/
-        /WSgptTfRIPCnwOCn3ONLqX4Bi0VweUrbGIVmJU6sNdj5p/hAQxykTcawk4TFId5LrrQbh
-        EqV3NOL/+ObggbuZx8JDGrqodnPAbbQ=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-287-5ll2Ea3jNV6xCqe3I2yCaA-1; Tue, 20 Sep 2022 08:23:22 -0400
-X-MC-Unique: 5ll2Ea3jNV6xCqe3I2yCaA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CC1DA38173C1;
-        Tue, 20 Sep 2022 12:23:21 +0000 (UTC)
-Received: from t480s.redhat.com (unknown [10.39.195.16])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 082A8C15BB5;
-        Tue, 20 Sep 2022 12:23:17 +0000 (UTC)
-From:   David Hildenbrand <david@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, linux-doc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org,
-        David Hildenbrand <david@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        David Laight <David.Laight@ACULAB.COM>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andy Whitcroft <apw@canonical.com>,
-        Joe Perches <joe@perches.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
-        Dave Young <dyoung@redhat.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: [PATCH v1 3/3] checkpatch: warn on usage of VM_BUG_ON() and other BUG variants
-Date:   Tue, 20 Sep 2022 14:23:02 +0200
-Message-Id: <20220920122302.99195-4-david@redhat.com>
-In-Reply-To: <20220920122302.99195-1-david@redhat.com>
-References: <20220920122302.99195-1-david@redhat.com>
+        Tue, 20 Sep 2022 08:24:11 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2066.outbound.protection.outlook.com [40.107.102.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96AD473901
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 05:24:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MpxwPcHsudAaWBK6JClfDH6QP8DxEQieBac8+jolfHVCWRQnfbd9uYKyoigO7xnbkUJ2/40nSRCaugsXwIyIPFzg+UoiClcqlLJaHgzUxtQeJSF/C3jx2hLRfif8L0kXhZ9NUTkriEM/1ESOsNh+HdG+jJQ4AFnrp5YVeGD22+M4MWJZMEJLkvFjazKONaeZQYAGNiZ4+X9yTs374tETCl9Kp+/GKyRQOpH49TeWXCTfgVB9XtfVCEjqhOYmSakUWsndrqGUCowDszwl/eGQd8trUczQDAGd15r/Pfbhc6RBIOeARU9MNujkcocBbexhTnTyutnxyvG3ai3Ms3upYg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=A0VaBZnryXLhlz6qbb0dNj0wpmpf8cTaC0FwtIralbg=;
+ b=KEPlgq7uriUYR6iS+wjeO+Gsr59zmhSlvnhBOCGs4ZJNYKB3Vb7Vpva3Vhn9dl8ev6F8BCwNB+mHhYSEmADyjC328ec9JCGF+H7rm4fyM+7hLA26AuVadg5LXAIqjiP/HUR5Z25iEh7FqM5mMYozJKyrInQxKHpbs64CGcXcT6sB5NZw2W0feHEwV9WzwBf68WyhQFwEmLZdL6E3F3VEJdPbs2D/GeaKOZIMG84JgzoIlqvyxt9TAGX7KtDCARHXu0KsxB4uGxOtwtnmY6SpQUZ5f5x76AuVm6rVH2ojpBPgUbN5ViWv+I42xfNqb1F61hyI/yLE5JwZ5/GXhg8vIw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=A0VaBZnryXLhlz6qbb0dNj0wpmpf8cTaC0FwtIralbg=;
+ b=MNuY/nylgzOBJ+fds+aFaoFYq6ZrCGBJJBKhQ+rCF4oHbixama3zRYd/m5m+3/b4Q0luuFwSETWt3XcHkqXTfyxZQR3baaaIDSw61whLCpaNIxqwzIpYmJrfcQRCZ8bNAsThhofrnX97Lgr8OsfYcxtXf6sH5aF4jl8mIdz9Yj4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by SJ0PR12MB5405.namprd12.prod.outlook.com (2603:10b6:a03:3af::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.19; Tue, 20 Sep
+ 2022 12:24:06 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::653f:e59b:3f40:8fed]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::653f:e59b:3f40:8fed%6]) with mapi id 15.20.5632.021; Tue, 20 Sep 2022
+ 12:24:06 +0000
+Message-ID: <3430255f-3675-eef2-92bd-4eb8be582c83@amd.com>
+Date:   Tue, 20 Sep 2022 14:23:58 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] drm/amdgpu: initialize r variable into amdgpu_cs_submit
+ function
+Content-Language: en-US
+To:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+Cc:     linuxfancy@googlegroups.com, linux-amarula@amarulasolutions.com,
+        sudipm.mukherjee@gmail.com,
+        Alex Deucher <alexander.deucher@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Philip Yang <Philip.Yang@amd.com>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20220920122216.346321-1-tommaso.merciai@amarulasolutions.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20220920122216.346321-1-tommaso.merciai@amarulasolutions.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR3P281CA0094.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a1::9) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|SJ0PR12MB5405:EE_
+X-MS-Office365-Filtering-Correlation-Id: ce6a4f33-2a92-4ba2-e51e-08da9b030293
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ksCdRUd5eRq6Ix19m42QFXlP/dnyuztm5bMinoLT1OYQHQ/hF+phxHJ/qxJpYvLlzhQahiNECO47I7d6GrO7T9DDDtU8bU5meEUW9Fa7wXgXWNCbRQWJQxSEYDVv3VgP6NMERp+xj3DDlmg6l5gh0fc+kwBwc9D8T0pdZxiW4Jz+fmdxGbe3WZXJR/y062UHFvKh4OVCecmkJlUNRBQE/tSI7nDkg+GmycK6TdVelyPxgs0qV6SA6VmVLpV6ZiMnIwV+KnmvQUjI0WRh6r6T4s77u6ZAEmnimmaRusZMPi8But5fKkuaTCs07iMSMVkldN62bZvk0CvFid9gjJcs14WLr1rUigEKt75M9LdANcgMdjeIalJBV+iHrLUWURcLzhCvR+0Us5t6us6VWghHlwOHJsN16JyfqT8FrEcszFPu6oJNTTPWVCUIB7xaqx3grtBadt+kLpWatOk8U9hyFJxVmQcPEyXq9fSvAhxqC2jXf26utll/L0lfhmtX45OQLP4ZaVYMc51A9higxJBq/nxDCRdesw7W1Cj3oQsTIXyj0yMxKX24KlhISLCwhSoylWxpvSfChbfCCi3fdhIGrsug6Sz1HU52uwoOGj6WxR9d3NZu4lvCS/OTs25WkxlFCUiwr8Mb5h3TDYEQsqpnF89p0Yin5/Gkvl9DshzW8EYgIfjjj7wWPIyChANQR/s+c/wrvp+Rqu9Yz03/91CsimIOMkHc7CiHGa8Fps8NW5tmArIAQ9v+KZRnJID74GJh+dh2RJxhGzXRr6hIAEWORNqIhdr9RUAGoAU0bd1wDRU=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(346002)(366004)(136003)(376002)(451199015)(2906002)(8676002)(83380400001)(36756003)(4326008)(41300700001)(6666004)(6506007)(478600001)(316002)(7416002)(31696002)(5660300002)(38100700002)(86362001)(54906003)(6916009)(6486002)(8936002)(31686004)(186003)(2616005)(66946007)(26005)(66556008)(6512007)(66476007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UFhVMWptL2hreXBEZW9pSGszL1VSODJDT1lKR0Y5bTdicEJxbDY5dTZsN0tq?=
+ =?utf-8?B?YkFrVVBtZjgwc1h4eVhyYlo2cEt1RWVpQnhNMHc2cDdzaGlWY2FQczh4NFVW?=
+ =?utf-8?B?WWhIaEhwTjZMZ3UrMDNtS2NGcXlHMzBZQW9ZVTZIbzdpU1JmSEdqZTBYNEZS?=
+ =?utf-8?B?c3JmViswL2dOaFcrMndsQzdTV1BUTk1iQ3EyeWRsVTJBV1BjbEJScStobEI4?=
+ =?utf-8?B?MVUyNG80V25ZYjRvZm40OTNra1lvbDVSQ3dXTXRnbHZHS0tJbk5XTWtHMXBL?=
+ =?utf-8?B?N1VCM3JHekJrVHV1ZE1hN1hwaXB0dEVPaitIT3F4TjhiR1E1Wkc5UmxYTjY2?=
+ =?utf-8?B?Y3BleUJuQ3N1ZE0zclpBdGlBRUlsSWUyZnNRMHZLSzNQRW5DdWxOQnVzdDBm?=
+ =?utf-8?B?clFWV2FhMTBDajBvL3cvU2owWW0rd1JtL3NxNEhDdEI5Unh5a2UrSjRzN1pl?=
+ =?utf-8?B?VGVPQnN5QmpVVktibDZ4NzhtdSt2QUlpMWN1WFJObDdldmFKU1gzYXoyaVVG?=
+ =?utf-8?B?N25KT01zZjcwQzhKVXAzcXZ4a0lQK1d0MmNzbEUrSEQ5dk56dW5OUXdUQWF1?=
+ =?utf-8?B?ZEdOalV0RnY5Nk5Pa1lNWlE2YjN5dnBhTUpxY1R1dXR5MDNqT3FJbGIzNlZW?=
+ =?utf-8?B?NHN3ZlkrTktTSG9XMkNqZnBtQWo3YVVJRFc4RTlHQXhIRzhvMlZMd2c3cmM3?=
+ =?utf-8?B?OWFraFVQMGFVUnhOUDc3QWdjY3NvYWZNaTIrd3NTRzBCbUxpM21zUHUzUmlt?=
+ =?utf-8?B?UGtVb0wvN1VOejgzK0I0OGt1U29GakpzSGJTM0xDQkxJZEplMTlCa0prTmc3?=
+ =?utf-8?B?VWxueXdVTXZMTnF0dEVTR04xOG10U0xPSFh5VEJ3cURyc3U2ODdNVEJJdElD?=
+ =?utf-8?B?MjlvSGJIcFRxbHJrZzZhUUo5UnNnZlRPamRQMUY2dmszbS84ZUl2MDhmWkc2?=
+ =?utf-8?B?VzFZcFZTV3dBV0ptZG1BZFRrS1l3bzJ5bWpidktKa3FIaWI5R3dZV2ZERUNN?=
+ =?utf-8?B?czZJRXgxRDNCUW5mOUFlS3lDRUZ5SVptbFp4WjZBTnN0eEFJMklsNlgwU2hG?=
+ =?utf-8?B?U1R2VlpWdnBPeUlCU3Byc1IrWFdLcFhoQWRLaWpITGFOMXFERzNOdy9mZDVW?=
+ =?utf-8?B?RndtQWZIN0FJT1VnK3pqaERhSmdxYnlhdkQweVdEbG9PV1pidUxzM3FhdEEw?=
+ =?utf-8?B?NnB0YVNZT3phdSs5QmE2eG5HWHBGd0toYng4RmY1eXphVHZuZGtPanoyU0Rv?=
+ =?utf-8?B?dTYxSnZmWE9iRDB1cjhOSTVzSVUyckw3alVlUWJZTmJIdjE5RjBseVRmUlJv?=
+ =?utf-8?B?eTZBNzNGdjhieEdKQzc3RjBkQVdhMmM2dTNYbG5jVHNxdDUrd3JaWWZENlZq?=
+ =?utf-8?B?aUFlTk1zRFpSQ25KN2ZNZW5ndGJZRzFSNEk2ZU50SUt1TTc1d21HMGFLWm5o?=
+ =?utf-8?B?bERXVXdjN2o3VzVGV1dUYkkzYnVUZ2oxUGpHcGZjVmt5bktjdlQzNnZyd0Vu?=
+ =?utf-8?B?ZXVoWm1pSU53ekJwbUIwRWFCNGRjUjM3YS9QZXNmYnd2MDhYSUpHVmlTemJ3?=
+ =?utf-8?B?K0xzNytXWU9vUDFLRFg4UlB6VUZyalBwdXczbnZsMUo0QTUvcEtOSXlPaGJP?=
+ =?utf-8?B?bFRCQTV3dzdHbkZPMTlrS21oaVpabnlPalRxVTE3ZEpMWWFNV2x6WHgzYS8r?=
+ =?utf-8?B?ZmVXWmcxbWZjOXpxN1lkQTE1SWo5dGNpUmVKa1JQVDNBYTAzUkZSeW0zV0Fk?=
+ =?utf-8?B?cENBZ1grZWtqQ3lqRFo5MmhnUlZWZ0J4ZGJUckFERjczYnVkOHFLVTBKNnZv?=
+ =?utf-8?B?M2hJMmtGRmZDL3hlbkRETUcwb2o5c3BDM0xVZXBXeTR4VG8veHBFaDQ0a2pK?=
+ =?utf-8?B?N3JnNjUzby9iSXhBUGZZQkNrS0MvTHpTUWtvQklJeE91S05DU1ZTek9iKzF1?=
+ =?utf-8?B?ak1KVmVibWlsSklubWgyL1lMNDhNYk1FcEFVNGwwQlpCMFoxNnRWcDlZQ2Uy?=
+ =?utf-8?B?eTdqMERVMUE0RThBeCsrK25BUDlaQVNvbGlPQWIvRDFWbmFzNTNiK20vaGhV?=
+ =?utf-8?B?N1doUEd0UU9CZmdZUUFzMmtnOTN0aG1PNGdmNzF6c3dSU2hwS2RDbXMwUUZk?=
+ =?utf-8?Q?rVeCWlWwTOsFzqTaX1QuVvSRS?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ce6a4f33-2a92-4ba2-e51e-08da9b030293
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Sep 2022 12:24:05.9300
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: GfcAtn4uxtFsiL2eg0i1CWBsqt8jdU8Nb0lyvQNLqYfb42RcYj8MwlA8jIgvgn0l
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5405
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-checkpatch does not point out that VM_BUG_ON() and friends should be
-avoided, however, Linus notes:
+Am 20.09.22 um 14:22 schrieb Tommaso Merciai:
+> The builds of arm64 allmodconfig with clang failed to build
+> next-20220920 with the following result:
+>
+> 1190:3: error: variable 'r' is uninitialized when used here [-Werror,-Wuninitialized]
+> note: initialize the variable 'r' to silence this warning
+>
+> This fix compilation error
 
-    VM_BUG_ON() has the exact same semantics as BUG_ON. It is literally
-    no different, the only difference is "we can make the code smaller
-    because these are less important". [1]
+I've already send a patch to fix this to the mailing list 7 Minutes ago :)
 
-So let's warn on VM_BUG_ON() and other BUG variants as well. While at it,
-make it clearer that the kernel really shouldn't be crashed.
+Please review or ack that one.
 
-As there are some subsystem BUG macros that actually don't end up crashing
-the kernel -- for example, KVM_BUG_ON() -- exclude these manually.
+Thanks,
+Christian.
 
-[1] https://lore.kernel.org/r/CAHk-=wg40EAZofO16Eviaj7mfqDhZ2gVEbvfsMf6gYzspRjYvw@mail.gmail.com
-
-Signed-off-by: David Hildenbrand <david@redhat.com>
----
- scripts/checkpatch.pl | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-index 79e759aac543..21f3a79aa46f 100755
---- a/scripts/checkpatch.pl
-+++ b/scripts/checkpatch.pl
-@@ -4695,12 +4695,12 @@ sub process {
- 			}
- 		}
- 
--# avoid BUG() or BUG_ON()
--		if ($line =~ /\b(?:BUG|BUG_ON)\b/) {
-+# do not use BUG() or variants
-+		if ($line =~ /\b(?!AA_|BUILD_|DCCP_|IDA_|KVM_|RWLOCK_|snd_|SPIN_)(?:[a-zA-Z_]*_)?BUG(?:_ON)?(?:_[A-Z_]+)?\s*\(/) {
- 			my $msg_level = \&WARN;
- 			$msg_level = \&CHK if ($file);
- 			&{$msg_level}("AVOID_BUG",
--				      "Avoid crashing the kernel - try using WARN_ON & recovery code rather than BUG() or BUG_ON()\n" . $herecurr);
-+				      "Do not crash the kernel unless it is unavoidable - use WARN_ON_ONCE & recovery code (if reasonable) rather than BUG() or variants.\n" . $herecurr);
- 		}
- 
- # avoid LINUX_VERSION_CODE
--- 
-2.37.3
+>
+> Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+> ---
+>   drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
+> index 58088c663125..efa3dc9b69fd 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
+> @@ -1168,7 +1168,7 @@ static int amdgpu_cs_submit(struct amdgpu_cs_parser *p,
+>   	struct amdgpu_bo_list_entry *e;
+>   	struct amdgpu_job *job;
+>   	uint64_t seq;
+> -	int r;
+> +	int r = 0;
+>   
+>   	job = p->job;
+>   	p->job = NULL;
 
