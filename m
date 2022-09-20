@@ -2,177 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C9715BEC09
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 19:31:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8DC55BEBDB
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 19:26:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230285AbiITRa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 13:30:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49272 "EHLO
+        id S230315AbiITR0v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 13:26:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231237AbiITRad (ORCPT
+        with ESMTP id S229472AbiITR0t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 13:30:33 -0400
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB2F7172C
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 10:30:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1663694866; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=SXs2NNty6nAHGNb82MGcdFDT9tph4cnz0xB0CTD4tBMylQpe4l04b0xJtHhdiH2+1fdQ/quuNm/FgNW8oXhjmoeRwQ+bXGn1rWSd+r6ihXjha73i6Vg9KAuPXgh4QaRMcKusBqXqFaApyZiSghs4XRT/xjme+VNuCHU+x1pyO2A=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1663694866; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=8AjFH1BLUb+TXyGp2qTPrkMzOdVeStVDjagqGC2aBMo=; 
-        b=Sw1PseK+KmPrwX1AQ8dc6oOr/0M4HUVO17hk49JrmZA/7w0rZgxEIxV/HbC2xXmzN7u87ZkeCPtyhKuwqu5gQufo9sBoX+FTC+6KcGJYipe3tmp2sYt2cy9n+76DT/eE1jVnVf8Yf3a4IN6QxjV2yqLPeSIbmRZ/MTSmnUI9x94=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1663694866;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:In-Reply-To:References:MIME-Version:Content-Type:Content-Transfer-Encoding:Reply-To;
-        bh=8AjFH1BLUb+TXyGp2qTPrkMzOdVeStVDjagqGC2aBMo=;
-        b=jLxb9ZGQDFo5AEsXVm/Qi+zoRrLLAGO8eYMrpSIdFKislJMVYN3SkdvolhR5jUwq
-        bEsPBHbK1lvICO2xBrHrVoO+t87QFKvSjV8FeN5JiVTSd2yGYEuSIbFKKi1wIQb6O51
-        qDS2mOGJjRu9It83qg61kpwuT2LSNM//Kdqo1gzk=
-Received: from arinc9-Xeront.fusolab.local (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
-        with SMTPS id 1663694864308155.8970139669667; Tue, 20 Sep 2022 10:27:44 -0700 (PDT)
-From:   =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        erkin.bozoglu@xeront.com
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org,
-        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
-        Petr Louda <petr.louda@outlook.cz>
-Subject: [PATCH v4 net-next 10/10] mips: dts: ralink: mt7621: add GB-PC2 LEDs
-Date:   Tue, 20 Sep 2022 20:25:56 +0300
-Message-Id: <20220920172556.16557-11-arinc.unal@arinc9.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220920172556.16557-1-arinc.unal@arinc9.com>
-References: <20220920172556.16557-1-arinc.unal@arinc9.com>
+        Tue, 20 Sep 2022 13:26:49 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BE3A58DC7;
+        Tue, 20 Sep 2022 10:26:48 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id E12DA21B69;
+        Tue, 20 Sep 2022 17:26:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1663694806; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=55Y7hJRILYCZSmEl8VFafa6FNPLMA4ET1MSFLD7oFeY=;
+        b=KXfCm5+BcMeawj5bdpORhiYS8nKC4KS1vP8VpCW5X1JXHICPRX6MhhHmNtEx6LLR+YDytD
+        MTOjRMasjnoMcw1gMsmdnh0BpOOBBJSggcb4z42+PiV5vOt0nQJ02YrUqRBcDyKZZlDmzE
+        xwcPznonGc5EVYRQvIHNlocOneaG5sk=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id B49882C141;
+        Tue, 20 Sep 2022 17:26:46 +0000 (UTC)
+Date:   Tue, 20 Sep 2022 19:26:43 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        linux-modules@vger.kernel.org
+Subject: Re: [PATCH v2 1/8] scripts/kallsyms: don't compress symbol type when
+ CONFIG_KALLSYMS_ALL=y
+Message-ID: <Yyn305PlgTZixR0V@alley>
+References: <20220909130016.727-1-thunder.leizhen@huawei.com>
+ <20220909130016.727-2-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220909130016.727-2-thunder.leizhen@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the missing LEDs for GB-PC2. The ethblack-green, ethblue-green, power
-and system LEDs weren't added previously, because they don't exist on the
-device schematics. Tests on a GB-PC2 by me and Petr proved otherwise.
+On Fri 2022-09-09 21:00:09, Zhen Lei wrote:
+> Currently, to search for a symbol, we need to expand the symbols in
+> 'kallsyms_names' one by one, and then use the expanded string for
+> comparison. This is very slow.
+> 
+> In fact, we can first compress the name being looked up and then use
+> it for comparison when traversing 'kallsyms_names'.
 
-The i2c bus cannot be used on GB-PC2 as its pins are wired to LEDs instead,
-and GB-PC1 does not use it. Therefore, do not enable it on both devices.
+This does not explain how this patch modifies the compressed data
+and why it is needed.
 
-Link: https://github.com/ngiger/GnuBee_Docs/blob/master/GB-PCx/Documents/GB-PC2_V1.1_schematic.pdf
-Tested-by: Petr Louda <petr.louda@outlook.cz>
-Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
----
- .../boot/dts/ralink/mt7621-gnubee-gb-pc1.dts  |  6 ---
- .../boot/dts/ralink/mt7621-gnubee-gb-pc2.dts  | 42 ++++++++++++++++---
- 2 files changed, 36 insertions(+), 12 deletions(-)
 
-diff --git a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts b/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts
-index 6ecb8165efe8..0128bd8fa7ed 100644
---- a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts
-+++ b/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts
-@@ -20,12 +20,6 @@ chosen {
- 		bootargs = "console=ttyS0,57600";
- 	};
- 
--	palmbus: palmbus@1e000000 {
--		i2c@900 {
--			status = "okay";
--		};
--	};
--
- 	gpio-keys {
- 		compatible = "gpio-keys";
- 
-diff --git a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts b/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts
-index 5f52193a4c37..7515555388ae 100644
---- a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts
-+++ b/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts
-@@ -20,12 +20,6 @@ chosen {
- 		bootargs = "console=ttyS0,57600";
- 	};
- 
--	palmbus: palmbus@1e000000 {
--		i2c@900 {
--			status = "okay";
--		};
--	};
--
- 	gpio-keys {
- 		compatible = "gpio-keys";
- 
-@@ -35,6 +29,42 @@ key-reset {
- 			linux,code = <KEY_RESTART>;
- 		};
- 	};
-+
-+	gpio-leds {
-+		compatible = "gpio-leds";
-+
-+		ethblack-green {
-+			label = "green:ethblack";
-+			gpios = <&gpio 3 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		ethblue-green {
-+			label = "green:ethblue";
-+			gpios = <&gpio 4 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		ethyellow-green {
-+			label = "green:ethyellow";
-+			gpios = <&gpio 15 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		ethyellow-orange {
-+			label = "orange:ethyellow";
-+			gpios = <&gpio 13 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		power {
-+			label = "green:power";
-+			gpios = <&gpio 6 GPIO_ACTIVE_LOW>;
-+			linux,default-trigger = "default-on";
-+		};
-+
-+		system {
-+			label = "green:system";
-+			gpios = <&gpio 8 GPIO_ACTIVE_LOW>;
-+			linux,default-trigger = "disk-activity";
-+		};
-+	};
- };
- 
- &mmc {
--- 
-2.34.1
+> This increases the size of 'kallsyms_names'. About 48KiB, 2.67%, on x86
+> with defconfig.
+> Before: kallsyms_num_syms=131392, sizeof(kallsyms_names)=1823659
+> After : kallsyms_num_syms=131392, sizeof(kallsyms_names)=1872418
+> 
+> However, if CONFIG_KALLSYMS_ALL is not set, the size of 'kallsyms_names'
+> does not change.
+> 
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> ---
+>  scripts/kallsyms.c | 15 ++++++++++++---
+>  1 file changed, 12 insertions(+), 3 deletions(-)
+> 
+> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+> index f18e6dfc68c5839..ab6fe7cd014efd1 100644
+> --- a/scripts/kallsyms.c
+> +++ b/scripts/kallsyms.c
+> @@ -60,6 +60,7 @@ static unsigned int table_size, table_cnt;
+>  static int all_symbols;
+>  static int absolute_percpu;
+>  static int base_relative;
+> +static int sym_start_idx;
+>  
+>  static int token_profit[0x10000];
+>  
+> @@ -511,7 +512,7 @@ static void learn_symbol(const unsigned char *symbol, int len)
+>  {
+>  	int i;
+>  
+> -	for (i = 0; i < len - 1; i++)
+> +	for (i = sym_start_idx; i < len - 1; i++)
+>  		token_profit[ symbol[i] + (symbol[i + 1] << 8) ]++;
 
+This skips the first character in the @symbol string. I do not see how
+this is used in the new code, for example, in
+kallsyms_on_each_match_symbol(), in the 5th patch. It seems to iterate
+the compressed data from the 0th index:
+
+	for (i = 0, off = 0; i < kallsyms_num_syms; i++)
+
+>  }
+>  
+> @@ -520,7 +521,7 @@ static void forget_symbol(const unsigned char *symbol, int len)
+>  {
+>  	int i;
+>  
+> -	for (i = 0; i < len - 1; i++)
+> +	for (i = sym_start_idx; i < len - 1; i++)
+>  		token_profit[ symbol[i] + (symbol[i + 1] << 8) ]--;
+>  }
+>  
+> @@ -538,7 +539,7 @@ static unsigned char *find_token(unsigned char *str, int len,
+>  {
+>  	int i;
+>  
+> -	for (i = 0; i < len - 1; i++) {
+> +	for (i = sym_start_idx; i < len - 1; i++) {
+>  		if (str[i] == token[0] && str[i+1] == token[1])
+>  			return &str[i];
+>  	}
+> @@ -780,6 +781,14 @@ int main(int argc, char **argv)
+>  	} else if (argc != 1)
+>  		usage();
+>  
+> +	/*
+> +	 * Skip the symbol type, do not compress it to optimize the performance
+> +	 * of finding or traversing symbols in kernel, this is good for modules
+> +	 * such as livepatch.
+
+I see. The type is added as the first character here.
+
+in static struct sym_entry *read_symbol(FILE *in)
+{
+[...]
+	/* include the type field in the symbol name, so that it gets
+	 * compressed together */
+[...]
+	sym->sym[0] = type;
+	strcpy(sym_name(sym), name);
+
+It sounds a bit crazy. read_symbol() makes a trick so that the type
+can be compressed. This patch does another trick to avoid it.
+
+
+> +	 */
+> +	if (all_symbols)
+> +		sym_start_idx = 1;
+
+This looks a bit fragile. My understanding is that the new code in
+kernel/kallsyms.c and kernel/module/kallsyms.c depends on this change.
+
+The faster search is used when CONFIG_KALLSYMS_ALL is defined.
+But the data are compressed this way when this script is called
+with --all-symbols.
+
+Is it guaranteed that this script will generate the needed data
+when CONFIG_KALLSYMS_ALL is defined?
+
+What about 3rd party modules?
+
+I would personally suggest to store the symbol type into a separate
+sym->type entry in struct sym_entry and never compress it.
+
+IMHO, the size win is not worth the code complexity.
+
+Well, people compiling the kernel for small devices might think
+different. But they probably disable kallsyms completely.
+
+Best Regards,
+Petr
