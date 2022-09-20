@@ -2,128 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB16D5BDC9B
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 07:52:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAA3B5BDCB4
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 07:54:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbiITFwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 01:52:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44326 "EHLO
+        id S229832AbiITFyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 01:54:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230176AbiITFv4 (ORCPT
+        with ESMTP id S229540AbiITFxs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 01:51:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C05F13F1DA;
-        Mon, 19 Sep 2022 22:51:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 710A6B82103;
-        Tue, 20 Sep 2022 05:51:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1477DC433C1;
-        Tue, 20 Sep 2022 05:51:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663653112;
-        bh=n6gQZoG7jJsxjSK3bqqn1IleP8t2piutWDKO2U7XzJ0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KgUPl1iSk3E0d+tIj09uQQGXfBIEWJCZ+Q9Q4tbsS0FOqo+nYBW/iWkdEZO1mDea/
-         PTD1Z0q2vtcJV2NEmHkMinzzHY55c0t7EMq8znTDOVpL4EAcKvXbykg+ZHEm1YlKWD
-         pkCodkf4v9KpwpdQf7nlqHpfrNU9eiMNZxZjE2ErIgFpNxV37Mq1plumtTpDU6qrOW
-         K0cJ2rNrlyClbREmIxJIQKh7Kx5HPrPlKUHRHuH3VYXfV68GNrw3ZnXRvL04IW9JC+
-         AG3FrarevbeHxJPWVjojGJ11ePf/kHzTTpq9lo/nLjZi5pDCfrEdYqHUTSnbwg68c2
-         aGUTu5oqeKJNA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oaWAg-0007N0-Qa; Tue, 20 Sep 2022 07:51:50 +0200
-Date:   Tue, 20 Sep 2022 07:51:50 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Rajendra Nayak <quic_rjendra@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@somainline.org, mturquette@baylibre.com,
-        sboyd@kernel.org, mka@chromium.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, johan+linaro@kernel.org,
-        quic_kriskura@quicinc.com, dianders@chromium.org,
-        linux-clk@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] clk: qcom: gcc-sc7180: Update the .pwrsts for usb
- gdsc
-Message-ID: <YylU9hx/9j0QKLsO@hovoldconsulting.com>
-References: <20220916102417.24549-1-quic_rjendra@quicinc.com>
- <20220916102417.24549-2-quic_rjendra@quicinc.com>
- <YyiOiudZuMDXOvGr@hovoldconsulting.com>
- <e446d0c0-7084-8b5a-132e-977b25913343@quicinc.com>
+        Tue, 20 Sep 2022 01:53:48 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E25415B795
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 22:53:45 -0700 (PDT)
+Received: from [10.180.13.185] (unknown [10.180.13.185])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx72tdVSljxnQeAA--.45684S3;
+        Tue, 20 Sep 2022 13:53:34 +0800 (CST)
+Subject: Re: Re: [PATCH] mm/vmscan: don't scan adjust too much if current is
+ not kswapd
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Feng Tang <feng.tang@intel.com>
+References: <20220914023318.549118-1-zhanghongchen@loongson.cn>
+ <20220914155142.bf388515a39fb45bae987231@linux-foundation.org>
+ <6bcb4883-03d0-88eb-4c42-84fff0a9a141@loongson.cn>
+ <YyLUGnqtZXn4MjJF@casper.infradead.org>
+ <54813a74-cc0e-e470-c632-78437a0d0ad4@loongson.cn>
+ <YyLpls9/t6LKQefS@casper.infradead.org>
+ <b52b3f49-ebf5-6f63-da1a-f57711c3f97d@loongson.cn>
+ <YyQ2m9vU/plyBNas@casper.infradead.org>
+ <4bd0012e-77ff-9d0d-e295-800471994aeb@loongson.cn>
+ <CAJD7tkZkPVwQYR1mqZoKQ=kkR96JCUzrpw8o-9vtX3qwdkj-=w@mail.gmail.com>
+From:   Hongchen Zhang <zhanghongchen@loongson.cn>
+Message-ID: <648bac39-e87f-15e3-f2d4-4d3b578772bb@loongson.cn>
+Date:   Tue, 20 Sep 2022 13:53:33 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e446d0c0-7084-8b5a-132e-977b25913343@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAJD7tkZkPVwQYR1mqZoKQ=kkR96JCUzrpw8o-9vtX3qwdkj-=w@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8Cx72tdVSljxnQeAA--.45684S3
+X-Coremail-Antispam: 1UD129KBjvJXoW3Ar15Gw1fKrykuryxCw1Utrb_yoW3CFy8pF
+        17tF47Kr48Jr4Utr47Kw4qqr18tr1DC3W5Wry8Gr17uF1qvr1UJw48Gr4YkF1DGr1UCry2
+        qrW5Xw12vr17XaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvYb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4
+        vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
+        F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r
+        4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487
+        MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
+        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_
+        Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
+        CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v2
+        6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07
+        beAp5UUUUU=
+X-CM-SenderInfo: x2kd0w5krqwupkhqwqxorr0wxvrqhubq/
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 09:06:22AM +0530, Rajendra Nayak wrote:
+Hi Yosry,
+
+Sorry for not replying in time, there was a problem with my email.
+
+On 2022/9/20 am 7:32, Yosry Ahmed wrote:
+> On Fri, Sep 16, 2022 at 3:20 AM Hongchen Zhang
+> <zhanghongchen@loongson.cn> wrote:
+>>
+>> Hi Andrew and Matthew,
+>>
+>> On 2022/9/16 pm 4:40, Matthew Wilcox wrote:
+>>> On Fri, Sep 16, 2022 at 08:57:50AM +0800, Hongchen Zhang wrote:
+>>>> Hi Andrew ,
+>>>>
+>>>> On 2022/9/15 pm 5:00, Matthew Wilcox wrote:
+>>>>> On Thu, Sep 15, 2022 at 04:02:41PM +0800, Hongchen Zhang wrote:
+>>>>>> Hi Matthew,
+>>>>>> On 2022/9/15 pm 3:28, Matthew Wilcox wrote:
+>>>>>>> On Thu, Sep 15, 2022 at 09:19:48AM +0800, Hongchen Zhang wrote:
+>>>>>>>> [ 3748.453561] INFO: task float_bessel:77920 blocked for more than 120
+>>>>>>>> seconds.
+>>>>>>>> [ 3748.460839]       Not tainted 5.15.0-46-generic #49-Ubuntu
+>>>>>>>> [ 3748.466490] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables
+>>>>>>>> this message.
+>>>>>>>> [ 3748.474618] task:float_bessel    state:D stack:    0 pid:77920 ppid:
+>>>>>>>> 77327 flags:0x00004002
+>>>>>>>> [ 3748.483358] Call Trace:
+>>>>>>>> [ 3748.485964]  <TASK>
+>>>>>>>> [ 3748.488150]  __schedule+0x23d/0x590
+>>>>>>>> [ 3748.491804]  schedule+0x4e/0xc0
+>>>>>>>> [ 3748.495038]  rwsem_down_read_slowpath+0x336/0x390
+>>>>>>>> [ 3748.499886]  ? copy_user_enhanced_fast_string+0xe/0x40
+>>>>>>>> [ 3748.505181]  down_read+0x43/0xa0
+>>>>>>>> [ 3748.508518]  do_user_addr_fault+0x41c/0x670
+>>>>>>>> [ 3748.512799]  exc_page_fault+0x77/0x170
+>>>>>>>> [ 3748.516673]  asm_exc_page_fault+0x26/0x30
+>>>>>>>> [ 3748.520824] RIP: 0010:copy_user_enhanced_fast_string+0xe/0x40
+>>>>>>>> [ 3748.526764] Code: 89 d1 c1 e9 03 83 e2 07 f3 48 a5 89 d1 f3 a4 31 c0 0f
+>>>>>>>> 01 ca c3 cc cc cc cc 0f 1f 00 0f 01 cb 83 fa 40 0f 82 70 ff ff ff 89 d1 <f3>
+>>>>>>>> a4 31 c0 0f 01 ca c3 cc cc cc cc 66 08
+>>>>>>>> [ 3748.546120] RSP: 0018:ffffaa9248fffb90 EFLAGS: 00050206
+>>>>>>>> [ 3748.551495] RAX: 00007f99faa1a010 RBX: ffffaa9248fffd88 RCX:
+>>>>>>>> 0000000000000010
+>>>>>>>> [ 3748.558828] RDX: 0000000000001000 RSI: ffff9db397ab8ff0 RDI:
+>>>>>>>> 00007f99faa1a000
+>>>>>>>> [ 3748.566160] RBP: ffffaa9248fffbf0 R08: ffffcc2fc2965d80 R09:
+>>>>>>>> 0000000000000014
+>>>>>>>> [ 3748.573492] R10: 0000000000000000 R11: 0000000000000014 R12:
+>>>>>>>> 0000000000001000
+>>>>>>>> [ 3748.580858] R13: 0000000000001000 R14: 0000000000000000 R15:
+>>>>>>>> ffffaa9248fffd98
+>>>>>>>> [ 3748.588196]  ? copy_page_to_iter+0x10e/0x400
+>>>>>>>> [ 3748.592614]  filemap_read+0x174/0x3e0
+>>>>>>>
+>>>>>>> Interesting; it wasn't the process itself which triggered the page
+>>>>>>> fault; the process called read() and the kernel took the page fault to
+>>>>>>> satisfy the read() call.
+>>>>>>>
+>>>>>>>> [ 3748.596354]  ? ima_file_check+0x6a/0xa0
+>>>>>>>> [ 3748.600301]  generic_file_read_iter+0xe5/0x150
+>>>>>>>> [ 3748.604884]  ext4_file_read_iter+0x5b/0x190
+>>>>>>>> [ 3748.609164]  ? aa_file_perm+0x102/0x250
+>>>>>>>> [ 3748.613125]  new_sync_read+0x10d/0x1a0
+>>>>>>>> [ 3748.617009]  vfs_read+0x103/0x1a0
+>>>>>>>> [ 3748.620423]  ksys_read+0x67/0xf0
+>>>>>>>> [ 3748.623743]  __x64_sys_read+0x19/0x20
+>>>>>>>> [ 3748.627511]  do_syscall_64+0x59/0xc0
+>>>>>>>> [ 3748.631203]  ? syscall_exit_to_user_mode+0x27/0x50
+>>>>>>>> [ 3748.636144]  ? do_syscall_64+0x69/0xc0
+>>>>>>>> [ 3748.639992]  ? exit_to_user_mode_prepare+0x96/0xb0
+>>>>>>>> [ 3748.644931]  ? irqentry_exit_to_user_mode+0x9/0x20
+>>>>>>>> [ 3748.649872]  ? irqentry_exit+0x1d/0x30
+>>>>>>>> [ 3748.653737]  ? exc_page_fault+0x89/0x170
+>>>>>>>> [ 3748.657795]  entry_SYSCALL_64_after_hwframe+0x61/0xcb
+>>>>>>>> [ 3748.663030] RIP: 0033:0x7f9a852989cc
+>>>>>>>> [ 3748.666713] RSP: 002b:00007f9a8497dc90 EFLAGS: 00000246 ORIG_RAX:
+>>>>>>>> 0000000000000000
+>>>>>>>> [ 3748.674487] RAX: ffffffffffffffda RBX: 00007f9a8497f5c0 RCX:
+>>>>>>>> 00007f9a852989cc
+>>>>>>>> [ 3748.681817] RDX: 0000000000027100 RSI: 00007f99faa18010 RDI:
+>>>>>>>> 0000000000000061
+>>>>>>>> [ 3748.689150] RBP: 00007f9a8497dd60 R08: 0000000000000000 R09:
+>>>>>>>> 00007f99faa18010
+>>>>>>>> [ 3748.696493] R10: 0000000000000000 R11: 0000000000000246 R12:
+>>>>>>>> 00007f99faa18010
+>>>>>>>> [ 3748.703841] R13: 00005605e11c406f R14: 0000000000000001 R15:
+>>>>>>>> 0000000000027100
+>>>>>>>
+>>>>>>> ORIG_RAX is 0, which matches sys_read.
+>>>>>>> RDI is file descriptor 0x61
+>>>>>>> RSI is plausibly a userspace pointer, 0x7f99faa18010
+>>>>>>> RDX is the length, 0x27100 or 160kB.
+>>>>>>>
+>>>>>>> That all seems reasonable.
+>>>>>>>
+>>>>>>> What I really want to know is who is _holding_ the lock.  We stash
+>>>>>>> a pointer to the task_struct in 'owner', so we could clearly find this
+>>>>>>> out in the 'blocked for too long' report, and print their stack trace.
+>>>>>>>
+>>>>>> As described in the comment for __rwsem_set_reader_owned,it is hard to track
+>>>>>> read owners.So we could not clearly find out who blocked the process,it was
+>>>>>> caused by multiple tasks.
+>>>>>
+>>>>> Readers don't block readers.  You have a reader here, so it's being
+>>>>> blocked by a writer.  And that writer's task_struct is stashed in
+>>>>> rwsem->owner.  It would be nice if we dumped that information
+>>>>> automatically ... but we don't do that today.  Perhaps you could
+>>>>> grab that information from a crash dump if you have one.
+>>>>>
+>>>>>>> You must have done something like this already in order to deduce that
+>>>>>>> it was the direct reclaim path that was the problem?
+>>>>>>>
+>>>>>> The method we used is to track the direct reclaim using the
+>>>>>> trace_mm_vmscan_direct_reclaim_{begin,end} interface.When the problem
+>>>>>> occurred,we could get a very large "nr_reclaimed" which is not a desirable
+>>>>>> value for process except kswapd.
+>>>>>
+>>>>> I disagree.  If a process needs to allocate memory then it should be
+>>>>> paying the cost of reclaiming that memory itself.  kswapd is a last
+>>>>> resort to reclaim memory when we have a workload (eg a network router)
+>>>>> that does its memory allocation primarily in interrupt context.
+>>>>>
+>>>> What's your opinion about this scan adjust issue? Is there a better way to
+>>>> fix this issue?
+>>>
+>>> Yes, but we need you to gather more information about what's causing
+>>> the issue before we can suggest what that is.
+>>>
+>> I think the following scenery triggers the scan adjust issue:
+>> In function shrink_lruvec, we call get_scan_count and get the following
+>> values:
+>> targets[LRU_INACTIVE_ANON]=50000
+>> targets[LRU_ACTIVE_ANON]=50000
+>> targets[LRU_INACTIVE_FILE]=128
+>> targets[LRU_ACTIVE_FILE]=129
+>>
+>> After the first scan, we get more than nr_to_reclaim pages, but the
+>> percentage of scanning nr[LRU_INACTIVE_FILE+LRU_ACTIVE_FILE] is 256/257,
+>>
+>> Then when we scan adjust, we must scan(possibly reclaim)
+>> 256*(50000+50000)/257-256=99354 pages, which is too large and would
+>> waste too many time.
+>> If it is not kswapd, it is unacceptable to reclaim so many pages.
+>> So we should limit the number of pages of scan adjust.
+> 
+> IIUC commit 6eb90d649537 ("mm: vmscan: fix extreme overreclaim and
+> swap floods") that was recently sent by Johannes [1] addresses a
+> similar issue (reclaiming way beyond nr_to_reclaim when anon vs file
+> LRU sizes are very different), but in a slightly different scenario.
+> IIUC with Johannes's patch, scan adjustment is already limited for
+> scenarios where scan_adjust (aka proportional_reclaim) is not
+> initialized to true, which would be all cases except global direct
+> reclaim on DEF_PRIORITY. Is my understanding here correct?
+> 
+Yes, this patch fix the same issue,let's talk this issue there.
+> [1] https://lore.kernel.org/lkml/20220802162811.39216-1-hannes@cmpxchg.org/
+>>
+>> Thanks
+>> Hongchen Zhang
+>>
+>>
 > 
 > 
-> On 9/19/2022 9:15 PM, Johan Hovold wrote:
-> > On Fri, Sep 16, 2022 at 03:54:16PM +0530, Rajendra Nayak wrote:
-> >> The USB controller on sc7180 does not retain the state when
-> >> the system goes into low power state and the GDSC is
-> >> turned off. This results in the controller reinitializing and
-> >> re-enumerating all the connected devices (resulting in additional
-> >> delay while coming out of suspend)
-> >> Fix this by updating the .pwrsts for the USB GDSC so it only
-> >> transitions to retention state in low power.
-> >>
-> >> Signed-off-by: Rajendra Nayak <quic_rjendra@quicinc.com>
-> >> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
-> >> Tested-by: Matthias Kaehlcke <mka@chromium.org>
-> >> ---
-> >> v2:
-> >> Updated the changelog
-> >>
-> >>   drivers/clk/qcom/gcc-sc7180.c | 2 +-
-> >>   1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/clk/qcom/gcc-sc7180.c b/drivers/clk/qcom/gcc-sc7180.c
-> >> index c2ea09945c47..2d3980251e78 100644
-> >> --- a/drivers/clk/qcom/gcc-sc7180.c
-> >> +++ b/drivers/clk/qcom/gcc-sc7180.c
-> >> @@ -2224,7 +2224,7 @@ static struct gdsc usb30_prim_gdsc = {
-> >>   	.pd = {
-> >>   		.name = "usb30_prim_gdsc",
-> >>   	},
-> >> -	.pwrsts = PWRSTS_OFF_ON,
-> >> +	.pwrsts = PWRSTS_RET_ON,
-> >>   };
-> >>   
-> >>   static struct gdsc hlos1_vote_mmnoc_mmu_tbu_hf0_gdsc = {
-> > 
-> > It seems like the above will not work unless you also provide the
-> > registers offsets that gdsc_force_mem_on() expects.
-> 
-> That's true, but its needed only on platforms that support complete
-> CX domain power collapse. sc7280 (and sc7180) does not support
-> that and hence we can achieve GDSC RET without any of the RETAIN_MEM/
-> RETAIN_PERIPH bits programmed.
-> I explained some of that in detail on another related thread a
-> while back [1]
-> 
-> [1] https://lore.kernel.org/all/5ff21b1e-3af9-36ef-e13e-fa33f526d0e3@quicinc.com/
 
-Thanks for the link, that was was very informative. 
-
-Could you please update the commit message of patch 1/3 so that it also
-covers these systems and explains why you don't set the RETAIN_MEM and
-RETAIN_PERIPH bits for them?
-
-As that commit message stands now, it seems that those bits must be set
-for retention to work.
-
-> > Specifically, unless you set cxc_count for the GDSC, the above call is a
-> > no-op and the retention setting (i.e. the RETAIN_MEM and RETAIN_PERIPH
-> > bits) will not be updated when registering the GDSC.
-
-Johan
