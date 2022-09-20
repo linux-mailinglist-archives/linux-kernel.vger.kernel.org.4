@@ -2,262 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19AFE5BEC1A
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 19:35:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62A5F5BEC1D
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 19:37:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231309AbiITRfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 13:35:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60398 "EHLO
+        id S231126AbiITRhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 13:37:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231137AbiITRf3 (ORCPT
+        with ESMTP id S230187AbiITRhL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 13:35:29 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1796746D9F
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 10:35:27 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id lh5so7878950ejb.10
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 10:35:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date;
-        bh=q3ItRxAU/BxmLQ4LgAu2LZCds3bc6ZWDAT8CVSuBctA=;
-        b=L7MGMS5Vt/CFqXHz2tNq5GjrmRDNs2FHaP3oHkoVigpYySA2PiuSES/U9tKioSrzBD
-         LR/Yq4K8iTlbnaDydJMhUNVB1zElGo/lje8Zfg3RWnjwVIzh6RfQQgSYZMAgoA89JzEb
-         I3QSpNmqSN3yeTdWaxbAYv1Q93MXaaXNEU+u0kYmRGSoSLvOoJqNqj4b4HHC3XUsR2Zb
-         fWqcI3HCmQ/orbL3oshYY2hsyILX0234gLAO6peP+daaWTRUu8DZGliXyaSRRmU8VqTt
-         WSESYc7m9Tnd1T73ycKa3KiTQIDKkO+9LdTKBm5GRoxk/aC7BfRQX87vKeay8vzkwIJR
-         RXZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=q3ItRxAU/BxmLQ4LgAu2LZCds3bc6ZWDAT8CVSuBctA=;
-        b=o0K6VV/Xy8DZnpn8mZ4p/9WyEg17n4S77NyFlVD7GoMTxSeXuppIFbYm0WEBw4ol0b
-         qEgvIG/AIV9Lb+fPIWgaqwo17yvXCa/esTZEkOS1x0NHuC8nV5EMdJq/UJstBUfMR+Du
-         Gj51k/tyFy5rdziG+ZyRp71brLTI0NrCZPltiqEpiRbgYV/GmFYMEjG93tFA7ckat3XW
-         /WEXtS9qfHkLkMcBQO/4LAkvbwtAhbDkEvTozNfxFu9qBHpbmXulXcEPKAOw2YUDNqkZ
-         3MCehVELLYvpBo9ahZkBx4Pa+oDeHWbAMV/bKHrAACoBdXDE3r8VJ2ZiEBO2jw16754w
-         1lXg==
-X-Gm-Message-State: ACrzQf1UNZUZfBN7e9OijBdBNIpeOymSqjoDo8bXuT7yuo3J00IL3A71
-        0nU/5C+ZaYG7ZTAe3DFN6xgromCiIQ==
-X-Google-Smtp-Source: AMsMyM4rLL8K5sid/7uiFqINM4gT7UcvR6j8C8YClaQEY7G1y689ZNiNu39HIs3Cv9kd6PoOImgpWQ==
-X-Received: by 2002:a17:907:2cce:b0:77a:6958:5aaa with SMTP id hg14-20020a1709072cce00b0077a69585aaamr17505452ejc.245.1663695325547;
-        Tue, 20 Sep 2022 10:35:25 -0700 (PDT)
-Received: from localhost.localdomain ([46.53.248.206])
-        by smtp.gmail.com with ESMTPSA id d24-20020a056402001800b004511957d075sm181960edu.80.2022.09.20.10.35.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 10:35:24 -0700 (PDT)
-Date:   Tue, 20 Sep 2022 20:35:23 +0300
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     akpm@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] proc: mark more files as permanent
-Message-ID: <Yyn527DzDMa+r0Yj@localhost.localdomain>
+        Tue, 20 Sep 2022 13:37:11 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 561DD48CA0
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 10:37:10 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4MX7yr1zdVz9snR;
+        Tue, 20 Sep 2022 19:37:08 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 3hNtrYzvTGo0; Tue, 20 Sep 2022 19:37:08 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4MX7yr0lMSz9sb2;
+        Tue, 20 Sep 2022 19:37:08 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 03DEB8B773;
+        Tue, 20 Sep 2022 19:37:08 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id GN5d43MMkRdB; Tue, 20 Sep 2022 19:37:07 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (po16898.idsi0.si.c-s.fr [192.168.232.36])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id C612D8B764;
+        Tue, 20 Sep 2022 19:37:07 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 28KHaueN1631727
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Tue, 20 Sep 2022 19:36:57 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 28KHat3e1631724;
+        Tue, 20 Sep 2022 19:36:55 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+Subject: [PATCH] powerpc/highmem: Properly handle fragmented memory
+Date:   Tue, 20 Sep 2022 19:36:42 +0200
+Message-Id: <f08cca5c46d67399c53262eca48e015dcf1841f9.1663695394.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1663695401; l=2820; s=20211009; h=from:subject:message-id; bh=zZYtB2x+Tm15SIiBUEcswFS/ssyXHnPqFPklEmioB4g=; b=DWfX+yK3bDaiCsFckfmR1Kazj+e3NO54zggM77+tVV1X5m2OPJYaAQV+DhDhUXw1lQVNYYUVia/c xG2Vc4kMDIHj/1bCUPyclookzOwuYqrv2vYSaAYb+KO0dN/gje8r
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mark
-	/proc/devices
-	/proc/kpagecount
-	/proc/kpageflags
-	/proc/kpagecgroup
-	/proc/loadavg
-	/proc/meminfo
-	/proc/softirqs
-	/proc/uptime
-	/proc/version
+In addition to checking whether a page is reserved before allocating
+it to highmem, verify that it is valid memory.
 
-as permanent /proc entries, saving alloc/free and some
-list/spinlock ops per use.
+Otherwise the kernel Oopses as below:
 
-These files are never removed by the kernel so it is OK
-to mark them.
+[    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:off
+[    0.000000] Kernel attempted to read user page (7df58) - exploit attempt? (uid: 0)
+[    0.000000] BUG: Unable to handle kernel data access on read at 0x0007df58
+[    0.000000] Faulting instruction address: 0xc01c8348
+[    0.000000] Oops: Kernel access of bad area, sig: 11 [#1]
+[    0.000000] BE PAGE_SIZE=4K SMP NR_CPUS=2 P2020RDB-PC
+[    0.000000] Modules linked in:
+[    0.000000] CPU: 0 PID: 0 Comm: swapper Not tainted 6.0.0-rc2-0caacb197b677410bdac81bc34f05235+ #121
+[    0.000000] NIP:  c01c8348 LR: c01cb2bc CTR: 0000000a
+[    0.000000] REGS: c10d7e20 TRAP: 0300   Not tainted  (6.0.0-rc2-0caacb197b677410bdac81bc34f05235+)
+[    0.000000] MSR:  00021000 <CE,ME>  CR: 48044224  XER: 00000000
+[    0.000000] DEAR: 0007df58 ESR: 00000000
+[    0.000000] GPR00: c01cb294 c10d7f10 c1045340 00000001 00000004 c112bcc0 00000015 eedf1000
+[    0.000000] GPR08: 00000003 0007df58 00000000 f0000000 28044228 00000200 00000000 00000000
+[    0.000000] GPR16: 00000000 00000000 00000000 0275cb7a c0000000 00000001 0000075f 00000000
+[    0.000000] GPR24: c1031004 00000000 00000000 00000001 c10f0000 eedf1000 00080000 00080000
+[    0.000000] NIP [c01c8348] free_unref_page_prepare.part.93+0x48/0x60
+[    0.000000] LR [c01cb2bc] free_unref_page+0x84/0x4b8
+[    0.000000] Call Trace:
+[    0.000000] [c10d7f10] [eedf1000] 0xeedf1000 (unreliable)
+[    0.000000] [c10d7f20] [c01cb294] free_unref_page+0x5c/0x4b8
+[    0.000000] [c10d7f70] [c1007644] mem_init+0xd0/0x194
+[    0.000000] [c10d7fa0] [c1000e4c] start_kernel+0x4c0/0x6d0
+[    0.000000] [c10d7ff0] [c00003e0] set_ivor+0x13c/0x178
+[    0.000000] Instruction dump:
+[    0.000000] 552817be 5509103a 7d294214 55293830 7d4a4a14 812a003c 814a0038 5529002a
+[    0.000000] 7c892050 5484c23a 5489eafa 548406fe <7d2a482e> 7d242430 5484077e 90870010
+[    0.000000] ---[ end trace 0000000000000000 ]---
 
-Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
+Reported-by: Pali Rohár <pali@kernel.org>
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 ---
+ arch/powerpc/mm/mem.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- fs/proc/devices.c  |    6 +++++-
- fs/proc/internal.h |    5 +++++
- fs/proc/loadavg.c  |    6 +++++-
- fs/proc/meminfo.c  |    5 ++++-
- fs/proc/page.c     |    3 +++
- fs/proc/softirqs.c |    6 +++++-
- fs/proc/uptime.c   |    6 +++++-
- fs/proc/version.c  |    6 +++++-
- 8 files changed, 37 insertions(+), 6 deletions(-)
+diff --git a/arch/powerpc/mm/mem.c b/arch/powerpc/mm/mem.c
+index 01772e79fd93..6ddbd6cb3a2a 100644
+--- a/arch/powerpc/mm/mem.c
++++ b/arch/powerpc/mm/mem.c
+@@ -302,7 +302,7 @@ void __init mem_init(void)
+ 		for (pfn = highmem_mapnr; pfn < max_mapnr; ++pfn) {
+ 			phys_addr_t paddr = (phys_addr_t)pfn << PAGE_SHIFT;
+ 			struct page *page = pfn_to_page(pfn);
+-			if (!memblock_is_reserved(paddr))
++			if (memblock_is_memory(paddr) && !memblock_is_reserved(paddr))
+ 				free_highmem_page(page);
+ 		}
+ 	}
+-- 
+2.37.1
 
---- a/fs/proc/devices.c
-+++ b/fs/proc/devices.c
-@@ -4,6 +4,7 @@
- #include <linux/proc_fs.h>
- #include <linux/seq_file.h>
- #include <linux/blkdev.h>
-+#include "internal.h"
- 
- static int devinfo_show(struct seq_file *f, void *v)
- {
-@@ -54,7 +55,10 @@ static const struct seq_operations devinfo_ops = {
- 
- static int __init proc_devices_init(void)
- {
--	proc_create_seq("devices", 0, NULL, &devinfo_ops);
-+	struct proc_dir_entry *pde;
-+
-+	pde = proc_create_seq("devices", 0, NULL, &devinfo_ops);
-+	pde_make_permanent(pde);
- 	return 0;
- }
- fs_initcall(proc_devices_init);
---- a/fs/proc/internal.h
-+++ b/fs/proc/internal.h
-@@ -79,6 +79,11 @@ static inline bool pde_is_permanent(const struct proc_dir_entry *pde)
- 	return pde->flags & PROC_ENTRY_PERMANENT;
- }
- 
-+static inline void pde_make_permanent(struct proc_dir_entry *pde)
-+{
-+	pde->flags |= PROC_ENTRY_PERMANENT;
-+}
-+
- extern struct kmem_cache *proc_dir_entry_cache;
- void pde_free(struct proc_dir_entry *pde);
- 
---- a/fs/proc/loadavg.c
-+++ b/fs/proc/loadavg.c
-@@ -9,6 +9,7 @@
- #include <linux/seq_file.h>
- #include <linux/seqlock.h>
- #include <linux/time.h>
-+#include "internal.h"
- 
- static int loadavg_proc_show(struct seq_file *m, void *v)
- {
-@@ -27,7 +28,10 @@ static int loadavg_proc_show(struct seq_file *m, void *v)
- 
- static int __init proc_loadavg_init(void)
- {
--	proc_create_single("loadavg", 0, NULL, loadavg_proc_show);
-+	struct proc_dir_entry *pde;
-+
-+	pde = proc_create_single("loadavg", 0, NULL, loadavg_proc_show);
-+	pde_make_permanent(pde);
- 	return 0;
- }
- fs_initcall(proc_loadavg_init);
---- a/fs/proc/meminfo.c
-+++ b/fs/proc/meminfo.c
-@@ -162,7 +162,10 @@ static int meminfo_proc_show(struct seq_file *m, void *v)
- 
- static int __init proc_meminfo_init(void)
- {
--	proc_create_single("meminfo", 0, NULL, meminfo_proc_show);
-+	struct proc_dir_entry *pde;
-+
-+	pde = proc_create_single("meminfo", 0, NULL, meminfo_proc_show);
-+	pde_make_permanent(pde);
- 	return 0;
- }
- fs_initcall(proc_meminfo_init);
---- a/fs/proc/page.c
-+++ b/fs/proc/page.c
-@@ -91,6 +91,7 @@ static ssize_t kpagecount_read(struct file *file, char __user *buf,
- }
- 
- static const struct proc_ops kpagecount_proc_ops = {
-+	.proc_flags	= PROC_ENTRY_PERMANENT,
- 	.proc_lseek	= mem_lseek,
- 	.proc_read	= kpagecount_read,
- };
-@@ -268,6 +269,7 @@ static ssize_t kpageflags_read(struct file *file, char __user *buf,
- }
- 
- static const struct proc_ops kpageflags_proc_ops = {
-+	.proc_flags	= PROC_ENTRY_PERMANENT,
- 	.proc_lseek	= mem_lseek,
- 	.proc_read	= kpageflags_read,
- };
-@@ -322,6 +324,7 @@ static ssize_t kpagecgroup_read(struct file *file, char __user *buf,
- }
- 
- static const struct proc_ops kpagecgroup_proc_ops = {
-+	.proc_flags	= PROC_ENTRY_PERMANENT,
- 	.proc_lseek	= mem_lseek,
- 	.proc_read	= kpagecgroup_read,
- };
---- a/fs/proc/softirqs.c
-+++ b/fs/proc/softirqs.c
-@@ -3,6 +3,7 @@
- #include <linux/kernel_stat.h>
- #include <linux/proc_fs.h>
- #include <linux/seq_file.h>
-+#include "internal.h"
- 
- /*
-  * /proc/softirqs  ... display the number of softirqs
-@@ -27,7 +28,10 @@ static int show_softirqs(struct seq_file *p, void *v)
- 
- static int __init proc_softirqs_init(void)
- {
--	proc_create_single("softirqs", 0, NULL, show_softirqs);
-+	struct proc_dir_entry *pde;
-+
-+	pde = proc_create_single("softirqs", 0, NULL, show_softirqs);
-+	pde_make_permanent(pde);
- 	return 0;
- }
- fs_initcall(proc_softirqs_init);
---- a/fs/proc/uptime.c
-+++ b/fs/proc/uptime.c
-@@ -7,6 +7,7 @@
- #include <linux/time.h>
- #include <linux/time_namespace.h>
- #include <linux/kernel_stat.h>
-+#include "internal.h"
- 
- static int uptime_proc_show(struct seq_file *m, void *v)
- {
-@@ -39,7 +40,10 @@ static int uptime_proc_show(struct seq_file *m, void *v)
- 
- static int __init proc_uptime_init(void)
- {
--	proc_create_single("uptime", 0, NULL, uptime_proc_show);
-+	struct proc_dir_entry *pde;
-+
-+	pde = proc_create_single("uptime", 0, NULL, uptime_proc_show);
-+	pde_make_permanent(pde);
- 	return 0;
- }
- fs_initcall(proc_uptime_init);
---- a/fs/proc/version.c
-+++ b/fs/proc/version.c
-@@ -5,6 +5,7 @@
- #include <linux/proc_fs.h>
- #include <linux/seq_file.h>
- #include <linux/utsname.h>
-+#include "internal.h"
- 
- static int version_proc_show(struct seq_file *m, void *v)
- {
-@@ -17,7 +18,10 @@ static int version_proc_show(struct seq_file *m, void *v)
- 
- static int __init proc_version_init(void)
- {
--	proc_create_single("version", 0, NULL, version_proc_show);
-+	struct proc_dir_entry *pde;
-+
-+	pde = proc_create_single("version", 0, NULL, version_proc_show);
-+	pde_make_permanent(pde);
- 	return 0;
- }
- fs_initcall(proc_version_init);
