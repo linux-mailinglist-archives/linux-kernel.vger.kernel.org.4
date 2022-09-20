@@ -2,116 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 630205BE832
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 16:11:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C2B65BE83D
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 16:12:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231599AbiITOKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 10:10:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45322 "EHLO
+        id S231633AbiITOMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 10:12:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231639AbiITOJx (ORCPT
+        with ESMTP id S231292AbiITOLs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 10:09:53 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4DD26051F
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 07:09:18 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id go34so6505393ejc.2
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 07:09:18 -0700 (PDT)
+        Tue, 20 Sep 2022 10:11:48 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5276F6172F
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 07:10:17 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id p18so2489989plr.8
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 07:10:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date;
-        bh=R397pNu5OW1HkILIkUc6nGWe9PVD3IFnLlOQRGYZFcI=;
-        b=NBMdFpgLA8Okognl7qlVYIM27sOXWyrEdnUq++1OSXrohmtQeJTbxYgy8EzpxJks+s
-         3Tf+fpDjzCNJc8B9uzO8zDqpoFXxMwXJMb/j5uHdj7qZ6iGm7nuMdavpHViUvIVH+RpE
-         d6VNkKf0+gQrxH2HZP+dlwBX18+GIE7bSh30U=
+        d=edgeble-ai.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=QPxEn/eAqZz49dBAsNJltwqDSnOVtKaOrJil3gAFfRA=;
+        b=N1PWe3VdAKaEJkhr6bQzq/58UH5Sue2qiNbAqdjfQjsdDK6LY2n/NuEGkr/00VMU9W
+         xb2V3+oi7ydfMqeGmh+AvRKBE8TIPQ6nEH9I8fOfZQDKWGowIz+1QiAFw2YDXJ3LzOJi
+         kU+pCrBvp5GadVnVfjsDzKMhj3aO74rFJAWRpgoOM9SQl1JbH5y4V1oA2VedNqZfKpaP
+         zhn+ZJiPHPewpHqouU+UywK6VvaZAtVHPYtf2L91uMa5tSxfeoLtNjYdDL1BnqPu0qyU
+         JK+fYDH/iQQxc6Y8Zj6xvFjjxdi7TnKXWNEr1gGaXks9PeWD5iFfKc4jCWZZFUmG2bJS
+         OlAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=R397pNu5OW1HkILIkUc6nGWe9PVD3IFnLlOQRGYZFcI=;
-        b=wo03TPfwQuGiLd+kklgsbiDtjVYc/11uE9qABWKMjFSgf5AgpPMiP9YrZQ6wJ0CYph
-         D2qe6WK9nPF+n4IFXXJOuhwLxqeQLH9YyAMoDWvbMkHnBprrsnzRw73QjN0i4trMTGtn
-         Mh04rEWxXOfBGls4Aced12BsJm5Q6vXSuPzCwTwRbSoFpOS2zcznaPfy7mPlK3eqPrPN
-         lJQcdCOx5xBVxYIjopBJNbjQUvdAcdlQv1TuaFg9TlmFHr62tnJK6/AYSkIcmmxko7aX
-         LbMTMQQhKBj2ArPqAvjJ2I3D+8c8sVDcJkpPkyDN5uljtLPLmMBFUmEZHn+hW8d8936f
-         EXbA==
-X-Gm-Message-State: ACrzQf1wnILOGhcqnnueEVyWIrG7/gXS7tubqh0kD7kmOyp6o1TYPXXD
-        xJZJL5Sa2hlLrxbS2atvD8odHw==
-X-Google-Smtp-Source: AMsMyM7Ar/sE/fCWqnil0n3UehAjTzYKB0JCiIZlolnVrjjtrNxGD41fkBtNyZw4fZLjuRzitqjeqw==
-X-Received: by 2002:a17:907:9619:b0:77f:6796:dcb9 with SMTP id gb25-20020a170907961900b0077f6796dcb9mr17025174ejc.7.1663682956651;
-        Tue, 20 Sep 2022 07:09:16 -0700 (PDT)
-Received: from alco.roam.corp.google.com ([2620:0:1059:10:935d:52b0:7461:88e1])
-        by smtp.gmail.com with ESMTPSA id l10-20020a1709063d2a00b0077f324979absm927133ejf.67.2022.09.20.07.09.16
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=QPxEn/eAqZz49dBAsNJltwqDSnOVtKaOrJil3gAFfRA=;
+        b=KFZNxGEvDb3wwth/nW2uuYUMqnPlltEoU+kb68dCpbCPwsE4zYoQvncizX0qT4sW4w
+         9YZwdpbd9AV+KnKhNABrm6kNSUidKtPQWZ638/NP7RlLiOo3YYD2IKNbR2zWi5YbGZfJ
+         mIssthGxLj0hv9Scg4FePy2e7yq644593y9FTmSwpdHMc49yXWM8R0QQIp+ge0UmIY80
+         Ht0x4y60HwwmVY6ITPF5GFo/hECa1u4urj8hkDpqit2e1ZATEw7hutok5jdyga34MIn0
+         DIQurTXFUvK9IX6NY0SLr3YPSZB2PNG/0MqaOJ/T/P+kZXjnnefC5dikhW95G27VGICK
+         NDNg==
+X-Gm-Message-State: ACrzQf2ffwyklQCNiKGdRhFMx0epevvrXympw884+VAD4jDYeNmgQV8G
+        z9w0qi4n4uiIcIurLhjDIgYjpg==
+X-Google-Smtp-Source: AMsMyM6lgdYkRh8kQx8SNnSS7OR+Dv+YX3GkVF950OMZj/IKhWpp/fejl4AeVrW6Ag60qZ6Iep6E7g==
+X-Received: by 2002:a17:90b:1c07:b0:200:9728:b8cd with SMTP id oc7-20020a17090b1c0700b002009728b8cdmr4212275pjb.139.1663683004240;
+        Tue, 20 Sep 2022 07:10:04 -0700 (PDT)
+Received: from archl-hc1b.. ([103.51.75.120])
+        by smtp.gmail.com with ESMTPSA id t9-20020a170902e84900b001782a0d3eeasm1499858plg.115.2022.09.20.07.09.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 07:09:16 -0700 (PDT)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Tue, 20 Sep 2022 16:09:05 +0200
-Subject: [PATCH v1 3/3] media: uvcvideo: Add a unique suffix to camera names
+        Tue, 20 Sep 2022 07:10:03 -0700 (PDT)
+From:   Anand Moon <anand@edgeble.ai>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        David Wu <david.wu@rock-chips.com>
+Cc:     Anand Moon <anand@edgeble.ai>, linux-rockchip@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Jagan Teki <jagan@edgeble.ai>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v3 1/2] dt-bindings: net: rockchip-dwmac: add rv1126 compatible
+Date:   Tue, 20 Sep 2022 14:09:40 +0000
+Message-Id: <20220920140944.2535-1-anand@edgeble.ai>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20220920-resend-meta-v1-3-dfcfba923204@chromium.org>
-References: <20220920-resend-meta-v1-0-dfcfba923204@chromium.org>
-In-Reply-To: <20220920-resend-meta-v1-0-dfcfba923204@chromium.org>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Ricardo Ribalda <ribalda@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-X-Mailer: b4 0.11.0-dev-d93f8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1065; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=LqqKR6cu2xAjH4lzsAYqiGP5U8CacElJsizHM8iayoQ=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjKcmHfWFxkufRfT4VEkNWqqzKR+Klx5MmXKaFPBcu
- Oo/i3LCJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCYynJhwAKCRDRN9E+zzrEiK6XEA
- CD4tmawtJcGv4W0UbQl4Ojt61/WVT2gFa+w++PEFWS6N2DTUSwZQAGLY8TQQ+v5SQb3GtRC7xsdZ8i
- cFhbBMU0BE6VcsO5bpPFI4d/kfVsXPZTVyK73mPp62yM8WEh9lY2g0N59zm4E5pwyULl1beuBp6dF/
- u4OVgnrt4nH84oINZ/JnD0lx2XlCAP/R/zyWSaX2O9iXcVHkSeSzmMzSQPwl9M9aXrN1aHfIJ9wMR9
- 0agMcwe31isSDGnpO6eudAzNDSulZbZ01oAUJXmpf7si8fyk0W/N//HLmANdrQca+ACTPc3PPthAYP
- ZZZDaOP8ZitxiHG1YvezyT40ZF8zLjFn5z2rASp412v0vfWLQ4nSyOOy0PpVT4L2JU7pQEbtaQvk57
- Cy+XOv1HrIB3AuXi435x9/iXIMkwJak2I3mC3I0baOt7x3bBt3roZv8XVtNIGjXZCCGBIp98j2Fyhp
- VZK7grqOX4rJD1RFsLUOEO7TjfKzvGJ/HSzrj+MfD/shg6MB7P0rKXRH1EzoFnWquPIZ/36GAoBjdc
- jQvlH5Dz9nl5vRXwJdldWL7Xg3TOz13Thp8Sy+VkTlPDm1P35Bs5+1UTvA6i+9WOnRKLL7EaiXiuKR
- X301i8ijqcAS3hJI0ELwSUbpnC+edkbvFzEG1ytB7720wF7RCGx1Xz5nLCVQ==
-X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
- fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some cameras have multiple data inputs (i.e. IR sensor and RGB sensor),
-append a unique number to the device name.
+Add compatible string for RV1126 gmac, and constrain it to
+be compatible with Synopsys dwmac 4.20a.
 
-Fixes v4l2-compliance:
-    Media Controller ioctls:
-         fail: v4l2-test-media.cpp(205): v2_entity_names_set.find(key) != v2_entity_names_set.end()
-       test MEDIA_IOC_G_TOPOLOGY: FAIL
-         fail: v4l2-test-media.cpp(394): num_data_links != num_links
-       test MEDIA_IOC_ENUM_ENTITIES/LINKS: FAIL
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Jagan Teki <jagan@edgeble.ai>
+Signed-off-by: Anand Moon <anand@edgeble.ai>
+---
+v3: added reviewed by Krzysztof Kozlowski
+    rebased on linux-net-next
+v2: add missing compatible string to property
+    added reviewed by Heiko Stuebner.
+---
+---
+ Documentation/devicetree/bindings/net/rockchip-dwmac.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-
-diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index 9c05776f11d1..0f0e200a345e 100644
---- a/drivers/media/usb/uvc/uvc_driver.c
-+++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -2251,7 +2251,8 @@ int uvc_register_video_device(struct uvc_device *dev,
- 		break;
- 	}
+diff --git a/Documentation/devicetree/bindings/net/rockchip-dwmac.yaml b/Documentation/devicetree/bindings/net/rockchip-dwmac.yaml
+index 3c8c3a907181..42fb72b6909d 100644
+--- a/Documentation/devicetree/bindings/net/rockchip-dwmac.yaml
++++ b/Documentation/devicetree/bindings/net/rockchip-dwmac.yaml
+@@ -27,6 +27,7 @@ select:
+           - rockchip,rk3568-gmac
+           - rockchip,rk3588-gmac
+           - rockchip,rv1108-gmac
++          - rockchip,rv1126-gmac
+   required:
+     - compatible
  
--	strscpy(vdev->name, dev->name, sizeof(vdev->name));
-+	snprintf(vdev->name, sizeof(vdev->name), "%s %u", dev->name,
-+		 stream->header.bTerminalLink);
- 
- 	/*
- 	 * Set the driver data before calling video_register_device, otherwise
-
+@@ -48,6 +49,7 @@ properties:
+               - rockchip,rk3368-gmac
+               - rockchip,rk3399-gmac
+               - rockchip,rv1108-gmac
++              - rockchip,rv1126-gmac
+       - items:
+           - enum:
+               - rockchip,rk3568-gmac
 -- 
-b4 0.11.0-dev-d93f8
+2.37.3
+
