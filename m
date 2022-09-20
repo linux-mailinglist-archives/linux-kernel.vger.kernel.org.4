@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8D795BE791
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 15:51:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD5F65BE793
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 15:51:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230369AbiITNvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 09:51:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42888 "EHLO
+        id S230377AbiITNvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 09:51:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230341AbiITNvI (ORCPT
+        with ESMTP id S230422AbiITNvM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 09:51:08 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67B61399F1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 06:51:02 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id az6so1974787wmb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 06:51:02 -0700 (PDT)
+        Tue, 20 Sep 2022 09:51:12 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8368D419A9
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 06:51:10 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id n12so4364757wrx.9
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 06:51:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:organization:from:references
          :cc:to:content-language:subject:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date;
-        bh=vwvpH9OCUXie6JCH3Id6Xbj2ycjGgu6cufNjGSnRVxI=;
-        b=PXsyjr2YR55AB98TCWIzI1oVJEwxYonA7Mf3TC5hnslTtwwgzwM9Nm3G/InB+w5RA4
-         cfCn8JWn8ktZMg4VpAIsGyyejDEW11sSI42B2hnhtdWTedp+OgbXLggikkZptZGkNu0h
-         LiDJjWexPyY+j9E9jI2L0viELzQqYn28OYVz1uMrKCo65j10ryulaJ+ZU324ysYpkm5j
-         /bpCurXxWukGg3fphNkuD8ic11M+U2+3Ukf5jxYdBSi8R6u0Ku3YE83alMr1UnIWivtw
-         qPn6R1KCLgJxCoN8X4yRqyVzJqmhw+W2aYNk/PpcJkoxEx3MijB2BiNWM/BK3XtBrc14
-         yZng==
+        bh=LrxrlfgogzKxFXnVwSOeSnz3Pf0bksNj/SZqFupjFPg=;
+        b=zM8VfJhUiAkb1Qb+niEHKxiCFjouT0+7xy1OYBskmZYdfToN54rUGdj2svNO06uhzu
+         SST0CYwtqofGShJL0qZCk42fkute5DP+8kGlNO+mIJSSw6h8lR+k+Gc704NwPHJTcxbK
+         F2QP62z4x6oJ3obznrc3PgncVkRG+ePRMTe/74Q6WeigxrzlINqmAqO09GUp5mju5m6w
+         UM/5k1uQy244MscHq2RN9bZTKKnBEBCIND8yqnh9yFBjmOWIwWXuA7SznJu2xzQ/N4MK
+         WqhYdd9otxZYMb+YvpwhgGawW3rhsoJjxu6KZG3VhN7LA6RRHfPEITP/5T0GdZBAhpjJ
+         DW3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:organization:from:references
          :cc:to:content-language:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=vwvpH9OCUXie6JCH3Id6Xbj2ycjGgu6cufNjGSnRVxI=;
-        b=ogh+SeZht8JjKRqDUFRtOS9J08U8fcKCfQA84LYiDB9STJG05LGGB807ceMSnv78Mn
-         V3DbYIKwiIoI4ttAIn5UlOQy4Ypq8M6XnvI95e2Tm0qffbHwVjpliF9zeNS+wasvHob/
-         tYYPz8Ba8xyari2VWFFaXJjkfcn1vja27qFrWAj5yb3IRzf2ik8ExZ+WtLhrRKQY1Ovc
-         9TqSXShZ6fBFgvx0/Wr1zm7dDa9pvLJ1lkTFxq2zD05wJBciWTmzqc/m9N4Fv5fkLmYA
-         46MY9Z7RwxQ5tcz4THHGUsfGs6mjZdlJ65dlO9TXamt8ZkGf99gxCh5hjBuGZCfciAng
-         7/6w==
-X-Gm-Message-State: ACrzQf0/9DjL9FLyJRgjRCkPGXX7NB7d6KJSX/k4/I08S1F4AecdEEZB
-        i5bXf42bikspllOyXKCmGtz3XA==
-X-Google-Smtp-Source: AMsMyM7nVr2E4rDnRhbelfS7us0PH0eK3nVw9E84nraECaQCRgntj+daUZUAzMqKthsGAPklo64f+g==
-X-Received: by 2002:a05:600c:221a:b0:3b4:75b8:3f7f with SMTP id z26-20020a05600c221a00b003b475b83f7fmr2450241wml.175.1663681860947;
-        Tue, 20 Sep 2022 06:51:00 -0700 (PDT)
+        bh=LrxrlfgogzKxFXnVwSOeSnz3Pf0bksNj/SZqFupjFPg=;
+        b=59Xp+bvR/DgLRkTaY4cKzWYfPf/yIcdV38rt6hYk3LpJ0xpzBYWUYpX5gJMVRo3t5W
+         rUJbF41vyqpQmtlanWO7tkJl1jGfvH5NUQ8VQ3YXxo80Y0KbKtFDe35QejD1Vr+ppqRC
+         hylnbh2C/qA1KDELCZiUTlkvp+/ESLuTayrbU/Wx99nyHKOoMVXfZlmdmu7E29O6Eni4
+         4g45zY2CEgwV1/bQ+KHKq0kXjwtP/3i8FrFwHuYqIe/rz+ur1iQMalmvOee/bsnMwjpN
+         a5atzeRycHnoHnkMV30VzVvhDYmgO7I1sMzrkAHzjzSmS7G7Zm996mkEvU6KPmE3Cxgn
+         PS8A==
+X-Gm-Message-State: ACrzQf3dNmm+lMsp7LsA50nqzxFvTjPTpYt/Q1iHdTB3s9RvezGD5uAE
+        4UI+bm5NpJ/UX7Sywz4xUF2y/w==
+X-Google-Smtp-Source: AMsMyM5W/9aDbYyp8ScDfKrY39kx2CCpPiVocGA8eRuESI6Qhka1HvMz8tW8DDl6Nw/zeHL2noYkew==
+X-Received: by 2002:adf:e609:0:b0:22a:a6fd:cfe1 with SMTP id p9-20020adfe609000000b0022aa6fdcfe1mr14599637wrm.0.1663681868927;
+        Tue, 20 Sep 2022 06:51:08 -0700 (PDT)
 Received: from ?IPV6:2a01:e0a:982:cbb0:7e10:f0f:43b2:9b5e? ([2a01:e0a:982:cbb0:7e10:f0f:43b2:9b5e])
-        by smtp.gmail.com with ESMTPSA id r10-20020a05600c434a00b003b4868eb71bsm75688wme.25.2022.09.20.06.50.59
+        by smtp.gmail.com with ESMTPSA id bg7-20020a05600c3c8700b003b47b913901sm394307wmb.1.2022.09.20.06.51.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Sep 2022 06:51:00 -0700 (PDT)
-Message-ID: <65b66c5f-2f33-903c-ce87-3fb2b23f1b50@linaro.org>
-Date:   Tue, 20 Sep 2022 15:50:59 +0200
+        Tue, 20 Sep 2022 06:51:07 -0700 (PDT)
+Message-ID: <112a306f-0687-36c7-bba2-7cdddbb14530@linaro.org>
+Date:   Tue, 20 Sep 2022 15:51:06 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH 02/17] phy: qcom-qmp-pcie-msm8996: drop unused type from
- config
+Subject: Re: [PATCH 03/17] phy: qcom-qmp-ufs: drop unused type from config
 Content-Language: en-US
 To:     Johan Hovold <johan+linaro@kernel.org>,
         Vinod Koul <vkoul@kernel.org>
@@ -68,10 +67,10 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         linux-kernel@vger.kernel.org
 References: <20220920073826.20811-1-johan+linaro@kernel.org>
- <20220920073826.20811-3-johan+linaro@kernel.org>
+ <20220920073826.20811-4-johan+linaro@kernel.org>
 From:   Neil Armstrong <neil.armstrong@linaro.org>
 Organization: Linaro
-In-Reply-To: <20220920073826.20811-3-johan+linaro@kernel.org>
+In-Reply-To: <20220920073826.20811-4-johan+linaro@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -89,14 +88,14 @@ On 20/09/2022 09:38, Johan Hovold wrote:
 > 
 > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 > ---
->   drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c | 3 ---
->   1 file changed, 3 deletions(-)
+>   drivers/phy/qualcomm/phy-qcom-qmp-ufs.c | 8 --------
+>   1 file changed, 8 deletions(-)
 > 
-> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c
-> index 245f6dc1710e..20a76b1b23a2 100644
-> --- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c
-> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c
-> @@ -188,8 +188,6 @@ struct qmp_phy;
+> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c b/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
+> index 7b335b50b4a1..e5c8d3a4fdaa 100644
+> --- a/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
+> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
+> @@ -535,8 +535,6 @@ struct qmp_phy;
 >   
 >   /* struct qmp_phy_cfg - per-PHY initialization config */
 >   struct qmp_phy_cfg {
@@ -105,13 +104,53 @@ On 20/09/2022 09:38, Johan Hovold wrote:
 >   	/* number of lanes provided by phy */
 >   	int nlanes;
 >   
-> @@ -323,7 +321,6 @@ static const char * const qmp_phy_vreg_l[] = {
+> @@ -668,7 +666,6 @@ static const char * const qmp_phy_vreg_l[] = {
 >   };
 >   
->   static const struct qmp_phy_cfg msm8996_pciephy_cfg = {
-> -	.type			= PHY_TYPE_PCIE,
->   	.nlanes			= 3,
+>   static const struct qmp_phy_cfg msm8996_ufs_cfg = {
+> -	.type			= PHY_TYPE_UFS,
+>   	.nlanes			= 1,
 >   
->   	.serdes_tbl		= msm8996_pcie_serdes_tbl,
+>   	.serdes_tbl		= msm8996_ufs_serdes_tbl,
+> @@ -694,7 +691,6 @@ static const struct qmp_phy_cfg msm8996_ufs_cfg = {
+>   };
+>   
+>   static const struct qmp_phy_cfg sdm845_ufsphy_cfg = {
+> -	.type			= PHY_TYPE_UFS,
+>   	.nlanes			= 2,
+>   
+>   	.serdes_tbl		= sdm845_ufsphy_serdes_tbl,
+> @@ -720,7 +716,6 @@ static const struct qmp_phy_cfg sdm845_ufsphy_cfg = {
+>   };
+>   
+>   static const struct qmp_phy_cfg sm6115_ufsphy_cfg = {
+> -	.type			= PHY_TYPE_UFS,
+>   	.nlanes			= 1,
+>   
+>   	.serdes_tbl		= sm6115_ufsphy_serdes_tbl,
+> @@ -744,7 +739,6 @@ static const struct qmp_phy_cfg sm6115_ufsphy_cfg = {
+>   };
+>   
+>   static const struct qmp_phy_cfg sm8150_ufsphy_cfg = {
+> -	.type			= PHY_TYPE_UFS,
+>   	.nlanes			= 2,
+>   
+>   	.serdes_tbl		= sm8150_ufsphy_serdes_tbl,
+> @@ -769,7 +763,6 @@ static const struct qmp_phy_cfg sm8150_ufsphy_cfg = {
+>   };
+>   
+>   static const struct qmp_phy_cfg sm8350_ufsphy_cfg = {
+> -	.type			= PHY_TYPE_UFS,
+>   	.nlanes			= 2,
+>   
+>   	.serdes_tbl		= sm8350_ufsphy_serdes_tbl,
+> @@ -794,7 +787,6 @@ static const struct qmp_phy_cfg sm8350_ufsphy_cfg = {
+>   };
+>   
+>   static const struct qmp_phy_cfg sm8450_ufsphy_cfg = {
+> -	.type			= PHY_TYPE_UFS,
+>   	.nlanes			= 2,
+>   
+>   	.serdes_tbl		= sm8350_ufsphy_serdes_tbl,
 
 Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
