@@ -2,237 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF14A5BD937
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 03:11:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 866835BD93A
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 03:13:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229991AbiITBLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 21:11:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46412 "EHLO
+        id S229811AbiITBNC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 21:13:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229917AbiITBLb (ORCPT
+        with ESMTP id S229743AbiITBMn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 21:11:31 -0400
-Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-eopbgr140083.outbound.protection.outlook.com [40.107.14.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DBD352FF7;
-        Mon, 19 Sep 2022 18:10:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=n6WcWTzNlVERUt82hW5GsEYfAIM4PyboTjZQh/MKb/Oqj5BK6o9y1P0GSATzPRb9fubMaJhvwjS1qJse8BrSHx6+V5eSWL7t5ZQtsSBA3B/6D3bWHckQ8CEQe4TEHGvOR2KoKT1IN4JO9MwlDqVWyjq8jFjlPljSiu70CXuQm7qV2wEWKhrwDEc3uG7KJ+zG3w70HzuvwepEjEgHCeXOOOd99s6ndIj3nAYH5A4f8pRq61I6YlI8WVnDFNHtRkMj6N7GupYOZBsz8N6n6O5xjPQ79pn9Pd/j/XkzjnyDVehT8sinUG6mKA4CVaniyKwj+enGJzw6xHh2YlgM3A70Sg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GFUOfM7M5eHiwg+MUqf0WAu35sW6vkZJDFaiUQmHRYM=;
- b=POAS7RBf9eg00x0yVGtR3aADQ9VRb6M2kjfiKskmJTHffQKRLh1mFwCZXBA7pzcQ/l8QcqryUuxBnOzSVCPOpomiDOzCtSDoNgq+82Y/EjTbsO8u4pBFxzJbIJB8PcvkAzpMZZbmV+AR3VxxHry0Y5kD3VHIs/FQRhkHj4fR3ONsyqAd1kGWwa1M626aZPRGulPcWqEOehifOifeI/m69gMbB0dlSfVOE3MwDwjP9Cjapbv+dutv/h28rf+tkjQbicPQjllIxTCoAdwStIwZltsOLPWEch4dQ42ogZfVMUSJS1nyWejWvt0HoGKL8RibncVRfMaK/20qce0yA+jL+w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GFUOfM7M5eHiwg+MUqf0WAu35sW6vkZJDFaiUQmHRYM=;
- b=pmecf3pyH0kMNnY4yQiLYn2hX+IW5ARr4lrivNAPPRjMFaauNexoCeCk79g/qkZculH/f2PE2K7iMIAFLoMzimXC6MSfLN50vMLstZN8x/TuLVdvnirs4bPsqBn/Mvvr99S/bUctSbSa++78zX/rKh/0eghMMeaLEzDXTDP9u9Y=
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by DBAPR04MB7448.eurprd04.prod.outlook.com (2603:10a6:10:1a6::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.21; Tue, 20 Sep
- 2022 01:10:34 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::1eb:dcf:8fd7:867]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::1eb:dcf:8fd7:867%5]) with mapi id 15.20.5632.018; Tue, 20 Sep 2022
- 01:10:34 +0000
-From:   Peng Fan <peng.fan@nxp.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-CC:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dien Pham <dien.pham.ry@renesas.com>,
-        Gaku Inami <gaku.inami.xh@renesas.com>,
-        Nicolas Pitre <npitre@baylibre.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH] Revert "firmware: arm_scmi: Add clock management to the
- SCMI power domain"
-Thread-Topic: [PATCH] Revert "firmware: arm_scmi: Add clock management to the
- SCMI power domain"
-Thread-Index: AQHYzCJH938Lnv+sGUKY2h9ELO/QXq3ngw9A
-Date:   Tue, 20 Sep 2022 01:10:34 +0000
-Message-ID: <DU0PR04MB9417DDE0914ECA41B3800511884C9@DU0PR04MB9417.eurprd04.prod.outlook.com>
-References: <20220919122033.86126-1-ulf.hansson@linaro.org>
-In-Reply-To: <20220919122033.86126-1-ulf.hansson@linaro.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DU0PR04MB9417:EE_|DBAPR04MB7448:EE_
-x-ms-office365-filtering-correlation-id: ae8bfef5-e6be-4b87-fa1b-08da9aa4ebb3
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: sGiuMwsswTphOEz2h7hFdDrLRD1wWli2e1Z0KMsLaJzKLkfm6DKvzVAZOJDmJruvM3L22TXDE2yoxZbwgqyOrzrfPxhb0QBb9QLJqGpRUJ8i3nN11xAiZZcmvJ6QFW/j+nxh+jXcqk3QQJ9SavUj4CNZCkj6+hCz9QbNI/oTuhIx4wifO2DE+jCPs7k8zFT05V2tCIybU2fQCYDvqdGn6pFuJjZaURpNegh1SoNnxBgTsBqU1qMULqu/7JcUqjf5XTHUca5rCHvxNzvmFB1616f7sxbCJglgHkIaTLh9nN2w5hdlGBksoCOLoRtk66dYknmTNcbHzyU2blqY/UrfvoIsLaE2F5zSi5e9XBXi9cIvGcSOgHjzVmy8TBprFTrzcGs+Jrp9sjTci0EHocEReMV7AWDUXsnIio4n1Ek4Ad1DJ74SFcicrGPXCjFqz6hMb/OWedbrFnTV/AeiCKfNDhPTXG7MXchDTmU0psIAsGG20yOAqlhhwImTuZ94KDxfEKOoXPFi3oINOGYSQJSUqqE+JqMq+bDGXuiIqmOYxdjDb+6/nyA3qv39RtwJFRec71A9TX1DFCdof9OfFzxk0sMSpvmwUj47Somrsiw6/PN2Qg5dze885qqmPxZ77pQ95Kq5xHtOmCkFve8UcPe4iRMaP0C2wyNHaSF3oR0QO34Hqg6emXCvOKcUORhuKKSo7+rFoKXkJeVuXJU5KCIMma0AQkOpo11rcYboRWtYiJz70iDqodSkjP71jv5EXMn4x0dlfLjQYPgiO4HaimN+JqOrmdtpcx8B7qH6thdsxq8=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(39860400002)(346002)(396003)(366004)(451199015)(66556008)(5660300002)(66946007)(64756008)(4326008)(66476007)(7416002)(66446008)(76116006)(54906003)(110136005)(86362001)(8936002)(45080400002)(316002)(33656002)(122000001)(8676002)(38100700002)(83380400001)(6506007)(41300700001)(7696005)(966005)(71200400001)(52536014)(478600001)(186003)(9686003)(26005)(38070700005)(55016003)(44832011)(2906002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?WySGlBt/ti7czy1Vh77iRb5H61uGFrM8y/FfqQML804qI75Y1MHB2mbLg6Es?=
- =?us-ascii?Q?MJOUa2KpmeGQ6ZUNAclT77Zete2zxU2dVijYFutEhWHV5Foo91bCMG7gRTue?=
- =?us-ascii?Q?6RumzZ5pvgA+RdHMFIvXVAYSyufpztCijvshEtcyEWEtjnGuB9RqRekKiaOD?=
- =?us-ascii?Q?ReD1B+SMcS9xsdJ2bjOn9tvtZ7i0jiEpnMSgCXanAv0TAPes5eVyQEywBOHg?=
- =?us-ascii?Q?IF8GgWEL73ffOtj+xMXhxzjNM0Vxzsv2psG7rywBdH/B8DPH1mkG+fWykGnJ?=
- =?us-ascii?Q?iOycXu0rUtbdAvfiW3r4O/GAil/NkLMa7yD4g16Zhwn4bX7KfRM1Rdxu4+A7?=
- =?us-ascii?Q?RXGdwHUYNGzoQ+GXBLofUp4Hp57WtsZ/lBllfHkEX0NQPa9Yrm0KtX32ueUw?=
- =?us-ascii?Q?gYBQVdcI8Swpe7+7ycFff77SxyN44XUrjF4ovFrDjMR5t94eB3Li/Oa6d9Cg?=
- =?us-ascii?Q?qHMV+28C3hm5pCBwryB+X+IjyySzBcn6Orx1h1k4YYkbfNryIed5WtHCNRVS?=
- =?us-ascii?Q?MXXYn5LmmWW9nw9cd29fINW6UfayMU9RwvFeCP9FNdXsK1L5EqEeMiXf0npo?=
- =?us-ascii?Q?in/CHehxDdO8+YYq/P2fWHBWFpv6Yi/7CUtoQbJaWP7qgmNJgqeXaTDPHDb0?=
- =?us-ascii?Q?iHzm8Mud21jhqRwySXSzHCExDthnfeevUbRfQSr86msJMMORdWGULJsSdsfo?=
- =?us-ascii?Q?8QZ0o7iK70WYHBKZNg4gUwQcCHEYjGjOfJ7A25DdeqYO/QKdzFWGyomzoXVR?=
- =?us-ascii?Q?ZTMHylubSgJ8ToAspPXU59gsrHK9tmVRNgzEZtDN2pMMRL2WpbYxnUa5tiKA?=
- =?us-ascii?Q?JZRZmG00lAmK9t7NoiddsyCoCdvr2tJ5S0oIiB7zTHEaUV36iAZC52Khe2px?=
- =?us-ascii?Q?UvX7YqPg1iw3wiWeanP8TSDdx2hda1RRpfTHg7FtW9T3Zw52vQRYc9wYciaY?=
- =?us-ascii?Q?+5VhLHxTd5aCdnIRoaKL7W5XNcvqq4JO3gLXzyZeyhKLfUYJssRb/bbG6zR4?=
- =?us-ascii?Q?U6Y+mHSMBEDT06XokJBFQtlOdc9iNwuiJk7tKSJm9pelWFUK3yW6RoLWpVic?=
- =?us-ascii?Q?ENm6EOQDE5GhbaFvJ7NX/95/XIIxSyP6FoDAhIkxu5tFHAHJj0NYZrHXr0Pn?=
- =?us-ascii?Q?sYLpzQ7UDjBt5oyNXwjhluFWkGYuVqudgXzhh1zaC889NzMmUrXbGImK/qyW?=
- =?us-ascii?Q?FKLWG3lW/pt30Yyp1UYoN8j8+2dfTuZPb+Z3Ae6Lo5pN1XuGzb+Sotp+9KXt?=
- =?us-ascii?Q?P+SX5UojcoFbFIB/NV0iUQthcBBOhkMhkKwUrDYo3tsncJogD3zYqS16n4hC?=
- =?us-ascii?Q?Oqf5NdOsBNvICRqlFanpmJsheDZmdz9gH4RdIJFI04BS+48S9zKQ+FHWBzLH?=
- =?us-ascii?Q?D6eM+yp/9nriU9fDhzmamDCo/1CH6yOMWghLPL7Wl0TXm3Kf5CstuoJ3UREn?=
- =?us-ascii?Q?8fBM8glKuQMy39za+DZjHzec3Xgo1AXkIja2IYSLvKXXxDPAuMDzJxw69lDN?=
- =?us-ascii?Q?OH3EYp9I8mzun7mby4Y7nzKbHviXB5TYW1bdwWnB+4r2ynmunJvHQGTOi2g7?=
- =?us-ascii?Q?fj6shN6mtRBUWObhMII=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 19 Sep 2022 21:12:43 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B34052E63
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 18:11:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663636311; x=1695172311;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=j0HdFT5OvtJlg5Ny82ycNOllTWbCkuOEUkQDYVbA3xY=;
+  b=gtMOWMPmYmPXFB6WaMvBnG07eAa/+ekYAXd1hcySfAysFZBudhx+tKwf
+   +ieTbi+fcboWMqk4+rFM4kt/9qlhUusQ37tUhNxqSaao9koiaSqgZTTAH
+   F2ZpYAIqH9kylXGq7/MBI+R9tDpQuBtcMBgjhAANRM23HU6OD7XpJOxiZ
+   XsJpfg4ILHokgP5vHIuA/B+qkes3iDqP9x5x5fxDbM2YwA8PXV5+rPg1j
+   Zh7mMZxULcFX5HpHzQj+D1amWyF6co9EIWgPP+qXOTS/scIaHskzQZsrs
+   bSiylLqG1P/M2F3McUphrHvdYJD7PGWmbFl9jjQYnMHOTjpbn+tqKR0ji
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="298288221"
+X-IronPort-AV: E=Sophos;i="5.93,329,1654585200"; 
+   d="scan'208";a="298288221"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 18:11:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,329,1654585200"; 
+   d="scan'208";a="687200114"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 19 Sep 2022 18:11:43 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oaRnb-0002Ll-00;
+        Tue, 20 Sep 2022 01:11:43 +0000
+Date:   Tue, 20 Sep 2022 09:11:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daeho Jeong <daeho43@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Daeho Jeong <daehojeong@google.com>
+Subject: Re: [PATCH 2/2] f2fs: introduce F2FS_IOC_START_ATOMIC_REPLACE
+Message-ID: <202209200942.RO5JnVfI-lkp@intel.com>
+References: <20220919160644.2219088-2-daeho43@gmail.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ae8bfef5-e6be-4b87-fa1b-08da9aa4ebb3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Sep 2022 01:10:34.5632
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: IO4JK7FODMqFf2KftaprgP+F/pls5vCWiz3Hkj+01igXdV1NmsBS45ZqJFGF3uBlfJyuSBxgx6NVjeoCXBzHjw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR04MB7448
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220919160644.2219088-2-daeho43@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Subject: [PATCH] Revert "firmware: arm_scmi: Add clock management to
-> the SCMI power domain"
->=20
-> This reverts commit a3b884cef873 ("firmware: arm_scmi: Add clock
-> management to the SCMI power domain").
->=20
-> Using the GENPD_FLAG_PM_CLK tells genpd to gate/ungate the consumer
-> device's clock(s) during runtime suspend/resume through the PM clock API.
-> More precisely, in genpd_runtime_resume() the clock(s) for the consumer
-> device would become ungated prior to the driver-level ->runtime_resume()
-> callbacks gets invoked.
->=20
-> This behaviour isn't a good fit for all platforms/drivers. For example, a
-> driver may need to make some preparations of its device in its
-> ->runtime_resume() callback, like calling clk_set_rate() before the
-> clock(s) should be ungated. In these cases, it's easier to let the clock(=
-s) to be
-> managed solely by the driver, rather than at the PM domain level.
->=20
-> For these reasons, let's drop the use GENPD_FLAG_PM_CLK for the SCMI PM
-> domain, as to enable it to be more easily adopted across ARM platforms.
->=20
-> Fixes: a3b884cef873 ("firmware: arm_scmi: Add clock management to the
-> SCMI power domain")
-> Cc: Nicolas Pitre <npitre@baylibre.com>
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Hi Daeho,
 
-Tested-by: Peng Fan <peng.fan@nxp.com>
+Thank you for the patch! Yet something to improve:
 
-Thanks,
-Peng.
+[auto build test ERROR on jaegeuk-f2fs/dev-test]
+[also build test ERROR on linus/master v6.0-rc6 next-20220919]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> ---
->=20
-> To get some more background to $subject patch, please have a look at the
-> lore-link below.
->=20
-> https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Flore.
-> kernel.org%2Fall%2FDU0PR04MB94173B45A2CFEE3BF1BD313A88409%40D
-> U0PR04MB9417.eurprd04.prod.outlook.com%2F&amp;data=3D05%7C01%7Cp
-> eng.fan%40nxp.com%7C05437bc19cb14760450a08da9a3968c0%7C686ea1d
-> 3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637991868616277658%7CUnkn
-> own%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik
-> 1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=3DQpQfK8lTApY
-> qhYj80lUudQJMCujYyN9j1RNB4Q00wrM%3D&amp;reserved=3D0
->=20
-> Kind regards
-> Ulf Hansson
->=20
-> ---
->  drivers/firmware/arm_scmi/scmi_pm_domain.c | 26 ----------------------
->  1 file changed, 26 deletions(-)
->=20
-> diff --git a/drivers/firmware/arm_scmi/scmi_pm_domain.c
-> b/drivers/firmware/arm_scmi/scmi_pm_domain.c
-> index 581d34c95769..d5dee625de78 100644
-> --- a/drivers/firmware/arm_scmi/scmi_pm_domain.c
-> +++ b/drivers/firmware/arm_scmi/scmi_pm_domain.c
-> @@ -8,7 +8,6 @@
->  #include <linux/err.h>
->  #include <linux/io.h>
->  #include <linux/module.h>
-> -#include <linux/pm_clock.h>
->  #include <linux/pm_domain.h>
->  #include <linux/scmi_protocol.h>
->=20
-> @@ -53,27 +52,6 @@ static int scmi_pd_power_off(struct
-> generic_pm_domain *domain)
->  	return scmi_pd_power(domain, false);
->  }
->=20
-> -static int scmi_pd_attach_dev(struct generic_pm_domain *pd, struct devic=
-e
-> *dev) -{
-> -	int ret;
-> -
-> -	ret =3D pm_clk_create(dev);
-> -	if (ret)
-> -		return ret;
-> -
-> -	ret =3D of_pm_clk_add_clks(dev);
-> -	if (ret >=3D 0)
-> -		return 0;
-> -
-> -	pm_clk_destroy(dev);
-> -	return ret;
-> -}
-> -
-> -static void scmi_pd_detach_dev(struct generic_pm_domain *pd, struct
-> device *dev) -{
-> -	pm_clk_destroy(dev);
-> -}
-> -
->  static int scmi_pm_domain_probe(struct scmi_device *sdev)  {
->  	int num_domains, i;
-> @@ -124,10 +102,6 @@ static int scmi_pm_domain_probe(struct
-> scmi_device *sdev)
->  		scmi_pd->genpd.name =3D scmi_pd->name;
->  		scmi_pd->genpd.power_off =3D scmi_pd_power_off;
->  		scmi_pd->genpd.power_on =3D scmi_pd_power_on;
-> -		scmi_pd->genpd.attach_dev =3D scmi_pd_attach_dev;
-> -		scmi_pd->genpd.detach_dev =3D scmi_pd_detach_dev;
-> -		scmi_pd->genpd.flags =3D GENPD_FLAG_PM_CLK |
-> -				       GENPD_FLAG_ACTIVE_WAKEUP;
->=20
->  		pm_genpd_init(&scmi_pd->genpd, NULL,
->  			      state =3D=3D SCMI_POWER_STATE_GENERIC_OFF);
-> --
-> 2.34.1
+url:    https://github.com/intel-lab-lkp/linux/commits/Daeho-Jeong/f2fs-correct-i_size-change-for-atomic-writes/20220920-000935
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git dev-test
+config: i386-randconfig-a006-20220919 (https://download.01.org/0day-ci/archive/20220920/202209200942.RO5JnVfI-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/884660386769b2359529c52ad0afc06684f1ea87
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Daeho-Jeong/f2fs-correct-i_size-change-for-atomic-writes/20220920-000935
+        git checkout 884660386769b2359529c52ad0afc06684f1ea87
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/
 
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> fs/f2fs/file.c:4090:7: error: use of undeclared identifier 'F2FS_IOC_START_ATOMIC_REPLACE'
+           case F2FS_IOC_START_ATOMIC_REPLACE:
+                ^
+   1 error generated.
+
+
+vim +/F2FS_IOC_START_ATOMIC_REPLACE +4090 fs/f2fs/file.c
+
+  4082	
+  4083	static long __f2fs_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+  4084	{
+  4085		switch (cmd) {
+  4086		case FS_IOC_GETVERSION:
+  4087			return f2fs_ioc_getversion(filp, arg);
+  4088		case F2FS_IOC_START_ATOMIC_WRITE:
+  4089			return f2fs_ioc_start_atomic_write(filp, false);
+> 4090		case F2FS_IOC_START_ATOMIC_REPLACE:
+  4091			return f2fs_ioc_start_atomic_write(filp, true);
+  4092		case F2FS_IOC_COMMIT_ATOMIC_WRITE:
+  4093			return f2fs_ioc_commit_atomic_write(filp);
+  4094		case F2FS_IOC_ABORT_ATOMIC_WRITE:
+  4095			return f2fs_ioc_abort_atomic_write(filp);
+  4096		case F2FS_IOC_START_VOLATILE_WRITE:
+  4097		case F2FS_IOC_RELEASE_VOLATILE_WRITE:
+  4098			return -EOPNOTSUPP;
+  4099		case F2FS_IOC_SHUTDOWN:
+  4100			return f2fs_ioc_shutdown(filp, arg);
+  4101		case FITRIM:
+  4102			return f2fs_ioc_fitrim(filp, arg);
+  4103		case FS_IOC_SET_ENCRYPTION_POLICY:
+  4104			return f2fs_ioc_set_encryption_policy(filp, arg);
+  4105		case FS_IOC_GET_ENCRYPTION_POLICY:
+  4106			return f2fs_ioc_get_encryption_policy(filp, arg);
+  4107		case FS_IOC_GET_ENCRYPTION_PWSALT:
+  4108			return f2fs_ioc_get_encryption_pwsalt(filp, arg);
+  4109		case FS_IOC_GET_ENCRYPTION_POLICY_EX:
+  4110			return f2fs_ioc_get_encryption_policy_ex(filp, arg);
+  4111		case FS_IOC_ADD_ENCRYPTION_KEY:
+  4112			return f2fs_ioc_add_encryption_key(filp, arg);
+  4113		case FS_IOC_REMOVE_ENCRYPTION_KEY:
+  4114			return f2fs_ioc_remove_encryption_key(filp, arg);
+  4115		case FS_IOC_REMOVE_ENCRYPTION_KEY_ALL_USERS:
+  4116			return f2fs_ioc_remove_encryption_key_all_users(filp, arg);
+  4117		case FS_IOC_GET_ENCRYPTION_KEY_STATUS:
+  4118			return f2fs_ioc_get_encryption_key_status(filp, arg);
+  4119		case FS_IOC_GET_ENCRYPTION_NONCE:
+  4120			return f2fs_ioc_get_encryption_nonce(filp, arg);
+  4121		case F2FS_IOC_GARBAGE_COLLECT:
+  4122			return f2fs_ioc_gc(filp, arg);
+  4123		case F2FS_IOC_GARBAGE_COLLECT_RANGE:
+  4124			return f2fs_ioc_gc_range(filp, arg);
+  4125		case F2FS_IOC_WRITE_CHECKPOINT:
+  4126			return f2fs_ioc_write_checkpoint(filp, arg);
+  4127		case F2FS_IOC_DEFRAGMENT:
+  4128			return f2fs_ioc_defragment(filp, arg);
+  4129		case F2FS_IOC_MOVE_RANGE:
+  4130			return f2fs_ioc_move_range(filp, arg);
+  4131		case F2FS_IOC_FLUSH_DEVICE:
+  4132			return f2fs_ioc_flush_device(filp, arg);
+  4133		case F2FS_IOC_GET_FEATURES:
+  4134			return f2fs_ioc_get_features(filp, arg);
+  4135		case F2FS_IOC_GET_PIN_FILE:
+  4136			return f2fs_ioc_get_pin_file(filp, arg);
+  4137		case F2FS_IOC_SET_PIN_FILE:
+  4138			return f2fs_ioc_set_pin_file(filp, arg);
+  4139		case F2FS_IOC_PRECACHE_EXTENTS:
+  4140			return f2fs_ioc_precache_extents(filp, arg);
+  4141		case F2FS_IOC_RESIZE_FS:
+  4142			return f2fs_ioc_resize_fs(filp, arg);
+  4143		case FS_IOC_ENABLE_VERITY:
+  4144			return f2fs_ioc_enable_verity(filp, arg);
+  4145		case FS_IOC_MEASURE_VERITY:
+  4146			return f2fs_ioc_measure_verity(filp, arg);
+  4147		case FS_IOC_READ_VERITY_METADATA:
+  4148			return f2fs_ioc_read_verity_metadata(filp, arg);
+  4149		case FS_IOC_GETFSLABEL:
+  4150			return f2fs_ioc_getfslabel(filp, arg);
+  4151		case FS_IOC_SETFSLABEL:
+  4152			return f2fs_ioc_setfslabel(filp, arg);
+  4153		case F2FS_IOC_GET_COMPRESS_BLOCKS:
+  4154			return f2fs_get_compress_blocks(filp, arg);
+  4155		case F2FS_IOC_RELEASE_COMPRESS_BLOCKS:
+  4156			return f2fs_release_compress_blocks(filp, arg);
+  4157		case F2FS_IOC_RESERVE_COMPRESS_BLOCKS:
+  4158			return f2fs_reserve_compress_blocks(filp, arg);
+  4159		case F2FS_IOC_SEC_TRIM_FILE:
+  4160			return f2fs_sec_trim_file(filp, arg);
+  4161		case F2FS_IOC_GET_COMPRESS_OPTION:
+  4162			return f2fs_ioc_get_compress_option(filp, arg);
+  4163		case F2FS_IOC_SET_COMPRESS_OPTION:
+  4164			return f2fs_ioc_set_compress_option(filp, arg);
+  4165		case F2FS_IOC_DECOMPRESS_FILE:
+  4166			return f2fs_ioc_decompress_file(filp, arg);
+  4167		case F2FS_IOC_COMPRESS_FILE:
+  4168			return f2fs_ioc_compress_file(filp, arg);
+  4169		default:
+  4170			return -ENOTTY;
+  4171		}
+  4172	}
+  4173	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
