@@ -2,115 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E14D45BE72D
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 15:34:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C33745BE72F
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 15:34:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230300AbiITNej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 09:34:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45026 "EHLO
+        id S230251AbiITNet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 09:34:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230142AbiITNef (ORCPT
+        with ESMTP id S230055AbiITNef (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 20 Sep 2022 09:34:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BB9CCF5
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 06:34:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663680870;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qRfnqkDRjPiW51IVNT2CYsNbJcFu0UYEn+De3QAv12Y=;
-        b=D8hdi3S4vhcu2HcvT5VtkJDVt8IciRJhAOiRNO/BdXsTy5fiNuRhDO+DfGCMWODxtZUAYV
-        92BdxbVGOEW3fX8OLGyO/MGlwiI34Fgt3frNkX6Ust4SNpRTUEKmT6gRBPrAQJfLo53vLz
-        FYiwFKFjVr6UzlfsDK0HmO4BpRLzwgw=
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com
- [209.85.210.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-470-cqVAJ4Z1NDSRnTVjXKkCAQ-1; Tue, 20 Sep 2022 09:34:28 -0400
-X-MC-Unique: cqVAJ4Z1NDSRnTVjXKkCAQ-1
-Received: by mail-pf1-f197.google.com with SMTP id a3-20020aa795a3000000b0054b94ce7d12so1738793pfk.17
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 06:34:28 -0700 (PDT)
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D746DCD4;
+        Tue, 20 Sep 2022 06:34:30 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id o70-20020a17090a0a4c00b00202f898fa86so2500611pjo.2;
+        Tue, 20 Sep 2022 06:34:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=Ud1zLgXH9AoOTKaYWX8ixkpv9cvGKhiKEy3m7R2TJr0=;
+        b=WmGMJacRaa9mKwkL/FSCqBD9WAcWHIA5mGjDhAoJiZpWncEvQivRiD6ahlCswCWTUZ
+         U54lVxtiFuoQBn9t59ANs9QkriEcbNFYaqIm08Pup2x8i7b7emBxog5ODGweq/EpXfQM
+         yNE2AVwS63/au95MYlXofk8aiTkYOtgUjF//YJRxLXjSdVcVDYNkkk2WZt6/O0MrQ4Ui
+         p3NmZ8bGWEWkTNLZdqSpenux7bC9RGFRC3Dox+4WpGrkmpN6er2FJozi59IC8xv+ulHB
+         OIo2IRe5e6OlBxpDLgGfkpKMxz78H5I5P392Vu6ZTJbgnphl4Oq6W9UWMxCP42se1aWQ
+         574Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=qRfnqkDRjPiW51IVNT2CYsNbJcFu0UYEn+De3QAv12Y=;
-        b=a/y+LM3auD4/N6ml8sylFyjBavYCmq3Tea1PPMbxM2AtYZsu1327zeSLIccn/Q/sln
-         JSAnSoO9fs1ZhmwCZD8k3VXo4YqZKhrhuM/exB+7LQ69pH9OpuaCbY9qCjkupvPZsbkG
-         j4S/nLZG4jd4rB2oFTV/cXkw1QsmVJ0dK4WpT1iLIBpWpvejUtqmdDaxC5FyS2E48zLg
-         o425l6UQNOulqlbrS8OLGYB1BuiMRzNTHwKoaA0ekXD43Kxc6Rt1SXUgnGJPhSSZcrjb
-         Q1gte9cyrUPkv66FTNxQUgeqeNX4ldgYQrDkBemjhHtU3qHu8Ek+TTlF0dmup8U+Nh1L
-         9Hyw==
-X-Gm-Message-State: ACrzQf1dDjx5cfqce1FxPbN2BaiIkigsTRLl5GZdbeBs7y26YZvyw9X7
-        ZfnZAF7RO6Tm08T3NiBo0IE9mgFdDiylTZrojGy812nMilM4vpmY6yimPsHf6iQXQPFJWYNZCr5
-        u7wyL2r0gBEDuDXUn+qAyGyPVqSYs2hkML3E2ncb+
-X-Received: by 2002:a62:170b:0:b0:53b:93dc:966b with SMTP id 11-20020a62170b000000b0053b93dc966bmr24215336pfx.29.1663680867898;
-        Tue, 20 Sep 2022 06:34:27 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4I2IHbtf+VWtaQDWpdFJU7QPz9b7nLewLG7wC2Kp914b2qQx/FgrcYfx3HEOvG9rrO71Az0D2Tpje4Knoijak=
-X-Received: by 2002:a62:170b:0:b0:53b:93dc:966b with SMTP id
- 11-20020a62170b000000b0053b93dc966bmr24215316pfx.29.1663680867659; Tue, 20
- Sep 2022 06:34:27 -0700 (PDT)
+        bh=Ud1zLgXH9AoOTKaYWX8ixkpv9cvGKhiKEy3m7R2TJr0=;
+        b=IttLIa37k6bRZQnXSHFWk3gG1E0nFtOZw4bP35CXL3IqFvok305WmqU0rw8YPK4dqD
+         Df+bsg1EH/eTkKEykpEaWYAZ9CgcnssCz3YFBsCLnnyLyMvmgRHPC9WIUqLY+NWl/+Nm
+         l/fgS6E9a+tzlQQ10e00Sxczf0CTMJm1jp1bkJNFJc2O8JQVPwyWED27JaB1j0g5Kf9A
+         qp2lR7DPy800lGV0K9QusA2VQCWlMUmOnigt3oJQX24t9z+Ki/SQQrialsdcjzZjqgMb
+         HYJikhEYj2nurQn0OeJNjX8tae7P06R7+7s7Zfok5O7fZIosz+AD7iV9dS48JsC99HOk
+         eDog==
+X-Gm-Message-State: ACrzQf2H5P3T0jNNT9TSRnTPoSNxIBTO0RR0x83938/08XarZuW7dMyu
+        aerLUW1Ndmp7YVAUYsvHBuZgpcC8SwSTwm5ksjfBEbMpAc/k+mDy
+X-Google-Smtp-Source: AMsMyM6E2HA8/leiFEFaY65VyvtF6eRZ91zeoQsTy0Ppg6zZHbNuIAQVLLwESFu05DhZpCyeFbQBE9tu9E+Ha1VFluA=
+X-Received: by 2002:a17:903:32cf:b0:178:3d49:45b0 with SMTP id
+ i15-20020a17090332cf00b001783d4945b0mr4853354plr.5.1663680870272; Tue, 20 Sep
+ 2022 06:34:30 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220902082552.2433744-1-marcus.folkesson@gmail.com>
-In-Reply-To: <20220902082552.2433744-1-marcus.folkesson@gmail.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Tue, 20 Sep 2022 15:34:15 +0200
-Message-ID: <CAO-hwJLOcFkts2wuMvr79w81XENEb9XyAXESciOgUiqSwG2pBw@mail.gmail.com>
-Subject: Re: [PATCH v2 0/1] VRC-2 Car Controller
-To:     Marcus Folkesson <marcus.folkesson@gmail.com>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
+References: <Yymq2WLA6q6TxnNq@ipe420-102>
+In-Reply-To: <Yymq2WLA6q6TxnNq@ipe420-102>
+From:   Magnus Karlsson <magnus.karlsson@gmail.com>
+Date:   Tue, 20 Sep 2022 15:34:19 +0200
+Message-ID: <CAJ8uoz2D9mGjZzo6SmAWtgbb0A3AB_Nk4eYXajenv3VDBA11=A@mail.gmail.com>
+Subject: Re: [PATCH bpf v2] xsk: inherit need_wakeup flag for shared sockets
+To:     Jalal Mostafa <jalal.a.mostapha@gmail.com>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org, bjorn@kernel.org,
+        magnus.karlsson@intel.com, maciej.fijalkowski@intel.com,
+        jonathan.lemon@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, daniel@iogearbox.net,
+        linux-kernel@vger.kernel.org, jalal.mostafa@kit.edu
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 2, 2022 at 10:20 AM Marcus Folkesson
-<marcus.folkesson@gmail.com> wrote:
+On Tue, Sep 20, 2022 at 1:58 PM Jalal Mostafa
+<jalal.a.mostapha@gmail.com> wrote:
 >
-> Hi,
->
-> The device creates two USB endpoints where on of those represent the X/Y
-> axis as 16 buttons which is not.. quite right.
-> So get rid of that endpoint.
->
-> Also fix the report descriptor for the other endpoint.
->
-> Output from hid-recorder:
-> #  X:     32 | Y:   1001 | #
-> E: 000105.808008 7 20 00 e9 03 00 00 00
->
-> Link to previous discussion:
-> https://lore.kernel.org/all/CAO-hwJL-3vAzywjeUsopsRSJX6j-maC5R75ekxZg-W_oKDqYYw@mail.gmail.com/
->
->
-> v2:
-> - Remove .remove
-> - Change help text in Kconfig
-> - Remove redundant check for USB endpoint in vrc2_report_fixup
->
-> Marcus Folkesson (1):
->   HID: Add driver for VRC-2 Car Controller
->
->  MAINTAINERS            |  6 +++
->  drivers/hid/Kconfig    | 10 +++++
->  drivers/hid/Makefile   |  1 +
->  drivers/hid/hid-vrc2.c | 91 ++++++++++++++++++++++++++++++++++++++++++
->  4 files changed, 108 insertions(+)
->  create mode 100644 drivers/hid/hid-vrc2.c
->
+> The flag for need_wakeup is not set for xsks with `XDP_SHARED_UMEM`
+> flag and of different queue ids and/or devices. They should inherit
+> the flag from the first socket buffer pool since no flags can be
+> specified once `XDP_SHARED_UMEM` is specified. The issue is fixed
+> by creating a new function `xp_create_and_assign_umem_shared` to
+> create xsk_buff_pool for xsks with the shared umem flag set.
 
-Applied to for-6.1/rc-controllers in hid.git
+Thanks!
 
-Thanks a lot for this work!
+Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
 
-Cheers,
-Benjamin
-
+> Fixes: b5aea28dca134 ("xsk: Add shared umem support between queue ids")
+> Signed-off-by: Jalal Mostafa <jalal.a.mostapha@gmail.com>
+> ---
+>  include/net/xsk_buff_pool.h | 2 +-
+>  net/xdp/xsk.c               | 4 ++--
+>  net/xdp/xsk_buff_pool.c     | 5 +++--
+>  3 files changed, 6 insertions(+), 5 deletions(-)
+>
+> diff --git a/include/net/xsk_buff_pool.h b/include/net/xsk_buff_pool.h
+> index 647722e847b4..f787c3f524b0 100644
+> --- a/include/net/xsk_buff_pool.h
+> +++ b/include/net/xsk_buff_pool.h
+> @@ -95,7 +95,7 @@ struct xsk_buff_pool *xp_create_and_assign_umem(struct xdp_sock *xs,
+>                                                 struct xdp_umem *umem);
+>  int xp_assign_dev(struct xsk_buff_pool *pool, struct net_device *dev,
+>                   u16 queue_id, u16 flags);
+> -int xp_assign_dev_shared(struct xsk_buff_pool *pool, struct xdp_umem *umem,
+> +int xp_assign_dev_shared(struct xsk_buff_pool *pool, struct xdp_sock *umem_xs,
+>                          struct net_device *dev, u16 queue_id);
+>  int xp_alloc_tx_descs(struct xsk_buff_pool *pool, struct xdp_sock *xs);
+>  void xp_destroy(struct xsk_buff_pool *pool);
+> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> index 5b4ce6ba1bc7..7bada4e8460b 100644
+> --- a/net/xdp/xsk.c
+> +++ b/net/xdp/xsk.c
+> @@ -954,8 +954,8 @@ static int xsk_bind(struct socket *sock, struct sockaddr *addr, int addr_len)
+>                                 goto out_unlock;
+>                         }
+>
+> -                       err = xp_assign_dev_shared(xs->pool, umem_xs->umem,
+> -                                                  dev, qid);
+> +                       err = xp_assign_dev_shared(xs->pool, umem_xs, dev,
+> +                                                  qid);
+>                         if (err) {
+>                                 xp_destroy(xs->pool);
+>                                 xs->pool = NULL;
+> diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
+> index a71a8c6edf55..ed6c71826d31 100644
+> --- a/net/xdp/xsk_buff_pool.c
+> +++ b/net/xdp/xsk_buff_pool.c
+> @@ -212,17 +212,18 @@ int xp_assign_dev(struct xsk_buff_pool *pool,
+>         return err;
+>  }
+>
+> -int xp_assign_dev_shared(struct xsk_buff_pool *pool, struct xdp_umem *umem,
+> +int xp_assign_dev_shared(struct xsk_buff_pool *pool, struct xdp_sock *umem_xs,
+>                          struct net_device *dev, u16 queue_id)
+>  {
+>         u16 flags;
+> +       struct xdp_umem *umem = umem_xs->umem;
+>
+>         /* One fill and completion ring required for each queue id. */
+>         if (!pool->fq || !pool->cq)
+>                 return -EINVAL;
+>
+>         flags = umem->zc ? XDP_ZEROCOPY : XDP_COPY;
+> -       if (pool->uses_need_wakeup)
+> +       if (umem_xs->pool->uses_need_wakeup)
+>                 flags |= XDP_USE_NEED_WAKEUP;
+>
+>         return xp_assign_dev(pool, dev, queue_id, flags);
+> --
+> 2.34.1
+>
