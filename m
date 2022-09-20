@@ -2,166 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11E9E5BDD23
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 08:28:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A83F65BDD25
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 08:29:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbiITG1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 02:27:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33304 "EHLO
+        id S230100AbiITG3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 02:29:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiITG1r (ORCPT
+        with ESMTP id S230210AbiITG3Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 02:27:47 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48B4C14036;
-        Mon, 19 Sep 2022 23:27:46 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id r23so1574695pgr.6;
-        Mon, 19 Sep 2022 23:27:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=hVjUCDSaCdPdJ7NXLFSifGsFadRadfOQWil7zKYvxLI=;
-        b=c125V8QjD5o5L+Aqok+dbsA1xQu0n25dsto6FuFHTGqhuM7a30ssy9Bs6qo8NNXIJy
-         lYGrqv/UeUKStJwtecVoceKViRqnHW+DfaHZIo7g5ALU1AL2IPxzDLJPoXW9xjoHVrsM
-         8x0ZHzaag8QtoAdsJvAD4JTkiMOmgBXcy9UwwJz/TCGwZG7H4UIFiaR18ePdxTgt23GT
-         H76eLZ8X1YFQBgMPJ5W/gkScCjmgjeS+PoXSc5PNQZoyFOy4de5ghPSQcAnHWs/tyWHd
-         PXqQLUyWa8B0HTxw2CAzWCXoWPIcZtdg734JqkletsmF3w0oX1D54xT/U25BGdZEOYf7
-         JRbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=hVjUCDSaCdPdJ7NXLFSifGsFadRadfOQWil7zKYvxLI=;
-        b=AWAJuouVQ0/sjkzYjOeGykglNt73gSA3J7dQu9ZBFdre5SgdgWBwfk3fQc9o+fXrW0
-         yx5gtFaEVOzfsRWfMydq14QvW3Y9n39aN/GzNv360xug23hCrtRjNomUz0ClSsxMoKTF
-         +wkA3+ABTHuVJKFWY9tDq5vdAw2BP/cH0qPOQoMeNIg7CF8PqNg9cbLc3AMQc1V6QPAP
-         D1CaByETEiR5czEn/jlYh4dZXTj3jDO+j31hH1eIW88S0+Byka4Ww+kA1+UCtqvx5B3C
-         bOCy6DGhxte3hNVrfh7ISrK1MpQX1xDjr/9xtPAFl43+YRrvjpUkcUBcwkFsgp2UfDCU
-         tOQw==
-X-Gm-Message-State: ACrzQf1bujblJ85mwElZ7r6N2IMk8stk1AFF2C7wFIEPhp3c1HADqAzE
-        9WpEwb7XF6rDEDiPn7FojjDDYyNWzqFarPs2csY=
-X-Google-Smtp-Source: AMsMyM5s4t8RXN2/xwtdUU0gK/TFlYQcykuRGozpzIEPl1arwy8c3Q8rsEQyaBnVdQYh7nqPZL3CP6d7nL3hQ92w7NE=
-X-Received: by 2002:a63:3409:0:b0:438:c9c9:5582 with SMTP id
- b9-20020a633409000000b00438c9c95582mr18570186pga.69.1663655265597; Mon, 19
- Sep 2022 23:27:45 -0700 (PDT)
+        Tue, 20 Sep 2022 02:29:16 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3F95E31E;
+        Mon, 19 Sep 2022 23:29:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663655355; x=1695191355;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vU4UOY1cFcL0pHjYCJ/Vivviv9dmXv+UoY/OX8Hoa/s=;
+  b=PxFD/6Hpz8dyjeTHf8haMPCkJLbW6Uv/hByAl3NOvJkZiHk6OXj3IFSb
+   Sz92bzxVm4kp6xlCNGamALczrO015DLPCzxzG26uf36zicb6R35hpfjAe
+   aJprmIjBGneD32BBTGaCvpuqhSkgZXkWEGS/7pE/6gQZvTD849LHaiB/I
+   f+ioSMiNr/Ge1BQYoqdYNzvAW27cg5/AWlJ95+sJeNrqqAgjhtX27Wrcv
+   pq38ibJFBnZWJgn7jbYBGxXiWsjkG9iNshYP36ker2oTGxD+Gdh1XBjTb
+   2Co8cXvCExSr2fM/cuOEu0sBKSmBR/aNycNyuuVfS44piOBivvdUmDaim
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="385898548"
+X-IronPort-AV: E=Sophos;i="5.93,329,1654585200"; 
+   d="scan'208";a="385898548"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 23:29:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,329,1654585200"; 
+   d="scan'208";a="649457126"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 19 Sep 2022 23:29:05 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oaWki-0002Xl-39;
+        Tue, 20 Sep 2022 06:29:04 +0000
+Date:   Tue, 20 Sep 2022 14:28:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Lizhi Hou <lizhi.hou@amd.com>, vkoul@kernel.org,
+        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        trix@redhat.com
+Cc:     kbuild-all@lists.01.org, Lizhi Hou <lizhi.hou@amd.com>,
+        max.zhen@amd.com, sonal.santan@amd.com, larry.liu@amd.com,
+        brian.xu@amd.com
+Subject: Re: [PATCH V3 XDMA 1/1] dmaengine: xilinx: xdma: add xilinx xdma
+ driver
+Message-ID: <202209201427.ujYkdhUE-lkp@intel.com>
+References: <1663631039-49732-2-git-send-email-lizhi.hou@amd.com>
 MIME-Version: 1.0
-References: <YyjCBjJch24OT+Ia@ipe420-102>
-In-Reply-To: <YyjCBjJch24OT+Ia@ipe420-102>
-From:   Magnus Karlsson <magnus.karlsson@gmail.com>
-Date:   Tue, 20 Sep 2022 08:27:34 +0200
-Message-ID: <CAJ8uoz3G05BsmafrkP93sO--3S2MBgA96Dh_40iM8svuPU5qxA@mail.gmail.com>
-Subject: Re: [PATCH bpf] xsk: inherit need_wakeup flag for shared sockets
-To:     Jalal Mostafa <jalal.a.mostapha@gmail.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org, bjorn@kernel.org,
-        magnus.karlsson@intel.com, maciej.fijalkowski@intel.com,
-        jonathan.lemon@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, ast@kernel.org,
-        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
-        linux-kernel@vger.kernel.org, jalal.mostafa@kit.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1663631039-49732-2-git-send-email-lizhi.hou@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 9:27 PM Jalal Mostafa
-<jalal.a.mostapha@gmail.com> wrote:
->
-> The flag for need_wakeup is not set for xsks with `XDP_SHARED_UMEM`
-> flag and of different queue ids and/or devices. They should inherit
-> the flag from the first socket buffer pool since no flags can be
-> specified once `XDP_SHARED_UMEM` is specified. The issue is fixed
-> by creating a new function `xp_create_and_assign_umem_shared` to
-> create xsk_buff_pool for xsks with the shared umem flag set.
+Hi Lizhi,
 
-Thanks for spotting this Jalal. Though I think we should aim for a
-simpler fix. The uses_need_wakeup flag is set by xp_assign_dev(). The
-problem here is the function xp_assign_dev_shared() that prepares the
-flag parameter for xp_assign_dev().
+I love your patch! Yet something to improve:
 
-if (pool->uses_need_wakeup)
-                flags |= XDP_USE_NEED_WAKEUP;
+[auto build test ERROR on vkoul-dmaengine/next]
+[also build test ERROR on linus/master v6.0-rc6 next-20220919]
+[cannot apply to xilinx-xlnx/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Should really be:
+url:    https://github.com/intel-lab-lkp/linux/commits/Lizhi-Hou/xilinx-XDMA-driver/20220920-074553
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git next
+config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20220920/202209201427.ujYkdhUE-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/2622fde9f389e211554d46e149765c1fe5da6f44
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Lizhi-Hou/xilinx-XDMA-driver/20220920-074553
+        git checkout 2622fde9f389e211554d46e149765c1fe5da6f44
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/dma/xilinx/
 
-if (umem_xs->pool->uses_need_wakeup)
-                flags |= XDP_USE_NEED_WAKEUP;
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-So change the function parameter *umem to *umem_xs, use that in the
-function call and do:
+All errors (new ones prefixed by >>):
 
-flags = umem_xs->umem->zc ? XDP_ZEROCOPY : XDP_COPY;
-if (umem_xs->pool->uses_need_wakeup)
-          flags |= XDP_USE_NEED_WAKEUP;
+   In file included from <command-line>:
+   drivers/dma/xilinx/xdma.c: In function 'xdma_xfer_start.isra':
+>> include/linux/compiler_types.h:354:45: error: call to '__compiletime_assert_247' declared with attribute error: FIELD_GET: type of reg too small for mask
+     354 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                                             ^
+   include/linux/compiler_types.h:335:25: note: in definition of macro '__compiletime_assert'
+     335 |                         prefix ## suffix();                             \
+         |                         ^~~~~~
+   include/linux/compiler_types.h:354:9: note: in expansion of macro '_compiletime_assert'
+     354 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:71:17: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+      71 |                 BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
+         |                 ^~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:128:17: note: in expansion of macro '__BF_FIELD_CHECK'
+     128 |                 __BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: ");       \
+         |                 ^~~~~~~~~~~~~~~~
+   drivers/dma/xilinx/xdma.c:358:15: note: in expansion of macro 'FIELD_GET'
+     358 |         val = FIELD_GET(XDMA_HI_ADDR_MASK, block->dma_addr);
+         |               ^~~~~~~~~
 
-What do you think?
 
-> Signed-off-by: Jalal Mostafa <jalal.a.mostapha@gmail.com>
-> ---
->  include/net/xsk_buff_pool.h |  2 ++
->  net/xdp/xsk.c               |  3 +--
->  net/xdp/xsk_buff_pool.c     | 15 +++++++++++++++
->  3 files changed, 18 insertions(+), 2 deletions(-)
->
-> diff --git a/include/net/xsk_buff_pool.h b/include/net/xsk_buff_pool.h
-> index 647722e847b4..917cfef9d355 100644
-> --- a/include/net/xsk_buff_pool.h
-> +++ b/include/net/xsk_buff_pool.h
-> @@ -93,6 +93,8 @@ struct xsk_buff_pool {
->  /* AF_XDP core. */
->  struct xsk_buff_pool *xp_create_and_assign_umem(struct xdp_sock *xs,
->                                                 struct xdp_umem *umem);
-> +struct xsk_buff_pool *xp_create_and_assign_umem_shared(struct xdp_sock *xs,
-> +                                                      struct xdp_sock *umem_xs);
->  int xp_assign_dev(struct xsk_buff_pool *pool, struct net_device *dev,
->                   u16 queue_id, u16 flags);
->  int xp_assign_dev_shared(struct xsk_buff_pool *pool, struct xdp_umem *umem,
-> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> index 5b4ce6ba1bc7..a415db88e8e5 100644
-> --- a/net/xdp/xsk.c
-> +++ b/net/xdp/xsk.c
-> @@ -946,8 +946,7 @@ static int xsk_bind(struct socket *sock, struct sockaddr *addr, int addr_len)
->                         /* Share the umem with another socket on another qid
->                          * and/or device.
->                          */
-> -                       xs->pool = xp_create_and_assign_umem(xs,
-> -                                                            umem_xs->umem);
-> +                       xs->pool = xp_create_and_assign_umem_shared(xs, umem_xs);
->                         if (!xs->pool) {
->                                 err = -ENOMEM;
->                                 sockfd_put(sock);
-> diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
-> index a71a8c6edf55..7d5b0bd8d953 100644
-> --- a/net/xdp/xsk_buff_pool.c
-> +++ b/net/xdp/xsk_buff_pool.c
-> @@ -112,6 +112,21 @@ struct xsk_buff_pool *xp_create_and_assign_umem(struct xdp_sock *xs,
->         return NULL;
->  }
->
-> +struct xsk_buff_pool *xp_create_and_assign_umem_shared(struct xdp_sock *xs,
-> +                                                      struct xdp_sock *umem_xs)
-> +{
-> +       struct xdp_umem *umem = umem_xs->umem;
-> +       struct xsk_buff_pool *pool = xp_create_and_assign_umem(xs, umem);
-> +
-> +       if (!pool)
-> +               goto out;
-> +
-> +       pool->uses_need_wakeup = umem_xs->pool->uses_need_wakeup;
-> +
-> +out:
-> +       return pool;
-> +}
-> +
->  void xp_set_rxq_info(struct xsk_buff_pool *pool, struct xdp_rxq_info *rxq)
->  {
->         u32 i;
-> --
-> 2.34.1
->
+vim +/__compiletime_assert_247 +354 include/linux/compiler_types.h
+
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  340  
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  341  #define _compiletime_assert(condition, msg, prefix, suffix) \
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  342  	__compiletime_assert(condition, msg, prefix, suffix)
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  343  
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  344  /**
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  345   * compiletime_assert - break build and emit msg if condition is false
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  346   * @condition: a compile-time constant condition to check
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  347   * @msg:       a message to emit if condition is false
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  348   *
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  349   * In tradition of POSIX assert, this macro will break the build if the
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  350   * supplied condition is *false*, emitting the supplied error message if the
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  351   * compiler has support to do so.
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  352   */
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  353  #define compiletime_assert(condition, msg) \
+eb5c2d4b45e3d2 Will Deacon 2020-07-21 @354  	_compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  355  
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
