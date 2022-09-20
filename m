@@ -2,101 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A2715BDE61
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 09:37:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C16F85BDE72
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 09:39:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229473AbiITHh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 03:37:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45020 "EHLO
+        id S230440AbiITHjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 03:39:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230220AbiITHhW (ORCPT
+        with ESMTP id S230373AbiITHjD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 03:37:22 -0400
-Received: from ssh248.corpemail.net (ssh248.corpemail.net [210.51.61.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B09760683
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 00:37:19 -0700 (PDT)
-Received: from ([60.208.111.195])
-        by ssh248.corpemail.net ((D)) with ASMTP (SSL) id OGF00011;
-        Tue, 20 Sep 2022 15:37:11 +0800
-Received: from lihongweizz00.home.langchao.com (10.180.204.84) by
- jtjnmail201605.home.langchao.com (10.100.2.5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 20 Sep 2022 15:37:15 +0800
-From:   Rock Li <lihongweizz@inspur.com>
-To:     <mark@fasheh.com>, <jlbec@evilplan.org>,
-        <joseph.qi@linux.alibaba.com>
-CC:     <ocfs2-devel@oss.oracle.com>, <linux-kernel@vger.kernel.org>,
-        Rock Li <lihongweizz@inspur.com>
-Subject: [PATCH] ocfs2: fix crash issue if access released lockres in debugfs
-Date:   Tue, 20 Sep 2022 15:36:38 +0800
-Message-ID: <20220920073638.1358-1-lihongweizz@inspur.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 20 Sep 2022 03:39:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86288606B8;
+        Tue, 20 Sep 2022 00:39:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 23F16B81C00;
+        Tue, 20 Sep 2022 07:39:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23281C43141;
+        Tue, 20 Sep 2022 07:38:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663659539;
+        bh=eMzRMOuITtXlZDAcCmKMPvOjEHytU8mCI4T2I/LUy8Y=;
+        h=From:To:Cc:Subject:Date:From;
+        b=l/lrpngFflAzqTa/76oLoQ0FmopYCDJfwjEiNJY0kakl8JbMMM5a/AU1TptxXb3w9
+         rAdgGARNHfi5tPVbOUL2TGeCjTf4iSuMHfCDk/t6mHUZ+YsRSZMPJw+yH5GqWlYRWt
+         SZQf0+XZCCqKjIZvCMsb6Khn/0EvPxLzfL1ODpS5gp5DwKm5Uj9XoqqCuofKrKh+s7
+         44NKMui20J5gRQIlBxMjmTDVQhJRcI/7Z65qHl7uZUXQWG8eQuiIlUhNBPeS/DToIZ
+         NYBjs2uVvPCKU1Ksyp21e8NGoZZYCGISdK1F0wk+iazqzLnsmbhcAI6p+r4Lsm0wnI
+         9dN2bkv7Xp/Ow==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan+linaro@kernel.org>)
+        id 1oaXqO-0005Qc-Hg; Tue, 20 Sep 2022 09:39:01 +0200
+From:   Johan Hovold <johan+linaro@kernel.org>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH 00/17] phy: qcom-qmp: config and misc clean ups
+Date:   Tue, 20 Sep 2022 09:38:09 +0200
+Message-Id: <20220920073826.20811-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.180.204.84]
-X-ClientProxiedBy: Jtjnmail201614.home.langchao.com (10.100.2.14) To
- jtjnmail201605.home.langchao.com (10.100.2.5)
-tUid:   2022920153711997fac9f361039e13e098431dd3977e6
-X-Abuse-Reports-To: service@corp-email.com
-Abuse-Reports-To: service@corp-email.com
-X-Complaints-To: service@corp-email.com
-X-Report-Abuse-To: service@corp-email.com
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Access locking_state of dlm debugfs may cause crash as scene below:
+Here's the next and hopefully last set of QMP driver cleanups for a
+while.
 
-Proc A:                  Proc that access debuginfo:
-add_lockres_tracking(lockresA)
-...
-                         ocfs2_dlm_seq_next():
-                           //priv->p_iter_res points to next
-                           //lockres e.g. B. priv->p_tmp_res hold
-                           //copy of lockres A before leave
-                         ocfs2_dlm_seq_show()
-...
-remove_lockres_tracking(lockres B):
-  //free lockres B, l_debug_list in
-  //priv->p_ter_res is updated but not
-  //priv->p_tmp_res
-...
-                         ocfs2_dlm_seq_next():
-			   //priv->p_tmp_res which holds a old copy of
-                           //lockres A, the l_debug_list holds a
-                           //out-of-date succeed pointer, which will
-                           //cause crash as //access invalid memory
-                           iter = v; //priv->p_tmp_res
-                           iter = ocfs2_dlm_next_res(iter, priv)
+These patches drops further configuration parameters that are unused or
+redundant since the QMP driver split.
 
-The root cause of this issue is that private->p_iter_res acts as the
-agent of accessing lockres and is protected by ocfs2_dlm_tracking_lock
-while p_tmp_res is only a copy of the lockres and will be out-of-dated
-after leave critial region of ocfs2_dlm_tracking_lock. We should use
-priv->p_ter_res as the forward iterater instead.
+This notably includes consolidating the lane configuration, which for
+legacy reasons was inconsistent.
 
-Signed-off-by: Rock Li <lihongweizz@inspur.com>
----
- fs/ocfs2/dlmglue.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Johan
 
-diff --git a/fs/ocfs2/dlmglue.c b/fs/ocfs2/dlmglue.c
-index c28bc98..5d84350 100644
---- a/fs/ocfs2/dlmglue.c
-+++ b/fs/ocfs2/dlmglue.c
-@@ -3109,7 +3109,7 @@ static void *ocfs2_dlm_seq_next(struct seq_file *m, void *v, loff_t *pos)
- 	struct ocfs2_lock_res *dummy = &priv->p_iter_res;
- 
- 	spin_lock(&ocfs2_dlm_tracking_lock);
--	iter = ocfs2_dlm_next_res(iter, priv);
-+	iter = ocfs2_dlm_next_res(dummy, priv);
- 	list_del_init(&dummy->l_debug_list);
- 	if (iter) {
- 		list_add(&dummy->l_debug_list, &iter->l_debug_list);
+
+Johan Hovold (17):
+  phy: qcom-qmp-pcie: drop unused type from config
+  phy: qcom-qmp-pcie-msm8996: drop unused type from config
+  phy: qcom-qmp-ufs: drop unused type from config
+  phy: qcom-qmp-usb: drop unused type from config
+  phy: qcom-qmp-pcie: drop init and exit wrappers
+  phy: qcom-qmp-usb: drop init and exit wrappers
+  phy: qcom-qmp: drop unused forward declarations
+  phy: qcom-qmp-pcie-msm8996: drop unused kernel doc
+  phy: qcom-qmp-pcie: drop unused mode field
+  phy: qcom-qmp-pcie: drop unused config field
+  phy: qcom-qmp: drop unused index field
+  phy: qcom-qmp-pcie: consolidate lane config
+  phy: qcom-qmp-pcie-msm8996: rename nlanes config
+  phy: qcom-qmp-combo: consolidate lane config
+  phy: qcom-qmp-ufs: consolidate lane config
+  phy: qcom-qmp-usb: consolidate lane config
+  phy: qcom-qmp-combo: drop redundant DP config flag
+
+ drivers/phy/qualcomm/phy-qcom-qmp-combo.c     | 104 +++++-----------
+ .../phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c  |  14 +--
+ drivers/phy/qualcomm/phy-qcom-qmp-pcie.c      |  90 ++++----------
+ drivers/phy/qualcomm/phy-qcom-qmp-ufs.c       |  44 ++-----
+ drivers/phy/qualcomm/phy-qcom-qmp-usb.c       | 112 ++++--------------
+ 5 files changed, 89 insertions(+), 275 deletions(-)
+
 -- 
-1.8.3.1
+2.35.1
 
