@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 703D55BEADA
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 18:10:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3A775BEAE0
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 18:11:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230481AbiITQKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 12:10:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50458 "EHLO
+        id S231130AbiITQLg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 12:11:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229928AbiITQK2 (ORCPT
+        with ESMTP id S229921AbiITQLe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 12:10:28 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD4E10BB
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 09:10:27 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id r125so4302129oia.8
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 09:10:27 -0700 (PDT)
+        Tue, 20 Sep 2022 12:11:34 -0400
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1113F6B155
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 09:11:31 -0700 (PDT)
+Received: by mail-ot1-x32c.google.com with SMTP id r13-20020a056830418d00b0065601df69c0so2049405otu.7
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 09:11:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=UXjaeEik90YzXeLDR2W4WjZVnnFwHMwroQ6yWKNSRgA=;
-        b=T9cdH6v0/SKVdljrr56ri4Rz6BWh+Z2maSeep3o/Wy4lglPjbxhUnt0+188DQ9W8vR
-         FxkLw2KDhxGMqlerWZb+YlQqG7p4wH6RbiXp0ReVW3LYeNVuRf0cc3oLCMhYmfNc5B8O
-         /8CacwwkO4KyPMTPRugvNO+wpUlzob6Fz2403wCtYVA89z5iXgnOg5eoXRg1IEjYfX7r
-         LG8wrLyzdo38dHCQZtkSEOFXq3zjyHtm4FLKNTpX37miXFWVVdS3e7BJXw7DhK4QbbDq
-         iOOavo63+ACY1QhQtaLRznU9URM4gSV29mYw+BT7AkRE41Djj7wHKDqbPoioJPtnKmhj
-         yaFw==
+        bh=CFL7aF0Lpx3sGV7EQnRPGBaKXb71NBZ9UzzFCX2PLnU=;
+        b=XgAcGjAHKfLFS16nM9iiM7B7UtPyyObCuRf2WBRt4DIn/J2kHABErMfKUJgNiIeXz6
+         eDPxZJDOPXYul99wfO/V2nUPQKvXAPgXoGYPv7/AGh0ROPmaMjiXVYfPM2frgs6BkKuo
+         FSjHDZiJLqr3Cli4CqqDraHHCGAXsEJLbNNtsjVMzCaDI86E9DY1DUvGfpss8cZY2jro
+         uDm1n8IDF0IATWb5OCNv0aZRNYuXwuCKXVXXmFu3e0sg7q3Tpq0BDZN7ux80nJOcYimZ
+         yYAoWhQHR+uot/VYBVOnXHDfP7GEoXWYmKSuVWja34oYzBb2uqy8Zs32MxNaWCPe7tCT
+         IvzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=UXjaeEik90YzXeLDR2W4WjZVnnFwHMwroQ6yWKNSRgA=;
-        b=MUTNPiPTwzM5Ef9EuzXKFd1VZuMOMgkWrGgRvEhMeMz5/QobWvKlx01AXs1h5UV2fD
-         ZK2ITpBTXlTNDdkt4/S4TP/lBkoQsYmxbRLF9XyeGGWy+IhRfii/XgvAAT55j0uPggjP
-         xQ9kLFSmhplr6c39eymXe5tLcxPdqMhf0qWxA6kPr7blwiJa3SY/ndl3PJG49VWF4Hni
-         PxctEjio4HPzyE+iQpF/u3F6ImKcbxLRJTpWmP4KnhVYtxPyA4yVcip4PEdqy7PQrzlH
-         Tjqve625t0K9Y4BUlllwP5YjO0BXop5TpZvYWetXtVJWzCLgkJxceE4ByC3JeAGyUZ0W
-         t7MQ==
-X-Gm-Message-State: ACrzQf2ZGbUKdU8rnt4pN5EU7BoAXljoyeUWDi3IjplyLzGUXai+Q2YR
-        9cjcKsuK38islhVGEnmbKF+pTwMaDuEZLMoA9G3hzMJC
-X-Google-Smtp-Source: AMsMyM5RRkIjKFuqLc2MRgC2GoMfxwkEDftEddw+q0j18vgSxojkeoXJDTSg8dASbarhqiwRe12QKnFaGiSp7RSy3hw=
-X-Received: by 2002:a05:6808:2390:b0:350:5c6b:5ef9 with SMTP id
- bp16-20020a056808239000b003505c6b5ef9mr1985622oib.96.1663690226955; Tue, 20
- Sep 2022 09:10:26 -0700 (PDT)
+        bh=CFL7aF0Lpx3sGV7EQnRPGBaKXb71NBZ9UzzFCX2PLnU=;
+        b=M3U3MSixlMmOa2p6MNKehNqXJaLiOc3GXjBRoINnbImkzyDo1xSV93caCzT6nVSwNa
+         D9hLAcRUTveolIrbwYgir2TwxGKkQGhX5ZyOcckaZQyou5Vo66AplDpCS8h+azTCTqwh
+         24XjqsDwaV/u5txDgU40nsaTh70/k4NnZp7W9+Q9cy9O0tS9Iqk9ahyaCj3GKsn2niuM
+         +GxQWgfrxFFasbL/JThr/4/vEbm5laThWKZStqDYuiyRSFwS9k2e1xKc99RswO2T+zfX
+         T6oZdQ5VCih0cQFkXvVq7N+Jwr6plGEXm/CK7MeQy2dErNEVJbX8VucbrAplazaRX0pw
+         BjBA==
+X-Gm-Message-State: ACrzQf0yeOYSSKlYW3C/RE8ByyzwH1FY6+2LPFwMZbImqooBw0moA4Zw
+        0NzoHDFRT9q+bla0Ie/V11BcXVh9Yt6MU0io8/s=
+X-Google-Smtp-Source: AMsMyM6A0fKosrNPb6aIaCncIrF3lfn+IGCf3YGllsL/BcIc5fpjbW3Yq75JpmRUqIFBJu7g3jiYBKlN9DtGV3Ccrag=
+X-Received: by 2002:a9d:376:0:b0:655:b4bc:fd6e with SMTP id
+ 109-20020a9d0376000000b00655b4bcfd6emr10670481otv.233.1663690290428; Tue, 20
+ Sep 2022 09:11:30 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220920063503.215199-1-ye.xingchen@zte.com.cn>
-In-Reply-To: <20220920063503.215199-1-ye.xingchen@zte.com.cn>
+References: <20220920063600.215257-1-ye.xingchen@zte.com.cn>
+In-Reply-To: <20220920063600.215257-1-ye.xingchen@zte.com.cn>
 From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Tue, 20 Sep 2022 12:10:15 -0400
-Message-ID: <CADnq5_O8DSAGzbjhz-2XD6tkAQmWMGM1d7YBngzGEmf0w-trdw@mail.gmail.com>
-Subject: Re: [PATCH linux-next] drm/amd/pm: Remove the unneeded result variable
+Date:   Tue, 20 Sep 2022 12:11:19 -0400
+Message-ID: <CADnq5_PB=z9JeVV4c1YC6hbAXXvHPLbD=kZvOyS1QxR-WMU9Gw@mail.gmail.com>
+Subject: Re: [PATCH linux-next] drm/amd/pm: Remove unneeded result variable
 To:     cgel.zte@gmail.com
 Cc:     alexander.deucher@amd.com, airlied@linux.ie,
         ye xingchen <ye.xingchen@zte.com.cn>,
@@ -70,43 +70,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks.
+Applied.  Thanks!
 
-On Tue, Sep 20, 2022 at 2:35 AM <cgel.zte@gmail.com> wrote:
+On Tue, Sep 20, 2022 at 2:36 AM <cgel.zte@gmail.com> wrote:
 >
 > From: ye xingchen <ye.xingchen@zte.com.cn>
 >
-> Return the value append_vbios_pptable() directly instead of storing it in
-> another redundant variable.
+> Return the value atomctrl_initialize_mc_reg_table_v2_2() directly instead
+> of storing it in another redundant variable.
 >
 > Reported-by: Zeal Robot <zealci@zte.com.cn>
 > Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 > ---
->  .../gpu/drm/amd/pm/powerplay/hwmgr/vega12_processpptables.c  | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
+>  drivers/gpu/drm/amd/pm/powerplay/smumgr/polaris10_smumgr.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
 >
-> diff --git a/drivers/gpu/drm/amd/pm/powerplay/hwmgr/vega12_processpptables.c b/drivers/gpu/drm/amd/pm/powerplay/hwmgr/vega12_processpptables.c
-> index 1e79baab753e..bd54fbd393b9 100644
-> --- a/drivers/gpu/drm/amd/pm/powerplay/hwmgr/vega12_processpptables.c
-> +++ b/drivers/gpu/drm/amd/pm/powerplay/hwmgr/vega12_processpptables.c
-> @@ -195,7 +195,6 @@ static int init_powerplay_table_information(
->         struct phm_ppt_v3_information *pptable_information =
->                 (struct phm_ppt_v3_information *)hwmgr->pptable;
->         uint32_t disable_power_control = 0;
+> diff --git a/drivers/gpu/drm/amd/pm/powerplay/smumgr/polaris10_smumgr.c b/drivers/gpu/drm/amd/pm/powerplay/smumgr/polaris10_smumgr.c
+> index 45214a364baa..e7ed2a7adf8f 100644
+> --- a/drivers/gpu/drm/amd/pm/powerplay/smumgr/polaris10_smumgr.c
+> +++ b/drivers/gpu/drm/amd/pm/powerplay/smumgr/polaris10_smumgr.c
+> @@ -2567,15 +2567,13 @@ static uint8_t polaris10_get_memory_modile_index(struct pp_hwmgr *hwmgr)
+>
+>  static int polaris10_initialize_mc_reg_table(struct pp_hwmgr *hwmgr)
+>  {
 > -       int result;
+>         struct polaris10_smumgr *smu_data = (struct polaris10_smumgr *)(hwmgr->smu_backend);
+>         pp_atomctrl_mc_reg_table *mc_reg_table = &smu_data->mc_reg_table;
+>         uint8_t module_index = polaris10_get_memory_modile_index(hwmgr);
 >
->         hwmgr->thermal_controller.ucType = powerplay_table->ucThermalControllerType;
->         pptable_information->uc_thermal_controller_type = powerplay_table->ucThermalControllerType;
-> @@ -257,9 +256,7 @@ static int init_powerplay_table_information(
->         if (pptable_information->smc_pptable == NULL)
->                 return -ENOMEM;
+>         memset(mc_reg_table, 0, sizeof(pp_atomctrl_mc_reg_table));
+> -       result = atomctrl_initialize_mc_reg_table_v2_2(hwmgr, module_index, mc_reg_table);
 >
-> -       result = append_vbios_pptable(hwmgr, (pptable_information->smc_pptable));
-> -
 > -       return result;
-> +       return append_vbios_pptable(hwmgr, (pptable_information->smc_pptable));
+> +       return atomctrl_initialize_mc_reg_table_v2_2(hwmgr, module_index, mc_reg_table);
 >  }
 >
->  static int vega12_pp_tables_initialize(struct pp_hwmgr *hwmgr)
+>  static bool polaris10_is_dpm_running(struct pp_hwmgr *hwmgr)
 > --
 > 2.25.1
