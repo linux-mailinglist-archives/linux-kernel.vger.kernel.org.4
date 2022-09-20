@@ -2,101 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 522EA5BE4E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 13:48:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF94E5BE4E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 13:49:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230049AbiITLr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 07:47:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44094 "EHLO
+        id S230335AbiITLtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 07:49:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbiITLrz (ORCPT
+        with ESMTP id S229767AbiITLs5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 07:47:55 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD93A167E3;
-        Tue, 20 Sep 2022 04:47:53 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id n35-20020a05600c502300b003b4924c6868so739236wmr.1;
-        Tue, 20 Sep 2022 04:47:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date;
-        bh=Uzqu4x3ReJl2swGfEJj67Pd2unDJ3Dv2X7PfUeAMFlU=;
-        b=CmXkA8qIbaFNouX5UDIP2EtzvEpNmgRhb/8rznaJhGMNUuwBOFHghs3gJQS4uomnZr
-         YDcqkjuEvJ4vCka5cONnCHVRV6iQInH+8o7Zq6VeC/3C8HUmiQ31Tc1D7RqHoZMY0+gl
-         DpJVgqTY9VSsYXVMFHySjCx4npqW7qGsRD7k6vyHOfIxIklfFsHo9utUqClMbHOH7nzv
-         xKq4OLNK7WWtv23lHrNAz+KZYWDVjodkcEtoVo4NkPp0a/0giowcL+JsMfRSnh9PfBq2
-         GPBjK8DY/TfnAMRV+kChdRhMBeamsBENpwI9RfDCDpHENBnE3x1TJgyEn6gEeFu9Vrxg
-         wbYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Uzqu4x3ReJl2swGfEJj67Pd2unDJ3Dv2X7PfUeAMFlU=;
-        b=b0t0o0tnomuG0WVnkPaW8/gsv2uImBvvGHdop01M56YS+66H9VL0DidCooeadI5CL3
-         54gFqZQaCfylODjIJ3RfWfHN2eoLgs34+yvLSwRm+rns1d/Rxfh4tHut51cotIOT+VmP
-         6xf9u4HVOkcY85M8X806RY/IW/Dq7C3UgG+cjV91lNabinKrn7fMJY1KJBIiP3Nw7gIP
-         yL//6okjn/joSNTNCycG1YhkeulPHtQ1q1zjDVdrJf1miGtM8oElfd40YuvLor/PKaIt
-         VI1I7GnUb+2IgaOxSI/8UZfjCi1RDSKIvm83BPLRUnFnxgmBh8S8mKjJZGsxX8I0H8wR
-         VAQg==
-X-Gm-Message-State: ACrzQf3e8Igm5QFbppmKNEZeH3vPrTkeLogQ1lrwh80cOrMEkIaqFf/u
-        JNlqI/AjE9num05p5fAwl756H/IvOz7wqg==
-X-Google-Smtp-Source: AMsMyM4aBYcaHzJkBzdvhpxsTIJL1CmLJ4dHjh82nS5T2kmR/xQCQfB8ki9IGbZoXjIWTpnN0yGzMA==
-X-Received: by 2002:a1c:f009:0:b0:3b4:9398:49c9 with SMTP id a9-20020a1cf009000000b003b4939849c9mr2085385wmb.174.1663674472131;
-        Tue, 20 Sep 2022 04:47:52 -0700 (PDT)
-Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
-        by smtp.gmail.com with ESMTPSA id b20-20020a05600c4e1400b003b33de17577sm2254667wmq.13.2022.09.20.04.47.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 04:47:51 -0700 (PDT)
-Date:   Tue, 20 Sep 2022 12:47:49 +0100
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-Cc:     "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Philip Yang <Philip.Yang@amd.com>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, linux-next@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev
-Subject: build failure of next-20220920 due to c2b08e7a6d27 ("drm/amdgpu:
- move entity selection and job init earlier during CS")
-Message-ID: <YymoZR0jHR7seGyU@debian>
+        Tue, 20 Sep 2022 07:48:57 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68B7D167E3;
+        Tue, 20 Sep 2022 04:48:56 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28KB1TBs030624;
+        Tue, 20 Sep 2022 11:48:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=kTbqXAABmhsBU64oFTSy25edsGfHV13V706e0e6We5M=;
+ b=LYcAHgJzBV9P6GjnHVeMhwxDNC1kunlb05fM9+rw/8/bCLOuaaPaXpkqdsOTfxumTqsa
+ yWkZr9zGyijubK+8TssFSUEqI9tZdRVfS7DJYTfY12evJFISZ756c48B8+GEC7xKqCGM
+ IoFxe7JCKWgrITR/o2OovMt/qd1x3ohNpJqFSgo9pSNyVBkos4kuMj+0OB+2kOVmxvwk
+ /s/pDcpGjm29SthmSvEDdhST6RGwol2C8cbsd/DZ96o+XWKpmU2eX3/JZlUeCpnkCuh4
+ Mx/XTZDOdXGeEarPBLPH+Qgd1TDRZxsaFMWNFcDyVgBI/u/+Ap6vslpOIEovH2Hsc8Qi qA== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jq8fw119d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Sep 2022 11:48:52 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28KBmpW7012811
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Sep 2022 11:48:51 GMT
+Received: from c-skakit-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Tue, 20 Sep 2022 04:48:47 -0700
+From:   Satya Priya <quic_c_skakit@quicinc.com>
+To:     Rob Herring <robh@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@kernel.org>
+CC:     <mka@chromium.org>, Stephen Boyd <swboyd@chromium.org>,
+        Andy Gross <agross@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_tdas@quicinc.com>, <quic_c_skakit@quicinc.com>,
+        <linux-clk@vger.kernel.org>
+Subject: [PATCH] arm64: dts: qcom: sc7280: Add the reset reg for lpass audiocc on SC7280
+Date:   Tue, 20 Sep 2022 17:18:15 +0530
+Message-ID: <1663674495-25748-1-git-send-email-quic_c_skakit@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: Mn4KcJq4rSM-psqLIrH0jSPR-6-m_n-1
+X-Proofpoint-ORIG-GUID: Mn4KcJq4rSM-psqLIrH0jSPR-6-m_n-1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-20_04,2022-09-16_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1011
+ adultscore=0 malwarescore=0 spamscore=0 mlxscore=0 lowpriorityscore=0
+ bulkscore=0 mlxlogscore=652 suspectscore=0 phishscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
+ definitions=main-2209200070
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
+Add the reset register offset for clock gating.
 
-The builds of arm64 allmodconfig with clang failed to build next-20220920
-with the error:
+Fixes: 9499240d15f2 ("arm64: dts: qcom: sc7280: Add lpasscore & lpassaudio clock controllers")
+Signed-off-by: Satya Priya <quic_c_skakit@quicinc.com>
+---
+ arch/arm64/boot/dts/qcom/sc7280.dtsi | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c:1190:3: error: variable 'r' is uninitialized when used here [-Werror,-Wuninitialized]
-                r |= !amdgpu_ttm_tt_get_user_pages_done(bo->tbo.ttm);
-                ^
-drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c:1171:7: note: initialize the variable 'r' to silence this warning
-        int r;
-             ^
-              = 0
-1 error generated.
-
-
-git bisect pointed to c2b08e7a6d27 ("drm/amdgpu: move entity selection and job init earlier during CS")
-
-I will be happy to test any patch or provide any extra log if needed.
-
-
+diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+index 8d807b7..353c137 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+@@ -2295,7 +2295,8 @@
+ 
+ 		lpass_audiocc: clock-controller@3300000 {
+ 			compatible = "qcom,sc7280-lpassaudiocc";
+-			reg = <0 0x03300000 0 0x30000>;
++			reg = <0 0x03300000 0 0x30000>,
++			      <0 0x032a9000 0 0x1000>;
+ 			clocks = <&rpmhcc RPMH_CXO_CLK>,
+ 			       <&lpass_aon LPASS_AON_CC_MAIN_RCG_CLK_SRC>;
+ 			clock-names = "bi_tcxo", "lpass_aon_cc_main_rcg_clk_src";
 -- 
-Regards
-Sudip
+2.7.4
+
