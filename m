@@ -2,476 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DE705BE841
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 16:12:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8CE95BE857
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 16:15:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231479AbiITOM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 10:12:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43754 "EHLO
+        id S231453AbiITOOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 10:14:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231649AbiITOLw (ORCPT
+        with ESMTP id S231392AbiITONP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 10:11:52 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB16B61B01
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 07:10:19 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id e17so4029101edc.5
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 07:10:19 -0700 (PDT)
+        Tue, 20 Sep 2022 10:13:15 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A4032D99;
+        Tue, 20 Sep 2022 07:11:27 -0700 (PDT)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28KDXO1l031060;
+        Tue, 20 Sep 2022 14:11:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2022-7-12;
+ bh=cDjJaoM5vlbcSCFfNVZEu2d87Hy7mazGCCWHTGkOfaI=;
+ b=O/s/kYwkbWBaQvKgyuVdG9w/IpIG1xEutcGYB7OSY8rofXmrQBZFZa8ZOlteYse7FdUV
+ Wmk6ZE3M4mBKp3SrOsQ28zM24T9NrI7yYiCTgIIJdVI9Q8ycgnoW9m/eSVn9zmY1VRn0
+ UE9rx1yQ3tJKxGVFye4oswBvuqT6kr2Ynkmcx03ARqsDtjHmiJ1Ew4okw8SI5jvgkgTw
+ aewt+47olmRs+fDu6a6aFUAMxC/Ww1QmBDrFGiK8eRfCs8vpr3c4EgO4YiyWL0PrPsvv
+ TuYenfQAmyKVz9BPkqbwnbD8o5PjFcgryxfZHe61N6Vq83Mxv0HIZPu5vPFG3wK5gqlT vQ== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3jn69kq3d2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 20 Sep 2022 14:11:05 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 28KDco8K027858;
+        Tue, 20 Sep 2022 14:11:04 GMT
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2169.outbound.protection.outlook.com [104.47.56.169])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3jp3cnc47m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 20 Sep 2022 14:11:04 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=np/5foRdCjRvHeePThPuDm6qZFlyo8LI08JPIfkL9Gn/hP6pHAVfXuUXtR3jq3aP3eLpKs9eLA0MzAvHgbrXVLTkn0xp4/ExW4xhXUDwKyn7vC0pPUvKDzgOb7VBjiKX/Pyjryzx73I1YjPAo8MPSueLGfynHgC1X5r7l+TaMHSgsHeHigLn0CIAO+fnn6kJ+EgP5WCXAdIphrK/fKvXckJO5LzUdey79P9X5vO3ykGPuMbO5aAAqFNbWSLATdjL/D0HuvrHjsSKT/07RyaWq6nt2PKnyQBfrOIq1neCemWy27ztdrT52lk+wMd0cAM+hhxLo8KAyTjHkaFTVe8a1Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cDjJaoM5vlbcSCFfNVZEu2d87Hy7mazGCCWHTGkOfaI=;
+ b=iOxrFyL/RLdbHMlntr+489cEQdvYqQBBCoSQLDz7WQUqngb1kjnJAUxivTdp4bA8CGObmxYPVF9d0/GWgxBviRBudRZVe7QBBpLr80UPYqoTXA1jBNfbjeoC98ggi1Qc2YyLixOuMcRjULJwa3pcwplkXj6p3WAIqnQnklKF35IHiIarh8YCHgekJVAob++Fyw9bhAc/ZnBu0FizeRINXBJSlIy5GTNc1myZGJ4QzhzVkpqm1eMshsp3vrmrv0lp3bI8h5mjIGtdG1tOuPA2YxrRRJ/2DhVX8MBqqUCKG/0i0Cv5i0Zr/y6wUcgMA5m7wRCEFXQ3dP1/IxfZWrVhxQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date;
-        bh=ucPdrtJkPwf0BboNbtvdco9R/hcnAGguJpObhkf38C8=;
-        b=HO5sr1cWLwa3y35YNEdTI16wyVUtMIACshxUIA4KWnbNs3UCm98hSB4OHTprMEwC/a
-         T8LpJmaajKMQiwbza8YSKHfEnyK9uF7Y6dWfRWhnE+BDtPJAzNdUGCBQr4KkiG+XQf+Y
-         P1IQdSd10CLIj2Iw85QCEoe+CFAkCWf5GjREY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=ucPdrtJkPwf0BboNbtvdco9R/hcnAGguJpObhkf38C8=;
-        b=sB1cBlmceXZx73bX/Uu248/WetpqWehJbeYXYdpfB+4kSHgaWjdmT1atAh8zZvXdou
-         1pIT4m++p2ZBnZaX7c2TuCK2l0inEdz0cAmUbwNkexPeSP1DCjoG0SmC52yQ8BYn9zpq
-         lM2bWq4uxaTmkiNMD0112JPRC1pAKP4WdSWaG49s5DErnslQS/i9HXWMVHn3m9baRBf0
-         v40phvHuwGvkp9ySgjENZZHo1jP2WlGJ3tKoPiPd/+VV/gl+R58gj9/2oBh1NdzQhuwv
-         B7NQ1ViMo8SyIirxZ33V3rdck0JLQSRI1phvfFaLNvAJJ59Krf1c1PFoTzPkyr0Q0P6S
-         vVQQ==
-X-Gm-Message-State: ACrzQf3EFrkwJ+Ahoj+1r5BZPRHVHoWTo8vvsRxoV+Ljp+OsKUtk+Jrm
-        rVvC7eA3Asx817REXiAjSQQZCuFrOJK/k5qsXBA=
-X-Google-Smtp-Source: AMsMyM4lxDO7g4HuMho4z6sf2P/lecptqkY7Q12fxuVeWwVVMeeySCymELdzq/VUaWzsQwXg81GsMw==
-X-Received: by 2002:a05:6402:26d2:b0:451:5a8c:346b with SMTP id x18-20020a05640226d200b004515a8c346bmr19975208edd.424.1663683005196;
-        Tue, 20 Sep 2022 07:10:05 -0700 (PDT)
-Received: from alco.roam.corp.google.com ([2620:0:1059:10:935d:52b0:7461:88e1])
-        by smtp.gmail.com with ESMTPSA id w11-20020a056402128b00b0044e796598bdsm115488edv.11.2022.09.20.07.10.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 07:10:04 -0700 (PDT)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Tue, 20 Sep 2022 16:09:52 +0200
-Subject: [PATCH v1 3/3] media: uvcvideo: Do power management granularly
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cDjJaoM5vlbcSCFfNVZEu2d87Hy7mazGCCWHTGkOfaI=;
+ b=x4jU/WmmFCRgI5TVUX0Ajxw8w6kfJIfj0r7Va3gOD+0fqNTUTbMftSjRpbQ1ZclXsGtSSGD3gw9V5Dwt0U4iDt/acJs7vv/3uVAyfCND+EO/1uU5ONEWCaKKtQmD6YVKddfKPMY+/hN96QlK2LENeiwaYRAzcPh4U8abGhUydK0=
+Received: from SA1PR10MB5711.namprd10.prod.outlook.com (2603:10b6:806:23e::20)
+ by DM4PR10MB6885.namprd10.prod.outlook.com (2603:10b6:8:103::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.14; Tue, 20 Sep
+ 2022 14:11:00 +0000
+Received: from SA1PR10MB5711.namprd10.prod.outlook.com
+ ([fe80::610f:82ba:a9ad:bd65]) by SA1PR10MB5711.namprd10.prod.outlook.com
+ ([fe80::610f:82ba:a9ad:bd65%7]) with mapi id 15.20.5632.021; Tue, 20 Sep 2022
+ 14:11:00 +0000
+Date:   Tue, 20 Sep 2022 10:10:57 -0400
+From:   Daniel Jordan <daniel.m.jordan@oracle.com>
+To:     Steffen Klassert <steffen.klassert@secunet.com>
+Cc:     eadavis@sina.com, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        syzbot+bc05445bc14148d51915@syzkaller.appspotmail.com,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [PATCH] padata: fix lockdep warning in padata serialization
+Message-ID: <20220920141057.cy54d5ukflrgay3a@oracle.com>
+References: <20220919151248.smfo7nq6yoqzy2vo@oracle.com>
+ <20220920003908.391835-1-eadavis@sina.com>
+ <20220920014711.bvreurf4ex44w6oj@oracle.com>
+ <20220920055443.GI2950045@gauss3.secunet.de>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220920055443.GI2950045@gauss3.secunet.de>
+X-ClientProxiedBy: BL1PR13CA0442.namprd13.prod.outlook.com
+ (2603:10b6:208:2c3::27) To SA1PR10MB5711.namprd10.prod.outlook.com
+ (2603:10b6:806:23e::20)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20220920-resend-powersave-v1-3-123aa2ba3836@chromium.org>
-References: <20220920-resend-powersave-v1-0-123aa2ba3836@chromium.org>
-In-Reply-To: <20220920-resend-powersave-v1-0-123aa2ba3836@chromium.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Tomasz Figa <tfiga@chromium.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        linux-media@vger.kernel.org
-X-Mailer: b4 0.11.0-dev-d93f8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=10244; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=mQK7QNORiDfMtgiTEcpPSa/3OoMx5fx8L+y3jCnHq5c=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjKcm4Y0ax3mHrs1uEOk3ppGkwa6bxcvCk1VY/vljo
- 6dcksceJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCYynJuAAKCRDRN9E+zzrEiD93D/
- 9CkA+JO7fksIwxy/Ssk6nrHJm1sVDO7SuMdyFr1TYCxeCYqIcCgdfTqtYbB0vNllSJcXh1GUMbR1c4
- U51czGB1995pULG+dE7hnr5o1VDsBOCpSlKjeS0hpOAaQywgQH9qpJ3Dpr5sWbXh7Z+CqFWt9JL6B8
- cKkIBnu0ZHJpgSptU0Nge/VsJDSnYZARZglarzCdrh/MnxKiwSuDYo02TwNQU5k36N8tsOgQ0CrDj3
- rLR1oqSn2osS+d5kg2MGZVc8/XvjjE11ESov7E1MdVo/TI+6p+YjvEBDzEpL1Ro1vW+nZa+1IqvUXt
- LMVDDv8OcN7JFgCTbPMACETlNQIVbjZX4g6YGvVg0FUJdlBK0/F/DvFxyunzOay8HYIp0iIk/TOGdh
- FntTnv3e+lRrRukkIw+9GgxDoHwy7t4PIijOa48GMLaTJdfSsSu2chu0twMhWabPb1BoyPXngWltYn
- 6tyPxp8DurOTeVlaCqGG6tC3q6T76rdQrqTC0L1ZMdsrhO4uWy3k8KRZwYPTyjVDDyOAznAH/kH5e3
- kS6hCHMLaOYgzFXUdXQlhGz6z/1WtJufAZgEACJ5XgvNfllbVr/fT+EJNXIDzZuhdLAghEreGonYNu
- KxtCNyIvnSPWCIzXccL7oSeF+nJPrEm7P3q+5QH2MVVu9g811uoXBaKlGLAA==
-X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
- fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA1PR10MB5711:EE_|DM4PR10MB6885:EE_
+X-MS-Office365-Filtering-Correlation-Id: 380d20ba-cc64-40c7-939e-08da9b11f1ce
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: IytpeBaEBd/waT5kp4mHEPtb7azGICihx/iDXog/s+VS0tk36tk345q/xlJSS9MbLkH5LtF+uLIkwdzO+CKg88J8IyI6VUTPuI336/PccQJyWgrPlXjOZi22JycBH7wcQYLuexUEHi9XKxB7hV2hsioxwneScHWFQIRe1+PTFMlYGBW/+uFjButC+3yvt6TUOVGZhRie3RAA/UJUQeTFgzH+JXGEW3Iq8ZcEthsoh80h476c6pQvdyrVP6ldXnHGZh7Uytax5IXiebMQ5cJia4SD1YWfFXnP86Lg2DABC7qDxh8Pcz+uvyIwJbAWmesuMhWY87cv3rXBvfHLfFlpGJdrWBNmPwVL6zF4R6atkhwa3mBTV6HzB0gd5vYVp9xtH0zS6dLYnXwuCxLGwdcv9p925YQFxnzJV7VFDp/89uzjThoWfKm5QAiyCZHTtga3pGaAUAYobrIL6KMxe6qH+lUJJclyaRAlw/h9LC9uk/GLjJ2hxpZCMxMR7pAzbGMsGuvVh7smpnZ4y/Tap6FBBZytii/0YRGPSJkJnBH7/Vd15vswIpAIfp1QYrgYrlCd6oQNQR6lLM2mv8QsR4VZgr++IEQW8lfmcot1EzREL8907cK8l3SfDS+swucpEYRdsPNueSX3i+D+b7J095wmIVmqyvPk/y5fmkU2+Gz4RTaa7D+r7w+okwCPz13SwKZ46sJAfRt+p01Brw2GAaUuvB520rIQQveErwa+rcL9gpaUjU7Ovan4uyS5iRzP8v6c
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR10MB5711.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(396003)(346002)(376002)(136003)(39860400002)(451199015)(83380400001)(36756003)(2906002)(8676002)(6916009)(5660300002)(316002)(66946007)(4326008)(66476007)(66556008)(86362001)(478600001)(6486002)(6666004)(41300700001)(8936002)(6506007)(52116002)(2616005)(1076003)(186003)(26005)(6512007)(38100700002)(38350700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?HdMzYIvLMmf/40WOHXZnv4FOBpa68dXRJPGwXoipu68q9dkObm2XzisTet37?=
+ =?us-ascii?Q?I7TykbmiRUoMhJ6s+okljaAY4Y8HHIwz181Rx59n2Mz87y0xksGNjm4gm3ea?=
+ =?us-ascii?Q?sTKyAdhvKRn69ki6DJHiTt2cKGHjAdPucxMVejl0sKzM7idTVhR0k45Wm/vw?=
+ =?us-ascii?Q?yjmXL4ppxCou9w/FzZPDN+WWi5Gqp/qQFd7ieZQIliS0ZbFx0i81EcIoeo0f?=
+ =?us-ascii?Q?HTdxKp4V5hmCRqDRkZKYQ9/obmaeeVb04NONPkJCCO33DvLb6QQ0rAAyh8u7?=
+ =?us-ascii?Q?bFQzY2QhOhheIcmFMiO3z2gz9zUyBT5aqdCrD2sCxwyuJxF9X6fdeUNKlezU?=
+ =?us-ascii?Q?qQMzm8JGgWtHDEauP0p4KZKuXqG6etpJZMzgf8hasLeR7Y5dPjp8UiGjtZnm?=
+ =?us-ascii?Q?bKbmw+7dIyKW/FqGZ3CojMqKrOwxbaYslo+liGtzAa08qXGJHGObYFkfqoM/?=
+ =?us-ascii?Q?aLA/N2/+V9DLGQq0hgYO67Dauj33ndFJvPDw/Ojben07qSBY6JHi0PTGodpm?=
+ =?us-ascii?Q?62ecHT+9r+9pxWvFs9xaXInq+iLi8pQKGSZdDFOi1pQMfRrf7BeVB8Pzkn/4?=
+ =?us-ascii?Q?DU4mvHoLBsuMR/5xm8NPa/UCZo1r22FerRQJYjxyC1A1APpTDLV+aeMRqNXY?=
+ =?us-ascii?Q?lbrFmSCWQGVK9T18QQBNLxlw3M5YJdywe79T/pfEvGWIk4pHFD4ZmMEpGjzu?=
+ =?us-ascii?Q?1eUSwMBqNvigzq0Sb+FliXwdDQwtUzYA97086fLlXPzoDvp/6NE9lmbCONwT?=
+ =?us-ascii?Q?yZPAYeQ/SfLgUYPosrNilC8UJRSur4onRdVRb/z7gBuVmN2ft29VG4KGMkpv?=
+ =?us-ascii?Q?gyVFsUeejWFXsIumpVMBRLB4/Q93NEAv8ke9UIf35Yq7P3uZyKG2gtfOabHZ?=
+ =?us-ascii?Q?4T4I4gwzvW2XsvIVwpqBCF9xDMnTW3hTkusSS0cBQl2gkY2hnQKg3Rw+okps?=
+ =?us-ascii?Q?plUKp6qborz2ORIRfpzxfKSKaXObeaOWWra879hXimcqVYcQK2NiE1moly1L?=
+ =?us-ascii?Q?pyf4A1uRXnh4fNazreeBm6Bl8zuKMMi5gE9lAFqkLl6WaQXXmEUdH2RyXOUz?=
+ =?us-ascii?Q?3m4v8S/cQqLtUcZzdyP2tnn2617X548lbKeQJR91nxJc/qCmrO/qShZaJdTg?=
+ =?us-ascii?Q?G6/3dOjIkq+yGk6egMgPJIdcYMIAxkR3m02aedfY07ILvzzJv7BY02Tl3k8O?=
+ =?us-ascii?Q?4QrMvCfzdx+W8CJjdDd5mc9NGWsFNU2JspP8/YQxbly86QhCXLX2eWhGFh9T?=
+ =?us-ascii?Q?cIEKJrRBP2kWt29LwuDJudFq99rBEiYgXd7FjjfVWRGVTCDOaNKw9y5hAzHM?=
+ =?us-ascii?Q?gOLFTbTE9BWQeNC384HdW3Xm0ZUCxKO0LGzz/izZUD6EJTawAHByjkY9pIbX?=
+ =?us-ascii?Q?W8S/N5lcXZ5dCvLBMUn/5AcqltKHpMEsNNVAN1yqTK77QHTRDaGn9Kty2Zf0?=
+ =?us-ascii?Q?hAIOsxdkxohA9d0mVBRve7XZBGdkfoqRg4mRlUZTcKv6Hv/GDajhTBXABEQQ?=
+ =?us-ascii?Q?RuqB6bRgu26QaDd7xAx309XsURrogUgFrsHlLTyyJmk3ptLsKyLHmRBZ2/tW?=
+ =?us-ascii?Q?ZNbJV0PEAR7ZY8m56bt3/L0FTR+wjSE4x1A2wbm5Q09tkHhxlSr0z0feboDZ?=
+ =?us-ascii?Q?AQ=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 380d20ba-cc64-40c7-939e-08da9b11f1ce
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR10MB5711.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Sep 2022 14:11:00.2598
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2xvSyrny2iSLqCDHv8tP7PE7uwCkuosb81gLJJWnnDvgWcek6wMl/yklB6k/uuvml5bLWK+iB0U2vNKfwOZBdWviFZx67ALJW5juWkpP/1c=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR10MB6885
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-20_06,2022-09-20_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxlogscore=695
+ spamscore=0 adultscore=0 mlxscore=0 malwarescore=0 bulkscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209200084
+X-Proofpoint-ORIG-GUID: OtCDE3i3xrG9veuGgj8xMvPG4Rn0gIbW
+X-Proofpoint-GUID: OtCDE3i3xrG9veuGgj8xMvPG4Rn0gIbW
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of suspending/resume the USB device at open()/close(), do it
-when the device is actually used.
+Hi Steffen,
 
-This way we can reduce the power consumption when a service is holding
-the video device and leaving it in an idle state.
+On Tue, Sep 20, 2022 at 07:54:43AM +0200, Steffen Klassert wrote:
+> On Mon, Sep 19, 2022 at 09:47:11PM -0400, Daniel Jordan wrote:
+> > On Tue, Sep 20, 2022 at 08:39:08AM +0800, eadavis@sina.com wrote:
+> > > From: Edward Adam Davis <eadavis@sina.com>
+> > > 
+> > > On Mon, 19 Sep 2022 11:12:48 -0400, Daniel Jordan wrote:
+> > > > Hi Edward,
+> > > > 
+> > > > On Mon, Sep 19, 2022 at 09:05:55AM +0800, eadavis@sina.com wrote:
+> > > > > From: Edward Adam Davis <eadavis@sina.com>
+> > > > > 
+> > > > > Parallelized object serialization uses spin_unlock for unlocking a spin lock
+> > > > > that was previously locked with spin_lock.
+> > > > 
+> > > > There's nothing unusual about that, though?
+> > > > 
+> > > > > This caused the following lockdep warning about an inconsistent lock
+> > > > > state:
+> > > > > 
+> > > > >         inconsistent {HARDIRQ-ON-W} -> {IN-HARDIRQ-W} usage.
+> > > > 
+> > > > Neither HARDIRQ-ON-W nor IN-HARDIRQ-W appear in the syzbot report, did
+> > > > you mean SOFTIRQ-ON-W and IN-SOFTIRQ-W?
+> > > Yes, I want say: inconsistent {SOFTIRQ-ON-W} -> {IN-SOFTIRQ-W} usage.
+> > > > 
+> > > > > We must use spin_lock_irqsave, because it is possible to trigger tipc 
+> > > > > from an irq handler.
+> > > > 
+> > > > A softirq handler, not a hardirq handler.  I'd suggest using
+> > > > spin_lock_bh() instead of _irqsave in your patch.
+> > > I think _irqsave better than _bh, it can save the irq context, but _bh not, 
+> > > and in tipc call trace contain SOFTIRQ-ON-W and IN-SOFTIRQ-W.
+> > 
+> > _irqsave saving the context is about handling nested hardirq disables.
+> > It's not needed here since we don't need to care about disabling
+> > hardirq.
+> > 
+> > _bh is for disabling softirq, a different context from hardirq.  We want
+> > _bh here since the deadlock happens when a CPU takes the lock in both
+> > task and softirq context.  padata uses _bh lock variants because it can
+> > be called in softirq context but not hardirq.  Let's be consistent and
+> > do it in this case too.
+> 
+> padata_do_serial is called with BHs off, so using spin_lock_bh should not
+> fix anything here. I guess the problem is that we call padata_find_next
+> after we enabled the BHs in padata_reorder.
 
-Reviewed-by: Tomasz Figa <tfiga@chromium.org>
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+Yeah, padata_do_serial can be called with BHs off, like in the tipc
+stack, but there are also cases where BHs can be on, like lockdep said
+here:
 
-diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
-index 8d5002543e2c..b9642afabd9b 100644
---- a/drivers/media/usb/uvc/uvc_v4l2.c
-+++ b/drivers/media/usb/uvc/uvc_v4l2.c
-@@ -25,6 +25,46 @@
- 
- #include "uvcvideo.h"
- 
-+/* ------------------------------------------------------------------------
-+ * UVC power management
-+ */
-+
-+static int uvc_pm_get(struct uvc_streaming *stream)
-+{
-+	int ret = 0;
-+
-+	ret = usb_autopm_get_interface(stream->dev->intf);
-+	if (ret)
-+		return ret;
-+
-+	mutex_lock(&stream->dev->lock);
-+	if (!stream->dev->users)
-+		ret = uvc_status_start(stream->dev, GFP_KERNEL);
-+	if (!ret)
-+		stream->dev->users++;
-+	mutex_unlock(&stream->dev->lock);
-+
-+	if (ret)
-+		usb_autopm_put_interface(stream->dev->intf);
-+
-+	return ret;
-+}
-+
-+static void uvc_pm_put(struct uvc_streaming *stream)
-+{
-+	mutex_lock(&stream->dev->lock);
-+	if (WARN_ON(!stream->dev->users)) {
-+		mutex_unlock(&stream->dev->lock);
-+		return;
-+	}
-+	stream->dev->users--;
-+	if (!stream->dev->users)
-+		uvc_status_stop(stream->dev);
-+	mutex_unlock(&stream->dev->lock);
-+
-+	usb_autopm_put_interface(stream->dev->intf);
-+}
-+
- /* ------------------------------------------------------------------------
-  * UVC ioctls
-  */
-@@ -249,6 +289,9 @@ static int uvc_v4l2_try_format(struct uvc_streaming *stream,
- 	 * developers test their webcams with the Linux driver as well as with
- 	 * the Windows driver).
- 	 */
-+	ret = uvc_pm_get(stream);
-+	if (ret)
-+		return ret;
- 	mutex_lock(&stream->mutex);
- 	if (stream->dev->quirks & UVC_QUIRK_PROBE_EXTRAFIELDS)
- 		probe->dwMaxVideoFrameSize =
-@@ -257,6 +300,7 @@ static int uvc_v4l2_try_format(struct uvc_streaming *stream,
- 	/* Probe the device. */
- 	ret = uvc_probe_video(stream, probe);
- 	mutex_unlock(&stream->mutex);
-+	uvc_pm_put(stream);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -468,7 +512,13 @@ static int uvc_v4l2_set_streamparm(struct uvc_streaming *stream,
- 	}
- 
- 	/* Probe the device with the new settings. */
-+	ret = uvc_pm_get(stream);
-+	if (ret) {
-+		mutex_unlock(&stream->mutex);
-+		return ret;
-+	}
- 	ret = uvc_probe_video(stream, &probe);
-+	uvc_pm_put(stream);
- 	if (ret < 0) {
- 		mutex_unlock(&stream->mutex);
- 		return ret;
-@@ -559,36 +609,29 @@ static int uvc_v4l2_open(struct file *file)
- {
- 	struct uvc_streaming *stream;
- 	struct uvc_fh *handle;
--	int ret = 0;
- 
- 	stream = video_drvdata(file);
- 	uvc_dbg(stream->dev, CALLS, "%s\n", __func__);
- 
--	ret = usb_autopm_get_interface(stream->dev->intf);
--	if (ret < 0)
--		return ret;
--
- 	/* Create the device handle. */
- 	handle = kzalloc(sizeof(*handle), GFP_KERNEL);
--	if (handle == NULL) {
--		usb_autopm_put_interface(stream->dev->intf);
-+	if (!handle)
- 		return -ENOMEM;
--	}
- 
--	mutex_lock(&stream->dev->lock);
--	if (stream->dev->users == 0) {
--		ret = uvc_status_start(stream->dev, GFP_KERNEL);
--		if (ret < 0) {
--			mutex_unlock(&stream->dev->lock);
--			usb_autopm_put_interface(stream->dev->intf);
-+	/*
-+	 * If the uvc evdev exists we cannot suspend when the device
-+	 * is idle. Otherwise we will miss button actions.
-+	 */
-+	if (stream->dev->input) {
-+		int ret;
-+
-+		ret = uvc_pm_get(stream);
-+		if (ret) {
- 			kfree(handle);
- 			return ret;
- 		}
- 	}
- 
--	stream->dev->users++;
--	mutex_unlock(&stream->dev->lock);
--
- 	v4l2_fh_init(&handle->vfh, &stream->vdev);
- 	v4l2_fh_add(&handle->vfh);
- 	handle->chain = stream->chain;
-@@ -610,6 +653,12 @@ static int uvc_v4l2_release(struct file *file)
- 	if (uvc_has_privileges(handle))
- 		uvc_queue_release(&stream->queue);
- 
-+	if (handle->is_streaming)
-+		uvc_pm_put(stream);
-+
-+	if (stream->dev->input)
-+		uvc_pm_put(stream);
-+
- 	/* Release the file handle. */
- 	uvc_dismiss_privileges(handle);
- 	v4l2_fh_del(&handle->vfh);
-@@ -617,12 +666,6 @@ static int uvc_v4l2_release(struct file *file)
- 	kfree(handle);
- 	file->private_data = NULL;
- 
--	mutex_lock(&stream->dev->lock);
--	if (--stream->dev->users == 0)
--		uvc_status_stop(stream->dev);
--	mutex_unlock(&stream->dev->lock);
--
--	usb_autopm_put_interface(stream->dev->intf);
- 	return 0;
- }
- 
-@@ -849,9 +892,17 @@ static int uvc_ioctl_streamon(struct file *file, void *fh,
- 
- 	if (handle->is_streaming)
- 		goto unlock;
-+
-+	ret = uvc_pm_get(stream);
-+	if (ret)
-+		goto unlock;
-+
- 	ret = uvc_queue_streamon(&stream->queue, type);
- 	handle->is_streaming = !ret;
- 
-+	if (!handle->is_streaming)
-+		uvc_pm_put(stream);
-+
- unlock:
- 	mutex_unlock(&stream->mutex);
- 
-@@ -875,6 +926,9 @@ static int uvc_ioctl_streamoff(struct file *file, void *fh,
- 	ret = uvc_queue_streamoff(&stream->queue, type);
- 	handle->is_streaming = !!ret;
- 
-+	if (!handle->is_streaming)
-+		uvc_pm_put(stream);
-+
- unlock:
- 	mutex_unlock(&stream->mutex);
- 
-@@ -928,6 +982,7 @@ static int uvc_ioctl_g_input(struct file *file, void *fh, unsigned int *input)
- {
- 	struct uvc_fh *handle = fh;
- 	struct uvc_video_chain *chain = handle->chain;
-+	struct uvc_streaming *stream = handle->stream;
- 	u8 *buf;
- 	int ret;
- 
-@@ -941,9 +996,16 @@ static int uvc_ioctl_g_input(struct file *file, void *fh, unsigned int *input)
- 	if (!buf)
- 		return -ENOMEM;
- 
-+	ret = uvc_pm_get(stream);
-+	if (ret) {
-+		kfree(buf);
-+		return ret;
-+	}
-+
- 	ret = uvc_query_ctrl(chain->dev, UVC_GET_CUR, chain->selector->id,
- 			     chain->dev->intfnum,  UVC_SU_INPUT_SELECT_CONTROL,
- 			     buf, 1);
-+	uvc_pm_put(stream);
- 	if (!ret)
- 		*input = *buf - 1;
- 
-@@ -956,6 +1018,7 @@ static int uvc_ioctl_s_input(struct file *file, void *fh, unsigned int input)
- {
- 	struct uvc_fh *handle = fh;
- 	struct uvc_video_chain *chain = handle->chain;
-+	struct uvc_streaming *stream = handle->stream;
- 	u8 *buf;
- 	int ret;
- 
-@@ -977,10 +1040,17 @@ static int uvc_ioctl_s_input(struct file *file, void *fh, unsigned int input)
- 	if (!buf)
- 		return -ENOMEM;
- 
-+	ret = uvc_pm_get(stream);
-+	if (ret) {
-+		kfree(buf);
-+		return ret;
-+	}
-+
- 	*buf = input + 1;
- 	ret = uvc_query_ctrl(chain->dev, UVC_SET_CUR, chain->selector->id,
- 			     chain->dev->intfnum, UVC_SU_INPUT_SELECT_CONTROL,
- 			     buf, 1);
-+	uvc_pm_put(stream);
- 	kfree(buf);
- 
- 	return ret;
-@@ -991,8 +1061,15 @@ static int uvc_ioctl_queryctrl(struct file *file, void *fh,
- {
- 	struct uvc_fh *handle = fh;
- 	struct uvc_video_chain *chain = handle->chain;
-+	struct uvc_streaming *stream = handle->stream;
-+	int ret;
- 
--	return uvc_query_v4l2_ctrl(chain, qc);
-+	ret = uvc_pm_get(stream);
-+	if (ret)
-+		return ret;
-+	ret = uvc_query_v4l2_ctrl(chain, qc);
-+	uvc_pm_put(stream);
-+	return ret;
- }
- 
- static int uvc_ioctl_query_ext_ctrl(struct file *file, void *fh,
-@@ -1000,10 +1077,15 @@ static int uvc_ioctl_query_ext_ctrl(struct file *file, void *fh,
- {
- 	struct uvc_fh *handle = fh;
- 	struct uvc_video_chain *chain = handle->chain;
-+	struct uvc_streaming *stream = handle->stream;
- 	struct v4l2_queryctrl qc = { qec->id };
- 	int ret;
- 
-+	ret = uvc_pm_get(stream);
-+	if (ret)
-+		return ret;
- 	ret = uvc_query_v4l2_ctrl(chain, &qc);
-+	uvc_pm_put(stream);
- 	if (ret)
- 		return ret;
- 
-@@ -1049,6 +1131,7 @@ static int uvc_ioctl_g_ext_ctrls(struct file *file, void *fh,
- {
- 	struct uvc_fh *handle = fh;
- 	struct uvc_video_chain *chain = handle->chain;
-+	struct uvc_streaming *stream = handle->stream;
- 	struct v4l2_ext_control *ctrl = ctrls->controls;
- 	unsigned int i;
- 	int ret;
-@@ -1073,22 +1156,30 @@ static int uvc_ioctl_g_ext_ctrls(struct file *file, void *fh,
- 		return 0;
- 	}
- 
-+	ret = uvc_pm_get(stream);
-+	if (ret)
-+		return ret;
- 	ret = uvc_ctrl_begin(chain);
--	if (ret < 0)
-+	if (ret < 0) {
-+		uvc_pm_put(stream);
- 		return ret;
-+	}
- 
- 	for (i = 0; i < ctrls->count; ++ctrl, ++i) {
- 		ret = uvc_ctrl_get(chain, ctrl);
- 		if (ret < 0) {
- 			uvc_ctrl_rollback(handle);
- 			ctrls->error_idx = i;
--			return ret;
-+			goto done;
- 		}
- 	}
- 
- 	ctrls->error_idx = 0;
- 
--	return uvc_ctrl_rollback(handle);
-+	ret = uvc_ctrl_rollback(handle);
-+done:
-+	uvc_pm_put(stream);
-+	return ret;
- }
- 
- static int uvc_ioctl_s_try_ext_ctrls(struct uvc_fh *handle,
-@@ -1097,6 +1188,7 @@ static int uvc_ioctl_s_try_ext_ctrls(struct uvc_fh *handle,
- {
- 	struct v4l2_ext_control *ctrl = ctrls->controls;
- 	struct uvc_video_chain *chain = handle->chain;
-+	struct uvc_streaming *stream = handle->stream;
- 	unsigned int i;
- 	int ret;
- 
-@@ -1104,9 +1196,15 @@ static int uvc_ioctl_s_try_ext_ctrls(struct uvc_fh *handle,
- 	if (ret < 0)
- 		return ret;
- 
-+	ret = uvc_pm_get(stream);
-+	if (ret)
-+		return ret;
-+
- 	ret = uvc_ctrl_begin(chain);
--	if (ret < 0)
-+	if (ret < 0) {
-+		uvc_pm_put(stream);
- 		return ret;
-+	}
- 
- 	for (i = 0; i < ctrls->count; ++ctrl, ++i) {
- 		ret = uvc_ctrl_set(handle, ctrl);
-@@ -1114,16 +1212,20 @@ static int uvc_ioctl_s_try_ext_ctrls(struct uvc_fh *handle,
- 			uvc_ctrl_rollback(handle);
- 			ctrls->error_idx = ioctl == VIDIOC_S_EXT_CTRLS ?
- 						    ctrls->count : i;
--			return ret;
-+			goto done;
- 		}
- 	}
- 
- 	ctrls->error_idx = 0;
- 
- 	if (ioctl == VIDIOC_S_EXT_CTRLS)
--		return uvc_ctrl_commit(handle, ctrls);
-+		ret = uvc_ctrl_commit(handle, ctrls);
- 	else
--		return uvc_ctrl_rollback(handle);
-+		ret = uvc_ctrl_rollback(handle);
-+
-+done:
-+	uvc_pm_put(stream);
-+	return ret;
- }
- 
- static int uvc_ioctl_s_ext_ctrls(struct file *file, void *fh,
-@@ -1147,8 +1249,16 @@ static int uvc_ioctl_querymenu(struct file *file, void *fh,
- {
- 	struct uvc_fh *handle = fh;
- 	struct uvc_video_chain *chain = handle->chain;
-+	struct uvc_streaming *stream = handle->stream;
-+	int ret;
-+
-+	ret = uvc_pm_get(stream);
-+	if (ret)
-+		return ret;
-+	ret = uvc_query_v4l2_menu(chain, qm);
-+	uvc_pm_put(stream);
- 
--	return uvc_query_v4l2_menu(chain, qm);
-+	return ret;
- }
- 
- static int uvc_ioctl_g_selection(struct file *file, void *fh,
+{SOFTIRQ-ON-W} state was registered at:
+  ...
+  padata_do_serial+0x21e/0x4b0 kernel/padata.c:392
+  ...
 
--- 
-b4 0.11.0-dev-d93f8
+Line 392 is in _do_serial, not _reorder or _find_next.
