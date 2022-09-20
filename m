@@ -2,442 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81FC55BEB66
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 18:54:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBA485BEB68
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 18:54:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231209AbiITQyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 12:54:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39962 "EHLO
+        id S230156AbiITQyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 12:54:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiITQyN (ORCPT
+        with ESMTP id S229706AbiITQyg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 12:54:13 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C0667CBD;
-        Tue, 20 Sep 2022 09:54:12 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id a10so3817087ljq.0;
-        Tue, 20 Sep 2022 09:54:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=G/3iq03jjXbDBDyYLNnAY3NjUgkDrIltGEid6oXr0v4=;
-        b=ByE+t9XNoqO7K5Nb/dznuxxX+f9U3rq7rpsuxtTJ7BRkjx/E2U8TAUzgYwvT9qItgi
-         /yhKWKzsVQ+0EE5CLGdGmY3d4Qb1hIcY7xq2G9HaZgBLPduZH//Z4crnjVhEdBjJquQQ
-         LlQzl3mfjYbrO+vJnMUAOQCzmWDgho55WVi+fP4aZaGvsFlAJvh387CBMEmwbtKwMWBx
-         cudgypEufDZc1vPIuiyy2IepL3wSjO62RUk0hUDACuVBXwXDGmJ1KdpLJ6oXdV5XNyZJ
-         Ghg1/ghZP7APMi6igqhA5NOY1lGyUq0N97QiU4a34stvByfRxidC/ocRAtnn8ZtMUx3E
-         zXow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=G/3iq03jjXbDBDyYLNnAY3NjUgkDrIltGEid6oXr0v4=;
-        b=vPYRFAcyQ4hgvgrhw2XUSy3pXbsxWaRsGRKloJbjQQDItUcPFTCzXMIiWj4a4lyEfq
-         hkLtPWMgfipMdJRUq7iDhxljsh/NbWBk3mWwaheGk2xsjBHGFcb6sCGfKE4/AsDggkyw
-         MLpbwrTqkj6jToZ66NYh1OLsj32jkoqI77+0cPLbf1AjQ79U7pcIKAwD4YVhzL4dw801
-         lZS4Sd4Jxlm4tgNWOb6hQ7jc7Ezvg6U2gnZp7YEEMYyZLZLOYGn0A54ndTYmEuJ4jDZ7
-         ho5LlCE1ngJqnDkWTdki6OcI1N9PjLsZPeINrLB+AVbyN5OlLnFV+91TIV1EUtFPdLsf
-         kSZg==
-X-Gm-Message-State: ACrzQf0L0AYDw7mSCVgNH1Pl3U8Bz4hk1BbVMCQ+Uau/4yU2uuFliF28
-        abOBfNJ4XyjsE+z9gYKCLWZGdAFJoDm/Lw==
-X-Google-Smtp-Source: AMsMyM4wNKu0YmXOJWXxTaSUYRX9P2Th1uxfS5/tTeY8ylg80YO2PWmvuVb7VLCqNPbU26mgaOhSWw==
-X-Received: by 2002:a2e:a587:0:b0:26c:510b:3cca with SMTP id m7-20020a2ea587000000b0026c510b3ccamr3448234ljp.452.1663692850436;
-        Tue, 20 Sep 2022 09:54:10 -0700 (PDT)
-Received: from DESKTOP-GSFPEC9.localdomain (broadband-46-242-10-176.ip.moscow.rt.ru. [46.242.10.176])
-        by smtp.gmail.com with ESMTPSA id s12-20020ac25fac000000b0049a747d6156sm34789lfe.287.2022.09.20.09.54.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 09:54:09 -0700 (PDT)
-From:   Konstantin Aladyshev <aladyshev22@gmail.com>
-Cc:     Konstantin Aladyshev <aladyshev22@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] ARM: dts: aspeed: Add AMD DaytonaX BMC
-Date:   Tue, 20 Sep 2022 19:54:02 +0300
-Message-Id: <20220920165404.14099-1-aladyshev22@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 20 Sep 2022 12:54:36 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2086.outbound.protection.outlook.com [40.107.244.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17E815588
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 09:54:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hsoxpSoNA1/qbwoACvqB9sPE0kUgBZ6CflSHgGKCnp2+bjpzR3QsgXpK5tBXDCmUjPLxIZfUjj8bWPwle3am8WXkTY9hImtOiioCQukGQgh0IdLqAghGgnvIMR4poKl1h4s5cl14l0112GAmcJjs4i/z3vauG7hR1V01WOLtHxA0zT/vHYHVLVjIXBES4wzK0P+edAk+dE5ZIa8CXJIKQWyJK+lVC9uG3a8+wtSoduiODuy0u3dnBCqWn8kTXjMTQXHEurNizdXkGjXetD0tSsCzPqQH+cvYTmIZsA1ubiF+PeWeEAOcIEktPQvj7Yy2ch5olJtycGEiFcy9Gh0SQw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lQ4JXhxKUI1zsoJ05VFaiVr3hVV3o+jTm6EhiotmwU0=;
+ b=mZIIjlh/GUcMMib0qnDgTbZrkC84G9JY56kJy7TtvX9NPtsToBX1cJU4A3RdmrS6aGFbTP8PZDP9A84u7iQoN9gHH6UGP6kMLqPncByPjTG8MAAIyG2o0A///gglk+0QHiCvP7ZffDtpOW8Veide8DC3rmATnZ8q5R76r2y/86lk7JnlLt47bqDlGCfDiWXj+iNY2tT28i1NlDq4uAjl1ii+8/04NxXS56Z8ptUIGlRT0fCK6aaZ1A1Swg1j/tt+NVfFKjScFwdUfMIbnHmvjQzNSehcehZyLGsjgjCRdY5PQS0rAPtnJLsa4ZMcpYR0ACYKWHaiFmibhpuQ1Egaqw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lQ4JXhxKUI1zsoJ05VFaiVr3hVV3o+jTm6EhiotmwU0=;
+ b=vODBUsOwYBcgxkO8NuSzvP3w9+CxhlAyACq7fbDxVGoLkochNHMkgvx7sLozqQb+sfk0CJN9Sg3LN2DM37IxFJyJ5weW/l4Ygsw1nxnWg+mTJmTDkHsUbgxakXIfSTVwgwDi5hTGV0tUinU+z/dRFzpX83wh5V6dHMaK8pMYCd4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM5PR12MB1947.namprd12.prod.outlook.com (2603:10b6:3:111::23)
+ by DM4PR12MB6590.namprd12.prod.outlook.com (2603:10b6:8:8f::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.16; Tue, 20 Sep
+ 2022 16:54:31 +0000
+Received: from DM5PR12MB1947.namprd12.prod.outlook.com
+ ([fe80::80ca:c97:d395:1acf]) by DM5PR12MB1947.namprd12.prod.outlook.com
+ ([fe80::80ca:c97:d395:1acf%6]) with mapi id 15.20.5632.021; Tue, 20 Sep 2022
+ 16:54:31 +0000
+Message-ID: <160580f4-103b-8b58-7b56-2fd6545c989e@amd.com>
+Date:   Tue, 20 Sep 2022 12:54:28 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2] A simple doc fix
+Content-Language: en-US
+To:     Anup K Parikh <parikhanupk.foss@gmail.com>,
+        skhan@linuxfoundation.org, airlied@linux.ie, daniel@ffwll.ch
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <Yylh1Nst25I6u6Uh@autolfshost>
+From:   Andrey Grodzovsky <andrey.grodzovsky@amd.com>
+In-Reply-To: <Yylh1Nst25I6u6Uh@autolfshost>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YT3PR01CA0089.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:84::20) To DM5PR12MB1947.namprd12.prod.outlook.com
+ (2603:10b6:3:111::23)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,WEIRD_QUOTING
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM5PR12MB1947:EE_|DM4PR12MB6590:EE_
+X-MS-Office365-Filtering-Correlation-Id: f2f426f3-857d-4b28-de64-08da9b28c9ae
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: qWfvNyOG8DcNa55UzxujHvAJCC2JitVJZWVdO66QYvZql3i+i+4C5Vv9wyCnppAwsDKAQPwOwRceu0Uf4e6P8hhDPhaVcbIiWB+jCnnOsAol/y4G+jDjHdkQkSgUDkV/ZtVd7wKvY6h0XYXPxTiPa8nK0I+jT7Y/y8XLbv82WjJItqYRXvMEcaRJXcGl1rYWcwGYSP1rmjC7jzmGCtcjqN1E/QN4AeXyntv0rd8gznk06WptL2GemYFNjD3Lhn+A8yzJoFXtpp9RJ3HchzW4FCFxhPJ/wsFuleH0zCyuAXq0skVXSZqlvYxRS03Di/js7uMuDZPqyWs3j1DqoW7BckLCWdnnYRVvxbASz7lUIJGDFNHv1hSbskBXtpGI5mb3+k3I0XdRLV0sOOcXzpdiWJvYVII7GmGsgw+BhfeD+uK8jW/U1RcZJVl193QdCmkoRljZWNRVWiQb5P4KB2+AlOe2XhlUatQgjvXZTj00PERwu/gv/jw97QNbaqDNMxNS91mcKzUGx9hVhBJ/mtyqeUX00+PGRY0tw2K9J5H6fQI9C5kAINGBSACJ9IF4EO48VK5TkdZHYQ0VgfkKtCDy94B3VbNyTzjnEcthMrs65K4k8Q4yWA2x/iO30K9NX4OukUAC5ay20Tdl3DDkgvn95YM6AAvt/pNrGQqTO7dfxr2mJNhGQ3GIuoSx5hRt9A6FRTE4Yp9HwGTzrDTnzBDWLeY/KgRdf7nol6/XA5BxWQfwJxgav7EzqnXXUqHEejtFEyU9/clTjH3lNS978f+HkfdHYctMbRGnU7XAAgHbDZWYz5KNiVyFgYrLQ3V6QAY1dwL/efFEa75xanF5qnQTKg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB1947.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(39860400002)(366004)(136003)(396003)(451199015)(41300700001)(8936002)(86362001)(2906002)(66946007)(66476007)(8676002)(36756003)(4326008)(66556008)(31686004)(316002)(83380400001)(6512007)(53546011)(5660300002)(44832011)(6506007)(45080400002)(6666004)(31696002)(38100700002)(478600001)(186003)(2616005)(6486002)(966005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bEZPN1VzY2NKS0luTDJOY3UxQ2ROZGlUU1VrcjVwL3dON1FHbnhwaXcreGta?=
+ =?utf-8?B?U01UV1hBQUZTYnRldW9lZWV1TGhCNkdBdlRZTlgrNVpwWXdJbVFHazhFWGNV?=
+ =?utf-8?B?STZmVE80NFpIM0xKczdwRzgvSng2YzZlalFpcGo5REQxQTduVlN6Z3lSZTdN?=
+ =?utf-8?B?Mk1oSExFNTdHV0x4dSsvZng4ZnE2bUd5TExhOFpPdWtwT3ozeDdLYTRScWVZ?=
+ =?utf-8?B?a05zaVEyUTBocGNaeUM2Mm5hR2dEQ3RoYjRQSkVncFZOLzVJZ24yVzVFV1NC?=
+ =?utf-8?B?OTdGazMvM2NyR2UyZFUrR0J4T2JrRzQyakd2V2x2dm5mV0pyOWtwUGtpMlpq?=
+ =?utf-8?B?ZW1ZTWtKT3JPSjF2VldYWW9OZ2ZZZ21QVGhrWE9qcjBqZ2ZKT2JwK0ZOYTlH?=
+ =?utf-8?B?d05PZzVVQktobmd2WWN4STNVaXRFS1RRTVU5U3B1ZE54RzhVUXFqb2tiVDBk?=
+ =?utf-8?B?cTM0dmFZRTQvT3NwYm11QXc1NFdpeXoySDJVVUxoS0cyME9MOWRlNE5yUXdO?=
+ =?utf-8?B?VXpmbFN2OU5sdXVNRTcvdWZtMm01WmYxTXFEei9va1U5UzY0T20zbEtmek5O?=
+ =?utf-8?B?TExWZWpaRktmc2VaWXp2VkZlYjZLR1FnekNuaDNNWkZybzNrRXR4cnE3RVlC?=
+ =?utf-8?B?R3gxSUxpQkF4akRtVXVuU3ltQnlFMEtDdi9nVFZhc1ZvakZnTUxLQU1nQVZZ?=
+ =?utf-8?B?ZE5VSktUamVaUE9sOS9VR1QyeTBJbWxvVkVaYWlJbS9iVUdjcmRBQUd3RUMz?=
+ =?utf-8?B?Y0cvTWpDUWU4NGVzSEs3enVhNWU2RmxJU1NVbVUveEZqUDVLY1V5YlhyZ1hF?=
+ =?utf-8?B?WHp5VkUyNWYvOTA2VEU2UUlOMHVrN2tiQjhsZnZnejhBa1l1ZCtuVTVxQjBP?=
+ =?utf-8?B?YnRYaGc0UkVhMjg4VnIzdXoySWNpd2xQa3k3YlNmaTRxVDhKQzA2Y2VPTkJt?=
+ =?utf-8?B?WkZXaE9lc0wzc3RjYWdzY2RSV09UOExyWnlPYW9nTDBwclVoZXFsWUhMNUNk?=
+ =?utf-8?B?eEI4UWdnclZZU1RKSEkrejBLc3lWNGNGRTVRQy9EdEthZThNQkliMmJWQmky?=
+ =?utf-8?B?ZnNNZ3FkNHZUdDZiTGFNYTF4anpyOEJIOUlRTStNdTZpaENndlpPakJwbGJW?=
+ =?utf-8?B?NHM3RlZaRFhlanBwZThMMTVvUWhsbHM2cUoySmNKbFk3cmR4eXZITWxadjE0?=
+ =?utf-8?B?SHE2YWRCb0ZpZDdJa1ZHNjBISjNDN2doUks2Y2x6ek51WW9mNDhFSHZ5YnhV?=
+ =?utf-8?B?Z1lONEZHUGt2R0VKTUh4NlR5SjNLM21aOXNCZzc5cmVYU1lPOGhyRklOV0VH?=
+ =?utf-8?B?U0FTemVicUM4QzhZZnJOMElxVk5kazNRTzVjdllNeXRZV0RKclBvYTNseTZo?=
+ =?utf-8?B?RnlxN21FbnpPUGthNkdtaFpFMFFPZjh3Tnk4K0NYUkFMMzVxckNOVmtUQ2pH?=
+ =?utf-8?B?YUlRZENzY3FmZnBCTFR2QWFSS0p1OHA0anpYTEFoc1ZZT3MrUm5mbGRENGxW?=
+ =?utf-8?B?K3o0K1cwNC9DejdjSFlnbUo0WS8vUHdIY0hKSkxEdGlhQ0ZwZHFDOWlWNzQ0?=
+ =?utf-8?B?L1VtOTBpT1BISmhzc2VXZXpydHFVcnpPZ1FMSHlCMGlEb3NwS3BNWlBhRFU2?=
+ =?utf-8?B?bmNVZStkdnduSVcrbWFubTVQbjg5b3k1eVgxSmFQa3puM0xFS2phcHBmVW9x?=
+ =?utf-8?B?MUg5OVVMYkNzZWJVcWIvRVpCRHJ0QjJxSUt2WVBRUjNlSE9hWVZGbDAxOVIr?=
+ =?utf-8?B?SHVBNUI5eGJBWUdocWt6a2RmTFgxa3JtanhqUGtGTzk5ZHBTTVBZZDZiU1dT?=
+ =?utf-8?B?UWxiL2tPUlA1SHBmcmc2UzkvdWpWdC82cFhKcllrVExHMklPSWdHeU1sTG5v?=
+ =?utf-8?B?dm9UYUZUWklxMC9jSGRCRnlBMHJvSGdSb0FTek5iaExjcFJUT21jWTNTenFL?=
+ =?utf-8?B?c0xkZXVZVGVISklMNnFxN3NWWU56eXhaZGQwbTVrRzhvRVFpRlVxMll0NVdG?=
+ =?utf-8?B?M3dTbTM5V0VzbGN3V2RSQjBOK3lpbXhWVldvb0dWY1FLZFU5L2pIam44WVRr?=
+ =?utf-8?B?ZnYyOVc2R2pjbTN1eXd0aTRNbWJuS3llREMzZHN2Wnh0RXcyQm93N2thZ3Nn?=
+ =?utf-8?B?bmFuSG02OTQzRTFYcXhsVFBSZGtzUnlISHNZQnV1UkpKV2t4WjlLL3dlSHJW?=
+ =?utf-8?Q?8agQ43pCST70kO4S0ff3qGJ2ZwY2HJ0GVaivFW0ZCCh6?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f2f426f3-857d-4b28-de64-08da9b28c9ae
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB1947.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Sep 2022 16:54:31.2586
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2LyWKIE0o0Kxyj6B8LesovQMYLv7//RNMYUjtZv8tQszGkYZI1ywXqYzo8H/QfBlqA4pAL5P9AdzmxtPMwqIuA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6590
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add initial version of device tree for the BMC in the AMD DaytonaX
-platform.
+Reviewed-by: Andrey Grodzovsky <andrey.grodzovsky@amd.com>
 
-AMD DaytonaX platform is a customer reference board (CRB) with an
-Aspeed ast2500 BMC manufactured by AMD.
+Will push it to drm-misc-next
 
-Signed-off-by: Konstantin Aladyshev <aladyshev22@gmail.com>
----
- .../bindings/arm/aspeed/aspeed.yaml           |   1 +
- arch/arm/boot/dts/Makefile                    |   1 +
- arch/arm/boot/dts/aspeed-bmc-amd-daytonax.dts | 319 ++++++++++++++++++
- 3 files changed, 321 insertions(+)
- create mode 100644 arch/arm/boot/dts/aspeed-bmc-amd-daytonax.dts
+Thanks,
 
-diff --git a/Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml b/Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml
-index 1895ce9de461..191a52595fea 100644
---- a/Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml
-+++ b/Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml
-@@ -30,6 +30,7 @@ properties:
-         items:
-           - enum:
-               - amd,ethanolx-bmc
-+              - amd,daytonax-bmc
-               - ampere,mtjade-bmc
-               - aspeed,ast2500-evb
-               - asrock,e3c246d4i-bmc
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 05d8aef6e5d2..9eff88d410aa 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -1575,6 +1575,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
- 	aspeed-ast2600-evb-a1.dtb \
- 	aspeed-ast2600-evb.dtb \
- 	aspeed-bmc-amd-ethanolx.dtb \
-+	aspeed-bmc-amd-daytonax.dtb \
- 	aspeed-bmc-ampere-mtjade.dtb \
- 	aspeed-bmc-arm-stardragon4800-rep2.dtb \
- 	aspeed-bmc-asrock-e3c246d4i.dtb \
-diff --git a/arch/arm/boot/dts/aspeed-bmc-amd-daytonax.dts b/arch/arm/boot/dts/aspeed-bmc-amd-daytonax.dts
-new file mode 100644
-index 000000000000..89634dda8e5f
---- /dev/null
-+++ b/arch/arm/boot/dts/aspeed-bmc-amd-daytonax.dts
-@@ -0,0 +1,319 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/dts-v1/;
-+
-+#include "aspeed-g5.dtsi"
-+#include <dt-bindings/gpio/aspeed-gpio.h>
-+#include <dt-bindings/interrupt-controller/irq.h>
-+
-+/ {
-+	model = "AMD DaytonaX BMC";
-+	compatible = "amd,daytonax-bmc", "aspeed,ast2500";
-+
-+	memory@80000000 {
-+		reg = <0x80000000 0x20000000>;
-+	};
-+
-+	reserved-memory {
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges;
-+
-+		video_engine_memory: jpegbuffer {
-+			size = <0x02000000>;	/* 32M */
-+			alignment = <0x01000000>;
-+			compatible = "shared-dma-pool";
-+			reusable;
-+		};
-+	};
-+
-+	aliases {
-+		serial0 = &uart1;
-+		serial4 = &uart5;
-+	};
-+
-+	chosen {
-+		stdout-path = &uart5;
-+		bootargs = "console=ttyS4,115200 earlycon";
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+
-+		fault {
-+			gpios = <&gpio ASPEED_GPIO(A, 2) GPIO_ACTIVE_LOW>;
-+		};
-+
-+		identify {
-+			gpios = <&gpio ASPEED_GPIO(A, 3) GPIO_ACTIVE_LOW>;
-+		};
-+	};
-+
-+	iio-hwmon {
-+		compatible = "iio-hwmon";
-+		io-channels = <&adc 0>, <&adc 1>, <&adc 2>, <&adc 3>, <&adc 4>,
-+			<&adc 5>, <&adc 6>, <&adc 7>, <&adc 8>, <&adc 9>,
-+			<&adc 10>, <&adc 11>, <&adc 12>, <&adc 13>, <&adc 14>,
-+			<&adc 15>;
-+	};
-+};
-+
-+&fmc {
-+	status = "okay";
-+	flash@0 {
-+		status = "okay";
-+		m25p,fast-read;
-+		label = "bmc";
-+		#include "openbmc-flash-layout.dtsi"
-+	};
-+};
-+
-+&mac0 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_rgmii1_default &pinctrl_mdio1_default>;
-+};
-+
-+&uart1 {
-+	//Host Console
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_txd1_default
-+		&pinctrl_rxd1_default
-+		&pinctrl_nrts1_default
-+		&pinctrl_ndtr1_default
-+		&pinctrl_ndsr1_default
-+		&pinctrl_ncts1_default
-+		&pinctrl_ndcd1_default
-+		&pinctrl_nri1_default>;
-+};
-+
-+&uart5 {
-+	//BMC Console
-+	status = "okay";
-+};
-+
-+&vuart {
-+	status = "okay";
-+	aspeed,lpc-io-reg = <0x3f8>;
-+	aspeed,lpc-interrupts = <4 IRQ_TYPE_LEVEL_HIGH>;
-+};
-+
-+&adc {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_adc0_default
-+		&pinctrl_adc1_default
-+		&pinctrl_adc2_default
-+		&pinctrl_adc3_default
-+		&pinctrl_adc4_default
-+		&pinctrl_adc5_default
-+		&pinctrl_adc6_default
-+		&pinctrl_adc7_default
-+		&pinctrl_adc8_default
-+		&pinctrl_adc9_default
-+		&pinctrl_adc10_default
-+		&pinctrl_adc11_default
-+		&pinctrl_adc12_default
-+		&pinctrl_adc13_default
-+		&pinctrl_adc14_default
-+		&pinctrl_adc15_default>;
-+};
-+
-+&gpio {
-+	status = "okay";
-+	gpio-line-names =
-+	/*A0-A7*/	"","","led-fault","led-identify","","","","",
-+	/*B0-B7*/	"","","","","","","","",
-+	/*C0-C7*/	"id-button","","","","","","","",
-+	/*D0-D7*/	"","","ASSERT_BMC_READY","","","","","",
-+	/*E0-E7*/	"reset-button","reset-control","power-button","power-control","",
-+			"power-good","power-ok","",
-+	/*F0-F7*/	"","","","","","","BATTERY_DETECT","",
-+	/*G0-G7*/	"","","","","","","","",
-+	/*H0-H7*/	"","","","","","","","",
-+	/*I0-I7*/	"","","","","","","","",
-+	/*J0-J7*/	"","","","","","","","",
-+	/*K0-K7*/	"","","","","","","","",
-+	/*L0-L7*/	"","","","","","","","",
-+	/*M0-M7*/	"","","","","","","","",
-+	/*N0-N7*/	"","","","","","","","",
-+	/*O0-O7*/	"","","","","","","","",
-+	/*P0-P7*/	"","","","","","","","",
-+	/*Q0-Q7*/	"","","","","","","","",
-+	/*R0-R7*/	"","","","","","","","",
-+	/*S0-S7*/	"","","","","","","","",
-+	/*T0-T7*/	"","","","","","","","",
-+	/*U0-U7*/	"","","","","","","","",
-+	/*V0-V7*/	"","","","","","","","",
-+	/*W0-W7*/	"","","","","","","","",
-+	/*X0-X7*/	"","","","","","","","",
-+	/*Y0-Y7*/	"","","","","","","","",
-+	/*Z0-Z7*/	"","","","","","","","",
-+	/*AA0-AA7*/	"","","","","","","","",
-+	/*AB0-AB7*/	"FM_BMC_READ_SPD_TEMP","","","","","","","",
-+	/*AC0-AC7*/	"","","","","","","","";
-+};
-+
-+&i2c0 {
-+	status = "okay";
-+};
-+
-+&i2c1 {
-+	status = "okay";
-+};
-+
-+&i2c2 {
-+	status = "okay";
-+};
-+
-+&i2c3 {
-+	status = "okay";
-+};
-+
-+&i2c4 {
-+	status = "okay";
-+};
-+
-+&i2c5 {
-+	status = "okay";
-+};
-+
-+&i2c6 {
-+	status = "okay";
-+};
-+
-+&i2c7 {
-+	status = "okay";
-+};
-+
-+&i2c8 {
-+	status = "okay";
-+};
-+
-+&i2c10 {
-+	status = "okay";
-+};
-+
-+&i2c11 {
-+	status = "okay";
-+};
-+
-+&i2c12 {
-+	status = "okay";
-+};
-+
-+&kcs3 {
-+	status = "okay";
-+	aspeed,lpc-io-reg = <0xca2>;
-+};
-+
-+&lpc_snoop {
-+	status = "okay";
-+	snoop-ports = <0x80>, <0x81>;
-+};
-+
-+&lpc_ctrl {
-+	status = "okay";
-+};
-+
-+&pwm_tacho {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_pwm0_default
-+		&pinctrl_pwm1_default
-+		&pinctrl_pwm2_default
-+		&pinctrl_pwm3_default
-+		&pinctrl_pwm4_default
-+		&pinctrl_pwm5_default
-+		&pinctrl_pwm6_default
-+		&pinctrl_pwm7_default>;
-+
-+	fan@0 {
-+		reg = <0x00>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x00>;
-+	};
-+
-+	fan@1 {
-+		reg = <0x00>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x01>;
-+	};
-+
-+	fan@2 {
-+		reg = <0x01>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x02>;
-+	};
-+
-+	fan@3 {
-+		reg = <0x01>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x03>;
-+	};
-+
-+	fan@4 {
-+		reg = <0x02>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x04>;
-+	};
-+
-+	fan@5 {
-+		reg = <0x02>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x05>;
-+	};
-+
-+	fan@6 {
-+		reg = <0x03>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x06>;
-+	};
-+
-+	fan@7 {
-+		reg = <0x03>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x07>;
-+	};
-+
-+	fan@8 {
-+		reg = <0x04>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x08>;
-+	};
-+
-+	fan@9 {
-+		reg = <0x04>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x09>;
-+	};
-+
-+	fan@10 {
-+		reg = <0x05>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x0a>;
-+	};
-+
-+	fan@11 {
-+		reg = <0x05>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x0b>;
-+	};
-+
-+	fan@12 {
-+		reg = <0x06>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x0c>;
-+	};
-+
-+	fan@13 {
-+		reg = <0x06>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x0d>;
-+	};
-+
-+	fan@14 {
-+		reg = <0x07>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x0e>;
-+	};
-+
-+	fan@15 {
-+		reg = <0x07>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x0f>;
-+	};
-+};
-+
-+&video {
-+	status = "okay";
-+	memory-region = <&video_engine_memory>;
-+};
-+
-+&vhub {
-+	status = "okay";
-+};
--- 
-2.25.1
+Andrey
 
+On 2022-09-20 02:46, Anup K Parikh wrote:
+> Fix two warnings during doc build which also results in corresponding
+> additions in generated docs
+>
+> Warnings Fixed:
+> 1. include/drm/gpu_scheduler.h:462: warning: Function parameter or member
+>     'dev' not described in 'drm_gpu_scheduler'
+> 2. drivers/gpu/drm/scheduler/sched_main.c:1005: warning: Function
+>     parameter or member 'dev' not described in 'drm_sched_init'
+>
+> Signed-off-by: Anup K Parikh <parikhanupk.foss@gmail.com>
+> ---
+> Changes in v2:
+>      Correct the doc strings according to
+>      Link: https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Fall%2Ff528a8e4-5162-66d5-09da-5252076882b8%40amd.com%2F&amp;data=05%7C01%7Candrey.grodzovsky%40amd.com%7Ccbef53d3f32845465ce908da9ad3f29b%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637992532358603366%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=PnHCvtDFVWnb25YkDfjHcmy9MBpLCA462xco799rjJs%3D&amp;reserved=0
+>   drivers/gpu/drm/scheduler/sched_main.c | 2 ++
+>   include/drm/gpu_scheduler.h            | 2 ++
+>   2 files changed, 4 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm/scheduler/sched_main.c
+> index 68317d3a7a27..979685830671 100644
+> --- a/drivers/gpu/drm/scheduler/sched_main.c
+> +++ b/drivers/gpu/drm/scheduler/sched_main.c
+> @@ -994,6 +994,8 @@ static int drm_sched_main(void *param)
+>    *		used
+>    * @score: optional score atomic shared with other schedulers
+>    * @name: name used for debugging
+> + * @dev: A device pointer - primarily useful for printing standardized
+> + *       messages with DRM_DEV_ERROR().
+>    *
+>    * Return 0 on success, otherwise error code.
+>    */
+> diff --git a/include/drm/gpu_scheduler.h b/include/drm/gpu_scheduler.h
+> index addb135eeea6..80a525dd19bd 100644
+> --- a/include/drm/gpu_scheduler.h
+> +++ b/include/drm/gpu_scheduler.h
+> @@ -435,6 +435,8 @@ struct drm_sched_backend_ops {
+>    * @_score: score used when the driver doesn't provide one
+>    * @ready: marks if the underlying HW is ready to work
+>    * @free_guilty: A hit to time out handler to free the guilty job.
+> + * @dev: A device pointer - primarily useful for printing standardized
+> + *       messages with DRM_DEV_ERROR().
+>    *
+>    * One scheduler is implemented for each hardware ring.
+>    */
