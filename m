@@ -2,107 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67D915BDDC7
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 09:07:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67C7E5BDDCE
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 09:08:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230076AbiITHGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 03:06:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33142 "EHLO
+        id S230100AbiITHHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 03:07:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229909AbiITHGu (ORCPT
+        with ESMTP id S229777AbiITHHc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 03:06:50 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2403D5B7B8
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 00:06:49 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id u18so2232753lfo.8
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 00:06:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=BpGibXFgS0C/8+QW13M1OlsPel1EQHzKXdhl+DKxo08=;
-        b=HPT/6Gjgl4SGIytwzUcr3sYP2ohP3kgKY6hkpB3irXCTIxpy/JZERpkhxabAiTD6PM
-         JPoD0D24wIcG83ptsDEsJrx79haAbkb+ktr/KxcNEFhDBqlNoKetTEEtK6mNpnfg5cWi
-         zTRMF9FeN+iOx7g1zheSFkh6CtR43QtgJvAzb1iKgswKJL2VNE9GODHQ4bUM/fAxV2co
-         Wq0xuhIegzSTISXDNoadzzEgeib8bnQG3F/qiJDFUcswKZv1Naqu/oe7V9AcFscUywHL
-         XYYTHDipmu7HeoZhRWf99LSdm1FjrO4rOq/anaDb9z9us9v/Lqlne2diVY2I+MPzAz5v
-         uqlQ==
+        Tue, 20 Sep 2022 03:07:32 -0400
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4CF452E5A;
+        Tue, 20 Sep 2022 00:07:31 -0700 (PDT)
+Received: by mail-qv1-f42.google.com with SMTP id ml1so1438945qvb.1;
+        Tue, 20 Sep 2022 00:07:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=BpGibXFgS0C/8+QW13M1OlsPel1EQHzKXdhl+DKxo08=;
-        b=cXcNcjRI4BVuZwWpnQyQG9BlZVvioZC3sv6bVzbC4+h6r03Xt0FuGplXUJXR1JtS67
-         PUwfvyX1G2idT9ooDPo4D35nbN9Jjbp9bRKo/18motgaragPM39xOdjvaMMyMK8yvrsQ
-         H1N1xhLdc2yhA3V+ZYh3jV3a3o/ZPwVbI4QAkHpk4ZVnhpQng8gw9/HMbC3vDBaONqh8
-         CoWT17QfC7smA6GryaV56behiikbkvT0+Q5C+Cd2H1UGKk7RdlANzJZ+VPtL6FUUz/tr
-         yUrIkACJp+0Oj2W63rE0Z3hcvA5AKulTRX53CGAAX3OF8ii5ef2K0HxqYx+zmx+WPScR
-         jKqw==
-X-Gm-Message-State: ACrzQf1g0gvTn8tq78AxfeU4HfTH8X2beXad0vTnKjz82loNJNb6uH67
-        /onTIv/MPmdX8BB+Nyhp2K927Q==
-X-Google-Smtp-Source: AMsMyM5ppkFWKFY0q7coi2ylM45dStSfuK7WNLNglTVeYJNwKlA0P10H0k8wQBoC6MA5O/rI6AMKvg==
-X-Received: by 2002:a05:6512:400d:b0:499:d9e:e04c with SMTP id br13-20020a056512400d00b004990d9ee04cmr7127207lfb.400.1663657607344;
-        Tue, 20 Sep 2022 00:06:47 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id v11-20020a2e9f4b000000b00261eb75fa5dsm113836ljk.41.2022.09.20.00.06.46
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=AgNMwleUSoGMfhROZxFkeUVJmew80ewFy3sNwaTGKlY=;
+        b=4BFuocp76KzlxVLvhShx+0gv4iiED7xRs4waAfJJiGH4Fo8BOTdCr4iwfWujz6BVp+
+         2w/oKtyuozhoGl7lYC326JizmQ9cGlSVBhqjtxmybF0YQJ+lm2YJeUeRzE+DoCQ9sAHb
+         PNqCzfD6yPZsMdunw9PQFGvEPB8RVMVs+SYfXSC+xJGH5h9CzQpu4X1O+8DldGVWrSPC
+         7hBanFr9I0YuGB2TOHOTvycuu/VpWWQSi+ersZT3ftSPzMkg2j8RfZyOtjRhRGb+kaxR
+         5saYOxQA3LlvGm+9e4jTJf6bXyIarzYTZnszIOJBebY4avfZD+v5zmvd/BWSjYbZLA6R
+         dQEQ==
+X-Gm-Message-State: ACrzQf0wS6mo7o+XjFwc224V5L821XCv1ZbjYdruRo9MptazU/NsfgeK
+        dTzwpu3GgP4nTrnmFY2BGoa1KAYtFp29PA==
+X-Google-Smtp-Source: AMsMyM40aTRSZQRkhQW0ck3jQOrNZxQFKvhp+Xql9jKKArNzeb3wgtlLqYwk50yH3CJ4Dv0uRvhqyg==
+X-Received: by 2002:a05:6214:27ca:b0:4a9:d3f8:9cfb with SMTP id ge10-20020a05621427ca00b004a9d3f89cfbmr17469328qvb.56.1663657650758;
+        Tue, 20 Sep 2022 00:07:30 -0700 (PDT)
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
+        by smtp.gmail.com with ESMTPSA id bj38-20020a05620a192600b006cebda00630sm544401qkb.60.2022.09.20.00.07.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Sep 2022 00:06:46 -0700 (PDT)
-Message-ID: <1b03d24e-7bd3-f912-b59b-f2199770e9d8@linaro.org>
-Date:   Tue, 20 Sep 2022 09:06:45 +0200
+        Tue, 20 Sep 2022 00:07:30 -0700 (PDT)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-3487d84e477so16484637b3.6;
+        Tue, 20 Sep 2022 00:07:30 -0700 (PDT)
+X-Received: by 2002:a81:1691:0:b0:345:17df:4fc6 with SMTP id
+ 139-20020a811691000000b0034517df4fc6mr17471834yww.502.1663657650127; Tue, 20
+ Sep 2022 00:07:30 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH] ARM: dts: aspeed: greatlakes: Add Facebook greatlakes
- (AST2600) BMC
-Content-Language: en-US
-To:     Bonnie Lo <Bonnie_Lo@Wiwynn.com>
-Cc:     patrick@stwcx.xyz, garnermic@fb.com, Delphine_Chiu@Wiwynn.com,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org
-References: <20220920023042.19244-1-Bonnie_Lo@Wiwynn.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220920023042.19244-1-Bonnie_Lo@Wiwynn.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <8ec796f47620980fdd0403e21bd8b7200b4fa1d4.1663598796.git.geert+renesas@glider.be>
+ <00e5b86b-fe51-98c9-92b7-349b6a03fc1b@omp.ru>
+In-Reply-To: <00e5b86b-fe51-98c9-92b7-349b6a03fc1b@omp.ru>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 20 Sep 2022 09:07:19 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdX7tn4EgG5YCN8FZTmY3+42zLGAxoUnCt5GNk24Hs+c5w@mail.gmail.com>
+Message-ID: <CAMuHMdX7tn4EgG5YCN8FZTmY3+42zLGAxoUnCt5GNk24Hs+c5w@mail.gmail.com>
+Subject: Re: [PATCH] net: ravb: Fix PHY state warning splat during system resume
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        netdev@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/09/2022 04:30, Bonnie Lo wrote:
-> From: Bonnie Lo <Bonnie_Lo@wiwynn.com>
-> 
-> Add linux device tree entry related to
-> greatlakes specific devices connected to BMC SoC.
-> 
-> Signed-off-by: Bonnie Lo <Bonnie_Lo@wiwynn.com>
+Hi Sergey,
 
-Do not ignore comments, but either implement them or keep discussion
-going. If something is not clear, feel free to ask for clarifications.
+On Mon, Sep 19, 2022 at 8:40 PM Sergey Shtylyov <s.shtylyov@omp.ru> wrote:
+> On 9/19/22 5:48 PM, Geert Uytterhoeven wrote:
+> > Since commit 744d23c71af39c7d ("net: phy: Warn about incorrect
+> > mdio_bus_phy_resume() state"), a warning splat is printed during system
+> > resume with Wake-on-LAN disabled:
+> >
+> >         WARNING: CPU: 0 PID: 1197 at drivers/net/phy/phy_device.c:323 mdio_bus_phy_resume+0xbc/0xc8
+> >
+> > As the Renesas Ethernet AVB driver already calls phy_{stop,start}() in
+> > its suspend/resume callbacks, it is sufficient to just mark the MAC
+> > responsible for managing the power state of the PHY.
+> >
+> > Fixes: fba863b816049b03 ("net: phy: make PHY PM ops a no-op if MAC driver manages PHY PM")
+> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+>
+> Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
 
-Since there are no changes and you resubmit the same patch - NAK.
+Thanks for your review!
 
-(...)
+> > --- a/drivers/net/ethernet/renesas/ravb_main.c
+> > +++ b/drivers/net/ethernet/renesas/ravb_main.c
+> > @@ -1449,6 +1449,8 @@ static int ravb_phy_init(struct net_device *ndev)
+> >               phy_remove_link_mode(phydev, ETHTOOL_LINK_MODE_100baseT_Half_BIT);
+> >       }
+> >
+> > +     /* Indicate that the MAC is responsible for managing PHY PM */
+> > +     phydev->mac_managed_pm = true;
+>
+>    Hm, this field is declared as *unsigned*...
 
-> 
-> WIWYNN PROPRIETARY
-> This email (and any attachments) contains proprietary or confidential information and is for the sole use of its intended recipient. Any unauthorized review, use, copying or distribution of this email or the content of this email is strictly prohibited. If you are not the intended recipient, please notify the sender and delete this email immediately.
+True, I copied this from drivers/net/ethernet/broadcom/genet/bcmmii.c.
+But true/false are fully compatible with single-bit values.
 
-This means we have to remove the email because I was not authorized to
-copy/distribute it.
+The linuxdoc suggests to use true, like for all other single-bit fields used
+as booleans:
 
-Best regards,
-Krzysztof
+include/linux/phy.h: * @mac_managed_pm: Set true if MAC driver takes
+of suspending/resuming PHY
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
