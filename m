@@ -2,129 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B73BB5BF004
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 00:22:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8736D5BF00A
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 00:23:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230409AbiITWVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 18:21:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60682 "EHLO
+        id S231159AbiITWXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 18:23:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbiITWVP (ORCPT
+        with ESMTP id S231126AbiITWXk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 18:21:15 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CD2A50074
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 15:21:14 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id fs14so4537412pjb.5
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 15:21:14 -0700 (PDT)
+        Tue, 20 Sep 2022 18:23:40 -0400
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19B5851407
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 15:23:38 -0700 (PDT)
+Received: by mail-vs1-xe2a.google.com with SMTP id 63so3484741vse.2
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 15:23:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=upw72VMgBHjGqZ0U19GWpMgzVWGJTdhRQ+B6JpzBzhI=;
-        b=XaT90E8n2dHZfoQg35IwewP1F01hNnFj3HR28CQPhteLbf8K8/qzEfH4PnmvQwUc1l
-         Vu5c/N1czJLmPcijnABkGU3shW911nCwc2oVYG2knnKsFI1BDQSZF90+wU/meXdN5gS7
-         I8viMtcF9E/E7sWpN7MRpPJZUesU/n2ObnUtE=
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=Bmjjq9da2ZZQv+bFqrfQD4q9L5cTlcfvUlJYV0gue+Q=;
+        b=kC8GcBSEzpY3ni0r7gLE0rdV1zCZyCYXgZWHDP/hxtmnrW1WDQxRM4VqgQpe8y0TKO
+         zjCJFs2v9gY50RO00olwxtS7GsFOLaTahcZ1RnjMTUIcM/ilbRKt8h6olpkh2HHEBomD
+         LuD3AUSauSkc56m9cM7q8UrSV7BHKxlmClLls40HrJdDYwICXqCIGDj2he6rM4xrg7Lx
+         Q26JxSbuymA2G8s94MT1OjHrfBWD6PUona0GuUuu6rWvXM+bDppNwd2ickOKoGXKwwUh
+         r8Pg/Dj2bxtbu65OSsbCfFhK8hIlGXLGLbdAKoJ5kglB2scI+H5/pUt2e28k3saBXBqz
+         np3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=upw72VMgBHjGqZ0U19GWpMgzVWGJTdhRQ+B6JpzBzhI=;
-        b=p+o5dXApPSR0jSVXhg0Ux9oulva51Q9fleDVThygwOk7rQy2GaCKYET3Ov8YZ6Nlx0
-         +MbENYs8VUizWnghdrG/k2UYH46S1vQFgnurod5YuPMOlF+FW+5eAcyFQik4EPETpmYs
-         5ZuGpE6K/tQzSd7Na649x50gy9HVr3Xx5sx9uldZdtPzi1kZy9P7AL8Exn5m6RKmyF4y
-         Y2blurYnnOkwRSb+eG5OkCaTQUXq69RCMEc+noVQRI8fmhMMbzZIRFoI2GD5y9TClz96
-         D1nP0FN5elWFgJB1bH7gFGXYWCsn9keSuphoaf4qtp1ASZ+a/GUBq3fCId+1MDsq4Nem
-         9esw==
-X-Gm-Message-State: ACrzQf37axvDWEwxxBG/lPrZ0CeBQ2e1dX/BwXqw1Y1VeBClcmoPTcvG
-        hLABTDthTNDv0CYCe9T4gF1SRg==
-X-Google-Smtp-Source: AMsMyM6nY7sNxH3PAXOplIR0CNRRrYOg/61kDeU+ppTPOusz6Hzev6Euv38+l4THkA3nyZ4g+ysgFw==
-X-Received: by 2002:a17:902:ec82:b0:178:6b70:7eca with SMTP id x2-20020a170902ec8200b001786b707ecamr1729657plg.164.1663712473795;
-        Tue, 20 Sep 2022 15:21:13 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id x4-20020a1709027c0400b001637529493esm426472pll.66.2022.09.20.15.21.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 15:21:13 -0700 (PDT)
-Date:   Tue, 20 Sep 2022 15:21:11 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Ren Zhijie <renzhijie2@huawei.com>, viro@zeniv.linux.org.uk,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, tanghui20@huawei.com
-Subject: Re: [PATCH] exec: Force binary name when argv is empty
-Message-ID: <202209201516.966D6EF@keescook>
-References: <20220920120812.231417-1-renzhijie2@huawei.com>
- <87sfkmyumv.fsf@email.froward.int.ebiederm.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=Bmjjq9da2ZZQv+bFqrfQD4q9L5cTlcfvUlJYV0gue+Q=;
+        b=Jj+ZUkxGcpRPWDqcfx8fdhtiHuVVoHjNdYorSo1XThFS0GOp/WE7k71bcdRUnxhUgV
+         B88Wgbot83oIIKrk4WSk3arNGfT2nmKWhcyKJXXFzwwAUHAFSLZ0U5eLpx3COzLZlMlR
+         Yt/3b2gEKvDb/kxeyUkNI7VnmVsdrYkgOdlVlM2e0HpHpN6vvtdLPLX2O3CGvNR/MSHz
+         PpvpdjYWdDrQsPS/37XkVHu0Jqrg6sRft7dHejkwaWKipBkYZpKP7oanwgBUUnTT1Gmd
+         cUaanlh96kBWxv7wCL+B5PhwiLZ4FQM+Vmp/gwCOxqZKvoAm49195IRQWoO7WEUemigt
+         HZ8g==
+X-Gm-Message-State: ACrzQf21SiBJhGi17eKNa0+JcGmjrtAgfY4iZx3EN2neaDXTsBHIPboB
+        2hnwTjnmfVinCwt58xeEEtQlf9AEbM0mz+gLU1tZBQ==
+X-Google-Smtp-Source: AMsMyM7Vf/QRcnAyBz+54K5dEI3RtDnKBzaPFQ0uwrc7uBvxnfJRLEgGe8C4ePJRpBzkc96kaDDLlRGb1AzNpRFIiK8=
+X-Received: by 2002:a67:ac09:0:b0:39a:eab8:a3a6 with SMTP id
+ v9-20020a67ac09000000b0039aeab8a3a6mr5799386vse.9.1663712617046; Tue, 20 Sep
+ 2022 15:23:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87sfkmyumv.fsf@email.froward.int.ebiederm.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220919201648.2250764-1-keescook@chromium.org>
+In-Reply-To: <20220919201648.2250764-1-keescook@chromium.org>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Tue, 20 Sep 2022 16:23:00 -0600
+Message-ID: <CAOUHufZpan+wVO7tHgMOkX--0JGhv-mqj2Y+QQKRB4GAGSR18w@mail.gmail.com>
+Subject: Re: [PATCH v2] x86/uaccess: Avoid check_object_size() in copy_from_user_nmi()
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Matthew Wilcox <willy@infradead.org>, dev@der-flo.net,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        stable <stable@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 09:42:48AM -0500, Eric W. Biederman wrote:
-> Ren Zhijie <renzhijie2@huawei.com> writes:
-> > From: Hui Tang <tanghui20@huawei.com>
-> >
-> > First run './execv-main execv-child', there is empty in 'COMMAND' column
-> > when run 'ps -u'.
-> >
-> >  USER       PID %CPU %MEM    VSZ   RSS TTY    [...] TIME COMMAND
-> >  root       368  0.3  0.0   4388   764 ttyS0        0:00 ./execv-main
-> >  root       369  0.6  0.0   4520   812 ttyS0        0:00
-> >
-> > The program 'execv-main' as follows:
-> >
-> >  int main(int argc, char **argv)
-> >  {
-> >    char *execv_argv[] = {NULL};
-> >    pid_t pid = fork();
-> >
-> >    if (pid == 0) {
-> >      execv(argv[1], execv_argv);
-> >    } else if (pid > 0) {
-> >      wait(NULL);
-> >    }
-> >    return 0;
-> >  }
+On Mon, Sep 19, 2022 at 2:16 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> The check_object_size() helper under CONFIG_HARDENED_USERCOPY is
+> designed to skip any checks where the length is known at compile time as
+> a reasonable heuristic to avoid "likely known-good" cases. However, it can
+> only do this when the copy_*_user() helpers are, themselves, inline too.
+>
+> Using find_vmap_area() requires taking a spinlock. The check_object_size()
+> helper can call find_vmap_area() when the destination is in vmap memory.
+> If show_regs() is called in interrupt context, it will attempt a call to
+> copy_from_user_nmi(), which may call check_object_size() and then
+> find_vmap_area(). If something in normal context happens to be in the
+> middle of calling find_vmap_area() (with the spinlock held), the interrupt
+> handler will hang forever.
+>
+> The copy_from_user_nmi() call is actually being called with a fixed-size
+> length, so check_object_size() should never have been called in
+> the first place. Given the narrow constraints, just replace the
+> __copy_from_user_inatomic() call with an open-coded version that calls
+> only into the sanitizers and not check_object_size(), followed by a call
+> to raw_copy_from_user().
+>
+> Reported-by: Yu Zhao <yuzhao@google.com>
+> Link: https://lore.kernel.org/all/CAOUHufaPshtKrTWOz7T7QFYUNVGFm0JBjvM700Nhf9qEL9b3EQ@mail.gmail.com
+> Reported-by: dev@der-flo.net
+> Suggested-by: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Matthew Wilcox <willy@infradead.org>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Josh Poimboeuf <jpoimboe@kernel.org>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: x86@kernel.org
+> Fixes: 0aef499f3172 ("mm/usercopy: Detect vmalloc overruns")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+> v2: drop the call explicitly instead of using inline to do it
+> v1: https://lore.kernel.org/lkml/20220916135953.1320601-1-keescook@chromium.org
+> ---
+>  arch/x86/lib/usercopy.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/x86/lib/usercopy.c b/arch/x86/lib/usercopy.c
+> index ad0139d25401..d2aff9b176cf 100644
+> --- a/arch/x86/lib/usercopy.c
+> +++ b/arch/x86/lib/usercopy.c
+> @@ -44,7 +44,8 @@ copy_from_user_nmi(void *to, const void __user *from, unsigned long n)
+>          * called from other contexts.
+>          */
+>         pagefault_disable();
+> -       ret = __copy_from_user_inatomic(to, from, n);
+> +       instrument_copy_from_user(to, from, n);
 
-The correct fix is to userspace here:
+Got a build error on top of mm-unstable:
 
-  int main(int argc, char **argv)
-  {
--   char *execv_argv[] = {NULL};
-+   char *execv_argv[] = { argv[1], NULL };
-    pid_t pid = fork();
-
-    if (pid == 0) {
-
-> [...]
-> For a rare case that should essentially never happen why make it
-> friendlier to use?  Why not fix userspace to add the friendly name
-> instead of the kernel?
-> 
-> Unless there is a good reason for it, it would be my hope that in
-> a couple of years all of the userspace programs that trigger
-> the warning when they start up could be fixed, and we could have
-> execve start failing in those cases.
-
-Agreed -- the goal is to help userspace fix how execve(2) is called.
-
-Speaking to the proposed patch, this idea was considered during the
-development of the ""-adding patch, with the basic outcome being
-that creating a _new_ behavior was not a good idea, and might cause more
-confusion. You can see the thread here:
-
-https://lore.kernel.org/all/202202021229.9681AD39B0@keescook/
-
--Kees
-
--- 
-Kees Cook
+arch/x86/lib/usercopy.c:47:2: error: call to undeclared function
+'instrument_copy_from_user'; ISO C99 and later do not support implicit
+function declarations [-Wimplicit-function-declaration]
+        instrument_copy_from_user(to, from, n);
+        ^
+arch/x86/lib/usercopy.c:47:2: note: did you mean 'instrument_copy_to_user'?
+./include/linux/instrumented.h:117:1: note: 'instrument_copy_to_user'
+declared here
+instrument_copy_to_user(void __user *to, const void *from, unsigned long n)
+^
+1 error generated.
