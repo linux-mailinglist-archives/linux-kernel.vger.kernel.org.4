@@ -2,62 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5290B5BDD97
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 08:47:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FD385BDD94
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 08:47:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230472AbiITGrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 02:47:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40088 "EHLO
+        id S230020AbiITGq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 02:46:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230295AbiITGrS (ORCPT
+        with ESMTP id S230262AbiITGqy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 02:47:18 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 387ED17A84
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 23:47:12 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id q9so1599358pgq.8
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 23:47:12 -0700 (PDT)
+        Tue, 20 Sep 2022 02:46:54 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD5853D3B;
+        Mon, 19 Sep 2022 23:46:53 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id 9so1814816pfz.12;
+        Mon, 19 Sep 2022 23:46:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date;
-        bh=c5KSSWVkQxJDHC069bgwLU2fYk2mKQxGKTjcX09JPwY=;
-        b=HGj8MOzY5CZ5wxY9nmVqBylRA4qoVO1HOk9+EhvXCILBr9M4OZJo0YdHC6FurSSr/Z
-         7CJtTPLAHtRDD1EkTvAEtJAep51AV8xpS2UDs7KXapD+l/86KL+PiNrJZo9ulcWhnGqD
-         UdhKPlUfLsyqSBENOGCLXdg1RMflt4EvN9baVT4GNEnSpYsXzW3HUK/uC6sW95Rb2SvH
-         FHBmMvLDHttahh9qmLz3+f9//48KTDqNjvhgX842FvRn0Lf/WIVFGmuWBSyMCcmkYLwj
-         XjqpuhxKWs4SxYBUqQhSX08HMFlRg+Pus5Z0tYWilQWqgwDyKi381Cdvf79bOu3Yhf8i
-         q6Rw==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=vkTFnfbmIR3qwyo/CUT31Fe4BhBU2kMVaByFkU7+mmo=;
+        b=Xpyb/ZLXc5x/of0UagrB8IiP1JVm37WZ/NYb4yLemjk2zKq4uRxPv0IHxE1RYxJXJE
+         +j1D6K+XKnf7ua+ux06ZzsJlsZEsdc8g9F5Sa8lNL6M2nAMQ6udh3P3/PBk9H7N3jLwb
+         zAKlEz9pD2jIfM8nVifW6oov+38+hIEKHrcP4XpETGe44E887hFoB9EbAGr//6HQb/lm
+         ZUctankBwUxFvUikhxMNJi7XRwqWtOfiC1BZ3EuLT/XZwlo4HU5yfh+6FxRDKs5ycDOG
+         Qttn7ETgosa5Cq3hkL+PRjE+SQ1am8kN4CdZ7TVrg0z7FKEwreNXQ42r+cBkzFUHXFGZ
+         9lMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=c5KSSWVkQxJDHC069bgwLU2fYk2mKQxGKTjcX09JPwY=;
-        b=t4yepVC5N1O0pAqqMTa7mLxkTdN/3T6JZ2WQ10PqslcnxS6Kap2yMKVxoEi0J9luXi
-         nVsscFxkFWHls6e1lzsUGLYKMS4NyAigfrXihmf0wwl4Bg7Ds++ts0SUq6GNjPRGvNKa
-         uaOXaY+DyMHLJ5bsGKJ04hC2jhI6tKFkRSkKbLadENbwDXLlJdh1JZXRP3GYyoT6VvfG
-         quwdTW6q3uxAd2PHRTkkCBp3MPwCpFm9wAQV4/OnNzpaYCyw2wGlNrKbCYdrD+rSOOLV
-         0qLuEzNwDfo0ayOuv3PM2xvKuYdkFUpu6VVnLoZqlrFGsYxdcOuBPTnQtCoMvlpq93YK
-         ZBXQ==
-X-Gm-Message-State: ACrzQf2FdcO1dAnXUekiSNPhB4qzUsfMsJNDgooI1P0/vYFZ2SWmxU0i
-        SM8e7E8rG5FJVcpGHcAUB7I=
-X-Google-Smtp-Source: AMsMyM5XcLxF8MhhH/PMsaRm36L2TkcyH9kq6drtdeDhum5yfRYVmKGhA1mMkFg3ixyXD2tyXWzvxg==
-X-Received: by 2002:a62:8403:0:b0:540:c1e4:fb31 with SMTP id k3-20020a628403000000b00540c1e4fb31mr22297478pfd.85.1663656431635;
-        Mon, 19 Sep 2022 23:47:11 -0700 (PDT)
-Received: from autolfshost ([117.228.7.95])
-        by smtp.gmail.com with ESMTPSA id i6-20020a056a00224600b0054aa69bc192sm651383pfu.72.2022.09.19.23.47.06
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=vkTFnfbmIR3qwyo/CUT31Fe4BhBU2kMVaByFkU7+mmo=;
+        b=m6Lo+PLdYcuIKrogQBYKuoulAgjM2MhM5Y+K4Y2yVz9osCERlTTq5vEBEWSwRNi78W
+         2qhfnSbGNOoDngYiAlS4zeoD+t3nphV7t+AQpatXk5kOU8h0ZZCWHlINBtTRu8gAz/Zo
+         06QsB0hqnXF9E2KJoV5IawCPkbVV4S82RUNCX2IneIg0VjFivCNvQ/n+DADBO1TeoK1K
+         aXagB8aBK1gsvIebfHNzJEL34p6knuQxy1uSxdkKtpVivlxVvuAoNDp+gsMDrgarl8U+
+         3zPgvj7R1e/67iNRtcSsjexGatLujYZ+TkwZNyJhhDImxeibs2UK5afdkaWuXV3PO0jP
+         8S+A==
+X-Gm-Message-State: ACrzQf2Xz1tn+nm6vcaWvaBpaSX+kr6HHIrDzbDGKcbn1e71UCiTW8Vv
+        hjCxrq5yruW3PuLAhctxlUyeYHraomU=
+X-Google-Smtp-Source: AMsMyM7tpo4/lpe8xbYYLCxTjK6FI4HdBFZsdF60Z4Xv5/Vv1yyQxc6Dt8+lkFx1ALem2zZVSTQ5fw==
+X-Received: by 2002:a63:5d18:0:b0:439:61d0:7487 with SMTP id r24-20020a635d18000000b0043961d07487mr18828899pgb.268.1663656412876;
+        Mon, 19 Sep 2022 23:46:52 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id cv20-20020a17090afd1400b001fb1de10a4dsm610572pjb.33.2022.09.19.23.46.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 23:47:11 -0700 (PDT)
-Date:   Tue, 20 Sep 2022 12:16:44 +0530
-From:   Anup K Parikh <parikhanupk.foss@gmail.com>
-To:     skhan@linuxfoundation.org, andrey.grodzovsky@amd.com,
-        airlied@linux.ie, daniel@ffwll.ch
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] A simple doc fix
-Message-ID: <Yylh1Nst25I6u6Uh@autolfshost>
+        Mon, 19 Sep 2022 23:46:52 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: ye.xingchen@zte.com.cn
+To:     ulf.hansson@linaro.org
+Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH linux-next] mmc: rtsx_usb_sdmmc: Remove the unneeded result variable
+Date:   Tue, 20 Sep 2022 06:46:48 +0000
+Message-Id: <20220920064648.215375-1-ye.xingchen@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -68,50 +70,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix two warnings during doc build which also results in corresponding
-additions in generated docs
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
-Warnings Fixed:
-1. include/drm/gpu_scheduler.h:462: warning: Function parameter or member
-   'dev' not described in 'drm_gpu_scheduler'
-2. drivers/gpu/drm/scheduler/sched_main.c:1005: warning: Function
-   parameter or member 'dev' not described in 'drm_sched_init'
+Return the value rtsx_usb_send_cmd() directly instead of storing it in
+another redundant variable.
 
-Signed-off-by: Anup K Parikh <parikhanupk.foss@gmail.com>
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 ---
-Changes in v2:
-    Correct the doc strings according to
-    Link: https://lore.kernel.org/all/f528a8e4-5162-66d5-09da-5252076882b8@amd.com/
- drivers/gpu/drm/scheduler/sched_main.c | 2 ++
- include/drm/gpu_scheduler.h            | 2 ++
- 2 files changed, 4 insertions(+)
+ drivers/mmc/host/rtsx_usb_sdmmc.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm/scheduler/sched_main.c
-index 68317d3a7a27..979685830671 100644
---- a/drivers/gpu/drm/scheduler/sched_main.c
-+++ b/drivers/gpu/drm/scheduler/sched_main.c
-@@ -994,6 +994,8 @@ static int drm_sched_main(void *param)
-  *		used
-  * @score: optional score atomic shared with other schedulers
-  * @name: name used for debugging
-+ * @dev: A device pointer - primarily useful for printing standardized
-+ *       messages with DRM_DEV_ERROR().
-  *
-  * Return 0 on success, otherwise error code.
-  */
-diff --git a/include/drm/gpu_scheduler.h b/include/drm/gpu_scheduler.h
-index addb135eeea6..80a525dd19bd 100644
---- a/include/drm/gpu_scheduler.h
-+++ b/include/drm/gpu_scheduler.h
-@@ -435,6 +435,8 @@ struct drm_sched_backend_ops {
-  * @_score: score used when the driver doesn't provide one
-  * @ready: marks if the underlying HW is ready to work
-  * @free_guilty: A hit to time out handler to free the guilty job.
-+ * @dev: A device pointer - primarily useful for printing standardized
-+ *       messages with DRM_DEV_ERROR().
-  *
-  * One scheduler is implemented for each hardware ring.
-  */
+diff --git a/drivers/mmc/host/rtsx_usb_sdmmc.c b/drivers/mmc/host/rtsx_usb_sdmmc.c
+index 5fe4528e296e..5798aee06653 100644
+--- a/drivers/mmc/host/rtsx_usb_sdmmc.c
++++ b/drivers/mmc/host/rtsx_usb_sdmmc.c
+@@ -1042,7 +1042,6 @@ static int sd_set_timing(struct rtsx_usb_sdmmc *host,
+ 		unsigned char timing, bool *ddr_mode)
+ {
+ 	struct rtsx_ucr *ucr = host->ucr;
+-	int err;
+ 
+ 	*ddr_mode = false;
+ 
+@@ -1097,9 +1096,7 @@ static int sd_set_timing(struct rtsx_usb_sdmmc *host,
+ 		break;
+ 	}
+ 
+-	err = rtsx_usb_send_cmd(ucr, MODE_C, 100);
+-
+-	return err;
++	return rtsx_usb_send_cmd(ucr, MODE_C, 100);
+ }
+ 
+ static void sdmmc_set_ios(struct mmc_host *mmc, struct mmc_ios *ios)
 -- 
-2.35.1
-
+2.25.1
