@@ -2,128 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE43D5BEAA1
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 17:59:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74FBE5BEAA4
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 18:00:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231436AbiITP7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 11:59:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35144 "EHLO
+        id S231548AbiITQAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 12:00:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231540AbiITP7s (ORCPT
+        with ESMTP id S230428AbiITQAB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 11:59:48 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5954564CB
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 08:59:47 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id a8so4492043lff.13
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 08:59:47 -0700 (PDT)
+        Tue, 20 Sep 2022 12:00:01 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6471113FAF
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 09:00:00 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-3454b0b1b6dso32481097b3.4
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 09:00:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=QMYsP28bPSxiuVehnUkq9TPK8zyTroEstE6jb5tgTaI=;
-        b=n+AtSohyyJIp32sHBo57AZXXa9T8x1CpBYXcbLur2iNqWsjX86/ihr9MnLKwNgYyMU
-         GX9N2pZkMEFhQPl5ZlxgTeHD1n8+BlFjeRBzYXYiZCKlcV8qGgCAS3d6oMd+EWQPrrhM
-         1GvoqjjI2oLhq7zDxpcx+A9APdo/yShIyhz0Lmt0q6zLIHsOu5Awg5HdG4Z5sMtO/U7u
-         ApAdEV+RKdeShp7eyK3o7adbqHxXJuU/0yG7rucfjVihMwKgdGSiXxju9YI8u6fAGHgm
-         3XIZl1mAlsVHRToObmHU9YsmdfsePs24ygAC7ZBi3+7hEUj0vBbSh7XPprr5QasfCBzr
-         L8cg==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=16rXn9G6e+vzicFuly3W1zcOBEo+YQGYAw+kgXgqvTY=;
+        b=JulG5+8FYssKEV3UjOlxsbhuR+H3zTPHXzwbJ8fWhdBNyZ7mARaew2XIFgZSN1JHPE
+         XRYW8z5HH7i/phg3JINjBbEndMxSTCjkATkMWNgh6LYoWShDBQNo/p6la21e941PO+/R
+         FwA9szzTCOjtntjSZpxeEhhJE4b64I8ydHPFTe1g2PPZXPtnK1/284v2WBUhJ0G7jNFg
+         8Dh/Y7fIV+F1IDg+HMDjt1r5AypmS9/B9pQ3ff9Vvjx17ThaDrLisykzSFom31lxkkK6
+         lTAFmIKAxm6/O8AfTdWyKRXQSIyYN9z2U1LBXSb3HtLG9pctHxu8Bt7lnEHi4V05Bxnk
+         Sa5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=QMYsP28bPSxiuVehnUkq9TPK8zyTroEstE6jb5tgTaI=;
-        b=aSl5Xb83BkfkDGkxc7W9PCA4kv2O5BkMJNDJaI9DKb14R+WzYF9Mh4GJq1/YA3iKgy
-         f1hdHteeIRZ7WcdGQJhuz42LwmPHD2B2PZ6MSRHSYyFhsgGA5MNPjqJWp8hcX1hzpzkh
-         DxDILMCeYSh4Bjt3FOacQXGgX27yqa6KUlgq78Z5wO/07CrThZTLupkGZsBW8Vzq/8H+
-         2U+gY2Gpr0AgBmOm0EPxXt0IhpPznlAP/BY05FA698wjhPISjskSDx/YqiYW6po7E9ag
-         mZtGr0wTLk55rKdCKJ2Q3ngC8h9sRX95FdnDR8aCVYmVIwp7ZNC8uyJKHAPtMNqqu1Bf
-         gZEQ==
-X-Gm-Message-State: ACrzQf38LHlYvOAA57iIDcvTq9hkYN8stAHTvEtPcafnWNI/VUpbdT9Z
-        oEVsQHy2/aUAmklQm/zGCdJnBw==
-X-Google-Smtp-Source: AMsMyM4wZ4bHQzY1QM+2MvHkJrH6aFzjE1xLqU7NFFllPA01l1cq/QNVqFQhjz6U4JGkLgammgllmQ==
-X-Received: by 2002:a05:6512:2210:b0:499:d710:9c0d with SMTP id h16-20020a056512221000b00499d7109c0dmr9097083lfu.325.1663689585682;
-        Tue, 20 Sep 2022 08:59:45 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id l17-20020a2e8691000000b0026b2094f6fcsm19677lji.73.2022.09.20.08.59.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Sep 2022 08:59:44 -0700 (PDT)
-Message-ID: <10bd1f39-3971-90ee-5fe4-c44005cdfcc8@linaro.org>
-Date:   Tue, 20 Sep 2022 17:59:43 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=16rXn9G6e+vzicFuly3W1zcOBEo+YQGYAw+kgXgqvTY=;
+        b=qmI2YbG5y/Rb58VeSWBIuV2dSOH2MfNZJhmxVUrIyEoYYjOHwLnRgKBq/b0vdDXZo5
+         /Nyasf/hAy6Wf+4VgkebVSkQ+1nFS5O0XAaO0HiAUvX6gXIsFtRPx4L5aatsqVrmWCKX
+         774ihcWJKsdYmgupaKYHRklHmCceC3H/pVpWcZiLRr1ZhoUudJHaW0IArgHVQNQvbL3c
+         sPwpKHlsjJOFTcjgAYl92gb2ru33/+8WC+m7Qpd89GyuyLBc/uWNyXKkGBlwn0Dxw39D
+         mfOtSRXzF65K8n2sxwqsz4zfe7pb6OIoyWtKcA6YT2AU5DtjwlqL5EyZZRLs+SpjI4sv
+         +plg==
+X-Gm-Message-State: ACrzQf2v6eaFkhc0lHjYYF3BZHIzQ1/xEdnRmT+GtjlMtF/XZoVCXfs3
+        e3VG7K/DiCvFNlQ/WpePU+jYSxi6N9X2K3R2xye/Fw==
+X-Google-Smtp-Source: AMsMyM6nZ/IrGw3W3z/XPOIhCtYqKsDRqGaE/nQcpedW0Y2khjGiygpQYVwrXz4yI0wBHKVuHP6uJcrCAMlybj4hQXw=
+X-Received: by 2002:a81:7986:0:b0:349:853d:d165 with SMTP id
+ u128-20020a817986000000b00349853dd165mr20287586ywc.467.1663689599302; Tue, 20
+ Sep 2022 08:59:59 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v3] dt-bindings: firmware: imx: sync with SCFW kit v1.13.0
-Content-Language: en-US
-To:     Viorel Suman <viorel.suman@oss.nxp.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Viorel Suman <viorel.suman@nxp.com>,
-        Shenwei Wang <shenwei.wang@nxp.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20220919132236.264382-1-viorel.suman@oss.nxp.com>
- <c86d39c9-82d2-0f9f-9836-76ad3b6d8ede@linaro.org>
- <20220919180631.x2telgn6d7woggmz@fsr-ub1664-116>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220919180631.x2telgn6d7woggmz@fsr-ub1664-116>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <202209201359.3f33d97f-oliver.sang@intel.com>
+In-Reply-To: <202209201359.3f33d97f-oliver.sang@intel.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Tue, 20 Sep 2022 08:59:48 -0700
+Message-ID: <CANn89iJn554zCtkG9d556kgC4010yfgc4X+GAnoQQW+5Z_sNpg@mail.gmail.com>
+Subject: Re: [tcp] 4bfe744ff1: packetdrill.packetdrill/gtests/net/tcp/epoll/epoll_out_edge_default_notsent_lowat_ipv4-mapped-v6.fail
+To:     kernel test robot <oliver.sang@intel.com>
+Cc:     lkp@lists.01.org, kbuild test robot <lkp@intel.com>,
+        "David S. Miller" <davem@davemloft.net>, Doug Porter <dsp@fb.com>,
+        Soheil Hassas Yeganeh <soheil@google.com>,
+        Neal Cardwell <ncardwell@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/09/2022 20:06, Viorel Suman wrote:
-43
->>>  #define IMX_SC_R_SECVIO			44
->>>  #define IMX_SC_R_DC_1_VIDEO0		45
->>>  #define IMX_SC_R_DC_1_VIDEO1		46
->>>  #define IMX_SC_R_DC_1_FRAC0		47
->>> +#define IMX_SC_R_V2X			48
->>>  #define IMX_SC_R_DC_1			49
->>> +#define IMX_SC_R_UNUSED14		50
->>>  #define IMX_SC_R_DC_1_PLL_0		51
->>>  #define IMX_SC_R_DC_1_PLL_1		52
->>>  #define IMX_SC_R_SPI_0			53
->>> @@ -151,10 +154,10 @@
->>>  #define IMX_SC_R_DMA_1_CH29		137
->>>  #define IMX_SC_R_DMA_1_CH30		138
->>>  #define IMX_SC_R_DMA_1_CH31		139
->>> -#define IMX_SC_R_UNUSED1		140
->>
->> This one disappears...
-> 
-> Hi Krzysztof,
-> 
-> Right, it was renamed in the subsequent SCFW kit
-> versions to IMX_SC_R_V2X_PID0, thus - this patch
-> rename it in include/dt-bindings/firmware/imx/rsrc.h
-> file in order to have this file and SCFW kit defines
-> synchronized.
-> 
-> IMX_SC_R_UNUSED1 is not referenced somehow in kernel,
-> thus - no compilation issues if renamed to IMX_SC_R_V2X_PID0,
-> IMHO it does not make sense to me to add the related
-> backward compatibility define like below:
-> 
-> #define IMX_SC_R_UNUSED1 IMX_SC_R_V2X_PID0
+On Mon, Sep 19, 2022 at 10:22 PM kernel test robot
+<oliver.sang@intel.com> wrote:
+>
+>
+> Greeting,
+>
+> FYI, we noticed the following commit (built with gcc-11):
+>
+> commit: 4bfe744ff1644fbc0a991a2677dc874475dd6776 ("tcp: fix potential xmit stalls caused by TCP_NOTSENT_LOWAT")
+> https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
+>
+> in testcase: packetdrill
+> version: packetdrill-x86_64-329d89e-1_20220824
+> with following parameters:
+>
+>
+>
+> on test machine: 8 threads 1 sockets Intel(R) Core(TM) i7-7700 CPU @ 3.60GHz (Kaby Lake) with 32G memory
+>
+> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
+>
+>
+> If you fix the issue, kindly add following tag
+> | Reported-by: kernel test robot <oliver.sang@intel.com>
+> | Link: https://lore.kernel.org/r/202209201359.3f33d97f-oliver.sang@intel.com
+>
+>
+> we actually also observed other tests failed on this commit but pass on parent:
+> (more details are in attached dmesg and 'packetdrill' file)
+>
+> =========================================================================================
+> tbox_group/testcase/rootfs/kconfig/compiler:
+>   lkp-kbl-d01/packetdrill/debian-11.1-x86_64-20220510.cgz/x86_64-rhel-8.3-func/gcc-11
+>
+> 1fcb8fb3522f5b0f 4bfe744ff1644fbc0a991a2677d
+> ---------------- ---------------------------
+>        fail:runs  %reproduction    fail:runs
+>            |             |             |
+>            :30         100%          30:30    packetdrill.packetdrill/gtests/net/tcp/epoll/epoll_out_edge_default_notsent_lowat_ipv4-mapped-v6.fail
+>            :30         100%          30:30    packetdrill.packetdrill/gtests/net/tcp/epoll/epoll_out_edge_default_notsent_lowat_ipv4.fail
+>            :30         100%          30:30    packetdrill.packetdrill/gtests/net/tcp/epoll/epoll_out_edge_ipv4-mapped-v6.fail
+>            :30         100%          30:30    packetdrill.packetdrill/gtests/net/tcp/epoll/epoll_out_edge_ipv4.fail
+>            :30         100%          30:30    packetdrill.packetdrill/gtests/net/tcp/epoll/epoll_out_edge_notsent_lowat_ipv4-mapped-v6.fail
+>            :30         100%          30:30    packetdrill.packetdrill/gtests/net/tcp/epoll/epoll_out_edge_notsent_lowat_ipv4.fail
+>
+>
+> stdout:
+> stderr:
+> FAIL [/lkp/benchmarks/packetdrill/gtests/net/tcp/epoll/epoll_out_edge.pkt (ipv4)]
+> stdout:
+> stderr:
+> FAIL [/lkp/benchmarks/packetdrill/gtests/net/tcp/epoll/epoll_out_edge_default_notsent_lowat.pkt (ipv4-mapped-v6)]
+>
+>
+>
+> To reproduce:
+>
+>         git clone https://github.com/intel/lkp-tests.git
+>         cd lkp-tests
+>         sudo bin/lkp install job.yaml           # job file is attached in this email
+>         bin/lkp split-job --compatible job.yaml # generate the yaml file for lkp run
+>         sudo bin/lkp run generated-yaml-file
+>
+>         # if come across any failure that blocks the test,
+>         # please remove ~/.lkp and /lkp dir to run from a clean state.
+>
+>
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://01.org/lkp
+>
+>
 
-The bindings are used by other people (other Linux kernel forks) and by
-other projects (like bootloaders and other operating systems). This is
-why once set, we do not change them, with some exceptions.
+Sure, these (out of tree) packetdrill tests need to account for the
+new kernel behavior.
 
-Best regards,
-Krzysztof
+I am not sure who is responsible for these tests, but this is not the
+kernel maintainers.
