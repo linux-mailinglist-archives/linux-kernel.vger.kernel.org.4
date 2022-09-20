@@ -2,117 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFA6F5BDFD5
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 10:21:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3980A5BDFD1
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 10:21:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231175AbiITIVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 04:21:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33094 "EHLO
+        id S231430AbiITIVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 04:21:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230452AbiITIT6 (ORCPT
+        with ESMTP id S231172AbiITIUM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 04:19:58 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77EB6FF
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 01:17:41 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id cc5so2968297wrb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 01:17:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date;
-        bh=l9gtbM2uto1x5bgL0a0otnawkJGJbySIPkwXwU+/1Sg=;
-        b=g0l7m7UeOdhQ1PnCBXbxUamAfihljV9V2FnQje6nfTZog1OMNhC8oL2nO8DhxAHrdz
-         R5tjgOGSyumGkF1pwo5z9ZhIt6dtb8075rVEd0oApEB71LEbSqSUTlsR+EYRxDVa3Lu8
-         O+M8MmsB1I9X2KmauJ8B5tR6kOAf5niG8lHh5Je0byFx2N6cYQQqgVnAETPrQm822657
-         YCcAnFbL9A6L59hlZ4tsyqYSyzTIcsC5bqU+4Hl6WMx9QJcCoacg34iA3YmNAviHMt2M
-         G3tn/H27cfKd2XR8nEMg2hGrsCRaySYxd8kgkvHDc8Y2YLYU+EuDxVMvRszMbjSiW2gX
-         nLbA==
+        Tue, 20 Sep 2022 04:20:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 786B7B1F5
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 01:18:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663661912;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nYBXnM221OKkMmYnX56agU4HA29O1+0qE07dmbgFr1Y=;
+        b=UYQL6cEZya3EUjGuAX728tyovitTPhL9jkC0WN7/7QCtsPIrwcJ+AxME126OXPejI6Jpo0
+        OR4D/2h/lpa8hU9NR/KxM7EYRApNN4J2C204Zt5ulVc5l7W8qmtPlfWQpjFjQXVjYD7FR1
+        X/o3F4atgzIWhZLcyjuwVDMW4/R8vC4=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-31-aEtLuz6sNy-JJYCRCAJ8jg-1; Tue, 20 Sep 2022 04:18:31 -0400
+X-MC-Unique: aEtLuz6sNy-JJYCRCAJ8jg-1
+Received: by mail-wm1-f69.google.com with SMTP id c188-20020a1c35c5000000b003b2dee5fb58so811857wma.5
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 01:18:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=l9gtbM2uto1x5bgL0a0otnawkJGJbySIPkwXwU+/1Sg=;
-        b=ufPhbQb6/8Plg+S9yr0Ofi7vy1Qd2T79nsd5pawFtAcqr7larZ/WLsseCWuIid1sIu
-         TeouYz1iGAk0Dvk7bMXby2kJaGYfpwHpDo8jJswAQ0TK7vqQF8DkadZTBa2ZkwQ9CP82
-         aWdKpeKor2wQjlHUWutkug4UODLCtnR4mYdQ3IwnzZNrNZunPZpoxwGJCIwks9iTJHMv
-         HVSUVQ1+SmBtOIFWDhi7uUyKd0xs+z/NSWz8IkcAinPN+BdsSx+utcoyouWlIaUjgcR8
-         VCrKF+BrrIMVzyUp5wz36zg1pwAo0e5qi5sEkFjW4/pKDLSOpncLGv9pUwYMSkIZPUbI
-         pB1g==
-X-Gm-Message-State: ACrzQf3/IqXRGvUuf5Ak6RLtPiO7VrWFXf5l8LHBTb8fL2MLboqkoFtf
-        ovQ8DZgKSl5xDcZffw3KW2VThQ==
-X-Google-Smtp-Source: AMsMyM7tatwTKzU25uwqfUSidVRXEueFyIejARipSVNwx7OXnQPpPmj88gcBjqsYA2tRb+GzRzL8Iw==
-X-Received: by 2002:adf:9b97:0:b0:22a:e61a:4b0c with SMTP id d23-20020adf9b97000000b0022ae61a4b0cmr10134280wrc.290.1663661859773;
-        Tue, 20 Sep 2022 01:17:39 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:7e10:f0f:43b2:9b5e? ([2a01:e0a:982:cbb0:7e10:f0f:43b2:9b5e])
-        by smtp.gmail.com with ESMTPSA id bx9-20020a5d5b09000000b00228d183f9c2sm973130wrb.89.2022.09.20.01.17.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Sep 2022 01:17:39 -0700 (PDT)
-Message-ID: <4aa7744a-f002-9029-d50d-bae43c051559@linaro.org>
-Date:   Tue, 20 Sep 2022 10:17:38 +0200
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=nYBXnM221OKkMmYnX56agU4HA29O1+0qE07dmbgFr1Y=;
+        b=bHLfHG6JH/BPjEkaXOuIfA5rsKUZi7qB6fLgqX0GnePyRx3RwRvXz3PYvIJcDRmS0x
+         aT8pe0XRGLXga4ieKQMV9c+2qF4bG13xjn0A83ZHrvLKNeUTplGNeKVzhfcsrdo0r8XI
+         dr50uAZawv/p2+eN+iwqZv8l+tGEn1k+4BiwDezWbQ/33q2+T4vZi36SINr7KCbZJNhk
+         0VhbeMW9Uwrq1eDoACAIeUBjBgSjSdEZ867QFwWexzaLr4tfw9g+/sUQWgBp9lGwWkDv
+         /O0DCQ+HOdJHGHMSMPhH/tyINDQ+8qnAxcQn1b7cOT59CWI2gmn2wLmSyvfSGYV5i07W
+         p5vw==
+X-Gm-Message-State: ACrzQf24Vp68KzKAPHKwNZNJLa+8OV3DbaT3MlbcV8f/ZCzK0v9lvokr
+        eJqD+J5A2bzSbtFljOxnc+KkIzPC4JpdbsQjtQduLvOp8CtYGaSAeZ+rLIzl+r5FYHVveXT3oKY
+        8suYg+Qb7LI/KCvRvN9R+w5QP
+X-Received: by 2002:a5d:4ec5:0:b0:228:6707:8472 with SMTP id s5-20020a5d4ec5000000b0022867078472mr13700964wrv.12.1663661910615;
+        Tue, 20 Sep 2022 01:18:30 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5Gc746EtqOMp12PC/ZhI3qlffavJ9O8HKgnaDgO6702xNdn3VPX99CEZYZBDDZBLY3QzW+vw==
+X-Received: by 2002:a5d:4ec5:0:b0:228:6707:8472 with SMTP id s5-20020a5d4ec5000000b0022867078472mr13700953wrv.12.1663661910369;
+        Tue, 20 Sep 2022 01:18:30 -0700 (PDT)
+Received: from sgarzare-redhat (host-87-11-6-69.retail.telecomitalia.it. [87.11.6.69])
+        by smtp.gmail.com with ESMTPSA id z22-20020a05600c0a1600b003b4868eb6bbsm1749112wmp.23.2022.09.20.01.18.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Sep 2022 01:18:29 -0700 (PDT)
+Date:   Tue, 20 Sep 2022 10:18:24 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     vdasa@vmware.com, vbhakta@vmware.com, namit@vmware.com,
+        bryantan@vmware.com, zackr@vmware.com,
+        linux-graphics-maintainer@vmware.com, doshir@vmware.com,
+        gregkh@linuxfoundation.org, davem@davemloft.net,
+        pv-drivers@vmware.com, joe@perches.com, netdev@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-rdma@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH 0/3] MAINTAINERS: Update entries for some VMware drivers
+Message-ID: <20220920081824.vshwiv3lt5crlxdj@sgarzare-redhat>
+References: <20220906172722.19862-1-vdasa@vmware.com>
+ <20220919104147.1373eac1@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] drm: bridge/dw-hdmi-ahb-audio: use strscpy() is more
- robust and safer
-Content-Language: en-US
-To:     cgel.zte@gmail.com, andrzej.hajda@intel.com
-Cc:     robert.foss@linaro.org, Zeal Robot <zealci@zte.com.cn>,
-        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
-        dri-devel@lists.freedesktop.org
-References: <20220919030401.211331-1-chi.minghao@zte.com.cn>
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Organization: Linaro
-In-Reply-To: <20220919030401.211331-1-chi.minghao@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220919104147.1373eac1@kernel.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/09/2022 05:04, cgel.zte@gmail.com wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
-> 
-> The implementation of strscpy() is more robust and safer.
-> 
-> That's now the recommended way to copy NUL terminated strings.
-> 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-> ---
->   drivers/gpu/drm/bridge/synopsys/dw-hdmi-ahb-audio.c | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi-ahb-audio.c b/drivers/gpu/drm/bridge/synopsys/dw-hdmi-ahb-audio.c
-> index 7d2ed0ed2fe2..4efb62bcdb63 100644
-> --- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi-ahb-audio.c
-> +++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi-ahb-audio.c
-> @@ -542,8 +542,8 @@ static int snd_dw_hdmi_probe(struct platform_device *pdev)
->   	if (ret < 0)
->   		return ret;
->   
-> -	strlcpy(card->driver, DRIVER_NAME, sizeof(card->driver));
-> -	strlcpy(card->shortname, "DW-HDMI", sizeof(card->shortname));
-> +	strscpy(card->driver, DRIVER_NAME, sizeof(card->driver));
-> +	strscpy(card->shortname, "DW-HDMI", sizeof(card->shortname));
->   	snprintf(card->longname, sizeof(card->longname),
->   		 "%s rev 0x%02x, irq %d", card->shortname, revision,
->   		 data->irq);
-> @@ -561,7 +561,7 @@ static int snd_dw_hdmi_probe(struct platform_device *pdev)
->   
->   	dw->pcm = pcm;
->   	pcm->private_data = dw;
-> -	strlcpy(pcm->name, DRIVER_NAME, sizeof(pcm->name));
-> +	strscpy(pcm->name, DRIVER_NAME, sizeof(pcm->name));
->   	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_PLAYBACK, &snd_dw_hdmi_ops);
->   
->   	/*
+On Mon, Sep 19, 2022 at 10:41:47AM -0700, Jakub Kicinski wrote:
+>On Tue,  6 Sep 2022 10:27:19 -0700 vdasa@vmware.com wrote:
+>> From: Vishnu Dasa <vdasa@vmware.com>
+>>
+>> This series updates a few existing maintainer entries for VMware
+>> supported drivers and adds a new entry for vsock vmci transport
+>> driver.
+>
+>Just to be sure - who are you expecting to take these in?
+>
 
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+FYI Greg already queued this series in his char-misc-next branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git/log/?h=char-misc-next
+
+Thanks,
+Stefano
+
