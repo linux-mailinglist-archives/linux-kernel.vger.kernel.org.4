@@ -2,244 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13AFF5BECAC
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 20:17:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 726415BECAF
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 20:18:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbiITSRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 14:17:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51090 "EHLO
+        id S230270AbiITSSF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 14:18:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230040AbiITSR2 (ORCPT
+        with ESMTP id S229871AbiITSSB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 14:17:28 -0400
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3D0352451;
-        Tue, 20 Sep 2022 11:17:27 -0700 (PDT)
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-11eab59db71so5422132fac.11;
-        Tue, 20 Sep 2022 11:17:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=lzAR5EIrusYB8W382hzaSsfUkXSCRt/ZC1GFR4BZOo8=;
-        b=nDjhXNqB5DW3KAteDacrYYmzUOtWeOUxAM8Q2/wI0TSD1qJLSreEzyV7eOn49wHZXL
-         VLpuuPYnE+QbMFhC1MNhDcmwB/lv/83Ys75qUKKogjQzMCEAoTh8ilj2tru2YZodwlfe
-         mReIQiwMQiVo9DMewVrKquhszeL0Hxjhmmdp4SrHdrO/vr+RY3SysNLlbc9vax6AYEID
-         VO14CxQVA0KsDoww5eL6aL77rkErGOOZVkQWDTx7WsJIvu1MiAAaeeOXVQO2ZjhONtN+
-         r383gA8+2xZhLHHymKjRd0v8tBv1wysH9+YUqE8FUb2fC0so4EYGQ0NsPgZP5c1NDfWr
-         VPEg==
-X-Gm-Message-State: ACrzQf2CDu0gmY0vskdu5nCXd5VZOCXFWrMyWM0kTNfajdKnsBljZYDD
-        H8ndMsTRciH6DGAqIAjkfZOAYbOF6utpXX+15VM=
-X-Google-Smtp-Source: AMsMyM6yY8aQAEYs/HCM5tZw43I1H4/dfwjXYKjPAxOI6LLdm+HHngcMP747BCxZiuxw2pEs13DF0cQMCO+YPvrF9G0=
-X-Received: by 2002:a05:6870:524b:b0:12c:cfd2:81c0 with SMTP id
- o11-20020a056870524b00b0012ccfd281c0mr2771362oai.209.1663697846788; Tue, 20
- Sep 2022 11:17:26 -0700 (PDT)
+        Tue, 20 Sep 2022 14:18:01 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9F37467CBA
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 11:17:57 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 491CE143D;
+        Tue, 20 Sep 2022 11:18:03 -0700 (PDT)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A7BBC3F5A1;
+        Tue, 20 Sep 2022 11:17:53 -0700 (PDT)
+Message-ID: <07193d97-476a-498f-e738-e7920c2fdeea@arm.com>
+Date:   Tue, 20 Sep 2022 20:17:29 +0200
 MIME-Version: 1.0
-References: <20220916175902.1155177-1-namhyung@kernel.org> <20220916175902.1155177-3-namhyung@kernel.org>
- <5116611b-2d91-a9fe-5760-65a9a9b50747@intel.com>
-In-Reply-To: <5116611b-2d91-a9fe-5760-65a9a9b50747@intel.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Tue, 20 Sep 2022 11:17:15 -0700
-Message-ID: <CAM9d7cizZ3Ztdqe8fXfWNOTk0Rg5v6tuSO3KbX2O_c-7a0-vNg@mail.gmail.com>
-Subject: Re: [PATCH 2/4] perf tools: Add perf_event__synthesize_{start,stop}()
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4 6/8] sched/fair: Add sched group latency support
+Content-Language: en-US
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, parth@linux.ibm.com,
+        qais.yousef@arm.com, chris.hyser@oracle.com,
+        valentin.schneider@arm.com, patrick.bellasi@matbug.net,
+        David.Laight@aculab.com, pjt@google.com, pavel@ucw.cz,
+        tj@kernel.org, qperret@google.com, tim.c.chen@linux.intel.com,
+        joshdon@google.com
+References: <20220916080305.29574-1-vincent.guittot@linaro.org>
+ <20220916080305.29574-7-vincent.guittot@linaro.org>
+ <000c2893-feb4-373d-2234-2ca74be94714@arm.com>
+ <CAKfTPtASminP4ogVRhcvQ4R3-x-E+UUzuMaEu-xQU_MtLr9+Xg@mail.gmail.com>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <CAKfTPtASminP4ogVRhcvQ4R3-x-E+UUzuMaEu-xQU_MtLr9+Xg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 6:50 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
->
-> On 16/09/22 20:59, Namhyung Kim wrote:
-> > These functions are to prepare and cleanup necessary work for synthesizing.
-> > It doesn't do anything yet but later patch will add it.
-> >
-> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> > ---
-> >  tools/perf/builtin-inject.c        | 3 +++
-> >  tools/perf/builtin-record.c        | 3 +++
-> >  tools/perf/builtin-stat.c          | 2 ++
-> >  tools/perf/builtin-top.c           | 4 ++++
-> >  tools/perf/util/auxtrace.c         | 2 ++
-> >  tools/perf/util/synthetic-events.c | 8 ++++++++
-> >  tools/perf/util/synthetic-events.h | 3 +++
-> >  7 files changed, 25 insertions(+)
-> >
-> > diff --git a/tools/perf/builtin-inject.c b/tools/perf/builtin-inject.c
-> > index e254f18986f7..2e91a887919b 100644
-> > --- a/tools/perf/builtin-inject.c
-> > +++ b/tools/perf/builtin-inject.c
-> > @@ -2368,9 +2368,12 @@ int cmd_inject(int argc, const char **argv)
-> >       if (ret < 0)
-> >               goto out_delete;
-> >
-> > +     perf_event__synthesize_start();
-> > +
-> >       ret = __cmd_inject(&inject);
-> >
-> >       guest_session__exit(&inject.guest_session);
-> > +     perf_event__synthesize_stop();
->
-> AFAICT perf inject synthesizes mmap events only for JIT and that is
-> open-coded in jitdump.c. i.e. perf_event__synthesize_start / stop
-> not needed
+On 19/09/2022 17:49, Vincent Guittot wrote:
+> On Mon, 19 Sept 2022 at 13:55, Dietmar Eggemann
+> <dietmar.eggemann@arm.com> wrote:
+>>
+>> s/valentin.schneider@arm.com//
+>>
+>> On 16/09/2022 10:03, Vincent Guittot wrote:
+>>> Task can set its latency priority, which is then used to decide to preempt
+>>> the current running entity of the cfs, but sched group entities still have
+>>> the default latency offset.
+>>>
+>>> Add a latency field in task group to set the latency offset of the
+>>> sched_eneities of the group, which will be used against other entities in
+>>
+>> s/sched_eneities/sched_entity
+>>
+>>> the parent cfs when deciding which entity to schedule first.
+>>
+>> So latency for cgroups does not follow any (existing) Resource
+>> Distribution Model/Scheme (Documentation/admin-guide/cgroup-v2.rst)?
+>> Latency values are only used to compare sched entities at the same level.
+> 
+> Just like share/cpu.weight value does for time sharing
 
-Right, it's not strictly necessary.  While perf inject -b can synthesize
-some build-id events but it also doesn't require this even with the
-patch 3.
+But for this we define it as following the `Weights` scheme. That's why
+I was asking,
 
-Originally I thought this might be a good place to add something
-we want to do for synthesis.  But I only need it for DSO build-IDs
-in MMAP2 and we can remove it from other places.
+>> [...]
+>>
+>>> +static int cpu_latency_write_s64(struct cgroup_subsys_state *css,
+>>> +                             struct cftype *cft, s64 latency)
+>>> +{
+>>
+>> There is no [MIN, MAX] checking?
+> 
+> This is done is sched_group_set_latency() which checks that
+> abs(latency) < sysctl_sched_latency
 
->
-> >
-> >  out_delete:
-> >       strlist__delete(inject.known_build_ids);
-> > diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
-> > index 02e38f50a138..5b7b9ad2a280 100644
-> > --- a/tools/perf/builtin-record.c
-> > +++ b/tools/perf/builtin-record.c
-> > @@ -1966,6 +1966,8 @@ static int record__synthesize(struct record *rec, bool tail)
-> >       if (rec->opts.tail_synthesize != tail)
-> >               return 0;
-> >
-> > +     perf_event__synthesize_start();
->
-> Perhaps also record__synthesize_workload() ?
+I see. Nit-picking: Wouldn't this allow to specify a latency offset
+value for the non-existent `nice = 20`? Highest nice value 19 maps to
+`973/1024 * sysctl_sched_latency`.
 
-Oh, right.  I thought it's handled during exec but it seems
-switch-output things need it additionally.  Will add.
+> 
+>>
+>> min_weight = sched_latency_to_weight[0]  = -1024
+>> max_weight = sched_latency_to_weight[39] =   973
+>>
+>> [MIN, MAX] = [sysctl_sched_latency * min_weight >> NICE_LATENCY_SHIFT,
+>>               sysctl_sched_latency * max_weight >> NICE_LATENCY_SHIFT]
+>>
+>>
+>> With the `cpu.latency` knob user would have to know for example that the
+>> value is -24,000,000ns to get the same behaviour as for a task latency
+>> nice = -20 (latency prio = 0) (w/ sysctl_sched_latency = 24ms)?
+> 
+> Yes, Tejun raised some concerns about adding an interface like nice in
+> the task group in v2 so I have removed it.
+> 
+>>
+>> For `nice` we have `cpu.weight.nice` next to `cpu.weight` in cgroup v2 ?
+> 
+> If everybody is ok, I can add back the cpu.latency.nice interface in
+> the v5 in addition to the cpu.latency
 
->
-> > +
-> >       if (data->is_pipe) {
-> >               err = perf_event__synthesize_for_pipe(tool, session, data,
-> >                                                     process_synthesized_event);
-> > @@ -2072,6 +2074,7 @@ static int record__synthesize(struct record *rec, bool tail)
-> >       }
-> >
-> >  out:
-> > +     perf_event__synthesize_stop();
-> >       return err;
-> >  }
-> >
-> > diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-> > index e05fe72c1d87..f6f61e08f4c2 100644
-> > --- a/tools/perf/builtin-stat.c
-> > +++ b/tools/perf/builtin-stat.c
-> > @@ -962,6 +962,7 @@ static int __run_perf_stat(int argc, const char **argv, int run_idx)
-> >               if (err < 0)
-> >                       return err;
-> >
-> > +             perf_event__synthesize_start();
-> >               err = perf_event__synthesize_stat_events(&stat_config, NULL, evsel_list,
-> >                                                        process_synthesized_event, is_pipe);
-> >               if (err < 0)
-> > @@ -2641,6 +2642,7 @@ int cmd_stat(int argc, const char **argv)
-> >                       perf_session__write_header(perf_stat.session, evsel_list, fd, true);
-> >               }
-> >
-> > +             perf_event__synthesize_stop();
-> >               evlist__close(evsel_list);
-> >               perf_session__delete(perf_stat.session);
-> >       }
-> > diff --git a/tools/perf/builtin-top.c b/tools/perf/builtin-top.c
-> > index e89208b4ad4b..1eff894e6b5f 100644
-> > --- a/tools/perf/builtin-top.c
-> > +++ b/tools/perf/builtin-top.c
-> > @@ -1258,6 +1258,8 @@ static int __cmd_top(struct perf_top *top)
-> >  #endif
-> >       }
-> >
-> > +     perf_event__synthesize_start();
-> > +
-> >       ret = perf_event__synthesize_bpf_events(top->session, perf_event__process,
-> >                                               &top->session->machines.host,
-> >                                               &top->record_opts);
-> > @@ -1273,6 +1275,8 @@ static int __cmd_top(struct perf_top *top)
-> >                                   top->evlist->core.threads, true, false,
-> >                                   top->nr_threads_synthesize);
-> >
-> > +     perf_event__synthesize_stop();
-> > +
-> >       if (top->nr_threads_synthesize > 1)
-> >               perf_set_singlethreaded();
-> >
-> > diff --git a/tools/perf/util/auxtrace.c b/tools/perf/util/auxtrace.c
-> > index b59c278fe9ed..1bfe076c22fb 100644
-> > --- a/tools/perf/util/auxtrace.c
-> > +++ b/tools/perf/util/auxtrace.c
-> > @@ -1328,6 +1328,7 @@ int perf_event__process_auxtrace_info(struct perf_session *session,
-> >       if (err)
-> >               return err;
-> >
-> > +     perf_event__synthesize_start();
-> >       unleader_auxtrace(session);
-> >
-> >       return 0;
-> > @@ -2834,6 +2835,7 @@ void auxtrace__free(struct perf_session *session)
-> >       if (!session->auxtrace)
-> >               return;
-> >
-> > +     perf_event__synthesize_stop();
->
-> auxtrace does not synthesize mmap events
+cpu.weight/cpu.weight.nice interface:
 
-Yeah, I don't have a strong need for it.  I just added it in case
-we need something for synthesis later.  But I will remove it
-if you don't think it's worth it.
+echo X > cpu.weight	   tg->shares
 
-Thanks,
-Namhyung
+    1                          10,240
+  100                       1,048,576
+10000                     104,857,600
 
->
-> >       return session->auxtrace->free(session);
-> >  }
-> >
-> > diff --git a/tools/perf/util/synthetic-events.c b/tools/perf/util/synthetic-events.c
-> > index 0ff57ca24577..9d4f5dacd154 100644
-> > --- a/tools/perf/util/synthetic-events.c
-> > +++ b/tools/perf/util/synthetic-events.c
-> > @@ -47,6 +47,14 @@
-> >
-> >  unsigned int proc_map_timeout = DEFAULT_PROC_MAP_PARSE_TIMEOUT;
-> >
-> > +void perf_event__synthesize_start(void)
-> > +{
-> > +}
-> > +
-> > +void perf_event__synthesize_stop(void)
-> > +{
-> > +}
-> > +
-> >  int perf_tool__process_synth_event(struct perf_tool *tool,
-> >                                  union perf_event *event,
-> >                                  struct machine *machine,
-> > diff --git a/tools/perf/util/synthetic-events.h b/tools/perf/util/synthetic-events.h
-> > index 53737d1619a4..e4414616080c 100644
-> > --- a/tools/perf/util/synthetic-events.h
-> > +++ b/tools/perf/util/synthetic-events.h
-> > @@ -43,6 +43,9 @@ int parse_synth_opt(char *str);
-> >  typedef int (*perf_event__handler_t)(struct perf_tool *tool, union perf_event *event,
-> >                                    struct perf_sample *sample, struct machine *machine);
-> >
-> > +void perf_event__synthesize_start(void);
-> > +void perf_event__synthesize_stop(void);
-> > +
-> >  int perf_event__synthesize_attrs(struct perf_tool *tool, struct evlist *evlist, perf_event__handler_t process);
-> >  int perf_event__synthesize_attr(struct perf_tool *tool, struct perf_event_attr *attr, u32 ids, u64 *id, perf_event__handler_t process);
-> >  int perf_event__synthesize_build_id(struct perf_tool *tool, struct dso *pos, u16 misc, perf_event__handler_t process, struct machine *machine);
->
+echo X > cpu.weight.nice
+
+  -20                     90,891,264
+    0                      1,048,576
+   19                         15,360
+
+Wouldn't then a similar interface for cpu.latency [1..100..10000] and
+cpu.latency.nice [-20..0..19] make most sense?
+
+Raw latency_offset values at interface level are not portable.
+
+
