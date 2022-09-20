@@ -2,135 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 053CD5BE6F1
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 15:22:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFF1C5BE6F2
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 15:22:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230295AbiITNWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 09:22:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57488 "EHLO
+        id S231352AbiITNWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 09:22:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230172AbiITNWh (ORCPT
+        with ESMTP id S231180AbiITNWt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 09:22:37 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 010261759E;
-        Tue, 20 Sep 2022 06:22:35 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 92FD46601F3B;
-        Tue, 20 Sep 2022 14:22:32 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1663680153;
-        bh=Pk+W1ozfQ0SCVra3zDNF6XprepX+dt5BIPhJgQVPHCg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ayMX/uXRw+VaEpEORAOiID4m6Ob3nBFdEr7OcT5IUKvutOwyjmbSgw5wqzarIS1Zk
-         uefqwVJj5VPpRw4LoMbOyJHVaXP0Xcvj3TV4gFa4p0xT8HY3CcNfA4QqH0hyGkaqBa
-         mKIM3cvd5LMdmud7IInQHvQWlMLygzt3k9neWpryFJvPVsxR7vi307VoSJqwFMR1my
-         kfeGepaL13w0b4MZ3Gx2z7UWenntrhL1tQ1ZwBnqbiRxu0OnUadkXtVMtFMuncQo/k
-         t75voKZHwb6/C6xlekPQcdisGpzyiCj8HsKsLWCU05eElOGKTTPoz+zI9DTSlaU6Ju
-         2FTDiFwlttdiw==
-Message-ID: <3ed55b0d-6c14-79a1-b4c1-5764c667d195@collabora.com>
-Date:   Tue, 20 Sep 2022 15:22:29 +0200
+        Tue, 20 Sep 2022 09:22:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB7C4D822
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 06:22:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663680163;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HAagr+5D/SDR0OvGsWzOAQR3yF3tO/raRhnWXj9RfQU=;
+        b=Zi5tZqe0g9eHXPkjp0Bz9SBo84Cs39hiNRiQZe0adHFnVlUylTvIa9XXjc2wOdskGsr+yM
+        38qB9Ioad01mMG/6+gcsYupk0EXambJQ9+nfEzho7U5t8NhTLdZO248zbpDMFOuKbomhky
+        KOEb0cciFzURQ8GLUUNccrZ3p39SrzU=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-558-G12eMV4rMYuF4AptX_XEgA-1; Tue, 20 Sep 2022 09:22:42 -0400
+X-MC-Unique: G12eMV4rMYuF4AptX_XEgA-1
+Received: by mail-wr1-f72.google.com with SMTP id d25-20020adf9b99000000b0022adb03aee6so1147861wrc.6
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 06:22:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=HAagr+5D/SDR0OvGsWzOAQR3yF3tO/raRhnWXj9RfQU=;
+        b=QurJ3GdapQTJhjWj2sfOYlWwyy0n5WRAnkGW/+QiFJZ8EghIVtL/PUsWDAL04Hr5cS
+         XY95S6UKRpBYiK++Dv4TTzbvRkdEJjj4GvNRrK3a1wmU6UjVzqx9IlPPXXqdY2V343sd
+         HIIfgjKjm7+YqlHBAWQJXUKLAw5If1qelDg7LUM118QosbtJ3TDpdbtsmNngFHu8RIFz
+         JYVxePepTLU+rsu4K2McGBFDeW+95T7dy22y+YmgpZHsho/zuh4F8WU8s97VVUnmxwYI
+         dpm5D49p4zI0NXeGnTa1nxUXqaAPXRaeXUSzPeyofoHKCMzbtDZsnYwxctRjciYrfCyM
+         +WEQ==
+X-Gm-Message-State: ACrzQf0glJwMdF953iOnGLLqbdcu6DdGkcNifadNrfBnJYHdHNJAOTjs
+        YYH0BHJcQkXs+HMMTVJgTW9oCbDM5z0M8S9+70MBckIgDPF1/VaHjuliZj37TakALGWZDwrPVTp
+        +XzD6jI0rKzbc8i8thLlPh3nv
+X-Received: by 2002:a05:600c:4f56:b0:3b4:b6b0:42d4 with SMTP id m22-20020a05600c4f5600b003b4b6b042d4mr2395178wmq.143.1663680160829;
+        Tue, 20 Sep 2022 06:22:40 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4uNmTszB+WUAb11KH7RULfuLObx/dVn5U7CXVqKDMewoWn5osuTwcZ84XnG0Qq7JUZG3l1Dw==
+X-Received: by 2002:a05:600c:4f56:b0:3b4:b6b0:42d4 with SMTP id m22-20020a05600c4f5600b003b4b6b042d4mr2395155wmq.143.1663680160558;
+        Tue, 20 Sep 2022 06:22:40 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c712:2300:e82d:5a58:4fd8:c1e6? (p200300cbc7122300e82d5a584fd8c1e6.dip0.t-ipconnect.de. [2003:cb:c712:2300:e82d:5a58:4fd8:c1e6])
+        by smtp.gmail.com with ESMTPSA id o17-20020a5d4a91000000b00228dff8d975sm1606351wrq.109.2022.09.20.06.22.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Sep 2022 06:22:39 -0700 (PDT)
+Message-ID: <7f1cfee4-c6de-ea59-0aa9-9bd55054fb22@redhat.com>
+Date:   Tue, 20 Sep 2022 15:22:38 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH 1/2] dt-bindings: net: mediatek-dwmac: add support for
- mt8188
+ Thunderbird/102.2.1
+Subject: Re: [PATCH] mm/secretmem: remove reduntant return value
 Content-Language: en-US
-To:     Jianguo Zhang <jianguo.zhang@mediatek.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Biao Huang <biao.huang@mediatek.com>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20220920083617.4177-1-jianguo.zhang@mediatek.com>
- <20220920083617.4177-2-jianguo.zhang@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220920083617.4177-2-jianguo.zhang@mediatek.com>
+To:     xiujianfeng <xiujianfeng@huawei.com>, akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Binyi Han <dantengknight@gmail.com>
+References: <20220920012205.246217-1-xiujianfeng@huawei.com>
+ <3196b824-bcee-0c44-bfd3-f6cd8a1e6719@redhat.com>
+ <c4e99ea3-302d-b173-27f1-92c38ddaca8c@huawei.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <c4e99ea3-302d-b173-27f1-92c38ddaca8c@huawei.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 20/09/22 10:36, Jianguo Zhang ha scritto:
-> Add binding document for the ethernet on mt8188
+On 20.09.22 14:35, xiujianfeng wrote:
+> Hi,
 > 
-> Signed-off-by: Jianguo Zhang <jianguo.zhang@mediatek.com>
-> ---
->   .../devicetree/bindings/net/mediatek-dwmac.yaml        | 10 ++++++++--
->   1 file changed, 8 insertions(+), 2 deletions(-)
+> 在 2022/9/20 20:10, David Hildenbrand 写道:
+>> On 20.09.22 03:22, Xiu Jianfeng wrote:
+>>> The return value @ret is always 0, so remove it and return 0 directly.
+>>>
+>>> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+>>> ---
+>>>    mm/secretmem.c | 6 ++----
+>>>    1 file changed, 2 insertions(+), 4 deletions(-)
+>>>
+>>> diff --git a/mm/secretmem.c b/mm/secretmem.c
+>>> index 6a44efb673b2..04c3ac9448a1 100644
+>>> --- a/mm/secretmem.c
+>>> +++ b/mm/secretmem.c
+>>> @@ -278,10 +278,8 @@ static struct file_system_type secretmem_fs = {
+>>>    static int __init secretmem_init(void)
+>>>    {
+>>> -    int ret = 0;
+>>> -
+>>>        if (!secretmem_enable)
+>>> -        return ret;
+>>> +        return 0;
+>>>        secretmem_mnt = kern_mount(&secretmem_fs);
+>>>        if (IS_ERR(secretmem_mnt))
+>>
+>> On top of which tree is that?
+>>
+>> 6.0-rc6 has here:
+>>
+>> if (IS_ERR(secretmem_mnt))
+>>       ret = PTR_ERR(secretmem_mnt);
+>>
+> Sorry, it's on linux-next tree, I should have used [PATCH -next]:)
 > 
-> diff --git a/Documentation/devicetree/bindings/net/mediatek-dwmac.yaml b/Documentation/devicetree/bindings/net/mediatek-dwmac.yaml
-> index 61b2fb9e141b..eaf7e8d53432 100644
-> --- a/Documentation/devicetree/bindings/net/mediatek-dwmac.yaml
-> +++ b/Documentation/devicetree/bindings/net/mediatek-dwmac.yaml
-> @@ -20,6 +20,7 @@ select:
->           enum:
->             - mediatek,mt2712-gmac
 
-Please keep the list ordered by name. MT8188 goes before 8195.
+Maybe this change should be squashed into the patch from Binyi directly:
 
->             - mediatek,mt8195-gmac
-> +          - mediatek,mt8188-gmac
->     required:
->       - compatible
->   
-> @@ -37,6 +38,11 @@ properties:
->             - enum:
->                 - mediatek,mt8195-gmac
->             - const: snps,dwmac-5.10a
-> +      - items:
-> +          - enum:
-> +              - mediatek,mt8188-gmac
-> +          - const: mediatek,mt8195-gmac
-> +          - const: snps,dwmac-5.10a
->   
->     clocks:
->       minItems: 5
-> @@ -74,7 +80,7 @@ properties:
->         or will round down. Range 0~31*170.
->         For MT2712 RMII/MII interface, Allowed value need to be a multiple of 550,
->         or will round down. Range 0~31*550.
-> -      For MT8195 RGMII/RMII/MII interface, Allowed value need to be a multiple of 290,
-> +      For MT8195/MT8188 RGMII/RMII/MII interface, Allowed value need to be a multiple of 290,
 
-For MT8188/MT8195
+commit 4eb5bbde3ccb710d3b85bfb13466612e56393369 (mm/mm-hotfixes-stable)
+Author: Binyi Han <dantengknight@gmail.com>
+Date:   Sun Sep 4 00:46:47 2022 -0700
 
->         or will round down. Range 0~31*290.
->   
->     mediatek,rx-delay-ps:
-> @@ -84,7 +90,7 @@ properties:
->         or will round down. Range 0~31*170.
->         For MT2712 RMII/MII interface, Allowed value need to be a multiple of 550,
->         or will round down. Range 0~31*550.
-> -      For MT8195 RGMII/RMII/MII interface, Allowed value need to be a multiple
-> +      For MT8195/MT8188 RGMII/RMII/MII interface, Allowed value need to be a multiple
+     mm: fix dereferencing possible ERR_PTR
+     
+     Smatch checker complains that 'secretmem_mnt' dereferencing possible
+     ERR_PTR().  Let the function return if 'secretmem_mnt' is ERR_PTR, to
+     avoid deferencing it.
+     
+     Link: https://lkml.kernel.org/r/20220904074647.GA64291@cloud-MacBookPro
+     Fixes: 1507f51255c9f ("mm: introduce memfd_secret system call to create "secret" memory areas")
+     Signed-off-by: Binyi Han <dantengknight@gmail.com>
+     Reviewed-by: Andrew Morton <akpm@linux-foudation.org>
+     Cc: Mike Rapoport <rppt@kernel.org>
+     Cc: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+     Cc: Hagen Paul Pfeifer <hagen@jauu.net>
+     Cc: James Bottomley <James.Bottomley@HansenPartnership.com>
+     Cc: <stable@vger.kernel.org>
+     Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 
-For MT8188/MT8195
 
->         of 290, or will round down. Range 0~31*290.
->   
->     mediatek,rmii-rxc:
+-- 
+Thanks,
 
+David / dhildenb
 
