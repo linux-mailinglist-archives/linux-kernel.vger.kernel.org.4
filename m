@@ -2,156 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78DEB5BE5E3
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 14:32:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC4BD5BE5E6
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 14:32:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231217AbiITMcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 08:32:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47960 "EHLO
+        id S231229AbiITMcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 08:32:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbiITMbw (ORCPT
+        with ESMTP id S230379AbiITMcS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 08:31:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2626E564CE;
-        Tue, 20 Sep 2022 05:31:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C4963B80BEC;
-        Tue, 20 Sep 2022 12:31:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74CCCC433D6;
-        Tue, 20 Sep 2022 12:31:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663677108;
-        bh=i2971qM7wlevODiVHlQWVkeQKCoULSDtCivyYa6BY3w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Q359WuuE7X8iHPUglRgZ6umBriKE4r+Hq60s0D7bZenVvQZ4nI53Q/0IHEDWUvL08
-         uO1lUj+/+gsUuHABZ0IUgFE9VpucvwIQJdQ0+o+qLceGFQWOjTx274Wv0QgoQwQqDB
-         Bq6B/yj6zX6+ne9r87JfQG1DqPPHAUwk/5wBhBEUUm5zmwQcKDqLTClYTCw1gL+EWj
-         y+co7RjqxrjwqgzVQOyvkrVOgNfaKYqf/Dnk/7RydhOFfw29XBhF+VqBugULRYy6nW
-         kGdHmx4EM6/oydyvS6EAGcuvFJCcs2df/Ji6kGzIJMqPXxrjzmWTkMGZJXBpD98pEC
-         ZvljhnwREUPvw==
-Date:   Tue, 20 Sep 2022 14:31:45 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
-        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
-        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
-        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
-        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
-        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
-        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
-        dinguyen@kernel.org, jonas@southpole.se,
-        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
-        James.Bottomley@HansenPartnership.com, deller@gmx.de,
-        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
-        davem@davemloft.net, richard@nod.at,
-        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
-        amakhalov@vmware.com, pv-drivers@vmware.com,
-        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
-        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
-        gregkh@linuxfoundation.org, mturquette@baylibre.com,
-        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
-        sudeep.holla@arm.com, agross@kernel.org,
-        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
-        anup@brainfault.org, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, jacob.jun.pan@linux.intel.com,
-        atishp@atishpatra.org, Arnd Bergmann <arnd@arndb.de>,
-        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk, dennis@kernel.org, tj@kernel.org,
-        cl@linux.com, rostedt@goodmis.org, pmladek@suse.com,
-        senozhatsky@chromium.org, john.ogness@linutronix.de,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, fweisbec@gmail.com,
-        ryabinin.a.a@gmail.com, glider@google.com, andreyknvl@gmail.com,
-        dvyukov@google.com, vincenzo.frascino@arm.com,
-        Andrew Morton <akpm@linux-foundation.org>, jpoimboe@kernel.org,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-perf-users@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-arch@vger.kernel.org, kasan-dev@googlegroups.com
-Subject: Re: [PATCH v2 00/44] cpuidle,rcu: Clean up the mess
-Message-ID: <20220920123145.GC72346@lothringen>
-References: <20220919095939.761690562@infradead.org>
+        Tue, 20 Sep 2022 08:32:18 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F7D5C9E4
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 05:32:08 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id t7so3993485wrm.10
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 05:32:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date;
+        bh=1MF4EqMmKiknkCxbkWjC3WSdMgGUyAMwUXpH/v5PLhs=;
+        b=hqQ+kEhXrINc6InWXqyon5OwHwauo0C0OEZqG9NYnnK3ZJEsnGX1dAgFB3BKCrj+G2
+         dPc7q5c1k8lHWMoQBkHE/1IaSTUy3ygewYM52gTFSgKVYi2WbLib61VKuUPe+W0DDkYR
+         JKD8dDfQC2/sTJdVL6sudb0h/OJjZIYbZ88OU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=1MF4EqMmKiknkCxbkWjC3WSdMgGUyAMwUXpH/v5PLhs=;
+        b=jeHK2vQKg6UiTjjIf3seX4YpcdTmb5fUAYHHEDttIMAJIwJXPDR3fDNWZqi6z9SKTY
+         i2CAPy8XrNfdYG8DNWbuAanhPCQGF+/WvkokUinsvDEpaCwkeWHMJxguyFd/giu2zo47
+         KKzAjC1/SHTIBEqoTOe/QlKyl2FZZDXhrjvIKbtfhqr9/HR0o0y/+9+06++eyUZm5sBf
+         pXUmRKsQSLg7VlKPO3R/jNDrfI8wsUJr9KhylF2/j4RHLeA+pmG9QkgrN+7ct+aygnZ3
+         f0qVZxxR0cXl6KdUMbSiguQRpwxyklOF9sCtZbaMtlL7PfKT1Rv/MaGzb9y8pfOJ68RN
+         /ajg==
+X-Gm-Message-State: ACrzQf0Sa8ICAtVXFqdWMY0HPQuG0NlTJ9V4bP1Pj48eAZHkjKJfVTFK
+        JIgZjVekBSRso9C9XNOkp+vWfA==
+X-Google-Smtp-Source: AMsMyM6r6Ml0b1UTbXqs9UY3GRGCQbw72xzvUd6ll61viiKh6J0PpVhoGzWJOg+mkXMFmIU7FSUtJw==
+X-Received: by 2002:a5d:504c:0:b0:228:db0e:a4c9 with SMTP id h12-20020a5d504c000000b00228db0ea4c9mr14181924wrt.272.1663677127257;
+        Tue, 20 Sep 2022 05:32:07 -0700 (PDT)
+Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-56-12.cust.vodafonedsl.it. [188.217.56.12])
+        by smtp.gmail.com with ESMTPSA id f7-20020a05600c4e8700b003b340f00f10sm17629084wmq.31.2022.09.20.05.32.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Sep 2022 05:32:06 -0700 (PDT)
+Date:   Tue, 20 Sep 2022 14:32:03 +0200
+From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Cc:     linuxfancy@googlegroups.com, linux-amarula@amarulasolutions.com,
+        sudipm.mukherjee@gmail.com,
+        Alex Deucher <alexander.deucher@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Philip Yang <Philip.Yang@amd.com>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] drm/amdgpu: initialize r variable into amdgpu_cs_submit
+ function
+Message-ID: <20220920123203.GA346517@tom-ThinkPad-T14s-Gen-2i>
+References: <20220920122216.346321-1-tommaso.merciai@amarulasolutions.com>
+ <3430255f-3675-eef2-92bd-4eb8be582c83@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220919095939.761690562@infradead.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <3430255f-3675-eef2-92bd-4eb8be582c83@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 11:59:39AM +0200, Peter Zijlstra wrote:
-> Hi All!
-> 
-> At long last, a respin of the cpuidle vs rcu cleanup patches.
-> 
-> v1: https://lkml.kernel.org/r/20220608142723.103523089@infradead.org
-> 
-> These here patches clean up the mess that is cpuidle vs rcuidle.
-> 
-> At the end of the ride there's only on RCU_NONIDLE user left:
-> 
->   arch/arm64/kernel/suspend.c:            RCU_NONIDLE(__cpu_suspend_exit());
-> 
-> and 'one' trace_*_rcuidle() user:
-> 
->   kernel/trace/trace_preemptirq.c:                        trace_irq_enable_rcuidle(CALLER_ADDR0, CALLER_ADDR1);
->   kernel/trace/trace_preemptirq.c:                        trace_irq_disable_rcuidle(CALLER_ADDR0, CALLER_ADDR1);
->   kernel/trace/trace_preemptirq.c:                        trace_irq_enable_rcuidle(CALLER_ADDR0, caller_addr);
->   kernel/trace/trace_preemptirq.c:                        trace_irq_disable_rcuidle(CALLER_ADDR0, caller_addr);
->   kernel/trace/trace_preemptirq.c:                trace_preempt_enable_rcuidle(a0, a1);
->   kernel/trace/trace_preemptirq.c:                trace_preempt_disable_rcuidle(a0, a1);
-> 
-> However this last is all in deprecated code that should be unused for GENERIC_ENTRY.
-> 
-> I've touched a lot of code that I can't test and I might've broken something by
-> accident. In particular the whole ARM cpuidle stuff was quite involved.
-> 
-> Please all; have a look where you haven't already.
-> 
-> 
-> New since v1:
-> 
->  - rebase on top of Frederic's rcu-context-tracking rename fest
->  - more omap goodness as per the last discusion (thanks Tony!)
->  - removed one more RCU_NONIDLE() from arm64/risc-v perf code
->  - ubsan/kasan fixes
->  - intel_idle module-param for testing
->  - a bunch of extra __always_inline, because compilers are silly.
+Hi Christian,
 
-Except for those I have already tagged as Reviewed:
+On Tue, Sep 20, 2022 at 02:23:58PM +0200, Christian König wrote:
+> Am 20.09.22 um 14:22 schrieb Tommaso Merciai:
+> > The builds of arm64 allmodconfig with clang failed to build
+> > next-20220920 with the following result:
+> > 
+> > 1190:3: error: variable 'r' is uninitialized when used here [-Werror,-Wuninitialized]
+> > note: initialize the variable 'r' to silence this warning
+> > 
+> > This fix compilation error
+> 
+> I've already send a patch to fix this to the mailing list 7 Minutes ago :)
+> 
+> Please review or ack that one.
 
-Acked-by: Frederic Weisbecker <frederic@kernel.org>
+Sorry, my bad. Don't see your patch :)
 
-Thanks for the hard work!
+Cheers,
+Tommaso
+
+> 
+> Thanks,
+> Christian.
+> 
+> > 
+> > Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+> > ---
+> >   drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
+> > index 58088c663125..efa3dc9b69fd 100644
+> > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
+> > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
+> > @@ -1168,7 +1168,7 @@ static int amdgpu_cs_submit(struct amdgpu_cs_parser *p,
+> >   	struct amdgpu_bo_list_entry *e;
+> >   	struct amdgpu_job *job;
+> >   	uint64_t seq;
+> > -	int r;
+> > +	int r = 0;
+> >   	job = p->job;
+> >   	p->job = NULL;
+> 
+
+-- 
+Tommaso Merciai
+Embedded Linux Engineer
+tommaso.merciai@amarulasolutions.com
+__________________________________
+
+Amarula Solutions SRL
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+T. +39 042 243 5310
+info@amarulasolutions.com
+www.amarulasolutions.com
