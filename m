@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B151B5BE33F
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 12:32:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86F2F5BE341
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 12:32:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230252AbiITKbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 06:31:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44698 "EHLO
+        id S231252AbiITKb7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 06:31:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230463AbiITKbT (ORCPT
+        with ESMTP id S229966AbiITKbU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 06:31:19 -0400
+        Tue, 20 Sep 2022 06:31:20 -0400
 Received: from mail-m11875.qiye.163.com (mail-m11875.qiye.163.com [115.236.118.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B386FA36
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 03:31:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F205B62ABD
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 03:31:18 -0700 (PDT)
 Received: from localhost.localdomain (unknown [58.22.7.114])
-        by mail-m11875.qiye.163.com (Hmail) with ESMTPA id B93FE280BA6;
-        Tue, 20 Sep 2022 18:31:15 +0800 (CST)
+        by mail-m11875.qiye.163.com (Hmail) with ESMTPA id 71C22280B29;
+        Tue, 20 Sep 2022 18:31:16 +0800 (CST)
 From:   Jianqun Xu <jay.xu@rock-chips.com>
 To:     linus.walleij@linaro.org, heiko@sntech.de, brgl@bgdev.pl,
         andriy.shevchenko@linux.intel.com
@@ -25,21 +25,21 @@ Cc:     robert.moore@intel.com, robh@kernel.org,
         linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
         lenb@kernel.org, rafael@kernel.org,
         Jianqun Xu <jay.xu@rock-chips.com>
-Subject: [PATCH 08/20] gpiolib: make gpiochip_find_by_name to be common function
-Date:   Tue, 20 Sep 2022 18:30:56 +0800
-Message-Id: <20220920103108.23074-9-jay.xu@rock-chips.com>
+Subject: [PATCH 09/20] gpio/rockchip: drop 'bank->name' from the driver
+Date:   Tue, 20 Sep 2022 18:30:57 +0800
+Message-Id: <20220920103108.23074-10-jay.xu@rock-chips.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220920103108.23074-1-jay.xu@rock-chips.com>
 References: <20220920103108.23074-1-jay.xu@rock-chips.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFJSktLSjdXWS1ZQUlXWQ8JGhUIEh9ZQVlCGEMeVkIZTR4eSR5NT0lMTVUTARMWGhIXJB
-        QOD1lXWRgSC1lBWU5DVUlJVUxVSkpPWVdZFhoPEhUdFFlBWU9LSFVKSktITUpVSktLVUtZBg++
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MAg6Ixw*Kz0pNhwrFxQ8LxgO
-        FwswCipVSlVKTU1ITU1CQ0xNT0pIVTMWGhIXVREaAlUDDjsJFBgQVhgTEgsIVRgUFkVZV1kSC1lB
-        WU5DVUlJVUxVSkpPWVdZCAFZQUhMSEw3Bg++
-X-HM-Tid: 0a835a73b52a2eb1kusnb93fe280ba6
+        tZV1koWUFJSktLSjdXWS1ZQUlXWQ8JGhUIEh9ZQVlCGUpJVh4eSU4fS01IHx5MSVUTARMWGhIXJB
+        QOD1lXWRgSC1lBWU5DVUlJVUxVSkpPWVdZFhoPEhUdFFlBWU9LSFVKSktISkxVSktLVUtZBg++
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6NzI6Ogw5GD0eFBxLPQk6Lx8s
+        FBZPCzFVSlVKTU1ITU1CQ0xMSkNIVTMWGhIXVREaAlUDDjsJFBgQVhgTEgsIVRgUFkVZV1kSC1lB
+        WU5DVUlJVUxVSkpPWVdZCAFZQUhKTEs3Bg++
+X-HM-Tid: 0a835a73b7f12eb1kusn71c22280b29
 X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
         autolearn=no autolearn_force=no version=3.4.6
@@ -49,79 +49,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move find_chip_by_name from gpiolib to the gpio/driver.h, also rename to
-gpiochip_find_by_name, make it to be a common function.
+Not to use the 'bank->name' and create 'gc->lable' by the bank number.
 
 Signed-off-by: Jianqun Xu <jay.xu@rock-chips.com>
 ---
- drivers/gpio/gpiolib.c      | 16 ++--------------
- include/linux/gpio/driver.h | 12 ++++++++++++
- 2 files changed, 14 insertions(+), 14 deletions(-)
+ drivers/gpio/gpio-rockchip.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-index cc9c0a12259e..c06334772c47 100644
---- a/drivers/gpio/gpiolib.c
-+++ b/drivers/gpio/gpiolib.c
-@@ -935,18 +935,6 @@ struct gpio_chip *gpiochip_find(void *data,
- }
- EXPORT_SYMBOL_GPL(gpiochip_find);
+diff --git a/drivers/gpio/gpio-rockchip.c b/drivers/gpio/gpio-rockchip.c
+index bb50335239ac..dafcc8be1687 100644
+--- a/drivers/gpio/gpio-rockchip.c
++++ b/drivers/gpio/gpio-rockchip.c
+@@ -327,7 +327,7 @@ static void rockchip_irq_demux(struct irq_desc *desc)
+ 	struct rockchip_pin_bank *bank = irq_desc_get_handler_data(desc);
+ 	u32 pend;
  
--static int gpiochip_match_name(struct gpio_chip *gc, void *data)
--{
--	const char *name = data;
--
--	return !strcmp(gc->label, name);
--}
--
--static struct gpio_chip *find_chip_by_name(const char *name)
--{
--	return gpiochip_find((void *)name, gpiochip_match_name);
--}
--
- #ifdef CONFIG_GPIOLIB_IRQCHIP
+-	dev_dbg(bank->dev, "got irq for bank %s\n", bank->name);
++	dev_dbg(bank->dev, "got irq\n");
  
- /*
-@@ -3660,7 +3648,7 @@ void gpiod_add_hogs(struct gpiod_hog *hogs)
- 		 * The chip may have been registered earlier, so check if it
- 		 * exists and, if so, try to hog the line now.
- 		 */
--		gc = find_chip_by_name(hog->chip_label);
-+		gc = gpiochip_find_by_name(hog->chip_label);
- 		if (gc)
- 			gpiochip_machine_hog(gc, hog);
+ 	chained_irq_enter(chip, desc);
+ 
+@@ -521,8 +521,7 @@ static int rockchip_interrupts_register(struct rockchip_pin_bank *bank)
+ 	bank->domain = irq_domain_add_linear(bank->of_node, 32,
+ 					&irq_generic_chip_ops, NULL);
+ 	if (!bank->domain) {
+-		dev_warn(bank->dev, "could not init irq domain for bank %s\n",
+-			 bank->name);
++		dev_warn(bank->dev, "could not init irq domain\n");
+ 		return -EINVAL;
  	}
-@@ -3745,7 +3733,7 @@ static struct gpio_desc *gpiod_find(struct device *dev, const char *con_id,
- 			return ERR_PTR(-EPROBE_DEFER);
- 		}
  
--		gc = find_chip_by_name(p->key);
-+		gc = gpiochip_find_by_name(p->key);
+@@ -531,8 +530,7 @@ static int rockchip_interrupts_register(struct rockchip_pin_bank *bank)
+ 					     handle_level_irq,
+ 					     clr, 0, 0);
+ 	if (ret) {
+-		dev_err(bank->dev, "could not alloc generic chips for bank %s\n",
+-			bank->name);
++		dev_err(bank->dev, "could not alloc generic chips\n");
+ 		irq_domain_remove(bank->domain);
+ 		return -EINVAL;
+ 	}
+@@ -586,8 +584,10 @@ static int rockchip_gpiolib_register(struct rockchip_pin_bank *bank)
+ 	gc = &bank->gpio_chip;
+ 	gc->base = bank->pin_base;
+ 	gc->ngpio = bank->nr_pins;
+-	gc->label = bank->name;
+ 	gc->parent = bank->dev;
++	gc->label = devm_kasprintf(bank->dev, GFP_KERNEL, "gpio%d", bank->bank_num);
++	if (!gc->label)
++		return -ENOMEM;
  
- 		if (!gc) {
- 			/*
-diff --git a/include/linux/gpio/driver.h b/include/linux/gpio/driver.h
-index 6aeea1071b1b..4ed26a7d98ff 100644
---- a/include/linux/gpio/driver.h
-+++ b/include/linux/gpio/driver.h
-@@ -618,6 +618,18 @@ extern int devm_gpiochip_add_data_with_key(struct device *dev, struct gpio_chip
- extern struct gpio_chip *gpiochip_find(void *data,
- 			      int (*match)(struct gpio_chip *gc, void *data));
- 
-+static int gpiochip_match_name(struct gpio_chip *gc, void *data)
-+{
-+	const char *name = data;
-+
-+	return !strcmp(gc->label, name);
-+}
-+
-+static inline struct gpio_chip *gpiochip_find_by_name(const char *name)
-+{
-+	return gpiochip_find((void *)name, gpiochip_match_name);
-+}
-+
- bool gpiochip_line_is_irq(struct gpio_chip *gc, unsigned int offset);
- int gpiochip_reqres_irq(struct gpio_chip *gc, unsigned int offset);
- void gpiochip_relres_irq(struct gpio_chip *gc, unsigned int offset);
+ 	ret = gpiochip_add_data(gc, bank);
+ 	if (ret) {
 -- 
 2.25.1
 
