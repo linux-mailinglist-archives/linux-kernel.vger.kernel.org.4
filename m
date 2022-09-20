@@ -2,149 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EED685BE643
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 14:50:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C67F15BE65B
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 14:53:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231325AbiITMuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 08:50:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46098 "EHLO
+        id S231364AbiITMxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 08:53:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230436AbiITMuU (ORCPT
+        with ESMTP id S230373AbiITMw5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 08:50:20 -0400
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B43561B02
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 05:50:19 -0700 (PDT)
-Received: by mail-il1-x130.google.com with SMTP id g12so1293317ilj.5
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 05:50:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=zQKgQ4HqE6wGzsyWaju9zoDk2+yG62YwCmFP6Uq7Ybg=;
-        b=fYLN3d+bXN+MueTMze9Q8X6v353Up/GFFmi+EjF1hMneXt78kSyeeghELK0zuJJdpq
-         2zvNjmPJKy2mSaeouPbyeWFtS8LlFQOFGnFm4WG3pJ0BtfFigTNSy+gXCamnBgOsvlB8
-         ZTEVV7RLxC8QQ/35ydv4daofvisKRz7d7Z7zb7+Z6D2ZaFwsHGLsJKs0OYwkytdSM8s8
-         CUD4l/yiG3v/UXDrsC+7Il+CRkWbumwBWzFAjEJakWmbeJXPvreJvXGXiix1fg4OQHDb
-         BOGS4insDNyJ0dCu88LWA5Y9iIDjNVoIZ6lgV5/wAGhxVQZJbM4Hk/4IPQwfv3nyGUTd
-         LJ3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=zQKgQ4HqE6wGzsyWaju9zoDk2+yG62YwCmFP6Uq7Ybg=;
-        b=cqmaiMHh6KIJJBY/pEorgyFyIjF1ZLW/L9QQnzI69h2VWgBntIp17F8Zt49YPcncCF
-         JoAGqkJHPT7nWuiS6wSOaGUHcrLq6bJW1yXAGFt0vjsQ2TwFn5wohxVdfaG5R/2u8pc5
-         8GjLPMpLHAU9XwG79YOcWnvnpqcwDLszwGv2d8G+ZrxwIs0oJhGJgv091eMP8eZnhaN+
-         D0CuElu23U+85MbTXQro0dzaV8MxWotzOUkWdIYhprECBJXlZ7/N23Pt8eYulbH1NuY7
-         7T7nL9QCsvwZiKSDg5Yvmc0pk2zWejAP8T5PpUGewGiPtrVnod4wp31+Kx9xLYlRkD5o
-         ga/w==
-X-Gm-Message-State: ACrzQf2Up2T/RjggFMRS+l9YlKWTrxuT+QeX8Le+bzkYCoDAYy/Gn+Qz
-        R6sr5Mma/JeKDi38HpVeI2y/og==
-X-Google-Smtp-Source: AMsMyM5zr3Cun3OYjYJC8x4bIwCaiiqupw70+97apWEch/GHkgE7BtksNT5A+S9+j+89fT61O9fv5g==
-X-Received: by 2002:a92:c543:0:b0:2f5:ae52:a023 with SMTP id a3-20020a92c543000000b002f5ae52a023mr4533245ilj.118.1663678218268;
-        Tue, 20 Sep 2022 05:50:18 -0700 (PDT)
-Received: from [172.22.22.4] ([98.61.227.136])
-        by smtp.googlemail.com with ESMTPSA id y11-20020a056602178b00b00688b30a7812sm31398iox.42.2022.09.20.05.50.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Sep 2022 05:50:17 -0700 (PDT)
-Message-ID: <b26912a7-0770-4b1f-4cf4-bed81298cbdb@linaro.org>
-Date:   Tue, 20 Sep 2022 07:50:16 -0500
+        Tue, 20 Sep 2022 08:52:57 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6EC76C130;
+        Tue, 20 Sep 2022 05:52:56 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id D0D723200A08;
+        Tue, 20 Sep 2022 08:52:54 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Tue, 20 Sep 2022 08:52:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1663678374; x=1663764774; bh=yTlflAyOUF
+        EqTJEaTdC+96VGs2mVc7ugO0+0lZWQg2U=; b=H6M/gJpSlbKCZd/GdDoOoo1Qjc
+        XyEKmSV3x9jatUq1YyLH0TQTkc17SPVxw2NQ6G4b3Z1gZ+4AsmpaAJ+Bn3L1aXFn
+        2pLPC/Ff+hr8esFrYWvOXC9MbkoAYhjGQmNjXKkVPtI+NPJ1HGQxwLs5fytRlUF5
+        vkIlUth54gv7IWn4X9a0GEjX5V2607FoEkFrvAXAXpLcmJzmVSPzb5GHZwCsoNYG
+        YKfsO6ZoQU7JSKb0EGu06eq23TTQrNYQg+zjbQ3MSGOIBNROvimJo5lhF69PQ506
+        oF66VGiur5Y9QhnLZdoVyomIr7BdhAW9zXE7ANg2XCohuUVJI67Wht+rmBVw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1663678374; x=1663764774; bh=yTlflAyOUFEqT
+        JEaTdC+96VGs2mVc7ugO0+0lZWQg2U=; b=toIdzmZ0aH158pNAkNigqiSNmS4tN
+        x1kN7uA9KnLhEaEiI20Nmw30730yC+5Kq3SfgsGhcF8PbvXdQ1yuMaoj8SbRf43t
+        HnT0621dgVsK8ZhcIr1bZkwTKLTd5LALjdfgRYxvroem9xwZw/3y3aSikXK6cH17
+        P9NDm9E6rESOO+y4iJ8mFqZb0QeZ80wvGixFw5SX7UCIBLdm0HL5xFcoXRnYnMAM
+        QJQZ8J2g8m376WWvuWfpphKQ9ts/WvMMLmeu9JkPfdkIN5JUFYlycj2BJnyRFApq
+        XGqse/9JXNDZbHviz/baVvOBUOeTv7+fP9tGvR/ojkF+gcldpgIF7q4DQ==
+X-ME-Sender: <xms:pbcpY3juFeVJ3fb8xAsHzK544zSjhTLN2_nJVvNZ4GLbsPts3MUofg>
+    <xme:pbcpY0B1LG01L_7tUNZBVKNQrore1uDRx02J0wSgRtmc4MnK2mjPzlJiJdQrjqe4t
+    EkshVFcsq_lfhk5sT4>
+X-ME-Received: <xmr:pbcpY3HEpfsZSNLjpfVl2LDAsFNjTUWeS1fa0K1GumvYQbsduKjAf7yvSB6h>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedvledgheekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepufggtgfghfffkffvvefosehtkeertdertdejnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepleeuveetteffvdevlefgffelgeduueefleevfedvudegheekfeekheejieek
+    gedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:pbcpY0SWIW8i9uIykmatpvIvuk1Q-47KILBQqj6d2Je91uhUBF9hWg>
+    <xmx:pbcpY0zXQTk8fug1yO-6lsRe3qtoqpT6c4aKf9jNItOqd47Uv6iCaw>
+    <xmx:pbcpY66PbWsVKF40k46l2NSc5AL0EWqxQcTxROlXpBsyRbjfqPgqMA>
+    <xmx:prcpYwDP_8T5BkHA7O4q-PEK5yxcdUHxqkOz8oUvloNe3YWRBUMLlQ>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 20 Sep 2022 08:52:53 -0400 (EDT)
+Subject: [PATCH v2 0/7] drm/vc4: Fix the core clock behaviour
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH net-next 3/6] net: ipa: move and redefine
- ipa_version_valid()
-Content-Language: en-US
-To:     Paolo Abeni <pabeni@redhat.com>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org
-Cc:     mka@chromium.org, evgreen@chromium.org, andersson@kernel.org,
-        quic_cpratapa@quicinc.com, quic_avuyyuru@quicinc.com,
-        quic_jponduru@quicinc.com, quic_subashab@quicinc.com,
-        elder@kernel.org, netdev@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220910011131.1431934-1-elder@linaro.org>
- <20220910011131.1431934-4-elder@linaro.org>
- <d98d439ef5ee8a1744481bf1f076fbed918c3cef.camel@redhat.com>
-From:   Alex Elder <elder@linaro.org>
-In-Reply-To: <d98d439ef5ee8a1744481bf1f076fbed918c3cef.camel@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-b4-tracking: H4sIAAu3KWMC/xXLQQ5FQAwA0KtI1ypVDP5txigayZBOIj8RdzeWb/FuSGIqCX7FDSaXJj1iBpcFhM
+ 3HVVDnbGBipqHu0E7FRf/Y7ugI6577xnXU8jhDPpNPgpP5GLZvXa4itODgeV6uj6ouagAAAA==
+From:   Maxime Ripard <maxime@cerno.tech>
+Date:   Tue, 20 Sep 2022 14:50:19 +0200
+Message-Id: <20220815-rpi-fix-4k-60-v2-0-983276b83f62@cerno.tech>
+To:     Daniel Vetter <daniel@ffwll.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Stephen Boyd <sboyd@kernel.org>, Emma Anholt <emma@anholt.net>,
+        Ray Jui <rjui@broadcom.com>, Maxime Ripard <mripard@kernel.org>
+Cc:     linux-rpi-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Dom Cobley <popcornmix@gmail.com>,
+        dri-devel@lists.freedesktop.org, Maxime Ripard <maxime@cerno.tech>,
+        linux-arm-kernel@lists.infradead.org
+X-Mailer: b4 0.10.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2654; i=maxime@cerno.tech;
+ h=from:subject:message-id; bh=Usxpco6HT+dQTlqIqrK9EZazz1b2NzHvAwZ5ALguFI8=;
+ b=owGbwMvMwCX2+D1vfrpE4FHG02pJDMma2/lKci8obSraqdT4JPT8aaZrb0WW/Tjan3kw3uaXbN3+
+ /gMhHaUsDGJcDLJiiiwxwuZL4k7Net3JxjcPZg4rE8gQBi5OAZjIN2WG/+HiPR+jXzcu0ZlmGbpzcU
+ Xc3JSSX91d3Q9eV2a5Bi71k2RkONl/605SfMe/TyIzA+R3X/A913Eigi9ySsEzxxsLLjAd5wMA
+X-Developer-Key: i=maxime@cerno.tech; a=openpgp;
+ fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/20/22 3:29 AM, Paolo Abeni wrote:
-> On Fri, 2022-09-09 at 20:11 -0500, Alex Elder wrote:
->> Move the definition of ipa_version_valid(), making it a static
->> inline function defined together with the enumerated type in
->> "ipa_version.h".  Define a new count value in the type.
->>
->> Rename the function to be ipa_version_supported(), and have it
->> return true only if the IPA version supplied is explicitly supported
->> by the driver.
-> 
-> I'm wondering if the above is going to cause regressions with some IPA
-> versions suddenly not probed anymore by the module?
+Hi,
 
-That is a really good observation.
+Those patches used to be part of a larger clock fixes series:
+https://lore.kernel.org/linux-clk/20220715160014.2623107-1-maxime@cerno.tech/
 
-The way versions are handled is a little bit inconsistent.  The
-code is generally written in such a way that *any* version could
-be used (between a certain minimum and maximum, currently 3.0-4.11).
-In other words, the *intent* in the code is to make it so that
-quirks and features that are version-specific are handled the right
-way, even if we do not (yet) support it.
+However, that series doesn't seem to be getting anywhere, so I've split out
+these patches that fix a regression that has been there since 5.18 and that
+prevents the 4k output from working on the RaspberryPi4.
 
-So for example the inline macro rsrc_grp_encoded() returns the
-mask to use to specify an endpoint's assigned resource group.
-IPA v4.7 uses one bit, whereas others use two or three bits.
-We don't "formally" support IPA v4.7, because I (or someone
-else) haven't set up a Device Tree file and "IPA config data"
-to test it on real hardware.  Still, rsrc_grp_encoded() returns
-the right value for IPA v4.7, even though it won't be needed
-until IPA v4.7 is tested and declared supported.
+Hopefully, we will be able to merge those patches through the DRM tree to avoid
+any further disruption.
 
-The intent is to facilitate adding support for IPA v4.7 (and
-others).  In principle one could simply try it out and it should
-work, but in reality it is unlikely to be that easy.
+Let me know what you think,
+Maxime
 
-Finally, as mentioned, to support a version (such as 4.7) we
-need to create "ipa_data-v4.7.c", which defines a bunch of
-things that are version-specific.  Because those definitions
-are missing, no IPA v4.7 hardware will be matched by the
-ipa_match[] table.
+To: Florian Fainelli <f.fainelli@gmail.com>
+To: Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
+To: Ray Jui <rjui@broadcom.com>
+To: Scott Branden <sbranden@broadcom.com>
+To: Michael Turquette <mturquette@baylibre.com>
+To: Stephen Boyd <sboyd@kernel.org>
+To: Emma Anholt <emma@anholt.net>
+To: Maxime Ripard <mripard@kernel.org>
+To: David Airlie <airlied@linux.ie>
+To: Daniel Vetter <daniel@ffwll.ch>
+Cc: linux-rpi-kernel@lists.infradead.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-clk@vger.kernel.org
+Cc: dri-devel@lists.freedesktop.org
+Cc: Dom Cobley <popcornmix@gmail.com>
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 
-So the answer to your question is that currently none of the
-unsupported versions will successfully probe anyway.
+---
 
-> Additionally there are a few places checking for the now unsupported
-> version[s], I guess that check could/should be removed? e.g.
-> ipa_reg_irq_suspend_en_ee_n_offset(),
-> ipa_reg_irq_suspend_info_ee_n_offset()
-> ...
+Changes in v2:
+- Dropped the clock patches, made an ad-hoc function in the firmware driver
+- Link to v1: https://lore.kernel.org/r/20220815-rpi-fix-4k-60-v1-0-c52bd642f7c6@cerno.tech
 
-I'm a fan of removing unused code like this, but I really would
-like to actually support these other IPA versions, and I hope
-the code is close to ready for that.  I would just need to get
-some hardware to test it with (and it needs to rise to the top
-of my priority list...).
+---
+Dom Cobley (1):
+      drm/vc4: hdmi: Add more checks for 4k resolutions
 
-Does this make sense to you?
+Maxime Ripard (6):
+      firmware: raspberrypi: Introduce rpi_firmware_find_node()
+      firmware: raspberrypi: Move the clock IDs to the firmware header
+      firmware: raspberrypi: Provide a helper to query a clock max rate
+      drm/vc4: hdmi: Fix hdmi_enable_4kp60 detection
+      drm/vc4: hdmi: Rework hdmi_enable_4kp60 detection code
+      drm/vc4: Make sure we don't end up with a core clock too high
 
-Thank you very much for taking the time to review this.
+ drivers/clk/bcm/clk-raspberrypi.c          | 18 -----------
+ drivers/firmware/raspberrypi.c             | 22 +++++++++++++
+ drivers/gpu/drm/vc4/vc4_drv.h              | 16 ++++++++++
+ drivers/gpu/drm/vc4/vc4_hdmi.c             | 25 ++++++++-------
+ drivers/gpu/drm/vc4/vc4_hdmi.h             |  8 -----
+ drivers/gpu/drm/vc4/vc4_hvs.c              | 26 +++++++++++++++
+ drivers/gpu/drm/vc4/vc4_kms.c              | 13 +++++---
+ include/soc/bcm2835/raspberrypi-firmware.h | 51 ++++++++++++++++++++++++++++++
+ 8 files changed, 136 insertions(+), 43 deletions(-)
+---
+base-commit: 521a547ced6477c54b4b0cc206000406c221b4d6
+change-id: 20220815-rpi-fix-4k-60-17273650429d
 
-					-Alex
-
-> Thanks,
-> 
-> Paolo
-> 
-
+Best regards,
+-- 
+Maxime Ripard <maxime@cerno.tech>
