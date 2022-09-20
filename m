@@ -2,161 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 142065BEB9C
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 19:09:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AE675BEBA3
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 19:11:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbiITRJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 13:09:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56630 "EHLO
+        id S231180AbiITRLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 13:11:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbiITRJp (ORCPT
+        with ESMTP id S230350AbiITRLL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 13:09:45 -0400
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2053.outbound.protection.outlook.com [40.107.102.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F488BC;
-        Tue, 20 Sep 2022 10:09:43 -0700 (PDT)
+        Tue, 20 Sep 2022 13:11:11 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2215491CE
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 10:11:10 -0700 (PDT)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28KGJD1p028862;
+        Tue, 20 Sep 2022 17:10:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2022-7-12;
+ bh=UtW29Sn4DwJn4Gd2gh31I5vc7GZr+rSUr/SZ+ZgYxJo=;
+ b=XN0nk1glimldre5K5/j51Mf4fEBANmoAeO5bRoBQ/B1yMmR+5PC0/QCpo22IEFGIohmZ
+ WXh/1t2qRTMJ96yLDVnwwMX0PtRm8xKUgFh4jeS3jFxkkHKQlH6IWgZDY5CfqhE0sz9R
+ mFIEh0sUFTu0DDYxc62+BzYqkbS8jJ8mplRCVan1C1yNq5UmteNTN+iqhY8rEEgedhaF
+ SQSPCA5Zxoc85O7MIqH0a1Xl6KwGzyqfylmtZzXM7mB1d0NNvdzl90QvWjbg0cxBiBAQ
+ 3bnoLVDM+ZYo19LFJGnRI2NYkGHUljUqTVujUB6g8xNSOYuVLm1bbCr51m2DUIc5kawI Sg== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3jn68rfmpc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 20 Sep 2022 17:10:36 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 28KG6eCQ035750;
+        Tue, 20 Sep 2022 17:10:35 GMT
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2176.outbound.protection.outlook.com [104.47.55.176])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3jp3d2hya3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 20 Sep 2022 17:10:35 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QUWLP7Xjx3Ds46yfW2chh+v5LToy53XibSKsM9L/BrPwQIoaT/T6soEnMrtAf/rOHDc/839GiGzzHrQazrH9mt6hPfLOGSZmT3RIeUsX810TI0bEVe9/ZQ0bWBbdNJ2rcZRfl4blJO5zmhW4uN+mUULUD5laTCG/5GsZWdmJ2ScfQb5eUzz6uPPFIOu7kMiyAJCtOIO+woCizDGXEkhRBPD/TBl03aQ9IV7qdibElv2SXsBAPYQORDh7Uv0BauOcNb2F6Q9uhyCzyLA5XF28nOho+wScUNQ6zbzwDMPBWDrrGtTpIW/Ajn5CgwQaPOfLOI2VgwpVp2Ds1kuavhWnXQ==
+ b=ZX1TxpV9ILU1kOIVLUgO4Pn975vxgviosxXzCUftc6FxhJ78Cf2RLdtt5875O6A7rKi2yabESAh6fIoJovL0QGJrDifwXobbzGlEReyYFu5Wd831danjdsud6sIxISXj2tm5iFYkW/wTTtWx598Ds99KAIsUe7Iv6sX8wymv/yS6R0uVKbB/4wHTyMSRaxtx8QMyPqakkUPQJcrKt9o5G7d7cQeCJJYBAXgMg3ZKuV7FK3KWbEPRYvlWDDEllUv5eOQVx6jLH1BgfO/hrWgxWVPbCdxQq4/E8177We5t0Y+fY/Fqmkhuv/I24l3T1knKIjppMVm9lLXlmswGo974uA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Rxq68L2pumFc+NXtpgG1X14PZ7oFaTCYWPvYUJk2/Jw=;
- b=M585lflW3imdUq7p+/MGXgNkB7NPK+VHAekMe4Mf7eOgJZVdHdDV5kwJ9nUeuVM8HjQPlwCM193VrxwvdcErXfMPsTYRB6glmTG6o779Iu+YTMg/xF7uGxChnhlTFS9vVMb5hx/I85v7SYcIiO1oDYffw6dTkL6Ggm2IIPxsjFfX0eJcdHKBneenK5g6aMa0h1Qo4TKO/A6XY7uGdYtAIAroF59R8Jy7ctj85UoayFsKf5nnPnILRuXkuJH0Ws5+/t+IxQCgw3KFSovwEZ/4wtN+sQnf1tVB9vwEbTKoo9BhkBn2SriO0Mv1naem176/0CFTiJ3cWJNyvyRUHeWFEA==
+ bh=UtW29Sn4DwJn4Gd2gh31I5vc7GZr+rSUr/SZ+ZgYxJo=;
+ b=Xq31SGbfa0CkQ1GtrJA6cOvMV5xjGHRtQLj+9Zmh6D5A62mqHpKTxDtv4W4m9m2xxYGBW15LxXnrR+KcHxDfwRqG63Gu67xWy/zu2DXq/bq4GsfKfhiuhH1howgqUJhY1nKSej4gw0YNJm0x2sBYIVEWIgyndobA+dIx7iWdKRtQpW+TrJsybA8K2xHyPl1QM4vWMp9v8LITQj4aA0hmYZSdapgWCYMCKR/9IcKTC0ceSJF+PT7ZGRv+8a8kW63B+IciZLRCRhKgcFJ1v0ZwZROEY7UvLiz2CYNbhdMiUkK3W74NgWRbbs1a0FKFW6fM4a0c1ANERRylDffuvf5WJw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Rxq68L2pumFc+NXtpgG1X14PZ7oFaTCYWPvYUJk2/Jw=;
- b=uvj3KIQaKTaODmUq0gjPI6mWoBgIxF1UR7xia1xbjvX9vUOTJXOt3n/ibacNtKpDgKhepUsLzzQ2i/QsrbQDYa6m+lWMyMdUci1gOUt6xKu2gKnGda9x9/SUVdW0HQH2oWaC7CqHCpCddzqPoEiTqdZVZbkqVtsFhYcLVldyVDM=
-Received: from MW3PR12MB4553.namprd12.prod.outlook.com (2603:10b6:303:2c::19)
- by SJ0PR12MB5408.namprd12.prod.outlook.com (2603:10b6:a03:305::18) with
+ bh=UtW29Sn4DwJn4Gd2gh31I5vc7GZr+rSUr/SZ+ZgYxJo=;
+ b=OW1S5mtSHbafbnv9lBd+blHelxTW1ifOL9bkj24KgASvZlxNuzsOa1j5zsM9xqzgZpC7+o1u07jdbg4D3mknWSH01OmhOukej418g35hhrs3uai5yJ30B+m7Nj6eoJU7CyeHK/tAvFwWbuM4NOLGDvx/oO4lrcY1BA5O6SvNVLM=
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
+ by BLAPR10MB5171.namprd10.prod.outlook.com (2603:10b6:208:325::13) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.19; Tue, 20 Sep
- 2022 17:09:41 +0000
-Received: from MW3PR12MB4553.namprd12.prod.outlook.com
- ([fe80::4120:60cf:46a8:7109]) by MW3PR12MB4553.namprd12.prod.outlook.com
- ([fe80::4120:60cf:46a8:7109%7]) with mapi id 15.20.5632.021; Tue, 20 Sep 2022
- 17:09:41 +0000
-From:   "Moger, Babu" <Babu.Moger@amd.com>
-To:     Reinette Chatre <reinette.chatre@intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>
-CC:     "fenghua.yu@intel.com" <fenghua.yu@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "damien.lemoal@opensource.wdc.com" <damien.lemoal@opensource.wdc.com>,
-        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "jpoimboe@kernel.org" <jpoimboe@kernel.org>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "chang.seok.bae@intel.com" <chang.seok.bae@intel.com>,
-        "pawan.kumar.gupta@linux.intel.com" 
-        <pawan.kumar.gupta@linux.intel.com>,
-        "jmattson@google.com" <jmattson@google.com>,
-        "daniel.sneddon@linux.intel.com" <daniel.sneddon@linux.intel.com>,
-        "Das1, Sandipan" <Sandipan.Das@amd.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "james.morse@arm.com" <james.morse@arm.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "eranian@google.com" <eranian@google.com>
-Subject: RE: [PATCH v4 09/13] x86/resctrl: Add sysfs interface files to
- read/write event configuration
-Thread-Topic: [PATCH v4 09/13] x86/resctrl: Add sysfs interface files to
- read/write event configuration
-Thread-Index: AQHYwuPUElL9x6Uav0G/mNvc1Vq6Aa3iRHAAgASz0wCAAA9xAIAAPtiAgAALQoCAAUy4MA==
-Date:   Tue, 20 Sep 2022 17:09:40 +0000
-Message-ID: <MW3PR12MB45537C67691C1D4048CF25E7954C9@MW3PR12MB4553.namprd12.prod.outlook.com>
-References: <166257348081.1043018.11227924488792315932.stgit@bmoger-ubuntu>
- <166257366204.1043018.4834615270384002210.stgit@bmoger-ubuntu>
- <13294a8f-e76f-a6a9-284c-67adbc80ec7c@intel.com>
- <04132d34-c69e-62a0-35ba-bafa44210c0a@amd.com>
- <bd424e21-c24d-fcf1-96e8-38c9f7546d19@intel.com>
- <9dd5a111-63ea-8c4b-5515-d24d1d9c73f0@amd.com>
- <ab2f780c-72aa-2415-7167-e23c27f9a194@intel.com>
-In-Reply-To: <ab2f780c-72aa-2415-7167-e23c27f9a194@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2022-09-20T16:58:06Z;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=46eb1b75-b716-4b1c-853c-2cd03db07911;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_enabled: true
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_setdate: 2022-09-20T17:09:38Z
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_method: Standard
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_name: General
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_actionid: 49204c32-928f-427f-b98f-be4e2d1e5dd7
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_contentbits: 0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MW3PR12MB4553:EE_|SJ0PR12MB5408:EE_
-x-ms-office365-filtering-correlation-id: 509f98b6-0af8-4f1d-7071-08da9b2ae812
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: CHYw/F+Sla8FPkrkCb0JgmQhBgezllievgwlScA4JhWSKBHrXYcK7Z9cJWfhxO2FwvF5nlzXDYzDNYuZBWSyE01rMw6DifWpsuIyjNYFRJHHDc55m7+C+mrYZ8q9zpufLhoMsWXb1Ko3Og5wkJU3GQjaQUv3zXGTiKRtrKQ8PDpNVdJ1iWfSsDMrZWANymCZoCHdTTx7spTj0fPkwTJ9jos6+JUyluAgVb05guijNSIY6aAePiZ5f3y7mB4FfjbGv5GURn15hTWoV5yG8qy3CslaI6rEESaETwas4CVKnaT0vpABJFzpP7CMK4vCN/Ov0NgpckLouJJtMaxp1NT1FGTocVclzom9JHbitYD8u3mkq/pZGsk50uMLH6MIQG4WIL50gCcObl475MnE0zssCi817mQLesjPB1fOQ1bOREbRmNnOwVeqQE+Ho3a6JSssDwDshBi6gVnWUUjY6XjaR9afJ2hB3IA8FBzOqtUBSk2y+tQNK0FoRUWhbqrZPSBFe/PPmTO0bgq6MH1ziMmsAlrD2BRfJmJArNt2ChQJazhyrnGKAmPWresebKPSaufprJUEc4ubigtuEBuy6TCl4OpbI1MU8lU2afatvxGuOIAoSdwvNFCj/GEC5M87mTK6PcUZjL1UH6k7Y7wZ5dEmWg93qObPH6yYWLD8BgyoymnokhpvaTwAkTZnPRhnaLLV3mYeeSxE/TvIxdlMoGRjpaiBZ3s2yMKA0Sb8RIR9jrK/u9yBUzM3KuvCMvQgQTsHWGctTSIQtt5+d+0EbLYuKWMwIjK+dcV4vS1/MuL1oWw=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW3PR12MB4553.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(39860400002)(136003)(396003)(366004)(451199015)(2906002)(33656002)(122000001)(316002)(38100700002)(4326008)(66556008)(64756008)(5660300002)(8676002)(66476007)(52536014)(66446008)(66946007)(54906003)(45080400002)(76116006)(110136005)(8936002)(86362001)(186003)(478600001)(7416002)(9686003)(26005)(38070700005)(83380400001)(966005)(71200400001)(53546011)(55016003)(7696005)(41300700001)(6506007);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?B6rmRoPHM8kIsYeLNZ4IPYEiaovswWmeVoJttT5qLuTNnHmGBrgpEnGLe0?=
- =?iso-8859-1?Q?ceHSExlgdmBXEzzYIRtERG4HzeyHBANkXQ6AXFxTWqAbwr0kakwS7AxHoG?=
- =?iso-8859-1?Q?vjZubfUWTIx38DjRFdpVuXTc+1G9sc6fP8PV7z+Cgk3OpM+BqEm0W09kMm?=
- =?iso-8859-1?Q?SygkGgTPL5/vWJKho8TRiXGJj3V7jDUwRHtsdi+qugWWdSBC6sAIzNCvdl?=
- =?iso-8859-1?Q?TbcNuYDGmLuAUu7m2yqzF0dAgPRlUZuI6pklc5B+fdO95JoLqdOCHSvq6n?=
- =?iso-8859-1?Q?PLxs3twIhGd66keebLsQDS+O60CBVZBqIh+eubv7RtIyyIHWtnpl6ewdhS?=
- =?iso-8859-1?Q?5FdWcgyXCnukfUjbcA0jnGMBuRlPB91X4JagAxq5AmXTWXFoG/itkveP1b?=
- =?iso-8859-1?Q?fM7jRc69kpTI0d2uVJ1SW3AAWXZkEYdQJEL0QYAOTZ+sQHAbyCrlSLKUck?=
- =?iso-8859-1?Q?l6NS+HT4MMJLIqZQtiUbbCHHrS9HNJM86mZT7xYSHkP3Al2Ly8kRBX8MDx?=
- =?iso-8859-1?Q?jRTv1ANGCj5w6i5Zne5wCJ223u5tLw3uA+Ecl54myNG+4Wh9ACCrcsmOCW?=
- =?iso-8859-1?Q?EFPddB13qe+MwOu6pk0U/ifOob5sd0kRyImQe8rCjVeV9jQL/RRYyGu/x9?=
- =?iso-8859-1?Q?eKi/vDF8RIOkjMGtnGXSe8Lwo61hooIucZi/kr0LsknAbv4H2M8bX3ScIj?=
- =?iso-8859-1?Q?3/+f7RoITyls9Wnb8Ha28WgsL9WE3rB+2df4nEKVN1IJThqDsCfIvG68+w?=
- =?iso-8859-1?Q?iLPqvuh6kYj6WehSlKczKhAXPsdIILyY6PuXcDQUZgr0U/0NU0PFg88Lxw?=
- =?iso-8859-1?Q?LaC3VYHPcKG+AULLWH/MUFinvVDGVOBQmaWm/vFZEtrUDqjTlloQDZL5dW?=
- =?iso-8859-1?Q?KNH1+EGgdC2hZHvYAje/tT/uII6JlJqLg/S1JFGiQ4XgVYMfY3W2rqCfmO?=
- =?iso-8859-1?Q?avVzAgsvbMDxF6QJwIM9kU15CmIT2e/yr/IXzvdb0p1uwCYVA14LfxGS/N?=
- =?iso-8859-1?Q?+0wOg23WOFwdHKlPDE1JJ1SxJZbAm7U2kA22xm56Z8EA58X4IinNCuAarW?=
- =?iso-8859-1?Q?RDQU4le30Frq3+W4G07Rws3whqcheGz8W5OwxqQQdqMhQJgSLXovGXSDFl?=
- =?iso-8859-1?Q?6Ib2v3gAPJqIoaqDWAQLQJQCyhMyjt/7MH1NsLL2sEEjTJUHz2FNqDoaqw?=
- =?iso-8859-1?Q?0OufPHn3IS4GXQUze48Pya1PKQC/x4GJ+JLjOtYTK/AJZ3oOApl+NJvWQC?=
- =?iso-8859-1?Q?TgZgzLvRCueCZh+qtqAsgapqMuEn1AGJduQ/KxyMK6J/i3476NxKGXId4F?=
- =?iso-8859-1?Q?mwd28HZhVfGf54go2TMlVYqYfXN2Hwi7SI6xbLiQrYBzys0mekpUfR9x2g?=
- =?iso-8859-1?Q?fCJgAHV/TVbRKwsp78ryy6eHlFdLEq5EEFH9oN/9bH2rnPS8HV7rqJUKqB?=
- =?iso-8859-1?Q?4OmhJC15NzlF8vk2nCQq5tHAEI8hN9zRfhXIuF4bVdiKI2hIIfHypn+kAT?=
- =?iso-8859-1?Q?ltGvPzcf4U63d4CWHXeWX8P4wHO7qcpyCwJIJBEk2NPdY0ibSPciKFkkB6?=
- =?iso-8859-1?Q?Z9InMjetY3S2KJuMoI0DrpdHEVqFGy2LszqL3qJA8xyImBeEBQA2XRUGFr?=
- =?iso-8859-1?Q?/fZHsEDSOXgro=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.14; Tue, 20 Sep
+ 2022 17:10:32 +0000
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::dfde:308:42fe:6c5a]) by BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::dfde:308:42fe:6c5a%3]) with mapi id 15.20.5654.014; Tue, 20 Sep 2022
+ 17:10:32 +0000
+Date:   Tue, 20 Sep 2022 10:10:29 -0700
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+To:     Oscar Salvador <osalvador@suse.de>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Muchun Song <songmuchun@bytedance.com>,
+        Joao Martins <joao.m.martins@oracle.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michal Hocko <mhocko@suse.com>, Peter Xu <peterx@redhat.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Vlastimil Babka <vbabka@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v2] hugetlb: freeze allocated pages before creating
+ hugetlb pages
+Message-ID: <Yyn0BZu1gNHG7pZ7@monkey>
+References: <20220916214638.155744-1-mike.kravetz@oracle.com>
+ <Yyk7cN8KhUlNFmM8@localhost.localdomain>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yyk7cN8KhUlNFmM8@localhost.localdomain>
+X-ClientProxiedBy: MW4PR04CA0245.namprd04.prod.outlook.com
+ (2603:10b6:303:88::10) To BY5PR10MB4196.namprd10.prod.outlook.com
+ (2603:10b6:a03:20d::23)
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|BLAPR10MB5171:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2aae54d3-2c64-48c9-1db9-08da9b2b064a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: P6QMZmpBRh/zTFjx+08oKuQQThhcsNll6DobXPn7eLgNSNnUAkz8rnaOEtwUDC/HegSw9fCNenergNBN7FMIRqkTyUOeahUS0cwsyJaYV7lSZuPTkkkNKEVPqcivjB2Oot8Xc4NN5q9x2Whf9qKku5bgb/JLWnax3asuSZsLDK3Oz95e9lgbF7hFNNADxyOS7QPSLHtOjZfH3JU4NnbGrbM/DfYPxfzTjBL0Azd65C4/CL+oA2+M0phb3EnODdFKrztXO4edJmqtX20SNd+zbCXz56wjIIdXxf8fZKezSYHs/QPpp8j6YwdJ2mJCc+pV+36uQlWYOPaSKd7NfqybrDb5eoWUhAoBG5v2Iu9XIstdkwMIGi0N/oFZPcjge/gK0+1GGiZNVoUogC3pg667QmaHnACsR0TXPbXExOdYxwDHNl+oftW7Hz7XpKk4VJbka+nImzczVmcXLwbExePYPwgPdGukYz4gsSHjQSRAGC8a2lAP5whbbCAPOa7r5BIQYMrdRntuRU4Wnu34x/sxieb66oHiZMGS8dtbwbDbuzdowGpC3hSpkRjYbT9aukxp7XVI/IbjGOn+aEOfMXcONwx+AQ86raM0Yaxr332ouJzbGCrdrO1rMCJB5aIGxH0NITpsjjry31ETmhG2brHAMA0AG+MV9zVb6tKoqj8I6no2GFnPHgfM2eG8EnapfusNB/WabeHYOW+nKUUzp7wMogaf+MakM9A7SseaTAA5xqLY8vqRA7yc9gst1yrFDwtdaz9MiMj3YW+QEeubDBOL6g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(366004)(136003)(376002)(396003)(346002)(39860400002)(451199015)(186003)(66899012)(83380400001)(44832011)(26005)(33716001)(53546011)(6512007)(9686003)(7416002)(6666004)(86362001)(4326008)(66556008)(66476007)(8676002)(66946007)(54906003)(6916009)(316002)(966005)(6486002)(2906002)(5660300002)(478600001)(38100700002)(8936002)(6506007)(41300700001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?X9PdIrc7DNqY1TgIlz7nrKRslOyWFBCjj/z239y6pcxtIg88HAqKZYhTql88?=
+ =?us-ascii?Q?hzQYjRPZnI/ztQmQ/gtZrKiHIQgPa/0k1CwTsSUEeQ/dP8NYbosjTXSUvO/4?=
+ =?us-ascii?Q?tjYL8lA8kV3dDm8FW92xFPpwLCeacvjb+15iMxKeolTRm69R+aotlAJ5zo19?=
+ =?us-ascii?Q?SqBOuLvn0sgtZEb8eVQia3+n6Kx7TMaDFBxtfVdVqkiw8tlc9YUja4XN/E5Q?=
+ =?us-ascii?Q?WUQRifA5KUMFBbOa2PUIsJw2sJIY1lxmsj0p0Hkkd6KS+SAq9XQBLFB2+Rud?=
+ =?us-ascii?Q?jKeIP4pkwfIxB79Vbs89CivtQXSH4AnnpK1pOGDPS7IKBudjCkL+78qasatI?=
+ =?us-ascii?Q?nOqcIZRsR4ILP579ZzCkFxdj0iRdXkV7SvP+MF0VmpDhRJCxh4We6TDzqOEY?=
+ =?us-ascii?Q?0IDbkf8xX2pNltBfBcACr4wHUvPF9MC7UgZSKLF8NO+RJJqmB7qg9EJLiA1W?=
+ =?us-ascii?Q?Vaabz6jqhNzgNEn1oEfFkM25Fuh/zPQIGvKF7RKS0ske+dw8YwXAI889ZDIe?=
+ =?us-ascii?Q?ckGwYfFrIbJaMpsAc7MYoRukrG85zUwHkayVg+YZ5G3uLEInir31QTubRdNp?=
+ =?us-ascii?Q?ZR73b2P7i388nFbXaY/m7m88R5+izJPtIeEgcUs7oFAnoARWEKrbfaN0iCb8?=
+ =?us-ascii?Q?BdlPt8zVbxuylaJNCNm6UUtpRMegnxIHCiyiEl54PWteJzNTaLUMt2p5MY6H?=
+ =?us-ascii?Q?k3Q0ydev696BEhYIYq3RIc6yake0MauiNnH+2UcOllTzjW1C9n7IhFBYV7Et?=
+ =?us-ascii?Q?4nNS7rHUrBCHQ2VYeCIGnkT0/Y2phaJmBahgpGOd+w9lbmy5Ip4v2akPKQkO?=
+ =?us-ascii?Q?KFnKSjMODYAMTsX0djZ5nco6lF2zuQlyjZt299iwVmetUFxv1XxjT7bKfmKW?=
+ =?us-ascii?Q?hVxYf3mMCr2Eib+gR0qCyBzaMZzWALhSUd/NJONWwxuiBGhTEu/KjBPOtI1s?=
+ =?us-ascii?Q?9JTpKlWSVOiWvjoGP8cpzaN4PiEuZLo8GopPFgetYX5vzUvGYA2YABkhfH4R?=
+ =?us-ascii?Q?4WHIfx/khzCbb3PPMZNUHNidQiPd9Z9iVSBTeiQpoQ9nAF7KecOMndV8bL1e?=
+ =?us-ascii?Q?wD6YLeq7hu5RZa7HFDJm7pgsx1wkiJMuLG8EZ1mmAx9IPuFAGqjP1WozEXpT?=
+ =?us-ascii?Q?a+9OlpPzRbnuR/YCOBqKf4n4p+te6wxPJbhoz2FuFHnb76KAfonEGEW01fub?=
+ =?us-ascii?Q?AfqN8HpLJtCDIXlGn/DgzlzlAYwfqjJ3oHfKarD4J52SLYC75U3U7xCdFTo+?=
+ =?us-ascii?Q?hpeIGaw+9oq5BB3a0/7Kd2Rda03UDlb/A3pH/QC0zQtIZoubmt/NNfCBATgb?=
+ =?us-ascii?Q?vidkxLlPoHdeNVhilfrlaczWTKwljRWvLacYTKf4KRKK5+Fdes1Wq3YiWT4o?=
+ =?us-ascii?Q?jYV7dUe4HFhciEyMextJn7mA5AHWjbvLIK8YNs/1bL/hMbnqAriAB7sntNXy?=
+ =?us-ascii?Q?YEbq4X7gcNHxUa5wnosc/aBhzojfJT3ICIBn7lq25OKeltpuoOjQFSH3pXC3?=
+ =?us-ascii?Q?wO0vbQAl6nlYqI5aHkS3W3feQUZYU1e1ym4PBRII6A2z7YuiA3n30xDALPwS?=
+ =?us-ascii?Q?HK3yN6nhi8tMSlFeqfsoueVmaX2/8lwUKVbSa7DrYOsRmvoO5Fo2nhjRMt4t?=
+ =?us-ascii?Q?DQ=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2aae54d3-2c64-48c9-1db9-08da9b2b064a
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MW3PR12MB4553.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 509f98b6-0af8-4f1d-7071-08da9b2ae812
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Sep 2022 17:09:41.0175
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Sep 2022 17:10:31.9877
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: xqoZp15tlNaTT/aO0eu8UlBzU6+opgHtlm3Y/Jzffovm4zo87tAMYfcwhVLKYfsY
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5408
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Y/wRHkQ0ddjYc08OtqXEG9RfzTgsI7eh6vbDIlbEGCGMrVM01/I6wvt5DV78uqmObgJeuYbjlzacA2iRPKDnHg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB5171
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-20_08,2022-09-20_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 spamscore=0 malwarescore=0
+ bulkscore=0 adultscore=0 suspectscore=0 mlxlogscore=999 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
+ definitions=main-2209200102
+X-Proofpoint-GUID: 4vif7aqwRMZ4m5W8q0I0hwqj7iJqgoIk
+X-Proofpoint-ORIG-GUID: 4vif7aqwRMZ4m5W8q0I0hwqj7iJqgoIk
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -164,186 +152,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[AMD Official Use Only - General]
+On 09/20/22 06:02, Oscar Salvador wrote:
+> On Fri, Sep 16, 2022 at 02:46:38PM -0700, Mike Kravetz wrote:
+> > When creating hugetlb pages, the hugetlb code must first allocate
+> > contiguous pages from a low level allocator such as buddy, cma or
+> > memblock.  The pages returned from these low level allocators are
+> > ref counted.  This creates potential issues with other code taking
+> > speculative references on these pages before they can be transformed to
+> > a hugetlb page.  This issue has been addressed with methods and code
+> > such as that provided in [1].
+> > 
+> > Recent discussions about vmemmap freeing [2] have indicated that it
+> > would be beneficial to freeze all sub pages, including the head page
+> > of pages returned from low level allocators before converting to a
+> > hugetlb page.  This helps avoid races if we want to replace the page
+> > containing vmemmap for the head page.
+> > 
+> > There have been proposals to change at least the buddy allocator to
+> > return frozen pages as described at [3].  If such a change is made, it
+> > can be employed by the hugetlb code.  However, as mentioned above
+> > hugetlb uses several low level allocators so each would need to be
+> > modified to return frozen pages.  For now, we can manually freeze the
+> > returned pages.  This is done in two places:
+> > 1) alloc_buddy_huge_page, only the returned head page is ref counted.
+> >    We freeze the head page, retrying once in the VERY rare case where
+> >    there may be an inflated ref count.
+> > 2) prep_compound_gigantic_page, for gigantic pages the current code
+> >    freezes all pages except the head page.  New code will simply freeze
+> >    the head page as well.
+> > 
+> > In a few other places, code checks for inflated ref counts on newly
+> > allocated hugetlb pages.  With the modifications to freeze after
+> > allocating, this code can be removed.
+> > 
+> > After hugetlb pages are freshly allocated, they are often added to the
+> > hugetlb free lists.  Since these pages were previously ref counted, this
+> > was done via put_page() which would end up calling the hugetlb
+> > destructor: free_huge_page.  With changes to freeze pages, we simply
+> > call free_huge_page directly to add the pages to the free list.
+> > 
+> > In a few other places, freshly allocated hugetlb pages were immediately
+> > put into use, and the expectation was they were already ref counted.  In
+> > these cases, we must manually ref count the page.
+> > 
+> > [1] https://lore.kernel.org/linux-mm/20210622021423.154662-3-mike.kravetz@oracle.com/
+> > [2] https://lore.kernel.org/linux-mm/20220802180309.19340-1-joao.m.martins@oracle.com/
+> > [3] https://lore.kernel.org/linux-mm/20220809171854.3725722-1-willy@infradead.org/
+> > 
+> > Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+> 
+> Hi Mike,
+> 
+> this looks great and simplifies the code much more.
+> I got a question though:
+> 
+> > --- a/mm/hugetlb.c
+> > +++ b/mm/hugetlb.c
+> > @@ -1787,9 +1787,8 @@ static bool __prep_compound_gigantic_page(struct page *page, unsigned int order,
+> >  
+> >  	/* we rely on prep_new_huge_page to set the destructor */
+> >  	set_compound_order(page, order);
+> > -	__ClearPageReserved(page);
+> >  	__SetPageHead(page);
+> > -	for (i = 1; i < nr_pages; i++) {
+> > +	for (i = 0; i < nr_pages; i++) {
+> >  		p = nth_page(page, i);
+> >  
+> >  		/*
+> > @@ -1830,17 +1829,19 @@ static bool __prep_compound_gigantic_page(struct page *page, unsigned int order,
+> >  		} else {
+> >  			VM_BUG_ON_PAGE(page_count(p), p);
+> >  		}
+> > -		set_compound_head(p, page);
+> > +		if (i != 0)
+> > +			set_compound_head(p, page);
+> 
+> Sure I am missing something here, but why we only freeze refcount here
+> in case it is for demote?
 
-Hi Reinette,
+Hi Oscar, thanks for taking a look.
 
-> -----Original Message-----
-> From: Reinette Chatre <reinette.chatre@intel.com>
-> Sent: Monday, September 19, 2022 4:07 PM
-> To: Moger, Babu <Babu.Moger@amd.com>; corbet@lwn.net;
-> tglx@linutronix.de; mingo@redhat.com; bp@alien8.de
-> Cc: fenghua.yu@intel.com; dave.hansen@linux.intel.com; x86@kernel.org;
-> hpa@zytor.com; paulmck@kernel.org; akpm@linux-foundation.org;
-> quic_neeraju@quicinc.com; rdunlap@infradead.org;
-> damien.lemoal@opensource.wdc.com; songmuchun@bytedance.com;
-> peterz@infradead.org; jpoimboe@kernel.org; pbonzini@redhat.com;
-> chang.seok.bae@intel.com; pawan.kumar.gupta@linux.intel.com;
-> jmattson@google.com; daniel.sneddon@linux.intel.com; Das1, Sandipan
-> <Sandipan.Das@amd.com>; tony.luck@intel.com; james.morse@arm.com;
-> linux-doc@vger.kernel.org; linux-kernel@vger.kernel.org;
-> bagasdotme@gmail.com; eranian@google.com
-> Subject: Re: [PATCH v4 09/13] x86/resctrl: Add sysfs interface files to
-> read/write event configuration
->=20
-> Hi Babu,
->=20
-> On 9/19/2022 1:26 PM, Moger, Babu wrote:
-> > On 9/19/22 11:42, Reinette Chatre wrote:
-> >> On 9/19/2022 8:46 AM, Moger, Babu wrote:
-> >>> On 9/16/22 10:58, Reinette Chatre wrote:
-> >>>> On 9/7/2022 11:01 AM, Babu Moger wrote:
-> >>>>> Add two new sysfs files to read/write the event configuration if
-> >>>>> the feature Bandwidth Monitoring Event Configuration (BMEC) is
-> >>>>> supported. The file mbm_local_config is for the configuration of
-> >>>>> the event mbm_local_bytes and the file mbm_total_config is for the
-> >>>>> configuration of mbm_total_bytes.
-> >>>>>
-> >>>>> $ls /sys/fs/resctrl/mon_data/mon_L3_00/mbm_local*
-> >>>>> /sys/fs/resctrl/mon_data/mon_L3_00/mbm_local_bytes
-> >>>>> /sys/fs/resctrl/mon_data/mon_L3_00/mbm_local_config
-> >>>>>
-> >>>>> $ls /sys/fs/resctrl/mon_data/mon_L3_00/mbm_total*
-> >>>>> /sys/fs/resctrl/mon_data/mon_L3_00/mbm_total_bytes
-> >>>>> /sys/fs/resctrl/mon_data/mon_L3_00/mbm_total_config
-> >>>>>
-> >>>> This patch makes the mbm*config files per monitor group. Looking
-> >>>> ahead at later patches how the configuration is set it is not clear
-> >>>> to me that this is the right place for these configuration files.
-> >>>>
-> >>>> Looking ahead to patch 10 there is neither rmid nor closid within
-> >>>> the (MSR_IA32_EVT_CFG_BASE + index) register - it only takes the
-> >>>> bits indicating what access types needs to be counted. Also in
-> >>>> patch 10 I understand that the scope of this register is per L3
-> >>>> cache domain.
-> >>> Yes. Scope of=A0 MSR_IA32_EVT_CFG_BASE per L3 domain.
-> >>>> Considering this, why is the sysfs file associated with each
-> >>>> monitor group?
-> >>> Please see the response below.
-> >>>> For example, consider the following scenario:
-> >>>> # cd /sys/fs/resctrl
-> >>>> # mkdir g2
-> >>>> # mkdir mon_groups/m1
-> >>>> # mkdir mon_groups/m2
-> >>>> # find . | grep mbm_local_config
-> >>>> ./mon_data/mon_L3_00/mbm_local_config
-> >>>> ./mon_data/mon_L3_01/mbm_local_config
-> >>>> ./g2/mon_data/mon_L3_00/mbm_local_config
-> >>>> ./g2/mon_data/mon_L3_01/mbm_local_config
-> >>>> ./mon_groups/m2/mon_data/mon_L3_00/mbm_local_config
-> >>>> ./mon_groups/m2/mon_data/mon_L3_01/mbm_local_config
-> >>>> ./mon_groups/m1/mon_data/mon_L3_00/mbm_local_config
-> >>>> ./mon_groups/m1/mon_data/mon_L3_01/mbm_local_config
-> >>>>
-> >>>>
-> >>>> From what I understand, the following sysfs files are associated
-> >>>> with cache domain #0 and thus writing to any of these files would
-> >>>> change the same configuration:
-> >>>> ./mon_data/mon_L3_00/mbm_local_config
-> >>>> ./g2/mon_data/mon_L3_00/mbm_local_config
-> >>>> ./mon_groups/m2/mon_data/mon_L3_00/mbm_local_config
-> >>>> ./mon_groups/m1/mon_data/mon_L3_00/mbm_local_config
-> >>>>
-> >>>> Could you please correct me where I am wrong?
-> >>> For example, we have CPUs 0-7 in domain 0. We have two counters
-> >>> which are configurable.
-> >>>
-> >>> Lets consider same example as your mentioned about.
-> >>>
-> >>> g2 is a control group.
-> >>>
-> >>> m1 and m2 are monitor group.
-> >>>
-> >>> We can have control group g2 with CPUs 0-7 to limit the L3 bandwidth
-> >>> (or memory bandwidth with required schemata setting).
-> >>>
-> >>> We can have mon group m1 with cpus 0-3 to monitor mbm_local_bytes.
-> >>>
-> >>> We can have mon group m2 with cpus=A0 4-7 to monitor mbm_total_bytes.
-> >>>
-> >>> Each group is independently, monitoring two separate thing. Without
-> >>> having
-> >> Right, because monitoring, the actual counting of the events, is per
-> >> monitor group. When a monitor group is created a new RMID is created
-> >> and when the counter is read it is per-RMID.
-> >>
-> >> The event configuration is independent from the RMID using the counter=
-.
-> >>
-> >>> sysfs file (mbm_local_config and mbm_total_config) in each monitor
-> >>> group, we wont be able to configure the above configuration.
-> >> I do not understand this reasoning. From what I understand the event
-> >> configuration is independent from the monitoring group. Thus,
-> >> changing an event configuration for one monitoring group would impact
-> >> all monitoring groups using that event counter. This implementation
-> >> associates an event configuration with each monitoring group and by
-> >> doing so it implies that it is unique to the monitoring group, but
-> >> that is not how it works.
-> >
-> > The event configuration is designed per L3 domain. The mon_data is
-> > also per domain (like mon_L3_00.. mon_L3_01 etc). So, added the event
-> > configuration file inside each domain. We have all the information
-> > inside the domain. Thought, that is right place. I am open for suggesti=
-ons.
->=20
-> It is not clear to me if you are also seeing all the duplication that acc=
-ompanies
-> this implementation. As you can see in the example I provided in
-> https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Flore.=
-kern
-> el.org%2Flkml%2F13294a8f-e76f-a6a9-284c-
-> 67adbc80ec7c%40intel.com%2F&amp;data=3D05%7C01%7Cbabu.moger%40amd.
-> com%7Cc22190a25ac044ec5f5408da9a82f5b7%7C3dd8961fe4884e608e11a82
-> d994e183d%7C0%7C0%7C637992184504699692%7CUnknown%7CTWFpbGZsb3
-> d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3
-> D%7C3000%7C%7C%7C&amp;sdata=3DuPuGOlwaIgwJ9VnwNOS%2B4mUrqJnS65
-> OdrEsEXtztUbU%3D&amp;reserved=3D0,
-> if I understand the implementation correctly, there will be several
-> configuration files scattered through resctrl that all configure the same=
- value. I
-> asked you to correct me where I am wrong but you did not correct me.
-> Instead you keep repeating that placing the files in the duplicate locati=
-ons is
-> convenient. I can see how this is convenient for you but please do consid=
-er that
-> having these duplicate configuration files scattered through resctrl make=
-s for a
-> very confusing user interface and unexpected behavior. Users would expect
-> that a configuration associated with a monitor group impacts that monitor
-> group only - not all monitor groups associated with that domain.
->=20
-> User API is hard so this does need careful thought. Perhaps the architect=
-s can
-> chime in here.
->=20
-> One option could be:
-> # cd /sys/fs/resctrl/info/L3_MON
-> # cat mbm_total_config
-> 0=3D7f;1=3D7f
-> # cat mbm_local_config
-> 0=3D15;1=3D15
+I think you may have missed something in the above comment.  For gigantic
+pages, we only freeze pages if NOT demote.  In the demote case, pages are
+already frozen.
 
-I think this should work.=20
-# cat mbm_total_config
-0=3D7f;1=3D7f
-I would think 0 and 1 are domain ids here.
+> We seem to be doing it inconditionally in alloc_buddy_huge_page.
 
-We have to provide interface to write also.
-#echo "0=3D0x70" > mbm_total_config  (update mbm_total_config  for domain 0=
-)
-#echo 1=3D0x10  > mbm_local_config     (update mbm_local_config  for domain=
- 1)
+In alloc_buddy_huge_page, we are getting a fresh/new hugetlb page.  So, we are
+certainly not in a demote path.  That is why we freeze unconditionally there.
+We want to make sure it is frozen before it is put to use as a hugetlb
+page.
 
-We will have to parse the string and update the specific domains.
+In the demote path, we call two routines to 'prep' the set of free pages.
+- prep_compound_gigantic_page_for_demote which ends up in the above logic.
+  We do not need to freeze, because the ref count of all the pages are
+  already zero.
+- prep_compound_page is not hugetlb specific, but rather used in the normal
+  allocation path of compound pages.  It serves the purpose of creating a
+  compound page of the appropriate size.  prep_compound_page only deals with
+  getting the compound page structure correct.  It does not change any ref
+  counts.  This is desired as the ref count on all the pages is zero.
 
->=20
-> It would be clear when changing mem_total_config or mbm_local_config that
-> it would impact all monitoring groups within all resource groups. What do=
- you
-> think?
-
-Yes. Thank you. It should work. As long and we have the ways to modify(and =
-read) the specific L3 domains then it should be fine. Let me start on that.=
- Will reply if I see any major issues.
-Thanks
-Babu
+Hope that answers your question.
+-- 
+Mike Kravetz
