@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA2AF5BEE27
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 22:02:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 999325BEE29
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 22:02:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231282AbiITUB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 16:01:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56368 "EHLO
+        id S231203AbiITUCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 16:02:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231137AbiITUBp (ORCPT
+        with ESMTP id S231185AbiITUBw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 16:01:45 -0400
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5303452FD2
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 13:01:44 -0700 (PDT)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-12b542cb1d3so5836899fac.13
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 13:01:44 -0700 (PDT)
+        Tue, 20 Sep 2022 16:01:52 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BB2952474
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 13:01:45 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-1279948d93dso5874381fac.10
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 13:01:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=lP9Jf81Swn6HKhzeqSgb5dx7kwZ1I6PvW+Qk6QnaJIM=;
-        b=mn+XocFI9IgOzLf24JS8tHEgsTnBgE4LGh8VUQUZ/PdLXavL5/96BlY/5O437ZmoNj
-         Ms1IbUvflE+mIMbwlxolfk8SsZg6frg4TgbF2e12wT+b8mQrgn+kBBPDMJr/2dv6D2JL
-         Ey5Am5OPOuZdbFXYRCpk2h7eUd+ybr6y7vlyU8O0OdStNfKYfwC5lwXNBD3BgTYcFtkr
-         lO0euV7UOctGTgyN1owGgZd9BFXLf1jfmEkOu0NDN274EcG/xaNfyNvWsQZSrxeY7fQ2
-         AuK2sMuGetebvnRi1HkKdG8Il5brmy+sFp9WTJNzYoco9/knhBTMPQM4ojA5Hk7EQU4T
-         7vAg==
+        bh=B1QW5eCktyNKF1Kabrt/RgSIFVK+r7/SbP4DaTVv7K4=;
+        b=CFtR9BmF/mRW3nRk8Fi0CTXIhc6ljBmuJPicWV16FOX/DcrG5bd5Xp7WKC34SqFRUF
+         w1HC1d+7orsPsY5UIhG+6gq3wBT4/hCA1f7+5F8AEL4TZPakrdS2IYMIgaI/AYt6xVPK
+         cMWNjErvdvZFch0+w4r9yGo1nnoJEx2grPtoxplFsoyajdlKE6Hf330LujxSsfv2VfEJ
+         WQUUk/Nq89WsA2iIyf/PxjK+8EhXQ5Uep/Bd589gsdYG3UADxiIC3csqH1GzQSCrcix+
+         SoftkyB5dVVJoXZTX/PXsCCLz+20gNuhWp7bTExmcTZZeo3mCyQQdSGqGuH39+5wF/6a
+         4hmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=lP9Jf81Swn6HKhzeqSgb5dx7kwZ1I6PvW+Qk6QnaJIM=;
-        b=J6J9WERCwNvAoLmoaZvDAr9cArkCFQ/rJy16aaVKz8KwIDqGAWoCEToRsJJify8Cku
-         q2dBlavqpIBAhmhicE1Q/NNZVvuzI5MSskJOwz/aY4GZlVAn71IqGFpPBwI2WdGVkqyr
-         doxt9oEHpFHqH73wZiWfbkJVZjoWG66YzGVkYgSPB1+catQ+6ZbGDYUyj28uJ5MdKYRL
-         YlERfOWMUpkKkX2EOgjv7ZozdbdHdtJpIZ6AnIjrlzmjmVsVIoG9E8OaDUuOd94zUVat
-         MPT6oQbSTY2W67fDHm+w1z1meFuSxBUtJTprSK2c4AMP9fWxeIbtvwiQYvrhrgI8LkiG
-         Gqiw==
-X-Gm-Message-State: ACrzQf2PcSDJurbbV+0YVY8h7ce8E98JPc3AUNq07I15Q/RYq+cIIKPO
-        DnONJflsz3FndVbjAABEgD+FQg==
-X-Google-Smtp-Source: AMsMyM6dx12VbH4+QCIEnfs+y56iuqMWJieydWsURcHHZvh8hsscCTrigL/e0w7CpvmWC06fgaRsLQ==
-X-Received: by 2002:a05:6870:352:b0:10e:d4ee:a3f2 with SMTP id n18-20020a056870035200b0010ed4eea3f2mr3094146oaf.172.1663704103435;
-        Tue, 20 Sep 2022 13:01:43 -0700 (PDT)
+        bh=B1QW5eCktyNKF1Kabrt/RgSIFVK+r7/SbP4DaTVv7K4=;
+        b=tBbNx1a3ph+3kWE5BpPEhGCr8vHLqJoHxu8waAnoRXDe2/PwX0gO14lTa2cbW2Bncq
+         iL6u5BsGgE+lzMm8R9J2s79sCWsLsjfpCKnzWfZF3U1dgFEo08dJ9RZ6gPE/oYoNbgcI
+         NVkr1QMp/foTbs7qnnQ7gNGATyx5CxXWnF7fRcq6oey1W7EhGOdNauPNYzskXrFTqBfw
+         roDMxGJhLlXnqaGV4TQRozTzVwDpYznZ2Cfd2xcS6wO+E8Hs496MCboDPUFHnrwLC3gB
+         eHm+FVdpnkEore+I1XOzkVlBApXllGRj+MdiBZP5vDq2IAxIAGzb2seT4BIlbVdob1QP
+         PNLw==
+X-Gm-Message-State: ACrzQf115D4cUKgEuX4kz2pja11boY10vUWQDvdN4aMm7ex5fmMlbNJv
+        ye4oYs9GUbi1RUpwXvKKu3gam80dgnBKOA==
+X-Google-Smtp-Source: AMsMyM5GtwOU/1tVl60AV9oj0dltona29WAUwji3TKeTc1p2ogvO1P54+2ujmc7IamK5+DeQ82tF6Q==
+X-Received: by 2002:a05:6870:9a1a:b0:120:8d35:c740 with SMTP id fo26-20020a0568709a1a00b001208d35c740mr3183927oab.166.1663704104876;
+        Tue, 20 Sep 2022 13:01:44 -0700 (PDT)
 Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id bm43-20020a0568081aab00b0034d14c6ce3dsm325634oib.16.2022.09.20.13.01.42
+        by smtp.gmail.com with ESMTPSA id bm43-20020a0568081aab00b0034d14c6ce3dsm325634oib.16.2022.09.20.13.01.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 13:01:43 -0700 (PDT)
+        Tue, 20 Sep 2022 13:01:44 -0700 (PDT)
 From:   William Breathitt Gray <william.gray@linaro.org>
 To:     linux-iio@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, mranostay@ti.com,
@@ -56,9 +56,9 @@ Cc:     linux-kernel@vger.kernel.org, mranostay@ti.com,
         groeck@chromium.org, jic23@kernel.org, david@lechnology.com,
         robertcnelson@gmail.com,
         William Breathitt Gray <william.gray@linaro.org>
-Subject: [PATCH v5 3/5] counter: Introduce the Count capture component
-Date:   Tue, 20 Sep 2022 13:21:27 -0400
-Message-Id: <ff4fac409706a57f601188afbd9a08fc0af42a26.1663693757.git.william.gray@linaro.org>
+Subject: [PATCH v5 4/5] counter: Consolidate Counter extension sysfs attribute creation
+Date:   Tue, 20 Sep 2022 13:21:28 -0400
+Message-Id: <58e248e11fa839ef12ca883883c92bedddd8de77.1663693757.git.william.gray@linaro.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <cover.1663693757.git.william.gray@linaro.org>
 References: <cover.1663693757.git.william.gray@linaro.org>
@@ -73,64 +73,167 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some devices provide a latch function to save historic Count values.
-This patch standardizes exposure of such functionality as Count capture
-components. A COUNTER_COMP_CAPTURE macro is provided for driver authors
-to define a capture component. A new event COUNTER_EVENT_CAPTURE is
-introduced to represent Count value capture events.
+Counter extensions are handled for the Device, Counts, and Signals. The
+code loops through each Counter extension and creates the expected sysfs
+attributes. This patch consolidates that code into functions to reduce
+redundancy and make the intention of the code clearer.
 
-Cc: Julien Panis <jpanis@baylibre.com>
 Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
 ---
- Documentation/ABI/testing/sysfs-bus-counter | 6 ++++++
- include/linux/counter.h                     | 3 +++
- include/uapi/linux/counter.h                | 2 ++
- 3 files changed, 11 insertions(+)
+ drivers/counter/counter-sysfs.c | 98 ++++++++++++++++-----------------
+ 1 file changed, 49 insertions(+), 49 deletions(-)
 
-diff --git a/Documentation/ABI/testing/sysfs-bus-counter b/Documentation/ABI/testing/sysfs-bus-counter
-index a234022f9add..30b6e1faa6f6 100644
---- a/Documentation/ABI/testing/sysfs-bus-counter
-+++ b/Documentation/ABI/testing/sysfs-bus-counter
-@@ -4,6 +4,12 @@ Contact:	linux-iio@vger.kernel.org
- Description:
- 		Count data of Count Y represented as a string.
- 
-+What:		/sys/bus/counter/devices/counterX/countY/capture
-+KernelVersion:	6.1
-+Contact:	linux-iio@vger.kernel.org
-+Description:
-+		Historical capture of the Count Y count data.
-+
- What:		/sys/bus/counter/devices/counterX/countY/ceiling
- KernelVersion:	5.2
- Contact:	linux-iio@vger.kernel.org
-diff --git a/include/linux/counter.h b/include/linux/counter.h
-index 60428d06915d..2c6594c240d4 100644
---- a/include/linux/counter.h
-+++ b/include/linux/counter.h
-@@ -453,6 +453,9 @@ struct counter_available {
- 	.priv = &(_available), \
+diff --git a/drivers/counter/counter-sysfs.c b/drivers/counter/counter-sysfs.c
+index e5dd36e1a45f..b393da402e0b 100644
+--- a/drivers/counter/counter-sysfs.c
++++ b/drivers/counter/counter-sysfs.c
+@@ -592,6 +592,46 @@ static int counter_comp_id_attr_create(struct device *const dev,
+ 	return 0;
  }
  
-+#define COUNTER_COMP_CAPTURE(_read, _write) \
-+	COUNTER_COMP_COUNT_U64("capture", _read, _write)
++static int counter_ext_attrs_create(struct device *const dev,
++				    struct counter_attribute_group *const group,
++				    const struct counter_comp *const ext,
++				    const enum counter_scope scope,
++				    void *const parent, const size_t id)
++{
++	int err;
 +
- #define COUNTER_COMP_CEILING(_read, _write) \
- 	COUNTER_COMP_COUNT_U64("ceiling", _read, _write)
++	/* Create main extension attribute */
++	err = counter_attr_create(dev, group, ext, scope, parent);
++	if (err < 0)
++		return err;
++
++	/* Create extension id attribute */
++	return counter_comp_id_attr_create(dev, group, ext->name, id);
++}
++
++static int counter_sysfs_exts_add(struct device *const dev,
++				  struct counter_attribute_group *const group,
++				  const struct counter_comp *const exts,
++				  const size_t num_ext,
++				  const enum counter_scope scope,
++				  void *const parent)
++{
++	size_t i;
++	const struct counter_comp *ext;
++	int err;
++
++	/* Create attributes for each extension */
++	for (i = 0; i < num_ext; i++) {
++		ext = &exts[i];
++		err = counter_ext_attrs_create(dev, group, ext, scope, parent,
++					       i);
++		if (err < 0)
++			return err;
++	}
++
++	return 0;
++}
++
+ static struct counter_comp counter_signal_comp = {
+ 	.type = COUNTER_COMP_SIGNAL_LEVEL,
+ 	.name = "signal",
+@@ -605,8 +645,6 @@ static int counter_signal_attrs_create(struct counter_device *const counter,
+ 	struct device *const dev = &counter->dev;
+ 	int err;
+ 	struct counter_comp comp;
+-	size_t i;
+-	struct counter_comp *ext;
  
-diff --git a/include/uapi/linux/counter.h b/include/uapi/linux/counter.h
-index e9610e1944dc..8ab12d731e3b 100644
---- a/include/uapi/linux/counter.h
-+++ b/include/uapi/linux/counter.h
-@@ -63,6 +63,8 @@ enum counter_event_type {
- 	COUNTER_EVENT_INDEX,
- 	/* State of counter is changed */
- 	COUNTER_EVENT_CHANGE_OF_STATE,
-+	/* Count value captured */
-+	COUNTER_EVENT_CAPTURE,
- };
+ 	/* Create main Signal attribute */
+ 	comp = counter_signal_comp;
+@@ -620,21 +658,9 @@ static int counter_signal_attrs_create(struct counter_device *const counter,
+ 	if (err < 0)
+ 		return err;
  
- /**
+-	/* Create an attribute for each extension */
+-	for (i = 0; i < signal->num_ext; i++) {
+-		ext = &signal->ext[i];
+-
+-		err = counter_attr_create(dev, cattr_group, ext, scope, signal);
+-		if (err < 0)
+-			return err;
+-
+-		err = counter_comp_id_attr_create(dev, cattr_group, ext->name,
+-						  i);
+-		if (err < 0)
+-			return err;
+-	}
+-
+-	return 0;
++	/* Add Signal extensions */
++	return counter_sysfs_exts_add(dev, cattr_group, signal->ext,
++				      signal->num_ext, scope, signal);
+ }
+ 
+ static int counter_sysfs_signals_add(struct counter_device *const counter,
+@@ -719,8 +745,6 @@ static int counter_count_attrs_create(struct counter_device *const counter,
+ 	struct device *const dev = &counter->dev;
+ 	int err;
+ 	struct counter_comp comp;
+-	size_t i;
+-	struct counter_comp *ext;
+ 
+ 	/* Create main Count attribute */
+ 	comp = counter_count_comp;
+@@ -743,21 +767,9 @@ static int counter_count_attrs_create(struct counter_device *const counter,
+ 	if (err < 0)
+ 		return err;
+ 
+-	/* Create an attribute for each extension */
+-	for (i = 0; i < count->num_ext; i++) {
+-		ext = &count->ext[i];
+-
+-		err = counter_attr_create(dev, cattr_group, ext, scope, count);
+-		if (err < 0)
+-			return err;
+-
+-		err = counter_comp_id_attr_create(dev, cattr_group, ext->name,
+-						  i);
+-		if (err < 0)
+-			return err;
+-	}
+-
+-	return 0;
++	/* Add Count extensions */
++	return counter_sysfs_exts_add(dev, cattr_group, count->ext,
++				      count->num_ext, scope, count);
+ }
+ 
+ static int counter_sysfs_counts_add(struct counter_device *const counter,
+@@ -850,8 +862,6 @@ static int counter_sysfs_attr_add(struct counter_device *const counter,
+ 	const enum counter_scope scope = COUNTER_SCOPE_DEVICE;
+ 	struct device *const dev = &counter->dev;
+ 	int err;
+-	size_t i;
+-	struct counter_comp *ext;
+ 
+ 	/* Add Signals sysfs attributes */
+ 	err = counter_sysfs_signals_add(counter, cattr_group);
+@@ -888,19 +898,9 @@ static int counter_sysfs_attr_add(struct counter_device *const counter,
+ 	if (err < 0)
+ 		return err;
+ 
+-	/* Create an attribute for each extension */
+-	for (i = 0; i < counter->num_ext; i++) {
+-		ext = &counter->ext[i];
+-
+-		err = counter_attr_create(dev, cattr_group, ext, scope, NULL);
+-		if (err < 0)
+-			return err;
+-
+-		err = counter_comp_id_attr_create(dev, cattr_group, ext->name,
+-						  i);
+-		if (err < 0)
+-			return err;
+-	}
++	/* Add device extensions */
++	return counter_sysfs_exts_add(dev, cattr_group, counter->ext,
++				      counter->num_ext, scope, NULL);
+ 
+ 	return 0;
+ }
 -- 
 2.37.3
 
