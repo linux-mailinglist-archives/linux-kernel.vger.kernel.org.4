@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C8DD5BDAE5
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 05:37:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 091AD5BDAE6
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 05:37:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbiITDhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 23:37:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47992 "EHLO
+        id S229987AbiITDh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 23:37:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbiITDhS (ORCPT
+        with ESMTP id S229596AbiITDhS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 19 Sep 2022 23:37:18 -0400
 Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BE5505A147
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA4E15A14A
         for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 20:37:16 -0700 (PDT)
 Received: from linux.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxReJqNSlj7FseAA--.48978S3;
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxReJqNSlj7FseAA--.48978S4;
         Tue, 20 Sep 2022 11:37:15 +0800 (CST)
 From:   Tiezhu Yang <yangtiezhu@loongson.cn>
 To:     Huacai Chen <chenhuacai@kernel.org>,
         Masami Hiramatsu <mhiramat@kernel.org>
 Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/4] LoongArch: Add kprobe support
-Date:   Tue, 20 Sep 2022 11:37:11 +0800
-Message-Id: <1663645034-967-2-git-send-email-yangtiezhu@loongson.cn>
+Subject: [PATCH 2/4] LoongArch: Add kretprobe support
+Date:   Tue, 20 Sep 2022 11:37:12 +0800
+Message-Id: <1663645034-967-3-git-send-email-yangtiezhu@loongson.cn>
 X-Mailer: git-send-email 2.1.0
 In-Reply-To: <1663645034-967-1-git-send-email-yangtiezhu@loongson.cn>
 References: <1663645034-967-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf8DxReJqNSlj7FseAA--.48978S3
-X-Coremail-Antispam: 1UD129KBjvAXoW3KryUtF43CF13GrWrGrW5trb_yoW8ArW8Zo
-        WSvF4qgr48KrW5WF4rJr1qqFyUW3W8WFWrAFWavFs8uF17Ar15Xr4jkrW8Ja4aqF4Fg3yf
-        C39xua4fAayxuFn3n29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-        AaLaJ3UjIYCTnIWjp_UUUYX7k0a2IF6w4kM7kC6x804xWl14x267AKxVW8JVW5JwAFc2x0
-        x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87
-        I2jVAFwI0_Jr4l82xGYIkIc2x26xkF7I0E14v26r1Y6r1xM28lY4IEw2IIxxk0rwA2F7IY
-        1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20x
-        vEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280
-        aVCY1x0267AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4
-        CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvj
-        eVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY02Avz4vE14v_Gr4l42xK82IYc2
-        Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
-        6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0x
-        vE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE
-        42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6x
-        kF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07bOYFAUUUUU=
+X-CM-TRANSID: AQAAf8DxReJqNSlj7FseAA--.48978S4
+X-Coremail-Antispam: 1UD129KBjvJXoWxGFWxAw1kuFWxJF1UWF4Uurg_yoW5Gw1fpF
+        9Iyr9xGr45WrZ3ZrZxJ34FvF4S9rn7u3y7GrZrJa4rCFy5XryUJr1xXrW2vFyrGrZYvr1S
+        qF4rJryYkFW7J37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBFb7Iv0xC_KF4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI
+        8067AKxVWUXwA2048vs2IY020Ec7CjxVAFwI0_JFI_Gr1l8cAvFVAK0II2c7xJM28CjxkF
+        64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcV
+        CY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv
+        6xkF7I0E14v26F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzV
+        Aqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S
+        6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkIecxEwVAFwVW8GwCF04k20xvY0x
+        0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E
+        7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcV
+        C0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF
+        04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7
+        CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jw4SrUUUUU=
 X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -54,629 +54,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kprobes allows you to trap at almost any kernel address and
-execute a callback function, this commit adds kprobe support
-for LoongArch.
+Use the generic kretprobe trampoline handler to add kretprobe
+support for LoongArch.
 
 Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 ---
- arch/loongarch/Kconfig               |   1 +
- arch/loongarch/include/asm/inst.h    |  31 ++++
- arch/loongarch/include/asm/kprobes.h |  44 +++++
- arch/loongarch/include/asm/ptrace.h  |   1 +
- arch/loongarch/kernel/Makefile       |   2 +
- arch/loongarch/kernel/inst.c         | 107 ++++++++++++
- arch/loongarch/kernel/kprobes.c      | 309 +++++++++++++++++++++++++++++++++++
- 7 files changed, 495 insertions(+)
- create mode 100644 arch/loongarch/include/asm/kprobes.h
- create mode 100644 arch/loongarch/kernel/kprobes.c
+ arch/loongarch/Kconfig          |  1 +
+ arch/loongarch/kernel/kprobes.c | 49 ++++++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 49 insertions(+), 1 deletion(-)
 
 diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index 5b5fc94..6b01073 100644
+index 6b01073..5f8503a 100644
 --- a/arch/loongarch/Kconfig
 +++ b/arch/loongarch/Kconfig
-@@ -94,6 +94,7 @@ config LOONGARCH
- 	select HAVE_IOREMAP_PROT
+@@ -95,6 +95,7 @@ config LOONGARCH
  	select HAVE_IRQ_EXIT_ON_IRQ_STACK
  	select HAVE_IRQ_TIME_ACCOUNTING
-+	select HAVE_KPROBES
+ 	select HAVE_KPROBES
++	select HAVE_KRETPROBES
  	select HAVE_MOD_ARCH_SPECIFIC
  	select HAVE_NMI
  	select HAVE_PCI
-diff --git a/arch/loongarch/include/asm/inst.h b/arch/loongarch/include/asm/inst.h
-index fce1843..fc8879b 100644
---- a/arch/loongarch/include/asm/inst.h
-+++ b/arch/loongarch/include/asm/inst.h
-@@ -7,6 +7,7 @@
- 
- #include <linux/types.h>
- #include <asm/asm.h>
-+#include <asm/ptrace.h>
- 
- #define INSN_BREAK		0x002a0000
- 
-@@ -20,6 +21,10 @@
- 
- #define ADDR_IMM(addr, INSN)	((addr & ADDR_IMMMASK_##INSN) >> ADDR_IMMSHIFT_##INSN)
- 
-+enum reg0i15_op {
-+	break_op	= 0x54,
-+};
-+
- enum reg0i26_op {
- 	b_op		= 0x14,
- 	bl_op		= 0x15,
-@@ -28,6 +33,8 @@ enum reg0i26_op {
- enum reg1i20_op {
- 	lu12iw_op	= 0x0a,
- 	lu32id_op	= 0x0b,
-+	pcaddi_op	= 0x0c,
-+	pcalau12i_op	= 0x0d,
- 	pcaddu12i_op	= 0x0e,
- 	pcaddu18i_op	= 0x0f,
- };
-@@ -35,6 +42,8 @@ enum reg1i20_op {
- enum reg1i21_op {
- 	beqz_op		= 0x10,
- 	bnez_op		= 0x11,
-+	bceqz_op	= 0x48000000,
-+	bcnez_op	= 0x48000100,
- };
- 
- enum reg2_op {
-@@ -164,6 +173,11 @@ enum reg3sa2_op {
- 	alsld_op	= 0x16,
- };
- 
-+struct reg0i15_format {
-+	unsigned int immediate : 15;
-+	unsigned int opcode : 17;
-+};
-+
- struct reg0i26_format {
- 	unsigned int immediate_h : 10;
- 	unsigned int immediate_l : 16;
-@@ -249,6 +263,7 @@ struct reg3sa2_format {
- 
- union loongarch_instruction {
- 	unsigned int word;
-+	struct reg0i15_format	reg0i15_format;
- 	struct reg0i26_format	reg0i26_format;
- 	struct reg1i20_format	reg1i20_format;
- 	struct reg1i21_format	reg1i21_format;
-@@ -313,6 +328,12 @@ static inline bool is_branch_ins(union loongarch_instruction *ip)
- 		ip->reg1i21_format.opcode <= bgeu_op;
- }
- 
-+static inline bool is_pc_ins(union loongarch_instruction *ip)
-+{
-+	return ip->reg1i20_format.opcode >= pcaddi_op &&
-+		ip->reg1i20_format.opcode <= pcaddu18i_op;
-+}
-+
- static inline bool is_ra_save_ins(union loongarch_instruction *ip)
- {
- 	/* st.d $ra, $sp, offset */
-@@ -334,6 +355,16 @@ static inline bool is_stack_alloc_ins(union loongarch_instruction *ip)
- u32 larch_insn_gen_lu32id(enum loongarch_gpr rd, int imm);
- u32 larch_insn_gen_lu52id(enum loongarch_gpr rd, enum loongarch_gpr rj, int imm);
- u32 larch_insn_gen_jirl(enum loongarch_gpr rd, enum loongarch_gpr rj, unsigned long pc, unsigned long dest);
-+void simu_branch(struct pt_regs *regs, union loongarch_instruction insn);
-+void simu_pc(struct pt_regs *regs, union loongarch_instruction insn);
-+
-+static inline unsigned long sign_extended(unsigned long val, unsigned int idx)
-+{
-+	if (val & (1UL << idx))
-+		return ~((1UL << (idx + 1)) - 1) | val;
-+	else
-+		return ((1UL << (idx + 1)) - 1) & val;
-+}
- 
- static inline bool signed_imm_check(long val, unsigned int bit)
- {
-diff --git a/arch/loongarch/include/asm/kprobes.h b/arch/loongarch/include/asm/kprobes.h
-new file mode 100644
-index 0000000..afcf254
---- /dev/null
-+++ b/arch/loongarch/include/asm/kprobes.h
-@@ -0,0 +1,44 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+#ifndef __ASM_LOONGARCH_KPROBES_H
-+#define __ASM_LOONGARCH_KPROBES_H
-+
-+#include <asm-generic/kprobes.h>
-+
-+#ifdef CONFIG_KPROBES
-+
-+#include <asm/inst.h>
-+
-+#define __ARCH_WANT_KPROBES_INSN_SLOT
-+#define MAX_INSN_SIZE			2
-+
-+#define flush_insn_slot(p)		do { } while (0)
-+#define kretprobe_blacklist_size	0
-+
-+typedef union loongarch_instruction kprobe_opcode_t;
-+
-+/* Architecture specific copy of original instruction */
-+struct arch_specific_insn {
-+	/* copy of the original instruction */
-+	kprobe_opcode_t *insn;
-+};
-+
-+struct prev_kprobe {
-+	struct kprobe *kp;
-+	unsigned long status;
-+	unsigned long saved_irq;
-+	unsigned long saved_era;
-+};
-+
-+/* per-cpu kprobe control block */
-+struct kprobe_ctlblk {
-+	unsigned long kprobe_status;
-+	unsigned long kprobe_saved_irq;
-+	unsigned long kprobe_saved_era;
-+	struct prev_kprobe prev_kprobe;
-+};
-+
-+void arch_remove_kprobe(struct kprobe *p);
-+bool kprobe_fault_handler(struct pt_regs *regs, int trapnr);
-+
-+#endif /* CONFIG_KPROBES */
-+#endif /* __ASM_LOONGARCH_KPROBES_H */
-diff --git a/arch/loongarch/include/asm/ptrace.h b/arch/loongarch/include/asm/ptrace.h
-index 17838c6..eb9538a 100644
---- a/arch/loongarch/include/asm/ptrace.h
-+++ b/arch/loongarch/include/asm/ptrace.h
-@@ -6,6 +6,7 @@
- #define _ASM_PTRACE_H
- 
- #include <asm/page.h>
-+#include <asm/irqflags.h>
- #include <asm/thread_info.h>
- #include <uapi/asm/ptrace.h>
- 
-diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Makefile
-index 5358144..ff98d8a 100644
---- a/arch/loongarch/kernel/Makefile
-+++ b/arch/loongarch/kernel/Makefile
-@@ -33,4 +33,6 @@ obj-$(CONFIG_UNWINDER_PROLOGUE) += unwind_prologue.o
- 
- obj-$(CONFIG_PERF_EVENTS)	+= perf_event.o perf_regs.o
- 
-+obj-$(CONFIG_KPROBES)		+= kprobes.o
-+
- CPPFLAGS_vmlinux.lds		:= $(KBUILD_CFLAGS)
-diff --git a/arch/loongarch/kernel/inst.c b/arch/loongarch/kernel/inst.c
-index b1df0ec..143acb6 100644
---- a/arch/loongarch/kernel/inst.c
-+++ b/arch/loongarch/kernel/inst.c
-@@ -38,3 +38,110 @@ u32 larch_insn_gen_jirl(enum loongarch_gpr rd, enum loongarch_gpr rj, unsigned l
- 
- 	return insn.word;
- }
-+
-+void simu_branch(struct pt_regs *regs, union loongarch_instruction insn)
-+{
-+	unsigned int imm, imm_l, imm_h, rd, rj;
-+	unsigned long pc = regs->csr_era;
-+
-+	imm_l = insn.reg0i26_format.immediate_l;
-+	imm_h = insn.reg0i26_format.immediate_h;
-+	switch (insn.reg0i26_format.opcode) {
-+	case b_op:
-+		regs->csr_era = pc + sign_extended((imm_h << 16 | imm_l) << 2, 27);
-+		return;
-+	case bl_op:
-+		regs->csr_era = pc + sign_extended((imm_h << 16 | imm_l) << 2, 27);
-+		regs->regs[1] = pc + LOONGARCH_INSN_SIZE;
-+		return;
-+	}
-+
-+	imm_l = insn.reg1i21_format.immediate_l;
-+	imm_h = insn.reg1i21_format.immediate_h;
-+	rj = insn.reg1i21_format.rj;
-+	switch (insn.reg1i21_format.opcode) {
-+	case beqz_op:
-+		if (regs->regs[rj] == 0)
-+			regs->csr_era = pc + sign_extended((imm_h << 16 | imm_l) << 2, 22);
-+		else
-+			regs->csr_era = pc + LOONGARCH_INSN_SIZE;
-+		return;
-+	case bnez_op:
-+		if (regs->regs[rj] != 0)
-+			regs->csr_era = pc + sign_extended((imm_h << 16 | imm_l) << 2, 22);
-+		else
-+			regs->csr_era = pc + LOONGARCH_INSN_SIZE;
-+		return;
-+	}
-+
-+	imm = insn.reg2i16_format.immediate;
-+	rj = insn.reg2i16_format.rj;
-+	rd = insn.reg2i16_format.rd;
-+	switch (insn.reg2i16_format.opcode) {
-+	case beq_op:
-+		if (regs->regs[rj] == regs->regs[rd])
-+			regs->csr_era = pc + sign_extended(imm << 2, 17);
-+		else
-+			regs->csr_era = pc + LOONGARCH_INSN_SIZE;
-+		break;
-+	case bne_op:
-+		if (regs->regs[rj] != regs->regs[rd])
-+			regs->csr_era = pc + sign_extended(imm << 2, 17);
-+		else
-+			regs->csr_era = pc + LOONGARCH_INSN_SIZE;
-+		break;
-+	case blt_op:
-+		if ((long)regs->regs[rj] < (long)regs->regs[rd])
-+			regs->csr_era = pc + sign_extended(imm << 2, 17);
-+		else
-+			regs->csr_era = pc + LOONGARCH_INSN_SIZE;
-+		break;
-+	case bge_op:
-+		if ((long)regs->regs[rj] >= (long)regs->regs[rd])
-+			regs->csr_era = pc + sign_extended(imm << 2, 17);
-+		else
-+			regs->csr_era = pc + LOONGARCH_INSN_SIZE;
-+		break;
-+	case bltu_op:
-+		if (regs->regs[rj] < regs->regs[rd])
-+			regs->csr_era = pc + sign_extended(imm << 2, 17);
-+		else
-+			regs->csr_era = pc + LOONGARCH_INSN_SIZE;
-+		break;
-+	case bgeu_op:
-+		if (regs->regs[rj] >= regs->regs[rd])
-+			regs->csr_era = pc + sign_extended(imm << 2, 17);
-+		else
-+			regs->csr_era = pc + LOONGARCH_INSN_SIZE;
-+		break;
-+	case jirl_op:
-+		regs->csr_era = regs->regs[rj] + sign_extended(imm << 2, 17);
-+		regs->regs[rd] = pc + LOONGARCH_INSN_SIZE;
-+		break;
-+	}
-+}
-+
-+void simu_pc(struct pt_regs *regs, union loongarch_instruction insn)
-+{
-+	unsigned long pc = regs->csr_era;
-+	unsigned int rd = insn.reg1i20_format.rd;
-+	unsigned int imm = insn.reg1i20_format.immediate;
-+
-+	switch (insn.reg1i20_format.opcode) {
-+	case pcaddi_op:
-+		regs->regs[rd] = pc + sign_extended(imm << 2, 21);
-+		break;
-+	case pcaddu12i_op:
-+		regs->regs[rd] = pc + sign_extended(imm << 12, 31);
-+		break;
-+	case pcaddu18i_op:
-+		regs->regs[rd] = pc + sign_extended(imm << 18, 37);
-+		break;
-+	case pcalau12i_op:
-+		regs->regs[rd] = pc + sign_extended(imm << 12, 31);
-+		regs->regs[rd] &= ~((1 << 12) - 1);
-+		break;
-+	}
-+
-+	regs->csr_era += LOONGARCH_INSN_SIZE;
-+}
 diff --git a/arch/loongarch/kernel/kprobes.c b/arch/loongarch/kernel/kprobes.c
-new file mode 100644
-index 0000000..b2c73a5
---- /dev/null
+index b2c73a5..8c3efe5 100644
+--- a/arch/loongarch/kernel/kprobes.c
 +++ b/arch/loongarch/kernel/kprobes.c
-@@ -0,0 +1,309 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+#include <linux/kprobes.h>
-+#include <linux/kdebug.h>
-+#include <asm/break.h>
-+
-+static const union loongarch_instruction breakpoint_insn = {
-+	.reg0i15_format = {
-+		.opcode = break_op,
-+		.immediate = BRK_KPROBE_BP,
-+	}
-+};
-+
-+static const union loongarch_instruction singlestep_insn = {
-+	.reg0i15_format = {
-+		.opcode = break_op,
-+		.immediate = BRK_KPROBE_SSTEPBP,
-+	}
-+};
-+
-+DEFINE_PER_CPU(struct kprobe *, current_kprobe);
-+DEFINE_PER_CPU(struct kprobe_ctlblk, kprobe_ctlblk);
-+
-+static bool insns_are_not_supported(union loongarch_instruction insn)
+@@ -303,7 +303,54 @@ int kprobe_exceptions_notify(struct notifier_block *self,
+ }
+ NOKPROBE_SYMBOL(kprobe_exceptions_notify);
+ 
++/*
++ * For function-return probes, init_kprobes() establishes a probepoint
++ * here. When a retprobed function returns, this probe is hit and
++ * trampoline_probe_handler() runs, calling the kretprobe's handler.
++ */
++static void __used kretprobe_trampoline_holder(void)
 +{
-+	switch (insn.reg2i14_format.opcode) {
-+	case llw_op:
-+	case lld_op:
-+	case scw_op:
-+	case scd_op:
-+		pr_notice("kprobe: ll or sc instructions are not supported\n");
-+		return true;
-+	}
-+
-+	switch (insn.reg1i21_format.opcode) {
-+	case bceqz_op:
-+	case bcnez_op:
-+		pr_notice("kprobe: bceqz or bcnez instructions are not supported\n");
-+		return true;
-+	}
-+
-+	return false;
++	asm volatile(".global __kretprobe_trampoline\n"
++		     "__kretprobe_trampoline:\n"
++		     "nop\n");
 +}
-+NOKPROBE_SYMBOL(insns_are_not_supported);
 +
-+int arch_prepare_kprobe(struct kprobe *p)
++/* Called when the probe at kretprobe trampoline is hit */
++static int trampoline_probe_handler(struct kprobe *p, struct pt_regs *regs)
 +{
-+	union loongarch_instruction insn;
-+
-+	insn = p->addr[0];
-+	if (insns_are_not_supported(insn))
-+		return -EINVAL;
-+
-+	p->ainsn.insn = get_insn_slot();
-+	if (!p->ainsn.insn)
-+		return -ENOMEM;
-+
-+	p->ainsn.insn[0] = *p->addr;
-+	p->ainsn.insn[1] = singlestep_insn;
-+
-+	p->opcode = *p->addr;
-+
-+	return 0;
-+}
-+NOKPROBE_SYMBOL(arch_prepare_kprobe);
-+
-+/* Install breakpoint in text */
-+void arch_arm_kprobe(struct kprobe *p)
-+{
-+	*p->addr = breakpoint_insn;
-+}
-+NOKPROBE_SYMBOL(arch_arm_kprobe);
-+
-+/* Remove breakpoint from text */
-+void arch_disarm_kprobe(struct kprobe *p)
-+{
-+	*p->addr = p->opcode;
-+}
-+NOKPROBE_SYMBOL(arch_disarm_kprobe);
-+
-+void arch_remove_kprobe(struct kprobe *p)
-+{
-+	if (p->ainsn.insn) {
-+		free_insn_slot(p->ainsn.insn, 0);
-+		p->ainsn.insn = NULL;
-+	}
-+}
-+NOKPROBE_SYMBOL(arch_remove_kprobe);
-+
-+static void save_previous_kprobe(struct kprobe_ctlblk *kcb)
-+{
-+	kcb->prev_kprobe.kp = kprobe_running();
-+	kcb->prev_kprobe.status = kcb->kprobe_status;
-+	kcb->prev_kprobe.saved_irq = kcb->kprobe_saved_irq;
-+	kcb->prev_kprobe.saved_era = kcb->kprobe_saved_era;
-+}
-+NOKPROBE_SYMBOL(save_previous_kprobe);
-+
-+static void restore_previous_kprobe(struct kprobe_ctlblk *kcb)
-+{
-+	__this_cpu_write(current_kprobe, kcb->prev_kprobe.kp);
-+	kcb->kprobe_status = kcb->prev_kprobe.status;
-+	kcb->kprobe_saved_irq = kcb->prev_kprobe.saved_irq;
-+	kcb->kprobe_saved_era = kcb->prev_kprobe.saved_era;
-+}
-+NOKPROBE_SYMBOL(restore_previous_kprobe);
-+
-+static void set_current_kprobe(struct kprobe *p, struct pt_regs *regs,
-+			       struct kprobe_ctlblk *kcb)
-+{
-+	__this_cpu_write(current_kprobe, p);
-+	kcb->kprobe_saved_irq = regs->csr_prmd & CSR_PRMD_PIE;
-+	kcb->kprobe_saved_era = regs->csr_era;
-+}
-+NOKPROBE_SYMBOL(set_current_kprobe);
-+
-+static bool insns_are_not_simulated(struct kprobe *p, struct pt_regs *regs)
-+{
-+	if (is_branch_ins(&p->opcode)) {
-+		simu_branch(regs, p->opcode);
-+		return false;
-+	} else if (is_pc_ins(&p->opcode)) {
-+		simu_pc(regs, p->opcode);
-+		return false;
-+	} else {
-+		return true;
-+	}
-+}
-+NOKPROBE_SYMBOL(insns_are_not_simulated);
-+
-+static void setup_singlestep(struct kprobe *p, struct pt_regs *regs,
-+			     struct kprobe_ctlblk *kcb, int reenter)
-+{
-+	if (reenter) {
-+		save_previous_kprobe(kcb);
-+		set_current_kprobe(p, regs, kcb);
-+		kcb->kprobe_status = KPROBE_REENTER;
-+	} else {
-+		kcb->kprobe_status = KPROBE_HIT_SS;
-+	}
-+
-+	if (p->ainsn.insn->word == breakpoint_insn.word) {
-+		regs->csr_prmd &= ~CSR_PRMD_PIE;
-+		regs->csr_prmd |= kcb->kprobe_saved_irq;
-+		return;
-+	}
-+
-+	regs->csr_prmd &= ~CSR_PRMD_PIE;
-+
-+	if (insns_are_not_simulated(p, regs)) {
-+		kcb->kprobe_status = KPROBE_HIT_SS;
-+		regs->csr_era = (unsigned long)&p->ainsn.insn[0];
-+	} else {
-+		kcb->kprobe_status = KPROBE_HIT_SSDONE;
-+		if (p->post_handler)
-+			p->post_handler(p, regs, 0);
-+		reset_current_kprobe();
-+	}
-+}
-+NOKPROBE_SYMBOL(setup_singlestep);
-+
-+static bool reenter_kprobe(struct kprobe *p, struct pt_regs *regs,
-+			  struct kprobe_ctlblk *kcb)
-+{
-+	switch (kcb->kprobe_status) {
-+	case KPROBE_HIT_SSDONE:
-+	case KPROBE_HIT_ACTIVE:
-+		kprobes_inc_nmissed_count(p);
-+		setup_singlestep(p, regs, kcb, 1);
-+		break;
-+	case KPROBE_HIT_SS:
-+	case KPROBE_REENTER:
-+		pr_warn("Failed to recover from reentered kprobes.\n");
-+		dump_kprobe(p);
-+		BUG();
-+		break;
-+	default:
-+		WARN_ON(1);
-+		return false;
-+	}
-+
-+	return true;
-+}
-+NOKPROBE_SYMBOL(reenter_kprobe);
-+
-+static bool kprobe_pre_handler(struct pt_regs *regs)
-+{
-+	struct kprobe *p, *cur_kprobe;
-+	struct kprobe_ctlblk *kcb;
-+	unsigned long addr = instruction_pointer(regs);
-+
-+	kcb = get_kprobe_ctlblk();
-+	cur_kprobe = kprobe_running();
-+
-+	p = get_kprobe((kprobe_opcode_t *) addr);
-+	if (p) {
-+		if (cur_kprobe) {
-+			if (reenter_kprobe(p, regs, kcb))
-+				return true;
-+		} else {
-+			/* Probe hit */
-+			set_current_kprobe(p, regs, kcb);
-+			kcb->kprobe_status = KPROBE_HIT_ACTIVE;
-+
-+			/*
-+			 * If we have no pre-handler or it returned 0, we
-+			 * continue with normal processing.  If we have a
-+			 * pre-handler and it returned non-zero, it will
-+			 * modify the execution path and no need to single
-+			 * stepping. Let's just reset current kprobe and exit.
-+			 *
-+			 * pre_handler can hit a breakpoint and can step thru
-+			 * before return.
-+			 */
-+			if (!p->pre_handler || !p->pre_handler(p, regs))
-+				setup_singlestep(p, regs, kcb, 0);
-+			else
-+				reset_current_kprobe();
-+		}
-+		return true;
-+	}
-+
++	instruction_pointer(regs) = __kretprobe_trampoline_handler(regs, NULL);
 +	/*
-+	 * The breakpoint instruction was removed right
-+	 * after we hit it.  Another cpu has removed
-+	 * either a probepoint or a debugger breakpoint
-+	 * at this address.  In either case, no further
-+	 * handling of this interrupt is appropriate.
-+	 * Return back to original instruction, and continue.
++	 * By returning a non-zero value, we are telling
++	 * kprobe_handler() that we don't want the post_handler
++	 * to run (and have re-enabled preemption)
 +	 */
-+	return false;
++	return 1;
 +}
-+NOKPROBE_SYMBOL(kprobe_pre_handler);
++NOKPROBE_SYMBOL(trampoline_probe_handler);
 +
-+static inline bool kprobe_post_handler(struct pt_regs *regs)
++static struct kprobe trampoline_p = {
++	.addr = (kprobe_opcode_t *)__kretprobe_trampoline,
++	.pre_handler = trampoline_probe_handler
++};
++
++void arch_prepare_kretprobe(struct kretprobe_instance *ri,
++			    struct pt_regs *regs)
 +{
-+	struct kprobe *cur = kprobe_running();
-+	struct kprobe_ctlblk *kcb = get_kprobe_ctlblk();
++	ri->ret_addr = (kprobe_opcode_t *)regs->regs[1];
++	ri->fp = NULL;
 +
-+	if (!cur)
-+		return false;
-+
-+	/* Restore back the original saved kprobes variables and continue */
-+	if (kcb->kprobe_status == KPROBE_REENTER) {
-+		restore_previous_kprobe(kcb);
-+		return true;
-+	}
-+
-+	/* Call post handler */
-+	kcb->kprobe_status = KPROBE_HIT_SSDONE;
-+	if (cur->post_handler)
-+		cur->post_handler(cur, regs, 0);
-+
-+	regs->csr_era = kcb->kprobe_saved_era + LOONGARCH_INSN_SIZE;
-+	regs->csr_prmd |= kcb->kprobe_saved_irq;
-+
-+	reset_current_kprobe();
-+
-+	return true;
++	/* Replace the return addr with trampoline addr */
++	regs->regs[1] = (unsigned long)__kretprobe_trampoline;
 +}
-+NOKPROBE_SYMBOL(kprobe_post_handler);
++NOKPROBE_SYMBOL(arch_prepare_kretprobe);
 +
-+bool kprobe_fault_handler(struct pt_regs *regs, int trapnr)
++int arch_trampoline_kprobe(struct kprobe *p)
 +{
-+	struct kprobe_ctlblk *kcb = get_kprobe_ctlblk();
-+
-+	if (kcb->kprobe_status & KPROBE_HIT_SS) {
-+		regs->csr_era = kcb->kprobe_saved_era + LOONGARCH_INSN_SIZE;
-+		regs->csr_prmd |= kcb->kprobe_saved_irq;
-+		reset_current_kprobe();
-+	}
-+
-+	return false;
++	return p->addr == trampoline_p.addr;
 +}
-+NOKPROBE_SYMBOL(kprobe_fault_handler);
++NOKPROBE_SYMBOL(arch_trampoline_kprobe);
 +
-+int kprobe_exceptions_notify(struct notifier_block *self,
-+			     unsigned long val, void *data)
-+{
-+	struct die_args *args = (struct die_args *)data;
-+	int ret = NOTIFY_DONE;
-+
-+	switch (val) {
-+	case DIE_BREAK:
-+		if (kprobe_pre_handler(args->regs))
-+			ret = NOTIFY_STOP;
-+		break;
-+	case DIE_SSTEPBP:
-+		if (kprobe_post_handler(args->regs))
-+			ret = NOTIFY_STOP;
-+		break;
-+	case DIE_PAGE_FAULT:
-+		preempt_disable();
-+		if (kprobe_running()
-+		    && kprobe_fault_handler(args->regs, args->trapnr))
-+			ret = NOTIFY_STOP;
-+		preempt_enable();
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	return ret;
-+}
-+NOKPROBE_SYMBOL(kprobe_exceptions_notify);
-+
-+int __init arch_init_kprobes(void)
-+{
-+	return 0;
-+}
+ int __init arch_init_kprobes(void)
+ {
+-	return 0;
++	return register_kprobe(&trampoline_p);
+ }
 -- 
 2.1.0
 
