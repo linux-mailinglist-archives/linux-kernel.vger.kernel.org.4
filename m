@@ -2,125 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C95BE5BEC9C
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 20:12:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2989A5BECA2
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 20:15:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbiITSMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 14:12:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46716 "EHLO
+        id S229811AbiITSPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 14:15:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbiITSM3 (ORCPT
+        with ESMTP id S229603AbiITSPd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 14:12:29 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D16E1570E
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 11:12:28 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id z13so5002064edb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 11:12:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=UxJ8rW//GvFRzYiqb7FcOc8c4uS74wXg/hmPFHHyeA0=;
-        b=YBLruLr5DBNAIlTAxtA3I1Zr5N+6+7ZpxNpjzAFJ4O+39pTvESNS4BZszLmARDv7a5
-         yBVGN7GOBBJFowcCyD7FrfIhACWI8EiIQppJMJaZa8wTm+2kZ5jmVsdG6MH3/4c54TWr
-         m7zeVAb/yWZMXPuWx03G5DAxMX2EYgjcoyCDTukhy0Qa5kwqgDL6Bs1EsxL8KwaVfp5E
-         s0FnaGMDutVEoerMWhaleTosA9v+M8nKr8gzfaK3VKPvPDZgI8xbWfUuYaxuPjcxQK1x
-         VD7DmpnW8dcB6cNTAaWvxZZ9t++KhlI8j4gK2jLPxkacqRGupsysmRuI2ou4nZX/u/DX
-         +3Tg==
+        Tue, 20 Sep 2022 14:15:33 -0400
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37F444BD13;
+        Tue, 20 Sep 2022 11:15:32 -0700 (PDT)
+Received: by mail-qv1-f51.google.com with SMTP id y9so2631728qvo.4;
+        Tue, 20 Sep 2022 11:15:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=UxJ8rW//GvFRzYiqb7FcOc8c4uS74wXg/hmPFHHyeA0=;
-        b=iNT5hDyWR9RY0rtn5EEKGxIMi3+FGVejzmjTgMAa9MAj2eYIkt5jN2Xbm9XEYIcI98
-         rCYktSvH0bI96yTv0bvPy3oWLV+mbLfYw7oy/uwFklK7TXMXYLjROoqQYnaUiw1YgP0u
-         +Z26gr6LBKqsTxewROR3MjZa5sYFoSuAH4OxShFN7x3uEwyjsxflNYm6nafaU6yOIdJH
-         ntUtqwdsn5+Quux1K470WBS44PVg9Sy3y4yE9QTPdNq4/2bo/uAVCNi212h1J3Zz3Nu5
-         Xa9hVaIZwUY431EYrnnxbcFMBr1HxI9NnqJ0grrZOyKI5/NH8NU7+a/ZvGJI1pVLcC2k
-         hB6w==
-X-Gm-Message-State: ACrzQf2WuSB0nRZbJ10NGeC3XYb3EzssJUocIjwbGmsC2u3QKyb3HLb3
-        qJuCxDYJgdxfArPUFUASVHKfJE39UXxGNfsX8/Wa+mPABkw=
-X-Google-Smtp-Source: AMsMyM7PMxdTFGqqTHkNV2MZvsSy/zTh84aME965vBYd0cNVakCzxExWkU8Vx5Y8SwaT9xnkrtg0AOKAgquknl6Z1K8=
-X-Received: by 2002:aa7:d3d3:0:b0:44e:baab:54d9 with SMTP id
- o19-20020aa7d3d3000000b0044ebaab54d9mr20817547edr.43.1663697546757; Tue, 20
- Sep 2022 11:12:26 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=DXGgRFrzenuJCQ3cBD3T9BZ4V6UBP/IlbFITLbOc4wA=;
+        b=XdozD86JEDcN2edKTqxCGYhFBH6R9h+IL/8PwHX9G/hjEFr6bSFj7FV2XDSbLjGV4b
+         iS+6mVWYlUoamwIJWNL0AoRfmC1E6H4HZ0HYtzpk3K5OBSJNfmk6yj/uHNntsvC35CFL
+         3DK4TxpcS3NF4QVrNxEOEWIQXSMsi999+FaXthDXuOGv43YxUvt5bZeZ6ijhAAz65BK0
+         2wLbtqD2Q0UAqR00xGjjcfAzmsEvirk1DnmRaHhSH9YISj/gAgO8nzG5alQLqBS/vAyb
+         vV35gQWz7rjqBDZS+M5weUvhPJgfBC4uNaNu77YEIlffjrxVh9j9+sVDtYxCoObCUldB
+         cA8g==
+X-Gm-Message-State: ACrzQf3J61qjSsIr+v9gZh4GQ1onOrFg4/w0j9lEM+Ye0aKexsxpvkoD
+        EeH6vpYrXqHfGZ0DQBQxSFzIa1g6lwH5NA==
+X-Google-Smtp-Source: AMsMyM6+NVbuGAFP7iY/mBRyhepCkBT0huTttfO1iK/AqcuMOLDlG/HxSi+aTawBS7H1kQqUFSO77w==
+X-Received: by 2002:a0c:f307:0:b0:4aa:a431:c184 with SMTP id j7-20020a0cf307000000b004aaa431c184mr20783836qvl.76.1663697731003;
+        Tue, 20 Sep 2022 11:15:31 -0700 (PDT)
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
+        by smtp.gmail.com with ESMTPSA id l5-20020a05620a28c500b006bc1512986esm317501qkp.97.2022.09.20.11.15.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Sep 2022 11:15:30 -0700 (PDT)
+Received: by mail-yb1-f178.google.com with SMTP id 63so4630067ybq.4;
+        Tue, 20 Sep 2022 11:15:30 -0700 (PDT)
+X-Received: by 2002:a05:6902:45:b0:6ae:ce15:a08d with SMTP id
+ m5-20020a056902004500b006aece15a08dmr20152275ybh.380.1663697730098; Tue, 20
+ Sep 2022 11:15:30 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220911095923.3614387-1-pasha.tatashin@soleen.com> <20220912132322.7c486c40c6acf8eec0785c87@linux-foundation.org>
-In-Reply-To: <20220912132322.7c486c40c6acf8eec0785c87@linux-foundation.org>
-From:   Pasha Tatashin <pasha.tatashin@soleen.com>
-Date:   Tue, 20 Sep 2022 14:11:50 -0400
-Message-ID: <CA+CK2bDkvgifEXh9voz5oYog-rDNm2GnqTZL=-5HndOFF2CJqg@mail.gmail.com>
-Subject: Re: [PATCH 0/3] page table check default to warn instead of panic
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>, linux-mm <linux-mm@kvack.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 20 Sep 2022 20:15:19 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdURCeAVt_2L33P197qbj3UBXLWRZH0nZvm+UJbnzBCS2A@mail.gmail.com>
+Message-ID: <CAMuHMdURCeAVt_2L33P197qbj3UBXLWRZH0nZvm+UJbnzBCS2A@mail.gmail.com>
+Subject: E1000e PTP crash on R-Car Gen2
+To:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Miroslav Lichvar <mlichvar@redhat.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        intel-wired-lan@lists.osuosl.org, netdev <netdev@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 4:23 PM Andrew Morton <akpm@linux-foundation.org> wrote:
->
-> On Sun, 11 Sep 2022 09:59:20 +0000 Pasha Tatashin <pasha.tatashin@soleen.com> wrote:
->
-> > From: Pasha Tatashin <tatashin@google.com>
-> >
-> > Page table check when detects errors panics the kernel. Let instead,
-> > print a warning, and panic only when specifically requested via kernel
-> > parameter:
-> >
-> >       page_table_check=panic
-> >
-> > The discussion about using panic vs. warn is here:
-> > https://lore.kernel.org/linux-mm/20220902232732.12358-1-rick.p.edgecombe@intel.com
->
-> The changelog doesn't actually describe the reason for making this
-> change.  Somebody obviously wants pagetable check errors to no longer
-> panic the kernel, but why??  (The same can be said of the [2/3]
-> changelog).
+Hi all,
 
-This came from the discussion listed above. There seems to be a
-consensus that we should reduce the number of BUG_ON() in the kernel,
-and replace them with WARN_ON_ONCE() when possible to recover. In the
-case of page_table_check we can recover, but for some it may be unsafe
-because of security implications. Therefore, I would like to keep  an
-option of being able to panic only because of page table check errors,
-but not keeping it enabled by default.
+While leaving a Renesas Koelsch development board (with R-Car M2-W SoC)
+and an otherwise unused Intel E1000e Ethernet card running unattended, I
+ran into a crash after 4 hours and 5 minutes of uptime:
 
-I will add more info to the commit message.
+    Unhandled fault: asynchronous external abort (0x1211) at 0x00000000
+    [00000000] *pgd=80000040004003, *pmd=00000000
+    Internal error: : 1211 [#1] SMP ARM
+    Modules linked in:
+    CPU: 0 PID: 581 Comm: kworker/0:0 Tainted: G                 N
+6.0.0-rc6-koelsch-00864-g34666b5da80f #1661
+    Hardware name: Generic R-Car Gen2 (Flattened Device Tree)
+    Workqueue: events e1000e_systim_overflow_work
+    PC is at e1000e_read_systim+0x3c/0x1c0
+    LR is at timecounter_read+0x14/0xa0
 
->
-> Also, should we be changing the default?  People who like the panic
-> will get a big surprise when they find out that they should have added
-> a kernel parameter to get the old behaviour back.  It would be less
-> disruptive to default to panic unless page_table_check=warn was added.
+    [...]
 
-I was thinking about this as well. I decided to change the default:
-the old users will still get a warning, but going forward we will be
-inline with the rest of the kernel: warn on by default, and optionally
-panic.
+     e1000e_read_systim from timecounter_read+0x14/0xa0
+     timecounter_read from e1000e_systim_overflow_work+0x24/0x7c
+     e1000e_systim_overflow_work from process_one_work+0x2f0/0x4c4
+     process_one_work from worker_thread+0x240/0x2d0
+     worker_thread from kthread+0xd0/0xe0
+     kthread from ret_from_fork+0x14/0x34
 
->
-> If there's a solid reason for changing the default, it should be
-> changelogged.  And if that reason is generally agreed to, perhaps the
-> kernel should print a warning at boot if neither page_table_check=panic
-> nor page_table_check=warn were provided.  To tell people that the
-> default has been changed.
+    [...]
 
-I am not sure that is needed, and when do we remove that extra boot
-message? This is a relatively new feature, and existing users would
-still get an ugly warning about incorrect page table mappings.
+    BUG: workqueue lockup - pool cpus=0 node=0 flags=0x0 nice=0 stuck for 39s!
 
-Thank you,
-Pasha
+    [...]
 
->
->
+This happened when checking if the time counter overflowed, which is done
+from a workqueue periodically (E1000_SYSTIM_OVERFLOW_PERIOD = 4 hours).
+The asynchronous external abort is a typical symptom of accessing a
+device's hardware registers (in this case the PCIe controller) while the
+device's clock is disabled, so presumably the workqueue ran while the
+device was runtime-suspended.
+
+I don't know much about how and when Linux uses PTP, but I did notice
+drivers/net/ethernet/intel/e1000e/netdev.c makes several pm_runtime_*()
+calls (but not in e1000e_read_systim()), while
+drivers/net/ethernet/intel/e1000e/ptp.c makes none.
+
+Unfortunately I haven't managed to reproduce the problem (even with
+E1000_SYSTIM_OVERFLOW_PERIOD reduced), so probably there is a race
+condition somewhere.
+
+Thanks for your comments!
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
