@@ -2,133 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37FE45BE56A
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 14:14:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55A4B5BE553
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 14:11:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229950AbiITMOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 08:14:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50034 "EHLO
+        id S230268AbiITMLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 08:11:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbiITMOJ (ORCPT
+        with ESMTP id S229905AbiITMLT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 08:14:09 -0400
-Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 392576B67B;
-        Tue, 20 Sep 2022 05:14:08 -0700 (PDT)
-Received: from dev011.ch-qa.sw.ru ([172.29.1.16])
-        by relay.virtuozzo.com with esmtp (Exim 4.95)
-        (envelope-from <alexander.atanasov@virtuozzo.com>)
-        id 1oac55-004fqT-6p;
-        Tue, 20 Sep 2022 14:12:39 +0200
-From:   Alexander Atanasov <alexander.atanasov@virtuozzo.com>
-To:     Jonathan Corbet <corbet@lwn.net>, Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     kernel@openvz.org,
-        Alexander Atanasov <alexander.atanasov@virtuozzo.com>,
-        Kees Cook <keescook@chromium.org>,
-        Roman Gushchin <guro@fb.com>, Jann Horn <jannh@google.com>,
-        Vijayanand Jitta <vjitta@codeaurora.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: [PATCH v2] mm: Make failslab writable again
-Date:   Tue, 20 Sep 2022 15:11:11 +0300
-Message-Id: <20220920121111.1792905-1-alexander.atanasov@virtuozzo.com>
-X-Mailer: git-send-email 2.31.1
+        Tue, 20 Sep 2022 08:11:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A469B66A7D;
+        Tue, 20 Sep 2022 05:11:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 30CD561E51;
+        Tue, 20 Sep 2022 12:11:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 134E5C433C1;
+        Tue, 20 Sep 2022 12:11:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663675877;
+        bh=jrxJEEjsToQxBRhXTlVo2g/gA/1JhFAV1VSOHZsNC5I=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=jQFSqEEd0vVeNH9i4MEgpkb4v2Qfl5l5g0bduZioWnNZshm40/Lqh0iAlXHovgNkj
+         omHPVbKEzlwiW704e2D11AomYn/70JfxjXQEDbRmOI//+GBjYZGgpfid9oRY7gWykP
+         92osqCEmzPlZ/fdT2Kt1soPsYq+sqLZJCC3c6ONDjDI3xezkAXBOzV81Z1fK70VlBH
+         stTAUTuBj4mwySNo5/dgCPUo29mDeL6Tl19AjQz6YIVxUZ1xVIvcLD2Iiga4QN4kYz
+         4Qx3bo3uqo1tvohHnvp7ReJ9Zt5KXAQCXk3OnYmK/DWg+3OFjBmjKAJg90XAd9lK+x
+         3mLdjKe5ITlEQ==
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Hangyu Hua <hbh25y@gmail.com>, gustavoars@kernel.org, jgg@ziepe.ca,
+        bvanassche@acm.org
+Cc:     target-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org
+Subject: Re: [PATCH] infiniband: ulp: srpt: Use flex array destination for memcpy()
+Date:   Tue, 20 Sep 2022 15:11:12 +0300
+Message-Id: <166367586716.282710.5174043716059240470.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20220909022943.8896-1-hbh25y@gmail.com>
+References: <20220909022943.8896-1-hbh25y@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In (060807f841ac mm, slub: make remaining slub_debug related attributes
-read-only) failslab was made read-only.
-I think it became a collateral victim to the two other options for which
-the reasons are perfectly valid.
-Here is why:
- - sanity_checks and trace are slab internal debug options,
-   failslab is used for fault injection.
- - for fault injections, which by presumption are random, it
-   does not matter if it is not set atomically. And you need to
-   set atleast one more option to trigger fault injection.
- - in a testing scenario you may need to change it at runtime
-   example: module loading - you test all allocations limited
-   by the space option. Then you move to test only your module's
-   own slabs.
- - when set by command line flags it effectively disables all
-   cache merges.
+On Fri, 9 Sep 2022 10:29:43 +0800, Hangyu Hua wrote:
+> In preparation for FORTIFY_SOURCE performing run-time destination buffer
+> bounds checking for memcpy(), specify the destination output buffer
+> explicitly, instead of asking memcpy() to write past the end of what looked
+> like a fixed-size object.
+> 
+> Notice that srp_rsp[] is a pointer to a structure that contains
+> flexible-array member data[]:
+> 
+> [...]
 
-Cc: Vlastimil Babka <vbabka@suse.cz>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Roman Gushchin <guro@fb.com>
-Cc: Christoph Lameter <cl@linux.com>
-Cc: Jann Horn <jannh@google.com>
-Cc: Vijayanand Jitta <vjitta@codeaurora.org>
-Cc: David Rientjes <rientjes@google.com>
-Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
-Cc: Pekka Enberg <penberg@kernel.org>
-Link: http://lkml.kernel.org/r/20200610163135.17364-5-vbabka@suse.cz
+Applied, thanks!
 
-Signed-off-by: Alexander Atanasov <alexander.atanasov@virtuozzo.com>
----
- Documentation/mm/slub.rst |  2 ++
- mm/slub.c                 | 16 +++++++++++++++-
- 2 files changed, 17 insertions(+), 1 deletion(-)
+[1/1] infiniband: ulp: srpt: Use flex array destination for memcpy()
+      https://git.kernel.org/rdma/rdma/c/4b46a6079d2f8a
 
-V1->V2: Fixed commit message. Flags are set using WRITE_ONCE.
-
-diff --git a/Documentation/mm/slub.rst b/Documentation/mm/slub.rst
-index 43063ade737a..86837073a39e 100644
---- a/Documentation/mm/slub.rst
-+++ b/Documentation/mm/slub.rst
-@@ -116,6 +116,8 @@ options from the ``slub_debug`` parameter translate to the following files::
- 	T	trace
- 	A	failslab
- 
-+failslab file is writable, so writing 1 or 0 will enable or disable
-+the option at runtime. Write returns -EINVAL if cache is an alias.
- Careful with tracing: It may spew out lots of information and never stop if
- used on the wrong slab.
- 
-diff --git a/mm/slub.c b/mm/slub.c
-index 862dbd9af4f5..57cf18936526 100644
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -5617,7 +5617,21 @@ static ssize_t failslab_show(struct kmem_cache *s, char *buf)
- {
- 	return sysfs_emit(buf, "%d\n", !!(s->flags & SLAB_FAILSLAB));
- }
--SLAB_ATTR_RO(failslab);
-+
-+static ssize_t failslab_store(struct kmem_cache *s, const char *buf,
-+				size_t length)
-+{
-+	if (s->refcount > 1)
-+		return -EINVAL;
-+
-+	if (buf[0] == '1')
-+		WRITE_ONCE(s->flags, s->flags | SLAB_FAILSLAB);
-+	else
-+		WRITE_ONCE(s->flags, s->flags & ~SLAB_FAILSLAB);
-+
-+	return length;
-+}
-+SLAB_ATTR(failslab);
- #endif
- 
- static ssize_t shrink_show(struct kmem_cache *s, char *buf)
-
-base-commit: 80e78fcce86de0288793a0ef0f6acf37656ee4cf
+Best regards,
 -- 
-2.31.1
-
+Leon Romanovsky <leon@kernel.org>
