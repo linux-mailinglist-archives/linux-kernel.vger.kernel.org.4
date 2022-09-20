@@ -2,218 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 972825BDAFB
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 05:45:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 026D35BDAFE
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 05:48:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbiITDpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 23:45:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56326 "EHLO
+        id S229612AbiITDsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 23:48:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229866AbiITDpJ (ORCPT
+        with ESMTP id S229488AbiITDsO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 23:45:09 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED3FE0BF
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 20:45:07 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id p18so1123293plr.8
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 20:45:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=YD7hd3hhitQ0ZZVcAt1CNpm+2q/a/QqH8eSW/It4jOc=;
-        b=R8P+SsH3Wyqs714dWK/k+Pwca0WluPJ3cMXSNEx8dbv5h7zk3n4WPOUCtz+1DxYY1t
-         1x4Ig7cwuPZLpUnagq7nTWzEW6ZwXG3oqMF9NkNDarrAjHcsedv/eCJFHn2m45YMN/hK
-         k1lLAaV+HYRbJwutjv46LQqdX5the5r3VT0iQ6MYkkaIyRGW2DUeV9jGMvmrQTcOhStx
-         dJsKsc6zFShdRsqc0oWpoqOPp91yBtSzbotEgriDkQMp8rwnj/ihl4A+IQwegSpj1DaB
-         rShDG5NHSpkP3IQUYOlZez9jyzdrVj1sLnmIAA7itIVPFzrUH83ShjlpCi6G3tgWKRYZ
-         kiTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=YD7hd3hhitQ0ZZVcAt1CNpm+2q/a/QqH8eSW/It4jOc=;
-        b=oWFW9QITziEtbGL75jz6GcZ3G8rjPzebyLG1nojPxFyBIHkvavNprYrtA46v5LN/iE
-         xYiODIg3t+IZA+MsBGEKfJwK7eHlvipoCZElAuoPbgCRBB19IH4HeAyATBcIVeW4/MB8
-         ZILu8LvqB1+3clI2aMs2Ev276nljp2otlvYySYwbQefLw8jKLUPUHB0KH5sczVEU225R
-         JCN6GBbv04IeufvHS4PNIdr2tQkEzJqGnxBV6lwbUTmI0gdRygdghoNDpuYrigeIpfu6
-         vNEtzKe14AxioMG9f8AJdNXEJdGyVGCTJ88/SaUDYTyYLzofZf2HcSOc5aDE+lHWqNmi
-         y+cQ==
-X-Gm-Message-State: ACrzQf01dgK97rTR0+Ox2mM9QWSlbF9zSK/czH1jsC1XvmjQ7kN0RAHF
-        yzSLwMckvjQn98Za3Jq8yM3vtp0TkBUc
-X-Google-Smtp-Source: AMsMyM4ZJ1O4dtE9VngQsTj07UObovLvLpvTPeHPr20gQ6Uwr6RB+6a39/H2k+ybIxNI/orlP3y1lQ==
-X-Received: by 2002:a17:903:1110:b0:178:9f67:b524 with SMTP id n16-20020a170903111000b001789f67b524mr3032927plh.50.1663645507266;
-        Mon, 19 Sep 2022 20:45:07 -0700 (PDT)
-Received: from localhost.localdomain ([43.132.141.3])
-        by smtp.gmail.com with ESMTPSA id mj24-20020a17090b369800b001fb53587166sm261301pjb.28.2022.09.19.20.45.05
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 19 Sep 2022 20:45:06 -0700 (PDT)
-From:   xiakaixu1987@gmail.com
-X-Google-Original-From: kaixuxia@tencent.com
-To:     sj@kernel.org, akpm@linux-foundation.org
-Cc:     damon@lists.linux.dev, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Kaixu Xia <kaixuxia@tencent.com>
-Subject: [PATCH v2] mm/damon: deduplicate damon_{reclaim,lru_sort}_apply_parameters()
-Date:   Tue, 20 Sep 2022 11:44:21 +0800
-Message-Id: <1663645461-21084-1-git-send-email-kaixuxia@tencent.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 19 Sep 2022 23:48:14 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 068BC4D4FC
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 20:48:05 -0700 (PDT)
+X-UUID: fa0681a33ed4482a9cbfaf39450c60ec-20220920
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:CC:To:From:Subject:MIME-Version:Date:Message-ID; bh=Jz5vm2YaapemwoSJhLba/w/znSz6qfV4EVBhxelwwNc=;
+        b=cPWs2WvQKlXWgMXQZ7URz/5Ul/lT14pjEf+gWWOkQdamxn3288slKEjcVqOka4BIeFZNWdbGcKhyaE7dKyfVL41RjKGYxUn/A8CT5QODHZ2nsr9W/16dZmCM31ppcqfDP5bmo467xy/rhkCD3TlSw3YuA946OmMhnz6heQtDKTU=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:acd8e1de-ec1c-4b02-b79b-915f85f2cdde,IP:0,U
+        RL:25,TC:0,Content:-5,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+        ON:release,TS:65
+X-CID-INFO: VERSION:1.1.11,REQID:acd8e1de-ec1c-4b02-b79b-915f85f2cdde,IP:0,URL
+        :25,TC:0,Content:-5,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
+        ON:quarantine,TS:65
+X-CID-META: VersionHash:39a5ff1,CLOUDID:f1b15b70-dafa-4a42-b716-cf2cd4845592,B
+        ulkID:220918123239OLP9J5MU,BulkQuantity:135,Recheck:0,SF:28|17|19|48|823|8
+        24,TC:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:40,QS:nil,BEC:nil
+        ,COL:0
+X-UUID: fa0681a33ed4482a9cbfaf39450c60ec-20220920
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <allen-kh.cheng@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 374548407; Tue, 20 Sep 2022 11:47:59 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Tue, 20 Sep 2022 11:47:54 +0800
+Received: from [172.21.84.99] (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Tue, 20 Sep 2022 11:47:54 +0800
+Message-ID: <42aebe49-1419-c474-ec7d-9bfcc15162eb@mediatek.com>
+Date:   Tue, 20 Sep 2022 11:47:53 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2] drm: mediatek: Fix display vblank timeout when disable
+ dsi
+Content-Language: en-US
+From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>
+CC:     Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        =?UTF-8?B?WGlubGVpIExlZSAo5p2O5piV56OKKQ==?= 
+        <Xinlei.Lee@mediatek.com>
+References: <20220914140031.18578-1-allen-kh.cheng@mediatek.com>
+ <CAAOTY_92F5WgCedZOvg_qtkHLorTCXiWtuGgoJ=9gRryYHi7TQ@mail.gmail.com>
+ <7ef4e4c6-e8e6-74a9-8211-bff90ad2d9fb@mediatek.com>
+In-Reply-To: <7ef4e4c6-e8e6-74a9-8211-bff90ad2d9fb@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kaixu Xia <kaixuxia@tencent.com>
+Hi CK,
 
-The bodies of damon_{reclaim,lru_sort}_apply_parameters() contain
-duplicates. This commit add a common function
-damon_set_region_biggest_system_ram_default() to removes the
-duplicates.
+We can use [1] in mt8186. Please ignore this PATCH.
 
-Signed-off-by: Kaixu Xia <kaixuxia@tencent.com>
-Suggested-by: SeongJae Park <sj@kernel.org>
----
-v2:
- -change the common function name and add kernel comment.
+Thanks,
+Allen
 
- include/linux/damon.h |  3 ++-
- mm/damon/core.c       | 35 ++++++++++++++++++++++++++++++++++-
- mm/damon/lru_sort.c   | 13 +++----------
- mm/damon/reclaim.c    | 13 +++----------
- 4 files changed, 42 insertions(+), 22 deletions(-)
+[1]
+http://lists.infradead.org/pipermail/linux-mediatek/2022-August/046713.html
 
-diff --git a/include/linux/damon.h b/include/linux/damon.h
-index e7808a84675f..ed5470f50bab 100644
---- a/include/linux/damon.h
-+++ b/include/linux/damon.h
-@@ -557,7 +557,8 @@ static inline bool damon_target_has_pid(const struct damon_ctx *ctx)
- int damon_start(struct damon_ctx **ctxs, int nr_ctxs, bool exclusive);
- int damon_stop(struct damon_ctx **ctxs, int nr_ctxs);
- 
--bool damon_find_biggest_system_ram(unsigned long *start, unsigned long *end);
-+int damon_set_region_biggest_system_ram_default(struct damon_target *t,
-+				unsigned long *start, unsigned long *end);
- 
- #endif	/* CONFIG_DAMON */
- 
-diff --git a/mm/damon/core.c b/mm/damon/core.c
-index 9c80c6eb00c2..9e96cb9fb5db 100644
---- a/mm/damon/core.c
-+++ b/mm/damon/core.c
-@@ -1245,7 +1245,8 @@ static int walk_system_ram(struct resource *res, void *arg)
-  * Find biggest 'System RAM' resource and store its start and end address in
-  * @start and @end, respectively.  If no System RAM is found, returns false.
-  */
--bool damon_find_biggest_system_ram(unsigned long *start, unsigned long *end)
-+static bool damon_find_biggest_system_ram(unsigned long *start,
-+						unsigned long *end)
- 
- {
- 	struct damon_system_ram_region arg = {};
-@@ -1259,6 +1260,38 @@ bool damon_find_biggest_system_ram(unsigned long *start, unsigned long *end)
- 	return true;
- }
- 
-+/*
-+ * damon_set_region_biggest_system_ram_default() - Set the region of the given
-+ * monitoring target as requested, or biggest 'System RAM'.
-+ * @t:		The monitoring target to set the region.
-+ * @start:	The pointer to the start address of the region.
-+ * @end:	The pointer to the end address of the region.
-+ *
-+ * This function sets the region of @t as requested by @start and @end.  If the
-+ * values of the two pointers are pointing to are zero, however, this function
-+ * finds the biggest 'System RAM' resource and set the region to cover the
-+ * resource.  In the latter case, this function saves the start and end address
-+ * of the resource in @start and @end, respectively.
-+ *
-+ * Return: 0 on success, negative error code otherwise.
-+ */
-+int damon_set_region_biggest_system_ram_default(struct damon_target *t,
-+			unsigned long *start, unsigned long *end)
-+{
-+	struct damon_addr_range addr_range;
-+
-+	if (*start > *end)
-+		return -EINVAL;
-+
-+	if (!*start && !*end &&
-+		!damon_find_biggest_system_ram(start, end))
-+		return -EINVAL;
-+
-+	addr_range.start = *start;
-+	addr_range.end = *end;
-+	return damon_set_regions(t, &addr_range, 1);
-+}
-+
- static int __init damon_init(void)
- {
- 	damon_region_cache = KMEM_CACHE(damon_region, 0);
-diff --git a/mm/damon/lru_sort.c b/mm/damon/lru_sort.c
-index d7eb72b41cb6..efbc2bda8b9c 100644
---- a/mm/damon/lru_sort.c
-+++ b/mm/damon/lru_sort.c
-@@ -188,7 +188,6 @@ static struct damos *damon_lru_sort_new_cold_scheme(unsigned int cold_thres)
- static int damon_lru_sort_apply_parameters(void)
- {
- 	struct damos *scheme;
--	struct damon_addr_range addr_range;
- 	unsigned int hot_thres, cold_thres;
- 	int err = 0;
- 
-@@ -211,15 +210,9 @@ static int damon_lru_sort_apply_parameters(void)
- 		return -ENOMEM;
- 	damon_add_scheme(ctx, scheme);
- 
--	if (monitor_region_start > monitor_region_end)
--		return -EINVAL;
--	if (!monitor_region_start && !monitor_region_end &&
--	    !damon_find_biggest_system_ram(&monitor_region_start,
--					   &monitor_region_end))
--		return -EINVAL;
--	addr_range.start = monitor_region_start;
--	addr_range.end = monitor_region_end;
--	return damon_set_regions(target, &addr_range, 1);
-+	return damon_set_region_biggest_system_ram_default(target,
-+					&monitor_region_start,
-+					&monitor_region_end);
- }
- 
- static int damon_lru_sort_turn(bool on)
-diff --git a/mm/damon/reclaim.c b/mm/damon/reclaim.c
-index 3d59ab11b7b3..162c9b1ca00f 100644
---- a/mm/damon/reclaim.c
-+++ b/mm/damon/reclaim.c
-@@ -144,7 +144,6 @@ static struct damos *damon_reclaim_new_scheme(void)
- static int damon_reclaim_apply_parameters(void)
- {
- 	struct damos *scheme;
--	struct damon_addr_range addr_range;
- 	int err = 0;
- 
- 	err = damon_set_attrs(ctx, &damon_reclaim_mon_attrs);
-@@ -157,15 +156,9 @@ static int damon_reclaim_apply_parameters(void)
- 		return -ENOMEM;
- 	damon_set_schemes(ctx, &scheme, 1);
- 
--	if (monitor_region_start > monitor_region_end)
--		return -EINVAL;
--	if (!monitor_region_start && !monitor_region_end &&
--	    !damon_find_biggest_system_ram(&monitor_region_start,
--					   &monitor_region_end))
--		return -EINVAL;
--	addr_range.start = monitor_region_start;
--	addr_range.end = monitor_region_end;
--	return damon_set_regions(target, &addr_range, 1);
-+	return damon_set_region_biggest_system_ram_default(target,
-+					&monitor_region_start,
-+					&monitor_region_end);
- }
- 
- static int damon_reclaim_turn(bool on)
--- 
-2.27.0
-
+On 9/19/22 11:01, Allen-KH Cheng wrote:
+> Hi CK,
+> 
+> We will test this fix on the mt8186/mt8183.
+> Maybe our fix is not necessary.
+> 
+> I appreciate your suggestion.
+> 
+> BRs,
+> Allen
+> 
+> On 9/18/22 12:32, Chun-Kuang Hu wrote:
+>> Hi, Allen:
+>>
+>> Allen-KH Cheng <allen-kh.cheng@mediatek.com> 於 2022年9月14日 週三 晚上10:00寫道：
+>>>
+>>> From: Xinlei Lee <xinlei.lee@mediatek.com>
+>>>
+>>> Dsi is turned off at bridge.disable, causing crtc to wait for vblank
+>>> timeout. It is necessary to add count protection to turn off dsi and
+>>> turn off at post_disable.
+>>
+>> If turn off dsi in post_disable(), you should turn on dsi in pre_enable().
+>>
+>> There is another patch fix this problem [1], do you have any comment
+>> on that patch?
+>>
+>> [1] http://lists.infradead.org/pipermail/linux-mediatek/2022-August/046713.html
+>>
+>> Regards,
+>> Chun-Kuang.
+>>
+>>>
+>>> Fixes: cde7e2e35c28 ("drm/mediatek: Separate poweron/poweroff from enable/disable and define new funcs")
+>>> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
+>>> Co-developed-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+>>> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+>>> ---
+>>> Change in v1:
+>>>   * Rebase to kernel/git/chunkuang.hu/linux.git, mediatek-drm-fixes
+>>>     [Allen-KH Cheng <allen-kh.cheng@mediatek.com>]
+>>> ---
+>>> ---
+>>>  drivers/gpu/drm/mediatek/mtk_dsi.c | 15 ++++++---------
+>>>  1 file changed, 6 insertions(+), 9 deletions(-)
+>>>
+>>> diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediatek/mtk_dsi.c
+>>> index 5b624e0f5b0a..e30f4244c001 100644
+>>> --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
+>>> +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
+>>> @@ -768,14 +768,6 @@ static void mtk_dsi_bridge_mode_set(struct drm_bridge *bridge,
+>>>         drm_display_mode_to_videomode(adjusted, &dsi->vm);
+>>>  }
+>>>
+>>> -static void mtk_dsi_bridge_atomic_disable(struct drm_bridge *bridge,
+>>> -                                         struct drm_bridge_state *old_bridge_state)
+>>> -{
+>>> -       struct mtk_dsi *dsi = bridge_to_dsi(bridge);
+>>> -
+>>> -       mtk_output_dsi_disable(dsi);
+>>> -}
+>>> -
+>>>  static void mtk_dsi_bridge_atomic_enable(struct drm_bridge *bridge,
+>>>                                          struct drm_bridge_state *old_bridge_state)
+>>>  {
+>>> @@ -803,13 +795,15 @@ static void mtk_dsi_bridge_atomic_post_disable(struct drm_bridge *bridge,
+>>>  {
+>>>         struct mtk_dsi *dsi = bridge_to_dsi(bridge);
+>>>
+>>> +       if (dsi->refcount == 1)
+>>> +               mtk_output_dsi_disable(dsi);
+>>> +
+>>>         mtk_dsi_poweroff(dsi);
+>>>  }
+>>>
+>>>  static const struct drm_bridge_funcs mtk_dsi_bridge_funcs = {
+>>>         .attach = mtk_dsi_bridge_attach,
+>>>         .atomic_destroy_state = drm_atomic_helper_bridge_destroy_state,
+>>> -       .atomic_disable = mtk_dsi_bridge_atomic_disable,
+>>>         .atomic_duplicate_state = drm_atomic_helper_bridge_duplicate_state,
+>>>         .atomic_enable = mtk_dsi_bridge_atomic_enable,
+>>>         .atomic_pre_enable = mtk_dsi_bridge_atomic_pre_enable,
+>>> @@ -829,6 +823,9 @@ void mtk_dsi_ddp_stop(struct device *dev)
+>>>  {
+>>>         struct mtk_dsi *dsi = dev_get_drvdata(dev);
+>>>
+>>> +       if (dsi->refcount == 1)
+>>> +               mtk_output_dsi_disable(dsi);
+>>> +
+>>>         mtk_dsi_poweroff(dsi);
+>>>  }
+>>>
+>>> --
+>>> 2.18.0
+>>>
