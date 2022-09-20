@@ -2,119 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E5125BE54E
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 14:10:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37FE45BE56A
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 14:14:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230108AbiITMKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 08:10:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46244 "EHLO
+        id S229950AbiITMOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 08:14:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbiITMKl (ORCPT
+        with ESMTP id S229920AbiITMOJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 08:10:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 050A327CFD
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 05:10:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663675840;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tomIFmT2auPWgU52HW7Ixu9aQt/lJ7bkSj0XCxjEol8=;
-        b=GaFlfbT0FmjGGc79xTMpgFOSo4A67zNsCSWGkkDr5Ie+LM4dj30vJx2793xYVkKsiqGf73
-        quvQzztG2s0RJv3mGSBHlFJy4t3IjrjEPYSeyQmASx74nQcz78uj/csZCmWGzIc7mDh/QH
-        UR3XG8JG0ZJgUCOjy0cEZ6B36bZIPTs=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-446-mX_wTQy-McaUuTcPGnA5OQ-1; Tue, 20 Sep 2022 08:10:38 -0400
-X-MC-Unique: mX_wTQy-McaUuTcPGnA5OQ-1
-Received: by mail-wm1-f69.google.com with SMTP id y20-20020a05600c365400b003b4d4ae666fso581781wmq.4
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 05:10:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=tomIFmT2auPWgU52HW7Ixu9aQt/lJ7bkSj0XCxjEol8=;
-        b=i+FouRCVqvDRox2npaFiAt8yu4MG0CEUaERYmSV28fyO5rQ9SA8HRN93dmxDTUIWEb
-         jBfkdC0LPHcwXXO29l/R084w0nZOEhUXyfyO3E8U4Ee3h6NVnUu21unOyrL0m8dj2svU
-         6fQqlNKJIwtK8vX00pTb85IhNAX94QiIRF0tdSCYL9iZBgj7fMmozVssRFue9AYOWEbM
-         ZQgGSdwVMHIOkXmmoc8izCrOpbL4uZIiEi7ceixO9Vm8UWDyc2iAZ0Sf6VpjM9sFDkyQ
-         LrkeX4l+4GIivQQYP+8jc5ERm4N6I91CZLH82wq0rXTdeg1WF/d8c1tYC+GvJid9I3La
-         m5Rw==
-X-Gm-Message-State: ACrzQf34CIz9V0FHoTfuyW36eGk6qR08e/Gn1g8/Cj6XQ/b56x9ZiBv1
-        lGF0VSkdLyTNkEv3UMR8g/XsMGBsOMcpi66kNg0TplYeyMa2pzATwEZjXGTuTnj1RTQoBvF91vZ
-        y65NYbDDNaPXLF9X4l3JTGoWV
-X-Received: by 2002:a05:6000:815:b0:22a:418e:f354 with SMTP id bt21-20020a056000081500b0022a418ef354mr13956798wrb.97.1663675837139;
-        Tue, 20 Sep 2022 05:10:37 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7WQqz1rESE7cF5L6XLg90fFIoyXCvRsKbGaq9PEEF6VFsm7YhkfEjvOeeeX5sDsAdwlyWJKw==
-X-Received: by 2002:a05:6000:815:b0:22a:418e:f354 with SMTP id bt21-20020a056000081500b0022a418ef354mr13956784wrb.97.1663675836799;
-        Tue, 20 Sep 2022 05:10:36 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c712:2300:e82d:5a58:4fd8:c1e6? (p200300cbc7122300e82d5a584fd8c1e6.dip0.t-ipconnect.de. [2003:cb:c712:2300:e82d:5a58:4fd8:c1e6])
-        by smtp.gmail.com with ESMTPSA id t9-20020a05600c198900b003b47b80cec3sm19087785wmq.42.2022.09.20.05.10.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Sep 2022 05:10:36 -0700 (PDT)
-Message-ID: <3196b824-bcee-0c44-bfd3-f6cd8a1e6719@redhat.com>
-Date:   Tue, 20 Sep 2022 14:10:35 +0200
+        Tue, 20 Sep 2022 08:14:09 -0400
+Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 392576B67B;
+        Tue, 20 Sep 2022 05:14:08 -0700 (PDT)
+Received: from dev011.ch-qa.sw.ru ([172.29.1.16])
+        by relay.virtuozzo.com with esmtp (Exim 4.95)
+        (envelope-from <alexander.atanasov@virtuozzo.com>)
+        id 1oac55-004fqT-6p;
+        Tue, 20 Sep 2022 14:12:39 +0200
+From:   Alexander Atanasov <alexander.atanasov@virtuozzo.com>
+To:     Jonathan Corbet <corbet@lwn.net>, Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     kernel@openvz.org,
+        Alexander Atanasov <alexander.atanasov@virtuozzo.com>,
+        Kees Cook <keescook@chromium.org>,
+        Roman Gushchin <guro@fb.com>, Jann Horn <jannh@google.com>,
+        Vijayanand Jitta <vjitta@codeaurora.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: [PATCH v2] mm: Make failslab writable again
+Date:   Tue, 20 Sep 2022 15:11:11 +0300
+Message-Id: <20220920121111.1792905-1-alexander.atanasov@virtuozzo.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH] mm/secretmem: remove reduntant return value
-Content-Language: en-US
-To:     Xiu Jianfeng <xiujianfeng@huawei.com>, akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20220920012205.246217-1-xiujianfeng@huawei.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220920012205.246217-1-xiujianfeng@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20.09.22 03:22, Xiu Jianfeng wrote:
-> The return value @ret is always 0, so remove it and return 0 directly.
-> 
-> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
-> ---
->   mm/secretmem.c | 6 ++----
->   1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/mm/secretmem.c b/mm/secretmem.c
-> index 6a44efb673b2..04c3ac9448a1 100644
-> --- a/mm/secretmem.c
-> +++ b/mm/secretmem.c
-> @@ -278,10 +278,8 @@ static struct file_system_type secretmem_fs = {
->   
->   static int __init secretmem_init(void)
->   {
-> -	int ret = 0;
-> -
->   	if (!secretmem_enable)
-> -		return ret;
-> +		return 0;
->   
->   	secretmem_mnt = kern_mount(&secretmem_fs);
->   	if (IS_ERR(secretmem_mnt))
+In (060807f841ac mm, slub: make remaining slub_debug related attributes
+read-only) failslab was made read-only.
+I think it became a collateral victim to the two other options for which
+the reasons are perfectly valid.
+Here is why:
+ - sanity_checks and trace are slab internal debug options,
+   failslab is used for fault injection.
+ - for fault injections, which by presumption are random, it
+   does not matter if it is not set atomically. And you need to
+   set atleast one more option to trigger fault injection.
+ - in a testing scenario you may need to change it at runtime
+   example: module loading - you test all allocations limited
+   by the space option. Then you move to test only your module's
+   own slabs.
+ - when set by command line flags it effectively disables all
+   cache merges.
 
-On top of which tree is that?
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Roman Gushchin <guro@fb.com>
+Cc: Christoph Lameter <cl@linux.com>
+Cc: Jann Horn <jannh@google.com>
+Cc: Vijayanand Jitta <vjitta@codeaurora.org>
+Cc: David Rientjes <rientjes@google.com>
+Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
+Cc: Pekka Enberg <penberg@kernel.org>
+Link: http://lkml.kernel.org/r/20200610163135.17364-5-vbabka@suse.cz
 
-6.0-rc6 has here:
+Signed-off-by: Alexander Atanasov <alexander.atanasov@virtuozzo.com>
+---
+ Documentation/mm/slub.rst |  2 ++
+ mm/slub.c                 | 16 +++++++++++++++-
+ 2 files changed, 17 insertions(+), 1 deletion(-)
 
-if (IS_ERR(secretmem_mnt))
-	ret = PTR_ERR(secretmem_mnt);
+V1->V2: Fixed commit message. Flags are set using WRITE_ONCE.
 
+diff --git a/Documentation/mm/slub.rst b/Documentation/mm/slub.rst
+index 43063ade737a..86837073a39e 100644
+--- a/Documentation/mm/slub.rst
++++ b/Documentation/mm/slub.rst
+@@ -116,6 +116,8 @@ options from the ``slub_debug`` parameter translate to the following files::
+ 	T	trace
+ 	A	failslab
+ 
++failslab file is writable, so writing 1 or 0 will enable or disable
++the option at runtime. Write returns -EINVAL if cache is an alias.
+ Careful with tracing: It may spew out lots of information and never stop if
+ used on the wrong slab.
+ 
+diff --git a/mm/slub.c b/mm/slub.c
+index 862dbd9af4f5..57cf18936526 100644
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -5617,7 +5617,21 @@ static ssize_t failslab_show(struct kmem_cache *s, char *buf)
+ {
+ 	return sysfs_emit(buf, "%d\n", !!(s->flags & SLAB_FAILSLAB));
+ }
+-SLAB_ATTR_RO(failslab);
++
++static ssize_t failslab_store(struct kmem_cache *s, const char *buf,
++				size_t length)
++{
++	if (s->refcount > 1)
++		return -EINVAL;
++
++	if (buf[0] == '1')
++		WRITE_ONCE(s->flags, s->flags | SLAB_FAILSLAB);
++	else
++		WRITE_ONCE(s->flags, s->flags & ~SLAB_FAILSLAB);
++
++	return length;
++}
++SLAB_ATTR(failslab);
+ #endif
+ 
+ static ssize_t shrink_show(struct kmem_cache *s, char *buf)
+
+base-commit: 80e78fcce86de0288793a0ef0f6acf37656ee4cf
 -- 
-Thanks,
-
-David / dhildenb
+2.31.1
 
