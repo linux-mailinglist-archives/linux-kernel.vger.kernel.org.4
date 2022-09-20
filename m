@@ -2,59 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F4C65BDE6D
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 09:39:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E00E5BDEE8
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 09:57:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230463AbiITHjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 03:39:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46334 "EHLO
+        id S229546AbiITH5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 03:57:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230357AbiITHjD (ORCPT
+        with ESMTP id S229557AbiITH5G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 03:39:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D56E6606B4;
-        Tue, 20 Sep 2022 00:39:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 60632B82558;
-        Tue, 20 Sep 2022 07:39:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1191CC433C1;
-        Tue, 20 Sep 2022 07:38:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663659539;
-        bh=ZMg+DLlcdSNqveTVoiGMNLqinsWBf1qIoufFezsHv90=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=deUePSbjI1qt9UmHdaQMj3rR5fi8uXynqnSpclwKlorrntxIwYDNKY2m42uLA8qoq
-         cuvOsseLwP5kucB25dI5Wtlsh3NqiyuuUm3ET9Huh1psKdattEn1gRXF/kvPQpfgPj
-         9QGqa8ODqWetiq62ww9LQTLEB1UjPqeSeTUx41mmLDXwubw2lDObuCOlgp+ymbHOej
-         q0g5KEiEQyQMUqjrLEED6b5ooMoNOKWWKgiLgv+u12FLnZOzCvB7L2omYme5xG2xdp
-         wbyWsRZhUdfEdQywd/237/FPzDLz9ooD0aUnXdI4dViZbNtUtmTQwHfdPZafNM9Leb
-         qFG1tWHmtDCYg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1oaXqP-0005Qr-Pe; Tue, 20 Sep 2022 09:39:01 +0200
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 06/17] phy: qcom-qmp-usb: drop init and exit wrappers
-Date:   Tue, 20 Sep 2022 09:38:15 +0200
-Message-Id: <20220920073826.20811-7-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220920073826.20811-1-johan+linaro@kernel.org>
-References: <20220920073826.20811-1-johan+linaro@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        Tue, 20 Sep 2022 03:57:06 -0400
+Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AED7627F;
+        Tue, 20 Sep 2022 00:57:04 -0700 (PDT)
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 609ED225F6F;
+        Tue, 20 Sep 2022 09:57:03 +0200 (CEST)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 15AA4225F6C;
+        Tue, 20 Sep 2022 09:57:03 +0200 (CEST)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 5472B180222C;
+        Tue, 20 Sep 2022 15:56:58 +0800 (+08)
+From:   Richard Zhu <hongxing.zhu@nxp.com>
+To:     p.zabel@pengutronix.de, l.stach@pengutronix.de,
+        bhelgaas@google.com, lorenzo.pieralisi@arm.com, robh@kernel.org,
+        shawnguo@kernel.org, vkoul@kernel.org,
+        alexander.stein@ew.tq-group.com, marex@denx.de,
+        richard.leitner@linux.dev
+Cc:     linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        linux-imx@nxp.com
+Subject: [PATCH v8 0/2] Add the iMX8MP PCIe support
+Date:   Tue, 20 Sep 2022 15:38:16 +0800
+Message-Id: <1663659498-5180-1-git-send-email-hongxing.zhu@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,76 +47,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drop the unnecessary PHY init and exit callback wrappers.
+Based on the 6.0-rc1 of the pci/next branch. 
+This series adds the i.MX8MP PCIe support and tested on i.MX8MP
+EVK board when one PCIe NVME device is used.
 
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- drivers/phy/qualcomm/phy-qcom-qmp-usb.c | 29 ++++---------------------
- 1 file changed, 4 insertions(+), 25 deletions(-)
+- i.MX8MP PCIe has reversed initial PERST bit value refer to i.MX8MQ/i.MX8MM.
+  Add the PHY PERST explicitly for i.MX8MP PCIe PHY.
+- Add the i.MX8MP PCIe PHY support in the i.MX8M PCIe PHY driver.
+  And share as much as possible codes with i.MX8MM PCIe PHY.
+- Add the i.MX8MP PCIe support in binding document, DTS files, and PCIe
+  driver.
 
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-index 03481b6f1c35..a42e13905c15 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-@@ -2125,8 +2125,9 @@ static int qmp_usb_serdes_init(struct qmp_phy *qphy)
- 	return 0;
- }
- 
--static int qmp_usb_com_init(struct qmp_phy *qphy)
-+static int qmp_usb_init(struct phy *phy)
- {
-+	struct qmp_phy *qphy = phy_get_drvdata(phy);
- 	struct qcom_qmp *qmp = qphy->qmp;
- 	const struct qmp_phy_cfg *cfg = qphy->cfg;
- 	void __iomem *pcs = qphy->pcs;
-@@ -2197,8 +2198,9 @@ static int qmp_usb_com_init(struct qmp_phy *qphy)
- 	return ret;
- }
- 
--static int qmp_usb_com_exit(struct qmp_phy *qphy)
-+static int qmp_usb_exit(struct phy *phy)
- {
-+	struct qmp_phy *qphy = phy_get_drvdata(phy);
- 	struct qcom_qmp *qmp = qphy->qmp;
- 	const struct qmp_phy_cfg *cfg = qphy->cfg;
- 
-@@ -2211,20 +2213,6 @@ static int qmp_usb_com_exit(struct qmp_phy *qphy)
- 	return 0;
- }
- 
--static int qmp_usb_init(struct phy *phy)
--{
--	struct qmp_phy *qphy = phy_get_drvdata(phy);
--	struct qcom_qmp *qmp = qphy->qmp;
--	int ret;
--	dev_vdbg(qmp->dev, "Initializing QMP phy\n");
--
--	ret = qmp_usb_com_init(qphy);
--	if (ret)
--		return ret;
--
--	return 0;
--}
--
- static int qmp_usb_power_on(struct phy *phy)
- {
- 	struct qmp_phy *qphy = phy_get_drvdata(phy);
-@@ -2316,15 +2304,6 @@ static int qmp_usb_power_off(struct phy *phy)
- 	return 0;
- }
- 
--static int qmp_usb_exit(struct phy *phy)
--{
--	struct qmp_phy *qphy = phy_get_drvdata(phy);
--
--	qmp_usb_com_exit(qphy);
--
--	return 0;
--}
--
- static int qmp_usb_enable(struct phy *phy)
- {
- 	int ret;
--- 
-2.35.1
+Main changes v7-->v8:
+- Add the Reviewed-by tag, no other changes.
+  Only two patches in v8, Since the other patches had been merged by
+  Philipp/Shawn/Lorenzo.
 
+Main changes v6-->v7:
+- Add "Reviewed-by: Lucas Stach <l.stach@pengutronix.de>" into first three
+  patches.
+- Use "const *char" to replace the static allocation.
+
+Main changes v5-->v6:
+- To avoid code duplication when find the gpr syscon regmap, add the
+  gpr compatible into the drvdata.
+- Add one missing space before one curly brace in 3/7 of v5 series.
+- 4/7 of v5 had been applied by Phillipp, thanks. For ease of tests, still
+  keep it in v6.
+
+Main changes v4-->v5:
+- Use Lucas' approach, let blk-ctrl driver do the hsio-mix resets.
+- Fetch the iomuxc-gpr regmap by the different phandles.
+
+Main changes v3-->v4:
+- Regarding Phillipp's suggestions, add fix tag into the first commit.
+- Add Reviewed and Tested tags.
+
+Main changes v2-->v3:
+- Fix the schema checking error in the PHY dt-binding patch.
+- Inspired by Lucas, the PLL configurations might not required when
+  external OSC is used as PCIe referrence clock. It's true. Remove all
+  the HSIO PLL bit manipulations, and PCIe works fine on i.MX8MP EVK board
+  with one NVME device is used.
+- Drop the #4 patch of v2, since it had been applied by Rob.
+
+Main changes v1-->v2:
+- It's my fault forget including Vinod, re-send v2 after include Vinod
+  and linux-phy@lists.infradead.org.
+- List the basements of this patch-set. The branch, codes changes and so on.
+- Clean up some useless register and bit definitions in #3 patch.
+
+[PATCH v8 1/2] dt-binding: phy: Add iMX8MP PCIe PHY binding
+[PATCH v8 2/2] phy: freescale: imx8m-pcie: Add i.MX8MP PCIe PHY
