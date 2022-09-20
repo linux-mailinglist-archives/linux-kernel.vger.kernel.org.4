@@ -2,190 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4009D5BED2B
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 20:51:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EDED5BED2D
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 20:53:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231454AbiITSvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 14:51:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58782 "EHLO
+        id S230124AbiITSxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 14:53:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231178AbiITSvL (ORCPT
+        with ESMTP id S231382AbiITSwk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 14:51:11 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2084.outbound.protection.outlook.com [40.107.237.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D9D574CD9
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 11:50:39 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Iyh/Plae2R89bp8TMMw6Qju5XS81Bte5mAoZ1oKCBzlJf+EgWPj/qhWYXkoRcpTZj3tGDA7zHKdXvKgZvrhpc7nj0JxIcJbaxuHpsYmbPgnkL32RALI0AH2hVZ27VriTt8T1qslsdMct8FAOztpdrALEt5EAxRw9z+ySWE2/EBR6dtdkSdLwApw+P0G4BoY+lmardvHXIjbF5cymA64J8OMfoFfD08q0fqbv00bn6dvkLx+HWjzq+HMzmhN+mdu8+4PXQqLQ3JZG5CMMadClCsPEwbmg14n0pYfRC7Ijn1F+ixU+e14Tlx+so1U/SqGNWHnKuRLLnRMj21F7iJQUfA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=B0McHsKfdD1qD1+/2uYBtLCYVXDh0zqTVVXGmHCFhpY=;
- b=avUPGjK3bhgPM6vsuIxE/QCzk4v+zjBQZpPxILIHJkd1Fump3sGh4Q9Tra0xdNREh+85Zi1KTNCdWUaqJIHveFrigxK111KrinDOh+riDQijAfP3Fw3xV+luZCfsDchfStv8gKyS3d9HSgGZbWL6GTKxu7CoOHPRIe5m1j1Y5YIgkyEnJHRrUU54dmNNMgkQ+d4YJWYxRCX8mqo7fsylTEDJil/lamJnzzNxiFtjisbzgIXbg35jkXdErSG1wl8twogXqed3se9KyGkK9tdagHlwAh5kgwlFl3pbGM4cqLQiYPuNWzcT95Z3JDi8oX0AU5xdxcmhSpoH3lbLt61nPw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=B0McHsKfdD1qD1+/2uYBtLCYVXDh0zqTVVXGmHCFhpY=;
- b=lSxDGkVVx5FV571/N3WDtE/o4w1+R3JEy57DIerAsuyjqsdASwBgyk1B5EyKoEFhYFfzR+rwm7tOK+ymhZAF3UlgdfjG+33Ocp6b99CPz37Zjukd1LY77vVThYUnOELJk/mT0bOchi7Zz2PMnM7uOB7DEJrn22vrvOWnmBmlWbYFFo2TMGgxmB0ttqhv2qSqU0RzURJ04VplaOloH1xB0vxgra09Mm+b9yA9Hcpo13IPwrZ+0YTJeMqrmE/r5GEITQMLZRyoCia/p4YAnJ535GpjNuMPJWs1qHrUeMekDtlNexzwv5BDYKHaZfdAs+lu/m+YEpTy8uw3zD/v5uWfJA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by SJ1PR12MB6075.namprd12.prod.outlook.com (2603:10b6:a03:45e::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.19; Tue, 20 Sep
- 2022 18:50:34 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::462:7fe:f04f:d0d5]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::462:7fe:f04f:d0d5%7]) with mapi id 15.20.5632.021; Tue, 20 Sep 2022
- 18:50:34 +0000
-Date:   Tue, 20 Sep 2022 15:50:33 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Jacob Pan <jacob.jun.pan@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Ashok Raj <ashok_raj@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Taras Madan <tarasmadan@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Joerg Roedel <joro@8bytes.org>
-Subject: Re: [PATCHv8 00/11] Linear Address Masking enabling
-Message-ID: <YyoLedkOx59KUjSw@nvidia.com>
-References: <20220914151818.uupzpyd333qnnmlt@box.shutemov.name>
- <YyHz7H0uyqG58b3E@araj-MOBL2.amr.corp.intel.com>
- <20220914154532.mmxfsr7eadgnxt3s@box.shutemov.name>
- <20220914165116.24f82d74@jacob-builder>
- <20220915090135.fpeokbokkdljv7rw@box.shutemov.name>
- <20220915172858.pl62a5w3m5binxrk@box.shutemov.name>
- <Yym8zsuXbYaW3alU@nvidia.com>
- <15741fdf-68b6-bd32-b0c2-63fde3bb0db2@intel.com>
- <Yynp77km4SaHpe/3@nvidia.com>
- <20220920113742.277ac497@jacob-builder>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220920113742.277ac497@jacob-builder>
-X-ClientProxiedBy: MN2PR07CA0027.namprd07.prod.outlook.com
- (2603:10b6:208:1a0::37) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Tue, 20 Sep 2022 14:52:40 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75C975CF4
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 11:51:55 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id n83so4882831oif.11
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 11:51:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=vY8sHYY7zNUoEuLbLjqUl5lsurpJUVgT1WqyEhJsWE8=;
+        b=MMpj/KNqVxz+oHCOmTgPx1BIvbKWe/wPCPo4d7GodQLILghv+7qkr/S6m6cR3Kila6
+         OhHVY2ETF82PAjps+SF6Eu9XkO2FMau6MY4QRnXQH33RMVm/FRzTuSH7Ai1N1ZM0WRma
+         H2Hg5taBWg01mq4aQPWBPcLxlgDPU+2E/FXcY3ru2/No/T7fwsSxwzup98rcr+Ux7/BN
+         EO09A/yX0P3FbS/nkBpLeII14aQBNx2+nE5dU+gCvOJeaj3jYC5kB+G9yrUcfqY0bpe+
+         AEy5zeUZmCoJx/MdoNlMHmb9P1M+nTLMdkS7+IPKfn7U/ZnYadda2TAa0CiOM1IRO54l
+         1qnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=vY8sHYY7zNUoEuLbLjqUl5lsurpJUVgT1WqyEhJsWE8=;
+        b=X2tN1GLZZ8W5Knz59KRSbScg+2E5kAeUDwfHN7aBoP6a5gGwPQ0JB1+JiismjlUPuE
+         MvkBsZo6hnHFPO45/ebVTefOoQ9jwOhoZJbvX27CcSQTiMiwRgVQBq/YJnPH6Ir8/WJO
+         jgF9eu9qHQAgkZTiIJ5BxgxmtUE+6UcZg60rPsXtwEOzHPC0AwmSRgYP8hnIj/8CoiJH
+         0ATxmiqIjV23IXujtdZC0rnp+YmA9ISEELhlGU+BWavVu2FNmqGYwjgGImlnUoKHW2T/
+         kB/9zWbPSkSMoCq7/PwdyW/jLguU46GygjQDB3GyFDpqJfLnJp2vvd5GDPB2QITS7odT
+         wlTw==
+X-Gm-Message-State: ACrzQf0oO/Zny6J6it5Dc4v1b9wuhfoDcGgEnFHGT4CptDvYTjy+PYnb
+        tb7J5g4q+HIk5KZnF0bheHc0rRFEzuKLnUwEYaPxcw==
+X-Google-Smtp-Source: AMsMyM6mey0/kpmB5FqJFxrogjFkw/IEJbgHNhbIlkVR/h/IDgaOuLIZm1dytx7DrSZFsJrXL03uv7Ix3qF/X+rpPhw=
+X-Received: by 2002:aca:35d6:0:b0:34f:bb2a:4f5f with SMTP id
+ c205-20020aca35d6000000b0034fbb2a4f5fmr2279516oia.54.1663699914656; Tue, 20
+ Sep 2022 11:51:54 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN2PR12MB4192:EE_|SJ1PR12MB6075:EE_
-X-MS-Office365-Filtering-Correlation-Id: 96f0c2d7-b793-40d2-7f45-08da9b39003a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: C1fLBVKSmNmaetZhZ+tMq/1eaPdfvjqIgFPoCPS0i4FiLCclGHMSJA6cPKJN4N+PPtgDpLBuQRGKdKxL2SviWqgMkY1O/252zhkNZdOhJ0zaySlklWTaGc7BMC6DFDqWoH/fPa4lzUplWY5hGZ2RnyXLTL5PBfFbNOsS0asZfUANpdO6Ji8GFb3Iqv4gJ7U9wDHSQKvqxudQnhZxbxcGN06A8FQt4Rz6fJvPpBxJnGYuwcst/JBgarciXoAk2SwhGLx5us7ODFQH4u4mvBFU1kbCBGoj8zEDfnNSr4KtijyaHgPpx2LCwz12KL1xuyd477PZsAHXuU7yVL/YZBbktAgUtEZk8nh9RqBaJ9n6XRdYUWDAe/BhCZzrBTl7ytwsxZkuRmvlcSVwM3kKg5YbJ5GD+2ANOMFigY3CHzTXcBEb8ZpyNvnBEnoC1BRGl3tudS6FYOTOA0+NAZFCnSSnBukzcydBr+u7h2x38+KdJOwV6Wbgv/UcN+NqJj2UhXMr3b0qQim74sCXro0PYYex9YsNhiT5Y6KCvAhvx55hMkq/2158Vq0jLXHLhQtvTCWklqeu1UZLN9IIF4mZmwAfYJ5VTIPX19cFU8n2WybgKzPpKLBLrGUqqW1CQHfo8uxEz9djOxB7yPYA2/Pu5RPw6mp1DX8LuY2ZCqpdSr3/G7afI2vwhhhDfOMocyAmVvGIbUaf//MK7YwiVshDoxizxg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(376002)(366004)(396003)(346002)(136003)(451199015)(41300700001)(5660300002)(7416002)(8936002)(8676002)(53546011)(66946007)(66476007)(2906002)(66556008)(36756003)(316002)(38100700002)(6916009)(4326008)(83380400001)(6512007)(6506007)(54906003)(26005)(6486002)(186003)(86362001)(478600001)(2616005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/BLMiscFb/l38q5v9rKWVgTOKvNL6flEX4q6z7amB6e6fqKhhgVWa35FzpJo?=
- =?us-ascii?Q?h1zvVFDl55H5GvjnTZmb5dIvuPe17SSLmiklxQm0b2N/3SKKlLGb/uC+aEM3?=
- =?us-ascii?Q?yVdP/bz3ZL726HSycc0HCEKG5e5cyFRT5smlOINXzYxv8UASh3Be3ddZsYim?=
- =?us-ascii?Q?wWVLk7CrI16swlbqeGhjWCuweW1OChAhm9vdT6Sf1L5l1kGZHlFc9YNj9N4C?=
- =?us-ascii?Q?07mdQZynJ6gXpsxFv9HJhNopFPsJcmlgHaIsg+VK5bQG97UkobgHIMKHgiQ1?=
- =?us-ascii?Q?wYMs6RH5eLCC1mD5pmuVWLWgaphM32gsTCqL25KUg/MSTWGhKqWQAGy5BaDu?=
- =?us-ascii?Q?w1PqmuFc5ZWWe96KLZJHvToM6nyNBKRL8CmsulxMHeKP7bg5xkLn8q++Y35X?=
- =?us-ascii?Q?NtC3wx/lMG8vJ045NcwWipvbWL9LjURRK1NaNZvlSKiLHz6zrQruIuSYANc9?=
- =?us-ascii?Q?Gwz9mfyfe+r9yj5wx8kVG348wWZEShp3s47IXXSe4bNNbvEfQQ7+/jQYCypG?=
- =?us-ascii?Q?HiQsAmj0O1M3PHFY3bAdVhzsfyErgEEI4WIEs4xBsJ06DX68tnbCiMq3M7PD?=
- =?us-ascii?Q?08T9mUpucmBhNZ3UW9ZOCVwk5IgO9E3iVUNGJzD/MkYxoY/PqW0ribDJj3Re?=
- =?us-ascii?Q?Pzza62TyfnTlxryPHwwrdOr4AC1v1lRruv/8B18WDAo+mGjbAJ5ZsHOg8aif?=
- =?us-ascii?Q?tSRWeLXRZLjxRSbR96L9+5WrEUfS/PLtRjCSH0bVc8hTIZEjNto9MX3AMh2f?=
- =?us-ascii?Q?Fnq38KhBni+Tz28cFaCxVl+q8R2kl9lf8M8XcjqyWH178s0TXqofTvqwV5F+?=
- =?us-ascii?Q?uggo0cQaDd0B5SBQMswDdMFKC5KuKDtOjhv/S8d/WIYzEgOX0YmfDem0k027?=
- =?us-ascii?Q?RyayvQAUwZityYuTMNcKLTKidc7At0122ZRDGKA9h1Ld1WCitymhHRVQch0p?=
- =?us-ascii?Q?Y7efhXVq0wIvH+S+FsfxgsJ0spZsgQDrFNHGZ9cULYOblLlm0+BvB+aGUP2s?=
- =?us-ascii?Q?HqdnwfsBBOWTdEsm/O1Z5S8uVOWmbnnNWlxJ48hTaKuX+E7644K2vhmXBJYo?=
- =?us-ascii?Q?DhPFmx79ZOZxmts3e7aSs2B3nvucyI/y+XYtJZxN+LG2qs0sVofu1TzTp9Ll?=
- =?us-ascii?Q?E2V83n+t8awxiqkeH4+bCoZMgkIAe9+DO/pjk5/f/VzQzy2VQ5hLkdW5aPxm?=
- =?us-ascii?Q?J4JGPSNCjGAB3PBF+IlVAxP0gF9h+jq/I6UfXKhxHWoN5y7oXJnYRdfgWIPP?=
- =?us-ascii?Q?ScrVN910qVH2WRyrf1RDNsvsro87KsXMrBf0t6kkOCuen7mqL/vdjmiNlHJ5?=
- =?us-ascii?Q?DGhgEdhZQQY+XCs4eNpYamHD0MCfq7JPq74mNFZZAhUt6cms/LRrLjxllX2o?=
- =?us-ascii?Q?SkPEd4VA2hcgnO+wSMcAWBbUJzQpsZXUuim713ZtE+FUYRjqxZSc+o2+KXv+?=
- =?us-ascii?Q?tlYUgY6RCfwklKmB5dm8GP4SQy/hu3FYIDznIeULHyQvB8Vh5LXPnRTJFfp6?=
- =?us-ascii?Q?3YVbk4wvIDvvyU0zu2R0SdJxvPVVNOYJSbSwWhEDjNIA2j826FrfnRGTysLz?=
- =?us-ascii?Q?p0mLr5IDUxtAunWHRa9lJSFyAGaB8vGyd/VCoEcM?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 96f0c2d7-b793-40d2-7f45-08da9b39003a
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Sep 2022 18:50:34.7977
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qIo0mfQPvyD4wymubR5M1KAqpYtOBghsJRJE/sjAeQP8mNvMroKIB3XRDzh7zolw
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6075
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220920184808.44876-1-sudip.mukherjee@sifive.com>
+In-Reply-To: <20220920184808.44876-1-sudip.mukherjee@sifive.com>
+From:   Sudip Mukherjee <sudip.mukherjee@sifive.com>
+Date:   Tue, 20 Sep 2022 19:51:43 +0100
+Message-ID: <CAHyZL-fHcyeBM-mmqQHjLidWJK77-cZgbOCjXrHDkXYyjL02ng@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] mtd: spi-nor: issi: is25wp256: Init flash based on SFDP
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <pratyush@kernel.org>,
+        Michael Walle <michael@walle.cc>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     greentime.hu@sifive.com, jude.onyenegecha@sifive.com,
+        william.salmon@sifive.com, adnan.chowdhury@sifive.com,
+        ben.dooks@sifive.com, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 11:41:04AM -0700, Jacob Pan wrote:
-> Hi Jason,
-> 
-> On Tue, 20 Sep 2022 13:27:27 -0300, Jason Gunthorpe <jgg@nvidia.com> wrote:
-> 
-> > On Tue, Sep 20, 2022 at 09:06:32AM -0700, Dave Hansen wrote:
-> > > On 9/20/22 06:14, Jason Gunthorpe wrote:  
-> > > > For this I would rather have a function that queries the format of the
-> > > > page table under the mm_struct and we have enum values like
-> > > > INTEL_NORMAL and INTEL_LAM as possible values.
-> > > > 
-> > > > The iommu driver will block incompatible page table formats, and when
-> > > > it starts up it should assert something that blocks changing the
-> > > > format.  
-> > > 
-> > > That doesn't sound too bad.  Except, please don't call it a "page table
-> > > format".  The format of the page tables does not change with LAM.  It's
-> > > entirely how the CPU interprets addresses that changes.  
-> > 
-> > Sure it does. The rules for how the page table is walked change. The
-> > actual bits stored in memory might not be different, but that doesn't
-> > mean the format didn't change. If it didn't change we wouldn't have an
-> > incompatibility with the IOMMU HW walker.
-> 
-> There are many CPU-IOMMU compatibility checks before we do for SVA,e.g. we
-> check paging mode in sva_bind. We are delegating these checks in
-> arch/platform code. So why can't we let arch code decide how to convey
-> mm-IOMMU SVA compatibility? let it be a flag ( as in this patch) or some
-> callback.
+On Tue, Sep 20, 2022 at 7:48 PM Sudip Mukherjee
+<sudip.mukherjee@sifive.com> wrote:
+>
+> The datasheet of is25wp256 says it supports SFDP. Get rid of the static
+> initialization of the flash parameters and init them when parsing SFDP.
+>
+> Testing showed the flash using SPINOR_OP_READ_1_1_4_4B 0x6c,
+> SPINOR_OP_PP_4B 0x12 and SPINOR_OP_BE_4K_4B 0x21 before enabling SFDP.
+> After this patch, it parses the SFDP information and still uses the
+> same opcodes.
+>
+> Signed-off-by: Sudip Mukherjee <sudip.mukherjee@sifive.com>
+> ---
+>
+> No change from v2, just resending again with the next patch.
+> Results from the tests given by Tudor in the following mail.
 
-In general I'm not so keen on arch unique code for general ideas like
-this (ARM probably has the same issue), but sure it could work.
+Test result after this patch:
 
-> Perhaps a more descriptive name
-> s/arch_can_alloc_pasid(mm)/arch_can_support_sva(mm)/ is all we disagreeing
-> :)
+# dd if=/dev/urandom of=./qspi_test bs=1M count=6
+6+0 records in
+6+0 records out
 
-Except that still isn't what it is doing. "sva" can mean lots of
-things. You need to assert that the page table format is one of the
-formats that the iommu understands and configure the iommu to match
-it. It is a very simple question about what ruleset and memory layout
-govern the page table memory used by the CPU.
+# mtd_debug write /dev/mtd4 0 6291456 qspi_test
+Copied 6291456 bytes from qspi_test to address 0x00000000 in flash
 
-And I think every CPU should be able to define a couple of their
-configurations in some enum, most of the PTE handling code is all
-hardwired, so I don't think we really support that many combinations
-anyhow?
+# mtd_debug erase /dev/mtd4 0 6291456
+Erased 6291456 bytes from address 0x00000000 in flash
 
-Jason
+# mtd_debug read /dev/mtd4 0 6291456 qspi_read
+Copied 6291456 bytes from address 0x00000000 in flash to qspi_read
+
+# hexdump qspi_read
+0000000 ffff ffff ffff ffff ffff ffff ffff ffff
+*
+
+0600000
+
+# mtd_debug write /dev/mtd4 0 6291456 qspi_test
+Copied 6291456 bytes from qspi_test to address 0x00000000 in flash
+
+# mtd_debug read /dev/mtd4 0 6291456 qspi_read
+Copied 6291456 bytes from address 0x00000000 in flash to qspi_read
+
+# sha1sum qspi_test qspi_read
+57f8d4fee65622104e24276e865f662844f12242  qspi_test
+57f8d4fee65622104e24276e865f662844f12242  qspi_read
+
+# cat /sys/bus/spi/devices/spi0.0/spi-nor/partname
+is25wp256
+
+# cat /sys/bus/spi/devices/spi0.0/spi-nor/jedec_id
+9d7019
+
+# cat /sys/bus/spi/devices/spi0.0/spi-nor/manufacturer
+issi
+
+# xxd -p /sys/bus/spi/devices/spi0.0/spi-nor/sfdp
+53464450060101ff00060110300000ff9d05010380000002ffffffffffff
+ffffffffffffffffffffffffffffffffffffe520f9ffffffff0f44eb086b
+083b80bbfeffffffffff00ffffff44eb0c200f5210d800ff234ac90082d8
+11cecccd68467a757a75f7aed55c4a422cfff030faa9ffffffffffffffff
+ffffffffffffffff501950169ff9c0648fefffff
+
+# md5sum /sys/bus/spi/devices/spi0.0/spi-nor/sfdp
+ba14818b9ec42713f24d94d66bb90ba0  /sys/bus/spi/devices/spi0.0/spi-nor/sfdp
+
+
+-- 
+Regards
+Sudip
