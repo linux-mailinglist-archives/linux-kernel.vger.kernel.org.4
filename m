@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E288E5BE82C
+	by mail.lfdr.de (Postfix) with ESMTP id 4A5EF5BE82A
 	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 16:11:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231521AbiITOKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 10:10:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42944 "EHLO
+        id S231466AbiITOKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 10:10:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231598AbiITOJ5 (ORCPT
+        with ESMTP id S231637AbiITOJx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 10:09:57 -0400
+        Tue, 20 Sep 2022 10:09:53 -0400
 Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B3FD5FF4C
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 07:09:17 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id sb3so6419292ejb.9
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 07:09:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B9436050E
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 07:09:18 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id go34so6505301ejc.2
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 07:09:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date;
-        bh=gTdEV0vsY3y0x6LHB6IcVQo9mK20RFAoNv/l6xzHAV8=;
-        b=Iko5BaPWfpeumHHO+MrhcmVJI5HXlXLMO/hmCtFvoy0VsaW188D8b+FKtA7qiCmROW
-         06ySSV2gLg8IxiMS8+oUwV+hEse3Q8I9Qk92+QwH74j4IRqf1O1rO1SCi4Q9J8I+ojiA
-         bVecTVBbgZKzWxvTnGZBCoJplrBAVXx19lJNw=
+        bh=2PCHXmpS3a4cpm6Nvunds7hNUWRumI4ZR//08i+61VY=;
+        b=D2wAPJISTcLpYO4j2hX8z2YoGvo4E0F/zz8vRLrSJoy4irorQeC/xtj4aqJVfZToxH
+         u6iuorVsRURTRKKXDP7+mG0egL1MKc2yY0Rc8IKbHNZShB1qfaYEbU7CX7Sdt9AjcXhh
+         vo5qkcqJLiZcZ3mdVDV//q3ouHqQmyi/HnQ78=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=gTdEV0vsY3y0x6LHB6IcVQo9mK20RFAoNv/l6xzHAV8=;
-        b=GGBMBmCq4loRUqf9x87Pvo68tia7eRFYbuNlwRF+xW17XzWCafzIqo1dC/XJQ1V54c
-         eUpNv7grG2jEVLTHVBSt2EwY64uf9Je7HypcfIUMACoHCUZNUpucirS4GyYveAuYM/iG
-         fYW9F9DOW3mltl2KSw5q3VQ5q38qPTf+QWagizmfHKchFBwjn8WD7FQxQhx6rpD1dXpL
-         jYUvq4Ume9z68H8uViRJ2fKsnHJoxbjhEkD8SsfNJWYmOyytDrGFq88uzmQNRHf0tCUg
-         H+gl3+kisZo1aDBl4ix4KDkoTxz8jVrlaF/gx2vE0VnfBmOUV8JFmAydWIIzEOB3G/z/
-         KT7Q==
-X-Gm-Message-State: ACrzQf0559+u81Jc5fvU7DcdYuX00vpy8W+hTCzqKSL/2oaQ6waUQ1Mk
-        zDLtbnPg/Tz3+2gPOdIK2o3O0g==
-X-Google-Smtp-Source: AMsMyM612EXNrWlvaTUjI2w3I3GZsEXDzwNYpHmvhMt/gl6SRK6cCl+ue4dVjejA/nFailUSOEF8Cg==
-X-Received: by 2002:a17:907:3d86:b0:780:2e5b:58e0 with SMTP id he6-20020a1709073d8600b007802e5b58e0mr16838888ejc.312.1663682955030;
+        bh=2PCHXmpS3a4cpm6Nvunds7hNUWRumI4ZR//08i+61VY=;
+        b=gyPgcYS5w25HJHeK1pAf6aWj/3OgnuYOfYtV4VKqCQSVy3bts6YGg/vcosXXbr5MwE
+         zQWK085x3wS1ZjRQv68q8L1VjKfaQ+2RJ/8Kpy+Hjh9nF9HX0oX3V0zca+AnBCenmEyJ
+         rFpG/mSN+MiKh0KmIX3zwCS6yUyGzS7ia27JrAJYndzhSCf02Pt6FWlKDS25XunZGrVu
+         AGQMyMBGqklYKRuNL7TDZY9R0TV7Gwx2PYVYCaUKgROlQ28pbdnLALvDDzLVpcm25n4C
+         q4/wU0XuMx5xJs2hBV6x9JDNs/TB9j76tm+qmhYCx0JtHiIFbXEiZW3zzlPQu15Z7dDf
+         XiVw==
+X-Gm-Message-State: ACrzQf2XB7EBQNAynpkulkTRebr+KGQVpguNr0q0XtAORrurORvhFy3v
+        zXadJCMxI7D9yI/IriZwvhhZVOnGzexGUxxvung=
+X-Google-Smtp-Source: AMsMyM4wUO5alvyyaOIrWcEMfcGIZotOLC8BzY1nvMaz1PDnulMCev9vwBb8p9IGjcntBsopXkuRMw==
+X-Received: by 2002:a17:906:328c:b0:780:7574:ced2 with SMTP id 12-20020a170906328c00b007807574ced2mr17218545ejw.634.1663682955943;
         Tue, 20 Sep 2022 07:09:15 -0700 (PDT)
 Received: from alco.roam.corp.google.com ([2620:0:1059:10:935d:52b0:7461:88e1])
-        by smtp.gmail.com with ESMTPSA id l10-20020a1709063d2a00b0077f324979absm927133ejf.67.2022.09.20.07.09.14
+        by smtp.gmail.com with ESMTPSA id l10-20020a1709063d2a00b0077f324979absm927133ejf.67.2022.09.20.07.09.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 07:09:14 -0700 (PDT)
+        Tue, 20 Sep 2022 07:09:15 -0700 (PDT)
 From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Tue, 20 Sep 2022 16:09:03 +0200
-Subject: [PATCH v1 1/3] media: v4l2-dev.c: Add Meta: to the name of metadata devices
+Date:   Tue, 20 Sep 2022 16:09:04 +0200
+Subject: [PATCH v1 2/3] media: Documentation/driver-api: Document device name
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20220920-resend-meta-v1-1-dfcfba923204@chromium.org>
+Message-Id: <20220920-resend-meta-v1-2-dfcfba923204@chromium.org>
 References: <20220920-resend-meta-v1-0-dfcfba923204@chromium.org>
 In-Reply-To: <20220920-resend-meta-v1-0-dfcfba923204@chromium.org>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
@@ -61,19 +61,19 @@ Cc:     Ricardo Ribalda <ribalda@chromium.org>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 X-Mailer: b4 0.11.0-dev-d93f8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1448; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=bV8W+YuXfvWe/X5JvjObDusJi2H14+the+IwKiTlJYE=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjKcmEc8le88r7+R4L1gdXBcnasGlzIeKJq+DbxQXY
- H9c+qdaJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCYynJhAAKCRDRN9E+zzrEiDYGD/
- 4yrtVCChIfENsWdbtJGsffgk9tXjfPKCzDVQTo8x+fwjzZtk2kyOEbew1XDF7hBMD8zqEc7Di1fhS6
- MDbwUZESJ/j7G9OjXHXdBnQxOlhkX4f0xXwuxs7bKBH2xfpVoma47cj2sSGRu5WPgh42Pzsm9OfTTd
- i0TvyPN/01zB0xXTaBJ47fBQgLyC9AUCz1EkON1J0rSe8X9VTpP0k6jNGvBQ25l7RzNIa/bZGoZDcI
- yC9DBRlVEbXXOcRtdAZvV4sSEVRv0lNi9lt6SoTWrSqTjKhxAzS1ID4Vloig88MCn/R/oLQ7ujRyyb
- UWZZtOVHKB8M+KdK/mmvE2xmuCNaN/g5BHiCC+93lTy9/9W+p8ufJNOEYbtBVr2bDm61eOXn86a1DO
- LrhulSP2gZzsqWFh0ktpA/COmeFoZ5wgso1kuKPpJ2paxrf/vaOxTcH5/wU6c7P2HFxuk4yFFCfEwx
- BnISymk7Cr1E0gm4CT7qtcUCiZbYiO4MtQ/xIJg2CeNbfvSFRFbarzQbFJFyGrpGdQUmfzTb1Yrlh3
- J/j0GGtV8Z5PD14b8Zhfqgi5kD/aZPqcX7N6M3x8zD/NnKo7l3PNpyAtDAj+SpOivd4xAsFCu9CKKk
- LbM9NMLlZHg0Nyaly8q7zJMCFdamJkXjCi0AuxnSoAKTCg8cDyB42RW8hdrA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1032; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=HciaCCHyEvIeKVlrlc8/DyoOKo+/6DQ85iWol0LXRbE=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjKcmFzWpUkjaI0rM9439zD7utogdFtHDytIIQ715s
+ 163jHKSJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCYynJhQAKCRDRN9E+zzrEiCrOD/
+ 99Ws+U83b/ujdRcBlQC/bTHWwpmOlA1KQrDTD6BrJNb6Mxv1/A5387x6PF7xMkHPGdE8YR1aqgymPS
+ 6fu1WgeVlvdlcqYjHhYd+i7Mm4/2IKyFHEUcKfHXDjn4mpomb0RL17/3wrsiKsGbfFo/aMLAnKUbE/
+ iUYwioRJLg/3VTLu1je93hWsardGfR1Nja3ABreq8YmQpMwzyIr/GAXuJkcpZVEMLUj7eZSSHwVm6X
+ aJ8cyoOGRudSpfpcLgZkltZHOUTZRL8E1VEwZKbHRpK4en4ZnYOXtFgMB4PjSF5SflDQKKI9s2e0zu
+ +D3GcSL8LD1VZhdVVunho+fXh+c8ocjkr1YQ+VGVmYiV5crKOFCRtq1JmdQe02i6devgvEvQlmslH+
+ a/o5bk9VmUXqQts38YWVX9aHV6cpD7AJdCiaNPZgXOvpIhY14k+/ygiMHkRHa0qRqOKyulTOhlmOHX
+ I+dj4jOExZYH/OGtp0gBft1im3iVTlfAUSE2isru0pViuBhHn6eLoDOz2D5SV2OKcWfgK0M0ZUJObu
+ rdylqzKd/LvZxm92UTdPDWaaCOg2bG/BKtlBRtNAXvG2ZpujFVUY4GAE/vmWDcFbj7ed3SHEMNqZEs
+ V7X3bklXy2T56G5DDAMdFAtWhL81RPuYKrEEuB0quBBeDJks+A502yS1iJmg==
 X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
  fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -86,42 +86,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Devices with Metadata output (like uvc), create two video devices, one
-for the data itself and another one for the metadata.
+Document how the name of the metadata devices is modified.
 
-Add a "Meta: " to the beginning of the device name, as suggested by Mauro,
-to avoid having multiple devices with the same name.
-
-Fixes v4l2-compliance:
-Media Controller ioctls:
-     fail: v4l2-test-media.cpp(205): v2_entity_names_set.find(key) != v2_entity_names_set.end()
-   test MEDIA_IOC_G_TOPOLOGY: FAIL
-     fail: v4l2-test-media.cpp(394): num_data_links != num_links
-   test MEDIA_IOC_ENUM_ENTITIES/LINKS: FAIL
-
-Suggested-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 
-diff --git a/drivers/media/v4l2-core/v4l2-dev.c b/drivers/media/v4l2-core/v4l2-dev.c
-index d00237ee4cae..da97572953af 100644
---- a/drivers/media/v4l2-core/v4l2-dev.c
-+++ b/drivers/media/v4l2-core/v4l2-dev.c
-@@ -901,6 +901,15 @@ int __video_register_device(struct video_device *vdev,
- 	if (WARN_ON(type != VFL_TYPE_SUBDEV && !vdev->device_caps))
- 		return -EINVAL;
+diff --git a/Documentation/driver-api/media/v4l2-dev.rst b/Documentation/driver-api/media/v4l2-dev.rst
+index 99e3b5fa7444..935a46e29c5e 100644
+--- a/Documentation/driver-api/media/v4l2-dev.rst
++++ b/Documentation/driver-api/media/v4l2-dev.rst
+@@ -42,7 +42,9 @@ You should also set these fields of :c:type:`video_device`:
+ - :c:type:`video_device`->v4l2_dev: must be set to the :c:type:`v4l2_device`
+   parent device.
  
-+	/* Add Meta: to metadata device names */
-+	if (vdev->device_caps &
-+	    (V4L2_CAP_META_CAPTURE | V4L2_CAP_META_OUTPUT)) {
-+		char aux[sizeof(vdev->name)];
-+
-+		snprintf(aux, sizeof(aux), "Meta: %s", vdev->name);
-+		strscpy(vdev->name, aux, sizeof(aux));
-+	}
-+
- 	/* v4l2_fh support */
- 	spin_lock_init(&vdev->fh_lock);
- 	INIT_LIST_HEAD(&vdev->fh_list);
+-- :c:type:`video_device`->name: set to something descriptive and unique.
++- :c:type:`video_device`->name: set to something descriptive and unique. If the
++  device has the `V4L2_CAP_META_CAPTURE` or `V4L2_CAP_META_OUTPUT` capabilities,
++  the string `Meta:` will be inserted before the original name.
+ 
+ - :c:type:`video_device`->vfl_dir: set this to ``VFL_DIR_RX`` for capture
+   devices (``VFL_DIR_RX`` has value 0, so this is normally already the
 
 -- 
 b4 0.11.0-dev-d93f8
