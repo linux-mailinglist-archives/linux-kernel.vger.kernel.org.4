@@ -2,63 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A01C35BDD9C
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 08:49:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C8DD5BDE98
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 09:43:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbiITGs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 02:48:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42066 "EHLO
+        id S230523AbiITHnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 03:43:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230320AbiITGsy (ORCPT
+        with ESMTP id S230129AbiITHmm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 02:48:54 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B14D5E540
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 23:48:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663656534; x=1695192534;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=RGdm1aXssN9TFvb1NrVDWI/D7fOta/uR4tLNgHnBB94=;
-  b=gW+oOuCliVebTJ3v1YjDCWY1ptu1sWYceFk6FlXjH+e5rL9tqJks59mV
-   ALknc40nbX7AQ4Px+bYMonyqXwLTurvE19ymqgI0MLHukwmOwrn39rQEk
-   +q9sKxkjPnj1rHAUlYHRE4l+AYp/3mEhrVSdE6gcpF/ta1lurTRV2ce89
-   GDXyGeB/k/GqaSPoqY7j7yAGkywiGU7iP29lhp38vWFufXSPP7nXt/Gzi
-   oScpyTiG0Y6Nns/2yP4zLqaj8b8XCOdBZDE3KYVBmcQqo1YXG4iRUBaeU
-   uHMAiVSCBMcKcQQbbsE0O5omyqu3oPEBL6hA5sYnlVh9grtc1tFNuvGiA
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="363573553"
-X-IronPort-AV: E=Sophos;i="5.93,329,1654585200"; 
-   d="scan'208";a="363573553"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 23:48:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,329,1654585200"; 
-   d="scan'208";a="681172664"
-Received: from linux-pnp-server-13.sh.intel.com ([10.239.176.176])
-  by fmsmga008.fm.intel.com with ESMTP; 19 Sep 2022 23:48:49 -0700
-From:   Jiebin Sun <jiebin.sun@intel.com>
-To:     akpm@linux-foundation.org, vasily.averin@linux.dev,
-        shakeelb@google.com, dennis@kernel.org, tj@kernel.org,
-        cl@linux.com, ebiederm@xmission.com, legion@kernel.org,
-        manfred@colorfullife.com, alexander.mikhalitsyn@virtuozzo.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     tim.c.chen@intel.com, feng.tang@intel.com, ying.huang@intel.com,
-        tianyou.li@intel.com, wangyang.guo@intel.com, jiebin.sun@intel.com,
-        Manfred Spraul <manfred@colorfullif.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>
-Subject: [PATCH] ipc/msg: avoid negative value by overflow in msginfo
-Date:   Tue, 20 Sep 2022 23:08:09 +0800
-Message-Id: <20220920150809.4014944-1-jiebin.sun@intel.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <8d74a7d4-b80f-2a0f-ee95-243bdbd51ccd@colorfullife.com>
-References: <8d74a7d4-b80f-2a0f-ee95-243bdbd51ccd@colorfullife.com>
+        Tue, 20 Sep 2022 03:42:42 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2FA5642DC;
+        Tue, 20 Sep 2022 00:41:12 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MWthK4KHgzKQ0p;
+        Tue, 20 Sep 2022 15:38:41 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.67.175.61])
+        by APP2 (Coremail) with SMTP id Syh0CgBH4mt1biljrIh4BA--.36206S2;
+        Tue, 20 Sep 2022 15:40:38 +0800 (CST)
+From:   Pu Lehui <pulehui@huaweicloud.com>
+To:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Pu Lehui <pulehui@huawei.com>,
+        Pu Lehui <pulehui@huaweicloud.com>
+Subject: [PATCH bpf v4 0/2] Fix wrong cgroup attach flags being assigned to effective progs
+Date:   Tue, 20 Sep 2022 15:42:31 +0000
+Message-Id: <20220920154233.1494352-1-pulehui@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-CM-TRANSID: Syh0CgBH4mt1biljrIh4BA--.36206S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7WFWkWF1xKw1DGFy3JFW5Wrg_yoW8KFy3pF
+        WkA3W5Jwn8Wr93J3ySya4jga4rKr48Aw1jy3ZrZr48uFyxtryqyry2k3yFyr17XFsrGw4x
+        Zr15AFy5G3y5taDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9S14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2jI8I6cxK62vIxIIY0VWUZVW8XwA2ocxC64kIII
+        0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xv
+        wVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4
+        x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG
+        64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r
+        1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAq
+        YI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4I
+        kC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWU
+        WwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr
+        0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWr
+        Zr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr
+        1UYxBIdaVFxhVjvjDU0xZFpf9x0pRQo7tUUUUU=
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        KHOP_HELO_FCRDNS,SPF_HELO_NONE,SPF_NONE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,32 +70,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 32-bit value in msginfo struct could be negative if we get it
-from signed 64-bit. Clamping it to INT_MAX helps to avoid the
-negative value by overflow.
+From: Pu Lehui <pulehui@huawei.com>
 
-Signed-off-by: Jiebin Sun <jiebin.sun@intel.com>
-Reviewed-by: Manfred Spraul <manfred@colorfullif.com>
-Reviewed-by: Tim Chen <tim.c.chen@linux.intel.com>
----
- ipc/msg.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+When root-cgroup attach multi progs and sub-cgroup attach a
+override prog, bpftool will display incorrectly for the attach
+flags of the sub-cgroup’s effective progs:
 
-diff --git a/ipc/msg.c b/ipc/msg.c
-index f2bb4c193ecf..65f437e28c9b 100644
---- a/ipc/msg.c
-+++ b/ipc/msg.c
-@@ -501,8 +501,8 @@ static int msgctl_info(struct ipc_namespace *ns, int msqid,
- 	max_idx = ipc_get_maxidx(&msg_ids(ns));
- 	up_read(&msg_ids(ns).rwsem);
- 	if (cmd == MSG_INFO) {
--		msginfo->msgmap = percpu_counter_sum(&ns->percpu_msg_hdrs);
--		msginfo->msgtql = percpu_counter_sum(&ns->percpu_msg_bytes);
-+		msginfo->msgmap = min(percpu_counter_sum(&ns->percpu_msg_hdrs), INT_MAX);
-+		msginfo->msgtql = min(percpu_counter_sum(&ns->percpu_msg_bytes), INT_MAX);
- 	} else {
- 		msginfo->msgmap = MSGMAP;
- 		msginfo->msgpool = MSGPOOL;
+$ bpftool cgroup tree /sys/fs/cgroup effective
+CgroupPath
+ID       AttachType      AttachFlags     Name
+/sys/fs/cgroup
+6        cgroup_sysctl   multi           sysctl_tcp_mem
+13       cgroup_sysctl   multi           sysctl_tcp_mem
+/sys/fs/cgroup/cg1
+20       cgroup_sysctl   override        sysctl_tcp_mem
+6        cgroup_sysctl   override        sysctl_tcp_mem <- wrong
+13       cgroup_sysctl   override        sysctl_tcp_mem <- wrong
+/sys/fs/cgroup/cg1/cg2
+20       cgroup_sysctl                   sysctl_tcp_mem
+6        cgroup_sysctl                   sysctl_tcp_mem
+13       cgroup_sysctl                   sysctl_tcp_mem
+
+For cg1, obviously, the attach flags of prog6 and prog13 can not be
+OVERRIDE. And for query with EFFECTIVE flags, exporting attach flags
+does not make sense. So let's remove the AttachFlags field and the
+associated logic. After these patches, the above effective cgroup
+tree will show as bellow:
+
+# bpftool cgroup tree /sys/fs/cgroup effective
+CgroupPath
+ID       AttachType      Name
+/sys/fs/cgroup
+6        cgroup_sysctl   sysctl_tcp_mem
+13       cgroup_sysctl   sysctl_tcp_mem
+/sys/fs/cgroup/cg1
+20       cgroup_sysctl   sysctl_tcp_mem
+6        cgroup_sysctl   sysctl_tcp_mem
+13       cgroup_sysctl   sysctl_tcp_mem
+/sys/fs/cgroup/cg1/cg2
+20       cgroup_sysctl   sysctl_tcp_mem
+6        cgroup_sysctl   sysctl_tcp_mem
+13       cgroup_sysctl   sysctl_tcp_mem
+
+v4:
+- Reject prog_attach_flags array when effective query. (Martin)
+- Target to bpf tree. (Martin)
+
+v3:
+https://lore.kernel.org/bpf/20220914161742.3180731-1-pulehui@huaweicloud.com
+- Don't show attach flags when effective query. (John, sdf, Martin)
+
+v2:
+https://lore.kernel.org/bpf/20220908145304.3436139-1-pulehui@huaweicloud.com
+- Limit prog_cnt to avoid overflow. (John)
+- Add more detail message.
+
+v1:
+https://lore.kernel.org/bpf/20220820120234.2121044-1-pulehui@huawei.com
+
+Pu Lehui (2):
+  bpf, cgroup: Reject prog_attach_flags array when effective query
+  bpftool: Fix wrong cgroup attach flags being assigned to effective
+    progs
+
+ include/uapi/linux/bpf.h       |  7 +++--
+ kernel/bpf/cgroup.c            | 28 +++++++++++-------
+ tools/bpf/bpftool/cgroup.c     | 54 ++++++++++++++++++++++++++++++----
+ tools/include/uapi/linux/bpf.h |  7 +++--
+ 4 files changed, 77 insertions(+), 19 deletions(-)
+
 -- 
-2.31.1
+2.25.1
 
