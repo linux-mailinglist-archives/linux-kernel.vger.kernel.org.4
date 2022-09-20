@@ -2,145 +2,394 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF4AE5BDEF8
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 09:59:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E91A5BDF03
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 10:01:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230295AbiITH7k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 03:59:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55170 "EHLO
+        id S230233AbiITIB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 04:01:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230172AbiITH73 (ORCPT
+        with ESMTP id S230190AbiITIAs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 03:59:29 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF3DE61112;
-        Tue, 20 Sep 2022 00:59:26 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id w8so2378914lft.12;
-        Tue, 20 Sep 2022 00:59:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=xi4J48eyVp3XBTnULXOJWqnXSkoDp8ND1IDB0SNIHaE=;
-        b=gf8qkEuX/8rcMT+OVpDYVHbtPPXG48oysNuDVSfNrus2fDKGlifxfMDPP0BxX4rzm/
-         mvNgpi5wttjVEZp5SiM05XiZNMSlBRS5WmWUbKspSqf8mQgeGcFdZKG//0mfGAzvrrfY
-         uCVFyKvXsKzVXN+OMjC7SFbhl/wQ9RL8UFq45yM2jfP9pO/y74/T40GTxdF4xKE55XHW
-         SSPlzMRs2oCPg+k7GVT1bhs56PNIbSSoxV2kgXC+6ohq2nXWh3VXAp42AxFNzeODG2wZ
-         wDvY3zC9r3xAPFgPocPJp/pY7Jve1rd+YgdT0gKK8zgQyEWrzTkKDnZA1Jbs0b/lZrab
-         h5yw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=xi4J48eyVp3XBTnULXOJWqnXSkoDp8ND1IDB0SNIHaE=;
-        b=gkSDciCCQNnpQcx6JNiut+RmUoEW55h+yCuq36ZzDwCcvSwMy7m4g+8WaEwMkUtTM5
-         TGhhZsCKT5GhMbK9Iy4WJ7iGlj4NL/DzIIxJdvukjtvqUeBcr6dCnziNJVat9l4nC78k
-         n14koDy40jjoO9uwihRL4XGUjUnDnE6zzJg5DSJ1RJ8/wTiOs9HyaGCdREUcLcdJBx5v
-         UEUFILZhNI0EwCvrqj+ZAsdIvgPrY9+amcfLeRYy/fRcaY6xA+eteD5HYdpcfltzMUUF
-         ipx+zac6lvAWEN5r5nyfacUfhJACQqwhB9GwELH7sl/cpfysg1o19B+3O5fB4NaWuAyO
-         ljzQ==
-X-Gm-Message-State: ACrzQf34d1Z+yAfVN0xLEWcm6zKkfWLE3iif1sUDOq7iwMpqy/fcmhd7
-        HU3FRtRNLnmY0pz3Qjl1vrK6uoBcV8F2Q360vi2f1a3Ddec=
-X-Google-Smtp-Source: AMsMyM6jwmAgf6JVkGoyng4BC6Sn/3ffWQfWLkLl/CA+/fv09157gUqekt913KGzQ9CVd9Wp4vN3fy5b8MjFnrwMzGg=
-X-Received: by 2002:a05:6512:694:b0:498:ff40:24e with SMTP id
- t20-20020a056512069400b00498ff40024emr7016041lfe.265.1663660764492; Tue, 20
- Sep 2022 00:59:24 -0700 (PDT)
+        Tue, 20 Sep 2022 04:00:48 -0400
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E31E62A89;
+        Tue, 20 Sep 2022 01:00:42 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4MWv312TDlz9xtmt;
+        Tue, 20 Sep 2022 15:54:53 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwAno13_ciljaChgAA--.64537S2;
+        Tue, 20 Sep 2022 09:00:11 +0100 (CET)
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        dhowells@redhat.com, jarkko@kernel.org, rostedt@goodmis.org,
+        mingo@redhat.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, shuah@kernel.org
+Cc:     bpf@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        deso@posteo.net, memxor@gmail.com,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v18 00/13] bpf: Add kfuncs for PKCS#7 signature verification
+Date:   Tue, 20 Sep 2022 09:59:38 +0200
+Message-Id: <20220920075951.929132-1-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220714122322.63663-1-tmaimon77@gmail.com> <20220714122322.63663-2-tmaimon77@gmail.com>
- <20220718211046.GA3547663-robh@kernel.org> <CAP6Zq1hQ5m2kkQOKaYsKhPQhCW+vdsdyPRxxb_yRGMB=gJCPdw@mail.gmail.com>
- <3981e6e8-d4bb-b13d-7aaa-7aea83ffaad9@linaro.org> <CAP6Zq1gp1ph1wixgb6nL+2R8We2YJ2HQM2iC05itq_XWd2Cwig@mail.gmail.com>
- <bfca0379-7346-13e7-a18f-66740c5871b3@linaro.org>
-In-Reply-To: <bfca0379-7346-13e7-a18f-66740c5871b3@linaro.org>
-From:   Tomer Maimon <tmaimon77@gmail.com>
-Date:   Tue, 20 Sep 2022 10:59:12 +0300
-Message-ID: <CAP6Zq1gyDW8ZwwAZ1jyfNEZa09WN-biZZJY8tBmW_gzMzpj3ZA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] dt-binding: pinctrl: Add NPCM8XX pinctrl and GPIO documentation
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh@kernel.org>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        zhengbin13@huawei.com, OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: GxC2BwAno13_ciljaChgAA--.64537S2
+X-Coremail-Antispam: 1UD129KBjvAXoW3uFyxtFy3uryUKFW5Gw1xZrb_yoW8Wr4UZo
+        WfWw4fWay5Kr17ArnrCF1xCFy8uw1Ik34DArsIvr15WFnFgrWUCFyDua1xXr4qgan5WFyj
+        ga45C34DZFZrX3Zxn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+        AaLaJ3UjIYCTnIWjp_UUUY17kC6x804xWl14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK
+        8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4
+        AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF
+        7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26r4j6r4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28I
+        cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
+        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI
+        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42
+        IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
+        87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUOlksDUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQABBF1jj4M-rgACsl
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 19 Sept 2022 at 19:06, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 19/09/2022 16:31, Tomer Maimon wrote:
-> >>>>> +examples:
-> >>>>> +  - |
-> >>>>> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> >>>>> +    #include <dt-bindings/gpio/gpio.h>
-> >>>>> +
-> >>>>> +    soc {
-> >>>>> +      #address-cells = <2>;
-> >>>>> +      #size-cells = <2>;
-> >>>>> +
-> >>>>> +      pinctrl: pinctrl@f0800000 {
-> >>>>> +        compatible = "nuvoton,npcm845-pinctrl";
-> >>>>> +        ranges = <0x0 0x0 0xf0010000 0x8000>;
-> >>>>> +        #address-cells = <1>;
-> >>>>> +        #size-cells = <1>;
-> >>>>> +        nuvoton,sysgcr = <&gcr>;
-> >>>>> +
-> >>>>> +        gpio0: gpio@f0010000 {
-> >>>>
-> >>>> gpio@0
-> >>>>
-> >>>> Is this really a child block of the pinctrl? Doesn't really look like it
-> >>>> based on addressess. Where are the pinctrl registers? In the sysgcr? If
-> >>>> so, then pinctrl should be a child of it. But that doesn't really work
-> >>>> too well with gpio child nodes...
-> >>> the pin controller mux is handled by sysgcr this is why the sysgcr in
-> >>> the mother node,
-> >>> and the pin configuration are handled by the GPIO registers.  each
-> >>> GPIO bank (child) contains 32 GPIO.
-> >>> this is why the GPIO is the child node.
-> >>
-> >> Then maybe pinctrl should be the sysgcr and expose regmap for other devices?
-> > The pin controller using the sysgcr to handle the pinmux, this is why
-> > the sysgcr is in the mother node, is it problematic?
->
-> You said pin-controller mux registers are in sysgcr, so it should not be
-> used via syscon.
-Sorry but maybe I missed something.
-the sysgcr is used for miscellaneous features and not only for the pin
-controller mux, this is why it used syscon and defined in the dtsi:
-                gcr: system-controller@f0800000 {
-                        compatible = "nuvoton,npcm845-gcr", "syscon";
-                        reg = <0x0 0xf0800000 0x0 0x1000>;
-                };
->
-> Please provide address map description to convince us that this is
-> correct HW representation.
-GCR (sysgcr) registers 0xf0800000-0xf0801000 - used for miscellaneous
-features, not only pin mux.
-GPIO0 0xf0010000-0xf0011000
-GPIO1 0xf0011000-0xf0012000
-...
-GPIO7 0xf0017000-0xf0018000
->
-> Best regards,
-> Krzysztof
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Best regards,
+One of the desirable features in security is the ability to restrict import
+of data to a given system based on data authenticity. If data import can be
+restricted, it would be possible to enforce a system-wide policy based on
+the signing keys the system owner trusts.
 
-Tomer
+This feature is widely used in the kernel. For example, if the restriction
+is enabled, kernel modules can be plugged in only if they are signed with a
+key whose public part is in the primary or secondary keyring.
+
+For eBPF, it can be useful as well. For example, it might be useful to
+authenticate data an eBPF program makes security decisions on.
+
+After a discussion in the eBPF mailing list, it was decided that the stated
+goal should be accomplished by introducing four new kfuncs:
+bpf_lookup_user_key() and bpf_lookup_system_key(), for retrieving a keyring
+with keys trusted for signature verification, respectively from its serial
+and from a pre-determined ID; bpf_key_put(), to release the reference
+obtained with the former two kfuncs, bpf_verify_pkcs7_signature(), for
+verifying PKCS#7 signatures.
+
+Other than the key serial, bpf_lookup_user_key() also accepts key lookup
+flags, that influence the behavior of the lookup. bpf_lookup_system_key()
+accepts pre-determined IDs defined in include/linux/verification.h.
+
+bpf_key_put() accepts the new bpf_key structure, introduced to tell whether
+the other structure member, a key pointer, is valid or not. The reason is
+that verify_pkcs7_signature() also accepts invalid pointers, set with the
+pre-determined ID, to select a system-defined keyring. key_put() must be
+called only for valid key pointers.
+
+Since the two key lookup functions allocate memory and one increments a key
+reference count, they must be used in conjunction with bpf_key_put(). The
+latter must be called only if the lookup functions returned a non-NULL
+pointer. The verifier denies the execution of eBPF programs that don't
+respect this rule.
+
+The two key lookup functions should be used in alternative, depending on
+the use case. While bpf_lookup_user_key() provides great flexibility, it
+seems suboptimal in terms of security guarantees, as even if the eBPF
+program is assumed to be trusted, the serial used to obtain the key pointer
+might come from untrusted user space not choosing one that the system
+administrator approves to enforce a mandatory policy.
+
+bpf_lookup_system_key() instead provides much stronger guarantees,
+especially if the pre-determined ID is not passed by user space but is
+hardcoded in the eBPF program, and that program is signed. In this case,
+bpf_verify_pkcs7_signature() will always perform signature verification
+with a key that the system administrator approves, i.e. the primary,
+secondary or platform keyring.
+
+Nevertheless, key permission checks need to be done accurately. Since
+bpf_lookup_user_key() cannot determine how a key will be used by other
+kfuncs, it has to defer the permission check to the actual kfunc using the
+key. It does it by calling lookup_user_key() with KEY_DEFER_PERM_CHECK as
+needed permission. Later, bpf_verify_pkcs7_signature(), if called,
+completes the permission check by calling key_validate(). It does not need
+to call key_task_permission() with permission KEY_NEED_SEARCH, as it is
+already done elsewhere by the key subsystem. Future kfuncs using the
+bpf_key structure need to implement the proper checks as well.
+
+Finally, the last kfunc, bpf_verify_pkcs7_signature(), accepts the data and
+signature to verify as eBPF dynamic pointers, to minimize the number of
+kfunc parameters, and the keyring with keys for signature verification as a
+bpf_key structure, returned by one of the two key lookup functions.
+
+bpf_lookup_user_key() and bpf_verify_pkcs7_signature() can be called only
+from sleepable programs, because of memory allocation and crypto
+operations. For example, the lsm.s/bpf attach point is suitable,
+fexit/array_map_update_elem is not.
+
+The correctness of implementation of the new kfuncs and of their usage is
+checked with the introduced tests.
+
+The patch set includes a patch from another author (dependency) for sake of
+completeness. It is organized as follows.
+
+Patch 1 from KP Singh allows kfuncs to be used by LSM programs. Patch 2
+exports the bpf_dynptr definition through BTF. Patch 3 splits
+is_dynptr_reg_valid_init() and introduces is_dynptr_type_expected(), to
+know more precisely the cause of a negative result of a dynamic pointer
+check. Patch 4 allows dynamic pointers to be used as kfunc parameters.
+Patch 5 exports bpf_dynptr_get_size(), to obtain the real size of data
+carried by a dynamic pointer. Patch 6 makes available for new eBPF kfuncs
+and programs some key-related definitions. Patch 7 introduces the
+bpf_lookup_*_key() and bpf_key_put() kfuncs. Patch 8 introduces the
+bpf_verify_pkcs7_signature() kfunc. Patch 9 changes the testing kernel
+configuration to compile everything as built-in. Finally, patches 10-13
+introduce the tests.
+
+Changelog
+
+v17:
+ - Remove unnecessary typedefs in test_verify_pkcs7_sig.c (suggested by KP)
+ - Add patch to export bpf_dynptr through BTF (reported by KP)
+ - Rename u{8,16,32,64} variables to __u{8,16,32,64} in the tests, for
+   consistency with other eBPF programs (suggested by Yonghong)
+
+v16:
+ - Remove comments in include/linux/key.h for KEY_LOOKUP_*
+ - Change kmalloc() flag from GFP_ATOMIC to GFP_KERNEL in
+   bpf_lookup_user_key(), as the kfunc needs anyway to be sleepable
+   (suggested by Kumar)
+ - Test passing a dynamic pointer with NULL data to
+   bpf_verify_pkcs7_signature() (suggested by Kumar)
+
+v15:
+ - Add kfunc_dynptr_param test to deny list for s390x
+
+v14:
+ - Explain that is_dynptr_type_expected() will be useful also for BTF
+   (suggested by Joanne)
+ - Rename KEY_LOOKUP_FLAGS_ALL to KEY_LOOKUP_ALL (suggested by Jarkko)
+ - Swap declaration of spi and dynptr_type in is_dynptr_type_expected()
+   (suggested by Joanne)
+ - Reimplement kfunc dynptr tests with a regular eBPF program instead of
+   executing them with test_verifier (suggested by Joanne)
+ - Make key lookup flags as enum so that they are automatically exported
+   through BTF (suggested by Alexei)
+ 
+v13:
+ - Split is_dynptr_reg_valid_init() and introduce is_dynptr_type_expected()
+   to see if the dynamic pointer type passed as argument to a kfunc is
+   supported (suggested by Kumar)
+ - Add forward declaration of struct key in include/linux/bpf.h (suggested
+   by Song)
+ - Declare mask for key lookup flags, remove key_lookup_flags_check()
+   (suggested by Jarkko and KP)
+ - Allow only certain dynamic pointer types (currently, local) to be passed
+   as argument to kfuncs (suggested by Kumar)
+ - For each dynamic pointer parameter in kfunc, additionally check if the
+   passed pointer is to the stack (suggested by Kumar)
+ - Split the validity/initialization and dynamic pointer type check also in
+   the verifier, and adjust the expected error message in the test (a test
+   for an unexpected dynptr type passed to a helper cannot be added due to
+   missing suitable helpers, but this case has been tested manually)
+ - Add verifier tests to check the dynamic pointers passed as argument to
+   kfuncs (suggested by Kumar)
+
+v12:
+ - Put lookup_key and verify_pkcs7_sig tests in deny list for s390x (JIT
+   does not support calling kernel function)
+
+v11:
+ - Move stringify_struct() macro to include/linux/btf.h (suggested by
+   Daniel)
+ - Change kernel configuration options in
+   tools/testing/selftests/bpf/config* from =m to =y
+
+v10:
+ - Introduce key_lookup_flags_check() and system_keyring_id_check() inline
+   functions to check parameters (suggested by KP)
+ - Fix descriptions and comment of key-related kfuncs (suggested by KP)
+ - Register kfunc set only once (suggested by Alexei)
+ - Move needed kernel options to the architecture-independent configuration
+   for testing
+
+v9:
+ - Drop patch to introduce KF_SLEEPABLE kfunc flag (already merged)
+ - Rename valid_ptr member of bpf_key to has_ref (suggested by Daniel)
+ - Check dynamic pointers in kfunc definition with bpf_dynptr_kern struct
+   definition instead of string, to detect structure renames (suggested by
+   Daniel)
+ - Explicitly say that we permit initialized dynamic pointers in kfunc
+   definition (suggested by Daniel)
+ - Remove noinline __weak from kfuncs definition (reported by Daniel)
+ - Simplify key lookup flags check in bpf_lookup_user_key() (suggested by
+   Daniel)
+ - Explain the reason for deferring key permission check (suggested by
+   Daniel)
+ - Allocate memory with GFP_ATOMIC in bpf_lookup_system_key(), and remove
+   KF_SLEEPABLE kfunc flag from kfunc declaration (suggested by Daniel)
+ - Define only one kfunc set and remove the loop for registration
+   (suggested by Alexei)
+
+v8:
+ - Define the new bpf_key structure to carry the key pointer and whether
+   that pointer is valid or not (suggested by Daniel)
+ - Drop patch to mark a kfunc parameter with the __maybe_null suffix
+ - Improve documentation of kfuncs
+ - Introduce bpf_lookup_system_key() to obtain a key pointer suitable for
+   verify_pkcs7_signature() (suggested by Daniel)
+ - Use the new kfunc registration API
+ - Drop patch to test the __maybe_null suffix
+ - Add tests for bpf_lookup_system_key()
+
+v7:
+ - Add support for using dynamic and NULL pointers in kfunc (suggested by
+   Alexei)
+ - Add new kfunc-related tests
+
+v6:
+ - Switch back to key lookup helpers + signature verification (until v5),
+   and defer permission check from bpf_lookup_user_key() to
+   bpf_verify_pkcs7_signature()
+ - Add additional key lookup test to illustrate the usage of the
+   KEY_LOOKUP_CREATE flag and validate the flags (suggested by Daniel)
+ - Make description of flags of bpf_lookup_user_key() more user-friendly
+   (suggested by Daniel)
+ - Fix validation of flags parameter in bpf_lookup_user_key() (reported by
+   Daniel)
+ - Rename bpf_verify_pkcs7_signature() keyring-related parameters to
+   user_keyring and system_keyring to make their purpose more clear
+ - Accept keyring-related parameters of bpf_verify_pkcs7_signature() as
+   alternatives (suggested by KP)
+ - Replace unsigned long type with u64 in helper declaration (suggested by
+   Daniel)
+ - Extend the bpf_verify_pkcs7_signature() test by calling the helper
+   without data, by ensuring that the helper enforces the keyring-related
+   parameters as alternatives, by ensuring that the helper rejects
+   inaccessible and expired keyrings, and by checking all system keyrings
+ - Move bpf_lookup_user_key() and bpf_key_put() usage tests to
+   ref_tracking.c (suggested by John)
+ - Call bpf_lookup_user_key() and bpf_key_put() only in sleepable programs
+
+v5:
+ - Move KEY_LOOKUP_ to include/linux/key.h
+   for validation of bpf_verify_pkcs7_signature() parameter
+ - Remove bpf_lookup_user_key() and bpf_key_put() helpers, and the
+   corresponding tests
+ - Replace struct key parameter of bpf_verify_pkcs7_signature() with the
+   keyring serial and lookup flags
+ - Call lookup_user_key() and key_put() in bpf_verify_pkcs7_signature()
+   code, to ensure that the retrieved key is used according to the
+   permission requested at lookup time
+ - Clarified keyring precedence in the description of
+   bpf_verify_pkcs7_signature() (suggested by John)
+ - Remove newline in the second argument of ASSERT_
+ - Fix helper prototype regular expression in bpf_doc.py
+
+v4:
+ - Remove bpf_request_key_by_id(), don't return an invalid pointer that
+   other helpers can use
+ - Pass the keyring ID (without ULONG_MAX, suggested by Alexei) to
+   bpf_verify_pkcs7_signature()
+ - Introduce bpf_lookup_user_key() and bpf_key_put() helpers (suggested by
+   Alexei)
+ - Add lookup_key_norelease test, to ensure that the verifier blocks eBPF
+   programs which don't decrement the key reference count
+ - Parse raw PKCS#7 signature instead of module-style signature in the
+   verify_pkcs7_signature test (suggested by Alexei)
+ - Parse kernel module in user space and pass raw PKCS#7 signature to the
+   eBPF program for signature verification
+
+v3:
+ - Rename bpf_verify_signature() back to bpf_verify_pkcs7_signature() to
+   avoid managing different parameters for each signature verification
+   function in one helper (suggested by Daniel)
+ - Use dynamic pointers and export bpf_dynptr_get_size() (suggested by
+   Alexei)
+ - Introduce bpf_request_key_by_id() to give more flexibility to the caller
+   of bpf_verify_pkcs7_signature() to retrieve the appropriate keyring
+   (suggested by Alexei)
+ - Fix test by reordering the gcc command line, always compile sign-file
+ - Improve helper support check mechanism in the test
+
+v2:
+ - Rename bpf_verify_pkcs7_signature() to a more generic
+   bpf_verify_signature() and pass the signature type (suggested by KP)
+ - Move the helper and prototype declaration under #ifdef so that user
+   space can probe for support for the helper (suggested by Daniel)
+ - Describe better the keyring types (suggested by Daniel)
+ - Include linux/bpf.h instead of vmlinux.h to avoid implicit or
+   redeclaration
+ - Make the test selfcontained (suggested by Alexei)
+
+v1:
+ - Don't define new map flag but introduce simple wrapper of
+   verify_pkcs7_signature() (suggested by Alexei and KP)
+
+KP Singh (1):
+  bpf: Allow kfuncs to be used in LSM programs
+
+Roberto Sassu (12):
+  btf: Export bpf_dynptr definition
+  bpf: Move dynptr type check to is_dynptr_type_expected()
+  btf: Allow dynamic pointer parameters in kfuncs
+  bpf: Export bpf_dynptr_get_size()
+  KEYS: Move KEY_LOOKUP_ to include/linux/key.h and define
+    KEY_LOOKUP_ALL
+  bpf: Add bpf_lookup_*_key() and bpf_key_put() kfuncs
+  bpf: Add bpf_verify_pkcs7_signature() kfunc
+  selftests/bpf: Compile kernel with everything as built-in
+  selftests/bpf: Add verifier tests for bpf_lookup_*_key() and
+    bpf_key_put()
+  selftests/bpf: Add additional tests for bpf_lookup_*_key()
+  selftests/bpf: Add test for bpf_verify_pkcs7_signature() kfunc
+  selftests/bpf: Add tests for dynamic pointers parameters in kfuncs
+
+ include/linux/bpf.h                           |   9 +
+ include/linux/bpf_verifier.h                  |   5 +
+ include/linux/btf.h                           |   9 +
+ include/linux/key.h                           |   6 +
+ include/linux/verification.h                  |   8 +
+ kernel/bpf/btf.c                              |  34 ++
+ kernel/bpf/helpers.c                          |   4 +-
+ kernel/bpf/verifier.c                         |  35 +-
+ kernel/trace/bpf_trace.c                      | 180 ++++++++
+ security/keys/internal.h                      |   2 -
+ tools/testing/selftests/bpf/DENYLIST.s390x    |   3 +
+ tools/testing/selftests/bpf/Makefile          |  14 +-
+ tools/testing/selftests/bpf/config            |  32 +-
+ tools/testing/selftests/bpf/config.x86_64     |   7 +-
+ .../testing/selftests/bpf/prog_tests/dynptr.c |   2 +-
+ .../bpf/prog_tests/kfunc_dynptr_param.c       | 164 +++++++
+ .../selftests/bpf/prog_tests/lookup_key.c     | 112 +++++
+ .../bpf/prog_tests/verify_pkcs7_sig.c         | 399 ++++++++++++++++++
+ .../bpf/progs/test_kfunc_dynptr_param.c       |  94 +++++
+ .../selftests/bpf/progs/test_lookup_key.c     |  46 ++
+ .../bpf/progs/test_verify_pkcs7_sig.c         |  90 ++++
+ tools/testing/selftests/bpf/test_verifier.c   |   3 +-
+ .../selftests/bpf/verifier/ref_tracking.c     | 139 ++++++
+ .../testing/selftests/bpf/verify_sig_setup.sh | 104 +++++
+ 24 files changed, 1466 insertions(+), 35 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/kfunc_dynptr_param.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/lookup_key.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/verify_pkcs7_sig.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_lookup_key.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_verify_pkcs7_sig.c
+ create mode 100755 tools/testing/selftests/bpf/verify_sig_setup.sh
+
+-- 
+2.25.1
+
