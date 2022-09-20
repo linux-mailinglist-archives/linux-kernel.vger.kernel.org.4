@@ -2,105 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FE575BE070
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 10:41:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04DFC5BE07E
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 10:41:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbiITIlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 04:41:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46504 "EHLO
+        id S231416AbiITIlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 04:41:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231382AbiITIk6 (ORCPT
+        with ESMTP id S229905AbiITIlP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 04:40:58 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B0481AF3E
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 01:39:38 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1oaYmb-0005c5-NA; Tue, 20 Sep 2022 10:39:09 +0200
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1oaYma-0001Ji-JI; Tue, 20 Sep 2022 10:39:08 +0200
-Date:   Tue, 20 Sep 2022 10:39:08 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        mchehab@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, kishon@ti.com, vkoul@kernel.org,
-        hverkuil@xs4all.nl, jacopo@jmondi.org,
-        kieran.bingham+renesas@ideasonboard.com,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        kernel@pengutronix.de
-Subject: Re: [PATCH v2 4/4] media: tc358746: add Toshiba TC358746 Parallel to
- CSI-2 bridge driver
-Message-ID: <20220920083908.st4h3pb6usn4zavu@pengutronix.de>
-References: <20220916134535.128131-1-m.felsch@pengutronix.de>
- <20220916134535.128131-5-m.felsch@pengutronix.de>
- <YyhktzmcgXKnrMFU@pendragon.ideasonboard.com>
- <20220919171142.6av6ap5gwweldado@pengutronix.de>
- <Yyio06jhK13BiNiP@pendragon.ideasonboard.com>
- <YyjI/JOcryD8yKzT@paasikivi.fi.intel.com>
+        Tue, 20 Sep 2022 04:41:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5111B29CBC;
+        Tue, 20 Sep 2022 01:39:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E24F6621AA;
+        Tue, 20 Sep 2022 08:39:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BF8AC433D6;
+        Tue, 20 Sep 2022 08:39:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663663189;
+        bh=QLZ/gLimlgPenm2mvkYzFXUkUzl2sWERNFTd7Lrn/1M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AfHPkPepFM7eYC1abChd5HUgbgK6NK5Ayauo2eAkkQ+CyceHVol/FwKHrD0RdQLfO
+         zvLwJIz5hFTcfKysjcDoPWgnwe9DDEKNj2dGeGEO2/kIpq57wb6SpC09LCGTp41BhC
+         qxQ5vAd4G1aZwL9mb4aPm0WIseAcnDPeseRWtIJM6uCN6SGJfOOrvPOzsT+VAJwBNz
+         wiUajd+Ahq99S7H8TFLbbtoaLHF3PS+Az8pt1+z7xkCsVe2mpsMmqYqlwHg5cIBClI
+         ExOjOWmHHdRNPqJTL8pOkUMYH9TCMDUfjtUV19S9P9aYLdb8Rxs1AEAhPOImHVP1XR
+         BbrIzh74M2mzQ==
+Date:   Tue, 20 Sep 2022 10:39:45 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
+        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
+        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
+        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
+        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
+        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
+        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
+        dinguyen@kernel.org, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
+        James.Bottomley@hansenpartnership.com, deller@gmx.de,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, pv-drivers@vmware.com,
+        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
+        gregkh@linuxfoundation.org, mturquette@baylibre.com,
+        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
+        sudeep.holla@arm.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
+        anup@brainfault.org, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, jacob.jun.pan@linux.intel.com,
+        atishp@atishpatra.org, Arnd Bergmann <arnd@arndb.de>,
+        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, dennis@kernel.org, tj@kernel.org,
+        cl@linux.com, rostedt@goodmis.org, pmladek@suse.com,
+        senozhatsky@chromium.org, john.ogness@linutronix.de,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, fweisbec@gmail.com,
+        ryabinin.a.a@gmail.com, glider@google.com, andreyknvl@gmail.com,
+        dvyukov@google.com, vincenzo.frascino@arm.com,
+        Andrew Morton <akpm@linux-foundation.org>, jpoimboe@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-perf-users@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-arch@vger.kernel.org, kasan-dev@googlegroups.com
+Subject: Re: [PATCH v2 09/44] cpuidle,omap3: Push RCU-idle into driver
+Message-ID: <20220920083945.GA69891@lothringen>
+References: <20220919095939.761690562@infradead.org>
+ <20220919101520.936337959@infradead.org>
+ <20220919143142.GA61009@lothringen>
+ <YyiIaeQY8STLK0d0@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YyjI/JOcryD8yKzT@paasikivi.fi.intel.com>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <YyiIaeQY8STLK0d0@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sakari,
-
-On 22-09-19, Sakari Ailus wrote:
-> On Mon, Sep 19, 2022 at 08:37:23PM +0300, Laurent Pinchart wrote:
-> > > > > +	ctrl = v4l2_ctrl_new_int_menu(&tc358746->ctrl_hdl, NULL,
-> > > > > +				      V4L2_CID_LINK_FREQ, 0, 0,
-> > > > 
-> > > > Shouldn't the max argument be set to the number of items minus 1 ?
-> > > 
-> > > Right now I would keep it that way since the driver only supports one
-> > > link-frequencies setting. So the ctrl don't let the userspace assume
-> > > that there are more than one link-frequency.
+On Mon, Sep 19, 2022 at 05:19:05PM +0200, Peter Zijlstra wrote:
+> On Mon, Sep 19, 2022 at 04:31:42PM +0200, Frederic Weisbecker wrote:
+> > On Mon, Sep 19, 2022 at 11:59:48AM +0200, Peter Zijlstra wrote:
+> > > Doing RCU-idle outside the driver, only to then teporarily enable it
+> > > again before going idle is daft.
 > > 
-> > Good point. Can you add a short comment above the call to explain this ?
+> > That doesn't tell where those calls are.
 > 
-> Wouldn't it be just easier to do what Laurent suggested originally? The end
-> result is the same, isn't it, and no comment needed?
-
-The end result depends on the device-tree given "link-frequencies"
-property. The driver currently takes only one frequency but the
-system-integrator of course can specify many more. In such case the 1st
-is used. If I go with Laurent's comment, all frequencies would be shown
-to the user-space but IMHO this shouldn't be the case since the driver
-supports only 1 frequency.
-
-> > 
-> > > > > +				      link_frequencies);
-> > > > > +	if (ctrl)
-> > > > > +		ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+> cpu_pm_enter/exit and the power domain stuff, possibly also the clock
+> domain stuff. It's all over :/
 > 
-> Now that this is a bridge, this value presumably doesn't need to change.
+> I suppose I can add a blub and copy/paste it around the various patches
+> if you want.
 
-The value can change, e.g. if you have a few freq. to allow a wide range
-of frame sizes. This can be the case to conform the emv tests. So there
-can be a freq. for smaller frame sizes and one for larger frame sizes.
+Yes please, sorry I don't want to bother but, just for the sake of
+git blame to report something useful in 5 years.
 
-> There will just be more blanking if the source sub-device pixel rate is
-> slower, right?
-
-Please see above.
-
-Regards,
-  Marco
+Thanks.
