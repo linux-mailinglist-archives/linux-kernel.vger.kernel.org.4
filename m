@@ -2,112 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D45A5BE5E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 14:32:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E98945BE5EB
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 14:32:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231239AbiITMc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 08:32:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48074 "EHLO
+        id S231259AbiITMcx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 08:32:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbiITMcU (ORCPT
+        with ESMTP id S231272AbiITMcn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 08:32:20 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C0C1564CE;
-        Tue, 20 Sep 2022 05:32:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663677139; x=1695213139;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CbnaupBI0IcuRH5CP6ofyWOkuYX0WeuPr4HLdbRSrus=;
-  b=NJJwDY+Mo+1fkpP6yLyCp4CWHJTb4rnWK9KZ748fo4KbjhHlm/Mx0sXP
-   iPAehYgqCWhpUJ1Bjt5IcFwykBTQHLNvxJ3HfMl2QWN04+lxDMjBsEWXN
-   O45KawAnIjCliha6tPsGME+P/qaovX2f/sYr2iWg0TXQsSQZnOahYEMt5
-   NmaJLNQDaIAzCouMXsUxGAJZPaoeQ/oLBBRShKHp8ee7C2pqEA5JDgkeW
-   v6FajkVGc9ZBqlxZVuTBcGhdUaX/mmrhDPMg7vzoBcf40BtMK60KR+6jd
-   dBiPUSxkx3GIjNXMzfn7TDpH9jO1st0MUf9c4BTZbjPjmskurbORlJv31
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10476"; a="325982203"
-X-IronPort-AV: E=Sophos;i="5.93,330,1654585200"; 
-   d="scan'208";a="325982203"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 05:32:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,330,1654585200"; 
-   d="scan'208";a="621245024"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga007.fm.intel.com with ESMTP; 20 Sep 2022 05:32:15 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oacQ9-004zO7-2u;
-        Tue, 20 Sep 2022 15:32:13 +0300
-Date:   Tue, 20 Sep 2022 15:32:13 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Raul E Rangel <rrangel@chromium.org>
-Cc:     linux-acpi@vger.kernel.org, linux-input@vger.kernel.org,
-        timvp@google.com, hdegoede@redhat.com, rafael@kernel.org,
-        mario.limonciello@amd.com, jingle.wu@emc.com.tw,
-        mika.westerberg@linux.intel.com, dmitry.torokhov@gmail.com,
-        linus.walleij@linaro.org, Wolfram Sang <wsa@kernel.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 07/13] i2c: acpi: Use ACPI wake capability bit to set
- wake_irq
-Message-ID: <Yymyzcfp7gqdTYam@smile.fi.intel.com>
-References: <20220919155916.1044219-1-rrangel@chromium.org>
- <20220919095504.v4.7.I8af4282adc72eb9f247adcd03676a43893a020a6@changeid>
+        Tue, 20 Sep 2022 08:32:43 -0400
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC032753B2;
+        Tue, 20 Sep 2022 05:32:39 -0700 (PDT)
+Received: by mail-qv1-f54.google.com with SMTP id m9so1861750qvv.7;
+        Tue, 20 Sep 2022 05:32:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=Wf+OpOOgKm2MQUZNT6fzDTc2lerh5dFGABEYb4COJ4Y=;
+        b=oPJtUACPa+yeG10enZMgNzR4vA9vJARWIAbZcucDDNSzYHQ6QJKvomdVKAlYREF9kr
+         ZVWOo+2VQ90xxvW7Gcj3OjQ5XGWiD/wZosqBLN+QkeX1Ikp0fwwvIo0QJX3Ymd9fgOVb
+         W9mUT5E9wLPMRdWlpWXa1bUDqeN2omfHc4S75y8SoxmDxCzrpMQbWdefmve39sIzXUE8
+         C8zdqlc9QHSSDgd2RtNUxcZ/BjZ9pGu9vFg9I2KhyztXP0SOBIM1smIviKkdjZ+mb/p8
+         0KhoggbQmEiggnug9OVJ/ogbGsP1lwoBoVGqWIpBu+6XRb3GFfU02K4yuel82XjT78VS
+         /kWA==
+X-Gm-Message-State: ACrzQf2XHcxdD2/CYITzUYk47xfCR9pTQpfagQf9HO+cMxKK/vQOQg+s
+        PvplZV6hwVgB6tKfn3Eq2sTKIPadcJgTFA==
+X-Google-Smtp-Source: AMsMyM7Yo9TjkGZ98y/4LtdivMQ4NpD3iJ0oBbqoQctlUyO0brSTKE1Lzd4ZUWQRvbPTL6R9S7upig==
+X-Received: by 2002:a05:6214:27ed:b0:4ac:7fd7:7d8b with SMTP id jt13-20020a05621427ed00b004ac7fd77d8bmr18620641qvb.129.1663677158499;
+        Tue, 20 Sep 2022 05:32:38 -0700 (PDT)
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
+        by smtp.gmail.com with ESMTPSA id bn35-20020a05620a2ae300b006cbc00db595sm53521qkb.23.2022.09.20.05.32.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Sep 2022 05:32:37 -0700 (PDT)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-333a4a5d495so24781107b3.10;
+        Tue, 20 Sep 2022 05:32:37 -0700 (PDT)
+X-Received: by 2002:a81:6756:0:b0:345:525e:38 with SMTP id b83-20020a816756000000b00345525e0038mr19491451ywc.47.1663677157058;
+ Tue, 20 Sep 2022 05:32:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220919095504.v4.7.I8af4282adc72eb9f247adcd03676a43893a020a6@changeid>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220915181558.354737-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220915181558.354737-9-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220915181558.354737-9-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 20 Sep 2022 14:32:25 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdW99EutciosPtOTU9AztfvfMdKTaS+YRmpmS4VnhZ9KAA@mail.gmail.com>
+Message-ID: <CAMuHMdW99EutciosPtOTU9AztfvfMdKTaS+YRmpmS4VnhZ9KAA@mail.gmail.com>
+Subject: Re: [PATCH v3 08/10] riscv: dts: renesas: Add minimal DTS for Renesas
+ RZ/Five SMARC EVK
+To:     Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Atish Patra <atishp@rivosinc.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 09:59:09AM -0600, Raul E Rangel wrote:
-> Device tree already has a mechanism to pass the wake_irq. It does this
-> by looking for the wakeup-source property and setting the
-> I2C_CLIENT_WAKE flag. This CL adds the ACPI equivalent. It uses the
-> ACPI interrupt wake flag to determine if the interrupt can be used to
-> wake the system. Previously the i2c drivers had to make assumptions and
-> blindly enable the wake IRQ. This can cause spurious wake events. e.g.,
-> If there is a device with an Active Low interrupt and the device gets
-> powered off while suspending, the interrupt line will go low since it's
-> no longer powered and wakes the system. For this reason we should
-> respect the board designers wishes and honor the wake bit defined on the
-> interrupt.
+Hi Prabhakar,
 
-...
+On Thu, Sep 15, 2022 at 8:17 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> Enable the minimal blocks required for booting the Renesas RZ/Five
+> SMARC EVK with initramfs.
+>
+> Below are the blocks enabled:
+> - CPG
+> - CPU0
+> - DDR (memory regions)
+> - PINCTRL
+> - PLIC
+> - SCIF0
+>
+> Note we have deleted the nodes from the DT for which support needs to be
+> added for RZ/Five SoC and are enabled by RZ/G2UL SMARC EVK SoM/carrier
+> board DTS/I.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+> v2->v3
+> * Dropped RB tags from Conor and Geert
+> * Now re-using the SoM and carrier board DTS/I from RZ/G2UL
 
-> +	if (irq_ctx.irq == -ENOENT)
-> +		irq_ctx.irq = acpi_dev_gpio_irq_wake_get(adev, 0, &irq_ctx.wake_capable);
+Thanks for the update!
 
-I just realized, that there is an inconsistency on how we fill the wake_capable
-parameter. In some cases we check for IRQ for an error condition (IRQ not found)
-and in some the wake_capable still be filled.
+> --- /dev/null
+> +++ b/arch/riscv/boot/dts/renesas/r9a07g043f01-smarc.dts
+> @@ -0,0 +1,27 @@
+> +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +/*
+> + * Device Tree Source for the RZ/Five SMARC EVK
+> + *
+> + * Copyright (C) 2022 Renesas Electronics Corp.
+> + */
+> +
+> +/dts-v1/;
+> +
+> +/*
+> + * DIP-Switch SW1 setting
+> + * 1 : High; 0: Low
+> + * SW1-2 : SW_SD0_DEV_SEL      (0: uSD; 1: eMMC)
+> + * SW1-3 : SW_ET0_EN_N         (0: ETHER0; 1: CAN0, CAN1, SSI1, RSPI1)
+> + * Please change below macros according to SW1 setting on SoM
 
-Here the best approach I believe is to add
+"on the SoM" (like in r9a07g043u11-smarc.dts)?
 
-	if (irq_ctx.irq < 0)
-		return irq_ctx.irq;
+> --- /dev/null
+> +++ b/arch/riscv/boot/dts/renesas/rzfive-smarc-som.dtsi
+> @@ -0,0 +1,42 @@
+> +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +/*
+> + * Device Tree Source for the RZ/Five SMARC EVK SOM
+> + *
+> + * Copyright (C) 2022 Renesas Electronics Corp.
+> + */
+> +
+> +#include <arm64/renesas/rzg2ul-smarc-som.dtsi>
+> +
+> +/ {
+> +       aliases {
+> +               /delete-property/ ethernet0;
+> +               /delete-property/ ethernet1;
 
-I.o.w. we apply the rule "do not fill the output parameters when it's known
-to be an error condition".
+OK
 
-> +	if (wake_capable)
-> +		*wake_capable = irq_ctx.wake_capable;
+> +       };
+> +
+> +       chosen {
+> +               bootargs = "ignore_loglevel";
+> +       };
+> +};
+> +
+> +#if (SW_SW0_DEV_SEL)
+> +/delete-node/ &adc;
+> +#endif
+> +
+> +#if (!SW_ET0_EN_N)
+> +/delete-node/ &eth0;
+> +#endif
+> +/delete-node/ &eth1;
+> +
+> +/delete-node/ &ostm1;
+> +/delete-node/ &ostm2;
 
-> +	return irq_ctx.irq;
+Given they are all placeholders, do you really need to delete them?
+(more below)
 
--- 
-With Best Regards,
-Andy Shevchenko
+Gr{oetje,eeting}s,
 
+                        Geert
 
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
