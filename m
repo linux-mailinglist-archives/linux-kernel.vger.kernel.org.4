@@ -2,138 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 526C05BEAC3
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 18:06:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 893845BEAC5
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 18:06:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230293AbiITQFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 12:05:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44496 "EHLO
+        id S229630AbiITQGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 12:06:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231407AbiITQFm (ORCPT
+        with ESMTP id S230456AbiITQGM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 12:05:42 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C39585F9A4;
-        Tue, 20 Sep 2022 09:05:40 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id u9so7347652ejy.5;
-        Tue, 20 Sep 2022 09:05:40 -0700 (PDT)
+        Tue, 20 Sep 2022 12:06:12 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03DB23F1EC
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 09:06:09 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id x1-20020a17090ab00100b001fda21bbc90so11267404pjq.3
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 09:06:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=Eoj+9YVS7ZbvdHxGcn08+V7ecurW5KQvPgCOMjMH010=;
-        b=kjU9hV8Jl2mKbVH0atog7MEskvKVMD9stVp5tTaogMS7eA8whFWkcxzC+ndpdlRoSz
-         cWOcC81rhxeIZlNl+1hokFH0dloCkV8m3p9yuNQ/ntyMPQER7kSoOamT1FdxqAIJu8D3
-         mxnuecSURZO7Dcyysr9OiVWReIXxdHGAY5YE699JnvYLJts5wLhTrSgioCIFZEELwkYv
-         q9l9TB8snGKAlRqCq7IpvZqxL40MeP+aGrBDEZuI7lrj/RSsupPYZg6YgzLXxB+IufbA
-         6AZmL+8kM/E1FVR61Agrk3g28pwSc4vsAGB0BpvOf1cs5WUPsR7yYRJeskbsuZesVTcF
-         /rkQ==
+        d=purestorage.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=mVXjEkchDteCE1zCDTUzpbpt8ACeKtrTbNbxuuk9ZdA=;
+        b=WhArmtdqs/KKDWTWMCosIdRxKr5Uet/gXZ+ddafXZpICoDfqgBCpm+m0BrBuw5VioO
+         N01TiT3dRBp4xqgudzkm/sAl1qlY6gQRp0RC6rRz6Go7V8X64Hkj64kZuiRacglKXcCE
+         L0xB0mvUGlbtRw3Byz1SGuCNldmz/jpLsQRM8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=Eoj+9YVS7ZbvdHxGcn08+V7ecurW5KQvPgCOMjMH010=;
-        b=Sk2JYfU1XpkT67InsYTnO6CcRXyBWBXPRVjlXoyZYizrO2s68YiRihQze2MOnKbK1V
-         hlv9RV8P4URTyV4g2nRY8T35MDely8tRhqcDMNVYDZmrWJhJOY+2NZbLzS1G8JkxazOt
-         7UwS8GJJM+UUzTdH81hkQRJ6KlJM9Pq50+ady72Pr43MkmFo2VxyJQqcDv2X9EXhFh9X
-         t/+7FwW3fErcfDDkvs57UrqMYZV3pMLOqRzTzEAb4kqK+F8XeOEC1RqKo4Q6gY+bORgr
-         tEw7/YF9OcYbnX7W3+xyw3JpWVI97MJorglLbWjg9xtWNwIiE8WEK1OGUeK1soU6+z/N
-         NvCg==
-X-Gm-Message-State: ACrzQf13cQVcgIf8PJR1pezHha7337TAJlAXaEb5yMkvsexfwgUIdU5w
-        EtCZWcPcNqA3dvSfvA7kG8L0xaRI2iXqOnzhdP0=
-X-Google-Smtp-Source: AMsMyM48vhimTOMy7qPE4/TDwKwjy1/XnY2/SRfe6v6ZGuZqQeW9NiA4wGt5KXErXoSujh/QByRFk32JRBhed8tP15k=
-X-Received: by 2002:a17:907:847:b0:77f:f489:cc25 with SMTP id
- ww7-20020a170907084700b0077ff489cc25mr17227555ejb.80.1663689939190; Tue, 20
- Sep 2022 09:05:39 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=mVXjEkchDteCE1zCDTUzpbpt8ACeKtrTbNbxuuk9ZdA=;
+        b=Mo8UwfSMeYgziDHs+Gz9KQSVnvUr3d7KNnXVRGKargc14xLbhNss808hlCdlGg5w7q
+         XRyHNb35VD/RzSTYpBsHy+libb631dnuHV25LfHemIF00dFDa3KgXrCw4ofDxS3e4/A4
+         N+H3FAW6AbZgjnLqkTWIp75yw+upA0nt8FCsu4IBuu/qDVjy8yCeoeY+omi/XtkAjT2Z
+         S1qh4lvzwXL3Avi4aU6Ki2EeYOL9Iv5I6d53saDRn4Yw7nJyM/W5NPa55cxkZ4l/Ib/l
+         vtQgW1br/0powZTTlHfL2BrL3bbQtLKWS0x6zPdYKXnSdx1Za9iKV+R6sfbF+diqQ9+Y
+         y2Ag==
+X-Gm-Message-State: ACrzQf3tsUStqt8upbhiPPvv+nYLDMQhP+wqvn1V4v177PdgcTLi4Knr
+        r2RAKR6vqsNjiwFL6EtwcX8eHA==
+X-Google-Smtp-Source: AMsMyM4CDISk3X5hd2+0a+iB0Ji58ldPnFUwavVGxhVfv8jmCnDVTEmhu9onCz743+5jWuUglxommQ==
+X-Received: by 2002:a17:903:32c4:b0:178:5206:b396 with SMTP id i4-20020a17090332c400b001785206b396mr365485plr.99.1663689968516;
+        Tue, 20 Sep 2022 09:06:08 -0700 (PDT)
+Received: from medusa.lab.kspace.sh (c-98-207-191-243.hsd1.ca.comcast.net. [98.207.191.243])
+        by smtp.googlemail.com with ESMTPSA id l2-20020a170902f68200b001730a1af0fbsm102688plg.23.2022.09.20.09.06.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Sep 2022 09:06:07 -0700 (PDT)
+Date:   Tue, 20 Sep 2022 09:06:06 -0700
+From:   Mohamed Khalfella <mkhalfella@purestorage.com>
+To:     Keith Busch <kbusch@kernel.org>
+Cc:     stable@vger.kernel.org, Eric Badger <ebadger@purestorage.com>,
+        Jens Axboe <axboe@fb.com>, Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Tao Chiu <taochiu@synology.com>,
+        Leon Chien <leonchien@synology.com>,
+        Cody Wong <codywong@synology.com>,
+        "open list:NVM EXPRESS DRIVER" <linux-nvme@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] nvme-pci: Make sure to ring doorbell when last request
+ is short-circuited
+Message-ID: <20220920160606.GB3444537@medusa>
+References: <20220918054816.936669-1-mkhalfella@purestorage.com>
+ <YyioTUV/Td+yf0Z6@kbusch-mbp>
 MIME-Version: 1.0
-References: <20220915181558.354737-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220915181558.354737-9-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAMuHMdW99EutciosPtOTU9AztfvfMdKTaS+YRmpmS4VnhZ9KAA@mail.gmail.com>
- <CA+V-a8s9y0Jq4TJk9E_ptsZTW3iCoysaBSrUeQV8qfDFO3wzeQ@mail.gmail.com> <CAMuHMdWy=uU-QQgkz+-sBHfuK9tE-E4LijVLrYX7Efh9=C9vLg@mail.gmail.com>
-In-Reply-To: <CAMuHMdWy=uU-QQgkz+-sBHfuK9tE-E4LijVLrYX7Efh9=C9vLg@mail.gmail.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Tue, 20 Sep 2022 17:05:12 +0100
-Message-ID: <CA+V-a8uQ1XOq4v+nmoxOKk=K5tmahXeAttvE8BdbMBoU8GHr-A@mail.gmail.com>
-Subject: Re: [PATCH v3 08/10] riscv: dts: renesas: Add minimal DTS for Renesas
- RZ/Five SMARC EVK
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Atish Patra <atishp@rivosinc.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YyioTUV/Td+yf0Z6@kbusch-mbp>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
+On 2022-09-19 11:35:09 -0600, Keith Busch wrote:
+> > Fixes: d4060d2be1132 ("nvme-pci: fix controller reset hang when racing with nvme_timeout")
+> 
+> I revisted that commit, and it doesn't sound correct. Specifically this part:
+> 
+>     5) reset_work() continues to setup_io_queues() as it observes no error
+>        in init_identify(). However, the admin queue has already been
+>        quiesced in dev_disable(). Thus, any following commands would be
+>        blocked forever in blk_execute_rq().
+> 
+> When a timeout occurs in the CONNECTING state, the timeout handler unquiesces
+> the queue specifically to flush out any blocked requests. Is that commit really
+> necessary? I'd rather just revert it to save the extra per-IO checks if not.
 
-On Tue, Sep 20, 2022 at 4:07 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> Hi Prabhakar,
->
-> On Tue, Sep 20, 2022 at 3:05 PM Lad, Prabhakar
-> <prabhakar.csengg@gmail.com> wrote:
-> > On Tue, Sep 20, 2022 at 1:32 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > > On Thu, Sep 15, 2022 at 8:17 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> > > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > >
-> > > > Enable the minimal blocks required for booting the Renesas RZ/Five
-> > > > SMARC EVK with initramfs.
-> > > >
-> > > > Below are the blocks enabled:
-> > > > - CPG
-> > > > - CPU0
-> > > > - DDR (memory regions)
-> > > > - PINCTRL
-> > > > - PLIC
-> > > > - SCIF0
-> > > >
-> > > > Note we have deleted the nodes from the DT for which support needs to be
-> > > > added for RZ/Five SoC and are enabled by RZ/G2UL SMARC EVK SoM/carrier
-> > > > board DTS/I.
-> > > >
-> > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> > > > --- /dev/null
-> > > > +++ b/arch/riscv/boot/dts/renesas/rzfive-smarc-som.dtsi
-> > > > @@ -0,0 +1,42 @@
-> > > > +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > > +/*
-> > > > + * Device Tree Source for the RZ/Five SMARC EVK SOM
-> > > > + *
-> > > > + * Copyright (C) 2022 Renesas Electronics Corp.
-> > > > + */
-> > > > +
-> > > > +#include <arm64/renesas/rzg2ul-smarc-som.dtsi>
-> > > > +
-> > > > +/ {
-> > > > +       aliases {
-> > > > +               /delete-property/ ethernet0;
-> > > > +               /delete-property/ ethernet1;
-> > >
-> > > OK
-> > >
-> > I assume you are OK with dropping the above too?
->
-> I did intend to delete these properties (hence the "OK"), as their
-> presence may confuse U-Boot.
->
-Thank you for the clarification.
-
-Cheers,
-Prabhakar
+I can not speak with certainty whether 4060d2be1132 need to be reverted or not.
+I will need to carefully inspect reset code path and do more experiments. If this
+commit gets reverted we still need to add `nvme_commit_rqs` to `nvme_mq_admin_ops`.
