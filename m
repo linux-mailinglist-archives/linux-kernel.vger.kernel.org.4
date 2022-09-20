@@ -2,104 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 813895BEE0C
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 21:53:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5F6C5BEE10
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 21:56:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbiITTxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 15:53:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47680 "EHLO
+        id S230270AbiITT4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 15:56:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230049AbiITTxo (ORCPT
+        with ESMTP id S230150AbiITTzz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 15:53:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68B6174356;
-        Tue, 20 Sep 2022 12:53:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 20 Sep 2022 15:55:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 532824DF17
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 12:55:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663703752;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=EvSPE19vYY50yERcfNczWACCNLmBgP6vCyooUyO9/Mc=;
+        b=BzE9oOvq43Qt03tqgfq25gG523GqTRf0bb0vjdsRSeMdwDFRA/Ux/csvniiRMl+UrK82TQ
+        LEH+btfON3IZ6RN190rcOEwHHiV2Ey6ndpfMaS+t0L6nUQXBqBLMge970f5LK6Tbz3dzMd
+        TKB01WKLBZth99IPyK1e1FPxfTz82Wo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-587-CHSg0IPtNdSws-lVilMKgQ-1; Tue, 20 Sep 2022 15:55:51 -0400
+X-MC-Unique: CHSg0IPtNdSws-lVilMKgQ-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CB3DD621DD;
-        Tue, 20 Sep 2022 19:53:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0733AC433C1;
-        Tue, 20 Sep 2022 19:53:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663703621;
-        bh=K5D/cvhmWjxK0VnS1qCjWGXgGazK2EgtutCIcApbmxQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rL7fTkTZDNCKo7hSdqwlfp2xVwaPupoyqnSYzapd1FdPVNpHAOeBHfwi7H9imZ+iF
-         jEcaMnFOHPb6YerGWT/8ZhVGkvYZVMs/v1dhfvrMxjaPiRl65hu+Vetz3FRU+E1Kad
-         nvfbsvh6WgWnFy17kzYUDdQnvkHUpXel9orrYQbQFCJGL1mhpHEtxXDGTbFyBSjCC5
-         ZdGZ6IMb1rnFAzk32dlJwk98MNljLyhjVJ4SRRJyWqEAwmcZGMxEh6NAolktF6Ef7b
-         pq3QHa3WHiiCYLyp+8N9z9ufUWIeJeWfSzgxBiOWAC2jgW6br71Li4KbyyBKaC0wTQ
-         vX6G1lwpUd0LQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id EB03540856; Tue, 20 Sep 2022 20:53:37 +0100 (IST)
-Date:   Tue, 20 Sep 2022 20:53:37 +0100
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org, Song Liu <songliubraving@fb.com>,
-        bpf@vger.kernel.org
-Subject: Re: [PATCH 0/4] perf stat: Fix bperf cgroup counters (v2)
-Message-ID: <YyoaQZIrAO+1HgD5@kernel.org>
-References: <20220916184132.1161506-1-namhyung@kernel.org>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CB060811E87;
+        Tue, 20 Sep 2022 19:55:50 +0000 (UTC)
+Received: from llong.com (unknown [10.22.34.82])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 70247492B05;
+        Tue, 20 Sep 2022 19:55:50 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Waiman Long <longman@redhat.com>
+Subject: [PATCH v2] locking/qspinlock: Do spin-wait in slowpath if preemptible
+Date:   Tue, 20 Sep 2022 15:55:42 -0400
+Message-Id: <20220920195542.1548164-1-longman@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220916184132.1161506-1-namhyung@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, Sep 16, 2022 at 11:41:28AM -0700, Namhyung Kim escreveu:
-> Hello,
-> 
-> This fixes random failures in the perf stat cgroup BPF counters (bperf).
-> I've also added a new test to ensure it working properly.
-> 
-> v2 changes)
->  * fix a segfault with uncore event
+There are some code paths in the kernel where arch_spin_lock() will be
+called directly when the lock isn't expected to be contended and critical
+section is short. For example, tracing_saved_cmdlines_size_read()
+in kernel/trace/trace.c does that.
 
-Thanks, applied.
+In most cases, preemption is also not disabled. This creates a problem
+for the qspinlock slowpath which expects preemption to be disabled
+to guarantee the safe use of per cpu qnodes structure. To work around
+these special use cases, add a preemption count check in the slowpath
+and do a simple spin-wait when preemption isn't disabled.
 
-- Arnaldo
+Fixes: a33fda35e3a7 ("Introduce a simple generic 4-byte queued spinlock")
+Signed-off-by: Waiman Long <longman@redhat.com>
+---
+ [v2] Move down spin-wait to after the pending bit wait.
 
- 
-> You can get it from 'perf/bperf-cgrp-fix-v2' branch in
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
-> 
-> Thanks,
-> Namhyung
-> 
-> 
-> Namhyung Kim (4):
->   perf stat: Fix BPF program section name
->   perf stat: Fix cpu map index in bperf cgroup code
->   perf stat: Use evsel->core.cpus to iterate cpus in BPF cgroup counters
->   perf test: Add a new test for perf stat cgroup BPF counter
-> 
->  .../tests/shell/stat_bpf_counters_cgrp.sh     | 83 +++++++++++++++++++
->  tools/perf/util/bpf_counter_cgroup.c          | 10 +--
->  tools/perf/util/bpf_skel/bperf_cgroup.bpf.c   |  2 +-
->  3 files changed, 89 insertions(+), 6 deletions(-)
->  create mode 100755 tools/perf/tests/shell/stat_bpf_counters_cgrp.sh
-> 
-> 
-> base-commit: 62e64c9d2fd12839c02f1b3e8b873e7cb34e8720
-> -- 
-> 2.37.3.968.ga6b4b080e4-goog
+ kernel/locking/qspinlock.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
+diff --git a/kernel/locking/qspinlock.c b/kernel/locking/qspinlock.c
+index 65a9a10caa6f..d0159038084d 100644
+--- a/kernel/locking/qspinlock.c
++++ b/kernel/locking/qspinlock.c
+@@ -398,6 +398,23 @@ void queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
+ queue:
+ 	lockevent_inc(lock_slowpath);
+ pv_queue:
++#ifdef CONFIG_PREEMPT_COUNT
++	/*
++	 * As arch_spin_lock() can be called directly in some use cases
++	 * where the lock isn't expected to be contended, critical section
++	 * is short and preemption isn't disabled, we can't use qnodes in
++	 * this case as state may be screwed up in case preemption happens
++	 * or preemption warning may be printed (CONFIG_DEBUG_PREEMPT).
++	 * Just do a simple spin-wait in this case as the lock shouldn't be
++	 * contended for long.
++	 */
++	if (unlikely(!preempt_count())) {
++		while (!queued_spin_trylock(lock))
++			cpu_relax();
++		return;
++	}
++#endif
++
+ 	node = this_cpu_ptr(&qnodes[0].mcs);
+ 	idx = node->count++;
+ 	tail = encode_tail(smp_processor_id(), idx);
 -- 
+2.31.1
 
-- Arnaldo
