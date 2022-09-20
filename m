@@ -2,256 +2,429 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 420A15BEA55
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 17:36:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 950965BEA5D
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 17:39:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231520AbiITPgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 11:36:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36644 "EHLO
+        id S231572AbiITPjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 11:39:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbiITPgs (ORCPT
+        with ESMTP id S230448AbiITPjj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 11:36:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 765A7659E0;
-        Tue, 20 Sep 2022 08:36:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 03A31623C6;
-        Tue, 20 Sep 2022 15:36:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D5C6C433C1;
-        Tue, 20 Sep 2022 15:36:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663688206;
-        bh=D4fI20wsDZU6cBnEMfE+TOOp7Qrzm1qKp2H/6FoR1lw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=RFTGMek09d+aDdEKwQI5h9B9rUkfk1jaIjyoKzeykvjmwn5OmC3Ab3M4BIHr+Zftn
-         hwQQXrOg06GmITriVcjkYKVYtZ/wedGGgOzbCwzUDOpF8QCEs8oupwqCKtMnOvy10W
-         GqCyYJ0iRjyJSk8IGuD5QNUBcXSYPHcjPuAtSVFCwmcX5XKtUjNe7lhNOx2HCyne2B
-         q9P2brJEWnSui/jrnLDBiiOY0QcQAB+emVwJWzLOHjgN0rNE9ubiA3vT1tBSWjv3Db
-         ktoHwtI+ZlmizOqxe4jujhPf9vXL8So3/bdagy34nv4Yb7UL+yrJXLZR+z3Tq8z3gN
-         9O0U98xNH7QPA==
-Received: by mail-lj1-f174.google.com with SMTP id q17so3445626lji.11;
-        Tue, 20 Sep 2022 08:36:46 -0700 (PDT)
-X-Gm-Message-State: ACrzQf0/DtBCWgVeTpRixEGW6D8Oy8uCEewQFyU0DP2idB7+H45YkLiK
-        l0hUs7Ga8gE8bUqBv1tAyBCBma4GBJ/Q1Ajdw4k=
-X-Google-Smtp-Source: AMsMyM48yyP2Hqwk6bUrxTHAQc4fBFlYjN+MCHW44sVapUcWvHsLb4wIHHgjlbB4nlnT1A6045csLq04qR0dn0WWsCw=
-X-Received: by 2002:a2e:2d0a:0:b0:26c:a1c:cdf with SMTP id t10-20020a2e2d0a000000b0026c0a1c0cdfmr7905440ljt.352.1663688204337;
- Tue, 20 Sep 2022 08:36:44 -0700 (PDT)
+        Tue, 20 Sep 2022 11:39:39 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 601B26437;
+        Tue, 20 Sep 2022 08:39:37 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id b24so3471448ljk.6;
+        Tue, 20 Sep 2022 08:39:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=0mIUpg849MzBV+X66Bb81RCZlV8Kq/NjqMnhqZGN04E=;
+        b=d3mQDc6cklh29PFwTTqZzD7EHVGVN2PjDILc0jVBHDy/IoXXcMUGgb/SNs4sA1DZSj
+         e0hZY0hcbXviXJFpoiXZJd682YvmNL/WbxzlPBUfXpbBwMtffNudH/TgnSG9pSckS0bQ
+         sku+3HtqBhcE7b9C34oelOGMDV0kGsoocQmzFKEreCcsF+sy2GKNw9zEWmH764nLpHSF
+         KolE/O6R4XPKAsR7dAxbLfWIt9lTjqN3OnBVUilXv9WguDh87alW6fYMm1xgOwke867E
+         8K3BEQhUwHotA43JL4ke9zEVntpup6h4e2vMIR27qhAknzaZqWtd7jlAaQIEwE0NhLty
+         bLLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=0mIUpg849MzBV+X66Bb81RCZlV8Kq/NjqMnhqZGN04E=;
+        b=MGNjblyiKHNC6urODwe1N360pb8HU6vJlZ0mDVrfLcMpCxu7yAe4WYJXgulQ0uLDqD
+         QvdeZWU9qvN2dukIAfet9qSJdkOu49y86fKx4A5staGqqG6aDRJCGJL9K/5h8hVtKTCJ
+         sRITJwsl6rSiTrFS+ovJiOd8B/0HxlzW97VPckIeCoRijVeR3N9CHtCJsv/MZkN1bVte
+         CRwY4Sx+eiuv4MKifuvf1CeyeedXtf0tpI5lZ5dy+6yO1lajzaCWON9622V1Itn/H6fL
+         rQTfY0v9evW+r9yYUdHvR55/rlfqS5Ku1B1T97qsOXv7PsWScbb1ypTSyvIjz6OoKVWT
+         86Zw==
+X-Gm-Message-State: ACrzQf1gdjkGh+0AHPhDn052DeJERyhsPjRrhgun2gjt+fwcIYZ5WY6x
+        lEm4N3Q0MMCnijiMSxCSyyc=
+X-Google-Smtp-Source: AMsMyM5djkogT0KcIWxhM1PPxL+fYM+++yX0dFg+uiqXVjwtniIqt1K9nZVgdRSDnwL3iPBDQ/G+Jg==
+X-Received: by 2002:a2e:9650:0:b0:26b:ef42:7168 with SMTP id z16-20020a2e9650000000b0026bef427168mr6865212ljh.346.1663688375664;
+        Tue, 20 Sep 2022 08:39:35 -0700 (PDT)
+Received: from DESKTOP-GSFPEC9.localdomain (broadband-46-242-10-176.ip.moscow.rt.ru. [46.242.10.176])
+        by smtp.gmail.com with ESMTPSA id u24-20020ac24c38000000b0048afbe8a6a1sm9402lfq.241.2022.09.20.08.39.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Sep 2022 08:39:35 -0700 (PDT)
+From:   Konstantin Aladyshev <aladyshev22@gmail.com>
+Cc:     Konstantin Aladyshev <aladyshev22@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org
+Subject: [PATCH v2] ARM: dts: aspeed: Add AMD DaytonaX BMC
+Date:   Tue, 20 Sep 2022 18:39:26 +0300
+Message-Id: <20220920153928.6454-1-aladyshev22@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220919193257.2031-1-demi@invisiblethingslab.com>
-In-Reply-To: <20220919193257.2031-1-demi@invisiblethingslab.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Tue, 20 Sep 2022 17:36:32 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXEBfJUfTQ3THqqKxsU09_S98B_TjTECKwGM0WAv_5tZaA@mail.gmail.com>
-Message-ID: <CAMj1kXEBfJUfTQ3THqqKxsU09_S98B_TjTECKwGM0WAv_5tZaA@mail.gmail.com>
-Subject: Re: [PATCH v3] Support ESRT in Xen dom0
-To:     Demi Marie Obenour <demi@invisiblethingslab.com>
-Cc:     Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xen-devel@lists.xenproject.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,WEIRD_QUOTING
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Demi,
+Add initial version of device tree for the BMC in the AMD DaytonaX
+platform.
 
-On Mon, 19 Sept 2022 at 21:33, Demi Marie Obenour
-<demi@invisiblethingslab.com> wrote:
->
-> fwupd requires access to the EFI System Resource Table (ESRT) to
-> discover which firmware can be updated by the OS.  Currently, Linux does
-> not expose the ESRT when running as a Xen dom0.  Therefore, it is not
-> possible to use fwupd in a Xen dom0, which is a serious problem for e.g.
-> Qubes OS.
->
-> Before Xen 4.16, this was not fixable due to hypervisor limitations.
-> The UEFI specification requires the ESRT to be in EfiBootServicesData
-> memory, which Xen will use for whatever purposes it likes.  Therefore,
-> Linux cannot safely access the ESRT, as Xen may have overwritten it.
->
-> Starting with Xen 4.17, Xen checks if the ESRT is in EfiBootServicesData
-> or EfiRuntimeServicesData memory.  If the ESRT is in EfiBootServicesData
-> memory, Xen allocates some memory of type EfiRuntimeServicesData, copies
-> the ESRT to it, and finally replaces the ESRT pointer with a pointer to
-> the copy.  Since Xen will not clobber EfiRuntimeServicesData memory,
-> this ensures that the ESRT can safely be accessed by the OS.  It is safe
-> to access the ESRT under Xen if, and only if, it is in memory of type
-> EfiRuntimeServicesData.
->
+AMD DaytonaX platform is a customer reference board (CRB) with an
+Aspeed ast2500 BMC manufactured by AMD.
 
-Thanks for the elaborate explanation. This is really helpful.
+Signed-off-by: Konstantin Aladyshev <aladyshev22@gmail.com>
+---
+ arch/arm/boot/dts/Makefile                    |   1 +
+ arch/arm/boot/dts/aspeed-bmc-amd-daytonax.dts | 320 ++++++++++++++++++
+ 2 files changed, 321 insertions(+)
+ create mode 100644 arch/arm/boot/dts/aspeed-bmc-amd-daytonax.dts
 
-So here, you are explaining that the only way for Xen to prevent
-itself from potentially clobbering the ESRT is by creating a
-completely new allocation? What about other assets that may be passed
-via EFI boot services data regions?
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 05d8aef6e5d2..9eff88d410aa 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -1575,6 +1575,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
+ 	aspeed-ast2600-evb-a1.dtb \
+ 	aspeed-ast2600-evb.dtb \
+ 	aspeed-bmc-amd-ethanolx.dtb \
++	aspeed-bmc-amd-daytonax.dtb \
+ 	aspeed-bmc-ampere-mtjade.dtb \
+ 	aspeed-bmc-arm-stardragon4800-rep2.dtb \
+ 	aspeed-bmc-asrock-e3c246d4i.dtb \
+diff --git a/arch/arm/boot/dts/aspeed-bmc-amd-daytonax.dts b/arch/arm/boot/dts/aspeed-bmc-amd-daytonax.dts
+new file mode 100644
+index 000000000000..0e066b5ae0fb
+--- /dev/null
++++ b/arch/arm/boot/dts/aspeed-bmc-amd-daytonax.dts
+@@ -0,0 +1,320 @@
++// SPDX-License-Identifier: GPL-2.0
++/dts-v1/;
++
++#include "aspeed-g5.dtsi"
++#include <dt-bindings/gpio/aspeed-gpio.h>
++#include <dt-bindings/interrupt-controller/irq.h>
++
++/ {
++	model = "AMD DaytonaX BMC";
++	compatible = "amd,daytonax-bmc", "aspeed,ast2500";
++
++	memory@80000000 {
++		reg = <0x80000000 0x20000000>;
++	};
++
++	reserved-memory {
++		#address-cells = <1>;
++		#size-cells = <1>;
++		ranges;
++
++		video_engine_memory: jpegbuffer {
++			size = <0x02000000>;	/* 32M */
++			alignment = <0x01000000>;
++			compatible = "shared-dma-pool";
++			reusable;
++		};
++	};
++
++	aliases {
++		serial0 = &uart1;
++		serial4 = &uart5;
++	};
++
++	chosen {
++		stdout-path = &uart5;
++		bootargs = "console=ttyS4,115200 earlycon";
++	};
++
++	leds {
++		compatible = "gpio-leds";
++
++		fault {
++			gpios = <&gpio ASPEED_GPIO(A, 2) GPIO_ACTIVE_LOW>;
++		};
++
++		identify {
++			gpios = <&gpio ASPEED_GPIO(A, 3) GPIO_ACTIVE_LOW>;
++		};
++	};
++
++	iio-hwmon {
++		compatible = "iio-hwmon";
++		io-channels = <&adc 0>, <&adc 1>, <&adc 2>, <&adc 3>, <&adc 4>,
++			<&adc 5>, <&adc 6>, <&adc 7>, <&adc 8>, <&adc 9>,
++			<&adc 10>, <&adc 11>, <&adc 12>, <&adc 13>, <&adc 14>,
++			<&adc 15>;
++	};
++};
++
++&fmc {
++	status = "okay";
++	flash@0 {
++		status = "okay";
++		m25p,fast-read;
++		label = "bmc";
++		#include "openbmc-flash-layout.dtsi"
++	};
++};
++
++&mac0 {
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_rgmii1_default &pinctrl_mdio1_default>;
++};
++
++&uart1 {
++	//Host Console
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_txd1_default
++		&pinctrl_rxd1_default
++		&pinctrl_nrts1_default
++		&pinctrl_ndtr1_default
++		&pinctrl_ndsr1_default
++		&pinctrl_ncts1_default
++		&pinctrl_ndcd1_default
++		&pinctrl_nri1_default>;
++};
++
++&uart5 {
++	//BMC Console
++	status = "okay";
++};
++
++&vuart {
++	status = "okay";
++	aspeed,lpc-io-reg = <0x3f8>;
++	aspeed,lpc-interrupts = <4 IRQ_TYPE_LEVEL_HIGH>;
++};
++
++&adc {
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_adc0_default
++		&pinctrl_adc1_default
++		&pinctrl_adc2_default
++		&pinctrl_adc3_default
++		&pinctrl_adc4_default
++		&pinctrl_adc5_default
++		&pinctrl_adc6_default
++		&pinctrl_adc7_default
++		&pinctrl_adc8_default
++		&pinctrl_adc9_default
++		&pinctrl_adc10_default
++		&pinctrl_adc11_default
++		&pinctrl_adc12_default
++		&pinctrl_adc13_default
++		&pinctrl_adc14_default
++		&pinctrl_adc15_default>;
++};
++
++&gpio {
++	status = "okay";
++	gpio-line-names =
++	/*A0-A7*/	"","","led-fault","led-identify","","","","",
++	/*B0-B7*/	"","","","","","","","",
++	/*C0-C7*/	"id-button","","","","","","","",
++	/*D0-D7*/	"","","ASSERT_BMC_READY","","","","","",
++	/*E0-E7*/	"reset-button","reset-control","power-button","power-control","",
++			"power-good","power-ok","",
++	/*F0-F7*/	"","","","","","","BATTERY_DETECT","",
++	/*G0-G7*/	"","","","","","","","",
++	/*H0-H7*/	"","","","","","","","",
++	/*I0-I7*/	"","","","","","","","",
++	/*J0-J7*/	"","","","","","","","",
++	/*K0-K7*/	"","","","","","","","",
++	/*L0-L7*/	"","","","","","","","",
++	/*M0-M7*/	"","","","","","","","",
++	/*N0-N7*/	"","","","","","","","",
++	/*O0-O7*/	"","","","","","","","",
++	/*P0-P7*/	"","","","","","","","",
++	/*Q0-Q7*/	"","","","","","","","",
++	/*R0-R7*/	"","","","","","","","",
++	/*S0-S7*/	"","","","","","","","",
++	/*T0-T7*/	"","","","","","","","",
++	/*U0-U7*/	"","","","","","","","",
++	/*V0-V7*/	"","","","","","","","",
++	/*W0-W7*/	"","","","","","","","",
++	/*X0-X7*/	"","","","","","","","",
++	/*Y0-Y7*/	"","","","","","","","",
++	/*Z0-Z7*/	"","","","","","","","",
++	/*AA0-AA7*/	"","","","","","","","",
++	/*AB0-AB7*/	"FM_BMC_READ_SPD_TEMP","","","","","","","",
++	/*AC0-AC7*/	"","","","","","","","";
++};
++
++&i2c0 {
++	status = "okay";
++};
++
++&i2c1 {
++	status = "okay";
++};
++
++&i2c2 {
++	status = "okay";
++};
++
++&i2c3 {
++	status = "okay";
++};
++
++&i2c4 {
++	status = "okay";
++};
++
++&i2c5 {
++	status = "okay";
++};
++
++&i2c6 {
++	status = "okay";
++};
++
++&i2c7 {
++	status = "okay";
++};
++
++&i2c8 {
++	status = "okay";
++};
++
++&i2c10 {
++	status = "okay";
++};
++
++&i2c11 {
++	status = "okay";
++};
++
++&i2c12 {
++	status = "okay";
++};
++
++&kcs3 {
++	status = "okay";
++	aspeed,lpc-io-reg = <0xca2>;
++};
++
++&lpc_snoop {
++	status = "okay";
++	snoop-ports = <0x80>, <0x81>;
++};
++
++&lpc_ctrl {
++	status = "okay";
++};
++
++&pwm_tacho {
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_pwm0_default
++		&pinctrl_pwm1_default
++		&pinctrl_pwm2_default
++		&pinctrl_pwm3_default
++		&pinctrl_pwm4_default
++		&pinctrl_pwm5_default
++		&pinctrl_pwm6_default
++		&pinctrl_pwm7_default>;
++
++	fan@0 {
++		reg = <0x00>;
++		aspeed,fan-tach-ch = /bits/ 8 <0x00>;
++	};
++
++	fan@1 {
++		reg = <0x00>;
++		aspeed,fan-tach-ch = /bits/ 8 <0x01>;
++	};
++
++	fan@2 {
++		reg = <0x01>;
++		aspeed,fan-tach-ch = /bits/ 8 <0x02>;
++	};
++
++	fan@3 {
++		reg = <0x01>;
++		aspeed,fan-tach-ch = /bits/ 8 <0x03>;
++	};
++
++	fan@4 {
++		reg = <0x02>;
++		aspeed,fan-tach-ch = /bits/ 8 <0x04>;
++	};
++
++	fan@5 {
++		reg = <0x02>;
++		aspeed,fan-tach-ch = /bits/ 8 <0x05>;
++	};
++
++	fan@6 {
++		reg = <0x03>;
++		aspeed,fan-tach-ch = /bits/ 8 <0x06>;
++	};
++
++	fan@7 {
++		reg = <0x03>;
++		aspeed,fan-tach-ch = /bits/ 8 <0x07>;
++	};
++
++	fan@8 {
++		reg = <0x04>;
++		aspeed,fan-tach-ch = /bits/ 8 <0x08>;
++	};
++
++	fan@9 {
++		reg = <0x04>;
++		aspeed,fan-tach-ch = /bits/ 8 <0x09>;
++	};
++
++	fan@10 {
++		reg = <0x05>;
++		aspeed,fan-tach-ch = /bits/ 8 <0x0a>;
++	};
++
++	fan@11 {
++		reg = <0x05>;
++		aspeed,fan-tach-ch = /bits/ 8 <0x0b>;
++	};
++
++	fan@12 {
++		reg = <0x06>;
++		aspeed,fan-tach-ch = /bits/ 8 <0x0c>;
++	};
++
++	fan@13 {
++		reg = <0x06>;
++		aspeed,fan-tach-ch = /bits/ 8 <0x0d>;
++	};
++
++	fan@14 {
++		reg = <0x07>;
++		aspeed,fan-tach-ch = /bits/ 8 <0x0e>;
++	};
++
++	fan@15 {
++		reg = <0x07>;
++		aspeed,fan-tach-ch = /bits/ 8 <0x0f>;
++	};
++};
++
++&video {
++	status = "okay";
++	memory-region = <&video_engine_memory>;
++};
++
++&vhub {
++	status = "okay";
++};
++
+-- 
+2.25.1
 
-So first of all, EfiRuntimeServicesData has a special purpose: it is
-used to carry data that is part of the EFI runtime service
-implementations themselves. Therefore, it has to be mapped into the
-EFI page tables by the OS kernel, and carved out of the linear map (to
-prevent inadvertent access with mismatched attributes). So unless you
-are writing the code that backs GetVariable() or SetVariable(), there
-are never good reasons to use EfiRuntimeServicesData.
-
-If you want to use a memory type that is suitable for firmware tables
-that are intended for consumption by the OS only (and not by the
-runtime services themselves), you might consider EfiAcpiReclaimMemory.
-
-TBH I still don't think this is a scalable approach. There are other
-configuration tables that may be passed in EFI boot services memory,
-and MS especially were pushing back in the UEFI forum on adding table
-types that were passed in anything other the EfiBootServicesData.
-
-> When running as a Xen dom0, check if the ESRT is in memory of type
-> EfiRuntimeServicesData, and if it is, parse it as if not running under
-> Xen.  This allows programs such as fwupd which require the ESRT to run
-> under Xen, and so makes fwupd support in Qubes OS possible.
->
-> Signed-off-by: Demi Marie Obenour <demi@invisiblethingslab.com>
-> ---
-> Changes since v2:
->
-> - Massively updated commit message.
-> - Fetch the ESRT inline in drivers/firmware/efi/esrt.c, instead of using
->   a single-use helper in drivers/xen/efi.c.
->
-> Changes since v1:
->
-> - Use a different type (struct xen_efi_mem_info) for memory information
->   provided by Xen, as Xen reports it in a different way than the
->   standard Linux functions do.
->
->  drivers/firmware/efi/esrt.c | 71 ++++++++++++++++++++++++++++++-------
->  1 file changed, 58 insertions(+), 13 deletions(-)
->
-> diff --git a/drivers/firmware/efi/esrt.c b/drivers/firmware/efi/esrt.c
-> index 2a2f52b017e736dd995c69e8aeb5fbd7761732e5..378bf2ea770ad3bd747345a89258216919eb21bb 100644
-> --- a/drivers/firmware/efi/esrt.c
-> +++ b/drivers/firmware/efi/esrt.c
-> @@ -28,6 +28,11 @@
->  #include <asm/io.h>
->  #include <asm/early_ioremap.h>
->
-> +#ifdef CONFIG_XEN_EFI
-> +#include <asm/xen/hypercall.h>
-> +#include <xen/page.h>
-> +#endif
-> +
->  struct efi_system_resource_entry_v1 {
->         efi_guid_t      fw_class;
->         u32             fw_type;
-> @@ -243,27 +248,67 @@ void __init efi_esrt_init(void)
->         void *va;
->         struct efi_system_resource_table tmpesrt;
->         size_t size, max, entry_size, entries_size;
-> -       efi_memory_desc_t md;
-> -       int rc;
->         phys_addr_t end;
-> -
-> -       if (!efi_enabled(EFI_MEMMAP))
-> -               return;
-> +       uint32_t type;
->
->         pr_debug("esrt-init: loading.\n");
->         if (!esrt_table_exists())
->                 return;
->
-> -       rc = efi_mem_desc_lookup(efi.esrt, &md);
-> -       if (rc < 0 ||
-> -           (!(md.attribute & EFI_MEMORY_RUNTIME) &&
-> -            md.type != EFI_BOOT_SERVICES_DATA &&
-> -            md.type != EFI_RUNTIME_SERVICES_DATA)) {
-> -               pr_warn("ESRT header is not in the memory map.\n");
-> +       if (efi_enabled(EFI_MEMMAP)) {
-> +               efi_memory_desc_t md;
-> +
-> +               if (efi_mem_desc_lookup(efi.esrt, &md) < 0 ||
-> +                   (!(md.attribute & EFI_MEMORY_RUNTIME) &&
-> +                    md.type != EFI_BOOT_SERVICES_DATA &&
-> +                    md.type != EFI_RUNTIME_SERVICES_DATA)) {
-> +                       pr_warn("ESRT header is not in the memory map.\n");
-> +                       return;
-> +               }
-> +
-> +               type = md.type;
-> +               max = efi_mem_desc_end(&md);
-> +#ifdef CONFIG_XEN_EFI
-> +       } else if (efi_enabled(EFI_PARAVIRT)) {
-> +               static_assert(XEN_PAGE_SHIFT == EFI_PAGE_SHIFT,
-> +                             "Mismatch between EFI_PAGE_SHIFT and XEN_PAGE_SHIFT");
-> +
-> +               struct xen_platform_op op = {
-> +                       .cmd = XENPF_firmware_info,
-> +                       .u.firmware_info = {
-> +                               .type = XEN_FW_EFI_INFO,
-> +                               .index = XEN_FW_EFI_MEM_INFO,
-> +                               .u.efi_info.mem.addr = efi.esrt,
-> +                               .u.efi_info.mem.size = ((u64)-1ULL) - efi.esrt,
-> +                       }
-> +               };
-> +               union xenpf_efi_info *info = &op.u.firmware_info.u.efi_info;
-> +               int rc = HYPERVISOR_platform_op(&op);
-> +
-> +               if (rc) {
-> +                       pr_warn("Failed to lookup ESRT header %lu in Xen memory map: error %d\n",
-> +                               efi.esrt, rc);
-> +                       return;
-> +               }
-> +               type = info->mem.type;
-> +               max = info->mem.addr + info->mem.size;
-> +
-> +               /*
-> +                * Recent Xen versions relocate the ESRT to memory of type
-> +                * EfiRuntimeServicesData, which Xen will not reuse.  If the ESRT
-> +                * is not in EfiRuntimeServicesData memory, it has not been reserved
-> +                * by Xen and might be allocated to other guests, so it cannot
-> +                * safely be used.
-> +                */
-> +               if (type != EFI_RUNTIME_SERVICES_DATA) {
-> +                       pr_warn("Xen did not reserve ESRT, ignoring it\n");
-> +                       return;
-> +               }
-> +#endif
-
-I am really not happy with this. You are adding a special case
-specific to Xen to double check that it has violated the EFI spec as
-required. Even if some firmwares exist that do the same, codifying it
-like this on mainline Linux code is not something I am comfortable
-accepting.
-
-I take it that this also means that ESRT on dom0 is currently just
-broken, right?
-
-
-> +       } else {
->                 return;
->         }
->
-> -       max = efi_mem_desc_end(&md);
->         if (max < efi.esrt) {
->                 pr_err("EFI memory descriptor is invalid. (esrt: %p max: %p)\n",
->                        (void *)efi.esrt, (void *)max);
-> @@ -333,7 +378,7 @@ void __init efi_esrt_init(void)
->
->         end = esrt_data + size;
->         pr_info("Reserving ESRT space from %pa to %pa.\n", &esrt_data, &end);
-> -       if (md.type == EFI_BOOT_SERVICES_DATA)
-> +       if (type == EFI_BOOT_SERVICES_DATA)
->                 efi_mem_reserve(esrt_data, esrt_data_size);
->
->         pr_debug("esrt-init: loaded.\n");
-> --
-> Sincerely,
-> Demi Marie Obenour (she/her/hers)
-> Invisible Things Lab
