@@ -2,105 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 060C45BD8A1
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 02:03:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40D385BD8A6
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 02:12:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229574AbiITADs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 20:03:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36582 "EHLO
+        id S229602AbiITAMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 20:12:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiITADo (ORCPT
+        with ESMTP id S229581AbiITAMM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 20:03:44 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D35FC501B9
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 17:03:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663632221; x=1695168221;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=8kGngS5hGQwtktWogbY6TTSMVixVDUF6lzm9ZW6UHw0=;
-  b=m9mRmtP6/LyahpTsmFR2/4KTtNqV7I6jEHjyGr61FIrwl2FSKqWrL6T4
-   Lw+mOpGhMaIcO46uabXitUi/QHSiOLe/Oolf+61E2+cj3I+UnJ17kZvqT
-   wNfs38Hf1gR1PSJr0CG3MgbUGrTthYHWDLRDtoTZ+5GRXGgecadK7Dvvy
-   jrtJBrQGr5y0nnnuncsZIu7BGL6MfcCQFQHhO3si7Uu9IaRr1W8ISte9R
-   f9sHOhAB+XVj80IAtTn+HNrF00gcRSRDuLZXu7vLFoASFSHmLLlUcV8u+
-   jy9jwbBvhMuLRzbxgTZc83aWSurioIxcQDPUqznDhAsPnHJK7f5Yg7TUV
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="361291618"
-X-IronPort-AV: E=Sophos;i="5.93,329,1654585200"; 
-   d="scan'208";a="361291618"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 17:03:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,329,1654585200"; 
-   d="scan'208";a="618694515"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 19 Sep 2022 17:03:38 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oaQjh-0002K5-2r;
-        Tue, 20 Sep 2022 00:03:37 +0000
-Date:   Tue, 20 Sep 2022 08:02:42 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yuanchu Xie <yuanchu@google.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        SeongJae Park <sj@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [linux-stable-rc:linux-5.15.y 6634/9999]
- huge_count_read_write.c:23:9: warning: 'write' reading 4294967295 bytes from
- a region of size 1
-Message-ID: <202209200744.TnQ9kRau-lkp@intel.com>
+        Mon, 19 Sep 2022 20:12:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9EEC43336;
+        Mon, 19 Sep 2022 17:12:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 94AEAB80B16;
+        Tue, 20 Sep 2022 00:12:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32C95C433B5;
+        Tue, 20 Sep 2022 00:12:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663632729;
+        bh=jGh6Z/8o8phkxD6Q5ZaClfS96enuq/pckZpmt/gSUKw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=QxfSf0QTdMROv8kOD4YiiscBiAFwlo9PR57pV30gJmTUhrNpU/yWDrH7eLYMgP6jK
+         4AElYiaGpjieblpx1ymUfRCCwpdsuhxmRdDBBVCtNUk0JULVG7i6Tk8r8czAHGn08j
+         MBBSR5x1J3eJKDggrNpdTb7tjQ+pjnSxHlCwGTWe7w/PYA2UXRli85h6LKs+fhbjT6
+         VZx80+WFkDW30LgD7SETB2DCnkd6Krj0/cFx3zmmtk+SNp1YtBxiso4SFiIgiNvkte
+         uR3c+udyxrbhe308ZeBZELRHAlq41d1lMahVvd0r8cqTN3VJ1uvQ0eiLq32Q/8wMfa
+         Sl8TXtoN4T7og==
+Received: by mail-oi1-f175.google.com with SMTP id m81so1682320oia.1;
+        Mon, 19 Sep 2022 17:12:09 -0700 (PDT)
+X-Gm-Message-State: ACrzQf3FXJqkua7FaiGxOiuPkSkRAEvdnc5oC7Axp+LEGA+hEN/x3Bj9
+        HrziwawLRDFnj33CDhNrSkY70Gxs0oEJnDaz35k=
+X-Google-Smtp-Source: AMsMyM7q6m74X81UqNxrOeCx3Dxj/WxoLF1r3ltRRUbJziqD0ESkxDrh6zD8VT0RsW27eG0Uex4S1P+7jPii4oPq1r0=
+X-Received: by 2002:a05:6808:201f:b0:34f:9fdf:dbbf with SMTP id
+ q31-20020a056808201f00b0034f9fdfdbbfmr356862oiw.19.1663632728293; Mon, 19 Sep
+ 2022 17:12:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220918155246.1203293-1-guoren@kernel.org> <20220918155246.1203293-10-guoren@kernel.org>
+In-Reply-To: <20220918155246.1203293-10-guoren@kernel.org>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Tue, 20 Sep 2022 08:11:55 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRtRzeDqr3=AUkGadPMmMA6kwU86+zSNn8+0qXSk8zmVQ@mail.gmail.com>
+Message-ID: <CAJF2gTRtRzeDqr3=AUkGadPMmMA6kwU86+zSNn8+0qXSk8zmVQ@mail.gmail.com>
+Subject: Re: [PATCH V5 09/11] riscv: Support HAVE_SOFTIRQ_ON_OWN_STACK
+To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
+        tglx@linutronix.de, peterz@infradead.org, luto@kernel.org,
+        conor.dooley@microchip.com, heiko@sntech.de, jszhang@kernel.org,
+        lazyparser@gmail.com, falcon@tinylab.org, chenhuacai@kernel.org,
+        apatel@ventanamicro.com, atishp@atishpatra.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, mark.rutland@arm.com,
+        zouyipeng@huawei.com, bigeasy@linutronix.de,
+        David.Laight@aculab.com
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-head:   d766f744e4827dc41ef6c01403a96b7bb3938132
-commit: 9ea7148f61cd225959bbacc0b075db72169c8b59 [6634/9999] selftests/damon: add damon to selftests root Makefile
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-reproduce:
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=9ea7148f61cd225959bbacc0b075db72169c8b59
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc linux-5.15.y
-        git checkout 9ea7148f61cd225959bbacc0b075db72169c8b59
-        make O=/tmp/kselftest headers
-        make O=/tmp/kselftest -C tools/testing/selftests
+On Sun, Sep 18, 2022 at 11:53 PM <guoren@kernel.org> wrote:
+>
+> From: Guo Ren <guoren@linux.alibaba.com>
+>
+> Add the HAVE_SOFTIRQ_ON_OWN_STACK feature for the IRQ_STACKS config. The
+> irq and softirq use the same independent irq_stack of percpu by time
+> division multiplexing.
+>
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> ---
+>  arch/riscv/Kconfig      |  7 ++++---
+>  arch/riscv/kernel/irq.c | 16 ++++++++++++++++
+>  2 files changed, 20 insertions(+), 3 deletions(-)
+>
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index 75db47a983f2..dfe600f3526c 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -434,12 +434,13 @@ config FPU
+>           If you don't know what to do here, say Y.
+>
+>  config IRQ_STACKS
+> -       bool "Independent irq stacks" if EXPERT
+> +       bool "Independent irq & softirq stacks" if EXPERT
+>         default y
+>         select HAVE_IRQ_EXIT_ON_IRQ_STACK
+> +       select HAVE_SOFTIRQ_ON_OWN_STACK
+>         help
+> -         Add independent irq stacks for percpu to prevent kernel stack overflows.
+> -         We may save some memory footprint by disabling IRQ_STACKS.
+> +         Add independent irq & softirq stacks for percpu to prevent kernel stack
+> +         overflows. We may save some memory footprint by disabling IRQ_STACKS.
+>
+>  endmenu # "Platform type"
+>
+> diff --git a/arch/riscv/kernel/irq.c b/arch/riscv/kernel/irq.c
+> index 5ad4952203c5..6dc9ccd01470 100644
+> --- a/arch/riscv/kernel/irq.c
+> +++ b/arch/riscv/kernel/irq.c
+> @@ -11,6 +11,7 @@
+>  #include <linux/seq_file.h>
+>  #include <asm/smp.h>
+>  #include <asm/vmap_stack.h>
+> +#include <asm/softirq_stack.h>
+>
+>  #ifdef CONFIG_IRQ_STACKS
+>  static DEFINE_PER_CPU(ulong *, irq_stack_ptr);
+> @@ -38,6 +39,21 @@ static void init_irq_stacks(void)
+>                 per_cpu(irq_stack_ptr, cpu) = per_cpu(irq_stack, cpu);
+>  }
+>  #endif /* CONFIG_VMAP_STACK */
+> +
+> +#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
+Sorry, it should be. If you compiled an error, please modify it manually,
++#ifdef CONFIG_HAVE_SOFTIRQ_ON_OWN_STACK
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+> +static void do_riscv_softirq(struct pt_regs *regs)
+> +{
+> +       __do_softirq();
+> +}
+> +
+> +void do_softirq_own_stack(void)
+> +{
+> +       ulong *sp = per_cpu(irq_stack_ptr, smp_processor_id());
+> +
+> +       call_on_stack(NULL, sp, do_riscv_softirq, 0);
+> +}
+> +#endif /* CONFIG_SOFTIRQ_ON_OWN_STACK */
+> +
+>  #else
+>  static void init_irq_stacks(void) {}
+>  #endif /* CONFIG_IRQ_STACKS */
+> --
+> 2.36.1
+>
 
-All warnings (new ones prefixed by >>):
-
-   huge_count_read_write.c: In function 'write_read_with_huge_count':
->> huge_count_read_write.c:23:9: warning: 'write' reading 4294967295 bytes from a region of size 1 [-Wstringop-overread]
-      23 |         write(filedesc, "", 0xfffffffful);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from huge_count_read_write.c:8:
-   /usr/include/unistd.h:367:16: note: in a call to function 'write' declared with attribute 'access (read_only, 2, 3)'
-     367 | extern ssize_t write (int __fd, const void *__buf, size_t __n) __wur
-         |                ^~~~~
->> huge_count_read_write.c:25:15: warning: 'read' writing 4294967295 bytes into a region of size 25 overflows the destination [-Wstringop-overflow=]
-      25 |         ret = read(filedesc, buf, 0xfffffffful);
-         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   huge_count_read_write.c:14:14: note: destination object 'buf' of size 25
-      14 |         char buf[25];
-         |              ^~~
-   In file included from huge_count_read_write.c:8:
-   /usr/include/unistd.h:360:16: note: in a call to function 'read' declared with attribute 'access (write_only, 2, 3)'
-     360 | extern ssize_t read (int __fd, void *__buf, size_t __nbytes) __wur
-         |                ^~~~
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best Regards
+ Guo Ren
