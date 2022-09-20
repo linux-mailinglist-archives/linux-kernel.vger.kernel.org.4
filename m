@@ -2,185 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B1AB5BE7D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 16:00:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0752B5BE7D7
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 16:00:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbiITOAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 10:00:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57842 "EHLO
+        id S229845AbiITOAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 10:00:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiITOAH (ORCPT
+        with ESMTP id S230325AbiITOAb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 10:00:07 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D1413F27;
-        Tue, 20 Sep 2022 07:00:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663682406; x=1695218406;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=RHAlT1tmtQpRmnr86saDeoL2upzLNqG6AJXpqitAz+0=;
-  b=WKh4leqb8+mVSOrEdzUHMy6Qcbhm9kBodcUasg1QaO/0SE4TXp5t3g8t
-   HY32sI/QV1CLUlkYK66e20T6KvUX3ScBTFvrZGoHLkjXZQRBACzH7AFZa
-   SdZVYi73pU+FEtjMBS0qfnCdKRKoeu3CbHgGnmPRBl/kWjc9lD3RoEgrz
-   o3wvw8kTc2v69Ei3TFFsF67+EWtGn5y5gkcoaa5dxwtQEPs4ll0RTsjHP
-   HoYkNgfFgmGED9E7tSGdnOzJFC5g5s3gbP2oftTqiZle1cGxPGR2NrnVQ
-   F8NvQ9zDLVB/gRy9sOIwYMynnt870JqNx/u989tJs6aWhvmhwl6u8oyYe
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10476"; a="298424944"
-X-IronPort-AV: E=Sophos;i="5.93,330,1654585200"; 
-   d="scan'208";a="298424944"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 07:00:06 -0700
-X-IronPort-AV: E=Sophos;i="5.93,330,1654585200"; 
-   d="scan'208";a="744543055"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.58.32])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 07:00:03 -0700
-Message-ID: <571fb9aa-98e7-b42a-aa81-01658e131f11@intel.com>
-Date:   Tue, 20 Sep 2022 16:59:59 +0300
+        Tue, 20 Sep 2022 10:00:31 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2690A17051;
+        Tue, 20 Sep 2022 07:00:30 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28KDkAw5010415;
+        Tue, 20 Sep 2022 14:00:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=j+EMvjBsy0IMEg+i0Vc5T5tC5c3LuWqT+jfH1OLp0qE=;
+ b=ngEDVwmakLzLg0EZwmF+gK3XMK39n1gOrWot4J6jp2nHJfz9lUUWwPImwlmHDzIPia9Z
+ OtxhHgbsczFZBEVZi2++yTCq6kxzCY1KMbZ1rsiAhHUvyP+tOwKB5qDqmBX54Q5eojhY
+ siJL96KC2RAM/lW6HRNbGJrcNQs5FaEM9yJ4P8h4MFK2Tg7f+5KgWF0fVizUIf7XqhbO
+ izajrDcRxYeGMmFSAT9C+tpQX+6x7dOL2RpG8jl0RKydavyuZmztB2tTJy97olHhgVxz
+ eFUxbYHhmh6Zc/L2d1HzF4g6oImuuhcnV6XgpOc8I4gLWzBU2lb1Ol7EyVCj9Xx+WgJc bw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jqepr0daf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Sep 2022 14:00:18 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28KDlE9U013676;
+        Tue, 20 Sep 2022 14:00:16 GMT
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jqepr0d4e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Sep 2022 14:00:15 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28KDt1cv003987;
+        Tue, 20 Sep 2022 14:00:12 GMT
+Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
+        by ppma02dal.us.ibm.com with ESMTP id 3jn5v9s46s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Sep 2022 14:00:12 +0000
+Received: from smtpav05.wdc07v.mail.ibm.com ([9.208.128.117])
+        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28KE0BrO65601932
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 20 Sep 2022 14:00:12 GMT
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 199C958043;
+        Tue, 20 Sep 2022 14:00:11 +0000 (GMT)
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 45E065805F;
+        Tue, 20 Sep 2022 14:00:09 +0000 (GMT)
+Received: from [9.155.210.227] (unknown [9.155.210.227])
+        by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 20 Sep 2022 14:00:09 +0000 (GMT)
+Message-ID: <52b73ecf-1a00-69ce-1cb8-8adb8bdd97c8@linux.ibm.com>
+Date:   Tue, 20 Sep 2022 16:00:08 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH 3/4] perf record: Save DSO build-ID for synthesizing
-Content-Language: en-US
-To:     Namhyung Kim <namhyung@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users@vger.kernel.org
-References: <20220916175902.1155177-1-namhyung@kernel.org>
- <20220916175902.1155177-4-namhyung@kernel.org>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20220916175902.1155177-4-namhyung@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.2.2
+Subject: Re: [PATCH net-next v2 0/2] Separate SMC parameter settings from TCP
+ sysctls
+To:     Wen Gu <guwen@linux.alibaba.com>, kgraul@linux.ibm.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1663667542-119851-1-git-send-email-guwen@linux.alibaba.com>
+From:   Wenjia Zhang <wenjia@linux.ibm.com>
+In-Reply-To: <1663667542-119851-1-git-send-email-guwen@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: NbJ7CKR4-1Qc9gUnA9A7-QUt7h1mbzgh
+X-Proofpoint-GUID: eHeb1O3jttufCdabq3PARyDWTOADBkRZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-20_04,2022-09-20_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ spamscore=0 malwarescore=0 adultscore=0 lowpriorityscore=0 suspectscore=0
+ bulkscore=0 mlxlogscore=968 clxscore=1011 impostorscore=0 mlxscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209200079
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/09/22 20:59, Namhyung Kim wrote:
-> When synthesizing MMAP2 with build-id, it'd read the same file repeatedly as
-> it has no idea if it's done already.  Maintain a dsos to check that and skip
-> the file access if possible.
+
+
+On 20.09.22 11:52, Wen Gu wrote:
+> SMC shares some sysctls with TCP, but considering the difference
+> between these two protocols, it may not be very suitable for SMC
+> to reuse TCP parameter settings in some cases, such as keepalive
+> time or buffer size.
 > 
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> ---
->  tools/perf/util/synthetic-events.c | 49 +++++++++++++++++++++++++-----
->  1 file changed, 42 insertions(+), 7 deletions(-)
+> So this patch set aims to introduce some SMC specific sysctls to
+> independently and flexibly set the parameters that suit SMC.
 > 
-> diff --git a/tools/perf/util/synthetic-events.c b/tools/perf/util/synthetic-events.c
-> index 9d4f5dacd154..e6978b2dee8f 100644
-> --- a/tools/perf/util/synthetic-events.c
-> +++ b/tools/perf/util/synthetic-events.c
-> @@ -4,6 +4,7 @@
->  #include "util/data.h"
->  #include "util/debug.h"
->  #include "util/dso.h"
-> +#include "util/dsos.h"
->  #include "util/event.h"
->  #include "util/evlist.h"
->  #include "util/machine.h"
-> @@ -47,12 +48,25 @@
->  
->  unsigned int proc_map_timeout = DEFAULT_PROC_MAP_PARSE_TIMEOUT;
->  
-> +static bool synth_init_done;
-> +static struct dsos synth_dsos;
-> +
->  void perf_event__synthesize_start(void)
->  {
-> +	if (synth_init_done)
-> +		return;
-> +
-> +	dsos__init(&synth_dsos);
-> +
-> +	synth_init_done = true;
->  }
->  
->  void perf_event__synthesize_stop(void)
->  {
-> +	if (!synth_init_done)
-> +		return;
-> +
-> +	dsos__exit(&synth_dsos);
->  }
->  
->  int perf_tool__process_synth_event(struct perf_tool *tool,
-> @@ -374,26 +388,47 @@ static bool read_proc_maps_line(struct io *io, __u64 *start, __u64 *end,
->  static void perf_record_mmap2__read_build_id(struct perf_record_mmap2 *event,
->  					     bool is_kernel)
->  {
-> -	struct build_id bid;
-> +	struct build_id _bid, *bid = &_bid;
-> +	struct dso *dso = NULL;
-> +	struct dso_id id;
->  	int rc;
->  
-> -	if (is_kernel)
-> -		rc = sysfs__read_build_id("/sys/kernel/notes", &bid);
-> -	else
-> -		rc = filename__read_build_id(event->filename, &bid) > 0 ? 0 : -1;
-> +	if (is_kernel) {
-> +		rc = sysfs__read_build_id("/sys/kernel/notes", bid);
-> +		goto out;
-> +	}
-> +
-> +	id.maj = event->maj;
-> +	id.min = event->min;
-> +	id.ino = event->ino;
-> +	id.ino_generation = event->ino_generation;
->  
+> v2->v1:
+> - Use proc_dointvec_jiffies as proc_handler and allow value 0 to
+>    disable TEST_LINK.
+> 
+> Tony Lu (1):
+>    net/smc: Unbind r/w buffer size from clcsock and make them tunable
+> 
+> Wen Gu (1):
+>    net/smc: Introduce a specific sysctl for TEST_LINK time
+> 
+>   Documentation/networking/smc-sysctl.rst | 25 +++++++++++++++++++++++++
+>   include/net/netns/smc.h                 |  3 +++
+>   net/smc/af_smc.c                        |  5 ++---
+>   net/smc/smc_core.c                      |  8 ++++----
+>   net/smc/smc_llc.c                       |  2 +-
+>   net/smc/smc_llc.h                       |  1 +
+>   net/smc/smc_sysctl.c                    | 30 ++++++++++++++++++++++++++++++
+>   7 files changed, 66 insertions(+), 8 deletions(-)
+> 
+Looks good. Thank you!
 
-There might be some paths missing perf_event__synthesize_start()
-e.g. perf trace
-So it would probably be safer to use lazy initialization for
-synth_dsos.
-
-Also, callers of perf_record_mmap2__read_build_id() have a struct
-machine so I wonder about putting synth_dsos in struct machine ?
-Or even just using machine->dsos ?
-
-> +	dso = dsos__findnew_id(&synth_dsos, event->filename, &id);
-> +	if (dso && dso->has_build_id) {
-> +		bid = &dso->bid;
-> +		rc = 0;
-> +		goto out;
-> +	}
-> +
-> +	rc = filename__read_build_id(event->filename, bid) > 0 ? 0 : -1;
-> +
-> +out:
->  	if (rc == 0) {
-> -		memcpy(event->build_id, bid.data, sizeof(bid.data));
-> -		event->build_id_size = (u8) bid.size;
-> +		memcpy(event->build_id, bid->data, sizeof(bid->data));
-> +		event->build_id_size = (u8) bid->size;
->  		event->header.misc |= PERF_RECORD_MISC_MMAP_BUILD_ID;
->  		event->__reserved_1 = 0;
->  		event->__reserved_2 = 0;
-> +
-> +		if (dso && !dso->has_build_id)
-> +			dso__set_build_id(dso, bid);
->  	} else {
->  		if (event->filename[0] == '/') {
->  			pr_debug2("Failed to read build ID for %s\n",
->  				  event->filename);
->  		}
->  	}
-> +	dso__put(dso);
->  }
->  
->  int perf_event__synthesize_mmap_events(struct perf_tool *tool,
-
+For the series:
+Acked-by: Wenjia Zhang <wenjia@linux.ibm.com>
