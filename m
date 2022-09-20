@@ -2,163 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B39D65BE77B
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 15:46:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB62D5BE77F
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 15:47:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230463AbiITNqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 09:46:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36554 "EHLO
+        id S230253AbiITNr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 09:47:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbiITNqb (ORCPT
+        with ESMTP id S229814AbiITNrY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 09:46:31 -0400
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2055.outbound.protection.outlook.com [40.107.101.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9197356BB0;
-        Tue, 20 Sep 2022 06:46:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=k3g40jHK9q57xIINqbPLWzepMFJrphhkmXokYV0q8JJX84eDxzxBZPL3jsWbfJLPJgjVMPVR883Ia4LLefj6qHG8v+9Rdyr+v6dzoLHwI75F5Gpk2feVx+pMGidA/OZMKRT7xe/y0B1009B5kWFytndIVuJjB9d3xHxHcScdyEIQNIQ62unQ+5fIt2C/xg3HGJWI5UoQKA44LzxkuWTtZB6nQNrlVTgGfq+5WxKpY2PUsaI3JvDXhGwAbgS9aaqYwcbGUxcMXzpeW/+N9Ey6Y5wcWvMXsNEWFZzr+PVf/YfJaVGFjU/mZkutp4bVVle/44Uj51xyqLL4wMnO/+YKKQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=73FCaBfII5fhDpD6TRa6T8KOvq4EsVROxzG32h6s0Y4=;
- b=A9Nz8MskC66dbbTyjrZ/w6G+1Ex1oONAgR4xBHNi7jV4JRrMM3wCi28qOUnFbz5mQSy72XlfdAIog7ZAubiPici0Nkrb6cEQj2uv9ugnIym4A6+uPVoHEW4tB1dFgXbFvEyHaHLApIo23e7Dk7WQuwyCM4Svjjj/RDVPADO5h3M0N6Z42AWKznPU6oe9hzJ8rihKKNY2bZpCX7WQgtaSZUtlkVaCqI2vxutvqhBGDgBYHWoryPHjDPx0YU04UZyH3tY+JS/GYvm1wxF0cFwrA/WbTOlBzCM+t/hV0R64ZaGjprSBh9fvEU+khmvJ//z7w8J3GX/J50fsbjxT/cCM9w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=73FCaBfII5fhDpD6TRa6T8KOvq4EsVROxzG32h6s0Y4=;
- b=HFSBEkGSGQFtyl+y4gyE6z7bGn0GkK3leMFJ3o+d44vH+9KryYfhTsy1Jh3ffAwS8kRV80/S15bFXcBX7jPvvnfdHQQbQSfRC5ADHYaNgwZBEvUXtIHuTYD/gmLkbjfmbRsrAOAUc1jaej0lhUIRQRrZmIVya7gV9rLhGlRXC3k=
-Received: from SN6PR12MB2767.namprd12.prod.outlook.com (2603:10b6:805:75::23)
- by CY5PR12MB6645.namprd12.prod.outlook.com (2603:10b6:930:42::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.19; Tue, 20 Sep
- 2022 13:46:27 +0000
-Received: from SN6PR12MB2767.namprd12.prod.outlook.com
- ([fe80::8588:d2f4:2eb9:7021]) by SN6PR12MB2767.namprd12.prod.outlook.com
- ([fe80::8588:d2f4:2eb9:7021%4]) with mapi id 15.20.5654.014; Tue, 20 Sep 2022
- 13:46:25 +0000
-From:   "Kalra, Ashish" <Ashish.Kalra@amd.com>
-To:     Borislav Petkov <bp@alien8.de>
-CC:     "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "jroedel@suse.de" <jroedel@suse.de>,
-        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "jmattson@google.com" <jmattson@google.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "slp@redhat.com" <slp@redhat.com>,
-        "pgonda@google.com" <pgonda@google.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "srinivas.pandruvada@linux.intel.com" 
-        <srinivas.pandruvada@linux.intel.com>,
-        "rientjes@google.com" <rientjes@google.com>,
-        "dovmurik@linux.ibm.com" <dovmurik@linux.ibm.com>,
-        "tobin@ibm.com" <tobin@ibm.com>,
-        "Roth, Michael" <Michael.Roth@amd.com>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "kirill@shutemov.name" <kirill@shutemov.name>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "marcorr@google.com" <marcorr@google.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "alpergun@google.com" <alpergun@google.com>,
-        "dgilbert@redhat.com" <dgilbert@redhat.com>,
-        "jarkko@kernel.org" <jarkko@kernel.org>
-Subject: RE: [PATCH Part2 v6 11/49] crypto:ccp: Define the SEV-SNP commands
-Thread-Topic: [PATCH Part2 v6 11/49] crypto:ccp: Define the SEV-SNP commands
-Thread-Index: AQHYzPF6nAnMhnAyzEyIBLkI9xAtX63oSy3w
-Date:   Tue, 20 Sep 2022 13:46:25 +0000
-Message-ID: <SN6PR12MB2767213C998077DFE8D52CAE8E4C9@SN6PR12MB2767.namprd12.prod.outlook.com>
-References: <cover.1655761627.git.ashish.kalra@amd.com>
- <f5dec307d246096768afd770d16a26be25fa28b3.1655761627.git.ashish.kalra@amd.com>
- <Yym6Ob2tPYeb0Kq1@zn.tnic>
-In-Reply-To: <Yym6Ob2tPYeb0Kq1@zn.tnic>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2022-09-20T13:11:45Z;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=0f747027-2dfb-4144-95fe-dc5547ab01d9;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_enabled: true
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_setdate: 2022-09-20T13:46:19Z
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_method: Standard
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_name: General
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_actionid: 69296c3b-2c28-45c0-9598-8f66975b91f9
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_contentbits: 0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SN6PR12MB2767:EE_|CY5PR12MB6645:EE_
-x-ms-office365-filtering-correlation-id: d93ab987-e723-4cf2-05ac-08da9b0e8327
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: UxR+Z7MpZlRmOZ0ARbY7Y9Q4KlXQc0sDpRvdIFGOXGmLwJMwBhen+zZ/LzuuMPKizxH4ghsXESmPlmvN+doNdiCb6PF6f22QUjnL6ZngPbo61ewpXDb3ydDsA1ZSfgIKgPgofdyQLmApK91q0eg8TmgFAmbXaWANMyIa2vbHxu+w9c6ElXdv7yw4JllUn3F1NWs/OxHt3ne5UafQuzl2W/T6CVDVaWJzIoNCvgj5aDs7HN6Y3EUPNkpGfFxsJotXa0folBNCmY7Bna1FWZR9zivVukI3yYVBEeTQG4vs0FuX+sGCNWH+plgSBWoiIIydmR634Z4kd1bZnpXpqha0NkgGmO5MRxGBXU8W/wyHsp8pMZHka1jnxYGu8u78kpf3Q0kSATsbFkIVKmknCdtuXou88mnToI/TdTTEvuD8DPSDSzJ701KzMWL0aTV0n1lje5Rz+x735+K4CKax0Uf/g1WICByapgDSLpqeb6pP0SyCc0yUgune1+6/gYrPz0FMbnEy18z/rcj3aMYtqcfVXVk+iVL65/p2Z9aoYGLykXjhNk+GYUAX2EikmQ0PcuYJ4MNffjpxXj/j7C4X814SEc/iXb2xsZqYpB9Qow0yC0LV66ruQC6wR4MPo+R/ScfbmeRgRneEuR5lnY83MNEQ+nxSsUd5smqqqXPj4vjtI5UpYT+5+xGERHd3KyYbd86iqpHJEDGSv4nulePdLIK0yfFBcMLFJldJKoTrMv8KhYYlLtbNX/lEPEpO7c1kLm8bqWTrNNW/4X8x9yP/UTVzPQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB2767.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(376002)(366004)(136003)(346002)(451199015)(7696005)(26005)(9686003)(38070700005)(38100700002)(478600001)(7406005)(7416002)(2906002)(5660300002)(66446008)(66476007)(122000001)(64756008)(6506007)(86362001)(33656002)(186003)(55016003)(83380400001)(71200400001)(41300700001)(66946007)(4326008)(76116006)(66556008)(6916009)(316002)(8676002)(8936002)(54906003)(52536014);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?vayyNxnXOlkX/5MhJt+3eDTiazbHS5W0MUeRO2f1nONFhepBpKUn0JpRUU7K?=
- =?us-ascii?Q?dgl8Z41F8xaOrN49OxYthVfvUmvdeDrHhOk2O5DNJVPtIozJvb1m0cNxHdek?=
- =?us-ascii?Q?AjoKvEqvfflHDhzMU6N9tDo6YjwGkbh8WfLMyXLsNYmWHvv/a4S8DXZiT5Hp?=
- =?us-ascii?Q?BLeIdhK4aJs5ov/1oa96j2CAU3YAyj6/BIglnxOJAzMCmfjKlhYjGeoceOAJ?=
- =?us-ascii?Q?B41BeiS7WAWc/sujAUoH1vMmcWQc+++dVjA0D0PJ0PrsKYNb3Ta/2x3QDc/B?=
- =?us-ascii?Q?nt54a+CtQ8ABobqsIjUptCCuO+15RC0r460kjEMqY1oPONGVb6ihN2U607he?=
- =?us-ascii?Q?QDD1lDjTUCc2mzQsf213VeC8tyz7h2iV5WF7poQVhok9JEY/LpUEMBMqA0aO?=
- =?us-ascii?Q?6rxTXOlhmWd6fhl+ssD/LDt/lyWod/xrrSGFTd0uzkRrRNb/KjDRicazPcXc?=
- =?us-ascii?Q?wWPSECX+u/Ot7OyVAG/HIDTuU/mleiYrdRR4LX/iiDTih5BW8iXlhb/5rKNA?=
- =?us-ascii?Q?Z0r0zSgTsNj1DKWaAx8pHn+jCONy7Wjwrg44GqCDWgZwURS8ratp5hI4VwKt?=
- =?us-ascii?Q?zpfgQWrjYugpbpDSYn5B6oo1n6oFky9u9yjmNWuKqGt+D/U8mpP03VPV6bq9?=
- =?us-ascii?Q?2u7Abq9M0mbo2yYgt6cx15LjUxVo3X7gLp5kh3t1LlnOSVhBv77gGKiNj63a?=
- =?us-ascii?Q?T5C+AMgQtTu0qKOfLHbyxHKrOpl6FKqOzwCcROW10RC27Sii2m+ll35w9DlT?=
- =?us-ascii?Q?j9ddU7j62DQA1ZD+9G6oS5FuvNFpLYeY3nxuVjHILFKv88Yeu7qBpaCxOkS+?=
- =?us-ascii?Q?JnboITythJXx4vJk5ilatF38g8VOSe9NsoYsHXQPGAR4RsXAtdCUQU6u7xsI?=
- =?us-ascii?Q?QVgYUTEECrm0yBVNtrwPHUK5k4cQZNm6q7h+/JRh8OeJwCPzvUI1zMlJRxF1?=
- =?us-ascii?Q?BL+xqw12SIBVIp5JqkIJv76s27Tnjh+gC35nYO/T5bjkLjdInpwODsFIvALy?=
- =?us-ascii?Q?CGd/aUAzAlOQAf82BZLwgM6MZX3gObEp1aoKcz9atb6k2FGfFCY4DXFgMCjN?=
- =?us-ascii?Q?MgN3zVWUjBMssfW08Kta35r1bM+hg2TJg8D7J3lSQmqBbrHYBQDQY3L6DD0K?=
- =?us-ascii?Q?cCD10/RUO3vXDJ6mEtnjQjTmXuWtAtxE6KcsDnFmmUoB3ouzxPWqYBx4f6OE?=
- =?us-ascii?Q?5Kd42eZE977DkeERLWlyey2u8UmQfjHktUZBwcA7UZLozzlaYJBPqwDx+/Uv?=
- =?us-ascii?Q?2EK8uyVtCzeWn9McPX7LW5iR7GvehxsEYRjASrrK825NhADOMAmGQwQHZBZy?=
- =?us-ascii?Q?FAoEEM2atsQFFYTg3iuy9Il4c41uRtTGzz/Xn9TYFBtsUZ/7WojQYZc9msT7?=
- =?us-ascii?Q?zAYShS4zTKV7sftyMnpAM4cQQfwQ3iGUAUGMBIwr18AESgXciCLQ/LYnyvGe?=
- =?us-ascii?Q?GNJ7ZDGvITOp6KE4fpKWs2Jh09XswqwV0FhPCJiOXR7TvxVGR/l9YppJNb2w?=
- =?us-ascii?Q?2rRgboM9euMFTWSbyWeQbSCQgCPloN5/o0sFK3qS5rVs5briGfwVat1cDuhX?=
- =?us-ascii?Q?eCgz8RhU77Z4VpwKHVA=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 20 Sep 2022 09:47:24 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB3057217;
+        Tue, 20 Sep 2022 06:47:20 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id lh5so6236006ejb.10;
+        Tue, 20 Sep 2022 06:47:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=FIfv7ldS0YkRlbgUcQzoAtfI4poeYBTKR3ilCVR4L44=;
+        b=Ib4LtlPrWnMKsLSranL8+d9s8BraCoSk8vC38PSPG45HunaEjF8J+E7X0fZ87WYJ1T
+         YexlNUct7PIKUbSlqgCUBv5ecfQOZpLeD7P1/K2BPLk+UTiBRGMsIRLtGti9asAtn/41
+         6k5vyMnMTcb/o9pFgCacfYFq7yNJvXdYUYRy8NkOiBwlmYFVSOR6saJaJtjGE7RjSmBg
+         U1B1HRDT8He6dxCAimHvMReIJOZoBlHIWYiQeITjAFS2zQs7+MBsSWP+OHJ69pTb28mT
+         sG47+kawwNL6JJ6Lx4hgTLKH0ZssKBtnrcAku3GFT8Mizcf+D5Ogz6HE1OZCeSMwQtXA
+         +ubg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=FIfv7ldS0YkRlbgUcQzoAtfI4poeYBTKR3ilCVR4L44=;
+        b=XSLdOu6J3VOrw1ZGIe54PnCHNZUHpxwPP9lohqw/nCFzDLj0BUZJAxvnU+8BuxNFPA
+         qjsIHkz3Gfc6yCJ1kfm5+K57JH0FCjBEdvN+gF0IeG3uk/afSOlk2LT8EwpDY8gu+eBF
+         rnlazhNHe5HXrljLZkNL5lkWexhwKA0i8nz6UzCY/v6g80nC36ET2HRwRL5FtmTK6yhO
+         oDuAEpIRXFpwPacWRffXQTWILLoJE+2nJ4UiQKRAJOV8hkXiSHU+s90CK/geS9kuU/8a
+         bHno1jf2niq+6wTaAa+V+5SnjbAwZ+wmWqpkihcgN7bgZECUn+p0GuyqtdPBBCrbDBCE
+         athg==
+X-Gm-Message-State: ACrzQf1W4KQBpFGiF2D1y+FTI+X7l4b9E1HC0rFB/LzGBaKSaXUkOFX/
+        zjm9sAA5xhzKeZbMopHHe4JCgEezqop1qjfIubM=
+X-Google-Smtp-Source: AMsMyM5HgTh+5QojTUeIrgHbwGkUKtpIcdqU9tP/gHB3cveUpRK1tcUB+nxOzNhlHbkx+N7yPSGymD5FZc6WqDCbsRo=
+X-Received: by 2002:a17:907:6d90:b0:77c:68a8:a5b with SMTP id
+ sb16-20020a1709076d9000b0077c68a80a5bmr17470946ejc.342.1663681639186; Tue, 20
+ Sep 2022 06:47:19 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2767.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d93ab987-e723-4cf2-05ac-08da9b0e8327
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Sep 2022 13:46:25.7941
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: VVswLz+iX4uOggK2lEySxRoDEEXNKvykDOR07xh9z45M1sfvK25dhHwW6mKvYwnBG+Bo8yxyxUwsxz8CnXEr/g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6645
+References: <20220915181558.354737-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220915181558.354737-8-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <3693a3a1-5a2a-4cc5-fb55-f6ad9a4b3f72@microchip.com> <CA+V-a8u87tqhC69qGD2zq_gT9jc_cSWd+NRn_u0bPTdmmk+j4A@mail.gmail.com>
+ <e15f3e2a-2761-84d9-c5c9-118717e0bb83@conchuod.ie> <CAMuHMdUGD9s96JJafsYdfnPqvg6KLvmC9GUS4yjaaXi2hYrJYQ@mail.gmail.com>
+ <Yymyh+UlIICacxeV@wendy>
+In-Reply-To: <Yymyh+UlIICacxeV@wendy>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Tue, 20 Sep 2022 14:46:49 +0100
+Message-ID: <CA+V-a8u3LcDhOYqWSOJUUeSMX+o=12pAcFJ0xArYSPy+=uT9NA@mail.gmail.com>
+Subject: Re: [PATCH v3 07/10] riscv: boot: dts: r9a07g043: Add placeholder nodes
+To:     Conor Dooley <conor.dooley@microchip.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Conor Dooley <mail@conchuod.ie>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, heiko@sntech.de,
+        atishp@rivosinc.com, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, biju.das.jz@bp.renesas.com,
+        prabhakar.mahadev-lad.rj@bp.renesas.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -166,79 +76,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[AMD Official Use Only - General]
+Hi Conor and Geert,
 
-Hello Boris,
+On Tue, Sep 20, 2022 at 1:31 PM Conor Dooley <conor.dooley@microchip.com> wrote:
+>
+> On Tue, Sep 20, 2022 at 02:17:50PM +0200, Geert Uytterhoeven wrote:
+> > Hi Conor,
+> >
+> > On Fri, Sep 16, 2022 at 12:40 AM Conor Dooley <mail@conchuod.ie> wrote:
+> > > On 15/09/2022 23:26, Lad, Prabhakar wrote:
+> > > > On Thu, Sep 15, 2022 at 10:36 PM <Conor.Dooley@microchip.com> wrote:
+> > > >> On 15/09/2022 19:15, Prabhakar wrote:
+> > > >>> riscv: boot: dts: r9a07g043: Add placeholder nodes
+> > > >>> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > >>> Add empty placeholder nodes to RZ/Five (R9A07G043) SoC DTSI.
+> > > >> Can you explain why do you need placeholder nodes for this and
+> > > >> cannot just directly include the other dtsis?
+> > > >>
+> > > > Since the RZ/G2UL SoC is ARM64 where it has a GIC and on RZ/Five SoC
+> > > > we have PLIC for interrupts. Also the interrupt numbering for RZ/Five
+> > > > SoC differs from RZ/G2UL SoC hence we are not directly using the
+> > > > RZ/G2UL SoC DTSI [0].
+> > > >
+> > > > [0] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/boot/dts/renesas/r9a07g043.dtsi?h=v6.0-rc5
+> > > >
+> > > > For the RZ/Five SMARC EVK I am re-using the below files [1] (SoM) and
+> > > > [2] (Carrier board) as the RZ/Five SMARC EVK is pin compatible.  Since
+> > > > I am re-using these when trying to compile the RZ/Five DTB I get
+> > > > compilation errors since the nodes dont exist (and there is no way
+> > > > currently we can delete the node reference when the actual node itself
+> > > > isn't present) hence these place holders.
+> > > >
+> > > > [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/boot/dts/renesas/rzg2ul-smarc-som.dtsi?h=v6.0-rc5
+> > > > [2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/boot/dts/renesas/rzg2ul-smarc.dtsi?h=v6.0-rc5
+> > >
+> > > If this method is acceptable to Geert, this explanation 100% needs to
+> > > go into the commit message.
+> >
+> > We've been using these placeholders a lot in Renesas SoC-specific
+> > .dtsi files, as they allow us to introduce gradually support for a new SoC
+> > that is mounted on an existing PCB, and thus shares a board-specific
+> > .dtsi file.  Hence I'm fine with this.
+>
+> Aye, if you're happy with it then I am too...
+> >
+> > However, I think more properties can be dropped from the placeholders.
+> > There is no need to have e.g. 'reg-names' and 'status = "disabled"'
+> > (there is no compatible value, so no matching is done).
+>
+> ...and this makes a lot of sense. I'd still like a comment in the
+> commit message though explaining why placeholder nodes are needed as
+> opposed to just leaving it blank etc.
+>
+I will drop the status and reg-names properties and also update the
+commit message while sending the v4
 
->> +/**
->> + * struct sev_data_snp_platform_status_buf - SNP_PLATFORM_STATUS=20
->> +command params
->> + *
->> + * @address: physical address where the status should be copied  */=20
->> +struct sev_data_snp_platform_status_buf {
->> +	u64 status_paddr;			/* In */
->> +} __packed;
->> +
->> +/**
->> + * struct sev_data_snp_download_firmware - SNP_DOWNLOAD_FIRMWARE=20
->> +command params
->> + *
->> + * @address: physical address of firmware image
->> + * @len: len of the firmware image
->> + */
->> +struct sev_data_snp_download_firmware {
->> +	u64 address;				/* In */
->> +	u32 len;				/* In */
->> +} __packed;
->> +
->> +/**
->> + * struct sev_data_snp_gctx_create - SNP_GCTX_CREATE command params
->> + *
->> + * @gctx_paddr: system physical address of the page donated to firmware=
- by
->> + *		the hypervisor to contain the guest context.
->> + */
->> +struct sev_data_snp_gctx_create {
->> +	u64 gctx_paddr;				/* In */
->> +} __packed;
-
->So some of those structs have the same layout. Let's unify them pls.
->I.e., for
-
->sev_data_send_finish, sev_data_send_cancel, sev_data_receive_finish
-
->you do
-
->struct sev_data_tx {
->	u32 handle;				/* In */
->} __packed;
-
->For sev_data_snp_platform_status_buf, sev_data_snp_gctx_create, sev_data_s=
-np_decommission and all those others who are a single u64, you use a single
-
->struct sev_data_addr {
->	u64 gctx_paddr;				/* In */
->} __packed;
-
->so that we don't have gazillion structs all of different names but a lot o=
-f them identical in content.
-
-These are structure definitions as per SNP Firmware API specifications, and=
- they match the SNP Firmware commands and required arguments.
-
-As an example below:
-
-8.12 SNP_DECOMMISSION
-This command destroys a guest context. After this command successfully comp=
-letes, the guest=20
-will not long be runnable.
-8.12.1 Parameters
-Table 55. Layout of the CMDBUF_SNP_DECOMMISSION Structure
-GCTX_PADDR Bits 63:12 of the sPA of the guest's=20
-context page
-
-Isn't it better to have 1:1 mapping between specification and structure def=
-initions here ?
-
-Thanks,
-Ashish
+Cheers,
+Prabhakar
