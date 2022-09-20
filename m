@@ -2,70 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C2B65BE83D
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 16:12:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F01D85BE847
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 16:14:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231633AbiITOMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 10:12:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44708 "EHLO
+        id S231571AbiITOMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 10:12:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231292AbiITOLs (ORCPT
+        with ESMTP id S231670AbiITOL5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 10:11:48 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5276F6172F
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 07:10:17 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id p18so2489989plr.8
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 07:10:17 -0700 (PDT)
+        Tue, 20 Sep 2022 10:11:57 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AE915FF76
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 07:10:28 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id fs14so3172308pjb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 07:10:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=edgeble-ai.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=QPxEn/eAqZz49dBAsNJltwqDSnOVtKaOrJil3gAFfRA=;
-        b=N1PWe3VdAKaEJkhr6bQzq/58UH5Sue2qiNbAqdjfQjsdDK6LY2n/NuEGkr/00VMU9W
-         xb2V3+oi7ydfMqeGmh+AvRKBE8TIPQ6nEH9I8fOfZQDKWGowIz+1QiAFw2YDXJ3LzOJi
-         kU+pCrBvp5GadVnVfjsDzKMhj3aO74rFJAWRpgoOM9SQl1JbH5y4V1oA2VedNqZfKpaP
-         zhn+ZJiPHPewpHqouU+UywK6VvaZAtVHPYtf2L91uMa5tSxfeoLtNjYdDL1BnqPu0qyU
-         JK+fYDH/iQQxc6Y8Zj6xvFjjxdi7TnKXWNEr1gGaXks9PeWD5iFfKc4jCWZZFUmG2bJS
-         OlAg==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=DSNp/uharmpReYy+YC5O0owair4IDAzJu/dQoMj9EuE=;
+        b=JGndOtlikbTpSUbPqg2ojZV/PXcChJ3VizuBebT9Sawr5R1L0a/3IKUD+C46gPVshH
+         /wQ1wlvkXfiT5X2OdpVJMDYv9ZealAuYXOQXYt9B18G/vmiE+aTapx769Uuj8yEV7TAO
+         XasE/nQj5UZaPTG40sHhoZo3tA2mTvzMWuXVnZ3JfKfxZv03I8yIurRHtFuXVep0J9QS
+         OVmj9HHW3QQcXqDmfW8cgGyFFtOosKlnaJCDXFE/eX04ih7Ob/DY58jASG4w15FEjukz
+         C/XkGWhfQ1RgwyLRpk46pcOtLGZVA8bY4Z1IFmLSLs+KxPCieueXyhi+XQbrWXvA1U/M
+         TXVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=QPxEn/eAqZz49dBAsNJltwqDSnOVtKaOrJil3gAFfRA=;
-        b=KFZNxGEvDb3wwth/nW2uuYUMqnPlltEoU+kb68dCpbCPwsE4zYoQvncizX0qT4sW4w
-         9YZwdpbd9AV+KnKhNABrm6kNSUidKtPQWZ638/NP7RlLiOo3YYD2IKNbR2zWi5YbGZfJ
-         mIssthGxLj0hv9Scg4FePy2e7yq644593y9FTmSwpdHMc49yXWM8R0QQIp+ge0UmIY80
-         Ht0x4y60HwwmVY6ITPF5GFo/hECa1u4urj8hkDpqit2e1ZATEw7hutok5jdyga34MIn0
-         DIQurTXFUvK9IX6NY0SLr3YPSZB2PNG/0MqaOJ/T/P+kZXjnnefC5dikhW95G27VGICK
-         NDNg==
-X-Gm-Message-State: ACrzQf2ffwyklQCNiKGdRhFMx0epevvrXympw884+VAD4jDYeNmgQV8G
-        z9w0qi4n4uiIcIurLhjDIgYjpg==
-X-Google-Smtp-Source: AMsMyM6lgdYkRh8kQx8SNnSS7OR+Dv+YX3GkVF950OMZj/IKhWpp/fejl4AeVrW6Ag60qZ6Iep6E7g==
-X-Received: by 2002:a17:90b:1c07:b0:200:9728:b8cd with SMTP id oc7-20020a17090b1c0700b002009728b8cdmr4212275pjb.139.1663683004240;
-        Tue, 20 Sep 2022 07:10:04 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=DSNp/uharmpReYy+YC5O0owair4IDAzJu/dQoMj9EuE=;
+        b=SmB8chSv3tRy64LMsn3Wx9LnYXVNoc//cAIG3v8qbdKBMjvL4rgV4wiu7dJzN82Aq+
+         yoQknF7B5o/85+FnGDbH5vswM5ISnxykvIA6WyGk5jvJJrbmvJhPgZ1Gg28JSgKfLFAK
+         NV2ybuo3x02x8jK1XDEp9yt3ovHahJLOAx9wd4NCftW/bkBGStZZkb/P40aGKr2N3xFy
+         n8z/EHh8NXXqDXrPlofykJWYH4mBg2y2+Pxamb4FbwD4WQzdQh2wPK4t852MTUlq8ag9
+         ChyAX30jzRJ0bW6tPb4Wr/VD5BVb+RhdFIs3nU+1Ttn40CfEXkh01qPO2C4j+1zc+Bb/
+         DVEQ==
+X-Gm-Message-State: ACrzQf2wfnO4IRQaLamH+XEqvne4n8q1J7sqswzfq4dEs+yCA4ixXMBI
+        q0Hw3AfIbpuq/Jh7qoVCZeDrJw==
+X-Google-Smtp-Source: AMsMyM7OQv10cWPYv1yYSPX4pu91pIFT6zRmq1k7wLZMkluTirdpzLCp+HN/D/iOxhB09n7MRWX0Ig==
+X-Received: by 2002:a17:902:6542:b0:172:95d8:a777 with SMTP id d2-20020a170902654200b0017295d8a777mr4917335pln.61.1663683012286;
+        Tue, 20 Sep 2022 07:10:12 -0700 (PDT)
 Received: from archl-hc1b.. ([103.51.75.120])
-        by smtp.gmail.com with ESMTPSA id t9-20020a170902e84900b001782a0d3eeasm1499858plg.115.2022.09.20.07.09.59
+        by smtp.gmail.com with ESMTPSA id t9-20020a170902e84900b001782a0d3eeasm1499858plg.115.2022.09.20.07.10.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 07:10:03 -0700 (PDT)
+        Tue, 20 Sep 2022 07:10:11 -0700 (PDT)
 From:   Anand Moon <anand@edgeble.ai>
-To:     "David S. Miller" <davem@davemloft.net>,
+To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        David Wu <david.wu@rock-chips.com>
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>
 Cc:     Anand Moon <anand@edgeble.ai>, linux-rockchip@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Sugar Zhang <sugar.zhang@rock-chips.com>,
+        David Wu <david.wu@rock-chips.com>,
         Jagan Teki <jagan@edgeble.ai>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v3 1/2] dt-bindings: net: rockchip-dwmac: add rv1126 compatible
-Date:   Tue, 20 Sep 2022 14:09:40 +0000
-Message-Id: <20220920140944.2535-1-anand@edgeble.ai>
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v3 2/2] net: ethernet: stmicro: stmmac: dwmac-rk: Add rv1126 support
+Date:   Tue, 20 Sep 2022 14:09:41 +0000
+Message-Id: <20220920140944.2535-2-anand@edgeble.ai>
 X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20220920140944.2535-1-anand@edgeble.ai>
+References: <20220920140944.2535-1-anand@edgeble.ai>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -77,43 +81,168 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add compatible string for RV1126 gmac, and constrain it to
-be compatible with Synopsys dwmac 4.20a.
+Rockchip RV1126 has GMAC 10/100/1000M ethernet controller
+via RGMII and RMII interfaces are configured via M0 and M1 pinmux.
 
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Jagan Teki <jagan@edgeble.ai>
+This patch adds rv1126 support by adding delay lines of M0 and M1
+simultaneously.
+
+Signed-off-by: Sugar Zhang <sugar.zhang@rock-chips.com>
+Signed-off-by: David Wu <david.wu@rock-chips.com>
 Signed-off-by: Anand Moon <anand@edgeble.ai>
+Signed-off-by: Jagan Teki <jagan@edgeble.ai>
 ---
-v3: added reviewed by Krzysztof Kozlowski
+v3: changes none
     rebased on linux-net-next
-v2: add missing compatible string to property
-    added reviewed by Heiko Stuebner.
+v2: changes none
 ---
 ---
- Documentation/devicetree/bindings/net/rockchip-dwmac.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ .../net/ethernet/stmicro/stmmac/dwmac-rk.c    | 125 ++++++++++++++++++
+ 1 file changed, 125 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/net/rockchip-dwmac.yaml b/Documentation/devicetree/bindings/net/rockchip-dwmac.yaml
-index 3c8c3a907181..42fb72b6909d 100644
---- a/Documentation/devicetree/bindings/net/rockchip-dwmac.yaml
-+++ b/Documentation/devicetree/bindings/net/rockchip-dwmac.yaml
-@@ -27,6 +27,7 @@ select:
-           - rockchip,rk3568-gmac
-           - rockchip,rk3588-gmac
-           - rockchip,rv1108-gmac
-+          - rockchip,rv1126-gmac
-   required:
-     - compatible
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c
+index 15dea1f2a90a..f7269d79a385 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c
+@@ -1297,6 +1297,130 @@ static const struct rk_gmac_ops rv1108_ops = {
+ 	.set_rmii_speed = rv1108_set_rmii_speed,
+ };
  
-@@ -48,6 +49,7 @@ properties:
-               - rockchip,rk3368-gmac
-               - rockchip,rk3399-gmac
-               - rockchip,rv1108-gmac
-+              - rockchip,rv1126-gmac
-       - items:
-           - enum:
-               - rockchip,rk3568-gmac
++#define RV1126_GRF_GMAC_CON0		0X0070
++#define RV1126_GRF_GMAC_CON1		0X0074
++#define RV1126_GRF_GMAC_CON2		0X0078
++
++/* RV1126_GRF_GMAC_CON0 */
++#define RV1126_GMAC_PHY_INTF_SEL_RGMII	\
++		(GRF_BIT(4) | GRF_CLR_BIT(5) | GRF_CLR_BIT(6))
++#define RV1126_GMAC_PHY_INTF_SEL_RMII	\
++		(GRF_CLR_BIT(4) | GRF_CLR_BIT(5) | GRF_BIT(6))
++#define RV1126_GMAC_FLOW_CTRL			GRF_BIT(7)
++#define RV1126_GMAC_FLOW_CTRL_CLR		GRF_CLR_BIT(7)
++#define RV1126_GMAC_M0_RXCLK_DLY_ENABLE		GRF_BIT(1)
++#define RV1126_GMAC_M0_RXCLK_DLY_DISABLE	GRF_CLR_BIT(1)
++#define RV1126_GMAC_M0_TXCLK_DLY_ENABLE		GRF_BIT(0)
++#define RV1126_GMAC_M0_TXCLK_DLY_DISABLE	GRF_CLR_BIT(0)
++#define RV1126_GMAC_M1_RXCLK_DLY_ENABLE		GRF_BIT(3)
++#define RV1126_GMAC_M1_RXCLK_DLY_DISABLE	GRF_CLR_BIT(3)
++#define RV1126_GMAC_M1_TXCLK_DLY_ENABLE		GRF_BIT(2)
++#define RV1126_GMAC_M1_TXCLK_DLY_DISABLE	GRF_CLR_BIT(2)
++
++/* RV1126_GRF_GMAC_CON1 */
++#define RV1126_GMAC_M0_CLK_RX_DL_CFG(val)	HIWORD_UPDATE(val, 0x7F, 8)
++#define RV1126_GMAC_M0_CLK_TX_DL_CFG(val)	HIWORD_UPDATE(val, 0x7F, 0)
++/* RV1126_GRF_GMAC_CON2 */
++#define RV1126_GMAC_M1_CLK_RX_DL_CFG(val)	HIWORD_UPDATE(val, 0x7F, 8)
++#define RV1126_GMAC_M1_CLK_TX_DL_CFG(val)	HIWORD_UPDATE(val, 0x7F, 0)
++
++static void rv1126_set_to_rgmii(struct rk_priv_data *bsp_priv,
++				int tx_delay, int rx_delay)
++{
++	struct device *dev = &bsp_priv->pdev->dev;
++
++	if (IS_ERR(bsp_priv->grf)) {
++		dev_err(dev, "Missing rockchip,grf property\n");
++		return;
++	}
++
++	regmap_write(bsp_priv->grf, RV1126_GRF_GMAC_CON0,
++		     RV1126_GMAC_PHY_INTF_SEL_RGMII |
++		     RV1126_GMAC_M0_RXCLK_DLY_ENABLE |
++		     RV1126_GMAC_M0_TXCLK_DLY_ENABLE |
++		     RV1126_GMAC_M1_RXCLK_DLY_ENABLE |
++		     RV1126_GMAC_M1_TXCLK_DLY_ENABLE);
++
++	regmap_write(bsp_priv->grf, RV1126_GRF_GMAC_CON1,
++		     RV1126_GMAC_M0_CLK_RX_DL_CFG(rx_delay) |
++		     RV1126_GMAC_M0_CLK_TX_DL_CFG(tx_delay));
++
++	regmap_write(bsp_priv->grf, RV1126_GRF_GMAC_CON2,
++		     RV1126_GMAC_M1_CLK_RX_DL_CFG(rx_delay) |
++		     RV1126_GMAC_M1_CLK_TX_DL_CFG(tx_delay));
++}
++
++static void rv1126_set_to_rmii(struct rk_priv_data *bsp_priv)
++{
++	struct device *dev = &bsp_priv->pdev->dev;
++
++	if (IS_ERR(bsp_priv->grf)) {
++		dev_err(dev, "%s: Missing rockchip,grf property\n", __func__);
++		return;
++	}
++
++	regmap_write(bsp_priv->grf, RV1126_GRF_GMAC_CON0,
++		     RV1126_GMAC_PHY_INTF_SEL_RMII);
++}
++
++static void rv1126_set_rgmii_speed(struct rk_priv_data *bsp_priv, int speed)
++{
++	struct device *dev = &bsp_priv->pdev->dev;
++	unsigned long rate;
++	int ret;
++
++	switch (speed) {
++	case 10:
++		rate = 2500000;
++		break;
++	case 100:
++		rate = 25000000;
++		break;
++	case 1000:
++		rate = 125000000;
++		break;
++	default:
++		dev_err(dev, "unknown speed value for RGMII speed=%d", speed);
++		return;
++	}
++
++	ret = clk_set_rate(bsp_priv->clk_mac_speed, rate);
++	if (ret)
++		dev_err(dev, "%s: set clk_mac_speed rate %ld failed %d\n",
++			__func__, rate, ret);
++}
++
++static void rv1126_set_rmii_speed(struct rk_priv_data *bsp_priv, int speed)
++{
++	struct device *dev = &bsp_priv->pdev->dev;
++	unsigned long rate;
++	int ret;
++
++	switch (speed) {
++	case 10:
++		rate = 2500000;
++		break;
++	case 100:
++		rate = 25000000;
++		break;
++	default:
++		dev_err(dev, "unknown speed value for RGMII speed=%d", speed);
++		return;
++	}
++
++	ret = clk_set_rate(bsp_priv->clk_mac_speed, rate);
++	if (ret)
++		dev_err(dev, "%s: set clk_mac_speed rate %ld failed %d\n",
++			__func__, rate, ret);
++}
++
++static const struct rk_gmac_ops rv1126_ops = {
++	.set_to_rgmii = rv1126_set_to_rgmii,
++	.set_to_rmii = rv1126_set_to_rmii,
++	.set_rgmii_speed = rv1126_set_rgmii_speed,
++	.set_rmii_speed = rv1126_set_rmii_speed,
++};
++
+ #define RK_GRF_MACPHY_CON0		0xb00
+ #define RK_GRF_MACPHY_CON1		0xb04
+ #define RK_GRF_MACPHY_CON2		0xb08
+@@ -1836,6 +1960,7 @@ static const struct of_device_id rk_gmac_dwmac_match[] = {
+ 	{ .compatible = "rockchip,rk3568-gmac", .data = &rk3568_ops },
+ 	{ .compatible = "rockchip,rk3588-gmac", .data = &rk3588_ops },
+ 	{ .compatible = "rockchip,rv1108-gmac", .data = &rv1108_ops },
++	{ .compatible = "rockchip,rv1126-gmac", .data = &rv1126_ops },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(of, rk_gmac_dwmac_match);
 -- 
 2.37.3
 
