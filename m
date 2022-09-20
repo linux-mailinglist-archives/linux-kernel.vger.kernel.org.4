@@ -2,115 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAACB5BE9ED
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 17:17:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEF335BE9EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 17:18:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231287AbiITPRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 11:17:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34014 "EHLO
+        id S231384AbiITPSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 11:18:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231594AbiITPRO (ORCPT
+        with ESMTP id S230096AbiITPSD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 11:17:14 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E82B65257
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 08:16:58 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id n12so4797621wrx.9
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 08:16:58 -0700 (PDT)
+        Tue, 20 Sep 2022 11:18:03 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4F715F11B
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 08:18:02 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id w8so4287826lft.12
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 08:18:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=sTa1pbTVMPJ1tf0fbIJm6r4QEWbV/1sWEH4W85gfxdA=;
-        b=Y0I8B2b3LP+wzBoIwffHFhR8WfPrSkke8bPxBfdpa1N8AqQnjtUb7c4CmtN24qDDhp
-         qdL9Uud2I30izEuKxHpDkDIvQsHjjHSigXA8ob2zyPlsjdSDJEqyqPpzLn28QvWSy7KL
-         qQeFNIl2oWaknO+UzEWzpGs+d8ZNb2Cx/uKizP1/tOe+EHQFl93J0S8U18g/IvP7Y7F4
-         d6f4YSPMFnQYjUgtnRkeGD7bo7q0GU0CxKxamfwit1fq15nkLEYURNwTzCI/sJHwioVE
-         98Z217tzwyEGW4GGj3HG0mcmrgh37N5Ne8Nwz9cTvOGRaCoWzT7R1EwI6zs2gdSg2djQ
-         KQXA==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=5se1nLah5wB7N2z+/BXJGVEJry5l8HVmuf5730Cxm1c=;
+        b=t/GsXU0TSldX02gXKmfWhpOaf9w10U4rMd7iYYtyHToeJwoAZbn1VARtKPcjIrzJax
+         vGhTZMfwXH44f/9DBonR/qhyrV320zwtnmLK2WTYEWn+q1tCsYt1asWA6V3ZWRWICvT9
+         n/55/9QYwqCkn3T/l0/VJQoPch7nuxBwgX4gZZEWn57lme27FqZqX8ZiwEnTB8wVP7kV
+         P1kzzHbAzmAAOFqb7wei+kL0Lx8fu+zQsUYlzMuEsZE1L6SJPfl7nVuZZe0OxGSB8fnR
+         yfPlsNep6MPbUZ4WnPa2IaZwXwbuzYybnF4/Dw20vnXTjoJwrM7Q+fBfUdASo6Xx3kz2
+         9LYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=sTa1pbTVMPJ1tf0fbIJm6r4QEWbV/1sWEH4W85gfxdA=;
-        b=ylcRlGtMXV+0O5K0K4Nfjf2pMn7LDMFdJ8QDuq3+5M0G1uElFAw3c1pBQUr+Y9UF2f
-         GXsYj9PhS3Q2N3swral3a3CveryLzgYVJzARmm6PXY9gZSngCsl2ziY49MQdoPwpcIgD
-         EK7PgCBK+Ruhu7floJ27wViNgO9MXHrEMUix8ybdCNOOChRcIFLYnNYgRf4TYdAljYn1
-         podQxP1eaK4RgY57p/uSgiLVxzgS/w/iegKX0CAfa79eWCeXRkP7pFe9E0orJvBnHCDv
-         w3h4ag7okPP3uB2oDQsATyc8nnGupDi8OszmzHYx6GaK2ETAGk5PRICkemyg91B98eYS
-         PKjA==
-X-Gm-Message-State: ACrzQf3eLgh0tdekjljCiiO0Insd1F6zZBJXk5kxnawpd+1n5MhIYGiS
-        UGaBWHYflmFt6u8Wxk1/MV+IbA==
-X-Google-Smtp-Source: AMsMyM4CnxN9VS5xftyuGqfVz/42sP79DDIp25KA4140PE5NmZBRvjW0ASBqI2gKS8NFBNgL+mI2tQ==
-X-Received: by 2002:a5d:6d46:0:b0:21f:8b7:4c1d with SMTP id k6-20020a5d6d46000000b0021f08b74c1dmr14533501wri.455.1663687016603;
-        Tue, 20 Sep 2022 08:16:56 -0700 (PDT)
-Received: from [192.168.0.20] (210.145.15.109.rev.sfr.net. [109.15.145.210])
-        by smtp.gmail.com with ESMTPSA id cc16-20020a5d5c10000000b0021e4829d359sm40298wrb.39.2022.09.20.08.16.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Sep 2022 08:16:56 -0700 (PDT)
-Message-ID: <bf4d4cdf-27a1-7e09-59dc-25a8646fad1f@baylibre.com>
-Date:   Tue, 20 Sep 2022 17:16:55 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=5se1nLah5wB7N2z+/BXJGVEJry5l8HVmuf5730Cxm1c=;
+        b=ba9QuD7yIf/y/DYs7MOztcrZVdV5+b2OMmehMYZ6G12cgo7/STX3KudnnwLujiynt5
+         Q+TzFyg5COF/1udHtVryI6gDNR9b9H/freLzxMrG4StIO8FMD1Ud+7lUxO3Hb36ePkYf
+         ZYXvthAwro+xXypudhCG//ArjQuBkoR5zDMe95TaMTbYUdpe5A7yGiWv/sR/KjLr90O/
+         qZpGMD8OtAlbYPaaeFTgQJ/cBx2d4OD/P1h25EyJe7ArWOVfkWxx0ppnYRk+BR6Up+zm
+         PkvXJFY7udmIh05f1kj9ZXaW8IZI5OXrdkezOcXa8vyBkzEsahA+pgQNFchv1gkR+Rbk
+         v2hw==
+X-Gm-Message-State: ACrzQf0dqQ/upDL8uI49DD4j/ttAJjDcy1iFAgHwWjnU54UYKHruf0tU
+        i4+CRLWrNFgwJdJ3o5L6HN+PggF+kE5riiw5SERoBw==
+X-Google-Smtp-Source: AMsMyM7g2GB6gWS/U1QhMJ4bhZeEHRjSTibIwVDLMHasj5Gw1dMEzmBKIGssqwSpPOnFUDfFvoU6IVNBam3WpyHqSMY=
+X-Received: by 2002:a05:6512:2286:b0:49e:eb:ea19 with SMTP id
+ f6-20020a056512228600b0049e00ebea19mr8571266lfu.645.1663687080917; Tue, 20
+ Sep 2022 08:18:00 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] arm64: dts: mediatek: mt8183: remove thermal zones
- without trips.
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220914131339.18348-1-aouledameur@baylibre.com>
- <a8af4c54-12a2-a314-f190-f12859ef4ddd@gmail.com>
- <ca326ce8-3eee-8a7a-a522-9ffbdf7d8a82@linaro.org>
-Content-Language: en-US
-From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
-In-Reply-To: <ca326ce8-3eee-8a7a-a522-9ffbdf7d8a82@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220916080305.29574-6-vincent.guittot@linaro.org>
+ <20220916120245.2951-1-hdanton@sina.com> <CAKfTPtDV+ACXtQGH38sXwFVJfq+EzyKO1mCMZ68Q+GC5kw7-ww@mail.gmail.com>
+ <20220917225819.817-1-hdanton@sina.com> <CAKfTPtCFCYi3uM2B7wf4A3d4bfVHb=-_PA+6tWMQQCA9K9Hi5A@mail.gmail.com>
+ <20220920113238.1176-1-hdanton@sina.com>
+In-Reply-To: <20220920113238.1176-1-hdanton@sina.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Tue, 20 Sep 2022 17:17:49 +0200
+Message-ID: <CAKfTPtBU4N-Y0zptdaVAUA8FgG2jHrBfyB1vEpNQnjJ1g_G8pQ@mail.gmail.com>
+Subject: Re: [PATCH v4 5/8] sched/fair: Take into account latency priority at wakeup
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     peterz@infradead.org, mgorman@suse.de, valentin.schneider@arm.com,
+        parth@linux.ibm.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 9/15/22 17:50, Daniel Lezcano wrote:
-> On 14/09/2022 16:15, Matthias Brugger wrote:
->>
->>
->> On 14/09/2022 15:13, Amjad Ouled-Ameur wrote:
->>> Thermal zones without trip point are not registered by thermal core.
->>>
->>> tzts1 ~ tzts6 zones of mt8183 were intially introduced for test-purpose
->>> only but are not supposed to remain on DT.
->>>
->>> Remove the zones above and keep only cpu_thermal.
->>>
->>
->> My understanding is that this thermal zones exist but are not used. 
->> DTS should describe the HW as it is, so I propose to add
->> status = "disabled";
->> to the zones.
->>
+On Tue, 20 Sept 2022 at 13:32, Hillf Danton <hdanton@sina.com> wrote:
 >
-> At least the trip points must be declared as stated in the bindings
+> On 18 Sep 2022 12:46:00 +0200 Vincent Guittot <vincent.guittot@linaro.org> wrote:
+> > On Sun, 18 Sept 2022 at 00:58, Hillf Danton <hdanton@sina.com> wrote:
+> > >
+> > > On 16 Sep 2022 15:36:53 +0200 Vincent Guittot <vincent.guittot@linaro.org> wrote:
+> > > >
+> > > > Hi Hillf,
+> > > >
+> > > > On Fri, 16 Sept 2022 at 14:03, Hillf Danton <hdanton@sina.com> wrote:
+> > > > >
+> > > > > Hello Vincent
+> > > > >
+> > > > > On 16 Sep 2022 10:03:02 +0200 Vincent Guittot <vincent.guittot@linaro.org> wrote:
+> > > > > >
+> > > > > > @@ -4606,6 +4608,7 @@ check_preempt_tick(struct cfs_rq *cfs_rq, struct sched_entity *curr)
+> > > > > >
+> > > > > >       se = __pick_first_entity(cfs_rq);
+> > > > > >       delta = curr->vruntime - se->vruntime;
+> > > > > > +     delta -= wakeup_latency_gran(curr, se);
+> > > > > >
+> > > > > >       if (delta < 0)
+> > > > > >               return;
+> > > > >
+> > > > > What is derived from the latency nice you added is the runtime granulaity
+> > > > > which has a role in preempting the current task.
+> > > > >
+> > > > > Given the same defination of latency nice as the nice, the runtime granularity
+> > > > > can be computed without introducing the latency nice.
+> > > > >
+> > > > > Only for thoughts now.
+> > > > >
+> > > > > Hillf
+> > > > >
+> > > > > +++ b/kernel/sched/fair.c
+> > > > > @@ -4569,7 +4569,7 @@ dequeue_entity(struct cfs_rq *cfs_rq, st
+> > > > >  static void
+> > > > >  check_preempt_tick(struct cfs_rq *cfs_rq, struct sched_entity *curr)
+> > > > >  {
+> > > > > -       unsigned long ideal_runtime, delta_exec;
+> > > > > +       unsigned long ideal_runtime, delta_exec, granu;
+> > > > >         struct sched_entity *se;
+> > > > >         s64 delta;
+> > > > >
+> > > > > @@ -4594,6 +4594,14 @@ check_preempt_tick(struct cfs_rq *cfs_rq
+> > > > >                 return;
+> > > > >
+> > > > >         se = __pick_first_entity(cfs_rq);
+> > > > > +
+> > > > > +       granu = sysctl_sched_min_granularity +
+> > > > > +               (ideal_runtime - sysctl_sched_min_granularity) *
+> > > > > +               (se->latency_nice + 20) / LATENCY_NICE_WIDTH;
+> > > >
+> > > > There is no latency_nice field in se but a latency_offset instead
+> > > >
+> > > > Also at this step, we are sure that curr has run at least
+> > > > sysctl_sched_min_granularity and we want now to compare curr vruntime
+> > > > with first se's one. We take the latency offset into account to make
+> > > > sure we will not preempt curr too early
+> > > >
+> > > > > +
+> > > > > +       if (delta_exec < granu)
+> > > > > +               return;
+> > > > > +
+> > > > >         delta = curr->vruntime - se->vruntime;
+> > > > >
+> > > > >         if (delta < 0)
+> > >                 return;
+> > >
+> > >             if (delta > ideal_runtime)
+> > >                 resched_curr(rq_of(cfs_rq));
+> > >
+> > > After another look, curr is not preempted without the gap in vruntime
+> > > between curr and the first entity growing more than ideal runtime, while
+> >
+> > Curr can be preempted as it has run more than the ideal time (1st
+> > test). This one is to make sure that the diff does not become too
+> > large. Here we reuse the same comparison as wakeup to make sure that a
+> > newly curr will get a chance to run its ideal time after  having
+> > preempted at wakeup the previous current
 >
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/thermal/thermal-zones.yaml#n213 
+> IIUC it would take two checks to preempt correctly - diff in vruntime
+> is checked first to avoid preempting too early, then it is checked again
+> with latency_offset taken into account to avoid preempting too late.
+
+The 1st test in check_preempt_tick() : if (delta_exec > ideal_runtime)
+ensures that a resched happens after the current run is slice
+
+The 2nd test : if (delta_exec < sysctl_sched_min_granularity)
+ensures that current will run at least 3ms
+
+The 3rd one :  if (delta > ideal_runtime)
+is there to make sure that there is not too much diff between the
+vruntime. But we are comparing virtual runtime with execution time and
+as Peter mentioned in another thread that's weird. [1] will fix it in
+addition to ensure max runtime.
+Then, current might have preempted first_entity few ms before thanks
+to its latency_offset. If the tick happens quickly after the
+preemption, delta might be above ideal_runtime whereas current has run
+its ideal time yet
+
+[1] https://lore.kernel.org/all/20220916131538.24706-1-vincent.guittot@linaro.org/
+
 >
+> +++ b/kernel/sched/fair.c
+> @@ -4571,7 +4571,7 @@ check_preempt_tick(struct cfs_rq *cfs_rq
+>  {
+>         unsigned long ideal_runtime, delta_exec;
+>         struct sched_entity *se;
+> -       s64 delta;
+> +       s64 delta, d2;
 >
-In the base case we should but there are no trip points for these 
-sensors according to MediaTek.
-
-
-Regards,
-
-Amjad
-
+>         ideal_runtime = sched_slice(cfs_rq, curr);
+>         delta_exec = curr->sum_exec_runtime - curr->prev_sum_exec_runtime;
+> @@ -4595,11 +4595,9 @@ check_preempt_tick(struct cfs_rq *cfs_rq
+>
+>         se = __pick_first_entity(cfs_rq);
+>         delta = curr->vruntime - se->vruntime;
+> +       d2 = delta - wakeup_latency_gran(curr, se);
+>
+> -       if (delta < 0)
+> -               return;
+> -
+> -       if (delta > ideal_runtime)
+> +       if (delta > ideal_runtime || d2 > ideal_runtime)
+>                 resched_curr(rq_of(cfs_rq));
+>  }
+>
