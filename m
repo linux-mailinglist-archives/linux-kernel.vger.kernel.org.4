@@ -2,195 +2,479 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80F1A5BE586
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 14:17:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE9D65BE582
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 14:17:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbiITMRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 08:17:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57034 "EHLO
+        id S230367AbiITMRf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 08:17:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230416AbiITMRl (ORCPT
+        with ESMTP id S229965AbiITMRb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 08:17:41 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECC1F74E0E
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 05:17:38 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id f14so3460644lfg.5
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 05:17:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=PjV/C/iJaslECOoT/9+C2TwJfWJ2ZEuELuT2THrHTSs=;
-        b=R2XTmSX2SYLGWoAi8uGJIOaJZirw2IXSXnPpGo8lFigrYdCueJMlmMabp/H99h9XTu
-         KIyUhUkxdHZQ0mhs8+0HYvvGOV0vpaTCCeNexfh8+gQROBi2NP0IJVbnTgpv8clOcECi
-         AesONc22xViO48ek3VJ3rmhJcNY/tVYV/SDitUibR/c9sgiygDNqDfF+hCHqZaNsqwVm
-         dVhJ93iQbzw6ZBnFIoqKednYBtDNTJ6iR961ETXTXbW7Eg6asVAkueV89q9nWR3LPZYi
-         meq507FGw86zQ4mr++L3/sPwT8j1iCHvUkybKLRR8O2J39ROH2UxiN7AE33gMrqHnj6B
-         EcYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=PjV/C/iJaslECOoT/9+C2TwJfWJ2ZEuELuT2THrHTSs=;
-        b=CZgrcOFZHjJxMS5g8BE8lSldr6+u1sA6pFTKn8n29ErjKcJpByMzT6Z3eAEC1l1Q87
-         H2tMV/W657F9kVBVDM3af4fs/MowgifiwFr86yFvTP6K8EUURikdw+mNmkLX9pxfcmDK
-         3L/MKAS1ttDdx2Kq5RPVQc9vc9zu4JWypAylzj2YlpU6Wz1roSnU5U8Z+vIUi6S+5S+Q
-         OePhg61rTqvUpv5oiAjJDJVoNmNglMTvP69O1Xio2FNZVqgJ8q/7YHD2FkzKutbwGVeE
-         CPvBvTDL8jZFwMiIL7brJabnLuTGiWF0xkkTR61ZGSBavnXM5qfBBBCUNQTr1Sw08TaT
-         8WIg==
-X-Gm-Message-State: ACrzQf1sMh9ofCOcakc35Ux8EjymVA/XpCaELdYdTgHcjguJSepey4V+
-        z9Z1ILhuowZKjE8FF9f1mKrMQwQoScPq28Tyizf07w==
-X-Google-Smtp-Source: AMsMyM4TtcxV4q/66+HfLL3mPzRYJ9eXY2eQe4lofxHEXFr3UeUUpUmikabbHChRqteAz4+a6hi5gLJ+Ff+wq6MJqq4=
-X-Received: by 2002:a05:6512:280d:b0:498:fd40:51d4 with SMTP id
- cf13-20020a056512280d00b00498fd4051d4mr8952799lfb.167.1663676256865; Tue, 20
- Sep 2022 05:17:36 -0700 (PDT)
+        Tue, 20 Sep 2022 08:17:31 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A6F73921;
+        Tue, 20 Sep 2022 05:17:29 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id DEE5B6601F6E;
+        Tue, 20 Sep 2022 13:17:26 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1663676248;
+        bh=QQ2HxkvMf4aXu9a+2GDgTEXKznUPIbGdnE0YrrTQM44=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=BI3zn3DtTbVkfWHLAXehJ/VSznfXvZRtUL1Evu68+1uJA69oHASEsyMlBT9clCLPq
+         ZyYY/UhYUjnf9/+qaNMOtHh0y3ncv8HEPeLfWjnufRfnwLcF1ewUVl+8lcO10Nta0A
+         7rsFhlFSmCPno6ewukFVXaL/kkdhE+RBcdSDrUVPEmZOyQZGsoQZ4hNBDwcEploT9D
+         7nDIbrcfQVzTEznbkXNWcW+9DP+HOIQMHjn8yI9UbOwYVAJFXfCmF6B9He6ojQV8XS
+         dqBzIo2xEPpBTSKdvyr1zY8MbRGYzv0E5ZO68EFanZdulrVNJ4gy00vQvyzGIrq5xC
+         ZPlvUrjHJoPyw==
+Message-ID: <00293eda-ca41-b472-1ae4-def4a6dcd4fe@collabora.com>
+Date:   Tue, 20 Sep 2022 14:17:23 +0200
 MIME-Version: 1.0
-References: <20220919181309.286611-1-dinguyen@kernel.org> <20220919181309.286611-2-dinguyen@kernel.org>
-In-Reply-To: <20220919181309.286611-2-dinguyen@kernel.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 20 Sep 2022 14:17:00 +0200
-Message-ID: <CAPDyKFoB7Z6kDOBd9rVLXU5yRQK7d5A-ut5CRroepbAfQpuByw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] mmc: dw_mmc-pltfm: socfpga: add method to configure clk-phase
-To:     Dinh Nguyen <dinguyen@kernel.org>
-Cc:     jh80.chung@samsung.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v1 14/17] phy: mediatek: add support for
+ phy-mtk-hdmi-mt8195
+Content-Language: en-US
+To:     Guillaume Ranquet <granquet@baylibre.com>,
+        Vinod Koul <vkoul@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Rob Herring <robh+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        CK Hu <ck.hu@mediatek.com>, Jitao shi <jitao.shi@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-mediatek@lists.infradead.org,
+        dri-devel@lists.freedesktop.org,
+        Pablo Sun <pablo.sun@mediatek.com>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org
+References: <20220919-v1-0-4844816c9808@baylibre.com>
+ <20220919-v1-14-4844816c9808@baylibre.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220919-v1-14-4844816c9808@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 19 Sept 2022 at 20:13, Dinh Nguyen <dinguyen@kernel.org> wrote:
->
-> The clock-phase settings for the SDMMC controller in the SoCFPGA
-> Strarix10/Agilex/N5X platforms reside in a register in the System
-> Manager. Add a method to access that register through the syscon
-> interface.
->
-> Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
-> ---
->  drivers/mmc/host/dw_mmc-pltfm.c | 68 ++++++++++++++++++++++++++++++++-
->  1 file changed, 67 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/mmc/host/dw_mmc-pltfm.c b/drivers/mmc/host/dw_mmc-pltfm.c
-> index 9901208be797..9e3237c18a9d 100644
-> --- a/drivers/mmc/host/dw_mmc-pltfm.c
-> +++ b/drivers/mmc/host/dw_mmc-pltfm.c
-> @@ -17,10 +17,15 @@
->  #include <linux/mmc/host.h>
->  #include <linux/mmc/mmc.h>
->  #include <linux/of.h>
-> +#include <linux/mfd/altera-sysmgr.h>
-> +#include <linux/regmap.h>
->
->  #include "dw_mmc.h"
->  #include "dw_mmc-pltfm.h"
->
-> +#define SYSMGR_SDMMC_CTRL_SET(smplsel, drvsel) \
-> +       ((((smplsel) & 0x7) << 4) | (((drvsel) & 0x7) << 0))
+Il 19/09/22 18:56, Guillaume Ranquet ha scritto:
+> Add basic support for the mediatek hdmi phy on MT8195 SoC
+> 
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_mt8195_hdmi.c b/drivers/gpu/drm/mediatek/mtk_mt8195_hdmi.c
+> index bb7593ea4c86..0157acdce56c 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_mt8195_hdmi.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_mt8195_hdmi.c
+> @@ -1344,6 +1344,8 @@ static void mtk_hdmi_bridge_disable(struct drm_bridge *bridge,
+>   	mtk_hdmi_disable_hdcp_encrypt(hdmi);
+>   	usleep_range(50000, 50050);
+>   
+> +	phy_power_off(hdmi->phy);
+
+This one belongs to patch [11/17]
+
 > +
->  int dw_mci_pltfm_register(struct platform_device *pdev,
->                           const struct dw_mci_drv_data *drv_data)
->  {
-> @@ -62,9 +67,70 @@ const struct dev_pm_ops dw_mci_pltfm_pmops = {
->  };
->  EXPORT_SYMBOL_GPL(dw_mci_pltfm_pmops);
->
-> +static int dw_mci_socfpga_priv_init(struct dw_mci *host)
+>   	hdmi->enabled = false;
+>   }
+>   
+> diff --git a/drivers/phy/mediatek/Makefile b/drivers/phy/mediatek/Makefile
+> index fb1f8edaffa7..c9a50395533e 100644
+> --- a/drivers/phy/mediatek/Makefile
+> +++ b/drivers/phy/mediatek/Makefile
+> @@ -12,6 +12,7 @@ obj-$(CONFIG_PHY_MTK_XSPHY)		+= phy-mtk-xsphy.o
+>   phy-mtk-hdmi-drv-y			:= phy-mtk-hdmi.o
+>   phy-mtk-hdmi-drv-y			+= phy-mtk-hdmi-mt2701.o
+>   phy-mtk-hdmi-drv-y			+= phy-mtk-hdmi-mt8173.o
+> +phy-mtk-hdmi-drv-y			+= phy-mtk-hdmi-mt8195.o
+>   obj-$(CONFIG_PHY_MTK_HDMI)		+= phy-mtk-hdmi-drv.o
+>   
+>   phy-mtk-mipi-dsi-drv-y			:= phy-mtk-mipi-dsi.o
+> diff --git a/drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c b/drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c
+> new file mode 100644
+> index 000000000000..149015b64c02
+> --- /dev/null
+> +++ b/drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c
+> @@ -0,0 +1,673 @@
+
+..snip..
+
+> +
+> +static int mtk_hdmi_pll_set_hw(struct clk_hw *hw, unsigned char prediv,
+> +			       unsigned char fbkdiv_high,
+> +			       unsigned long fbkdiv_low,
+> +			       unsigned char fbkdiv_hs3, unsigned char posdiv1,
+> +			       unsigned char posdiv2, unsigned char txprediv,
+> +			       unsigned char txposdiv,
+> +			       unsigned char digital_div)
 > +{
-> +       struct device_node *np = host->dev->of_node;
-> +       struct regmap *sys_mgr_base_addr;
-> +       u32 clk_phase[2] = {0}, reg_offset;
-> +       int i, rc, hs_timing;
+> +	unsigned char txposdiv_value = 0;
+> +	unsigned char div3_ctrl_value = 0;
+> +	unsigned char posdiv_vallue = 0;
+> +	unsigned char div_ctrl_value = 0;
+> +	unsigned char reserve_3_2_value = 0;
+> +	unsigned char prediv_value = 0;
+> +	unsigned char reserve13_value = 0;
+> +	struct mtk_hdmi_phy *hdmi_phy = to_mtk_hdmi_phy(hw);
 > +
-> +       rc = of_property_read_variable_u32_array(np, "clk-phase-sd-hs", &clk_phase[0], 2, 0);
-
-This needs to be documented through updated DT bindings.
-
-> +       if (rc) {
-> +               sys_mgr_base_addr =
-> +                       altr_sysmgr_regmap_lookup_by_phandle(np, "altr,sysmgr-syscon");
-
-DT bindings?
-
-> +               if (IS_ERR(sys_mgr_base_addr)) {
-> +                       pr_err("%s: failed to find altr,sys-mgr regmap!\n", __func__);
-> +                       return 1;
-> +               }
-> +       } else
-> +               return 1;
+> +	mtk_hdmi_pll_select_source(hw);
 > +
-> +       of_property_read_u32_index(np, "altr,sysmgr-syscon", 1, &reg_offset);
+> +	mtk_hdmi_pll_performance_setting(hw);
+> +
+> +	mtk_hdmi_phy_mask(hdmi_phy, HDMI_1_CFG_10,
+> +			  0x2 << RG_HDMITX21_BIAS_PE_BG_VREF_SEL_SHIFT,
+> +			  RG_HDMITX21_BIAS_PE_BG_VREF_SEL);
+> +	mtk_hdmi_phy_mask(hdmi_phy, HDMI_1_CFG_10,
+> +			  0x0 << RG_HDMITX21_VREF_SEL_SHIFT,
+> +			  RG_HDMITX21_VREF_SEL);
+> +	mtk_hdmi_phy_mask(hdmi_phy, HDMI_1_CFG_9,
+> +			  0x2 << RG_HDMITX21_SLDO_VREF_SEL_SHIFT,
+> +			  RG_HDMITX21_SLDO_VREF_SEL);
+> +	mtk_hdmi_phy_mask(hdmi_phy, HDMI_1_CFG_10,
+> +			  0x0 << RG_HDMITX21_BIAS_PE_VREF_SELB_SHIFT,
+> +			  RG_HDMITX21_BIAS_PE_VREF_SELB);
+> +	mtk_hdmi_phy_mask(hdmi_phy, HDMI_1_CFG_3,
+> +			  0x1 << RG_HDMITX21_SLDOLPF_EN_SHIFT,
+> +			  RG_HDMITX21_SLDOLPF_EN);
+> +	mtk_hdmi_phy_mask(hdmi_phy, HDMI_1_CFG_6,
+> +			  0x11 << RG_HDMITX21_INTR_CAL_SHIFT,
+> +			  RG_HDMITX21_INTR_CAL);
+> +	mtk_hdmi_phy_mask(hdmi_phy, HDMI_1_PLL_CFG_2,
+> +			  0x1 << RG_HDMITXPLL_PWD_SHIFT, RG_HDMITXPLL_PWD);
+> +
+> +	/* TXPOSDIV */
 
-DT bindings?
+Either ilog2() or use a switch...
+
+> +	if (txposdiv == 1)
+> +		txposdiv_value = 0x0;
+> +	else if (txposdiv == 2)
+> +		txposdiv_value = 0x1;
+> +	else if (txposdiv == 4)
+> +		txposdiv_value = 0x2;
+> +	else if (txposdiv == 8)
+> +		txposdiv_value = 0x3;
+> +	else
+> +		return -EINVAL;
+> +
+> +	mtk_hdmi_phy_mask(hdmi_phy, HDMI_1_CFG_6,
+> +			  txposdiv_value << RG_HDMITX21_TX_POSDIV_SHIFT,
+> +			  RG_HDMITX21_TX_POSDIV);
+> +
+> +	mtk_hdmi_phy_mask(hdmi_phy, HDMI_1_CFG_6,
+> +			  0x1 << RG_HDMITX21_TX_POSDIV_EN_SHIFT,
+> +			  RG_HDMITX21_TX_POSDIV_EN);
+> +	mtk_hdmi_phy_mask(hdmi_phy, HDMI_1_CFG_6,
+> +			  0x0 << RG_HDMITX21_FRL_EN_SHIFT, RG_HDMITX21_FRL_EN);
+> +
+> +	/* TXPREDIV */
+
+Use a switch.
+
+> +	if (txprediv == 2) {
+> +		div3_ctrl_value = 0x0;
+> +		posdiv_vallue = 0x0;
+> +	} else if (txprediv == 4) {
+> +		div3_ctrl_value = 0x0;
+> +		posdiv_vallue = 0x1;
+> +	} else if (txprediv == 6) {
+> +		div3_ctrl_value = 0x1;
+> +		posdiv_vallue = 0x0;
+> +	} else if (txprediv == 12) {
+> +		div3_ctrl_value = 0x1;
+> +		posdiv_vallue = 0x1;
+> +	} else {
+> +		return -EINVAL;
+> +	}
+> +
+> +	mtk_hdmi_phy_mask(hdmi_phy, HDMI_1_PLL_CFG_4,
+> +			  div3_ctrl_value
+> +				  << RG_HDMITXPLL_POSDIV_DIV3_CTRL_SHIFT,
+> +			  RG_HDMITXPLL_POSDIV_DIV3_CTRL);
+> +	mtk_hdmi_phy_mask(hdmi_phy, HDMI_1_PLL_CFG_4,
+> +			  posdiv_vallue << RG_HDMITXPLL_POSDIV_SHIFT,
+> +			  RG_HDMITXPLL_POSDIV);
+> +
+> +	/* POSDIV1 */
+
+same here.
+
+> +	if (posdiv1 == 5)
+> +		div_ctrl_value = 0x0;
+> +	else if (posdiv1 == 10)
+> +		div_ctrl_value = 0x1;
+> +	else if (posdiv1 == (125 / 10))
+
+/* This is 12.5 in reality, but we get only the integer part */
+case 12:
+
+...or you'll have to use a "deci-divider", which would complicate human readability
+by ... quite a bit, in some cases.
+
+> +		div_ctrl_value = 0x2;
+> +	else if (posdiv1 == 15)
+> +		div_ctrl_value = 0x3;
+> +	else
+> +		return -EINVAL;
+> +
+
+..snip..
 
 > +
-> +       for (i = 0; i < ARRAY_SIZE(clk_phase); i++) {
-> +               switch (clk_phase[i]) {
-> +               case 0:
-> +                       clk_phase[i] = 0;
-> +                       break;
-> +               case 45:
-> +                       clk_phase[i] = 1;
-> +                       break;
-> +               case 90:
-> +                       clk_phase[i] = 2;
-> +                       break;
-> +               case 135:
-> +                       clk_phase[i] = 3;
-> +                       break;
-> +               case 180:
-> +                       clk_phase[i] = 4;
-> +                       break;
-> +               case 225:
-> +                       clk_phase[i] = 5;
-> +                       break;
-> +               case 270:
-> +                       clk_phase[i] = 6;
-> +                       break;
-> +               case 315:
-> +                       clk_phase[i] = 7;
-> +                       break;
-> +               default:
-> +                       clk_phase[i] = 0;
-> +                       break;
-> +               }
-> +       }
-
-In my opinion, it looks like converting to use
-mmc_of_parse_clk_phase() should be able to avoid some of the open
-coding above.
-
-If you need some inspiration of how to implement this, you may have a
-look at drivers/mmc/host/sdhci-of-aspeed.c
-
-> +       hs_timing = SYSMGR_SDMMC_CTRL_SET(clk_phase[0], clk_phase[1]);
-> +       regmap_write(sys_mgr_base_addr, reg_offset, hs_timing);
+> +#define PCW_DECIMAL_WIDTH 24
 > +
-> +       return 0;
+> +static int mtk_hdmi_pll_calculate_params(struct clk_hw *hw, unsigned long rate,
+> +					 unsigned long parent_rate)
+> +{
+> +	int ret;
+> +	unsigned long long tmds_clk = 0;
+> +	unsigned long long pixel_clk = 0;
+> +	//pll input source frequency
+
+Fix comments style.
+
+> +	unsigned long long da_hdmitx21_ref_ck = 0;
+> +	unsigned long long ns_hdmipll_ck = 0; //ICO output clk
+> +	//source clk for Display digital
+> +	unsigned long long ad_hdmipll_pixel_ck = 0;
+> +	unsigned char digital_div = 0;
+> +	unsigned long long pcw = 0; //FBDIV
+
+u64 pcw;
+
+> +	unsigned char txprediv = 0;
+> +	unsigned char txposdiv = 0;
+> +	unsigned char fbkdiv_high = 0;
+> +	unsigned long fbkdiv_low = 0;
+> +	unsigned char posdiv1 = 0;
+> +	unsigned char posdiv2 = 0;
+> +	unsigned char prediv = 1; //prediv is always 1
+> +	unsigned char fbkdiv_hs3 = 1; //fbkdiv_hs3 is always 1
+> +	int i = 0;
+> +	unsigned char txpredivs[4] = { 2, 4, 6, 12 };
+> +
+> +	pixel_clk = rate;
+> +	tmds_clk = pixel_clk;
+> +
+> +	if (tmds_clk < 25000000 || tmds_clk > 594000000)
+> +		return -EINVAL;
+> +
+> +	da_hdmitx21_ref_ck = 26000000UL; //in HZ
+> +
+> +	/*  TXPOSDIV stage treatment:
+> +	 *	0M  <  TMDS clk  < 54M		  /8
+> +	 *	54M <= TMDS clk  < 148.35M    /4
+> +	 *	148.35M <=TMDS clk < 296.7M   /2
+> +	 *	296.7 <=TMDS clk <= 594M	  /1
+> +	 */
+> +	if (tmds_clk < 54000000UL)
+> +		txposdiv = 8;
+> +	else if (tmds_clk >= 54000000UL && tmds_clk < 148350000UL)
+
+	else if (tmds_clk < 148350000UL)
+
+> +		txposdiv = 4;
+> +	else if (tmds_clk >= 148350000UL && tmds_clk < 296700000UL)
+
+	else if (tmds_clk < 296700000UL)
+
+> +		txposdiv = 2;
+> +	else if (tmds_clk >= 296700000UL && tmds_clk <= 594000000UL)
+
+	else if (tmds_clk <= 594000000UL)
+
+> +		txposdiv = 1;
+> +	else
+> +		return -EINVAL;
+> +
+
+..snip..
+
+> +
+> +	txprediv = txpredivs[i];
+> +
+> +	/* PCW calculation: FBKDIV
+> +	 * formula: pcw=(frequency_out*2^pcw_bit) / frequency_in / FBKDIV_HS3;
+> +	 * RG_HDMITXPLL_FBKDIV[32:0]:
+> +	 * [32,24] 9bit integer, [23,0]:24bit fraction
+> +	 */
+> +	pcw = ns_hdmipll_ck;
+
+	pcw = ns_hdmipll_ck << PCW_DECIMAL_WIDTH;
+	pcw /= da_hdmitx21_ref_ck;
+	pcw /= fbkdiv_hs3;
+
+> +	pcw = pcw << PCW_DECIMAL_WIDTH;
+> +	pcw = pcw / da_hdmitx21_ref_ck;
+> +	pcw = pcw / fbkdiv_hs3;
+> +
+> +	if ((pcw / BIT(32)) > 1) {
+
+	pcw_nbits = fls64(pcw);
+
+	if (pcw_nbits > 33)
+		return -EINVAL;
+
+	if (pcw_nbits == 33) {
+		fbkdiv_high = 1;
+		fkbdiv_low = pcw % BIT(32);
+	} else {
+		fbkdiv_high = 0;
+		fbkdiv_low = pcw;
+	}
+
+> +		return -EINVAL;
+> +	} else if ((pcw / BIT(32)) == 1) {
+> +		fbkdiv_high = 1;
+> +		fbkdiv_low = pcw % BIT(32);
+> +	} else {
+> +		fbkdiv_high = 0;
+> +		fbkdiv_low = pcw;
+> +	}
+> +
+> +	/* posdiv1:
+> +	 * posdiv1 stage treatment according to color_depth:
+> +	 * 24bit -> posdiv1 /10, 30bit -> posdiv1 /12.5,
+> +	 * 36bit -> posdiv1 /15, 48bit -> posdiv1 /10
+> +	 */
+> +	posdiv1 = 10; // div 10
+> +	posdiv2 = 1;
+> +	ad_hdmipll_pixel_ck = (ns_hdmipll_ck / 10) / 1;
+
+I understand this as
+	ad_hdmipll_pixel_ck = (ns_hdmipll_ck / posdiv1) / posdiv2;
+
+..if that's true, please fix.
+
+> +
+> +	/* Digital clk divider, max /32 */
+> +	digital_div = ad_hdmipll_pixel_ck / pixel_clk;
+> +	if (!(digital_div <= 32 && digital_div >= 1))
+> +		return -EINVAL;
+> +
+> +	ret = mtk_hdmi_pll_set_hw(hw, prediv, fbkdiv_high, fbkdiv_low,
+> +				  fbkdiv_hs3, posdiv1, posdiv2, txprediv,
+> +				  txposdiv, digital_div);
+> +	if (ret)
+> +		return -EINVAL;
+> +
+> +	return 0;
 > +}
 > +
-> +static const struct dw_mci_drv_data socfpga_drv_data = {
-> +       .init           = dw_mci_socfpga_priv_init,
+> +static int mtk_hdmi_pll_drv_setting(struct clk_hw *hw)
+> +{
+> +	unsigned char data_channel_bias, clk_channel_bias;
+> +	unsigned char impedance, impedance_en;
+> +	struct mtk_hdmi_phy *hdmi_phy = to_mtk_hdmi_phy(hw);
+> +	unsigned long tmds_clk;
+> +	unsigned long pixel_clk = hdmi_phy->pll_rate;
+> +
+> +	tmds_clk = pixel_clk;
+
+	tmds_rate = pixel_rate;
+
+...better describes that we're talking about clock rates, not clock per-se.
+
+> +
+> +	/* bias & impedance setting:
+> +	 * 3G < data rate <= 6G: enable impedance 100ohm,
+> +	 *      data channel bias 24mA, clock channel bias 20mA
+> +	 * pixel clk >= HD,  74.175MHZ <= pixel clk <= 300MHZ:
+> +	 *      enalbe impedance 100ohm
+> +	 *      data channel 20mA, clock channel 16mA
+> +	 * 27M =< pixel clk < 74.175: disable impedance
+> +	 *      data channel & clock channel bias 10mA
+> +	 */
+> +
+> +	/* 3G < data rate <= 6G, 300M < tmds rate <= 594M */
+> +	if (tmds_clk > 300000000UL && tmds_clk <= 594000000UL) {
+> +		data_channel_bias = 0x3c; //24mA
+
+There must be an equation to calculate the bias value from milliamps to HW values,
+in which case we would see here...
+
+		data_channel_bias = MTK_HDMI_BIAS_MA(24);
+		clk_channel_bias = MTK_HDMI_BIAS_MA(20);
+		impedance = MTK_HDMI_IMPEDANCE_OHMS(100);
+		impedance_en = SOMETHING();
+
+> +		clk_channel_bias = 0x34; //20mA
+> +		impedance_en = 0xf;
+> +		impedance = 0x36; //100ohm
+> +	} else if (pixel_clk >= 74175000UL && pixel_clk <= 300000000UL) {
+> +		data_channel_bias = 0x34; //20mA
+> +		clk_channel_bias = 0x2c; //16mA
+> +		impedance_en = 0xf;
+> +		impedance = 0x36; //100ohm
+> +	} else if (pixel_clk >= 27000000UL && pixel_clk < 74175000UL) {
+
+By the way, if you invert all the checks here (check from highest pixclk to lowest)
+you can simplify it.
+
+> +		data_channel_bias = 0x14; //10mA
+> +		clk_channel_bias = 0x14; //10mA
+> +		impedance_en = 0x0;
+> +		impedance = 0x0;
+> +	} else {
+> +		return -EINVAL;
+> +	}
+> +
+
+..snip..
+
+> +
+> +static int mtk_hdmi_phy_configure(struct phy *phy, union phy_configure_opts *opts)
+> +{
+> +	struct phy_configure_opts_dp *dp_opts = &opts->dp;
+> +	struct mtk_hdmi_phy *hdmi_phy = phy_get_drvdata(phy);
+> +	int ret = 0;
+> +	bool enable = 0;
+> +
+> +	ret = clk_set_rate(hdmi_phy->pll, dp_opts->link_rate);
+> +
+
+Please remove this blank line...
+
+> +	if (ret)
+> +		goto out;
+> +
+> +	mtk_mt8195_phy_tmds_high_bit_clk_ratio(hdmi_phy, enable);
+> +
+> +out:
+> +	return ret;
+> +}
+> +
+> +struct mtk_hdmi_phy_conf mtk_hdmi_phy_8195_conf = {
+> +	.flags = CLK_SET_RATE_PARENT | CLK_SET_RATE_GATE,
+> +	.hdmi_phy_clk_ops = &mtk_hdmi_pll_ops,
+> +	.hdmi_phy_enable_tmds = mtk_hdmi_phy_enable_tmds,
+> +	.hdmi_phy_disable_tmds = mtk_hdmi_phy_disable_tmds,
+> +	.hdmi_phy_configure = mtk_hdmi_phy_configure,
 > +};
 > +
->  static const struct of_device_id dw_mci_pltfm_match[] = {
->         { .compatible = "snps,dw-mshc", },
-> -       { .compatible = "altr,socfpga-dw-mshc", },
-> +       { .compatible = "altr,socfpga-dw-mshc", .data = &socfpga_drv_data, },
->         { .compatible = "img,pistachio-dw-mshc", },
->         {},
->  };
-> --
-> 2.25.1
->
+> +MODULE_AUTHOR("Can Zeng <can.zeng@mediatek.com>");
+> +MODULE_DESCRIPTION("MediaTek MT8195 HDMI PHY Driver");
+> +MODULE_LICENSE("GPL v2");
 
-Kind regards
-Uffe
+Regards,
+Angelo
+
