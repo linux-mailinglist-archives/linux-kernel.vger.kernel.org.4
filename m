@@ -2,177 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 538A75BEB92
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 19:07:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A4E85BEB96
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 19:07:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230380AbiITRHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 13:07:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54488 "EHLO
+        id S230356AbiITRHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 13:07:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230001AbiITRHL (ORCPT
+        with ESMTP id S230153AbiITRHm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 13:07:11 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2077.outbound.protection.outlook.com [40.107.92.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1CD756BA4
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 10:07:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=a+fYwxoMLVId2NyUF60QHSxvvdkyjpnTcBF8Z/quvSCDms08qkeF0lhyuIqXmWABUMbyhve3EljkSEN4L5AXCOy0MU44jA3918guDm9CjMA7DN8X9bQRKGDiiDkHqWDbQ3lPq/NKqM0oikcg5rtaG1RJrFJHFgKk/7QwWtfKF1fJh1YvEG0yyn4izFFKmk5BJzU7rWiUCX50yGn5FB2Nt8dXiZbEmkZHm0jmieHEyugxTZmRKWNUzoN0uYsO5VztzaGk8YhQhdfnbSVRqZ3xTNnQt22k+mprUWuZO8+GuwX9w3mHvu7S04kklVkCPSPsgz5JCDSMo4OWzvZz+3jhfA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JW/BoRL6//WkNOJdR0ujFIOnkewLR6BAie6C2ZjBraM=;
- b=UrPRHNtu7ZdrCaWAjhdEQHMZMurVpUPzonNhV+Y1QvaX12xWmQOEltpxcRNlu/m1KbTGwGHuWqKJisSpVe6rOFWvQPusJX8+hbQGvracGqc87stXWr8HB593+VuABf6j8YezCsqILszkx0up08c3mFg302Wy/09GHHKO4kAxi6fdstq4X40M3YabPoAiQ2gME9+TxMT9/yHebepEKfQz2w65jh0LjqiIOMHmRGesj1gpZMcYzjzW+/+U/g3u5yxZsN0w6b/u0Gdx2vhva5dikGb8WjP8Uyp6zTajZt5XPU/JjXBBnaoHsX7n4xf5zVwU52r1VQaEv/1ZNdGkWc2v8Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JW/BoRL6//WkNOJdR0ujFIOnkewLR6BAie6C2ZjBraM=;
- b=e5NJIiGtgq8TbsiasT+5sj1VAuCuCFhP9tlF1ft8LMIblrLgfx2vfAXBcHcLx1KYgYqZrIO9RXlo6hdPk4fh55PSTWZb4YHUGdeGmh4w7VKO5rf2yA3wvcLPCcsAVDFGKRPgigMsJkridll92dP8bSraEStbhxwc4DEuNSrIzgk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM5PR12MB1947.namprd12.prod.outlook.com (2603:10b6:3:111::23)
- by PH0PR12MB5418.namprd12.prod.outlook.com (2603:10b6:510:e5::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.21; Tue, 20 Sep
- 2022 17:07:06 +0000
-Received: from DM5PR12MB1947.namprd12.prod.outlook.com
- ([fe80::80ca:c97:d395:1acf]) by DM5PR12MB1947.namprd12.prod.outlook.com
- ([fe80::80ca:c97:d395:1acf%6]) with mapi id 15.20.5632.021; Tue, 20 Sep 2022
- 17:07:06 +0000
-Message-ID: <52c849ad-2645-03c8-4907-07df6b2fc090@amd.com>
-Date:   Tue, 20 Sep 2022 13:07:04 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2] A simple doc fix
-Content-Language: en-US
-To:     Anup K Parikh <parikhanupk.foss@gmail.com>,
-        skhan@linuxfoundation.org, airlied@linux.ie, daniel@ffwll.ch
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <Yylh1Nst25I6u6Uh@autolfshost>
-From:   Andrey Grodzovsky <andrey.grodzovsky@amd.com>
-In-Reply-To: <Yylh1Nst25I6u6Uh@autolfshost>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YT1PR01CA0040.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:2e::9) To DM5PR12MB1947.namprd12.prod.outlook.com
- (2603:10b6:3:111::23)
+        Tue, 20 Sep 2022 13:07:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 262C25A882
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 10:07:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C8BA8B82188
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 17:07:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9365C433B5;
+        Tue, 20 Sep 2022 17:07:37 +0000 (UTC)
+Date:   Tue, 20 Sep 2022 18:07:34 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     James Clark <james.clark@arm.com>
+Cc:     suzuki.poulose@arm.com, coresight@lists.linaro.org,
+        mathieu.poirier@linaro.org, mike.leach@linaro.org,
+        leo.yan@linaro.org,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] coresight: Use new autogenerated sysreg definitions
+Message-ID: <YynzVqwK+6JJt9XW@arm.com>
+References: <20220920134827.31738-1-james.clark@arm.com>
+ <Yyntfsas+K63Oo1a@arm.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM5PR12MB1947:EE_|PH0PR12MB5418:EE_
-X-MS-Office365-Filtering-Correlation-Id: a52713d2-51b9-47dc-6de9-08da9b2a8baa
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Md1SxmN6tzRx5svRrdKWuJFRskRnC6wRNZMpTn+w9IpRtuaplm87Cvn/gyesb+lFjwap7egymv4kNlq0YDDd0RKo2wFbP0meRINNl1xtr4no2llUbPwfkonpzo5SpE/KaDitdea9PzuZ1R8De0+e8LOoEAbbIioxt66rftlp9aeHC/BHeHkiwUZoUErq9S5ss/GYSa+myd9ps3ri3T7NETs/R+E1Zbu7o26bGxxb0JtFW0gz13KFDwBvFxGWhYcExxFVeux4pUo6bEpwhh1Cd+3LF2/PbW1oI1/3hJ9dLzubpUdOFrpBeD8DLHXn1pT54ML2SDZ8SMgLKqO3W0sPY43XjfGrByyax2gO0dh87Tiqx6lenHQtKcHE6bvmifH2wJWu2Apz8EGrKmav4hL8l5Ad6u743cwMzEXZsn+wRRg1emt2VjRjHOd4X7l4aPn5jEVBG1Z4ULrDKfS2zIAIFm1G/2k2yEH72GPkgxdgTX6hnG2XG60/WTv6Jr01jDR8ds+YxHHYuD0OT+iqIBZ6cmel/gM6khW8JcXJjDtmAnaUMNd/zumQA2Nadc8pZaHR2U4hO5wB/AoyiklViSuQWwq8fmoBsxN5l9MtJzIN6IJ7EhrDrEVsqFJSXb4QH76D75Tu4uglQ89wlVzGwXRevEcB/5QIGYyfhYt3GVwLUS9VvEbPaT10K0o6l0qB23xgwdBAphBNTAfoq8eNXP0mr1glp9eBbA37Db4+zqLhk5oDQz7tVoh4PMGkX5xkOaJi34wqlSCRtdcKmUua1udhpZN1El5z1A1OOxCiUWqUpwCfQglXCla2kwLAE/vjCipU/YKpyZODQI/humixi3jL9A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB1947.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(366004)(376002)(396003)(136003)(39860400002)(451199015)(38100700002)(66946007)(186003)(2616005)(66556008)(66476007)(36756003)(83380400001)(2906002)(966005)(41300700001)(316002)(8936002)(53546011)(86362001)(4326008)(6486002)(6506007)(6512007)(8676002)(45080400002)(478600001)(31696002)(44832011)(5660300002)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eDFZTGFPVEx3aWFKZXBPQmJjZHJIdjFnTnRtZk9rbVFKdDU2MjRMY0Q4Q3Nx?=
- =?utf-8?B?RnlRQ09LaVc2U0FlU3VETUMwZWh0WHVoNVV0bHo0Zm9rWWVBKzR4TGxQK1lR?=
- =?utf-8?B?Q0ozd3hIaTUvMVMvWEx4MEl1SHN5N1ZmZ3FuY1RoN0FaajdCclhlcWtBMS91?=
- =?utf-8?B?NTdScGxsTm8vZ2tHVUlOUi9MRGRFQ1ZvRGtPWHROZi8xQUJ2U0FzNjRKajdW?=
- =?utf-8?B?cncvb1FXSXhrSHYrVWN1Yi9OUkhRUjl0RFM3aGYzOUc4dEx1S3pFUEkrV2dk?=
- =?utf-8?B?N3o5dHpIUVZ3WGpJVGhtN1U5VFJYVzlwY0tsUG8wYUJVQ2pjTUgrcExlbTl6?=
- =?utf-8?B?VFl3L2NoNnhZOUhkMlhRRXdZamY4RkhTcFduS2QyV3NhQmE4ZjNpQmNMTG5q?=
- =?utf-8?B?WS9VTXU0aHJpNFBpTGkvRkNiUE9uWS9XRElybW8zQnVKL1BKb3BHVENoRDhL?=
- =?utf-8?B?RVcxZnJlSVF3eTdpeUJoM041TzlQZnp6K0YyNnZRczRxaWhiM1phdGJadWtJ?=
- =?utf-8?B?RHhwanc0b2x3d0xnRFBKbE1GWG5oOFc3SGQ0dFpKYVZIWStUODV5bW9JUmpP?=
- =?utf-8?B?cWsrckpuU3VHalN2b0VJY21OMTFsRFlEQTBJcWxGM2QreHpLVTY4eEpkT0Yx?=
- =?utf-8?B?NG9tWXgweUxocnF0WVFmUkdaWHdHZjFxUWpVNVM5YWJsYnRYbWVhVTZHVUh2?=
- =?utf-8?B?Q0pMY3dDYklxUEorRUMzS0hTM3lVbXJ3TnV6QVl1bkN5T2lOVVdjUDc3WWdK?=
- =?utf-8?B?ZFA0QlhVbU5vSmVHUVNhQjM5WCtlbnhBeUNpQ2kxN0xaNDFueVgrQ3hTSDVT?=
- =?utf-8?B?bXFvMjZpSUZRMG9uTEJMaExNL0J4M1VCNzJBSXBIdDlVVUZ5VWtoelJKVkVL?=
- =?utf-8?B?OVRqM1I3bGJDZ2lma3BLNHl2MTdqSzJnbWVJczl0ZnBGV0xPNlNuU3NJbmlN?=
- =?utf-8?B?cFhZYXlxRExRYmJ1Yjg0Uk1EK2tqV2ZrYkNRd2ZEdXkvQ25BNUdGR0p5Uk9T?=
- =?utf-8?B?SzcySGJIRlRxeDlPczNWTWN1QjZaU0I1T0d3dXlTUitUTDBycVZIbHg3WUUy?=
- =?utf-8?B?LzU3SzdYWkFUcG9TUUErYTJNa0VIY2xDS2MxOEFwK3Q0QXV5YjJPQzNnRE1n?=
- =?utf-8?B?NWxIMmdpZGZUMjBOUUNHcEhXZndYQ1d4U05aM3lvdmVPa3VVUmhLN2FDVUM2?=
- =?utf-8?B?NnpWUjlNRWQ0MHg1SWxuc044NVBtbUxiaGdRcytzWnBldGQya2NrZEpGWWlK?=
- =?utf-8?B?cGR6amNSNFJlakpnRWdSdFh3WXFSVFRGd0c2Q1ZnMEVRQnAySWlEK2pIZ3BO?=
- =?utf-8?B?RXNCRjFYVHV5aGZBUVl5dEhIcDNmUkNpN2EySGVqQ1VvWDk2NGlmczZVK2hO?=
- =?utf-8?B?NXRLNEZ2VXpJYnpOWXhFTndtWklCY3crcFJhODJUcnd2bUxvL1lubnN2aXAz?=
- =?utf-8?B?TFU0UEp3K2lhZkJTTnRJbDJQWENjM2txdTRWRmovN25PRmE3L1FNMXpxU2FB?=
- =?utf-8?B?MjRRQk53MEo0ZUt2dnIrNWhLOUtXWmJjd2pLeWJpS3pkZ3k4dGlVdGJDZlZw?=
- =?utf-8?B?UHU4aSt2UHRRdFdHMEVQTk5GYThJMmppeE1VVXRtKzB6UDJMZVlEcGhuaEFK?=
- =?utf-8?B?TlNSblV2eUJxRXpYeUFmcktkaFBTYklZMlQ4U242ejVPanJ3ang0NlFmV0VI?=
- =?utf-8?B?Z0FINGs3cEo5QXp5M0xZR2N5OVRUSXZUVjJ4N3BOS1QvWWhsd1NvdFZOeG9U?=
- =?utf-8?B?WFk3SmVRVEZpa0k0TXIrcHlXQUNNVGEyTFhlM3ZFdG83d1ZPMWN0MURZWk9Y?=
- =?utf-8?B?ZTJJUWFEWVdtMGtMa3J5Rkh3MHo1d1o4amgxakRmUmxOTENlbXI5RkFUbk5l?=
- =?utf-8?B?WkFXWXBpZ1ZGak9OekN0M3Qyb2FNaU9BY2l0VDBEYXdIN2J2UHZMNnZtMFU0?=
- =?utf-8?B?Z04rby93SGNNU2FYdEJtL0hEUkl2RUsvV3Z1S3dKN0s0ZHdlOFpacXE0eHRL?=
- =?utf-8?B?RkxXR2ZyL0l1cnNBdGpZbWJiSzBVcGdVUm1ETGhYNHZUWDlxWlJxRncvSVk0?=
- =?utf-8?B?cUVLL1NTWW1YRnZLMVBFaW4xVkMwMmxVTS9SekpJK1E2UHB5alJpUnUwRTBv?=
- =?utf-8?B?ZUhKU1BHQzRhSzNaVmYwS3pMRzhPM2xaOHNaRGpjWjlwMmRPQWJTYmd3amZy?=
- =?utf-8?Q?Hoy9rhIruTVj9fQlCr/fn3c+AaJ2JEqwNkxgbOkL9IT7?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a52713d2-51b9-47dc-6de9-08da9b2a8baa
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB1947.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Sep 2022 17:07:06.1886
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: XZ44CoZdvWBd00b7k8LzwjNgUHROVAipUESeJSxrVhY9R583RvT2WQxH4+YoVzOaYghNg7KDCHipxae4+1igDQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB5418
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yyntfsas+K63Oo1a@arm.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After rebasing to latest drm-misc-next to latest I actually see someone 
-else already fixed this and other kerneldoc warnings so we can skip this 
-patch.
+On Tue, Sep 20, 2022 at 05:42:38PM +0100, Catalin Marinas wrote:
+> BTW, for some reason we don't have CoreSight enabled in defconfig, not
+> even as a module. Would you mind sending a patch for this and enable (as
+> modules) all the relevant drivers? We miss any test coverage here.
 
-Andrey
+The PMU counters are in the same camp. Enabling them breaks the kernel
+build. I wonder whether we should go for changing the default in Kconfig
+directly rather than defconfig.
 
-On 2022-09-20 02:46, Anup K Parikh wrote:
-> Fix two warnings during doc build which also results in corresponding
-> additions in generated docs
->
-> Warnings Fixed:
-> 1. include/drm/gpu_scheduler.h:462: warning: Function parameter or member
->     'dev' not described in 'drm_gpu_scheduler'
-> 2. drivers/gpu/drm/scheduler/sched_main.c:1005: warning: Function
->     parameter or member 'dev' not described in 'drm_sched_init'
->
-> Signed-off-by: Anup K Parikh <parikhanupk.foss@gmail.com>
-> ---
-> Changes in v2:
->      Correct the doc strings according to
->      Link: https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Fall%2Ff528a8e4-5162-66d5-09da-5252076882b8%40amd.com%2F&amp;data=05%7C01%7Candrey.grodzovsky%40amd.com%7Ccbef53d3f32845465ce908da9ad3f29b%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637992532358603366%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=PnHCvtDFVWnb25YkDfjHcmy9MBpLCA462xco799rjJs%3D&amp;reserved=0
->   drivers/gpu/drm/scheduler/sched_main.c | 2 ++
->   include/drm/gpu_scheduler.h            | 2 ++
->   2 files changed, 4 insertions(+)
->
-> diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm/scheduler/sched_main.c
-> index 68317d3a7a27..979685830671 100644
-> --- a/drivers/gpu/drm/scheduler/sched_main.c
-> +++ b/drivers/gpu/drm/scheduler/sched_main.c
-> @@ -994,6 +994,8 @@ static int drm_sched_main(void *param)
->    *		used
->    * @score: optional score atomic shared with other schedulers
->    * @name: name used for debugging
-> + * @dev: A device pointer - primarily useful for printing standardized
-> + *       messages with DRM_DEV_ERROR().
->    *
->    * Return 0 on success, otherwise error code.
->    */
-> diff --git a/include/drm/gpu_scheduler.h b/include/drm/gpu_scheduler.h
-> index addb135eeea6..80a525dd19bd 100644
-> --- a/include/drm/gpu_scheduler.h
-> +++ b/include/drm/gpu_scheduler.h
-> @@ -435,6 +435,8 @@ struct drm_sched_backend_ops {
->    * @_score: score used when the driver doesn't provide one
->    * @ready: marks if the underlying HW is ready to work
->    * @free_guilty: A hit to time out handler to free the guilty job.
-> + * @dev: A device pointer - primarily useful for printing standardized
-> + *       messages with DRM_DEV_ERROR().
->    *
->    * One scheduler is implemented for each hardware ring.
->    */
+-- 
+Catalin
