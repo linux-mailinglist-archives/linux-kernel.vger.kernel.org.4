@@ -2,142 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E84A5BE0EA
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 10:57:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DAB05BE0F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 10:58:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231499AbiITI5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 04:57:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53732 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231444AbiITI5c (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S230337AbiITI5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 20 Sep 2022 04:57:32 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87DC758DCA;
-        Tue, 20 Sep 2022 01:57:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=/nDDP1N0D4CAKFG1jjZ0nUCcb4Cwi+2XeLNzAB5a/3A=; b=dwq7k7OLBAweuvxZAbsIyybjmJ
-        LWKFQLhJfLLYjlWcLF1VzOmm/u3DYXUkxiGZB432qxzVGoPDa+HDV664vlFYQOwNVOgwYKQh00P/y
-        2Moq5lHOrC15n7bUB20DWWFsx8XV1J1DNLnxbuCGUFWdx8geNgMfV6XhqReLWifLY+YeFodx27IXq
-        /IrJ0mO09Di3qhEI4cp6g7HRbgntsbzEH8ickJuRs6Usu7AqtrURdlQsKWIMoNKkSXupoPQSsqje7
-        UezmEjo7U4Z1A3DxPyeQLWaZEGErf50B+83wnXPcrPsl85uPvrl+T4DjBM0ejacsZ7Zz8oufPZrwY
-        XBBt0mUA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oaZ3v-00EIvL-QZ; Tue, 20 Sep 2022 08:57:04 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BC92330035F;
-        Tue, 20 Sep 2022 10:57:00 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 892F82BAC7A92; Tue, 20 Sep 2022 10:57:00 +0200 (CEST)
-Date:   Tue, 20 Sep 2022 10:57:00 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
-        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
-        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
-        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
-        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
-        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
-        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
-        dinguyen@kernel.org, jonas@southpole.se,
-        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
-        James.Bottomley@hansenpartnership.com, deller@gmx.de,
-        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
-        davem@davemloft.net, richard@nod.at,
-        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
-        amakhalov@vmware.com, pv-drivers@vmware.com,
-        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
-        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
-        gregkh@linuxfoundation.org, mturquette@baylibre.com,
-        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
-        sudeep.holla@arm.com, agross@kernel.org,
-        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
-        anup@brainfault.org, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, jacob.jun.pan@linux.intel.com,
-        atishp@atishpatra.org, Arnd Bergmann <arnd@arndb.de>,
-        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk, dennis@kernel.org, tj@kernel.org,
-        cl@linux.com, rostedt@goodmis.org, pmladek@suse.com,
-        senozhatsky@chromium.org, john.ogness@linutronix.de,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, fweisbec@gmail.com,
-        ryabinin.a.a@gmail.com, glider@google.com, andreyknvl@gmail.com,
-        dvyukov@google.com, vincenzo.frascino@arm.com,
-        Andrew Morton <akpm@linux-foundation.org>, jpoimboe@kernel.org,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-perf-users@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-arch@vger.kernel.org, kasan-dev@googlegroups.com,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: Re: [PATCH v2 03/44] cpuidle/poll: Ensure IRQ state is invariant
-Message-ID: <YymAXPkZkyFIEjXM@hirez.programming.kicks-ass.net>
-References: <20220919095939.761690562@infradead.org>
- <20220919101520.534233547@infradead.org>
- <20220919131927.GA58444@lothringen>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53674 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230102AbiITI52 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 20 Sep 2022 04:57:28 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4660758DCA
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 01:57:27 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id f193so1946052pgc.0
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 01:57:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=62nVa40ZgGMYjJOOlAI4o87s1b9LqZFjm9xnCLFUbvc=;
+        b=NEMmqTq31r2QpI2ZRcIyZyhgXAHH9l4S3mGhKI8c/Q8b66B2u814setloKdYDaPIGc
+         WwLEgcDZNVlVJqsIo3Jopr29HIJJVDoKV/fAUtsyr3U9c2kkQW06VfQ9PojhS4KfnN6w
+         3zIUSUPQiVT3cbyoc74+eKYH86N/DH2iH4f/X7xHzid5td8ruG3joOR6eP3FF8G7Ij8x
+         rIjmth3R2ScdLU88OapbZC2e/u+RmoBH3jT6Q+pB9tbCpHqGTdqmY0OVslKMyW9l/caq
+         eY31xBb2B8w4RFGCnosC6lxthUstlQ/ctbkD0m5I8t727FBgJqodqdYZ2jg/sFNjeJ83
+         8OCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=62nVa40ZgGMYjJOOlAI4o87s1b9LqZFjm9xnCLFUbvc=;
+        b=35kPvfcdYSG/K5IUxyUcKKHPtLUsJiYZqMPNXGJZwOL8GxOsBoxk4tSB20n3kp03Tt
+         qJgMKJmF4MZWUZWnOxXvRfZKh8la1QK0S3+1iTaluN7LUowOMEMgY7Y2NkSWrKAgFmcT
+         ESHbIXFD+/3wsL1iMoo5paes4cW9oHUi2rYgW+TE+nTCKBnTufL019jVFOxzsJ1az7jq
+         FxxoRmPtBPiw7RCKED1WWwXqQda7FTfP9JHVvJiRHbAZVA8lKwoOlaEryy9j5RkH3Q0m
+         rAKo0U8xbA0luuIgGXeb2gj0fLb1OzR88spspo3mZPoBmkeauM32MvUo+uo6fHNL3BY4
+         ja2g==
+X-Gm-Message-State: ACrzQf2UQkFUp+rTBPO6CHnBvfsmZsiy8Mz3Y793a5g/+mrcUFf+mHH9
+        FPJDrM5iNcMg418O88W+WRfNGw==
+X-Google-Smtp-Source: AMsMyM7Rr/Tecs9HYOp6ZvDf4OofcbojhnBBOkN9Z0yk1HDWy8EfRKnztxVftinUplcBgYX4yC5UOw==
+X-Received: by 2002:a05:6a00:2290:b0:541:f19:5197 with SMTP id f16-20020a056a00229000b005410f195197mr22914753pfe.42.1663664246714;
+        Tue, 20 Sep 2022 01:57:26 -0700 (PDT)
+Received: from ?IPV6:2401:4900:1c61:6535:ca5f:67d1:670d:e188? ([2401:4900:1c61:6535:ca5f:67d1:670d:e188])
+        by smtp.gmail.com with ESMTPSA id p22-20020a1709027ed600b0017837d30a8csm847720plb.254.2022.09.20.01.57.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Sep 2022 01:57:26 -0700 (PDT)
+Message-ID: <00dd028f-d636-0cda-40ce-01d5addcbec9@linaro.org>
+Date:   Tue, 20 Sep 2022 14:27:20 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220919131927.GA58444@lothringen>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v6 1/4 RESEND] ARM: dts: qcom: Use new compatibles for
+ crypto nodes
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org
+Cc:     agross@kernel.org, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, thara.gopinath@gmail.com,
+        devicetree@vger.kernel.org, robh@kernel.org, andersson@kernel.org,
+        bhupesh.linux@gmail.com, catalin.marinas@arm.com, will@kernel.org,
+        arnd@arndb.de, Jordan Crouse <jorcrous@amazon.com>
+References: <20220919221509.1057574-1-bhupesh.sharma@linaro.org>
+ <20220919221509.1057574-2-bhupesh.sharma@linaro.org>
+ <bb577304-f048-8fd5-fc7a-47a0897ba792@linaro.org>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+In-Reply-To: <bb577304-f048-8fd5-fc7a-47a0897ba792@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 03:19:27PM +0200, Frederic Weisbecker wrote:
-> On Mon, Sep 19, 2022 at 11:59:42AM +0200, Peter Zijlstra wrote:
-> > cpuidle_state::enter() methods should be IRQ invariant
+
+
+On 9/20/22 12:55 PM, Krzysztof Kozlowski wrote:
+> On 20/09/2022 00:15, Bhupesh Sharma wrote:
+>> Since we are using soc specific qce crypto IP compatibles
+>> in the bindings now, use the same in the device tree files
+>> which include the crypto nodes.
+>>
+>> Cc: Bjorn Andersson <andersson@kernel.org>
+>> Cc: Rob Herring <robh@kernel.org>
+>> Tested-by: Jordan Crouse <jorcrous@amazon.com>
+>> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+>> ---
+>>   arch/arm/boot/dts/qcom-ipq4019.dtsi   | 2 +-
+>>   arch/arm64/boot/dts/qcom/ipq6018.dtsi | 2 +-
+>>   arch/arm64/boot/dts/qcom/ipq8074.dtsi | 2 +-
+>>   arch/arm64/boot/dts/qcom/msm8996.dtsi | 2 +-
+>>   arch/arm64/boot/dts/qcom/sdm845.dtsi  | 2 +-
+>>   5 files changed, 5 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/arch/arm/boot/dts/qcom-ipq4019.dtsi b/arch/arm/boot/dts/qcom-ipq4019.dtsi
+>> index b23591110bd2..9c40714562d5 100644
+>> --- a/arch/arm/boot/dts/qcom-ipq4019.dtsi
+>> +++ b/arch/arm/boot/dts/qcom-ipq4019.dtsi
+>> @@ -314,7 +314,7 @@ cryptobam: dma-controller@8e04000 {
+>>   		};
+>>   
+>>   		crypto: crypto@8e3a000 {
+>> -			compatible = "qcom,crypto-v5.1";
+>> +			compatible = "qcom,ipq4019-qce";
 > 
-> Got a bit confused with the invariant thing since the first chunck I
-> see in this patch is a conversion to an non-traceable local_irq_enable().
+> There are few issues here:
+> 1. Compatible is not documented.
+
+Its documented here: 
+https://lore.kernel.org/linux-arm-msm/30756e6f-952f-ccf2-b493-e515ba4f0a64@linaro.org/
+
+[as mentioned in the dependency section in the cover letter :)]
+
+> 2. Compatible is not supported by old kernel - ABI break.
+> 3. Everything won't be bisectable...
+
+I think its a question of dependencies b/w the patchsets intended for
+separate areas. Let me think more on how, I can resolve it in newer
+versions.
+
+Thanks,
+Bhupesh
+
+
+
+> The same in other places.
 > 
-> Maybe just add a short mention about that and why?
-
-Changelog now reads:
-
----
-Subject: cpuidle/poll: Ensure IRQ state is invariant
-From: Peter Zijlstra <peterz@infradead.org>
-Date: Tue May 31 15:43:32 CEST 2022
-
-cpuidle_state::enter() methods should be IRQ invariant.
-
-Additionally make sure to use raw_local_irq_*() methods since this
-cpuidle callback will be called with RCU already disabled.
-
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
+> Best regards,
+> Krzysztof
