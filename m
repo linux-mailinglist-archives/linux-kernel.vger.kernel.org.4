@@ -2,135 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34C6B5BE325
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 12:28:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5EE25BE35D
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 12:36:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230254AbiITK1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 06:27:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37148 "EHLO
+        id S230517AbiITKgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 06:36:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230328AbiITK0p (ORCPT
+        with ESMTP id S230385AbiITKfy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 06:26:45 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C5771725
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 03:26:40 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id s2-20020a6bdc02000000b006a0cb10e1e8so1183631ioc.14
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 03:26:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=+7GYa/bfu8He9Neu0dv/rAd1cD9cFE948uqmZB8ev0E=;
-        b=LcMBC3USOJ6vdUhbfBC+PgQdqqhLBqXu4JScLwXZKVoaLk9KW6ucStvnxu6lhOAqlH
-         AAvfTcARzuBmBm42fw/3a46giTOeNOlOCriC/4293B7bwbKo8GBT44mMPc6OqRN5vdnm
-         QJO/ABvScTC97KsaPWzeq0CT3RcFntKDmq5GIbH5RsGWvICAcGWYFaBrh1AA8TMXqXyD
-         nI8976FLz+RufCLaPS8ByjlYOwf7RHtzClNBxrUXN4KwYr0eo91Bs61Br5Bu1YQqKcw2
-         rXfpJ/tKeOx0EawYjYZzBXZpoDvKon6RxoGH/jyP/pHIn6bf9F5UR3i8wHDXqWoTQBVV
-         3SFQ==
-X-Gm-Message-State: ACrzQf2eB9GFGzXTUdllnfB0UgbXtEpNTibcg92FYUg/JFa8hcWMvhDz
-        gCILpqC1sIZ0t9cBHUpPafwx8e/cU159jl/FP80cLz1wi2Mc
-X-Google-Smtp-Source: AMsMyM46YkZcgiL35+Q16+pirzky0DfEkO6SBesqD1GfcPUVhZXdytVW/g5sqG8tN7OXwbf3PwG474P1DQmPozw24yQrh1XBjRLe
+        Tue, 20 Sep 2022 06:35:54 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB3172FE3;
+        Tue, 20 Sep 2022 03:34:03 -0700 (PDT)
+Received: from fraeml740-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MWyXT02jrz67ww1;
+        Tue, 20 Sep 2022 18:32:09 +0800 (CST)
+Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
+ fraeml740-chm.china.huawei.com (10.206.15.221) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 20 Sep 2022 12:33:49 +0200
+Received: from localhost.localdomain (10.69.192.58) by
+ lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 20 Sep 2022 11:33:47 +0100
+From:   John Garry <john.garry@huawei.com>
+To:     <damien.lemoal@opensource.wdc.com>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <hare@suse.de>, <hch@lst.de>
+CC:     <linux-ide@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-scsi@vger.kernel.org>, <brking@us.ibm.com>,
+        John Garry <john.garry@huawei.com>
+Subject: [PATCH RFC 0/6] libata/scsi/libsas: Allocate SCSI device earlier for ata port probe
+Date:   Tue, 20 Sep 2022 18:27:04 +0800
+Message-ID: <1663669630-21333-1-git-send-email-john.garry@huawei.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
-X-Received: by 2002:a92:c543:0:b0:2f5:ae52:a023 with SMTP id
- a3-20020a92c543000000b002f5ae52a023mr4289358ilj.118.1663669599322; Tue, 20
- Sep 2022 03:26:39 -0700 (PDT)
-Date:   Tue, 20 Sep 2022 03:26:39 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007dcc0b05e91943c2@google.com>
-Subject: [syzbot] KMSAN: uninit-value in ondemand_readahead
-From:   syzbot <syzbot+8ce7f8308d91e6b8bbe2@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, glider@google.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com,
-        willy@infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.58]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ lhrpeml500003.china.huawei.com (7.191.162.67)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Currently for libata the SCSI device (sdev) associated with an ata_device
+is allocated when the port probe has completed.
 
-syzbot found the following issue on:
+It's useful to have the SCSI device and its associated request queue
+available earlier for the port probe. Specifically if we have the
+request queue available, then we can:
+- Easily put ATA qc in SCSI cmnd priv data
+- Send ATA internal commands on SCSI device request queue for [0]. The
+  current solution there is to use the shost sdev request queue, which
+  isn't great.
+  
+This series changes the ata port probe to alloc the sdev in the
+ata_device revalidation, and then just do a SCSI starget scan afterwards.
 
-HEAD commit:    8f4ae27df775 Revert "Revert "crypto: kmsan: disable accele..
-git tree:       https://github.com/google/kmsan.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=10b5e0f8880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=121c7ef28ec597bd
-dashboard link: https://syzkaller.appspot.com/bug?extid=8ce7f8308d91e6b8bbe2
-compiler:       clang version 15.0.0 (https://github.com/llvm/llvm-project.git 610139d2d9ce6746b3c617fb3e2f7886272d26ff), GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: i386
+Why an RFC?
+1. IPR  driver needs to be fixed up - it does not use ATA EH port probe
+   Mail [1] needs following up
+2. SATA PMP support needs verification, but I don't have a setup
+3. This series needs to be merged into or go after [0]
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Patch 1/6 could be merged now.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/4cf4e5a58eb8/disk-8f4ae27d.raw.xz
-vmlinux: https://storage.googleapis.com/82e5fbbe1600/vmlinux-8f4ae27d.xz
+[0] https://lore.kernel.org/linux-ide/1654770559-101375-1-git-send-email-john.garry@huawei.com/
+[1] https://lore.kernel.org/linux-ide/369448ed-f89a-c2db-1850-91450d8b5998@opensource.wdc.com/
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+8ce7f8308d91e6b8bbe2@syzkaller.appspotmail.com
+Any comments welcome - please have a look.
 
-=====================================================
-BUG: KMSAN: uninit-value in ondemand_readahead+0x9de/0x1930 mm/readahead.c:586
- ondemand_readahead+0x9de/0x1930 mm/readahead.c:586
- page_cache_sync_ra+0x733/0x770 mm/readahead.c:699
- page_cache_sync_readahead include/linux/pagemap.h:1215 [inline]
- cramfs_blkdev_read+0x5fb/0x12b0 fs/cramfs/inode.c:217
- cramfs_read fs/cramfs/inode.c:278 [inline]
- cramfs_read_folio+0x21e/0x11e0 fs/cramfs/inode.c:827
- read_pages+0x1217/0x16b0 mm/readahead.c:178
- page_cache_ra_unbounded+0x7bf/0x880 mm/readahead.c:263
- do_page_cache_ra mm/readahead.c:293 [inline]
- page_cache_ra_order+0xf50/0x1000 mm/readahead.c:550
- ondemand_readahead+0x10f3/0x1930 mm/readahead.c:672
- page_cache_sync_ra+0x733/0x770 mm/readahead.c:699
- page_cache_sync_readahead include/linux/pagemap.h:1215 [inline]
- filemap_get_pages mm/filemap.c:2566 [inline]
- filemap_read+0xa07/0x3f80 mm/filemap.c:2660
- generic_file_read_iter+0x128/0xaa0 mm/filemap.c:2806
- __kernel_read+0x3c1/0xaa0 fs/read_write.c:428
- integrity_kernel_read+0x80/0xb0 security/integrity/iint.c:199
- ima_calc_file_hash_tfm security/integrity/ima/ima_crypto.c:485 [inline]
- ima_calc_file_shash security/integrity/ima/ima_crypto.c:516 [inline]
- ima_calc_file_hash+0x18b6/0x3e30 security/integrity/ima/ima_crypto.c:573
- ima_collect_measurement+0x42f/0xb50 security/integrity/ima/ima_api.c:292
- process_measurement+0x208a/0x3680 security/integrity/ima/ima_main.c:337
- ima_file_check+0xbc/0x120 security/integrity/ima/ima_main.c:517
- do_open fs/namei.c:3559 [inline]
- path_openat+0x497c/0x5600 fs/namei.c:3691
- do_filp_open+0x249/0x660 fs/namei.c:3718
- do_sys_openat2+0x1f0/0x910 fs/open.c:1311
- do_sys_open fs/open.c:1327 [inline]
- __do_compat_sys_openat fs/open.c:1387 [inline]
- __se_compat_sys_openat fs/open.c:1385 [inline]
- __ia32_compat_sys_openat+0x2a7/0x330 fs/open.c:1385
- do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
- __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
- do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
- do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:246
- entry_SYSENTER_compat_after_hwframe+0x70/0x82
+Based on v6.0-rc4 and tested for QEMU AHCI and libsas.
 
-Local variable ra created at:
- cramfs_blkdev_read+0xbe/0x12b0 fs/cramfs/inode.c:186
- cramfs_read fs/cramfs/inode.c:278 [inline]
- cramfs_read_folio+0x21e/0x11e0 fs/cramfs/inode.c:827
+John Garry (6):
+  scsi: core: Use SCSI_SCAN_RESCAN in  __scsi_add_device()
+  scsi: scsi_transport_sas: Allocate end device target id in the rphy
+    alloc
+  scsi: core: Add scsi_get_dev()
+  ata: libata-scsi: Add ata_scsi_setup_sdev()
+  scsi: libsas: Add sas_ata_setup_device()
+  ata: libata-scsi: Allocate sdev early in port probe
 
-CPU: 0 PID: 4115 Comm: syz-executor.2 Not tainted 6.0.0-rc5-syzkaller-48538-g8f4ae27df775 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-=====================================================
+ drivers/ata/libata-eh.c           |  4 +++
+ drivers/ata/libata-scsi.c         | 45 +++++++++++++++++++++----------
+ drivers/ata/libata.h              |  1 +
+ drivers/scsi/libsas/sas_ata.c     | 20 ++++++++++++++
+ drivers/scsi/scsi_scan.c          | 28 ++++++++++++++++++-
+ drivers/scsi/scsi_transport_sas.c | 25 +++++++++++------
+ include/linux/libata.h            |  2 ++
+ include/scsi/scsi_host.h          |  3 +++
+ 8 files changed, 105 insertions(+), 23 deletions(-)
 
+-- 
+2.35.3
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
