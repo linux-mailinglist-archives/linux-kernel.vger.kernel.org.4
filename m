@@ -2,116 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8F065BD9BA
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 03:58:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F02515BD9BF
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 04:00:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230062AbiITB6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 21:58:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52492 "EHLO
+        id S230075AbiITCAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 22:00:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbiITB6p (ORCPT
+        with ESMTP id S229552AbiITCA0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 21:58:45 -0400
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B795509D
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 18:58:44 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VQGhopY_1663639121;
-Received: from 30.240.98.170(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0VQGhopY_1663639121)
-          by smtp.aliyun-inc.com;
-          Tue, 20 Sep 2022 09:58:42 +0800
-Message-ID: <10f3f03d-e616-0619-cbe1-8515a3d7fc0e@linux.alibaba.com>
-Date:   Tue, 20 Sep 2022 09:58:41 +0800
+        Mon, 19 Sep 2022 22:00:26 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88F263ECC1
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 19:00:24 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id t70so1091608pgc.5
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 19:00:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=EjORqgjc+/XhQqghTBNI0hH8VFbCYaiJSHUSAzsHW/I=;
+        b=dGZ18XozA7N0XnASUbI7DGMsKYTkXd2yFvJICwNNaOaJH4dpJDcjL27zwe6QeC3VCp
+         M8Gy8lGui2ZVOGDeboW8GStuOY3D/vHOgXU4MK249GOOYUGFyAuXIK7XGA4i5qYz/qDh
+         5XBadz57bCkwq3wujP2qDkjmeN60exaMcgAiA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=EjORqgjc+/XhQqghTBNI0hH8VFbCYaiJSHUSAzsHW/I=;
+        b=f8rxd72V10lNjojb6w6G8malBkGoiQYMH/aVN8+Kh7EQbJHNT6BFzplX3V5M7EZyRn
+         txFgqx+IeI033NYu8Nq8TqoJ0FJWIMfwnAXnqJzu4cA7II3JIU3kPtHJPMJPShhZw2F7
+         Ob3G9d7U7BwfUAOgg0jxpP/q6yQeRz36lWvufmXYsXfiJVdTsjN9gSEjaOQN6A9cKKIu
+         2sTkezO6UuamK0hmtXaPcBXVV2Cu7GAqMu+nISurr/KllxaI6ujZohtuX0lfEQV4S/ae
+         B9zZKSWKwRRF8e4qzsjhcRvMfikldLeOzMoacPMu/Q0HC+jjGBeZq3/m8efpVYCvhxja
+         LDQA==
+X-Gm-Message-State: ACrzQf3fPCX0EMKVbuO34SaPY5JHOc9EouHHSCWYl96xdcgWLhv9pbWP
+        4Qx6CODksuKeSmNojJdTFX5Hew==
+X-Google-Smtp-Source: AMsMyM58X9k8GcTeKgoegI2mdrKD6liuT+rLE15aHV+Fgb9jLF6PqaA/CefLL5MmiIGmP6MmFzcv8w==
+X-Received: by 2002:a63:778d:0:b0:438:5c5b:f2ac with SMTP id s135-20020a63778d000000b004385c5bf2acmr18209126pgc.401.1663639224075;
+        Mon, 19 Sep 2022 19:00:24 -0700 (PDT)
+Received: from localhost ([2401:fa00:8f:203:f7fc:1606:58e3:671d])
+        by smtp.gmail.com with ESMTPSA id z30-20020aa7991e000000b0053bf1f90188sm68003pff.176.2022.09.19.19.00.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Sep 2022 19:00:23 -0700 (PDT)
+From:   Hidenori Kobayashi <hidenorik@chromium.org>
+To:     Dongchun Zhu <dongchun.zhu@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Hidenori Kobayashi <hidenorik@chromium.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] media: ov8856: Add runtime PM callbacks
+Date:   Tue, 20 Sep 2022 11:00:01 +0900
+Message-Id: <20220920020002.710533-1-hidenorik@chromium.org>
+X-Mailer: git-send-email 2.37.3.968.ga6b4b080e4-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.2.2
-Subject: Re: [PATCH v1 2/2] mm/damon/sysfs: use kzmalloc instead kmalloc to
- simplify codes
-To:     SeongJae Park <sj@kernel.org>
-Cc:     akpm@linux-foundation.org, damon@lists.linux.dev,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20220919172251.61428-1-sj@kernel.org>
-From:   haoxin <xhao@linux.alibaba.com>
-In-Reply-To: <20220919172251.61428-1-sj@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+There were no runtime PM callbacks registered, leaving regulators being
+enabled while the device is suspended on DT systems. Calling existing
+power controlling functions from callbacks properly turn them off/on.
 
-在 2022/9/20 上午1:22, SeongJae Park 写道:
-> On Mon, 19 Sep 2022 23:12:01 +0800 Xin Hao <xhao@linux.alibaba.com> wrote:
->
->> In damon_sysfs_access_pattern_alloc() adn damon_sysfs_attrs_alloc(),
->> we can use kzmalloc to alloc instance of the related structs, This makes
->> the function code much cleaner.
-> This definitely makes the code cleaner, thank you.  But, the initial intent of
-> the code is to initialize the fiedls that really need to be initialized at the
-> point, for the efficiency and also for making it clear which field is needed to
-> be initialized to what value here.  It's also intended to make readers wonder
-> about where and how the remaining fields are initialized.
+Signed-off-by: Hidenori Kobayashi <hidenorik@chromium.org>
+---
+ drivers/media/i2c/ov8856.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-Maybe the other func like damon_sysfs_kdamonds_alloc() also need to do 
-like this, you can see it return directly by
+diff --git a/drivers/media/i2c/ov8856.c b/drivers/media/i2c/ov8856.c
+index a9728afc81d4..3f57bc30b78b 100644
+--- a/drivers/media/i2c/ov8856.c
++++ b/drivers/media/i2c/ov8856.c
+@@ -2200,6 +2200,26 @@ static int __maybe_unused ov8856_resume(struct device *dev)
+ 	return 0;
+ }
+ 
++static int __maybe_unused ov8856_runtime_suspend(struct device *dev)
++{
++	struct i2c_client *client = to_i2c_client(dev);
++	struct v4l2_subdev *sd = i2c_get_clientdata(client);
++	struct ov8856 *ov8856 = to_ov8856(sd);
++
++	__ov8856_power_off(ov8856);
++
++	return 0;
++}
++
++static int __maybe_unused ov8856_runtime_resume(struct device *dev)
++{
++	struct i2c_client *client = to_i2c_client(dev);
++	struct v4l2_subdev *sd = i2c_get_clientdata(client);
++	struct ov8856 *ov8856 = to_ov8856(sd);
++
++	return __ov8856_power_on(ov8856);
++}
++
+ static int ov8856_set_format(struct v4l2_subdev *sd,
+ 			     struct v4l2_subdev_state *sd_state,
+ 			     struct v4l2_subdev_format *fmt)
+@@ -2540,6 +2560,7 @@ static int ov8856_probe(struct i2c_client *client)
+ 
+ static const struct dev_pm_ops ov8856_pm_ops = {
+ 	SET_SYSTEM_SLEEP_PM_OPS(ov8856_suspend, ov8856_resume)
++	SET_RUNTIME_PM_OPS(ov8856_runtime_suspend, ov8856_runtime_resume, NULL)
+ };
+ 
+ #ifdef CONFIG_ACPI
+-- 
+2.37.2.789.g6183377224-goog
 
-kzalloc.
-
-static struct damon_sysfs_kdamonds *damon_sysfs_kdamonds_alloc(void)
-{
-             return kzalloc(sizeof(struct damon_sysfs_kdamonds), 
-GFP_KERNEL);
-}
-
-> So, to my humble eyes, this change looks like making the code a little bit
-> inefficient and unclear, sorry.
->
->
-> Thanks,
-> SJ
->
->> Signed-off-by: Xin Hao <xhao@linux.alibaba.com>
->> ---
->>   mm/damon/sysfs.c | 15 ++-------------
->>   1 file changed, 2 insertions(+), 13 deletions(-)
->>
->> diff --git a/mm/damon/sysfs.c b/mm/damon/sysfs.c
->> index b852a75b9f39..06154ece7960 100644
->> --- a/mm/damon/sysfs.c
->> +++ b/mm/damon/sysfs.c
->> @@ -657,13 +657,7 @@ struct damon_sysfs_access_pattern {
->>   static
->>   struct damon_sysfs_access_pattern *damon_sysfs_access_pattern_alloc(void)
->>   {
->> -	struct damon_sysfs_access_pattern *access_pattern =
->> -		kmalloc(sizeof(*access_pattern), GFP_KERNEL);
->> -
->> -	if (!access_pattern)
->> -		return NULL;
->> -	access_pattern->kobj = (struct kobject){};
->> -	return access_pattern;
->> +	return kzalloc(sizeof(struct damon_sysfs_access_pattern), GFP_KERNEL);
->>   }
->>   
->>   static int damon_sysfs_access_pattern_add_range_dir(
->> @@ -1620,12 +1614,7 @@ struct damon_sysfs_attrs {
->>   
->>   static struct damon_sysfs_attrs *damon_sysfs_attrs_alloc(void)
->>   {
->> -	struct damon_sysfs_attrs *attrs = kmalloc(sizeof(*attrs), GFP_KERNEL);
->> -
->> -	if (!attrs)
->> -		return NULL;
->> -	attrs->kobj = (struct kobject){};
->> -	return attrs;
->> +	return kzalloc(sizeof(struct damon_sysfs_attrs), GFP_KERNEL);
->>   }
->>   
->>   static int damon_sysfs_attrs_add_dirs(struct damon_sysfs_attrs *attrs)
->> -- 
->> 2.31.0
