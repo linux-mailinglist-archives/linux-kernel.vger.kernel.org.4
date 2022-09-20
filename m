@@ -2,47 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D89345BEAF5
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 18:16:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BDC25BEAFB
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 18:18:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231419AbiITQQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 12:16:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57474 "EHLO
+        id S229802AbiITQS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 12:18:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbiITQQW (ORCPT
+        with ESMTP id S231352AbiITQQX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 12:16:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86BB5D133;
+        Tue, 20 Sep 2022 12:16:23 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ADB551A15
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 09:16:22 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id s18so2058076qtx.6
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 09:16:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=JYo2UwsHnyRJ0cdkre+Ls0UO9p1NrvPYX66IenZob5I=;
+        b=sfUM2bLLsTrXEFWe4Km1gtjV8yC9yhiLVHf3NwfzfPCvcJEfVL1v+TeMkxTZpgPxIx
+         a48/nUMeox1Kdt6oav5jj13IbSGER0P/LkZ+XHfg20waAdW7Appw85qppkVBZleNqkDI
+         5nNtcWA/lXZt5/uvA79E9jzQmq6Z9Ci0Uh3uoQrtEcYaIKDoZ2ly67CVRPR4gepsKi+T
+         l3b+9N4Xwx68esHa5De4ly8xWpMTfZtLlww2Eado6GGnJ0ZDkeMagq5PMiyPUeBr+QKd
+         t5wbgze695Kd+rrMtxKZVww7026tPijKRrMVVOy3BZUXkiN3EEG++QLZSqP9ta2Fd1z8
+         gF2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=JYo2UwsHnyRJ0cdkre+Ls0UO9p1NrvPYX66IenZob5I=;
+        b=bkInCNDxz8Fq2wykdBXtpw3Oal5ydV/dExfuOqCMG0Hf7xp2FCZ+qVo06HflbAXhzv
+         UCCPA5NpVrbsKmiMKKJmsZhxq9LZJsoo9eTMbE3OSYedu4gTBnhjAlejvukgiSRuk9qK
+         +GMIPzvY2M8AJZUccijJ1m0MAXAo6FkpEJsryKULgFh9RCZk3Aj6lBPbiBwnvnx6/1th
+         lnHyandeOyxT6huw5G7nzscwbFMfICdAfOmYJEYzVXnH1mmImIWy6x/m+2YDVRVSao41
+         HMAeyGfrl1/n3XfOb0778wDW/JuHnckTbiv8N3YxtIUk+rzHLUeTUvvXK53OLUgF7zEV
+         8IZQ==
+X-Gm-Message-State: ACrzQf3SNGZXM5lKkg3uNGad2J/ONkGj4kH+S9mtpkMwmIzSSCJSRGpI
+        FiGuTYzTmYQ6ZiYy+gGS2H+C1g==
+X-Google-Smtp-Source: AMsMyM7QUgAHuWD6FkbOCq2zcrXirY0ofUob6HGYLSMZKye+oVr7FtSPlCCFTQ5MeTDKpmLRabvNHA==
+X-Received: by 2002:a05:622a:110e:b0:35b:a6d3:96fd with SMTP id e14-20020a05622a110e00b0035ba6d396fdmr20282997qty.590.1663690581163;
         Tue, 20 Sep 2022 09:16:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6FC13B81EBE;
-        Tue, 20 Sep 2022 16:16:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4C43C433D7;
-        Tue, 20 Sep 2022 16:16:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663690579;
-        bh=BIWGlv9fTdZY9w/qXyLCPnM9+g1DdLRMHLwnKSLT+qM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=xfI/yUZxQQovCR1SCHX/rh7Gllqk5Cn8/H/Vghi/HRYhyYwt5YX/qgqf18V7iZ4Cf
-         s7SVTuwIL97mnxekClBLxdRzV2k1E1I2oPCuxltviMGEDmvBXBoNJnlc8K1BWlqrDt
-         gllx2zzj1SJcdEfYQr2fpJSypnLaxBtE6jkR/Rlw=
-Date:   Tue, 20 Sep 2022 18:16:15 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Rondreis <linhaoguo86@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        johan@kernel.org
-Subject: Re: KASAN: use-after-free Write in keyspan_close
-Message-ID: <YynnT7/mnzJVn7iz@kroah.com>
-References: <CAB7eexKhQeqgpMaZoT=JD2EMwn=qTw4sWzF7hdU9XDFVsz3ooA@mail.gmail.com>
+Received: from [172.22.22.4] ([98.61.227.136])
+        by smtp.googlemail.com with ESMTPSA id s4-20020a05620a254400b006cf43968db6sm100510qko.76.2022.09.20.09.16.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Sep 2022 09:16:20 -0700 (PDT)
+Message-ID: <917abc36-ee08-6f1e-2bf5-a657b022c912@linaro.org>
+Date:   Tue, 20 Sep 2022 11:16:18 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAB7eexKhQeqgpMaZoT=JD2EMwn=qTw4sWzF7hdU9XDFVsz3ooA@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH net v2] net: ipa: properly limit modem routing table use
+Content-Language: en-US
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        mka@chromium.org, evgreen@chromium.org, bjorn.andersson@linaro.org,
+        quic_cpratapa@quicinc.com, quic_avuyyuru@quicinc.com,
+        quic_jponduru@quicinc.com, quic_subashab@quicinc.com,
+        elder@kernel.org, netdev@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220913204602.1803004-1-elder@linaro.org>
+ <20220920081400.0cbe44ff@kernel.org>
+From:   Alex Elder <elder@linaro.org>
+In-Reply-To: <20220920081400.0cbe44ff@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,36 +79,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 10:47:37PM +0800, Rondreis wrote:
-> Hello,
-> 
-> When fuzzing the Linux kernel driver v6.0-rc6, the following crash was
-> triggered.
-> 
-> HEAD commit: 521a547ced6477c54b4b0cc206000406c221b4d6
-> git tree: upstream
-> 
-> kernel config: https://pastebin.com/raw/hekxU61F
-> console output: https://pastebin.com/raw/gvADdA0t
-> 
-> Sorry for failing to extract the reproducer. But on other versions of
-> Linux, I also triggered this crash.
-> 
-> I would appreciate it if you have any idea how to solve this bug.
+On 9/20/22 10:14 AM, Jakub Kicinski wrote:
+>> v2: Update the element info arrays defining the modified QMI message
+>>      so it uses the ipa_mem_bounds_ei structure rather than the
+>>      ipa_mem_array_ei structure.  The message format is identical,
+>>      but the code was incorrect without that change.
+> Unclear to me why, ipa_mem_bounds_ei and ipa_mem_array_ei seem
+> identical, other than s/end/count/. Overall the patch feels
+> a touch too verbose for a fix, makes it harder to grasp the key
+> functional change IMHO. I could be misunderstanding but please
+> keep the goal of making fixes small and crisp in mind for the future.
 
-Are you hitting this with a real keyspan device, or is this a "fake"
-one?
+I see you've already accepted the patch, and I appreciate that.
 
-if a fake one, what type of fake data are you sending the driver?  Are
-the configuration options correct, and you are giving it bad data, or
-something else?
+The verbosity was because it was maybe a subtle difference
+and I failed to be more concise describing it.
 
-Fuzzing on invalid USB data for drivers is the next "boundry" to start
-working on, so far we have only handed invalid configuration information
-fairly well, so patches to work on this next layer are always
-appreciated if you consider USB data to now be considered "hostile" and
-not trustable.
+Over the wire, the ipa_mem_bounds and ipa_mem_array *look*
+identical (both are a pair of 32-bit unsigned values).
 
-thanks,
+But they are *semantically* different.  The "array" is a
+base offset and number of entries.  The "bounds" specifies
+the start and last offset (one less than the number of
+entries).
 
-greg k-h
+So the type has changed to try to make the distinction
+clearer.  I realize neither the compiler nor the QMI
+implementation will distinguish it, but the hope is that
+the human reader can derive some value from it.
+
+I don't want to be any more verbose, so I'll leave it at
+that.
+
+					-Alex
