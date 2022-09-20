@@ -2,110 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F364E5BE2EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 12:20:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 190595BE2F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 12:21:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbiITKUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 06:20:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53324 "EHLO
+        id S230444AbiITKU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 06:20:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbiITKT6 (ORCPT
+        with ESMTP id S230341AbiITKUT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 06:19:58 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 625B026561;
-        Tue, 20 Sep 2022 03:19:57 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Tue, 20 Sep 2022 06:20:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B017448CBE;
+        Tue, 20 Sep 2022 03:20:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id B68D56600368;
-        Tue, 20 Sep 2022 11:19:54 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1663669195;
-        bh=iUq+6SOQiYHg6R9Dqd5eD1XyHyTrpOd2jfDvPJ7B3OE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=oXSviiEBnEb3mN3mSMGpsPl5quu0E8RjJ8pK+7UR4nmiguSAC3BKIxhr4B0r7G7m/
-         gxrjVyyCLhyOVvWAYc7mxNppd2ejo3UTlHSYgyX3q35Lz1AqTkSFhkYgOppJBUp6TD
-         sd/fccKGgLgRZ+4/BDTBH+UlMHnJmlUd24csAq+M2FOWrbUh1NMgpybwVHNvFe0vy+
-         BkGSpxH1eutjiyi9sFAPUN8ede0nPu5WZY/hQVw5wQIb7ohatSElbpcyA8xXL/vlOU
-         4tbm9gxUcce6pYYgCpKeGLnqqotChSWHRn5jwuXQUhpa+5b/o95AeWBVHQLW4C7v6H
-         iWaZykJzDms6w==
-Message-ID: <5071cc60-313e-bd01-228f-f0a0f2ce99a8@collabora.com>
-Date:   Tue, 20 Sep 2022 12:19:52 +0200
+        by ams.source.kernel.org (Postfix) with ESMTPS id 45895B82711;
+        Tue, 20 Sep 2022 10:20:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EC633C43470;
+        Tue, 20 Sep 2022 10:20:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663669215;
+        bh=CuV4ZhXnyzj8Z3Dvy2jDCEyiGeRVrDoc9otxQBBjYL0=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=iUyeh5XzHnV9XYAcA6o7AiddhLEN2JJ3euKPFCA3PH07TvePLPvPOaQ/HiCiCWDq4
+         TJWR1LYK3c2v3+3laSm637eABdpkyNFqRGNwJB5tX+WnKbE0xzOntnvfjCQBG7NSuk
+         B/YKYWslNSeXsm75+i4mzWgmBLg70IuwbKy4EZddBoBwSNpg1ODvDR/9v39Zm91Wj1
+         1xXgNbV4AlOccBwET70BWVqePaaDjJijBOUyCYGYk19VDDqxhnqy3pwxoZt+QXblzN
+         CSFjlUPmQ1xM4Uo2oYJCCkxtSe3OPne8MGzK+Yj4/AMgrgTMEwvMH9/rwqYAq+tnKG
+         S1Jv0a2XO4F3A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C26F6E21EE0;
+        Tue, 20 Sep 2022 10:20:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v1 06/17] dt-bindings: mediatek: set the hdmi to be
- compatible with syscon
-Content-Language: en-US
-To:     Guillaume Ranquet <granquet@baylibre.com>,
-        Vinod Koul <vkoul@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        CK Hu <ck.hu@mediatek.com>, Jitao shi <jitao.shi@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-mediatek@lists.infradead.org,
-        dri-devel@lists.freedesktop.org,
-        Pablo Sun <pablo.sun@mediatek.com>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org
-References: <20220919-v1-0-4844816c9808@baylibre.com>
- <20220919-v1-6-4844816c9808@baylibre.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220919-v1-6-4844816c9808@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [Patch net] net: dsa: microchip: lan937x: fix maximum frame length
+ check
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166366921479.11231.1109250514261906383.git-patchwork-notify@kernel.org>
+Date:   Tue, 20 Sep 2022 10:20:14 +0000
+References: <20220912051228.1306074-1-rakesh.sankaranarayanan@microchip.com>
+In-Reply-To: <20220912051228.1306074-1-rakesh.sankaranarayanan@microchip.com>
+To:     Rakesh Sankaranarayanan <rakesh.sankaranarayanan@microchip.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
+        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
+        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, arun.ramadoss@microchip.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 19/09/22 18:56, Guillaume Ranquet ha scritto:
-> In order to share register with a dedicated ddc driver, set the hdmi
-> compatible to syscon.
-> 
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> 
-> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.yaml
-> index abb231a0694b..86297b7eb7f7 100644
-> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.yaml
-> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.yaml
-> @@ -16,12 +16,14 @@ description: |
->   
->   properties:
->     compatible:
-> -    enum:
-> -      - mediatek,mt2701-hdmi
-> -      - mediatek,mt7623-hdmi
-> -      - mediatek,mt8167-hdmi
-> -      - mediatek,mt8173-hdmi
-> -      - mediatek,mt8195-hdmi
-> +    items:
-> +      - enum:
-> +          - mediatek,mt2701-hdmi
-> +          - mediatek,mt7623-hdmi
-> +          - mediatek,mt8167-hdmi
-> +          - mediatek,mt8173-hdmi
-> +      - const: syscon
-> +
+Hello:
 
-This is an ABI breakage, you can't do that.
+This patch was applied to netdev/net.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
 
-Regards,
-Angelo
+On Mon, 12 Sep 2022 10:42:28 +0530 you wrote:
+> Maximum frame length check is enabled in lan937x switch on POR, But it
+> is found to be disabled on driver during port setup operation. Due to
+> this, packets are not dropped when transmitted with greater than configured
+> value. For testing, setup made for lan1->lan2 transmission and configured
+> lan1 interface with a frame length (less than 1500 as mentioned in
+> documentation) and transmitted packets with greater than configured value.
+> Expected no packets at lan2 end, but packets observed at lan2.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net] net: dsa: microchip: lan937x: fix maximum frame length check
+    https://git.kernel.org/netdev/net/c/807e5eda2078
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
