@@ -2,54 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1AD45BEEB6
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 22:46:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 744EC5BEEBF
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 22:50:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbiITUqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 16:46:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47350 "EHLO
+        id S230107AbiITUuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 16:50:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiITUqo (ORCPT
+        with ESMTP id S229529AbiITUuT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 16:46:44 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5265F7696C
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 13:46:43 -0700 (PDT)
+        Tue, 20 Sep 2022 16:50:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 422314D178;
+        Tue, 20 Sep 2022 13:50:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A1C78CE1B7B
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 20:46:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09AF3C433D6;
-        Tue, 20 Sep 2022 20:46:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C72BC614B5;
+        Tue, 20 Sep 2022 20:50:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 25605C433D7;
+        Tue, 20 Sep 2022 20:50:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663706800;
-        bh=HYli6/cvxotMBPYQELJFv5WGyh/XqaUzoeHSir/vKA8=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=YbhnGHFY/LqduHDsATHsaeiSD1PpZnjnVP61BY+U63BG8Rr/T6Zl+jKsfV87a/JIA
-         KIqajDw/eonnTVG2zxoq/4ck+aqS0LjZ90/+70kP/NYZYgLE1k2r8RDLGDAXmUiQpA
-         y6DVW2JXxWfkESO7UUiDU1iS7xqPyH9TuLkWW33q5jmc8ywDuEHeKrQxPZDDJ+B0uR
-         LYo/EGTH/GxpivGgDXaLiFJ1kdpvCJAF6ULeLP1LImNHsyAyU7bItQ1I4i3PVoBBiA
-         ZG7iuoDfRnLnIfDNsiD4G5jJIBLrvPWina5kP7wnC6uav9foC5rSIrJWMPUY2lEMSt
-         YaLj8ZeUhmilw==
-From:   Mark Brown <broonie@kernel.org>
-To:     peter.ujfalusi@linux.intel.com, Chunxu Li <chunxu.li@mediatek.com>,
-        lgirdwood@gmail.com, angelogioacchino.delregno@collabora.com,
-        daniel.baluta@nxp.com, pierre-louis.bossart@linux.intel.com
-Cc:     matthias.bgg@gmail.com, sound-open-firmware@alsa-project.org,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, yc.hung@mediatek.com,
-        linux-arm-kernel@lists.infradead.org,
-        project_global_chrome_upstream_group@mediatek.com
-In-Reply-To: <20220917022610.594-1-chunxu.li@mediatek.com>
-References: <20220917022610.594-1-chunxu.li@mediatek.com>
-Subject: Re: [PATCH] ASoC: SOF: mediatek: add pcm_hw_params callback for mt8186
-Message-Id: <166370679567.361668.2078852324764910878.b4-ty@kernel.org>
-Date:   Tue, 20 Sep 2022 21:46:35 +0100
-MIME-Version: 1.0
+        s=k20201202; t=1663707018;
+        bh=KjOtBowGvvlXkY0CJ/ZXa41LgAc2HijH/N9ZoIAn4Vw=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=OVvBlnI32wtXmw49Ixv3W+jIyVKJlYTch98OR7gtaudqrUJhOt7B7HzLZpIi8KEGf
+         24UizCAQDwboJ31NnOQuZc8G5pjA9L7zQuLa1M2cADVXV9azHbQAUb05sn0ekZCYb9
+         nNVNdGCJIqqhPAIdAH2IYKhc8JXa3q8C70rvhtYZ3eMTIVh+Li4rIICcImFikEnPJZ
+         gDkmBm1Kp3Ft6gLrzyiplZN6QVS19jxGZo8aba5leU/XHTM5o+ewUB1fKokV25Okd6
+         wp6PLNZ2kL4bkJOZev7e5LKwlCDVY5NCa9wSQbTl42NyHABdw/NsUP7nR3V/BoivGd
+         l9UC6uHF43FCA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 057DFE21EE2;
+        Tue, 20 Sep 2022 20:50:18 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.11.0-dev-8af31
+Subject: Re: [PATCH] MAINTAINERS: Add myself as a reviewer for Qualcomm ETHQOS
+ Ethernet driver
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166370701801.15267.18212299614611715724.git-patchwork-notify@kernel.org>
+Date:   Tue, 20 Sep 2022 20:50:18 +0000
+References: <20220915112804.3950680-1-bhupesh.sharma@linaro.org>
+In-Reply-To: <20220915112804.3950680-1-bhupesh.sharma@linaro.org>
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc:     netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org,
+        vkoul@kernel.org, davem@davemloft.net
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,36 +58,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 17 Sep 2022 10:26:10 +0800, Chunxu Li wrote:
-> add pcm_hw_params callback for mt8186 to support continue
-> update dma host position
+Hello:
+
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Thu, 15 Sep 2022 16:58:04 +0530 you wrote:
+> As suggested by Vinod, adding myself as the reviewer
+> for the Qualcomm ETHQOS Ethernet driver.
 > 
+> Recently I have enabled this driver on a few Qualcomm
+> SoCs / boards and hence trying to keep a close eye on
+> it.
 > 
+> [...]
 
-Applied to
+Here is the summary with links:
+  - MAINTAINERS: Add myself as a reviewer for Qualcomm ETHQOS Ethernet driver
+    https://git.kernel.org/netdev/net/c/603ccb3aca71
 
-   broonie/sound.git for-next
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Thanks!
 
-[1/1] ASoC: SOF: mediatek: add pcm_hw_params callback for mt8186
-      commit: 78091edc1c7806846049e1d480f6a8051507ed94
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
