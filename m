@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3511E5BE3F3
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 12:57:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DA2E5BE3F7
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 12:57:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230315AbiITK4o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 06:56:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33508 "EHLO
+        id S229598AbiITK4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 06:56:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230497AbiITK4j (ORCPT
+        with ESMTP id S230246AbiITK4l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 06:56:39 -0400
+        Tue, 20 Sep 2022 06:56:41 -0400
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B69D6AA25;
-        Tue, 20 Sep 2022 03:56:38 -0700 (PDT)
-X-UUID: 7aac2bc73f93435ba05548a19f394cea-20220920
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB5486DF88;
+        Tue, 20 Sep 2022 03:56:39 -0700 (PDT)
+X-UUID: b2a5e7552d874d36b5c4dc36b478e1f8-20220920
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=yLi9Y9lzraMMjpBP1+i+VEvrdSAb0bYIQ6O9q2fTfg4=;
-        b=hwiThbWLJNdNunaEUQOOCX2rWzBE26t2k4eu72MTijmpNCClRrB/aa7mA3nDknBAefeP2JSKJNvzclItYYHrt8S3fjLGz7c4wWyh+JS7pZ4bLkA2Ydz1TFLFus4aFPq/i7M2TJcZURKy4pixJA65TMaUq+DMpU4QX4Y5FL8i2LQ=;
+        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=5t0XM1737ZWX1mhSCQ9gGUR194bfXWMaXzOPq4liWSc=;
+        b=FeHAa/mLZKMTzbPi6r6RE104jzY13e9CKCbEeUYDJ2o5ywKbk0MmOub4pY0D6WVtT49pxQxR7klrOewFCEaxnCGYDWofFaU6HuNUWe62FraLfmBd5df1IHc9XAtjXKyNzHmzNZI3oFW3SQGJzV5KIEo5HwerCFcvGWPIwwEv+HQ=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:0af95adb-311f-4fcb-b5c8-17d3cc41485d,IP:0,U
+X-CID-O-INFO: VERSION:1.1.11,REQID:b7300394-d2d2-447d-ae4d-e4aa9ff8fd32,IP:0,U
         RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
         release,TS:0
-X-CID-META: VersionHash:39a5ff1,CLOUDID:26246b70-dafa-4a42-b716-cf2cd4845592,B
+X-CID-META: VersionHash:39a5ff1,CLOUDID:4a4b485e-5ed4-4e28-8b00-66ed9f042fbd,B
         ulkID:nil,BulkQuantity:0,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,U
         RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 7aac2bc73f93435ba05548a19f394cea-20220920
+X-UUID: b2a5e7552d874d36b5c4dc36b478e1f8-20220920
 Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
         (envelope-from <runyang.chen@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1797377620; Tue, 20 Sep 2022 18:56:32 +0800
+        with ESMTP id 615476418; Tue, 20 Sep 2022 18:56:35 +0800
 Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Tue, 20 Sep 2022 18:56:30 +0800
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Tue, 20 Sep 2022 18:56:33 +0800
 Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n1.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Tue, 20 Sep 2022 18:56:30 +0800
+ Transport; Tue, 20 Sep 2022 18:56:32 +0800
 From:   Runyang Chen <Runyang.Chen@mediatek.com>
 To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
         Rob Herring <robh+dt@kernel.org>, <nfraprado@collabora.com>
 CC:     <angelogioacchino.delregno@collabora.com>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>,
@@ -50,10 +50,10 @@ CC:     <angelogioacchino.delregno@collabora.com>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>,
         <linux-mediatek@lists.infradead.org>,
-        Runyang Chen <runyang.chen@mediatek.com>
-Subject: [PATCH v3 2/3] dt-bindings: reset: mt8188: add toprgu reset-controller header file
-Date:   Tue, 20 Sep 2022 18:56:21 +0800
-Message-ID: <20220920105622.25666-3-Runyang.Chen@mediatek.com>
+        "Runyang Chen" <runyang.chen@mediatek.com>
+Subject: [PATCH v3 3/3] watchdog: mediatek: mt8188: add wdt support
+Date:   Tue, 20 Sep 2022 18:56:22 +0800
+Message-ID: <20220920105622.25666-4-Runyang.Chen@mediatek.com>
 X-Mailer: git-send-email 2.9.2
 In-Reply-To: <20220920105622.25666-1-Runyang.Chen@mediatek.com>
 References: <20220920105622.25666-1-Runyang.Chen@mediatek.com>
@@ -71,57 +71,46 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Runyang Chen <runyang.chen@mediatek.com>
 
-Add toprgu reset-controller header file for MT8188
+Support MT8188 watchdog device.
 
 Signed-off-by: Runyang Chen <runyang.chen@mediatek.com>
-Acked-by: Rob Herring <robh@kernel.org>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 ---
- include/dt-bindings/reset/mt8188-resets.h | 36 +++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
- create mode 100644 include/dt-bindings/reset/mt8188-resets.h
+ drivers/watchdog/mtk_wdt.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/include/dt-bindings/reset/mt8188-resets.h b/include/dt-bindings/reset/mt8188-resets.h
-new file mode 100644
-index 000000000000..377cdfda82a9
---- /dev/null
-+++ b/include/dt-bindings/reset/mt8188-resets.h
-@@ -0,0 +1,36 @@
-+/* SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)*/
-+/*
-+ * Copyright (c) 2022 MediaTek Inc.
-+ * Author: Runyang Chen <runyang.chen@mediatek.com>
-+ */
+diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
+index e97787536792..b53763ad90cf 100644
+--- a/drivers/watchdog/mtk_wdt.c
++++ b/drivers/watchdog/mtk_wdt.c
+@@ -13,6 +13,7 @@
+ #include <dt-bindings/reset/mt7986-resets.h>
+ #include <dt-bindings/reset/mt8183-resets.h>
+ #include <dt-bindings/reset/mt8186-resets.h>
++#include <dt-bindings/reset/mt8188-resets.h>
+ #include <dt-bindings/reset/mt8192-resets.h>
+ #include <dt-bindings/reset/mt8195-resets.h>
+ #include <linux/delay.h>
+@@ -90,6 +91,10 @@ static const struct mtk_wdt_data mt8186_data = {
+ 	.toprgu_sw_rst_num = MT8186_TOPRGU_SW_RST_NUM,
+ };
+ 
++static const struct mtk_wdt_data mt8188_data = {
++	.toprgu_sw_rst_num = MT8188_TOPRGU_SW_RST_NUM,
++};
 +
-+#ifndef _DT_BINDINGS_RESET_CONTROLLER_MT8188
-+#define _DT_BINDINGS_RESET_CONTROLLER_MT8188
-+
-+#define MT8188_TOPRGU_CONN_MCU_SW_RST          0
-+#define MT8188_TOPRGU_INFRA_GRST_SW_RST        1
-+#define MT8188_TOPRGU_IPU0_SW_RST              2
-+#define MT8188_TOPRGU_IPU1_SW_RST              3
-+#define MT8188_TOPRGU_IPU2_SW_RST              4
-+#define MT8188_TOPRGU_AUD_ASRC_SW_RST          5
-+#define MT8188_TOPRGU_INFRA_SW_RST             6
-+#define MT8188_TOPRGU_MMSYS_SW_RST             7
-+#define MT8188_TOPRGU_MFG_SW_RST               8
-+#define MT8188_TOPRGU_VENC_SW_RST              9
-+#define MT8188_TOPRGU_VDEC_SW_RST              10
-+#define MT8188_TOPRGU_CAM_VCORE_SW_RST         11
-+#define MT8188_TOPRGU_SCP_SW_RST               12
-+#define MT8188_TOPRGU_APMIXEDSYS_SW_RST        13
-+#define MT8188_TOPRGU_AUDIO_SW_RST             14
-+#define MT8188_TOPRGU_CAMSYS_SW_RST            15
-+#define MT8188_TOPRGU_MJC_SW_RST               16
-+#define MT8188_TOPRGU_PERI_SW_RST              17
-+#define MT8188_TOPRGU_PERI_AO_SW_RST           18
-+#define MT8188_TOPRGU_PCIE_SW_RST              19
-+#define MT8188_TOPRGU_ADSPSYS_SW_RST           21
-+#define MT8188_TOPRGU_DPTX_SW_RST              22
-+#define MT8188_TOPRGU_SPMI_MST_SW_RST          23
-+
-+#define MT8188_TOPRGU_SW_RST_NUM               24
-+
-+#endif  /* _DT_BINDINGS_RESET_CONTROLLER_MT8188 */
+ static const struct mtk_wdt_data mt8192_data = {
+ 	.toprgu_sw_rst_num = MT8192_TOPRGU_SW_RST_NUM,
+ };
+@@ -429,6 +434,7 @@ static const struct of_device_id mtk_wdt_dt_ids[] = {
+ 	{ .compatible = "mediatek,mt7986-wdt", .data = &mt7986_data },
+ 	{ .compatible = "mediatek,mt8183-wdt", .data = &mt8183_data },
+ 	{ .compatible = "mediatek,mt8186-wdt", .data = &mt8186_data },
++	{ .compatible = "mediatek,mt8188-wdt", .data = &mt8188_data },
+ 	{ .compatible = "mediatek,mt8192-wdt", .data = &mt8192_data },
+ 	{ .compatible = "mediatek,mt8195-wdt", .data = &mt8195_data },
+ 	{ /* sentinel */ }
 -- 
 2.18.0
 
