@@ -2,177 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6F665BEE69
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 22:23:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 658425BEE6C
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 22:23:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbiITUXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 16:23:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50990 "EHLO
+        id S229691AbiITUXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 16:23:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbiITUXc (ORCPT
+        with ESMTP id S231219AbiITUXn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 16:23:32 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E27374599B;
-        Tue, 20 Sep 2022 13:23:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663705410; x=1695241410;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=h6Lk3Kl+Tj08loLMM88M6zJHOl87KGlYmN1WgADQzWE=;
-  b=mtrzisQXIfZ5PUpay3iRPa6v+8D+WguNrBawnWIK1jlVjwGLheVNAsFE
-   vFWou+6JX0ckHZjh+M2dEaecBm54XzjIFXP6u86UXprNP8GuhKbUmJDFt
-   SQ/Vopab0CmSaGJ56kXNE7P5TL1G/nTwSFEmgU7OO5cEvOo8ADkcdeOV3
-   7oOzBU8NFUryrCqmBOrTNpCVms7KXLPg8n64qetS54pyAktn1myin/WCS
-   IQ/raM9Zb5ZyuF1FsZT/Xw8SCrK3i9PoYP+BNjNNDQbXpXcc8pxKat1eL
-   AMvgKSSCMI+Xpl48DecLrz19i2bwGNC1y4vVeI5QwDsjtxeUuDSFv4+pp
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10476"; a="300648920"
-X-IronPort-AV: E=Sophos;i="5.93,331,1654585200"; 
-   d="scan'208";a="300648920"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 13:23:30 -0700
-X-IronPort-AV: E=Sophos;i="5.93,331,1654585200"; 
-   d="scan'208";a="649744727"
-Received: from djiang5-mobl2.amr.corp.intel.com (HELO [10.212.25.89]) ([10.212.25.89])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 13:23:29 -0700
-Message-ID: <afdac388-061e-a403-3b9e-1273cee98509@intel.com>
-Date:   Tue, 20 Sep 2022 13:23:29 -0700
+        Tue, 20 Sep 2022 16:23:43 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 225895723B;
+        Tue, 20 Sep 2022 13:23:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1663705415;
+        bh=h6gv9PlmKnvxPi82tH8JhJLH/uYc0Z0zySdp6jbifIY=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=cwUs4Kqs8TYRV8OcOulZDB+c7ClXtN7kUSXhiSx1hFoGuCd4Twu2TP3xb4C5TqBzN
+         l2LTISxJY7e2oGtNPL4Y1Qg50xjCzvl0Di8XSrlB341t/TzX3HpdGNe6cZyTXNgAOE
+         jVp7noAgJuq+NsqKYzGGw8LN2PgSCYb2PwemJDhg=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.174.94]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1Ma24s-1op5mN1w2O-00Vyqz; Tue, 20
+ Sep 2022 22:23:35 +0200
+Message-ID: <647e2197-8f89-f5a0-a60b-476aff2fd134@gmx.de>
+Date:   Tue, 20 Sep 2022 22:23:34 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.2.2
-Subject: Re: [RFC PATCH 1/9] cxl/mem: Implement Get Event Records command
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: Build regressions/improvements in v6.0-rc5
 Content-Language: en-US
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Ira Weiny <ira.weiny@intel.com>
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org
-References: <20220813053243.757363-1-ira.weiny@intel.com>
- <20220813053243.757363-2-ira.weiny@intel.com>
- <20220824165058.00007d4f@huawei.com> <Yxgd51zdrk9pEXE6@iweiny-mobl>
- <20220908135240.00001217@huawei.com> <Yxun42yjtZREEeRv@iweiny-desk3>
- <20220920164904.00001be8@huawei.com>
-From:   Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20220920164904.00001be8@huawei.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-kernel@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>
+Cc:     linux-parisc@vger.kernel.org
+References: <CAHk-=wjG0js0MpsoH3-yvp05u_gXHu+uhkvqdAZDVb=9xUmX=g@mail.gmail.com>
+ <20220912091325.1780524-1-geert@linux-m68k.org>
+ <alpine.DEB.2.22.394.2209121120590.1176514@ramsan.of.borg>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <alpine.DEB.2.22.394.2209121120590.1176514@ramsan.of.borg>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:9Jd6J4vdbb9Ym4yaWggKuO2dzkfsLwCz3ylb5YPuujlOPztUcMj
+ aKqD20omebDaQ40+2enXelicrgSPGCvbNHoM1qJoJfxAxq2u2qLNK2QFyqUMWQYido1OgR5
+ W0eQmv0zu4n/oKYVexrPs7uPAyLLD9UlCX3ZOlrYWozJxfe+U1/p15XOPYsqaBRSM8h0RNg
+ cUgiP3bXzQQkxZClHvXtA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Mu/C18ZnMAk=:5TpbHaKIuvEaw79rNHE6Np
+ LiN9ArMQjHB21ckRE5PtwhjwN0eHTW5WzxRTOfD7waDg1TCXASimLgoq9SZNxaSe1R91qgVRF
+ kr71KdWofeIsgGgsJHRg68JVl3+G1oQB0RILUu/g8/jWJ55KOxXguISV9dF8y08BQ6hVt/fri
+ 63g+NgK0ZzkaOIvJGg7bIaxBf77tIhA3zWWMWvEVKidMV9hCm/52rtT9NEKuq5A9VrQdPisV+
+ uD+8rm9g2bpNRCIl9aF4pvfakHFznzXpa9w4dwUuWT52O4gATFPzPxiLIXc53jOUhRs2k1mi3
+ asxiJesdeKll3u3VFfuttfSpqpaPJYBV929Q4YlbayyVzsJtXP/3o3bv69dhFSbttdhmFAQd6
+ hXx2JTjrdtVRG7NcB45ULzYRrlL85g2kMn874wjN+lQaTW6Lb17cYRyPoJUiqLf7dRwsKa/gx
+ EGDQIbqLJ3Pbz33sEkb8zfQ3khom37OUCtmOiFGN1sBKMt/K1zPd6kW8W5h2kT1ux49wlNmQw
+ ZXPzCJKYlUN+IKO1w7bFOM4HVhbZRFX7uAw4mlVnsxm4Ems/4T8ODC5avnxzNDIwrl2grNvAn
+ Dva7n1P1pUTbMMPCVa+X8Y/DbeZ/31gQ/cWKqLPkH20qYBiI7SUqQ+Ki6Bt5wXTqSIfN7jQIC
+ stnamCUdVt5qQw+OvtPAB5v0o1APB5Ej+/uYxdii1akfB3cWhTc8TZUmZ6HA5tWnPOQw7wOLt
+ xGn8GhHQhiVyt556r4ObXgCUmt0MaajzvRVBbWFmnWzx/Xn5Dm/h3HxZzW4YqJz0MaaDs9j6C
+ dbLgqdIaZNlK2Uf9oqhTiurfSCqNhJkpTowSuEyucPMJOVTbTa21UGY5fZ3YH46ti37BwsLck
+ pO4NoWy3XCQQVq/YStnlSx4sQfS1OtjgadgC5f+LTJ3fpntz6JonmRN0Z9L3i8hI8YfibyQH/
+ aN39znm154A4sOTijTC6mrkKbjvmVUioKDWTVfKjFckU9uAULmlpGvl9pkJysg1HaL1dc8Wv7
+ hYlDeIagQv4djJcGjpj2xLOV6nnZPwQwxEDSLG4lGI5LGIfMBPWaA6dpeddah2BuBbdWE+Lvj
+ oTBJTv3Im38IRPjljWyx5wzDLrtw+6Lsb/K6S6imOmygO4r7RF1XSreYZCB34qqEPxbAP8RGC
+ fsukYPpZtSZyUqCYtdQ0n0shfj
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 9/12/22 11:22, Geert Uytterhoeven wrote:
+> On Mon, 12 Sep 2022, Geert Uytterhoeven wrote:
+>> JFYI, when comparing v6.0-rc5[1] to v6.0-rc4[3], the summaries are:
+>> =C2=A0- build errors: +16/-1
+>
+>  =C2=A0 + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error=
+: .cfi_endproc without corresponding .cfi_startproc:=C2=A0 =3D> 32
+>  =C2=A0 + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error=
+: bad or irreducible absolute expression:=C2=A0 =3D> 16
+>  =C2=A0 + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error=
+: junk at end of line, first unrecognized character is `:':=C2=A0 =3D> 16
+>  =C2=A0 + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error=
+: no such instruction: `be 0x100(%sr2,%r0)':=C2=A0 =3D> 29
+>  =C2=A0 + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error=
+: no such instruction: `ldi 0,%r20':=C2=A0 =3D> 30
+>  =C2=A0 + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error=
+: no such instruction: `ldw 0(%sp),%r31':=C2=A0 =3D> 26
+>  =C2=A0 + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: no su=
+ch instruction: `ble 0x100(%sr2,%r0)':=C2=A0 =3D> 46, 51
+>  =C2=A0 + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: no su=
+ch instruction: `ldi 0,%r25':=C2=A0 =3D> 44
+>  =C2=A0 + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: no su=
+ch instruction: `ldi 1,%r25':=C2=A0 =3D> 49
+>  =C2=A0 + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: no su=
+ch instruction: `ldi 173,%r20':=C2=A0 =3D> 45, 50
+>  =C2=A0 + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unkno=
+wn pseudo-op: `.callinfo':=C2=A0 =3D> 40
+>  =C2=A0 + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unkno=
+wn pseudo-op: `.entry':=C2=A0 =3D> 41
+>  =C2=A0 + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unkno=
+wn pseudo-op: `.exit':=C2=A0 =3D> 54
+>  =C2=A0 + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unkno=
+wn pseudo-op: `.proc':=C2=A0 =3D> 39
+>  =C2=A0 + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unkno=
+wn pseudo-op: `.procend':=C2=A0 =3D> 55
+>  =C2=A0 + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unkno=
+wn pseudo-op: `.stringz':=C2=A0 =3D> 76
+>
+> parisc-gcc8/generic-32bit_defconfig
+>
+>> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/80e78fcce86de=
+0288793a0ef0f6acf37656ee4cf/ (all 135 configs)
+>> [3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/7e18e42e4b280=
+c85b76967a9106a13ca61c16179/ (all 135 configs)
 
-On 9/20/2022 8:49 AM, Jonathan Cameron wrote:
-> On Fri, 9 Sep 2022 13:53:55 -0700
-> Ira Weiny <ira.weiny@intel.com> wrote:
->
->> On Thu, Sep 08, 2022 at 01:52:40PM +0100, Jonathan Cameron wrote:
->>>    
->> [snip]
->>
->>>>>> diff --git a/include/trace/events/cxl-events.h b/include/trace/events/cxl-events.h
->>>>>> new file mode 100644
->>>>>> index 000000000000..f4baeae66cf3
->>>>>> --- /dev/null
->>>>>> +++ b/include/trace/events/cxl-events.h
->>>>>> @@ -0,0 +1,127 @@
->>>>>> +/* SPDX-License-Identifier: GPL-2.0 */
->>>>>> +#undef TRACE_SYSTEM
->>>>>> +#define TRACE_SYSTEM cxl_events
->>>>>> +
->>>>>> +#if !defined(_CXL_TRACE_EVENTS_H) ||  defined(TRACE_HEADER_MULTI_READ)
->>>>>> +#define _CXL_TRACE_EVENTS_H
->>>>>> +
->>>>>> +#include <linux/tracepoint.h>
->>>>>> +
->>>>>> +#define EVENT_LOGS					\
->>>>>> +	EM(CXL_EVENT_TYPE_INFO,		"Info")		\
->>>>>> +	EM(CXL_EVENT_TYPE_WARN,		"Warning")	\
->>>>>> +	EM(CXL_EVENT_TYPE_FAIL,		"Failure")	\
->>>>>> +	EM(CXL_EVENT_TYPE_FATAL,	"Fatal")	\
->>>>>> +	EMe(CXL_EVENT_TYPE_MAX,		"<undefined>")
->>>>> Hmm. 4 is defined in CXL 3.0, but I'd assume we won't use tracepoints for
->>>>> dynamic capacity events so I guess it doesn't matter.
->>>> I'm not sure why you would say that.  I anticipate some user space daemon
->>>> requiring these events to set things up.
->>> Certainly a possible solution. I'd kind of expect a more hand shake based approach
->>> than a tracepoint.  Guess we'll see :)
->> Yea I think we should wait an see.
->>
->>>    
->>>>>      
->>>>>> +	{ CXL_EVENT_RECORD_FLAG_PERF_DEGRADED,	"Performance Degraded"		}, \
->>>>>> +	{ CXL_EVENT_RECORD_FLAG_HW_REPLACE,	"Hardware Replacement Needed"	}  \
->>>>>> +)
->>>>>> +
->>>>>> +TRACE_EVENT(cxl_event,
->>>>>> +
->>>>>> +	TP_PROTO(const char *dev_name, enum cxl_event_log_type log,
->>>>>> +		 struct cxl_event_record_raw *rec),
->>>>>> +
->>>>>> +	TP_ARGS(dev_name, log, rec),
->>>>>> +
->>>>>> +	TP_STRUCT__entry(
->>>>>> +		__string(dev_name, dev_name)
->>>>>> +		__field(int, log)
->>>>>> +		__array(u8, id, UUID_SIZE)
->>>>>> +		__field(u32, flags)
->>>>>> +		__field(u16, handle)
->>>>>> +		__field(u16, related_handle)
->>>>>> +		__field(u64, timestamp)
->>>>>> +		__array(u8, data, EVENT_RECORD_DATA_LENGTH)
->>>>>> +		__field(u8, length)
->>>>> Do we want the maintenance operation class added in Table 8-42 from CXL 3.0?
->>>>> (only noticed because I happen to have that spec revision open rather than 2.0).
->>>> Yes done.
->>>>
->>>> There is some discussion with Dan regarding not decoding anything and letting
->>>> user space take care of it all.  I think this shows a valid reason Dan
->>>> suggested this.
->>> I like being able to print tracepoints with out userspace tools.
->>> This also enforces structure and stability of interface which I like.
->> I tend to agree with you.
->>
->>> Maybe a raw tracepoint or variable length trailing buffer to pass
->>> on what we don't understand?
->> I've already realized that we need to print all reserved fields for this
->> reason.  If there is something the kernel does not understand user space can
->> just figure it out on it's own.
->>
->> Sound reasonable?
-> Hmm. Printing reserved fields would be unusual.  Not sure what is done for similar
-> cases elsewhere, CPER records etc...
->
-> We could just print a raw array of the whole event as well as decode version, but
-> that means logging most of the fields twice...
->
-> Not nice either.
->
-> I'm a bit inclined to say we should maybe just ignore stuff we don't know about or
-> is there a version number we can use to decide between decoded vs decoded as much as
-> possible + raw log?
+I see those errors on the kiss website, but I'm unable to reproduce them.
+Downloaded that .config, used same compiler (from https://mirrors.edge.ker=
+nel.org/pub/tools/crosstool/files/bin/x86_64/8.5.0/)....
+Not sure how to get this fixed.
+If someone has an idea or can reproduce, please let me know.
 
-libtraceevent can pull the trace event data structure fields directly. 
-So the raw data can be pulled directly from the kernel. And what gets 
-printed to the trace buffer can be decoded data constructed from those 
-fields by the kernel code. So with that you can have access both.
-
->
-> Jonathan
->
->> Ira
->>
->>> Jonathan
->>>
->>>    
+Helge
