@@ -2,65 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 012E35BDCE6
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 08:09:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09F565BDCEB
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 08:11:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230185AbiITGJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 02:09:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39354 "EHLO
+        id S229987AbiITGLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 02:11:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbiITGJM (ORCPT
+        with ESMTP id S229546AbiITGLt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 02:09:12 -0400
+        Tue, 20 Sep 2022 02:11:49 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A65E5FEE;
-        Mon, 19 Sep 2022 23:09:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C42D3AE46;
+        Mon, 19 Sep 2022 23:11:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2B252B824A7;
-        Tue, 20 Sep 2022 06:09:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD1E8C43146;
-        Tue, 20 Sep 2022 06:09:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C54F5B8249F;
+        Tue, 20 Sep 2022 06:11:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB181C433C1;
+        Tue, 20 Sep 2022 06:11:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663654148;
-        bh=zfzusDb14FFN7gQb0UhtuJazqWZoNGqu03mLfuxOeXs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=YbI2CTg3AVEHucpqvxxaOBdV2hkT2IvObY2/2uiRAZl4LPc9txSPdOupykJxFAVMc
-         //M1Mzrw51exNgGidLKPFzwB2m4s2KkxAWKM+gxkfmmzAs92T6BvEnuxAhOnjET2Uy
-         guixZF8zkN6jDCP9wBE0CW4uzx10LCsB/Zw0QyfLPL3S5HHfhxe4N3QfiwWQxLXUlv
-         VS93azSDm5Zu3A5wdiUUcSxH0RC8wBu68DtFdUPG12joDbj1/sfdHWx7rHO3ntTRUI
-         3Nqsk16We6SY3LXy2sKztSn5Aif3XmkpHd4e7siFVjY6My6yOF56ojfwtJ69uSEZQ2
-         xVkCfLpwCUSlw==
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-127ba06d03fso2795999fac.3;
-        Mon, 19 Sep 2022 23:09:08 -0700 (PDT)
-X-Gm-Message-State: ACrzQf15jnapojjA9H2dUaLEtHyEEjmUPGhmNhR61zssylhfaEziAXiA
-        g+uK6H7PPILI84Cv9pP/b3bQ2bmZFMnLlhsYPiI=
-X-Google-Smtp-Source: AMsMyM5/BTTDa5v+eF4g4y/fFcD46UVeV81LVzz0xqS4N4SXQrDzkSWMO2JEIpuBTgQQr/IPW3RpNyik4vHqQmdADDU=
-X-Received: by 2002:a05:6870:5803:b0:12c:c3e0:99dc with SMTP id
- r3-20020a056870580300b0012cc3e099dcmr1079696oap.19.1663654147825; Mon, 19 Sep
- 2022 23:09:07 -0700 (PDT)
+        s=k20201202; t=1663654305;
+        bh=NuFw7uED7Nut4KOkUsKsKxYCFbmw1Pj9smtOuX/NV5U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sJ/P2SXqcLyeBHY3+xxuhckYc5Q5wc31re0TfJgTYhh/XxK6AYmDtnQmvy8jjgrrq
+         KE2B0Z9zUk1lwISuJnYeVhkhfvShg5Zy+sLLC9/fNmoMG9HuxbkMLGyuM7IL0IJ+vT
+         HqAa4AYUFX/T5UATTw50dGM6Xkkh+3oXIAv38wgCY6c5QPYajL0vl7XgTudNLNUhAF
+         7qrMr2OgZz5EupI66zkwli4u4OarQTHNaz7x5rmJyI/tYjKfzO3RYhvkR70D4BWjbz
+         bwWXRYD9tfYzK7vy/S3E3fKQqPv4qDdXmCai7+e+Xaq55+fN0OLrvKVShXlsi/gNEw
+         Moi5LGimzIuqQ==
+Date:   Tue, 20 Sep 2022 11:41:41 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Vidya Sagar <vidyas@nvidia.com>
+Cc:     lpieralisi@kernel.org, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, kishon@ti.com, mani@kernel.org,
+        Sergey.Semin@baikalelectronics.ru, ffclaire1224@gmail.com,
+        linux-pci@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        kthota@nvidia.com, mmaddireddy@nvidia.com, sagar.tv@gmail.com
+Subject: Re: [PATCH V1 8/9] phy: tegra: p2u: Set ENABLE_L2_EXIT_RATE_CHANGE
+ in calibration
+Message-ID: <YylZnfan61xlXFWb@matsya>
+References: <20220919143627.13803-1-vidyas@nvidia.com>
+ <20220919143627.13803-9-vidyas@nvidia.com>
 MIME-Version: 1.0
-References: <20220918155246.1203293-1-guoren@kernel.org> <20220918155246.1203293-9-guoren@kernel.org>
- <Yyhyap+Xi3UtV+T0@hirez.programming.kicks-ass.net>
-In-Reply-To: <Yyhyap+Xi3UtV+T0@hirez.programming.kicks-ass.net>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 20 Sep 2022 14:08:55 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTS9rFTndZXvDG+XNOOEwZYC_Hbu9TOO_F+4gQo1mRF2bQ@mail.gmail.com>
-Message-ID: <CAJF2gTS9rFTndZXvDG+XNOOEwZYC_Hbu9TOO_F+4gQo1mRF2bQ@mail.gmail.com>
-Subject: Re: [PATCH V5 08/11] riscv: Support HAVE_IRQ_EXIT_ON_IRQ_STACK
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
-        luto@kernel.org, conor.dooley@microchip.com, heiko@sntech.de,
-        jszhang@kernel.org, lazyparser@gmail.com, falcon@tinylab.org,
-        chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, mark.rutland@arm.com,
-        zouyipeng@huawei.com, bigeasy@linutronix.de,
-        David.Laight@aculab.com, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Guo Ren <guoren@linux.alibaba.com>, keescook@chromium.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220919143627.13803-9-vidyas@nvidia.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -70,52 +60,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 9:45 PM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Sun, Sep 18, 2022 at 11:52:43AM -0400, guoren@kernel.org wrote:
->
-> > +ENTRY(call_on_stack)
-> > +     /* Create a frame record to save our ra and fp */
-> > +     addi    sp, sp, -RISCV_SZPTR
-> > +     REG_S   ra, (sp)
-> > +     addi    sp, sp, -RISCV_SZPTR
-> > +     REG_S   fp, (sp)
-> > +
-> > +     /* Save sp in fp */
-> > +     move    fp, sp
-> > +
-> > +     /* Move to the new stack and call the function there */
-> > +     li      a3, IRQ_STACK_SIZE
-> > +     add     sp, a1, a3
-> > +     jalr    a2
-> > +
-> > +     /*
-> > +      * Restore sp from prev fp, and fp, ra from the frame
-> > +      */
-> > +     move    sp, fp
-> > +     REG_L   fp, (sp)
-> > +     addi    sp, sp, RISCV_SZPTR
-> > +     REG_L   ra, (sp)
-> > +     addi    sp, sp, RISCV_SZPTR
-> > +     ret
-> > +ENDPROC(call_on_stack)
->
-> IIRC x86_64 moved away from a stack-switch function like this because it
-> presents a convenient exploit gadget.
-I found:
-https://lore.kernel.org/all/20210204204903.350275743@linutronix.de/
+On 19-09-22, 20:06, Vidya Sagar wrote:
+> Set ENABLE_L2_EXIT_RATE_CHANGE to request UPHY PLL rate change to Gen1
+> during initialization. This helps in the below surprise down cases,
+>   - Surprise down happens at Gen3/Gen4 link speed
+>   - Surprise down happens and external REFCLK is cut off which causes
+> UPHY PLL rate to deviate to an invalid rate
+> 
+> ENABLE_L2_EXIT_RATE_CHANGE needs to be set to bring the UPHY PLL rate
+> back to Gen1 during controller initialization for the link up.
+> 
+> Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
+> ---
+>  drivers/phy/tegra/phy-tegra194-p2u.c | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+> 
+> diff --git a/drivers/phy/tegra/phy-tegra194-p2u.c b/drivers/phy/tegra/phy-tegra194-p2u.c
+> index 1415ca71de38..fb710e89acac 100644
+> --- a/drivers/phy/tegra/phy-tegra194-p2u.c
+> +++ b/drivers/phy/tegra/phy-tegra194-p2u.c
+> @@ -15,6 +15,7 @@
+>  #include <linux/phy/phy.h>
+>  
+>  #define P2U_CONTROL_CMN			0x74
+> +#define P2U_CONTROL_CMN_ENABLE_L2_EXIT_RATE_CHANGE		BIT(13)
+>  #define P2U_CONTROL_CMN_SKP_SIZE_PROTECTION_EN			BIT(20)
+>  
+>  #define P2U_PERIODIC_EQ_CTRL_GEN3	0xc0
+> @@ -85,8 +86,21 @@ static int tegra_p2u_power_on(struct phy *x)
+>  	return 0;
+>  }
+>  
+> +int tegra_p2u_calibrate(struct phy *x)
 
-  - The fact that the stack switching code ended up being an easy to find
-    exploit gadget.
+why not static?
 
-What's the exploit gadget? Do you have a ref link? Thx.
-
->
-> I'm not much of an exploit writer and I've no idea how effective our
-> inline stategy is, perhaps other can comment.
-It seems that I should move to an inline flavor. a0cfc74d0b00
-("x86/irq: Provide macro for inlining irq stack switching")
+> +{
+> +	struct tegra_p2u *phy = phy_get_drvdata(x);
+> +	u32 val;
+> +
+> +	val = p2u_readl(phy, P2U_CONTROL_CMN);
+> +	val |= P2U_CONTROL_CMN_ENABLE_L2_EXIT_RATE_CHANGE;
+> +	p2u_writel(phy, val, P2U_CONTROL_CMN);
+> +
+> +	return 0;
+> +}
+> +
+>  static const struct phy_ops ops = {
+>  	.power_on = tegra_p2u_power_on,
+> +	.calibrate = tegra_p2u_calibrate,
+>  	.owner = THIS_MODULE,
+>  };
+>  
+> -- 
+> 2.17.1
 
 -- 
-Best Regards
- Guo Ren
+~Vinod
