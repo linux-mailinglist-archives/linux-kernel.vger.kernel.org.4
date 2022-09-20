@@ -2,105 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92FE45BDBF0
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 07:00:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD8BC5BDBC3
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 06:45:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbiITFAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 01:00:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43684 "EHLO
+        id S229529AbiITEpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 00:45:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbiITFAg (ORCPT
+        with ESMTP id S229815AbiITEpL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 01:00:36 -0400
-X-Greylist: delayed 599 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 19 Sep 2022 22:00:23 PDT
-Received: from mail10.tencent.com (mail10.tencent.com [14.18.183.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52D0D286F8
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 22:00:21 -0700 (PDT)
-Received: from EX-SZ021.tencent.com (unknown [10.28.6.73])
-        by mail10.tencent.com (Postfix) with ESMTP id 11379D4907;
-        Tue, 20 Sep 2022 12:44:38 +0800 (CST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tencent.com;
-        s=s202002; t=1663649078;
-        bh=ZyARqJMFdysKk8MYGVUFgQsHULKhbzQIIkgr8sNCSgA=;
-        h=From:To:CC:Subject:Date;
-        b=LMZ87klsmKD64XwCGOUcSO5SHjCPoilE9ttbJWUjNYppDGS6S/Jipvx9gUZOPlo/4
-         KcGJw7SU3GoAd68QymYsw+eGdIoI1pCGZybUsRLy0BE1ke2TEu33HjANBwbnhqA39A
-         8Bgf/Do4JzqBGvrlGE75CDYHm54k9ZcV6vFfz224=
-Received: from EX-SZ045.tencent.com (10.28.6.96) by EX-SZ021.tencent.com
- (10.28.6.73) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.4; Tue, 20 Sep
- 2022 12:44:37 +0800
-Received: from EX-SZ049.tencent.com (10.28.6.102) by EX-SZ045.tencent.com
- (10.28.6.96) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.4; Tue, 20 Sep
- 2022 12:44:37 +0800
-Received: from EX-SZ049.tencent.com ([fe80::e0be:89c3:ec1:bef7]) by
- EX-SZ049.tencent.com ([fe80::e0be:89c3:ec1:bef7%8]) with mapi id
- 15.01.2242.008; Tue, 20 Sep 2022 12:44:37 +0800
-From:   =?utf-8?B?Zmx5aW5ncGVuZyjlva3mtakp?= <flyingpeng@tencent.com>
-To:     "pbonzini@redhat.com" <pbonzini@redhat.com>
-CC:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: [RESEND PATCH] kvm: mmu: fix typos in struct kvm_arch
-Thread-Topic: [RESEND PATCH] kvm: mmu: fix typos in struct kvm_arch
-Thread-Index: AQHYzKuvOes+0LB2n0mt06s9Fk30YQ==
-Date:   Tue, 20 Sep 2022 04:44:37 +0000
-Message-ID: <6DB576D7-C37D-4D11-95BF-DB23522FA8ED@tencent.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.99.48.13]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <3D1FCB50A8AEDB458733501A3A281CAF@tencent.com>
-Content-Transfer-Encoding: base64
+        Tue, 20 Sep 2022 00:45:11 -0400
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15B0733421;
+        Mon, 19 Sep 2022 21:45:08 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=ziyangzhang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VQHRevk_1663649105;
+Received: from 30.97.56.91(mailfrom:ZiyangZhang@linux.alibaba.com fp:SMTPD_---0VQHRevk_1663649105)
+          by smtp.aliyun-inc.com;
+          Tue, 20 Sep 2022 12:45:06 +0800
+Message-ID: <475726f7-bb65-5681-1967-a9ae9075004e@linux.alibaba.com>
+Date:   Tue, 20 Sep 2022 12:45:03 +0800
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_PASS,T_SPF_HELO_TEMPERROR
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.0
+Subject: Re: [PATCH V3 5/7] ublk_drv: consider recovery feature in aborting
+ mechanism
+Content-Language: en-US
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     axboe@kernel.dk, xiaoguang.wang@linux.alibaba.com,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        joseph.qi@linux.alibaba.com
+References: <20220913041707.197334-1-ZiyangZhang@linux.alibaba.com>
+ <20220913041707.197334-6-ZiyangZhang@linux.alibaba.com>
+ <Yyg3KLfQaxbS1miq@T590>
+ <9a682fac-f022-1f4d-5c2c-e1f0a84746d8@linux.alibaba.com>
+ <YyhhnbrHTJpW4Xcm@T590>
+ <dbc78e92-ede7-fc63-1bee-83794bf1e33b@linux.alibaba.com>
+ <Yyktx/xz0qTNxnT4@T590>
+From:   Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
+In-Reply-To: <Yyktx/xz0qTNxnT4@T590>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tm8gJ2t2bXBfbW11X3BhZ2VzJywgaXQgc2hvdWxkIGJlICdrdm1fbW11X3BhZ2UnLiBBbmQNCnN0
-cnVjdCBrdm1fbW11X3BhZ2VzIGFuZCBzdHJ1Y3Qga3ZtX21tdV9wYWdlIGFyZSBkaWZmZXJlbnQg
-c3RydWN0dXJlcywNCmhlcmUgc2hvdWxkIGJlIGt2bV9tbXVfcGFnZS4NCmt2bV9tbXVfcGFnZXMg
-aXMgZGVmaW5lZCBpbiBhcmNoL3g4Ni9rdm0vbW11L21tdS5jLg0KDQpTdWdnZXN0ZWQtYnk6IERh
-dmlkIE1hdGxhY2sgPGRtYXRsYWNrQGdvb2dsZS5jb20+DQpTaWduZWQtb2ZmLWJ5OiBQZW5nIEhh
-byA8Zmx5aW5ncGVuZ0B0ZW5jZW50LmNvbT4NClJldmlld2VkLWJ5OiBEYXZpZCBNYXRsYWNrIDxk
-bWF0bGFja0Bnb29nbGUuY29tPg0KLS0tDQogYXJjaC94ODYvaW5jbHVkZS9hc20va3ZtX2hvc3Qu
-aCB8IDEyICsrKysrKy0tLS0tLQ0KIDEgZmlsZSBjaGFuZ2VkLCA2IGluc2VydGlvbnMoKyksIDYg
-ZGVsZXRpb25zKC0pDQoNCmRpZmYgLS1naXQgYS9hcmNoL3g4Ni9pbmNsdWRlL2FzbS9rdm1faG9z
-dC5oIGIvYXJjaC94ODYvaW5jbHVkZS9hc20va3ZtX2hvc3QuaA0KaW5kZXggZTgyODFkNjRhNDMx
-Li5lNjdiMmY2MDJmYjIgMTAwNjQ0DQotLS0gYS9hcmNoL3g4Ni9pbmNsdWRlL2FzbS9rdm1faG9z
-dC5oDQorKysgYi9hcmNoL3g4Ni9pbmNsdWRlL2FzbS9rdm1faG9zdC5oDQpAQCAtMTI3Miw4ICsx
-MjcyLDggQEAgc3RydWN0IGt2bV9hcmNoIHsNCiAgICAgICAgYm9vbCB0ZHBfbW11X2VuYWJsZWQ7
-DQoNCiAgICAgICAgLyoNCi0gICAgICAgICogTGlzdCBvZiBzdHJ1Y3Qga3ZtX21tdV9wYWdlcyBi
-ZWluZyB1c2VkIGFzIHJvb3RzLg0KLSAgICAgICAgKiBBbGwgc3RydWN0IGt2bV9tbXVfcGFnZXMg
-aW4gdGhlIGxpc3Qgc2hvdWxkIGhhdmUNCisgICAgICAgICogTGlzdCBvZiBrdm1fbW11X3BhZ2Ug
-c3RydWN0cyBiZWluZyB1c2VkIGFzIHJvb3RzLg0KKyAgICAgICAgKiBBbGwga3ZtX21tdV9wYWdl
-IHN0cnVjdHMgaW4gdGhlIGxpc3Qgc2hvdWxkIGhhdmUNCiAgICAgICAgICogdGRwX21tdV9wYWdl
-IHNldC4NCiAgICAgICAgICoNCiAgICAgICAgICogRm9yIHJlYWRzLCB0aGlzIGxpc3QgaXMgcHJv
-dGVjdGVkIGJ5Og0KQEAgLTEyOTIsOCArMTI5Miw4IEBAIHN0cnVjdCBrdm1fYXJjaCB7DQogICAg
-ICAgIHN0cnVjdCBsaXN0X2hlYWQgdGRwX21tdV9yb290czsNCg0KICAgICAgICAvKg0KLSAgICAg
-ICAgKiBMaXN0IG9mIHN0cnVjdCBrdm1wX21tdV9wYWdlcyBub3QgYmVpbmcgdXNlZCBhcyByb290
-cy4NCi0gICAgICAgICogQWxsIHN0cnVjdCBrdm1fbW11X3BhZ2VzIGluIHRoZSBsaXN0IHNob3Vs
-ZCBoYXZlDQorICAgICAgICAqIExpc3Qgb2Yga3ZtX21tdV9wYWdlIHN0cnVjdHMgbm90IGJlaW5n
-IHVzZWQgYXMgcm9vdHMuDQorICAgICAgICAqIEFsbCBrdm1fbW11X3BhZ2Ugc3RydWN0cyBpbiB0
-aGUgbGlzdCBzaG91bGQgaGF2ZQ0KICAgICAgICAgKiB0ZHBfbW11X3BhZ2Ugc2V0IGFuZCBhIHRk
-cF9tbXVfcm9vdF9jb3VudCBvZiAwLg0KICAgICAgICAgKi8NCiAgICAgICAgc3RydWN0IGxpc3Rf
-aGVhZCB0ZHBfbW11X3BhZ2VzOw0KQEAgLTEzMDMsOSArMTMwMyw5IEBAIHN0cnVjdCBrdm1fYXJj
-aCB7DQogICAgICAgICAqIGlzIGhlbGQgaW4gcmVhZCBtb2RlOg0KICAgICAgICAgKiAgLSB0ZHBf
-bW11X3Jvb3RzIChhYm92ZSkNCiAgICAgICAgICogIC0gdGRwX21tdV9wYWdlcyAoYWJvdmUpDQot
-ICAgICAgICAqICAtIHRoZSBsaW5rIGZpZWxkIG9mIHN0cnVjdCBrdm1fbW11X3BhZ2VzIHVzZWQg
-YnkgdGhlIFREUCBNTVUNCisgICAgICAgICogIC0gdGhlIGxpbmsgZmllbGQgb2Yga3ZtX21tdV9w
-YWdlIHN0cnVjdHMgdXNlZCBieSB0aGUgVERQIE1NVQ0KICAgICAgICAgKiAgLSBscGFnZV9kaXNh
-bGxvd2VkX21tdV9wYWdlcw0KLSAgICAgICAgKiAgLSB0aGUgbHBhZ2VfZGlzYWxsb3dlZF9saW5r
-IGZpZWxkIG9mIHN0cnVjdCBrdm1fbW11X3BhZ2VzIHVzZWQNCisgICAgICAgICogIC0gdGhlIGxw
-YWdlX2Rpc2FsbG93ZWRfbGluayBmaWVsZCBvZiBrdm1fbW11X3BhZ2Ugc3RydWN0cyB1c2VkDQog
-ICAgICAgICAqICAgIGJ5IHRoZSBURFAgTU1VDQogICAgICAgICAqIEl0IGlzIGFjY2VwdGFibGUs
-IGJ1dCBub3QgbmVjZXNzYXJ5LCB0byBhY3F1aXJlIHRoaXMgbG9jayB3aGVuDQogICAgICAgICAq
-IHRoZSB0aHJlYWQgaG9sZHMgdGhlIE1NVSBsb2NrIGluIHdyaXRlIG1vZGUuDQotLQ0KMi4yNy4w
-DQoNCg==
+On 2022/9/20 11:04, Ming Lei wrote:
+> On Tue, Sep 20, 2022 at 09:49:33AM +0800, Ziyang Zhang wrote:
+>> On 2022/9/19 20:33, Ming Lei wrote:
+>>>>>> +
+>>>>>> +static void ublk_quiesce_queue(struct ublk_device *ub,
+>>>>>> +		struct ublk_queue *ubq)
+>>>>>> +{
+>>>>>> +	int i;
+>>>>>> +
+>>>>>> +	for (i = 0; i < ubq->q_depth; i++) {
+>>>>>> +		struct ublk_io *io = &ubq->ios[i];
+>>>>>> +
+>>>>>> +		if (!(io->flags & UBLK_IO_FLAG_ACTIVE)) {
+>>>>>> +			struct request *rq = blk_mq_tag_to_rq(
+>>>>>> +					ub->tag_set.tags[ubq->q_id], i);
+>>>>>> +
+>>>>>> +			WARN_ON_ONCE(!rq);
+>>>>>> +			pr_devel("%s: %s rq: qid %d tag %d io_flags %x\n", __func__,
+>>>>>> +					ublk_queue_can_use_recovery_reissue(ubq) ?
+>>>>>> +					"requeue" : "abort",
+>>>>>> +					ubq->q_id, i, io->flags);
+>>>>>> +			if (ublk_queue_can_use_recovery_reissue(ubq))
+>>>>>> +				blk_mq_requeue_request(rq, false);
+>>>>>
+>>>>> This way is too violent.
+>>>>>
+>>>>> There may be just one queue dying, but you requeue all requests
+>>>>> from any queue. I'd suggest to take the approach in ublk_daemon_monitor_work(),
+>>>>> such as, just requeuing requests in dying queue.
+>>>>
+>>>> If we want to start a new process after a crash for USER_RECOVERY, all old ubq_daemons
+>>>> must exit and rqs of all queues have to be requeued/aborted. We cannot let live
+>>>> ubq_daemons run any more because they do not belong to the new process.
+>>>
+>>> IMO, the old process really can exist, and recently even I got such
+>>> requirement for switching queue from one thread to another.
+>>
+>> For now, only one process can open /dev/ublkcX, so a new process is necessary now.
+>>
+>> If you think "per ubq_daemon" recovery is reasonable, I can do that in the future
+>> if multiple processes is supported. But I really suggest that we can keep current
+>> design as the first step which assumes all ubq_daemons are exited and a new process
+>> is started, and that really meets our requirement.
+>>
+>> BTW, START_USER_RECOVERY has to be reconsidered because we may need to pass a ubq_id
+>> with it.
+>>
+>>>
+>>> What we should do is to get all inflight requests done, and cancel all io
+>>> commands, no matter if the ubq pthread is dead or live.
+>>>
+>>>>
+>>>> BTW, I really wonder why there could be just one queue dying? All queues must be dying
+>>>> shortly after any ubq_daemon is dying since they are all pthreads in the same process.
+>>>
+>>> You can't assume it is always so. Maybe one pthread is dead first, and
+>>> others are dying later, maybe just one is dead.
+>>
+>> Yes, I know there may be only one pthread is dead while others keep running, but now
+>> ublk_drv only support one process opening the same /dev/ublkcX, so other pthreads
+>> must dead(no matter they are aborted by signal or themselves) later.
+>>
+>>>
+>>> If one queue's pthread is live, you may get trouble by simply requeuing
+>>> the request, that is why I suggest to re-use the logic of
+>>> ublk_daemon_monitor_work/ublk_abort_queue().
+>>
+>> Actually, if any ubq_daemon is live, no rqs are requeued, please see the check in
+>> ublk_quiesce_dev(). It always makes sure that ALL ubq_daemons are dying, then it
+>> starts quiesce jobs.
+> 
+> OK, looks I miss this point, but you should have quiesced queue at the
+> beginning of ublk_quiesce_dev(), then the transition period can be kept
+> as short as possible. Otherwise, if one queue pthread isn't dying, the
+> device can be kept in this part-working state forever.
+> 
+
+Ming, this is what you said in PATCH V2:
+"
+The simplest handling might be to exit all ublk queues first, and re-create one
+new process to recover all since the request queue is required to be
+quiesced first, and all ublk queue is actually quiesced too. So from user
+viewpoint, there is nothing visible comparing with just recovering
+single ubq daemon/pthread.
+"
+
+So I assume that quiesce_work starts only after all ubq_damons are dying.
+Note that current ublk does not support mutpile process opening the same chardev.
+
+Really we should agree on this. My suggestion is that we only consider "all ubq_daemons
+are dying".
+
+You mention that someone want to enable "switch ubq_daemon pthread to another one" and
+I think it is another feature but not recovery feature.
+
+Regards,
+Zhang.
+
