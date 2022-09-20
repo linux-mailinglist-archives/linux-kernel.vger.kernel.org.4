@@ -2,107 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A01FA5BE59A
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 14:22:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 653F45BE598
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 14:22:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230452AbiITMWc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 08:22:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34406 "EHLO
+        id S230365AbiITMW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 08:22:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbiITMWY (ORCPT
+        with ESMTP id S229530AbiITMWW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 08:22:24 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BECC973901
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 05:22:22 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id n35-20020a05600c502300b003b4924c6868so784172wmr.1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 05:22:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=4SwIaD3vwte9/wOVUhii8jjHUDs7etXJMigmdSdQFz4=;
-        b=SLFoLkpR340kKkW0YrWlEfAhG5dD3fKjX3yfiQcJ1RBvRf3qDsOJQmWuFi8It2zGOO
-         4xWD+xaLSG2zcyyiiRX1wHCG/QPvLR6pyaxkUQuhrKBIwqqWleODmA3zmBCy2s7jSOpd
-         vvFkpw0tqn83ArzebL3ogqtG6JaH24hPhvgb0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=4SwIaD3vwte9/wOVUhii8jjHUDs7etXJMigmdSdQFz4=;
-        b=reYktBKJA1N3KIpOQTEZEuQE9phJ2j8YCugDbG3RNCzdHK9KukeLJmwBcKopx5pJuU
-         9ukwuvO8ZcxxBy2KJ7Bs5qzr8LtUxgka0LNYAi3bTCxSasW5itg0wbGkp9BJRr5KsBJR
-         01mjI7Yr5IwVqEUSisXypJQQ92b6+xi8jB3WK1p/O9OkiUnygBGKVbDetQN+vki9NLpw
-         Bxrn1kGPuWRLQFNwtQv60q4Nwizv98vfZO/XTz48TpiUtxsWCx9DTCAuUDUZh5xTPfiT
-         s6TXppygY7lXTKTHJkW/EmgMu29hMI9L1X5gdhuhy8ncxiwcOFwISsG3A5GZcgldE4Tf
-         ctew==
-X-Gm-Message-State: ACrzQf0Kb6mzoEDA9NHYPQfw3Ia1YrT3gdtTv4fiNteTQTWVb3ImKzJ9
-        fftOX/g3ByOP0rFBd+rmq69Arg==
-X-Google-Smtp-Source: AMsMyM7KTVO8qT5Kn3gc4wVc7Gf+axGxMqi1Oeo15wjCpSJNRvW5WWXc7u2JmKl2DoEucPmryDsVKg==
-X-Received: by 2002:a05:600c:1c19:b0:3b4:c1cb:d46d with SMTP id j25-20020a05600c1c1900b003b4c1cbd46dmr2203248wms.172.1663676541365;
+        Tue, 20 Sep 2022 08:22:22 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F86373901;
         Tue, 20 Sep 2022 05:22:21 -0700 (PDT)
-Received: from tom-ThinkPad-T14s-Gen-2i.station (net-188-217-56-12.cust.vodafonedsl.it. [188.217.56.12])
-        by smtp.gmail.com with ESMTPSA id i7-20020a05600c354700b003b4cba4ef71sm13124268wmq.41.2022.09.20.05.22.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 05:22:20 -0700 (PDT)
-From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-To:     tommaso.merciai@amarulasolutions.com
-Cc:     linuxfancy@googlegroups.com, linux-amarula@amarulasolutions.com,
-        sudipm.mukherjee@gmail.com,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Philip Yang <Philip.Yang@amd.com>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH] drm/amdgpu: initialize r variable into amdgpu_cs_submit function
-Date:   Tue, 20 Sep 2022 14:22:14 +0200
-Message-Id: <20220920122216.346321-1-tommaso.merciai@amarulasolutions.com>
-X-Mailer: git-send-email 2.25.1
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 16E066601F6E;
+        Tue, 20 Sep 2022 13:22:19 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1663676540;
+        bh=d5C1UKHSt0P8rgevUzVZlIrzp+iptSFeKnmBaNqfAx8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=mF9gZIO1aOqTgoLykkQMAflYNNiPZ8Oi5tMxaUkgST6FrWwxKo0ySbVOkiqVJgwDf
+         xxDg3pYhlMSk1qFHx8IKPXyLyLnZ+qSl/lQWWn/xlNa+WqGINMfEyTBURD3ElpMbPw
+         YyaJth9oSYylURi12Sy9farhIOhhAoiP7dtbNBbhUDRJUYsVAsm3y/YbtOJLnppu6z
+         v5IAbVSxy8GY3Mbl+d9K8AO1QP/tlIosQZSU0O2iJ47USgJqW0+YNST8sU/wXu54D4
+         Otwcaxki2aVvSJaH2DVEowJaxn5Mw16sia808+hpc7ZBYIOdnbZ5F1zcBhmNPual0P
+         uaDsHHZ0mDk5g==
+Message-ID: <812a5de2-dbe3-2f0d-492c-16ea004c996a@collabora.com>
+Date:   Tue, 20 Sep 2022 14:22:16 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v1 16/17] drm/mediatek: dpi: Add mt8195 hdmi to DPI driver
+Content-Language: en-US
+To:     Guillaume Ranquet <granquet@baylibre.com>,
+        Vinod Koul <vkoul@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Rob Herring <robh+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        CK Hu <ck.hu@mediatek.com>, Jitao shi <jitao.shi@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-mediatek@lists.infradead.org,
+        dri-devel@lists.freedesktop.org,
+        Pablo Sun <pablo.sun@mediatek.com>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org
+References: <20220919-v1-0-4844816c9808@baylibre.com>
+ <20220919-v1-16-4844816c9808@baylibre.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220919-v1-16-4844816c9808@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The builds of arm64 allmodconfig with clang failed to build
-next-20220920 with the following result:
+Il 19/09/22 18:56, Guillaume Ranquet ha scritto:
+> Add the DPI1 hdmi path support in mtk dpi driver
+> 
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> index 630a4e301ef6..91212b7610e8 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> @@ -15,7 +15,10 @@
+>   #include <linux/of_graph.h>
+>   #include <linux/pinctrl/consumer.h>
+>   #include <linux/platform_device.h>
+> +#include <linux/reset.h>
+>   #include <linux/types.h>
+> +#include <linux/regmap.h>
+> +#include <linux/mfd/syscon.h>
+>   
+>   #include <video/videomode.h>
+>   
+> @@ -66,10 +69,14 @@ struct mtk_dpi {
+>   	struct drm_bridge *next_bridge;
+>   	struct drm_connector *connector;
+>   	void __iomem *regs;
+> +	struct reset_control *reset_ctl;
+>   	struct device *dev;
+>   	struct clk *engine_clk;
+> +	struct clk *dpi_ck_cg;
+>   	struct clk *pixel_clk;
+> +	struct clk *dpi_sel_clk;
+>   	struct clk *tvd_clk;
+> +	struct clk *hdmi_cg;
 
-1190:3: error: variable 'r' is uninitialized when used here [-Werror,-Wuninitialized]
-note: initialize the variable 'r' to silence this warning
 
-This fix compilation error
+You're adding new clocks and then you're making *all clocks*, including the
+already existing ones... optional.
 
-Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
----
- drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+That looks seriously odd.... can you please give a devicetree example for
+MT8195 in the next version, perhaps in the cover letter?
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
-index 58088c663125..efa3dc9b69fd 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
-@@ -1168,7 +1168,7 @@ static int amdgpu_cs_submit(struct amdgpu_cs_parser *p,
- 	struct amdgpu_bo_list_entry *e;
- 	struct amdgpu_job *job;
- 	uint64_t seq;
--	int r;
-+	int r = 0;
- 
- 	job = p->job;
- 	p->job = NULL;
--- 
-2.25.1
+Would also make it easier to test this entire big series.
+
+Regards,
+Angelo
 
