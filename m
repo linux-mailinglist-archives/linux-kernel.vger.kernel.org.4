@@ -2,125 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E06D5BDAB0
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 05:09:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 805745BDABD
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 05:15:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbiITDJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 23:09:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48668 "EHLO
+        id S229919AbiITDPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 23:15:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbiITDJT (ORCPT
+        with ESMTP id S229824AbiITDOw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 23:09:19 -0400
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2053.outbound.protection.outlook.com [40.107.22.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E92E739C;
-        Mon, 19 Sep 2022 20:09:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=InRym7k4y0A3tIW166xg1oJBoW0eEuCOF0KncADmVbspjMXsMi4r8t2cffMdSilBh2aYPo8IFwjVnSkFZlLpE4/KvetN7RA/+KNm0cIbFNntPvpg1YQnoFh8F8DVuY6AQzDi5nNVrkiKZIS7yYkXKfloUpEL3rB2ic6KDVdeLyJAYTUPimnTEi2rJPbQI1JqTb7RIs+grnj9d7gXuP/Wcw0v37fy2mZNcichTn2/q2uV6Uek8lvJ5EmbJtkyxkTimb59ljnf0AYhYMN0sXPnKr9Xxc3W7KJupmz1AnmsZYdT8P87WGTphqxDMHYLch66M/1NzcU7xkMDCm54y3Kk7Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=byHqjx2ltALp9LVoa3XJH2MtMQc6mwtsiYROkv7GUd4=;
- b=VOD1HOioFyyq0azY2jsxTfVvvhubjkFYVsU1EM7nsgeMsRwywjAPGuruR560dzi15dV3BzKK7P0y77+bwAEp/ydfD6jxJtByKEXqc1I5f28/BsACh4+TqnPGGuJuPbMtwcXmV9smzTwWE0EDg+0aHrMUHWHbhsA1WabflpFHqLThz37DjyIEhO47Icr852k8/NWNOftPUZtAmBe2R9R1ggpzRI/w1pliA110axGkwm0tjDTC3yQAfYDUxlysCiNSb9mfTPR+PfLLuLKcqGLi0RXiE94UPyPgjWd++Q1VpG9NpuJ2pFS/+ifR9rx9lcHLBC7tUu/N8Dwy7ybNRnsRbg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=byHqjx2ltALp9LVoa3XJH2MtMQc6mwtsiYROkv7GUd4=;
- b=eHlNnGjbpEUUuqEw149HBm5mjudO79PaDkVLh8EljLEaSWILNS/v3RTw/TqeXOEzIBg76BllflCQjk0/1xjUrqO1fdwAbkZDmRI+On7YXvz512VYqAKcAh5Pbx6oo2Bz21eiC4CK0yLBsrCq8pPdoV/wODUONXM+Eobiye5SwTg=
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by PAXPR04MB9253.eurprd04.prod.outlook.com (2603:10a6:102:2bd::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.17; Tue, 20 Sep
- 2022 03:09:15 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::1eb:dcf:8fd7:867]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::1eb:dcf:8fd7:867%5]) with mapi id 15.20.5632.018; Tue, 20 Sep 2022
- 03:09:15 +0000
-From:   Peng Fan <peng.fan@nxp.com>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        "bjorn.andersson@kernel.org" <bjorn.andersson@kernel.org>,
-        "mathieu.poirier@linaro.org" <mathieu.poirier@linaro.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
-CC:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH V5 0/6] remoteproc: imx_rproc: support i.MX8QM/QXP
-Thread-Topic: [PATCH V5 0/6] remoteproc: imx_rproc: support i.MX8QM/QXP
-Thread-Index: AQHYt1YQLw/DlLV00Eatr29REha5pa3nzPRA
-Date:   Tue, 20 Sep 2022 03:09:15 +0000
-Message-ID: <DU0PR04MB94179E5E1563DD72849BEDCC884C9@DU0PR04MB9417.eurprd04.prod.outlook.com>
-References: <20220824011023.1493050-1-peng.fan@oss.nxp.com>
-In-Reply-To: <20220824011023.1493050-1-peng.fan@oss.nxp.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DU0PR04MB9417:EE_|PAXPR04MB9253:EE_
-x-ms-office365-filtering-correlation-id: 6c72a05d-dc7a-4591-2d3a-08da9ab58018
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Y4nyOVup/oAFNyDoniJCFmXYdFgYRgf03s65kGFtvq12BrTM+PuR9er2SYLNlgRfRiX81bhH5CiIvGCQBPdPNvq9Rt0EKT3pk2FOuxvKlBtJtzF5SNj5SeMlaWDfVtjmswCXzsWB2VfmZHLzbK1qCHP7GjPI+z8QVzs3X6HuRW09Nj5N1Vlal9TSlRQ6Irsk+l7pjxbRYogHn0w2dhEJ3M3ZbGyjPuV91ODNyhZ99tMjE5NW9byR2i9rJUGuZaSHKMO6yi7eMeduKCIdobORRm4eOXoeuJKfVCQb2TC888v6cYwtc0tdkyrvhvfIi9XkU50RMr4thGurb6j5yni9vDWEuULIr1MDBrDWLchRnM3dYt4Hcr2ijSi9Hw4cCCFanjn3qjizQxcqMb7mR6ISOyLD3C+1eMJ8dgf0v8JDzv2ZP8BCBJ03LyE2Qa58hup06yDawrG7ERjw96sBrdiO80vu0LoouUiO/P/fXlyl76q5w7ca77Q1WjWpHhlcW53mWhllO4s4OrXu9Tj/MgYEpAmzpP6Ef/mQ2DbXhSVX9w1SEs0zlkKlVS2Au0byFo2TEZlzXY5EmTNqrFLodBYm++jYrVn10xmq86sHqt6H8LOj/h3i2qsZl7vgPyQTLYwQP9/HsIZks6BrWUyne1c3v0HDwHA1aZsYSLHk9hTV3F75BS9sRytx9mzGURHxjvdDdeyihOX629bflHkCwIhxmHYeSHYyHp9ip43MeMypBGBXgnZ5ouDiHT/xNfVSTCPRjzNscBOqRkDxdh2ox5N9GqycbPw1vnh6EYRWkx8PgSq4tSaYIBEjwpDDIefSIrAp8tM1izvFd6IJGk/5Sn8nOw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(136003)(346002)(376002)(396003)(39860400002)(451199015)(41300700001)(966005)(71200400001)(6506007)(83380400001)(7696005)(26005)(186003)(9686003)(7416002)(2906002)(44832011)(5660300002)(55016003)(8676002)(110136005)(64756008)(8936002)(54906003)(66446008)(66476007)(66946007)(52536014)(66556008)(76116006)(4326008)(478600001)(316002)(38100700002)(122000001)(38070700005)(33656002)(86362001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?fzYDxRVRd+fVFbcx9QNWZXa7WqNZbwcQoJyT6TkOjcw+cH+iMezwgSX/UL78?=
- =?us-ascii?Q?25QJieVQV+6fdze2b18/uCrba/G9M+V8asQzz/Z5Vw/ndHk/LWfnCWDhKKs1?=
- =?us-ascii?Q?AzPewNfJGPBhC7dmsGVQ1vK41TWHGflA8Q5/3fP0N63jl2B920pGOSPblllh?=
- =?us-ascii?Q?dSghMpv9rBpYRrPvD8KeRTfDSBcBYxpOYX9uQsvIShOYZtBIACDa3N+bn6X0?=
- =?us-ascii?Q?REFEGDpci5uk1BUi3AHbOSP+2XqdlBMht77mlX/r+1hLptuys3VupvQsZpg9?=
- =?us-ascii?Q?fDLAeaYBCf1Oj6W3hpjqgLx4V40cSZ2b1U95aTolRjE1j8ZXSbtWihoBeVlf?=
- =?us-ascii?Q?5nAHx/BBxT6DPsZ9yLIKE2a1imS8XBeaZlcnoTfRqiNHci5uiX/sHJe7GxNM?=
- =?us-ascii?Q?8KLUvWj2Rb38ij1t+60DI2kiuBsdSqdaV2VFiCOGChhHmdr+9u4cx2ahta3e?=
- =?us-ascii?Q?3wwiPKST/IT4yTXRijitf8FruHEKb7P4DqB3CY9mps1nAQxGEdt6h6Z9Jijv?=
- =?us-ascii?Q?eigYKe5n7wnRj0XI6vIWcwD6dNXY02eFjv/aviFAs8JOFb+RWfW9qU3+ioZ5?=
- =?us-ascii?Q?zhzdbahFyJGwFDPIyuzwEk2z0Jw00mXBRyr2IOUG5ZMHtwFJXgStTUagBpWx?=
- =?us-ascii?Q?+SMdR4Hsza2FCkHiOM28ni1dO1o+ocysQTLVku59gSqXarCqjgnINMjJ409p?=
- =?us-ascii?Q?txLv9/K8x9YjgwpIcBFP5zQK1cKRpk4oPZDtoTYkf5OrSaEfzRoMFqDD+nQ2?=
- =?us-ascii?Q?pxW1L+U9nsrWhBNMdwDeZW9n7L7AN8VsIgiWQbta1oWdb10ErBvP7S0Fwx2G?=
- =?us-ascii?Q?uX5m2FldaEUj6KMyRJrLGp98a7m1LgMNz4QqxpI0zbzNUqrCX4pVS9mWfZQQ?=
- =?us-ascii?Q?R9PTCpYX0Qe5J60xD2S4hjygYJVs6pJD1pPwArr3EEJa3tECPAvr9pJWrsNw?=
- =?us-ascii?Q?h1eI8cJVrgDOFVJvRzphXEdtxH+WM12MJDbl4LwLgz31Se7ycNV99usH0pLM?=
- =?us-ascii?Q?0X0azFKGGV6dNAo+SrF+dg6l2MLTzQuaOFCAXAVUIKi5e7KZjH//mxDvaCE6?=
- =?us-ascii?Q?Faoby61BhenY1hTOGLhZLYCKZ/TYIcBN6ju4RpWawG1fbuL/glrIWmpmokDI?=
- =?us-ascii?Q?uiDu+aT3/0cNRnvu+K72a91iYKHOAJibzBXCTEorU/S5Gx7pMm5i7IgzTT0g?=
- =?us-ascii?Q?Tx0FCw4uODPXFMtf7ALNfBdmqK657AApH2dZWFnMgVqeLSt6VmzEvfxGePvu?=
- =?us-ascii?Q?yquBmDIdfpX0ZTEdNFAjw3zML4dGR4rHSM03afh9pzlk2YqHv/wajQ+NkioP?=
- =?us-ascii?Q?+ucTmUlq3dyffay572vFe1xsVDpy3CdClVTg4kwQH2B8MQfOj7x4iNb/lMgT?=
- =?us-ascii?Q?2NfaBzNC00VyqNig6mMv3UnZwbpfVRO1FievUc7weAl4rFc5XS/1gwIfisCw?=
- =?us-ascii?Q?3AgcGa6ZNFGx3Xi+XivBSIvPxWzgnJ+AwqbEMTeTuSBsbrLuBjTqrWrcFZpa?=
- =?us-ascii?Q?84+AkFEWoU1g3EjoeC5LTOyLGZrgoRDyvHKNalMNahXTGrtLBzdvycPGSXux?=
- =?us-ascii?Q?6/zaHprYrQBWu3K97cRUp9PLM7WIilxuO6BzLjpJ?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 19 Sep 2022 23:14:52 -0400
+Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA5B6584;
+        Mon, 19 Sep 2022 20:14:50 -0700 (PDT)
+Received: by mail-vk1-xa2b.google.com with SMTP id h5so730790vkc.5;
+        Mon, 19 Sep 2022 20:14:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=3tC17ydEXE0ipwLhiejx78Ifh9gVJNR3v+BzRu0I5bM=;
+        b=DALbMkaENjnsC0pqm0faDU0vDIkCtkMpDPhtStJjc5nTxsFe1sBT1o3bHATmhBL3ro
+         WABdpIS/VbokU+7KfgVFAqwPBgmtNgemC5n2zY6hHn+nxj0fIA6nXYMbInP5ppMiEup8
+         T35SL0YPx3L9R3hCmaQXRPyWPsHsZyRCoagbY5WbP9JRgaxTyBCF7ISFj7VVsYVUmdBN
+         UyRmjoK15E9GsUkd1juUJ6JZHozeqUP5r8Uw61Ak96UQrzyS+qmizeY3ca2E8/LVEoyn
+         mH1g5WoVyIoKZ2c8FOjoiMCyffc4JdD6zqp1U5cijUvldeb3EDF3mndKRS4MzFy/qNuZ
+         d99Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=3tC17ydEXE0ipwLhiejx78Ifh9gVJNR3v+BzRu0I5bM=;
+        b=geK07su8YGGf+DmVDsUB3XA9wVQjjTj/gCjrrdbR9JttyQPLIfs2r736ciHO6QXsbJ
+         1FrYWkgN+iOJgzIwxBrnrM5XXQCj0f8av0WTULrgFCDztctTn/4fHlgLZR+mAndgV85H
+         MXE1zfHlTBji6KsMprx4GjpTVl+f+IG/WS9zekdPeIEOFf/wFdfQ//8785mSEVN+ms1V
+         b46E/zR+zZI8ERZhfMJDBwIPYtNV8vu+7rsEOkoTinp6ySzf8CsSp0pn2c+MQ5eQXEha
+         swTciO/5aGIGlg6dvHQBePc+Bk4sf/dWYVmroOqsn59psfSD/llMWnTdVPr/roYaCg9z
+         eYaQ==
+X-Gm-Message-State: ACrzQf0V4f42Yo5kQriWD+/UwipTHAjEz3Q6w/Qw0puaMi3e+xIxXCY+
+        YkNPeUvbuQezdAZkmt+ffkc=
+X-Google-Smtp-Source: AMsMyM5AUhQTxxtBBRh1nR+MZ7B/Beo0k/NE74dw5FrUJC/GWrTduZB7Tyn1h0B7edfrE1CGA6G7cg==
+X-Received: by 2002:a1f:4397:0:b0:39e:8f5b:a2a7 with SMTP id q145-20020a1f4397000000b0039e8f5ba2a7mr7131865vka.26.1663643688986;
+        Mon, 19 Sep 2022 20:14:48 -0700 (PDT)
+Received: from [192.168.1.140] ([65.35.200.237])
+        by smtp.gmail.com with ESMTPSA id v12-20020a67af0c000000b0039807c3161asm67172vsl.18.2022.09.19.20.14.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Sep 2022 20:14:48 -0700 (PDT)
+Message-ID: <2c3743cc-f29b-6cc9-d6b8-992cca69b60f@gmail.com>
+Date:   Mon, 19 Sep 2022 22:12:18 -0500
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6c72a05d-dc7a-4591-2d3a-08da9ab58018
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Sep 2022 03:09:15.4547
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Cl7e36AgzvuSAcExObj0uCMyuWcJvsEibGRWTb7+Y2ROj3cGTNvJUfImSar9z9pF9rhG5UTEJde64dSJTVRnHA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB9253
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH RFC 0/2] Generate device tree node for pci devices
+Content-Language: en-US
+To:     Tom Rix <trix@redhat.com>, Lizhi Hou <lizhi.hou@amd.com>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, robh@kernel.org, helgaas@kernel.org
+Cc:     clement.leger@bootlin.com, max.zhen@amd.com, sonal.santan@amd.com,
+        larry.liu@amd.com, brian.xu@amd.com, stefano.stabellini@xilinx.com
+References: <1661809417-11370-1-git-send-email-lizhi.hou@amd.com>
+ <1d9faa2e-e3fc-d104-c85f-4035233848d6@gmail.com>
+ <ca35a14d-501d-265e-b196-a87e1e994cd0@amd.com>
+ <78211af5-171c-ef4f-a8c2-17f63dc479bc@gmail.com>
+ <8bee1ddd-0a84-62cd-9beb-3bbb09d83de1@amd.com>
+ <f042a8d7-fa2b-3e75-a2f2-6e6ba28a9b38@gmail.com>
+ <7393f2f3-3af5-edf9-4afb-8acc0a8db1e7@redhat.com>
+From:   Frank Rowand <frowand.list@gmail.com>
+In-Reply-To: <7393f2f3-3af5-edf9-4afb-8acc0a8db1e7@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -128,70 +83,208 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bjorn, Mathieu
+On 9/17/22 13:36, Tom Rix wrote:
+> Frank,
+> 
+> On 9/16/22 7:23 PM, Frank Rowand wrote:
+>> On 9/13/22 16:02, Lizhi Hou wrote:
+>>> On 9/13/22 10:41, Frank Rowand wrote:
+>>>> On 9/13/22 12:10, Lizhi Hou wrote:
+>>>>> On 9/13/22 00:00, Frank Rowand wrote:
+>>>>>> On 8/29/22 16:43, Lizhi Hou wrote:
+>>>>>>> This patch series introduces OF overlay support for PCI devices which
+>>>>>>> primarily addresses two use cases. First, it provides a data driven method
+>>>>>>> to describe hardware peripherals that are present in a PCI endpoint and
+>>>>>>> hence can be accessed by the PCI host. An example device is Xilinx/AMD
+>>>>>>> Alveo PCIe accelerators. Second, it allows reuse of a OF compatible
+>>>>>>> driver -- often used in SoC platforms -- in a PCI host based system. An
+>>>>>>> example device is Microchip LAN9662 Ethernet Controller.
+>>>>>>>
+>>>>>>> This patch series consolidates previous efforts to define such an
+>>>>>>> infrastructure:
+>>>>>>> https://lore.kernel.org/lkml/20220305052304.726050-1-lizhi.hou@xilinx.com/
+>>>>>>> https://lore.kernel.org/lkml/20220427094502.456111-1-clement.leger@bootlin.com/
+>>>>>>>
+>>>>>>> Normally, the PCI core discovers PCI devices and their BARs using the
+>>>>>>> PCI enumeration process. However, the process does not provide a way to
+>>>>>>> discover the hardware peripherals that are present in a PCI device, and
+>>>>>>> which can be accessed through the PCI BARs. Also, the enumeration process
+>>>>>>> does not provide a way to associate MSI-X vectors of a PCI device with the
+>>>>>>> hardware peripherals that are present in the device. PCI device drivers
+>>>>>>> often use header files to describe the hardware peripherals and their
+>>>>>>> resources as there is no standard data driven way to do so. This patch
+>>>>>>> series proposes to use flattened device tree blob to describe the
+>>>>>>> peripherals in a data driven way. Based on previous discussion, using
+>>>>>>> device tree overlay is the best way to unflatten the blob and populate
+>>>>>>> platform devices. To use device tree overlay, there are three obvious
+>>>>>>> problems that need to be resolved.
+>>>>>>>
+>>>>>>> First, we need to create a base tree for non-DT system such as x86_64. A
+>>>>>>> patch series has been submitted for this:
+>>>>>>> https://lore.kernel.org/lkml/20220624034327.2542112-1-frowand.list@gmail.com/
+>>>>>>> https://lore.kernel.org/lkml/20220216050056.311496-1-lizhi.hou@xilinx.com/
+>>>>>>>
+>>>>>>> Second, a device tree node corresponding to the PCI endpoint is required
+>>>>>>> for overlaying the flattened device tree blob for that PCI endpoint.
+>>>>>>> Because PCI is a self-discoverable bus, a device tree node is usually not
+>>>>>>> created for PCI devices. This series adds support to generate a device
+>>>>>>> tree node for a PCI device which advertises itself using PCI quirks
+>>>>>>> infrastructure.
+>>>>>>>
+>>>>>>> Third, we need to generate device tree nodes for PCI bridges since a child
+>>>>>>> PCI endpoint may choose to have a device tree node created.
+>>>>>>>
+>>>>>>> This patch series is made up of two patches.
+>>>>>>>
+>>>>>>> The first patch is adding OF interface to allocate an OF node. It is copied
+>>>>>>> from:
+>>>>>>> https://lore.kernel.org/lkml/20220620104123.341054-5-clement.leger@bootlin.com/
+>>>>>>>
+>>>>>>> The second patch introduces a kernel option, CONFIG_PCI_OF. When the option
+>>>>>>> is turned on, the kernel will generate device tree nodes for all PCI
+>>>>>>> bridges unconditionally. The patch also shows how to use the PCI quirks
+>>>>>>> infrastructure, DECLARE_PCI_FIXUP_FINAL to generate a device tree node for
+>>>>>>> a device. Specifically, the patch generates a device tree node for Xilinx
+>>>>>>> Alveo U50 PCIe accelerator device. The generated device tree nodes do not
+>>>>>>> have any property. Future patches will add the necessary properties.
+>>>>>>>
+>>>>>>> Clément Léger (1):
+>>>>>>>      of: dynamic: add of_node_alloc()
+>>>>>>>
+>>>>>>> Lizhi Hou (1):
+>>>>>>>      pci: create device tree node for selected devices
+>>>>>>>
+>>>>>>>     drivers/of/dynamic.c        |  50 +++++++++++++----
+>>>>>>>     drivers/pci/Kconfig         |  11 ++++
+>>>>>>>     drivers/pci/bus.c           |   2 +
+>>>>>>>     drivers/pci/msi/irqdomain.c |   6 +-
+>>>>>>>     drivers/pci/of.c            | 106 ++++++++++++++++++++++++++++++++++++
+>>>>>>>     drivers/pci/pci-driver.c    |   3 +-
+>>>>>>>     drivers/pci/pci.h           |  16 ++++++
+>>>>>>>     drivers/pci/quirks.c        |  11 ++++
+>>>>>>>     drivers/pci/remove.c        |   1 +
+>>>>>>>     include/linux/of.h          |   7 +++
+>>>>>>>     10 files changed, 200 insertions(+), 13 deletions(-)
+>>>>>>>
+>>>>>> The patch description leaves out the most important piece of information.
+>>>>>>
+>>>>>> The device located at the PCI endpoint is implemented via FPGA
+>>>>>>       - which is programmed after Linux boots (or somewhere late in the boot process)
+>>>>>>          - (A) and thus can not be described by static data available pre-boot because
+>>>>>>                it is dynamic (and the FPGA program will often change while the Linux
+>>>>>>                kernel is already booted
+>>>>>>          - (B) can be described by static data available pre-boot because the FPGA
+>>>>>>                program will always be the same for this device on this system
+>>>>>>
+>>>>>> I am not positive what part of what I wrote above is correct and would appreciate
+>>>>>> some confirmation of what is correct or incorrect.
+>>>>> There are 2 series devices rely on this patch:
+>>>>>
+>>>>>       1) Xilinx Alveo Accelerator cards (FPGA based device)
+>>>>>
+>>>>>       2) lan9662 PCIe card
+>>>>>
+>>>>>             please see: https://lore.kernel.org/lkml/20220427094502.456111-1-clement.leger@bootlin.com/
+>>>> Thanks.  Please include this information in future versions of the patch series.
+>>>>
+>>>> For device 2 I have strongly recommended using pre-boot apply of the overlay to the base
+>>>> device tree.  I realize that this suggestion is only a partial solution if one wants to
+>>>> use hotplug to change system configuration (as opposed to using hotplug only to replace
+>>>> an existing device (eg a broken device) with another instance of the same device).  I
+>>>> also realize that this increased the system administration overhead.  On the other hand
+>>>> an overlay based solution is likely to be fragile and possibly flaky.
+>>> Can you clarify the pre-boot apply approach? How will it work for PCI devices?
+>>>>> For Xilinx Alveo device, it is (A). The FPGA partitions can be programmed dynamically after boot.
+>>>> I looked at the Xilinx Alveo web page, and there are a variety of types of Alveo cards
+>>>> available.  So the answer to my next question may vary by type of card.
+>>>>
+>>>> Is it expected that the fpga program on a given card will change frequently (eg multiple
+>>>> times per day), where the changed program results in a new device that would require a
+>>>> different hardware description in the device tree?
+>>> Different images may be loaded to a FPGA partition several times a
+>>> day. The PCI topology (Device IDs, BARs, MSIx, etc) does not change.
+>>> New IPs may appear (and old IPs may disappear) on the BARs when a new
+>>> image is loaded. We would like to use flattened device tree to
+>>> describe the IPs on the BARs.
+>> That was kind of a non-answer.  I know that images _may_ change at
+>> some frequency.  I was trying to get a sense of whether the images
+>> were _likely_ to be changing on a frequent basis for these types
+>> of boards, or whether frequent image changes are likely to be a
+>> rare edge use case.
+>>
+>> If there is a good design for the 99.999% use case that does not
+>> support the 0.001% use case then it may be better to not create
+>> an inferior design that also supports the 0.001% use case.
+>>
+>> I hope that gives a better idea of the reason why I was asking the
+>> question and how the answer could impact design and implementation
+>> decisions.
+>>
+>> As a point of reference, some other fpga users have indicated a
+>> desire to change images many times per second.  The current driver
+>> and overlay architecture did not seem to me to be a good match to
+>> that use case (depending on the definition of "many").
+> 
+> I would rather we cover 99.999% now.
+> 
+> My understanding is that the subdevices are flexible but fairly
+> static and the frequency Lizhi mentions would cover development
+> uses.
+> 
+> In production I would expect the image to change about once a year
+> with the same order of magnitude as firmware.
 
-Is this patchset fine for you?=20
-V4 was sent out 2 months ago and no comments,
-V5 was sent out near 1 month with only a minor rebase conflict.
+Thanks for this info, it helps a lot.
 
-Thanks,
-Peng.
+> 
+> Can you point me to a reference of a user case with high frequency
+> images changing that also depends on pci io device changing?
 
-> Subject: [PATCH V5 0/6] remoteproc: imx_rproc: support i.MX8QM/QXP
->=20
-> From: Peng Fan <peng.fan@nxp.com>
->=20
-> V5:
->  The patchset could not apply on latest remoteproc for-next branch,  so
-> rebased. Only patch 6 has a minor conflict, other patches are not  change=
-d.
->=20
-> V4:
->  https://lore.kernel.org/all/20220701104725.557314-1-
-> peng.fan@oss.nxp.com/
->  Add R-b from DT maintainer
->  Fix probe failure and driver remove path in patch 3, 4  Add comments
-> about i.MX8QM entries filter in patch 5
->=20
-> V3:
->  Drop the dependency in V2.
->  Tested on i.MX8QM/8MM
->  Use 'fsl,resource-id' and 'fsl,entry-address' Per dt maintainer  Drop 'r=
-eg'
-> property Per remoteproc maintainer  Drop mcore self recovery, until we
-> land in common framework support.
->  https://patchwork.kernel.org/project/linux-
-> remoteproc/cover/20220517064937.4033441-1-peng.fan@oss.nxp.com/
->=20
-> V2:
->  https://patchwork.kernel.org/project/linux-
-> remoteproc/cover/20220309102118.8131-1-peng.fan@oss.nxp.com/
->  Depends on https://patchwork.kernel.org/project/linux-
-> remoteproc/list/?series=3D621311
->  Tested on i.MX8QXP/QM/8MP
->  Addressed Mathieu's comments
->  Drop V1 patch 5/9, patch 3/9 is replaced with upper dependency patchset
-> Move V1 patch 4/9 out to https://patchwork.kernel.org/project/linux-
-> remoteproc/patch/20220308065754.3355-1-peng.fan@oss.nxp.com/
->  Update commit log
->  Drop magic number to get entry address from device tree in patch 4/6
->=20
-> The V1 patchset:
-> https://patchwork.kernel.org/project/linux-
-> remoteproc/patch/20220111033333.403448-4-peng.fan@oss.nxp.com/
->=20
-> Peng Fan (6):
->   dt-bindings: remoteproc: imx_rproc: support i.MX8QXP
->   dt-bindings: remoteproc: imx_rproc: support i.MX8QM
->   remoteproc: imx_rproc: support attaching to i.MX8QXP M4
->   remoteproc: imx_rproc: support kicking Mcore from Linux for i.MX8QXP
->   remoteproc: imx_rproc: support i.MX8QM
->   remoteproc: imx_rproc: request mbox channel later
->=20
->  .../bindings/remoteproc/fsl,imx-rproc.yaml    |  16 ++
->  drivers/remoteproc/imx_rproc.c                | 261 +++++++++++++++++-
->  2 files changed, 270 insertions(+), 7 deletions(-)
->=20
-> --
-> 2.37.1
+I actually don't have references to any previous PCI devices that are
+based on FPGAs, let alone with a high frequency of images changing.
+
+The Alveo devices are the first such devices that have come to my
+attention.  Note that this is a technology space that I do not
+follow, so my lack of awareness does not mean much.
+
+I do not remember the specific discussion that was asserting or
+desiring a high frequency of image changes for an FPGA.  The
+current overlay architecture and overall device tree architecture
+would not handle this well and/or robustly because (off the top of
+my head, hopefully I'm getting this correct) the live system device
+tree does not directly contain all of the associated data - some of
+it is contained in the unflattened device tree (FDT) that remains in
+memory after unflattening, both in the case of the base system device
+tree and overlay device trees.  Some of the device tree data APIs return
+pointers to this data in the FDT.  And the API does not provide reference
+counting for the data (just reference counting for nodes - and these
+reference counts are know to be frequently incorrect).
+
+In general I have very little visibility into the FPGA space so I go
+out of my way to notify them before making changes to the overlay
+implementation, API, etc; listen carefully to their input; and give
+them lots of opportunity to test any resulting changes.
+
+-Frank
+
+> 
+> Tom
+> 
+>> -Frank
+>>
+>>> Thanks,
+>>>
+>>> Lizhi
+>>>
+>>>> Or is the fpga program expected to change on an infrequent basis (eg monthly, quarterly,
+>>>> annually), in the same way as device firmware and operating systems are updated on a regular
+>>>> basis for bug fixes and new functionality?
+>>>>
+>>>>
+>>>>> Thanks,
+>>>>>
+>>>>> Lzhi
+>>>>>
+>>>>>> -Frank
+> 
 
