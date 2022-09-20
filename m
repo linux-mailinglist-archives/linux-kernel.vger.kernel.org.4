@@ -2,173 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C89EA5BDA80
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 04:58:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB1715BDA82
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 04:58:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbiITC6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 22:58:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35494 "EHLO
+        id S230078AbiITC6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 22:58:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbiITC54 (ORCPT
+        with ESMTP id S229645AbiITC6K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 22:57:56 -0400
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15675808C;
-        Mon, 19 Sep 2022 19:57:53 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=tonylu@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VQH16ud_1663642669;
-Received: from localhost(mailfrom:tonylu@linux.alibaba.com fp:SMTPD_---0VQH16ud_1663642669)
-          by smtp.aliyun-inc.com;
-          Tue, 20 Sep 2022 10:57:50 +0800
-Date:   Tue, 20 Sep 2022 10:57:48 +0800
-From:   Tony Lu <tonylu@linux.alibaba.com>
-To:     Wen Gu <guwen@linux.alibaba.com>
-Cc:     kgraul@linux.ibm.com, wenjia@linux.ibm.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        Mon, 19 Sep 2022 22:58:10 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3E0C5850E
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 19:58:09 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id iw17so1097866plb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 19:58:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=bG3TOlajU16P3gbCwMauLa0qhe+go+yuIOUL4RNlsMs=;
+        b=mB0m4QXG1bWuQUYi3KqzpGAYgP8XshwcXa4pcBNoksZRgGI46KWHie5yLhFC+vyYPJ
+         NjCkck5Vo0qK30wnb3TD0bVCAB71TJmZSgFtnbxkFmeeU6s6TaRcOZJfmcwSYqRdQei2
+         CD4g18SdBpe0zEaU0Kw1GiAICKMXrE26WOWXc/689WbeWxT9Dgm+bYKPgmIpqTb9BbIa
+         DiIQzVllOQRwvJ2Ro/adFfTxKEW1HO99ODpEKb64oEx0PMS6b+g0ASjMq24KQDBgUj3a
+         nXOnSL1q6BHo1cGSp//lXHCWmuNn/ZrvV8xuLmU3QoRsDEFBMCQeYB9IFip3F2Z6Pb+I
+         +tRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=bG3TOlajU16P3gbCwMauLa0qhe+go+yuIOUL4RNlsMs=;
+        b=fHfx2hjh1tOKJq7GXZVhNHNuPGm6DusUhqXkceT/kSiiqsBJB4V2hFW0lvfwb4Kjtm
+         dhexVlVRfDX+RS7RqUasQokKsUekJfNPUdFjt8HEhnigrzdJr7iPR2CJDbchS5q43vKW
+         RjJ1NJCHx/rJ6z4lkc5SrhTfY1GGoqEjkRAAqmkBn/Pmjh2VGmKTBaMJeLk+pYyop3eY
+         0otXRe5SYxVa9k5pa7Ct755at7mcYKl0wxYtBsUNGsDjMjoijDuR41+ktkK72Kdj7RbH
+         AafVP9Y1zUWX5ae1jHKTySGwSH8aalQG9bWf5NafAq7Ir03cSXztiDhlfkNMGR9dHTEj
+         cJlg==
+X-Gm-Message-State: ACrzQf0gkVlXTBD2e7iIEa5hVBWx7NehG1uGSIj+uJXDNJbstHemcQxR
+        lBnqQxGOa7ywggBdafTDBKg=
+X-Google-Smtp-Source: AMsMyM422QwAquVOaMXBpgC0AQASMi7a0PhUei0xAJVzNK/fyN+cnM/gRRAeitNAdCFk83iiMBHuoQ==
+X-Received: by 2002:a17:90b:1b10:b0:200:934b:741f with SMTP id nu16-20020a17090b1b1000b00200934b741fmr1482826pjb.212.1663642688676;
+        Mon, 19 Sep 2022 19:58:08 -0700 (PDT)
+Received: from dtor-ws.mtv.corp.google.com ([2620:15c:202:201:b095:5d5d:4c28:8088])
+        by smtp.gmail.com with ESMTPSA id z128-20020a626586000000b00542e190f6bcsm147499pfb.102.2022.09.19.19.58.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Sep 2022 19:58:07 -0700 (PDT)
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+        =?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 1/2] net/smc: Introduce a specific sysctl for
- TEST_LINK time
-Message-ID: <YyksLLWsk9TGiB6k@TonyMac-Alibaba>
-Reply-To: Tony Lu <tonylu@linux.alibaba.com>
-References: <1663641907-15852-1-git-send-email-guwen@linux.alibaba.com>
- <1663642434-30035-1-git-send-email-guwen@linux.alibaba.com>
+Subject: [PATCH 1/2] ASoC: ssm2518: drop support for platform data
+Date:   Mon, 19 Sep 2022 19:58:03 -0700
+Message-Id: <20220920025804.1788667-1-dmitry.torokhov@gmail.com>
+X-Mailer: git-send-email 2.37.3.968.ga6b4b080e4-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1663642434-30035-1-git-send-email-guwen@linux.alibaba.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 10:53:54AM +0800, Wen Gu wrote:
-> SMC-R tests the viability of link by sending out TEST_LINK LLC
-> messages over RoCE fabric when connections on link have been
-> idle for a time longer than keepalive interval (testlink time).
-> 
-> But using tcp_keepalive_time as testlink time maybe not quite
-> suitable because it is default no less than two hours[1], which
-> is too long for single link to find peer dead. The active host
-> will still use peer-dead link (QP) sending messages, and can't
-> find out until get IB_WC_RETRY_EXC_ERR error CQEs, which takes
-> more time than TEST_LINK timeout (SMC_LLC_WAIT_TIME) normally.
-> 
-> So this patch introduces a independent sysctl for SMC-R to set
-> link keepalive time, in order to detect link down in time. The
-> default value is 30 seconds.
-> 
-> [1] https://www.rfc-editor.org/rfc/rfc1122#page-101
-> 
-> Signed-off-by: Wen Gu <guwen@linux.alibaba.com>
+There are currently no users of this driver's platform data in the
+mainline kernel, so let's drop it.
 
-LGTM.
+Newer devices should use DT, ACPI, or static software properties to
+describe the hardware.
 
-Reviewed-by: Tony Lu <tonylu@linux.alibaba.com>
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+---
+ include/linux/platform_data/ssm2518.h | 21 ---------------------
+ sound/soc/codecs/ssm2518.c            |  6 +-----
+ 2 files changed, 1 insertion(+), 26 deletions(-)
+ delete mode 100644 include/linux/platform_data/ssm2518.h
 
-> ---
->  Documentation/networking/smc-sysctl.rst |  7 +++++++
->  include/net/netns/smc.h                 |  1 +
->  net/smc/smc_llc.c                       |  2 +-
->  net/smc/smc_llc.h                       |  1 +
->  net/smc/smc_sysctl.c                    | 14 ++++++++++++++
->  5 files changed, 24 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/networking/smc-sysctl.rst b/Documentation/networking/smc-sysctl.rst
-> index 742e90e..f8c3d59 100644
-> --- a/Documentation/networking/smc-sysctl.rst
-> +++ b/Documentation/networking/smc-sysctl.rst
-> @@ -34,3 +34,10 @@ smcr_buf_type - INTEGER
->          - 1 - Use virtually contiguous buffers
->          - 2 - Mixed use of the two types. Try physically contiguous buffers first.
->            If not available, use virtually contiguous buffers then.
-> +
-> +smcr_testlink_time - INTEGER
-> +	How frequently SMC-R link sends out TEST_LINK LLC messages to confirm
-> +	viability, after the last activity of connections on it. The maximum
-> +	value is (INT_MAX / HZ) seconds, the minimum value is 1 second.
-> +
-> +	Default: 30 seconds.
-> diff --git a/include/net/netns/smc.h b/include/net/netns/smc.h
-> index 2adbe2b..d295e2c 100644
-> --- a/include/net/netns/smc.h
-> +++ b/include/net/netns/smc.h
-> @@ -19,5 +19,6 @@ struct netns_smc {
->  #endif
->  	unsigned int			sysctl_autocorking_size;
->  	unsigned int			sysctl_smcr_buf_type;
-> +	int				sysctl_smcr_testlink_time;
->  };
->  #endif
-> diff --git a/net/smc/smc_llc.c b/net/smc/smc_llc.c
-> index 175026a..388bd2e 100644
-> --- a/net/smc/smc_llc.c
-> +++ b/net/smc/smc_llc.c
-> @@ -2127,7 +2127,7 @@ void smc_llc_lgr_init(struct smc_link_group *lgr, struct smc_sock *smc)
->  	init_waitqueue_head(&lgr->llc_flow_waiter);
->  	init_waitqueue_head(&lgr->llc_msg_waiter);
->  	mutex_init(&lgr->llc_conf_mutex);
-> -	lgr->llc_testlink_time = READ_ONCE(net->ipv4.sysctl_tcp_keepalive_time);
-> +	lgr->llc_testlink_time = READ_ONCE(net->smc.sysctl_smcr_testlink_time) * HZ;
->  }
->  
->  /* called after lgr was removed from lgr_list */
-> diff --git a/net/smc/smc_llc.h b/net/smc/smc_llc.h
-> index 4404e52..1de9a29 100644
-> --- a/net/smc/smc_llc.h
-> +++ b/net/smc/smc_llc.h
-> @@ -19,6 +19,7 @@
->  
->  #define SMC_LLC_WAIT_FIRST_TIME		(5 * HZ)
->  #define SMC_LLC_WAIT_TIME		(2 * HZ)
-> +#define SMC_LLC_TESTLINK_DEFAULT_TIME	30
->  
->  enum smc_llc_reqresp {
->  	SMC_LLC_REQ,
-> diff --git a/net/smc/smc_sysctl.c b/net/smc/smc_sysctl.c
-> index 0613868..7f68520 100644
-> --- a/net/smc/smc_sysctl.c
-> +++ b/net/smc/smc_sysctl.c
-> @@ -16,8 +16,12 @@
->  
->  #include "smc.h"
->  #include "smc_core.h"
-> +#include "smc_llc.h"
->  #include "smc_sysctl.h"
->  
-> +static int smcr_testlink_time_min = 1;
-> +static int smcr_testlink_time_max = (INT_MAX / HZ);
-> +
->  static struct ctl_table smc_table[] = {
->  	{
->  		.procname       = "autocorking_size",
-> @@ -35,6 +39,15 @@
->  		.extra1		= SYSCTL_ZERO,
->  		.extra2		= SYSCTL_TWO,
->  	},
-> +	{
-> +		.procname	= "smcr_testlink_time",
-> +		.data		= &init_net.smc.sysctl_smcr_testlink_time,
-> +		.maxlen		= sizeof(int),
-> +		.mode		= 0644,
-> +		.proc_handler	= proc_dointvec_minmax,
-> +		.extra1		= &smcr_testlink_time_min,
-> +		.extra2		= &smcr_testlink_time_max,
-> +	},
->  	{  }
->  };
->  
-> @@ -60,6 +73,7 @@ int __net_init smc_sysctl_net_init(struct net *net)
->  
->  	net->smc.sysctl_autocorking_size = SMC_AUTOCORKING_DEFAULT_SIZE;
->  	net->smc.sysctl_smcr_buf_type = SMCR_PHYS_CONT_BUFS;
-> +	net->smc.sysctl_smcr_testlink_time = SMC_LLC_TESTLINK_DEFAULT_TIME;
->  
->  	return 0;
->  
-> -- 
-> 1.8.3.1
+diff --git a/include/linux/platform_data/ssm2518.h b/include/linux/platform_data/ssm2518.h
+deleted file mode 100644
+index 3f9e632d6f63..000000000000
+--- a/include/linux/platform_data/ssm2518.h
++++ /dev/null
+@@ -1,21 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-only */
+-/*
+- * SSM2518 amplifier audio driver
+- *
+- * Copyright 2013 Analog Devices Inc.
+- *  Author: Lars-Peter Clausen <lars@metafoo.de>
+- */
+-
+-#ifndef __LINUX_PLATFORM_DATA_SSM2518_H__
+-#define __LINUX_PLATFORM_DATA_SSM2518_H__
+-
+-/**
+- * struct ssm2518_platform_data - Platform data for the ssm2518 driver
+- * @enable_gpio: GPIO connected to the nSD pin. Set to -1 if the nSD pin is
+- *            hardwired.
+- */
+-struct ssm2518_platform_data {
+-	int enable_gpio;
+-};
+-
+-#endif
+diff --git a/sound/soc/codecs/ssm2518.c b/sound/soc/codecs/ssm2518.c
+index 6d8847848299..feee28207e5d 100644
+--- a/sound/soc/codecs/ssm2518.c
++++ b/sound/soc/codecs/ssm2518.c
+@@ -13,7 +13,6 @@
+ #include <linux/slab.h>
+ #include <linux/gpio.h>
+ #include <linux/of_gpio.h>
+-#include <linux/platform_data/ssm2518.h>
+ #include <sound/core.h>
+ #include <sound/pcm.h>
+ #include <sound/pcm_params.h>
+@@ -736,7 +735,6 @@ static const struct regmap_config ssm2518_regmap_config = {
+ 
+ static int ssm2518_i2c_probe(struct i2c_client *i2c)
+ {
+-	struct ssm2518_platform_data *pdata = i2c->dev.platform_data;
+ 	struct ssm2518 *ssm2518;
+ 	int ret;
+ 
+@@ -744,9 +742,7 @@ static int ssm2518_i2c_probe(struct i2c_client *i2c)
+ 	if (ssm2518 == NULL)
+ 		return -ENOMEM;
+ 
+-	if (pdata) {
+-		ssm2518->enable_gpio = pdata->enable_gpio;
+-	} else if (i2c->dev.of_node) {
++	if (i2c->dev.of_node) {
+ 		ssm2518->enable_gpio = of_get_gpio(i2c->dev.of_node, 0);
+ 		if (ssm2518->enable_gpio < 0 && ssm2518->enable_gpio != -ENOENT)
+ 			return ssm2518->enable_gpio;
+-- 
+2.37.3.968.ga6b4b080e4-goog
+
