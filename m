@@ -2,94 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBE6C5BE1C3
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 11:21:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB8D45BE1CB
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 11:23:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230203AbiITJVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 05:21:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46654 "EHLO
+        id S230020AbiITJW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 05:22:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230030AbiITJVB (ORCPT
+        with ESMTP id S230463AbiITJWz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 05:21:01 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41AA1642E5
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 02:21:00 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id n12so3190604wrx.9
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 02:21:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=vNQe2GtbiEbNlyf2XnFRT7jFM6dqwBbNb6DV8g2UnnE=;
-        b=D7/EMxpeYN6SPsHGRc8F2hFpJxBQAg/IykN2uBhVB9perr+IAjGrXbGSmKU7FZGEcO
-         axEyuJbqExONBLYsx6gqpk8nor4dbJ5Ti755Ggse1oe+G53iFq99Y0guwdkNjN/zmOFN
-         81N1UdkZ6lnTvQBhluQOHrVifo1i4K5CUZgfsKeh3Jg5bN+f47dBkYGvOANDUcXYMysM
-         4xVlvnY+VXxFqG9UNzDTPalIUP3YyfsJFuqivvGP1scON1OmkCulgfhk57l3FzotXePv
-         4mRsRBEyB1LOGPSqNOEDDpf4IS7qRQNTViuJrFvLqxxXzIh/KPvaQWNBrI5Mr6pKteim
-         Fo8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=vNQe2GtbiEbNlyf2XnFRT7jFM6dqwBbNb6DV8g2UnnE=;
-        b=q1Q2s4ZV0L+45mCOJikJVkLD9EUa8z2c2lY8OUbv7nH5RLo78kEanvM9cNqiL4VpGo
-         5068lR5VpgCwObstzIT5091xQMj2AyPasVFt/8jHXB3Zbxdpcx/+pWnKYBn9rUM5j+mO
-         k67ZmIR21VJibnEIMxgnHmFLJe5wOkChWdoGknThG/11rSYpGiOa1ri/PzxK4GZBkkSF
-         Dp/EAUXr0eP2Lgo+dfvMGEE9dVwLjDelZbvj/tkXYrHPUEoTVlUFx6wCqjj5EluHhEGu
-         LFzRaEvmAg8xt65PPXsKFferkRjIN9mlO3rAtthmFkNy32/DsWtU3B41eG1Vl9vnWbIB
-         aJXw==
-X-Gm-Message-State: ACrzQf07RxMX+nnku5v8FlAgyySpQHw/sblxZ1ISm4YG2vU4J+p4tnW3
-        MX4pWIlUz+SqFl0/0bCN1uEINg==
-X-Google-Smtp-Source: AMsMyM4gXAKw4BsWYZM4GahwvUJElzZY87R7sO9Q/AEA/+PDUm7seHM2obUaC4y0w0grBuuBguRA7g==
-X-Received: by 2002:adf:d1ec:0:b0:228:d9ea:cbd2 with SMTP id g12-20020adfd1ec000000b00228d9eacbd2mr13347043wrd.609.1663665658829;
-        Tue, 20 Sep 2022 02:20:58 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id c17-20020a5d4cd1000000b0022a297950cesm1063507wrt.23.2022.09.20.02.20.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 02:20:58 -0700 (PDT)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-To:     cgel.zte@gmail.com, andrzej.hajda@intel.com
-Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
-        linux-kernel@vger.kernel.org, robert.foss@linaro.org,
-        Zeal Robot <zealci@zte.com.cn>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH] drm: bridge/dw-hdmi-ahb-audio: use strscpy() is more robust and safer
-Date:   Tue, 20 Sep 2022 09:20:56 +0000
-Message-Id: <166366564178.3256514.17123212725949451194.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220919030401.211331-1-chi.minghao@zte.com.cn>
-References: <20220919030401.211331-1-chi.minghao@zte.com.cn>
+        Tue, 20 Sep 2022 05:22:55 -0400
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A6565240;
+        Tue, 20 Sep 2022 02:22:54 -0700 (PDT)
+Received: from toolbox.toradex.int ([31.10.206.125]) by mrelay.perfora.net
+ (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0Mg4yR-1oxTcy331Z-00NSKL;
+ Tue, 20 Sep 2022 11:22:34 +0200
+From:   Marcel Ziswiler <marcel@ziswiler.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1 0/4] arm: dts: colibri-imx6: usb dual-role switching et. al.
+Date:   Tue, 20 Sep 2022 11:22:23 +0200
+Message-Id: <20220920092227.286306-1-marcel@ziswiler.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:e/HpDYBrATkipc+19r8nOoE93W4o1keSfWinjQxJDW1UqUk4AmU
+ ryxBokYEfNfsOvWWqO8t+qmshTP+Cu6VGND1CfwYidKj/pur8fkERCSb+sGIDk7yMOtdL+X
+ KrLKXVQtMJt3SWzn12Q9Ag76gxbdMK3zTvMBQfsemlUAWfHHUU4XrAJ8r/xVn2rKrF37rWA
+ ibsL8SS7mlEaAv+NMfhtw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:rOKFENmZWns=:MHtnd5AZcJGpu3sLWdmzdi
+ CjSTu2PwfJN5TefIF3++HGGZwk60BjBvI34QCTdsHPgEPfuI7MYgbAnZFOvGbuAqrk0hDsFAA
+ z8r32sfTx8I1aR99nIqIlL4KcJRCvcJ1vXWccqcTYfJOJw3dIXQKiXMY+TmdJNGWyKcVsBOUN
+ Z7CIij3LXR2wL9E3X1809tVlysk5aEhmpO+LzzZ7KYLY67Z1MlyutP4Ui4k/smURPbNnuG0XB
+ /mWn6uA2ZpcsHmMb4WCUg3aE+A2wabwLhhran+cLHwKK6AVcEWAmQ3M45i2ry/kdXAIn6mTKv
+ 1SEwa+GK6gXC74TTD4+WkowAiszcnrYXUs/MW31fWRkVtPGwS9wygsgHnEQlKjoNZynJsl06l
+ SyqjqTyJF9kNgpC+lwnPA1yxVGCMfQrDAhAlUpq2B4z+pBL4H/GkcjxjG95S5fDWRzIpX3fqt
+ LM7gBIBdzKECZo7aHt1x5Z3gHwKxjEERJvY/YEcjySRU1QFNY6xeOmFrsU2liGuNOGrkiDNu7
+ gVbDveqoA2ey/btdVxZCXR31GskaSqqyCfuQP/2A14EIBcsxGWvKwzAuW6sAN/4ku2tNVbATC
+ vvgugIk+1djfZ7N7VII1KgYj03p6eR190d5104qKugER7GaQmfn/KOIN2tunZpdWS4W4Jw9kM
+ Su/gnshgrz5cjRKvVRSQkDIqIpnOd37vFDFvGxLWWXG0iLb7jMCxCMZ2KNvypX4W7YA0gaM0y
+ inJZoR09SSWPmDMZ+RkdmAr1hXoDwd+JUsQ4QZJTY3u1gqM06o+ZMz7cl8V16gs/WatEh+KSO
+ Rekf9aX
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-On Mon, 19 Sep 2022 03:04:01 +0000, cgel.zte@gmail.com wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
-> 
-> The implementation of strscpy() is more robust and safer.
-> 
-> That's now the recommended way to copy NUL terminated strings.
-> 
-> 
-> [...]
 
-Thanks, Applied to https://anongit.freedesktop.org/git/drm/drm-misc.git (drm-misc-next)
+This series is an assortment of USB dual-role specific commits as
+follows:
 
-[1/1] drm: bridge/dw-hdmi-ahb-audio: use strscpy() is more robust and safer
-      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=110ae8a21bbe779a133c1672a1463105c9d50590
+Introduce USBC_DET GPIO based USB dual-role aka device/host switching.
+
+Move USB VBUS supply from single carrier board to module level device
+tree. This pin is as per Colibri module family standard.
+
+Specify USBH_PEN GPIO being active-low rather than active-high
+(cosmetic only).
+
+Remove spurious debounce property from linux,extcon-usb-gpio. That
+commit is actually for Colibri iMX7.
+
+
+Marcel Ziswiler (3):
+  arm: dts: colibri-imx6: move vbus-supply to module level device tree
+  arm: dts: colibri-imx6: specify usbh_pen gpio being active-low
+  arm: dts: imx7-colibri: remove spurious debounce property
+
+Philippe Schenker (1):
+  arm: dts: colibri-imx6: usb dual-role switching
+
+ arch/arm/boot/dts/imx6dl-colibri-aster.dts   |  1 -
+ arch/arm/boot/dts/imx6dl-colibri-eval-v3.dts |  1 -
+ arch/arm/boot/dts/imx6dl-colibri-iris.dts    |  1 -
+ arch/arm/boot/dts/imx6qdl-colibri.dtsi       | 22 ++++++++++++++++----
+ arch/arm/boot/dts/imx7-colibri.dtsi          |  1 -
+ 5 files changed, 18 insertions(+), 8 deletions(-)
 
 -- 
-Neil
+2.36.1
+
