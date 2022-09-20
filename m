@@ -2,107 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2C6C5BED93
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 21:23:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D4D05BED7C
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 21:19:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbiITTX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 15:23:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38338 "EHLO
+        id S230243AbiITTTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 15:19:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231405AbiITTXK (ORCPT
+        with ESMTP id S229488AbiITTTQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 15:23:10 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 777135467E
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 12:23:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663701782; x=1695237782;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=KGOmGLFXa/AHId60Y5h76Pqaa93QttmT+20FZZNUBns=;
-  b=gUWQLosH9h9ax5utUz3SXoVcTXhU6bgSpVSQHqjfo16/OSztY/RepVnd
-   8z0VHHTLUz0RVPJwikoME8dtMjzmNfohy9cH00raRUZXXzoOORey9oVx/
-   IvioQ2CFBnmoh6F/rrVwv1nohKPlaj1T6Us80mWfo76WvojKrom8omW3w
-   dpxf5Kd7oi2rBhxR1E67cX8h4pZS0lltIridjUeFgF6eEfcFSsaGfSvaD
-   RyClGw1dKZK47ybvDoGzw5YWnVvuJoN1Puk4O20aW2SJAW/ZH8PvVCsJN
-   monsYg7hXmANtmSiIw2y37/S8fjInW/njYoW47PH3m8FmUvi79xUyFZeW
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10476"; a="363774040"
-X-IronPort-AV: E=Sophos;i="5.93,331,1654585200"; 
-   d="scan'208";a="363774040"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 12:23:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,331,1654585200"; 
-   d="scan'208";a="596647284"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 20 Sep 2022 12:23:00 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oaipf-0002ub-2r;
-        Tue, 20 Sep 2022 19:22:59 +0000
-Date:   Wed, 21 Sep 2022 03:17:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ban Tao <fengzheng923@gmail.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [broonie-ci:20220920_kuninori_morimoto_gx_asoc_soc_h_random_cleanup
- 35/44] sound/soc/sunxi/sun50i-dmic.c:268:34: warning: unused variable
- 'sun50i_dmic_of_match'
-Message-ID: <202209210327.k80A7Kzb-lkp@intel.com>
+        Tue, 20 Sep 2022 15:19:16 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC1A261D68;
+        Tue, 20 Sep 2022 12:19:14 -0700 (PDT)
+Received: from zn.tnic (p200300ea9733e791329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e791:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5C7241EC01D4;
+        Tue, 20 Sep 2022 21:19:09 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1663701549;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=FEzgIy7+VixOuaBNBHyswL6EnQKt/p0p/2LZpYHPS9U=;
+        b=mn7vCIJGvsWZLdM9xxpNou/6M4KSIPKPBzD8db6NOZvjnFqZi3TX9ksfL4zkdDNaH9Fh7D
+        Jn0s9NdlwuKB0lAVopNcz9qg/ODzwUsB4YusCJF9hofr6XVkzS8isw3wie50qMYLIZi8dP
+        Rc2aaia0xXB0QB6c9RB39MdDOyM9yGo=
+Date:   Tue, 20 Sep 2022 21:19:05 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Michael Roth <michael.roth@amd.com>
+Subject: Re: [PATCH 1/6] x86/head_64: clean up mixed mode 32-bit entry code
+Message-ID: <YyoSKYQFDiqcqXWA@zn.tnic>
+References: <20220815134223.740112-1-ardb@kernel.org>
+ <20220815134223.740112-2-ardb@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220815134223.740112-2-ardb@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git 20220920_kuninori_morimoto_gx_asoc_soc_h_random_cleanup
-head:   3289dc026a8cf5d6469eb49d838bc971f4370f9d
-commit: 9fc2c8ed923d8ec8a49cf5b5076c84867126ca69 [35/44] ASoC: sunxi: Add Allwinner H6 Digital MIC driver
-config: arm-randconfig-r024-20220921 (https://download.01.org/0day-ci/archive/20220921/202209210327.k80A7Kzb-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git/commit/?id=9fc2c8ed923d8ec8a49cf5b5076c84867126ca69
-        git remote add broonie-ci https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git
-        git fetch --no-tags broonie-ci 20220920_kuninori_morimoto_gx_asoc_soc_h_random_cleanup
-        git checkout 9fc2c8ed923d8ec8a49cf5b5076c84867126ca69
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash sound/soc/sunxi/
+On Mon, Aug 15, 2022 at 03:42:18PM +0200, Ard Biesheuvel wrote:
+> The x86_64 32-bit entry code is a jumble of EFI and SEV routines, which
+> is not good for maintainability. Let's isolate the EFI mixed mode code
+> and combine it with the boot service thunk that lives in another .S
+> file, so that we can remove it from head_64.S
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+Who is "we"?
 
-All warnings (new ones prefixed by >>):
+Please use passive voice in all text.
 
->> sound/soc/sunxi/sun50i-dmic.c:268:34: warning: unused variable 'sun50i_dmic_of_match' [-Wunused-const-variable]
-   static const struct of_device_id sun50i_dmic_of_match[] = {
-                                    ^
-   1 warning generated.
+> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> ---
+>  arch/x86/boot/compressed/Makefile       |   6 +-
+>  arch/x86/boot/compressed/efi_mixed.S    | 358 ++++++++++++++++++++
+>  arch/x86/boot/compressed/efi_thunk_64.S | 195 -----------
+>  arch/x86/boot/compressed/head_32.S      |   4 -
+>  arch/x86/boot/compressed/head_64.S      | 149 +-------
+>  drivers/firmware/efi/libstub/x86-stub.c |   3 +-
+>  6 files changed, 370 insertions(+), 345 deletions(-)
 
+So I'm really nervous about patches touching early asm code where
+multiple things happen all at once instead of each logical change being
+split into a single patch: here I see code movement but then other
+functionality is being added too.
 
-vim +/sun50i_dmic_of_match +268 sound/soc/sunxi/sun50i-dmic.c
+So I'd really appreciate it if you split this one into smaller, obvious,
+even boring patches - this will simplify review considerably. For
+example, do only a mechanical code movement in one patch and then add
+the new startup_64_mixedmode thing in another. And so on.
 
-   267	
- > 268	static const struct of_device_id sun50i_dmic_of_match[] = {
-   269		{
-   270			.compatible = "allwinner,sun50i-h6-dmic",
-   271		},
-   272		{ /* sentinel */ }
-   273	};
-   274	MODULE_DEVICE_TABLE(of, sun50i_dmic_of_match);
-   275	
+That would be greatly appreciated.
+
+Thx.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
