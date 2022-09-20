@@ -2,238 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58D775BD993
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 03:44:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66A8A5BD998
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 03:45:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbiITBoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 21:44:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54702 "EHLO
+        id S229805AbiITBpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 21:45:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230138AbiITBnh (ORCPT
+        with ESMTP id S229612AbiITBpP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 21:43:37 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 197B854642
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 18:43:31 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id b5so1907866wrr.5
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 18:43:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=F4ITKG33T7YLqBOkr0dCfFEupJUqxrsjsayFSB1eVuQ=;
-        b=imS0eXryPZF2ZP3SxRXkJ8FBfg0HL6gl7WA1Uqu2VK44HNGUF01d5wtO3NhTlzIqPT
-         cvUUUYCFEVwILg3T/t3snVXBsiIDU5oRDdLnl4K+9FFEALuJQkqKIIBHt2xE6UTSwuWN
-         Mo0TR4WB8JdaGHMvqyFHjFYcm/YX76+aHWWTO7uJLI/z7i27dY1AZEbNS2cKHhGIR8CY
-         6XNHYxSjgpY7mICcnfg6a78zKElXP3E9c7NJfDiEq3mMEHqSNpWIGbIjZl9ecOsq+uRv
-         Uwz5sFi0Q/c4f2oO3NXXwk2CGnY3XF9q1i9hZsPsK5CfFRWkaIUaBODk0F23SCeHOGyW
-         0MBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=F4ITKG33T7YLqBOkr0dCfFEupJUqxrsjsayFSB1eVuQ=;
-        b=ztC8fRwTksAXrpj8Q2KMSXK4n4Pofr0KpTNLm6TdOQGUBr/0JQ/ni36ghc3lQ/+h48
-         jxjzDknfFJ4rtjWxrDCD4asHGOFE7B6yJZb39kXST3Fedvg27TBvAm4cKqQzdrOa2Cg1
-         NXDS30VJNUGoAKUkyRopissHnSngx6K4zPDVPKA57qF2nC5BEP/CV3Y4NI7Nh/18MOsW
-         HRYDFYX6DRdVMMePkTZrjIUVrlyq4W0mhoeSHJLOow1gCNuwSj59rGaYJeyWj3QP8fds
-         fqw35rcJt/oqwY/epsfw8fTcA/igfyOlCfaJ2JJ1z+JtiaqffzWp+bVMQD5D1P7N4mld
-         UziQ==
-X-Gm-Message-State: ACrzQf3b5IoFgT5bmD7ZC9qXvgRgYoV6AT0FneNCw3aMld6dF7i4R4Ng
-        7cD7prs8TfnYAxDv0iQCIjYUuiJjrZFfXEk5cMcXx291Sg==
-X-Google-Smtp-Source: AMsMyM6hsiRiSIOyhDtCQ4b+Rn3dgXsxbBT4UQhkOw4S7Ew9mY0lcIo5kmDMmHITSLMvddZ5pCBz7CGPKorMISpu+NA=
-X-Received: by 2002:adf:8b07:0:b0:228:da7c:80ee with SMTP id
- n7-20020adf8b07000000b00228da7c80eemr12096764wra.25.1663638209988; Mon, 19
- Sep 2022 18:43:29 -0700 (PDT)
-MIME-Version: 1.0
-References: <1663568889-17634-1-git-send-email-kaixuxia@tencent.com> <20220919165604.61177-1-sj@kernel.org>
-In-Reply-To: <20220919165604.61177-1-sj@kernel.org>
-From:   Kaixu Xia <xiakaixu1987@gmail.com>
-Date:   Tue, 20 Sep 2022 09:43:18 +0800
-Message-ID: <CAGjdHukQHkPy_wt8igpLCxTJWeEUY9HzbKtfiEDueJrOvxaVxw@mail.gmail.com>
-Subject: Re: [PATCH] mm/damon: deduplicate damon_{reclaim,lru_sort}_apply_parameters()
-To:     SeongJae Park <sj@kernel.org>
-Cc:     akpm@linux-foundation.org, damon@lists.linux.dev,
-        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
-        Kaixu Xia <kaixuxia@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 19 Sep 2022 21:45:15 -0400
+Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 36C0540BFC;
+        Mon, 19 Sep 2022 18:45:12 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [10.162.98.155])
+        by mail-app3 (Coremail) with SMTP id cC_KCgBnbQwPGyljNLDDBg--.19579S2;
+        Tue, 20 Sep 2022 09:44:53 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     peterz@infradead.org, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, tglx@linutronix.de, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH V2] perf/x86/rapl: fix deadlock in rapl_pmu_event_stop
+Date:   Tue, 20 Sep 2022 09:44:47 +0800
+Message-Id: <20220920014447.71946-1-duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cC_KCgBnbQwPGyljNLDDBg--.19579S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7ZF47XryxCr4rWFW5WFyfWFg_yoW8AFWrpr
+        WxAFy5tF1jv3Z2qayUK3WkXw4fua1kXanrJryfGw1rAan8Wan8J3W8WayFvF45JrZ7XasI
+        yw10qrWrAFyDAa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvm1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJr0_GcWl84ACjcxK6I8E
+        87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c
+        8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_
+        Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
+        xGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IY
+        c2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW8uw4UJr1UMxC20s026xCaFVCjc4AY6r1j6r
+        4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
+        67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
+        x0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2
+        z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnU
+        UI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgkTAVZdtbikRgAHs6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 12:56 AM SeongJae Park <sj@kernel.org> wrote:
->
-> Hi Kaixu,
->
-> On Mon, 19 Sep 2022 14:28:09 +0800 xiakaixu1987@gmail.com wrote:
->
-> > From: Kaixu Xia <kaixuxia@tencent.com>
-> >
-> > The bodies of damon_{reclaim,lru_sort}_apply_parameters() contain
-> > duplicates.
->
-> Good finding!
->
-> > This commit add a common function
-> > damon_set_regions_from_system_ram() to removes the duplicates.
-> >
-> > Signed-off-by: Kaixu Xia <kaixuxia@tencent.com>
-> > ---
-> >  include/linux/damon.h |  3 ++-
-> >  mm/damon/core.c       | 20 +++++++++++++++++++-
-> >  mm/damon/lru_sort.c   | 13 +++----------
-> >  mm/damon/reclaim.c    | 13 +++----------
-> >  4 files changed, 27 insertions(+), 22 deletions(-)
-> >
-> > diff --git a/include/linux/damon.h b/include/linux/damon.h
-> > index e7808a84675f..2fd05568ef45 100644
-> > --- a/include/linux/damon.h
-> > +++ b/include/linux/damon.h
-> > @@ -557,7 +557,8 @@ static inline bool damon_target_has_pid(const struct damon_ctx *ctx)
-> >  int damon_start(struct damon_ctx **ctxs, int nr_ctxs, bool exclusive);
-> >  int damon_stop(struct damon_ctx **ctxs, int nr_ctxs);
-> >
-> > -bool damon_find_biggest_system_ram(unsigned long *start, unsigned long *end);
-> > +int damon_set_regions_from_system_ram(struct damon_target *t,
-> > +                             unsigned long *start, unsigned long *end);
-> >
-> >  #endif       /* CONFIG_DAMON */
-> >
-> > diff --git a/mm/damon/core.c b/mm/damon/core.c
-> > index 9c80c6eb00c2..d967b2805a53 100644
-> > --- a/mm/damon/core.c
-> > +++ b/mm/damon/core.c
-> > @@ -1245,7 +1245,8 @@ static int walk_system_ram(struct resource *res, void *arg)
-> >   * Find biggest 'System RAM' resource and store its start and end address in
-> >   * @start and @end, respectively.  If no System RAM is found, returns false.
-> >   */
-> > -bool damon_find_biggest_system_ram(unsigned long *start, unsigned long *end)
-> > +static bool damon_find_biggest_system_ram(unsigned long *start,
-> > +                                             unsigned long *end)
-> >
-> >  {
-> >       struct damon_system_ram_region arg = {};
-> > @@ -1259,6 +1260,23 @@ bool damon_find_biggest_system_ram(unsigned long *start, unsigned long *end)
-> >       return true;
-> >  }
-> >
-> > +int damon_set_regions_from_system_ram(struct damon_target *t,
-> > +                     unsigned long *start, unsigned long *end)
-> > +{
-> > +     struct damon_addr_range addr_range;
-> > +
-> > +     if (*start > *end)
-> > +             return -EINVAL;
-> > +
-> > +     if (!*start && !*end &&
-> > +             !damon_find_biggest_system_ram(start, end))
-> > +             return -EINVAL;
->
-> This function sets the region as biggest system ram only if both *start and
-> *end are zero.  The name should be changed, and it would better to have a
-> kernel doc comment as the behavior is not very simple.  How about below?
->
-> /**
->  * damon_set_region_biggest_system_ram_default() - Set the region of the given
->  * monitoring target as requested, or biggest 'System RAM'.
->  * @t:          The monitoring target to set the region.
->  * @start:      The pointer to the start address of the region.
->  * @end:        The pointer to the end address of the region.
->  *
->  * This function sets the region of @t as requested by @start and @end.  If the
->  * values of the two pointers are pointing to are zero, however, this function
->  * finds the biggest 'System RAM' resource and set the region to cover the
->  * resource.  In the latter case, this function saves the start and end address
->  * of the resource in @start and @end, respectively.
->  *
->  * Return: 0 on success, negative error code otherwise.
->  */
->
-Thanks for your detailed comments! I'll follow that in the next version.
+There is a deadlock in rapl_pmu_event_stop(), the process is
+shown below:
 
+    (thread 1)                 |        (thread 2)
+rapl_pmu_event_stop()          | rapl_hrtimer_handle()
+ ...                           |  if (!pmu->n_active)
+ raw_spin_lock_irqsave() //(1) |  ...
+  ...                          |
+  hrtimer_cancel()             |  raw_spin_lock_irqsave() //(2)
+  (block forever)
 
-Thanks,
-Kaixu
-> > +
-> > +     addr_range.start = *start;
-> > +     addr_range.end = *end;
-> > +     return damon_set_regions(t, &addr_range, 1);
-> > +}
-> > +
-> >  static int __init damon_init(void)
-> >  {
-> >       damon_region_cache = KMEM_CACHE(damon_region, 0);
-> > diff --git a/mm/damon/lru_sort.c b/mm/damon/lru_sort.c
-> > index d7eb72b41cb6..0276cbec632a 100644
-> > --- a/mm/damon/lru_sort.c
-> > +++ b/mm/damon/lru_sort.c
-> > @@ -188,7 +188,6 @@ static struct damos *damon_lru_sort_new_cold_scheme(unsigned int cold_thres)
-> >  static int damon_lru_sort_apply_parameters(void)
-> >  {
-> >       struct damos *scheme;
-> > -     struct damon_addr_range addr_range;
-> >       unsigned int hot_thres, cold_thres;
-> >       int err = 0;
-> >
-> > @@ -211,15 +210,9 @@ static int damon_lru_sort_apply_parameters(void)
-> >               return -ENOMEM;
-> >       damon_add_scheme(ctx, scheme);
-> >
-> > -     if (monitor_region_start > monitor_region_end)
-> > -             return -EINVAL;
-> > -     if (!monitor_region_start && !monitor_region_end &&
-> > -         !damon_find_biggest_system_ram(&monitor_region_start,
-> > -                                        &monitor_region_end))
-> > -             return -EINVAL;
-> > -     addr_range.start = monitor_region_start;
-> > -     addr_range.end = monitor_region_end;
-> > -     return damon_set_regions(target, &addr_range, 1);
-> > +     return damon_set_regions_from_system_ram(target,
-> > +                             &monitor_region_start,
-> > +                             &monitor_region_end);
-> >  }
-> >
-> >  static int damon_lru_sort_turn(bool on)
-> > diff --git a/mm/damon/reclaim.c b/mm/damon/reclaim.c
-> > index 3d59ab11b7b3..6297e1799190 100644
-> > --- a/mm/damon/reclaim.c
-> > +++ b/mm/damon/reclaim.c
-> > @@ -144,7 +144,6 @@ static struct damos *damon_reclaim_new_scheme(void)
-> >  static int damon_reclaim_apply_parameters(void)
-> >  {
-> >       struct damos *scheme;
-> > -     struct damon_addr_range addr_range;
-> >       int err = 0;
-> >
-> >       err = damon_set_attrs(ctx, &damon_reclaim_mon_attrs);
-> > @@ -157,15 +156,9 @@ static int damon_reclaim_apply_parameters(void)
-> >               return -ENOMEM;
-> >       damon_set_schemes(ctx, &scheme, 1);
-> >
-> > -     if (monitor_region_start > monitor_region_end)
-> > -             return -EINVAL;
-> > -     if (!monitor_region_start && !monitor_region_end &&
-> > -         !damon_find_biggest_system_ram(&monitor_region_start,
-> > -                                        &monitor_region_end))
-> > -             return -EINVAL;
-> > -     addr_range.start = monitor_region_start;
-> > -     addr_range.end = monitor_region_end;
-> > -     return damon_set_regions(target, &addr_range, 1);
-> > +     return damon_set_regions_from_system_ram(target,
-> > +                             &monitor_region_start,
-> > +                             &monitor_region_end);
-> >  }
-> >
-> >  static int damon_reclaim_turn(bool on)
-> > --
-> > 2.27.0
-> >
->
-> Thanks,
-> SJ
+We hold pmu->lock in position (1) and use hrtimer_cancel() to wait
+rapl_hrtimer_handle() to stop, but rapl_hrtimer_handle() also need
+pmu->lock in position (2). As a result, the rapl_pmu_event_stop()
+will be blocked forever.
+
+This patch extracts hrtimer_cancel() from the protection of
+raw_spin_lock_irqsave(). As a result, the rapl_hrtimer_handle()
+could obtain the pmu->lock.
+
+Fixes: 65661f96d3b3 ("perf/x86: Add RAPL hrtimer support")
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+---
+Changes in v2:
+  - Move hrtimer_cancel() to the end of rapl_pmu_event_stop() function.
+
+ arch/x86/events/rapl.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/events/rapl.c b/arch/x86/events/rapl.c
+index 77e3a47af5a..7c110092c83 100644
+--- a/arch/x86/events/rapl.c
++++ b/arch/x86/events/rapl.c
+@@ -281,8 +281,6 @@ static void rapl_pmu_event_stop(struct perf_event *event, int mode)
+ 	if (!(hwc->state & PERF_HES_STOPPED)) {
+ 		WARN_ON_ONCE(pmu->n_active <= 0);
+ 		pmu->n_active--;
+-		if (pmu->n_active == 0)
+-			hrtimer_cancel(&pmu->hrtimer);
+ 
+ 		list_del(&event->active_entry);
+ 
+@@ -300,6 +298,11 @@ static void rapl_pmu_event_stop(struct perf_event *event, int mode)
+ 		hwc->state |= PERF_HES_UPTODATE;
+ 	}
+ 
++	if (!pmu->n_active) {
++		raw_spin_unlock_irqrestore(&pmu->lock, flags);
++		hrtimer_cancel(&pmu->hrtimer);
++		return;
++	}
+ 	raw_spin_unlock_irqrestore(&pmu->lock, flags);
+ }
+ 
+-- 
+2.17.1
+
