@@ -2,122 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 725455BE701
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 15:25:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 538015BE70D
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 15:28:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230232AbiITNZi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 09:25:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59680 "EHLO
+        id S231349AbiITN1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 09:27:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230193AbiITNZY (ORCPT
+        with ESMTP id S230193AbiITN1f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 09:25:24 -0400
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 635D518361;
-        Tue, 20 Sep 2022 06:25:23 -0700 (PDT)
-Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 141A01C0011;
-        Tue, 20 Sep 2022 13:25:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1663680321;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lYeC4eRq5RlMrUFjZ+fZ/i+94z9oPYyN1F3IkNjUduA=;
-        b=jfdDLHPtE8UCO8JtQrFXucuEIwhzmLa9F73A0xZNIOmO6IO7OmAK0F3mYbcdfdrE2mua0Z
-        6Qwi6KsO88oBtk+X+E0EQxURr1QG0iRmnOvIkBAnfKYbFNzXZCOQjKKokaUUgTtrLroKMn
-        8E9JluBgaW6HcuXq98RridYXxwI1r5SltUaObqa/x9PzvJ1v0Q/OmwUT+iToVrSfkeEREG
-        PlvV4gTn8vdZyAW6quv6eZzpjF1D5oXgKMSch0JVm3dc6yiYmIma57rS73DUFYak/TluRe
-        jIfdX4mNTxReQkrLIyI4gUVQJ9Ir7PBgNayyuTJutX4b1qw4L6C1VTlsuSv0eQ==
-Date:   Tue, 20 Sep 2022 15:25:20 +0200
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Rafael Mendonca <rafaelmendsr@gmail.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: i2c: ov5648: Free V4L2 fwnode data on unbind
-Message-ID: <Yym/QDURAtn1LX8i@aptenodytes>
-References: <20220919023247.731106-1-rafaelmendsr@gmail.com>
+        Tue, 20 Sep 2022 09:27:35 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6E64B0F6;
+        Tue, 20 Sep 2022 06:27:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 9BFE3CE13DA;
+        Tue, 20 Sep 2022 13:27:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9CB7C433D6;
+        Tue, 20 Sep 2022 13:27:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663680451;
+        bh=emZ0PSvN7PdJPmfg7UowvInfJkjTANIHUiCWV15huMs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=euL0dHN1z+HxNswXUDd143M2jKANlGQv+76sWsqypWhASSucurFxAkg4GzKyKDdmp
+         wdJQsg5o/1RDQMELAs5PVDbtl3EcL7RkSWjhVnUvPE3Vw1l5rh2mVQh5TGDiM+hUBQ
+         pWv5Wiv3mEurVDQLV83VKKYRWL05qFAYeuS60ZMbDa7KfD/lJHTmQPGS85zN6f44Js
+         LatCP3mq6iIeCZvrTAlRtlKeUSVY3CzM7fws/xGAVXRjKNaQb3tuDzl8mUP2GYoNu0
+         FXen0Tq5HXNQMEfrzzf+iAngb9maU0QvpQWNTOV2ZD4eec0sNxyW7YqIRIVipx36DP
+         v4kVHR1lrDFQQ==
+Received: by pali.im (Postfix)
+        id DA93D97E; Tue, 20 Sep 2022 15:27:27 +0200 (CEST)
+From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Marcin Wojtas <mw@semihalf.com>
+Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH 0/5] ARM: mvebu: Add audio support for Armada 38x
+Date:   Tue, 20 Sep 2022 15:26:43 +0200
+Message-Id: <20220920132648.2008-1-pali@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="9uSi25hGhxag/Hrg"
-Content-Disposition: inline
-In-Reply-To: <20220919023247.731106-1-rafaelmendsr@gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch series add audio support for Armada 38x. It contains commits
+from Marvell linux repository
 
---9uSi25hGhxag/Hrg
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+https://github.com/MarvellEmbeddedProcessors/linux-marvell/commit/a1d70444cb0476a7524273274ca8e6d52ce6f1fe
+https://github.com/MarvellEmbeddedProcessors/linux-marvell/commit/f365c93237787c7a64f2617da9425eb01e09e71f
+https://github.com/MarvellEmbeddedProcessors/linux-marvell/commit/b645bfa9121214d6456de3df6b8e577f2c01c6b3
+https://github.com/MarvellEmbeddedProcessors/linux-marvell/commit/829c96c206f2930e5323064cef57158bd780730d
 
-Hi Rafael,
+first two squashed, rebased on top of the current linux master branch
+(at v6.0-rc6) with additional patches which adds S/PDIF support on
+Turris Omnia - A385 board.
 
-On Sun 18 Sep 22, 23:32, Rafael Mendonca wrote:
-> The V4L2 fwnode data structure doesn't get freed on unbind, which leads to
-> a memleak.
+Marcin Wojtas (3):
+  ASoC: kirkwood: enable Kirkwood driver for Armada 38x platforms
+  ARM: mvebu: add audio I2S controller to Armada 38x Device Tree
+  ARM: mvebu: add audio support to Armada 385 DB
 
-Thanks for this patch, good catch!
+Pali Rohár (2):
+  ARM: mvebu: Add spdif-pins mpp pins for Armada 38x
+  ARM: dts: turris-omnia: Define S/PDIF audio card
 
-I agree with Jacopo, you shouldn't add a newline before the call.
-Feel free to send a v2 with that fixed and include my:
+ .../devicetree/bindings/sound/mvebu-audio.txt |  14 +-
+ arch/arm/boot/dts/armada-385-turris-omnia.dts |  27 ++++
+ arch/arm/boot/dts/armada-388-db.dts           |  69 +++++++++
+ arch/arm/boot/dts/armada-38x.dtsi             |  24 ++++
+ sound/soc/kirkwood/kirkwood-i2s.c             | 136 +++++++++++++++++-
+ sound/soc/kirkwood/kirkwood.h                 |   2 +
+ 6 files changed, 269 insertions(+), 3 deletions(-)
 
-Reviewed-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+-- 
+2.20.1
 
-Cheers,
-
-Paul
-
-> Fixes: e43ccb0a045f ("media: i2c: Add support for the OV5648 image sensor=
-")
-> Signed-off-by: Rafael Mendonca <rafaelmendsr@gmail.com>
-> ---
->  drivers/media/i2c/ov5648.c | 2 ++
->  1 file changed, 2 insertions(+)
->=20
-> diff --git a/drivers/media/i2c/ov5648.c b/drivers/media/i2c/ov5648.c
-> index dfcd33e9ee13..95850f06112b 100644
-> --- a/drivers/media/i2c/ov5648.c
-> +++ b/drivers/media/i2c/ov5648.c
-> @@ -2598,6 +2598,8 @@ static int ov5648_remove(struct i2c_client *client)
->  	mutex_destroy(&sensor->mutex);
->  	media_entity_cleanup(&subdev->entity);
-> =20
-> +	v4l2_fwnode_endpoint_free(&sensor->endpoint);
-> +
->  	return 0;
->  }
-> =20
-> --=20
-> 2.34.1
->=20
-
---=20
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
-
---9uSi25hGhxag/Hrg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmMpv0AACgkQ3cLmz3+f
-v9FR8Qf/YtP4XukNSQNQ6xjgkO5Nl4UDlg/p3v3HkQhsgpDasIQUrFhSgjwcJ0HI
-sA07XaEtElbrbAwbLyqhuxJc/sSYXlhSzaEp7YMm6NwjPmAVXY1cYmU0qRXcupEE
-KIZWjdVA+O+FR2DTmHLxIb2e4nRKSw5Et1er8kVdxJ58Zy57I+clIidNJFJYh2c1
-P5iGPsnYLSIvbHdZhgvocfE7lrs34o+fZGZfSLtGxPpZzRABVVwv7exPL4feC64x
-n6s7iNGxMBH3SHu0JJCQ+yDA6El20sQxbUpoMNawI/MWDjn6G7a4HKpCx8qPxldP
-JyaATLXCdPuaFQPZ9ot04/lYksARqA==
-=x+Bz
------END PGP SIGNATURE-----
-
---9uSi25hGhxag/Hrg--
