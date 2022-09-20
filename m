@@ -2,70 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E7995BE7CF
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 15:58:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B1AB5BE7D3
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 16:00:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230142AbiITN6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 09:58:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55016 "EHLO
+        id S229973AbiITOAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 10:00:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230414AbiITN6g (ORCPT
+        with ESMTP id S229470AbiITOAH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 09:58:36 -0400
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 945F610B9;
-        Tue, 20 Sep 2022 06:58:35 -0700 (PDT)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-1278a61bd57so4290368fac.7;
-        Tue, 20 Sep 2022 06:58:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=MMxpBTkSlUl1RA0jT5K/9AdRypOJK9Ht+4jVkjeqBbk=;
-        b=Vi8G3iJOeOsqJlPNZPzd3jDDo08I1P1VPY868WrCaUf401yJ/EL6xDJnP2YaoIo+X1
-         AsYEjUFJ0rYoTyHZt2pklclhO+/hGD5RoEpogffQ7wJRNndzzb2yNRu+S2jQNuTEZaF/
-         7zsZI8hPGcApRR3YA4WaQrGldEEjhJ2Bsvuy+Iu/WB8awkdmkV6gD9C1CDiEGN8QC4Ui
-         ygpxg5c/0ciO6Mcm/qA75+Ww8c9EniZ48Fenu4umBULUfGDUUG13yq66M3BQt5R9nPH4
-         rNftqgu1G0Y8bk9HdIzIi16bKzgOndRh/H3RWpFfnJSrOmXIFuFcKZFg04Dpvb5LXl6F
-         Vapg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=MMxpBTkSlUl1RA0jT5K/9AdRypOJK9Ht+4jVkjeqBbk=;
-        b=qddsHHbO6Y90l31I9wjfB+k/x/wqRHNx/ckx0HsSLCxOPb+vZX6GtOYxQbnx5kj/E4
-         SG/6QD7XCeuCsU2ra3kK3VCQRI52Jt76AruVyKHWfQw0z/xX2coYFHa6sgQMGiM+ptvx
-         XdItwAgryUbI8W2PmMF/5bNQgEjufb7j+eOMgSDm9ofR5Cwarmmo8dB8No8QK2TDfaDq
-         46SCPGxVZCR1GXi0BFnA42oNEH5q37MPU7RawhEiMZMbt7HiuEWeBWI5i84PhMlNOR2W
-         8oqtxMUDZAiX+dyzpJOXyP6mVKmEcAzbg/5TM06bbfGuiWnYACNtUFt7Tkwb8GGQ5GJL
-         ol1w==
-X-Gm-Message-State: ACrzQf3UYzAWuITkevTkXeTv7xelp2zOIWPCc9YeY54qN46jaz0Hbqkk
-        T/E4Nn6OwO6yL7JQgEiP96xbWHqSndFq9w==
-X-Google-Smtp-Source: AMsMyM7yzg82yFPVwblMHXlYp/Kg/jUBQH6qxFg09k3rCcm9y3KY9ADGvQLh8vslYjfChgR0to7jag==
-X-Received: by 2002:a05:6870:9618:b0:12d:70f7:bb6f with SMTP id d24-20020a056870961800b0012d70f7bb6fmr372799oaq.239.1663682314688;
-        Tue, 20 Sep 2022 06:58:34 -0700 (PDT)
-Received: from macondo ([2804:431:e7cc:3499:63b7:66da:c087:3355])
-        by smtp.gmail.com with ESMTPSA id u4-20020a4aae84000000b004762a830156sm113713oon.32.2022.09.20.06.58.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 06:58:34 -0700 (PDT)
-Date:   Tue, 20 Sep 2022 10:58:30 -0300
-From:   Rafael Mendonca <rafaelmendsr@gmail.com>
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: i2c: ov5648: Free V4L2 fwnode data on unbind
-Message-ID: <YynHBkbTw6bTgYNq@macondo>
-References: <20220919023247.731106-1-rafaelmendsr@gmail.com>
- <Yym/QDURAtn1LX8i@aptenodytes>
+        Tue, 20 Sep 2022 10:00:07 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D1413F27;
+        Tue, 20 Sep 2022 07:00:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663682406; x=1695218406;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=RHAlT1tmtQpRmnr86saDeoL2upzLNqG6AJXpqitAz+0=;
+  b=WKh4leqb8+mVSOrEdzUHMy6Qcbhm9kBodcUasg1QaO/0SE4TXp5t3g8t
+   HY32sI/QV1CLUlkYK66e20T6KvUX3ScBTFvrZGoHLkjXZQRBACzH7AFZa
+   SdZVYi73pU+FEtjMBS0qfnCdKRKoeu3CbHgGnmPRBl/kWjc9lD3RoEgrz
+   o3wvw8kTc2v69Ei3TFFsF67+EWtGn5y5gkcoaa5dxwtQEPs4ll0RTsjHP
+   HoYkNgfFgmGED9E7tSGdnOzJFC5g5s3gbP2oftTqiZle1cGxPGR2NrnVQ
+   F8NvQ9zDLVB/gRy9sOIwYMynnt870JqNx/u989tJs6aWhvmhwl6u8oyYe
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10476"; a="298424944"
+X-IronPort-AV: E=Sophos;i="5.93,330,1654585200"; 
+   d="scan'208";a="298424944"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 07:00:06 -0700
+X-IronPort-AV: E=Sophos;i="5.93,330,1654585200"; 
+   d="scan'208";a="744543055"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.58.32])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 07:00:03 -0700
+Message-ID: <571fb9aa-98e7-b42a-aa81-01658e131f11@intel.com>
+Date:   Tue, 20 Sep 2022 16:59:59 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yym/QDURAtn1LX8i@aptenodytes>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH 3/4] perf record: Save DSO build-ID for synthesizing
+Content-Language: en-US
+To:     Namhyung Kim <namhyung@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org
+References: <20220916175902.1155177-1-namhyung@kernel.org>
+ <20220916175902.1155177-4-namhyung@kernel.org>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20220916175902.1155177-4-namhyung@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,56 +70,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 03:25:20PM +0200, Paul Kocialkowski wrote:
-> Hi Rafael,
+On 16/09/22 20:59, Namhyung Kim wrote:
+> When synthesizing MMAP2 with build-id, it'd read the same file repeatedly as
+> it has no idea if it's done already.  Maintain a dsos to check that and skip
+> the file access if possible.
 > 
-> On Sun 18 Sep 22, 23:32, Rafael Mendonca wrote:
-> > The V4L2 fwnode data structure doesn't get freed on unbind, which leads to
-> > a memleak.
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> ---
+>  tools/perf/util/synthetic-events.c | 49 +++++++++++++++++++++++++-----
+>  1 file changed, 42 insertions(+), 7 deletions(-)
 > 
-> Thanks for this patch, good catch!
-> 
-> I agree with Jacopo, you shouldn't add a newline before the call.
+> diff --git a/tools/perf/util/synthetic-events.c b/tools/perf/util/synthetic-events.c
+> index 9d4f5dacd154..e6978b2dee8f 100644
+> --- a/tools/perf/util/synthetic-events.c
+> +++ b/tools/perf/util/synthetic-events.c
+> @@ -4,6 +4,7 @@
+>  #include "util/data.h"
+>  #include "util/debug.h"
+>  #include "util/dso.h"
+> +#include "util/dsos.h"
+>  #include "util/event.h"
+>  #include "util/evlist.h"
+>  #include "util/machine.h"
+> @@ -47,12 +48,25 @@
+>  
+>  unsigned int proc_map_timeout = DEFAULT_PROC_MAP_PARSE_TIMEOUT;
+>  
+> +static bool synth_init_done;
+> +static struct dsos synth_dsos;
+> +
+>  void perf_event__synthesize_start(void)
+>  {
+> +	if (synth_init_done)
+> +		return;
+> +
+> +	dsos__init(&synth_dsos);
+> +
+> +	synth_init_done = true;
+>  }
+>  
+>  void perf_event__synthesize_stop(void)
+>  {
+> +	if (!synth_init_done)
+> +		return;
+> +
+> +	dsos__exit(&synth_dsos);
+>  }
+>  
+>  int perf_tool__process_synth_event(struct perf_tool *tool,
+> @@ -374,26 +388,47 @@ static bool read_proc_maps_line(struct io *io, __u64 *start, __u64 *end,
+>  static void perf_record_mmap2__read_build_id(struct perf_record_mmap2 *event,
+>  					     bool is_kernel)
+>  {
+> -	struct build_id bid;
+> +	struct build_id _bid, *bid = &_bid;
+> +	struct dso *dso = NULL;
+> +	struct dso_id id;
+>  	int rc;
+>  
+> -	if (is_kernel)
+> -		rc = sysfs__read_build_id("/sys/kernel/notes", &bid);
+> -	else
+> -		rc = filename__read_build_id(event->filename, &bid) > 0 ? 0 : -1;
+> +	if (is_kernel) {
+> +		rc = sysfs__read_build_id("/sys/kernel/notes", bid);
+> +		goto out;
+> +	}
+> +
+> +	id.maj = event->maj;
+> +	id.min = event->min;
+> +	id.ino = event->ino;
+> +	id.ino_generation = event->ino_generation;
+>  
 
-Thanks for the review, I'll send a v2. As the code for the ov5648 is
-similar to the ov8865, and in the 8865 there is this blank line before
-the v4l2_fwnode_endpoint_free() call, I thought it might be good to keep
-the same style here, that's why this empty line ended up appearing here.
+There might be some paths missing perf_event__synthesize_start()
+e.g. perf trace
+So it would probably be safer to use lazy initialization for
+synth_dsos.
 
-> Feel free to send a v2 with that fixed and include my:
-> 
-> Reviewed-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> 
-> Cheers,
-> 
-> Paul
-> 
-> > Fixes: e43ccb0a045f ("media: i2c: Add support for the OV5648 image sensor")
-> > Signed-off-by: Rafael Mendonca <rafaelmendsr@gmail.com>
-> > ---
-> >  drivers/media/i2c/ov5648.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/drivers/media/i2c/ov5648.c b/drivers/media/i2c/ov5648.c
-> > index dfcd33e9ee13..95850f06112b 100644
-> > --- a/drivers/media/i2c/ov5648.c
-> > +++ b/drivers/media/i2c/ov5648.c
-> > @@ -2598,6 +2598,8 @@ static int ov5648_remove(struct i2c_client *client)
-> >  	mutex_destroy(&sensor->mutex);
-> >  	media_entity_cleanup(&subdev->entity);
-> >  
-> > +	v4l2_fwnode_endpoint_free(&sensor->endpoint);
-> > +
-> >  	return 0;
-> >  }
-> >  
-> > -- 
-> > 2.34.1
-> > 
-> 
-> -- 
-> Paul Kocialkowski, Bootlin
-> Embedded Linux and kernel engineering
-> https://bootlin.com
+Also, callers of perf_record_mmap2__read_build_id() have a struct
+machine so I wonder about putting synth_dsos in struct machine ?
+Or even just using machine->dsos ?
 
+> +	dso = dsos__findnew_id(&synth_dsos, event->filename, &id);
+> +	if (dso && dso->has_build_id) {
+> +		bid = &dso->bid;
+> +		rc = 0;
+> +		goto out;
+> +	}
+> +
+> +	rc = filename__read_build_id(event->filename, bid) > 0 ? 0 : -1;
+> +
+> +out:
+>  	if (rc == 0) {
+> -		memcpy(event->build_id, bid.data, sizeof(bid.data));
+> -		event->build_id_size = (u8) bid.size;
+> +		memcpy(event->build_id, bid->data, sizeof(bid->data));
+> +		event->build_id_size = (u8) bid->size;
+>  		event->header.misc |= PERF_RECORD_MISC_MMAP_BUILD_ID;
+>  		event->__reserved_1 = 0;
+>  		event->__reserved_2 = 0;
+> +
+> +		if (dso && !dso->has_build_id)
+> +			dso__set_build_id(dso, bid);
+>  	} else {
+>  		if (event->filename[0] == '/') {
+>  			pr_debug2("Failed to read build ID for %s\n",
+>  				  event->filename);
+>  		}
+>  	}
+> +	dso__put(dso);
+>  }
+>  
+>  int perf_event__synthesize_mmap_events(struct perf_tool *tool,
 
