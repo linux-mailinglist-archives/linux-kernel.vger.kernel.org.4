@@ -2,93 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0752B5BE7D7
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 16:00:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AC405BE7DF
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 16:02:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229845AbiITOAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 10:00:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58736 "EHLO
+        id S231407AbiITOCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 10:02:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230325AbiITOAb (ORCPT
+        with ESMTP id S230472AbiITOCD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 10:00:31 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2690A17051;
-        Tue, 20 Sep 2022 07:00:30 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28KDkAw5010415;
-        Tue, 20 Sep 2022 14:00:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=j+EMvjBsy0IMEg+i0Vc5T5tC5c3LuWqT+jfH1OLp0qE=;
- b=ngEDVwmakLzLg0EZwmF+gK3XMK39n1gOrWot4J6jp2nHJfz9lUUWwPImwlmHDzIPia9Z
- OtxhHgbsczFZBEVZi2++yTCq6kxzCY1KMbZ1rsiAhHUvyP+tOwKB5qDqmBX54Q5eojhY
- siJL96KC2RAM/lW6HRNbGJrcNQs5FaEM9yJ4P8h4MFK2Tg7f+5KgWF0fVizUIf7XqhbO
- izajrDcRxYeGMmFSAT9C+tpQX+6x7dOL2RpG8jl0RKydavyuZmztB2tTJy97olHhgVxz
- eFUxbYHhmh6Zc/L2d1HzF4g6oImuuhcnV6XgpOc8I4gLWzBU2lb1Ol7EyVCj9Xx+WgJc bw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jqepr0daf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 20 Sep 2022 14:00:18 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28KDlE9U013676;
-        Tue, 20 Sep 2022 14:00:16 GMT
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jqepr0d4e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 20 Sep 2022 14:00:15 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28KDt1cv003987;
-        Tue, 20 Sep 2022 14:00:12 GMT
-Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
-        by ppma02dal.us.ibm.com with ESMTP id 3jn5v9s46s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 20 Sep 2022 14:00:12 +0000
-Received: from smtpav05.wdc07v.mail.ibm.com ([9.208.128.117])
-        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28KE0BrO65601932
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 20 Sep 2022 14:00:12 GMT
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 199C958043;
-        Tue, 20 Sep 2022 14:00:11 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 45E065805F;
-        Tue, 20 Sep 2022 14:00:09 +0000 (GMT)
-Received: from [9.155.210.227] (unknown [9.155.210.227])
-        by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 20 Sep 2022 14:00:09 +0000 (GMT)
-Message-ID: <52b73ecf-1a00-69ce-1cb8-8adb8bdd97c8@linux.ibm.com>
-Date:   Tue, 20 Sep 2022 16:00:08 +0200
+        Tue, 20 Sep 2022 10:02:03 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06403386B5;
+        Tue, 20 Sep 2022 07:01:59 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MX3586W8QzMnGc;
+        Tue, 20 Sep 2022 21:57:16 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 20 Sep 2022 22:01:56 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 20 Sep 2022 22:01:56 +0800
+Subject: Re: [PATCH v2 7/8] livepatch: Improve the search performance of
+ module_kallsyms_on_each_symbol()
+To:     Petr Mladek <pmladek@suse.com>
+CC:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Masahiro Yamada" <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        <linux-modules@vger.kernel.org>
+References: <20220909130016.727-1-thunder.leizhen@huawei.com>
+ <20220909130016.727-8-thunder.leizhen@huawei.com> <YymtJwYB7Q9mTPgS@alley>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <263d1b98-463f-79b0-a4ff-41b9af900e9c@huawei.com>
+Date:   Tue, 20 Sep 2022 22:01:44 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.2.2
-Subject: Re: [PATCH net-next v2 0/2] Separate SMC parameter settings from TCP
- sysctls
-To:     Wen Gu <guwen@linux.alibaba.com>, kgraul@linux.ibm.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1663667542-119851-1-git-send-email-guwen@linux.alibaba.com>
-From:   Wenjia Zhang <wenjia@linux.ibm.com>
-In-Reply-To: <1663667542-119851-1-git-send-email-guwen@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <YymtJwYB7Q9mTPgS@alley>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: NbJ7CKR4-1Qc9gUnA9A7-QUt7h1mbzgh
-X-Proofpoint-GUID: eHeb1O3jttufCdabq3PARyDWTOADBkRZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-20_04,2022-09-20_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- spamscore=0 malwarescore=0 adultscore=0 lowpriorityscore=0 suspectscore=0
- bulkscore=0 mlxlogscore=968 clxscore=1011 impostorscore=0 mlxscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209200079
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -97,35 +68,133 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 20.09.22 11:52, Wen Gu wrote:
-> SMC shares some sysctls with TCP, but considering the difference
-> between these two protocols, it may not be very suitable for SMC
-> to reuse TCP parameter settings in some cases, such as keepalive
-> time or buffer size.
+On 2022/9/20 20:08, Petr Mladek wrote:
+> On Fri 2022-09-09 21:00:15, Zhen Lei wrote:
+>> Currently we traverse all symbols of all modules to find the specified
+>> function for the specified module. But in reality, we just need to find
+>> the given module and then traverse all the symbols in it.
 > 
-> So this patch set aims to introduce some SMC specific sysctls to
-> independently and flexibly set the parameters that suit SMC.
+> I agree that it might be noticeable speedup.
 > 
-> v2->v1:
-> - Use proc_dointvec_jiffies as proc_handler and allow value 0 to
->    disable TEST_LINK.
+>> In order to achieve this purpose, split the call to hook 'fn' into two
+>> phases:
+>> 1. Finds the given module. Pass pointer 'mod'. Hook 'fn' directly returns
+>>    the comparison result of the module name without comparing the function
+>>    name.
+>> 2. Finds the given function in that module. Pass pointer 'mod = NULL'.
+>>    Hook 'fn' skip the comparison of module name and directly compare
+>>    function names.
+>>
+>> Phase1: mod1-->mod2..(subsequent modules do not need to be compared)
+>>                 |
+>> Phase2:          -->f1-->f2-->f3
+>>
+>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+>> ---
+>>  kernel/livepatch/core.c  |  7 ++-----
+>>  kernel/module/kallsyms.c | 13 ++++++++++++-
+>>  2 files changed, 14 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
+>> index 31b57ccf908017e..98e23137e4133bc 100644
+>> --- a/kernel/livepatch/core.c
+>> +++ b/kernel/livepatch/core.c
+>> @@ -130,15 +130,12 @@ static int klp_find_callback(void *data, const char *name,
+>>  {
+>>  	struct klp_find_arg *args = data;
+>>  
+>> -	if ((mod && !args->objname) || (!mod && args->objname))
+>> -		return 0;
+>> +	if (mod)
+>> +		return strcmp(args->objname, mod->name);
+>>  
+>>  	if (strcmp(args->name, name))
+>>  		return 0;
+>>  
+>> -	if (args->objname && strcmp(args->objname, mod->name))
+>> -		return 0;
+>> -
+>>  	args->addr = addr;
+>>  	args->count++;
+>>  
+>> diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
+>> index f5c5c9175333df7..b033613e6c7e3bb 100644
+>> --- a/kernel/module/kallsyms.c
+>> +++ b/kernel/module/kallsyms.c
+>> @@ -510,6 +510,11 @@ int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
+>>  		if (mod->state == MODULE_STATE_UNFORMED)
+>>  			continue;
+>>  
+>> +		/* check mod->name first */
+>> +		ret = fn(data, NULL, mod, 0);
+>> +		if (ret)
+>> +			continue;
 > 
-> Tony Lu (1):
->    net/smc: Unbind r/w buffer size from clcsock and make them tunable
+> Hmm, it somehow gets too complicated. The same fn() callback has to
+> behave correctly in 3 different situations. I would suggest to
+> simplify everything:
 > 
-> Wen Gu (1):
->    net/smc: Introduce a specific sysctl for TEST_LINK time
 > 
->   Documentation/networking/smc-sysctl.rst | 25 +++++++++++++++++++++++++
->   include/net/netns/smc.h                 |  3 +++
->   net/smc/af_smc.c                        |  5 ++---
->   net/smc/smc_core.c                      |  8 ++++----
->   net/smc/smc_llc.c                       |  2 +-
->   net/smc/smc_llc.h                       |  1 +
->   net/smc/smc_sysctl.c                    | 30 ++++++++++++++++++++++++++++++
->   7 files changed, 66 insertions(+), 8 deletions(-)
+> 1. Pass the requested modname as a parameter to module_kallsyms_on_each_symbol()
 > 
-Looks good. Thank you!
+> /*
+>  * Iterate over all symbols in the given @modname. For symbols from
+>  * vmlinux use kallsyms_on_each_symbol() instead.
+>  */
+> int module_kallsyms_on_each_symbol(const char *modname,
+> 				   int (*fn)(void *, const char *,
+> 					     struct module *, unsigned long),
+> 				   void *data)
+> 
+> and do here:
+> 
+> 		if (strcmp(modname, mod->name))
+> 			continue;
 
-For the series:
-Acked-by: Wenjia Zhang <wenjia@linux.ibm.com>
+Right, looks good. This makes the code logic much clearer. Thanks.
+
+> 
+> 
+> 2. We do not even need to pass .objname in struct klp_find_arg
+>    could simplify the callback:
+> 
+
+Yes
+
+> static int klp_find_callback(void *data, const char *name,
+> 			     struct module *mod, unsigned long addr)
+> {
+> 	struct klp_find_arg *args = data;
+> 
+> 	if (strcmp(args->name, name))
+> 		return 0;
+> 
+> 	args->addr = addr;
+> 	args->count++;
+> 
+> 	/*
+> 	 * Finish the search when the symbol is found for the desired position
+> 	 * or the position is not defined for a non-unique symbol.
+> 	 */
+> 	if ((args->pos && (args->count == args->pos)) ||
+> 	    (!args->pos && (args->count > 1)))
+> 		return 1;
+> 
+> 	return 0;
+> }
+> 
+> 3. As a result the *mod parameter won't be used by any existing
+>    fn() callback and could be removed. This should be done as
+>    a separate patch. It touches also ftrace_lookup_symbols().
+
+OK, I will do it tomorrow. The next version is v5.
+
+> 
+> Best Regards,
+> Petr
+> .
+> 
+
+-- 
+Regards,
+  Zhen Lei
