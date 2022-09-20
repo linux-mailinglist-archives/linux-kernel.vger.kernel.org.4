@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00F035BF13F
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 01:33:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CDDF5BF142
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 01:33:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231558AbiITXdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 19:33:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45142 "EHLO
+        id S230116AbiITXdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 19:33:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231293AbiITXcK (ORCPT
+        with ESMTP id S231299AbiITXcM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 19:32:10 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80FB0785B5
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 16:32:09 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id ev16-20020a17090aead000b00202cf672e74so2324426pjb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 16:32:09 -0700 (PDT)
+        Tue, 20 Sep 2022 19:32:12 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4C22785AE
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 16:32:10 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id z7-20020a170903018700b0017835863686so2649726plg.11
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 16:32:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date;
-        bh=EpWQgthCzwVlN1+QDovdFCTrEnPbNzZiM48g8Uk0Cqs=;
-        b=ICkmuWwmWjHn4KH3q8vaKoU16Z+bWz2DowxDhujdMEzB4uglAaJiFzMAss0+DLyuDO
-         4fNdkoSB8JYdRaGEpHnzEnhiq785DVElXgbyUcuOChJgA41emKrbWTngTVeVcueUoOgI
-         YFHuQUcSCcics6ETwR02K4I0A+ZayxoP7IhtLDAWhxt7mlhQBg5v5y+/dS+zbD9eKIS4
-         rQPOwk/qRQTMyP9J2O2FiCtSr/VJBcZi6svRQL0s/afLyA7ZTzP/n4l95BkMARxEAs1z
-         KLmOzY9/A/Vw1TJHiiN945z7KYKvMUzxuL4YY0HGjPCDBZkQ+IIua5Ey2487KkJLl4yD
-         YLDQ==
+        bh=rTWaBPwz2/qNlI0UhodZEKKRNq3tjBG1e+PkMgoZ0tg=;
+        b=oKlfB3thr/sXblrFDvi74UIewrbWkHY5kRCv1R9A8hrArpJUX30GPkTsgCDp1mfHnw
+         rUlq7oVUhzdGd+fe9Zwty3Ougt0DY1qystlre6w2QNGh/53jaEIy29TGO6dA+U1qJlIP
+         /kbDC6///FmBuRMX310eo1wo43zp134Ft+kFsgvrow7IYxsS49FLWP/3zzQJfuyMZyAv
+         njLma4eaXZL1RmniT8QbVEU3no/pK6+mlVci9ddTQSowSIDEkus22+IN1n0elOepPHLY
+         JPSE/M9NC/ssQNFHkeJwDlaAEHWsQc79GtFanHLF+HV8d/c5bsoxI7c1OxNAOqPJ9U8P
+         vBQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date;
-        bh=EpWQgthCzwVlN1+QDovdFCTrEnPbNzZiM48g8Uk0Cqs=;
-        b=YX8h6pUQIF4vw/GZ1dxXoY636IERmQWzX0merQKZHidbRo9wbb5bGfk+9uIXuZ0eJ1
-         qDfa3kjzxnG8IuudRwdkVPRi6U9VVNpbQqS2oW8rqDg8ZBVjXG0JX4zTOLkO2BkFnIlH
-         31i+c5KTgK272lW/vwh1IFRgVTo2JmXeBaD/pEuaF6FU4iS5FHCTmAgary7L+fAWlG9G
-         3AItbL+ajLMI9CzMcNfI66iPNO/SsqT76byzmFuWCx7O8j6U4jOQiz/P0mTwEE3mYA2Z
-         FP0kzJu+82oj7156byPsDNs08iycnA0WU8ssyxu0FDrbJHp13lCO35ZdaAx06bTTcd8r
-         OaWg==
-X-Gm-Message-State: ACrzQf1Nj671SRQxS0xU+zAmUdJTYp2RUQlnXtfZyeE9bw31SS4cNbbt
-        3aJqu89i2bxiDR/JNfruyY27fcju+CM=
-X-Google-Smtp-Source: AMsMyM64WYPPbsmc8kPNJpF8TVe2l1U1WthIbKGNZq82LyCgxeCwhItfCI6/KUPndfsknD2/gAtJHYvyGoM=
+        bh=rTWaBPwz2/qNlI0UhodZEKKRNq3tjBG1e+PkMgoZ0tg=;
+        b=gi0kAIMvuiNxGUszl48Vy/VFZeyQRTpVMDbgJ9397yBngvcqCX5ROAM0aG16wAV1nt
+         LxW1fTamGLJsBpAqUFNzC5yb4g3cfP/pkZ7hC5+h6NFsTPRkbqc5nAKKy/R58WMevVII
+         Xbv75kmIxfutNc0ljyZ9DpsR1qrIT7ZSEKd+6FTQueR0yHnr66wpn49XXJ4+dvc+ArBg
+         zLhRtvXcik1apELaFGmbUdavHZQ2a8qoqF6cgtVX0sKQ2U+cq0M51wqJCmHK65m/OVW+
+         ed/Rn8yV9GrGD6n1FOtAkPOL3/C7HvPcBeR2Dt76YJKdl9ZaMPHt5KKCiGEHzFYWFUaO
+         fP2A==
+X-Gm-Message-State: ACrzQf3oSuZ29Hf7tiS+iutMjSmOx6MLqv9wjEDHr9xiYlOLF+RaUZwC
+        0mOuvR/uBY7nhsoMUdDxEegf2Co46YI=
+X-Google-Smtp-Source: AMsMyM4V3pc2cKqI076/ChjACASYI/YZw4EK+gQ82lufp1Q+NZA9R6JRWx0McNN3uL/KQdo7atvkApl7cfo=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:7586:b0:172:d0de:7a3c with SMTP id
- j6-20020a170902758600b00172d0de7a3cmr2021687pll.38.1663716729065; Tue, 20 Sep
- 2022 16:32:09 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a17:903:1112:b0:178:a030:5f72 with SMTP id
+ n18-20020a170903111200b00178a0305f72mr1982480plh.12.1663716730489; Tue, 20
+ Sep 2022 16:32:10 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue, 20 Sep 2022 23:31:25 +0000
+Date:   Tue, 20 Sep 2022 23:31:26 +0000
 In-Reply-To: <20220920233134.940511-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220920233134.940511-1-seanjc@google.com>
 X-Mailer: git-send-email 2.37.3.968.ga6b4b080e4-goog
-Message-ID: <20220920233134.940511-20-seanjc@google.com>
-Subject: [PATCH v3 19/28] KVM: x86: Disable APIC logical map if vCPUs are
- aliased in logical mode
+Message-ID: <20220920233134.940511-21-seanjc@google.com>
+Subject: [PATCH v3 20/28] KVM: x86: Honor architectural behavior for aliased
+ 8-bit APIC IDs
 From:   Sean Christopherson <seanjc@google.com>
 To:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>
@@ -66,7 +66,7 @@ Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,37 +74,139 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Disable the optimized APIC logical map if multiple vCPUs are aliased to
-the same logical ID.  Architecturally, all CPUs whose logical ID matches
-the MDA are supposed to receive the interrupt; overwriting existing map
-entries can result in missed IPIs.
+Apply KVM's hotplug hack if and only if userspace has enabled 32-bit IDs
+for x2APIC.  If 32-bit IDs are not enabled, disable the optimized map to
+honor x86 architectural behavior if multiple vCPUs shared a physical APIC
+ID.  As called out in the changelog that added the hack, all CPUs whose
+(possibly truncated) APIC ID matches the target are supposed to receive
+the IPI.
 
-Fixes: 1e08ec4a130e ("KVM: optimize apic interrupt delivery")
+  KVM intentionally differs from real hardware, because real hardware
+  (Knights Landing) does just "x2apic_id & 0xff" to decide whether to
+  accept the interrupt in xAPIC mode and it can deliver one interrupt to
+  more than one physical destination, e.g. 0x123 to 0x123 and 0x23.
+
+Applying the hack even when x2APIC is not fully enabled means KVM doesn't
+correctly handle scenarios where the guest has aliased xAPIC IDs across
+multiple vCPUs, as only the vCPU with the lowest vCPU ID will receive any
+interrupts.  It's extremely unlikely any real world guest aliase APIC IDs,
+or even modifies APIC IDs, but KVM's behavior is arbitrary, e.g. the
+lowest vCPU ID "wins" regardless of which vCPU is "aliasing" and which
+vCPU is "normal".
+
+Furthermore, the hack is _not_ guaranteed to work!  The hack works if and
+only if the optimized APIC map is successfully allocated.  If the map
+allocation fails (unlikely), KVM will fall back to its unoptimized
+behavior, which _does_ honor the architectural behavior.
+
+Pivot on 32-bit x2APIC IDs being enabled as that is required to take
+advantage of the hotplug hack (see kvm_apic_state_fixup()), i.e. won't
+break existing setups unless they are way, way off in the weeds.
+
+And an entry in KVM's errata to document the hack.  Alternatively, KVM
+could provide an actual x2APIC quirk and document the hack that way, but
+there's unlikely to ever be a use case for disabling the quirk.  Go the
+errata route to avoid having to validate a quirk no one cares about.
+
+Fixes: 5bd5db385b3e ("KVM: x86: allow hotplug of VCPU with APIC ID over 0xff")
 Signed-off-by: Sean Christopherson <seanjc@google.com>
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
 ---
- arch/x86/kvm/lapic.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ Documentation/virt/kvm/x86/errata.rst | 11 ++++++
+ arch/x86/kvm/lapic.c                  | 50 ++++++++++++++++++++++-----
+ 2 files changed, 52 insertions(+), 9 deletions(-)
 
+diff --git a/Documentation/virt/kvm/x86/errata.rst b/Documentation/virt/kvm/x86/errata.rst
+index 410e0aa63493..49a05f24747b 100644
+--- a/Documentation/virt/kvm/x86/errata.rst
++++ b/Documentation/virt/kvm/x86/errata.rst
+@@ -37,3 +37,14 @@ Nested virtualization features
+ ------------------------------
+ 
+ TBD
++
++x2APIC
++------
++When KVM_X2APIC_API_USE_32BIT_IDS is enabled, KVM activates a hack/quirk that
++allows sending events to a single vCPU using its x2APIC ID even if the target
++vCPU has legacy xAPIC enabled, e.g. to bring up hotplugged vCPUs via INIT-SIPI
++on VMs with > 255 vCPUs.  A side effect of the quirk is that, if multiple vCPUs
++have the same physical APIC ID, KVM will deliver events targeting that APIC ID
++only to the vCPU with the lowest vCPU ID.  If KVM_X2APIC_API_USE_32BIT_IDS is
++not enabled, KVM follows x86 architecture when processing interrupts (all vCPUs
++matching the target APIC ID receive the interrupt).
 diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-index a12360fd4df6..e447278d1986 100644
+index e447278d1986..b344ab52556e 100644
 --- a/arch/x86/kvm/lapic.c
 +++ b/arch/x86/kvm/lapic.c
-@@ -341,11 +341,12 @@ void kvm_recalculate_apic_map(struct kvm *kvm)
- 		if (!mask)
- 			continue;
+@@ -274,10 +274,10 @@ void kvm_recalculate_apic_map(struct kvm *kvm)
+ 		struct kvm_lapic *apic = vcpu->arch.apic;
+ 		struct kvm_lapic **cluster;
+ 		enum kvm_apic_logical_mode logical_mode;
++		u32 x2apic_id, physical_id;
+ 		u16 mask;
+ 		u32 ldr;
+ 		u8 xapic_id;
+-		u32 x2apic_id;
  
--		if (!is_power_of_2(mask)) {
-+		ldr = ffs(mask) - 1;
-+		if (!is_power_of_2(mask) || cluster[ldr]) {
- 			new->logical_mode = KVM_APIC_MODE_MAP_DISABLED;
+ 		if (!kvm_apic_present(vcpu))
  			continue;
- 		}
--		cluster[ffs(mask) - 1] = apic;
-+		cluster[ldr] = apic;
- 	}
- out:
- 	old = rcu_dereference_protected(kvm->arch.apic_map,
+@@ -285,16 +285,48 @@ void kvm_recalculate_apic_map(struct kvm *kvm)
+ 		xapic_id = kvm_xapic_id(apic);
+ 		x2apic_id = kvm_x2apic_id(apic);
+ 
+-		/* Hotplug hack: see kvm_apic_match_physical_addr(), ... */
+-		if ((apic_x2apic_mode(apic) || x2apic_id > 0xff) &&
+-				x2apic_id <= new->max_apic_id)
+-			new->phys_map[x2apic_id] = apic;
+ 		/*
+-		 * ... xAPIC ID of VCPUs with APIC ID > 0xff will wrap-around,
+-		 * prevent them from masking VCPUs with APIC ID <= 0xff.
++		 * Apply KVM's hotplug hack if userspace has enable 32-bit APIC
++		 * IDs.  Allow sending events to vCPUs by their x2APIC ID even
++		 * if the target vCPU is in legacy xAPIC mode, and silently
++		 * ignore aliased xAPIC IDs (the x2APIC ID is truncated to 8
++		 * bits, causing IDs > 0xff to wrap and collide).
++		 *
++		 * Honor the architectural (and KVM's non-optimized) behavior
++		 * if userspace has not enabled 32-bit x2APIC IDs.  Each APIC
++		 * is supposed to process messages independently.  If multiple
++		 * vCPUs have the same effective APIC ID, e.g. due to the
++		 * x2APIC wrap or because the guest manually modified its xAPIC
++		 * IDs, events targeting that ID are supposed to be recognized
++		 * by all vCPUs with said ID.
+ 		 */
+-		if (!apic_x2apic_mode(apic) && !new->phys_map[xapic_id])
+-			new->phys_map[xapic_id] = apic;
++		if (kvm->arch.x2apic_format) {
++			/* See also kvm_apic_match_physical_addr(). */
++			if ((apic_x2apic_mode(apic) || x2apic_id > 0xff) &&
++			    x2apic_id <= new->max_apic_id)
++				new->phys_map[x2apic_id] = apic;
++
++			if (!apic_x2apic_mode(apic) && !new->phys_map[xapic_id])
++				new->phys_map[xapic_id] = apic;
++		} else {
++			/*
++			 * Disable the optimized map if the physical APIC ID is
++			 * already mapped, i.e. is aliased to multiple vCPUs.
++			 * The optimized map requires a strict 1:1 mapping
++			 * between IDs and vCPUs.
++			 */
++			if (apic_x2apic_mode(apic))
++				physical_id = x2apic_id;
++			else
++				physical_id = xapic_id;
++
++			if (new->phys_map[physical_id]) {
++				kvfree(new);
++				new = NULL;
++				goto out;
++			}
++			new->phys_map[physical_id] = apic;
++		}
+ 
+ 		if (new->logical_mode == KVM_APIC_MODE_MAP_DISABLED ||
+ 		    !kvm_apic_sw_enabled(apic))
 -- 
 2.37.3.968.ga6b4b080e4-goog
 
