@@ -2,118 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 738785BE96E
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 16:57:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65DB15BE96F
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 16:57:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231263AbiITO5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 10:57:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33360 "EHLO
+        id S231316AbiITO52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 10:57:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230341AbiITO5G (ORCPT
+        with ESMTP id S231258AbiITO5Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 10:57:06 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91DB94B0FC
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 07:57:03 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id s6so4228116lfo.7
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 07:57:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=VXJHObo0AaoKhcpZ+uR9GeJuvPJhUQU0+5Xdrsh3wJE=;
-        b=tdzCJviRK5GqllvXhxhBQSh4iUn+AqvkyAXcd3ABlPg6jpUQNeO6BNFxuVJYX7Ekm4
-         GVE9jWms+0+UB20Ga+o+OHQ8dwayZec1qXDFxW3MidP2XhUTUjfOAJG6FDS8D5X9AjBm
-         GKx0Zl3vtnqe+3tLfqcOjVKi5KJovNLMjyI92FYv8UId/GtjxqERRIpm9KQlhmIWgEPO
-         6DmeNMECx9IuITccce/jsxOkkc5K42kP9RMk7SFeegYILfILffoUViPgTtg2GE2j1z9p
-         zM+TRWX3lhUT0Wrf3zRniDPwlchIiXHDKhSgKbbfwMv1i3YQFgQz07+G7u9y4q4QJzpU
-         cxBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=VXJHObo0AaoKhcpZ+uR9GeJuvPJhUQU0+5Xdrsh3wJE=;
-        b=74ZU3JWU85BrcIUYuawXSretWpAdE0gsn+bGDKxaUNWiQxgkA2ASCMmRr3Vs5sfmXD
-         lpebK75BwHzYwLtRlwZDYWjl1OAHSL9tdtqauxAm2mWlfaL5IimiXLfZV1adGG212mT9
-         RfMc+EV7OUBy5j6sl+pVVb+QQdLL/UVw4KhQyNdFZ25w/3CDrQQw+pYl4Df3aurEfiRX
-         /7BGUq7gqnP8RuJHTqkNtikvTbdWoSpnELHLN3wqZhUNkkUHkC2YFjXTaNpq7IaSGMio
-         l3CHHC5lEWaI8sDHbgMdC8ol87asaZXGKrWrq322ATWFLrxKTp9mZSDxsJeGpgjavz0X
-         yV5A==
-X-Gm-Message-State: ACrzQf1xHHc3Kf0eRGYUmUL0y6Dzmjvsk2/Dxd0SyUVP87XmvzO7iRJh
-        jgu2dZgzEUalpfqrzlP0+URINIToPDLK9lcQ4BY5Zg==
-X-Google-Smtp-Source: AMsMyM5gakyQSfDrc9u0pDGBpdHu/o8QX76B9e5JHQ8ECCdkESU2+fCnjeW2O9/W8QuQpnpCkeErsCCkCGhG/EqRrcw=
-X-Received: by 2002:a05:6512:22c9:b0:499:cb5d:c138 with SMTP id
- g9-20020a05651222c900b00499cb5dc138mr8191499lfu.490.1663685821832; Tue, 20
- Sep 2022 07:57:01 -0700 (PDT)
+        Tue, 20 Sep 2022 10:57:25 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A0961EAC9
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 07:57:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663685844; x=1695221844;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HvCoWXC5l0s95QFD5U8TCexD257nOCbyPLfqtS7D3tA=;
+  b=HOElLBQJNgKO7FK091pFxrUT4PyaPwP4y4iuHX07qsSgnFtdEvLLhR3x
+   v9QWq3AZQP0CefH9dg0wcj1xHrmC8FzRd0CcwVdHKw66k89J2xQO9TvHo
+   RKWub0r0NVPkkgsfwGIUHbQvEkDr3lzY+Ing5E6h/2OeO181FhSHvxgVk
+   N764ie3PgtzUXuEdIZZ34FtQRfiVEhCMNOVrEpY2tXHapHu+9I4cMf7JL
+   1h/90UT3ipBmkmBqACfNTXqa5b4HUxqI6FeH0C0rsxw64zGUl6Z3+qOrp
+   J7SDLjhRnqcMEiqhFVXejKG/LZdLOSrVbKa+uO03x3zaWArhOGdGszdX+
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10476"; a="301095915"
+X-IronPort-AV: E=Sophos;i="5.93,330,1654585200"; 
+   d="scan'208";a="301095915"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 07:57:02 -0700
+X-IronPort-AV: E=Sophos;i="5.93,330,1654585200"; 
+   d="scan'208";a="687441949"
+Received: from araj-dh-work.jf.intel.com (HELO araj-dh-work) ([10.165.157.158])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 07:57:01 -0700
+Date:   Tue, 20 Sep 2022 14:57:04 +0000
+From:   Ashok Raj <ashok_raj@linux.intel.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Jacob Pan <jacob.jun.pan@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        Kostya Serebryany <kcc@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Taras Madan <tarasmadan@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Joerg Roedel <joro@8bytes.org>
+Subject: Re: [PATCHv8 00/11] Linear Address Masking enabling
+Message-ID: <YynUwJ30QywipsxO@araj-dh-work>
+References: <20220912224930.ukakmmwumchyacqc@box.shutemov.name>
+ <20220914144518.46rhhyh7zmxieozs@box.shutemov.name>
+ <YyHvF2K7ELVSTGvB@araj-MOBL2.amr.corp.intel.com>
+ <20220914151818.uupzpyd333qnnmlt@box.shutemov.name>
+ <YyHz7H0uyqG58b3E@araj-MOBL2.amr.corp.intel.com>
+ <20220914154532.mmxfsr7eadgnxt3s@box.shutemov.name>
+ <20220914165116.24f82d74@jacob-builder>
+ <20220915090135.fpeokbokkdljv7rw@box.shutemov.name>
+ <20220915172858.pl62a5w3m5binxrk@box.shutemov.name>
+ <Yym8zsuXbYaW3alU@nvidia.com>
 MIME-Version: 1.0
-References: <20220916080305.29574-1-vincent.guittot@linaro.org>
- <20220916080305.29574-5-vincent.guittot@linaro.org> <5c060322-b132-c9b6-1253-6657ad08a63d@gnu.org>
- <CAKfTPtB8OeRzbDjfKoNUGLC1XUXT07G9QedCJ8stSMGvAD5hNg@mail.gmail.com> <ca9231c6-ef15-959f-f028-e55fbe686699@gnu.org>
-In-Reply-To: <ca9231c6-ef15-959f-f028-e55fbe686699@gnu.org>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Tue, 20 Sep 2022 16:56:50 +0200
-Message-ID: <CAKfTPtB7aWZ8nGoPK73XDgDJL42zVQzrXz4TYpcxbGHnmtq4Cg@mail.gmail.com>
-Subject: Re: [PATCH v4 4/8] sched/core: Add permission checks for setting the
- latency_nice value
-To:     Tim Janik <timj@gnu.org>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, parth@linux.ibm.com,
-        qais.yousef@arm.com, chris.hyser@oracle.com,
-        valentin.schneider@arm.com, patrick.bellasi@matbug.net,
-        David.Laight@aculab.com, pjt@google.com, pavel@ucw.cz,
-        tj@kernel.org, qperret@google.com, tim.c.chen@linux.intel.com,
-        joshdon@google.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yym8zsuXbYaW3alU@nvidia.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 20 Sept 2022 at 12:18, Tim Janik <timj@gnu.org> wrote:
->
-> Hi.
->
-> On 19.09.22 14:41, Vincent Guittot wrote:
-> > Hi,
-> >
-> > Thanks you for describing in detail your use case.
->
-> > Ok, Your explanation makes sense to me especially because we want to
-> > ensure to not provide more cpu time with this latency prio. I'm
-> > curious to see the feedback from others about the reason we want
-> > CAP_SYS_NICE other than following nice priority.
-> >
-> > Side question, Have you tried this patchset (minus this patch) with
-> > your use case ?
->
-> I have now tested a modified version of the ALSA Test_latency.c program
-> that acquires latency nice as non-root:
->    https://gist.github.com/tim-janik/88f9df5456b879ecc59da93dc6ce6be1
->
-> With a busy but not overloaded CPU, the short time latency tests are
-> often better, measured with: ./lnice-latency -p -s 1
->
-> But the results aren't very reliable with this test. I.e. requesting a
-> latency nice value of -20 reduces the chance for underruns somewhat but
-> doesn't eliminate them (and lnice-latency.c gives up on the first XRUN
+On Tue, Sep 20, 2022 at 10:14:54AM -0300, Jason Gunthorpe wrote:
+> On Thu, Sep 15, 2022 at 08:28:58PM +0300, Kirill A. Shutemov wrote:
+> 
+> > @@ -31,7 +33,17 @@ int iommu_sva_alloc_pasid(struct mm_struct *mm, ioasid_t min, ioasid_t max)
+> >  	    min == 0 || max < min)
+> >  		return -EINVAL;
+> >  
+> > +	/* Serialize against address tagging enabling */
+> > +	if (mmap_write_lock_killable(mm))
+> > +		return -EINTR;
+> > +
+> > +	if (!arch_can_alloc_pasid(mm)) {
+> > +		mmap_write_unlock(mm);
+> > +		return -EBUSY;
+> > +	}
+> 
+> This has nothing to do with "allocating pasid"
+> 
+> Rather should be: "is the CPU page table compatible with the IOMMU HW
+> page table walker"
 
-It's expected that latency nice can't fix all scheduling latency
-problems. The hard real time constraint can only be ensured with FIFO
-or deadline scheduler
+Thanks Jason, this certainly looks like a more logical way to look at it
+rather than the functional association of allocating pasids. 
 
-> in the given time period). It might be better to instead count the XRUN
-> occurances over a given time pertiod.
-
-Thanks. I'm going to have a look the test
-
->
->
-> --
-> Anklang Free Software DAW
-> https://anklang.testbit.eu/
+> 
+> For this I would rather have a function that queries the format of the
+> page table under the mm_struct and we have enum values like
+> INTEL_NORMAL and INTEL_LAM as possible values.
+> 
+> The iommu driver will block incompatible page table formats, and when
+> it starts up it should assert something that blocks changing the
+> format.
+> 
+> Jason
+> 
