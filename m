@@ -2,201 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48F735BE36A
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 12:37:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADA185BE36E
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 12:37:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231251AbiITKg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 06:36:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52542 "EHLO
+        id S231274AbiITKhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 06:37:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231261AbiITKgD (ORCPT
+        with ESMTP id S230096AbiITKgH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 06:36:03 -0400
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E18E72FE4;
-        Tue, 20 Sep 2022 03:34:19 -0700 (PDT)
-Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id D0FB3240003;
-        Tue, 20 Sep 2022 10:34:14 +0000 (UTC)
-Date:   Tue, 20 Sep 2022 12:34:12 +0200
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Marco Felsch <m.felsch@pengutronix.de>
-Cc:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
-        laurent.pinchart+renesas@ideasonboard.com, akinobu.mita@gmail.com,
-        jacopo+renesas@jmondi.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] media: mt9m111: fix device power usage
-Message-ID: <20220920103412.cxpykimes3d7rz7i@lati>
-References: <20220916135713.143890-1-m.felsch@pengutronix.de>
- <20220916135713.143890-2-m.felsch@pengutronix.de>
- <20220920102704.mna6ys3bpgdi4flo@lati>
+        Tue, 20 Sep 2022 06:36:07 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6F7F0E;
+        Tue, 20 Sep 2022 03:34:33 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 640596601F3B;
+        Tue, 20 Sep 2022 11:34:30 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1663670071;
+        bh=Ly/Gd/BN8cZIA8HYYtUp7eyC8GP8ws7pSAuEwyx/X5o=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=XUSr6mTZd0KrAR17T81pA/3sXiF88jPHisabDNPtgK3vjBm3IG4jNbju3JvH2nZ1P
+         vkjCshGNakNla1CP5FeOMLER2lO0EdPtfRbeeSz0m3uuA0H9MF7x+cF668zOxeur3g
+         PcYf0wAG6mA/uVRZ9WLVy1aK+cop7Auxnv7zaV9k5znPLe/5wKf60oDe4b62eBspxM
+         +gh5SAN6aq7CYRHpff/mvhCcNF4ORhPVxJ1/AbSYaNx066mGNdqXuGC+nMLRqi+Z9G
+         6FwhjDGNmmvMgSZ0AjrScXDd+7tP+yWpAeEQCOPBpUdv24dBszOkTV0H/462MD0Jpd
+         WHNRBP8jig7xA==
+Message-ID: <b2ab259b-404d-a267-6fef-913c4514b078@collabora.com>
+Date:   Tue, 20 Sep 2022 12:34:28 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220920102704.mna6ys3bpgdi4flo@lati>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v1 08/17] drm/mediatek: hdmi: add cec flag
+Content-Language: en-US
+To:     Guillaume Ranquet <granquet@baylibre.com>,
+        Vinod Koul <vkoul@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Rob Herring <robh+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        CK Hu <ck.hu@mediatek.com>, Jitao shi <jitao.shi@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-mediatek@lists.infradead.org,
+        dri-devel@lists.freedesktop.org,
+        Pablo Sun <pablo.sun@mediatek.com>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org
+References: <20220919-v1-0-4844816c9808@baylibre.com>
+ <20220919-v1-8-4844816c9808@baylibre.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220919-v1-8-4844816c9808@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marco
+Il 19/09/22 18:56, Guillaume Ranquet ha scritto:
+> Add a flag to indicate support for cec.
+> 
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_hdmi_common.c b/drivers/gpu/drm/mediatek/mtk_hdmi_common.c
+> index bfcca6f8b839..86653ebaacfd 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_hdmi_common.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_hdmi_common.c
+> @@ -154,35 +154,38 @@ int mtk_hdmi_dt_parse_pdata(struct mtk_hdmi *hdmi, struct platform_device *pdev,
+>   		return ret;
+>   	}
+>   
+> -	/* The CEC module handles HDMI hotplug detection */
+> -	cec_np = of_get_compatible_child(np->parent, "mediatek,mt8173-cec");
+> -	if (!cec_np) {
+> -		dev_err(dev, "Failed to find CEC node\n");
+> -		return -EINVAL;
+> -	}
+> +	if (hdmi->conf->has_cec) {
 
-On Tue, Sep 20, 2022 at 12:27:04PM +0200, Jacopo Mondi wrote:
-> Hi Marco
->
-> On Fri, Sep 16, 2022 at 03:57:12PM +0200, Marco Felsch wrote:
-> > Currently the driver turn off the power after probe and toggle it during
-> > .stream by using the .s_power callback. This is problematic since other
-> > callbacks like .set_fmt accessing the hardware as well which will fail.
-> > So in the end the default format is the only supported format.
-> >
-> > Remove the hardware register access from the callbacks and instead sync
-> > the state once right before the stream gets enabled to fix this for
-> > .set_fmt() and .set_selection(). For the debug register access we need
-> > to turn the device on/off before accessing the registers to fix this and
-> > finally for the ctrls access we need the device to be powered to fix
-> > this.
-> >
-> > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-> > ---
-> > Changelog:
-> >
-> > v2:
-> > - squash patch 2 and 3
-> > ---
-> >  drivers/media/i2c/mt9m111.c | 40 ++++++++++++++++++++-----------------
-> >  1 file changed, 22 insertions(+), 18 deletions(-)
-> >
-> > diff --git a/drivers/media/i2c/mt9m111.c b/drivers/media/i2c/mt9m111.c
-> > index 52be1c310455..8de93ab99cbc 100644
-> > --- a/drivers/media/i2c/mt9m111.c
-> > +++ b/drivers/media/i2c/mt9m111.c
-> > @@ -455,7 +455,7 @@ static int mt9m111_set_selection(struct v4l2_subdev *sd,
-> >  	struct mt9m111 *mt9m111 = to_mt9m111(client);
-> >  	struct v4l2_rect rect = sel->r;
-> >  	int width, height;
-> > -	int ret, align = 0;
-> > +	int align = 0;
-> >
-> >  	if (sel->which != V4L2_SUBDEV_FORMAT_ACTIVE ||
-> >  	    sel->target != V4L2_SEL_TGT_CROP)
-> > @@ -481,14 +481,11 @@ static int mt9m111_set_selection(struct v4l2_subdev *sd,
-> >  	width = min(mt9m111->width, rect.width);
-> >  	height = min(mt9m111->height, rect.height);
-> >
-> > -	ret = mt9m111_setup_geometry(mt9m111, &rect, width, height, mt9m111->fmt->code);
-> > -	if (!ret) {
-> > -		mt9m111->rect = rect;
-> > -		mt9m111->width = width;
-> > -		mt9m111->height = height;
-> > -	}
-> > +	mt9m111->rect = rect;
-> > +	mt9m111->width = width;
-> > +	mt9m111->height = height;
-> >
-> > -	return ret;
-> > +	return 0;
-> >  }
-> >
-> >  static int mt9m111_get_selection(struct v4l2_subdev *sd,
-> > @@ -632,7 +629,6 @@ static int mt9m111_set_fmt(struct v4l2_subdev *sd,
-> >  	const struct mt9m111_datafmt *fmt;
-> >  	struct v4l2_rect *rect = &mt9m111->rect;
-> >  	bool bayer;
-> > -	int ret;
-> >
-> >  	if (mt9m111->is_streaming)
-> >  		return -EBUSY;
-> > @@ -681,16 +677,11 @@ static int mt9m111_set_fmt(struct v4l2_subdev *sd,
-> >  		return 0;
-> >  	}
-> >
-> > -	ret = mt9m111_setup_geometry(mt9m111, rect, mf->width, mf->height, mf->code);
-> > -	if (!ret)
-> > -		ret = mt9m111_set_pixfmt(mt9m111, mf->code);
-> > -	if (!ret) {
-> > -		mt9m111->width	= mf->width;
-> > -		mt9m111->height	= mf->height;
-> > -		mt9m111->fmt	= fmt;
-> > -	}
-> > +	mt9m111->width	= mf->width;
-> > +	mt9m111->height	= mf->height;
-> > +	mt9m111->fmt	= fmt;
-> >
-> > -	return ret;
-> > +	return 0;
-> >  }
-> >
-> >  static const struct mt9m111_mode_info *
-> > @@ -748,6 +739,8 @@ mt9m111_find_mode(struct mt9m111 *mt9m111, unsigned int req_fps,
-> >  	return mode;
-> >  }
-> >
-> > +static int mt9m111_s_power(struct v4l2_subdev *sd, int on);
-> > +
-> >  #ifdef CONFIG_VIDEO_ADV_DEBUG
-> >  static int mt9m111_g_register(struct v4l2_subdev *sd,
-> >  			      struct v4l2_dbg_register *reg)
-> > @@ -758,10 +751,14 @@ static int mt9m111_g_register(struct v4l2_subdev *sd,
-> >  	if (reg->reg > 0x2ff)
-> >  		return -EINVAL;
-> >
-> > +	mt9m111_s_power(sd, 1);
-> > +
-> >  	val = mt9m111_reg_read(client, reg->reg);
-> >  	reg->size = 2;
-> >  	reg->val = (u64)val;
-> >
-> > +	mt9m111_s_power(sd, 0);
-> > +
-> >  	if (reg->val > 0xffff)
-> >  		return -EIO;
-> >
-> > @@ -776,9 +773,13 @@ static int mt9m111_s_register(struct v4l2_subdev *sd,
-> >  	if (reg->reg > 0x2ff)
-> >  		return -EINVAL;
-> >
-> > +	mt9m111_s_power(sd, 1);
-> > +
-> >  	if (mt9m111_reg_write(client, reg->reg, reg->val) < 0)
-> >  		return -EIO;
-> >
-> > +	mt9m111_s_power(sd, 0);
-> > +
->
-> So far so good
->
-> >  	return 0;
-> >  }
-> >  #endif
-> > @@ -891,6 +892,9 @@ static int mt9m111_s_ctrl(struct v4l2_ctrl *ctrl)
-> >  	struct mt9m111 *mt9m111 = container_of(ctrl->handler,
-> >  					       struct mt9m111, hdl);
-> >
-> > +	if (!mt9m111->is_streaming)
-> > +		return 0;
-> > +
->
-> If you refuse to set controls if the sensor is not streaming (ie
-> powered) which I think it's right, shouldn't you call
-> __v4l2_ctrl_handler_setup() at s_stream(1) time to have the controls
-> applied ?
->
+I think that's a pointless overcomplication: I know why you're doing this but I'm
+not sure that this is a good solution.
 
-Oh scratch that, it's in the s_power(1) call path. It's would be nicer
-to have runtime_pm, but you already know that :)
+I would simply disable CEC support if there is no CEC child node and that's it...
 
-Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
-
-Thanks
-   j
-
-> >  	switch (ctrl->id) {
-> >  	case V4L2_CID_VFLIP:
-> >  		return mt9m111_set_flip(mt9m111, ctrl->val,
-> > --
-> > 2.30.2
-> >
+Regards,
+Angelo
