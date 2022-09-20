@@ -2,100 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 263025BEA21
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 17:26:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFD025BEA24
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 17:26:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231346AbiITP0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 11:26:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51884 "EHLO
+        id S229695AbiITP0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 11:26:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231359AbiITP0T (ORCPT
+        with ESMTP id S231422AbiITP0u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 11:26:19 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC1A66117
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 08:26:17 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id a14so3418157ljj.8
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 08:26:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=4l7aMfmqCryjQwAP7nUR3rR023wPhPFZ45uqdGA6vXU=;
-        b=ug41M0juoWTyFjlJFI3JO/BxOIkOyJX1HmmPygZID/A2DnhJvRY/vpvmZ6zDKaoN/9
-         0iVDpLlXaxIX34fhgBHkS0UgbP2o5Zt97FlJwookkZY45p4frVPv0qG7BPk2Awsn68VM
-         00DNt0kp/ihgQi2peCOsZnd7seMCnVOyGujvrhehLXya/jMDPjvMCG7H4luP04o0/LKP
-         UAOYwyc4vImp7vdyM17Ul+GmrEkDW6T9/anC236oZqGTSAfAB+0b7xtPmcpXgEdYKGF7
-         XC6tXPY5gYECtmW51sXIvoEKcsBSnFO+u20x9LPS+xAtOAHyyMwueAqo14sEm/sPdmjG
-         aSkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=4l7aMfmqCryjQwAP7nUR3rR023wPhPFZ45uqdGA6vXU=;
-        b=YosYZcZj/iD5nr7btcv2PxW/xnNN59gCZ4cmEwSf9UK2YjeGdZw8hm0jb7lr8zXK2R
-         7W4g768lU7BMOe43d0eVuo5ONX35kgeVZF6157ru8va1jsM2P2xAX26R3tgln8T4xi6I
-         J18QGHlf5bAgjKJ8U41tz++ZiNuvq7SYq0f1+kCqeY0RfqCImHzxhR1LioOl70y+HTfy
-         fKqrE3jm6p22Q2kFi/8jHT1hR89TkiCd9A1IFYp52DJWsPGXJs+X6e7I9XkVkZhV00H+
-         D2JZM4x9iU/HzTot1wyDRM2LYxVOMGkOajWqMXL0wUDK5z83ItPU3U/hSrdr8kA4Clhg
-         YYDg==
-X-Gm-Message-State: ACrzQf2OTEB4OGRKdfA3Ht8p7RPAUmkQKYRCiLYNsNaeGsQ7DWbfwysI
-        oStTdCOUA8nQ2iDiaTeV8dKoRw==
-X-Google-Smtp-Source: AMsMyM4JKyvwhM7YiHyZtwVoNrtUcBKYR2S6GGTDusaMteI1RsYMqBPofBm3W7n40MgCMtIOk+opOg==
-X-Received: by 2002:a2e:a549:0:b0:26c:4988:2742 with SMTP id e9-20020a2ea549000000b0026c49882742mr4206383ljn.11.1663687575964;
-        Tue, 20 Sep 2022 08:26:15 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id be17-20020a056512251100b0049a4862966fsm10743lfb.146.2022.09.20.08.26.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Sep 2022 08:26:15 -0700 (PDT)
-Message-ID: <ada6ef7f-0106-6a30-64ad-66b3277d987b@linaro.org>
-Date:   Tue, 20 Sep 2022 17:26:14 +0200
+        Tue, 20 Sep 2022 11:26:50 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 426586611C
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 08:26:49 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1oaf8q-0004iC-W9; Tue, 20 Sep 2022 17:26:33 +0200
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1oaf8q-0007Cc-1J; Tue, 20 Sep 2022 17:26:32 +0200
+Date:   Tue, 20 Sep 2022 17:26:32 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>, mchehab@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        kishon@ti.com, vkoul@kernel.org, hverkuil@xs4all.nl,
+        jacopo@jmondi.org, kieran.bingham+renesas@ideasonboard.com,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        kernel@pengutronix.de
+Subject: Re: [PATCH v2 3/4] media: dt-bindings: add bindings for Toshiba
+ TC358746
+Message-ID: <20220920152632.mjpgpmelvx4ya4k7@pengutronix.de>
+References: <20220916134535.128131-1-m.felsch@pengutronix.de>
+ <20220916134535.128131-4-m.felsch@pengutronix.de>
+ <YyZTCsflWtUbo2ld@pendragon.ideasonboard.com>
+ <20220919100844.bb7tzbql2vpk76xz@pengutronix.de>
+ <YyhDO4ohv47uIij2@paasikivi.fi.intel.com>
+ <YyhKoDxFoobY9vBd@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 1/2] dt-bindings: net: mediatek-dwmac: add support for
- mt8188
-Content-Language: en-US
-To:     Jianguo Zhang <jianguo.zhang@mediatek.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Biao Huang <biao.huang@mediatek.com>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20220920083617.4177-1-jianguo.zhang@mediatek.com>
- <20220920083617.4177-2-jianguo.zhang@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220920083617.4177-2-jianguo.zhang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YyhKoDxFoobY9vBd@pendragon.ideasonboard.com>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/09/2022 10:36, Jianguo Zhang wrote:
-> Add binding document for the ethernet on mt8188
+Hi Laurent, Sakari,
+
+On 22-09-19, Laurent Pinchart wrote:
+> On Mon, Sep 19, 2022 at 10:23:55AM +0000, Sakari Ailus wrote:
+> > On Mon, Sep 19, 2022 at 12:08:44PM +0200, Marco Felsch wrote:
+> > > On 22-09-18, Laurent Pinchart wrote:
+> > > > On Fri, Sep 16, 2022 at 03:45:34PM +0200, Marco Felsch wrote:
+> > > > > Add the bindings for the Toshiba TC358746 Parallel <-> MIPI-CSI bridge
+> > > > > driver.
+> > > > > 
+> > > > > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+> > > > > Reviewed-by: Rob Herring <robh@kernel.org>
+> > > > > ---
+> > > > > Changelog:
+> > > > > 
+> > > > > v2:
+> > > > > - addded Robs r-b
+> > > > > - s/than/then/
+> > > > > - added hsync/vsync/bus-type, make hsync/vsync required
+> > > > > - fix example indent
+> > > > > 
+> > > > >  .../bindings/media/i2c/toshiba,tc358746.yaml  | 179 ++++++++++++++++++
+> > > > >  1 file changed, 179 insertions(+)
+> > > > >  create mode 100644 Documentation/devicetree/bindings/media/i2c/toshiba,tc358746.yaml
+> > > > > 
+> > > > > diff --git a/Documentation/devicetree/bindings/media/i2c/toshiba,tc358746.yaml b/Documentation/devicetree/bindings/media/i2c/toshiba,tc358746.yaml
+> > > > > new file mode 100644
+> > > > > index 000000000000..1fa574400bc2
+> > > > > --- /dev/null
+> > > > > +++ b/Documentation/devicetree/bindings/media/i2c/toshiba,tc358746.yaml
+> > > > > @@ -0,0 +1,179 @@
+> > > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > > > +%YAML 1.2
+> > > > > +---
+> > > > > +$id: http://devicetree.org/schemas/media/i2c/toshiba,tc358746.yaml#
+> > > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > > > +
+> > > > > +title: Toshiba TC358746 Parallel to MIPI CSI2 Bridge
+> > > > > +
+> > > > > +maintainers:
+> > > > > +  - Marco Felsch <kernel@pengutronix.de>
+> > > > > +
+> > > > > +description: |-
+> > > > > +  The Toshiba TC358746 converts a parallel video stream into a MIPI CSI-2
+> > > > > +  stream. The direction can be either parallel-in -> csi-out or csi-in ->
+> > > > > +  parallel-out The chip is programmable trough I2C and SPI but the SPI
+> > > > > +  interface is only supported in parallel-in -> csi-out mode.
+> > > > > +
+> > > > > +  Note that the current device tree bindings only support the
+> > > > > +  parallel-in -> csi-out path.
+> > > > > +
+> > > > > +properties:
+> > > > > +  compatible:
+> > > > > +    const: toshiba,tc358746
+> > > > > +
+> > > > > +  reg:
+> > > > > +    maxItems: 1
+> > > > > +
+> > > > > +  clocks:
+> > > > > +    description:
+> > > > > +      The phandle to the reference clock source. This corresponds to the
+> > > > > +      hardware pin REFCLK.
+> > > > > +    maxItems: 1
+> > > > > +
+> > > > > +  clock-names:
+> > > > > +    const: refclk
+> > > > > +
+> > > > > +# The bridge can act as clock provider for the sensor. To enable this support
+> > > > > +# #clock-cells must be specified. Attention if this feature is used then the
+> > > > > +# mclk rate must be at least: (2 * link-frequency) / 8
+> > > > > +#                             `------------------´   ^
+> > > > > +#                             internal PLL rate   smallest possible mclk-div
+> > > > > +  "#clock-cells":
+> > > > > +    const: 0
+> > > > > +
+> > > > > +  clock-output-names:
+> > > > > +    description:
+> > > > > +      The clock name of the MCLK output, the default name is tc358746-mclk.
+> > > > > +    maxItems: 1
+> > > > > +
+> > > > > +  vddc-supply:
+> > > > > +    description: Digital core voltage supply, 1.2 volts
+> > > > > +
+> > > > > +  vddio-supply:
+> > > > > +    description: Digital I/O voltage supply, 1.8 volts
+> > > > > +
+> > > > > +  vddmipi-supply:
+> > > > > +    description: MIPI CSI phy voltage supply, 1.2 volts
+> > > > > +
+> > > > > +  reset-gpios:
+> > > > > +    description:
+> > > > > +      The phandle and specifier for the GPIO that controls the chip reset.
+> > > > > +      This corresponds to the hardware pin RESX which is physically active low.
+> > > > > +    maxItems: 1
+> > > > > +
+> > > > > +  ports:
+> > > > > +    $ref: /schemas/graph.yaml#/properties/ports
+> > > > > +    properties:
+> > > > > +      port@0:
+> > > > > +        $ref: /schemas/graph.yaml#/$defs/port-base
+> > > > > +        description: Input port
+> > > > > +
+> > > > > +        properties:
+> > > > > +          endpoint:
+> > > > > +            $ref: /schemas/media/video-interfaces.yaml#
+> > > > > +            unevaluatedProperties: false
+> > > > > +
+> > > > > +            properties:
+> > > > > +              hsync-active:
+> > > > > +                enum:
+> > > > > +                  - 0 # Hvalid active high
+> > > > > +              vsync-active:
+> > > > > +                enum:
+> > > > > +                  - 0 # Vvalid active high
+> > > > > +              bus-type:
+> > > > > +                enum:
+> > > > > +                  - 5 # Parallel
+> > > > > +
+> > > > > +            required:
+> > > > > +              - hsync-active
+> > > > > +              - vsync-active
+> > > > 
+> > > > Let's make bus-type required too, to prepare for BT.656 support.
+> > > 
+> > > I would have done it when the BT.656 support is added. Since the BT.656
+> > > don't require the sync signals I would have made a descision:
+> > >  - either: hsync/vsync present -> parallel with external syncs, or
+> > >  - bus-type present -> parallel bus with embedded syncs.
+> > > 
+> > > So we don't bother the system-integrator with specifying unnecessary
+> > > properties. Also having v/hsync required in place with the bus-type (set
+> > > to bt.656) can cause confusion about the final used mode.
+> > 
+> > The V4L2 fwnode framework can guess the type of the bus but it's not
+> > recommended to use the feature.
 > 
-> Signed-off-by: Jianguo Zhang <jianguo.zhang@mediatek.com>
+> Explicit bus types in DT indeed makes it easier for drivers, so if a
+> device can support multiple bus types (even if not implemented yet in
+> the corresponding drivers), the property should be there.
 
-Please version your patches. git format-patch can do it for you.
+Okay, I will make it required.
 
-Best regards,
-Krzysztof
+> > Why do you have hsync-active and vsync-active if both are always zero? Can
+> > the hardware not support other configuration?
+
+Sure the device supports toggling the logic but it is not implemented.
+So the bindings needs to enforce it to 0 right now. As soon as it is
+implemented & tested, we can say that both is supported :)
+
+Regards,
+  Marco
