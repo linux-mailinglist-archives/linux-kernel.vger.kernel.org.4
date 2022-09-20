@@ -2,102 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 599765BE938
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 16:43:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF65C5BE93E
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 16:44:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230178AbiITOnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 10:43:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44294 "EHLO
+        id S230500AbiITOnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 10:43:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229982AbiITOnK (ORCPT
+        with ESMTP id S229741AbiITOn1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 10:43:10 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB8A2543ED;
-        Tue, 20 Sep 2022 07:43:08 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id E0C843200A9B;
-        Tue, 20 Sep 2022 10:43:06 -0400 (EDT)
-Received: from imap49 ([10.202.2.99])
-  by compute5.internal (MEProxy); Tue, 20 Sep 2022 10:43:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lmb.io; h=cc:cc
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1663684986; x=1663771386; bh=b2NLgxbKTa
-        U2l5yP5VXesj/Hv+T6knC6w277DZ3PdJA=; b=ih9ZoJHo9YEylOAnCcyOV5AWOK
-        aKbXcUNOo4djhqP0JssSm9mFG1oJsWVSzqXSYsnq+luS4swJhxOMCM2zxsDQFgiS
-        ncFdCXyR25YNVP/x3ImcAhGJKyIi/LqcYsB8jUB9sbC7iyWe4lstGu/5SsrYfAg1
-        YIddBpOXXW1JsMQIWXe7BQkABkzU6hBJKX9xhSUKSJxwu6oOc1t+kkZGrQStFe/z
-        wwb0t4cenVjDY/C6Mfke/3ZNnOjjN6ss5kfcafuvoK7s5DJuJcvJ5Sz+GQ8xJy2c
-        6oGqrIBkDIf6+laRqhexs/ZLAOOE/vdBy4ebyiqwR2CPWdJKZK8FgQAhAbyw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1663684986; x=1663771386; bh=b2NLgxbKTaU2l5yP5VXesj/Hv+T6
-        knC6w277DZ3PdJA=; b=vtKXxz+TRdNO6vZUGcoMywyPDZVHvxLVbR4ALCX+kNyk
-        zt7L04kMWLLX6Q+BfKZF0ftn8Ihaj5SO1v0UqJKqk+GVTEAKnb4wCl9YX0KtTr1l
-        /1GnvkjnzUvOprS+88gwuR/sg31hcqwjXS986lxrlN3kL8gwhf5eN/BBBYJxoQL9
-        5TPLbZ4UUBoajIwxuyReLl+4ADXGnEayoZcNoIca8KVVETTBFNAeK8z6gsmupk6s
-        pfKbvkwHNz4HsKGoEFNxYmVaO23YHQ/JnSza0pMpXOv4umOKxiHd7cFRFYwlIDIq
-        MjUKoOG9cap8nhtrf71IUUEFGeMVqfWtT2v4BoQZfA==
-X-ME-Sender: <xms:edEpY9UCEJtBUUVB0GO6X2RNy54fsRdl_zx21xd-w9QEKxTf7Why4w>
-    <xme:edEpY9murgI72Nfu6q-H-iwLaeY397XZwQFlHixqw83SA5LNAdL9ZWhOEezSnIH5N
-    WDwc4tU9zm7paZoPA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedvledgkedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefofgggkfgjfhffhffvvefutgesth
-    dtredtreertdenucfhrhhomhepfdfnohhrvghniicuuegruhgvrhdfuceoohhssheslhhm
-    sgdrihhoqeenucggtffrrghtthgvrhhnpeffteegfffgffffueduiefhffeufffgleehge
-    dtleelgefgfffgveefkeeftdffleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgr
-    mhepmhgrihhlfhhrohhmpehoshhssehlmhgsrdhioh
-X-ME-Proxy: <xmx:edEpY5bA42ppEheW6rRmDymHpc7ZB5Uui1Wxt8epQrme9N1jCo9qkA>
-    <xmx:edEpYwUwKwXT-fm8LaQIpU8sY0u8O9mmCdY-FxpwhqjSpIb8ngpYBA>
-    <xmx:edEpY3m0Z9cit3h2KbooAVlM_2UniBxt1AC6wlFEZ-AGVfWaUSfIGA>
-    <xmx:etEpYwAs5EotP83TNIuRrq_nhIHuFzHDsDgx1rXS9gjdPasni_pV2A>
-Feedback-ID: icd3146c6:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 8C06415A0087; Tue, 20 Sep 2022 10:43:05 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-935-ge4ccd4c47b-fm-20220914.001-ge4ccd4c4
-Mime-Version: 1.0
-Message-Id: <aec8ef40-260c-4ded-b806-d381a3075ff0@www.fastmail.com>
-In-Reply-To: <5a3c5ea9-d557-6070-d778-1092f3c51257@huawei.com>
-References: <20220715115559.139691-1-shaozhengchao@huawei.com>
- <20220914111936.19881-1-oss@lmb.io>
- <CAKH8qBujKnFh8_g+npxHpo7RGFshus3N0iysmVBohTtG1X2yow@mail.gmail.com>
- <5a3c5ea9-d557-6070-d778-1092f3c51257@huawei.com>
-Date:   Tue, 20 Sep 2022 15:42:31 +0100
-From:   "Lorenz Bauer" <oss@lmb.io>
-To:     shaozhengchao <shaozhengchao@huawei.com>,
-        "Stanislav Fomichev" <sdf@google.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yuehaibing@huawei.com
-Subject: Re: [PATCH v4,bpf-next] bpf: Don't redirect packets with invalid pkt_len
+        Tue, 20 Sep 2022 10:43:27 -0400
+Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C9353004;
+        Tue, 20 Sep 2022 07:43:25 -0700 (PDT)
+Received: from in02.mta.xmission.com ([166.70.13.52]:58122)
+        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1oaeT5-007JKb-2U; Tue, 20 Sep 2022 08:43:23 -0600
+Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:40460 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1oaeT2-00A5cd-1m; Tue, 20 Sep 2022 08:43:22 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Ren Zhijie <renzhijie2@huawei.com>
+Cc:     <keescook@chromium.org>, <viro@zeniv.linux.org.uk>,
+        <linux-mm@kvack.org>, <linux-fsdevel@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <tanghui20@huawei.com>
+References: <20220920120812.231417-1-renzhijie2@huawei.com>
+Date:   Tue, 20 Sep 2022 09:42:48 -0500
+In-Reply-To: <20220920120812.231417-1-renzhijie2@huawei.com> (Ren Zhijie's
+        message of "Tue, 20 Sep 2022 20:08:12 +0800")
+Message-ID: <87sfkmyumv.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
 Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-XM-SPF: eid=1oaeT2-00A5cd-1m;;;mid=<87sfkmyumv.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX18i+9VOR1RYod84Byw32gyuF/Em/c5q38s=
+X-SA-Exim-Connect-IP: 68.110.29.46
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa08 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ***;Ren Zhijie <renzhijie2@huawei.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 1718 ms - load_scoreonly_sql: 0.08 (0.0%),
+        signal_user_changed: 15 (0.9%), b_tie_ro: 13 (0.8%), parse: 1.09
+        (0.1%), extract_message_metadata: 15 (0.9%), get_uri_detail_list: 2.7
+        (0.2%), tests_pri_-1000: 8 (0.4%), tests_pri_-950: 1.49 (0.1%),
+        tests_pri_-900: 1.15 (0.1%), tests_pri_-90: 298 (17.3%), check_bayes:
+        291 (16.9%), b_tokenize: 9 (0.5%), b_tok_get_all: 9 (0.5%),
+        b_comp_prob: 3.8 (0.2%), b_tok_touch_all: 262 (15.3%), b_finish: 1.74
+        (0.1%), tests_pri_0: 1311 (76.3%), check_dkim_signature: 0.58 (0.0%),
+        check_dkim_adsp: 3.0 (0.2%), poll_dns_idle: 41 (2.4%), tests_pri_10:
+        4.0 (0.2%), tests_pri_500: 60 (3.5%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH] exec: Force binary name when argv is empty
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 19 Sep 2022, at 11:55, shaozhengchao wrote:
-> Sorry for the delay. I'm busy testing the TC module recently. I'm very 
-> sorry for the user-space breakage.
+Ren Zhijie <renzhijie2@huawei.com> writes:
+
+> From: Hui Tang <tanghui20@huawei.com>
 >
-> The root cause of this problem is that eth_type_trans() is called when
-> the protocol type of the SKB is parsed. The len value of the SKB is
-> reduced to 0. If the user mode requires that the forwarding succeed, or
->   if the MAC header is added again after the MAC header is subtracted, 
-> is this appropriate?
+> First run './execv-main execv-child', there is empty in 'COMMAND' column
+> when run 'ps -u'.
+>
+>  USER       PID %CPU %MEM    VSZ   RSS TTY    [...] TIME COMMAND
+>  root       368  0.3  0.0   4388   764 ttyS0        0:00 ./execv-main
+>  root       369  0.6  0.0   4520   812 ttyS0        0:00
+>
+> The program 'execv-main' as follows:
+>
+>  int main(int argc, char **argv)
+>  {
+>    char *execv_argv[] = {NULL};
+>    pid_t pid = fork();
+>
+>    if (pid == 0) {
+>      execv(argv[1], execv_argv);
+>    } else if (pid > 0) {
+>      wait(NULL);
+>    }
+>    return 0;
+>  }
+>
+> So replace empty string ("") added with the name of binary
+> when calling execve with a NULL argv.
 
-We don't require forwarding to succeed with a 14 byte input buffer. We also don't look at the MAC header.
+I do not understand the point of this patch.  The command name is
+allowed to be anything.  By convention it is the name of the binary but
+that is not required.  For login shells it is always something else.
 
-I think refusing to forward 0 length packets would be OK. Not 100% certain I understood you correctly, let me know if this helps.
+The practical problem that commit dcd46d897adb ("exec: Force single
+empty string when argv is empty") addresses is that a NULL argv[0]
+is not expected by programs, and can be used to trigger bugs in
+those programs.  Especially suid programs.
 
-Best
-Lorenz
+The actual desired behavior is to simply have execve fail in that
+case.  Unfortunately there are a few existing programs that depend
+on running that way, so we could not have such exec's fail.
+
+For a rare case that should essentially never happen why make it
+friendlier to use?  Why not fix userspace to add the friendly name
+instead of the kernel?
+
+Unless there is a good reason for it, it would be my hope that in
+a couple of years all of the userspace programs that trigger
+the warning when they start up could be fixed, and we could have
+execve start failing in those cases.
+
+Eric
+
+>
+> Fixes: dcd46d897adb ("exec: Force single empty string when argv is empty")
+> Signed-off-by: Hui Tang <tanghui20@huawei.com>
+> ---
+>  fs/exec.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+>
+> diff --git a/fs/exec.c b/fs/exec.c
+> index 939d76e23935..7d1909a89a57 100644
+> --- a/fs/exec.c
+> +++ b/fs/exec.c
+> @@ -494,8 +494,8 @@ static int bprm_stack_limits(struct linux_binprm *bprm)
+>  	 * signal to the parent that the child has run out of stack space.
+>  	 * Instead, calculate it here so it's possible to fail gracefully.
+>  	 *
+> -	 * In the case of argc = 0, make sure there is space for adding a
+> -	 * empty string (which will bump argc to 1), to ensure confused
+> +	 * In the case of argc = 0, make sure there is space for adding
+> +	 * bprm->filename (which will bump argc to 1), to ensure confused
+>  	 * userspace programs don't start processing from argv[1], thinking
+>  	 * argc can never be 0, to keep them from walking envp by accident.
+>  	 * See do_execveat_common().
+> @@ -1900,7 +1900,7 @@ static int do_execveat_common(int fd, struct filename *filename,
+>  
+>  	retval = count(argv, MAX_ARG_STRINGS);
+>  	if (retval == 0)
+> -		pr_warn_once("process '%s' launched '%s' with NULL argv: empty string added\n",
+> +		pr_warn_once("process '%s' launched '%s' with NULL argv: bprm->filename added\n",
+>  			     current->comm, bprm->filename);
+>  	if (retval < 0)
+>  		goto out_free;
+> @@ -1929,13 +1929,13 @@ static int do_execveat_common(int fd, struct filename *filename,
+>  		goto out_free;
+>  
+>  	/*
+> -	 * When argv is empty, add an empty string ("") as argv[0] to
+> +	 * When argv is empty, add bprm->filename as argv[0] to
+>  	 * ensure confused userspace programs that start processing
+>  	 * from argv[1] won't end up walking envp. See also
+>  	 * bprm_stack_limits().
+>  	 */
+>  	if (bprm->argc == 0) {
+> -		retval = copy_string_kernel("", bprm);
+> +		retval = copy_string_kernel(bprm->filename, bprm);
+>  		if (retval < 0)
+>  			goto out_free;
+>  		bprm->argc = 1;
