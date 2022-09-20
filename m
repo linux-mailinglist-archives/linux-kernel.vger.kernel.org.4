@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F40735BE4B3
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 13:41:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2A965BE4B7
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 13:41:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230033AbiITLlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 07:41:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33034 "EHLO
+        id S230153AbiITLlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 07:41:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230307AbiITLlO (ORCPT
+        with ESMTP id S230352AbiITLl3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 07:41:14 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA3E17171D
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 04:41:12 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id q3so2727976pjg.3
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 04:41:12 -0700 (PDT)
+        Tue, 20 Sep 2022 07:41:29 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8AE573938
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 04:41:18 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id o70-20020a17090a0a4c00b00202f898fa86so2199567pjo.2
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 04:41:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=Ow7jg7iL4OBsAsTVBpxDnjt3oRi+Efs0B5EUHKrVg58=;
-        b=u4imFhzk0rcWxWia/6Eb8RWqVZp7FRaBXwhvqBSQsj+wnFAfG3Eq2VnrbHowHbUXGT
-         vnXztbOcsy5EdsL+f0nZioHCAJ7pOiVp5GEvXrplkKWhmVlNEdcdNRZvPoj4iRpQDHj6
-         7Geb76bWw+eM0+XLX95FguUPnXZEeREBwbkzS0MQmzG3wuGoEaar0/bQuApnhqhSnS9X
-         7p+PqCIjIVmGjlVCM84bG++O6eFlKmJBmFikj9lILL8sY7GHVQTDBJTQDrOKGJCI6EuY
-         zg18mxx87PYZv9jtCyEm7KZs2ClUc50CCsU08RPpfE6jooYU4mpySVXwpyu5mkSmuoZM
-         ujrQ==
+        bh=g6AC6jEf76DqrwOwWwOtLtUk31f5tzTAXDubM2/ZX08=;
+        b=ARe77Wi6S4c70JwGGEeGv+7LI1vlm8Iao63LhaaZHXbimsEa+2gKXKIj45z3WezXK8
+         9NYPi+kjzosHx4EpLu4dXx7ZqZ4LDGoZy8FTEym+8iVCkRSq9FE1w3aKbtH3k33G0U/9
+         OMowAo+E47vhSo3QmIZYnzcxdvxPibw/EO8hBjPaxGYOlh1We22+Ax1EA81tAI+nR1QN
+         7S8VI5BuEajQ0w+LShkZeO9VD5m8WNxwnm6YPkAsivGsP8SfhNUQdzRqJgLjWngm8U7c
+         wOgBquSA33uMDBYT+Nm2XKAKlqna45n+bBgo4qdhO2ockESRK3rna8I/hxoKPxYJ+lQk
+         fPyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=Ow7jg7iL4OBsAsTVBpxDnjt3oRi+Efs0B5EUHKrVg58=;
-        b=5tz6dyzFHHmcQsDCU87tQWoq78DXh2tMYSVW8lTtL+s2qlL2fZ9pqO4Yf7+fgKqQJj
-         MmGdM99tEt9ORRpMquNisSc99q9z76Jy7CqBseO+EAgLcQIxEsIlGF6BD3alI6VzbFC6
-         8yVi4QEffMfNG9oJQleIVNvO2xOaInFYCmZPinGKxkNqSoDAaHkOjFW0pUEgE6oQanAV
-         bv6ex+d/HylO1eEd02TngIzIM2A+CAPCY7ADHRGVA11HfqNme4Icb5tM56f6vQu1Xus6
-         jI0e9qSXnLq3uvTBRTN4Fxv/Yf2rtijjZAdhuAX0hc1IvJAqzhGRbPDeBOiiGX7ZYGo0
-         qqxg==
-X-Gm-Message-State: ACrzQf1MPPF2lRmEK8vS/UPCe6ZyI+xcGPw/OZR9eVS3v3klpblHmHw/
-        TZ7jY7FDTNWP17nBZslzXBO0Zg==
-X-Google-Smtp-Source: AMsMyM71JT1mEhC7wdZI3cGQS2uyvkFvIR5GXCiEuGs3YyQ/VsR//PE6NxgcG9fopZr8UvuyDFiJHQ==
-X-Received: by 2002:a17:90b:4b11:b0:202:998b:71b1 with SMTP id lx17-20020a17090b4b1100b00202998b71b1mr3536363pjb.208.1663674072459;
-        Tue, 20 Sep 2022 04:41:12 -0700 (PDT)
+        bh=g6AC6jEf76DqrwOwWwOtLtUk31f5tzTAXDubM2/ZX08=;
+        b=5Tmer+/2SqocS8vR4se6J2CUHIr5Ei50O56rWnl/iR6M2iKVBDhNAYoYa7BXAcUS/M
+         5EAV6xrFHo3fIoSbykd1ZVqRTPn5BjvshNtt2/dd2ZFH0vvxY2hcjU3opKZnEMT/d2Fx
+         GzGy4yMEm+jLu9DQNjTalBHC19/XBKBba8TLWbJJJoa48KhUkXXfFELZ8wHQkPskWcft
+         vfbCXk4iuIbykDkp4Oj+nIy7HWyqpUH3ooCbv/eOqY14eQZUKpcSxsYgmh8/BSQiYuXG
+         MMC58hFxPqN2Ue2LtEkcTs9XvjUAuaa87uFQG+k6mEvAQBa91Er+zd+yMA6oS+JWneih
+         nbdg==
+X-Gm-Message-State: ACrzQf3kxqD9RjXTz1kDBYjMgWTi9SvbmHDLZj0flQuYUQrmClAuaj0x
+        M+SU5wVxCx7Xl6SQYH/bvdNv6w==
+X-Google-Smtp-Source: AMsMyM5G7F0wTVQPxep+p0SCdwjOJ5D5ZVd8XO7y6z3cQPkLD0IruGY9NAplEmO3T0icT/eFqApszg==
+X-Received: by 2002:a17:903:496:b0:176:ba09:1cc0 with SMTP id jj22-20020a170903049600b00176ba091cc0mr4344800plb.41.1663674078004;
+        Tue, 20 Sep 2022 04:41:18 -0700 (PDT)
 Received: from localhost.localdomain ([2401:4900:1c61:6535:ca5f:67d1:670d:e188])
-        by smtp.gmail.com with ESMTPSA id p30-20020a63741e000000b00434e57bfc6csm1348793pgc.56.2022.09.20.04.41.07
+        by smtp.gmail.com with ESMTPSA id p30-20020a63741e000000b00434e57bfc6csm1348793pgc.56.2022.09.20.04.41.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 04:41:11 -0700 (PDT)
+        Tue, 20 Sep 2022 04:41:17 -0700 (PDT)
 From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
 To:     linux-crypto@vger.kernel.org, devicetree@vger.kernel.org
 Cc:     agross@kernel.org, herbert@gondor.apana.org.au,
@@ -58,9 +58,9 @@ Cc:     agross@kernel.org, herbert@gondor.apana.org.au,
         andersson@kernel.org, bhupesh.sharma@linaro.org,
         bhupesh.linux@gmail.com, davem@davemloft.net,
         Jordan Crouse <jorcrous@amazon.com>
-Subject: [PATCH v7 2/9] dt-bindings: qcom-qce: Add 'interconnects' and 'interconnect-names'
-Date:   Tue, 20 Sep 2022 17:10:44 +0530
-Message-Id: <20220920114051.1116441-3-bhupesh.sharma@linaro.org>
+Subject: [PATCH v7 3/9] dt-bindings: qcom-qce: Add 'iommus' to optional properties
+Date:   Tue, 20 Sep 2022 17:10:45 +0530
+Message-Id: <20220920114051.1116441-4-bhupesh.sharma@linaro.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220920114051.1116441-1-bhupesh.sharma@linaro.org>
 References: <20220920114051.1116441-1-bhupesh.sharma@linaro.org>
@@ -75,39 +75,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add 'interconnects' and 'interconnect-names' as optional properties
-to the device-tree binding documentation for Qualcomm crypto IP.
+Add the missing optional property - 'iommus' to the
+device-tree binding documentation for qcom-qce crypto IP.
 
-These properties describe the interconnect path between crypto and main
-memory and the interconnect type respectively.
+This property describes the phandle(s) to apps_smmu node with sid mask.
 
 Cc: Bjorn Andersson <andersson@kernel.org>
-Acked-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Rob Herring <robh@kernel.org>
 Tested-by: Jordan Crouse <jorcrous@amazon.com>
 Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 ---
- Documentation/devicetree/bindings/crypto/qcom-qce.yaml | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ Documentation/devicetree/bindings/crypto/qcom-qce.yaml | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/crypto/qcom-qce.yaml b/Documentation/devicetree/bindings/crypto/qcom-qce.yaml
-index 8df47e8513b8..94f96ebc5dac 100644
+index 94f96ebc5dac..4e00e7925fed 100644
 --- a/Documentation/devicetree/bindings/crypto/qcom-qce.yaml
 +++ b/Documentation/devicetree/bindings/crypto/qcom-qce.yaml
-@@ -32,6 +32,14 @@ properties:
+@@ -32,6 +32,12 @@ properties:
        - const: bus
        - const: core
  
-+  interconnects:
-+    maxItems: 1
++  iommus:
++    minItems: 1
++    maxItems: 8
 +    description:
-+      Interconnect path between qce crypto and main memory.
++      phandle to apps_smmu node with sid mask.
 +
-+  interconnect-names:
-+    const: memory
-+
-   dmas:
-     items:
-       - description: DMA specifiers for rx dma channel.
+   interconnects:
+     maxItems: 1
+     description:
+@@ -72,4 +78,8 @@ examples:
+         clock-names = "iface", "bus", "core";
+         dmas = <&cryptobam 2>, <&cryptobam 3>;
+         dma-names = "rx", "tx";
++        iommus = <&apps_smmu 0x584 0x0011>,
++                 <&apps_smmu 0x586 0x0011>,
++                 <&apps_smmu 0x594 0x0011>,
++                 <&apps_smmu 0x596 0x0011>;
+     };
 -- 
 2.37.1
 
