@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 399EA5BE7A8
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 15:53:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EDD35BE7AA
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 15:53:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231150AbiITNxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 09:53:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44500 "EHLO
+        id S231464AbiITNxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 09:53:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231363AbiITNwa (ORCPT
+        with ESMTP id S230456AbiITNwr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 09:52:30 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE62950192
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 06:52:02 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id t14so4386305wrx.8
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 06:52:02 -0700 (PDT)
+        Tue, 20 Sep 2022 09:52:47 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CAA945F6A
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 06:52:08 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id t14so4386698wrx.8
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 06:52:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:organization:from:references
          :cc:to:content-language:subject:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date;
-        bh=wavHRpIWkpyu/fKpoa4LUcNf3AdZyP5am8fHD/jGLRE=;
-        b=thALaoFEIkou3OZhPREDndGPX4/7jF7ShmviKDCgYAgqh1z+qLL9LNgPp8qw5VjE3w
-         6e0/fkVPATk+5NZHXQd7hdrTjSE28UEnz341OFPioAMQppYS3FaJMcKq5YZDvmQmrY4w
-         Dm/oXNDrimCOR+I/hSw0CAPx2q6WivhXsTKG4C6nR/T7c3gnBaPyuqo8teonguZvNrTZ
-         VW7YH3OfUF5FIvoeaRDCqZcxPEiKPikYrMJtT1Map3WZLZkoqGguE5sCjoYgiC+ObZ0C
-         ev6708kyCJdmR6rgScMsNz0cCruVQU+sJT1fx6tgaTNY+DhWmLxXhgiW3oGfgVmrsh3/
-         OoiQ==
+        bh=Q2S5kn0jzeFVRABkK/YHbcUCIRF0pe18iCbYjVDYwPA=;
+        b=C1fhbRcPSWMroocXNRq+4Ll+26xjdV0bPwQ2IHMBm16cyFN/Qqgdl7fpZUq5xx9GB8
+         27yGD1BLyhNjw3Rz6byMH66DjHqdtR8SmkE1g4qqcxxal11uKK97ZxWfuI6V4hX2UAv8
+         GD+BjliZ+EFAzIOt2HMvUFF44JAC0hQUHkdtLqcTCamyiRyCYKcLwvhEEdW+lv4SD6mA
+         eWYqIUH9l6h4+tmXJuGjeOmiud+4KXLI8ygFKXPsRt0iVCtWCFr4ISGQLJpPndr2TXnw
+         DZSUFBKtNdkAYmiB7jKHce1jw49L1XSffHNv8Xy80rXHI9t/KEYauB7+P4WRDkRTNxqG
+         mwgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:organization:from:references
          :cc:to:content-language:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=wavHRpIWkpyu/fKpoa4LUcNf3AdZyP5am8fHD/jGLRE=;
-        b=n2xXZme9d66GDVTn7/2YQu6GOIcL3w3iZSJH9wQ2dIKRWH+/EVEC9OEpBBfb2bmP0p
-         jIljLpY/EFsPFgguvdo7b4YoXEc5P8qqmFukaJNaQZugPQlLHAWdTfueRLrVSZcj/C0S
-         V/INqVFNjThADfgSRG7cZZj+Lm2itjfmC92AlLuS7V8OJqPu4Qk7ipXPZIHqMVZtd74E
-         v9Z+4lffURV3m3+AdQly4PvbdB9nebm3idhyzG7YjXfl0mb5bntewAUh5FQM6hbVAfIZ
-         H58h7Lk4elcbtfK+jXjzGe5BFTqqOX6fuRVEuQb3zbilcfueAJ4sufKF8bcUy7FvWLVi
-         wCRw==
-X-Gm-Message-State: ACrzQf3ZG0U5croRUigfbjzwnmkBpmHYAW0bSIqs+BCw4GMLdAVMCk2F
-        4bE+uZ0B2qf20CVKqJ6jETRuCA==
-X-Google-Smtp-Source: AMsMyM5a+rZ0auh2vbTz9I0PrgjTcQNeburU0wRnf66nxizH0SYO1n8k+g2mr7qf0bOh21TjCoL3cw==
-X-Received: by 2002:adf:e609:0:b0:22a:a6fd:cfe1 with SMTP id p9-20020adfe609000000b0022aa6fdcfe1mr14602066wrm.0.1663681922043;
-        Tue, 20 Sep 2022 06:52:02 -0700 (PDT)
+        bh=Q2S5kn0jzeFVRABkK/YHbcUCIRF0pe18iCbYjVDYwPA=;
+        b=JuvWWBBA5RY52q4G2GqDV7q8sx3UESwh6KkVeJaKSj1pKFPX425oM+5Bc2aELYYTs9
+         BAwgs9oQ1XAe15xlPKw0l0rK2uCTCtzznAGpBaTvD8BYRjlN4hvqoiQfPs2YgNwFmYSI
+         xad+lmhdVHfXJtGkZ5P+e69dfWQMlVF/PJevz3unW2SaQYbUUvHJJw+Bafu4Cw/okqrI
+         AE2LlOZLYqRjeU6nN80QN31P8aeaoKk2as57qTSqId9PfXVY/Vvib6xjfMFVBdUgqioR
+         qp4gr2a9pbcIULR1D1EQd1CEOBQTfkk7jp/KO+rasQC8cwu7+TUpiMqTPMhR9+wfLqIo
+         /hDg==
+X-Gm-Message-State: ACrzQf3zPZ8+1QWp4PELvjlhRuQFKcMR5ppypPDMpcP7BrY0M2TwGYKR
+        kaURYo4t3ZD5ruThq94egyXxhQ==
+X-Google-Smtp-Source: AMsMyM4wMVJWiISTAegI16gdFzYkCFp6cWAck5swNPWFa3ym7bKty//RZmZETweLe2XBLFzNLG0ivQ==
+X-Received: by 2002:adf:e5cf:0:b0:22a:c37c:5c6c with SMTP id a15-20020adfe5cf000000b0022ac37c5c6cmr14730579wrn.410.1663681926713;
+        Tue, 20 Sep 2022 06:52:06 -0700 (PDT)
 Received: from ?IPV6:2a01:e0a:982:cbb0:7e10:f0f:43b2:9b5e? ([2a01:e0a:982:cbb0:7e10:f0f:43b2:9b5e])
-        by smtp.gmail.com with ESMTPSA id c11-20020adfe70b000000b00228c483128dsm19919wrm.90.2022.09.20.06.52.00
+        by smtp.gmail.com with ESMTPSA id x12-20020a05600c2d0c00b003b4de550e34sm33885wmf.40.2022.09.20.06.52.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Sep 2022 06:52:01 -0700 (PDT)
-Message-ID: <050ce714-3c4b-97c7-458e-c5e8d38cd9ac@linaro.org>
-Date:   Tue, 20 Sep 2022 15:52:00 +0200
+        Tue, 20 Sep 2022 06:52:06 -0700 (PDT)
+Message-ID: <aaed11ee-9687-8fb3-fb20-e835a470aa15@linaro.org>
+Date:   Tue, 20 Sep 2022 15:52:05 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH 13/17] phy: qcom-qmp-pcie-msm8996: rename nlanes config
+Subject: Re: [PATCH 14/17] phy: qcom-qmp-combo: consolidate lane config
 Content-Language: en-US
 To:     Johan Hovold <johan+linaro@kernel.org>,
         Vinod Koul <vkoul@kernel.org>
@@ -67,15 +67,16 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         linux-kernel@vger.kernel.org
 References: <20220920073826.20811-1-johan+linaro@kernel.org>
- <20220920073826.20811-14-johan+linaro@kernel.org>
+ <20220920073826.20811-15-johan+linaro@kernel.org>
 From:   Neil Armstrong <neil.armstrong@linaro.org>
 Organization: Linaro
-In-Reply-To: <20220920073826.20811-14-johan+linaro@kernel.org>
+In-Reply-To: <20220920073826.20811-15-johan+linaro@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -83,46 +84,207 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 20/09/2022 09:38, Johan Hovold wrote:
-> The nlanes configuration parameter is really the number of PHYs provided
-> by this QMP block on MSM8996. Rename it accordingly.
+> For legacy reasons, there are two configuration parameters that appear
+> to describe the number of lanes a PHY has, even if "nlanes" was actually
+> used for a different purpose.
+> 
+> Replace them both with a new field simply named "lanes".
 > 
 > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 > ---
->   drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c | 8 ++++----
->   1 file changed, 4 insertions(+), 4 deletions(-)
+>   drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 38 ++++++++---------------
+>   1 file changed, 13 insertions(+), 25 deletions(-)
 > 
-> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c
-> index e261837aee32..0f8e739936ab 100644
-> --- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c
-> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c
-> @@ -186,8 +186,8 @@ static const struct qmp_phy_init_tbl msm8996_pcie_pcs_tbl[] = {
->   
->   /* struct qmp_phy_cfg - per-PHY initialization config */
+> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
+> index 08e96e383a29..417e0fcf1a9f 100644
+> --- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
+> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
+> @@ -816,8 +816,7 @@ struct qmp_phy;
 >   struct qmp_phy_cfg {
+>   	/* phy-type - PCIE/UFS/USB */
+>   	unsigned int type;
 > -	/* number of lanes provided by phy */
 > -	int nlanes;
-> +	/* number of PHYs provided by this block */
-> +	int num_phys;
+> +	int lanes;
 >   
 >   	/* Init sequence for PHY blocks - serdes, tx, rx, pcs */
 >   	const struct qmp_phy_init_tbl *serdes_tbl;
-> @@ -318,7 +318,7 @@ static const char * const qmp_phy_vreg_l[] = {
+> @@ -879,8 +878,6 @@ struct qmp_phy_cfg {
+>   
+>   	/* true, if PHY has a separate DP_COM control block */
+>   	bool has_phy_dp_com_ctrl;
+> -	/* true, if PHY has secondary tx/rx lanes to be configured */
+> -	bool is_dual_lane_phy;
+>   
+>   	/* Offset from PCS to PCS_USB region */
+>   	unsigned int pcs_usb_offset;
+> @@ -1029,7 +1026,7 @@ static const char * const sc7180_usb3phy_reset_l[] = {
+>   
+>   static const struct qmp_phy_cfg sc7180_usb3phy_cfg = {
+>   	.type			= PHY_TYPE_USB3,
+> -	.nlanes			= 1,
+> +	.lanes			= 2,
+>   
+>   	.serdes_tbl		= qmp_v3_usb3_serdes_tbl,
+>   	.serdes_tbl_num		= ARRAY_SIZE(qmp_v3_usb3_serdes_tbl),
+> @@ -1056,12 +1053,11 @@ static const struct qmp_phy_cfg sc7180_usb3phy_cfg = {
+>   	.pwrdn_delay_max	= POWER_DOWN_DELAY_US_MAX,
+>   
+>   	.has_phy_dp_com_ctrl	= true,
+> -	.is_dual_lane_phy	= true,
 >   };
 >   
->   static const struct qmp_phy_cfg msm8996_pciephy_cfg = {
-> -	.nlanes			= 3,
-> +	.num_phys		= 3,
+>   static const struct qmp_phy_cfg sc7180_dpphy_cfg = {
+>   	.type			= PHY_TYPE_DP,
+> -	.nlanes			= 1,
+> +	.lanes			= 2,
 >   
->   	.serdes_tbl		= msm8996_pcie_serdes_tbl,
->   	.serdes_tbl_num		= ARRAY_SIZE(msm8996_pcie_serdes_tbl),
-> @@ -861,7 +861,7 @@ static int qmp_pcie_msm8996_probe(struct platform_device *pdev)
->   	if (IS_ERR(serdes))
->   		return PTR_ERR(serdes);
+>   	.serdes_tbl		= qmp_v3_dp_serdes_tbl,
+>   	.serdes_tbl_num		= ARRAY_SIZE(qmp_v3_dp_serdes_tbl),
+> @@ -1091,7 +1087,6 @@ static const struct qmp_phy_cfg sc7180_dpphy_cfg = {
+>   	.regs			= qmp_v3_usb3phy_regs_layout,
 >   
-> -	expected_phys = cfg->nlanes;
-> +	expected_phys = cfg->num_phys;
+>   	.has_phy_dp_com_ctrl	= true,
+> -	.is_dual_lane_phy	= true,
 >   
->   	mutex_init(&qmp->phy_mutex);
+>   	.dp_aux_init = qcom_qmp_v3_phy_dp_aux_init,
+>   	.configure_dp_tx = qcom_qmp_v3_phy_configure_dp_tx,
+> @@ -1106,7 +1101,7 @@ static const struct qmp_phy_combo_cfg sc7180_usb3dpphy_cfg = {
 >   
+>   static const struct qmp_phy_cfg sdm845_usb3phy_cfg = {
+>   	.type			= PHY_TYPE_USB3,
+> -	.nlanes			= 1,
+> +	.lanes			= 2,
+>   
+>   	.serdes_tbl		= qmp_v3_usb3_serdes_tbl,
+>   	.serdes_tbl_num		= ARRAY_SIZE(qmp_v3_usb3_serdes_tbl),
+> @@ -1133,7 +1128,6 @@ static const struct qmp_phy_cfg sdm845_usb3phy_cfg = {
+>   	.pwrdn_delay_max	= POWER_DOWN_DELAY_US_MAX,
+>   
+>   	.has_phy_dp_com_ctrl	= true,
+> -	.is_dual_lane_phy	= true,
+>   };
+>   
+>   static const struct qmp_phy_combo_cfg sdm845_usb3dpphy_cfg = {
+> @@ -1143,7 +1137,7 @@ static const struct qmp_phy_combo_cfg sdm845_usb3dpphy_cfg = {
+>   
+>   static const struct qmp_phy_cfg sm8150_usb3phy_cfg = {
+>   	.type			= PHY_TYPE_USB3,
+> -	.nlanes			= 1,
+> +	.lanes			= 2,
+>   
+>   	.serdes_tbl		= sm8150_usb3_serdes_tbl,
+>   	.serdes_tbl_num		= ARRAY_SIZE(sm8150_usb3_serdes_tbl),
+> @@ -1174,12 +1168,11 @@ static const struct qmp_phy_cfg sm8150_usb3phy_cfg = {
+>   	.pwrdn_delay_max	= POWER_DOWN_DELAY_US_MAX,
+>   
+>   	.has_phy_dp_com_ctrl	= true,
+> -	.is_dual_lane_phy	= true,
+>   };
+>   
+>   static const struct qmp_phy_cfg sc8180x_dpphy_cfg = {
+>   	.type			= PHY_TYPE_DP,
+> -	.nlanes			= 1,
+> +	.lanes			= 2,
+>   
+>   	.serdes_tbl		= qmp_v4_dp_serdes_tbl,
+>   	.serdes_tbl_num		= ARRAY_SIZE(qmp_v4_dp_serdes_tbl),
+> @@ -1209,7 +1202,6 @@ static const struct qmp_phy_cfg sc8180x_dpphy_cfg = {
+>   	.regs			= qmp_v3_usb3phy_regs_layout,
+>   
+>   	.has_phy_dp_com_ctrl	= true,
+> -	.is_dual_lane_phy	= true,
+>   
+>   	.dp_aux_init = qcom_qmp_v4_phy_dp_aux_init,
+>   	.configure_dp_tx = qcom_qmp_v4_phy_configure_dp_tx,
+> @@ -1224,7 +1216,7 @@ static const struct qmp_phy_combo_cfg sc8180x_usb3dpphy_cfg = {
+>   
+>   static const struct qmp_phy_cfg sc8280xp_usb43dp_usb_cfg = {
+>   	.type			= PHY_TYPE_USB3,
+> -	.nlanes			= 1,
+> +	.lanes			= 2,
+>   
+>   	.serdes_tbl		= sc8280xp_usb43dp_serdes_tbl,
+>   	.serdes_tbl_num		= ARRAY_SIZE(sc8280xp_usb43dp_serdes_tbl),
+> @@ -1252,12 +1244,11 @@ static const struct qmp_phy_cfg sc8280xp_usb43dp_usb_cfg = {
+>   	.pwrdn_delay_max	= POWER_DOWN_DELAY_US_MAX,
+>   
+>   	.has_phy_dp_com_ctrl	= true,
+> -	.is_dual_lane_phy	= true,
+>   };
+>   
+>   static const struct qmp_phy_cfg sc8280xp_usb43dp_dp_cfg = {
+>   	.type			= PHY_TYPE_DP,
+> -	.nlanes			= 1,
+> +	.lanes			= 2,
+>   
+>   	.serdes_tbl		= qmp_v5_dp_serdes_tbl,
+>   	.serdes_tbl_num		= ARRAY_SIZE(qmp_v5_dp_serdes_tbl),
+> @@ -1287,7 +1278,6 @@ static const struct qmp_phy_cfg sc8280xp_usb43dp_dp_cfg = {
+>   	.regs			= qmp_v4_usb3phy_regs_layout,
+>   
+>   	.has_phy_dp_com_ctrl	= true,
+> -	.is_dual_lane_phy	= true,
+>   
+>   	.dp_aux_init = qcom_qmp_v4_phy_dp_aux_init,
+>   	.configure_dp_tx = qcom_qmp_v4_phy_configure_dp_tx,
+> @@ -1302,7 +1292,7 @@ static const struct qmp_phy_combo_cfg sc8280xp_usb43dpphy_combo_cfg = {
+>   
+>   static const struct qmp_phy_cfg sm8250_usb3phy_cfg = {
+>   	.type			= PHY_TYPE_USB3,
+> -	.nlanes			= 1,
+> +	.lanes			= 2,
+>   
+>   	.serdes_tbl		= sm8150_usb3_serdes_tbl,
+>   	.serdes_tbl_num		= ARRAY_SIZE(sm8150_usb3_serdes_tbl),
+> @@ -1332,12 +1322,11 @@ static const struct qmp_phy_cfg sm8250_usb3phy_cfg = {
+>   	.pwrdn_delay_max	= POWER_DOWN_DELAY_US_MAX,
+>   
+>   	.has_phy_dp_com_ctrl	= true,
+> -	.is_dual_lane_phy	= true,
+>   };
+>   
+>   static const struct qmp_phy_cfg sm8250_dpphy_cfg = {
+>   	.type			= PHY_TYPE_DP,
+> -	.nlanes			= 1,
+> +	.lanes			= 2,
+>   
+>   	.serdes_tbl		= qmp_v4_dp_serdes_tbl,
+>   	.serdes_tbl_num		= ARRAY_SIZE(qmp_v4_dp_serdes_tbl),
+> @@ -1367,7 +1356,6 @@ static const struct qmp_phy_cfg sm8250_dpphy_cfg = {
+>   	.regs			= qmp_v4_usb3phy_regs_layout,
+>   
+>   	.has_phy_dp_com_ctrl	= true,
+> -	.is_dual_lane_phy	= true,
+>   
+>   	.dp_aux_init = qcom_qmp_v4_phy_dp_aux_init,
+>   	.configure_dp_tx = qcom_qmp_v4_phy_configure_dp_tx,
+> @@ -2117,7 +2105,7 @@ static int qmp_combo_power_on(struct phy *phy)
+>   	/* Tx, Rx, and PCS configurations */
+>   	qmp_combo_configure_lane(tx, cfg->regs, cfg->tx_tbl, cfg->tx_tbl_num, 1);
+>   
+> -	if (cfg->is_dual_lane_phy) {
+> +	if (cfg->lanes >= 2) {
+>   		qmp_combo_configure_lane(qphy->tx2, cfg->regs, cfg->tx_tbl,
+>   					 cfg->tx_tbl_num, 2);
+>   	}
+> @@ -2128,7 +2116,7 @@ static int qmp_combo_power_on(struct phy *phy)
+>   
+>   	qmp_combo_configure_lane(rx, cfg->regs, cfg->rx_tbl, cfg->rx_tbl_num, 1);
+>   
+> -	if (cfg->is_dual_lane_phy) {
+> +	if (cfg->lanes >= 2) {
+>   		qmp_combo_configure_lane(qphy->rx2, cfg->regs, cfg->rx_tbl,
+>   					 cfg->rx_tbl_num, 2);
+>   	}
+> @@ -2725,7 +2713,7 @@ static int qmp_combo_create(struct device *dev, struct device_node *np, int id,
+>   	if (cfg->pcs_usb_offset)
+>   		qphy->pcs_usb = qphy->pcs + cfg->pcs_usb_offset;
+>   
+> -	if (cfg->is_dual_lane_phy) {
+> +	if (cfg->lanes >= 2) {
+>   		qphy->tx2 = devm_of_iomap(dev, np, 3, NULL);
+>   		if (IS_ERR(qphy->tx2))
+>   			return PTR_ERR(qphy->tx2);
 
 Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
