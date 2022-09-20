@@ -2,140 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 726415BECAF
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 20:18:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ABB35BECB0
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 20:18:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230270AbiITSSF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 14:18:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51742 "EHLO
+        id S230308AbiITSSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 14:18:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbiITSSB (ORCPT
+        with ESMTP id S229847AbiITSSE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 14:18:01 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9F37467CBA
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 11:17:57 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 491CE143D;
-        Tue, 20 Sep 2022 11:18:03 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A7BBC3F5A1;
-        Tue, 20 Sep 2022 11:17:53 -0700 (PDT)
-Message-ID: <07193d97-476a-498f-e738-e7920c2fdeea@arm.com>
-Date:   Tue, 20 Sep 2022 20:17:29 +0200
+        Tue, 20 Sep 2022 14:18:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF6D5209A
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 11:18:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 52F6362C16
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 18:18:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AC72C433D6;
+        Tue, 20 Sep 2022 18:17:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663697879;
+        bh=+HVQJ3kjgFnkSJtb8OPsQU+IhPNSgPKAs+x42YJ7ydE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pHI/lt+yv0PsEyiEwS5iu3nWREEzeNYXInMX653FA0omaolG9fUxT60G7w7dXZp6B
+         I7tkakIdOCCPCTBwkYTZTY4AGs8Qg5WthOoov1+tLQGdQ5iWhpQeVMKJZqN98FsbSp
+         DYw8v0ka5jGcAy2yqNtRk9oaR1Fjzb0drsnJ5wzv2LuAKmG47WjAToGPugl5/IzMxd
+         Pcm8RcLOXdBu9pwQovP+v1cjHUaQ8fWkZOVpHH117ddOFoooLQlo5bNwS58yO+JrCr
+         XAklb989/PUhHj10s4uEkIFjHj9fOTRy7eCSTkHRmdYqmJyK0+SMTvnRDUkTMARCxk
+         R9GVlsr4SO/SQ==
+Received: by pali.im (Postfix)
+        id 710ED97E; Tue, 20 Sep 2022 20:17:56 +0200 (CEST)
+Date:   Tue, 20 Sep 2022 20:17:56 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH] powerpc/highmem: Properly handle fragmented memory
+Message-ID: <20220920181756.snty255rhiexjvzh@pali>
+References: <f08cca5c46d67399c53262eca48e015dcf1841f9.1663695394.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v4 6/8] sched/fair: Add sched group latency support
-Content-Language: en-US
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, parth@linux.ibm.com,
-        qais.yousef@arm.com, chris.hyser@oracle.com,
-        valentin.schneider@arm.com, patrick.bellasi@matbug.net,
-        David.Laight@aculab.com, pjt@google.com, pavel@ucw.cz,
-        tj@kernel.org, qperret@google.com, tim.c.chen@linux.intel.com,
-        joshdon@google.com
-References: <20220916080305.29574-1-vincent.guittot@linaro.org>
- <20220916080305.29574-7-vincent.guittot@linaro.org>
- <000c2893-feb4-373d-2234-2ca74be94714@arm.com>
- <CAKfTPtASminP4ogVRhcvQ4R3-x-E+UUzuMaEu-xQU_MtLr9+Xg@mail.gmail.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <CAKfTPtASminP4ogVRhcvQ4R3-x-E+UUzuMaEu-xQU_MtLr9+Xg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f08cca5c46d67399c53262eca48e015dcf1841f9.1663695394.git.christophe.leroy@csgroup.eu>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/09/2022 17:49, Vincent Guittot wrote:
-> On Mon, 19 Sept 2022 at 13:55, Dietmar Eggemann
-> <dietmar.eggemann@arm.com> wrote:
->>
->> s/valentin.schneider@arm.com//
->>
->> On 16/09/2022 10:03, Vincent Guittot wrote:
->>> Task can set its latency priority, which is then used to decide to preempt
->>> the current running entity of the cfs, but sched group entities still have
->>> the default latency offset.
->>>
->>> Add a latency field in task group to set the latency offset of the
->>> sched_eneities of the group, which will be used against other entities in
->>
->> s/sched_eneities/sched_entity
->>
->>> the parent cfs when deciding which entity to schedule first.
->>
->> So latency for cgroups does not follow any (existing) Resource
->> Distribution Model/Scheme (Documentation/admin-guide/cgroup-v2.rst)?
->> Latency values are only used to compare sched entities at the same level.
+On Tuesday 20 September 2022 19:36:42 Christophe Leroy wrote:
+> In addition to checking whether a page is reserved before allocating
+> it to highmem, verify that it is valid memory.
 > 
-> Just like share/cpu.weight value does for time sharing
-
-But for this we define it as following the `Weights` scheme. That's why
-I was asking,
-
->> [...]
->>
->>> +static int cpu_latency_write_s64(struct cgroup_subsys_state *css,
->>> +                             struct cftype *cft, s64 latency)
->>> +{
->>
->> There is no [MIN, MAX] checking?
+> Otherwise the kernel Oopses as below:
 > 
-> This is done is sched_group_set_latency() which checks that
-> abs(latency) < sysctl_sched_latency
-
-I see. Nit-picking: Wouldn't this allow to specify a latency offset
-value for the non-existent `nice = 20`? Highest nice value 19 maps to
-`973/1024 * sysctl_sched_latency`.
-
+> [    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:off
+> [    0.000000] Kernel attempted to read user page (7df58) - exploit attempt? (uid: 0)
+> [    0.000000] BUG: Unable to handle kernel data access on read at 0x0007df58
+> [    0.000000] Faulting instruction address: 0xc01c8348
+> [    0.000000] Oops: Kernel access of bad area, sig: 11 [#1]
+> [    0.000000] BE PAGE_SIZE=4K SMP NR_CPUS=2 P2020RDB-PC
+> [    0.000000] Modules linked in:
+> [    0.000000] CPU: 0 PID: 0 Comm: swapper Not tainted 6.0.0-rc2-0caacb197b677410bdac81bc34f05235+ #121
+> [    0.000000] NIP:  c01c8348 LR: c01cb2bc CTR: 0000000a
+> [    0.000000] REGS: c10d7e20 TRAP: 0300   Not tainted  (6.0.0-rc2-0caacb197b677410bdac81bc34f05235+)
+> [    0.000000] MSR:  00021000 <CE,ME>  CR: 48044224  XER: 00000000
+> [    0.000000] DEAR: 0007df58 ESR: 00000000
+> [    0.000000] GPR00: c01cb294 c10d7f10 c1045340 00000001 00000004 c112bcc0 00000015 eedf1000
+> [    0.000000] GPR08: 00000003 0007df58 00000000 f0000000 28044228 00000200 00000000 00000000
+> [    0.000000] GPR16: 00000000 00000000 00000000 0275cb7a c0000000 00000001 0000075f 00000000
+> [    0.000000] GPR24: c1031004 00000000 00000000 00000001 c10f0000 eedf1000 00080000 00080000
+> [    0.000000] NIP [c01c8348] free_unref_page_prepare.part.93+0x48/0x60
+> [    0.000000] LR [c01cb2bc] free_unref_page+0x84/0x4b8
+> [    0.000000] Call Trace:
+> [    0.000000] [c10d7f10] [eedf1000] 0xeedf1000 (unreliable)
+> [    0.000000] [c10d7f20] [c01cb294] free_unref_page+0x5c/0x4b8
+> [    0.000000] [c10d7f70] [c1007644] mem_init+0xd0/0x194
+> [    0.000000] [c10d7fa0] [c1000e4c] start_kernel+0x4c0/0x6d0
+> [    0.000000] [c10d7ff0] [c00003e0] set_ivor+0x13c/0x178
+> [    0.000000] Instruction dump:
+> [    0.000000] 552817be 5509103a 7d294214 55293830 7d4a4a14 812a003c 814a0038 5529002a
+> [    0.000000] 7c892050 5484c23a 5489eafa 548406fe <7d2a482e> 7d242430 5484077e 90870010
+> [    0.000000] ---[ end trace 0000000000000000 ]---
 > 
->>
->> min_weight = sched_latency_to_weight[0]  = -1024
->> max_weight = sched_latency_to_weight[39] =   973
->>
->> [MIN, MAX] = [sysctl_sched_latency * min_weight >> NICE_LATENCY_SHIFT,
->>               sysctl_sched_latency * max_weight >> NICE_LATENCY_SHIFT]
->>
->>
->> With the `cpu.latency` knob user would have to know for example that the
->> value is -24,000,000ns to get the same behaviour as for a task latency
->> nice = -20 (latency prio = 0) (w/ sysctl_sched_latency = 24ms)?
+> Reported-by: Pali Rohár <pali@kernel.org>
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+
+Hello and thank you for care about this issue!
+
+I have already tested this change, it fixes crash, so add my:
+
+Tested-by: Pali Rohár <pali@kernel.org>
+
+Anyway, should there be some Fixes: tag? E.g.
+
+Fixes: b0e0d68b1c52 ("powerpc/32: Allow fragmented physical memory")
+
+(which enabled support for fragmented memory and therefore kernel
+started crashing?)
+
+Link: https://lore.kernel.org/linuxppc-dev/20220908201701.sd3zqn5hfixmjvhh@pali/
+
+> ---
+>  arch/powerpc/mm/mem.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Yes, Tejun raised some concerns about adding an interface like nice in
-> the task group in v2 so I have removed it.
+> diff --git a/arch/powerpc/mm/mem.c b/arch/powerpc/mm/mem.c
+> index 01772e79fd93..6ddbd6cb3a2a 100644
+> --- a/arch/powerpc/mm/mem.c
+> +++ b/arch/powerpc/mm/mem.c
+> @@ -302,7 +302,7 @@ void __init mem_init(void)
+>  		for (pfn = highmem_mapnr; pfn < max_mapnr; ++pfn) {
+>  			phys_addr_t paddr = (phys_addr_t)pfn << PAGE_SHIFT;
+>  			struct page *page = pfn_to_page(pfn);
+> -			if (!memblock_is_reserved(paddr))
+> +			if (memblock_is_memory(paddr) && !memblock_is_reserved(paddr))
+>  				free_highmem_page(page);
+>  		}
+>  	}
+> -- 
+> 2.37.1
 > 
->>
->> For `nice` we have `cpu.weight.nice` next to `cpu.weight` in cgroup v2 ?
-> 
-> If everybody is ok, I can add back the cpu.latency.nice interface in
-> the v5 in addition to the cpu.latency
-
-cpu.weight/cpu.weight.nice interface:
-
-echo X > cpu.weight	   tg->shares
-
-    1                          10,240
-  100                       1,048,576
-10000                     104,857,600
-
-echo X > cpu.weight.nice
-
-  -20                     90,891,264
-    0                      1,048,576
-   19                         15,360
-
-Wouldn't then a similar interface for cpu.latency [1..100..10000] and
-cpu.latency.nice [-20..0..19] make most sense?
-
-Raw latency_offset values at interface level are not portable.
-
-
