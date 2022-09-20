@@ -2,99 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 698DE5BE5F5
+	by mail.lfdr.de (Postfix) with ESMTP id B46555BE5F6
 	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 14:35:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230124AbiITMez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 08:34:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51974 "EHLO
+        id S231245AbiITMe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 08:34:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230331AbiITMeu (ORCPT
+        with ESMTP id S230391AbiITMev (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 08:34:50 -0400
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 545FF19018;
+        Tue, 20 Sep 2022 08:34:51 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B2F2E69;
         Tue, 20 Sep 2022 05:34:49 -0700 (PDT)
-Received: by mail-qv1-f47.google.com with SMTP id w4so1892514qvp.2;
-        Tue, 20 Sep 2022 05:34:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=DScy5TK0GP5AqTqFl701GW46IDwtxGgy76xOd2cvfOc=;
-        b=rAedqHJCKUz1FFJmPMPtQFFJzRU95uT9J02jZeqB0yClI3gMUlERSieH5tMqeYTq3X
-         j13bqfPAEi0FKuYgeODQpVHxKHaHj8eyDPRfjqWiMWqNf7oHTRdS24hktUqLnV55TSl7
-         T99b783aEo710bqQdKV0qY2JDgLulYuuWrOMXMM+WgCZ/FKyN5K/V2LVFJfuxG9pw5Hp
-         7N2M6PayLrTdUVA5geCetTQtnv5PNdBqo1ttgXc7QaQu4Y9TsNpL9ZHUCobv0NyKmpfa
-         LAWGZK1D8uA6mSTWG85u8DIpdTAlEjrcdKLKZsb6bpywT7ufS7z45gPcGhD6T2esAG9n
-         6XGQ==
-X-Gm-Message-State: ACrzQf21txhdIgMOGLaX8ZWfivTVMiGQOlKT2rXlR4EwzxDYs1HMfsul
-        QCyHbRorxQ8zN0zoMMQmtV9TU87+9PfOFA==
-X-Google-Smtp-Source: AMsMyM6C+shd7dihay6XlWt6Es6bG/q9Kks5AstAoKM8ZXJJCPjKFCXaa2i2xJf3lz6Jx9zqjfT3Gw==
-X-Received: by 2002:a0c:8d85:0:b0:497:8b1:d372 with SMTP id t5-20020a0c8d85000000b0049708b1d372mr18938386qvb.68.1663677288043;
-        Tue, 20 Sep 2022 05:34:48 -0700 (PDT)
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
-        by smtp.gmail.com with ESMTPSA id i11-20020a05622a08cb00b00342f844e30fsm875816qte.31.2022.09.20.05.34.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Sep 2022 05:34:47 -0700 (PDT)
-Received: by mail-yb1-f176.google.com with SMTP id p69so3233938yba.0;
-        Tue, 20 Sep 2022 05:34:46 -0700 (PDT)
-X-Received: by 2002:a25:3746:0:b0:6b1:4a12:b2d5 with SMTP id
- e67-20020a253746000000b006b14a12b2d5mr16262084yba.89.1663677286562; Tue, 20
- Sep 2022 05:34:46 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id E5AE121B56;
+        Tue, 20 Sep 2022 12:34:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1663677287; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kEBiP8Irblq9kj6QD799kTTxDt9/WWTcEX16z78NVkU=;
+        b=jEoqDmjkCh7lyGBrkzZd8PrCQUDJjtkeuHecIFyS92AX6uJ7FFPOFurawsKVDMSiRx/x2Y
+        /t/mkCBA2Gzgk765VaD/hh5sp+XrNqZRIgdhd4oYuD7qTh0xYoyU9Uw0+gVTljiht/APIO
+        xvV45IMK5+ddhtcbpGH5+9kAE19jUnc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1663677287;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kEBiP8Irblq9kj6QD799kTTxDt9/WWTcEX16z78NVkU=;
+        b=5g+WP+tvoIEfKRnDKwmXYo9RZENhPK4LXtcae6P0xhY4a8NNflV/TV6EZc8QVEwRUhJkjf
+        mLB27rIOwLIDCeCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B3AA113ABB;
+        Tue, 20 Sep 2022 12:34:47 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id LwACKmezKWPHWwAAMHmgww
+        (envelope-from <mliska@suse.cz>); Tue, 20 Sep 2022 12:34:47 +0000
+Message-ID: <e1261036-238a-513c-1b6d-fa4f47e6edb2@suse.cz>
+Date:   Tue, 20 Sep 2022 14:34:47 +0200
 MIME-Version: 1.0
-References: <20220915181558.354737-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220915181558.354737-10-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220915181558.354737-10-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 20 Sep 2022 14:34:35 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUWOGRpdG5=GLHc=fySqn7ErHtO0c91bJsgOO+Bp1ZUoA@mail.gmail.com>
-Message-ID: <CAMuHMdUWOGRpdG5=GLHc=fySqn7ErHtO0c91bJsgOO+Bp1ZUoA@mail.gmail.com>
-Subject: Re: [PATCH v3 09/10] MAINTAINERS: Add entry for Renesas RISC-V architecture
-To:     Prabhakar <prabhakar.csengg@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Atish Patra <atishp@rivosinc.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 2/2] kbuild: lto: preserve MAKEFLAGS for module linking
+Content-Language: en-US
+To:     Jiri Slaby <jirislaby@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>
+References: <20220719084149.29950-1-jslaby@suse.cz>
+ <20220719084149.29950-2-jslaby@suse.cz>
+ <CAK7LNATNy6-W+9USiO1pEK1syj1M1fVB1Zda2NuDmPogVp4cmQ@mail.gmail.com>
+ <0d2464f2-b900-4fd9-74cb-61d635d45799@kernel.org>
+From:   =?UTF-8?Q?Martin_Li=c5=a1ka?= <mliska@suse.cz>
+In-Reply-To: <0d2464f2-b900-4fd9-74cb-61d635d45799@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 15, 2022 at 8:17 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> Add RISC-V architecture as part of ARM/Renesas architecture, as they have
-> the same maintainers, use the same development collaboration
-> infrastructure, and share many files.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
-> v2->v3
-> * Merged as part of ARM
+On 9/20/22 10:06, Jiri Slaby wrote:
+> On 19. 07. 22, 11:15, Masahiro Yamada wrote:
+>> On Tue, Jul 19, 2022 at 5:41 PM Jiri Slaby <jslaby@suse.cz> wrote:
+>>>
+>>> From: Martin Liska <mliska@suse.cz>
+>>>
+>>> Prefix command in makefile run in order to preserve access to jobserver.
+>>> This is needed for gcc at least.
+>>>
+>>> Fixes this warning:
+>>> lto-wrapper: warning: jobserver is not available: ‘--jobserver-auth=’ is not present in ‘MAKEFLAGS’
+>>
+>>
+>> What is lto-wrapper ?
+> 
+> lto-wrapper is a part of gcc:
+> https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=gcc/lto-wrapper.cc
+> 
+> And is invoked during the link of LTO objects (also to link in parallel if jobserver is available).
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Yes, it's a driver that is invoked by Linker when it decides to use LTO mode in GCC compiler.
+Later on the lto-wrapper connects to make's jobserver and runs in parallel. Note a recent [1]
+make implemented named pipes when it comes to communication with jobserver. And thus the '+'
+won't be needed in the future, but we need it for now.
 
-Gr{oetje,eeting}s,
+Cheers,
+Martin
 
-                        Geert
+[1] https://git.savannah.gnu.org/cgit/make.git/commit/?id=7ad2593b2d2bb5b9332f4444d8bf93ac6f958bc6
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> I am leaving the unanswered questions below for Martin to answer.
+> 
+>>> Cc: Sedat Dilek <sedat.dilek@gmail.com>
+>>> Cc: Masahiro Yamada <masahiroy@kernel.org>
+>>> Cc: Michal Marek <michal.lkml@markovi.net>
+>>> Cc: Nick Desaulniers <ndesaulniers@google.com>
+>>> Fixes: 5d45950dfbb1 (kbuild: move vmlinux.o link to scripts/Makefile.vmlinux_o)
+>>> Signed-off-by: Martin Liska <mliska@suse.cz>
+>>> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+>>> ---
+>>>
+>>> Notes:
+>>>      [v2] this is new in v2
+>>>
+>>>   scripts/Makefile.build | 6 +++---
+>>>   1 file changed, 3 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+>>> index bb63374fb055..493f3c4e8461 100644
+>>> --- a/scripts/Makefile.build
+>>> +++ b/scripts/Makefile.build
+>>> @@ -247,8 +247,8 @@ endef
+>>>
+>>>   # Built-in and composite module parts
+>>>   $(obj)/%.o: $(src)/%.c $(recordmcount_source) FORCE
+>>> -       $(call if_changed_rule,cc_o_c)
+>>> -       $(call cmd,force_checksrc)
+>>> +       +$(call if_changed_rule,cc_o_c)
+>>> +       +$(call cmd,force_checksrc)
+>>
+>>
+>> cmd_force_checksrc invokes sparse.
+>> How is it related to GCC?
+>>
+>>
+>>
+>>
+>>>
+>>>   # To make this rule robust against "Argument list too long" error,
+>>>   # ensure to add $(obj)/ prefix by a shell command.
+>>> @@ -457,7 +457,7 @@ endef
+>>>   $(multi-obj-m): objtool-enabled := $(delay-objtool)
+>>>   $(multi-obj-m): part-of-module := y
+>>>   $(multi-obj-m): %.o: %.mod FORCE
+>>> -       $(call if_changed_rule,ld_multi_m)
+>>> +       +$(call if_changed_rule,ld_multi_m)
+>>>   $(call multi_depend, $(multi-obj-m), .o, -objs -y -m)
+>>
+>>
+>> cmd_ld_multi_m invokes $(LD) directly.
+>> How is it related to gcc?
+> 
+> 
+> 
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
