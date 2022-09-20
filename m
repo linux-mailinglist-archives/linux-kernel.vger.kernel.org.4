@@ -2,479 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3F505BDC90
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 07:49:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34C2E5BDC92
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 07:50:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbiITFtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 01:49:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40276 "EHLO
+        id S230113AbiITFuc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 01:50:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229903AbiITFtL (ORCPT
+        with ESMTP id S229903AbiITFu2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 01:49:11 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1658030F64;
-        Mon, 19 Sep 2022 22:49:10 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id h188so1469744pgc.12;
-        Mon, 19 Sep 2022 22:49:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=L9UcYZ8ZHMuof7HS2ENh0lx7rjVyWG5q5xjN6rCvzP8=;
-        b=IpMmkDfvw0JiwlAZBzWe1AMmNb8qX4OSHTT0WUQLvu2KrRlc8r1n4jKkfAWuz4p4IP
-         Z5G0gREdWSRYMhV9/aWjoEJNXYrCibHSWWVdq3/Gn+3LgjsX9rmFD996LeFnDET3Mj/m
-         VI5nnKHhJ+9+PrvsA12ClTehqhQiYXQpV957nG2z/aB72FQFtw1sW0pQQUzXbNhi1JHP
-         7Rfqn+PHQnaGSkjFOYIQYnpuRzsCJw7jvWiB0vMeFkqU48qs5eDtq+6Y4SOXYqgmj6c2
-         xPkWZ9bMRTXyJe0qi5A6IeH0TJlKua/KuhCCqjc+kJMbrd0D9c70eThlwFjRm3d45J/C
-         FHMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=L9UcYZ8ZHMuof7HS2ENh0lx7rjVyWG5q5xjN6rCvzP8=;
-        b=u2Gmg4yWSFrmGs4M0Oc5L93kQQM3sxD8mYePjVKoRmkaX+5lO/HGM04UZI9gNR7KZO
-         98D+MKSBC/LApwOGcJOGrEW1jP5y5LVS5Gu46BFCGaQaVqLwqndDxh38HLtIHKnw0Aff
-         hzyGZGjk+i/uxxejX2E4W76wLI19w4xSLDhf32zPxz2sFmhohoAABBo/MXmUZs+wpdaZ
-         rjWfYqPN+biwloz6zYIlThOCruRfvqkKMioGDmdTGWAri12MPBXXNEINL5OcALtOJWZR
-         UpnN6OTv1s21Cg+52VkaqFnS97FS9V4P0C4Pt0Pub987lOBrgiM6z8lTbH8W7Ro61NoG
-         RAFg==
-X-Gm-Message-State: ACrzQf3kEAvtjjgqFWImIfRV9+IMI58f+WU8M7q/uev6uRSkygwUTKH9
-        5djw4B/mZ2ufW/D7bPbjmBvbASmzWcNhatsi
-X-Google-Smtp-Source: AMsMyM7FoEAhkJ6p9hkH0/AfXnnlLeSa+1Y3jU6FhdmB0TKuFCgVomv2fMW4JtzoygUErAJXXObBDA==
-X-Received: by 2002:a62:1e83:0:b0:545:6896:188 with SMTP id e125-20020a621e83000000b0054568960188mr22348826pfe.51.1663652949452;
-        Mon, 19 Sep 2022 22:49:09 -0700 (PDT)
-Received: from localhost ([36.112.86.8])
-        by smtp.gmail.com with ESMTPSA id e7-20020aa798c7000000b005383a0d9699sm515699pfm.144.2022.09.19.22.49.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 22:49:09 -0700 (PDT)
-From:   Hawkins Jiawei <yin31149@gmail.com>
-To:     yin31149@gmail.com
-Cc:     18801353760@163.com, gregkh@linuxfoundation.org,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        luiz.dentz@gmail.com, marcel@holtmann.org, rafael@kernel.org,
-        soenke.huster@eknoes.de,
-        syzbot+5a2d2b4a8ca80ad216a9@syzkaller.appspotmail.com,
-        syzbot+e653e3f67251b6139aaa@syzkaller.appspotmail.com,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] BUG: corrupted list in kobject_add_internal (4)
-Date:   Tue, 20 Sep 2022 13:49:04 +0800
-Message-Id: <20220920054904.26134-1-yin31149@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220920051024.4991-1-yin31149@gmail.com>
-References: <20220920051024.4991-1-yin31149@gmail.com>
+        Tue, 20 Sep 2022 01:50:28 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0B992DABF
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 22:50:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663653026; x=1695189026;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=azjpc/W1xgm63w6co4quNz/N14+KNfXPM4ToOaCNS2Q=;
+  b=gBlydoEcGQYi6cb8MlIDQ2zpW+1coarkjM4ITuVayDWFMGLfd6eGJlLQ
+   VmsPskMRe4i8LwJ9EwWd67SKcln7aFJag7EFvR1MpHpA01Pk02i+G9IXA
+   AyMaoKmlkd65+K1oYT3we/QHJ1n+uZNI6wYcehiuJSVsToPGdu9BrbYEa
+   +TxTmISTQ2Xsej56CZVj1tK4U3svzauLSVn+XtaNejVkDjMU0BDZsqbTH
+   VYX87YmwnyBdOxMhSATxmrqnS5axu1pQOpNbnNby5UK/+8hNTxeuyWgne
+   4EHpbQn55XXhLtJUH/s0NAs1TC1/Hm3Qfu5eSfY+bhCjZqsF31m4xtQej
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="300423156"
+X-IronPort-AV: E=Sophos;i="5.93,329,1654585200"; 
+   d="scan'208";a="300423156"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 22:50:26 -0700
+X-IronPort-AV: E=Sophos;i="5.93,329,1654585200"; 
+   d="scan'208";a="569944306"
+Received: from jiebinsu-mobl.ccr.corp.intel.com (HELO [10.238.4.108]) ([10.238.4.108])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 22:50:22 -0700
+Message-ID: <e75d5408-d57b-af5b-f8b9-b9ffdcc9a554@intel.com>
+Date:   Tue, 20 Sep 2022 13:50:20 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH v6 2/2] ipc/msg: mitigate the lock contention with percpu
+ counter
+Content-Language: en-US
+To:     Manfred Spraul <manfred@colorfullife.com>,
+        akpm@linux-foundation.org, vasily.averin@linux.dev,
+        shakeelb@google.com, dennis@kernel.org, tj@kernel.org,
+        cl@linux.com, ebiederm@xmission.com, legion@kernel.org,
+        alexander.mikhalitsyn@virtuozzo.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Cc:     tim.c.chen@intel.com, feng.tang@intel.com, ying.huang@intel.com,
+        tianyou.li@intel.com, wangyang.guo@intel.com,
+        Tim Chen <tim.c.chen@linux.intel.com>
+References: <20220902152243.479592-1-jiebin.sun@intel.com>
+ <20220913192538.3023708-1-jiebin.sun@intel.com>
+ <20220913192538.3023708-3-jiebin.sun@intel.com>
+ <aadf6c7e-dea8-4dff-1815-cca9c2c2da9e@colorfullife.com>
+ <6ed22478-0c89-92ea-a346-0349be2dd99c@intel.com>
+ <8d74a7d4-b80f-2a0f-ee95-243bdbd51ccd@colorfullife.com>
+From:   "Sun, Jiebin" <jiebin.sun@intel.com>
+In-Reply-To: <8d74a7d4-b80f-2a0f-ee95-243bdbd51ccd@colorfullife.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Luiz,
 
-On Tue, 20 Sept 2022 at 13:23, Luiz Augusto von Dentz <luiz.dentz@gmail.com> wrote:
+On 9/20/2022 12:53 PM, Manfred Spraul wrote:
+> On 9/20/22 04:36, Sun, Jiebin wrote:
+>>
+>> On 9/18/2022 8:53 PM, Manfred Spraul wrote:
+>>> Hi Jiebin,
+>>>
+>>> On 9/13/22 21:25, Jiebin Sun wrote:
+>>>> The msg_bytes and msg_hdrs atomic counters are frequently
+>>>> updated when IPC msg queue is in heavy use, causing heavy
+>>>> cache bounce and overhead. Change them to percpu_counter
+>>>> greatly improve the performance. Since there is one percpu
+>>>> struct per namespace, additional memory cost is minimal.
+>>>> Reading of the count done in msgctl call, which is infrequent.
+>>>> So the need to sum up the counts in each CPU is infrequent.
+>>>>
+>>>> Apply the patch and test the pts/stress-ng-1.4.0
+>>>> -- system v message passing (160 threads).
+>>>>
+>>>> Score gain: 3.99x
+>>>>
+>>>> CPU: ICX 8380 x 2 sockets
+>>>> Core number: 40 x 2 physical cores
+>>>> Benchmark: pts/stress-ng-1.4.0
+>>>> -- system v message passing (160 threads)
+>>>>
+>>>> Signed-off-by: Jiebin Sun <jiebin.sun@intel.com>
+>>>> Reviewed-by: Tim Chen <tim.c.chen@linux.intel.com>
+>>> Reviewed-by: Manfred Spraul <manfred@colorfullif.com>
+>>>> @@ -495,17 +496,18 @@ static int msgctl_info(struct ipc_namespace 
+>>>> *ns, int msqid,
+>>>>       msginfo->msgssz = MSGSSZ;
+>>>>       msginfo->msgseg = MSGSEG;
+>>>>       down_read(&msg_ids(ns).rwsem);
+>>>> -    if (cmd == MSG_INFO) {
+>>>> +    if (cmd == MSG_INFO)
+>>>>           msginfo->msgpool = msg_ids(ns).in_use;
+>>>> -        msginfo->msgmap = atomic_read(&ns->msg_hdrs);
+>>>> -        msginfo->msgtql = atomic_read(&ns->msg_bytes);
+>>>> +    max_idx = ipc_get_maxidx(&msg_ids(ns));
+>>>> +    up_read(&msg_ids(ns).rwsem);
+>>>> +    if (cmd == MSG_INFO) {
+>>>> +        msginfo->msgmap = percpu_counter_sum(&ns->percpu_msg_hdrs);
+>>>> +        msginfo->msgtql = percpu_counter_sum(&ns->percpu_msg_bytes);
+>>>
+>>> Not caused by your change, it just now becomes obvious:
+>>>
+>>> msginfo->msgmap and ->msgtql are type int, i.e. signed 32-bit, and 
+>>> the actual counters are 64-bit.
+>>> This can overflow - and I think the code should handle this. Just 
+>>> clamp the values to INT_MAX.
+>>>
+>> Hi Manfred,
+>>
+>> Thanks for your advice. But I'm not sure if we could fix the overflow 
+>> issue in ipc/msg totally by
+>>
+>> clamp(val, low, INT_MAX). If the value is over s32, we might avoid 
+>> the reversal sign, but still could
+>>
+>> not get the accurate value.
 >
-> Hi Hawkins,
+> I think just clamping it to INT_MAX is the best approach.
+> Reporting negative values is worse than clamping. If (and only if) 
+> there are real users that need to know the total amount of memory 
+> allocated for messages queues in one namespace, then we could add a 
+> MSG_INFO64 with long values. But I would not add that right now, I do 
+> not see a real use case where the value would be needed.
 >
-> On Mon, Sep 19, 2022 at 10:12 PM Hawkins Jiawei <yin31149@gmail.com> wrote:
-> >
-> > Hi Luiz,
-> >
-> > On Tue, 20 Sept 2022 at 00:55, Luiz Augusto von Dentz <luiz.dentz@gmail.com> wrote:
-> > >
-> > > Hi Hawkins,
-> > >
-> > > On Mon, Sep 19, 2022 at 1:42 AM Hawkins Jiawei <yin31149@gmail.com> wrote:
-> > > >
-> > > > On Sat, 17 Sept 2022 at 09:47, Hawkins Jiawei <yin31149@gmail.com> wrote:
-> > > > >
-> > > > >Hi,
-> > > > >
-> > > > >On Fri, 26 Aug 2022 08:27:06, AM Sönke Huster <soenke.huster@eknoes.de> wrote:
-> > > > >>Hi Luiz,
-> > > > >>
-> > > > >>On 25.08.22 20:58, Luiz Augusto von Dentz wrote:
-> > > > >>> Hi Sönke,
-> > > > >>>
-> > > > >>> On Thu, Aug 25, 2022 at 8:08 AM Sönke Huster <soenke.huster@eknoes.de> wrote:
-> > > > >>>>
-> > > > >>>> Hi,
-> > > > >>>>
-> > > > >>>>
-> > > > >>>>
-> > > > >>>> While fuzzing I found several crashes similar to the following:
-> > > > >>>>
-> > > > >>>>
-> > > > >>>>         [    5.345731] sysfs: cannot create duplicate filename '/devices/virtual/bluetooth/hci0/hci0:0'
-> > > > >>>>
-> > > > >>>>         [...]
-> > > > >>>>
-> > > > >>>>         [    5.430464] BUG: KASAN: use-after-free in klist_add_tail+0x1bd/0x200
-> > > > >>>>
-> > > > >>>>         [    5.430464] Write of size 8 at addr ffff88800bfcc468 by task kworker/u3:1/43
-> > > > >>>>
-> > > > >>>>         [    5.430464]
-> > > > >>>>
-> > > > >>>>         [    5.430464] CPU: 0 PID: 43 Comm: kworker/u3:1 Not tainted 5.19.0-12855-g13f222680b8f #2
-> > > > >>>>
-> > > > >>>>         [    5.430464] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
-> > > > >>>>
-> > > > >>>>         [    5.430464] Workqueue: hci0 hci_rx_work
-> > > > >>>>
-> > > > >>>>         [    5.430464] Call Trace:
-> > > > >>>>
-> > > > >>>>         [    5.430464]  <TASK>
-> > > > >>>>
-> > > > >>>>         [    5.430464]  dump_stack_lvl+0x45/0x5d
-> > > > >>>>
-> > > > >>>>         [    5.430464]  print_report.cold+0x5e/0x5e5
-> > > > >>>>
-> > > > >>>>         [    5.430464]  kasan_report+0xb1/0x1c0
-> > > > >>>>
-> > > > >>>>         [    5.430464]  klist_add_tail+0x1bd/0x200
-> > > > >>>>
-> > > > >>>>         [    5.430464]  device_add+0xa6b/0x1b80
-> > > > >>>>
-> > > > >>>>         [    5.430464]  hci_conn_add_sysfs+0x91/0x110
-> > > > >>>>
-> > > > >>>>         [    5.430464]  le_conn_complete_evt+0x117f/0x17d0
-> > > > >>>>
-> > > > >>>>         [    5.430464]  hci_le_conn_complete_evt+0x226/0x2c0
-> > > > >>>>
-> > > > >>>>         [    5.430464]  hci_le_meta_evt+0x2c0/0x4a0
-> > > > >>>>
-> > > > >>>>         [    5.430464]  hci_event_packet+0x636/0xf60
-> > > > >>>>
-> > > > >>>>         [    5.430464]  hci_rx_work+0xa8c/0x1000
-> > > > >>>>
-> > > > >>>>         [    5.430464]  process_one_work+0x8df/0x1530
-> > > > >>>>
-> > > > >>>>         [    5.430464]  worker_thread+0x575/0x11a0
-> > > > >>>>
-> > > > >>>>         [    5.430464]  kthread+0x29d/0x340
-> > > > >>>>
-> > > > >>>>         [    5.430464]  ret_from_fork+0x22/0x30
-> > > > >>>>
-> > > > >>>>         [    5.430464]  </TASK>
-> > > > >>>>
-> > > > >>>>         [    5.430464]
-> > > > >>>>
-> > > > >>>>         [    5.430464] Allocated by task 44:
-> > > > >>>>
-> > > > >>>>         [    5.430464]  kasan_save_stack+0x1e/0x40
-> > > > >>>>
-> > > > >>>>         [    5.430464]  __kasan_kmalloc+0x81/0xa0
-> > > > >>>>
-> > > > >>>>         [    5.430464]  device_add+0xcae/0x1b80
-> > > > >>>>
-> > > > >>>>         [    5.430464]  hci_conn_add_sysfs+0x91/0x110
-> > > > >>>>
-> > > > >>>>         [    5.430464]  le_conn_complete_evt+0x117f/0x17d0
-> > > > >>>>
-> > > > >>>>         [    5.430464]  hci_le_conn_complete_evt+0x226/0x2c0
-> > > > >>>>
-> > > > >>>>         [    5.430464]  hci_le_meta_evt+0x2c0/0x4a0
-> > > > >>>>
-> > > > >>>>         [    5.430464]  hci_event_packet+0x636/0xf60
-> > > > >>>>
-> > > > >>>>         [    5.430464]  hci_rx_work+0xa8c/0x1000
-> > > > >>>>
-> > > > >>>>         [    5.430464]  process_one_work+0x8df/0x1530
-> > > > >>>>
-> > > > >>>>         [    5.430464]  worker_thread+0x575/0x11a0
-> > > > >>>>
-> > > > >>>>         [    5.430464]  kthread+0x29d/0x340
-> > > > >>>>
-> > > > >>>>         [    5.430464]  ret_from_fork+0x22/0x30
-> > > > >>>>
-> > > > >>>>         [    5.430464]
-> > > > >>>>
-> > > > >>>>         [    5.430464] Freed by task 43:
-> > > > >>>>
-> > > > >>>>         [    5.430464]  kasan_save_stack+0x1e/0x40
-> > > > >>>>
-> > > > >>>>         [    5.430464]  kasan_set_track+0x21/0x30
-> > > > >>>>
-> > > > >>>>         [    5.430464]  kasan_set_free_info+0x20/0x40
-> > > > >>>>
-> > > > >>>>         [    5.430464]  __kasan_slab_free+0x108/0x190
-> > > > >>>>
-> > > > >>>>         [    5.430464]  kfree+0xa9/0x360
-> > > > >>>>
-> > > > >>>>         [    5.430464]  device_add+0x33a/0x1b80
-> > > > >>>>
-> > > > >>>>         [    5.430464]  hci_conn_add_sysfs+0x91/0x110
-> > > > >>>>
-> > > > >>>>         [    5.430464]  hci_le_cis_estabilished_evt+0x517/0xa70
-> > > > >>>>
-> > > > >>>>         [    5.430464]  hci_le_meta_evt+0x2c0/0x4a0
-> > > > >>>>
-> > > > >>>>         [    5.430464]  hci_event_packet+0x636/0xf60
-> > > > >>>>
-> > > > >>>>         [    5.430464]  hci_rx_work+0xa8c/0x1000
-> > > > >>>>
-> > > > >>>>         [    5.430464]  process_one_work+0x8df/0x1530
-> > > > >>>>
-> > > > >>>>         [    5.430464]  worker_thread+0x575/0x11a0
-> > > > >>>>
-> > > > >>>>         [    5.430464]  kthread+0x29d/0x340
-> > > > >>>>
-> > > > >>>>         [    5.430464]  ret_from_fork+0x22/0x30
-> > > > >>>>
-> > > > >>>>
-> > > > >>>>
-> > > > >>>> I think I fixed a similar issue in d5ebaa7c5f6f ("Bluetooth: hci_event: Ignore multiple conn complete events"). Here, the problem was that multiple connection complete events for the same handle called hci_conn_add_sysfs multiple times, but if it is called with an existing connection conn->dev->p is freed.
-> > > > >>>>
-> > > > >>>> This is because device_add is called - its documentation contains this sentence: "Do not call this routine or device_register() more than once for any device structure".
-> > > > >>>>
-> > > > >>>>
-> > > > >>>>
-> > > > >>>> This here is similar: First, an hci_le_conn_complete_evt creates a new connection.
-> > > > >>>>
-> > > > >>>> Afterwards, an hci_le_cis_estabilished_evt with the same handle finds that connection, and tries to add it to sysfs again, freeing conn->dev->p. Now, an event that might use that connection such as here the hci_le_conn_complete_evt triggers a use after free.
-> > > > >>>>
-> > > > >
-> > > > >Syzkaller reports a bug as follows [1]:
-> > > > >------------[ cut here ]------------
-> > > > >kernel BUG at lib/list_debug.c:33!
-> > > > >invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-> > > > >[...]
-> > > > >Call Trace:
-> > > > > <TASK>
-> > > > > __list_add include/linux/list.h:69 [inline]
-> > > > > list_add_tail include/linux/list.h:102 [inline]
-> > > > > kobj_kset_join lib/kobject.c:164 [inline]
-> > > > > kobject_add_internal+0x18f/0x8f0 lib/kobject.c:214
-> > > > > kobject_add_varg lib/kobject.c:358 [inline]
-> > > > > kobject_add+0x150/0x1c0 lib/kobject.c:410
-> > > > > device_add+0x368/0x1e90 drivers/base/core.c:3452
-> > > > > hci_conn_add_sysfs+0x9b/0x1b0 net/bluetooth/hci_sysfs.c:53
-> > > > > hci_le_cis_estabilished_evt+0x57c/0xae0 net/bluetooth/hci_event.c:6799
-> > > > > hci_le_meta_evt+0x2b8/0x510 net/bluetooth/hci_event.c:7110
-> > > > > hci_event_func net/bluetooth/hci_event.c:7440 [inline]
-> > > > > hci_event_packet+0x63d/0xfd0 net/bluetooth/hci_event.c:7495
-> > > > > hci_rx_work+0xae7/0x1230 net/bluetooth/hci_core.c:4007
-> > > > > process_one_work+0x991/0x1610 kernel/workqueue.c:2289
-> > > > > worker_thread+0x665/0x1080 kernel/workqueue.c:2436
-> > > > > kthread+0x2e4/0x3a0 kernel/kthread.c:376
-> > > > > ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
-> > > > > </TASK>
-> > > > >
-> > > > >I think they are the same problems:
-> > > > >A hci_le_conn_complete_evt creates a new connection, and calls
-> > > > >hci_conn_add_sysfs(). Then hci_le_cis_estabilished_evt with the same handle
-> > > > >finds that connection, and will also calls hci_conn_add_sysfs(), which maybe
-> > > > >triggering corrupted list bug.
-> > > > >
-> > > > >Link: https://syzkaller.appspot.com/bug?id=da3246e2d33afdb92d66bc166a0934c5b146404a [1]
-> > > > >
-> > > > >>>>
-> > > > >>>>
-> > > > >>>> I bisected this bug and it was introduced with  26afbd826ee3 ("Bluetooth: Add initial implementation of CIS connections").
-> > > > >>>>
-> > > > >>>>
-> > > > >>>>
-> > > > >>>> The same happens with hci_le_create_big_complete_evt: Here, multiple events trigger the following bug:
-> > > > >>>>
-> > > > >>>>
-> > > > >>>>
-> > > > >>>>         [    6.898080] BUG: kernel NULL pointer dereference, address: 0000000000000058
-> > > > >>>>
-> > > > >>>>         [    6.898081] #PF: supervisor read access in kernel mode
-> > > > >>>>
-> > > > >>>>         [    6.898083] #PF: error_code(0x0000) - not-present page
-> > > > >>>>
-> > > > >>>>         [    6.898085] Oops: 0000 [#1] PREEMPT SMP NOPTI
-> > > > >>>>
-> > > > >>>>         [    6.898090] Workqueue: hci0 hci_rx_work
-> > > > >>>>
-> > > > >>>>         [    6.898092] RIP: 0010:klist_next+0x12/0x160
-> > > > >>>>
-> > > > >>>>         [    6.898128] Call Trace:
-> > > > >>>>
-> > > > >>>>         [    6.898129]  <TASK>
-> > > > >>>>
-> > > > >>>>         [    6.898130]  ? bt_link_release+0x20/0x20
-> > > > >>>>
-> > > > >>>>         [    6.898133]  device_find_child+0x37/0xa0
-> > > > >>>>
-> > > > >>>>         [    6.898136]  hci_conn_del_sysfs+0x71/0xa0
-> > > > >>>>
-> > > > >>>>         [    6.898138]  hci_conn_cleanup+0x17a/0x2c0
-> > > > >>>>
-> > > > >>>>         [    6.898141]  hci_conn_del+0x14a/0x240
-> > > > >>>>
-> > > > >>>>         [    6.898144]  hci_le_create_big_complete_evt+0x3d8/0x470
-> > > > >>>>
-> > > > >>>>         [    6.898146]  ? hci_le_remote_feat_complete_evt+0x3e0/0x3e0
-> > > > >>>>
-> > > > >>>>         [    6.898148]  hci_le_meta_evt+0x155/0x230
-> > > > >>>>
-> > > > >>>>         [    6.898150]  hci_event_packet+0x328/0x820
-> > > > >>>>
-> > > > >>>>         [    6.898152]  ? hci_conn_drop+0x100/0x100
-> > > > >>>>
-> > > > >>>>         [    6.898155]  hci_rx_work+0x725/0xb70
-> > > > >>>>
-> > > > >>>>         [    6.898157]  process_one_work+0x2a6/0x5d0
-> > > > >>>>
-> > > > >>>>         [    6.898160]  worker_thread+0x4a/0x3e0
-> > > > >>>>
-> > > > >>>>         [    6.898162]  ? process_one_work+0x5d0/0x5d0
-> > > > >>>>
-> > > > >>>>         [    6.898164]  kthread+0xed/0x120
-> > > > >>>>
-> > > > >>>>         [    6.898165]  ? kthread_complete_and_exit+0x20/0x20
-> > > > >>>>
-> > > > >>>>         [    6.898167]  ret_from_fork+0x22/0x30
-> > > > >>>>
-> > > > >>>>         [    6.898170]  </TASK>
-> > > > >>>>
-> > > > >>>>
-> > > > >>>>
-> > > > >>>> I bisected this bug and it was introduced with eca0ae4aea66 ("Bluetooth: Add initial implementation of BIS connections").
-> > > > >>>>
-> > > > >>>>
-> > > > >>>>
-> > > > >>>> I am not really sure how to solve that. As far as I understand, previously we simply set an unused handle as connection handle, and checked for that before setting the correct handle and adding it to sysfs. But here, adding it to sysfs seems to happen in a different function and the handle is already set.
-> > > > >>>
-> > > > >>> We should probably check if link-type, if it is an ISO link it shall
-> > > > >>> not be created via Connection Complete events and they have their own
-> > > > >>> events to create that.
-> > > > I wonder if we can check the connection type in hci_le_create_big_complete_evt()
-> > > > and hci_le_cis_estabilished_evt(), as below:
-> > > >
-> > > > diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
-> > > > index 6643c9c20fa4..5b83473d51b5 100644
-> > > > --- a/net/bluetooth/hci_event.c
-> > > > +++ b/net/bluetooth/hci_event.c
-> > > > @@ -6795,8 +6795,16 @@ static void hci_le_cis_estabilished_evt(struct hci_dev *hdev, void *data,
-> > > >
-> > > >         if (!ev->status) {
-> > > >                 conn->state = BT_CONNECTED;
-> > > > -               hci_debugfs_create_conn(conn);
-> > > > -               hci_conn_add_sysfs(conn);
-> > > > +
-> > > > +               /* Only ISO_LINK link type need to register connection device
-> > > > +                * here, others will register in their relative
-> > > > +                * Connection Complete events
-> > > > +                */
-> > > > +               if (conn->type == ISO_LINK) {
-> > > > +                       hci_debugfs_create_conn(conn);
-> > > > +                       hci_conn_add_sysfs(conn);
-> > > > +               }
-> > >
-> > > We should probably just bail out if conn->type != ISO_LINK which can
-> > > be done much earlier.
-> > Thanks for explanation.
-> https://patchwork.kernel.org/project/bluetooth/patch/20220919181017.1658995-1-luiz.dentz@gmail.com/
-Thanks for link.
-
+> Any other opinions?
 >
-> > >
-> > > >                 hci_iso_setup_path(conn);
-> > > >                 goto unlock;
-> > > >         }
-> > > > @@ -6901,8 +6909,16 @@ static void hci_le_create_big_complete_evt(struct hci_dev *hdev, void *data,
-> > > >
-> > > >         if (!ev->status) {
-> > > >                 conn->state = BT_CONNECTED;
-> > > > -               hci_debugfs_create_conn(conn);
-> > > > -               hci_conn_add_sysfs(conn);
-> > > > +
-> > > > +               /* Only ISO_LINK link type need to register connection device
-> > > > +                * here, others will register in their relative
-> > > > +                * Connection Complete events
-> > > > +                */
-> > > > +               if (conn->type == ISO_LINK) {
-> > > > +                       hci_debugfs_create_conn(conn);
-> > > > +                       hci_conn_add_sysfs(conn);
-> > > > +               }
-> > > > +
-> > > >                 hci_iso_setup_path(conn);
-> > > >                 goto unlock;
-> > > >         }
-> > > >
-> > > > It seems that this patch can pass the syzbot test.
-> > > >
-> > > > Link: https://lore.kernel.org/all/0000000000004f9ca105e8ba8157@google.com/
-> > > > Reported-and-tested-by: syzbot+5a2d2b4a8ca80ad216a9@syzkaller.appspotmail.com
-> > > >
-> > > > Link: https://lore.kernel.org/all/0000000000008a7a3f05e8ad02f6@google.com/
-> > > > Reported-and-tested-by: syzbot+e653e3f67251b6139aaa@syzkaller.appspotmail.com
-> > > >
-> > > > >>>
-> > > > >>
-> > > > >>But then the problem of duplicate hci_le_cis_estabilished_evt / hci_le_create_big_complete_evt still exists, isn't it? For example if the connection is created through a hci_le_cis_req_evt, and afterwards two hci_le_cis_estabilished_evt arrive, the second event calls hci_conn_add_sysfs a second time which frees parts of the device structure.
-> > > > As for this problem, I wonder if we can check the connection state in those
-> > > > functions as below, liking patch
-> > > > d5ebaa7c5f6f("Bluetooth: hci_event: Ignore multiple conn complete events"):
-> > > >
-> > > > diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
-> > > > index 5b83473d51b5..f6b62cfcf082 100644
-> > > > --- a/net/bluetooth/hci_event.c
-> > > > +++ b/net/bluetooth/hci_event.c
-> > > > @@ -6794,6 +6794,14 @@ static void hci_le_cis_estabilished_evt(struct hci_dev *hdev, void *data,
-> > > >         }
-> > > >
-> > > >         if (!ev->status) {
-> > > > +               /* The HCI_LE_CIS_Estabilished event is only sent once per connection.
-> > > > +                * Processing it more than once per connection can corrupt kernel memory.
-> > > > +                *
-> > > > +                * As the connection state is set here for the first time, it indicates
-> > > > +                * whether the connection is already set up.
-> > > > +                */
-> > > > +               if (conn->state == BT_CONNECTED)
-> > > > +                       goto unlock;
-> > > >                 conn->state = BT_CONNECTED;
-> > > >
-> > > >                 /* Only ISO_LINK link type need to register connection device
-> > > > @@ -6908,6 +6916,14 @@ static void hci_le_create_big_complete_evt(struct hci_dev *hdev, void *data,
-> > > >                 conn->handle = __le16_to_cpu(ev->bis_handle[0]);
-> > > >
-> > > >         if (!ev->status) {
-> > > > +               /* The HCI_LE_Create_BIG_Complete event is only sent once per connection.
-> > > > +                * Processing it more than once per connection can corrupt kernel memory.
-> > > > +                *
-> > > > +                * As the connection state is set here for the first time, it indicates
-> > > > +                * whether the connection is already set up.
-> > > > +                */
-> > > > +               if (conn->state == BT_CONNECTED)
-> > > > +                       goto unlock;
-> > >
-> > > These changes look good, please send a proper patch.
-> > OK, I will add some error message and send a proper patch.
+> -- 
 >
-> Note that I did send a set that should resolve this as well:
->
-> https://patchwork.kernel.org/project/bluetooth/list/?series=678331
->
-Right, it seems better to patch this bug in this way.
-
-> > >
-> > > >                 conn->state = BT_CONNECTED;
-> > > >
-> > > >                 /* Only ISO_LINK link type need to register connection device
-> > > >
-> > > > >>
-> > > > >>>> Best
-> > > > >>>> Sönke
-> > > > >I wonder that if we need both two patches? Because they
-> > > > >seems to be used to patch different bugs?
-> > >
-> > >
-> > >
-> > > --
-> > > Luiz Augusto von Dentz
+>     Manfred
 >
 >
->
-> --
-> Luiz Augusto von Dentz
+OK. I will work on it and send it out for review.
