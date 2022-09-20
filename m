@@ -2,78 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88D845BDCD7
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 08:02:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC5545BDCD9
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 08:02:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230326AbiITGC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 02:02:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32784 "EHLO
+        id S230323AbiITGCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 02:02:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230313AbiITGC0 (ORCPT
+        with ESMTP id S230320AbiITGCt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 02:02:26 -0400
-Received: from m15112.mail.126.com (m15112.mail.126.com [220.181.15.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 01CD13AB29;
-        Mon, 19 Sep 2022 23:02:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=rPz6M
-        0iDGacqM/TYQJ5LIsccdvNf/oq58gZjr7E4IwY=; b=atd0TWWv0ZgPTF5bcjo9y
-        LajXUsE2dEpsqFlxYdRppFIpYIEX4bFl6A2pHVMH2rva6NdnQxR/9yBtbwgSI1N7
-        fB89hX2GCZL8tUTH96c7uoUmY8XZ9+6/a3jZ4IPGj0Hh/8eggKbCOLWI042xjT/I
-        s9UGMf2B1vab/7TJRKkm9U=
-Received: from localhost.localdomain (unknown [117.160.246.157])
-        by smtp2 (Coremail) with SMTP id DMmowAAnhbFoVyljNH+WBw--.22081S4;
-        Tue, 20 Sep 2022 14:02:17 +0800 (CST)
-From:   wangliangzz@126.com
-To:     pbonzini@redhat.com
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        wangliangzz@inspur.com
-Subject: [PATCH] kvm_host.h: fix spelling typo in function declaration
-Date:   Tue, 20 Sep 2022 14:02:10 +0800
-Message-Id: <20220920060210.4842-1-wangliangzz@126.com>
-X-Mailer: git-send-email 2.27.0
+        Tue, 20 Sep 2022 02:02:49 -0400
+X-Greylist: delayed 443 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 19 Sep 2022 23:02:44 PDT
+Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DA175C9CF;
+        Mon, 19 Sep 2022 23:02:44 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by a.mx.secunet.com (Postfix) with ESMTP id E4C2D205E3;
+        Tue, 20 Sep 2022 07:54:44 +0200 (CEST)
+X-Virus-Scanned: by secunet
+Received: from a.mx.secunet.com ([127.0.0.1])
+        by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id swpeMJd9catj; Tue, 20 Sep 2022 07:54:44 +0200 (CEST)
+Received: from mailout2.secunet.com (mailout2.secunet.com [62.96.220.49])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by a.mx.secunet.com (Postfix) with ESMTPS id 6396520561;
+        Tue, 20 Sep 2022 07:54:44 +0200 (CEST)
+Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
+        by mailout2.secunet.com (Postfix) with ESMTP id 52A6C80004A;
+        Tue, 20 Sep 2022 07:54:44 +0200 (CEST)
+Received: from mbx-essen-01.secunet.de (10.53.40.197) by
+ cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 20 Sep 2022 07:54:44 +0200
+Received: from gauss2.secunet.de (10.182.7.193) by mbx-essen-01.secunet.de
+ (10.53.40.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 20 Sep
+ 2022 07:54:43 +0200
+Received: by gauss2.secunet.de (Postfix, from userid 1000)
+        id 75FF531829FB; Tue, 20 Sep 2022 07:54:43 +0200 (CEST)
+Date:   Tue, 20 Sep 2022 07:54:43 +0200
+From:   Steffen Klassert <steffen.klassert@secunet.com>
+To:     Daniel Jordan <daniel.m.jordan@oracle.com>
+CC:     <eadavis@sina.com>, <linux-crypto@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <syzbot+bc05445bc14148d51915@syzkaller.appspotmail.com>,
+        <syzkaller-bugs@googlegroups.com>
+Subject: Re: [PATCH] padata: fix lockdep warning in padata serialization
+Message-ID: <20220920055443.GI2950045@gauss3.secunet.de>
+References: <20220919151248.smfo7nq6yoqzy2vo@oracle.com>
+ <20220920003908.391835-1-eadavis@sina.com>
+ <20220920014711.bvreurf4ex44w6oj@oracle.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: DMmowAAnhbFoVyljNH+WBw--.22081S4
-X-Coremail-Antispam: 1Uf129KBjvdXoWrurWDuFy8Cry5Kr18JrWDJwb_yoWfKrg_Za
-        yfG3sYgFW7Wr1xtw1jkanaqr1Fgw4kJF409a15CryDJFyDtws8Cw4kWr1UXrWUWrZFkF93
-        ZFnY9FyfZr12qjkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU08MaUUUUUU==
-X-Originating-IP: [117.160.246.157]
-X-CM-SenderInfo: pzdqwzpldqw6b26rjloofrz/1tbiJAqC1lpEFrw1IgAAsZ
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220920014711.bvreurf4ex44w6oj@oracle.com>
+X-ClientProxiedBy: cas-essen-01.secunet.de (10.53.40.201) To
+ mbx-essen-01.secunet.de (10.53.40.197)
+X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wang Liang <wangliangzz@inspur.com>
+On Mon, Sep 19, 2022 at 09:47:11PM -0400, Daniel Jordan wrote:
+> On Tue, Sep 20, 2022 at 08:39:08AM +0800, eadavis@sina.com wrote:
+> > From: Edward Adam Davis <eadavis@sina.com>
+> > 
+> > On Mon, 19 Sep 2022 11:12:48 -0400, Daniel Jordan wrote:
+> > > Hi Edward,
+> > > 
+> > > On Mon, Sep 19, 2022 at 09:05:55AM +0800, eadavis@sina.com wrote:
+> > > > From: Edward Adam Davis <eadavis@sina.com>
+> > > > 
+> > > > Parallelized object serialization uses spin_unlock for unlocking a spin lock
+> > > > that was previously locked with spin_lock.
+> > > 
+> > > There's nothing unusual about that, though?
+> > > 
+> > > > This caused the following lockdep warning about an inconsistent lock
+> > > > state:
+> > > > 
+> > > >         inconsistent {HARDIRQ-ON-W} -> {IN-HARDIRQ-W} usage.
+> > > 
+> > > Neither HARDIRQ-ON-W nor IN-HARDIRQ-W appear in the syzbot report, did
+> > > you mean SOFTIRQ-ON-W and IN-SOFTIRQ-W?
+> > Yes, I want say: inconsistent {SOFTIRQ-ON-W} -> {IN-SOFTIRQ-W} usage.
+> > > 
+> > > > We must use spin_lock_irqsave, because it is possible to trigger tipc 
+> > > > from an irq handler.
+> > > 
+> > > A softirq handler, not a hardirq handler.  I'd suggest using
+> > > spin_lock_bh() instead of _irqsave in your patch.
+> > I think _irqsave better than _bh, it can save the irq context, but _bh not, 
+> > and in tipc call trace contain SOFTIRQ-ON-W and IN-SOFTIRQ-W.
+> 
+> _irqsave saving the context is about handling nested hardirq disables.
+> It's not needed here since we don't need to care about disabling
+> hardirq.
+> 
+> _bh is for disabling softirq, a different context from hardirq.  We want
+> _bh here since the deadlock happens when a CPU takes the lock in both
+> task and softirq context.  padata uses _bh lock variants because it can
+> be called in softirq context but not hardirq.  Let's be consistent and
+> do it in this case too.
 
-Make parameters in function declaration consistent with
-those in function definition for better cscope-ability
-
-Signed-off-by: Wang Liang <wangliangzz@inspur.com>
----
- include/linux/kvm_host.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index f4519d3689e1..a2c71c205fd1 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -1345,7 +1345,7 @@ void kvm_arch_vcpu_unblocking(struct kvm_vcpu *vcpu);
- bool kvm_vcpu_wake_up(struct kvm_vcpu *vcpu);
- void kvm_vcpu_kick(struct kvm_vcpu *vcpu);
- int kvm_vcpu_yield_to(struct kvm_vcpu *target);
--void kvm_vcpu_on_spin(struct kvm_vcpu *vcpu, bool usermode_vcpu_not_eligible);
-+void kvm_vcpu_on_spin(struct kvm_vcpu *vcpu, bool yield_to_kernel_mode);
- 
- void kvm_flush_remote_tlbs(struct kvm *kvm);
- 
--- 
-2.31.1
-
+padata_do_serial is called with BHs off, so using spin_lock_bh should not
+fix anything here. I guess the problem is that we call padata_find_next
+after we enabled the BHs in padata_reorder.
