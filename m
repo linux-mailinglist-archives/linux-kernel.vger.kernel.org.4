@@ -2,101 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E4325BD9AF
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 03:51:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30F9E5BD9B6
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 03:54:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbiITBva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 21:51:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44930 "EHLO
+        id S230043AbiITByf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 21:54:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229764AbiITBv2 (ORCPT
+        with ESMTP id S229689AbiITByb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 21:51:28 -0400
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D556F558ED
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 18:51:27 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VQGawHz_1663638683;
-Received: from localhost.localdomain(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0VQGawHz_1663638683)
+        Mon, 19 Sep 2022 21:54:31 -0400
+Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD1692FC
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 18:54:27 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R831e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VQGZuw6_1663638864;
+Received: from 30.240.98.170(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0VQGZuw6_1663638864)
           by smtp.aliyun-inc.com;
-          Tue, 20 Sep 2022 09:51:25 +0800
-From:   Xin Hao <xhao@linux.alibaba.com>
-To:     mike.kravetz@oracle.com
-Cc:     songmuchun@bytedance.com, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4] mm/hugetlb: add available_huge_pages() func
-Date:   Tue, 20 Sep 2022 09:51:22 +0800
-Message-Id: <20220920015122.68064-1-xhao@linux.alibaba.com>
-X-Mailer: git-send-email 2.31.0
+          Tue, 20 Sep 2022 09:54:25 +0800
+Message-ID: <ff9f1b54-5d50-a43d-62a7-3e1adadf1974@linux.alibaba.com>
+Date:   Tue, 20 Sep 2022 09:54:23 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.2.2
+Subject: Re: [PATCH v1 1/2] mm/damon/sysfs: remove unnecessary variables
+To:     SeongJae Park <sj@kernel.org>
+Cc:     akpm@linux-foundation.org, damon@lists.linux.dev,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20220919170305.61335-1-sj@kernel.org>
+From:   haoxin <xhao@linux.alibaba.com>
+In-Reply-To: <20220919170305.61335-1-sj@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In hugetlb.c file, there are several places to compare the values of
-'h->free_huge_pages' and 'h->resv_huge_pages', it looks a bit messy, so
-there add a new available_huge_pages() func to do these.
 
-Signed-off-by: Xin Hao <xhao@linux.alibaba.com>
-Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
----
- mm/hugetlb.c | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
-
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 9b8526d27c29..99dc961d131a 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -1191,6 +1191,11 @@ static struct page *dequeue_huge_page_nodemask(struct hstate *h, gfp_t gfp_mask,
- 	return NULL;
- }
-
-+static unsigned long available_huge_pages(struct hstate *h)
-+{
-+	return h->free_huge_pages - h->resv_huge_pages;
-+}
-+
- static struct page *dequeue_huge_page_vma(struct hstate *h,
- 				struct vm_area_struct *vma,
- 				unsigned long address, int avoid_reserve,
-@@ -1207,12 +1212,11 @@ static struct page *dequeue_huge_page_vma(struct hstate *h,
- 	 * have no page reserves. This check ensures that reservations are
- 	 * not "stolen". The child may still get SIGKILLed
- 	 */
--	if (!vma_has_reserves(vma, chg) &&
--			h->free_huge_pages - h->resv_huge_pages == 0)
-+	if (!vma_has_reserves(vma, chg) && !available_huge_pages(h))
- 		goto err;
-
- 	/* If reserves cannot be used, ensure enough pages are in the pool */
--	if (avoid_reserve && h->free_huge_pages - h->resv_huge_pages == 0)
-+	if (avoid_reserve && !available_huge_pages(h))
- 		goto err;
-
- 	gfp_mask = htlb_alloc_mask(h);
-@@ -2124,7 +2128,7 @@ int dissolve_free_huge_page(struct page *page)
- 	if (!page_count(page)) {
- 		struct page *head = compound_head(page);
- 		struct hstate *h = page_hstate(head);
--		if (h->free_huge_pages - h->resv_huge_pages == 0)
-+		if (!available_huge_pages(h))
- 			goto out;
-
- 		/*
-@@ -2311,7 +2315,7 @@ struct page *alloc_huge_page_nodemask(struct hstate *h, int preferred_nid,
- 		nodemask_t *nmask, gfp_t gfp_mask)
- {
- 	spin_lock_irq(&hugetlb_lock);
--	if (h->free_huge_pages - h->resv_huge_pages > 0) {
-+	if (available_huge_pages(h)) {
- 		struct page *page;
-
- 		page = dequeue_huge_page_nodemask(h, gfp_mask, preferred_nid, nmask);
---
-2.31.0
+在 2022/9/20 上午1:03, SeongJae Park 写道:
+> On Mon, 19 Sep 2022 23:12:00 +0800 Xin Hao <xhao@linux.alibaba.com> wrote:
+>
+>> Just do a little change here, the 'err' variable really no need to stay
+>> here.
+>>
+>> Signed-off-by: Xin Hao <xhao@linux.alibaba.com>
+>> ---
+>>   mm/damon/sysfs.c | 6 ++----
+>>   1 file changed, 2 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/mm/damon/sysfs.c b/mm/damon/sysfs.c
+>> index 0cca1909bf67..b852a75b9f39 100644
+>> --- a/mm/damon/sysfs.c
+>> +++ b/mm/damon/sysfs.c
+>> @@ -1109,9 +1109,8 @@ static ssize_t start_store(struct kobject *kobj, struct kobj_attribute *attr,
+>>   {
+>>   	struct damon_sysfs_region *region = container_of(kobj,
+>>   			struct damon_sysfs_region, kobj);
+>> -	int err = kstrtoul(buf, 0, &region->start);
+>>
+>> -	if (err)
+>> +	if (kstrtoul(buf, 0, &region->start))
+>>   		return -EINVAL;
+> Good finding.  But, I'd like to let the user know why it really fails by giving
+> them the error code that returned by 'kstrtoul()' here.  Let's keep the 'err'
+> but return 'err' here.
+Ok,  it make sense.
+>
+>>   	return count;
+>>   }
+>> @@ -1130,9 +1129,8 @@ static ssize_t end_store(struct kobject *kobj, struct kobj_attribute *attr,
+>>   {
+>>   	struct damon_sysfs_region *region = container_of(kobj,
+>>   			struct damon_sysfs_region, kobj);
+>> -	int err = kstrtoul(buf, 0, &region->end);
+>>
+>> -	if (err)
+>> +	if (kstrtoul(buf, 0, &region->end))
+>>   		return -EINVAL;
+> ditto.
+>
+>>   	return count;
+>>   }
+>> --
+>> 2.31.0
+>
+> Thanks,
+> SJ
