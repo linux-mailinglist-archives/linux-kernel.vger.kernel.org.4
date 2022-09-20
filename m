@@ -2,144 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 008EE5BE3AA
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 12:45:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3E275BE3B2
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 12:45:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229983AbiITKn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 06:43:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39404 "EHLO
+        id S231414AbiITKow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 06:44:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231287AbiITKnb (ORCPT
+        with ESMTP id S230133AbiITKo3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 06:43:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ACD225C5;
-        Tue, 20 Sep 2022 03:43:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0BCF8628F0;
-        Tue, 20 Sep 2022 10:43:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A744C433C1;
-        Tue, 20 Sep 2022 10:43:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663670608;
-        bh=6GsQ3yhKLr/MxdSlXebBHOnZZwkqV+Km5n+FdtLELFs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=B5dAVjAuYVAf/ldcpMwVOIccr93eh+i/PPqe86bcTTpe9rquyYiwNXWsEYN6MEgtC
-         4dkSGP8Y6MjqZepb+9gQ6s3zfFi8AQZlWHaT9YE94OBgT652ETiHQ4+oyg1H9cMKe0
-         W4ejHxERjCdEHRyFhCMtozUTXVDZIa2H0g10CJTUgcjhZqBq48hlTCa71o1rmNMJUn
-         UuRNJ769Ea2tTmdOKpPB1SWcTi7Afm+dzY4ofsUzOPWyR3eaWqkGsJ5+yZC/8xtTFB
-         fdtVAvZE4UfiE+hEXckkBlXeuH+b1N2KqaqSOzsoRx2yLdTrKi9779585hh4U8ohjY
-         b1TN7NMPsPyxQ==
-Date:   Tue, 20 Sep 2022 12:43:25 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
-        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
-        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
-        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
-        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
-        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
-        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
-        dinguyen@kernel.org, jonas@southpole.se,
-        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
-        James.Bottomley@hansenpartnership.com, deller@gmx.de,
-        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
-        davem@davemloft.net, richard@nod.at,
-        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
-        amakhalov@vmware.com, pv-drivers@vmware.com,
-        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
-        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
-        gregkh@linuxfoundation.org, mturquette@baylibre.com,
-        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
-        sudeep.holla@arm.com, agross@kernel.org,
-        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
-        anup@brainfault.org, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, jacob.jun.pan@linux.intel.com,
-        atishp@atishpatra.org, Arnd Bergmann <arnd@arndb.de>,
-        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk, dennis@kernel.org, tj@kernel.org,
-        cl@linux.com, rostedt@goodmis.org, pmladek@suse.com,
-        senozhatsky@chromium.org, john.ogness@linutronix.de,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, fweisbec@gmail.com,
-        ryabinin.a.a@gmail.com, glider@google.com, andreyknvl@gmail.com,
-        dvyukov@google.com, vincenzo.frascino@arm.com,
-        Andrew Morton <akpm@linux-foundation.org>, jpoimboe@kernel.org,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-perf-users@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-arch@vger.kernel.org, kasan-dev@googlegroups.com,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: Re: [PATCH v2 03/44] cpuidle/poll: Ensure IRQ state is invariant
-Message-ID: <20220920104325.GA72346@lothringen>
-References: <20220919095939.761690562@infradead.org>
- <20220919101520.534233547@infradead.org>
- <20220919131927.GA58444@lothringen>
- <YymAXPkZkyFIEjXM@hirez.programming.kicks-ass.net>
+        Tue, 20 Sep 2022 06:44:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 293DB67153
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 03:44:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663670640;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Bryd/YqvBscp2y8ehsVjCoNVOvUucCenOquY6lmdqLE=;
+        b=UPlzEJJf4gFrlhTDrmO3sq2WxICbnWc9HtDAZN0pnND6VuujN4IAQwDRCOlcgwRDLsfOwj
+        3TJeHDupKS0DM1/BIwbSNCL0Fkwaa9j5nNfDS4/iGQM2VwLtLaLp3h0tkaiUNk7BOTPWOt
+        lj/cqftEqv5Ada1SMskX8IU/T9VOKkU=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-54-Rk4qJ1jdPZWn_D_JWYaxZg-1; Tue, 20 Sep 2022 06:43:59 -0400
+X-MC-Unique: Rk4qJ1jdPZWn_D_JWYaxZg-1
+Received: by mail-qv1-f70.google.com with SMTP id e19-20020ad44433000000b004aaa7d00846so1737539qvt.0
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 03:43:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=Bryd/YqvBscp2y8ehsVjCoNVOvUucCenOquY6lmdqLE=;
+        b=216yX4HnN20yexYvaNTLm6PT7+GO7+UzTK/EYzgD/ZoP/bHYmQZOqz1vwYhfTBK7s5
+         qrtRrwx3Q2PcILKzvX4MPZKzjkxYVe1zFbQ6iwxn7/Nps/Nm3yJ5azAUSCTIbDru3ktD
+         /cftzUSmHJGJWfBPqaflR8dTp3/ZVSoa63Kig/YKnTko+Z00Inl7hHQaq/vj8JICVms3
+         Z0OdBXSCtFXcU4Q3ttflJeBQgxABT8MMRvmG3Dc4sjdj6KSavNcuQUjoOgPryjuxOW1J
+         qJ9dMdFaHFbMwQ6w3xZJBKjiTeOuasDuxb2lGK6zkqQwLcNaI5OZ1xmkpmy+LtzWKHn/
+         DitQ==
+X-Gm-Message-State: ACrzQf2jCh6PMLfXpAkvd236M2/L455tfAq3XtJC24i1xINUJCeRUc03
+        c4kbzwZ+6G5cpZMWJ8+PJS0FssAw6Bh0gDYPhhsMbwsRKIMdyWmSSClg04NS+g7tBqUyzNqXUZ6
+        NjQyB0T3LbYC2u6pKIFAbbvfG
+X-Received: by 2002:ad4:5ca2:0:b0:4aa:9d05:2424 with SMTP id q2-20020ad45ca2000000b004aa9d052424mr17937140qvh.71.1663670638669;
+        Tue, 20 Sep 2022 03:43:58 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6Ksp+8em66xjCysoFTBRD+jUUAtxdjlfisN2fuwcZNehJY+I7UeG3BcQTd8r72XLhFC4WzSQ==
+X-Received: by 2002:ad4:5ca2:0:b0:4aa:9d05:2424 with SMTP id q2-20020ad45ca2000000b004aa9d052424mr17937131qvh.71.1663670638406;
+        Tue, 20 Sep 2022 03:43:58 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-114-90.dyn.eolo.it. [146.241.114.90])
+        by smtp.gmail.com with ESMTPSA id y8-20020a05620a44c800b006ce16588056sm805177qkp.89.2022.09.20.03.43.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Sep 2022 03:43:57 -0700 (PDT)
+Message-ID: <cc46d6ae3bba9dfcc602ac23a32fad9860cb8064.camel@redhat.com>
+Subject: Re: [net-next v2 2/3] seg6: add NEXT-C-SID support for SRv6 End
+ behavior
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Andrea Mayer <andrea.mayer@uniroma2.it>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        bpf@vger.kernel.org
+Cc:     Stefano Salsano <stefano.salsano@uniroma2.it>,
+        Paolo Lungaroni <paolo.lungaroni@uniroma2.it>,
+        Ahmed Abdelsalam <ahabdels.dev@gmail.com>
+Date:   Tue, 20 Sep 2022 12:43:53 +0200
+In-Reply-To: <20220912171619.16943-3-andrea.mayer@uniroma2.it>
+References: <20220912171619.16943-1-andrea.mayer@uniroma2.it>
+         <20220912171619.16943-3-andrea.mayer@uniroma2.it>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YymAXPkZkyFIEjXM@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 10:57:00AM +0200, Peter Zijlstra wrote:
-> On Mon, Sep 19, 2022 at 03:19:27PM +0200, Frederic Weisbecker wrote:
-> > On Mon, Sep 19, 2022 at 11:59:42AM +0200, Peter Zijlstra wrote:
-> > > cpuidle_state::enter() methods should be IRQ invariant
-> > 
-> > Got a bit confused with the invariant thing since the first chunck I
-> > see in this patch is a conversion to an non-traceable local_irq_enable().
-> > 
-> > Maybe just add a short mention about that and why?
+On Mon, 2022-09-12 at 19:16 +0200, Andrea Mayer wrote:
+> The NEXT-C-SID mechanism described in [1] offers the possibility of
+> encoding several SRv6 segments within a single 128 bit SID address. Such
+> a SID address is called a Compressed SID (C-SID) container. In this way,
+> the length of the SID List can be drastically reduced.
 > 
-> Changelog now reads:
+> A SID instantiated with the NEXT-C-SID flavor considers an IPv6 address
+> logically structured in three main blocks: i) Locator-Block; ii)
+> Locator-Node Function; iii) Argument.
 > 
+>                         C-SID container
+> +------------------------------------------------------------------+
+> >     Locator-Block      |Loc-Node|            Argument            |
+> >                        |Function|                                |
+> +------------------------------------------------------------------+
+> <--------- B -----------> <- NF -> <------------- A --------------->
+> 
+>    (i) The Locator-Block can be any IPv6 prefix available to the provider;
+> 
+>   (ii) The Locator-Node Function represents the node and the function to
+>        be triggered when a packet is received on the node;
+> 
+>  (iii) The Argument carries the remaining C-SIDs in the current C-SID
+>        container.
+> 
+> The NEXT-C-SID mechanism relies on the "flavors" framework defined in
+> [2]. The flavors represent additional operations that can modify or
+> extend a subset of the existing behaviors.
+> 
+> This patch introduces the support for flavors in SRv6 End behavior
+> implementing the NEXT-C-SID one. An SRv6 End behavior with NEXT-C-SID
+> flavor works as an End behavior but it is capable of processing the
+> compressed SID List encoded in C-SID containers.
+> 
+> An SRv6 End behavior with NEXT-C-SID flavor can be configured to support
+> user-provided Locator-Block and Locator-Node Function lengths. In this
+> implementation, such lengths must be evenly divisible by 8 (i.e. must be
+> byte-aligned), otherwise the kernel informs the user about invalid
+> values with a meaningful error code and message through netlink_ext_ack.
+> 
+> If Locator-Block and/or Locator-Node Function lengths are not provided
+> by the user during configuration of an SRv6 End behavior instance with
+> NEXT-C-SID flavor, the kernel will choose their default values i.e.,
+> 32-bit Locator-Block and 16-bit Locator-Node Function.
+> 
+> [1] - https://datatracker.ietf.org/doc/html/draft-ietf-spring-srv6-srh-compression
+> [2] - https://datatracker.ietf.org/doc/html/rfc8986
+> 
+> Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
 > ---
-> Subject: cpuidle/poll: Ensure IRQ state is invariant
-> From: Peter Zijlstra <peterz@infradead.org>
-> Date: Tue May 31 15:43:32 CEST 2022
+>  include/uapi/linux/seg6_local.h |  24 +++
+>  net/ipv6/seg6_local.c           | 335 +++++++++++++++++++++++++++++++-
+>  2 files changed, 356 insertions(+), 3 deletions(-)
 > 
-> cpuidle_state::enter() methods should be IRQ invariant.
-> 
-> Additionally make sure to use raw_local_irq_*() methods since this
-> cpuidle callback will be called with RCU already disabled.
-> 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> diff --git a/include/uapi/linux/seg6_local.h b/include/uapi/linux/seg6_local.h
+> index 332b18f318f8..4fdc424c9cb3 100644
+> --- a/include/uapi/linux/seg6_local.h
+> +++ b/include/uapi/linux/seg6_local.h
+> @@ -28,6 +28,7 @@ enum {
+>  	SEG6_LOCAL_BPF,
+>  	SEG6_LOCAL_VRFTABLE,
+>  	SEG6_LOCAL_COUNTERS,
+> +	SEG6_LOCAL_FLAVORS,
+>  	__SEG6_LOCAL_MAX,
+>  };
+>  #define SEG6_LOCAL_MAX (__SEG6_LOCAL_MAX - 1)
+> @@ -110,4 +111,27 @@ enum {
+>  
+>  #define SEG6_LOCAL_CNT_MAX (__SEG6_LOCAL_CNT_MAX - 1)
+>  
+> +/* SRv6 End* Flavor attributes */
+> +enum {
+> +	SEG6_LOCAL_FLV_UNSPEC,
+> +	SEG6_LOCAL_FLV_OPERATION,
+> +	SEG6_LOCAL_FLV_LCBLOCK_BITS,
+> +	SEG6_LOCAL_FLV_LCNODE_FN_BITS,
+> +	__SEG6_LOCAL_FLV_MAX,
+> +};
+> +
+> +#define SEG6_LOCAL_FLV_MAX (__SEG6_LOCAL_FLV_MAX - 1)
+> +
+> +/* Designed flavor operations for SRv6 End* Behavior */
+> +enum {
+> +	SEG6_LOCAL_FLV_OP_UNSPEC,
+> +	SEG6_LOCAL_FLV_OP_PSP,
+> +	SEG6_LOCAL_FLV_OP_USP,
+> +	SEG6_LOCAL_FLV_OP_USD,
+> +	SEG6_LOCAL_FLV_OP_NEXT_CSID,
+> +	__SEG6_LOCAL_FLV_OP_MAX
+> +};
+> +
+> +#define SEG6_LOCAL_FLV_OP_MAX (__SEG6_LOCAL_FLV_OP_MAX - 1)
+> +
+>  #endif
+> diff --git a/net/ipv6/seg6_local.c b/net/ipv6/seg6_local.c
+> index f43e6f0baac1..8370726ae7bf 100644
+> --- a/net/ipv6/seg6_local.c
+> +++ b/net/ipv6/seg6_local.c
+> @@ -73,6 +73,55 @@ struct bpf_lwt_prog {
+>  	char *name;
+>  };
+>  
+> +/* default length values (expressed in bits) for both Locator-Block and
+> + * Locator-Node Function.
+> + *
+> + * Both SEG6_LOCAL_LCBLOCK_DBITS and SEG6_LOCAL_LCNODE_FN_DBITS *must* be:
+> + *    i) greater than 0;
+> + *   ii) evenly divisible by 8. In other terms, the lengths of the
+> + *	 Locator-Block and Locator-Node Function must be byte-aligned (we can
+> + *	 relax this constraint in the future if really needed).
+> + *
+> + * Moreover, a third condition must hold:
+> + *  iii) SEG6_LOCAL_LCBLOCK_DBITS + SEG6_LOCAL_LCNODE_FN_DBITS <= 128.
+> + *
+> + * The correctness of SEG6_LOCAL_LCBLOCK_DBITS and SEG6_LOCAL_LCNODE_FN_DBITS
+> + * values are checked during the kernel compilation. If the compilation stops,
+> + * check the value of these parameters to see if they meet conditions (i), (ii)
+> + * and (iii).
+> + */
+> +#define SEG6_LOCAL_LCBLOCK_DBITS	32
+> +#define SEG6_LOCAL_LCNODE_FN_DBITS	16
+> +
+> +/* The following next_csid_chk_{cntr,lcblock,lcblock_fn}_bits macros can be
+> + * used directly to check whether the lengths (in bits) of Locator-Block and
+> + * Locator-Node Function are valid according to (i), (ii), (iii).
+> + */
+> +#define next_csid_chk_cntr_bits(blen, flen)		\
+> +	((blen) + (flen) > 128)
+> +
+> +#define next_csid_chk_lcblock_bits(blen)		\
+> +({							\
+> +	typeof(blen) __tmp = blen;			\
+> +	(!__tmp || __tmp > 120 || (__tmp & 0x07));	\
 
-Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
+Just a note to mention that in theory a caller could pass a signed
+argument, so the above check does not ensure that __tmp is acutally >=
+8.
 
-Thanks!
+All the current callers use unsigned arguements, so it still looks
+safe. 
+
+Cheers,
+
+Paolo
 
