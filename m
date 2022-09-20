@@ -2,327 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 811C25BE024
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 10:32:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 358215BE029
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 10:33:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbiITIcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 04:32:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54938 "EHLO
+        id S230514AbiITIcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 04:32:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230234AbiITIcA (ORCPT
+        with ESMTP id S231282AbiITIcH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 04:32:00 -0400
-Received: from mail.thorsis.com (mail.thorsis.com [92.198.35.195])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB7FD1110;
-        Tue, 20 Sep 2022 01:31:45 -0700 (PDT)
-Date:   Tue, 20 Sep 2022 10:31:36 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=thorsis.com; s=default;
-        t=1663662701;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JVHLmwXDyh6TUEwB/nhu8l7QMTD6wZTCB4/sJ3sL0ZA=;
-        b=l2h1ZiA2fOprwC+cehAzOgsg8GXULR65KBms7en/0ITgWNx76txAF/DMOtfd7e7SdFNNAc
-        PxxKGnpILz9d3SmqxWo5tEaolGY1kPr02Wk2ZepH0p+bz4fORK4eyubkp/9nU6NKo1eFLd
-        VChmZKnKEsP5VtUiUAsUI4SbRcgLXKagqvT1FyQVw+/Uquq5Dt/Skq1VFN2WCht5HDnPgg
-        wu0Pxjlf25vintpJvvw0XwxbPvru0XwKfzsrQEWiwQ9v58FJ3LhmbcaYsFHZSb10C2b2ZC
-        9qF1UF30FBWVomrEuc/DByCUnEihHH2Tkt9LrLRBeiEOeM9ufDQGezD2ZVN3ag==
-From:   Alexander Dahl <ada@thorsis.com>
-To:     Stefan Wahren <stefan.wahren@i2se.com>
-Cc:     Ariel D'Alessandro <ariel.dalessandro@collabora.com>,
-        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org, arnd@arndb.de,
-        f.fainelli@gmail.com, nsaenz@kernel.org, olof@lixom.net,
-        robh+dt@kernel.org, soc@kernel.org, william.zhang@broadcom.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [PATCH] ARM: dts: Add Raspberry Pi Compute Module 4 CANOPi Board
-Message-ID: <Yyl6aD7jXigk9UFX@ada.ifak-system.com>
-Mail-Followup-To: Stefan Wahren <stefan.wahren@i2se.com>,
-        Ariel D'Alessandro <ariel.dalessandro@collabora.com>,
-        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org, arnd@arndb.de,
-        f.fainelli@gmail.com, nsaenz@kernel.org, olof@lixom.net,
-        robh+dt@kernel.org, soc@kernel.org, william.zhang@broadcom.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-References: <20220916153156.30412-1-ariel.dalessandro@collabora.com>
- <YygeqySPtiAEN8EH@ada.ifak-system.com>
- <354a3ef2-c2df-e8fb-da15-b2271581959b@i2se.com>
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <354a3ef2-c2df-e8fb-da15-b2271581959b@i2se.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 20 Sep 2022 04:32:07 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E80642F
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 01:32:04 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id b6so2065660ljr.10
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 01:32:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=e5NbNmHqCTNWIuLtFd/xJyd41CdSEWykAKatXf98LzQ=;
+        b=F/azeecqNQ0r0OnKpDAK+lE7+mPrDKflODWkdTEhYiPVy2Ds0QR1LfiVWR9QviaZ23
+         trYYhU4jIRlDQ5vUkt9fBVt1cOIRRXfcrBK1/wBF35q8CCZCbqafAdBUz2VI/hV0i07B
+         zMlW1phPoKNUBDH9Izm77Ov5zwooyXddO3zuIDccbae3TzhNksBA4xTJO3G7zGYBjYpU
+         IYYv7D5arE5bM0qCqDFv16+UFwNGaKE1X+hOLWWS8PatSeaB55s4xNv8pk+DaNoiRrN3
+         8vQ5cMiNk0hT7JQWeKxzaS6K9Kz8op9IksdAmLqv2WeOvthYgKcJzgD+qyWZNK3d7/t4
+         2MbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=e5NbNmHqCTNWIuLtFd/xJyd41CdSEWykAKatXf98LzQ=;
+        b=GnGrvGJNFngsoVjDl4VzZtKSIJ7M1zHnh/LjAiKc4Lx1A7l41FlpS0ewsQJBQBvimj
+         fLufS6Vg+EQZPAQbgduVDLLfTIXuxszMXhy9gi4e8EJmShDBMhnRxO1p+xvrltZS/D5a
+         DvIGCT9JLq24SZ4Mn9GLHkvzrEPIRSGqybfuSzp3dtK8RzHTnErkNsKFFHDFwdmhZUxM
+         jGlczgv8FPSns9jotwySim754bibfD2nmV82VIgiB0viOf51fUd5QZTYugieqdQzhA56
+         vOEh8CamiS/nXZDE+ay4RzePJ4By/E7c9xaaA9apmRsL3ZqAqlIy/zLLTsg8KQecAJHe
+         m8MQ==
+X-Gm-Message-State: ACrzQf2+N4q3oz3TZkNobSLoU8XwmfQAbJeV04XDdcmEVhrJFeR7FOTm
+        nqPbY/eWHGvRh4WIBInPBB6QNQ==
+X-Google-Smtp-Source: AMsMyM7KNMChPE2Rgyh3kKm/hPSJtpEndm6m6U5vsW842vuEu5FKfr0pg6gGWxliP86yysZq0PMluQ==
+X-Received: by 2002:a2e:bc84:0:b0:26c:3bee:575f with SMTP id h4-20020a2ebc84000000b0026c3bee575fmr5775829ljf.389.1663662723105;
+        Tue, 20 Sep 2022 01:32:03 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id z23-20020a2e9b97000000b00261e7244887sm145166lji.60.2022.09.20.01.32.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Sep 2022 01:32:02 -0700 (PDT)
+Message-ID: <f35a1e45-1856-2443-f87a-33bc97c1c578@linaro.org>
+Date:   Tue, 20 Sep 2022 10:32:01 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v3 1/3] dt-bindings: pinctrl: qcom: add sdm670 pinctrl
+Content-Language: en-US
+To:     Richard Acayan <mailingradian@gmail.com>,
+        linux-arm-msm@vger.kernel.org
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+References: <20220920021636.1634-1-mailingradian@gmail.com>
+ <20220920021636.1634-2-mailingradian@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220920021636.1634-2-mailingradian@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Stefan,
+On 20/09/2022 04:16, Richard Acayan wrote:
+> There is a new driver for the Snapdragon 670 TLMM (Top-Level Mode
+> Multiplexer). Document it.
+> 
+> Adapted from qcom,sm6350-pinctrl.yaml in the same directory at
+> commit c09acbc499e8 ("dt-bindings: pinctrl: use pinctrl.yaml").
 
-Am Mon, Sep 19, 2022 at 01:18:21PM +0200 schrieb Stefan Wahren:
-> Hi Alexander,
-> 
-> [fix address of Krzysztof]
-> 
-> Am 19.09.22 um 09:47 schrieb Alexander Dahl:
-> > Hei hei,
-> > 
-> > Am Fri, Sep 16, 2022 at 12:31:56PM -0300 schrieb Ariel D'Alessandro:
-> > > The Eclipse KUKSA CANOPi [0] is a baseboard for the Raspberry Compute
-> > > Module 4 (CM4). It contains a VIA VL805 4 Port USB controller and two
-> > > MCP251xFD based CAN-FD interfaces.
-> > > 
-> > > [0] https://github.com/boschresearch/kuksa.hardware
-> > > 
-> > > Signed-off-by: Ariel D'Alessandro <ariel.dalessandro@collabora.com>
-> > > ---
-> > >   arch/arm/boot/dts/Makefile                    |   1 +
-> > >   arch/arm/boot/dts/bcm2711-rpi-cm4-canopi.dts  | 139 ++++++++++++++++++
-> > >   arch/arm64/boot/dts/broadcom/Makefile         |   1 +
-> > >   .../dts/broadcom/bcm2711-rpi-cm4-canopi.dts   |   2 +
-> > >   4 files changed, 143 insertions(+)
-> > >   create mode 100644 arch/arm/boot/dts/bcm2711-rpi-cm4-canopi.dts
-> > >   create mode 100644 arch/arm64/boot/dts/broadcom/bcm2711-rpi-cm4-canopi.dts
-> > > 
-> > > diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> > > index 05d8aef6e5d2..8930ab2c132c 100644
-> > > --- a/arch/arm/boot/dts/Makefile
-> > > +++ b/arch/arm/boot/dts/Makefile
-> > > @@ -98,6 +98,7 @@ dtb-$(CONFIG_ARCH_BCM2835) += \
-> > >   	bcm2837-rpi-zero-2-w.dtb \
-> > >   	bcm2711-rpi-400.dtb \
-> > >   	bcm2711-rpi-4-b.dtb \
-> > > +	bcm2711-rpi-cm4-canopi.dtb \
-> > >   	bcm2711-rpi-cm4-io.dtb \
-> > >   	bcm2835-rpi-zero.dtb \
-> > >   	bcm2835-rpi-zero-w.dtb
-> > > diff --git a/arch/arm/boot/dts/bcm2711-rpi-cm4-canopi.dts b/arch/arm/boot/dts/bcm2711-rpi-cm4-canopi.dts
-> > > new file mode 100644
-> > > index 000000000000..52ec5908883c
-> > > --- /dev/null
-> > > +++ b/arch/arm/boot/dts/bcm2711-rpi-cm4-canopi.dts
-> > > @@ -0,0 +1,139 @@
-> > > +// SPDX-License-Identifier: GPL-2.0
-> > > +/dts-v1/;
-> > > +#include "bcm2711-rpi-cm4.dtsi"
-> > > +
-> > > +/ {
-> > > +	model = "Raspberry Pi Compute Module 4 CANOPi Board";
-> > > +
-> > > +	clocks {
-> > > +		clk_mcp251xfd_osc: mcp251xfd-osc {
-> > > +			#clock-cells = <0>;
-> > > +			compatible = "fixed-clock";
-> > > +			clock-frequency = <20000000>;
-> > > +		};
-> > > +	};
-> > > +
-> > > +	leds {
-> > > +		led-act {
-> > > +			gpios = <&gpio 42 GPIO_ACTIVE_HIGH>;
-> > > +		};
-> > > +
-> > > +		led-pwr {
-> > > +			label = "PWR";
-> > > +			gpios = <&expgpio 2 GPIO_ACTIVE_LOW>;
-> > > +			default-state = "keep";
-> > > +			linux,default-trigger = "default-on";
-> > > +		};
-> > > +	};
-> > This looks like using the node name and the deprecated "label"
-> > property for LED naming.  Please see
-> > Documentation/devicetree/bindings/leds/common.yaml and use the
-> > properties "function" and "color" instead.  Also check the node names
-> > itself, see the example in that binding or the leds-gpio binding for
-> > reference.
-> 
-> Oops, i didn't noticed this.
-> 
-> Unfortunately the ACT-LED is already a little bit opaque defined in
-> bcm2835-rpi.dtsi:
-> 
-> leds {
->         compatible = "gpio-leds";
-> 
->         led-act {
->             label = "ACT";
->             default-state = "keep";
->             linux,default-trigger = "heartbeat";
->         };
-> };
-> 
-> So a reference (currently missing) would have make it clear that the ACT-LED
-> is common for all Raspberry Pi boards.
-
-Yes, a reference would probably good, would make it easier to spot
-this is already defined in the dtsi.
-
-> So you wish that this is fixed for the CANOPi board or all Raspberry Pi
-> boards?
-> 
-> I'm asking because switching to function would change the sysfs path and
-> breaking userspace ABI.
-
-You're right, and the effective label should stay as is for existing
-boards to not break userspace.  
-
-Not sure what the policy is for baseboards with compute modules.  Are
-those LEDs on the compute module?  Or does the CM just expose those
-GPIOs?  Is there some policy all baseboards must use them for LEDs?
-An what about additional LEDs on the baseboard?  Is this allowed?  
-(I don't think there a generic rules for that, but maybe some best
-practices for certain SoMs like the RPi CM?)
-
-IMHO for new independent boards though, new LEDs should not be
-introduced the old way. I thought this is the case here, but it seems
-I was wrong due to that baseboard vs. SoM thing.
-
-Greets
-Alex
+Reference other commits if they relate to the issue described here, e.g.
+they cause a bug. If it is not the case, no need for this.
 
 > 
-> > 
-> > Greets
-> > Alex
-> > 
-> > > +};
-> > > +
-> > > +&ddc0 {
-> > > +	status = "okay";
-> > > +};
-> > > +
-> > > +&ddc1 {
-> > > +	status = "okay";
-> > > +};
-> > > +
-> > > +&hdmi0 {
-> > > +	status = "okay";
-> > > +};
-> > > +
-> > > +&hdmi1 {
-> > > +	status = "okay";
-> > > +};
-> > > +
-> > > +&i2c0 {
-> > > +	pinctrl-names = "default";
-> > > +	pinctrl-0 = <&i2c0_gpio44>;
-> > > +	status = "okay";
-> > > +	clock-frequency = <100000>;
-> > > +
-> > > +	pcf85063a@51 {
-> > > +		compatible = "nxp,pcf85063a";
-> > > +		reg = <0x51>;
-> > > +	};
-> > > +};
-> > > +
-> > > +&pcie0 {
-> > > +	pci@0,0 {
-> > > +		device_type = "pci";
-> > > +		#address-cells = <3>;
-> > > +		#size-cells = <2>;
-> > > +		ranges;
-> > > +
-> > > +		reg = <0 0 0 0 0>;
-> > > +
-> > > +		usb@0,0 {
-> > > +			reg = <0 0 0 0 0>;
-> > > +			resets = <&reset RASPBERRYPI_FIRMWARE_RESET_ID_USB>;
-> > > +		};
-> > > +	};
-> > > +};
-> > > +
-> > > +&pixelvalve0 {
-> > > +	status = "okay";
-> > > +};
-> > > +
-> > > +&pixelvalve1 {
-> > > +	status = "okay";
-> > > +};
-> > > +
-> > > +&pixelvalve2 {
-> > > +	status = "okay";
-> > > +};
-> > > +
-> > > +&pixelvalve4 {
-> > > +	status = "okay";
-> > > +};
-> > > +
-> > > +&spi {
-> > > +	status = "okay";
-> > > +	pinctrl-names = "default";
-> > > +	pinctrl-0 = <&spi0_gpio7>;
-> > > +	cs-gpios = <&gpio 8 1>, <&gpio 7 1>;
-> > > +	dmas = <&dma 6>, <&dma 7>;
-> > > +	dma-names = "tx", "rx";
-> > > +
-> > > +	mcp251xfd0: mcp251xfd@0 {
-> > > +		compatible = "microchip,mcp251xfd";
-> > > +		reg = <0>;
-> > > +		pinctrl-names = "default";
-> > > +		pinctrl-0 = <&mcp251xfd0_pins>;
-> > > +		spi-max-frequency = <20000000>;
-> > > +		interrupt-parent = <&gpio>;
-> > > +		interrupts = <27 IRQ_TYPE_LEVEL_LOW>;
-> > > +		clocks = <&clk_mcp251xfd_osc>;
-> > > +	};
-> > > +
-> > > +	mcp251xfd1: mcp251xfd@1 {
-> > > +		compatible = "microchip,mcp251xfd";
-> > > +		reg = <1>;
-> > > +		pinctrl-names = "default";
-> > > +		pinctrl-0 = <&mcp251xfd1_pins>;
-> > > +		spi-max-frequency = <20000000>;
-> > > +		interrupt-parent = <&gpio>;
-> > > +		interrupts = <22 IRQ_TYPE_LEVEL_LOW>;
-> > > +		clocks = <&clk_mcp251xfd_osc>;
-> > > +	};
-> > > +};
-> > > +
-> > > +&gpio {
-> > > +	mcp251xfd0_pins: mcp251xfd0_pins {
-> > > +		brcm,pins = <27>;
-> > > +		brcm,function = <BCM2835_FSEL_GPIO_IN>;
-> > > +	};
-> > > +
-> > > +	mcp251xfd1_pins: mcp251xfd1_pins {
-> > > +		brcm,pins = <22>;
-> > > +		brcm,function = <BCM2835_FSEL_GPIO_IN>;
-> > > +	};
-> > > +};
-> > > +
-> > > +&vc4 {
-> > > +	status = "okay";
-> > > +};
-> > > +
-> > > +&vec {
-> > > +	status = "disabled";
-> > > +};
-> > > diff --git a/arch/arm64/boot/dts/broadcom/Makefile b/arch/arm64/boot/dts/broadcom/Makefile
-> > > index e8584d3b698f..7cd88b8c0345 100644
-> > > --- a/arch/arm64/boot/dts/broadcom/Makefile
-> > > +++ b/arch/arm64/boot/dts/broadcom/Makefile
-> > > @@ -1,6 +1,7 @@
-> > >   # SPDX-License-Identifier: GPL-2.0
-> > >   dtb-$(CONFIG_ARCH_BCM2835) += bcm2711-rpi-400.dtb \
-> > >   			      bcm2711-rpi-4-b.dtb \
-> > > +			      bcm2711-rpi-cm4-canopi.dtb \
-> > >   			      bcm2711-rpi-cm4-io.dtb \
-> > >   			      bcm2837-rpi-3-a-plus.dtb \
-> > >   			      bcm2837-rpi-3-b.dtb \
-> > > diff --git a/arch/arm64/boot/dts/broadcom/bcm2711-rpi-cm4-canopi.dts b/arch/arm64/boot/dts/broadcom/bcm2711-rpi-cm4-canopi.dts
-> > > new file mode 100644
-> > > index 000000000000..e9369aa0eb39
-> > > --- /dev/null
-> > > +++ b/arch/arm64/boot/dts/broadcom/bcm2711-rpi-cm4-canopi.dts
-> > > @@ -0,0 +1,2 @@
-> > > +// SPDX-License-Identifier: GPL-2.0
-> > > +#include "arm/bcm2711-rpi-cm4-canopi.dts"
-> > > -- 
-> > > 2.37.2
-> > > 
+> Signed-off-by: Richard Acayan <mailingradian@gmail.com>
+> ---
+>  .../bindings/pinctrl/qcom,sdm670-tlmm.yaml    | 138 ++++++++++++++++++
+>  1 file changed, 138 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,sdm670-tlmm.yaml
+> 
+
+(...)
+
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts: true
+> +  interrupt-controller: true
+> +  '#interrupt-cells': true
+> +  gpio-controller: true
+> +  gpio-reserved-ranges:
+> +    minItems: 1
+> +    maxItems: 76
+
+Do you have 152 or 153 GPIOs?
+
+> +
+> +  '#gpio-cells': true
+> +  gpio-ranges: true
+> +  wakeup-parent: true
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +patternProperties:
+> +  '-state$':
+> +    oneOf:
+> +      - $ref: "#/$defs/qcom-sdm670-tlmm-state"
+> +      - patternProperties:
+> +          "-pins$":
+> +            $ref: "#/$defs/qcom-sdm670-tlmm-state"
+> +        additionalProperties: false
+> +
+> +$defs:
+> +  qcom-sdm670-tlmm-state:
+> +    type: object
+> +    description:
+> +      Pinctrl node's client devices use subnodes for desired pin configuration.
+> +      Client device subnodes use below standard properties.
+> +
+> +    properties:
+> +      pins:
+> +        description:
+> +          List of gpio pins affected by the properties specified in this
+> +          subnode.
+> +        items:
+> +          oneOf:
+> +            - pattern: "^gpio([0-9]|[1-9][0-9]|1[0-4][0-9])$"
+> +            - enum: [ ufs_reset, sdc1_rclk, sdc1_clk, sdc1_cmd, sdc1_data,
+> +                      sdc2_clk, sdc2_cmd, sdc2_data ]
+> +        minItems: 1
+> +        maxItems: 36
+> +
+> +      function:
+> +        description:
+> +          Specify the alternative function to be configured for the specified
+> +          pins.
+> +
+> +        enum: [ adsp_ext, agera_pll, atest_char, atest_tsens, atest_tsens2, atest_usb1, atest_usb10,
+> +                atest_usb11, atest_usb12, atest_usb13, atest_usb2, atest_usb20, atest_usb21,
+> +                atest_usb22, atest_usb23, cam_mclk, cci_async, cci_i2c, cci_timer0, cci_timer1,
+> +                cci_timer2, cci_timer3, cci_timer4, copy_gp, copy_phase, dbg_out, ddr_bist,
+> +                ddr_pxi0, ddr_pxi1, ddr_pxi2, ddr_pxi3, edp_hot, edp_lcd, gcc_gp1, gcc_gp2, gcc_gp3,
+> +                gp_pdm0, gp_pdm1, gp_pdm2, gpio, gps_tx, jitter_bist, ldo_en, ldo_update,
+> +                lpass_slimbus, m_voc, mdp_vsync, mdp_vsync0, mdp_vsync1, mdp_vsync2, mdp_vsync3,
+> +                mss_lte, nav_pps, pa_indicator, pci_e0, pci_e1, phase_flag, pll_bist, pll_bypassnl,
+> +                pll_reset, pri_mi2s, pri_mi2s_ws, prng_rosc, qdss_cti, qdss, qlink_enable,
+> +                qlink_request, qua_mi2s, qup0, qup1, qup10, qup11, qup12, qup13, qup14, qup15, qup2,
+> +                qup3, qup4, qup5, qup6, qup7, qup8, qup9, qup_l4, qup_l5, qup_l6, sdc4_clk,
+> +                sdc4_cmd, sdc4_data, sd_write, sec_mi2s, ter_mi2s, tgu_ch0, tgu_ch1, tgu_ch2,
+> +                tgu_ch3, tsif1_clk, tsif1_data, tsif1_en, tsif1_error, tsif1_sync, tsif2_clk,
+> +                tsif2_data, tsif2_en, tsif2_error, tsif2_sync, uim1_clk, uim1_data, uim1_present,
+> +                uim1_reset, uim2_clk, uim2_data, uim2_present, uim2_reset, uim_batt, usb_phy, vfr_1,
+> +                vsense_trigger, wlan1_adc0, wlan1_adc1, wlan2_adc0, wlan2_adc1, wsa_clk, wsa_data, ]
+> +
+> +
+> +      bias-disable: true
+> +      bias-pull-down: true
+> +      bias-pull-up: true
+> +      drive-strength: true
+> +      input-enable: true
+> +      output-high: true
+> +      output-low: true
+> +
+> +    required:
+> +      - pins
+> +
+> +    allOf:
+> +      - $ref: "qcom,tlmm-common.yaml#/$defs/qcom-tlmm-state"
+> +      - if:
+> +          properties:
+> +            pins:
+> +              pattern: "^gpio([0-9]|[1-9][0-9]|1[0-4][0-9])$"
+> +        then:
+> +          required:
+> +            - function
+> +
+> +    additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +        #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +        pinctrl@3400000 {
+
+Still wrong indentation.
+
+> +                compatible = "qcom,sdm670-tlmm";
+> +                reg = <0x03400000 0x300000>;
+> +                interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
+> +                gpio-controller;
+> +                #gpio-cells = <2>;
+> +                interrupt-controller;
+> +                #interrupt-cells = <2>;
+> +                gpio-ranges = <&tlmm 0 0 151>;
+> +
+
+Best regards,
+Krzysztof
