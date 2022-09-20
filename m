@@ -2,72 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8BAD5BECFC
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 20:48:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D83295BECFF
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 20:48:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230348AbiITSsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 14:48:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52164 "EHLO
+        id S230444AbiITSsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 14:48:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230020AbiITSr6 (ORCPT
+        with ESMTP id S230408AbiITSsM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 14:47:58 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B1FD719B8
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 11:47:57 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id i203-20020a1c3bd4000000b003b3df9a5ecbso7532363wma.1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 11:47:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=e1rax8zHktkJE4NlsAmrfBmfy6JQLwKUdVTmbuE0Kvk=;
-        b=a/n6KLKyuuFnUM9vPXO3YclSzmLnz5UmmI77Eu3qAaW7GkwFECSgfrEM4d7ThRkn+b
-         ZTMsEBSKTuD7zZiQVnWgjr07lcGlSZ9GvvEgMm0rhzp6C0aGUGevKgOvhoTx7JxtonZC
-         cRH+h/UsrueXTDj97dWDJ+LJl89I4BlMeysqwnhpKoX3kUbWiKuuMaXAF8Zpx1L8spQA
-         Hk/fmXNFF5Mygf7rmhKqwumIZA0iLEqpSsNbVh8OcqU9iYKYY9QYErbSUiNfkFYXOFPR
-         LAi4v5NqDj/zYgN5BQZ8iCvyfyDZ/LxZM9kQpWnHtWqeAGSezF8VPy4ng6kbwnRmQpE9
-         Sp7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=e1rax8zHktkJE4NlsAmrfBmfy6JQLwKUdVTmbuE0Kvk=;
-        b=G3bmRkog5Qz752B53brzHv5a4p7ccSAlPPokywoq+WkpZ+5KJZqJ5PDfl2IygLXZIf
-         fgEN6Jb30SvuAITGF1Vk9sbU3D9R8bDRKQgUFbzT/xHHMACI/V1ZDlI+316rWaKUJv6T
-         BR7dzppe+2U5F/mEHe16emiEgywTRlw9+lwNsMsEvAI7t9l6ZDN4J2/mLIiGJu1dsBTr
-         erwsAj1Izb6o9y0stR3BvYSQinpM/o3v61/vpZ4ea7+HqZ/ALYLTwjyKaJ6NIBlKXy8x
-         5zRK4jBy54fcD4w5axzmehkwUGe+1jpyE024/SLPAmP4uOjbbB/uDsnnzYcfdM9tXfzc
-         MYVQ==
-X-Gm-Message-State: ACrzQf342aZffEe/Ba+3L59VJHVPkAMyk0HEpGYUsiOe/XRFCgKy0vXn
-        4zbjyMMgQX0oW4SyZs5gbbYhtg==
-X-Google-Smtp-Source: AMsMyM4R92uxH1TZaMut6DsSvvNnopmxhOhsLA3A+9DuCP3Acj5edYh4JdyiyzPrQqGkRn4eb4NHpQ==
-X-Received: by 2002:a05:600c:310b:b0:3b4:c709:4322 with SMTP id g11-20020a05600c310b00b003b4c7094322mr3342558wmo.141.1663699676003;
-        Tue, 20 Sep 2022 11:47:56 -0700 (PDT)
-Received: from localhost.localdomain (host-78-150-37-98.as13285.net. [78.150.37.98])
-        by smtp.gmail.com with ESMTPSA id id21-20020a05600ca19500b003b27f644488sm507061wmb.29.2022.09.20.11.47.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 11:47:55 -0700 (PDT)
-From:   Sudip Mukherjee <sudip.mukherjee@sifive.com>
-To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <pratyush@kernel.org>,
-        Michael Walle <michael@walle.cc>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Cc:     greentime.hu@sifive.com, jude.onyenegecha@sifive.com,
-        william.salmon@sifive.com, adnan.chowdhury@sifive.com,
-        ben.dooks@sifive.com, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Sudip Mukherjee <sudip.mukherjee@sifive.com>
-Subject: [PATCH v3 1/2] mtd: spi-nor: issi: is25wp256: Init flash based on SFDP
-Date:   Tue, 20 Sep 2022 19:47:48 +0100
-Message-Id: <20220920184748.44812-1-sudip.mukherjee@sifive.com>
-X-Mailer: git-send-email 2.30.2
+        Tue, 20 Sep 2022 14:48:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A96E719B8
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 11:48:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B41E6B82C35
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 18:48:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C84B2C433C1;
+        Tue, 20 Sep 2022 18:48:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663699689;
+        bh=FDAgjlPosg1ja6z+aN+h8UwvXOzCcYNPUY1CxZR4JbM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=liXlD7XxR+89JC/jc5fDqQ39tYxnFPPpFQ8qGUcEE4G6ptPCdGiVPtprJttpn8JfO
+         Y79cXhQM57YHtaqM29FYUtu0rdVyeWxVBFehCy0Iom+EFTTiAsJoe8U7fkSvA/90NH
+         xDxeeEjHAEDCuu6TGBujn5O3y0ct58mo+ZHU0oc8Ao/UIx8PbtkGLw8WEOWo6wjiSO
+         /OpmlA9cNKQmpYtHfawjRcXqjTTIKQtiWirf6Mg+fhYoiZzR999F0jI/9C/8+QEZTJ
+         MPsHXWx5B6es+MZ58SHYI2+Y2fMGn5KlbhEb6SjfGcDvQqGV1wLpTT1m2IdmoPZ9S/
+         Mpl9rZfClt/jg==
+Date:   Tue, 20 Sep 2022 19:48:06 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     James Clark <james.clark@arm.com>, suzuki.poulose@arm.com,
+        coresight@lists.linaro.org, mathieu.poirier@linaro.org,
+        mike.leach@linaro.org, leo.yan@linaro.org,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] coresight: Use new autogenerated sysreg definitions
+Message-ID: <YyoK5uSwYRC3u3T8@sirena.org.uk>
+References: <20220920134827.31738-1-james.clark@arm.com>
+ <Yyntfsas+K63Oo1a@arm.com>
+ <YynzVqwK+6JJt9XW@arm.com>
+ <Yyn+68Nv2OYKId11@sirena.org.uk>
+ <YyoBkDGtS+nAWp+Q@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="7AAcTFuRjuZ34qB4"
+Content-Disposition: inline
+In-Reply-To: <YyoBkDGtS+nAWp+Q@arm.com>
+X-Cookie: One FISHWICH coming up!!
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,37 +62,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The datasheet of is25wp256 says it supports SFDP. Get rid of the static
-initialization of the flash parameters and init them when parsing SFDP.
 
-Testing showed the flash using SPINOR_OP_READ_1_1_4_4B 0x6c,
-SPINOR_OP_PP_4B 0x12 and SPINOR_OP_BE_4K_4B 0x21 before enabling SFDP.
-After this patch, it parses the SFDP information and still uses the
-same opcodes.
+--7AAcTFuRjuZ34qB4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Signed-off-by: Sudip Mukherjee <sudip.mukherjee@sifive.com>
----
+On Tue, Sep 20, 2022 at 07:08:16PM +0100, Catalin Marinas wrote:
 
-No change from v2, just resending again with the next patch.
-Results from the tests given by Tudor in the following mail.
+> BTW, do you plan to send a patch for the arm_spe_pmu build failures
+> (unless you did already and I missed it):
 
+Nathan sent a patch for that yesterday, I was a bit surprised you
+didn't pick it up yet TBH.
 
- drivers/mtd/spi-nor/issi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--7AAcTFuRjuZ34qB4
+Content-Type: application/pgp-signature; name="signature.asc"
 
-diff --git a/drivers/mtd/spi-nor/issi.c b/drivers/mtd/spi-nor/issi.c
-index 89a66a19d754f..8b48459b5054c 100644
---- a/drivers/mtd/spi-nor/issi.c
-+++ b/drivers/mtd/spi-nor/issi.c
-@@ -71,7 +71,7 @@ static const struct flash_info issi_nor_parts[] = {
- 	{ "is25wp128",  INFO(0x9d7018, 0, 64 * 1024, 256)
- 		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ) },
- 	{ "is25wp256", INFO(0x9d7019, 0, 64 * 1024, 512)
--		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ)
-+		PARSE_SFDP
- 		FIXUP_FLAGS(SPI_NOR_4B_OPCODES)
- 		.fixups = &is25lp256_fixups },
- 
--- 
-2.30.2
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMqCuEACgkQJNaLcl1U
+h9A/cAf/QISqKBrTMQ/g+279EYgVmk3ipyi/aEVmnKUHrv/usdv1l+PMl4Yh+TZR
+qoko+c7ObtU+vKCSLVqv4ToiBkwgFQvIkRzCbdG0b8KUnqHPnTqexhgdZgXt5ScH
+TJy+V4AbJXjdTB8y/KzulYDGbyQ9xcG0YqiCZTivAC1hWqQyrHNhbybQYwA2H+cP
+3GwbYEsXEyciP4xoNp85F1LGTXUrvIxbtoNHGcqyJrjaw6zRacNNYZ8ui/hERu1Z
+zURcQSr3G6myoemBHdPe1vPfZ+LBX6jIZRbzA1AYI1R/kTgIqjPwXxCz02zk9C6e
+7PG/ONzznqTcZwggVkZvOKa568jsXw==
+=8HXb
+-----END PGP SIGNATURE-----
+
+--7AAcTFuRjuZ34qB4--
