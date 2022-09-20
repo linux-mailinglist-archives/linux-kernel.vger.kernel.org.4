@@ -2,142 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE1155BE9C2
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 17:12:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 170355BE9C7
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 17:12:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230270AbiITPMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 11:12:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53464 "EHLO
+        id S229764AbiITPMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 11:12:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbiITPM3 (ORCPT
+        with ESMTP id S230377AbiITPMq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 11:12:29 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7031417AA8
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 08:12:28 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id n10so4743458wrw.12
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 08:12:28 -0700 (PDT)
+        Tue, 20 Sep 2022 11:12:46 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65A0F5A3FE
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 08:12:43 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id s10so3387841ljp.5
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 08:12:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
+        d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=Edc5vm8+HRg8OvueT4HffnM8lhoUQsfY1q2oyUaLegM=;
-        b=O0ko2PMRP4hSqwQ+T2uyZeknljuCg085maL0c/OFwwKxfUIgM23Tp/gpv9VSx0Sueh
-         yhAwQ/pigKIYkkyYhQbPHlE3Ew6cvxQpCa5dDhu2+mjrRRPNf1SH8Km06aWjC6aydtE3
-         l9Y4ygxtXGRxk3EMUQ4ge6qV/KOKaILoUikseuM4EEWMn/38LQ3bQAMbn9Ro/vDz/EnI
-         oA5CPjQyNx+lwPwJsO+yOAE69qofPcxWjr1bxd6nlJHV8RsK0cTd3Z4HfbC0ucGVRKef
-         RMMJ3yZlrNOK5IkjsZyaLD4rS/cEvI9dg6F8yX6zjaB4gxwLfaa9LXGRb/ffzkM0FjiX
-         pvRA==
+        bh=ZDQKf8hMaoTftjO/wZ7T/DZ09g0+Y8QFKUhj1aczZO4=;
+        b=ijboJH4ZrvEVX7eaxNhBtr6nvX/5TUNuJFbmOqb0+QVyWacM7IZnlW5yZJuYuClDvZ
+         v4snu7Fkf2FNjd4tVHOObneeahy8b84caSjAI7JNomzrgj4KlvmmbGBRbBlIQDScGkU5
+         AtjjSLIFGry4WeNbCg5T1m5FeInNPPQLbsY8D0ysBmH9Ydb+zN0yU898nwA5nNQ5bM2O
+         X0hBLN7WAek0/smDVWaHRNRklQ2eKn+W735Fg2/9g3xRfPsqh5qTykYmLMEos7L6T9jy
+         JJZRR8d/3zZSkmAdDjJ9+umgDxlvr5XgkRJcVC9sj3hxuU9sv2FUfjHXvupE53tlIRbL
+         QRvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=Edc5vm8+HRg8OvueT4HffnM8lhoUQsfY1q2oyUaLegM=;
-        b=HMFhUg91nrJpoflB/fkHWiWPtTw5k8x6U64OvnO0uSzbVhS4TqC2fa/G9gFmL7It/0
-         9fipOivRXSyyinydZSQZryHOZMe94PLpWqUNnRxluHVRrLtsIIsWnWm40VKzdKxJ1xu4
-         kHWWPocteJrA84z7Y28sGG6Y3Aapj2I+GO21EWVeLdsWIPhBOS0LgUob1EpBHl6aP5x4
-         p8brflb2fR8dzYA7SIe/3QdR5/4l7tXSYl/Hutwfx6c+x+GEC3ajceDQtZ9BBV3ThNBg
-         LyQtwROT2d5hbhtsjx7FMkn6Hw6OV7WCn8okdF8AVv4e6pxck3wJ4CypDTNhi5Z+2Axp
-         evMw==
-X-Gm-Message-State: ACrzQf3bwgemH8XZ4USjyqnoG/k0VuytuGbFMU1fgQkR/9ePsWCp3Bds
-        gnkdfgyhFTTUWCunGTEbNlXUAQ==
-X-Google-Smtp-Source: AMsMyM4u7M8Oa3I0tiFWjywE/WPatGo9t8jr+6HvqPcpjnCsdmlW3DJa0sFe70cyd5vWJDPhvhUEkQ==
-X-Received: by 2002:a5d:67ca:0:b0:228:7ad5:768f with SMTP id n10-20020a5d67ca000000b002287ad5768fmr14282120wrw.163.1663686746950;
-        Tue, 20 Sep 2022 08:12:26 -0700 (PDT)
-Received: from [192.168.178.32] ([51.155.200.13])
-        by smtp.gmail.com with ESMTPSA id v10-20020a5d590a000000b002206203ed3dsm34079wrd.29.2022.09.20.08.12.25
+        bh=ZDQKf8hMaoTftjO/wZ7T/DZ09g0+Y8QFKUhj1aczZO4=;
+        b=d2+50JWwK+S21we6h2x3/i5UM4AEaKC2PAR/iHRKB7je1zcyU3MdwYYN3l49m4yMyl
+         fxJ/f6ZjviA6kOTl6mjOWj4flJYqBEHr4O1AMLwJvDCC3wy8TUt/RLpLN15hP3xKkqeD
+         UzFspjUTbcjen4KAApIQPUNQmY/iI8/RKOrn0uBx1SyYBUPxw7y2QwiwKk1fts0dbGBC
+         KItE9W4cEPK5NSpeBccy1CgMA8nYWuRWXHOqBImzN2md1B4wFodnOQVLB/oMDz6a037G
+         iaBbgvUy77r+5jehM1kqVTA88w2B/UmvAI8ocF48MdLhSHKSPCyfWszGxsw0oF+UF7kM
+         5q2A==
+X-Gm-Message-State: ACrzQf1chxvM3FuRlZT+VZa7yHO+rqVk0QZl6zelwB/PBp5HjyNbUj03
+        3RkTeNqTnX2GTIe5xWlDawv7PA==
+X-Google-Smtp-Source: AMsMyM7QSPRloERUtnpYtYvGWHR7eEWFhijs5dTYRI013FK2V/Z/om+lBoVDAQl70Nxw3ITy/2Cang==
+X-Received: by 2002:a05:651c:514:b0:26c:5815:551d with SMTP id o20-20020a05651c051400b0026c5815551dmr1792306ljp.28.1663686761755;
+        Tue, 20 Sep 2022 08:12:41 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id v12-20020a19740c000000b00497a2815d8dsm1781lfe.195.2022.09.20.08.12.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Sep 2022 08:12:26 -0700 (PDT)
-Message-ID: <6bed1b34-3e92-2deb-94b5-9c194c6c7e6c@isovalent.com>
-Date:   Tue, 20 Sep 2022 16:12:25 +0100
+        Tue, 20 Sep 2022 08:12:41 -0700 (PDT)
+Message-ID: <b4016460-f43a-13f8-432e-47c27237e005@linaro.org>
+Date:   Tue, 20 Sep 2022 17:12:40 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [bpf-next v4 2/3] bpftool: Update doc (add auto_attach to prog
- load)
-Content-Language: en-GB
-To:     Wang Yufen <wangyufen@huawei.com>, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, davem@davemloft.net, kuba@kernel.org,
-        hawk@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
-        trix@redhat.com
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, llvm@lists.linux.dev
-References: <1663037687-26006-1-git-send-email-wangyufen@huawei.com>
- <1663037687-26006-2-git-send-email-wangyufen@huawei.com>
-From:   Quentin Monnet <quentin@isovalent.com>
-In-Reply-To: <1663037687-26006-2-git-send-email-wangyufen@huawei.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v7 6/9] crypto: qce: core: Add new compatibles for qce
+ crypto driver
+Content-Language: en-US
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     agross@kernel.org, herbert@gondor.apana.org.au,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, thara.gopinath@gmail.com,
+        robh@kernel.org, andersson@kernel.org, bhupesh.linux@gmail.com,
+        davem@davemloft.net, Jordan Crouse <jorcrous@amazon.com>
+References: <20220920114051.1116441-1-bhupesh.sharma@linaro.org>
+ <20220920114051.1116441-7-bhupesh.sharma@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220920114051.1116441-7-bhupesh.sharma@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tue Sep 13 2022 03:54:46 GMT+0100 (British Summer Time) ~ Wang Yufen
-<wangyufen@huawei.com>
-> Add auto_attach optional to prog load|loadall for supporting
-> one-step load-attach-pin_link.
+On 20/09/2022 13:40, Bhupesh Sharma wrote:
+> Since we decided to use soc specific compatibles for describing
+> the qce crypto IP nodes in the device-trees, adapt the driver
+> now to handle the same.
 > 
-> Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+> Keep the old deprecated compatible strings still in the driver,
+> to ensure backward compatibility.
+> 
+> Cc: Bjorn Andersson <andersson@kernel.org>
+> Cc: Rob Herring <robh@kernel.org>
+> Cc: herbert@gondor.apana.org.au
+> Tested-by: Jordan Crouse <jorcrous@amazon.com>
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 > ---
->  tools/bpf/bpftool/Documentation/bpftool-prog.rst | 12 ++++++++++--
->  1 file changed, 10 insertions(+), 2 deletions(-)
+>  drivers/crypto/qce/core.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
 > 
-> diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-> index eb1b2a2..463f895 100644
-> --- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-> +++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-> @@ -31,7 +31,7 @@ PROG COMMANDS
->  |	**bpftool** **prog dump xlated** *PROG* [{**file** *FILE* | **opcodes** | **visual** | **linum**}]
->  |	**bpftool** **prog dump jited**  *PROG* [{**file** *FILE* | **opcodes** | **linum**}]
->  |	**bpftool** **prog pin** *PROG* *FILE*
-> -|	**bpftool** **prog** { **load** | **loadall** } *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*]
-> +|	**bpftool** **prog** { **load** | **loadall** } *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*] [**auto_attach**]
->  |	**bpftool** **prog attach** *PROG* *ATTACH_TYPE* [*MAP*]
->  |	**bpftool** **prog detach** *PROG* *ATTACH_TYPE* [*MAP*]
->  |	**bpftool** **prog tracelog**
-> @@ -131,7 +131,7 @@ DESCRIPTION
->  		  contain a dot character ('.'), which is reserved for future
->  		  extensions of *bpffs*.
+> diff --git a/drivers/crypto/qce/core.c b/drivers/crypto/qce/core.c
+> index 63be06df5519..99ed540611ab 100644
+> --- a/drivers/crypto/qce/core.c
+> +++ b/drivers/crypto/qce/core.c
+> @@ -291,8 +291,17 @@ static int qce_crypto_remove(struct platform_device *pdev)
+>  }
 >  
-> -	**bpftool prog { load | loadall }** *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*]
-> +	**bpftool prog { load | loadall }** *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*] [**auto_attach**]
->  		  Load bpf program(s) from binary *OBJ* and pin as *PATH*.
->  		  **bpftool prog load** pins only the first program from the
->  		  *OBJ* as *PATH*. **bpftool prog loadall** pins all programs
-> @@ -150,6 +150,14 @@ DESCRIPTION
->  		  Optional **pinmaps** argument can be provided to pin all
->  		  maps under *MAP_DIR* directory.
->  
-> +		  If **auto_attach** is specified program will be attached
-> +		  before pin. 1)in that case, only the link (representing the program
+>  static const struct of_device_id qce_crypto_of_match[] = {
+> +	/* Following two entries are deprecated (kept only for backward compatibility) */
+>  	{ .compatible = "qcom,crypto-v5.1", },
+>  	{ .compatible = "qcom,crypto-v5.4", },
 
-"1)in" -> "In"
+This is okay, so there is no ABI break.
 
-> +		  attached to its hook) is pinned, not the program as such, so the
-> +		  path won't show in "bpftool prog show -f", only show in
+> +	/* Add compatible strings as per updated dt-bindings, here: */
+> +	{ .compatible = "qcom,ipq4019-qce", },
+> +	{ .compatible = "qcom,ipq6018-qce", },
+> +	{ .compatible = "qcom,ipq8074-qce", },
+> +	{ .compatible = "qcom,msm8996-qce", },
+> +	{ .compatible = "qcom,sdm845-qce", },
+> +	{ .compatible = "qcom,sm8150-qce", },
+> +	{ .compatible = "qcom,sm8250-qce", },
 
-Let's use markup instead of quotes around the commands please, **bpftool
-prog show -f** and **bpftool link show -f** (below).
+This is a bit odd... you have 7 devices which are simply compatible or
+even the same. This should be instead one compatible.
 
-> +		  "bpftool link show -f", and 2)this only works when bpftool (libbpf)
+I don't really get why do you want to deprecate "qcom,crypto-v5.1".
+Commit msg only says "we decided" but I do not know who is "we" and "why
+we decided like this". If you want to deprecate it, perfectly fine by
+me, but please say in commit msg why you are doing it.
 
-", and 2)this..." -> ". Also, this..."
-
-> +		  is able to infer all necessary information from the object file,
-> +		  in particular, it's not supported for all program types.
-> +
->  		  Note: *PATH* must be located in *bpffs* mount. It must not
->  		  contain a dot character ('.'), which is reserved for future
->  		  extensions of *bpffs*.
-
-Apart from the formatting nits above, looks good, thank you.
+Best regards,
+Krzysztof
