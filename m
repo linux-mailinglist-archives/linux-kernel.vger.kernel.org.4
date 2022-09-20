@@ -2,104 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B60A5BE403
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 12:58:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ACA25BE40B
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 13:03:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229847AbiITK6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 06:58:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35168 "EHLO
+        id S229743AbiITLCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 07:02:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230364AbiITK6X (ORCPT
+        with ESMTP id S229471AbiITLCo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 06:58:23 -0400
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9136872ECD;
-        Tue, 20 Sep 2022 03:58:08 -0700 (PDT)
-Received: by mail-ej1-f47.google.com with SMTP id y17so5198502ejo.6;
-        Tue, 20 Sep 2022 03:58:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=DIf4A6MJfckarZjD46d4BsfCfgbtP0HUjIfcnatCVF4=;
-        b=MtxzBxJckZt202x3WkcyuKwwdUpR/UE2O+GhTXXvcBrugYt+qcHWwexSnbpYwnJ6wN
-         voRhBQN2ayJ7iR7fS34bOC/zN0hZtcVXKZRyc27GKFDLMBHpD938fQEB41/vwI5RqBl3
-         qRr+SE0fqY3Rg3khEq6RC3y6KDoSUj9PgOvdBkzYSwdNDISIxNXDpPaLwEEiDwet6hoo
-         I4OSCbShg5G/HAca5IpWAZrCfrJe2n0SW6pjAwFCqX0FHioHMx5peoC2dcEpBSDCmi4f
-         Q3KtxBxIyAwNQ+Ilxm65Xhjj0MWJQYNCgwgqrPflx6IydvR7AkznDDbcImKKKxusMgkY
-         ZxNQ==
-X-Gm-Message-State: ACrzQf0sCFNE3PU4Nj/jYNTH7bDFXyZMYTEP1HZvCwud8xjYjQ0mIg4V
-        7/eiBKU/n1a85Upc/Ua9hkQ=
-X-Google-Smtp-Source: AMsMyM5kxMnMuhMcHTwEZeZUOWkC/2ffdKn/oARxrizmy9SaILemUN35/307/v8LTz/ze3YlWW9CkA==
-X-Received: by 2002:a17:906:cc10:b0:77a:fe95:eae2 with SMTP id ml16-20020a170906cc1000b0077afe95eae2mr16531605ejb.466.1663671486796;
-        Tue, 20 Sep 2022 03:58:06 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id bi14-20020a170906a24e00b007803083a36asm651296ejb.115.2022.09.20.03.58.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Sep 2022 03:58:06 -0700 (PDT)
-Message-ID: <bb3fa609-858f-ab16-95b4-06fd43ec6129@kernel.org>
-Date:   Tue, 20 Sep 2022 12:58:04 +0200
+        Tue, 20 Sep 2022 07:02:44 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B8CF6C753
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 04:02:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=m7J8TcFCe/3IrKyoUbv8nRLU7ejKg/hYnQKxirV/su0=; b=UhIOaSq1GKZ+umUqUQqLxQeXyb
+        gfoWFwlw1+tKTZe0YggLmGLq/bYMhtjNJYAMMv1hlvtIoP/3fDZ0X/BRH+v+Dj5PXkudlUv1rmWqN
+        MBWfGQ+JJ27t/3hNxif2bFCKuwLcaZnkrO27lIP5A0w3ayFDmnKDro2LpqeN6CsqAhFSy8C7Q8ET+
+        spCC3Qewu3yg6rkk42+w4DOGE3jrYZHdNZwLomWaxSoG/gGK4KLP3fbrIOv6Nipx2P2UE3959YyJb
+        aQEKsvGgiEh3JR3jYX6M21DUU6a2VT1OHZZr8ppJyyzIPT2fnB/6As8YQPLCM+od81mZr5Zlk2rsy
+        PKYRK9Sw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oab13-00EKM7-2b; Tue, 20 Sep 2022 11:02:13 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id EC9B3300202;
+        Tue, 20 Sep 2022 13:02:11 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id CB1F82BB47D18; Tue, 20 Sep 2022 13:02:11 +0200 (CEST)
+Date:   Tue, 20 Sep 2022 13:02:11 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Nadav Amit <nadav.amit@gmail.com>
+Cc:     "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [RFC PATCH] x86/syscalls: allow tracing of __do_sys_[syscall]
+ functions
+Message-ID: <Yymds595qthVSnt0@hirez.programming.kicks-ass.net>
+References: <20220913135213.720368-1-namit@vmware.com>
+ <2D09BBFE-45F3-4B9C-8734-D002CA99FD94@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v4 10/10] tty: serial: use uart_port_tx_limited()
-Content-Language: en-US
-To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
-        Kevin Cernekee <cernekee@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        linux-riscv@lists.infradead.org
-References: <20220920052049.20507-1-jslaby@suse.cz>
- <20220920075844.29360-1-jslaby@suse.cz>
- <f2653c92-1769-fc7c-8ad8-abf34affef6b@linux.intel.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <f2653c92-1769-fc7c-8ad8-abf34affef6b@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2D09BBFE-45F3-4B9C-8734-D002CA99FD94@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20. 09. 22, 11:19, Ilpo Järvinen wrote:
-> One improvement suggestion below.
+On Mon, Sep 19, 2022 at 07:35:42PM -0700, Nadav Amit wrote:
+
+> 1. What is the reason that inline functions are marked with notrace?
+
+IIRC the concern is that a notrace function using an inline function;
+GCC deciding to not inline and then still hitting tracing.
+
+For noinstr we've mandated __always_inline to avoid this problem. The
+direct advantage is that those inlined into instrumented code get, well,
+instrumented.
+
+> 2. Is probing function that is called from do_idle() supposed to work, or
+>    should the kernel prevent it?
+
+Should work for some :-) Specifically it doesn't work for those that
+disable RCU, and that's (largely) being fixed here:
+
+  https://lore.kernel.org/all/20220919095939.761690562@infradead.org/T/#u
+
+Although looking at it just now, I think I missed a spot.. lemme go fix
+;-)
+
+I'm failing to find this callchain; where is
+tick_nohz_get_sleep_length() calling to elfcorehdr_read() ?!?
+
+> [ 2381.892478]  elfcorehdr_read+0x40/0x40
+> [ 2381.896681]  tick_nohz_get_sleep_length+0x9d/0xc0
+> [ 2381.901955]  menu_select+0x4bb/0x630
+> [ 2381.905965]  cpuidle_select+0x16/0x20
+> [ 2381.910069]  do_idle+0x1d2/0x270
+> [ 2381.913689]  cpu_startup_entry+0x20/0x30
+> [ 2381.918086]  start_secondary+0x118/0x150
+> [ 2381.922484]  secondary_startup_64_no_verify+0xc3/0xcb
+> [ 2381.928147]  </TASK>
+> [ 2381.931535] Modules linked in: zram
+> [ 2381.936365] CR2: ffffc90077cb6e4b
+> [ 2381.940998] ---[ end trace 0000000000000000 ]---
 > 
->> diff --git a/drivers/tty/serial/altera_jtaguart.c b/drivers/tty/serial/altera_jtaguart.c
->> index 23f339757894..f224f5141726 100644
->> --- a/drivers/tty/serial/altera_jtaguart.c
->> +++ b/drivers/tty/serial/altera_jtaguart.c
->> @@ -137,39 +137,17 @@ static void altera_jtaguart_rx_chars(struct altera_jtaguart *pp)
->>   static void altera_jtaguart_tx_chars(struct altera_jtaguart *pp)
-...
->> +	space = readl(port->membase + ALTERA_JTAGUART_CONTROL_REG);
->> +	space &= ALTERA_JTAGUART_CONTROL_WSPACE_MSK;
->> +	space >>= ALTERA_JTAGUART_CONTROL_WSPACE_OFF;
-> 
-> This is FIELD_GET(ALTERA_JTAGUART_CONTROL_WSPACE_MSK, ...) & then allows
-> killing ALTERA_JTAGUART_CONTROL_WSPACE_OFF. I'd probably do it in a
-> separate patch though.
-
-Right. Prepared for v5.
-
-thanks,
--- 
-js
-suse labs
-
