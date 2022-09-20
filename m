@@ -2,121 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA3745BE7BF
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 15:56:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F9915BE7C6
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 15:56:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231469AbiITN4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 09:56:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49668 "EHLO
+        id S231405AbiITN4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 09:56:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231405AbiITNzt (ORCPT
+        with ESMTP id S231296AbiITN4X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 09:55:49 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA2803686F
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 06:54:39 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id z2so3985593edi.1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 06:54:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=DLUl+3DSxpghb+4XVDEdCI4TXeLI6nIF01m7+R/dTes=;
-        b=I03TMuUOg4ZdeMC99+46z4AfULcPnl4IXNk6St0H/OKqsWPQvEg0sNSTPnFK6EVnGW
-         WGq/s2WMelHwnhwaPR+Ua9DCI+Qq+MM7r3lbbA+55ln63ju/jgAKkISyQHxnr7EQaBjm
-         528ryRJ+b7y9tYmOGNbKgXB9xC71hNBVCiRyWb9BXk2DOnIy0dmNuUuskKLpxp2BdZe0
-         W8giLV38QuUgRcofNnkpf42Dw8r/AIIECpxoOoNgrRNK7u0ozVbITGYe2sgY+/2VUP5E
-         HyPfezqZlwFh9nnsPL594U+aEwHaQ6xz38/mxiVbdvummsNAni2pfuoNkc2GIK12gEK6
-         5F1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=DLUl+3DSxpghb+4XVDEdCI4TXeLI6nIF01m7+R/dTes=;
-        b=GC8oBszxLCX/cv7FtIbT7nNIFsS51QCT2xe39Uqc73l4pV56ANSTQrZZ52ARDsOX6E
-         DsKGIkHFvYipTkgp0L8rGKAzVxlExxhCXAwbygNJHHktLZ7RmVliicKRTbP8FrF+vzRj
-         R5w3fLntr5dRr1Q0T1s2WxAU2AidSbEyalFRTvjzUV5RIcrMqu/TXMELj2zJHqhwwkMN
-         IBWI/dM7KIj2Jc8e1405rmDFepHUyaT7rBxsh8CG51znq3OslkfCu0WvWfXhnq8PxmLV
-         53+VfPTMhU9y750Z6/Sz0ayxAFxoD5OogLxRjVxN3WsVeLbjG6oQ4X1nkouOPRBGDzFG
-         DSlg==
-X-Gm-Message-State: ACrzQf3S2wXoq3JVK1zlkYewr36bqYur5YnYOPV3FQARIuy18r7qGBLo
-        6p4ewrDFr126ntD+ZllpWPLINA==
-X-Google-Smtp-Source: AMsMyM7CtiJE1Ez0ADzDOiMGkV/6ZNzyWNnYrCEosRVgLIdloLixcmJXoaOoWiAFgtSzL9yBSbudLA==
-X-Received: by 2002:a05:6402:1f0e:b0:453:a419:b3a0 with SMTP id b14-20020a0564021f0e00b00453a419b3a0mr14412561edb.124.1663682077666;
-        Tue, 20 Sep 2022 06:54:37 -0700 (PDT)
-Received: from brgl-uxlite.. ([77.241.232.28])
-        by smtp.gmail.com with ESMTPSA id m23-20020a509317000000b0044f21c69608sm100503eda.10.2022.09.20.06.54.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 06:54:37 -0700 (PDT)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Kent Gibson <warthog618@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [PATCH] gpiolib: cdev: add fdinfo output for line request file descriptors
-Date:   Tue, 20 Sep 2022 15:54:35 +0200
-Message-Id: <20220920135435.15593-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.34.1
+        Tue, 20 Sep 2022 09:56:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFFA9C5A;
+        Tue, 20 Sep 2022 06:56:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C34C62A12;
+        Tue, 20 Sep 2022 13:56:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13583C433C1;
+        Tue, 20 Sep 2022 13:56:02 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="P4ADW90z"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1663682161;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Lg6bMazNsMGmwBmvyDVUmdouveDcQiF3/T6/HfWGCq4=;
+        b=P4ADW90zfPBvIJ/4JO7gj/gO3ko/G55AmKPTkD074x8FlRQVArvsxfi0x/ZNHl2jpdUPl4
+        I48K+6bN3dpZO58y5AslSAnLPt5jyLiDf+G9zQkhhVTaeeQZgYVoWJBZbPVjs4Sy7LyPYT
+        yoPLC0DETnvT9hE1+oAP2qv133hJJqE=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 29868528 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Tue, 20 Sep 2022 13:56:00 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
+Cc:     Dominik Brodowski <linux@dominikbrodowski.net>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH v2] random: use hwgenerator randomness more frequently at early boot
+Date:   Tue, 20 Sep 2022 15:54:58 +0200
+Message-Id: <20220920135456.2766285-1-Jason@zx2c4.com>
+In-Reply-To: <20220904101753.3050-1-linux@dominikbrodowski.net>
+References: 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add fdinfo output for file descriptors created for user-space line
-requests in GPIO uAPI v2. The fdinfo file now contains the name of the
-GPIO device that is the "parent" of the request as well as offsets of
-the lines requested. This allows user-space to parse the /proc/$PID/fdinfo
-entries and deduct the PID of the process that requested a specific line.
+From: Dominik Brodowski <linux@dominikbrodowski.net>
 
-Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Mix in randomness from hw-rng sources more frequently during early
+boot, approximately once for every rng reseed.
+
+Signed-off-by: Dominik Brodowski <linux@dominikbrodowski.net>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 ---
- drivers/gpio/gpiolib-cdev.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+Dominik - I incorporated the refactoring mentioned on the mailing list.
+Hopefully this is okay with you. Holler if I got something wrong! -Jason
 
-diff --git a/drivers/gpio/gpiolib-cdev.c b/drivers/gpio/gpiolib-cdev.c
-index f8041d4898d1..0f7b5562c410 100644
---- a/drivers/gpio/gpiolib-cdev.c
-+++ b/drivers/gpio/gpiolib-cdev.c
-@@ -1497,6 +1497,21 @@ static int linereq_release(struct inode *inode, struct file *file)
- 	return 0;
+ drivers/char/random.c | 22 ++++++++++------------
+ 1 file changed, 10 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index c8cc23515568..16e0c5f6cf2f 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -260,25 +260,23 @@ static void crng_fast_key_erasure(u8 key[CHACHA_KEY_SIZE],
  }
  
-+#ifdef CONFIG_PROC_FS
-+static void linereq_show_fdinfo(struct seq_file *out, struct file *file)
-+{
-+	struct linereq *lr = file->private_data;
-+	struct device *dev = &lr->gdev->dev;
-+	u16 i;
-+
-+	seq_printf(out, "gpio-device:\t%s\n", dev_name(dev));
-+
-+	for (i = 0; i < lr->num_lines; i++)
-+		seq_printf(out, "gpio-line:\t%d\n",
-+			   gpio_chip_hwgpio(lr->lines[i].desc));
-+}
-+#endif
-+
- static const struct file_operations line_fileops = {
- 	.release = linereq_release,
- 	.read = linereq_read,
-@@ -1507,6 +1522,9 @@ static const struct file_operations line_fileops = {
- #ifdef CONFIG_COMPAT
- 	.compat_ioctl = linereq_ioctl_compat,
- #endif
-+#ifdef CONFIG_PROC_FS
-+	.show_fdinfo = linereq_show_fdinfo,
-+#endif
- };
+ /*
+- * Return whether the crng seed is considered to be sufficiently old
+- * that a reseeding is needed. This happens if the last reseeding
+- * was CRNG_RESEED_INTERVAL ago, or during early boot, at an interval
++ * Return the interval until the next reseeding, which is normally
++ * CRNG_RESEED_INTERVAL, but during early boot, it is at an interval
+  * proportional to the uptime.
+  */
+-static bool crng_has_old_seed(void)
++static unsigned int crng_reseed_interval(void)
+ {
+ 	static bool early_boot = true;
+-	unsigned long interval = CRNG_RESEED_INTERVAL;
  
- static int linereq_create(struct gpio_device *gdev, void __user *ip)
+ 	if (unlikely(READ_ONCE(early_boot))) {
+ 		time64_t uptime = ktime_get_seconds();
+ 		if (uptime >= CRNG_RESEED_INTERVAL / HZ * 2)
+ 			WRITE_ONCE(early_boot, false);
+ 		else
+-			interval = max_t(unsigned int, CRNG_RESEED_START_INTERVAL,
+-					 (unsigned int)uptime / 2 * HZ);
++			return max_t(unsigned int, CRNG_RESEED_START_INTERVAL,
++				     (unsigned int)uptime / 2 * HZ);
+ 	}
+-	return time_is_before_jiffies(READ_ONCE(base_crng.birth) + interval);
++	return CRNG_RESEED_INTERVAL;
+ }
+ 
+ /*
+@@ -320,7 +318,7 @@ static void crng_make_state(u32 chacha_state[CHACHA_STATE_WORDS],
+ 	 * If the base_crng is old enough, we reseed, which in turn bumps the
+ 	 * generation counter that we check below.
+ 	 */
+-	if (unlikely(crng_has_old_seed()))
++	if (unlikely(time_is_before_jiffies(READ_ONCE(base_crng.birth) + crng_reseed_interval())))
+ 		crng_reseed();
+ 
+ 	local_lock_irqsave(&crngs.lock, flags);
+@@ -866,11 +864,11 @@ void add_hwgenerator_randomness(const void *buf, size_t len, size_t entropy)
+ 	credit_init_bits(entropy);
+ 
+ 	/*
+-	 * Throttle writing to once every CRNG_RESEED_INTERVAL, unless
+-	 * we're not yet initialized.
++	 * Throttle writing to once every reseed interval, unless we're not yet
++	 * initialized.
+ 	 */
+ 	if (!kthread_should_stop() && crng_ready())
+-		schedule_timeout_interruptible(CRNG_RESEED_INTERVAL);
++		schedule_timeout_interruptible(crng_reseed_interval());
+ }
+ EXPORT_SYMBOL_GPL(add_hwgenerator_randomness);
+ 
 -- 
-2.34.1
+2.37.3
 
