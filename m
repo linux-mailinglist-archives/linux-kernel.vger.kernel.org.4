@@ -2,84 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F8C35BEF45
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 23:40:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE8B65BEF58
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 23:47:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbiITVkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 17:40:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39062 "EHLO
+        id S230394AbiITVrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 17:47:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbiITVkS (ORCPT
+        with ESMTP id S230379AbiITVrT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 17:40:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F3FE3A4B7;
-        Tue, 20 Sep 2022 14:40:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2401762E3B;
-        Tue, 20 Sep 2022 21:40:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 86414C433D7;
-        Tue, 20 Sep 2022 21:40:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663710016;
-        bh=4sU7ecHwWPojN4jm0SQPY2aAJq/hd8C5UTIUOCeQ6Vs=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=bQQO51Ll6adjRFnYxA55iOgIlGt53Zdluz86UuyNRahF6hHRhde/C8//ShZvHrnRA
-         bHS+BY3DnZ6VaRZ03p5tVnrpf8CbhkEsOIlJzR2irOqDIY1ZR+MZ39WKvAvQ4Zl00R
-         Fjed+WG+8RB2Xmf4cSb19532VUSxrQdYIM+Sb7w8VAGvqkInbVX2y7T38jXsTaYAai
-         0NyYAaQlmCg4qGKrh9sNQ1ytouxhgxrRImmnfkD/tOu3WbyA26MDGlfXIJ6Hca+YF/
-         f0aVlLeK58h3+leVhmxR/+ZOzjrvS1qTFMgQj5R4Efah/dz8PMmHx9oBG9X/+pt9YT
-         9v/aW5kAv2Leg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 69654E21EE2;
-        Tue, 20 Sep 2022 21:40:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 20 Sep 2022 17:47:19 -0400
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91C3361D50;
+        Tue, 20 Sep 2022 14:47:18 -0700 (PDT)
+Received: by mail-oi1-f175.google.com with SMTP id t62so5523004oie.10;
+        Tue, 20 Sep 2022 14:47:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=nNOJO5Rfau/4P4r51NLfOvsWPmiGi6ydKZx53FmD4Qg=;
+        b=Rh3m7qcSZw6oAUS+pp9BvgQma6bYAIHAwizVeVSkac6gOxHqTgmkosG5d5I7UWL/Us
+         Z2JqzBAJxiB32AjsgOxFF+56PGM8kQiCwdWOlumaU/U+OUSNwVXLmwv21eolZWpji9ak
+         NhiGran4nraUsMt8z7BcrKRYeqUa1DejiEK6rpleUwl1tpL8q9qbiTgwNmtCu9GjFVOZ
+         K8oyCUhdjiLECaPZIiRj7r0UltgDbQWKtTJ5rJrSLx4BVMd2nvS3Kxc+dwwuW52cpFr3
+         u81prG7I7cVs7d/Gism2Uq3RxvXb15a7vFy8dNjZCfRDNvsJK4GbaagmyZG5BVRz1RSZ
+         t1Ag==
+X-Gm-Message-State: ACrzQf0zXsGYgsQcQqVXMovzS6rwEM9OTGj4+qOhAZs1NPMwGHJl5cvG
+        pto7lBQsyz10HS1Wjf/EnvSrl78dz3vMjjYD8bE=
+X-Google-Smtp-Source: AMsMyM6rzZj410WRr0VQRjv7ZiJ0O2AOrtaWx9t+YrwUx9jhgWRASDmUqPdgsJTYcyKo+MaUX+ab8aTT4409HzOooE4=
+X-Received: by 2002:aca:d882:0:b0:34d:49bf:3587 with SMTP id
+ p124-20020acad882000000b0034d49bf3587mr2506665oig.209.1663710436869; Tue, 20
+ Sep 2022 14:47:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: make NET_(DEV|NS)_REFCNT_TRACKER depend on NET
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166371001642.7760.2082528617719201998.git-patchwork-notify@kernel.org>
-Date:   Tue, 20 Sep 2022 21:40:16 +0000
-References: <20220915124256.32512-1-lukas.bulwahn@gmail.com>
-In-Reply-To: <20220915124256.32512-1-lukas.bulwahn@gmail.com>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220918031524.26719-1-leo.yan@linaro.org> <20220918031524.26719-3-leo.yan@linaro.org>
+In-Reply-To: <20220918031524.26719-3-leo.yan@linaro.org>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Tue, 20 Sep 2022 14:47:05 -0700
+Message-ID: <CAM9d7ciR0b5GSASVPxn-r5sBTJW9KZXcQYEsV4zRan5bdgmRCg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] perf test: Introduce script for java symbol testing
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi Leo,
 
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+On Sat, Sep 17, 2022 at 8:15 PM Leo Yan <leo.yan@linaro.org> wrote:
+>
+> This commit introduces a script for testing java symbols.
+>
+> The test records java program, inject samples with JIT samples, check
+> specific JIT symbols in the report, the test will pass only when these
+> two symbols are detected.
+>
+> Suggested-by: Ian Rogers <irogers@google.com>
+> Signed-off-by: Leo Yan <leo.yan@linaro.org>
+> ---
+>  tools/perf/tests/shell/test_java_symbol.sh | 69 ++++++++++++++++++++++
+>  1 file changed, 69 insertions(+)
+>  create mode 100755 tools/perf/tests/shell/test_java_symbol.sh
+>
+> diff --git a/tools/perf/tests/shell/test_java_symbol.sh b/tools/perf/tests/shell/test_java_symbol.sh
+> new file mode 100755
+> index 000000000000..d96fea405ea9
+> --- /dev/null
+> +++ b/tools/perf/tests/shell/test_java_symbol.sh
+> @@ -0,0 +1,69 @@
+> +#!/bin/bash
+> +# Test java symbol
+> +
+> +# SPDX-License-Identifier: GPL-2.0
+> +# Leo Yan <leo.yan@linaro.org>, 2022
+> +
+> +PERF_DATA=$(mktemp /tmp/__perf_test.perf.data.XXXXX)
+> +PERF_INJ_DATA=$(mktemp /tmp/__perf_test.perf.data.inj.XXXXX)
+> +
+> +cleanup_files()
+> +{
+> +       echo "Cleaning up files..."
+> +       rm -f ${PERF_DATA}
+> +       rm -f ${PERF_INJ_DATA}
+> +}
+> +
+> +trap cleanup_files exit term int
+> +
+> +if [ -e "$PWD/tools/perf/libperf-jvmti.so" ]; then
+> +       LIBJVMTI=$PWD/tools/perf/libperf-jvmti.so
+> +elif [ -e "$PWD/libperf-jvmti.so" ]; then
+> +       LIBJVMTI=$PWD/libperf-jvmti.so
+> +elif [ -e "$PREFIX/lib64/libperf-jvmti.so" ]; then
+> +       LIBJVMTI=$PREFIX/lib64/libperf-jvmti.so
+> +elif [ -e "$PREFIX/lib/libperf-jvmti.so" ]; then
+> +       LIBJVMTI=$PREFIX/lib/libperf-jvmti.so
+> +if [ -e "/usr/lib/linux-tools-$(uname -a | awk '{ print $3 }' | sed -r 's/-generic//')/libperf-jvmti.so" ]; then
 
-On Thu, 15 Sep 2022 14:42:56 +0200 you wrote:
-> It makes little sense to ask if networking namespace or net device refcount
-> tracking shall be enabled for debug kernel builds without network support.
-> 
-> This is similar to the commit eb0b39efb7d9 ("net: CONFIG_DEBUG_NET depends
-> on CONFIG_NET").
-> 
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> 
-> [...]
+s/if/elif/ ?
 
-Here is the summary with links:
-  - net: make NET_(DEV|NS)_REFCNT_TRACKER depend on NET
-    https://git.kernel.org/netdev/net-next/c/caddb4e0d639
+> +       LIBJVMTI=/usr/lib/linux-tools-$(uname -a | awk '{ print $3 }' | sed -r 's/-generic//')/libperf-jvmti.so
+> +else
+> +       echo "Fail to find libperf-jvmti.so"
+> +       # JVMTI is a build option, skip the test if fail to find lib
+> +       exit 2
+> +fi
+> +
+> +cat <<EOF | perf record -k 1 -o $PERF_DATA jshell -s -J-agentpath:$LIBJVMTI
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Wouldn't it check if jshell is available first?
+
+Thanks,
+Namhyung
 
 
+> +int fib(int x) {
+> +       return x > 1 ? fib(x - 2) + fib(x - 1) : 1;
+> +}
+> +
+> +int q = 0;
+> +
+> +for (int i = 0; i < 10; i++)
+> +       q += fib(i);
+> +
+> +System.out.println(q);
+> +EOF
+> +
+> +if [ $? -ne 0 ]; then
+> +       echo "Fail to record for java program"
+> +       exit 1
+> +fi
+> +
+> +if ! perf inject -i $PERF_DATA -o $PERF_INJ_DATA -j; then
+> +       echo "Fail to inject samples"
+> +       exit 1
+> +fi
+> +
+> +# Below is an example of the instruction samples reporting:
+> +#   8.18%  jshell           jitted-50116-29.so    [.] Interpreter
+> +#   0.75%  Thread-1         jitted-83602-1670.so  [.] jdk.internal.jimage.BasicImageReader.getString(int)
+> +perf report --stdio -i ${PERF_INJ_DATA} 2>&1 | \
+> +       egrep " +[0-9]+\.[0-9]+% .* (Interpreter|jdk\.internal).*" > /dev/null 2>&1
+> +
+> +if [ $? -ne 0 ]; then
+> +       echo "Fail to find java symbols"
+> +       exit 1
+> +fi
+> +
+> +exit 0
+> --
+> 2.34.1
+>
