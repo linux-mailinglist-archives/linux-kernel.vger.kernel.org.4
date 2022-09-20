@@ -2,64 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CBB35BE6CA
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 15:13:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7CD15BE6DB
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 15:18:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230394AbiITNN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 09:13:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47316 "EHLO
+        id S230312AbiITNSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 09:18:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbiITNNX (ORCPT
+        with ESMTP id S230511AbiITNSg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 09:13:23 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C3B14199D
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 06:13:19 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id t190so2553439pgd.9
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 06:13:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=5fa+6VB7uN3dY9iE1jP8H/iyTkP2TWufgen/2BmG/3Q=;
-        b=IA2pXJ2nSjDlY3RSqfCcgNc7Os9rprk+c9WpIxWuZAIghYuB8rftLq4OL1hOOp+M9p
-         fDpRCsemWDKsp2UR3NJYximbgQwmfLwE92rXXoPh9ojVMzoWnSCAwNV48AmOTxhsBLF8
-         vutC2Rnl/2B7vCFGxMtskvo2lmwRDWstcFMPqY6oQHdcytpJ2KtX8xuB9dZp8o/5fmpg
-         s+ZxUrTohsoJHnkajj+K13HcmPXNnfr+VzyOBkY9YqU1DctTGI/URm8LcszQQMV2Tx3u
-         jkOfY8Xd5fkTHwiOPZ6HuB34TO65/7DZJeDsnsZ2P1al3oRFVc2v25PiepelxV26SUOZ
-         cUBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=5fa+6VB7uN3dY9iE1jP8H/iyTkP2TWufgen/2BmG/3Q=;
-        b=3BpyeFBDVcWNUXGUScTniOo3A47evXgSxBwlLJC01tQmPCDtjQbYGO1NLq+v9D4hB3
-         Vsrb4PglHD0Sjru/9R+B9l+l2h7PXyWZk/TmGvTFZS57w2q1S6ZE8foRjBtPjPSAUVSC
-         PRm+tw5VoLBCdgm2IZ4uRT+HiYCokmpdcs2ovcFImdj/IjnpmYlUv+hYJe6TaKEU/z3M
-         HEZAqXsfcMu0ecOdHK6tHMCDGi1nQH1+Q++7MIjKVIc7JTdSam558cZxpy3+TV/FP2f1
-         kFdehfAAyqSmo8ATiHwKXuiguctFEfbT+HghlfIyhunpIhvPTdaQDPhefZLgR/OeUyRd
-         68+w==
-X-Gm-Message-State: ACrzQf1IaCaofAiF3PbOgCaqlWQ7vp4ZgCtLm5cVYaWCroTIC/NHvnZV
-        KSFlWTiPkygORWBxftHG70sqDxkUEOa3uQ==
-X-Google-Smtp-Source: AMsMyM6VgIIU/UhY7bRxO30SQMkdEw/inYuzkaZsMe4rLitZ8FxPikxaXYqfPogZRvoHfwua7N00ZA==
-X-Received: by 2002:a63:91c3:0:b0:439:c38a:1a95 with SMTP id l186-20020a6391c3000000b00439c38a1a95mr16563004pge.568.1663679598545;
-        Tue, 20 Sep 2022 06:13:18 -0700 (PDT)
-Received: from always-T480.www.tendawifi.com ([139.177.225.225])
-        by smtp.gmail.com with ESMTPSA id w16-20020a17090a529000b00203a4f70b90sm1379612pjh.45.2022.09.20.06.13.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 06:13:18 -0700 (PDT)
-From:   zhenwei pi <pizhenwei@bytedance.com>
-To:     hch@lst.de, sagi@grimberg.me
-Cc:     linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
-        zhenwei pi <pizhenwei@bytedance.com>
-Subject: [RESEND for nvme-6.1] nvmet-tcp: Fix NULL pointer dereference during release
-Date:   Tue, 20 Sep 2022 21:16:17 +0800
-Message-Id: <20220920131617.63540-1-pizhenwei@bytedance.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 20 Sep 2022 09:18:36 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 900ED21B3
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 06:18:31 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 937DD1042;
+        Tue, 20 Sep 2022 06:18:37 -0700 (PDT)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BFC173F73D;
+        Tue, 20 Sep 2022 06:18:27 -0700 (PDT)
+Message-ID: <b02452b2-900c-89da-c7b7-40a61268065e@arm.com>
+Date:   Tue, 20 Sep 2022 15:18:16 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4 5/8] sched/fair: Take into account latency priority at
+ wakeup
+Content-Language: en-US
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, parth@linux.ibm.com,
+        qais.yousef@arm.com, chris.hyser@oracle.com,
+        valentin.schneider@arm.com, patrick.bellasi@matbug.net,
+        David.Laight@aculab.com, pjt@google.com, pavel@ucw.cz,
+        tj@kernel.org, qperret@google.com, tim.c.chen@linux.intel.com,
+        joshdon@google.com
+References: <20220916080305.29574-1-vincent.guittot@linaro.org>
+ <20220916080305.29574-6-vincent.guittot@linaro.org>
+ <073938c4-ab23-2270-8e60-291f2901e230@arm.com>
+ <CAKfTPtCWE5O4TeTBG8hgar8w56-WzvmX7aR9D7dXN_vJ5LCLyQ@mail.gmail.com>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <CAKfTPtCWE5O4TeTBG8hgar8w56-WzvmX7aR9D7dXN_vJ5LCLyQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,97 +56,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-nvmet-tcp frees CMD buffers in nvmet_tcp_uninit_data_in_cmds(),
-and waits the inflight IO requests in nvmet_sq_destroy(). During wait
-the inflight IO requests, the callback nvmet_tcp_queue_response()
-is called from backend after IO complete, this leads a typical
-Use-After-Free issue like this:
+On 19/09/2022 17:39, Vincent Guittot wrote:
+> On Mon, 19 Sept 2022 at 12:05, Dietmar Eggemann
+> <dietmar.eggemann@arm.com> wrote:
+>>
+>> On 16/09/2022 10:03, Vincent Guittot wrote:
+>>
+>> [...]
+>>
+>>> @@ -4512,7 +4519,7 @@ int sched_fork(unsigned long clone_flags, struct task_struct *p)
+>>>       p->prio = current->normal_prio;
+>>>
+>>>       /* Propagate the parent's latency requirements to the child as well */
+>>> -     p->latency_nice = current->latency_nice;
+>>> +     p->latency_prio = current->latency_prio;
+>>
+>> Isn't here a `set_latency_offset(p)` missing here?
+> 
+> Hmm, I think it's the opposite and the line above is a nop from the
+> beginning (i.e. patch 2).
 
- BUG: kernel NULL pointer dereference, address: 0000000000000008
- #PF: supervisor read access in kernel mode
- #PF: error_code(0x0000) - not-present page
- PGD 107f80067 P4D 107f80067 PUD 10789e067 PMD 0
- Oops: 0000 [#1] PREEMPT SMP NOPTI
- CPU: 1 PID: 123 Comm: kworker/1:1H Kdump: loaded Tainted: G            E      6.0.0-rc2.bm.1-amd64 #15
- Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
- Workqueue: nvmet_tcp_wq nvmet_tcp_io_work [nvmet_tcp]
- RIP: 0010:shash_ahash_digest+0x2b/0x110
- Code: 1f 44 00 00 41 57 41 56 41 55 41 54 55 48 89 fd 53 48 89 f3 48 83 ec 08 44 8b 67 30 45 85 e4 74 1c 48 8b 57 38 b8 00 10 00 00 <44> 8b 7a 08 44 29 f8 39 42 0c 0f 46 42 0c 41 39 c4 76 43 48 8b 03
- RSP: 0018:ffffc9000051bdd8 EFLAGS: 00010206
- RAX: 0000000000001000 RBX: ffff888100ab5470 RCX: 0000000000000000
- RDX: 0000000000000000 RSI: ffff888100ab5470 RDI: ffff888100ab5420
- RBP: ffff888100ab5420 R08: ffff8881024d08c8 R09: ffff888103e1b4b8
- R10: 8080808080808080 R11: 0000000000000000 R12: 0000000000001000
- R13: 0000000000000000 R14: ffff88813412bd4c R15: ffff8881024d0800
- FS:  0000000000000000(0000) GS:ffff88883fa40000(0000) knlGS:0000000000000000
- CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
- CR2: 0000000000000008 CR3: 0000000104b48000 CR4: 0000000000350ee0
- Call Trace:
-  <TASK>
-  nvmet_tcp_io_work+0xa52/0xb52 [nvmet_tcp]
-  ? __switch_to+0x106/0x420
-  process_one_work+0x1ae/0x380
-  ? process_one_work+0x380/0x380
-  worker_thread+0x30/0x360
-  ? process_one_work+0x380/0x380
-  kthread+0xe6/0x110
-  ? kthread_complete_and_exit+0x20/0x20
-  ret_from_fork+0x1f/0x30
+Yeah, you're right! It looked suspicious ...
 
-Suggested by Sagi, separate nvmet_tcp_uninit_data_in_cmds() into two
-steps:
-  uninit data in cmds                  <- new step 1
-  nvmet_sq_destroy();
-  cancel_work_sync(&queue->io_work);
-  free CMD buffers                     <- new step 2
+[...]
 
-Signed-off-by: zhenwei pi <pizhenwei@bytedance.com>
----
- drivers/nvme/target/tcp.c | 19 ++++++++++++++++---
- 1 file changed, 16 insertions(+), 3 deletions(-)
+>>> +      * the idle thread and don't set next buddy as a candidate for being
+>>> +      * picked in priority.
+>>> +      * In case of simultaneous wakeup from idle, the latency sensitive tasks
+>>> +      * lost opportunity to preempt non sensitive tasks which woke up
+>>> +      * simultaneously.
+>>> +      */
+>>
+>> The position of this comment block within this function is somehow
+>> misleading since it describes the reason for the function rather then a
+>> particular condition within this function. Wouldn't it be more readable
+>> when it would be a function header comment instead?
+> 
+> I put it after the usual early return tests to put the comment close
+> to the useful part: the use of next buddy and __pick_first_entity()
 
-diff --git a/drivers/nvme/target/tcp.c b/drivers/nvme/target/tcp.c
-index c07de4f4f719..70baeab6af30 100644
---- a/drivers/nvme/target/tcp.c
-+++ b/drivers/nvme/target/tcp.c
-@@ -1406,14 +1406,26 @@ static void nvmet_tcp_uninit_data_in_cmds(struct nvmet_tcp_queue *queue)
- 	for (i = 0; i < queue->nr_cmds; i++, cmd++) {
- 		if (nvmet_tcp_need_data_in(cmd))
- 			nvmet_req_uninit(&cmd->req);
--
--		nvmet_tcp_free_cmd_buffers(cmd);
- 	}
- 
- 	if (!queue->nr_cmds && nvmet_tcp_need_data_in(&queue->connect)) {
- 		/* failed in connect */
--		nvmet_tcp_finish_cmd(&queue->connect);
-+		nvmet_req_uninit(&queue->connect.req);
-+	}
-+}
-+
-+static void nvmet_tcp_free_cmd_data_in_buffers(struct nvmet_tcp_queue *queue)
-+{
-+	struct nvmet_tcp_cmd *cmd = queue->cmds;
-+	int i;
-+
-+	for (i = 0; i < queue->nr_cmds; i++, cmd++) {
-+		if (nvmet_tcp_need_data_in(cmd))
-+			nvmet_tcp_free_cmd_buffers(cmd);
- 	}
-+
-+	if (!queue->nr_cmds && nvmet_tcp_need_data_in(&queue->connect))
-+		nvmet_tcp_free_cmd_buffers(&queue->connect);
- }
- 
- static void nvmet_tcp_release_queue_work(struct work_struct *w)
-@@ -1434,6 +1446,7 @@ static void nvmet_tcp_release_queue_work(struct work_struct *w)
- 	nvmet_tcp_uninit_data_in_cmds(queue);
- 	nvmet_sq_destroy(&queue->nvme_sq);
- 	cancel_work_sync(&queue->io_work);
-+	nvmet_tcp_free_cmd_data_in_buffers(queue);
- 	sock_release(queue->sock);
- 	nvmet_tcp_free_cmds(queue);
- 	if (queue->hdr_digest || queue->data_digest)
--- 
-2.20.1
+So you want to have the `wakeup_preempt_entity(se, pse) == 1` condition
+from check_preempt_wakeup() also for cfs_task woken up by others.
 
+[...]
+
+>>> +      * requirement that needs to be evaluated versus other entity.
+>>> +      * Otherwise, use the latency weight to evaluate how much scheduling
+>>> +      * delay is acceptable by se.
+>>> +      */
+>>> +     if ((se->latency_offset < 0) || (curr->latency_offset < 0))
+>>> +             latency_offset -= curr->latency_offset;
+>>
+>> I still don't get the rationale behind why when either one (se or curr)
+>> of the latency_nice values is negative, we use the diff between them but
+>> if not, we only care about se's value. Why don't you always use the diff
+>> between se and curr? Since we have a range [-20 ... 19] why shouldn't we
+>> use the difference between let's say se = 19 and curr = 5?
+>> You discussed this with Tao Zhou on the v1 but I didn't understand it fully.
+> 
+> Let say that current has a latency nice prio of 19 and a task A with a
+> latency nice of 10 wakes up. Both tasks don't care about scheduling
+> latency (current more than task A). If we use the diff, the output of
+> wakeup_latency_gran() would be negative (-10ms) which reflects the
+> fact that the waking task is sensitive to the latency and wants to
+> preempt current even if its vruntime is after. But obviously both
+> current and task A don't care to preempt at wakeup.
+
+OK, I understand but there is a certain level of unsteadiness here.
+
+If p has >0 it gets treated differently in case current has >=0 and case
+current has <0.
+
+Do we expect that tasks set their value to [1..19] in this case, when
+the default 0 already indicates a 'don't care'?
