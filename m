@@ -2,84 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 744EC5BEEBF
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 22:50:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 245635BEEC7
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 22:52:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230107AbiITUuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 16:50:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50202 "EHLO
+        id S230184AbiITUwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 16:52:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiITUuT (ORCPT
+        with ESMTP id S230126AbiITUwL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 16:50:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 422314D178;
-        Tue, 20 Sep 2022 13:50:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C72BC614B5;
-        Tue, 20 Sep 2022 20:50:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 25605C433D7;
-        Tue, 20 Sep 2022 20:50:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663707018;
-        bh=KjOtBowGvvlXkY0CJ/ZXa41LgAc2HijH/N9ZoIAn4Vw=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=OVvBlnI32wtXmw49Ixv3W+jIyVKJlYTch98OR7gtaudqrUJhOt7B7HzLZpIi8KEGf
-         24UizCAQDwboJ31NnOQuZc8G5pjA9L7zQuLa1M2cADVXV9azHbQAUb05sn0ekZCYb9
-         nNVNdGCJIqqhPAIdAH2IYKhc8JXa3q8C70rvhtYZ3eMTIVh+Li4rIICcImFikEnPJZ
-         gDkmBm1Kp3Ft6gLrzyiplZN6QVS19jxGZo8aba5leU/XHTM5o+ewUB1fKokV25Okd6
-         wp6PLNZ2kL4bkJOZev7e5LKwlCDVY5NCa9wSQbTl42NyHABdw/NsUP7nR3V/BoivGd
-         l9UC6uHF43FCA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 057DFE21EE2;
-        Tue, 20 Sep 2022 20:50:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 20 Sep 2022 16:52:11 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75BC552FDA;
+        Tue, 20 Sep 2022 13:52:10 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id l14so9109619eja.7;
+        Tue, 20 Sep 2022 13:52:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=KmHiTHNMTP8biWsAP8daQYj5OY7BVwVRM9tvvWtd+NA=;
+        b=bGz7v3TaL9xqwNaEzzhpRePNJl3nR2v8fyy/tdpfj8ORs8A+tKuV2ErqZkEXznE4zE
+         +KE1X/eI3TP2EtvYb5jzlnwfEDi/0wI2sFh64PIGZiKE8rSfv5J+CNfRZvpHPkwTvJmw
+         sB3PUgynTa0cuRCC0zcyM0msRKssfEEA+QhMkZDvdKisHGwoKTuZLJKoyc/aefYF1E50
+         tvDpXFQ+0Xvb+EvZ6zm3eJxS6/p5OUzjUqNHta4yxPnstaHc5B518gi42G9L5mGSzK51
+         U+uO4xxRqLtpJNEGBu6MHxaoPsLKc3va1Qu/ipdlM3Hp2do0Au8MD7fMVq6tjSoaHnUX
+         YfEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=KmHiTHNMTP8biWsAP8daQYj5OY7BVwVRM9tvvWtd+NA=;
+        b=oAzR4A6K/zrGY4r1HA78a4AZ9GDtmAgFPhIXu+bmVrcNrFnhYp32tQul+yCrzBTm2n
+         eeQfusi2vNXIkXbxDdLR3TH3KYR6zGnd1OlRMPeQtAkRG6StfDqaVeoQ1tYwH0k+/ZUm
+         16jpbjB4Jg1RpjaIr/BW2d3ELf2kE+1wSK8GIbvmFnmh5myqazFDKhasidNWOy3g8W+8
+         jHJpY0+zA2ksOpoUld2totaCN3sIGUMGgFqUbLiaWxoCz8ATMo02tekbXjPxsf7rL17F
+         0UweRJy0fet2qHFHmkXbQSZDfZmIcVWkKQdMR1ZXS147aXmgxXlngbahfuF30kWP2hMS
+         JNXg==
+X-Gm-Message-State: ACrzQf0mY/XvElueBcMw0JHCWnd5whYaeNdVfVBpmGcvngVyd6uNBntW
+        pBXr76dEbwSJRRkqVWKgL+bQEFNrCuwnTqoOEbY=
+X-Google-Smtp-Source: AMsMyM6Urbztzi3kgvmdlXK/pPcCUmXSDTtGMUd+8QRzEyTzqJlbCLQ+Xv/h1Fp5zCLZ+Wv/N+Z0CaoNNcKWWwG+LIM=
+X-Received: by 2002:a17:907:2c41:b0:77d:8aed:cf7c with SMTP id
+ hf1-20020a1709072c4100b0077d8aedcf7cmr18383110ejc.447.1663707128951; Tue, 20
+ Sep 2022 13:52:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] MAINTAINERS: Add myself as a reviewer for Qualcomm ETHQOS
- Ethernet driver
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166370701801.15267.18212299614611715724.git-patchwork-notify@kernel.org>
-Date:   Tue, 20 Sep 2022 20:50:18 +0000
-References: <20220915112804.3950680-1-bhupesh.sharma@linaro.org>
-In-Reply-To: <20220915112804.3950680-1-bhupesh.sharma@linaro.org>
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Cc:     netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org,
-        vkoul@kernel.org, davem@davemloft.net
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220920184904.90495-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220920184904.90495-8-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <OS0PR01MB5922AFDAFE3DEBBFFF875875864C9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+ <OS0PR01MB59224D591B8A227A5655ECDE864C9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+In-Reply-To: <OS0PR01MB59224D591B8A227A5655ECDE864C9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Tue, 20 Sep 2022 21:51:42 +0100
+Message-ID: <CA+V-a8s-6FLu-5D44-Szt8eN1V0rhPxm+cO4OrcKmT90O8LoXg@mail.gmail.com>
+Subject: Re: [PATCH v4 07/10] riscv: dts: r9a07g043: Add placeholder nodes
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+        Atish Patra <atishp@rivosinc.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi Biju,
 
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+On Tue, Sep 20, 2022 at 8:26 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
+>
+>
+> Just ignore my mail, As I realised IRQ property in each node will be a problem.
+>
+Yes the IRQ numbers are different (offset of 32) along with the IRQ parent.
 
-On Thu, 15 Sep 2022 16:58:04 +0530 you wrote:
-> As suggested by Vinod, adding myself as the reviewer
-> for the Qualcomm ETHQOS Ethernet driver.
-> 
-> Recently I have enabled this driver on a few Qualcomm
-> SoCs / boards and hence trying to keep a close eye on
-> it.
-> 
-> [...]
+Refer this thread [0] where other SoC vendors have similar issues,
+maybe in future when DTC becomes more clever we can use single SoC
+DTSI for both.
 
-Here is the summary with links:
-  - MAINTAINERS: Add myself as a reviewer for Qualcomm ETHQOS Ethernet driver
-    https://git.kernel.org/netdev/net/c/603ccb3aca71
+[0] https://lore.kernel.org/lkml/CAMuHMdUMM9H4jLJ8-zOz9SXoqmK-s4zRWzGCsU8jt_sDgY1h+Q@mail.gmail.com/
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Cheers,
+Prabhakar
