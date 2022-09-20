@@ -2,111 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D4765BDB1C
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 05:59:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 824045BDB1F
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 06:02:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230178AbiITD7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 23:59:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38302 "EHLO
+        id S229622AbiITECO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 00:02:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbiITD7Q (ORCPT
+        with ESMTP id S229572AbiITECG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 23:59:16 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71A075A3D5;
-        Mon, 19 Sep 2022 20:58:48 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28K2QDng031558;
-        Tue, 20 Sep 2022 03:58:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=jgWfAwXuuu0RIdbapJx7yHndhKxVFwzMF8fPwOYRIh4=;
- b=V98QEKTGLVs4XWgo0zI+PzcQfyY8V/psh+JiDkV/uOKEV59uWt86RKF+ARn4jgxB7gyj
- cqzH0E2dztGVk+UQ4/cbP8Ym2xWK9LFf5CcisJPg0BQmTqfakCFVSUtl/t/ZTCJaFbPc
- rvYlxxidDhBv0VS0f9l9vAWIZrawmiefw16sAqTtvPgbQO9XlPROdJw7+ogBi35aI6XD
- L9wpsRizgL3Gcn1E6D6y3i/6srtAFfCvds2sgUM/8ZRwR99eS+THatYm49E5t5XV+vvX
- aUon8qRMlS6us760KveLI4sKUjpP9PZiersB4OKvZEV+X3v1hepX2aer1m2zXZt/kwsT YQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jpxaeh1e4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 20 Sep 2022 03:58:43 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28K3wgar018766
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 20 Sep 2022 03:58:42 GMT
-Received: from blr-ubuntu-525.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Mon, 19 Sep 2022 20:58:38 -0700
-From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, Alex Elder <elder@ieee.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        "Sai Prakash Ranjan" <quic_saipraka@quicinc.com>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>, <vkoul@kernel.org>,
-        "Souradeep Chowdhury" <quic_schowdhu@quicinc.com>
-Subject: [PATCH V13 7/7] arm64: dts: qcom: sdm845: Add Data Capture and Compare(DCC) support node
-Date:   Tue, 20 Sep 2022 09:27:04 +0530
-Message-ID: <9f910db668caf9840117977e0231dc9a50432a8f.1663642052.git.quic_schowdhu@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1663642051.git.quic_schowdhu@quicinc.com>
-References: <cover.1663642051.git.quic_schowdhu@quicinc.com>
+        Tue, 20 Sep 2022 00:02:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BD9ADEB
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 21:02:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663646524;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=a2Q6u2DGYBJzVi4q2AHZgi4BSpB8IO5nFEbbegWhcS0=;
+        b=aETcI83EN3r4DmysGOn1+sfiNbwygBYyQPWiFvM7eWH0wN1jjYiVnNFlp0bzdd+839ajMM
+        Scj8wiH81fNgldHzZK8Kpl38k/gUWzWmEAa8+gAtEqpOVZNDflKh4FK4Q768EqDT+HKq33
+        MZoRM6bhXXIJPgZHh1cYA4EwP5VLKgE=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-274-9WVQwIFcPDqyrDTBES0yKg-1; Tue, 20 Sep 2022 00:02:00 -0400
+X-MC-Unique: 9WVQwIFcPDqyrDTBES0yKg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 63E6429ABA30;
+        Tue, 20 Sep 2022 04:02:00 +0000 (UTC)
+Received: from T590 (ovpn-8-20.pek2.redhat.com [10.72.8.20])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id A66621121314;
+        Tue, 20 Sep 2022 04:01:55 +0000 (UTC)
+Date:   Tue, 20 Sep 2022 12:01:50 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
+Cc:     axboe@kernel.dk, xiaoguang.wang@linux.alibaba.com,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        joseph.qi@linux.alibaba.com
+Subject: Re: [PATCH V3 5/7] ublk_drv: consider recovery feature in aborting
+ mechanism
+Message-ID: <Yyk7LnH9lj303DTj@T590>
+References: <20220913041707.197334-1-ZiyangZhang@linux.alibaba.com>
+ <20220913041707.197334-6-ZiyangZhang@linux.alibaba.com>
+ <Yyg3KLfQaxbS1miq@T590>
+ <9a682fac-f022-1f4d-5c2c-e1f0a84746d8@linux.alibaba.com>
+ <YyhhnbrHTJpW4Xcm@T590>
+ <dbc78e92-ede7-fc63-1bee-83794bf1e33b@linux.alibaba.com>
+ <Yyktx/xz0qTNxnT4@T590>
+ <64492fad-e14a-c647-b490-cd1f53a475a8@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: CzLilTSsPHaF1VNbd-NEz24jXlUlpNzZ
-X-Proofpoint-ORIG-GUID: CzLilTSsPHaF1VNbd-NEz24jXlUlpNzZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-19_13,2022-09-16_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- priorityscore=1501 suspectscore=0 lowpriorityscore=0 mlxlogscore=815
- adultscore=0 clxscore=1015 malwarescore=0 phishscore=0 impostorscore=0
- mlxscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209200022
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <64492fad-e14a-c647-b490-cd1f53a475a8@linux.alibaba.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the DCC(Data Capture and Compare) device tree node entry along with
-the address of the register region.
+On Tue, Sep 20, 2022 at 11:24:12AM +0800, Ziyang Zhang wrote:
+> On 2022/9/20 11:04, Ming Lei wrote:
+> > On Tue, Sep 20, 2022 at 09:49:33AM +0800, Ziyang Zhang wrote:
+> > 
+> > Follows the delta patch against patch 5 for showing the idea:
+> > 
+> > 
+> > diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
+> > index 4409a130d0b6..60c5786c4711 100644
+> > --- a/drivers/block/ublk_drv.c
+> > +++ b/drivers/block/ublk_drv.c
+> > @@ -656,7 +656,8 @@ static void ublk_complete_rq(struct request *req)
+> >   * Also aborting may not be started yet, keep in mind that one failed
+> >   * request may be issued by block layer again.
+> >   */
+> > -static void __ublk_fail_req(struct ublk_io *io, struct request *req)
+> > +static void __ublk_fail_req(struct ublk_queue *ubq, struct ublk_io *io,
+> > +		struct request *req)
+> >  {
+> >  	WARN_ON_ONCE(io->flags & UBLK_IO_FLAG_ACTIVE);
+> >  
+> > @@ -667,7 +668,10 @@ static void __ublk_fail_req(struct ublk_io *io, struct request *req)
+> >  				req->tag,
+> >  				io->flags);
+> >  		io->flags |= UBLK_IO_FLAG_ABORTED;
+> > -		blk_mq_end_request(req, BLK_STS_IOERR);
+> > +		if (ublk_queue_can_use_recovery_reissue(ubq))
+> > +			blk_mq_requeue_request(req, false);
+> 
+> Here is one problem:
+> We reset io->flags to 0 in ublk_queue_reinit() and it is called before new
 
-Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
----
- arch/arm64/boot/dts/qcom/sdm845.dtsi | 6 ++++++
- 1 file changed, 6 insertions(+)
+As we agreed, ublk_queue_reinit() will be moved to ublk_ch_release(), when there isn't
+any inflight request, which is completed by either ublk server or __ublk_fail_req().
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-index ff6bda1..ee13b5f 100644
---- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-@@ -1968,6 +1968,12 @@
- 			interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
- 		};
- 
-+		dma@10a2000 {
-+			compatible = "qcom,sdm845-dcc", "qcom,dcc";
-+			reg = <0x0 0x010a2000 0x0 0x1000>,
-+			      <0x0 0x010ae000 0x0 0x2000>;
-+		};
-+
- 		pcie0: pci@1c00000 {
- 			compatible = "qcom,pcie-sdm845", "snps,dw-pcie";
- 			reg = <0 0x01c00000 0 0x2000>,
--- 
-2.7.4
+So clearing io->flags isn't related with quisceing device.
+
+> ubq_daemon with FETCH_REQ is accepted. ublk_abort_queue() is not protected with
+> ub_mutex and it is called many times in monitor_work. So same rq may be requeued
+> multiple times.
+
+UBLK_IO_FLAG_ABORTED is set for the slot, so one req is only ended or
+requeued just once.
+
+> 
+> With recovery disabled, there is no such problem since io->flags does not change
+> until ublk_dev is released.
+
+But we have agreed that ublk_queue_reinit() can be moved to release
+handler of /dev/ublkcN.
+
+> 
+> In my patch 5 I only requeue the same rq once. So re-using ublk_abort_queue() is
+> hard for recovery feature.
+
+No, the same rq is just requeued once. Here the point is:
+
+1) reuse previous pattern in ublk_stop_dev(), which is proved as
+workable reliably
+
+2) avoid to stay in half-working state forever
+
+3) the behind idea is more simpler.
+
+
+Thanks.
+Ming
 
