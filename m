@@ -2,126 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FD685BED99
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 21:24:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8ADF5BED96
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 21:24:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231376AbiITTYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 15:24:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40314 "EHLO
+        id S231336AbiITTYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 15:24:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbiITTYW (ORCPT
+        with ESMTP id S229512AbiITTYP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 15:24:22 -0400
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D08027FE6;
-        Tue, 20 Sep 2022 12:24:19 -0700 (PDT)
-Received: by mail-qv1-f45.google.com with SMTP id y9so2782289qvo.4;
-        Tue, 20 Sep 2022 12:24:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=yysm/muSvmUqRZUlhuFzQOUXKN32lBic33bRnAUB65A=;
-        b=TZaReT3idjc95k14UNpI7XrpdRriIprYwK814rCNUKrn9+61GdakSoRrv+r8ZpxOt7
-         N7+YL7OBJq+LsX04yy8CBuULEvmWpIDihsXu4T2fdJbJ0oLtQUVBFJvebhAzY+ea4wXv
-         2oJfwsxeZyJBk5LUVX0fp1xaHobmlKQKjCE/hXNa75p+6bqzguLbWeozkgO8S+1jzeET
-         DAJH/bzaAcmhOtK7XmC6GyjfNL12futE05NN7nMoX0bRDYG4eHRuA1g8B7nFTgHVjQpX
-         zmgMlJjfHdEj4IhnipnpUQ3D6S+X654y8cHNNsE80M9L3FIatZHnU+A7MuHVdoCeZuIL
-         xuDg==
-X-Gm-Message-State: ACrzQf37HBiATfSMxWWvg7Uj2wc9VUSGfRCbmWnhIFhZ+RdI7bjO6/Ej
-        gUWPKfLKdYbYNilxF1acML0oNYtxmUURaA==
-X-Google-Smtp-Source: AMsMyM5bWF08qQCCpwdUQs/NFmMSjEXtHGTRIcs0f8E9NJDFjaWjvGwgJQDjNGQv14SYbdzvnuc5TA==
-X-Received: by 2002:ad4:5bcd:0:b0:4ad:2fc4:6571 with SMTP id t13-20020ad45bcd000000b004ad2fc46571mr12945010qvt.103.1663701858395;
-        Tue, 20 Sep 2022 12:24:18 -0700 (PDT)
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
-        by smtp.gmail.com with ESMTPSA id h22-20020a05622a171600b0035ba366cc90sm368019qtk.15.2022.09.20.12.24.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Sep 2022 12:24:17 -0700 (PDT)
-Received: by mail-yb1-f169.google.com with SMTP id 125so4823836ybt.12;
-        Tue, 20 Sep 2022 12:24:17 -0700 (PDT)
-X-Received: by 2002:a25:8e84:0:b0:696:466c:baa with SMTP id
- q4-20020a258e84000000b00696466c0baamr19432910ybl.604.1663701857015; Tue, 20
- Sep 2022 12:24:17 -0700 (PDT)
+        Tue, 20 Sep 2022 15:24:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E5A45062;
+        Tue, 20 Sep 2022 12:24:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2EE0E62D1A;
+        Tue, 20 Sep 2022 19:24:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62248C433C1;
+        Tue, 20 Sep 2022 19:24:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663701853;
+        bh=JrnRCZHbfI08ymI3t1xnEnPAFFIZwPIAnzrn4ahHtuY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=lg3Na3RHvHVuHVHp4FRY0I5HLG76D8SMdAHLj+T2CisHvq+4RW/UXxb6C7KgZG/tQ
+         Tj3i9TfuNVGgWUCaoqMUkNSRTmCHtCIbwgaMiP5l06LpEhgIwoitG5pcIlpbj8GWal
+         Az4aH9V7rAnTRaBxum9hg+KPZsUIdlu3zVVR06PrN3wbJhQtIOfoAAq5q3BYNkBl4r
+         VC5pEfoyB0LfYWGLLNFv2vDNeQgM1+p420UUK83+ZmgBbIRxmtYCbge7S03mh0z1ed
+         GOheMIJQ/dJNP58dQKz2VwRULf6bjwXWoQAP/7pRyxYY3VU1q1091V3Ec6q3Zk9NHw
+         AyOnOmz2S3RqA==
+Date:   Tue, 20 Sep 2022 14:24:11 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Rui Ma <Rui.Ma@amd.com>
+Cc:     bhelgaas@google.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drivers/pci: Decrease VF memory BAR size to Save host
+ memory occupied by PTEs:
+Message-ID: <20220920192411.GA1127373@bhelgaas>
 MIME-Version: 1.0
-References: <20220920184904.90495-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <YyoSgGlkIB8GMog8@spud>
-In-Reply-To: <YyoSgGlkIB8GMog8@spud>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 20 Sep 2022 21:24:05 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXfkX-AOusfOn-6fmaJavWWoD1mW8QNqUCUdkHuz=3FsA@mail.gmail.com>
-Message-ID: <CAMuHMdXfkX-AOusfOn-6fmaJavWWoD1mW8QNqUCUdkHuz=3FsA@mail.gmail.com>
-Subject: Re: [PATCH v4 00/10] Add support for Renesas RZ/Five SoC
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Prabhakar <prabhakar.csengg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-        Atish Patra <atishp@rivosinc.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220920024108.418496-1-Rui.Ma@amd.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Conor,
+Please use conventional prefix and capitalization in subject (use "git
+log --oneline").
 
-On Tue, Sep 20, 2022 at 9:20 PM Conor Dooley <conor@kernel.org> wrote:
-> On Tue, Sep 20, 2022 at 07:48:54PM +0100, Prabhakar wrote:
-> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > The RZ/Five microprocessor includes a RISC-V CPU Core (AX45MP Single)
-> > 1.0 GHz, 16-bit DDR3L/DDR4 interface. And it also has many interfaces such
-> > as Gbit-Ether, CAN, and USB 2.0, making it ideal for applications such as
-> > entry-class social infrastructure gateway control and industrial gateway
-> > control.
-> >
-> > This patch series adds initial SoC DTSi support for Renesas RZ/Five
-> > (R9A07G043) SoC and updates the bindings for the same. Below is the list
-> > of IP blocks added in the initial SoC DTSI which can be used to boot via
-> > initramfs on RZ/Five SMARC EVK:
-> > - AX45MP CPU
-> > - CPG
-> > - PINCTRL
-> > - PLIC
-> > - SCIF0
-> > - SYSC
->
-> Ran into one complaint from dtbs_check:
-> arch/riscv/boot/dts/renesas/r9a07g043f01-smarc.dtb: usb-phy@11c50200: '#phy-cells' is a required property
->         From schema: /home/conor/.local/lib/python3.10/site-packages/dtschema/schemas/phy/phy-provider.yaml
-> arch/riscv/boot/dts/renesas/r9a07g043f01-smarc.dtb: usb-phy@11c70200: '#phy-cells' is a required property
->         From schema: /home/conor/.local/lib/python3.10/site-packages/dtschema/schemas/phy/phy-provider.yaml
->
-> Other than that which should be a trivial fix the whole lot looks good
-> to me...
+On Tue, Sep 20, 2022 at 10:41:08AM +0800, Rui Ma wrote:
+> The VRAM space is fixed, as the number of VFs increases, the actual BAR
+> memory space used by each VF decreases. However, the BAR memory mapping is
+> always based on the initial size of the VRAM. So do not map this unneeded
+> memory can save host memory occupied by PTEs. Although each PTE only
+> occupies a few bytes of space on its own, a large number of PTEs can still
+> take up a lot of space.
 
-That's due to the placeholders...
+This patch changes generic PCIe code, so the commit log should
+describe it in terms of concepts from the PCIe spec.  VRAM is a
+device-specific idea that does not appear in the spec.
 
-Currently it is not yet a requirement that "make dtbs_check" is warning-free.
-I'm wondering how we have to handle new SoCs with existing boards in
-the future. Probably just more properties in the placeholders...
+sriov_init() determines the VF BAR sizes at enumeration-time, before
+VFs are enabled and before we know how many VFs there are.
 
-Gr{oetje,eeting}s,
+Apparently there are two concepts here?
 
-                        Geert
+  1) VF BARx size depends on NumVFs?  Please include PCIe spec
+  reference for this.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+  2) Space used by PTEs?  This needs more explanation, since PCIe
+  itself isn't concerned about this.  I suppose you mean the overhead
+  of ioremapping things?
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> Signed-off-by: Rui Ma <Rui.Ma@amd.com>
+> ---
+>  drivers/pci/iov.c    | 11 +++++++++--
+>  drivers/pci/pci.h    | 15 +++++++++++++++
+>  drivers/pci/quirks.c | 38 ++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 62 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/pci/iov.c b/drivers/pci/iov.c
+> index 952217572113..d623f46669b6 100644
+> --- a/drivers/pci/iov.c
+> +++ b/drivers/pci/iov.c
+> @@ -295,6 +295,11 @@ int pci_iov_add_virtfn(struct pci_dev *dev, int id)
+>  	struct resource *res;
+>  	struct pci_sriov *iov = dev->sriov;
+>  	struct pci_bus *bus;
+
+Add blank line here to follow existing coding style.
+
+> +    /*
+> +     * Some SRIOV device's Bar is too large and occupy too much rmap size.
+> +     * Resize the request resource of VF.
+
+s/SRIOV/SR-IOV/ throughout to match spec usage
+s/Bar/BAR/ throughout
+
+I don't understand "BAR is too large."  What does that mean?  How do
+we determine what "too large" is?
+
+"rmap" is not a PCIe concept and needs further details if used here.
+
+> +     */
+> +	u16 shift = 1;
+>  
+>  	bus = virtfn_add_bus(dev->bus, pci_iov_virtfn_bus(dev, id));
+>  	if (!bus)
+> @@ -328,8 +333,10 @@ int pci_iov_add_virtfn(struct pci_dev *dev, int id)
+>  		virtfn->resource[i].name = pci_name(virtfn);
+>  		virtfn->resource[i].flags = res->flags;
+>  		size = pci_iov_resource_size(dev, i + PCI_IOV_RESOURCES);
+> +		shift = 1;
+> +		shift = virtfn_get_shift(dev, iov->num_VFs, i);
+>  		virtfn->resource[i].start = res->start + size * id;
+> -		virtfn->resource[i].end = virtfn->resource[i].start + size - 1;
+> +		virtfn->resource[i].end = virtfn->resource[i].start + (size >> (shift - 1)) - 1;
+>  		rc = request_resource(res, &virtfn->resource[i]);
+>  		BUG_ON(rc);
+>  	}
+> @@ -680,12 +687,12 @@ static int sriov_enable(struct pci_dev *dev, int nr_virtfn)
+>  	msleep(100);
+>  	pci_cfg_access_unlock(dev);
+>  
+> +	iov->num_VFs = nr_virtfn;
+>  	rc = sriov_add_vfs(dev, initial);
+>  	if (rc)
+>  		goto err_pcibios;
+>  
+>  	kobject_uevent(&dev->dev.kobj, KOBJ_CHANGE);
+> -	iov->num_VFs = nr_virtfn;
+>  
+>  	return 0;
+>  
+> diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
+> index 3d60cabde1a1..befc67a280eb 100644
+> --- a/drivers/pci/pci.h
+> +++ b/drivers/pci/pci.h
+> @@ -603,6 +603,21 @@ static inline int pci_dev_specific_reset(struct pci_dev *dev, bool probe)
+>  }
+>  #endif
+>  
+> +struct virtfn_get_shift_methods {
+> +	u16 vendor;
+> +	u16 device;
+> +	u16 (*get_shift)(struct pci_dev *dev, u16 arg, int arg2);
+> +};
+
+"get_shift" doesn't mean anything 
+
+> +#ifdef CONFIG_PCI_QUIRKS
+> +u16 virtfn_get_shift(struct pci_dev *dev, u16 arg1, int arg2);
+> +#else
+> +static inline u16 virtfn_get_shift(struct pci_dev *dev, u16 arg1, int arg2)
+> +{
+> +	return (u16)1;
+> +}
+> +#endif
+> +
+>  #if defined(CONFIG_PCI_QUIRKS) && defined(CONFIG_ARM64)
+>  int acpi_get_rc_resources(struct device *dev, const char *hid, u16 segment,
+>  			  struct resource *res);
+> diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+> index da829274fc66..82502c5923e4 100644
+> --- a/drivers/pci/quirks.c
+> +++ b/drivers/pci/quirks.c
+> @@ -4085,6 +4085,44 @@ int pci_dev_specific_reset(struct pci_dev *dev, bool probe)
+>  	return -ENOTTY;
+>  }
+>  
+> +static u16 divided_by_VF(struct pci_dev *dev, u16 num_VFs, int bar_num)
+> +{
+> +	u16 shift = 1;
+> +
+> +	if (bar_num == 0) {
+> +		while ((1 << shift) <= num_VFs)
+> +			shift += 1;
+> +	}
+> +	pci_info(dev, "Bar %d get shift: %d.\n", bar_num, shift);
+> +	return shift;
+> +}
+> +
+> +static const struct virtfn_get_shift_methods virtfn_get_shift_methods[] = {
+> +	{ PCI_VENDOR_ID_ATI, 0x73a1, divided_by_VF},
+> +	{ 0 }
+> +};
+> +
+> +/*
+> + * Get shift num to calculate SRIOV device bar.
+> + * Sometimes the bar size for SRIOV device is too large
+> + * and we want to calculate the size to define the end
+> + * of virtfn.
+
+Rewrap to fill 78 columns.
+
+> + */
+> +u16 virtfn_get_shift(struct pci_dev *dev, u16 arg1, int arg2)
+> +{
+> +	const struct virtfn_get_shift_methods *i;
+> +
+> +	for (i = virtfn_get_shift_methods; i->get_shift; i++) {
+> +		if ((i->vendor == dev->vendor ||
+> +		     i->vendor == (u16)PCI_ANY_ID) &&
+> +		    (i->device == dev->device ||
+> +		     i->device == (u16)PCI_ANY_ID))
+> +			return i->get_shift(dev, arg1, arg2);
+> +	}
+> +
+> +	return (u16)1;
+> +}
+> +
+>  static void quirk_dma_func0_alias(struct pci_dev *dev)
+>  {
+>  	if (PCI_FUNC(dev->devfn) != 0)
+> -- 
+> 2.25.1
+> 
