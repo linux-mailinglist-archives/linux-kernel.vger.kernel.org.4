@@ -2,148 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90A405BEBD5
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 19:25:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C6645BEBA2
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 19:11:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230243AbiITRZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 13:25:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44848 "EHLO
+        id S229917AbiITRLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 13:11:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbiITRZW (ORCPT
+        with ESMTP id S229472AbiITRLH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 13:25:22 -0400
-Received: from na01-obe.outbound.protection.outlook.com (mail-cusazon11020023.outbound.protection.outlook.com [52.101.61.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EAAA52DD9;
-        Tue, 20 Sep 2022 10:25:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=f9Nj2FAL9b9+QaY5rbOrVZQdKhgrdGMM9KpaLmj+L8eCbHZqxkLg6kHT+Q2afgl71TGvqlfg69e0xbkEpK0ZS5JQ+bimW8uu/yDuS9HQhv9Vdmv5BFXHLRsl6u2e1QkNZSdx2lZmcJW/7F8HxuaokA0VwolB06/GGiGcWXXrWHKP63jHx36N6BdgKjXMdS6T+u16NYz6avuF8kwJld9ETagWn62k3wKFfgZZ15gFgxovxCMMYi1GxKATiMpWqdxwlLt/YXkFN9DJta0qnqgOtV+bXTdb4kf/K6l3QGsACiQ1gLeiJpkl4mUhFXCWr1Z4wS+BEStUa5lQL9HO/pkzjg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5z+VUimxgVd+ChpsH1NWhFFn0ZB7hE6xZ5jRVBNfxr4=;
- b=l12hVOC1X1/1slc7YxiF4uYo/50YO+KfesGO8dqQAXOZLZAfL2ct/70b9TMd3P3eEm28sLfZJAkDrJTw6wVNhRY3rTYcWoYSkZ2qZGBmwOQp9BpnvGh7Bflxno7VqMHf/+VMYwEDOqKpfsa//4tHCEOiT0gjqKOx2je+OzRDyfAmKg8HNgsTyiiCtBQEs5FUAF8SxbKSaJ5wx/9wgIop8ZNYH/XKrA+kfJUgL9AxO+dS1PJSbjXLz+PhKGc81M9kqQf7r6NLQXnL/io2CYU6092ntbAz10rn5dUzKjN7IomT7bcKMmUKMCT+ioD4FxD8kWSYN7/eyMeYtTGmsW2Xfg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5z+VUimxgVd+ChpsH1NWhFFn0ZB7hE6xZ5jRVBNfxr4=;
- b=CUipd8A18e5p0Y1U5lMWP6myA3kkdGxiilzhe+5RvMMJ8k3cP3zX56feI+QsVqqyLQacwne3cRiIZY5Z2t+evHy03vJ7n0GUrZHPIc+Z0x3j+LdoWCHukasuEajkyJRcaDsInt/0St1uVLvpdAqPmvJlFti8dS4foeKI3NoD7vM=
-Received: from SA1PR21MB1335.namprd21.prod.outlook.com (2603:10b6:806:1f2::11)
- by DM4PR21MB3683.namprd21.prod.outlook.com (2603:10b6:8:b0::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.6; Tue, 20 Sep
- 2022 17:10:39 +0000
-Received: from SA1PR21MB1335.namprd21.prod.outlook.com
- ([fe80::b113:4857:420a:80e]) by SA1PR21MB1335.namprd21.prod.outlook.com
- ([fe80::b113:4857:420a:80e%4]) with mapi id 15.20.5676.004; Tue, 20 Sep 2022
- 17:10:39 +0000
-From:   Dexuan Cui <decui@microsoft.com>
-To:     Long Li <longli@microsoft.com>, KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "shiraz.saleem@intel.com" <shiraz.saleem@intel.com>,
-        Ajay Sharma <sharmaajay@microsoft.com>
-CC:     "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>
-Subject: RE: [Patch v5 11/12] net: mana: Define data structures for protection
- domain and memory registration
-Thread-Topic: [Patch v5 11/12] net: mana: Define data structures for
- protection domain and memory registration
-Thread-Index: AQHYvNF7bQEmUA10cEOXp/CDsZomn63orgsQ
-Date:   Tue, 20 Sep 2022 17:10:39 +0000
-Message-ID: <SA1PR21MB1335EF33DEE19DBDA5841B7ABF4C9@SA1PR21MB1335.namprd21.prod.outlook.com>
-References: <1661906071-29508-1-git-send-email-longli@linuxonhyperv.com>
- <1661906071-29508-12-git-send-email-longli@linuxonhyperv.com>
-In-Reply-To: <1661906071-29508-12-git-send-email-longli@linuxonhyperv.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=4b31c1e2-5dd9-42e0-a6e7-350a72d7d578;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-09-20T17:10:10Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR21MB1335:EE_|DM4PR21MB3683:EE_
-x-ms-office365-filtering-correlation-id: 2882431b-f592-4626-26cf-08da9b2b0aa8
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: IIi9DhcU4yaI5HNahum1/NoRhugubzSJyj6bBkAsGGHZSshanXt0W1TGixvP1z06YIM8SovVGwpZEA8sx0Molov3VUGeLFR4ajUWyUvAXTjbatpAsKcogui0pB2BBbjqEIn9uAIuZszjvBOZa3FS6tkEp/BDvfTc61GLYHixaIBIngdw5dbBNpSoC6kPE9pJn7cS2v/+aLHCHg1dme+U01XoSz7WVUFNfTMPNLjOt7PKRm9ZjK2LxWjBWbiUDKDelx3zJLSOQX+6jX5OfZk1/wBtc46jSX98BQ3JTSIgQIKNtiE+ues3Ahu3bw3CjyOtnpGoZxvtuMQ/TO1xLMAh92N3C/Kv6ozAaX0fNEC6PS+8dv2+L2LWz+n3iquLLsHHh0HeV1sqoaw5nY1DUvQsuXsxsiPoOOchc3GT5XA4GmHgASUcvHC/6UlSodzrJ4Ft3WnkgSYy9LhUYbS3IdEFw7+CdoTAB60ZcChLcn0F6yXQAzwPkexWr3qVbf2N/vO+yit6mtj8iVCk90Nuwzk5mvhG5rtEYuKxVnszVhIgy+z8cDCq37V3WFJaEDYHeXESZcrm+pGrDrAlvadobZKpOhzya7dkyM0Up7YiOPA34geok9J/uM51Y5GmsjY3JvnUSNZPfNyd6/pI0sJ2TU5rgFxhziu+4we+0KwCsy0EudMUL48NcU62PxjhiUfhgy0SMq7Vb3ZSMjByidzAcu+KcXnCfVOQ3An9mtk8yVcH5Hxx7miB1mLFtTJw9hcjz1E0j+cCXq++Z+U1h80+60CMC82ENQUjqdTranBmy4ZzZw3Ii91pf8WIraJyu1RD0evZTVyakLPdiAQ/AYIGu6jElw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR21MB1335.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(396003)(136003)(376002)(39860400002)(346002)(451199015)(921005)(38070700005)(86362001)(122000001)(186003)(38100700002)(82950400001)(82960400001)(76116006)(8990500004)(6506007)(7696005)(2906002)(26005)(9686003)(71200400001)(478600001)(54906003)(10290500003)(66946007)(6636002)(316002)(110136005)(66556008)(41300700001)(4326008)(66476007)(66446008)(64756008)(8676002)(5660300002)(52536014)(8936002)(7416002)(4744005)(33656002)(55016003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?cAA/ZV89XDCHCLCXUI/4Y9kHkX2jOUrc7JiXH3jRWQPRSdWv0ZxxA0/ocnyo?=
- =?us-ascii?Q?0h/D40+CIwInznxvJs0Jmqjm+XB7vzbV5c0fAAspQq1hRuDWrT1cWJ++VRFa?=
- =?us-ascii?Q?SOliqK8DC7Q60EoGHAA9NXQXaIyrkeNtFcAUGn7yRH+7WYCQ37fFznxhdaJO?=
- =?us-ascii?Q?dGsEIrZy8BRE+mVn9Ih/rXURPvJrwfuyMF2DeFad4xboRCt2gEP0GNnbLUvI?=
- =?us-ascii?Q?ru0agE3k/gvFC7JxVwoVFxXsiMLK67TRgoGYz8wuskdchYXjAKjT5MtWtsUi?=
- =?us-ascii?Q?jcmaeLxcozR9erPGv1zT8YjRISPU+q3SkWrkt9ejDAirdKrHbyqSERwh+t/o?=
- =?us-ascii?Q?oh2CaZQ0D/U9toiO+NegIpzBfWQ+jl8Q6IYwZMU8iKGRGMtIEjI2TnirZkBS?=
- =?us-ascii?Q?50y4aS+DsiFeUjmPPuyv4yFbxje8VC3ib7ux6kSsh9T+phcQ9HSrughP++aA?=
- =?us-ascii?Q?It0PuVNXuh3hxJk5H5CgWPrpHcqoaBpid8ETRrfq2vkzjFin8Cs8CySWz80s?=
- =?us-ascii?Q?K5jPU+NSKI1VXcFy9ztyUaZ87VKbIz6jagr6XzwG3QE+ymCDXClYYxOQS3/M?=
- =?us-ascii?Q?6UQdWxyTMPbzbU55FPGOIoEzFIl2PeSEK9tS6UxMmhnWVX7cCMSx45QQmEjM?=
- =?us-ascii?Q?YNeYKOl6iy4S3rDIJ1sMs3J/D6fvF5GdeviIvBVqQKlNnMLx96jtSAaMdvy+?=
- =?us-ascii?Q?E6aoYuzPurP9MA9rW0MIq+KbV8orrw9R/+cVYcjWbOT4FBoozxhzxB65T8v0?=
- =?us-ascii?Q?3eNv9eNgkvdI+J0EE9PVuw29Q2WCnXEioKC0swYSBMrgzD/d2YOWdtkp8RJA?=
- =?us-ascii?Q?wAnROWfybqRR6Vlxq6dSy19nKsCKPI2EaPGEm0Az0GTf2Mc65oYcM83kcsmQ?=
- =?us-ascii?Q?P9U70G9m/e92qO4/QaRF2zaKKFOIZ0aHE15fQdijhpVFwojOCtTfSFBeRC/7?=
- =?us-ascii?Q?aMdPjmHtqSPVs5A+M8C0YR3izflXJPnmSUHg2Jzb4qbIDgCwvxgZfOhRaK1g?=
- =?us-ascii?Q?vE4cdX21rskkoUpTYtwYbH45guU28nUH2J7iaKHN4vEtN1NP/qlwjfCgJJEm?=
- =?us-ascii?Q?YU6JpFjpmgCmtL1njs9pknMEJPC+mkMsFLbxuNYPiXg6clTip6Q6Bjb1gY0g?=
- =?us-ascii?Q?W9iiBm32Itm6dbCFR82mzYvULjQ3gjPQ44GHY7PyGkBZNeP3DkrO61gO8kji?=
- =?us-ascii?Q?q4lFLDLYNg9/FKRlr9aIpmJyYw6v5vB/WYtUWUb6ovrMKdmUd0cZFXrbF52P?=
- =?us-ascii?Q?GySmX4fjk7Yt7DYcw21gztghkQSrLsU9ygyfJm+zMWl3Om8AczjuvjBV87LO?=
- =?us-ascii?Q?QySssIJurzrXnvd8Ou3LdLUmOd9A5Crskf2tlmtMsWSi8Uw/+KEVARHLZhcg?=
- =?us-ascii?Q?MD4SyWIVFAuw4twEzwkUap2rcPwPc7d47Eeh6l+ZAHT5kGrCVOcVc+QFZcUK?=
- =?us-ascii?Q?+Q8MjlF2g/MdhzHbW2oukkmFEnk7HSuCItpqajknzCte9+vL35RSbeDsJll8?=
- =?us-ascii?Q?CaUL0D7aXg5hn7uLjYn2ZH1BDoByAjF3LKJ3oltS+g+HmpU+qxblNub5CyIV?=
- =?us-ascii?Q?23AVLIZpm/nwnT3z2phhq5FYPHwDDy5OQ8UekGu4?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 20 Sep 2022 13:11:07 -0400
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC943AB0D
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 10:11:02 -0700 (PDT)
+Received: by mail-io1-xd2e.google.com with SMTP id b23so2857615iof.2
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 10:11:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=O7ytbqe6pVXPKn3iwKh9mY6CEL72Jgs7iEKkL0LhVbs=;
+        b=JdDoIafpjc0KAZrMJe2Hq9W444dqYlBlCY4+SXElJz2zFAWzKBT+TMAjf1WD7Uqc7L
+         8ercw89DHikKCgksXvr5NG2CeKDQ8CdiOTBh0mpHXIcf1oRkh9UOzzm7gqPoA5cedb/W
+         hckQBJHtJ0x26cXFZSN6pbWNiCr7e37PLkEfc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=O7ytbqe6pVXPKn3iwKh9mY6CEL72Jgs7iEKkL0LhVbs=;
+        b=IWnJCH4wkk1LpoW7IT4gEMeKY0S0fZjx2ISdMGbHo6/srqcajLVOqLt16vwSpLWfMa
+         zKNOn41rPIIoKwGEe8RRXPD2b9PR4V5Bv7+VtwMhkfE/r/O676oq5R+unjMFJCTkX6IY
+         plyyb99xKKepEXdINeAReeLoSlowcMDQdzssWjS9Gr/nJKU35I5YHdreS+gUosCXxTCu
+         04xBR/dm1euufumlSSydqO6qyogAscDxnCkr5/NPw0fyQz4MyD3RfDReLF1FJSQR+T2o
+         BF+i4+Dttv/Uv97tModOizvEPP8zPcuQcX5ccEspWrhk8RM5TPqlZeHNM6sDXymRPhD7
+         cvkw==
+X-Gm-Message-State: ACrzQf0QE0NFQHCY//VtgXlw7X4QGieNI9h0ANb+oCrEsQ4Nmg6qMzvl
+        5zdzYwMzScv2Y/j98V4CIFcC9MB33nFUb67wlpp4jQ==
+X-Google-Smtp-Source: AMsMyM4WXHOfpPkGnaL7Unbx7ksz0tMuEQElxEqjzmapmTseoy904gX3GMBEDrPchr12o8drl0O2QjiQRTYe4pJSULo=
+X-Received: by 2002:a02:c047:0:b0:35a:5fdc:1793 with SMTP id
+ u7-20020a02c047000000b0035a5fdc1793mr11314390jam.155.1663693862018; Tue, 20
+ Sep 2022 10:11:02 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR21MB1335.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2882431b-f592-4626-26cf-08da9b2b0aa8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Sep 2022 17:10:39.0568
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: sNCQm3AIBLqGK3GEibE4+Eum3LSVn/v4kfAAoOgHvPp/n3oHe51VVjz0Lw38xUkOgbCazKIstnWXNpjcnEKgRA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR21MB3683
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220904141020.2947725-1-dario.binacchi@amarulasolutions.com> <20220913163510.GR6477@pengutronix.de>
+In-Reply-To: <20220913163510.GR6477@pengutronix.de>
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Date:   Tue, 20 Sep 2022 19:10:48 +0200
+Message-ID: <CABGWkvpur+A1UHwhJ6CCStyaYH79_aqJo4eWOW-s1p2jakbFMA@mail.gmail.com>
+Subject: Re: [RESEND PATCH v5 1/2] dmaengine: mxs: use platform_driver_register
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-amarula@amarulasolutions.com,
+        Michael Trimarchi <michael@amarulasolutions.com>,
+        stable@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>, dmaengine@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: longli@linuxonhyperv.com <longli@linuxonhyperv.com>
-> Sent: Tuesday, August 30, 2022 5:35 PM
-> ...
-> From: Ajay Sharma <sharmaajay@microsoft.com>
->=20
-> The MANA hardware support protection domain and memory registration for
-> use
-> in RDMA environment. Add those definitions and expose them for use by the
-> RDMA driver.
->=20
-> Signed-off-by: Ajay Sharma <sharmaajay@microsoft.com>
-> Signed-off-by: Long Li <longli@microsoft.com>
+Hi Vinoud,
 
-Reviewed-by: Dexuan Cui <decui@microsoft.com>
+On Tue, Sep 13, 2022 at 6:35 PM Sascha Hauer <s.hauer@pengutronix.de> wrote:
+>
+> Hi Dario,
+>
+> On Sun, Sep 04, 2022 at 04:10:19PM +0200, Dario Binacchi wrote:
+> > Driver registration fails on SOC imx8mn as its supplier, the clock
+> > control module, is probed later than subsys initcall level. This driver
+> > uses platform_driver_probe which is not compatible with deferred probing
+> > and won't be probed again later if probe function fails due to clock not
+> > being available at that time.
+> >
+> > This patch replaces the use of platform_driver_probe with
+> > platform_driver_register which will allow probing the driver later again
+> > when the clock control module will be available.
+> >
+> > Fixes: a580b8c5429a ("dmaengine: mxs-dma: add dma support for i.MX23/28")
+> > Co-developed-by: Michael Trimarchi <michael@amarulasolutions.com>
+> > Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+> > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> > Cc: stable@vger.kernel.org
+>
+> How I see it v3 of this patch is perfectly fine and should be taken
+> instead of this one. I just commented that to v3.
+>
+> Not sure if Vinod would take v3, or if you should resend v3 as v6
+> instead. If you do, you can add my Acked-by.
+>
+> Vinod, please let us know what you prefer.
+
+Could you please let me know how to proceed? This patch has been pending for
+a while and it's a real shame as the change is minimal and fixes a
+real issue that is
+still present in the mainline and stable kernels.
+
+Thanks and regards,
+Dario
+
+>
+> Sascha
+>
+> >
+> > ---
+> >
+> > Changes in v5:
+> > - Update the commit message.
+> > - Add the patch "dmaengine: mxs: fix section mismatch" to remove the
+> >   warning raised by this patch.
+> >
+> > Changes in v4:
+> > - Restore __init in front of mxs_dma_probe() definition.
+> > - Rename the mxs_dma_driver variable to mxs_dma_driver_probe.
+> > - Update the commit message.
+> > - Use builtin_platform_driver() instead of module_platform_driver().
+> >
+> > Changes in v3:
+> > - Restore __init in front of mxs_dma_init() definition.
+> >
+> > Changes in v2:
+> > - Add the tag "Cc: stable@vger.kernel.org" in the sign-off area.
+> >
+> >  drivers/dma/mxs-dma.c | 8 ++------
+> >  1 file changed, 2 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/drivers/dma/mxs-dma.c b/drivers/dma/mxs-dma.c
+> > index 994fc4d2aca4..18f8154b859b 100644
+> > --- a/drivers/dma/mxs-dma.c
+> > +++ b/drivers/dma/mxs-dma.c
+> > @@ -839,10 +839,6 @@ static struct platform_driver mxs_dma_driver = {
+> >               .name   = "mxs-dma",
+> >               .of_match_table = mxs_dma_dt_ids,
+> >       },
+> > +     .probe = mxs_dma_probe,
+> >  };
+> > -
+> > -static int __init mxs_dma_module_init(void)
+> > -{
+> > -     return platform_driver_probe(&mxs_dma_driver, mxs_dma_probe);
+> > -}
+> > -subsys_initcall(mxs_dma_module_init);
+> > +builtin_platform_driver(mxs_dma_driver);
+> > --
+> > 2.32.0
+> >
+> >
+>
+> --
+> Pengutronix e.K.                           |                             |
+> Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+> 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+> Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
+
+
+-- 
+
+Dario Binacchi
+
+Embedded Linux Developer
+
+dario.binacchi@amarulasolutions.com
+
+__________________________________
+
+
+Amarula Solutions SRL
+
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+
+T. +39 042 243 5310
+info@amarulasolutions.com
+
+www.amarulasolutions.com
