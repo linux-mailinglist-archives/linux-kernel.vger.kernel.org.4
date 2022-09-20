@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 399FD5BED12
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 20:50:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C80145BED17
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 20:50:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230500AbiITSu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 14:50:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56092 "EHLO
+        id S231236AbiITSub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 14:50:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230458AbiITSuN (ORCPT
+        with ESMTP id S230270AbiITSuQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 14:50:13 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204D65FF48;
-        Tue, 20 Sep 2022 11:50:12 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id i203-20020a1c3bd4000000b003b3df9a5ecbso7537420wma.1;
-        Tue, 20 Sep 2022 11:50:12 -0700 (PDT)
+        Tue, 20 Sep 2022 14:50:16 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93862606A6;
+        Tue, 20 Sep 2022 11:50:13 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id e16so5945808wrx.7;
+        Tue, 20 Sep 2022 11:50:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=i0mZzaQm6+l7tL7CHpRvjbgnVX+wPMwIm1qv0xCs4s8=;
-        b=OEBmL0IbJg2zcJRYGPljfxLtxYeL6YJrqrfndtFclS9FAIyhmaJZ3zl8/WfjaHw8+z
-         L/Kor5vnC1+IiEtHNY5L5EgQEIw4JLedb9pfqwvbBIXFemYh1qmCl9xE2rIdOw6wWkOr
-         qP+ZkR+s/GM4xSSoIVS+WKm055sWd0EKPa/UsajIpCR2ZxzfQvE4Rl+aQDAVBUe4KaR3
-         RicMais/DYLBk/nGCQzYIalPt+PjtSSje0B+JlRlQSMcV6L8EwB4cITUTDYrycdm2he/
-         d9HdFj++ZOVP2rLb8xukP7Ao1aXtVI+Ys2LhId86b9dFcSjx+WLjWX3bup+OmtNgYltn
-         0WAg==
+        bh=PvYfwd2nPuMUYkxu6YqzbYYwaZvTVZWZRcfAOAojG1g=;
+        b=XvqfCxUWw7Ob93m1pCW+Yo3ZDVF8JTbPLKM+69O0aP8qjXz8rQoXy9zm9mAboPkuDs
+         wFptWyweOJhrxbhrsloM2xwYI2b8pGPhzbIxJKL9X0rvGNf3z/VJ5eD7WQyzGxSran5c
+         fQlS67sZZUYeAtrT5VYuopmyaAASMcZ7EPQPoNv0ugP8hxMAE7OCuM3Dlkq1ocROp3VL
+         d2Dn8OGyXQTMi2gbGPBg5lgtDlwyDqdO05ohE9Hv1gdkt7khCjd+3Xwiv2Enr6C8lf9r
+         mR3vfwHlK6h837Oe8tchU7jJLWdFYrhsK2G8MW+yQbzVuS20p/1LltM5U+1vwCo/VQI/
+         rRxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=i0mZzaQm6+l7tL7CHpRvjbgnVX+wPMwIm1qv0xCs4s8=;
-        b=MxWFjp9wyAguoGUIWwbfp7EdEuBuCbtFHhHaTP0bYiUmGKIjnm1iDYWDLdQQJC7kgE
-         4E9VQv/4Da+F9LuZFYrOipokZwUydvn653dyTyZWk6ssnWXohZKGTAyFLkgpefZvrTq0
-         2rFYQpdpwkfovemYmgwTOADaqMcgYIE+kTubzDijOf5oxLnhRB5FvCxGDN5K8hf4DqYx
-         Q3LXCRmu11W6koiD/LppxXEW2QQPrPogKm5a7flhLctC3QPFdWg4uOA7fkgOR/wJA5KE
-         rsJsGrjN8FJrojvT4YGMNOKF1Kl9zkieEwG2vFY2VJJM/9ASBl6onjIBDpDEYIV2nwSl
-         ABTw==
-X-Gm-Message-State: ACrzQf2us2SrW6uf5Tm+BtR0yLWTd8g1dtqldfx3f8cGTqW+ixYik+X+
-        EaN+/q36/6+/da+/d/HHmBg=
-X-Google-Smtp-Source: AMsMyM52d4NzTqDtmW2Bvy/qewCqt1i/HUIQSyOLLldvhyGClnlQSHpWhiIESwW5LglFU3AM1rPD7A==
-X-Received: by 2002:a05:600c:5028:b0:3a8:4349:153c with SMTP id n40-20020a05600c502800b003a84349153cmr3433382wmr.130.1663699810715;
-        Tue, 20 Sep 2022 11:50:10 -0700 (PDT)
+        bh=PvYfwd2nPuMUYkxu6YqzbYYwaZvTVZWZRcfAOAojG1g=;
+        b=uN95kl+qSXbSgVwsEWj5ziBLxejndbGWCqOeXYC+WEZ/WbvuG9ph4cJMoHkVdKn3oc
+         5/WTkkI72i5MBeTQ6ozSMxXaoTtgcYtPGykVAeAr1Przl0d6s25XuF8oE1dPXOVxXXol
+         FIdwdWl1+QWuMEFWUCL/6spNGaJe/6DC/EcWge6yePk7wLvgQ4anKWOsneK8Y9HAd4gd
+         QKF3aAjEHnGxrnirE/UG+9XwRwAn4mC62QklOJYUEGjaT4grxIdXIWe6G6j1ylDEnVYO
+         QghUnPDiIL4dZXCzzXQCkWGbM8S9pz8XE19RgOFKhppoT0HidbOVD9Q0zY3eiLyrBMiP
+         AtpA==
+X-Gm-Message-State: ACrzQf0ypy2nChYlVHGagVu05aLZYxAD1ctGtqABbtxy0HCIOi7wPPjh
+        Zpg/AkLYoixCfgl0G+4jRLw=
+X-Google-Smtp-Source: AMsMyM76OQSXwK5sY+9A35aBFOAgfcDsYqF2PChfuGlLLSZuTZZv7QbLJ2jvApEs1oRsa52efQYETQ==
+X-Received: by 2002:a5d:598f:0:b0:22a:f77e:869a with SMTP id n15-20020a5d598f000000b0022af77e869amr9719128wri.357.1663699811661;
+        Tue, 20 Sep 2022 11:50:11 -0700 (PDT)
 Received: from prasmi.home ([2a00:23c8:2501:c701:e9a4:d6c9:505d:20d0])
-        by smtp.gmail.com with ESMTPSA id cc4-20020a5d5c04000000b00228de351fc0sm582722wrb.38.2022.09.20.11.50.09
+        by smtp.gmail.com with ESMTPSA id cc4-20020a5d5c04000000b00228de351fc0sm582722wrb.38.2022.09.20.11.50.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 11:50:10 -0700 (PDT)
+        Tue, 20 Sep 2022 11:50:11 -0700 (PDT)
 From:   Prabhakar <prabhakar.csengg@gmail.com>
 X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To:     Rob Herring <robh+dt@kernel.org>,
@@ -68,9 +68,9 @@ Cc:     Heiko Stuebner <heiko@sntech.de>,
         Biju Das <biju.das.jz@bp.renesas.com>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v4 02/10] dt-bindings: riscv: Sort the CPU core list alphabetically
-Date:   Tue, 20 Sep 2022 19:48:56 +0100
-Message-Id: <20220920184904.90495-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v4 03/10] dt-bindings: riscv: Add Andes AX45MP core to the list
+Date:   Tue, 20 Sep 2022 19:48:57 +0100
+Message-Id: <20220920184904.90495-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220920184904.90495-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20220920184904.90495-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
@@ -88,52 +88,41 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Sort the CPU cores list alphabetically for maintenance.
+The Renesas RZ/Five microprocessor includes a RISC-V CPU Core (AX45MP
+Single) from Andes. In preparation to add support for RZ/Five SoC add
+the Andes AX45MP core to the list.
+
+More details about Andes AX45MP core can be found here:
+[0] http://www.andestech.com/en/products-solutions/andescore-processors/riscv-ax45mp/
 
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
 ---
 v3 -> v4
-* Included RB tag from Heiko
+* No change
 
 v2 -> v3
 * Included RB tag from Geert
 
 v1 -> v2
-* Included RB tag from Krzysztof
+* Included ack from Krzysztof
 ---
- Documentation/devicetree/bindings/riscv/cpus.yaml | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ Documentation/devicetree/bindings/riscv/cpus.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml b/Documentation/devicetree/bindings/riscv/cpus.yaml
-index 873dd12f6e89..2a1c5ae5b0aa 100644
+index 2a1c5ae5b0aa..1681767790c5 100644
 --- a/Documentation/devicetree/bindings/riscv/cpus.yaml
 +++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
-@@ -27,17 +27,17 @@ properties:
+@@ -27,6 +27,7 @@ properties:
      oneOf:
        - items:
            - enum:
--              - sifive,rocket0
-+              - canaan,k210
++              - andestech,ax45mp
+               - canaan,k210
                - sifive,bullet0
                - sifive,e5
-               - sifive,e7
-               - sifive,e71
--              - sifive,u74-mc
--              - sifive,u54
--              - sifive,u74
-+              - sifive,rocket0
-               - sifive,u5
-+              - sifive,u54
-               - sifive,u7
--              - canaan,k210
-+              - sifive,u74
-+              - sifive,u74-mc
-           - const: riscv
-       - items:
-           - enum:
 -- 
 2.25.1
 
