@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A71405BDBAB
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 06:27:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95F665BDBA6
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 06:26:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbiITE0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 00:26:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38378 "EHLO
+        id S230051AbiITE0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 00:26:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230000AbiITE0X (ORCPT
+        with ESMTP id S229733AbiITE0Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 00:26:23 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2908158B69;
+        Tue, 20 Sep 2022 00:26:24 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A04C56B94;
+        Mon, 19 Sep 2022 21:26:16 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id fv3so1804415pjb.0;
         Mon, 19 Sep 2022 21:26:15 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id l65so1588573pfl.8;
-        Mon, 19 Sep 2022 21:26:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=kNFWWy7bwpQVYleHcT5hR/K7/r+CDpNqO6pCTqZ+Bqk=;
-        b=iEoOYDQuDeKqlyz9GzDA5FBF1n+Te1LRLAVTNZY+LC9cDRaDrwdI07j386rCcjd/+b
-         jWSruN7EDHX7ArOufpN/hDIWzVfTZfN7YgrBRuGcWQRg6lH7e4sbajvVJ9oXiNQeCaTe
-         76+dqf22D4yzJl3PPTKcG948hM6pO+PlHjvyW1vtG4Sf/nbJjMVxVWNCn+HTUe/cLsui
-         8Q4bs1P5Jh8MAmvTVnp2O1IF6BBq/6nJcVdYZob/VlrrTIXE574cAKRnKWGGVpINxWHM
-         QY90cN6dlVwwMtoWODH+RcX8nJPUGlI0HUXd3nEsZwXziRBq/UEfUkb12AkCK+HSvolf
-         RFkw==
+        bh=pIGkYbf9yJq729wkfcXhqGqwyONGFWTL2PsMGXYGRvA=;
+        b=b1A/UY/etRaIToqRoaqAcmDdOu0iH5cXbcOhn+YhlJosnosC1rD7s7QfxhFGiRikNE
+         /zYKEgqwFVesX6Qcky1cciscr/9ZSZXXlVlQCSdy/oFiJfPpSDUrSkSSGegMYdyM9rS/
+         ubmH2jI8lBtJ0qjtYexMwjJKAFRorbONbNTqS0vIQvhsnoqPxQXQ4NWGdZ9rkA/oARy6
+         /6rsAK6w/rIKrVamDDJa/WNYOdhEROcdUebOcI+6MFNZ2k/N0OYt45cxfQ07aQqKu12W
+         I7+csj1oIBRGJYKbVwt8hgAak8Da7iXHXlyCFhG3c8A2rn6ZkcuJW81OzJoSr1BtORKb
+         ORvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=kNFWWy7bwpQVYleHcT5hR/K7/r+CDpNqO6pCTqZ+Bqk=;
-        b=ppK0yN/1ku2O2bVs7Y2RF3keynMe2yF8Wg4UkjNTyBsdD0gi5MFk3k15ufj3tuwQYH
-         zSkUmLvBpfYsnCEylpG0tegKwA253Ric6l4k9bPrfIq8J+V+8IXbfVRke96C3hqEq1mY
-         9m8077tPfZPuCax5Zogqn5jcbn8NWuheEAkXCEO68T67qbypPJil0s2mKFLyEAiimu4r
-         kGhq7oVPuW69bzkZOgFSf6PK9gahzyIgAaiZhbA7wyTVyj/sMYZDUjDR5PqJRQ4lPZwl
-         BM4pjgjCVYz1vIGzELH6OjqgDEs4UOjJyTubDOWybiDLBARw9lrPkr+4tNm2rfK6d/J5
-         vdCg==
-X-Gm-Message-State: ACrzQf2hCE87QpaB7n0rQmEdmG/Xe33j8f5TA8Xh1lCh3hd/XJ1TNYGt
-        3JKOtJznVCFzJ/V9cShkSPY=
-X-Google-Smtp-Source: AMsMyM6kjzieQk2rKnAzOxto0IPCpm9CxxoKAfWuP0jfdKwCKYLBCjC1iEbrRHSMs6hoOtRm5gZHew==
-X-Received: by 2002:aa7:952f:0:b0:540:e8ee:a077 with SMTP id c15-20020aa7952f000000b00540e8eea077mr22001999pfp.34.1663647973928;
-        Mon, 19 Sep 2022 21:26:13 -0700 (PDT)
+        bh=pIGkYbf9yJq729wkfcXhqGqwyONGFWTL2PsMGXYGRvA=;
+        b=BQWhnk8z9Xf19sKwRd+Q1AiYs1xYl5tYHULpodrSCeMjv/OES58T5nt/FqpPE/gUet
+         ZFt6eyvI2HwXy4hZtCtgpKF3/GvyuiNLO2UlVD8xisvq5FdYCWZos3/79oCGwX12ogjP
+         DqZhIDw8EgHln+NAXtzRURAyWHYmXG362lkAirv0xhVNjSzXePH87fWDxJlhqLRWw9gy
+         ObdAs2oMLC/RBaw4KhVLWlH54QiJxOofYqz5zlJNGubq9IS/LWnlakKkR87Tdstxmd/l
+         qaZS9R73k0hcA07PIzsZEMDW2C3lAgPQvMMGYNzXXER7kbBHdqjPyBW+70jjJzaGEY/6
+         nZ3w==
+X-Gm-Message-State: ACrzQf2ogjS+vRmlpySOh5P8veCl3pemEsKapbhE8hG6cN58vZL+iJl5
+        3FtMyJsOdXeGiFFpbeVHtH4=
+X-Google-Smtp-Source: AMsMyM57I0D9KIVw5AL4bdyaT/GSXFo5QhBvAjAk5tjNPB7zD3KhkddmqgVNM5gMV4mJBMN9PV5OmQ==
+X-Received: by 2002:a17:902:c941:b0:177:e69a:a517 with SMTP id i1-20020a170902c94100b00177e69aa517mr3090266pla.144.1663647975125;
+        Mon, 19 Sep 2022 21:26:15 -0700 (PDT)
 Received: from dtor-ws.mtv.corp.google.com ([2620:15c:202:201:b095:5d5d:4c28:8088])
-        by smtp.gmail.com with ESMTPSA id t15-20020a17090a024f00b001fab208523esm337518pje.3.2022.09.19.21.26.12
+        by smtp.gmail.com with ESMTPSA id t15-20020a17090a024f00b001fab208523esm337518pje.3.2022.09.19.21.26.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 21:26:13 -0700 (PDT)
+        Mon, 19 Sep 2022 21:26:14 -0700 (PDT)
 From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
 To:     Shawn Guo <shawnguo@kernel.org>,
         Sascha Hauer <s.hauer@pengutronix.de>,
@@ -56,9 +56,9 @@ To:     Shawn Guo <shawnguo@kernel.org>,
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Fabio Estevam <festevam@gmail.com>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/4] dt-binding: input: egalax-ts: fix GPIO and IRQ in example
-Date:   Mon, 19 Sep 2022 21:26:06 -0700
-Message-Id: <20220920042608.1865560-2-dmitry.torokhov@gmail.com>
+Subject: [PATCH 3/4] Input: egalax_ts - switch to using gpiod API
+Date:   Mon, 19 Sep 2022 21:26:07 -0700
+Message-Id: <20220920042608.1865560-3-dmitry.torokhov@gmail.com>
 X-Mailer: git-send-email 2.37.3.968.ga6b4b080e4-goog
 In-Reply-To: <20220920042608.1865560-1-dmitry.torokhov@gmail.com>
 References: <20220920042608.1865560-1-dmitry.torokhov@gmail.com>
@@ -74,28 +74,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver is using level triggered interrupt (low) which is backed by
-and active low GPIO that can be used to wake the controller by driving it
-low. Let's annotate it properly in the example.
+This updates the driver to gpiod API, and removes yet another use of
+of_get_named_gpio().
 
 Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 ---
- .../devicetree/bindings/input/touchscreen/egalax-ts.txt       | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/input/touchscreen/egalax_ts.c | 42 +++++++++++----------------
+ 1 file changed, 17 insertions(+), 25 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/input/touchscreen/egalax-ts.txt b/Documentation/devicetree/bindings/input/touchscreen/egalax-ts.txt
-index 92fb2620f5e2..ebbe93810574 100644
---- a/Documentation/devicetree/bindings/input/touchscreen/egalax-ts.txt
-+++ b/Documentation/devicetree/bindings/input/touchscreen/egalax-ts.txt
-@@ -13,6 +13,6 @@ Example:
- 		compatible = "eeti,egalax_ts";
- 		reg = <0x04>;
- 		interrupt-parent = <&gpio1>;
--		interrupts = <9 2>;
--		wakeup-gpios = <&gpio1 9 0>;
-+		interrupts = <9 IRQ_TYPE_LEVEL_LOW>;
-+		wakeup-gpios = <&gpio1 9 GPIO_ACTIVE_LOW>;
- 	};
+diff --git a/drivers/input/touchscreen/egalax_ts.c b/drivers/input/touchscreen/egalax_ts.c
+index 83ac8c128192..9e9b1c52720d 100644
+--- a/drivers/input/touchscreen/egalax_ts.c
++++ b/drivers/input/touchscreen/egalax_ts.c
+@@ -14,17 +14,17 @@
+   - auto idle mode support
+ */
+ 
++#include <linux/err.h>
+ #include <linux/module.h>
+ #include <linux/i2c.h>
+ #include <linux/interrupt.h>
+ #include <linux/input.h>
+ #include <linux/irq.h>
+-#include <linux/gpio.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/delay.h>
+ #include <linux/slab.h>
+ #include <linux/bitops.h>
+ #include <linux/input/mt.h>
+-#include <linux/of_gpio.h>
+ 
+ /*
+  * Mouse Mode: some panel may configure the controller to mouse mode,
+@@ -119,32 +119,26 @@ static irqreturn_t egalax_ts_interrupt(int irq, void *dev_id)
+ /* wake up controller by an falling edge of interrupt gpio.  */
+ static int egalax_wake_up_device(struct i2c_client *client)
+ {
+-	struct device_node *np = client->dev.of_node;
+-	int gpio;
++	struct gpio_desc *gpio;
+ 	int ret;
+ 
+-	if (!np)
+-		return -ENODEV;
+-
+-	gpio = of_get_named_gpio(np, "wakeup-gpios", 0);
+-	if (!gpio_is_valid(gpio))
+-		return -ENODEV;
+-
+-	ret = gpio_request(gpio, "egalax_irq");
+-	if (ret < 0) {
+-		dev_err(&client->dev,
+-			"request gpio failed, cannot wake up controller: %d\n",
+-			ret);
++	/* wake up controller via an falling edge on IRQ gpio. */
++	gpio = gpiod_get(&client->dev, "wakeup", GPIOD_OUT_HIGH);
++	ret = PTR_ERR_OR_ZERO(gpio);
++	if (ret) {
++		if (ret != -EPROBE_DEFER)
++			dev_err(&client->dev,
++				"failed to request wakeup gpio, cannot wake up controller: %d\n",
++				ret);
+ 		return ret;
+ 	}
+ 
+-	/* wake up controller via an falling edge on IRQ gpio. */
+-	gpio_direction_output(gpio, 0);
+-	gpio_set_value(gpio, 1);
++	/* release the line */
++	gpiod_set_value_cansleep(gpio, 0);
+ 
+-	/* controller should be waken up, return irq.  */
+-	gpio_direction_input(gpio);
+-	gpio_free(gpio);
++	/* controller should be woken up, return irq.  */
++	gpiod_direction_input(gpio);
++	gpiod_put(gpio);
+ 
+ 	return 0;
+ }
+@@ -185,10 +179,8 @@ static int egalax_ts_probe(struct i2c_client *client,
+ 
+ 	/* controller may be in sleep, wake it up. */
+ 	error = egalax_wake_up_device(client);
+-	if (error) {
+-		dev_err(&client->dev, "Failed to wake up the controller\n");
++	if (error)
+ 		return error;
+-	}
+ 
+ 	error = egalax_firmware_version(client);
+ 	if (error < 0) {
 -- 
 2.37.3.968.ga6b4b080e4-goog
 
