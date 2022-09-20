@@ -2,172 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A895C5BDBDF
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 06:55:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5965B5BDBE5
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 06:57:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbiITEz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 00:55:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38600 "EHLO
+        id S229816AbiITE5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 00:57:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbiITEz0 (ORCPT
+        with ESMTP id S229557AbiITE5D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 00:55:26 -0400
-Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 003D3422EE;
-        Mon, 19 Sep 2022 21:55:24 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R521e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=dust.li@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VQHUiMh_1663649720;
-Received: from localhost(mailfrom:dust.li@linux.alibaba.com fp:SMTPD_---0VQHUiMh_1663649720)
-          by smtp.aliyun-inc.com;
-          Tue, 20 Sep 2022 12:55:21 +0800
-Date:   Tue, 20 Sep 2022 12:55:20 +0800
-From:   "dust.li" <dust.li@linux.alibaba.com>
-To:     Wen Gu <guwen@linux.alibaba.com>, kgraul@linux.ibm.com,
-        wenjia@linux.ibm.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com
-Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 1/2] net/smc: Introduce a specific sysctl for
- TEST_LINK time
-Message-ID: <20220920045520.GC108825@linux.alibaba.com>
-Reply-To: dust.li@linux.alibaba.com
-References: <1663641907-15852-1-git-send-email-guwen@linux.alibaba.com>
- <1663642434-30035-1-git-send-email-guwen@linux.alibaba.com>
+        Tue, 20 Sep 2022 00:57:03 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B12958DC9;
+        Mon, 19 Sep 2022 21:57:02 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 28K4ufqe003851;
+        Mon, 19 Sep 2022 23:56:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1663649801;
+        bh=8KOilXQeO0JEZa4fCJ5Ej6qxCCZNlBHDegq2hXI2lMM=;
+        h=Date:CC:Subject:To:References:From:In-Reply-To;
+        b=lgHGL0PoyBAOscAKWonYb66zAR6WfTpF6PjNmVbU0Y1Swaf6bdxHCMmKLYXMw4g7q
+         od+p3RW3XWkK4cs/94mD58EA8pff77fPdAKiLnKbiVOeyfZIYDmVfnW2w9W0PT1n/S
+         jkAt8YqtQSdT3lp8GJFTCjEME3zDeOW/vcdAuab4=
+Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 28K4ufYW009288
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 19 Sep 2022 23:56:41 -0500
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Mon, 19
+ Sep 2022 23:56:41 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Mon, 19 Sep 2022 23:56:41 -0500
+Received: from [10.24.69.241] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 28K4uaHc034689;
+        Mon, 19 Sep 2022 23:56:37 -0500
+Message-ID: <2f830a26-c9f0-2902-302c-371c59994a6f@ti.com>
+Date:   Tue, 20 Sep 2022 10:26:36 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1663642434-30035-1-git-send-email-guwen@linux.alibaba.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+CC:     <lee.jones@linaro.org>, <kishon@ti.com>, <vkoul@kernel.org>,
+        <dan.carpenter@oracle.com>, <rogerq@kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>, <sjakhade@cadence.com>,
+        <s-vadapalli@ti.com>
+Subject: Re: [PATCH 1/6] dt-bindings: phy: ti: phy-gmii-sel: Add bindings for
+ J721e
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, Rob Herring <robh@kernel.org>
+References: <20220914093911.187764-1-s-vadapalli@ti.com>
+ <20220914093911.187764-2-s-vadapalli@ti.com>
+ <20220914161527.GA2269201-robh@kernel.org>
+ <d48e5ef4-6d5b-0977-ed45-de810e42356c@ti.com>
+ <31028736-ba81-122e-b630-b66e9d9d491a@linaro.org>
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+In-Reply-To: <31028736-ba81-122e-b630-b66e9d9d491a@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 10:53:54AM +0800, Wen Gu wrote:
->SMC-R tests the viability of link by sending out TEST_LINK LLC
->messages over RoCE fabric when connections on link have been
->idle for a time longer than keepalive interval (testlink time).
->
->But using tcp_keepalive_time as testlink time maybe not quite
->suitable because it is default no less than two hours[1], which
->is too long for single link to find peer dead. The active host
->will still use peer-dead link (QP) sending messages, and can't
->find out until get IB_WC_RETRY_EXC_ERR error CQEs, which takes
->more time than TEST_LINK timeout (SMC_LLC_WAIT_TIME) normally.
->
->So this patch introduces a independent sysctl for SMC-R to set
->link keepalive time, in order to detect link down in time. The
->default value is 30 seconds.
->
->[1] https://www.rfc-editor.org/rfc/rfc1122#page-101
->
->Signed-off-by: Wen Gu <guwen@linux.alibaba.com>
->---
-> Documentation/networking/smc-sysctl.rst |  7 +++++++
-> include/net/netns/smc.h                 |  1 +
-> net/smc/smc_llc.c                       |  2 +-
-> net/smc/smc_llc.h                       |  1 +
-> net/smc/smc_sysctl.c                    | 14 ++++++++++++++
-> 5 files changed, 24 insertions(+), 1 deletion(-)
->
->diff --git a/Documentation/networking/smc-sysctl.rst b/Documentation/networking/smc-sysctl.rst
->index 742e90e..f8c3d59 100644
->--- a/Documentation/networking/smc-sysctl.rst
->+++ b/Documentation/networking/smc-sysctl.rst
->@@ -34,3 +34,10 @@ smcr_buf_type - INTEGER
->         - 1 - Use virtually contiguous buffers
->         - 2 - Mixed use of the two types. Try physically contiguous buffers first.
->           If not available, use virtually contiguous buffers then.
->+
->+smcr_testlink_time - INTEGER
->+	How frequently SMC-R link sends out TEST_LINK LLC messages to confirm
->+	viability, after the last activity of connections on it. The maximum
->+	value is (INT_MAX / HZ) seconds, the minimum value is 1 second.
->+
->+	Default: 30 seconds.
->diff --git a/include/net/netns/smc.h b/include/net/netns/smc.h
->index 2adbe2b..d295e2c 100644
->--- a/include/net/netns/smc.h
->+++ b/include/net/netns/smc.h
->@@ -19,5 +19,6 @@ struct netns_smc {
-> #endif
-> 	unsigned int			sysctl_autocorking_size;
-> 	unsigned int			sysctl_smcr_buf_type;
->+	int				sysctl_smcr_testlink_time;
-> };
-> #endif
->diff --git a/net/smc/smc_llc.c b/net/smc/smc_llc.c
->index 175026a..388bd2e 100644
->--- a/net/smc/smc_llc.c
->+++ b/net/smc/smc_llc.c
->@@ -2127,7 +2127,7 @@ void smc_llc_lgr_init(struct smc_link_group *lgr, struct smc_sock *smc)
-> 	init_waitqueue_head(&lgr->llc_flow_waiter);
-> 	init_waitqueue_head(&lgr->llc_msg_waiter);
-> 	mutex_init(&lgr->llc_conf_mutex);
->-	lgr->llc_testlink_time = READ_ONCE(net->ipv4.sysctl_tcp_keepalive_time);
->+	lgr->llc_testlink_time = READ_ONCE(net->smc.sysctl_smcr_testlink_time) * HZ;
-> }
-> 
-> /* called after lgr was removed from lgr_list */
->diff --git a/net/smc/smc_llc.h b/net/smc/smc_llc.h
->index 4404e52..1de9a29 100644
->--- a/net/smc/smc_llc.h
->+++ b/net/smc/smc_llc.h
->@@ -19,6 +19,7 @@
-> 
-> #define SMC_LLC_WAIT_FIRST_TIME		(5 * HZ)
-> #define SMC_LLC_WAIT_TIME		(2 * HZ)
->+#define SMC_LLC_TESTLINK_DEFAULT_TIME	30
+Hello Krzysztof,
 
-I'm wondering why we don't follow the upper to macros using (30 * HZ) ?
+On 19/09/22 15:47, Krzysztof Kozlowski wrote:
+> On 15/09/2022 07:28, Siddharth Vadapalli wrote:
+>>>> @@ -65,12 +66,19 @@ properties:
+>>>>      description: |
+>>>>        Required only for QSGMII mode. Array to select the port for
+>>>>        QSGMII main mode. Rest of the ports are selected as QSGMII_SUB
+>>>> -      ports automatically. Any one of the 4 CPSW5G ports can act as the
+>>>> -      main port with the rest of them being the QSGMII_SUB ports.
+>>>> -    maxItems: 1
+>>>> -    items:
+>>>> -      minimum: 1
+>>>> -      maximum: 4
+>>>> +      ports automatically. For J7200 CPSW5G with the compatible:
+>>>> +      ti,j7200-cpsw5g-phy-gmii-sel, ti,qsgmii-main-ports is an
+>>>> +      array of only one element, which is the port number ranging from
+>>>> +      1 to 4. For J721e CPSW9G with the compatible:
+>>>> +      ti,j721e-cpsw9g-phy-gmii-sel, ti,qsgmii-main-ports is an array
+>>>> +      of two elements, which corresponds to two potential QSGMII main
+>>>> +      ports. The first element and second element of the array can both
+>>>> +      range from 1 to 8 each, corresponding to two QSGMII main ports.
+>>>> +      For J721e CPSW9G, to configure port 2 as the first QSGMII main
+>>>> +      port and port 7 as the second QSGMII main port, we specify:
+>>>> +      ti,qsgmii-main-ports = <2>, <7>;
+>>>> +      If only one QSGMII main port is desired, mention the same main
+>>>> +      port twice.
+>>>
+>>> Two different forms for the same property name is not great. Just make a 
+>>> new property if you need something different.
+>>
+>> Thank you for reviewing the patch. Based on the discussion for the
+>> previous series at [1], I had planned to reuse the same property
+>> "ti,qsgmii-main-ports" for TI's J721e device too. The reason for this is
+>> that the property represents the same feature on both devices which is
+>> that of the QSGMII main port. The only difference between the two of
+>> them is that J7200's CPSW5G has 4 external ports while J721e's CPSW9G
+>> has 8 external ports. Thus, J7200 can have at most one QSGMII main port
+>> while J721e can have up to two. Adding a new property which describes
+>> the same feature appears to be redundant to me. Please let me know.
+>>
+> 
+> The trouble is that you wrote the description like it were two different
+> properties (for xx this is one element, for yy this is something else).
+> You need to describe the property in unified way.
 
+Thank you for reviewing the patch. I plan to update the description to
+the following:
+"Required only for QSGMII mode. Array to select the port/s for QSGMII
+main mode. The size of the array corresponds to the number of QSGMII
+interfaces and thus, the number of distinct QSGMII main ports, supported
+by the device. If the device supports two QSGMII interfaces but only one
+QSGMII interface is desired, repeat the QSGMII main port value
+corresponding to the QSGMII interface in the array."
 
-> 
-> enum smc_llc_reqresp {
-> 	SMC_LLC_REQ,
->diff --git a/net/smc/smc_sysctl.c b/net/smc/smc_sysctl.c
->index 0613868..7f68520 100644
->--- a/net/smc/smc_sysctl.c
->+++ b/net/smc/smc_sysctl.c
->@@ -16,8 +16,12 @@
-> 
-> #include "smc.h"
-> #include "smc_core.h"
->+#include "smc_llc.h"
-> #include "smc_sysctl.h"
-> 
->+static int smcr_testlink_time_min = 1;
->+static int smcr_testlink_time_max = (INT_MAX / HZ);
->+
-> static struct ctl_table smc_table[] = {
-> 	{
-> 		.procname       = "autocorking_size",
->@@ -35,6 +39,15 @@
-> 		.extra1		= SYSCTL_ZERO,
-> 		.extra2		= SYSCTL_TWO,
-> 	},
->+	{
->+		.procname	= "smcr_testlink_time",
->+		.data		= &init_net.smc.sysctl_smcr_testlink_time,
->+		.maxlen		= sizeof(int),
->+		.mode		= 0644,
->+		.proc_handler	= proc_dointvec_minmax,
->+		.extra1		= &smcr_testlink_time_min,
->+		.extra2		= &smcr_testlink_time_max,
->+	},
-> 	{  }
-> };
-> 
->@@ -60,6 +73,7 @@ int __net_init smc_sysctl_net_init(struct net *net)
-> 
-> 	net->smc.sysctl_autocorking_size = SMC_AUTOCORKING_DEFAULT_SIZE;
-> 	net->smc.sysctl_smcr_buf_type = SMCR_PHYS_CONT_BUFS;
->+	net->smc.sysctl_smcr_testlink_time = SMC_LLC_TESTLINK_DEFAULT_TIME;
-> 
-> 	return 0;
-> 
->-- 
->1.8.3.1
+I intend to describe the property in detail to help users understand the
+property and its usage better. In the process, I might have
+unintentionally made it appear as two different properties in the
+previous description. I hope the new description shows that the property
+describes the same feature across devices while making its usage clear
+to the users at the same time. Please let me know if this is fine.
+
+Regards,
+Siddharth.
