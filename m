@@ -2,157 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F5015BDBCA
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 06:49:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DB995BDBCC
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 06:50:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229977AbiITEtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 00:49:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58504 "EHLO
+        id S230020AbiITEuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 00:50:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229963AbiITEtS (ORCPT
+        with ESMTP id S229983AbiITEuI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 00:49:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D0BB5757C
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 21:49:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663649356;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xwdSkv0sWoOjtp387EHQdNyYtM07L5RAmGXXTLqT48E=;
-        b=S3h4gqaPrSwreemXTj8WEgNhlPEUZGsz4TFdasnVbkw/nNgrzwd0AKfc2/APIotiaBNtqv
-        47nZEkteQ0CCPSFIATotg77MuxtsFtBAanO2LLio5m0TgLmZOzYSXIPLwIJdLxTWrY1xFN
-        QyqHJTR5TJZHyI0bU8d/8zhBKmTXugY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-44-iCwgt507PWiyC0fi5fl-qQ-1; Tue, 20 Sep 2022 00:49:13 -0400
-X-MC-Unique: iCwgt507PWiyC0fi5fl-qQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9063B85A5B6;
-        Tue, 20 Sep 2022 04:49:12 +0000 (UTC)
-Received: from T590 (ovpn-8-20.pek2.redhat.com [10.72.8.20])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 24DF4201F402;
-        Tue, 20 Sep 2022 04:49:06 +0000 (UTC)
-Date:   Tue, 20 Sep 2022 12:49:00 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
-Cc:     axboe@kernel.dk, xiaoguang.wang@linux.alibaba.com,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        joseph.qi@linux.alibaba.com
-Subject: Re: [PATCH V3 5/7] ublk_drv: consider recovery feature in aborting
- mechanism
-Message-ID: <YylGPHg+hvY8f9+U@T590>
-References: <20220913041707.197334-1-ZiyangZhang@linux.alibaba.com>
- <20220913041707.197334-6-ZiyangZhang@linux.alibaba.com>
- <Yyg3KLfQaxbS1miq@T590>
- <9a682fac-f022-1f4d-5c2c-e1f0a84746d8@linux.alibaba.com>
- <YyhhnbrHTJpW4Xcm@T590>
- <dbc78e92-ede7-fc63-1bee-83794bf1e33b@linux.alibaba.com>
- <Yyktx/xz0qTNxnT4@T590>
- <64492fad-e14a-c647-b490-cd1f53a475a8@linux.alibaba.com>
- <Yyk7LnH9lj303DTj@T590>
- <5af80188-c904-635a-242e-4bb1cd7f2e01@linux.alibaba.com>
+        Tue, 20 Sep 2022 00:50:08 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B178833A3D
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 21:50:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663649407; x=1695185407;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=fICPVqnDIG/Nsgrrcabwe5vtL8ddHgYP80Ca0tMyJhs=;
+  b=C42TaeauduXqbcnbE+arqa3fI9gTLvA/e8QUrTDIWkv5xlP0mTYemlMz
+   VAuDB2r+pNj0fdaudElmfP7f1N2dBcewuPX5/YDWHrKLYoaUH3u4QNxJ3
+   WwvaHyCPydXg3qGvDJvOvmH0l0W1mP9uRwKk3ctTjc31bJ0jGs05EwC9m
+   eOQUMmtMyLU72n5ZDQqq/U2lpxPSgd0r0Yl3wl4QchI+vg408FL84+qu2
+   0i9KgjVKy4YfWa/AXZdJyzjDSGOgTG4Khtd9fPOwMUy2A82cE5F19IcaM
+   5HY8HtmPRDGB3CfxwT//pglXjdrjpbmZEKDve2WQGr22pD+kPqMJvVB9a
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="300414490"
+X-IronPort-AV: E=Sophos;i="5.93,329,1654585200"; 
+   d="scan'208";a="300414490"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 21:50:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,329,1654585200"; 
+   d="scan'208";a="947509879"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 19 Sep 2022 21:50:01 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oaVCr-0002Tl-0U;
+        Tue, 20 Sep 2022 04:50:01 +0000
+Date:   Tue, 20 Sep 2022 12:49:42 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: kernel/resource.c:1795:23: sparse: sparse: cast truncates bits from
+ constant value (fffffffff becomes ffffffff)
+Message-ID: <202209201253.FRw5oo2x-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5af80188-c904-635a-242e-4bb1cd7f2e01@linux.alibaba.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 12:39:31PM +0800, Ziyang Zhang wrote:
-> On 2022/9/20 12:01, Ming Lei wrote:
-> > On Tue, Sep 20, 2022 at 11:24:12AM +0800, Ziyang Zhang wrote:
-> >> On 2022/9/20 11:04, Ming Lei wrote:
-> >>> On Tue, Sep 20, 2022 at 09:49:33AM +0800, Ziyang Zhang wrote:
-> >>>
-> >>> Follows the delta patch against patch 5 for showing the idea:
-> >>>
-> >>>
-> >>> diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
-> >>> index 4409a130d0b6..60c5786c4711 100644
-> >>> --- a/drivers/block/ublk_drv.c
-> >>> +++ b/drivers/block/ublk_drv.c
-> >>> @@ -656,7 +656,8 @@ static void ublk_complete_rq(struct request *req)
-> >>>   * Also aborting may not be started yet, keep in mind that one failed
-> >>>   * request may be issued by block layer again.
-> >>>   */
-> >>> -static void __ublk_fail_req(struct ublk_io *io, struct request *req)
-> >>> +static void __ublk_fail_req(struct ublk_queue *ubq, struct ublk_io *io,
-> >>> +		struct request *req)
-> >>>  {
-> >>>  	WARN_ON_ONCE(io->flags & UBLK_IO_FLAG_ACTIVE);
-> >>>  
-> >>> @@ -667,7 +668,10 @@ static void __ublk_fail_req(struct ublk_io *io, struct request *req)
-> >>>  				req->tag,
-> >>>  				io->flags);
-> >>>  		io->flags |= UBLK_IO_FLAG_ABORTED;
-> >>> -		blk_mq_end_request(req, BLK_STS_IOERR);
-> >>> +		if (ublk_queue_can_use_recovery_reissue(ubq))
-> >>> +			blk_mq_requeue_request(req, false);
-> >>
-> >> Here is one problem:
-> >> We reset io->flags to 0 in ublk_queue_reinit() and it is called before new
-> > 
-> > As we agreed, ublk_queue_reinit() will be moved to ublk_ch_release(), when there isn't
-> > any inflight request, which is completed by either ublk server or __ublk_fail_req().
-> > 
-> > So clearing io->flags isn't related with quisceing device.
-> > 
-> >> ubq_daemon with FETCH_REQ is accepted. ublk_abort_queue() is not protected with
-> >> ub_mutex and it is called many times in monitor_work. So same rq may be requeued
-> >> multiple times.
-> > 
-> > UBLK_IO_FLAG_ABORTED is set for the slot, so one req is only ended or
-> > requeued just once.
-> 
-> Yes, we can move ublk_queue_reinit() into ublk_ch_release(), but monitor_work is scheduled
-> periodically so ublk_abort_queue() is called multiple times. As ublk_queue_reinit() clear
-> io->flags, ublk_abort_queue() can requeue the same rq twice. Note that monitor_work can be
-> scheduled after ublk_ch_release().
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   521a547ced6477c54b4b0cc206000406c221b4d6
+commit: 23a22cd1c98be518774fe7f7e8a5203af050525a cxl/region: Allocate HPA capacity to regions
+date:   8 weeks ago
+config: arm-randconfig-s042-20220919 (https://download.01.org/0day-ci/archive/20220920/202209201253.FRw5oo2x-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=23a22cd1c98be518774fe7f7e8a5203af050525a
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 23a22cd1c98be518774fe7f7e8a5203af050525a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash
 
-No, monitor work is supposed to be shutdown after in-flight requests are
-drained.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
->  
-> > 
-> >>
-> >> With recovery disabled, there is no such problem since io->flags does not change
-> >> until ublk_dev is released.
-> > 
-> > But we have agreed that ublk_queue_reinit() can be moved to release
-> > handler of /dev/ublkcN.
-> > 
-> >>
-> >> In my patch 5 I only requeue the same rq once. So re-using ublk_abort_queue() is
-> >> hard for recovery feature.
-> > 
-> > No, the same rq is just requeued once. Here the point is:
-> > 
-> > 1) reuse previous pattern in ublk_stop_dev(), which is proved as
-> > workable reliably
-> > 
-> > 2) avoid to stay in half-working state forever
-> > 
-> > 3) the behind idea is more simpler.
-> 
-> Ming, your patch requeue rqs with ACTVE unset. these rqs have been issued to the
-> dying ubq_daemon. What I concern about is inflight rqs with ACTIVE set.
+sparse warnings: (new ones prefixed by >>)
+>> kernel/resource.c:1795:23: sparse: sparse: cast truncates bits from constant value (fffffffff becomes ffffffff)
+   kernel/resource.c:1813:24: sparse: sparse: cast truncates bits from constant value (fffffffff becomes ffffffff)
 
-My patch drains all inflight requests no matter if ACTIVE is set or not,
-and that is the reason why it is simpler.
+vim +1795 kernel/resource.c
 
-Thanks,
-Ming
+14b80582c43e4f Dan Williams 2022-05-20  1788  
+14b80582c43e4f Dan Williams 2022-05-20  1789  static resource_size_t gfr_start(struct resource *base, resource_size_t size,
+14b80582c43e4f Dan Williams 2022-05-20  1790  				 resource_size_t align, unsigned long flags)
+14b80582c43e4f Dan Williams 2022-05-20  1791  {
+14b80582c43e4f Dan Williams 2022-05-20  1792  	if (flags & GFR_DESCENDING) {
+14b80582c43e4f Dan Williams 2022-05-20  1793  		resource_size_t end;
+14b80582c43e4f Dan Williams 2022-05-20  1794  
+14b80582c43e4f Dan Williams 2022-05-20 @1795  		end = min_t(resource_size_t, base->end,
+14b80582c43e4f Dan Williams 2022-05-20  1796  			    (1ULL << MAX_PHYSMEM_BITS) - 1);
+14b80582c43e4f Dan Williams 2022-05-20  1797  		return end - size + 1;
+14b80582c43e4f Dan Williams 2022-05-20  1798  	}
+14b80582c43e4f Dan Williams 2022-05-20  1799  
+14b80582c43e4f Dan Williams 2022-05-20  1800  	return ALIGN(base->start, align);
+14b80582c43e4f Dan Williams 2022-05-20  1801  }
+14b80582c43e4f Dan Williams 2022-05-20  1802  
 
+:::::: The code at line 1795 was first introduced by commit
+:::::: 14b80582c43e4f550acfd93c2b2cadbe36ea0874 resource: Introduce alloc_free_mem_region()
+
+:::::: TO: Dan Williams <dan.j.williams@intel.com>
+:::::: CC: Dan Williams <dan.j.williams@intel.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
