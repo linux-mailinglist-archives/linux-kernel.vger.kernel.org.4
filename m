@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 996AF5BDE8B
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 09:41:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAC775BDE6E
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 09:39:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230467AbiITHkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 03:40:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46420 "EHLO
+        id S231186AbiITHjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 03:39:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230416AbiITHjF (ORCPT
+        with ESMTP id S230359AbiITHjD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 03:39:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99618606B5;
-        Tue, 20 Sep 2022 00:39:04 -0700 (PDT)
+        Tue, 20 Sep 2022 03:39:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D495660689;
+        Tue, 20 Sep 2022 00:39:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 277CDB82561;
-        Tue, 20 Sep 2022 07:39:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20A80C4347C;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 717BEB8253A;
+        Tue, 20 Sep 2022 07:39:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14B3FC433D7;
         Tue, 20 Sep 2022 07:38:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1663659539;
-        bh=0WpKIrtzSvxKkXOUcVo1f8LRvOiN+BejO8qNmQISNBA=;
+        bh=R+4ni1Bjgjo5PtcTztH9oA6jovlxazbNXvwamnT/0zQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=j4IEvIkh4aCyXSdKBw3seimUVuF4xGK+A33aXd443yDuSkAUPO4cbGpBtyGQGH1vE
-         xkYnI8iW2eAAQBUYLGtzP4LMBW9zLo7plqWm5ZihDpn7dLIGbAtLWnctZu1GRqmgUj
-         wsE1x1cDLLmCIwlScm7LMlsBKpFWUO0rhXmzlChJaZcMzBWDCJwhRt8Izgg79Nhwd8
-         MnC4+SDeNdZ/8zYkFKdPB/hx8hw48XfzLnwDvvuglHqxzwsUIgcEcnP56Vmlvd0aVZ
-         YFMB9FZtCQEEpPQxt8vqcrkcVBHfDPfEhnL9d9zBOEUu5xBfFlpBnaKRqP1PZg8X+n
-         cszKR6tXgctEw==
+        b=uzhooAjOykMbwyuPefdU4XnZuCyG6xvxN0aaI1T816+bVUoXKoXoudqoa3eaRwudC
+         UfjQffDhJohn0p5yDcepd14BemKw/yu81vvnjFDbb4TMJ6Y3UMKVDyzV9OSc+d7x1v
+         2mxyFqzfB/l3hLAD3SLijC0OVTzJblBtYFYCSY1pj01bsLXXP5YmezNXLHbPj6YGsq
+         lNqh1VEgojS4oJ9rBEkOPGX83FO38pvjdUTywgX41e83BJilbdY/UJ+3t8I8STLhp0
+         mG6zYf3vJFdxigeIS7IqzhGF7mQWWxbKyddThTYFiref/dkbIhRd4JYYVwf+ayTsxa
+         3t4P3VIrgq/Dg==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1oaXqP-0005Qe-BB; Tue, 20 Sep 2022 09:39:01 +0200
+        id 1oaXqP-0005Qg-Di; Tue, 20 Sep 2022 09:39:01 +0200
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Vinod Koul <vkoul@kernel.org>
 Cc:     Andy Gross <agross@kernel.org>,
@@ -45,9 +45,9 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 01/17] phy: qcom-qmp-pcie: drop unused type from config
-Date:   Tue, 20 Sep 2022 09:38:10 +0200
-Message-Id: <20220920073826.20811-2-johan+linaro@kernel.org>
+Subject: [PATCH 02/17] phy: qcom-qmp-pcie-msm8996: drop unused type from config
+Date:   Tue, 20 Sep 2022 09:38:11 +0200
+Message-Id: <20220920073826.20811-3-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220920073826.20811-1-johan+linaro@kernel.org>
 References: <20220920073826.20811-1-johan+linaro@kernel.org>
@@ -63,18 +63,18 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 The configuration PHY type is no longer used since the QMP driver split
-so drop it from the configurations.
+so drop it from the configuration.
 
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 14 --------------
- 1 file changed, 14 deletions(-)
+ drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-index 4939edcd8cb1..d25f9215b86f 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-@@ -1304,8 +1304,6 @@ struct qmp_phy;
+diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c
+index 245f6dc1710e..20a76b1b23a2 100644
+--- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c
++++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c
+@@ -188,8 +188,6 @@ struct qmp_phy;
  
  /* struct qmp_phy_cfg - per-PHY initialization config */
  struct qmp_phy_cfg {
@@ -83,102 +83,14 @@ index 4939edcd8cb1..d25f9215b86f 100644
  	/* number of lanes provided by phy */
  	int nlanes;
  
-@@ -1470,7 +1468,6 @@ static const char * const sdm845_pciephy_reset_l[] = {
+@@ -323,7 +321,6 @@ static const char * const qmp_phy_vreg_l[] = {
  };
  
- static const struct qmp_phy_cfg ipq8074_pciephy_cfg = {
+ static const struct qmp_phy_cfg msm8996_pciephy_cfg = {
 -	.type			= PHY_TYPE_PCIE,
- 	.nlanes			= 1,
+ 	.nlanes			= 3,
  
- 	.serdes_tbl		= ipq8074_pcie_serdes_tbl,
-@@ -1499,7 +1496,6 @@ static const struct qmp_phy_cfg ipq8074_pciephy_cfg = {
- };
- 
- static const struct qmp_phy_cfg ipq8074_pciephy_gen3_cfg = {
--	.type			= PHY_TYPE_PCIE,
- 	.nlanes			= 1,
- 
- 	.serdes_tbl		= ipq8074_pcie_gen3_serdes_tbl,
-@@ -1529,7 +1525,6 @@ static const struct qmp_phy_cfg ipq8074_pciephy_gen3_cfg = {
- };
- 
- static const struct qmp_phy_cfg ipq6018_pciephy_cfg = {
--	.type			= PHY_TYPE_PCIE,
- 	.nlanes			= 1,
- 
- 	.serdes_tbl		= ipq6018_pcie_serdes_tbl,
-@@ -1559,7 +1554,6 @@ static const struct qmp_phy_cfg ipq6018_pciephy_cfg = {
- };
- 
- static const struct qmp_phy_cfg sdm845_qmp_pciephy_cfg = {
--	.type = PHY_TYPE_PCIE,
- 	.nlanes = 1,
- 
- 	.serdes_tbl		= sdm845_qmp_pcie_serdes_tbl,
-@@ -1590,7 +1584,6 @@ static const struct qmp_phy_cfg sdm845_qmp_pciephy_cfg = {
- };
- 
- static const struct qmp_phy_cfg sdm845_qhp_pciephy_cfg = {
--	.type = PHY_TYPE_PCIE,
- 	.nlanes = 1,
- 
- 	.serdes_tbl		= sdm845_qhp_pcie_serdes_tbl,
-@@ -1619,7 +1612,6 @@ static const struct qmp_phy_cfg sdm845_qhp_pciephy_cfg = {
- };
- 
- static const struct qmp_phy_cfg sm8250_qmp_gen3x1_pciephy_cfg = {
--	.type = PHY_TYPE_PCIE,
- 	.nlanes = 1,
- 
- 	.serdes_tbl		= sm8250_qmp_pcie_serdes_tbl,
-@@ -1658,7 +1650,6 @@ static const struct qmp_phy_cfg sm8250_qmp_gen3x1_pciephy_cfg = {
- };
- 
- static const struct qmp_phy_cfg sm8250_qmp_gen3x2_pciephy_cfg = {
--	.type = PHY_TYPE_PCIE,
- 	.nlanes = 2,
- 
- 	.serdes_tbl		= sm8250_qmp_pcie_serdes_tbl,
-@@ -1698,7 +1689,6 @@ static const struct qmp_phy_cfg sm8250_qmp_gen3x2_pciephy_cfg = {
- };
- 
- static const struct qmp_phy_cfg msm8998_pciephy_cfg = {
--	.type			= PHY_TYPE_PCIE,
- 	.nlanes			= 1,
- 
- 	.serdes_tbl		= msm8998_pcie_serdes_tbl,
-@@ -1723,7 +1713,6 @@ static const struct qmp_phy_cfg msm8998_pciephy_cfg = {
- };
- 
- static const struct qmp_phy_cfg sc8180x_pciephy_cfg = {
--	.type = PHY_TYPE_PCIE,
- 	.nlanes = 1,
- 
- 	.serdes_tbl		= sc8180x_qmp_pcie_serdes_tbl,
-@@ -1753,7 +1742,6 @@ static const struct qmp_phy_cfg sc8180x_pciephy_cfg = {
- };
- 
- static const struct qmp_phy_cfg sdx55_qmp_pciephy_cfg = {
--	.type = PHY_TYPE_PCIE,
- 	.nlanes = 2,
- 
- 	.serdes_tbl		= sdx55_qmp_pcie_serdes_tbl,
-@@ -1785,7 +1773,6 @@ static const struct qmp_phy_cfg sdx55_qmp_pciephy_cfg = {
- };
- 
- static const struct qmp_phy_cfg sm8450_qmp_gen3x1_pciephy_cfg = {
--	.type = PHY_TYPE_PCIE,
- 	.nlanes = 1,
- 
- 	.serdes_tbl		= sm8450_qmp_gen3x1_pcie_serdes_tbl,
-@@ -1816,7 +1803,6 @@ static const struct qmp_phy_cfg sm8450_qmp_gen3x1_pciephy_cfg = {
- };
- 
- static const struct qmp_phy_cfg sm8450_qmp_gen4x2_pciephy_cfg = {
--	.type = PHY_TYPE_PCIE,
- 	.nlanes = 2,
- 
- 	.serdes_tbl		= sm8450_qmp_gen4x2_pcie_serdes_tbl,
+ 	.serdes_tbl		= msm8996_pcie_serdes_tbl,
 -- 
 2.35.1
 
