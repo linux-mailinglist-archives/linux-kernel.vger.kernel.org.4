@@ -2,227 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D34F45BE770
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 15:44:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B98DE5BE773
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 15:45:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229713AbiITNoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 09:44:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59934 "EHLO
+        id S229832AbiITNpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 09:45:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230186AbiITNoL (ORCPT
+        with ESMTP id S231372AbiITNo7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 09:44:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE2E4F3BC
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 06:44:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663681448;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vwW7t8MPa7zeKiTEgnAftOAZBeq2iD70Wyn142D/zRo=;
-        b=SClir3dq9ieDg7GzdeVhk3z8wn69SXG5Za2e9Tpolj3w/M9cVkavVKQ/qBcXJuLLqDDlYs
-        Zj4dMrCFUH1iSeE/su+Eijma+w6g5opW7yzC8v6IiRx51k/kSuAXuRyTGTAhyzGmpmPwb9
-        UHoeh7OZmlABBKZZrmgnKeTdT5/gNqI=
-Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com
- [209.85.210.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-153-QDG1_CyLN22n5tJxc4zNOg-1; Tue, 20 Sep 2022 09:44:07 -0400
-X-MC-Unique: QDG1_CyLN22n5tJxc4zNOg-1
-Received: by mail-pf1-f198.google.com with SMTP id ay1-20020a056a00300100b0053e7e97696bso1754511pfb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 06:44:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=vwW7t8MPa7zeKiTEgnAftOAZBeq2iD70Wyn142D/zRo=;
-        b=bQaHumk1pWHNCYTNaAGup6VUXe+dM+29o1lDfLSexNV4yrlOSY650yZpVc5/HRNGW6
-         BB1fOMJpZ5tIa2JwQ1JNHx4gGaaE9yui/L+btBtyadsdCxmJMiub0ipje+rYaNk8jTjF
-         jdwpbFYQ0uz1GDYLuolsav/tw69J+EGkQNQH9KF88F66q0Mjng169YR0Dr92fgmQKphe
-         pwLLVBpeJo3SGhDKMSDlricD/FV/KAbLcGWUe7rguIGZ3cdw+d88jQuFXMHAEKg6DU2F
-         wKjcIQGUF4sGBGxTN+5iCaO0HZR/NKE3rzbSByFV7GnXJuD1WShojKG5apyGNJdG2cbm
-         HlkQ==
-X-Gm-Message-State: ACrzQf2Z3CR4DMMDf1O8iIrcayynZWnWJRpvYK2RgQ9b2t5Z7gbJZvNe
-        NEUUkQ9U6Ry0ko2aR2edcr6WPIARxWU5Lnn0uHdwVShjIOy2G7suNKLDiZm9yHiDfcdH5qqBcPS
-        6wV2DC7Y4IuIC31h0XFE2RirUCQVuw3L6Fr5hORfs
-X-Received: by 2002:a17:90a:f28b:b0:203:627c:7ba1 with SMTP id fs11-20020a17090af28b00b00203627c7ba1mr4063196pjb.191.1663681446407;
-        Tue, 20 Sep 2022 06:44:06 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM61euhDYViIzDlUs4Ah/OZb3hFvXIlLEfl5ptqxt1gkv1vD4Ica+puVs5gjlf6riTd8NcMoul6d/R4nLAKpoCo=
-X-Received: by 2002:a17:90a:f28b:b0:203:627c:7ba1 with SMTP id
- fs11-20020a17090af28b00b00203627c7ba1mr4063163pjb.191.1663681446067; Tue, 20
- Sep 2022 06:44:06 -0700 (PDT)
+        Tue, 20 Sep 2022 09:44:59 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC8F616E;
+        Tue, 20 Sep 2022 06:44:47 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28KBbDPJ032460;
+        Tue, 20 Sep 2022 15:44:33 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : from : subject : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=tKe93jKTJuGPYc8RLIZ+qGFMxQwQpY6C7yIqnX+fRxc=;
+ b=3Z8juWDfqMB6uBZiRAmuQEJVJVqtZQwkwDpAKixcN9ZBy3PaiYllzdotzthgYeSuiaIf
+ jwJ6Z+5tWS4ksM+tmbRXKhglAuW5oJ4qMhenR/t5/EArZAUV3xchypYt9OuxPvceAu3I
+ Py+oO79NY5xeFwjbxXHPLm3BBXt30h0HXr3QZvmYQ7eDQ9Bj055HoJFPh92zVPl1I1rT
+ uTyslkzuIPalm8HM9KujmDhqCflYHaUQmboZOh7AoO1WEGGPnDV6VIJ29kaNul25CaR4
+ rwUk1xLW0eUmUd5fl46SrmPji53X/OmXPZiM/6K6pTDfg+H07oWShx47fCzPlokkHSXT 3w== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3jn6a0u8mp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Sep 2022 15:44:33 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D605210002A;
+        Tue, 20 Sep 2022 15:44:31 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 54D5123300B;
+        Tue, 20 Sep 2022 15:44:31 +0200 (CEST)
+Received: from [10.201.22.245] (10.75.127.44) by SHFDAG1NODE2.st.com
+ (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.31; Tue, 20 Sep
+ 2022 15:44:30 +0200
+Message-ID: <66e27df5-7697-446d-df7c-eb50e6d06f46@foss.st.com>
+Date:   Tue, 20 Sep 2022 15:44:18 +0200
 MIME-Version: 1.0
-References: <20220902132938.2409206-1-benjamin.tissoires@redhat.com>
-In-Reply-To: <20220902132938.2409206-1-benjamin.tissoires@redhat.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Tue, 20 Sep 2022 15:43:55 +0200
-Message-ID: <CAO-hwJ+GxSHKf-zCNg-WM_5+o2B94n4=AXGwz-tfipS_+YpK+w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v10 00/23] Introduce eBPF support for HID devices
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>
-Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+Subject: Re: [PATCH v8 0/4] remoteproc: restructure the remoteproc VirtIO
+ device
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        Rob Herring <robh@kernel.org>, Christoph Hellwig <hch@lst.de>,
+        Stefano Stabellini <stefanos@xilinx.com>,
+        Bruce Ashfield <bruce.ashfield@xilinx.com>
+References: <20220826115232.2163130-1-arnaud.pouliquen@foss.st.com>
+ <20220919223027.GG759648@p14s>
+Content-Language: en-US
+In-Reply-To: <20220919223027.GG759648@p14s>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.44]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-20_05,2022-09-20_02,2022-06-22_01
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 2, 2022 at 3:29 PM Benjamin Tissoires
-<benjamin.tissoires@redhat.com> wrote:
->
+Hi Mathieu,
+
+On 9/20/22 00:30, Mathieu Poirier wrote:
 > Hi,
->
-> here comes the v10 of the HID-BPF series.
->
-> Again, for a full explanation of HID-BPF, please refer to the last patch
-> in this series (23/23).
->
-> Hopefully we are getting closer to merging the bpf-core changes that
-> are pre-requesite of the HID work.
->
-> This revision of the series focused on those bpf-core changes with
-> a hopefully proper way of fixing access to ctx pointers, and a few more
-> selftests to cover those changes.
->
-> Once those bpf changes are in, the HID changes are pretty much self
-> consistent, which is a good thing, but I still wonder how we are going
-> to merge the selftests. I'd rather have the selftests in the bpf tree to
-> prevent any regression on bpf-core changes, but that might require some
-> coordination between the HID and bpf trees.
->
-> Anyway, let's hope we are getting closer to the end of those revisions :)
+> 
+> On Fri, Aug 26, 2022 at 01:52:28PM +0200, Arnaud Pouliquen wrote:
+>> 1) Update from V7 [1]:
+>>
+>> - rebase on rproc-next branch [2], commit 729c16326b7f ("remoteproc: imx_dsp_rproc: fix argument 2 of rproc_mem_entry_init")
+>>   The updates take into account the integration of the
+>>   commit 1404acbb7f68 ("remoteproc: Fix dma_mem leak after rproc_shutdown")
+>> - add Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org> according to reviews on V7
+>>
+>>
+>> [1] https://lkml.org/lkml/2022/7/13/663
+>> [2] https://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git/log/?h=for-next
+>>
+>> 2) Patchset description:
+>>
+>> This series is a part of the work initiated a long time ago in 
+>> the series "remoteproc: Decorelate virtio from core"[3]
+>>
+>> Objective of the work:
+>> - Update the remoteproc VirtIO device creation (use platform device)
+>> - Allow to declare remoteproc VirtIO device in DT
+>>     - declare resources associated to a remote proc VirtIO
+>>     - declare a list of VirtIO supported by the platform.
+>> - Prepare the enhancement to more VirtIO devices (e.g I2C, audio, video, ...).
+>>   For instance be able to declare a I2C device in a virtio-i2C node.
+>> - Keep the legacy working!
+>> - Try to improve the picture about concerns reported by Christoph Hellwing [4][5]
+>>
+>> [3] https://lkml.org/lkml/2020/4/16/1817
+>> [4] https://lkml.org/lkml/2021/6/23/607
+>> [5] https://patchwork.kernel.org/project/linux-remoteproc/patch/AOKowLclCbOCKxyiJ71WeNyuAAj2q8EUtxrXbyky5E@cp7-web-042.plabs.ch/
+>>
+>> In term of device tree this would result in such hierarchy (stm32mp1 example with 2 virtio RPMSG):
+>>
+>> 	m4_rproc: m4@10000000 {
+>> 		compatible = "st,stm32mp1-m4";
+>> 		reg = <0x10000000 0x40000>,
+>> 		      <0x30000000 0x40000>,
+>> 		      <0x38000000 0x10000>;
+>>         memory-region = <&retram>, <&mcuram>,<&mcuram2>;
+>>         mboxes = <&ipcc 2>, <&ipcc 3>;
+>>         mbox-names = "shutdown", "detach";
+>>         status = "okay";
+>>
+>>         #address-cells = <1>;
+>>         #size-cells = <0>;
+>>         
+>>         vdev@0 {
+>> 		compatible = "rproc-virtio";
+>> 		reg = <0>;
+>> 		virtio,id = <7>;  /* RPMSG */
+>> 		memory-region = <&vdev0vring0>, <&vdev0vring1>, <&vdev0buffer>;
+>> 		mboxes = <&ipcc 0>, <&ipcc 1>;
+>> 		mbox-names = "vq0", "vq1";
+>> 		status = "okay";
+>>         };
+>>
+>>         vdev@1 {
+>> 		compatible = "rproc-virtio";
+>> 		reg = <1>;
+>> 		virtio,id = <7>;  /*RPMSG */
+>> 		memory-region = <&vdev1vring0>, <&vdev1vring1>, <&vdev1buffer>;
+>> 		mboxes = <&ipcc 4>, <&ipcc 5>;
+>> 		mbox-names = "vq0", "vq1";
+>> 		status = "okay";
+>>         };
+>> };
+> 
+> I was in the process of applying this set when the last patch gave me a
+> checkpatch warning about "virtio,rproc" not being documented.
+> 
+> I suggest to introduce a new "virtio-rproc.yaml" based on this work[1], with the
+> above in the example sections.
 
-FWIW, I have now applied the HID patches 8, 9, and 10 to hid.git. They
-are independent of the bpf work and given how close we are to 6.1, we
-can take them just now.
-Patch 11 is having a conflict with the HID tree, so I'll need to
-handle it in v11 for the HID part.
+Yes I saw the warning, but for this first series it is not possible to declare
+the associated "rproc-virtio" device  in device tree.
+So at this step it seems not make senses to create the devicetree bindings file.
+More than that I don't know how I could justify the properties in bindings if
+there is not driver code associated.
 
-The first few patches have already been applied in the bpf-next tree,
-as part of the v11 subset of those patches.
+So i would be in favor of not adding the bindings in this series but to define
+bindings in the first patch of my "step 2" series; as done on my github:
+https://github.com/arnopo/linux/commit/9616d89a4f478cf78865a244efcde108d900f69f
 
-The plan is now to wait for all of these to land in 6.1-rc1, and then
-submit only the HID changes as a followup series for 6.2.
+Please let me know your preference.
 
-Cheers,
-Benjamin
+Regards,
+Arnaud
 
->
-> Cheers,
-> Benjamin
->
->
-> Benjamin Tissoires (23):
->   selftests/bpf: regroup and declare similar kfuncs selftests in an
->     array
->   bpf: split btf_check_subprog_arg_match in two
->   bpf/verifier: allow all functions to read user provided context
->   selftests/bpf: add test for accessing ctx from syscall program type
->   bpf/btf: bump BTF_KFUNC_SET_MAX_CNT
->   bpf/verifier: allow kfunc to return an allocated mem
->   selftests/bpf: Add tests for kfunc returning a memory pointer
->   HID: core: store the unique system identifier in hid_device
->   HID: export hid_report_type to uapi
->   HID: convert defines of HID class requests into a proper enum
->   HID: Kconfig: split HID support and hid-core compilation
->   HID: initial BPF implementation
->   selftests/bpf: add tests for the HID-bpf initial implementation
->   HID: bpf: allocate data memory for device_event BPF programs
->   selftests/bpf/hid: add test to change the report size
->   HID: bpf: introduce hid_hw_request()
->   selftests/bpf: add tests for bpf_hid_hw_request
->   HID: bpf: allow to change the report descriptor
->   selftests/bpf: add report descriptor fixup tests
->   selftests/bpf: Add a test for BPF_F_INSERT_HEAD
->   samples/bpf: HID: add new hid_mouse example
->   samples/bpf: HID: add Surface Dial example
->   Documentation: add HID-BPF docs
->
->  Documentation/hid/hid-bpf.rst                 | 513 +++++++++
->  Documentation/hid/index.rst                   |   1 +
->  drivers/Makefile                              |   2 +-
->  drivers/hid/Kconfig                           |  20 +-
->  drivers/hid/Makefile                          |   2 +
->  drivers/hid/bpf/Kconfig                       |  17 +
->  drivers/hid/bpf/Makefile                      |  11 +
->  drivers/hid/bpf/entrypoints/Makefile          |  93 ++
->  drivers/hid/bpf/entrypoints/README            |   4 +
->  drivers/hid/bpf/entrypoints/entrypoints.bpf.c |  66 ++
->  .../hid/bpf/entrypoints/entrypoints.lskel.h   | 682 ++++++++++++
->  drivers/hid/bpf/hid_bpf_dispatch.c            | 526 ++++++++++
->  drivers/hid/bpf/hid_bpf_dispatch.h            |  28 +
->  drivers/hid/bpf/hid_bpf_jmp_table.c           | 577 ++++++++++
->  drivers/hid/hid-core.c                        |  49 +-
->  include/linux/bpf.h                           |  11 +-
->  include/linux/bpf_verifier.h                  |   2 +
->  include/linux/btf.h                           |  10 +
->  include/linux/hid.h                           |  38 +-
->  include/linux/hid_bpf.h                       | 148 +++
->  include/uapi/linux/hid.h                      |  26 +-
->  include/uapi/linux/hid_bpf.h                  |  25 +
->  kernel/bpf/btf.c                              | 149 ++-
->  kernel/bpf/verifier.c                         |  66 +-
->  net/bpf/test_run.c                            |  37 +
->  samples/bpf/.gitignore                        |   2 +
->  samples/bpf/Makefile                          |  27 +
->  samples/bpf/hid_mouse.bpf.c                   | 134 +++
->  samples/bpf/hid_mouse.c                       | 161 +++
->  samples/bpf/hid_surface_dial.bpf.c            | 161 +++
->  samples/bpf/hid_surface_dial.c                | 232 ++++
->  tools/include/uapi/linux/hid.h                |  62 ++
->  tools/include/uapi/linux/hid_bpf.h            |  25 +
->  tools/testing/selftests/bpf/Makefile          |   2 +-
->  tools/testing/selftests/bpf/config            |   3 +
->  tools/testing/selftests/bpf/prog_tests/hid.c  | 990 ++++++++++++++++++
->  .../selftests/bpf/prog_tests/kfunc_call.c     | 182 +++-
->  tools/testing/selftests/bpf/progs/hid.c       | 206 ++++
->  .../selftests/bpf/progs/kfunc_call_fail.c     | 160 +++
->  .../selftests/bpf/progs/kfunc_call_test.c     |  71 ++
->  40 files changed, 5416 insertions(+), 105 deletions(-)
->  create mode 100644 Documentation/hid/hid-bpf.rst
->  create mode 100644 drivers/hid/bpf/Kconfig
->  create mode 100644 drivers/hid/bpf/Makefile
->  create mode 100644 drivers/hid/bpf/entrypoints/Makefile
->  create mode 100644 drivers/hid/bpf/entrypoints/README
->  create mode 100644 drivers/hid/bpf/entrypoints/entrypoints.bpf.c
->  create mode 100644 drivers/hid/bpf/entrypoints/entrypoints.lskel.h
->  create mode 100644 drivers/hid/bpf/hid_bpf_dispatch.c
->  create mode 100644 drivers/hid/bpf/hid_bpf_dispatch.h
->  create mode 100644 drivers/hid/bpf/hid_bpf_jmp_table.c
->  create mode 100644 include/linux/hid_bpf.h
->  create mode 100644 include/uapi/linux/hid_bpf.h
->  create mode 100644 samples/bpf/hid_mouse.bpf.c
->  create mode 100644 samples/bpf/hid_mouse.c
->  create mode 100644 samples/bpf/hid_surface_dial.bpf.c
->  create mode 100644 samples/bpf/hid_surface_dial.c
->  create mode 100644 tools/include/uapi/linux/hid.h
->  create mode 100644 tools/include/uapi/linux/hid_bpf.h
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/hid.c
->  create mode 100644 tools/testing/selftests/bpf/progs/hid.c
->  create mode 100644 tools/testing/selftests/bpf/progs/kfunc_call_fail.c
->
-> --
-> 2.36.1
->
 
+> 
+> Thanks,
+> Mathieu
+> 
+> [1]. https://elixir.bootlin.com/linux/v6.0-rc6/source/Documentation/devicetree/bindings/virtio/virtio-device.yaml
+> 
+> 
+>>
+>> I have divided the work in 4 steps to simplify the review, This series implements only
+>> the step 1:
+>> step 1: Redefine the remoteproc VirtIO device as a platform device
+>>   - migrate rvdev management in remoteproc virtio.c,
+>>   - create a remotproc virtio config ( can be disabled for platform that not use VirtIO IPC.
+>> step 2: Add possibility to declare and probe a VirtIO sub node
+>>   - VirtIO bindings declaration,
+>>   - multi DT VirtIO devices support,
+>>   - introduction of a remote proc virtio bind device mechanism ,
+>> => https://github.com/arnopo/linux/commits/step2-virtio-in-DT
+>> step 3: Add memory declaration in VirtIO subnode
+>> => https://github.com/arnopo/linux/commits/step3-virtio-memories
+>> step 4: Add mailbox declaration in VirtIO subnode
+>> => https://github.com/arnopo/linux/commits/step4-virtio-mailboxes
+>>
+>> Arnaud Pouliquen (4):
+>>   remoteproc: core: Introduce rproc_rvdev_add_device function
+>>   remoteproc: core: Introduce rproc_add_rvdev function
+>>   remoteproc: Move rproc_vdev management to remoteproc_virtio.c
+>>   remoteproc: virtio: Create platform device for the remoteproc_virtio
+>>
+>>  drivers/remoteproc/remoteproc_core.c     | 154 +++---------------
+>>  drivers/remoteproc/remoteproc_internal.h |  23 ++-
+>>  drivers/remoteproc/remoteproc_virtio.c   | 189 ++++++++++++++++++++---
+>>  include/linux/remoteproc.h               |   6 +-
+>>  4 files changed, 210 insertions(+), 162 deletions(-)
+>>
+>> -- 
+>> 2.24.3
+>>
