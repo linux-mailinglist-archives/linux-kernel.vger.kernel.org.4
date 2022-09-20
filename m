@@ -2,63 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD0E05BDF89
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 10:15:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA4755BDF9E
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 10:15:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbiITIN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 04:13:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48934 "EHLO
+        id S231398AbiITINj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 04:13:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230150AbiITIMw (ORCPT
+        with ESMTP id S230431AbiITIMw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 20 Sep 2022 04:12:52 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFB0F63F27
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 01:11:11 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 3847EE0006;
-        Tue, 20 Sep 2022 08:11:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1663661470;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FYw776a8tiBkeyoGWt+RRk/t/WHYRfwOtyHykS/tkzo=;
-        b=gOs5kzRTn1wMng7I6nEFJVmYTCVJ/tFQfTfrm6yznxfQzbyQfXgcMe4grn+JJT0nh5baft
-        3axkTi/8KTWa2m6OxlU1me4r97PZtLGtAmfg0Xf37QHpXH4jAt2ffihGrHxaXWEQzyMAAq
-        Wj+XfrDt4hSmVscS23Nvd9eGYi9YguUNvNKsJw+y/OIzjLF1WuloDIa36RBClkUUT4dmfn
-        jxBeA+H/bz2v9XG6TrhrxZGgdzIIJVZcRH6PFC+gRKgTu69DHP4VheYMtZ9NyYTSAYaw47
-        MHGAyjfexOlgPl0lIUxWAdqE04/ctGUI67MHyOMwWOA5knYTmCOiEeqHaEzrVw==
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Slark Xiao <slark_xiao@163.com>, han.xu@nxp.com,
-        miquel.raynal@bootlin.com, vigneshr@ti.com, richard@nod.at
-Cc:     linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org
-Subject: Re: [PATCH] mtd: rawnand: gpmi: Fix typo 'the the' in comment
-Date:   Tue, 20 Sep 2022 10:11:07 +0200
-Message-Id: <20220920081107.597391-1-miquel.raynal@bootlin.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220722072850.72797-1-slark_xiao@163.com>
-References: 
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C1676555B;
+        Tue, 20 Sep 2022 01:11:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663661473; x=1695197473;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=NpXFnndhkQG9hC09OmD04EE4e1t8OODVtE0sPkSoK7I=;
+  b=DmJcOwMqeZRFmOxuome3v/k3B7g/1+epzgEhkWX7SAvXTTJXnbu3xrF4
+   t6VFZF99fE/21FHqz33JnN229ehuwBpQ6c5cTNvCef2RBI0GuUyamyvV1
+   G/Pzi2AUhENxsv9N+kielpsMrZ7XmyUE874W/XeO1chZLuGjDqsGu2IRQ
+   snVljn7OxOhsOCSrvrvneLSNfrAKaXBJB7VD7VCEjcK8QAlE7MTYUxLOw
+   m2QlfvHFHczYD5XybWlcBxo8pAWLt9Ju30Pe1/RUznTRYuCnkXouYnwod
+   XhllsKs2Qdb62ma9BlZfMjsT1uos10MFNDCoRkY0ThO+hJB8g4QDPccQ5
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="297222696"
+X-IronPort-AV: E=Sophos;i="5.93,330,1654585200"; 
+   d="scan'208";a="297222696"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 01:11:12 -0700
+X-IronPort-AV: E=Sophos;i="5.93,330,1654585200"; 
+   d="scan'208";a="614304129"
+Received: from bdallmer-mobl.ger.corp.intel.com ([10.252.59.238])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 01:11:10 -0700
+Date:   Tue, 20 Sep 2022 11:11:08 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Jiri Slaby <jslaby@suse.cz>
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v4 05/10] tty: serial: extract tx_ready() from
+ __serial_lpc32xx_tx()
+In-Reply-To: <20220920052049.20507-6-jslaby@suse.cz>
+Message-ID: <3c92a9b4-c531-d960-a3cd-827c42f7f48e@linux.intel.com>
+References: <20220920052049.20507-1-jslaby@suse.cz> <20220920052049.20507-6-jslaby@suse.cz>
 MIME-Version: 1.0
-X-linux-mtd-patch-notification: thanks
-X-linux-mtd-patch-commit: b'12e971b21caf069e4cae9720cfc70e200b24992b'
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-1092543553-1663661472=:1766"
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-07-22 at 07:28:50 UTC, Slark Xiao wrote:
-> Replace 'the the' with 'the' in the comment.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+
+--8323329-1092543553-1663661472=:1766
+Content-Type: text/plain; charset=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
+
+On Tue, 20 Sep 2022, Jiri Slaby wrote:
+
+> The condition in __serial_lpc32xx_tx()'s loop is barely readable.
+> Extract it to a separate function. This will make the cleanup in the
+> next patches easier too.
 > 
-> Signed-off-by: Slark Xiao <slark_xiao@163.com>
+> Cc: Vladimir Zapolskiy <vz@mleia.com>
+> Cc: <linux-arm-kernel@lists.infradead.org>
+> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
 
-Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next, thanks.
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-Miquel
+I noticed that wait_for_xmit_ready() uses < 32 for the similar check 
+which seems fishy...
+
+
+-- 
+ i.
+
+--8323329-1092543553-1663661472=:1766--
