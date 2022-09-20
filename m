@@ -2,140 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 857CE5BDDA9
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 08:51:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B464F5BDDAB
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 08:51:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231182AbiITGu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 02:50:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47068 "EHLO
+        id S231191AbiITGvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 02:51:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231181AbiITGuk (ORCPT
+        with ESMTP id S230489AbiITGvV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 02:50:40 -0400
-Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B6455EDD6
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 23:50:34 -0700 (PDT)
-X-UUID: 03b0ff0e0c094adf8616251c93b7712d-20220920
-X-UUID: 03b0ff0e0c094adf8616251c93b7712d-20220920
-X-User: zhouzongmin@kylinos.cn
-Received: from localhost.localdomain [(116.128.244.169)] by mailgw
-        (envelope-from <zhouzongmin@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 985915299; Tue, 20 Sep 2022 14:51:11 +0800
-From:   Zongmin Zhou <zhouzongmin@kylinos.cn>
-To:     airlied@redhat.com, kraxel@redhat.com, airlied@linux.ie,
-        daniel@ffwll.ch
-Cc:     virtualization@lists.linux-foundation.org,
-        spice-devel@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Zongmin Zhou <zhouzongmin@kylinos.cn>,
-        Ming Xie <xieming@kylinos.cn>
-Subject: [RESEND PATCH] drm/qxl: drop set_prod_notify parameter from qxl_ring_create
-Date:   Tue, 20 Sep 2022 14:50:23 +0800
-Message-Id: <20220920065023.1633303-1-zhouzongmin@kylinos.cn>
+        Tue, 20 Sep 2022 02:51:21 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85BDF543E8;
+        Mon, 19 Sep 2022 23:51:19 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id u132so1858354pfc.6;
+        Mon, 19 Sep 2022 23:51:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=x5WDaYjfTujjxBwXecsmwJZGZt1UTrVVS5ttWoE+VSE=;
+        b=nG2CxL5KDT3hMaYRKJAshXAevxBi6ZO0OV8FCz8G0jGzL5cCpBT5FfGHkypfFeh//P
+         fC52ZFD2amD4+5xKMaXKRxhQWQLR+FzrmqCZFScPz70tuNw/vV7SDIlXkPTN1kvO/2nJ
+         /C8nHr+L/QD3Cc79dKhmShbQAkTIgjqMyRR6Ys+Zx+Ls2jOoG5K81p5HBzk30+qaYTWz
+         d28vM3iW3BHETx73URWrKdqBTDf3menl3LivZN/9sysd48adC3qb9g4H/BTj7JmovEWL
+         XLjyg0AJBEZui2WUpzPrH2/RsfQ6cMxOHGwt2pgmMyuvZXqklEDhlL6WFOhfzI+ymmzo
+         l35A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=x5WDaYjfTujjxBwXecsmwJZGZt1UTrVVS5ttWoE+VSE=;
+        b=lYk8eAz6GlYTc5zF1geNHXOirk8C6SqaQLgiOzNatV3Yqm367eLjMFn8VTG0CqYdAO
+         hBjflpcboqNT7kZP4jqDTziOgje+NFMBGmdfYmG3fZ58vSVcM4G8xYZtNo9AJHLIEg8H
+         ZrEwlHzRn9boeo+H9KQHq4ym5C3Nlcr/zxGPFr6BkLWbK8rfr5O10ZF2AyvO6KnR9Zxp
+         gbtA6dv5RJA1dfa+Ug/9wZtzVJRU/tOZvOT57YwdWTyrm6zntbHYoOyefkdaGHpXQAVd
+         JhrTAg9F7i4B+XuyiEYhBuVIwRRCvJZTQee8IEGzcA/HesGRdaFMj5DPX3T0GPKIDdDR
+         wJVQ==
+X-Gm-Message-State: ACrzQf2Wa+xdu95vecf7Kn93IHeRJJpSBloEDpK/yZbvuJspcca7pPQ2
+        yIxxgLjfoBl6RxxosYhsL44=
+X-Google-Smtp-Source: AMsMyM5LstHcdpNuKoJGXe53gx97VB4xcvezTGSCTUxAf8/y7H39SbFjy19YT271OAlJPlOi+2ulEA==
+X-Received: by 2002:a63:193:0:b0:43a:346c:166f with SMTP id 141-20020a630193000000b0043a346c166fmr5156529pgb.284.1663656678985;
+        Mon, 19 Sep 2022 23:51:18 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id s21-20020a63d055000000b0041a6638b357sm658983pgi.72.2022.09.19.23.51.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Sep 2022 23:51:18 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: ye.xingchen@zte.com.cn
+To:     tony@atomide.com
+Cc:     khilman@kernel.org, linux@armlinux.org.uk,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, ye xingchen <ye.xingchen@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH linux-next] ARM: OMAP2+: Remove the unneeded result variable
+Date:   Tue, 20 Sep 2022 06:51:13 +0000
+Message-Id: <20220920065113.215685-1-ye.xingchen@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,RDNS_DYNAMIC,SPF_HELO_NONE,T_SPF_PERMERROR,
-        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since qxl_io_reset(qdev) will be called immediately
-after qxl_ring_create() been called,
-and parameter like notify_on_prod will be set to default value.
-So the call to qxl_ring_init_hdr() before becomes meaningless.
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
-Signed-off-by: Zongmin Zhou<zhouzongmin@kylinos.cn>
-Suggested-by: Ming Xie<xieming@kylinos.cn>
+Return the value amx3_common_init() directly instead of storing it in
+another redundant variable.
+
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 ---
- drivers/gpu/drm/qxl/qxl_cmd.c | 8 --------
- drivers/gpu/drm/qxl/qxl_drv.h | 2 --
- drivers/gpu/drm/qxl/qxl_kms.c | 4 +---
- 3 files changed, 1 insertion(+), 13 deletions(-)
+ arch/arm/mach-omap2/pm33xx-core.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/drivers/gpu/drm/qxl/qxl_cmd.c b/drivers/gpu/drm/qxl/qxl_cmd.c
-index 7b00c955cd82..63aa96a69752 100644
---- a/drivers/gpu/drm/qxl/qxl_cmd.c
-+++ b/drivers/gpu/drm/qxl/qxl_cmd.c
-@@ -53,17 +53,11 @@ void qxl_ring_free(struct qxl_ring *ring)
- 	kfree(ring);
- }
+diff --git a/arch/arm/mach-omap2/pm33xx-core.c b/arch/arm/mach-omap2/pm33xx-core.c
+index bf0d25fd2cea..4b29d8323ffc 100644
+--- a/arch/arm/mach-omap2/pm33xx-core.c
++++ b/arch/arm/mach-omap2/pm33xx-core.c
+@@ -105,8 +105,6 @@ static int amx3_common_init(int (*idle)(u32 wfi_flags))
  
--void qxl_ring_init_hdr(struct qxl_ring *ring)
--{
--	ring->ring->header.notify_on_prod = ring->n_elements;
--}
--
- struct qxl_ring *
- qxl_ring_create(struct qxl_ring_header *header,
- 		int element_size,
- 		int n_elements,
- 		int prod_notify,
--		bool set_prod_notify,
- 		wait_queue_head_t *push_event)
+ static int am33xx_suspend_init(int (*idle)(u32 wfi_flags))
  {
- 	struct qxl_ring *ring;
-@@ -77,8 +71,6 @@ qxl_ring_create(struct qxl_ring_header *header,
- 	ring->n_elements = n_elements;
- 	ring->prod_notify = prod_notify;
- 	ring->push_event = push_event;
--	if (set_prod_notify)
--		qxl_ring_init_hdr(ring);
- 	spin_lock_init(&ring->lock);
- 	return ring;
+-	int ret;
+-
+ 	gfx_l4ls_clkdm = clkdm_lookup("gfx_l4ls_gfx_clkdm");
+ 
+ 	if (!gfx_l4ls_clkdm) {
+@@ -114,9 +112,7 @@ static int am33xx_suspend_init(int (*idle)(u32 wfi_flags))
+ 		return -ENODEV;
+ 	}
+ 
+-	ret = amx3_common_init(idle);
+-
+-	return ret;
++	return amx3_common_init(idle);
  }
-diff --git a/drivers/gpu/drm/qxl/qxl_drv.h b/drivers/gpu/drm/qxl/qxl_drv.h
-index 47c169673088..432758ad39a3 100644
---- a/drivers/gpu/drm/qxl/qxl_drv.h
-+++ b/drivers/gpu/drm/qxl/qxl_drv.h
-@@ -277,10 +277,8 @@ struct qxl_ring *qxl_ring_create(struct qxl_ring_header *header,
- 				 int element_size,
- 				 int n_elements,
- 				 int prod_notify,
--				 bool set_prod_notify,
- 				 wait_queue_head_t *push_event);
- void qxl_ring_free(struct qxl_ring *ring);
--void qxl_ring_init_hdr(struct qxl_ring *ring);
- int qxl_check_idle(struct qxl_ring *ring);
  
- static inline uint64_t
-diff --git a/drivers/gpu/drm/qxl/qxl_kms.c b/drivers/gpu/drm/qxl/qxl_kms.c
-index 9bf6d4cc98d4..dc3828db1991 100644
---- a/drivers/gpu/drm/qxl/qxl_kms.c
-+++ b/drivers/gpu/drm/qxl/qxl_kms.c
-@@ -194,7 +194,6 @@ int qxl_device_init(struct qxl_device *qdev,
- 					     sizeof(struct qxl_command),
- 					     QXL_COMMAND_RING_SIZE,
- 					     qdev->io_base + QXL_IO_NOTIFY_CMD,
--					     false,
- 					     &qdev->display_event);
- 	if (!qdev->command_ring) {
- 		DRM_ERROR("Unable to create command ring\n");
-@@ -207,7 +206,6 @@ int qxl_device_init(struct qxl_device *qdev,
- 				sizeof(struct qxl_command),
- 				QXL_CURSOR_RING_SIZE,
- 				qdev->io_base + QXL_IO_NOTIFY_CURSOR,
--				false,
- 				&qdev->cursor_event);
- 
- 	if (!qdev->cursor_ring) {
-@@ -219,7 +217,7 @@ int qxl_device_init(struct qxl_device *qdev,
- 	qdev->release_ring = qxl_ring_create(
- 				&(qdev->ram_header->release_ring_hdr),
- 				sizeof(uint64_t),
--				QXL_RELEASE_RING_SIZE, 0, true,
-+				QXL_RELEASE_RING_SIZE, 0,
- 				NULL);
- 
- 	if (!qdev->release_ring) {
+ static int am43xx_suspend_init(int (*idle)(u32 wfi_flags))
 -- 
 2.25.1
-
-
-No virus found
-		Checked by Hillstone Network AntiVirus
