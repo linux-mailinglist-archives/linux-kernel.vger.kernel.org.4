@@ -2,69 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C21545BDD92
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 08:46:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5290B5BDD97
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 08:47:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230460AbiITGqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 02:46:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38604 "EHLO
+        id S230472AbiITGrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 02:47:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230262AbiITGqX (ORCPT
+        with ESMTP id S230295AbiITGrS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 02:46:23 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3573564E5;
-        Mon, 19 Sep 2022 23:46:22 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 8272368BEB; Tue, 20 Sep 2022 08:46:14 +0200 (CEST)
-Date:   Tue, 20 Sep 2022 08:46:13 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Logan Gunthorpe <logang@deltatee.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-mm@kvack.org, Christoph Hellwig <hch@lst.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Don Dutile <ddutile@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Minturn Dave B <dave.b.minturn@intel.com>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Xiong Jianxin <jianxin.xiong@intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Martin Oliveira <martin.oliveira@eideticom.com>,
-        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Stephen Bates <sbates@raithlin.com>
-Subject: Re: [PATCH v9 7/8] PCI/P2PDMA: Allow userspace VMA allocations
- through sysfs
-Message-ID: <20220920064613.GB17325@lst.de>
-References: <20220825152425.6296-1-logang@deltatee.com> <20220825152425.6296-8-logang@deltatee.com> <YxDb2MyRx6o/wDAz@kroah.com> <4a4bca1e-bebf-768f-92d4-92eb8ae714e1@deltatee.com> <YxDhEO9ycZDTnbZm@kroah.com> <cc9a24a8-dd3a-9d21-d9a7-5ee4b0ad7a57@deltatee.com> <YxD7uZYaV75gJS9d@kroah.com> <fb9d7948-43fe-87c5-5275-70f280181ad1@deltatee.com> <YxGad5h2Nn/Ejslc@kroah.com> <db8cd049-c78b-1aa0-dcd0-0feb8c6cb25c@deltatee.com>
+        Tue, 20 Sep 2022 02:47:18 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 387ED17A84
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 23:47:12 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id q9so1599358pgq.8
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 23:47:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date;
+        bh=c5KSSWVkQxJDHC069bgwLU2fYk2mKQxGKTjcX09JPwY=;
+        b=HGj8MOzY5CZ5wxY9nmVqBylRA4qoVO1HOk9+EhvXCILBr9M4OZJo0YdHC6FurSSr/Z
+         7CJtTPLAHtRDD1EkTvAEtJAep51AV8xpS2UDs7KXapD+l/86KL+PiNrJZo9ulcWhnGqD
+         UdhKPlUfLsyqSBENOGCLXdg1RMflt4EvN9baVT4GNEnSpYsXzW3HUK/uC6sW95Rb2SvH
+         FHBmMvLDHttahh9qmLz3+f9//48KTDqNjvhgX842FvRn0Lf/WIVFGmuWBSyMCcmkYLwj
+         XjqpuhxKWs4SxYBUqQhSX08HMFlRg+Pus5Z0tYWilQWqgwDyKi381Cdvf79bOu3Yhf8i
+         q6Rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=c5KSSWVkQxJDHC069bgwLU2fYk2mKQxGKTjcX09JPwY=;
+        b=t4yepVC5N1O0pAqqMTa7mLxkTdN/3T6JZ2WQ10PqslcnxS6Kap2yMKVxoEi0J9luXi
+         nVsscFxkFWHls6e1lzsUGLYKMS4NyAigfrXihmf0wwl4Bg7Ds++ts0SUq6GNjPRGvNKa
+         uaOXaY+DyMHLJ5bsGKJ04hC2jhI6tKFkRSkKbLadENbwDXLlJdh1JZXRP3GYyoT6VvfG
+         quwdTW6q3uxAd2PHRTkkCBp3MPwCpFm9wAQV4/OnNzpaYCyw2wGlNrKbCYdrD+rSOOLV
+         0qLuEzNwDfo0ayOuv3PM2xvKuYdkFUpu6VVnLoZqlrFGsYxdcOuBPTnQtCoMvlpq93YK
+         ZBXQ==
+X-Gm-Message-State: ACrzQf2FdcO1dAnXUekiSNPhB4qzUsfMsJNDgooI1P0/vYFZ2SWmxU0i
+        SM8e7E8rG5FJVcpGHcAUB7I=
+X-Google-Smtp-Source: AMsMyM5XcLxF8MhhH/PMsaRm36L2TkcyH9kq6drtdeDhum5yfRYVmKGhA1mMkFg3ixyXD2tyXWzvxg==
+X-Received: by 2002:a62:8403:0:b0:540:c1e4:fb31 with SMTP id k3-20020a628403000000b00540c1e4fb31mr22297478pfd.85.1663656431635;
+        Mon, 19 Sep 2022 23:47:11 -0700 (PDT)
+Received: from autolfshost ([117.228.7.95])
+        by smtp.gmail.com with ESMTPSA id i6-20020a056a00224600b0054aa69bc192sm651383pfu.72.2022.09.19.23.47.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Sep 2022 23:47:11 -0700 (PDT)
+Date:   Tue, 20 Sep 2022 12:16:44 +0530
+From:   Anup K Parikh <parikhanupk.foss@gmail.com>
+To:     skhan@linuxfoundation.org, andrey.grodzovsky@amd.com,
+        airlied@linux.ie, daniel@ffwll.ch
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] A simple doc fix
+Message-ID: <Yylh1Nst25I6u6Uh@autolfshost>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <db8cd049-c78b-1aa0-dcd0-0feb8c6cb25c@deltatee.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 02, 2022 at 12:46:54PM -0600, Logan Gunthorpe wrote:
-> See the diff at the bottom of this email. I can apply it on top of this
-> patch, but IMO it is neither easier to follow nor maintain. Unless you 
-> have a different suggestion...
+Fix two warnings during doc build which also results in corresponding
+additions in generated docs
 
-Greg, can you chime in on this?  Besides this item we just have a few
-cosmetic bits left I think, and I'd really like to get the series into
-this merge window.
+Warnings Fixed:
+1. include/drm/gpu_scheduler.h:462: warning: Function parameter or member
+   'dev' not described in 'drm_gpu_scheduler'
+2. drivers/gpu/drm/scheduler/sched_main.c:1005: warning: Function
+   parameter or member 'dev' not described in 'drm_sched_init'
+
+Signed-off-by: Anup K Parikh <parikhanupk.foss@gmail.com>
+---
+Changes in v2:
+    Correct the doc strings according to
+    Link: https://lore.kernel.org/all/f528a8e4-5162-66d5-09da-5252076882b8@amd.com/
+ drivers/gpu/drm/scheduler/sched_main.c | 2 ++
+ include/drm/gpu_scheduler.h            | 2 ++
+ 2 files changed, 4 insertions(+)
+
+diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm/scheduler/sched_main.c
+index 68317d3a7a27..979685830671 100644
+--- a/drivers/gpu/drm/scheduler/sched_main.c
++++ b/drivers/gpu/drm/scheduler/sched_main.c
+@@ -994,6 +994,8 @@ static int drm_sched_main(void *param)
+  *		used
+  * @score: optional score atomic shared with other schedulers
+  * @name: name used for debugging
++ * @dev: A device pointer - primarily useful for printing standardized
++ *       messages with DRM_DEV_ERROR().
+  *
+  * Return 0 on success, otherwise error code.
+  */
+diff --git a/include/drm/gpu_scheduler.h b/include/drm/gpu_scheduler.h
+index addb135eeea6..80a525dd19bd 100644
+--- a/include/drm/gpu_scheduler.h
++++ b/include/drm/gpu_scheduler.h
+@@ -435,6 +435,8 @@ struct drm_sched_backend_ops {
+  * @_score: score used when the driver doesn't provide one
+  * @ready: marks if the underlying HW is ready to work
+  * @free_guilty: A hit to time out handler to free the guilty job.
++ * @dev: A device pointer - primarily useful for printing standardized
++ *       messages with DRM_DEV_ERROR().
+  *
+  * One scheduler is implemented for each hardware ring.
+  */
+-- 
+2.35.1
 
