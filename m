@@ -2,117 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8849A5BE0D9
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 10:57:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E84A5BE0EA
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 10:57:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231312AbiITI47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 04:56:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52954 "EHLO
+        id S231499AbiITI5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 04:57:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230359AbiITI4z (ORCPT
+        with ESMTP id S231444AbiITI5c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 04:56:55 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F07E66B170
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 01:56:54 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id c7so1881559pgt.11
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 01:56:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date;
-        bh=1xCkS/NtliFBAi/Unm7O+jqERrlsw7P433sZiPkri3c=;
-        b=azy6gWBcH4uAn3JvvMQoDVf6XDBtjAt5NsZSWHLqsSuh4LJjSUMemhinc/jbUGQkNz
-         nSjbWacmQzT0rFScKnaXXVgE/9M4fLe1q7HJ2WaujXmuSJjwS4RHp5acXPeqYF83ht6z
-         BxBcRNj+t3HCeMaPJzDrr0/z0n8qxrJ34c+Py8pNW+95MahPfZ4yUIJl5ngeLToM0ZC4
-         4Jsgt2sn25OJMS/SeSkqpk/D5v616MJ1BqTh/8DOxGvRLpp4EzygolAktTUGqO88/Ys5
-         MXnmDRgw8Sg4Ib3mF2wZCSNf33n2NVcEL0lX8lfdJyPgWDszilpA5/AOUrC4Ab5vU4Bb
-         COAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date;
-        bh=1xCkS/NtliFBAi/Unm7O+jqERrlsw7P433sZiPkri3c=;
-        b=5fhNx5WEaUgz84VOXXw6qpC6CeQdWET94vP1PsxVhNNXckfwzO4YhX1I2Zhmv5LIur
-         BoyBsByQcAACRdLzWuOQGfNux18Nu8dDgBOSxWbAF4rc/iqe/11Ubgp0XK1P17vYSMwY
-         qGfm0ZuerOC/IdJb+Y7ghds+l7ctLi2Sq1KOqWMpycg+Vo2YLAI5uXEtJHabhOotEPi6
-         HhlB1E9COIslMhON8ULCmhHPdfwyTQV/v0xZf8AYGkTTTgXduj86Q/47xy0thWsBsIfc
-         Gnwasa/44Ksctna5UD78Z3wF7eLzrbJD8Imm+FmBuq0CunuItSWRr3c7G0xft/2kU60U
-         ZLzg==
-X-Gm-Message-State: ACrzQf3iIdD+5gQsANPuFZxTeS9ufYxdMCVPUhpScxN0TMEWz/4CQKf0
-        isnLNiAs/z7bl5g0mKa6JiIBYqZTI6ZQfA==
-X-Google-Smtp-Source: AMsMyM48Yj9b5Zqz62ykAeM1jQWHvPRvE0b7QwL9zrD02o/110sRTUMvRa0KxyX0KGZe86Bc2XWSAA==
-X-Received: by 2002:a63:88c8:0:b0:439:494d:fd10 with SMTP id l191-20020a6388c8000000b00439494dfd10mr19078526pgd.201.1663664214258;
-        Tue, 20 Sep 2022 01:56:54 -0700 (PDT)
-Received: from localhost ([203.219.227.147])
-        by smtp.gmail.com with ESMTPSA id a2-20020a1709027e4200b001754fa42065sm868869pln.143.2022.09.20.01.56.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Sep 2022 01:56:53 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 20 Sep 2022 18:56:49 +1000
-Message-Id: <CN13QQX0NEA2.M6SABG46NYYN@bobo>
-Cc:     <linux-kernel@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: [PATCH v2 06/19] powerpc/cputable: Split cpu_specs[] out of
- cputable.h
-From:   "Nicholas Piggin" <npiggin@gmail.com>
-To:     "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        "Michael Ellerman" <mpe@ellerman.id.au>
-X-Mailer: aerc 0.11.0
-References: <828f6a64eeb51ce9abfa1d4e84c521a02fecebb8.1663606875.git.christophe.leroy@csgroup.eu> <a44b865e0318286155273b10cdf524ab697928c1.1663606875.git.christophe.leroy@csgroup.eu>
-In-Reply-To: <a44b865e0318286155273b10cdf524ab697928c1.1663606875.git.christophe.leroy@csgroup.eu>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 20 Sep 2022 04:57:32 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87DC758DCA;
+        Tue, 20 Sep 2022 01:57:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=/nDDP1N0D4CAKFG1jjZ0nUCcb4Cwi+2XeLNzAB5a/3A=; b=dwq7k7OLBAweuvxZAbsIyybjmJ
+        LWKFQLhJfLLYjlWcLF1VzOmm/u3DYXUkxiGZB432qxzVGoPDa+HDV664vlFYQOwNVOgwYKQh00P/y
+        2Moq5lHOrC15n7bUB20DWWFsx8XV1J1DNLnxbuCGUFWdx8geNgMfV6XhqReLWifLY+YeFodx27IXq
+        /IrJ0mO09Di3qhEI4cp6g7HRbgntsbzEH8ickJuRs6Usu7AqtrURdlQsKWIMoNKkSXupoPQSsqje7
+        UezmEjo7U4Z1A3DxPyeQLWaZEGErf50B+83wnXPcrPsl85uPvrl+T4DjBM0ejacsZ7Zz8oufPZrwY
+        XBBt0mUA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oaZ3v-00EIvL-QZ; Tue, 20 Sep 2022 08:57:04 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BC92330035F;
+        Tue, 20 Sep 2022 10:57:00 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 892F82BAC7A92; Tue, 20 Sep 2022 10:57:00 +0200 (CEST)
+Date:   Tue, 20 Sep 2022 10:57:00 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
+        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
+        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
+        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
+        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
+        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
+        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
+        dinguyen@kernel.org, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
+        James.Bottomley@hansenpartnership.com, deller@gmx.de,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, pv-drivers@vmware.com,
+        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
+        gregkh@linuxfoundation.org, mturquette@baylibre.com,
+        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
+        sudeep.holla@arm.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
+        anup@brainfault.org, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, jacob.jun.pan@linux.intel.com,
+        atishp@atishpatra.org, Arnd Bergmann <arnd@arndb.de>,
+        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, dennis@kernel.org, tj@kernel.org,
+        cl@linux.com, rostedt@goodmis.org, pmladek@suse.com,
+        senozhatsky@chromium.org, john.ogness@linutronix.de,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, fweisbec@gmail.com,
+        ryabinin.a.a@gmail.com, glider@google.com, andreyknvl@gmail.com,
+        dvyukov@google.com, vincenzo.frascino@arm.com,
+        Andrew Morton <akpm@linux-foundation.org>, jpoimboe@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-perf-users@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-arch@vger.kernel.org, kasan-dev@googlegroups.com,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: [PATCH v2 03/44] cpuidle/poll: Ensure IRQ state is invariant
+Message-ID: <YymAXPkZkyFIEjXM@hirez.programming.kicks-ass.net>
+References: <20220919095939.761690562@infradead.org>
+ <20220919101520.534233547@infradead.org>
+ <20220919131927.GA58444@lothringen>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220919131927.GA58444@lothringen>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue Sep 20, 2022 at 3:01 AM AEST, Christophe Leroy wrote:
-> cpu_specs[] is full of #ifdefs depending on the different
-> types of CPU.
->
-> CPUs are mutually exclusive, it is therefore possible to split
-> cpu_specs[] into smaller more readable pieces.
->
-> Create cpu_specs_XXX.h that will each be dedicated on one
-> of the following mutually exclusive families:
-> - 40x
-> - 44x
-> - 47x
-> - 8xx
-> - e500
-> - book3s/32
-> - book3s/64
->
-> In book3s/32, the block for 603 has been moved in front in order
-> to not have two 604 blocks.
+On Mon, Sep 19, 2022 at 03:19:27PM +0200, Frederic Weisbecker wrote:
+> On Mon, Sep 19, 2022 at 11:59:42AM +0200, Peter Zijlstra wrote:
+> > cpuidle_state::enter() methods should be IRQ invariant
+> 
+> Got a bit confused with the invariant thing since the first chunck I
+> see in this patch is a conversion to an non-traceable local_irq_enable().
+> 
+> Maybe just add a short mention about that and why?
 
+Changelog now reads:
 
->
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> ---
->  arch/powerpc/kernel/cpu_specs.h           |   27 +
->  arch/powerpc/kernel/cpu_specs_40x.h       |  280 +++
->  arch/powerpc/kernel/cpu_specs_44x.h       |  304 ++++
->  arch/powerpc/kernel/cpu_specs_47x.h       |   78 +
->  arch/powerpc/kernel/cpu_specs_8xx.h       |   21 +
->  arch/powerpc/kernel/cpu_specs_book3s_32.h |  607 +++++++
->  arch/powerpc/kernel/cpu_specs_book3s_64.h |  488 ++++++
->  arch/powerpc/kernel/cpu_specs_e500.h      |  135 ++
->  arch/powerpc/kernel/cputable.c            | 1877 +--------------------
+---
+Subject: cpuidle/poll: Ensure IRQ state is invariant
+From: Peter Zijlstra <peterz@infradead.org>
+Date: Tue May 31 15:43:32 CEST 2022
 
-This series is a nice cleanup. No comments yet but kernel/ is getting
-pretty crowded. Should we make some subdirectories for subarch things
-like mm has?
+cpuidle_state::enter() methods should be IRQ invariant.
 
-Can do that after your series. Probably requires another merge window
-to do it.
+Additionally make sure to use raw_local_irq_*() methods since this
+cpuidle callback will be called with RCU already disabled.
 
-Thanks,
-Nick
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
