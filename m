@@ -2,136 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8264B5BE166
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 11:08:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F4495BE10F
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 11:00:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230416AbiITJHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 05:07:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48876 "EHLO
+        id S231549AbiITJAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 05:00:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231627AbiITJHY (ORCPT
+        with ESMTP id S230481AbiITI7n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 05:07:24 -0400
-Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 846436D9EA;
-        Tue, 20 Sep 2022 02:05:20 -0700 (PDT)
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-12803ac8113so3255045fac.8;
-        Tue, 20 Sep 2022 02:05:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=gd/npqLKLd3AnTSH/+RFKBsH5iJOqAjM5MsAjYDhe+E=;
-        b=fnnscz7VljZQXX4AixFOtwmwMOrI/KAwQLCKpiQh8OhcYn5izhpN9Zvsty/7viGJOr
-         vhXpc+UbScB838RJc351Feaq3UtMF1UHspCiIGfe/TDn/FA5s92Sp1cFpa8LaKJm7yaI
-         vKG5ZmYckBkv6lEw5lBv95dMaUZxEwcEMHe7RqlbBiPO2UtNDk/QKUN4QHTnKgJATcbt
-         +DhU/ZhBfRtntbS1kAL7iC2fJA5GLoy1KZf8lAehqEK0anz7sX3FFwMsm9CV6Pr8oP9P
-         iBfH6d3/ltRzOdhPV46jhSeUIlFVsCjBeZHa8gEUj1+B9lmFPIXWtoG85XbL93JTU8U1
-         WUFA==
-X-Gm-Message-State: ACrzQf0yjvF9W0GHrSqggifXSOnqB3CNLCUnos4+2aje5k16BEjmcQ3l
-        gJWMqILQC5oFQMQa0P6YeMTGjDd6BCOrgw==
-X-Google-Smtp-Source: AMsMyM7QLzvaKy5B9ZvgsD8MrO3Uf4lxdYxGoNsNfAzFQTpSDv2Ia8WjBbfwzQiHNJHP4DS1zqqiZQ==
-X-Received: by 2002:a05:6870:f20b:b0:12d:29e4:df2e with SMTP id t11-20020a056870f20b00b0012d29e4df2emr1542655oao.262.1663664719430;
-        Tue, 20 Sep 2022 02:05:19 -0700 (PDT)
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com. [209.85.210.45])
-        by smtp.gmail.com with ESMTPSA id ep36-20020a056870a9a400b00118281a1227sm679779oab.39.2022.09.20.02.05.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Sep 2022 02:05:19 -0700 (PDT)
-Received: by mail-ot1-f45.google.com with SMTP id r13-20020a056830418d00b0065601df69c0so1279933otu.7;
-        Tue, 20 Sep 2022 02:05:19 -0700 (PDT)
-X-Received: by 2002:a0d:dd09:0:b0:344:fca5:9b44 with SMTP id
- g9-20020a0ddd09000000b00344fca59b44mr18154946ywe.358.1663664299984; Tue, 20
- Sep 2022 01:58:19 -0700 (PDT)
+        Tue, 20 Sep 2022 04:59:43 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74E1F6C110;
+        Tue, 20 Sep 2022 01:59:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=W0WuIu+jUoS9XLKKaCH8kQp1fmQssrlCtEm/el88ozE=; b=W1sdVyg7vy3ch8nf9fwJC+rQAA
+        Ok63hswk+DsuwDPoYMow5lpuRTg0zwye/uMJ7IZxhvsE8DqEb8IUKGXI2vHvDWYEw8tlYqo51FALc
+        ZTsNnqkaLalFrpr8JHNXkX85QpdDDffKTM0jzzzHE890y80CZ3xf0MvTgC+6pcPEhwcVqBLuCt/ue
+        ACjH+0VY11uC++wbmWA9jKjDB2w8MUoGQUsqPG4vg1hfyWfx8tLeEnKKR2aXVj5eexUqmJaWJ4XzM
+        WZxvwFxPbkcoskk60vuUbFCgljrJO8fWOc/ThBigj91DsKdqZZKbYEKqQyg1nhkHvBtgcqywSN/+g
+        730JiXIw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oaZ5n-00EIzl-O7; Tue, 20 Sep 2022 08:58:59 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5131A3006B9;
+        Tue, 20 Sep 2022 10:58:59 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 211C72BAC7A93; Tue, 20 Sep 2022 10:58:59 +0200 (CEST)
+Date:   Tue, 20 Sep 2022 10:58:59 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
+        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
+        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
+        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
+        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
+        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
+        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
+        dinguyen@kernel.org, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
+        James.Bottomley@hansenpartnership.com, deller@gmx.de,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, pv-drivers@vmware.com,
+        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
+        gregkh@linuxfoundation.org, mturquette@baylibre.com,
+        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
+        sudeep.holla@arm.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
+        anup@brainfault.org, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, jacob.jun.pan@linux.intel.com,
+        atishp@atishpatra.org, Arnd Bergmann <arnd@arndb.de>,
+        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, dennis@kernel.org, tj@kernel.org,
+        cl@linux.com, rostedt@goodmis.org, pmladek@suse.com,
+        senozhatsky@chromium.org, john.ogness@linutronix.de,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, fweisbec@gmail.com,
+        ryabinin.a.a@gmail.com, glider@google.com, andreyknvl@gmail.com,
+        dvyukov@google.com, vincenzo.frascino@arm.com,
+        Andrew Morton <akpm@linux-foundation.org>, jpoimboe@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-perf-users@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-arch@vger.kernel.org, kasan-dev@googlegroups.com
+Subject: Re: [PATCH v2 08/44] cpuidle,imx6: Push RCU-idle into driver
+Message-ID: <YymA0yJybIWLco/v@hirez.programming.kicks-ass.net>
+References: <20220919095939.761690562@infradead.org>
+ <20220919101520.869531945@infradead.org>
+ <20220919142123.GE58444@lothringen>
 MIME-Version: 1.0
-References: <20220503211954.1428919-1-frowand.list@gmail.com>
- <CAMuHMdWhn8cY4usyqao-osEcSCcmkU+NYg21co+GxVfvg5+dhw@mail.gmail.com> <725f870b-b927-352d-85ab-675b91b7c75a@gmail.com>
-In-Reply-To: <725f870b-b927-352d-85ab-675b91b7c75a@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 20 Sep 2022 10:58:08 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdX52_pnJPDuYoqOxwxsiC_+Zecg4kyWU94zAg1NRYHyDQ@mail.gmail.com>
-Message-ID: <CAMuHMdX52_pnJPDuYoqOxwxsiC_+Zecg4kyWU94zAg1NRYHyDQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] of: overlay: rename overlay source files from .dts
- to .dtso
-To:     Frank Rowand <frowand.list@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Pantelis Antoniou <pantelis.antoniou@konsulko.com>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Li Yang <leoyang.li@nxp.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Michal Simek <monstr@monstr.eu>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Michael Walle <michael@walle.cc>,
-        Alex Marginean <alexandru.marginean@nxp.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Jason Liu <jason.hui.liu@nxp.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-pci <linux-pci@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220919142123.GE58444@lothringen>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Frank,
+On Mon, Sep 19, 2022 at 04:21:23PM +0200, Frederic Weisbecker wrote:
+> On Mon, Sep 19, 2022 at 11:59:47AM +0200, Peter Zijlstra wrote:
+> > Doing RCU-idle outside the driver, only to then temporarily enable it
+> > again, at least twice, before going idle is daft.
+> 
+> Hmm, what ends up calling RCU_IDLE() here? Also what about
+> cpu_do_idle()?
 
-Pity you couldn't make it to Dublin. We've been missing you!
+I've ammended patches 5-12 with a comment like:
 
-On Tue, Jul 19, 2022 at 1:44 AM Frank Rowand <frowand.list@gmail.com> wrote:
-> On 7/7/22 02:21, Geert Uytterhoeven wrote:
-> > On Tue, May 3, 2022 at 11:20 PM <frowand.list@gmail.com> wrote:
-> >> From: Frank Rowand <frank.rowand@sony.com>
-> >>
-> >> In drivers/of/unittest-data/:
-> >>    - Rename .dts overlay source files to use .dtso suffix.
-> >>    - Add Makefile rule to build .dtbo.o assembly file from overlay
-> >>      .dtso source file.
-> >>    - Update Makefile to build .dtbo.o objects instead of .dtb.o from
-> >>      unittest overlay source files.
-> >>
-> >> Modify driver/of/unitest.c to use .dtbo.o based symbols instead of
-> >> .dtb.o
-> >>
-> >> Modify scripts/Makefile.lib %.dtbo rule to depend upon %.dtso instead
-> >> of %.dts
-> >>
-> >> Rename .dts overlay source files to use .dtso suffix in:
-> >>    arch/arm64/boot/dts/freescale/
-> >>    arch/arm64/boot/dts/xilinx/
-> >>
-> >> Signed-off-by: Frank Rowand <frank.rowand@sony.com>
-> >
-> > What is the status of this work?
-> > Thanks!
->
-> I'll work on this tomorrow after I test your overlay improvement patches.
+Notably both cpu_pm_enter() and cpu_cluster_pm_enter() implicity
+re-enable RCU.
 
-Any updates? We're again at rc6.
-Thanks!
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+(each noting the specific sites for the relevant patch).
