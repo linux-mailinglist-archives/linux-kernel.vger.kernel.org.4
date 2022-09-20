@@ -2,96 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F96F5BDA4E
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 04:42:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAF925BDA50
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 04:42:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbiITCl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 22:41:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44432 "EHLO
+        id S230045AbiITCmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 22:42:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229908AbiITClz (ORCPT
+        with ESMTP id S230177AbiITCmJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 22:41:55 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F3EF57E2E;
-        Mon, 19 Sep 2022 19:41:53 -0700 (PDT)
-X-UUID: ae26f053675141ed849e0a1e610a89fe-20220920
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=sIGqGcIRrPYQKpKAtc4/Ah0ogLUo8Srchgvb8OewzRE=;
-        b=aRvQ0VDRfgbGD6rD0Wj566EQJ9zlsbkzJKGh/pNPpEuxrCmVvVbctwupsGNoNCr1IxlPRjst4QgU6qJUtmMBSlQJXiwBtvgmSjec5RgD8tH0Xw5sCt1P7a1ZlA1Af+C2d1B7bKgdDzyYVOj6e6hBOeFpR44rzPYS8Q8M7Ukj68k=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:d075e4ed-0c9a-4add-8ddf-a67c62c87db5,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:90
-X-CID-INFO: VERSION:1.1.11,REQID:d075e4ed-0c9a-4add-8ddf-a67c62c87db5,IP:0,URL
-        :0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
-        N:quarantine,TS:90
-X-CID-META: VersionHash:39a5ff1,CLOUDID:8714365e-5ed4-4e28-8b00-66ed9f042fbd,B
-        ulkID:220920002500QDDVP7VP,BulkQuantity:70,Recheck:0,SF:28|17|19|48,TC:nil
-        ,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:40,QS:nil,BEC:nil,COL:0
-X-UUID: ae26f053675141ed849e0a1e610a89fe-20220920
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
-        (envelope-from <jianguo.zhang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1121040200; Tue, 20 Sep 2022 10:41:49 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Tue, 20 Sep 2022 10:41:48 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Tue, 20 Sep 2022 10:41:47 +0800
-Message-ID: <f78e79520b5edc9b477c38131fd97e5e603c0428.camel@mediatek.com>
-Subject: Re: [PATCH 2/2] net: dt-bindings: dwmac: add support for mt8188
-From:   Jianguo Zhang <jianguo.zhang@mediatek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     <netdev@vger.kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Biao Huang <biao.huang@mediatek.com>,
-        <devicetree@vger.kernel.org>, <linux-mediatek@lists.infradead.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        <linux-kernel@vger.kernel.org>,
-        "Giuseppe Cavallaro" <peppe.cavallaro@st.com>,
-        Eric Dumazet <edumazet@google.com>
-Date:   Tue, 20 Sep 2022 10:41:47 +0800
-In-Reply-To: <20220919162453.4kkphzhc2tu6wzou@krzk-bin>
-References: <20220919080410.11270-1-jianguo.zhang@mediatek.com>
-         <20220919080410.11270-3-jianguo.zhang@mediatek.com>
-         <20220919162453.4kkphzhc2tu6wzou@krzk-bin>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 19 Sep 2022 22:42:09 -0400
+Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A2DC3C16E;
+        Mon, 19 Sep 2022 19:42:03 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=ziyangzhang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VQGxJtb_1663641719;
+Received: from 30.97.56.91(mailfrom:ZiyangZhang@linux.alibaba.com fp:SMTPD_---0VQGxJtb_1663641719)
+          by smtp.aliyun-inc.com;
+          Tue, 20 Sep 2022 10:42:00 +0800
+Message-ID: <341e500b-487d-f16a-8ba6-399e2972b685@linux.alibaba.com>
+Date:   Tue, 20 Sep 2022 10:41:57 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.0
+Subject: Re: [PATCH V3 6/7] ublk_drv: add START_USER_RECOVERY and
+ END_USER_RECOVERY support
+Content-Language: en-US
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     axboe@kernel.dk, xiaoguang.wang@linux.alibaba.com,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        joseph.qi@linux.alibaba.com
+References: <20220913041707.197334-1-ZiyangZhang@linux.alibaba.com>
+ <20220913041707.197334-7-ZiyangZhang@linux.alibaba.com>
+ <Yyhom5s4AxK+wSu4@T590>
+From:   Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
+In-Reply-To: <Yyhom5s4AxK+wSu4@T590>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Krzysztof,
+On 2022/9/19 21:03, Ming Lei wrote:
+> On Tue, Sep 13, 2022 at 12:17:06PM +0800, ZiyangZhang wrote:
+>> START_USER_RECOVERY and END_USER_RECOVERY are two new control commands
+>> to support user recovery feature.
+>>
+>> After a crash, user should send START_USER_RECOVERY, it will:
+>> (1) check if (a)current ublk_device is UBLK_S_DEV_QUIESCED which was
+>>     set by quiesce_work and (b)the file struct is released.
+>> (2) reinit all ubqs, including:
+>>     (a) put the task_struct and reset ->ubq_daemon to NULL.
+>>     (b) reset all ublk_io.
+>> (3) reset ub->mm to NULL.
+>>
+>> Then, user should start a new process and send FETCH_REQ on each
+>> ubq_daemon.
+>>
+>> Finally, user should send END_USER_RECOVERY, it will:
+>> (1) wait for all new ubq_daemons getting ready.
+>> (2) update ublksrv_pid
+>> (3) unquiesce the request queue and expect incoming ublk_queue_rq()
+>> (4) convert ub's state to UBLK_S_DEV_LIVE
+>>
+>> Note: we can handle STOP_DEV between START_USER_RECOVERY and
+>> END_USER_RECOVERY. This is helpful to users who cannot start new process
+>> after sending START_USER_RECOVERY ctrl-cmd.
+>>
+>> Signed-off-by: ZiyangZhang <ZiyangZhang@linux.alibaba.com>
+>> ---
+>>  drivers/block/ublk_drv.c | 116 +++++++++++++++++++++++++++++++++++++++
+>>  1 file changed, 116 insertions(+)
+>>
+>> diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
+>> index 4409a130d0b6..3a3af80ee938 100644
+>> --- a/drivers/block/ublk_drv.c
+>> +++ b/drivers/block/ublk_drv.c
+>> @@ -1961,6 +1961,116 @@ static int ublk_ctrl_set_params(struct io_uring_cmd *cmd)
+>>  	return ret;
+>>  }
+>>  
+>> +static void ublk_queue_reinit(struct ublk_device *ub, struct ublk_queue *ubq)
+>> +{
+>> +	int i;
+>> +
+>> +	WARN_ON_ONCE(!(ubq->ubq_daemon && ubq_daemon_is_dying(ubq)));
+>> +	/* All old ioucmds have to be completed */
+>> +	WARN_ON_ONCE(ubq->nr_io_ready);
+>> +	pr_devel("%s: prepare for recovering qid %d\n", __func__, ubq->q_id);
+>> +	/* old daemon is PF_EXITING, put it now */
+>> +	put_task_struct(ubq->ubq_daemon);
+>> +	/* We have to reset it to NULL, otherwise ub won't accept new FETCH_REQ */
+>> +	ubq->ubq_daemon = NULL;
+>> +
+>> +	for (i = 0; i < ubq->q_depth; i++) {
+>> +		struct ublk_io *io = &ubq->ios[i];
+>> +
+>> +		/* forget everything now and be ready for new FETCH_REQ */
+>> +		io->flags = 0;
+>> +		io->cmd = NULL;
+>> +		io->addr = 0;
+>> +	}
+>> +}
+>> +
+>> +static int ublk_ctrl_start_recovery(struct io_uring_cmd *cmd)
+>> +{
+>> +	struct ublksrv_ctrl_cmd *header = (struct ublksrv_ctrl_cmd *)cmd->cmd;
+>> +	struct ublk_device *ub;
+>> +	int ret = -EINVAL;
+>> +	int i;
+>> +
+>> +	ub = ublk_get_device_from_id(header->dev_id);
+>> +	if (!ub)
+>> +		return ret;
+>> +
+>> +	mutex_lock(&ub->mutex);
+>> +	if (!ublk_can_use_recovery(ub))
+>> +		goto out_unlock;
+>> +	/*
+>> +	 * START_RECOVERY is only allowd after:
+>> +	 *
+>> +	 * (1) UB_STATE_OPEN is not set, which means the dying process is exited
+>> +	 *     and related io_uring ctx is freed so file struct of /dev/ublkcX is
+>> +	 *     released.
+>> +	 *
+>> +	 * (2) UBLK_S_DEV_QUIESCED is set, which means the quiesce_work:
+>> +	 *     (a)has quiesced request queue
+>> +	 *     (b)has requeued every inflight rqs whose io_flags is ACTIVE
+>> +	 *     (c)has requeued/aborted every inflight rqs whose io_flags is NOT ACTIVE
+>> +	 *     (d)has completed/camceled all ioucmds owned by ther dying process
+>> +	 */
+>> +	if (test_bit(UB_STATE_OPEN, &ub->state) ||
+>> +			ub->dev_info.state != UBLK_S_DEV_QUIESCED) {
+>> +		ret = -EBUSY;
+>> +		goto out_unlock;
+>> +	}
+>> +	pr_devel("%s: start recovery for dev id %d.\n", __func__, header->dev_id);
+>> +	for (i = 0; i < ub->dev_info.nr_hw_queues; i++)
+>> +		ublk_queue_reinit(ub, ublk_get_queue(ub, i));
+>> +	/* set to NULL, otherwise new ubq_daemon cannot mmap the io_cmd_buf */
+>> +	ub->mm = NULL;
+>> +	ub->nr_queues_ready = 0;
+> 
+> I am wondering why you don't move the above(queue reinit, clearing ub->mm)
+> into ublk_ch_release(), and looks it is more clean to clear this stuff
+> there. Meantime I guess one control command might be enough for user
+> recovery.
 
-	Thanks for your comment.
 
-On Mon, 2022-09-19 at 18:24 +0200, Krzysztof Kozlowski wrote:
-> 'clk_csr'
-'clk_csr' properity is parsed in driver, but it is not documented in
-bingings for now. We will push a patch to describe 'clk_csr' in
-snps,dwmac.yaml file in next version patches.
+OK, START_USER_RECOVERY just does cleanup stuff for a new process and
+ublk_ch_release() does the similar thing since it is always called when chardev
+is released. And our new process must open the chardev after it is released.
 
-BRS
-Jianguo
+So (queue reinit, clearing ub->mm) can be done in ublk_ch_release().
 
+Regards,
+Zhang.
