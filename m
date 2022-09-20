@@ -2,142 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 818EA5BE727
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 15:33:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E14D45BE72D
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 15:34:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230112AbiITNdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 09:33:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44290 "EHLO
+        id S230300AbiITNej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 09:34:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230055AbiITNda (ORCPT
+        with ESMTP id S230142AbiITNef (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 09:33:30 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBC1856B8C;
-        Tue, 20 Sep 2022 06:33:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1663680802; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Tue, 20 Sep 2022 09:34:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BB9CCF5
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 06:34:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663680870;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=1czWZauFxNtX7yu8h4BjguhMKq0iDi8NktR4AukipiQ=;
-        b=n46staB1GBYhjWfq1N9F6myYR2vdoXdTj2V6+MQWPBI+mdAopEqZN5jDHIMi8eDgrZpupY
-        IqqJU+2W6AHKBftMB++SKoiQaIIm/GCh0KR5UVPqlLsnwkPGUk2bXyusyTWACpeFYt7S8D
-        ke9VnSKXTAzjAjKLq1bYFW8HaOBHfN4=
-Date:   Tue, 20 Sep 2022 14:33:13 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: Usefulness of CONFIG_MACH_JZ47*
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mips <linux-mips@vger.kernel.org>,
-        MIPS Creator CI20 Development 
-        <mips-creator-ci20-dev@googlegroups.com>
-Message-Id: <DBGIIR.8W0JWG83D6FE2@crapouillou.net>
-In-Reply-To: <F21B5D44-94D8-4BDB-BB34-9CBFC5F2B891@goldelico.com>
-References: <af10570000d7e103d70bbea590ce8df4f8902b67.1661330532.git.christophe.jaillet@wanadoo.fr>
-        <UC07HR.REF39SO0Y5PG2@crapouillou.net>
-        <CDEACE3D-5433-457B-AF77-E41F39A04CA4@goldelico.com>
-        <H34IIR.IGTU7CQ36OZK3@crapouillou.net>
-        <F21B5D44-94D8-4BDB-BB34-9CBFC5F2B891@goldelico.com>
+        bh=qRfnqkDRjPiW51IVNT2CYsNbJcFu0UYEn+De3QAv12Y=;
+        b=D8hdi3S4vhcu2HcvT5VtkJDVt8IciRJhAOiRNO/BdXsTy5fiNuRhDO+DfGCMWODxtZUAYV
+        92BdxbVGOEW3fX8OLGyO/MGlwiI34Fgt3frNkX6Ust4SNpRTUEKmT6gRBPrAQJfLo53vLz
+        FYiwFKFjVr6UzlfsDK0HmO4BpRLzwgw=
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com
+ [209.85.210.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-470-cqVAJ4Z1NDSRnTVjXKkCAQ-1; Tue, 20 Sep 2022 09:34:28 -0400
+X-MC-Unique: cqVAJ4Z1NDSRnTVjXKkCAQ-1
+Received: by mail-pf1-f197.google.com with SMTP id a3-20020aa795a3000000b0054b94ce7d12so1738793pfk.17
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 06:34:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=qRfnqkDRjPiW51IVNT2CYsNbJcFu0UYEn+De3QAv12Y=;
+        b=a/y+LM3auD4/N6ml8sylFyjBavYCmq3Tea1PPMbxM2AtYZsu1327zeSLIccn/Q/sln
+         JSAnSoO9fs1ZhmwCZD8k3VXo4YqZKhrhuM/exB+7LQ69pH9OpuaCbY9qCjkupvPZsbkG
+         j4S/nLZG4jd4rB2oFTV/cXkw1QsmVJ0dK4WpT1iLIBpWpvejUtqmdDaxC5FyS2E48zLg
+         o425l6UQNOulqlbrS8OLGYB1BuiMRzNTHwKoaA0ekXD43Kxc6Rt1SXUgnGJPhSSZcrjb
+         Q1gte9cyrUPkv66FTNxQUgeqeNX4ldgYQrDkBemjhHtU3qHu8Ek+TTlF0dmup8U+Nh1L
+         9Hyw==
+X-Gm-Message-State: ACrzQf1dDjx5cfqce1FxPbN2BaiIkigsTRLl5GZdbeBs7y26YZvyw9X7
+        ZfnZAF7RO6Tm08T3NiBo0IE9mgFdDiylTZrojGy812nMilM4vpmY6yimPsHf6iQXQPFJWYNZCr5
+        u7wyL2r0gBEDuDXUn+qAyGyPVqSYs2hkML3E2ncb+
+X-Received: by 2002:a62:170b:0:b0:53b:93dc:966b with SMTP id 11-20020a62170b000000b0053b93dc966bmr24215336pfx.29.1663680867898;
+        Tue, 20 Sep 2022 06:34:27 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4I2IHbtf+VWtaQDWpdFJU7QPz9b7nLewLG7wC2Kp914b2qQx/FgrcYfx3HEOvG9rrO71Az0D2Tpje4Knoijak=
+X-Received: by 2002:a62:170b:0:b0:53b:93dc:966b with SMTP id
+ 11-20020a62170b000000b0053b93dc966bmr24215316pfx.29.1663680867659; Tue, 20
+ Sep 2022 06:34:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220902082552.2433744-1-marcus.folkesson@gmail.com>
+In-Reply-To: <20220902082552.2433744-1-marcus.folkesson@gmail.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Tue, 20 Sep 2022 15:34:15 +0200
+Message-ID: <CAO-hwJLOcFkts2wuMvr79w81XENEb9XyAXESciOgUiqSwG2pBw@mail.gmail.com>
+Subject: Re: [PATCH v2 0/1] VRC-2 Car Controller
+To:     Marcus Folkesson <marcus.folkesson@gmail.com>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Sep 2, 2022 at 10:20 AM Marcus Folkesson
+<marcus.folkesson@gmail.com> wrote:
+>
+> Hi,
+>
+> The device creates two USB endpoints where on of those represent the X/Y
+> axis as 16 buttons which is not.. quite right.
+> So get rid of that endpoint.
+>
+> Also fix the report descriptor for the other endpoint.
+>
+> Output from hid-recorder:
+> #  X:     32 | Y:   1001 | #
+> E: 000105.808008 7 20 00 e9 03 00 00 00
+>
+> Link to previous discussion:
+> https://lore.kernel.org/all/CAO-hwJL-3vAzywjeUsopsRSJX6j-maC5R75ekxZg-W_oKDqYYw@mail.gmail.com/
+>
+>
+> v2:
+> - Remove .remove
+> - Change help text in Kconfig
+> - Remove redundant check for USB endpoint in vrc2_report_fixup
+>
+> Marcus Folkesson (1):
+>   HID: Add driver for VRC-2 Car Controller
+>
+>  MAINTAINERS            |  6 +++
+>  drivers/hid/Kconfig    | 10 +++++
+>  drivers/hid/Makefile   |  1 +
+>  drivers/hid/hid-vrc2.c | 91 ++++++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 108 insertions(+)
+>  create mode 100644 drivers/hid/hid-vrc2.c
+>
 
+Applied to for-6.1/rc-controllers in hid.git
 
-Le mar., sept. 20 2022 at 14:31:38 +0200, H. Nikolaus Schaller=20
-<hns@goldelico.com> a =E9crit :
-> Hi Paul,
->=20
->>  Am 20.09.2022 um 11:09 schrieb Paul Cercueil <paul@crapouillou.net>:
->>=20
->>  Hi Nikolaus,
->>=20
->>  Le mar., sept. 20 2022 at 08:31:30 +0200, H. Nikolaus Schaller=20
->> <hns@goldelico.com> a =E9crit :
->>>  Hi Paul,
->>>  it seems as if there aren't many places left over where the=20
->>> MACH_JZ47* configs are still in use:
->>>  drivers/char/hw_ramdom/Kconfig
->>>  drivers/clk/ingenic/Kconfig
->>>  drivers/gpu/drm/ingenic/Kconfig
->>>  drivers/pinctrl/pinctrl-ingenic.c
->>>  Is it possible to get rid of them and just have=20
->>> CONFIG_MACH_INGENIC_GENERIC?
->>>  This might simplify my defconfig for multiple machines.
->>=20
->>  CONFIG_MIPS_GENERIC_KERNEL=3Dy
->=20
-> This breaks compilation for me, e.g.
->=20
-> arch/mips/mm/cache.c:203:6: error: 'cpu_has_tx39_cache' undeclared=20
-> (first use in this function)
+Thanks a lot for this work!
 
-v6.0-rc does not have 'cpu_has_tx39_cache' anywhere in that file, or in=20
-arch/mips/ for that matter. It was removed in v5.18.
-
-And a v5.17 kernel compiles fine here with these options enabled. So=20
-it's a problem on your side, I guess.
-
->>  CONFIG_BOARD_INGENIC=3Dy
->=20
-> This config option does not exist (at least in v6.0-rc). Probably you=20
-> refer to CONFIG_INGENIC_GENERIC_BOARD.
-
-No, I do not, and yes, it exists.
-
-> As far as I see, this does not choose to build any device tree blob.
->=20
-> I tried some patch to get the .dtb built, but the resulting kernel=20
-> does not show any activity.
->=20
-> If I e.g. switch back from CONFIG_INGENIC_GENERIC_BOARD=3Dy to=20
-> CONFIG_JZ4780_CI20=3Dy the kernel works.
-
-Because in the first case you build a generic kernel, which does not=20
-embed any .dtb, and you are responsible for providing the kernel with=20
-the blob at boot time; while if you build with CONFIG_JZ4780_CI20=3Dy it=20
-embeds the .dtb inside the kernel.
-
-You can embed the .dtb into the generic kernel at compile-time too,=20
-have a look at "Kernel type -> Kernel appended dtb support." Not sure=20
-why you'd want that for a generic kernel, though.
-
->>=20
->>  Then you can support all Ingenic-based boards alongside other MIPS=20
->> boards.
->=20
-> Yes, I know, but why are the MACH_JZ47* not replaced by=20
-> CONFIG_MACH_INGENIC_GENERIC if they are almost unused or completely=20
-> removed?
-
-They *are* used.
-
-> BTW: there are also seems to be some board specific CONFIGs in=20
-> processor specific code (e.g. CONFIG_JZ4780_CI20 in irqchip code).
-
-rgrep CI20 drivers/irqchip/
-
-returns nothing for me.
-
-> So selecting a MACH is not sufficient to get these features.
->=20
-> All this looks a little fragile and incomplete... Maybe if I find=20
-> some time (which is unfortunately quite unlikely) I can propose some=20
-> fixes.
-
-It is not "fragile and incomplete", it works as intended, and it's a=20
-feature I use often.
-
--Paul
-
+Cheers,
+Benjamin
 
