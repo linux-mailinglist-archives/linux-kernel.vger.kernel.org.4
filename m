@@ -2,124 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8F025BD9E5
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 04:12:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BA7F5BD9EC
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 04:16:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbiITCMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 22:12:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41076 "EHLO
+        id S230084AbiITCQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 22:16:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbiITCMw (ORCPT
+        with ESMTP id S229596AbiITCQo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 22:12:52 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED5EF57541;
-        Mon, 19 Sep 2022 19:12:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663639971; x=1695175971;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WwkSfOxPmAZwYaiBBQ8ZxTjUKezOhW2aAc04ysU8N1I=;
-  b=et/ZOdr1e+WpNUtc7THE30/1Eoiw7ZL8qY8mHC3Ub+F3bPP9XQ/2f/GG
-   6ClKfRsEtaDPZmaOxD9E93QU+dk5cB2uCl66vXZTQl6GWqfds6xyju+Nw
-   q+K8d+8Ah+ERuDj/cEIpBtY+dv/1vLCqHn9+Dki/4JCyMgYLq4bGfO/6e
-   Mg68286zMyyc/h7C8yOsIAyjd01RPY7Kjg1b16OVeRgv9eO1kZpC29w7a
-   IR9qkINNaRor57KP5dqzl4B2rgcg9RowhSv4fj6syx8gdj5MfWLIBFkDO
-   /zwmofgOT8BO4zRBxokY/M9+Xb1FeYOi1NBBbjDPGkmvUREYoKmmnyvWh
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="282600238"
-X-IronPort-AV: E=Sophos;i="5.93,329,1654585200"; 
-   d="scan'208";a="282600238"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 19:12:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,329,1654585200"; 
-   d="scan'208";a="569890529"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 19 Sep 2022 19:12:48 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oaSkh-0002Ob-1O;
-        Tue, 20 Sep 2022 02:12:47 +0000
-Date:   Tue, 20 Sep 2022 10:12:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     tumic@gpxsee.org, Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>, Michal Simek <monstr@monstr.eu>
-Cc:     kbuild-all@lists.01.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-i2c@vger.kernel.org,
-        Martin =?utf-8?B?VMWvbWE=?= <martin.tuma@digiteqautomotive.com>
-Subject: Re: [PATCH v2 2/3] Added Xilinx XDMA IP core driver
-Message-ID: <202209201009.KI4tLr7u-lkp@intel.com>
-References: <20220919185556.5215-3-tumic@gpxsee.org>
+        Mon, 19 Sep 2022 22:16:44 -0400
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93AF036DC1;
+        Mon, 19 Sep 2022 19:16:42 -0700 (PDT)
+Received: by mail-il1-x133.google.com with SMTP id a14so696435ild.0;
+        Mon, 19 Sep 2022 19:16:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=uhElhL1iGj7D7c7p5uNqiCIgPSuLaW+aX2botzGI+o8=;
+        b=qSl4iV/SedCK1cwzqsQNrcyK8zslOHREIr/BTbO0Sz+kFmmyTNjHEkBLX5et8IMnot
+         o0oqJGOgLTewou5Wwf92oR3jq2Vjd/9mwEL/UUI7XJpmR81ttjqe3K6qXPNqpf9/co8X
+         Qz+VSYw+Z7vpAkdXgQzmjcQaC/oJWtqx6inQetLYKH+gYFZMsl2srf6ejT+jtd12IsrB
+         hoIuIVEBYaYf6e/s6WDcBIAVi5SSa1okcpxCY0yZULHbpsF6sLbiKEZ5D6OdbjlNKe0i
+         meIGzRRp8WTvo/mEmB++NngoLF3tE9Pu08yQ/fMbuBYvKQ+yfwTtAtwWWAg/ZzdFm1t9
+         jOqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=uhElhL1iGj7D7c7p5uNqiCIgPSuLaW+aX2botzGI+o8=;
+        b=mr21tiOUGd6DX2WjzpU9WFXHdXUP7/hJ5DqsZKucGwE/XrI79PD04AshV1qX8hwrW+
+         ro9HoHoj+IAHdJkGTm58FHph68PXlAOUf371ae8xkVi5dAosAjPsnQzUK9PhOfRvrp+G
+         k+r6ZLdMLcwxQGySCVrlOQfbxhCUmi6c7UdHokfV3Y5FszLtYwklpBzu2PRmA+rOE9jO
+         Q5XenALwiansa4Grier7md4VLReenHxdkIPsCTy6mZkK6gW5ZJ/1Jx1zrzlHkcOKHuvM
+         SVcWL8ccUp5d2CkbMqiisEWS5Ib4Sy3BS1kLHYLD8NGMpkL7Qy2roereYMMQUb+JuQYV
+         vIOA==
+X-Gm-Message-State: ACrzQf1NZnKkuRchjYuGjMPGo8Xgrn1FT/FGERiUFwLUfV13STuOhukB
+        oSQo5Yk83SixkHa1MaZB/IlXLu+rnfg=
+X-Google-Smtp-Source: AMsMyM5Srq6rEgrYm95RYIywOZiVe+PuBXT6IJMOcybpBatQjWV+Uni0nYNdj/+0HISlbHEsSzc6iQ==
+X-Received: by 2002:a05:6e02:b4c:b0:2f1:e54d:9870 with SMTP id f12-20020a056e020b4c00b002f1e54d9870mr8544867ilu.214.1663640201733;
+        Mon, 19 Sep 2022 19:16:41 -0700 (PDT)
+Received: from localhost ([2607:fea8:a2e2:2d00::58d4])
+        by smtp.gmail.com with UTF8SMTPSA id j184-20020a0263c1000000b00346a98b0a76sm141422jac.77.2022.09.19.19.16.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Sep 2022 19:16:41 -0700 (PDT)
+From:   Richard Acayan <mailingradian@gmail.com>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Richard Acayan <mailingradian@gmail.com>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+Subject: [PATCH v3 0/3] SDM670 Pin Control Driver
+Date:   Mon, 19 Sep 2022 22:16:33 -0400
+Message-Id: <20220920021636.1634-1-mailingradian@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220919185556.5215-3-tumic@gpxsee.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Changes since v2:
+ - remove quotes from pinctrl.yaml# in dt-bindings
+ - constrain gpio-reserved-ranges to 1-76 items (includes ufs_reset)
+ - indentation in dt-bindings example
+ - cite downstream kernel source
+ - remove MODULE_AUTHOR (most imported pinctrl drivers don't have this)
 
-Thank you for the patch! Perhaps something to improve:
+Changes since v1:
+ - add a field in msm_pinctrl_soc_data to accomodate the needs of the
+   driver and device dts
+ - apply changes made to existing tlmm dt documentation
+ - add reserved gpios array
+ - rename device tree compat string to qcom,sdm670-tlmm
+ - remove dependency on ACPI
+ - move MODULE_DEVICE_TABLE macro call up
+ - add missing pins (fixes most of the debugfs problems)
+ - move qup0_pins down
+ - add whitespace between UFS_RESET macro and pins array
 
-[auto build test WARNING on vkoul-dmaengine/next]
-[also build test WARNING on linus/master v6.0-rc6 next-20220919]
-[cannot apply to media-tree/master xilinx-xlnx/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+This patch series adds the driver for the Qualcomm Snapdragon 670 TLMM
+(Top-Level Mode Multiplexer) and introduces a new field so that SDM670-
+related device trees can reserve their own gpios.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/tumic-gpxsee-org/Digiteq-Automotive-MGB4-driver/20220920-021718
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git next
-config: s390-allyesconfig (https://download.01.org/0day-ci/archive/20220920/202209201009.KI4tLr7u-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/ad840c5e2b9ee9a8b1ceb4879fe7f82edcc767c5
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review tumic-gpxsee-org/Digiteq-Automotive-MGB4-driver/20220920-021718
-        git checkout ad840c5e2b9ee9a8b1ceb4879fe7f82edcc767c5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/dma/xilinx/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   drivers/dma/xilinx/xilinx_xdma.c: In function 'read_interrupts':
->> drivers/dma/xilinx/xilinx_xdma.c:409:17: warning: variable 'hi' set but not used [-Wunused-but-set-variable]
-     409 |         u32 lo, hi;
-         |                 ^~
->> drivers/dma/xilinx/xilinx_xdma.c:409:13: warning: variable 'lo' set but not used [-Wunused-but-set-variable]
-     409 |         u32 lo, hi;
-         |             ^~
+ .../bindings/pinctrl/qcom,sdm670-tlmm.yaml         |  138 ++
+ drivers/pinctrl/qcom/Kconfig                       |    9 +
+ drivers/pinctrl/qcom/Makefile                      |    1 +
+ drivers/pinctrl/qcom/pinctrl-msm.c                 |    3 +-
+ drivers/pinctrl/qcom/pinctrl-msm.h                 |    4 +
+ drivers/pinctrl/qcom/pinctrl-sdm670.c              | 1373 ++++++++++++++++++++
+ 6 files changed, 1527 insertions(+), 1 deletion(-)
 
 
-vim +/hi +409 drivers/dma/xilinx/xilinx_xdma.c
-
-   404	
-   405	static void read_interrupts(struct xdma_dev *xdev)
-   406	{
-   407		struct interrupt_regs *reg =
-   408			(struct interrupt_regs *)(xdev->config_bar + XDMA_OFS_INT_CTRL);
- > 409		u32 lo, hi;
-   410	
-   411		hi = ioread32(&reg->user_int_request);
-   412		lo = ioread32(&reg->channel_int_request);
-   413	}
-   414	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
