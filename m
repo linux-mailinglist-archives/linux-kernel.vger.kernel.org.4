@@ -2,126 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F08355BE003
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 10:29:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8279C5BE02A
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 10:33:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230267AbiITI3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 04:29:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52832 "EHLO
+        id S229561AbiITIdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 04:33:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231524AbiITI2g (ORCPT
+        with ESMTP id S230477AbiITIco (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 04:28:36 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64303656D
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 01:27:18 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id o2so2498693lfc.10
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 01:27:18 -0700 (PDT)
+        Tue, 20 Sep 2022 04:32:44 -0400
+Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02E2B1277E;
+        Tue, 20 Sep 2022 01:32:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=rkPuKjWB8t4FYJYHNtyFAmh2TFPD2Tl5mYJFMngelcQ=;
-        b=dQ/DjRpyzJOPnWU9+cHPp5K1+NyJCZhOur3fr22c9+x8TZvCIw3Wcm0Ssp0uyu0tu3
-         yDDjrQf/390dPv2OjCBN9ar+Yslw5Vh0fVAQX8AlXvaY25n5382qD7bJM1e0241bf31K
-         t/RWa92e+NIVi73NA2XJEQ9gC5SHHY6OG3PNjNkBoaEQRWlqWeS2vfA0PLbAB5wMazJB
-         fHSWi3l/1HDzrc2oNVcqu+Sm13Pe3GWuxmuoytOGa0ws99C836uILRrzbUixZuOvSv/r
-         ls+HmEav2ZSNabJ8ZLCTc+r9snw3TKsTKsXXK3TDBlrt0paJ/WLA95C0Sj8dn6pC7OFx
-         a2uA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=rkPuKjWB8t4FYJYHNtyFAmh2TFPD2Tl5mYJFMngelcQ=;
-        b=dejuFfVVmIUljohCOkG3H1dyUaNKhvBjhRm6xJdaskGpMSVmx2u0MY15mDrktSGmHP
-         EAGhl7/ZYmesOJH0znkslJY+yaPm4FdYTxHQDSVchemdHjwqU2V5Fih5A8UOKrvdCUpW
-         g+gcFyFlI9E83tvmnnq2VUedp7XkLWbqqqZmHYJvmlshqyupEAKZUmu7tfcWjBkDyAUq
-         39s2a5cLFChfWyw8PYRuCIrslxpXf1KPmaPjYJI7xdc/aEWZ5guGcV3rXnc5/5yXlyMn
-         Kphx2uhSoD69sJ5BiK2iriuoKsncG3b7boH2NPxTPePBaAh5S09fEpiXKhhgqBzwbi32
-         +bRw==
-X-Gm-Message-State: ACrzQf0uuyikpr51AQ5rT+iIMQnXIcbJfRVhfoy/9o2Ur9vIVJsLYN7i
-        RzCYsVvMbev4/s3CYBSa0LBLeA==
-X-Google-Smtp-Source: AMsMyM4BFghKOOucFsHQ4S+QvuMdbzcePIG13Xz2ThhzLq10ft0xMOyHNHZhr6ZzPzppj24LyC566A==
-X-Received: by 2002:a05:6512:261e:b0:49e:e7dd:8912 with SMTP id bt30-20020a056512261e00b0049ee7dd8912mr7259070lfb.360.1663662436750;
-        Tue, 20 Sep 2022 01:27:16 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id n22-20020a05651203f600b004978e51b691sm190279lfq.266.2022.09.20.01.27.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Sep 2022 01:27:15 -0700 (PDT)
-Message-ID: <9d702646-3517-be57-dbdd-c5e5d803dd4a@linaro.org>
-Date:   Tue, 20 Sep 2022 10:27:14 +0200
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1663662763; x=1695198763;
+  h=message-id:date:mime-version:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:subject;
+  bh=VMI90VsaFAznWdudY3c2Y8bpe/V3g+agyL0jxa8IuF4=;
+  b=pmmZZwlFGh21UmGmFUZHaiH/UOZTbefz5tEOU1KumvlazQnzlpoZJscY
+   4GduEfHqpEn7ctHEluZ42lAsCr+bNR6hLiu5xrzacL9UGWZLbAQP+J++8
+   VofGhLLdIAO+8Sm1ZI13Z1jQ8ofrAEAL/7sIWRXNPx5W0lWYzwtRNg98J
+   4=;
+X-IronPort-AV: E=Sophos;i="5.93,330,1654560000"; 
+   d="scan'208";a="1056013639"
+Subject: Re: [PATCH] libfs: fix negative value support in simple_attr_write()
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1d-54a073b7.us-east-1.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-9103.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 08:27:36 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1d-54a073b7.us-east-1.amazon.com (Postfix) with ESMTPS id 3C907A287C;
+        Tue, 20 Sep 2022 08:27:35 +0000 (UTC)
+Received: from EX19D013UWB003.ant.amazon.com (10.13.138.111) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Tue, 20 Sep 2022 08:27:33 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
+ EX19D013UWB003.ant.amazon.com (10.13.138.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
+ Tue, 20 Sep 2022 08:27:33 +0000
+Received: from [192.168.162.64] (10.85.143.179) by mail-relay.amazon.com
+ (10.43.161.249) with Microsoft SMTP Server id 15.0.1497.38 via Frontend
+ Transport; Tue, 20 Sep 2022 08:27:28 +0000
+Message-ID: <f75a7d97-58cb-9136-093b-bf5af48da99a@amazon.com>
+Date:   Tue, 20 Sep 2022 11:27:25 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH] ARM: dts: aspeed: greatlakes: Add Facebook greatlakes
- (AST2600) BMC
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     <viro@zeniv.linux.org.uk>, <yangyicong@hisilicon.com>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <andriy.shevchenko@intel.com>, <hhhawa@amazon.com>,
+        <jonnyc@amazon.com>, Akinobu Mita <akinobu.mita@gmail.com>,
+        "Farber, Eliav" <farbere@amazon.com>
+References: <20220918135036.33595-1-farbere@amazon.com>
+ <20220919142413.c294de0777dcac8abe2d2f71@linux-foundation.org>
 Content-Language: en-US
-To:     Bonnie Lo/WYHQ/Wiwynn <Bonnie_Lo@wiwynn.com>
-Cc:     "patrick@stwcx.xyz" <patrick@stwcx.xyz>,
-        "garnermic@fb.com" <garnermic@fb.com>,
-        Delphine Chiu/WYHQ/Wiwynn <DELPHINE_CHIU@wiwynn.com>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        "soc@kernel.org" <soc@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>
-References: <20220920023042.19244-1-Bonnie_Lo@Wiwynn.com>
- <1b03d24e-7bd3-f912-b59b-f2199770e9d8@linaro.org>
- <HK0PR04MB3105362597B1E8CBF897D0E3F84C9@HK0PR04MB3105.apcprd04.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <HK0PR04MB3105362597B1E8CBF897D0E3F84C9@HK0PR04MB3105.apcprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
+From:   "Farber, Eliav" <farbere@amazon.com>
+In-Reply-To: <20220919142413.c294de0777dcac8abe2d2f71@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-14.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/09/2022 09:28, Bonnie Lo/WYHQ/Wiwynn wrote:
-> Hi Krzysztof,
-> 
-> I am sorry.
-> I have revise the DTS according to your comment and revise the subject.
+On 9/20/2022 12:24 AM, Andrew Morton wrote:
+> On Sun, 18 Sep 2022 13:50:36 +0000 Eliav Farber <farbere@amazon.com> 
+> wrote:
+>
+>> After commit 488dac0c9237 ("libfs: fix error cast of negative value in
+>> simple_attr_write()"), a user trying set a negative value will get a
+>> '-EINVAL' error, because simple_attr_write() was modified to use
+>> kstrtoull() which can handle only unsigned values, instead of
+>> simple_strtoll().
+>>
+>> This breaks all the places using DEFINE_DEBUGFS_ATTRIBUTE() with format
+>> of a signed integer.
+>>
+>> The u64 value which attr->set() receives is not an issue for negative
+>> numbers.
+>> The %lld and %llu in any case are for 64-bit value. Representing it as
+>> unsigned simplifies the generic code, but it doesn't mean we can't keep
+>> their signed value if we know that.
+>>
+>> This change basically reverts the mentioned commit, but uses kstrtoll()
+>> instead of simple_strtoll() which is obsolete.
+>>
+>
+> https://lkml.kernel.org/r/20220919172418.45257-1-akinobu.mita@gmail.com
+> addresses the same thing.
+>
+> Should the final version of this fix be backported into -stable trees?
 
-You send again the same patch. If you intended to send a version 2,
-please indicate it. Git format-patch can help you. Our process also
-explains it.
 
-https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst
+I think that my patch can be dropped in favor of Akinobu's patch.
 
-> I would like to update the patch to you, so I use "git send email" again.
-> It seems like it doesn't reply the original mail but resubmit the patch.
-> Could you guide me how I can reply the original mail thread and update the patch but resubmit it.
+--
+Regards, Eliav
 
-Resubmit same patch is not correct. You just did it. I expect new
-versions of your patch. Each new version should be appropriately marked
-with version number and changelog. Just take a look at other patches in
-the list.
-
-https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst
-
-> 
-> Thanks,
-> Bonnie
-
-Do not top post.
-
-
-> This email (and any attachments) contains proprietary or confidential information and is for the sole use of its intended recipient. Any unauthorized review, use, copying or distribution of this email or the content of this email is strictly prohibited. If you are not the intended recipient, please notify the sender and delete this email immediately.
-
-I notify you that I am going to remove the email immediately.
-
-Best regards,
-Krzysztof
