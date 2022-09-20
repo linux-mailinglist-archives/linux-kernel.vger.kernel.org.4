@@ -2,134 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C9325BD8CC
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 02:31:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 713765BD8CD
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 02:33:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229624AbiITAba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 20:31:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35326 "EHLO
+        id S229733AbiITAcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 20:32:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbiITAb0 (ORCPT
+        with ESMTP id S229673AbiITAcx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 20:31:26 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174B551A2D;
-        Mon, 19 Sep 2022 17:31:26 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id y2so735716qtv.5;
-        Mon, 19 Sep 2022 17:31:26 -0700 (PDT)
+        Mon, 19 Sep 2022 20:32:53 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC3652454
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 17:32:52 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id c24so810721plo.3
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 17:32:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=zR2Q4QyS+Tbvo76GqnO7ltxu1VimNHBe8fxFKg919ww=;
-        b=LKpGlipgDxDA1WUXqy9+tksIPJRTp1SvWisllhpCivdFLoApqRAqFK0f6aw84ymcNr
-         2vTkBfKGI5r2RVD+FXF6elJRg6Isz8aKL4EGvWW0822JTYKHh7Nk8m8KbWZjVmJBX195
-         9eK5A4QHjBhbhi5cFIUXvU3A1EvkKuAsyIvs6bqwoVmp4NwfTXq6B3lOuCGRLRTnf8Hq
-         Qmhy7LLbouKt6aMoQGOH2ZP9R47x7vXrDzIn6rf4IP7dCiySMgMHuOkDr0DTOLEMVhY4
-         oZcMD8rnKardQOXzankIryIo8jGY8WdXGlXpNw5fh6QEsWj+9T6704IMmulGlbJ5e/qE
-         KrCQ==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=lzSlCQ5sS4qil99odoJMLVUL5/2+gqYaJrux/DqPc6U=;
+        b=qGjH6NMOKBTCVBUGx+d/w8SQADzCr9jQk7AgXKAM7xJQENzeqOm7GWXyUt4R1s8jJZ
+         TISK+ck/YNm7d3Dr3tY9Vq2gK1hM3/k9RnyW2D0s/B5Layx8IjnkwRjt3CJd14RwQEQ7
+         yLdLjEj3pGjkAAlhzzgazIhpr9iboyHn92CgXI3F0tfCU9ouBmoVfEgh55Y6H7z4u3MC
+         1Tgmf++FpZtIoJc4eT2tJcn98n1XEOEd7duDv2ux5GjOb0BsmWl2svvMY6FoCKadgxHW
+         S8KUawuBuZ4Dlu46m31statcPB3rj1d4v1WpqAJvdTqQOLYYuGl4ixLRfwVENl8flZLQ
+         t/yw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=zR2Q4QyS+Tbvo76GqnO7ltxu1VimNHBe8fxFKg919ww=;
-        b=KRHsyEItE9nVRME8iNAA0rtkm3HpgCgks8dCeZnSBMm6D7zIIcoz3Sy7NfEKuZk+3v
-         QK7GVa7zobxPjNG+jOGYqHCtyoc7vbFHymMXUaxLzTKywIMcvyFCZOfOsvthaVYPfyKu
-         BDZ29eL+X0Mqm6CYPlev8Qyuag4Smu3jDUQsF2y/KSDhTc7Lsztc1UscdjAuJM53OqaO
-         ij5dCE7DGE9B5Gd5r4onk1OHtnTiaSxxv1pM0e3pO8NixqPynsknQZ+T1JgG+BXRfsb6
-         T3XCIecQ3fk+IJfEAxRGsobTqvYw8M0B+3IG8uRDqlJiTmgNZ2enUeiFwLU3Do9STNuf
-         3qBA==
-X-Gm-Message-State: ACrzQf3I8ensmEWzrINiJHgMXOAoQ1hRs2lcZksAyCUAyZkQ+pBUr7Eq
-        ziMa4ze7mKcOinEaYUqJSA0=
-X-Google-Smtp-Source: AMsMyM5cHFbPeIkstTYcLMvF34ln71+chVB5pyQuT174Kvk4jOcjte1o+r/pGB2SHLVbfj3SfVuF6g==
-X-Received: by 2002:a05:622a:454:b0:35c:e1a7:5348 with SMTP id o20-20020a05622a045400b0035ce1a75348mr8980919qtx.604.1663633885205;
-        Mon, 19 Sep 2022 17:31:25 -0700 (PDT)
-Received: from [192.168.1.201] (pool-173-73-95-180.washdc.fios.verizon.net. [173.73.95.180])
-        by smtp.gmail.com with ESMTPSA id v4-20020a05620a090400b006bbf85cad0fsm13266252qkv.20.2022.09.19.17.31.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Sep 2022 17:31:24 -0700 (PDT)
-Message-ID: <ab2ce38a-313b-7e87-aaf5-cfc2b6e0cb28@gmail.com>
-Date:   Mon, 19 Sep 2022 20:31:23 -0400
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=lzSlCQ5sS4qil99odoJMLVUL5/2+gqYaJrux/DqPc6U=;
+        b=Gxe8jky6HIc14iex9QqaTxvsnqSRe6iKbweGOi1vxGv/M5bkcAgRp7gHqJoeNvyUrd
+         8PS1QX1nVzPo0+i5syNC7xQo1DfpGHIvllmEH7fyjUlHw8HI4NMc7W+ih7427K+KgGaq
+         LjYPMpK3ME0iXkOzYzkrMjsbZ8uN9NhHYfLrR9fVI021KWz99AmFc6BdYPfoZvNVfQBM
+         A/rIqqXcj2vK3J3rMLi17bfIOfxlTyUeklc+csjWCNbJHgjKTNCeEU3n2jREI43qmCX+
+         zscOhiZVTBQuX9FO7M1wCoQyczeEMq7Zdjh02qWniMxha11P+njsDm1o07dzjhwSmndm
+         AbQw==
+X-Gm-Message-State: ACrzQf2YhH4tJNzuM71LcuEn0G0ANIHyaC9gnW2pTkLLDfb/Dvt+MOah
+        wk0LwBYZAZPUcTlZuRo19rNOsA==
+X-Google-Smtp-Source: AMsMyM7AfhhUtmouHolPvCpJICIKqFteZ5daTBEaqzUS+NqDW7767dXqE7ulVe+y9lII9n9LWIqYvA==
+X-Received: by 2002:a17:90a:4688:b0:1ef:a94:7048 with SMTP id z8-20020a17090a468800b001ef0a947048mr925310pjf.244.1663633971355;
+        Mon, 19 Sep 2022 17:32:51 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id y1-20020aa79421000000b00537daf64e8esm21008612pfo.188.2022.09.19.17.32.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Sep 2022 17:32:50 -0700 (PDT)
+Date:   Tue, 20 Sep 2022 00:32:47 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        mlevitsk@redhat.com, vkuznets@redhat.com
+Subject: Re: [PATCH v2 9/9] KVM: x86: never write to memory from
+ kvm_vcpu_check_block
+Message-ID: <YykKLx+EMufA+uuZ@google.com>
+References: <20220811210605.402337-1-pbonzini@redhat.com>
+ <20220811210605.402337-10-pbonzini@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] net: sunhme: Fix packet reception for len <
- RX_COPY_THRESHOLD
-Content-Language: en-US
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        Zheyu Ma <zheyuma97@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Rolf Eike Beer <eike-kernel@sf-tec.de>,
-        Nick Bowler <nbowler@draconx.ca>
-References: <20220918215534.1529108-1-seanga2@gmail.com>
- <YyjTa1qtt7kPqEaZ@lunn.ch>
-From:   Sean Anderson <seanga2@gmail.com>
-In-Reply-To: <YyjTa1qtt7kPqEaZ@lunn.ch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220811210605.402337-10-pbonzini@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/19/22 16:39, Andrew Lunn wrote:
-> On Sun, Sep 18, 2022 at 05:55:34PM -0400, Sean Anderson wrote:
->> There is a separate receive path for small packets (under 256 bytes).
->> Instead of allocating a new dma-capable skb to be used for the next packet,
->> this path allocates a skb and copies the data into it (reusing the existing
->> sbk for the next packet). There are two bytes of junk data at the beginning
->> of every packet. I believe these are inserted in order to allow aligned
->> DMA and IP headers. We skip over them using skb_reserve. Before copying
->> over the data, we must use a barrier to ensure we see the whole packet. The
->> current code only synchronizes len bytes, starting from the beginning of
->> the packet, including the junk bytes. However, this leaves off the final
->> two bytes in the packet. Synchronize the whole packet.
->>
->> To reproduce this problem, ping a HME with a payload size between 17 and 214
->>
->> 	$ ping -s 17 <hme_address>
->>
->> which will complain rather loudly about the data mismatch. Small packets
->> (below 60 bytes on the wire) do not have this issue. I suspect this is
->> related to the padding added to increase the minimum packet size.
->>
->> Signed-off-by: Sean Anderson <seanga2@gmail.com>
+On Thu, Aug 11, 2022, Paolo Bonzini wrote:
+> kvm_vcpu_check_block() is called while not in TASK_RUNNING, and therefore
+> it cannot sleep.  Writing to guest memory is therefore forbidden, but it
+> can happen on AMD processors if kvm_check_nested_events() causes a vmexit.
 > 
-> Hi Sean
+> Fortunately, all events that are caught by kvm_check_nested_events() are
+> also recognized by kvm_vcpu_has_events() through vendor callbacks such as
+> kvm_x86_interrupt_allowed() or kvm_x86_ops.nested_ops->has_events(), so
+> remove the call and postpone the actual processing to vcpu_block().
 > 
->> Patch-prefix: net
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
+>  arch/x86/kvm/x86.c | 14 +++++++++++---
+>  1 file changed, 11 insertions(+), 3 deletions(-)
 > 
-> This should be in the Subject of the email. Various tools look for the
-> netdev tree there. Please try to remember that for future patches.
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 5e9358ea112b..9226fd536783 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -10639,6 +10639,17 @@ static inline int vcpu_block(struct kvm_vcpu *vcpu)
+>  			return 1;
+>  	}
+>  
+> +	if (is_guest_mode(vcpu)) {
+> +		/*
+> +		 * Evaluate nested events before exiting the halted state.
+> +		 * This allows the halt state to be recorded properly in
+> +		 * the VMCS12's activity state field (AMD does not have
+> +		 * a similar field and a vmexit always causes a spurious
+> +		 * wakeup from HLT).
+> +		 */
+> +		kvm_check_nested_events(vcpu);
+> +	}
+> +
+>  	if (kvm_apic_accept_events(vcpu) < 0)
+>  		return 0;
 
-Sorry, it should have been "Series-postfix".
+Oof, this ends up yielding a really confusing code sequence.  kvm_apic_accept_events()
+has its own kvm_check_nested_events(), but has code to snapshot pending INITs/SIPIs
+_before_ the call.  Unpacked, KVM ends up with:
 
-> Please could you add a Fixes: tag indicating when the problem was
-> introduced. Its O.K. if that was when the driver was added. It just
-> helps getting the patch back ported to older stable kernels.
+	if (is_guest_mode(vcpu))
+		kvm_check_nested_events(vcpu);
 
-Well, the driver was added before git was started...
+	/*
+	 * Read pending events before calling the check_events
+	 * callback.
+	 */
+	pe = smp_load_acquire(&apic->pending_events);
+	if (!pe)
+		return 0;
 
-I suppose I could blame 1da177e4c3f4 ("Linux-2.6.12-rc2"), but maybe I
-should just CC the stable list?
+	if (is_guest_mode(vcpu)) {
+		r = kvm_check_nested_events(vcpu);
+		if (r < 0)
+			return r == -EBUSY ? 0 : r;
+	}
 
-> I think patchwork allows you to just reply to your post, and it will
-> automagically append the Fixes: tag when the Maintainer actually
-> applies the patch.
-> 
-> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-> 
->      Andrew
+	if (kvm_vcpu_latch_init(vcpu)) {
+		WARN_ON_ONCE(vcpu->arch.mp_state == KVM_MP_STATE_INIT_RECEIVED);
+		if (test_bit(KVM_APIC_SIPI, &pe))
+			clear_bit(KVM_APIC_SIPI, &apic->pending_events);
+		return 0;
+	}
 
---Sean
+	if (test_bit(KVM_APIC_INIT, &pe)) {
+		clear_bit(KVM_APIC_INIT, &apic->pending_events);
+		kvm_vcpu_reset(vcpu, true);
+		if (kvm_vcpu_is_bsp(apic->vcpu))
+			vcpu->arch.mp_state = KVM_MP_STATE_RUNNABLE;
+		else
+			vcpu->arch.mp_state = KVM_MP_STATE_INIT_RECEIVED;
+	}
+	if (test_bit(KVM_APIC_SIPI, &pe)) {
+		clear_bit(KVM_APIC_SIPI, &apic->pending_events);
+		if (vcpu->arch.mp_state == KVM_MP_STATE_INIT_RECEIVED) {
+			/* evaluate pending_events before reading the vector */
+			smp_rmb();
+			sipi_vector = apic->sipi_vector;
+			static_call(kvm_x86_vcpu_deliver_sipi_vector)(vcpu, sipi_vector);
+			vcpu->arch.mp_state = KVM_MP_STATE_RUNNABLE;
+		}
+	}
+
+which on the surface makes this code look broken, e.g. if kvm_check_nested_events()
+_needs_ to be after the pending_events snapshot is taken, why is it safe to add a
+kvm_check_nested_events() call immediately before the snapshot?
+
+In reality, it's just a bunch of noise because the pending events snapshot is
+completely unnecessary and subtly relies on INIT+SIPI being blocked after VM-Exit
+on VMX (and SVM, but it's more important for VMX).
+
+In particular, testing "pe" after VM-Exit is nonsensical.  On VMX, events are consumed
+if they trigger VM-Exit, i.e. processing INIT/SIPI is flat out wrong if the INIT/SIPI
+was the direct cause of VM-Exit.  On SVM, events are left pending, so if any pending
+INIT/SIPI will still be there.
+
+The VMX code works because kvm_vcpu_latch_init(), a.k.a. "is INIT blocked", is
+always true after VM-Exit since INIT is always blocked in VMX root mode.  Ditto for
+the conditional clearing of SIPI; the CPU can't be in wait-for-SIPI immediately
+after VM-Exit and so dropping SIPIs ends up being architecturally ok.
+
+I'll add a patch to drop the snapshot code, assuming I'm not missing something even
+more subtle...
