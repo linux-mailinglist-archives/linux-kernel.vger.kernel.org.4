@@ -2,68 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 240745BE9F9
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 17:20:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8549C5BE9FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 17:21:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231593AbiITPUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 11:20:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39734 "EHLO
+        id S229656AbiITPUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 11:20:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230239AbiITPTz (ORCPT
+        with ESMTP id S231532AbiITPUE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 11:19:55 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0828B4360D;
-        Tue, 20 Sep 2022 08:19:52 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 28KFJXsD006984;
-        Tue, 20 Sep 2022 10:19:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1663687173;
-        bh=yWRsREvNZkF4XLgEBQOs6YrBBDa50eU+ke3+nNz11Lk=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=m9ikZ07djMgr2CMc3ZERc68nOFuGh27y/29xdHrjmIzycwfOSN+Xot8Z+rQh02vVs
-         2H2kfK/dSIEIPTyAU6eXVzXsK/E+2C4Ux36oszjjJxBsWcXZHLL3r9FU3nHcSNkE5D
-         bAa/9lkT/IhS0vxuJASKONPKGO0cOdKV4auiTZ1E=
-Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 28KFJWlK011477
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 20 Sep 2022 10:19:32 -0500
-Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Tue, 20
- Sep 2022 10:19:32 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Tue, 20 Sep 2022 10:19:32 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 28KFJVPI073424;
-        Tue, 20 Sep 2022 10:19:31 -0500
-From:   Rahul T R <r-ravikumar@ti.com>
-To:     <dri-devel@lists.freedesktop.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     <andrzej.hajda@intel.com>, <narmstrong@baylibre.com>,
-        <robert.foss@linaro.org>, <jonas@kwiboo.se>,
-        <jernej.skrabec@gmail.com>, <airlied@linux.ie>, <daniel@ffwll.ch>,
-        <p.zabel@pengutronix.de>, <tomi.valkeinen@ideasonboard.com>,
-        <laurent.pinchart@ideasonboard.com>,
-        <linux-kernel@vger.kernel.org>, <jpawar@cadence.com>,
-        <sjakhade@cadence.com>, <mparab@cadence.com>, <a-bhatia1@ti.com>,
-        <devicetree@vger.kernel.org>, <vigneshr@ti.com>,
-        <lee.jones@linaro.org>, Rahul T R <r-ravikumar@ti.com>
-Subject: [PATCH v7 5/5] drm/bridge: cdns-dsi: Add support for J721E wrapper
-Date:   Tue, 20 Sep 2022 20:49:19 +0530
-Message-ID: <20220920151919.25658-6-r-ravikumar@ti.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220920151919.25658-1-r-ravikumar@ti.com>
-References: <20220920151919.25658-1-r-ravikumar@ti.com>
+        Tue, 20 Sep 2022 11:20:04 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D0F85A8BE
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 08:19:58 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id j24so2907769lja.4
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 08:19:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=rD2Iu80dHLJWJ4+vD+KGwraRNgomTCbTDLJpR3Q5Kx8=;
+        b=W6mbAyLFmXXQcpHH6yLbyJbjO1iHcvldBNOpIAvTGtBbRqvtfM7Wy8glBUrHVjUCbj
+         mSIP6Q9xya0Ea0l73qkbdzeTAJcPdmz7msICv+rrTSeEOvk0yb9S065y3cp0BTZbWmRG
+         OlGxH7KpZxOuxwtaVptMi6jCEn0iGvP59zWToiYyrpdROzHJSLieciJohNIBjMqSb7eb
+         y27aOcr4EyTGXwJTmutAS9EkARj8zxvH1AmAb3FiwwBRbiiofnq17wVCrwB9ZlhrjUqV
+         ke2m5RwdZfW6wwqG0j4zbDe099fTHjsNsFqf436TX036RBIaSucaBm/aEOJ1kIi6g4DF
+         vL0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=rD2Iu80dHLJWJ4+vD+KGwraRNgomTCbTDLJpR3Q5Kx8=;
+        b=DB8bR7mdtayoiepp2tgm3wHSsMslScu8rtgM4/vjE24YYp/uC1GbXBgM6PNCFn+heb
+         fga1/ic4A7/ZveqSa5tCd/SJSrACbK9GgzDCsRFd0KX5+xSydJGMO80RIiw+hZ76s1Cd
+         Tt3//JmmA0oK0eOTP3QoGfwqd8YG7Y+eyEeTexEFwmNjPNCSwfpxTNqLBf+ISauylKHI
+         976C6RVHAmM3R+cVzxSXWdlqg3plhixeIL1Pb8hQmmuydKhm1gXFpZr5TBHcRWLFpzmh
+         bBcRUBr0MtL6/XDfpV2+2c5o/4psYCuOz8WTJcaHBmTG1Wp1eDCgHajWzMbwWsJXQZzA
+         R79w==
+X-Gm-Message-State: ACrzQf2H2nkplDB9CSM0xQHysGC+mYZ8gGFllQUTQDcLjrLHYx0cAJw8
+        Ovj5pHJ+icl/ez9mMBki82TebQ==
+X-Google-Smtp-Source: AMsMyM6Qc/9g0u+WpXt8XCZR3c2BKTCrGSK+rk+9Ww3VlAYIpUy1zJXBTirkcBLxQ4bycaYYCQLv6g==
+X-Received: by 2002:a2e:844e:0:b0:26b:f5ee:b2bb with SMTP id u14-20020a2e844e000000b0026bf5eeb2bbmr7381800ljh.403.1663687196496;
+        Tue, 20 Sep 2022 08:19:56 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id bx11-20020a05651c198b00b0026c15d60ad1sm37998ljb.132.2022.09.20.08.19.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Sep 2022 08:19:56 -0700 (PDT)
+Message-ID: <07c118cb-4daf-8e82-2969-1cff072ec52a@linaro.org>
+Date:   Tue, 20 Sep 2022 17:19:55 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH 2/2] mmc: dw_mmc-pltfm: socfpga: add method to configure
+ clk-phase
+Content-Language: en-US
+To:     Dinh Nguyen <dinguyen@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     jh80.chung@samsung.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220919181309.286611-1-dinguyen@kernel.org>
+ <20220919181309.286611-2-dinguyen@kernel.org>
+ <CAPDyKFoB7Z6kDOBd9rVLXU5yRQK7d5A-ut5CRroepbAfQpuByw@mail.gmail.com>
+ <50c7d35b-f395-6421-1422-56e30a580318@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <50c7d35b-f395-6421-1422-56e30a580318@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,259 +80,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for wrapper settings for DSI bridge on
-j721e. Also set the DPI input to DPI0
+On 20/09/2022 15:24, Dinh Nguyen wrote:
+> 
+> Hi Ulf,
+> 
+> Thanks for the review!
+> 
+> On 9/20/22 07:17, Ulf Hansson wrote:
+>> On Mon, 19 Sept 2022 at 20:13, Dinh Nguyen <dinguyen@kernel.org> wrote:
+>>>
+>>> The clock-phase settings for the SDMMC controller in the SoCFPGA
+>>> Strarix10/Agilex/N5X platforms reside in a register in the System
+>>> Manager. Add a method to access that register through the syscon
+>>> interface.
+>>>
+>>> Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
+>>> ---
+>>>   drivers/mmc/host/dw_mmc-pltfm.c | 68 ++++++++++++++++++++++++++++++++-
+>>>   1 file changed, 67 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/mmc/host/dw_mmc-pltfm.c b/drivers/mmc/host/dw_mmc-pltfm.c
+>>> index 9901208be797..9e3237c18a9d 100644
+>>> --- a/drivers/mmc/host/dw_mmc-pltfm.c
+>>> +++ b/drivers/mmc/host/dw_mmc-pltfm.c
+>>> @@ -17,10 +17,15 @@
+>>>   #include <linux/mmc/host.h>
+>>>   #include <linux/mmc/mmc.h>
+>>>   #include <linux/of.h>
+>>> +#include <linux/mfd/altera-sysmgr.h>
+>>> +#include <linux/regmap.h>
+>>>
+>>>   #include "dw_mmc.h"
+>>>   #include "dw_mmc-pltfm.h"
+>>>
+>>> +#define SYSMGR_SDMMC_CTRL_SET(smplsel, drvsel) \
+>>> +       ((((smplsel) & 0x7) << 4) | (((drvsel) & 0x7) << 0))
+>>> +
+>>>   int dw_mci_pltfm_register(struct platform_device *pdev,
+>>>                            const struct dw_mci_drv_data *drv_data)
+>>>   {
+>>> @@ -62,9 +67,70 @@ const struct dev_pm_ops dw_mci_pltfm_pmops = {
+>>>   };
+>>>   EXPORT_SYMBOL_GPL(dw_mci_pltfm_pmops);
+>>>
+>>> +static int dw_mci_socfpga_priv_init(struct dw_mci *host)
+>>> +{
+>>> +       struct device_node *np = host->dev->of_node;
+>>> +       struct regmap *sys_mgr_base_addr;
+>>> +       u32 clk_phase[2] = {0}, reg_offset;
+>>> +       int i, rc, hs_timing;
+>>> +
+>>> +       rc = of_property_read_variable_u32_array(np, "clk-phase-sd-hs", &clk_phase[0], 2, 0);
+>>
+>> This needs to be documented through updated DT bindings.
+> 
+> Ok, but it looks like clk-phase-sd-hs is already documented in 
+> Documentation/devicetree/bindings/mmc/mmc-controller.yaml
 
-Signed-off-by: Rahul T R <r-ravikumar@ti.com>
----
- drivers/gpu/drm/bridge/cadence/Kconfig        | 10 ++++
- drivers/gpu/drm/bridge/cadence/Makefile       |  1 +
- .../gpu/drm/bridge/cadence/cdns-dsi-core.c    | 37 +++++++++++++-
- .../gpu/drm/bridge/cadence/cdns-dsi-core.h    | 13 +++++
- .../gpu/drm/bridge/cadence/cdns-dsi-j721e.c   | 51 +++++++++++++++++++
- .../gpu/drm/bridge/cadence/cdns-dsi-j721e.h   | 18 +++++++
- 6 files changed, 129 insertions(+), 1 deletion(-)
- create mode 100644 drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.c
- create mode 100644 drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.h
+Not in next-20220919.
 
-diff --git a/drivers/gpu/drm/bridge/cadence/Kconfig b/drivers/gpu/drm/bridge/cadence/Kconfig
-index 8fbb46c66094..663a02d96420 100644
---- a/drivers/gpu/drm/bridge/cadence/Kconfig
-+++ b/drivers/gpu/drm/bridge/cadence/Kconfig
-@@ -36,3 +36,13 @@ config DRM_CDNS_DSI
- 	help
- 	  Support Cadence DPI to DSI bridge. This is an internal
- 	  bridge and is meant to be directly embedded in a SoC.
-+
-+if DRM_CDNS_DSI
-+
-+config DRM_CDNS_DSI_J721E
-+	bool "J721E Cadence DPI/DSI wrapper support"
-+	default y
-+	help
-+	  Support J721E Cadence DPI/DSI wrapper. This wrapper adds
-+	  support to select which DPI input to use for the bridge.
-+endif
-diff --git a/drivers/gpu/drm/bridge/cadence/Makefile b/drivers/gpu/drm/bridge/cadence/Makefile
-index e3d8e9a40784..4cffc8ff71c4 100644
---- a/drivers/gpu/drm/bridge/cadence/Makefile
-+++ b/drivers/gpu/drm/bridge/cadence/Makefile
-@@ -4,3 +4,4 @@ cdns-mhdp8546-y := cdns-mhdp8546-core.o cdns-mhdp8546-hdcp.o
- cdns-mhdp8546-$(CONFIG_DRM_CDNS_MHDP8546_J721E) += cdns-mhdp8546-j721e.o
- obj-$(CONFIG_DRM_CDNS_DSI) += cdns-dsi.o
- cdns-dsi-y := cdns-dsi-core.o
-+cdns-dsi-$(CONFIG_DRM_CDNS_DSI_J721E) += cdns-dsi-j721e.o
-diff --git a/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.c b/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.c
-index cba91247ab26..4b7de38ef1b0 100644
---- a/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.c
-+++ b/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.c
-@@ -15,12 +15,16 @@
- #include <linux/iopoll.h>
- #include <linux/module.h>
- #include <linux/of_address.h>
-+#include <linux/of_device.h>
- #include <linux/of_graph.h>
- #include <linux/platform_device.h>
- #include <linux/pm_runtime.h>
- #include <linux/reset.h>
- 
- #include "cdns-dsi-core.h"
-+#ifdef CONFIG_DRM_CDNS_DSI_J721E
-+#include "cdns-dsi-j721e.h"
-+#endif
- 
- static inline struct cdns_dsi *input_to_dsi(struct cdns_dsi_input *input)
- {
-@@ -265,6 +269,10 @@ static void cdns_dsi_bridge_disable(struct drm_bridge *bridge)
- 
- 	val = readl(dsi->regs + MCTL_MAIN_EN) & ~IF_EN(input->id);
- 	writel(val, dsi->regs + MCTL_MAIN_EN);
-+
-+	if (dsi->platform_ops && dsi->platform_ops->disable)
-+		dsi->platform_ops->disable(dsi);
-+
- 	pm_runtime_put(dsi->base.dev);
- }
- 
-@@ -360,6 +368,9 @@ static void cdns_dsi_bridge_enable(struct drm_bridge *bridge)
- 	if (WARN_ON(pm_runtime_get_sync(dsi->base.dev) < 0))
- 		return;
- 
-+	if (dsi->platform_ops && dsi->platform_ops->enable)
-+		dsi->platform_ops->enable(dsi);
-+
- 	mode = &bridge->encoder->crtc->state->adjusted_mode;
- 	nlanes = output->dev->lanes;
- 
-@@ -800,6 +811,8 @@ static int cdns_dsi_drm_probe(struct platform_device *pdev)
- 		goto err_disable_pclk;
- 	}
- 
-+	dsi->platform_ops = of_device_get_match_data(&pdev->dev);
-+
- 	val = readl(dsi->regs + IP_CONF);
- 	dsi->direct_cmd_fifo_depth = 1 << (DIRCMD_FIFO_DEPTH(val) + 2);
- 	dsi->rx_fifo_depth = RX_FIFO_DEPTH(val);
-@@ -835,14 +848,27 @@ static int cdns_dsi_drm_probe(struct platform_device *pdev)
- 	dsi->base.dev = &pdev->dev;
- 	dsi->base.ops = &cdns_dsi_ops;
- 
-+	if (dsi->platform_ops && dsi->platform_ops->init) {
-+		ret = dsi->platform_ops->init(dsi);
-+		if (ret != 0) {
-+			dev_err(&pdev->dev, "platform initialization failed: %d\n",
-+				ret);
-+			goto err_disable_runtime_pm;
-+		}
-+	}
-+
- 	ret = mipi_dsi_host_register(&dsi->base);
- 	if (ret)
--		goto err_disable_runtime_pm;
-+		goto err_deinit_platform;
- 
- 	clk_disable_unprepare(dsi->dsi_p_clk);
- 
- 	return 0;
- 
-+err_deinit_platform:
-+	if (dsi->platform_ops && dsi->platform_ops->exit)
-+		dsi->platform_ops->exit(dsi);
-+
- err_disable_runtime_pm:
- 	pm_runtime_disable(&pdev->dev);
- 
-@@ -857,6 +883,10 @@ static int cdns_dsi_drm_remove(struct platform_device *pdev)
- 	struct cdns_dsi *dsi = platform_get_drvdata(pdev);
- 
- 	mipi_dsi_host_unregister(&dsi->base);
-+
-+	if (dsi->platform_ops && dsi->platform_ops->exit)
-+		dsi->platform_ops->exit(dsi);
-+
- 	pm_runtime_disable(&pdev->dev);
- 
- 	return 0;
-@@ -864,6 +894,11 @@ static int cdns_dsi_drm_remove(struct platform_device *pdev)
- 
- static const struct of_device_id cdns_dsi_of_match[] = {
- 	{ .compatible = "cdns,dsi" },
-+#ifdef CONFIG_DRM_CDNS_DSI_J721E
-+	{ .compatible = "ti,j721e-dsi",
-+	  .data = &dsi_ti_j721e_ops,
-+	},
-+#endif
- 	{ },
- };
- MODULE_DEVICE_TABLE(of, cdns_dsi_of_match);
-diff --git a/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.h b/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.h
-index 65cc77f19b39..37568b547fbe 100644
---- a/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.h
-+++ b/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.h
-@@ -439,9 +439,22 @@ struct cdns_dsi_input {
- 	struct drm_bridge bridge;
- };
- 
-+struct cdns_dsi;
-+
-+struct dsi_platform_ops {
-+	int (*init)(struct cdns_dsi *dsi);
-+	void (*exit)(struct cdns_dsi *dsi);
-+	void (*enable)(struct cdns_dsi *dsi);
-+	void (*disable)(struct cdns_dsi *dsi);
-+};
-+
- struct cdns_dsi {
- 	struct mipi_dsi_host base;
- 	void __iomem *regs;
-+#ifdef CONFIG_DRM_CDNS_DSI_J721E
-+	void __iomem *j721e_regs;
-+#endif
-+	const struct dsi_platform_ops *platform_ops;
- 	struct cdns_dsi_input input;
- 	struct cdns_dsi_output output;
- 	unsigned int direct_cmd_fifo_depth;
-diff --git a/drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.c b/drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.c
-new file mode 100644
-index 000000000000..b5216acb333e
---- /dev/null
-+++ b/drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.c
-@@ -0,0 +1,51 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * TI j721e Cadence DSI wrapper
-+ *
-+ * Copyright (C) 2022 Texas Instruments Incorporated - http://www.ti.com/
-+ * Author: Rahul T R <r-ravikumar@ti.com>
-+ */
-+
-+#include <linux/io.h>
-+#include <linux/platform_device.h>
-+
-+#include "cdns-dsi-j721e.h"
-+
-+#define DSI_WRAP_REVISION		0x0
-+#define DSI_WRAP_DPI_CONTROL		0x4
-+#define DSI_WRAP_DSC_CONTROL		0x8
-+#define DSI_WRAP_DPI_SECURE		0xc
-+#define DSI_WRAP_DSI_0_ASF_STATUS	0x10
-+
-+#define DSI_WRAP_DPI_0_EN		BIT(0)
-+#define DSI_WRAP_DSI2_MUX_SEL		BIT(4)
-+
-+static int cdns_dsi_j721e_init(struct cdns_dsi *dsi)
-+{
-+	struct platform_device *pdev = to_platform_device(dsi->base.dev);
-+
-+	dsi->j721e_regs = devm_platform_ioremap_resource(pdev, 1);
-+	return PTR_ERR_OR_ZERO(dsi->j721e_regs);
-+}
-+
-+static void cdns_dsi_j721e_enable(struct cdns_dsi *dsi)
-+{
-+	/*
-+	 * Enable DPI0 as its input. DSS0 DPI2 is connected
-+	 * to DSI DPI0. This is the only supported configuration on
-+	 * J721E.
-+	 */
-+	writel(DSI_WRAP_DPI_0_EN, dsi->j721e_regs + DSI_WRAP_DPI_CONTROL);
-+}
-+
-+static void cdns_dsi_j721e_disable(struct cdns_dsi *dsi)
-+{
-+	/* Put everything to defaults  */
-+	writel(0, dsi->j721e_regs + DSI_WRAP_DPI_CONTROL);
-+}
-+
-+const struct dsi_platform_ops dsi_ti_j721e_ops = {
-+	.init = cdns_dsi_j721e_init,
-+	.enable = cdns_dsi_j721e_enable,
-+	.disable = cdns_dsi_j721e_disable,
-+};
-diff --git a/drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.h b/drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.h
-new file mode 100644
-index 000000000000..01f3dbd92db2
---- /dev/null
-+++ b/drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.h
-@@ -0,0 +1,18 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * TI j721e Cadence DSI wrapper
-+ *
-+ * Copyright (C) 2022 Texas Instruments Incorporated - http://www.ti.com/
-+ * Author: Rahul T R <r-ravikumar@ti.com>
-+ */
-+
-+#ifndef CDNS_DSI_J721E_H
-+#define CDNS_DSI_J721E_H
-+
-+#include "cdns-dsi-core.h"
-+
-+struct dsi_platform_ops;
-+
-+extern const struct dsi_platform_ops dsi_ti_j721e_ops;
-+
-+#endif /* !CDNS_DSI_J721E_H */
--- 
-2.37.3
+> 
+> Should I create a specific documentation just for
+> "altr,socfpga-dw-mshc" and document "clk-phase-sd-hs"?
 
+All properties must be documented.
+
+> 
+>>
+>>> +       if (rc) {
+>>> +               sys_mgr_base_addr =
+>>> +                       altr_sysmgr_regmap_lookup_by_phandle(np, "altr,sysmgr-syscon");
+>>
+>> DT bindings?
+> 
+> "altr,sysmgr-syscon" has already been documented in
+> Documentation/devicetree/bindings/net/socfpga-dwmac.txt
+
+This is not documentation of nodes you are changing here and in patch 1.
+
+You linked altr,socfpga-stmmac and here you have altr,socfpga-dw-mshc...
+
+Best regards,
+Krzysztof
