@@ -2,112 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 685B45BEB1A
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 18:28:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C26CF5BEB1C
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 18:29:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230238AbiITQ1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 12:27:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41360 "EHLO
+        id S230283AbiITQ3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 12:29:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230179AbiITQ1x (ORCPT
+        with ESMTP id S229603AbiITQ27 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 12:27:53 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92F305C357
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 09:27:52 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id go6so3649093pjb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 09:27:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=nozjIQsweFuPzfXtraNdAM+jAee1LTWuryMIowXVdmM=;
-        b=hcEk8juE0EYct1W9g0P5fcYEALarG90oOtjn08jXv5BzEET3M/kbyEQPjqLRz/3NJ7
-         kAjluUeQ7up2kZp9CzJLJvViy81CE1kXM3aZ7KmiPsangwrugNyzEqh8W/OUISBCKwnz
-         qtEsi1c9TqKYmxI6Z6bAzkIrGRRGkb+9AmqWrJksO3tW7Sb8XqvuvqWIlTyWwMyobshT
-         L3TbCLZxjI6Tk/X1Yw7wl4fz0rVSIPUSPk95eSYRvz7zR2tBoEkxyvBLQZkMybawTQEl
-         nUZ8/8s/AxnZfebI+vMVbv3tJz2V8Jq/bwFzIjJMEoy0VxRF3kHfwXrXYvUCLdU4xNhd
-         k9uQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=nozjIQsweFuPzfXtraNdAM+jAee1LTWuryMIowXVdmM=;
-        b=MwgetEm6w0gUOPzbyne063FV4utoE1wBdGcJlgIZE1+KC9dyLj1ab51HFB7NVANQBJ
-         i3fW/NP6jzw4bW/P3zBxLyiD8fQUUJ6nrOgRGel2Ly1gigVguvJaLx2I0+EfgaQ3KP7z
-         CqxSUzMWdQixCjdPaSU67mhVgwExa49GvhgTd02dNo3fbBOjR2Sw2l/Pw1ZGdtZRyKXL
-         fRHoXnM72/cH93DuPIdRDp3qK9bZSYL7I2f85Hme95th9kzjlZr2A1+A6mXhyqfwy2YJ
-         joiHFF9stM6OrQxmi13bLv7fP9jFqW1BV7sG2aqkZaC7UM7Gb54IVnfSQCz81BEMZvJa
-         gw7g==
-X-Gm-Message-State: ACrzQf37J7o8RGIFk0L3yMmso0bNdQEBGKYuW18ZA6XIKWoddrDdE86C
-        3r6qOAS3Wo67/97/vnOJFDT654LyS6gQLHlm4M84kQ==
-X-Google-Smtp-Source: AMsMyM5KZuDwvE3apQ9pHqcDFjofKL8mxCNQPblHh1p95fGuAklUekavrnU/j/FRFmn51VGhNlUxJuhEsb3RLs6REnw=
-X-Received: by 2002:a17:903:11c7:b0:178:afa2:43fd with SMTP id
- q7-20020a17090311c700b00178afa243fdmr475305plh.126.1663691272149; Tue, 20 Sep
- 2022 09:27:52 -0700 (PDT)
+        Tue, 20 Sep 2022 12:28:59 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0DBD5A8BD;
+        Tue, 20 Sep 2022 09:28:58 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28KFURhF003269;
+        Tue, 20 Sep 2022 16:28:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=VSzjtJ+iL/H6yfXfqjWpjH8XeRgh0pgcNMJl2d+jvYo=;
+ b=W8xQoVHEy+pkfimPJ9pHEEgynZz560lDU+CpbgUw7GzNm0FyoDcjVU8QsrYQvNal9N3n
+ Ez/fIz4JcDOA7yjKsKCtE2/0zPR2y5fK/4q0E8iQahi8dKfMxTraDKMAKAk3c59ZuRQE
+ zXbKX4bm55leucpctzwDWM2Muqlt/D8UoSgQ6i1FqU7Y9Z6BEP3lDxAeJ4y9Hc/n/ysJ
+ WQfrW5WJ77YWz5b358gnc7/G0yUIdA72k6mHDw2vVtm5jJmxVeBRVp0BRHdM0biUaRaZ
+ 0uOsmv6SIYwpCVBXNSMHXfHkgCQSqFMCIK5J0R1WlaIGO9PJQjk6O23ZnZ5JpbYqYB7A 2Q== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jq8fw1pu5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Sep 2022 16:28:52 +0000
+Received: from nasanex01b.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28KGSpl6009846
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Sep 2022 16:28:51 GMT
+Received: from quicinc.com (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 20 Sep
+ 2022 09:28:51 -0700
+Date:   Tue, 20 Sep 2022 09:28:50 -0700
+From:   Guru Das Srinagesh <quic_gurus@quicinc.com>
+To:     Bjorn Andersson <andersson@kernel.org>
+CC:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/1] soc: qcom: llcc: Move struct llcc_slice_config to
+ header
+Message-ID: <20220920162849.GA27067@quicinc.com>
+References: <1663384000-8097-1-git-send-email-quic_gurus@quicinc.com>
+ <20220919205633.qw5ucwjtyt4vjsro@builder.lan>
 MIME-Version: 1.0
-References: <20220916131854.687371-1-jsd@semihalf.com> <20220916131854.687371-2-jsd@semihalf.com>
- <YyScSCcXOT9/KD5w@smile.fi.intel.com>
-In-Reply-To: <YyScSCcXOT9/KD5w@smile.fi.intel.com>
-From:   =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>
-Date:   Tue, 20 Sep 2022 18:27:41 +0200
-Message-ID: <CAOtMz3NY=iGf8yUwv_u1y6ke1taqi1-rcZOSZdj+n8a4+JJ3BQ@mail.gmail.com>
-Subject: Re: [PATCH -next 1/2] i2c: designware: Switch from using MMIO access
- to SMN access
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        jarkko.nikula@linux.intel.com, wsa@kernel.org,
-        rrangel@chromium.org, upstream@semihalf.com,
-        mario.limonciello@amd.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220919205633.qw5ucwjtyt4vjsro@builder.lan>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 9L65oIdKd_tfhZvgW3En1zP4I7t34S7r
+X-Proofpoint-ORIG-GUID: 9L65oIdKd_tfhZvgW3En1zP4I7t34S7r
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-20_06,2022-09-20_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1015
+ adultscore=0 malwarescore=0 spamscore=0 mlxscore=0 lowpriorityscore=0
+ bulkscore=0 mlxlogscore=999 suspectscore=0 phishscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
+ definitions=main-2209200097
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+On Sep 19 2022 15:56, Bjorn Andersson wrote:
+> On Fri, Sep 16, 2022 at 08:06:40PM -0700, Guru Das Srinagesh wrote:
+> > Move struct llcc_slice_config to header so that it can be reused by
+> > other kernel modules.
+> 
+> Can you please continue this sentence to provide some concrete examples?
+> Will we see those other users posted upstream?
 
-pon., 19 wrz 2022 o 15:59 Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> napisa=C5=82(a):
->
-> On Fri, Sep 16, 2022 at 03:18:53PM +0200, Jan Dabros wrote:
-> > Due to a change in silicon compared to Cezanne, in future revisions MSR
-> > access can't be used to get the base address of the PSP MMIO region tha=
-t
-> > contains the PSP mailbox interface.
-> >
-> > Modify driver to use SMN access also for Cezanne platforms (it is
-> > working there) in order to simplify codebase when adding support for ne=
-w
-> > SoC versions.
-> >
-> > Export amd_cache_northbridges() which was unexported by
->
-> > e1907d3: "x86/amd_nb: Unexport amd_cache_northbridges()"
->
-> Please, use standard format of referring to the commits in the history
-> (basically the same as for Fixes tags).
+There is an llcc debug module downstream that we're currently using to test the
+llcc driver that uses this struct and has to copy the struct definition because
+it's not in the header. I can check with the team about their plans to upstream
+this driver.
 
-Sure.
+Thank you.
 
->
-> > since function which registers i2c-designware-platdrv is a
-> > subsys_initcall that is executed before fs_initcall (when enumeration o=
-f
-> > NB descriptors occurs). Thus in order to use SMN accesses it's necessar=
-y
-> > to explicitly call amd_cache_northrbidges() from within this driver.
->
-> Also it doesn't clarify if this commit a full revert of that (rebased for
-> new kernel versions) or partial or functional?
-
-This is a partial revert, I will mention this in the commit msg.
-
-Best Regards,
-Jan
+Guru Das.
