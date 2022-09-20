@@ -2,120 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFFF15BE716
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 15:29:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C7BD5BE71E
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 15:30:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230345AbiITN3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 09:29:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38772 "EHLO
+        id S230294AbiITNah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 09:30:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230179AbiITN3C (ORCPT
+        with ESMTP id S230300AbiITNae (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 09:29:02 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F2A4B497
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 06:29:00 -0700 (PDT)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MX2M51rYYzMnDn;
-        Tue, 20 Sep 2022 21:24:17 +0800 (CST)
-Received: from [10.67.110.112] (10.67.110.112) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 20 Sep 2022 21:28:58 +0800
-Subject: Re: [PATCH] mm/secretmem: remove reduntant return value
-To:     David Hildenbrand <david@redhat.com>, <akpm@linux-foundation.org>
-CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        Binyi Han <dantengknight@gmail.com>
-References: <20220920012205.246217-1-xiujianfeng@huawei.com>
- <3196b824-bcee-0c44-bfd3-f6cd8a1e6719@redhat.com>
- <c4e99ea3-302d-b173-27f1-92c38ddaca8c@huawei.com>
- <7f1cfee4-c6de-ea59-0aa9-9bd55054fb22@redhat.com>
-From:   xiujianfeng <xiujianfeng@huawei.com>
-Message-ID: <0761fca9-b9f0-f3d7-0bf2-e73089db9d84@huawei.com>
-Date:   Tue, 20 Sep 2022 21:28:57 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.1
+        Tue, 20 Sep 2022 09:30:34 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B42D4B497
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 06:30:32 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id n12so4268084wrx.9
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 06:30:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date;
+        bh=XLxjCK1UrYCEX7pcRlMkQ0jqY8Ny3pjRnQ4MiYRMmGc=;
+        b=NK2Oy+tzNmW0Z0DQa5UKF/e2pj9fFX9OGHvrWk7x696wpkkn2l2T1KbCkWux41Zkco
+         GCKNjtyNmTq+jrWWpZ0+/nRAjHICJ/12WhhToJoctEKsZ8iRXz/SrOte8WIYZ9QV/OuV
+         RA2/XT85gYr0p89WonCHF1uuQoQd0iQFBD0/4Z71HFIx7baxKce+lVlxzF6MaajfTh/T
+         u53scWLTA9g1eAlhOl7Hf7dGqGE3TRTr3XiKLQ6QV5HPhKijceuzphGZZMHNaHpOuccL
+         wm6Q35jLqNE3vsLBOJCvmU0rClqWQMpDwUhmOT2C16rNsykgtZw0qwRehDDJ0mIUHw1b
+         MuGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=XLxjCK1UrYCEX7pcRlMkQ0jqY8Ny3pjRnQ4MiYRMmGc=;
+        b=NEGYYLST5U8aF4dmi5vruobL+UxfGSFFL5icxntjG+ifxDXT4gAjaXB2H6EbwJvMFq
+         aIV7ZpPxP8JOj/5XOAqui/6LXY0SELSNYjSArO7cYr49YnXdrDfy6X4Jv2earKd6T9N9
+         mmt/LZGexy8pTurx5EgJegNKi6YLaGaIWLy2XkwL0T2qOTcCtf/0u+2uk5OKflBl+bc6
+         K/u+XSPeHpUiQ9HoaQUoIfGpi9An6CG3+TyAim/y1zBfMDpF2cHXxuo4nOm85fgBQ0JN
+         ewbCsJxufEOr0caP77hcnYmVRUQP41CzgzC/XpMnaMVum/Psvq7XAgt666I/KF8ak8W7
+         QacA==
+X-Gm-Message-State: ACrzQf2TMcXRyS6JVhTh9IW+AMbJX5OWitvzuDRbcba32xjn+AGb7l+S
+        28VSCh7hCeIrQuZC4NtvHeWzBw==
+X-Google-Smtp-Source: AMsMyM4rDJ9Ph6SYonLeoLqOVQkjtcIXLs9X97QpO0G9E4099LrQwE+woqtN527kN7WDVD9ZZDoZoA==
+X-Received: by 2002:a05:6000:982:b0:229:79e5:6a96 with SMTP id by2-20020a056000098200b0022979e56a96mr13814135wrb.469.1663680631063;
+        Tue, 20 Sep 2022 06:30:31 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:7e10:f0f:43b2:9b5e? ([2a01:e0a:982:cbb0:7e10:f0f:43b2:9b5e])
+        by smtp.gmail.com with ESMTPSA id j26-20020adfa55a000000b0022afddab5dfsm70082wrb.7.2022.09.20.06.30.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Sep 2022 06:30:30 -0700 (PDT)
+Message-ID: <5a10b8b7-3881-2f31-5a79-ddef9798184d@linaro.org>
+Date:   Tue, 20 Sep 2022 15:30:28 +0200
 MIME-Version: 1.0
-In-Reply-To: <7f1cfee4-c6de-ea59-0aa9-9bd55054fb22@redhat.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.110.112]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500023.china.huawei.com (7.185.36.114)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] phy: qualcomm: call clk_disable_unprepare in the error
+ handling
+Content-Language: en-US
+To:     Dongliang Mu <dzm91@hust.edu.cn>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Vivek Gautam <vivek.gautam@codeaurora.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Jaehoon Chung <jh80.chung@samsung.com>
+Cc:     Dongliang Mu <mudongliangabcd@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20220914051334.69282-1-dzm91@hust.edu.cn>
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Organization: Linaro
+In-Reply-To: <20220914051334.69282-1-dzm91@hust.edu.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 14/09/2022 07:13, Dongliang Mu wrote:
+> From: Dongliang Mu <mudongliangabcd@gmail.com>
+> 
+> Smatch reports the following error:
+> 
+> drivers/phy/qualcomm/phy-qcom-usb-hsic.c:82 qcom_usb_hsic_phy_power_on()
+> warn: 'uphy->cal_clk' from clk_prepare_enable() not released on lines:
+> 58.
+> drivers/phy/qualcomm/phy-qcom-usb-hsic.c:82 qcom_usb_hsic_phy_power_on()
+> warn: 'uphy->cal_sleep_clk' from clk_prepare_enable() not released on
+> lines: 58.
+> drivers/phy/qualcomm/phy-qcom-usb-hsic.c:82 qcom_usb_hsic_phy_power_on()
+> warn: 'uphy->phy_clk' from clk_prepare_enable() not released on lines:
+> 58.
+> 
+> Fix this by calling proper clk_disable_unprepare calls.
+> 
+> Fixes: 0b56e9a7e835 ("phy: Group vendor specific phy drivers")
+> Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+> ---
+>   drivers/phy/qualcomm/phy-qcom-usb-hsic.c | 6 ++++--
+>   1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/phy/qualcomm/phy-qcom-usb-hsic.c b/drivers/phy/qualcomm/phy-qcom-usb-hsic.c
+> index 716a77748ed8..20f6dd37c7c1 100644
+> --- a/drivers/phy/qualcomm/phy-qcom-usb-hsic.c
+> +++ b/drivers/phy/qualcomm/phy-qcom-usb-hsic.c
+> @@ -54,8 +54,10 @@ static int qcom_usb_hsic_phy_power_on(struct phy *phy)
+>   
+>   	/* Configure pins for HSIC functionality */
+>   	pins_default = pinctrl_lookup_state(uphy->pctl, PINCTRL_STATE_DEFAULT);
+> -	if (IS_ERR(pins_default))
+> -		return PTR_ERR(pins_default);
+> +	if (IS_ERR(pins_default)) {
+> +		ret = PTR_ERR(pins_default);
+> +		goto err_ulpi;
+> +	}
+>   
+>   	ret = pinctrl_select_state(uphy->pctl, pins_default);
+>   	if (ret)
 
-在 2022/9/20 21:22, David Hildenbrand 写道:
-> On 20.09.22 14:35, xiujianfeng wrote:
->> Hi,
->>
->> 在 2022/9/20 20:10, David Hildenbrand 写道:
->>> On 20.09.22 03:22, Xiu Jianfeng wrote:
->>>> The return value @ret is always 0, so remove it and return 0 directly.
->>>>
->>>> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
->>>> ---
->>>>    mm/secretmem.c | 6 ++----
->>>>    1 file changed, 2 insertions(+), 4 deletions(-)
->>>>
->>>> diff --git a/mm/secretmem.c b/mm/secretmem.c
->>>> index 6a44efb673b2..04c3ac9448a1 100644
->>>> --- a/mm/secretmem.c
->>>> +++ b/mm/secretmem.c
->>>> @@ -278,10 +278,8 @@ static struct file_system_type secretmem_fs = {
->>>>    static int __init secretmem_init(void)
->>>>    {
->>>> -    int ret = 0;
->>>> -
->>>>        if (!secretmem_enable)
->>>> -        return ret;
->>>> +        return 0;
->>>>        secretmem_mnt = kern_mount(&secretmem_fs);
->>>>        if (IS_ERR(secretmem_mnt))
->>>
->>> On top of which tree is that?
->>>
->>> 6.0-rc6 has here:
->>>
->>> if (IS_ERR(secretmem_mnt))
->>>       ret = PTR_ERR(secretmem_mnt);
->>>
->> Sorry, it's on linux-next tree, I should have used [PATCH -next]:)
->>
-> 
-> Maybe this change should be squashed into the patch from Binyi directly:
-> 
-
-Looks good to me, thanks.
-
-> 
-> commit 4eb5bbde3ccb710d3b85bfb13466612e56393369 (mm/mm-hotfixes-stable)
-> Author: Binyi Han <dantengknight@gmail.com>
-> Date:   Sun Sep 4 00:46:47 2022 -0700
-> 
->     mm: fix dereferencing possible ERR_PTR
->     Smatch checker complains that 'secretmem_mnt' dereferencing possible
->     ERR_PTR().  Let the function return if 'secretmem_mnt' is ERR_PTR, to
->     avoid deferencing it.
->     Link: https://lkml.kernel.org/r/20220904074647.GA64291@cloud-MacBookPro
->     Fixes: 1507f51255c9f ("mm: introduce memfd_secret system call to 
-> create "secret" memory areas")
->     Signed-off-by: Binyi Han <dantengknight@gmail.com>
->     Reviewed-by: Andrew Morton <akpm@linux-foudation.org>
->     Cc: Mike Rapoport <rppt@kernel.org>
->     Cc: Ammar Faizi <ammarfaizi2@gnuweeb.org>
->     Cc: Hagen Paul Pfeifer <hagen@jauu.net>
->     Cc: James Bottomley <James.Bottomley@HansenPartnership.com>
->     Cc: <stable@vger.kernel.org>
->     Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-> 
-> 
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
