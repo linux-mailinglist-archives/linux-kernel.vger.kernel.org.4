@@ -2,130 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1502E5BEF60
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 23:50:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 077015BEF63
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 23:50:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230025AbiITVu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 17:50:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47906 "EHLO
+        id S229522AbiITVuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 17:50:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230426AbiITVuT (ORCPT
+        with ESMTP id S229865AbiITVuR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 17:50:19 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71C882180E;
-        Tue, 20 Sep 2022 14:50:17 -0700 (PDT)
-Date:   Tue, 20 Sep 2022 21:50:13 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1663710615;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZjzWjp2mR7KNavC4NQ2XVbJMIOQAxuWxGFL/2GffVuU=;
-        b=O/w80v/2nM0cMDtDzz9QBPJhACPnxInxeqGbxCdklwizacfojzCBgHyDLHXdszCIkusTSx
-        x7iXbRYekUo1coQiJbaIpkD7b/s0414pd3v/u60aNfQSPZxnnk7PAJOdyw4Lp2sZ7qOMKs
-        8nII+qSxYfbylpIwLr2HubdNOmw6Xp2+GfdvJNvP16/EeSfSRYVMTDtkfC6o2yWkUfgnTC
-        +Oul0e81U5JwGvexz9B33dQf1n2tyoAI8VIfVCEFgpR74avw2IMhVSLCbzN7eAn/B10lJ2
-        5FISD2iHA3qnAw1/oRSDwqOrCo14kMcrSXEdiFmi33ao5jKIypgZBec0kmWl1w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1663710615;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZjzWjp2mR7KNavC4NQ2XVbJMIOQAxuWxGFL/2GffVuU=;
-        b=0T7pdgB8ranrI9QnGDASi2HUowfDWk/x05yTa7bt5S1/OINSmQz7iY5Hz7qEuILpCUkd6M
-        VglzWrQWo038M+AA==
-From:   "tip-bot2 for Kees Cook" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/uaccess: Avoid check_object_size() in
- copy_from_user_nmi()
-Cc:     Yu Zhao <yuzhao@google.com>, dev@der-flo.net,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        stable@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <CAOUHufaPshtKrTWOz7T7QFYUNVGFm0JBjvM700Nhf9qEL9b3EQ@mail.gmail.com>
-References: <CAOUHufaPshtKrTWOz7T7QFYUNVGFm0JBjvM700Nhf9qEL9b3EQ@mail.gmail.com>
-MIME-Version: 1.0
-Message-ID: <166371061341.401.16240146052010103408.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+        Tue, 20 Sep 2022 17:50:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BB7F63E7;
+        Tue, 20 Sep 2022 14:50:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1CCEE62E49;
+        Tue, 20 Sep 2022 21:50:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 68153C433C1;
+        Tue, 20 Sep 2022 21:50:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663710615;
+        bh=ARRvbxIcJ7M+YQg21nn//eBVp6Y44LRwd1TWR31zn+Q=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=FnKCuiZ5NHYpjX+lYO5LMGY8SePJ5m/2JLRCkM1WZTygn+cHDqUfpZS5IMr6jDa2z
+         B2aDLhpOh/0XGYbf5US4LJdWx4njvmQoooV5hEMlf19M7Lyn31CqdqzPI0Pb5SY607
+         k+tI7o27j3Tte2lLTyMwPBlgNcu9hmOkTtscFijh1i8VvRJKWH/l7rJOJ8R7pyIqlH
+         JQqrOF/WnEeJQlK7RSzdWUguUGh4bMMkuMtnv0KEYisLyYVt3Rh6iWF7BKnHAaqDtJ
+         Oj5xcsRrbW6JF/R5vwSfffaQrvkTPtnkfZvnhV3nwuUA2xDstbSONxsR2OT/97IifB
+         xErHn650daP5Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 46273E21EE0;
+        Tue, 20 Sep 2022 21:50:15 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v3 0/3] bpf: Small nf_conn cleanups
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166371061528.14033.10203496581444033110.git-patchwork-notify@kernel.org>
+Date:   Tue, 20 Sep 2022 21:50:15 +0000
+References: <cover.1663683114.git.dxu@dxuuu.xyz>
+In-Reply-To: <cover.1663683114.git.dxu@dxuuu.xyz>
+To:     Daniel Xu <dxu@dxuuu.xyz>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, memxor@gmail.com, martin.lau@linux.dev,
+        pablo@netfilter.org, fw@strlen.de, toke@kernel.org,
+        netfilter-devel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
+Hello:
 
-Commit-ID:     80d82ca9562bb881f2884ccb33b5530d40144450
-Gitweb:        https://git.kernel.org/tip/80d82ca9562bb881f2884ccb33b5530d40144450
-Author:        Kees Cook <keescook@chromium.org>
-AuthorDate:    Mon, 19 Sep 2022 13:16:48 -07:00
-Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Tue, 20 Sep 2022 14:43:49 -07:00
+This series was applied to bpf/bpf-next.git (master)
+by Martin KaFai Lau <martin.lau@kernel.org>:
 
-x86/uaccess: Avoid check_object_size() in copy_from_user_nmi()
+On Tue, 20 Sep 2022 08:15:21 -0600 you wrote:
+> This patchset cleans up a few small things:
+> 
+> * Delete unused stub
+> * Rename variable to be more descriptive
+> * Fix some `extern` declaration warnings
+> 
+> Past discussion:
+> - v2: https://lore.kernel.org/bpf/cover.1663616584.git.dxu@dxuuu.xyz/
+> 
+> [...]
 
-The check_object_size() helper under CONFIG_HARDENED_USERCOPY is
-designed to skip any checks where the length is known at compile time as
-a reasonable heuristic to avoid "likely known-good" cases. However, it can
-only do this when the copy_*_user() helpers are, themselves, inline too.
+Here is the summary with links:
+  - [bpf-next,v3,1/3] bpf: Remove unused btf_struct_access stub
+    https://git.kernel.org/bpf/bpf-next/c/52bdae37c92a
+  - [bpf-next,v3,2/3] bpf: Rename nfct_bsa to nfct_btf_struct_access
+    https://git.kernel.org/bpf/bpf-next/c/5a090aa35038
+  - [bpf-next,v3,3/3] bpf: Move nf_conn extern declarations to filter.h
+    https://git.kernel.org/bpf/bpf-next/c/fdf214978a71
 
-Using find_vmap_area() requires taking a spinlock. The check_object_size()
-helper can call find_vmap_area() when the destination is in vmap memory.
-If show_regs() is called in interrupt context, it will attempt a call to
-copy_from_user_nmi(), which may call check_object_size() and then
-find_vmap_area(). If something in normal context happens to be in the
-middle of calling find_vmap_area() (with the spinlock held), the interrupt
-handler will hang forever.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-The copy_from_user_nmi() call is actually being called with a fixed-size
-length, so check_object_size() should never have been called in
-the first place. Given the narrow constraints, just replace the
-__copy_from_user_inatomic() call with an open-coded version that calls
-only into the sanitizers and not check_object_size(), followed by a call
-to raw_copy_from_user().
 
-Fixes: 0aef499f3172 ("mm/usercopy: Detect vmalloc overruns")
-Reported-by: Yu Zhao <yuzhao@google.com>
-Reported-by: dev@der-flo.net
-Suggested-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Tested-by: Florian Lehner <dev@der-flo.net>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/all/CAOUHufaPshtKrTWOz7T7QFYUNVGFm0JBjvM700Nhf9qEL9b3EQ@mail.gmail.com
-Link: https://lkml.kernel.org/r/20220919201648.2250764-1-keescook@chromium.org
----
- arch/x86/lib/usercopy.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/lib/usercopy.c b/arch/x86/lib/usercopy.c
-index ad0139d..d2aff9b 100644
---- a/arch/x86/lib/usercopy.c
-+++ b/arch/x86/lib/usercopy.c
-@@ -44,7 +44,8 @@ copy_from_user_nmi(void *to, const void __user *from, unsigned long n)
- 	 * called from other contexts.
- 	 */
- 	pagefault_disable();
--	ret = __copy_from_user_inatomic(to, from, n);
-+	instrument_copy_from_user(to, from, n);
-+	ret = raw_copy_from_user(to, from, n);
- 	pagefault_enable();
- 
- 	return ret;
