@@ -2,104 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 020BA5BDFEA
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 10:24:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 621EA5BDFF9
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 10:28:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230116AbiITIYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 04:24:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33198 "EHLO
+        id S230244AbiITI1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 04:27:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231372AbiITIXD (ORCPT
+        with ESMTP id S231366AbiITI1D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 04:23:03 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C2CA6581B
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 01:20:51 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id u69so1831478pgd.2
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 01:20:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=VQpZRPjw97dLIW56sK+yQ0p4A8fqcnFL6FG6rvfKDvs=;
-        b=Xt70jeatjEGHB9EdIqy92nlbkciC6fZlZYjqNoH+QKx8/l1yhaspy+XgHws9D61sOb
-         WYK615yf16Hu8C3OnG8qdFWCJzdlpGMwHrGuMJvHKiwtA70LjZ5Xfo/YMjCbOzTrrktr
-         cLkWAgbOk3E5wnQpUP235mzzn8fG6HNWn8gGk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=VQpZRPjw97dLIW56sK+yQ0p4A8fqcnFL6FG6rvfKDvs=;
-        b=avyR9gO11XJ5exl92ZdefYFlNJpaL737ZtGiAcOKkfBn2CChubtjz0NSRGudbuUYVW
-         uHUUQJ7+hVvSmb9IhvmO36iTkyb021jQmwSIzs8NbmxiS62qxPsEDKewRx8qdTdVHJ85
-         pePgqLb2867aRUGBq1BQM3CTcKC/IP2AIu8Vk3UdnrlyJjZIqFdOswMaZ9TQZ1t6WCMU
-         MxLZaBSkl4czogPjbohUmkGdgBpkEkkgD7YBsQHlPQNGgM0XOJbGNhlv2AH0QEdzeWqB
-         lBz8zJ/3N/tu2YmRqvftJz/GoBkl9dimP+c916nt7JAMTEfYi2F3OT3ETIiO+5ql2/5Q
-         Ci2w==
-X-Gm-Message-State: ACrzQf1X/Qq5Z0IEgalUiHIZnQygrus8iYIs2vkn1wS5iE7sIaMiNVJA
-        bISfRuPc4UqPE3ESZ5sS7LCzUg==
-X-Google-Smtp-Source: AMsMyM4rATdCzBtbaTbAdmV/XQanotaAz+eodIb2aEN5mTYDvcY/JSVpRneYmgaVzGvZe9+kOHwPTg==
-X-Received: by 2002:a63:d905:0:b0:439:c930:85a5 with SMTP id r5-20020a63d905000000b00439c93085a5mr15724205pgg.474.1663662050133;
-        Tue, 20 Sep 2022 01:20:50 -0700 (PDT)
-Received: from localhost ([2620:15c:2ce:200:3001:aa57:999b:fd4a])
-        by smtp.gmail.com with UTF8SMTPSA id 14-20020a17090a0cce00b001fd9c63e56bsm1820259pjt.32.2022.09.20.01.20.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Sep 2022 01:20:49 -0700 (PDT)
-From:   Denis Nikitin <denik@chromium.org>
-To:     Marc Zyngier <maz@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Manoj Gupta <manojgupta@google.com>,
-        David Brazdil <dbrazdil@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, Denis Nikitin <denik@chromium.org>
-Subject: [PATCH] KVM: arm64: nvhe: Disable profile optimization
-Date:   Tue, 20 Sep 2022 01:20:05 -0700
-Message-Id: <20220920082005.2459826-1-denik@chromium.org>
-X-Mailer: git-send-email 2.37.3.968.ga6b4b080e4-goog
+        Tue, 20 Sep 2022 04:27:03 -0400
+Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA6C67CAE;
+        Tue, 20 Sep 2022 01:24:22 -0700 (PDT)
+Received: from dev011.ch-qa.sw.ru ([172.29.1.16])
+        by relay.virtuozzo.com with esmtp (Exim 4.95)
+        (envelope-from <alexander.atanasov@virtuozzo.com>)
+        id 1oaYSj-004etn-0W;
+        Tue, 20 Sep 2022 10:20:49 +0200
+From:   Alexander Atanasov <alexander.atanasov@virtuozzo.com>
+To:     Jonathan Corbet <corbet@lwn.net>, Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     kernel@openvz.org,
+        Alexander Atanasov <alexander.atanasov@virtuozzo.com>,
+        Kees Cook <keescook@chromium.org>,
+        Roman Gushchin <guro@fb.com>, Jann Horn <jannh@google.com>,
+        Vijayanand Jitta <vjitta@codeaurora.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: [PATCH] mm: Make failslab writable again
+Date:   Tue, 20 Sep 2022 11:20:33 +0300
+Message-Id: <20220920082033.1727374-1-alexander.atanasov@virtuozzo.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kernel build with -fprofile-sample-use raises the following failure:
+In (060807f841ac mm, slub: make remaining slub_debug related attributes
+read-only failslab) it was made RO.
+I think it became a collateral victim to the other two options
+(sanity_checks and trace) for which the reasons are perfectly valid.
+Here is why:
+ - sanity_checks and trace are slab internal debug options,
+   failslab is used for fault injection.
+ - for fault injections, which by presumption are random, it
+   does not matter if it is not set atomically. You need to
+   set atleast one more option to trigger fault injection.
+ - in a testing scenario you may need to change it at runtime
+   example: module loading - you test all allocations limited
+   by the space option. Then you move to test only your module's
+   own slabs.
+ - when set by command line flags it effectively disables all
+   cache merges.
 
-error: arch/arm64/kvm/hyp/nvhe/kvm_nvhe.tmp.o: Unexpected SHT_REL
-section ".rel.llvm.call-graph-profile"
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Roman Gushchin <guro@fb.com>
+Cc: Christoph Lameter <cl@linux.com>
+Cc: Jann Horn <jannh@google.com>
+Cc: Vijayanand Jitta <vjitta@codeaurora.org>
+Cc: David Rientjes <rientjes@google.com>
+Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
+Cc: Pekka Enberg <penberg@kernel.org>
+Link: http://lkml.kernel.org/r/20200610163135.17364-5-vbabka@suse.cz
 
-SHT_REL is generated by the latest lld, see
-https://reviews.llvm.org/rGca3bdb57fa1ac98b711a735de048c12b5fdd8086.
-Disable profile optimization in kvm/nvhe to fix the build with
-AutoFDO.
-
-Signed-off-by: Denis Nikitin <denik@chromium.org>
+Signed-off-by: Alexander Atanasov <alexander.atanasov@virtuozzo.com>
 ---
- arch/arm64/kvm/hyp/nvhe/Makefile | 3 +++
- 1 file changed, 3 insertions(+)
+ Documentation/mm/slub.rst |  2 ++
+ mm/slub.c                 | 14 +++++++++++++-
+ 2 files changed, 15 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/kvm/hyp/nvhe/Makefile b/arch/arm64/kvm/hyp/nvhe/Makefile
-index b5c5119c7396..6a6188374a52 100644
---- a/arch/arm64/kvm/hyp/nvhe/Makefile
-+++ b/arch/arm64/kvm/hyp/nvhe/Makefile
-@@ -89,6 +89,9 @@ quiet_cmd_hypcopy = HYPCOPY $@
- # Remove ftrace, Shadow Call Stack, and CFI CFLAGS.
- # This is equivalent to the 'notrace', '__noscs', and '__nocfi' annotations.
- KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_FTRACE) $(CC_FLAGS_SCS) $(CC_FLAGS_CFI), $(KBUILD_CFLAGS))
-+# Profile optimization creates SHT_REL section '.llvm.call-graph-profile' for
-+# the hot code. SHT_REL is currently not supported by the KVM tools.
-+KBUILD_CFLAGS += $(call cc-option,-fno-profile-sample-use,-fno-profile-use)
+diff --git a/Documentation/mm/slub.rst b/Documentation/mm/slub.rst
+index 43063ade737a..86837073a39e 100644
+--- a/Documentation/mm/slub.rst
++++ b/Documentation/mm/slub.rst
+@@ -116,6 +116,8 @@ options from the ``slub_debug`` parameter translate to the following files::
+ 	T	trace
+ 	A	failslab
  
- # KVM nVHE code is run at a different exception code with a different map, so
- # compiler instrumentation that inserts callbacks or checks into the code may
++failslab file is writable, so writing 1 or 0 will enable or disable
++the option at runtime. Write returns -EINVAL if cache is an alias.
+ Careful with tracing: It may spew out lots of information and never stop if
+ used on the wrong slab.
+ 
+diff --git a/mm/slub.c b/mm/slub.c
+index 862dbd9af4f5..7c15d312e0fb 100644
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -5617,7 +5617,19 @@ static ssize_t failslab_show(struct kmem_cache *s, char *buf)
+ {
+ 	return sysfs_emit(buf, "%d\n", !!(s->flags & SLAB_FAILSLAB));
+ }
+-SLAB_ATTR_RO(failslab);
++
++static ssize_t failslab_store(struct kmem_cache *s, const char *buf,
++				size_t length)
++{
++	if (s->refcount > 1)
++		return -EINVAL;
++
++	s->flags &= ~SLAB_FAILSLAB;
++	if (buf[0] == '1')
++		s->flags |= SLAB_FAILSLAB;
++	return length;
++}
++SLAB_ATTR(failslab);
+ #endif
+ 
+ static ssize_t shrink_show(struct kmem_cache *s, char *buf)
+
+base-commit: 80e78fcce86de0288793a0ef0f6acf37656ee4cf
 -- 
-2.37.3.968.ga6b4b080e4-goog
+2.31.1
 
