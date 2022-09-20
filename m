@@ -2,86 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 008C55BE954
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 16:48:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D76C35BE961
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 16:51:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230439AbiITOsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 10:48:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50788 "EHLO
+        id S230348AbiITOvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 10:51:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230312AbiITOsC (ORCPT
+        with ESMTP id S229802AbiITOvd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 10:48:02 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 356CC58B40
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 07:48:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=TwHHjLSb/3B92HnbWvhN8I/TcbGfmh11K5oo3jdWgNs=; b=C7wB+jWCfEd71+mAqXSsbaSLdN
-        VTkhdJU8Blkh7ORudNPBg0DSDNyQgV2zrnZ+UDNLutzQxZOTqbbXUoPLNxQqpqxm+y4lAGPBBTVgX
-        jQMh/03K2Jn6CWi+3CMwHhPhOdLZN5SwrcYANmm8bQJMH1xyUb+DBxDbGH5EJg08vVYgX67pL4r7+
-        7aIf4SVL5kMYx4JPuVTw3d8s1R1IMCRK0oocw/uKVgsAMiUk7XblNUkjnVvpjfhj7AYVSzjHkZMGe
-        OILH2a9Iw3EDRcHyjPpq2qtQXVMJ4rBokIKwZjc/KxBUA5M4XDUhyyRbGMhjisEUnDxIyCZrsp+Ms
-        g67JVDvQ==;
-Received: from [2601:1c2:d80:3110::a2e7]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oaeXT-004awq-Oh; Tue, 20 Sep 2022 14:47:56 +0000
-Message-ID: <0fbe656f-bc96-6ec0-4fab-2e020484a9a8@infradead.org>
-Date:   Tue, 20 Sep 2022 07:47:52 -0700
+        Tue, 20 Sep 2022 10:51:33 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5FE930551;
+        Tue, 20 Sep 2022 07:51:32 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id n83so3958487oif.11;
+        Tue, 20 Sep 2022 07:51:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=sK3l/7ireIyebTpzElTksVtVf2abmUnWhRtQl7kzKXU=;
+        b=KlIkFV7VgcSZ7Kc5r43d0egsRp3NWHdEQHTVBY4ubNULGEQyRET8LzjsXeB3neFzO9
+         t64aC1df6jnsJpAm2luaG4aPrM1+rzKjQX4EkaJUuCOPLA3ma9Q4hI8XpiTbw50RubuW
+         P+3eGfZbIBzOn2jKU/GYvGZe14b7BzSofzabPsPJ/INGJs2PGeciL9F/FY6RALNJSoJR
+         9naZ5JdveIoTrLaZOg3Oh3AtIhJr650G0ErDCqzhP37LjSAJ/CTva/+/cTGnkcRjgXfa
+         h7mhwFUNl0yNB7HzroY67599Z69hKLg/UtcF5kHTxEXQR6qQut4hEKXR2nuyfVliJ1vq
+         ztUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=sK3l/7ireIyebTpzElTksVtVf2abmUnWhRtQl7kzKXU=;
+        b=4xcY70fKmHcEyDPmihuYhAzjA8atYmziUHsiGkw6wvMEwo8JYGsZN5Bax3MSsHlmgV
+         5FwPojB+BbLG8V0maoMKnL/NV450/DKnCrHPzb3UU82pY3XbbTozXWo4QNYUppwsDsdo
+         Vs1CIpECGK4NhJMuRdVrJ+cwMmXjAQElO3/9K2MC11HC7RlN1bOf+NBO3C0eY+g7St0r
+         //bDd2rDqsHFYC4iEccAnAXQIVC4sUJCl4dDVgYQmCaW1FnwHowK7ckqgm19o9gobRQX
+         pEKvU3sOaQ1vATtZp6nwNAnUGtQz1GTHrMO5uow6gdk7kYDdyxlyY7q3IbSZfG2mjUWH
+         OnrA==
+X-Gm-Message-State: ACrzQf1DYnPkyQI2L7+NyfY61WawbDFK+Yp5uMHCO6jn9vb8kPsc/aDi
+        X9vUdbkqWp7wbiolZ3GkDruVo4hM968=
+X-Google-Smtp-Source: AMsMyM7UPUN/aISEbd2G4BbSn+IheDmIuz1gETVP9Ya6cE0aro+hmb7c0HaoJuDMM8QuTxB4WUeAbg==
+X-Received: by 2002:a05:6808:a05:b0:350:d047:8878 with SMTP id n5-20020a0568080a0500b00350d0478878mr1759392oij.138.1663685491930;
+        Tue, 20 Sep 2022 07:51:31 -0700 (PDT)
+Received: from localhost ([12.97.180.36])
+        by smtp.gmail.com with ESMTPSA id r7-20020a056870e98700b0012c8f0d1f85sm538oao.17.2022.09.20.07.51.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Sep 2022 07:51:31 -0700 (PDT)
+Date:   Tue, 20 Sep 2022 07:49:21 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the bitmap tree
+Message-ID: <YynS8Z7BLy0/Vu1j@yury-laptop>
+References: <20220920180839.79870ef4@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: ERROR: modpost: "vmf_insert_pfn_prot"
- [drivers/gpu/drm/ttm/ttm.ko] undefined!
-Content-Language: en-US
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-References: <202209181951.Wdmac1wt-lkp@intel.com>
- <d369f23b-8c14-1d72-8d1c-2c3791a09b1b@infradead.org>
- <bae0ae28-b3b7-765d-3ad1-aed269046437@redhat.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <bae0ae28-b3b7-765d-3ad1-aed269046437@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220920180839.79870ef4@canb.auug.org.au>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 9/20/22 02:19, Javier Martinez Canillas wrote:
-> Hello Randy,
+On Tue, Sep 20, 2022 at 06:08:39PM +1000, Stephen Rothwell wrote:
+> Hi all,
 > 
-> On 9/20/22 08:04, Randy Dunlap wrote:
->>
->>
->> On 9/18/22 04:08, kernel test robot wrote:
->>> Hi Javier,
->>>
->>> FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
->>
->> On 2022-June-19 Javier said that he would merge my patch:
->>
->> https://lore.kernel.org/dri-devel/5eabd169-b8a0-fb8f-d70b-4495d3790f05@redhat.com/
->>
->> What's up, Javier?
->>
->>
+> After merging the bitmap tree, today's linux-next build (powerpc
+> allyesconfig) failed like this:
 > 
-> Sorry, you are right. I've pushed now to drm-misc (drm-misc-fixes)
-> after fixing the commit message and Fixes tag as we talked before:
+> ld: arch/powerpc/kernel/head_64.o: in function `generic_secondary_common_init':
+> (.text+0x545e): undefined reference to `nr_cpu_ids'
 > 
-> https://cgit.freedesktop.org/drm/drm-misc/commit/?h=drm-misc-fixes&id=d8a79c030549
+> Caused by commit
+> 
+>   c90c5bd9f2d6 ("lib/cpumask: add FORCE_NR_CPUS config option")
+> 
+> This build has CONFIG_FORCE_NR_CPUS set but the (assembler) code expects
+> nr_cpu_ids to be a variable ...
+> 
+> I have reverted that commit for today.
 
-Yes. Thanks.
+Thanks for report, Stephen.
 
--- 
-~Randy
+I did PPC build for bitmap-for-next, and it was OK on top of
+v6-rc4. On today's -next I can reproduce the failure. It's weird
+because the code in trouble was added at 2011 in 768d18ad6d5e6
+("powerpc: Don't search for paca in freed memory").
+
+Anyways, the fix is straightforward. I updated the bitmap-for-next
+with it, and will send it for review shortly.
+--
+
+diff --git a/arch/powerpc/kernel/head_64.S b/arch/powerpc/kernel/head_64.S
+index cf2c08902c05..7cb97881635e 100644
+--- a/arch/powerpc/kernel/head_64.S
++++ b/arch/powerpc/kernel/head_64.S
+@@ -400,7 +400,11 @@ generic_secondary_common_init:
+ #else
+        LOAD_REG_ADDR(r8, paca_ptrs)    /* Load paca_ptrs pointe         */
+        ld      r8,0(r8)                /* Get base vaddr of array       */
++#if (NR_CPUS == 1) || defined(CONFIG_FORCE_NR_CPUS)
++       LOAD_REG_IMMEDIATE(r7, NR_CPUS)
++#else
+        LOAD_REG_ADDR(r7, nr_cpu_ids)   /* Load nr_cpu_ids address       */
++#endif
+        lwz     r7,0(r7)                /* also the max paca allocated   */
+        li      r5,0                    /* logical cpu id                */
+ 1:
+
