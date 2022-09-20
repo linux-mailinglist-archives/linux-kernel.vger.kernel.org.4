@@ -2,167 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA3705BE867
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 16:16:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E61C85BE882
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 16:19:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231587AbiITOQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 10:16:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58372 "EHLO
+        id S231774AbiITOSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 10:18:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbiITOQT (ORCPT
+        with ESMTP id S231636AbiITOSD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 10:16:19 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF63E36869
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 07:14:02 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id g5so3537944ybg.11
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 07:14:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=A5SHHtL7QW2l54muzkKKvK4LNnKVv9lnQOHGxIBuRuE=;
-        b=I0YUoX79VzdB1su5c8YsyhJqRmH5BNT4YqtIql7uMHjv4tNfOgHifd92qluReG4d/X
-         i+jYW3HyitXzOX4IonS8R0ZONlFkR1k7gzgwSfoZiyoaclz0ttvaXwLoZb7ZtxANBu5Y
-         3z526ei+ptSUlr9B43I+BPqd8EpQylJ4cBJQM2NB3es8UnHI+rMDDmASlishpV745ZiR
-         FmF+Tn/kij0Q3tHjPuP7PPUW7rGa0WojF+SdtI5DCR6jLM2zwity5aoAXKaUhJv2tGwk
-         A1NAE6VKh7Q2gKgry+vltVNnOPdcodRj2m1ez7wQy3SuDN63Pt0F5Dl77GROsIrV6LU3
-         c7sQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=A5SHHtL7QW2l54muzkKKvK4LNnKVv9lnQOHGxIBuRuE=;
-        b=2S/CCcJ989B3Sf/9wIk5+e/V6f62FOCVNiOyPRpBWBFeHDBxweUmDm+N65PL2RJhgS
-         8zUW1HrmCvqiJY1ET3FU6I7xJJR0f39gsojU7MnvQaBV32endorh+qlbOVrKcsAZAJdz
-         OCGXvvSJWXuGICXQHwxEH0CbwsxxPrwi/ZopW6xwtNMoV7KJ4v2ih8JqGVjh615Ei/Ov
-         wBc7krqkeQOVICpTtuJ+HiF9BKceXpXD2z3bN1cyQaeZ1Z6jNM0lJ8W7NctbWgih8Rmg
-         zChVll2gmbkJeZ9luGu3diXzjzx9Hbo4X5RakIgVLxa3gucjPfGrJTZ+kU6kP9YgzuyF
-         hxxg==
-X-Gm-Message-State: ACrzQf0AhtOCfmYjPxgLFUpX5m9rGRqH59WolR9IQwMispSopZUQdZI3
-        P/LuxZGZ8BfAAH8jsacXhenm/oFSgyIcpqmT+oB44A==
-X-Google-Smtp-Source: AMsMyM5ptp/xJcYbBs/zLcmhTWf9yaT5sYYL81f6HBIkVW4YVsWA9kHYXFc60Kp909nkSHb5MmXRrVuHNeF6LJJFSRY=
-X-Received: by 2002:a25:af52:0:b0:6b3:de78:452a with SMTP id
- c18-20020a25af52000000b006b3de78452amr10092889ybj.157.1663683242012; Tue, 20
- Sep 2022 07:14:02 -0700 (PDT)
+        Tue, 20 Sep 2022 10:18:03 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2588745F66
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 07:15:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663683315; x=1695219315;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=xA0JrjBAnkFO5QAWRGJQ/YU/q0V/00/ns9LMq7yznFk=;
+  b=RaCRzSLef9lSPswwGMmcd9jm3qXIXAv6TI/LqeUQONI4WU0DUmT2c5P3
+   2yG8klbWym5cRa7YYYhWDMIuD6gmEKVtkbBX5HXSgINxYx7V4fyjlpiY4
+   QLVkZi7BYAnCnXapUf1nuPvh8K6ooIhi17GEGnO6I5bVxV8pk/1UwxnXm
+   eDSSYSZ4KG1xdWxE1pTbReeCOahQwYcHl/XPx2MWtrpC7Mj5v5u8mj2o1
+   5f4mpVStkWVvsfO0R+cRgdYtayYyhH+6IwWfiRVsmfuHJYSbjQV9J8H61
+   zLEGnMV/aQYL6p+JYCeiEzdnakPG7d9dDb/uc0xkHoyYFEanj4DNOD+ze
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10476"; a="363663896"
+X-IronPort-AV: E=Sophos;i="5.93,330,1654585200"; 
+   d="scan'208";a="363663896"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 07:15:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,330,1654585200"; 
+   d="scan'208";a="570097051"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 20 Sep 2022 07:14:59 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oae1a-0002ng-1m;
+        Tue, 20 Sep 2022 14:14:58 +0000
+Date:   Tue, 20 Sep 2022 22:14:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Ingo Molnar <mingo@kernel.org>
+Subject: arch/x86/entry/common.c:736:24: warning: no previous prototype for
+ 'xen_pv_evtchn_do_upcall'
+Message-ID: <202209202208.CpsEyXIp-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220913192757.37727-1-dmitry.osipenko@collabora.com> <20220913192757.37727-16-dmitry.osipenko@collabora.com>
-In-Reply-To: <20220913192757.37727-16-dmitry.osipenko@collabora.com>
-From:   Sumit Semwal <sumit.semwal@linaro.org>
-Date:   Tue, 20 Sep 2022 19:43:49 +0530
-Message-ID: <CAO_48GFtLjR657nO+yh9KwsrWbNmGVsf7srHj19biO+NauYt4w@mail.gmail.com>
-Subject: Re: [PATCH v5 15/21] dma-buf: Move dma_buf_vmap() to dynamic locking specification
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Rob Clark <robdclark@gmail.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        =?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas_os@shipmail.org>,
-        Qiang Yu <yuq825@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Tomi Valkeinen <tomba@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        Ruhl Michael J <michael.j.ruhl@intel.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org,
-        linux-rdma@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dmitry,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   521a547ced6477c54b4b0cc206000406c221b4d6
+commit: 2f6474e4636bcc68af6c44abb2703f12d7f083da x86/entry: Switch XEN/PV hypercall entry to IDTENTRY
+date:   2 years, 3 months ago
+config: x86_64-randconfig-r016-20220919 (https://download.01.org/0day-ci/archive/20220920/202209202208.CpsEyXIp-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2f6474e4636bcc68af6c44abb2703f12d7f083da
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 2f6474e4636bcc68af6c44abb2703f12d7f083da
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/entry/
 
-Thanks very much for the series.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-On Wed, 14 Sept 2022 at 00:59, Dmitry Osipenko
-<dmitry.osipenko@collabora.com> wrote:
->
-> Move dma_buf_vmap/vunmap_unlocked() functions to the dynamic locking
-> specification by asserting that the reservation lock is held.
-Thanks for the patch; just a minor nit - I think you mean dma_buf_vmap
-/ vunmap() here, and not _unlocked?
+Note: functions only called from assembly code should be annotated with the asmlinkage attribute
+All warnings (new ones prefixed by >>):
 
-Best,
-Sumit.
-
-
->
-> Acked-by: Christian K=C3=B6nig <christian.koenig@amd.com>
-> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-> ---
->  drivers/dma-buf/dma-buf.c | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-> index 50db7571dc4b..80fd6ccc88c6 100644
-> --- a/drivers/dma-buf/dma-buf.c
-> +++ b/drivers/dma-buf/dma-buf.c
-> @@ -1450,6 +1450,8 @@ int dma_buf_vmap(struct dma_buf *dmabuf, struct ios=
-ys_map *map)
->         if (WARN_ON(!dmabuf))
->                 return -EINVAL;
->
-> +       dma_resv_assert_held(dmabuf->resv);
-> +
->         if (!dmabuf->ops->vmap)
->                 return -EINVAL;
->
-> @@ -1510,6 +1512,8 @@ void dma_buf_vunmap(struct dma_buf *dmabuf, struct =
-iosys_map *map)
->         if (WARN_ON(!dmabuf))
->                 return;
->
-> +       dma_resv_assert_held(dmabuf->resv);
-> +
->         BUG_ON(iosys_map_is_null(&dmabuf->vmap_ptr));
->         BUG_ON(dmabuf->vmapping_counter =3D=3D 0);
->         BUG_ON(!iosys_map_is_equal(&dmabuf->vmap_ptr, map));
-> --
-> 2.37.3
->
+   arch/x86/entry/common.c:274:24: warning: no previous prototype for 'prepare_exit_to_usermode' [-Wmissing-prototypes]
+     274 | __visible noinstr void prepare_exit_to_usermode(struct pt_regs *regs)
+         |                        ^~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/entry/common.c:336:24: warning: no previous prototype for 'syscall_return_slowpath' [-Wmissing-prototypes]
+     336 | __visible noinstr void syscall_return_slowpath(struct pt_regs *regs)
+         |                        ^~~~~~~~~~~~~~~~~~~~~~~
+>> arch/x86/entry/common.c:736:24: warning: no previous prototype for 'xen_pv_evtchn_do_upcall' [-Wmissing-prototypes]
+     736 | __visible noinstr void xen_pv_evtchn_do_upcall(struct pt_regs *regs)
+         |                        ^~~~~~~~~~~~~~~~~~~~~~~
 
 
---
-Thanks and regards,
+vim +/xen_pv_evtchn_do_upcall +736 arch/x86/entry/common.c
 
-Sumit Semwal (he / him)
-Tech Lead - LCG, Vertical Technologies
-Linaro.org =E2=94=82 Open source software for ARM SoCs
+   735	
+ > 736	__visible noinstr void xen_pv_evtchn_do_upcall(struct pt_regs *regs)
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
