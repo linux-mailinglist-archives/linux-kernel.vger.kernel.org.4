@@ -2,211 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B582B5BEFF1
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 00:17:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B1F35BEFF3
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 00:17:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230397AbiITWQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 18:16:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50160 "EHLO
+        id S230258AbiITWRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 18:17:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230049AbiITWQV (ORCPT
+        with ESMTP id S229805AbiITWRG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 18:16:21 -0400
-Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 897086BCC9;
-        Tue, 20 Sep 2022 15:15:56 -0700 (PDT)
-Received: by mail-oi1-f169.google.com with SMTP id n83so5604318oif.11;
-        Tue, 20 Sep 2022 15:15:56 -0700 (PDT)
+        Tue, 20 Sep 2022 18:17:06 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5184278BF2
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 15:16:57 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id y136so4075120pfb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 15:16:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=FwUOhYqsMP6xtd9/MCw9V5fFKqwT862ZZH0RJSft3e4=;
+        b=Dlf6n6YigvqX6AcLR9i7RejZDv9FXJpCEqYwq6AZyPvPoB7bZGswGTg32azgCTmDf/
+         tSP6m6yFhKdk+kBq9L+1LBGlj7V5NCJA9GQOXh4abWHBUqUq50fXrBNubPkALHSHG3l2
+         tzy1NTVHTYuaBQDZCuNjWr1vU/7gaba3WDp0HOnfLxAxfK5lTId7xLurOEaCFq4dHge+
+         nqAglwz2H65C7ZrMeDNxLLvIeZnXl6qYxiA60El0fKRGeGgjXLULxkqa2xfJtgErnPwQ
+         vpUQ0bjH0YtaobybAfbYuwZ2wgCDoTkOTo7BRnq55KSY790TgL3nRqD67wz4UOYNbBK3
+         OiNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=Fha+mvoBboYjfgvs7HNSSfPbH2YIEoWIGBnfMq9CF44=;
-        b=lFOiwKX9UInYbpmEB/wd0NqNzlYBy9QkrJqpwEjlu4BRxts1MW+NKQRdicM5EQsbyp
-         zXas8t7YdRs0SpggSWgpidy5IX3R4uP8zy0k/PuDixapmbh0RudAaBwE2ujed995lbBo
-         I54cYmaSLVh0IVkbcAizoPz75CcDgurpPQL3KHJLux6A1qnfh92xopqgynW+UrUdrNju
-         EMdDHsofamkztXWF9DlgbjK17FkP65T/6NGCS7PrkJGjRsGqh3e5wDEB+eqfazp1VRmX
-         km0+xBYVA7Nbmajt89q/GD/5iw0OdejPO14TEyBrw5fNiS+Gqs4C3d9yXsXLiKk6w6Gj
-         L3NQ==
-X-Gm-Message-State: ACrzQf0Elzw+zy8yS4LtsVsdVNsIIrUxmIbW5UsHnCpSYDqiiZCYfUu/
-        Bdkglt4hK8ZjOQmcsCDXn+pgfgVtnfGLvAowmJUmkXTW
-X-Google-Smtp-Source: AMsMyM6bog1uPAHtLMYj5s87Pp7MJ8aHisOsYN2SIq/2TeQ2vH1uEPGVxDg98aVDGVB3t/uqo85A3psElXt2Dha6o/Y=
-X-Received: by 2002:aca:d882:0:b0:34d:49bf:3587 with SMTP id
- p124-20020acad882000000b0034d49bf3587mr2551570oig.209.1663712153538; Tue, 20
- Sep 2022 15:15:53 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=FwUOhYqsMP6xtd9/MCw9V5fFKqwT862ZZH0RJSft3e4=;
+        b=q+yxIcv5b4jt5HKUW1iyTregVTcrS79C0syju7wlIGHYQfa/tEWH15ZBVcv3RGkIyh
+         0TE/zpQjdDjJMcjWYUQxGymjycMFBbaTaLUE/82fR5Q3DuViF07ZiSUE7jMokN3C6G2B
+         ezbniJ+E2eHSQU38yV4WF32fOF8RMwjaGDh9s+qt9n+UukUT0buFAe6jhqWqg949YVF0
+         1f7sHpiEhQFTHg8CLtjryTRGxRDvmmXp9UytyEaBaZ+YoAt+S6/LJoDVlVvPLpVvYFdR
+         d2Jl8PpFXK2QE9oFCVVA/vsMLIyVimKkNKWZybq++q8AR/HIdyeVNrpzjINjYXgbaH2n
+         9YBA==
+X-Gm-Message-State: ACrzQf2MvkL5p5FVQIHo7k/cHZSiZM10YT1BmCrsaNPENnsgtLJAJ+LE
+        53fOrbXfYsst1b52K91u1Lmllw==
+X-Google-Smtp-Source: AMsMyM7/DR+/Z9SYYBWpoQz4RH3MsYuMDCUp909I49IEerpoxPrJv4J29GLsp4G/Oe0NiR6U8Nfygg==
+X-Received: by 2002:a05:6a00:1911:b0:545:cdf0:a61f with SMTP id y17-20020a056a00191100b00545cdf0a61fmr24948927pfi.32.1663712215442;
+        Tue, 20 Sep 2022 15:16:55 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id p12-20020a170902e74c00b0016c5306917fsm428943plf.53.2022.09.20.15.16.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Sep 2022 15:16:55 -0700 (PDT)
+Date:   Tue, 20 Sep 2022 22:16:51 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Jilin Yuan <yuanjilin@cdjrlc.com>
+Cc:     pbonzini@redhat.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: x86/mmu: fix repeated words in comments
+Message-ID: <Yyo701VSV6OBeDPP@google.com>
+References: <20220831125217.12313-1-yuanjilin@cdjrlc.com>
 MIME-Version: 1.0
-References: <20220918032843.27285-1-leo.yan@linaro.org>
-In-Reply-To: <20220918032843.27285-1-leo.yan@linaro.org>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Tue, 20 Sep 2022 15:15:42 -0700
-Message-ID: <CAM9d7cjZt2k8_JtsPvWcDrzaXb0K02-OKYD4bNA3oL35vXa5Zw@mail.gmail.com>
-Subject: Re: [PATCH RESEND v2] perf test: Introduce script for data symbol testing
-To:     Leo Yan <leo.yan@linaro.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220831125217.12313-1-yuanjilin@cdjrlc.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 17, 2022 at 8:28 PM Leo Yan <leo.yan@linaro.org> wrote:
->
-> This commit introduces a shell script for data symbol testing.
->
-> The testing is designed a data structure with 64-byte alignment, it has
-> two fields "data1" and "data2", and other fields are reserved.
->
-> Using "perf mem" command, we can record and report memory samples for a
-> self-contained workload with 1 second duration.  If have no any memory
-> sample for the data structure "buf1", it reports failure;  and by
-> checking the offset in structure "buf1", if any memory accessing is not
-> for "data1" and "data2" fields, it means wrong data symbol parsing and
-> returns failure.
->
-> Signed-off-by: Leo Yan <leo.yan@linaro.org>
+On Wed, Aug 31, 2022, Jilin Yuan wrote:
+> Delete the redundant word 'to'.
+> 
+> Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
 > ---
->
-> Changes from v1:
-> - Removed "killall" since the test has no child process (Ian);
-> - Used "char" instead of "long" in the buf structure.
->
->  tools/perf/tests/shell/test_data_symbol.sh | 92 ++++++++++++++++++++++
->  1 file changed, 92 insertions(+)
->  create mode 100755 tools/perf/tests/shell/test_data_symbol.sh
->
-> diff --git a/tools/perf/tests/shell/test_data_symbol.sh b/tools/perf/tests/shell/test_data_symbol.sh
-> new file mode 100755
-> index 000000000000..d007513ecfbe
-> --- /dev/null
-> +++ b/tools/perf/tests/shell/test_data_symbol.sh
-> @@ -0,0 +1,92 @@
-> +#!/bin/bash
-> +# Test data symbol
-> +
-> +# SPDX-License-Identifier: GPL-2.0
-> +# Leo Yan <leo.yan@linaro.org>, 2022
-> +
-> +skip_if_no_mem_event() {
-> +       perf mem record -e list 2>&1 | egrep -q 'available' && return 0
-> +       return 2
-> +}
-> +
-> +skip_if_no_mem_event || exit 2
-> +
-> +# skip if there's no compiler
-> +if ! [ -x "$(command -v cc)" ]; then
-> +       echo "skip: no compiler, install gcc"
-> +       exit 2
-> +fi
-> +
-> +TEST_PROGRAM_SOURCE=$(mktemp /tmp/__perf_test.program.XXXXX.c)
-> +TEST_PROGRAM=$(mktemp /tmp/__perf_test.program.XXXXX)
-> +PERF_DATA=$(mktemp /tmp/__perf_test.perf.data.XXXXX)
-> +
-> +check_result() {
-> +       # The memory report format is as below:
-> +       #    99.92%  ...  [.] buf1+0x38  ...
-> +       result=$(perf mem report -i ${PERF_DATA} --stdio 2>&1 | egrep "buf1" | \
-> +               awk '{ for (i = 1; i <= NF; i++) { if ($i ~ /^buf1/) { print $i; break; } } }')
 
-It'd be simpler to use the 'symbol_daddr' sort key alone.
+Pushed to branch `for_paolo/6.1` at:
 
-  result=$(perf mem report -i ${PERF_DATA} -s symbol_daddr -q 2>&1 | \
-        awk '/buf1/ { print $4 }'
+    https://github.com/sean-jc/linux.git
 
-
-> +
-> +       # Testing is failed if has no any sample for "buf1"
-> +       [ -z "$result" ] && return 1
-> +
-> +       while IFS= read -r line; do
-> +               # The "data1" and "data2" fields in structure "buf1" have
-> +               # offset "0x0" and "0x38", returns failure if detect any
-> +               # other offset value.
-> +               if [ "$line" != "buf1+0x0" ] && [ "$line" != "buf1+0x38" ]; then
-> +                       return 1
-> +               fi
-> +       done <<< "$result"
-> +
-> +       return 0
-> +}
-> +
-> +cleanup_files()
-> +{
-> +       echo "Cleaning up files..."
-> +       rm -f ${PERF_DATA}
-> +       rm -f ${TEST_PROGRAM_SOURCE}
-> +       rm -f ${TEST_PROGRAM}
-> +}
-> +
-> +trap cleanup_files exit term int
-> +
-> +# compile test program
-> +cat << EOF > $TEST_PROGRAM_SOURCE
-
-You could directly call the compiler with a pipe.
-
-> +#include <stdio.h>
-> +#include <stdlib.h>
-> +#include <unistd.h>
-
-The headers are not used?
-
-> +
-> +typedef struct _buf {
-> +       char data1;
-> +       char reserved[55];
-> +       char data2;
-> +} buf __attribute__((aligned(64)));
-> +
-> +static buf buf1;
-> +
-> +int main() {
-
-s/()/(void)/
-
-> +       int i;
-
-unused.
-
-Thanks,
-Namhyung
-
-
-> +       for (;;) {
-> +               buf1.data1++;
-> +               buf1.data2 += buf1.data1;
-> +       }
-> +       return 0;
-> +}
-> +EOF
-> +
-> +echo "Compiling test program..."
-> +cc $TEST_PROGRAM_SOURCE -o $TEST_PROGRAM || exit 1
-> +
-> +echo "Recording workload..."
-> +perf mem record --all-user -o ${PERF_DATA} -- $TEST_PROGRAM &
-> +PERFPID=$!
-> +
-> +sleep 1
-> +
-> +kill $PERFPID
-> +wait $PERFPID
-> +
-> +check_result
-> +exit $?
-> --
-> 2.34.1
->
+Unless you hear otherwise, it will make its way to kvm/queue "soon".
