@@ -2,103 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47C685BF08F
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 00:52:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87CCF5BF092
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 00:53:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230264AbiITWwk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 18:52:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35720 "EHLO
+        id S230322AbiITWxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 18:53:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230237AbiITWwe (ORCPT
+        with ESMTP id S229644AbiITWw7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 18:52:34 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F04D71BD8
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 15:52:33 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id p18so3862273plr.8
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 15:52:33 -0700 (PDT)
+        Tue, 20 Sep 2022 18:52:59 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C86AA71BD2
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 15:52:57 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id d64-20020a17090a6f4600b00202ce056566so12325260pjk.4
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 15:52:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=csHCOpX4Thr2QRrHr400VPFVzlVPJ8/efH6qq4nAHXc=;
-        b=aDBP4/2lo+pXphddlVIa2FTCAzhZ91faxjotdaCnJaSpL/aaDEkohKi/G9sUhhvB5s
-         KMUGnoXYj3i89qIOkEuj5X5q6NGMUXkkTwKWrVXeRs3yHmNL7JiWxSIoTavOqdn9DmtZ
-         WrROCn/b2HS8AyqdqV4GgA4eGe+8jr7IfQMaE=
+        bh=oq3iuYqgpVztglY7H/NFsHDhvYDb/9kInx41v+sCUYo=;
+        b=TkcBPM4T6KPghdH6FXzD+gnd3xzgIIgXHLbx3JCrzl7bSBgzPXNoOqNEA3VqRKkwbc
+         m/6/lmQ7AzVMA5hzx/4/MSYmc1xwU6qGE3PltYGdF4ZCy70rAfLPV69ysEo0YtEK5qua
+         I/CB7fY5z4Eu2SaU2TQL5y3d+TobopeELw0pLGbEYTK7NxEWVw2K/uKaKWFwGgwb14no
+         KqgKg7mgdWW0RDYK03mNz2ppfJM5iASv+IYzhqcpJm/Rmdr7qaJewRWIQa4Dl2CSC96o
+         EjpRxK6dWK46cxcMmCeRQxgXCMieB+337c0Xnz8BFfVp+srnP1Iu49SekUTLshfXW/g1
+         1X3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=csHCOpX4Thr2QRrHr400VPFVzlVPJ8/efH6qq4nAHXc=;
-        b=wexnrkrgXMhUHT9mx/t0mwCOqYacjd9icu4MJI5gbztapxqylUG0TSq0r59ny9W3Fe
-         0VIqLwvH5e+n2I3TTtHDyny94NKraT3WmkbZbSy16cdUgiZh/eLnzbVfHkIMr+eLC0/4
-         HSpqAb6WWqVkAYePkyofRyQWXGR8fqBQpi+owcgOd/MWcS11g8m6y63CxoIdvRxQbuO1
-         IBXwxFvJbWZissEJsYll4R24G9U60LCEjisUVbJyaGFGMrw2kj8CujMbAZZ3r4PtjoMn
-         Ktx3GsvI6mmVdKcrEzHxKbZUTTG6hUU98cvLWqLQtyPTJPLVNJXynoIPZh3ciBMX2Zgp
-         R5Gw==
-X-Gm-Message-State: ACrzQf1A8fpQpadhysqFj5TOLFXWUZbsLTyCmMd7xNEq5YwOWmyX9GyZ
-        JBkYVAH8/IUPgZFC3yN47sUaXA==
-X-Google-Smtp-Source: AMsMyM5f+/GVDaMh8mBt+g8Z2/ClIUN5JBPSQy1AM58w9hhHp0b6WHVvMFj25tmNNs2JJPVMGUhEFQ==
-X-Received: by 2002:a17:902:f683:b0:176:cc02:ce83 with SMTP id l3-20020a170902f68300b00176cc02ce83mr1802714plg.88.1663714352678;
-        Tue, 20 Sep 2022 15:52:32 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id f13-20020a170902ce8d00b0016dc6279ab7sm421363plg.149.2022.09.20.15.52.31
+        bh=oq3iuYqgpVztglY7H/NFsHDhvYDb/9kInx41v+sCUYo=;
+        b=1cKANsVcM+spCImLepIqpBvD654ts2A6T158pbG56BUhlN4IPAKfwKmzdiCzMDvTEw
+         kGWtysLDtY0oeiSeflU72LXJQreEscfxG6JJcdIoFV3nk0/vNIwIB4S2rkKxsuZ3w9xZ
+         qQy9oXNnetw44/ZKrx6hrxMcrgafJaD4BRsdRByHb5EhSxJLEyfxafWL5bF9h3Pzpeeh
+         0DEoqVDMPP2VFVMbOK9bzzbOBRLOvd1Jv+ZuX71K6sy094cIixL6moEDCbVlynnlxx49
+         sZP7yIcoS/QOtI82VAdVesir6YQ5PLxck/CBSH+rYP6BrY3ivzYR97pfULSjRi6nP/Rh
+         UpEA==
+X-Gm-Message-State: ACrzQf2ozivTMKX6dn1DorEpZ7NIH9lR4Iac6+vxBV0H4eOFib0Pu4Zy
+        pLxbjpp+3iV0tZUfkWLOHi3cew==
+X-Google-Smtp-Source: AMsMyM5gkpKq6OvOszMaHIpqHSNccl7/7urVrT0Gij2fXPU9+iu3UyR3X+REdjCc9Z/UvK+KtvuVOQ==
+X-Received: by 2002:a17:90a:1b6e:b0:1f5:1902:af92 with SMTP id q101-20020a17090a1b6e00b001f51902af92mr6307754pjq.238.1663714377221;
+        Tue, 20 Sep 2022 15:52:57 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id e11-20020a17090301cb00b00176c431e7e2sm469518plh.13.2022.09.20.15.52.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 15:52:31 -0700 (PDT)
-Date:   Tue, 20 Sep 2022 15:52:30 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Evan Green <evgreen@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, gwendal@chromium.org,
-        Eric Biggers <ebiggers@kernel.org>,
-        Matthew Garrett <mgarrett@aurora.tech>, jarkko@kernel.org,
-        zohar@linux.ibm.com, linux-integrity@vger.kernel.org,
-        Pavel Machek <pavel@ucw.cz>, apronin@chromium.org,
-        dlunev@google.com, rjw@rjwysocki.net, linux-pm@vger.kernel.org,
-        corbet@lwn.net, jejb@linux.ibm.com,
-        David Howells <dhowells@redhat.com>,
-        Hao Wu <hao.wu@rubrik.com>, James Morris <jmorris@namei.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Len Brown <len.brown@intel.com>,
-        Matthew Garrett <matthewgarrett@google.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, axelj <axelj@axis.com>,
-        keyrings@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v2 00/10] Encrypted Hibernation
-Message-ID: <202209201550.D2F47108@keescook>
-References: <20220823222526.1524851-1-evgreen@chromium.org>
+        Tue, 20 Sep 2022 15:52:56 -0700 (PDT)
+Date:   Tue, 20 Sep 2022 22:52:53 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/6] KVM: x86: Introduce CPUID_8000_0007_EDX
+ 'scattered' leaf
+Message-ID: <YypEReJYrI0c7Oii@google.com>
+References: <20220916135205.3185973-1-vkuznets@redhat.com>
+ <20220916135205.3185973-3-vkuznets@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220823222526.1524851-1-evgreen@chromium.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220916135205.3185973-3-vkuznets@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 03:25:16PM -0700, Evan Green wrote:
-> This series adopts that primitive as a foundation, tweaking and building
-> on it a bit. Where Matthew's series used the TPM-backed key to encrypt a
-> hash of the image, this series uses the key directly as a gcm(aes)
-> encryption key, which the kernel uses to encrypt and decrypt the
-> hibernate image in chunks of 16 pages. This provides both encryption and
-> integrity, which turns out to be a noticeable performance improvement over
-> separate passes for encryption and hashing.
+On Fri, Sep 16, 2022, Vitaly Kuznetsov wrote:
+> CPUID_8000_0007_EDX may come handy when X86_FEATURE_CONSTANT_TSC
+> needs to be checked.
+> 
+> No functional change intended.
+> 
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> ---
+>  arch/x86/kvm/cpuid.c         | 4 ++++
+>  arch/x86/kvm/reverse_cpuid.h | 9 ++++++++-
+>  2 files changed, 12 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+> index 75dcf7a72605..f68b14053c9b 100644
+> --- a/arch/x86/kvm/cpuid.c
+> +++ b/arch/x86/kvm/cpuid.c
+> @@ -669,6 +669,10 @@ void kvm_set_cpu_caps(void)
+>  	if (!tdp_enabled && IS_ENABLED(CONFIG_X86_64))
+>  		kvm_cpu_cap_set(X86_FEATURE_GBPAGES);
+>  
+> +	kvm_cpu_cap_init_scattered(CPUID_8000_0007_EDX,
+> +		SF(CONSTANT_TSC)
+> +	);
 
-I like this series! I would ask that someone more familiar with the
-cryptographic constraints here confirm that the primitives you're using
-are going to actually provide you the constraints you want (i.e.
-encryption, integrity, etc). My understanding is that gcm(aes) is
-exactly right, but I Am Not A Cryptographer. ;)
+The scattered leaf needs to be used in __do_cpuid_func(), e.g.
 
-I'll reply more to individual patches ...
-
--- 
-Kees Cook
+diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+index ffdc28684cb7..c91f23bb3605 100644
+--- a/arch/x86/kvm/cpuid.c
++++ b/arch/x86/kvm/cpuid.c
+@@ -1137,8 +1137,8 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
+                /* L2 cache and TLB: pass through host info. */
+                break;
+        case 0x80000007: /* Advanced power management */
+-               /* invariant TSC is CPUID.80000007H:EDX[8] */
+-               entry->edx &= (1 << 8);
++               cpuid_entry_override(entry, CPUID_8000_0007_EDX);
++
+                /* mask against host */
+                entry->edx &= boot_cpu_data.x86_power;
+                entry->eax = entry->ebx = entry->ecx = 0;
