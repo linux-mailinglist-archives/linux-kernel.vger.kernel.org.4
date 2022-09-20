@@ -2,148 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C33745BE72F
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 15:34:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E94F5BE731
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 15:35:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230251AbiITNet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 09:34:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45024 "EHLO
+        id S231279AbiITNfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 09:35:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230055AbiITNef (ORCPT
+        with ESMTP id S231376AbiITNfS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 09:34:35 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D746DCD4;
-        Tue, 20 Sep 2022 06:34:30 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id o70-20020a17090a0a4c00b00202f898fa86so2500611pjo.2;
-        Tue, 20 Sep 2022 06:34:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=Ud1zLgXH9AoOTKaYWX8ixkpv9cvGKhiKEy3m7R2TJr0=;
-        b=WmGMJacRaa9mKwkL/FSCqBD9WAcWHIA5mGjDhAoJiZpWncEvQivRiD6ahlCswCWTUZ
-         U54lVxtiFuoQBn9t59ANs9QkriEcbNFYaqIm08Pup2x8i7b7emBxog5ODGweq/EpXfQM
-         yNE2AVwS63/au95MYlXofk8aiTkYOtgUjF//YJRxLXjSdVcVDYNkkk2WZt6/O0MrQ4Ui
-         p3NmZ8bGWEWkTNLZdqSpenux7bC9RGFRC3Dox+4WpGrkmpN6er2FJozi59IC8xv+ulHB
-         OIo2IRe5e6OlBxpDLgGfkpKMxz78H5I5P392Vu6ZTJbgnphl4Oq6W9UWMxCP42se1aWQ
-         574Q==
+        Tue, 20 Sep 2022 09:35:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D5A4B485
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 06:34:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663680899;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vsayBf+vjxANIOwIkgB0cyuQ2jLCowoT3OPiCISHDcU=;
+        b=e6SbaEGeB1R0Wd6jHV5LCypQFzQ/31nnC7/F1z0YbeJ4I1mnFH2hHk3sk/7p+UAIPx56hq
+        phGJ/Ikkmua01/0gKRYv1YmEN0Z+zRh0nNw39eec7BEUaoMw4kineAMLsj9gKe+Lxo6y8e
+        z8nq8+0FApTPsRAzf0qkRryTkJYlZmA=
+Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com
+ [209.85.210.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-7-cgmNqf-3NPuwJ4SB0keCag-1; Tue, 20 Sep 2022 09:34:54 -0400
+X-MC-Unique: cgmNqf-3NPuwJ4SB0keCag-1
+Received: by mail-pf1-f199.google.com with SMTP id y22-20020aa79af6000000b0054a792d9ca9so1750204pfp.11
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 06:34:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=Ud1zLgXH9AoOTKaYWX8ixkpv9cvGKhiKEy3m7R2TJr0=;
-        b=IttLIa37k6bRZQnXSHFWk3gG1E0nFtOZw4bP35CXL3IqFvok305WmqU0rw8YPK4dqD
-         Df+bsg1EH/eTkKEykpEaWYAZ9CgcnssCz3YFBsCLnnyLyMvmgRHPC9WIUqLY+NWl/+Nm
-         l/fgS6E9a+tzlQQ10e00Sxczf0CTMJm1jp1bkJNFJc2O8JQVPwyWED27JaB1j0g5Kf9A
-         qp2lR7DPy800lGV0K9QusA2VQCWlMUmOnigt3oJQX24t9z+Ki/SQQrialsdcjzZjqgMb
-         HYJikhEYj2nurQn0OeJNjX8tae7P06R7+7s7Zfok5O7fZIosz+AD7iV9dS48JsC99HOk
-         eDog==
-X-Gm-Message-State: ACrzQf2H5P3T0jNNT9TSRnTPoSNxIBTO0RR0x83938/08XarZuW7dMyu
-        aerLUW1Ndmp7YVAUYsvHBuZgpcC8SwSTwm5ksjfBEbMpAc/k+mDy
-X-Google-Smtp-Source: AMsMyM6E2HA8/leiFEFaY65VyvtF6eRZ91zeoQsTy0Ppg6zZHbNuIAQVLLwESFu05DhZpCyeFbQBE9tu9E+Ha1VFluA=
-X-Received: by 2002:a17:903:32cf:b0:178:3d49:45b0 with SMTP id
- i15-20020a17090332cf00b001783d4945b0mr4853354plr.5.1663680870272; Tue, 20 Sep
- 2022 06:34:30 -0700 (PDT)
+        bh=vsayBf+vjxANIOwIkgB0cyuQ2jLCowoT3OPiCISHDcU=;
+        b=ts8D2qZLUsoGzj9ltHdAOBq+qkPjr4zsycjYkJDN6pWGrKAFDvGlMQ27Ixbkcz0zqI
+         HBnYORuuH1DqVwdfTJ03HdkbedI38vIe7buSRb2roY0VQsgA7ooLPOyhovGZp5PTmlxW
+         bluXaM72YwS4S7husSu9NfGh90e9cFcnQA7UZhzIjp7Xjs2FIuqiav1lHMclX5NB/kch
+         Fm8Blbd8dJJ1XHfJVEjImROEIv5VndASNaW7u6QAE7UHlMi3rzHlg0IGlfagzCSkrFDB
+         pt1ArqA0+1PvcxU08tYcto+8+SsiVVJh+Rw29HsoBYBFaXVxBTANa4W7/nMHAJz6xWbr
+         EPYg==
+X-Gm-Message-State: ACrzQf1/Xn7yMmWMKWs4OqDnid76VuBYx61OQHn8QY7PwD/IPmFTn6WC
+        9GOsxLvmlnY43gNGivujckyycilHDy5teR3CJTfKE1Ji9dyO3Gw951TDfPvlYdUnVCtW08HeQsQ
+        1KYEp5MVbhSpi4zHGiCGPi9tMJR6xcWfYSe6lmcD7
+X-Received: by 2002:a63:f445:0:b0:43a:2d54:f28d with SMTP id p5-20020a63f445000000b0043a2d54f28dmr8463863pgk.491.1663680887917;
+        Tue, 20 Sep 2022 06:34:47 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6dxblwd639ceHSE2X+X0xHDM9fCQ21GWsJSllZguRePHIG18Xv78ifM+HdVKbbqtmh+TrI1YdeGNcAxmYBKvs=
+X-Received: by 2002:a63:f445:0:b0:43a:2d54:f28d with SMTP id
+ p5-20020a63f445000000b0043a2d54f28dmr8463842pgk.491.1663680887590; Tue, 20
+ Sep 2022 06:34:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <Yymq2WLA6q6TxnNq@ipe420-102>
-In-Reply-To: <Yymq2WLA6q6TxnNq@ipe420-102>
-From:   Magnus Karlsson <magnus.karlsson@gmail.com>
-Date:   Tue, 20 Sep 2022 15:34:19 +0200
-Message-ID: <CAJ8uoz2D9mGjZzo6SmAWtgbb0A3AB_Nk4eYXajenv3VDBA11=A@mail.gmail.com>
-Subject: Re: [PATCH bpf v2] xsk: inherit need_wakeup flag for shared sockets
-To:     Jalal Mostafa <jalal.a.mostapha@gmail.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org, bjorn@kernel.org,
-        magnus.karlsson@intel.com, maciej.fijalkowski@intel.com,
-        jonathan.lemon@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, daniel@iogearbox.net,
-        linux-kernel@vger.kernel.org, jalal.mostafa@kit.edu
+References: <20220914184345.270456-1-marcus.folkesson@gmail.com>
+In-Reply-To: <20220914184345.270456-1-marcus.folkesson@gmail.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Tue, 20 Sep 2022 15:34:36 +0200
+Message-ID: <CAO-hwJJCrf0_V=w8_z1uD=zQKS+9yPBnt8KfnYEahYxe=hc4oQ@mail.gmail.com>
+Subject: Re: [PATCH] HID: Add driver for PhoenixRC Flight Controller
+To:     Marcus Folkesson <marcus.folkesson@gmail.com>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 1:58 PM Jalal Mostafa
-<jalal.a.mostapha@gmail.com> wrote:
+On Wed, Sep 14, 2022 at 8:38 PM Marcus Folkesson
+<marcus.folkesson@gmail.com> wrote:
 >
-> The flag for need_wakeup is not set for xsks with `XDP_SHARED_UMEM`
-> flag and of different queue ids and/or devices. They should inherit
-> the flag from the first socket buffer pool since no flags can be
-> specified once `XDP_SHARED_UMEM` is specified. The issue is fixed
-> by creating a new function `xp_create_and_assign_umem_shared` to
-> create xsk_buff_pool for xsks with the shared umem flag set.
-
-Thanks!
-
-Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
-
-> Fixes: b5aea28dca134 ("xsk: Add shared umem support between queue ids")
-> Signed-off-by: Jalal Mostafa <jalal.a.mostapha@gmail.com>
+> The PhoenixRC is a controller with 8 channels for use in flight
+> simulators.
+>
+> Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
 > ---
->  include/net/xsk_buff_pool.h | 2 +-
->  net/xdp/xsk.c               | 4 ++--
->  net/xdp/xsk_buff_pool.c     | 5 +++--
->  3 files changed, 6 insertions(+), 5 deletions(-)
+
+Applied to for-6.1/rc-controllers in hid.git
+
+Cheers,
+Benjamin
+
+>  MAINTAINERS            |   6 +++
+>  drivers/hid/Kconfig    |   9 ++++
+>  drivers/hid/Makefile   |   1 +
+>  drivers/hid/hid-ids.h  |   1 +
+>  drivers/hid/hid-pxrc.c | 112 +++++++++++++++++++++++++++++++++++++++++
+>  5 files changed, 129 insertions(+)
+>  create mode 100644 drivers/hid/hid-pxrc.c
 >
-> diff --git a/include/net/xsk_buff_pool.h b/include/net/xsk_buff_pool.h
-> index 647722e847b4..f787c3f524b0 100644
-> --- a/include/net/xsk_buff_pool.h
-> +++ b/include/net/xsk_buff_pool.h
-> @@ -95,7 +95,7 @@ struct xsk_buff_pool *xp_create_and_assign_umem(struct xdp_sock *xs,
->                                                 struct xdp_umem *umem);
->  int xp_assign_dev(struct xsk_buff_pool *pool, struct net_device *dev,
->                   u16 queue_id, u16 flags);
-> -int xp_assign_dev_shared(struct xsk_buff_pool *pool, struct xdp_umem *umem,
-> +int xp_assign_dev_shared(struct xsk_buff_pool *pool, struct xdp_sock *umem_xs,
->                          struct net_device *dev, u16 queue_id);
->  int xp_alloc_tx_descs(struct xsk_buff_pool *pool, struct xdp_sock *xs);
->  void xp_destroy(struct xsk_buff_pool *pool);
-> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> index 5b4ce6ba1bc7..7bada4e8460b 100644
-> --- a/net/xdp/xsk.c
-> +++ b/net/xdp/xsk.c
-> @@ -954,8 +954,8 @@ static int xsk_bind(struct socket *sock, struct sockaddr *addr, int addr_len)
->                                 goto out_unlock;
->                         }
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 64379c699903..2f70b7d2b4b9 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -8907,6 +8907,12 @@ L:       linux-input@vger.kernel.org
+>  S:     Supported
+>  F:     drivers/hid/hid-playstation.c
 >
-> -                       err = xp_assign_dev_shared(xs->pool, umem_xs->umem,
-> -                                                  dev, qid);
-> +                       err = xp_assign_dev_shared(xs->pool, umem_xs, dev,
-> +                                                  qid);
->                         if (err) {
->                                 xp_destroy(xs->pool);
->                                 xs->pool = NULL;
-> diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
-> index a71a8c6edf55..ed6c71826d31 100644
-> --- a/net/xdp/xsk_buff_pool.c
-> +++ b/net/xdp/xsk_buff_pool.c
-> @@ -212,17 +212,18 @@ int xp_assign_dev(struct xsk_buff_pool *pool,
->         return err;
->  }
+> +HID PHOENIX RC FLIGHT CONTROLLER
+> +M:     Marcus Folkesson <marcus.folkesson@gmail.com>
+> +L:     linux-input@vger.kernel.org
+> +S:     Maintained
+> +F:     drivers/hid/hid-pxrc.c
+> +
+>  HID SENSOR HUB DRIVERS
+>  M:     Jiri Kosina <jikos@kernel.org>
+>  M:     Jonathan Cameron <jic23@kernel.org>
+> diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
+> index 70da5931082f..8ca58141d5be 100644
+> --- a/drivers/hid/Kconfig
+> +++ b/drivers/hid/Kconfig
+> @@ -950,6 +950,15 @@ config PLAYSTATION_FF
+>           Say Y here if you would like to enable force feedback support for
+>           PlayStation game controllers.
 >
-> -int xp_assign_dev_shared(struct xsk_buff_pool *pool, struct xdp_umem *umem,
-> +int xp_assign_dev_shared(struct xsk_buff_pool *pool, struct xdp_sock *umem_xs,
->                          struct net_device *dev, u16 queue_id)
->  {
->         u16 flags;
-> +       struct xdp_umem *umem = umem_xs->umem;
+> +config HID_PXRC
+> +       tristate "PhoenixRC HID Flight Controller"
+> +       depends on HID
+> +       help
+> +       Support for PhoenixRC HID Flight Controller, a 8-axis flight controller.
+> +
+> +       To compile this driver as a module, choose M here: the
+> +       module will be called hid-pxrc.
+> +
+>  config HID_RAZER
+>         tristate "Razer non-fully HID-compliant devices"
+>         depends on HID
+> diff --git a/drivers/hid/Makefile b/drivers/hid/Makefile
+> index cac2cbe26d11..b3748b97d5b5 100644
+> --- a/drivers/hid/Makefile
+> +++ b/drivers/hid/Makefile
+> @@ -101,6 +101,7 @@ hid-picolcd-$(CONFIG_DEBUG_FS)              += hid-picolcd_debugfs.o
+>  obj-$(CONFIG_HID_PLANTRONICS)  += hid-plantronics.o
+>  obj-$(CONFIG_HID_PLAYSTATION)  += hid-playstation.o
+>  obj-$(CONFIG_HID_PRIMAX)       += hid-primax.o
+> +obj-$(CONFIG_HID_PXRC)         += hid-pxrc.o
+>  obj-$(CONFIG_HID_RAZER)        += hid-razer.o
+>  obj-$(CONFIG_HID_REDRAGON)     += hid-redragon.o
+>  obj-$(CONFIG_HID_RETRODE)      += hid-retrode.o
+> diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
+> index d9eb676abe96..30ac56cb238b 100644
+> --- a/drivers/hid/hid-ids.h
+> +++ b/drivers/hid/hid-ids.h
+> @@ -1381,6 +1381,7 @@
 >
->         /* One fill and completion ring required for each queue id. */
->         if (!pool->fq || !pool->cq)
->                 return -EINVAL;
+>  #define USB_VENDOR_ID_MULTIPLE_1781    0x1781
+>  #define USB_DEVICE_ID_RAPHNET_4NES4SNES_OLD    0x0a9d
+> +#define USB_DEVICE_ID_PHOENIXRC        0x0898
 >
->         flags = umem->zc ? XDP_ZEROCOPY : XDP_COPY;
-> -       if (pool->uses_need_wakeup)
-> +       if (umem_xs->pool->uses_need_wakeup)
->                 flags |= XDP_USE_NEED_WAKEUP;
->
->         return xp_assign_dev(pool, dev, queue_id, flags);
+>  #define USB_VENDOR_ID_DRACAL_RAPHNET   0x289b
+>  #define USB_DEVICE_ID_RAPHNET_2NES2SNES        0x0002
+> diff --git a/drivers/hid/hid-pxrc.c b/drivers/hid/hid-pxrc.c
+> new file mode 100644
+> index 000000000000..b0e517f9cde7
+> --- /dev/null
+> +++ b/drivers/hid/hid-pxrc.c
+> @@ -0,0 +1,112 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * HID driver for PhoenixRC 8-axis flight controller
+> + *
+> + * Copyright (C) 2022 Marcus Folkesson <marcus.folkesson@gmail.com>
+> + */
+> +
+> +#include <linux/device.h>
+> +#include <linux/hid.h>
+> +#include <linux/module.h>
+> +
+> +#include "hid-ids.h"
+> +
+> +struct pxrc_priv {
+> +       u8 slider;
+> +       u8 dial;
+> +       bool alternate;
+> +};
+> +
+> +static __u8 pxrc_rdesc_fixed[] = {
+> +       0x05, 0x01,        // Usage Page (Generic Desktop Ctrls)
+> +       0x09, 0x04,        // Usage (Joystick)
+> +       0xA1, 0x01,        // Collection (Application)
+> +       0x09, 0x01,        //   Usage (Pointer)
+> +       0xA1, 0x00,        //   Collection (Physical)
+> +       0x09, 0x30,        //     Usage (X)
+> +       0x09, 0x36,        //     Usage (Slider)
+> +       0x09, 0x31,        //     Usage (Y)
+> +       0x09, 0x32,        //     Usage (Z)
+> +       0x09, 0x33,        //     Usage (Rx)
+> +       0x09, 0x34,        //     Usage (Ry)
+> +       0x09, 0x35,        //     Usage (Rz)
+> +       0x09, 0x37,        //     Usage (Dial)
+> +       0x15, 0x00,        //     Logical Minimum (0)
+> +       0x26, 0xFF, 0x00,  //     Logical Maximum (255)
+> +       0x35, 0x00,        //     Physical Minimum (0)
+> +       0x46, 0xFF, 0x00,  //     Physical Maximum (255)
+> +       0x75, 0x08,        //     Report Size (8)
+> +       0x95, 0x08,        //     Report Count (8)
+> +       0x81, 0x02,        //     Input (Data,Var,Abs,No Wrap,Linear,Preferred State,No Null Position)
+> +       0xC0,              //   End Collection
+> +       0xC0,              // End Collection
+> +};
+> +
+> +static __u8 *pxrc_report_fixup(struct hid_device *hdev, __u8 *rdesc,
+> +                               unsigned int *rsize)
+> +{
+> +       hid_info(hdev, "fixing up PXRC report descriptor\n");
+> +       *rsize = sizeof(pxrc_rdesc_fixed);
+> +       return pxrc_rdesc_fixed;
+> +}
+> +
+> +static int pxrc_raw_event(struct hid_device *hdev, struct hid_report *report,
+> +        u8 *data, int size)
+> +{
+> +       struct pxrc_priv *priv = hid_get_drvdata(hdev);
+> +
+> +       if (priv->alternate)
+> +               priv->slider = data[7];
+> +       else
+> +               priv->dial = data[7];
+> +
+> +       data[1] = priv->slider;
+> +       data[7] = priv->dial;
+> +
+> +       priv->alternate = !priv->alternate;
+> +       return 0;
+> +}
+> +
+> +static int pxrc_probe(struct hid_device *hdev, const struct hid_device_id *id)
+> +{
+> +       int ret;
+> +       struct pxrc_priv *priv;
+> +
+> +       priv = devm_kzalloc(&hdev->dev, sizeof(*priv), GFP_KERNEL);
+> +       if (!priv)
+> +               return -ENOMEM;
+> +       hid_set_drvdata(hdev, priv);
+> +
+> +       ret = hid_parse(hdev);
+> +       if (ret) {
+> +               hid_err(hdev, "parse failed\n");
+> +               return ret;
+> +       }
+> +
+> +       ret = hid_hw_start(hdev, HID_CONNECT_DEFAULT);
+> +       if (ret) {
+> +               hid_err(hdev, "hw start failed\n");
+> +               return ret;
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +static const struct hid_device_id pxrc_devices[] = {
+> +       { HID_USB_DEVICE(USB_VENDOR_ID_MULTIPLE_1781, USB_DEVICE_ID_PHOENIXRC) },
+> +       { /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(hid, pxrc_devices);
+> +
+> +static struct hid_driver pxrc_driver = {
+> +       .name = "hid-pxrc",
+> +       .id_table = pxrc_devices,
+> +       .report_fixup = pxrc_report_fixup,
+> +       .probe = pxrc_probe,
+> +       .raw_event = pxrc_raw_event,
+> +};
+> +module_hid_driver(pxrc_driver);
+> +
+> +MODULE_AUTHOR("Marcus Folkesson <marcus.folkesson@gmail.com>");
+> +MODULE_DESCRIPTION("HID driver for PXRC 8-axis flight controller");
+> +MODULE_LICENSE("GPL");
 > --
-> 2.34.1
+> 2.37.1
 >
+
