@@ -2,127 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C2465BDAA5
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 05:05:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 034555BDA9D
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 05:04:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230108AbiITDFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 23:05:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43156 "EHLO
+        id S229673AbiITDEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 23:04:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230040AbiITDEs (ORCPT
+        with ESMTP id S229801AbiITDDn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 23:04:48 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD66DBCB5;
-        Mon, 19 Sep 2022 20:04:26 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id a80so1474307pfa.4;
-        Mon, 19 Sep 2022 20:04:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=1ZAgs0EUhexlFlK2MZMbzZ6IVMi8WJy1viUVzYD9emk=;
-        b=mz2nf/kpV65RpPN0RxEjlCpMh7TtltlOTVC6jiGG97yzv1C4MN6RzvyEYIuSmm3OG2
-         Our5rGPb7SjhuI7BtCKuDLTeRkiA4xYUMmIykzT1wDDOvJiQMQJYLll+cpUUc3Ex9AL4
-         YnWINGn19qKq6DKXF3Ccwk5TDfy07eS8eVqSSwsZReBLbJBLrERONLNwrqrQ0B3b3y8/
-         kG7i3GmFTNNHrxcJ/kZIuAf85k6RaYmRsl5zgLh7oEs5na1Gr5+lxooREHsD7yGk5Dsq
-         O/Gzda4ZIwpI/xuJZVseT92X9MJEMv8mSqy1amnhjm+FIAz5Bazg3AFyecau54wTxf30
-         15qA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=1ZAgs0EUhexlFlK2MZMbzZ6IVMi8WJy1viUVzYD9emk=;
-        b=uCXJ914i67ONFbL9BVU30kWR4fDhFyVeqs39Me9AeD+5Rx4Zt46k93m1t+v3PUZCW2
-         l/vUyP1a0rTvLoVUIMCvX0esYbCSfxCA8ahUEg4xBMrCsZcsgU1UhdrDwfcoHIfTzust
-         5NWPrfuW/suTz/4f0VvBlLOK8acifHcoiPphAJylnMcpUdFn/AK2iGlUQfv7ZxWuEXMW
-         MuBKSh2i8kJGyRE9owHWbvAvEKW6++mylg37KOlXEbNJVcbUgrtROZdFxJHn0FbRscGp
-         NG2AR9xPkty963ZrmNeMi5c+PbLTfspUQLZCf53MDWzA5vq105fkPRn4SZbmfAiXCKMP
-         ruRg==
-X-Gm-Message-State: ACrzQf1RDOLV9G25D+mEwEQKams9Q/QROko0sVrGvYJvHfc6+SGZhy+b
-        wt4x5s0eB4kFbCwst+S803pzZZFAN+j2gQ==
-X-Google-Smtp-Source: AMsMyM4c+NnhvJf5VR8ihN9H6u+dBOlOl1hRfRzYIvJe9+wQ2FGWaeKUq7AcKI69mRRNR2ZnJgH3XQ==
-X-Received: by 2002:a63:d250:0:b0:435:1774:1f93 with SMTP id t16-20020a63d250000000b0043517741f93mr18422050pgi.339.1663643065471;
-        Mon, 19 Sep 2022 20:04:25 -0700 (PDT)
-Received: from skynet-linux.local ([2406:7400:61:8a0f:392d:db19:673c:627a])
-        by smtp.googlemail.com with ESMTPSA id t193-20020a635fca000000b0043a18cef977sm171083pgb.13.2022.09.19.20.04.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 20:04:24 -0700 (PDT)
-From:   Sireesh Kodali <sireeshkodali1@gmail.com>
-To:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-Cc:     andersson@kernel.org, Sireesh Kodali <sireeshkodali1@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v3 4/4] dt-bindings: remoteproc: qcom: wcnss: Add compatible for pronto v3
-Date:   Tue, 20 Sep 2022 08:33:16 +0530
-Message-Id: <20220920030316.1619781-5-sireeshkodali1@gmail.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220920030316.1619781-1-sireeshkodali1@gmail.com>
-References: <20220920030316.1619781-1-sireeshkodali1@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 19 Sep 2022 23:03:43 -0400
+Received: from mail.nfschina.com (mail.nfschina.com [124.16.136.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 607CA5852C;
+        Mon, 19 Sep 2022 20:03:42 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id 24BBC1E80D1C;
+        Tue, 20 Sep 2022 11:00:35 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id FpVUwppaUQEi; Tue, 20 Sep 2022 11:00:32 +0800 (CST)
+Received: from localhost.localdomain (unknown [219.141.250.2])
+        (Authenticated sender: kunyu@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id 233AA1E80D17;
+        Tue, 20 Sep 2022 11:00:32 +0800 (CST)
+From:   Li kunyu <kunyu@nfschina.com>
+To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, catalin.marinas@arm.com,
+        will@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, arnd@arndb.de
+Cc:     linux-hyperv@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Li kunyu <kunyu@nfschina.com>
+Subject: [PATCH] asm-generic: Remove the parameters of the generate_guest_id function and modify the return type and modify the function name
+Date:   Tue, 20 Sep 2022 11:03:35 +0800
+Message-Id: <20220920030335.69132-1-kunyu@nfschina.com>
+X-Mailer: git-send-email 2.18.2
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pronto v3 remoteproc is similar to pronto v2. It is found on the
-MSM8953 platform, which is used by SDM450, SDM625, SDM626, APQ8053 and
-other SoCs. Since the configuration is same on all SoCs, a single
-compatible is used.
+The generate_guest_id function is more suitable for use after the
+following modifications.
+1. Modify the type of the guest_id variable to u64, which is compatible
+with the caller.
+2. Remove all parameters from the function, and write the parameter
+(LINUX_VERSION_CODE) passed in by the actual call into the function
+implementation.
+3. Rename the function to make it clearly a Hyper-V related function,
+and modify it to hv_generate_guest_id.
 
-Signed-off-by: Sireesh Kodali <sireeshkodali1@gmail.com>
+Signed-off-by: Li kunyu <kunyu@nfschina.com>
 ---
- .../bindings/remoteproc/qcom,wcnss-pil.yaml      | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ arch/arm64/hyperv/mshyperv.c   |  2 +-
+ arch/x86/hyperv/hv_init.c      |  2 +-
+ include/asm-generic/mshyperv.h | 12 +++++-------
+ 3 files changed, 7 insertions(+), 9 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,wcnss-pil.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,wcnss-pil.yaml
-index 31232c59b22b..639c52284f4f 100644
---- a/Documentation/devicetree/bindings/remoteproc/qcom,wcnss-pil.yaml
-+++ b/Documentation/devicetree/bindings/remoteproc/qcom,wcnss-pil.yaml
-@@ -22,6 +22,7 @@ properties:
-           - enum:
-               - qcom,pronto-v1-pil
-               - qcom,pronto-v2-pil
-+              - qcom,pronto-v3-pil
-           - const: qcom,pronto
-       - const: qcom,riva-pil
+diff --git a/arch/arm64/hyperv/mshyperv.c b/arch/arm64/hyperv/mshyperv.c
+index bbbe351e9045..3863fd226e0e 100644
+--- a/arch/arm64/hyperv/mshyperv.c
++++ b/arch/arm64/hyperv/mshyperv.c
+@@ -38,7 +38,7 @@ static int __init hyperv_init(void)
+ 		return 0;
  
-@@ -197,6 +198,21 @@ allOf:
-         - power-domains
-         - power-domain-names
+ 	/* Setup the guest ID */
+-	guest_id = generate_guest_id(0, LINUX_VERSION_CODE, 0);
++	guest_id = hv_generate_guest_id();
+ 	hv_set_vpreg(HV_REGISTER_GUEST_OSID, guest_id);
  
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,pronto-v3-pil
-+    then:
-+      properties:
-+        vddmx-supply: false
-+        vddcx-supply: false
-+
-+      required:
-+        - power-domains
-+        - power-domain-names
-+
- examples:
-   - |
-     #include <dt-bindings/interrupt-controller/arm-gic.h>
+ 	/* Get the features and hints from Hyper-V */
+diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+index 3de6d8b53367..93770791b858 100644
+--- a/arch/x86/hyperv/hv_init.c
++++ b/arch/x86/hyperv/hv_init.c
+@@ -426,7 +426,7 @@ void __init hyperv_init(void)
+ 	 * 1. Register the guest ID
+ 	 * 2. Enable the hypercall and register the hypercall page
+ 	 */
+-	guest_id = generate_guest_id(0, LINUX_VERSION_CODE, 0);
++	guest_id = hv_generate_guest_id();
+ 	wrmsrl(HV_X64_MSR_GUEST_OS_ID, guest_id);
+ 
+ 	/* Hyper-V requires to write guest os id via ghcb in SNP IVM. */
+diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
+index c05d2ce9b6cd..78e7dc9e9587 100644
+--- a/include/asm-generic/mshyperv.h
++++ b/include/asm-generic/mshyperv.h
+@@ -25,6 +25,7 @@
+ #include <linux/nmi.h>
+ #include <asm/ptrace.h>
+ #include <asm/hyperv-tlfs.h>
++#include <linux/version.h>
+ 
+ struct ms_hyperv_info {
+ 	u32 features;
+@@ -105,15 +106,12 @@ static inline u64 hv_do_rep_hypercall(u16 code, u16 rep_count, u16 varhead_size,
+ }
+ 
+ /* Generate the guest OS identifier as described in the Hyper-V TLFS */
+-static inline  __u64 generate_guest_id(__u64 d_info1, __u64 kernel_version,
+-				       __u64 d_info2)
++static inline  u64 generate_guest_id(void)
+ {
+-	__u64 guest_id = 0;
++	u64 guest_id;
+ 
+-	guest_id = (((__u64)HV_LINUX_VENDOR_ID) << 48);
+-	guest_id |= (d_info1 << 48);
+-	guest_id |= (kernel_version << 16);
+-	guest_id |= d_info2;
++	guest_id = (((u64)HV_LINUX_VENDOR_ID) << 48);
++	guest_id |= (((u64)LINUX_VERSION_CODE) << 16);
+ 
+ 	return guest_id;
+ }
 -- 
-2.37.3
+2.18.2
 
