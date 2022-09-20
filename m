@@ -2,77 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 318735BDECB
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 09:51:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C61AE5BDECE
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 09:51:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230100AbiITHuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 03:50:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33364 "EHLO
+        id S230037AbiITHvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 03:51:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbiITHt7 (ORCPT
+        with ESMTP id S229832AbiITHuu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 03:49:59 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEDB9219D;
-        Tue, 20 Sep 2022 00:49:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=AU0mZCMIx8JARy0byW2BmRzgYXSYzSXxAhWcU08IaqY=; b=aUezXLcVpUDpj+rBGwR2e2Dq+j
-        +m8n/y4046APNRMEDTF0ZqaDkAxglTlVUNTJr9E1Z6iC226V1Bog1WEQ2+K4ikDCcQlgIfO79QYEn
-        goQtBRPP+NXjgTSijBjOyUanFbCeVbhd0zVD0jL5AzO3eoXRAf7sgibPwBwjIJpBRSuo6MlMOJVkH
-        45Z1TPzd/6ND3EgH8tHfjOOybk9MqFcjdvPfa8IIrKATJFRTJJ/ua6OyNsUaM6kt5wiagvMuJ7Cav
-        WHJ9MvPeN6mIa0F7Nz1cmXZ0IlQ7xW2U8RmCkN9IPpyqtDS+bJksjLZ3l0EsO/cbt4ePE8hMqOnbn
-        EqnTWtdQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oaY0H-001Ung-4F; Tue, 20 Sep 2022 07:49:13 +0000
-Date:   Tue, 20 Sep 2022 00:49:13 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Sarthak Kukreti <sarthakkukreti@chromium.org>
-Cc:     dm-devel@redhat.com, linux-block@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Jens Axboe <axboe@kernel.dk>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Bart Van Assche <bvanassche@google.com>,
-        Daniil Lunev <dlunev@google.com>,
-        Evan Green <evgreen@google.com>,
-        Gwendal Grignou <gwendal@google.com>
-Subject: Re: [PATCH RFC 4/8] fs: Introduce FALLOC_FL_PROVISION
-Message-ID: <YylweQAZkIdb5ixo@infradead.org>
-References: <20220915164826.1396245-1-sarthakkukreti@google.com>
- <20220915164826.1396245-5-sarthakkukreti@google.com>
+        Tue, 20 Sep 2022 03:50:50 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A82219D
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 00:50:33 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id t14so2842049wrx.8
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 00:50:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=gY39qtZMtYnSCBI5ag2fwPcPioNDUJTIO745L137KJU=;
+        b=OERt7TQSDtT7HYlnanZ7FoZR2Kl9yzn5smbPxktEdKAPl9FDLWkL11jnw2QsXohUJ/
+         tlgzD+8vBiFjjKiRWciLQIK24MSdYXqvFTZJbbg3LZfDmBCZ6fTq8PoN+vXePxG6MArb
+         PODBNbiOvB5YUooBRLkL7OZkkqztndCa52OQpj0/37K+EuqOSRtMpq6MMUAQegoSm3IN
+         3ce0Zy3voWtDv03vAua9SMR36dxSTFxM4BQPDVPoOTnjKi8nS85J4aLCARK3/MuO45wz
+         Vm+d90YX4x0n6u6JxPZh4iZJ2OmJQE7CrT7oqNKGC+HPTtou+qe6U/WYvW56uEqB49Eh
+         ra4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=gY39qtZMtYnSCBI5ag2fwPcPioNDUJTIO745L137KJU=;
+        b=spZ1tGuYy3/QyX3ZLE8q/4diwsZoYqwJjZL8dso893aEgWPLV72Aq/AKjmy8N0pj5L
+         Bhpy3EziscMJ4DLsRegujz5AYoSqjyE+E7QNCt+qtsC9AUK/6Wa9kwcKZ9+ruDOBZ3fW
+         3ciEMvvEM9fA41EaBxKxbS0Hdvb2nm9CTLRQspo4QcXnsSSa8oTVZhRdkdU+ZHGvYJj5
+         LVYVUM+Y9juxUUZAPNjGF9ShOOv0W+ALc9jVvJN4Tnk/uFODYqaVNPSTJ1R/ivFa49rZ
+         5C1kfcaKsSUoneJ2yFic4LmrYGpT+QRkns1nQu6Ei0VDtAlc05950XJn2ybqWsVaU3m8
+         Q8Ww==
+X-Gm-Message-State: ACrzQf3cx5UQBPRf3/HqjiqNb7lja58kiX0hD8tYwvDcR/SiH9yTakAq
+        HriT1bVYakV0j+NoFQBnx1Y72w==
+X-Google-Smtp-Source: AMsMyM64ATfa2EQHIABE25QxpQFzzoUQY4ZPSBH71pRvBnJc/OapbTG7YrMDdhHHfBQHx9nGgldNUA==
+X-Received: by 2002:a05:6000:681:b0:22a:3007:df45 with SMTP id bo1-20020a056000068100b0022a3007df45mr12406498wrb.149.1663660232112;
+        Tue, 20 Sep 2022 00:50:32 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id r13-20020adfa14d000000b0022af5e36981sm1016337wrr.9.2022.09.20.00.50.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Sep 2022 00:50:31 -0700 (PDT)
+Date:   Tue, 20 Sep 2022 08:50:29 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Luca Weiss <luca.weiss@fairphone.com>
+Cc:     linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        linux-kernel@vger.kernel.org, Lee Jones <lee@kernel.org>
+Subject: Re: [PATCH v3 1/2] mfd: qcom-spmi-pmic: convert hex numbers lowercase
+Message-ID: <YylwxQSulh7C48T7@google.com>
+References: <20220915113523.44074-1-luca.weiss@fairphone.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220915164826.1396245-5-sarthakkukreti@google.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220915113523.44074-1-luca.weiss@fairphone.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 15, 2022 at 09:48:22AM -0700, Sarthak Kukreti wrote:
-> From: Sarthak Kukreti <sarthakkukreti@chromium.org>
-> 
-> FALLOC_FL_PROVISION is a new fallocate() allocation mode that
-> sends a hint to (supported) thinly provisioned block devices to
-> allocate space for the given range of sectors via REQ_OP_PROVISION.
+On Thu, 15 Sep 2022, Luca Weiss wrote:
 
-So, how does that "provisioning" actually work in todays world where
-storage is usually doing out of place writes in one or more layers,
-including the flash storage everyone is using.  Does it give you one
-write?  And unlimited number?  Some undecided number inbetween?  How
-is it affected by write zeroes to that range or a discard?
+> There are some IDs that are written in uppercase. For consistency
+> convert them to lowercase.
+> 
+> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> ---
+> Changes since v2:
+> * Split out to separate patch
+> 
+>  include/soc/qcom/qcom-spmi-pmic.h | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+
+These aren't MFD patches.  Please reword the subject.
+
+-- 
+DEPRECATED: Please use lee@kernel.org
