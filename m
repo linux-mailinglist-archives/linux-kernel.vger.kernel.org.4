@@ -2,185 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 601265BECA5
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 20:16:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 020D35BECA9
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 20:16:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229845AbiITSQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 14:16:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50456 "EHLO
+        id S230155AbiITSQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 14:16:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbiITSQH (ORCPT
+        with ESMTP id S229631AbiITSQn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 14:16:07 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 1B24E4F387
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 11:16:05 -0700 (PDT)
-Received: (qmail 191387 invoked by uid 1000); 20 Sep 2022 14:16:04 -0400
-Date:   Tue, 20 Sep 2022 14:16:04 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Rondreis <linhaoguo86@gmail.com>
-Cc:     balbi@kernel.org, andriy.shevchenko@linux.intel.com,
-        jakobkoschel@gmail.com, quic_wcheng@quicinc.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: kernel v5.19 warn in usb_ep_queue
-Message-ID: <YyoDZNZX2ggSuaFE@rowland.harvard.edu>
-References: <CAB7eexKe2YtpYHy0Ohyr-SXLAWUjErJGLSspSUCeEL=CWyZSKw@mail.gmail.com>
+        Tue, 20 Sep 2022 14:16:43 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7489244571;
+        Tue, 20 Sep 2022 11:16:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id E71D0CE1B08;
+        Tue, 20 Sep 2022 18:16:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB18CC433C1;
+        Tue, 20 Sep 2022 18:16:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663697799;
+        bh=qbFGsZmeyVBsjxnEf6EsFVV+a4DqJ+aI9q4jgAqQE8s=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=DCi2N5qM84CpyJ4wWr0ZucIQfZKVQ9ERFZuGWlCmq+KdUixA1HAh1v8vNfh4J1Aim
+         dn1G+rhm0MHuDMsEoHq8cetTXUnhyoalNpvXmhh277nw0EaDo9O6MTwrA9BBrmQ16/
+         5/BeI3IIWkQOMdSSKAyS2p+BxENvI44PCFCDXm7StNs1GqNwTnr1PleZyGmTbXrfxD
+         zVPg999YsligGnuuBm4yvP7Ud4ol5JkZG980TQslP4KTZV6y7mrhPooZyOwJldg3Yn
+         SIUn2kmZu8JI+eJ+wOgrL5mUkGPUa2+Gq+Wm8c6rMIemS1jEgKiB5OmUMreQ4ywUHZ
+         khGDd80bxmvdg==
+Date:   Tue, 20 Sep 2022 13:16:37 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>
+Cc:     linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mka@chromium.org,
+        quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
+        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
+        quic_ramkri@quicinc.com, manivannan.sadhasivam@linaro.org,
+        swboyd@chromium.org, dmitry.baryshkov@linaro.org,
+        svarbanov@mm-sol.com, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@somainline.org, lpieralisi@kernel.org,
+        robh@kernel.org, kw@linux.com, bhelgaas@google.com,
+        linux-phy@lists.infradead.org, vkoul@kernel.org, kishon@ti.com,
+        mturquette@baylibre.com, linux-clk@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: Re: [PATCH v7 1/5] PCI: qcom: Add system suspend and resume support
+Message-ID: <20220920181637.GA1121154@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAB7eexKe2YtpYHy0Ohyr-SXLAWUjErJGLSspSUCeEL=CWyZSKw@mail.gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1663669347-29308-2-git-send-email-quic_krichai@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 10:12:04AM +0800, Rondreis wrote:
-> Hello,
+On Tue, Sep 20, 2022 at 03:52:23PM +0530, Krishna chaitanya chundru wrote:
+> Add suspend and resume syscore ops.
 > 
-> When fuzzing the Linux kernel driver 5.19.0-rc4-00208-g69cb6c6556ad,
-> the following crash was triggered.
-> 
-> HEAD commit: 4b0986a3613c92f4ec1bdc7f60ec66fea135991f (HEAD, tag: v5.18)
-> git tree: upstream
-> 
-> kernel config: https://pastebin.com/KecL2gaG
-> C reproducer: https://pastebin.com/wLDJ9cnP
-> console output: https://pastebin.com/t0r8EwTw
-> 
-> Basically, in the c reproducer, we use the gadget module to emulate
-> the process of attaching a usb device (vendor id: 0xbaf, product id:
-> 0x121, with function: midi and ms_null).
-> To reproduce this crash, we utilize a third-party library to emulate
-> the attaching process: https://github.com/linux-usb-gadgets/libusbgx.
-> Just clone this repository, make install it, and compile the c
-> reproducer with ``` gcc crash.c -lusbgx -o crash ``` will do the
-> trick.
-> 
-> It seems that an error state in struct usb_ep trigger such kernel warning.
-> 
-> The crash report is as follow:
-> 
-> ```
-> ------------[ cut here ]------------
-> ------------[ cut here ]------------
-> WARNING: CPU: 3 PID: 3442 at drivers/usb/gadget/udc/core.c:283
-> usb_ep_queue+0x16b/0x3b0 drivers/usb/gadget/udc/core.c:283
-> Modules linked in:
-> CPU: 3 PID: 3442 Comm: file-storage Not tainted
-> 5.19.0-rc4-00208-g69cb6c6556ad #1
-> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-> 1.13.0-1ubuntu1.1 04/01/2014
-> RIP: 0010:usb_ep_queue+0x16b/0x3b0 drivers/usb/gadget/udc/core.c:283
-> Code: 46 05 0f 92 c3 31 ff 89 de e8 f1 e9 49 fd 84 db 0f 85 16 01 00
-> 00 e8 c4 e8 49 fd 44 89 e0 5b 5d 41 5c 41 5d c3 e8 b5 e8 49 fd <0f> 0b
-> 41 bc 94 ff ff ff e9 73 ff ff ff e8 a3 e8 49 fd 65 8b 1d cc
-> RSP: 0018:ffffc9000490fd00 EFLAGS: 00010246
-> RAX: 0000000000000000 RBX: 0000000000000002 RCX: ffff888110e0d580
-> RDX: 0000000000000000 RSI: ffff888110e0d580 RDI: 0000000000000002
-> RBP: ffff88810ae84158 R08: ffffffff83fb31eb R09: 0000000000000000
-> R10: 0000000000000001 R11: ffffed10221c1ab0 R12: 0000000000000cc0
-> R13: ffff888111843f10 R14: ffff888111843f10 R15: ffff88811084e000
-> FS: 0000000000000000(0000) GS:ffff88811a980000(0000) knlGS:0000000000000000
-> CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007f841985e020 CR3: 000000010d19a000 CR4: 0000000000350ee0
-> Call Trace:
-> <TASK>
-> start_transfer.isra.0+0x26/0x100
-> drivers/usb/gadget/function/f_mass_storage.c:527
-> start_out_transfer.isra.0+0xf0/0x1b0
-> drivers/usb/gadget/function/f_mass_storage.c:560
-> get_next_command drivers/usb/gadget/function/f_mass_storage.c:2249 [inline]
-> fsg_main_thread+0x377/0x6fc0 drivers/usb/gadget/function/f_mass_storage.c:2572
-> kthread+0x2ef/0x3a0 kernel/kthread.c:376
-> ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
-> </TASK>
+> Few PCIe endpoints like NVMe and WLANs are always expecting the device
+> to be in D0 state and the link to be active (or in l1ss) all the time
+> (including in S3 state).
 
-Can you please try to recreate this bug after applying the diagnostic 
-patch below?  I'd like to see what output it produces in the kernel log.
+What does this have to do with the patch?  I don't see any NVMe or
+WLAN patches here.
 
-Alan Stern
+> In qcom platform PCIe resources( clocks, phy etc..) can released
+> when the link is in L1ss to reduce the power consumption. So if the link
+> is in L1ss, release the PCIe resources. And when the system resumes,
+> enable the PCIe resources if they released in the suspend path.
 
+What's the connection with L1.x?  Links enter L1.x based on activity
+and timing.  That doesn't seem like a reliable indicator to turn PHYs
+off and disable clocks.
 
-Index: usb-devel/drivers/usb/gadget/function/f_mass_storage.c
-===================================================================
---- usb-devel.orig/drivers/usb/gadget/function/f_mass_storage.c
-+++ usb-devel/drivers/usb/gadget/function/f_mass_storage.c
-@@ -415,6 +415,7 @@ static void bulk_in_complete(struct usb_
- 	struct fsg_common	*common = ep->driver_data;
- 	struct fsg_buffhd	*bh = req->context;
- 
-+	dev_info(&common->gadget->dev, "Bulk in complete %p\n", bh);
- 	if (req->status || req->actual != req->length)
- 		DBG(common, "%s --> %d, %u/%u\n", __func__,
- 		    req->status, req->actual, req->length);
-@@ -431,6 +432,7 @@ static void bulk_out_complete(struct usb
- 	struct fsg_common	*common = ep->driver_data;
- 	struct fsg_buffhd	*bh = req->context;
- 
-+	dev_info(&common->gadget->dev, "Bulk out complete %p\n", bh);
- 	dump_msg(common, "bulk-out", req->buf, req->actual);
- 	if (req->status || req->actual != bh->bulk_out_intended_length)
- 		DBG(common, "%s --> %d, %u/%u\n", __func__,
-@@ -547,6 +549,7 @@ static bool start_in_transfer(struct fsg
- 	if (!fsg_is_set(common))
- 		return false;
- 	bh->state = BUF_STATE_SENDING;
-+	dev_info(&common->gadget->dev, "Bulk in start %p\n", bh);
- 	if (start_transfer(common->fsg, common->fsg->bulk_in, bh->inreq))
- 		bh->state = BUF_STATE_EMPTY;
- 	return true;
-@@ -557,6 +560,7 @@ static bool start_out_transfer(struct fs
- 	if (!fsg_is_set(common))
- 		return false;
- 	bh->state = BUF_STATE_RECEIVING;
-+	dev_info(&common->gadget->dev, "Bulk out start %p\n", bh);
- 	if (start_transfer(common->fsg, common->fsg->bulk_out, bh->outreq))
- 		bh->state = BUF_STATE_FULL;
- 	return true;
-@@ -2310,10 +2314,12 @@ reset:
- 
- 		/* Disable the endpoints */
- 		if (fsg->bulk_in_enabled) {
-+			dev_info(&fsg->gadget->dev, "Disable bulk in A\n");
- 			usb_ep_disable(fsg->bulk_in);
- 			fsg->bulk_in_enabled = 0;
- 		}
- 		if (fsg->bulk_out_enabled) {
-+			dev_info(&fsg->gadget->dev, "Disable bulk out A\n");
- 			usb_ep_disable(fsg->bulk_out);
- 			fsg->bulk_out_enabled = 0;
- 		}
-@@ -2333,6 +2339,7 @@ reset:
- 	rc = config_ep_by_speed(common->gadget, &(fsg->function), fsg->bulk_in);
- 	if (rc)
- 		goto reset;
-+	dev_info(&fsg->gadget->dev, "Enable bulk in\n");
- 	rc = usb_ep_enable(fsg->bulk_in);
- 	if (rc)
- 		goto reset;
-@@ -2343,6 +2350,7 @@ reset:
- 				fsg->bulk_out);
- 	if (rc)
- 		goto reset;
-+	dev_info(&fsg->gadget->dev, "Enable bulk out\n");
- 	rc = usb_ep_enable(fsg->bulk_out);
- 	if (rc)
- 		goto reset;
-@@ -2392,10 +2400,12 @@ static void fsg_disable(struct usb_funct
- 
- 	/* Disable the endpoints */
- 	if (fsg->bulk_in_enabled) {
-+		dev_info(&fsg->gadget->dev, "Disable bulk in B\n");
- 		usb_ep_disable(fsg->bulk_in);
- 		fsg->bulk_in_enabled = 0;
- 	}
- 	if (fsg->bulk_out_enabled) {
-+		dev_info(&fsg->gadget->dev, "Disable bulk out B\n");
- 		usb_ep_disable(fsg->bulk_out);
- 		fsg->bulk_out_enabled = 0;
- 	}
+> is_suspended flag indicates if the PCIe resources are released or not
+> in the suspend path.
 
+Why is "is_suspended" important for the commit log?  It looks like
+just a standard implementation detail.
+
+> Its observed that access to Ep PCIe space to mask MSI/MSIX is happening
+> at the very late stage of suspend path (access by affinity changes while
+> making CPUs offline during suspend, this will happen after devices are
+> suspended (after all phases of suspend ops)). If we turn off clocks in
+> any PM callback, afterwards running into crashes due to un-clocked access
+> due to above mentioned MSI/MSIx access.
+> So, we are making use of syscore framework to turn off the PCIe clocks
+> which will be called after making CPUs offline.
+
+Add blank lines between paragraphs.  Or rewrap into a single paragraph.
+
+s/Its observed/It's observed/
+s/MSIX/MSI-X/ throughout
+s/MSIx/MSI-X/ throughout
+
+Bjorn
