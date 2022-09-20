@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59BC65BDE73
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 09:39:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F4C65BDE6D
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 09:39:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230433AbiITHjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 03:39:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46302 "EHLO
+        id S230463AbiITHjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 03:39:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230350AbiITHjC (ORCPT
+        with ESMTP id S230357AbiITHjD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 03:39:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E9EB60516;
+        Tue, 20 Sep 2022 03:39:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D56E6606B4;
         Tue, 20 Sep 2022 00:39:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1CA2F6248D;
-        Tue, 20 Sep 2022 07:39:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24FBCC43140;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 60632B82558;
+        Tue, 20 Sep 2022 07:39:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1191CC433C1;
         Tue, 20 Sep 2022 07:38:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1663659539;
-        bh=K+BfnWQLrlylNxKUw3danjgFngQqMpiDXDbH2n7HI14=;
+        bh=ZMg+DLlcdSNqveTVoiGMNLqinsWBf1qIoufFezsHv90=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P83L7sSyk+N0JOLm1dy5fRTWp0p/0WLNFLKfb9s80ND0u963zWz+MqL0BqeM+xPVi
-         8tW6FAZnagHNJbwx64nTxkch3UP0NLZOiY7SBMWeGCGNSZ6qQlUHkz/X+yzPCOKbZr
-         z1fb5roj+SKerD45Zt3GY4jGjyzPANPod4boJailrgRiyUL4AIjXAPOPIMAWtYdf3a
-         05M6QLFkX5vCUQABI8lgAunAktIWAvr2bjYaRmUki7jwICuFvFx+tioJNahrpbJQiQ
-         4Ws+NH6HLJGQoG+dY5Sob3yldZMJ3agVbSS/2lUB9FjLYFdKmKKTtpbtfktftb+QLD
-         W3Urp2Y/fPIXQ==
+        b=deUePSbjI1qt9UmHdaQMj3rR5fi8uXynqnSpclwKlorrntxIwYDNKY2m42uLA8qoq
+         cuvOsseLwP5kucB25dI5Wtlsh3NqiyuuUm3ET9Huh1psKdattEn1gRXF/kvPQpfgPj
+         9QGqa8ODqWetiq62ww9LQTLEB1UjPqeSeTUx41mmLDXwubw2lDObuCOlgp+ymbHOej
+         q0g5KEiEQyQMUqjrLEED6b5ooMoNOKWWKgiLgv+u12FLnZOzCvB7L2omYme5xG2xdp
+         wbyWsRZhUdfEdQywd/237/FPzDLz9ooD0aUnXdI4dViZbNtUtmTQwHfdPZafNM9Leb
+         qFG1tWHmtDCYg==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1oaXqP-0005Qm-N8; Tue, 20 Sep 2022 09:39:01 +0200
+        id 1oaXqP-0005Qr-Pe; Tue, 20 Sep 2022 09:39:01 +0200
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Vinod Koul <vkoul@kernel.org>
 Cc:     Andy Gross <agross@kernel.org>,
@@ -45,9 +45,9 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 05/17] phy: qcom-qmp-pcie: drop init and exit wrappers
-Date:   Tue, 20 Sep 2022 09:38:14 +0200
-Message-Id: <20220920073826.20811-6-johan+linaro@kernel.org>
+Subject: [PATCH 06/17] phy: qcom-qmp-usb: drop init and exit wrappers
+Date:   Tue, 20 Sep 2022 09:38:15 +0200
+Message-Id: <20220920073826.20811-7-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220920073826.20811-1-johan+linaro@kernel.org>
 References: <20220920073826.20811-1-johan+linaro@kernel.org>
@@ -66,70 +66,70 @@ Drop the unnecessary PHY init and exit callback wrappers.
 
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 29 ++++--------------------
+ drivers/phy/qualcomm/phy-qcom-qmp-usb.c | 29 ++++---------------------
  1 file changed, 4 insertions(+), 25 deletions(-)
 
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-index d25f9215b86f..525097e3b041 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-@@ -1877,8 +1877,9 @@ static int qmp_pcie_serdes_init(struct qmp_phy *qphy)
+diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
+index 03481b6f1c35..a42e13905c15 100644
+--- a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
++++ b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
+@@ -2125,8 +2125,9 @@ static int qmp_usb_serdes_init(struct qmp_phy *qphy)
  	return 0;
  }
  
--static int qmp_pcie_com_init(struct qmp_phy *qphy)
-+static int qmp_pcie_init(struct phy *phy)
+-static int qmp_usb_com_init(struct qmp_phy *qphy)
++static int qmp_usb_init(struct phy *phy)
  {
 +	struct qmp_phy *qphy = phy_get_drvdata(phy);
  	struct qcom_qmp *qmp = qphy->qmp;
  	const struct qmp_phy_cfg *cfg = qphy->cfg;
  	void __iomem *pcs = qphy->pcs;
-@@ -1925,8 +1926,9 @@ static int qmp_pcie_com_init(struct qmp_phy *qphy)
+@@ -2197,8 +2198,9 @@ static int qmp_usb_com_init(struct qmp_phy *qphy)
  	return ret;
  }
  
--static int qmp_pcie_com_exit(struct qmp_phy *qphy)
-+static int qmp_pcie_exit(struct phy *phy)
+-static int qmp_usb_com_exit(struct qmp_phy *qphy)
++static int qmp_usb_exit(struct phy *phy)
  {
 +	struct qmp_phy *qphy = phy_get_drvdata(phy);
  	struct qcom_qmp *qmp = qphy->qmp;
  	const struct qmp_phy_cfg *cfg = qphy->cfg;
  
-@@ -1939,20 +1941,6 @@ static int qmp_pcie_com_exit(struct qmp_phy *qphy)
+@@ -2211,20 +2213,6 @@ static int qmp_usb_com_exit(struct qmp_phy *qphy)
  	return 0;
  }
  
--static int qmp_pcie_init(struct phy *phy)
+-static int qmp_usb_init(struct phy *phy)
 -{
 -	struct qmp_phy *qphy = phy_get_drvdata(phy);
 -	struct qcom_qmp *qmp = qphy->qmp;
 -	int ret;
 -	dev_vdbg(qmp->dev, "Initializing QMP phy\n");
 -
--	ret = qmp_pcie_com_init(qphy);
+-	ret = qmp_usb_com_init(qphy);
 -	if (ret)
 -		return ret;
 -
 -	return 0;
 -}
 -
- static int qmp_pcie_power_on(struct phy *phy)
+ static int qmp_usb_power_on(struct phy *phy)
  {
  	struct qmp_phy *qphy = phy_get_drvdata(phy);
-@@ -2060,15 +2048,6 @@ static int qmp_pcie_power_off(struct phy *phy)
+@@ -2316,15 +2304,6 @@ static int qmp_usb_power_off(struct phy *phy)
  	return 0;
  }
  
--static int qmp_pcie_exit(struct phy *phy)
+-static int qmp_usb_exit(struct phy *phy)
 -{
 -	struct qmp_phy *qphy = phy_get_drvdata(phy);
 -
--	qmp_pcie_com_exit(qphy);
+-	qmp_usb_com_exit(qphy);
 -
 -	return 0;
 -}
 -
- static int qmp_pcie_enable(struct phy *phy)
+ static int qmp_usb_enable(struct phy *phy)
  {
  	int ret;
 -- 
