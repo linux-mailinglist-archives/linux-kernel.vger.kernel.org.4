@@ -2,146 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A83F65BDD25
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 08:29:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F6F95BDD30
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 08:30:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230100AbiITG3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 02:29:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33816 "EHLO
+        id S230481AbiITGah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 02:30:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230210AbiITG3Q (ORCPT
+        with ESMTP id S230394AbiITGaR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 02:29:16 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3F95E31E;
-        Mon, 19 Sep 2022 23:29:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663655355; x=1695191355;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vU4UOY1cFcL0pHjYCJ/Vivviv9dmXv+UoY/OX8Hoa/s=;
-  b=PxFD/6Hpz8dyjeTHf8haMPCkJLbW6Uv/hByAl3NOvJkZiHk6OXj3IFSb
-   Sz92bzxVm4kp6xlCNGamALczrO015DLPCzxzG26uf36zicb6R35hpfjAe
-   aJprmIjBGneD32BBTGaCvpuqhSkgZXkWEGS/7pE/6gQZvTD849LHaiB/I
-   f+ioSMiNr/Ge1BQYoqdYNzvAW27cg5/AWlJ95+sJeNrqqAgjhtX27Wrcv
-   pq38ibJFBnZWJgn7jbYBGxXiWsjkG9iNshYP36ker2oTGxD+Gdh1XBjTb
-   2Co8cXvCExSr2fM/cuOEu0sBKSmBR/aNycNyuuVfS44piOBivvdUmDaim
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="385898548"
-X-IronPort-AV: E=Sophos;i="5.93,329,1654585200"; 
-   d="scan'208";a="385898548"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 23:29:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,329,1654585200"; 
-   d="scan'208";a="649457126"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 19 Sep 2022 23:29:05 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oaWki-0002Xl-39;
-        Tue, 20 Sep 2022 06:29:04 +0000
-Date:   Tue, 20 Sep 2022 14:28:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Lizhi Hou <lizhi.hou@amd.com>, vkoul@kernel.org,
-        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        trix@redhat.com
-Cc:     kbuild-all@lists.01.org, Lizhi Hou <lizhi.hou@amd.com>,
-        max.zhen@amd.com, sonal.santan@amd.com, larry.liu@amd.com,
-        brian.xu@amd.com
-Subject: Re: [PATCH V3 XDMA 1/1] dmaengine: xilinx: xdma: add xilinx xdma
- driver
-Message-ID: <202209201427.ujYkdhUE-lkp@intel.com>
-References: <1663631039-49732-2-git-send-email-lizhi.hou@amd.com>
+        Tue, 20 Sep 2022 02:30:17 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B2CA101D3;
+        Mon, 19 Sep 2022 23:29:59 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28K6DYOj029188;
+        Tue, 20 Sep 2022 06:29:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=YDHz6/u6Abm9nEPIMaHjx0z4gop+Pr0/HoEmdHpJHMQ=;
+ b=Qx6Z/XwTglfSW7VMCmbCw1LwQJlJ+5TcgQiZC2jxvcEdmiwrrXNmdO/Gd2+eKwC5J7jp
+ 9zgDb5SoGtGRvvXoRIAzhWVvU6g2MJ3nnXRgtzIDQjJhfhFwtp/bviFD01LNw2/z40uB
+ hT++rE+Y+XuT0vqAifCeKeU/SWaSV0hiLy0TBIBYv/qANR7efvQk573+6DwgR9F5a690
+ aU4Gmaij3n1tQ5BWNDtzuiUqhsbDY6C5pPGjFqI94kTQQunSQgPp8Es49ulAwqOpSuDJ
+ 3syizCwEYBPkKsvA9UgZq5N+zPskzo2vsQGVTB5Il7cMiqjCPPH+zcEjkR+yMGBJeynK dQ== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jq4r08h8q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Sep 2022 06:29:42 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28K6TfDL015952
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Sep 2022 06:29:41 GMT
+Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Mon, 19 Sep 2022 23:29:35 -0700
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+To:     <linux-remoteproc@vger.kernel.org>, <agross@kernel.org>,
+        <andersson@kernel.org>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
+        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
+        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
+        <judyhsiao@chromium.org>, <devicetree@vger.kernel.org>
+CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Subject: [PATCH v7 0/8] Update ADSP pil loader for SC7280 platform
+Date:   Tue, 20 Sep 2022 11:59:11 +0530
+Message-ID: <1663655359-1402-1-git-send-email-quic_srivasam@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1663631039-49732-2-git-send-email-lizhi.hou@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: hiGPVYdhxOhqbp36uMXBquSe19nHkkRL
+X-Proofpoint-GUID: hiGPVYdhxOhqbp36uMXBquSe19nHkkRL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-20_02,2022-09-16_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
+ malwarescore=0 suspectscore=0 spamscore=0 lowpriorityscore=0 clxscore=1015
+ impostorscore=0 mlxscore=0 bulkscore=0 priorityscore=1501 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
+ definitions=main-2209200038
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lizhi,
+Update ADSP pil loader driver for SC7280 platforms.
+Changes since V6:
+	-- Update dt-bindings with glink-edge
+	-- Add qcom,qmp property.
+	-- Update parse firmware callback.
+	-- Update commit message.
+	-- Update smmu map and unmap function names.
+	-- Revert adsp_ops const change.
+	-- Move iommu check to within smmu map/unmap functions.
+Changes since V5:
+	-- Remove adsp_rproc_unmap_smmu, adsp_of_unmap_smmu, adsp_of_map_smmu and 
+	   adsp_rproc_map_smmu functions.
+	-- Remove find_loaded_rsc_table call back initialization.
+	-- Rename adsp_sandbox_needed to has_iommu.
+	-- Update parse_fw callback in rproc ops.
+	-- Remove qcom,adsp-memory-regions property in dt-bindings.
+	-- Change adsp binary extension name.
+Changes since V4:
+	-- Update halt registers description in dt bindings.
+	-- Update Memory sandboxing with proper APIs for resource
+	   allocation and free.
+Changes since V3:
+	-- Rename is_adsp_sb_needed to adsp_sandbox_needed.
+	-- Update sc7280 compatible name entry in sorted order.
+	-- Add smmu unmapping in error case and in adsp stop.
+	-- Revert converting sdm845 dt bindings to generic and 
+	   create new dt bindings for sc7280.
+Changes since V2:
+	-- Generated patch with -M flag.
+	-- Add Clock property in dt bindings.
+	-- Add qcom,adsp-memory-regions property.
+	-- Add is_adsp_sb_needed flag instead of is_wpss.
+	-- Initialize is_adsp_sb_needed flag.
+	-- Remove empty proxy pds array.
+	-- Replace platform_bus_type with adsp->dev->bus.
+	-- Use API of_parse_phandle_with_args() instead of 
+	    of_parse_phandle_with_fixed_args().
+	-- Replace adsp->is_wpss with adsp->is_adsp.
+	-- Update error handling in adsp_start().
+Changes since V1:
+	-- Change reg property maxItems to minItems and update description.
+	-- Fix typo errors.
 
-I love your patch! Yet something to improve:
+Srinivasa Rao Mandadapu (8):
+  dt-bindings: remoteproc: qcom: Add SC7280 ADSP support
+  remoteproc: qcom: Add flag in adsp private data structure
+  remoteproc: qcom: Add compatible name for SC7280 ADSP
+  remoteproc: qcom: Update rproc parse firmware callback
+  remoteproc: qcom: Replace hard coded values with macros
+  remoteproc: qcom: Add efuse evb selection control
+  remoteproc: qcom: Add support for memory sandbox
+  remoteproc: qcom: Update QDSP6 out-of-reset timeout value
 
-[auto build test ERROR on vkoul-dmaengine/next]
-[also build test ERROR on linus/master v6.0-rc6 next-20220919]
-[cannot apply to xilinx-xlnx/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Lizhi-Hou/xilinx-XDMA-driver/20220920-074553
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git next
-config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20220920/202209201427.ujYkdhUE-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/2622fde9f389e211554d46e149765c1fe5da6f44
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Lizhi-Hou/xilinx-XDMA-driver/20220920-074553
-        git checkout 2622fde9f389e211554d46e149765c1fe5da6f44
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/dma/xilinx/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from <command-line>:
-   drivers/dma/xilinx/xdma.c: In function 'xdma_xfer_start.isra':
->> include/linux/compiler_types.h:354:45: error: call to '__compiletime_assert_247' declared with attribute error: FIELD_GET: type of reg too small for mask
-     354 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:335:25: note: in definition of macro '__compiletime_assert'
-     335 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:354:9: note: in expansion of macro '_compiletime_assert'
-     354 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:71:17: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-      71 |                 BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
-         |                 ^~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:128:17: note: in expansion of macro '__BF_FIELD_CHECK'
-     128 |                 __BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: ");       \
-         |                 ^~~~~~~~~~~~~~~~
-   drivers/dma/xilinx/xdma.c:358:15: note: in expansion of macro 'FIELD_GET'
-     358 |         val = FIELD_GET(XDMA_HI_ADDR_MASK, block->dma_addr);
-         |               ^~~~~~~~~
-
-
-vim +/__compiletime_assert_247 +354 include/linux/compiler_types.h
-
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  340  
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  341  #define _compiletime_assert(condition, msg, prefix, suffix) \
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  342  	__compiletime_assert(condition, msg, prefix, suffix)
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  343  
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  344  /**
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  345   * compiletime_assert - break build and emit msg if condition is false
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  346   * @condition: a compile-time constant condition to check
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  347   * @msg:       a message to emit if condition is false
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  348   *
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  349   * In tradition of POSIX assert, this macro will break the build if the
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  350   * supplied condition is *false*, emitting the supplied error message if the
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  351   * compiler has support to do so.
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  352   */
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  353  #define compiletime_assert(condition, msg) \
-eb5c2d4b45e3d2 Will Deacon 2020-07-21 @354  	_compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  355  
+ .../bindings/remoteproc/qcom,sc7280-adsp-pil.yaml  | 226 +++++++++++++++++++++
+ drivers/remoteproc/qcom_q6v5_adsp.c                | 129 +++++++++++-
+ 2 files changed, 349 insertions(+), 6 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,sc7280-adsp-pil.yaml
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.7.4
+
