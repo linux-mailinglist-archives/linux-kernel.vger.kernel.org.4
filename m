@@ -2,48 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6C995BE3DD
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 12:54:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AB065BE3D5
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 12:53:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230269AbiITKyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 06:54:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56508 "EHLO
+        id S230262AbiITKxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 06:53:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230372AbiITKyN (ORCPT
+        with ESMTP id S229704AbiITKxs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 06:54:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D501D6BCE1;
-        Tue, 20 Sep 2022 03:54:00 -0700 (PDT)
+        Tue, 20 Sep 2022 06:53:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46EE25D0F1;
+        Tue, 20 Sep 2022 03:53:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 53DED62554;
-        Tue, 20 Sep 2022 10:54:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90244C433C1;
-        Tue, 20 Sep 2022 10:53:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F40B5B827AF;
+        Tue, 20 Sep 2022 10:53:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AB41C433D6;
+        Tue, 20 Sep 2022 10:53:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663671239;
-        bh=4s+A0uYH2NDzk3cUu+6aMBlQzRJ+8g45TxmZX6PVPBU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=qyzjAcNb1I81boB5q8hZQCXLbH+Su0haoR1d1jkh4RJWt4c14qfWDl4P28Cdemdv0
-         8qNp8lCMe3SS4AbnyFFcjy+VnuRiaE/2UBHlYrIvJRS/hcerAWsf6lLm6/6BMOFYNk
-         zu/5BgysySw6HDwSuCQoO32+rA6GogetvMQL5S6rguPRs8+Vdh2i91tVxPpHzZJRwY
-         reni+zMPukY8tWfyd+F5C1CUPqFyAt9HeLSVO/2z30pszek1pERzfk9lH7qtnwSmCz
-         msCU6Y494mHh1VpWkclB/VynDz+vKf3Zr19STYF/eOyzsHX7hK98KqlM/COw+po7JF
-         ZtVqryhvEVFgw==
-From:   Christian Brauner <brauner@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] fs fixes for v6.0-rc7
-Date:   Tue, 20 Sep 2022 12:51:10 +0200
-Message-Id: <20220920105109.1315345-1-brauner@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        s=k20201202; t=1663671224;
+        bh=1uzaYeWYbymD/f+i/QytZhu6oKO9BM7m7uKIAm7/1aY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kwUuVl6qzzyQ8/M60E4GBJaDSvCCIGZsWXd6EWoe6ETg4UPGRSPJSpODGC89bVoml
+         D8yMcp2L8SqglVlcwPjBx0kwWsmuhxSt4A6MHMYEdl8sw5Zt0+i8CPGg6TTK40x4my
+         mHRIDutJuMJ3kECm4eorV/KO7XWDkJoFt5Xcko5DBOFQuad34F85DOuPGJQOkcR3nN
+         x3i3rl+wBIvgbXn74nt/EudGishy0lWfyQwIhjZzzOrS/gzl1GIHezRYRweYZnMwZB
+         mX8bZPz/2M6J4eYsqVrIj88f6cgWd9NcoOu5bfu6upfEe+DnQeaKeleng7SJXqBrye
+         EQG2xv/JeiBzw==
+Date:   Tue, 20 Sep 2022 12:53:41 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
+        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
+        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
+        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
+        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
+        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
+        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
+        dinguyen@kernel.org, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
+        James.Bottomley@HansenPartnership.com, deller@gmx.de,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, pv-drivers@vmware.com,
+        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
+        gregkh@linuxfoundation.org, mturquette@baylibre.com,
+        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
+        sudeep.holla@arm.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
+        anup@brainfault.org, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, jacob.jun.pan@linux.intel.com,
+        atishp@atishpatra.org, Arnd Bergmann <arnd@arndb.de>,
+        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, dennis@kernel.org, tj@kernel.org,
+        cl@linux.com, rostedt@goodmis.org, pmladek@suse.com,
+        senozhatsky@chromium.org, john.ogness@linutronix.de,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, fweisbec@gmail.com,
+        ryabinin.a.a@gmail.com, glider@google.com, andreyknvl@gmail.com,
+        dvyukov@google.com, vincenzo.frascino@arm.com,
+        Andrew Morton <akpm@linux-foundation.org>, jpoimboe@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-perf-users@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-arch@vger.kernel.org, kasan-dev@googlegroups.com
+Subject: Re: [PATCH v2 11/44] cpuidle,omap4: Push RCU-idle into driver
+Message-ID: <20220920105341.GB72346@lothringen>
+References: <20220919095939.761690562@infradead.org>
+ <20220919101521.072508494@infradead.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3230; i=brauner@kernel.org; h=from:subject; bh=4s+A0uYH2NDzk3cUu+6aMBlQzRJ+8g45TxmZX6PVPBU=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMSRrzhZ391nSY8Dw2e72To7Xtd+8iovO7lm/clbEk3qurbPX 7T39p6OUhUGMi0FWTJHFod0kXG45T8Vmo0wNmDmsTCBDGLg4BWAiAaWMDCtnq3ZMOtTctUt+q/kGJm HbHSy5kYqrmx0iU+rs709KS2Bk2F6UHXuGdd2tFNdnv1yrLQIOun/89Zih2//TuQgztaxP/AA=
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220919101521.072508494@infradead.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -53,77 +111,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Linus,
+On Mon, Sep 19, 2022 at 11:59:50AM +0200, Peter Zijlstra wrote:
+> Doing RCU-idle outside the driver, only to then temporarily enable it
+> again, some *four* times, before going idle is daft.
+> 
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Reviewed-by: Tony Lindgren <tony@atomide.com>
+> Tested-by: Tony Lindgren <tony@atomide.com>
 
-/* Summary */
-Beginning of the merge window we introduced the vfs{g,u}id_t types in
-b27c82e12965 ("attr: port attribute changes to new types") and changed various
-codepaths over including chown_common().
-
-When userspace passes -1 for an ownership change the ownership fields in struct
-iattr stay uninitialized. Usually this is fine because any code making use of
-any fields in struct iattr must check the ->ia_valid field whether the value of
-interest has been initialized. That's true for all struct iattr passing code.
-
-However, over the course of the last year with more heavy use of KMSAN we found
-quite a few places that got this wrong. A recent one I fixed was 3cb6ee991496
-("9p: only copy valid iattrs in 9P2000.L setattr implementation").
-
-But we also have LSM hooks. Actually we have two. The first one is
-security_inode_setattr() in notify_change() which does the right thing and
-passes the full struct iattr down to LSMs and thus LSMs can check whether it is
-initialized.
-
-But then we also have security_path_chown() which passes down a path argument
-and the target ownership as the filesystem would see it. For the latter we now
-generate the target values based on struct iattr and pass it down. However,
-when userspace passes -1 then struct iattr isn't initialized. This patch simply
-initializes ->ia_vfs{g,u}id with INVALID_VFS{G,U}ID so the hook continue to see
-invalid ownership when -1 is passed from userspace. The only LSM that cares
-about the actual values is Tomoyo.
-
-The vfs codepaths don't look at these fields without ->ia_valid being set so
-there's no harm in initializing ->ia_vfs{g,u}id. Arguably this is also safer
-since we can't end up copying valid ownership values when invalid ownership
-values should be passed.
-
-This only affects mainline. No kernel has been released with this and thus no
-backport is needed. The commit is thus marked with a Fixes: tag but annotated
-with "# mainline only" (I didn't quite remember what Greg said about how to
-tell stable autoselect to not bother with fixes for mainline only.).
-
-/* Testing */
-All patches are based on v6.0-rc3. No build failures or warnings were observed
-and fstests, selftests, and LTP have seen no regressions.
-
-/* Conflicts */
-At the time of creating this PR no merge conflicts were reported from
-linux-next and no merge conflicts showed up doing a test-merge with current
-mainline.
-
-The following changes since commit b90cb1053190353cc30f0fef0ef1f378ccc063c5:
-
-  Linux 6.0-rc3 (2022-08-28 15:05:29 -0700)
-
-are available in the Git repository at:
-
-  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/vfs/idmapping.git tags/fs.fixes.v6.0-rc7
-
-for you to fetch changes up to f52d74b190f8d10ec01cd5774eca77c2186c8ab7:
-
-  open: always initialize ownership fields (2022-09-20 11:57:57 +0200)
-
-Please consider pulling these changes from the signed fs.fixes.v6.0-rc7 tag.
-
-Thanks!
-Christian
-
-----------------------------------------------------------------
-fs.fixes.v6.0-rc7
-
-----------------------------------------------------------------
-Tetsuo Handa (1):
-      open: always initialize ownership fields
-
- fs/open.c | 2 ++
- 1 file changed, 2 insertions(+)
+Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
