@@ -2,152 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFF1C5BE6F2
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 15:22:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E9D75BE6F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 15:23:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231352AbiITNWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 09:22:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57906 "EHLO
+        id S230264AbiITNXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 09:23:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231180AbiITNWt (ORCPT
+        with ESMTP id S229926AbiITNXN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 09:22:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB7C4D822
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 06:22:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663680163;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HAagr+5D/SDR0OvGsWzOAQR3yF3tO/raRhnWXj9RfQU=;
-        b=Zi5tZqe0g9eHXPkjp0Bz9SBo84Cs39hiNRiQZe0adHFnVlUylTvIa9XXjc2wOdskGsr+yM
-        38qB9Ioad01mMG/6+gcsYupk0EXambJQ9+nfEzho7U5t8NhTLdZO248zbpDMFOuKbomhky
-        KOEb0cciFzURQ8GLUUNccrZ3p39SrzU=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-558-G12eMV4rMYuF4AptX_XEgA-1; Tue, 20 Sep 2022 09:22:42 -0400
-X-MC-Unique: G12eMV4rMYuF4AptX_XEgA-1
-Received: by mail-wr1-f72.google.com with SMTP id d25-20020adf9b99000000b0022adb03aee6so1147861wrc.6
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 06:22:41 -0700 (PDT)
+        Tue, 20 Sep 2022 09:23:13 -0400
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF08D4DB0E;
+        Tue, 20 Sep 2022 06:23:11 -0700 (PDT)
+Received: by mail-qv1-xf33.google.com with SMTP id v15so1944548qvi.11;
+        Tue, 20 Sep 2022 06:23:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=k1ondIBYTXsuq+93bFBIfa0vNivWkkEf+GNV0BFc+7k=;
+        b=LrHXAC9mAT4IzMGFAPbFf+UJ1rcL0CtlcsxfzKtQmWUwFHVh0tycUFXSDgudhQRGi1
+         63KlmzKLv5igOukDxVSRM1tV8Rnhi0GK52NppeMjvWCpoPF8iRok+RMTyOQTbVUf52vN
+         SmSf5HG6MfMhAJL8Lad8g0toJi2qi/GrZuITXw87hTHVDt7dePJL2DFmdBgZpv0HRGGF
+         OlU89ad4ZsyrSuXZRXO3GxcA2Z3dr6QAB1x/UD3LO3ZHsMfiiJ3mew/VoknwOLx2A0aS
+         GEFP711wMi32eRrDzDRkOuu6j8T7wq01sCv6mJUU5n1+SeFWoE9TbX1AlClcASZFORcy
+         QVFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=HAagr+5D/SDR0OvGsWzOAQR3yF3tO/raRhnWXj9RfQU=;
-        b=QurJ3GdapQTJhjWj2sfOYlWwyy0n5WRAnkGW/+QiFJZ8EghIVtL/PUsWDAL04Hr5cS
-         XY95S6UKRpBYiK++Dv4TTzbvRkdEJjj4GvNRrK3a1wmU6UjVzqx9IlPPXXqdY2V343sd
-         HIIfgjKjm7+YqlHBAWQJXUKLAw5If1qelDg7LUM118QosbtJ3TDpdbtsmNngFHu8RIFz
-         JYVxePepTLU+rsu4K2McGBFDeW+95T7dy22y+YmgpZHsho/zuh4F8WU8s97VVUnmxwYI
-         dpm5D49p4zI0NXeGnTa1nxUXqaAPXRaeXUSzPeyofoHKCMzbtDZsnYwxctRjciYrfCyM
-         +WEQ==
-X-Gm-Message-State: ACrzQf0glJwMdF953iOnGLLqbdcu6DdGkcNifadNrfBnJYHdHNJAOTjs
-        YYH0BHJcQkXs+HMMTVJgTW9oCbDM5z0M8S9+70MBckIgDPF1/VaHjuliZj37TakALGWZDwrPVTp
-        +XzD6jI0rKzbc8i8thLlPh3nv
-X-Received: by 2002:a05:600c:4f56:b0:3b4:b6b0:42d4 with SMTP id m22-20020a05600c4f5600b003b4b6b042d4mr2395178wmq.143.1663680160829;
-        Tue, 20 Sep 2022 06:22:40 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4uNmTszB+WUAb11KH7RULfuLObx/dVn5U7CXVqKDMewoWn5osuTwcZ84XnG0Qq7JUZG3l1Dw==
-X-Received: by 2002:a05:600c:4f56:b0:3b4:b6b0:42d4 with SMTP id m22-20020a05600c4f5600b003b4b6b042d4mr2395155wmq.143.1663680160558;
-        Tue, 20 Sep 2022 06:22:40 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c712:2300:e82d:5a58:4fd8:c1e6? (p200300cbc7122300e82d5a584fd8c1e6.dip0.t-ipconnect.de. [2003:cb:c712:2300:e82d:5a58:4fd8:c1e6])
-        by smtp.gmail.com with ESMTPSA id o17-20020a5d4a91000000b00228dff8d975sm1606351wrq.109.2022.09.20.06.22.39
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=k1ondIBYTXsuq+93bFBIfa0vNivWkkEf+GNV0BFc+7k=;
+        b=sotmRHHUdKKPGS2TjeMg5ABTnOA1C2AmcDtn5dD2JQyyWjprTHMU3M3vgN74SZq5+t
+         cM37zTW0cF8paDMWoI2CTSQit9hXJGPLjZ7Bjb1iFxRDveD/DpFw8JsbEqGoSznnhi09
+         u1jv7MWH7+BTTl9/mFBnAQ7Vp7dcLlFcyduFtH3xojReWYLhO0XEgA/mfmvc/vAI3OZW
+         u8P+2jus/gcA2E9KnaEoNTSEqJ5/pwKdCvqG2+3Q+RPNmNycemLeemzfvIgjYAXMNvzc
+         f8id4dSqSA1CsEIr61zeIGvvo1o/sXCg+0aamTGIVYIy9ppCchriu8SwHDQJNL5Bx7fn
+         9zKw==
+X-Gm-Message-State: ACrzQf1aTJTgO4uy5Pxx0gCSG5niLsQfWqhnw+VtWocHWB7C4clgTre5
+        TBD7OK4vTUZRoTT6TqyEjNE=
+X-Google-Smtp-Source: AMsMyM74/O3pPhkmqPl9DsitaJGKdbmDcx93CFu1cSKXqCjXLMBT3yo5ax6ppvXfGLdhm6jaBVfmUw==
+X-Received: by 2002:a05:6214:20ac:b0:4ac:ad56:a9f4 with SMTP id 12-20020a05621420ac00b004acad56a9f4mr18554658qvd.78.1663680190941;
+        Tue, 20 Sep 2022 06:23:10 -0700 (PDT)
+Received: from [192.168.1.201] (pool-173-73-95-180.washdc.fios.verizon.net. [173.73.95.180])
+        by smtp.gmail.com with ESMTPSA id dt30-20020a05620a479e00b006ce3cffa2c8sm151520qkb.43.2022.09.20.06.23.10
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Sep 2022 06:22:39 -0700 (PDT)
-Message-ID: <7f1cfee4-c6de-ea59-0aa9-9bd55054fb22@redhat.com>
-Date:   Tue, 20 Sep 2022 15:22:38 +0200
+        Tue, 20 Sep 2022 06:23:10 -0700 (PDT)
+Message-ID: <eb3ea4f2-3f12-3040-7faa-3d4fe44f68e5@gmail.com>
+Date:   Tue, 20 Sep 2022 09:23:09 -0400
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH] mm/secretmem: remove reduntant return value
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] net: sunhme: Fix packet reception for len <
+ RX_COPY_THRESHOLD
 Content-Language: en-US
-To:     xiujianfeng <xiujianfeng@huawei.com>, akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Binyi Han <dantengknight@gmail.com>
-References: <20220920012205.246217-1-xiujianfeng@huawei.com>
- <3196b824-bcee-0c44-bfd3-f6cd8a1e6719@redhat.com>
- <c4e99ea3-302d-b173-27f1-92c38ddaca8c@huawei.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <c4e99ea3-302d-b173-27f1-92c38ddaca8c@huawei.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        Zheyu Ma <zheyuma97@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Rolf Eike Beer <eike-kernel@sf-tec.de>,
+        Nick Bowler <nbowler@draconx.ca>
+References: <20220918215534.1529108-1-seanga2@gmail.com>
+ <YyjTa1qtt7kPqEaZ@lunn.ch> <ab2ce38a-313b-7e87-aaf5-cfc2b6e0cb28@gmail.com>
+ <Yymz9K6QXi860AWh@lunn.ch>
+From:   Sean Anderson <seanga2@gmail.com>
+In-Reply-To: <Yymz9K6QXi860AWh@lunn.ch>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20.09.22 14:35, xiujianfeng wrote:
-> Hi,
+On 9/20/22 08:37, Andrew Lunn wrote:
+>>> Please could you add a Fixes: tag indicating when the problem was
+>>> introduced. Its O.K. if that was when the driver was added. It just
+>>> helps getting the patch back ported to older stable kernels.
+>>
+>> Well, the driver was added before git was started...
+>>
+>> I suppose I could blame 1da177e4c3f4 ("Linux-2.6.12-rc2"), but maybe I
+>> should just CC the stable list?
 > 
-> 在 2022/9/20 20:10, David Hildenbrand 写道:
->> On 20.09.22 03:22, Xiu Jianfeng wrote:
->>> The return value @ret is always 0, so remove it and return 0 directly.
->>>
->>> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
->>> ---
->>>    mm/secretmem.c | 6 ++----
->>>    1 file changed, 2 insertions(+), 4 deletions(-)
->>>
->>> diff --git a/mm/secretmem.c b/mm/secretmem.c
->>> index 6a44efb673b2..04c3ac9448a1 100644
->>> --- a/mm/secretmem.c
->>> +++ b/mm/secretmem.c
->>> @@ -278,10 +278,8 @@ static struct file_system_type secretmem_fs = {
->>>    static int __init secretmem_init(void)
->>>    {
->>> -    int ret = 0;
->>> -
->>>        if (!secretmem_enable)
->>> -        return ret;
->>> +        return 0;
->>>        secretmem_mnt = kern_mount(&secretmem_fs);
->>>        if (IS_ERR(secretmem_mnt))
->>
->> On top of which tree is that?
->>
->> 6.0-rc6 has here:
->>
->> if (IS_ERR(secretmem_mnt))
->>       ret = PTR_ERR(secretmem_mnt);
->>
-> Sorry, it's on linux-next tree, I should have used [PATCH -next]:)
+> That is a valid commit to use. It is unlikely anybody will backport it
+> that far, but it does give the machinery a trigger it does need
+> backporting.
+> 
+> 	Andrew
 > 
 
-Maybe this change should be squashed into the patch from Binyi directly:
+OK, well then this
 
-
-commit 4eb5bbde3ccb710d3b85bfb13466612e56393369 (mm/mm-hotfixes-stable)
-Author: Binyi Han <dantengknight@gmail.com>
-Date:   Sun Sep 4 00:46:47 2022 -0700
-
-     mm: fix dereferencing possible ERR_PTR
-     
-     Smatch checker complains that 'secretmem_mnt' dereferencing possible
-     ERR_PTR().  Let the function return if 'secretmem_mnt' is ERR_PTR, to
-     avoid deferencing it.
-     
-     Link: https://lkml.kernel.org/r/20220904074647.GA64291@cloud-MacBookPro
-     Fixes: 1507f51255c9f ("mm: introduce memfd_secret system call to create "secret" memory areas")
-     Signed-off-by: Binyi Han <dantengknight@gmail.com>
-     Reviewed-by: Andrew Morton <akpm@linux-foudation.org>
-     Cc: Mike Rapoport <rppt@kernel.org>
-     Cc: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-     Cc: Hagen Paul Pfeifer <hagen@jauu.net>
-     Cc: James Bottomley <James.Bottomley@HansenPartnership.com>
-     Cc: <stable@vger.kernel.org>
-     Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-
-
--- 
-Thanks,
-
-David / dhildenb
-
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
