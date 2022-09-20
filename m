@@ -2,129 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 320405BE1E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 11:29:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EBC65BE1EB
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 11:29:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbiITJ2g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 05:28:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57748 "EHLO
+        id S230333AbiITJ3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 05:29:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbiITJ2d (ORCPT
+        with ESMTP id S230037AbiITJ3B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 05:28:33 -0400
-Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD4ED6AA08
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 02:28:31 -0700 (PDT)
-Received: from submission (posteo.de [185.67.36.169]) 
-        by mout02.posteo.de (Postfix) with ESMTPS id 60586240101
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 11:28:30 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
-        t=1663666110; bh=vHEP6vaM4hy2huTBhOW3ls1s8DRZuvLteUrEaol9UKs=;
-        h=Subject:From:To:Cc:Date:From;
-        b=SFW1NWbrvd0NIX9gO5dnfvdVVSQfYgnL05sqKzlHSWA0Ej99wDpZNBrzlfc06uzo1
-         iLzzr4rYmTk9b7MKxT0R9RTRhFnPp1dcvRmON/86VxFx/Zug62L57n+a0JwWw6kXCf
-         vorM0DTJnAvqM+uhY9pQwEuzTQBi5AR0byihMUqhe5Cfu4KPAya+/RNyZT4AGFcM1o
-         Cm44C9TQkBnxkq38fWw2X/rNvfhkiDAGvrk9YoQLKkT6bzuB8nDgaFzqXoQIFphJQr
-         HeV5nYdZ4HahwDa3pQZYHkxCzZ523A8DX3WaGfH8kC6943skEcuCAbzDZDFlXrP9OC
-         rQ8fHDwOw8jPA==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4MWx7053TKz6tmV;
-        Tue, 20 Sep 2022 11:28:28 +0200 (CEST)
-Message-ID: <823a21b40a6ba6ccd022594c6bf1efaeb7a5a65d.camel@posteo.de>
-Subject: Re: [PATCH] media: i2c: hi846: Fix memory leak in hi846_parse_dt()
-From:   Martin Kepplinger <martink@posteo.de>
-To:     Rafael Mendonca <rafaelmendsr@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Pavel Machek <pavel@ucw.cz>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 20 Sep 2022 09:28:28 +0000
-In-Reply-To: <20220919021252.730729-1-rafaelmendsr@gmail.com>
-References: <20220919021252.730729-1-rafaelmendsr@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        Tue, 20 Sep 2022 05:29:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 502BE6CD04;
+        Tue, 20 Sep 2022 02:29:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E18F661DC6;
+        Tue, 20 Sep 2022 09:28:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53F92C433D6;
+        Tue, 20 Sep 2022 09:28:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663666139;
+        bh=c9tNWaX+fG4Wy0u/MHxZ7+cfWDSAeFQOc1Tp0X/dp30=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JBs016aYWv/9hPEvaf9RCowNRCwkfgSvgZ7FXp58il6YCQZHRDQdbJ3QF+GokU2rs
+         UrY8lL9GIL3WSxvpcKol9BBH/PxXKlmw228u73oxfTbt68kcD3n2rUF+meD/+brhjf
+         o8135p5R8VrhCW7O8GXaSvR/DkoEPgLvPjA9p7Cwu0bRzGwMsLaKZw2Lgqkd4apvNk
+         /ZGuQbF9NHpTVNihvmN4C+qBWxXcKgL8trBUsYxsbyeXHfObkN3MJYxThz2i/QmIYj
+         z09laYILSS8/AdN0SBWYYjPZL3dGE2NAuUo+KnHdrXwkJfsrXMHs49XTZUZ9c1h8RS
+         qfCzkbC/9pcwQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oaZYr-0002Wy-8G; Tue, 20 Sep 2022 11:29:01 +0200
+Date:   Tue, 20 Sep 2022 11:29:01 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Vinod Koul <vkoul@kernel.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     andersson@kernel.org, kishon@ti.com, linux-arm-msm@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] phy: qcom-qmp-pcie: Fix the SM8450 PCS registers
+Message-ID: <YymH3XCz2r/pj0xY@hovoldconsulting.com>
+References: <20220910063857.17372-1-manivannan.sadhasivam@linaro.org>
+ <YylhpBtz8d2dqJhv@matsya>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YylhpBtz8d2dqJhv@matsya>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Sonntag, dem 18.09.2022 um 23:12 -0300 schrieb Rafael Mendonca:
-> If any of the checks related to the supported link frequencies fail,
-> then
-> the V4L2 fwnode resources don't get released before returning, which
-> leads
-> to a memleak. Fix this by properly freeing the V4L2 fwnode data in a
-> designated label.
+On Tue, Sep 20, 2022 at 12:15:56PM +0530, Vinod Koul wrote:
+> On 10-09-22, 12:08, Manivannan Sadhasivam wrote:
+> > In the PCS region, registers QPHY_V5_PCS_EQ_CONFIG4 and
+> > QPHY_V5_PCS_EQ_CONFIG5 should be used instead of QPHY_V5_PCS_EQ_CONFIG2
+> > and QPHY_V5_PCS_EQ_CONFIG3.
+> > 
+> > This causes high latency when ASPM is enabled, so fix it!
+> > 
+> > Fixes: 2c91bf6bf290 ("phy: qcom-qmp: Add SM8450 PCIe1 PHY support")
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > ---
+
+> > diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcs-v5.h b/drivers/phy/qualcomm/phy-qcom-qmp-pcs-v5.h
+> > index 61a44519f969..cca6455ec98c 100644
+> > --- a/drivers/phy/qualcomm/phy-qcom-qmp-pcs-v5.h
+> > +++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcs-v5.h
+> > @@ -11,7 +11,7 @@
+> >  #define QPHY_V5_PCS_G3S2_PRE_GAIN			0x170
+> >  #define QPHY_V5_PCS_RX_SIGDET_LVL			0x188
+> >  #define QPHY_V5_PCS_RATE_SLEW_CNTRL1			0x198
+> > -#define QPHY_V5_PCS_EQ_CONFIG2				0x1e0
+> > -#define QPHY_V5_PCS_EQ_CONFIG3				0x1e4
+
+Why are you removing these defines? (They are correct for sc8280xp.)
+
+> > +#define QPHY_V5_PCS_EQ_CONFIG4				0x2e0
+> > +#define QPHY_V5_PCS_EQ_CONFIG5				0x2e4
 > 
-> Fixes: e8c0882685f9 ("media: i2c: add driver for the SK Hynix Hi-846
-> 8M pixel camera")
-> Signed-off-by: Rafael Mendonca <rafaelmendsr@gmail.com>
-> ---
->  drivers/media/i2c/hi846.c | 14 ++++++++++----
->  1 file changed, 10 insertions(+), 4 deletions(-)
+> This conflicts with c0c7769cdae2 ("phy: qcom-qmp: Add SC8280XP USB3 UNI phy")
 > 
-> diff --git a/drivers/media/i2c/hi846.c b/drivers/media/i2c/hi846.c
-> index ad35c3ff3611..254031503c72 100644
-> --- a/drivers/media/i2c/hi846.c
-> +++ b/drivers/media/i2c/hi846.c
-> @@ -2008,22 +2008,24 @@ static int hi846_parse_dt(struct hi846
-> *hi846, struct device *dev)
->             bus_cfg.bus.mipi_csi2.num_data_lanes != 4) {
->                 dev_err(dev, "number of CSI2 data lanes %d is not
-> supported",
->                         bus_cfg.bus.mipi_csi2.num_data_lanes);
-> -               v4l2_fwnode_endpoint_free(&bus_cfg);
-> -               return -EINVAL;
-> +               ret = -EINVAL;
-> +               goto check_hwcfg_error;
->         }
->  
->         hi846->nr_lanes = bus_cfg.bus.mipi_csi2.num_data_lanes;
->  
->         if (!bus_cfg.nr_of_link_frequencies) {
->                 dev_err(dev, "link-frequency property not found in
-> DT\n");
-> -               return -EINVAL;
-> +               ret = -EINVAL;
-> +               goto check_hwcfg_error;
->         }
->  
->         /* Check that link frequences for all the modes are in device
-> tree */
->         fq = hi846_check_link_freqs(hi846, &bus_cfg);
->         if (fq) {
->                 dev_err(dev, "Link frequency of %lld is not
-> supported\n", fq);
-> -               return -EINVAL;
-> +               ret = -EINVAL;
-> +               goto check_hwcfg_error;
->         }
->  
->         v4l2_fwnode_endpoint_free(&bus_cfg);
-> @@ -2044,6 +2046,10 @@ static int hi846_parse_dt(struct hi846 *hi846,
-> struct device *dev)
->         }
->  
->         return 0;
-> +
-> +check_hwcfg_error:
-> +       v4l2_fwnode_endpoint_free(&bus_cfg);
-> +       return ret;
->  }
->  
->  static int hi846_probe(struct i2c_client *client)
+> where QPHY_V5_PCS_EQ_CONFIG5 was added as 0x1e0
+> 
+> Do we have a different v5 for SM8450 and SC8280XP?
 
-thank you very much for the patch. lgtm,
+I can confirm that the PCS_EQ_CONFIG defines added for sc8280xp matches
+the vendor's headers for both the combo and USB PHYs.
 
-Reviewed-by: Martin Kepplinger <martink@posteo.de>
-
-                  martin
-
-
+Johan
