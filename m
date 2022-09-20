@@ -2,104 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B63B5BDF63
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 10:11:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56CA95BDFAD
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 10:18:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229921AbiITILp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 04:11:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41798 "EHLO
+        id S230300AbiITISU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 04:18:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230289AbiITILM (ORCPT
+        with ESMTP id S229717AbiITIRz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 04:11:12 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE91467164
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 01:07:21 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MWvDt1DCrzcn0p;
-        Tue, 20 Sep 2022 16:03:26 +0800 (CST)
-Received: from huawei.com (10.175.103.91) by dggpemm500022.china.huawei.com
- (7.185.36.162) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 20 Sep
- 2022 16:07:19 +0800
-From:   Zeng Heng <zengheng4@huawei.com>
-To:     <jpoimboe@kernel.org>, <peterz@infradead.org>, <mbenes@suse.cz>
-CC:     <linux-kernel@vger.kernel.org>, <zengheng4@huawei.com>,
-        <liwei391@huawei.com>
-Subject: [PATCH -next 3/3] tools: objtool: fix unused-parameter warning in special.c
-Date:   Tue, 20 Sep 2022 16:14:16 +0800
-Message-ID: <20220920081416.3570803-4-zengheng4@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220920081416.3570803-1-zengheng4@huawei.com>
-References: <20220920081416.3570803-1-zengheng4@huawei.com>
+        Tue, 20 Sep 2022 04:17:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E14496526D
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 01:15:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663661706;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IZY1YavaFvCQO8tOgPzXe0UBwQkGNW34ROeeUBFifyI=;
+        b=bnbXqrexHF6ZFVLwzCA5gNxmsOXcwWWvWfHVRVV2xdqU0DW+uOEKWiOJYrtHfrR5YTGUDD
+        cT+LsqRHrt+gM53LUWPfloLjHaJ+evjOCwA7mnVHVxaLXHR9ZNEPr0WJNOUIrOpu+qv4HN
+        0rL69Q49SFXAXm4jEy0patXHjSElXfw=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-257-hSbfo87KMTaF3-PjgFBzJA-1; Tue, 20 Sep 2022 04:14:59 -0400
+X-MC-Unique: hSbfo87KMTaF3-PjgFBzJA-1
+Received: by mail-wr1-f70.google.com with SMTP id g19-20020adfa493000000b0022a2ee64216so832750wrb.14
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 01:14:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :content-language:references:to:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=IZY1YavaFvCQO8tOgPzXe0UBwQkGNW34ROeeUBFifyI=;
+        b=uN/bQ9LOIkWcYohUiLvCKwC6xkTxBL1KPXmDIUx1XF91MZz7G1fnqqLoyUYRIB7X+2
+         xSQPBTIkEEIzRXD8Kng7LpHym76vwXGhPp9q/kEEwVb2qpVIF4tTvhMaWPTujuwuE61L
+         elHD0xofnGxWZ+doMCK5sImSJ6X4BF+V4V852A2a0vJmzqT5C9m5xl5SuclO5AVmw+RX
+         jfbhd66YBWMmyApJFKpqRoxrfhtzA9bpPevS68tX3d/L5EJqxHcb1Jyy9k03pTcw5H9h
+         YfAPp+z+Xl/TzFKQN67IU5tl9NF+i6siVdBKjF6kvmmENmS+P4/YabM3KTpot6YYGRGT
+         km3w==
+X-Gm-Message-State: ACrzQf3Ia2LkFqGzEWslrdOrb+3zAWc1teOaEuQe/DIO6OAbVNBqvk6S
+        9r1phtDVcbZn0Cz7kMNxse8EpQqikLEQLMTgyE/DV0G+NFz+nmwDKyKN4OLMFw3flQZ6gSfTGK8
+        pqovrDPb2cMttCKgH6HV3YW9v
+X-Received: by 2002:a05:600c:502c:b0:3a8:41e9:cd32 with SMTP id n44-20020a05600c502c00b003a841e9cd32mr1390986wmr.177.1663661698499;
+        Tue, 20 Sep 2022 01:14:58 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM66+NV0/AY2AzFAp6F92Em689IXLMoLrKqSW9fGLIpywepwzilF5sHgjwovliPmjN35Y1UA+w==
+X-Received: by 2002:a05:600c:502c:b0:3a8:41e9:cd32 with SMTP id n44-20020a05600c502c00b003a841e9cd32mr1390961wmr.177.1663661698255;
+        Tue, 20 Sep 2022 01:14:58 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c712:2300:e82d:5a58:4fd8:c1e6? (p200300cbc7122300e82d5a584fd8c1e6.dip0.t-ipconnect.de. [2003:cb:c712:2300:e82d:5a58:4fd8:c1e6])
+        by smtp.gmail.com with ESMTPSA id l4-20020adff484000000b0022ac13aa98fsm889374wro.97.2022.09.20.01.14.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Sep 2022 01:14:57 -0700 (PDT)
+Message-ID: <08572e43-5de6-9bca-54ab-1779aeb54c25@redhat.com>
+Date:   Tue, 20 Sep 2022 10:14:56 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500022.china.huawei.com (7.185.36.162)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+To:     Akinobu Mita <akinobu.mita@gmail.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        corbet@lwn.net, osalvador@suse.de, shuah@kernel.org,
+        Zhao Gongyi <zhaogongyi@huawei.com>,
+        Wei Yongjun <weiyongjun1@huawei.com>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        akpm@linux-foundation.org
+References: <20220919172418.45257-1-akinobu.mita@gmail.com>
+ <20220919172418.45257-2-akinobu.mita@gmail.com>
+Content-Language: en-US
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH 1/3] libfs: add DEFINE_SIMPLE_ATTRIBUTE_SIGNED for signed
+ value
+In-Reply-To: <20220919172418.45257-2-akinobu.mita@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove unused parameters of function
-'arch_support_alt_relocation'.
+On 19.09.22 19:24, Akinobu Mita wrote:
+> The simple attribute files do not accept a negative value since the
+> commit 488dac0c9237 ("libfs: fix error cast of negative value in
+> simple_attr_write()"), so we have to use a 64-bit value to write a
+> negative value.
+> 
+> This adds DEFINE_SIMPLE_ATTRIBUTE_SIGNED for a signed value.
+> 
+> Fixes: 488dac0c9237 ("libfs: fix error cast of negative value in simple_attr_write()")
 
-There is no logic changes.
+This patch itself isn't a fix. The fixes tags belong to the other 
+patches that make use of this.
 
-Signed-off-by: Zeng Heng <zengheng4@huawei.com>
----
- tools/objtool/arch/x86/special.c        | 3 +--
- tools/objtool/check.c                   | 2 +-
- tools/objtool/include/objtool/special.h | 3 +--
- 3 files changed, 3 insertions(+), 5 deletions(-)
+> Reported-by: Zhao Gongyi <zhaogongyi@huawei.com>
+> Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
+> ---
 
-diff --git a/tools/objtool/arch/x86/special.c b/tools/objtool/arch/x86/special.c
-index 7c97b7391279..2524156f0f23 100644
---- a/tools/objtool/arch/x86/special.c
-+++ b/tools/objtool/arch/x86/special.c
-@@ -39,8 +39,7 @@ void arch_handle_alternative(unsigned short feature, struct special_alt *alt)
- }
- 
- bool arch_support_alt_relocation(struct special_alt *special_alt,
--				 struct instruction *insn,
--				 struct reloc *reloc)
-+				 struct instruction *insn)
- {
- 	/*
- 	 * The x86 alternatives code adjusts the offsets only when it
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index cee5436b3bf9..1f755700c036 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -1645,7 +1645,7 @@ static int handle_group_alt(struct objtool_file *file,
- 		 */
- 		alt_reloc = insn_reloc(file, insn);
- 		if (alt_reloc &&
--		    !arch_support_alt_relocation(special_alt, insn, alt_reloc)) {
-+		    !arch_support_alt_relocation(special_alt, insn)) {
- 
- 			WARN_FUNC("unsupported relocation in alternatives section",
- 				  insn->sec, insn->offset);
-diff --git a/tools/objtool/include/objtool/special.h b/tools/objtool/include/objtool/special.h
-index dc4721e19002..fc184be6cd9f 100644
---- a/tools/objtool/include/objtool/special.h
-+++ b/tools/objtool/include/objtool/special.h
-@@ -35,8 +35,7 @@ int special_get_alts(struct elf *elf, struct list_head *alts);
- void arch_handle_alternative(unsigned short feature, struct special_alt *alt);
- 
- bool arch_support_alt_relocation(struct special_alt *special_alt,
--				 struct instruction *insn,
--				 struct reloc *reloc);
-+				 struct instruction *insn);
- struct reloc *arch_find_switch_table(struct objtool_file *file,
- 				    struct instruction *insn);
- #endif /* _SPECIAL_H */
+Reviewed-by: David Hildenbrand <david@redhat.com>
+
 -- 
-2.25.1
+Thanks,
+
+David / dhildenb
 
