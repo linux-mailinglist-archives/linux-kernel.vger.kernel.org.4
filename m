@@ -2,116 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4C9A5BE5EE
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 14:34:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 698DE5BE5F5
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 14:35:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbiITMeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 08:34:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50204 "EHLO
+        id S230124AbiITMez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 08:34:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229982AbiITMeM (ORCPT
+        with ESMTP id S230331AbiITMeu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 08:34:12 -0400
-Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 972825F110;
-        Tue, 20 Sep 2022 05:34:11 -0700 (PDT)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 990341CAC;
-        Tue, 20 Sep 2022 14:34:09 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1663677249;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vy3394MDBwTyDF5riRpGQ1bWI/Uxx+v9aoRpfwrtVw8=;
-        b=KLIiwldTgLh6waIO/BXq7aQ3yTMHLFx/Y1z74gAe+OaI4pMml15WCZgkgZrCdsP6u5vQNx
-        OeS2VehbPnUXgzy91fu27zngDuZrZxgAytYqDtkFhEL7G2kfsddRuiqFVRIv2eTwkIJgbS
-        RvHNJz5HVTyPvHZJfQ55X7I2D8sEwsf8J4YkPZUtPzMZvQkTy7opNbd9C0SZ5lnlSbUbE+
-        5uRydG3+vo6VmB4dkIKBjMySCmNpcTtOkaGa1J2FmV89ufEl25Z9bT3U88Q/gOSmTFa9CJ
-        oon5pzB/dsvYF3ZWfvvWfwBrsFlY0PiQuAOwiieyHUrlSFlStg36lrMvKwqFwA==
+        Tue, 20 Sep 2022 08:34:50 -0400
+Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 545FF19018;
+        Tue, 20 Sep 2022 05:34:49 -0700 (PDT)
+Received: by mail-qv1-f47.google.com with SMTP id w4so1892514qvp.2;
+        Tue, 20 Sep 2022 05:34:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=DScy5TK0GP5AqTqFl701GW46IDwtxGgy76xOd2cvfOc=;
+        b=rAedqHJCKUz1FFJmPMPtQFFJzRU95uT9J02jZeqB0yClI3gMUlERSieH5tMqeYTq3X
+         j13bqfPAEi0FKuYgeODQpVHxKHaHj8eyDPRfjqWiMWqNf7oHTRdS24hktUqLnV55TSl7
+         T99b783aEo710bqQdKV0qY2JDgLulYuuWrOMXMM+WgCZ/FKyN5K/V2LVFJfuxG9pw5Hp
+         7N2M6PayLrTdUVA5geCetTQtnv5PNdBqo1ttgXc7QaQu4Y9TsNpL9ZHUCobv0NyKmpfa
+         LAWGZK1D8uA6mSTWG85u8DIpdTAlEjrcdKLKZsb6bpywT7ufS7z45gPcGhD6T2esAG9n
+         6XGQ==
+X-Gm-Message-State: ACrzQf21txhdIgMOGLaX8ZWfivTVMiGQOlKT2rXlR4EwzxDYs1HMfsul
+        QCyHbRorxQ8zN0zoMMQmtV9TU87+9PfOFA==
+X-Google-Smtp-Source: AMsMyM6C+shd7dihay6XlWt6Es6bG/q9Kks5AstAoKM8ZXJJCPjKFCXaa2i2xJf3lz6Jx9zqjfT3Gw==
+X-Received: by 2002:a0c:8d85:0:b0:497:8b1:d372 with SMTP id t5-20020a0c8d85000000b0049708b1d372mr18938386qvb.68.1663677288043;
+        Tue, 20 Sep 2022 05:34:48 -0700 (PDT)
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
+        by smtp.gmail.com with ESMTPSA id i11-20020a05622a08cb00b00342f844e30fsm875816qte.31.2022.09.20.05.34.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Sep 2022 05:34:47 -0700 (PDT)
+Received: by mail-yb1-f176.google.com with SMTP id p69so3233938yba.0;
+        Tue, 20 Sep 2022 05:34:46 -0700 (PDT)
+X-Received: by 2002:a25:3746:0:b0:6b1:4a12:b2d5 with SMTP id
+ e67-20020a253746000000b006b14a12b2d5mr16262084yba.89.1663677286562; Tue, 20
+ Sep 2022 05:34:46 -0700 (PDT)
 MIME-Version: 1.0
-Date:   Tue, 20 Sep 2022 14:34:09 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     horatiu.vultur@microchip.com, UNGLinuxDriver@microchip.com,
-        andy.shevchenko@gmail.com, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] pinctrl: ocelot: Fix interrupt controller
-In-Reply-To: <CACRpkdb70zawWDSxUM=hJYkOEbG5a5guZWBytqUmRG2FZLiXsQ@mail.gmail.com>
-References: <20220909145942.844102-1-horatiu.vultur@microchip.com>
- <20220920120642.690340-1-michael@walle.cc>
- <CACRpkdb70zawWDSxUM=hJYkOEbG5a5guZWBytqUmRG2FZLiXsQ@mail.gmail.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <faa173ddc1d55d2e3931246453e5e953@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220915181558.354737-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220915181558.354737-10-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220915181558.354737-10-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 20 Sep 2022 14:34:35 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUWOGRpdG5=GLHc=fySqn7ErHtO0c91bJsgOO+Bp1ZUoA@mail.gmail.com>
+Message-ID: <CAMuHMdUWOGRpdG5=GLHc=fySqn7ErHtO0c91bJsgOO+Bp1ZUoA@mail.gmail.com>
+Subject: Re: [PATCH v3 09/10] MAINTAINERS: Add entry for Renesas RISC-V architecture
+To:     Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Atish Patra <atishp@rivosinc.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-09-20 14:28, schrieb Linus Walleij:
-> On Tue, Sep 20, 2022 at 2:06 PM Michael Walle <michael@walle.cc> wrote:
-> 
->> Our board has a shared active low interrupt line, connected to a quad 
->> PHY
->> LAN8814 and two GPY215 PHYs. I've gave this a try but it doesn't seem 
->> to
->> work. It seems the interrupt fires multiple times. If I plug a cable 
->> in
->> one of the LAN8814 ports, I see that the interrupt count in
->> /proc/interrupts has increased by two. If I use a GPY215 port, I see 
->> about
->> 40 interrupts firing.
-> 
-> A lot of interrupts firing is very typical for level IRQs.
+On Thu, Sep 15, 2022 at 8:17 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> Add RISC-V architecture as part of ARM/Renesas architecture, as they have
+> the same maintainers, use the same development collaboration
+> infrastructure, and share many files.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+> v2->v3
+> * Merged as part of ARM
 
-Common but wrong? Except in the error case, /proc/interrupts
-was always reliable on our boards :)
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-> So I assume these are wire-OR, i.e. exploiting open drain with
-> a pull-up resistor.
+Gr{oetje,eeting}s,
 
-Yes, the usual shared line interrupts.
+                        Geert
 
-> Just checking: since these drivers obviously must pass pass
-> IRQF_SHARED, have you also made sure that each driver also
-> will properly return IRQ_HANDLED if the interrupt was for them
-> (triggered by "their" hardware) but IRQ_NONE if the interrupt was
-> not for them (triggered by something else)?
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-Thanks, I'll check it.
-
-> The IRQ core relies on all drivers to do the right thing here.
-> 
-> Otherwise the IRQ will just re-fire until someone/something
-> manages to properly handle it and drive the line high again.
-> 
-> A typical case would be the LAN8814 driver having been probed
-> first, thus its IRQ handler will be visited first, and always returning
-> IRQ_HANDLED thereby "stealing" the irq from everyone else.
-> 
-> Another possible problem is if you don't have an external pull-up
-> resistor and you need some pin config to enable pull-up on the
-> SoC input line. This will generate a lot of IRQs.
-
-I've checked with a scope, the levels and edges look good.
-
-> A third problem would be that the line need time to rise.
-> But that should be uncommon.
-
-I haven't looked at the code of this patch, but obiously it
-is emulating the level triggered behavior with just a pin change
-interrupt. There might also be something wrong there, too.
-
--michael
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
