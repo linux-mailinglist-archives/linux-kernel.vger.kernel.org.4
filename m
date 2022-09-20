@@ -2,69 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30C305BE8E8
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 16:28:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4FCF5BE8EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 16:29:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231325AbiITO2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 10:28:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55482 "EHLO
+        id S231144AbiITO31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 10:29:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229984AbiITO2E (ORCPT
+        with ESMTP id S231216AbiITO3X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 10:28:04 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 118C6226;
-        Tue, 20 Sep 2022 07:28:04 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-127d10b4f19so4415748fac.9;
-        Tue, 20 Sep 2022 07:28:04 -0700 (PDT)
+        Tue, 20 Sep 2022 10:29:23 -0400
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 221CE1EC5B
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 07:29:21 -0700 (PDT)
+Received: by mail-il1-x134.google.com with SMTP id y9so1440649ily.11
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 07:29:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=eIBCdRZ91e6B9az9bnty9SmfU59aOEZQ/+8nwcyHTOw=;
-        b=IyOmUaPi8ehKws+AiyBpdlKelCC9fvz2Voejsb65/WgZLtv10tIaPF8EveAV8DdBgx
-         xHlwwmd/mwufZtvPfcy+aLzer76SvgdASR27mRr9X+BXDsI+j4Eec4NmT4KWaZK4mhYu
-         a+BmtSO+lqioiXkOcQWiogrx0rhNq3p1WtBiiafa/iO+9CQiGaIVbvoHnTB1ejGGK6M3
-         IlTLKEPfGWi8qzTeBIr3J4QgeHj5gBmYjRyqAhIlFrve2HEyORNsaKVJAb35VOHpR87Y
-         F4W2KCMijl+K7/OqhcdkKRkqRg0ej/mFwbaKc/0MmIsSxMswFcoBdyKCzljLkpOvRJNi
-         G6VQ==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date;
+        bh=b4h6CnwfloglB8BX+JRYg+NYPY8n41O96rCGRmQYplY=;
+        b=OHhSlzb9MwYwEhBf8fpJH0U5e1L2dVexdla0WM5KyZ4zbRtBzUfJn2XILD5bMabmkP
+         ZDYLnP31LdiaWYG0Wwb/fO+FheyanTUkNiqNEezV2RWKBdzf9LIHsYrhplxM5eWMuejL
+         KZOJLg2ngf0JRvBS5tOyMTJUbMN9/459HyY/2EgN/g+Ny+osHq7pvp8FqIKAflkSnnr2
+         anLXXixBEMhRLTX7B1jKf+VfpB1h3vILSD18xhMHDC8+EoZDZB2LtCJvDLYRKim3SmJf
+         nDquTgYKNxta4EhxfFuVtOCH3u0hhSa9xkNOAUkf+DHo1PrdbMxu8Fwcv58DUpJKNwhI
+         VUfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=eIBCdRZ91e6B9az9bnty9SmfU59aOEZQ/+8nwcyHTOw=;
-        b=eQ/dyWUPTOY3KfRuQkwWANXCz3IwrW+I4V20UwDD6ojyugvhWRvukAbIN9GSnVTLiD
-         NY+7mPQW5WaeXKtfU98FU2aQLCoHiCAqOPClj/RKX/izBWF0rXsj6LdGIDCPzmmradBr
-         OYQVb3R/q0IyQJ/clZL26UgxgEIl+fSg8RO+X9mh2WKSgLVNwcpCCe9t7KQwpNOAdfZl
-         0Sj6hmc2MlIuvr9D4IDxxi+dVYPkY0UfnB0A77FMv6WQ1lyy4smt7yvCBVT8eVzmRrg2
-         EB4XfS+h/2aZ/i8aQxLbDpAI/OE3jRLL0L7y2qxqmiHRYEydYhmyms6xRBz7t0tDdK9q
-         WK+A==
-X-Gm-Message-State: ACrzQf2A1GwO2yRaAbcDjTuUCFPeUtRAD+OhB1F93X9sCsR15GfRq2eM
-        Y0zZHZ/IT6G9KoKJS5lvo2qLnTeaAEQ2Vg==
-X-Google-Smtp-Source: AMsMyM7BPX3OjSWMrCTfcCxF36VS5tVznjT+tOzXDN85FdBggDWFZNPUtVIE0Ifev7tysBfxJ0bOPw==
-X-Received: by 2002:a05:6870:b508:b0:12d:1c59:90d9 with SMTP id v8-20020a056870b50800b0012d1c5990d9mr2256678oap.199.1663684083277;
-        Tue, 20 Sep 2022 07:28:03 -0700 (PDT)
-Received: from macondo.. ([2804:431:e7cc:3499:63b7:66da:c087:3355])
-        by smtp.gmail.com with ESMTPSA id l7-20020a056830268700b0065a193c08absm42860otu.34.2022.09.20.07.28.00
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=b4h6CnwfloglB8BX+JRYg+NYPY8n41O96rCGRmQYplY=;
+        b=wNrd7lcFNqd3ps/vBkhSAlZvxEYjM6BP/2QFxr0nNRd9bLJ0iw39lt1YgjH9zMOPtS
+         PCs2SInWM+tGnIuDkgCCTk7CQeyb3b2b1f2g39YC9PO7aOWGjgkEINcEeFjzzOOnbbkt
+         XiFOhTxvmfWErQKfBEPQsEBNkKdSprhrCB8hi3+b2aTDIiq2VJ9rVcZ0SqDXczGcsPPY
+         Mq4b3FEj9h080j9erC7YusVUIZqeD97zOqvSMPEqDOJBbwFzVnj0ZOzQ/Xtbbjvghn3Z
+         6iIGTRzr40VktDlVH/7Bif9QU+9YsaEW+9d4/20JGkBM3tjUZDJN0B9I98sJTjDdC9n0
+         b9Cw==
+X-Gm-Message-State: ACrzQf3lPVRD1vAUP/xl/R0WWtLrgF2yIjGDSZBzUJinUuyll3yhTD/X
+        /bdWBudsNVeXPfEHTYWt9CrfhpbIkwgpuA==
+X-Google-Smtp-Source: AMsMyM5nQxxF50sNz7iolWQkkg2CR+NmBFf2et7lsbUK6kUIMnUm9voaFO3QFZyqwuacx1Bc42tS0A==
+X-Received: by 2002:a92:6a12:0:b0:2f6:3bd1:fbdf with SMTP id f18-20020a926a12000000b002f63bd1fbdfmr1308703ilc.205.1663684160490;
+        Tue, 20 Sep 2022 07:29:20 -0700 (PDT)
+Received: from [127.0.0.1] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id d71-20020a02624a000000b003567503cf92sm683241jac.82.2022.09.20.07.29.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 07:28:02 -0700 (PDT)
-From:   Rafael Mendonca <rafaelmendsr@gmail.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Rafael Mendonca <rafaelmendsr@gmail.com>,
-        Tommaso Merciai <tommaso.merciai@amarulasolutions.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] media: i2c: ov5648: Free V4L2 fwnode data on unbind
-Date:   Tue, 20 Sep 2022 11:27:48 -0300
-Message-Id: <20220920142749.738715-1-rafaelmendsr@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 20 Sep 2022 07:29:19 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Li zeming <zeming@nfschina.com>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20220919012825.2936-1-zeming@nfschina.com>
+References: <20220919012825.2936-1-zeming@nfschina.com>
+Subject: Re: [PATCH] block: Remove unnecessary (void*) conversions
+Message-Id: <166368415982.11026.4714198976076323254.b4-ty@kernel.dk>
+Date:   Tue, 20 Sep 2022 08:29:19 -0600
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Mailer: b4 0.10.0-dev-355bd
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,32 +70,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The V4L2 fwnode data structure doesn't get freed on unbind, which leads to
-a memleak.
+On Mon, 19 Sep 2022 09:28:25 +0800, Li zeming wrote:
+> The key pointer does not need to cast the type.
+> 
+> 
 
-Fixes: e43ccb0a045f ("media: i2c: Add support for the OV5648 image sensor")
-Signed-off-by: Rafael Mendonca <rafaelmendsr@gmail.com>
-Reviewed-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-Reviewed-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
----
-v1->v2
-- Remove empty line before call to free
----
- drivers/media/i2c/ov5648.c | 1 +
- 1 file changed, 1 insertion(+)
+Applied, thanks!
 
-diff --git a/drivers/media/i2c/ov5648.c b/drivers/media/i2c/ov5648.c
-index dfcd33e9ee13..220c53565b0a 100644
---- a/drivers/media/i2c/ov5648.c
-+++ b/drivers/media/i2c/ov5648.c
-@@ -2597,6 +2597,7 @@ static int ov5648_remove(struct i2c_client *client)
- 	v4l2_ctrl_handler_free(&sensor->ctrls.handler);
- 	mutex_destroy(&sensor->mutex);
- 	media_entity_cleanup(&subdev->entity);
-+	v4l2_fwnode_endpoint_free(&sensor->endpoint);
- 
- 	return 0;
- }
+[1/1] block: Remove unnecessary (void*) conversions
+      commit: a7609c68f7a117a77b3049c2353f555854be69e9
+
+Best regards,
 -- 
-2.34.1
+Jens Axboe
+
 
