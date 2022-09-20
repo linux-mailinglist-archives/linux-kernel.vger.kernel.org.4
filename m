@@ -2,133 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 204045BEB5B
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 18:51:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCF9A5BEB60
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 18:52:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbiITQvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 12:51:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38550 "EHLO
+        id S230210AbiITQwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 12:52:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230005AbiITQu6 (ORCPT
+        with ESMTP id S229530AbiITQwl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 12:50:58 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D20594D801
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 09:50:56 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id a29so3299324pfk.5
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 09:50:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date;
-        bh=tJ0MDKHA5vJWXi8Ax19UpV1RwrQzRYfQtWqOPMNkLRk=;
-        b=VpoSh0W+roXAOOUC1IOpPs0jUIbaT+zaUdv0d9am+Sy+f0b/uoPGLwa6FWar9awTZv
-         eDPU3myte8MmUH1EIuskCJKCZu0c5Ga9LPgPtdJGe4X/FhS0kdyDs7XsO1MUiU5f/Da8
-         XEA5HSWAL0keqXxehoTmvtlPCIVWwACMNzcFXuOzeq4MYTk8wOqOEquIQpCcrsfiAlDD
-         qtUB2R469plVNherjgOqWCgoWAJrKEL161ftZC0wEf6FbIAyb12XJq5B9C5E1OJjClaP
-         3A9s+Dyg6tpn7q5FgjHLGW5z5QbfFmS5e5Ld87UzFr3//rm/O+/53e5wc6mEtf5gGotG
-         BbzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=tJ0MDKHA5vJWXi8Ax19UpV1RwrQzRYfQtWqOPMNkLRk=;
-        b=2OcT8qPMu2DZ1a3HB8LXgO4bN5vbVFyMNqhaOPgw+6C/GUqaoKspiFTGeSq4egSe2K
-         NAP0u6HMAByNIbgi2BE8RqF/65n8mHXiUAQC7m5iIYgKEUJQirET8dWiHO/61S/e27XE
-         NmYXpy92A0FVkA1jlPOeK1vC5ZV3goy3jwrKipsVWAFXmd0joaGFqdGaG1L5s33z+OWO
-         GMyjJm3wn6CC2NJs8QtfHVl3NkIhTrG0Tez0qqRbhSPMN/AR93GcyXC/vvHLibyiK/PG
-         0MD/OAZ27QKVBdkRCzVgSulfb6zMWT+RpZO3FbeXXJAiI2bFsghKk5KKDabLScSIg3qy
-         ZhaQ==
-X-Gm-Message-State: ACrzQf3Y+nmB/aTxfCn2PG/Ix9GSpmKPuUbkvs1UMRzFKDgU5j/HZq6y
-        GCS1GOEie2pt+eguUjKn5wfNXg==
-X-Google-Smtp-Source: AMsMyM4xd5P7ZoJYaPrBy3SINvZGFjwpUij8ReLC2fPc2M4OwJdq/xwDUJ7AkIFnLQT45qqXjsmmoA==
-X-Received: by 2002:a05:6a00:c86:b0:542:7c38:4a59 with SMTP id a6-20020a056a000c8600b005427c384a59mr25241917pfv.74.1663692656216;
-        Tue, 20 Sep 2022 09:50:56 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id c10-20020a170902d48a00b0016c0eb202a5sm98149plg.225.2022.09.20.09.50.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 09:50:55 -0700 (PDT)
-Date:   Tue, 20 Sep 2022 16:50:51 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Li RongQing <lirongqing@baidu.com>
-Subject: Re: [PATCH v2 04/23] KVM: x86: Inhibit AVIC SPTEs if any vCPU
- enables x2APIC
-Message-ID: <Yynva7GV+XpU0Llx@google.com>
-References: <20220903002254.2411750-1-seanjc@google.com>
- <20220903002254.2411750-5-seanjc@google.com>
- <8a24c36efebfa4fb302587a74e3bc1e088e17be8.camel@redhat.com>
- <Yyngcg3ainoD0fNc@google.com>
+        Tue, 20 Sep 2022 12:52:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C3D647DB
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 09:52:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AF38A62545
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 16:52:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D890C433D6;
+        Tue, 20 Sep 2022 16:52:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663692760;
+        bh=Oh2dl9d4nX47VYSB8qPNmpq1Zk2XZIiNPnT0V++Qr88=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Y4tmSnx++nKzK93WeJaV1LJZTXiy04Vj/m2fiS4zMjVm3fdUmiE3hOrgYsh1xagPC
+         7vzBqiG3MDNCUgU5sZkuwB9NG7ycZuyej3zkymiFHt/Stmjr0io6cnFghApGfA+56v
+         g5XZP9SHiZhxWEKic4knqIFLCBKw7DDYWrJ41GVuf8mI3h7ikRx/wwt4SLvJQdlssf
+         5aAMwzfdblmpOpadJnKcg1I2AiJ0NWDqiNmOQx7kVYbP/3wZCWFQxxSo4dGrg9eod+
+         N43K7tq8t+bJPZuFk1lRee1oM+WI9y0L7dRZ34P3Ee6RQgKeWOC5RFl5Dj3ZBWoOJd
+         U/HnolC7c05Bg==
+From:   SeongJae Park <sj@kernel.org>
+To:     xiakaixu1987@gmail.com
+Cc:     sj@kernel.org, akpm@linux-foundation.org, damon@lists.linux.dev,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Kaixu Xia <kaixuxia@tencent.com>
+Subject: Re: [PATCH v2] mm/damon: deduplicate damon_{reclaim,lru_sort}_apply_parameters()
+Date:   Tue, 20 Sep 2022 16:52:38 +0000
+Message-Id: <20220920165238.59328-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <1663645461-21084-1-git-send-email-kaixuxia@tencent.com>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Yyngcg3ainoD0fNc@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022, Sean Christopherson wrote:
-> On Tue, Sep 20, 2022, Maxim Levitsky wrote:
-> > On Sat, 2022-09-03 at 00:22 +0000, Sean Christopherson wrote:
-> > > Reintroduce APICV_INHIBIT_REASON_X2APIC as a "partial" inhibit for AMD
-> > > to fix a bug where the APIC access page is visible to vCPUs that have
-> > > x2APIC enabled, i.e. shouldn't be able to "see" the xAPIC MMIO region.
-> > > 
-> > > On AMD, due to its "hybrid" mode where AVIC is enabled when x2APIC is
-> > > enabled even without x2AVIC support, the bug occurs any time AVIC is
-> > > enabled as x2APIC is fully emulated by KVM.  I.e. hardware isn't aware
-> > > that the guest is operating in x2APIC mode.
-> > > 
-> > > Opportunistically drop the "can" while updating avic_activate_vmcb()'s
-> > > comment, i.e. to state that KVM _does_ support the hybrid mode.  Move
-> > > the "Note:" down a line to conform to preferred kernel/KVM multi-line
-> > > comment style.
-> > > 
-> > > Leave Intel as-is for now to avoid a subtle performance regression, even
-> > > though Intel likely suffers from the same bug.  On Intel, in theory the
-> > > bug rears its head only when vCPUs share host page tables (extremely
-> > > likely) and x2APIC enabling is not consistent within the guest, i.e. if
-> > > some vCPUs have x2APIC enabled and other does do not (unlikely to occur
-> > > except in certain situations, e.g. bringing up APs).
-> > 
-> > Are you sure about this?
-> 
-> Ah, no.  The key on Intel is the separate VMCS control for virtualizing xAPIC
-> accesses.  As you note below, KVM will provide memory semantics, which is technically
-> wrong.
-> 
-> > This is what I am thinking will happen, I might be wrong but I am not sure:
-> 
-> ...
-> 
-> > 3. guest accesses the 0xfee00xxx, assuming APICv/x2avic, the hardware won't redirect
-> > the access to apic backing page, but will instead just use that SPTE and let the guest
-> > read/write the private page that we mapped in the range, which is wrong.
-> > 
-> > Am I missing something?
-> 
-> No, I don't believe so.  I'm still hesitant to add the effetive inhibit to Intel,
-> though that's probably just pure paranoia at this point.  Probably makes sense to
-> just do it and verify that x2APIC virtualization still works.
+On Tue, 20 Sep 2022 11:44:21 +0800 xiakaixu1987@gmail.com wrote:
 
-Scratch that, Intel can end up with memory semantics irrespective of x2APIC, e.g.
-if APICv is enabled but a vCPU disables its APIC.  We could force a bus error by
-inhibiting APICv if any vCPU has its APIC hardware disabled, but IMO that's a bad
-tradeoff as there are legitimate reasons to disable the APIC on select vCPUs.
+> From: Kaixu Xia <kaixuxia@tencent.com>
+> 
+> The bodies of damon_{reclaim,lru_sort}_apply_parameters() contain
+> duplicates. This commit add a common function
+> damon_set_region_biggest_system_ram_default() to removes the
+> duplicates.
+> 
+> Signed-off-by: Kaixu Xia <kaixuxia@tencent.com>
+> Suggested-by: SeongJae Park <sj@kernel.org>
+> ---
+> v2:
+>  -change the common function name and add kernel comment.
+> 
+>  include/linux/damon.h |  3 ++-
+>  mm/damon/core.c       | 35 ++++++++++++++++++++++++++++++++++-
+>  mm/damon/lru_sort.c   | 13 +++----------
+>  mm/damon/reclaim.c    | 13 +++----------
+>  4 files changed, 42 insertions(+), 22 deletions(-)
+> 
+> diff --git a/include/linux/damon.h b/include/linux/damon.h
+> index e7808a84675f..ed5470f50bab 100644
+> --- a/include/linux/damon.h
+> +++ b/include/linux/damon.h
+> @@ -557,7 +557,8 @@ static inline bool damon_target_has_pid(const struct damon_ctx *ctx)
+>  int damon_start(struct damon_ctx **ctxs, int nr_ctxs, bool exclusive);
+>  int damon_stop(struct damon_ctx **ctxs, int nr_ctxs);
+>  
+> -bool damon_find_biggest_system_ram(unsigned long *start, unsigned long *end);
+> +int damon_set_region_biggest_system_ram_default(struct damon_target *t,
+> +				unsigned long *start, unsigned long *end);
+>  
+>  #endif	/* CONFIG_DAMON */
+>  
+> diff --git a/mm/damon/core.c b/mm/damon/core.c
+> index 9c80c6eb00c2..9e96cb9fb5db 100644
+> --- a/mm/damon/core.c
+> +++ b/mm/damon/core.c
+> @@ -1245,7 +1245,8 @@ static int walk_system_ram(struct resource *res, void *arg)
+>   * Find biggest 'System RAM' resource and store its start and end address in
+>   * @start and @end, respectively.  If no System RAM is found, returns false.
+>   */
+> -bool damon_find_biggest_system_ram(unsigned long *start, unsigned long *end)
+> +static bool damon_find_biggest_system_ram(unsigned long *start,
+> +						unsigned long *end)
+>  
+>  {
+>  	struct damon_system_ram_region arg = {};
+> @@ -1259,6 +1260,38 @@ bool damon_find_biggest_system_ram(unsigned long *start, unsigned long *end)
+>  	return true;
+>  }
+>  
+> +/*
 
-So, I'll omit Intel from the x2APIC pseudo-inhibit, and maybe add a KVM erratum
-to document that KVM may provide memory semantics for APIC_BASE when APICv/AVIC
-is enabled.
+We also need to add one more asterisk here to make this a valid kerneldoc
+comment.
+
+> + * damon_set_region_biggest_system_ram_default() - Set the region of the given
+> + * monitoring target as requested, or biggest 'System RAM'.
+> + * @t:		The monitoring target to set the region.
+> + * @start:	The pointer to the start address of the region.
+> + * @end:	The pointer to the end address of the region.
+> + *
+> + * This function sets the region of @t as requested by @start and @end.  If the
+> + * values of the two pointers are pointing to are zero, however, this function
+> + * finds the biggest 'System RAM' resource and set the region to cover the
+> + * resource.  In the latter case, this function saves the start and end address
+> + * of the resource in @start and @end, respectively.
+> + *
+> + * Return: 0 on success, negative error code otherwise.
+> + */
+> +int damon_set_region_biggest_system_ram_default(struct damon_target *t,
+> +			unsigned long *start, unsigned long *end)
+> +{
+> +	struct damon_addr_range addr_range;
+> +
+> +	if (*start > *end)
+> +		return -EINVAL;
+> +
+> +	if (!*start && !*end &&
+> +		!damon_find_biggest_system_ram(start, end))
+> +		return -EINVAL;
+> +
+> +	addr_range.start = *start;
+> +	addr_range.end = *end;
+> +	return damon_set_regions(t, &addr_range, 1);
+> +}
+> +
+[...]
+
+Thanks,
+SJ
