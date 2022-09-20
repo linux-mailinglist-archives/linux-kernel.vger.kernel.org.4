@@ -2,112 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB4AF5BE236
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 11:40:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA8A35BE23B
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 11:40:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230241AbiITJjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 05:39:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47786 "EHLO
+        id S229802AbiITJk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 05:40:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231148AbiITJjp (ORCPT
+        with ESMTP id S230467AbiITJkW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 05:39:45 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DFA410F0
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 02:39:33 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id a8so2749164lff.13
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 02:39:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=4UgBRhi/yvelR37RQjVh4NzYnNRpZ6qRgldTaLCmdbM=;
-        b=XdVDfRqdjptItUwji9CmGgIVKEnZDePYc4197BbBVbCFNzGljxG0zxBp8Pnewbo1vw
-         ag5chzMklLZdqkK8uZV6PEADKB6s76qsrYNjbdCkH/o09FcaCkS+oldc/z3Kw1mf+nF1
-         TbJYVTLsbDL/vytIfeTaA68Yf0go8X34Isw8yk8iPXzjfYEvaWUqF1NFfk3wfMbYlF2C
-         3BNDIUcRRhTs7BZfepVEkQ7FY6US50CNv9mXJEqboE1ejKYWdI0e/Xc/8jJK+Se7V/63
-         HXPm7fu4ebmAImVqw6x0mLRakWkJ5WkvWJGl36kw/hAGNFModr0vttx9F6l3goD7W6oo
-         O2hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=4UgBRhi/yvelR37RQjVh4NzYnNRpZ6qRgldTaLCmdbM=;
-        b=hYnSYs4QzdRRfRozNmrnxTSBvLFV5hzxHqJ9N2R/pBg5mNJLMOxdkm1FDrPXI478kx
-         EKasgJfMhFgekg/0xpf1rIIA8WXnpxUJayCdDYPNZ1yawm9hsT5wsWt1hVZSxdpbHngC
-         U85LsljHcOQ6N6Kd6d2DUueydQPJXscL0eH5G7MLHatTzIkQZIqbK+xe/Q8LoMhf3Lp6
-         fXm2GYuthUJb5Al21dp0RkhTYMwRuy4DeXaHct58ao4c/gsmAo6bdZ3RpFV6FXSvUeFA
-         zMPurV3yIu2pXEy1hjxYTqyXQsEpa5hkIhvPZBiAtc5Q4zBsihk1drkHMmflW0BjCPcL
-         osUA==
-X-Gm-Message-State: ACrzQf2402SJoK85xs++edh8F2k9uUa8KYYCilAcvlyuIlEkageLH1/q
-        UfhU7QjyPjPmCrRKFBEJ5qSNR5H8ToQxuQ==
-X-Google-Smtp-Source: AMsMyM6X1xHBZJPJsES15OMkWmtricB4yfOni/ZQAAQjDNVfy9pw/5Uyi0+bJj8VCGhZy3faaQf/ZA==
-X-Received: by 2002:a19:910f:0:b0:498:7212:10c0 with SMTP id t15-20020a19910f000000b00498721210c0mr8316238lfd.39.1663666771493;
-        Tue, 20 Sep 2022 02:39:31 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id 20-20020a2eb954000000b00268cfcf841asm177886ljs.56.2022.09.20.02.39.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Sep 2022 02:39:30 -0700 (PDT)
-Message-ID: <ccc318c0-ee1b-d538-6d2b-bf85a3c9c6fd@linaro.org>
-Date:   Tue, 20 Sep 2022 11:39:29 +0200
+        Tue, 20 Sep 2022 05:40:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD16A48CBD;
+        Tue, 20 Sep 2022 02:40:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D8A7C62796;
+        Tue, 20 Sep 2022 09:40:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3E189C433C1;
+        Tue, 20 Sep 2022 09:40:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663666817;
+        bh=3kY2LpMlTuaxvaHh4kVf+yHDFvzvWV9yHrL63uHqlrk=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=nFkS14OGZFPytyy9b0b98xomGhh6dXZhGq3bm5tXS3g09s7LkSHnwQjqe9FEHpe4L
+         ZocZDpsXmoqgSxUS9xic2uApeCL7NkzNnN6qsErJ9Y80xg3fSOAysoXc1ReN/kUbGA
+         k051kf4bqSdCaFRBLDny5IksLpv1yB6aiRgvACfAof80n5Lrkff6wSQvSo3WvDiqUB
+         mZHyWjcfLBrZqiqLIFPcjkhRpv6U10R9Eg8/O+v1ZQQVUd1vQ7eWVoHL2rUNVIO/4h
+         zC8utZ3CuiYVWzlCgznUWv+AbXib2VvhaeLoVJIObIvPOIMWIGTkgEeVYXaiCnQUWK
+         wACEOMNZ8nQSg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0E3E5E21EE0;
+        Tue, 20 Sep 2022 09:40:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v6 1/4 RESEND] ARM: dts: qcom: Use new compatibles for
- crypto nodes
-Content-Language: en-US
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org
-Cc:     agross@kernel.org, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, thara.gopinath@gmail.com,
-        devicetree@vger.kernel.org, robh@kernel.org, andersson@kernel.org,
-        bhupesh.linux@gmail.com, catalin.marinas@arm.com, will@kernel.org,
-        arnd@arndb.de, Jordan Crouse <jorcrous@amazon.com>
-References: <20220919221509.1057574-1-bhupesh.sharma@linaro.org>
- <20220919221509.1057574-2-bhupesh.sharma@linaro.org>
- <bb577304-f048-8fd5-fc7a-47a0897ba792@linaro.org>
- <00dd028f-d636-0cda-40ce-01d5addcbec9@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <00dd028f-d636-0cda-40ce-01d5addcbec9@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 net-next 00/10] DSA changes for multiple CPU ports (part 4)
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166366681705.19165.10240342144188805698.git-patchwork-notify@kernel.org>
+Date:   Tue, 20 Sep 2022 09:40:17 +0000
+References: <20220911010706.2137967-1-vladimir.oltean@nxp.com>
+In-Reply-To: <20220911010706.2137967-1-vladimir.oltean@nxp.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, f.fainelli@gmail.com, vivien.didelot@gmail.com,
+        andrew@lunn.ch, olteanv@gmail.com, claudiu.manoil@nxp.com,
+        alexandre.belloni@bootlin.com, UNGLinuxDriver@microchip.com,
+        colin.foster@in-advantage.com, roopa@nvidia.com,
+        razor@blackwall.org, tobias@waldekranz.com, kabel@kernel.org,
+        ansuelsmth@gmail.com, dqfext@gmail.com, alsi@bang-olufsen.dk,
+        linus.walleij@linaro.org, luizluca@gmail.com, nbd@nbd.name,
+        john@phrozen.org, sean.wang@mediatek.com, dsahern@kernel.org,
+        stephen@networkplumber.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/09/2022 10:57, Bhupesh Sharma wrote:
->>>   		crypto: crypto@8e3a000 {
->>> -			compatible = "qcom,crypto-v5.1";
->>> +			compatible = "qcom,ipq4019-qce";
->>
->> There are few issues here:
->> 1. Compatible is not documented.
-> 
-> Its documented here: 
-> https://lore.kernel.org/linux-arm-msm/30756e6f-952f-ccf2-b493-e515ba4f0a64@linaro.org/
-> 
-> [as mentioned in the dependency section in the cover letter :)]
-> 
->> 2. Compatible is not supported by old kernel - ABI break.
+Hello:
 
-You cannot fix this with dependencies/ordering.
+This series was applied to netdev/net-next.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
 
->> 3. Everything won't be bisectable...
+On Sun, 11 Sep 2022 04:06:56 +0300 you wrote:
+> Those who have been following part 1:
+> https://patchwork.kernel.org/project/netdevbpf/cover/20220511095020.562461-1-vladimir.oltean@nxp.com/
+> part 2:
+> https://patchwork.kernel.org/project/netdevbpf/cover/20220521213743.2735445-1-vladimir.oltean@nxp.com/
+> and part 3:
+> https://patchwork.kernel.org/project/netdevbpf/cover/20220819174820.3585002-1-vladimir.oltean@nxp.com/
+> will know that I am trying to enable the second internal port pair from
+> the NXP LS1028A Felix switch for DSA-tagged traffic via "ocelot-8021q".
 > 
-> I think its a question of dependencies b/w the patchsets intended for
-> separate areas. Let me think more on how, I can resolve it in newer
-> versions.
+> [...]
 
-DTS always goes separately so this also cannot be fixed with ordering or
-dependencies. However if Bjorn is fine with it, it's good.
+Here is the summary with links:
+  - [v2,net-next,01/10] net: introduce iterators over synced hw addresses
+    https://git.kernel.org/netdev/net-next/c/db01868bf2e9
+  - [v2,net-next,02/10] net: dsa: introduce dsa_port_get_master()
+    https://git.kernel.org/netdev/net-next/c/8f6a19c0316d
+  - [v2,net-next,03/10] net: dsa: allow the DSA master to be seen and changed through rtnetlink
+    https://git.kernel.org/netdev/net-next/c/95f510d0b792
+  - [v2,net-next,04/10] net: dsa: don't keep track of admin/oper state on LAG DSA masters
+    https://git.kernel.org/netdev/net-next/c/6e61b55c6d7f
+  - [v2,net-next,05/10] net: dsa: suppress appending ethtool stats to LAG DSA masters
+    https://git.kernel.org/netdev/net-next/c/cfeb84a52fcb
+  - [v2,net-next,06/10] net: dsa: suppress device links to LAG DSA masters
+    https://git.kernel.org/netdev/net-next/c/13eccc1bbb2e
+  - [v2,net-next,07/10] net: dsa: propagate extack to port_lag_join
+    https://git.kernel.org/netdev/net-next/c/2e359b00a117
+  - [v2,net-next,08/10] net: dsa: allow masters to join a LAG
+    https://git.kernel.org/netdev/net-next/c/acc43b7bf52a
+  - [v2,net-next,09/10] docs: net: dsa: update information about multiple CPU ports
+    https://git.kernel.org/netdev/net-next/c/0773e3a851c8
+  - [v2,net-next,10/10] net: dsa: felix: add support for changing DSA master
+    https://git.kernel.org/netdev/net-next/c/eca70102cfb1
 
-Best regards,
-Krzysztof
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
