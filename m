@@ -2,55 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70A6B5BE3C4
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 12:50:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6C995BE3DD
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 12:54:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230154AbiITKuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 06:50:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54002 "EHLO
+        id S230269AbiITKyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 06:54:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbiITKuS (ORCPT
+        with ESMTP id S230372AbiITKyN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 06:50:18 -0400
+        Tue, 20 Sep 2022 06:54:13 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D9B52529A;
-        Tue, 20 Sep 2022 03:50:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D501D6BCE1;
+        Tue, 20 Sep 2022 03:54:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 080796292A;
-        Tue, 20 Sep 2022 10:50:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5AB10C433D7;
-        Tue, 20 Sep 2022 10:50:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 53DED62554;
+        Tue, 20 Sep 2022 10:54:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90244C433C1;
+        Tue, 20 Sep 2022 10:53:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663671016;
-        bh=9a2t3wK0Ru1r5Ca3Rlk5Zy7DcfMhJsKYI36+wzQ7dQk=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=crQzKBxeoICwDwkTO9YQ2MXDXqoQXACdCcVUsndi7qn+dV0acDsW6hx/vxNJV4fZH
-         yUKl2EWmHnQikiD+WkQq62S5oTGw4qVcqtVPjo2EBgnbs/cGm+RgHzq4leKuYq7PRG
-         LTghvYiTGEqu6TnU1ld3sc3x8MxqSGrUBitkOtPuWAU4Vlgh/LCWnaDfUx/5ylsvZV
-         2jXT0ZZBV72Kf/q6xS6+859FOJ7fWzGyKifkCBmsmNhdyCsx7ZIkWl2gF42pytnYW5
-         LyGdE9JJ/CvGA+F0xKqXcjJz0YCPWCDz6vYGUnL4Wu4mWhbN98RBkfB35nvwqK4HAv
-         QJP695XBA9WEA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3D419E21EE0;
-        Tue, 20 Sep 2022 10:50:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1663671239;
+        bh=4s+A0uYH2NDzk3cUu+6aMBlQzRJ+8g45TxmZX6PVPBU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=qyzjAcNb1I81boB5q8hZQCXLbH+Su0haoR1d1jkh4RJWt4c14qfWDl4P28Cdemdv0
+         8qNp8lCMe3SS4AbnyFFcjy+VnuRiaE/2UBHlYrIvJRS/hcerAWsf6lLm6/6BMOFYNk
+         zu/5BgysySw6HDwSuCQoO32+rA6GogetvMQL5S6rguPRs8+Vdh2i91tVxPpHzZJRwY
+         reni+zMPukY8tWfyd+F5C1CUPqFyAt9HeLSVO/2z30pszek1pERzfk9lH7qtnwSmCz
+         msCU6Y494mHh1VpWkclB/VynDz+vKf3Zr19STYF/eOyzsHX7hK98KqlM/COw+po7JF
+         ZtVqryhvEVFgw==
+From:   Christian Brauner <brauner@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] fs fixes for v6.0-rc7
+Date:   Tue, 20 Sep 2022 12:51:10 +0200
+Message-Id: <20220920105109.1315345-1-brauner@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3230; i=brauner@kernel.org; h=from:subject; bh=4s+A0uYH2NDzk3cUu+6aMBlQzRJ+8g45TxmZX6PVPBU=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMSRrzhZ391nSY8Dw2e72To7Xtd+8iovO7lm/clbEk3qurbPX 7T39p6OUhUGMi0FWTJHFod0kXG45T8Vmo0wNmDmsTCBDGLg4BWAiAaWMDCtnq3ZMOtTctUt+q/kGJm HbHSy5kYqrmx0iU+rs709KS2Bk2F6UHXuGdd2tFNdnv1yrLQIOun/89Zih2//TuQgztaxP/AA=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 Content-Transfer-Encoding: 8bit
-Subject: Re: [net-next v2 0/3] seg6: add NEXT-C-SID support for SRv6 End behavior
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166367101624.31197.16175014864853693907.git-patchwork-notify@kernel.org>
-Date:   Tue, 20 Sep 2022 10:50:16 +0000
-References: <20220912171619.16943-1-andrea.mayer@uniroma2.it>
-In-Reply-To: <20220912171619.16943-1-andrea.mayer@uniroma2.it>
-To:     Andrea Mayer <andrea.mayer@uniroma2.it>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        shuah@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        bpf@vger.kernel.org, stefano.salsano@uniroma2.it,
-        paolo.lungaroni@uniroma2.it, ahabdels.dev@gmail.com
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,36 +53,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hey Linus,
 
-This series was applied to netdev/net-next.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
+/* Summary */
+Beginning of the merge window we introduced the vfs{g,u}id_t types in
+b27c82e12965 ("attr: port attribute changes to new types") and changed various
+codepaths over including chown_common().
 
-On Mon, 12 Sep 2022 19:16:16 +0200 you wrote:
-> The Segment Routing (SR) architecture is based on loose source routing.
-> A list of instructions, called segments, can be added to the packet headers to
-> influence the forwarding and processing of the packets in an SR enabled
-> network.
-> In SRv6 (Segment Routing over IPv6 data plane) [1], the segment identifiers
-> (SIDs) are IPv6 addresses (128 bits) and the segment list (SID List) is carried
-> in the Segment Routing Header (SRH). A segment may correspond to a "behavior"
-> that is executed by a node when the packet is received.
-> The Linux kernel currently supports a large subset of the behaviors described
-> in [2] (e.g., End, End.X, End.T and so on).
-> 
-> [...]
+When userspace passes -1 for an ownership change the ownership fields in struct
+iattr stay uninitialized. Usually this is fine because any code making use of
+any fields in struct iattr must check the ->ia_valid field whether the value of
+interest has been initialized. That's true for all struct iattr passing code.
 
-Here is the summary with links:
-  - [net-next,v2,1/3] seg6: add netlink_ext_ack support in parsing SRv6 behavior attributes
-    https://git.kernel.org/netdev/net-next/c/e2a8ecc45165
-  - [net-next,v2,2/3] seg6: add NEXT-C-SID support for SRv6 End behavior
-    https://git.kernel.org/netdev/net-next/c/848f3c0d4769
-  - [net-next,v2,3/3] selftests: seg6: add selftest for NEXT-C-SID flavor in SRv6 End behavior
-    https://git.kernel.org/netdev/net-next/c/19d6356ab3f0
+However, over the course of the last year with more heavy use of KMSAN we found
+quite a few places that got this wrong. A recent one I fixed was 3cb6ee991496
+("9p: only copy valid iattrs in 9P2000.L setattr implementation").
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+But we also have LSM hooks. Actually we have two. The first one is
+security_inode_setattr() in notify_change() which does the right thing and
+passes the full struct iattr down to LSMs and thus LSMs can check whether it is
+initialized.
 
+But then we also have security_path_chown() which passes down a path argument
+and the target ownership as the filesystem would see it. For the latter we now
+generate the target values based on struct iattr and pass it down. However,
+when userspace passes -1 then struct iattr isn't initialized. This patch simply
+initializes ->ia_vfs{g,u}id with INVALID_VFS{G,U}ID so the hook continue to see
+invalid ownership when -1 is passed from userspace. The only LSM that cares
+about the actual values is Tomoyo.
 
+The vfs codepaths don't look at these fields without ->ia_valid being set so
+there's no harm in initializing ->ia_vfs{g,u}id. Arguably this is also safer
+since we can't end up copying valid ownership values when invalid ownership
+values should be passed.
+
+This only affects mainline. No kernel has been released with this and thus no
+backport is needed. The commit is thus marked with a Fixes: tag but annotated
+with "# mainline only" (I didn't quite remember what Greg said about how to
+tell stable autoselect to not bother with fixes for mainline only.).
+
+/* Testing */
+All patches are based on v6.0-rc3. No build failures or warnings were observed
+and fstests, selftests, and LTP have seen no regressions.
+
+/* Conflicts */
+At the time of creating this PR no merge conflicts were reported from
+linux-next and no merge conflicts showed up doing a test-merge with current
+mainline.
+
+The following changes since commit b90cb1053190353cc30f0fef0ef1f378ccc063c5:
+
+  Linux 6.0-rc3 (2022-08-28 15:05:29 -0700)
+
+are available in the Git repository at:
+
+  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/vfs/idmapping.git tags/fs.fixes.v6.0-rc7
+
+for you to fetch changes up to f52d74b190f8d10ec01cd5774eca77c2186c8ab7:
+
+  open: always initialize ownership fields (2022-09-20 11:57:57 +0200)
+
+Please consider pulling these changes from the signed fs.fixes.v6.0-rc7 tag.
+
+Thanks!
+Christian
+
+----------------------------------------------------------------
+fs.fixes.v6.0-rc7
+
+----------------------------------------------------------------
+Tetsuo Handa (1):
+      open: always initialize ownership fields
+
+ fs/open.c | 2 ++
+ 1 file changed, 2 insertions(+)
