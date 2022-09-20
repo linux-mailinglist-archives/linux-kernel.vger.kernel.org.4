@@ -2,83 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B6B65BE8A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 16:20:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB8E65BE896
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 16:20:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231697AbiITOTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 10:19:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60494 "EHLO
+        id S231747AbiITOTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 10:19:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231776AbiITOSe (ORCPT
+        with ESMTP id S231817AbiITOSo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 10:18:34 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79ECC63F12;
-        Tue, 20 Sep 2022 07:15:53 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id C0AB95C00E9;
-        Tue, 20 Sep 2022 10:15:52 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Tue, 20 Sep 2022 10:15:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1663683352; x=1663769752; bh=h3
-        tqXL2enmCbEW25A7PZJVmWKB9mGq9wPoEsAr2P60U=; b=iJKpovmcTZ0CDzDQQY
-        b3af/HYWSTMsYdq7YX8czf9NjKmxVFxtdNiOmdzA/Z8cE6edO7+BH9TxavA/pCiF
-        eRDDfndg7sIp8i7pX1HYhnMAz66evwi0PSXn6tuoZBVPo307BOt++dP4Gu58xWex
-        9Uc/dq7obM0ox8zOCURwxALdwktJj45XusqDfMsNY6QCrWTcypRYHr4/0X84pfhu
-        41iNC+rQkbk/kQCnM5aKOyYYT8UKnvv585A48C2ofbBLY/JygmT183qxMhif1HER
-        k/jbQPuIyVfoNcq8Cgvh7z1EoeVahU/RSfyCj8Hf9Agd86+YAvnQKARZoy5KRl2f
-        zhgg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1663683352; x=1663769752; bh=h3tqXL2enmCbE
-        W25A7PZJVmWKB9mGq9wPoEsAr2P60U=; b=RLtHld6E5I/5XoVwK+qdTVJjbjyrB
-        xDuz11mgQpvvW0OrhOEvWgUloCFTtILooSgo13yHyMcQelLQH/g1SazlV1aFF2+C
-        b/3CTKvQx3YTtwCmKU9RkKPw2K7je4BaLoPx6F72niAXiWILWNFY+tYP8nTxR1EP
-        cx4dTuMPXqw5Emq/AAPpCPa4yU4cczL6DHVSrf6pZuD+lFNBSyhYH4h5wSpR9xp6
-        3jNGKVD0fG31uBJF2YHpwGkppZVzv8rFjhCVNlis0QTVPZNFvnDkUNG5VJV2w8ni
-        Bk68ZVGzUEnL9LbUDGIhMrJCQS/5Ya+qL2yvI658wBn4hnQE34NjYmalA==
-X-ME-Sender: <xms:GMspY8UA8EWof3nBzDrPYqXzpehjnC3RhsmNCaEffShybL8OHhyEkw>
-    <xme:GMspYwluczsKaSsllMTe7zWeCmSRMI5nBKICPQ7sKL9JArpJaKJA8MenxRuSkXfOa
-    AE-CM3zQLBXAtvTNg>
-X-ME-Received: <xmr:GMspYwZIrjozTlc1xzb0dxlrmtmGtTgpuQsPALTjRAFxb2MqWjlXK6J_KAl4iATNXd2ZNbngGtk6hqMr0XzWqTqZg9_qzRCozpaYqOI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedvledgjeegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdljedtmdenucfjughrpefhvf
-    evufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeffrghnihgvlhcuighuuceo
-    ugiguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhepgfefgfegjefhudeike
-    dvueetffelieefuedvhfehjeeljeejkefgffeghfdttdetnecuvehluhhsthgvrhfuihii
-    vgeptdenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdrgiihii
-X-ME-Proxy: <xmx:GMspY7V6VW-QPaaokXghP9HREg6eqPQDrekZQUrjupnuDu9U1XXupQ>
-    <xmx:GMspY2mhw4SrO4cVrnqNw1qTW71MUeSuqRRj-cdxMTyPuEo5dNT7aA>
-    <xmx:GMspYwesAqZJVxuYTdl3BCpoPwstTpPD5DMBooajzRk0feOkzU8tZQ>
-    <xmx:GMspY4fOx_13sQwd4HnZ1qx0ATt5Py_805grmt0ZS7u-EPEQPVsTJg>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 20 Sep 2022 10:15:51 -0400 (EDT)
-From:   Daniel Xu <dxu@dxuuu.xyz>
-To:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, memxor@gmail.com, martin.lau@linux.dev
-Cc:     Daniel Xu <dxu@dxuuu.xyz>, pablo@netfilter.org, fw@strlen.de,
-        toke@kernel.org, netfilter-devel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v3 3/3] bpf: Move nf_conn extern declarations to filter.h
-Date:   Tue, 20 Sep 2022 08:15:24 -0600
-Message-Id: <2bd2e0283df36d8a4119605878edb1838d144174.1663683114.git.dxu@dxuuu.xyz>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <cover.1663683114.git.dxu@dxuuu.xyz>
-References: <cover.1663683114.git.dxu@dxuuu.xyz>
+        Tue, 20 Sep 2022 10:18:44 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3E396580D
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 07:16:02 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id y3so6569760ejc.1
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 07:16:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=BV+bMpM/fk2Fhnz6QLswtDiUmDEO+rj/bi3ZNDBFzjI=;
+        b=A9JCOD2EYEnLgHDjhV6RWfz1gM9YilfLikmnE5+Pir+vBmFKGDsLfb7YQPjevWqY0g
+         A1kAaV5v7wZ/QkdXwe2IKIKt1bzYlpAs+ilbD/zX2URREqonYlVGmaJklILYlgQMEUhw
+         q23d6OJTaNUybc6+WSVxbtCczs0LizrKzwrPA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=BV+bMpM/fk2Fhnz6QLswtDiUmDEO+rj/bi3ZNDBFzjI=;
+        b=iRKZWyOHXF6HsE6CLOyave9a5KC9xBGws6O5e04sd4qQyHy1dhy38tcekjiJCG3P6n
+         CyW5AwBY69gAcQucfUgGpFuhxvvdfqYBwE28s3OVlTXSbpTWTG0T5W4oCn9EUX1Qbtwm
+         lYr6F96FAGpzVLNuexAwtoaqqiAwndDZZTpTqcbKB8cKuohaoTFVcrJXVQ2IlOfVzGJ4
+         i63wA70XD3c+ffwYMQTGutnVnCgNLPbGup7X6wI5iKzVudFhRMMXV37ozGCoRiV5Pd+B
+         g7y9Jffw8REtTkXTsCs+9xvzuX/7LbuFPCLYpH9chc/Bo1+nHqXWGoe2LkjIIyDaeZN0
+         GZhQ==
+X-Gm-Message-State: ACrzQf02KwYsVFer0kTHdMFI4C0HFj04SbzCOg7g78d8Zu/SyzvHCIfI
+        eQiRxIMwHIvoyl766gDzWl/8V4meV+ALCyHe
+X-Google-Smtp-Source: AMsMyM51iQc8DqTfZoTSz3rm4K8M8D3B2JbPW5V30A7Y3PFbMGku2zFeDXq85IQVCMmauMkVYDX9zA==
+X-Received: by 2002:a17:906:8a66:b0:781:714a:1f2a with SMTP id hy6-20020a1709068a6600b00781714a1f2amr6293367ejc.205.1663683361145;
+        Tue, 20 Sep 2022 07:16:01 -0700 (PDT)
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com. [209.85.221.44])
+        by smtp.gmail.com with ESMTPSA id r17-20020a1709061bb100b0073d84a321c8sm897678ejg.166.2022.09.20.07.15.58
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Sep 2022 07:15:58 -0700 (PDT)
+Received: by mail-wr1-f44.google.com with SMTP id t14so4509163wrx.8
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 07:15:58 -0700 (PDT)
+X-Received: by 2002:a5d:522f:0:b0:228:dc7f:b9a8 with SMTP id
+ i15-20020a5d522f000000b00228dc7fb9a8mr14878330wra.617.1663683357727; Tue, 20
+ Sep 2022 07:15:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_PDS_OTHER_BAD_TLD autolearn=ham autolearn_force=no
+References: <20220919165808.1.Idfb956ebc035c3bd0d682f4697c297c7a975c50d@changeid>
+ <20220920114020.2185607-1-sheng-liang.pan@quanta.corp-partner.google.com>
+In-Reply-To: <20220920114020.2185607-1-sheng-liang.pan@quanta.corp-partner.google.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 20 Sep 2022 07:15:44 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=WmeLSyziXXuOgkWUzhkOy7_wTyv=SF+JwnYh4NkYCa=Q@mail.gmail.com>
+Message-ID: <CAD=FV=WmeLSyziXXuOgkWUzhkOy7_wTyv=SF+JwnYh4NkYCa=Q@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: qcom: sc7280: All current evoker boards are LTE
+To:     Sheng-Liang Pan <sheng-liang.pan@quanta.corp-partner.google.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,70 +84,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We're seeing the following new warnings on netdev/build_32bit and
-netdev/build_allmodconfig_warn CI jobs:
+Hi,
 
-    ../net/core/filter.c:8608:1: warning: symbol
-    'nf_conn_btf_access_lock' was not declared. Should it be static?
-    ../net/core/filter.c:8611:5: warning: symbol 'nfct_bsa' was not
-    declared. Should it be static?
+On Tue, Sep 20, 2022 at 4:40 AM Sheng-Liang Pan
+<sheng-liang.pan@quanta.corp-partner.google.com> wrote:
+>
+> > At the time that commit 2abf6b6b9429 ("arm64: dts: qcom: sc7280: Add
+> > device tree for herobrine evoker") was posted, all herobrine SKUs were
+> > LTE.
+> >
+> > At the time that commit d42fae738f3a ("arm64: dts: qcom: Add LTE SKUs
+> > for sc7280-villager family"), the evoker board device tree hadn't yet
+> > landed.
+> >
+> > I belive that the above two facts mean that the evoker boards ought to
+> > be setup for LTE but currently aren't. Let's fix that.
+> Evoker should also have wifi/lte SKU,
+> I think we need to follow villager to create evoker.dtsi then separate wifi/lte dts.
 
-Fix by ensuring extern declaration is present while compiling filter.o.
+OK, sounds good. I'm happy if you want to post patches for that. If
+you need me to then let me know, but you probably know better what
+hardware exists and at what version.
 
-Fixes: 864b656f82cc ("bpf: Add support for writing to nf_conn:mark")
-Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
----
- include/linux/filter.h                   | 6 ++++++
- include/net/netfilter/nf_conntrack_bpf.h | 6 ------
- net/netfilter/nf_conntrack_bpf.c         | 1 +
- 3 files changed, 7 insertions(+), 6 deletions(-)
-
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index 75335432fcbc..98e28126c24b 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -567,6 +567,12 @@ struct sk_filter {
- 
- DECLARE_STATIC_KEY_FALSE(bpf_stats_enabled_key);
- 
-+extern struct mutex nf_conn_btf_access_lock;
-+extern int (*nfct_btf_struct_access)(struct bpf_verifier_log *log, const struct btf *btf,
-+				     const struct btf_type *t, int off, int size,
-+				     enum bpf_access_type atype, u32 *next_btf_id,
-+				     enum bpf_type_flag *flag);
-+
- typedef unsigned int (*bpf_dispatcher_fn)(const void *ctx,
- 					  const struct bpf_insn *insnsi,
- 					  unsigned int (*bpf_func)(const void *,
-diff --git a/include/net/netfilter/nf_conntrack_bpf.h b/include/net/netfilter/nf_conntrack_bpf.h
-index 1199d4f8e019..e1f1ba3116ef 100644
---- a/include/net/netfilter/nf_conntrack_bpf.h
-+++ b/include/net/netfilter/nf_conntrack_bpf.h
-@@ -12,12 +12,6 @@
- extern int register_nf_conntrack_bpf(void);
- extern void cleanup_nf_conntrack_bpf(void);
- 
--extern struct mutex nf_conn_btf_access_lock;
--extern int (*nfct_btf_struct_access)(struct bpf_verifier_log *log, const struct btf *btf,
--				     const struct btf_type *t, int off, int size,
--				     enum bpf_access_type atype, u32 *next_btf_id,
--				     enum bpf_type_flag *flag);
--
- #else
- 
- static inline int register_nf_conntrack_bpf(void)
-diff --git a/net/netfilter/nf_conntrack_bpf.c b/net/netfilter/nf_conntrack_bpf.c
-index 29c4efb3da5e..67df64283aef 100644
---- a/net/netfilter/nf_conntrack_bpf.c
-+++ b/net/netfilter/nf_conntrack_bpf.c
-@@ -9,6 +9,7 @@
- #include <linux/bpf_verifier.h>
- #include <linux/bpf.h>
- #include <linux/btf.h>
-+#include <linux/filter.h>
- #include <linux/mutex.h>
- #include <linux/types.h>
- #include <linux/btf_ids.h>
--- 
-2.37.1
-
+-Doug
