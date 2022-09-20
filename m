@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10ED45BEE50
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 22:15:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE40C5BEE4F
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 22:14:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231317AbiITUO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 16:14:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42160 "EHLO
+        id S229751AbiITUOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 16:14:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230447AbiITUOw (ORCPT
+        with ESMTP id S230308AbiITUOu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 16:14:52 -0400
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2048.outbound.protection.outlook.com [40.107.212.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 526D613E9B
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 13:14:49 -0700 (PDT)
+        Tue, 20 Sep 2022 16:14:50 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2063.outbound.protection.outlook.com [40.107.102.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C840513E27
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 13:14:48 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dDL/O1IX9gR92l1KMmLlE3bE34QY6yPMNimSyBSxJq/D1BlUDq4+eVn1ejLMQHGcdLw/XkjEVb7pbtVN/9PghxFI4GkfhT0eESCOj4HrioLSJkZXEOnX/TcRfAanBfIJtndMiHWLX69Djl+uISsTDvceqjloSTM02sznO4Omy33ihu2bblQgNgN/LxFFRm2f1CDT9Wmz4KfNCQhtn2PUldV0hM5IAAdl4xmt04eODnqhvRS8A3zy9qc9eO8SwZIMKOfLVRItwdzIyRdQYLLAhRHgABwViSKt2bRdSyy8+qUsyg7kyAK3CKSj9K+owpypOrzrpjj8bByvTHYvKzPnqA==
+ b=e36uZD32vZSxKZOrqHYcPIpNLBIYZTq3vZikU8tpVht2ZNDxLMQEj02h8E80MmzUikpK4YyC9VdU6C28ZBjwnZa37kAbnhk7ySCYPc0BLcq4BR26HiODbS+gYTKIPp4z0PrbRUKth3FA/oQJS5Rj+Kej8kWvYtXD8xZ1FdslBV3G6b6xXFCkkfLP69Z8TsY9Zy3h5VfAZfJTfh/K3VWe2Dx3QA1K7aCngRIrlQZkaRoXqijJ85o+0GzwyUEvXi2gvwfNwChccqbWt+Oten8N380sRzCg07SeUSDdmeWL4/ju6/KVyZ0ggou763sXqzviIr5a3Jp9w+a4QEr/z4nZEg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Fh2wCj7T0acBU7P/TwlkrC10HoHpBBI6sjMzDPqAluQ=;
- b=KrFM+mS0NU9eBN5vYuBKetffwqsVq9CaLLrS0SL2sLegMAxSEO7vYj6GOYJLb6MkCe7xTur1IBcVBYI5mU8HrlX3zXobreLa6K3r8ZQGaNw8k+oGho8T0bOXMQRQ5Y+huawkuj0xSHJmXwT9yiwd8o5Zv3A9lhTJA1sSU3ahU7GyPlrrXIC+ThhrPsZiY2uhw2gZjIenvGEYsoVHF7R5zQmUQ25B2ASygPNpU0PaLtUmIe8sz88HeWUh/L2i0Z/tuh1LqYU4CcfHk0B22oDGwTHWpo60V5Omb+P3WdcgytWf+T2ZQojHvuBJutH/XRU8Fd9sRH85jdwG9LhvU8dvLQ==
+ bh=VC/6FRyawRSJWRMRvlJXiwUD6N8p7I4/lfMmvkDdtM0=;
+ b=FYgdD8pi6dXPwIOOb10KpQe7pFJbiSvjA8fhXPIxfFEuqEvf8bnZdMNtkUbRDw8E1oDo7z/NRaSCh42TfRrsEBHINt7xE8jSaAbt3qIJ37Mi3SzpIZ8CW6jkTvhaNBA0dvl4hO61cxXv2TjFkL+P8kPcRZQXWn0Vj/P3E+5U4FeMACYAx3JlF2SPOzWtsU/hVcRTbZuaIN+q1peShOrLwQwB18qBSHHVCwlXzI2AiVl1p6yo0myQYR3S53/fX7EycmLLRfpiEVOpTE/IfcvZoUmJRo1ydYt8S85zmkcbXgsSLSQFdcjwYM95nXKjzFcduSh+6N7GppfPS+jtqMLjAQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Fh2wCj7T0acBU7P/TwlkrC10HoHpBBI6sjMzDPqAluQ=;
- b=yG7mOnhPMiFkK2bdhTM1Z0UVUGud34qO4Zgyb+DNeFMwHVyvExGk58Ir+zeNFdLmOhmCvVq2QTiukqKo6yIBIe2KFfG8tskP2/bhPPhCEoAy68mqpAUv+kgmC043shKyLEtvW0LZZbBLefXP1h4lp2U7BvR4ryNYvy6y03AdNe8=
-Received: from BN9PR03CA0869.namprd03.prod.outlook.com (2603:10b6:408:13d::34)
- by CY5PR12MB6622.namprd12.prod.outlook.com (2603:10b6:930:42::20) with
+ bh=VC/6FRyawRSJWRMRvlJXiwUD6N8p7I4/lfMmvkDdtM0=;
+ b=bamBG9pfCcNhF/dKdYEm7R3HKBTmSbBR4L+pB3w1p+gWOYkvixok/xHOg1Ivjvooayr34K8anc0SZ3ohSN79n+yaG75/6L9DSRsjRxwJnJqDvj+91MLS0mcZzZvFfCdLOSey+1A1ijMK6/snJc/AeKfCXYIdBdJW58zFd3x++Wk=
+Received: from BN8PR03CA0022.namprd03.prod.outlook.com (2603:10b6:408:94::35)
+ by DM4PR12MB5327.namprd12.prod.outlook.com (2603:10b6:5:39e::21) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.22; Tue, 20 Sep
- 2022 20:14:46 +0000
-Received: from BN8NAM11FT082.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:13d:cafe::6b) by BN9PR03CA0869.outlook.office365.com
- (2603:10b6:408:13d::34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.14; Tue, 20 Sep
+ 2022 20:14:47 +0000
+Received: from BN8NAM11FT081.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:94:cafe::a5) by BN8PR03CA0022.outlook.office365.com
+ (2603:10b6:408:94::35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.21 via Frontend
- Transport; Tue, 20 Sep 2022 20:14:46 +0000
+ Transport; Tue, 20 Sep 2022 20:14:47 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -47,25 +47,29 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT082.mail.protection.outlook.com (10.13.176.94) with Microsoft SMTP
+ BN8NAM11FT081.mail.protection.outlook.com (10.13.177.233) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5654.14 via Frontend Transport; Tue, 20 Sep 2022 20:14:46 +0000
+ 15.20.5654.14 via Frontend Transport; Tue, 20 Sep 2022 20:14:47 +0000
 Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Tue, 20 Sep
- 2022 15:14:45 -0500
+ 2022 15:14:46 -0500
 From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     Mark Brown <broonie@kernel.org>
+To:     Mark Brown <broonie@kernel.org>, <linux-kernel@vger.kernel.org>
 CC:     Saba Kareem Syed <Syed.SabaKareem@amd.com>,
         Xiaoyan Li <lxy.lixiaoyan@gmail.com>,
         Travis Glenn Hansen <travisghansen@yahoo.com>,
         Sebastian S <iam@decentr.al>,
         Mario Limonciello <mario.limonciello@amd.com>,
-        <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3 0/2] Add some models into acp6x quirk list
-Date:   Tue, 20 Sep 2022 15:14:33 -0500
-Message-ID: <20220920201436.19734-1-mario.limonciello@amd.com>
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, <alsa-devel@alsa-project.org>
+Subject: [PATCH v3 1/2] ASoC: amd: yc: Add ASUS UM5302TA into DMI table
+Date:   Tue, 20 Sep 2022 15:14:34 -0500
+Message-ID: <20220920201436.19734-2-mario.limonciello@amd.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220920201436.19734-1-mario.limonciello@amd.com>
+References: <20220920201436.19734-1-mario.limonciello@amd.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -74,23 +78,23 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT082:EE_|CY5PR12MB6622:EE_
-X-MS-Office365-Filtering-Correlation-Id: fb509b11-d90f-46fc-dfac-08da9b44c33f
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT081:EE_|DM4PR12MB5327:EE_
+X-MS-Office365-Filtering-Correlation-Id: 09c78327-86b1-4b4b-6693-08da9b44c3d0
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: b3Am2qqdeA/HZdjeu95+3jgyZwHQQH/sY9si0o1P6W5oIRm+VrquLmnGPVjxblpN/LqluGcLNEwJHUc/iKTu8t8DSFf/8ggKPnuM74u2XtFoi22V9nIYaKwJHpSJu99SdwZVihmODBLaktCm/QZB3gb5ZGl0PgnyAMkTWxchYu+XuLhQDVAiVDAxu5mL+phy/GMO0Um328A25IFu64KcWPB+eN6S0daML72Vp1b4wbIw8tx7cSnfUi5H6Iw0n15/4Pxk20damSgibar24yKkvBGHQroMSG8BqCocWfdf+J8IDybvhBAofUDV725FFWyir9HzznRJxs2iWdBlYYNKlyk62SBb5zNADUabyNDyNYCi+uuZk22ne4XxAUalIgjGSIrXiUbMwCdu6W+aFu/B95p819KdLxLYRhCdFwSLbMyWv5L+QehR/TTIxZII0vJZVpmI4y7rDdyIABthJFONcVnx495c4UtXboel2g9+PjdWpq8fq+SOorKeeNiT6GsqGmEYQbXxbonYPrXCyS21OOlVzymDnh4AkiHZcg1NH51jk70WD8Q8ozF04NZ2DnKgF5Jyb6HfPBhembjGmTNaRcSH0SBQM/11fbB8+c9IBonjmJTVb4guCB+UKoiZdEfGhTeLhpjKQxWgcR6WvhfHi2pZ5QfnyJaPhpAk/yHR3Fs0WqXzmvMHHtstgjaHZEJ5CVCdl/XmTMFOxOVeUb+7znYfQmuKCF6qB+LzsDkvBRA9wrPPSk9lADfD7MY43dN6YzKIupyShSn/XdWs/cPy5JdBZMsm7jyOLApBkBO1rnLN2H3hm0kyl8QKzztroe/dsvLWpz60rao87ayIw1Nymg==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(396003)(376002)(346002)(451199015)(46966006)(36840700001)(40470700004)(41300700001)(82740400003)(356005)(81166007)(6666004)(70586007)(2616005)(8936002)(186003)(36860700001)(82310400005)(336012)(47076005)(5660300002)(40480700001)(86362001)(54906003)(40460700003)(44832011)(478600001)(426003)(16526019)(1076003)(6916009)(4744005)(36756003)(8676002)(70206006)(4326008)(316002)(26005)(2906002)(7696005)(32563001)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 4mMUIvwopZHrGpnA6NhMr8hEWMFo2nOzK16zq2/fVOE6ls2BmMYfgsp/5chmnglBIyXGoSTHQqBFvVkihwyslZGNawd2bjDKXYdr+iFFgloIMAk+xB318DSYj9qHSa6vIkkV2UmOQ0/I0Jmxl1H+iI5VaxHWODIofUNeK7zuwtZGvRBtBCNk1o8vBKjwWV8HrwHL58x6aVaVwiZBu9t7AIz6wVC61hPsKCPu7QKZoelqfvV9yJoDaBqJ/g/54rbiXoPjaAJnHlveGhpIf0FSKj5i+28ZrpNEeHdyL2Nco5aaLXjxU+hwTcZHi0xTiPJcdJ3gGQoSW+M9t1o3UM/pBZUd/WOkMjmi7WF1oQBmwAUaNa5UGSsWKDGJMuCDvyWHRSOOLwSA7wjCG/XLC99tsAaH+rqaBcTtKFJO+MNHfTu5QH7FnaJGR3Ni5KQdJq1VLSCn0FWpYmCOjhOKLkuGBiOs5mchE64J/P4RZOmxh1o3+p5KxfdYB3wlpY1GWDbZp9hDaYQ4I+DIBrNbLLR9ry1CPmAEL6QtVVLIMrzsAU3nJmCs58mmRVm42UbThS21H8yeKUpbwtlaQkPBaA/dpUfJ81rO2Q3uIaFwMD3Xttvi2pH/+bME7KfHSaP9vVvIXmcV4lEGgtU2jAEQAiVDBrgFw0qJt4ZmSRnyaBD93hYo2IZF4d0TGXV4w5MiszXLKmTceBEMEMl1pdBrf3hivSSR619ZFlLl/xbptRBQMfwAYlNHRZ8lzLIu70hVcPe7tG462yihp7ks8ECsx0sOQgE3/5yE9+fCZVgNftfoZ1X12zzCkb6lAi8pKIMUiVgTudpSxW9WYM08zZpVquqsLw==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(396003)(39860400002)(136003)(451199015)(36840700001)(40470700004)(46966006)(81166007)(86362001)(356005)(316002)(2906002)(54906003)(110136005)(336012)(82310400005)(26005)(426003)(1076003)(2616005)(47076005)(186003)(16526019)(82740400003)(40460700003)(36860700001)(6666004)(7696005)(40480700001)(41300700001)(478600001)(966005)(36756003)(8676002)(5660300002)(4326008)(70206006)(44832011)(8936002)(4744005)(70586007)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Sep 2022 20:14:46.1077
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Sep 2022 20:14:47.1017
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: fb509b11-d90f-46fc-dfac-08da9b44c33f
+X-MS-Exchange-CrossTenant-Network-Message-Id: 09c78327-86b1-4b4b-6693-08da9b44c3d0
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT082.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT081.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6622
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5327
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -101,27 +105,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Another model from ASUS and Lenovo have been identified that
-don't include anything in ACPI tables to indicate they require the
-ACP6x DMIC driver to be loaded.
+From: Xiaoyan Li <lxy.lixiaoyan@gmail.com>
 
-This series adds them both to the quirk list.
+ASUS Zenbook S 13 OLED (UM5302TA) needs this quirk to get the built-in
+microphone working properly.
 
-changes from v1->v2:
- * Both models were independently sent in v1 but touch the same code,
-   so v2 collates them together.
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=216270
+Signed-off-by: Xiaoyan Li <lxy.lixiaoyan@gmail.com>
+Suggested-by: Mario Limonciello <mario.limonciello@amd.com>
+Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+---
+ sound/soc/amd/yc/acp6x-mach.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-v2->v3:
- * Add my missing S-o-B for 1/2
-Mario Limonciello (1):
-  ASoC: amd: yc: Add Lenovo Yoga Slim 7 Pro X to quirks table
-
-Xiaoyan Li (1):
-  ASoC: amd: yc: Add ASUS UM5302TA into DMI table
-
- sound/soc/amd/yc/acp6x-mach.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
-
+diff --git a/sound/soc/amd/yc/acp6x-mach.c b/sound/soc/amd/yc/acp6x-mach.c
+index e0b24e1daef3..5eab3baf3573 100644
+--- a/sound/soc/amd/yc/acp6x-mach.c
++++ b/sound/soc/amd/yc/acp6x-mach.c
+@@ -171,6 +171,13 @@ static const struct dmi_system_id yc_acp_quirk_table[] = {
+ 			DMI_MATCH(DMI_PRODUCT_NAME, "21J6"),
+ 		}
+ 	},
++	{
++		.driver_data = &acp6x_card,
++		.matches = {
++			DMI_MATCH(DMI_BOARD_VENDOR, "ASUSTeK COMPUTER INC."),
++			DMI_MATCH(DMI_PRODUCT_NAME, "UM5302TA"),
++		}
++	},
+ 	{}
+ };
+ 
 -- 
 2.34.1
 
