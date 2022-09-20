@@ -2,83 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 929CB5BD96D
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 03:36:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05BC95BD970
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 03:37:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229496AbiITBf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 21:35:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48138 "EHLO
+        id S229869AbiITBhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 21:37:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbiITBfx (ORCPT
+        with ESMTP id S229663AbiITBhY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 21:35:53 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8DF0491EE;
-        Mon, 19 Sep 2022 18:35:52 -0700 (PDT)
-Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MWkY92HvfzmVXJ;
-        Tue, 20 Sep 2022 09:31:57 +0800 (CST)
-Received: from dggpeml500010.china.huawei.com (7.185.36.155) by
- dggpeml500025.china.huawei.com (7.185.36.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 20 Sep 2022 09:35:50 +0800
-Received: from [10.67.111.232] (10.67.111.232) by
- dggpeml500010.china.huawei.com (7.185.36.155) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 20 Sep 2022 09:35:50 +0800
-Message-ID: <2f4dce7e-af89-b5d7-f7fc-e919d37bb38f@huawei.com>
-Date:   Tue, 20 Sep 2022 09:35:50 +0800
+        Mon, 19 Sep 2022 21:37:24 -0400
+Received: from mail.nfschina.com (unknown [124.16.136.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 48A9B49B56;
+        Mon, 19 Sep 2022 18:37:23 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id 0A5ED1E80D1C;
+        Tue, 20 Sep 2022 09:34:17 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id x1KCLMsn8TXq; Tue, 20 Sep 2022 09:34:14 +0800 (CST)
+Received: from nfschina.com.localdomain (unknown [219.141.250.2])
+        (Authenticated sender: zhounan@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id 4D3771E80D17;
+        Tue, 20 Sep 2022 09:34:14 +0800 (CST)
+From:   zhoun <zhounan@nfschina.com>
+To:     song@kernel.org
+Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zhou nan <zhounan@nfschina.com>
+Subject: [PATCH v2] md: Fix spelling mistake in comments of r5l_log
+Date:   Mon, 19 Sep 2022 21:36:45 -0400
+Message-Id: <20220920013645.84917-1-zhounan@nfschina.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: linux-next: Fixes tag needs some work in the mips tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Linux Next Mailing List" <linux-next@vger.kernel.org>
-References: <20220920041309.5edf2451@canb.auug.org.au>
-From:   "linyujun (C)" <linyujun809@huawei.com>
-In-Reply-To: <20220920041309.5edf2451@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.111.232]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml500010.china.huawei.com (7.185.36.155)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank you, this is indeed a clerical error, I will correct it and send a 
-v2 patch as soon as possible.
+From: Zhou nan <zhounan@nfschina.com>
 
-在 2022/9/20 2:13, Stephen Rothwell 写道:
-> Hi all,
->
-> In commit
->
->    1e6d11fe72e3 ("MIPS: SGI-IP30: Fix platform-device leak in bridge_platform_create()")
->
-> Fixes tag
->
->    Fixes: fd27234f24ae ("MIPS: add support for SGI Octane (IP30)")
->
-> has these problem(s):
->
->    - Subject does not match target commit subject
->      Just use
-> 	git log -1 --format='Fixes: %h ("%s")'
->
-> So
->
-> Fixes: fd27234f24ae ("MIPS: SGI-IP30: Free some unused memory")
->
-> or
->
-> Fixes: 7505576d1c1a ("MIPS: add support for SGI Octane (IP30)")
->
+Fix spelling of dones't in comments.
+
+Signed-off-by: Zhou nan <zhounan@nfschina.com>
+---
+v2:
+- Modify the title
+- Modify the name of sender
+---
+ drivers/md/raid5-cache.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/md/raid5-cache.c b/drivers/md/raid5-cache.c
+index f4e1cc1ece43..683fd4adde17 100644
+--- a/drivers/md/raid5-cache.c
++++ b/drivers/md/raid5-cache.c
+@@ -125,7 +125,7 @@ struct r5l_log {
+ 					 * reclaimed.  if it's 0, reclaim spaces
+ 					 * used by io_units which are in
+ 					 * IO_UNIT_STRIPE_END state (eg, reclaim
+-					 * dones't wait for specific io_unit
++					 * doesn't wait for specific io_unit
+ 					 * switching to IO_UNIT_STRIPE_END
+ 					 * state) */
+ 	wait_queue_head_t iounit_wait;
+-- 
+2.27.0
+
