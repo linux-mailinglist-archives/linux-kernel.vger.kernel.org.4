@@ -2,223 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 358215BE029
+	by mail.lfdr.de (Postfix) with ESMTP id CF4CF5BE02B
 	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 10:33:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230514AbiITIcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 04:32:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57778 "EHLO
+        id S231137AbiITIcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 04:32:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231282AbiITIcH (ORCPT
+        with ESMTP id S229792AbiITIcV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 04:32:07 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E80642F
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 01:32:04 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id b6so2065660ljr.10
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 01:32:04 -0700 (PDT)
+        Tue, 20 Sep 2022 04:32:21 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B55F92DCB;
+        Tue, 20 Sep 2022 01:32:19 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id o2so2517343lfc.10;
+        Tue, 20 Sep 2022 01:32:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=e5NbNmHqCTNWIuLtFd/xJyd41CdSEWykAKatXf98LzQ=;
-        b=F/azeecqNQ0r0OnKpDAK+lE7+mPrDKflODWkdTEhYiPVy2Ds0QR1LfiVWR9QviaZ23
-         trYYhU4jIRlDQ5vUkt9fBVt1cOIRRXfcrBK1/wBF35q8CCZCbqafAdBUz2VI/hV0i07B
-         zMlW1phPoKNUBDH9Izm77Ov5zwooyXddO3zuIDccbae3TzhNksBA4xTJO3G7zGYBjYpU
-         IYYv7D5arE5bM0qCqDFv16+UFwNGaKE1X+hOLWWS8PatSeaB55s4xNv8pk+DaNoiRrN3
-         8vQ5cMiNk0hT7JQWeKxzaS6K9Kz8op9IksdAmLqv2WeOvthYgKcJzgD+qyWZNK3d7/t4
-         2MbA==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=+/OUZiYO0SDMAPBkbc+dxN7K0Ghz3UX1HgPLq26TwY8=;
+        b=NBYAJFzZKAUXo9Iojo5wexxgw0TKAuBYfXYzNcSiw7qZqMR+0vZNwnQpIsfUXZjrpW
+         R87x/rjzcv+MrXy/YZQSXk9h3ESJLYWmIwyDGYyCPVV57J30cPmwy4l4W9Nf3BfK2dxJ
+         XSNZZOvsWvjpmiDXXJ74IfxzHW76bT0M9MuibSzsRQUphmGkWWIC0VbhDXArlBg45Jc0
+         f7a5xZyHziAUJL3o5t67zam2yoLhVnsbRyQAq61EJXEbM4AkKBBvjo//j4WSvqsJaKpY
+         Yj+sV0/ClglPqQ2FqLj9fMJr0OTpZzw9U9FGYsuZRnxgyC6zs3PPtj2iXht0e55zz9jQ
+         8tpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=e5NbNmHqCTNWIuLtFd/xJyd41CdSEWykAKatXf98LzQ=;
-        b=GnGrvGJNFngsoVjDl4VzZtKSIJ7M1zHnh/LjAiKc4Lx1A7l41FlpS0ewsQJBQBvimj
-         fLufS6Vg+EQZPAQbgduVDLLfTIXuxszMXhy9gi4e8EJmShDBMhnRxO1p+xvrltZS/D5a
-         DvIGCT9JLq24SZ4Mn9GLHkvzrEPIRSGqybfuSzp3dtK8RzHTnErkNsKFFHDFwdmhZUxM
-         jGlczgv8FPSns9jotwySim754bibfD2nmV82VIgiB0viOf51fUd5QZTYugieqdQzhA56
-         vOEh8CamiS/nXZDE+ay4RzePJ4By/E7c9xaaA9apmRsL3ZqAqlIy/zLLTsg8KQecAJHe
-         m8MQ==
-X-Gm-Message-State: ACrzQf2+N4q3oz3TZkNobSLoU8XwmfQAbJeV04XDdcmEVhrJFeR7FOTm
-        nqPbY/eWHGvRh4WIBInPBB6QNQ==
-X-Google-Smtp-Source: AMsMyM7KNMChPE2Rgyh3kKm/hPSJtpEndm6m6U5vsW842vuEu5FKfr0pg6gGWxliP86yysZq0PMluQ==
-X-Received: by 2002:a2e:bc84:0:b0:26c:3bee:575f with SMTP id h4-20020a2ebc84000000b0026c3bee575fmr5775829ljf.389.1663662723105;
-        Tue, 20 Sep 2022 01:32:03 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id z23-20020a2e9b97000000b00261e7244887sm145166lji.60.2022.09.20.01.32.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Sep 2022 01:32:02 -0700 (PDT)
-Message-ID: <f35a1e45-1856-2443-f87a-33bc97c1c578@linaro.org>
-Date:   Tue, 20 Sep 2022 10:32:01 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=+/OUZiYO0SDMAPBkbc+dxN7K0Ghz3UX1HgPLq26TwY8=;
+        b=aJqLzubEALBVSkw2xrOQHeKRlNUI3GV9MxjDcU1btJqF1DvKg2B2Bu5IeVGOcfxDoa
+         VomK37jlMbwi2Epn6bqNP6m+VdBxVEWRnQCAQ37Rkhs4cvFPi3gVW+SyH1w1tl85QqDv
+         yTEinJ9bik+8KhsFK6o+kZlMs5KeRbHyW+rAydBxjrdAynHbRwPAwe5gDksSHOaiTRFt
+         UKGbLQ6Evgu6YmMwHSoblEoTpCFfx6DzVU/6c1LbO0iIdfTKfJB4uHucTMCNaMGZ0Ube
+         2xPd/J8DK36JiLD4JIZEq8jBdpFrJe7F9DVfkI03QIE6ZUHR3iuR3PPARZK8ERqsb1SH
+         5Wfw==
+X-Gm-Message-State: ACrzQf2dR/wEPgs7lasr2yDq6cVblNg18wExjgfi9NkS/b2BE3pzkzu3
+        wLVze25NGGGYDdshZTPJxS+V2sN7bKUHyGdjfUI=
+X-Google-Smtp-Source: AMsMyM6R/zVvN7o1HLVOVBoRNZstsmoJ+m6sB78Wu1iewEJzZKmtLmXBalE8SjQYaEgEiTk+pdNoySHCq/kbebX1bFU=
+X-Received: by 2002:a05:6512:b1d:b0:49f:59da:c706 with SMTP id
+ w29-20020a0565120b1d00b0049f59dac706mr6078557lfu.668.1663662737989; Tue, 20
+ Sep 2022 01:32:17 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v3 1/3] dt-bindings: pinctrl: qcom: add sdm670 pinctrl
-Content-Language: en-US
-To:     Richard Acayan <mailingradian@gmail.com>,
-        linux-arm-msm@vger.kernel.org
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
+References: <20220714122322.63663-1-tmaimon77@gmail.com> <20220714122322.63663-2-tmaimon77@gmail.com>
+ <20220718211046.GA3547663-robh@kernel.org> <CAP6Zq1hQ5m2kkQOKaYsKhPQhCW+vdsdyPRxxb_yRGMB=gJCPdw@mail.gmail.com>
+ <3981e6e8-d4bb-b13d-7aaa-7aea83ffaad9@linaro.org> <CAP6Zq1gp1ph1wixgb6nL+2R8We2YJ2HQM2iC05itq_XWd2Cwig@mail.gmail.com>
+ <bfca0379-7346-13e7-a18f-66740c5871b3@linaro.org> <CAP6Zq1gyDW8ZwwAZ1jyfNEZa09WN-biZZJY8tBmW_gzMzpj3ZA@mail.gmail.com>
+ <2b0e6e33-ef76-4bd4-8894-53f9a3fe68b4@linaro.org>
+In-Reply-To: <2b0e6e33-ef76-4bd4-8894-53f9a3fe68b4@linaro.org>
+From:   Tomer Maimon <tmaimon77@gmail.com>
+Date:   Tue, 20 Sep 2022 11:32:06 +0300
+Message-ID: <CAP6Zq1iwW6HvvfM684VLG0ZT-0OLKT0udW4bHxsZsTMEypo2sg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] dt-binding: pinctrl: Add NPCM8XX pinctrl and GPIO documentation
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh@kernel.org>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
         Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-References: <20220920021636.1634-1-mailingradian@gmail.com>
- <20220920021636.1634-2-mailingradian@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220920021636.1634-2-mailingradian@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        zhengbin13@huawei.com, OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/09/2022 04:16, Richard Acayan wrote:
-> There is a new driver for the Snapdragon 670 TLMM (Top-Level Mode
-> Multiplexer). Document it.
-> 
-> Adapted from qcom,sm6350-pinctrl.yaml in the same directory at
-> commit c09acbc499e8 ("dt-bindings: pinctrl: use pinctrl.yaml").
-
-Reference other commits if they relate to the issue described here, e.g.
-they cause a bug. If it is not the case, no need for this.
-
-> 
-> Signed-off-by: Richard Acayan <mailingradian@gmail.com>
-> ---
->  .../bindings/pinctrl/qcom,sdm670-tlmm.yaml    | 138 ++++++++++++++++++
->  1 file changed, 138 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,sdm670-tlmm.yaml
-> 
-
-(...)
-
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts: true
-> +  interrupt-controller: true
-> +  '#interrupt-cells': true
-> +  gpio-controller: true
-> +  gpio-reserved-ranges:
-> +    minItems: 1
-> +    maxItems: 76
-
-Do you have 152 or 153 GPIOs?
-
-> +
-> +  '#gpio-cells': true
-> +  gpio-ranges: true
-> +  wakeup-parent: true
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +patternProperties:
-> +  '-state$':
-> +    oneOf:
-> +      - $ref: "#/$defs/qcom-sdm670-tlmm-state"
-> +      - patternProperties:
-> +          "-pins$":
-> +            $ref: "#/$defs/qcom-sdm670-tlmm-state"
-> +        additionalProperties: false
-> +
-> +$defs:
-> +  qcom-sdm670-tlmm-state:
-> +    type: object
-> +    description:
-> +      Pinctrl node's client devices use subnodes for desired pin configuration.
-> +      Client device subnodes use below standard properties.
-> +
-> +    properties:
-> +      pins:
-> +        description:
-> +          List of gpio pins affected by the properties specified in this
-> +          subnode.
-> +        items:
-> +          oneOf:
-> +            - pattern: "^gpio([0-9]|[1-9][0-9]|1[0-4][0-9])$"
-> +            - enum: [ ufs_reset, sdc1_rclk, sdc1_clk, sdc1_cmd, sdc1_data,
-> +                      sdc2_clk, sdc2_cmd, sdc2_data ]
-> +        minItems: 1
-> +        maxItems: 36
-> +
-> +      function:
-> +        description:
-> +          Specify the alternative function to be configured for the specified
-> +          pins.
-> +
-> +        enum: [ adsp_ext, agera_pll, atest_char, atest_tsens, atest_tsens2, atest_usb1, atest_usb10,
-> +                atest_usb11, atest_usb12, atest_usb13, atest_usb2, atest_usb20, atest_usb21,
-> +                atest_usb22, atest_usb23, cam_mclk, cci_async, cci_i2c, cci_timer0, cci_timer1,
-> +                cci_timer2, cci_timer3, cci_timer4, copy_gp, copy_phase, dbg_out, ddr_bist,
-> +                ddr_pxi0, ddr_pxi1, ddr_pxi2, ddr_pxi3, edp_hot, edp_lcd, gcc_gp1, gcc_gp2, gcc_gp3,
-> +                gp_pdm0, gp_pdm1, gp_pdm2, gpio, gps_tx, jitter_bist, ldo_en, ldo_update,
-> +                lpass_slimbus, m_voc, mdp_vsync, mdp_vsync0, mdp_vsync1, mdp_vsync2, mdp_vsync3,
-> +                mss_lte, nav_pps, pa_indicator, pci_e0, pci_e1, phase_flag, pll_bist, pll_bypassnl,
-> +                pll_reset, pri_mi2s, pri_mi2s_ws, prng_rosc, qdss_cti, qdss, qlink_enable,
-> +                qlink_request, qua_mi2s, qup0, qup1, qup10, qup11, qup12, qup13, qup14, qup15, qup2,
-> +                qup3, qup4, qup5, qup6, qup7, qup8, qup9, qup_l4, qup_l5, qup_l6, sdc4_clk,
-> +                sdc4_cmd, sdc4_data, sd_write, sec_mi2s, ter_mi2s, tgu_ch0, tgu_ch1, tgu_ch2,
-> +                tgu_ch3, tsif1_clk, tsif1_data, tsif1_en, tsif1_error, tsif1_sync, tsif2_clk,
-> +                tsif2_data, tsif2_en, tsif2_error, tsif2_sync, uim1_clk, uim1_data, uim1_present,
-> +                uim1_reset, uim2_clk, uim2_data, uim2_present, uim2_reset, uim_batt, usb_phy, vfr_1,
-> +                vsense_trigger, wlan1_adc0, wlan1_adc1, wlan2_adc0, wlan2_adc1, wsa_clk, wsa_data, ]
-> +
-> +
-> +      bias-disable: true
-> +      bias-pull-down: true
-> +      bias-pull-up: true
-> +      drive-strength: true
-> +      input-enable: true
-> +      output-high: true
-> +      output-low: true
-> +
-> +    required:
-> +      - pins
-> +
-> +    allOf:
-> +      - $ref: "qcom,tlmm-common.yaml#/$defs/qcom-tlmm-state"
-> +      - if:
-> +          properties:
-> +            pins:
-> +              pattern: "^gpio([0-9]|[1-9][0-9]|1[0-4][0-9])$"
-> +        then:
-> +          required:
-> +            - function
-> +
-> +    additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +        #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +        pinctrl@3400000 {
-
-Still wrong indentation.
-
-> +                compatible = "qcom,sdm670-tlmm";
-> +                reg = <0x03400000 0x300000>;
-> +                interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
-> +                gpio-controller;
-> +                #gpio-cells = <2>;
-> +                interrupt-controller;
-> +                #interrupt-cells = <2>;
-> +                gpio-ranges = <&tlmm 0 0 151>;
-> +
+On Tue, 20 Sept 2022 at 11:21, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 20/09/2022 09:59, Tomer Maimon wrote:
+> >>>>>>> +      pinctrl: pinctrl@f0800000 {
+> >>>>>>> +        compatible = "nuvoton,npcm845-pinctrl";
+> >>>>>>> +        ranges = <0x0 0x0 0xf0010000 0x8000>;
+> >>>>>>> +        #address-cells = <1>;
+> >>>>>>> +        #size-cells = <1>;
+> >>>>>>> +        nuvoton,sysgcr = <&gcr>;
+> >>>>>>> +
+> >>>>>>> +        gpio0: gpio@f0010000 {
+> >>>>>>
+> >>>>>> gpio@0
+> >>>>>>
+> >>>>>> Is this really a child block of the pinctrl? Doesn't really look like it
+> >>>>>> based on addressess. Where are the pinctrl registers? In the sysgcr? If
+> >>>>>> so, then pinctrl should be a child of it. But that doesn't really work
+> >>>>>> too well with gpio child nodes...
+> >>>>> the pin controller mux is handled by sysgcr this is why the sysgcr in
+> >>>>> the mother node,
+> >>>>> and the pin configuration are handled by the GPIO registers.  each
+> >>>>> GPIO bank (child) contains 32 GPIO.
+> >>>>> this is why the GPIO is the child node.
+> >>>>
+> >>>> Then maybe pinctrl should be the sysgcr and expose regmap for other devices?
+> >>> The pin controller using the sysgcr to handle the pinmux, this is why
+> >>> the sysgcr is in the mother node, is it problematic?
+> >>
+> >> You said pin-controller mux registers are in sysgcr, so it should not be
+> >> used via syscon.
+> > Sorry but maybe I missed something.
+> > the sysgcr is used for miscellaneous features and not only for the pin
+> > controller mux, this is why it used syscon and defined in the dtsi:
+> >                 gcr: system-controller@f0800000 {
+> >                         compatible = "nuvoton,npcm845-gcr", "syscon";
+> >                         reg = <0x0 0xf0800000 0x0 0x1000>;
+> >                 };
+> >>
+> >> Please provide address map description to convince us that this is
+> >> correct HW representation.
+> > GCR (sysgcr) registers 0xf0800000-0xf0801000 - used for miscellaneous
+> > features, not only pin mux.
+> > GPIO0 0xf0010000-0xf0011000
+> > GPIO1 0xf0011000-0xf0012000
+> > ...
+> > GPIO7 0xf0017000-0xf0018000
+> >>
+>
+> Then why your pinctrl is in sysgcr IO range? (pinctrl@f0800000)
+you suggest using pinctrl@0 or pinctrl@f0010000 and not
+pinctrl@f0800000 because 0xf0800000 is the GCR address that serve
+miscellaneous features and not only pinmux controller ?
+>
+> Your map looks quite different from what you described in example.
+>
+> Best regards,
+> Krzysztof
 
 Best regards,
-Krzysztof
+
+Tomer
