@@ -2,133 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC6615BE497
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 13:36:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C90845BE4A1
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 13:40:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230284AbiITLgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 07:36:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56508 "EHLO
+        id S230216AbiITLkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 07:40:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230216AbiITLgr (ORCPT
+        with ESMTP id S229596AbiITLkL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 07:36:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDFAC6EF0C
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 04:36:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663673804;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PsCfV3jb8Y6CJkx3bnF/8eo0TaIrp2G1MgoQNK12Cok=;
-        b=M3rUlbFM61qUUSSF8jvKnStvxlPo8GPXaBEyzKarlg/+gVoXcUEOkMtKeliRQ0jmKzzxbP
-        QL88kH5+90rSbvB3uUIZbdlecKIugnx7QGv3ZnIhCwRzbsq1C2cLcAuZqtV5G14IQcCqYQ
-        qONOKVeQSlHUic78bCf58Gl0pQnSXYo=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-370-qGoznZu0O-ClvLKlpaaaNA-1; Tue, 20 Sep 2022 07:36:43 -0400
-X-MC-Unique: qGoznZu0O-ClvLKlpaaaNA-1
-Received: by mail-qk1-f200.google.com with SMTP id bi3-20020a05620a318300b006cf2d389cdaso1679217qkb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 04:36:43 -0700 (PDT)
+        Tue, 20 Sep 2022 07:40:11 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4A5C61D5D
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 04:40:09 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id y17so5439667ejo.6
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 04:40:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date;
+        bh=IdlFGCXoJY/QZY2cE7K+3XDnlb/W4014NQvw+3M2OJ0=;
+        b=BViyFnWN2nNt/PnYtTMLhjloklGbQaJk6h+DgSCH5tbS037vuL/znjRqh+T/QU9lOQ
+         ziB85DTh5qQw0/hFLoC4hkub06WsFFsBsFoEQpVsp3D1QolFyMK2SbT4gX8+GPbCJ+wO
+         GXkVDJbLKo8E6TW/c/CjTa0OXuM0ujWH1iUYTa3uWflE/RAwd/RwpP0EweEdyemmAmTA
+         1S9ZxpzcOIhoMdLTMGCJe/1kZbxXy9ofu341OcsSxWiuBQbc6mJSlO89QPd7ekPr0dPL
+         uyrcI3RK7dMukWKCuAjlAT5I6q7wCP7I48q4N7F0hyRt9Mrfv86r58l6jLp3msL4+I0O
+         i3SA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=PsCfV3jb8Y6CJkx3bnF/8eo0TaIrp2G1MgoQNK12Cok=;
-        b=25nLTI38ayeKD0aw6CIYdUTnuQrR89pJT40PfBON3ud6fZSelQXdBTX1DMKEoSnE+J
-         rE7s9nR/UJ/BEE3eDQsgckSa2GcBa16wuHDdGJW1aMZmInVnShcLQVZOAR2OvtzFAEK8
-         MAP4fjT+hdqSoURMcVDbjVvle6piqae9jjxrpWBa2bXuSnwqRX5+7oGfQ2ryr4+GUwY/
-         rGoAzIfsa2r5elxikf/0+DbvLWXLlSV2rsaycd9bBp4md9feR65k98prlywzlJqoNSsH
-         za7F4dVc1kObbZTnIHtnwK6oGnDvl5HnBSijBq70epS6BzJSgtTSOzgM8BXusFBu0NsN
-         tF8g==
-X-Gm-Message-State: ACrzQf2EraLDOahMnKnYdmyxkiOWkdxumDir+TGTxazR+kk2g+k8N8IY
-        hVcw+SXcgBiv4m2MUNtTTPXpIY1G8JKP97EFZuzgwnmdxM9GvJ02mZ7gEjmni40jaZuyxJ44S6Z
-        +FKfAEWnayQh2kkieSnPOn8PsvjmU1iM4/Cfi+8r3
-X-Received: by 2002:a05:622a:1793:b0:35b:af87:4f22 with SMTP id s19-20020a05622a179300b0035baf874f22mr18699729qtk.673.1663673803213;
-        Tue, 20 Sep 2022 04:36:43 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6wIQ0jFhCaudvcBegNkhf6TY0qdf9hDp0ELXrNPeuoLTirgC5lOzDVWzTY40c9modUSL/vnMBgHTmfH7PrYgM=
-X-Received: by 2002:a05:622a:1793:b0:35b:af87:4f22 with SMTP id
- s19-20020a05622a179300b0035baf874f22mr18699716qtk.673.1663673802999; Tue, 20
- Sep 2022 04:36:42 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=IdlFGCXoJY/QZY2cE7K+3XDnlb/W4014NQvw+3M2OJ0=;
+        b=i1KtQBEzy8aSbtDUoVGiI28nxzIPmQUNOKp3TqhIFyhP7DXn9jbbao8Qm8G2MfN2pR
+         bK2sZn1AGdIiqIfulSjVWgga0niHNXDaR3O7os7NhGeL+XH0dRnACqCd7goyi4+MBATp
+         vvNlVOPmr3Q6TH5tri5PG6ri3prS+CQuSWXteHbM81ywscAtV8LULfWpanh4tYjsjRMI
+         XcmGe2OwvNu8TR1eIsDrvVv6qmdtEYvFguk3Rso2AHRfbT8YUyVYS9FJvCTwhu1vAXwL
+         AvQXHuj/z3R0djPj3b3KgBYB9x4iAtdjAh1h+u6U1X5qooew5+9hOX7t3JoqOEW7rXAb
+         oxlA==
+X-Gm-Message-State: ACrzQf0w8xqLpBTgknZ2pRB7sSsUgOqa1wetHbeEmzPMqdOjO4IBPH6N
+        SLPDcmBLzKaqkCH8Xp0GzCA8C5/Ss0jBKo40IP5DSpVdjinFrg==
+X-Google-Smtp-Source: AMsMyM49sXmpd6lWbrAupSenNeulqi/l78zyZ7dh7IhOh/g5e5W6RHynoFh+W3OVALJyEDHciG5xGr/PFIUVqxqoS2M=
+X-Received: by 2002:a17:907:3188:b0:741:4bf7:ec1a with SMTP id
+ xe8-20020a170907318800b007414bf7ec1amr17052253ejb.448.1663674007013; Tue, 20
+ Sep 2022 04:40:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220819200928.401416-1-kherbst@redhat.com> <YymY+3+C2aI7T3GU@eldamar.lan>
-In-Reply-To: <YymY+3+C2aI7T3GU@eldamar.lan>
-From:   Karol Herbst <kherbst@redhat.com>
-Date:   Tue, 20 Sep 2022 13:36:32 +0200
-Message-ID: <CACO55ts7rpbyYv3ovWt1iCfkGsChCUVitmHqtzAwFpfbPEZGYQ@mail.gmail.com>
-Subject: Re: [PATCH] nouveau: explicitly wait on the fence in nouveau_bo_move_m2mf
-To:     Salvatore Bonaccorso <carnil@debian.org>
-Cc:     linux-kernel@vger.kernel.org, Ben Skeggs <bskeggs@redhat.com>,
-        Lyude Paul <lyude@redhat.com>, dri-devel@lists.freedesktop.org,
-        nouveau@lists.freedesktop.org, stable@vger.kernel.org,
-        Computer Enthusiastic <computer.enthusiastic@gmail.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 20 Sep 2022 17:09:55 +0530
+Message-ID: <CA+G9fYtpNsjRzQdxFvLjVmG9XX95B6DtaviHq3oG6awGYTqGSw@mail.gmail.com>
+Subject: coresight-etm4x-core.c:969:26: error: 'ID_AA64DFR0_TRACEVER_SHIFT' undeclared
+To:     open list <linux-kernel@vger.kernel.org>,
+        coresight@lists.linaro.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>, Mark Brown <broonie@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 12:42 PM Salvatore Bonaccorso <carnil@debian.org> wrote:
->
-> Hi,
->
-> On Fri, Aug 19, 2022 at 10:09:28PM +0200, Karol Herbst wrote:
-> > It is a bit unlcear to us why that's helping, but it does and unbreaks
-> > suspend/resume on a lot of GPUs without any known drawbacks.
-> >
-> > Cc: stable@vger.kernel.org # v5.15+
-> > Closes: https://gitlab.freedesktop.org/drm/nouveau/-/issues/156
-> > Signed-off-by: Karol Herbst <kherbst@redhat.com>
-> > ---
-> >  drivers/gpu/drm/nouveau/nouveau_bo.c | 9 +++++++++
-> >  1 file changed, 9 insertions(+)
-> >
-> > diff --git a/drivers/gpu/drm/nouveau/nouveau_bo.c b/drivers/gpu/drm/nouveau/nouveau_bo.c
-> > index 35bb0bb3fe61..126b3c6e12f9 100644
-> > --- a/drivers/gpu/drm/nouveau/nouveau_bo.c
-> > +++ b/drivers/gpu/drm/nouveau/nouveau_bo.c
-> > @@ -822,6 +822,15 @@ nouveau_bo_move_m2mf(struct ttm_buffer_object *bo, int evict,
-> >               if (ret == 0) {
-> >                       ret = nouveau_fence_new(chan, false, &fence);
-> >                       if (ret == 0) {
-> > +                             /* TODO: figure out a better solution here
-> > +                              *
-> > +                              * wait on the fence here explicitly as going through
-> > +                              * ttm_bo_move_accel_cleanup somehow doesn't seem to do it.
-> > +                              *
-> > +                              * Without this the operation can timeout and we'll fallback to a
-> > +                              * software copy, which might take several minutes to finish.
-> > +                              */
-> > +                             nouveau_fence_wait(fence, false, false);
-> >                               ret = ttm_bo_move_accel_cleanup(bo,
-> >                                                               &fence->base,
-> >                                                               evict, false,
-> > --
-> > 2.37.1
-> >
-> >
->
-> While this is marked for 5.15+ only, a user in Debian was seeing the
-> suspend issue as well on 5.10.y and did confirm the commit fixes the
-> issue as well in the 5.10.y series:
->
-> https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=989705#69
->
-> Karol, Lyude, should that as well be picked for 5.10.y?
->
+Following build warnings / errors noticed while building arm64 coresight
+on linux next-20220919 and next-20220920.
 
-mhh from the original report 5.10 was fine, but maybe something got
-backported and it broke it? I'll try to do some testing on my machine
-and see what I can figure out, but it could also be a debian only
-issue at this point.
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-> Regards,
-> Salvatore
->
+make --silent --keep-going --jobs=8
+O=/home/tuxbuild/.cache/tuxmake/builds/1/build
+CROSS_COMPILE_COMPAT=arm-linux-gnueabihf- ARCH=arm64
+CROSS_COMPILE=aarch64-linux-gnu- 'CC=sccache aarch64-linux-gnu-gcc'
+'HOSTCC=sccache gcc'
 
+drivers/hwtracing/coresight/coresight-etm4x-core.c: In function
+'cpu_supports_sysreg_trace':
+drivers/hwtracing/coresight/coresight-etm4x-core.c:969:26: error:
+'ID_AA64DFR0_TRACEVER_SHIFT' undeclared (first use in this function);
+did you mean 'ID_AA64DFR0_EL1_TraceVer_SHIFT'?
+  969 |         return ((dfr0 >> ID_AA64DFR0_TRACEVER_SHIFT) & 0xfUL) > 0;
+      |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                          ID_AA64DFR0_EL1_TraceVer_SHIFT
+drivers/hwtracing/coresight/coresight-etm4x-core.c:969:26: note: each
+undeclared identifier is reported only once for each function it
+appears in
+drivers/hwtracing/coresight/coresight-etm4x-core.c: In function
+'cpu_detect_trace_filtering':
+drivers/hwtracing/coresight/coresight-etm4x-core.c:1057:57: error:
+'ID_AA64DFR0_TRACE_FILT_SHIFT' undeclared (first use in this
+function); did you mean 'ID_AA64PFR0_EL1_DIT_SHIFT'?
+ 1057 |         if (!cpuid_feature_extract_unsigned_field(dfr0,
+ID_AA64DFR0_TRACE_FILT_SHIFT))
+      |
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |
+ID_AA64PFR0_EL1_DIT_SHIFT
+drivers/hwtracing/coresight/coresight-etm4x-core.c: In function
+'cpu_supports_sysreg_trace':
+drivers/hwtracing/coresight/coresight-etm4x-core.c:970:1: error:
+control reaches end of non-void function [-Werror=return-type]
+  970 | }
+      | ^
+cc1: some warnings being treated as errors
+
+Regressions found on arm64:
+   - build-clang-13-lkftconfig
+   - build-gcc-11-lkftconfig-devicetree
+   - build-gcc-11-lkftconfig-kunit
+   - build-gcc-11-lkftconfig-perf
+   - build-gcc-11-lkftconfig-64k_page_size
+   - build-gcc-11-lkftconfig-debug
+   - build-gcc-11-lkftconfig-libgpiod
+   - build-gcc-11-lkftconfig-debug-kmemleak
+   - build-clang-14-lkftconfig
+   - build-clang-nightly-lkftconfig
+   - build-gcc-11-lkftconfig
+   - build-gcc-11-lkftconfig-kasan
+   - build-clang-12-lkftconfig
+   - build-gcc-11-lkftconfig-kselftest-kernel
+   - build-gcc-11-lkftconfig-rcutorture
+   - build-gcc-11-lkftconfig-armv8_features
+   - build-gcc-11-lkftconfig-kselftest
+
+Build: https://builds.tuxbuild.com/2F1cW8NpQ0Z6l9h9rfkZT5AXzqg/
+config: https://builds.tuxbuild.com/2F1cW8NpQ0Z6l9h9rfkZT5AXzqg/config
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org
