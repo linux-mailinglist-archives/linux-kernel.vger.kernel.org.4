@@ -2,231 +2,479 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E4D05BDC8E
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 07:48:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3F505BDC90
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 07:49:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229896AbiITFsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 01:48:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39980 "EHLO
+        id S229911AbiITFtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 01:49:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230132AbiITFsm (ORCPT
+        with ESMTP id S229903AbiITFtL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 01:48:42 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FBF1491F7
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 22:48:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=W0nnfIThImeaZlObEtcdogsCT3MhHlWU5UyTLURVwE3hkSd+sCDTgvX1Mk8LbkV/NyfkyHQheUl/QlNc9T3OkaKJWd+U9XOM2XHrXpXU1ts3rOYE1PmZ1UQYSeb7CK8ENJtu5mR0HwQ8jYVdJrtzpJRqI65ng9VZLjHIxt+fna34etZE7Y1wL+/xGzOZhht3fIAdhpq7cIfXtzFSkuyy/Vviehrss+KqQt7W6gkHuInD6A132USNjVpxLgN6k4LJsDikki8eFa5GUNHoqEiAlDKLCEjl7MG0WJCRaXDIYvui5QCfSqrt/kqger6cxSSg43jqAj4RlWdJwhjpE6m6Pw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=w8ClAv61itMhHNYW6tBg0Bhvc1iA4bnhlMT9S5lAWdI=;
- b=DHDfz7a8hKi5GztaKn5cWmErX764GEtIejgB7+0HtVur8+IqJpLFUS9FCDEvwUAAOpCVyhTZwl0i9CwfIsFUndW/y30F0G4YDKF3UfjZGUNXT6nzlL9xMSu5uuFjqvNPZAPj6QonAiakaPgEI2WqeEDB30lzT4TjZARxgU8bd8+DpJnk/UiHGssoSza8BjxdvdldCdhjgvFhjvstD71GL7shqXmYWoowAGkvqdK7l/+WEAtReHSxKcRop0nh4r387xS8LNu00RLfa7OMX01OzuDdwmus3Pm3XPa9hr5JTHhNBngXj9Sy2WRsJklS7TD/TN8Q7ee/XFLc/Doiu5TzNQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=w8ClAv61itMhHNYW6tBg0Bhvc1iA4bnhlMT9S5lAWdI=;
- b=aa+E2tMBVi523TXGojIdtSFlzXb62okCaIYZywkrfMwNVcrfc77PRzS3Y0LPJnhMfiZXk3Ccuh1fu+vv2PaUpqsVkTQkC1OWDe6oXMOVvpZJ5htuvIUTA+m/R4kHIyGCDILyoGUmip1fE7RTtf/6YUeyDUy4On4Pi5NqgKaRjzRVKk7Qi1OL5/Fcbi3SMzZV0dOWPpbcId/fUvZZo2N6vnu3aErJ67HCVXgo5J/TtZr95arwAGgfE27mEjHf0PvN1URZoDQe2HSH7lnVi6E9F/pTu54JJjYNZ73dhG22ngHVZvA12GIBxreYUV7vNN3HsZFyTaYoSI79J7YT2A6xRg==
-Received: from DM8PR12MB5400.namprd12.prod.outlook.com (2603:10b6:8:3b::12) by
- SJ0PR12MB6688.namprd12.prod.outlook.com (2603:10b6:a03:47d::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.19; Tue, 20 Sep
- 2022 05:48:38 +0000
-Received: from DM8PR12MB5400.namprd12.prod.outlook.com
- ([fe80::c42a:c673:1e4a:f357]) by DM8PR12MB5400.namprd12.prod.outlook.com
- ([fe80::c42a:c673:1e4a:f357%6]) with mapi id 15.20.5632.019; Tue, 20 Sep 2022
- 05:48:38 +0000
-From:   Eli Cohen <elic@nvidia.com>
-To:     Jason Wang <jasowang@redhat.com>
-CC:     "mst@redhat.com" <mst@redhat.com>,
-        "si-wei.liu@oracle.com" <si-wei.liu@oracle.com>,
-        Parav Pandit <parav@nvidia.com>,
-        "wuzongyong@linux.alibaba.com" <wuzongyong@linux.alibaba.com>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "eperezma@redhat.com" <eperezma@redhat.com>,
-        "lingshan.zhu@intel.com" <lingshan.zhu@intel.com>,
-        "gdawar@xilinx.com" <gdawar@xilinx.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "xieyongji@bytedance.com" <xieyongji@bytedance.com>
-Subject: RE: [PATCH 3/3] vp_vdpa: support feature provisioning
-Thread-Topic: [PATCH 3/3] vp_vdpa: support feature provisioning
-Thread-Index: AQHYyOBTnTc4N7nO402aAw298tWvH63mWm5wgAE5UYCAAENwsA==
-Date:   Tue, 20 Sep 2022 05:48:38 +0000
-Message-ID: <DM8PR12MB54002DE8984FB1F1D2531BE3AB4C9@DM8PR12MB5400.namprd12.prod.outlook.com>
-References: <20220915085048.12840-1-jasowang@redhat.com>
- <20220915085048.12840-4-jasowang@redhat.com>
- <DM8PR12MB54006A97A99515542260B5D6AB4D9@DM8PR12MB5400.namprd12.prod.outlook.com>
- <CACGkMEtfLGjHgFV7bgWrjWoFZyiTQMf9oDBGi5L=diQ5mtNRnA@mail.gmail.com>
-In-Reply-To: <CACGkMEtfLGjHgFV7bgWrjWoFZyiTQMf9oDBGi5L=diQ5mtNRnA@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM8PR12MB5400:EE_|SJ0PR12MB6688:EE_
-x-ms-office365-filtering-correlation-id: 37241b96-0506-469b-30af-08da9acbc3f2
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: aBEJ22HwJmmVZJUru0vF7f62cpOHU2YRQxuM1D9KWrikYGR419qdiYUp0PLpwt6TF2g22AMyOFGU64ccvKjB4D0Zz66e6g7Kr8+RpY0oFkzEhllks+3HMFbnIp/tzZjF1QMvDgQ76cNWu5TFTyUqOC8WYrotWrlvlQPgAu/2opYfoLk96dMkM+7WbY6SvxGlicbsL9yXSaY/X5dleYyVYKNJXgnZsj0QbrmRyx+WroCDfpUff45LsSFuWcvHE86n70Tc1L6E1BS3cldl1uvip4CggJZOGqcNfhG+C2okHsj17OIZdU09wGXFQ/gODY1ZvnadX0Mmv1G2DPOB7+lJYbrXxsM3O/EJ5cbpcNgUVJWAwzjXMVLt9vkWXi0Sb9BelN56VFSCm/ztpWL2raY5iRGfulHW/ycHSWajXVrackamaqYxalxR0IpdDJ8OIEHFt3P24MUmwexyN9QB/SNK1Z0rXfjNAlSplpLTNcK3NMEjPpWV3wy4fbcs10Jx0rPPYUrr0Sk5higLA/fw2fjzDJUAmkBni5gnN8ktztpk24B4dW/B5MB+AniPrPokFUW6+y+D/51TVyPBAKqCGocAUdxvbhooj1asjhFVr3fJUno1sWYeZy/crs2afdzjn/9ImN8GnvE37T5UtrzlxY0fxUSSXM993zqeuQhl+Mj6zBN7g2KVHbX2Oa2aGi0R1VKDa1vOQAHl6dwoc/LbMt3BeFRDYm+Zh5jur+hr5qyVMsuSmprNY49Z8RGq7Aim5+UF8lGCqLLflp2c9GdnLLjbiw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR12MB5400.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(346002)(396003)(39860400002)(366004)(451199015)(66476007)(52536014)(7416002)(66556008)(186003)(122000001)(8936002)(54906003)(4326008)(2906002)(86362001)(83380400001)(66446008)(66946007)(38100700002)(64756008)(76116006)(38070700005)(53546011)(55016003)(71200400001)(6916009)(316002)(6506007)(7696005)(41300700001)(8676002)(478600001)(5660300002)(33656002)(26005)(9686003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?b3JkUjJFYUF1b2NHeUdTZi9YeFlNdE1PR1lyTG1xbnhZZDFUa21EdjNzbVcx?=
- =?utf-8?B?d041d2k2V1ExbUN4WWFJY0EyQXhDdlA0T2Y0bEZKeHdNYytJK1JrTzNFTXFJ?=
- =?utf-8?B?MHljR0tSdU5mRXBNN21BaWdDWVNNcVFsaDEzeFkxWVFENzArbFVUaC9lM3ha?=
- =?utf-8?B?RDBYQTJEUFFLRG8xZ0FtQ0x4aWcyQmp5TldRWFc1K1ZFRzcxcW1IeWpTNmpz?=
- =?utf-8?B?YmdNdnJ0YlAzRlFJNlRIVkVYbWw4bW9NYUlvQlgvRGovcjRVSjFCMEdLYzhC?=
- =?utf-8?B?aG1Qb3lKWXowVkllYVlRd0pmNWRNKzRsM3BLT2dCQjBsK1VvSkFVRnZldHRo?=
- =?utf-8?B?bHNSWTB4RUlyRHNITFBSOXk5MU1HSG0wbnE1b2xISVF3Z0xWREVGbkxaUHV0?=
- =?utf-8?B?enk0MFphemRVbkFHWFBrZEk1aXVTSVR1MTJqcHd0a29YenFvL3hySW55WStk?=
- =?utf-8?B?UlBEbHdoTGlrNEVnVnZXWXFkM0F5QTNkb3lwZHFXUlBPd0lKeXBJVUcxWW4r?=
- =?utf-8?B?cXFsOTVJNmJPcW5LaEs5eGVRYVdQWG9PZ2lkQjF4N2RQcGtqWk90dGFaUnB1?=
- =?utf-8?B?UDMxcVlKTUZXTTBHc1VyRjdLRUFOTHpLaGhrREg4eHR5WE82L2pNV2lxV3o3?=
- =?utf-8?B?QzVZcmZCYnNBNUxXNkE4WUlpd21jRVlQS1ZyYkFMZU5rNk9xOUZNWFFJWlQ4?=
- =?utf-8?B?VkJpTXVSNE1BdDdJT083VThlU0xGU2hvam9rM0FGSndJc2hIRWxUb2xyaXVj?=
- =?utf-8?B?OWJMQUFCVUFZS0dLTEUweXA2dXhBWURMenlNU3l4Zk02NTlKcGNBU0lzamtM?=
- =?utf-8?B?ZjhDZy9iVk5SMW0xaWc1NGFCZGhkRTJFYTFYZlNMbEtCSG5lT2tWWlMxaVIx?=
- =?utf-8?B?VkFVOXFCL1V5ZnRsWlpBc0VtVlBtSU50WjdJL25RM1A1Z0VGVkduSC91MzFD?=
- =?utf-8?B?dkd2cGxUMHV5TnNuOWRsNzU1R0krUm5KT0Y2OXFmOW1HbytDeUFhVU0wcWdL?=
- =?utf-8?B?cXJOOE5zblo0RmNnZGJLZUd6NTJQRFgrcSsvUVFYNDRJVWdRSW0rMGJwS2xK?=
- =?utf-8?B?L0dISk11enV0QklOTWVpM3IwWlRIRjQ5T00zVFRXVEJSNUdTT1dFbnplRkg2?=
- =?utf-8?B?Y1VKSm5UMmkwUzZUUzg1MUluQkdBbWI3cUxsdTllcUpkcTFmYkZWZVU5QnpF?=
- =?utf-8?B?TDFFUDBYN3k0M0k5a3dCbzlXU2pmSmNOcURYVER1L2pvQVpyOFkzTVRTcXFx?=
- =?utf-8?B?NjhvQVh5L3liNnU2aXQ4eUNHMUcxTkIzUFhEbzVVRm9XS3g1V2lDMGdxZFJq?=
- =?utf-8?B?Y0svM0hhckgzMVcxeDI5aUJmbXBTMTJsRjRHa1hleDlkQURvNFlWUzZUSEg4?=
- =?utf-8?B?SFhodkJWTDcvejloWjYvcEIwZGlOQkowK0JsSEVCdWRXN0Z1b1VrSW1SZXpF?=
- =?utf-8?B?WWdpbVUwdVJQTlpwZTFjYUxzc21iMGNIbExWbk5ValpmdmhQeTQ5dUJJeVow?=
- =?utf-8?B?NFFTd2U5MGNZYngvNEdNVzFra3NkZHdWdWx3dDVGbmh0ZVRqaGNuR2htRFR3?=
- =?utf-8?B?cVdkVVBWVHI3VGlFZ1pFRHNXSEtxeERqWFA1M3hoK0JaVDUra094cW9Vcmw3?=
- =?utf-8?B?NEl6NThrT3lXbGlDYzI5ZEp0OEFwbkJhVENMSEpmd3NSUE5GZCtVZTlxTXdU?=
- =?utf-8?B?Snd0dnY4K2dnUTZsUFphelg5QTNuQ3NtR3cvVFl5VE5ueW1VczFvTXd0R0hU?=
- =?utf-8?B?cncxdFFUUXNVQlVnc0J2YkNqL2x3YlpTSkZCVEN0NUlKUkx5dFBuMlZmVHRO?=
- =?utf-8?B?eEdxVVVtVUg1ZlNDVHZCV201ZTBHRHpjdXpkQURWTjVYZGVCTlBOOFI5TXFO?=
- =?utf-8?B?akZPVzhOTmlhNVUvUzJFK0E1b2JFSlFFTEVqREU0YU5PSUxPc0ROM2d5b0ZR?=
- =?utf-8?B?dVpsS0tuMFdKYUtCTzU3Y1pOTktPbG9oSkhLYW5qMjdOL1VVZmMrUDJTWDFs?=
- =?utf-8?B?ek5VTWxCOVE4R2taWGFBU3hHK3pBUE5VNHlqY0VrWFFYU3pPS0lSMjNhZXJa?=
- =?utf-8?B?aDFjZWN6M3FmRTdoeW9sVW95NENhcFYxTjM4LzBMbFRZaWY3TVF3dlFuNFhv?=
- =?utf-8?Q?OSKQ=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Tue, 20 Sep 2022 01:49:11 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1658030F64;
+        Mon, 19 Sep 2022 22:49:10 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id h188so1469744pgc.12;
+        Mon, 19 Sep 2022 22:49:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=L9UcYZ8ZHMuof7HS2ENh0lx7rjVyWG5q5xjN6rCvzP8=;
+        b=IpMmkDfvw0JiwlAZBzWe1AMmNb8qX4OSHTT0WUQLvu2KrRlc8r1n4jKkfAWuz4p4IP
+         Z5G0gREdWSRYMhV9/aWjoEJNXYrCibHSWWVdq3/Gn+3LgjsX9rmFD996LeFnDET3Mj/m
+         VI5nnKHhJ+9+PrvsA12ClTehqhQiYXQpV957nG2z/aB72FQFtw1sW0pQQUzXbNhi1JHP
+         7Rfqn+PHQnaGSkjFOYIQYnpuRzsCJw7jvWiB0vMeFkqU48qs5eDtq+6Y4SOXYqgmj6c2
+         xPkWZ9bMRTXyJe0qi5A6IeH0TJlKua/KuhCCqjc+kJMbrd0D9c70eThlwFjRm3d45J/C
+         FHMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=L9UcYZ8ZHMuof7HS2ENh0lx7rjVyWG5q5xjN6rCvzP8=;
+        b=u2Gmg4yWSFrmGs4M0Oc5L93kQQM3sxD8mYePjVKoRmkaX+5lO/HGM04UZI9gNR7KZO
+         98D+MKSBC/LApwOGcJOGrEW1jP5y5LVS5Gu46BFCGaQaVqLwqndDxh38HLtIHKnw0Aff
+         hzyGZGjk+i/uxxejX2E4W76wLI19w4xSLDhf32zPxz2sFmhohoAABBo/MXmUZs+wpdaZ
+         rjWfYqPN+biwloz6zYIlThOCruRfvqkKMioGDmdTGWAri12MPBXXNEINL5OcALtOJWZR
+         UpnN6OTv1s21Cg+52VkaqFnS97FS9V4P0C4Pt0Pub987lOBrgiM6z8lTbH8W7Ro61NoG
+         RAFg==
+X-Gm-Message-State: ACrzQf3kEAvtjjgqFWImIfRV9+IMI58f+WU8M7q/uev6uRSkygwUTKH9
+        5djw4B/mZ2ufW/D7bPbjmBvbASmzWcNhatsi
+X-Google-Smtp-Source: AMsMyM7FoEAhkJ6p9hkH0/AfXnnlLeSa+1Y3jU6FhdmB0TKuFCgVomv2fMW4JtzoygUErAJXXObBDA==
+X-Received: by 2002:a62:1e83:0:b0:545:6896:188 with SMTP id e125-20020a621e83000000b0054568960188mr22348826pfe.51.1663652949452;
+        Mon, 19 Sep 2022 22:49:09 -0700 (PDT)
+Received: from localhost ([36.112.86.8])
+        by smtp.gmail.com with ESMTPSA id e7-20020aa798c7000000b005383a0d9699sm515699pfm.144.2022.09.19.22.49.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Sep 2022 22:49:09 -0700 (PDT)
+From:   Hawkins Jiawei <yin31149@gmail.com>
+To:     yin31149@gmail.com
+Cc:     18801353760@163.com, gregkh@linuxfoundation.org,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        luiz.dentz@gmail.com, marcel@holtmann.org, rafael@kernel.org,
+        soenke.huster@eknoes.de,
+        syzbot+5a2d2b4a8ca80ad216a9@syzkaller.appspotmail.com,
+        syzbot+e653e3f67251b6139aaa@syzkaller.appspotmail.com,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] BUG: corrupted list in kobject_add_internal (4)
+Date:   Tue, 20 Sep 2022 13:49:04 +0800
+Message-Id: <20220920054904.26134-1-yin31149@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220920051024.4991-1-yin31149@gmail.com>
+References: <20220920051024.4991-1-yin31149@gmail.com>
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM8PR12MB5400.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 37241b96-0506-469b-30af-08da9acbc3f2
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Sep 2022 05:48:38.2658
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: /fWGyWNgNzQ0Z9hR+/BlYPLjM6knzJ+NFxQ562nxwhyEzP778z2qKl3sXgZKbBG2
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6688
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBGcm9tOiBKYXNvbiBXYW5nIDxqYXNvd2FuZ0ByZWRoYXQuY29tPg0KPiBTZW50OiBUdWVzZGF5
-LCAyMCBTZXB0ZW1iZXIgMjAyMiA0OjQ2DQo+IFRvOiBFbGkgQ29oZW4gPGVsaWNAbnZpZGlhLmNv
-bT4NCj4gQ2M6IG1zdEByZWRoYXQuY29tOyBzaS13ZWkubGl1QG9yYWNsZS5jb207IFBhcmF2IFBh
-bmRpdA0KPiA8cGFyYXZAbnZpZGlhLmNvbT47IHd1em9uZ3lvbmdAbGludXguYWxpYmFiYS5jb207
-DQo+IHZpcnR1YWxpemF0aW9uQGxpc3RzLmxpbnV4LWZvdW5kYXRpb24ub3JnOyBsaW51eC1rZXJu
-ZWxAdmdlci5rZXJuZWwub3JnOw0KPiBlcGVyZXptYUByZWRoYXQuY29tOyBsaW5nc2hhbi56aHVA
-aW50ZWwuY29tOyBnZGF3YXJAeGlsaW54LmNvbTsNCj4gbHVsdUByZWRoYXQuY29tOyB4aWV5b25n
-amlAYnl0ZWRhbmNlLmNvbQ0KPiBTdWJqZWN0OiBSZTogW1BBVENIIDMvM10gdnBfdmRwYTogc3Vw
-cG9ydCBmZWF0dXJlIHByb3Zpc2lvbmluZw0KPiANCj4gT24gTW9uLCBTZXAgMTksIDIwMjIgYXQg
-MzowNSBQTSBFbGkgQ29oZW4gPGVsaWNAbnZpZGlhLmNvbT4gd3JvdGU6DQo+ID4NCj4gPiA+IEZy
-b206IEphc29uIFdhbmcgPGphc293YW5nQHJlZGhhdC5jb20+DQo+ID4gPiBTZW50OiBUaHVyc2Rh
-eSwgMTUgU2VwdGVtYmVyIDIwMjIgMTE6NTENCj4gPiA+IFRvOiBtc3RAcmVkaGF0LmNvbTsgamFz
-b3dhbmdAcmVkaGF0LmNvbQ0KPiA+ID4gQ2M6IEVsaSBDb2hlbiA8ZWxpY0BudmlkaWEuY29tPjsg
-c2ktd2VpLmxpdUBvcmFjbGUuY29tOyBQYXJhdiBQYW5kaXQNCj4gPiA+IDxwYXJhdkBudmlkaWEu
-Y29tPjsgd3V6b25neW9uZ0BsaW51eC5hbGliYWJhLmNvbTsNCj4gPiA+IHZpcnR1YWxpemF0aW9u
-QGxpc3RzLmxpbnV4LWZvdW5kYXRpb24ub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3Jn
-Ow0KPiA+ID4gZXBlcmV6bWFAcmVkaGF0LmNvbTsgbGluZ3NoYW4uemh1QGludGVsLmNvbTsgZ2Rh
-d2FyQHhpbGlueC5jb207DQo+ID4gPiBsdWx1QHJlZGhhdC5jb207IHhpZXlvbmdqaUBieXRlZGFu
-Y2UuY29tDQo+ID4gPiBTdWJqZWN0OiBbUEFUQ0ggMy8zXSB2cF92ZHBhOiBzdXBwb3J0IGZlYXR1
-cmUgcHJvdmlzaW9uaW5nDQo+ID4gPg0KPiA+ID4gVGhpcyBwYXRjaCBhbGxvd3MgdGhlIGRldmlj
-ZSBmZWF0dXJlcyB0byBiZSBwcm92aXNpb25lZCB2aWENCj4gPiA+IG5ldGxpbmsuIFRoaXMgaXMg
-ZG9uZSBieToNCj4gPiA+DQo+ID4gPiAxKSB2YWxpZGF0aW5nIHRoZSBwcm92aXNpb25lZCBmZWF0
-dXJlcyB0byBiZSBhIHN1YnNldCBvZiB0aGUgcGFyZW50DQo+ID4gPiAgICBmZWF0dXJlcy4NCj4g
-PiA+IDIpIGNsZWFyaW5nIHRoZSBmZWF0dXJlcyB0aGF0IGlzIG5vdCB3YW50ZWQgYnkgdGhlIHVz
-ZXJzcGFjZQ0KPiA+ID4NCj4gPiA+IFNpZ25lZC1vZmYtYnk6IEphc29uIFdhbmcgPGphc293YW5n
-QHJlZGhhdC5jb20+DQo+ID4gPiAtLS0NCj4gPiA+ICBkcml2ZXJzL3ZkcGEvdmlydGlvX3BjaS92
-cF92ZHBhLmMgfCAxNiArKysrKysrKysrKysrKy0tDQo+ID4gPiAgMSBmaWxlIGNoYW5nZWQsIDE0
-IGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pDQo+ID4gPg0KPiA+ID4gZGlmZiAtLWdpdCBh
-L2RyaXZlcnMvdmRwYS92aXJ0aW9fcGNpL3ZwX3ZkcGEuYw0KPiA+ID4gYi9kcml2ZXJzL3ZkcGEv
-dmlydGlvX3BjaS92cF92ZHBhLmMNCj4gPiA+IGluZGV4IDA0NTIyMDc3NzM1Yi4uNGIyOGUwYzk1
-YmEyIDEwMDY0NA0KPiA+ID4gLS0tIGEvZHJpdmVycy92ZHBhL3ZpcnRpb19wY2kvdnBfdmRwYS5j
-DQo+ID4gPiArKysgYi9kcml2ZXJzL3ZkcGEvdmlydGlvX3BjaS92cF92ZHBhLmMNCj4gPiA+IEBA
-IC0xNyw2ICsxNyw3IEBADQo+ID4gPiAgI2luY2x1ZGUgPGxpbnV4L3ZpcnRpb19yaW5nLmg+DQo+
-ID4gPiAgI2luY2x1ZGUgPGxpbnV4L3ZpcnRpb19wY2kuaD4NCj4gPiA+ICAjaW5jbHVkZSA8bGlu
-dXgvdmlydGlvX3BjaV9tb2Rlcm4uaD4NCj4gPiA+ICsjaW5jbHVkZSA8dWFwaS9saW51eC92ZHBh
-Lmg+DQo+ID4gPg0KPiA+ID4gICNkZWZpbmUgVlBfVkRQQV9RVUVVRV9NQVggMjU2DQo+ID4gPiAg
-I2RlZmluZSBWUF9WRFBBX0RSSVZFUl9OQU1FICJ2cF92ZHBhIg0KPiA+ID4gQEAgLTM1LDYgKzM2
-LDcgQEAgc3RydWN0IHZwX3ZkcGEgew0KPiA+ID4gICAgICAgc3RydWN0IHZpcnRpb19wY2lfbW9k
-ZXJuX2RldmljZSAqbWRldjsNCj4gPiA+ICAgICAgIHN0cnVjdCB2cF92cmluZyAqdnJpbmc7DQo+
-ID4gPiAgICAgICBzdHJ1Y3QgdmRwYV9jYWxsYmFjayBjb25maWdfY2I7DQo+ID4gPiArICAgICB1
-NjQgZGV2aWNlX2ZlYXR1cmVzOw0KPiA+ID4gICAgICAgY2hhciBtc2l4X25hbWVbVlBfVkRQQV9O
-QU1FX1NJWkVdOw0KPiA+ID4gICAgICAgaW50IGNvbmZpZ19pcnE7DQo+ID4gPiAgICAgICBpbnQg
-cXVldWVzOw0KPiA+ID4gQEAgLTY2LDkgKzY4LDkgQEAgc3RhdGljIHN0cnVjdCB2aXJ0aW9fcGNp
-X21vZGVybl9kZXZpY2UNCj4gPiA+ICp2cF92ZHBhX3RvX21kZXYoc3RydWN0IHZwX3ZkcGEgKnZw
-X3ZkcGEpDQo+ID4gPg0KPiA+ID4gIHN0YXRpYyB1NjQgdnBfdmRwYV9nZXRfZGV2aWNlX2ZlYXR1
-cmVzKHN0cnVjdCB2ZHBhX2RldmljZSAqdmRwYSkNCj4gPiA+ICB7DQo+ID4gPiAtICAgICBzdHJ1
-Y3QgdmlydGlvX3BjaV9tb2Rlcm5fZGV2aWNlICptZGV2ID0gdmRwYV90b19tZGV2KHZkcGEpOw0K
-PiA+ID4gKyAgICAgc3RydWN0IHZwX3ZkcGEgKnZwX3ZkcGEgPSB2ZHBhX3RvX3ZwKHZkcGEpOw0K
-PiA+ID4NCj4gPiA+IC0gICAgIHJldHVybiB2cF9tb2Rlcm5fZ2V0X2ZlYXR1cmVzKG1kZXYpOw0K
-PiA+ID4gKyAgICAgcmV0dXJuIHZwX3ZkcGEtPmRldmljZV9mZWF0dXJlczsNCj4gPiA+ICB9DQo+
-ID4NCj4gPiBVbnJlbGF0ZWQgdG8gdGhpcyBwYXRjaC4gTWF5YmUgcHV0IGluIGFub3RoZXIgcGF0
-Y2g/DQo+IA0KPiBBY3R1YWxseSBub3QsIHNpbmNlIHdlIGRvbid0IHdhbnQgdG8gcmVwb3J0IHRo
-ZSBmZWF0dXJlcyB0aGF0IGFyZQ0KPiBzdXBwb3J0ZWQgYnkgdGhlIGRldmljZSwgYnV0IHRoZSBm
-ZWF0dXJlcyB0aGF0IGFyZSBwcm92aXNpb25lZCB2aWENCj4gbmV0bGluazoNCj4gDQoNCkkgc2Vl
-Lg0KDQpSZXZpZXdlZC1ieTogRWxpIENvaGVuIDxlbGljQG52aWRpYS5jb20+DQoNCj4gPiA+ICsg
-ICAgIGlmIChhZGRfY29uZmlnLT5tYXNrICYgQklUX1VMTChWRFBBX0FUVFJfREVWX0ZFQVRVUkVT
-KSkgew0KPiA+ID4gKyAgICAgICAgICAgICBpZiAoYWRkX2NvbmZpZy0+ZGV2aWNlX2ZlYXR1cmVz
-ICYgfmRldmljZV9mZWF0dXJlcykNCj4gPiA+ICsgICAgICAgICAgICAgICAgICAgICByZXR1cm4g
-LUVJTlZBTDsNCj4gPiA+ICsgICAgICAgICAgICAgZGV2aWNlX2ZlYXR1cmVzICY9IGFkZF9jb25m
-aWctPmRldmljZV9mZWF0dXJlczsNCj4gPiA+ICsgICAgIH0NCj4gPiA+ICsgICAgIHZwX3ZkcGEt
-PmRldmljZV9mZWF0dXJlcyA9IGRldmljZV9mZWF0dXJlczsNCj4gDQo+IFRoYW5rcw0KPiANCj4g
-Pg0KPiA+ID4NCj4gPiA+ICBzdGF0aWMgaW50IHZwX3ZkcGFfc2V0X2RyaXZlcl9mZWF0dXJlcyhz
-dHJ1Y3QgdmRwYV9kZXZpY2UgKnZkcGEsIHU2NA0KPiA+ID4gZmVhdHVyZXMpDQo+ID4gPiBAQCAt
-NDc1LDYgKzQ3Nyw3IEBAIHN0YXRpYyBpbnQgdnBfdmRwYV9kZXZfYWRkKHN0cnVjdA0KPiB2ZHBh
-X21nbXRfZGV2DQo+ID4gPiAqdl9tZGV2LCBjb25zdCBjaGFyICpuYW1lLA0KPiA+ID4gICAgICAg
-c3RydWN0IHBjaV9kZXYgKnBkZXYgPSBtZGV2LT5wY2lfZGV2Ow0KPiA+ID4gICAgICAgc3RydWN0
-IGRldmljZSAqZGV2ID0gJnBkZXYtPmRldjsNCj4gPiA+ICAgICAgIHN0cnVjdCB2cF92ZHBhICp2
-cF92ZHBhID0gTlVMTDsNCj4gPiA+ICsgICAgIHU2NCBkZXZpY2VfZmVhdHVyZXM7DQo+ID4gPiAg
-ICAgICBpbnQgcmV0LCBpOw0KPiA+ID4NCj4gPiA+ICAgICAgIHZwX3ZkcGEgPSB2ZHBhX2FsbG9j
-X2RldmljZShzdHJ1Y3QgdnBfdmRwYSwgdmRwYSwNCj4gPiA+IEBAIC00OTEsNiArNDk0LDE0IEBA
-IHN0YXRpYyBpbnQgdnBfdmRwYV9kZXZfYWRkKHN0cnVjdA0KPiB2ZHBhX21nbXRfZGV2DQo+ID4g
-PiAqdl9tZGV2LCBjb25zdCBjaGFyICpuYW1lLA0KPiA+ID4gICAgICAgdnBfdmRwYS0+cXVldWVz
-ID0gdnBfbW9kZXJuX2dldF9udW1fcXVldWVzKG1kZXYpOw0KPiA+ID4gICAgICAgdnBfdmRwYS0+
-bWRldiA9IG1kZXY7DQo+ID4gPg0KPiA+ID4gKyAgICAgZGV2aWNlX2ZlYXR1cmVzID0gdnBfbW9k
-ZXJuX2dldF9mZWF0dXJlcyhtZGV2KTsNCj4gPiA+ICsgICAgIGlmIChhZGRfY29uZmlnLT5tYXNr
-ICYgQklUX1VMTChWRFBBX0FUVFJfREVWX0ZFQVRVUkVTKSkgew0KPiA+ID4gKyAgICAgICAgICAg
-ICBpZiAoYWRkX2NvbmZpZy0+ZGV2aWNlX2ZlYXR1cmVzICYgfmRldmljZV9mZWF0dXJlcykNCj4g
-PiA+ICsgICAgICAgICAgICAgICAgICAgICByZXR1cm4gLUVJTlZBTDsNCj4gPiA+ICsgICAgICAg
-ICAgICAgZGV2aWNlX2ZlYXR1cmVzICY9IGFkZF9jb25maWctPmRldmljZV9mZWF0dXJlczsNCj4g
-PiA+ICsgICAgIH0NCj4gPiA+ICsgICAgIHZwX3ZkcGEtPmRldmljZV9mZWF0dXJlcyA9IGRldmlj
-ZV9mZWF0dXJlczsNCj4gPiA+ICsNCj4gPiA+ICAgICAgIHJldCA9IGRldm1fYWRkX2FjdGlvbl9v
-cl9yZXNldChkZXYsIHZwX3ZkcGFfZnJlZV9pcnFfdmVjdG9ycywNCj4gPiA+IHBkZXYpOw0KPiA+
-ID4gICAgICAgaWYgKHJldCkgew0KPiA+ID4gICAgICAgICAgICAgICBkZXZfZXJyKCZwZGV2LT5k
-ZXYsDQo+ID4gPiBAQCAtNTk5LDYgKzYxMCw3IEBAIHN0YXRpYyBpbnQgdnBfdmRwYV9wcm9iZShz
-dHJ1Y3QgcGNpX2RldiAqcGRldiwNCj4gY29uc3QNCj4gPiA+IHN0cnVjdCBwY2lfZGV2aWNlX2lk
-ICppZCkNCj4gPiA+ICAgICAgIG1ndGRldi0+aWRfdGFibGUgPSBtZGV2X2lkOw0KPiA+ID4gICAg
-ICAgbWd0ZGV2LT5tYXhfc3VwcG9ydGVkX3ZxcyA9DQo+ID4gPiB2cF9tb2Rlcm5fZ2V0X251bV9x
-dWV1ZXMobWRldik7DQo+ID4gPiAgICAgICBtZ3RkZXYtPnN1cHBvcnRlZF9mZWF0dXJlcyA9IHZw
-X21vZGVybl9nZXRfZmVhdHVyZXMobWRldik7DQo+ID4gPiArICAgICBtZ3RkZXYtPmNvbmZpZ19h
-dHRyX21hc2sgPSAoMSA8PCBWRFBBX0FUVFJfREVWX0ZFQVRVUkVTKTsNCj4gPiA+ICAgICAgIHBj
-aV9zZXRfbWFzdGVyKHBkZXYpOw0KPiA+ID4gICAgICAgcGNpX3NldF9kcnZkYXRhKHBkZXYsIHZw
-X3ZkcGFfbWd0ZGV2KTsNCj4gPiA+DQo+ID4gPiAtLQ0KPiA+ID4gMi4yNS4xDQo+ID4NCg0K
+Hi Luiz,
+
+On Tue, 20 Sept 2022 at 13:23, Luiz Augusto von Dentz <luiz.dentz@gmail.com> wrote:
+>
+> Hi Hawkins,
+>
+> On Mon, Sep 19, 2022 at 10:12 PM Hawkins Jiawei <yin31149@gmail.com> wrote:
+> >
+> > Hi Luiz,
+> >
+> > On Tue, 20 Sept 2022 at 00:55, Luiz Augusto von Dentz <luiz.dentz@gmail.com> wrote:
+> > >
+> > > Hi Hawkins,
+> > >
+> > > On Mon, Sep 19, 2022 at 1:42 AM Hawkins Jiawei <yin31149@gmail.com> wrote:
+> > > >
+> > > > On Sat, 17 Sept 2022 at 09:47, Hawkins Jiawei <yin31149@gmail.com> wrote:
+> > > > >
+> > > > >Hi,
+> > > > >
+> > > > >On Fri, 26 Aug 2022 08:27:06, AM Sönke Huster <soenke.huster@eknoes.de> wrote:
+> > > > >>Hi Luiz,
+> > > > >>
+> > > > >>On 25.08.22 20:58, Luiz Augusto von Dentz wrote:
+> > > > >>> Hi Sönke,
+> > > > >>>
+> > > > >>> On Thu, Aug 25, 2022 at 8:08 AM Sönke Huster <soenke.huster@eknoes.de> wrote:
+> > > > >>>>
+> > > > >>>> Hi,
+> > > > >>>>
+> > > > >>>>
+> > > > >>>>
+> > > > >>>> While fuzzing I found several crashes similar to the following:
+> > > > >>>>
+> > > > >>>>
+> > > > >>>>         [    5.345731] sysfs: cannot create duplicate filename '/devices/virtual/bluetooth/hci0/hci0:0'
+> > > > >>>>
+> > > > >>>>         [...]
+> > > > >>>>
+> > > > >>>>         [    5.430464] BUG: KASAN: use-after-free in klist_add_tail+0x1bd/0x200
+> > > > >>>>
+> > > > >>>>         [    5.430464] Write of size 8 at addr ffff88800bfcc468 by task kworker/u3:1/43
+> > > > >>>>
+> > > > >>>>         [    5.430464]
+> > > > >>>>
+> > > > >>>>         [    5.430464] CPU: 0 PID: 43 Comm: kworker/u3:1 Not tainted 5.19.0-12855-g13f222680b8f #2
+> > > > >>>>
+> > > > >>>>         [    5.430464] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+> > > > >>>>
+> > > > >>>>         [    5.430464] Workqueue: hci0 hci_rx_work
+> > > > >>>>
+> > > > >>>>         [    5.430464] Call Trace:
+> > > > >>>>
+> > > > >>>>         [    5.430464]  <TASK>
+> > > > >>>>
+> > > > >>>>         [    5.430464]  dump_stack_lvl+0x45/0x5d
+> > > > >>>>
+> > > > >>>>         [    5.430464]  print_report.cold+0x5e/0x5e5
+> > > > >>>>
+> > > > >>>>         [    5.430464]  kasan_report+0xb1/0x1c0
+> > > > >>>>
+> > > > >>>>         [    5.430464]  klist_add_tail+0x1bd/0x200
+> > > > >>>>
+> > > > >>>>         [    5.430464]  device_add+0xa6b/0x1b80
+> > > > >>>>
+> > > > >>>>         [    5.430464]  hci_conn_add_sysfs+0x91/0x110
+> > > > >>>>
+> > > > >>>>         [    5.430464]  le_conn_complete_evt+0x117f/0x17d0
+> > > > >>>>
+> > > > >>>>         [    5.430464]  hci_le_conn_complete_evt+0x226/0x2c0
+> > > > >>>>
+> > > > >>>>         [    5.430464]  hci_le_meta_evt+0x2c0/0x4a0
+> > > > >>>>
+> > > > >>>>         [    5.430464]  hci_event_packet+0x636/0xf60
+> > > > >>>>
+> > > > >>>>         [    5.430464]  hci_rx_work+0xa8c/0x1000
+> > > > >>>>
+> > > > >>>>         [    5.430464]  process_one_work+0x8df/0x1530
+> > > > >>>>
+> > > > >>>>         [    5.430464]  worker_thread+0x575/0x11a0
+> > > > >>>>
+> > > > >>>>         [    5.430464]  kthread+0x29d/0x340
+> > > > >>>>
+> > > > >>>>         [    5.430464]  ret_from_fork+0x22/0x30
+> > > > >>>>
+> > > > >>>>         [    5.430464]  </TASK>
+> > > > >>>>
+> > > > >>>>         [    5.430464]
+> > > > >>>>
+> > > > >>>>         [    5.430464] Allocated by task 44:
+> > > > >>>>
+> > > > >>>>         [    5.430464]  kasan_save_stack+0x1e/0x40
+> > > > >>>>
+> > > > >>>>         [    5.430464]  __kasan_kmalloc+0x81/0xa0
+> > > > >>>>
+> > > > >>>>         [    5.430464]  device_add+0xcae/0x1b80
+> > > > >>>>
+> > > > >>>>         [    5.430464]  hci_conn_add_sysfs+0x91/0x110
+> > > > >>>>
+> > > > >>>>         [    5.430464]  le_conn_complete_evt+0x117f/0x17d0
+> > > > >>>>
+> > > > >>>>         [    5.430464]  hci_le_conn_complete_evt+0x226/0x2c0
+> > > > >>>>
+> > > > >>>>         [    5.430464]  hci_le_meta_evt+0x2c0/0x4a0
+> > > > >>>>
+> > > > >>>>         [    5.430464]  hci_event_packet+0x636/0xf60
+> > > > >>>>
+> > > > >>>>         [    5.430464]  hci_rx_work+0xa8c/0x1000
+> > > > >>>>
+> > > > >>>>         [    5.430464]  process_one_work+0x8df/0x1530
+> > > > >>>>
+> > > > >>>>         [    5.430464]  worker_thread+0x575/0x11a0
+> > > > >>>>
+> > > > >>>>         [    5.430464]  kthread+0x29d/0x340
+> > > > >>>>
+> > > > >>>>         [    5.430464]  ret_from_fork+0x22/0x30
+> > > > >>>>
+> > > > >>>>         [    5.430464]
+> > > > >>>>
+> > > > >>>>         [    5.430464] Freed by task 43:
+> > > > >>>>
+> > > > >>>>         [    5.430464]  kasan_save_stack+0x1e/0x40
+> > > > >>>>
+> > > > >>>>         [    5.430464]  kasan_set_track+0x21/0x30
+> > > > >>>>
+> > > > >>>>         [    5.430464]  kasan_set_free_info+0x20/0x40
+> > > > >>>>
+> > > > >>>>         [    5.430464]  __kasan_slab_free+0x108/0x190
+> > > > >>>>
+> > > > >>>>         [    5.430464]  kfree+0xa9/0x360
+> > > > >>>>
+> > > > >>>>         [    5.430464]  device_add+0x33a/0x1b80
+> > > > >>>>
+> > > > >>>>         [    5.430464]  hci_conn_add_sysfs+0x91/0x110
+> > > > >>>>
+> > > > >>>>         [    5.430464]  hci_le_cis_estabilished_evt+0x517/0xa70
+> > > > >>>>
+> > > > >>>>         [    5.430464]  hci_le_meta_evt+0x2c0/0x4a0
+> > > > >>>>
+> > > > >>>>         [    5.430464]  hci_event_packet+0x636/0xf60
+> > > > >>>>
+> > > > >>>>         [    5.430464]  hci_rx_work+0xa8c/0x1000
+> > > > >>>>
+> > > > >>>>         [    5.430464]  process_one_work+0x8df/0x1530
+> > > > >>>>
+> > > > >>>>         [    5.430464]  worker_thread+0x575/0x11a0
+> > > > >>>>
+> > > > >>>>         [    5.430464]  kthread+0x29d/0x340
+> > > > >>>>
+> > > > >>>>         [    5.430464]  ret_from_fork+0x22/0x30
+> > > > >>>>
+> > > > >>>>
+> > > > >>>>
+> > > > >>>> I think I fixed a similar issue in d5ebaa7c5f6f ("Bluetooth: hci_event: Ignore multiple conn complete events"). Here, the problem was that multiple connection complete events for the same handle called hci_conn_add_sysfs multiple times, but if it is called with an existing connection conn->dev->p is freed.
+> > > > >>>>
+> > > > >>>> This is because device_add is called - its documentation contains this sentence: "Do not call this routine or device_register() more than once for any device structure".
+> > > > >>>>
+> > > > >>>>
+> > > > >>>>
+> > > > >>>> This here is similar: First, an hci_le_conn_complete_evt creates a new connection.
+> > > > >>>>
+> > > > >>>> Afterwards, an hci_le_cis_estabilished_evt with the same handle finds that connection, and tries to add it to sysfs again, freeing conn->dev->p. Now, an event that might use that connection such as here the hci_le_conn_complete_evt triggers a use after free.
+> > > > >>>>
+> > > > >
+> > > > >Syzkaller reports a bug as follows [1]:
+> > > > >------------[ cut here ]------------
+> > > > >kernel BUG at lib/list_debug.c:33!
+> > > > >invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+> > > > >[...]
+> > > > >Call Trace:
+> > > > > <TASK>
+> > > > > __list_add include/linux/list.h:69 [inline]
+> > > > > list_add_tail include/linux/list.h:102 [inline]
+> > > > > kobj_kset_join lib/kobject.c:164 [inline]
+> > > > > kobject_add_internal+0x18f/0x8f0 lib/kobject.c:214
+> > > > > kobject_add_varg lib/kobject.c:358 [inline]
+> > > > > kobject_add+0x150/0x1c0 lib/kobject.c:410
+> > > > > device_add+0x368/0x1e90 drivers/base/core.c:3452
+> > > > > hci_conn_add_sysfs+0x9b/0x1b0 net/bluetooth/hci_sysfs.c:53
+> > > > > hci_le_cis_estabilished_evt+0x57c/0xae0 net/bluetooth/hci_event.c:6799
+> > > > > hci_le_meta_evt+0x2b8/0x510 net/bluetooth/hci_event.c:7110
+> > > > > hci_event_func net/bluetooth/hci_event.c:7440 [inline]
+> > > > > hci_event_packet+0x63d/0xfd0 net/bluetooth/hci_event.c:7495
+> > > > > hci_rx_work+0xae7/0x1230 net/bluetooth/hci_core.c:4007
+> > > > > process_one_work+0x991/0x1610 kernel/workqueue.c:2289
+> > > > > worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+> > > > > kthread+0x2e4/0x3a0 kernel/kthread.c:376
+> > > > > ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+> > > > > </TASK>
+> > > > >
+> > > > >I think they are the same problems:
+> > > > >A hci_le_conn_complete_evt creates a new connection, and calls
+> > > > >hci_conn_add_sysfs(). Then hci_le_cis_estabilished_evt with the same handle
+> > > > >finds that connection, and will also calls hci_conn_add_sysfs(), which maybe
+> > > > >triggering corrupted list bug.
+> > > > >
+> > > > >Link: https://syzkaller.appspot.com/bug?id=da3246e2d33afdb92d66bc166a0934c5b146404a [1]
+> > > > >
+> > > > >>>>
+> > > > >>>>
+> > > > >>>> I bisected this bug and it was introduced with  26afbd826ee3 ("Bluetooth: Add initial implementation of CIS connections").
+> > > > >>>>
+> > > > >>>>
+> > > > >>>>
+> > > > >>>> The same happens with hci_le_create_big_complete_evt: Here, multiple events trigger the following bug:
+> > > > >>>>
+> > > > >>>>
+> > > > >>>>
+> > > > >>>>         [    6.898080] BUG: kernel NULL pointer dereference, address: 0000000000000058
+> > > > >>>>
+> > > > >>>>         [    6.898081] #PF: supervisor read access in kernel mode
+> > > > >>>>
+> > > > >>>>         [    6.898083] #PF: error_code(0x0000) - not-present page
+> > > > >>>>
+> > > > >>>>         [    6.898085] Oops: 0000 [#1] PREEMPT SMP NOPTI
+> > > > >>>>
+> > > > >>>>         [    6.898090] Workqueue: hci0 hci_rx_work
+> > > > >>>>
+> > > > >>>>         [    6.898092] RIP: 0010:klist_next+0x12/0x160
+> > > > >>>>
+> > > > >>>>         [    6.898128] Call Trace:
+> > > > >>>>
+> > > > >>>>         [    6.898129]  <TASK>
+> > > > >>>>
+> > > > >>>>         [    6.898130]  ? bt_link_release+0x20/0x20
+> > > > >>>>
+> > > > >>>>         [    6.898133]  device_find_child+0x37/0xa0
+> > > > >>>>
+> > > > >>>>         [    6.898136]  hci_conn_del_sysfs+0x71/0xa0
+> > > > >>>>
+> > > > >>>>         [    6.898138]  hci_conn_cleanup+0x17a/0x2c0
+> > > > >>>>
+> > > > >>>>         [    6.898141]  hci_conn_del+0x14a/0x240
+> > > > >>>>
+> > > > >>>>         [    6.898144]  hci_le_create_big_complete_evt+0x3d8/0x470
+> > > > >>>>
+> > > > >>>>         [    6.898146]  ? hci_le_remote_feat_complete_evt+0x3e0/0x3e0
+> > > > >>>>
+> > > > >>>>         [    6.898148]  hci_le_meta_evt+0x155/0x230
+> > > > >>>>
+> > > > >>>>         [    6.898150]  hci_event_packet+0x328/0x820
+> > > > >>>>
+> > > > >>>>         [    6.898152]  ? hci_conn_drop+0x100/0x100
+> > > > >>>>
+> > > > >>>>         [    6.898155]  hci_rx_work+0x725/0xb70
+> > > > >>>>
+> > > > >>>>         [    6.898157]  process_one_work+0x2a6/0x5d0
+> > > > >>>>
+> > > > >>>>         [    6.898160]  worker_thread+0x4a/0x3e0
+> > > > >>>>
+> > > > >>>>         [    6.898162]  ? process_one_work+0x5d0/0x5d0
+> > > > >>>>
+> > > > >>>>         [    6.898164]  kthread+0xed/0x120
+> > > > >>>>
+> > > > >>>>         [    6.898165]  ? kthread_complete_and_exit+0x20/0x20
+> > > > >>>>
+> > > > >>>>         [    6.898167]  ret_from_fork+0x22/0x30
+> > > > >>>>
+> > > > >>>>         [    6.898170]  </TASK>
+> > > > >>>>
+> > > > >>>>
+> > > > >>>>
+> > > > >>>> I bisected this bug and it was introduced with eca0ae4aea66 ("Bluetooth: Add initial implementation of BIS connections").
+> > > > >>>>
+> > > > >>>>
+> > > > >>>>
+> > > > >>>> I am not really sure how to solve that. As far as I understand, previously we simply set an unused handle as connection handle, and checked for that before setting the correct handle and adding it to sysfs. But here, adding it to sysfs seems to happen in a different function and the handle is already set.
+> > > > >>>
+> > > > >>> We should probably check if link-type, if it is an ISO link it shall
+> > > > >>> not be created via Connection Complete events and they have their own
+> > > > >>> events to create that.
+> > > > I wonder if we can check the connection type in hci_le_create_big_complete_evt()
+> > > > and hci_le_cis_estabilished_evt(), as below:
+> > > >
+> > > > diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
+> > > > index 6643c9c20fa4..5b83473d51b5 100644
+> > > > --- a/net/bluetooth/hci_event.c
+> > > > +++ b/net/bluetooth/hci_event.c
+> > > > @@ -6795,8 +6795,16 @@ static void hci_le_cis_estabilished_evt(struct hci_dev *hdev, void *data,
+> > > >
+> > > >         if (!ev->status) {
+> > > >                 conn->state = BT_CONNECTED;
+> > > > -               hci_debugfs_create_conn(conn);
+> > > > -               hci_conn_add_sysfs(conn);
+> > > > +
+> > > > +               /* Only ISO_LINK link type need to register connection device
+> > > > +                * here, others will register in their relative
+> > > > +                * Connection Complete events
+> > > > +                */
+> > > > +               if (conn->type == ISO_LINK) {
+> > > > +                       hci_debugfs_create_conn(conn);
+> > > > +                       hci_conn_add_sysfs(conn);
+> > > > +               }
+> > >
+> > > We should probably just bail out if conn->type != ISO_LINK which can
+> > > be done much earlier.
+> > Thanks for explanation.
+> https://patchwork.kernel.org/project/bluetooth/patch/20220919181017.1658995-1-luiz.dentz@gmail.com/
+Thanks for link.
+
+>
+> > >
+> > > >                 hci_iso_setup_path(conn);
+> > > >                 goto unlock;
+> > > >         }
+> > > > @@ -6901,8 +6909,16 @@ static void hci_le_create_big_complete_evt(struct hci_dev *hdev, void *data,
+> > > >
+> > > >         if (!ev->status) {
+> > > >                 conn->state = BT_CONNECTED;
+> > > > -               hci_debugfs_create_conn(conn);
+> > > > -               hci_conn_add_sysfs(conn);
+> > > > +
+> > > > +               /* Only ISO_LINK link type need to register connection device
+> > > > +                * here, others will register in their relative
+> > > > +                * Connection Complete events
+> > > > +                */
+> > > > +               if (conn->type == ISO_LINK) {
+> > > > +                       hci_debugfs_create_conn(conn);
+> > > > +                       hci_conn_add_sysfs(conn);
+> > > > +               }
+> > > > +
+> > > >                 hci_iso_setup_path(conn);
+> > > >                 goto unlock;
+> > > >         }
+> > > >
+> > > > It seems that this patch can pass the syzbot test.
+> > > >
+> > > > Link: https://lore.kernel.org/all/0000000000004f9ca105e8ba8157@google.com/
+> > > > Reported-and-tested-by: syzbot+5a2d2b4a8ca80ad216a9@syzkaller.appspotmail.com
+> > > >
+> > > > Link: https://lore.kernel.org/all/0000000000008a7a3f05e8ad02f6@google.com/
+> > > > Reported-and-tested-by: syzbot+e653e3f67251b6139aaa@syzkaller.appspotmail.com
+> > > >
+> > > > >>>
+> > > > >>
+> > > > >>But then the problem of duplicate hci_le_cis_estabilished_evt / hci_le_create_big_complete_evt still exists, isn't it? For example if the connection is created through a hci_le_cis_req_evt, and afterwards two hci_le_cis_estabilished_evt arrive, the second event calls hci_conn_add_sysfs a second time which frees parts of the device structure.
+> > > > As for this problem, I wonder if we can check the connection state in those
+> > > > functions as below, liking patch
+> > > > d5ebaa7c5f6f("Bluetooth: hci_event: Ignore multiple conn complete events"):
+> > > >
+> > > > diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
+> > > > index 5b83473d51b5..f6b62cfcf082 100644
+> > > > --- a/net/bluetooth/hci_event.c
+> > > > +++ b/net/bluetooth/hci_event.c
+> > > > @@ -6794,6 +6794,14 @@ static void hci_le_cis_estabilished_evt(struct hci_dev *hdev, void *data,
+> > > >         }
+> > > >
+> > > >         if (!ev->status) {
+> > > > +               /* The HCI_LE_CIS_Estabilished event is only sent once per connection.
+> > > > +                * Processing it more than once per connection can corrupt kernel memory.
+> > > > +                *
+> > > > +                * As the connection state is set here for the first time, it indicates
+> > > > +                * whether the connection is already set up.
+> > > > +                */
+> > > > +               if (conn->state == BT_CONNECTED)
+> > > > +                       goto unlock;
+> > > >                 conn->state = BT_CONNECTED;
+> > > >
+> > > >                 /* Only ISO_LINK link type need to register connection device
+> > > > @@ -6908,6 +6916,14 @@ static void hci_le_create_big_complete_evt(struct hci_dev *hdev, void *data,
+> > > >                 conn->handle = __le16_to_cpu(ev->bis_handle[0]);
+> > > >
+> > > >         if (!ev->status) {
+> > > > +               /* The HCI_LE_Create_BIG_Complete event is only sent once per connection.
+> > > > +                * Processing it more than once per connection can corrupt kernel memory.
+> > > > +                *
+> > > > +                * As the connection state is set here for the first time, it indicates
+> > > > +                * whether the connection is already set up.
+> > > > +                */
+> > > > +               if (conn->state == BT_CONNECTED)
+> > > > +                       goto unlock;
+> > >
+> > > These changes look good, please send a proper patch.
+> > OK, I will add some error message and send a proper patch.
+>
+> Note that I did send a set that should resolve this as well:
+>
+> https://patchwork.kernel.org/project/bluetooth/list/?series=678331
+>
+Right, it seems better to patch this bug in this way.
+
+> > >
+> > > >                 conn->state = BT_CONNECTED;
+> > > >
+> > > >                 /* Only ISO_LINK link type need to register connection device
+> > > >
+> > > > >>
+> > > > >>>> Best
+> > > > >>>> Sönke
+> > > > >I wonder that if we need both two patches? Because they
+> > > > >seems to be used to patch different bugs?
+> > >
+> > >
+> > >
+> > > --
+> > > Luiz Augusto von Dentz
+>
+>
+>
+> --
+> Luiz Augusto von Dentz
