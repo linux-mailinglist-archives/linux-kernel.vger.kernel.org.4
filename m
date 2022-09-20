@@ -2,105 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26EE25BE08B
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 10:44:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8426C5BE089
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 10:44:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230527AbiITIoc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 04:44:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47168 "EHLO
+        id S231180AbiITIoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 04:44:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231444AbiITInK (ORCPT
+        with ESMTP id S231450AbiITInL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 04:43:10 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D8B51159
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 01:43:04 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id y5so3107257wrh.3
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 01:43:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=ZAvpaKWIaaoimaKjPK1x7A0zdLqSXC/UFwK6dwBQMK0=;
-        b=qil5CI8ZgMDde9d0fVqQ92tNYoZQiq+YviE4kATTTjVYdv8DqBP2SvToJtP7HZE/Qc
-         OPrDZ5/pWh32nXeuqOsdjgJ2PLwsw1e+iplSh8UaM9q5HBvT1CUr/YJAlhsWN66oUhY9
-         h86IidvkuYCrEh5cuBkHR4ZlR1m9dvlfaXC8GI5HcuLKle3H6ZPhFH1hsSPzAxOUCNNx
-         3FmDm/7U99X/inrEvKrDoafjOF74OBmn87Un2CgzFluBkN/40DB02xf86h/AzujdEJK0
-         tPd9WQ+nkznN1ZPUdNxaHmce778/tXvWuQWpfV46wb7jaik6PScs/Yd1HVsPxTswXGb1
-         NoVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=ZAvpaKWIaaoimaKjPK1x7A0zdLqSXC/UFwK6dwBQMK0=;
-        b=q+niWI/V5gs8NZnD3OdRQHqjdwFw25NU8LfU2E8tPi5+mWH+9EIGYd/k6XlpTW1rFp
-         DZArtv3apKH52jD8Xcaz0meRwKOpfWrh67LIiYgEoimNWj8WELOGWZAT23vTUNGNMHLX
-         FoxQM21LeDEjtWl+85V0AQV86wNPlBUbIDHdwXaODA3BgRvH47jtwf4m1s0fAnigPGN4
-         B79F23aJzKvHxSIozo+fSPK/4YY5nGqpCUN9FiXWNPk2vvipR4X2G9Kb9aKojvHmSlqr
-         gHQcIYaMfDYSTcZfQvb8z2AkI0egbFTncfSL6GnZ92D7G8O8nnFJZicwMPQm15zEq99h
-         gimg==
-X-Gm-Message-State: ACrzQf2l75Wn42f5asku3B8E6+ux9PaFfmPEP5hLfqh13s7sVjab4ouU
-        OUhss55YcvQYo+NlPExTKgOccQ==
-X-Google-Smtp-Source: AMsMyM5JOaLA06azudJailoqlVmLEIyphiCdHLd/EoI6PHfi903eB0VsEQnVUqyZ7z6/SIdBPkOi8A==
-X-Received: by 2002:a5d:4d0a:0:b0:228:d9c0:5abe with SMTP id z10-20020a5d4d0a000000b00228d9c05abemr13721513wrt.693.1663663382969;
-        Tue, 20 Sep 2022 01:43:02 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id q9-20020adff509000000b0022aeba020casm930504wro.83.2022.09.20.01.43.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Sep 2022 01:43:02 -0700 (PDT)
-Message-ID: <53810023-206a-c5c5-e88c-d56dc9ce00e1@linaro.org>
-Date:   Tue, 20 Sep 2022 10:43:01 +0200
+        Tue, 20 Sep 2022 04:43:11 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22D7A267;
+        Tue, 20 Sep 2022 01:43:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663663389; x=1695199389;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=NXtQOKSqmEjuG2E6ZCFhhcSyrJvV/xQNTl1GGhPictM=;
+  b=IBWWhCP4e9q2C60o/xKWiG0dV8Mv7r6CWdKlU4slJY1mVBSdhDxAyXZn
+   AGTKaK6dONKG89XnputlJVjTgKYOsEpvZ6dUVO11tnprlZa1NwaquD8Od
+   tb1HZNW1XGWSQcrqVCjfPQhAALf0w4QQ+xSEIE/PNU6aDP2LqTlQ0z9QT
+   AfJZV93cM/sB8i8kN92kEu1sdm5WrbMT9sshu5UJ50eApUf7LfegSCpSD
+   tGl/+f+G1+qfn7juOUoZrOuILsVzqpRoILix7EPcVp3vqkyfswAPqTpV3
+   qyINOSLGs6/rcOnynYF8nUSyzwk2Lqy3F1xCuT7h+ndy4E48w77nDCOwz
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="300456126"
+X-IronPort-AV: E=Sophos;i="5.93,330,1654585200"; 
+   d="scan'208";a="300456126"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 01:43:08 -0700
+X-IronPort-AV: E=Sophos;i="5.93,330,1654585200"; 
+   d="scan'208";a="652011156"
+Received: from bdallmer-mobl.ger.corp.intel.com ([10.252.59.238])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 01:43:06 -0700
+Date:   Tue, 20 Sep 2022 11:43:04 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Jiri Slaby <jslaby@suse.cz>
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 08/10] tty: serial: introduce transmit helpers
+In-Reply-To: <20220920052049.20507-9-jslaby@suse.cz>
+Message-ID: <962593ae-e38-70ba-1e85-ee5e6b231856@linux.intel.com>
+References: <20220920052049.20507-1-jslaby@suse.cz> <20220920052049.20507-9-jslaby@suse.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/9] clocksource/drivers/timer-ti-dm: Drop unused
- functions
-Content-Language: en-US
-To:     Tony Lindgren <tony@atomide.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Keerthy <j-keerthy@ti.com>,
-        Ladislav Michl <ladis@linux-mips.org>,
-        Nishanth Menon <nm@ti.com>, Suman Anna <s-anna@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220815131250.34603-1-tony@atomide.com>
- <20220815131250.34603-2-tony@atomide.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20220815131250.34603-2-tony@atomide.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-2112059611-1663663387=:1766"
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/08/2022 15:12, Tony Lindgren wrote:
-> We still have some unused functions left, let's drop them.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+
+--8323329-2112059611-1663663387=:1766
+Content-Type: text/plain; charset=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
+
+On Tue, 20 Sep 2022, Jiri Slaby wrote:
+
+> Many serial drivers do the same thing:
+> * send x_char if set
+> * keep sending from the xmit circular buffer until either
+>   - the loop reaches the end of the xmit buffer
+>   - TX is stopped
+>   - HW fifo is full
+> * check for pending characters and:
+>   - wake up tty writers to fill for more data into xmit buffer
+>   - stop TX if there is nothing in the xmit buffer
 > 
-> Signed-off-by: Tony Lindgren <tony@atomide.com>
+> The only differences are:
+> * how to write the character to the HW fifo
+> * the check of the end condition:
+>   - is the HW fifo full?
+>   - is limit of the written characters reached?
+> 
+> So unify the above into two helpers:
+> * uart_port_tx_limited() -- it performs the above taking the written
+>   characters limit into account, and
+> * uart_port_tx() -- the same as above, except it only checks the HW
+>   readiness, not the characters limit.
+> 
+> The HW specific operations (as stated as "differences" above) are passed
+> as arguments to the macros. They are:
+> * tx_ready -- returns true if HW can accept more data.
+> * put_char -- write a character to the device.
+> * tx_done -- when the write loop is done, perform arbitrary action
+>   before potential invocation of ops->stop_tx() happens.
+> 
+> Note that the above are macros. This means the code is generated in
+> place and the above 3 arguments are "inlined". I.e. no added penalty by
+> generating call instructions for every single character. Nor any
+> indirect calls. (As in some previous versions of this patchset.)
+> 
+> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
 
-Hi Tony,
-
-applied, thanks
-
-nice cleanup!
-
-   -- D.
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
 -- 
-<http://www.linaro.org/> Linaro.org â”‚ Open source software for ARM SoCs
+ i.
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+--8323329-2112059611-1663663387=:1766--
