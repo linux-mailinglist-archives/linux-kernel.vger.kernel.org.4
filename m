@@ -2,264 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 085445BE48C
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 13:35:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 834E45BE2B0
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 12:08:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbiITLfG convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 20 Sep 2022 07:35:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54558 "EHLO
+        id S230482AbiITKHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 06:07:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbiITLfD (ORCPT
+        with ESMTP id S229561AbiITKHM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 07:35:03 -0400
-X-Greylist: delayed 6776 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 20 Sep 2022 04:35:01 PDT
-Received: from h3cspam01-ex.h3c.com (smtp.h3c.com [221.12.31.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C26965251
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 04:35:00 -0700 (PDT)
-Received: from h3cspam01-ex.h3c.com (localhost [127.0.0.2] (may be forged))
-        by h3cspam01-ex.h3c.com with ESMTP id 28K9g1OR099096
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 17:42:01 +0800 (GMT-8)
-        (envelope-from wang.binglei@h3c.com)
-Received: from mail.maildlp.com ([172.25.15.155])
-        by h3cspam01-ex.h3c.com with ESMTP id 28K9dsDj085705;
-        Tue, 20 Sep 2022 17:39:54 +0800 (GMT-8)
-        (envelope-from wang.binglei@h3c.com)
-Received: from DAG2EX10-IDC.srv.huawei-3com.com (unknown [172.20.54.133])
-        by mail.maildlp.com (Postfix) with ESMTP id ED25722BE810;
-        Tue, 20 Sep 2022 17:40:56 +0800 (CST)
-Received: from localhost.localdomain (10.99.222.162) by
- DAG2EX10-IDC.srv.huawei-3com.com (172.20.54.133) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 20 Sep 2022 17:39:55 +0800
-From:   Binglei Wang <wang.binglei@h3c.com>
-To:     <paul.walmsley@sifive.com>
-CC:     <palmer@dabbelt.com>, <aou@eecs.berkeley.edu>,
-        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <l3b2w1@gmail.com>, "wang.binglei" <wang.binglei@h3c.com>
-Subject: [PATCH] rethook: add riscv rethook implementation.
-Date:   Tue, 20 Sep 2022 17:36:30 +0800
-Message-ID: <20220920093630.32085-1-wang.binglei@h3c.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 20 Sep 2022 06:07:12 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6D20361138;
+        Tue, 20 Sep 2022 03:07:10 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6FCC4169C;
+        Tue, 20 Sep 2022 03:07:16 -0700 (PDT)
+Received: from [10.57.18.118] (unknown [10.57.18.118])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 53F333F73B;
+        Tue, 20 Sep 2022 03:07:07 -0700 (PDT)
+Message-ID: <5ef51421-e6b0-edd5-6b6e-439b47b794a8@arm.com>
+Date:   Tue, 20 Sep 2022 11:07:05 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.99.222.162]
-X-ClientProxiedBy: BJSMTP01-EX.srv.huawei-3com.com (10.63.20.132) To
- DAG2EX10-IDC.srv.huawei-3com.com (172.20.54.133)
-Content-Transfer-Encoding: 8BIT
-X-DNSRBL: 
-X-MAIL: h3cspam01-ex.h3c.com 28K9g1OR099096
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [BUG] ls1046a: eDMA does not transfer data from I2C
+Content-Language: en-GB
+To:     Sean Anderson <sean.anderson@seco.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-i2c@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org
+Cc:     Li Yang <leoyang.li@nxp.com>, Peng Ma <peng.ma@nxp.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel@lists.freedesktop.org,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        linaro-mm-sig@lists.linaro.org, Robin Gong <yibin.gong@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Joy Zou <joy.zou@nxp.com>, linux-media@vger.kernel.org
+References: <38974aab-06d0-f5ff-d359-5eedd2f3bb3e@seco.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <38974aab-06d0-f5ff-d359-5eedd2f3bb3e@seco.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "wang.binglei" <wang.binglei@h3c.com>
+On 2022-09-19 23:24, Sean Anderson wrote:
+> Hi all,
+> 
+> I discovered a bug in either imx_i2c or fsl-edma on the LS1046A where no
+> data is read in i2c_imx_dma_read except for the last two bytes (which
+> are not read using DMA). This is perhaps best illustrated with the
+> following example:
+> 
+> # hexdump -C /sys/bus/nvmem/devices/0-00540/nvmem
+> [  308.914884] i2c i2c-0: ffff000809380000 0x0000000889380000 0x00000000f5401000 ffff000075401000
+> [  308.923529] src= 2180004 dst=f5401000 attr=   0 soff=   0 nbytes=1 slast=       0
+> [  308.923529] citer=  7e biter=  7e doff=   1 dlast_sga=       0
+> [  308.923529] major_int=1 disable_req=1 enable_sg=0
+> [  308.942113] fsl-edma 2c00000.edma: vchan 000000001b4371fc: txd 00000000d9dd26c5[4]: submitted
+> [  308.974049] fsl-edma 2c00000.edma: txd 00000000d9dd26c5[4]: marked complete
+> [  308.981339] i2c i2c-0: ffff000809380000 = [2e 2e 2f 2e 2e 2f 2e 2e 2f 64 65 76 69 63 65 73 2f 70 6c 61 74 66 6f 72 6d 2f 73 6f 63 2f 32 31 38 30 30 30 30 2e 69 32 63 2f 69 32 63 2d 30 2f 30 2d 30 30 35 34 2f 30 2d 30 30 35 34 30 00 00]
+> [  309.002226] i2c i2c-0: ffff000075401000 = [2e 2e 2f 2e 2e 2f 2e 2e 2f 64 65 76 69 63 65 73 2f 70 6c 61 74 66 6f 72 6d 2f 73 6f 63 2f 32 31 38 30 30 30 30 2e 69 32 63 2f 69 32 63 2d 30 2f 30 2d 30 30 35 34 2f 30 2d 30 30 35 34 30 00 00]
+> [  309.024649] i2c i2c-0: ffff000809380080 0x0000000889380080 0x00000000f5401800 ffff000075401800
+> [  309.033270] src= 2180004 dst=f5401800 attr=   0 soff=   0 nbytes=1 slast=       0
+> [  309.033270] citer=  7e biter=  7e doff=   1 dlast_sga=       0
+> [  309.033270] major_int=1 disable_req=1 enable_sg=0
+> [  309.051633] fsl-edma 2c00000.edma: vchan 000000001b4371fc: txd 00000000d9dd26c5[5]: submitted
+> [  309.083526] fsl-edma 2c00000.edma: txd 00000000d9dd26c5[5]: marked complete
+> [  309.090807] i2c i2c-0: ffff000809380080 = [00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00]
+> [  309.111694] i2c i2c-0: ffff000075401800 = [00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00]
+> 00000000  2e 2e 2f 2e 2e 2f 2e 2e  2f 64 65 76 69 63 65 73  |../../../devices|
+> 00000010  2f 70 6c 61 74 66 6f 72  6d 2f 73 6f 63 2f 32 31  |/platform/soc/21|
+> 00000020  38 30 30 30 30 2e 69 32  63 2f 69 32 63 2d 30 2f  |80000.i2c/i2c-0/|
+> 00000030  30 2d 30 30 35 34 2f 30  2d 30 30 35 34 30 00 00  |0-0054/0-00540..|
+> 00000040  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+> *
+> 00000070  00 00 00 00 00 00 00 00  00 00 00 00 00 00 ff ff  |................|
+> 00000080  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+> *
+> 000000f0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 ff 5b  |...............[|
+> 00000100
+> 
+> (patch with my debug prints appended below)
+> 
+> Despite the DMA completing successfully, no data was copied into the
+> buffer, leaving the original (now junk) contents. I probed the I2C bus
+> with an oscilloscope, and I verified that the transfer did indeed occur.
+> The timing between submission and completion seems reasonable for the
+> bus speed (50 kHz for whatever reason).
+> 
+> I had a look over the I2C driver, and nothing looked obviously
+> incorrect. If anyone has ideas on what to try, I'm more than willing.
 
-Most of the code copied from
-arch/riscv/kernel/probes/kprobes_trampoline.S
+Is the DMA controller cache-coherent? I see the mainline LS1046A DT 
+doesn't have a "dma-coherent" property for it, but the behaviour is 
+entirely consistent with that being wrong - dma_map_single() cleans the 
+cache, coherent DMA write hits the still-present cache lines, 
+dma_unmap_single() invalidates the cache, and boom, the data is gone and 
+you read back the previous content of the buffer that was cleaned out to 
+DRAM beforehand.
 
-Signed-off-by: wang.binglei <wang.binglei@h3c.com>
----
- arch/riscv/Kconfig                            |  1 +
- arch/riscv/kernel/probes/Makefile             |  1 +
- arch/riscv/kernel/probes/kprobes.c            |  7 ++
- arch/riscv/kernel/probes/rethook.c            | 24 +++++
- arch/riscv/kernel/probes/rethook_trampoline.S | 94 +++++++++++++++++++
- 5 files changed, 127 insertions(+)
- create mode 100644 arch/riscv/kernel/probes/rethook.c
- create mode 100644 arch/riscv/kernel/probes/rethook_trampoline.S
+Robin.
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index ed66c31e4..c5cae0825 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -97,6 +97,7 @@ config RISCV
-        select HAVE_KPROBES if !XIP_KERNEL
-        select HAVE_KPROBES_ON_FTRACE if !XIP_KERNEL
-        select HAVE_KRETPROBES if !XIP_KERNEL
-+       select HAVE_RETHOOK if !XIP_KERNEL
-        select HAVE_MOVE_PMD
-        select HAVE_MOVE_PUD
-        select HAVE_PCI
-diff --git a/arch/riscv/kernel/probes/Makefile b/arch/riscv/kernel/probes/Makefile
-index 7f0840dcc..ee345e7e9 100644
---- a/arch/riscv/kernel/probes/Makefile
-+++ b/arch/riscv/kernel/probes/Makefile
-@@ -3,4 +3,5 @@ obj-$(CONFIG_KPROBES)           += kprobes.o decode-insn.o simulate-insn.o
- obj-$(CONFIG_KPROBES)          += kprobes_trampoline.o
- obj-$(CONFIG_KPROBES_ON_FTRACE)        += ftrace.o
- obj-$(CONFIG_UPROBES)          += uprobes.o decode-insn.o simulate-insn.o
-+obj-$(CONFIG_RETHOOK)          += rethook.o rethook_trampoline.o
- CFLAGS_REMOVE_simulate-insn.o = $(CC_FLAGS_FTRACE)
-diff --git a/arch/riscv/kernel/probes/kprobes.c b/arch/riscv/kernel/probes/kprobes.c
-index e6e950b7c..2c1847921 100644
---- a/arch/riscv/kernel/probes/kprobes.c
-+++ b/arch/riscv/kernel/probes/kprobes.c
-@@ -345,6 +345,7 @@ int __init arch_populate_kprobe_blacklist(void)
-        return ret;
- }
-
-+#ifndef CONFIG_KRETPROBE_ON_RETHOOK
- void __kprobes __used *trampoline_probe_handler(struct pt_regs *regs)
- {
-        return (void *)kretprobe_trampoline_handler(regs, NULL);
-@@ -357,6 +358,12 @@ void __kprobes arch_prepare_kretprobe(struct kretprobe_instance *ri,
-        ri->fp = NULL;
-        regs->ra = (unsigned long) &__kretprobe_trampoline;
- }
-+#else
-+void __kprobes *trampoline_probe_handler(struct pt_regs *regs)
-+{
-+       return NULL;
-+}
-+#endif
-
- int __kprobes arch_trampoline_kprobe(struct kprobe *p)
- {
-diff --git a/arch/riscv/kernel/probes/rethook.c b/arch/riscv/kernel/probes/rethook.c
-new file mode 100644
-index 000000000..47853bc36
---- /dev/null
-+++ b/arch/riscv/kernel/probes/rethook.c
-@@ -0,0 +1,24 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Generic return hook for riscv.
-+ */
-+
-+#include <linux/kprobes.h>
-+#include <linux/rethook.h>
-+
-+/* This is called from arch_rethook_trampoline() */
-+unsigned long __used arch_rethook_trampoline_callback(struct pt_regs *regs)
-+{
-+       return rethook_trampoline_handler(regs, regs->s0);
-+}
-+NOKPROBE_SYMBOL(arch_rethook_trampoline_callback);
-+
-+void arch_rethook_prepare(struct rethook_node *rhn, struct pt_regs *regs, bool mcount)
-+{
-+       rhn->ret_addr = regs->ra;
-+       rhn->frame = regs->s0;
-+
-+       /* replace return addr with trampoline */
-+       regs->ra = (u64)arch_rethook_trampoline;
-+}
-+NOKPROBE_SYMBOL(arch_rethook_prepare);
-diff --git a/arch/riscv/kernel/probes/rethook_trampoline.S b/arch/riscv/kernel/probes/rethook_trampoline.S
-new file mode 100644
-index 000000000..aa79630ac
---- /dev/null
-+++ b/arch/riscv/kernel/probes/rethook_trampoline.S
-@@ -0,0 +1,94 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * rethook trampoline.
-+ * Copied from arch/riscv/kernel/probes/kprobes_trampoline.S
-+ */
-+#include <linux/linkage.h>
-+
-+#include <asm/asm.h>
-+#include <asm/asm-offsets.h>
-+
-+       .text
-+       .altmacro
-+
-+       .macro save_all_base_regs
-+       REG_S x1,  PT_RA(sp)
-+       REG_S x3,  PT_GP(sp)
-+       REG_S x4,  PT_TP(sp)
-+       REG_S x5,  PT_T0(sp)
-+       REG_S x6,  PT_T1(sp)
-+       REG_S x7,  PT_T2(sp)
-+       REG_S x8,  PT_S0(sp)
-+       REG_S x9,  PT_S1(sp)
-+       REG_S x10, PT_A0(sp)
-+       REG_S x11, PT_A1(sp)
-+       REG_S x12, PT_A2(sp)
-+       REG_S x13, PT_A3(sp)
-+       REG_S x14, PT_A4(sp)
-+       REG_S x15, PT_A5(sp)
-+       REG_S x16, PT_A6(sp)
-+       REG_S x17, PT_A7(sp)
-+       REG_S x18, PT_S2(sp)
-+       REG_S x19, PT_S3(sp)
-+       REG_S x20, PT_S4(sp)
-+       REG_S x21, PT_S5(sp)
-+       REG_S x22, PT_S6(sp)
-+       REG_S x23, PT_S7(sp)
-+       REG_S x24, PT_S8(sp)
-+       REG_S x25, PT_S9(sp)
-+       REG_S x26, PT_S10(sp)
-+       REG_S x27, PT_S11(sp)
-+       REG_S x28, PT_T3(sp)
-+       REG_S x29, PT_T4(sp)
-+       REG_S x30, PT_T5(sp)
-+       REG_S x31, PT_T6(sp)
-+       .endm
-+
-+       .macro restore_all_base_regs
-+       REG_L x3,  PT_GP(sp)
-+       REG_L x4,  PT_TP(sp)
-+       REG_L x5,  PT_T0(sp)
-+       REG_L x6,  PT_T1(sp)
-+       REG_L x7,  PT_T2(sp)
-+       REG_L x8,  PT_S0(sp)
-+       REG_L x9,  PT_S1(sp)
-+       REG_L x10, PT_A0(sp)
-+       REG_L x11, PT_A1(sp)
-+       REG_L x12, PT_A2(sp)
-+       REG_L x13, PT_A3(sp)
-+       REG_L x14, PT_A4(sp)
-+       REG_L x15, PT_A5(sp)
-+       REG_L x16, PT_A6(sp)
-+       REG_L x17, PT_A7(sp)
-+       REG_L x18, PT_S2(sp)
-+       REG_L x19, PT_S3(sp)
-+       REG_L x20, PT_S4(sp)
-+       REG_L x21, PT_S5(sp)
-+       REG_L x22, PT_S6(sp)
-+       REG_L x23, PT_S7(sp)
-+       REG_L x24, PT_S8(sp)
-+       REG_L x25, PT_S9(sp)
-+       REG_L x26, PT_S10(sp)
-+       REG_L x27, PT_S11(sp)
-+       REG_L x28, PT_T3(sp)
-+       REG_L x29, PT_T4(sp)
-+       REG_L x30, PT_T5(sp)
-+       REG_L x31, PT_T6(sp)
-+       .endm
-+
-+ENTRY(arch_rethook_trampoline)
-+       addi sp, sp, -(PT_SIZE_ON_STACK)
-+       save_all_base_regs
-+
-+       move a0, sp /* pt_regs */
-+
-+       call arch_rethook_trampoline_callback
-+
-+       /* use the result as the return-address */
-+       move ra, a0
-+
-+       restore_all_base_regs
-+       addi sp, sp, PT_SIZE_ON_STACK
-+
-+       ret
-+ENDPROC(arch_rethook_trampoline)
---
-2.17.1
-
--------------------------------------------------------------------------------------------------------------------------------------
-本邮件及其附件含有新华三集团的保密信息，仅限于发送给上面地址中列出
-的个人或群组。禁止任何其他人以任何形式使用（包括但不限于全部或部分地泄露、复制、
-或散发）本邮件中的信息。如果您错收了本邮件，请您立即电话或邮件通知发件人并删除本
-邮件！
-This e-mail and its attachments contain confidential information from New H3C, which is
-intended only for the person or entity whose address is listed above. Any use of the
-information contained herein in any way (including, but not limited to, total or partial
-disclosure, reproduction, or dissemination) by persons other than the intended
-recipient(s) is prohibited. If you receive this e-mail in error, please notify the sender
-by phone or email immediately and delete it!
+> --Sean
+> 
+> diff --git a/drivers/dma/fsl-edma-common.c b/drivers/dma/fsl-edma-common.c
+> index 15896e2413c4..1d9d4a55d2af 100644
+> --- a/drivers/dma/fsl-edma-common.c
+> +++ b/drivers/dma/fsl-edma-common.c
+> @@ -391,6 +391,12 @@ void fsl_edma_fill_tcd(struct fsl_edma_hw_tcd *tcd, u32 src, u32 dst,
+>   {
+>          u16 csr = 0;
+>   
+> +       pr_info("src=%8x dst=%8x attr=%4x soff=%4x nbytes=%u slast=%8x\n"
+> +               "citer=%4x biter=%4x doff=%4x dlast_sga=%8x\n"
+> +               "major_int=%d disable_req=%d enable_sg=%d\n",
+> +               src, dst, attr, soff, nbytes, slast, citer, biter, doff,
+> +               dlast_sga, major_int, disable_req, enable_sg);
+> +
+>          /*
+>           * eDMA hardware SGs require the TCDs to be stored in little
+>           * endian format irrespective of the register endian model.
+> diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
+> index 3576b63a6c03..0217f0cb1331 100644
+> --- a/drivers/i2c/busses/i2c-imx.c
+> +++ b/drivers/i2c/busses/i2c-imx.c
+> @@ -402,6 +402,9 @@ static int i2c_imx_dma_xfer(struct imx_i2c_struct *i2c_imx,
+>                  dev_err(dev, "DMA mapping failed\n");
+>                  goto err_map;
+>          }
+> +       phys_addr_t bufp = virt_to_phys(msgs->buf);
+> +       dev_info(dev, "%px %pap %pad %px\n", msgs->buf, &bufp,
+> +                &dma->dma_buf, phys_to_virt(dma->dma_buf));
+>   
+>          txdesc = dmaengine_prep_slave_single(dma->chan_using, dma->dma_buf,
+>                                          dma->dma_len, dma->dma_transfer_dir,
+> @@ -965,6 +968,9 @@ static int i2c_imx_dma_read(struct imx_i2c_struct *i2c_imx,
+>                  }
+>                  schedule();
+>          }
+> +       dev_info(dev, "%px = [%*ph]\n", msgs->buf, msgs->len, msgs->buf);
+> +       dev_info(dev, "%px = [%*ph]\n", phys_to_virt(dma->dma_buf), msgs->len,
+> +                phys_to_virt(dma->dma_buf));
+>   
+>          temp = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2CR);
+>          temp &= ~I2CR_DMAEN;
