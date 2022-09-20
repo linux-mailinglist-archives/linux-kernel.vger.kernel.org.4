@@ -2,94 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF7515BE1D0
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 11:23:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC1425BE1D2
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 11:23:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231678AbiITJXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 05:23:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47736 "EHLO
+        id S230168AbiITJXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 05:23:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231364AbiITJW7 (ORCPT
+        with ESMTP id S231535AbiITJXL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 05:22:59 -0400
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 577AD65276;
-        Tue, 20 Sep 2022 02:22:58 -0700 (PDT)
-Received: from toolbox.toradex.int ([31.10.206.125]) by mrelay.perfora.net
- (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0Lpu1h-1pFPzn2EMR-00ffvz;
- Tue, 20 Sep 2022 11:22:45 +0200
-From:   Marcel Ziswiler <marcel@ziswiler.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1 4/4] arm: dts: imx7-colibri: remove spurious debounce property
-Date:   Tue, 20 Sep 2022 11:22:27 +0200
-Message-Id: <20220920092227.286306-5-marcel@ziswiler.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220920092227.286306-1-marcel@ziswiler.com>
-References: <20220920092227.286306-1-marcel@ziswiler.com>
+        Tue, 20 Sep 2022 05:23:11 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D74FB6BD79
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 02:23:06 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1005D139F;
+        Tue, 20 Sep 2022 02:23:13 -0700 (PDT)
+Received: from ewhatever.cambridge.arm.com (ewhatever.cambridge.arm.com [10.1.197.1])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 6B74E3F73B;
+        Tue, 20 Sep 2022 02:23:05 -0700 (PDT)
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+To:     gregkh@linuxfoundation.org
+Cc:     coresight@lists.linaro.org, mathieu.poirier@linaro.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        mike.leach@linaro.org, leo.yan@linaro.org,
+        Suzuki K Poulose <suzuki.poulose@arm.com>
+Subject: [GIT PULL] Coresight changes for v6.1
+Date:   Tue, 20 Sep 2022 10:22:38 +0100
+Message-Id: <20220920092238.3798762-1-suzuki.poulose@arm.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:R5iDO3BfrzcBJI9dpElBGyNAuFPMZ4qHJTfHWq9pX5e360uphW9
- BiGWxdzDxk63v2hi/jwLWivgjj5khAyPePkxMgT46nAM5XKQUjH9kYem3MbFIJANavO2sZL
- ygdJZXwKTOK3DH1yHNJ+xVFjKJlucKdeoRDy/v7h1s5RK20YjdfHfy6KO6+v2QrDT9ZOI3+
- WhFejUT/mwtIqhre5A3MQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:S8leuyfUFJQ=:oKXpngvgNEqePPNrW9jvd3
- qEKOZ27ea6Oupd+0/08gUVMLMZwqNbBTnsbqRzhXHc5xFRR9oxzXhjkHK6H7bBshGdwB6foTX
- koYsrd45XpDFcR+Fy1+1dX9jRJ4fnf4AGMBQePz8C/7nUvA54XbAG+SKsqhTnqjg3XPs7VpXh
- vDdWEzc2mDuWWlrV8W3+teOsUBkLDmjXsXghGyT9h8U4/zeG+knoDyDkWLwJWeeH2AaWJJfjj
- H0Fjbr2kFwh9lDZpDKjl5pA2pujSyhJMDH4u9XIm2tyxDx7+ikuGWNfIGc4MID5fpshso1gQf
- 3g16tcBLLn4rBNtfoVBmm5dbl8fVSbOh7CvFAHVFuc6iKJKibcNfZOgkhnvb/1SdeBaHmukyr
- 30Hb4axYr00QL5gygji2doWMK1nPAQFcUUfiGuV4RaVBZu/1gePmtKWydZzd7PyZlIRLs8WPx
- RkbKxxhEPNQvauZAFfEuQGPMbgCXbnAXTy38HXRJ1EAW+EvZpTVePA6x2+GZN4ZVrD/6JujNK
- YqotwkDjUiYsVa3uhwSE/X713UMghCWdClgcfohm5CIJOB3YZX0Nb1jJehTW1VpAx47hdallJ
- zS1Lm1N6CmQYXrBTMTqYra+VLvWVG0mJ6Z0aZ6++3RUsQbNmT//Xez77Soq8ZdsGwZSG5Cx7v
- aGziS1JxDqg4RlkM0zUJKjGCvvWiGhpOtEIE4F562iFB3yMQggnBSuIZYO6nfOJZ0fpDxF9aN
- 067uEfAQV1I3vkgZxVMN1jHoDQkPGOBqlhBF6uU7R74ofac8oGJ3+d7KvjRfLiUQI6aJfsxWT
- Ejzb9lu
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Hi Greg,
 
-Remove spurious debounce property from linux,extcon-usb-gpio.
+Please find the coresight self hosted trace subsystem updates for
+v6.1. Kindly consider pulling.
 
-Note that debouncing is hard-coded to 20 ms (USB_GPIO_DEBOUNCE_MS
-define).
+Thanks
+Suzuki
 
-Fixes: 0ef1969ea569 ("ARM: dts: imx7-colibri: move aliases, chosen, extcon and gpio-keys")
-Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
----
+The following changes since commit 1c23f9e627a7b412978b4e852793c5e3c3efc555:
 
- arch/arm/boot/dts/imx7-colibri.dtsi | 1 -
- 1 file changed, 1 deletion(-)
+  Linux 6.0-rc2 (2022-08-21 17:32:54 -0700)
 
-diff --git a/arch/arm/boot/dts/imx7-colibri.dtsi b/arch/arm/boot/dts/imx7-colibri.dtsi
-index a8c31ee65623..840420f9a1cd 100644
---- a/arch/arm/boot/dts/imx7-colibri.dtsi
-+++ b/arch/arm/boot/dts/imx7-colibri.dtsi
-@@ -29,7 +29,6 @@ chosen {
- 
- 	extcon_usbc_det: usbc-det {
- 		compatible = "linux,extcon-usb-gpio";
--		debounce = <25>;
- 		id-gpio = <&gpio7 14 GPIO_ACTIVE_HIGH>; /* SODIMM 137 / USBC_DET */
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&pinctrl_usbc_det>;
--- 
-2.36.1
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/coresight/linux.git tags/coresight-next-v6.1
+
+for you to fetch changes up to 5fc1531dd771cd1481116a66f992a190e01efce6:
+
+  hwtracing: hisi_ptt: Fix up for "iommu/dma: Make header private" (2022-09-12 10:12:25 -0600)
+
+----------------------------------------------------------------
+coresight: Changes for v6.1
+
+Coresight trace subsystem updates for v6.1 includes:
+  - Support for HiSilicon PTT trace
+  - Coresight cleanup of sysfs accessor functions, reduced
+    code size.
+  - Expose coresight timestamp source for ETMv4+
+  - DT binding updates to include missing properties
+  - Minor documentation, Kconfig text fixes.
+
+Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+
+----------------------------------------------------------------
+Christophe JAILLET (1):
+      coresight: docs: Fix a broken reference
+
+German Gomez (2):
+      coresight: etm4x: Expose default timestamp source in sysfs
+      coresight: etm4x: docs: Add documentation for 'ts_source' sysfs interface
+
+James Clark (5):
+      coresight: Remove unused function parameter
+      coresight: Simplify sysfs accessors by using csdev_access abstraction
+      coresight: Re-use same function for similar sysfs register accessors
+      coresight: cti-sysfs: Re-use same functions for similar sysfs register accessors
+      coresight: Make new csdev_access offsets unsigned
+
+Nathan Chancellor (1):
+      coresight: cti-sysfs: Mark coresight_cti_reg_store() as __maybe_unused
+
+Randy Dunlap (1):
+      coresight: trbe: fix Kconfig "its" grammar
+
+Rob Herring (2):
+      dt-bindings: arm: coresight: Add 'power-domains' property
+      dt-bindings: arm: coresight-tmc: Add 'iommu' property
+
+Stephen Rothwell (1):
+      hwtracing: hisi_ptt: Fix up for "iommu/dma: Make header private"
+
+Yicong Yang (5):
+      iommu/arm-smmu-v3: Make default domain type of HiSilicon PTT device to identity
+      hwtracing: hisi_ptt: Add trace function support for HiSilicon PCIe Tune and Trace device
+      hwtracing: hisi_ptt: Add tune function support for HiSilicon PCIe Tune and Trace device
+      docs: trace: Add HiSilicon PTT device driver documentation
+      MAINTAINERS: Add maintainer for HiSilicon PTT driver
+
+ .../ABI/testing/sysfs-bus-coresight-devices-etm4x  |    8 +
+ Documentation/ABI/testing/sysfs-devices-hisi_ptt   |   61 ++
+ .../bindings/arm/arm,coresight-catu.yaml           |    3 +
+ .../devicetree/bindings/arm/arm,coresight-cti.yaml |    3 +
+ .../bindings/arm/arm,coresight-dynamic-funnel.yaml |    3 +
+ .../arm/arm,coresight-dynamic-replicator.yaml      |    3 +
+ .../bindings/arm/arm,coresight-etb10.yaml          |    3 +
+ .../devicetree/bindings/arm/arm,coresight-etm.yaml |    3 +
+ .../bindings/arm/arm,coresight-static-funnel.yaml  |    3 +
+ .../arm/arm,coresight-static-replicator.yaml       |    3 +
+ .../devicetree/bindings/arm/arm,coresight-stm.yaml |    3 +
+ .../devicetree/bindings/arm/arm,coresight-tmc.yaml |    6 +
+ .../bindings/arm/arm,coresight-tpiu.yaml           |    3 +
+ .../bindings/arm/arm,embedded-trace-extension.yaml |    3 +
+ .../trace/coresight/coresight-cpu-debug.rst        |    3 +-
+ .../trace/coresight/coresight-etm4x-reference.rst  |   14 +
+ Documentation/trace/hisi-ptt.rst                   |  298 ++++++
+ Documentation/trace/index.rst                      |    1 +
+ MAINTAINERS                                        |    8 +
+ arch/arm64/include/asm/sysreg.h                    |    1 +
+ drivers/Makefile                                   |    1 +
+ drivers/hwtracing/Kconfig                          |    2 +
+ drivers/hwtracing/coresight/Kconfig                |    4 +-
+ drivers/hwtracing/coresight/coresight-catu.c       |   27 +-
+ drivers/hwtracing/coresight/coresight-catu.h       |    8 +-
+ drivers/hwtracing/coresight/coresight-core.c       |   28 +
+ drivers/hwtracing/coresight/coresight-cti-sysfs.c  |  213 ++--
+ drivers/hwtracing/coresight/coresight-etb10.c      |   28 +-
+ .../hwtracing/coresight/coresight-etm3x-sysfs.c    |   34 +-
+ .../hwtracing/coresight/coresight-etm4x-sysfs.c    |   29 +
+ drivers/hwtracing/coresight/coresight-priv.h       |   72 +-
+ drivers/hwtracing/coresight/coresight-replicator.c |   10 +-
+ drivers/hwtracing/coresight/coresight-stm.c        |   40 +-
+ drivers/hwtracing/coresight/coresight-tmc-core.c   |   48 +-
+ drivers/hwtracing/coresight/coresight-tmc.h        |    4 +-
+ drivers/hwtracing/ptt/Kconfig                      |   12 +
+ drivers/hwtracing/ptt/Makefile                     |    2 +
+ drivers/hwtracing/ptt/hisi_ptt.c                   | 1046 ++++++++++++++++++++
+ drivers/hwtracing/ptt/hisi_ptt.h                   |  200 ++++
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c        |   21 +
+ include/linux/coresight.h                          |   23 +
+ 41 files changed, 1973 insertions(+), 312 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-devices-hisi_ptt
+ create mode 100644 Documentation/trace/hisi-ptt.rst
+ create mode 100644 drivers/hwtracing/ptt/Kconfig
+ create mode 100644 drivers/hwtracing/ptt/Makefile
+ create mode 100644 drivers/hwtracing/ptt/hisi_ptt.c
+ create mode 100644 drivers/hwtracing/ptt/hisi_ptt.h
