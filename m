@@ -2,391 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B0685BEBCC
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 19:22:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A79F5BEBCF
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 19:23:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230133AbiITRWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 13:22:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41388 "EHLO
+        id S230238AbiITRWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 13:22:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbiITRWd (ORCPT
+        with ESMTP id S230315AbiITRWo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 13:22:33 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BDA45FAF2;
-        Tue, 20 Sep 2022 10:22:31 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e791329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e791:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 77AE11EC01CE;
-        Tue, 20 Sep 2022 19:22:25 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1663694545;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=aTo5BCIIhVWElTta5Q80oaSGkccBfpExJYkW8aRkMUg=;
-        b=h6SpxGoxqOkReeKy9bJ79HGdmTMk2Yjva6RO25WmrAtjZo1AoB+MJidyJBwXp/BeOOnC7Z
-        Ixn68JdCuXF8cTzPfcEVrxzf/XN9QJFRtqa4e8lYxoDsmMqpVi7mtnBgWZnftDBOK9jcBW
-        MmjOAyDN/hmQHkLfZXdgpoIDBezPT+g=
-Date:   Tue, 20 Sep 2022 19:22:21 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Jia He <justin.he@arm.com>
-Cc:     Len Brown <lenb@kernel.org>, James Morse <james.morse@arm.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        Jan Luebbe <jlu@pengutronix.de>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Kani Toshi <toshi.kani@hpe.com>,
-        Ard Biesheuvel <ardb@kernel.org>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        devel@acpica.org, "Rafael J . Wysocki" <rafael@kernel.org>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>, linux-efi@vger.kernel.org,
-        nd@arm.com
-Subject: Re: [PATCH v6 5/8] EDAC/ghes: Make ghes_edac a proper module to
- remove the dependency on ghes
-Message-ID: <Yyn2zYLP9So0heBW@zn.tnic>
-References: <20220912144005.212624-1-justin.he@arm.com>
- <20220912144005.212624-6-justin.he@arm.com>
+        Tue, 20 Sep 2022 13:22:44 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF4B6D576
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 10:22:43 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id r12-20020a92cd8c000000b002f32d0d9fceso2017973ilb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 10:22:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=TPpFjDdK+tXhcMGIoZNSG+9qAkjbhonLlwvMuddDuMg=;
+        b=y234otlR2kJMQgw7I74lz57SikG0zixI6JOe1LTWkxLeOjP9KIbscm5XDYB5tbJK1E
+         e0IBPW3QIkdKIaMnVsubRsJD0eld9nnURIlDyin1u5VnXAa0bQHrdIaaMkhkdxw91ycl
+         4R7ZfAKr33mFKsbUS1xZLTdQc1DqqgyoZ/zMYs13Q/rRqBzAFpRCQ5xENlIH+8I+6EYg
+         CAB8Fbqjr4cypi5Yo3+SfCv9WfDCKktirDKwGztkO4Jre5/t3CxWUccrltIm6xT2qfU0
+         +ND5c5fj4OA1U0IJ8Z96Xm1Fh04io3xmsIv6bCrGOPPRjFwX3ZPbivz3ztVVkqmyXiFt
+         AYOg==
+X-Gm-Message-State: ACrzQf0NBYR35fYynSsIJbnmmMlqTBUYqtT+n6OTlSNOcZzeKq235Lct
+        su+3kJouZ1zk75Bs5is6KOE4zG+JW9RhkqbCQDqDhezW+EiT
+X-Google-Smtp-Source: AMsMyM6dyCOrnTYZ33Wleyed7+hZ9ahQ3n8Q5RUEObniknXSOWu8M2hBPWPOd+pHx47BkMLn2rsi3yP969ubFyx0T5IhvAgK66wS
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220912144005.212624-6-justin.he@arm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:216f:b0:2eb:9bcc:1649 with SMTP id
+ s15-20020a056e02216f00b002eb9bcc1649mr10342108ilv.226.1663694562604; Tue, 20
+ Sep 2022 10:22:42 -0700 (PDT)
+Date:   Tue, 20 Sep 2022 10:22:42 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006b49ea05e91f13e2@google.com>
+Subject: [syzbot] WARNING in cake_dequeue
+From:   syzbot <syzbot+1a58ef288b4f7a56adbf@syzkaller.appspotmail.com>
+To:     cake@lists.bufferbloat.net, davem@davemloft.net,
+        edumazet@google.com, jhs@mojatatu.com, jiri@resnulli.us,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com, toke@toke.dk,
+        xiyou.wangcong@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 02:40:02PM +0000, Jia He wrote:
-> Commit dc4e8c07e9e2 ("ACPI: APEI: explicit init of HEST and GHES in
-> apci_init()") introduced a bug that ghes_edac_register() would be invoked
-> before edac_init(). Because at that time, the bus "edac" hadn't been even
-> registered, this created sysfs /devices/mc0 instead of
-> /sys/devices/system/edac/mc/mc0 on an Ampere eMag server.
-> 
-> To remove the dependency of ghes_edac on ghes, make it a proper module. Use
-> a list to save the probing devices in ghes_probe(), and defer the
-> ghes_edac_register() to module_init() of the new ghes_edac module by
-> iterating over the devices list.
-> 
-> The ghes_edac_force_enable check is not needed in ghes_edac_unregister()
-> since it has been checked in ghes_edac_init().
-> 
-> Co-developed-by: Borislav Petkov <bp@alien8.de>
-> Signed-off-by: Borislav Petkov <bp@alien8.de>
-> Signed-off-by: Jia He <justin.he@arm.com>
-> Fixes: dc4e8c07e9e2 ("ACPI: APEI: explicit init of HEST and GHES in apci_init()")
-> Cc: Shuai Xue <xueshuai@linux.alibaba.com>
-> Acked-by: Toshi Kani <toshi.kani@hpe.com>
-> ---
->  drivers/acpi/apei/ghes.c | 22 +++++++++++++--
->  drivers/edac/Kconfig     |  4 +--
->  drivers/edac/ghes_edac.c | 59 +++++++++++++++++++++++-----------------
->  include/acpi/ghes.h      | 24 ++++------------
->  4 files changed, 62 insertions(+), 47 deletions(-)
+Hello,
 
-So those last three patches look unnecessarily complex. You don't
-need to export ghes_edac_force_enable and you don't need that
-ghes_edac_preferred() thing.
+syzbot found the following issue on:
 
-IOW, I'd like to see the below split into two patches:
+HEAD commit:    521a547ced64 Linux 6.0-rc6
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1267c108880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=122d7bd4fc8e0ecb
+dashboard link: https://syzkaller.appspot.com/bug?extid=1a58ef288b4f7a56adbf
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-1. Add ghes_get_devices() to ghes.c along with moving the
-ghes_edac_force_enable param to ghes.c
+Unfortunately, I don't have any reproducer for this issue yet.
 
-2. Add init() and exit() module functions and fixup Kconfig
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+1a58ef288b4f7a56adbf@syzkaller.appspotmail.com
 
-There's no need for ghes_present - ghes.c has either registered devices
-or not.
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 12003 at net/sched/sch_cake.c:2093 cake_dequeue+0x2188/0x3cb0 net/sched/sch_cake.c:2093
+Modules linked in:
+CPU: 0 PID: 12003 Comm: syz-executor.4 Not tainted 6.0.0-rc6-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
+RIP: 0010:cake_dequeue+0x2188/0x3cb0 net/sched/sch_cake.c:2093
+Code: 66 39 c5 0f 42 e8 e8 a7 a1 f1 f9 89 ee bf 00 04 00 00 e8 3b 9e f1 f9 66 81 fd 00 04 0f b7 dd 0f 86 a1 ef ff ff e8 88 a1 f1 f9 <0f> 0b e9 95 ef ff ff 31 ed e9 83 e8 ff ff e8 75 a1 f1 f9 48 8b 84
+RSP: 0018:ffffc90000007cf0 EFLAGS: 00010246
+RAX: 0000000000000000 RBX: 000000000000ffff RCX: 0000000000000100
+RDX: ffff888033c15880 RSI: ffffffff878a6798 RDI: 0000000000000003
+RBP: 000000000000ffff R08: 0000000000000003 R09: 0000000000000400
+R10: 000000000000ffff R11: 0000000000000001 R12: 0000000000000001
+R13: dffffc0000000000 R14: ffff88803ef01aa0 R15: ffff88803ef00000
+FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b2eb23000 CR3: 000000000bc8e000 CR4: 0000000000350ef0
+Call Trace:
+ <IRQ>
+ dequeue_skb net/sched/sch_generic.c:292 [inline]
+ qdisc_restart net/sched/sch_generic.c:397 [inline]
+ __qdisc_run+0x1ae/0x1710 net/sched/sch_generic.c:415
+ qdisc_run include/net/pkt_sched.h:126 [inline]
+ qdisc_run include/net/pkt_sched.h:123 [inline]
+ net_tx_action+0x71f/0xd20 net/core/dev.c:5086
+ __do_softirq+0x1d3/0x9c6 kernel/softirq.c:571
+ invoke_softirq kernel/softirq.c:445 [inline]
+ __irq_exit_rcu+0x123/0x180 kernel/softirq.c:650
+ irq_exit_rcu+0x5/0x20 kernel/softirq.c:662
+ sysvec_apic_timer_interrupt+0x93/0xc0 arch/x86/kernel/apic/apic.c:1106
+ </IRQ>
+ <TASK>
+ asm_sysvec_apic_timer_interrupt+0x16/0x20 arch/x86/include/asm/idtentry.h:649
+RIP: 0010:check_kcov_mode kernel/kcov.c:166 [inline]
+RIP: 0010:__sanitizer_cov_trace_pc+0xd/0x60 kernel/kcov.c:200
+Code: 00 00 e9 86 c0 81 02 66 0f 1f 44 00 00 48 8b be a8 01 00 00 e8 b4 ff ff ff 31 c0 c3 90 65 8b 05 19 66 86 7e 89 c1 48 8b 34 24 <81> e1 00 01 00 00 65 48 8b 14 25 80 6f 02 00 a9 00 01 ff 00 74 0e
+RSP: 0018:ffffc9000a98f758 EFLAGS: 00000246
+RAX: 0000000080000001 RBX: 00007fee55929000 RCX: 0000000080000001
+RDX: ffff888033c15880 RSI: ffffffff81b45ece RDI: 0000000000000001
+RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: ffffea0001b5bac8
+R13: ffffea0001b5bac0 R14: dffffc0000000000 R15: ffff888077a6a940
+ zap_pte_range mm/memory.c:1508 [inline]
+ zap_pmd_range mm/memory.c:1575 [inline]
+ zap_pud_range mm/memory.c:1604 [inline]
+ zap_p4d_range mm/memory.c:1625 [inline]
+ unmap_page_range+0xd1e/0x3cc0 mm/memory.c:1646
+ unmap_single_vma+0x196/0x360 mm/memory.c:1694
+ unmap_vmas+0x18c/0x310 mm/memory.c:1731
+ exit_mmap+0x1b8/0x490 mm/mmap.c:3116
+ __mmput+0x122/0x4b0 kernel/fork.c:1187
+ mmput+0x56/0x60 kernel/fork.c:1208
+ exit_mm kernel/exit.c:510 [inline]
+ do_exit+0x9e2/0x29b0 kernel/exit.c:782
+ do_group_exit+0xd2/0x2f0 kernel/exit.c:925
+ get_signal+0x238c/0x2610 kernel/signal.c:2857
+ arch_do_signal_or_restart+0x82/0x2300 arch/x86/kernel/signal.c:869
+ exit_to_user_mode_loop kernel/entry/common.c:166 [inline]
+ exit_to_user_mode_prepare+0x15f/0x250 kernel/entry/common.c:201
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
+ syscall_exit_to_user_mode+0x19/0x50 kernel/entry/common.c:294
+ do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fee55a89409
+Code: Unable to access opcode bytes at RIP 0x7fee55a893df.
+RSP: 002b:00007fee56bfb218 EFLAGS: 00000246 ORIG_RAX: 00000000000000ca
+RAX: fffffffffffffe00 RBX: 00007fee55b9bf88 RCX: 00007fee55a89409
+RDX: 0000000000000000 RSI: 0000000000000080 RDI: 00007fee55b9bf88
+RBP: 00007fee55b9bf80 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007fee55b9bf8c
+R13: 00007fffab12ee9f R14: 00007fee56bfb300 R15: 0000000000022000
+ </TASK>
+----------------
+Code disassembly (best guess):
+   0:	00 00                	add    %al,(%rax)
+   2:	e9 86 c0 81 02       	jmpq   0x281c08d
+   7:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+   d:	48 8b be a8 01 00 00 	mov    0x1a8(%rsi),%rdi
+  14:	e8 b4 ff ff ff       	callq  0xffffffcd
+  19:	31 c0                	xor    %eax,%eax
+  1b:	c3                   	retq
+  1c:	90                   	nop
+  1d:	65 8b 05 19 66 86 7e 	mov    %gs:0x7e866619(%rip),%eax        # 0x7e86663d
+  24:	89 c1                	mov    %eax,%ecx
+  26:	48 8b 34 24          	mov    (%rsp),%rsi
+* 2a:	81 e1 00 01 00 00    	and    $0x100,%ecx <-- trapping instruction
+  30:	65 48 8b 14 25 80 6f 	mov    %gs:0x26f80,%rdx
+  37:	02 00
+  39:	a9 00 01 ff 00       	test   $0xff0100,%eax
+  3e:	74 0e                	je     0x4e
 
-And ghes_edac is preferred if ghes_get_devices() gives you a list of
-devices or not.
-
-IOW, it all boils down to whether the list returned is NULL or not.
-
-HTH.
 
 ---
-diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
-index 8cb65f757d06..27c72b175e4b 100644
---- a/drivers/acpi/apei/ghes.c
-+++ b/drivers/acpi/apei/ghes.c
-@@ -109,6 +109,13 @@ static inline bool is_hest_type_generic_v2(struct ghes *ghes)
- bool ghes_disable;
- module_param_named(disable, ghes_disable, bool, 0);
- 
-+/*
-+ * "ghes.edac_force_enable" forcibly enables ghes_edac and skips the platform
-+ * check.
-+ */
-+static bool ghes_edac_force_enable;
-+module_param_named(edac_force_enable, ghes_edac_force_enable, bool, 0);
-+
- /*
-  * All error sources notified with HED (Hardware Error Device) share a
-  * single notifier callback, so they need to be linked and checked one
-@@ -120,6 +127,9 @@ module_param_named(disable, ghes_disable, bool, 0);
- static LIST_HEAD(ghes_hed);
- static DEFINE_MUTEX(ghes_list_mutex);
- 
-+static LIST_HEAD(ghes_devs);
-+static DEFINE_MUTEX(ghes_devs_mutex);
-+
- /*
-  * Because the memory area used to transfer hardware error information
-  * from BIOS to Linux can be determined only in NMI, IRQ or timer
-@@ -1378,7 +1388,11 @@ static int ghes_probe(struct platform_device *ghes_dev)
- 
- 	platform_set_drvdata(ghes_dev, ghes);
- 
--	ghes_edac_register(ghes, &ghes_dev->dev);
-+	ghes->dev = &ghes_dev->dev;
-+
-+	mutex_lock(&ghes_devs_mutex);
-+	list_add_tail(&ghes->elist, &ghes_devs);
-+	mutex_unlock(&ghes_devs_mutex);
- 
- 	/* Handle any pending errors right away */
- 	spin_lock_irqsave(&ghes_notify_lock_irq, flags);
-@@ -1442,7 +1456,9 @@ static int ghes_remove(struct platform_device *ghes_dev)
- 
- 	ghes_fini(ghes);
- 
--	ghes_edac_unregister(ghes);
-+	mutex_lock(&ghes_devs_mutex);
-+	list_del(&ghes->elist);
-+	mutex_unlock(&ghes_devs_mutex);
- 
- 	kfree(ghes);
- 
-@@ -1500,6 +1516,32 @@ void __init acpi_ghes_init(void)
- 		pr_info(GHES_PFX "Failed to enable APEI firmware first mode.\n");
- }
- 
-+/*
-+ * Known x86 systems that prefer GHES error reporting:
-+ */
-+static struct acpi_platform_list plat_list[] = {
-+	{"HPE   ", "Server  ", 0, ACPI_SIG_FADT, all_versions},
-+	{ } /* End */
-+};
-+
-+struct list_head *ghes_get_devices(void)
-+{
-+	int idx = -1;
-+
-+	if (IS_ENABLED(CONFIG_X86)) {
-+		idx = acpi_match_platform_list(plat_list);
-+		if (idx < 0) {
-+			if (!ghes_edac_force_enable)
-+				return NULL;
-+
-+			pr_warn_once("Force-loading ghes_edac on an unsupported platform. You're on your own!\n");
-+		}
-+	}
-+
-+	return &ghes_devs;
-+}
-+EXPORT_SYMBOL_GPL(ghes_get_devices);
-+
- void ghes_register_report_chain(struct notifier_block *nb)
- {
- 	atomic_notifier_chain_register(&ghes_report_chain, nb);
-diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
-index 17562cf1fe97..df45db81858b 100644
---- a/drivers/edac/Kconfig
-+++ b/drivers/edac/Kconfig
-@@ -53,8 +53,8 @@ config EDAC_DECODE_MCE
- 	  has been initialized.
- 
- config EDAC_GHES
--	bool "Output ACPI APEI/GHES BIOS detected errors via EDAC"
--	depends on ACPI_APEI_GHES && (EDAC=y)
-+	tristate "Output ACPI APEI/GHES BIOS detected errors via EDAC"
-+	depends on ACPI_APEI_GHES
- 	select UEFI_CPER
- 	help
- 	  Not all machines support hardware-driven error report. Some of those
-diff --git a/drivers/edac/ghes_edac.c b/drivers/edac/ghes_edac.c
-index 7b8d56a769f6..8460108e8623 100644
---- a/drivers/edac/ghes_edac.c
-+++ b/drivers/edac/ghes_edac.c
-@@ -54,12 +54,10 @@ static DEFINE_MUTEX(ghes_reg_mutex);
-  */
- static DEFINE_SPINLOCK(ghes_lock);
- 
--/* "ghes_edac.force_load=1" skips the platform check */
--static bool __read_mostly force_load;
--module_param(force_load, bool, 0);
--
- static bool system_scanned;
- 
-+static struct list_head *ghes_devs;
-+
- /* Memory Device - Type 17 of SMBIOS spec */
- struct memdev_dmi_entry {
- 	u8 type;
-@@ -387,34 +385,15 @@ static struct notifier_block ghes_edac_mem_err_nb = {
- 	.priority	= 0,
- };
- 
--/*
-- * Known systems that are safe to enable this module.
-- */
--static struct acpi_platform_list plat_list[] = {
--	{"HPE   ", "Server  ", 0, ACPI_SIG_FADT, all_versions},
--	{ } /* End */
--};
--
--int ghes_edac_register(struct ghes *ghes, struct device *dev)
-+static int ghes_edac_register(struct device *dev)
- {
- 	bool fake = false;
- 	struct mem_ctl_info *mci;
- 	struct ghes_pvt *pvt;
- 	struct edac_mc_layer layers[1];
- 	unsigned long flags;
--	int idx = -1;
- 	int rc = 0;
- 
--	if (IS_ENABLED(CONFIG_X86)) {
--		/* Check if safe to enable on this system */
--		idx = acpi_match_platform_list(plat_list);
--		if (!force_load && idx < 0)
--			return -ENODEV;
--	} else {
--		force_load = true;
--		idx = 0;
--	}
--
- 	/* finish another registration/unregistration instance first */
- 	mutex_lock(&ghes_reg_mutex);
- 
-@@ -458,15 +437,10 @@ int ghes_edac_register(struct ghes *ghes, struct device *dev)
- 		pr_info("This system has a very crappy BIOS: It doesn't even list the DIMMS.\n");
- 		pr_info("Its SMBIOS info is wrong. It is doubtful that the error report would\n");
- 		pr_info("work on such system. Use this driver with caution\n");
--	} else if (idx < 0) {
--		pr_info("This EDAC driver relies on BIOS to enumerate memory and get error reports.\n");
--		pr_info("Unfortunately, not all BIOSes reflect the memory layout correctly.\n");
--		pr_info("So, the end result of using this driver varies from vendor to vendor.\n");
--		pr_info("If you find incorrect reports, please contact your hardware vendor\n");
--		pr_info("to correct its BIOS.\n");
--		pr_info("This system has %d DIMM sockets.\n", ghes_hw.num_dimms);
- 	}
- 
-+	pr_info("This system has %d DIMM sockets.\n", ghes_hw.num_dimms);
-+
- 	if (!fake) {
- 		struct dimm_info *src, *dst;
- 		int i = 0;
-@@ -530,14 +504,11 @@ int ghes_edac_register(struct ghes *ghes, struct device *dev)
- 	return rc;
- }
- 
--void ghes_edac_unregister(struct ghes *ghes)
-+static void ghes_edac_unregister(struct ghes *ghes)
- {
- 	struct mem_ctl_info *mci;
- 	unsigned long flags;
- 
--	if (!force_load)
--		return;
--
- 	mutex_lock(&ghes_reg_mutex);
- 
- 	system_scanned = false;
-@@ -566,3 +537,32 @@ void ghes_edac_unregister(struct ghes *ghes)
- unlock:
- 	mutex_unlock(&ghes_reg_mutex);
- }
-+
-+static int __init ghes_edac_init(void)
-+{
-+	struct ghes *g, *g_tmp;
-+
-+	ghes_devs = ghes_get_devices();
-+	if (!ghes_devs)
-+		return -ENODEV;
-+
-+	list_for_each_entry_safe(g, g_tmp, ghes_devs, elist) {
-+		ghes_edac_register(g->dev);
-+	}
-+
-+	return 0;
-+}
-+module_init(ghes_edac_init);
-+
-+static void __exit ghes_edac_exit(void)
-+{
-+	struct ghes *g, *g_tmp;
-+
-+	list_for_each_entry_safe(g, g_tmp, ghes_devs, elist) {
-+		ghes_edac_unregister(g);
-+	}
-+}
-+module_exit(ghes_edac_exit);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("Output ACPI APEI/GHES BIOS detected errors module via EDAC");
-diff --git a/include/acpi/ghes.h b/include/acpi/ghes.h
-index 5cbd38b6e4e1..2e785d3554d8 100644
---- a/include/acpi/ghes.h
-+++ b/include/acpi/ghes.h
-@@ -27,6 +27,8 @@ struct ghes {
- 		struct timer_list timer;
- 		unsigned int irq;
- 	};
-+	struct device *dev;
-+	struct list_head elist;
- };
- 
- struct ghes_estatus_node {
-@@ -69,28 +71,14 @@ int ghes_register_vendor_record_notifier(struct notifier_block *nb);
-  * @nb: pointer to the notifier_block structure of the vendor record handler.
-  */
- void ghes_unregister_vendor_record_notifier(struct notifier_block *nb);
--#endif
--
--int ghes_estatus_pool_init(int num_ghes);
--
--/* From drivers/edac/ghes_edac.c */
--
--#ifdef CONFIG_EDAC_GHES
--int ghes_edac_register(struct ghes *ghes, struct device *dev);
--
--void ghes_edac_unregister(struct ghes *ghes);
- 
-+struct list_head *ghes_get_devices(void);
- #else
--static inline int ghes_edac_register(struct ghes *ghes, struct device *dev)
--{
--	return -ENODEV;
--}
--
--static inline void ghes_edac_unregister(struct ghes *ghes)
--{
--}
-+static inline struct list_head *ghes_get_devices(void) { return NULL; }
- #endif
- 
-+int ghes_estatus_pool_init(int num_ghes);
-+
- static inline int acpi_hest_get_version(struct acpi_hest_generic_data *gdata)
- {
- 	return gdata->revision >> 8;
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
