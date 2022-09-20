@@ -2,157 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A2BB5BF01C
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 00:31:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62A825BF020
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 00:31:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230264AbiITWad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 18:30:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42056 "EHLO
+        id S231182AbiITWbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 18:31:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231304AbiITWaN (ORCPT
+        with ESMTP id S231309AbiITWah (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 18:30:13 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE41D5A3C8
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 15:30:07 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id jm5so2843659plb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 15:30:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=UKSxoUS6VIIzYKH+SpWnYbcBjXQY18rL+go3ruU7WuU=;
-        b=mIaOZseZxPFYE7/aRWOFcv08907GUG3l11RDeJ2wt/jehjgBt6artQamEbtyQH1ZRm
-         3jFv0XgpJKt5zodkBnDn9Wkweya3Z4Sh3C1HN6abjs/OW2G5O5wJsUDFcOzKWO1nBDI9
-         7tznOJkRlVwBz3YBT5sZHkjW2Gv22da35bQpo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=UKSxoUS6VIIzYKH+SpWnYbcBjXQY18rL+go3ruU7WuU=;
-        b=Bo/yHF4UsQ+6BaGmv9mRE7AGiMrKYPDh+HK+HKKqvCsqvnsO5Iwb+uihuPcnHD7guo
-         yn4zX9ttRyqCHFArVD289ypfiN0Nk3Q0iiGDmESxuOzyTp8sME6QzB54pJn/keR0ZKOo
-         2RIA4ozEEGh+/+JGhSnimE9bv32ECAGeW8osShQ8cFkcK1wWXfM37/4Fms6qLiEVa1jg
-         yFTCZag00PVsDJ9RNJprapppXOsHkjrR82V4PtuDcOZh7UbOOJVxc2V50sDztG7KdCNm
-         i8wBOcFijj98ubh7DX8rBO2J8MNx5lbnN/JGAaoev8aVBP3TQYub4LziWXTJpMetjeX8
-         n2bA==
-X-Gm-Message-State: ACrzQf33Z3DBN+p7o4tQHmCAx8BxvCI7GDdcJ6YmZnaPhTWmorcL9B0G
-        BfC41cJB1kOxwhNIVhMGY1cQfA==
-X-Google-Smtp-Source: AMsMyM7Big1rXY5V8NOkfR0/wd1kVaVTiOspSsPtjj1lkkWdxfTbJIOrY4rgVzo3lyyMmp7nuIw2Hw==
-X-Received: by 2002:a17:903:120d:b0:178:a6ca:b974 with SMTP id l13-20020a170903120d00b00178a6cab974mr1741323plh.8.1663713007080;
-        Tue, 20 Sep 2022 15:30:07 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id n15-20020a17090a73cf00b0020063e7d63asm436074pjk.30.2022.09.20.15.30.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 15:30:06 -0700 (PDT)
-Date:   Tue, 20 Sep 2022 15:30:05 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Matthew Wilcox <willy@infradead.org>, dev@der-flo.net,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        stable <stable@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2] x86/uaccess: Avoid check_object_size() in
- copy_from_user_nmi()
-Message-ID: <202209201529.D90CDD898@keescook>
-References: <20220919201648.2250764-1-keescook@chromium.org>
- <CAOUHufZpan+wVO7tHgMOkX--0JGhv-mqj2Y+QQKRB4GAGSR18w@mail.gmail.com>
+        Tue, 20 Sep 2022 18:30:37 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD615FF49;
+        Tue, 20 Sep 2022 15:30:25 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MXGTB014Nz4xGC;
+        Wed, 21 Sep 2022 08:30:21 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1663713022;
+        bh=qk4XgG2mzxcKbrNJ8FlRuD3pj6kHAOuNVoW4BlDXlJw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=f81RY+b/quqLOFIx8N9MIzxrhHymvetFzNarhofNuYMHB9w5sBeefH3PeqwTgwNo6
+         6d2C9hMTU9PtKi2gy7JGRJuUzxr4s0NgYaMJpSshv5t3NewUYYaLoYnod0iYh9ElfJ
+         ykfRIEjdO3kAeov1RefqbcWkFmhhUzh2ysqBsZHVLPwyWQWM86eYUcMp382WlSt/1K
+         SUeItz4cn4/nKpsALw2Rgxka3/ndSxFSAd2msYEQdDt252n3RKy7I42kKa1VAVhvxJ
+         HfEZfCmw/jXB/7Pm+MRPMBG7vhYTda7Lu0d/spRzQdGhlf7/hxt7SaRgfE5nsNb+Pz
+         xrJI1KLzahxBA==
+Date:   Wed, 21 Sep 2022 08:30:20 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>
+Cc:     Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the bluetooth tree
+Message-ID: <20220921083020.6c046d27@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAOUHufZpan+wVO7tHgMOkX--0JGhv-mqj2Y+QQKRB4GAGSR18w@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/_zjlSnq9o4G_7A3n7Zn9mli";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 04:23:00PM -0600, Yu Zhao wrote:
-> On Mon, Sep 19, 2022 at 2:16 PM Kees Cook <keescook@chromium.org> wrote:
-> >
-> > The check_object_size() helper under CONFIG_HARDENED_USERCOPY is
-> > designed to skip any checks where the length is known at compile time as
-> > a reasonable heuristic to avoid "likely known-good" cases. However, it can
-> > only do this when the copy_*_user() helpers are, themselves, inline too.
-> >
-> > Using find_vmap_area() requires taking a spinlock. The check_object_size()
-> > helper can call find_vmap_area() when the destination is in vmap memory.
-> > If show_regs() is called in interrupt context, it will attempt a call to
-> > copy_from_user_nmi(), which may call check_object_size() and then
-> > find_vmap_area(). If something in normal context happens to be in the
-> > middle of calling find_vmap_area() (with the spinlock held), the interrupt
-> > handler will hang forever.
-> >
-> > The copy_from_user_nmi() call is actually being called with a fixed-size
-> > length, so check_object_size() should never have been called in
-> > the first place. Given the narrow constraints, just replace the
-> > __copy_from_user_inatomic() call with an open-coded version that calls
-> > only into the sanitizers and not check_object_size(), followed by a call
-> > to raw_copy_from_user().
-> >
-> > Reported-by: Yu Zhao <yuzhao@google.com>
-> > Link: https://lore.kernel.org/all/CAOUHufaPshtKrTWOz7T7QFYUNVGFm0JBjvM700Nhf9qEL9b3EQ@mail.gmail.com
-> > Reported-by: dev@der-flo.net
-> > Suggested-by: Andrew Morton <akpm@linux-foundation.org>
-> > Cc: Matthew Wilcox <willy@infradead.org>
-> > Cc: Peter Zijlstra <peterz@infradead.org>
-> > Cc: Josh Poimboeuf <jpoimboe@kernel.org>
-> > Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> > Cc: x86@kernel.org
-> > Fixes: 0aef499f3172 ("mm/usercopy: Detect vmalloc overruns")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > ---
-> > v2: drop the call explicitly instead of using inline to do it
-> > v1: https://lore.kernel.org/lkml/20220916135953.1320601-1-keescook@chromium.org
-> > ---
-> >  arch/x86/lib/usercopy.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/arch/x86/lib/usercopy.c b/arch/x86/lib/usercopy.c
-> > index ad0139d25401..d2aff9b176cf 100644
-> > --- a/arch/x86/lib/usercopy.c
-> > +++ b/arch/x86/lib/usercopy.c
-> > @@ -44,7 +44,8 @@ copy_from_user_nmi(void *to, const void __user *from, unsigned long n)
-> >          * called from other contexts.
-> >          */
-> >         pagefault_disable();
-> > -       ret = __copy_from_user_inatomic(to, from, n);
-> > +       instrument_copy_from_user(to, from, n);
-> 
-> Got a build error on top of mm-unstable:
-> 
-> arch/x86/lib/usercopy.c:47:2: error: call to undeclared function
-> 'instrument_copy_from_user'; ISO C99 and later do not support implicit
-> function declarations [-Wimplicit-function-declaration]
->         instrument_copy_from_user(to, from, n);
->         ^
-> arch/x86/lib/usercopy.c:47:2: note: did you mean 'instrument_copy_to_user'?
-> ./include/linux/instrumented.h:117:1: note: 'instrument_copy_to_user'
-> declared here
-> instrument_copy_to_user(void __user *to, const void *from, unsigned long n)
-> ^
-> 1 error generated.
+--Sig_/_zjlSnq9o4G_7A3n7Zn9mli
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Hm, I did test builds of this before sending. I wonder why this passed
-for me. I suppose this is needed explicitly in arch/x86/lib/usercopy.c:
+Hi all,
 
-#include <linux/instrumented.h>
+Commit
 
-?
+  239491111238 ("Bluetooth: MGMT: fix zalloc-simple.cocci warnings")
 
--- 
-Kees Cook
+is missing a Signed-off-by from its committer.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/_zjlSnq9o4G_7A3n7Zn9mli
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMqPvwACgkQAVBC80lX
+0GyzXwgAg3vvs5U2kqAow1jJgjbShphCclwj8V20W/32g/bcPXfNVSdjAZqcchTK
+3HeENwAFtV/Eqy7kIHhfBYbtseZ0rNJkYS1uRcHcWPPgsglgQ5GzSpvjfqiKleq5
+UrIocL8CgkwBwCIWSv9sNYBSVsIHLTzLetwj9cpg5K3CRkgFehMiYtWQcByiWs3C
+5O8qd9794HDET9Ou8L5Hq6RE2//WGcjI+nHnK/7YqQx1p+5cxuJ22sqHJgJoBQBw
+1E6W2TK7lG1sU16GjWOVxkxBwGO+4lfVJVKoXxDlEXycFMZ/7yc/88aW4A1F32FS
+XO8hFWvbvYmRKz0HIAKqUmZrtP2BWQ==
+=ALgB
+-----END PGP SIGNATURE-----
+
+--Sig_/_zjlSnq9o4G_7A3n7Zn9mli--
