@@ -2,90 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D48775BE0DA
+	by mail.lfdr.de (Postfix) with ESMTP id 8849A5BE0D9
 	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 10:57:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231214AbiITI4b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 04:56:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52206 "EHLO
+        id S231312AbiITI47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 04:56:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230359AbiITI42 (ORCPT
+        with ESMTP id S230359AbiITI4z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 04:56:28 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD3056B170
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 01:56:26 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1oaZ3C-0008RQ-Ba; Tue, 20 Sep 2022 10:56:18 +0200
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1oaZ3B-0002kh-He; Tue, 20 Sep 2022 10:56:17 +0200
-Date:   Tue, 20 Sep 2022 10:56:17 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     mchehab@kernel.org, laurent.pinchart+renesas@ideasonboard.com,
-        akinobu.mita@gmail.com, jacopo+renesas@jmondi.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] media: mt9m111: add V4L2_CID_LINK_FREQ support
-Message-ID: <20220920085617.7cfflloegh7en4mj@pengutronix.de>
-References: <20220916135713.143890-1-m.felsch@pengutronix.de>
- <YyhjpxHHFR4u+k+X@paasikivi.fi.intel.com>
- <20220919130829.ddoe2ajnrarkywgy@pengutronix.de>
- <YyhsQ+l1Sls00F0M@paasikivi.fi.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YyhsQ+l1Sls00F0M@paasikivi.fi.intel.com>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Tue, 20 Sep 2022 04:56:55 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F07E66B170
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 01:56:54 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id c7so1881559pgt.11
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 01:56:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date;
+        bh=1xCkS/NtliFBAi/Unm7O+jqERrlsw7P433sZiPkri3c=;
+        b=azy6gWBcH4uAn3JvvMQoDVf6XDBtjAt5NsZSWHLqsSuh4LJjSUMemhinc/jbUGQkNz
+         nSjbWacmQzT0rFScKnaXXVgE/9M4fLe1q7HJ2WaujXmuSJjwS4RHp5acXPeqYF83ht6z
+         BxBcRNj+t3HCeMaPJzDrr0/z0n8qxrJ34c+Py8pNW+95MahPfZ4yUIJl5ngeLToM0ZC4
+         4Jsgt2sn25OJMS/SeSkqpk/D5v616MJ1BqTh/8DOxGvRLpp4EzygolAktTUGqO88/Ys5
+         MXnmDRgw8Sg4Ib3mF2wZCSNf33n2NVcEL0lX8lfdJyPgWDszilpA5/AOUrC4Ab5vU4Bb
+         COAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date;
+        bh=1xCkS/NtliFBAi/Unm7O+jqERrlsw7P433sZiPkri3c=;
+        b=5fhNx5WEaUgz84VOXXw6qpC6CeQdWET94vP1PsxVhNNXckfwzO4YhX1I2Zhmv5LIur
+         BoyBsByQcAACRdLzWuOQGfNux18Nu8dDgBOSxWbAF4rc/iqe/11Ubgp0XK1P17vYSMwY
+         qGfm0ZuerOC/IdJb+Y7ghds+l7ctLi2Sq1KOqWMpycg+Vo2YLAI5uXEtJHabhOotEPi6
+         HhlB1E9COIslMhON8ULCmhHPdfwyTQV/v0xZf8AYGkTTTgXduj86Q/47xy0thWsBsIfc
+         Gnwasa/44Ksctna5UD78Z3wF7eLzrbJD8Imm+FmBuq0CunuItSWRr3c7G0xft/2kU60U
+         ZLzg==
+X-Gm-Message-State: ACrzQf3iIdD+5gQsANPuFZxTeS9ufYxdMCVPUhpScxN0TMEWz/4CQKf0
+        isnLNiAs/z7bl5g0mKa6JiIBYqZTI6ZQfA==
+X-Google-Smtp-Source: AMsMyM48Yj9b5Zqz62ykAeM1jQWHvPRvE0b7QwL9zrD02o/110sRTUMvRa0KxyX0KGZe86Bc2XWSAA==
+X-Received: by 2002:a63:88c8:0:b0:439:494d:fd10 with SMTP id l191-20020a6388c8000000b00439494dfd10mr19078526pgd.201.1663664214258;
+        Tue, 20 Sep 2022 01:56:54 -0700 (PDT)
+Received: from localhost ([203.219.227.147])
+        by smtp.gmail.com with ESMTPSA id a2-20020a1709027e4200b001754fa42065sm868869pln.143.2022.09.20.01.56.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Sep 2022 01:56:53 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 20 Sep 2022 18:56:49 +1000
+Message-Id: <CN13QQX0NEA2.M6SABG46NYYN@bobo>
+Cc:     <linux-kernel@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH v2 06/19] powerpc/cputable: Split cpu_specs[] out of
+ cputable.h
+From:   "Nicholas Piggin" <npiggin@gmail.com>
+To:     "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "Michael Ellerman" <mpe@ellerman.id.au>
+X-Mailer: aerc 0.11.0
+References: <828f6a64eeb51ce9abfa1d4e84c521a02fecebb8.1663606875.git.christophe.leroy@csgroup.eu> <a44b865e0318286155273b10cdf524ab697928c1.1663606875.git.christophe.leroy@csgroup.eu>
+In-Reply-To: <a44b865e0318286155273b10cdf524ab697928c1.1663606875.git.christophe.leroy@csgroup.eu>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sakari,
+On Tue Sep 20, 2022 at 3:01 AM AEST, Christophe Leroy wrote:
+> cpu_specs[] is full of #ifdefs depending on the different
+> types of CPU.
+>
+> CPUs are mutually exclusive, it is therefore possible to split
+> cpu_specs[] into smaller more readable pieces.
+>
+> Create cpu_specs_XXX.h that will each be dedicated on one
+> of the following mutually exclusive families:
+> - 40x
+> - 44x
+> - 47x
+> - 8xx
+> - e500
+> - book3s/32
+> - book3s/64
+>
+> In book3s/32, the block for 603 has been moved in front in order
+> to not have two 604 blocks.
 
-On 22-09-19, Sakari Ailus wrote:
 
-...
+>
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> ---
+>  arch/powerpc/kernel/cpu_specs.h           |   27 +
+>  arch/powerpc/kernel/cpu_specs_40x.h       |  280 +++
+>  arch/powerpc/kernel/cpu_specs_44x.h       |  304 ++++
+>  arch/powerpc/kernel/cpu_specs_47x.h       |   78 +
+>  arch/powerpc/kernel/cpu_specs_8xx.h       |   21 +
+>  arch/powerpc/kernel/cpu_specs_book3s_32.h |  607 +++++++
+>  arch/powerpc/kernel/cpu_specs_book3s_64.h |  488 ++++++
+>  arch/powerpc/kernel/cpu_specs_e500.h      |  135 ++
+>  arch/powerpc/kernel/cputable.c            | 1877 +--------------------
 
-> > > > +	ret = clk_prepare_enable(mt9m111->clk);
-> > > > +	if (ret < 0)
-> > > > +		return ret;
-> > > > +
-> > > > +	extclk_rate = clk_get_rate(mt9m111->clk);
-> > > > +	clk_disable_unprepare(mt9m111->clk);
-> > > 
-> > > I don't think you'll need to enable a clock to just get its frequency.
-> > 
-> > The official API states that you need to turn on the clk before
-> > requesting it and it makes sense. Also there is a new helper
-> > devm_clk_get_enabled() which addresses simple clk usage since most of
-> > drivers don't enable it before requesting the rate.
-> 
-> I guess the rate could change in the meantime, unless exclusive access is
-> requested. 
+This series is a nice cleanup. No comments yet but kernel/ is getting
+pretty crowded. Should we make some subdirectories for subarch things
+like mm has?
 
-Not only that, there are a bunch of clk provider hw around which may
-need to turned on first. Anyway, I really don't care on this topic. As
-I said I wanted to fullfil the API and if drop clk_prepare_enable() I
-don't. So if this okay for you I will go that way.
+Can do that after your series. Probably requires another merge window
+to do it.
 
-> The clock framework currently doesn't offer a way to set the assigned
-> rate and prevent changing it. But above, couldn't the clock frequency
-> be changed again once the clock has been disabled?
-
-Yes it could.
-
-Regards,
-  Marco
+Thanks,
+Nick
