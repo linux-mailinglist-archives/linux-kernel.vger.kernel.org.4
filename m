@@ -2,49 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 729095BEB47
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 18:43:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C4BC5BEB4C
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 18:45:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231363AbiITQnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 12:43:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57846 "EHLO
+        id S231453AbiITQpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 12:45:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231384AbiITQnh (ORCPT
+        with ESMTP id S231408AbiITQo4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 12:43:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8341696C0
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 09:43:36 -0700 (PDT)
+        Tue, 20 Sep 2022 12:44:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9108213E27;
+        Tue, 20 Sep 2022 09:44:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 49591B82AA2
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 16:43:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69005C433D6;
-        Tue, 20 Sep 2022 16:43:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B56562B4F;
+        Tue, 20 Sep 2022 16:44:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 868C8C43470;
+        Tue, 20 Sep 2022 16:44:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663692214;
-        bh=IplAMBKOu/DwLwd5Y8rhPLP0bAx8c+66+j6Ae10JGuc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fYzQyfrJS3Js0r1ARmXCwLLtM+lRrJ4Pc+tMOjVQNNxH2Y1oSFA2li8Znn+PgvM9x
-         kN/zzUl/3GelMSRbzYVEdcrIhpyipeAbdlsTraitVnpNccvuNf5eWAf9FZpA+yoyVU
-         DpHgpTZLri5jPHBck9KHf20G4+t7hyzk6ToYRDx5exDnKYT61rX9Ucyhdh3EICYGvq
-         ERHfjSXxhnOvfFzaMwkGTRJ+Jxemvs1Ssp4mrljGqB7LEAu/jRHq1HeOR2ga6CLrYB
-         oCUOHAPhpsJ7BeVrT8r+/rntXY3JiaW/enHjaXddvU2YiwFew5LvhQshKYuUgjO6dt
-         rB4Fuk8ct04yg==
-From:   SeongJae Park <sj@kernel.org>
-To:     xiakaixu1987@gmail.com
-Cc:     sj@kernel.org, akpm@linux-foundation.org, damon@lists.linux.dev,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Kaixu Xia <kaixuxia@tencent.com>
-Subject: Re: [PATCH v2] mm/damon: deduplicate damon_{reclaim,lru_sort}_apply_parameters()
-Date:   Tue, 20 Sep 2022 16:43:31 +0000
-Message-Id: <20220920164331.59056-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <1663645461-21084-1-git-send-email-kaixuxia@tencent.com>
-References: 
+        s=k20201202; t=1663692294;
+        bh=XIsRykKdGIJ+RZITE67y/5dHz3YGRh/z9EWZg+FrivU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=FEAo2CYlL6TCfxwNk8R5Lka/RkflGNBbITwbG1b/FazyvOnhLu1xtwrlvPRtmupyh
+         ySLDDROfDB0eNBuL+Pls/96mWcf485xPBBQIVMYf1X2W0a+yyGbfepDuy1ymti/uam
+         Rph92vC78UZ3C2oTp2sogjDjWr/C+JhZDeUoZDZJiW41MMA3EdWo0edcI9MwvYYmFx
+         wQ6NBe7wheZDi+8pcLRSBdkXuGjA3m3C5JyvBEX2GoXNfCEc4iFYpnEmQnGPl83FRQ
+         FmooEIsC2pjM8Vw+XqfHe2PPW+UMI/1VOtg6BlI3pF1PgUL9OyS+grLoooXEed6+SU
+         uUQZeulUXhdSw==
+Received: by mail-lf1-f50.google.com with SMTP id j16so4797303lfg.1;
+        Tue, 20 Sep 2022 09:44:54 -0700 (PDT)
+X-Gm-Message-State: ACrzQf2/FzE3EUQUxb6PvATgI8F8dRt9Igl2+g/QPc4akmoa1IDckRw7
+        B/HEnZXiwSDMcu8AKsGOgNx5GFj3w0ANnZ3OpxE=
+X-Google-Smtp-Source: AMsMyM7YfCjjO+1K7sVpyuUbefVF0ofb9t18Bsop16/pHu5lVYZ43kb+0I0nchspS9Agje+mDAu1AP8ShTlA1iUQprQ=
+X-Received: by 2002:a05:6512:ba1:b0:498:9890:1bb4 with SMTP id
+ b33-20020a0565120ba100b0049898901bb4mr7983242lfv.122.1663692292587; Tue, 20
+ Sep 2022 09:44:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220909194214.186731-1-gpiccoli@igalia.com> <04d65bd7-a6b2-bb14-fd69-632542ae9e86@wanadoo.fr>
+ <e8ce8fb4-baac-b3a5-5d6d-418e20c8d2d9@igalia.com>
+In-Reply-To: <e8ce8fb4-baac-b3a5-5d6d-418e20c8d2d9@igalia.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Tue, 20 Sep 2022 18:44:40 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXGze41X9ogZDEbm7=04XnFRPGjV7RMmeJnOveAsTfgDhQ@mail.gmail.com>
+Message-ID: <CAMj1kXGze41X9ogZDEbm7=04XnFRPGjV7RMmeJnOveAsTfgDhQ@mail.gmail.com>
+Subject: Re: [PATCH V2] efi: efibc: Guard against allocation failure
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net,
+        matt@codeblueprint.co.uk, mjg59@srcf.ucam.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -54,184 +64,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kaixu,
+On Sun, 11 Sept 2022 at 16:36, Guilherme G. Piccoli <gpiccoli@igalia.com> wrote:
+>
+> On 10/09/2022 01:56, Christophe JAILLET wrote:
+> > [...]
+> >>      wdata = kmalloc(MAX_DATA_LEN * sizeof(efi_char16_t), GFP_KERNEL);
+> > Hi,
+> >
+> > even if mostly useless in this case, kmalloc_array()?
+> >
+> > Or certainly maybe even better, kstrndup()?
+> >
+> > CJ
+> >
+>
+> Thanks! It's up to Ard, I could rework with this change if makes sense.
+> Cheers,
+>
 
-On Tue, 20 Sep 2022 11:44:21 +0800 xiakaixu1987@gmail.com wrote:
+kstrndup() does not work on wide strings so I think the code is fine as is.
 
-> From: Kaixu Xia <kaixuxia@tencent.com>
-> 
-> The bodies of damon_{reclaim,lru_sort}_apply_parameters() contain
-> duplicates. This commit add a common function
-
-s/add/adds/
-
-> damon_set_region_biggest_system_ram_default() to removes the
-
-s/removes/remove/
-
-> duplicates.
-> 
-> Signed-off-by: Kaixu Xia <kaixuxia@tencent.com>
-> Suggested-by: SeongJae Park <sj@kernel.org>
-> ---
-> v2:
->  -change the common function name and add kernel comment.
-
-Adding a link to the previous version of the patch here would be very helpful
-for me.  Could you please do so from next time?
-
-> 
->  include/linux/damon.h |  3 ++-
->  mm/damon/core.c       | 35 ++++++++++++++++++++++++++++++++++-
->  mm/damon/lru_sort.c   | 13 +++----------
->  mm/damon/reclaim.c    | 13 +++----------
->  4 files changed, 42 insertions(+), 22 deletions(-)
-> 
-> diff --git a/include/linux/damon.h b/include/linux/damon.h
-> index e7808a84675f..ed5470f50bab 100644
-> --- a/include/linux/damon.h
-> +++ b/include/linux/damon.h
-> @@ -557,7 +557,8 @@ static inline bool damon_target_has_pid(const struct damon_ctx *ctx)
->  int damon_start(struct damon_ctx **ctxs, int nr_ctxs, bool exclusive);
->  int damon_stop(struct damon_ctx **ctxs, int nr_ctxs);
->  
-> -bool damon_find_biggest_system_ram(unsigned long *start, unsigned long *end);
-> +int damon_set_region_biggest_system_ram_default(struct damon_target *t,
-> +				unsigned long *start, unsigned long *end);
->  
->  #endif	/* CONFIG_DAMON */
->  
-> diff --git a/mm/damon/core.c b/mm/damon/core.c
-> index 9c80c6eb00c2..9e96cb9fb5db 100644
-> --- a/mm/damon/core.c
-> +++ b/mm/damon/core.c
-> @@ -1245,7 +1245,8 @@ static int walk_system_ram(struct resource *res, void *arg)
->   * Find biggest 'System RAM' resource and store its start and end address in
->   * @start and @end, respectively.  If no System RAM is found, returns false.
->   */
-> -bool damon_find_biggest_system_ram(unsigned long *start, unsigned long *end)
-> +static bool damon_find_biggest_system_ram(unsigned long *start,
-> +						unsigned long *end)
->  
->  {
->  	struct damon_system_ram_region arg = {};
-> @@ -1259,6 +1260,38 @@ bool damon_find_biggest_system_ram(unsigned long *start, unsigned long *end)
->  	return true;
->  }
->  
-> +/*
-> + * damon_set_region_biggest_system_ram_default() - Set the region of the given
-> + * monitoring target as requested, or biggest 'System RAM'.
-> + * @t:		The monitoring target to set the region.
-> + * @start:	The pointer to the start address of the region.
-> + * @end:	The pointer to the end address of the region.
-> + *
-> + * This function sets the region of @t as requested by @start and @end.  If the
-> + * values of the two pointers are pointing to are zero, however, this function
-> + * finds the biggest 'System RAM' resource and set the region to cover the
-
-s/set/sets/
-
-> + * resource.  In the latter case, this function saves the start and end address
-
-s/address/addresses/
-
-> + * of the resource in @start and @end, respectively.
-> + *
-> + * Return: 0 on success, negative error code otherwise.
-> + */
-> +int damon_set_region_biggest_system_ram_default(struct damon_target *t,
-> +			unsigned long *start, unsigned long *end)
-> +{
-> +	struct damon_addr_range addr_range;
-> +
-> +	if (*start > *end)
-> +		return -EINVAL;
-> +
-> +	if (!*start && !*end &&
-> +		!damon_find_biggest_system_ram(start, end))
-> +		return -EINVAL;
-> +
-> +	addr_range.start = *start;
-> +	addr_range.end = *end;
-> +	return damon_set_regions(t, &addr_range, 1);
-> +}
-> +
->  static int __init damon_init(void)
->  {
->  	damon_region_cache = KMEM_CACHE(damon_region, 0);
-> diff --git a/mm/damon/lru_sort.c b/mm/damon/lru_sort.c
-> index d7eb72b41cb6..efbc2bda8b9c 100644
-> --- a/mm/damon/lru_sort.c
-> +++ b/mm/damon/lru_sort.c
-> @@ -188,7 +188,6 @@ static struct damos *damon_lru_sort_new_cold_scheme(unsigned int cold_thres)
->  static int damon_lru_sort_apply_parameters(void)
->  {
->  	struct damos *scheme;
-> -	struct damon_addr_range addr_range;
->  	unsigned int hot_thres, cold_thres;
->  	int err = 0;
->  
-> @@ -211,15 +210,9 @@ static int damon_lru_sort_apply_parameters(void)
->  		return -ENOMEM;
->  	damon_add_scheme(ctx, scheme);
->  
-> -	if (monitor_region_start > monitor_region_end)
-> -		return -EINVAL;
-> -	if (!monitor_region_start && !monitor_region_end &&
-> -	    !damon_find_biggest_system_ram(&monitor_region_start,
-> -					   &monitor_region_end))
-> -		return -EINVAL;
-> -	addr_range.start = monitor_region_start;
-> -	addr_range.end = monitor_region_end;
-> -	return damon_set_regions(target, &addr_range, 1);
-> +	return damon_set_region_biggest_system_ram_default(target,
-> +					&monitor_region_start,
-> +					&monitor_region_end);
->  }
->  
->  static int damon_lru_sort_turn(bool on)
-> diff --git a/mm/damon/reclaim.c b/mm/damon/reclaim.c
-> index 3d59ab11b7b3..162c9b1ca00f 100644
-> --- a/mm/damon/reclaim.c
-> +++ b/mm/damon/reclaim.c
-> @@ -144,7 +144,6 @@ static struct damos *damon_reclaim_new_scheme(void)
->  static int damon_reclaim_apply_parameters(void)
->  {
->  	struct damos *scheme;
-> -	struct damon_addr_range addr_range;
->  	int err = 0;
->  
->  	err = damon_set_attrs(ctx, &damon_reclaim_mon_attrs);
-> @@ -157,15 +156,9 @@ static int damon_reclaim_apply_parameters(void)
->  		return -ENOMEM;
->  	damon_set_schemes(ctx, &scheme, 1);
->  
-> -	if (monitor_region_start > monitor_region_end)
-> -		return -EINVAL;
-> -	if (!monitor_region_start && !monitor_region_end &&
-> -	    !damon_find_biggest_system_ram(&monitor_region_start,
-> -					   &monitor_region_end))
-> -		return -EINVAL;
-> -	addr_range.start = monitor_region_start;
-> -	addr_range.end = monitor_region_end;
-> -	return damon_set_regions(target, &addr_range, 1);
-> +	return damon_set_region_biggest_system_ram_default(target,
-> +					&monitor_region_start,
-> +					&monitor_region_end);
->  }
->  
->  static int damon_reclaim_turn(bool on)
-> -- 
-> 2.27.0
-
-Other than above mean and trivial comments,
-
-Reviewed-by: SeongJae Park <sj@kernel.org>
-
-As the comments are only for trivial grammar things, I will revise and post one
-on my own.
-
-
-Thanks,
-SJ
+I've queued it as a fix - thanks.
