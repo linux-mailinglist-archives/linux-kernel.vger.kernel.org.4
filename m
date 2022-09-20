@@ -2,123 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B6F55BE0CD
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 10:54:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F95F5BE0D0
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 10:55:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231175AbiITIyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 04:54:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45768 "EHLO
+        id S231367AbiITIya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 04:54:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230469AbiITIyF (ORCPT
+        with ESMTP id S231304AbiITIyX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 04:54:05 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 196686B64E;
-        Tue, 20 Sep 2022 01:54:05 -0700 (PDT)
+        Tue, 20 Sep 2022 04:54:23 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76B7B6B8E5
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 01:54:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663664045; x=1695200045;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bE7Qmiy6NhKs0sdl809v9zg8SKzJzql0subSBeUamVk=;
-  b=HrnEPjJ677FoXIU2d3z9K6U++X6aXVrotmUMGtyr+CdQSETZ5bpOHKjY
-   G42WF9iXRgJ8ypbCmlHJytvJk7hZPnrlWoIW0fFF/yWH1g8r6qIsjU0G5
-   mTpNlSJbcaFgQJMuq3TmcD3WphIbWnQ/f3r90mbTTOi4RQbIqdpHrYp6Y
-   kpwX3T5l7eyXqESQ8BjR7RGjRvgT9UsKZcBT4MJGKyF1d0JW/YV3N73no
-   I7w6ai0UhFVEgr9HOLn3dlgNpTSm5CwsFgCuCMgNTvqNR9kbwD8F6Fn0l
-   1AmsOnG3XVhqDMh1YAt8A1icmLU50GxVamNVBUeYDDYdR9Jo7xT+iGaOf
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="298364557"
+  t=1663664055; x=1695200055;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=lWATD4E8cke1MAacqKuanLY1ISCYiVkla0w3ukWrszY=;
+  b=a2tj/l0pbIY1dpPf79+teL8HHsGb1ttAic9S9GGn/6PehtlTzT6EDG+2
+   4inkU3CdHUGXlE2Wa7ey57zrXc5hfNf0GH/9I73tcBo05DiKNEU2QrAOU
+   sNUn1j3QZlcL7YxVR1jrMJUd8tObJUyAZtBmuiWMXQapAtix5808064ij
+   hqRBiRVTsTw/64wpkgySXGIsLsLTHl5GrxpMEEdnsRk8LpZrjEFyL2Xvk
+   VSGcDMmu5La68rs7XfXzGAq74cXJGumr5Twk4hOJC3MMt60A+wo9nVyxz
+   vq8KXYxWQVq+QoTox82xYirenjmDf/mBMQjgEMkK+KVFVOuU10B+uAYWM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="297231660"
 X-IronPort-AV: E=Sophos;i="5.93,330,1654585200"; 
-   d="scan'208";a="298364557"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 01:54:00 -0700
+   d="scan'208";a="297231660"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 01:54:15 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,330,1654585200"; 
-   d="scan'208";a="614317268"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 01:53:56 -0700
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id A54D1200DA;
-        Tue, 20 Sep 2022 11:53:54 +0300 (EEST)
-Date:   Tue, 20 Sep 2022 08:53:54 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Marco Felsch <m.felsch@pengutronix.de>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        mchehab@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, kishon@ti.com, vkoul@kernel.org,
-        hverkuil@xs4all.nl, jacopo@jmondi.org,
-        kieran.bingham+renesas@ideasonboard.com,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        kernel@pengutronix.de
-Subject: Re: [PATCH v2 4/4] media: tc358746: add Toshiba TC358746 Parallel to
- CSI-2 bridge driver
-Message-ID: <Yyl/oqZwUUb1Z0qM@paasikivi.fi.intel.com>
-References: <20220916134535.128131-1-m.felsch@pengutronix.de>
- <20220916134535.128131-5-m.felsch@pengutronix.de>
- <YyhktzmcgXKnrMFU@pendragon.ideasonboard.com>
- <20220919171142.6av6ap5gwweldado@pengutronix.de>
- <Yyio06jhK13BiNiP@pendragon.ideasonboard.com>
- <YyjI/JOcryD8yKzT@paasikivi.fi.intel.com>
- <20220920083908.st4h3pb6usn4zavu@pengutronix.de>
+   d="scan'208";a="687323018"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 20 Sep 2022 01:54:13 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oaZ1B-0002d7-11;
+        Tue, 20 Sep 2022 08:54:13 +0000
+Date:   Tue, 20 Sep 2022 16:53:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Jason A. Donenfeld" <zx2c4@kernel.org>
+Cc:     kbuild-all@lists.01.org, Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:crng/random/jd/vdso 3/3]
+ drivers/char/random.c:164:42: error: expected declaration specifiers or
+ '...' before '_vdso_rng_data'
+Message-ID: <202209201604.aAX4Shb6-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220920083908.st4h3pb6usn4zavu@pengutronix.de>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marco,
+tree:   https://github.com/ammarfaizi2/linux-block crng/random/jd/vdso
+head:   a7b31acb923dbd25e7bf030ca209f131c31f5288
+commit: a7b31acb923dbd25e7bf030ca209f131c31f5288 [3/3] random: implement getrandom() in vDSO
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20220920/202209201604.aAX4Shb6-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/a7b31acb923dbd25e7bf030ca209f131c31f5288
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block crng/random/jd/vdso
+        git checkout a7b31acb923dbd25e7bf030ca209f131c31f5288
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/
 
-On Tue, Sep 20, 2022 at 10:39:08AM +0200, Marco Felsch wrote:
-> Hi Sakari,
-> 
-> On 22-09-19, Sakari Ailus wrote:
-> > On Mon, Sep 19, 2022 at 08:37:23PM +0300, Laurent Pinchart wrote:
-> > > > > > +	ctrl = v4l2_ctrl_new_int_menu(&tc358746->ctrl_hdl, NULL,
-> > > > > > +				      V4L2_CID_LINK_FREQ, 0, 0,
-> > > > > 
-> > > > > Shouldn't the max argument be set to the number of items minus 1 ?
-> > > > 
-> > > > Right now I would keep it that way since the driver only supports one
-> > > > link-frequencies setting. So the ctrl don't let the userspace assume
-> > > > that there are more than one link-frequency.
-> > > 
-> > > Good point. Can you add a short comment above the call to explain this ?
-> > 
-> > Wouldn't it be just easier to do what Laurent suggested originally? The end
-> > result is the same, isn't it, and no comment needed?
-> 
-> The end result depends on the device-tree given "link-frequencies"
-> property. The driver currently takes only one frequency but the
-> system-integrator of course can specify many more. In such case the 1st
-> is used. If I go with Laurent's comment, all frequencies would be shown
-> to the user-space but IMHO this shouldn't be the case since the driver
-> supports only 1 frequency.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Yes, indeed. The driver can later be amended to support this.
+All errors (new ones prefixed by >>):
 
-> 
-> > > 
-> > > > > > +				      link_frequencies);
-> > > > > > +	if (ctrl)
-> > > > > > +		ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
-> > 
-> > Now that this is a bridge, this value presumably doesn't need to change.
-> 
-> The value can change, e.g. if you have a few freq. to allow a wide range
-> of frame sizes. This can be the case to conform the emv tests. So there
-> can be a freq. for smaller frame sizes and one for larger frame sizes.
+>> drivers/char/random.c:164:42: error: expected declaration specifiers or '...' before '_vdso_rng_data'
+     164 | DEFINE_VVAR_SINGLE(struct vdso_rng_data, _vdso_rng_data);
+         |                                          ^~~~~~~~~~~~~~
 
-Ack.
+
+vim +164 drivers/char/random.c
+
+   146	
+   147	#define warn_unseeded_randomness() \
+   148		if (IS_ENABLED(CONFIG_WARN_ALL_UNSEEDED_RANDOM) && !crng_ready()) \
+   149			printk_deferred(KERN_NOTICE "random: %s called from %pS with crng_init=%d\n", \
+   150					__func__, (void *)_RET_IP_, crng_init)
+   151	
+   152	
+   153	
+   154	/********************************************************************
+   155	 *
+   156	 * VDSO support helpers.
+   157	 *
+   158	 * The actual vDSO function is defined over in lib/vdso/getrandom.c,
+   159	 * but this section contains the kernel-mode helpers to support that.
+   160	 *
+   161	 ********************************************************************/
+   162	
+   163	/* The shared data page. */
+ > 164	DEFINE_VVAR_SINGLE(struct vdso_rng_data, _vdso_rng_data);
+   165	
 
 -- 
-Regards,
-
-Sakari Ailus
+0-DAY CI Kernel Test Service
+https://01.org/lkp
