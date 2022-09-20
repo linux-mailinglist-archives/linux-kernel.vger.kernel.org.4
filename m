@@ -2,97 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AA395BE494
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 13:35:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1003A5BE491
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 13:35:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230258AbiITLfq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 07:35:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55390 "EHLO
+        id S230204AbiITLfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 07:35:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230058AbiITLfn (ORCPT
+        with ESMTP id S230058AbiITLf2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 07:35:43 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028376CD25
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 04:35:41 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1oabXC-0008TL-5B; Tue, 20 Sep 2022 13:35:26 +0200
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1oabXA-000335-Om; Tue, 20 Sep 2022 13:35:24 +0200
-Date:   Tue, 20 Sep 2022 13:35:24 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        mchehab@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, kishon@ti.com, vkoul@kernel.org,
-        hverkuil@xs4all.nl, jacopo@jmondi.org,
-        kieran.bingham+renesas@ideasonboard.com,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        kernel@pengutronix.de
-Subject: Re: [PATCH v2 4/4] media: tc358746: add Toshiba TC358746 Parallel to
- CSI-2 bridge driver
-Message-ID: <20220920113524.yq2abqbunvfipnb2@pengutronix.de>
-References: <20220916134535.128131-1-m.felsch@pengutronix.de>
- <20220916134535.128131-5-m.felsch@pengutronix.de>
- <YyhjB+RbLokmBKPx@paasikivi.fi.intel.com>
- <YyhlQPhezmLG8ZCn@pendragon.ideasonboard.com>
- <Yyhonw7SEjkAPivN@paasikivi.fi.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yyhonw7SEjkAPivN@paasikivi.fi.intel.com>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Tue, 20 Sep 2022 07:35:28 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7F96CD3D
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 04:35:27 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 9F5E621BE4;
+        Tue, 20 Sep 2022 11:35:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1663673726; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EO2wkZqfwT9DTmM5Nw73PTujWB07LvgVqPcksqDNuPY=;
+        b=PAqnTuuwFLGksia6DhR5SgUPSMjLK9OeBhPEpBEk0yTK0lGIehKapzF6+1sgn6JzE5Zy0b
+        pRI+yAeKYoOH4PvJaRQB21RYBekmopnN8i3AvD1NYgkbr8QcJxHB3oINTH1xCLoUY6dGQY
+        YYfM9eAjubw6aJHxw0iiRptUl0JwfOk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1663673726;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EO2wkZqfwT9DTmM5Nw73PTujWB07LvgVqPcksqDNuPY=;
+        b=sYMrkr/Q6AFJbxZb0hUBr08jXTI+JrVRbnc9tcfS++/ISvhVNDt09o8Yvc0UzJ2YeTJhdx
+        OIu/WWj6Otq3k5CQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7F1121346B;
+        Tue, 20 Sep 2022 11:35:26 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 3ackHn6lKWOiQAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Tue, 20 Sep 2022 11:35:26 +0000
+Date:   Tue, 20 Sep 2022 13:35:25 +0200
+Message-ID: <875yhigtxe.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Rondreis <linhaoguo86@gmail.com>
+Cc:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: possible deadlock in snd_rawmidi_free
+In-Reply-To: <87y1ufh3u9.wl-tiwai@suse.de>
+References: <CAB7eexJP7w1B0mVgDF0dQ+gWor7UdkiwPczmL7pn91xx8xpzOA@mail.gmail.com>
+        <87y1ufh3u9.wl-tiwai@suse.de>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-09-19, Sakari Ailus wrote:
-> On Mon, Sep 19, 2022 at 03:49:04PM +0300, Laurent Pinchart wrote:
-> > On Mon, Sep 19, 2022 at 12:39:35PM +0000, Sakari Ailus wrote:
-> > > > +	dev_set_drvdata(dev, tc358746);
-> > > > +	pm_runtime_set_autosuspend_delay(dev, 200);
-> > > > +	pm_runtime_use_autosuspend(dev);
-> > > > +	pm_runtime_enable(dev);
-> > > > +
-> > > > +	err = tc358746_init_hw(tc358746);
-> > > 
-> > > The driver depends on runtime PM being enabled but does not depend on
-> > > CONFIG_PM. I'd suggest to power the device on and only then enable runtime
-> > > PM. See
-> > > <URL:https://hverkuil.home.xs4all.nl/spec/driver-api/camera-sensor.html#power-management>.
+On Mon, 19 Sep 2022 15:49:02 +0200,
+Takashi Iwai wrote:
+> 
+> On Mon, 19 Sep 2022 14:46:13 +0200,
+> Rondreis wrote:
 > > 
-> > Or simply depend on CONFIG_PM :-)
+> > Hello,
+> > 
+> > When fuzzing the Linux kernel driver v6.0-rc4, the following crash was
+> > triggered.
+> > 
+> > HEAD commit: 7e18e42e4b280c85b76967a9106a13ca61c16179
+> > git tree: upstream
+> > 
+> > kernel config: https://pastebin.com/raw/xtrgsXP3
+> > console output: https://pastebin.com/raw/9tabWDtu
+> > 
+> > Sorry for failing to extract the reproducer, and the crash occurred at
+> > the moment of disconnecting the midi device. On other versions of
+> > Linux, I also triggered this crash.
+> > 
+> > I would appreciate it if you have any idea how to solve this bug.
 > 
-> The user can still disable runtime PM.
-
-You mean by user-space? If I read the runtime.c code correctly in such
-case the core handles this enabling if one forbid it by increasing the
-usage-counter and calling the resume callback. So it is powered as you
-want. To fix the PM Kconfig, I will add "depends on PM".
-
-Regards,
-  Marco
-
-> I guess few do though. This should be addressed separately from this
-> driver, it'd be good to be able to deny that. In fact, no-one has ever
-> probably tested this for a large number of drivers and I guess it exists
-> just to have a way to disable runtime PM support in drivers that do not
-> work with it...
+> I think there are two ways to work around it.
 > 
-> -- 
-> Sakari Ailus
+> The first one is to move the unregister_sound*() calls out of the
+> sound_oss_mutex, something like:
+> -- 8< --
 > 
+> --- a/sound/core/sound_oss.c
+> +++ b/sound/core/sound_oss.c
+> @@ -162,7 +162,6 @@ int snd_unregister_oss_device(int type, struct snd_card *card, int dev)
+>  		mutex_unlock(&sound_oss_mutex);
+>  		return -ENOENT;
+>  	}
+> -	unregister_sound_special(minor);
+>  	switch (SNDRV_MINOR_OSS_DEVICE(minor)) {
+>  	case SNDRV_MINOR_OSS_PCM:
+>  		track2 = SNDRV_MINOR_OSS(cidx, SNDRV_MINOR_OSS_AUDIO);
+> @@ -174,12 +173,18 @@ int snd_unregister_oss_device(int type, struct snd_card *card, int dev)
+>  		track2 = SNDRV_MINOR_OSS(cidx, SNDRV_MINOR_OSS_DMMIDI1);
+>  		break;
+>  	}
+> -	if (track2 >= 0) {
+> -		unregister_sound_special(track2);
+> +	if (track2 >= 0)
+>  		snd_oss_minors[track2] = NULL;
+> -	}
+>  	snd_oss_minors[minor] = NULL;
+>  	mutex_unlock(&sound_oss_mutex);
+> +
+> +	/* call unregister_sound_special() outside sound_oss_mutex;
+> +	 * otherwise may deadlock, as it can trigger the release of a card
+> +	 */
+> +	unregister_sound_special(minor);
+> +	if (track2 >= 0)
+> +		unregister_sound_special(track2);
+> +
+>  	kfree(mptr);
+>  	return 0;
+>  }
+> -- 8< --
+> 
+> This should be OK, as the unregister_sound_*() itself can be called
+> concurrently.
+> 
+> Another workaround would be just to remove the register_mutex call at
+> snd_rawmidi_free(), e.g. something like:
+> 
+> -- 8< --
+> --- a/sound/core/rawmidi.c
+> +++ b/sound/core/rawmidi.c
+> @@ -1899,10 +1899,8 @@ static int snd_rawmidi_free(struct snd_rawmidi *rmidi)
+>  
+>  	snd_info_free_entry(rmidi->proc_entry);
+>  	rmidi->proc_entry = NULL;
+> -	mutex_lock(&register_mutex);
+>  	if (rmidi->ops && rmidi->ops->dev_unregister)
+>  		rmidi->ops->dev_unregister(rmidi);
+> -	mutex_unlock(&register_mutex);
+>  
+>  	snd_rawmidi_free_substreams(&rmidi->streams[SNDRV_RAWMIDI_STREAM_INPUT]);
+>  	snd_rawmidi_free_substreams(&rmidi->streams[SNDRV_RAWMIDI_STREAM_OUTPUT]);
+> -- 8< --
+> 
+> This register_mutex there should be superfluous since the device has
+> been already processed and detached by snd_rawmidi_dev_disconnect()
+> beforehand.  But if the first one is confirmed to work, the second one
+> can be left untouched.
+
+Could you check whether one of two changes above fixes the bug?
+Once after confirmed, I'll cook a proper patch for the submission.
+
+
+thanks,
+
+Takashi
