@@ -2,125 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA3035BECE9
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 20:37:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 079EE5BECF3
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 20:44:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230409AbiITShl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 14:37:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42874 "EHLO
+        id S230020AbiITSou (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 14:44:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230382AbiITShi (ORCPT
+        with ESMTP id S229499AbiITSor (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 14:37:38 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D7047435C
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 11:37:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663699057; x=1695235057;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=cwaHxCFQdCA+LHKA01+dBZuk8JhukqOfP2h7q+evcCs=;
-  b=agxLF798DH3RQuBu9iHgAOHXO/Tf0CB2lz5l+SrMs8aWZ1bn43CFz5Cl
-   kUD3115lh3oHfaOaznUjyRx7YNx5afhASuCIJgLj6HbsbCeBp3PjyS/mb
-   0+abbIU+b7Ig/+bDJEYITEp9IBw2rkOfJiJ8iWw7CqMkEeWuhRzm0ij6E
-   N6WC6c6fpIOjLwk5GngICtnrakTYkn5/6XOmchCHHssAXG/mZ74Wmi34+
-   kIBefQ05rAxuIO3FcKZNEzn5V0BkPyuXyWQ0G0HIU7nePA9gHOIXI569/
-   Jn8jr5wZr/yF+G8d3+NIe4Q0VY7GdKuksCONKPFrCZTDRHJHo9jDvu0A6
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10476"; a="299773230"
-X-IronPort-AV: E=Sophos;i="5.93,331,1654585200"; 
-   d="scan'208";a="299773230"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 11:37:36 -0700
-X-IronPort-AV: E=Sophos;i="5.93,331,1654585200"; 
-   d="scan'208";a="794370245"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.198.157])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 11:37:36 -0700
-Date:   Tue, 20 Sep 2022 11:41:04 -0700
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Jacob Pan <jacob.jun.pan@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Ashok Raj <ashok_raj@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Taras Madan <tarasmadan@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Joerg Roedel <joro@8bytes.org>, jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCHv8 00/11] Linear Address Masking enabling
-Message-ID: <20220920113742.277ac497@jacob-builder>
-In-Reply-To: <Yynp77km4SaHpe/3@nvidia.com>
-References: <20220914144518.46rhhyh7zmxieozs@box.shutemov.name>
- <YyHvF2K7ELVSTGvB@araj-MOBL2.amr.corp.intel.com>
- <20220914151818.uupzpyd333qnnmlt@box.shutemov.name>
- <YyHz7H0uyqG58b3E@araj-MOBL2.amr.corp.intel.com>
- <20220914154532.mmxfsr7eadgnxt3s@box.shutemov.name>
- <20220914165116.24f82d74@jacob-builder>
- <20220915090135.fpeokbokkdljv7rw@box.shutemov.name>
- <20220915172858.pl62a5w3m5binxrk@box.shutemov.name>
- <Yym8zsuXbYaW3alU@nvidia.com>
- <15741fdf-68b6-bd32-b0c2-63fde3bb0db2@intel.com>
- <Yynp77km4SaHpe/3@nvidia.com>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Tue, 20 Sep 2022 14:44:47 -0400
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB3DE13D77
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 11:44:44 -0700 (PDT)
+Received: by mail-qv1-xf2a.google.com with SMTP id g4so2700235qvo.3
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 11:44:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=IQ9PPDyjj+lezNSSGrpRlCchgA2fjl3IyszjxDAAz7w=;
+        b=VgNVATk8TWzGJTvL5fgSB/Swnr0d1NFPmPI8WXt2gnAJAOWBy+K3vG1rVCoTckL+om
+         LXmIcep6A2xb3HMjMDn98kelZqn7VTBJRe6RkICex6c7a1I3aTqu8IQ52I+aciQ1/gZG
+         1ctbR39n94hyRXIrL5JF5E/nBYmtLTf7eoYjTL30W0xw44GsiUTmLiy6v3kWMIfklcMf
+         nXGFcpryar+moC3LRbu2MCPnfzvW/GIrr0vxfW8T9ZOB8xZ703riH/Yrx0x7Uej0d1gO
+         wdAsCxhKdJlxI9w89qGnnVbGWL1Se/xFTLsOPpvAoWs6pC8noYvDNM3oRoVZiDdDPh9W
+         ZDPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=IQ9PPDyjj+lezNSSGrpRlCchgA2fjl3IyszjxDAAz7w=;
+        b=iOPKO3KYbnMZwefV+nv+OtfzXt47RNqqX9v/z6oL/MH7IkK2jdqPD/85dp+ik2EAK8
+         RoySrl6PAqp3/quDfKbKuILmGSrQGI4pMRSi6K2zlorpnNjcZfW9fwzWc+9UoQOD8rT7
+         e/yQgxCWUHC/uQxrYUntKO/qvMKm0E5Cd7QABlFiD7BcyiPnzM8a0z4Y6RN3osf/Bolt
+         vL/ZrgEU/ERPRCUgOShT07XhcYtvnr4tL0S8JTpzT5H4oerVNDTQcGSaIRSTk+TcMDl4
+         ALNMMJEgSnBdbqZBK+/Ch7bNHHFp0P9q07Ml82qdHRc2p8jLBxMIY+8yBVaDFmcRIH6K
+         do3g==
+X-Gm-Message-State: ACrzQf26G8gy5EX0+aeqjoMZ1sVNVAcc2EGdhtfZuaaVh9dIjbPh6IDf
+        x3i57hv5uW5ov5HprV4P89jOufoW/M+Y56eWxbKe7w==
+X-Google-Smtp-Source: AMsMyM7INOTVcrsBL/Rr8F7QcG9VG1/9xRJcIcx3kbOSfwGxtW2k8P0tIsg8+KG+3mV74+I1rk4ZKlmu0BreUUIZB50=
+X-Received: by 2002:a05:6214:c2a:b0:4ad:67d:c25a with SMTP id
+ a10-20020a0562140c2a00b004ad067dc25amr20574500qvd.125.1663699483375; Tue, 20
+ Sep 2022 11:44:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1661331396.git.houwenlong.hwl@antgroup.com>
+ <c0ee12e44f2d218a0857a5e05628d05462b32bf9.1661331396.git.houwenlong.hwl@antgroup.com>
+ <f6fd8ccff13f9f48cbca06f0a5278654198d0d06.camel@linux.intel.com> <YyoHNMz3CH4SnJwJ@google.com>
+In-Reply-To: <YyoHNMz3CH4SnJwJ@google.com>
+From:   David Matlack <dmatlack@google.com>
+Date:   Tue, 20 Sep 2022 11:44:17 -0700
+Message-ID: <CALzav=f=y7-2uOnXUi---hvCTa2otDBPsY1VoUtDWnS7+0QX=w@mail.gmail.com>
+Subject: Re: [PATCH v2 1/6] KVM: x86/mmu: Fix wrong gfn range of tlb flushing
+ in validate_direct_spte()
+To:     Robert Hoo <robert.hu@linux.intel.com>
+Cc:     Hou Wenlong <houwenlong.hwl@antgroup.com>,
+        kvm list <kvm@vger.kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        Lan Tianyu <Tianyu.Lan@microsoft.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jason,
+On Tue, Sep 20, 2022 at 11:32 AM David Matlack <dmatlack@google.com> wrote:
+>
+> On Sun, Sep 18, 2022 at 09:11:00PM +0800, Robert Hoo wrote:
+> > On Wed, 2022-08-24 at 17:29 +0800, Hou Wenlong wrote:
+> > > The spte pointing to the children SP is dropped, so the
+> > > whole gfn range covered by the children SP should be flushed.
+> > > Although, Hyper-V may treat a 1-page flush the same if the
+> > > address points to a huge page, it still would be better
+> > > to use the correct size of huge page. Also introduce
+> > > a helper function to do range-based flushing when a direct
+> > > SP is dropped, which would help prevent future buggy use
+> > > of kvm_flush_remote_tlbs_with_address() in such case.
+> > >
+> > > Fixes: c3134ce240eed ("KVM: Replace old tlb flush function with new
+> > > one to flush a specified range.")
+> > > Suggested-by: David Matlack <dmatlack@google.com>
+> > > Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
+> > > ---
+> > >  arch/x86/kvm/mmu/mmu.c | 10 +++++++++-
+> > >  1 file changed, 9 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > > index e418ef3ecfcb..a3578abd8bbc 100644
+> > > --- a/arch/x86/kvm/mmu/mmu.c
+> > > +++ b/arch/x86/kvm/mmu/mmu.c
+> > > @@ -260,6 +260,14 @@ void kvm_flush_remote_tlbs_with_address(struct
+> > > kvm *kvm,
+> > >     kvm_flush_remote_tlbs_with_range(kvm, &range);
+> > >  }
+> > >
+> > > +/* Flush all memory mapped by the given direct SP. */
+> > > +static void kvm_flush_remote_tlbs_direct_sp(struct kvm *kvm, struct
+> > > kvm_mmu_page *sp)
+> > > +{
+> > > +   WARN_ON_ONCE(!sp->role.direct);
+> >
+> > What if !sp->role.direct? Below flushing sp->gfn isn't expected? but
+> > still to do it. Is this operation harmless?
+>
+> Flushing TLBs is always harmless because KVM cannot ever assume an entry is
+> in the TLB. However, *not* (properly) flushing TLBs can be harmful. If KVM ever
+> calls kvm_flush_remote_tlbs_direct_sp() with an indirect SP, that is a bug in
+> KVM. The TLB flush here won't be harmful, as I explained, but KVM will miss a
+> TLB flush.
+>
+> That being said, I don't think any changes here are necessary.
+> kvm_flush_remote_tlbs_direct_sp() only has one caller, validate_direct_spte(),
+> which only operates on direct SPs. The name of the function also makes it
+> obvious this should only be called with a direct SP. And if we ever mess this
+> up in the future, we'll see the WARN_ON().
 
-On Tue, 20 Sep 2022 13:27:27 -0300, Jason Gunthorpe <jgg@nvidia.com> wrote:
-
-> On Tue, Sep 20, 2022 at 09:06:32AM -0700, Dave Hansen wrote:
-> > On 9/20/22 06:14, Jason Gunthorpe wrote:  
-> > > For this I would rather have a function that queries the format of the
-> > > page table under the mm_struct and we have enum values like
-> > > INTEL_NORMAL and INTEL_LAM as possible values.
-> > > 
-> > > The iommu driver will block incompatible page table formats, and when
-> > > it starts up it should assert something that blocks changing the
-> > > format.  
-> > 
-> > That doesn't sound too bad.  Except, please don't call it a "page table
-> > format".  The format of the page tables does not change with LAM.  It's
-> > entirely how the CPU interprets addresses that changes.  
-> 
-> Sure it does. The rules for how the page table is walked change. The
-> actual bits stored in memory might not be different, but that doesn't
-> mean the format didn't change. If it didn't change we wouldn't have an
-> incompatibility with the IOMMU HW walker.
-
-There are many CPU-IOMMU compatibility checks before we do for SVA,e.g. we
-check paging mode in sva_bind. We are delegating these checks in
-arch/platform code. So why can't we let arch code decide how to convey
-mm-IOMMU SVA compatibility? let it be a flag ( as in this patch) or some
-callback.
-
-Perhaps a more descriptive name
-s/arch_can_alloc_pasid(mm)/arch_can_support_sva(mm)/ is all we disagreeing
-:)
-
-Thanks,
-
-Jacob
+That being said, we might as well replace the WARN_ON_ONCE() with
+KVM_BUG_ON(). That will still do a WARN_ON_ONCE() but has the added
+benefit of terminating the VM.
