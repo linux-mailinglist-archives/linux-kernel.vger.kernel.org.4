@@ -2,144 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E0BF5BEA7C
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 17:47:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E055D5BEA81
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 17:49:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbiITPrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 11:47:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48588 "EHLO
+        id S230466AbiITPtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 11:49:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbiITPrF (ORCPT
+        with ESMTP id S230253AbiITPtB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 11:47:05 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C1F461119
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 08:47:04 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id x1so2796963plv.5
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 08:47:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date;
-        bh=cfeYRDbG1IwqxDDwCZ/PUhlAPjZzrLd37QWr6A2RCdE=;
-        b=qb+EI07Lm41KNZTnKWMqAKU2cZUOLNd8Pe+Hofo4HsKJA/i0Se7uhmq/j91oNyb/St
-         9yiN6awGrXDUxbCMQk53q8eeACZ3cCW/smwKpB0CX06xhQGa1ySRaL/WZLjWSpU1qxgT
-         VaCDlvjLpyCByRXDwSIFixOa6/f7g6htEG49xwX1NCG87V8UYN3c0JKrlURIRBGt0lh6
-         6HJoF8XxG6Nx5UIsL1MpW8VAZm6peenajwu5hghDhmcQ1gcEcdwX4l60GgqKWZlLEsnv
-         Yy4H0zhEVMVC6n5wx7VxpX9bD16I7A1XlgY329qap8SlPUc3E5zq0Y667AhASHe3mt1b
-         I8Hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=cfeYRDbG1IwqxDDwCZ/PUhlAPjZzrLd37QWr6A2RCdE=;
-        b=thoDCQyAePfTG1CKqG7Ixr0knXi94hlwCsjAXmQltkEWT1bBm2KAj/TLze88/myOup
-         dQ7R0V1B4JKlZAlrWQrIxFF0e3SxHqjdVXjJI+R9EO0VL75E3X3K7+74uFfs4DBsf5eq
-         FRUjTQ/rHfZ59kSS4YOrKGUwc5StvgnnzM4eLIgJD8FbKzna/BNHQYSQMMp0sfP63oA8
-         UKK0ptl+QHr98P1mgQDiVV/O6oP31JY/gYsOy4Oax0NWJo+JFC0KfiFmykPF1qDRT4D5
-         eJjjKsjA6qg669QVG9qMsvkhruPFvbGCs31FcsxOYsp7YIqqm1kQelpJZX5WKDy2aPAB
-         jv/Q==
-X-Gm-Message-State: ACrzQf1Vd1LfgQyt5DlYxmHdF/m2elXa8H8IEDXnqbpDHJLPKt3f+3eJ
-        AK0X006FqAPvRPqepFuIrjbnhw==
-X-Google-Smtp-Source: AMsMyM7nHUW6LZIxqYazx0vmROaMh9fzefg2755WV6Haotjq/IEXF/lVT1xdW+lJJaqZPHS7kUvV2g==
-X-Received: by 2002:a17:902:b20a:b0:178:6f5b:f903 with SMTP id t10-20020a170902b20a00b001786f5bf903mr320666plr.39.1663688823605;
-        Tue, 20 Sep 2022 08:47:03 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id h16-20020aa796d0000000b00540d75197f2sm32072pfq.143.2022.09.20.08.47.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 08:47:03 -0700 (PDT)
-Date:   Tue, 20 Sep 2022 15:46:58 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Li RongQing <lirongqing@baidu.com>
-Subject: Re: [PATCH v2 04/23] KVM: x86: Inhibit AVIC SPTEs if any vCPU
- enables x2APIC
-Message-ID: <Yyngcg3ainoD0fNc@google.com>
-References: <20220903002254.2411750-1-seanjc@google.com>
- <20220903002254.2411750-5-seanjc@google.com>
- <8a24c36efebfa4fb302587a74e3bc1e088e17be8.camel@redhat.com>
+        Tue, 20 Sep 2022 11:49:01 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E71766120
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 08:49:00 -0700 (PDT)
+Received: from mercury (dyndsl-091-096-056-222.ewe-ip-backbone.de [91.96.56.222])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 31DA16601FB8;
+        Tue, 20 Sep 2022 16:48:59 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1663688939;
+        bh=1cJdei1wKjC+6amXTIk3jEO0feNqmjSNtSnqcqw4pGo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Rf3dgg+RG4YHjpEUCWpS4vOAzt3CxDqy1TNEut8r7jdtYG3JwiuLmejY6CGgRjbzJ
+         PC5DcKH99dh/I0+EEHnV6dJ6DW/YikzjQrV6zpzyYN0yYY10q3LPPloC6u8OwPRtnJ
+         KNqildqUpGCeJS0PMKJzAKbecz+v4FidB4NBzoL/QBN3J3/+mW38iKmJFlkyzKZcIY
+         aPgC7HW69Zn34kfzBtXr6YkTkvJS90oxrrrlbYpj7VGRyEBDaPNTZdm1TVljjwnjXO
+         +icFvJt4Y9aFungijg7MVzuaUbk1M4BWL6Z1UTtMNS/zaTbQiuMZ+A+mXSHwDuhMiB
+         tmkAzOYXnAnWg==
+Received: by mercury (Postfix, from userid 1000)
+        id A33D310607CF; Tue, 20 Sep 2022 17:48:56 +0200 (CEST)
+Date:   Tue, 20 Sep 2022 17:48:56 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Jianglei Nie <niejianglei2021@163.com>
+Cc:     kuba@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] HSI: ssi_protocol: fix potential resource leak in
+ ssip_pn_open()
+Message-ID: <20220920154856.4s675wv7koivvpgb@mercury.elektranox.org>
+References: <20220905074801.46167-1-niejianglei2021@163.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="evlazoyrppugj4l4"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8a24c36efebfa4fb302587a74e3bc1e088e17be8.camel@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220905074801.46167-1-niejianglei2021@163.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022, Maxim Levitsky wrote:
-> On Sat, 2022-09-03 at 00:22 +0000, Sean Christopherson wrote:
-> > Reintroduce APICV_INHIBIT_REASON_X2APIC as a "partial" inhibit for AMD
-> > to fix a bug where the APIC access page is visible to vCPUs that have
-> > x2APIC enabled, i.e. shouldn't be able to "see" the xAPIC MMIO region.
-> > 
-> > On AMD, due to its "hybrid" mode where AVIC is enabled when x2APIC is
-> > enabled even without x2AVIC support, the bug occurs any time AVIC is
-> > enabled as x2APIC is fully emulated by KVM.  I.e. hardware isn't aware
-> > that the guest is operating in x2APIC mode.
-> > 
-> > Opportunistically drop the "can" while updating avic_activate_vmcb()'s
-> > comment, i.e. to state that KVM _does_ support the hybrid mode.  Move
-> > the "Note:" down a line to conform to preferred kernel/KVM multi-line
-> > comment style.
-> > 
-> > Leave Intel as-is for now to avoid a subtle performance regression, even
-> > though Intel likely suffers from the same bug.  On Intel, in theory the
-> > bug rears its head only when vCPUs share host page tables (extremely
-> > likely) and x2APIC enabling is not consistent within the guest, i.e. if
-> > some vCPUs have x2APIC enabled and other does do not (unlikely to occur
-> > except in certain situations, e.g. bringing up APs).
-> 
-> Are you sure about this?
 
-Ah, no.  The key on Intel is the separate VMCS control for virtualizing xAPIC
-accesses.  As you note below, KVM will provide memory semantics, which is technically
-wrong.
+--evlazoyrppugj4l4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> This is what I am thinking will happen, I might be wrong but I am not sure:
+Hi,
 
-...
+On Mon, Sep 05, 2022 at 03:48:01PM +0800, Jianglei Nie wrote:
+> ssip_pn_open() claims the HSI client's port with hsi_claim_port(). When
+> hsi_register_port_event() gets some error and returns a negetive value,
+> the HSI client's port should be released with hsi_release_port().
+>=20
+> Fix it by calling hsi_release_port() when hsi_register_port_event() fails.
+>=20
+> Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+> ---
+>  drivers/hsi/clients/ssi_protocol.c | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/drivers/hsi/clients/ssi_protocol.c b/drivers/hsi/clients/ssi=
+_protocol.c
+> index 21f11a5b965b..49ffd808d17f 100644
+> --- a/drivers/hsi/clients/ssi_protocol.c
+> +++ b/drivers/hsi/clients/ssi_protocol.c
+> @@ -931,6 +931,7 @@ static int ssip_pn_open(struct net_device *dev)
+>  	if (err < 0) {
+>  		dev_err(&cl->device, "Register HSI port event failed (%d)\n",
+>  			err);
+> +		hsi_release_port(cl);
+>  		return err;
+>  	}
+>  	dev_dbg(&cl->device, "Configuring SSI port\n");
 
-> 3. guest accesses the 0xfee00xxx, assuming APICv/x2avic, the hardware won't redirect
-> the access to apic backing page, but will instead just use that SPTE and let the guest
-> read/write the private page that we mapped in the range, which is wrong.
-> 
-> Am I missing something?
+Thanks, queued.
 
-No, I don't believe so.  I'm still hesitant to add the effetive inhibit to Intel,
-though that's probably just pure paranoia at this point.  Probably makes sense to
-just do it and verify that x2APIC virtualization still works.
+-- Sebastian
 
-> Also I somewhat doen't like the partial inhibit - it is to some extent
-> misleading.  I don't have a very strong option on using the inhibit, but its
-> meaning just feels a bit overloaded.
-> 
-> So why not to do it this way:
-> 
-> 1. zap the SPTE always when switching apic mode (e.g move the code in 
-> __kvm_set_or_clear_apicv_inhibit to a common funtion)
-> 
-> 2. make kvm_faultin_pfn check a flag 'any vcpu enabled x2apic' and refuse
-> to re-install that spte?
-> 
-> Something like that (only compile tested, and likely misses memory barriers):
+--evlazoyrppugj4l4
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Actually, since this is "sticky", we can go even further and just delete the
-memslot.  Deleting the memslot is slightly complicated by the need to drop SRCU
-if kvm_lapic_set_base() enables x2APIC during KVM_RUN, but that's enough enough
-to handled by putting the disabling logic in vcpu_run() and using KVM_REQ_UNBLOCK
-to ensure the memslot is deleted before the vCPU re-enters the guest.
+-----BEGIN PGP SIGNATURE-----
 
-Testing now...
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmMp4NQACgkQ2O7X88g7
++ponFRAAkqXj33I9pMg7pk8MlREeWZlbFSjx83m8YR7nLSgfFAMXt4qI01QJa5/k
+3FbQwp9Gf13eCvauBbvzb9jXg2OukD/6GrCeVbUsxmbr8IQ9zuV3di2yzI5nCLiM
+2cBaugH56SGD9PZHbrLH0Uxgh0fJEnB7ntjzfp8s1aPwscem4HZyYXxpnc+5HZGm
+DrthxjWd4RpA/TgjywnPHoom9Z6v/IGQVwe2CzJmz77lWSzeCbOWVUy3ccSHSyb/
+rrdiYvlrlsxh1eJYoDN+FmzBjwIFI2vn60ECtSyBpXRmDXUm6gmt4Dr7Nl+cAUes
+IaBeSeJm5kqTFN39aD1xpPBqpEj+jDS2yLBye1HejPrdJrvKd9tucBmIKkGvFXoH
+seBMOW+hyzrXGWA4HUxCsfk+WIjNg6RbkEqv1Q4nFjVnsaZH6vBd2oscfM4JT3mU
+0Wjtk31KDgoTb1WqNl2zotkuwoLbUP7n/2c2YL1iZNLz4s2RvqQ/DSJjHjB/wyZM
+aWBcQNyuSmEfklr6zrBfIkUZDQt1zUzIllk9ayFSsfxmtjS1AreeVyF4ttCn8Q9z
+TGic1A7H1lq5T991sadtB2A943MT428E6zQz6g4ddO5cQ6q9KsdpMyoYVM6UpXUH
+hfkmKFVEJpcJHUksYYssXkOVm3E4xFsDnDSoGxWfiNieIXlksDs=
+=QnIh
+-----END PGP SIGNATURE-----
+
+--evlazoyrppugj4l4--
