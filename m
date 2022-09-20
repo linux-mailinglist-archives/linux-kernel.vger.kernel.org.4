@@ -2,322 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 190C85BEAB5
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 18:03:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C8815BEABD
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 18:05:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbiITQDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 12:03:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40028 "EHLO
+        id S230232AbiITQEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 12:04:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231465AbiITQCs (ORCPT
+        with ESMTP id S231202AbiITQE3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 12:02:48 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA4636C77F;
-        Tue, 20 Sep 2022 09:02:33 -0700 (PDT)
-Received: from fraeml707-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MX5rS4WTnz67ZTx;
-        Wed, 21 Sep 2022 00:01:28 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml707-chm.china.huawei.com (10.206.15.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 20 Sep 2022 18:02:31 +0200
-Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 20 Sep
- 2022 17:02:30 +0100
-Date:   Tue, 20 Sep 2022 17:02:29 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To:     Ira Weiny <ira.weiny@intel.com>
-CC:     Dan Williams <dan.j.williams@intel.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        "Ben Widawsky" <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>
-Subject: Re: [RFC PATCH 5/9] cxl/mem: Trace DRAM Event Record
-Message-ID: <20220920170229.00007be3@huawei.com>
-In-Reply-To: <Yx+65zjlpTsmg6M5@iweiny-mobl>
-References: <20220813053243.757363-1-ira.weiny@intel.com>
-        <20220813053243.757363-6-ira.weiny@intel.com>
-        <20220825114632.00003fc6@huawei.com>
-        <Yx+65zjlpTsmg6M5@iweiny-mobl>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Tue, 20 Sep 2022 12:04:29 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D90966B16A
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 09:04:26 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id k10so4581862lfm.4
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 09:04:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=FogWB2FGGdAF/PqnPcBa4/GS/a8YaiRAD23uITPI7zk=;
+        b=VPtjkI+boNwBC+sWLXnbJiTs2CsMQODoEZj3Q0kXubJ1OMA7atWZnTUQo3A21KFhr5
+         2o0mBVwGdsOseRpFB9A1MaP7T2wiTTdIX5iZVi6gKOMbKZDwowN+qRS/d+vmr+6BL+DR
+         7upD5DidRQEW3/rzdkH3bfkK37GfiNWqULvwc004e+79nXstNxRmTJ0yIUdnXYZtBFzs
+         1nc3H2BXgkJdpkNwirulQqMZj8A89XOI4U55svfxzpVdXLfm/ny3GyuCWsxm7sKmDHYO
+         CMVfkQBkI+DzzAFJkAUZyk+nHI1YTRaJiQhBwILXjciTBDCs2Fc5chhz6PzVuIZ4hCbe
+         WVbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=FogWB2FGGdAF/PqnPcBa4/GS/a8YaiRAD23uITPI7zk=;
+        b=vx0ZiMYnZqz6MIgvpDaDODi5JRQLGRSmfOo0FaONweZMoCqHGx5W9Gi/1q3RY5qo20
+         xH6H/3t7/zlEN7NqQLMVLwi0VRhjfAONL/J2b7+mm3YXK+F1YodF5Kd4/40lMRoUoMyW
+         +8FVPrjY6gHqnXOPi7Y75J+znxbPYnhbGMpWTyfLz7IUs+KxiZG/kLteXhOQFurziT5z
+         TKfyYN1Tpb2KSld1O7xpfkkBcTEEqs+WtV2p2VQ1DZ9Pxl/dvXjuyhuptaIe5wOlEYcT
+         l5DgjFc6lxy34FEQL9421tPPtXb3gGPlJ5O3HZ3ISsm6WXKVtWvtIpcNMYZ6TnOKVugV
+         Yk4Q==
+X-Gm-Message-State: ACrzQf0sKxR/dIqClZrq7boXjHk5tYs0xsanQg9zetg4swFm4KhrPxX/
+        0uogni+ZjOQOgtoogvlXjzU1Ww==
+X-Google-Smtp-Source: AMsMyM6sD1Pr9eVFc6gnNTiuKWVfGjowPR9KRj0qBDptnRoLcvnkhKYp34+NmU7ATCCjXNm5ebQrWg==
+X-Received: by 2002:a05:6512:3e26:b0:497:3a4f:d1f with SMTP id i38-20020a0565123e2600b004973a4f0d1fmr9455339lfv.31.1663689865187;
+        Tue, 20 Sep 2022 09:04:25 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id z13-20020a2e8e8d000000b00261a8e56fe4sm23885ljk.55.2022.09.20.09.04.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Sep 2022 09:04:24 -0700 (PDT)
+Message-ID: <62aab493-fe9b-07af-2d9a-a85ba1d1060f@linaro.org>
+Date:   Tue, 20 Sep 2022 18:04:23 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v2] ARM: dts: aspeed: Add AMD DaytonaX BMC
+Content-Language: en-US
+To:     Konstantin Aladyshev <aladyshev22@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org
+References: <20220920153928.6454-1-aladyshev22@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220920153928.6454-1-aladyshev22@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.42]
-X-ClientProxiedBy: lhrpeml500001.china.huawei.com (7.191.163.213) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 12 Sep 2022 16:04:07 -0700
-Ira Weiny <ira.weiny@intel.com> wrote:
-
-> On Thu, Aug 25, 2022 at 11:46:32AM +0100, Jonathan Cameron wrote:
-> > On Fri, 12 Aug 2022 22:32:39 -0700
-> > ira.weiny@intel.com wrote:
-> >   
-> > > From: Ira Weiny <ira.weiny@intel.com>
-> > > 
-> > > CXL v3.0 section 8.2.9.2.1.2 defines the DRAM Event Record.
-> > > 
-> > > Determine if the event read is a DRAM event record and if so trace the
-> > > record.
-> > > 
-> > > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> > > 
-> > > ---
-> > > This record has a very odd byte layout with 2 - 16 bit fields
-> > > (validity_flags and column) aligned on an odd byte boundary.  In
-> > > addition nibble_mask and row are oddly aligned.
-> > > 
-> > > I've made my best guess as to how the endianess of these fields should
-> > > be resolved.  But I'm happy to hear from other folks if what I have is
-> > > wrong.  
-> > My assumption is same as you.  We should sanity check of course by
-> > poking relevant people.  
-> > 
-> > Similar comments in here to previous.  Use the get_unaligned_le24()
-> > accessors + consider not printing invalid fields.  
-> 
-> Yea I've already converted the 3 byte fields to get_unaligned_le24()
-> 
-> > > 
-> > > struct cxl_evt_dram_rec {
-> > > 	struct cxl_event_record_hdr hdr;
-> > > 	__le64 phys_addr;
-> > > 	u8 descriptor;
-> > > 	u8 type;
-> > > 	u8 transaction_type;
-> > > 	u16 validity_flags;
-> > > 	u8 channel;
-> > > 	u8 rank;
-> > > 	u8 nibble_mask[CXL_EVT_DER_NIBBLE_MASK_SIZE];
-> > > 	u8 bank_group;
-> > > 	u8 bank;
-> > > 	u8 row[CXL_EVT_DER_ROW_SIZE];
-> > > 	u16 column;
-> > > 	u8 correction_mask[CXL_EVT_DER_CORRECTION_MASK_SIZE];
-> > > } __packed;
-> > > ---
-> > >  drivers/cxl/core/mbox.c           |  16 +++++
-> > >  drivers/cxl/cxlmem.h              |  24 +++++++
-> > >  include/trace/events/cxl-events.h | 114 ++++++++++++++++++++++++++++++
-> > >  3 files changed, 154 insertions(+)
-> > > 
-> > > diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
-> > > index 0e433f072163..6414588a3c7b 100644
-> > > --- a/drivers/cxl/core/mbox.c
-> > > +++ b/drivers/cxl/core/mbox.c
-> > > @@ -717,6 +717,14 @@ static const uuid_t gen_media_event_uuid =
-> > >  	UUID_INIT(0xfbcd0a77, 0xc260, 0x417f,
-> > >  		  0x85, 0xa9, 0x08, 0x8b, 0x16, 0x21, 0xeb, 0xa6);
-> > >  
-> > > +/*
-> > > + * DRAM Event Record
-> > > + * CXL v3.0 section 8.2.9.2.1.2; Table 8-44  
-> > rev3.0, r3.0 or just 3.0    
-> 
-> Already done.
-> 
-> >   
-> > > + */
-> > > +static const uuid_t dram_event_uuid =
-> > > +	UUID_INIT(0x601dcbb3, 0x9c06, 0x4eab,
-> > > +		  0xb8, 0xaf, 0x4e, 0x9b, 0xfb, 0x5c, 0x96, 0x24);
-> > > +
-> > >  static void cxl_trace_event_record(const char *dev_name,
-> > >  				   enum cxl_event_log_type type,
-> > >  				   struct cxl_get_event_payload *payload)
-> > > @@ -731,6 +739,14 @@ static void cxl_trace_event_record(const char *dev_name,
-> > >  		return;
-> > >  	}
-> > >  
-> > > +	if (uuid_equal(id, &dram_event_uuid)) {  
-> > Why not else if?  Should be obvious to compiler that multiple uuid_equal
-> > conditions can't match, but even better to not make it try hard perhaps?  
-> 
-> Sure else if can work.
-> 
-> >   
-> > > +		struct cxl_evt_dram_rec *rec =
-> > > +				(struct cxl_evt_dram_rec *)&payload->record;
-> > > +
-> > > +		trace_cxl_dram_event(dev_name, type, rec);
-> > > +		return;
-> > > +	}
-> > > +
-> > >  	/* For unknown record types print just the header */
-> > >  	trace_cxl_event(dev_name, type, &payload->record);
-> > >  }
-> > > diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
-> > > index 33669459ae4b..50536c0a7850 100644
-> > > --- a/drivers/cxl/cxlmem.h
-> > > +++ b/drivers/cxl/cxlmem.h
-> > > @@ -421,6 +421,30 @@ struct cxl_evt_gen_media {
-> > >  	u8 component_id[CXL_EVT_GEN_MED_COMP_ID_SIZE];
-> > >  } __packed;
-> > >  
-> > > +/*
-> > > + * DRAM Event Record - DER
-> > > + * CXL v3.0 section 8.2.9.2.1.2; Table 3-44
-> > > + */
-> > > +#define CXL_EVT_DER_NIBBLE_MASK_SIZE		3
-> > > +#define CXL_EVT_DER_ROW_SIZE			3
-> > > +#define CXL_EVT_DER_CORRECTION_MASK_SIZE	0x20
-> > > +struct cxl_evt_dram_rec {
-> > > +	struct cxl_event_record_hdr hdr;
-> > > +	__le64 phys_addr;
-> > > +	u8 descriptor;
-> > > +	u8 type;
-> > > +	u8 transaction_type;
-> > > +	u16 validity_flags;  
-> > I've not tried it, but can we just mark these as __le16 and use
-> > the unaligned accessors?  get_unaligned_le16 etc  
-> 
-> get_unaligned_le16() requires a byte array...
-> 
-> So I think this needs to be:
-> 
-> 	u8 validity_flags[2];
-> 
-> Now that I know about those calls I think this does make a lot more sense.  The
-> test code works but I knew that it would be sketchy with real devices.
-> 
-> I'll adjust this.
-> 
-> > Also there is get_unaligned_le24() for the 3 byte ones.  
-> 
-> Yea done.
-> 
-> [snip]
-> 
-> > > +
-> > > +	TP_fast_assign(
-> > > +		/* Common */
-> > > +		__assign_str(dev_name, dev_name);
-> > > +		memcpy(__entry->id, &rec->hdr.id, UUID_SIZE);
-> > > +		__entry->log = log;
-> > > +		__entry->flags = le32_to_cpu(rec->hdr.flags_length) >> 8;
-> > > +		__entry->handle = le16_to_cpu(rec->hdr.handle);
-> > > +		__entry->related_handle = le16_to_cpu(rec->hdr.related_handle);
-> > > +		__entry->timestamp = le64_to_cpu(rec->hdr.timestamp);
-> > > +
-> > > +		/* DRAM */
-> > > +		__entry->phys_addr = le64_to_cpu(rec->phys_addr);
-> > > +		__entry->descriptor = rec->descriptor;
-> > > +		__entry->type = rec->type;
-> > > +		__entry->transaction_type = rec->transaction_type;
-> > > +		__entry->validity_flags = le16_to_cpu(rec->validity_flags);
-> > > +		__entry->channel = rec->channel;
-> > > +		__entry->rank = rec->rank;
-> > > +		__entry->nibble_mask = rec->nibble_mask[0] << 24 |
-> > > +				       rec->nibble_mask[1] << 16 |
-> > > +				       rec->nibble_mask[2] << 8; /* 3 byte LE ? */  
-> > 
-> > Use get_unalinged_le24() ? I'd definitely expect these to be le24.
-> > 
-> >   
-> > > +		__entry->nibble_mask = le32_to_cpu(__entry->nibble_mask);  
-> > 
-> > That doesn't look right.  You will have unwound the endianness using
-> > the shifts above. Don't convert it again (noop on le systems, so you
-> > probably won't see a problem when testing).  
-> 
-> I thought I did it right with 2 shifts.  But regardless using
-> get_unalinged_le24() is better and I've already changed it.
-> 
-> >   
-> > > +		__entry->bank_group = rec->bank_group;
-> > > +		__entry->bank = rec->bank;
-> > > +		__entry->row = rec->row[0] << 24 |
-> > > +			       rec->row[1] << 16 |
-> > > +			       rec->row[2] << 8; /* 3 byte LE ? */  
-> > 
-> > get_unaligned_le24()  
-> 
-> ... and this one.
-> 
-> >   
-> > > +		__entry->row = le32_to_cpu(__entry->row);  
-> >   
-> > > +		__entry->column = le16_to_cpu(rec->column);
-> > > +		memcpy(__entry->cor_mask, &rec->correction_mask,
-> > > +			CXL_EVT_DER_CORRECTION_MASK_SIZE);
-> > > +	),
-> > > +
-> > > +	TP_printk("%s: %s time=%llu id=%pUl handle=%x related_handle=%x hdr_flags='%s': " \
-> > > +		  "phys_addr=%llx volatile=%s desc='%s' type='%s' trans_type='%s' channel=%u " \
-> > > +		  "rank=%u nibble_mask=%x bank_group=%u bank=%u row=%u column=%u " \
-> > > +		  "cor_mask=%s valid_flags='%s'",
-> > > +		__get_str(dev_name), show_log_type(__entry->log),
-> > > +		__entry->timestamp, __entry->id, __entry->handle,
-> > > +		__entry->related_handle, show_hdr_flags(__entry->flags),
-> > > +		__entry->phys_addr & ~CXL_GMER_PHYS_ADDR_MASK,
-> > > +		(__entry->phys_addr & CXL_GMER_PHYS_ADDR_VOLATILE) ? "TRUE" : "FALSE",
-> > > +		show_event_desc_flags(__entry->descriptor),  
-> > As before can we not print the invalid ones based on the validity flags?
-> > 
-> > Few years ago now, but I did something along those lines for the CCIX equivalent of
-> > this stuff.  (honestly can't remember much about it now though!)
-> > Was a bit fiddly but lead to nicer prints in my opinion.
-> > 
-> > https://lore.kernel.org/all/20191114133919.32290-2-Jonathan.Cameron@huawei.com/  
-> 
-
-Ah. And I'd forgotten I shared it in this reply ;)
-
-> I'm still not seeing anything which alters the actual print in this patch or
-> ras_event.h
-> 
-> Perhaps I'm missing what you mean by selecting the valid fields.
-> 
-> Something will have to change the TP_printk() format itself from what I can see
-> and I don't see a way to do that within the trace infrastructure.
-> 
-> We _could_ do that within the C code where trace_dram() is called.  But I'd
-> like to keep all the info together and let user space decode more than what the
-> kernel may know.
+On 20/09/2022 17:39, Konstantin Aladyshev wrote:
+> Add initial version of device tree for the BMC in the AMD DaytonaX
+> platform.
 
 
-Take a look at cper_ccix_err_location() e.g. 
-
-+	if (cmem_err->validation_bits & CCIX_MEM_ERR_GENERIC_MEM_VALID)
-+		n = snprintf(msg, len, "Pool Generic Type: %s ",
-+			     cper_ccix_mem_err_generic_type_str(cmem_err->pool_generic_type));
-
-which is called from the TP_printk() via cper_ccix_mem_err_unpack()
-
-You can call normal code in TP_printk() though indeed that code needs to then
-be in a c file, not the tracepoint header.
-
-Given the meaning of those valid fields won't change, I'd be keen not to print
-the associated 'invalid' entries as those are kind of misleading.
-
-Note that userspace code doesn't generally consume anything to do with TP_printk()
-but rather does it's own processing... 
-E.g. something like:
-https://github.com/mchehab/rasdaemon/blob/master/non-standard-hisilicon.c#L210
-which happens to be one of our more complex trace point handlers in
-rasdaemon.  I think that particular handler decodes for print, but drops the
-data in the DB in a fairly raw format.  Some others break it down further for
-logging.  Here are the CCIX ones that never went upstream...
-https://lore.kernel.org/all/20190827113010.50405-2-Jonathan.Cameron@huawei.com/
-
-
-Jonathan
-
+Thank you for your patch. There is something to discuss/improve.
 
 > 
-> Ira
+> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+> index 05d8aef6e5d2..9eff88d410aa 100644
+> --- a/arch/arm/boot/dts/Makefile
+> +++ b/arch/arm/boot/dts/Makefile
+> @@ -1575,6 +1575,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
+>  	aspeed-ast2600-evb-a1.dtb \
+>  	aspeed-ast2600-evb.dtb \
+>  	aspeed-bmc-amd-ethanolx.dtb \
+> +	aspeed-bmc-amd-daytonax.dtb \
+>  	aspeed-bmc-ampere-mtjade.dtb \
+>  	aspeed-bmc-arm-stardragon4800-rep2.dtb \
+>  	aspeed-bmc-asrock-e3c246d4i.dtb \
+> diff --git a/arch/arm/boot/dts/aspeed-bmc-amd-daytonax.dts b/arch/arm/boot/dts/aspeed-bmc-amd-daytonax.dts
+> new file mode 100644
+> index 000000000000..0e066b5ae0fb
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/aspeed-bmc-amd-daytonax.dts
+> @@ -0,0 +1,320 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/dts-v1/;
+> +
+> +#include "aspeed-g5.dtsi"
+> +#include <dt-bindings/gpio/aspeed-gpio.h>
+> +#include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +/ {
+> +	model = "AMD DaytonaX BMC";
+> +	compatible = "amd,daytonax-bmc", "aspeed,ast2500";
 
+Missing bindings documentation.
+
+> +
+> +	memory@80000000 {
+> +		reg = <0x80000000 0x20000000>;
+> +	};
+> +
+> +	reserved-memory {
+> +		#address-cells = <1>;
+> +		#size-cells = <1>;
+> +		ranges;
+> +
+> +		video_engine_memory: jpegbuffer {
+> +			size = <0x02000000>;	/* 32M */
+> +			alignment = <0x01000000>;
+> +			compatible = "shared-dma-pool";
+> +			reusable;
+> +		};
+> +	};
+> +
+> +	aliases {
+> +		serial0 = &uart1;
+> +		serial4 = &uart5;
+> +	};
+> +
+> +	chosen {
+> +		stdout-path = &uart5;
+> +		bootargs = "console=ttyS4,115200 earlycon";
+
+bootargs do not belong to mainline DTS. earlycon for sure.
+
+> +	};
+> +
+> +	leds {
+> +		compatible = "gpio-leds";
+> +
+> +		fault {
+
+Does not look like you tested the DTS against bindings. Please run `make
+dtbs_check` (see Documentation/devicetree/bindings/writing-schema.rst
+for instructions).
+
+Nodes are wrong.
+
+Node names should be generic.
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+
+> +			gpios = <&gpio ASPEED_GPIO(A, 2) GPIO_ACTIVE_LOW>;
+> +		};
+> +
+> +		identify {
+
+Ditto
+
+> +			gpios = <&gpio ASPEED_GPIO(A, 3) GPIO_ACTIVE_LOW>;
+> +		};
+> +	};
+> +
+> +	iio-hwmon {
+> +		compatible = "iio-hwmon";
+> +		io-channels = <&adc 0>, <&adc 1>, <&adc 2>, <&adc 3>, <&adc 4>,
+> +			<&adc 5>, <&adc 6>, <&adc 7>, <&adc 8>, <&adc 9>,
+> +			<&adc 10>, <&adc 11>, <&adc 12>, <&adc 13>, <&adc 14>,
+> +			<&adc 15>;
+> +	};
+> +};
+> +
+> +&fmc {
+
+(...)
+
+
+> +	fan@15 {
+> +		reg = <0x07>;
+> +		aspeed,fan-tach-ch = /bits/ 8 <0x0f>;
+> +	};
+> +};
+> +
+> +&video {
+> +	status = "okay";
+> +	memory-region = <&video_engine_memory>;
+> +};
+> +
+> +&vhub {
+> +	status = "okay";
+> +};
+> +
+
+No need for trailing new line.
+
+Best regards,
+Krzysztof
