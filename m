@@ -2,168 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE8B65BEF58
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 23:47:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1502E5BEF60
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 23:50:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230394AbiITVrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 17:47:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44728 "EHLO
+        id S230025AbiITVu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 17:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230379AbiITVrT (ORCPT
+        with ESMTP id S230426AbiITVuT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 17:47:19 -0400
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91C3361D50;
-        Tue, 20 Sep 2022 14:47:18 -0700 (PDT)
-Received: by mail-oi1-f175.google.com with SMTP id t62so5523004oie.10;
-        Tue, 20 Sep 2022 14:47:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=nNOJO5Rfau/4P4r51NLfOvsWPmiGi6ydKZx53FmD4Qg=;
-        b=Rh3m7qcSZw6oAUS+pp9BvgQma6bYAIHAwizVeVSkac6gOxHqTgmkosG5d5I7UWL/Us
-         Z2JqzBAJxiB32AjsgOxFF+56PGM8kQiCwdWOlumaU/U+OUSNwVXLmwv21eolZWpji9ak
-         NhiGran4nraUsMt8z7BcrKRYeqUa1DejiEK6rpleUwl1tpL8q9qbiTgwNmtCu9GjFVOZ
-         K8oyCUhdjiLECaPZIiRj7r0UltgDbQWKtTJ5rJrSLx4BVMd2nvS3Kxc+dwwuW52cpFr3
-         u81prG7I7cVs7d/Gism2Uq3RxvXb15a7vFy8dNjZCfRDNvsJK4GbaagmyZG5BVRz1RSZ
-         t1Ag==
-X-Gm-Message-State: ACrzQf0zXsGYgsQcQqVXMovzS6rwEM9OTGj4+qOhAZs1NPMwGHJl5cvG
-        pto7lBQsyz10HS1Wjf/EnvSrl78dz3vMjjYD8bE=
-X-Google-Smtp-Source: AMsMyM6rzZj410WRr0VQRjv7ZiJ0O2AOrtaWx9t+YrwUx9jhgWRASDmUqPdgsJTYcyKo+MaUX+ab8aTT4409HzOooE4=
-X-Received: by 2002:aca:d882:0:b0:34d:49bf:3587 with SMTP id
- p124-20020acad882000000b0034d49bf3587mr2506665oig.209.1663710436869; Tue, 20
- Sep 2022 14:47:16 -0700 (PDT)
+        Tue, 20 Sep 2022 17:50:19 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71C882180E;
+        Tue, 20 Sep 2022 14:50:17 -0700 (PDT)
+Date:   Tue, 20 Sep 2022 21:50:13 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1663710615;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZjzWjp2mR7KNavC4NQ2XVbJMIOQAxuWxGFL/2GffVuU=;
+        b=O/w80v/2nM0cMDtDzz9QBPJhACPnxInxeqGbxCdklwizacfojzCBgHyDLHXdszCIkusTSx
+        x7iXbRYekUo1coQiJbaIpkD7b/s0414pd3v/u60aNfQSPZxnnk7PAJOdyw4Lp2sZ7qOMKs
+        8nII+qSxYfbylpIwLr2HubdNOmw6Xp2+GfdvJNvP16/EeSfSRYVMTDtkfC6o2yWkUfgnTC
+        +Oul0e81U5JwGvexz9B33dQf1n2tyoAI8VIfVCEFgpR74avw2IMhVSLCbzN7eAn/B10lJ2
+        5FISD2iHA3qnAw1/oRSDwqOrCo14kMcrSXEdiFmi33ao5jKIypgZBec0kmWl1w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1663710615;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZjzWjp2mR7KNavC4NQ2XVbJMIOQAxuWxGFL/2GffVuU=;
+        b=0T7pdgB8ranrI9QnGDASi2HUowfDWk/x05yTa7bt5S1/OINSmQz7iY5Hz7qEuILpCUkd6M
+        VglzWrQWo038M+AA==
+From:   "tip-bot2 for Kees Cook" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/urgent] x86/uaccess: Avoid check_object_size() in
+ copy_from_user_nmi()
+Cc:     Yu Zhao <yuzhao@google.com>, dev@der-flo.net,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        stable@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <CAOUHufaPshtKrTWOz7T7QFYUNVGFm0JBjvM700Nhf9qEL9b3EQ@mail.gmail.com>
+References: <CAOUHufaPshtKrTWOz7T7QFYUNVGFm0JBjvM700Nhf9qEL9b3EQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220918031524.26719-1-leo.yan@linaro.org> <20220918031524.26719-3-leo.yan@linaro.org>
-In-Reply-To: <20220918031524.26719-3-leo.yan@linaro.org>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Tue, 20 Sep 2022 14:47:05 -0700
-Message-ID: <CAM9d7ciR0b5GSASVPxn-r5sBTJW9KZXcQYEsV4zRan5bdgmRCg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] perf test: Introduce script for java symbol testing
-To:     Leo Yan <leo.yan@linaro.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Message-ID: <166371061341.401.16240146052010103408.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Leo,
+The following commit has been merged into the x86/urgent branch of tip:
 
-On Sat, Sep 17, 2022 at 8:15 PM Leo Yan <leo.yan@linaro.org> wrote:
->
-> This commit introduces a script for testing java symbols.
->
-> The test records java program, inject samples with JIT samples, check
-> specific JIT symbols in the report, the test will pass only when these
-> two symbols are detected.
->
-> Suggested-by: Ian Rogers <irogers@google.com>
-> Signed-off-by: Leo Yan <leo.yan@linaro.org>
-> ---
->  tools/perf/tests/shell/test_java_symbol.sh | 69 ++++++++++++++++++++++
->  1 file changed, 69 insertions(+)
->  create mode 100755 tools/perf/tests/shell/test_java_symbol.sh
->
-> diff --git a/tools/perf/tests/shell/test_java_symbol.sh b/tools/perf/tests/shell/test_java_symbol.sh
-> new file mode 100755
-> index 000000000000..d96fea405ea9
-> --- /dev/null
-> +++ b/tools/perf/tests/shell/test_java_symbol.sh
-> @@ -0,0 +1,69 @@
-> +#!/bin/bash
-> +# Test java symbol
-> +
-> +# SPDX-License-Identifier: GPL-2.0
-> +# Leo Yan <leo.yan@linaro.org>, 2022
-> +
-> +PERF_DATA=$(mktemp /tmp/__perf_test.perf.data.XXXXX)
-> +PERF_INJ_DATA=$(mktemp /tmp/__perf_test.perf.data.inj.XXXXX)
-> +
-> +cleanup_files()
-> +{
-> +       echo "Cleaning up files..."
-> +       rm -f ${PERF_DATA}
-> +       rm -f ${PERF_INJ_DATA}
-> +}
-> +
-> +trap cleanup_files exit term int
-> +
-> +if [ -e "$PWD/tools/perf/libperf-jvmti.so" ]; then
-> +       LIBJVMTI=$PWD/tools/perf/libperf-jvmti.so
-> +elif [ -e "$PWD/libperf-jvmti.so" ]; then
-> +       LIBJVMTI=$PWD/libperf-jvmti.so
-> +elif [ -e "$PREFIX/lib64/libperf-jvmti.so" ]; then
-> +       LIBJVMTI=$PREFIX/lib64/libperf-jvmti.so
-> +elif [ -e "$PREFIX/lib/libperf-jvmti.so" ]; then
-> +       LIBJVMTI=$PREFIX/lib/libperf-jvmti.so
-> +if [ -e "/usr/lib/linux-tools-$(uname -a | awk '{ print $3 }' | sed -r 's/-generic//')/libperf-jvmti.so" ]; then
+Commit-ID:     80d82ca9562bb881f2884ccb33b5530d40144450
+Gitweb:        https://git.kernel.org/tip/80d82ca9562bb881f2884ccb33b5530d40144450
+Author:        Kees Cook <keescook@chromium.org>
+AuthorDate:    Mon, 19 Sep 2022 13:16:48 -07:00
+Committer:     Dave Hansen <dave.hansen@linux.intel.com>
+CommitterDate: Tue, 20 Sep 2022 14:43:49 -07:00
 
-s/if/elif/ ?
+x86/uaccess: Avoid check_object_size() in copy_from_user_nmi()
 
-> +       LIBJVMTI=/usr/lib/linux-tools-$(uname -a | awk '{ print $3 }' | sed -r 's/-generic//')/libperf-jvmti.so
-> +else
-> +       echo "Fail to find libperf-jvmti.so"
-> +       # JVMTI is a build option, skip the test if fail to find lib
-> +       exit 2
-> +fi
-> +
-> +cat <<EOF | perf record -k 1 -o $PERF_DATA jshell -s -J-agentpath:$LIBJVMTI
+The check_object_size() helper under CONFIG_HARDENED_USERCOPY is
+designed to skip any checks where the length is known at compile time as
+a reasonable heuristic to avoid "likely known-good" cases. However, it can
+only do this when the copy_*_user() helpers are, themselves, inline too.
 
-Wouldn't it check if jshell is available first?
+Using find_vmap_area() requires taking a spinlock. The check_object_size()
+helper can call find_vmap_area() when the destination is in vmap memory.
+If show_regs() is called in interrupt context, it will attempt a call to
+copy_from_user_nmi(), which may call check_object_size() and then
+find_vmap_area(). If something in normal context happens to be in the
+middle of calling find_vmap_area() (with the spinlock held), the interrupt
+handler will hang forever.
 
-Thanks,
-Namhyung
+The copy_from_user_nmi() call is actually being called with a fixed-size
+length, so check_object_size() should never have been called in
+the first place. Given the narrow constraints, just replace the
+__copy_from_user_inatomic() call with an open-coded version that calls
+only into the sanitizers and not check_object_size(), followed by a call
+to raw_copy_from_user().
 
+Fixes: 0aef499f3172 ("mm/usercopy: Detect vmalloc overruns")
+Reported-by: Yu Zhao <yuzhao@google.com>
+Reported-by: dev@der-flo.net
+Suggested-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Tested-by: Florian Lehner <dev@der-flo.net>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/all/CAOUHufaPshtKrTWOz7T7QFYUNVGFm0JBjvM700Nhf9qEL9b3EQ@mail.gmail.com
+Link: https://lkml.kernel.org/r/20220919201648.2250764-1-keescook@chromium.org
+---
+ arch/x86/lib/usercopy.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-> +int fib(int x) {
-> +       return x > 1 ? fib(x - 2) + fib(x - 1) : 1;
-> +}
-> +
-> +int q = 0;
-> +
-> +for (int i = 0; i < 10; i++)
-> +       q += fib(i);
-> +
-> +System.out.println(q);
-> +EOF
-> +
-> +if [ $? -ne 0 ]; then
-> +       echo "Fail to record for java program"
-> +       exit 1
-> +fi
-> +
-> +if ! perf inject -i $PERF_DATA -o $PERF_INJ_DATA -j; then
-> +       echo "Fail to inject samples"
-> +       exit 1
-> +fi
-> +
-> +# Below is an example of the instruction samples reporting:
-> +#   8.18%  jshell           jitted-50116-29.so    [.] Interpreter
-> +#   0.75%  Thread-1         jitted-83602-1670.so  [.] jdk.internal.jimage.BasicImageReader.getString(int)
-> +perf report --stdio -i ${PERF_INJ_DATA} 2>&1 | \
-> +       egrep " +[0-9]+\.[0-9]+% .* (Interpreter|jdk\.internal).*" > /dev/null 2>&1
-> +
-> +if [ $? -ne 0 ]; then
-> +       echo "Fail to find java symbols"
-> +       exit 1
-> +fi
-> +
-> +exit 0
-> --
-> 2.34.1
->
+diff --git a/arch/x86/lib/usercopy.c b/arch/x86/lib/usercopy.c
+index ad0139d..d2aff9b 100644
+--- a/arch/x86/lib/usercopy.c
++++ b/arch/x86/lib/usercopy.c
+@@ -44,7 +44,8 @@ copy_from_user_nmi(void *to, const void __user *from, unsigned long n)
+ 	 * called from other contexts.
+ 	 */
+ 	pagefault_disable();
+-	ret = __copy_from_user_inatomic(to, from, n);
++	instrument_copy_from_user(to, from, n);
++	ret = raw_copy_from_user(to, from, n);
+ 	pagefault_enable();
+ 
+ 	return ret;
