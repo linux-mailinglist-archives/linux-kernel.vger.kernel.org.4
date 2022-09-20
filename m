@@ -2,119 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5610C5BE0B1
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 10:49:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C37595BE0BC
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 10:49:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230249AbiITIsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 04:48:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36730 "EHLO
+        id S230351AbiITItm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 04:49:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231410AbiITIsM (ORCPT
+        with ESMTP id S230296AbiITIt1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 04:48:12 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74BD63E77D
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 01:48:10 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id p1-20020a17090a2d8100b0020040a3f75eso1760571pjd.4
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 01:48:10 -0700 (PDT)
+        Tue, 20 Sep 2022 04:49:27 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D64647CC
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 01:49:25 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id p5so2092638ljc.13
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 01:49:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=Z0CIYBJ59VmXnMF6RrKkrGfbMLVUY9u6d9zW/w1YKxo=;
-        b=stBcYq0P2qVspyhXBudCWuspwYMnLkloEBnRu8iZ9njhsuEMVyBWG2fkR4PHagZDC5
-         jBRA/os+bhGrQ04IvNzfb3LoFCptK4WY2kXICFr1hrlGDZ5ZbEDND0i2M2r/K+hRnvSY
-         qUdo72zMXsdohLzgSusZQlOwsKYHwkmAzIYEMUxWoUtBs3PkLtjR0saDQ94exHT/BEnd
-         ehgACbwfl8w6MHCwR0TOR8BEcBxzauCd5A4+Rirw8IwLF7oQVtr6n+/Hq+Nl3atD+AWU
-         wq9OCsmAQ1KVXb8tCspn6hi7/25HWmeUhWx11WcK4mT8O4SSTxjEZXdbmQXWOH2OkqMO
-         926Q==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=avM2JaVz9NzVtQII/XtgHHxaQA02fvGFDYoIGdJRzAY=;
+        b=h3MEJo8KfgdtxNKfxd7Bn1dOV8WYJXSTSzVFDgnJS9ErCWyOA+MrJrX/HldOGC6Qy0
+         ACCgLZEQIiUeE1cR2S9KI2RlDVje5wCZgwkJnkLBV9OGfOmduTRbYTko1A43M+lzLk5p
+         f3Sz1guQXSnM7ms1ObceO6f05ilrLGT7GBwJ5ISAXfCN2XkQePLbkx7syTQek18Ie93A
+         VgbvcZuC1Jyp39bOuKx26q3DRAf6jCwL/QZI8H9HFbG3CWt9dQC1OpV/6sw1sIiFzXYT
+         zmqCuXMN+UKGy4kSFbUnE6+BeMt1BdXxvGC3Y0Ur4VVOrW+x/6puf0TnNXFtXYeN2nG3
+         UwzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Z0CIYBJ59VmXnMF6RrKkrGfbMLVUY9u6d9zW/w1YKxo=;
-        b=xDsDpljF0lBi0oJyvt57/dVPI5cYO7UkUn/Ak5IEs4rSckOpQQDWleSSicwZVMbw0t
-         z/y2Lf1XwTepXAGPLUp/+J4hOj6jTT5XH+j84lgy1EzXx+0wBpBTg6lPKyx1pvp8RV8H
-         Gb83ZiQ/HNyAKhYCe2oiLMHb5zKQU9q83edn7R7oyN0PzCbijyU1fM0hjt++qDwaMdbJ
-         Kl70kpoGupCnEAnCfGvkgKq6Gdb12WXu1tWXJENqnrn4SLiP710CXPV2vBld8GbD7acl
-         zcUdor5J4NnVzRqeIVpZ2VSxxnIsOfGMCYUEfNL+V8U64uEz87mk2QCTq+igZFrfYXyX
-         Pr4Q==
-X-Gm-Message-State: ACrzQf1TELByqhMtuzyrv6Op/djpx1HUeKkwpVaPRCx07Vgm3a6lf7WI
-        8wHlL+n5F/U6r+CiSaebtHrqeA==
-X-Google-Smtp-Source: AMsMyM7hdUJkdrTz4X/rM3IM3DquC6pUyCuxVg3nCWn2zWTFvFTXxao5FHWqy4n/oFtApFlunAGQ0g==
-X-Received: by 2002:a17:90b:38cb:b0:200:aaa6:6428 with SMTP id nn11-20020a17090b38cb00b00200aaa66428mr2768505pjb.47.1663663689720;
-        Tue, 20 Sep 2022 01:48:09 -0700 (PDT)
-Received: from ?IPV6:2401:4900:1c61:6535:ca5f:67d1:670d:e188? ([2401:4900:1c61:6535:ca5f:67d1:670d:e188])
-        by smtp.gmail.com with ESMTPSA id e11-20020a17090301cb00b0016be834d54asm824491plh.306.2022.09.20.01.48.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Sep 2022 01:48:08 -0700 (PDT)
-Message-ID: <dfe1bc9e-2ab9-d2dd-7daa-dddb8d66fd77@linaro.org>
-Date:   Tue, 20 Sep 2022 14:18:03 +0530
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=avM2JaVz9NzVtQII/XtgHHxaQA02fvGFDYoIGdJRzAY=;
+        b=HuK72pL2ymKbU9NM9dw+oB8PdynWagnuTfeW4MEzZlL+cGV6XBvXnI3I6mPU6dwGyy
+         v0kpnzp7gpaLBrGwkQ3gWA1yVXpejuNcM/EmDnqng7Y8MYmGTzhkstWgn1shWbxVTxmB
+         A958x1THMsLWH8dDHcLZSKimLJhwiZVxh1tjrzhyGwM+3WnqyFKeWe9Smi8Ydsez3ibk
+         RoFR3tgoT1shC759vqWZOmtYVQcpnAY5WbB2St4K2hDcqAQL7JqBBqjWOMlfMr/rAGwO
+         2/+CLNBJFXfnDX2IwvQklsI0DJaTCwqyBxpHUz1hjmSDA/GJcQN43JIE0oR8c8vVypi3
+         igfw==
+X-Gm-Message-State: ACrzQf2uSPbznEe4HooDcw1i7EGvAL3qUqLjPq0eg/3MWRJJ/Eb0q1lR
+        NCECwcQYxIbM0dFgh3wQkZEvtAcs69DPrW/4KJ6rI8wu
+X-Google-Smtp-Source: AMsMyM6jDHLoSohMNs5WAtMtfasbnBmxT4I+611rAp0kp9gyW2OmBeNYK7Quk+AY4vYeBrglnXPtotv4l0lSkFKkiv4=
+X-Received: by 2002:a05:651c:222c:b0:26b:dec5:a4f0 with SMTP id
+ y44-20020a05651c222c00b0026bdec5a4f0mr7132005ljq.359.1663663761407; Tue, 20
+ Sep 2022 01:49:21 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v6 0/4] dt-bindings: qcom-qce: Convert bindings to yaml &
- related changes
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org
-Cc:     agross@kernel.org, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, thara.gopinath@gmail.com,
-        devicetree@vger.kernel.org, robh@kernel.org, andersson@kernel.org,
-        bhupesh.linux@gmail.com, Jordan Crouse <jorcrous@amazon.com>
-References: <20220919220804.1047292-1-bhupesh.sharma@linaro.org>
- <36bd1c19-8fbd-0903-704d-447117b2007a@linaro.org>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-In-Reply-To: <36bd1c19-8fbd-0903-704d-447117b2007a@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <1663325892-9825-1-git-send-email-zhaoyang.huang@unisoc.com>
+ <20220919101629.xlafi2y2dk357wk3@techsingularity.net> <CAGWkznFEBDwDVeR1AH6gk30PHU3pvSHBusOSQgEB2L7mZD4Mxg@mail.gmail.com>
+ <20220920084555.rzphzayirdbtht2w@techsingularity.net>
+In-Reply-To: <20220920084555.rzphzayirdbtht2w@techsingularity.net>
+From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
+Date:   Tue, 20 Sep 2022 16:48:53 +0800
+Message-ID: <CAGWkznF2VvT=3sj3w8TC4JJ4XN0Y+CLGg_AYxxc4iuuVR518PQ@mail.gmail.com>
+Subject: Re: [RFC PATCH] mm: check global free_list if there is ongoing
+ reclaiming when pcp fail
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>, Ke Wang <ke.wang@unisoc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 9/20/22 12:58 PM, Krzysztof Kozlowski wrote:
-> On 20/09/2022 00:08, Bhupesh Sharma wrote:
-> 
-> (...)
-> 
-> 
->>
->> Qualcomm crypto engine (qce) is available on several Snapdragon SoCs.
->> The qce block supports hardware accelerated algorithms for encryption
->> and authentication. It also provides support for aes, des, 3des
->> encryption algorithms and sha1, sha256, hmac(sha1), hmac(sha256)
->> authentication algorithms.
->>
->> Note that this patchset is dependent on the dt-bindings patchset (see [1]) sent to devicetree list.
->>
->> [1]. https://lore.kernel.org/linux-arm-msm/20220919195618.926227-1-bhupesh.sharma@linaro.org/
-> 
-> If it is dependent on the bindings only, keep them together. However I
-> don't think this is the only dependency. You add here several
-> compatibles which are not supported.
-
-
-Please go through the cover letter where I mentioned that:
-   'As per Bjorn's suggestion on irc, broke down the patchset into 4
-   separate patchsets, one each for the following areas to allow easier
-   review and handling from the respective maintainer(s):
-         'arm-msm', 'crypto', 'dma' and 'devicetree'
-   This patchset is directed for the 'devicetree' tree / area.'
-
-Basically now the patchset which had around 23 patches in v5 will send 
-out as 4 separate patchsets one each for 'arm-msm', 'crypto', 'dma' and 
-'devicetree' trees.
-
-So when all the respective subsets are picked up, all the compatibles 
-are in place.
-
-Thanks,
-Bhupesh
+On Tue, Sep 20, 2022 at 4:46 PM Mel Gorman <mgorman@techsingularity.net> wrote:
+>
+> On Tue, Sep 20, 2022 at 09:45:35AM +0800, Zhaoyang Huang wrote:
+> > On Mon, Sep 19, 2022 at 6:22 PM Mel Gorman <mgorman@techsingularity.net> wrote:
+> > >
+> > > On Fri, Sep 16, 2022 at 06:58:12PM +0800, zhaoyang.huang wrote:
+> > > > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> > > >
+> > > > Check the global free list again even if rmqueue_bulk failed for pcp pages when
+> > > > there is ongoing reclaiming, which could eliminate potential direct reclaim by
+> > > > chance.
+> > > >
+> > > > Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> > >
+> > > Patch does not apply and may be based on a custom kernel that introduced
+> > > a problem. There is no description of what problem this is trying to
+> > > fix. Checking the status of reclaim for a specific zone in this path would
+> > > be a little unexpected.  If allocation pressure is exceeding the ability
+> > > of reclaim to make progress then the caller likely needs to take action
+> > > like direct reclaim. If the allocation failure is due to a high-order
+> > > failure then it may need to enter direct compaction etc.
+> >
+> > Agree with the above comment. This is a proposal aiming at avoiding
+> > direct reclaiming things with minimum cost, that is to say, about 5
+> > CPU instructions in return with the overhead of function calls which
+> > has both of several loops inside and potential throttle sleep by IO
+> > congestion etc.
+>
+> If the refill fails and kswapd is failing to keep up then actions like
+> direct reclaim or compaction are inevitable. At best, this patch would
+> race to allocate pages in one context that are being freed in parallel by
+> another context.
+>
+> Nak.
+ok, I have noticed that the latest modification has made some changes
+on this path. thanks for comment
+>
+> --
+> Mel Gorman
+> SUSE Labs
