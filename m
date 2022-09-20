@@ -2,53 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A21E5BE8D6
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 16:26:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEF315BE8B0
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 16:22:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230379AbiITOZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 10:25:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42346 "EHLO
+        id S230447AbiITOWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 10:22:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231839AbiITOZQ (ORCPT
+        with ESMTP id S231625AbiITOVn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 10:25:16 -0400
-X-Greylist: delayed 463 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 20 Sep 2022 07:25:03 PDT
-Received: from sym2.noone.org (sym.noone.org [178.63.92.236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFA572E9DC;
-        Tue, 20 Sep 2022 07:25:03 -0700 (PDT)
-Received: by sym2.noone.org (Postfix, from userid 1002)
-        id 4MX3XF3jCKzvjfn; Tue, 20 Sep 2022 16:17:17 +0200 (CEST)
-Date:   Tue, 20 Sep 2022 16:17:17 +0200
-From:   Tobias Klauser <tklauser@distanz.ch>
-To:     Jiri Slaby <jslaby@suse.cz>
-Cc:     gregkh@linuxfoundation.org,
-        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 02/10] tty: serial: clean up stop-tx part in
- altera_uart_tx_chars()
-Message-ID: <20220920141716.kqvtrqfyaf5e3ijq@distanz.ch>
-References: <20220920052049.20507-1-jslaby@suse.cz>
- <20220920052049.20507-3-jslaby@suse.cz>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220920052049.20507-3-jslaby@suse.cz>
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+        Tue, 20 Sep 2022 10:21:43 -0400
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C4B32D99;
+        Tue, 20 Sep 2022 07:19:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1663683582;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=uBeEJBLkFCYDy9tyewLPL9Ak1hbYgF4IFlXQI871aZg=;
+    b=OIhS2SPPrQOaxBBKZlzAvm2uQhec6l0ChhCjctof+C3m5LKnTgxnlsnWEW0/KvKil5
+    2wcFN0EDdZc7QfFcCGj15KSOZN6x4Y2THSLdE1EJWi70xRzJZjwfv8BJbOb2eTZA5nyN
+    dAU9UTVuzk71b02C9jN4S/mDTJpXty3+ZSTTW1vpNA9CEr5SMgswshFseB/I+hHNU42X
+    giAVExhRkcDXKWDubQJmfFNlsKJRznvgabjCuQi48x8NCFYm3UepBNx03zuytnxvkvP3
+    327VmIdocnYBlsnqyIbbRv9T1jkrbwhwIJnHI70jcbt6Ae8EHCpgHsFW/vV45wXvYSyq
+    ftPw==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj5Apz9PSN6LgsXcGZjzY="
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+    by smtp.strato.de (RZmta 48.1.1 DYNA|AUTH)
+    with ESMTPSA id x6434cy8KEJg1T1
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Tue, 20 Sep 2022 16:19:42 +0200 (CEST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
+Subject: Re: Usefulness of CONFIG_MACH_JZ47*
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <DBGIIR.8W0JWG83D6FE2@crapouillou.net>
+Date:   Tue, 20 Sep 2022 16:19:41 +0200
+Cc:     linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mips <linux-mips@vger.kernel.org>,
+        MIPS Creator CI20 Development 
+        <mips-creator-ci20-dev@googlegroups.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <8F8B1125-40FA-464B-B662-F29C3F0AA5E2@goldelico.com>
+References: <af10570000d7e103d70bbea590ce8df4f8902b67.1661330532.git.christophe.jaillet@wanadoo.fr>
+ <UC07HR.REF39SO0Y5PG2@crapouillou.net>
+ <CDEACE3D-5433-457B-AF77-E41F39A04CA4@goldelico.com>
+ <H34IIR.IGTU7CQ36OZK3@crapouillou.net>
+ <F21B5D44-94D8-4BDB-BB34-9CBFC5F2B891@goldelico.com>
+ <DBGIIR.8W0JWG83D6FE2@crapouillou.net>
+To:     Paul Cercueil <paul@crapouillou.net>
+X-Mailer: Apple Mail (2.3445.104.21)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-20 at 07:20:42 +0200, Jiri Slaby <jslaby@suse.cz> wrote:
-> The "stop TX" path in altera_uart_tx_chars() is open-coded, so:
-> * use uart_circ_empty() to check if the buffer is empty, and
-> * when true, call altera_uart_stop_tx().
-> 
-> Cc: Tobias Klauser <tklauser@distanz.ch>
-> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+Hi Paul,
 
-Acked-by: Tobias Klauser <tklauser@distanz.ch>
+> Am 20.09.2022 um 15:33 schrieb Paul Cercueil <paul@crapouillou.net>:
+>=20
+>=20
+>=20
+> Le mar., sept. 20 2022 at 14:31:38 +0200, H. Nikolaus Schaller =
+<hns@goldelico.com> a =C3=A9crit :
+>> Hi Paul,
+>>> Am 20.09.2022 um 11:09 schrieb Paul Cercueil <paul@crapouillou.net>:
+>>> Hi Nikolaus,
+>>> Le mar., sept. 20 2022 at 08:31:30 +0200, H. Nikolaus Schaller =
+<hns@goldelico.com> a =C3=A9crit :
+>>>> Hi Paul,
+>>>> it seems as if there aren't many places left over where the =
+MACH_JZ47* configs are still in use:
+>>>> drivers/char/hw_ramdom/Kconfig
+>>>> drivers/clk/ingenic/Kconfig
+>>>> drivers/gpu/drm/ingenic/Kconfig
+>>>> drivers/pinctrl/pinctrl-ingenic.c
+>>>> Is it possible to get rid of them and just have =
+CONFIG_MACH_INGENIC_GENERIC?
+>>>> This might simplify my defconfig for multiple machines.
+>>> CONFIG_MIPS_GENERIC_KERNEL=3Dy
+>> This breaks compilation for me, e.g.
+>> arch/mips/mm/cache.c:203:6: error: 'cpu_has_tx39_cache' undeclared =
+(first use in this function)
+>=20
+> v6.0-rc does not have 'cpu_has_tx39_cache' anywhere in that file, or =
+in arch/mips/ for that matter. It was removed in v5.18.
+>=20
+> And a v5.17 kernel compiles fine here with these options enabled. So =
+it's a problem on your side, I guess.
+
+Ah, you were right.
+
+I have a patch included which was provided by zhouyanjie@wanyeetech.com
+("MIPS: mm: Add Ingenic XBurst SoCs specific cache driver.").
+
+It is intended to improve caching and is part of jz4780 SMP support =
+which we wanted to have.
+AFAIR it was either not posted to lkml or rejected or superseded.
+
+>=20
+>>> CONFIG_BOARD_INGENIC=3Dy
+>> This config option does not exist (at least in v6.0-rc). Probably you =
+refer to CONFIG_INGENIC_GENERIC_BOARD.
+>=20
+> No, I do not, and yes, it exists.
+
+Ah, I grepped for CONFIG_BOARD_INGENIC but it exists only in one Kconfig =
+as BOARD_INGENIC.
+But what is then the difference to CONFIG_INGENIC_GENERIC_BOARD and =
+CONFIG_MACH_INGENIC_GENERIC?
+
+>=20
+>> As far as I see, this does not choose to build any device tree blob.
+>> I tried some patch to get the .dtb built, but the resulting kernel =
+does not show any activity.
+>> If I e.g. switch back from CONFIG_INGENIC_GENERIC_BOARD=3Dy to =
+CONFIG_JZ4780_CI20=3Dy the kernel works.
+>=20
+> Because in the first case you build a generic kernel, which does not =
+embed any .dtb, and you are responsible for providing the kernel with =
+the blob at boot time; while if you build with CONFIG_JZ4780_CI20=3Dy it =
+embeds the .dtb inside the kernel.
+>=20
+> You can embed the .dtb into the generic kernel at compile-time too, =
+have a look at "Kernel type -> Kernel appended dtb support." Not sure =
+why you'd want that for a generic kernel, though.
+
+Ah, I remember. Since I usually code 99% of my time for ARM systems with =
+separate .dtb files chosen by the boot loader, I forgot that we have to =
+append the .dtb on the CI20 and Alpha400. So there is no good solution =
+for a "universal" kernel binary either.
+
+>=20
+>>> Then you can support all Ingenic-based boards alongside other MIPS =
+boards.
+>> Yes, I know, but why are the MACH_JZ47* not replaced by =
+CONFIG_MACH_INGENIC_GENERIC if they are almost unused or completely =
+removed?
+>=20
+> They *are* used.
+
+Well, only in a handful of places as it looks like.
+
+>=20
+>> BTW: there are also seems to be some board specific CONFIGs in =
+processor specific code (e.g. CONFIG_JZ4780_CI20 in irqchip code).
+>=20
+> rgrep CI20 drivers/irqchip/
+>=20
+> returns nothing for me.
+
+Ah, again an inofficial patch which is part of the SMP stuff ("irqchip: =
+Ingenic: Add percpu IRQ support for X2000.").
+
+>=20
+>> So selecting a MACH is not sufficient to get these features.
+>> All this looks a little fragile and incomplete... Maybe if I find =
+some time (which is unfortunately quite unlikely) I can propose some =
+fixes.
+>=20
+> It is not "fragile and incomplete", it works as intended, and it's a =
+feature I use often.
+
+Yes, seems as if you are right. We may have added too many useful =
+patches which did not go upstreamand get in conflict with upstream =
+features.
+
+BR and thanks for helping to better understand,
+Nikolaus
+
+>=20
+> -Paul
+>=20
+
