@@ -2,74 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35F0C5BDBFE
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 07:05:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 958815BDC00
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 07:05:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbiITFFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 01:05:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48372 "EHLO
+        id S229960AbiITFFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 01:05:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbiITFFD (ORCPT
+        with ESMTP id S229498AbiITFFI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 01:05:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A66426ACC;
-        Mon, 19 Sep 2022 22:05:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 18A61B82469;
-        Tue, 20 Sep 2022 05:05:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 465BCC433C1;
-        Tue, 20 Sep 2022 05:04:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663650299;
-        bh=wnzt8PW3zP9wtrewvt5xUq0/W2ToEB86MUL4a6EzQ74=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=alEivXXaV7UE1FPN9+i6lHMvQP2Y35TWzGnpVSO3WlAf+WoMPOlV08+t10uNZAmA6
-         UQUSQfjdv0x1Mg3ErWUUZP2GXVQZFLoPJpwP30grxbu3FM8mojq6oWoqXWAWPE4JSW
-         Q9DslhB7EwVpjekwVUEeAIMCWwRxxMvVaNxCHLVvVZzVgMaGXvNHyKyv7+Yt4XGO7k
-         4zHGFY1RThlLcALwNrOhntokSCtcqciIE75WEvvUKnnp5kNMWhjCoVhwC9eEJlG4ur
-         30a3agResor32XjxuoTFXacUYEzZRZSDEr9whTllllOID0U1sQWJ+wQthn2KTfl3wj
-         6Md58N9TCp+nQ==
-Date:   Tue, 20 Sep 2022 10:34:55 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     yung-chuan.liao@linux.intel.com,
-        pierre-louis.bossart@linux.intel.com, sanyog.r.kale@intel.com,
-        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, quic_srivasam@quicinc.com
-Subject: Re: [PATCH v2 1/2] soundwire: qcom: update status from device id 1
-Message-ID: <YylJ90Vu7SUhSNIo@matsya>
-References: <20220916135352.19114-1-srinivas.kandagatla@linaro.org>
+        Tue, 20 Sep 2022 01:05:08 -0400
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE6240E23;
+        Mon, 19 Sep 2022 22:05:07 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=ziyangzhang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VQHRu7D_1663650303;
+Received: from 30.97.56.91(mailfrom:ZiyangZhang@linux.alibaba.com fp:SMTPD_---0VQHRu7D_1663650303)
+          by smtp.aliyun-inc.com;
+          Tue, 20 Sep 2022 13:05:04 +0800
+Message-ID: <3f4c227c-29ba-3d5b-47ab-9ca88c36044e@linux.alibaba.com>
+Date:   Tue, 20 Sep 2022 13:05:01 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220916135352.19114-1-srinivas.kandagatla@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.0
+Subject: Re: [PATCH V3 5/7] ublk_drv: consider recovery feature in aborting
+ mechanism
+Content-Language: en-US
+From:   Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     axboe@kernel.dk, xiaoguang.wang@linux.alibaba.com,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        joseph.qi@linux.alibaba.com
+References: <20220913041707.197334-1-ZiyangZhang@linux.alibaba.com>
+ <20220913041707.197334-6-ZiyangZhang@linux.alibaba.com>
+ <Yyg3KLfQaxbS1miq@T590>
+ <9a682fac-f022-1f4d-5c2c-e1f0a84746d8@linux.alibaba.com>
+ <YyhhnbrHTJpW4Xcm@T590>
+ <dbc78e92-ede7-fc63-1bee-83794bf1e33b@linux.alibaba.com>
+ <Yyktx/xz0qTNxnT4@T590>
+ <475726f7-bb65-5681-1967-a9ae9075004e@linux.alibaba.com>
+In-Reply-To: <475726f7-bb65-5681-1967-a9ae9075004e@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16-09-22, 14:53, Srinivas Kandagatla wrote:
-> By default autoenumeration is enabled on QCom SoundWire controller
-> which means the core should not be dealing with device 0 w.r.t enumeration.
+On 2022/9/20 12:45, Ziyang Zhang wrote:
+> On 2022/9/20 11:04, Ming Lei wrote:
+>> On Tue, Sep 20, 2022 at 09:49:33AM +0800, Ziyang Zhang wrote:
+>>> On 2022/9/19 20:33, Ming Lei wrote:
+>>>>>>> +
+>>>>>>> +static void ublk_quiesce_queue(struct ublk_device *ub,
+>>>>>>> +		struct ublk_queue *ubq)
+>>>>>>> +{
+>>>>>>> +	int i;
+>>>>>>> +
+>>>>>>> +	for (i = 0; i < ubq->q_depth; i++) {
+>>>>>>> +		struct ublk_io *io = &ubq->ios[i];
+>>>>>>> +
+>>>>>>> +		if (!(io->flags & UBLK_IO_FLAG_ACTIVE)) {
+>>>>>>> +			struct request *rq = blk_mq_tag_to_rq(
+>>>>>>> +					ub->tag_set.tags[ubq->q_id], i);
+>>>>>>> +
+>>>>>>> +			WARN_ON_ONCE(!rq);
+>>>>>>> +			pr_devel("%s: %s rq: qid %d tag %d io_flags %x\n", __func__,
+>>>>>>> +					ublk_queue_can_use_recovery_reissue(ubq) ?
+>>>>>>> +					"requeue" : "abort",
+>>>>>>> +					ubq->q_id, i, io->flags);
+>>>>>>> +			if (ublk_queue_can_use_recovery_reissue(ubq))
+>>>>>>> +				blk_mq_requeue_request(rq, false);
+>>>>>>
+>>>>>> This way is too violent.
+>>>>>>
+>>>>>> There may be just one queue dying, but you requeue all requests
+>>>>>> from any queue. I'd suggest to take the approach in ublk_daemon_monitor_work(),
+>>>>>> such as, just requeuing requests in dying queue.
+>>>>>
+>>>>> If we want to start a new process after a crash for USER_RECOVERY, all old ubq_daemons
+>>>>> must exit and rqs of all queues have to be requeued/aborted. We cannot let live
+>>>>> ubq_daemons run any more because they do not belong to the new process.
+>>>>
+>>>> IMO, the old process really can exist, and recently even I got such
+>>>> requirement for switching queue from one thread to another.
+>>>
+>>> For now, only one process can open /dev/ublkcX, so a new process is necessary now.
+>>>
+>>> If you think "per ubq_daemon" recovery is reasonable, I can do that in the future
+>>> if multiple processes is supported. But I really suggest that we can keep current
+>>> design as the first step which assumes all ubq_daemons are exited and a new process
+>>> is started, and that really meets our requirement.
+>>>
+>>> BTW, START_USER_RECOVERY has to be reconsidered because we may need to pass a ubq_id
+>>> with it.
+>>>
+>>>>
+>>>> What we should do is to get all inflight requests done, and cancel all io
+>>>> commands, no matter if the ubq pthread is dead or live.
+>>>>
+>>>>>
+>>>>> BTW, I really wonder why there could be just one queue dying? All queues must be dying
+>>>>> shortly after any ubq_daemon is dying since they are all pthreads in the same process.
+>>>>
+>>>> You can't assume it is always so. Maybe one pthread is dead first, and
+>>>> others are dying later, maybe just one is dead.
+>>>
+>>> Yes, I know there may be only one pthread is dead while others keep running, but now
+>>> ublk_drv only support one process opening the same /dev/ublkcX, so other pthreads
+>>> must dead(no matter they are aborted by signal or themselves) later.
+>>>
+>>>>
+>>>> If one queue's pthread is live, you may get trouble by simply requeuing
+>>>> the request, that is why I suggest to re-use the logic of
+>>>> ublk_daemon_monitor_work/ublk_abort_queue().
+>>>
+>>> Actually, if any ubq_daemon is live, no rqs are requeued, please see the check in
+>>> ublk_quiesce_dev(). It always makes sure that ALL ubq_daemons are dying, then it
+>>> starts quiesce jobs.
+>>
+>> OK, looks I miss this point, but you should have quiesced queue at the
+>> beginning of ublk_quiesce_dev(), then the transition period can be kept
+>> as short as possible. Otherwise, if one queue pthread isn't dying, the
+>> device can be kept in this part-working state forever.
+>>
 > 
-> During Enumeration if SoundWire core sees status[0] as SDW_SLAVE_ATTACHED and
-> start programming the device id, however reading DEVID registers return zeros
-> which does not match to any of the slaves in the list and the core attempts
-> to park this device to Group 13.  This results in adding SoundWire device
-> with enumeration address 0:0:0:0
+> Ming, this is what you said in PATCH V2:
+> "
+> The simplest handling might be to exit all ublk queues first, and re-create one
+> new process to recover all since the request queue is required to be
+> quiesced first, and all ublk queue is actually quiesced too. So from user
+> viewpoint, there is nothing visible comparing with just recovering
+> single ubq daemon/pthread.
+> "
 > 
-> Fix this by not passing device 0 status to SoundWire core.
+> So I assume that quiesce_work starts only after all ubq_damons are dying.
+> Note that current ublk does not support mutpile process opening the same chardev.
+> 
+> Really we should agree on this. My suggestion is that we only consider "all ubq_daemons
+> are dying".
+> 
+> You mention that someone want to enable "switch ubq_daemon pthread to another one" and
+> I think it is another feature but not recovery feature.
+> 
+> Regards,
+> Zhang.
 
-Applied after fixing typi pointed by Pierre, thanks
-
-Also, pls check, I got conflict which was resolved
-
--- 
-~Vinod
+This should be considered very carefully, Ming.
