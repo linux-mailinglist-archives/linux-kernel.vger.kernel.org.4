@@ -2,186 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A17325BD8BA
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 02:21:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BE805BD8BC
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 02:21:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbiITAV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 20:21:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53698 "EHLO
+        id S229689AbiITAVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 20:21:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiITAVY (ORCPT
+        with ESMTP id S229572AbiITAVe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 20:21:24 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F13225018F;
-        Mon, 19 Sep 2022 17:21:22 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 8D5225C01E2;
-        Mon, 19 Sep 2022 20:21:20 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Mon, 19 Sep 2022 20:21:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1663633280; x=
-        1663719680; bh=VbAejdjD9UaMfsDs74NDsg2d+mKxJjZQy4FL4UKO4Oc=; b=h
-        0m6f0gYrz52lqRrvTgAlh5LKIGa2/5zTZ/JuIlC0CXTGBos9+lxi8YGMjXb+nndy
-        gT9F+Z/GC2NBIW223WocZD2641UvmG9nvhIHXelKbkPFvu4raK+ewbhlGLxQb/Bq
-        WyMh2vUea84IZo4U0Q5saPdwpHPMVYhlVKV9MVQc2qHnRZoYJ13JffQrY5mO2Xf4
-        Y0HYkWy2mm8uREIkH8xF1hxLgHy560gvwK1fS3O1eR1LjsSeQtWVVZvfSdTaiOEI
-        3m3mS2ZHtqfY5YLAhiseqqaj8ISv6aF+fRdllZ5ZwKioHO2SXdvMRJyamLva1kVV
-        qMjN3inQ7JgveHxoIihBA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1663633280; x=
-        1663719680; bh=VbAejdjD9UaMfsDs74NDsg2d+mKxJjZQy4FL4UKO4Oc=; b=Y
-        2VfrQQ01yFCBmjAeBsMvHXCq9JrHu8ge+niZPUXXAoraaGgvFkf4rBgAlTwaCR6S
-        9wWEhu55+kMSjedNj2CuuGdMWgO5rIUOXTqTBxHfIOUrKClLge8uLgU5L+l/GF2v
-        Dnc9YBMnjbhIarO8zUVCMYAOUAl96rKII03lnNn856pifKddOLHzxts4diujdvmv
-        Kio0Gy3PswLNsmUYmDqv8XCX48sCcYNqSU/iVy0kBXOHJx5e21EYebHPUaBZKN7H
-        KTHYQLsuAeFv31W1GaDz8oioPRtf+paU36iFO1km2HdcEF4iBCTx9L/vtnh9eNSu
-        7sfK5O3Yt5HFe0NkCIqoQ==
-X-ME-Sender: <xms:gAcpY8ENRw_5mVGv8BDtlnjNWmow-cdNx7uG8nCWBU5OqeRt6Lsmqg>
-    <xme:gAcpY1VdfqtAochlVc9G-6jGAwIZgKCEBtHuneK9QcJop6fhx9jHJ8BasTW8GAQfz
-    Key0c3vpFNmXvdCq74>
-X-ME-Received: <xmr:gAcpY2JzZEQVipx5NZwZ8P5YmkEvti13oXopAdxcNHhisdRZoc5Eop9t1D4GiAgHwhzUHg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedvkedgfeegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepkffuhffvveffjghftgfgfgggsehtsgertddtreejnecuhfhrohhmpefnuhhk
-    vgculfhonhgvshcuoehluhhkvgeslhhjohhnvghsrdguvghvqeenucggtffrrghtthgvrh
-    hnpeevjeelledugfehtedtleevtdegjeeiteeiffeihfduiefffffffedtteffkedvleen
-    ucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomheplhhukhgvsehljhhonhgvshdruggvvh
-X-ME-Proxy: <xmx:gAcpY-GYqv0BukNKba-S50Nqhq1bROArnP0hho5EGKHBRLiiTJ9e0g>
-    <xmx:gAcpYyUCrZBMDhFkIZw2WOe1XTLY0Mziqo2F_QauNG97ed6tqb-hNQ>
-    <xmx:gAcpYxPEmZqjAG6oBKmeVsXMKV4oWx-9-aXvyiN4ic7ylq_ZkdJJdw>
-    <xmx:gAcpY0JlB7ZXgtFKzPEblyCGeM3sXWX7TbgXBBDwzRE7Kh_ztjhY8Q>
-Feedback-ID: i5ec1447f:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 19 Sep 2022 20:21:16 -0400 (EDT)
-Message-ID: <d6a2c31de1cb7e10730926ff0c3630c8c40a0e19.camel@ljones.dev>
-Subject: Re: [PATCH] asus-wmi: Expand support of GPU fan to read RPM and
- label
-From:   Luke Jones <luke@ljones.dev>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     markgross@kernel.org, corentin.chary@gmail.com, linux@roeck-us.net,
-        jdelvare@suse.com, acpi4asus-user@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-Date:   Tue, 20 Sep 2022 12:21:07 +1200
-In-Reply-To: <4d55be61-e797-9eec-bf7e-ed675947b04d@redhat.com>
-References: <20220916004623.10992-1-luke@ljones.dev>
-         <4d55be61-e797-9eec-bf7e-ed675947b04d@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.46.0 (by Flathub.org)) 
+        Mon, 19 Sep 2022 20:21:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE88852804
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 17:21:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663633291;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kBetV1101hfdFvC0CO1umfBPx9zMW1qE7FXiLHYebTU=;
+        b=CvKX3DQuhshvUGVVOmyXuIoUp3GQRIK3h5YhBLQpbHoWMdERS5/Jxv7OIQIkU7HCki0q5W
+        itsRPh6z1W9FIkgmm+vD7SjsW8zSYyIUiN7rNxxycpYDcsktx20gHBfYeA2oqYYCCO/9uf
+        HV4+KXCvZxeskd1KGK1AscCBzQkg9IA=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-582-KuMkr7aKOCO6il9ziI5RpA-1; Mon, 19 Sep 2022 20:21:30 -0400
+X-MC-Unique: KuMkr7aKOCO6il9ziI5RpA-1
+Received: by mail-qv1-f72.google.com with SMTP id w19-20020a0562140b3300b0049cad77df78so868127qvj.6
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 17:21:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=kBetV1101hfdFvC0CO1umfBPx9zMW1qE7FXiLHYebTU=;
+        b=lserw6g8/DHFt7mX6W15qq0CCB6VPckgoHg3pSCpFdPeYN6WD/WLimK4lRSszK5NLb
+         trotSSt7H/bNn6q4AjrtDlRyERMJ4iWbqrEFPVfIBH4F9v880dD2Is6ueVBNn+dupEym
+         PxP4VxeVSeRU/oASQfrv/72V8TtOYIsWT6V5A9JBf7wIc9DIFiRdixwDSMKLLOn2iXoO
+         nEIkwg2SzXvMZDv7p7ySkPLeJknlMUa5erxgQqUx0QTTquvxSm84B1y3I752kzO/0JJ8
+         BUMj5+GHxgdLgW0OMsAie5wlgMy/aZFdyl6zLNHnAWXkO0dsM25VHKIA2nQxaw+0OaJ3
+         g35w==
+X-Gm-Message-State: ACrzQf3ABliIUtbRP7axFOBGvUN5+5MToQ50b0czhvglTa5EnfLkgbtf
+        WWv6UMt23kzPI8K6ZCCu9gxc5GkIzDEY7eaVl874Ix4hJ9cvVhMkErja2sUYbJ33A6beUuOPjZ2
+        sITugNLoKGDd8nOEcI4zDMA18
+X-Received: by 2002:a05:6214:19c7:b0:4ad:32e9:a414 with SMTP id j7-20020a05621419c700b004ad32e9a414mr8328371qvc.115.1663633288917;
+        Mon, 19 Sep 2022 17:21:28 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4DyUYrtkHa2QUqcCdNGHLn5NMDVIEGrzukSM5kG6wAzOlNtoK+dsZcVAEwt0I2pDlAefcbVQ==
+X-Received: by 2002:a05:6214:19c7:b0:4ad:32e9:a414 with SMTP id j7-20020a05621419c700b004ad32e9a414mr8328359qvc.115.1663633288691;
+        Mon, 19 Sep 2022 17:21:28 -0700 (PDT)
+Received: from [192.168.98.18] ([107.12.98.143])
+        by smtp.gmail.com with ESMTPSA id r4-20020ae9d604000000b006bb29d932e1sm13826998qkk.105.2022.09.19.17.21.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Sep 2022 17:21:28 -0700 (PDT)
+Message-ID: <ab41cc04-1686-3a15-c209-387b1d60f7ef@redhat.com>
+Date:   Mon, 19 Sep 2022 20:21:27 -0400
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH net 1/2] selftests: bonding: cause oops in
+ bond_rr_gen_slave_id
+Content-Language: en-US
+To:     Jay Vosburgh <jay.vosburgh@canonical.com>
+Cc:     "netdev @ vger . kernel . org" <netdev@vger.kernel.org>,
+        Veaceslav Falico <vfalico@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+References: <cover.1663628505.git.jtoppins@redhat.com>
+ <bb3abf634d23944a24f4a9453e07c37c7b2168e9.1663628505.git.jtoppins@redhat.com>
+ <18171.1663632104@famine>
+From:   Jonathan Toppins <jtoppins@redhat.com>
+In-Reply-To: <18171.1663632104@famine>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gTW9uLCAyMDIyLTA5LTE5IGF0IDEzOjE4ICswMTAwLCBIYW5zIGRlIEdvZWRlIHdyb3RlOgo+
-IEhpIEx1a2UsCj4gCj4gT24gOS8xNi8yMiAwMTo0NiwgTHVrZSBELiBKb25lcyB3cm90ZToKPiA+
-IFRoZSBwcmV2aW91c2x5IGFkZGVkIHBhdGNoIHRvIGFkZCBzdXBwb3J0IGZvciBwd20gY2hhbmdl
-IGZvciBUVUYKPiA+IGxhcHRvcHMKPiA+IGFsc28gaXMgdXN1YWJsZSBmb3IgbW9yZSB0aGFuIFRV
-Ri4gVGhlIHNhbWUgbWV0aG9kIGAweDAwMTEwMDE0YCBpcwo+ID4gdXNlZCB0byByZWFkIHRoZSBm
-YW4gUlBNLgo+ID4gCj4gPiBBZGQgdHdvIGV4dHJhIGF0dHJpYnV0ZXMgZm9yIHJlYWRpbmcgZmFu
-MiBwbHVzIGZhbjIgbGFiZWwuCj4gPiAKPiA+IFNpZ25lZC1vZmYtYnk6IEx1a2UgRC4gSm9uZXMg
-PGx1a2VAbGpvbmVzLmRldj4KPiA+IC0tLQo+ID4gwqBkcml2ZXJzL3BsYXRmb3JtL3g4Ni9hc3Vz
-LXdtaS5jIHwgMzYKPiA+ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKystLQo+ID4gwqAx
-IGZpbGUgY2hhbmdlZCwgMzQgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkKPiA+IAo+ID4g
-ZGlmZiAtLWdpdCBhL2RyaXZlcnMvcGxhdGZvcm0veDg2L2FzdXMtd21pLmMKPiA+IGIvZHJpdmVy
-cy9wbGF0Zm9ybS94ODYvYXN1cy13bWkuYwo+ID4gaW5kZXggYWU0NmFmNzMxZGU5Li43ZmU2Y2Uy
-NWRhMGEgMTAwNjQ0Cj4gPiAtLS0gYS9kcml2ZXJzL3BsYXRmb3JtL3g4Ni9hc3VzLXdtaS5jCj4g
-PiArKysgYi9kcml2ZXJzL3BsYXRmb3JtL3g4Ni9hc3VzLXdtaS5jCj4gPiBAQCAtNzIsNiArNzIs
-NyBAQCBtb2R1bGVfcGFyYW0oZm5sb2NrX2RlZmF1bHQsIGJvb2wsIDA0NDQpOwo+ID4gwqAKPiA+
-IMKgI2RlZmluZSBBU1VTX1dNSV9GTkxPQ0tfQklPU19ESVNBQkxFRMKgwqBCSVQoMCkKPiA+IMKg
-Cj4gPiArI2RlZmluZSBBU1VTX0dQVV9GQU5fREVTQ8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqAiZ3B1X2ZhbiIKPiA+IMKgI2RlZmluZSBBU1VTX0ZBTl9ERVNDwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgImNwdV9mYW4iCj4gPiDCoCNkZWZpbmUgQVNVU19GQU5fTUZVTsKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoDB4MTMKPiA+IMKgI2RlZmluZSBBU1VT
-X0ZBTl9TRlVOX1JFQUTCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoDB4MDYKPiA+IEBAIC0yMDc4
-LDYgKzIwNzksMzAgQEAgc3RhdGljIHNzaXplX3QgYXN1c19od21vbl90ZW1wMShzdHJ1Y3QKPiA+
-IGRldmljZSAqZGV2LAo+ID4gwqB9Cj4gPiDCoAo+ID4gwqAvKiBHUFUgZmFuIG9uIG1vZGVybiBS
-T0cgbGFwdG9wcyAqLwo+ID4gK3N0YXRpYyBzc2l6ZV90IGZhbjJfaW5wdXRfc2hvdyhzdHJ1Y3Qg
-ZGV2aWNlICpkZXYsCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgc3RydWN0IGRldmljZV9hdHRy
-aWJ1dGUKPiA+ICphdHRyLAo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGNoYXIgKmJ1ZikKPiA+
-ICt7Cj4gPiArwqDCoMKgwqDCoMKgwqBzdHJ1Y3QgYXN1c193bWkgKmFzdXMgPSBkZXZfZ2V0X2Ry
-dmRhdGEoZGV2KTsKPiA+ICvCoMKgwqDCoMKgwqDCoGludCB2YWx1ZTsKPiA+ICvCoMKgwqDCoMKg
-wqDCoGludCByZXQ7Cj4gPiArCj4gPiArwqDCoMKgwqDCoMKgwqByZXQgPSBhc3VzX3dtaV9nZXRf
-ZGV2c3RhdGUoYXN1cywKPiA+IEFTVVNfV01JX0RFVklEX0dQVV9GQU5fQ1RSTCwgJnZhbHVlKTsK
-PiA+ICvCoMKgwqDCoMKgwqDCoGlmIChyZXQgPCAwKQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoHJldHVybiByZXQ7Cj4gPiArCj4gPiArwqDCoMKgwqDCoMKgwqB2YWx1ZSAmPSAw
-eGZmZmY7Cj4gPiArCj4gPiArwqDCoMKgwqDCoMKgwqByZXR1cm4gc3lzZnNfZW1pdChidWYsICIl
-ZFxuIiwgdmFsdWUgPCAwID8gLTEgOiB2YWx1ZSAqCj4gPiAxMDApOwo+IAo+IEFzIGFscmVhZHkg
-bWVudGlvbmVkIHNpbmNlIHlvdSAmIHdpdGggMHhmZmZmIGFib3ZlIHRoZSBzaWduIGJpdCBjYW4K
-PiBuZXZlciBiZQo+IHNldCwgc28gdGhlIHZhbHVlIGlzIG5ldmVyIGxlc3MgdGhlbiA8IDAsIHNv
-IEkgaGF2ZSBzaW1wbGlmaWVkIHRoaXMKPiB0bzoKPiAKPiDCoMKgwqDCoMKgwqDCoMKgcmV0dXJu
-IHN5c2ZzX2VtaXQoYnVmLCAiJWRcbiIsIHZhbHVlICogMTAwKTsKPiAKPiB3aGlsZSBtZXJnaW5n
-LgoKVGhhbmtzIEhhbnMgcmVhbGx5IGFwcHJlY2lhdGUgaXQsIHNvcnJ5IGkgbWlzc2VkIHRoYXQu
-IE15IHdvcmtsb2FkIGlzIGEKYml0IHRvbyBsYXJnZSBhdCB0aGUgbW9tZW50IDopCgpDaGVlcnMs
-Ckx1a2UuCgo+IAo+ID4gK30KPiA+ICsKPiA+ICtzdGF0aWMgc3NpemVfdCBmYW4yX2xhYmVsX3No
-b3coc3RydWN0IGRldmljZSAqZGV2LAo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHN0cnVj
-dCBkZXZpY2VfYXR0cmlidXRlCj4gPiAqYXR0ciwKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oCBjaGFyICpidWYpCj4gPiArewo+ID4gK8KgwqDCoMKgwqDCoMKgcmV0dXJuIHNwcmludGYoYnVm
-LCAiJXNcbiIsIEFTVVNfR1BVX0ZBTl9ERVNDKTsKPiA+ICt9Cj4gCj4gQW5kIGhlcmUgSSBoYXZl
-IGRvbmUgcy9zcHJpbnRmL3N5c2ZzX2VtaXQvIHdpdGggdGhvc2UgY2hhbmdlcwo+IEkndmUgYXBw
-bGllZCB0aGlzIHBhdGNoIHRvIG15IHJldmlldy1oYW5zIGJyYW5jaDoKPiBodHRwczovL2dpdC5r
-ZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dpdC9wZHg4Ni9wbGF0Zm9ybS1kcml2ZXJz
-LXg4Ni5naXQvbG9nLz9oPXJldmlldy1oYW5zCj4gCj4gTm90ZSBpdCB3aWxsIHNob3cgdXAgaW4g
-bXkgcmV2aWV3LWhhbnMgYnJhbmNoIG9uY2UgSSd2ZSBwdXNoZWQgbXkKPiBsb2NhbCBicmFuY2gg
-dGhlcmUsIHdoaWNoIG1pZ2h0IHRha2UgYSB3aGlsZS4KPiAKPiBPbmNlIEkndmUgcnVuIHNvbWUg
-dGVzdHMgb24gdGhpcyBicmFuY2ggdGhlIHBhdGNoZXMgdGhlcmUgd2lsbCBiZQo+IGFkZGVkIHRv
-IHRoZSBwbGF0Zm9ybS1kcml2ZXJzLXg4Ni9mb3ItbmV4dCBicmFuY2ggYW5kIGV2ZW50dWFsbHkK
-PiB3aWxsIGJlIGluY2x1ZGVkIGluIHRoZSBwZHg4NiBwdWxsLXJlcXVlc3QgdG8gTGludXMgZm9y
-IHRoZSBuZXh0Cj4gbWVyZ2Utd2luZG93Lgo+IAo+IFJlZ2FyZHMsCj4gCj4gSGFucwo+IAo+IAo+
-IAo+ID4gKwo+ID4gwqBzdGF0aWMgc3NpemVfdCBwd20yX2VuYWJsZV9zaG93KHN0cnVjdCBkZXZp
-Y2UgKmRldiwKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqBzdHJ1Y3QgZGV2aWNlX2F0dHJpYnV0ZSAqYXR0ciwKPiA+IMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqBjaGFyICpidWYpCj4gPiBAQCAtMjEyNyw5ICsyMTUyLDEyIEBAIHN0YXRpYyBzc2l6ZV90
-IHB3bTJfZW5hYmxlX3N0b3JlKHN0cnVjdAo+ID4gZGV2aWNlICpkZXYsCj4gPiDCoC8qIEZhbjEg
-Ki8KPiA+IMKgc3RhdGljIERFVklDRV9BVFRSX1JXKHB3bTEpOwo+ID4gwqBzdGF0aWMgREVWSUNF
-X0FUVFJfUlcocHdtMV9lbmFibGUpOwo+ID4gLXN0YXRpYyBERVZJQ0VfQVRUUl9SVyhwd20yX2Vu
-YWJsZSk7Cj4gPiDCoHN0YXRpYyBERVZJQ0VfQVRUUl9STyhmYW4xX2lucHV0KTsKPiA+IMKgc3Rh
-dGljIERFVklDRV9BVFRSX1JPKGZhbjFfbGFiZWwpOwo+ID4gKy8qIEZhbjIgLSBHUFUgZmFuICov
-Cj4gPiArc3RhdGljIERFVklDRV9BVFRSX1JXKHB3bTJfZW5hYmxlKTsKPiA+ICtzdGF0aWMgREVW
-SUNFX0FUVFJfUk8oZmFuMl9pbnB1dCk7Cj4gPiArc3RhdGljIERFVklDRV9BVFRSX1JPKGZhbjJf
-bGFiZWwpOwo+ID4gwqAKPiA+IMKgLyogVGVtcGVyYXR1cmUgKi8KPiA+IMKgc3RhdGljIERFVklD
-RV9BVFRSKHRlbXAxX2lucHV0LCBTX0lSVUdPLCBhc3VzX2h3bW9uX3RlbXAxLCBOVUxMKTsKPiA+
-IEBAIC0yMTQwLDYgKzIxNjgsOCBAQCBzdGF0aWMgc3RydWN0IGF0dHJpYnV0ZSAqaHdtb25fYXR0
-cmlidXRlc1tdID0KPiA+IHsKPiA+IMKgwqDCoMKgwqDCoMKgwqAmZGV2X2F0dHJfcHdtMl9lbmFi
-bGUuYXR0ciwKPiA+IMKgwqDCoMKgwqDCoMKgwqAmZGV2X2F0dHJfZmFuMV9pbnB1dC5hdHRyLAo+
-ID4gwqDCoMKgwqDCoMKgwqDCoCZkZXZfYXR0cl9mYW4xX2xhYmVsLmF0dHIsCj4gPiArwqDCoMKg
-wqDCoMKgwqAmZGV2X2F0dHJfZmFuMl9pbnB1dC5hdHRyLAo+ID4gK8KgwqDCoMKgwqDCoMKgJmRl
-dl9hdHRyX2ZhbjJfbGFiZWwuYXR0ciwKPiA+IMKgCj4gPiDCoMKgwqDCoMKgwqDCoMKgJmRldl9h
-dHRyX3RlbXAxX2lucHV0LmF0dHIsCj4gPiDCoMKgwqDCoMKgwqDCoMKgTlVMTAo+ID4gQEAgLTIx
-NjAsNyArMjE5MCw5IEBAIHN0YXRpYyB1bW9kZV90Cj4gPiBhc3VzX2h3bW9uX3N5c2ZzX2lzX3Zp
-c2libGUoc3RydWN0IGtvYmplY3QgKmtvYmosCj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHx8
-IGF0dHIgPT0gJmRldl9hdHRyX3B3bTFfZW5hYmxlLmF0dHIpIHsKPiA+IMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgaWYgKGFzdXMtPmZhbl90eXBlID09IEZBTl9UWVBFX05PTkUpCj4g
-PiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXR1cm4g
-MDsKPiA+IC3CoMKgwqDCoMKgwqDCoH0gZWxzZSBpZiAoYXR0ciA9PSAmZGV2X2F0dHJfcHdtMl9l
-bmFibGUuYXR0cikgewo+ID4gK8KgwqDCoMKgwqDCoMKgfSBlbHNlIGlmIChhdHRyID09ICZkZXZf
-YXR0cl9mYW4yX2lucHV0LmF0dHIKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoCB8fCBhdHRyID09
-ICZkZXZfYXR0cl9mYW4yX2xhYmVsLmF0dHIKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoCB8fCBh
-dHRyID09ICZkZXZfYXR0cl9wd20yX2VuYWJsZS5hdHRyKSB7Cj4gPiDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoGlmIChhc3VzLT5ncHVfZmFuX3R5cGUgPT0gRkFOX1RZUEVfTk9ORSkK
-PiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldHVy
-biAwOwo+ID4gwqDCoMKgwqDCoMKgwqDCoH0gZWxzZSBpZiAoYXR0ciA9PSAmZGV2X2F0dHJfdGVt
-cDFfaW5wdXQuYXR0cikgewo+IAoK
+On 9/19/22 20:01, Jay Vosburgh wrote:
+> Jonathan Toppins <jtoppins@redhat.com> wrote:
+> 
+>> This bonding selftest causes the following kernel oops on aarch64 and
+>> should be architectures agnostic.
+>>
+>> [  329.805838] kselftest: Running tests in drivers/net/bonding
+>> [  330.011028] eth0: renamed from link1_2
+>> [  330.220846] eth0: renamed from link1_1
+>> [  330.387755] bond0: (slave eth0): making interface the new active one
+>> [  330.394165] bond0: (slave eth0): Enslaving as an active interface with an up link
+>> [  330.401867] IPv6: ADDRCONF(NETDEV_CHANGE): eth0: link becomes ready
+>> [  334.586619] bond0: (slave eth0): Releasing backup interface
+>> [  334.671065] bond0: (slave eth0): Enslaving as an active interface with an up link
+>> [  334.686773] Unable to handle kernel paging request at virtual address ffff2c91ac905000
+>> [  334.694703] Mem abort info:
+>> [  334.697486]   ESR = 0x0000000096000004
+>> [  334.701234]   EC = 0x25: DABT (current EL), IL = 32 bits
+>> [  334.706536]   SET = 0, FnV = 0
+>> [  334.709579]   EA = 0, S1PTW = 0
+>> [  334.712719]   FSC = 0x04: level 0 translation fault
+>> [  334.717586] Data abort info:
+>> [  334.720454]   ISV = 0, ISS = 0x00000004
+>> [  334.724288]   CM = 0, WnR = 0
+>> [  334.727244] swapper pgtable: 4k pages, 48-bit VAs, pgdp=000008044d662000
+>> [  334.733944] [ffff2c91ac905000] pgd=0000000000000000, p4d=0000000000000000
+>> [  334.740734] Internal error: Oops: 96000004 [#1] SMP
+>> [  334.745602] Modules linked in: bonding tls veth rfkill sunrpc arm_spe_pmu vfat fat acpi_ipmi ipmi_ssif ixgbe igb i40e mdio ipmi_devintf ipmi_msghandler arm_cmn arm_dsu_pmu cppc_cpufreq acpi_tad fuse zram crct10dif_ce ast ghash_ce sbsa_gwdt nvme drm_vram_helper drm_ttm_helper nvme_core ttm xgene_hwmon
+>> [  334.772217] CPU: 7 PID: 2214 Comm: ping Not tainted 6.0.0-rc4-00133-g64ae13ed4784 #4
+>> [  334.779950] Hardware name: GIGABYTE R272-P31-00/MP32-AR1-00, BIOS F18v (SCP: 1.08.20211002) 12/01/2021
+>> [  334.789244] pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>> [  334.796196] pc : bond_rr_gen_slave_id+0x40/0x124 [bonding]
+>> [  334.801691] lr : bond_xmit_roundrobin_slave_get+0x38/0xdc [bonding]
+>> [  334.807962] sp : ffff8000221733e0
+>> [  334.811265] x29: ffff8000221733e0 x28: ffffdbac8572d198 x27: ffff80002217357c
+>> [  334.818392] x26: 000000000000002a x25: ffffdbacb33ee000 x24: ffff07ff980fa000
+>> [  334.825519] x23: ffffdbacb2e398ba x22: ffff07ff98102000 x21: ffff07ff981029c0
+>> [  334.832646] x20: 0000000000000001 x19: ffff07ff981029c0 x18: 0000000000000014
+>> [  334.839773] x17: 0000000000000000 x16: ffffdbacb1004364 x15: 0000aaaabe2f5a62
+>> [  334.846899] x14: ffff07ff8e55d968 x13: ffff07ff8e55db30 x12: 0000000000000000
+>> [  334.854026] x11: ffffdbacb21532e8 x10: 0000000000000001 x9 : ffffdbac857178ec
+>> [  334.861153] x8 : ffff07ff9f6e5a28 x7 : 0000000000000000 x6 : 000000007c2b3742
+>> [  334.868279] x5 : ffff2c91ac905000 x4 : ffff2c91ac905000 x3 : ffff07ff9f554400
+>> [  334.875406] x2 : ffff2c91ac905000 x1 : 0000000000000001 x0 : ffff07ff981029c0
+>> [  334.882532] Call trace:
+>> [  334.884967]  bond_rr_gen_slave_id+0x40/0x124 [bonding]
+>> [  334.890109]  bond_xmit_roundrobin_slave_get+0x38/0xdc [bonding]
+>> [  334.896033]  __bond_start_xmit+0x128/0x3a0 [bonding]
+>> [  334.901001]  bond_start_xmit+0x54/0xb0 [bonding]
+>> [  334.905622]  dev_hard_start_xmit+0xb4/0x220
+>> [  334.909798]  __dev_queue_xmit+0x1a0/0x720
+>> [  334.913799]  arp_xmit+0x3c/0xbc
+>> [  334.916932]  arp_send_dst+0x98/0xd0
+>> [  334.920410]  arp_solicit+0xe8/0x230
+>> [  334.923888]  neigh_probe+0x60/0xb0
+>> [  334.927279]  __neigh_event_send+0x3b0/0x470
+>> [  334.931453]  neigh_resolve_output+0x70/0x90
+>> [  334.935626]  ip_finish_output2+0x158/0x514
+>> [  334.939714]  __ip_finish_output+0xac/0x1a4
+>> [  334.943800]  ip_finish_output+0x40/0xfc
+>> [  334.947626]  ip_output+0xf8/0x1a4
+>> [  334.950931]  ip_send_skb+0x5c/0x100
+>> [  334.954410]  ip_push_pending_frames+0x3c/0x60
+>> [  334.958758]  raw_sendmsg+0x458/0x6d0
+>> [  334.962325]  inet_sendmsg+0x50/0x80
+>> [  334.965805]  sock_sendmsg+0x60/0x6c
+>> [  334.969286]  __sys_sendto+0xc8/0x134
+>> [  334.972853]  __arm64_sys_sendto+0x34/0x4c
+>> [  334.976854]  invoke_syscall+0x78/0x100
+>> [  334.980594]  el0_svc_common.constprop.0+0x4c/0xf4
+>> [  334.985287]  do_el0_svc+0x38/0x4c
+>> [  334.988591]  el0_svc+0x34/0x10c
+>> [  334.991724]  el0t_64_sync_handler+0x11c/0x150
+>> [  334.996072]  el0t_64_sync+0x190/0x194
+>> [  334.999726] Code: b9001062 f9403c02 d53cd044 8b040042 (b8210040)
+>> [  335.005810] ---[ end trace 0000000000000000 ]---
+>> [  335.010416] Kernel panic - not syncing: Oops: Fatal exception in interrupt
+>> [  335.017279] SMP: stopping secondary CPUs
+>> [  335.021374] Kernel Offset: 0x5baca8eb0000 from 0xffff800008000000
+>> [  335.027456] PHYS_OFFSET: 0x80000000
+>> [  335.030932] CPU features: 0x0000,0085c029,19805c82
+>> [  335.035713] Memory Limit: none
+>> [  335.038756] Rebooting in 180 seconds..
+>>
+>> Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
+>> ---
+>> .../selftests/drivers/net/bonding/Makefile    |  3 +-
+>> .../bonding/bond-arp-interval-causes-panic.sh | 48 +++++++++++++++++++
+>> 2 files changed, 50 insertions(+), 1 deletion(-)
+>> create mode 100755 tools/testing/selftests/drivers/net/bonding/bond-arp-interval-causes-panic.sh
+>>
+>> diff --git a/tools/testing/selftests/drivers/net/bonding/Makefile b/tools/testing/selftests/drivers/net/bonding/Makefile
+>> index 0f9659407969..1d866658e541 100644
+>> --- a/tools/testing/selftests/drivers/net/bonding/Makefile
+>> +++ b/tools/testing/selftests/drivers/net/bonding/Makefile
+>> @@ -2,7 +2,8 @@
+>> # Makefile for net selftests
+>>
+>> TEST_PROGS := bond-break-lacpdu-tx.sh \
+>> -	      dev_addr_lists.sh
+>> +	      dev_addr_lists.sh \
+>> +	      bond-arp-interval-causes-panic.sh
+>>
+>> TEST_FILES := lag_lib.sh
+>>
+>> diff --git a/tools/testing/selftests/drivers/net/bonding/bond-arp-interval-causes-panic.sh b/tools/testing/selftests/drivers/net/bonding/bond-arp-interval-causes-panic.sh
+>> new file mode 100755
+>> index 000000000000..095c262ba74c
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/drivers/net/bonding/bond-arp-interval-causes-panic.sh
+>> @@ -0,0 +1,48 @@
+>> +#!/bin/sh
+>> +# SPDX-License-Identifier: GPL-2.0
+>> +#
+>> +# cause kernel oops in bond_rr_gen_slave_id
+>> +DEBUG=${DEBUG:-0}
+>> +
+>> +set -e
+>> +test ${DEBUG} -ne 0 && set -x
+>> +
+>> +function finish()
+>> +{
+>> +	ip -all netns delete
+> 
+> 	Would it be friendlier to only delete the netns created by the
+> test itself?
+
+Sure I can list the specific namespaces.
+
+> 
+> 	I'm not too familiar with the selftest harness, so I'm not sure
+> if it handles that (runs the test in a container or something), but if
+> the test is run directly could this clobber other netns unrelated to the
+> test?
+
+Sure and if the namespace "server" has already been created the script 
+will get an EEXISTS error.
+
+The only limitation I am aware of is a timeout limitation, meaning the 
+script must execute within 45 seconds. The script 
+tools/testing/selftests/run_kselftest.sh appears to run the script 
+directly within the context under which run_kselftest.sh was started. 
+For example when I used it to verify this bug I used sudo to run as 
+root, `sudo run_kselftest.sh`.
+
+-Jon
 
