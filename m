@@ -2,107 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DB675BE7FF
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 16:05:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01CB75BE810
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 16:07:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231470AbiITOFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 10:05:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34392 "EHLO
+        id S231483AbiITOGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 10:06:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231511AbiITOFI (ORCPT
+        with ESMTP id S230400AbiITOGI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 10:05:08 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6DB81E3F4
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 07:05:04 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id z97so3973320ede.8
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 07:05:04 -0700 (PDT)
+        Tue, 20 Sep 2022 10:06:08 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B8C41275B;
+        Tue, 20 Sep 2022 07:05:37 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id w28so4004939edi.7;
+        Tue, 20 Sep 2022 07:05:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date;
-        bh=h/Y+36rJ0XAmUVw3zSB7sEQBewEkFELkMaeQ46FL9RI=;
-        b=nDxr5G3hmfov53FIPU+bMdw19ZzV3ysB58zax2UKojCpw9siSEgn05Ld0yfi6gypvh
-         a8hPTZ+bADhL+dugKmmpefdko3bunzrKYJ4QgM6WqvXZwTC0V7Y165v+gDpMx5CBg0VE
-         9pxdC3+iWczJ8bPHocHXYRF7QMFjq/PG7tl4M=
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=EwHes8ZciAYGoy8BwMgXo7aFIkW9k1/APFM7gcA+YE4=;
+        b=UNDKskzLSAqbQLUP+UeVxwK0UrKWnS2e0H/TwbCQJ2rixeaZaYlbvCdGVYky9wfOby
+         tp77xiWquLD1kWTMXO3uaWndWNce0DO6Tk/8LoU6eUapjDLrI0DkVT2VOESjxO5pjgm+
+         dtagsyw2LVi+F7SCvTt6bRm4tbwmPSpojCL1wPR5020nN8WG2wjhN0BJ8J76o6cYTOM2
+         44np7Wcpo+TYzPQZHqhhUNCQU56IFY4g4iMZJ1w+ltXtvEhbArAOijIiatTP1QHxBtEt
+         SJbr4N+xQE3+on7lfFHYYb8DJ9C4mw1R5U3Co6UQ0VnZYbyu9J3orCJgOjAdOtOyHftD
+         nTag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=h/Y+36rJ0XAmUVw3zSB7sEQBewEkFELkMaeQ46FL9RI=;
-        b=3kvfzcxQDDH0q8D0HDRv26h+Nutpff7oldkZE2+4GkHUdc9FpdErssHzlCC6kcSKA7
-         VsH5Q/eCQyM/f8RiInKi5dmavT6Uft2QQBOhvu19aKmefn4EBaZO9iDnW54RGSukBLu/
-         XEhdVTnJDe65ned13O/K0tMH2nQhHIsrMiLms6iBf4wXP97BmV1JN6N4nxn8Wab0GdQC
-         VZj0kjFcRRpncouuBs5yMyLJ/6QL4tSQbxzPczXV8kj/VUAERjrF/cLNpzwapHd4pr+1
-         R/LGqCnbtX7SO5a3BD2qFx6izNoy/oiAWcpE+FMrSlh8vb9FbvOCX2HfSwSifUWpkdX2
-         z6Jw==
-X-Gm-Message-State: ACrzQf0xMmJNq2FyaiU2tN+w5fUAKJQTT2h0LXP9CmHz/oCAfdBq53p5
-        4qKIBceHbMfTlB3/KdnjjJVHBQ==
-X-Google-Smtp-Source: AMsMyM6P6AzC5fYUByFUxhZ8UKT8Tt2oH7mdE1bRQD8H+je4WMnuqOFu96IXoHR0SBmMxmMaa3eylg==
-X-Received: by 2002:a05:6402:1d4e:b0:451:d378:eed2 with SMTP id dz14-20020a0564021d4e00b00451d378eed2mr20933164edb.23.1663682703410;
-        Tue, 20 Sep 2022 07:05:03 -0700 (PDT)
-Received: from alco.roam.corp.google.com ([2620:0:1059:10:935d:52b0:7461:88e1])
-        by smtp.gmail.com with ESMTPSA id k12-20020a05640212cc00b0044eb4227bf6sm69903edx.63.2022.09.20.07.05.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 07:05:03 -0700 (PDT)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Tue, 20 Sep 2022 16:04:55 +0200
-Subject: [PATCH v1 1/1] media: uvc: Handle cameras with invalid descriptors
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=EwHes8ZciAYGoy8BwMgXo7aFIkW9k1/APFM7gcA+YE4=;
+        b=f8eVF29GyHKR+iP1f23UYAVq/mnAvAO7bNVCEGLQ9XACm12k+bdIFO/7UqUd+hp4eM
+         qsL/hqr0GS+r7Om8CoZ7lvg+U5AE4ik8OYbgFVhLd7zHWYaWWvzUFEtO6cBUtgl+mAuI
+         KWsTUYPp/QzPkr7tijKiY6hmuGrQIWpWiq00feg3PGt0xSWzQ7+c5jq1D2Ft9u7eTo7y
+         BRhB8Etz+lBsFGMRf+U3pzOVIbXKIv4gKqBD+XqAMa8vZcOl3Pi1dWs39f8EzyCugMeM
+         PqtiUczY22u0ulhZoEGZza1wjK03AeaNP/+JaEg0AIZRAjv7WTLdpsYrXvflh3vOIM6F
+         WFeA==
+X-Gm-Message-State: ACrzQf1iequQShcxSjdcTqQG2KeV7NxLy6k0oaOnjndxnBR3MoabRqJS
+        jQF72GfVCNPj3ONBMhHEE8mglh4jC4SIzkyXHe/xRQN+o2Y=
+X-Google-Smtp-Source: AMsMyM5XSfvvCDjeoAw6txH9Jh1QnO4jMEY9JZD9n/EemS81naNt3d916d86R2GXAfqdBjhL4qYHRFonHHvh+LhWNDo=
+X-Received: by 2002:a05:6402:518d:b0:451:6655:5fb4 with SMTP id
+ q13-20020a056402518d00b0045166555fb4mr20197904edd.150.1663682735470; Tue, 20
+ Sep 2022 07:05:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20220920-invalid-desc-v1-1-76a93174f3bc@chromium.org>
-References: <20220920-invalid-desc-v1-0-76a93174f3bc@chromium.org>
-In-Reply-To: <20220920-invalid-desc-v1-0-76a93174f3bc@chromium.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzbot <syzkaller@googlegroups.com>,
-        Ricardo Ribalda <ribalda@chromium.org>
-X-Mailer: b4 0.11.0-dev-d93f8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=785; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=yrIy3l2hnY8Y9qudM5caOkWLQdYzxUDmVwB87V4YlIg=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjKciKU5BRvhxeSLYCqXBMjKZdD/OSWslWH9qO7a3z
- jBqdIzWJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCYynIigAKCRDRN9E+zzrEiCdiD/
- 0YQhHecO1z0ZHXlISotWTYf12qCFjOg9p6fGk4osGFFVTFWhfJI7wA0JtN5YkjURnTccqy0cK8yqIM
- h/aaxJT6iPBBTH6oJr1efVVNRSaNGt5tNFzG3+Il2Xp67xVEnpG7ILT367xoY9+IuPPl2Th3jHgvTA
- W/3opG3DU41jItHLzPsSEHthiH5hDevJZbB9xnVWontlVYsPvEC5b3Y86JuigxWN7xOWTvjMkuHD4L
- 7Pp1z8G1ATP2CduZnAQEyxl689bEUiffLUG5VIsMcNzVeK5HaqvCrMXonQtZoonBHXiIYrHnKttWkQ
- uj/d5FstHETl+FwrJMqtvs2FDwqeZ8qaEopPEa9X88HfZR/HpLP+4i1bx8GMeaZorLnkcJKKtR7R5G
- fUQ8fLqj8lqwdVonmGBT9PqbiwSKd/F0yyENUdg6UajOMY2WQf0Xt+rQ+JGkzdDyY1sUWeuEenD9Td
- lxIWKNQULtey9PEEMZ+s/yAxe3bHkUGt2p8bgts+mMKmEkcLYLuE/A7Y3CdwwKf2O7vsWFyHanGWmA
- /AMPkF2xz2XjOSyaKSbDSll2ZegagmqMF8vIZA9abbzNfQBw8pzpJZnYXgO+OQkhDyTsmSiJkENDmG
- pKNXpUSGoLMhp+Lg7gYUbL3dMW5vDxyzgrcPAJYn0OoKifJNyqCrIjwAeBJw==
-X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
- fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220915181558.354737-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220915181558.354737-9-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdW99EutciosPtOTU9AztfvfMdKTaS+YRmpmS4VnhZ9KAA@mail.gmail.com>
+In-Reply-To: <CAMuHMdW99EutciosPtOTU9AztfvfMdKTaS+YRmpmS4VnhZ9KAA@mail.gmail.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Tue, 20 Sep 2022 15:05:05 +0100
+Message-ID: <CA+V-a8s9y0Jq4TJk9E_ptsZTW3iCoysaBSrUeQV8qfDFO3wzeQ@mail.gmail.com>
+Subject: Re: [PATCH v3 08/10] riscv: dts: renesas: Add minimal DTS for Renesas
+ RZ/Five SMARC EVK
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Atish Patra <atishp@rivosinc.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the source entity does not contain any pads, do not create a link.
+Hi Geert,
 
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+Thank you for the review.
 
-diff --git a/drivers/media/usb/uvc/uvc_entity.c b/drivers/media/usb/uvc/uvc_entity.c
-index 7c4d2f93d351..1f730cb72e58 100644
---- a/drivers/media/usb/uvc/uvc_entity.c
-+++ b/drivers/media/usb/uvc/uvc_entity.c
-@@ -43,7 +43,7 @@ static int uvc_mc_create_links(struct uvc_video_chain *chain,
- 		source = (UVC_ENTITY_TYPE(remote) == UVC_TT_STREAMING)
- 		       ? (remote->vdev ? &remote->vdev->entity : NULL)
- 		       : &remote->subdev.entity;
--		if (source == NULL)
-+		if (source == NULL || source->num_pads == 0)
- 			continue;
- 
- 		remote_pad = remote->num_pads - 1;
+On Tue, Sep 20, 2022 at 1:32 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>
+> Hi Prabhakar,
+>
+> On Thu, Sep 15, 2022 at 8:17 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> >
+> > Enable the minimal blocks required for booting the Renesas RZ/Five
+> > SMARC EVK with initramfs.
+> >
+> > Below are the blocks enabled:
+> > - CPG
+> > - CPU0
+> > - DDR (memory regions)
+> > - PINCTRL
+> > - PLIC
+> > - SCIF0
+> >
+> > Note we have deleted the nodes from the DT for which support needs to be
+> > added for RZ/Five SoC and are enabled by RZ/G2UL SMARC EVK SoM/carrier
+> > board DTS/I.
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > ---
+> > v2->v3
+> > * Dropped RB tags from Conor and Geert
+> > * Now re-using the SoM and carrier board DTS/I from RZ/G2UL
+>
+> Thanks for the update!
+>
+> > --- /dev/null
+> > +++ b/arch/riscv/boot/dts/renesas/r9a07g043f01-smarc.dts
+> > @@ -0,0 +1,27 @@
+> > +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +/*
+> > + * Device Tree Source for the RZ/Five SMARC EVK
+> > + *
+> > + * Copyright (C) 2022 Renesas Electronics Corp.
+> > + */
+> > +
+> > +/dts-v1/;
+> > +
+> > +/*
+> > + * DIP-Switch SW1 setting
+> > + * 1 : High; 0: Low
+> > + * SW1-2 : SW_SD0_DEV_SEL      (0: uSD; 1: eMMC)
+> > + * SW1-3 : SW_ET0_EN_N         (0: ETHER0; 1: CAN0, CAN1, SSI1, RSPI1)
+> > + * Please change below macros according to SW1 setting on SoM
+>
+> "on the SoM" (like in r9a07g043u11-smarc.dts)?
+>
+Agreed, I will update it.
 
--- 
-b4 0.11.0-dev-d93f8
+> > --- /dev/null
+> > +++ b/arch/riscv/boot/dts/renesas/rzfive-smarc-som.dtsi
+> > @@ -0,0 +1,42 @@
+> > +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +/*
+> > + * Device Tree Source for the RZ/Five SMARC EVK SOM
+> > + *
+> > + * Copyright (C) 2022 Renesas Electronics Corp.
+> > + */
+> > +
+> > +#include <arm64/renesas/rzg2ul-smarc-som.dtsi>
+> > +
+> > +/ {
+> > +       aliases {
+> > +               /delete-property/ ethernet0;
+> > +               /delete-property/ ethernet1;
+>
+> OK
+>
+I assume you are OK with dropping the above too?
+
+> > +       };
+> > +
+> > +       chosen {
+> > +               bootargs = "ignore_loglevel";
+> > +       };
+> > +};
+> > +
+> > +#if (SW_SW0_DEV_SEL)
+> > +/delete-node/ &adc;
+> > +#endif
+> > +
+> > +#if (!SW_ET0_EN_N)
+> > +/delete-node/ &eth0;
+> > +#endif
+> > +/delete-node/ &eth1;
+> > +
+> > +/delete-node/ &ostm1;
+> > +/delete-node/ &ostm2;
+>
+> Given they are all placeholders, do you really need to delete them?
+> (more below)
+>
+I did retest without deleting the place holders and I dont see any
+issues (or splat) while booting up so I'll drop them while sending the
+v4.
+
+Cheers,
+Prabhakar
