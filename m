@@ -2,237 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAA3B5BDCB4
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 07:54:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DA215BDCBC
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 07:57:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbiITFyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 01:54:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45222 "EHLO
+        id S229911AbiITF5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 01:57:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbiITFxs (ORCPT
+        with ESMTP id S229552AbiITF5P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 01:53:48 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E25415B795
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 22:53:45 -0700 (PDT)
-Received: from [10.180.13.185] (unknown [10.180.13.185])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx72tdVSljxnQeAA--.45684S3;
-        Tue, 20 Sep 2022 13:53:34 +0800 (CST)
-Subject: Re: Re: [PATCH] mm/vmscan: don't scan adjust too much if current is
- not kswapd
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Feng Tang <feng.tang@intel.com>
-References: <20220914023318.549118-1-zhanghongchen@loongson.cn>
- <20220914155142.bf388515a39fb45bae987231@linux-foundation.org>
- <6bcb4883-03d0-88eb-4c42-84fff0a9a141@loongson.cn>
- <YyLUGnqtZXn4MjJF@casper.infradead.org>
- <54813a74-cc0e-e470-c632-78437a0d0ad4@loongson.cn>
- <YyLpls9/t6LKQefS@casper.infradead.org>
- <b52b3f49-ebf5-6f63-da1a-f57711c3f97d@loongson.cn>
- <YyQ2m9vU/plyBNas@casper.infradead.org>
- <4bd0012e-77ff-9d0d-e295-800471994aeb@loongson.cn>
- <CAJD7tkZkPVwQYR1mqZoKQ=kkR96JCUzrpw8o-9vtX3qwdkj-=w@mail.gmail.com>
-From:   Hongchen Zhang <zhanghongchen@loongson.cn>
-Message-ID: <648bac39-e87f-15e3-f2d4-4d3b578772bb@loongson.cn>
-Date:   Tue, 20 Sep 2022 13:53:33 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Tue, 20 Sep 2022 01:57:15 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2065.outbound.protection.outlook.com [40.107.94.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F63ECCE;
+        Mon, 19 Sep 2022 22:57:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=X/9ppMKoTJJA87yHIpdTs/WRy7icD+NInH5312+E2KlVHKAnYlb9T0f0alhzkmY3AHb/eUkF32BbDRmymJ7DQW9Yc5nqHuw/AdKCMVa+fR1mCcr8RXi5hZkvWiA0iL0iFX+Z7Ftx1RYaERNVD8y9fZABEZolFp3epck4PI9O3F4vKQHIKZsmBiuv57+FAKJ7He9O1yUKzrxwpAchRxCUnX2tMWQ6InDKIJjcFBTwtGwCig4pqTwC5eeNY0y0cAl52jUCnL7Eu5U8qkwSs2aDohbNBMUdoRQa7smJocHufwlFCVRyp/IX7L0NbT8FAylcjnuWySS/kPPhybncLVotDA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=N9cDEIxFcPEF4yCbmSf/9iPBv0F6hd2Ix0Vce2IUWWU=;
+ b=iGd5hErGB5teZY1buIEvIz/tIhDjQmfdc1xtVjGV9Oa/k7BukVziQMavL5sTbfklagjgC3bsNWJWLwltaPqve9NgrBMJlwaBiVyFYdWs9woqv6lF9kZvYoFbSPPxZvR+4CBadHkDQgIOu9zS0yD9ashDe19NjbdvM+HEdexI9ODYLKaVLeqvQhKyWrzU2bD0Y89W2sHifWmfpDMEyOFycjCX7YZcUhxdQhAuQnx9zHJFyeaeKOGuXAHvFIgoBS6rh3KqL1KrysK4dEe8hctozFQJtJslVBymuZb0o+ZoJmY4Ni1JBrwFCOJ7LkoVuGMQ6lPBLBRd1d5eN88SxQNCtA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=davemloft.net smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=N9cDEIxFcPEF4yCbmSf/9iPBv0F6hd2Ix0Vce2IUWWU=;
+ b=15jSxrSxeHcoT+vB8Q8L7PWeiBpkec4k2PEVqOy1nswpElM+l7a4UI/oPoAYlD9JBJikAryxr2QxODBvYMFzEUAoHjD034iS9A9c5m77zL32neYuG0lgjZsyB/BGxzghkt3p5Eqlvg6Z2IcJ2u8nBcq26GES2CZ2yw67XsjTp+0=
+Received: from BN9PR03CA0528.namprd03.prod.outlook.com (2603:10b6:408:131::23)
+ by DM4PR12MB6351.namprd12.prod.outlook.com (2603:10b6:8:a2::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5632.21; Tue, 20 Sep 2022 05:57:12 +0000
+Received: from BN8NAM11FT022.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:131:cafe::ac) by BN9PR03CA0528.outlook.office365.com
+ (2603:10b6:408:131::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.21 via Frontend
+ Transport; Tue, 20 Sep 2022 05:57:11 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ BN8NAM11FT022.mail.protection.outlook.com (10.13.176.112) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5632.12 via Frontend Transport; Tue, 20 Sep 2022 05:57:11 +0000
+Received: from SATLEXMB08.amd.com (10.181.40.132) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Tue, 20 Sep
+ 2022 00:57:10 -0500
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB08.amd.com
+ (10.181.40.132) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Mon, 19 Sep
+ 2022 22:57:10 -0700
+Received: from xhdswatia40.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.28 via Frontend
+ Transport; Tue, 20 Sep 2022 00:57:04 -0500
+From:   Sarath Babu Naidu Gaddam <sarath.babu.naidu.gaddam@amd.com>
+To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <linux@armlinux.org.uk>
+CC:     <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <michal.simek@amd.com>,
+        <radhey.shyam.pandey@amd.com>, <anirudha.sarangi@amd.com>,
+        <harini.katakam@amd.com>, <sarath.babu.naidu.gaddam@amd.com>,
+        <git@xilinx.com>, <git@amd.com>
+Subject: [RFC V2 PATCH 0/3] net: axienet: Introduce dmaengine
+Date:   Tue, 20 Sep 2022 11:27:00 +0530
+Message-ID: <20220920055703.13246-1-sarath.babu.naidu.gaddam@amd.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <CAJD7tkZkPVwQYR1mqZoKQ=kkR96JCUzrpw8o-9vtX3qwdkj-=w@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8Cx72tdVSljxnQeAA--.45684S3
-X-Coremail-Antispam: 1UD129KBjvJXoW3Ar15Gw1fKrykuryxCw1Utrb_yoW3CFy8pF
-        17tF47Kr48Jr4Utr47Kw4qqr18tr1DC3W5Wry8Gr17uF1qvr1UJw48Gr4YkF1DGr1UCry2
-        qrW5Xw12vr17XaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvYb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4
-        vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
-        F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r
-        4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487
-        MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
-        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_
-        Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-        CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v2
-        6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07
-        beAp5UUUUU=
-X-CM-SenderInfo: x2kd0w5krqwupkhqwqxorr0wxvrqhubq/
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT022:EE_|DM4PR12MB6351:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6dbe50ae-aa7e-4568-e3a6-08da9accf5cd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: tebY2D7kN/eROth/3kwxMouEdfm1vwMDy14jIxstuTytZmCiCn6I2waJ08WGMPucoDWZpV5CsqAaG+2hYc1K4dwYFxzgkjFkC1ot7W65njM7jaOgGlscRr6jcXLzvyGrHNSjVkB0VpRDPAZwWArfQFo4NIHe2BBTvehZvtXfBeV+u6fyJGO7QdKkJ177VCfRysOMsfMYSvynZTEtJAkAaeZfwVPimCnm2y2wPAK2CpkJM2hDoCO98r3kVCtrGMBbws9eJC1MliDZT4l3vTw9rsDNPtPEucUg8yWAM8r3slyeC75C2CilJCct1ZxiFQVZRHMmLGx1kWA0Dlhcm+eCCTJ81s2TWH+uw2rDsDQzj0Kz0KLoKJf5Pg3fI9Aa606jeSAJaojfqkesGNJ3rQ6mk8c/i7o2ccp3SsQMz/lH4SgOZcpwMXwMGquEJrEmF/wxggl0HK4wEEmsMz50vXxshhhFS10EbwHXBrNYBdsHpBQgA+v4r0NY5Q4eyV2k8Z0RpFGmYbYafEr3hfZZOol1p5smzv1EF1F8NUiLmsBk1/MCgnOo1zaFio3sUFThwgLUec8cOadGzn8VxtubvfWI32vY6tIw/q+3qtnnz6+hPxu4z3LjpcQhFx3jo9oOjGGrJdKU92uiQg0ksh4TCxWXeMmi15wduWw3cmaoUyK8n/P7pSPW40RCyhNOL6pBb6pbLUfDpZpK40N2fIDkXSMeyVUi5x9E+BazWWFQ1kVvOgxpWnbw4b6F4r7Yt1EgDugV048pOjzoGlSxr/g1AetGEA9aY16fUuXn7nvKrDW4XdA=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(376002)(346002)(396003)(136003)(451199015)(36840700001)(46966006)(40470700004)(40480700001)(356005)(2906002)(2616005)(186003)(426003)(47076005)(336012)(82740400003)(26005)(1076003)(81166007)(40460700003)(86362001)(316002)(54906003)(8676002)(4326008)(41300700001)(103116003)(70586007)(70206006)(478600001)(36756003)(6666004)(7416002)(110136005)(8936002)(5660300002)(36860700001)(83380400001)(82310400005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Sep 2022 05:57:11.3482
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6dbe50ae-aa7e-4568-e3a6-08da9accf5cd
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT022.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6351
+X-Spam-Status: No, score=0.9 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yosry,
+The axiethernet driver now uses the dmaengine framework to communicate
+with the xilinx DMAengine driver(AXIDMA, MCDMA). The inspiration behind
+this dmaengine adoption is to reuse the in-kernel xilinx dma engine
+driver[1] and remove redundant dma programming sequence[2] from the 
+ethernet driver. This simplifies the ethernet driver and also makes 
+it generic to be hooked to any complaint dma IP i.e AXIDMA, MCDMA 
+without any modification.
 
-Sorry for not replying in time, there was a problem with my email.
+This initial version is a proof of concept and validated with a ping test
+on an AXI ethernet subsystem 1G + xilinx AXI DMA design. There is an 
+anticipated performance impact due to the adoption of the dmaengine 
+framework. The plan is to revisit it once all required functional 
+features are implemented.
 
-On 2022/9/20 am 7:32, Yosry Ahmed wrote:
-> On Fri, Sep 16, 2022 at 3:20 AM Hongchen Zhang
-> <zhanghongchen@loongson.cn> wrote:
->>
->> Hi Andrew and Matthew,
->>
->> On 2022/9/16 pm 4:40, Matthew Wilcox wrote:
->>> On Fri, Sep 16, 2022 at 08:57:50AM +0800, Hongchen Zhang wrote:
->>>> Hi Andrew ,
->>>>
->>>> On 2022/9/15 pm 5:00, Matthew Wilcox wrote:
->>>>> On Thu, Sep 15, 2022 at 04:02:41PM +0800, Hongchen Zhang wrote:
->>>>>> Hi Matthew,
->>>>>> On 2022/9/15 pm 3:28, Matthew Wilcox wrote:
->>>>>>> On Thu, Sep 15, 2022 at 09:19:48AM +0800, Hongchen Zhang wrote:
->>>>>>>> [ 3748.453561] INFO: task float_bessel:77920 blocked for more than 120
->>>>>>>> seconds.
->>>>>>>> [ 3748.460839]       Not tainted 5.15.0-46-generic #49-Ubuntu
->>>>>>>> [ 3748.466490] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables
->>>>>>>> this message.
->>>>>>>> [ 3748.474618] task:float_bessel    state:D stack:    0 pid:77920 ppid:
->>>>>>>> 77327 flags:0x00004002
->>>>>>>> [ 3748.483358] Call Trace:
->>>>>>>> [ 3748.485964]  <TASK>
->>>>>>>> [ 3748.488150]  __schedule+0x23d/0x590
->>>>>>>> [ 3748.491804]  schedule+0x4e/0xc0
->>>>>>>> [ 3748.495038]  rwsem_down_read_slowpath+0x336/0x390
->>>>>>>> [ 3748.499886]  ? copy_user_enhanced_fast_string+0xe/0x40
->>>>>>>> [ 3748.505181]  down_read+0x43/0xa0
->>>>>>>> [ 3748.508518]  do_user_addr_fault+0x41c/0x670
->>>>>>>> [ 3748.512799]  exc_page_fault+0x77/0x170
->>>>>>>> [ 3748.516673]  asm_exc_page_fault+0x26/0x30
->>>>>>>> [ 3748.520824] RIP: 0010:copy_user_enhanced_fast_string+0xe/0x40
->>>>>>>> [ 3748.526764] Code: 89 d1 c1 e9 03 83 e2 07 f3 48 a5 89 d1 f3 a4 31 c0 0f
->>>>>>>> 01 ca c3 cc cc cc cc 0f 1f 00 0f 01 cb 83 fa 40 0f 82 70 ff ff ff 89 d1 <f3>
->>>>>>>> a4 31 c0 0f 01 ca c3 cc cc cc cc 66 08
->>>>>>>> [ 3748.546120] RSP: 0018:ffffaa9248fffb90 EFLAGS: 00050206
->>>>>>>> [ 3748.551495] RAX: 00007f99faa1a010 RBX: ffffaa9248fffd88 RCX:
->>>>>>>> 0000000000000010
->>>>>>>> [ 3748.558828] RDX: 0000000000001000 RSI: ffff9db397ab8ff0 RDI:
->>>>>>>> 00007f99faa1a000
->>>>>>>> [ 3748.566160] RBP: ffffaa9248fffbf0 R08: ffffcc2fc2965d80 R09:
->>>>>>>> 0000000000000014
->>>>>>>> [ 3748.573492] R10: 0000000000000000 R11: 0000000000000014 R12:
->>>>>>>> 0000000000001000
->>>>>>>> [ 3748.580858] R13: 0000000000001000 R14: 0000000000000000 R15:
->>>>>>>> ffffaa9248fffd98
->>>>>>>> [ 3748.588196]  ? copy_page_to_iter+0x10e/0x400
->>>>>>>> [ 3748.592614]  filemap_read+0x174/0x3e0
->>>>>>>
->>>>>>> Interesting; it wasn't the process itself which triggered the page
->>>>>>> fault; the process called read() and the kernel took the page fault to
->>>>>>> satisfy the read() call.
->>>>>>>
->>>>>>>> [ 3748.596354]  ? ima_file_check+0x6a/0xa0
->>>>>>>> [ 3748.600301]  generic_file_read_iter+0xe5/0x150
->>>>>>>> [ 3748.604884]  ext4_file_read_iter+0x5b/0x190
->>>>>>>> [ 3748.609164]  ? aa_file_perm+0x102/0x250
->>>>>>>> [ 3748.613125]  new_sync_read+0x10d/0x1a0
->>>>>>>> [ 3748.617009]  vfs_read+0x103/0x1a0
->>>>>>>> [ 3748.620423]  ksys_read+0x67/0xf0
->>>>>>>> [ 3748.623743]  __x64_sys_read+0x19/0x20
->>>>>>>> [ 3748.627511]  do_syscall_64+0x59/0xc0
->>>>>>>> [ 3748.631203]  ? syscall_exit_to_user_mode+0x27/0x50
->>>>>>>> [ 3748.636144]  ? do_syscall_64+0x69/0xc0
->>>>>>>> [ 3748.639992]  ? exit_to_user_mode_prepare+0x96/0xb0
->>>>>>>> [ 3748.644931]  ? irqentry_exit_to_user_mode+0x9/0x20
->>>>>>>> [ 3748.649872]  ? irqentry_exit+0x1d/0x30
->>>>>>>> [ 3748.653737]  ? exc_page_fault+0x89/0x170
->>>>>>>> [ 3748.657795]  entry_SYSCALL_64_after_hwframe+0x61/0xcb
->>>>>>>> [ 3748.663030] RIP: 0033:0x7f9a852989cc
->>>>>>>> [ 3748.666713] RSP: 002b:00007f9a8497dc90 EFLAGS: 00000246 ORIG_RAX:
->>>>>>>> 0000000000000000
->>>>>>>> [ 3748.674487] RAX: ffffffffffffffda RBX: 00007f9a8497f5c0 RCX:
->>>>>>>> 00007f9a852989cc
->>>>>>>> [ 3748.681817] RDX: 0000000000027100 RSI: 00007f99faa18010 RDI:
->>>>>>>> 0000000000000061
->>>>>>>> [ 3748.689150] RBP: 00007f9a8497dd60 R08: 0000000000000000 R09:
->>>>>>>> 00007f99faa18010
->>>>>>>> [ 3748.696493] R10: 0000000000000000 R11: 0000000000000246 R12:
->>>>>>>> 00007f99faa18010
->>>>>>>> [ 3748.703841] R13: 00005605e11c406f R14: 0000000000000001 R15:
->>>>>>>> 0000000000027100
->>>>>>>
->>>>>>> ORIG_RAX is 0, which matches sys_read.
->>>>>>> RDI is file descriptor 0x61
->>>>>>> RSI is plausibly a userspace pointer, 0x7f99faa18010
->>>>>>> RDX is the length, 0x27100 or 160kB.
->>>>>>>
->>>>>>> That all seems reasonable.
->>>>>>>
->>>>>>> What I really want to know is who is _holding_ the lock.  We stash
->>>>>>> a pointer to the task_struct in 'owner', so we could clearly find this
->>>>>>> out in the 'blocked for too long' report, and print their stack trace.
->>>>>>>
->>>>>> As described in the comment for __rwsem_set_reader_owned,it is hard to track
->>>>>> read owners.So we could not clearly find out who blocked the process,it was
->>>>>> caused by multiple tasks.
->>>>>
->>>>> Readers don't block readers.  You have a reader here, so it's being
->>>>> blocked by a writer.  And that writer's task_struct is stashed in
->>>>> rwsem->owner.  It would be nice if we dumped that information
->>>>> automatically ... but we don't do that today.  Perhaps you could
->>>>> grab that information from a crash dump if you have one.
->>>>>
->>>>>>> You must have done something like this already in order to deduce that
->>>>>>> it was the direct reclaim path that was the problem?
->>>>>>>
->>>>>> The method we used is to track the direct reclaim using the
->>>>>> trace_mm_vmscan_direct_reclaim_{begin,end} interface.When the problem
->>>>>> occurred,we could get a very large "nr_reclaimed" which is not a desirable
->>>>>> value for process except kswapd.
->>>>>
->>>>> I disagree.  If a process needs to allocate memory then it should be
->>>>> paying the cost of reclaiming that memory itself.  kswapd is a last
->>>>> resort to reclaim memory when we have a workload (eg a network router)
->>>>> that does its memory allocation primarily in interrupt context.
->>>>>
->>>> What's your opinion about this scan adjust issue? Is there a better way to
->>>> fix this issue?
->>>
->>> Yes, but we need you to gather more information about what's causing
->>> the issue before we can suggest what that is.
->>>
->> I think the following scenery triggers the scan adjust issue:
->> In function shrink_lruvec, we call get_scan_count and get the following
->> values:
->> targets[LRU_INACTIVE_ANON]=50000
->> targets[LRU_ACTIVE_ANON]=50000
->> targets[LRU_INACTIVE_FILE]=128
->> targets[LRU_ACTIVE_FILE]=129
->>
->> After the first scan, we get more than nr_to_reclaim pages, but the
->> percentage of scanning nr[LRU_INACTIVE_FILE+LRU_ACTIVE_FILE] is 256/257,
->>
->> Then when we scan adjust, we must scan(possibly reclaim)
->> 256*(50000+50000)/257-256=99354 pages, which is too large and would
->> waste too many time.
->> If it is not kswapd, it is unacceptable to reclaim so many pages.
->> So we should limit the number of pages of scan adjust.
-> 
-> IIUC commit 6eb90d649537 ("mm: vmscan: fix extreme overreclaim and
-> swap floods") that was recently sent by Johannes [1] addresses a
-> similar issue (reclaiming way beyond nr_to_reclaim when anon vs file
-> LRU sizes are very different), but in a slightly different scenario.
-> IIUC with Johannes's patch, scan adjustment is already limited for
-> scenarios where scan_adjust (aka proportional_reclaim) is not
-> initialized to true, which would be all cases except global direct
-> reclaim on DEF_PRIORITY. Is my understanding here correct?
-> 
-Yes, this patch fix the same issue,let's talk this issue there.
-> [1] https://lore.kernel.org/lkml/20220802162811.39216-1-hannes@cmpxchg.org/
->>
->> Thanks
->> Hongchen Zhang
->>
->>
-> 
-> 
+The dmaengine framework was extended for metadata API support during 
+the axidma RFC[3] discussion. However, it still needs further enhancements
+to make it well suited for ethernet usecases.
+
+Comments, suggestions, thoughts to implement remaining functional features
+are very welcome!
+
+Changes in V2:
+1) Add ethtool get/set coalesce and DMA reset using DMAengine framework.
+2) Add performance numbers.
+3) Remove .txt and change the name of file to xlnx,axiethernet.yaml.
+4) Fix DT check warning(Fix DT check warning('device_type' does not match
+   any of the regexes:'pinctrl-[0-9]+' From schema: Documentation/
+   devicetree/bindings/net/xilinx_axienet.yaml).
+
+Radhey Shyam Pandey (3):
+  dt-bindings: net: xilinx_axienet:convert bindings document to yaml
+  dt-bindings: net: xilinx_axienet: Introduce dmaengine binding support
+  net: axienet: Introduce dmaengine support
+
+ .../devicetree/bindings/net/xilinx_axienet.txt     |   99 --
+ .../devicetree/bindings/net/xlnx,axiethernet.yaml  |  159 +++
+ MAINTAINERS                                        |    1 +
+ drivers/net/ethernet/xilinx/xilinx_axienet.h       |  169 +---
+ drivers/net/ethernet/xilinx/xilinx_axienet_main.c  | 1165 ++++----------------
+ 5 files changed, 398 insertions(+), 1195 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/net/xilinx_axienet.txt
+ create mode 100644 Documentation/devicetree/bindings/net/xlnx,axiethernet.yaml
 
