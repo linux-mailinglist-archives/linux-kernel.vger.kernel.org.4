@@ -2,141 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC6845BEE86
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 22:26:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C0B35BEE90
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 22:29:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230139AbiITU0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 16:26:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56302 "EHLO
+        id S230116AbiITU3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 16:29:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbiITU0q (ORCPT
+        with ESMTP id S229529AbiITU3q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 16:26:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC2626FA08
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 13:26:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663705604;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kTuYdzoZrrSVtqbKAPsta2mJ6sY3BJrx+736wsbe0TI=;
-        b=KqyzTmh2p+Fl4jAsI0AWT/yGcpPUF7RAgyzCI4x570HItzzMTp/aCdZjdDJoWkgjmtPkRd
-        snqtvnCfqK6+rx6jiIt2SGD7POlbIHbdB0/4iZoYlz/XotGGXXWA29dFREgyu5z/ztTXa8
-        o/gbCKHDgtPeGDc8w7yxLHKMQt5Nf3Y=
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com
- [209.85.166.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-538-OMw3qYPsNdu4xojdkzA0Ow-1; Tue, 20 Sep 2022 16:26:43 -0400
-X-MC-Unique: OMw3qYPsNdu4xojdkzA0Ow-1
-Received: by mail-io1-f70.google.com with SMTP id x22-20020a6bda16000000b006a123cb02beso2039660iob.18
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 13:26:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:organization:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=kTuYdzoZrrSVtqbKAPsta2mJ6sY3BJrx+736wsbe0TI=;
-        b=7LmpZVXlZT5gZd2uY8ypM5tbTCGlq5pURtXxzL/kHxlnrPpWlrBDmgRREivn12YWb9
-         qVFxu7YXp73mRVg/nO9rWTplnP6KNn0bE+L8E8Im4t+h4IkkTv7vxUi6j+Ebn2OEvWyx
-         3pAt4TcfEkxtFZ4ZWAC3tSMzysUJnKeAzHDkB0ruwBhuUFIx2gpyEAX4Z1BOY0+uNAyn
-         Ygd4tRyRD4P7B55EXUThG0cjOXhTJdZUulbWnaQYs72YXVFYPR/b0zPLS4U+DwSX8fXw
-         JLl9LJ7bVxDr9KyLxBCOyI1JjNgTjwQHFvLPkpqhi3DwVnFj/+Sf6JEvG9WPCeAurSZt
-         zTDg==
-X-Gm-Message-State: ACrzQf2nKIN78u1ZX+yzimYnFifzDZ67gX1Sqo3d94sf1C7Abr9BEHxV
-        C0GT09SflXA6Yxjbkr5H9HjQflFo/YyFrqZzt6mltoUmYS8Gzo9AePIWawnXUHbkgfIRhLWBGcS
-        A1UnbhjkpCZj//KSfgMaSKjfA
-X-Received: by 2002:a05:6638:379e:b0:35a:6503:453c with SMTP id w30-20020a056638379e00b0035a6503453cmr11604727jal.118.1663705602744;
-        Tue, 20 Sep 2022 13:26:42 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7Wn3n/ipGU1Lsd59DpS6zB424nUgnSwe6A3PA6dfJBFxnu4Ya4+9pvipnOK8j87C89TfNNcQ==
-X-Received: by 2002:a05:6638:379e:b0:35a:6503:453c with SMTP id w30-20020a056638379e00b0035a6503453cmr11604691jal.118.1663705602488;
-        Tue, 20 Sep 2022 13:26:42 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id z18-20020a05663822b200b00359fbe10489sm269899jas.103.2022.09.20.13.26.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 13:26:42 -0700 (PDT)
-Date:   Tue, 20 Sep 2022 14:26:39 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Kevin Tian <kevin.tian@intel.com>
-Cc:     Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Eric Farman <farman@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Tony Krowiak <akrowiak@linux.ibm.com>,
-        Jason Herne <jjherne@linux.ibm.com>,
-        Harald Freudenberger <freude@linux.ibm.com>,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Longfang Liu <liulongfang@huawei.com>,
-        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Kirti Wankhede <kwankhede@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Abhishek Sahu <abhsahu@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org, Yi Liu <yi.l.liu@intel.com>
-Subject: Re: [PATCH v3 15/15] vfio: Add struct device to vfio_device
-Message-ID: <20220920142639.29b1bdc2.alex.williamson@redhat.com>
-In-Reply-To: <20220909102247.67324-16-kevin.tian@intel.com>
-References: <20220909102247.67324-1-kevin.tian@intel.com>
-        <20220909102247.67324-16-kevin.tian@intel.com>
-Organization: Red Hat
+        Tue, 20 Sep 2022 16:29:46 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5A50E0EF;
+        Tue, 20 Sep 2022 13:29:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=4GkFAM9ta15G5fu8V8P3u7MnkTCMjeq28zxKCugAOm0=; b=x1KlwbOFXZpW4WLiH/g/4ugBbM
+        VpxvKqvSX0+exHvXpLROOQgkxfIUQhdBxOFAmsQTQcSladGovbtc/dw6D4+62xFCnZIrrClYuVcGI
+        OtTAfLnmYnRwNyBkwqDDRJK/7FbqIVFtKxobtZLeQNSvLd/gLSpmcL5s43m61y1IUcy/KtnduNatO
+        UjLVELQ13XHs+QvC4V4/3uZCpD6Ka+Ld6u5+soyoAko4gXTMvEfFrFmjhRwF0jlZq4gPFKcF3ezrX
+        wYPkFpc/hJzm0RC6bG6vnzrz865bre7snxVGgrVfuv2XTXxaGaGaVBGq8H901eMMPol0uxQyFiLZ6
+        iXD/ol0A==;
+Received: from [2601:1c2:d80:3110::a2e7]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oajs8-006Iaw-WF; Tue, 20 Sep 2022 20:29:37 +0000
+Message-ID: <d54e7e26-7797-bedb-142a-2101a4e497de@infradead.org>
+Date:   Tue, 20 Sep 2022 13:29:36 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: Build regressions/improvements in v6.0-rc5
+Content-Language: en-US
+To:     Helge Deller <deller@gmx.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-kernel@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>
+Cc:     linux-parisc@vger.kernel.org
+References: <CAHk-=wjG0js0MpsoH3-yvp05u_gXHu+uhkvqdAZDVb=9xUmX=g@mail.gmail.com>
+ <20220912091325.1780524-1-geert@linux-m68k.org>
+ <alpine.DEB.2.22.394.2209121120590.1176514@ramsan.of.borg>
+ <647e2197-8f89-f5a0-a60b-476aff2fd134@gmx.de>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <647e2197-8f89-f5a0-a60b-476aff2fd134@gmx.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri,  9 Sep 2022 18:22:47 +0800
-Kevin Tian <kevin.tian@intel.com> wrote:
 
-> From: Yi Liu <yi.l.liu@intel.com>
-> 
-> and replace kref. With it a 'vfio-dev/vfioX' node is created under the
-> sysfs path of the parent, indicating the device is bound to a vfio
-> driver, e.g.:
-> 
-> /sys/devices/pci0000\:6f/0000\:6f\:01.0/vfio-dev/vfio0
-> 
-> It is also a preparatory step toward adding cdev for supporting future
-> device-oriented uAPI.
-> 
-> Add Documentation/ABI/testing/sysfs-devices-vfio-dev.
-> 
-> Also take this chance to rename chardev 'vfio' to 'vfio-group' in
-> /proc/devices.
 
-What's the risk/reward here, is this just more aesthetically pleasing
-symmetry vs 'vfio-dev'?  The char major number to name association in
-/proc/devices seems pretty obscure, but what due diligence have we done
-to make sure this doesn't break anyone?  Thanks,
+On 9/20/22 13:23, Helge Deller wrote:
+> On 9/12/22 11:22, Geert Uytterhoeven wrote:
+>> On Mon, 12 Sep 2022, Geert Uytterhoeven wrote:
+>>> JFYI, when comparing v6.0-rc5[1] to v6.0-rc4[3], the summaries are:
+>>>  - build errors: +16/-1
+>>
+>>    + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error: .cfi_endproc without corresponding .cfi_startproc:  => 32
+>>    + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error: bad or irreducible absolute expression:  => 16
+>>    + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error: junk at end of line, first unrecognized character is `:':  => 16
+>>    + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error: no such instruction: `be 0x100(%sr2,%r0)':  => 29
+>>    + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error: no such instruction: `ldi 0,%r20':  => 30
+>>    + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error: no such instruction: `ldw 0(%sp),%r31':  => 26
+>>    + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: no such instruction: `ble 0x100(%sr2,%r0)':  => 46, 51
+>>    + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: no such instruction: `ldi 0,%r25':  => 44
+>>    + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: no such instruction: `ldi 1,%r25':  => 49
+>>    + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: no such instruction: `ldi 173,%r20':  => 45, 50
+>>    + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unknown pseudo-op: `.callinfo':  => 40
+>>    + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unknown pseudo-op: `.entry':  => 41
+>>    + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unknown pseudo-op: `.exit':  => 54
+>>    + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unknown pseudo-op: `.proc':  => 39
+>>    + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unknown pseudo-op: `.procend':  => 55
+>>    + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unknown pseudo-op: `.stringz':  => 76
+>>
+>> parisc-gcc8/generic-32bit_defconfig
+>>
+>>> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/80e78fcce86de0288793a0ef0f6acf37656ee4cf/ (all 135 configs)
+>>> [3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/7e18e42e4b280c85b76967a9106a13ca61c16179/ (all 135 configs)
+> 
+> I see those errors on the kiss website, but I'm unable to reproduce them.
+> Downloaded that .config, used same compiler (from https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/x86_64/8.5.0/)....
+> Not sure how to get this fixed.
+> If someone has an idea or can reproduce, please let me know.
 
-Alex
+Hi,
+I can reproduce it using the (x86_64 hosted) crosstool gcc-12.1.0 from kernel.org that Arnd builds/provides.
+https://mirrors.edge.kernel.org/pub/tools/crosstool/
 
+
+I expect it's a matter of gcc not being built for the right target, but that's just a guess
+on my part. I know nothing about configuring gcc for arch. targets.
+
+
+-- 
+~Randy
