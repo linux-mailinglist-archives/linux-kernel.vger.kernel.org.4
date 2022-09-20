@@ -2,187 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8DC55BEBDB
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 19:26:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C03CC5BEC05
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 19:30:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230315AbiITR0v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 13:26:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45532 "EHLO
+        id S231129AbiITRaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 13:30:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiITR0t (ORCPT
+        with ESMTP id S231503AbiITR36 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 13:26:49 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BE3A58DC7;
-        Tue, 20 Sep 2022 10:26:48 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id E12DA21B69;
-        Tue, 20 Sep 2022 17:26:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1663694806; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=55Y7hJRILYCZSmEl8VFafa6FNPLMA4ET1MSFLD7oFeY=;
-        b=KXfCm5+BcMeawj5bdpORhiYS8nKC4KS1vP8VpCW5X1JXHICPRX6MhhHmNtEx6LLR+YDytD
-        MTOjRMasjnoMcw1gMsmdnh0BpOOBBJSggcb4z42+PiV5vOt0nQJ02YrUqRBcDyKZZlDmzE
-        xwcPznonGc5EVYRQvIHNlocOneaG5sk=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id B49882C141;
-        Tue, 20 Sep 2022 17:26:46 +0000 (UTC)
-Date:   Tue, 20 Sep 2022 19:26:43 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        linux-modules@vger.kernel.org
-Subject: Re: [PATCH v2 1/8] scripts/kallsyms: don't compress symbol type when
- CONFIG_KALLSYMS_ALL=y
-Message-ID: <Yyn305PlgTZixR0V@alley>
-References: <20220909130016.727-1-thunder.leizhen@huawei.com>
- <20220909130016.727-2-thunder.leizhen@huawei.com>
+        Tue, 20 Sep 2022 13:29:58 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E68522290;
+        Tue, 20 Sep 2022 10:29:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663694983; x=1695230983;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=w8/YG0nidbb5+vN2FkxNfJIceA5A1DLzUcR7puogyMM=;
+  b=VzkeQCrlK2dphaCiKaJAiP1rKVJFEljLiV2OOvW6prDsjZwZt9g8bj7R
+   AZS1GxZVbuDrAmUE1PGikU53/kb9ieoWPOvtw+7YXzlMB6HBgPtr+uVfR
+   P5Tkunu4acXndNHIQKr4BqGAzhxqcbV9o39dt0xaa+PaxPNXkZaS8TOau
+   9i/swg9W4oHFFdUz1sI9+rlFzed5kVaRt7Wlq5CW0TBeZ389PlzMPS5sY
+   tmnlAftf5GHAMY02A40mgAqJGmOVRssGPYhIgMoV78MBo9rs5L1byN9nl
+   LQODRmNnwbkAk4sQjnL58KEIKNKLjQd1iSQ3qTv3/IaS7UwVdvZXbwx0d
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10476"; a="297360289"
+X-IronPort-AV: E=Sophos;i="5.93,331,1654585200"; 
+   d="scan'208";a="297360289"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 10:29:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,331,1654585200"; 
+   d="scan'208";a="947766882"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga005.fm.intel.com with ESMTP; 20 Sep 2022 10:29:31 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oah3p-0059IS-1s;
+        Tue, 20 Sep 2022 20:29:29 +0300
+Date:   Tue, 20 Sep 2022 20:29:29 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Kent Gibson <warthog618@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] gpiolib: cdev: add fdinfo output for line request file
+ descriptors
+Message-ID: <Yyn4eUKCOSxcLKdi@smile.fi.intel.com>
+References: <20220920135435.15593-1-brgl@bgdev.pl>
+ <Yyn2HEBPPWlJ3E0W@smile.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220909130016.727-2-thunder.leizhen@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Yyn2HEBPPWlJ3E0W@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 2022-09-09 21:00:09, Zhen Lei wrote:
-> Currently, to search for a symbol, we need to expand the symbols in
-> 'kallsyms_names' one by one, and then use the expanded string for
-> comparison. This is very slow.
-> 
-> In fact, we can first compress the name being looked up and then use
-> it for comparison when traversing 'kallsyms_names'.
+On Tue, Sep 20, 2022 at 08:19:25PM +0300, Andy Shevchenko wrote:
+> On Tue, Sep 20, 2022 at 03:54:35PM +0200, Bartosz Golaszewski wrote:
 
-This does not explain how this patch modifies the compressed data
-and why it is needed.
+...
 
+> Also don't forget that sizes over PAGE_SIZE in sysfs sometimes problematic and
+> racy.(the commit 888be6067b97 ("ACPI: sysfs: Fix a buffer overrun problem with
+> description_show()") for the reference).
 
-> This increases the size of 'kallsyms_names'. About 48KiB, 2.67%, on x86
-> with defconfig.
-> Before: kallsyms_num_syms=131392, sizeof(kallsyms_names)=1823659
-> After : kallsyms_num_syms=131392, sizeof(kallsyms_names)=1872418
-> 
-> However, if CONFIG_KALLSYMS_ALL is not set, the size of 'kallsyms_names'
-> does not change.
-> 
-> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> ---
->  scripts/kallsyms.c | 15 ++++++++++++---
->  1 file changed, 12 insertions(+), 3 deletions(-)
-> 
-> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-> index f18e6dfc68c5839..ab6fe7cd014efd1 100644
-> --- a/scripts/kallsyms.c
-> +++ b/scripts/kallsyms.c
-> @@ -60,6 +60,7 @@ static unsigned int table_size, table_cnt;
->  static int all_symbols;
->  static int absolute_percpu;
->  static int base_relative;
-> +static int sym_start_idx;
->  
->  static int token_profit[0x10000];
->  
-> @@ -511,7 +512,7 @@ static void learn_symbol(const unsigned char *symbol, int len)
->  {
->  	int i;
->  
-> -	for (i = 0; i < len - 1; i++)
-> +	for (i = sym_start_idx; i < len - 1; i++)
->  		token_profit[ symbol[i] + (symbol[i + 1] << 8) ]++;
+This is not the commit I wanted to point to... But suddenly can't find easily
+the one I remembered happened in the kernel.
 
-This skips the first character in the @symbol string. I do not see how
-this is used in the new code, for example, in
-kallsyms_on_each_match_symbol(), in the 5th patch. It seems to iterate
-the compressed data from the 0th index:
-
-	for (i = 0, off = 0; i < kallsyms_num_syms; i++)
-
->  }
->  
-> @@ -520,7 +521,7 @@ static void forget_symbol(const unsigned char *symbol, int len)
->  {
->  	int i;
->  
-> -	for (i = 0; i < len - 1; i++)
-> +	for (i = sym_start_idx; i < len - 1; i++)
->  		token_profit[ symbol[i] + (symbol[i + 1] << 8) ]--;
->  }
->  
-> @@ -538,7 +539,7 @@ static unsigned char *find_token(unsigned char *str, int len,
->  {
->  	int i;
->  
-> -	for (i = 0; i < len - 1; i++) {
-> +	for (i = sym_start_idx; i < len - 1; i++) {
->  		if (str[i] == token[0] && str[i+1] == token[1])
->  			return &str[i];
->  	}
-> @@ -780,6 +781,14 @@ int main(int argc, char **argv)
->  	} else if (argc != 1)
->  		usage();
->  
-> +	/*
-> +	 * Skip the symbol type, do not compress it to optimize the performance
-> +	 * of finding or traversing symbols in kernel, this is good for modules
-> +	 * such as livepatch.
-
-I see. The type is added as the first character here.
-
-in static struct sym_entry *read_symbol(FILE *in)
-{
-[...]
-	/* include the type field in the symbol name, so that it gets
-	 * compressed together */
-[...]
-	sym->sym[0] = type;
-	strcpy(sym_name(sym), name);
-
-It sounds a bit crazy. read_symbol() makes a trick so that the type
-can be compressed. This patch does another trick to avoid it.
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-> +	 */
-> +	if (all_symbols)
-> +		sym_start_idx = 1;
-
-This looks a bit fragile. My understanding is that the new code in
-kernel/kallsyms.c and kernel/module/kallsyms.c depends on this change.
-
-The faster search is used when CONFIG_KALLSYMS_ALL is defined.
-But the data are compressed this way when this script is called
-with --all-symbols.
-
-Is it guaranteed that this script will generate the needed data
-when CONFIG_KALLSYMS_ALL is defined?
-
-What about 3rd party modules?
-
-I would personally suggest to store the symbol type into a separate
-sym->type entry in struct sym_entry and never compress it.
-
-IMHO, the size win is not worth the code complexity.
-
-Well, people compiling the kernel for small devices might think
-different. But they probably disable kallsyms completely.
-
-Best Regards,
-Petr
