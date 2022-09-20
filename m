@@ -2,107 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FD385BDD94
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 08:47:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52F885BDD95
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 08:47:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230020AbiITGq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 02:46:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39456 "EHLO
+        id S230252AbiITGrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 02:47:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230262AbiITGqy (ORCPT
+        with ESMTP id S230433AbiITGrI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 02:46:54 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD5853D3B;
-        Mon, 19 Sep 2022 23:46:53 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id 9so1814816pfz.12;
-        Mon, 19 Sep 2022 23:46:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=vkTFnfbmIR3qwyo/CUT31Fe4BhBU2kMVaByFkU7+mmo=;
-        b=Xpyb/ZLXc5x/of0UagrB8IiP1JVm37WZ/NYb4yLemjk2zKq4uRxPv0IHxE1RYxJXJE
-         +j1D6K+XKnf7ua+ux06ZzsJlsZEsdc8g9F5Sa8lNL6M2nAMQ6udh3P3/PBk9H7N3jLwb
-         zAKlEz9pD2jIfM8nVifW6oov+38+hIEKHrcP4XpETGe44E887hFoB9EbAGr//6HQb/lm
-         ZUctankBwUxFvUikhxMNJi7XRwqWtOfiC1BZ3EuLT/XZwlo4HU5yfh+6FxRDKs5ycDOG
-         Qttn7ETgosa5Cq3hkL+PRjE+SQ1am8kN4CdZ7TVrg0z7FKEwreNXQ42r+cBkzFUHXFGZ
-         9lMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=vkTFnfbmIR3qwyo/CUT31Fe4BhBU2kMVaByFkU7+mmo=;
-        b=m6Lo+PLdYcuIKrogQBYKuoulAgjM2MhM5Y+K4Y2yVz9osCERlTTq5vEBEWSwRNi78W
-         2qhfnSbGNOoDngYiAlS4zeoD+t3nphV7t+AQpatXk5kOU8h0ZZCWHlINBtTRu8gAz/Zo
-         06QsB0hqnXF9E2KJoV5IawCPkbVV4S82RUNCX2IneIg0VjFivCNvQ/n+DADBO1TeoK1K
-         aXagB8aBK1gsvIebfHNzJEL34p6knuQxy1uSxdkKtpVivlxVvuAoNDp+gsMDrgarl8U+
-         3zPgvj7R1e/67iNRtcSsjexGatLujYZ+TkwZNyJhhDImxeibs2UK5afdkaWuXV3PO0jP
-         8S+A==
-X-Gm-Message-State: ACrzQf2Xz1tn+nm6vcaWvaBpaSX+kr6HHIrDzbDGKcbn1e71UCiTW8Vv
-        hjCxrq5yruW3PuLAhctxlUyeYHraomU=
-X-Google-Smtp-Source: AMsMyM7tpo4/lpe8xbYYLCxTjK6FI4HdBFZsdF60Z4Xv5/Vv1yyQxc6Dt8+lkFx1ALem2zZVSTQ5fw==
-X-Received: by 2002:a63:5d18:0:b0:439:61d0:7487 with SMTP id r24-20020a635d18000000b0043961d07487mr18828899pgb.268.1663656412876;
-        Mon, 19 Sep 2022 23:46:52 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id cv20-20020a17090afd1400b001fb1de10a4dsm610572pjb.33.2022.09.19.23.46.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 23:46:52 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: ye.xingchen@zte.com.cn
-To:     ulf.hansson@linaro.org
-Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] mmc: rtsx_usb_sdmmc: Remove the unneeded result variable
-Date:   Tue, 20 Sep 2022 06:46:48 +0000
-Message-Id: <20220920064648.215375-1-ye.xingchen@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Tue, 20 Sep 2022 02:47:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D29A5F122
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 23:47:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 235CA62441
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 06:47:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CA29C433B5;
+        Tue, 20 Sep 2022 06:47:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663656422;
+        bh=SvXI7Ba7eKmCawLmelygwSy8WdDRklUMauHJ8UCmQGE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LFmRt2FQfMHGJdtALu4/WlD8sRwoSENvlyWtrUk+nHQQcy9/1T1A936ja4g5inMBZ
+         YymRVL6yAr4PXEtv1+wUwpYOXJLq36mF8abOihxKgHVHMF6jqSyM5HmUtpNjRXkdFN
+         uQc+7lFAfaHMtwckoKTcsaO+DQdY+6+2b7XDkhm18JZmtXilPhh+4jH+/5uAmY/1p1
+         TvpglsTrPsZ4PWo2IjoGUCGAzZhpEmVOVFGDHR1kmf6XF09ufLPS0TWFAymQqJhJam
+         n2fz1hfJPCBwNjAZZVp8R0YmIoO4x8Dcd6vvlGrdyRucJ7XaE/jSgQEzzQl1ORZEq4
+         IIrCOM+SKhiGA==
+Date:   Tue, 20 Sep 2022 12:16:58 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Matt Ranostay <mranostay@ti.com>
+Cc:     linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
+        rogerq@kernel.org, vigneshr@ti.com
+Subject: Re: [PATCH] phy: ti: phy-j721e-wiz: stop name conflict if multiple
+ serdes are initialized
+Message-ID: <Yylh4oW21zD4jUQf@matsya>
+References: <20220909200026.3422-1-mranostay@ti.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220909200026.3422-1-mranostay@ti.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+On 09-09-22, 13:00, Matt Ranostay wrote:
+> When multiple serdes instances are initialized the first will succeed but
+> additional will conflict over clocks names and probing fails.
 
-Return the value rtsx_usb_send_cmd() directly instead of storing it in
-another redundant variable.
+Applied, thanks
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- drivers/mmc/host/rtsx_usb_sdmmc.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
-
-diff --git a/drivers/mmc/host/rtsx_usb_sdmmc.c b/drivers/mmc/host/rtsx_usb_sdmmc.c
-index 5fe4528e296e..5798aee06653 100644
---- a/drivers/mmc/host/rtsx_usb_sdmmc.c
-+++ b/drivers/mmc/host/rtsx_usb_sdmmc.c
-@@ -1042,7 +1042,6 @@ static int sd_set_timing(struct rtsx_usb_sdmmc *host,
- 		unsigned char timing, bool *ddr_mode)
- {
- 	struct rtsx_ucr *ucr = host->ucr;
--	int err;
- 
- 	*ddr_mode = false;
- 
-@@ -1097,9 +1096,7 @@ static int sd_set_timing(struct rtsx_usb_sdmmc *host,
- 		break;
- 	}
- 
--	err = rtsx_usb_send_cmd(ucr, MODE_C, 100);
--
--	return err;
-+	return rtsx_usb_send_cmd(ucr, MODE_C, 100);
- }
- 
- static void sdmmc_set_ios(struct mmc_host *mmc, struct mmc_ios *ios)
 -- 
-2.25.1
+~Vinod
