@@ -2,289 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 942945BEFD1
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 00:10:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCC425BEFE1
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 00:14:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbiITWKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 18:10:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46062 "EHLO
+        id S230176AbiITWMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 18:12:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbiITWKg (ORCPT
+        with ESMTP id S229785AbiITWMu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 18:10:36 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F4B577565;
-        Tue, 20 Sep 2022 15:10:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663711835; x=1695247835;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=UBQeKs5cl99jKPWb5OBAHbwxpiulAGlxTmlsJarxYXk=;
-  b=jeQjeeU7yRfMPPcsiW6DR0M+ZwYaz/dlUFvy8TLMZSSkCyXPnCUorIxn
-   zf0+/0W8LG+a6WK4GZnGF13F5Iu+1DNYC+jzO2HGMn8+GPi6kRpMgkNuo
-   jJGFzBLhLMpkLgoD2qsjSz07RhghH6UH2S348XxbbNbNPPr+xxkUdQ6OA
-   9t0I/FWXZM+KlpDw/wB9/3P3icg19+mAG/nbUodvFe/JPFv/3KsMiXnvJ
-   1Yv22+J+/hWIJhFuBzxlzw/SHHMRIllNb6E2F6OIK4wnNfZ7VyqVp2qE7
-   FKo3z5gNBrmmA4HX3af02OzS+0NugoUhUEHaXuGH4tLmmwM1ClpT0dHfU
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10476"; a="326140201"
-X-IronPort-AV: E=Sophos;i="5.93,331,1654585200"; 
-   d="scan'208";a="326140201"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 15:10:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,331,1654585200"; 
-   d="scan'208";a="681489194"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga008.fm.intel.com with ESMTP; 20 Sep 2022 15:10:35 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 20 Sep 2022 15:10:34 -0700
-Received: from fmsmsx609.amr.corp.intel.com (10.18.126.89) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 20 Sep 2022 15:10:34 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx609.amr.corp.intel.com (10.18.126.89) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Tue, 20 Sep 2022 15:10:34 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.102)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Tue, 20 Sep 2022 15:10:33 -0700
+        Tue, 20 Sep 2022 18:12:50 -0400
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-eopbgr150077.outbound.protection.outlook.com [40.107.15.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64E2C77EB9;
+        Tue, 20 Sep 2022 15:12:48 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fb2caZMNoNiyyOXN3dDgFZ1HmyLHVQXIeoVJ3gW2IxoGACF4uMw33+50R56HNY4X8LCXFtizqeWbhmPRNwXTdxiwPmbeaLi1G2uHrygxIP6QB+Aj8uLRQoSnRAVUICuNi9r0xpGFknkTrPaPPsHzZOsabZ/HRsaHXi9bQfsRfbCHMPCf5Mavrj2IQXEesUBmVyOVm7wZW4CEqImEOjyAl7JTSIj6f/QFyjNZxoOtYkqP7Kv7tkO8rwxIoB0U5rQhfFjZTWDrZkXP4yMTaHc3jOHVB3JVWji3wDC3VJXPL/XeZplwFl+grcYZvOz0SJvMytJnWcsrcQkYjSvYoQ9gOA==
+ b=OPGIhy/tJNqdTlJ8JT9EttXddf/ArZaFqeGC5Gubj27dQGIIOCcHIj5Yn5RhtDUGZ+n9shLYOS6MyfW0DJaajQI84VdexxetY4D4oZPmDorE8LMAOwWglJ+il6yOhpWN1oHu32MTgFVPBG+o6qkOcEquIRKloG5ByWzQaAo2/tgY9aqZpu3sP/GynGTv1AsG+63x1llQqe58spvarH5RsaOPVjvqjIgshUsTzpgjSK3f3NPB6HN0kH9lvjWWjOe02S27sPbizFoSnnkrQKPKTaQ8+h19JlRuCeG3Wn4zphH6cFyX/uJ4G7PDYr1mdozfEqYyDM0CdpvnYIlgIYc0nA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=q2VWk0z+1AcwdE83duPFN486CE8B7Fgwwa7zEabzRmE=;
- b=JQCC4mA1DlJQIUaYHwP8cjJdTPRvDI0MbVbpYYnVP0WwZ90QQWf/EG/LGsM2MHKETkIZYdkThRC7LmEEeLqfD9UtP1/R/QLkiEPTMqCSkZ/kvv35mHZqqWD9DbZqxAn4nwR/bXDQlNEkj5t4WR6BsHL8rBuEdaeF5aJ2z5YVgxJJJ7qRIJYFkZcts9OjVjdST6t2jJhaSco3Vci1XHNJlNBU4gb7x1EYA8OtwAjAEmS3gVEBAWJtcCDwZpvhr19gzpaQRche8B4nEEiH/14CqTTZoStdHUBNpzOcaieJfMu+1kXTa3es3ftwrFd+QTLXGfqxuQ3Q77nbk/VX15aGoA==
+ bh=BNor5NqYpS5KRNmKMxpe5Ss2IZwSElF6CmhVRIBDViA=;
+ b=hGc228++Di8YIfCH+JTIDF9sc3GPwpvIjUROUschIUn1ZT4s5vaBGTv1A/II/IWh3sGuiYYBNDuHnrH9y8tShWgzL3Jf4hQtlM9KYQVFVQIX+KH1SmnEkkh4Za8Xk7IZP0fCnoRhTFkaTwgCmZ4thMUm7C/wOOCPrQ3C6cRtoBEVIbY2U5vJFuYOwtgV3S9vDogU2Mt/wuCtd9tHJtqQM0SOWX2EOhRhCIQQbP286EX+rnPQfEhlIUv1Ho7y2qX1QNbtNbBIbBuQJO8o7YR5WnvWaFTnD39cjtbNa94i6iaiMa3a+03ZmoY33TDk3jpB52xTaHJ3+SmMYEyETl94dg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
+ smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
+ dkim=pass header.d=seco.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BNor5NqYpS5KRNmKMxpe5Ss2IZwSElF6CmhVRIBDViA=;
+ b=jiWFNdRJojCjwfP10PpY9q6IGFTPoTAnlIHeoRfO0Vhnv18+8+77Ku7lDiUp9PVmuKNwfuCKHwCn2FCMP3VJhCZVjiEZ5lbJ/FQ3rVmVN/KtVZ3ym0OG6q+Pp6GpucCQdznJeyKUcteA2fjHzn/57S+L5nkKB8WV+215enQ/rrwrGFPz9q6uS2IRA0UvWAft6yKdMGmmtmOfbLVJEaPdd1ZUiGu/3rRnAxBR/fjijozvGDbXklGI9k+6QHmiRvwEKv3czuuvhMa/wRJXWcz4rgs7QLaqa14rpqc1t5WFArVeqY8nVzEqCEIfY7/IfdnROOnLsSsy75mC60HfUQHStA==
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SA1PR11MB6733.namprd11.prod.outlook.com (2603:10b6:806:25c::17)
- by DS0PR11MB6544.namprd11.prod.outlook.com (2603:10b6:8:d0::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5632.17; Tue, 20 Sep 2022 22:10:31 +0000
-Received: from SA1PR11MB6733.namprd11.prod.outlook.com
- ([fe80::b572:2e32:300b:d14a]) by SA1PR11MB6733.namprd11.prod.outlook.com
- ([fe80::b572:2e32:300b:d14a%3]) with mapi id 15.20.5632.021; Tue, 20 Sep 2022
- 22:10:31 +0000
-Date:   Tue, 20 Sep 2022 15:10:26 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Dave Jiang <dave.jiang@intel.com>
-CC:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>
-Subject: Re: [RFC PATCH 1/9] cxl/mem: Implement Get Event Records command
-Message-ID: <Yyo6Un8YmRM7aOLz@iweiny-desk3>
-References: <20220813053243.757363-1-ira.weiny@intel.com>
- <20220813053243.757363-2-ira.weiny@intel.com>
- <20220824165058.00007d4f@huawei.com>
- <Yxgd51zdrk9pEXE6@iweiny-mobl>
- <20220908135240.00001217@huawei.com>
- <Yxun42yjtZREEeRv@iweiny-desk3>
- <20220920164904.00001be8@huawei.com>
- <afdac388-061e-a403-3b9e-1273cee98509@intel.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <afdac388-061e-a403-3b9e-1273cee98509@intel.com>
-X-ClientProxiedBy: SJ0PR05CA0101.namprd05.prod.outlook.com
- (2603:10b6:a03:334::16) To SA1PR11MB6733.namprd11.prod.outlook.com
- (2603:10b6:806:25c::17)
+ header.d=none;dmarc=none action=none header.from=seco.com;
+Received: from DB7PR03MB4972.eurprd03.prod.outlook.com (2603:10a6:10:7d::22)
+ by AS4PR03MB8179.eurprd03.prod.outlook.com (2603:10a6:20b:4e2::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.18; Tue, 20 Sep
+ 2022 22:12:46 +0000
+Received: from DB7PR03MB4972.eurprd03.prod.outlook.com
+ ([fe80::204a:de22:b651:f86d]) by DB7PR03MB4972.eurprd03.prod.outlook.com
+ ([fe80::204a:de22:b651:f86d%6]) with mapi id 15.20.5654.014; Tue, 20 Sep 2022
+ 22:12:46 +0000
+From:   Sean Anderson <sean.anderson@seco.com>
+To:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexandru Marginean <alexandru.marginean@nxp.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Sean Anderson <sean.anderson@seco.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Subject: [PATCH net-next v6 0/8] net: phy: Add support for rate matching
+Date:   Tue, 20 Sep 2022 18:12:27 -0400
+Message-Id: <20220920221235.1487501-1-sean.anderson@seco.com>
+X-Mailer: git-send-email 2.35.1.1320.gc452695387.dirty
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: MN2PR01CA0038.prod.exchangelabs.com (2603:10b6:208:23f::7)
+ To DB7PR03MB4972.eurprd03.prod.outlook.com (2603:10a6:10:7d::22)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA1PR11MB6733:EE_|DS0PR11MB6544:EE_
-X-MS-Office365-Filtering-Correlation-Id: ae0fffa6-a958-4d43-9ff3-08da9b54ee8f
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-TrafficTypeDiagnostic: DB7PR03MB4972:EE_|AS4PR03MB8179:EE_
+X-MS-Office365-Filtering-Correlation-Id: 634fdab5-4251-455b-3855-08da9b553f1a
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: eAs/O1TBGEYl9od2O2v0LXKWckI01kAdq2wrDp+9EfjDjm50oPvtkHU+gfE1T/C8mwzTYNQRF9NAsHoPH3tu3O36jmgsKS8Xw5Xb8kqTgP+HmpbHhgeXvto24Faa2WwiH1RhhAFA0F+frD1pL3PLaIfzFtQJH+gFz2QOZJXT1eXyIc7thXeQGSgAjEdR5C4wbGDovYBSzpzm+Raz2kB0XUvEUxrT3gXwehD2vCA5DJ4DCqxg2DeTS4Ib4r4n8vQPk9MK7rRi3FOyJdsc9jwXXI5T/qfrfioiu9Eg9ObHntmMULAAjda0PXv94wEuODxlKznVHpf9HKYvf13GZhm2kUdR3/XV9TAXMjV68O6VXAQtKIWhfF9546EVO+R1iXD+kUJtGwIn66MMs/XmTE8d+0DlNsI/L0D9CeFM4aw0AuW3ou/23qZuhv4rTgMRvX67fpMb+ck8mO6MCvgWUB1xZJ4Qb9WgoDyXGEnEYCCeehTwKS9iGHZg+iOPiuHz/wqxnh1LUPm8jtLSlS1KvqOmX4jlY4zKpYMXQmV1ZOGbWQq0R6L0ymb8GsZiQpRwn9omQZ2yp4vWASUufMHZTsMbsU2WH2UZwV4bibTJKWeUHoJNxBmuWdqCHN4M7wcAuvK5RHok5MQ+8q66GD/jjtse2br5jRUN7nCQ7oyRHLcX6OPLqF2D4NLdcbDZLOW0u2JPZLpVcDuu6vhiEgoromQY4Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6733.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(136003)(346002)(39860400002)(376002)(366004)(396003)(451199015)(44832011)(5660300002)(41300700001)(66946007)(8936002)(38100700002)(2906002)(86362001)(82960400001)(33716001)(6862004)(66476007)(66556008)(4326008)(8676002)(6636002)(83380400001)(53546011)(478600001)(26005)(316002)(54906003)(6506007)(6666004)(9686003)(6512007)(6486002)(186003);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: jZ59hiedRZQmUDVoLQ39FSs4dxMWyP/OEpDf9hq3l9n3UWnNlhh2StNLU7pW3fqFB2Jdcx5rDHbxOeocp7yu9ULcTHq9+q5+NHQBU9ObKmOWsu3hGWlF2VuUeVl7B8Gr5QNC+pgV+ox+WyVQEpB6aQgGzARBOZITJgPae6qnYALIob97KpUl0QEE2yP8DViW4BLYpjSjtq97kO9jjbX9XELslVkt26qd+vxOMrC2i9H3PFyo6/U/QFSBbpdguUWI06I8MjEspoi5oeMyP2M5K2CWzNLyWArYNoQTLnb3VX+E9mbBCLbFGPr8DbY2W350UF6ZlXT62LfY0BxIwWRHTm0MF2PohIO2N1QbjEzD/TJPnpSAlrZVAHdaNvti9Zh/Qwrx1WOxZcW+hOr3OeDG3C8l213Dr+J60lMApyMmOvt7oRe4YD4AlRlp4oTJbRCwChcFvUkQzX18KPm01e0wTYVP8kIzuZ/fKcnrrLo2TNKijp6iagqB6rmaFZtooIZVBX5kW4s7Y99qmjeWxpKY7iCj8t09xlBxtirxXlVud6d9Ajj0XnkdzkgtIA6wlPZR37OFwyjJmXrdAfSOlMItr2qGU35CPxvZnnvLScIttISeCEmCAp9zmmynWHAbIHzt9fanM8nEl5dcd0rrPQ+ty30GT3csbUzkESEcNgw0S+pPfHnPs7U9oHGLPwNHYZfxYU0j1KeqWVfAReKWMPBYLq9/OriOScIKb6un7NLxQ54kY+LpGskZf+nz5SiiLOy1Jy/BUuZSiwO9BX1j1cTo7NOBMnt7oKGvPOIaSi4qsdM=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4972.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39850400004)(366004)(396003)(376002)(346002)(136003)(451199015)(7416002)(8676002)(186003)(478600001)(966005)(1076003)(66476007)(66556008)(66946007)(4326008)(5660300002)(2616005)(44832011)(86362001)(8936002)(83380400001)(6486002)(26005)(316002)(54906003)(2906002)(6512007)(36756003)(110136005)(6506007)(38350700002)(6666004)(41300700001)(38100700002)(52116002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?M54VNB1HjiwtVBxIdz6YN8p1gqeMWervIxinGLmj/ZI3M7eueWYMyj8+d7L7?=
- =?us-ascii?Q?l8+EzNf8aSKtHnK/h6w/PHbU2GqShh2mCYkpT183vMq0ipo854dNrfaTQzDU?=
- =?us-ascii?Q?iJBnfK3y8qeRAzOOWV6Qj9TB5WN2BGEPCX2MFFEPtqhtRI+Me6fujHL0Dxmo?=
- =?us-ascii?Q?R8nLL0bZ9XRSiOZGMIWLkBm7A8y+Tu9BULSkSfDVBloxUR51jmd8m1R6Umeo?=
- =?us-ascii?Q?Ld6l9P/Od1uzpac5Fa6BND8ecdZPNUKiHayuwcbxj6hZvqq1Pyfk0/m0DZQX?=
- =?us-ascii?Q?cDcKenZSOdMKmxsvDPncOSry3X79Ff5A5RceBj/PqYEpU0GP8+DyRa9y2mDi?=
- =?us-ascii?Q?uTtkcYR18qSVfsa/wp8fjbVcx/aG2sIPOsy2/AiUk181s6pSo7GxTdDzsY/Y?=
- =?us-ascii?Q?LqP10IeAiS/YvCyddGbBfXzHOLBUC1gQKi3I3tPyaSMoLuGZaMIun5NQVaZn?=
- =?us-ascii?Q?MMujzeGxMkEOu6W3DC/dnZ2HUNI3rlEcdx7l7qBU0HEgo3jDJwQmmifAo5FZ?=
- =?us-ascii?Q?4oWph2DnFoYMjuYGVGOnzCVZ6YIwEOAncr7SHk3i1jRqRHea259KUzHGnc+J?=
- =?us-ascii?Q?fRqqFRdQ41qxjf9Xq33/IPJaNfu0y8XX8m3zwO0JaSD/fbI5yqGESK4qtfbH?=
- =?us-ascii?Q?oLJ4NWblxseUFMnslI5WgIv6PbHmt5oIrB3zStXMrB8PC4YpfwE8gyfwyU1U?=
- =?us-ascii?Q?E1TN9y85jCpCClyIdyNJiESiT4+nqIhO8JsHLBgQXr/SMOn3DR70CsTI+BTn?=
- =?us-ascii?Q?f/hGZDL3zLRQDUtKq/Ue/GNn46jXVgRzI8EbuoVeqaQ1j3gmqjV5uNfNgaoN?=
- =?us-ascii?Q?UeEob/NElZFXOmKXFwBV2quyNVg9P5Vo7W/g4zyDSg3uQg4cRxC4/r1V6aWI?=
- =?us-ascii?Q?+5wYZz9vpdQZ2jhTqJqsIvAVw934jKXJf42uYKSnXYmFxK9IKO+m+6vjHjza?=
- =?us-ascii?Q?C+4VHPm0lXrpqh0FNVzaPuKWNo2sYQiBtr/j3k9KZGSipgD8Z/fN9yfi5qrV?=
- =?us-ascii?Q?Urc4gz1PnXZycrMoqmW7azxplzYnlIWWFmY3NkuRORtZJdou8atHqb9uabiC?=
- =?us-ascii?Q?rM7L0+LbkvkG2PocCzTOQhYVWSXu0bsuPBtUWwz72iHN8rIFxN55EHGPwGik?=
- =?us-ascii?Q?g2V6MLEeze3doEnhGMuEj5SOteIUMQS0pMPF4O98ZUvrTOtKXLdjWPBH+tOR?=
- =?us-ascii?Q?IJshvL1dUiQloUlg8agF/ugQgwnxz6bS7PGMV1uixfYQhVrBfJoUcHaBc4nn?=
- =?us-ascii?Q?GTjGFuHjb+XNFXfYvqxda4716u0MxPAwGwBNvGm7/TTdOkHIFeOI5N9DyYcY?=
- =?us-ascii?Q?plQMNMiLo83aBQ3j1qBesJ1pkzTFlJk/SAXxYakUcCuXEgd49GZlinq4RR2c?=
- =?us-ascii?Q?wwgvkSzLStIhY4AJH7F5E9dzJ0/j+iGizq5HXvmVe5nHumavag1Cei8BUexs?=
- =?us-ascii?Q?eni9nT8PE8FqpzoYNuSVERQkR9x7BETorUfzzIEb9+AtYcLB5SPNIsCgPScl?=
- =?us-ascii?Q?z0XQ61ImpxaJl4w6Ua6bEV1/yj+FP0gZxTsr8Nf2tMnQnU+q6U5HPZJg+AuN?=
- =?us-ascii?Q?j1jdPt/hD5+QEBdGCpIgrAioe6y7m8U4EAln8eBq?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: ae0fffa6-a958-4d43-9ff3-08da9b54ee8f
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6733.namprd11.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zXEJPmWrruHNizAfwcrgndXiK1iQR5VY518hoOHB7UoP0yd6FvoF6AQC9mLT?=
+ =?us-ascii?Q?xYTlhMHh21QKg1I5pNYQUEWyXmqAxpO7mSDMAOcR70axZgnYwzadchLnEqhR?=
+ =?us-ascii?Q?4pmTZDkPaXEEJc++2do4qF3ezZoRhq97dGsOWT2QUi8v5AxMBZcnltqTGviB?=
+ =?us-ascii?Q?Qblbg3lF8g8SMxKFk/0mgrba2YJ4DocvIDa1PguQY2YHBlXQYBzLaF2K30L8?=
+ =?us-ascii?Q?FnIgr0jhDxtBNLnOVtu+cyag51hjsCaVSWYRmh14yTrUKYcVCW7WDz63040m?=
+ =?us-ascii?Q?5hx5lSd4+h2GgX5IBukSHmhOSp93JCyCW6ggSrJJSSZUsFin4WQ3zuNq57RX?=
+ =?us-ascii?Q?/bOwc7CcN2YfDNfj6wdZkDAujMLJd5JCZ2XoG2HjRmAiP9ThU/FXeFHiWl4a?=
+ =?us-ascii?Q?uEykMHKqSm55raHqq4py1ARZ3TFKw6zfy5fCbrh3WPGb+Ft91MReXegK3NN3?=
+ =?us-ascii?Q?tS4NRnWB41qMdl9VwXXqgWBZeJmZ4NnLRwEDyPC9Ode1k6M0BKoIRlA5SMJ1?=
+ =?us-ascii?Q?i9S/0NjD4gpm0ONirdXIMZThAx52x4dRLBhhEmxP1sf/UZUFWcNPqr/SoVRr?=
+ =?us-ascii?Q?4xCWeZRdS5ETfV/U/Pu6ErkKMbDH/GukujJWlOuX7BxPv0DHQ7CCYua8F7eZ?=
+ =?us-ascii?Q?Vl72DFZQhYNmjDXFjc0GxDNMvrMQWL0pJ8IhfXwuqCipenS78Mwxd64hh9Dq?=
+ =?us-ascii?Q?ALqSkWsAeKIdiSqT4o+l1j+ekJw9WDChgSRH1XYg6Oejpz/OTLyoZiXG26li?=
+ =?us-ascii?Q?eNSd5Rgt1PUqm7whNJ6qqTIZc2Ip6lnqzsyVFq+T1Tivhm4QMYp0H5w7ARCY?=
+ =?us-ascii?Q?TmJsg7yEOgB098/kv9zVeTj1v+S6oUcCoSmq4QyYYVEfkC2wsGHmJA0XBqc5?=
+ =?us-ascii?Q?GRGkhXBmzHnzNLdxmkv+nwx2/fYOwEH6qtrFctlWsZA+/h3L1R+ztoim4YRB?=
+ =?us-ascii?Q?ZBxpzjJnhT9YPAhjXMgAq48qdJ4iGf/l56RKEmn49pkrJdGzxnAKKA/EIupJ?=
+ =?us-ascii?Q?ZgO7wB2A8tWZxMAFQj5k+9WefnjdeYBophwZzYQAuMmUcoC+TZGutQ9cYkl7?=
+ =?us-ascii?Q?y9GZAGIOlpOOZvfFwtnknrJbCbE+xxGQ2vPBsaK3vOeK7Q4yrhNTSNmg1Sv6?=
+ =?us-ascii?Q?Y1Uiy1iTyzXvFicETVzojVR5UDJDAM37WSzTHdJDiXhsCg7UzD2wxZmt0f8+?=
+ =?us-ascii?Q?Klf8OcpHIXsH9cPrvWId1n0N+OiDlCbODrMVzbI6h7QQlOGAznGVYDbsfb3x?=
+ =?us-ascii?Q?lVqPhJJvGDdwKi1aZ8v/MDd1w73dVP9+kqdgzpz4Qupk+XmbcOMZHl1PLIsM?=
+ =?us-ascii?Q?MU8QivFfwvoC78Yg0gGIH8TdRybIZBbYfdbxyvGPnO+YhGjze45IJgSJMUSp?=
+ =?us-ascii?Q?MKVoVI7NOwBNE6HaBmi83qUrv077TGbf9txh0jfPojtwsxa6vyZ5BhnxNOOl?=
+ =?us-ascii?Q?P7VlVtwZR/uAf0fvK8MqikxL0qgb0ma1hzclq0jN/CXVBCvQQXsZHIhU4oiN?=
+ =?us-ascii?Q?CDpRW40nyUG5agZOvGC3d7IpuZILbvxCJnmVypggTzxWDxHBD9GaKTeAsAu2?=
+ =?us-ascii?Q?HzS/a6gywrN1VdjaTllD2wHE2Fxdt8bQhXznRWfv9zQRxwqNFocCzUU1dQHX?=
+ =?us-ascii?Q?qg=3D=3D?=
+X-OriginatorOrg: seco.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 634fdab5-4251-455b-3855-08da9b553f1a
+X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB4972.eurprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Sep 2022 22:10:30.9857
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Sep 2022 22:12:46.0492
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tSR9CQNPdGQ0UlX31S+aSgyUjpibjoFFDi8qimXATtUnLaTQ+RDUePjq8nXLXzkaU0xPXDKvbwhwUOIejyH2VA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB6544
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: HurueWqBe9BepU8FT71wZc+Gr8ppwdC9K+jNOFY3kewlNkS4LsfyBp0saqJrfvxrxyfD/m3iMR24AV5Nt+mSMw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS4PR03MB8179
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 01:23:29PM -0700, Jiang, Dave wrote:
-> 
-> On 9/20/2022 8:49 AM, Jonathan Cameron wrote:
-> > On Fri, 9 Sep 2022 13:53:55 -0700
-> > Ira Weiny <ira.weiny@intel.com> wrote:
-> > 
-> > > On Thu, Sep 08, 2022 at 01:52:40PM +0100, Jonathan Cameron wrote:
-> > > [snip]
-> > > 
-> > > > > > > diff --git a/include/trace/events/cxl-events.h b/include/trace/events/cxl-events.h
-> > > > > > > new file mode 100644
-> > > > > > > index 000000000000..f4baeae66cf3
-> > > > > > > --- /dev/null
-> > > > > > > +++ b/include/trace/events/cxl-events.h
-> > > > > > > @@ -0,0 +1,127 @@
-> > > > > > > +/* SPDX-License-Identifier: GPL-2.0 */
-> > > > > > > +#undef TRACE_SYSTEM
-> > > > > > > +#define TRACE_SYSTEM cxl_events
-> > > > > > > +
-> > > > > > > +#if !defined(_CXL_TRACE_EVENTS_H) ||  defined(TRACE_HEADER_MULTI_READ)
-> > > > > > > +#define _CXL_TRACE_EVENTS_H
-> > > > > > > +
-> > > > > > > +#include <linux/tracepoint.h>
-> > > > > > > +
-> > > > > > > +#define EVENT_LOGS					\
-> > > > > > > +	EM(CXL_EVENT_TYPE_INFO,		"Info")		\
-> > > > > > > +	EM(CXL_EVENT_TYPE_WARN,		"Warning")	\
-> > > > > > > +	EM(CXL_EVENT_TYPE_FAIL,		"Failure")	\
-> > > > > > > +	EM(CXL_EVENT_TYPE_FATAL,	"Fatal")	\
-> > > > > > > +	EMe(CXL_EVENT_TYPE_MAX,		"<undefined>")
-> > > > > > Hmm. 4 is defined in CXL 3.0, but I'd assume we won't use tracepoints for
-> > > > > > dynamic capacity events so I guess it doesn't matter.
-> > > > > I'm not sure why you would say that.  I anticipate some user space daemon
-> > > > > requiring these events to set things up.
-> > > > Certainly a possible solution. I'd kind of expect a more hand shake based approach
-> > > > than a tracepoint.  Guess we'll see :)
-> > > Yea I think we should wait an see.
-> > > 
-> > > > > > > +	{ CXL_EVENT_RECORD_FLAG_PERF_DEGRADED,	"Performance Degraded"		}, \
-> > > > > > > +	{ CXL_EVENT_RECORD_FLAG_HW_REPLACE,	"Hardware Replacement Needed"	}  \
-> > > > > > > +)
-> > > > > > > +
-> > > > > > > +TRACE_EVENT(cxl_event,
-> > > > > > > +
-> > > > > > > +	TP_PROTO(const char *dev_name, enum cxl_event_log_type log,
-> > > > > > > +		 struct cxl_event_record_raw *rec),
-> > > > > > > +
-> > > > > > > +	TP_ARGS(dev_name, log, rec),
-> > > > > > > +
-> > > > > > > +	TP_STRUCT__entry(
-> > > > > > > +		__string(dev_name, dev_name)
-> > > > > > > +		__field(int, log)
-> > > > > > > +		__array(u8, id, UUID_SIZE)
-> > > > > > > +		__field(u32, flags)
-> > > > > > > +		__field(u16, handle)
-> > > > > > > +		__field(u16, related_handle)
-> > > > > > > +		__field(u64, timestamp)
-> > > > > > > +		__array(u8, data, EVENT_RECORD_DATA_LENGTH)
-> > > > > > > +		__field(u8, length)
-> > > > > > Do we want the maintenance operation class added in Table 8-42 from CXL 3.0?
-> > > > > > (only noticed because I happen to have that spec revision open rather than 2.0).
-> > > > > Yes done.
-> > > > > 
-> > > > > There is some discussion with Dan regarding not decoding anything and letting
-> > > > > user space take care of it all.  I think this shows a valid reason Dan
-> > > > > suggested this.
-> > > > I like being able to print tracepoints with out userspace tools.
-> > > > This also enforces structure and stability of interface which I like.
-> > > I tend to agree with you.
-> > > 
-> > > > Maybe a raw tracepoint or variable length trailing buffer to pass
-> > > > on what we don't understand?
-> > > I've already realized that we need to print all reserved fields for this
-> > > reason.  If there is something the kernel does not understand user space can
-> > > just figure it out on it's own.
-> > > 
-> > > Sound reasonable?
-> > Hmm. Printing reserved fields would be unusual.  Not sure what is done for similar
-> > cases elsewhere, CPER records etc...
-> > 
-> > We could just print a raw array of the whole event as well as decode version, but
-> > that means logging most of the fields twice...
-> > 
-> > Not nice either.
-> > 
-> > I'm a bit inclined to say we should maybe just ignore stuff we don't know about or
-> > is there a version number we can use to decide between decoded vs decoded as much as
-> > possible + raw log?
+This adds support for phy rate matching: when a phy adapts between
+differing phy interface and link speeds. It was originally submitted as
+part of [1], which is considered "v1" of this series.
 
-I'm not a fan of loging the raw + decoded versions.
+Several past discussions [2-4] around adding rate adaptation provide
+some context.
 
-> 
-> libtraceevent can pull the trace event data structure fields directly. So
-> the raw data can be pulled directly from the kernel.
+Although in earlier versions of this series, userspace could disable
+rate matching, now it is only possible to determine the current rate
+adaptation type. Disabling or otherwise configuring rate adaptation has
+been left for future work. However, because currently only
+RATE_MATCH_PAUSE is implemented, it is possible to disable rate
+adaptation by modifying the advertisement appropriately.
 
-This raw data needs to be in a field though.  If the kernel does not save the
-reserved fields in the TP_fast_assign() then the data won't be in a field to
-access.
+[1] https://lore.kernel.org/netdev/20220715215954.1449214-1-sean.anderson@seco.com/T/#t
+[2] https://lore.kernel.org/netdev/1579701573-6609-1-git-send-email-madalin.bucur@oss.nxp.com/
+[3] https://lore.kernel.org/netdev/1580137671-22081-1-git-send-email-madalin.bucur@oss.nxp.com/
+[4] https://lore.kernel.org/netdev/20200116181933.32765-1-olteanv@gmail.com/
 
->
-> And what gets printed
-> to the trace buffer can be decoded data constructed from those fields by the
-> kernel code. So with that you can have access both.
-> 
+Changes in v6:
+- Don't announce that we've enabled pause frames for rate adaptation
+- Merry Christmas
+- Rename rate adaptation to rate matching
+- Reword documentation, (hopefully) taking into account feedback
 
-Fast assigning the entire buffer + decoded versions will roughly double the
-trace event size.
+Changes in v5:
+- Break off patch "net: phy: Add 1000BASE-KX interface mode" for
+  separate submission.
+- Document phy_rate_adaptation_to_str
+- Drop patch "Add some helpers for working with mac caps"; it has been
+  incorperated into the autonegotiation patch.
+- Move phylink_cap_from_speed_duplex to this commit
+- Rebase onto net-next/master
+- Remove unnecessary comma
 
-Thinking through this a bit more there is a sticking point.
+Changes in v4:
+- Export phy_rate_adaptation_to_str
+- Remove phylink_interface_max_speed, which was accidentally added
+- Split off the LS1046ARDB 1G fix
 
-The difficulty will be ensuring that any new field names are documented such
-that when user space starts to look at them they can determine if that data
-appears as a new field or as part of a reserved field.
+Changes in v3:
+- Add phylink_cap_from_speed_duplex to look up the mac capability
+  corresponding to the interface's speed.
+- Document MAC_(A)SYM_PAUSE
+- Include RATE_ADAPT_CRS; it's a few lines and it doesn't hurt.
+- Modify link settings directly in phylink_link_up, instead of doing
+  things more indirectly via link_*.
+- Move unused defines to next commit (where they will be used)
+- Remove "Support differing link/interface speed/duplex". It has been
+  rendered unnecessary due to simplification of the rate adaptation
+  patches. Thanks Russell!
+- Rewrite cover letter to better reflect the opinions of the developers
+  involved
 
-For example if user space needs to access data in the reserved data now it can
-simply decode it.  However, when that data becomes a field it no longer is part
-of the reserved data.  So what user space would need to do is look for the
-field first (ie know the field name) and then if it does not appear extract it
-from the reserved data.
+Changes in v2:
+- Add (read-only) ethtool support for rate adaptation
+- Add comments clarifying the register defines
+- Add locking to phy_get_rate_adaptation
+- Always use the rate adaptation setting to determine the interface
+  speed/duplex (instead of sometimes using the interface mode).
+- Determine the interface speed and max mac speed directly instead of
+  guessing based on the caps.
+- Move part of commit message to cover letter, as it gives a good
+  overview of the whole series, and allows this patch to focus more on
+  the specifics.
+- Reorder variables in aqr107_read_rate
+- Use int/defines instead of enum to allow for use in ioctls/netlink
+- Use the phy's rate adaptation setting to determine whether to use its
+  link speed/duplex or the MAC's speed/duplex with MLO_AN_INBAND.
 
-I'm now wondering if I've wasted my time decoding anything since the kernel
-does not need to know anything about these fields.  Because the above scenario
-means that user space may get ugly over time.
+Sean Anderson (8):
+  net: phylink: Document MAC_(A)SYM_PAUSE
+  net: phylink: Export phylink_caps_to_linkmodes
+  net: phylink: Generate caps and convert to linkmodes separately
+  net: phy: Add support for rate matching
+  net: phylink: Adjust link settings based on rate matching
+  net: phylink: Adjust advertisement based on rate matching
+  net: phy: aquantia: Add some additional phy interfaces
+  net: phy: aquantia: Add support for rate matching
 
-That said I don't think it will present any incompatibilities.  So perhaps we
-are ok?
+ Documentation/networking/ethtool-netlink.rst |   2 +
+ drivers/net/phy/aquantia_main.c              |  68 ++++-
+ drivers/net/phy/phy-core.c                   |  21 ++
+ drivers/net/phy/phy.c                        |  28 ++
+ drivers/net/phy/phylink.c                    | 268 +++++++++++++++++--
+ include/linux/phy.h                          |  22 +-
+ include/linux/phylink.h                      |  40 ++-
+ include/uapi/linux/ethtool.h                 |  18 +-
+ include/uapi/linux/ethtool_netlink.h         |   1 +
+ net/ethtool/ioctl.c                          |   1 +
+ net/ethtool/linkmodes.c                      |   5 +
+ 11 files changed, 440 insertions(+), 34 deletions(-)
 
-Ira
+-- 
+2.35.1.1320.gc452695387.dirty
+
