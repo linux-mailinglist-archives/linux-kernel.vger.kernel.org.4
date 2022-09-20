@@ -2,242 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EC895BE675
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 14:54:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC7665BE688
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 14:58:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231439AbiITMyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 08:54:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50060 "EHLO
+        id S230110AbiITM5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 08:57:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231435AbiITMyD (ORCPT
+        with ESMTP id S229802AbiITM5t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 08:54:03 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DF2C75FCE
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 05:53:35 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id n23-20020a056602341700b00689fc6dbfd6so1359311ioz.8
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 05:53:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=jQJm8Z+up347I13dxWYRPWK1SdivX1s8IHwB5EA/8gk=;
-        b=vkukf/E+wQEDF6hUc0zzxN8hcDw/u8jfF5cEEwiWN5cgqloX2Z94xIzoQxgoL7oaLP
-         l6LJs6ez7dj4XxQoZRp2Ab9Qc9z8/i6McyvkF/CMahaM8OPIhGCna00D4THfVfG15+rf
-         ji2Q7cwyUxhsbhaFCNNeUfA8boUdcGg01BioIX4HaENOkYjYiiT1uzJ6y7IYjKDUa7bd
-         +y/YeofhEG7AtLSnLX0CUjcRqJJdipa+4cny3InSe7v5Qz/v+NQG6ZxN7YZrcqFrzaSy
-         JJk0W0lmqezClRKxaePbScPHDfJK55RqV6mWXPySkB3IMADD2t1f0Ewg4ds493fHItTo
-         398w==
-X-Gm-Message-State: ACrzQf1tRNQHcLYUzvZLdXs1FBCWO8VW/RMmUjkGKWVSGHSihIy2dpMR
-        GRFwh51Dt19G/Ls666b1Qf/QVbYkU7mbPkKmO19+Z5rdX5dn
-X-Google-Smtp-Source: AMsMyM6l6LLo4LWGKy1iezG8GllPNubQqkEn/HEBaG5rq+mYVV3f7Bc8lO3y7PQiTnHuHMq2nyIulejtxAPn4IVQmHIUWDcBul4c
+        Tue, 20 Sep 2022 08:57:49 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2064.outbound.protection.outlook.com [40.107.93.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47AA9CE5
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 05:57:48 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WqCi+s6ivpXKcdFyXkiPYHWASFjJqApusXwvb5JN+GPRXfIp+8iubKzlxXuycfzXmnLGdgbojFdwzMjkZRLWC/CtNVcrtJd2nhAZ19Igeqcyy/vCPhjMmgkOmFlRejGJWCoHkkxMYR7w3Jfk4dqVHsU+Oq3boL4M98bPOR6BveVXwjFhkjCPGNnYZimd0MQQ6ATx5DIV0JHpTkM1sQTN0hgY8wTzD6rCr1vLbrvfhPGN1mm2rMBfBHyD6zfajc82qmko40WA4jdCQrnqsE6juRq9E6+v29NciHSA9ijxwHHZCG4cRSu+0psQsLa12YbKapvLXlIZcWfYjCCnc8pq8A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rXSwpkXN02oaJjuNnxues01kGbJcSDrIuzKiJ/YXFu4=;
+ b=je2Lix0jd/+MeS6i147XzpbYNKz0jemvzOYwkJfgNagWxLg1/vysbJam81WtLWgv8qk0VdFmNqBH0SpSq2U8hVkFcJRbos1GbTwh24lT8peq2eBIVKbNt/4yDLxRWU4TYAWL2vx1qdImHuK+7lDy1qlmFbZ9PIyufSCgF42Q3pzGqoyanDLo65e/iSMp9MaNtJNSZl5xVjpT0iIMtYYyFnsUH2IwIDgpdNvQFCrZbUUXZYTUEEqRHcUIU9t6o6ZYpJ5X77uIsfedOhPYaZ9XPx9Fidqq40PEhdD+7pKw9IEEsjiDNIuXLbCWKVGkiC4aOW42C6dLpxRRdolZkAesWw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rXSwpkXN02oaJjuNnxues01kGbJcSDrIuzKiJ/YXFu4=;
+ b=ACgxdrBbgxfXllxmYDcKpFh5QLejSz8cLPNl0KkcOFSSJQLwoiK9VHnFadAr9ye0Xcoz2jNpdUw+51LdSnK9FPRI3jmjiDI8BrJiHIzvHcPdXA2BfDQmnMaoyWKdv3qh24uutIzy3dTOF99/GjOsj4hniutVVdJbR00GKoxvVxc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by DM4PR12MB7600.namprd12.prod.outlook.com (2603:10b6:8:108::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.14; Tue, 20 Sep
+ 2022 12:57:46 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::653f:e59b:3f40:8fed]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::653f:e59b:3f40:8fed%6]) with mapi id 15.20.5632.021; Tue, 20 Sep 2022
+ 12:57:45 +0000
+Message-ID: <f5b5b001-a1c7-bfa4-1b59-04c439fc9ace@amd.com>
+Date:   Tue, 20 Sep 2022 14:57:37 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] drm/amdgpu: initialize r variable into amdgpu_cs_submit
+ function
+Content-Language: en-US
+To:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+Cc:     Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+        llvm@lists.linux.dev, Philip Yang <Philip.Yang@amd.com>,
+        David Airlie <airlied@linux.ie>, linuxfancy@googlegroups.com,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        Tom Rix <trix@redhat.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        linux-amarula@amarulasolutions.com, sudipm.mukherjee@gmail.com
+References: <20220920122216.346321-1-tommaso.merciai@amarulasolutions.com>
+ <3430255f-3675-eef2-92bd-4eb8be582c83@amd.com>
+ <20220920123203.GA346517@tom-ThinkPad-T14s-Gen-2i>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20220920123203.GA346517@tom-ThinkPad-T14s-Gen-2i>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR3P281CA0028.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:1c::19) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:150c:b0:35a:f7a9:c3d8 with SMTP id
- b12-20020a056638150c00b0035af7a9c3d8mr1916588jat.38.1663678413730; Tue, 20
- Sep 2022 05:53:33 -0700 (PDT)
-Date:   Tue, 20 Sep 2022 05:53:33 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000def90305e91b5016@google.com>
-Subject: [syzbot] possible deadlock in skb_queue_tail (4)
-From:   syzbot <syzbot+44b38bcb874d81a15a57@syzkaller.appspotmail.com>
-To:     bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, kuniyu@amazon.com, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|DM4PR12MB7600:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7064fe63-b480-4ca9-39c3-08da9b07b674
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: kdxuNOSy5FycO82ggjPvZ2ksMF9Wq1j4roy3hG4S8tL5m2rK6+SZpZfV9NHxwUFhu/R2aXnpS3Kc2ujPcQhxr7pBqil6GxVR0UyF7SG8DYn6p/cg1gV76WRi9e0kcAnVCDUYvBkC1L0jPG5vL33vYzh+ieJh0sW/Z7TRP2kxLsgGpE0QaOYiR7xZItxITkeIVTZPLgR6x+/NpSTz5YRaWN45nsY6qKx/9A7pX3fmjh8qzoWlzpno79RX3+bnprRugWb0kdnVQevnOx1FoRUP9hob0uvZvCWGeKiS6CKb1RJcXpDt6txvrUqUwRjHk4jhh5VFiPabHPPMktnFHzw3IWYARQ91AuWBS4nDXWKk1v0HYa3kcLhb+nalWENvDwsDI/gwvunRqASy1WNPhxhWsIK32qcP1AicdEkQfqF2WZcLNikWXFEovll4O2gBOPauzgaKoeOCAFVlxVm/1385vdmMtOL4q/n+ns/pOtDw5HaoPAmtolqCdjN6XvI8evwVx6LoKWfH5TFtnVN61QUoySjFjVxyaEtv/r02XPfFZeD3BXpJ2/kbzrT47gImA9ev2NvkoL7m5diu3hxUYOpWDZTke3hprYlLdAdWV7X4AwnZXxfs2X9TmbJFd7kgzpJ+jhWHuluarv3BXDwQ7jmjXZ64Ud2tk3cju9mpPe8Uw5ck9LqZpj2hOFFPFA2B6KDskJQCwkGlCXC2ZqOLAZCUsATAx1CG1TGCq5pS6dhCCF/nvMMWVsyOmJTSg2QeXhDzDjkqLDLDTe85x7yCMwaa+hUzsO3+SJx+u00ZLi1znQY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(366004)(376002)(346002)(39860400002)(396003)(451199015)(38100700002)(110136005)(66574015)(54906003)(83380400001)(31696002)(86362001)(2906002)(316002)(478600001)(36756003)(6512007)(26005)(6486002)(6666004)(41300700001)(6506007)(2616005)(186003)(7416002)(31686004)(5660300002)(4326008)(8936002)(66946007)(8676002)(66556008)(66476007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Wi90Vks4dllZd0czV0Y2NWc4RUNVbjVHYUNDVVBJUHNoeXVEUmhLM0NlcFRQ?=
+ =?utf-8?B?cmUxT2JrclcwTHhkMFppTExvTlp4U2JuRGFNN2xRUm1uTVpON3NSeWxIUEll?=
+ =?utf-8?B?QWQ1YjFITmpqZWR2M1ZUNGNtbmF5N0xJRjBjV2dtK1dhTVQ4ZVRUL0tzb2Vu?=
+ =?utf-8?B?MlVSamR4Qi92eDROdFFOT0pXRWJLdTZqNm1nZ1RDTCt0eWUvNVJ3Rk14Mi8x?=
+ =?utf-8?B?c2hxWjYyNnZZODBzRHh2TUtpYnYzRG5xaHFKVkFrdEQvcHZtNkVMS1BVNk5p?=
+ =?utf-8?B?c09tMmsvb2lWRnk2c2cvTmlIWFdIMXZwWGlZUGdCU0ppWDNZNjMrc3UrMUI3?=
+ =?utf-8?B?bTViaWNCaEE2ckxJZDdJRHRrYzJMNEJiVUxUUldWLzIxdThwWm1Zem9SbkRw?=
+ =?utf-8?B?K01OL01lbmh0RlJNM0xnS3Z3WnpHVlFzRXdZR3FwMFNYRFNOc0pIU3dyZHVU?=
+ =?utf-8?B?M0w0R2ZXQXAvL2xjNEsxMjNHaDdUcENaUU01T2lvdFAzUEdXbTMwWHhWeEhx?=
+ =?utf-8?B?RU5GYkYwRFduMWVQN3llZUF0Qm5HMFJuVE5nRHc2VVNLdjBmWjJDN0E3N0NR?=
+ =?utf-8?B?c3dOekxiQUtUbTZKTnFXNjlaQ0pxRDFnQ0lqTWRqZWNMMk1jS3dxaGxQTTZz?=
+ =?utf-8?B?eU5tZlJKY1l2dTdHMVcyVlBvYjFYMjA4Vy9aNHc3N2VUL252R1ZnbUtnRUsw?=
+ =?utf-8?B?OThjSGVJN1NIUEhEWEU5azdGY0lhd1ZGeG9rYnpCL2diVDVlSHBwVGkzTGJo?=
+ =?utf-8?B?Q0ZMTUFOWjFOaURyQUNFV1Z5L0E3TzNkTTRTMUt4Sy9iWGNKeTc4Z25qOGNz?=
+ =?utf-8?B?anovZ21jSEFCNGh0a0F3QWgxZE56OU1JMEdmYjZCOE93V0pZVzVZV0dsV2dS?=
+ =?utf-8?B?VmVXNGVXNWF4c1NpNWhaNDVRTytiS3VVYmVxKzBlcEdZekNOTWRxdy9YV0pE?=
+ =?utf-8?B?bTYzZnhoc0dBWTZHSGhkV2tXZXVKNnJJMm8rTFMvTjlkYnlycUozTXEvRDVC?=
+ =?utf-8?B?ZlNIOHZUZTIvbTRpNm1STnF5WjBHdnNQWTNQYm5NMVZCUWw0RzJKVFhOZlQ4?=
+ =?utf-8?B?SHVlZGlRdWNSUWswbkxUNVA4cnowOXpnRW42eG1HZEFmWEd4ZXVpYk1lL1Iw?=
+ =?utf-8?B?OVNnOEdhb0s2OFZHa1BWR3ovVlROOVJ1ZmRKTy91RmlDalkwa05Nb0pEWFFj?=
+ =?utf-8?B?MjhISTRqV1B5YUFGUDRzeWhTYWxWZ2lUQWQ5amhIRmNKRm81elhxUFRtSzZh?=
+ =?utf-8?B?c2lCK20rK2IwSG1LMEVkL2R4am9LZU9PQW96cDhxZ2g5Z1VjaXBKQm40RmRG?=
+ =?utf-8?B?Wi9hcXpLZ2kzbGtvQ1FPaXdjTVN4ZlhNUGg3eDg0WlF4RjJKSFAvK1RMQnVv?=
+ =?utf-8?B?Q3NwZGZmdE92TFh1N2hpNUNkQUtsTk1EeG9QZTQ0VEpTSkNLcDVpTlV4Mll4?=
+ =?utf-8?B?REFNNU9EQTlqekJqTFVzUzRpU2dRZjZHdG1aUStXdEVzY0h0eURXSTZyR1Zn?=
+ =?utf-8?B?Mk9lMlJGUHpJRVFBQzlyd2VPaTZYbWJ1Z3ozdU82OTdrdS9iZlBvWVRsUWMz?=
+ =?utf-8?B?YTV4eVNnWmRJa3psb1gwLzhFYkVBYTd5cjNhRXdxQ3M3NnY5UzQ3dEdSa3Zi?=
+ =?utf-8?B?WEM3RWtiNisyWkZycjR3aWpVQmF6K3lMRmVCL0pSMnI5cFNvYUtUTDJ5ekln?=
+ =?utf-8?B?VGNpSjY2TEVPQW53Vm1zRktLK2hKcFFKWmVhZC9kQXRNYTZFeENFRHppb1Fl?=
+ =?utf-8?B?dHhTdWRCVWh5UkgzTUtWRDJReWRRUlVGcXpnMTJKUEFKUnFpaDdCUmhEZzBZ?=
+ =?utf-8?B?TktxdHRqanRoRU9LcDU5b2hPbENEL0E0b2tsWDkwVkQ3QUhtdlZJaUdCcjdv?=
+ =?utf-8?B?Y0FXVzFnY25YWFd1QzF4cDdzTzFzZWNaNWovQm1QdlhHdFlqR3gwUVNxanly?=
+ =?utf-8?B?cDRCODdkNkdEUUttdDA2aEk4WGpSNDVQbU93Nkd0dlRDZ3J5ZytFQ2p2NTNC?=
+ =?utf-8?B?aExVK0pPZjVGRFE1R1FxTzd0RzlxYy9qT2w4b3czTmdCcTNQdlg2MlY4ZGUw?=
+ =?utf-8?B?eThoM0ZsTTVhZit1THAwODdYV0IzcU9wR0YrL1RSNEN3OHlNYnZvbGdNbUF3?=
+ =?utf-8?Q?M3GU2DHMLLkNs8v+wJpUvUMpA?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7064fe63-b480-4ca9-39c3-08da9b07b674
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Sep 2022 12:57:45.7149
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: L5myRZFE900oBSmV6iWweldCWSbNDluI40n3d4THdXvHV+bvQ8nwW26dDFNu4EpM
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB7600
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Am 20.09.22 um 14:32 schrieb Tommaso Merciai:
+> Hi Christian,
+>
+> On Tue, Sep 20, 2022 at 02:23:58PM +0200, Christian König wrote:
+>> Am 20.09.22 um 14:22 schrieb Tommaso Merciai:
+>>> The builds of arm64 allmodconfig with clang failed to build
+>>> next-20220920 with the following result:
+>>>
+>>> 1190:3: error: variable 'r' is uninitialized when used here [-Werror,-Wuninitialized]
+>>> note: initialize the variable 'r' to silence this warning
+>>>
+>>> This fix compilation error
+>> I've already send a patch to fix this to the mailing list 7 Minutes ago :)
+>>
+>> Please review or ack that one.
+> Sorry, my bad. Don't see your patch :)
 
-syzbot found the following issue on:
+No problem, already reviewed and pushed :)
 
-HEAD commit:    3245cb65fd91 Merge tag 'devicetree-fixes-for-6.0-2' of git..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=12b0c487080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=98a30118ec9215e9
-dashboard link: https://syzkaller.appspot.com/bug?extid=44b38bcb874d81a15a57
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: i386
+It probably takes a moment for the mailing list to deliver the patch to 
+everybody.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Cheers,
+Christian.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+44b38bcb874d81a15a57@syzkaller.appspotmail.com
+>
+> Cheers,
+> Tommaso
+>
+>> Thanks,
+>> Christian.
+>>
+>>> Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+>>> ---
+>>>    drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c | 2 +-
+>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
+>>> index 58088c663125..efa3dc9b69fd 100644
+>>> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
+>>> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
+>>> @@ -1168,7 +1168,7 @@ static int amdgpu_cs_submit(struct amdgpu_cs_parser *p,
+>>>    	struct amdgpu_bo_list_entry *e;
+>>>    	struct amdgpu_job *job;
+>>>    	uint64_t seq;
+>>> -	int r;
+>>> +	int r = 0;
+>>>    	job = p->job;
+>>>    	p->job = NULL;
 
-======================================================
-WARNING: possible circular locking dependency detected
-6.0.0-rc5-syzkaller-00025-g3245cb65fd91 #0 Not tainted
-------------------------------------------------------
-syz-executor.4/21149 is trying to acquire lock:
-ffff8880178441e8 (rlock-AF_UNIX){+.+.}-{2:2}, at: skb_queue_tail+0x21/0x140 net/core/skbuff.c:3400
-
-but task is already holding lock:
-ffff888017844670 (&u->lock/1){+.+.}-{2:2}, at: unix_state_double_lock net/unix/af_unix.c:1298 [inline]
-ffff888017844670 (&u->lock/1){+.+.}-{2:2}, at: unix_state_double_lock+0x77/0xa0 net/unix/af_unix.c:1290
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #1 (&u->lock/1){+.+.}-{2:2}:
-       _raw_spin_lock_nested+0x30/0x40 kernel/locking/spinlock.c:378
-       sk_diag_dump_icons net/unix/diag.c:87 [inline]
-       sk_diag_fill+0xaaf/0x10d0 net/unix/diag.c:155
-       sk_diag_dump net/unix/diag.c:193 [inline]
-       unix_diag_dump+0x3a9/0x640 net/unix/diag.c:217
-       netlink_dump+0x541/0xc20 net/netlink/af_netlink.c:2275
-       __netlink_dump_start+0x647/0x900 net/netlink/af_netlink.c:2380
-       netlink_dump_start include/linux/netlink.h:245 [inline]
-       unix_diag_handler_dump net/unix/diag.c:315 [inline]
-       unix_diag_handler_dump+0x5c2/0x830 net/unix/diag.c:304
-       __sock_diag_cmd net/core/sock_diag.c:235 [inline]
-       sock_diag_rcv_msg+0x31a/0x440 net/core/sock_diag.c:266
-       netlink_rcv_skb+0x153/0x420 net/netlink/af_netlink.c:2501
-       sock_diag_rcv+0x26/0x40 net/core/sock_diag.c:277
-       netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
-       netlink_unicast+0x543/0x7f0 net/netlink/af_netlink.c:1345
-       netlink_sendmsg+0x917/0xe10 net/netlink/af_netlink.c:1921
-       sock_sendmsg_nosec net/socket.c:714 [inline]
-       sock_sendmsg+0xcf/0x120 net/socket.c:734
-       sock_write_iter+0x291/0x3d0 net/socket.c:1108
-       call_write_iter include/linux/fs.h:2187 [inline]
-       do_iter_readv_writev+0x20b/0x3b0 fs/read_write.c:729
-       do_iter_write+0x182/0x700 fs/read_write.c:855
-       vfs_writev+0x1aa/0x630 fs/read_write.c:928
-       do_writev+0x279/0x2f0 fs/read_write.c:971
-       do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
-       __do_fast_syscall_32+0x65/0xf0 arch/x86/entry/common.c:178
-       do_fast_syscall_32+0x2f/0x70 arch/x86/entry/common.c:203
-       entry_SYSENTER_compat_after_hwframe+0x70/0x82
-
--> #0 (rlock-AF_UNIX){+.+.}-{2:2}:
-       check_prev_add kernel/locking/lockdep.c:3095 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3214 [inline]
-       validate_chain kernel/locking/lockdep.c:3829 [inline]
-       __lock_acquire+0x2a43/0x56d0 kernel/locking/lockdep.c:5053
-       lock_acquire kernel/locking/lockdep.c:5666 [inline]
-       lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5631
-       __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
-       _raw_spin_lock_irqsave+0x39/0x50 kernel/locking/spinlock.c:162
-       skb_queue_tail+0x21/0x140 net/core/skbuff.c:3400
-       unix_dgram_sendmsg+0xf41/0x1b50 net/unix/af_unix.c:2043
-       sock_sendmsg_nosec net/socket.c:714 [inline]
-       sock_sendmsg+0xcf/0x120 net/socket.c:734
-       ____sys_sendmsg+0x6eb/0x810 net/socket.c:2482
-       __sys_sendmsg_sock+0x26/0x30 net/socket.c:2548
-       io_sendmsg+0x246/0x7d0 io_uring/net.c:289
-       io_issue_sqe+0x6b6/0xd20 io_uring/io_uring.c:1577
-       io_queue_sqe io_uring/io_uring.c:1755 [inline]
-       io_submit_sqe io_uring/io_uring.c:2013 [inline]
-       io_submit_sqes+0x94e/0x1d30 io_uring/io_uring.c:2124
-       __do_sys_io_uring_enter+0xb85/0x1ea0 io_uring/io_uring.c:3054
-       do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
-       __do_fast_syscall_32+0x65/0xf0 arch/x86/entry/common.c:178
-       do_fast_syscall_32+0x2f/0x70 arch/x86/entry/common.c:203
-       entry_SYSENTER_compat_after_hwframe+0x70/0x82
-
-other info that might help us debug this:
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(&u->lock/1);
-                               lock(rlock-AF_UNIX);
-                               lock(&u->lock/1);
-  lock(rlock-AF_UNIX);
-
- *** DEADLOCK ***
-
-2 locks held by syz-executor.4/21149:
- #0: ffff88807dcb40a8 (&ctx->uring_lock){+.+.}-{3:3}, at: __do_sys_io_uring_enter+0xb7a/0x1ea0 io_uring/io_uring.c:3053
- #1: ffff888017844670 (&u->lock/1){+.+.}-{2:2}, at: unix_state_double_lock net/unix/af_unix.c:1298 [inline]
- #1: ffff888017844670 (&u->lock/1){+.+.}-{2:2}, at: unix_state_double_lock+0x77/0xa0 net/unix/af_unix.c:1290
-
-stack backtrace:
-CPU: 0 PID: 21149 Comm: syz-executor.4 Not tainted 6.0.0-rc5-syzkaller-00025-g3245cb65fd91 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2175
- check_prev_add kernel/locking/lockdep.c:3095 [inline]
- check_prevs_add kernel/locking/lockdep.c:3214 [inline]
- validate_chain kernel/locking/lockdep.c:3829 [inline]
- __lock_acquire+0x2a43/0x56d0 kernel/locking/lockdep.c:5053
- lock_acquire kernel/locking/lockdep.c:5666 [inline]
- lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5631
- __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
- _raw_spin_lock_irqsave+0x39/0x50 kernel/locking/spinlock.c:162
- skb_queue_tail+0x21/0x140 net/core/skbuff.c:3400
- unix_dgram_sendmsg+0xf41/0x1b50 net/unix/af_unix.c:2043
- sock_sendmsg_nosec net/socket.c:714 [inline]
- sock_sendmsg+0xcf/0x120 net/socket.c:734
- ____sys_sendmsg+0x6eb/0x810 net/socket.c:2482
- __sys_sendmsg_sock+0x26/0x30 net/socket.c:2548
- io_sendmsg+0x246/0x7d0 io_uring/net.c:289
- io_issue_sqe+0x6b6/0xd20 io_uring/io_uring.c:1577
- io_queue_sqe io_uring/io_uring.c:1755 [inline]
- io_submit_sqe io_uring/io_uring.c:2013 [inline]
- io_submit_sqes+0x94e/0x1d30 io_uring/io_uring.c:2124
- __do_sys_io_uring_enter+0xb85/0x1ea0 io_uring/io_uring.c:3054
- do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
- __do_fast_syscall_32+0x65/0xf0 arch/x86/entry/common.c:178
- do_fast_syscall_32+0x2f/0x70 arch/x86/entry/common.c:203
- entry_SYSENTER_compat_after_hwframe+0x70/0x82
-RIP: 0023:0xf7faf549
-Code: 03 74 c0 01 10 05 03 74 b8 01 10 06 03 74 b4 01 10 07 03 74 b0 01 10 08 03 74 d8 01 00 00 00 00 00 51 52 55 89 e5 0f 34 cd 80 <5d> 5a 59 c3 90 90 90 90 8d b4 26 00 00 00 00 8d b4 26 00 00 00 00
-RSP: 002b:00000000f7f895cc EFLAGS: 00000296 ORIG_RAX: 00000000000001aa
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 0000000000002a6e
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-----------------
-Code disassembly (best guess):
-   0:	03 74 c0 01          	add    0x1(%rax,%rax,8),%esi
-   4:	10 05 03 74 b8 01    	adc    %al,0x1b87403(%rip)        # 0x1b8740d
-   a:	10 06                	adc    %al,(%rsi)
-   c:	03 74 b4 01          	add    0x1(%rsp,%rsi,4),%esi
-  10:	10 07                	adc    %al,(%rdi)
-  12:	03 74 b0 01          	add    0x1(%rax,%rsi,4),%esi
-  16:	10 08                	adc    %cl,(%rax)
-  18:	03 74 d8 01          	add    0x1(%rax,%rbx,8),%esi
-  1c:	00 00                	add    %al,(%rax)
-  1e:	00 00                	add    %al,(%rax)
-  20:	00 51 52             	add    %dl,0x52(%rcx)
-  23:	55                   	push   %rbp
-  24:	89 e5                	mov    %esp,%ebp
-  26:	0f 34                	sysenter
-  28:	cd 80                	int    $0x80
-* 2a:	5d                   	pop    %rbp <-- trapping instruction
-  2b:	5a                   	pop    %rdx
-  2c:	59                   	pop    %rcx
-  2d:	c3                   	retq
-  2e:	90                   	nop
-  2f:	90                   	nop
-  30:	90                   	nop
-  31:	90                   	nop
-  32:	8d b4 26 00 00 00 00 	lea    0x0(%rsi,%riz,1),%esi
-  39:	8d b4 26 00 00 00 00 	lea    0x0(%rsi,%riz,1),%esi
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
