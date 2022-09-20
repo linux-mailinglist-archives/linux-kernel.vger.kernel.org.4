@@ -2,144 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 198FF5BD9A5
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 03:49:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DDF05BD9A7
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 03:49:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229986AbiITBtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 21:49:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40044 "EHLO
+        id S230011AbiITBtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 21:49:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229774AbiITBtB (ORCPT
+        with ESMTP id S229777AbiITBtl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 21:49:01 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2FAD550A2;
-        Mon, 19 Sep 2022 18:49:00 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28K0vhJS025801;
-        Tue, 20 Sep 2022 01:48:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2022-7-12;
- bh=o+TqE0mQG0aqk3NUHGdKo9TE//WRWdEDHmWOKZLyVFM=;
- b=cbBaVehpeFDNTMdCetfCw/OHxaKQ0GKJozuPx/siuiNF3Ao5+GP9kNECX5oZv29gIVUj
- tdCow2bw1pqxGLWaadxAkvv/A88CxrwpG7g8XKaYr050QC5XcxfRy2B3+g5uUR3fiVb/
- G8esDgl3CbTuplOyNIcDetyZbOGPF8vUbfQQuDw2o+wEHJZ2NtyVSbngRb3ARIbIg994
- mGrix2xAF/FWi20QfLw1n2PkJnA1m6pEOZGFtXct2qiEimyo6G6R4DbjbLewo1E+huZi
- u3kxTlKqHM6bE3X5CWuN1fQN4pheidoZ+72FiCOe48+VYS7nKEWugxxzyTZyW7x1SMjO AA== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3jn68m5e3c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 20 Sep 2022 01:48:51 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 28K0wN4U010173;
-        Tue, 20 Sep 2022 01:48:50 GMT
-Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2102.outbound.protection.outlook.com [104.47.70.102])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3jp39pywd1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 20 Sep 2022 01:48:50 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LxmsyKY44nJG/swo5Wj28pFoY5E18dfoUbW+HwpL234M8FFfmBGc3WS29aWw5MdwkwVrrfhqx0BaNlPdTm7SWNO6Qujl5xEXgPvjgJpmI97pxPCQ8xX0Ghyo5cOBISE5EBgmbpMpJMD72A6aU8ENR6oMMYGDOTCGS0WB/NNT4vjf8FWmIVAz/6Z5SAx+YgLUE7VcLESb6+JaC8sWNP+ufrAFfRhxAXe9bjlwnQhTZnU5Bf9ADb9KfEItoQPcJD5mZW1NEDngL9II2QicMa/xsgNAz8t7YnoWXCgI9CaKmqwqViDEcHoc4AhJKqt1zF5rb5KgoA3zAEhoMsdlDKZlVA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=o+TqE0mQG0aqk3NUHGdKo9TE//WRWdEDHmWOKZLyVFM=;
- b=WXOOY94NDRt6B0lwkR+ZATBFV5QhK1paHw7QOesYTSx9GvmytdGF1nh36i2vXoy6l70RsGS99khwIzl3QdKw47qzORAJhIWCJzLlFvD4rhfRfOZ6sT3aj+MPS7lXHaZ6eUJ3eVVLsZ6tuA+glxs6CoRvYAgyhcu8Bwx+7hTizIyyANkx0pOAcKmQtARyJ/wF8HF7NeNI9HgSRbwkajnFBOKbN4En6ASUHHLTh5ovBCBNxsjQJZiKBYWtU7l0pQ2TxBQHs3aqOugzXbNAGEaWpyAPZ2n4EgtjsfKrv1VYohqBzfUOS+6MkvRRwqQ2y7GijfrHoDleR85dM1SzF+Szog==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=o+TqE0mQG0aqk3NUHGdKo9TE//WRWdEDHmWOKZLyVFM=;
- b=WpYzYIlok5ZSGoH2iGkS18kcRmwnSDz0x05RlmaLN6D4IfYvpyxY3QH+enCXxV44kPYT7n7Rj3Ff/bPtLvIE1gxkv/m40d0+85alwcMKATj/iGGdSGlkSgZ8f/+xoNrDEn+WHj2xzCrhEbs65PsX+B3AZCC/bWpk/6KKhR+qw6s=
-Received: from SA1PR10MB5711.namprd10.prod.outlook.com (2603:10b6:806:23e::20)
- by BN0PR10MB4934.namprd10.prod.outlook.com (2603:10b6:408:120::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.21; Tue, 20 Sep
- 2022 01:48:48 +0000
-Received: from SA1PR10MB5711.namprd10.prod.outlook.com
- ([fe80::610f:82ba:a9ad:bd65]) by SA1PR10MB5711.namprd10.prod.outlook.com
- ([fe80::610f:82ba:a9ad:bd65%7]) with mapi id 15.20.5632.021; Tue, 20 Sep 2022
- 01:48:48 +0000
-Date:   Mon, 19 Sep 2022 21:48:45 -0400
-From:   Daniel Jordan <daniel.m.jordan@oracle.com>
-To:     eadavis@sina.com
-Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        steffen.klassert@secunet.com,
-        syzbot+bc05445bc14148d51915@syzkaller.appspotmail.com,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [PATCH v2] padata: fix lockdep warning
-Message-ID: <20220920014845.5dej6kcq7lcuhuly@oracle.com>
-References: <20220919152740.t7keqbjfvl4ylf77@oracle.com>
- <20220920012508.403159-1-eadavis@sina.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220920012508.403159-1-eadavis@sina.com>
-X-ClientProxiedBy: MN2PR16CA0041.namprd16.prod.outlook.com
- (2603:10b6:208:234::10) To SA1PR10MB5711.namprd10.prod.outlook.com
- (2603:10b6:806:23e::20)
+        Mon, 19 Sep 2022 21:49:41 -0400
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E496647B;
+        Mon, 19 Sep 2022 18:49:39 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R981e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=ziyangzhang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VQGbhvo_1663638576;
+Received: from 30.97.56.91(mailfrom:ZiyangZhang@linux.alibaba.com fp:SMTPD_---0VQGbhvo_1663638576)
+          by smtp.aliyun-inc.com;
+          Tue, 20 Sep 2022 09:49:37 +0800
+Message-ID: <dbc78e92-ede7-fc63-1bee-83794bf1e33b@linux.alibaba.com>
+Date:   Tue, 20 Sep 2022 09:49:33 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA1PR10MB5711:EE_|BN0PR10MB4934:EE_
-X-MS-Office365-Filtering-Correlation-Id: b79ad1ac-b063-4cc6-371e-08da9aaa42e1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: IbH5nGTDGvhKKm5YMjIC4WLnY8VpI5567zFJhjq8V7N+6zr6FHu8NqJyiq42BL31fRVLiL9CMZUgvKta2NnyYYEqoZfO5QH+oj4PweBT2H1GpxQrCRMknBqB/n/bgKgZwkeaeRxgUZAjM7WciHe5na6Rh4+QSif7xP5Aq3mKAmdhm98uu1hTryPp3b/V4Xvklxc1F9S2Tjh3+qvbrvHOr1OfIKN2p2pUamR+HzYW1WH+plR2R2tNs3G1rTROzLOOkJfI/rddkhPsG5w8g6jPc7U4UbCowJ/SIEfdsHpMx4RB5OSRvicKaFZAPi0nCBDwA16tN+KCfJ5cnTULXdp61V6T+SHB5aiD4V8WYNdohrqgbYPBEmwh8NS7ZkOJ1ggXdxjeYugT8U70VHm8vyBKV1l4PLyJKyWNCbBnKZ18YjbyOGrOpFFgpueS5JTGXKgzwLxpi9+K88AlfxmD+Snm39kMaEVw/gRVjLjHJ3tg6HpODP79vdAhybx6NX+AMhUpOj4ah5eNTeu32OIhLvNwSSMXtr3zgHqsDwNHmZKB97QgurNJITbgiR9G6WWXBG2r1p/tWqFK/PkyGjSccuULkKQpmcj7X4L4GV54ajLy6TnvDb0HgluceiRyv5S4pvhyef83sdq6UyiAQ2Tf6f2YZ8bF+SmPyvFtBk751UgNBgWQsByaDEhYRkPVqtHqKzJrwsaxeJDm5G7DC3VqBnpjyHOy6C6z1kSOtDBYc0vTiLJYtt4weNzz6zMdcqDwyaYRuBX/1HaZA2zHiFIIbPTRXw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR10MB5711.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(366004)(396003)(39860400002)(376002)(136003)(451199015)(36756003)(2906002)(316002)(8676002)(38350700002)(38100700002)(558084003)(4326008)(66476007)(5660300002)(66556008)(66946007)(6916009)(8936002)(86362001)(1076003)(186003)(478600001)(2616005)(6512007)(26005)(52116002)(6666004)(83380400001)(41300700001)(6506007)(6486002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?kQvyL8HGj564VjB3CartQETgspmbygZ6j8E1KETCCZRf1JeuvDWyW252HzzC?=
- =?us-ascii?Q?TDBvolPMAwz7kl4hek0p43NzyvhhIgmYiOo5+T8imKxpe0bdboGEWIoD+yBH?=
- =?us-ascii?Q?Ra+mCM4gfa12sakab2RHR81vQPiZse/cKKPEHuebZxR0EzSazBOas4XvjctV?=
- =?us-ascii?Q?ueM7N732iGI+rSGgGkxVD/fmJDOicHaOiPjL2hQ+1t7QSPXVqfeIe6fTllVz?=
- =?us-ascii?Q?Bha/o4c4kJRrzI3+H+wPO8SCqg5RI353Ji0WF/vmvGJ4fftKsPFHq2bMnDlH?=
- =?us-ascii?Q?PdH8d6be1uz9qtV5Tk1KhIp+CePDMjJT6gAtDYVFzNatrPzDahYg86zRARZo?=
- =?us-ascii?Q?hDsUbdV0bG17r0hsg0tWkQ+d6pXqO9V20az7kNaQXzjUsz4nNiuOj5Viqcza?=
- =?us-ascii?Q?KAaFrHLTOMfEucjFaweT8BUyflbRrCu+9zgJeJVH82O60AWJNQInnNdDh24a?=
- =?us-ascii?Q?nYLHsmolH+E84c/mI9BpmeTZQXXzzBfK2mJrru4eW/FS7Plstld9Ku4+ve/7?=
- =?us-ascii?Q?Y8FGLFIPmcWnPMAc4CbiXOQ3Af/93mhUpETYmPhZIFEi4tgqYZBOiqG0TXED?=
- =?us-ascii?Q?RkYnXqEH8MqVnKG7cDmXoBAGaIqxKtXv7tZ9WqNF1YhGSjt8XDuJLnPuRPkH?=
- =?us-ascii?Q?ROmdvjPZVw33hRQerA28AeztgP/Hcd8QICAkbi2lheTy9Jhi/AJLKm19NeWd?=
- =?us-ascii?Q?mlOdKJdZI8hfWa0PdVcIxetGKkVyqetzEtOFobwuUJ41iX3D+gAGmkIMhfiQ?=
- =?us-ascii?Q?NLfpm8S+G+rjzwXZI+277O4g4Mj2oToxYA15ct4y9bf9kRRsk2ynt/nudvFf?=
- =?us-ascii?Q?tUwWNGh/I6PJKCkyqzvPtRkW90PKoXzDQ6AWrfPTkrLOaRaJSFf/QpkMTJtn?=
- =?us-ascii?Q?aUAILD6LtrnaHiMTfXROKX2sEt7GWWGSvX4i/JRnyPV30eqkdcc9fT/i/9ov?=
- =?us-ascii?Q?8P112N0Gk4g2yXk1PBDINYLmKsxdaJY2jjXmTlvAQeJMGLsNt+/dPxPMx1LP?=
- =?us-ascii?Q?yYgGUUtO98u5kS7kki1pxSItiwLb/dnAuSF2pVgCQkuMHE2wVZwo4k33fxwf?=
- =?us-ascii?Q?TwfvXtpseX2gd3f1N02N4SsRPsWbBpHbTG1suIbNR6yPIyeHcu9uUdOXIX8Z?=
- =?us-ascii?Q?eEJuWkppBSgDZJMlepA1EAuWL7nlTgRNjY72Ge2OiKt/wdykL513IP0aeBL5?=
- =?us-ascii?Q?16uVQehX1R90R76YEXYhQtXelmKCaPAdF0s9xYMomq3YquTfLdJ3AOVATxI1?=
- =?us-ascii?Q?XsPu0VZ8AEPaBgDQWzXhu6K7JR2JgFk+EPOoebQuE8Y8sSnsL9NhUT7WewqI?=
- =?us-ascii?Q?CwWxSEp2yRMPtlxy/BJ7FNQDcEpGgzB7jlt20CU8ibdmZ/DtfI0+7enamPhX?=
- =?us-ascii?Q?vJCtPmsK3V5xBZQ7A/FOBN4luNucRKpkpsEfy2RBu4APX3eSzIiMW5p832zu?=
- =?us-ascii?Q?chPY5Wvf+Gt+/pgMz8ddG32gOSMEY2Jmm8rz0i3S02nRCvpTHg5OiMD54nA5?=
- =?us-ascii?Q?OTbrWURAA0bFOBrSs2sZn6B3AX+3v3iKQUbzTrUuyWNZxoHkvWg3B5S86lv1?=
- =?us-ascii?Q?kU+DcRkV7Cl0uq4Jx2tnAO0D40GMiT/C26hG4aiU4iCeLQoFwMkiE79ui5XE?=
- =?us-ascii?Q?tg=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b79ad1ac-b063-4cc6-371e-08da9aaa42e1
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR10MB5711.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Sep 2022 01:48:48.4598
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: sG6zyh3384JPjnuc6fiVQbJvaU5MFLA/2glH6WITkDCvuYw6lPUO1C8iwdBa94hdQD2MIGd1xK/9pMQ80aIjEmOQYCBLn/hk23amwVsG1hg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR10MB4934
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-19_05,2022-09-16_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=655 adultscore=0
- phishscore=0 bulkscore=0 malwarescore=0 spamscore=0 suspectscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209200010
-X-Proofpoint-ORIG-GUID: gWu8wYDPzrMiV8HgUf7shUiDwDSuNJLf
-X-Proofpoint-GUID: gWu8wYDPzrMiV8HgUf7shUiDwDSuNJLf
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.0
+Subject: Re: [PATCH V3 5/7] ublk_drv: consider recovery feature in aborting
+ mechanism
+Content-Language: en-US
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     axboe@kernel.dk, xiaoguang.wang@linux.alibaba.com,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        joseph.qi@linux.alibaba.com
+References: <20220913041707.197334-1-ZiyangZhang@linux.alibaba.com>
+ <20220913041707.197334-6-ZiyangZhang@linux.alibaba.com>
+ <Yyg3KLfQaxbS1miq@T590>
+ <9a682fac-f022-1f4d-5c2c-e1f0a84746d8@linux.alibaba.com>
+ <YyhhnbrHTJpW4Xcm@T590>
+From:   Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
+In-Reply-To: <YyhhnbrHTJpW4Xcm@T590>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -147,10 +50,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 09:25:08AM +0800, eadavis@sina.com wrote:
-> Changes in v2:
->   Add Fixes, Cc, And alert comments.
+On 2022/9/19 20:33, Ming Lei wrote:
+>>>> +
+>>>> +static void ublk_quiesce_queue(struct ublk_device *ub,
+>>>> +		struct ublk_queue *ubq)
+>>>> +{
+>>>> +	int i;
+>>>> +
+>>>> +	for (i = 0; i < ubq->q_depth; i++) {
+>>>> +		struct ublk_io *io = &ubq->ios[i];
+>>>> +
+>>>> +		if (!(io->flags & UBLK_IO_FLAG_ACTIVE)) {
+>>>> +			struct request *rq = blk_mq_tag_to_rq(
+>>>> +					ub->tag_set.tags[ubq->q_id], i);
+>>>> +
+>>>> +			WARN_ON_ONCE(!rq);
+>>>> +			pr_devel("%s: %s rq: qid %d tag %d io_flags %x\n", __func__,
+>>>> +					ublk_queue_can_use_recovery_reissue(ubq) ?
+>>>> +					"requeue" : "abort",
+>>>> +					ubq->q_id, i, io->flags);
+>>>> +			if (ublk_queue_can_use_recovery_reissue(ubq))
+>>>> +				blk_mq_requeue_request(rq, false);
+>>>
+>>> This way is too violent.
+>>>
+>>> There may be just one queue dying, but you requeue all requests
+>>> from any queue. I'd suggest to take the approach in ublk_daemon_monitor_work(),
+>>> such as, just requeuing requests in dying queue.
+>>
+>> If we want to start a new process after a crash for USER_RECOVERY, all old ubq_daemons
+>> must exit and rqs of all queues have to be requeued/aborted. We cannot let live
+>> ubq_daemons run any more because they do not belong to the new process.
+> 
+> IMO, the old process really can exist, and recently even I got such
+> requirement for switching queue from one thread to another.
 
-I appreciate the feedback you addressed, but kindly wait until we've
-reached a consensus on the last version before sending a new one.
-Thanks.
+For now, only one process can open /dev/ublkcX, so a new process is necessary now.
+
+If you think "per ubq_daemon" recovery is reasonable, I can do that in the future
+if multiple processes is supported. But I really suggest that we can keep current
+design as the first step which assumes all ubq_daemons are exited and a new process
+is started, and that really meets our requirement.
+
+BTW, START_USER_RECOVERY has to be reconsidered because we may need to pass a ubq_id
+with it.
+
+> 
+> What we should do is to get all inflight requests done, and cancel all io
+> commands, no matter if the ubq pthread is dead or live.
+> 
+>>
+>> BTW, I really wonder why there could be just one queue dying? All queues must be dying
+>> shortly after any ubq_daemon is dying since they are all pthreads in the same process.
+> 
+> You can't assume it is always so. Maybe one pthread is dead first, and
+> others are dying later, maybe just one is dead.
+
+Yes, I know there may be only one pthread is dead while others keep running, but now
+ublk_drv only support one process opening the same /dev/ublkcX, so other pthreads
+must dead(no matter they are aborted by signal or themselves) later.
+
+> 
+> If one queue's pthread is live, you may get trouble by simply requeuing
+> the request, that is why I suggest to re-use the logic of
+> ublk_daemon_monitor_work/ublk_abort_queue().
+
+Actually, if any ubq_daemon is live, no rqs are requeued, please see the check in
+ublk_quiesce_dev(). It always makes sure that ALL ubq_daemons are dying, then it
+starts quiesce jobs.
+
+> 
+> For stopping device, request queue is frozen in del_gendisk() and all
+> in-flight requests are drained, and monitor work provides such
+> guarantee.
+> 
+> For user recovery, monitor work should help you too by aborting one
+> queue if it is dying until all requests are drained.
+
+Monitor work can schedule quiesce_work if it finds a dying ubq_daemon.
+Then quiesce_work calls ublk_quiesce_dev(). I do this because ublk_quiesce_dev()
+has to wait all inflight rqs with ACTIVE set being requeued.
+
+> 
+>>
+>>>
+>>> That said you still can re-use the logic in ublk_abort_queue()/ublk_daemon_monitor_work()
+>>> for making progress, just changing aborting request with requeue in
+>>> ublk_abort_queue().
+>>
+>> I get your point, but it may be hard to reuse the logic in ublk_daemon_monitor_work()
+>> because:
+>> (1) we have to quiesce request queue in ublk_quiesce_dev(). This has to be done with
+>>     ub_mutex.
+>> (2) ublk_quiesce_dev() cannot be run after rqs are requeued/aborted.
+> 
+> I don't get your point, the request queue needs to be quiesced once, then
+> either inflight requests are requeued if the queue is dying, or completed by
+> the queue's pthread if it is live. As you mentioned, in reality, most times,
+> all pthreads will be killed, but timing can be different, and I think
+> you can not requeue one request if the ubq pthread isn't dying.
+
+I do not requeue rqs with a live ubq_daemon. ublk_quiesce_dev() always starts
+after all ubq_daemons are dying.
+
+Regards,
+Zhang.
