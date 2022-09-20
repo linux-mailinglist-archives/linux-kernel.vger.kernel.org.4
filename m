@@ -2,107 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 337D85BF06B
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 00:44:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2C5F5BF056
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 00:42:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230179AbiITWnk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 18:43:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55000 "EHLO
+        id S230243AbiITWl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 18:41:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbiITWnh (ORCPT
+        with ESMTP id S230108AbiITWlz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 18:43:37 -0400
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA236745F
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 15:43:36 -0700 (PDT)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-12b542cb1d3so6434644fac.13
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 15:43:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=UreT1JFCWLwfJPYC+Sa2QhjvGuzvBwnaZ7R243GgYBI=;
-        b=C8Pluupfoou+Dwog6ZapihxJf/eRoO0iYADDCtKbVAwT0ypAq784j8Ir/H6UrOmah4
-         ArIFGR3h8xhtpxerjL1VPkl9lAyjRul+HG9Y9wo/jQ1K08A17CHbSH3i9YIwCrri7kMS
-         2lrZgGlJTgyEjTi40N6mnkxusIfDX7NKzVAAe5tevO5Dk6l64OOw6C41ZwRs7jD7dVBu
-         0rLbXgaBG1VobX7uGcsqfrt0M+ZwnrU9A5LqzdJfCZBWZe2R7Bgye0EpWhLjKTxsjvqd
-         YEa5wvZiSanMeRknQrQsTwFv00wfacNX0pQdTkkvw6hNCaPu21CB9T89leZoECxi/3o7
-         RM7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=UreT1JFCWLwfJPYC+Sa2QhjvGuzvBwnaZ7R243GgYBI=;
-        b=udTg8dohBBBhcDJkPbBsUamibcB4plyv+lEF9A6yfDU0S3zEUtCe8VQpgQmIv5Su41
-         PE6LlupcEOB2dCzwJrM+CzFi5jfn0FPrdcSftP8rtmelgN7QKo28lWrsboX92pj1ls3l
-         cZ8XVQfEjG6N5zPKNrkEFS+b7KDFBFdWcXyYJLPxBNa5GHeLf4hHtamwKow7MaKR6h8d
-         SHVS4Nzb+AOux0YIGicOts2lJwIsqh7u0eOmTZpn2J2hYqUINbUjY2MweoSPEcqbgr2d
-         MXHbxnNFDes7nBy7L0J4Wj82FjsxitlkKzoflv/HhkHWMVGZHJ6DAtrOwwi6AcIzIS0B
-         TZaQ==
-X-Gm-Message-State: ACrzQf3kekabhAbEErguCfaxLxgmzyFuIuwHZbGlN1hntJa14szkjXH6
-        3o7xSR00qI8UyxlIGNcHcO7DdZUoKCg=
-X-Google-Smtp-Source: AMsMyM6kfmQfPNwBUXbkl3FQCfaOIXPlbr+N/kHTbA6GXWkd3ix3i4AgpZpcTWdqwtuHvVCQvTfnzQ==
-X-Received: by 2002:a05:6870:f29f:b0:12c:be38:cec6 with SMTP id u31-20020a056870f29f00b0012cbe38cec6mr3406034oap.109.1663713815908;
-        Tue, 20 Sep 2022 15:43:35 -0700 (PDT)
-Received: from localhost ([12.97.180.36])
-        by smtp.gmail.com with ESMTPSA id 187-20020aca06c4000000b0033e8629b323sm484430oig.35.2022.09.20.15.43.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 15:43:35 -0700 (PDT)
-Date:   Tue, 20 Sep 2022 15:41:23 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Alexey Kardashevskiy <aik@ozlabs.ru>,
-        Alan Modra <amodra@au1.ibm.com>, Daniel Axtens <dja@axtens.net>
-Subject: Re: [PATCH] powerpc/64: don't refer nr_cpu_ids in asm code when it's
- undefined
-Message-ID: <YypBk2gtlVCUBNXx@yury-laptop>
-References: <20220920152935.1569605-1-yury.norov@gmail.com>
- <20220921082006.2235b7d2@canb.auug.org.au>
+        Tue, 20 Sep 2022 18:41:55 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1959E5F7D4;
+        Tue, 20 Sep 2022 15:41:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663713714; x=1695249714;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=b9oRYIY/0P4/wRclJhpAT7JXzjpH5eB6xLUCqXF0c+o=;
+  b=e0N6oZtS17zIft38T/7oJ5bDMCsUqczd7NeRoPaFtoETbZDu2fEqDMY9
+   9j2JTOSyGHwN9gZk9rIEsb4W7SRdK1Ara91/ZdZbbDIgcwtkmUdKHj/gN
+   kgj//OyjpP1gk36Wi3ZGBtC7NMpMMKnRmEgtMgp8aS+N1kjhpVfKXAqtk
+   rZMALKW4d7EBVsxhlarfTvEktSQCtl7RtZrPe2ulqoXL0fiUyYqCoCB4h
+   xrUWX2VucwijfIYEjbePPl1i5jiyWTNFXsKtLu/x0au89vQJFbDJUVKA9
+   WK52Hvvj1dg51okFnXoYlWUe7buvsrpaM7lBHaKvRDtRB8dS2xRw90rXM
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10476"; a="361592913"
+X-IronPort-AV: E=Sophos;i="5.93,331,1654585200"; 
+   d="scan'208";a="361592913"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 15:41:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,331,1654585200"; 
+   d="scan'208";a="761493313"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 20 Sep 2022 15:41:50 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oalw6-000312-03;
+        Tue, 20 Sep 2022 22:41:50 +0000
+Date:   Wed, 21 Sep 2022 06:41:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ricardo Ribalda <ribalda@chromium.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-media@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-kernel@vger.kernel.org,
+        Ricardo Ribalda <ribalda@chromium.org>
+Subject: Re: [PATCH v1 2/2] media: uvcvideo: Use standard names for menus
+Message-ID: <202209210624.LFgi79pj-lkp@intel.com>
+References: <20220920-standard-menues-v1-2-839799192e9d@chromium.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220921082006.2235b7d2@canb.auug.org.au>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220920-standard-menues-v1-2-839799192e9d@chromium.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 21, 2022 at 08:20:06AM +1000, Stephen Rothwell wrote:
-> Hi Yury,
-> 
-> On Tue, 20 Sep 2022 08:29:35 -0700 Yury Norov <yury.norov@gmail.com> wrote:
-> >
-> 
-> > diff --git a/arch/powerpc/kernel/head_64.S b/arch/powerpc/kernel/head_64.S
-> > index cf2c08902c05..7cb97881635e 100644
-> > --- a/arch/powerpc/kernel/head_64.S
-> > +++ b/arch/powerpc/kernel/head_64.S
-> > @@ -400,7 +400,11 @@ generic_secondary_common_init:
-> >  #else
-> >  	LOAD_REG_ADDR(r8, paca_ptrs)	/* Load paca_ptrs pointe	 */
-> >  	ld	r8,0(r8)		/* Get base vaddr of array	 */
-> > +#if (NR_CPUS == 1) || defined(CONFIG_FORCE_NR_CPUS)
-> > +	LOAD_REG_IMMEDIATE(r7, NR_CPUS)
-> > +#else
-> >  	LOAD_REG_ADDR(r7, nr_cpu_ids)	/* Load nr_cpu_ids address       */
-> > +#endif
-> >  	lwz	r7,0(r7)		/* also the max paca allocated 	 */
-> >  	li	r5,0			/* logical cpu id                */
-> >  1:
-> > -- 
-> > 2.34.1
-> > 
-> 
-> I don't know PPC assembly very well, but should the #endif be one line
-> lower so that the constant is not dereferenced in the non-#else case? 
+Hi Ricardo,
 
-Looks like you're right. Thanks, I'll send a v2.
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on 521a547ced6477c54b4b0cc206000406c221b4d6]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ricardo-Ribalda/media-uvc-Get-menu-names-from-framework/20220920-221725
+base:   521a547ced6477c54b4b0cc206000406c221b4d6
+config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220921/202209210624.LFgi79pj-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/6f853c5bf3837302050a20e9142196ccb12a2918
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Ricardo-Ribalda/media-uvc-Get-menu-names-from-framework/20220920-221725
+        git checkout 6f853c5bf3837302050a20e9142196ccb12a2918
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/media/usb/uvc/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/media/usb/uvc/uvc_driver.c:2664:35: warning: unused variable 'power_line_frequency_controls_limited' [-Wunused-const-variable]
+   static const struct uvc_menu_info power_line_frequency_controls_limited[] = {
+                                     ^
+   1 warning generated.
+
+
+vim +/power_line_frequency_controls_limited +2664 drivers/media/usb/uvc/uvc_driver.c
+
+310fe52461e624 drivers/media/video/uvc/uvc_driver.c Laurent Pinchart 2009-12-09  2659  
+c0efd232929c2c drivers/media/video/uvc/uvc_driver.c Laurent Pinchart 2008-06-30  2660  /* ------------------------------------------------------------------------
+c0efd232929c2c drivers/media/video/uvc/uvc_driver.c Laurent Pinchart 2008-06-30  2661   * Driver initialization and cleanup
+c0efd232929c2c drivers/media/video/uvc/uvc_driver.c Laurent Pinchart 2008-06-30  2662   */
+c0efd232929c2c drivers/media/video/uvc/uvc_driver.c Laurent Pinchart 2008-06-30  2663  
+382075604a688b drivers/media/usb/uvc/uvc_driver.c   Ricardo Ribalda  2022-06-07 @2664  static const struct uvc_menu_info power_line_frequency_controls_limited[] = {
+382075604a688b drivers/media/usb/uvc/uvc_driver.c   Ricardo Ribalda  2022-06-07  2665  	{ 1, "50 Hz" },
+382075604a688b drivers/media/usb/uvc/uvc_driver.c   Ricardo Ribalda  2022-06-07  2666  	{ 2, "60 Hz" },
+382075604a688b drivers/media/usb/uvc/uvc_driver.c   Ricardo Ribalda  2022-06-07  2667  };
+382075604a688b drivers/media/usb/uvc/uvc_driver.c   Ricardo Ribalda  2022-06-07  2668  
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
