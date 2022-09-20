@@ -2,166 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32EA25BE0AB
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 10:48:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A7EA5BE0B0
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 10:49:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbiITIsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 04:48:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36480 "EHLO
+        id S229741AbiITIsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 04:48:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231529AbiITIru (ORCPT
+        with ESMTP id S230249AbiITIr4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 04:47:50 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7765B40E18
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 01:47:42 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id s6so2600436lfo.7
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 01:47:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=bPC0wOWHS3IfkpyiNHTrPOKy7lllIftEAhOiSZ57lWE=;
-        b=xx1IH7gi6vuXdqBC8gCyQHJnBpx94OKrk8RWttmSL7BTYXLGZYOAlUaOt5XuevZRnI
-         9mSoFEAlQNRW61/D2d1n/yX+9Dpz8Yu6GH3mETVc/M1epxE3yWY+B1QVJSFOqmmDrR7T
-         xRXFcc8j6PJmvvPziypomGMvbLcSUw8Zw5j+9gguuGJHRlf4aLbzn6XIoIFLgN/F8c8z
-         HJfRm3xT9jZxkfNdJxEZKyb6cZJ+UA0/c8SRFXYiowtu1Vmx4Y8RhqEbIf57ZdIwtSv/
-         G9u7MDQwRP+0LWtaOjq1H5EGhEDOJU0yCBXB261I5VwDV7N3/ApG/rF8WseQw7wYCd4q
-         JIbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=bPC0wOWHS3IfkpyiNHTrPOKy7lllIftEAhOiSZ57lWE=;
-        b=pFrBspUw76VPkMcltoqlNVUlqmcPfuATToSU4P9jzTlxKr4lqjUP3yQEkElwFlWimj
-         z4TT2Vsg22McWdIbOHKLQXNKB0q3UMdbf1+xaLioKZttg2FUQ4rovrR+/Gf5WS6PqcL+
-         rvtIicaGzi1FU0WJcHsK1Llv4ndA6BtwbGvPdHLsIfGAV85klkgrJe4rTImfO9Ai6ihm
-         BbLYwW8/sEDniKRkV3iiRIA8NvqZPxR2n1izQkruvwtu7I86E9b6YZw4fW3dhsT3W1Lz
-         BXVr4EpsWozY0kkv/qfK7seafPEKXYudbaL/p3MghgPaZD2jhmjF+D0J32ZxJh/MP9jT
-         DRPA==
-X-Gm-Message-State: ACrzQf0LxITfwODaeCoIcVBg608C61wLYPwCQojhvVlbExHXacsiejaL
-        yNGihOX6yhLqoae1EVL84xkRcQ==
-X-Google-Smtp-Source: AMsMyM5H098ZyPcH4hQiK06tnggqiLZI22yq2+Z+n6Ilu5uMR/fxGiIdZGjRfa+iAg143TZk4rwxyw==
-X-Received: by 2002:a05:6512:3c9f:b0:49d:d486:96d7 with SMTP id h31-20020a0565123c9f00b0049dd48696d7mr7980206lfv.596.1663663660813;
-        Tue, 20 Sep 2022 01:47:40 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id q9-20020ac246e9000000b0049486c66140sm205437lfo.119.2022.09.20.01.47.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Sep 2022 01:47:40 -0700 (PDT)
-Message-ID: <6f1ad082-74e4-e4e7-9304-5cdd95cc9f66@linaro.org>
-Date:   Tue, 20 Sep 2022 10:47:39 +0200
+        Tue, 20 Sep 2022 04:47:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69CF22FFE3;
+        Tue, 20 Sep 2022 01:47:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0793C621BB;
+        Tue, 20 Sep 2022 08:47:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62FEDC433C1;
+        Tue, 20 Sep 2022 08:47:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663663674;
+        bh=pR5dTdl8QcwJ+GvmFZiO2SLRRtJXz8jfmSxpS4Sg5j8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ba4XQtwGAf7J1/pirvwb2QTm7r6VcO9mCBVb/t5ItpDjSPWg1kVAmQvmhRnPlzdWK
+         M0M2Xcr72MHjcaKko5h4qXsPF/nlNVJuBIgAzm0yiSHNosgCrZwZm0ktefYa29EH07
+         hHdWJdIrz2nwGLVO3fc6DqYANxhX3SE66q3IHezXJkxWAwyxNDl7AFUEjF3wFhLr7H
+         JSE4QL8uirmaVME32WbISL1dhvxr9gp+PwL2hPZxij96487EATFMADTr0vU8O4mXXe
+         iAl0Wxq/2AX7yAowNJxEu2+thRIR3GhOM6H8VNB8wJ6nu81/71krUOyqR6wzhStEjr
+         I0fHgeeWmEL5Q==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oaYv6-0002Db-MC; Tue, 20 Sep 2022 10:47:56 +0200
+Date:   Tue, 20 Sep 2022 10:47:56 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v2] PCI: qcom: Add support for modular builds
+Message-ID: <Yyl+PNcbtSwzlgvh@hovoldconsulting.com>
+References: <20220721064720.10762-1-johan+linaro@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v2 1/2] dt-binding: pinctrl: Add NPCM8XX pinctrl and GPIO
- documentation
-Content-Language: en-US
-To:     Tomer Maimon <tmaimon77@gmail.com>
-Cc:     Rob Herring <robh@kernel.org>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
-        zhengbin13@huawei.com, OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>
-References: <20220714122322.63663-1-tmaimon77@gmail.com>
- <20220714122322.63663-2-tmaimon77@gmail.com>
- <20220718211046.GA3547663-robh@kernel.org>
- <CAP6Zq1hQ5m2kkQOKaYsKhPQhCW+vdsdyPRxxb_yRGMB=gJCPdw@mail.gmail.com>
- <3981e6e8-d4bb-b13d-7aaa-7aea83ffaad9@linaro.org>
- <CAP6Zq1gp1ph1wixgb6nL+2R8We2YJ2HQM2iC05itq_XWd2Cwig@mail.gmail.com>
- <bfca0379-7346-13e7-a18f-66740c5871b3@linaro.org>
- <CAP6Zq1gyDW8ZwwAZ1jyfNEZa09WN-biZZJY8tBmW_gzMzpj3ZA@mail.gmail.com>
- <2b0e6e33-ef76-4bd4-8894-53f9a3fe68b4@linaro.org>
- <CAP6Zq1iwW6HvvfM684VLG0ZT-0OLKT0udW4bHxsZsTMEypo2sg@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAP6Zq1iwW6HvvfM684VLG0ZT-0OLKT0udW4bHxsZsTMEypo2sg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220721064720.10762-1-johan+linaro@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/09/2022 10:32, Tomer Maimon wrote:
-> On Tue, 20 Sept 2022 at 11:21, Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 20/09/2022 09:59, Tomer Maimon wrote:
->>>>>>>>> +      pinctrl: pinctrl@f0800000 {
->>>>>>>>> +        compatible = "nuvoton,npcm845-pinctrl";
->>>>>>>>> +        ranges = <0x0 0x0 0xf0010000 0x8000>;
->>>>>>>>> +        #address-cells = <1>;
->>>>>>>>> +        #size-cells = <1>;
->>>>>>>>> +        nuvoton,sysgcr = <&gcr>;
->>>>>>>>> +
->>>>>>>>> +        gpio0: gpio@f0010000 {
->>>>>>>>
->>>>>>>> gpio@0
->>>>>>>>
->>>>>>>> Is this really a child block of the pinctrl? Doesn't really look like it
->>>>>>>> based on addressess. Where are the pinctrl registers? In the sysgcr? If
->>>>>>>> so, then pinctrl should be a child of it. But that doesn't really work
->>>>>>>> too well with gpio child nodes...
->>>>>>> the pin controller mux is handled by sysgcr this is why the sysgcr in
->>>>>>> the mother node,
->>>>>>> and the pin configuration are handled by the GPIO registers.  each
->>>>>>> GPIO bank (child) contains 32 GPIO.
->>>>>>> this is why the GPIO is the child node.
->>>>>>
->>>>>> Then maybe pinctrl should be the sysgcr and expose regmap for other devices?
->>>>> The pin controller using the sysgcr to handle the pinmux, this is why
->>>>> the sysgcr is in the mother node, is it problematic?
->>>>
->>>> You said pin-controller mux registers are in sysgcr, so it should not be
->>>> used via syscon.
->>> Sorry but maybe I missed something.
->>> the sysgcr is used for miscellaneous features and not only for the pin
->>> controller mux, this is why it used syscon and defined in the dtsi:
->>>                 gcr: system-controller@f0800000 {
->>>                         compatible = "nuvoton,npcm845-gcr", "syscon";
->>>                         reg = <0x0 0xf0800000 0x0 0x1000>;
->>>                 };
->>>>
->>>> Please provide address map description to convince us that this is
->>>> correct HW representation.
->>> GCR (sysgcr) registers 0xf0800000-0xf0801000 - used for miscellaneous
->>> features, not only pin mux.
->>> GPIO0 0xf0010000-0xf0011000
->>> GPIO1 0xf0011000-0xf0012000
->>> ...
->>> GPIO7 0xf0017000-0xf0018000
->>>>
->>
->> Then why your pinctrl is in sysgcr IO range? (pinctrl@f0800000)
-> you suggest using pinctrl@0 or pinctrl@f0010000 and not
-> pinctrl@f0800000 because 0xf0800000 is the GCR address that serve
-> miscellaneous features and not only pinmux controller ?
+Hi Lorenzo,
 
-If you have a map like you pasted, then DTS like this:
+On Thu, Jul 21, 2022 at 08:47:20AM +0200, Johan Hovold wrote:
+> Allow the Qualcomm PCIe controller driver to be built as a module, which
+> is useful for multi-platform kernels as well as during development.
+> 
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+> 
+> Changes in v2
+>  - rebase on next-20220720 (adjust context)
+>  - add Rob and Mani's reviewed-by tags
 
-syscon@f0800000 {}
-pinctrl@f0800000 {
-  gpio@f0010000 {}
-}
+Have you had a change to look at this one since you got back from
+vacation?
 
-Is quite weird, don't you think? You have two devices on the same unit
-address which is not allowed. You have child of pinctrl with entirely
-different unit address, so how is it its child?
+I believe this should be uncontroversial as we already have other
+modular dwc drivers and there's no mapping of legacy INTx interrupts
+involved.
 
-Best regards,
-Krzysztof
+>  drivers/pci/controller/dwc/Kconfig     |  2 +-
+>  drivers/pci/controller/dwc/pcie-qcom.c | 36 +++++++++++++++++++++++---
+>  2 files changed, 34 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/Kconfig b/drivers/pci/controller/dwc/Kconfig
+> index 62ce3abf0f19..230f56d1a268 100644
+> --- a/drivers/pci/controller/dwc/Kconfig
+> +++ b/drivers/pci/controller/dwc/Kconfig
+> @@ -168,7 +168,7 @@ config PCI_HISI
+>  	  Hip05 and Hip06 SoCs
+>  
+>  config PCIE_QCOM
+> -	bool "Qualcomm PCIe controller"
+> +	tristate "Qualcomm PCIe controller"
+>  	depends on OF && (ARCH_QCOM || COMPILE_TEST)
+>  	depends on PCI_MSI_IRQ_DOMAIN
+>  	select PCIE_DW_HOST
+> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> index 5ed164c2afa3..d176c635016b 100644
+> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> @@ -16,7 +16,7 @@
+>  #include <linux/io.h>
+>  #include <linux/iopoll.h>
+>  #include <linux/kernel.h>
+> -#include <linux/init.h>
+> +#include <linux/module.h>
+>  #include <linux/of_device.h>
+>  #include <linux/of_gpio.h>
+>  #include <linux/pci.h>
+> @@ -1518,6 +1518,15 @@ static int qcom_pcie_host_init(struct dw_pcie_rp *pp)
+>  	return ret;
+>  }
+>  
+> +static void qcom_pcie_host_deinit(struct qcom_pcie *pcie)
+> +{
+> +	qcom_ep_reset_assert(pcie);
+> +	if (pcie->cfg->ops->post_deinit)
+> +		pcie->cfg->ops->post_deinit(pcie);
+> +	phy_power_off(pcie->phy);
+> +	pcie->cfg->ops->deinit(pcie);
+> +}
+> +
+>  static const struct dw_pcie_host_ops qcom_pcie_dw_ops = {
+>  	.host_init = qcom_pcie_host_init,
+>  };
+> @@ -1752,6 +1761,22 @@ static int qcom_pcie_probe(struct platform_device *pdev)
+>  	return ret;
+>  }
+>  
+> +static int qcom_pcie_remove(struct platform_device *pdev)
+> +{
+> +	struct qcom_pcie *pcie = platform_get_drvdata(pdev);
+> +	struct device *dev = &pdev->dev;
+> +
+> +	dw_pcie_host_deinit(&pcie->pci->pp);
+> +	qcom_pcie_host_deinit(pcie);
+> +
+> +	phy_exit(pcie->phy);
+> +
+> +	pm_runtime_put_sync(dev);
+> +	pm_runtime_disable(dev);
+> +
+> +	return 0;
+> +}
+> +
+>  static const struct of_device_id qcom_pcie_match[] = {
+>  	{ .compatible = "qcom,pcie-apq8084", .data = &apq8084_cfg },
+>  	{ .compatible = "qcom,pcie-ipq8064", .data = &ipq8064_cfg },
+> @@ -1771,6 +1796,7 @@ static const struct of_device_id qcom_pcie_match[] = {
+>  	{ .compatible = "qcom,pcie-ipq6018", .data = &ipq6018_cfg },
+>  	{ }
+>  };
+> +MODULE_DEVICE_TABLE(of, qcom_pcie_match);
+>  
+>  static void qcom_fixup_class(struct pci_dev *dev)
+>  {
+> @@ -1786,10 +1812,14 @@ DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x1001, qcom_fixup_class);
+>  
+>  static struct platform_driver qcom_pcie_driver = {
+>  	.probe = qcom_pcie_probe,
+> +	.remove = qcom_pcie_remove,
+>  	.driver = {
+>  		.name = "qcom-pcie",
+> -		.suppress_bind_attrs = true,
+>  		.of_match_table = qcom_pcie_match,
+>  	},
+>  };
+> -builtin_platform_driver(qcom_pcie_driver);
+> +module_platform_driver(qcom_pcie_driver);
+> +
+> +MODULE_AUTHOR("Stanimir Varbanov <svarbanov@mm-sol.com>");
+> +MODULE_DESCRIPTION("Qualcomm PCIe root complex driver");
+> +MODULE_LICENSE("GPL");
+
+Johan
