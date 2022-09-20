@@ -2,189 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC7665BE688
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 14:58:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0BC45BE68C
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 14:59:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbiITM5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 08:57:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58274 "EHLO
+        id S229838AbiITM7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 08:59:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229802AbiITM5t (ORCPT
+        with ESMTP id S229802AbiITM7N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 08:57:49 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2064.outbound.protection.outlook.com [40.107.93.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47AA9CE5
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 05:57:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WqCi+s6ivpXKcdFyXkiPYHWASFjJqApusXwvb5JN+GPRXfIp+8iubKzlxXuycfzXmnLGdgbojFdwzMjkZRLWC/CtNVcrtJd2nhAZ19Igeqcyy/vCPhjMmgkOmFlRejGJWCoHkkxMYR7w3Jfk4dqVHsU+Oq3boL4M98bPOR6BveVXwjFhkjCPGNnYZimd0MQQ6ATx5DIV0JHpTkM1sQTN0hgY8wTzD6rCr1vLbrvfhPGN1mm2rMBfBHyD6zfajc82qmko40WA4jdCQrnqsE6juRq9E6+v29NciHSA9ijxwHHZCG4cRSu+0psQsLa12YbKapvLXlIZcWfYjCCnc8pq8A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rXSwpkXN02oaJjuNnxues01kGbJcSDrIuzKiJ/YXFu4=;
- b=je2Lix0jd/+MeS6i147XzpbYNKz0jemvzOYwkJfgNagWxLg1/vysbJam81WtLWgv8qk0VdFmNqBH0SpSq2U8hVkFcJRbos1GbTwh24lT8peq2eBIVKbNt/4yDLxRWU4TYAWL2vx1qdImHuK+7lDy1qlmFbZ9PIyufSCgF42Q3pzGqoyanDLo65e/iSMp9MaNtJNSZl5xVjpT0iIMtYYyFnsUH2IwIDgpdNvQFCrZbUUXZYTUEEqRHcUIU9t6o6ZYpJ5X77uIsfedOhPYaZ9XPx9Fidqq40PEhdD+7pKw9IEEsjiDNIuXLbCWKVGkiC4aOW42C6dLpxRRdolZkAesWw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rXSwpkXN02oaJjuNnxues01kGbJcSDrIuzKiJ/YXFu4=;
- b=ACgxdrBbgxfXllxmYDcKpFh5QLejSz8cLPNl0KkcOFSSJQLwoiK9VHnFadAr9ye0Xcoz2jNpdUw+51LdSnK9FPRI3jmjiDI8BrJiHIzvHcPdXA2BfDQmnMaoyWKdv3qh24uutIzy3dTOF99/GjOsj4hniutVVdJbR00GKoxvVxc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by DM4PR12MB7600.namprd12.prod.outlook.com (2603:10b6:8:108::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.14; Tue, 20 Sep
- 2022 12:57:46 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::653f:e59b:3f40:8fed]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::653f:e59b:3f40:8fed%6]) with mapi id 15.20.5632.021; Tue, 20 Sep 2022
- 12:57:45 +0000
-Message-ID: <f5b5b001-a1c7-bfa4-1b59-04c439fc9ace@amd.com>
-Date:   Tue, 20 Sep 2022 14:57:37 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] drm/amdgpu: initialize r variable into amdgpu_cs_submit
- function
-Content-Language: en-US
-To:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-Cc:     Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        llvm@lists.linux.dev, Philip Yang <Philip.Yang@amd.com>,
-        David Airlie <airlied@linux.ie>, linuxfancy@googlegroups.com,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
-        Tom Rix <trix@redhat.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        linux-amarula@amarulasolutions.com, sudipm.mukherjee@gmail.com
-References: <20220920122216.346321-1-tommaso.merciai@amarulasolutions.com>
- <3430255f-3675-eef2-92bd-4eb8be582c83@amd.com>
- <20220920123203.GA346517@tom-ThinkPad-T14s-Gen-2i>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20220920123203.GA346517@tom-ThinkPad-T14s-Gen-2i>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR3P281CA0028.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:1c::19) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Tue, 20 Sep 2022 08:59:13 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16DEFCE5
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 05:59:12 -0700 (PDT)
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 831C53F1A5
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 12:59:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1663678749;
+        bh=eqAwEupQJTaL2ViF2lYJ6wP4Hl3nR09hRm2qaq0rQeE=;
+        h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
+         Content-Type:Date:Message-ID;
+        b=jfwPx3+CMZMYXfO/R3CFtNTihgun1Cy5pHGdpOt4mnf/+ndsrIicf/AOhxqqtl+Wk
+         RfsOs08552W2rFoo1EBpbCC8WZTY251poQBrebvtzY4NjxZH7qNfmIeVCBl1j149B0
+         Oo92pKvtZZnf5CeaOdlpNViPsMbuT9UTDO7TztnNK/s9WtWelkgBiSZhONU5hNNm2e
+         YsyBYZN1o97e/E6CvgIiYeUS3WtVgQmqsw8THjBBC+caXV1KE2dGh8jGdJCP4p/K7W
+         E9yqb3rG2yeXXDlMR4KqUxI97sD3sllHiQGdtZWQRcvBBriQzm/+VVvvszAOzjNMqb
+         UKwUglPJSpD2A==
+Received: by mail-pf1-f200.google.com with SMTP id a3-20020aa795a3000000b0054b94ce7d12so1685648pfk.17
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 05:59:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:content-transfer-encoding:content-id:mime-version
+         :comments:references:in-reply-to:subject:cc:to:from
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=eqAwEupQJTaL2ViF2lYJ6wP4Hl3nR09hRm2qaq0rQeE=;
+        b=sIY1SV7nS5w85X0ByPQqTGZtcETmkLPheFFnaFsyEYrf4fd7aWWv8okb88ltj6U+BC
+         6OtjDwVWDR+r7e9kzY/LROygCvZ3opBC5MWaCC7QOJSuBAW31eGzkDnPL/HRQYakTQRz
+         7+OBtEC/SkVoEv439anqqFmf5qRyajlWIAxqUc305KXX+AJeLlIokECALHDgy6TZ3/yb
+         qUVPwkvEk9LaehAGjr8GV7IYGkNrNfkcqJ+fzY2IbS5FE7esJBRKvi+4xO2xRBhtuE/t
+         rBxibZx8Is24VF4ppfNeCHGZnvcJAUZEgkKrJDetyfdMnm0qmjBlSkfTyJb4f5RjMUot
+         MtLw==
+X-Gm-Message-State: ACrzQf1FboCsJOXpjCQxENzRCiEh0emzxfOek/cq9ulkcl+bqTy+OH++
+        m5NPQnNwxxLoUmWH9OI1WGSyc0GOUTzXYbCWIOtvVHNXkcGMya96QPw+7ZwSvNgUJ3nVLJEAQbx
+        NM3oiFy3wQQjwC3Tiy+VhGwA/PKlhTcGGcIUK2Obmug==
+X-Received: by 2002:a17:90a:64c8:b0:202:6d4a:90f8 with SMTP id i8-20020a17090a64c800b002026d4a90f8mr3885578pjm.11.1663678747868;
+        Tue, 20 Sep 2022 05:59:07 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5IRqKKEhDlg4r6E3b5F4XnWYIDAdTm4HI2gpPxq2zepmxnXXYtHpSQyLoifBaRxlfIrdwDPg==
+X-Received: by 2002:a17:90a:64c8:b0:202:6d4a:90f8 with SMTP id i8-20020a17090a64c800b002026d4a90f8mr3885553pjm.11.1663678747591;
+        Tue, 20 Sep 2022 05:59:07 -0700 (PDT)
+Received: from famine.localdomain ([50.125.80.157])
+        by smtp.gmail.com with ESMTPSA id d1-20020a170903230100b00176d347e9a7sm1364706plh.233.2022.09.20.05.59.06
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 20 Sep 2022 05:59:06 -0700 (PDT)
+Received: by famine.localdomain (Postfix, from userid 1000)
+        id 50334604E4; Tue, 20 Sep 2022 05:59:06 -0700 (PDT)
+Received: from famine (localhost [127.0.0.1])
+        by famine.localdomain (Postfix) with ESMTP id 4A2C6A0101;
+        Tue, 20 Sep 2022 05:59:06 -0700 (PDT)
+From:   Jay Vosburgh <jay.vosburgh@canonical.com>
+To:     Jonathan Toppins <jtoppins@redhat.com>
+cc:     "netdev @ vger . kernel . org" <netdev@vger.kernel.org>,
+        Veaceslav Falico <vfalico@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jussi Maki <joamaki@gmail.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net 2/2] bonding: fix NULL deref in bond_rr_gen_slave_id
+In-reply-to: <3cd65bdf26ba7b64c8ade801820562c426b90109.1663628505.git.jtoppins@redhat.com>
+References: <cover.1663628505.git.jtoppins@redhat.com> <3cd65bdf26ba7b64c8ade801820562c426b90109.1663628505.git.jtoppins@redhat.com>
+Comments: In-reply-to Jonathan Toppins <jtoppins@redhat.com>
+   message dated "Mon, 19 Sep 2022 19:08:46 -0400."
+X-Mailer: MH-E 8.6+git; nmh 1.6; Emacs 29.0.50
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|DM4PR12MB7600:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7064fe63-b480-4ca9-39c3-08da9b07b674
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kdxuNOSy5FycO82ggjPvZ2ksMF9Wq1j4roy3hG4S8tL5m2rK6+SZpZfV9NHxwUFhu/R2aXnpS3Kc2ujPcQhxr7pBqil6GxVR0UyF7SG8DYn6p/cg1gV76WRi9e0kcAnVCDUYvBkC1L0jPG5vL33vYzh+ieJh0sW/Z7TRP2kxLsgGpE0QaOYiR7xZItxITkeIVTZPLgR6x+/NpSTz5YRaWN45nsY6qKx/9A7pX3fmjh8qzoWlzpno79RX3+bnprRugWb0kdnVQevnOx1FoRUP9hob0uvZvCWGeKiS6CKb1RJcXpDt6txvrUqUwRjHk4jhh5VFiPabHPPMktnFHzw3IWYARQ91AuWBS4nDXWKk1v0HYa3kcLhb+nalWENvDwsDI/gwvunRqASy1WNPhxhWsIK32qcP1AicdEkQfqF2WZcLNikWXFEovll4O2gBOPauzgaKoeOCAFVlxVm/1385vdmMtOL4q/n+ns/pOtDw5HaoPAmtolqCdjN6XvI8evwVx6LoKWfH5TFtnVN61QUoySjFjVxyaEtv/r02XPfFZeD3BXpJ2/kbzrT47gImA9ev2NvkoL7m5diu3hxUYOpWDZTke3hprYlLdAdWV7X4AwnZXxfs2X9TmbJFd7kgzpJ+jhWHuluarv3BXDwQ7jmjXZ64Ud2tk3cju9mpPe8Uw5ck9LqZpj2hOFFPFA2B6KDskJQCwkGlCXC2ZqOLAZCUsATAx1CG1TGCq5pS6dhCCF/nvMMWVsyOmJTSg2QeXhDzDjkqLDLDTe85x7yCMwaa+hUzsO3+SJx+u00ZLi1znQY=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(366004)(376002)(346002)(39860400002)(396003)(451199015)(38100700002)(110136005)(66574015)(54906003)(83380400001)(31696002)(86362001)(2906002)(316002)(478600001)(36756003)(6512007)(26005)(6486002)(6666004)(41300700001)(6506007)(2616005)(186003)(7416002)(31686004)(5660300002)(4326008)(8936002)(66946007)(8676002)(66556008)(66476007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Wi90Vks4dllZd0czV0Y2NWc4RUNVbjVHYUNDVVBJUHNoeXVEUmhLM0NlcFRQ?=
- =?utf-8?B?cmUxT2JrclcwTHhkMFppTExvTlp4U2JuRGFNN2xRUm1uTVpON3NSeWxIUEll?=
- =?utf-8?B?QWQ1YjFITmpqZWR2M1ZUNGNtbmF5N0xJRjBjV2dtK1dhTVQ4ZVRUL0tzb2Vu?=
- =?utf-8?B?MlVSamR4Qi92eDROdFFOT0pXRWJLdTZqNm1nZ1RDTCt0eWUvNVJ3Rk14Mi8x?=
- =?utf-8?B?c2hxWjYyNnZZODBzRHh2TUtpYnYzRG5xaHFKVkFrdEQvcHZtNkVMS1BVNk5p?=
- =?utf-8?B?c09tMmsvb2lWRnk2c2cvTmlIWFdIMXZwWGlZUGdCU0ppWDNZNjMrc3UrMUI3?=
- =?utf-8?B?bTViaWNCaEE2ckxJZDdJRHRrYzJMNEJiVUxUUldWLzIxdThwWm1Zem9SbkRw?=
- =?utf-8?B?K01OL01lbmh0RlJNM0xnS3Z3WnpHVlFzRXdZR3FwMFNYRFNOc0pIU3dyZHVU?=
- =?utf-8?B?M0w0R2ZXQXAvL2xjNEsxMjNHaDdUcENaUU01T2lvdFAzUEdXbTMwWHhWeEhx?=
- =?utf-8?B?RU5GYkYwRFduMWVQN3llZUF0Qm5HMFJuVE5nRHc2VVNLdjBmWjJDN0E3N0NR?=
- =?utf-8?B?c3dOekxiQUtUbTZKTnFXNjlaQ0pxRDFnQ0lqTWRqZWNMMk1jS3dxaGxQTTZz?=
- =?utf-8?B?eU5tZlJKY1l2dTdHMVcyVlBvYjFYMjA4Vy9aNHc3N2VUL252R1ZnbUtnRUsw?=
- =?utf-8?B?OThjSGVJN1NIUEhEWEU5azdGY0lhd1ZGeG9rYnpCL2diVDVlSHBwVGkzTGJo?=
- =?utf-8?B?Q0ZMTUFOWjFOaURyQUNFV1Z5L0E3TzNkTTRTMUt4Sy9iWGNKeTc4Z25qOGNz?=
- =?utf-8?B?anovZ21jSEFCNGh0a0F3QWgxZE56OU1JMEdmYjZCOE93V0pZVzVZV0dsV2dS?=
- =?utf-8?B?VmVXNGVXNWF4c1NpNWhaNDVRTytiS3VVYmVxKzBlcEdZekNOTWRxdy9YV0pE?=
- =?utf-8?B?bTYzZnhoc0dBWTZHSGhkV2tXZXVKNnJJMm8rTFMvTjlkYnlycUozTXEvRDVC?=
- =?utf-8?B?ZlNIOHZUZTIvbTRpNm1STnF5WjBHdnNQWTNQYm5NMVZCUWw0RzJKVFhOZlQ4?=
- =?utf-8?B?SHVlZGlRdWNSUWswbkxUNVA4cnowOXpnRW42eG1HZEFmWEd4ZXVpYk1lL1Iw?=
- =?utf-8?B?OVNnOEdhb0s2OFZHa1BWR3ovVlROOVJ1ZmRKTy91RmlDalkwa05Nb0pEWFFj?=
- =?utf-8?B?MjhISTRqV1B5YUFGUDRzeWhTYWxWZ2lUQWQ5amhIRmNKRm81elhxUFRtSzZh?=
- =?utf-8?B?c2lCK20rK2IwSG1LMEVkL2R4am9LZU9PQW96cDhxZ2g5Z1VjaXBKQm40RmRG?=
- =?utf-8?B?Wi9hcXpLZ2kzbGtvQ1FPaXdjTVN4ZlhNUGg3eDg0WlF4RjJKSFAvK1RMQnVv?=
- =?utf-8?B?Q3NwZGZmdE92TFh1N2hpNUNkQUtsTk1EeG9QZTQ0VEpTSkNLcDVpTlV4Mll4?=
- =?utf-8?B?REFNNU9EQTlqekJqTFVzUzRpU2dRZjZHdG1aUStXdEVzY0h0eURXSTZyR1Zn?=
- =?utf-8?B?Mk9lMlJGUHpJRVFBQzlyd2VPaTZYbWJ1Z3ozdU82OTdrdS9iZlBvWVRsUWMz?=
- =?utf-8?B?YTV4eVNnWmRJa3psb1gwLzhFYkVBYTd5cjNhRXdxQ3M3NnY5UzQ3dEdSa3Zi?=
- =?utf-8?B?WEM3RWtiNisyWkZycjR3aWpVQmF6K3lMRmVCL0pSMnI5cFNvYUtUTDJ5ekln?=
- =?utf-8?B?VGNpSjY2TEVPQW53Vm1zRktLK2hKcFFKWmVhZC9kQXRNYTZFeENFRHppb1Fl?=
- =?utf-8?B?dHhTdWRCVWh5UkgzTUtWRDJReWRRUlVGcXpnMTJKUEFKUnFpaDdCUmhEZzBZ?=
- =?utf-8?B?TktxdHRqanRoRU9LcDU5b2hPbENEL0E0b2tsWDkwVkQ3QUhtdlZJaUdCcjdv?=
- =?utf-8?B?Y0FXVzFnY25YWFd1QzF4cDdzTzFzZWNaNWovQm1QdlhHdFlqR3gwUVNxanly?=
- =?utf-8?B?cDRCODdkNkdEUUttdDA2aEk4WGpSNDVQbU93Nkd0dlRDZ3J5ZytFQ2p2NTNC?=
- =?utf-8?B?aExVK0pPZjVGRFE1R1FxTzd0RzlxYy9qT2w4b3czTmdCcTNQdlg2MlY4ZGUw?=
- =?utf-8?B?eThoM0ZsTTVhZit1THAwODdYV0IzcU9wR0YrL1RSNEN3OHlNYnZvbGdNbUF3?=
- =?utf-8?Q?M3GU2DHMLLkNs8v+wJpUvUMpA?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7064fe63-b480-4ca9-39c3-08da9b07b674
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Sep 2022 12:57:45.7149
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: L5myRZFE900oBSmV6iWweldCWSbNDluI40n3d4THdXvHV+bvQ8nwW26dDFNu4EpM
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB7600
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <16281.1663678746.1@famine>
+Content-Transfer-Encoding: quoted-printable
+Date:   Tue, 20 Sep 2022 05:59:06 -0700
+Message-ID: <16282.1663678746@famine>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 20.09.22 um 14:32 schrieb Tommaso Merciai:
-> Hi Christian,
+Jonathan Toppins <jtoppins@redhat.com> wrote:
+
+>Fix a NULL dereference of the struct bonding.rr_tx_counter member because
+>if a bond is initially created with an initial mode !=3D zero (Round Robi=
+n)
+>the memory required for the counter is never created and when the mode is
+>changed there is never any attempt to verify the memory is allocated upon
+>switching modes.
 >
-> On Tue, Sep 20, 2022 at 02:23:58PM +0200, Christian König wrote:
->> Am 20.09.22 um 14:22 schrieb Tommaso Merciai:
->>> The builds of arm64 allmodconfig with clang failed to build
->>> next-20220920 with the following result:
->>>
->>> 1190:3: error: variable 'r' is uninitialized when used here [-Werror,-Wuninitialized]
->>> note: initialize the variable 'r' to silence this warning
->>>
->>> This fix compilation error
->> I've already send a patch to fix this to the mailing list 7 Minutes ago :)
->>
->> Please review or ack that one.
-> Sorry, my bad. Don't see your patch :)
-
-No problem, already reviewed and pushed :)
-
-It probably takes a moment for the mailing list to deliver the patch to 
-everybody.
-
-Cheers,
-Christian.
-
+>This causes the following Oops on an aarch64 machine:
+>    [  334.686773] Unable to handle kernel paging request at virtual addr=
+ess ffff2c91ac905000
+>    [  334.694703] Mem abort info:
+>    [  334.697486]   ESR =3D 0x0000000096000004
+>    [  334.701234]   EC =3D 0x25: DABT (current EL), IL =3D 32 bits
+>    [  334.706536]   SET =3D 0, FnV =3D 0
+>    [  334.709579]   EA =3D 0, S1PTW =3D 0
+>    [  334.712719]   FSC =3D 0x04: level 0 translation fault
+>    [  334.717586] Data abort info:
+>    [  334.720454]   ISV =3D 0, ISS =3D 0x00000004
+>    [  334.724288]   CM =3D 0, WnR =3D 0
+>    [  334.727244] swapper pgtable: 4k pages, 48-bit VAs, pgdp=3D00000804=
+4d662000
+>    [  334.733944] [ffff2c91ac905000] pgd=3D0000000000000000, p4d=3D00000=
+00000000000
+>    [  334.740734] Internal error: Oops: 96000004 [#1] SMP
+>    [  334.745602] Modules linked in: bonding tls veth rfkill sunrpc arm_=
+spe_pmu vfat fat acpi_ipmi ipmi_ssif ixgbe igb i40e mdio ipmi_devintf ipmi=
+_msghandler arm_cmn arm_dsu_pmu cppc_cpufreq acpi_tad fuse zram crct10dif_=
+ce ast ghash_ce sbsa_gwdt nvme drm_vram_helper drm_ttm_helper nvme_core tt=
+m xgene_hwmon
+>    [  334.772217] CPU: 7 PID: 2214 Comm: ping Not tainted 6.0.0-rc4-0013=
+3-g64ae13ed4784 #4
+>    [  334.779950] Hardware name: GIGABYTE R272-P31-00/MP32-AR1-00, BIOS =
+F18v (SCP: 1.08.20211002) 12/01/2021
+>    [  334.789244] pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS =
+BTYPE=3D--)
+>    [  334.796196] pc : bond_rr_gen_slave_id+0x40/0x124 [bonding]
+>    [  334.801691] lr : bond_xmit_roundrobin_slave_get+0x38/0xdc [bonding=
+]
+>    [  334.807962] sp : ffff8000221733e0
+>    [  334.811265] x29: ffff8000221733e0 x28: ffffdbac8572d198 x27: ffff8=
+0002217357c
+>    [  334.818392] x26: 000000000000002a x25: ffffdbacb33ee000 x24: ffff0=
+7ff980fa000
+>    [  334.825519] x23: ffffdbacb2e398ba x22: ffff07ff98102000 x21: ffff0=
+7ff981029c0
+>    [  334.832646] x20: 0000000000000001 x19: ffff07ff981029c0 x18: 00000=
+00000000014
+>    [  334.839773] x17: 0000000000000000 x16: ffffdbacb1004364 x15: 0000a=
+aaabe2f5a62
+>    [  334.846899] x14: ffff07ff8e55d968 x13: ffff07ff8e55db30 x12: 00000=
+00000000000
+>    [  334.854026] x11: ffffdbacb21532e8 x10: 0000000000000001 x9 : ffffd=
+bac857178ec
+>    [  334.861153] x8 : ffff07ff9f6e5a28 x7 : 0000000000000000 x6 : 00000=
+0007c2b3742
+>    [  334.868279] x5 : ffff2c91ac905000 x4 : ffff2c91ac905000 x3 : ffff0=
+7ff9f554400
+>    [  334.875406] x2 : ffff2c91ac905000 x1 : 0000000000000001 x0 : ffff0=
+7ff981029c0
+>    [  334.882532] Call trace:
+>    [  334.884967]  bond_rr_gen_slave_id+0x40/0x124 [bonding]
+>    [  334.890109]  bond_xmit_roundrobin_slave_get+0x38/0xdc [bonding]
+>    [  334.896033]  __bond_start_xmit+0x128/0x3a0 [bonding]
+>    [  334.901001]  bond_start_xmit+0x54/0xb0 [bonding]
+>    [  334.905622]  dev_hard_start_xmit+0xb4/0x220
+>    [  334.909798]  __dev_queue_xmit+0x1a0/0x720
+>    [  334.913799]  arp_xmit+0x3c/0xbc
+>    [  334.916932]  arp_send_dst+0x98/0xd0
+>    [  334.920410]  arp_solicit+0xe8/0x230
+>    [  334.923888]  neigh_probe+0x60/0xb0
+>    [  334.927279]  __neigh_event_send+0x3b0/0x470
+>    [  334.931453]  neigh_resolve_output+0x70/0x90
+>    [  334.935626]  ip_finish_output2+0x158/0x514
+>    [  334.939714]  __ip_finish_output+0xac/0x1a4
+>    [  334.943800]  ip_finish_output+0x40/0xfc
+>    [  334.947626]  ip_output+0xf8/0x1a4
+>    [  334.950931]  ip_send_skb+0x5c/0x100
+>    [  334.954410]  ip_push_pending_frames+0x3c/0x60
+>    [  334.958758]  raw_sendmsg+0x458/0x6d0
+>    [  334.962325]  inet_sendmsg+0x50/0x80
+>    [  334.965805]  sock_sendmsg+0x60/0x6c
+>    [  334.969286]  __sys_sendto+0xc8/0x134
+>    [  334.972853]  __arm64_sys_sendto+0x34/0x4c
+>    [  334.976854]  invoke_syscall+0x78/0x100
+>    [  334.980594]  el0_svc_common.constprop.0+0x4c/0xf4
+>    [  334.985287]  do_el0_svc+0x38/0x4c
+>    [  334.988591]  el0_svc+0x34/0x10c
+>    [  334.991724]  el0t_64_sync_handler+0x11c/0x150
+>    [  334.996072]  el0t_64_sync+0x190/0x194
+>    [  334.999726] Code: b9001062 f9403c02 d53cd044 8b040042 (b8210040)
+>    [  335.005810] ---[ end trace 0000000000000000 ]---
+>    [  335.010416] Kernel panic - not syncing: Oops: Fatal exception in i=
+nterrupt
+>    [  335.017279] SMP: stopping secondary CPUs
+>    [  335.021374] Kernel Offset: 0x5baca8eb0000 from 0xffff800008000000
+>    [  335.027456] PHYS_OFFSET: 0x80000000
+>    [  335.030932] CPU features: 0x0000,0085c029,19805c82
+>    [  335.035713] Memory Limit: none
+>    [  335.038756] Rebooting in 180 seconds..
 >
-> Cheers,
-> Tommaso
->
->> Thanks,
->> Christian.
->>
->>> Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
->>> ---
->>>    drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c | 2 +-
->>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
->>> index 58088c663125..efa3dc9b69fd 100644
->>> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
->>> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
->>> @@ -1168,7 +1168,7 @@ static int amdgpu_cs_submit(struct amdgpu_cs_parser *p,
->>>    	struct amdgpu_bo_list_entry *e;
->>>    	struct amdgpu_job *job;
->>>    	uint64_t seq;
->>> -	int r;
->>> +	int r = 0;
->>>    	job = p->job;
->>>    	p->job = NULL;
+>The is to allocate the memory in bond_open() which is guaranteed to be
+    ^
+   "fix" or "remedy" or the like here?
 
+	Other than the missing word, the patch looks good to me.
+
+	-J
+
+>called before any packets are processed.
+>
+>Fixes: 848ca9182a7d ("net: bonding: Use per-cpu rr_tx_counter")
+>Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
+>---
+> drivers/net/bonding/bond_main.c | 15 ++++++---------
+> 1 file changed, 6 insertions(+), 9 deletions(-)
+>
+>diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_m=
+ain.c
+>index bc6d8b0aa6fb..86d42306aa5e 100644
+>--- a/drivers/net/bonding/bond_main.c
+>+++ b/drivers/net/bonding/bond_main.c
+>@@ -4182,6 +4182,12 @@ static int bond_open(struct net_device *bond_dev)
+> 	struct list_head *iter;
+> 	struct slave *slave;
+> =
+
+>+	if (BOND_MODE(bond) =3D=3D BOND_MODE_ROUNDROBIN && !bond->rr_tx_counter=
+) {
+>+		bond->rr_tx_counter =3D alloc_percpu(u32);
+>+		if (!bond->rr_tx_counter)
+>+			return -ENOMEM;
+>+	}
+>+
+> 	/* reset slave->backup and slave->inactive */
+> 	if (bond_has_slaves(bond)) {
+> 		bond_for_each_slave(bond, slave, iter) {
+>@@ -6243,15 +6249,6 @@ static int bond_init(struct net_device *bond_dev)
+> 	if (!bond->wq)
+> 		return -ENOMEM;
+> =
+
+>-	if (BOND_MODE(bond) =3D=3D BOND_MODE_ROUNDROBIN) {
+>-		bond->rr_tx_counter =3D alloc_percpu(u32);
+>-		if (!bond->rr_tx_counter) {
+>-			destroy_workqueue(bond->wq);
+>-			bond->wq =3D NULL;
+>-			return -ENOMEM;
+>-		}
+>-	}
+>-
+> 	spin_lock_init(&bond->stats_lock);
+> 	netdev_lockdep_set_classes(bond_dev);
+> =
+
+>-- =
+
+>2.31.1
+>
+
+---
+	-Jay Vosburgh, jay.vosburgh@canonical.com
