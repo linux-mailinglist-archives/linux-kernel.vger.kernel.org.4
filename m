@@ -2,460 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F2FB5BE391
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 12:43:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D5745BE3A3
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 12:44:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231415AbiITKma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 06:42:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58556 "EHLO
+        id S230255AbiITKny (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 06:43:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230307AbiITKl6 (ORCPT
+        with ESMTP id S231228AbiITKnZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 06:41:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1211B1DA;
-        Tue, 20 Sep 2022 03:41:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9A306B827B7;
-        Tue, 20 Sep 2022 10:41:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D502FC433C1;
-        Tue, 20 Sep 2022 10:41:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663670514;
-        bh=CKajWNG2El0lKl8w2iv0ftefJX8EJizlxTv2zF6YJ9s=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s35TOKT/kcAC41idXKms0W8aLFweBVk2jCGNcLgEb5NLBaHXQqoSifGqmBg0oZV30
-         xNUoekFGRvt+5V1R4Z6rXggWIGSE3yrhA/57FBQuTW3qr2oHDd4G86g/dU9TDCtlqY
-         Rf0hiBEg5znTcDZyLZN4ECo1RHNHmRmp80EZCwbs=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org, stable@vger.kernel.org
-Cc:     lwn@lwn.net, jslaby@suse.cz,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: Linux 5.4.214
-Date:   Tue, 20 Sep 2022 12:42:15 +0200
-Message-Id: <16636705341686@kroah.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <1663670534215131@kroah.com>
-References: <1663670534215131@kroah.com>
+        Tue, 20 Sep 2022 06:43:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 838CF5F9B
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 03:43:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663670592;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qMA0rQs86FOwfocxFPVrINYPjkbq3Q1x9nWeAx3V0gI=;
+        b=i7RiBaoiwVpRGjSHu0HPOwQxdPYI7vfZJX+lZuIGLVk1uY5VeQQMOWq2raBR/IQDPa/A+x
+        AntwPk+86NZyzWfHculruhB9SBe5HHYlgiVDfOmOvfh8kwMtR5OvhfTkm0Ka8wJCfwnmWa
+        HVLeJjz/CXgb+R4dn0NWsHTIiQ31oPE=
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com
+ [209.85.210.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-593-UpDu1FJUOcK3GKrSb66Vxw-1; Tue, 20 Sep 2022 06:43:11 -0400
+X-MC-Unique: UpDu1FJUOcK3GKrSb66Vxw-1
+Received: by mail-pf1-f197.google.com with SMTP id ay1-20020a056a00300100b0053e7e97696bso1504056pfb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 03:43:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=qMA0rQs86FOwfocxFPVrINYPjkbq3Q1x9nWeAx3V0gI=;
+        b=A1pF70di5Yq1JDCS7lPUMaEg4aXVjApQ+GumNSOMbPTsMbdUBpR4v6qUIauJZ0oBCe
+         V6bs+bEjpoar4BQZn7r8KODi8ADJLTE19GcAAOHH+/faSuFn1mwHMicILYdKWJrCiiH7
+         VFrCGbtRJPfM5100RG8rNW6dF9VOr/YcDv+OsHKj+DRqw9K+fXlIPtVCcSdOKo2V/YmD
+         EZgblube+TTO0kdFkhuHFB8XlrN2q2YDV1TEYg0fRchLAhzyCH5IyehTMOkK9bdQC1am
+         Vw85iuHaLMLKwBNUMV0NFfWGCt9o91wOefebG+/JBOTNU07ERy74cfEj6oBCBmumjK/W
+         /+XA==
+X-Gm-Message-State: ACrzQf0EsTA5uC+9wXakCojouV0n9Dh2OBNNaPP0Rdns+tgQU3wo+7ZU
+        w6uK5UNZPh1WSkH6RDDFK6RDe1Bgo1aljhXGAdscMOTdNy1jNGJxeohadszJ8KZvMkqGK9wkWfz
+        8gRvnKLVdJhN+mRpyhNV54431RfANCNQM6Lq8TmOS
+X-Received: by 2002:a17:90b:1d12:b0:200:461c:fa7d with SMTP id on18-20020a17090b1d1200b00200461cfa7dmr3254654pjb.38.1663670589911;
+        Tue, 20 Sep 2022 03:43:09 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4LwOlWM+owfEUV010mJfgetj3SukXN+Y26a36gzyfhur973qtqvZjOgY/ZWBiyAeoxHSdwI2HqG3nq0p7A1iQ=
+X-Received: by 2002:a17:90b:1d12:b0:200:461c:fa7d with SMTP id
+ on18-20020a17090b1d1200b00200461cfa7dmr3254615pjb.38.1663670589623; Tue, 20
+ Sep 2022 03:43:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220919155916.1044219-1-rrangel@chromium.org>
+In-Reply-To: <20220919155916.1044219-1-rrangel@chromium.org>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Tue, 20 Sep 2022 12:42:58 +0200
+Message-ID: <CAO-hwJKcpXQjvLuQK+wfqkU0LHxKbbAyNCZnQGxe47fm1o6LQw@mail.gmail.com>
+Subject: Re: [PATCH v4 00/13] acpi: i2c: Use SharedAndWake and
+ ExclusiveAndWake to enable wake irq
+To:     Raul E Rangel <rrangel@chromium.org>
+Cc:     linux-acpi@vger.kernel.org,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        timvp@google.com, Hans De Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        rafael@kernel.org, Mario Limonciello <mario.limonciello@amd.com>,
+        jingle <jingle.wu@emc.com.tw>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alistair Francis <alistair@alistair23.me>,
+        Angela Czubak <acz@semihalf.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Bartosz Szczepanek <bsz@semihalf.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Johnny Chuang <johnny.chuang.emc@gmail.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Len Brown <lenb@kernel.org>, Rob Herring <robh@kernel.org>,
+        Terry Bowman <terry.bowman@amd.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        linux-gpio@vger.kernel.org, Linux I2C <linux-i2c@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-diff --git a/Documentation/input/joydev/joystick.rst b/Documentation/input/joydev/joystick.rst
-index 9746fd76cc58..f38c330c028e 100644
---- a/Documentation/input/joydev/joystick.rst
-+++ b/Documentation/input/joydev/joystick.rst
-@@ -517,6 +517,7 @@ All I-Force devices are supported by the iforce module. This includes:
- * AVB Mag Turbo Force
- * AVB Top Shot Pegasus
- * AVB Top Shot Force Feedback Racing Wheel
-+* Boeder Force Feedback Wheel
- * Logitech WingMan Force
- * Logitech WingMan Force Wheel
- * Guillemot Race Leader Force Feedback
-diff --git a/Makefile b/Makefile
-index 4a4c83d2b3f7..59f34d7f6f3b 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- VERSION = 5
- PATCHLEVEL = 4
--SUBLEVEL = 213
-+SUBLEVEL = 214
- EXTRAVERSION =
- NAME = Kleptomaniac Octopus
- 
-diff --git a/drivers/gpu/drm/msm/msm_rd.c b/drivers/gpu/drm/msm/msm_rd.c
-index c7832a951039..a6b024b06b36 100644
---- a/drivers/gpu/drm/msm/msm_rd.c
-+++ b/drivers/gpu/drm/msm/msm_rd.c
-@@ -191,6 +191,9 @@ static int rd_open(struct inode *inode, struct file *file)
- 	file->private_data = rd;
- 	rd->open = true;
- 
-+	/* Reset fifo to clear any previously unread data: */
-+	rd->fifo.head = rd->fifo.tail = 0;
-+
- 	/* the parsing tools need to know gpu-id to know which
- 	 * register database to load.
- 	 */
-diff --git a/drivers/hid/intel-ish-hid/ishtp-hid.h b/drivers/hid/intel-ish-hid/ishtp-hid.h
-index 5ffd0da3cf1f..65af0ebef79f 100644
---- a/drivers/hid/intel-ish-hid/ishtp-hid.h
-+++ b/drivers/hid/intel-ish-hid/ishtp-hid.h
-@@ -110,7 +110,7 @@ struct report_list {
-  * @multi_packet_cnt:	Count of fragmented packet count
-  *
-  * This structure is used to store completion flags and per client data like
-- * like report description, number of HID devices etc.
-+ * report description, number of HID devices etc.
-  */
- struct ishtp_cl_data {
- 	/* completion flags */
-diff --git a/drivers/hid/intel-ish-hid/ishtp/client.c b/drivers/hid/intel-ish-hid/ishtp/client.c
-index 1cc157126fce..c0d69303e3b0 100644
---- a/drivers/hid/intel-ish-hid/ishtp/client.c
-+++ b/drivers/hid/intel-ish-hid/ishtp/client.c
-@@ -626,13 +626,14 @@ static void ishtp_cl_read_complete(struct ishtp_cl_rb *rb)
- }
- 
- /**
-- * ipc_tx_callback() - IPC tx callback function
-+ * ipc_tx_send() - IPC tx send function
-  * @prm: Pointer to client device instance
-  *
-- * Send message over IPC either first time or on callback on previous message
-- * completion
-+ * Send message over IPC. Message will be split into fragments
-+ * if message size is bigger than IPC FIFO size, and all
-+ * fragments will be sent one by one.
-  */
--static void ipc_tx_callback(void *prm)
-+static void ipc_tx_send(void *prm)
- {
- 	struct ishtp_cl	*cl = prm;
- 	struct ishtp_cl_tx_ring	*cl_msg;
-@@ -677,32 +678,41 @@ static void ipc_tx_callback(void *prm)
- 			    list);
- 	rem = cl_msg->send_buf.size - cl->tx_offs;
- 
--	ishtp_hdr.host_addr = cl->host_client_id;
--	ishtp_hdr.fw_addr = cl->fw_client_id;
--	ishtp_hdr.reserved = 0;
--	pmsg = cl_msg->send_buf.data + cl->tx_offs;
-+	while (rem > 0) {
-+		ishtp_hdr.host_addr = cl->host_client_id;
-+		ishtp_hdr.fw_addr = cl->fw_client_id;
-+		ishtp_hdr.reserved = 0;
-+		pmsg = cl_msg->send_buf.data + cl->tx_offs;
-+
-+		if (rem <= dev->mtu) {
-+			/* Last fragment or only one packet */
-+			ishtp_hdr.length = rem;
-+			ishtp_hdr.msg_complete = 1;
-+			/* Submit to IPC queue with no callback */
-+			ishtp_write_message(dev, &ishtp_hdr, pmsg);
-+			cl->tx_offs = 0;
-+			cl->sending = 0;
- 
--	if (rem <= dev->mtu) {
--		ishtp_hdr.length = rem;
--		ishtp_hdr.msg_complete = 1;
--		cl->sending = 0;
--		list_del_init(&cl_msg->list);	/* Must be before write */
--		spin_unlock_irqrestore(&cl->tx_list_spinlock, tx_flags);
--		/* Submit to IPC queue with no callback */
--		ishtp_write_message(dev, &ishtp_hdr, pmsg);
--		spin_lock_irqsave(&cl->tx_free_list_spinlock, tx_free_flags);
--		list_add_tail(&cl_msg->list, &cl->tx_free_list.list);
--		++cl->tx_ring_free_size;
--		spin_unlock_irqrestore(&cl->tx_free_list_spinlock,
--			tx_free_flags);
--	} else {
--		/* Send IPC fragment */
--		spin_unlock_irqrestore(&cl->tx_list_spinlock, tx_flags);
--		cl->tx_offs += dev->mtu;
--		ishtp_hdr.length = dev->mtu;
--		ishtp_hdr.msg_complete = 0;
--		ishtp_send_msg(dev, &ishtp_hdr, pmsg, ipc_tx_callback, cl);
-+			break;
-+		} else {
-+			/* Send ipc fragment */
-+			ishtp_hdr.length = dev->mtu;
-+			ishtp_hdr.msg_complete = 0;
-+			/* All fregments submitted to IPC queue with no callback */
-+			ishtp_write_message(dev, &ishtp_hdr, pmsg);
-+			cl->tx_offs += dev->mtu;
-+			rem = cl_msg->send_buf.size - cl->tx_offs;
-+		}
- 	}
-+
-+	list_del_init(&cl_msg->list);
-+	spin_unlock_irqrestore(&cl->tx_list_spinlock, tx_flags);
-+
-+	spin_lock_irqsave(&cl->tx_free_list_spinlock, tx_free_flags);
-+	list_add_tail(&cl_msg->list, &cl->tx_free_list.list);
-+	++cl->tx_ring_free_size;
-+	spin_unlock_irqrestore(&cl->tx_free_list_spinlock,
-+		tx_free_flags);
- }
- 
- /**
-@@ -720,7 +730,7 @@ static void ishtp_cl_send_msg_ipc(struct ishtp_device *dev,
- 		return;
- 
- 	cl->tx_offs = 0;
--	ipc_tx_callback(cl);
-+	ipc_tx_send(cl);
- 	++cl->send_msg_cnt_ipc;
- }
- 
-diff --git a/drivers/input/joystick/iforce/iforce-main.c b/drivers/input/joystick/iforce/iforce-main.c
-index b2a68bc9f0b4..b86de1312512 100644
---- a/drivers/input/joystick/iforce/iforce-main.c
-+++ b/drivers/input/joystick/iforce/iforce-main.c
-@@ -50,6 +50,7 @@ static struct iforce_device iforce_device[] = {
- 	{ 0x046d, 0xc291, "Logitech WingMan Formula Force",		btn_wheel, abs_wheel, ff_iforce },
- 	{ 0x05ef, 0x020a, "AVB Top Shot Pegasus",			btn_joystick_avb, abs_avb_pegasus, ff_iforce },
- 	{ 0x05ef, 0x8884, "AVB Mag Turbo Force",			btn_wheel, abs_wheel, ff_iforce },
-+	{ 0x05ef, 0x8886, "Boeder Force Feedback Wheel",		btn_wheel, abs_wheel, ff_iforce },
- 	{ 0x05ef, 0x8888, "AVB Top Shot Force Feedback Racing Wheel",	btn_wheel, abs_wheel, ff_iforce }, //?
- 	{ 0x061c, 0xc0a4, "ACT LABS Force RS",                          btn_wheel, abs_wheel, ff_iforce }, //?
- 	{ 0x061c, 0xc084, "ACT LABS Force RS",				btn_wheel, abs_wheel, ff_iforce },
-diff --git a/drivers/net/ethernet/broadcom/tg3.c b/drivers/net/ethernet/broadcom/tg3.c
-index 70bd79dc43f2..a9962474d551 100644
---- a/drivers/net/ethernet/broadcom/tg3.c
-+++ b/drivers/net/ethernet/broadcom/tg3.c
-@@ -18154,16 +18154,20 @@ static void tg3_shutdown(struct pci_dev *pdev)
- 	struct net_device *dev = pci_get_drvdata(pdev);
- 	struct tg3 *tp = netdev_priv(dev);
- 
-+	tg3_reset_task_cancel(tp);
-+
- 	rtnl_lock();
-+
- 	netif_device_detach(dev);
- 
- 	if (netif_running(dev))
- 		dev_close(dev);
- 
--	if (system_state == SYSTEM_POWER_OFF)
--		tg3_power_down(tp);
-+	tg3_power_down(tp);
- 
- 	rtnl_unlock();
-+
-+	pci_disable_device(pdev);
- }
- 
- /**
-diff --git a/drivers/net/ieee802154/cc2520.c b/drivers/net/ieee802154/cc2520.c
-index 43506948e444..0432a4f829a9 100644
---- a/drivers/net/ieee802154/cc2520.c
-+++ b/drivers/net/ieee802154/cc2520.c
-@@ -507,6 +507,7 @@ cc2520_tx(struct ieee802154_hw *hw, struct sk_buff *skb)
- 		goto err_tx;
- 
- 	if (status & CC2520_STATUS_TX_UNDERFLOW) {
-+		rc = -EINVAL;
- 		dev_err(&priv->spi->dev, "cc2520 tx underflow exception\n");
- 		goto err_tx;
- 	}
-diff --git a/drivers/net/phy/dp83822.c b/drivers/net/phy/dp83822.c
-index cc1522550f2c..da3983352dd4 100644
---- a/drivers/net/phy/dp83822.c
-+++ b/drivers/net/phy/dp83822.c
-@@ -197,8 +197,7 @@ static int dp83822_config_intr(struct phy_device *phydev)
- 		if (misr_status < 0)
- 			return misr_status;
- 
--		misr_status |= (DP83822_RX_ERR_HF_INT_EN |
--				DP83822_ANEG_COMPLETE_INT_EN |
-+		misr_status |= (DP83822_ANEG_COMPLETE_INT_EN |
- 				DP83822_DUP_MODE_CHANGE_INT_EN |
- 				DP83822_SPEED_CHANGED_INT_EN |
- 				DP83822_LINK_STAT_INT_EN |
-diff --git a/drivers/nvme/target/tcp.c b/drivers/nvme/target/tcp.c
-index e9512d077b8a..eb5b39c2bba8 100644
---- a/drivers/nvme/target/tcp.c
-+++ b/drivers/nvme/target/tcp.c
-@@ -1416,6 +1416,9 @@ static void nvmet_tcp_state_change(struct sock *sk)
- 		goto done;
- 
- 	switch (sk->sk_state) {
-+	case TCP_FIN_WAIT2:
-+	case TCP_LAST_ACK:
-+		break;
- 	case TCP_FIN_WAIT1:
- 	case TCP_CLOSE_WAIT:
- 	case TCP_CLOSE:
-diff --git a/drivers/perf/arm_pmu_platform.c b/drivers/perf/arm_pmu_platform.c
-index e35cb76c8d10..6eb077db7384 100644
---- a/drivers/perf/arm_pmu_platform.c
-+++ b/drivers/perf/arm_pmu_platform.c
-@@ -118,7 +118,7 @@ static int pmu_parse_irqs(struct arm_pmu *pmu)
- 
- 	if (num_irqs == 1) {
- 		int irq = platform_get_irq(pdev, 0);
--		if (irq && irq_is_percpu_devid(irq))
-+		if ((irq > 0) && irq_is_percpu_devid(irq))
- 			return pmu_parse_percpu_irq(pmu, irq);
- 	}
- 
-diff --git a/drivers/platform/x86/acer-wmi.c b/drivers/platform/x86/acer-wmi.c
-index d27a564389a4..e88bd54ff8bd 100644
---- a/drivers/platform/x86/acer-wmi.c
-+++ b/drivers/platform/x86/acer-wmi.c
-@@ -93,6 +93,7 @@ static const struct key_entry acer_wmi_keymap[] __initconst = {
- 	{KE_KEY, 0x22, {KEY_PROG2} },    /* Arcade */
- 	{KE_KEY, 0x23, {KEY_PROG3} },    /* P_Key */
- 	{KE_KEY, 0x24, {KEY_PROG4} },    /* Social networking_Key */
-+	{KE_KEY, 0x27, {KEY_HELP} },
- 	{KE_KEY, 0x29, {KEY_PROG3} },    /* P_Key for TM8372 */
- 	{KE_IGNORE, 0x41, {KEY_MUTE} },
- 	{KE_IGNORE, 0x42, {KEY_PREVIOUSSONG} },
-@@ -106,7 +107,13 @@ static const struct key_entry acer_wmi_keymap[] __initconst = {
- 	{KE_IGNORE, 0x48, {KEY_VOLUMEUP} },
- 	{KE_IGNORE, 0x49, {KEY_VOLUMEDOWN} },
- 	{KE_IGNORE, 0x4a, {KEY_VOLUMEDOWN} },
--	{KE_IGNORE, 0x61, {KEY_SWITCHVIDEOMODE} },
-+	/*
-+	 * 0x61 is KEY_SWITCHVIDEOMODE. Usually this is a duplicate input event
-+	 * with the "Video Bus" input device events. But sometimes it is not
-+	 * a dup. Map it to KEY_UNKNOWN instead of using KE_IGNORE so that
-+	 * udev/hwdb can override it on systems where it is not a dup.
-+	 */
-+	{KE_KEY, 0x61, {KEY_UNKNOWN} },
- 	{KE_IGNORE, 0x62, {KEY_BRIGHTNESSUP} },
- 	{KE_IGNORE, 0x63, {KEY_BRIGHTNESSDOWN} },
- 	{KE_KEY, 0x64, {KEY_SWITCHVIDEOMODE} },	/* Display Switch */
-diff --git a/drivers/soc/fsl/Kconfig b/drivers/soc/fsl/Kconfig
-index f9ad8ad54a7d..df062477dab0 100644
---- a/drivers/soc/fsl/Kconfig
-+++ b/drivers/soc/fsl/Kconfig
-@@ -24,6 +24,7 @@ config FSL_MC_DPIO
-         tristate "QorIQ DPAA2 DPIO driver"
-         depends on FSL_MC_BUS
-         select SOC_BUS
-+        select FSL_GUTS
-         help
- 	  Driver for the DPAA2 DPIO object.  A DPIO provides queue and
- 	  buffer management facilities for software to interact with
-diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
-index 2f72753c3e22..0b37c8e550e7 100644
---- a/drivers/usb/storage/unusual_uas.h
-+++ b/drivers/usb/storage/unusual_uas.h
-@@ -62,6 +62,13 @@ UNUSUAL_DEV(0x0984, 0x0301, 0x0128, 0x0128,
- 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
- 		US_FL_IGNORE_UAS),
- 
-+/* Reported-by: Tom Hu <huxiaoying@kylinos.cn> */
-+UNUSUAL_DEV(0x0b05, 0x1932, 0x0000, 0x9999,
-+		"ASUS",
-+		"External HDD",
-+		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-+		US_FL_IGNORE_UAS),
-+
- /* Reported-by: David Webb <djw@noc.ac.uk> */
- UNUSUAL_DEV(0x0bc2, 0x331a, 0x0000, 0x9999,
- 		"Seagate",
-diff --git a/fs/tracefs/inode.c b/fs/tracefs/inode.c
-index 7878f145bf1b..8fbf8658644f 100644
---- a/fs/tracefs/inode.c
-+++ b/fs/tracefs/inode.c
-@@ -139,6 +139,8 @@ struct tracefs_mount_opts {
- 	kuid_t uid;
- 	kgid_t gid;
- 	umode_t mode;
-+	/* Opt_* bitfield. */
-+	unsigned int opts;
- };
- 
- enum {
-@@ -239,6 +241,7 @@ static int tracefs_parse_options(char *data, struct tracefs_mount_opts *opts)
- 	kgid_t gid;
- 	char *p;
- 
-+	opts->opts = 0;
- 	opts->mode = TRACEFS_DEFAULT_MODE;
- 
- 	while ((p = strsep(&data, ",")) != NULL) {
-@@ -273,24 +276,36 @@ static int tracefs_parse_options(char *data, struct tracefs_mount_opts *opts)
- 		 * but traditionally tracefs has ignored all mount options
- 		 */
- 		}
-+
-+		opts->opts |= BIT(token);
- 	}
- 
- 	return 0;
- }
- 
--static int tracefs_apply_options(struct super_block *sb)
-+static int tracefs_apply_options(struct super_block *sb, bool remount)
- {
- 	struct tracefs_fs_info *fsi = sb->s_fs_info;
- 	struct inode *inode = sb->s_root->d_inode;
- 	struct tracefs_mount_opts *opts = &fsi->mount_opts;
- 
--	inode->i_mode &= ~S_IALLUGO;
--	inode->i_mode |= opts->mode;
-+	/*
-+	 * On remount, only reset mode/uid/gid if they were provided as mount
-+	 * options.
-+	 */
-+
-+	if (!remount || opts->opts & BIT(Opt_mode)) {
-+		inode->i_mode &= ~S_IALLUGO;
-+		inode->i_mode |= opts->mode;
-+	}
- 
--	inode->i_uid = opts->uid;
-+	if (!remount || opts->opts & BIT(Opt_uid))
-+		inode->i_uid = opts->uid;
- 
--	/* Set all the group ids to the mount option */
--	set_gid(sb->s_root, opts->gid);
-+	if (!remount || opts->opts & BIT(Opt_gid)) {
-+		/* Set all the group ids to the mount option */
-+		set_gid(sb->s_root, opts->gid);
-+	}
- 
- 	return 0;
- }
-@@ -305,7 +320,7 @@ static int tracefs_remount(struct super_block *sb, int *flags, char *data)
- 	if (err)
- 		goto fail;
- 
--	tracefs_apply_options(sb);
-+	tracefs_apply_options(sb, true);
- 
- fail:
- 	return err;
-@@ -357,7 +372,7 @@ static int trace_fill_super(struct super_block *sb, void *data, int silent)
- 
- 	sb->s_op = &tracefs_super_operations;
- 
--	tracefs_apply_options(sb);
-+	tracefs_apply_options(sb, false);
- 
- 	return 0;
- 
-diff --git a/mm/mmap.c b/mm/mmap.c
-index e8cf6f88933c..eeebbb20accf 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -2605,6 +2605,7 @@ static void unmap_region(struct mm_struct *mm,
- {
- 	struct vm_area_struct *next = prev ? prev->vm_next : mm->mmap;
- 	struct mmu_gather tlb;
-+	struct vm_area_struct *cur_vma;
- 
- 	lru_add_drain();
- 	tlb_gather_mmu(&tlb, mm, start, end);
-@@ -2619,8 +2620,12 @@ static void unmap_region(struct mm_struct *mm,
- 	 * concurrent flush in this region has to be coming through the rmap,
- 	 * and we synchronize against that using the rmap lock.
- 	 */
--	if ((vma->vm_flags & (VM_PFNMAP|VM_MIXEDMAP)) != 0)
--		tlb_flush_mmu(&tlb);
-+	for (cur_vma = vma; cur_vma; cur_vma = cur_vma->vm_next) {
-+		if ((cur_vma->vm_flags & (VM_PFNMAP|VM_MIXEDMAP)) != 0) {
-+			tlb_flush_mmu(&tlb);
-+			break;
-+		}
-+	}
- 
- 	free_pgtables(&tlb, vma, prev ? prev->vm_end : FIRST_USER_ADDRESS,
- 				 next ? next->vm_start : USER_PGTABLES_CEILING);
+On Mon, Sep 19, 2022 at 5:59 PM Raul E Rangel <rrangel@chromium.org> wrote:
+>
+> Today, i2c drivers are making the assumption that their IRQs can also
+> be used as wake IRQs. This isn't always the case and it can lead to
+> spurious wakes. This has recently started to affect AMD Chromebooks.
+> With the introduction of
+> d62bd5ce12d7 ("pinctrl: amd: Implement irq_set_wake"), the AMD GPIO
+> controller gained the capability to set the wake bit on each GPIO. The
+> ACPI specification defines two ways to inform the system if a device is
+> wake capable:
+> 1) The _PRW object defines the GPE that can be used to wake the system.
+> 2) Setting ExclusiveAndWake or SharedAndWake in the _CRS GpioInt.
+>
+> Currently only the first method is supported. The i2c drivers don't have
+> any indication that the IRQ is wake capable, so they guess. This causes
+> spurious interrupts, for example:
+> * We have an ACPI HID device that has `_PR0` and `_PR3`. It doesn't have
+>   `_PRW` or `ExclusiveAndWake` so that means the device can't wake the
+>   system.
+> * The IRQ line is active level low for this device and is pulled up by
+>   the power resource defined in `_PR0`/`_PR3`.
+> * The i2c driver will (incorrectly) arm the GPIO for wake by calling
+>   `enable_irq_wake` as part of its suspend hook.
+> * ACPI will power down the device since it doesn't have a wake GPE
+>   associated with it.
+> * When the device is powered down, the IRQ line will drop, and it will
+>   trigger a wake event.
+>
+> See the following debug log:
+> [   42.335804] PM: Suspending system (s2idle)
+> [   42.340186] amd_gpio AMD0030:00: RX: Setting wake for pin 89 to enable
+> [   42.467736]     power-0416 __acpi_power_off      : Power resource [PR00] turned off
+> [   42.467739] device_pm-0280 device_set_power      : Device [H05D] transitioned to D3cold
+> [   42.475210] PM: pm_system_irq_wakeup: 11 triggered pinctrl_amd
+> [   42.535293] PM: Wakeup unrelated to ACPI SCI
+> [   42.535294] PM: resume from suspend-to-idle
+>
+> In order to fix this, we need to take into account the wake capable bit
+> defined on the Interrupt/GpioInt. This is accomplished by:
+> * Migrating some of the i2c drivers over to using the PM subsystem to
+>   manage the wake IRQ.
+> * Expose the wake_capable bit from the ACPI Interrupt/GpioInt resource
+>   to the  i2c core.
+> * Use the wake_capable bit in the i2c core to call
+>   `dev_pm_set_wake_irq`. This reuses the existing device tree flow.
+> * Make the i2c drivers stop calling `dev_pm_set_wake_irq` since it's now
+>   handled by the i2c core.
+> * Make the ACPI device PM system aware of the wake_irq. This is
+>   necessary so the device doesn't incorrectly get powered down when a
+>   wake_irq is enabled.
+>
+> I've tested this code with various combinations of having _PRW,
+> ExclusiveAndWake and power resources all defined or not defined, but it
+> would be great if others could test this out on their hardware.
+>
+> I'm sure this will surface some devices where the IRQs were not
+> correctly marked as wake capable. Ideally the firmware can be fixed, but
+> if not we can work around this in the kernel by providing a board
+> specific `struct i2c_board_info` with the `I2C_CLIENT_WAKE` flag set.
+> See `chromeos_laptop.c` for an example of matching DMI properties and
+> setting the `I2C_CLIENT_WAKE` override.
+>
+> Thanks,
+> Raul
+>
+> Changes in v4:
+> - Added Reviewed-by
+> - Reformatted with 96 char limit
+> - Removed unnecessary !!
+> - Removed unrelated white space change
+> - Renamed i2c_acpi_add_resource to i2c_acpi_add_irq_resource
+> - Expanded logic in i2c_acpi_add_i2c_resource to make it easier to read
+>
+> Changes in v3:
+> - Kept `acpi_dev_gpio_irq_get_by` unchanged to avoid having to touch
+>   unrelated drivers.
+> - Converted wake_capable parameter to bool.
+> - Fixed bad indent
+> - Convert wake_capable to bool
+> - Only update wake_capable pointer once
+> - Move wake_capable local into local block
+>
+> Changes in v2:
+> - Added elants_i2c to series
+> - Added raydium_ts_i2c to series
+> - Fixed call site in mlxbf_gige_probe
+> - Added ability to extract wake bit from Interrupt/IRQ resources
+> - Look at wake_cabple bit for IRQ/Interrupt resources
+> - I chose not to keep the legacy code around since systems without DT or ACPI should be rare.
+>
+> Raul E Rangel (13):
+>   HID: i2c-hid: Use PM subsystem to manage wake irq
+>   Input: elan_i2c - Use PM subsystem to manage wake irq
+>   Input: elants_i2c - Use PM subsystem to manage wake irq
+>   Input: raydium_ts_i2c - Use PM subsystem to manage wake irq
+>   gpiolib: acpi: Add wake_capable variants of acpi_dev_gpio_irq_get
+>   ACPI: resources: Add wake_capable parameter to acpi_dev_irq_flags
+>   i2c: acpi: Use ACPI wake capability bit to set wake_irq
+>   ACPI: PM: Take wake IRQ into consideration when entering
+>     suspend-to-idle
+>   HID: i2c-hid: acpi: Stop setting wakeup_capable
+>   HID: i2c-hid: Don't set wake_capable and wake_irq
+>   Input: elan_i2c - Don't set wake_capable and wake_irq
+>   Input: elants_i2c - Don't set wake_capable and wake_irq
+>   Input: raydium_ts_i2c - Don't set wake_capable and wake_irq
+>
+>  drivers/acpi/device_pm.c                   | 19 +++++++++--
+>  drivers/acpi/irq.c                         |  8 +++--
+>  drivers/acpi/resource.c                    | 23 ++++++++++----
+>  drivers/gpio/gpiolib-acpi.c                | 15 +++++++--
+>  drivers/gpio/gpiolib-acpi.h                |  2 ++
+>  drivers/hid/i2c-hid/i2c-hid-acpi.c         |  5 ---
+>  drivers/hid/i2c-hid/i2c-hid-core.c         | 24 ++------------
+>  drivers/i2c/i2c-core-acpi.c                | 37 ++++++++++++++++------
+>  drivers/i2c/i2c-core-base.c                |  6 +++-
+>  drivers/i2c/i2c-core.h                     |  4 +--
+>  drivers/input/mouse/elan_i2c_core.c        | 15 +--------
+>  drivers/input/touchscreen/elants_i2c.c     | 13 ++------
+>  drivers/input/touchscreen/raydium_i2c_ts.c |  7 +---
+>  drivers/pnp/pnpacpi/rsparser.c             |  7 ++--
+>  include/linux/acpi.h                       | 23 +++++++++++---
+>  include/linux/ioport.h                     |  3 +-
+>  16 files changed, 117 insertions(+), 94 deletions(-)
+>
+
+For the HID patches (1, 9, 10):
+Acked-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+
+Feel free to take those through whatever tree is the best, we don't
+have anything scheduled for i2c-hid for 6.1 right now.
+
+Cheers,
+Benjamin
+
