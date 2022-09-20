@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50D785BE7A4
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 15:52:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B34835BE7A6
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 15:52:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231477AbiITNwj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 09:52:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44062 "EHLO
+        id S231129AbiITNwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 09:52:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231414AbiITNwD (ORCPT
+        with ESMTP id S231271AbiITNwO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 09:52:03 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B805A8BD
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 06:51:53 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id n12so4368124wrx.9
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 06:51:53 -0700 (PDT)
+        Tue, 20 Sep 2022 09:52:14 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301895B06E
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 06:51:58 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id r3-20020a05600c35c300b003b4b5f6c6bdso1714329wmq.2
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 06:51:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:organization:from:references
          :cc:to:content-language:subject:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date;
-        bh=G+ob9gslUEjTfn2CBImEFZYMaoKP4Rt8AUUITXFerD8=;
-        b=tg+D2tjd6jvRRlSzpJoFFTF6tp3n0TGMvUX2GCpiQvbixps9kCC7pVa/Sw5i50cHk1
-         /7xx32axnrRUDPcTWUXIub1cMhiskS5B0r6Z8yY5S6K/iPMhQaMI7IoYwgypEkLGOziK
-         4gjKAWxJWoSbdZhp7Qj2VdZGp4GWjI186EaNwdLgNc/qwCAaFZSPdJub3wi+iP1STrMH
-         YiHuV9RUtr/KCWn6kO7VAoPtpyIuA8W/ymB6zn/7wXONvkThZmjKSI7d75RkNba2YwsI
-         x4AJrsfrVhdc8JE9BbDEIuMhrhp+mT5MolF1I9v2PbXW0NiSb+UVU/zFVKVQteyExlvM
-         rIEA==
+        bh=GS8xCUqG0t9AUIgS1AsqigvxUb4zPV78ytM7QDX7zq4=;
+        b=qAGojTB3TzqZohOagS2b4f0NiciUWWpLykoYRuzcCPs8dOpGbE3d3gEjd9N5Wt3ncA
+         iD2y0maUZFucvo3oY1aIu99GcFrFUKhEJ6uKD/vK+9kzJPgHTs1atSTd8y5rc9CplyrL
+         SynYZ839Jn2IhmloVc3PqdIEHSCOmJuMBsi96Yi3yWcrS5rP5fknizvDw5332Rg9XBOl
+         jf2AD4zXgA/j1H5XHX/UpMAmT2PO+q2CWbkE3ZDZHw3ipxuNTa3M9qQR1jc2JhDD9B5U
+         9/cGZzhT+hV7tmn5Fdb+D9N1U9odjeKFqc9xSA9FL8WUWbK7cafe+yvevGVsQ9QY4/Yp
+         PyLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:organization:from:references
          :cc:to:content-language:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=G+ob9gslUEjTfn2CBImEFZYMaoKP4Rt8AUUITXFerD8=;
-        b=NzXhUq6QrxdUaoRpCFZaARNR8d8Hq1Otl2bSysTwjXulIe+A+SjFjxtJbZWS02XHLJ
-         1qdcDOMziSwPPBpbW0nTuryNF1B4xc+cMbYTa/TwDMkpASRq7hS4dyky09MjB8F3GO7l
-         BF5TyIUFOG8HUOEg0/imrXGlacRl1zLaRnqlCHo/d2/fTbI8On/KQFW+WiELCDSRVQpZ
-         M4rRqFRPiTto7JfbU9EUD8oU2ZxyRvCDEGzkuEObVUmQxVXzRgZnB8BORN9M7ij/5UO2
-         V5tSivmqwEK0nj0BaXWVAKVgatP9XmIiBIQ2hNSIo/9PRjsI91u6fZeh980euFd4Z3GY
-         1bmw==
-X-Gm-Message-State: ACrzQf3IvFJYdbKfuNab4jdhs/lWpbP8BbXt6bRIiXU9pvUXUIlP4DcR
-        4QcD18MQCFruf3aW/uwyIz583Q==
-X-Google-Smtp-Source: AMsMyM7XZy4WhMpqk0na5Pt3bcrSDcK8pGIRp2z+EFvw1MegtlqB2GXpg/ZB+oEFHUGgm1BUHjXaUw==
-X-Received: by 2002:a05:6000:1d8b:b0:22a:c046:946d with SMTP id bk11-20020a0560001d8b00b0022ac046946dmr13922372wrb.249.1663681911830;
-        Tue, 20 Sep 2022 06:51:51 -0700 (PDT)
+        bh=GS8xCUqG0t9AUIgS1AsqigvxUb4zPV78ytM7QDX7zq4=;
+        b=1LAPLLUqx5fqGeulucUMROGzdFusCtIHDJC8Hv38+euV5b9V4d8ETJiOQisYOxMZCR
+         z7RHRH/e1ergnRQS4mfHYyTaj744r+gqnzyM3oezB3UgSiC1iQ77a0z8t6VpzE6ygW2Q
+         oEdmWD/Dj2h3OJ21J+vkew17XjxZ9z0NrZ2mMt3cn2l2VKMBhlPcG26oZjUY3Dq3/xPV
+         TK4Q48kTivaMVCWQBSsITk7Oq92OiLv+fT8CYAgWdnUsrKL5NfSHNB+ZsGrd0JfCccc9
+         Epy2UAyswPzNTQ8p5qt2zqW1tAhIFe8AL0MYYc/tDgPHJygxI1qkCyYosY/wigG+RWoo
+         GVlQ==
+X-Gm-Message-State: ACrzQf3MKlm2xJSLLiHUYYnvIkOM5QgPNdMUvMy2Pd9bAijGQyESpEMs
+        f3EuabMybG5E+t6s2GDdxT58kQ==
+X-Google-Smtp-Source: AMsMyM5h4R1g+4DB6J3HIKjYxzM6ZnYv1jtOwCd+qTb7MSVW0Jlj33YlC9C02kM6+bVY6drXnGK10g==
+X-Received: by 2002:a05:600c:2142:b0:3b4:9289:9d4e with SMTP id v2-20020a05600c214200b003b492899d4emr2557770wml.197.1663681917329;
+        Tue, 20 Sep 2022 06:51:57 -0700 (PDT)
 Received: from ?IPV6:2a01:e0a:982:cbb0:7e10:f0f:43b2:9b5e? ([2a01:e0a:982:cbb0:7e10:f0f:43b2:9b5e])
-        by smtp.gmail.com with ESMTPSA id z26-20020a05600c221a00b003b4727d199asm115535wml.15.2022.09.20.06.51.50
+        by smtp.gmail.com with ESMTPSA id z10-20020a5d44ca000000b0022add371ed2sm49217wrr.55.2022.09.20.06.51.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Sep 2022 06:51:51 -0700 (PDT)
-Message-ID: <898e1495-81ba-c861-1eaa-91a29f8ee52b@linaro.org>
-Date:   Tue, 20 Sep 2022 15:51:50 +0200
+        Tue, 20 Sep 2022 06:51:56 -0700 (PDT)
+Message-ID: <8fda5b6a-1549-6034-1315-af1c33e6aa04@linaro.org>
+Date:   Tue, 20 Sep 2022 15:51:55 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH 11/17] phy: qcom-qmp: drop unused index field
+Subject: Re: [PATCH 12/17] phy: qcom-qmp-pcie: consolidate lane config
 Content-Language: en-US
 To:     Johan Hovold <johan+linaro@kernel.org>,
         Vinod Koul <vkoul@kernel.org>
@@ -67,10 +67,10 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         linux-kernel@vger.kernel.org
 References: <20220920073826.20811-1-johan+linaro@kernel.org>
- <20220920073826.20811-12-johan+linaro@kernel.org>
+ <20220920073826.20811-13-johan+linaro@kernel.org>
 From:   Neil Armstrong <neil.armstrong@linaro.org>
 Organization: Linaro
-In-Reply-To: <20220920073826.20811-12-johan+linaro@kernel.org>
+In-Reply-To: <20220920073826.20811-13-johan+linaro@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -84,128 +84,196 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 20/09/2022 09:38, Johan Hovold wrote:
-> Only the MSM8996 PCIe QMP driver uses the index field so drop it from
-> the other drivers.
+> For legacy reasons, there are two configuration parameters that describe
+> the number of lanes a PHY has.
+> 
+> Replace them both with a new field simply named "lanes".
 > 
 > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 > ---
->   drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 3 ---
->   drivers/phy/qualcomm/phy-qcom-qmp-pcie.c  | 3 ---
->   drivers/phy/qualcomm/phy-qcom-qmp-ufs.c   | 3 ---
->   drivers/phy/qualcomm/phy-qcom-qmp-usb.c   | 3 ---
->   4 files changed, 12 deletions(-)
+>   drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 39 ++++++++++--------------
+>   1 file changed, 16 insertions(+), 23 deletions(-)
 > 
-> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-> index 41f938126ff1..08e96e383a29 100644
-> --- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-> @@ -906,7 +906,6 @@ struct qmp_phy_combo_cfg {
->    * @pcs_misc: iomapped memory space for lane's pcs_misc
->    * @pcs_usb: iomapped memory space for lane's pcs_usb
->    * @pipe_clk: pipe clock
-> - * @index: lane index
->    * @qmp: QMP phy to which this lane belongs
->    * @mode: current PHY mode
->    * @dp_aux_cfg: Display port aux config
-> @@ -925,7 +924,6 @@ struct qmp_phy {
->   	void __iomem *pcs_misc;
->   	void __iomem *pcs_usb;
->   	struct clk *pipe_clk;
-> -	unsigned int index;
->   	struct qcom_qmp *qmp;
->   	enum phy_mode mode;
->   	unsigned int dp_aux_cfg;
-> @@ -2779,7 +2777,6 @@ static int qmp_combo_create(struct device *dev, struct device_node *np, int id,
->   	}
->   
->   	qphy->phy = generic_phy;
-> -	qphy->index = id;
->   	qphy->qmp = qmp;
->   	qmp->phys[id] = qphy;
->   	phy_set_drvdata(generic_phy, qphy);
 > diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-> index d22d2cf2fc18..387abed33727 100644
+> index 387abed33727..dde398105f03 100644
 > --- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
 > +++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-> @@ -1371,7 +1371,6 @@ struct qmp_phy_cfg {
->    * @rx2: iomapped memory space for second lane's rx (in dual lane PHYs)
->    * @pcs_misc: iomapped memory space for lane's pcs_misc
->    * @pipe_clk: pipe clock
-> - * @index: lane index
->    * @qmp: QMP phy to which this lane belongs
->    */
->   struct qmp_phy {
-> @@ -1385,7 +1384,6 @@ struct qmp_phy {
->   	void __iomem *rx2;
->   	void __iomem *pcs_misc;
->   	struct clk *pipe_clk;
-> -	unsigned int index;
->   	struct qcom_qmp *qmp;
+> @@ -1302,8 +1302,7 @@ static const struct qmp_phy_init_tbl sm8450_qmp_gen4x2_pcie_pcs_misc_tbl[] = {
+>   
+>   /* struct qmp_phy_cfg - per-PHY initialization config */
+>   struct qmp_phy_cfg {
+> -	/* number of lanes provided by phy */
+> -	int nlanes;
+> +	int lanes;
+>   
+>   	/* Init sequence for PHY blocks - serdes, tx, rx, pcs */
+>   	const struct qmp_phy_init_tbl *serdes_tbl;
+> @@ -1351,9 +1350,6 @@ struct qmp_phy_cfg {
+>   	int pwrdn_delay_min;
+>   	int pwrdn_delay_max;
+>   
+> -	/* true, if PHY has secondary tx/rx lanes to be configured */
+> -	bool is_dual_lane_phy;
+> -
+>   	/* QMP PHY pipe clock interface rate */
+>   	unsigned long pipe_clock_rate;
+>   };
+> @@ -1461,7 +1457,7 @@ static const char * const sdm845_pciephy_reset_l[] = {
 >   };
 >   
-> @@ -2264,7 +2262,6 @@ static int qmp_pcie_create(struct device *dev, struct device_node *np, int id,
->   	}
+>   static const struct qmp_phy_cfg ipq8074_pciephy_cfg = {
+> -	.nlanes			= 1,
+> +	.lanes			= 1,
 >   
->   	qphy->phy = generic_phy;
-> -	qphy->index = id;
->   	qphy->qmp = qmp;
->   	qmp->phys[id] = qphy;
->   	phy_set_drvdata(generic_phy, qphy);
-> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c b/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
-> index cc49dec46df4..ca9a42250556 100644
-> --- a/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
-> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
-> @@ -580,7 +580,6 @@ struct qmp_phy_cfg {
->    * @tx2: iomapped memory space for second lane's tx (in dual lane PHYs)
->    * @rx2: iomapped memory space for second lane's rx (in dual lane PHYs)
->    * @pcs_misc: iomapped memory space for lane's pcs_misc
-> - * @index: lane index
->    * @qmp: QMP phy to which this lane belongs
->    */
->   struct qmp_phy {
-> @@ -593,7 +592,6 @@ struct qmp_phy {
->   	void __iomem *tx2;
->   	void __iomem *rx2;
->   	void __iomem *pcs_misc;
-> -	unsigned int index;
->   	struct qcom_qmp *qmp;
+>   	.serdes_tbl		= ipq8074_pcie_serdes_tbl,
+>   	.serdes_tbl_num		= ARRAY_SIZE(ipq8074_pcie_serdes_tbl),
+> @@ -1489,7 +1485,7 @@ static const struct qmp_phy_cfg ipq8074_pciephy_cfg = {
 >   };
 >   
-> @@ -1149,7 +1147,6 @@ static int qmp_ufs_create(struct device *dev, struct device_node *np, int id,
->   	}
+>   static const struct qmp_phy_cfg ipq8074_pciephy_gen3_cfg = {
+> -	.nlanes			= 1,
+> +	.lanes			= 1,
 >   
->   	qphy->phy = generic_phy;
-> -	qphy->index = id;
->   	qphy->qmp = qmp;
->   	qmp->phys[id] = qphy;
->   	phy_set_drvdata(generic_phy, qphy);
-> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-> index 820062a95211..a34320738f60 100644
-> --- a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-> @@ -1491,7 +1491,6 @@ struct qmp_phy_cfg {
->    * @pcs_misc: iomapped memory space for lane's pcs_misc
->    * @pcs_usb: iomapped memory space for lane's pcs_usb
->    * @pipe_clk: pipe clock
-> - * @index: lane index
->    * @qmp: QMP phy to which this lane belongs
->    * @mode: current PHY mode
->    */
-> @@ -1507,7 +1506,6 @@ struct qmp_phy {
->   	void __iomem *pcs_misc;
->   	void __iomem *pcs_usb;
->   	struct clk *pipe_clk;
-> -	unsigned int index;
->   	struct qcom_qmp *qmp;
->   	enum phy_mode mode;
+>   	.serdes_tbl		= ipq8074_pcie_gen3_serdes_tbl,
+>   	.serdes_tbl_num		= ARRAY_SIZE(ipq8074_pcie_gen3_serdes_tbl),
+> @@ -1518,7 +1514,7 @@ static const struct qmp_phy_cfg ipq8074_pciephy_gen3_cfg = {
 >   };
-> @@ -2648,7 +2646,6 @@ int qmp_usb_create(struct device *dev, struct device_node *np, int id,
->   	}
 >   
->   	qphy->phy = generic_phy;
-> -	qphy->index = id;
->   	qphy->qmp = qmp;
->   	qmp->phys[id] = qphy;
->   	phy_set_drvdata(generic_phy, qphy);
+>   static const struct qmp_phy_cfg ipq6018_pciephy_cfg = {
+> -	.nlanes			= 1,
+> +	.lanes			= 1,
+>   
+>   	.serdes_tbl		= ipq6018_pcie_serdes_tbl,
+>   	.serdes_tbl_num		= ARRAY_SIZE(ipq6018_pcie_serdes_tbl),
+> @@ -1547,7 +1543,7 @@ static const struct qmp_phy_cfg ipq6018_pciephy_cfg = {
+>   };
+>   
+>   static const struct qmp_phy_cfg sdm845_qmp_pciephy_cfg = {
+> -	.nlanes = 1,
+> +	.lanes			= 1,
+>   
+>   	.serdes_tbl		= sdm845_qmp_pcie_serdes_tbl,
+>   	.serdes_tbl_num		= ARRAY_SIZE(sdm845_qmp_pcie_serdes_tbl),
+> @@ -1577,7 +1573,7 @@ static const struct qmp_phy_cfg sdm845_qmp_pciephy_cfg = {
+>   };
+>   
+>   static const struct qmp_phy_cfg sdm845_qhp_pciephy_cfg = {
+> -	.nlanes = 1,
+> +	.lanes			= 1,
+>   
+>   	.serdes_tbl		= sdm845_qhp_pcie_serdes_tbl,
+>   	.serdes_tbl_num		= ARRAY_SIZE(sdm845_qhp_pcie_serdes_tbl),
+> @@ -1605,7 +1601,7 @@ static const struct qmp_phy_cfg sdm845_qhp_pciephy_cfg = {
+>   };
+>   
+>   static const struct qmp_phy_cfg sm8250_qmp_gen3x1_pciephy_cfg = {
+> -	.nlanes = 1,
+> +	.lanes			= 1,
+>   
+>   	.serdes_tbl		= sm8250_qmp_pcie_serdes_tbl,
+>   	.serdes_tbl_num		= ARRAY_SIZE(sm8250_qmp_pcie_serdes_tbl),
+> @@ -1643,7 +1639,7 @@ static const struct qmp_phy_cfg sm8250_qmp_gen3x1_pciephy_cfg = {
+>   };
+>   
+>   static const struct qmp_phy_cfg sm8250_qmp_gen3x2_pciephy_cfg = {
+> -	.nlanes = 2,
+> +	.lanes			= 2,
+>   
+>   	.serdes_tbl		= sm8250_qmp_pcie_serdes_tbl,
+>   	.serdes_tbl_num		= ARRAY_SIZE(sm8250_qmp_pcie_serdes_tbl),
+> @@ -1675,14 +1671,13 @@ static const struct qmp_phy_cfg sm8250_qmp_gen3x2_pciephy_cfg = {
+>   	.pwrdn_ctrl		= SW_PWRDN | REFCLK_DRV_DSBL,
+>   	.phy_status		= PHYSTATUS,
+>   
+> -	.is_dual_lane_phy	= true,
+>   	.has_pwrdn_delay	= true,
+>   	.pwrdn_delay_min	= 995,		/* us */
+>   	.pwrdn_delay_max	= 1005,		/* us */
+>   };
+>   
+>   static const struct qmp_phy_cfg msm8998_pciephy_cfg = {
+> -	.nlanes			= 1,
+> +	.lanes			= 1,
+>   
+>   	.serdes_tbl		= msm8998_pcie_serdes_tbl,
+>   	.serdes_tbl_num		= ARRAY_SIZE(msm8998_pcie_serdes_tbl),
+> @@ -1706,7 +1701,7 @@ static const struct qmp_phy_cfg msm8998_pciephy_cfg = {
+>   };
+>   
+>   static const struct qmp_phy_cfg sc8180x_pciephy_cfg = {
+> -	.nlanes = 1,
+> +	.lanes			= 1,
+>   
+>   	.serdes_tbl		= sc8180x_qmp_pcie_serdes_tbl,
+>   	.serdes_tbl_num		= ARRAY_SIZE(sc8180x_qmp_pcie_serdes_tbl),
+> @@ -1735,7 +1730,7 @@ static const struct qmp_phy_cfg sc8180x_pciephy_cfg = {
+>   };
+>   
+>   static const struct qmp_phy_cfg sdx55_qmp_pciephy_cfg = {
+> -	.nlanes = 2,
+> +	.lanes			= 2,
+>   
+>   	.serdes_tbl		= sdx55_qmp_pcie_serdes_tbl,
+>   	.serdes_tbl_num		= ARRAY_SIZE(sdx55_qmp_pcie_serdes_tbl),
+> @@ -1759,14 +1754,13 @@ static const struct qmp_phy_cfg sdx55_qmp_pciephy_cfg = {
+>   	.pwrdn_ctrl		= SW_PWRDN,
+>   	.phy_status		= PHYSTATUS_4_20,
+>   
+> -	.is_dual_lane_phy	= true,
+>   	.has_pwrdn_delay	= true,
+>   	.pwrdn_delay_min	= 995,		/* us */
+>   	.pwrdn_delay_max	= 1005,		/* us */
+>   };
+>   
+>   static const struct qmp_phy_cfg sm8450_qmp_gen3x1_pciephy_cfg = {
+> -	.nlanes = 1,
+> +	.lanes			= 1,
+>   
+>   	.serdes_tbl		= sm8450_qmp_gen3x1_pcie_serdes_tbl,
+>   	.serdes_tbl_num		= ARRAY_SIZE(sm8450_qmp_gen3x1_pcie_serdes_tbl),
+> @@ -1796,7 +1790,7 @@ static const struct qmp_phy_cfg sm8450_qmp_gen3x1_pciephy_cfg = {
+>   };
+>   
+>   static const struct qmp_phy_cfg sm8450_qmp_gen4x2_pciephy_cfg = {
+> -	.nlanes = 2,
+> +	.lanes			= 2,
+>   
+>   	.serdes_tbl		= sm8450_qmp_gen4x2_pcie_serdes_tbl,
+>   	.serdes_tbl_num		= ARRAY_SIZE(sm8450_qmp_gen4x2_pcie_serdes_tbl),
+> @@ -1820,7 +1814,6 @@ static const struct qmp_phy_cfg sm8450_qmp_gen4x2_pciephy_cfg = {
+>   	.pwrdn_ctrl		= SW_PWRDN | REFCLK_DRV_DSBL,
+>   	.phy_status		= PHYSTATUS_4_20,
+>   
+> -	.is_dual_lane_phy	= true,
+>   	.has_pwrdn_delay	= true,
+>   	.pwrdn_delay_min	= 995,		/* us */
+>   	.pwrdn_delay_max	= 1005,		/* us */
+> @@ -1959,7 +1952,7 @@ static int qmp_pcie_power_on(struct phy *phy)
+>   	qmp_pcie_configure_lane(tx, cfg->regs, cfg->tx_tbl, cfg->tx_tbl_num, 1);
+>   	qmp_pcie_configure_lane(tx, cfg->regs, cfg->tx_tbl_sec, cfg->tx_tbl_num_sec, 1);
+>   
+> -	if (cfg->is_dual_lane_phy) {
+> +	if (cfg->lanes >= 2) {
+>   		qmp_pcie_configure_lane(qphy->tx2, cfg->regs, cfg->tx_tbl,
+>   					cfg->tx_tbl_num, 2);
+>   		qmp_pcie_configure_lane(qphy->tx2, cfg->regs, cfg->tx_tbl_sec,
+> @@ -1969,7 +1962,7 @@ static int qmp_pcie_power_on(struct phy *phy)
+>   	qmp_pcie_configure_lane(rx, cfg->regs, cfg->rx_tbl, cfg->rx_tbl_num, 1);
+>   	qmp_pcie_configure_lane(rx, cfg->regs, cfg->rx_tbl_sec, cfg->rx_tbl_num_sec, 1);
+>   
+> -	if (cfg->is_dual_lane_phy) {
+> +	if (cfg->lanes >= 2) {
+>   		qmp_pcie_configure_lane(qphy->rx2, cfg->regs, cfg->rx_tbl,
+>   					cfg->rx_tbl_num, 2);
+>   		qmp_pcie_configure_lane(qphy->rx2, cfg->regs, cfg->rx_tbl_sec,
+> @@ -2225,7 +2218,7 @@ static int qmp_pcie_create(struct device *dev, struct device_node *np, int id,
+>   	if (IS_ERR(qphy->pcs))
+>   		return PTR_ERR(qphy->pcs);
+>   
+> -	if (cfg->is_dual_lane_phy) {
+> +	if (cfg->lanes >= 2) {
+>   		qphy->tx2 = devm_of_iomap(dev, np, 3, NULL);
+>   		if (IS_ERR(qphy->tx2))
+>   			return PTR_ERR(qphy->tx2);
 
 Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
