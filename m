@@ -2,81 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAD995BF114
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 01:30:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 358AA5BF117
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 01:31:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbiITXaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 19:30:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43014 "EHLO
+        id S230464AbiITXbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 19:31:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230060AbiITXaC (ORCPT
+        with ESMTP id S229918AbiITXbj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 19:30:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CE073DF0A;
-        Tue, 20 Sep 2022 16:29:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 129B6B82D83;
-        Tue, 20 Sep 2022 23:29:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FB2CC433B5;
-        Tue, 20 Sep 2022 23:29:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663716595;
-        bh=nD4QLliR2Fg9W839ij/O4HSyRbpGyiFLDJtkdeZ/HeY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=BfwBkfqbihYRed6NuVk9N/7VrgAlWrxMTTnaQQMPx7cebYpFkqsE/ktZQWEHBiYaX
-         cwb7Y3AEkerp3zVtNY/ziEbnaENtxPrhGS2KNFOpI3iXxcnGhMvgX70B+w7J7FZ7Qa
-         gyI9tRxfZgHOF677hYUGAYQ6JwTXL76IREzWK8r+S2mxTeINADcF+H3zunuUqAWrR0
-         aX9eX8dtdd4RMautD7Rb4Nl0d45XaSRDRwrxVHc0ijebPXXz9ay9zNlH78gp7F9lj9
-         F37xn7mSvuyaRC4CLmwhHztTmpzkWd8eXwN79QyBkJSDeLNm5wQE7HPnfkuPhJlNC4
-         vsHKvmKaq4Txg==
-Date:   Tue, 20 Sep 2022 16:29:54 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Nikolay Aleksandrov <razor@blackwall.org>
-Cc:     Sevinj Aghayeva <sevinj.aghayeva@gmail.com>,
-        netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        aroulin@nvidia.com, sbrivio@redhat.com, roopa@nvidia.com,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org
-Subject: Re: [PATCH RFC net-next 0/5] net: vlan: fix bridge binding behavior
- and add selftests
-Message-ID: <20220920162954.1f4aaf7b@kernel.org>
-In-Reply-To: <78bd0e54-4ee3-bd3c-2154-9eb8b9a70497@blackwall.org>
-References: <cover.1663445339.git.sevinj.aghayeva@gmail.com>
-        <78bd0e54-4ee3-bd3c-2154-9eb8b9a70497@blackwall.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 20 Sep 2022 19:31:39 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E45C75E64C
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 16:31:37 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id b11-20020a170902d50b00b0017828988079so2641091plg.21
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 16:31:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
+         :subject:date;
+        bh=yLvwOWuXtYmkq2gfHjtQ1MhX2AnqJW1myBmVRg299oc=;
+        b=pq7XJBM0vZ9KBqZnYoj2EMzf3D9IQDFghpRQZgnIbzKHdFWniBp/yKBOkw5BFcrgEG
+         XmMR0TP7OiMzg0S/Bl1P16+d+VyB/TQfTxI8IOQiMHCw9M7Jta1HLVQNbpyZ1x9ON4PF
+         TNyu5PyT1XzbZA9e/iPzPUXLdkZRsdWc4UVDdvx6YfGw8Pu6kvlrPpTkSr8iGQ15P1DP
+         jrdVZOkcm8/P3ClTHMk4+Me4qwUYHIvAn/bUhM3SpvIyqef5WLyOKiOjNm72fwLLlb+f
+         qSQBuJ4nh6g1593Cnnro7xFEq1Oy8hJtD2nS+MJkYwqJkf/bZSxq9DOlA8R8e9p3xfyG
+         j8KA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=yLvwOWuXtYmkq2gfHjtQ1MhX2AnqJW1myBmVRg299oc=;
+        b=bUk6GzbJaxbolnW3mQlzp0fwSe+HZwVwbqJEVJlnevI5nUfznEa0nT3GYaxeD8ZwS/
+         Ny8OtrNOERqj80Ty6q4XIHPYqF9Q1usMGZR7FzwEQINCJK8p9M7dyrpsXLAYKAkcMfWh
+         M+zDjmKdcDc+g94LniKtHAoCX+j3Dz3ioqAGsfwGeRN3a35ecqlhb19BVDqX0Jd2VLD0
+         gCDEIt4omfkgZfeP7A5uI1ScuVXgVRVsWNPg0+bMOrLNo/90dWbgnue7qPn4ABFwvk1g
+         2FGHMI2E8eFg3/q3+jNV/IxqT6+yEu6IarQBPwt204QdZ4OKO1w55QMmZCyWgz8S4+rk
+         pqPA==
+X-Gm-Message-State: ACrzQf2umZ7V8c1zNW58PvpzQd4lnvIo5Oa2dw94NMR9CBHnn7TAt+RS
+        O/l4FW3XjMu5KzFgYeLeVVxS5fXukN8=
+X-Google-Smtp-Source: AMsMyM4v+iUjgkKBatNGzl5ZdWlqUnuoLW9A6Q+ClVGzUcSTXacOuBjve8AEVYyvMQuC9dbVqnkg8JXNvyw=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:90b:1942:b0:202:cf66:f37f with SMTP id
+ nk2-20020a17090b194200b00202cf66f37fmr6235484pjb.15.1663716697425; Tue, 20
+ Sep 2022 16:31:37 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Tue, 20 Sep 2022 23:31:06 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.3.968.ga6b4b080e4-goog
+Message-ID: <20220920233134.940511-1-seanjc@google.com>
+Subject: [PATCH v3 00/28] KVM: x86: AVIC and local APIC fixes+cleanups
+From:   Sean Christopherson <seanjc@google.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Li RongQing <lirongqing@baidu.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 20 Sep 2022 12:16:26 +0300 Nikolay Aleksandrov wrote:
-> The set looks good to me, the bridge and vlan direct dependency is gone and
-> the new notification type is used for passing link type specific info.
+TL;DR: KVM's AVIC and optimized APIC map code doesn't correctly handle
+various edge cases that are architecturally legal(ish), but are unlikely
+to occur in most real world scenarios.
 
-IDK, vlan knows it's calling the bridge:
+I have tested this heavily with KUT, but I haven't booted Windows and
+don't have access to x2AVIC, so additional testing would be much
+appreciated.
 
-+	if ((vlan->flags ^ old_flags) & VLAN_FLAG_BRIDGE_BINDING &&
-+	    netif_is_bridge_master(vlan->real_dev)) {
+v3:
+  - Collect reviews. [Paolo]
+  - Drop "partial" x2APIC inhibit and instead delete the memslot.
+    [Maxim, Suravee]
+  - Skip logical mode updates for x2APIC, which just reuses the
+    phys_map with some clever logic. [Suravee]
+  - Add a fix for "nodecode write" traps. [Alejandro]
 
-bridge knows it's vlan calling:
+v2:
+  - https://lore.kernel.org/all/20220903002254.2411750-1-seanjc@google.com
+  - Collect reviews. [Li, Maxim]
+  - Disable only MMIO access when x2APIC is enabled (instead of disabling
+    all of AVIC). [Maxim]
+  - Inhibit AVIC when logical IDs are aliased. [Maxim]
+  - Tweak name of set_virtual_apic_mode() hook. [Maxim]
+  - Straight up revert logical ID fastpath mess. [Maxim]
+  - Reword changelog about skipping vCPU during logical setup. [Maxim]
+  - Fix LDR updates on AVIC. [Maxim?]
+  - Fix a nasty ISR caching bug.
+  - Flush TLB when activating AVIC.
 
-+	if (is_vlan_dev(dev)) {
-+		br_vlan_device_event(dev, event, ptr);
+v1: https://lore.kernel.org/all/20220831003506.4117148-1-seanjc@google.com
 
-going thru the generic NETDEV notifier seems odd.
+Sean Christopherson (27):
+  KVM: x86: Blindly get current x2APIC reg value on "nodecode write"
+    traps
+  KVM: x86: Purge "highest ISR" cache when updating APICv state
+  KVM: SVM: Flush the "current" TLB when activating AVIC
+  KVM: SVM: Process ICR on AVIC IPI delivery failure due to invalid
+    target
+  KVM: x86: Don't inhibit APICv/AVIC if xAPIC ID mismatch is due to
+    32-bit ID
+  KVM: x86: Move APIC access page helper to common x86 code
+  KVM: x86: Inhibit APIC memslot if x2APIC and AVIC are enabled
+  KVM: SVM: Don't put/load AVIC when setting virtual APIC mode
+  KVM: SVM: Replace "avic_mode" enum with "x2avic_enabled" boolean
+  KVM: SVM: Compute dest based on sender's x2APIC status for AVIC kick
+  Revert "KVM: SVM: Use target APIC ID to complete x2AVIC IRQs when
+    possible"
+  KVM: SVM: Document that vCPU ID == APIC ID in AVIC kick fastpatch
+  KVM: SVM: Add helper to perform final AVIC "kick" of single vCPU
+  KVM: x86: Explicitly skip optimized logical map setup if vCPU's LDR==0
+  KVM: x86: Explicitly track all possibilities for APIC map's logical
+    modes
+  KVM: x86: Skip redundant x2APIC logical mode optimized cluster setup
+  KVM: x86: Disable APIC logical map if logical ID covers multiple MDAs
+  KVM: x86: Disable APIC logical map if vCPUs are aliased in logical
+    mode
+  KVM: x86: Honor architectural behavior for aliased 8-bit APIC IDs
+  KVM: x86: Inhibit APICv/AVIC if the optimized physical map is disabled
+  KVM: SVM: Inhibit AVIC if vCPUs are aliased in logical mode
+  KVM: SVM: Always update local APIC on writes to logical dest register
+  KVM: SVM: Update svm->ldr_reg cache even if LDR is "bad"
+  KVM: SVM: Require logical ID to be power-of-2 for AVIC entry
+  KVM: SVM: Handle multiple logical targets in AVIC kick fastpath
+  KVM: SVM: Ignore writes to Remote Read Data on AVIC write traps
+  Revert "KVM: SVM: Do not throw warning when calling avic_vcpu_load on
+    a running vcpu"
 
-If this is just to avoid the dependency we can perhaps add a stub 
-like net/ipv4/udp_tunnel_stub.c ?
+Suravee Suthikulpanit (1):
+  KVM: SVM: Fix x2APIC Logical ID calculation for
+    avic_kick_target_vcpus_fast
 
-> If the others are ok with it I think you can send it as non-RFC, but I'd give it
-> a few more days at least. :)
+ Documentation/virt/kvm/x86/errata.rst |  11 +
+ arch/x86/include/asm/kvm_host.h       |  51 +++-
+ arch/x86/kvm/lapic.c                  | 224 +++++++++++++---
+ arch/x86/kvm/lapic.h                  |   2 +
+ arch/x86/kvm/svm/avic.c               | 363 ++++++++++++--------------
+ arch/x86/kvm/svm/svm.c                |   4 +-
+ arch/x86/kvm/svm/svm.h                |  11 +-
+ arch/x86/kvm/vmx/vmx.c                |  36 +--
+ arch/x86/kvm/x86.c                    |   7 +
+ 9 files changed, 426 insertions(+), 283 deletions(-)
+
+
+base-commit: 372d07084593dc7a399bf9bee815711b1fb1bcf2
+-- 
+2.37.3.968.ga6b4b080e4-goog
+
