@@ -2,131 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 015595BE138
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 11:02:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAFE65BE154
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 11:04:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230126AbiITJCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 05:02:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34468 "EHLO
+        id S231464AbiITJE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 05:04:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231132AbiITJBr (ORCPT
+        with ESMTP id S231496AbiITJC6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 05:01:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3B806C758;
-        Tue, 20 Sep 2022 02:01:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 20 Sep 2022 05:02:58 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C84546CD16;
+        Tue, 20 Sep 2022 02:02:17 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C0453621BE;
-        Tue, 20 Sep 2022 09:01:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12021C433C1;
-        Tue, 20 Sep 2022 09:01:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663664493;
-        bh=r3YA3TgrnfQL0+0wV4NaVSy5szGp5VuMs1RW9pHe3lU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AzxE+ep+hNLQJM2Wi0FzFjxB5EPyT0bT1sF+vGvp/qqEsGDiM8Qxgt9HfL5GiqctW
-         ydtwcTF95SErW/3YfT767vlGAIBPRec/9LY/xcROmCrXbpLipwDvonuxfesQbGtW0K
-         3X57xI5xG+bP4GpwbyyVcFAUi7K0jN1trLi5oXpe5rIEW+jy1XgRCTH5RP3Mvq9gku
-         rfLdXPEErWLn4QrMEjOjhbKqcH+8LTinoB+hUyQqojABcfM2uzy0XQr/ZQeGrr1R1B
-         wc6IB4cpjEoOiXRZxqecNrqR6jTHxLhIWd7jd9chmFiCmiZeAdbQsNmvXPK/696igQ
-         C+5aVtXIg3knA==
-Date:   Tue, 20 Sep 2022 11:01:29 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
-        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
-        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
-        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
-        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
-        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
-        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
-        dinguyen@kernel.org, jonas@southpole.se,
-        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
-        James.Bottomley@hansenpartnership.com, deller@gmx.de,
-        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
-        davem@davemloft.net, richard@nod.at,
-        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
-        amakhalov@vmware.com, pv-drivers@vmware.com,
-        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
-        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
-        gregkh@linuxfoundation.org, mturquette@baylibre.com,
-        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
-        sudeep.holla@arm.com, agross@kernel.org,
-        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
-        anup@brainfault.org, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, jacob.jun.pan@linux.intel.com,
-        atishp@atishpatra.org, Arnd Bergmann <arnd@arndb.de>,
-        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk, dennis@kernel.org, tj@kernel.org,
-        cl@linux.com, rostedt@goodmis.org, pmladek@suse.com,
-        senozhatsky@chromium.org, john.ogness@linutronix.de,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, fweisbec@gmail.com,
-        ryabinin.a.a@gmail.com, glider@google.com, andreyknvl@gmail.com,
-        dvyukov@google.com, vincenzo.frascino@arm.com,
-        Andrew Morton <akpm@linux-foundation.org>, jpoimboe@kernel.org,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-perf-users@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-arch@vger.kernel.org, kasan-dev@googlegroups.com
-Subject: Re: [PATCH v2 08/44] cpuidle,imx6: Push RCU-idle into driver
-Message-ID: <20220920090129.GD69891@lothringen>
-References: <20220919095939.761690562@infradead.org>
- <20220919101520.869531945@infradead.org>
- <20220919142123.GE58444@lothringen>
- <YymA0yJybIWLco/v@hirez.programming.kicks-ass.net>
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id EFF556601F65;
+        Tue, 20 Sep 2022 10:01:58 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1663664519;
+        bh=+3Eho6vznxN6lcZbJbVvkS5KJYsPvu5pctKzlZPKMUo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=LJclHzWWXsCnozr4D6rWp6q57rPuakEPkNWPH4x5OppazabiA3wjTGmtPFWcgEgIj
+         GR4sP0iuussi0aap1SwEamN3AIHInnQt4Y1crvC44KcN+0rKVSTNkt68tCFtcAFgHP
+         HS3TRs3QGz4pde4u0r/jmuJIccKVgD1Y/4o3hls04T98y6fFdWjuThZAW7qN0rGcIc
+         OkU750ey5Tj9vwjKlDYO//swC6zIN/iq6EUNiD3n5mCmT6OWvc4/WLatlhkVtbeK+s
+         MqjnrDydHispgrfrj0N6PWPcfxJ5yGR6xzIIQIlFVoxfFGL1qS81oMdjy95Z24kSXU
+         xwFUg1uwDjb7w==
+Message-ID: <3a0ac49f-2245-fb64-aa60-e3b1a1d4afcd@collabora.com>
+Date:   Tue, 20 Sep 2022 11:01:56 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YymA0yJybIWLco/v@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v3 2/3] iommu/mediatek: Add enable IOMMU SMC command for
+ INFRA master
+Content-Language: en-US
+To:     "Chengci.Xu" <chengci.xu@mediatek.com>,
+        Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     iommu@lists.linux.dev, linux-mediatek@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220919082611.19824-1-chengci.xu@mediatek.com>
+ <20220919082611.19824-3-chengci.xu@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220919082611.19824-3-chengci.xu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 10:58:59AM +0200, Peter Zijlstra wrote:
-> On Mon, Sep 19, 2022 at 04:21:23PM +0200, Frederic Weisbecker wrote:
-> > On Mon, Sep 19, 2022 at 11:59:47AM +0200, Peter Zijlstra wrote:
-> > > Doing RCU-idle outside the driver, only to then temporarily enable it
-> > > again, at least twice, before going idle is daft.
-> > 
-> > Hmm, what ends up calling RCU_IDLE() here? Also what about
-> > cpu_do_idle()?
+Il 19/09/22 10:26, Chengci.Xu ha scritto:
+> The register which can enable IOMMU for INFRA master should be setted
+> in secure world for security concerns. Therefore, we add a SMC command
+> for INFRA master to enable/disable INFRA IOMMU in ATF. This function is
+> prepared for MT8188.
 > 
-> I've ammended patches 5-12 with a comment like:
+> Signed-off-by: Chengci.Xu <chengci.xu@mediatek.com>
+> ---
+>   drivers/iommu/mtk_iommu.c  | 21 +++++++++++++++++++--
+>   include/soc/mediatek/smi.h |  1 +
+>   2 files changed, 20 insertions(+), 2 deletions(-)
 > 
-> Notably both cpu_pm_enter() and cpu_cluster_pm_enter() implicity
-> re-enable RCU.
-> 
-> (each noting the specific sites for the relevant patch).
+> diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
+> index 552e4eb8c610..8b8a289bab2c 100644
+> --- a/drivers/iommu/mtk_iommu.c
+> +++ b/drivers/iommu/mtk_iommu.c
+> @@ -3,6 +3,7 @@
+>    * Copyright (c) 2015-2016 MediaTek Inc.
+>    * Author: Yong Wu <yong.wu@mediatek.com>
+>    */
+> +#include <linux/arm-smccc.h>
+>   #include <linux/bitfield.h>
+>   #include <linux/bug.h>
+>   #include <linux/clk.h>
+> @@ -28,6 +29,7 @@
+>   #include <linux/slab.h>
+>   #include <linux/spinlock.h>
+>   #include <linux/soc/mediatek/infracfg.h>
+> +#include <linux/soc/mediatek/mtk_sip_svc.h>
+>   #include <asm/barrier.h>
+>   #include <soc/mediatek/smi.h>
+>   
+> @@ -138,6 +140,7 @@
+>   #define PM_CLK_AO			BIT(15)
+>   #define IFA_IOMMU_PCIE_SUPPORT		BIT(16)
+>   #define PGTABLE_PA_35_EN		BIT(17)
+> +#define CFG_IFA_MASTER_IN_ATF		BIT(18)
+>   
+>   #define MTK_IOMMU_HAS_FLAG_MASK(pdata, _x, mask)	\
+>   				((((pdata)->flags) & (mask)) == (_x))
+> @@ -553,7 +556,20 @@ static int mtk_iommu_config(struct mtk_iommu_data *data, struct device *dev,
+>   				larb_mmu->mmu |= MTK_SMI_MMU_EN(portid);
+>   			else
+>   				larb_mmu->mmu &= ~MTK_SMI_MMU_EN(portid);
+> -		} else if (MTK_IOMMU_IS_TYPE(data->plat_data, MTK_IOMMU_TYPE_INFRA)) {
+> +		} else if (MTK_IOMMU_IS_TYPE(data->plat_data, MTK_IOMMU_TYPE_INFRA) &&
+> +			   MTK_IOMMU_HAS_FLAG(data->plat_data, CFG_IFA_MASTER_IN_ATF)) {
+> +			struct arm_smccc_res res;
+> +
+> +			arm_smccc_smc(MTK_SIP_KERNEL_IOMMU_CONTROL,
+> +				      IOMMU_ATF_CMD_CONFIG_INFRA_IOMMU,
+> +				      portid, enable, 0, 0, 0, 0, &res);
+> +			if (res.a0 != 0) {
+> +				dev_err(dev, "%s iommu(%s) inframaster %d fail(%ld).\n",
+> +					enable ? "enable" : "disable",
+> +					dev_name(data->dev), portid, res.a0);
+> +				ret = -EINVAL;
+> +			}
+> +		} else {
 
-Thanks!
+This one is opening a big window for future mistakes.
+
+I think that the only way that you have to do this is...
+
+	} else if (MTK_IOMMU_IS_TYPE(data->plat_data, MTK_IOMMU_TYPE_INFRA)) {
+		if (MTK_IOMMU_HAS_FLAG(data->plat_data, CFG_IFA_MASTER_IN_ATF)) {
+			arm_smcc_smc ....
+		} else {
+			peri_mmuen_msk ....
+		}
+	}
+
+Otherwise, to reduce indentation, you'd have to do something like...
+
+static int mtk_iommu_config_one(struct mtk_iommu_data *data, struct device *dev,
+				bool enable, u32 regionid, u32 larbid, u32 portid)
+{
+	struct mtk_smi_larb_iommu *larb_mmu;
+	............
+}
+
+static int mtk_iommu_config(struct .............)
+{
+	vars, etc....
+
+	for (i = 0; i < fwspec->num_ids; ++i)
+		mtk_iommu_config_one(data, dev, enable, regionid,
+				     MTK_M4U_TO_LARB(...), MTK_M4U_TO_PORT(...));
+}
+
+
+or....
+
+static int mtk_iommu_config_one_infra(struct ....)
+{
+	if (is atf) ....
+	else ....
+}
+
+Your choice.
+
+Regards,
+Angelo
+
+
