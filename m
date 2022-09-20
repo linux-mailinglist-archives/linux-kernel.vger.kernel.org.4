@@ -2,68 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74FBE5BEAA4
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 18:00:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6FF85BEAAD
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 18:01:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231548AbiITQAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 12:00:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35728 "EHLO
+        id S231590AbiITQBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 12:01:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230428AbiITQAB (ORCPT
+        with ESMTP id S231431AbiITQAz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 12:00:01 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6471113FAF
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 09:00:00 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-3454b0b1b6dso32481097b3.4
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 09:00:00 -0700 (PDT)
+        Tue, 20 Sep 2022 12:00:55 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE695A803
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 09:00:51 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id e68so3186465pfe.1
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 09:00:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=16rXn9G6e+vzicFuly3W1zcOBEo+YQGYAw+kgXgqvTY=;
-        b=JulG5+8FYssKEV3UjOlxsbhuR+H3zTPHXzwbJ8fWhdBNyZ7mARaew2XIFgZSN1JHPE
-         XRYW8z5HH7i/phg3JINjBbEndMxSTCjkATkMWNgh6LYoWShDBQNo/p6la21e941PO+/R
-         FwA9szzTCOjtntjSZpxeEhhJE4b64I8ydHPFTe1g2PPZXPtnK1/284v2WBUhJ0G7jNFg
-         8Dh/Y7fIV+F1IDg+HMDjt1r5AypmS9/B9pQ3ff9Vvjx17ThaDrLisykzSFom31lxkkK6
-         lTAFmIKAxm6/O8AfTdWyKRXQSIyYN9z2U1LBXSb3HtLG9pctHxu8Bt7lnEHi4V05Bxnk
-         Sa5g==
+        d=lixom-net.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=/XA5rkoouGgX9DCK7SjCAV6orQoM99AmvM4Gl/XVcZc=;
+        b=UbdCnls33atG4xWvWkmByU/a6tf+VDySm1kndblgUXjNNzsdPPmowbUFA11ocrRWSh
+         BDGKgRXo1Tyg27YE89N4hwD27d5JT7U64+hgjWoag4+AgFhsV8J3naLUCmgu8SJ5HTEc
+         ZNgYAhlLVTYexBs5rA9it8sXkQvHoKzIjWUWCk+UIDWupY8B6v/xyp95mmGvWHh3IseX
+         l8AQ7TDBzS8r0EQfO7RWzP0BLAbLPjoyKs50cCbjv8zaumDgF35xr35MisOarryf1kg3
+         Y0RCKoGEmn3ig3ip85mGIeU4uswZ86MQG886MXYoldVfo3qKXUAR6fXVQj71ExGqEptp
+         BcCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=16rXn9G6e+vzicFuly3W1zcOBEo+YQGYAw+kgXgqvTY=;
-        b=qmI2YbG5y/Rb58VeSWBIuV2dSOH2MfNZJhmxVUrIyEoYYjOHwLnRgKBq/b0vdDXZo5
-         /Nyasf/hAy6Wf+4VgkebVSkQ+1nFS5O0XAaO0HiAUvX6gXIsFtRPx4L5aatsqVrmWCKX
-         774ihcWJKsdYmgupaKYHRklHmCceC3H/pVpWcZiLRr1ZhoUudJHaW0IArgHVQNQvbL3c
-         sPwpKHlsjJOFTcjgAYl92gb2ru33/+8WC+m7Qpd89GyuyLBc/uWNyXKkGBlwn0Dxw39D
-         mfOtSRXzF65K8n2sxwqsz4zfe7pb6OIoyWtKcA6YT2AU5DtjwlqL5EyZZRLs+SpjI4sv
-         +plg==
-X-Gm-Message-State: ACrzQf2v6eaFkhc0lHjYYF3BZHIzQ1/xEdnRmT+GtjlMtF/XZoVCXfs3
-        e3VG7K/DiCvFNlQ/WpePU+jYSxi6N9X2K3R2xye/Fw==
-X-Google-Smtp-Source: AMsMyM6nZ/IrGw3W3z/XPOIhCtYqKsDRqGaE/nQcpedW0Y2khjGiygpQYVwrXz4yI0wBHKVuHP6uJcrCAMlybj4hQXw=
-X-Received: by 2002:a81:7986:0:b0:349:853d:d165 with SMTP id
- u128-20020a817986000000b00349853dd165mr20287586ywc.467.1663689599302; Tue, 20
- Sep 2022 08:59:59 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=/XA5rkoouGgX9DCK7SjCAV6orQoM99AmvM4Gl/XVcZc=;
+        b=K2d1ApO2dx1xZLOwcYcW0TfwW5+pmprstfRmFCJSZTHSF0zChRRH5A4+i4nqF7e1xr
+         wqnnPu2DF7Ad7SUAcKi/7LM/4m50jSedo6LMryP0GjytdjftWuHtPiOnK/EeY+TaPkhz
+         NjJRL39nNAvW0uY3LJNZG6OV8YBW5D5TXovMhjQlRsT8QzK09DGVgx+/Pyu9u070UC/Z
+         8z+TSb48hiQihqgdsTTTUSl9qBiXmH61mYBaI5wX4wC49tnBdsXtLtdWP+oCbhZXjMuQ
+         E2Ek9YtNV4yGGGOQBco/oovroVrIvJzrgJkO3PtkIxREvFG+YEcIrhbBHywnlNDkpW9e
+         GVNA==
+X-Gm-Message-State: ACrzQf3wfrygxA1LEIdP4yOrjjU6h/1kknuBuxHu1+vqJfktm/BU3ikC
+        lX8sHOfEgCf0ZA4BOzWtHvw2AQ==
+X-Google-Smtp-Source: AMsMyM7Bspny5wJ7RTUvQPBMhUFUW4mhUnaRJBnTUiH0bjIFvW70GdXwxuc6WhIqJ42e15MlO4qMzQ==
+X-Received: by 2002:a63:b4a:0:b0:438:c97c:994d with SMTP id a10-20020a630b4a000000b00438c97c994dmr21373081pgl.597.1663689650624;
+        Tue, 20 Sep 2022 09:00:50 -0700 (PDT)
+Received: from lx2k.lixom.net (99-152-116-91.lightspeed.sntcca.sbcglobal.net. [99.152.116.91])
+        by smtp.gmail.com with ESMTPSA id bf10-20020a170902b90a00b0017849a2b56asm89488plb.46.2022.09.20.09.00.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Sep 2022 09:00:48 -0700 (PDT)
+From:   Olof Johansson <olof@lixom.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Olof Johansson <olof@lixom.net>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>
+Subject: [PATCH v2] serial: sifive: enable clocks for UART when probed
+Date:   Tue, 20 Sep 2022 09:00:18 -0700
+Message-Id: <20220920160017.7315-1-olof@lixom.net>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <202209201359.3f33d97f-oliver.sang@intel.com>
-In-Reply-To: <202209201359.3f33d97f-oliver.sang@intel.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Tue, 20 Sep 2022 08:59:48 -0700
-Message-ID: <CANn89iJn554zCtkG9d556kgC4010yfgc4X+GAnoQQW+5Z_sNpg@mail.gmail.com>
-Subject: Re: [tcp] 4bfe744ff1: packetdrill.packetdrill/gtests/net/tcp/epoll/epoll_out_edge_default_notsent_lowat_ipv4-mapped-v6.fail
-To:     kernel test robot <oliver.sang@intel.com>
-Cc:     lkp@lists.01.org, kbuild test robot <lkp@intel.com>,
-        "David S. Miller" <davem@davemloft.net>, Doug Porter <dsp@fb.com>,
-        Soheil Hassas Yeganeh <soheil@google.com>,
-        Neal Cardwell <ncardwell@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,82 +74,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 10:22 PM kernel test robot
-<oliver.sang@intel.com> wrote:
->
->
-> Greeting,
->
-> FYI, we noticed the following commit (built with gcc-11):
->
-> commit: 4bfe744ff1644fbc0a991a2677dc874475dd6776 ("tcp: fix potential xmit stalls caused by TCP_NOTSENT_LOWAT")
-> https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
->
-> in testcase: packetdrill
-> version: packetdrill-x86_64-329d89e-1_20220824
-> with following parameters:
->
->
->
-> on test machine: 8 threads 1 sockets Intel(R) Core(TM) i7-7700 CPU @ 3.60GHz (Kaby Lake) with 32G memory
->
-> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
->
->
-> If you fix the issue, kindly add following tag
-> | Reported-by: kernel test robot <oliver.sang@intel.com>
-> | Link: https://lore.kernel.org/r/202209201359.3f33d97f-oliver.sang@intel.com
->
->
-> we actually also observed other tests failed on this commit but pass on parent:
-> (more details are in attached dmesg and 'packetdrill' file)
->
-> =========================================================================================
-> tbox_group/testcase/rootfs/kconfig/compiler:
->   lkp-kbl-d01/packetdrill/debian-11.1-x86_64-20220510.cgz/x86_64-rhel-8.3-func/gcc-11
->
-> 1fcb8fb3522f5b0f 4bfe744ff1644fbc0a991a2677d
-> ---------------- ---------------------------
->        fail:runs  %reproduction    fail:runs
->            |             |             |
->            :30         100%          30:30    packetdrill.packetdrill/gtests/net/tcp/epoll/epoll_out_edge_default_notsent_lowat_ipv4-mapped-v6.fail
->            :30         100%          30:30    packetdrill.packetdrill/gtests/net/tcp/epoll/epoll_out_edge_default_notsent_lowat_ipv4.fail
->            :30         100%          30:30    packetdrill.packetdrill/gtests/net/tcp/epoll/epoll_out_edge_ipv4-mapped-v6.fail
->            :30         100%          30:30    packetdrill.packetdrill/gtests/net/tcp/epoll/epoll_out_edge_ipv4.fail
->            :30         100%          30:30    packetdrill.packetdrill/gtests/net/tcp/epoll/epoll_out_edge_notsent_lowat_ipv4-mapped-v6.fail
->            :30         100%          30:30    packetdrill.packetdrill/gtests/net/tcp/epoll/epoll_out_edge_notsent_lowat_ipv4.fail
->
->
-> stdout:
-> stderr:
-> FAIL [/lkp/benchmarks/packetdrill/gtests/net/tcp/epoll/epoll_out_edge.pkt (ipv4)]
-> stdout:
-> stderr:
-> FAIL [/lkp/benchmarks/packetdrill/gtests/net/tcp/epoll/epoll_out_edge_default_notsent_lowat.pkt (ipv4-mapped-v6)]
->
->
->
-> To reproduce:
->
->         git clone https://github.com/intel/lkp-tests.git
->         cd lkp-tests
->         sudo bin/lkp install job.yaml           # job file is attached in this email
->         bin/lkp split-job --compatible job.yaml # generate the yaml file for lkp run
->         sudo bin/lkp run generated-yaml-file
->
->         # if come across any failure that blocks the test,
->         # please remove ~/.lkp and /lkp dir to run from a clean state.
->
->
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
->
->
+When the PWM driver was changed to disable clocks if no PWMs are enabled,
+it ended up also disabling the shared parent with the UART, since the
+UART doesn't do any clock enablement on its own.
 
-Sure, these (out of tree) packetdrill tests need to account for the
-new kernel behavior.
+To avoid these surprises, switch to clk_get_enabled().
 
-I am not sure who is responsible for these tests, but this is not the
-kernel maintainers.
+Fixes: ace41d7564e655 ("pwm: sifive: Ensure the clk is enabled exactly once per running PWM")
+Cc: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Cc: Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>
+Signed-off-by: Olof Johansson <olof@lixom.net>
+
+---
+
+v2: Switch to devm_clk_enabled() per Uwe's suggestion.
+
+---
+ drivers/tty/serial/sifive.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/tty/serial/sifive.c b/drivers/tty/serial/sifive.c
+index 5c3a07546a58..4b1d4fe8458e 100644
+--- a/drivers/tty/serial/sifive.c
++++ b/drivers/tty/serial/sifive.c
+@@ -945,7 +945,7 @@ static int sifive_serial_probe(struct platform_device *pdev)
+ 		return PTR_ERR(base);
+ 	}
+ 
+-	clk = devm_clk_get(&pdev->dev, NULL);
++	clk = devm_clk_get_enabled(&pdev->dev, NULL);
+ 	if (IS_ERR(clk)) {
+ 		dev_err(&pdev->dev, "unable to find controller clock\n");
+ 		return PTR_ERR(clk);
+-- 
+2.30.2
+
