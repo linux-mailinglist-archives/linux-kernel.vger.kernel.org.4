@@ -2,124 +2,492 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 163AA5BF0C5
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 01:03:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A863F5BF0CC
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 01:04:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229631AbiITXDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 19:03:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47230 "EHLO
+        id S230154AbiITXEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 19:04:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbiITXDV (ORCPT
+        with ESMTP id S230150AbiITXEd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 19:03:21 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF114621F
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 16:03:20 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id t3so3906382ply.2
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 16:03:20 -0700 (PDT)
+        Tue, 20 Sep 2022 19:04:33 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E5754E60C
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 16:04:28 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id v1so3880328plo.9
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 16:04:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=E44LtxBb4cFW/kLPJw1A0jZf+CX5zmSzX5uonY/R+VY=;
-        b=IOM5LD7O5hlft6bVTbnyuQNGfvNbk1tT0zAkLCkQrG9RL+KlHK7IBeI07Gwz3pd1rc
-         AFWuaYGAP5lYDyCmtmovpVFnHDgtM6h3RKVwUJ5XCL+1NP8DPkdZgDvmZFFz1DKxPki1
-         0MGNCE717O6FC3c7L+2pGtFUMsuAMAvqaIQqgWKKi4O8afhI6jWTSHlA16FrwPK7Kz8z
-         0+MuM1Y1518bJMC8pF+wWcVjFXUuGlW5tyPGIQJ0uvLzlG1SM3suBQkGVzXLcyUyvQwh
-         uBdbpFIzLK3vlFbj5cj17yswtSmDTj7NnapWm4/sFacKVhEBoryWBkbDESAzmEhpO5X9
-         T7QA==
+        bh=LyrJKunt6Bv95Zben2BBaqPexfz0fVUlC+ujvmVQHyI=;
+        b=NArXo2QMx4TXiiCrgwuPPdakfQgOVr4aL6SFd1TqZQFtDqr2871hq0U00cz2C5cYmy
+         m7j//s0OdF1fkZc43YSPg8i4TgsZdoglKhC3IRqiAX41DU9GnEygwYYA075SA8wW4pRQ
+         R0goHeVnhAUDQVY8bANL7I29S5kOGZwKvm2Ss=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=E44LtxBb4cFW/kLPJw1A0jZf+CX5zmSzX5uonY/R+VY=;
-        b=p7qBSnWScc0LtgW8Gnb3WZt6AbJDseru8x7u2bE1PIFRk+DoQBmbQdd8F/fQvxtoaO
-         DJNg9MI2UI4kgyEBYfJO9ABgJSHzTPQa4hcFAio8yG5W/dA+1da7+N1FY81VAp4sdOmi
-         ZyVDl8WmUi3XUDnO2523bFTrYRzwqpljm0UIDPwJTYcR771YY8jP5RXx2sAhvhhST/R2
-         PRS9SjeMuSlZ32Z41NXsBf4J/KKNVHRIilASBtWZFdsockEaY4bFHfQAz/3qaWDIxN3s
-         4IVi/4upMVCLJlm4yJJafS9PHa2hUExTCt9F+EiBnkM5COroRyTw7vs55awc44q3EAO+
-         SUcA==
-X-Gm-Message-State: ACrzQf37MsRO+XBqlz9Pey4UAM9J1LFP6X9Qq1h+aIHhUAlJUX+IVbui
-        LALbZf8WfJ0jm3u4oywdY3NVRA==
-X-Google-Smtp-Source: AMsMyM45dkTMa7ElEzbUnT3/VtdsrsuQn4Slxp7unEvmZyXmajo2YjikD9tCxViypUzSK++/JNqFTA==
-X-Received: by 2002:a17:90b:3ec7:b0:202:b984:8436 with SMTP id rm7-20020a17090b3ec700b00202b9848436mr6324651pjb.4.1663714999365;
-        Tue, 20 Sep 2022 16:03:19 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id j6-20020a17090276c600b001789b724712sm409491plt.232.2022.09.20.16.03.18
+        bh=LyrJKunt6Bv95Zben2BBaqPexfz0fVUlC+ujvmVQHyI=;
+        b=Yu6Zka+41exPvjSNGmqjRk7tVy91pyObNEbMYFl2ZTEgDmQuYeZl/j9nrzKw2bg9+l
+         q9Q65BbI/37JL6qVpTfWnkXDvswkxby9CndMeAjEpbEiqQo97LqSElO8Rmyw5DlQTCDc
+         AwI0QtVv/Cmad7uCrW7AMidtC/GxMFqLDPM80tfYeeDaVfpp8y81goKHEY4PYYbVeE2C
+         ROoc38gQDXyG6Xz94xrwVgmAWv8dQ2wY+unPwMpOMzyhhgWDgp8JsmB/c21yk5uuCThj
+         HXgufZIollq6E4YAqy8kHs0DvOwQzl68uRBUr5P1EYW5lUpisI4RRhc+yFvv2NW6tkC3
+         ihPg==
+X-Gm-Message-State: ACrzQf1/6GJjbU3HmAZKW+zupRpxqOGXlJcgHDDuRcF53tmpqPlyBbnY
+        VY4y06PiF7wrpM4KIYjkxW1LJg==
+X-Google-Smtp-Source: AMsMyM4A4G2t2nwn3Gic6sgWIvEWBMwsw4D6wb3WzEtXD+3H5ZsbXoR4z32bXCFHZs9hTAyOl9EKZg==
+X-Received: by 2002:a17:90b:1d87:b0:200:b6e1:7e9f with SMTP id pf7-20020a17090b1d8700b00200b6e17e9fmr6296859pjb.235.1663715067465;
+        Tue, 20 Sep 2022 16:04:27 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id t8-20020a170902e84800b001753654d9c5sm447991plg.95.2022.09.20.16.04.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 16:03:18 -0700 (PDT)
-Date:   Tue, 20 Sep 2022 23:03:15 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/6] KVM: x86: Hyper-V invariant TSC control
-Message-ID: <YypGs6BOX7Wvtl/H@google.com>
-References: <20220916135205.3185973-1-vkuznets@redhat.com>
- <20220916135205.3185973-4-vkuznets@redhat.com>
+        Tue, 20 Sep 2022 16:04:26 -0700 (PDT)
+Date:   Tue, 20 Sep 2022 16:04:25 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Evan Green <evgreen@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, gwendal@chromium.org,
+        Eric Biggers <ebiggers@kernel.org>,
+        Matthew Garrett <mgarrett@aurora.tech>, jarkko@kernel.org,
+        zohar@linux.ibm.com, linux-integrity@vger.kernel.org,
+        Pavel Machek <pavel@ucw.cz>, apronin@chromium.org,
+        dlunev@google.com, rjw@rjwysocki.net, linux-pm@vger.kernel.org,
+        corbet@lwn.net, jejb@linux.ibm.com,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        Paul Moore <paul@paul-moore.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v2 03/10] security: keys: trusted: Include TPM2 creation
+ data
+Message-ID: <202209201552.DF8C511D23@keescook>
+References: <20220823222526.1524851-1-evgreen@chromium.org>
+ <20220823152108.v2.3.Ieb1215f598bc9df56b0e29e5977eae4fcca25e15@changeid>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220916135205.3185973-4-vkuznets@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220823152108.v2.3.Ieb1215f598bc9df56b0e29e5977eae4fcca25e15@changeid>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 16, 2022, Vitaly Kuznetsov wrote:
-> Normally, genuine Hyper-V doesn't expose architectural invariant TSC
-> (CPUID.80000007H:EDX[8]) to its guests by default. A special PV MSR
-> (HV_X64_MSR_TSC_INVARIANT_CONTROL, 0x40000118) and corresponding CPUID
-> feature bit (CPUID.0x40000003.EAX[15]) were introduced. When bit 0 of the
-> PV MSR is set, invariant TSC bit starts to show up in CPUID. When the
-> feature is exposed to Hyper-V guests, reenlightenment becomes unneeded.
+On Tue, Aug 23, 2022 at 03:25:19PM -0700, Evan Green wrote:
+> In addition to the private key and public key, the TPM2_Create
+> command may also return creation data, a creation hash, and a creation
+> ticket. These fields allow the TPM to attest to the contents of a
+> specified set of PCRs at the time the trusted key was created. Encrypted
+> hibernation will use this to ensure that PCRs settable only by the
+> kernel were set properly at the time of creation, indicating this is an
+> authentic hibernate key.
 > 
-> Add the feature to KVM. Keep CPUID output intact when the feature
-> wasn't exposed to L1 and implement the required logic for hiding
-> invariant TSC when the feature was exposed and invariant TSC control
-> MSR wasn't written to. Copy genuine Hyper-V behavior and forbid to
-> disable the feature once it was enabled.
+> Encode these additional parameters into the ASN.1 created to represent
+> the key blob. The new fields are made optional so that they don't bloat
+> key blobs which don't need them, and to ensure interoperability with
+> old blobs.
+> 
+> ---
+> 
+> (no changes since v1)
+> 
+> This is a replacement for Matthew's original patch here:
+> https://patchwork.kernel.org/patch/12096489/
+> 
+> That patch was written before the exported key format was switched to
+> ASN.1. This patch accomplishes the same thing (saving, loading, and
+> getting pointers to the creation data) while utilizing the new ASN.1
+> format.
 
-...
+This part (between your S-o-b and the "---") should got below the "---"
+after your S-o-b, otherwise tooling will include it in the commit log
+(or lose your S-o-b).
 
-> diff --git a/arch/x86/kvm/hyperv.h b/arch/x86/kvm/hyperv.h
-> index da2737f2a956..8be6dc3d76af 100644
-> --- a/arch/x86/kvm/hyperv.h
-> +++ b/arch/x86/kvm/hyperv.h
-> @@ -133,6 +133,21 @@ static inline bool kvm_hv_has_stimer_pending(struct kvm_vcpu *vcpu)
->  			     HV_SYNIC_STIMER_COUNT);
+> 
+> Signed-off-by: Evan Green <evgreen@chromium.org>
+> ---
+>  include/keys/trusted-type.h               |   8 +
+>  security/keys/trusted-keys/tpm2key.asn1   |   5 +-
+>  security/keys/trusted-keys/trusted_tpm2.c | 202 +++++++++++++++++++---
+>  3 files changed, 190 insertions(+), 25 deletions(-)
+> 
+> diff --git a/include/keys/trusted-type.h b/include/keys/trusted-type.h
+> index 4eb64548a74f1a..209086fed240a5 100644
+> --- a/include/keys/trusted-type.h
+> +++ b/include/keys/trusted-type.h
+> @@ -22,15 +22,23 @@
+>  #define MAX_BLOB_SIZE			512
+>  #define MAX_PCRINFO_SIZE		64
+>  #define MAX_DIGEST_SIZE			64
+> +#define MAX_CREATION_DATA		412
+> +#define MAX_TK				76
+>  
+>  struct trusted_key_payload {
+>  	struct rcu_head rcu;
+>  	unsigned int key_len;
+>  	unsigned int blob_len;
+> +	unsigned int creation_len;
+> +	unsigned int creation_hash_len;
+> +	unsigned int tk_len;
+>  	unsigned char migratable;
+>  	unsigned char old_format;
+>  	unsigned char key[MAX_KEY_SIZE + 1];
+>  	unsigned char blob[MAX_BLOB_SIZE];
+> +	unsigned char *creation;
+> +	unsigned char *creation_hash;
+> +	unsigned char *tk;
+>  };
+>  
+>  struct trusted_key_options {
+> diff --git a/security/keys/trusted-keys/tpm2key.asn1 b/security/keys/trusted-keys/tpm2key.asn1
+> index f57f869ad60068..1bfbf290e523a3 100644
+> --- a/security/keys/trusted-keys/tpm2key.asn1
+> +++ b/security/keys/trusted-keys/tpm2key.asn1
+> @@ -7,5 +7,8 @@ TPMKey ::= SEQUENCE {
+>  	emptyAuth	[0] EXPLICIT BOOLEAN OPTIONAL,
+>  	parent		INTEGER ({tpm2_key_parent}),
+>  	pubkey		OCTET STRING ({tpm2_key_pub}),
+> -	privkey		OCTET STRING ({tpm2_key_priv})
+> +	privkey		OCTET STRING ({tpm2_key_priv}),
+> +	creationData	[1] EXPLICIT OCTET STRING OPTIONAL ({tpm2_key_creation_data}),
+> +	creationHash	[2] EXPLICIT OCTET STRING OPTIONAL ({tpm2_key_creation_hash}),
+> +	creationTk	[3] EXPLICIT OCTET STRING OPTIONAL ({tpm2_key_creation_tk})
+>  	}
+
+Maybe include a link (or named reference) to these fields from the TPM
+spec?
+
+> [...]
+> @@ -46,6 +49,26 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
+>  
+>  	pub_len = get_unaligned_be16(src) + 2;
+>  	pub = src;
+> +	src += pub_len;
+> +
+> +	creation_data_len = get_unaligned_be16(src);
+> +	if (creation_data_len) {
+> +		creation_data_len += 2;
+> +		creation_data = src;
+> +		src += creation_data_len;
+> +
+> +		creation_hash_len = get_unaligned_be16(src) + 2;
+> +		creation_hash = src;
+> +		src += creation_hash_len;
+> +
+> +		/*
+> +		 * The creation ticket (TPMT_TK_CREATION) consists of a 2 byte
+> +		 * tag, 4 byte handle, and then a TPM2B_DIGEST, which is a 2
+> +		 * byte length followed by data.
+> +		 */
+> +		creation_tk_len = get_unaligned_be16(src + 6) + 8;
+> +		creation_tk = src;
+> +	}
+>  
+>  	if (!scratch)
+>  		return -ENOMEM;
+
+I don't see anything in this code (even before your patch) actually
+checking length against the "len" argument to tpm2_key_encode(). I think
+that needs to be fixed so proper bounds checking can be done here.
+Otherwise how do we know if we're running off the end of "src"?
+
+Yes, I realize if we have a malicious TPM everything goes out the
+window, but TPMs don't always behave -- this code should likely be more
+defensive. Or, I've misunderstood where "src" is coming from.
+Regardless, my question stands: what is checking "len"?
+
+> @@ -63,26 +86,81 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
+>  	}
+>  
+>  	/*
+> -	 * Assume both octet strings will encode to a 2 byte definite length
+> +	 * Assume each octet string will encode to a 2 byte definite length.
+> +	 * Each optional octet string consumes one extra byte.
+>  	 *
+> -	 * Note: For a well behaved TPM, this warning should never
+> -	 * trigger, so if it does there's something nefarious going on
+> +	 * Note: For a well behaved TPM, this warning should never trigger, so
+> +	 * if it does there's something nefarious going on
+>  	 */
+> -	if (WARN(work - scratch + pub_len + priv_len + 14 > SCRATCH_SIZE,
+> -		 "BUG: scratch buffer is too small"))
+> -		return -EINVAL;
+> +	if (WARN(work - scratch + pub_len + priv_len + creation_data_len +
+> +		 creation_hash_len + creation_tk_len + (7 * 5) + 3 >
+> +		 SCRATCH_SIZE,
+> +		 "BUG: scratch buffer is too small")) {
+> +		rc = -EINVAL;
+> +		goto err;
+> +	}
+>  
+>  	work = asn1_encode_integer(work, end_work, options->keyhandle);
+>  	work = asn1_encode_octet_string(work, end_work, pub, pub_len);
+>  	work = asn1_encode_octet_string(work, end_work, priv, priv_len);
+> +	if (creation_data_len) {
+> +		u8 *scratch2 = kmalloc(SCRATCH_SIZE, GFP_KERNEL);
+> +		u8 *work2;
+> +		u8 *end_work2 = scratch2 + SCRATCH_SIZE;
+> +
+> +		if (!scratch2) {
+> +			rc = -ENOMEM;
+> +			goto err;
+> +		}
+> +
+> +		work2 = asn1_encode_octet_string(scratch2,
+> +						 end_work2,
+> +						 creation_data,
+> +						 creation_data_len);
+> +
+> +		work = asn1_encode_tag(work,
+> +				       end_work,
+> +				       1,
+> +				       scratch2,
+> +				       work2 - scratch2);
+> +
+> +		work2 = asn1_encode_octet_string(scratch2,
+> +						 end_work2,
+> +						 creation_hash,
+> +						 creation_hash_len);
+> +
+> +		work = asn1_encode_tag(work,
+> +				       end_work,
+> +				       2,
+> +				       scratch2,
+> +				       work2 - scratch2);
+> +
+> +		work2 = asn1_encode_octet_string(scratch2,
+> +						 end_work2,
+> +						 creation_tk,
+> +						 creation_tk_len);
+> +
+> +		work = asn1_encode_tag(work,
+> +				       end_work,
+> +				       3,
+> +				       scratch2,
+> +				       work2 - scratch2);
+> +
+> +		kfree(scratch2);
+> +	}
+>  
+>  	work1 = payload->blob;
+>  	work1 = asn1_encode_sequence(work1, work1 + sizeof(payload->blob),
+>  				     scratch, work - scratch);
+> -	if (WARN(IS_ERR(work1), "BUG: ASN.1 encoder failed"))
+> -		return PTR_ERR(work1);
+> +	if (WARN(IS_ERR(work1), "BUG: ASN.1 encoder failed")) {
+> +		rc = PTR_ERR(work1);
+> +		goto err;
+
+I find the addition of the word "BUG" in a WARN() to be confusing. :) I
+realize this is just copying the existing style, though.
+
+> +	}
+>  
+>  	return work1 - payload->blob;
+> +err:
+> +	kfree(scratch);
+> +	return rc;
 >  }
 >  
-> +/*
-> + * With HV_ACCESS_TSC_INVARIANT feature, invariant TSC (CPUID.80000007H:EDX[8])
-> + * is only observed after HV_X64_MSR_TSC_INVARIANT_CONTROL was written to.
-> + */
-> +static inline bool kvm_hv_invtsc_suppressed(struct kvm_vcpu *vcpu)
+>  struct tpm2_key_context {
+> @@ -91,15 +169,21 @@ struct tpm2_key_context {
+>  	u32 pub_len;
+>  	const u8 *priv;
+>  	u32 priv_len;
+> +	const u8 *creation_data;
+> +	u32 creation_data_len;
+> +	const u8 *creation_hash;
+> +	u32 creation_hash_len;
+> +	const u8 *creation_tk;
+> +	u32 creation_tk_len;
+>  };
+>  
+>  static int tpm2_key_decode(struct trusted_key_payload *payload,
+> -			   struct trusted_key_options *options,
+> -			   u8 **buf)
+> +			   struct trusted_key_options *options)
+>  {
+> +	u64 data_len;
+>  	int ret;
+>  	struct tpm2_key_context ctx;
+> -	u8 *blob;
+> +	u8 *blob, *buf;
+>  
+>  	memset(&ctx, 0, sizeof(ctx));
+>  
+> @@ -108,21 +192,57 @@ static int tpm2_key_decode(struct trusted_key_payload *payload,
+>  	if (ret < 0)
+>  		return ret;
+>  
+> -	if (ctx.priv_len + ctx.pub_len > MAX_BLOB_SIZE)
+> +	data_len = ctx.priv_len + ctx.pub_len + ctx.creation_data_len +
+> +		   ctx.creation_hash_len + ctx.creation_tk_len;
+> +
+> +	if (data_len > MAX_BLOB_SIZE)
+>  		return -EINVAL;
+>  
+> -	blob = kmalloc(ctx.priv_len + ctx.pub_len + 4, GFP_KERNEL);
+> -	if (!blob)
+> +	buf = kmalloc(data_len + 4, GFP_KERNEL);
+> +	if (!buf)
+>  		return -ENOMEM;
+>  
+> -	*buf = blob;
+> +	blob = buf;
+>  	options->keyhandle = ctx.parent;
+>  
+>  	memcpy(blob, ctx.priv, ctx.priv_len);
+>  	blob += ctx.priv_len;
+>  
+>  	memcpy(blob, ctx.pub, ctx.pub_len);
+> +	blob += ctx.pub_len;
+> +	if (ctx.creation_data_len) {
+> +		memcpy(blob, ctx.creation_data, ctx.creation_data_len);
+> +		blob += ctx.creation_data_len;
+> +	}
+> +
+> +	if (ctx.creation_hash_len) {
+> +		memcpy(blob, ctx.creation_hash, ctx.creation_hash_len);
+> +		blob += ctx.creation_hash_len;
+> +	}
+>  
+> +	if (ctx.creation_tk_len) {
+> +		memcpy(blob, ctx.creation_tk, ctx.creation_tk_len);
+> +		blob += ctx.creation_tk_len;
+> +	}
+> +
+> +	/*
+> +	 * Copy the buffer back into the payload blob since the creation
+> +	 * info will be used after loading.
+> +	 */
+> +	payload->blob_len = blob - buf;
+> +	memcpy(payload->blob, buf, payload->blob_len);
+> +	if (ctx.creation_data_len) {
+> +		payload->creation = payload->blob + ctx.priv_len + ctx.pub_len;
+> +		payload->creation_len = ctx.creation_data_len;
+> +		payload->creation_hash = payload->creation + ctx.creation_data_len;
+> +		payload->creation_hash_len = ctx.creation_hash_len;
+> +		payload->tk = payload->creation_hash +
+> +			      payload->creation_hash_len;
+> +
+> +		payload->tk_len = ctx.creation_tk_len;
+> +	}
+> +
+> +	kfree(buf);
+>  	return 0;
+>  }
+>  
+> @@ -185,6 +305,42 @@ int tpm2_key_priv(void *context, size_t hdrlen,
+>  	return 0;
+>  }
+>  
+> +int tpm2_key_creation_data(void *context, size_t hdrlen,
+> +			   unsigned char tag,
+> +			   const void *value, size_t vlen)
 > +{
-> +	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
+> +	struct tpm2_key_context *ctx = context;
 > +
-> +	if (!hv_vcpu)
-> +		return false;
+> +	ctx->creation_data = value;
+> +	ctx->creation_data_len = vlen;
 > +
-> +	return (hv_vcpu->cpuid_cache.features_eax & HV_ACCESS_TSC_INVARIANT) &&
-> +		!(to_kvm_hv(vcpu->kvm)->hv_invtsc_control & HV_INVARIANT_TSC_EXPOSED);
+> +	return 0;
+> +}
 
-It's still not obvious to me why KVM shouldn't do:
+What is hdrlen here? Or rather, what kinds of bounds checking is needed
+here?
 
-	if (!hv_vcpu)
-		return false;
+> +
+> +int tpm2_key_creation_hash(void *context, size_t hdrlen,
+> +			   unsigned char tag,
+> +			   const void *value, size_t vlen)
+> +{
+> +	struct tpm2_key_context *ctx = context;
+> +
+> +	ctx->creation_hash = value;
+> +	ctx->creation_hash_len = vlen;
+> +
+> +	return 0;
+> +}
+> +
+> +int tpm2_key_creation_tk(void *context, size_t hdrlen,
+> +			 unsigned char tag,
+> +			 const void *value, size_t vlen)
+> +{
+> +	struct tpm2_key_context *ctx = context;
+> +
+> +	ctx->creation_tk = value;
+> +	ctx->creation_tk_len = vlen;
+> +
+> +	return 0;
+> +}
+> +
+>  /**
+>   * tpm_buf_append_auth() - append TPMS_AUTH_COMMAND to the buffer.
+>   *
+> @@ -229,6 +385,7 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
+>  		      struct trusted_key_options *options)
+>  {
+>  	int blob_len = 0;
+> +	unsigned int offset;
+>  	struct tpm_buf buf;
+>  	u32 hash;
+>  	u32 flags;
+> @@ -317,13 +474,14 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
+>  		rc = -E2BIG;
+>  		goto out;
+>  	}
+> -	if (tpm_buf_length(&buf) < TPM_HEADER_SIZE + 4 + blob_len) {
+> +	offset = TPM_HEADER_SIZE + 4;
+> +	if (tpm_buf_length(&buf) < offset + blob_len) {
+>  		rc = -EFAULT;
+>  		goto out;
+>  	}
+>  
+>  	blob_len = tpm2_key_encode(payload, options,
+> -				   &buf.data[TPM_HEADER_SIZE + 4],
+> +				   &buf.data[offset],
+>  				   blob_len);
+>  
+>  out:
+> @@ -370,13 +528,11 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
+>  	int rc;
+>  	u32 attrs;
+>  
+> -	rc = tpm2_key_decode(payload, options, &blob);
+> -	if (rc) {
+> -		/* old form */
+> -		blob = payload->blob;
+> +	rc = tpm2_key_decode(payload, options);
+> +	if (rc)
+>  		payload->old_format = 1;
+> -	}
+>  
+> +	blob = payload->blob;
+>  	/* new format carries keyhandle but old format doesn't */
+>  	if (!options->keyhandle)
+>  		return -EINVAL;
+> @@ -433,8 +589,6 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
+>  			(__be32 *) &buf.data[TPM_HEADER_SIZE]);
+>  
+>  out:
+> -	if (blob != payload->blob)
+> -		kfree(blob);
+>  	tpm_buf_destroy(&buf);
+>  
+>  	if (rc > 0)
+> -- 
+> 2.31.0
+> 
 
-	return !(hv_vcpu->cpuid_cache.features_eax & HV_ACCESS_TSC_INVARIANT) ||
-	       !(to_kvm_hv(vcpu->kvm)->hv_invtsc_control & HV_INVARIANT_TSC_EXPOSED);
+Otherwise looks good!
 
-I.e. why is invariant TSC _not_ suppressed on Hyper-V by default?
+-Kees
+
+-- 
+Kees Cook
