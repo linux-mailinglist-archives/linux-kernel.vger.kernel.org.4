@@ -2,74 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3754A5BEAAC
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 18:01:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 264855BEAB3
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 18:02:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231463AbiITQBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 12:01:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37316 "EHLO
+        id S231334AbiITQCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 12:02:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231601AbiITQAt (ORCPT
+        with ESMTP id S231129AbiITQB3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 12:00:49 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 868E640BE9
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 09:00:47 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id h3so3594283lja.1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 09:00:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=+ipAueGYq20ud/XafDtc9lpH1wkNgmf60dZIXYXJn7M=;
-        b=zo6YEvwbQt03IwL1smspUYWhyyZznPGHE0FrtQkTg42FKGHlwf+cjm3rI5kLvms4BI
-         mHFYKVOPRFfu1fSSTAnODSWJD8UCm0khtBaRtYVMbjoIdKIdi8lZ1compQ6h9doiwpmJ
-         IWePJ3qc1dKkV0GFFz0gMQ7HlFh9xhY7XD1U+wx7raigu0p7clSAGHQmLADz4qO7TPu9
-         Qy/TlALCNQVUjW0Pjvp7XGVrFWRjGDWO/jcFwnRvYnT1d+IJUC8OQORtjf/Ql5H0tdTZ
-         lYjIhMgmI7/hUMPfGFWVahyp9Xf4SXzs0w0ciT+R83IEc3Iwk+fEHPrjXlyha9EbaV8X
-         /gpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=+ipAueGYq20ud/XafDtc9lpH1wkNgmf60dZIXYXJn7M=;
-        b=KRf4RSm2mxeIQoYSUaFTd7s+9Rv/LA4329zZXoWRkhJmOLDuEZipGjuArFtFnJrXaF
-         EydceTKFflCax6/5M8wrq2BA3SPIQC+/7ORL2O7oSWLMM7kfpQlmy67AqoLuZynlp/l+
-         +1gGxqSrcxAoBrRt3FmpiskVcLVxx4kmdJaS5WAkavEXgO3ElrBU5FTWrr2vAtuyb33x
-         9pXadYOGzdDhCdYyzpdL3Pqt6AL4e1gjtzgrbe41Tn1yQwdN5zbXx9ULXqODGmLc22Ip
-         uoWyNdSIuZufmQSiokwR3miBXnre897A8S8Rfcgedob9frOdZDehMw3rkeiwajuPvScr
-         /lYA==
-X-Gm-Message-State: ACrzQf1sFzs7BXsRJnol0DNSD4ETVambZqeuLT/Wz1P88BRLmErq4Huc
-        kQ2DF5T04LlDwslpkJ35zPW5Tg==
-X-Google-Smtp-Source: AMsMyM5SWWn2dqLZUyBtlV83s4L7GxK5sCbJPht6qd5fTmr+bTRUwrJbINsFVbiagjEn0Lwm5Z02fg==
-X-Received: by 2002:a2e:9606:0:b0:26c:442a:40c2 with SMTP id v6-20020a2e9606000000b0026c442a40c2mr5265118ljh.458.1663689645880;
-        Tue, 20 Sep 2022 09:00:45 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id j7-20020a2e8507000000b0026c36023a9asm10840lji.131.2022.09.20.09.00.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Sep 2022 09:00:45 -0700 (PDT)
-Message-ID: <558e9b2e-36cb-f09d-2c39-c98248b185d9@linaro.org>
-Date:   Tue, 20 Sep 2022 18:00:44 +0200
+        Tue, 20 Sep 2022 12:01:29 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ACFA5AA22;
+        Tue, 20 Sep 2022 09:01:27 -0700 (PDT)
+Received: from [192.168.1.138] ([37.4.248.18]) by mrelayeu.kundenserver.de
+ (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1MYvPq-1onmhJ3KTo-00Urvo; Tue, 20 Sep 2022 18:01:09 +0200
+Message-ID: <688777fc-e6af-8cbe-b19d-c531a7a66b32@i2se.com>
+Date:   Tue, 20 Sep 2022 18:01:08 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v5 2/3] arm64: tegra: Add PWM controllers on Tegra234
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 2/7] firmware: raspberrypi: Move the clock IDs to the
+ firmware header
 Content-Language: en-US
-To:     Sandipan Patra <spatra@nvidia.com>, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     bbasu@nvidia.com, kyarlagadda@nvidia.com
-References: <20220919141455.31084-1-spatra@nvidia.com>
- <20220919141455.31084-2-spatra@nvidia.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220919141455.31084-2-spatra@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Maxime Ripard <maxime@cerno.tech>, Daniel Vetter <daniel@ffwll.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Stephen Boyd <sboyd@kernel.org>, Emma Anholt <emma@anholt.net>,
+        Ray Jui <rjui@broadcom.com>, Maxime Ripard <mripard@kernel.org>
+Cc:     linux-rpi-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Dom Cobley <popcornmix@gmail.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220815-rpi-fix-4k-60-v2-0-983276b83f62@cerno.tech>
+ <20220815-rpi-fix-4k-60-v2-2-983276b83f62@cerno.tech>
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+In-Reply-To: <20220815-rpi-fix-4k-60-v2-2-983276b83f62@cerno.tech>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Provags-ID: V03:K1:BMJbLZFlz3GApiFfjEz3NrS77SCCBYOpm8x1SZNvBf/sPUv2bjl
+ yGngIQPx/zKjhQAqhy7bHLQT0zA/9l39u7GvalXhSO7fs+ORg5beqK0wg/1KDFz2pA5yswl
+ UmaLwSYihGXSm3hFwSxRbcfFVYUEPCchcD5OvVxuPx7gGgSJkNQ2nTuz4WJkuiTGjzR4ZP2
+ FTfNbxZ6XAJ9xPPJJWU9g==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:R1m/G7E0AnU=:nPGL4HIR3e+Q2MSI5Zjc5S
+ 4+gRfiLRFYbwycGCtG/OUM/q2FC7nNgHxJYE4I2BAs8jY9Iv92BSGsV0KcWBLofUjk4469O3E
+ A/YZ/hBoWrxSFItWVmdTHBVGJYiYLw2uboRgDVESHJxeEiZtCbIsujLuYaOXr5e7d4OJcPkqR
+ QPpgOr9pelOgV0SOi0ylywzbUMsrfvKFrhzXOULR7+BvYyMdBmfcqd6toH8p96FDXfgfFzQYI
+ ShIhlxa6RJYauRLn189Q24wpt7sFGSNs/uZocBtALtn8pPZjZLvag4Rc6WbyxIt0qFYK6I6Io
+ wgQSwe4rtJUrb91/p8HdmBZgNgaG6Y+ZgHRErNxlgj+kbOD5w5+lKTWxllVx89oa3e4t0SF3u
+ 8FRaPu/A71tBqeYg0pHjHGcV9mKejwle2F2yjlcub1/jo2wR0E8a9a3pjIzhdp8k3rT1dSxj4
+ Ne8CvBdvy2Xff7j2qeaGOnnGcMzdLhiGLcRxM8vPUXE9ZWdrAm0Fhkzh3qXaf1v2ByMU/G5WV
+ EvKyWH/6zAR5OzhNeOktRXTUsOA35LaEZ/oCSc/nMqLNNycGulZ6uHo7Jild27lwJ+SofMpYG
+ lOf0IkGlGVsgdEAghUZ3nSVY5jxdEwNWyTXddW5sqFbfB+bp9rj86NfQc6fTM464ztk9tQb4h
+ 1fj0OhtC7CDo8wvEsGtb89nOqGhXCqdV0IWXnCES/82ZaQg4xnNJJm1KivlGR2bQEnKtxEtwF
+ Riu4MivWDjEj3m52JSSlVFqHB3TD/vbqEBI/88PG7GDPZQwNOHu+ANxqLWbi+IIjijZvu0KR7
+ h+lOk0M
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,16 +70,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/09/2022 16:14, Sandipan Patra wrote:
-> Tegra234 has eight single-channel PWM controllers, one of them in the
-> AON block.
-> 
-> Signed-off-by: Sandipan Patra <spatra@nvidia.com>
-> ---
+Hi Maxime,
 
+Am 20.09.22 um 14:50 schrieb Maxime Ripard:
+> We'll need the clock IDs in more drivers than just the clock driver from
+> now on, so let's move them in the firmware header.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+recently as i reviewed the clk-raspberrypi i noticed this, too. But from 
+my point of view the clock ids should go to include/dt-bindings/clock 
+(like bcm2835.h) because these clock ids are actually referenced in the 
+DTS files and we need to make sure they are in sync. AFAIR this would 
+also result in change from enum to defines.
 
+Sorry, i didn't had the time to send a patch for this.
 
-Best regards,
-Krzysztof
+>
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+>
+> diff --git a/drivers/clk/bcm/clk-raspberrypi.c b/drivers/clk/bcm/clk-raspberrypi.c
+> index 876b37b8683c..1f5e6a1554e6 100644
+> --- a/drivers/clk/bcm/clk-raspberrypi.c
+> +++ b/drivers/clk/bcm/clk-raspberrypi.c
+> @@ -18,24 +18,6 @@
+>   
+>   #include <soc/bcm2835/raspberrypi-firmware.h>
+>   
+> -enum rpi_firmware_clk_id {
+> -	RPI_FIRMWARE_EMMC_CLK_ID = 1,
+> -	RPI_FIRMWARE_UART_CLK_ID,
+> -	RPI_FIRMWARE_ARM_CLK_ID,
+> -	RPI_FIRMWARE_CORE_CLK_ID,
+> -	RPI_FIRMWARE_V3D_CLK_ID,
+> -	RPI_FIRMWARE_H264_CLK_ID,
+> -	RPI_FIRMWARE_ISP_CLK_ID,
+> -	RPI_FIRMWARE_SDRAM_CLK_ID,
+> -	RPI_FIRMWARE_PIXEL_CLK_ID,
+> -	RPI_FIRMWARE_PWM_CLK_ID,
+> -	RPI_FIRMWARE_HEVC_CLK_ID,
+> -	RPI_FIRMWARE_EMMC2_CLK_ID,
+> -	RPI_FIRMWARE_M2MC_CLK_ID,
+> -	RPI_FIRMWARE_PIXEL_BVB_CLK_ID,
+> -	RPI_FIRMWARE_NUM_CLK_ID,
+> -};
+> -
+>   static char *rpi_firmware_clk_names[] = {
+>   	[RPI_FIRMWARE_EMMC_CLK_ID]	= "emmc",
+>   	[RPI_FIRMWARE_UART_CLK_ID]	= "uart",
+> diff --git a/include/soc/bcm2835/raspberrypi-firmware.h b/include/soc/bcm2835/raspberrypi-firmware.h
+> index 63426082bcb9..74c7bcc1ac2a 100644
+> --- a/include/soc/bcm2835/raspberrypi-firmware.h
+> +++ b/include/soc/bcm2835/raspberrypi-firmware.h
+> @@ -136,6 +136,24 @@ enum rpi_firmware_property_tag {
+>   	RPI_FIRMWARE_GET_DMA_CHANNELS =                       0x00060001,
+>   };
+>   
+> +enum rpi_firmware_clk_id {
+> +	RPI_FIRMWARE_EMMC_CLK_ID = 1,
+> +	RPI_FIRMWARE_UART_CLK_ID,
+> +	RPI_FIRMWARE_ARM_CLK_ID,
+> +	RPI_FIRMWARE_CORE_CLK_ID,
+> +	RPI_FIRMWARE_V3D_CLK_ID,
+> +	RPI_FIRMWARE_H264_CLK_ID,
+> +	RPI_FIRMWARE_ISP_CLK_ID,
+> +	RPI_FIRMWARE_SDRAM_CLK_ID,
+> +	RPI_FIRMWARE_PIXEL_CLK_ID,
+> +	RPI_FIRMWARE_PWM_CLK_ID,
+> +	RPI_FIRMWARE_HEVC_CLK_ID,
+> +	RPI_FIRMWARE_EMMC2_CLK_ID,
+> +	RPI_FIRMWARE_M2MC_CLK_ID,
+> +	RPI_FIRMWARE_PIXEL_BVB_CLK_ID,
+> +	RPI_FIRMWARE_NUM_CLK_ID,
+> +};
+> +
+>   #if IS_ENABLED(CONFIG_RASPBERRYPI_FIRMWARE)
+>   int rpi_firmware_property(struct rpi_firmware *fw,
+>   			  u32 tag, void *data, size_t len);
+>
