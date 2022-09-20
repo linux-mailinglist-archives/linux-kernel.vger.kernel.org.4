@@ -2,112 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C37595BE0BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 10:49:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 119375BE0B7
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 10:49:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230351AbiITItm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 04:49:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39124 "EHLO
+        id S230467AbiITItP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 04:49:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230296AbiITIt1 (ORCPT
+        with ESMTP id S231460AbiITItD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 04:49:27 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D64647CC
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 01:49:25 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id p5so2092638ljc.13
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 01:49:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=avM2JaVz9NzVtQII/XtgHHxaQA02fvGFDYoIGdJRzAY=;
-        b=h3MEJo8KfgdtxNKfxd7Bn1dOV8WYJXSTSzVFDgnJS9ErCWyOA+MrJrX/HldOGC6Qy0
-         ACCgLZEQIiUeE1cR2S9KI2RlDVje5wCZgwkJnkLBV9OGfOmduTRbYTko1A43M+lzLk5p
-         f3Sz1guQXSnM7ms1ObceO6f05ilrLGT7GBwJ5ISAXfCN2XkQePLbkx7syTQek18Ie93A
-         VgbvcZuC1Jyp39bOuKx26q3DRAf6jCwL/QZI8H9HFbG3CWt9dQC1OpV/6sw1sIiFzXYT
-         zmqCuXMN+UKGy4kSFbUnE6+BeMt1BdXxvGC3Y0Ur4VVOrW+x/6puf0TnNXFtXYeN2nG3
-         UwzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=avM2JaVz9NzVtQII/XtgHHxaQA02fvGFDYoIGdJRzAY=;
-        b=HuK72pL2ymKbU9NM9dw+oB8PdynWagnuTfeW4MEzZlL+cGV6XBvXnI3I6mPU6dwGyy
-         v0kpnzp7gpaLBrGwkQ3gWA1yVXpejuNcM/EmDnqng7Y8MYmGTzhkstWgn1shWbxVTxmB
-         A958x1THMsLWH8dDHcLZSKimLJhwiZVxh1tjrzhyGwM+3WnqyFKeWe9Smi8Ydsez3ibk
-         RoFR3tgoT1shC759vqWZOmtYVQcpnAY5WbB2St4K2hDcqAQL7JqBBqjWOMlfMr/rAGwO
-         2/+CLNBJFXfnDX2IwvQklsI0DJaTCwqyBxpHUz1hjmSDA/GJcQN43JIE0oR8c8vVypi3
-         igfw==
-X-Gm-Message-State: ACrzQf2uSPbznEe4HooDcw1i7EGvAL3qUqLjPq0eg/3MWRJJ/Eb0q1lR
-        NCECwcQYxIbM0dFgh3wQkZEvtAcs69DPrW/4KJ6rI8wu
-X-Google-Smtp-Source: AMsMyM6jDHLoSohMNs5WAtMtfasbnBmxT4I+611rAp0kp9gyW2OmBeNYK7Quk+AY4vYeBrglnXPtotv4l0lSkFKkiv4=
-X-Received: by 2002:a05:651c:222c:b0:26b:dec5:a4f0 with SMTP id
- y44-20020a05651c222c00b0026bdec5a4f0mr7132005ljq.359.1663663761407; Tue, 20
- Sep 2022 01:49:21 -0700 (PDT)
+        Tue, 20 Sep 2022 04:49:03 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6463DF2A
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 01:49:01 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8237A6601F65;
+        Tue, 20 Sep 2022 09:48:59 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1663663739;
+        bh=3O1gIy6Vy/Ms9LXKAt/hkcmUK5uDCj1tR4GUjf/uneA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=dRhnYDPrVJMp1Ip6BavnyMePgoxD6nH+8UU9E6dMEBlah5z4aogJg2zDXvw5TyvEo
+         yXhHi6UbMEFotN6D3gsICRJZIaDMqBSyhhYTI/qkWOG3YicwF1c3JaADwp2y7MwW0p
+         My9O/LRGF77G/OK/vmZ+vHmr4bHhPv8JWt2049TVlQgd9zWzlklXlbMJ8+X5NWT4Tk
+         +Neeo7aYESSTX0mCuRMZFOJ82DA22+kNWaPo02/uBFbJ8NtNHDqSScXhthGPVgrB0N
+         Mp9E0lmXI/ITWEu+RyAbO8BLWNxFJumJByNqknWCTSDb/1ACSr9ODCK58YDvUBpiDb
+         lHAY9WVJ1Fseg==
+Message-ID: <afa996b6-ee13-5add-9248-9339aa0beb02@collabora.com>
+Date:   Tue, 20 Sep 2022 10:48:56 +0200
 MIME-Version: 1.0
-References: <1663325892-9825-1-git-send-email-zhaoyang.huang@unisoc.com>
- <20220919101629.xlafi2y2dk357wk3@techsingularity.net> <CAGWkznFEBDwDVeR1AH6gk30PHU3pvSHBusOSQgEB2L7mZD4Mxg@mail.gmail.com>
- <20220920084555.rzphzayirdbtht2w@techsingularity.net>
-In-Reply-To: <20220920084555.rzphzayirdbtht2w@techsingularity.net>
-From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
-Date:   Tue, 20 Sep 2022 16:48:53 +0800
-Message-ID: <CAGWkznF2VvT=3sj3w8TC4JJ4XN0Y+CLGg_AYxxc4iuuVR518PQ@mail.gmail.com>
-Subject: Re: [RFC PATCH] mm: check global free_list if there is ongoing
- reclaiming when pcp fail
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>, Ke Wang <ke.wang@unisoc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [RESEND PATCH v2] mailbox: mtk-cmdq: fix gce timeout issue
+Content-Language: en-US
+To:     Yongqiang Niu <yongqiang.niu@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Cc:     Jassi Brar <jassisinghbrar@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Hsin-Yi Wang <hsinyi@chromium.org>
+References: <20220919071238.23920-1-yongqiang.niu@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220919071238.23920-1-yongqiang.niu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 4:46 PM Mel Gorman <mgorman@techsingularity.net> wrote:
->
-> On Tue, Sep 20, 2022 at 09:45:35AM +0800, Zhaoyang Huang wrote:
-> > On Mon, Sep 19, 2022 at 6:22 PM Mel Gorman <mgorman@techsingularity.net> wrote:
-> > >
-> > > On Fri, Sep 16, 2022 at 06:58:12PM +0800, zhaoyang.huang wrote:
-> > > > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> > > >
-> > > > Check the global free list again even if rmqueue_bulk failed for pcp pages when
-> > > > there is ongoing reclaiming, which could eliminate potential direct reclaim by
-> > > > chance.
-> > > >
-> > > > Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> > >
-> > > Patch does not apply and may be based on a custom kernel that introduced
-> > > a problem. There is no description of what problem this is trying to
-> > > fix. Checking the status of reclaim for a specific zone in this path would
-> > > be a little unexpected.  If allocation pressure is exceeding the ability
-> > > of reclaim to make progress then the caller likely needs to take action
-> > > like direct reclaim. If the allocation failure is due to a high-order
-> > > failure then it may need to enter direct compaction etc.
-> >
-> > Agree with the above comment. This is a proposal aiming at avoiding
-> > direct reclaiming things with minimum cost, that is to say, about 5
-> > CPU instructions in return with the overhead of function calls which
-> > has both of several loops inside and potential throttle sleep by IO
-> > congestion etc.
->
-> If the refill fails and kswapd is failing to keep up then actions like
-> direct reclaim or compaction are inevitable. At best, this patch would
-> race to allocate pages in one context that are being freed in parallel by
-> another context.
->
-> Nak.
-ok, I have noticed that the latest modification has made some changes
-on this path. thanks for comment
->
-> --
-> Mel Gorman
-> SUSE Labs
+Il 19/09/22 09:12, Yongqiang Niu ha scritto:
+> 1. enable gce ddr enable(gce reigster offset 0x48, bit 16 to 18) when gce work,
+> and disable gce ddr enable when gce work job done
+> 2. split cmdq clk enable/disable api, and control gce ddr enable/disable
+> in clk enable/disable function to make sure it could protect when cmdq
+> is multiple used by display and mdp
+> 
+> this is only for some SOC which has flag "control_by_sw".
+> for this kind of gce, there is a handshake flow between gce and ddr
+> hardware,
+> if not set ddr enable flag of gce, ddr will fall into idle mode,
+> then gce instructions will not process done.
+> we need set this flag of gce to tell ddr when gce is idle or busy
+> controlled by software flow.
+> 
+> ddr problem is a special case.
+> when test suspend/resume case, gce sometimes will pull ddr, and ddr can
+> not go to suspend.
+> if we set gce register 0x48 to 0x7, will fix this gce pull ddr issue,
+> as you have referred [1] and [2] (8192 and 8195)
+> but for mt8186, the gce is more special, except setting of [1] and [2],
+> we need add more setting set gce register 0x48 to (0x7 << 16 | 0x7)
+> when gce working to make sure gce could process all instructions ok.
+> this case just need normal bootup, if we not set this, display cmdq
+> task will timeout, and chrome homescreen will always black screen.
+> 
+> and with this patch, we have done these test on mt8186:
+> 1.suspend/resume
+> 2.boot up to home screen
+> 3.playback video with youtube.
+> 
+> suspend issue is special gce hardware issue, gce client  driver
+> command already process done, but gce still pull ddr.
+> 
+> Signed-off-by: Yongqiang Niu <yongqiang.niu@mediatek.com>
+> ---
+>   drivers/mailbox/mtk-cmdq-mailbox.c | 66 +++++++++++++++++++++++++++---
+>   1 file changed, 61 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/mailbox/mtk-cmdq-mailbox.c b/drivers/mailbox/mtk-cmdq-mailbox.c
+> index 9465f9081515..3a1b11de84be 100644
+> --- a/drivers/mailbox/mtk-cmdq-mailbox.c
+> +++ b/drivers/mailbox/mtk-cmdq-mailbox.c
+> @@ -80,16 +80,60 @@ struct cmdq {
+>   	bool			suspended;
+>   	u8			shift_pa;
+>   	bool			control_by_sw;
+> +	bool			sw_ddr_en;
+>   	u32			gce_num;
+> +	atomic_t		usage;
+> +	spinlock_t		lock;
+>   };
+>   
+>   struct gce_plat {
+>   	u32 thread_nr;
+>   	u8 shift;
+>   	bool control_by_sw;
+> +	bool sw_ddr_en;
+>   	u32 gce_num;
+>   };
+>   
+> +static s32 cmdq_clk_enable(struct cmdq *cmdq)
+> +{
+> +	s32 usage, ret;
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&cmdq->lock, flags);
+> +
+> +	usage = atomic_inc_return(&cmdq->usage);
+> +
+> +	ret = clk_bulk_enable(cmdq->gce_num, cmdq->clocks);
+> +	if (usage <= 0 || ret < 0) {
+> +		dev_err(cmdq->mbox.dev, "ref count %d ret %d suspend %d\n",
+> +			usage, ret, cmdq->suspended);
+> +	} else if (usage == 1) {
+> +		if (cmdq->sw_ddr_en)
+> +			writel((0x7 << 16) + 0x7, cmdq->base + GCE_GCTL_VALUE);
+
+Can this be used on MT8192/MT8195?
+If yes, you can avoid adding that sw_ddr_en, as you would be able to simply
+use `control_by_sw`, which already seems to be doing most of what you're adding
+here.
+
+Also, I dislike all this locking: the point of having MTK CMDQ is to improve
+performance (I know it's more than that, but there's no ISP upstream) and part
+of that happens because locking is greatly reduced.
+
+If you add it back up, we're losing part of the point.
+
+Though, in this driver, we are already tracking the usage of the CMDQ threads
+and, when there's no more usage, we're turning off the clocks: this is done
+through the usage of `task_busy_list`, so you *do* have a way to avoid adding
+more locks around.
+Besides that, you could also add a clock notifier for the same, but since
+the state is already tracked, I'd avoid using that.
+
+Moreover, (7 << 16) == GENMASK(18, 16)
+
+#define GCE_CMD_SOMETHING GENMASK(18, 16)
+
+Regards,
+Angelo
+
+
+
