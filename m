@@ -2,65 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E127D5BD98C
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 03:41:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6B835BD995
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 03:44:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230060AbiITBlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 21:41:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53250 "EHLO
+        id S229812AbiITBoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 21:44:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229896AbiITBl2 (ORCPT
+        with ESMTP id S230146AbiITBnj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 21:41:28 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92F3A54C86
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 18:40:42 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id s14-20020a17090a6e4e00b0020057c70943so9241499pjm.1
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 18:40:42 -0700 (PDT)
+        Mon, 19 Sep 2022 21:43:39 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 955E85073C
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 18:43:37 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id m81so1914363oia.1
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 18:43:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=z/jZBVKHrf7HtYZLUnYAd+Pe60b/PHa+auZtuaqhfT8=;
-        b=YfVBV3dzuD1D5wySYoRuLCSCFHAgvMu/0oUEoW8E5EGy1bi9bK/3Wo4IDRHrseDcDv
-         W/BnA7LUSPjgN8CJQbNwANEPbw2Mmj8vPBXDDiYFm/y2fVdO1NjWULHz9+uLG7bSgK0W
-         dE6UodGr9fxTNpSLBdsU+2gOHlLEH+yAW3ClkccRisO23vA0LoMFo3LbFc6lrN/zI8iF
-         CRlFfRLPN/OGFDMO8qkoI1mqysNjROyiMxTAwFRkgCtAHHO5vl7Di03zcoLVmQKzUuhX
-         ccya3Wf/L/Kf3h4H62q03Dtc37vCntslevOgjDV5k68MnZ0/WuhMMv4uZfPP9yjzB/ep
-         Or0w==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=74d7oXrgzFnbsbNRa8Cu3QvRmG8E5YtnNRFaXJLincQ=;
+        b=GLRly3LCDQPKWSrm7OfBuU5KtOm2/mMqvwnve4eqv0J5hU5tDiJOd76QeAKeQqfYrc
+         8k7pFmqKROa3V7nJPewkXewfiW4C6CcjxAzhKEcJ8GOejezcozDxAfVWStZQTfiXmiV7
+         e2fhSsyERH0fODiqVqFFWyDZcv/SXZ0fTEw3oMt4iUmPxc8W2q/5eoCJqWJSGyIYVMC5
+         mN4nRXgpot3Dm6PfWta6OvECVNT9wtl0arsuVZtw7KA8P/E3IK/PAqft4gdrBb0YdJ99
+         ZeL6Ak6WMsI15J8VRorHtlAlmIxNoK7KSbiejAOoOAiVRE0DYlMyd3t/Tq5uBbQ80gjB
+         5RMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=z/jZBVKHrf7HtYZLUnYAd+Pe60b/PHa+auZtuaqhfT8=;
-        b=rp305qgioMWGDrjxVQ0rt8mDzpmbxpeFLeQsG6j+vBwWJ71iatLK8p4G72HKiL7ExU
-         GiN0j0mGFfh/IxLPF4lNnbPXwkUBkU9w9WYMF1ABH4tJpwkJWTTw5K2rZV5wxaZ02vYb
-         hm6OrSr80BoxHGVVtvuACzPjT7unKVwa+Y2dQrmE0w8ZZ4tWudBIKLpyPuiT2Y846nSG
-         +0sXXmpBMv79PLPnQ1xWVI9UA9+OHf7698FBlD186M+AAoXd9Tuve0oLwKsZKjjBJrG+
-         5etPtRVCJY4uaSw+W+9zUIj7X+nZTt8Pndob743BSlciH7uaQ3nM+6jT65/gHCgB6t+o
-         MKXw==
-X-Gm-Message-State: ACrzQf0QeJBnbo8KLkihYgA1iVHd66LAGL95gVFTO5ZEOVopA4hdgcGb
-        AyfoNcsZKLbVp2hAiVks5JvBp61sMyk=
-X-Google-Smtp-Source: AMsMyM6puk5qGOPpKHFJRYzBm3Kjz6m8fNSBs5uZYPPpy5nnA9/uOibSQbmN3KwPCAK1kEtTHF+hew==
-X-Received: by 2002:a17:902:ab01:b0:178:fee:c607 with SMTP id ik1-20020a170902ab0100b001780feec607mr2497889plb.20.1663638041017;
-        Mon, 19 Sep 2022 18:40:41 -0700 (PDT)
-Received: from daehojeong-desktop.mtv.corp.google.com ([2620:15c:211:201:720f:7de4:678:7fcb])
-        by smtp.gmail.com with ESMTPSA id x7-20020a170902ec8700b00177e5d83d3esm62184plg.88.2022.09.19.18.40.40
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=74d7oXrgzFnbsbNRa8Cu3QvRmG8E5YtnNRFaXJLincQ=;
+        b=3JNaaDrp7i5MAerpdbmCi8l+JsgXFQ2RL3cKRYlZ5Fz6ad6rtO7vqFHaPybZAB/mWm
+         hyJ6q2bsfkEYJyk8kdBOApIhY26vDH/vEJ+MzLPrBAV6I8YvW9ORnhpgXnNYpD8ff024
+         51cKqA4+NbEjtLSq6jjN3y/PsPTclcvlkzH9uunDCUCGM7gvor6GqooYd7NiFqj3w6Pw
+         zubLHtiMcuRkuHlF/N9qkEOVJde6p9SH486oXITriQTOcbwh75SrIYhMzxY7IWckbTeh
+         y2b9Rhm9oqmAetdjQiBkWepi8+5fDw3ZWTv9BID8uOS7M/hMDwUG9vCvQ3PodQhJGXjM
+         89+g==
+X-Gm-Message-State: ACrzQf2zyqQGw2Ng+UCHSIJlwPjvW03CG+ZVT1wwu69h1ySv1HeM+yLD
+        CmfxyE2w4HHDyYt8If0cJDU=
+X-Google-Smtp-Source: AMsMyM4BuAM78s/IKfglr+RQpT2jPXqx9j6VV1pNnl7q1x33VbNYf+sMGFt/XMAhQy9h0Lmkyp77jA==
+X-Received: by 2002:a54:4482:0:b0:34f:b980:e74a with SMTP id v2-20020a544482000000b0034fb980e74amr511028oiv.32.1663638215848;
+        Mon, 19 Sep 2022 18:43:35 -0700 (PDT)
+Received: from localhost ([12.97.180.36])
+        by smtp.gmail.com with ESMTPSA id z20-20020a056871015400b0012784cb563dsm261175oab.22.2022.09.19.18.43.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 18:40:40 -0700 (PDT)
-From:   Daeho Jeong <daeho43@gmail.com>
-To:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com
-Cc:     Daeho Jeong <daehojeong@google.com>
-Subject: [PATCH v2] f2fs: introduce F2FS_IOC_START_ATOMIC_REPLACE
-Date:   Mon, 19 Sep 2022 18:40:36 -0700
-Message-Id: <20220920014036.2295853-1-daeho43@gmail.com>
-X-Mailer: git-send-email 2.37.3.968.ga6b4b080e4-goog
+        Mon, 19 Sep 2022 18:43:35 -0700 (PDT)
+Date:   Mon, 19 Sep 2022 18:41:25 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org,
+        Alexey Klimov <klimov.linux@gmail.com>,
+        Andy Whitcroft <apw@canonical.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        David Laight <David.Laight@aculab.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Kees Cook <keescook@chromium.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Russell King <linux@armlinux.org.uk>
+Subject: Re: [PATCH v4 3/4] lib/find_bit: optimize find_next_bit() functions
+Message-ID: <YykaRYstXwJGqwvB@yury-laptop>
+References: <20220915020730.852234-1-yury.norov@gmail.com>
+ <20220915020730.852234-4-yury.norov@gmail.com>
+ <YyhykvFCOskPAp59@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YyhykvFCOskPAp59@smile.fi.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,132 +83,149 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daeho Jeong <daehojeong@google.com>
+On Mon, Sep 19, 2022 at 04:45:54PM +0300, Andy Shevchenko wrote:
+> On Wed, Sep 14, 2022 at 07:07:29PM -0700, Yury Norov wrote:
+> > Over the past couple years, the function _find_next_bit() was extended
+> > with parameters that modify its behavior to implement and- zero- and le-
+> > flavors. The parameters are passed at compile time, but current design
+> > prevents a compiler from optimizing out the conditionals.
+> > 
+> > As find_next_bit() API grows, I expect that more parameters will be added.
+> > Current design would require more conditional code in _find_next_bit(),
+> > which would bloat the helper even more and make it barely readable.
+> > 
+> > This patch replaces _find_next_bit() with a macro FIND_NEXT_BIT, and adds
+> > a set of wrappers, so that the compile-time optimizations become possible.
+> > 
+> > The common logic is moved to the new macro, and all flavors may be
+> > generated by providing a FETCH macro parameter, like in this example:
+> > 
+> >   #define FIND_NEXT_BIT(FETCH, MUNGE, size, start) ...
+> > 
+> >   find_next_xornot_and_bit(addr1, addr2, addr3, size, start)
+> >   {
+> > 	return FIND_NEXT_BIT(addr1[idx] ^ ~addr2[idx] & addr3[idx],
+> > 				/* nop */, size, start);
+> >   }
+> > 
+> > The FETCH may be of any complexity, as soon as it only refers the bitmap(s)
+> > and an iterator idx.
+> > 
+> > MUNGE is here to support _le code generation for BE builds. May be
+> > empty.
+> > 
+> > I ran find_bit_benchmark 16 times on top of 6.0-rc2 and 16 times on top
+> > of 6.0-rc2 + this series. The results for kvm/x86_64 are:
+> > 
+> >                       v6.0-rc2  Optimized       Difference  Z-score
+> > Random dense bitmap         ns         ns        ns      %
+> > find_next_bit:          787735     670546    117189   14.9     3.97
+> > find_next_zero_bit:     777492     664208    113284   14.6    10.51
+> > find_last_bit:          830925     687573    143352   17.3     2.35
+> > find_first_bit:        3874366    3306635    567731   14.7     1.84
+> > find_first_and_bit:   40677125   37739887   2937238    7.2     1.36
+> > find_next_and_bit:      347865     304456     43409   12.5     1.35
+> > 
+> > Random sparse bitmap
+> > find_next_bit:           19816      14021      5795   29.2     6.10
+> > find_next_zero_bit:    1318901    1223794     95107    7.2     1.41
+> > find_last_bit:           14573      13514      1059    7.3     6.92
+> > find_first_bit:        1313321    1249024     64297    4.9     1.53
+> > find_first_and_bit:       8921       8098       823    9.2     4.56
+> > find_next_and_bit:        9796       7176      2620   26.7     5.39
+> > 
+> > Where the statistics is significant (z-score > 3), the improvement
+> > is ~15%.
+> > 
+> > According to the bloat-o-meter, the Image size is 10-11K less:
+> > 
+> > x86_64/defconfig:
+> > add/remove: 32/14 grow/shrink: 61/782 up/down: 6344/-16521 (-10177)
+> > 
+> > arm64/defconfig:
+> > add/remove: 3/2 grow/shrink: 50/714 up/down: 608/-11556 (-10948)
+> 
+> ...
+> 
+> >  /*
+> 
+> Seems like you wanted this to be a kernel doc, but it isn't right now.
 
-introduce a new ioctl to replace the whole content of a file atomically,
-which means it induces truncate and content update at the same time.
-We can start it with F2FS_IOC_START_ATOMIC_REPLACE and complete it with
-F2FS_IOC_COMMIT_ATOMIC_WRITE. Or abort it with
-F2FS_IOC_ABORT_ATOMIC_WRITE.
+No, I didn't. I can remove '@' below, if that concerns you.
+ 
+> > - * This is a common helper function for find_next_bit, find_next_zero_bit, and
+> > - * find_next_and_bit. The differences are:
+> > - *  - The "invert" argument, which is XORed with each fetched word before
+> > - *    searching it for one bits.
+> > - *  - The optional "addr2", which is anded with "addr1" if present.
+> > + * Common helper for find_next_bit() function family
+> 
+> In such case this should start with a name of the macro
+> 
+>  * FIND_NEXT_BIT - ...
+> 
+> > + * @FETCH: The expression that fetches and pre-processes each word of bitmap(s)
+> > + * @MUNGE: The expression that post-processes a word containing found bit (may be empty)
+> > + * @size: The bitmap size in bits
+> > + * @start: The bitnumber to start searching at
+> >   */
+> 
+> ...
+> 
+> > +#define FIND_NEXT_BIT(FETCH, MUNGE, size, start)				\
+> > +({										\
+> > +	unsigned long mask, idx, tmp, sz = (size), __start = (start);		\
+> > +										\
+> > +	if (unlikely(__start >= sz))						\
+> > +		goto out;							\
+> > +										\
+> > +	mask = MUNGE(BITMAP_FIRST_WORD_MASK(__start));				\
+> > +	idx = __start / BITS_PER_LONG;						\
+> > +										\
+> > +	for (tmp = (FETCH) & mask; !tmp; tmp = (FETCH)) {			\
+> > +		if ((idx + 1) * BITS_PER_LONG >= sz)				\
+> > +			goto out;						\
+> > +		idx++;								\
+> > +	}									\
+> > +										\
+> > +	sz = min(idx * BITS_PER_LONG + __ffs(MUNGE(tmp)), sz);			\
+> > +out:										\
+> 
+> I dunno if GCC expression limits the scope of goto labels, but on the safe side
+> you can add a prefix to it, so it becomes:
+> 
+> FIND_NEXT_BIT_out:
+> 
+> (or alike).
 
-Signed-off-by: Daeho Jeong <daehojeong@google.com>
----
-v2: add undefined ioctl number reported by <lkp@intel.com>
----
- fs/f2fs/data.c            |  3 +++
- fs/f2fs/f2fs.h            |  1 +
- fs/f2fs/file.c            | 12 ++++++++++--
- fs/f2fs/segment.c         | 14 +++++++++++++-
- include/uapi/linux/f2fs.h |  1 +
- 5 files changed, 28 insertions(+), 3 deletions(-)
+As Linus already said, the 'out' is function-scope. We can make it a
+block-scope with __label__, but this would make an impression that we
+are OK with stacking many FIND macros in a single function.
 
-diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
-index 6cd29a575105..d3d32db3a25d 100644
---- a/fs/f2fs/data.c
-+++ b/fs/f2fs/data.c
-@@ -3438,6 +3438,9 @@ static int prepare_atomic_write_begin(struct f2fs_sb_info *sbi,
- 	else if (*blk_addr != NULL_ADDR)
- 		return 0;
- 
-+	if (is_inode_flag_set(inode, FI_ATOMIC_REPLACE))
-+		goto reserve_block;
-+
- 	/* Look for the block in the original inode */
- 	err = __find_data_block(inode, index, &ori_blk_addr);
- 	if (err)
-diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-index 539da7f12cfc..2c49da12d6d8 100644
---- a/fs/f2fs/f2fs.h
-+++ b/fs/f2fs/f2fs.h
-@@ -764,6 +764,7 @@ enum {
- 	FI_COMPRESS_RELEASED,	/* compressed blocks were released */
- 	FI_ALIGNED_WRITE,	/* enable aligned write */
- 	FI_COW_FILE,		/* indicate COW file */
-+	FI_ATOMIC_REPLACE,	/* indicate atomic replace */
- 	FI_MAX,			/* max flag, never be used */
- };
- 
-diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-index 4f9b80c41b1e..4abd9d2a55b3 100644
---- a/fs/f2fs/file.c
-+++ b/fs/f2fs/file.c
-@@ -1982,7 +1982,7 @@ static int f2fs_ioc_getversion(struct file *filp, unsigned long arg)
- 	return put_user(inode->i_generation, (int __user *)arg);
- }
- 
--static int f2fs_ioc_start_atomic_write(struct file *filp)
-+static int f2fs_ioc_start_atomic_write(struct file *filp, bool truncate)
- {
- 	struct inode *inode = file_inode(filp);
- 	struct user_namespace *mnt_userns = file_mnt_user_ns(filp);
-@@ -2051,6 +2051,12 @@ static int f2fs_ioc_start_atomic_write(struct file *filp)
- 
- 	isize = i_size_read(inode);
- 	fi->original_i_size = isize;
-+	if (truncate) {
-+		set_inode_flag(inode, FI_ATOMIC_REPLACE);
-+		truncate_inode_pages_final(inode->i_mapping);
-+		f2fs_i_size_write(inode, 0);
-+		isize = 0;
-+	}
- 	f2fs_i_size_write(fi->cow_inode, isize);
- 
- 	spin_lock(&sbi->inode_lock[ATOMIC_FILE]);
-@@ -4080,7 +4086,9 @@ static long __f2fs_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
- 	case FS_IOC_GETVERSION:
- 		return f2fs_ioc_getversion(filp, arg);
- 	case F2FS_IOC_START_ATOMIC_WRITE:
--		return f2fs_ioc_start_atomic_write(filp);
-+		return f2fs_ioc_start_atomic_write(filp, false);
-+	case F2FS_IOC_START_ATOMIC_REPLACE:
-+		return f2fs_ioc_start_atomic_write(filp, true);
- 	case F2FS_IOC_COMMIT_ATOMIC_WRITE:
- 		return f2fs_ioc_commit_atomic_write(filp);
- 	case F2FS_IOC_ABORT_ATOMIC_WRITE:
-diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-index 143b7ea0fb8e..c524538a9013 100644
---- a/fs/f2fs/segment.c
-+++ b/fs/f2fs/segment.c
-@@ -263,14 +263,26 @@ static void __complete_revoke_list(struct inode *inode, struct list_head *head,
- 					bool revoke)
- {
- 	struct revoke_entry *cur, *tmp;
-+	pgoff_t start_index = 0;
-+	bool truncate = is_inode_flag_set(inode, FI_ATOMIC_REPLACE);
- 
- 	list_for_each_entry_safe(cur, tmp, head, list) {
--		if (revoke)
-+		if (revoke) {
- 			__replace_atomic_write_block(inode, cur->index,
- 						cur->old_addr, NULL, true);
-+		} else if (truncate) {
-+			f2fs_truncate_hole(inode, start_index, cur->index);
-+			start_index = cur->index + 1;
-+		}
-+
- 		list_del(&cur->list);
- 		kmem_cache_free(revoke_entry_slab, cur);
- 	}
-+
-+	if (!revoke && truncate) {
-+		f2fs_do_truncate_blocks(inode, start_index * PAGE_SIZE, false);
-+		clear_inode_flag(inode, FI_ATOMIC_REPLACE);
-+	}
- }
- 
- static int __f2fs_commit_atomic_write(struct inode *inode)
-diff --git a/include/uapi/linux/f2fs.h b/include/uapi/linux/f2fs.h
-index 3121d127d5aa..955d440be104 100644
---- a/include/uapi/linux/f2fs.h
-+++ b/include/uapi/linux/f2fs.h
-@@ -42,6 +42,7 @@
- 						struct f2fs_comp_option)
- #define F2FS_IOC_DECOMPRESS_FILE	_IO(F2FS_IOCTL_MAGIC, 23)
- #define F2FS_IOC_COMPRESS_FILE		_IO(F2FS_IOCTL_MAGIC, 24)
-+#define F2FS_IOC_START_ATOMIC_REPLACE	_IO(F2FS_IOCTL_MAGIC, 25)
- 
- /*
-  * should be same as XFS_IOC_GOINGDOWN.
--- 
-2.37.3.968.ga6b4b080e4-goog
+I spend some time trying to figure out a legitimate usecase for it, but
+nothing came in mind. There are many real cases when we need 2 or more
+find functions at once but all that cases would work with regular
+wrappers around FIND_BIT(). Check this, for example:
 
+https://lore.kernel.org/lkml/20220919210559.1509179-6-yury.norov@gmail.com/
+
+I don't know how FIND_BIT() machinery will evolve with time. For now
+it's a clean and neat local helper with a very straightforward usage.
+Lets keep it simple now? If someone will decide to call FIND_BIT()
+twice and fail, it would be a good hint that he's doing something
+wrong.
+
+> > +	sz;									\
+> > +})
+> 
+> ...
+> 
+> > +unsigned long _find_next_zero_bit_le(const unsigned long *addr, unsigned
+> > +		long size, unsigned long offset)
+> 
+> Usually we don't split parameters between lines.
+
+Ok
+
+Thanks,
+Yury
