@@ -2,240 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E42555BDE97
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 09:43:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 753F45BDF17
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 10:03:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229582AbiITHnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 03:43:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50330 "EHLO
+        id S231196AbiITICK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 04:02:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230416AbiITHmm (ORCPT
+        with ESMTP id S229932AbiITIBV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 03:42:42 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6BC399E1;
-        Tue, 20 Sep 2022 00:41:11 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MWthg1vt9zlK5Z;
-        Tue, 20 Sep 2022 15:38:59 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.67.175.61])
-        by APP2 (Coremail) with SMTP id Syh0CgBH4mt1biljrIh4BA--.36206S4;
-        Tue, 20 Sep 2022 15:40:39 +0800 (CST)
-From:   Pu Lehui <pulehui@huaweicloud.com>
-To:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Pu Lehui <pulehui@huawei.com>,
-        Pu Lehui <pulehui@huaweicloud.com>
-Subject: [PATCH bpf v4 2/2] bpftool: Fix wrong cgroup attach flags being assigned to effective progs
-Date:   Tue, 20 Sep 2022 15:42:33 +0000
-Message-Id: <20220920154233.1494352-3-pulehui@huaweicloud.com>
+        Tue, 20 Sep 2022 04:01:21 -0400
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9884D120A5;
+        Tue, 20 Sep 2022 01:01:16 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4MWv3j1S7Lz9xtn2;
+        Tue, 20 Sep 2022 15:55:29 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwAno13_ciljaChgAA--.64537S5;
+        Tue, 20 Sep 2022 09:00:47 +0100 (CET)
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        dhowells@redhat.com, jarkko@kernel.org, rostedt@goodmis.org,
+        mingo@redhat.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, shuah@kernel.org
+Cc:     bpf@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        deso@posteo.net, memxor@gmail.com,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Joanne Koong <joannelkoong@gmail.com>
+Subject: [PATCH v18 03/13] bpf: Move dynptr type check to is_dynptr_type_expected()
+Date:   Tue, 20 Sep 2022 09:59:41 +0200
+Message-Id: <20220920075951.929132-4-roberto.sassu@huaweicloud.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220920154233.1494352-1-pulehui@huaweicloud.com>
-References: <20220920154233.1494352-1-pulehui@huaweicloud.com>
+In-Reply-To: <20220920075951.929132-1-roberto.sassu@huaweicloud.com>
+References: <20220920075951.929132-1-roberto.sassu@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgBH4mt1biljrIh4BA--.36206S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxuw4fAr4rGrykAF18CF1rZwb_yoW7CF4xpr
-        4kZ34jy3WY9r9xXFsav3s0gFWrGr4xW342ya9xXr4ruF1xWryvyr1IkFy0vr13WFZ2yw4x
-        Z3W5ZFZrGw4jva7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUm214x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2jI8I6cxK62vIxIIY0VWUZVW8XwA2048vs2IY02
-        0E87I2jVAFwI0_Jryl82xGYIkIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2
-        F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjx
-        v20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2
-        z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0V
-        AKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1l
-        Ox8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErc
-        IFxwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkE
-        bVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67
-        AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI
-        42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMI
-        IF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVF
-        xhVjvjDU0xZFpf9x0pR9NVDUUUUU=
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
+X-CM-TRANSID: GxC2BwAno13_ciljaChgAA--.64537S5
+X-Coremail-Antispam: 1UD129KBjvJXoWxWryxKryktry5trW5JryrJFb_yoWrZF13pF
+        s7u39FqrW0yF42vw1fJF4kArZ8Kry8WrW5CFZ5A340yFyxZr98ZF15Kr17Xrn5KFWkCw43
+        Aw10vay5Aw1UJFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBab4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUWw
+        A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+        w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+        W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+        6r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2
+        WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkE
+        bVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x
+        0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E
+        7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcV
+        C0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwCI42IY
+        6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aV
+        CY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07UQZ2-UUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgABBF1jj39AmAACsT
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        KHOP_HELO_FCRDNS,SPF_HELO_NONE,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pu Lehui <pulehui@huawei.com>
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-When root-cgroup attach multi progs and sub-cgroup attach a override prog,
-bpftool will display incorrectly for the attach flags of the sub-cgroup’s
-effective progs:
+Move dynptr type check to is_dynptr_type_expected() from
+is_dynptr_reg_valid_init(), so that callers can better determine the cause
+of a negative result (dynamic pointer not valid/initialized, dynamic
+pointer of the wrong type). It will be useful for example for BTF, to
+restrict which dynamic pointer types can be passed to kfuncs, as initially
+only the local type will be supported.
 
-$ bpftool cgroup tree /sys/fs/cgroup effective
-CgroupPath
-ID       AttachType      AttachFlags     Name
-/sys/fs/cgroup
-6        cgroup_sysctl   multi           sysctl_tcp_mem
-13       cgroup_sysctl   multi           sysctl_tcp_mem
-/sys/fs/cgroup/cg1
-20       cgroup_sysctl   override        sysctl_tcp_mem
-6        cgroup_sysctl   override        sysctl_tcp_mem <- wrong
-13       cgroup_sysctl   override        sysctl_tcp_mem <- wrong
-/sys/fs/cgroup/cg1/cg2
-20       cgroup_sysctl                   sysctl_tcp_mem
-6        cgroup_sysctl                   sysctl_tcp_mem
-13       cgroup_sysctl                   sysctl_tcp_mem
+Also, splitting makes the code more readable, since checking the dynamic
+pointer type is not necessarily related to validity and initialization.
 
-Attach flags is only valid for attached progs of this layer cgroup,
-but not for effective progs. For querying with EFFECTIVE flags,
-exporting attach flags does not make sense. So let's remove the
-AttachFlags field and the associated logic. After this patch, the
-above effective cgroup tree will show as bellow:
+Split the validity/initialization and dynamic pointer type check also in
+the verifier, and adjust the expected error message in the test (a test for
+an unexpected dynptr type passed to a helper cannot be added due to missing
+suitable helpers, but this case has been tested manually).
 
-$ bpftool cgroup tree /sys/fs/cgroup effective
-CgroupPath
-ID       AttachType      Name
-/sys/fs/cgroup
-6        cgroup_sysctl   sysctl_tcp_mem
-13       cgroup_sysctl   sysctl_tcp_mem
-/sys/fs/cgroup/cg1
-20       cgroup_sysctl   sysctl_tcp_mem
-6        cgroup_sysctl   sysctl_tcp_mem
-13       cgroup_sysctl   sysctl_tcp_mem
-/sys/fs/cgroup/cg1/cg2
-20       cgroup_sysctl   sysctl_tcp_mem
-6        cgroup_sysctl   sysctl_tcp_mem
-13       cgroup_sysctl   sysctl_tcp_mem
-
-Fixes: b79c9fc9551b ("bpf: implement BPF_PROG_QUERY for BPF_LSM_CGROUP")
-Fixes: a98bf57391a2 ("tools: bpftool: add support for reporting the effective cgroup progs")
-Signed-off-by: Pu Lehui <pulehui@huawei.com>
+Cc: Joanne Koong <joannelkoong@gmail.com>
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- tools/bpf/bpftool/cgroup.c | 54 ++++++++++++++++++++++++++++++++++----
- 1 file changed, 49 insertions(+), 5 deletions(-)
+ kernel/bpf/verifier.c                         | 35 ++++++++++++++-----
+ .../testing/selftests/bpf/prog_tests/dynptr.c |  2 +-
+ 2 files changed, 28 insertions(+), 9 deletions(-)
 
-diff --git a/tools/bpf/bpftool/cgroup.c b/tools/bpf/bpftool/cgroup.c
-index cced668fb2a3..b46a998d8f8d 100644
---- a/tools/bpf/bpftool/cgroup.c
-+++ b/tools/bpf/bpftool/cgroup.c
-@@ -136,8 +136,8 @@ static int show_bpf_prog(int id, enum bpf_attach_type attach_type,
- 			jsonw_string_field(json_wtr, "attach_type", attach_type_str);
- 		else
- 			jsonw_uint_field(json_wtr, "attach_type", attach_type);
--		jsonw_string_field(json_wtr, "attach_flags",
--				   attach_flags_str);
-+		if (!(query_flags & BPF_F_QUERY_EFFECTIVE))
-+			jsonw_string_field(json_wtr, "attach_flags", attach_flags_str);
- 		jsonw_string_field(json_wtr, "name", prog_name);
- 		if (attach_btf_name)
- 			jsonw_string_field(json_wtr, "attach_btf_name", attach_btf_name);
-@@ -150,7 +150,10 @@ static int show_bpf_prog(int id, enum bpf_attach_type attach_type,
- 			printf("%-15s", attach_type_str);
- 		else
- 			printf("type %-10u", attach_type);
--		printf(" %-15s %-15s", attach_flags_str, prog_name);
-+		if (query_flags & BPF_F_QUERY_EFFECTIVE)
-+			printf(" %-15s", prog_name);
-+		else
-+			printf(" %-15s %-15s", attach_flags_str, prog_name);
- 		if (attach_btf_name)
- 			printf(" %-15s", attach_btf_name);
- 		else if (info.attach_btf_id)
-@@ -195,6 +198,32 @@ static int cgroup_has_attached_progs(int cgroup_fd)
- 
- 	return no_prog ? 0 : 1;
- }
-+
-+static int show_effective_bpf_progs(int cgroup_fd, enum bpf_attach_type type,
-+				    int level)
-+{
-+	LIBBPF_OPTS(bpf_prog_query_opts, p);
-+	__u32 prog_ids[1024] = {0};
-+	__u32 iter;
-+	int ret;
-+
-+	p.query_flags = query_flags;
-+	p.prog_cnt = ARRAY_SIZE(prog_ids);
-+	p.prog_ids = prog_ids;
-+
-+	ret = bpf_prog_query_opts(cgroup_fd, type, &p);
-+	if (ret)
-+		return ret;
-+
-+	if (p.prog_cnt == 0)
-+		return 0;
-+
-+	for (iter = 0; iter < p.prog_cnt; iter++)
-+		show_bpf_prog(prog_ids[iter], type, NULL, level);
-+
-+	return 0;
-+}
-+
- static int show_attached_bpf_progs(int cgroup_fd, enum bpf_attach_type type,
- 				   int level)
- {
-@@ -245,6 +274,14 @@ static int show_attached_bpf_progs(int cgroup_fd, enum bpf_attach_type type,
- 	return 0;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 8c6fbcd0afaf..53dad321ac0b 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -781,8 +781,8 @@ static bool is_dynptr_reg_valid_uninit(struct bpf_verifier_env *env, struct bpf_
+ 	return true;
  }
  
-+static int show_bpf_progs(int cgroup_fd, enum bpf_attach_type type,
-+			  int level)
-+{
-+	return query_flags & BPF_F_QUERY_EFFECTIVE ?
-+	       show_effective_bpf_progs(cgroup_fd, type, level) :
-+	       show_attached_bpf_progs(cgroup_fd, type, level);
-+}
-+
- static int do_show(int argc, char **argv)
+-static bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
+-				     enum bpf_arg_type arg_type)
++static bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env,
++				     struct bpf_reg_state *reg)
  {
- 	enum bpf_attach_type type;
-@@ -292,6 +329,8 @@ static int do_show(int argc, char **argv)
- 
- 	if (json_output)
- 		jsonw_start_array(json_wtr);
-+	else if (query_flags & BPF_F_QUERY_EFFECTIVE)
-+		printf("%-8s %-15s %-15s\n", "ID", "AttachType", "Name");
- 	else
- 		printf("%-8s %-15s %-15s %-15s\n", "ID", "AttachType",
- 		       "AttachFlags", "Name");
-@@ -304,7 +343,7 @@ static int do_show(int argc, char **argv)
- 		 * If we were able to get the show for at least one
- 		 * attach type, let's return 0.
- 		 */
--		if (show_attached_bpf_progs(cgroup_fd, type, 0) == 0)
-+		if (show_bpf_progs(cgroup_fd, type, 0) == 0)
- 			ret = 0;
+ 	struct bpf_func_state *state = func(env, reg);
+ 	int spi = get_spi(reg->off);
+@@ -798,11 +798,24 @@ static bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env, struct bpf_re
+ 			return false;
  	}
  
-@@ -362,7 +401,7 @@ static int do_show_tree_fn(const char *fpath, const struct stat *sb,
++	return true;
++}
++
++static bool is_dynptr_type_expected(struct bpf_verifier_env *env,
++				    struct bpf_reg_state *reg,
++				    enum bpf_arg_type arg_type)
++{
++	struct bpf_func_state *state = func(env, reg);
++	enum bpf_dynptr_type dynptr_type;
++	int spi = get_spi(reg->off);
++
+ 	/* ARG_PTR_TO_DYNPTR takes any type of dynptr */
+ 	if (arg_type == ARG_PTR_TO_DYNPTR)
+ 		return true;
  
- 	btf_vmlinux = libbpf_find_kernel_btf();
- 	for (type = 0; type < __MAX_BPF_ATTACH_TYPE; type++)
--		show_attached_bpf_progs(cgroup_fd, type, ftw->level);
-+		show_bpf_progs(cgroup_fd, type, ftw->level);
+-	return state->stack[spi].spilled_ptr.dynptr.type == arg_to_dynptr_type(arg_type);
++	dynptr_type = arg_to_dynptr_type(arg_type);
++
++	return state->stack[spi].spilled_ptr.dynptr.type == dynptr_type;
+ }
  
- 	if (errno == EINVAL)
- 		/* Last attach type does not support query.
-@@ -436,6 +475,11 @@ static int do_show_tree(int argc, char **argv)
+ /* The reg state of a pointer or a bounded scalar was saved when
+@@ -6081,21 +6094,27 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+ 			}
  
- 	if (json_output)
- 		jsonw_start_array(json_wtr);
-+	else if (query_flags & BPF_F_QUERY_EFFECTIVE)
-+		printf("%s\n"
-+		       "%-8s %-15s %-15s\n",
-+		       "CgroupPath",
-+		       "ID", "AttachType", "Name");
- 	else
- 		printf("%s\n"
- 		       "%-8s %-15s %-15s %-15s\n",
+ 			meta->uninit_dynptr_regno = regno;
+-		} else if (!is_dynptr_reg_valid_init(env, reg, arg_type)) {
++		} else if (!is_dynptr_reg_valid_init(env, reg)) {
++			verbose(env,
++				"Expected an initialized dynptr as arg #%d\n",
++				arg + 1);
++			return -EINVAL;
++		} else if (!is_dynptr_type_expected(env, reg, arg_type)) {
+ 			const char *err_extra = "";
+ 
+ 			switch (arg_type & DYNPTR_TYPE_FLAG_MASK) {
+ 			case DYNPTR_TYPE_LOCAL:
+-				err_extra = "local ";
++				err_extra = "local";
+ 				break;
+ 			case DYNPTR_TYPE_RINGBUF:
+-				err_extra = "ringbuf ";
++				err_extra = "ringbuf";
+ 				break;
+ 			default:
++				err_extra = "<unknown>";
+ 				break;
+ 			}
+-
+-			verbose(env, "Expected an initialized %sdynptr as arg #%d\n",
++			verbose(env,
++				"Expected a dynptr of type %s as arg #%d\n",
+ 				err_extra, arg + 1);
+ 			return -EINVAL;
+ 		}
+diff --git a/tools/testing/selftests/bpf/prog_tests/dynptr.c b/tools/testing/selftests/bpf/prog_tests/dynptr.c
+index bcf80b9f7c27..8fc4e6c02bfd 100644
+--- a/tools/testing/selftests/bpf/prog_tests/dynptr.c
++++ b/tools/testing/selftests/bpf/prog_tests/dynptr.c
+@@ -30,7 +30,7 @@ static struct {
+ 	{"invalid_helper2", "Expected an initialized dynptr as arg #3"},
+ 	{"invalid_write1", "Expected an initialized dynptr as arg #1"},
+ 	{"invalid_write2", "Expected an initialized dynptr as arg #3"},
+-	{"invalid_write3", "Expected an initialized ringbuf dynptr as arg #1"},
++	{"invalid_write3", "Expected an initialized dynptr as arg #1"},
+ 	{"invalid_write4", "arg 1 is an unacquired reference"},
+ 	{"invalid_read1", "invalid read from stack"},
+ 	{"invalid_read2", "cannot pass in dynptr at an offset"},
 -- 
 2.25.1
 
