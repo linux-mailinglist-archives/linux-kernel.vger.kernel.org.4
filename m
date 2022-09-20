@@ -2,50 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99F9D5BE786
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 15:48:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80BDF5BE78A
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 15:50:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231126AbiITNsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 09:48:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38166 "EHLO
+        id S229917AbiITNuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 09:50:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiITNsi (ORCPT
+        with ESMTP id S229599AbiITNuQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 09:48:38 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CBE956B8C;
-        Tue, 20 Sep 2022 06:48:35 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 678AB1C0003; Tue, 20 Sep 2022 15:48:33 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
-        t=1663681713;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LMWgtZekcEigY07GE7Rgrxe8a63TCCCCmIA3rHO/7ts=;
-        b=hwATHZQAyROmF5XEgiIGhMzxryLKLMf3wRGld3G+8pxwqvmVyKk26dwh+3Vv0IV1VXU9LB
-        1Uxz+kQFxPz29R2t589s4gUqDb14bPrc5jR1hEJkTaN+F5rXGJssTZXj5GtaJw68cCiZgc
-        WHNFWcO3HV4j/WTSDG6D+42ti3geA0I=
-Date:   Tue, 20 Sep 2022 15:48:32 +0200
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Sasha Levin <sashal@kernel.org>, Greg KH <greg@kroah.com>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>,
-        Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
-        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 4.9 01/13] spi: spi-cadence: Fix SPI CS gets
- toggling sporadically
-Message-ID: <20220920134832.GA19086@duo.ucw.cz>
-References: <20220914090540.471725-1-sashal@kernel.org>
+        Tue, 20 Sep 2022 09:50:16 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0CB10DF95
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 06:50:13 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4E95713D5;
+        Tue, 20 Sep 2022 06:50:19 -0700 (PDT)
+Received: from [10.1.38.12] (e121896.cambridge.arm.com [10.1.38.12])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 98EFC3F73D;
+        Tue, 20 Sep 2022 06:50:10 -0700 (PDT)
+Message-ID: <7dbf6fc6-5cd5-4493-af55-6ebf6b97a019@arm.com>
+Date:   Tue, 20 Sep 2022 14:50:08 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="KsGdsel6WgEHnImy"
-Content-Disposition: inline
-In-Reply-To: <20220914090540.471725-1-sashal@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: coresight-etm4x-core.c:969:26: error:
+ 'ID_AA64DFR0_TRACEVER_SHIFT' undeclared
+Content-Language: en-US
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        coresight@lists.linaro.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>, Mark Brown <broonie@kernel.org>
+References: <CA+G9fYtpNsjRzQdxFvLjVmG9XX95B6DtaviHq3oG6awGYTqGSw@mail.gmail.com>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <CA+G9fYtpNsjRzQdxFvLjVmG9XX95B6DtaviHq3oG6awGYTqGSw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -53,81 +54,81 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---KsGdsel6WgEHnImy
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hi!
+On 20/09/2022 12:39, Naresh Kamboju wrote:
+> Following build warnings / errors noticed while building arm64 coresight
+> on linux next-20220919 and next-20220920.
 
-> From: Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>
->=20
-> [ Upstream commit 21b511ddee09a78909035ec47a6a594349fe3296 ]
->=20
-> As part of unprepare_transfer_hardware, SPI controller will be disabled
-> which will indirectly deassert the CS line. This will create a problem
-> in some of the devices where message will be transferred with
-> cs_change flag set(CS should not be deasserted).
-> As per SPI controller implementation, if SPI controller is disabled then
-> all output enables are inactive and all pins are set to input mode which
-> means CS will go to default state high(deassert). This leads to an issue
-> when core explicitly ask not to deassert the CS (cs_change =3D 1). This
-> patch fix the above issue by checking the Slave select status bits from
-> configuration register before disabling the SPI.
+Fix is here:
+https://lists.linaro.org/archives/list/coresight@lists.linaro.org/thread/OS4F43WGOYGQUJHISR2PZQPE3FUQ7DXH/
 
-My records say this was already submitted to AUTOSEL at "Jun
-27". There are more patches from that era that were reviewed in
-AUTOSEL but not merged anywhere. Can you investigate?
-
-Best regards,
-								Pavel
-
-a 4.9 01/13] spi: spi-cadence: Fix SPI CS gets toggling sporadic
-a 4.9 02/13] spi: cadence: Detect transmit FIFO depth
-n unused preparation 4.9 03/13] drm/vc4: crtc: Use an union to store the pa=
-ge f\
-l
-a 4.9 04/13] drivers/net/ethernet/neterion/vxge: Fix a use-af
-n just a comment fix 4.9 05/13] video: fbdev: skeletonfb: Fix syntax errors=
- in \
-c
-a just a printk tweak 4.9 06/13] video: fbdev: intelfb: Use aperture size f=
-rom \
-pc
-a 4.9 07/13] video: fbdev: pxa3xx-gcu: Fix integer overflow i
-n just a cleanup 4.9 08/13] video: fbdev: simplefb: Check before clk_put() n
-a 4.9 09/13] mips: lantiq: falcon: Fix refcount leak bug in s
-a 4.9 10/13] mips: lantiq: xway: Fix refcount leak bug in sys
-n we still have reference to the name, it is not safe to put it 4.9 11/13] =
-mips\
-/pic32/pic32mzda: Fix refcount leak bugs
-a 4.9 12/13] mips: lantiq: Add missing of_node_put() in irq.c
-
-a 4.19 03/22] ALSA: usb-audio: US16x08: Move overflow check b
-n unused preparation 4.19 05/22] drm/vc4: crtc: Move the BO handling out of=
- com\
-m
-! do we have everything? 4.19 06/22] ALSA: x86: intel_hdmi_audio: enable pm=
-_run\
-time
-! 4.19 07/22] hamradio: 6pack: fix array-index-out-of-bounds
-a 4.19 13/22] arch: mips: generic: Add missing of_node_put()
-a 4.19 14/22] mips: mti-malta: Fix refcount leak in malta-tim
-a 4.19 15/22] mips: ralink: Fix refcount leak in of.c
-a 4.19 20/22] drm/sun4i: Add DMA mask and segment size
-! 4.19 21/22] drm/amdgpu: Adjust logic around GTT size (v3)
-
---=20
-People of Russia, stop Putin before his war on Ukraine escalates.
-
---KsGdsel6WgEHnImy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYynEsAAKCRAw5/Bqldv6
-8luBAJ9OZ67f7QmMHV8I0fI6mhl5V8eB4ACgiefn0m6xPtyoWiXiT/59AaF1ZJM=
-=7rpI
------END PGP SIGNATURE-----
-
---KsGdsel6WgEHnImy--
+> 
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> 
+> make --silent --keep-going --jobs=8
+> O=/home/tuxbuild/.cache/tuxmake/builds/1/build
+> CROSS_COMPILE_COMPAT=arm-linux-gnueabihf- ARCH=arm64
+> CROSS_COMPILE=aarch64-linux-gnu- 'CC=sccache aarch64-linux-gnu-gcc'
+> 'HOSTCC=sccache gcc'
+> 
+> drivers/hwtracing/coresight/coresight-etm4x-core.c: In function
+> 'cpu_supports_sysreg_trace':
+> drivers/hwtracing/coresight/coresight-etm4x-core.c:969:26: error:
+> 'ID_AA64DFR0_TRACEVER_SHIFT' undeclared (first use in this function);
+> did you mean 'ID_AA64DFR0_EL1_TraceVer_SHIFT'?
+>   969 |         return ((dfr0 >> ID_AA64DFR0_TRACEVER_SHIFT) & 0xfUL) > 0;
+>       |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+>       |                          ID_AA64DFR0_EL1_TraceVer_SHIFT
+> drivers/hwtracing/coresight/coresight-etm4x-core.c:969:26: note: each
+> undeclared identifier is reported only once for each function it
+> appears in
+> drivers/hwtracing/coresight/coresight-etm4x-core.c: In function
+> 'cpu_detect_trace_filtering':
+> drivers/hwtracing/coresight/coresight-etm4x-core.c:1057:57: error:
+> 'ID_AA64DFR0_TRACE_FILT_SHIFT' undeclared (first use in this
+> function); did you mean 'ID_AA64PFR0_EL1_DIT_SHIFT'?
+>  1057 |         if (!cpuid_feature_extract_unsigned_field(dfr0,
+> ID_AA64DFR0_TRACE_FILT_SHIFT))
+>       |
+> ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>       |
+> ID_AA64PFR0_EL1_DIT_SHIFT
+> drivers/hwtracing/coresight/coresight-etm4x-core.c: In function
+> 'cpu_supports_sysreg_trace':
+> drivers/hwtracing/coresight/coresight-etm4x-core.c:970:1: error:
+> control reaches end of non-void function [-Werror=return-type]
+>   970 | }
+>       | ^
+> cc1: some warnings being treated as errors
+> 
+> Regressions found on arm64:
+>    - build-clang-13-lkftconfig
+>    - build-gcc-11-lkftconfig-devicetree
+>    - build-gcc-11-lkftconfig-kunit
+>    - build-gcc-11-lkftconfig-perf
+>    - build-gcc-11-lkftconfig-64k_page_size
+>    - build-gcc-11-lkftconfig-debug
+>    - build-gcc-11-lkftconfig-libgpiod
+>    - build-gcc-11-lkftconfig-debug-kmemleak
+>    - build-clang-14-lkftconfig
+>    - build-clang-nightly-lkftconfig
+>    - build-gcc-11-lkftconfig
+>    - build-gcc-11-lkftconfig-kasan
+>    - build-clang-12-lkftconfig
+>    - build-gcc-11-lkftconfig-kselftest-kernel
+>    - build-gcc-11-lkftconfig-rcutorture
+>    - build-gcc-11-lkftconfig-armv8_features
+>    - build-gcc-11-lkftconfig-kselftest
+> 
+> Build: https://builds.tuxbuild.com/2F1cW8NpQ0Z6l9h9rfkZT5AXzqg/
+> config: https://builds.tuxbuild.com/2F1cW8NpQ0Z6l9h9rfkZT5AXzqg/config
+> 
+> 
+> --
+> Linaro LKFT
+> https://lkft.linaro.org
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
