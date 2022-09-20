@@ -2,117 +2,338 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 514BB5BDDF6
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 09:16:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F5AC5BDDD0
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 09:09:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230342AbiITHPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 03:15:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41232 "EHLO
+        id S230109AbiITHJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 03:09:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231209AbiITHPT (ORCPT
+        with ESMTP id S229582AbiITHJL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 03:15:19 -0400
-X-Greylist: delayed 424 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 20 Sep 2022 00:14:54 PDT
-Received: from mx.der-flo.net (mx.der-flo.net [193.160.39.236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4316D402F5;
-        Tue, 20 Sep 2022 00:14:53 -0700 (PDT)
-Received: by mx.der-flo.net (Postfix, from userid 110)
-        id CCA17160F1A; Tue, 20 Sep 2022 09:07:47 +0200 (CEST)
+        Tue, 20 Sep 2022 03:09:11 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5AB95F101;
+        Tue, 20 Sep 2022 00:09:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663657749; x=1695193749;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=d35d0xMsVeQ5khCIa9tYi0pmR1rIIBJci9gPgkbTF0U=;
+  b=bxwHWTemuMQmXut+GQRRHWaxogzFykY3qmfI1u3yUx+6OZ6vl4sw83QE
+   jDXPTKJBYrLIZ8X76R/G6Ih8DSGlMvKi2vlxfnHjzisTYUgwR2CVAj/nV
+   pU15gavfZZAu0XmSKH6ApmWoJONZgWJi4SIF0Aee+aNwnqxWYhbboX1YR
+   zhZzFdjHFf3rE4/3Ritn3lVk11JDID21gkjc41Bx064NSCV/feyAgaaId
+   K/1mtE4VGZxKJ3eQiMwZOZmO93H3tTaHUxVgd77EfHecKpXtvptfsPg42
+   9EgzYn2VN0ONR/ZagEOSQw6qDGufSBTbPB3e3FYxgMKTVeuvIh9IG1mD5
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="298343712"
+X-IronPort-AV: E=Sophos;i="5.93,329,1654585200"; 
+   d="scan'208";a="298343712"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 00:09:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,329,1654585200"; 
+   d="scan'208";a="687291627"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 20 Sep 2022 00:09:07 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oaXNS-0002Yy-05;
+        Tue, 20 Sep 2022 07:09:06 +0000
+Date:   Tue, 20 Sep 2022 15:09:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yihao Han <hanyihao@vivo.com>, Nilesh Javali <njavali@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, Yihao Han <hanyihao@vivo.com>
+Subject: Re: [PATCH] scsi: qla2xxx: fix excluded_middle.cocci warnings
+Message-ID: <202209201406.fHVcccRp-lkp@intel.com>
+References: <20220920024554.2606-1-hanyihao@vivo.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220920024554.2606-1-hanyihao@vivo.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-Received: from localhost (unknown [IPv6:2a02:1210:22e1:1f00:fb89:69cb:433e:eb56])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-256) server-digest SHA256)
-        (No client certificate requested)
-        by mx.der-flo.net (Postfix) with ESMTPSA id 537E2160145;
-        Tue, 20 Sep 2022 09:07:45 +0200 (CEST)
-Date:   Tue, 20 Sep 2022 09:07:44 +0200
-From:   Florian Lehner <dev@der-flo.net>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Matthew Wilcox <willy@infradead.org>, Yu Zhao <yuzhao@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2] x86/uaccess: Avoid check_object_size() in
- copy_from_user_nmi()
-Message-ID: <YylmwJOyDCPP11fg@der-flo.net>
-References: <20220919201648.2250764-1-keescook@chromium.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220919201648.2250764-1-keescook@chromium.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 01:16:48PM -0700, Kees Cook wrote:
-> The check_object_size() helper under CONFIG_HARDENED_USERCOPY is
-> designed to skip any checks where the length is known at compile time as
-> a reasonable heuristic to avoid "likely known-good" cases. However, it can
-> only do this when the copy_*_user() helpers are, themselves, inline too.
-> 
-> Using find_vmap_area() requires taking a spinlock. The check_object_size()
-> helper can call find_vmap_area() when the destination is in vmap memory.
-> If show_regs() is called in interrupt context, it will attempt a call to
-> copy_from_user_nmi(), which may call check_object_size() and then
-> find_vmap_area(). If something in normal context happens to be in the
-> middle of calling find_vmap_area() (with the spinlock held), the interrupt
-> handler will hang forever.
-> 
-> The copy_from_user_nmi() call is actually being called with a fixed-size
-> length, so check_object_size() should never have been called in
-> the first place. Given the narrow constraints, just replace the
-> __copy_from_user_inatomic() call with an open-coded version that calls
-> only into the sanitizers and not check_object_size(), followed by a call
-> to raw_copy_from_user().
-> 
-> Reported-by: Yu Zhao <yuzhao@google.com>
-> Link: https://lore.kernel.org/all/CAOUHufaPshtKrTWOz7T7QFYUNVGFm0JBjvM700Nhf9qEL9b3EQ@mail.gmail.com
-> Reported-by: dev@der-flo.net
-> Suggested-by: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Matthew Wilcox <willy@infradead.org>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Josh Poimboeuf <jpoimboe@kernel.org>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: x86@kernel.org
-> Fixes: 0aef499f3172 ("mm/usercopy: Detect vmalloc overruns")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
-> v2: drop the call explicitly instead of using inline to do it
-> v1: https://lore.kernel.org/lkml/20220916135953.1320601-1-keescook@chromium.org
-> ---
->  arch/x86/lib/usercopy.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/lib/usercopy.c b/arch/x86/lib/usercopy.c
-> index ad0139d25401..d2aff9b176cf 100644
-> --- a/arch/x86/lib/usercopy.c
-> +++ b/arch/x86/lib/usercopy.c
-> @@ -44,7 +44,8 @@ copy_from_user_nmi(void *to, const void __user *from, unsigned long n)
->  	 * called from other contexts.
->  	 */
->  	pagefault_disable();
-> -	ret = __copy_from_user_inatomic(to, from, n);
-> +	instrument_copy_from_user(to, from, n);
-> +	ret = raw_copy_from_user(to, from, n);
->  	pagefault_enable();
->  
->  	return ret;
-> -- 
-> 2.34.1
-> 
+Hi Yihao,
 
-Thanks!
+Thank you for the patch! Yet something to improve:
 
-Tested-by: Florian Lehner <dev@der-flo.net>
+[auto build test ERROR on jejb-scsi/for-next]
+[also build test ERROR on mkp-scsi/for-next linus/master v6.0-rc6 next-20220919]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Yihao-Han/scsi-qla2xxx-fix-excluded_middle-cocci-warnings/20220920-104643
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
+config: ia64-allyesconfig (https://download.01.org/0day-ci/archive/20220920/202209201406.fHVcccRp-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/81672bb39d1900d22e851a7cfb0b9a0aa35df8af
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Yihao-Han/scsi-qla2xxx-fix-excluded_middle-cocci-warnings/20220920-104643
+        git checkout 81672bb39d1900d22e851a7cfb0b9a0aa35df8af
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/scsi/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/scsi/qla2xxx/qla_target.c: In function 'qlt_free_session_done':
+>> drivers/scsi/qla2xxx/qla_target.c:1031:78: error: expected ')' before '{' token
+    1031 |                     (!own || (own->iocb.u.isp24.status_subcode == ELS_PLOGI)) {
+         |                                                                              ^~
+         |                                                                              )
+   drivers/scsi/qla2xxx/qla_target.c:1030:20: note: to match this '('
+    1030 |                 if (ha->flags.edif_enabled &&
+         |                    ^
+>> drivers/scsi/qla2xxx/qla_target.c:1047:9: error: expected expression before '}' token
+    1047 |         }
+         |         ^
+
+
+vim +1031 drivers/scsi/qla2xxx/qla_target.c
+
+   961	
+   962	void qlt_free_session_done(struct work_struct *work)
+   963	{
+   964		struct fc_port *sess = container_of(work, struct fc_port,
+   965		    free_work);
+   966		struct qla_tgt *tgt = sess->tgt;
+   967		struct scsi_qla_host *vha = sess->vha;
+   968		struct qla_hw_data *ha = vha->hw;
+   969		unsigned long flags;
+   970		bool logout_started = false;
+   971		scsi_qla_host_t *base_vha = pci_get_drvdata(ha->pdev);
+   972		struct qlt_plogi_ack_t *own =
+   973			sess->plogi_link[QLT_PLOGI_LINK_SAME_WWN];
+   974	
+   975		ql_dbg(ql_dbg_disc, vha, 0xf084,
+   976			"%s: se_sess %p / sess %p from port %8phC loop_id %#04x"
+   977			" s_id %02x:%02x:%02x logout %d keep %d els_logo %d\n",
+   978			__func__, sess->se_sess, sess, sess->port_name, sess->loop_id,
+   979			sess->d_id.b.domain, sess->d_id.b.area, sess->d_id.b.al_pa,
+   980			sess->logout_on_delete, sess->keep_nport_handle,
+   981			sess->send_els_logo);
+   982	
+   983		if (!IS_SW_RESV_ADDR(sess->d_id)) {
+   984			qla2x00_mark_device_lost(vha, sess, 0);
+   985	
+   986			if (sess->send_els_logo) {
+   987				qlt_port_logo_t logo;
+   988	
+   989				logo.id = sess->d_id;
+   990				logo.cmd_count = 0;
+   991				INIT_LIST_HEAD(&logo.list);
+   992				if (!own)
+   993					qlt_send_first_logo(vha, &logo);
+   994				sess->send_els_logo = 0;
+   995			}
+   996	
+   997			if (sess->logout_on_delete && sess->loop_id != FC_NO_LOOP_ID) {
+   998				int rc;
+   999	
+  1000				if (!own ||
+  1001				     (own->iocb.u.isp24.status_subcode == ELS_PLOGI)) {
+  1002					sess->logout_completed = 0;
+  1003					rc = qla2x00_post_async_logout_work(vha, sess,
+  1004					    NULL);
+  1005					if (rc != QLA_SUCCESS)
+  1006						ql_log(ql_log_warn, vha, 0xf085,
+  1007						    "Schedule logo failed sess %p rc %d\n",
+  1008						    sess, rc);
+  1009					else
+  1010						logout_started = true;
+  1011				} else if (own && (own->iocb.u.isp24.status_subcode ==
+  1012					ELS_PRLI) && ha->flags.rida_fmt2) {
+  1013					rc = qla2x00_post_async_prlo_work(vha, sess,
+  1014					    NULL);
+  1015					if (rc != QLA_SUCCESS)
+  1016						ql_log(ql_log_warn, vha, 0xf085,
+  1017						    "Schedule PRLO failed sess %p rc %d\n",
+  1018						    sess, rc);
+  1019					else
+  1020						logout_started = true;
+  1021				}
+  1022			} /* if sess->logout_on_delete */
+  1023	
+  1024			if (sess->nvme_flag & NVME_FLAG_REGISTERED &&
+  1025			    !(sess->nvme_flag & NVME_FLAG_DELETING)) {
+  1026				sess->nvme_flag |= NVME_FLAG_DELETING;
+  1027				qla_nvme_unregister_remote_port(sess);
+  1028			}
+  1029	
+  1030			if (ha->flags.edif_enabled &&
+> 1031			    (!own || (own->iocb.u.isp24.status_subcode == ELS_PLOGI)) {
+  1032				sess->edif.authok = 0;
+  1033				if (!ha->flags.host_shutting_down) {
+  1034					ql_dbg(ql_dbg_edif, vha, 0x911e,
+  1035					       "%s wwpn %8phC calling qla2x00_release_all_sadb\n",
+  1036					       __func__, sess->port_name);
+  1037					qla2x00_release_all_sadb(vha, sess);
+  1038				} else {
+  1039					ql_dbg(ql_dbg_edif, vha, 0x911e,
+  1040					       "%s bypassing release_all_sadb\n",
+  1041					       __func__);
+  1042				}
+  1043	
+  1044				qla_edif_clear_appdata(vha, sess);
+  1045				qla_edif_sess_down(vha, sess);
+  1046			}
+> 1047		}
+  1048	
+  1049		/*
+  1050		 * Release the target session for FC Nexus from fabric module code.
+  1051		 */
+  1052		if (sess->se_sess != NULL)
+  1053			ha->tgt.tgt_ops->free_session(sess);
+  1054	
+  1055		if (logout_started) {
+  1056			bool traced = false;
+  1057			u16 cnt = 0;
+  1058	
+  1059			while (!READ_ONCE(sess->logout_completed)) {
+  1060				if (!traced) {
+  1061					ql_dbg(ql_dbg_disc, vha, 0xf086,
+  1062						"%s: waiting for sess %p logout\n",
+  1063						__func__, sess);
+  1064					traced = true;
+  1065				}
+  1066				msleep(100);
+  1067				cnt++;
+  1068				/*
+  1069				 * Driver timeout is set to 22 Sec, update count value to loop
+  1070				 * long enough for log-out to complete before advancing. Otherwise,
+  1071				 * straddling logout can interfere with re-login attempt.
+  1072				 */
+  1073				if (cnt > 230)
+  1074					break;
+  1075			}
+  1076	
+  1077			ql_dbg(ql_dbg_disc, vha, 0xf087,
+  1078			    "%s: sess %p logout completed\n", __func__, sess);
+  1079		}
+  1080	
+  1081		if (sess->logo_ack_needed) {
+  1082			sess->logo_ack_needed = 0;
+  1083			qla24xx_async_notify_ack(vha, sess,
+  1084				(struct imm_ntfy_from_isp *)sess->iocb, SRB_NACK_LOGO);
+  1085		}
+  1086	
+  1087		spin_lock_irqsave(&vha->work_lock, flags);
+  1088		sess->flags &= ~FCF_ASYNC_SENT;
+  1089		spin_unlock_irqrestore(&vha->work_lock, flags);
+  1090	
+  1091		spin_lock_irqsave(&ha->tgt.sess_lock, flags);
+  1092		if (sess->se_sess) {
+  1093			sess->se_sess = NULL;
+  1094			if (tgt && !IS_SW_RESV_ADDR(sess->d_id))
+  1095				tgt->sess_count--;
+  1096		}
+  1097	
+  1098		qla2x00_set_fcport_disc_state(sess, DSC_DELETED);
+  1099		sess->fw_login_state = DSC_LS_PORT_UNAVAIL;
+  1100		sess->deleted = QLA_SESS_DELETED;
+  1101	
+  1102		if (sess->login_succ && !IS_SW_RESV_ADDR(sess->d_id)) {
+  1103			vha->fcport_count--;
+  1104			sess->login_succ = 0;
+  1105		}
+  1106	
+  1107		qla2x00_clear_loop_id(sess);
+  1108	
+  1109		if (sess->conflict) {
+  1110			sess->conflict->login_pause = 0;
+  1111			sess->conflict = NULL;
+  1112			if (!test_bit(UNLOADING, &vha->dpc_flags))
+  1113				set_bit(RELOGIN_NEEDED, &vha->dpc_flags);
+  1114		}
+  1115	
+  1116		{
+  1117			struct qlt_plogi_ack_t *con =
+  1118			    sess->plogi_link[QLT_PLOGI_LINK_CONFLICT];
+  1119			struct imm_ntfy_from_isp *iocb;
+  1120	
+  1121			own = sess->plogi_link[QLT_PLOGI_LINK_SAME_WWN];
+  1122	
+  1123			if (con) {
+  1124				iocb = &con->iocb;
+  1125				ql_dbg(ql_dbg_tgt_mgt, vha, 0xf099,
+  1126					 "se_sess %p / sess %p port %8phC is gone,"
+  1127					 " %s (ref=%d), releasing PLOGI for %8phC (ref=%d)\n",
+  1128					 sess->se_sess, sess, sess->port_name,
+  1129					 own ? "releasing own PLOGI" : "no own PLOGI pending",
+  1130					 own ? own->ref_count : -1,
+  1131					 iocb->u.isp24.port_name, con->ref_count);
+  1132				qlt_plogi_ack_unref(vha, con);
+  1133				sess->plogi_link[QLT_PLOGI_LINK_CONFLICT] = NULL;
+  1134			} else {
+  1135				ql_dbg(ql_dbg_tgt_mgt, vha, 0xf09a,
+  1136				    "se_sess %p / sess %p port %8phC is gone, %s (ref=%d)\n",
+  1137				    sess->se_sess, sess, sess->port_name,
+  1138				    own ? "releasing own PLOGI" :
+  1139				    "no own PLOGI pending",
+  1140				    own ? own->ref_count : -1);
+  1141			}
+  1142	
+  1143			if (own) {
+  1144				sess->fw_login_state = DSC_LS_PLOGI_PEND;
+  1145				qlt_plogi_ack_unref(vha, own);
+  1146				sess->plogi_link[QLT_PLOGI_LINK_SAME_WWN] = NULL;
+  1147			}
+  1148		}
+  1149	
+  1150		sess->explicit_logout = 0;
+  1151		spin_unlock_irqrestore(&ha->tgt.sess_lock, flags);
+  1152		sess->free_pending = 0;
+  1153	
+  1154		qla2x00_dfs_remove_rport(vha, sess);
+  1155	
+  1156		ql_dbg(ql_dbg_disc, vha, 0xf001,
+  1157		    "Unregistration of sess %p %8phC finished fcp_cnt %d\n",
+  1158			sess, sess->port_name, vha->fcport_count);
+  1159	
+  1160		if (tgt && (tgt->sess_count == 0))
+  1161			wake_up_all(&tgt->waitQ);
+  1162	
+  1163		if (!test_bit(PFLG_DRIVER_REMOVING, &base_vha->pci_flags) &&
+  1164		    !(vha->vp_idx && test_bit(VPORT_DELETE, &vha->dpc_flags)) &&
+  1165		    (!tgt || !tgt->tgt_stop) && !LOOP_TRANSITION(vha)) {
+  1166			switch (vha->host->active_mode) {
+  1167			case MODE_INITIATOR:
+  1168			case MODE_DUAL:
+  1169				set_bit(RELOGIN_NEEDED, &vha->dpc_flags);
+  1170				qla2xxx_wake_dpc(vha);
+  1171				break;
+  1172			case MODE_TARGET:
+  1173			default:
+  1174				/* no-op */
+  1175				break;
+  1176			}
+  1177		}
+  1178	
+  1179		if (vha->fcport_count == 0)
+  1180			wake_up_all(&vha->fcport_waitQ);
+  1181	}
+  1182	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
