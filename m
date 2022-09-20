@@ -2,137 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13F155BE9AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 17:07:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A01EF5BE9B4
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 17:09:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229706AbiITPHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 11:07:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47288 "EHLO
+        id S230054AbiITPJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 11:09:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbiITPHf (ORCPT
+        with ESMTP id S229670AbiITPJ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 11:07:35 -0400
-Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C8A15FED;
-        Tue, 20 Sep 2022 08:07:33 -0700 (PDT)
-Received: by mail-qk1-f172.google.com with SMTP id y2so1785689qkl.11;
-        Tue, 20 Sep 2022 08:07:33 -0700 (PDT)
+        Tue, 20 Sep 2022 11:09:26 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58BDA1C131
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 08:09:24 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id b5so4802989wrr.5
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 08:09:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=Ka7EPG5Xut0v8+2/48BohUWIHUgDtwFwJB88xgoGnyk=;
+        b=b6bsp1ACrwaFLHldPV1fKgPrq7g4nwegTR+Ny/0mVucro9R943onenV3BEN2H5E5ur
+         wDTiNHJRyAcgYah8sYTnvpiIJDfCDLukWeKqDlB2te9MThRNrRmhuNBaitBvzqsItj2t
+         PJoEVgwx8G6wb/2B9vrfFYHMUbokY4ZtORyTDkTLrGfWgMauripCLTo2jATXxj8GeINq
+         n6WMrjDe3v2hKJWiVZlWzh8dCAb8dqQow6yPMKcDRKKs6MfP1qgj+knNnhZ4XL9igB/E
+         xs2a+VEjo79ke9xENnOyRcnveyQnlIRvgWqpNjJ1s/Z/OJdlJc5CN4l0CPQnPht91giZ
+         hIfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=beo87QLkKwCHQVFvRevjYmIvSu6gsEO9BIku51wSlXE=;
-        b=oh7YQxx4Wx9STZnAnyUKAO4aBmPiOmY8n1uiYeyub4FEKBacxm14TDNpGlNv+WvVGE
-         IHtcriPs9cjt03oqVdhr9RuTSgs0wkIPM2nHBV7InOcFnOh0AupZgVYBraR6iIZtZ2L6
-         2JjmVXKD4HPdnfzmoQz/u9uzVIxg8F21QlkjPaeGoK7zEo8TRo2vIf8ewpk/3t/W0s2j
-         J6UtOL8/7ArswYZ5o2TKwZkos7gsUWKjwNgzSZ3fRBnAY1xQWP7ZbPRFWimDbDdZB/TM
-         ZOZHRxAl5IkGPNN8azOnL5eK7lwgLSfv4K3FICaZzHW8v1EhTXNOvSZSO5N1VrWYOw8V
-         v8tQ==
-X-Gm-Message-State: ACrzQf0VC8HcY2GxmbnHZXONX/zXyI40dcHfuJea8aaIpBqCZg1GkH5l
-        jfuSETEMliFwZToYlbbqIxfyyFEHv9WSyw==
-X-Google-Smtp-Source: AMsMyM7iTFuRDkRqCv4yKePkNuqurAmE9VL9By98xxAjL6Yj3lEfR372ozdeNWpjbYQPqVk7suPRCA==
-X-Received: by 2002:a05:620a:222f:b0:6cb:dc20:f0c3 with SMTP id n15-20020a05620a222f00b006cbdc20f0c3mr15932688qkh.366.1663686452218;
-        Tue, 20 Sep 2022 08:07:32 -0700 (PDT)
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com. [209.85.128.171])
-        by smtp.gmail.com with ESMTPSA id de4-20020a05620a370400b006bb87c4833asm230950qkb.109.2022.09.20.08.07.31
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=Ka7EPG5Xut0v8+2/48BohUWIHUgDtwFwJB88xgoGnyk=;
+        b=jLP1WlZN1AumYi/SxZmuc9hTP6go8UHxdc+pyb7Yaddl5T2mwxXLwL6yY4PiIsguG9
+         dVrUih+G3HlB7nJJdy1PF79yrFKRr7EfHNhZo1K1VzZZtfsEcnX+vVzkVWi3ey8Df8vM
+         Xm42PYawQOB1swhQUnnbplU4L883g8UktfbZt5bPDpvMTWqUcu3WV09lMannV6LHoYCt
+         ZiBAQDihP/I466FlcgV9KEr6PjkCluO1voPTFanFlG3TuVDLyebAhXHrX3qCcTm5dR28
+         rp4MRY0Hgpy+2KtdgNomXjQg+N1NF2gR9Oiuem1282KYTuOC6ptSgxp9/tRrtLZTtc7z
+         I6OA==
+X-Gm-Message-State: ACrzQf30sCqAvNwW3yaJWJONwrP4RS0DAhuOn4eZK5PrGC9jYKwDN9rB
+        GfSITQ4lB8Ci7yXwyHkwS3D+3Q==
+X-Google-Smtp-Source: AMsMyM5Ah4BP1hEXKyWVmR/bZ3Gv1JyrxqPKL6ZiXk9zNi2Ku0QZsVu7HE6AbEQTDFEjBBOiqiD5fg==
+X-Received: by 2002:adf:e10c:0:b0:225:3168:c261 with SMTP id t12-20020adfe10c000000b002253168c261mr14090730wrz.159.1663686562838;
+        Tue, 20 Sep 2022 08:09:22 -0700 (PDT)
+Received: from [192.168.178.32] ([51.155.200.13])
+        by smtp.gmail.com with ESMTPSA id t13-20020a5d6a4d000000b00228da845d4dsm226170wrw.94.2022.09.20.08.09.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Sep 2022 08:07:31 -0700 (PDT)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-3452214cec6so30865657b3.1;
-        Tue, 20 Sep 2022 08:07:31 -0700 (PDT)
-X-Received: by 2002:a81:8d3:0:b0:34d:1215:fb4b with SMTP id
- 202-20020a8108d3000000b0034d1215fb4bmr7135561ywi.383.1663686450814; Tue, 20
- Sep 2022 08:07:30 -0700 (PDT)
+        Tue, 20 Sep 2022 08:09:21 -0700 (PDT)
+Message-ID: <7db01da4-3aa0-6b40-7816-5f5ea3bc157b@isovalent.com>
+Date:   Tue, 20 Sep 2022 16:09:20 +0100
 MIME-Version: 1.0
-References: <20220915181558.354737-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220915181558.354737-9-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAMuHMdW99EutciosPtOTU9AztfvfMdKTaS+YRmpmS4VnhZ9KAA@mail.gmail.com> <CA+V-a8s9y0Jq4TJk9E_ptsZTW3iCoysaBSrUeQV8qfDFO3wzeQ@mail.gmail.com>
-In-Reply-To: <CA+V-a8s9y0Jq4TJk9E_ptsZTW3iCoysaBSrUeQV8qfDFO3wzeQ@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 20 Sep 2022 16:07:18 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWy=uU-QQgkz+-sBHfuK9tE-E4LijVLrYX7Efh9=C9vLg@mail.gmail.com>
-Message-ID: <CAMuHMdWy=uU-QQgkz+-sBHfuK9tE-E4LijVLrYX7Efh9=C9vLg@mail.gmail.com>
-Subject: Re: [PATCH v3 08/10] riscv: dts: renesas: Add minimal DTS for Renesas
- RZ/Five SMARC EVK
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Atish Patra <atishp@rivosinc.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [bpf-next v4 1/3] bpftool: Add auto_attach for bpf prog
+ load|loadall
+Content-Language: en-GB
+To:     Wang Yufen <wangyufen@huawei.com>, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        hawk@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
+        trix@redhat.com
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, llvm@lists.linux.dev
+References: <1663037687-26006-1-git-send-email-wangyufen@huawei.com>
+From:   Quentin Monnet <quentin@isovalent.com>
+In-Reply-To: <1663037687-26006-1-git-send-email-wangyufen@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
+Tue Sep 13 2022 03:54:45 GMT+0100 (British Summer Time) ~ Wang Yufen
+<wangyufen@huawei.com>
+> Add auto_attach optional to support one-step load-attach-pin_link.
+> 
+> For example,
+>    $ bpftool prog loadall test.o /sys/fs/bpf/test auto_attach
+> 
+>    $ bpftool link
+>    26: tracing  name test1  tag f0da7d0058c00236  gpl
+>    	loaded_at 2022-09-09T21:39:49+0800  uid 0
+>    	xlated 88B  jited 55B  memlock 4096B  map_ids 3
+>    	btf_id 55
+>    28: kprobe  name test3  tag 002ef1bef0723833  gpl
+>    	loaded_at 2022-09-09T21:39:49+0800  uid 0
+>    	xlated 88B  jited 56B  memlock 4096B  map_ids 3
+>    	btf_id 55
+>    57: tracepoint  name oncpu  tag 7aa55dfbdcb78941  gpl
+>    	loaded_at 2022-09-09T21:41:32+0800  uid 0
+>    	xlated 456B  jited 265B  memlock 4096B  map_ids 17,13,14,15
+>    	btf_id 82
+> 
+>    $ bpftool link
+>    1: tracing  prog 26
+>    	prog_type tracing  attach_type trace_fentry
+>    3: perf_event  prog 28
+>    10: perf_event  prog 57
+> 
+> The auto_attach optional can support tracepoints, k(ret)probes,
+> u(ret)probes.
+> 
+> Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+> Signed-off-by: Wang Yufen <wangyufen@huawei.com>
 
-On Tue, Sep 20, 2022 at 3:05 PM Lad, Prabhakar
-<prabhakar.csengg@gmail.com> wrote:
-> On Tue, Sep 20, 2022 at 1:32 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > On Thu, Sep 15, 2022 at 8:17 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > >
-> > > Enable the minimal blocks required for booting the Renesas RZ/Five
-> > > SMARC EVK with initramfs.
-> > >
-> > > Below are the blocks enabled:
-> > > - CPG
-> > > - CPU0
-> > > - DDR (memory regions)
-> > > - PINCTRL
-> > > - PLIC
-> > > - SCIF0
-> > >
-> > > Note we have deleted the nodes from the DT for which support needs to be
-> > > added for RZ/Five SoC and are enabled by RZ/G2UL SMARC EVK SoM/carrier
-> > > board DTS/I.
-> > >
-> > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Looks good to me, thank you
 
-> > > --- /dev/null
-> > > +++ b/arch/riscv/boot/dts/renesas/rzfive-smarc-som.dtsi
-> > > @@ -0,0 +1,42 @@
-> > > +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > +/*
-> > > + * Device Tree Source for the RZ/Five SMARC EVK SOM
-> > > + *
-> > > + * Copyright (C) 2022 Renesas Electronics Corp.
-> > > + */
-> > > +
-> > > +#include <arm64/renesas/rzg2ul-smarc-som.dtsi>
-> > > +
-> > > +/ {
-> > > +       aliases {
-> > > +               /delete-property/ ethernet0;
-> > > +               /delete-property/ ethernet1;
-> >
-> > OK
-> >
-> I assume you are OK with dropping the above too?
+Reviewed-by: Quentin Monnet <quentin@isovalent.com>
 
-I did intend to delete these properties (hence the "OK"), as their
-presence may confuse U-Boot.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
