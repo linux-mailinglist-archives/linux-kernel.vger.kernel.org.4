@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 532755BED22
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 20:50:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CE965BED21
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 20:50:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231232AbiITSuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 14:50:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56332 "EHLO
+        id S231129AbiITSuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 14:50:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230522AbiITSuR (ORCPT
+        with ESMTP id S230518AbiITSuR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 20 Sep 2022 14:50:17 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A84B1606AA;
-        Tue, 20 Sep 2022 11:50:14 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id g3so5874926wrq.13;
-        Tue, 20 Sep 2022 11:50:14 -0700 (PDT)
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E6836111B;
+        Tue, 20 Sep 2022 11:50:15 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id cc5so5946195wrb.6;
+        Tue, 20 Sep 2022 11:50:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=PIml5h9yfGZM8hFj0DM2cpSK5N9+Jc9EevGrYn1++vQ=;
-        b=LR7YtcMxhe3P0sEoEbJcH+IkBqrOkuc6o8e6zFaIH3s6hCMkvbaoX0KeIil8ejenWE
-         jddSYjFaJ1eXffm98pgu4B8UsyZ3805SytCXEvlU6HFY19IQ7wytoXQTYtdMNXR4Y4Uu
-         UF5heYpMAZWUxTsPfNc6mi7iecR8SCO5gWsBBj9bx6hDhVa7XaVvwM+PjpYm+xPqH5gS
-         pYjljuCUtbgOc9W5YnW7gRo+HwpDSbwKNODmxr3vhnfntwpf4hKvY30l7Wu7TuprisUh
-         i4Kd079fwNxBqMniHL9S35KyW5pU6OA999s+81FLD1xOQhNKhq2NDzXlh2ISaDAE5aJL
-         9c8w==
+        bh=BUW4gOYp/pXvxRdjMx+H4oGpfR74YdeU/jQctJIUObE=;
+        b=VgJBCzZSWWvGQX9E9GzjZGOpU4hKxrxrtei/ntzf7fQTpq1XhSpjFZnjmkFwj/gWRb
+         sVF0T2vYzVBl2RX+vevLdV0lwQDUqo7ZZpZfRAKX5KCfOGs9cDPue5o+bLLFyuEWAykM
+         kaK0X8Wd7Mg8vwjRLWKLEl4QeqG9MPNz97/Pw4NTpSIwY3APQRGIAnpFU2aYVBt58R5L
+         o8L+tvojSBRYYbJoTDSXI4iU6KmaUOAp23Zc7ARzris6AKSgO6m2n1rfevcGttjt6Fbe
+         o/4TTERQ55AZXFoEwD/RKA4apdIAxGK+4CMsHm6wrkTO3P4pMAMJcHviZ+mXja/i9CbA
+         TWEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=PIml5h9yfGZM8hFj0DM2cpSK5N9+Jc9EevGrYn1++vQ=;
-        b=1Al1+3pVbppgplZJxcTLvoN+A87kHkMBDLTN2A4wx3isomLPZqGkWiU+TURItWWui6
-         6eQJgRJg3wSNLgJGCM+kdZPvcmUlepgtWHKV/CtZ/qQAj6F3rJybSep4nRxwAIQT68PF
-         YjUGvpge+tAjBelZBM1d+eiGnb2pz9uOMNMzxHjZAJpX8TJZmWTnDGoTbQpHPFV56gI9
-         5sgnYflghRW9hrzmYGhakCKMlzHcu3J/qTOHHQtaW/qESZjXLimOeHLGsl9x4OQu+8HZ
-         g/1rtdw/gtLS4CcOjqi/baGcXSbCrvRoLC8uVUUzYJfmBmkwTJUd4ALAazbp+BlLAt3t
-         AKLw==
-X-Gm-Message-State: ACrzQf2zb0XsJimLnKaQateW/WhqPn3W2kleXZNiTDo6BBASFxUeeCYo
-        BHneEQWYa2cpi7+XTDgHAx4=
-X-Google-Smtp-Source: AMsMyM5YuEsIkz/ZbwCy+LfECoAJ6wOTpSpMRW2lh6ErlpsbZS7wKSEoBVSfZwsTS9ij5ivNi33RTg==
-X-Received: by 2002:a05:6000:1689:b0:22a:a66d:1f37 with SMTP id y9-20020a056000168900b0022aa66d1f37mr15201522wrd.197.1663699812700;
-        Tue, 20 Sep 2022 11:50:12 -0700 (PDT)
+        bh=BUW4gOYp/pXvxRdjMx+H4oGpfR74YdeU/jQctJIUObE=;
+        b=jrQ20S39DnsqUsAhoPOOkJZvtaNlpeEk+YlkQZSnd6dkWveE3bw8IMuZafWUBPbKO4
+         SDDZgj9osx2TLDa2vHZlDN9+U6nG8yDs4bc9mR7JwHrInWuA1US2sZWswY7TD2P2Fcsg
+         X4Ftnyx4vCjxzHM97PvHPdicT1OYudxlVt1/Y4FyCHzDXNp3DUdu3nZCMCf2J09j9hi2
+         QeHUUaFKvlE/HcDB23UqnNMMy1UmN4ac2J046bmWZy3XzOFuHiDcHWfiQ0zS8FC9vlui
+         kUdqHkG86fCeEET+vfwfYefS3saH0ugduc/wYVW0JKjXkilfNQ980KpsomJ47GpqAGqW
+         +Vxg==
+X-Gm-Message-State: ACrzQf1hq4nBcCb7me8mHDp52T4/V/pWdYHKn2lL5ukQJzu7ZS0FrNrI
+        AsUbAGqUDJUkh+iEJpzCYPI=
+X-Google-Smtp-Source: AMsMyM53j1tfWe4rRV/yOYx41751jvFLwqQWHbJd13UU1u7cdlpuhMqQE623NK+uLtEX3oHpV2SpBw==
+X-Received: by 2002:a05:6000:1a87:b0:22a:56da:9a2b with SMTP id f7-20020a0560001a8700b0022a56da9a2bmr15342036wry.433.1663699813775;
+        Tue, 20 Sep 2022 11:50:13 -0700 (PDT)
 Received: from prasmi.home ([2a00:23c8:2501:c701:e9a4:d6c9:505d:20d0])
-        by smtp.gmail.com with ESMTPSA id cc4-20020a5d5c04000000b00228de351fc0sm582722wrb.38.2022.09.20.11.50.11
+        by smtp.gmail.com with ESMTPSA id cc4-20020a5d5c04000000b00228de351fc0sm582722wrb.38.2022.09.20.11.50.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 11:50:12 -0700 (PDT)
+        Tue, 20 Sep 2022 11:50:13 -0700 (PDT)
 From:   Prabhakar <prabhakar.csengg@gmail.com>
 X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To:     Rob Herring <robh+dt@kernel.org>,
@@ -66,11 +66,10 @@ Cc:     Heiko Stuebner <heiko@sntech.de>,
         linux-renesas-soc@vger.kernel.org,
         Prabhakar <prabhakar.csengg@gmail.com>,
         Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v4 04/10] dt-bindings: soc: renesas: renesas.yaml: Document Renesas RZ/Five SoC
-Date:   Tue, 20 Sep 2022 19:48:58 +0100
-Message-Id: <20220920184904.90495-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v4 05/10] riscv: Kconfig.socs: Add ARCH_RENESAS kconfig option
+Date:   Tue, 20 Sep 2022 19:48:59 +0100
+Message-Id: <20220920184904.90495-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220920184904.90495-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20220920184904.90495-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
@@ -88,46 +87,42 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Document Renesas RZ/Five (R9A07G043) SoC.
-
-More info about RZ/Five SoC:
-https://www.renesas.com/us/en/products/microcontrollers-microprocessors/rz-mpus/rzfive-risc-v-general-purpose-microprocessors-risc-v-cpu-core-andes-ax45mp-single-10-ghz-2ch-gigabit-ethernet
+Add ARCH_RENESAS config option to allow selecting the Renesas RISC-V SoCs.
+We currently have the newly added RZ/Five (R9A07G043) RISC-V based SoC.
 
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
 v3 -> v4
-* No change
+* Dropped SOC_RENESAS_RZFIVE config option
+* Dropped explicitly selecting SOC_BUS/GPIOLIB/PINCTRL configs
+  under ARCH_RENESAS
+* Updated commit message
+* Dropped RB tag
+* Used riscv instead of RISC-V in subject line
 
 v2 -> v3
-* Dropped "(RISC-V core)" comment
-* Included ACK and RB tags
+* Included RB tag from Geert
 
 v1 -> v2
-* New patch
+* No Change
 ---
- Documentation/devicetree/bindings/soc/renesas/renesas.yaml | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/riscv/Kconfig.socs | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/soc/renesas/renesas.yaml b/Documentation/devicetree/bindings/soc/renesas/renesas.yaml
-index 07c5e6ebd5a0..2789022b52eb 100644
---- a/Documentation/devicetree/bindings/soc/renesas/renesas.yaml
-+++ b/Documentation/devicetree/bindings/soc/renesas/renesas.yaml
-@@ -431,11 +431,12 @@ properties:
-               - renesas,rzn1d400-db # RZN1D-DB (RZ/N1D Demo Board for the RZ/N1D 400 pins package)
-           - const: renesas,r9a06g032
+diff --git a/arch/riscv/Kconfig.socs b/arch/riscv/Kconfig.socs
+index 69774bb362d6..5c420ed55ef9 100644
+--- a/arch/riscv/Kconfig.socs
++++ b/arch/riscv/Kconfig.socs
+@@ -80,4 +80,9 @@ config SOC_CANAAN_K210_DTB_SOURCE
  
--      - description: RZ/G2UL (R9A07G043)
-+      - description: RZ/Five and RZ/G2UL (R9A07G043)
-         items:
-           - enum:
-               - renesas,smarc-evk # SMARC EVK
-           - enum:
-+              - renesas,r9a07g043f01 # RZ/Five
-               - renesas,r9a07g043u11 # RZ/G2UL Type-1
-               - renesas,r9a07g043u12 # RZ/G2UL Type-2
-           - const: renesas,r9a07g043
+ endif # SOC_CANAAN
+ 
++config ARCH_RENESAS
++	bool "Renesas RISC-V SoCs"
++	help
++	  This enables support for the RISC-V based Renesas SoCs.
++
+ endmenu # "SoC selection"
 -- 
 2.25.1
 
