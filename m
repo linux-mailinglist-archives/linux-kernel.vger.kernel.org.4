@@ -2,209 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BD655BE270
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 11:53:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CB0C5BE275
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 11:54:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230367AbiITJxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 05:53:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40624 "EHLO
+        id S230195AbiITJyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 05:54:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230216AbiITJwr (ORCPT
+        with ESMTP id S230225AbiITJya (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 05:52:47 -0400
-Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF3F86EF37;
-        Tue, 20 Sep 2022 02:52:45 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R301e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=guwen@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VQIslnZ_1663667555;
-Received: from localhost(mailfrom:guwen@linux.alibaba.com fp:SMTPD_---0VQIslnZ_1663667555)
-          by smtp.aliyun-inc.com;
-          Tue, 20 Sep 2022 17:52:42 +0800
-From:   Wen Gu <guwen@linux.alibaba.com>
-To:     kgraul@linux.ibm.com, wenjia@linux.ibm.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
-Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v2 2/2] net/smc: Unbind r/w buffer size from clcsock and make them tunable
-Date:   Tue, 20 Sep 2022 17:52:22 +0800
-Message-Id: <1663667542-119851-3-git-send-email-guwen@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1663667542-119851-1-git-send-email-guwen@linux.alibaba.com>
-References: <1663667542-119851-1-git-send-email-guwen@linux.alibaba.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 20 Sep 2022 05:54:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A61D9D;
+        Tue, 20 Sep 2022 02:54:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D1FD6287A;
+        Tue, 20 Sep 2022 09:54:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7684BC433C1;
+        Tue, 20 Sep 2022 09:54:24 +0000 (UTC)
+Date:   Tue, 20 Sep 2022 10:54:21 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-efi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Peter Jones <pjones@redhat.com>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+        AKASHI Takahiro <takahiro.akashi@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Xi Ruoyao <xry111@xry111.site>,
+        Lennart Poettering <lennart@poettering.net>,
+        Jeremy Linton <jeremy.linton@arm.com>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v5 3/8] efi/libstub: use EFI provided memcpy/memset
+ routines
+Message-ID: <YymNzUoGGOKu1e1d@arm.com>
+References: <20220910081152.2238369-1-ardb@kernel.org>
+ <20220910081152.2238369-4-ardb@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220910081152.2238369-4-ardb@kernel.org>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tony Lu <tonylu@linux.alibaba.com>
+On Sat, Sep 10, 2022 at 10:11:47AM +0200, Ard Biesheuvel wrote:
+> The stub is used in different execution environments, but on arm64,
+> RISC-V and LoongArch, we still use the core kernel's implementation of
+> memcpy and memset, as they are just a branch instruction away, and can
+> generally be reused even from code such as the EFI stub that runs in a
+> completely different address space.
+> 
+> KAsan complicates this slightly, resulting in the need for some hacks to
+> expose the uninstrumented, __ prefixed versions as the normal ones, as
+> the latter are instrumented to include the KAsan checks, which only work
+> in the core kernel.
+> 
+> Unfortunately, #define'ing memcpy to __memcpy when building C code does
+> not guarantee that no explicit memcpy() calls will be emitted. And with
+> the upcoming zboot support, which consists of a separate binary which
+> therefore needs its own implementation of memcpy/memset anyway, it's
+> better to provide one explicitly instead of linking to the existing one.
+> 
+> Given that EFI exposes implementations of memmove() and memset() via the
+> boot services table, let's wire those up in the appropriate way, and
+> drop the references to the core kernel ones.
+> 
+> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> ---
+>  arch/arm64/kernel/image-vars.h            | 13 ---------
 
-Currently, SMC uses smc->sk.sk_{rcv|snd}buf to create buffers for
-send buffer and RMB. And the values of buffer size are from tcp_{w|r}mem
-in clcsock.
-
-The buffer size from TCP socket doesn't fit SMC well. Generally, buffers
-are usually larger than TCP for SMC-R/-D to get higher performance, for
-they are different underlay devices and paths.
-
-So this patch unbinds buffer size from TCP, and introduces two sysctl
-knobs to tune them independently. Also, these knobs are per net
-namespace and work for containers.
-
-Signed-off-by: Tony Lu <tonylu@linux.alibaba.com>
----
- Documentation/networking/smc-sysctl.rst | 18 ++++++++++++++++++
- include/net/netns/smc.h                 |  2 ++
- net/smc/af_smc.c                        |  5 ++---
- net/smc/smc_core.c                      |  8 ++++----
- net/smc/smc_sysctl.c                    | 21 +++++++++++++++++++++
- 5 files changed, 47 insertions(+), 7 deletions(-)
-
-diff --git a/Documentation/networking/smc-sysctl.rst b/Documentation/networking/smc-sysctl.rst
-index 45ba152..6d8acdb 100644
---- a/Documentation/networking/smc-sysctl.rst
-+++ b/Documentation/networking/smc-sysctl.rst
-@@ -41,3 +41,21 @@ smcr_testlink_time - INTEGER
- 	disabling TEST_LINK.
- 
- 	Default: 30 seconds.
-+
-+wmem - INTEGER
-+	Initial size of send buffer used by SMC sockets.
-+	The default value inherits from net.ipv4.tcp_wmem[1].
-+
-+	The minimum value is 16KiB and there is no hard limit for max value, but
-+	only allowed 512KiB for SMC-R and 1MiB for SMC-D.
-+
-+	Default: 16K
-+
-+rmem - INTEGER
-+	Initial size of receive buffer (RMB) used by SMC sockets.
-+	The default value inherits from net.ipv4.tcp_rmem[1].
-+
-+	The minimum value is 16KiB and there is no hard limit for max value, but
-+	only allowed 512KiB for SMC-R and 1MiB for SMC-D.
-+
-+	Default: 128K
-diff --git a/include/net/netns/smc.h b/include/net/netns/smc.h
-index d295e2c..582212a 100644
---- a/include/net/netns/smc.h
-+++ b/include/net/netns/smc.h
-@@ -20,5 +20,7 @@ struct netns_smc {
- 	unsigned int			sysctl_autocorking_size;
- 	unsigned int			sysctl_smcr_buf_type;
- 	int				sysctl_smcr_testlink_time;
-+	int				sysctl_wmem;
-+	int				sysctl_rmem;
- };
- #endif
-diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
-index 0939cc3..e44ca70 100644
---- a/net/smc/af_smc.c
-+++ b/net/smc/af_smc.c
-@@ -379,6 +379,8 @@ static struct sock *smc_sock_alloc(struct net *net, struct socket *sock,
- 	sk->sk_state = SMC_INIT;
- 	sk->sk_destruct = smc_destruct;
- 	sk->sk_protocol = protocol;
-+	WRITE_ONCE(sk->sk_sndbuf, READ_ONCE(net->smc.sysctl_wmem));
-+	WRITE_ONCE(sk->sk_rcvbuf, READ_ONCE(net->smc.sysctl_rmem));
- 	smc = smc_sk(sk);
- 	INIT_WORK(&smc->tcp_listen_work, smc_tcp_listen_work);
- 	INIT_WORK(&smc->connect_work, smc_connect_work);
-@@ -3253,9 +3255,6 @@ static int __smc_create(struct net *net, struct socket *sock, int protocol,
- 		smc->clcsock = clcsock;
- 	}
- 
--	smc->sk.sk_sndbuf = max(smc->clcsock->sk->sk_sndbuf, SMC_BUF_MIN_SIZE);
--	smc->sk.sk_rcvbuf = max(smc->clcsock->sk->sk_rcvbuf, SMC_BUF_MIN_SIZE);
--
- out:
- 	return rc;
- }
-diff --git a/net/smc/smc_core.c b/net/smc/smc_core.c
-index ebf56cd..ea41f22 100644
---- a/net/smc/smc_core.c
-+++ b/net/smc/smc_core.c
-@@ -2307,10 +2307,10 @@ static int __smc_buf_create(struct smc_sock *smc, bool is_smcd, bool is_rmb)
- 
- 	if (is_rmb)
- 		/* use socket recv buffer size (w/o overhead) as start value */
--		sk_buf_size = smc->sk.sk_rcvbuf / 2;
-+		sk_buf_size = smc->sk.sk_rcvbuf;
- 	else
- 		/* use socket send buffer size (w/o overhead) as start value */
--		sk_buf_size = smc->sk.sk_sndbuf / 2;
-+		sk_buf_size = smc->sk.sk_sndbuf;
- 
- 	for (bufsize_short = smc_compress_bufsize(sk_buf_size, is_smcd, is_rmb);
- 	     bufsize_short >= 0; bufsize_short--) {
-@@ -2369,7 +2369,7 @@ static int __smc_buf_create(struct smc_sock *smc, bool is_smcd, bool is_rmb)
- 	if (is_rmb) {
- 		conn->rmb_desc = buf_desc;
- 		conn->rmbe_size_short = bufsize_short;
--		smc->sk.sk_rcvbuf = bufsize * 2;
-+		smc->sk.sk_rcvbuf = bufsize;
- 		atomic_set(&conn->bytes_to_rcv, 0);
- 		conn->rmbe_update_limit =
- 			smc_rmb_wnd_update_limit(buf_desc->len);
-@@ -2377,7 +2377,7 @@ static int __smc_buf_create(struct smc_sock *smc, bool is_smcd, bool is_rmb)
- 			smc_ism_set_conn(conn); /* map RMB/smcd_dev to conn */
- 	} else {
- 		conn->sndbuf_desc = buf_desc;
--		smc->sk.sk_sndbuf = bufsize * 2;
-+		smc->sk.sk_sndbuf = bufsize;
- 		atomic_set(&conn->sndbuf_space, bufsize);
- 	}
- 	return 0;
-diff --git a/net/smc/smc_sysctl.c b/net/smc/smc_sysctl.c
-index 3224d30..b6f79fa 100644
---- a/net/smc/smc_sysctl.c
-+++ b/net/smc/smc_sysctl.c
-@@ -19,6 +19,9 @@
- #include "smc_llc.h"
- #include "smc_sysctl.h"
- 
-+static int min_sndbuf = SMC_BUF_MIN_SIZE;
-+static int min_rcvbuf = SMC_BUF_MIN_SIZE;
-+
- static struct ctl_table smc_table[] = {
- 	{
- 		.procname       = "autocorking_size",
-@@ -43,6 +46,22 @@
- 		.mode		= 0644,
- 		.proc_handler	= proc_dointvec_jiffies,
- 	},
-+	{
-+		.procname	= "wmem",
-+		.data		= &init_net.smc.sysctl_wmem,
-+		.maxlen		= sizeof(int),
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec_minmax,
-+		.extra1		= &min_sndbuf,
-+	},
-+	{
-+		.procname	= "rmem",
-+		.data		= &init_net.smc.sysctl_rmem,
-+		.maxlen		= sizeof(int),
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec_minmax,
-+		.extra1		= &min_rcvbuf,
-+	},
- 	{  }
- };
- 
-@@ -69,6 +88,8 @@ int __net_init smc_sysctl_net_init(struct net *net)
- 	net->smc.sysctl_autocorking_size = SMC_AUTOCORKING_DEFAULT_SIZE;
- 	net->smc.sysctl_smcr_buf_type = SMCR_PHYS_CONT_BUFS;
- 	net->smc.sysctl_smcr_testlink_time = SMC_LLC_TESTLINK_DEFAULT_TIME;
-+	WRITE_ONCE(net->smc.sysctl_wmem, READ_ONCE(net->ipv4.sysctl_tcp_wmem[1]));
-+	WRITE_ONCE(net->smc.sysctl_rmem, READ_ONCE(net->ipv4.sysctl_tcp_rmem[1]));
- 
- 	return 0;
- 
--- 
-1.8.3.1
-
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
