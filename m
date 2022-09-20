@@ -2,239 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 599ED5BF02E
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 00:32:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A58B55BF04B
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 00:40:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229655AbiITWbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 18:31:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44622 "EHLO
+        id S229488AbiITWj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 18:39:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbiITWbq (ORCPT
+        with ESMTP id S229631AbiITWjz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 18:31:46 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7128225C6C
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 15:31:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663713105; x=1695249105;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=cqggcTAxb9N5aY8DgeDzOPQv8zguDUpPu7jYY0RpRGo=;
-  b=CKx0S/3Pib1dxYbgouts1L2wpgi82XCr68QB8jNwcGYjp1dndRDh6yb3
-   pklZ/HFC7nowqVCnxnQViElD6bdPd+aeWoMfQplQfolrvZbEV0/RG7XrT
-   LRqofZMNcOxmi3TAw78m3WWfDWi/HqJQDl406swfoxn7EGdMMmgSRqJWu
-   Ra4n8oy5PCp9v2OgLpj775BgBlrSBh3ul70iT/oroCcQ2zs1S2CTyYMav
-   emZ8y9+DtsIck9kjbsB2IJv7U3qRjAVv5hGyJU0qKo511pNz9OKoVxULy
-   KOdLVsP6slt/3Aa1rrh6jCaCllzRMvvq6MiCZx9lGwNC5atwInkCjZBHF
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10476"; a="280210214"
-X-IronPort-AV: E=Sophos;i="5.93,331,1654585200"; 
-   d="scan'208";a="280210214"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 15:31:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,331,1654585200"; 
-   d="scan'208";a="652277126"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 20 Sep 2022 15:31:42 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oalmH-00030j-38;
-        Tue, 20 Sep 2022 22:31:41 +0000
-Date:   Wed, 21 Sep 2022 06:31:23 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Valentin Korenblit <vkorenblit@sequans.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [mtd:nand/next 11/31]
- drivers/mtd/nand/raw/cadence-nand-controller.c:1893:4: error: implicit
- declaration of function 'ioread64_rep' is invalid in C99
-Message-ID: <202209210641.MziHAbW7-lkp@intel.com>
+        Tue, 20 Sep 2022 18:39:55 -0400
+Received: from GBR01-LO2-obe.outbound.protection.outlook.com (mail-lo2gbr01on2110.outbound.protection.outlook.com [40.107.10.110])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E47AE033;
+        Tue, 20 Sep 2022 15:39:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NiZ992iVBGf3ElfM8A2rONLupZYgvs+BXl+fm9cFEq6tbuIxmCCcledYbi/V8ofrn5bYi+mE/EA1uv0B61Wg62x6+tk7jm4lAvut2zVeAJAtl3W4kyQivdTrt8J5GfoQKATGsQc2rpT9wYMvQjp1hBbBHcUcsDt9uSWtc8b7lcjgjzlGYfdZLWcQhCXACsMrsa3y5Pmv8E3Gm6jwOhwWi3vXXz+S/fz23oH6Wct+qRl+aLr43EWNQVNr3XdbNNPkv8zr+NCdQDO/VZ4u6bH1nYhhy+wxPX93d1efFyHZSLm4DpFG7SdB3kW6Qi/QzGWd68bsjIaqZW0J1qXMfQLBJA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hrob3Zyv3BbNx2crY5nTiL7EyT+uy5DH9XR9sJZoeYs=;
+ b=Nz6dRggYk/7CQtfTWm9PPngf5dZjaLtZ9Yoi0QaxaNWKlpZsp0YSWSUEo77ebSSHT53Xq+KiLW8gjYnpPMqgjdT44bxxrd5A/N+cQ6xRSzjDYE3/tsswtLFJtPiOla6mZO4vHmyXTKiFhBbkUDxKVO8u/bLQzr0DbhEuzx8MoVjjCjNb9WEL+44pD0BXlPX+qsfPeaWnBzmqd96ECVvMI9qgsfOgiire3HH8hnHBGqeMG7pJGXZKM8TJTEUSEYlZX+pOezRH7AeocoEJMJNXG9pqzVnixOKMqNfA8c2umrInSyctdF1psZFypOoMmDfNF3Ns253zMVsCWUm82ex0JQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
+ dkim=pass header.d=garyguo.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hrob3Zyv3BbNx2crY5nTiL7EyT+uy5DH9XR9sJZoeYs=;
+ b=FRHHtceyNGlVpl8efAhQcZyroy8LZ6bzCF5+LDnqMA/LQCCuyaE0RETxzT+88gw7uIumCfdSEfwWyZSyuR/DYh8uDBg8BYEYZ3LnTyPOgEVAEI00u0nXDmUmvMTHyIUldyjiJ9L1KH4yRZOyfrfLyCaAeoxyWla3jDDk8Ppplnw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=garyguo.net;
+Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
+ by CWLP265MB7037.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:1f8::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.15; Tue, 20 Sep
+ 2022 22:39:51 +0000
+Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::31ff:7dfd:5b99:2d1c]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::31ff:7dfd:5b99:2d1c%3]) with mapi id 15.20.5654.014; Tue, 20 Sep 2022
+ 22:39:51 +0000
+Date:   Tue, 20 Sep 2022 23:39:47 +0100
+From:   Gary Guo <gary@garyguo.net>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Konstantin Shelekhin <k.shelekhin@yadro.com>, ojeda@kernel.org,
+        ark.email@gmail.com, bjorn3_gh@protonmail.com, bobo1239@web.de,
+        bonifaido@gmail.com, boqun.feng@gmail.com, davidgow@google.com,
+        dev@niklasmohrin.de, dsosnowski@dsosnowski.pl, foxhlchen@gmail.com,
+        geofft@ldpreload.com, gregkh@linuxfoundation.org,
+        jarkko@kernel.org, john.m.baublitz@gmail.com,
+        leseulartichaut@gmail.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, me@kloenk.de, milan@mdaverde.com,
+        mjmouse9999@gmail.com, patches@lists.linux.dev,
+        rust-for-linux@vger.kernel.org, thesven73@gmail.com,
+        viktor@v-gar.de, Andreas Hindborg <andreas.hindborg@wdc.com>
+Subject: Re: [PATCH v9 12/27] rust: add `kernel` crate
+Message-ID: <20220920233947.0000345c@garyguo.net>
+In-Reply-To: <87a66uxcpc.fsf@email.froward.int.ebiederm.org>
+References: <20220805154231.31257-13-ojeda@kernel.org>
+        <Yu5Bex9zU6KJpcEm@yadro.com>
+        <CANiq72=3j2NM2kS8iw14G6MnGirb0=O6XQyCsY9vVgsZ1DfLaQ@mail.gmail.com>
+        <Yu6BXwtPZwYPIDT6@casper.infradead.org>
+        <Yyh3kFUvt2aMh4nq@wedsonaf-dev>
+        <CAHk-=wgaBaVaK2K=N05fwWSSLM6YJx=yLmP4f7j6d6o=nCAtdw@mail.gmail.com>
+        <CAHk-=whTDbFZKB4KJ6=74hoLcerTm3JuN3PV8G6ktcz+Xm1qew@mail.gmail.com>
+        <YyivY6WIl/ahZQqy@wedsonaf-dev>
+        <CAHk-=whm5Ujw-yroDPZWRsHK76XxZWF1E9806jNOicVTcQC6jw@mail.gmail.com>
+        <Yyjut3MHooCwzHRc@wedsonaf-dev>
+        <CAHk-=wityPWw4YkHeMNU4iGanyiC3UwDRhbOHYCJrhB2paCGwA@mail.gmail.com>
+        <CAFRnB2VPpLSMqQwFPEjZhde8+-c6LLms54QkMt+wZPjOTULESw@mail.gmail.com>
+        <CAHk-=wiyD6KqZN8jFkMHPRPxrbyJEUDRP6+WaH9Q9hjDB5i1zg@mail.gmail.com>
+        <CAHk-=wj6sDFk8ZXSEKUMj-J9zfrMSSO3jhBEaveVaJSUpr=O=w@mail.gmail.com>
+        <87a66uxcpc.fsf@email.froward.int.ebiederm.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; i686-w64-mingw32)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO4P123CA0565.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:33b::19) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:253::10)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|CWLP265MB7037:EE_
+X-MS-Office365-Filtering-Correlation-Id: 439a08b4-7c43-43a0-db4a-08da9b5907d2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: goQGTz2c/LRj+uxo1uxFDOe5C+qT4PgluWv7mfW7CXgPhLPssYfpoOdJZUvHVgeKOE0p48OMtuCvYh6Aw0hAB2gCnjpzqmW/8NDQFt0GOInmPvufKopeIRknn+7xBC8/wSZYulfCNPX+qwH5H5owSes3bTkW84kh0xZMD69rGwd/dTcYO3VwaFyUKSu1oi0GIttGi5ilRv9Yi8gFZZzoSj7aOnbGicZVtnaTBvEHwDEHzhamQ+lqMKKy7MFHiLwrhsaQKS4dDFKIDhHcvLRGM63SQ71qzq8xWLaS5F65tIEqimuqWGHtqfJsa6bx3UxXXo6LuP/ADWLL4IOI8xcKmvSbK9rOokbpmu7HauXHS4qiI6qQS7ZdgJNUpiCzWPg+hkjGImuznLOEqnJ7upk/iOZFiSeNJduuOWBZp0jAhM64MpgKY+p8ShBo9n6Gq/R7q/rY7BLNp+FqaxN3g5uUxgezzvOg61dTEhNqTKtnpd6YgLMQgdMt6JpedkC41HYKI8Qs75MLQaTfgqTARxBUeq219I4j0Sf7/vAKORbPXxECGQG6UN0h2EnEF6RlQ+bMv9lfeOnT5bywfSxOO2dwiEwHy7frqTSaD9r8BfZWyEVrndsX4moG3SkPZFiRhnTXQWehdw3v4wd/27UiYipuHo17xBEqspNt0qD0gykSPsv8+j6x0M2de5DrIdH0Hnhg5IpxlEQmbUvMsFylUORkulr1duz+qPilcwsK2uHn2XxzDOMvlcQlENjfBGm2A7VSr+H9FBFzd+2fQWrS+rh+Tg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(396003)(366004)(376002)(39830400003)(136003)(346002)(451199015)(7406005)(7416002)(5660300002)(83380400001)(6512007)(2906002)(6486002)(478600001)(6916009)(54906003)(316002)(38100700002)(1076003)(86362001)(186003)(41300700001)(6666004)(52116002)(6506007)(8936002)(2616005)(36756003)(53546011)(966005)(66946007)(8676002)(4326008)(66556008)(66476007)(81973001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?XQFul/WX0N+GUDCliGhM/RMsJrwpirX2F8nNExOsTmXvP2sZ+y2mJ+DrkKSN?=
+ =?us-ascii?Q?XA7mqeiPNe5AXD9+umqsRv/VVor2GisZwmqAZtNvGIs6Mjah/JHaI7LVPCk9?=
+ =?us-ascii?Q?92peIpQ2Nhc43Z3Lh5YiXKetP2z/J/a6v5jWS78jt4inlLXEXSfmYt5WawZC?=
+ =?us-ascii?Q?21uhkisZsmJnDX1BIkzMgtp6K8E31Ja0A89fKgn2cwromaqsQ0aQsARJ3cd0?=
+ =?us-ascii?Q?4hfzyCwC+e6JvXHJcpha5Sv2g/aBNkPrM/WQURu5NZzqXyzkLMTDgTOnnr0a?=
+ =?us-ascii?Q?ed3OyQsGww8RPKq/ftLCjWKlp09TgdxDbmSkIbabj/uoYZCECcITq4Zc2UAe?=
+ =?us-ascii?Q?w6BA8QbqwZnrbl6JWbaAM/+S2ly69sKc0MVa2MOonOSKMkFMEGhLYs7NMO0o?=
+ =?us-ascii?Q?z+szDaZ2aT5xhzMnTC3hQpKeqTKuVPVS15LRVlNIgcvQ0NApLUkmybtTSYP2?=
+ =?us-ascii?Q?jqPIJROWYd3xpxIwKW/PF5LbXyqdtXztkq5E45ds3kx5EzHqdjHGhf/6Y2JZ?=
+ =?us-ascii?Q?YaM438PmShf+b6wacp6pIyEqAs5lAEVqOyYTcl4WHF9KWiIBjpU37IktShu3?=
+ =?us-ascii?Q?E7xJGuFJ12qkOut0kByVoGo8/e+bKFSKg4ereKzg8qpY6DuzM0Zrt1ZhlSVy?=
+ =?us-ascii?Q?XZVSsa3BQCvNdsjcjF/q9vmDzXg8smSaX4MUqun8JD9kmtkZEjIsQWe7LxH6?=
+ =?us-ascii?Q?MmDuYs2Xf0WiSWXn8/KR8DpOjzR9uk8Gq1g9c0835PbwoKoBHdEKDHu74fTp?=
+ =?us-ascii?Q?xcY8lrN277NK9Xot1Pfr+bYin7i7w1k12zlqSt6s6JOkn6wnWKaXcxAN1kh4?=
+ =?us-ascii?Q?ImLy88tRnT3c+lnlao+qNZpgYuDUwzYrFP0lBtHd32xu/U58nKSTrbgkOvUW?=
+ =?us-ascii?Q?H/DRdMUIQ9HoPERE+mtjeiWvw/msmD+Wj6ejUJYv27U4mIO0nBRxLagVaXVX?=
+ =?us-ascii?Q?BVPeWof8kaZv6uAHgKRSzgnhEycDaU8V7EBeX5aPvJT8+rqlF4ww170AeFvV?=
+ =?us-ascii?Q?gPQZ1B3ZvSHvj/2SIXY0nN0Hq45qeIPWJ2fck89+tk4dx//A2UkiRAOA/I4f?=
+ =?us-ascii?Q?vpH2Bo2B2jg8XoPaCOTNlhi/kNwtCry4HdkpfemFWgAV6MjomOulQngPELQB?=
+ =?us-ascii?Q?wyo+saR7J3xMeejaTH7cjPppY/AnDmsP8M7w+VA1dNwaXylMrea9hDMQ1MGt?=
+ =?us-ascii?Q?RLGgc7QtrSggqCsbolT+we5t8GIFUJc04/Al3vG52BBKoc4sTigVzmUIjSgZ?=
+ =?us-ascii?Q?1lfTU3hZEQkFS9ug3Ah5Y+MSJKxG6EGFL1rSk4h4NZTa7vjEZMIReiWaJU/Y?=
+ =?us-ascii?Q?h1yEgjewLeatjQWVVKoI3PBSImRM5QCgU768OgGzMhov1zU2TkizQnoy1jBp?=
+ =?us-ascii?Q?V9JE/iG6KX7ukp0L4cxySy/+6xcy6Pn/Z74Ga918XXZvs11+OEcYXBveQ96P?=
+ =?us-ascii?Q?Pmali0py1/xB8pGKdLYrrEuV3Pnv9srb/icXn5655yGD4mK2nLYOZaFpn2wS?=
+ =?us-ascii?Q?FzNptHphBpaiBD+b5u49TjHj0nOrvl3fkS0zHW8VhePQCW2UikfFjmf52fW4?=
+ =?us-ascii?Q?dtv+0L0lCdQvT2Qw/K2AvmtDwxL80gBeXUZ5Y0QNEjs+8AqGeCmp/SXYgylj?=
+ =?us-ascii?Q?Q3fxnAPu5eIOIPXaWCS9n2l0GUDTvVabkWClrec17Sd+?=
+X-OriginatorOrg: garyguo.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: 439a08b4-7c43-43a0-db4a-08da9b5907d2
+X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Sep 2022 22:39:51.3093
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8HKe1Tw6T184OmFgNsLbJXaA5pF/hBNIJdIHmsup9gUvnX54ZqbIMXFV4sqora/lpqIgnybgBNmyLftbHEASqQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CWLP265MB7037
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next
-head:   63de24fccb6b831be1abfe07292449105b467731
-commit: 7e7dc04774b18c0e42ce74aa3357021cda979674 [11/31] mtd: rawnand: cadence: support 64-bit slave dma interface
-config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20220921/202209210641.MziHAbW7-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git/commit/?id=7e7dc04774b18c0e42ce74aa3357021cda979674
-        git remote add mtd https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git
-        git fetch --no-tags mtd nand/next
-        git checkout 7e7dc04774b18c0e42ce74aa3357021cda979674
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/mtd/nand/raw/
+On Tue, 20 Sep 2022 10:55:27 -0500
+"Eric W. Biederman" <ebiederm@xmission.com> wrote:
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+> Linus Torvalds <torvalds@linux-foundation.org> writes:
+> 
+> > On Mon, Sep 19, 2022 at 4:58 PM Linus Torvalds
+> > <torvalds@linux-foundation.org> wrote:  
+> >>
+> >> This is not some kind of "a few special things".
+> >>
+> >> This is things like absolutely _anything_ that allocates memory, or
+> >> takes a lock, or does a number of other things.  
+> >
+> > Examples of "number of other things" ends up being things like
+> > "accessing user memory", which depending on what you are doing may
+> > be very common too.
+> >
+> > And btw, it's not only about the (multiple kinds of) atomic regions.
+> >
+> > We have other context rules in the kernel too, like "does floating
+> > point or vector unit calculations". Which you can actually do, but
+> > only in a kernel_fpu_begin/kernel_fpu_end region.
+> >
+> > Now, the floating point thing is rare enough that it's probably fine
+> > to just say "no floating point at all in Rust code".  It tends to be
+> > very special code, so you'd write it in C or inline assembly,
+> > because you're doing special things like using the vector unit for
+> > crypto hashes using special CPU instructions.  
+> 
+> I just want to point out that there are ways of representing things
+> like the context you are running in during compile time.  I won't
+> argue they are necessarily practical, but there are ways and by
+> exploring those ways some practical solutions may result.
+> 
+> Instead of saying:
+> spin_lock(&lock);
+> do_something();
+> spin_unlock(&lock);
+> 
+> It is possible to say:
+> with_spin_lock(&lock, do_something());
+> 
+> This can be taken a step farther and with_spin_lock can pass a
+> ``token'' say a structure with no members that disappears at compile
+> time that let's the code know it has the spinlock held.
+> 
+> In C I would do:
+> struct have_spin_lock_x {
+> 	// nothing
+> };
+> 
+> do_something(struct have_spin_lock_x context_guarantee)
+> {
+> 	...;
+> }
+> 
+> I think most of the special contexts in the kernel can be represented
+> in a similar manner.  A special parameter that can be passed and will
+> compile out.
+> 
+> I don't recall seeing anything like that tried in the kernel so I
+> don't know if it makes sense or if it would get too wordy to live,
+> but it is possible.  If passing a free context parameter is not too
+> wordy it would catch silly errors, and would hopefully leave more
+> mental space for developers to pay attention to the other details of
+> the problems they are solving.
+> 
+> *Shrug*  I don't know if rust allows for free parameters like that and
+> if it does I don't know if it would be cheap enough to live.
 
-All errors (new ones prefixed by >>):
+I believe this was mentioned by Wedson in one of his previous emails.
+This pattern is quite common in Rust code. It looks like this:
 
->> drivers/mtd/nand/raw/cadence-nand-controller.c:1893:4: error: implicit declaration of function 'ioread64_rep' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                           ioread64_rep(cdns_ctrl->io.virt, buf, len_in_words);
-                           ^
->> drivers/mtd/nand/raw/cadence-nand-controller.c:1962:4: error: implicit declaration of function 'iowrite64_rep' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                           iowrite64_rep(cdns_ctrl->io.virt, buf, len_in_words);
-                           ^
-   2 errors generated.
+	#[derive(Clone, Copy)]
+	pub struct Token<'a>(PhantomData<&'a ()>);
+	
+	pub fn with_token<T>(f: impl for<'a> FnOnce(Token<'a>) -> T) ->
+	T { f(Token(PhantomData))
+	}
 
+Any function that requires something can just take token by value, e.g.
+with `token: Token<'_>`. Since Token is a zero-sized type (ZST), this
+parameter will be omitted during code generation, so it won't affect
+the ABI and this has no runtime cost.
 
-vim +/ioread64_rep +1893 drivers/mtd/nand/raw/cadence-nand-controller.c
+Example on godbolt: https://godbolt.org/z/9n954cG4d, showing that the
+token is actually all optimised out.
 
-  1871	
-  1872	static int cadence_nand_read_buf(struct cdns_nand_ctrl *cdns_ctrl,
-  1873					 u8 *buf, int len)
-  1874	{
-  1875		u8 thread_nr = 0;
-  1876		u32 sdma_size;
-  1877		int status;
-  1878	
-  1879		/* Wait until slave DMA interface is ready to data transfer. */
-  1880		status = cadence_nand_wait_on_sdma(cdns_ctrl, &thread_nr, &sdma_size);
-  1881		if (status)
-  1882			return status;
-  1883	
-  1884		if (!cdns_ctrl->caps1->has_dma) {
-  1885			u8 data_dma_width = cdns_ctrl->caps2.data_dma_width;
-  1886	
-  1887			int len_in_words = (data_dma_width == 4) ? len >> 2 : len >> 3;
-  1888	
-  1889			/* read alingment data */
-  1890			if (data_dma_width == 4)
-  1891				ioread32_rep(cdns_ctrl->io.virt, buf, len_in_words);
-  1892			else
-> 1893				ioread64_rep(cdns_ctrl->io.virt, buf, len_in_words);
-  1894	
-  1895			if (sdma_size > len) {
-  1896				int read_bytes = (data_dma_width == 4) ?
-  1897					len_in_words << 2 : len_in_words << 3;
-  1898	
-  1899				/* read rest data from slave DMA interface if any */
-  1900				if (data_dma_width == 4)
-  1901					ioread32_rep(cdns_ctrl->io.virt,
-  1902						     cdns_ctrl->buf,
-  1903						     sdma_size / 4 - len_in_words);
-  1904				else
-  1905					ioread64_rep(cdns_ctrl->io.virt,
-  1906						     cdns_ctrl->buf,
-  1907						     sdma_size / 8 - len_in_words);
-  1908	
-  1909				/* copy rest of data */
-  1910				memcpy(buf + read_bytes, cdns_ctrl->buf,
-  1911				       len - read_bytes);
-  1912			}
-  1913			return 0;
-  1914		}
-  1915	
-  1916		if (cadence_nand_dma_buf_ok(cdns_ctrl, buf, len)) {
-  1917			status = cadence_nand_slave_dma_transfer(cdns_ctrl, buf,
-  1918								 cdns_ctrl->io.dma,
-  1919								 len, DMA_FROM_DEVICE);
-  1920			if (status == 0)
-  1921				return 0;
-  1922	
-  1923			dev_warn(cdns_ctrl->dev,
-  1924				 "Slave DMA transfer failed. Try again using bounce buffer.");
-  1925		}
-  1926	
-  1927		/* If DMA transfer is not possible or failed then use bounce buffer. */
-  1928		status = cadence_nand_slave_dma_transfer(cdns_ctrl, cdns_ctrl->buf,
-  1929							 cdns_ctrl->io.dma,
-  1930							 sdma_size, DMA_FROM_DEVICE);
-  1931	
-  1932		if (status) {
-  1933			dev_err(cdns_ctrl->dev, "Slave DMA transfer failed");
-  1934			return status;
-  1935		}
-  1936	
-  1937		memcpy(buf, cdns_ctrl->buf, len);
-  1938	
-  1939		return 0;
-  1940	}
-  1941	
-  1942	static int cadence_nand_write_buf(struct cdns_nand_ctrl *cdns_ctrl,
-  1943					  const u8 *buf, int len)
-  1944	{
-  1945		u8 thread_nr = 0;
-  1946		u32 sdma_size;
-  1947		int status;
-  1948	
-  1949		/* Wait until slave DMA interface is ready to data transfer. */
-  1950		status = cadence_nand_wait_on_sdma(cdns_ctrl, &thread_nr, &sdma_size);
-  1951		if (status)
-  1952			return status;
-  1953	
-  1954		if (!cdns_ctrl->caps1->has_dma) {
-  1955			u8 data_dma_width = cdns_ctrl->caps2.data_dma_width;
-  1956	
-  1957			int len_in_words = (data_dma_width == 4) ? len >> 2 : len >> 3;
-  1958	
-  1959			if (data_dma_width == 4)
-  1960				iowrite32_rep(cdns_ctrl->io.virt, buf, len_in_words);
-  1961			else
-> 1962				iowrite64_rep(cdns_ctrl->io.virt, buf, len_in_words);
-  1963	
-  1964			if (sdma_size > len) {
-  1965				int written_bytes = (data_dma_width == 4) ?
-  1966					len_in_words << 2 : len_in_words << 3;
-  1967	
-  1968				/* copy rest of data */
-  1969				memcpy(cdns_ctrl->buf, buf + written_bytes,
-  1970				       len - written_bytes);
-  1971	
-  1972				/* write all expected by nand controller data */
-  1973				if (data_dma_width == 4)
-  1974					iowrite32_rep(cdns_ctrl->io.virt,
-  1975						      cdns_ctrl->buf,
-  1976						      sdma_size / 4 - len_in_words);
-  1977				else
-  1978					iowrite64_rep(cdns_ctrl->io.virt,
-  1979						      cdns_ctrl->buf,
-  1980						      sdma_size / 8 - len_in_words);
-  1981			}
-  1982	
-  1983			return 0;
-  1984		}
-  1985	
-  1986		if (cadence_nand_dma_buf_ok(cdns_ctrl, buf, len)) {
-  1987			status = cadence_nand_slave_dma_transfer(cdns_ctrl, (void *)buf,
-  1988								 cdns_ctrl->io.dma,
-  1989								 len, DMA_TO_DEVICE);
-  1990			if (status == 0)
-  1991				return 0;
-  1992	
-  1993			dev_warn(cdns_ctrl->dev,
-  1994				 "Slave DMA transfer failed. Try again using bounce buffer.");
-  1995		}
-  1996	
-  1997		/* If DMA transfer is not possible or failed then use bounce buffer. */
-  1998		memcpy(cdns_ctrl->buf, buf, len);
-  1999	
-  2000		status = cadence_nand_slave_dma_transfer(cdns_ctrl, cdns_ctrl->buf,
-  2001							 cdns_ctrl->io.dma,
-  2002							 sdma_size, DMA_TO_DEVICE);
-  2003	
-  2004		if (status)
-  2005			dev_err(cdns_ctrl->dev, "Slave DMA transfer failed");
-  2006	
-  2007		return status;
-  2008	}
-  2009	
+It should be noted however, atomic context is not something that a
+token can represent. You can only use tokens to restrict what you *can*
+do, but not what you *can't* do. There is no negative reasoning with
+tokens, you can't create a function that can only be called when you
+don't have token.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+You can use tokens to represent non-atomic contexts, but that'll be
+really painful because this requires carrying a token in almost all
+functions. This kind of API also works well for FPU contexts.
+
+Best,
+Gary
