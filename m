@@ -2,82 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3A4D5BDFBA
+	by mail.lfdr.de (Postfix) with ESMTP id 7862E5BDFB9
 	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 10:20:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230471AbiITIT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 04:19:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60766 "EHLO
+        id S229684AbiITIUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 04:20:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231509AbiITITI (ORCPT
+        with ESMTP id S231527AbiITITL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 04:19:08 -0400
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A0A065803
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 01:15:50 -0700 (PDT)
+        Tue, 20 Sep 2022 04:19:11 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDBA666105;
+        Tue, 20 Sep 2022 01:15:54 -0700 (PDT)
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 62124200010;
-        Tue, 20 Sep 2022 08:15:48 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 6623B1C000F;
+        Tue, 20 Sep 2022 08:15:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1663661749;
+        t=1663661753;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=QVLy22muNBEbzcIbHIu1IOkDAC7wNvhUFUf+W0Hkpoo=;
-        b=ZP9Xgwf9F1ZvG8cr4gEN9kc8KMHfsjkM6tHa3vZb0ElkPAlFFJ3Z7PofV6bz6KxvveYbkH
-        dRaixZL++53s5IMFW/9aCWmP90lndia4xK3BRFXG79qiVKxBw1XyWyUkrrvnw5wahHshRO
-        O0ssuFyYguQD8pFkpg9DKCmRx/mdogzDkmnWaFP6ecpPHoPQ4gX7tDwoCzq1MSaV71J4+E
-        wE8OyUjCubzW0RIPrliSCRZYeUmyX9WEajciMC31GDjmq0lAwT6s34QSnWTVpm/icLqAy4
-        vyWgtQw9hsOfklIEoTDQi8eehLvXV8GOY8WJt5O0AuMizrb45gh1Lvc88yYfaA==
+        bh=0bZ/4ub62GqpgWbwegoDb5Vo3VrGav4tMuzZ44pe6tM=;
+        b=BgB9C/LSPzzzishEokbHUGFSlXDbeh+mEAFBADS19MhM+0dG37H/D0RxGjbzShZQroPcFw
+        MAZjU5+DVYmcGiXX4c3UCGtO6UgClhiCZ/2CyNL2rUygRPmGhQMcCk2hUi9YpaeuRmeXdv
+        2D1xa0eTfPLE0oAJSEIw+z5kE8Njk5VyMdEXy5Jw+5utfdy7SI5QF/3xbeZuV/DGcSj5oO
+        3uuJL2muhLARpDv+65r5+BKQm+KlZACUaJ0gjBMNKX/iGOggetYY46P2mqL82uFctqXvLB
+        MtrGjtUO9S4DNu5qcS2Mu2EliEX32QJqSKu3VDFXEgRDRoFqgWMmdze988H3Vg==
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     =?utf-8?q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
         Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        =?utf-8?q?Marek_Beh=C3=BAn?= <kabel@kernel.org>
-Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mtd: rawnand: fsl_elbc: Fix none ECC mode
-Date:   Tue, 20 Sep 2022 10:15:46 +0200
-Message-Id: <20220920081547.597617-1-miquel.raynal@bootlin.com>
+        Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-mtd@lists.infradead.org
+Subject: Re: [PATCH] mtd: nand: bbt: Use the bitmap API to allocate bitmaps
+Date:   Tue, 20 Sep 2022 10:15:51 +0200
+Message-Id: <20220920081551.598096-1-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220707184328.3845-1-pali@kernel.org>
+In-Reply-To:  <b18c2b6711b8930f0dfb8318b5d19ef6e41f0f9a.1656864573.git.christophe.jaillet@wanadoo.fr>
 References: 
 MIME-Version: 1.0
 X-linux-mtd-patch-notification: thanks
-X-linux-mtd-patch-commit: b'049e43b9fd8fd2966940485da163d67e96ee3fea'
-Content-Type: text/plain; charset=UTF-8
+X-linux-mtd-patch-commit: b'054c6b58fc6ca7321dc53d7b64f8422919355cd9'
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-07-07 at 18:43:28 UTC, =?utf-8?q?Pali_Roh=C3=A1r?= wrote:
-> Commit f6424c22aa36 ("mtd: rawnand: fsl_elbc: Make SW ECC work") added
-> support for specifying ECC mode via DTS and skipping autodetection.
+On Sun, 2022-07-03 at 16:09:45 UTC, Christophe JAILLET wrote:
+> Use bitmap_zalloc()/bitmap_free() instead of hand-writing them.
 > 
-> But it broke explicit specification of HW ECC mode in DTS as correct
-> settings for HW ECC mode are applied only when NONE mode or nothing was
-> specified in DTS file.
+> It is less verbose and it improves the semantic.
 > 
-> Also it started aliasing NONE mode to be same as when ECC mode was not
-> specified and disallowed usage of ON_DIE mode.
-> 
-> Fix all these issues. Use autodetection of ECC mode only in case when mode
-> was really not specified in DTS file by checking that ecc value is invalid.
-> Set HW ECC settings either when HW ECC was specified in DTS or it was
-> autodetected. And do not fail when ON_DIE mode is set.
-> 
-> Fixes: f6424c22aa36 ("mtd: rawnand: fsl_elbc: Make SW ECC work")
-> Signed-off-by: Pali Rohár <pali@kernel.org>
-> Reviewed-by: Marek Behún <kabel@kernel.org>
-> Reviewed-by: Marek Behún <kabel@kernel.org>
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
 Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next, thanks.
 
