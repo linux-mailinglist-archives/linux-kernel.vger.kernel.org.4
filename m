@@ -2,26 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B10F75BE1CD
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 11:23:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 152005BE1D5
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 11:24:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231594AbiITJXA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 05:23:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47674 "EHLO
+        id S230156AbiITJXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 05:23:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230422AbiITJW4 (ORCPT
+        with ESMTP id S231322AbiITJW7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 05:22:56 -0400
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 802F9647F5;
-        Tue, 20 Sep 2022 02:22:55 -0700 (PDT)
+        Tue, 20 Sep 2022 05:22:59 -0400
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5595765242;
+        Tue, 20 Sep 2022 02:22:57 -0700 (PDT)
 Received: from toolbox.toradex.int ([31.10.206.125]) by mrelay.perfora.net
- (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0MHIph-1oWUrX2G8J-00E4PL;
- Tue, 20 Sep 2022 11:22:37 +0200
+ (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0MSthj-1okIME0uZB-00RuIn;
+ Tue, 20 Sep 2022 11:22:39 +0200
 From:   Marcel Ziswiler <marcel@ziswiler.com>
 To:     linux-arm-kernel@lists.infradead.org
-Cc:     Philippe Schenker <philippe.schenker@toradex.com>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
         Fabio Estevam <festevam@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         NXP Linux Team <linux-imx@nxp.com>,
@@ -30,94 +29,124 @@ Cc:     Philippe Schenker <philippe.schenker@toradex.com>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v1 1/4] arm: dts: colibri-imx6: usb dual-role switching
-Date:   Tue, 20 Sep 2022 11:22:24 +0200
-Message-Id: <20220920092227.286306-2-marcel@ziswiler.com>
+Subject: [PATCH v1 2/4] arm: dts: colibri-imx6: move vbus-supply to module level device tree
+Date:   Tue, 20 Sep 2022 11:22:25 +0200
+Message-Id: <20220920092227.286306-3-marcel@ziswiler.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220920092227.286306-1-marcel@ziswiler.com>
 References: <20220920092227.286306-1-marcel@ziswiler.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:Kp2c5nuRc74u27ldKLPobTX69ut281IMllkiUvRyo72q3S7TWr5
- P6obXMjNL0k/4uNysYTxwSuZsH31pxl5bjYnDjgMs4Y+Dmkuqg6v01K10jNnajJhNRwQ3+w
- qccH4VWjw6EskbvzmnG3G9XQ8mYky0QgKnt5hfGlL3LefjrAAjM/c6u9CZ+NrPemd0S9tuC
- 6ch7iTGPgSYtzU9Y0OnOw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:AMJJ+i6j+xo=:IP4HEipEfbuKdsDL9/EgHL
- 31UpGEurkhyqdLSaEShfzqWCRCTwrKddYhrn+dnfLTnKxoTyZ33bKLchnMXDwDBNeHcMjaBTh
- RSBOPg1czTHUJPzAOfFdpkWLckvVZatZAZiEeRR/9e4NI7z5D6SQJowRq03YGOAIbKLqXGfo1
- kWlSbWh/cMdwtJZ3ssbZSRp4D1t80obtw2rKq0xIc3Zm3D6fTs4zQzfptxOYe+VBv3JoubS0x
- d9S9AMqv1hXZg1WaXqZKq5aaNVjp4J0YirHmxrYntTn/knTbGPogSNS0ycU3TtsUB1cmrRhVB
- Fawi0qQLVOSDGac4JMMGcejB6yhEnkCjNL15Gq+7QjBNwM3P/9mnVqMWNQOXvOfUoGZ+4g/nE
- NEmQ5xUtsVLHBSjSvofFCV7+Bsn5TdDwa84ldBDTZeB6ZjR24uAcyeRG2DvDfrxeSFHcExdZ1
- 2VtjBMV/HzF2LiOzC1H4bICepK2PPcCHENE9a4ge5vcGSBjGt/WChFEWKw6awk7BzoY6ocrNW
- HRpZ7e5oxCY9UXNqur2fgyKArpmtFVhkEfBb68THGWRJ8LgJOZ66wUpqiONYjRZjknG4lWK/P
- TwdUF/C12juqDZUIcf9hZ7yNqxsY9lROr41CCC69nfkA6uD+X6HLQv5gmxs9to9IfJfY9zsy6
- /1Hskqd3dZZ2ALLvl+xVchWhx3xcC2sl94IlSvYXgePmhQi7uEar9aUaA1OAA91CaVBJRIFer
- s/a/l23HHvjhwqJubyorZx/kcGzrlIgK77Wdb0x0rhePfivQxPu0Qx/vtsKAeE/4gNYkrHFzv
- e75MUjl
+X-Provags-ID: V03:K1:zeuJwMcicAMOPDXAbzXSFKRHTfDTyXF+Y05WFx96dshyrE7To6M
+ DrHTh7cMKROC+Oe2m6hS4Vk3145SLqB4XAsiUkLZEJJGJXgImbYdxdwtoAmRhXSJCmDLSvy
+ DZiX/ndI1fHtd9knbhsIkFiOWFC4RTFvDOS0cIo4UGgovZWz9aLZtaFViL0OVvBL92jkXo4
+ IlAMFWigXdcN3cLF8jjqw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:HJzWSuUH/A4=:KiEnYYqaCwIlDn/2khyzUV
+ hAfnIFYUdnFz4I2LdHQorpI2+Gb4YGy6s/qYsW34A6BL8srH8sy+7y2LbR7v+iD/530pTr9j2
+ /cMlaulcBuSdwM2u5ciiWWvNbknSPKYS+OTfSw4fc0nwoAK54OokWnQ+AsNygnxR7NTgW9jJ3
+ iTOJxtGdNHv8q8f+4A8YVRBCmDWyfUZRRd/nNgtHsBd+zZJJGoxfOJC7KQUZygI623xoFRk+d
+ CD2UV28k2Wo5InrOe8OOWs6IthFRMPO6MqY/xi7UuZm43SU/wIPFVP6YwJzJ1hisx2MqcLCMa
+ 9/87dbYvnN+7LHUh027f4/EpMqsdySYY6jJbg5UUr/L21r/wCVwXs83VV0WDWv1/jBTsxXbuR
+ bgCXYBnfG/OI53pS7qjHxro32L9eNsCqIU5J1RPVt7x1238JsGT1tzssirH33UGGGk3luRuEm
+ typ7afNisiZq8i3bRLcCH+D4Vg+GDPgG43t1wdnuCCRM6PQ9en+Alyw0gn3+GZZhi5QLemyqZ
+ z3HThMFc9QSnqgUN9ETrsSRHMD1toZhFZtaY4QrIuM8ZJzlIY7J6Kp+RtDN7gLdDRFxkZt2nu
+ 0TWESBfpXBHbRrizIb7arsOE3JVR9mpTeJLD8SpBnuT4DOI7KNlceDznbDFKmtLDk0zH/L/vL
+ uXfH456D/ju6doVpksyqzsn5p6dTyb8njmln5CFhGqDKky1Y0CAISkhReYzkSoQphwDbXoK+F
+ K9utSVKMfDc63OpJwfuetL8mC5AgQGikfjj8AbtRjd3GWj7TEHviiq2w2j+M/zHZGQwIhQabe
+ hUEjX55
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Philippe Schenker <philippe.schenker@toradex.com>
+From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-Introduce USBC_DET GPIO based USB dual-role aka device/host switching.
+Move USB VBUS supply from single carrier board to module level device
+tree. This pin is as per Colibri module family standard.
 
-While at it re-work pinmux comment adding SODIMM number to the USBC_DET
-entry.
-
-Signed-off-by: Philippe Schenker <philippe.schenker@toradex.com>
 Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 ---
 
- arch/arm/boot/dts/imx6qdl-colibri.dtsi | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+ arch/arm/boot/dts/imx6dl-colibri-aster.dts   | 1 -
+ arch/arm/boot/dts/imx6dl-colibri-eval-v3.dts | 1 -
+ arch/arm/boot/dts/imx6dl-colibri-iris.dts    | 1 -
+ arch/arm/boot/dts/imx6qdl-colibri.dtsi       | 9 +++++++--
+ 4 files changed, 7 insertions(+), 5 deletions(-)
 
+diff --git a/arch/arm/boot/dts/imx6dl-colibri-aster.dts b/arch/arm/boot/dts/imx6dl-colibri-aster.dts
+index 74e8a6cd8bed..a28e083f29d5 100644
+--- a/arch/arm/boot/dts/imx6dl-colibri-aster.dts
++++ b/arch/arm/boot/dts/imx6dl-colibri-aster.dts
+@@ -99,7 +99,6 @@ &uart3 {
+ };
+ 
+ &usbh1 {
+-	vbus-supply = <&reg_usb_host_vbus>;
+ 	status = "okay";
+ };
+ 
+diff --git a/arch/arm/boot/dts/imx6dl-colibri-eval-v3.dts b/arch/arm/boot/dts/imx6dl-colibri-eval-v3.dts
+index 7272edd85a49..a02981d4a3fc 100644
+--- a/arch/arm/boot/dts/imx6dl-colibri-eval-v3.dts
++++ b/arch/arm/boot/dts/imx6dl-colibri-eval-v3.dts
+@@ -111,7 +111,6 @@ &uart3 {
+ };
+ 
+ &usbh1 {
+-	vbus-supply = <&reg_usb_host_vbus>;
+ 	status = "okay";
+ };
+ 
+diff --git a/arch/arm/boot/dts/imx6dl-colibri-iris.dts b/arch/arm/boot/dts/imx6dl-colibri-iris.dts
+index cf77d894f6d7..c5797ff35b71 100644
+--- a/arch/arm/boot/dts/imx6dl-colibri-iris.dts
++++ b/arch/arm/boot/dts/imx6dl-colibri-iris.dts
+@@ -138,7 +138,6 @@ &uart3 {
+ };
+ 
+ &usbh1 {
+-	vbus-supply = <&reg_usb_host_vbus>;
+ 	status = "okay";
+ };
+ 
 diff --git a/arch/arm/boot/dts/imx6qdl-colibri.dtsi b/arch/arm/boot/dts/imx6qdl-colibri.dtsi
-index 023e76215064..3e98b5da0cc6 100644
+index 3e98b5da0cc6..21c5049bda4e 100644
 --- a/arch/arm/boot/dts/imx6qdl-colibri.dtsi
 +++ b/arch/arm/boot/dts/imx6qdl-colibri.dtsi
-@@ -24,6 +24,13 @@ backlight: backlight {
- 		status = "disabled";
- 	};
+@@ -112,7 +112,7 @@ reg_module_3v3_audio: regulator-module-3v3-audio {
  
-+	extcon_usbc_det: usbc-det {
-+		compatible = "linux,extcon-usb-gpio";
-+		id-gpio = <&gpio7 12 GPIO_ACTIVE_HIGH>; /* SODIMM 137 / USBC_DET */
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_usbc_det>;
-+	};
-+
- 	gpio-keys {
- 		compatible = "gpio-keys";
+ 	reg_usb_host_vbus: regulator-usb-host-vbus {
+ 		compatible = "regulator-fixed";
+-		gpio = <&gpio3 31 GPIO_ACTIVE_HIGH>; /* USBH_PEN */
++		gpio = <&gpio3 31 GPIO_ACTIVE_HIGH>; /* SODIMM 129 / USBH_PEN */
  		pinctrl-names = "default";
-@@ -670,9 +677,11 @@ &uart3 {
+ 		pinctrl-0 = <&pinctrl_regulator_usbh_pwr>;
+ 		regulator-max-microvolt = <5000000>;
+@@ -677,6 +677,11 @@ &uart3 {
  	status = "disabled";
  };
  
-+/* Colibri USBC */
++/* Colibri USBH */
++&usbh1 {
++	vbus-supply = <&reg_usb_host_vbus>;
++};
++
+ /* Colibri USBC */
  &usbotg {
  	disable-over-current;
--	dr_mode = "peripheral";
-+	dr_mode = "otg";
-+	extcon = <0>, <&extcon_usbc_det>;
- 	status = "disabled";
- };
+@@ -995,7 +1000,7 @@ MX6QDL_PAD_SD4_DAT2__PWM4_OUT	0x1b0b1
  
-@@ -1055,7 +1064,7 @@ MX6QDL_PAD_SD4_CMD__UART3_RX_DATA	0x1b0b1
- 
- 	pinctrl_usbc_det: usbcdetgrp {
+ 	pinctrl_regulator_usbh_pwr: gpioregusbhpwrgrp {
  		fsl,pins = <
--			/* USBC_DET */
-+			/* SODIMM 137 / USBC_DET */
- 			MX6QDL_PAD_GPIO_17__GPIO7_IO12		0x1b0b0
- 			/* USBC_DET_OVERWRITE */
- 			MX6QDL_PAD_RGMII_RXC__GPIO6_IO30	0x0f058
+-			/* USBH_EN */
++			/* SODIMM 129 / USBH_PEN */
+ 			MX6QDL_PAD_EIM_D31__GPIO3_IO31	0x0f058
+ 		>;
+ 	};
 -- 
 2.36.1
 
