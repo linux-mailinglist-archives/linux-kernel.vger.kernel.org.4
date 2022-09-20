@@ -2,123 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C96365BEA4B
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 17:31:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BC895BEA3E
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 17:30:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231546AbiITPby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 11:31:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60140 "EHLO
+        id S231444AbiITPaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 11:30:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230510AbiITPbv (ORCPT
+        with ESMTP id S231459AbiITP36 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 11:31:51 -0400
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A6BD67C9C
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 08:31:50 -0700 (PDT)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-127d10b4f19so4723823fac.9
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 08:31:50 -0700 (PDT)
+        Tue, 20 Sep 2022 11:29:58 -0400
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E086F4CA24
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 08:29:55 -0700 (PDT)
+Received: by mail-oi1-x236.google.com with SMTP id t62so4134234oie.10
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 08:29:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=NSVDXfSRUDiwSJM94IRfEXRWFe0gjMqEORV1yJ1Cr/g=;
-        b=GZvvYs8QmONhNtvXrYrUFMpoJ84rht+aW6CrX7UAdPQuRptDlZcYDtA77Ohj6q3tjE
-         e3KZ7Iflou0f6pfJCVCTp9db/mcuYM/kAo31GTyWHkEOcpr9VK5+86DF01k9/5LD1za+
-         GmH1c0WMIpTy44oZvMNYt8e6twYc4DxacunJTkfg0Mnl0UbulOPIDX4+uQNhh/qFcMHl
-         vlWYmwiWHUWnJI9LhvhuU8lzhw8PjreNdi2vx6trOjt+OC+McQpUDeJfEnl0HCKKtbn0
-         a2//xL01A298AgEgJF+iTGAqDvL+XXHWO40zaKmUpsJx0O3m8JLnY3b7UNefhKFGtBGj
-         Cb5w==
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date;
+        bh=+DSlfSel3yRE1C1IwW4OrAqTmK3GNN9Jwi8kn6ihhjw=;
+        b=ZP/z0SVbTw2O08wweGZHFpjR5zp3Fw/AvHp5BYMtUm0kCFB0Pr0PxHAyztAPPD06DK
+         gmgc5KsWpvpuTvczyVVEBuSGE37WDIdpf4rNVmkP0erYhPznpHyicsiOhVk5HpESTdvi
+         smTq08sKXqhLG0uyERlgAIskmCvWVCBd3+/VPGA0a0zLPP05EofxJXZFU476hv8mBblc
+         tPWAF2XVWp54YFpzng8fF9401XFqnhYwjxuoXe+umbw5AaHgkhkC8dtcC/2Vf191X5l4
+         UHFa8GqWP/jU0k50lisOQAMaYq+xxPRYDrujm8IP7yjhp9MhbgKAhKbBkqi4p6UC77W0
+         Anrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=NSVDXfSRUDiwSJM94IRfEXRWFe0gjMqEORV1yJ1Cr/g=;
-        b=kVBbrOuyENi7z2ICm1kvSuzbHtHyQnMFKovaoeUSVDg7SNBtbAZQPcObbtc0emt+Un
-         A3SpxjO/CY89ltW5Gf+89UrfEugb8CjLdL0HVgwtFfUV8IfK5HLEAqr+zZTDzGvi1Ku2
-         51Qpq5M+7nFaPnfanDMMyZUfZ61Jhiy+PFNAM8ZrZRIkUtvlHt0lN+BgUnodzxKEYpJS
-         UDxYzw6cO82BvUp/gmxWsxEC7EGfuFR9WAXnzmy/CY5TBXvCGJaLbsbBd4F5Epb+4Icg
-         Y2KIEMeUzbrEIRgwnsTennG3hr/RWaWv7sZ1dGp+iIHby7oOcG7wXyYkHqdnp8qq2PvP
-         yKig==
-X-Gm-Message-State: ACrzQf2U8m3c83aVkqOhNjHBiisKubMWIJidZ0KcGs73ql/9qOYo6fnG
-        jB+sz1XNSlapY9RDS2KV0o4=
-X-Google-Smtp-Source: AMsMyM4WgwMmk5VzErXM6IcIhRMz8WP7ZQ5NaOyzKBL0qI0fTo38tGTcDavZLCzqdCdOUJu5P5PQpw==
-X-Received: by 2002:a05:6871:5d1:b0:127:7771:f0d3 with SMTP id v17-20020a05687105d100b001277771f0d3mr2373464oan.199.1663687909805;
-        Tue, 20 Sep 2022 08:31:49 -0700 (PDT)
-Received: from localhost ([12.97.180.36])
-        by smtp.gmail.com with ESMTPSA id u28-20020a4a615c000000b00448985f1f17sm39521ooe.9.2022.09.20.08.31.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 08:31:49 -0700 (PDT)
-From:   Yury Norov <yury.norov@gmail.com>
-To:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Alexey Kardashevskiy <aik@ozlabs.ru>,
-        Alan Modra <amodra@au1.ibm.com>, Daniel Axtens <dja@axtens.net>
-Cc:     Yury Norov <yury.norov@gmail.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: [PATCH] powerpc/64: don't refer nr_cpu_ids in asm code when it's undefined
-Date:   Tue, 20 Sep 2022 08:29:35 -0700
-Message-Id: <20220920152935.1569605-1-yury.norov@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=+DSlfSel3yRE1C1IwW4OrAqTmK3GNN9Jwi8kn6ihhjw=;
+        b=TF0MHxNoVvxoxVp7Rej6wWWIwrG+VRWY0+X17rmczsuyXjzxTQhHu490SS1BQWjCR4
+         8qnYHx9Y0SqLXIqfW/fpGKkvmlFfp4+7kTM9qjdsdmKxJ75KLm8H43wEfUtEnOshLDNh
+         74EaSZ81nN/MsfisZkPmIlTLGg7+nFIvdGMjGY8n62DXnBYoW9axkGGbDlTKgig4f4iE
+         R+zl8+Rnl1+aw+bnni0pFZ+cmKoZhvG3Qmxj5pmFJ1Dtk/NPuqEEnltTEp18DYzc0MC1
+         U3tEri1ANSG1092dtDTCJxWozUz4/eW5aaUX+n1GznAtiLSNloi29/NLhh1GDEqIhAd+
+         EKIQ==
+X-Gm-Message-State: ACrzQf2Q+ec7AgXbkzCJR6zMajZsOrIOcTzmbNRy9Oxw/Zf3/0VNdcqO
+        Xx37RZ6ooqBxFuqhqKLrUMhRQyylzuF4RKYpiIc=
+X-Google-Smtp-Source: AMsMyM5ckw6f05wrFqmIP/cANtwHrMhVyqa3ect+P6QI6ytexqkTtainNKnMnWNCvgxV543YsnenH6uk9VkP7eYQX+M=
+X-Received: by 2002:a05:6808:1b2a:b0:34f:f989:99c1 with SMTP id
+ bx42-20020a0568081b2a00b0034ff98999c1mr1806777oib.173.1663687795175; Tue, 20
+ Sep 2022 08:29:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Received: by 2002:a9d:6e4:0:0:0:0:0 with HTTP; Tue, 20 Sep 2022 08:29:54 -0700 (PDT)
+Reply-To: mr.rwilson11@gmail.com
+From:   Richard Wilson <richardwilson0012016@gmail.com>
+Date:   Tue, 20 Sep 2022 15:29:54 +0000
+Message-ID: <CABJaJH9jMCX_SudAE0cjcv+vjCOp1v_NOtQDTLuH8Cbb_jnAsA@mail.gmail.com>
+Subject: Deposit
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:236 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5001]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [richardwilson0012016[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [richardwilson0012016[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [mr.rwilson11[at]gmail.com]
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-generic_secondary_common_init() calls LOAD_REG_ADDR(r7, nr_cpu_ids)
-conditionally on CONFIG_SMP. However, if NR_CPUS == 1, kernel doesn't
-use the nr_cpu_ids, and in C code, it's just:
-  #if NR_CPUS == 1
-  #define nr_cpu_ids
-  ...
-
-The [1] makes declaration of nr_cpu_ids conditional on NR_CPUS == 1,
-and that reveals the issue: compiler can't link the
-LOAD_REG_ADDR(r7, nr_cpu_ids) against nonexisting symbol.
-
-Current code looks unsafe for those who build kernel with CONFIG_SMP=y and
-NR_CPUS == 1. This is weird configuration, but not disallowed.
-
-Fix the linker error by replacing LOAD_REG_ADDR() with LOAD_REG_IMMEDIATE()
-conditionally on NR_CPUS == 1.
-
-The issue was spotted after applying [1], which adds a CONFIG_FORCE_NR_CPUS
-option that has the similar effect on nr_cpu_ids. So, in this patch, make
-the LOAD_REG() conditional on CONFIG_FORCE_NR_CPUS too.
-
-On top of:
-[1] https://lore.kernel.org/lkml/20220905230820.3295223-4-yury.norov@gmail.com/T/#m96ffe122721893471fd3470d911a8f2fad6d03b3
-
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Yury Norov <yury.norov@gmail.com>
----
- arch/powerpc/kernel/head_64.S | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/arch/powerpc/kernel/head_64.S b/arch/powerpc/kernel/head_64.S
-index cf2c08902c05..7cb97881635e 100644
---- a/arch/powerpc/kernel/head_64.S
-+++ b/arch/powerpc/kernel/head_64.S
-@@ -400,7 +400,11 @@ generic_secondary_common_init:
- #else
- 	LOAD_REG_ADDR(r8, paca_ptrs)	/* Load paca_ptrs pointe	 */
- 	ld	r8,0(r8)		/* Get base vaddr of array	 */
-+#if (NR_CPUS == 1) || defined(CONFIG_FORCE_NR_CPUS)
-+	LOAD_REG_IMMEDIATE(r7, NR_CPUS)
-+#else
- 	LOAD_REG_ADDR(r7, nr_cpu_ids)	/* Load nr_cpu_ids address       */
-+#endif
- 	lwz	r7,0(r7)		/* also the max paca allocated 	 */
- 	li	r5,0			/* logical cpu id                */
- 1:
 -- 
-2.34.1
-
+Dear
+I am contacting you to assist retrieve his huge deposit Mr. Alexander
+left in the bank before its get confiscated by the bank. Get back to
+me for more detail's
+Barr. Richard Wilson
