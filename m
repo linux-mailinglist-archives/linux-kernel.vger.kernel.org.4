@@ -2,148 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D7E75BE246
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 11:44:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AE8E5BE248
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 11:44:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229828AbiITJnu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 05:43:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53606 "EHLO
+        id S229471AbiITJoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 05:44:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230038AbiITJnp (ORCPT
+        with ESMTP id S229741AbiITJoe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 05:43:45 -0400
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4278848CBD;
-        Tue, 20 Sep 2022 02:43:43 -0700 (PDT)
-Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id DE6FD20000D;
-        Tue, 20 Sep 2022 09:43:38 +0000 (UTC)
-Date:   Tue, 20 Sep 2022 11:43:37 +0200
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Marco Felsch <m.felsch@pengutronix.de>
-Cc:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
-        laurent.pinchart+renesas@ideasonboard.com, akinobu.mita@gmail.com,
-        jacopo+renesas@jmondi.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] media: mt9m111: add V4L2_CID_LINK_FREQ support
-Message-ID: <20220920094337.qyvvjakmygocfcwj@lati>
-References: <20220916135713.143890-1-m.felsch@pengutronix.de>
+        Tue, 20 Sep 2022 05:44:34 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C070625E8
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 02:44:32 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id b35so3071797edf.0
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 02:44:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=OyCx9Q/YabKJ08RMc2YSISL+trnpKtcuAbGr7WtPKfc=;
+        b=AAItVZaAaMgY8eWYbeiDcXrXZFKaspBfiGGtzZWsfSj0KwHXmMmMluUXajKqmfH6cw
+         HmZebfGoOHLIHmpNJG+sa8ZfzrQT0PIWtURt5RYjgu9d1LKmuUwimv2+53RfhoKvC2Hf
+         O9t0oLT7u+CZ+ukOnUkWVkEcrI7sGtHnp/1OkiL0wMWNIhAeEuChwYoaypnaEoumGpvY
+         V2OSwcVdlRsZiR5FP3Oaylvpy05AVH1AT5tRDt2LggtrAzNxH9lQN/gf6uRY3AjRNdkp
+         TZg62OTF+zBlDCbgSltRsBpqinQEZ9jRp3dMJh1X4WpybQIHVZxrMtfyw2Dp37wwD6ci
+         6vOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=OyCx9Q/YabKJ08RMc2YSISL+trnpKtcuAbGr7WtPKfc=;
+        b=Ian7rPrcfjAyLiUofxN31q3tF1XPDi7/GS2zNlXUDOW+yD6lORX+UPQPdNDq9txKf0
+         ZJ6AnzbtvkYOfZ+kVpm7DCYJ0uSG87kxJUhmz7VLyrGS7Mls/tHuu1aHvQ99BSIq673d
+         Bn/LnxeAAmEDdNVPctFf8zq7ccYbDpxby01/vZGS1297ZYP69LgBdUSoCi5YzhIMHD8o
+         l4vwjQ/Zvl5p9D62073hJ/ZBPj1uo16YbulnTm5wT+gTbin37rsdwVCKbL2V+eIM2fTC
+         0rqCH/vW9ZwjYf5FYAENKrzQfwTrvb7ouFrd/AxaOb224Pm3sjFydG4Lb1c8AQvzem7k
+         m3xQ==
+X-Gm-Message-State: ACrzQf26f0PbEYmKDh2qYsDS6+/yYFs+v5Zsd7mV4QYLIiHAVdQuBEAC
+        IPABNWTjExBnJwT4ZRxykDhMTo0pfJHBCDV1Bc103Q==
+X-Google-Smtp-Source: AMsMyM6InZTkT9FN9zpFRW+4rE1C5opy2tXduGXYOGfiHkGd9ccEMJUItzhCIu0PfXC/9vp1T0doU0xHKC+Lmm6BJjc=
+X-Received: by 2002:aa7:d6d9:0:b0:44d:e1b7:d905 with SMTP id
+ x25-20020aa7d6d9000000b0044de1b7d905mr19361012edr.32.1663667071339; Tue, 20
+ Sep 2022 02:44:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220916135713.143890-1-m.felsch@pengutronix.de>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220728091712.13395-1-m.zatovic1@gmail.com> <CACRpkdbD1qzJujhq-U0UN0tWam9CaoLvVuAQfafq4XNaEdZ2QA@mail.gmail.com>
+ <CAPGNi94R6bW80Yc=B5iesW=ihxy_bD1p-iPhLCASh_=82mjT9w@mail.gmail.com>
+In-Reply-To: <CAPGNi94R6bW80Yc=B5iesW=ihxy_bD1p-iPhLCASh_=82mjT9w@mail.gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 20 Sep 2022 11:44:19 +0200
+Message-ID: <CACRpkdY2pGOV=PFKEaPAnKpt16HNLomRuQKRgH8A+cKFUotRXw@mail.gmail.com>
+Subject: Re: [PATCH RFC v1 1/2] bus: add Wiegand write-only GPIO driver
+To:     =?UTF-8?B?TWFydGluIFphxaVvdmnEjQ==?= <m.zatovic1@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        mani@kernel.org, hemantk@codeaurora.org, elder@linaro.org,
+        f.fainelli@gmail.com, Michael.Srba@seznam.cz,
+        jeffrey.l.hugo@gmail.com, gregkh@linuxfoundation.org,
+        bjorn.andersson@linaro.org, saravanak@google.com,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marco
+On Mon, Sep 19, 2022 at 2:57 PM Martin Za=C5=A5ovi=C4=8D <m.zatovic1@gmail.=
+com> wrote:
 
-On Fri, Sep 16, 2022 at 03:57:11PM +0200, Marco Felsch wrote:
-> Add support to report the link frequency.
+> 1. drivers/bus/wiegand.c
+> 2. include/linux/wiegand.h
+> 3. drivers/gpio/gpio-wiegand.h
 >
-> Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-> ---
-> The v1 of this small series can be found here:
-> https://lore.kernel.org/all/20220818144712.997477-1-m.felsch@pengutronix.de/
->
-> Thanks a lot to Jacopo for the review feedback on my v1.
->
-> Changelog:
->
-> v2:
-> - use V4L2_CID_LINK_FREQ instead of V4L2_CID_PIXEL_RATE
-> ---
->  drivers/media/i2c/mt9m111.c | 21 ++++++++++++++++++++-
->  1 file changed, 20 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/media/i2c/mt9m111.c b/drivers/media/i2c/mt9m111.c
-> index afc86efa9e3e..52be1c310455 100644
-> --- a/drivers/media/i2c/mt9m111.c
-> +++ b/drivers/media/i2c/mt9m111.c
-> @@ -1249,6 +1249,8 @@ static int mt9m111_probe(struct i2c_client *client)
->  {
->  	struct mt9m111 *mt9m111;
->  	struct i2c_adapter *adapter = client->adapter;
-> +	static s64 extclk_rate;
+> I have looked for drivers with a similar division and tried to figure out=
+ what the file drivers/bus/wiegand.c should contain.
+> So far I am only sure that it will contain the parity calculation functio=
+ns.
 
-Why static ?
-Also clk_get_rate() returns an unsigned long
+That is a question for people who know wiegand... Maybe just yourself!
 
+You also clearly need some bus infrastructure to populate and spawn devices=
+.
+This mechanism depends on the specifics of the bus.
 
-> +	struct v4l2_ctrl *ctrl;
->  	int ret;
->
->  	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_WORD_DATA)) {
-> @@ -1271,6 +1273,13 @@ static int mt9m111_probe(struct i2c_client *client)
->  	if (IS_ERR(mt9m111->clk))
->  		return PTR_ERR(mt9m111->clk);
->
-> +	ret = clk_prepare_enable(mt9m111->clk);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	extclk_rate = clk_get_rate(mt9m111->clk);
-> +	clk_disable_unprepare(mt9m111->clk);
-> +
->  	mt9m111->regulator = devm_regulator_get(&client->dev, "vdd");
->  	if (IS_ERR(mt9m111->regulator)) {
->  		dev_err(&client->dev, "regulator not found: %ld\n",
-> @@ -1285,7 +1294,7 @@ static int mt9m111_probe(struct i2c_client *client)
->  	mt9m111->subdev.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
->  				 V4L2_SUBDEV_FL_HAS_EVENTS;
->
-> -	v4l2_ctrl_handler_init(&mt9m111->hdl, 7);
-> +	v4l2_ctrl_handler_init(&mt9m111->hdl, 8);
->  	v4l2_ctrl_new_std(&mt9m111->hdl, &mt9m111_ctrl_ops,
->  			V4L2_CID_VFLIP, 0, 1, 1, 0);
->  	v4l2_ctrl_new_std(&mt9m111->hdl, &mt9m111_ctrl_ops,
-> @@ -1309,6 +1318,16 @@ static int mt9m111_probe(struct i2c_client *client)
->  				BIT(V4L2_COLORFX_NEGATIVE) |
->  				BIT(V4L2_COLORFX_SOLARIZATION)),
->  			V4L2_COLORFX_NONE);
+> The code for sysfs attribute files may also be a part of this file, but I=
+ am not sure about it.
+> If hypothetically there was another Wiegand driver besides the GPIO one a=
+nd a user would
+> like to connect both of these Wiegand interfaces, he would loose the abil=
+ity to set attributes
+> for individual Wiegand interfaces, am I right?
 
-Empty line maybe ?
+You should spawn individual devices on a wiegand bus (the kernel concept of
+bus). Each new device becomes something like a struct wiegand_device that
+contains a struct device, and the struct device is the anchor in sysfs.
+https://www.kernel.org/doc/html/latest/driver-api/driver-model/bus.html
 
-> +	/*
-> +	 * The extclk rate equals the link freq. if reg default values are used,
-> +	 * which is the case. This must be adapted as soon as we don't use the
-> +	 * default values anymore.
-> +	 */
-> +	ctrl = v4l2_ctrl_new_int_menu(&mt9m111->hdl, &mt9m111_ctrl_ops,
-> +				      V4L2_CID_LINK_FREQ, 0, 0, &extclk_rate);
-> +	if (ctrl)
-> +		ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
-> +
+> Should the drivers/bus/wiegand.c be a full-scale driver or should it just=
+ be a file that
+> contains the Wiegand-specific functions(such as parity calculation)?
 
-I'm sorry I have not replied to your previous email about using
-LINK_FREQ for parallel busses.. I see it mentioned in ext-ctrls-image-process.rst
-as you said:
+It should be what we call a bus driver, OK a bit self-referential, but anyt=
+hing
+that is common for the bus and the code to spawn the devices.
 
-``V4L2_CID_LINK_FREQ (integer menu)``
-    The frequency of the data bus (e.g. parallel or CSI-2).
-
-I still have a bit of troubles seeing it apply nicely on a parallel
-bus. Isn't PIXEL_RATE more appropriate ? You said you need to know the
-overall bus bandwidth in bytes , and pixel_rate * bpp / 8 is equally
-valid and easy as link_freq / num_lanes, which requires the receiver
-to fetch the remote subdev media bus configuration instead of relying
-on the input format. Also LINK_FREQ is a menu control, something nasty
-already for CSI-2 busses, which requires to pre-calculate the link
-freqs based on the input mclk. It is also meant to be changed by
-userspace, while PIXEL_RATE is RO by default.
-
-Sakari, Laurent, what's your take here ?
-
-
-
->  	mt9m111->subdev.ctrl_handler = &mt9m111->hdl;
->  	if (mt9m111->hdl.error) {
->  		ret = mt9m111->hdl.error;
-> --
-> 2.30.2
->
+Yours,
+Linus Walleij
