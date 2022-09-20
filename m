@@ -2,188 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D4CD5BE9EB
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 17:17:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAACB5BE9ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 17:17:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231420AbiITPRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 11:17:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33886 "EHLO
+        id S231287AbiITPRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 11:17:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230467AbiITPRL (ORCPT
+        with ESMTP id S231594AbiITPRO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 11:17:11 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B111647DB
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 08:16:54 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id s6so4332317lfo.7
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 08:16:54 -0700 (PDT)
+        Tue, 20 Sep 2022 11:17:14 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E82B65257
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 08:16:58 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id n12so4797621wrx.9
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 08:16:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=LBJXkuxhmse5P1lyWiiuBqBUGrfjJdoy9vn87fbJbbE=;
-        b=Z8+4YFNvQpl0pK3twnvrjV0GrnqkQyNjD4XoPyfhgQ0kMzL3xC1YdrNlobjz4u0q38
-         1ZHc3WI5zWPwRyPAiT0x3qVF0tfnsZTAPl0E+d1OgZqXQ1sQSBsb8MltMigMtSqt9p3l
-         QsqpQeQTJ3C+7vcxP9TNIxoorYesosdGLp4anmGPy9K+h4Jp71gIZk7o/nlBoZq0xciT
-         O8AbvGY+uai3Re7ZDT6d2D1Y8u1v3ARaMKpkcmjLFIXufIadSyB2BZmH3v6iok7QpoNd
-         H9NrPUwGlS84FnOGUy9iQiQ1++ZeS7x8yMwqeF+qNNI49iP1WpEohenKwgDWIb8kbr0g
-         bJZQ==
+        bh=sTa1pbTVMPJ1tf0fbIJm6r4QEWbV/1sWEH4W85gfxdA=;
+        b=Y0I8B2b3LP+wzBoIwffHFhR8WfPrSkke8bPxBfdpa1N8AqQnjtUb7c4CmtN24qDDhp
+         qdL9Uud2I30izEuKxHpDkDIvQsHjjHSigXA8ob2zyPlsjdSDJEqyqPpzLn28QvWSy7KL
+         qQeFNIl2oWaknO+UzEWzpGs+d8ZNb2Cx/uKizP1/tOe+EHQFl93J0S8U18g/IvP7Y7F4
+         d6f4YSPMFnQYjUgtnRkeGD7bo7q0GU0CxKxamfwit1fq15nkLEYURNwTzCI/sJHwioVE
+         98Z217tzwyEGW4GGj3HG0mcmrgh37N5Ne8Nwz9cTvOGRaCoWzT7R1EwI6zs2gdSg2djQ
+         KQXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=LBJXkuxhmse5P1lyWiiuBqBUGrfjJdoy9vn87fbJbbE=;
-        b=1uqUUO16lotTHwQMxY2rr0zwWbiJwFozyU5NwUYMJqoJTuCrX3AQdZKo/4t5nuE7eI
-         EwJRZd4BKP4f53kf/lFGX+o7yMpbPLQzn2CKEgonhVbMqM5AB6/3Kum2UsjkHrpkCY9W
-         tlaCtHUN858ACyppMO0dTD1y1fb6ngPx4WAMMQb77xeAXYPymjZEOcA295DYdJURGkRU
-         QP5jxD3n0NqEauMIcRr8UG+aDANj1B21FCtiC6a8u35I9OXI5Wn7XZM5xZ86BT9kmtpP
-         nd5bsBIfiBOTGF22vv1aqzuOg1X1O5B4sqP/U08xN1cYc3uFaJf6o+SlwNaFjh74g5LA
-         MW9g==
-X-Gm-Message-State: ACrzQf12uB7OMQ2iJjZYqIh2NYHz8uv/w9KyzDeCTG6BY6kaA/gg6YPT
-        aA5THW8nm0JDM2Ym5XEKKQQW0w==
-X-Google-Smtp-Source: AMsMyM6SQUnreP+sl7ZN5I5Dmk/k+y1Uh7VFe8XVZJXlGsEPqcb7RcbafqbaRJ+eNvNUYZ9pOjY5PQ==
-X-Received: by 2002:a05:6512:32c1:b0:49f:5c95:5146 with SMTP id f1-20020a05651232c100b0049f5c955146mr6050239lfg.469.1663687012826;
-        Tue, 20 Sep 2022 08:16:52 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id du8-20020a056512298800b00492f0f66956sm351627lfb.284.2022.09.20.08.16.51
+        bh=sTa1pbTVMPJ1tf0fbIJm6r4QEWbV/1sWEH4W85gfxdA=;
+        b=ylcRlGtMXV+0O5K0K4Nfjf2pMn7LDMFdJ8QDuq3+5M0G1uElFAw3c1pBQUr+Y9UF2f
+         GXsYj9PhS3Q2N3swral3a3CveryLzgYVJzARmm6PXY9gZSngCsl2ziY49MQdoPwpcIgD
+         EK7PgCBK+Ruhu7floJ27wViNgO9MXHrEMUix8ybdCNOOChRcIFLYnNYgRf4TYdAljYn1
+         podQxP1eaK4RgY57p/uSgiLVxzgS/w/iegKX0CAfa79eWCeXRkP7pFe9E0orJvBnHCDv
+         w3h4ag7okPP3uB2oDQsATyc8nnGupDi8OszmzHYx6GaK2ETAGk5PRICkemyg91B98eYS
+         PKjA==
+X-Gm-Message-State: ACrzQf3eLgh0tdekjljCiiO0Insd1F6zZBJXk5kxnawpd+1n5MhIYGiS
+        UGaBWHYflmFt6u8Wxk1/MV+IbA==
+X-Google-Smtp-Source: AMsMyM4CnxN9VS5xftyuGqfVz/42sP79DDIp25KA4140PE5NmZBRvjW0ASBqI2gKS8NFBNgL+mI2tQ==
+X-Received: by 2002:a5d:6d46:0:b0:21f:8b7:4c1d with SMTP id k6-20020a5d6d46000000b0021f08b74c1dmr14533501wri.455.1663687016603;
+        Tue, 20 Sep 2022 08:16:56 -0700 (PDT)
+Received: from [192.168.0.20] (210.145.15.109.rev.sfr.net. [109.15.145.210])
+        by smtp.gmail.com with ESMTPSA id cc16-20020a5d5c10000000b0021e4829d359sm40298wrb.39.2022.09.20.08.16.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Sep 2022 08:16:52 -0700 (PDT)
-Message-ID: <d8b7fce1-99fa-584b-55e0-f4c3cbe500e2@linaro.org>
-Date:   Tue, 20 Sep 2022 17:16:51 +0200
+        Tue, 20 Sep 2022 08:16:56 -0700 (PDT)
+Message-ID: <bf4d4cdf-27a1-7e09-59dc-25a8646fad1f@baylibre.com>
+Date:   Tue, 20 Sep 2022 17:16:55 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v2 1/2] dt-binding: pinctrl: Add NPCM8XX pinctrl and GPIO
- documentation
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] arm64: dts: mediatek: mt8183: remove thermal zones
+ without trips.
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220914131339.18348-1-aouledameur@baylibre.com>
+ <a8af4c54-12a2-a314-f190-f12859ef4ddd@gmail.com>
+ <ca326ce8-3eee-8a7a-a522-9ffbdf7d8a82@linaro.org>
 Content-Language: en-US
-To:     Tomer Maimon <tmaimon77@gmail.com>
-Cc:     Rob Herring <robh@kernel.org>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
-        zhengbin13@huawei.com, OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>
-References: <20220714122322.63663-1-tmaimon77@gmail.com>
- <20220714122322.63663-2-tmaimon77@gmail.com>
- <20220718211046.GA3547663-robh@kernel.org>
- <CAP6Zq1hQ5m2kkQOKaYsKhPQhCW+vdsdyPRxxb_yRGMB=gJCPdw@mail.gmail.com>
- <3981e6e8-d4bb-b13d-7aaa-7aea83ffaad9@linaro.org>
- <CAP6Zq1gp1ph1wixgb6nL+2R8We2YJ2HQM2iC05itq_XWd2Cwig@mail.gmail.com>
- <bfca0379-7346-13e7-a18f-66740c5871b3@linaro.org>
- <CAP6Zq1gyDW8ZwwAZ1jyfNEZa09WN-biZZJY8tBmW_gzMzpj3ZA@mail.gmail.com>
- <2b0e6e33-ef76-4bd4-8894-53f9a3fe68b4@linaro.org>
- <CAP6Zq1iwW6HvvfM684VLG0ZT-0OLKT0udW4bHxsZsTMEypo2sg@mail.gmail.com>
- <6f1ad082-74e4-e4e7-9304-5cdd95cc9f66@linaro.org>
- <CAP6Zq1hTS7mVWvYWfTwWvrZibKMpW5r7=wE6W9uETb=aS6MTuA@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAP6Zq1hTS7mVWvYWfTwWvrZibKMpW5r7=wE6W9uETb=aS6MTuA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
+In-Reply-To: <ca326ce8-3eee-8a7a-a522-9ffbdf7d8a82@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/09/2022 11:27, Tomer Maimon wrote:
-> On Tue, 20 Sept 2022 at 11:47, Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 20/09/2022 10:32, Tomer Maimon wrote:
->>> On Tue, 20 Sept 2022 at 11:21, Krzysztof Kozlowski
->>> <krzysztof.kozlowski@linaro.org> wrote:
->>>>
->>>> On 20/09/2022 09:59, Tomer Maimon wrote:
->>>>>>>>>>> +      pinctrl: pinctrl@f0800000 {
->>>>>>>>>>> +        compatible = "nuvoton,npcm845-pinctrl";
->>>>>>>>>>> +        ranges = <0x0 0x0 0xf0010000 0x8000>;
->>>>>>>>>>> +        #address-cells = <1>;
->>>>>>>>>>> +        #size-cells = <1>;
->>>>>>>>>>> +        nuvoton,sysgcr = <&gcr>;
->>>>>>>>>>> +
->>>>>>>>>>> +        gpio0: gpio@f0010000 {
->>>>>>>>>>
->>>>>>>>>> gpio@0
->>>>>>>>>>
->>>>>>>>>> Is this really a child block of the pinctrl? Doesn't really look like it
->>>>>>>>>> based on addressess. Where are the pinctrl registers? In the sysgcr? If
->>>>>>>>>> so, then pinctrl should be a child of it. But that doesn't really work
->>>>>>>>>> too well with gpio child nodes...
->>>>>>>>> the pin controller mux is handled by sysgcr this is why the sysgcr in
->>>>>>>>> the mother node,
->>>>>>>>> and the pin configuration are handled by the GPIO registers.  each
->>>>>>>>> GPIO bank (child) contains 32 GPIO.
->>>>>>>>> this is why the GPIO is the child node.
->>>>>>>>
->>>>>>>> Then maybe pinctrl should be the sysgcr and expose regmap for other devices?
->>>>>>> The pin controller using the sysgcr to handle the pinmux, this is why
->>>>>>> the sysgcr is in the mother node, is it problematic?
->>>>>>
->>>>>> You said pin-controller mux registers are in sysgcr, so it should not be
->>>>>> used via syscon.
->>>>> Sorry but maybe I missed something.
->>>>> the sysgcr is used for miscellaneous features and not only for the pin
->>>>> controller mux, this is why it used syscon and defined in the dtsi:
->>>>>                 gcr: system-controller@f0800000 {
->>>>>                         compatible = "nuvoton,npcm845-gcr", "syscon";
->>>>>                         reg = <0x0 0xf0800000 0x0 0x1000>;
->>>>>                 };
->>>>>>
->>>>>> Please provide address map description to convince us that this is
->>>>>> correct HW representation.
->>>>> GCR (sysgcr) registers 0xf0800000-0xf0801000 - used for miscellaneous
->>>>> features, not only pin mux.
->>>>> GPIO0 0xf0010000-0xf0011000
->>>>> GPIO1 0xf0011000-0xf0012000
->>>>> ...
->>>>> GPIO7 0xf0017000-0xf0018000
->>>>>>
->>>>
->>>> Then why your pinctrl is in sysgcr IO range? (pinctrl@f0800000)
->>> you suggest using pinctrl@0 or pinctrl@f0010000 and not
->>> pinctrl@f0800000 because 0xf0800000 is the GCR address that serve
->>> miscellaneous features and not only pinmux controller ?
->>
->> If you have a map like you pasted, then DTS like this:
->>
->> syscon@f0800000 {}
->> pinctrl@f0800000 {
->>   gpio@f0010000 {}
->> }
->>
->> Is quite weird, don't you think? You have two devices on the same unit
->> address which is not allowed. You have child of pinctrl with entirely
-> O.K.
->> different unit address, so how is it its child?
-> The pinctrl node name will modify the pinctrl@f0010000 the same as the
-> range property and the start of the child registers,is it fine?
+Hi,
 
-We are all busy, so I don't have that much bandwidth to review each of
-your many solutions and instead poking me with every possible solution,
-I would prefer if you think a bit how this all should work and look.
+On 9/15/22 17:50, Daniel Lezcano wrote:
+> On 14/09/2022 16:15, Matthias Brugger wrote:
+>>
+>>
+>> On 14/09/2022 15:13, Amjad Ouled-Ameur wrote:
+>>> Thermal zones without trip point are not registered by thermal core.
+>>>
+>>> tzts1 ~ tzts6 zones of mt8183 were intially introduced for test-purpose
+>>> only but are not supposed to remain on DT.
+>>>
+>>> Remove the zones above and keep only cpu_thermal.
+>>>
+>>
+>> My understanding is that this thermal zones exist but are not used. 
+>> DTS should describe the HW as it is, so I propose to add
+>> status = "disabled";
+>> to the zones.
+>>
+>
+> At least the trip points must be declared as stated in the bindings
+>
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/thermal/thermal-zones.yaml#n213 
+>
+>
+In the base case we should but there are no trip points for these 
+sensors according to MediaTek.
 
-I don't know if it is fine. Why you should have two devices like this:
-pinctrl@f0010000 {
-gpio@f0010000 {}
-}
 
-???
-Instead of one device? Answer such questions to yourself before asking
-me. Please come with reasonable DTS describing the hardware.
+Regards,
 
-Best regards,
-Krzysztof
+Amjad
+
