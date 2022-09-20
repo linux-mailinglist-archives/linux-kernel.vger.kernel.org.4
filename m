@@ -2,139 +2,386 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17C395BDA23
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 04:29:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E39C5BDA27
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 04:31:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230179AbiITC3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 22:29:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57914 "EHLO
+        id S230187AbiITCbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 22:31:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230126AbiITC3L (ORCPT
+        with ESMTP id S229695AbiITCbH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 22:29:11 -0400
-Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC63A57571;
-        Mon, 19 Sep 2022 19:29:08 -0700 (PDT)
-Date:   Mon, 19 Sep 2022 19:29:02 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1663640947;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Azk++dAUvKme1VxPhtmJU9jTbzs9oCk7066tB1JCjdc=;
-        b=RkPy3/nhUuZhup/28G2vo4pAPfBajx/Kw92mASQFoaLiKa5FkybZLzziaRDXZ5hW1wQfVD
-        P2Jw7Hu/z/t0X5Xz/uMgFuno7uAf7qaL4J4uxWdqw8w7Fjz5zHeNWd0AJLTz49gR6QL8DS
-        L2UcAvZisT42l2T1jPOV6FDaz42fr/I=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Kairui Song <kasong@tencent.com>
-Cc:     cgroups@vger.kernel.org, linux-mm@kvack.org,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, Michal Hocko <mhocko@suse.com>
-Subject: Re: [PATCH v2 2/2] mm: memcontrol: make cgroup_memory_noswap a
- static key
-Message-ID: <YyklbsFFu26cmHPU@P9FQF9L96D>
-References: <20220919180634.45958-1-ryncsn@gmail.com>
- <20220919180634.45958-3-ryncsn@gmail.com>
+        Mon, 19 Sep 2022 22:31:07 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2076.outbound.protection.outlook.com [40.107.215.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B17674054F;
+        Mon, 19 Sep 2022 19:31:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fricHUsSA55wNRy0MpMuri18qmXxblTGmCvRNg2LISsdSBGcaJrIkbZf4grnK2zW2Seemvtar92qsHBc75yVezf0nJzRuj3QC8r1nOhefTnxuJbZk5OHNj0SWRUXXkTQQiJogj5JIK8SRK97hbhywbFzr5Gxt3s2TweP+NsbKq3xdPU1w+dlDGuXUDlaaoz0qgIRLByRinKq3A1bLnuYZT2XRTJXrODEUc76B5/aNXE3zIJVnvydg5LWIgHBYLDnzwQ2rEQDr31RGLRNjhFjBR+/mYIHUt5GIJmJq8cLat9kqt9+KgvQt4ybvEdnqA4E4Av+druHLbsK4rKgwCXQYw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2fBZdvIA1nXn8ptN+cnpZ6MWm86B9cQv66bPJf9CiXo=;
+ b=HMeQatg/pYcJbPqyAmjlou4ibunH/J2zDFNDKrAy33XCd6/CgHuWjn4/rvqcQoDpLHYCvkQPVT/NR0reTE7thpBSDOtt4D77kOZbLdlJ3vPFX/dRsamLDUBiNeigVn+fvjgj0+9imKFFldhi4NnAVBjKi0J1qR1cRTQhqzLWkHr6Mn7CwuzNY1hEJIBF4bC9hU77+myK/+4vp2TsPpruynvDj8EE3SZslsJMFibumYaY79qWwMEzEPCmsBnfWmodTpifotM7SNPTTdLMU3iZsiEyQMOKJoSnsjaNZGqgZb+8dADE8jcw/daZ2UUY3tN/dS3DKt+EnekVAdm9i+fHRQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
+ 211.20.1.79) smtp.rcpttodomain=linaro.org smtp.mailfrom=wiwynn.com;
+ dmarc=fail (p=quarantine sp=quarantine pct=100) action=quarantine
+ header.from=wiwynn.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wiwynn.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2fBZdvIA1nXn8ptN+cnpZ6MWm86B9cQv66bPJf9CiXo=;
+ b=L/2wrPI2xoB5JNR/6RLr2SUkhKvCTNrrF1w92I9HGHft4YW9+6cYCO209tllGfm+U7UVa/OSlPlVcdkr0CbNbcFMpLhaUfe1FFgvsMTsHGkf6tuGqZJjOciwiSOyo63HxTrWuqbarAwC6AQHvsFLiMIjEa/7lRqGwRYQgf5tgN3moKtNPOykGsPOy/tx7xJFINkSboL8PDfK8timCTzkqcM/ZXSyH2diCdsJdbf+C/j+DscxYaAweivyKLoMI2Xl2cJUOG5qddgw+Qz+HLBszzEvW8x60FaZxuUnULdA8eEjjeU3/i8bcs0kzrfA2/q3BauYjm28BB13fsk639/uQQ==
+Received: from PS1PR01CA0018.apcprd01.prod.exchangelabs.com
+ (2603:1096:300:75::30) by PSAPR04MB4373.apcprd04.prod.outlook.com
+ (2603:1096:301:34::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.14; Tue, 20 Sep
+ 2022 02:30:58 +0000
+Received: from PSAAPC01FT061.eop-APC01.prod.protection.outlook.com
+ (2603:1096:300:75:cafe::9) by PS1PR01CA0018.outlook.office365.com
+ (2603:1096:300:75::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.21 via Frontend
+ Transport; Tue, 20 Sep 2022 02:30:58 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 211.20.1.79)
+ smtp.mailfrom=Wiwynn.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=quarantine header.from=Wiwynn.com;
+Received-SPF: Fail (protection.outlook.com: domain of Wiwynn.com does not
+ designate 211.20.1.79 as permitted sender) receiver=protection.outlook.com;
+ client-ip=211.20.1.79; helo=localhost.localdomain;
+Received: from localhost.localdomain (211.20.1.79) by
+ PSAAPC01FT061.mail.protection.outlook.com (10.13.38.140) with Microsoft SMTP
+ Server id 15.20.5632.12 via Frontend Transport; Tue, 20 Sep 2022 02:30:56
+ +0000
+From:   Bonnie Lo <Bonnie_Lo@Wiwynn.com>
+To:     krzysztof.kozlowski@linaro.org
+Cc:     patrick@stwcx.xyz, garnermic@fb.com, Delphine_Chiu@Wiwynn.com,
+        Bonnie Lo <Bonnie_Lo@wiwynn.com>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org
+Subject: [PATCH] ARM: dts: aspeed: greatlakes: Add Facebook greatlakes (AST2600) BMC
+Date:   Tue, 20 Sep 2022 10:30:34 +0800
+Message-Id: <20220920023042.19244-1-Bonnie_Lo@Wiwynn.com>
+X-Mailer: git-send-email 2.17.1
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PSAAPC01FT061:EE_|PSAPR04MB4373:EE_
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220919180634.45958-3-ryncsn@gmail.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: 28188756-d697-419e-bda4-08da9ab026be
+Content-Transfer-Encoding: quoted-printable
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: eWjeQHocWboMEItBacwYcR5RWtojqAbs938v9wnNzBJ1LG37SS3WFXj6aJxXEOh+yHsNVbojv22IiMOAkweBCocCB72RlZ9ATmUNq5mf1xrHtpbEFLtqDfVlne8AQ6wJ3sKMLG9Cy8sIkvnnev/x765MBSz6wQzCVjm4q4TrhikNoPakUGWToC3PtLaYGTO7FDH4512tnAT8HJ0F+FsrbVEzoj0nJJk23xz/efI35p/UNIAbvgxDyZyOITG/Coz9MaCxphSaUCRfJafnoeER7ETRWIYR69s0UhaZfWvhKr1T5QM+O2FeqM1xdSBX4mOAYPPQW0Cfi5Hi3++VIElZl0gaD1rDN8znezK2G8ew8AWOKngZwAIYGY/lazxUrc82t1JasZuhdF1aIcxioKRofEqs9cOC80JQSKd16GafrVRsl/MRuJHzSDB/m8D/eSJwxw3p640jWIAJ8rbGDhpmWbpAJL8XEwx7WEzZ1td7XB8Zo0uFo3coBwmGDn38W3Ux6YNLmlH6WtFIv1KySucT1158ccsq6+zM78dmggrDP6qSsC0SYH/WwFtaJ1Bu0xiBIMYEi7y4FMKm+E0y6aj7Bu9hCOVLRurXz+x/2ld3eQRDbf6l7/P+EHyzHU6SXta07fP6B9pg3JNP+QuXN+7VwKCIkVd1WpvB13vVoHhLkEYP5SHCORNxkCqX77wdRwOCLuoHBqWSc4mDjN8hYVLtC43cz7sjydzV0UGXb84KGZNPNRelyQd1YSdgEaQSwMn9
+X-Forefront-Antispam-Report: CIP:211.20.1.79;CTRY:TW;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:localhost.localdomain;PTR:211-20-1-79.hinet-ip.hinet.net;CAT:NONE;SFS:(13230022)(6069001)(4636009)(346002)(396003)(376002)(136003)(39850400004)(47680400002)(451199015)(36840700001)(46966006)(82310400005)(40480700001)(36756003)(9316004)(2906002)(36736006)(36906005)(316002)(36860700001)(47076005)(8676002)(82740400003)(4326008)(7416002)(5660300002)(70206006)(70586007)(6916009)(8936002)(86362001)(54906003)(336012)(1076003)(186003)(478600001)(956004)(2616005)(356005)(81166007)(6512007)(26005)(6666004)(83380400001)(41300700001)(6506007)(6486002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: wiwynn.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Sep 2022 02:30:56.9584
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 28188756-d697-419e-bda4-08da9ab026be
+X-MS-Exchange-CrossTenant-Id: da6e0628-fc83-4caf-9dd2-73061cbab167
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=da6e0628-fc83-4caf-9dd2-73061cbab167;Ip=[211.20.1.79];Helo=[localhost.localdomain]
+X-MS-Exchange-CrossTenant-AuthSource: PSAAPC01FT061.eop-APC01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PSAPR04MB4373
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 02:06:34AM +0800, Kairui Song wrote:
-> From: Kairui Song <kasong@tencent.com>
-> 
-> cgroup_memory_noswap is used in many hot path, so make it a static key
-> to lower the kernel overhead.
-> 
-> Using 8G of ZRAM as SWAP, benchmark using `perf stat -d -d -d --repeat 100`
-> with the following code snip in a non-root cgroup:
-> 
->    #include <stdio.h>
->    #include <string.h>
->    #include <linux/mman.h>
->    #include <sys/mman.h>
->    #define MB 1024UL * 1024UL
->    int main(int argc, char **argv){
->       void *p = mmap(NULL, 8000 * MB, PROT_READ | PROT_WRITE,
->                      MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
->       memset(p, 0xff, 8000 * MB);
->       madvise(p, 8000 * MB, MADV_PAGEOUT);
->       memset(p, 0xff, 8000 * MB);
->       return 0;
->    }
-> 
-> Before:
->           7,021.43 msec task-clock                #    0.967 CPUs utilized            ( +-  0.03% )
->              4,010      context-switches          #  573.853 /sec                     ( +-  0.01% )
->                  0      cpu-migrations            #    0.000 /sec
->          2,052,057      page-faults               #  293.661 K/sec                    ( +-  0.00% )
->     12,616,546,027      cycles                    #    1.805 GHz                      ( +-  0.06% )  (39.92%)
->        156,823,666      stalled-cycles-frontend   #    1.25% frontend cycles idle     ( +-  0.10% )  (40.25%)
->        310,130,812      stalled-cycles-backend    #    2.47% backend cycles idle      ( +-  4.39% )  (40.73%)
->     18,692,516,591      instructions              #    1.49  insn per cycle
->                                                   #    0.01  stalled cycles per insn  ( +-  0.04% )  (40.75%)
->      4,907,447,976      branches                  #  702.283 M/sec                    ( +-  0.05% )  (40.30%)
->         13,002,578      branch-misses             #    0.26% of all branches          ( +-  0.08% )  (40.48%)
->      7,069,786,296      L1-dcache-loads           #    1.012 G/sec                    ( +-  0.03% )  (40.32%)
->        649,385,847      L1-dcache-load-misses     #    9.13% of all L1-dcache accesses  ( +-  0.07% )  (40.10%)
->      1,485,448,688      L1-icache-loads           #  212.576 M/sec                    ( +-  0.15% )  (39.49%)
->         31,628,457      L1-icache-load-misses     #    2.13% of all L1-icache accesses  ( +-  0.40% )  (39.57%)
->          6,667,311      dTLB-loads                #  954.129 K/sec                    ( +-  0.21% )  (39.50%)
->          5,668,555      dTLB-load-misses          #   86.40% of all dTLB cache accesses  ( +-  0.12% )  (39.03%)
->                765      iTLB-loads                #  109.476 /sec                     ( +- 21.81% )  (39.44%)
->          4,370,351      iTLB-load-misses          # 214320.09% of all iTLB cache accesses  ( +-  1.44% )  (39.86%)
->        149,207,254      L1-dcache-prefetches      #   21.352 M/sec                    ( +-  0.13% )  (40.27%)
-> 
->            7.25869 +- 0.00203 seconds time elapsed  ( +-  0.03% )
-> 
-> After:
->           6,576.16 msec task-clock                #    0.953 CPUs utilized            ( +-  0.10% )
->              4,020      context-switches          #  605.595 /sec                     ( +-  0.01% )
->                  0      cpu-migrations            #    0.000 /sec
->          2,052,056      page-faults               #  309.133 K/sec                    ( +-  0.00% )
->     11,967,619,180      cycles                    #    1.803 GHz                      ( +-  0.36% )  (38.76%)
->        161,259,240      stalled-cycles-frontend   #    1.38% frontend cycles idle     ( +-  0.27% )  (36.58%)
->        253,605,302      stalled-cycles-backend    #    2.16% backend cycles idle      ( +-  4.45% )  (34.78%)
->     19,328,171,892      instructions              #    1.65  insn per cycle
->                                                   #    0.01  stalled cycles per insn  ( +-  0.10% )  (31.46%)
->      5,213,967,902      branches                  #  785.461 M/sec                    ( +-  0.18% )  (30.68%)
->         12,385,170      branch-misses             #    0.24% of all branches          ( +-  0.26% )  (34.13%)
->      7,271,687,822      L1-dcache-loads           #    1.095 G/sec                    ( +-  0.12% )  (35.29%)
->        649,873,045      L1-dcache-load-misses     #    8.93% of all L1-dcache accesses  ( +-  0.11% )  (41.41%)
->      1,950,037,608      L1-icache-loads           #  293.764 M/sec                    ( +-  0.33% )  (43.11%)
->         31,365,566      L1-icache-load-misses     #    1.62% of all L1-icache accesses  ( +-  0.39% )  (45.89%)
->          6,767,809      dTLB-loads                #    1.020 M/sec                    ( +-  0.47% )  (48.42%)
->          6,339,590      dTLB-load-misses          #   95.43% of all dTLB cache accesses  ( +-  0.50% )  (46.60%)
->                736      iTLB-loads                #  110.875 /sec                     ( +-  1.79% )  (48.60%)
->          4,314,836      iTLB-load-misses          # 518653.73% of all iTLB cache accesses  ( +-  0.63% )  (42.91%)
->        144,950,156      L1-dcache-prefetches      #   21.836 M/sec                    ( +-  0.37% )  (41.39%)
-> 
->            6.89935 +- 0.00703 seconds time elapsed  ( +-  0.10% )
-> 
-> The performance is clearly better. There is no significant hotspot
-> improvement according to perf report, as there are quite a few
-> callers of memcg_swap_enabled and do_memsw_account (which calls
-> memcg_swap_enabled). Many pieces of minor optimizations resulted
-> in lower overhead for the branch predictor, and bettter performance.
-> 
-> Acked-by: Michal Hocko <mhocko@suse.com>
-> Signed-off-by: Kairui Song <kasong@tencent.com>
+From: Bonnie Lo <Bonnie_Lo@wiwynn.com>
 
-Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
+Add linux device tree entry related to
+greatlakes specific devices connected to BMC SoC.
 
-Thanks!
+Signed-off-by: Bonnie Lo <Bonnie_Lo@wiwynn.com>
+---
+ arch/arm/boot/dts/Makefile                    |   1 +
+ .../dts/aspeed-bmc-facebook-greatlakes.dts    | 247 ++++++++++++++++++
+ 2 files changed, 248 insertions(+)
+ create mode 100644 arch/arm/boot/dts/aspeed-bmc-facebook-greatlakes.dts
+
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 05d8aef6e5d2..d9f417f2d7df 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -1586,6 +1586,7 @@ dtb-$(CONFIG_ARCH_ASPEED) +=3D \
+        aspeed-bmc-facebook-elbert.dtb \
+        aspeed-bmc-facebook-fuji.dtb \
+        aspeed-bmc-facebook-galaxy100.dtb \
++       aspeed-bmc-facebook-greatlakes.dtb \
+        aspeed-bmc-facebook-minipack.dtb \
+        aspeed-bmc-facebook-tiogapass.dtb \
+        aspeed-bmc-facebook-wedge40.dtb \
+diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-greatlakes.dts b/arch/ar=
+m/boot/dts/aspeed-bmc-facebook-greatlakes.dts
+new file mode 100644
+index 000000000000..c368eb33efeb
+--- /dev/null
++++ b/arch/arm/boot/dts/aspeed-bmc-facebook-greatlakes.dts
+@@ -0,0 +1,247 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++// Copyright 2022 Facebook Inc.
++
++/dts-v1/;
++#include "aspeed-g6.dtsi"
++#include <dt-bindings/gpio/aspeed-gpio.h>
++#include <dt-bindings/leds/leds-pca955x.h>
++#include <dt-bindings/i2c/i2c.h>
++
++/ {
++       model =3D "Facebook Greatlakes BMC";
++       compatible =3D "facebook,greatlakes-bmc", "aspeed,ast2600";
++
++       aliases {
++               serial4 =3D &uart5;
++       };
++
++       chosen {
++               bootargs =3D "console=3DttyS4,57600n8";
++       };
++
++       memory@80000000 {
++               device_type =3D "memory";
++               reg =3D <0x80000000 0x80000000>;
++       };
++
++       iio-hwmon {
++               compatible =3D "iio-hwmon";
++               io-channels =3D <&adc0 0>, <&adc0 1>, <&adc0 2>, <&adc0 3>,
++                               <&adc0 4>, <&adc0 5>, <&adc0 6>, <&adc0 7>,
++                               <&adc1 0>, <&adc1 2>, <&adc1 3>, <&adc1 4>,
++                               <&adc1 5>, <&adc1 6>;
++       };
++};
++
++&uart1 {
++       status =3D "okay";
++};
++
++&uart2 {
++       status =3D "okay";
++};
++
++&uart3 {
++       status =3D "okay";
++};
++
++&uart4 {
++       status =3D "okay";
++};
++
++&uart5 {
++       status =3D "okay";
++};
++
++&wdt1 {
++       status =3D "okay";
++       pinctrl-names =3D "default";
++       pinctrl-0 =3D <&pinctrl_wdtrst1_default>;
++       aspeed,reset-type =3D "soc";
++       aspeed,external-signal;
++       aspeed,ext-push-pull;
++       aspeed,ext-active-high;
++       aspeed,ext-pulse-duration =3D <256>;
++};
++
++&mac3 {
++       status =3D "okay";
++       pinctrl-names =3D "default";
++       pinctrl-0 =3D <&pinctrl_rmii4_default>;
++       no-hw-checksum;
++       use-ncsi;
++       mlx,multi-host;
++       ncsi-ctrl,start-redo-probe;
++       ncsi-ctrl,no-channel-monitor;
++       ncsi-package =3D <1>;
++       ncsi-channel =3D <1>;
++       ncsi-rexmit =3D <1>;
++       ncsi-timeout =3D <2>;
++};
++
++&rtc {
++       status =3D "okay";
++};
++
++&fmc {
++       status =3D "okay";
++       flash@0 {
++               status =3D "okay";
++               m25p,fast-read;
++               label =3D "bmc";
++               spi-rx-bus-width =3D <4>;
++               spi-max-frequency =3D <50000000>;
++#include "openbmc-flash-layout-64.dtsi"
++       };
++       flash@1 {
++               status =3D "okay";
++               m25p,fast-read;
++               label =3D "bmc2";
++               spi-rx-bus-width =3D <4>;
++               spi-max-frequency =3D <50000000>;
++       };
++};
++
++&i2c0 {
++       status =3D "okay";
++       multi-master;
++       ipmb0@10 {
++               compatible =3D "ipmb-dev";
++               reg =3D <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
++               i2c-protocol;
++       };
++};
++
++&i2c1 {
++       status =3D "okay";
++       multi-master;
++       ipmb1@10 {
++               compatible =3D "ipmb-dev";
++               reg =3D <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
++               i2c-protocol;
++       };
++};
++
++&i2c2 {
++       status =3D "okay";
++       multi-master;
++       ipmb2@10 {
++               compatible =3D "ipmb-dev";
++               reg =3D <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
++               i2c-protocol;
++       };
++};
++
++&i2c3 {
++       status =3D "okay";
++       multi-master;
++       ipmb3@10 {
++               compatible =3D "ipmb-dev";
++               reg =3D <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
++               i2c-protocol;
++       };
++};
++
++&i2c4 {
++       status =3D "okay";
++};
++
++&i2c5 {
++       status =3D "okay";
++};
++
++&i2c6 {
++       status =3D "okay";
++};
++
++&i2c7 {
++       status =3D "okay";
++};
++
++&i2c8 {
++       status =3D "okay";
++       temperature-sensor@1f {
++               compatible =3D "ti,tmp421";
++               reg =3D <0x1f>;
++       };
++       // NIC EEPROM
++       eeprom@50 {
++               compatible =3D "st,24c32";
++               reg =3D <0x50>;
++       };
++};
++
++&i2c9 {
++       status =3D "okay";
++       multi-master;
++       ipmb9@10 {
++               compatible =3D "ipmb-dev";
++               reg =3D <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
++               i2c-protocol;
++       };
++};
++
++&i2c10 {
++       status =3D "okay";
++};
++
++&i2c11 {
++       status =3D "okay";
++       eeprom@51 {
++               compatible =3D "atmel,24c128";
++               reg =3D <0x51>;
++       };
++       eeprom@54 {
++               compatible =3D "atmel,24c128";
++               reg =3D <0x54>;
++       };
++};
++
++&i2c12 {
++       status =3D "okay";
++       temperature-sensor@4f {
++               compatible =3D "lm75";
++               reg =3D <0x4f>;
++       };
++};
++
++&i2c13 {
++       status =3D "okay";
++};
++
++&adc0 {
++       ref_voltage =3D <2500>;
++       status =3D "okay";
++       pinctrl-0 =3D <&pinctrl_adc0_default &pinctrl_adc1_default
++                       &pinctrl_adc2_default &pinctrl_adc3_default
++                       &pinctrl_adc4_default &pinctrl_adc5_default
++                       &pinctrl_adc6_default &pinctrl_adc7_default>;
++};
++
++&adc1 {
++       ref_voltage =3D <2500>;
++       status =3D "okay";
++       pinctrl-0 =3D <&pinctrl_adc8_default &pinctrl_adc10_default
++                       &pinctrl_adc11_default &pinctrl_adc12_default
++                       &pinctrl_adc13_default &pinctrl_adc14_default>;
++};
++
++
++&ehci0 {
++       status =3D "okay";
++};
++
++&ehci1 {
++       status =3D "okay";
++};
++
++&uhci {
++       status =3D "okay";
++};
++
++&gpio0 {
++       pinctrl-names =3D "default";
++       pinctrl-0 =3D <&pinctrl_gpiu1_default &pinctrl_gpiu7_default>;
++};
++
++
+--
+2.17.1
+
+WIWYNN PROPRIETARY
+This email (and any attachments) contains proprietary or confidential infor=
+mation and is for the sole use of its intended recipient. Any unauthorized =
+review, use, copying or distribution of this email or the content of this e=
+mail is strictly prohibited. If you are not the intended recipient, please =
+notify the sender and delete this email immediately.
