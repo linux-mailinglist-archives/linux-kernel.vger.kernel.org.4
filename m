@@ -2,174 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 236DB5BDE0D
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 09:24:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6958E5BDE11
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 09:24:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230203AbiITHXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 03:23:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53154 "EHLO
+        id S230204AbiITHYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 03:24:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiITHXf (ORCPT
+        with ESMTP id S230149AbiITHYd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 03:23:35 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA165501A0;
-        Tue, 20 Sep 2022 00:23:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=IKJaeDScRrK+JIC8Gbrvn6nNvLhPVYznUfIuOJ7G4Ds=; b=jhPn6HiiENFLg2SFmJ30AuSqoC
-        n0UXjZX8nUjjPdJyhdMc3l6m4xaDuHk2DNFEEJBge5OsdKEDKncMdSqmzUhr63k0lWu0hqsOGgkED
-        ItaA2kVSLRXIqMPBgNi60QXOnUkIWgXYDQDCRopZO3MX0wNNG8N2zfzAqVV+KrvlbkPGruxgRAOgH
-        rvyr6aWBhnZhv7BbcxKvZa8Cwb/G6lb/9b6hsbO3oDm4uhEINaQgRhsr8Lhos76pNowo9NwzsBwHo
-        kAaPYLs3ryTqyBUEYz8Gdu/JdYKNf12aWamFnyRf/8IiNLJsmGxa0RpdoYbVI8ld2gW+0cXYXrQlz
-        JaNsv+hA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oaXaq-005LcW-AU; Tue, 20 Sep 2022 07:22:56 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C7061300074;
-        Tue, 20 Sep 2022 09:22:50 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 9C25E2BAC8466; Tue, 20 Sep 2022 09:22:50 +0200 (CEST)
-Date:   Tue, 20 Sep 2022 09:22:50 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
-        luto@kernel.org, conor.dooley@microchip.com, heiko@sntech.de,
-        jszhang@kernel.org, lazyparser@gmail.com, falcon@tinylab.org,
-        chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, mark.rutland@arm.com,
-        zouyipeng@huawei.com, bigeasy@linutronix.de,
-        David.Laight@aculab.com, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH V5 07/11] riscv: convert to generic entry
-Message-ID: <YylqSsL6bdhIOMte@hirez.programming.kicks-ass.net>
-References: <20220918155246.1203293-1-guoren@kernel.org>
- <20220918155246.1203293-8-guoren@kernel.org>
- <Yyhv4UUXuSfvMOw+@hirez.programming.kicks-ass.net>
- <CAJF2gTRdkmemEWsDYhVXb8KD0PS6b1VAPu_MfeZ+Rmf2qEGa6Q@mail.gmail.com>
+        Tue, 20 Sep 2022 03:24:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F4A6B36
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 00:24:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663658669;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=g0uOi5qTyf/a7VXxNooee54i3U9fkVbBJzRMmloiIlw=;
+        b=gyWc++AT1xMQ3JfakHRkzP8ScFtGjtNd7J4xAnKJNytoallhq4cCJllwRe73esdyh+J74i
+        C/jO3ObdJpQE80we+D6CWpS8X1bboyJ+BQ3W330KnQBBWzxetE/Dgogs3JxoRyYHlqCF6i
+        Rrc8gqZJtb/BZhsuGQYPOjXk2Kx2Y20=
+Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com
+ [209.85.210.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-657-YZpWSJ9NOKWQyafrkcyOTQ-1; Tue, 20 Sep 2022 03:24:28 -0400
+X-MC-Unique: YZpWSJ9NOKWQyafrkcyOTQ-1
+Received: by mail-pf1-f199.google.com with SMTP id be18-20020a056a001f1200b00543d4bac885so1215442pfb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 00:24:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=g0uOi5qTyf/a7VXxNooee54i3U9fkVbBJzRMmloiIlw=;
+        b=cQ2MerWTQ5hgIUHU3+/3pMCIHvN4t1mYyeEesyo8+FDqyy+KTeVCHOfZhSXzlcVd4X
+         6URJ/rU7IOx0GgRAJuA+yPDIQdReo7ezGAKPjejyK0F7RrHCHTNhKbCU9Jg4YHvaPqXB
+         MDdtr7A20qOHohh15nNkt2uKvnc86vBio8k23ViXZaXmsK4tLCxONzV9KVMbBtUJb2Zp
+         YSuz4zBGsBkyr2ZztBNyuCYhY5s5ngcHpu8Kjotga4IFXiuBzYCNdeM/p3OUaPKz/ZFg
+         r9nvyNn/fF83DDoLaDx97a53w3NILKHdqU72PiH0YHO8/XUpCXNFWGxJNfjy3t9jmWIs
+         IisQ==
+X-Gm-Message-State: ACrzQf3Pna1LJWLMo6S9R89JvTUgkR9haPAdjqOWVOwsmGMSYIif44Bc
+        BZz1aryDhSU6IAM5xWLMPsJidq/TolNgQ/Vbo5LVv0NZZxd5MMZ2bmvE3pbg5psug7gVJOTDI/p
+        ORqWB4AaUlzafRSzWbbjrLEVN
+X-Received: by 2002:a17:90b:4a85:b0:202:4f3f:1f65 with SMTP id lp5-20020a17090b4a8500b002024f3f1f65mr2381709pjb.241.1663658667123;
+        Tue, 20 Sep 2022 00:24:27 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM46f2cbuC7SwgzAF5mMZqdhxD22k2h84NaHeFKZh01JjTmriF5vDFbjDxwbzPGz432bmKmCFw==
+X-Received: by 2002:a17:90b:4a85:b0:202:4f3f:1f65 with SMTP id lp5-20020a17090b4a8500b002024f3f1f65mr2381682pjb.241.1663658666811;
+        Tue, 20 Sep 2022 00:24:26 -0700 (PDT)
+Received: from xps13.. ([240d:1a:c0d:9f00:94be:c13b:981e:47e6])
+        by smtp.gmail.com with ESMTPSA id n16-20020a170903111000b001788ccecbf5sm687762plh.31.2022.09.20.00.24.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Sep 2022 00:24:26 -0700 (PDT)
+From:   Shigeru Yoshida <syoshida@redhat.com>
+To:     maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, airlied@linux.ie, daniel@ffwll.ch
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Shigeru Yoshida <syoshida@redhat.com>,
+        syzbot+c512687fff9d22327436@syzkaller.appspotmail.com
+Subject: [PATCH] drm/gem: Avoid use-after-free on drm_gem_mmap_obj() failure
+Date:   Tue, 20 Sep 2022 16:24:08 +0900
+Message-Id: <20220920072408.387105-1-syoshida@redhat.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJF2gTRdkmemEWsDYhVXb8KD0PS6b1VAPu_MfeZ+Rmf2qEGa6Q@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 02:36:33PM +0800, Guo Ren wrote:
-> On Mon, Sep 19, 2022 at 9:34 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > On Sun, Sep 18, 2022 at 11:52:42AM -0400, guoren@kernel.org wrote:
-> >
-> > > @@ -123,18 +126,22 @@ int handle_misaligned_store(struct pt_regs *regs);
-> > >
-> > >  asmlinkage void __trap_section do_trap_load_misaligned(struct pt_regs *regs)
-> > >  {
-> > > +     irqentry_state_t state = irqentry_enter(regs);
-> > >       if (!handle_misaligned_load(regs))
-> > >               return;
-> > >       do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc,
-> > >                     "Oops - load address misaligned");
-> > > +     irqentry_exit(regs, state);
-> > >  }
-> > >
-> > >  asmlinkage void __trap_section do_trap_store_misaligned(struct pt_regs *regs)
-> > >  {
-> > > +     irqentry_state_t state = irqentry_enter(regs);
-> > >       if (!handle_misaligned_store(regs))
-> > >               return;
-> > >       do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc,
-> > >                     "Oops - store (or AMO) address misaligned");
-> > > +     irqentry_exit(regs, state);
-> > >  }
-> > >  #endif
-> > >  DO_ERROR_INFO(do_trap_store_fault,
-> > > @@ -158,6 +165,8 @@ static inline unsigned long get_break_insn_length(unsigned long pc)
-> > >
-> > >  asmlinkage __visible __trap_section void do_trap_break(struct pt_regs *regs)
-> > >  {
-> > > +     irqentry_state_t state = irqentry_enter(regs);
-> > > +
-> > >  #ifdef CONFIG_KPROBES
-> > >       if (kprobe_single_step_handler(regs))
-> > >               return;
-> >
-> > FWIW; on x86 I've classified many of the 'from-kernel' traps as
-> > NMI-like, since those traps can happen from any context, including with
-> > IRQs disabled.
-> The do_trap_break is for ebreak instruction, not NMI. RISC-V NMI has
-> separate CSR. ref:
-> 
-> This proposal adds support for resumable non-maskable interrupts
-> (RNMIs) to RISC-V. The extension adds four new CSRs (`mnepc`,
-> `mncause`, `mnstatus`, and `mnscratch`) to hold the interrupted state,
-> and a new instruction to resume from the RNMI handler.
+syzbot reported use-after-free for drm_gem_object [1].  This causes
+the call trace like below:
 
-Yes, but that's not what I'm saying. I'm saying I've classified
-'from-kernel' traps as NMI-like.
+[   75.327400][ T5723] Call Trace:
+[   75.327611][ T5723]  <TASK>
+[   75.327803][ T5723]  drm_gem_object_handle_put_unlocked+0x11e/0x1a0
+[   75.328209][ T5723]  drm_gem_object_release_handle+0x5d/0x70
+[   75.328568][ T5723]  ? drm_gem_object_handle_put_unlocked+0x1a0/0x1a0
+[   75.328965][ T5723]  idr_for_each+0x99/0x160
+[   75.329253][ T5723]  drm_gem_release+0x20/0x30
+[   75.329544][ T5723]  drm_file_free.part.0+0x269/0x310
+[   75.329867][ T5723]  drm_close_helper.isra.0+0x88/0xa0
+[   75.330305][ T5723]  drm_release+0x8e/0x1a0
+[   75.330674][ T5723]  ? drm_release_noglobal+0xc0/0xc0
+[   75.331138][ T5723]  __fput+0x10e/0x440
+[   75.331503][ T5723]  task_work_run+0x73/0xd0
+[   75.331895][ T5723]  do_exit+0x535/0x1200
+[   75.332280][ T5723]  ? ktime_get_coarse_real_ts64+0x13b/0x170
+[   75.332810][ T5723]  do_group_exit+0x51/0x100
+[   75.333215][ T5723]  __x64_sys_exit_group+0x18/0x20
+[   75.333654][ T5723]  do_syscall_64+0x37/0x90
+[   75.334058][ T5723]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-Consider:
+If drm_gem_mmap_obj() failed, it drops the reference count by calling
+drm_gem_object_put().  However, drm_gem_mmap() drops the reference
+count after calling drm_gem_mmap_obj() even if it failed, so it breaks
+the balance of the reference count.
 
-	raw_spin_lock_irq(&foo);
-	...
-	<trap>
+This patch fixes this issue by calling drm_gem_object_put() only if
+drm_gem_mmap_obj() succeeds, and returns immediately if
+drm_gem_mmap_obj() failed without calling drm_gem_object_put().
 
-Then you want the trap to behave as if it were an NMI; that is abide by
-the rules of NMI (strictly wait-free code).
+Link: https://syzkaller.appspot.com/bug?id=c42a72b0b3bcedd95e5f132a4ccd7cd550334160 [1]
+Reported-by: syzbot+c512687fff9d22327436@syzkaller.appspotmail.com
+Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
+---
+ drivers/gpu/drm/drm_gem.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-So yes, they are not NMI, but they nest just like it, so we want the
-handlers to abide by the same rules.
+diff --git a/drivers/gpu/drm/drm_gem.c b/drivers/gpu/drm/drm_gem.c
+index ad068865ba20..f345d38df50a 100644
+--- a/drivers/gpu/drm/drm_gem.c
++++ b/drivers/gpu/drm/drm_gem.c
+@@ -1115,10 +1115,12 @@ int drm_gem_mmap(struct file *filp, struct vm_area_struct *vma)
+ 
+ 	ret = drm_gem_mmap_obj(obj, drm_vma_node_size(node) << PAGE_SHIFT,
+ 			       vma);
++	if (ret)
++		return ret;
+ 
+ 	drm_gem_object_put(obj);
+ 
+-	return ret;
++	return 0;
+ }
+ EXPORT_SYMBOL(drm_gem_mmap);
+ 
+-- 
+2.37.3
 
-Does that make sense?
-
-> >
-> > The basic shape of the trap handlers looks a little like:
-> >
-> >         if (user_mode(regs)) {
-> If nmi comes from user_mode, why we using
-> irqenrty_enter/exit_from/to_user_mode instead of
-> irqentry_nmi_enter/exit?
-
-s/nmi/trap/ because the 'from-user' trap never nests inside kernel code.
-
-Additionally, many 'from-user' traps want to do 'silly' things like send
-signals, which is something that requires scheduling.
-
-They're fundamentally different from 'from-kernel' traps, which per the
-above, nest most dangerously.
-
-> >                 irqenrty_enter_from_user_mode(regs);
-> >                 do_user_trap();
-> >                 irqentry_exit_to_user_mode(regs);
-> >         } else {
-> >                 irqentry_state_t state = irqentry_nmi_enter(regs);
-> >                 do_kernel_trap();
-> >                 irqentry_nmi_exit(regs, state);
-> >         }
-> >
-> > Not saying you have to match Risc-V in this patch-set, just something to
-> > consider.
-> I think the shape of the riscv NMI handler looks a little like this:
-> 
-> asmlinkage __visible __trap_section void do_trap_nmi(struct pt_regs *regs)
-> {
->                  irqentry_state_t state = irqentry_nmi_enter(regs);
->                  do_nmi_trap();
->                  irqentry_nmi_exit(regs, state);
-> }
-
-That is correct for the NMI handler; but here I'm specifically talking
-about traps, like the unalign trap, break trap etc. Those that can
-happen *anywhere* in kernel code and nest most unfortunate.
