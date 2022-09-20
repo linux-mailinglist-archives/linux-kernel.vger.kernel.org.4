@@ -2,48 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7C855BD8F5
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 02:56:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 774895BD8FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 03:00:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbiITA4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 20:56:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60208 "EHLO
+        id S229832AbiITBAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 21:00:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbiITA4u (ORCPT
+        with ESMTP id S229632AbiITBAT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 20:56:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBC891156
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 17:56:49 -0700 (PDT)
+        Mon, 19 Sep 2022 21:00:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06D54A80A;
+        Mon, 19 Sep 2022 18:00:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 673C2B81DF8
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 00:56:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAF58C433C1;
-        Tue, 20 Sep 2022 00:56:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 67EBC61FCC;
+        Tue, 20 Sep 2022 01:00:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BDDA8C43141;
+        Tue, 20 Sep 2022 01:00:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663635407;
-        bh=3bqIncGQwuSUvaM97RMErCT63FB5S2Jz7uQPJg5tEhc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=okg9K9OIIjb/0dAJrs8Dy+QRQl6/8RlnvFVNBg3+bXeQ/kXEhx92/MJXcfa8ipHYC
-         KY5XPVIxd5Z4FfYpagbLHt4J+qGVxKGUKFj/nD+gp5KrdUflRb8eFhH7PxjtOpfx2t
-         n4AnUYSFT2+9ykX7AhXI0ykmb3HG4vkScfp5wJU6CZO3k1n69U29Df9DvnMVGJHy2r
-         sMToYHTSUQ5IyHCpjHFHV5AAatua4eapar8mSY6qMOocvLgI4KMGm93x+EQhiVT7/Y
-         D4QsPw8QT8FD76pG2h0jOCKaV2U+VQxTrecG9/wk4Xhhz6rpZhOHFjODYsFSH78v7J
-         lHhLuy0T9Nq9Q==
-Date:   Mon, 19 Sep 2022 17:56:45 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Chao Yu <chao@kernel.org>
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v2] f2fs: record need_fsck in super_block
-Message-ID: <YykPzeC4lk+F/U/2@google.com>
-References: <20220913135919.2445544-1-chao@kernel.org>
+        s=k20201202; t=1663635615;
+        bh=5rlOT2MBuAONykuxvoM0F+tMTDJxeyxlWO1ncCCNQVA=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=MN+Sr9nd4afmF2LJNLNcV9D+dUBX9yVZPpmZb6jvRwre2f+VO7xso3tse40Vv7Wb2
+         G4yVfEUNTIb86486jHVLjPwQnggQyx+VTC6GYEHJfQv66uVzC8l2xYc8DsMqYlO2bC
+         KVjxssYTwZcLdgNEg1Ih235OuPBVLOSjZ+YhC1EVx6Mq9JfR1IlrcVUbTTo8+PAvTa
+         K/NyrdEpseFjDd46Zy55X7fkaMClcvqSbywXyj/HrkWvecFoxcrHEPMH1Rf0iH3/uU
+         yMpVddcDQpVAlN93RgeUwt2Xbm5lcJaYYxQfKX0APq8/a+bmO9n2mbiz2NTEV8Z5pk
+         NbLqEXVm/dWPQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A0CFEE52539;
+        Tue, 20 Sep 2022 01:00:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220913135919.2445544-1-chao@kernel.org>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] net: mana: Add rmb after checking owner bits
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166363561565.18776.11288575492844926736.git-patchwork-notify@kernel.org>
+Date:   Tue, 20 Sep 2022 01:00:15 +0000
+References: <1662928805-15861-1-git-send-email-haiyangz@microsoft.com>
+In-Reply-To: <1662928805-15861-1-git-send-email-haiyangz@microsoft.com>
+To:     Haiyang Zhang <haiyangz@microsoft.com>
+Cc:     linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        decui@microsoft.com, kys@microsoft.com, sthemmin@microsoft.com,
+        paulros@microsoft.com, shacharr@microsoft.com, olaf@aepfle.de,
+        vkuznets@redhat.com, davem@davemloft.net,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -53,118 +59,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/13, Chao Yu wrote:
-> Once CP_ERROR_FLAG is set, checkpoint is disallowed to be triggered to
-> persist CP_FSCK_FLAG, fsck won't repair the image due to lack of
-> CP_FSCK_FLAG.
-> 
-> This patch proposes to persist newly introduced SB_NEED_FSCK flag into
-> super block if CP_ERROR_FLAG and SBI_NEED_FSCK is set, later, once fsck
-> detect this flag, it can check and repair corrupted image in time.
-> 
-> Signed-off-by: Chao Yu <chao@kernel.org>
-> ---
-> v2:
-> - remove unneeded codes.
->  fs/f2fs/checkpoint.c    |  6 +++++-
->  fs/f2fs/f2fs.h          |  1 +
->  fs/f2fs/super.c         | 26 ++++++++++++++++++++++++++
->  include/linux/f2fs_fs.h |  5 ++++-
->  4 files changed, 36 insertions(+), 2 deletions(-)
-> 
-> diff --git a/fs/f2fs/checkpoint.c b/fs/f2fs/checkpoint.c
-> index c3119e4c890c..0836fce40394 100644
-> --- a/fs/f2fs/checkpoint.c
-> +++ b/fs/f2fs/checkpoint.c
-> @@ -30,8 +30,12 @@ void f2fs_stop_checkpoint(struct f2fs_sb_info *sbi, bool end_io)
->  {
->  	f2fs_build_fault_attr(sbi, 0, 0);
->  	set_ckpt_flags(sbi, CP_ERROR_FLAG);
-> -	if (!end_io)
-> +	if (!end_io) {
->  		f2fs_flush_merged_writes(sbi);
-> +
-> +		if (is_sbi_flag_set(sbi, SBI_NEED_FSCK))
-> +			f2fs_update_sb_flags(sbi, SB_NEED_FSCK);
+Hello:
 
-Let's think of putting some more context in superblock, if we want to overwrite
-it. E.g., a reason to stop checkpoint?
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-> +	}
->  }
->  
->  /*
-> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-> index dee7b67a17a6..1960a98c7555 100644
-> --- a/fs/f2fs/f2fs.h
-> +++ b/fs/f2fs/f2fs.h
-> @@ -3556,6 +3556,7 @@ int f2fs_enable_quota_files(struct f2fs_sb_info *sbi, bool rdonly);
->  int f2fs_quota_sync(struct super_block *sb, int type);
->  loff_t max_file_blocks(struct inode *inode);
->  void f2fs_quota_off_umount(struct super_block *sb);
-> +void f2fs_update_sb_flags(struct f2fs_sb_info *sbi, unsigned int flag);
->  int f2fs_commit_super(struct f2fs_sb_info *sbi, bool recover);
->  int f2fs_sync_fs(struct super_block *sb, int sync);
->  int f2fs_sanity_check_ckpt(struct f2fs_sb_info *sbi);
-> diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
-> index b8e5fe244596..c99ba840593d 100644
-> --- a/fs/f2fs/super.c
-> +++ b/fs/f2fs/super.c
-> @@ -3846,6 +3846,32 @@ int f2fs_commit_super(struct f2fs_sb_info *sbi, bool recover)
->  	return err;
->  }
->  
-> +void f2fs_update_sb_flags(struct f2fs_sb_info *sbi, unsigned int flag)
-> +{
-> +	unsigned short s_flags;
-> +	int err;
-> +
-> +	if (le16_to_cpu(F2FS_RAW_SUPER(sbi)->s_flags) & SB_NEED_FSCK)
-> +		return;
-> +
-> +	f2fs_down_write(&sbi->sb_lock);
-> +
-> +	s_flags = le16_to_cpu(F2FS_RAW_SUPER(sbi)->s_flags);
-> +
-> +	if (s_flags & SB_NEED_FSCK)
-> +		goto out_unlock;
-> +
-> +	F2FS_RAW_SUPER(sbi)->s_flags = cpu_to_le16(s_flags | SB_NEED_FSCK);
-> +
-> +	err = f2fs_commit_super(sbi, false);
-> +	if (err) {
-> +		f2fs_warn(sbi, "f2fs_commit_super fails to persist flag: %u, err:%d", flag, err);
-> +		F2FS_RAW_SUPER(sbi)->s_flags = s_flags;
-> +	}
-> +out_unlock:
-> +	f2fs_up_write(&sbi->sb_lock);
-> +}
-> +
->  static int f2fs_scan_devices(struct f2fs_sb_info *sbi)
->  {
->  	struct f2fs_super_block *raw_super = F2FS_RAW_SUPER(sbi);
-> diff --git a/include/linux/f2fs_fs.h b/include/linux/f2fs_fs.h
-> index d445150c5350..124176e2a42c 100644
-> --- a/include/linux/f2fs_fs.h
-> +++ b/include/linux/f2fs_fs.h
-> @@ -73,6 +73,8 @@ struct f2fs_device {
->  	__le32 total_segments;
->  } __packed;
->  
-> +#define SB_NEED_FSCK			0x00000001	/* need fsck */
-> +
->  struct f2fs_super_block {
->  	__le32 magic;			/* Magic Number */
->  	__le16 major_ver;		/* Major Version */
-> @@ -116,7 +118,8 @@ struct f2fs_super_block {
->  	__u8 hot_ext_count;		/* # of hot file extension */
->  	__le16  s_encoding;		/* Filename charset encoding */
->  	__le16  s_encoding_flags;	/* Filename charset encoding flags */
-> -	__u8 reserved[306];		/* valid reserved region */
-> +	__le16 s_flags;			/* super block flags */
-> +	__u8 reserved[304];		/* valid reserved region */
->  	__le32 crc;			/* checksum of superblock */
->  } __packed;
->  
-> -- 
-> 2.25.1
+On Sun, 11 Sep 2022 13:40:05 -0700 you wrote:
+> Per GDMA spec, rmb is necessary after checking owner_bits, before
+> reading EQ or CQ entries.
+> 
+> Add rmb in these two places to comply with the specs.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: ca9c54d2d6a5 ("net: mana: Add a driver for Microsoft Azure Network Adapter (MANA)")
+> Reported-by: Sinan Kaya <Sinan.Kaya@microsoft.com>
+> Signed-off-by: Haiyang Zhang <haiyangz@microsoft.com>
+> 
+> [...]
+
+Here is the summary with links:
+  - [net] net: mana: Add rmb after checking owner bits
+    https://git.kernel.org/netdev/net/c/6fd2c68da55c
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
