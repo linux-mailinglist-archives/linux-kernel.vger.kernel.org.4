@@ -2,135 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 193BF5BE2CD
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 12:14:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91E7A5BE2A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 12:05:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230179AbiITKOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 06:14:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42340 "EHLO
+        id S230480AbiITKFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 06:05:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231228AbiITKNq (ORCPT
+        with ESMTP id S230091AbiITKF1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 06:13:46 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C51B6B8FA
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 03:13:17 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id o2so2902708lfc.10
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 03:13:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=igel-co-jp.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=Kj8G7tQXp3dB2CskDYDfYJI+6PpZ7oU+0ic/ZP4IQy4=;
-        b=VTTlqqsAIS6WArmTLHA68hWn7TJ4vlFNMWzhSyFGAYhOfla3D27i4EMKgcppiv4eO2
-         fnXiXx5JyOSyxf8pZa11wyl0A1bZaIlby15dkwXlzbTaRD7i1YMKKo8PUdVDVvvkdh1e
-         mZhQgEj3rT4OGkPhmf85Dwla6Fsts7du69InDTEpiqcC43HftCmXlF545MstqA0/+dQF
-         hZ05hv0ZUkGOO7Ul+VpjE+0ULdV41Jv99aqtPz0RXwmDV74ZItMF5v1onlDmb82AQsLO
-         uJzfhh3l8GhpWSM6LkaSo02AhRVIUjQ66ghKx+WCL3vXLVX22CEKJAh2Sp//c3JHE/st
-         6HbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=Kj8G7tQXp3dB2CskDYDfYJI+6PpZ7oU+0ic/ZP4IQy4=;
-        b=TqiOlQGwAbEADU0H0yJQ2sZQdZPm1T+flUe6V3AMpG4Q/O/vuaEGGXcQM8jyDEVwdV
-         gCRuSavvYIOwNkLOlFYNcFpzEsimf0AMP5UPwBbCi6qDGT9GgJgBRTnmDGsVJtY7Gw4M
-         ZOLjHxvzEKlL5ySdHwTzC0XgZxyvlZqkCdDygf5bqoQ3qg3HtX+S/HHlaJUGbXIWx4Bd
-         NIm7ZStRv7YwWp61st6GrTBgFdXCjnen9PvZ9CmRbu2DaU3JnOJsmJy41StmQMkRLbOx
-         kVgJxAvGYyJLpidI0gPbGJz0q4eVgX6C1yrBJrVmzvcsZszhs7/B6Tpr+yuweuFjhrYb
-         DAtA==
-X-Gm-Message-State: ACrzQf39fTn2sueo9su3kAZAGHf+Uhw7G9ys4E5YCcmdbcjkD1tFTBIh
-        p5HYlEjYxOcKYlo3FOPFpJiJsUpk2v/iPjcHjPcDcA==
-X-Google-Smtp-Source: AMsMyM7lM95/SWWgu+uEQ5wpzRiVAE+KO6sg3f85kueFZza2jw62yeG4FNCpANipI6vltZ8i4/+KJBjvx/FkixK4Ce8=
-X-Received: by 2002:a05:6512:3183:b0:498:fa29:35fe with SMTP id
- i3-20020a056512318300b00498fa2935femr7658789lfe.523.1663668778693; Tue, 20
- Sep 2022 03:12:58 -0700 (PDT)
+        Tue, 20 Sep 2022 06:05:27 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 410B154CB4;
+        Tue, 20 Sep 2022 03:05:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1663668323; x=1695204323;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=TF9Z14Cf+4jHWEAHeCx4BawtaGnTswA4wIDLFjzWOCE=;
+  b=ujqWHZXhesrDwJajEXbTE6OEA5YrSPYw8IyZJUo+oIK4r+Bg40mHQrCu
+   yy4rI66IprGP2LgKhup9yl6tLLMkok/QTmlGE40Emlx8E34c04U2WeTV8
+   Ry28j+ykkV1O4OCixRhsrTwGjPi0s07oMYI7GwBCW7nOPMS2KUPg+izJI
+   NYHLlerFd2YXBLy8HuH7U+eyvx1yQwbnfhX60lTRGsWmanZFC3Ugk5gRh
+   FGX7D8VEfEOBTJ0TeusPCE3uojVu2jqPtZylONrzNnOVekRSZe5xEcCrP
+   QxnsW4u+SXfb5aKr6CoBpPdX4o6mQ6KH3TOYr/b4cMdVOOcv/z5a4Kydu
+   g==;
+X-IronPort-AV: E=Sophos;i="5.93,330,1654585200"; 
+   d="scan'208";a="181220968"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 20 Sep 2022 03:05:22 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Tue, 20 Sep 2022 03:05:21 -0700
+Received: from DEN-LT-70577.microchip.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Tue, 20 Sep 2022 03:05:19 -0700
+From:   Daniel Machon <daniel.machon@microchip.com>
+To:     <netdev@vger.kernel.org>
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <Steen.Hegelund@microchip.com>,
+        <daniel.machon@microchip.com>, <UNGLinuxDriver@microchip.com>,
+        <casper.casan@gmail.com>, <horatiu.vultur@microchip.com>,
+        <rmk+kernel@armlinux.org.uk>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: [PATCH net-next v2 0/5] Add QoS offload support for sparx5
+Date:   Tue, 20 Sep 2022 12:14:27 +0200
+Message-ID: <20220920101432.139323-1-daniel.machon@microchip.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220916075651.64957-1-mie@igel.co.jp> <20220919185545.GA1022691@bhelgaas>
-In-Reply-To: <20220919185545.GA1022691@bhelgaas>
-From:   Shunsuke Mie <mie@igel.co.jp>
-Date:   Tue, 20 Sep 2022 19:12:47 +0900
-Message-ID: <CANXvt5oWtyh8KiEpk2Ad1sbn9e8FNoy3A99k+xkoujOFA3DhdA@mail.gmail.com>
-Subject: Re: [PATCH] PCI: endpoint: pci-epf-{,v}ntb: fix a check for no epc
- alignment constraint
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Jon Mason <jdmason@kudzu.us>, Dave Jiang <dave.jiang@intel.com>,
-        Allen Hubbe <allenbh@gmail.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, ntb@lists.linux.dev,
-        linux-pci@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2022=E5=B9=B49=E6=9C=8820=E6=97=A5(=E7=81=AB) 3:55 Bjorn Helgaas <helgaas@k=
-ernel.org>:
->
-> On Fri, Sep 16, 2022 at 04:56:51PM +0900, Shunsuke Mie wrote:
-> > Some pci endpoint controllers has not alignment constraint, and the
->
-> s/pci/PCI/
-> s/has not/have no/
-> s/constraint/constraints/
->
-> > epc_features->align becomes 0. In this case, IS_ALIGNED() in
-> > epf_ntb_config_spad_bar_alloc() doesn't work well. So this patch adds t=
-he 0
-> > checking before the IS_ALIGNED().
->
-> s/So this patch adds .../Check for this before IS_ALIGNED()/
-Thank you. I'll fix these.
->
-> > Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
-> > ---
-> >  drivers/pci/endpoint/functions/pci-epf-ntb.c  | 2 +-
-> >  drivers/pci/endpoint/functions/pci-epf-vntb.c | 2 +-
-> >  2 files changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/pci/endpoint/functions/pci-epf-ntb.c b/drivers/pci=
-/endpoint/functions/pci-epf-ntb.c
-> > index 9a00448c7e61..f74155ee8d72 100644
-> > --- a/drivers/pci/endpoint/functions/pci-epf-ntb.c
-> > +++ b/drivers/pci/endpoint/functions/pci-epf-ntb.c
-> > @@ -1021,7 +1021,7 @@ static int epf_ntb_config_spad_bar_alloc(struct e=
-pf_ntb *ntb,
-> >       peer_size =3D peer_epc_features->bar_fixed_size[peer_barno];
-> >
-> >       /* Check if epc_features is populated incorrectly */
-> > -     if ((!IS_ALIGNED(size, align)))
-> > +     if (align && (!IS_ALIGNED(size, align)))
-> >               return -EINVAL;
-> >
-> >       spad_count =3D ntb->spad_count;
-> > diff --git a/drivers/pci/endpoint/functions/pci-epf-vntb.c b/drivers/pc=
-i/endpoint/functions/pci-epf-vntb.c
-> > index 0ea85e1d292e..5e346c0a0f05 100644
-> > --- a/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> > +++ b/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> > @@ -418,7 +418,7 @@ static int epf_ntb_config_spad_bar_alloc(struct epf=
-_ntb *ntb)
-> >       size =3D epc_features->bar_fixed_size[barno];
-> >       align =3D epc_features->align;
-> >
-> > -     if ((!IS_ALIGNED(size, align)))
-> > +     if (align && !IS_ALIGNED(size, align))
-> >               return -EINVAL;
-> >
-> >       spad_count =3D ntb->spad_count;
-> > --
-> > 2.17.1
-> >
+This patch series adds support for offloading QoS features with the tc
+command suite, to the sparx5 switch. The new offloadable QoS features
+introduced in this patch series are:
 
-Best,
-Shunsuke
+  - tc-mqprio for mapping traffic class to hardware queue. Queues are by
+    default mapped 1:1  in hardware, as such the mqprio qdisc is used as
+    an attachment point for qdiscs tbf and ets.
+    
+    $ tc qdisc add dev eth0 root handle 1:0 mqprio
+    
+  - tc-tbf for setting up shaping on scheduler elements of the HSCH
+    (Hierarchical Scheduler) block. Shaping on either port output or
+    queue output is supported.
+    
+    Port shaper: $ tc qdisc add dev eth0 root handle 1:0 tbf rate \
+    10000000 burst 8192 limit 1m
+
+    Queue shaper: $ tc qdisc replace dev eth0 parent 1:5 handle 2:0 tbf \
+    rate 10000000 burst 8192 limit 1m
+  
+  - tc-ets for setting up strict and or bandwidth-sharing bands on one
+    through eight priority queues.
+    
+    Configure a mix of strict and bw-sharing bands: 
+    $ tc qdisc add dev eth0 handle 1: root ets bands 8 strict 5 \ 
+    quanta 1000 1000 1000 priomap 7 6 5 4 3 2 1 0
+
+Patch #1 Sets up the tc hook.
+Patch #2 Adds support for offloading the tc-mqprio qdisc.
+Patch #3 Adds support for offloading the tc-tbf qdisc.
+Patch #4 Adds support for offloading the tc-ets qdisc.
+Patch #5 Updates the maintainers of the sparx5 driver.
+
+========================================================================
+
+v1:
+https://lore.kernel.org/netdev/20220919120215.3815696-1-daniel.machon@microchip.com/
+
+v1 -> v2:
+  - Fix compiler warning in patch #2
+  - Fix comment style in patch #4
+
+Daniel Machon (5):
+  net: microchip: sparx5: add tc setup hook
+  net: microchip: sparx5: add support for offloading mqprio qdisc
+  net: microchip: sparx5: add support for offloading tbf qdisc
+  net: microchip: sparx5: add support for offloading ets qdisc
+  maintainers: update MAINTAINERS file.
+
+ MAINTAINERS                                   |   1 +
+ .../net/ethernet/microchip/sparx5/Makefile    |   2 +-
+ .../ethernet/microchip/sparx5/sparx5_main.c   |   7 +
+ .../microchip/sparx5/sparx5_main_regs.h       | 165 ++++++
+ .../ethernet/microchip/sparx5/sparx5_netdev.c |   8 +-
+ .../ethernet/microchip/sparx5/sparx5_qos.c    | 514 ++++++++++++++++++
+ .../ethernet/microchip/sparx5/sparx5_qos.h    |  82 +++
+ .../net/ethernet/microchip/sparx5/sparx5_tc.c | 125 +++++
+ .../net/ethernet/microchip/sparx5/sparx5_tc.h |  15 +
+ 9 files changed, 917 insertions(+), 2 deletions(-)
+ create mode 100644 drivers/net/ethernet/microchip/sparx5/sparx5_qos.c
+ create mode 100644 drivers/net/ethernet/microchip/sparx5/sparx5_qos.h
+ create mode 100644 drivers/net/ethernet/microchip/sparx5/sparx5_tc.c
+ create mode 100644 drivers/net/ethernet/microchip/sparx5/sparx5_tc.h
+
+-- 
+2.34.1
+
