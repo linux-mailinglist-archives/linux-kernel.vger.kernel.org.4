@@ -2,101 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ACA25BE40B
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 13:03:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A35765BE412
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 13:04:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229743AbiITLCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 07:02:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41452 "EHLO
+        id S229985AbiITLD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 07:03:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiITLCo (ORCPT
+        with ESMTP id S229471AbiITLDy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 07:02:44 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B8CF6C753
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 04:02:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=m7J8TcFCe/3IrKyoUbv8nRLU7ejKg/hYnQKxirV/su0=; b=UhIOaSq1GKZ+umUqUQqLxQeXyb
-        gfoWFwlw1+tKTZe0YggLmGLq/bYMhtjNJYAMMv1hlvtIoP/3fDZ0X/BRH+v+Dj5PXkudlUv1rmWqN
-        MBWfGQ+JJ27t/3hNxif2bFCKuwLcaZnkrO27lIP5A0w3ayFDmnKDro2LpqeN6CsqAhFSy8C7Q8ET+
-        spCC3Qewu3yg6rkk42+w4DOGE3jrYZHdNZwLomWaxSoG/gGK4KLP3fbrIOv6Nipx2P2UE3959YyJb
-        aQEKsvGgiEh3JR3jYX6M21DUU6a2VT1OHZZr8ppJyyzIPT2fnB/6As8YQPLCM+od81mZr5Zlk2rsy
-        PKYRK9Sw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oab13-00EKM7-2b; Tue, 20 Sep 2022 11:02:13 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id EC9B3300202;
-        Tue, 20 Sep 2022 13:02:11 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id CB1F82BB47D18; Tue, 20 Sep 2022 13:02:11 +0200 (CEST)
-Date:   Tue, 20 Sep 2022 13:02:11 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Nadav Amit <nadav.amit@gmail.com>
-Cc:     "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [RFC PATCH] x86/syscalls: allow tracing of __do_sys_[syscall]
- functions
-Message-ID: <Yymds595qthVSnt0@hirez.programming.kicks-ass.net>
-References: <20220913135213.720368-1-namit@vmware.com>
- <2D09BBFE-45F3-4B9C-8734-D002CA99FD94@gmail.com>
+        Tue, 20 Sep 2022 07:03:54 -0400
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82FC26EF0A;
+        Tue, 20 Sep 2022 04:03:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1663671804; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=F3nCYnYOvh89RVFuiW6azZBK9xdjihOmZMYUFmlPW83qpBJzj3w6Rcr7RO7kqtdqN2aFNY7m2b0QOLkil+t+toSIplEJCN17PjOhaVxmEsZ4T52WNiK5pC1gJadR95Jlf/gSVFa/Q8VdkYd3twjtBF6AAOOpsGAoNf2WDMZCpNM=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1663671804; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=aa86F3RsZzaIkBDZNOJitzS9yBMCdSGYomvTqaakYqo=; 
+        b=FYhdODlZ98Z/RipItQxWc2sj/NSr+d+DoLDe/uHxn3e2PlGp7cpXmuWyqtQfpnxpN6d9ddCHa3k2Q/yB2TQxe0HnQPx35B2u6g9oxXNuNTMnlMaKaySbgN7XlxxIE2NaGEkVZ4siQvlK2p5XBpSekALVuBRDRrAizIDYlUBrIhM=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1663671804;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=aa86F3RsZzaIkBDZNOJitzS9yBMCdSGYomvTqaakYqo=;
+        b=MqM2BHFSLG1YnI5v/H1cPdR/9PPYtTYVsnhA8duT6nHnsUymbxRKGHsial+bqXcL
+        US6ZHGhoMfd2RfASRUsNF5wL+S38B2w9owQVUJKOxzIT3CO9pW158zlpouUPF7okLGn
+        buQRC16FXhe8hlrEMNW/2sQM5X6JsFOtXtjd7sY0=
+Received: from [10.172.69.65] (93-42-111-99.ip86.fastwebnet.it [93.42.111.99]) by mx.zohomail.com
+        with SMTPS id 1663671802790737.960471735429; Tue, 20 Sep 2022 04:03:22 -0700 (PDT)
+Message-ID: <efce7270-13c1-79b0-12d3-66d4952e31fb@arinc9.com>
+Date:   Tue, 20 Sep 2022 14:03:15 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2D09BBFE-45F3-4B9C-8734-D002CA99FD94@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 net-next 00/10] dt-bindings and mt7621 devicetree
+ changes
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        erkin.bozoglu@xeront.com
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org
+References: <20220918134118.554813-1-arinc.unal@arinc9.com>
+ <d0630c9e-22c6-48a8-35ed-024949782cbd@linaro.org>
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <d0630c9e-22c6-48a8-35ed-024949782cbd@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 07:35:42PM -0700, Nadav Amit wrote:
-
-> 1. What is the reason that inline functions are marked with notrace?
-
-IIRC the concern is that a notrace function using an inline function;
-GCC deciding to not inline and then still hitting tracing.
-
-For noinstr we've mandated __always_inline to avoid this problem. The
-direct advantage is that those inlined into instrumented code get, well,
-instrumented.
-
-> 2. Is probing function that is called from do_idle() supposed to work, or
->    should the kernel prevent it?
-
-Should work for some :-) Specifically it doesn't work for those that
-disable RCU, and that's (largely) being fixed here:
-
-  https://lore.kernel.org/all/20220919095939.761690562@infradead.org/T/#u
-
-Although looking at it just now, I think I missed a spot.. lemme go fix
-;-)
-
-I'm failing to find this callchain; where is
-tick_nohz_get_sleep_length() calling to elfcorehdr_read() ?!?
-
-> [ 2381.892478]  elfcorehdr_read+0x40/0x40
-> [ 2381.896681]  tick_nohz_get_sleep_length+0x9d/0xc0
-> [ 2381.901955]  menu_select+0x4bb/0x630
-> [ 2381.905965]  cpuidle_select+0x16/0x20
-> [ 2381.910069]  do_idle+0x1d2/0x270
-> [ 2381.913689]  cpu_startup_entry+0x20/0x30
-> [ 2381.918086]  start_secondary+0x118/0x150
-> [ 2381.922484]  secondary_startup_64_no_verify+0xc3/0xcb
-> [ 2381.928147]  </TASK>
-> [ 2381.931535] Modules linked in: zram
-> [ 2381.936365] CR2: ffffc90077cb6e4b
-> [ 2381.940998] ---[ end trace 0000000000000000 ]---
+On 19.09.2022 09:50, Krzysztof Kozlowski wrote:
+> On 18/09/2022 15:41, Arınç ÜNAL wrote:
+>> Hello there!
+>>
+>> This patch series removes old MediaTek bindings, improves mediatek,mt7530
+>> and mt7621 memory controller bindings and improves mt7621 DTs.
+>>
+>> v3:
+>> - Explain the mt7621 memory controller binding change in more details.
+>> - Remove explaining the remaining DTC warnings from the patch log as there
+>> are new schemas submitted for them.
 > 
+> Please always describe dependencies. Otherwise I am free to take memory
+> controllers patch and I expect it will not hurt bisectability.
+
+I believe it won't hurt bisectability. I only fix the warnings that I 
+describe on the patch log, the warnings do not depend on any other patches.
+
+Arınç
