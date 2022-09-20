@@ -2,195 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9A835BDE55
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 09:35:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93CD05BDE21
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 09:28:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbiITHfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 03:35:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41570 "EHLO
+        id S229997AbiITH2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 03:28:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbiITHfG (ORCPT
+        with ESMTP id S229503AbiITH2Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 03:35:06 -0400
-X-Greylist: delayed 516 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 20 Sep 2022 00:35:04 PDT
-Received: from smtp01.aussiebb.com.au (smtp01.aussiebb.com.au [IPv6:2403:5800:3:25::1001])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34663356C8;
-        Tue, 20 Sep 2022 00:35:03 -0700 (PDT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by smtp01.aussiebb.com.au (Postfix) with ESMTP id 45182100537;
-        Tue, 20 Sep 2022 17:26:30 +1000 (AEST)
-X-Virus-Scanned: Debian amavisd-new at smtp01.aussiebb.com.au
-Received: from smtp01.aussiebb.com.au ([127.0.0.1])
-        by localhost (smtp01.aussiebb.com.au [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id ue6JXijPUc58; Tue, 20 Sep 2022 17:26:30 +1000 (AEST)
-Received: by smtp01.aussiebb.com.au (Postfix, from userid 116)
-        id 3D54E100578; Tue, 20 Sep 2022 17:26:30 +1000 (AEST)
+        Tue, 20 Sep 2022 03:28:16 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A701108D;
+        Tue, 20 Sep 2022 00:28:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=nJorAZkvCcaiVv9WkrvdCMH7huMoLLPjvJEGmhGxyoQ=; b=YOykU3vpSnGu6BB0dYht8u4ORE
+        qKUGkPeZalu2Ocza2rk+GDCR/hYIsCv1g72blDki9HLZRadNO63G5N401MiTPfc8GFmhSGVIx4Dvj
+        x2IY0DN/9iy4PqAPlT9+8nKCeVXQZ3wC4Wi1tjcrkPNcxLiatkDzVWtgh0NKI8JbS+s6Oteab9TCX
+        OJyt+zeGa0hju5IA48XLNURq3TCl72CS3tWwyHSyiAC7wxQpdPmwjNw3iZKPd07evjIi0lv7Arp7o
+        g+Q1G7SJmoN532yabjo0cRtuQIsP22gLXd4gtyJC5AFnJLhCSAVEJ7Nj8aCieVZx+S2gWDveREhjj
+        t8yFcCag==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oaXff-005Lnl-7X; Tue, 20 Sep 2022 07:27:55 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E11A7300212;
+        Tue, 20 Sep 2022 09:27:51 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id C92D32BB3E533; Tue, 20 Sep 2022 09:27:51 +0200 (CEST)
+Date:   Tue, 20 Sep 2022 09:27:51 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Guo Ren <guoren@kernel.org>
+Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
+        luto@kernel.org, conor.dooley@microchip.com, heiko@sntech.de,
+        jszhang@kernel.org, lazyparser@gmail.com, falcon@tinylab.org,
+        chenhuacai@kernel.org, apatel@ventanamicro.com,
+        atishp@atishpatra.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, mark.rutland@arm.com,
+        zouyipeng@huawei.com, bigeasy@linutronix.de,
+        David.Laight@aculab.com, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>, keescook@chromium.org
+Subject: Re: [PATCH V5 08/11] riscv: Support HAVE_IRQ_EXIT_ON_IRQ_STACK
+Message-ID: <Yylrd77Eh9v7OKLj@hirez.programming.kicks-ass.net>
+References: <20220918155246.1203293-1-guoren@kernel.org>
+ <20220918155246.1203293-9-guoren@kernel.org>
+ <Yyhyap+Xi3UtV+T0@hirez.programming.kicks-ass.net>
+ <CAJF2gTS9rFTndZXvDG+XNOOEwZYC_Hbu9TOO_F+4gQo1mRF2bQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJF2gTS9rFTndZXvDG+XNOOEwZYC_Hbu9TOO_F+4gQo1mRF2bQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
-Received: from donald.themaw.net (180-150-90-198.b4965a.per.nbn.aussiebb.net [180.150.90.198])
-        by smtp01.aussiebb.com.au (Postfix) with ESMTP id 715931004DE;
-        Tue, 20 Sep 2022 17:26:29 +1000 (AEST)
-Subject: [REPOST PATCH v3 2/2] vfs: parse: deal with zero length string value
-From:   Ian Kent <raven@themaw.net>
-To:     Al Viro <viro@ZenIV.linux.org.uk>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Siddhesh Poyarekar <siddhesh@gotplt.org>,
-        David Howells <dhowells@redhat.com>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Carlos Maiolino <cmaiolino@redhat.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Kernel Mailing List <linux-kernel@vger.kernel.org>
-Date:   Tue, 20 Sep 2022 15:26:29 +0800
-Message-ID: <166365878918.39016.12757946948158123324.stgit@donald.themaw.net>
-In-Reply-To: <166365872189.39016.10771273319597352356.stgit@donald.themaw.net>
-References: <166365872189.39016.10771273319597352356.stgit@donald.themaw.net>
-User-Agent: StGit/1.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Parsing an fs string that has zero length should result in the parameter
-being set to NULL so that downstream processing handles it correctly.
-For example, the proc mount table processing should print "(none)" in
-this case to preserve mount record field count, but if the value points
-to the NULL string this doesn't happen.
+On Tue, Sep 20, 2022 at 02:08:55PM +0800, Guo Ren wrote:
+> On Mon, Sep 19, 2022 at 9:45 PM Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > On Sun, Sep 18, 2022 at 11:52:43AM -0400, guoren@kernel.org wrote:
+> >
+> > > +ENTRY(call_on_stack)
+> > > +     /* Create a frame record to save our ra and fp */
+> > > +     addi    sp, sp, -RISCV_SZPTR
+> > > +     REG_S   ra, (sp)
+> > > +     addi    sp, sp, -RISCV_SZPTR
+> > > +     REG_S   fp, (sp)
+> > > +
+> > > +     /* Save sp in fp */
+> > > +     move    fp, sp
+> > > +
+> > > +     /* Move to the new stack and call the function there */
+> > > +     li      a3, IRQ_STACK_SIZE
+> > > +     add     sp, a1, a3
+> > > +     jalr    a2
+> > > +
+> > > +     /*
+> > > +      * Restore sp from prev fp, and fp, ra from the frame
+> > > +      */
+> > > +     move    sp, fp
+> > > +     REG_L   fp, (sp)
+> > > +     addi    sp, sp, RISCV_SZPTR
+> > > +     REG_L   ra, (sp)
+> > > +     addi    sp, sp, RISCV_SZPTR
+> > > +     ret
+> > > +ENDPROC(call_on_stack)
+> >
+> > IIRC x86_64 moved away from a stack-switch function like this because it
+> > presents a convenient exploit gadget.
+> I found:
+> https://lore.kernel.org/all/20210204204903.350275743@linutronix.de/
+> 
+>   - The fact that the stack switching code ended up being an easy to find
+>     exploit gadget.
+> 
+> What's the exploit gadget? Do you have a ref link? Thx.
 
-Signed-off-by: Ian Kent <raven@themaw.net>
----
- fs/fs_context.c            |   17 ++++++++++++-----
- fs/fs_parser.c             |   16 ++++++++++++++++
- include/linux/fs_context.h |    3 ++-
- 3 files changed, 30 insertions(+), 6 deletions(-)
+Sadly no, I do not. Kees might. But basically it boils down to this
+function taking both a stack pointer and a function pointer as
+arguments (@a1 and @a2 resp. if I'm not reading this wrong).
 
-diff --git a/fs/fs_context.c b/fs/fs_context.c
-index 24ce12f0db32..df04e5fc6d66 100644
---- a/fs/fs_context.c
-+++ b/fs/fs_context.c
-@@ -96,7 +96,9 @@ int vfs_parse_fs_param_source(struct fs_context *fc, struct fs_parameter *param)
- 	if (strcmp(param->key, "source") != 0)
- 		return -ENOPARAM;
- 
--	if (param->type != fs_value_is_string)
-+	/* source value may be NULL */
-+	if (param->type != fs_value_is_string &&
-+	    param->type != fs_value_is_empty)
- 		return invalf(fc, "Non-string source");
- 
- 	if (fc->source)
-@@ -175,10 +177,15 @@ int vfs_parse_fs_string(struct fs_context *fc, const char *key,
- 	};
- 
- 	if (value) {
--		param.string = kmemdup_nul(value, v_size, GFP_KERNEL);
--		if (!param.string)
--			return -ENOMEM;
--		param.type = fs_value_is_string;
-+		if (!v_size) {
-+			param.string = NULL;
-+			param.type = fs_value_is_empty;
-+		} else {
-+			param.string = kmemdup_nul(value, v_size, GFP_KERNEL);
-+			if (!param.string)
-+				return -ENOMEM;
-+			param.type = fs_value_is_string;
-+		}
- 	}
- 
- 	ret = vfs_parse_fs_param(fc, &param);
-diff --git a/fs/fs_parser.c b/fs/fs_parser.c
-index ed40ce5742fd..2046f41ab00b 100644
---- a/fs/fs_parser.c
-+++ b/fs/fs_parser.c
-@@ -197,6 +197,8 @@ int fs_param_is_bool(struct p_log *log, const struct fs_parameter_spec *p,
- 		     struct fs_parameter *param, struct fs_parse_result *result)
- {
- 	int b;
-+	if (param->type == fs_value_is_empty)
-+		return 0;
- 	if (param->type != fs_value_is_string)
- 		return fs_param_bad_value(log, param);
- 	if (!*param->string && (p->flags & fs_param_can_be_empty))
-@@ -213,6 +215,8 @@ int fs_param_is_u32(struct p_log *log, const struct fs_parameter_spec *p,
- 		    struct fs_parameter *param, struct fs_parse_result *result)
- {
- 	int base = (unsigned long)p->data;
-+	if (param->type == fs_value_is_empty)
-+		return 0;
- 	if (param->type != fs_value_is_string)
- 		return fs_param_bad_value(log, param);
- 	if (!*param->string && (p->flags & fs_param_can_be_empty))
-@@ -226,6 +230,8 @@ EXPORT_SYMBOL(fs_param_is_u32);
- int fs_param_is_s32(struct p_log *log, const struct fs_parameter_spec *p,
- 		    struct fs_parameter *param, struct fs_parse_result *result)
- {
-+	if (param->type == fs_value_is_empty)
-+		return 0;
- 	if (param->type != fs_value_is_string)
- 		return fs_param_bad_value(log, param);
- 	if (!*param->string && (p->flags & fs_param_can_be_empty))
-@@ -239,6 +245,8 @@ EXPORT_SYMBOL(fs_param_is_s32);
- int fs_param_is_u64(struct p_log *log, const struct fs_parameter_spec *p,
- 		    struct fs_parameter *param, struct fs_parse_result *result)
- {
-+	if (param->type == fs_value_is_empty)
-+		return 0;
- 	if (param->type != fs_value_is_string)
- 		return fs_param_bad_value(log, param);
- 	if (!*param->string && (p->flags & fs_param_can_be_empty))
-@@ -253,6 +261,8 @@ int fs_param_is_enum(struct p_log *log, const struct fs_parameter_spec *p,
- 		     struct fs_parameter *param, struct fs_parse_result *result)
- {
- 	const struct constant_table *c;
-+	if (param->type == fs_value_is_empty)
-+		return 0;
- 	if (param->type != fs_value_is_string)
- 		return fs_param_bad_value(log, param);
- 	if (!*param->string && (p->flags & fs_param_can_be_empty))
-@@ -268,6 +278,8 @@ EXPORT_SYMBOL(fs_param_is_enum);
- int fs_param_is_string(struct p_log *log, const struct fs_parameter_spec *p,
- 		       struct fs_parameter *param, struct fs_parse_result *result)
- {
-+	if (param->type == fs_value_is_empty)
-+		return 0;
- 	if (param->type != fs_value_is_string ||
- 	    (!*param->string && !(p->flags & fs_param_can_be_empty)))
- 		return fs_param_bad_value(log, param);
-@@ -278,6 +290,8 @@ EXPORT_SYMBOL(fs_param_is_string);
- int fs_param_is_blob(struct p_log *log, const struct fs_parameter_spec *p,
- 		     struct fs_parameter *param, struct fs_parse_result *result)
- {
-+	if (param->type == fs_value_is_empty)
-+		return 0;
- 	if (param->type != fs_value_is_blob)
- 		return fs_param_bad_value(log, param);
- 	return 0;
-@@ -287,6 +301,8 @@ EXPORT_SYMBOL(fs_param_is_blob);
- int fs_param_is_fd(struct p_log *log, const struct fs_parameter_spec *p,
- 		  struct fs_parameter *param, struct fs_parse_result *result)
- {
-+	if (param->type == fs_value_is_empty)
-+		return 0;
- 	switch (param->type) {
- 	case fs_value_is_string:
- 		if ((!*param->string && !(p->flags & fs_param_can_be_empty)) ||
-diff --git a/include/linux/fs_context.h b/include/linux/fs_context.h
-index 13fa6f3df8e4..ff1375a16c8c 100644
---- a/include/linux/fs_context.h
-+++ b/include/linux/fs_context.h
-@@ -50,7 +50,8 @@ enum fs_context_phase {
-  */
- enum fs_value_type {
- 	fs_value_is_undefined,
--	fs_value_is_flag,		/* Value not given a value */
-+	fs_value_is_flag,		/* Does not take a value */
-+	fs_value_is_empty,		/* Value is not given */
- 	fs_value_is_string,		/* Value is a string */
- 	fs_value_is_blob,		/* Value is a binary blob */
- 	fs_value_is_filename,		/* Value is a filename* + dirfd */
-
+If an attacker can call this with arguments of its choice then it gains
+full control of subsequent execution.
 
