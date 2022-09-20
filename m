@@ -2,182 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24C905BE9E5
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 17:16:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE1155BE9C2
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 17:12:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231549AbiITPQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 11:16:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32904 "EHLO
+        id S230270AbiITPMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 11:12:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231379AbiITPPv (ORCPT
+        with ESMTP id S229811AbiITPM3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 11:15:51 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1DEA22B1A;
-        Tue, 20 Sep 2022 08:15:49 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MX4nG3fd6zHpCw;
-        Tue, 20 Sep 2022 23:13:38 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 20 Sep 2022 23:15:47 +0800
-Received: from ubuntu1804.huawei.com (10.67.175.36) by
- dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 20 Sep 2022 23:15:46 +0800
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        <linux-perf-users@vger.kernel.org>
-CC:     <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
-        <aou@eecs.berkeley.edu>, <peterz@infradead.org>,
-        <mingo@redhat.com>, <acme@kernel.org>, <mark.rutland@arm.com>,
-        <alexander.shishkin@linux.intel.com>, <namhyung@kernel.org>,
-        <jolsa@kernel.org>, <guoren@kernel.org>, <nsaenzju@redhat.com>,
-        <frederic@kernel.org>, <changbin.du@intel.com>,
-        <vincent.chen@sifive.com>, <ardb@kernel.org>,
-        <mhiramat@kernel.org>, <rostedt@goodmis.org>,
-        <keescook@chromium.org>, <catalin.marinas@arm.com>,
-        <chenzhongjin@huawei.com>
-Subject: [PATCH -next 7/7] riscv: stacktrace: Fix unwinding on __kretporbe_trampoline
-Date:   Tue, 20 Sep 2022 23:12:02 +0800
-Message-ID: <20220920151202.180057-8-chenzhongjin@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220920151202.180057-1-chenzhongjin@huawei.com>
-References: <20220920151202.180057-1-chenzhongjin@huawei.com>
+        Tue, 20 Sep 2022 11:12:29 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7031417AA8
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 08:12:28 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id n10so4743458wrw.12
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 08:12:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=Edc5vm8+HRg8OvueT4HffnM8lhoUQsfY1q2oyUaLegM=;
+        b=O0ko2PMRP4hSqwQ+T2uyZeknljuCg085maL0c/OFwwKxfUIgM23Tp/gpv9VSx0Sueh
+         yhAwQ/pigKIYkkyYhQbPHlE3Ew6cvxQpCa5dDhu2+mjrRRPNf1SH8Km06aWjC6aydtE3
+         l9Y4ygxtXGRxk3EMUQ4ge6qV/KOKaILoUikseuM4EEWMn/38LQ3bQAMbn9Ro/vDz/EnI
+         oA5CPjQyNx+lwPwJsO+yOAE69qofPcxWjr1bxd6nlJHV8RsK0cTd3Z4HfbC0ucGVRKef
+         RMMJ3yZlrNOK5IkjsZyaLD4rS/cEvI9dg6F8yX6zjaB4gxwLfaa9LXGRb/ffzkM0FjiX
+         pvRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=Edc5vm8+HRg8OvueT4HffnM8lhoUQsfY1q2oyUaLegM=;
+        b=HMFhUg91nrJpoflB/fkHWiWPtTw5k8x6U64OvnO0uSzbVhS4TqC2fa/G9gFmL7It/0
+         9fipOivRXSyyinydZSQZryHOZMe94PLpWqUNnRxluHVRrLtsIIsWnWm40VKzdKxJ1xu4
+         kHWWPocteJrA84z7Y28sGG6Y3Aapj2I+GO21EWVeLdsWIPhBOS0LgUob1EpBHl6aP5x4
+         p8brflb2fR8dzYA7SIe/3QdR5/4l7tXSYl/Hutwfx6c+x+GEC3ajceDQtZ9BBV3ThNBg
+         LyQtwROT2d5hbhtsjx7FMkn6Hw6OV7WCn8okdF8AVv4e6pxck3wJ4CypDTNhi5Z+2Axp
+         evMw==
+X-Gm-Message-State: ACrzQf3bwgemH8XZ4USjyqnoG/k0VuytuGbFMU1fgQkR/9ePsWCp3Bds
+        gnkdfgyhFTTUWCunGTEbNlXUAQ==
+X-Google-Smtp-Source: AMsMyM4u7M8Oa3I0tiFWjywE/WPatGo9t8jr+6HvqPcpjnCsdmlW3DJa0sFe70cyd5vWJDPhvhUEkQ==
+X-Received: by 2002:a5d:67ca:0:b0:228:7ad5:768f with SMTP id n10-20020a5d67ca000000b002287ad5768fmr14282120wrw.163.1663686746950;
+        Tue, 20 Sep 2022 08:12:26 -0700 (PDT)
+Received: from [192.168.178.32] ([51.155.200.13])
+        by smtp.gmail.com with ESMTPSA id v10-20020a5d590a000000b002206203ed3dsm34079wrd.29.2022.09.20.08.12.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Sep 2022 08:12:26 -0700 (PDT)
+Message-ID: <6bed1b34-3e92-2deb-94b5-9c194c6c7e6c@isovalent.com>
+Date:   Tue, 20 Sep 2022 16:12:25 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.36]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [bpf-next v4 2/3] bpftool: Update doc (add auto_attach to prog
+ load)
+Content-Language: en-GB
+To:     Wang Yufen <wangyufen@huawei.com>, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        hawk@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
+        trix@redhat.com
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, llvm@lists.linux.dev
+References: <1663037687-26006-1-git-send-email-wangyufen@huawei.com>
+ <1663037687-26006-2-git-send-email-wangyufen@huawei.com>
+From:   Quentin Monnet <quentin@isovalent.com>
+In-Reply-To: <1663037687-26006-2-git-send-email-wangyufen@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When unwinding on __kretprobe_trampoline, the caller of traced function
-will be skipped because unwinder doesn't read the saved pt_regs.
+Tue Sep 13 2022 03:54:46 GMT+0100 (British Summer Time) ~ Wang Yufen
+<wangyufen@huawei.com>
+> Add auto_attach optional to prog load|loadall for supporting
+> one-step load-attach-pin_link.
+> 
+> Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+> ---
+>  tools/bpf/bpftool/Documentation/bpftool-prog.rst | 12 ++++++++++--
+>  1 file changed, 10 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+> index eb1b2a2..463f895 100644
+> --- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+> +++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+> @@ -31,7 +31,7 @@ PROG COMMANDS
+>  |	**bpftool** **prog dump xlated** *PROG* [{**file** *FILE* | **opcodes** | **visual** | **linum**}]
+>  |	**bpftool** **prog dump jited**  *PROG* [{**file** *FILE* | **opcodes** | **linum**}]
+>  |	**bpftool** **prog pin** *PROG* *FILE*
+> -|	**bpftool** **prog** { **load** | **loadall** } *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*]
+> +|	**bpftool** **prog** { **load** | **loadall** } *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*] [**auto_attach**]
+>  |	**bpftool** **prog attach** *PROG* *ATTACH_TYPE* [*MAP*]
+>  |	**bpftool** **prog detach** *PROG* *ATTACH_TYPE* [*MAP*]
+>  |	**bpftool** **prog tracelog**
+> @@ -131,7 +131,7 @@ DESCRIPTION
+>  		  contain a dot character ('.'), which is reserved for future
+>  		  extensions of *bpffs*.
+>  
+> -	**bpftool prog { load | loadall }** *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*]
+> +	**bpftool prog { load | loadall }** *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*] [**auto_attach**]
+>  		  Load bpf program(s) from binary *OBJ* and pin as *PATH*.
+>  		  **bpftool prog load** pins only the first program from the
+>  		  *OBJ* as *PATH*. **bpftool prog loadall** pins all programs
+> @@ -150,6 +150,14 @@ DESCRIPTION
+>  		  Optional **pinmaps** argument can be provided to pin all
+>  		  maps under *MAP_DIR* directory.
+>  
+> +		  If **auto_attach** is specified program will be attached
+> +		  before pin. 1)in that case, only the link (representing the program
 
-Things going like this:
+"1)in" -> "In"
 
-caller's caller		|       ...                 |<---+
-caller			+---------------------------+    |
-			| ra caller's caller        |    |
-			| s0 of caller's caller     |    |
-			|       ...                 |    |
-probed func returned	+---------------------------+    |
-__kretprobe_trampoline	| pt_regs:                  |    |
-			| epc caller                |    |
-                        | ra  __kretprobe_trampoline|    |
-			|       ...                 |    |
-                        | s0 of caller              | {ra, fp}
-			|       ...                 |
+> +		  attached to its hook) is pinned, not the program as such, so the
+> +		  path won't show in "bpftool prog show -f", only show in
 
-Since from caller to __kretprobe_trampoline, the {ra, fp} are not
-changed, unwinder will go directly to caller's caller.
+Let's use markup instead of quotes around the commands please, **bpftool
+prog show -f** and **bpftool link show -f** (below).
 
-Now we can have an ENCODED_FRAME_POINTER on stack and read the pt_regs,
-kretporbe will set the epc to correct_ret_addr so that we can unwind
-to the correct caller.
+> +		  "bpftool link show -f", and 2)this only works when bpftool (libbpf)
 
-Stacktrace before this patch:
+", and 2)this..." -> ". Also, this..."
 
- Call Trace:
-  ...
-  [<ffffffff800d5d48>] __kretprobe_trampoline_handler+0xc2/0x13e
-  [<ffffffff808b766c>] trampoline_probe_handler+0x30/0x46
-  [<ffffffff800070de>] __kretprobe_trampoline+0x52/0x92
-  [<ffffffff0163809c>] kprobe_init+0x9c/0x1000 [kprobe_unwind]
-  [<ffffffff800027c8>] do_one_initcall+0x4c/0x1f2
-  ...
+> +		  is able to infer all necessary information from the object file,
+> +		  in particular, it's not supported for all program types.
+> +
+>  		  Note: *PATH* must be located in *bpffs* mount. It must not
+>  		  contain a dot character ('.'), which is reserved for future
+>  		  extensions of *bpffs*.
 
-Stacktrace after this patch:
-
- Call Trace:
-  ...
-  [<ffffffff800d5d48>] __kretprobe_trampoline_handler+0xc2/0x13e
-  [<ffffffff808b766c>] trampoline_probe_handler+0x30/0x46
-  [<ffffffff800070de>] __kretprobe_trampoline+0x52/0x92
-+ [<ffffffff01633076>] the_caller+0x2c/0x38 [kprobe_unwind]
-  [<ffffffff0163809c>] kprobe_init+0x9c/0x1000 [kprobe_unwind]
-  [<ffffffff800027c8>] do_one_initcall+0x4c/0x1f2
-  ...
-
-Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
----
- arch/riscv/include/asm/stacktrace.h           | 4 ++++
- arch/riscv/kernel/probes/kprobes_trampoline.S | 8 ++++++++
- arch/riscv/kernel/stacktrace.c                | 5 +++++
- 3 files changed, 17 insertions(+)
-
-diff --git a/arch/riscv/include/asm/stacktrace.h b/arch/riscv/include/asm/stacktrace.h
-index a39e4ef1dbd5..506c7c38b6cb 100644
---- a/arch/riscv/include/asm/stacktrace.h
-+++ b/arch/riscv/include/asm/stacktrace.h
-@@ -16,6 +16,10 @@ struct unwind_state {
- 	unsigned long sp;
- 	unsigned long pc;
- 	struct pt_regs *regs;
-+#ifdef CONFIG_KRETPROBES
-+	struct llist_node *kr_cur;
-+	struct task_struct *task;
-+#endif
- };
- 
- extern void dump_backtrace(struct pt_regs *regs, struct task_struct *task,
-diff --git a/arch/riscv/kernel/probes/kprobes_trampoline.S b/arch/riscv/kernel/probes/kprobes_trampoline.S
-index 7bdb09ded39b..3c0677a714a6 100644
---- a/arch/riscv/kernel/probes/kprobes_trampoline.S
-+++ b/arch/riscv/kernel/probes/kprobes_trampoline.S
-@@ -6,6 +6,8 @@
- 
- #include <asm/asm.h>
- #include <asm/asm-offsets.h>
-+#include <asm/frame.h>
-+#include <asm/csr.h>
- 
- 	.text
- 	.altmacro
-@@ -79,6 +81,12 @@ ENTRY(__kretprobe_trampoline)
- 	addi sp, sp, -(PT_SIZE_ON_STACK)
- 	save_all_base_regs
- 
-+#ifdef CONFIG_FRAME_POINTER
-+	li s0, SR_PP
-+	REG_S s0, PT_STATUS(sp)
-+	ENCODE_FRAME_POINTER
-+#endif
-+
- 	move a0, sp /* pt_regs */
- 
- 	call trampoline_probe_handler
-diff --git a/arch/riscv/kernel/stacktrace.c b/arch/riscv/kernel/stacktrace.c
-index 976dc298ab3b..53edc685ca18 100644
---- a/arch/riscv/kernel/stacktrace.c
-+++ b/arch/riscv/kernel/stacktrace.c
-@@ -11,6 +11,7 @@
- #include <linux/sched/task_stack.h>
- #include <linux/stacktrace.h>
- #include <linux/ftrace.h>
-+#include <linux/kprobes.h>
- 
- #include <asm/stacktrace.h>
- 
-@@ -123,6 +124,10 @@ noinline notrace void arch_stack_walk(stack_trace_consume_fn consume_entry,
- 		state.sp = task->thread.sp;
- 		state.pc = task->thread.ra;
- 	}
-+#ifdef CONFIG_KRETPROBES
-+	state.kr_cur = NULL;
-+	state.task = task;
-+#endif
- 
- 	unwind(&state, consume_entry, cookie);
- }
--- 
-2.17.1
-
+Apart from the formatting nits above, looks good, thank you.
