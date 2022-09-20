@@ -2,112 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF35F5BE721
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 15:32:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70AD25BE724
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 15:33:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230096AbiITNcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 09:32:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43284 "EHLO
+        id S229928AbiITNdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 09:33:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbiITNcK (ORCPT
+        with ESMTP id S229676AbiITNdJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 09:32:10 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 322814F6BF
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 06:32:06 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id d12-20020a05600c3acc00b003b4c12e47f3so1662000wms.4
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 06:32:06 -0700 (PDT)
+        Tue, 20 Sep 2022 09:33:09 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD007578A0;
+        Tue, 20 Sep 2022 06:33:07 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id w10so1503795pll.11;
+        Tue, 20 Sep 2022 06:33:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date;
-        bh=g5jWZ2WFsY/FBmA+o1CluBEPsaJX+nCuG4k+tTP6m98=;
-        b=ahZuUmZPGV5kDEbozZYj/AQZKifnavG29tNgalSvlzR5TcLPGh1dSvBuu0oEwJWkK8
-         eGDqMvolNTe8QT2zuxZLn6S8pQpToMAWOV0m8ATNCMc7S8AGPU1V+Nk9sOBew7VWMUyU
-         uyigES993TtvKSZyAtdJjZeeQgrmza0ncNlYvvp0MfYTlSzYNBY01YZQgI3nWKhxpdx+
-         ERvibhp7HoUL1OgkpSyB15LJyXRTO8O3vtlG9UK9CjReqCffygYnKc+JJ0drJVY3SdCi
-         v7biwIIurbVya/n8QT6NsrszkTIdWIO2jENz5ysO8svMiWV8zedM1M3aENtrta9MV24m
-         hYrw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date;
+        bh=USvrs3UqdxmJVsfGHVufPx+zKN2HZu7qWUWjtAqweNc=;
+        b=G/Xk3OOgV88Bxn3Ll3F+ZN7VzG73hcONtPoz8GIZb1IrSfcY78S7cjzlsZTPMjVVOt
+         QObn1jeJtb4tBGlbstQ/iT/7FCHQu829ozHl5hOAA1eqmyeCNg5ka/vam8YgLiac9e6v
+         fqvJpFAJgVvws2vCM+U8jIwBu99jURFq2evlkgnTTzMjOnnc9IBevT+OhOBNW7QXqhG0
+         w/jq6suWMjEIQEnYNHlOcyHbifrnr9DPHFCNjttJvET13Qpu7QW5BCeO+0VfoRPIen1+
+         8ZiZSt5a8p4d6KIRvtS7u3VE1W4jbEWqiZajmX4VGzUJ7ZTMWu1ht4Fafjz3krJ99xTR
+         /SrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=g5jWZ2WFsY/FBmA+o1CluBEPsaJX+nCuG4k+tTP6m98=;
-        b=CcF3D193cbiQiB5q2WAFkOvVAja1onTD4LnoDWBC/0z3106s9yHZ8evZA10z7bPP8X
-         SaYDpMzMdq6QQI9Xbv2v9NADODPhLBsfMmgG5HdLk4x+U5AELmv2JK0R/kYheW3TDKdm
-         3/hOYq1t7fiPD9Dvmf94SlJVMvDSanoAc/u6Fg3INkdb7CHfclx0aqPlzAw+2uzbABOQ
-         ZvJHAk9Gy62rbzr1XSpAUvLWG4/fW6LrzPJ7DK6Uwy1rYFgWx4YTLiU95SEUALoYoHaP
-         1c8Je0C0aEuJng+N3cHGLrdg3PztUY9S+DVxvcSkdEi5dcvvdFTIYlajFcqtA8GCm3AZ
-         kgOQ==
-X-Gm-Message-State: ACrzQf0hFBU718YtVUWPw4ndGEeAVnxwLDtinoRQ8AKAGXeX3inSQNRE
-        r05dhCeGeejN0c14qIUQ1VwHhA==
-X-Google-Smtp-Source: AMsMyM5QtgXayw9Vbt5bQUfay84AiUJaO/gk8txKtCJ6f5cE6M/XeIOV5ivdcHiSum4QLXKloFZ0JA==
-X-Received: by 2002:a05:600c:43d3:b0:3b3:2f1c:f01c with SMTP id f19-20020a05600c43d300b003b32f1cf01cmr2465695wmn.152.1663680724742;
-        Tue, 20 Sep 2022 06:32:04 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:7e10:f0f:43b2:9b5e? ([2a01:e0a:982:cbb0:7e10:f0f:43b2:9b5e])
-        by smtp.gmail.com with ESMTPSA id e24-20020adfa458000000b002252ec781f7sm80983wra.8.2022.09.20.06.32.03
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date;
+        bh=USvrs3UqdxmJVsfGHVufPx+zKN2HZu7qWUWjtAqweNc=;
+        b=4mIyfc6LdnG1x2eMAXv++ddb1bQpCxRy75iOxdBbqhvXXfIngz0FFHeLPCj2oaXrkv
+         o/92K+2CL7QTyG1Z4gwom1p9gHrzkfcjCeOltAgmXGQzQwwoiJdOC7w2PZ3Ij+k4jwHf
+         l6togxGln8NlvWHvVCo7XdZI/Awvdj0XC6rMTs1arqwGnN/9a6tMhrC4AuOnb7rSxID5
+         F5htvq1uotyN7jZoIx63GzSIl7NU4BM3UcpXUYi1Uw9ZAlkfeRdKb7i0D7u1qpFfC2yy
+         EaVMrmeSK0C+Ha1k0vW4E5wLyOMDswpD4hjDVO2JXSoFbcJz6cls0FCQ+EPVRWzdH3HI
+         tkdw==
+X-Gm-Message-State: ACrzQf0ONxJXRk7gFV4av+XkMxbWEz0tCLtOh+UDhkMjF9b3Utt9FU9N
+        sPpQk0r+VlmpNUNLfDDDiyQ=
+X-Google-Smtp-Source: AMsMyM6ESnDu9n1wSpa24KqgwDm7YUPn8gK6IepDB9S9HLM3RI3NEL8k4QjdDgDYxvO2JN86bbIIkA==
+X-Received: by 2002:a17:903:32cc:b0:178:41c1:2e41 with SMTP id i12-20020a17090332cc00b0017841c12e41mr4831315plr.126.1663680786829;
+        Tue, 20 Sep 2022 06:33:06 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id fu1-20020a17090ad18100b002000d577cc3sm1412719pjb.55.2022.09.20.06.33.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Sep 2022 06:32:04 -0700 (PDT)
-Message-ID: <c117c5d5-e864-068b-a1fe-961e2eeba84c@linaro.org>
-Date:   Tue, 20 Sep 2022 15:32:03 +0200
+        Tue, 20 Sep 2022 06:33:05 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <af58a33c-2637-e761-ddc0-13159adf7c4e@roeck-us.net>
+Date:   Tue, 20 Sep 2022 06:33:03 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH -next] slimbus: qcom-ngd: Add error handling in
- of_qcom_slim_ngd_register
+Subject: Re: [PATCH v2 7/8] kbuild: use obj-y instead extra-y for objects
+ placed at the head
 Content-Language: en-US
-To:     Lin Yujun <linyujun809@huawei.com>, agross@kernel.org,
-        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
-        srinivas.kandagatla@linaro.org, gregkh@linuxfoundation.org,
-        vkoul@kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-References: <20220914031953.94061-1-linyujun809@huawei.com>
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Organization: Linaro
-In-Reply-To: <20220914031953.94061-1-linyujun809@huawei.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org
+References: <20220906061313.1445810-1-masahiroy@kernel.org>
+ <20220906061313.1445810-8-masahiroy@kernel.org>
+ <20220919225053.GA769506@roeck-us.net>
+ <CAMuHMdUxrXgJ7HHgk1vSyg6_S8TN3RvEW=QNgH9U0UueM41N-Q@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <CAMuHMdUxrXgJ7HHgk1vSyg6_S8TN3RvEW=QNgH9U0UueM41N-Q@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/09/2022 05:19, Lin Yujun wrote:
-> No error handling is performed when platform_device_add()
-> return fails. Refer to the error handling of driver_set_override(),
-> add error handling for platform_device_add().
+On 9/19/22 23:56, Geert Uytterhoeven wrote:
+> Hi Günter,
 > 
-> Fixes: 917809e2280b ("slimbus: ngd: Add qcom SLIMBus NGD driver")
-> Signed-off-by: Lin Yujun <linyujun809@huawei.com>
-> ---
->   drivers/slimbus/qcom-ngd-ctrl.c | 8 +++++++-
->   1 file changed, 7 insertions(+), 1 deletion(-)
+> On Tue, Sep 20, 2022 at 12:59 AM Guenter Roeck <linux@roeck-us.net> wrote:
+>> On Tue, Sep 06, 2022 at 03:13:12PM +0900, Masahiro Yamada wrote:
+>>> The objects placed at the head of vmlinux need special treatments:
+>>>
+>>>   - arch/$(SRCARCH)/Makefile adds them to head-y in order to place
+>>>     them before other archives in the linker command line.
+>>>
+>>>   - arch/$(SRCARCH)/kernel/Makefile adds them to extra-y instead of
+>>>     obj-y to avoid them going into built-in.a.
+>>>
+>>> This commit gets rid of the latter.
+>>>
+>>> Create vmlinux.a to collect all the objects that are unconditionally
+>>> linked to vmlinux. The objects listed in head-y are moved to the head
+>>> of vmlinux.a by using 'ar m'.
+>>>
+>>> With this, arch/$(SRCARCH)/kernel/Makefile can consistently use obj-y
+>>> for builtin objects.
+>>>
+>>> There is no *.o that is directly linked to vmlinux. Drop unneeded code
+>>> in scripts/clang-tools/gen_compile_commands.py.
+>>>
+>>> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+>>> Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
 > 
-> diff --git a/drivers/slimbus/qcom-ngd-ctrl.c b/drivers/slimbus/qcom-ngd-ctrl.c
-> index 0aa8408464ad..fb591990ddad 100644
-> --- a/drivers/slimbus/qcom-ngd-ctrl.c
-> +++ b/drivers/slimbus/qcom-ngd-ctrl.c
-> @@ -1470,7 +1470,13 @@ static int of_qcom_slim_ngd_register(struct device *parent,
->   		ngd->pdev->dev.of_node = node;
->   		ctrl->ngd = ngd;
->   
-> -		platform_device_add(ngd->pdev);
-> +		ret = platform_device_add(ngd->pdev);
-> +		if (ret) {
-> +			platform_device_put(ngd->pdev);
-> +			kfree(ngd);
-> +			of_node_put(node);
-> +			return ret;
-> +		}
->   		ngd->base = ctrl->base + ngd->id * data->offset +
->   					(ngd->id - 1) * data->size;
->   
+> Where does this R-b come from? It was not present in Yamada-san's
+> posting. Added by b4?
+> 
 
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+Maybe added by patchwork ? That is where I picked up the mbox.
+
+Guenter
+
+>> The following build failure is seen when building m68k:defconfig in
+>> next-20220919.
+> 
+> [...]
+> 
+>> # first bad commit: [6676e2cdd7c339dc40331faccbaac1112d2c1d78] kbuild: use obj-y instead extra-y for objects placed at the head
+> 
+> I did provide my R-b on Yamada-san's fix for this issue, which was
+> sent later in this thread.
+> 
+> Gr{oetje,eeting}s,
+> 
+>                          Geert
+> 
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                  -- Linus Torvalds
+
