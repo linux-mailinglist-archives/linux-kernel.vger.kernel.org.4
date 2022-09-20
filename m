@@ -2,192 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C2E55BE370
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 12:38:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FCFA5BE374
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 12:39:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231382AbiITKh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 06:37:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59518 "EHLO
+        id S231282AbiITKjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 06:39:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231297AbiITKhm (ORCPT
+        with ESMTP id S230461AbiITKiY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 06:37:42 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 897B669F51
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 03:35:37 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id e4-20020a5d85c4000000b0068bb3c11e72so1183778ios.5
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 03:35:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=HPj9algLbMrRfnhVa0iGOto4gsetCcc6Vj6GkXOTxZY=;
-        b=kOzIGjYnGRuZM5Z0afv9Qkxv87GxEJv8DBSR7klMaYluvecA19n5cBehJgT7eTERuJ
-         PUq678TaZvuJxl6MDUgDSfdZ7gduJeXrbo7fHEt5M/H8kbFY5qRvxUk/QMIqO8555rBK
-         YtifHuQOV869PsxE4VERisY/W+bhJ2kmzzT6W530rCYOx0R5uQE4/HbM4Vqhtay3jHw+
-         vbDUeWIAqOXcZZEJSs4cmGlxZ2slPjpcwb/lZ70H0AfNmH2IdrJMcLxxNswNZv/XKuKX
-         Uf4iM+i37zlFm8e3eAeibpBBTQrXBl/F8LDD8GNbnyoHS7lfUYJ79BnBnrHeBgFlZgU1
-         nmxQ==
-X-Gm-Message-State: ACrzQf0toQ0hHsOLZ0/l+X0OgjjzwMF3H96EExYlwlgayvrXCcYCKU0C
-        CMTfToy+vQT/xIWZL4otNL4KQP0FXehZG0r3r7+602Vy1+F0
-X-Google-Smtp-Source: AMsMyM4OubIzLTCl1xMP+SFbmEyENO9Aeq/WZMN2SZVq8dg4fgKHVIS30XWLvpZyIWERvOht1zn95I7homdN6POyDc4OApivtlLL
+        Tue, 20 Sep 2022 06:38:24 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE9A72EE7;
+        Tue, 20 Sep 2022 03:36:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663670212; x=1695206212;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ESeT68QBp14fZse7on7nqGxb5SnUIDEmkBvolLY55Fo=;
+  b=j8nABKC8JEeI8yE58udQZGCNWm/32kxyW8vENwYH7V9pu274EsMsPWNS
+   zsZXVfNiWNlaRyNO0WKj5ORHiLULkFmMOVY0z2x9+BTgNJrBTTzjmUOC1
+   Mm9Ik0lLSUPSy6vKrxo3jh+RVdD+epmXAayl2F9SGzjC8lU5ZTAFd0QeB
+   7xRXRiPWZblsMIFAgS9Uc/8LXBlLLhLBmvLf2snvharCsMzsQXfCrPPu3
+   oWTS5+71aNqEmXPCp0/SarJQITFUQW1DPbgEzlFx57McKDhmsNgbs7gMh
+   z3AF0YKWSS46d1OFsSk8JA8j/Dh6/WEK8cz7W8DwYSyuVvrIrIxIZ4ajS
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="361398152"
+X-IronPort-AV: E=Sophos;i="5.93,330,1654585200"; 
+   d="scan'208";a="361398152"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 03:36:51 -0700
+X-IronPort-AV: E=Sophos;i="5.93,330,1654585200"; 
+   d="scan'208";a="618865967"
+Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 03:36:48 -0700
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with SMTP id 3F528200DA;
+        Tue, 20 Sep 2022 13:36:46 +0300 (EEST)
+Date:   Tue, 20 Sep 2022 10:36:46 +0000
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Jacopo Mondi <jacopo@jmondi.org>
+Cc:     Marco Felsch <m.felsch@pengutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        mchehab@kernel.org, laurent.pinchart+renesas@ideasonboard.com,
+        akinobu.mita@gmail.com, jacopo+renesas@jmondi.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] media: mt9m111: add V4L2_CID_LINK_FREQ support
+Message-ID: <YymXviWNg/bi/HVr@paasikivi.fi.intel.com>
+References: <20220916135713.143890-1-m.felsch@pengutronix.de>
+ <YyhjpxHHFR4u+k+X@paasikivi.fi.intel.com>
+ <20220919130829.ddoe2ajnrarkywgy@pengutronix.de>
+ <YyhsQ+l1Sls00F0M@paasikivi.fi.intel.com>
+ <20220920085617.7cfflloegh7en4mj@pengutronix.de>
+ <20220920091933.kokk4le3cxpw4hvp@lati>
 MIME-Version: 1.0
-X-Received: by 2002:a92:cd89:0:b0:2f1:9850:7ded with SMTP id
- r9-20020a92cd89000000b002f198507dedmr9815831ilb.271.1663670136886; Tue, 20
- Sep 2022 03:35:36 -0700 (PDT)
-Date:   Tue, 20 Sep 2022 03:35:36 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000885d8605e91963fd@google.com>
-Subject: [syzbot] KASAN: stack-out-of-bounds Read in iput
-From:   syzbot <syzbot+870ae3a4c7a251c996bd@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220920091933.kokk4le3cxpw4hvp@lati>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Jacopo,
 
-syzbot found the following issue on:
+On Tue, Sep 20, 2022 at 11:19:33AM +0200, Jacopo Mondi wrote:
+> Hello
+> 
+> On Tue, Sep 20, 2022 at 10:56:17AM +0200, Marco Felsch wrote:
+> > Hi Sakari,
+> >
+> > On 22-09-19, Sakari Ailus wrote:
+> >
+> > ...
+> >
+> > > > > > +	ret = clk_prepare_enable(mt9m111->clk);
+> > > > > > +	if (ret < 0)
+> > > > > > +		return ret;
+> > > > > > +
+> > > > > > +	extclk_rate = clk_get_rate(mt9m111->clk);
+> > > > > > +	clk_disable_unprepare(mt9m111->clk);
+> > > > >
+> > > > > I don't think you'll need to enable a clock to just get its frequency.
+> > > >
+> > > > The official API states that you need to turn on the clk before
+> > > > requesting it and it makes sense. Also there is a new helper
+> > > > devm_clk_get_enabled() which addresses simple clk usage since most of
+> > > > drivers don't enable it before requesting the rate.
+> 
+> Had the same question on v1 and Marco pointed me to the clk_get_rate()
+> documentation
+> https://elixir.bootlin.com/linux/v6.0-rc1/source/include/linux/clk.h#L682
+> 
+> which indeed specifies
+> "This is only valid once the clock source has been enabled."
+> 
+> However none (or very few) of the linux-media i2c drivers actually do
+> that.
 
-HEAD commit:    521a547ced64 Linux 6.0-rc6
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=12c41580880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c221af36f6d1d811
-dashboard link: https://syzkaller.appspot.com/bug?extid=870ae3a4c7a251c996bd
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=110f0654880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1625e737080000
+I'm not aware of any. That's indeed what the documentation says. Also
+clk_enable() documentation says that "If the clock can not be
+enabled/disabled, this should return success". So I wonder how much can
+you trust it. ;-)
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/7daadf43221d/disk-521a547c.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/7e776edd0f78/vmlinux-521a547c.xz
+> 
+> I have added in cc the clk framework maintainer to see if he can help
+> shed some light on this
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+870ae3a4c7a251c996bd@syzkaller.appspotmail.com
+Thanks.
 
-ntfs3: loop2: RAW NTFS volume: Filesystem size 0.00 Gb > volume size 0.00 Gb. Mount in read-only
-==================================================================
-BUG: KASAN: stack-out-of-bounds in native_save_fl arch/x86/include/asm/irqflags.h:35 [inline]
-BUG: KASAN: stack-out-of-bounds in arch_local_save_flags arch/x86/include/asm/irqflags.h:70 [inline]
-BUG: KASAN: stack-out-of-bounds in arch_irqs_disabled arch/x86/include/asm/irqflags.h:130 [inline]
-BUG: KASAN: stack-out-of-bounds in lock_acquire+0x1c3/0x3c0 kernel/locking/lockdep.c:5669
-Read of size 8 at addr ffffc9000b7df95f by task syz-executor383/13922
+But yes, to make this work in general case, one would need a way to ensure
+the frequency is the one assigned in DT and that it won't change.
 
-CPU: 0 PID: 13922 Comm: syz-executor383 Not tainted 6.0.0-rc6-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
- print_address_description+0x65/0x4b0 mm/kasan/report.c:317
- print_report+0x108/0x1f0 mm/kasan/report.c:433
- kasan_report+0xc3/0xf0 mm/kasan/report.c:495
- native_save_fl arch/x86/include/asm/irqflags.h:35 [inline]
- arch_local_save_flags arch/x86/include/asm/irqflags.h:70 [inline]
- arch_irqs_disabled arch/x86/include/asm/irqflags.h:130 [inline]
- lock_acquire+0x1c3/0x3c0 kernel/locking/lockdep.c:5669
- __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
- _raw_spin_lock+0x2a/0x40 kernel/locking/spinlock.c:154
- spin_lock include/linux/spinlock.h:349 [inline]
- iput_final fs/inode.c:1737 [inline]
- iput+0x3ee/0x760 fs/inode.c:1774
- ntfs_fill_super+0x2352/0x42a0 fs/ntfs3/super.c:1278
- get_tree_bdev+0x400/0x620 fs/super.c:1323
- vfs_get_tree+0x88/0x270 fs/super.c:1530
- do_new_mount+0x289/0xad0 fs/namespace.c:3040
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f203d446d7a
-Code: 48 c7 c2 b8 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 d8 00 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f203d3f1078 EFLAGS: 00000286 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 00007f203d3f10d0 RCX: 00007f203d446d7a
-RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007f203d3f1090
-RBP: 000000000000000e R08: 00007f203d3f10d0 R09: 00007f203d3f16b8
-R10: 0000000000000000 R11: 0000000000000286 R12: 00007f203d3f1090
-R13: 0000000020000350 R14: 0000000000000003 R15: 0000000000000004
- </TASK>
+Getting the frequency (in an unreliable way?) isn't perfect but better than
+nothing. So far I haven't heard of issues in practice though.
 
-The buggy address belongs to stack of task syz-executor383/13922
- and is located at offset 31 in frame:
- lock_acquire+0x0/0x3c0 kernel/locking/lockdep.c:5621
+-- 
+Regards,
 
-This frame has 3 objects:
- [32, 40) 'flags.i.i.i87'
- [64, 72) 'flags.i.i.i'
- [96, 136) 'hlock'
-
-The buggy address belongs to the virtual mapping at
- [ffffc9000b7d8000, ffffc9000b7e1000) created by:
- dup_task_struct+0x8b/0x490 kernel/fork.c:977
-
-The buggy address belongs to the physical page:
-page:ffffea0001bcb8c0 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x6f2e3
-flags: 0xfff00000000000(node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000000 0000000000000000 dead000000000122 0000000000000000
-raw: 0000000000000000 0000000000000000 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x2dc2(GFP_KERNEL|__GFP_HIGHMEM|__GFP_NOWARN|__GFP_ZERO), pid 3629, tgid 3629 (syz-executor383), ts 473162860658, free_ts 11190855215
- prep_new_page mm/page_alloc.c:2532 [inline]
- get_page_from_freelist+0x742/0x7c0 mm/page_alloc.c:4283
- __alloc_pages+0x259/0x560 mm/page_alloc.c:5515
- vm_area_alloc_pages mm/vmalloc.c:2958 [inline]
- __vmalloc_area_node mm/vmalloc.c:3026 [inline]
- __vmalloc_node_range+0x8f4/0x1290 mm/vmalloc.c:3196
- alloc_thread_stack_node+0x307/0x500 kernel/fork.c:312
- dup_task_struct+0x8b/0x490 kernel/fork.c:977
- copy_process+0x65b/0x3fd0 kernel/fork.c:2088
- kernel_clone+0x21f/0x790 kernel/fork.c:2674
- __do_sys_clone kernel/fork.c:2808 [inline]
- __se_sys_clone kernel/fork.c:2792 [inline]
- __x64_sys_clone+0x228/0x290 kernel/fork.c:2792
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1449 [inline]
- free_pcp_prepare+0x812/0x900 mm/page_alloc.c:1499
- free_unref_page_prepare mm/page_alloc.c:3380 [inline]
- free_unref_page+0x7d/0x5f0 mm/page_alloc.c:3476
- free_contig_range+0xa3/0x160 mm/page_alloc.c:9408
- destroy_args+0xfe/0x91d mm/debug_vm_pgtable.c:1031
- debug_vm_pgtable+0x43e/0x497 mm/debug_vm_pgtable.c:1354
- do_one_initcall+0x1b9/0x3e0 init/main.c:1296
- do_initcall_level+0x168/0x218 init/main.c:1369
- do_initcalls+0x4b/0x8c init/main.c:1385
- kernel_init_freeable+0x3f1/0x57b init/main.c:1623
- kernel_init+0x19/0x2b0 init/main.c:1512
- ret_from_fork+0x1f/0x30
-
-Memory state around the buggy address:
- ffffc9000b7df800: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffffc9000b7df880: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->ffffc9000b7df900: 00 00 00 00 00 00 00 00 f1 f1 f1 f1 00 f2 f2 f2
-                                                    ^
- ffffc9000b7df980: 00 f2 f2 f2 00 00 00 00 00 f3 f3 f3 f3 f3 f3 f3
- ffffc9000b7dfa00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Sakari Ailus
