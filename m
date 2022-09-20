@@ -2,178 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 713765BD8CD
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 02:33:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB55D5BD8D3
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 02:37:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbiITAcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 20:32:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36182 "EHLO
+        id S229718AbiITAhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 20:37:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbiITAcx (ORCPT
+        with ESMTP id S229570AbiITAha (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 20:32:53 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC3652454
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 17:32:52 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id c24so810721plo.3
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 17:32:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=lzSlCQ5sS4qil99odoJMLVUL5/2+gqYaJrux/DqPc6U=;
-        b=qGjH6NMOKBTCVBUGx+d/w8SQADzCr9jQk7AgXKAM7xJQENzeqOm7GWXyUt4R1s8jJZ
-         TISK+ck/YNm7d3Dr3tY9Vq2gK1hM3/k9RnyW2D0s/B5Layx8IjnkwRjt3CJd14RwQEQ7
-         yLdLjEj3pGjkAAlhzzgazIhpr9iboyHn92CgXI3F0tfCU9ouBmoVfEgh55Y6H7z4u3MC
-         1Tgmf++FpZtIoJc4eT2tJcn98n1XEOEd7duDv2ux5GjOb0BsmWl2svvMY6FoCKadgxHW
-         S8KUawuBuZ4Dlu46m31statcPB3rj1d4v1WpqAJvdTqQOLYYuGl4ixLRfwVENl8flZLQ
-         t/yw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=lzSlCQ5sS4qil99odoJMLVUL5/2+gqYaJrux/DqPc6U=;
-        b=Gxe8jky6HIc14iex9QqaTxvsnqSRe6iKbweGOi1vxGv/M5bkcAgRp7gHqJoeNvyUrd
-         8PS1QX1nVzPo0+i5syNC7xQo1DfpGHIvllmEH7fyjUlHw8HI4NMc7W+ih7427K+KgGaq
-         LjYPMpK3ME0iXkOzYzkrMjsbZ8uN9NhHYfLrR9fVI021KWz99AmFc6BdYPfoZvNVfQBM
-         A/rIqqXcj2vK3J3rMLi17bfIOfxlTyUeklc+csjWCNbJHgjKTNCeEU3n2jREI43qmCX+
-         zscOhiZVTBQuX9FO7M1wCoQyczeEMq7Zdjh02qWniMxha11P+njsDm1o07dzjhwSmndm
-         AbQw==
-X-Gm-Message-State: ACrzQf2YhH4tJNzuM71LcuEn0G0ANIHyaC9gnW2pTkLLDfb/Dvt+MOah
-        wk0LwBYZAZPUcTlZuRo19rNOsA==
-X-Google-Smtp-Source: AMsMyM7AfhhUtmouHolPvCpJICIKqFteZ5daTBEaqzUS+NqDW7767dXqE7ulVe+y9lII9n9LWIqYvA==
-X-Received: by 2002:a17:90a:4688:b0:1ef:a94:7048 with SMTP id z8-20020a17090a468800b001ef0a947048mr925310pjf.244.1663633971355;
-        Mon, 19 Sep 2022 17:32:51 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id y1-20020aa79421000000b00537daf64e8esm21008612pfo.188.2022.09.19.17.32.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 17:32:50 -0700 (PDT)
-Date:   Tue, 20 Sep 2022 00:32:47 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        mlevitsk@redhat.com, vkuznets@redhat.com
-Subject: Re: [PATCH v2 9/9] KVM: x86: never write to memory from
- kvm_vcpu_check_block
-Message-ID: <YykKLx+EMufA+uuZ@google.com>
-References: <20220811210605.402337-1-pbonzini@redhat.com>
- <20220811210605.402337-10-pbonzini@redhat.com>
+        Mon, 19 Sep 2022 20:37:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9923742AD4
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 17:37:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3E171B81680
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 00:37:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28CF3C433D7;
+        Tue, 20 Sep 2022 00:37:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663634246;
+        bh=heePZ7QZ8vqdl1z91+kj41jIj0IOXSC9O4w358wTHLE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DDHdzC0KC/PA0taYnCBU7pDQQr0CSYsb46eQNyYxWyzyamXbvUJWl2YOpNOwqWK4w
+         j0ubfpjeczF/oXFV/TiWq9TpRJwWFCewsiXEJcBzIMY/NAxiT9QYyW14wZWzFoDPRf
+         7+ffx8VSg+XFv9m3yIwc4BlABZo5QI6MMV7l+0hHtinJFF7+vpKEd8FNsNSPW6C25V
+         jksh/jnp8yFPiPPtSOY1kiqtFCV7q1ODrF2hfjgW2xMbm2rQq5zxk4Ya4W3aVDC6li
+         tlMfrzJKMKBF5w+mUbRNZFrv1b4Xz8pkbFiuy7rH/COQFK+MwQIfiRegM88CJBMyGF
+         /4QdVouLrQcAQ==
+Date:   Tue, 20 Sep 2022 08:37:13 +0800
+From:   Gao Xiang <xiang@kernel.org>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Jiangshan Yi <13667453960@163.com>, akpm@linux-foundation.org,
+        willy@infradead.org, linux-kernel@vger.kernel.org,
+        Jiangshan Yi <yijiangshan@kylinos.cn>
+Subject: Re: [PATCH] fs/efs/inode.c: use __func__ instead of function name
+Message-ID: <YykLOUfit5r6cqxq@debian>
+Mail-Followup-To: Al Viro <viro@zeniv.linux.org.uk>,
+        Jiangshan Yi <13667453960@163.com>, akpm@linux-foundation.org,
+        willy@infradead.org, linux-kernel@vger.kernel.org,
+        Jiangshan Yi <yijiangshan@kylinos.cn>
+References: <20220919023314.3622391-1-13667453960@163.com>
+ <YykIOg0ApQycqOxu@ZenIV>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220811210605.402337-10-pbonzini@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YykIOg0ApQycqOxu@ZenIV>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 11, 2022, Paolo Bonzini wrote:
-> kvm_vcpu_check_block() is called while not in TASK_RUNNING, and therefore
-> it cannot sleep.  Writing to guest memory is therefore forbidden, but it
-> can happen on AMD processors if kvm_check_nested_events() causes a vmexit.
+On Tue, Sep 20, 2022 at 01:24:26AM +0100, Al Viro wrote:
+> On Mon, Sep 19, 2022 at 10:33:14AM +0800, Jiangshan Yi wrote:
+> > From: Jiangshan Yi <yijiangshan@kylinos.cn>
+> > 
+> > It is better to use __func__ instead of function name.
 > 
-> Fortunately, all events that are caught by kvm_check_nested_events() are
-> also recognized by kvm_vcpu_has_events() through vendor callbacks such as
-> kvm_x86_interrupt_allowed() or kvm_x86_ops.nested_ops->has_events(), so
-> remove the call and postpone the actual processing to vcpu_block().
-> 
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
->  arch/x86/kvm/x86.c | 14 +++++++++++---
->  1 file changed, 11 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 5e9358ea112b..9226fd536783 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -10639,6 +10639,17 @@ static inline int vcpu_block(struct kvm_vcpu *vcpu)
->  			return 1;
->  	}
->  
-> +	if (is_guest_mode(vcpu)) {
-> +		/*
-> +		 * Evaluate nested events before exiting the halted state.
-> +		 * This allows the halt state to be recorded properly in
-> +		 * the VMCS12's activity state field (AMD does not have
-> +		 * a similar field and a vmexit always causes a spurious
-> +		 * wakeup from HLT).
-> +		 */
-> +		kvm_check_nested_events(vcpu);
-> +	}
-> +
->  	if (kvm_apic_accept_events(vcpu) < 0)
->  		return 0;
+> 	Why is it better?  And why is it *not* sent to (active)
+> maintainers of fs/erofs?  I'm not going to apply that behind their
+> backs and I would ask akpm to abstain from taking that one.
 
-Oof, this ends up yielding a really confusing code sequence.  kvm_apic_accept_events()
-has its own kvm_check_nested_events(), but has code to snapshot pending INITs/SIPIs
-_before_ the call.  Unpacked, KVM ends up with:
+It's efs although it also starts with letter e and ends with fs ;).
+I have no idea who actually takes care of it now.
 
-	if (is_guest_mode(vcpu))
-		kvm_check_nested_events(vcpu);
-
-	/*
-	 * Read pending events before calling the check_events
-	 * callback.
-	 */
-	pe = smp_load_acquire(&apic->pending_events);
-	if (!pe)
-		return 0;
-
-	if (is_guest_mode(vcpu)) {
-		r = kvm_check_nested_events(vcpu);
-		if (r < 0)
-			return r == -EBUSY ? 0 : r;
-	}
-
-	if (kvm_vcpu_latch_init(vcpu)) {
-		WARN_ON_ONCE(vcpu->arch.mp_state == KVM_MP_STATE_INIT_RECEIVED);
-		if (test_bit(KVM_APIC_SIPI, &pe))
-			clear_bit(KVM_APIC_SIPI, &apic->pending_events);
-		return 0;
-	}
-
-	if (test_bit(KVM_APIC_INIT, &pe)) {
-		clear_bit(KVM_APIC_INIT, &apic->pending_events);
-		kvm_vcpu_reset(vcpu, true);
-		if (kvm_vcpu_is_bsp(apic->vcpu))
-			vcpu->arch.mp_state = KVM_MP_STATE_RUNNABLE;
-		else
-			vcpu->arch.mp_state = KVM_MP_STATE_INIT_RECEIVED;
-	}
-	if (test_bit(KVM_APIC_SIPI, &pe)) {
-		clear_bit(KVM_APIC_SIPI, &apic->pending_events);
-		if (vcpu->arch.mp_state == KVM_MP_STATE_INIT_RECEIVED) {
-			/* evaluate pending_events before reading the vector */
-			smp_rmb();
-			sipi_vector = apic->sipi_vector;
-			static_call(kvm_x86_vcpu_deliver_sipi_vector)(vcpu, sipi_vector);
-			vcpu->arch.mp_state = KVM_MP_STATE_RUNNABLE;
-		}
-	}
-
-which on the surface makes this code look broken, e.g. if kvm_check_nested_events()
-_needs_ to be after the pending_events snapshot is taken, why is it safe to add a
-kvm_check_nested_events() call immediately before the snapshot?
-
-In reality, it's just a bunch of noise because the pending events snapshot is
-completely unnecessary and subtly relies on INIT+SIPI being blocked after VM-Exit
-on VMX (and SVM, but it's more important for VMX).
-
-In particular, testing "pe" after VM-Exit is nonsensical.  On VMX, events are consumed
-if they trigger VM-Exit, i.e. processing INIT/SIPI is flat out wrong if the INIT/SIPI
-was the direct cause of VM-Exit.  On SVM, events are left pending, so if any pending
-INIT/SIPI will still be there.
-
-The VMX code works because kvm_vcpu_latch_init(), a.k.a. "is INIT blocked", is
-always true after VM-Exit since INIT is always blocked in VMX root mode.  Ditto for
-the conditional clearing of SIPI; the CPU can't be in wait-for-SIPI immediately
-after VM-Exit and so dropping SIPIs ends up being architecturally ok.
-
-I'll add a patch to drop the snapshot code, assuming I'm not missing something even
-more subtle...
+Thanks,
+Gao Xiang
