@@ -2,158 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD7415BE2FA
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 12:22:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 379555BE311
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 12:23:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbiITKWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 06:22:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56950 "EHLO
+        id S230100AbiITKXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 06:23:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbiITKWB (ORCPT
+        with ESMTP id S229605AbiITKWz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 06:22:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D425F6F545
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 03:21:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663669316;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3i+0gqrQGBQWhldO2Pvgxs5eAAnagMoK2WnxgbEYA48=;
-        b=PFwd1u3AbqQnnxqvNdcSvLnNwTKm3guoDAbRezZ2sYPD777uD/YvJtC7d3YJ9C+kKWCq8G
-        RRbiQbpJiHzu+EyBjIykp2aCcbxG9hgFIx3MMzK9Y9pBIyYpRbgcDieMzvZ8yLHaDjhV0n
-        TKuUzv7JFQrliSqW2jCTfixftcdexGw=
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com
- [209.85.210.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-92-XgiWYGs1Osesg923MLcHGQ-1; Tue, 20 Sep 2022 06:21:55 -0400
-X-MC-Unique: XgiWYGs1Osesg923MLcHGQ-1
-Received: by mail-pf1-f197.google.com with SMTP id 15-20020a62170f000000b0053e304ef6c0so1472810pfx.6
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 03:21:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=3i+0gqrQGBQWhldO2Pvgxs5eAAnagMoK2WnxgbEYA48=;
-        b=JkCixEzoCzyX7dDe0EEsceJPLvnrsZgVFZcnvyRdjLs3os7QkM9Nt160VqMwDKlwGJ
-         buA+NrD90Murq7sk1a8bYk3Z4qzNoWB+Yk3AwzAsFBvFksv4VtgEl7NWygjNpAqZ0DSd
-         I5dMoRndkEeHPzvKGKaDYDG8PQa21JjFvDhBH3fdm0UadLwXOtPcgdeoAhiHNDR8F9Y7
-         0s9gCOEZO90hLDFuPasJZGC09H3NQlmGwat0HaGLk8RY1z+Kfc9XLq3IbVijMB36bVbr
-         LOGwlFU54P15JdIeQE4VkOcZwxYVrBszqPm6q+1xINuvKnwdK/fTf4EktDf4+hlza5CP
-         eHVA==
-X-Gm-Message-State: ACrzQf0jiCpwYzsHtxUyUXUvP0nbbYVsErZFKeJit4PkfqOiYEGYYXrk
-        1c7+IlWyEP61VCtRndNF8NkJv/gpSK56Lnm3W1Lfo8QT2+rVl8eJ0rVtumJP1w4meNHxWa9akIv
-        gIP7jvGYmoIuUf9RBnYEv9lcHhU8HUbNL9YHcOD3I
-X-Received: by 2002:a17:903:120c:b0:172:728a:3b24 with SMTP id l12-20020a170903120c00b00172728a3b24mr4083970plh.61.1663669314786;
-        Tue, 20 Sep 2022 03:21:54 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7sDp1O8OmHEWmZvu4VZ45pvII+B4rRWc1fXEr8CLm1seb69bQyVC3yR+HtMDvXY75rWtRjh+R74unndl3Wxs0=
-X-Received: by 2002:a17:903:120c:b0:172:728a:3b24 with SMTP id
- l12-20020a170903120c00b00172728a3b24mr4083945plh.61.1663669314401; Tue, 20
- Sep 2022 03:21:54 -0700 (PDT)
-MIME-Version: 1.0
-References: <ByMO0BENaLBLEnGGrPwe37i3VDtN-VuRlSHqkdgk7Q1JHQ16bI_S1QuEtqtSdeV0XcwGMZwrAkFEGaEdXN_Z1qaN2r1cFeZnu5TyHMxszIU=@protonmail.com>
-In-Reply-To: <ByMO0BENaLBLEnGGrPwe37i3VDtN-VuRlSHqkdgk7Q1JHQ16bI_S1QuEtqtSdeV0XcwGMZwrAkFEGaEdXN_Z1qaN2r1cFeZnu5TyHMxszIU=@protonmail.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Tue, 20 Sep 2022 12:21:43 +0200
-Message-ID: <CAO-hwJLxTQ6Sq=yHksE1f9sDveAsX88ozhu5Pw4+N+kwHdi8hg@mail.gmail.com>
-Subject: Re: [PATCH] HID: nintendo: check analog user calibration for plausibility
-To:     Johnothan King <johnothanking@protonmail.com>
-Cc:     "Daniel J. Ogorchock" <djogorchock@gmail.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 20 Sep 2022 06:22:55 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C5C76DF83;
+        Tue, 20 Sep 2022 03:22:54 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28K804gS013233;
+        Tue, 20 Sep 2022 10:22:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=mH6Fwz3K30BlKk2TJCtxVla2r992cpTUFjl1FsBUztU=;
+ b=ZxqwOM7D+fTg/0ff4SiN3dJwpez5HttRrbSvCgx0MGSyrU8EQIbOcuDbXfMB0bxwyL1C
+ O1CfwEmf02/GLn8tO/AFVWIHtdFhclf6xuTfBDRKMjWXpOYSuf2b4X/Jqle2q4IA6xD8
+ zCwKBB3ffeZu5h68iebg5kfV4ETMG+q03BSS7F6vqQeo2SMCwl8gVZX7yFpnIS39LS9q
+ YFJr9RPdoJand1+yOTJw9vtxbFUwcvhk65gSxy7Hhak4tTQn/Uhx90a2axF7K0lPpw3f
+ 1pGbp2iM9i2PhiRoOwSJpgRtQsMqUI23KyWHBxACeL9Pr2E2FRJYrtyhHmz2UXDseSVT YA== 
+Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jpvahjss7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Sep 2022 10:22:34 +0000
+Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 28KAMUpu016172;
+        Tue, 20 Sep 2022 10:22:30 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 3jnqrbnbqk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Tue, 20 Sep 2022 10:22:30 +0000
+Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28KAMUnB016153;
+        Tue, 20 Sep 2022 10:22:30 GMT
+Received: from hu-sgudaval-hyd.qualcomm.com (hu-krichai-hyd.qualcomm.com [10.213.110.37])
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 28KAMTkK016147;
+        Tue, 20 Sep 2022 10:22:30 +0000
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 4058933)
+        id EAD2B19F4; Tue, 20 Sep 2022 15:52:28 +0530 (+0530)
+From:   Krishna chaitanya chundru <quic_krichai@quicinc.com>
+To:     helgaas@kernel.org
+Cc:     linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mka@chromium.org,
+        quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
+        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
+        quic_ramkri@quicinc.com, manivannan.sadhasivam@linaro.org,
+        swboyd@chromium.org, dmitry.baryshkov@linaro.org,
+        svarbanov@mm-sol.com, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@somainline.org, lpieralisi@kernel.org,
+        robh@kernel.org, kw@linux.com, bhelgaas@google.com,
+        linux-phy@lists.infradead.org, vkoul@kernel.org, kishon@ti.com,
+        mturquette@baylibre.com, linux-clk@vger.kernel.org,
+        Krishna chaitanya chundru <quic_krichai@quicinc.com>
+Subject: [PATCH v7 0/5] PCI: qcom: Add system suspend & resume support
+Date:   Tue, 20 Sep 2022 15:52:22 +0530
+Message-Id: <1663669347-29308-1-git-send-email-quic_krichai@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: tpr95SO5zlUUUhoZMHUx5re_yGPDoMYK
+X-Proofpoint-GUID: tpr95SO5zlUUUhoZMHUx5re_yGPDoMYK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-20_02,2022-09-16_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ lowpriorityscore=0 impostorscore=0 spamscore=0 priorityscore=1501
+ malwarescore=0 mlxlogscore=953 clxscore=1015 mlxscore=0 adultscore=0
+ phishscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2209130000 definitions=main-2209200062
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 9:51 AM Johnothan King
-<johnothanking@protonmail.com> wrote:
->
-> Arne Wendt writes:
->   Cheap clone controllers may (falsely) report as having a user
->   calibration for the analog sticks in place, but return
->   wrong/impossible values for the actual calibration data.
->   In the present case at mine, the controller reports having a
->   user calibration in place and successfully executes the read
->   commands. The reported user calibration however is
->   min = center = max = 0.
->
->   This pull request addresses problems of this kind by checking the
->   provided user calibration-data for plausibility (min < center < max)
->   and falling back to the default values if implausible.
->
-> I'll note that I was experiencing a crash because of this bug when using
-> the GuliKit KingKong 2 controller. The crash manifests as a divide by
-> zero error in the kernel logs:
-> kernel: divide error: 0000 [#1] PREEMPT SMP NOPTI
->
-> Link: https://github.com/nicman23/dkms-hid-nintendo/pull/25
-> Link: https://github.com/DanielOgorchock/linux/issues/36
-> Co-authored-by: Arne Wendt <arne.wendt@tuhh.de>
-> Signed-off-by: Johnothan King <johnothanking@protonmail.com>
-> ---
->  drivers/hid/hid-nintendo.c | 24 ++++++++++++++++++++++--
->  1 file changed, 22 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/hid/hid-nintendo.c b/drivers/hid/hid-nintendo.c
-> index 6028af3c3aae..7f287f6a75f5 100644
-> --- a/drivers/hid/hid-nintendo.c
-> +++ b/drivers/hid/hid-nintendo.c
-> @@ -793,7 +793,17 @@ static int joycon_request_calibration(struct joycon_ctlr *ctlr)
->                                             &ctlr->left_stick_cal_x,
->                                             &ctlr->left_stick_cal_y,
->                                             true);
-> -       if (ret) {
-> +
-> +       /*
-> +        * Check whether read succeeded and perform plausibility check
-> +        * for retrieved values.
-> +        */
-> +       if (ret ||
-> +               ctlr->left_stick_cal_x.min >= ctlr->left_stick_cal_x.center ||
-> +               ctlr->left_stick_cal_x.center >= ctlr->left_stick_cal_x.max ||
-> +               ctlr->left_stick_cal_y.min >= ctlr->left_stick_cal_y.center ||
-> +               ctlr->left_stick_cal_y.center >= ctlr->left_stick_cal_y.max
-> +       ) {
->                 hid_warn(ctlr->hdev,
->                          "Failed to read left stick cal, using dflts; e=%d\n",
->                          ret);
-> @@ -812,7 +822,17 @@ static int joycon_request_calibration(struct joycon_ctlr *ctlr)
->                                             &ctlr->right_stick_cal_x,
->                                             &ctlr->right_stick_cal_y,
->                                             false);
-> -       if (ret) {
-> +
-> +       /*
-> +        * Check whether read succeeded and perform plausibility check
-> +        * for retrieved values.
-> +        */
-> +       if (ret ||
-> +               ctlr->right_stick_cal_x.min >= ctlr->right_stick_cal_x.center ||
-> +               ctlr->right_stick_cal_x.center >= ctlr->right_stick_cal_x.max ||
-> +               ctlr->right_stick_cal_y.min >= ctlr->right_stick_cal_y.center ||
-> +               ctlr->right_stick_cal_y.center >= ctlr->right_stick_cal_y.max
+Few PCIe endpoints like NVMe and WLANs are always expecting the device
+to be in D0 state and the link to be active (or in l1ss) all the
+time (including in S3 state).
 
-Wouldn't it make sense to have a function that takes a single struct
-joycon_stick_cal pointer and does the check?
-This would make things more readable IMO.
+This patch series adds this support for allowing the system to enter
+S3 state (and further low power states) with PCIe Device being in D0
+state and with link being in l1ss on qcom platforms.
 
-Cheers,
-Benjamin
+And to get to the lowest power state on Qcom SoC, all the clocks need
+to be voted off. Since PCIe clocks are managed by qcom platform driver,
+this logic was added to the qcom platform driver.
 
-> +       ) {
->                 hid_warn(ctlr->hdev,
->                          "Failed to read right stick cal, using dflts; e=%d\n",
->                          ret);
-> --
-> 2.37.3
->
->
+And when we turn off PCIe PHY-specific clocks, PHY may go off and along
+with it the link also will go down. To retain, the link state in l1ss with
+PHY clocks turned off, we need park PCIe PHY in the power-down state so
+that it can maintain the link state in l1ss with the help of the always-on
+power domain (aka MX).
+To support this PHY Power-down state PHY driver has been updated with new
+interface APIs.
+
+Its observed that access to Ep PCIe space to mask MSI/MSIX is happening at
+the very late stage of suspend path (access by affinity changes while
+making CPUs offline during suspend, this will happen after devices are
+suspended (after all phases of suspend ops)). If we turn off clocks in any
+PM callback, afterwards running into crashes due to un-clocked access due
+to above mentioned MSI/MSIx access. So, we are making use of syscore
+framework to turn off the PCIe clocks which will be called after making
+CPUs offline.
+
+During this process, The controller should remain powered on. For this made
+changes to GDSC. 
+
+Few endpoints are taking time more time to settle the link in L1ss.
+So Waiting for max time of 200ms for the link to be stable in L1ss.
+
+Krishna chaitanya chundru (5):
+  PCI: qcom: Add system suspend and resume support
+  PCI: qcom: Add retry logic for link to be stable in L1ss
+  phy: core: Add support for phy suspend & resume
+  phy: qcom: Add power suspend & resume callbacks to pcie phy
+  clk: qcom: Enabling PCIe GDSC retention
+
+ drivers/clk/qcom/gcc-sc7280.c            |   2 +-
+ drivers/pci/controller/dwc/pcie-qcom.c   | 163 ++++++++++++++++++++++++++++++-
+ drivers/phy/phy-core.c                   |  30 ++++++
+ drivers/phy/qualcomm/phy-qcom-qmp-pcie.c |  50 ++++++++++
+ include/linux/phy/phy.h                  |  20 ++++
+ 5 files changed, 263 insertions(+), 2 deletions(-)
+
+-- 
+2.7.4
 
