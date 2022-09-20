@@ -2,127 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07EE45BDCFB
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 08:16:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 771AC5BDCFD
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 08:17:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230325AbiITGQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 02:16:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48736 "EHLO
+        id S230344AbiITGRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 02:17:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbiITGQ2 (ORCPT
+        with ESMTP id S229611AbiITGRC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 02:16:28 -0400
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9685A817;
-        Mon, 19 Sep 2022 23:16:27 -0700 (PDT)
-Received: by mail-ed1-f41.google.com with SMTP id e17so2312661edc.5;
-        Mon, 19 Sep 2022 23:16:27 -0700 (PDT)
+        Tue, 20 Sep 2022 02:17:02 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 280E55A809
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 23:17:02 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id e68so1818042pfe.1
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 23:17:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=B6hSOiP8g8zcB6u4AKVglZyJoOdoT3fhziHHZ2QNmtU=;
+        b=es8BM0wHkkzQAHxB0FX0GkmJEUxTn7K2VBAKKB3V5Bk5RYldxiY1m/fyt7ORwTs7Sw
+         csjSUYauRJ+zWLh+31MhKh1QzaG4X2QflkslS3Y/R6eq0RtQsDNF482Pvyx95yEB2h2v
+         u++rZmqHdt9U4myFqAn+aqKWT6ORWPMZkRK4xisBADSw4nOutil1IZOlVAZ8JJ2hPGGD
+         CBe2me9EEDC1VuuzhhUkCsuI6roiSSWN8m4N6roaRxJ+rRA3pFvXig9IFw5i5lpSPTIU
+         HxTQn916nob2CMwjr6VmXfGxkOtfohiNsN3Aj2l0FtreW0PLFlZGuGLpoPpQC45mI56z
+         H7QQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=pXGWiooZdfLQEw6htXJSmmHlrll72T6pMuHJ2O4lII4=;
-        b=x9B0ShZlhimaDGkWD38laKzSlKLak9VX+ikPRU003/pmJMg8CEvrou43UtteD2VYrP
-         Oebdb0Pwwx6nIc2ZWYlPStmvAdR4zvLKrMOC1yWinTx89i3HCFcezK1socvBWy4y4zQT
-         yTKUfb5YRRst+lLNIwGWBtJEMdlO0fXbZ3gUXx3m5YDvwxC7WRyhj/b4Rok7ULLOYC48
-         +kzE3kutYVBh3NoKdMr2kLtcUtEzRkr0OlxEOvxH7nlo18MNAZIa8MoS0E9jqkSx0zAo
-         cjqvB9rBj3ITeQe0eXSMHriB8Y0S64KZkQC/Ry4WBvfEJgOl1PFw9oSq8q7JZdSCXh+V
-         GZSw==
-X-Gm-Message-State: ACrzQf0up0rN8XE21YeuJr6d8kxhPkaal0iSubGu0Eg/p84gkJX9UU5l
-        OCk1dUWyW6MM+6d80MomxX4=
-X-Google-Smtp-Source: AMsMyM6x/RPgRMAxze76M9OQVx+kFOSJReAarH1MFSLa5CvIe7IfV81ccXEwQHUahaQIVk4IkvA+jw==
-X-Received: by 2002:aa7:d3cd:0:b0:452:5457:6375 with SMTP id o13-20020aa7d3cd000000b0045254576375mr18611308edr.111.1663654585639;
-        Mon, 19 Sep 2022 23:16:25 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id d24-20020a170906c21800b007707fc31b8dsm308824ejz.26.2022.09.19.23.16.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Sep 2022 23:16:25 -0700 (PDT)
-Message-ID: <c2e26880-6d1e-725d-a3df-9a96583e8fb2@kernel.org>
-Date:   Tue, 20 Sep 2022 08:16:23 +0200
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=B6hSOiP8g8zcB6u4AKVglZyJoOdoT3fhziHHZ2QNmtU=;
+        b=Oeyz/Ub4MZE8vZbLxQDSRQB4JU+c73n17h7DjCti3+LhCigFeYhOiWr8YTWEn+kxlm
+         pgPygkU/kErhkkT1MphDSHBpJ6X5XgyIz8Jt1s8388EpSTUJ77+ReCMrs+68xd9zCzl4
+         8ZWkekn3TYDp2bKKV7XR9p71EJABRcZy8ABea1RlfOh0gqzvDeDm/K3MdWs+mE4VTKes
+         LifjpunS41FXPnxFR4b8mHjdNOufgeuqKp/sRahvgw7jwWkir30cAaYKv5N74w80HTsr
+         FPUdWp+/X5qgcQSktwYtd43Ao067mKHBMbP3AIdXR0QSGGFqEWJveXUK1CmX7v1xvTI5
+         /5FA==
+X-Gm-Message-State: ACrzQf0PTp1M/mHbobnEf8nW5Ee9KxFeEo591fa4eDD91pvQiadXezXp
+        GVnp9xIwtzZV3pMBl3Qr8MI=
+X-Google-Smtp-Source: AMsMyM7otqRaKgalLurxjXjKVQ0peXA1t+7Kmgwpb0wvpEVxfKpohw0FQbPrQWluYT96xGyZzbbHcg==
+X-Received: by 2002:a63:4918:0:b0:439:1802:dda3 with SMTP id w24-20020a634918000000b004391802dda3mr18537836pga.467.1663654621642;
+        Mon, 19 Sep 2022 23:17:01 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id t17-20020a170902e1d100b001708c4ebbaesm461317pla.309.2022.09.19.23.16.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Sep 2022 23:17:00 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     andrzej.hajda@intel.com
+Cc:     neil.armstrong@linaro.org, robert.foss@linaro.org,
+        Laurent.pinchart@ideasonboard.com, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>
+Subject: [PATCH V2] drm: bridge/dw-hdmi-ahb-audio: use strscpy() is more robust and safer
+Date:   Tue, 20 Sep 2022 06:16:55 +0000
+Message-Id: <20220920061655.214785-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2 1/2] kbuild: pass jobserver to cmd_ld_vmlinux.o
-Content-Language: en-US
-To:     Masahiro Yamada <masahiroy@kernel.org>, Jiri Slaby <jslaby@suse.cz>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "Signed-off-by : Martin Liska" <mliska@suse.cz>
-References: <20220719084149.29950-1-jslaby@suse.cz>
- <CAK7LNAQa0QqEG1PLY3nr_ajP59d9cNU-0FBq2WGKnvEnZGJ1MA@mail.gmail.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <CAK7LNAQa0QqEG1PLY3nr_ajP59d9cNU-0FBq2WGKnvEnZGJ1MA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19. 07. 22, 11:15, Masahiro Yamada wrote:
-> On Tue, Jul 19, 2022 at 5:41 PM Jiri Slaby <jslaby@suse.cz> wrote:
->>
->> Until the link-vmlinux.sh split (cf. the commit below), the linker was
->> run with jobserver set in MAKEFLAGS. After the split, the command in
->> Makefile.vmlinux_o is not prefixed by "+" anymore, so this information
->> is lost.
->>
->> Restore it as linkers working in parallel (esp. the LTO ones) make a use
->> of it. In this case, it is gcc producing this warning otherwise:
->> lto-wrapper: warning: jobserver is not available: ‘--jobserver-auth=’ is not present in ‘MAKEFLAGS’
->>
->> Cc: Sedat Dilek <sedat.dilek@gmail.com>
->> Cc: Masahiro Yamada <masahiroy@kernel.org>
->> Cc: Michal Marek <michal.lkml@markovi.net>
->> Cc: Nick Desaulniers <ndesaulniers@google.com>
->> Cc: Signed-off-by: Martin Liska <mliska@suse.cz>
->> Fixes: 5d45950dfbb1 (kbuild: move vmlinux.o link to scripts/Makefile.vmlinux_o)
->> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
->> ---
->>
->> Notes:
->>      [v2] only commit message updated
-> 
-> 
-> Did you read my previous email?
-> 
-> https://lore.kernel.org/linux-kbuild/CAK7LNAS46hrVh3FNiHHL8_Hqp85VgWnsHyjQ4t-TFH_H344NOg@mail.gmail.com/
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-Huh, I neither received this email nor the linked one to my inbox. 
-@suse.cz somehow filters mails from you :/. Let me figure out (and use 
-kernel.org account for now). (And get back to your comments too.)
+The implementation of strscpy() is more robust and safer.
 
->>   scripts/Makefile.vmlinux_o | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/scripts/Makefile.vmlinux_o b/scripts/Makefile.vmlinux_o
->> index 84019814f33f..886db0659d9c 100644
->> --- a/scripts/Makefile.vmlinux_o
->> +++ b/scripts/Makefile.vmlinux_o
->> @@ -65,7 +65,7 @@ define rule_ld_vmlinux.o
->>   endef
->>
->>   vmlinux.o: $(initcalls-lds) $(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS) FORCE
->> -       $(call if_changed_rule,ld_vmlinux.o)
->> +       +$(call if_changed_rule,ld_vmlinux.o)
->>
->>   targets += vmlinux.o
->>
->> --
->> 2.37.1
->>
-> 
-> 
+That's now the recommended way to copy NUL terminated strings.
 
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+---
+v1->v2
+using DRIVER_NAME instead of "DW-HDMI".
+ drivers/gpu/drm/bridge/synopsys/dw-hdmi-ahb-audio.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi-ahb-audio.c b/drivers/gpu/drm/bridge/synopsys/dw-hdmi-ahb-audio.c
+index 7d2ed0ed2fe2..8cb6177f976d 100644
+--- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi-ahb-audio.c
++++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi-ahb-audio.c
+@@ -542,8 +542,8 @@ static int snd_dw_hdmi_probe(struct platform_device *pdev)
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	strlcpy(card->driver, DRIVER_NAME, sizeof(card->driver));
+-	strlcpy(card->shortname, "DW-HDMI", sizeof(card->shortname));
++	strscpy(card->driver, DRIVER_NAME, sizeof(card->driver));
++	strscpy(card->shortname, DRIVER_NAME, sizeof(card->shortname));
+ 	snprintf(card->longname, sizeof(card->longname),
+ 		 "%s rev 0x%02x, irq %d", card->shortname, revision,
+ 		 data->irq);
+@@ -561,7 +561,7 @@ static int snd_dw_hdmi_probe(struct platform_device *pdev)
+ 
+ 	dw->pcm = pcm;
+ 	pcm->private_data = dw;
+-	strlcpy(pcm->name, DRIVER_NAME, sizeof(pcm->name));
++	strscpy(pcm->name, DRIVER_NAME, sizeof(pcm->name));
+ 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_PLAYBACK, &snd_dw_hdmi_ops);
+ 
+ 	/*
 -- 
-js
-
+2.25.1
