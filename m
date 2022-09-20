@@ -2,60 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F4335BDC49
+	by mail.lfdr.de (Postfix) with ESMTP id 69FDC5BDC4A
 	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 07:21:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230158AbiITFVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 01:21:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37970 "EHLO
+        id S230237AbiITFVp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 01:21:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230002AbiITFUy (ORCPT
+        with ESMTP id S230137AbiITFU7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 01:20:54 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 121BC4DB7A;
-        Mon, 19 Sep 2022 22:20:54 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id BE5AA1F8B0;
-        Tue, 20 Sep 2022 05:20:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1663651252; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
+        Tue, 20 Sep 2022 01:20:59 -0400
+Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 731C54DF11;
+        Mon, 19 Sep 2022 22:20:57 -0700 (PDT)
+Message-ID: <dc251395-78af-2ea3-9049-3b44cb831783@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1663651255;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=dqYWbHDys658PO9cI+Q4Z9fm/eu7KUQM2lLlwljC3xU=;
-        b=V0cjK7yIJU3KGRaV1ns5Ue01jzb1IEM9mQOPmKorxPHeY5lRbhV9x7x9mZSVX58sJss5MW
-        78fdsgzTs+nQsK7LnPaXZDUva6ysoh+tujDKX6v2A3uAW4CeVDpnphVBDXyrNAFsLKGRW5
-        Eki8M08bsuobCa07kmKLSDofdStwkdA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1663651252;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dqYWbHDys658PO9cI+Q4Z9fm/eu7KUQM2lLlwljC3xU=;
-        b=Vcj6lXpcWhOmR7ycgpi0XPB/h6zk0jlUMC2iFU5fpMT6GqWLxQtTZ5nm5FIQpQI0oXnufP
-        9lnNPPUOqjTd1jDw==
-Received: from localhost.localdomain (unknown [10.100.201.122])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 9058E2C142;
-        Tue, 20 Sep 2022 05:20:52 +0000 (UTC)
-From:   Jiri Slaby <jslaby@suse.cz>
-To:     gregkh@linuxfoundation.org
-Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiri Slaby <jslaby@suse.cz>
-Subject: [PATCH v4 07/10] tty: serial: extract serial_omap_put_char() from transmit_chars()
-Date:   Tue, 20 Sep 2022 07:20:47 +0200
-Message-Id: <20220920052049.20507-8-jslaby@suse.cz>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220920052049.20507-1-jslaby@suse.cz>
-References: <20220920052049.20507-1-jslaby@suse.cz>
+        bh=TVGJXeiSIPnNsdrflC1unlY5vaATUQ/jFuJkzfR1pHQ=;
+        b=btCPPae5EarmsG+9BOWEXhsgz/o3rsduU6OAewWB05fiEuDmdEhsg9roxgZbXBLYSYJRy5
+        2rQCzo2ZzUTF5ybbnrwlc5XkMXQw1JpZOtvFMSOFp+oAlA1BYvBeBIMpIgy0uOhE/w8RaP
+        /m73rDUTqIEKHTLRGoCZd4VMdBtnEPk=
+Date:   Mon, 19 Sep 2022 22:20:47 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Subject: Re: [PATCH bpf-next v2 3/3] bpf: Move nf_conn extern declarations to
+ filter.h
+Content-Language: en-US
+To:     Daniel Xu <dxu@dxuuu.xyz>
+Cc:     pablo@netfilter.org, fw@strlen.de, toke@kernel.org,
+        netfilter-devel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, memxor@gmail.com
+References: <cover.1663616584.git.dxu@dxuuu.xyz>
+ <3c00fb8d15d543ae3b5df928c191047145c6b5fe.1663616584.git.dxu@dxuuu.xyz>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <3c00fb8d15d543ae3b5df928c191047145c6b5fe.1663616584.git.dxu@dxuuu.xyz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,66 +54,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This non-trivial code is doubled in transmit_chars(), so it deserves its
-own function. This will make next patches easier.
+On 9/19/22 12:44 PM, Daniel Xu wrote:
+> We're seeing the following new warnings on netdev/build_32bit and
+> netdev/build_allmodconfig_warn CI jobs:
+> 
+>      ../net/core/filter.c:8608:1: warning: symbol
+>      'nf_conn_btf_access_lock' was not declared. Should it be static?
+>      ../net/core/filter.c:8611:5: warning: symbol 'nfct_bsa' was not
+>      declared. Should it be static?
+> 
+> Fix by ensuring extern declaration is present while compiling filter.o.
+> 
+> Fixes: 864b656f82cc ("bpf: Add support for writing to nf_conn:mark")
+> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+> ---
+>   include/linux/filter.h                   | 6 ++++++
+>   include/net/netfilter/nf_conntrack_bpf.h | 7 +------
+>   2 files changed, 7 insertions(+), 6 deletions(-)
+> 
+> diff --git a/include/linux/filter.h b/include/linux/filter.h
+> index 75335432fcbc..98e28126c24b 100644
+> --- a/include/linux/filter.h
+> +++ b/include/linux/filter.h
+> @@ -567,6 +567,12 @@ struct sk_filter {
+>   
+>   DECLARE_STATIC_KEY_FALSE(bpf_stats_enabled_key);
+>   
+> +extern struct mutex nf_conn_btf_access_lock;
+> +extern int (*nfct_btf_struct_access)(struct bpf_verifier_log *log, const struct btf *btf,
+> +				     const struct btf_type *t, int off, int size,
+> +				     enum bpf_access_type atype, u32 *next_btf_id,
+> +				     enum bpf_type_flag *flag);
+> +
+>   typedef unsigned int (*bpf_dispatcher_fn)(const void *ctx,
+>   					  const struct bpf_insn *insnsi,
+>   					  unsigned int (*bpf_func)(const void *,
+> diff --git a/include/net/netfilter/nf_conntrack_bpf.h b/include/net/netfilter/nf_conntrack_bpf.h
+> index d1087e4da440..24d1ccc1f8df 100644
+> --- a/include/net/netfilter/nf_conntrack_bpf.h
+> +++ b/include/net/netfilter/nf_conntrack_bpf.h
+> @@ -5,6 +5,7 @@
+>   
+>   #include <linux/bpf.h>
+>   #include <linux/btf.h>
+> +#include <linux/filter.h>
 
-Signed-off-by: Jiri Slaby <jslaby@suse.cz>
----
+The filter.h is only needed by nf_conntrack_bpf.c?  How about moving 
+this include to nf_conntrack_bpf.c.  nf_conntrack_bpf.h is included by 
+other conntrack core codes.  I would prefer not to spill over 
+unnecessary bpf headers to them.  The same goes for the above bpf.h and 
+btf.h which are only needed in nf_conntrack_bpf.c also?
 
-Notes:
-    [v4] this is new in v4 -- extracted as a separate change
+>   #include <linux/kconfig.h>
+>   #include <linux/mutex.h>
 
- drivers/tty/serial/omap-serial.c | 20 +++++++++++---------
- 1 file changed, 11 insertions(+), 9 deletions(-)
+Also, is mutex.h still needed?
 
-diff --git a/drivers/tty/serial/omap-serial.c b/drivers/tty/serial/omap-serial.c
-index c87d85b901a7..b7b76e49115e 100644
---- a/drivers/tty/serial/omap-serial.c
-+++ b/drivers/tty/serial/omap-serial.c
-@@ -337,19 +337,24 @@ static void serial_omap_stop_rx(struct uart_port *port)
- 	serial_out(up, UART_IER, up->ier);
- }
- 
-+static void serial_omap_put_char(struct uart_omap_port *up, unsigned char ch)
-+{
-+	serial_out(up, UART_TX, ch);
-+
-+	if ((up->port.rs485.flags & SER_RS485_ENABLED) &&
-+			!(up->port.rs485.flags & SER_RS485_RX_DURING_TX))
-+		up->rs485_tx_filter_count++;
-+}
-+
- static void transmit_chars(struct uart_omap_port *up, unsigned int lsr)
- {
- 	struct circ_buf *xmit = &up->port.state->xmit;
- 	int count;
- 
- 	if (up->port.x_char) {
--		serial_out(up, UART_TX, up->port.x_char);
-+		serial_omap_put_char(up, up->port.x_char);
- 		up->port.icount.tx++;
- 		up->port.x_char = 0;
--		if ((up->port.rs485.flags & SER_RS485_ENABLED) &&
--		    !(up->port.rs485.flags & SER_RS485_RX_DURING_TX))
--			up->rs485_tx_filter_count++;
--
- 		return;
- 	}
- 	if (uart_circ_empty(xmit) || uart_tx_stopped(&up->port)) {
-@@ -358,12 +363,9 @@ static void transmit_chars(struct uart_omap_port *up, unsigned int lsr)
- 	}
- 	count = up->port.fifosize / 4;
- 	do {
--		serial_out(up, UART_TX, xmit->buf[xmit->tail]);
-+		serial_omap_put_char(up, xmit->buf[xmit->tail]);
- 		xmit->tail = (xmit->tail + 1) & (UART_XMIT_SIZE - 1);
- 		up->port.icount.tx++;
--		if ((up->port.rs485.flags & SER_RS485_ENABLED) &&
--		    !(up->port.rs485.flags & SER_RS485_RX_DURING_TX))
--			up->rs485_tx_filter_count++;
- 
- 		if (uart_circ_empty(xmit))
- 			break;
--- 
-2.37.3
+>   
+> @@ -14,12 +15,6 @@
+>   extern int register_nf_conntrack_bpf(void);
+>   extern void cleanup_nf_conntrack_bpf(void);
+>   
+> -extern struct mutex nf_conn_btf_access_lock;
+> -extern int (*nfct_btf_struct_access)(struct bpf_verifier_log *log, const struct btf *btf,
+> -				     const struct btf_type *t, int off, int size,
+> -				     enum bpf_access_type atype, u32 *next_btf_id,
+> -				     enum bpf_type_flag *flag);
+> -
+>   #else
+>   
+>   static inline int register_nf_conntrack_bpf(void)
 
