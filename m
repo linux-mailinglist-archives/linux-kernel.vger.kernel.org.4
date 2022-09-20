@@ -2,160 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDDC75BEAE1
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 18:11:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C39575BEAE6
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 18:12:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231172AbiITQLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 12:11:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51766 "EHLO
+        id S231239AbiITQM0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 12:12:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231178AbiITQLi (ORCPT
+        with ESMTP id S229984AbiITQMW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 12:11:38 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E64576C10F;
-        Tue, 20 Sep 2022 09:11:37 -0700 (PDT)
-Received: from fraeml704-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MX62B2hLwz67bhp;
-        Wed, 21 Sep 2022 00:09:54 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml704-chm.china.huawei.com (10.206.15.53) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.31; Tue, 20 Sep 2022 18:11:35 +0200
-Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 20 Sep
- 2022 17:11:35 +0100
-Date:   Tue, 20 Sep 2022 17:11:34 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To:     Ira Weiny <ira.weiny@intel.com>
-CC:     Dan Williams <dan.j.williams@intel.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        "Ben Widawsky" <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>
-Subject: Re: [RFC PATCH 6/9] cxl/mem: Trace Memory Module Event Record
-Message-ID: <20220920171134.000033a9@huawei.com>
-In-Reply-To: <YyJE2uuPZQqqpVew@iweiny-desk3>
-References: <20220813053243.757363-1-ira.weiny@intel.com>
-        <20220813053243.757363-7-ira.weiny@intel.com>
-        <20220825115842.000049a0@huawei.com>
-        <YyJE2uuPZQqqpVew@iweiny-desk3>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Tue, 20 Sep 2022 12:12:22 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106FC6BD67;
+        Tue, 20 Sep 2022 09:12:22 -0700 (PDT)
+Received: from mercury (dyndsl-091-096-056-222.ewe-ip-backbone.de [91.96.56.222])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id AD73E660036C;
+        Tue, 20 Sep 2022 17:12:20 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1663690340;
+        bh=4pnxuSa/+SQckgAxGLcLTdbVCsMAQVJqmr/cvX1u6IQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=m1/nry5hg+gMrp6neyk2AW6Za37ZK5LktEaeIhQQoly6pT0Q/uYxhr1qgyuUnQkt/
+         uYWe65/RJPiAN3FYfjn9a6f+CEHqAJRmJClV+1ZkVC1J6RZQhF4CVpbGMm1bTmyQD2
+         VyCdvQzV97qDUEIPJnqwUyy136UVNcCMfnWNhi2zTInsF1A3N9FSho9KDJ8TggT2Zn
+         rxSkWgx6Jop7gewvED1Aerhkdb0WAW1+3M9vzm2JzrrNLwlAdxRuvhUI+6rA6NutZb
+         sdqw2eay3nF07QttAyszuU7MYl47I13kbnj5qh2h/P1j/gxzlOgpqjmqAqBAVG/faJ
+         VXhXH57/sRYng==
+Received: by mercury (Postfix, from userid 1000)
+        id 9037D10607CF; Tue, 20 Sep 2022 18:12:18 +0200 (CEST)
+Date:   Tue, 20 Sep 2022 18:12:18 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     ChiaEn Wu <peterwu.pub@gmail.com>, broonie@kernel.org,
+        mazziesaccount@gmail.com
+Cc:     pavel@ucw.cz, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        jic23@kernel.org, lars@metafoo.de,
+        andriy.shevchenko@linux.intel.com, chiaen_wu@richtek.com,
+        alice_chen@richtek.com, cy_huang@richtek.com,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-iio@vger.kernel.org,
+        szunichen@gmail.com
+Subject: Re: [PATCH v11 4/8] lib: add linear range index macro
+Message-ID: <20220920161218.dkkfvfomrruebahi@mercury.elektranox.org>
+References: <cover.1663254344.git.chiaen_wu@richtek.com>
+ <0418eade65d434a25d304eaa804b34f92318be87.1663254344.git.chiaen_wu@richtek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.42]
-X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="l5tnc2jgsehdwtia"
+Content-Disposition: inline
+In-Reply-To: <0418eade65d434a25d304eaa804b34f92318be87.1663254344.git.chiaen_wu@richtek.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 14 Sep 2022 14:17:14 -0700
-Ira Weiny <ira.weiny@intel.com> wrote:
 
-> On Thu, Aug 25, 2022 at 11:58:42AM +0100, Jonathan Cameron wrote:
-> > On Fri, 12 Aug 2022 22:32:40 -0700
-> > ira.weiny@intel.com wrote:
-> >   
-> > > From: Ira Weiny <ira.weiny@intel.com>
-> > > 
-> > > CXL v3.0 section 8.2.9.2.1.3 defines the Memory Module Event Record.
-> > > 
-> > > Determine if the event read is memory module record and if so trace the
-> > > record.
-> > > 
-> > > Signed-off-by: Ira Weiny <ira.weiny@intel.com>  
-> > Similar comments to on previous patches around using
-> > get_unaligned_le*()  
-> 
-> Yep...
-> 
-> [snip]
-> 
-> > >  
-> > > +/*
-> > > + * Get Health Info Record
-> > > + * CXL v3.0 section 8.2.9.8.3.1; Table 8-100
-> > > + */
-> > > +struct cxl_get_health_info {
-> > > +	u8 health_status;
-> > > +	u8 media_status;
-> > > +	u8 add_status;
-> > > +	u8 life_used;
-> > > +	u16 device_temp;  
-> > 
-> > As previous - even though they aren't aligned, I'd have thought
-> > __le16 etc will still work.  The unaligned accessors are fine
-> > taking __le16 * for example.  
-> 
-> Ok my bad on using u16 here and I will change it.  I 100% agree that these
-> should be __le16/__le32.  That said there is no need to use the unaligned
-> accessors for the 16/32 bit fields.
-> 
-> The unaligned accessors cast the pointer to a __le16/__le32 type and no
-> architecture redefines those.  So using le{16,32}_to_cpu() should work just
-> fine on all archs.
+--l5tnc2jgsehdwtia
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-If they are unaligned, make sure to use the unaligned accessors.
+Hi,
 
-Key is that it's not a simple cast, but rather a cast to a packed
-structure.  The C spec guarantees that those will be handled correctly
-even on platforms that don't do unaligned accesses - it will have to
-use multiple instructions to construct the unaligned access from
-a set of small aligned ones.
-The C Spec doesn't guarantee the same for a simple cast to an __le16.
+On Thu, Sep 15, 2022 at 05:47:32PM +0800, ChiaEn Wu wrote:
+> From: ChiaEn Wu <chiaen_wu@richtek.com>
+>=20
+> Add linear_range_idx macro for declaring the linear_range struct simply.
+>=20
+> Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
+> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> ---
 
-There are some hints on this in:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/include/asm-generic/unaligned.h?id=778aaefb8e864fc61f850539ea479554dd4caea1
+Thanks, queued via immutable branch:
 
-I recall a full explanation of why this worked, but no idea where
-to find that now - might be the thread referred to in that patch from
-Arnd.
+The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
 
-Jonathan
+  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
 
+are available in the Git repository at:
 
-> 
-> [snip]
-> 
-> > > +
-> > > +	TP_fast_assign(
-> > > +		/* Common */
-> > > +		__assign_str(dev_name, dev_name);
-> > > +		memcpy(__entry->id, &rec->hdr.id, UUID_SIZE);
-> > > +		__entry->log = log;
-> > > +		__entry->flags = le32_to_cpu(rec->hdr.flags_length) >> 8;
-> > > +		__entry->handle = le16_to_cpu(rec->hdr.handle);
-> > > +		__entry->related_handle = le16_to_cpu(rec->hdr.related_handle);
-> > > +		__entry->timestamp = le64_to_cpu(rec->hdr.timestamp);
-> > > +
-> > > +		/* Memory Module Event */
-> > > +		__entry->event_type = rec->event_type;
-> > > +
-> > > +		/* Device Health Info */
-> > > +		__entry->health_status = rec->info.health_status;
-> > > +		__entry->media_status = rec->info.media_status;
-> > > +		__entry->life_used = rec->info.life_used;
-> > > +		__entry->dirty_shutdown_cnt = le32_to_cpu(rec->info.dirty_shutdown_cnt);
-> > > +		__entry->cor_vol_err_cnt = le32_to_cpu(rec->info.cor_vol_err_cnt);  
-> > 
-> > I've lost track, but my guess is some / all of these need the unaligned_get_le32()
-> > etc rather than aligned form.  Maybe just be lazy and use the unaligned versions
-> > even when things happen to be aligned - then we don't have to think about it
-> > when reviewing :)  
-> 
-> See above.  I think the 16/32 bit fields work as intended except for my lack of
-> using the correct type.
-> 
-> Ira
+  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-su=
+pply.git tags/psy-linear-range-for-v6.1-signed
 
+for you to fetch changes up to c2f2e2c3aecdbabf822272a4b6e7d91537633cd9:
+
+  lib: add linear range index macro (2022-09-16 22:27:19 +0200)
+
+----------------------------------------------------------------
+Immutable branch for linear range and power-supply for v6.1
+
+Immutable branch between linear range and power-supply for driver
+changes in MT6370.
+
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+
+----------------------------------------------------------------
+ChiaEn Wu (1):
+      lib: add linear range index macro
+
+ include/linux/linear_range.h | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+-- Sebastian
+
+>  include/linux/linear_range.h | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+>=20
+> diff --git a/include/linux/linear_range.h b/include/linux/linear_range.h
+> index fd3d0b3..2e4f4c3 100644
+> --- a/include/linux/linear_range.h
+> +++ b/include/linux/linear_range.h
+> @@ -26,6 +26,17 @@ struct linear_range {
+>  	unsigned int step;
+>  };
+> =20
+> +#define LINEAR_RANGE(_min, _min_sel, _max_sel, _step)		\
+> +	{							\
+> +		.min =3D _min,					\
+> +		.min_sel =3D _min_sel,				\
+> +		.max_sel =3D _max_sel,				\
+> +		.step =3D _step,					\
+> +	}
+> +
+> +#define LINEAR_RANGE_IDX(_idx, _min, _min_sel, _max_sel, _step)	\
+> +	[_idx] =3D LINEAR_RANGE(_min, _min_sel, _max_sel, _step)
+> +
+>  unsigned int linear_range_values_in_range(const struct linear_range *r);
+>  unsigned int linear_range_values_in_range_array(const struct linear_rang=
+e *r,
+>  						int ranges);
+> --=20
+> 2.7.4
+>=20
+
+--l5tnc2jgsehdwtia
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmMp5mIACgkQ2O7X88g7
++poHHQ/9HvToYVOdeiCOww5XunH69+2ib0YVQCxyUaHB5DouNsW21uhKmKI8C3SM
+znd+W+uaniZH4HWy1VOTPNYb+bFalIFf6ED4cI1ppBn4l2iUlAYbWzIBc7pk5z7C
+HdUtqzHPkq5jKuosU38jg/1TBlwnXApBwEuWVRBIwtLKm0y80XBBPUQycr+yqlww
+l02ngiAIu7bxPM37iYWorHFE3UzhoW250pzaMDANsIwz/A+T8PrGa+Br4r5R13G+
+u+ZUtbzTjmx8HkLFV++DQ3lfJRPWgWtQms+nrSr3V6YNh9KpOl35x6TXaLLyUICa
+JStHqjnzrxDWg9vkKHO8FBh2SA8ERt6m0hsLNnGZofbZqot8VqQXz8jPlPFjLw++
+ihupgvK2DCSg7ZesmrG4aE2Bt883pue0OVVK5vj+Kvb1QXlwe1QvovMK9jyEe4pd
+eS+ItZvrJsBKCRGYXmLO06ZiF7VPIlsm+5atVK1oU4qzmf0i+Q44NH8AneNLsTYO
+pdurTGwKmdwaUqLyxOZnYB2FqUlE98aFLvv1AIl8U/jB8Gg6iwPf8OVEP/Ot7BRW
+UJzia8CQTINKArz+E9FJm6mkj7GQAmoszMa19j3Bdj+qpSyN9Anjjhoohtz724Ix
+c9Gjx2otNjq67/kq0nXvg+X5hi3PiCVDr0q6o8TdaVbseaZP/lk=
+=StQZ
+-----END PGP SIGNATURE-----
+
+--l5tnc2jgsehdwtia--
