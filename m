@@ -2,102 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AA385BE4D0
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 13:42:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E296A5BE4D3
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 13:43:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230467AbiITLmy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 07:42:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34160 "EHLO
+        id S231162AbiITLnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 07:43:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230190AbiITLmE (ORCPT
+        with ESMTP id S230335AbiITLmW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 07:42:04 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36DCF74363
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 04:41:51 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id b23so2459507pfp.9
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 04:41:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=f1jyoMzYrt7oW3ZWE+v01VrggZfcgZodlLjAeFXHMeI=;
-        b=fs7gdTeOnh6ajT0yIBSWXYT4L2N3b4oPI9fdr6NeMuRnaU2VkFM0XPnXpJIdeR8O+e
-         kZu6hYqU/o9vRacABqPnwhkoUpbz0jMgf1ALcVRubrxJj2jsydG8IWxizoMCO+EtXdC2
-         trvFye6XTiVanq/1aBOn/53bG1OHC8bjNkhYsHOc5sQzNTyuoKsCbUz0fFXct3R8e+45
-         0GUjjXp0x4kTuOrIsmBslPQxt3KgCEIPDUUpgEnd4HQ8TP+rPOKplxljq+cdJY2BhhnR
-         umjKU0ViLgSz5GKHAqv+/4HjHg66/OpU9SpwDoeCdTauhrpVXfCh8PNj9X04jBBfiEAV
-         V+EA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=f1jyoMzYrt7oW3ZWE+v01VrggZfcgZodlLjAeFXHMeI=;
-        b=A1EbFV7yeMmoTbIoPSA0JXJTFKY057BXkDZsi5His8Ae7ItT0ezeG1NPGfthWptPk7
-         jJbmyVxKjrKeL0ZYcX4Ng4OYwpbMv1Ac5hWYxHD/PcVWlgOi+n03rDoMTIWKt1siys57
-         k53BFH77yO78xntXM1goNmNoTlGHDA4JtA5z7tSxk862hlZ+hVN5u5rlbCTyjVuaXv8R
-         3kVT3FR8CS8H78rivmtdH02oPjhM6qhFkHZyyd7lqckicX/wWrauQ0zLn1fBsaa2j26k
-         Jars8rAN0SHDLmrpbQngsvvkCn9Kxab1B0mobuW/6kDFNIrjVA4LmVR3+XIbQVQTmeIE
-         7Hpw==
-X-Gm-Message-State: ACrzQf2opMjWS30odfLhm249V+7raGjvPDhaX93f0r5n/EwmteOSdKbC
-        SYMwaYtTgc2rb2/2nZAwaoiHAQ==
-X-Google-Smtp-Source: AMsMyM5ZD2aJk5iuQA6y0NmBUSdwRh7Wc1Io0QWIX9d73pd6IVTCE1fZfBRd+zTbW5U4KgT11NenvA==
-X-Received: by 2002:a63:4c50:0:b0:429:983d:22f1 with SMTP id m16-20020a634c50000000b00429983d22f1mr20123611pgl.213.1663674110301;
-        Tue, 20 Sep 2022 04:41:50 -0700 (PDT)
-Received: from localhost.localdomain ([2401:4900:1c61:6535:ca5f:67d1:670d:e188])
-        by smtp.gmail.com with ESMTPSA id p30-20020a63741e000000b00434e57bfc6csm1348793pgc.56.2022.09.20.04.41.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 04:41:49 -0700 (PDT)
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-To:     linux-crypto@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     agross@kernel.org, herbert@gondor.apana.org.au,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        linux-arm-msm@vger.kernel.org, thara.gopinath@gmail.com,
-        robh@kernel.org, krzysztof.kozlowski@linaro.org,
-        andersson@kernel.org, bhupesh.sharma@linaro.org,
-        bhupesh.linux@gmail.com, davem@davemloft.net
-Subject: [PATCH v7 9/9] MAINTAINERS: Add myself as a co-maintainer for Qualcomm Crypto Drivers
-Date:   Tue, 20 Sep 2022 17:10:51 +0530
-Message-Id: <20220920114051.1116441-10-bhupesh.sharma@linaro.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220920114051.1116441-1-bhupesh.sharma@linaro.org>
-References: <20220920114051.1116441-1-bhupesh.sharma@linaro.org>
+        Tue, 20 Sep 2022 07:42:22 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC6374361;
+        Tue, 20 Sep 2022 04:41:58 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 139D06601F88;
+        Tue, 20 Sep 2022 12:41:54 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1663674116;
+        bh=A2riqMDL+e6uXEzLF8Z0oYqGsIpSvXIapKZhlgz+MLE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=D1JPK3PB/rETwddxkJo+ir808mHSZkg1lQAK95Xn08P8K4jDZWkQ6+LJNYMLJmBgG
+         cwxZUkGgM2dTL4OHRfY31FWcYMWq9MpEO5kkgwCoQMjY5NJaCxuwNO4QMahHdVn9MY
+         6PJcJDRAutMYp+pLUhdp/gfHIgCWHytfIPfarSWnliBchAcyBJiTiNZlp4ITxk4OV+
+         jWlmgmKgRSOTBw7La8G87wJibOJyInxdy5Rdww0e/HAowGr7ojq2gCCPtckQ0YfHJ5
+         jbauLmui0LDUiy3c8heWBA4dGdh/36TvQhQDedU0UAaITF19fNe278Slsp/D2y7Xiv
+         2M0Vo4ij7ontA==
+Message-ID: <ef56a05e-c575-2515-0e00-a22a854b52a0@collabora.com>
+Date:   Tue, 20 Sep 2022 13:41:52 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v1 13/17] phy: phy-mtk-hdmi: Add generic phy configure
+ callback
+Content-Language: en-US
+To:     Guillaume Ranquet <granquet@baylibre.com>,
+        Vinod Koul <vkoul@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Rob Herring <robh+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        CK Hu <ck.hu@mediatek.com>, Jitao shi <jitao.shi@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-mediatek@lists.infradead.org,
+        dri-devel@lists.freedesktop.org,
+        Pablo Sun <pablo.sun@mediatek.com>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org
+References: <20220919-v1-0-4844816c9808@baylibre.com>
+ <20220919-v1-13-4844816c9808@baylibre.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220919-v1-13-4844816c9808@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add myself as a co-maintainer of Qualcomm Crypto drivers.
-As I will be working on enabling crypto block on newer
-Qualcomm SoCs, I will also help review and co-maintain
-the same.
+Il 19/09/22 18:56, Guillaume Ranquet ha scritto:
+> Some phys, such as mt8195, needs to have a configure callback defined.
+> 
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
 
-Cc: Bjorn Andersson <andersson@kernel.org>
-Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index b0556cd21f86..df5724cf608c 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16945,6 +16945,7 @@ F:	drivers/cpufreq/qcom-cpufreq-nvmem.c
- 
- QUALCOMM CRYPTO DRIVERS
- M:	Thara Gopinath <thara.gopinath@gmail.com>
-+M:	Bhupesh Sharma <bhupesh.sharma@linaro.org>
- L:	linux-crypto@vger.kernel.org
- L:	linux-arm-msm@vger.kernel.org
- S:	Maintained
--- 
-2.37.1
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
