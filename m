@@ -2,190 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35B5D5BD90E
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 03:08:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BABC15BD90C
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 03:08:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbiITBIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 21:08:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42108 "EHLO
+        id S229572AbiITBIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 21:08:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbiITBIq (ORCPT
+        with ESMTP id S229473AbiITBID (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 21:08:46 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED2B4DB35
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 18:08:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663636125; x=1695172125;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Tov8EfxHzjNWgbAxafGGyflq4Ip5v1gW1UMbS/Or/Ng=;
-  b=iRQBUqdWLUpqubUUwgD4L7TfXmGF4jHajrf64EEVgat1+sjZzDEIWoyr
-   yaGJwD/oipQoa0LqWMiUd5r1M/zHO8aHjG2p47faAIgitNAIfoaJglLu8
-   8DwYh6LlfMM3+/VefWTzGaUl+r1KGdRU9omQm/ngo9z0Snf4Eq1YQ9bfy
-   fOVVWRGlECIK/yCuyOBAXHrzVGtXsNDLXDfQRXBTOdl+WYyne4bXRVw5F
-   vTEpL3nG1knAuUk1WzVXvJAPe+izAtWvnbJvlyvEiBfyz7L7l8APV9Oyi
-   lzgiAuOvpZ8aMcsBrDRBTXc2UbvPi0tk3SRAlctjD35xvmvEYzA6pPqq7
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="282590100"
-X-IronPort-AV: E=Sophos;i="5.93,329,1654585200"; 
-   d="scan'208";a="282590100"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 18:08:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,329,1654585200"; 
-   d="scan'208";a="681081184"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 19 Sep 2022 18:08:43 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oaRkg-0002Ld-2C;
-        Tue, 20 Sep 2022 01:08:42 +0000
-Date:   Tue, 20 Sep 2022 09:07:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:sched/rt] BUILD SUCCESS
- 44b0c2957adc62b86fcd51adeaf8e993171bc319
-Message-ID: <6329126a.lvUFDFefOnHapVP2%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Mon, 19 Sep 2022 21:08:03 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EBC84DB35;
+        Mon, 19 Sep 2022 18:08:01 -0700 (PDT)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MWjw60G9CzMn3p;
+        Tue, 20 Sep 2022 09:03:18 +0800 (CST)
+Received: from [10.174.178.185] (10.174.178.185) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 20 Sep 2022 09:07:58 +0800
+Subject: Re: [PATCH -next 1/2] ext4: fix potential memory leak in
+ ext4_fc_record_regions()
+To:     Damien Guibouret <damien.guibouret@partition-saving.com>,
+        <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
+        <linux-ext4@vger.kernel.org>
+References: <20220919144021.2162295-1-yebin10@huawei.com>
+ <20220919144021.2162295-2-yebin10@huawei.com>
+ <02fc228b-7cc5-b470-9b5c-8ad726b18158@partition-saving.com>
+CC:     <linux-kernel@vger.kernel.org>, <jack@suse.cz>
+From:   yebin <yebin10@huawei.com>
+Message-ID: <6329126D.8060704@huawei.com>
+Date:   Tue, 20 Sep 2022 09:07:57 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101
+ Thunderbird/38.1.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <02fc228b-7cc5-b470-9b5c-8ad726b18158@partition-saving.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.178.185]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched/rt
-branch HEAD: 44b0c2957adc62b86fcd51adeaf8e993171bc319  u64_stats: Streamline the implementation
 
-elapsed time: 724m
 
-configs tested: 109
-configs skipped: 3
+On 2022/9/20 2:40, Damien Guibouret wrote:
+> Hello,
+>
+> Le 19/09/2022 à 16:40, Ye Bin a écrit :
+>> As krealloc may return NULL, in this case 'state->fc_regions' may not be
+>> freed by krealloc, but 'state->fc_regions' already set NULL. Then will
+>> lead to 'state->fc_regions' memory leak.
+>>
+>> Signed-off-by: Ye Bin <yebin10@huawei.com>
+>> ---
+>>   fs/ext4/fast_commit.c | 14 ++++++++------
+>>   1 file changed, 8 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/fs/ext4/fast_commit.c b/fs/ext4/fast_commit.c
+>> index 9217a588afd1..cc8c8db075ba 100644
+>> --- a/fs/ext4/fast_commit.c
+>> +++ b/fs/ext4/fast_commit.c
+>> @@ -1677,15 +1677,17 @@ int ext4_fc_record_regions(struct super_block 
+>> *sb, int ino,
+>>       if (replay && state->fc_regions_used != state->fc_regions_valid)
+>>           state->fc_regions_used = state->fc_regions_valid;
+>>       if (state->fc_regions_used == state->fc_regions_size) {
+>> +        struct ext4_fc_alloc_region *fc_regions;
+>> +
+>>           state->fc_regions_size +=
+>>               EXT4_FC_REPLAY_REALLOC_INCREMENT;
+>> -        state->fc_regions = krealloc(
+>> -                    state->fc_regions,
+>> -                    state->fc_regions_size *
+>> -                    sizeof(struct ext4_fc_alloc_region),
+>> -                    GFP_KERNEL);
+>> -        if (!state->fc_regions)
+>> +        fc_regions = krealloc(state->fc_regions,
+>> +                      state->fc_regions_size *
+>> +                      sizeof(struct ext4_fc_alloc_region),
+>> +                      GFP_KERNEL);
+>> +        if (!fc_regions)
+>
+> Would it not be safer to restore state->fc_regions_size to its 
+> previous value in that case to keep consistency between size value and 
+> allocated size (or to update state->fc_regions_size only after 
+> allocation as it is done in second part of this patch) ?
+>
+Actually, If   'ext4_fc_record_regions()' return -ENOMEM, then will stop 
+replay journal.
+'state->fc_regions_size' will not be used any more, so it's safe.
+>>               return -ENOMEM;
+>> +        state->fc_regions = fc_regions;
+>>       }
+>>       region = &state->fc_regions[state->fc_regions_used++];
+>>       region->ino = ino;
+>
+> Regards,
+>
+> Damien
+>
+> .
+>
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-arc                                 defconfig
-s390                             allmodconfig
-alpha                               defconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-s390                                defconfig
-arc                  randconfig-r043-20220919
-mips                             allyesconfig
-s390                             allyesconfig
-sh                               allmodconfig
-i386                 randconfig-a013-20220919
-i386                 randconfig-a012-20220919
-x86_64                              defconfig
-i386                 randconfig-a011-20220919
-i386                 randconfig-a016-20220919
-i386                                defconfig
-s390                 randconfig-r044-20220919
-i386                 randconfig-a015-20220919
-riscv                randconfig-r042-20220919
-i386                 randconfig-a014-20220919
-x86_64                               rhel-8.3
-arm                                 defconfig
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-x86_64                           allyesconfig
-x86_64               randconfig-a012-20220919
-x86_64                    rhel-8.3-kselftests
-x86_64                           rhel-8.3-syz
-m68k                             allmodconfig
-x86_64               randconfig-a011-20220919
-arm                              allyesconfig
-x86_64                          rhel-8.3-func
-x86_64               randconfig-a014-20220919
-arc                              allyesconfig
-arm64                            allyesconfig
-x86_64               randconfig-a015-20220919
-ia64                             allmodconfig
-x86_64               randconfig-a013-20220919
-alpha                            allyesconfig
-x86_64               randconfig-a016-20220919
-m68k                             allyesconfig
-i386                             allyesconfig
-powerpc                     pq2fads_defconfig
-powerpc                 linkstation_defconfig
-sparc64                          alldefconfig
-sh                        sh7757lcr_defconfig
-csky                              allnoconfig
-alpha                             allnoconfig
-arc                               allnoconfig
-riscv                             allnoconfig
-powerpc              randconfig-c003-20220919
-i386                 randconfig-c001-20220919
-powerpc                          allyesconfig
-riscv                               defconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-x86_64               randconfig-c001-20220919
-arm                  randconfig-c002-20220919
-sh                          sdk7786_defconfig
-powerpc                   motionpro_defconfig
-sh                             shx3_defconfig
-sh                          kfr2r09_defconfig
-arm                          exynos_defconfig
-powerpc                       holly_defconfig
-arm                          gemini_defconfig
-m68k                        mvme16x_defconfig
-sh                            migor_defconfig
-nios2                            allyesconfig
-nios2                               defconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-x86_64               randconfig-k001-20220919
-sparc                               defconfig
-xtensa                           allyesconfig
-csky                                defconfig
-sparc                            allyesconfig
-x86_64                                  kexec
-loongarch                           defconfig
-loongarch                         allnoconfig
-loongarch                        allmodconfig
-i386                          debian-10.3-kvm
-i386                        debian-10.3-kunit
-i386                         debian-10.3-func
-
-clang tested configs:
-hexagon              randconfig-r041-20220919
-hexagon              randconfig-r045-20220919
-i386                 randconfig-a001-20220919
-i386                 randconfig-a002-20220919
-i386                 randconfig-a003-20220919
-i386                 randconfig-a004-20220919
-i386                 randconfig-a006-20220919
-x86_64               randconfig-a003-20220919
-i386                 randconfig-a005-20220919
-x86_64               randconfig-a001-20220919
-x86_64               randconfig-a002-20220919
-x86_64               randconfig-a004-20220919
-x86_64               randconfig-a006-20220919
-x86_64               randconfig-a005-20220919
-powerpc                          g5_defconfig
-mips                        qi_lb60_defconfig
-arm                         palmz72_defconfig
-mips                     loongson1c_defconfig
-hexagon                             defconfig
-powerpc                     tqm5200_defconfig
-mips                          rm200_defconfig
-arm                           sama7_defconfig
-powerpc                 mpc836x_mds_defconfig
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
