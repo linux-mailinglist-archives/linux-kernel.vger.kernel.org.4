@@ -2,107 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAD185BDD6D
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 08:37:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FB135BDD6F
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 08:38:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230482AbiITGhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 02:37:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47664 "EHLO
+        id S231176AbiITGiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 02:38:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230107AbiITGgy (ORCPT
+        with ESMTP id S229978AbiITGhu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 02:36:54 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B76875E540
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 23:36:05 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id v1so1410483plo.9
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 23:36:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=DcE48FGDHv0yOSzbYjt1rNc9RDHXJDR1T2QYo0htzd4=;
-        b=WfeSzzwjMlC1h/a8WfNvTmDa7ZVJvLPJO0rI2MnM0B5LsKfBrO7f7AfHe3L6gj0REV
-         SagG+yVOhfjjKM8Y8I/9UnLYJNTWBIbNjo3LhfNA/69g7+k0PyRa2JWiSz9Howjc8BqQ
-         cXTF60pxTFPfH1ivPQUBfdvqTJzuBQY7tBRwNOgGcabhmNrDBKzXQk+f5bxlwQoJx/gg
-         H19nu/PHjwtk3VR6nDqM5fQ73dYzbhJyxWr9yRgdHoZAomNqcsTxNNqJ08KJshfC5AAt
-         D3Fh9GTelOxInr1eevycB2gmafxEEZTMx/gdYo/6tUqBycmQamYBKTR+cJ78oPImHXnf
-         W5Qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=DcE48FGDHv0yOSzbYjt1rNc9RDHXJDR1T2QYo0htzd4=;
-        b=L2iXLIgkh6OL2c1/Bu/1N01j82tQknzjHDZ6OgRsuldOaaCnT5MdXBY/THZSmlm8N2
-         WIu+00M3IVRA+Dm7nXu8ZevIh7o2P71X5JzB8BJppTqWlVNlqnsa/09ij4zbC33W/Fnr
-         wK35NeoiZLVkp0R6n4V7EAGts/oKzyPB7ui0vHQkxJNN7r5lq8rqczIt7cJQBXayyzLY
-         JkkdfWogV08dtZXH7cbYp757n6IMkL6Ljy+WEC4FyaExCFn40gjnmyEil430MNVZ7zFl
-         MFGthc+CXfm9TAW4YdN0bmEFVg2GMPhjIJGxWkxdcGGIUjFzminWgTmla3YFJjRNP18x
-         V/RQ==
-X-Gm-Message-State: ACrzQf3tu0FDw3rdacBAZOuKiwExDWTpkG9lpDbOixO9ID642Psd22fO
-        LBLSoa7vRY6uYP6cphyVHq0=
-X-Google-Smtp-Source: AMsMyM4qpv+0B2J9/SDVZwkIT7eEtZIA5rLG3v1vSQ1E5LYdzYonEiVCQe3nrzq/M+cjqfWD0br5Nw==
-X-Received: by 2002:a17:90b:2bd3:b0:203:1a03:6b1b with SMTP id ru19-20020a17090b2bd300b002031a036b1bmr2203013pjb.58.1663655765249;
-        Mon, 19 Sep 2022 23:36:05 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id i13-20020a63220d000000b0042c0ffa0e62sm611172pgi.47.2022.09.19.23.36.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 23:36:04 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: ye.xingchen@zte.com.cn
-To:     alexander.deucher@amd.com
-Cc:     evan.quan@amd.com, christian.koenig@amd.com, Xinhui.Pan@amd.com,
-        airlied@linux.ie, daniel@ffwll.ch, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] drm/amd/pm: Remove unneeded result variable
-Date:   Tue, 20 Sep 2022 06:36:00 +0000
-Message-Id: <20220920063600.215257-1-ye.xingchen@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Tue, 20 Sep 2022 02:37:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 147815F130;
+        Mon, 19 Sep 2022 23:36:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A7ADCB81CF0;
+        Tue, 20 Sep 2022 06:36:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FB2AC43147;
+        Tue, 20 Sep 2022 06:36:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663655806;
+        bh=UasumqK8JDy4QUm3XOKDPKXpUz8MeHWEZlWpEge7SHk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=IeT0Ow0e2gryqHF+YZVhz5RDYHB+9l7X0sWxU4OdZ7kVADENteCdIKKy8BgnyDs+g
+         aX98x7IBRoo21LQ3YvCERTFpt2YhZxQRGozW1cMEJTcr3n7deMKW9gvXgNFaU0LBNK
+         VBDFyN+SMs91kM2qpUgFawzOBTibAgIHgio83adRp67LXn+tEB/6HhwWaTne0YsUn+
+         SvyNHbYDkZyJr+Xmg0kZ+/H4SNO+/dzpCIPgpOyLWcJmTbJGuzUvKUiUJNGp+yMODB
+         4PI/UDtE1UvhtdaoPSIYRk0lpzXhlKwwFHZWBSI06BC7EVePaPZsiJt0bCzZsBBMXu
+         Oo/s0hwlUESoQ==
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-127d10b4f19so2826009fac.9;
+        Mon, 19 Sep 2022 23:36:46 -0700 (PDT)
+X-Gm-Message-State: ACrzQf2nNfH1HpJgQE5HhSBknADMgwP7GCEP7vx4seBqcK8Mape9Are5
+        bJyYOvFWASfrkn3Tyo5OF6v1VMVwrtMCEV4VRYM=
+X-Google-Smtp-Source: AMsMyM6uHFgQjuLTZDoq4Wi16bBED+ipq/0qPmivsB6oIlMREURn4RpqQ/Co7zUtuew7caXA1KRyrH6dB1OH9wPOjsU=
+X-Received: by 2002:a05:6870:a78e:b0:12b:542b:e5b2 with SMTP id
+ x14-20020a056870a78e00b0012b542be5b2mr1178610oao.112.1663655805409; Mon, 19
+ Sep 2022 23:36:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220918155246.1203293-1-guoren@kernel.org> <20220918155246.1203293-8-guoren@kernel.org>
+ <Yyhv4UUXuSfvMOw+@hirez.programming.kicks-ass.net>
+In-Reply-To: <Yyhv4UUXuSfvMOw+@hirez.programming.kicks-ass.net>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Tue, 20 Sep 2022 14:36:33 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRdkmemEWsDYhVXb8KD0PS6b1VAPu_MfeZ+Rmf2qEGa6Q@mail.gmail.com>
+Message-ID: <CAJF2gTRdkmemEWsDYhVXb8KD0PS6b1VAPu_MfeZ+Rmf2qEGa6Q@mail.gmail.com>
+Subject: Re: [PATCH V5 07/11] riscv: convert to generic entry
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
+        luto@kernel.org, conor.dooley@microchip.com, heiko@sntech.de,
+        jszhang@kernel.org, lazyparser@gmail.com, falcon@tinylab.org,
+        chenhuacai@kernel.org, apatel@ventanamicro.com,
+        atishp@atishpatra.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, mark.rutland@arm.com,
+        zouyipeng@huawei.com, bigeasy@linutronix.de,
+        David.Laight@aculab.com, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+On Mon, Sep 19, 2022 at 9:34 PM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Sun, Sep 18, 2022 at 11:52:42AM -0400, guoren@kernel.org wrote:
+>
+> > @@ -123,18 +126,22 @@ int handle_misaligned_store(struct pt_regs *regs);
+> >
+> >  asmlinkage void __trap_section do_trap_load_misaligned(struct pt_regs *regs)
+> >  {
+> > +     irqentry_state_t state = irqentry_enter(regs);
+> >       if (!handle_misaligned_load(regs))
+> >               return;
+> >       do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc,
+> >                     "Oops - load address misaligned");
+> > +     irqentry_exit(regs, state);
+> >  }
+> >
+> >  asmlinkage void __trap_section do_trap_store_misaligned(struct pt_regs *regs)
+> >  {
+> > +     irqentry_state_t state = irqentry_enter(regs);
+> >       if (!handle_misaligned_store(regs))
+> >               return;
+> >       do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc,
+> >                     "Oops - store (or AMO) address misaligned");
+> > +     irqentry_exit(regs, state);
+> >  }
+> >  #endif
+> >  DO_ERROR_INFO(do_trap_store_fault,
+> > @@ -158,6 +165,8 @@ static inline unsigned long get_break_insn_length(unsigned long pc)
+> >
+> >  asmlinkage __visible __trap_section void do_trap_break(struct pt_regs *regs)
+> >  {
+> > +     irqentry_state_t state = irqentry_enter(regs);
+> > +
+> >  #ifdef CONFIG_KPROBES
+> >       if (kprobe_single_step_handler(regs))
+> >               return;
+>
+> FWIW; on x86 I've classified many of the 'from-kernel' traps as
+> NMI-like, since those traps can happen from any context, including with
+> IRQs disabled.
+The do_trap_break is for ebreak instruction, not NMI. RISC-V NMI has
+separate CSR. ref:
 
-Return the value atomctrl_initialize_mc_reg_table_v2_2() directly instead
-of storing it in another redundant variable.
+This proposal adds support for resumable non-maskable interrupts
+(RNMIs) to RISC-V. The extension adds four new CSRs (`mnepc`,
+`mncause`, `mnstatus`, and `mnscratch`) to hold the interrupted state,
+and a new instruction to resume from the RNMI handler.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- drivers/gpu/drm/amd/pm/powerplay/smumgr/polaris10_smumgr.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+>
+> The basic shape of the trap handlers looks a little like:
+>
+>         if (user_mode(regs)) {
+If nmi comes from user_mode, why we using
+irqenrty_enter/exit_from/to_user_mode instead of
+irqentry_nmi_enter/exit?
 
-diff --git a/drivers/gpu/drm/amd/pm/powerplay/smumgr/polaris10_smumgr.c b/drivers/gpu/drm/amd/pm/powerplay/smumgr/polaris10_smumgr.c
-index 45214a364baa..e7ed2a7adf8f 100644
---- a/drivers/gpu/drm/amd/pm/powerplay/smumgr/polaris10_smumgr.c
-+++ b/drivers/gpu/drm/amd/pm/powerplay/smumgr/polaris10_smumgr.c
-@@ -2567,15 +2567,13 @@ static uint8_t polaris10_get_memory_modile_index(struct pp_hwmgr *hwmgr)
- 
- static int polaris10_initialize_mc_reg_table(struct pp_hwmgr *hwmgr)
- {
--	int result;
- 	struct polaris10_smumgr *smu_data = (struct polaris10_smumgr *)(hwmgr->smu_backend);
- 	pp_atomctrl_mc_reg_table *mc_reg_table = &smu_data->mc_reg_table;
- 	uint8_t module_index = polaris10_get_memory_modile_index(hwmgr);
- 
- 	memset(mc_reg_table, 0, sizeof(pp_atomctrl_mc_reg_table));
--	result = atomctrl_initialize_mc_reg_table_v2_2(hwmgr, module_index, mc_reg_table);
- 
--	return result;
-+	return atomctrl_initialize_mc_reg_table_v2_2(hwmgr, module_index, mc_reg_table);
- }
- 
- static bool polaris10_is_dpm_running(struct pp_hwmgr *hwmgr)
+>                 irqenrty_enter_from_user_mode(regs);
+>                 do_user_trap();
+>                 irqentry_exit_to_user_mode(regs);
+>         } else {
+>                 irqentry_state_t state = irqentry_nmi_enter(regs);
+>                 do_kernel_trap();
+>                 irqentry_nmi_exit(regs, state);
+>         }
+>
+> Not saying you have to match Risc-V in this patch-set, just something to
+> consider.
+I think the shape of the riscv NMI handler looks a little like this:
+
+asmlinkage __visible __trap_section void do_trap_nmi(struct pt_regs *regs)
+{
+                 irqentry_state_t state = irqentry_nmi_enter(regs);
+                 do_nmi_trap();
+                 irqentry_nmi_exit(regs, state);
+}
+
 -- 
-2.25.1
+Best Regards
+ Guo Ren
