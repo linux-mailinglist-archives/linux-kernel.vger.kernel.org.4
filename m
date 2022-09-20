@@ -2,306 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 210795BE744
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 15:38:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3495C5BE73F
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 15:38:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231298AbiITNiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 09:38:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50954 "EHLO
+        id S231164AbiITNiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 09:38:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231191AbiITNiL (ORCPT
+        with ESMTP id S229760AbiITNh7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 09:38:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2145F580B0
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 06:38:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663681087;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lXq60k4Ir3p5piUtObaU84pFedZT5LrWb+1N9tdzWIw=;
-        b=JvmWh+z89KOhyujYjXLBClTGAXKUk87uiIKuKWwzo/6stjoN9uWZdbNyqWDbJOS3gmbapD
-        AmK/FhgMSNvbpHiG2/ISlQAWcs445jxtQa+XlZdKTMFUIbvLDSsxBlV1n6QUcDFmR8ReRi
-        GNCTLslvAPgyPUINqwS6t9aLtI0QyUE=
-Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com
- [209.85.215.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-359-z0KRvjvcMQ-BlqEvOiNUIQ-1; Tue, 20 Sep 2022 09:38:06 -0400
-X-MC-Unique: z0KRvjvcMQ-BlqEvOiNUIQ-1
-Received: by mail-pg1-f198.google.com with SMTP id m188-20020a633fc5000000b00434dccacd4aso1662664pga.10
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 06:38:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=lXq60k4Ir3p5piUtObaU84pFedZT5LrWb+1N9tdzWIw=;
-        b=unTg6oZ0cIR9dTHkUKV5kRt+OMCOE445IgF6Tht+LkKHo/Xo8uuDp602DB4oyBxUdv
-         EQ3TUKYFiIh7bFcb/BVuocVdlLhSW4tl5d+CtVKQeZwVA82TIkKE9Db7B2zNwICH+9oU
-         mY8UEv6xod/V/sDVyB9rns7DEa2qKQb0wI6ct1/crsoT3HvcQtq+tOzKu3tuKDwFUhTa
-         +YZjkgR9ANM1Beqh1wwg4plx6VeB8KbIFx0cNvj4S19EjnYC3vcsYd9Es5/i5kkVQciF
-         DzQdoqg1Jpd2meVeRDw6dYiI0pRu+Vp2SGikT/0y/+Evskmjp/w/PMmxwF8a8RUNJN+F
-         xdUA==
-X-Gm-Message-State: ACrzQf0b/i/H/xOS0nnCkRfX7s6say9NyfLkpjiXuPm9hiRI7WDUBHO9
-        3jDwwhZv/820HNnpvBZJ3W6Hl3HCKb7VebOC2oVyrcm+pKplVTxYmHaCG2F2rdjOm9L8wLv2jQ6
-        ax2nfRp9m3xTkurzdjv30WV3ilPO5gA3YBjq//9EY
-X-Received: by 2002:a17:903:120c:b0:172:728a:3b24 with SMTP id l12-20020a170903120c00b00172728a3b24mr4829622plh.61.1663681085014;
-        Tue, 20 Sep 2022 06:38:05 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7Tlmu2PWHOfxvk9a5I8EUZK0cU3NFSK+sKuHQ3NlD5rbAifGDu5hMyQzwnZt1PlabuZgn4SJAAFw6/OHUgYDo=
-X-Received: by 2002:a17:903:120c:b0:172:728a:3b24 with SMTP id
- l12-20020a170903120c00b00172728a3b24mr4829597plh.61.1663681084696; Tue, 20
- Sep 2022 06:38:04 -0700 (PDT)
+        Tue, 20 Sep 2022 09:37:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF4B53AE6C;
+        Tue, 20 Sep 2022 06:37:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 55F95629CE;
+        Tue, 20 Sep 2022 13:37:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A746C433D6;
+        Tue, 20 Sep 2022 13:37:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663681076;
+        bh=l6QCkQPQmf5xKZt5wdlN3JoV4O1u6fNCXibO2IpmGGA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=IsAH0TCEATreJJERC7+UKn3/F8/6zO4Q7JqNRE9u7reQ96PZmFwoziYCKD1Ell5UV
+         y2dTEXhRpRJ9NWoFnr6pwhEfoSqh1ia8keDlYn3Dz4vCqgsJbh+35qRlVbrmAcVFTw
+         tWBdxhxhSHlfxPQ01QBJ2eBGYJtYA25JsRRh2QvwZhiigsp78YifCSiMqSUHc+YAyM
+         Uuasx34seUOUJB0zuFfYi4K1kenSsARHTKmUkRCJpvYo57m3F9Hbf1xiURi7c+wHLu
+         EGQOukURfLMAhZV39JptoFFS4xE11HvewEzjYoz8hpmM5mdc3HdId51kqJxm8ENDas
+         UkIcyhSMU5S1Q==
+Date:   Tue, 20 Sep 2022 08:37:54 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v2] PCI: qcom: Add support for modular builds
+Message-ID: <20220920133754.GA1102995@bhelgaas>
 MIME-Version: 1.0
-References: <20220914132146.6435-1-hadess@hadess.net>
-In-Reply-To: <20220914132146.6435-1-hadess@hadess.net>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Tue, 20 Sep 2022 15:37:53 +0200
-Message-ID: <CAO-hwJL=CXZRkp1c9R6jcnM1HT4NpTsJPkuFH40bP8K9u0mDFg@mail.gmail.com>
-Subject: Re: [PATCH v1] HID: logitech-hidpp: Detect hi-res scrolling support
-To:     Bastien Nocera <hadess@hadess.net>
-Cc:     "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        "Peter F . Patel-Schneider" <pfpschneider@gmail.com>,
-        =?UTF-8?Q?Filipe_La=C3=ADns?= <lains@riseup.net>,
-        Nestor Lopez Casado <nlopezcasad@logitech.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yyl+PNcbtSwzlgvh@hovoldconsulting.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 3:21 PM Bastien Nocera <hadess@hadess.net> wrote:
->
-> Rather than relying on a never-ending stream of patches for quirks.
->
-> This change will detect whether HID++ 1.0 hi-res scroll, HID++ 2.0
-> hi-res scroll or HID++ 2.0 hi-res scroll wheel is supported, and enable
-> the feature without the need for quirks.
->
-> Tested on a Logitech M705 mouse that was unsupported before this change.
->
-> [    9.365324] logitech-hidpp-device 0003:046D:406D.0006: input,hidraw3: USB HID v1.11 Mouse [Logitech M705] on usb-0000:00:14.0-4/input2:3
-> [   57.472434] logitech-hidpp-device 0003:046D:406D.0006: HID++ 4.5 device connected.
-> [   57.616429] logitech-hidpp-device 0003:046D:406D.0006: Detected HID++ 2.0 hi-res scroll wheel
-> [   57.712424] logitech-hidpp-device 0003:046D:406D.0006: wheel multiplier = 8
->
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216480
-> Signed-off-by: Bastien Nocera <hadess@hadess.net>
-> ---
+On Tue, Sep 20, 2022 at 10:47:56AM +0200, Johan Hovold wrote:
+> Hi Lorenzo,
+> 
+> On Thu, Jul 21, 2022 at 08:47:20AM +0200, Johan Hovold wrote:
+> > Allow the Qualcomm PCIe controller driver to be built as a module, which
+> > is useful for multi-platform kernels as well as during development.
+> > 
+> > Reviewed-by: Rob Herring <robh@kernel.org>
+> > Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> > ---
+> > 
+> > Changes in v2
+> >  - rebase on next-20220720 (adjust context)
+> >  - add Rob and Mani's reviewed-by tags
+> 
+> Have you had a change to look at this one since you got back from
+> vacation?
+> 
+> I believe this should be uncontroversial as we already have other
+> modular dwc drivers and there's no mapping of legacy INTx interrupts
+> involved.
 
-Added the tested-by line from Peter and applied to for-6.1/logitech in hid.git
+I'm not Lorenzo, but was there a conclusive outcome to the thread at
+[1]?  The last thing I remember was that a buggy endpoint driver that
+failed to unmap all its interrupts could cause crashes if the PCIe
+controller driver was removed.
 
-Cheers,
-Benjamin
+Making the driver modular is essential so distros can build all the
+drivers and users can load the one needed by their platform.
 
->  drivers/hid/hid-logitech-hidpp.c | 118 ++++++++++++++++---------------
->  1 file changed, 61 insertions(+), 57 deletions(-)
->
-> diff --git a/drivers/hid/hid-logitech-hidpp.c b/drivers/hid/hid-logitech-hidpp.c
-> index 74013d0e0a24..5f8261c7b74c 100644
-> --- a/drivers/hid/hid-logitech-hidpp.c
-> +++ b/drivers/hid/hid-logitech-hidpp.c
-> @@ -74,21 +74,18 @@ MODULE_PARM_DESC(disable_tap_to_click,
->  #define HIDPP_QUIRK_NO_HIDINPUT                        BIT(23)
->  #define HIDPP_QUIRK_FORCE_OUTPUT_REPORTS       BIT(24)
->  #define HIDPP_QUIRK_UNIFYING                   BIT(25)
-> -#define HIDPP_QUIRK_HI_RES_SCROLL_1P0          BIT(26)
-> -#define HIDPP_QUIRK_HI_RES_SCROLL_X2120                BIT(27)
-> -#define HIDPP_QUIRK_HI_RES_SCROLL_X2121                BIT(28)
-> -#define HIDPP_QUIRK_HIDPP_WHEELS               BIT(29)
-> -#define HIDPP_QUIRK_HIDPP_EXTRA_MOUSE_BTNS     BIT(30)
-> -#define HIDPP_QUIRK_HIDPP_CONSUMER_VENDOR_KEYS BIT(31)
-> +#define HIDPP_QUIRK_HIDPP_WHEELS               BIT(26)
-> +#define HIDPP_QUIRK_HIDPP_EXTRA_MOUSE_BTNS     BIT(27)
-> +#define HIDPP_QUIRK_HIDPP_CONSUMER_VENDOR_KEYS BIT(28)
->
->  /* These are just aliases for now */
->  #define HIDPP_QUIRK_KBD_SCROLL_WHEEL HIDPP_QUIRK_HIDPP_WHEELS
->  #define HIDPP_QUIRK_KBD_ZOOM_WHEEL   HIDPP_QUIRK_HIDPP_WHEELS
->
->  /* Convenience constant to check for any high-res support. */
-> -#define HIDPP_QUIRK_HI_RES_SCROLL      (HIDPP_QUIRK_HI_RES_SCROLL_1P0 | \
-> -                                        HIDPP_QUIRK_HI_RES_SCROLL_X2120 | \
-> -                                        HIDPP_QUIRK_HI_RES_SCROLL_X2121)
-> +#define HIDPP_CAPABILITY_HI_RES_SCROLL (HIDPP_CAPABILITY_HIDPP10_FAST_SCROLL | \
-> +                                        HIDPP_CAPABILITY_HIDPP20_HI_RES_SCROLL | \
-> +                                        HIDPP_CAPABILITY_HIDPP20_HI_RES_WHEEL)
->
->  #define HIDPP_QUIRK_DELAYED_INIT               HIDPP_QUIRK_NO_HIDINPUT
->
-> @@ -99,6 +96,9 @@ MODULE_PARM_DESC(disable_tap_to_click,
->  #define HIDPP_CAPABILITY_BATTERY_VOLTAGE       BIT(4)
->  #define HIDPP_CAPABILITY_BATTERY_PERCENTAGE    BIT(5)
->  #define HIDPP_CAPABILITY_UNIFIED_BATTERY       BIT(6)
-> +#define HIDPP_CAPABILITY_HIDPP20_HI_RES_WHEEL  BIT(7)
-> +#define HIDPP_CAPABILITY_HIDPP20_HI_RES_SCROLL BIT(8)
-> +#define HIDPP_CAPABILITY_HIDPP10_FAST_SCROLL   BIT(9)
->
->  #define lg_map_key_clear(c)  hid_map_usage_clear(hi, usage, bit, max, EV_KEY, (c))
->
-> @@ -3418,14 +3418,14 @@ static int hi_res_scroll_enable(struct hidpp_device *hidpp)
->         int ret;
->         u8 multiplier = 1;
->
-> -       if (hidpp->quirks & HIDPP_QUIRK_HI_RES_SCROLL_X2121) {
-> +       if (hidpp->capabilities & HIDPP_CAPABILITY_HIDPP20_HI_RES_WHEEL) {
->                 ret = hidpp_hrw_set_wheel_mode(hidpp, false, true, false);
->                 if (ret == 0)
->                         ret = hidpp_hrw_get_wheel_capability(hidpp, &multiplier);
-> -       } else if (hidpp->quirks & HIDPP_QUIRK_HI_RES_SCROLL_X2120) {
-> +       } else if (hidpp->capabilities & HIDPP_CAPABILITY_HIDPP20_HI_RES_SCROLL) {
->                 ret = hidpp_hrs_set_highres_scrolling_mode(hidpp, true,
->                                                            &multiplier);
-> -       } else /* if (hidpp->quirks & HIDPP_QUIRK_HI_RES_SCROLL_1P0) */ {
-> +       } else /* if (hidpp->capabilities & HIDPP_CAPABILITY_HIDPP10_FAST_SCROLL) */ {
->                 ret = hidpp10_enable_scrolling_acceleration(hidpp);
->                 multiplier = 8;
->         }
-> @@ -3440,6 +3440,49 @@ static int hi_res_scroll_enable(struct hidpp_device *hidpp)
->         return 0;
->  }
->
-> +static int hidpp_initialize_hires_scroll(struct hidpp_device *hidpp)
-> +{
-> +       int ret;
-> +       unsigned long capabilities;
-> +
-> +       capabilities = hidpp->capabilities;
-> +
-> +       if (hidpp->protocol_major >= 2) {
-> +               u8 feature_index;
-> +               u8 feature_type;
-> +
-> +               ret = hidpp_root_get_feature(hidpp, HIDPP_PAGE_HIRES_WHEEL,
-> +                                            &feature_index, &feature_type);
-> +               if (!ret) {
-> +                       hidpp->capabilities |= HIDPP_CAPABILITY_HIDPP20_HI_RES_WHEEL;
-> +                       hid_dbg(hidpp->hid_dev, "Detected HID++ 2.0 hi-res scroll wheel\n");
-> +                       return 0;
-> +               }
-> +               ret = hidpp_root_get_feature(hidpp, HIDPP_PAGE_HI_RESOLUTION_SCROLLING,
-> +                                            &feature_index, &feature_type);
-> +               if (!ret) {
-> +                       hidpp->capabilities |= HIDPP_CAPABILITY_HIDPP20_HI_RES_SCROLL;
-> +                       hid_dbg(hidpp->hid_dev, "Detected HID++ 2.0 hi-res scrolling\n");
-> +               }
-> +       } else {
-> +               struct hidpp_report response;
-> +
-> +               ret = hidpp_send_rap_command_sync(hidpp,
-> +                                                 REPORT_ID_HIDPP_SHORT,
-> +                                                 HIDPP_GET_REGISTER,
-> +                                                 HIDPP_ENABLE_FAST_SCROLL,
-> +                                                 NULL, 0, &response);
-> +               if (!ret) {
-> +                       hidpp->capabilities |= HIDPP_CAPABILITY_HIDPP10_FAST_SCROLL;
-> +                       hid_dbg(hidpp->hid_dev, "Detected HID++ 1.0 fast scroll\n");
-> +               }
-> +       }
-> +
-> +       if (hidpp->capabilities == capabilities)
-> +               hid_dbg(hidpp->hid_dev, "Did not detect HID++ hi-res scrolling hardware support\n");
-> +       return 0;
-> +}
-> +
->  /* -------------------------------------------------------------------------- */
->  /* Generic HID++ devices                                                      */
->  /* -------------------------------------------------------------------------- */
-> @@ -3694,8 +3737,9 @@ static int hidpp_event(struct hid_device *hdev, struct hid_field *field,
->          * cases we must return early (falling back to default behaviour) to
->          * avoid a crash in hidpp_scroll_counter_handle_scroll.
->          */
-> -       if (!(hidpp->quirks & HIDPP_QUIRK_HI_RES_SCROLL) || value == 0
-> -           || hidpp->input == NULL || counter->wheel_multiplier == 0)
-> +       if (!(hidpp->capabilities & HIDPP_CAPABILITY_HI_RES_SCROLL)
-> +           || value == 0 || hidpp->input == NULL
-> +           || counter->wheel_multiplier == 0)
->                 return 0;
->
->         hidpp_scroll_counter_handle_scroll(hidpp->input, counter, value);
-> @@ -3927,6 +3971,7 @@ static void hidpp_connect_event(struct hidpp_device *hidpp)
->         }
->
->         hidpp_initialize_battery(hidpp);
-> +       hidpp_initialize_hires_scroll(hidpp);
->
->         /* forward current battery state */
->         if (hidpp->capabilities & HIDPP_CAPABILITY_HIDPP10_BATTERY) {
-> @@ -3946,7 +3991,7 @@ static void hidpp_connect_event(struct hidpp_device *hidpp)
->         if (hidpp->battery.ps)
->                 power_supply_changed(hidpp->battery.ps);
->
-> -       if (hidpp->quirks & HIDPP_QUIRK_HI_RES_SCROLL)
-> +       if (hidpp->capabilities & HIDPP_CAPABILITY_HI_RES_SCROLL)
->                 hi_res_scroll_enable(hidpp);
->
->         if (!(hidpp->quirks & HIDPP_QUIRK_NO_HIDINPUT) || hidpp->delayed_input)
-> @@ -4257,42 +4302,9 @@ static const struct hid_device_id hidpp_devices[] = {
->           HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_LOGITECH,
->                 USB_DEVICE_ID_LOGITECH_T651),
->           .driver_data = HIDPP_QUIRK_CLASS_WTP },
-> -       { /* Mouse Logitech Anywhere MX */
-> -         LDJ_DEVICE(0x1017), .driver_data = HIDPP_QUIRK_HI_RES_SCROLL_1P0 },
-> -       { /* Mouse Logitech Cube */
-> -         LDJ_DEVICE(0x4010), .driver_data = HIDPP_QUIRK_HI_RES_SCROLL_X2120 },
-> -       { /* Mouse Logitech M335 */
-> -         LDJ_DEVICE(0x4050), .driver_data = HIDPP_QUIRK_HI_RES_SCROLL_X2121 },
-> -       { /* Mouse Logitech M515 */
-> -         LDJ_DEVICE(0x4007), .driver_data = HIDPP_QUIRK_HI_RES_SCROLL_X2120 },
->         { /* Mouse logitech M560 */
->           LDJ_DEVICE(0x402d),
-> -         .driver_data = HIDPP_QUIRK_DELAYED_INIT | HIDPP_QUIRK_CLASS_M560
-> -               | HIDPP_QUIRK_HI_RES_SCROLL_X2120 },
-> -       { /* Mouse Logitech M705 (firmware RQM17) */
-> -         LDJ_DEVICE(0x101b), .driver_data = HIDPP_QUIRK_HI_RES_SCROLL_1P0 },
-> -       { /* Mouse Logitech M705 (firmware RQM67) */
-> -         LDJ_DEVICE(0x406d), .driver_data = HIDPP_QUIRK_HI_RES_SCROLL_X2121 },
-> -       { /* Mouse Logitech M720 */
-> -         LDJ_DEVICE(0x405e), .driver_data = HIDPP_QUIRK_HI_RES_SCROLL_X2121 },
-> -       { /* Mouse Logitech MX Anywhere 2 */
-> -         LDJ_DEVICE(0x404a), .driver_data = HIDPP_QUIRK_HI_RES_SCROLL_X2121 },
-> -       { LDJ_DEVICE(0x4072), .driver_data = HIDPP_QUIRK_HI_RES_SCROLL_X2121 },
-> -       { LDJ_DEVICE(0xb013), .driver_data = HIDPP_QUIRK_HI_RES_SCROLL_X2121 },
-> -       { LDJ_DEVICE(0xb018), .driver_data = HIDPP_QUIRK_HI_RES_SCROLL_X2121 },
-> -       { LDJ_DEVICE(0xb01f), .driver_data = HIDPP_QUIRK_HI_RES_SCROLL_X2121 },
-> -       { /* Mouse Logitech MX Anywhere 2S */
-> -         LDJ_DEVICE(0x406a), .driver_data = HIDPP_QUIRK_HI_RES_SCROLL_X2121 },
-> -       { /* Mouse Logitech MX Master */
-> -         LDJ_DEVICE(0x4041), .driver_data = HIDPP_QUIRK_HI_RES_SCROLL_X2121 },
-> -       { LDJ_DEVICE(0x4060), .driver_data = HIDPP_QUIRK_HI_RES_SCROLL_X2121 },
-> -       { LDJ_DEVICE(0x4071), .driver_data = HIDPP_QUIRK_HI_RES_SCROLL_X2121 },
-> -       { /* Mouse Logitech MX Master 2S */
-> -         LDJ_DEVICE(0x4069), .driver_data = HIDPP_QUIRK_HI_RES_SCROLL_X2121 },
-> -       { /* Mouse Logitech MX Master 3 */
-> -         LDJ_DEVICE(0x4082), .driver_data = HIDPP_QUIRK_HI_RES_SCROLL_X2121 },
-> -       { /* Mouse Logitech Performance MX */
-> -         LDJ_DEVICE(0x101a), .driver_data = HIDPP_QUIRK_HI_RES_SCROLL_1P0 },
-> +         .driver_data = HIDPP_QUIRK_DELAYED_INIT | HIDPP_QUIRK_CLASS_M560 },
->         { /* Keyboard logitech K400 */
->           LDJ_DEVICE(0x4024),
->           .driver_data = HIDPP_QUIRK_CLASS_K400 },
-> @@ -4353,14 +4365,6 @@ static const struct hid_device_id hidpp_devices[] = {
->         { /* MX5500 keyboard over Bluetooth */
->           HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_LOGITECH, 0xb30b),
->           .driver_data = HIDPP_QUIRK_HIDPP_CONSUMER_VENDOR_KEYS },
-> -       { /* MX Master mouse over Bluetooth */
-> -         HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_LOGITECH, 0xb012),
-> -         .driver_data = HIDPP_QUIRK_HI_RES_SCROLL_X2121 },
-> -       { HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_LOGITECH, 0xb01e),
-> -         .driver_data = HIDPP_QUIRK_HI_RES_SCROLL_X2121 },
-> -       { /* MX Master 3 mouse over Bluetooth */
-> -         HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_LOGITECH, 0xb023),
-> -         .driver_data = HIDPP_QUIRK_HI_RES_SCROLL_X2121 },
->
->         { /* And try to enable HID++ for all the Logitech Bluetooth devices */
->           HID_DEVICE(BUS_BLUETOOTH, HID_GROUP_ANY, USB_VENDOR_ID_LOGITECH, HID_ANY_ID) },
-> --
-> 2.37.3
->
+Making the driver removable is useful for developers but not for
+users, so I don't see it as essential.  Developers are in the business
+of developing and can easily carry a trivial out-of-tree patch to add
+removability if needed.
 
+If removability is actually safe even if endpoint drivers aren't
+perfect, then I don't object to it.  But if it's not always safe, I
+don't think the argument that "other drivers do it" is strong.  I'd
+rather make all the drivers safe even if that means making them
+non-removable.
+
+[1] https://lore.kernel.org/r/20220721195433.GA1747571@bhelgaas
+
+> >  drivers/pci/controller/dwc/Kconfig     |  2 +-
+> >  drivers/pci/controller/dwc/pcie-qcom.c | 36 +++++++++++++++++++++++---
+> >  2 files changed, 34 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/drivers/pci/controller/dwc/Kconfig b/drivers/pci/controller/dwc/Kconfig
+> > index 62ce3abf0f19..230f56d1a268 100644
+> > --- a/drivers/pci/controller/dwc/Kconfig
+> > +++ b/drivers/pci/controller/dwc/Kconfig
+> > @@ -168,7 +168,7 @@ config PCI_HISI
+> >  	  Hip05 and Hip06 SoCs
+> >  
+> >  config PCIE_QCOM
+> > -	bool "Qualcomm PCIe controller"
+> > +	tristate "Qualcomm PCIe controller"
+> >  	depends on OF && (ARCH_QCOM || COMPILE_TEST)
+> >  	depends on PCI_MSI_IRQ_DOMAIN
+> >  	select PCIE_DW_HOST
+> > diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> > index 5ed164c2afa3..d176c635016b 100644
+> > --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> > +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> > @@ -16,7 +16,7 @@
+> >  #include <linux/io.h>
+> >  #include <linux/iopoll.h>
+> >  #include <linux/kernel.h>
+> > -#include <linux/init.h>
+> > +#include <linux/module.h>
+> >  #include <linux/of_device.h>
+> >  #include <linux/of_gpio.h>
+> >  #include <linux/pci.h>
+> > @@ -1518,6 +1518,15 @@ static int qcom_pcie_host_init(struct dw_pcie_rp *pp)
+> >  	return ret;
+> >  }
+> >  
+> > +static void qcom_pcie_host_deinit(struct qcom_pcie *pcie)
+> > +{
+> > +	qcom_ep_reset_assert(pcie);
+> > +	if (pcie->cfg->ops->post_deinit)
+> > +		pcie->cfg->ops->post_deinit(pcie);
+> > +	phy_power_off(pcie->phy);
+> > +	pcie->cfg->ops->deinit(pcie);
+> > +}
+> > +
+> >  static const struct dw_pcie_host_ops qcom_pcie_dw_ops = {
+> >  	.host_init = qcom_pcie_host_init,
+> >  };
+> > @@ -1752,6 +1761,22 @@ static int qcom_pcie_probe(struct platform_device *pdev)
+> >  	return ret;
+> >  }
+> >  
+> > +static int qcom_pcie_remove(struct platform_device *pdev)
+> > +{
+> > +	struct qcom_pcie *pcie = platform_get_drvdata(pdev);
+> > +	struct device *dev = &pdev->dev;
+> > +
+> > +	dw_pcie_host_deinit(&pcie->pci->pp);
+> > +	qcom_pcie_host_deinit(pcie);
+> > +
+> > +	phy_exit(pcie->phy);
+> > +
+> > +	pm_runtime_put_sync(dev);
+> > +	pm_runtime_disable(dev);
+> > +
+> > +	return 0;
+> > +}
+> > +
+> >  static const struct of_device_id qcom_pcie_match[] = {
+> >  	{ .compatible = "qcom,pcie-apq8084", .data = &apq8084_cfg },
+> >  	{ .compatible = "qcom,pcie-ipq8064", .data = &ipq8064_cfg },
+> > @@ -1771,6 +1796,7 @@ static const struct of_device_id qcom_pcie_match[] = {
+> >  	{ .compatible = "qcom,pcie-ipq6018", .data = &ipq6018_cfg },
+> >  	{ }
+> >  };
+> > +MODULE_DEVICE_TABLE(of, qcom_pcie_match);
+> >  
+> >  static void qcom_fixup_class(struct pci_dev *dev)
+> >  {
+> > @@ -1786,10 +1812,14 @@ DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x1001, qcom_fixup_class);
+> >  
+> >  static struct platform_driver qcom_pcie_driver = {
+> >  	.probe = qcom_pcie_probe,
+> > +	.remove = qcom_pcie_remove,
+> >  	.driver = {
+> >  		.name = "qcom-pcie",
+> > -		.suppress_bind_attrs = true,
+> >  		.of_match_table = qcom_pcie_match,
+> >  	},
+> >  };
+> > -builtin_platform_driver(qcom_pcie_driver);
+> > +module_platform_driver(qcom_pcie_driver);
+> > +
+> > +MODULE_AUTHOR("Stanimir Varbanov <svarbanov@mm-sol.com>");
+> > +MODULE_DESCRIPTION("Qualcomm PCIe root complex driver");
+> > +MODULE_LICENSE("GPL");
+> 
+> Johan
