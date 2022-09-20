@@ -2,140 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC4BD5BE5E6
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 14:32:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D45A5BE5E7
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 14:32:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231229AbiITMcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 08:32:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48078 "EHLO
+        id S231239AbiITMc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 08:32:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230379AbiITMcS (ORCPT
+        with ESMTP id S229689AbiITMcU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 08:32:18 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F7D5C9E4
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 05:32:08 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id t7so3993485wrm.10
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 05:32:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date;
-        bh=1MF4EqMmKiknkCxbkWjC3WSdMgGUyAMwUXpH/v5PLhs=;
-        b=hqQ+kEhXrINc6InWXqyon5OwHwauo0C0OEZqG9NYnnK3ZJEsnGX1dAgFB3BKCrj+G2
-         dPc7q5c1k8lHWMoQBkHE/1IaSTUy3ygewYM52gTFSgKVYi2WbLib61VKuUPe+W0DDkYR
-         JKD8dDfQC2/sTJdVL6sudb0h/OJjZIYbZ88OU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=1MF4EqMmKiknkCxbkWjC3WSdMgGUyAMwUXpH/v5PLhs=;
-        b=jeHK2vQKg6UiTjjIf3seX4YpcdTmb5fUAYHHEDttIMAJIwJXPDR3fDNWZqi6z9SKTY
-         i2CAPy8XrNfdYG8DNWbuAanhPCQGF+/WvkokUinsvDEpaCwkeWHMJxguyFd/giu2zo47
-         KKzAjC1/SHTIBEqoTOe/QlKyl2FZZDXhrjvIKbtfhqr9/HR0o0y/+9+06++eyUZm5sBf
-         pXUmRKsQSLg7VlKPO3R/jNDrfI8wsUJr9KhylF2/j4RHLeA+pmG9QkgrN+7ct+aygnZ3
-         f0qVZxxR0cXl6KdUMbSiguQRpwxyklOF9sCtZbaMtlL7PfKT1Rv/MaGzb9y8pfOJ68RN
-         /ajg==
-X-Gm-Message-State: ACrzQf0Sa8ICAtVXFqdWMY0HPQuG0NlTJ9V4bP1Pj48eAZHkjKJfVTFK
-        JIgZjVekBSRso9C9XNOkp+vWfA==
-X-Google-Smtp-Source: AMsMyM6r6Ml0b1UTbXqs9UY3GRGCQbw72xzvUd6ll61viiKh6J0PpVhoGzWJOg+mkXMFmIU7FSUtJw==
-X-Received: by 2002:a5d:504c:0:b0:228:db0e:a4c9 with SMTP id h12-20020a5d504c000000b00228db0ea4c9mr14181924wrt.272.1663677127257;
-        Tue, 20 Sep 2022 05:32:07 -0700 (PDT)
-Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-56-12.cust.vodafonedsl.it. [188.217.56.12])
-        by smtp.gmail.com with ESMTPSA id f7-20020a05600c4e8700b003b340f00f10sm17629084wmq.31.2022.09.20.05.32.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 05:32:06 -0700 (PDT)
-Date:   Tue, 20 Sep 2022 14:32:03 +0200
-From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
-Cc:     linuxfancy@googlegroups.com, linux-amarula@amarulasolutions.com,
-        sudipm.mukherjee@gmail.com,
-        Alex Deucher <alexander.deucher@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Philip Yang <Philip.Yang@amd.com>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] drm/amdgpu: initialize r variable into amdgpu_cs_submit
- function
-Message-ID: <20220920123203.GA346517@tom-ThinkPad-T14s-Gen-2i>
-References: <20220920122216.346321-1-tommaso.merciai@amarulasolutions.com>
- <3430255f-3675-eef2-92bd-4eb8be582c83@amd.com>
+        Tue, 20 Sep 2022 08:32:20 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C0C1564CE;
+        Tue, 20 Sep 2022 05:32:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663677139; x=1695213139;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CbnaupBI0IcuRH5CP6ofyWOkuYX0WeuPr4HLdbRSrus=;
+  b=NJJwDY+Mo+1fkpP6yLyCp4CWHJTb4rnWK9KZ748fo4KbjhHlm/Mx0sXP
+   iPAehYgqCWhpUJ1Bjt5IcFwykBTQHLNvxJ3HfMl2QWN04+lxDMjBsEWXN
+   O45KawAnIjCliha6tPsGME+P/qaovX2f/sYr2iWg0TXQsSQZnOahYEMt5
+   NmaJLNQDaIAzCouMXsUxGAJZPaoeQ/oLBBRShKHp8ee7C2pqEA5JDgkeW
+   v6FajkVGc9ZBqlxZVuTBcGhdUaX/mmrhDPMg7vzoBcf40BtMK60KR+6jd
+   dBiPUSxkx3GIjNXMzfn7TDpH9jO1st0MUf9c4BTZbjPjmskurbORlJv31
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10476"; a="325982203"
+X-IronPort-AV: E=Sophos;i="5.93,330,1654585200"; 
+   d="scan'208";a="325982203"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 05:32:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,330,1654585200"; 
+   d="scan'208";a="621245024"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga007.fm.intel.com with ESMTP; 20 Sep 2022 05:32:15 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oacQ9-004zO7-2u;
+        Tue, 20 Sep 2022 15:32:13 +0300
+Date:   Tue, 20 Sep 2022 15:32:13 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Raul E Rangel <rrangel@chromium.org>
+Cc:     linux-acpi@vger.kernel.org, linux-input@vger.kernel.org,
+        timvp@google.com, hdegoede@redhat.com, rafael@kernel.org,
+        mario.limonciello@amd.com, jingle.wu@emc.com.tw,
+        mika.westerberg@linux.intel.com, dmitry.torokhov@gmail.com,
+        linus.walleij@linaro.org, Wolfram Sang <wsa@kernel.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 07/13] i2c: acpi: Use ACPI wake capability bit to set
+ wake_irq
+Message-ID: <Yymyzcfp7gqdTYam@smile.fi.intel.com>
+References: <20220919155916.1044219-1-rrangel@chromium.org>
+ <20220919095504.v4.7.I8af4282adc72eb9f247adcd03676a43893a020a6@changeid>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3430255f-3675-eef2-92bd-4eb8be582c83@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220919095504.v4.7.I8af4282adc72eb9f247adcd03676a43893a020a6@changeid>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christian,
+On Mon, Sep 19, 2022 at 09:59:09AM -0600, Raul E Rangel wrote:
+> Device tree already has a mechanism to pass the wake_irq. It does this
+> by looking for the wakeup-source property and setting the
+> I2C_CLIENT_WAKE flag. This CL adds the ACPI equivalent. It uses the
+> ACPI interrupt wake flag to determine if the interrupt can be used to
+> wake the system. Previously the i2c drivers had to make assumptions and
+> blindly enable the wake IRQ. This can cause spurious wake events. e.g.,
+> If there is a device with an Active Low interrupt and the device gets
+> powered off while suspending, the interrupt line will go low since it's
+> no longer powered and wakes the system. For this reason we should
+> respect the board designers wishes and honor the wake bit defined on the
+> interrupt.
 
-On Tue, Sep 20, 2022 at 02:23:58PM +0200, Christian König wrote:
-> Am 20.09.22 um 14:22 schrieb Tommaso Merciai:
-> > The builds of arm64 allmodconfig with clang failed to build
-> > next-20220920 with the following result:
-> > 
-> > 1190:3: error: variable 'r' is uninitialized when used here [-Werror,-Wuninitialized]
-> > note: initialize the variable 'r' to silence this warning
-> > 
-> > This fix compilation error
-> 
-> I've already send a patch to fix this to the mailing list 7 Minutes ago :)
-> 
-> Please review or ack that one.
+...
 
-Sorry, my bad. Don't see your patch :)
+> +	if (irq_ctx.irq == -ENOENT)
+> +		irq_ctx.irq = acpi_dev_gpio_irq_wake_get(adev, 0, &irq_ctx.wake_capable);
 
-Cheers,
-Tommaso
+I just realized, that there is an inconsistency on how we fill the wake_capable
+parameter. In some cases we check for IRQ for an error condition (IRQ not found)
+and in some the wake_capable still be filled.
 
-> 
-> Thanks,
-> Christian.
-> 
-> > 
-> > Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-> > ---
-> >   drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
-> > index 58088c663125..efa3dc9b69fd 100644
-> > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
-> > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
-> > @@ -1168,7 +1168,7 @@ static int amdgpu_cs_submit(struct amdgpu_cs_parser *p,
-> >   	struct amdgpu_bo_list_entry *e;
-> >   	struct amdgpu_job *job;
-> >   	uint64_t seq;
-> > -	int r;
-> > +	int r = 0;
-> >   	job = p->job;
-> >   	p->job = NULL;
-> 
+Here the best approach I believe is to add
+
+	if (irq_ctx.irq < 0)
+		return irq_ctx.irq;
+
+I.o.w. we apply the rule "do not fill the output parameters when it's known
+to be an error condition".
+
+> +	if (wake_capable)
+> +		*wake_capable = irq_ctx.wake_capable;
+
+> +	return irq_ctx.irq;
 
 -- 
-Tommaso Merciai
-Embedded Linux Engineer
-tommaso.merciai@amarulasolutions.com
-__________________________________
+With Best Regards,
+Andy Shevchenko
 
-Amarula Solutions SRL
-Via Le Canevare 30, 31100 Treviso, Veneto, IT
-T. +39 042 243 5310
-info@amarulasolutions.com
-www.amarulasolutions.com
+
