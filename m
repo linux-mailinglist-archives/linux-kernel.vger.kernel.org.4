@@ -2,94 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E45115BED7E
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 21:19:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B1AD5BED7F
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 21:19:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbiITTT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 15:19:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60730 "EHLO
+        id S231174AbiITTTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 15:19:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbiITTTS (ORCPT
+        with ESMTP id S229911AbiITTTm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 15:19:18 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74C0F642E8
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 12:19:17 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id o99-20020a17090a0a6c00b002039c4fce53so6366196pjo.2
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 12:19:17 -0700 (PDT)
+        Tue, 20 Sep 2022 15:19:42 -0400
+Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A52D1903E
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 12:19:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=uLSszCT1IxpnInF2D5RqSkjjI+8VauFRIZUKTh82iEk=;
-        b=Kd2KiF1uPuS50UJFnhEjakPvrHPIrmLngrROanyprldsZ1bfY+V+wuvMu4P290rQdA
-         H+cVKT39j22NlNrcjaiTvfyGzjw50/x6ZJLrWnaH7BWydzqVW+to5RXaOO9pFb3zQDjB
-         r0UteikTd44fqIPHiPAONL0MhuC/ZVlhAl0qGjwQw2yuRKoFSi+Wa4fHFSVatshOzsbp
-         +nd9vi9yqpiyVP8HJymx1/C1/B7k0OFAOSOGtFq2uOb+gHigg2csCSeN2bcmRF3+wl98
-         bpRoMWTP550QEHAC2/tZflsBx4AFTFTVdIfEnLA50fCVlXaV/SOWlBPkDXAVKAlk0Hfp
-         eHUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=uLSszCT1IxpnInF2D5RqSkjjI+8VauFRIZUKTh82iEk=;
-        b=Y2ZnPg/09L5jhqJWAR7i889DfY8tsOJLZjPiFZsc1pE6/uvbzG0WJPx/vqM3JgY0GM
-         2+Ff3GKXkrW8wPB9AXYOp1sjjPiJSAQXX3RjuIcUIfii2QpdDGDdtMuZ3bt6F+KC3kcV
-         29sRjgOVWXdwWoC2sm+3WCq1KhVCbUV8Jk2jq0sqZRMGx/zAKJoVY2JsmaivQO7ETHYf
-         us5IBRBj0NFN7tNWUNnIrWKCAC395w8IY7T+VW+hE32LG9NkDTDLYs/6nCAYaHZ/P/st
-         uK6WnQS0ntv92zCyXqlODMcjsm5tb9fBByyCwV4vvCQC0y7MjlqP3R3cVavd3GQX7Rjy
-         vW1A==
-X-Gm-Message-State: ACrzQf1xnfkH/ViEYK2RVchBLdUb+I7LNHVxRmFuwv/F3AhFZgETdk5c
-        SgYRwR7xFGlGUhiDneRpi2Eskw==
-X-Google-Smtp-Source: AMsMyM5QDSn1AqSkzDu0E5hRzTKLIWvzu5cl/aFo4299PkngStimhK8w/GVJC/d2cYeRtT2x/JbqTQ==
-X-Received: by 2002:a17:90a:e60c:b0:202:6ef8:4b52 with SMTP id j12-20020a17090ae60c00b002026ef84b52mr5523330pjy.236.1663701556771;
-        Tue, 20 Sep 2022 12:19:16 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id o126-20020a62cd84000000b00537eacc8fa6sm286903pfg.40.2022.09.20.12.19.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 12:19:16 -0700 (PDT)
-Date:   Tue, 20 Sep 2022 19:19:12 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Dr. David Alan Gilbert" <dgilbert@redhat.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Leonardo Bras <leobras@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>
-Subject: Re: [PATCH 0/3] KVM: x86: Fix XSAVE related bugs
-Message-ID: <YyoSMGSRRwratmrV@google.com>
-References: <20220824033057.3576315-1-seanjc@google.com>
- <YwYMInTCevZ/FYNl@work-vm>
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1663701582; x=1695237582;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=LNbemxru3L2hFlqgo1T4V9ZdsALhlrWUh7qwjPGj19g=;
+  b=P7k/O1DE4z31rvUR+e3RoCidFpivMkXRgmR7STICwRq3kRS5o9hLmXOq
+   fpyXprPtaLdd7gp4rZXopZiic9uhLmIbbM807LpaJxkVJi+rrrIqiKB/2
+   Btzw6OW/yBAyGojhg4I1RrGOPbaQdCPVhYkZlOofzA3wQKvKa0Ws23fvv
+   w=;
+X-IronPort-AV: E=Sophos;i="5.93,331,1654560000"; 
+   d="scan'208";a="261342312"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2c-90419278.us-west-2.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-9102.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 19:19:41 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2c-90419278.us-west-2.amazon.com (Postfix) with ESMTPS id 2177645A76;
+        Tue, 20 Sep 2022 19:19:40 +0000 (UTC)
+Received: from EX19D002UWA002.ant.amazon.com (10.13.138.246) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Tue, 20 Sep 2022 19:19:35 +0000
+Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
+ EX19D002UWA002.ant.amazon.com (10.13.138.246) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
+ Tue, 20 Sep 2022 19:19:35 +0000
+Received: from dev-dsk-risbhat-2b-8bdc64cd.us-west-2.amazon.com
+ (10.189.73.169) by mail-relay.amazon.com (10.43.60.234) with Microsoft SMTP
+ Server id 15.0.1497.38 via Frontend Transport; Tue, 20 Sep 2022 19:19:34
+ +0000
+Received: by dev-dsk-risbhat-2b-8bdc64cd.us-west-2.amazon.com (Postfix, from userid 22673075)
+        id 6D6402743; Tue, 20 Sep 2022 19:19:33 +0000 (UTC)
+From:   Rishabh Bhatnagar <risbhat@amazon.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-nvme@lists.infradead.org>
+CC:     <hch@lst.de>, <axboe@fb.com>, <kbusch@kernel.org>,
+        <sagi@grimberg.me>, <mbacco@amazon.com>,
+        Rishabh Bhatnagar <risbhat@amazon.com>
+Subject: [PATCH] nvme-pci: Set min align mask before calculating max_hw_sectors
+Date:   Tue, 20 Sep 2022 19:19:32 +0000
+Message-ID: <20220920191932.22797-1-risbhat@amazon.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YwYMInTCevZ/FYNl@work-vm>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-14.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022, Dr. David Alan Gilbert wrote:
-> * Sean Christopherson (seanjc@google.com) wrote:
-> > Patch 2 (from Dave) is the headliner and fixes a bug where KVM clear the
-> > FP+SSE bits in user_xfeatures when XSAVE is hidden from the guest and thus
-> > prevent userspace from saving/restoring FP+SSE state on XSAVE host.  This
-> > most visibily manifests as a failed migration (KVM_GET_XSAVE succeeds on a
-> > non-XSAVE host and KVM_SET_XSAVE fails on an XSAVE host), but also causes
-> > KVM_GET_SAVE on XSAVE hosts to effectively corrupt guest FP+SSE state.
-> > 
-> > Patch 1 fixes a mostly theoretical bug, and is also a prerequisite for
-> > patch 2.
-> > 
-> > Patch 3 fixes a bug found by inspection when staring at all of this.  KVM
-> > fails to check CR4.OSXSAVE when emulating XSETBV (the interception case
-> > gets away without the check because the intercept happens after hardware
-> > checks CR4).
-> 
-> Thanks for pulling those together; the set of 3 passes my same (light) smoke test.
+If swiotlb is force enabled dma_max_mapping_size ends up calling
+swiotlb_max_mapping_size which takes into account the min align
+mask for the device.
+Set the min align mask for nvme driver before calling
+dma_max_mapping_size while calculating max hw sectors.
 
-Paolo, do you want to grab this series for 6.0?
+Signed-off-by: Rishabh Bhatnagar <risbhat@amazon.com>
+---
+ drivers/nvme/host/pci.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
+index 98864b853eef..30e71e41a0a2 100644
+--- a/drivers/nvme/host/pci.c
++++ b/drivers/nvme/host/pci.c
+@@ -2834,6 +2834,8 @@ static void nvme_reset_work(struct work_struct *work)
+ 		nvme_start_admin_queue(&dev->ctrl);
+ 	}
+ 
++	dma_set_min_align_mask(dev->dev, NVME_CTRL_PAGE_SIZE - 1);
++
+ 	/*
+ 	 * Limit the max command size to prevent iod->sg allocations going
+ 	 * over a single page.
+@@ -2846,7 +2848,6 @@ static void nvme_reset_work(struct work_struct *work)
+ 	 * Don't limit the IOMMU merged segment size.
+ 	 */
+ 	dma_set_max_seg_size(dev->dev, 0xffffffff);
+-	dma_set_min_align_mask(dev->dev, NVME_CTRL_PAGE_SIZE - 1);
+ 
+ 	mutex_unlock(&dev->shutdown_lock);
+ 
+-- 
+2.37.1
+
