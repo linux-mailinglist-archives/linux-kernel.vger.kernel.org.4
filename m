@@ -2,77 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 241555BEEEF
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 23:04:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDA445BEEF0
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 23:04:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229971AbiITVEm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 17:04:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36522 "EHLO
+        id S230153AbiITVEy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 17:04:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbiITVEh (ORCPT
+        with ESMTP id S229847AbiITVEp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 17:04:37 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57DF6E86;
-        Tue, 20 Sep 2022 14:04:35 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id u9so9218679ejy.5;
-        Tue, 20 Sep 2022 14:04:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=LQKJvmVCX4rlGOfpYSKHs7yHs8plwdYfuIGRLcR33M0=;
-        b=VIQDoyBGKzhGzQsobeQrVMEAFCPorZ0mbt1iKUUX8YCQ9Nm31UsWaLEhMuZkz8ZU6k
-         oeQyg3z03Qd8841DMo3hnAKxYF41CS7MuNeLdFqNCF8jixRL5oSQCNJYwSKA/hDseHtU
-         t09vJ1RNlqxvF0WLiAfRahLtIso5sy4QcDlr8551WQGIU08jk9hg+DGP2g2t1vMjAu9n
-         v908BdOJGlAgf4SrY+EAJPOLuh48n4tWfiNf0pgEN0UUV9b5vKBaicMce8OkGdoZS3Gr
-         pyIn4EgwrR4ZL2WqSMx9DHQN3lRMhl7GHvSPSStF0nLSMJTgVSUcPOEU55bw21jsE44i
-         3+yA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=LQKJvmVCX4rlGOfpYSKHs7yHs8plwdYfuIGRLcR33M0=;
-        b=RxTOca8A86GMeqTOKo+OGqnTrHlKxSJsOStGJRibKBj2oFmUUbTZ8YIAy0ZsOZihWR
-         FJjohID745WXlNI7/IXEoKaSkEkoM7JRG7rYQ/SiQYWw0djOYOtJRM/45wETRX8UXuQy
-         r7TnUqEIH1YODiLCXSnP/AFVjUecm1mhzqwJYTdkkoedEqpZQ3MTVFKg4zi3a9w6EIx5
-         f6QN2vISGkr9YO8+T9I5TOEyD4v9HGXRKixd4PudlxKpDBUVyja1dSKT+VVQfAjKULS6
-         q871xcAaytN9U8IP5CJdxHL9exVRXhxEoi6VA4szPAQpMsQyioVWNtUReMaLJfBa5Non
-         G1iw==
-X-Gm-Message-State: ACrzQf35ucAL02Z6by6L/7LjF3qbRD5EtAyRbM2ZYSs76KzAj//aW9H+
-        IxtnRZRgxnnFYQcXcss49thoULjcH/8DiC002zw=
-X-Google-Smtp-Source: AMsMyM7JokOCPlBoWvkF7CKtlvIFY7k7VeHz/+DBFNANwsdIaa9+wtHP74h8vZeP8b8D2W3XEgQajMWwmTNFmvwgHGc=
-X-Received: by 2002:a17:907:847:b0:77f:f489:cc25 with SMTP id
- ww7-20020a170907084700b0077ff489cc25mr18164724ejb.80.1663707873691; Tue, 20
- Sep 2022 14:04:33 -0700 (PDT)
+        Tue, 20 Sep 2022 17:04:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC13DE0AD
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 14:04:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663707880;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dndBUUyTd8Rbt5rH1+UqxAoWeyUi1+M1Mj7FGWIu6ys=;
+        b=U7otvNj+AURB4XDxgQTRd8Sexo49EgnBCuI5/YLgP0gPjpqQ3t6dXgrfSZQg5LT090dVbF
+        xxyScyK0WopElQbHk36hdksA4lSyJ69koGmZyNFNCaGa7h/MTl8s/vOsqL8mzw1GGHweNU
+        OJ1JEkanduzsGsLT56SGXigkQvB4i8k=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-379-SJmcUg02OIm0wnXFFQkUtQ-1; Tue, 20 Sep 2022 17:04:36 -0400
+X-MC-Unique: SJmcUg02OIm0wnXFFQkUtQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4D92B882823;
+        Tue, 20 Sep 2022 21:04:36 +0000 (UTC)
+Received: from [10.22.34.82] (unknown [10.22.34.82])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1D08BC15BA8;
+        Tue, 20 Sep 2022 21:04:36 +0000 (UTC)
+Message-ID: <a9b00df6-cacc-56e7-82d9-e7b2875aa898@redhat.com>
+Date:   Tue, 20 Sep 2022 17:04:35 -0400
 MIME-Version: 1.0
-References: <20220920184904.90495-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220920184904.90495-6-prabhakar.mahadev-lad.rj@bp.renesas.com> <YyoOv9Jx+h0JzfX0@spud>
-In-Reply-To: <YyoOv9Jx+h0JzfX0@spud>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Tue, 20 Sep 2022 22:04:06 +0100
-Message-ID: <CA+V-a8s8Nr-RUabiLA5PhHLVQQxsBPpjX_7f7ANZoGGFfOGJVQ@mail.gmail.com>
-Subject: Re: [PATCH v4 05/10] riscv: Kconfig.socs: Add ARCH_RENESAS kconfig option
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-        Atish Patra <atishp@rivosinc.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v2] locking/qspinlock: Do spin-wait in slowpath if
+ preemptible
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>
+Cc:     linux-kernel@vger.kernel.org
+References: <20220920195542.1548164-1-longman@redhat.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20220920195542.1548164-1-longman@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,56 +66,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Conor,
-
-Thank you for the review.
-
-On Tue, Sep 20, 2022 at 8:04 PM Conor Dooley <conor@kernel.org> wrote:
+On 9/20/22 15:55, Waiman Long wrote:
+> There are some code paths in the kernel where arch_spin_lock() will be
+> called directly when the lock isn't expected to be contended and critical
+> section is short. For example, tracing_saved_cmdlines_size_read()
+> in kernel/trace/trace.c does that.
 >
-> On Tue, Sep 20, 2022 at 07:48:59PM +0100, Prabhakar wrote:
-> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> >
-> > Add ARCH_RENESAS config option to allow selecting the Renesas RISC-V SoCs.
-> > We currently have the newly added RZ/Five (R9A07G043) RISC-V based SoC.
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > ---
-> > v3 -> v4
-> > * Dropped SOC_RENESAS_RZFIVE config option
-> > * Dropped explicitly selecting SOC_BUS/GPIOLIB/PINCTRL configs
-> >   under ARCH_RENESAS
-> > * Updated commit message
-> > * Dropped RB tag
-> > * Used riscv instead of RISC-V in subject line
-> >
-> > v2 -> v3
-> > * Included RB tag from Geert
-> >
-> > v1 -> v2
-> > * No Change
-> > ---
-> >  arch/riscv/Kconfig.socs | 5 +++++
-> >  1 file changed, 5 insertions(+)
-> >
-> > diff --git a/arch/riscv/Kconfig.socs b/arch/riscv/Kconfig.socs
-> > index 69774bb362d6..5c420ed55ef9 100644
-> > --- a/arch/riscv/Kconfig.socs
-> > +++ b/arch/riscv/Kconfig.socs
-> > @@ -80,4 +80,9 @@ config SOC_CANAAN_K210_DTB_SOURCE
-> >
-> >  endif # SOC_CANAAN
+> In most cases, preemption is also not disabled. This creates a problem
+> for the qspinlock slowpath which expects preemption to be disabled
+> to guarantee the safe use of per cpu qnodes structure. To work around
+> these special use cases, add a preemption count check in the slowpath
+> and do a simple spin-wait when preemption isn't disabled.
 >
-> I am not asking for a respin for this since no-one likely cares, but
-> I think a future goal would be to sort the file alphabetically. I'll
-> probably do it with the other 30-something patches my Kconfig.socs
-> rework series has got to now - but if you *are* respinning sorting
-> alphabetically (ignoring the CANAAN) would reduce future churn.
->
-To clarify, shall I add ARCH_RENESAS to the beginning of the file or
-after the SOC_MICROCHIP_POLARFIRE config?
+> Fixes: a33fda35e3a7 ("Introduce a simple generic 4-byte queued spinlock")
+> Signed-off-by: Waiman Long <longman@redhat.com>
 
-As rest of the configs start with SOC and for Renesas it starts with
-ARCH, so to avoid another re-spin hence this query.
+On second thought, I believe the proper way to fix this is to make sure 
+that all the callers of arch_spin_lock() has preemption properly 
+disabled. Will work on another patch set to do that. So please ignore 
+this patch and sorry for the noise.
 
 Cheers,
-Prabhakar
+Longman
+
