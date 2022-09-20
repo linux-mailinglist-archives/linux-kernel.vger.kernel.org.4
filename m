@@ -2,70 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C1B85BEF0D
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 23:17:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DEC65BEF28
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 23:29:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230283AbiITVRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 17:17:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48766 "EHLO
+        id S230233AbiITV3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 17:29:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbiITVRb (ORCPT
+        with ESMTP id S229815AbiITV3o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 17:17:31 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C2635FAD8;
-        Tue, 20 Sep 2022 14:17:30 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e791329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e791:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 3189D1EC01D4;
-        Tue, 20 Sep 2022 23:17:24 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1663708644;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=zkNVIW7XMP+DXz/zp8bGb1+4u+ta+XVJ1+LgT7xDrEg=;
-        b=DgPfkNhN5dT+kTg1a0yH2OY/0HhEvqFh4aa+SBDfIrOClKTQEgZdxZaQaF0TMlzT0XmVLq
-        tlIYO81XrkYy0Ro0ay5sQaqu9uNV4sp+D87QoHAqP3yMFYTv/pPi8j6HlwXnLLmXF6bpdi
-        /pBuMqnelm1XMRyNgt+96tisQeY2aG8=
-Date:   Tue, 20 Sep 2022 23:17:19 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Jim Mattson <jmattson@google.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] KVM: EFER.LMSLE cleanup
-Message-ID: <Yyot34LGkFR2/j5f@zn.tnic>
-References: <20220920205922.1564814-1-jmattson@google.com>
+        Tue, 20 Sep 2022 17:29:44 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064DEBC17;
+        Tue, 20 Sep 2022 14:29:39 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id E87CF18845FF;
+        Tue, 20 Sep 2022 21:29:12 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id D3A51250007B;
+        Tue, 20 Sep 2022 21:29:12 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id C5ED9A0A1E65; Tue, 20 Sep 2022 21:29:12 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220920205922.1564814-1-jmattson@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Date:   Tue, 20 Sep 2022 23:29:12 +0200
+From:   netdev@kapio-technology.com
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 net-next 6/6] selftests: forwarding: add test of
+ MAC-Auth Bypass to locked port tests
+In-Reply-To: <Yx73FOpN5uhPQhFl@shredder>
+References: <YwzjPcQjfLPk3q/k@shredder>
+ <f1a17512266ac8b61444e7f0e568aca7@kapio-technology.com>
+ <YxNo/0+/Sbg9svid@shredder>
+ <5cee059b65f6f7671e099150f9da79c1@kapio-technology.com>
+ <Yxmgs7Du62V1zyjK@shredder>
+ <8dfc9b525f084fa5ad55019f4418a35e@kapio-technology.com>
+ <20220908112044.czjh3xkzb4r27ohq@skbuf>
+ <152c0ceadefbd742331c340bec2f50c0@kapio-technology.com>
+ <20220911001346.qno33l47i6nvgiwy@skbuf>
+ <15ee472a68beca4a151118179da5e663@kapio-technology.com>
+ <Yx73FOpN5uhPQhFl@shredder>
+User-Agent: Gigahost Webmail
+Message-ID: <086704ce7f323cc1b3cca78670b42095@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 01:59:19PM -0700, Jim Mattson wrote:
-> Jim Mattson (3):
->   Revert "KVM: SVM: Allow EFER.LMSLE to be set with nested svm"
->   x86/cpufeatures: Introduce X86_FEATURE_NO_LMSLE
->   KVM: SVM: Unconditionally enumerate EferLmsleUnsupported
+On 2022-09-12 11:08, Ido Schimmel wrote:
+> On Sun, Sep 11, 2022 at 11:23:55AM +0200, netdev@kapio-technology.com 
+> wrote:
+>> On 2022-09-11 02:13, Vladimir Oltean wrote:
+>> > On Fri, Sep 09, 2022 at 03:11:56PM +0200, netdev@kapio-technology.com
+>> > wrote:
+>> > > > > > On Wed, Sep 07, 2022 at 11:10:07PM +0200, netdev@kapio-technology.com wrote:
+>> > > > > > > I am at the blackhole driver implementation now, as I suppose that the
+>> > > > > > > iproute2 command should work with the mv88e6xxx driver when adding blackhole
+>> > > > > > > entries (with a added selftest)?
+>> > > > > > > I decided to add the blackhole feature as new ops for drivers with functions
+>> > > > > > > blackhole_fdb_add() and blackhole_fdb_del(). Do you agree with that approach?
+>> > > > > >
+>> > > > > > I assume you are talking about extending 'dsa_switch_ops'?
+>> > > > >
+>> > > > > Yes, that is the idea.
+>> > > > >
+>> > > > > > If so, it's up to the DSA maintainers to decide.
+>> > > >
+>> > > > What will be the usefulness of adding a blackhole FDB entry from user
+>> > > > space?
+>> > >
+>> > > With the software bridge it could be used to signal a untrusted host
+>> > > in
+>> > > connection with a locked port entry attempt. I don't see so much use
+>> > > other
+>> > > that test purposes with the driver though.
+>> >
+>> > Not a huge selling point, to be honest. Can't the blackhole flag remain
+>> > settable only in the device -> bridge direction, with user space just
+>> > reading it?
+>> 
+>> That is possible, but it would of course not make sense to have 
+>> selftests of
+>> the feature as that would not work unless there is a driver with this
+>> capability (now just mv88e6xxx).
+> 
+> The new "blackhole" flag requires changes in the bridge driver and
+> without allowing user space to add such entries, the only way to test
+> these changes is with mv88e6xxx which many of us do not have...
 
-Why do you need those two if you revert the hack? After the revert,
-anything that tries to set LMSLE should get a #GP anyway, no?
+I am now building from new system (comp), and the kernel selftests are 
+not being installed correctly, so I haven't been able to run the 
+selftests yet.
 
--- 
-Regards/Gruss,
-    Boris.
+I have made a blackhole selftest, which looks like this:
 
-https://people.kernel.org/tglx/notes-about-netiquette
+test_blackhole_fdb()
+{
+         RET=0
+
+         check_blackhole_fdb_support || return 0
+
+         tcpdump_start $h2
+         $MZ $h1 -q -t udp -a $h1 -b $h2
+         tcpdump_stop
+         tcpdump_show | grep -q udp
+         check_err $? "test_blackhole_fdb: No packet seen on initial"
+         tcpdump_cleanup
+
+         bridge fdb add `mac_get $h2` dev br0 blackhole
+         bridge fdb show dev br0 | grep -q "blackhole"
+         check_err $? "test_blackhole_fdb: No blackhole FDB entry found"
+
+         tcpdump_start $h2
+         $MZ $h1 -q -t udp -a $h1 -b $h2
+         tcpdump_stop
+         tcpdump_show | grep -q udp
+         check_fail $? "test_blackhole_fdb: packet seen with blackhole 
+fdb entry"
+         tcpdump_cleanup
+
+         bridge fdb del `mac_get $h2` dev br0 blackhole
+         bridge fdb show dev br0 | grep -q "blackhole"
+         check_fail $? "test_blackhole_fdb: Blackhole FDB entry not 
+deleted"
+
+         tcpdump_start $h2
+         $MZ $h1 -q -t udp -a $h1 -b $h2
+         tcpdump_stop
+         tcpdump_show | grep -q udp
+         check_err $? "test_blackhole_fdb: No packet seen after removing 
+blackhole FDB entry"
+         tcpdump_cleanup
+
+         log_test "Blackhole FDB entry test"
+}
+
+the setup is simple and is the same as in bridge_sticky_fdb.sh.
+
+Does the test look sound or is there obvious mistakes?
