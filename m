@@ -2,130 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 385BB5BDDFE
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 09:18:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58BE55BDE02
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 09:19:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbiITHSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 03:18:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46706 "EHLO
+        id S229489AbiITHTF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 03:19:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiITHSK (ORCPT
+        with ESMTP id S229971AbiITHTA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 03:18:10 -0400
-Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECC5555A7;
-        Tue, 20 Sep 2022 00:18:09 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.west.internal (Postfix) with ESMTP id 8FB5B2B05FC0;
-        Tue, 20 Sep 2022 03:18:07 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Tue, 20 Sep 2022 03:18:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1663658287; x=1663661887; bh=LvNsqUSk6C
-        VCiNNoqcWQ4F99wUt4fhfxMlYywrwPN6k=; b=TVdtYthFfEARf+agjGfErq4CvH
-        Z6FnpfSgA86pGm7O3Nt3OK2hqHCQs5nLA/n7OxxlgFa2CBQ53CulfjXa9TW6nGEC
-        kQF0ny96tpYS9a8svyRyvMjRQrMXGMH5fjDWaWv3QwX7ctCECQ7wQE+GMWrX8gsF
-        tpjyccoWR7vpIT7yTqTRRlrqCTg448qeWWLjHOLquZriUcjU/qvMjV2udRAuf4GB
-        jutfDkTNmVgEJNAQA4RIdnWJrDtB1UKJ2ADb5eTmECh6HGGsTEmhqqkc+u+kp/Y6
-        pv72xW/SIriFcRZ4w/on0GFbqP6Biw+RzqEHRAW8SYRgbp5GrchDfXgDED+g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1663658287; x=1663661887; bh=LvNsqUSk6CVCiNNoqcWQ4F99wUt4
-        fhfxMlYywrwPN6k=; b=oOGiChK6G8Xoo6Lfj9nP4p1xdk3EMUm7DXOrH6kktuDl
-        4l1UIDFy4iONbvI3/er6A5iGWw1QCHPxLvHQs/mKwbW63ul457G1Qzdsxi4vaMer
-        hHModBqasatxyxQWnLoYIpTZ4ZZxeb9iiDn41Wi146u8rWnw+751VB8/ZM5Fdomj
-        FD+alOr0WsUlshaNsfCGmLvZCX9Q3me+O35bKGshGa+tTHS1Oa5V7a8oOrrxeWF3
-        mN+ZdwK9IEoDTUQ+r4fuUSd5tV+LCEzYD5tMUJrVACSy0EAJdEayYcqvNUXaL/FT
-        6YxQvSNrGyaPmkmjbRf4SaL+KR8egYDXzed/0ZbxfA==
-X-ME-Sender: <xms:LmkpYwuB0UAoGNFSv1ucS0G1jy8b4eSr6wI_6m1wccPSlAdeV31nZg>
-    <xme:LmkpY9fvPZv9wRdzLdVXkdd1te9DmTw7rcJiUfnprBWWhJ-o10sJg4hCWSfFL-nPa
-    lNOPb4Z3v6-qekA4xo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedvkedguddvtdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:LmkpY7ygbkJaktw45WbT9SL2DxCR1ZzUpz7gtblg_eDR4mANmfGWfw>
-    <xmx:LmkpYzPEtieCJGcAhgyW6oRWo9hcUxO_ADF4nB86WJJT-TGNYEPxMA>
-    <xmx:LmkpYw8gX3IexwBknny5tso8GC8RBY6hn7sRQzH8u75dBzwPH60DpA>
-    <xmx:L2kpYz1MiAkGixFYUIVdrL1tQTooNaO5qAj9CQcrz5Avm9Ay58Deb2kjUKFtEjTU>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 49279B60086; Tue, 20 Sep 2022 03:18:06 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-935-ge4ccd4c47b-fm-20220914.001-ge4ccd4c4
-Mime-Version: 1.0
-Message-Id: <7a2379cf-c1cf-46af-9172-334d2b9b88d5@www.fastmail.com>
-In-Reply-To: <CAJF2gTRVH6pVqBn+n+wbccBcMWraRP3m4CbXz4g_y+=nPEU=Yw@mail.gmail.com>
-References: <20220908022506.1275799-1-guoren@kernel.org>
- <20220908022506.1275799-9-guoren@kernel.org>
- <4babce64-e96d-454c-aa35-243b3f2dc315@www.fastmail.com>
- <CAJF2gTQAMCjNyqrSOvqDAKR5Z-PZiTVxmoK9cvNAVQs+k2fZBg@mail.gmail.com>
- <8817af55-de0d-4e8f-a41b-25d01d5fa968@www.fastmail.com>
- <CAJF2gTRoKfJ25brnA=_CqNw9DPt8XKhcyNzmCbD6wX1q-jiR1w@mail.gmail.com>
- <CAJF2gTRVH6pVqBn+n+wbccBcMWraRP3m4CbXz4g_y+=nPEU=Yw@mail.gmail.com>
-Date:   Tue, 20 Sep 2022 09:17:45 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     guoren <guoren@kernel.org>
-Cc:     "Palmer Dabbelt" <palmer@rivosinc.com>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        "Andy Lutomirski" <luto@kernel.org>,
-        "Conor.Dooley" <conor.dooley@microchip.com>,
-        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        "Jisheng Zhang" <jszhang@kernel.org>, lazyparser@gmail.com,
-        falcon@tinylab.org, "Huacai Chen" <chenhuacai@kernel.org>,
-        "Anup Patel" <apatel@ventanamicro.com>,
-        "Atish Patra" <atishp@atishpatra.org>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        "Sebastian Andrzej Siewior" <bigeasy@linutronix.de>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        "Guo Ren" <guoren@linux.alibaba.com>,
-        "Andreas Schwab" <schwab@suse.de>
-Subject: Re: [PATCH V4 8/8] riscv: Add config of thread stack size
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 20 Sep 2022 03:19:00 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36CA36344
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 00:18:57 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id u18so2274368lfo.8
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 00:18:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=c6V/iqzhYX+7XjCjRngptEhB45APB69/gGkGWTb9bOI=;
+        b=REvGdsDQZm/hIli7qRuWBjeWznU/QQbweJf9/Appf9KWcP9UmAloY668RFsZ4KZxeV
+         16jZBJ8UhPexJ4YrPE8ny3oHLNOhAEtCe0UiLf8L+oZXbyBiQaaZ5TuNrRWSR/w52wDw
+         uE2wAxg4WAWfXzFcGxQbCFyh+eXiB0rVL4DvbB1B6sI2pfRkXofNzlQ3Sx7phmK5Kywl
+         LZKTHbY3ALWI70co7zM8vqzvpt5CAIB37yT6xTpBu6hWG4UeQNHiQT8fedY6XnUlMO7U
+         yKytGmD0tG4X9EHXwuFkEzhM24XEsIgoUFT7JPTRG4Um7Lg7+CmCdnr6NerKJtZ5oawM
+         mTXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=c6V/iqzhYX+7XjCjRngptEhB45APB69/gGkGWTb9bOI=;
+        b=XoJsAo7NRrJcqXejEVrpz3MTfO1JdQdDZw6EmGXm1kSORASlB6z2axUcefqdNMpD4u
+         0maaVrCYOvRL7FQH0qqIkX0LSAax2X62/aL9Og7ku+kUomup5KVt9IaVl1Ib4QKRUXcw
+         9xKORvWgcy2WpWBIDg3e8Vj8AyFKQDenoeoxQpH7g76irwvmqylLkQxKJ7PKThIyi7ck
+         uFE+NJVlvjHHNUcxJy8yh9GkzxGFsN0DlimQxwZHmvONqDSBKYfoBw0g1h0Qcv2a7/sS
+         E1FqVBBqo7mLo87uOWEY3n0FUWrAzFxmp6g42Qydugf4SJDC2BxemaglE+xz/uVlZLYJ
+         BVTw==
+X-Gm-Message-State: ACrzQf35OxPRnoRCrh/YEv05yHuCbuJ+1sQQHf3j+Ya+1PttHeSI8wsz
+        fe4tTBOIukxgVTsJ59MsxpjBXQ==
+X-Google-Smtp-Source: AMsMyM4/qcEPwX2znvCnJnpoJ1Q+PTnrI3VZ+8WxYiL0AEBO11iKm11+i2aefowgxlOJR3W9Mt+elg==
+X-Received: by 2002:a05:6512:1101:b0:492:da22:bc58 with SMTP id l1-20020a056512110100b00492da22bc58mr7978158lfg.219.1663658335296;
+        Tue, 20 Sep 2022 00:18:55 -0700 (PDT)
+Received: from brgl-uxlite.coova.org ([31.0.93.102])
+        by smtp.gmail.com with ESMTPSA id k12-20020a192d0c000000b004984ab5956dsm166373lfj.202.2022.09.20.00.18.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Sep 2022 00:18:54 -0700 (PDT)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Wei Yongjun <weiyongjun1@huawei.com>, stable@vger.kernel.org
+Subject: [PATCH] gpio: mockup: fix NULL pointer dereference when removing debugfs
+Date:   Tue, 20 Sep 2022 09:18:41 +0200
+Message-Id: <20220920071841.204292-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022, at 2:46 AM, Guo Ren wrote:
+We now remove the device's debugfs entries when unbinding the driver.
+This now causes a NULL-pointer dereference on module exit because the
+platform devices are unregistered *after* the global debugfs directory
+has been recursively removed. Fix it by unregistering the devices first.
 
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index dfe600f3526c..8def456f328c 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -442,6 +442,16 @@ config IRQ_STACKS
->           Add independent irq & softirq stacks for percpu to prevent
-> kernel stack
->           overflows. We may save some memory footprint by disabling IRQ_STACKS.
->
-> +config THREAD_SIZE
-> +       int "Kernel stack size (in bytes)" if EXPERT
-> +       range 4096 65536
-> +       default 8192 if 32BIT && !KASAN
-> +       default 32768 if 64BIT && KASAN
-> +       default 16384
-> +       help
-> +         Specify the Pages of thread stack size (from 4KB to 64KB), which also
-> +         affects irq stack size, which is equal to thread stack size.
+Fixes: 303e6da99429 ("gpio: mockup: remove gpio debugfs when remove device")
+Cc: Wei Yongjun <weiyongjun1@huawei.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+---
+ drivers/gpio/gpio-mockup.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I still think this should be guarded in a way that prevents
-setting the stack to smaller than default values unless VMAP_STACK
-is set as well.
+diff --git a/drivers/gpio/gpio-mockup.c b/drivers/gpio/gpio-mockup.c
+index a2e505a7545c..ab89cd8ddbd8 100644
+--- a/drivers/gpio/gpio-mockup.c
++++ b/drivers/gpio/gpio-mockup.c
+@@ -597,9 +597,9 @@ static int __init gpio_mockup_init(void)
+ 
+ static void __exit gpio_mockup_exit(void)
+ {
++	gpio_mockup_unregister_pdevs();
+ 	debugfs_remove_recursive(gpio_mockup_dbg_dir);
+ 	platform_driver_unregister(&gpio_mockup_driver);
+-	gpio_mockup_unregister_pdevs();
+ }
+ 
+ module_init(gpio_mockup_init);
+-- 
+2.34.1
 
-    Arnd
