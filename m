@@ -2,76 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C06B55BD9CC
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 04:03:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 151155BD9CD
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 04:03:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230098AbiITCDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Sep 2022 22:03:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57840 "EHLO
+        id S230105AbiITCDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Sep 2022 22:03:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230096AbiITCDZ (ORCPT
+        with ESMTP id S230103AbiITCDn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Sep 2022 22:03:25 -0400
-Received: from unicom145.biz-email.net (unicom145.biz-email.net [210.51.26.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D9957226;
-        Mon, 19 Sep 2022 19:03:22 -0700 (PDT)
-Received: from ([60.208.111.195])
-        by unicom145.biz-email.net ((D)) with ASMTP (SSL) id OBX00117;
-        Tue, 20 Sep 2022 10:03:17 +0800
-Received: from localhost.localdomain (10.200.104.97) by
- jtjnmail201622.home.langchao.com (10.100.2.22) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 20 Sep 2022 10:03:16 +0800
-From:   Bo Liu <liubo03@inspur.com>
-To:     <wim@linux-watchdog.org>, <linux@roeck-us.net>
-CC:     <linux-watchdog@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Bo Liu <liubo03@inspur.com>
-Subject: [PATCH] watchdog: Check dev_set_name() return value
-Date:   Mon, 19 Sep 2022 22:03:12 -0400
-Message-ID: <20220920020312.2383-1-liubo03@inspur.com>
-X-Mailer: git-send-email 2.18.2
+        Mon, 19 Sep 2022 22:03:43 -0400
+Received: from twspam01.aspeedtech.com (twspam01.aspeedtech.com [211.20.114.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A60005724C
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 19:03:39 -0700 (PDT)
+Received: from mail.aspeedtech.com ([192.168.0.24])
+        by twspam01.aspeedtech.com with ESMTP id 28K1gpFj087853;
+        Tue, 20 Sep 2022 09:42:51 +0800 (GMT-8)
+        (envelope-from chiawei_wang@aspeedtech.com)
+Received: from Chiawei-PC03.aspeed.com (192.168.2.66) by TWMBX02.aspeed.com
+ (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 20 Sep
+ 2022 10:03:36 +0800
+From:   Chia-Wei Wang <chiawei_wang@aspeedtech.com>
+To:     <minyard@acm.org>, <joel@jms.id.au>, <andrew@aj.id.au>,
+        <openipmi-developer@lists.sourceforge.net>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
+        <openbmc@lists.ozlabs.org>
+Subject: [PATCH] ipmi: kcs: aspeed: Update port address comments
+Date:   Tue, 20 Sep 2022 10:03:33 +0800
+Message-ID: <20220920020333.601-1-chiawei_wang@aspeedtech.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.200.104.97]
-X-ClientProxiedBy: Jtjnmail201615.home.langchao.com (10.100.2.15) To
- jtjnmail201622.home.langchao.com (10.100.2.22)
-tUid:   202292010031793cf6e2e6a568da9d6006a596f7ea805
-X-Abuse-Reports-To: service@corp-email.com
-Abuse-Reports-To: service@corp-email.com
-X-Complaints-To: service@corp-email.com
-X-Report-Abuse-To: service@corp-email.com
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [192.168.2.66]
+X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
+ (192.168.0.24)
+X-DNSRBL: 
+X-MAIL: twspam01.aspeedtech.com 28K1gpFj087853
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's possible that dev_set_name() returns -ENOMEM, catch and handle this.
+Remove AST_usrGuide_KCS.pdf as it is no longer maintained.
 
-Signed-off-by: Bo Liu <liubo03@inspur.com>
+Add more descriptions as the driver now supports the I/O
+address configurations for both the KCS Data and Cmd/Status
+interface registers.
+
+Signed-off-by: Chia-Wei Wang <chiawei_wang@aspeedtech.com>
 ---
- drivers/watchdog/watchdog_dev.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/char/ipmi/kcs_bmc_aspeed.c | 29 ++++++++++++++++++-----------
+ 1 file changed, 18 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
-index 54903f3c851e..744b2ab75288 100644
---- a/drivers/watchdog/watchdog_dev.c
-+++ b/drivers/watchdog/watchdog_dev.c
-@@ -1015,7 +1015,11 @@ static int watchdog_cdev_register(struct watchdog_device *wdd)
- 	wd_data->dev.groups = wdd->groups;
- 	wd_data->dev.release = watchdog_core_data_release;
- 	dev_set_drvdata(&wd_data->dev, wdd);
--	dev_set_name(&wd_data->dev, "watchdog%d", wdd->id);
-+	err = dev_set_name(&wd_data->dev, "watchdog%d", wdd->id);
-+	if (err) {
-+		put_device(&wd_data->dev);
-+		return err;
-+	}
+diff --git a/drivers/char/ipmi/kcs_bmc_aspeed.c b/drivers/char/ipmi/kcs_bmc_aspeed.c
+index cdc88cde1e9a..19c32bf50e0e 100644
+--- a/drivers/char/ipmi/kcs_bmc_aspeed.c
++++ b/drivers/char/ipmi/kcs_bmc_aspeed.c
+@@ -207,17 +207,24 @@ static void aspeed_kcs_updateb(struct kcs_bmc_device *kcs_bmc, u32 reg, u8 mask,
+ }
  
- 	kthread_init_work(&wd_data->work, watchdog_ping_work);
- 	hrtimer_init(&wd_data->timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL_HARD);
+ /*
+- * AST_usrGuide_KCS.pdf
+- * 2. Background:
+- *   we note D for Data, and C for Cmd/Status, default rules are
+- *     A. KCS1 / KCS2 ( D / C:X / X+4 )
+- *        D / C : CA0h / CA4h
+- *        D / C : CA8h / CACh
+- *     B. KCS3 ( D / C:XX2h / XX3h )
+- *        D / C : CA2h / CA3h
+- *        D / C : CB2h / CB3h
+- *     C. KCS4
+- *        D / C : CA4h / CA5h
++ * We note D for Data, and C for Cmd/Status, default rules are
++ *
++ * 1. Only the D address is given:
++ *   A. KCS1/KCS2 (D/C: X/X+4)
++ *      D/C: CA0h/CA4h
++ *      D/C: CA8h/CACh
++ *   B. KCS3 (D/C: XX2/XX3h)
++ *      D/C: CA2h/CA3h
++ *   C. KCS4 (D/C: X/X+1)
++ *      D/C: CA4h/CA5h
++ *
++ * 2. Both the D/C addresses are given:
++ *   A. KCS1/KCS2/KCS4 (D/C: X/Y)
++ *      D/C: CA0h/CA1h
++ *      D/C: CA8h/CA9h
++ *      D/C: CA4h/CA5h
++ *   B. KCS3 (D/C: XX2/XX3h)
++ *      D/C: CA2h/CA3h
+  */
+ static int aspeed_kcs_set_address(struct kcs_bmc_device *kcs_bmc, u32 addrs[2], int nr_addrs)
+ {
 -- 
-2.27.0
+2.25.1
 
