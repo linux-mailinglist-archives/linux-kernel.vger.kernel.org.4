@@ -2,203 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3495C5BE73F
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 15:38:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04AE95BE743
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 15:38:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231164AbiITNiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 09:38:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50716 "EHLO
+        id S231209AbiITNiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 09:38:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbiITNh7 (ORCPT
+        with ESMTP id S231207AbiITNiL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 09:37:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF4B53AE6C;
-        Tue, 20 Sep 2022 06:37:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 55F95629CE;
-        Tue, 20 Sep 2022 13:37:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A746C433D6;
-        Tue, 20 Sep 2022 13:37:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663681076;
-        bh=l6QCkQPQmf5xKZt5wdlN3JoV4O1u6fNCXibO2IpmGGA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=IsAH0TCEATreJJERC7+UKn3/F8/6zO4Q7JqNRE9u7reQ96PZmFwoziYCKD1Ell5UV
-         y2dTEXhRpRJ9NWoFnr6pwhEfoSqh1ia8keDlYn3Dz4vCqgsJbh+35qRlVbrmAcVFTw
-         tWBdxhxhSHlfxPQ01QBJ2eBGYJtYA25JsRRh2QvwZhiigsp78YifCSiMqSUHc+YAyM
-         Uuasx34seUOUJB0zuFfYi4K1kenSsARHTKmUkRCJpvYo57m3F9Hbf1xiURi7c+wHLu
-         EGQOukURfLMAhZV39JptoFFS4xE11HvewEzjYoz8hpmM5mdc3HdId51kqJxm8ENDas
-         UkIcyhSMU5S1Q==
-Date:   Tue, 20 Sep 2022 08:37:54 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Stanimir Varbanov <svarbanov@mm-sol.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v2] PCI: qcom: Add support for modular builds
-Message-ID: <20220920133754.GA1102995@bhelgaas>
+        Tue, 20 Sep 2022 09:38:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3C35A2E1
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 06:38:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663681088;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5ptul5F+oi+h41DyVRco1I/MopxWAXfTqNQ2MFX3lkw=;
+        b=aSEFEdqrgeDCK4bMzYmyGj2o482uidpLYcPZmq5Fz2vHlfM4iAGfuMexO9DY/HhlfwyKE/
+        4eBuzT5Ed5rpOsdT95EHjBRoJdvnxgmQ1ZOMUC6wZ/U8IawOFE5Rx9/moNdQ45mYOO7X74
+        V6jX9o3UREW8NQti2/dWy6KsM859d08=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-195-PiiZodm8Oq6lNJzMs_JJgQ-1; Tue, 20 Sep 2022 09:38:07 -0400
+X-MC-Unique: PiiZodm8Oq6lNJzMs_JJgQ-1
+Received: by mail-qt1-f198.google.com with SMTP id w4-20020a05622a134400b0035cbc5ec9a2so1844125qtk.14
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 06:38:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=5ptul5F+oi+h41DyVRco1I/MopxWAXfTqNQ2MFX3lkw=;
+        b=6KGI46wYFkFypdmfI5oecdo3dpHchicnkjvDPfUtJvB0zytpZ8GSjXLlk6CiP3KPsA
+         6vbXvzUe47ppTTe+dVw2Mo2MNPOja8UIlFvWFTYEopm09nK6ZygnfrrH5C/HKcjTVyZY
+         20qC8GA3HfjsCvFABXDB+t3Nstoe/AlgIUIti/zkt5aD0Blo0xU6vofJdresM7tDjDRw
+         0cr9AzFOog8J2bhD/XXIRim/8ddw8EikMvN6FCOawWFXk6Xcpk13z0rx2zI/Yah4SFOJ
+         wvtjQABthkECQc2UBxrVYb/NFRN7bbZW/w1ru0hAHToGCtc6IfxF3kzKLHqCc+MnrdXs
+         zqfg==
+X-Gm-Message-State: ACrzQf3KyPh/30hNgKuMOCkKRfqcfay2Q2x75+63GvVrfRAflWvpMYqU
+        uNsnWJBdSS243JXElNLd1XCurv4BYhLXLSE1EmpaKFmUcQtTsbuTXs1kNllhdwMoWB9Lp7sKVYr
+        KaRIh7WGLzYNWDABVfNlIE/0+
+X-Received: by 2002:ac8:59c8:0:b0:35c:e115:b18d with SMTP id f8-20020ac859c8000000b0035ce115b18dmr11456585qtf.123.1663681085599;
+        Tue, 20 Sep 2022 06:38:05 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6E77qWjrb4O7Hq4zvnJnGvSPaIHOB3HS5izLjI11yyG3poqQh+gGyGGwkM2TfWtP/1afoIQg==
+X-Received: by 2002:ac8:59c8:0:b0:35c:e115:b18d with SMTP id f8-20020ac859c8000000b0035ce115b18dmr11456440qtf.123.1663681083862;
+        Tue, 20 Sep 2022 06:38:03 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-114-90.dyn.eolo.it. [146.241.114.90])
+        by smtp.gmail.com with ESMTPSA id bj7-20020a05620a190700b006b9c6d590fasm148570qkb.61.2022.09.20.06.38.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Sep 2022 06:38:03 -0700 (PDT)
+Message-ID: <be11181df759bce03b0bc049d30fd925d5229718.camel@redhat.com>
+Subject: Re: [PATCH net-next 3/6] net: ipa: move and redefine
+ ipa_version_valid()
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Alex Elder <elder@linaro.org>, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org
+Cc:     mka@chromium.org, evgreen@chromium.org, andersson@kernel.org,
+        quic_cpratapa@quicinc.com, quic_avuyyuru@quicinc.com,
+        quic_jponduru@quicinc.com, quic_subashab@quicinc.com,
+        elder@kernel.org, netdev@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 20 Sep 2022 15:37:59 +0200
+In-Reply-To: <b26912a7-0770-4b1f-4cf4-bed81298cbdb@linaro.org>
+References: <20220910011131.1431934-1-elder@linaro.org>
+         <20220910011131.1431934-4-elder@linaro.org>
+         <d98d439ef5ee8a1744481bf1f076fbed918c3cef.camel@redhat.com>
+         <b26912a7-0770-4b1f-4cf4-bed81298cbdb@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yyl+PNcbtSwzlgvh@hovoldconsulting.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 10:47:56AM +0200, Johan Hovold wrote:
-> Hi Lorenzo,
-> 
-> On Thu, Jul 21, 2022 at 08:47:20AM +0200, Johan Hovold wrote:
-> > Allow the Qualcomm PCIe controller driver to be built as a module, which
-> > is useful for multi-platform kernels as well as during development.
+On Tue, 2022-09-20 at 07:50 -0500, Alex Elder wrote:
+> On 9/20/22 3:29 AM, Paolo Abeni wrote:
+> > On Fri, 2022-09-09 at 20:11 -0500, Alex Elder wrote:
+> > > Move the definition of ipa_version_valid(), making it a static
+> > > inline function defined together with the enumerated type in
+> > > "ipa_version.h".  Define a new count value in the type.
+> > > 
+> > > Rename the function to be ipa_version_supported(), and have it
+> > > return true only if the IPA version supplied is explicitly supported
+> > > by the driver.
 > > 
-> > Reviewed-by: Rob Herring <robh@kernel.org>
-> > Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > ---
-> > 
-> > Changes in v2
-> >  - rebase on next-20220720 (adjust context)
-> >  - add Rob and Mani's reviewed-by tags
+> > I'm wondering if the above is going to cause regressions with some IPA
+> > versions suddenly not probed anymore by the module?
 > 
-> Have you had a change to look at this one since you got back from
-> vacation?
+> That is a really good observation.
 > 
-> I believe this should be uncontroversial as we already have other
-> modular dwc drivers and there's no mapping of legacy INTx interrupts
-> involved.
-
-I'm not Lorenzo, but was there a conclusive outcome to the thread at
-[1]?  The last thing I remember was that a buggy endpoint driver that
-failed to unmap all its interrupts could cause crashes if the PCIe
-controller driver was removed.
-
-Making the driver modular is essential so distros can build all the
-drivers and users can load the one needed by their platform.
-
-Making the driver removable is useful for developers but not for
-users, so I don't see it as essential.  Developers are in the business
-of developing and can easily carry a trivial out-of-tree patch to add
-removability if needed.
-
-If removability is actually safe even if endpoint drivers aren't
-perfect, then I don't object to it.  But if it's not always safe, I
-don't think the argument that "other drivers do it" is strong.  I'd
-rather make all the drivers safe even if that means making them
-non-removable.
-
-[1] https://lore.kernel.org/r/20220721195433.GA1747571@bhelgaas
-
-> >  drivers/pci/controller/dwc/Kconfig     |  2 +-
-> >  drivers/pci/controller/dwc/pcie-qcom.c | 36 +++++++++++++++++++++++---
-> >  2 files changed, 34 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/drivers/pci/controller/dwc/Kconfig b/drivers/pci/controller/dwc/Kconfig
-> > index 62ce3abf0f19..230f56d1a268 100644
-> > --- a/drivers/pci/controller/dwc/Kconfig
-> > +++ b/drivers/pci/controller/dwc/Kconfig
-> > @@ -168,7 +168,7 @@ config PCI_HISI
-> >  	  Hip05 and Hip06 SoCs
-> >  
-> >  config PCIE_QCOM
-> > -	bool "Qualcomm PCIe controller"
-> > +	tristate "Qualcomm PCIe controller"
-> >  	depends on OF && (ARCH_QCOM || COMPILE_TEST)
-> >  	depends on PCI_MSI_IRQ_DOMAIN
-> >  	select PCIE_DW_HOST
-> > diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-> > index 5ed164c2afa3..d176c635016b 100644
-> > --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> > +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> > @@ -16,7 +16,7 @@
-> >  #include <linux/io.h>
-> >  #include <linux/iopoll.h>
-> >  #include <linux/kernel.h>
-> > -#include <linux/init.h>
-> > +#include <linux/module.h>
-> >  #include <linux/of_device.h>
-> >  #include <linux/of_gpio.h>
-> >  #include <linux/pci.h>
-> > @@ -1518,6 +1518,15 @@ static int qcom_pcie_host_init(struct dw_pcie_rp *pp)
-> >  	return ret;
-> >  }
-> >  
-> > +static void qcom_pcie_host_deinit(struct qcom_pcie *pcie)
-> > +{
-> > +	qcom_ep_reset_assert(pcie);
-> > +	if (pcie->cfg->ops->post_deinit)
-> > +		pcie->cfg->ops->post_deinit(pcie);
-> > +	phy_power_off(pcie->phy);
-> > +	pcie->cfg->ops->deinit(pcie);
-> > +}
-> > +
-> >  static const struct dw_pcie_host_ops qcom_pcie_dw_ops = {
-> >  	.host_init = qcom_pcie_host_init,
-> >  };
-> > @@ -1752,6 +1761,22 @@ static int qcom_pcie_probe(struct platform_device *pdev)
-> >  	return ret;
-> >  }
-> >  
-> > +static int qcom_pcie_remove(struct platform_device *pdev)
-> > +{
-> > +	struct qcom_pcie *pcie = platform_get_drvdata(pdev);
-> > +	struct device *dev = &pdev->dev;
-> > +
-> > +	dw_pcie_host_deinit(&pcie->pci->pp);
-> > +	qcom_pcie_host_deinit(pcie);
-> > +
-> > +	phy_exit(pcie->phy);
-> > +
-> > +	pm_runtime_put_sync(dev);
-> > +	pm_runtime_disable(dev);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> >  static const struct of_device_id qcom_pcie_match[] = {
-> >  	{ .compatible = "qcom,pcie-apq8084", .data = &apq8084_cfg },
-> >  	{ .compatible = "qcom,pcie-ipq8064", .data = &ipq8064_cfg },
-> > @@ -1771,6 +1796,7 @@ static const struct of_device_id qcom_pcie_match[] = {
-> >  	{ .compatible = "qcom,pcie-ipq6018", .data = &ipq6018_cfg },
-> >  	{ }
-> >  };
-> > +MODULE_DEVICE_TABLE(of, qcom_pcie_match);
-> >  
-> >  static void qcom_fixup_class(struct pci_dev *dev)
-> >  {
-> > @@ -1786,10 +1812,14 @@ DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x1001, qcom_fixup_class);
-> >  
-> >  static struct platform_driver qcom_pcie_driver = {
-> >  	.probe = qcom_pcie_probe,
-> > +	.remove = qcom_pcie_remove,
-> >  	.driver = {
-> >  		.name = "qcom-pcie",
-> > -		.suppress_bind_attrs = true,
-> >  		.of_match_table = qcom_pcie_match,
-> >  	},
-> >  };
-> > -builtin_platform_driver(qcom_pcie_driver);
-> > +module_platform_driver(qcom_pcie_driver);
-> > +
-> > +MODULE_AUTHOR("Stanimir Varbanov <svarbanov@mm-sol.com>");
-> > +MODULE_DESCRIPTION("Qualcomm PCIe root complex driver");
-> > +MODULE_LICENSE("GPL");
+> The way versions are handled is a little bit inconsistent.  The
+> code is generally written in such a way that *any* version could
+> be used (between a certain minimum and maximum, currently 3.0-4.11).
+> In other words, the *intent* in the code is to make it so that
+> quirks and features that are version-specific are handled the right
+> way, even if we do not (yet) support it.
 > 
-> Johan
+> So for example the inline macro rsrc_grp_encoded() returns the
+> mask to use to specify an endpoint's assigned resource group.
+> IPA v4.7 uses one bit, whereas others use two or three bits.
+> We don't "formally" support IPA v4.7, because I (or someone
+> else) haven't set up a Device Tree file and "IPA config data"
+> to test it on real hardware.  Still, rsrc_grp_encoded() returns
+> the right value for IPA v4.7, even though it won't be needed
+> until IPA v4.7 is tested and declared supported.
+> 
+> The intent is to facilitate adding support for IPA v4.7 (and
+> others).  In principle one could simply try it out and it should
+> work, but in reality it is unlikely to be that easy.
+> 
+> Finally, as mentioned, to support a version (such as 4.7) we
+> need to create "ipa_data-v4.7.c", which defines a bunch of
+> things that are version-specific.  Because those definitions
+> are missing, no IPA v4.7 hardware will be matched by the
+> ipa_match[] table.
+> 
+> So the answer to your question is that currently none of the
+> unsupported versions will successfully probe anyway.
+> 
+> > Additionally there are a few places checking for the now unsupported
+> > version[s], I guess that check could/should be removed? e.g.
+> > ipa_reg_irq_suspend_en_ee_n_offset(),
+> > ipa_reg_irq_suspend_info_ee_n_offset()
+> > ...
+> 
+> I'm a fan of removing unused code like this, but I really would
+> like to actually support these other IPA versions, and I hope
+> the code is close to ready for that.  I would just need to get
+> some hardware to test it with (and it needs to rise to the top
+> of my priority list...).
+> 
+> Does this make sense to you?
+
+Yes, very clear and detailed explaination, thanks!
+
+I'm ok with the series in the current form.
+
+Cheers,
+
+Paolo
+
