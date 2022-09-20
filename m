@@ -2,94 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D4D05BED7C
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 21:19:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E45115BED7E
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 21:19:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230243AbiITTTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 15:19:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60712 "EHLO
+        id S229885AbiITTT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 15:19:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbiITTTQ (ORCPT
+        with ESMTP id S229911AbiITTTS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 15:19:16 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC1A261D68;
-        Tue, 20 Sep 2022 12:19:14 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e791329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e791:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5C7241EC01D4;
-        Tue, 20 Sep 2022 21:19:09 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1663701549;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=FEzgIy7+VixOuaBNBHyswL6EnQKt/p0p/2LZpYHPS9U=;
-        b=mn7vCIJGvsWZLdM9xxpNou/6M4KSIPKPBzD8db6NOZvjnFqZi3TX9ksfL4zkdDNaH9Fh7D
-        Jn0s9NdlwuKB0lAVopNcz9qg/ODzwUsB4YusCJF9hofr6XVkzS8isw3wie50qMYLIZi8dP
-        Rc2aaia0xXB0QB6c9RB39MdDOyM9yGo=
-Date:   Tue, 20 Sep 2022 21:19:05 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Michael Roth <michael.roth@amd.com>
-Subject: Re: [PATCH 1/6] x86/head_64: clean up mixed mode 32-bit entry code
-Message-ID: <YyoSKYQFDiqcqXWA@zn.tnic>
-References: <20220815134223.740112-1-ardb@kernel.org>
- <20220815134223.740112-2-ardb@kernel.org>
+        Tue, 20 Sep 2022 15:19:18 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74C0F642E8
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 12:19:17 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id o99-20020a17090a0a6c00b002039c4fce53so6366196pjo.2
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 12:19:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=uLSszCT1IxpnInF2D5RqSkjjI+8VauFRIZUKTh82iEk=;
+        b=Kd2KiF1uPuS50UJFnhEjakPvrHPIrmLngrROanyprldsZ1bfY+V+wuvMu4P290rQdA
+         H+cVKT39j22NlNrcjaiTvfyGzjw50/x6ZJLrWnaH7BWydzqVW+to5RXaOO9pFb3zQDjB
+         r0UteikTd44fqIPHiPAONL0MhuC/ZVlhAl0qGjwQw2yuRKoFSi+Wa4fHFSVatshOzsbp
+         +nd9vi9yqpiyVP8HJymx1/C1/B7k0OFAOSOGtFq2uOb+gHigg2csCSeN2bcmRF3+wl98
+         bpRoMWTP550QEHAC2/tZflsBx4AFTFTVdIfEnLA50fCVlXaV/SOWlBPkDXAVKAlk0Hfp
+         eHUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=uLSszCT1IxpnInF2D5RqSkjjI+8VauFRIZUKTh82iEk=;
+        b=Y2ZnPg/09L5jhqJWAR7i889DfY8tsOJLZjPiFZsc1pE6/uvbzG0WJPx/vqM3JgY0GM
+         2+Ff3GKXkrW8wPB9AXYOp1sjjPiJSAQXX3RjuIcUIfii2QpdDGDdtMuZ3bt6F+KC3kcV
+         29sRjgOVWXdwWoC2sm+3WCq1KhVCbUV8Jk2jq0sqZRMGx/zAKJoVY2JsmaivQO7ETHYf
+         us5IBRBj0NFN7tNWUNnIrWKCAC395w8IY7T+VW+hE32LG9NkDTDLYs/6nCAYaHZ/P/st
+         uK6WnQS0ntv92zCyXqlODMcjsm5tb9fBByyCwV4vvCQC0y7MjlqP3R3cVavd3GQX7Rjy
+         vW1A==
+X-Gm-Message-State: ACrzQf1xnfkH/ViEYK2RVchBLdUb+I7LNHVxRmFuwv/F3AhFZgETdk5c
+        SgYRwR7xFGlGUhiDneRpi2Eskw==
+X-Google-Smtp-Source: AMsMyM5QDSn1AqSkzDu0E5hRzTKLIWvzu5cl/aFo4299PkngStimhK8w/GVJC/d2cYeRtT2x/JbqTQ==
+X-Received: by 2002:a17:90a:e60c:b0:202:6ef8:4b52 with SMTP id j12-20020a17090ae60c00b002026ef84b52mr5523330pjy.236.1663701556771;
+        Tue, 20 Sep 2022 12:19:16 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id o126-20020a62cd84000000b00537eacc8fa6sm286903pfg.40.2022.09.20.12.19.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Sep 2022 12:19:16 -0700 (PDT)
+Date:   Tue, 20 Sep 2022 19:19:12 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Dr. David Alan Gilbert" <dgilbert@redhat.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Leonardo Bras <leobras@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>
+Subject: Re: [PATCH 0/3] KVM: x86: Fix XSAVE related bugs
+Message-ID: <YyoSMGSRRwratmrV@google.com>
+References: <20220824033057.3576315-1-seanjc@google.com>
+ <YwYMInTCevZ/FYNl@work-vm>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220815134223.740112-2-ardb@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YwYMInTCevZ/FYNl@work-vm>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 03:42:18PM +0200, Ard Biesheuvel wrote:
-> The x86_64 32-bit entry code is a jumble of EFI and SEV routines, which
-> is not good for maintainability. Let's isolate the EFI mixed mode code
-> and combine it with the boot service thunk that lives in another .S
-> file, so that we can remove it from head_64.S
+On Wed, Aug 24, 2022, Dr. David Alan Gilbert wrote:
+> * Sean Christopherson (seanjc@google.com) wrote:
+> > Patch 2 (from Dave) is the headliner and fixes a bug where KVM clear the
+> > FP+SSE bits in user_xfeatures when XSAVE is hidden from the guest and thus
+> > prevent userspace from saving/restoring FP+SSE state on XSAVE host.  This
+> > most visibily manifests as a failed migration (KVM_GET_XSAVE succeeds on a
+> > non-XSAVE host and KVM_SET_XSAVE fails on an XSAVE host), but also causes
+> > KVM_GET_SAVE on XSAVE hosts to effectively corrupt guest FP+SSE state.
+> > 
+> > Patch 1 fixes a mostly theoretical bug, and is also a prerequisite for
+> > patch 2.
+> > 
+> > Patch 3 fixes a bug found by inspection when staring at all of this.  KVM
+> > fails to check CR4.OSXSAVE when emulating XSETBV (the interception case
+> > gets away without the check because the intercept happens after hardware
+> > checks CR4).
+> 
+> Thanks for pulling those together; the set of 3 passes my same (light) smoke test.
 
-Who is "we"?
-
-Please use passive voice in all text.
-
-> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> ---
->  arch/x86/boot/compressed/Makefile       |   6 +-
->  arch/x86/boot/compressed/efi_mixed.S    | 358 ++++++++++++++++++++
->  arch/x86/boot/compressed/efi_thunk_64.S | 195 -----------
->  arch/x86/boot/compressed/head_32.S      |   4 -
->  arch/x86/boot/compressed/head_64.S      | 149 +-------
->  drivers/firmware/efi/libstub/x86-stub.c |   3 +-
->  6 files changed, 370 insertions(+), 345 deletions(-)
-
-So I'm really nervous about patches touching early asm code where
-multiple things happen all at once instead of each logical change being
-split into a single patch: here I see code movement but then other
-functionality is being added too.
-
-So I'd really appreciate it if you split this one into smaller, obvious,
-even boring patches - this will simplify review considerably. For
-example, do only a mechanical code movement in one patch and then add
-the new startup_64_mixedmode thing in another. And so on.
-
-That would be greatly appreciated.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Paolo, do you want to grab this series for 6.0?
