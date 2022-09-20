@@ -2,125 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8402D5BE326
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 12:28:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 456C05BE317
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 12:26:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230274AbiITK0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 06:26:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37184 "EHLO
+        id S229939AbiITKZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 06:25:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbiITK0m (ORCPT
+        with ESMTP id S229505AbiITKZv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 06:26:42 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE6347198B
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 03:26:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663669587; x=1695205587;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=VoOytQWTXbQIFKidNNHAdMHfPT7haYxdnyvgQE2uRtQ=;
-  b=kV5sPZL4iXJ9pCWzDqs9gGuZyBBhyUpkBsGI9A0bmWBYBUIIlFCTK448
-   +1Vgripx/9uWhCGmar12wYXDI2B5299kYXLVNochFCHezxdjXKY3AbmSY
-   ZMVPLTMFMa6Mveq4uOAWo1xiHPT3Mcuv3sobkr56Z/LhO5lJrxTsUT0Oi
-   KlJ3uKPpiWIxz7igcWfTYdoJ/KU2WN2bX4EoDiZPK7UtLKigk9rTF9eXJ
-   w0SDNwfA9lkBPCZ/G3xuwZ3L60HGtUyTsEcgrp+s/R+MOrogsjgNiXrR1
-   LQAhUZerx1Pdb4HKUpczHl2ZITJI6J0TVIl/PD5wAsbgEMAQ2epkoCvom
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="363615894"
-X-IronPort-AV: E=Sophos;i="5.93,330,1654585200"; 
-   d="scan'208";a="363615894"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 03:26:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,330,1654585200"; 
-   d="scan'208";a="947615795"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 20 Sep 2022 03:26:25 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oaaSO-0002fx-2Z;
-        Tue, 20 Sep 2022 10:26:24 +0000
-Date:   Tue, 20 Sep 2022 18:25:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [kas:lam 5/13] drivers/input/serio/serport.c:216:21: sparse: sparse:
- incorrect type in assignment (different address spaces)
-Message-ID: <202209201829.bNE1v4V7-lkp@intel.com>
+        Tue, 20 Sep 2022 06:25:51 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E4335E674;
+        Tue, 20 Sep 2022 03:25:50 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id F07716600368;
+        Tue, 20 Sep 2022 11:25:47 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1663669549;
+        bh=pJFt8yhuO+61RNQoKu/PstmWS0PBWMsonGq/dnFhPCY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=R2oc5TOvtqehwVdIVv4+ZI4lKyrDIUceJdbxMi/4V4X4XDvk3e3SdGay/LYNOYzrC
+         DXxdJO5MyIrCLEkMrhjlY1u96S1/affuMfe8RaXDP7nFTXFnZ4MWC3M1xOzBDeK5m8
+         lEuvNw5Aggj73VIO/CLscBO+EUrcp+7eCblSGS1sIssmA6ELNjdJebtJWOjsFVDR/j
+         uyJbu45SEV9y71RXViboId+7Z/hCjzmzlJV1enTIUR5hQfvCVBwLXemvji4sqsnqRl
+         11BEWGHHH9GsllzQ/+5YTNdKLeZ4jQHIN3tTk5EKUrTsggQa9wzRKM5YpE1h9seXu4
+         qpub0SjqOUUWg==
+Message-ID: <153dcb4f-4583-427e-83c7-bdd33e3b11aa@collabora.com>
+Date:   Tue, 20 Sep 2022 12:25:45 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v1 07/17] drm/mediatek: extract common functions from the
+ mtk hdmi driver
+Content-Language: en-US
+To:     Guillaume Ranquet <granquet@baylibre.com>,
+        Vinod Koul <vkoul@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Rob Herring <robh+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        CK Hu <ck.hu@mediatek.com>, Jitao shi <jitao.shi@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-mediatek@lists.infradead.org,
+        dri-devel@lists.freedesktop.org,
+        Pablo Sun <pablo.sun@mediatek.com>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org
+References: <20220919-v1-0-4844816c9808@baylibre.com>
+ <20220919-v1-7-4844816c9808@baylibre.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220919-v1-7-4844816c9808@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git lam
-head:   8836fbd6cd3120383a0bc63cd54c7dd55639ed49
-commit: 2600a472582e2968633831d430c2a1366ad3e8b1 [5/13] x86/uaccess: Provide untagged_addr() and remove tags before address check
-config: x86_64-randconfig-s023-20220919 (https://download.01.org/0day-ci/archive/20220920/202209201829.bNE1v4V7-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git/commit/?id=2600a472582e2968633831d430c2a1366ad3e8b1
-        git remote add kas https://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git
-        git fetch --no-tags kas lam
-        git checkout 2600a472582e2968633831d430c2a1366ad3e8b1
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/acpi/ drivers/input/serio/ drivers/platform/x86/
+Il 19/09/22 18:56, Guillaume Ranquet ha scritto:
+> Create a common "framework" that can be used to add support for
+> different hdmi IPs within the mediatek range of products.
+> 
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> 
+> diff --git a/drivers/gpu/drm/mediatek/Makefile b/drivers/gpu/drm/mediatek/Makefile
+> index d4d193f60271..008ec69da67b 100644
+> --- a/drivers/gpu/drm/mediatek/Makefile
+> +++ b/drivers/gpu/drm/mediatek/Makefile
+> @@ -22,7 +22,8 @@ obj-$(CONFIG_DRM_MEDIATEK) += mediatek-drm.o
+>   
+>   mediatek-drm-hdmi-objs := mtk_cec.o \
+>   			  mtk_hdmi.o \
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+abcd ... mtk_hdmi_common.o goes here :-)
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/input/serio/serport.c:216:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned long [noderef] __user *__ptr_clean @@     got unsigned long * @@
-   drivers/input/serio/serport.c:216:21: sparse:     expected unsigned long [noderef] __user *__ptr_clean
-   drivers/input/serio/serport.c:216:21: sparse:     got unsigned long *
---
->> drivers/input/serio/serio_raw.c:178:29: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected char [noderef] __user *__ptr_clean @@     got char * @@
-   drivers/input/serio/serio_raw.c:178:29: sparse:     expected char [noderef] __user *__ptr_clean
-   drivers/input/serio/serio_raw.c:178:29: sparse:     got char *
->> drivers/input/serio/serio_raw.c:219:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected char const [noderef] __user *__ptr_clean @@     got char const * @@
-   drivers/input/serio/serio_raw.c:219:21: sparse:     expected char const [noderef] __user *__ptr_clean
-   drivers/input/serio/serio_raw.c:219:21: sparse:     got char const *
+> -			  mtk_hdmi_ddc.o
+> +			  mtk_hdmi_ddc.o \
+> +			  mtk_hdmi_common.o \
+>   
+>   obj-$(CONFIG_DRM_MEDIATEK_HDMI) += mediatek-drm-hdmi.o
+>   
+> diff --git a/drivers/gpu/drm/mediatek/mtk_hdmi.c b/drivers/gpu/drm/mediatek/mtk_hdmi.c
+> index 5cd05d4fe1a9..837d36ec4d64 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_hdmi.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_hdmi.c
+> @@ -32,187 +32,18 @@
+>   #include <drm/drm_probe_helper.h>
+>   
+>   #include "mtk_cec.h"
+> -#include "mtk_hdmi.h"
+>   #include "mtk_hdmi_regs.h"
+> +#include "mtk_hdmi_common.h"
+>   
+>   #define NCTS_BYTES	7
+>   
+> -enum mtk_hdmi_clk_id {
+> -	MTK_HDMI_CLK_HDMI_PIXEL,
+> -	MTK_HDMI_CLK_HDMI_PLL,
+> -	MTK_HDMI_CLK_AUD_BCLK,
+> -	MTK_HDMI_CLK_AUD_SPDIF,
+> -	MTK_HDMI_CLK_COUNT
+> +const char * const mtk_hdmi_clk_names_mt8183[MTK_MT8183_HDMI_CLK_COUNT] = {
 
-vim +216 drivers/input/serio/serport.c
+Why MT8183? This can be either MT8167 or MT2701... or, IMO more appropriately, you
+should name the IP version.
+Example: MTK_HDMIV123_CLK_COUNT (I don't know what IP version would that be!).
 
-a80d8b02751060 John Sung      2014-09-09  205  
-^1da177e4c3f41 Linus Torvalds 2005-04-16  206  /*
-^1da177e4c3f41 Linus Torvalds 2005-04-16  207   * serport_ldisc_ioctl() allows to set the port protocol, and device ID
-^1da177e4c3f41 Linus Torvalds 2005-04-16  208   */
-^1da177e4c3f41 Linus Torvalds 2005-04-16  209  
-d78328bcc4d0e6 Jiri Slaby     2021-11-22  210  static int serport_ldisc_ioctl(struct tty_struct *tty, unsigned int cmd,
-d78328bcc4d0e6 Jiri Slaby     2021-11-22  211  			       unsigned long arg)
-^1da177e4c3f41 Linus Torvalds 2005-04-16  212  {
-a80d8b02751060 John Sung      2014-09-09  213  	if (cmd == SPIOCSTYPE) {
-^1da177e4c3f41 Linus Torvalds 2005-04-16  214  		unsigned long type;
-^1da177e4c3f41 Linus Torvalds 2005-04-16  215  
-^1da177e4c3f41 Linus Torvalds 2005-04-16 @216  		if (get_user(type, (unsigned long __user *) arg))
-^1da177e4c3f41 Linus Torvalds 2005-04-16  217  			return -EFAULT;
-^1da177e4c3f41 Linus Torvalds 2005-04-16  218  
-a80d8b02751060 John Sung      2014-09-09  219  		serport_set_type(tty, type);
-a80d8b02751060 John Sung      2014-09-09  220  		return 0;
-a80d8b02751060 John Sung      2014-09-09  221  	}
-a80d8b02751060 John Sung      2014-09-09  222  
-a80d8b02751060 John Sung      2014-09-09  223  	return -EINVAL;
-a80d8b02751060 John Sung      2014-09-09  224  }
-a80d8b02751060 John Sung      2014-09-09  225  
+> +	[MTK_MT8183_HDMI_CLK_HDMI_PIXEL] = "pixel",
+> +	[MTK_MT8183_HDMI_CLK_HDMI_PLL] = "pll",
+> +	[MTK_MT8183_HDMI_CLK_AUD_BCLK] = "bclk",
+> +	[MTK_MT8183_HDMI_CLK_AUD_SPDIF] = "spdif",
+>   };
+>   
 
-:::::: The code at line 216 was first introduced by commit
-:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
+Regards,
+Angelo
 
-:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
-:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
