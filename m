@@ -2,96 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E17655BDE9E
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 09:44:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F248C5BDEA1
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 09:44:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230296AbiITHn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 03:43:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50178 "EHLO
+        id S231222AbiITHo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 03:44:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbiITHnV (ORCPT
+        with ESMTP id S231139AbiITHoH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 03:43:21 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2100B61D43
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 00:41:44 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id j24so1452277lja.4
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 00:41:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date;
-        bh=675CvuSp++zNLeIUZybBsP51nvc83dY+2bSGb3FYErQ=;
-        b=NldqLNNc9LwbZVJ34LXYNXA8Vpd5tV0/PS17GA+W2mWPvQSkX7/L0OuVA14Spa6E3o
-         otHXGdi2RPGtkN4r73WzqYoxlsOWDzapyylNhTESk+m+2LeHSZZOAD2ZBKS767Wz4SD2
-         GFKrJyRuvzsfLgsHleAw7h7/uMl39Gj/OCExpDVaBCG0VF4Yt24gtCWOQnmupW3QhzIu
-         YG+yfXTpeGmxY/hLlsLZImBKxyof97u5JNni+IWM/SRKixDflNoG3zNAB3b/4Gk6C3ka
-         fnokKyuN2FCGJP4xZy04HvvL23KSWVwSfx/d4FKENhNDDCQ8mvDUJKvqkhOsPc9OeRta
-         PVeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=675CvuSp++zNLeIUZybBsP51nvc83dY+2bSGb3FYErQ=;
-        b=oyWHlMVPYxg/1HDab0ANPldjydiYDESQ0Bxy0xFd01PvpksG6D8C6HObV6h2rDpZDH
-         oPY1gs+MYzfoA2NgcdrcmdRrW2u1/yvM/4qUgOYcuwd7ihBMd1aYGiC2fLgjda790+bt
-         CMvV8MTDlX+xfhhaH8QR0+C+qLOyCbAkgvqbmVfSy1CEPz1+wbVnVBDTq77VNyFD0L2I
-         +W/XjSrnjHPBksIxZ5muRgr2IYNCI2dhcTIyR5yfEyyiPbOuNjvQuBSTyajB5cAIPjSZ
-         w6bEvBOThRH7zZolydzcXXg2iR3MALMSMbk179FUOwSDwL5i5YpGkQt1gC4GEoUV6YRP
-         Ieaw==
-X-Gm-Message-State: ACrzQf2Ul9ZxkKS8m+Q4+bFcH/lMi0XzVPaumILCAf/9dJ/QEunUcitn
-        bl1wZ++4t6FTBABz9xU3+hagH6nNVIo171QIOGQ=
-X-Google-Smtp-Source: AMsMyM6+StWFkoQghKdSJWCK2y0fw/ngVv5iNMob4f2IaPjj8ePPqjEVdPP0NU5sQ+1t8znzipWM/szT/ly8DQeYWRU=
-X-Received: by 2002:a2e:98c2:0:b0:26c:5d10:63dd with SMTP id
- s2-20020a2e98c2000000b0026c5d1063ddmr328232ljj.326.1663659702570; Tue, 20 Sep
- 2022 00:41:42 -0700 (PDT)
+        Tue, 20 Sep 2022 03:44:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F9F5E644
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 00:42:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F17862072
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 07:42:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE9CDC433D6;
+        Tue, 20 Sep 2022 07:42:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663659775;
+        bh=nWPqcQ+k8fQn2uzfqc5Cff9bIXh9MOsUqh6sUrWx750=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=f9PSvtGCYG0K8iqdBca6m9ANsvqfiaBIBFyI36VFb4Z5mWHm4jYS5djU6gjAHlF2G
+         aXFecMhNvuzYvmNRKlbWVKnP2nf1Ut+oF0hBToI9IvpkMqPC2lGOXt1J6tss1a8w1n
+         vn1HoVR7Qbb3d6QF47tuyqrXHZ0RJW/dK3qSNm6iiP15OGfX4WqrGhVuP9sz6F5Xii
+         cYH7rxC0mcC+8Rn4f2DASpYvbSFwnsItVKbayHJjrc78bWfSsn/A9/cE6rHoccDfbt
+         HTMVeT8e0FbC9hK7qi0Xir8lW2R+ZzS68WjSxy8abbN+GXoL9uEYnduhR6p6SonnMN
+         u3iMm452hjvcA==
+Message-ID: <53ba30f1-c867-f34e-b262-08df67ef26fb@kernel.org>
+Date:   Tue, 20 Sep 2022 09:42:44 +0200
 MIME-Version: 1.0
-Received: by 2002:aa6:d8cb:0:b0:210:bead:96eb with HTTP; Tue, 20 Sep 2022
- 00:41:41 -0700 (PDT)
-Reply-To: chuisheung001@gmail.com
-From:   Chui Sheung <chuisheung002@gmail.com>
-Date:   Tue, 20 Sep 2022 08:41:41 +0100
-Message-ID: <CAHNzD9nrkLCoqJZBX_=iEs7HCT-scJQuXodSk8qxcfSEJ7=V_Q@mail.gmail.com>
-Subject: work
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH] trace/osnoise: Fix possible recursive locking in
+ stop_per_cpu_kthreads
+To:     Nico Pache <npache@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     rostedt@goodmis.org, mingo@redhat.com
+References: <20220919144932.3064014-1-npache@redhat.com>
+Content-Language: en-US
+From:   Daniel Bristot de Oliveira <bristot@kernel.org>
+In-Reply-To: <20220919144932.3064014-1-npache@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:234 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4999]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [chuisheung002[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [chuisheung002[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [chuisheung001[at]gmail.com]
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Can you work with me?
+Hi Nico!
+
+On 9/19/22 16:49, Nico Pache wrote:
+> There is a recursive lock on the cpu_hotplug_lock.
+> 
+> In kernel/trace/trace_osnoise.c:<start/stop>_per_cpu_kthreads:
+>     - start_per_cpu_kthreads calls cpus_read_lock() and if
+> 	start_kthreads returns a error it will call stop_per_cpu_kthreads.
+>     - stop_per_cpu_kthreads then calls cpus_read_lock() again causing
+>       deadlock.
+
+Yep, I see the problem.
+
+> Fix this by calling cpus_read_unlock() before calling
+> stop_per_cpu_kthreads. This behavior can also be seen in commit
+> f46b16520a08 ("trace/hwlat: Implement the per-cpu mode").
+
+Correct, we have a similar function that *without* this problem.
+
+> This error was noticed during the LTP ftrace-stress-test:
+> 
+> WARNING: possible recursive locking detected
+> --------------------------------------------
+> sh/275006 is trying to acquire lock:
+> ffffffffb02f5400 (cpu_hotplug_lock){++++}-{0:0}, at: stop_per_cpu_kthreads
+> 
+> but task is already holding lock:
+> ffffffffb02f5400 (cpu_hotplug_lock){++++}-{0:0}, at: start_per_cpu_kthreads
+> 
+> other info that might help us debug this:
+>  Possible unsafe locking scenario:
+> 
+>       CPU0
+>       ----
+>  lock(cpu_hotplug_lock);
+>  lock(cpu_hotplug_lock);
+> 
+>  *** DEADLOCK ***
+> 
+> May be due to missing lock nesting notation
+> 
+> 3 locks held by sh/275006:
+>  #0: ffff8881023f0470 (sb_writers#24){.+.+}-{0:0}, at: ksys_write
+>  #1: ffffffffb084f430 (trace_types_lock){+.+.}-{3:3}, at: rb_simple_write
+>  #2: ffffffffb02f5400 (cpu_hotplug_lock){++++}-{0:0}, at: start_per_cpu_kthreads
+> 
+> Fixes: c8895e271f79 ("trace/osnoise: Support hotplug operations")
+> Signed-off-by: Nico Pache <npache@redhat.com>
+
+Acked-by: Daniel Bristot de Oliveira <bristot@kernel.org>
+
+Thanks!
+-- Daniel
