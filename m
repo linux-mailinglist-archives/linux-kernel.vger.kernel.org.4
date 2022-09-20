@@ -2,77 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE8F55BE849
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 16:14:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED5635BE84C
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 16:14:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231516AbiITON0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 10:13:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45004 "EHLO
+        id S231715AbiITONc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 10:13:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230011AbiITONG (ORCPT
+        with ESMTP id S231502AbiITONH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 10:13:06 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F154260E0
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 07:11:21 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id hy2so2777287ejc.8
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 07:11:21 -0700 (PDT)
+        Tue, 20 Sep 2022 10:13:07 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 563F813F3D
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 07:11:22 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id l14so6464182eja.7
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 07:11:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
-         :subject:from:to:cc:subject:date;
-        bh=bFMsn9IXp+cM8Xxf88ZnEOGeS0ZEgVNFdUByyRlVn/c=;
-        b=i8T0IsM040S+4+Q52a3mWpzwMZ1cbf7eY4BLl9gtzcl6GE/Do4yr6d3SUfozzk51tO
-         9Q08Yeo+VBgRzG3woUAS2tnNpRcPi7PiZ8ELKwncAIh2wTIoznzbyTdSB5dVn9r81XLP
-         uemK6wMlkHTaGKHf5I5srrugFcRkWh34xih2U=
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date;
+        bh=7SbWdOzYyZ4DvXywVbhtnQssUKjn+mgaC4ezA3WwW3o=;
+        b=kFnQKOcSb/HOluTfiESWSAxS4b+ac0m+08CMknX881ZXIUR0v9dOBCavYs5OMdQNPU
+         eCpl00nnhyL+MyRpU2RBjqO5YwxhfXJ8QlBW0F4XnCpnnE+D8jYhQqr1jiTOA2FXphRK
+         kQ7YzKh8Cu4L3ZgBj4RItpa/KXTXl27RQXByI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
-         :subject:x-gm-message-state:from:to:cc:subject:date;
-        bh=bFMsn9IXp+cM8Xxf88ZnEOGeS0ZEgVNFdUByyRlVn/c=;
-        b=3G6k7KZHMPd6K0Ml0tI7soG1TMiPKYEq/6n8bLVIjNgoDr50hxOFpelK/ZuDY92hlm
-         Lu7UXVxvLKQBeREt5rB0tZpo+UvopruGc0WSpJpvl4ybwaHU5f8ChIQVqCHuLeGXecf9
-         dH6w116MP1bsvLLlFNIyUvVNJthVwJ3HxBnnxIVb/W4aFUuNq78tjh2u7dY9WFLsY2/P
-         SPwGDoExpj2xP/s+iA/ZeKlXKROgsX9J9UbzR0lNtNrL/yaBQvfBhQO/p4QqVLf4B2oQ
-         WgLJ1JaHnY5VR8DufIo3Zp+HAh5IoGB1YhGMzBlHXtj6GwkAbn+QIdXOYZY66lZbaWw9
-         Z44A==
-X-Gm-Message-State: ACrzQf2vbSN+cLxo6B6RBoZM6KI31FqZrPPNhltwtazrbrKkg9swnzQY
-        bj1bh7PMH5rlrHa02A5D7FQs2/Qady9H7p+3MxE=
-X-Google-Smtp-Source: AMsMyM4Ho6pr29m/1ijxxiBDUN8EVn8puqAJWn8FfcfHS4/YN3iowuqJpfIHpmwvY6K0Mw7NVLpnbA==
-X-Received: by 2002:a17:906:5d05:b0:781:be1b:f4cd with SMTP id g5-20020a1709065d0500b00781be1bf4cdmr2849604ejt.408.1663683079606;
-        Tue, 20 Sep 2022 07:11:19 -0700 (PDT)
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=7SbWdOzYyZ4DvXywVbhtnQssUKjn+mgaC4ezA3WwW3o=;
+        b=D7NDVroArusaklnCGOTPOJLc4ySY1GcXcfZvC6xIO9NjyZyq5od61OwsSnwKMic3Yt
+         I3ReZrKrpmNOF8b6uFFRjAtNcmmdWoXo+g7/mVPZVJZnB3GU8T+khYlVLmfqJD5KbS1E
+         78iSvFqdYDBg2S4i4IZAmfeVptynQ6SKlftubOajRN7OJDcesogrvitA516vG6fQ52pP
+         Fj7LyhTbMCX6YicC4hUrF+T51yV+oXDc80QrKEaUvY3WhLxyxONzRLeZm+nl4/TWimIq
+         ZD7wgsQQlgWHMr1/WOsEfge3U4xukvjr2/qkETXBT8lsJhkRG/B8wyVJi3GNmjIkIvTc
+         0HWQ==
+X-Gm-Message-State: ACrzQf2nCIziKzwixTl86w4q4e0K6c3BfpxRrVobGRQr95mEXH+doaD5
+        o3X5mPE4VbvALLdaf3ojR2FfCFuhN9550+RyJ58=
+X-Google-Smtp-Source: AMsMyM5hpLGMkj0xF0Ypp3/noizXD8wsUtLqgxhUtfLkgm3MkcTW4dTp7JImq3L8FJYDgR/Pn4l5pQ==
+X-Received: by 2002:a17:907:2bf8:b0:770:837a:e3b8 with SMTP id gv56-20020a1709072bf800b00770837ae3b8mr16739970ejc.562.1663683080412;
+        Tue, 20 Sep 2022 07:11:20 -0700 (PDT)
 Received: from alco.roam.corp.google.com ([2620:0:1059:10:935d:52b0:7461:88e1])
-        by smtp.gmail.com with ESMTPSA id b24-20020aa7c918000000b004518ee90b4dsm129668edt.1.2022.09.20.07.11.18
+        by smtp.gmail.com with ESMTPSA id b24-20020aa7c918000000b004518ee90b4dsm129668edt.1.2022.09.20.07.11.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 07:11:19 -0700 (PDT)
-Subject: [PATCH v1 0/5] [RESEND] Follow-up patches for uvc v4l2-compliance
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-b4-tracking: H4sIAPfJKWMC/w3L0QqDMAxA0V+RPC/QhQ7Z/qZp4wzUOBrmi/jv5vFwuSe4DBWHz3TCkENddws8Hx
- PUtdhXUFsYKBGlNyUc4mINj9wJ6779uhargnlpLHnhNvMLYubigjyirbHbv/frugH+5RqmbQAAAA==
+        Tue, 20 Sep 2022 07:11:20 -0700 (PDT)
 From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Tue, 20 Sep 2022 16:11:03 +0200
-Message-Id: <20220920-resend-v4l2-compliance-v1-0-81364c15229b@chromium.org>
+Date:   Tue, 20 Sep 2022 16:11:04 +0200
+Subject: [PATCH v1 1/5] media: uvcvideo: uvc_ctrl_is_accessible: check for INACTIVE
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Message-Id: <20220920-resend-v4l2-compliance-v1-1-81364c15229b@chromium.org>
+References: <20220920-resend-v4l2-compliance-v1-0-81364c15229b@chromium.org>
+In-Reply-To: <20220920-resend-v4l2-compliance-v1-0-81364c15229b@chromium.org>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Cc:     Hans Verkuil <hans.verkuil@cisco.com>,
         Ricardo Ribalda <ribalda@chromium.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
 X-Mailer: b4 0.11.0-dev-d93f8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1405; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=vXDfBohc5Z0VLN/PTxvaQLPipSrV30lwRF0Q4M3859Q=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjKcn5LZHNQuM/RYopZSq6YXToyduKFQV3qGvvS3YT
- aXzNBsuJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCYynJ+QAKCRDRN9E+zzrEiK1mD/
- 9QTmV8UzAzzAVUsZXTKnnsWkq5xriX5vtZNw0faaE0jftrQcdOpPCcwOS9EsCaD3ZaZ6GC5xSMLT2W
- bBM1bmKdpRkQh0CsVL1Y1wZ+HJti2dgipM6BVGl6Ba3KGsWvF0AqEL4u6Tje+dzvUiolY1rTF9qgdE
- ShWwidg5W7ToHgYGXVBH+G+8J2nuwIpxvvwx2HAg9bAFfg2c12dbNRmN2AzxyCclk7gEdBqJn+MgWN
- +Z36t/T34jFuMBfouUusqV/2i3vr14V5NWzUfMAUgAwEa1EmYZH/xHqwXh+EeXFNvJ0kF3sd1T9uPz
- LkrhEsDcVUN28PoKk1tAvijw5tiMr+fnaYmHWxsdA4MN+9SfO32k4avBIaVqKQJnvGBtEjhhuuigyt
- buDCB9G51jEy1HOFvworDbc4DqaAIjSWVg/2p/ViiNqewvJb7hHA8CmBxPZT0k28G2yt199keT2B9c
- +/yU3JJoSy9t49HcEc0TiTv4l/Dk8u/satoSm1Hzh5yAIyfT7g3RmoxwtW+kdFmLGJkKXvTjze+c/j
- iUytBk+4B3Tnr6ZYyt5lZ8VHl1W3vivVjjPmE52JhJ9L6PeTzKHDG+VGvOuBrb+XCs9BnDf5ws3b3Y
- SsDDcnncERHuO56uxwit+gZqitR/ngtQRONCb3+hv1Kc7LeeBV+dCwFnFPlg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5006; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=xRue/wJ3pUDw9TYU7ZEzphzigf/XRMvyyhrkUV+XLC0=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjKcn8gTHpYmKRi+gxssRJuwAH49xopUaixfYUXUXW
+ LbdiivGJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCYynJ/AAKCRDRN9E+zzrEiB8lD/
+ 466NcHWkpY/16/og8S+G/pUJWwOuyuigoz0K0WcxyjUc/2vZnC/gwhsrHzCctVuGu7lKpKDC3XiuJ9
+ hV4pCSdlwY6cMEkecm5cLEVeEhHx08R5qSyOeJgCGlacRSuaztPALYi2OMdq4muShHXEfPq4/OGctE
+ x6Y+N7hBNLIGFuWo8DArMJkpt9UGYdaJus6qdLH3nlViUQNvqMwJSfFf/ymk2JHKdcgxPt4kpc+lQ/
+ YaADo4viomu6zZE/RdvK+M5TW/PJtQNML3Vk8CSq9Hllt9eH3ou6kDrI4fuTUS7pj2IrIKOGOU3nbW
+ 4UK9TYs+nQvsMKoImC42Awzb7FSURZ9ZXF288zop5OwRqBTM3tgzqOm6KTHygOVahwJfBgWZmhN4ys
+ GnvBULhoqfJYEoJUTepIzEkTzNutKgB1tOxfA5zh2LwjzRDd+mmYsTbbTWjdHgy+Xd/uJOoSigAR9U
+ vl1hldSTGDTeEML68emSIhdg1fTuvbnftHYR7gdFdCSr0NQfACXGkBWqxhYCE+LnJElKDIj/KP102U
+ HUUINTAzC3JxpRqkYc6P52hVHggkzh6xVHL4GAb0KdlA0S7DlZ0UVV8/RGh0aJIpN8EBFBCXdLwvWO
+ bQ3J+ZQClvZDt7aqGc7+XoTakTIfjWW/4kHcYObNz9N5Pt0fUbHjpz3bal2Q==
 X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
  fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -85,41 +86,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patchset contains the fixes for the comments on "v10 of Fix
-v4l2-compliance errors series". In particular to the patches
+From: Hans Verkuil <hverkuil@xs4all.nl>
 
--uvcvideo: uvc_ctrl_is_accessible: check for INACTIVE
--uvcvideo: improve error handling in uvc_query_ctrl()
+Check for inactive controls in uvc_ctrl_is_accessible().
+Use the new value for the master_id controls if present,
+otherwise use the existing value to determine if it is OK
+to set the control. Doing this here avoids attempting to
+set an inactive control, which will return an error from the
+USB device, which returns an invalid errorcode.
 
-And the patch:
--uvcvideo: Fix handling on Bitmask controls
+This fixes:
+  warn: v4l2-test-controls.cpp(483): s_ctrl returned EIO
+  warn: v4l2-test-controls.cpp(483): s_ctrl returned EIO
+test VIDIOC_G/S_CTRL: OK
+  warn: v4l2-test-controls.cpp(739): s_ext_ctrls returned EIO
+  warn: v4l2-test-controls.cpp(739): s_ext_ctrls returned EIO
+  warn: v4l2-test-controls.cpp(816): s_ext_ctrls returned EIO
+test VIDIOC_G/S/TRY_EXT_CTRLS: OK
 
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-media@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: Hans Verkuil <hans.verkuil@cisco.com>
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+Tested with:
+v4l2-ctl -c auto_exposure=1
+OK
+v4l2-ctl -c exposure_time_absolute=251
+OK
+v4l2-ctl -c auto_exposure=3
+OK
+v4l2-ctl -c exposure_time_absolute=251
+VIDIOC_S_EXT_CTRLS: failed: Input/output error
+exposure_time_absolute: Input/output error
+ERROR
+v4l2-ctl -c auto_exposure=3,exposure_time_absolute=251,auto_exposure=1
+v4l2-ctl -C auto_exposure,exposure_time_absolute  
+auto_exposure: 1
+exposure_time_absolute: 251
 
----
-Hans Verkuil (2):
-      media: uvcvideo: uvc_ctrl_is_accessible: check for INACTIVE
-      media: uvcvideo: improve error logging in uvc_query_ctrl()
+Reviewed-by: Ricardo Ribalda <ribalda@chromium.org>
+Signed-off-by: Hans Verkuil <hans.verkuil@cisco.com>
 
-Ricardo Ribalda (3):
-      media: uvcvideo: Return -EACCES for Wrong state error
-      media: uvcvideo: Do not return positive errors in uvc_query_ctrl()
-      media: uvcvideo: Fix handling on Bitmask controls
+diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+index 8c208db9600b..7153ee5aabb1 100644
+--- a/drivers/media/usb/uvc/uvc_ctrl.c
++++ b/drivers/media/usb/uvc/uvc_ctrl.c
+@@ -1064,11 +1064,33 @@ static int uvc_query_v4l2_class(struct uvc_video_chain *chain, u32 req_id,
+ 	return 0;
+ }
+ 
++/**
++ * uvc_ctrl_is_accessible() - Check if a control can be read/writen/tried.
++ * @chain: uvc_video_chain that the controls belong to.
++ * @v4l2_id: video4linux id of the control.
++ * @ctrl: Other controls that will be accessed in the ioctl.
++ * @ioctl: ioctl used to access the control.
++ *
++ * Check if a control can be accessed by a specicific ioctl operation,
++ * assuming that other controls are also going to be accessed by that ioctl.
++ * We need to check the value of the other controls, to support operations
++ * where a master value is changed with a slave value. Eg.
++ * auto_exposure=1,exposure_time_absolute=251
++ *
++ */
+ int uvc_ctrl_is_accessible(struct uvc_video_chain *chain, u32 v4l2_id,
+-			   bool read)
++			   const struct v4l2_ext_controls *ctrls,
++			   unsigned long ioctl)
+ {
++	struct uvc_control_mapping *master_map = NULL;
++	struct uvc_control *master_ctrl = NULL;
+ 	struct uvc_control_mapping *mapping;
+ 	struct uvc_control *ctrl;
++	bool read = ioctl == VIDIOC_G_EXT_CTRLS;
++	bool try = ioctl == VIDIOC_TRY_EXT_CTRLS;
++	s32 val;
++	int ret;
++	int i;
+ 
+ 	if (__uvc_query_v4l2_class(chain, v4l2_id, 0) >= 0)
+ 		return -EACCES;
+@@ -1083,6 +1105,29 @@ int uvc_ctrl_is_accessible(struct uvc_video_chain *chain, u32 v4l2_id,
+ 	if (!(ctrl->info.flags & UVC_CTRL_FLAG_SET_CUR) && !read)
+ 		return -EACCES;
+ 
++	if (read || try || !mapping->master_id)
++		return 0;
++
++	/*
++	 * Iterate backwards in cases where the master control is accessed
++	 * multiple times in the same ioctl. We want the last value.
++	 */
++	for (i = ctrls->count - 1; i >= 0; i--) {
++		if (ctrls->controls[i].id == mapping->master_id)
++			return ctrls->controls[i].value ==
++					mapping->master_manual ? 0 : -EACCES;
++	}
++
++	__uvc_find_control(ctrl->entity, mapping->master_id, &master_map,
++			   &master_ctrl, 0);
++
++	if (!master_ctrl || !(master_ctrl->info.flags & UVC_CTRL_FLAG_GET_CUR))
++		return 0;
++
++	ret = __uvc_ctrl_get(chain, master_ctrl, master_map, &val);
++	if (ret >= 0 && val != mapping->master_manual)
++		return -EACCES;
++
+ 	return 0;
+ }
+ 
+diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
+index 4cc3fa6b8c98..d95168cdc2d1 100644
+--- a/drivers/media/usb/uvc/uvc_v4l2.c
++++ b/drivers/media/usb/uvc/uvc_v4l2.c
+@@ -1020,8 +1020,8 @@ static int uvc_ctrl_check_access(struct uvc_video_chain *chain,
+ 	int ret = 0;
+ 
+ 	for (i = 0; i < ctrls->count; ++ctrl, ++i) {
+-		ret = uvc_ctrl_is_accessible(chain, ctrl->id,
+-					    ioctl == VIDIOC_G_EXT_CTRLS);
++		ret = uvc_ctrl_is_accessible(chain, ctrl->id, ctrls,
++					    ioctl);
+ 		if (ret)
+ 			break;
+ 	}
+diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+index 24c911aeebce..644d5fcf2eef 100644
+--- a/drivers/media/usb/uvc/uvcvideo.h
++++ b/drivers/media/usb/uvc/uvcvideo.h
+@@ -905,7 +905,8 @@ static inline int uvc_ctrl_rollback(struct uvc_fh *handle)
+ int uvc_ctrl_get(struct uvc_video_chain *chain, struct v4l2_ext_control *xctrl);
+ int uvc_ctrl_set(struct uvc_fh *handle, struct v4l2_ext_control *xctrl);
+ int uvc_ctrl_is_accessible(struct uvc_video_chain *chain, u32 v4l2_id,
+-			   bool read);
++			   const struct v4l2_ext_controls *ctrls,
++			   unsigned long ioctl);
+ 
+ int uvc_xu_ctrl_query(struct uvc_video_chain *chain,
+ 		      struct uvc_xu_control_query *xqry);
 
- drivers/media/usb/uvc/uvc_ctrl.c  | 100 +++++++++++++++++++++++++++++++++-----
- drivers/media/usb/uvc/uvc_v4l2.c  |   4 +-
- drivers/media/usb/uvc/uvc_video.c |  15 +++---
- drivers/media/usb/uvc/uvcvideo.h  |   3 +-
- 4 files changed, 99 insertions(+), 23 deletions(-)
----
-base-commit: 521a547ced6477c54b4b0cc206000406c221b4d6
-change-id: 20220920-resend-v4l2-compliance-4fdbe4fbd7b5
-
-Best regards,
 -- 
-Ricardo Ribalda <ribalda@chromium.org>
+b4 0.11.0-dev-d93f8
