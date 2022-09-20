@@ -2,123 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C73DD5BE9A9
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 17:06:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13F155BE9AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 17:07:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230133AbiITPGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 11:06:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45960 "EHLO
+        id S229706AbiITPHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 11:07:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229815AbiITPGa (ORCPT
+        with ESMTP id S230175AbiITPHf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 11:06:30 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE50414D3A
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 08:06:27 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id o2so4250207lfc.10
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 08:06:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=p4P0NeQ+Hs0UhBCJIe2tPG1fmTf8Df505EFaHwu7878=;
-        b=NDTTn3LJdGo55R3e01AcgjrRXfHlQQm0T3o9ZEjVZ5hJvJd5cgDrOpjtPQ+GT9oBzd
-         domJ+l5Aqw8+AoTPiZg2c9wwWuiVn15QKaE97F69i/knxCLqmswttrvL7UQ8/y9SZ44X
-         DyDXo9cdOnKqW0z2bj0KnZAusB31jfwWS13thxjyHiEb+J22KBg/7ge6fbuL7BMDnOQo
-         uVpPqQtEuojB8oSA068Qasf9FSnnUx6QMzqWOA8IT6OZwwSJ8IA33UTJc58tgJ4KUY0D
-         a2ChbpPFpcu3PlWRQMDtT9u0jC350YcCBVo/8Zcym69E25pKih7UHltEQrMiuYo/68q1
-         Ch6g==
+        Tue, 20 Sep 2022 11:07:35 -0400
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C8A15FED;
+        Tue, 20 Sep 2022 08:07:33 -0700 (PDT)
+Received: by mail-qk1-f172.google.com with SMTP id y2so1785689qkl.11;
+        Tue, 20 Sep 2022 08:07:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=p4P0NeQ+Hs0UhBCJIe2tPG1fmTf8Df505EFaHwu7878=;
-        b=e3Mh8nYu4oIOv5m3yaGWIvgal6WwzXia8fvcidBchisqkO1AF6jz2onLGklFI6l3QW
-         DgycNGx5Os+54goy8aTqI4uRkp7C8OKUYDeDB6X95P9p2gKQyRbbjvxOxVF79hqiLeFJ
-         iZv/O0HNEXGVNWsFd48BTJktFDZ1n7FoLo3ja7JDcI8rPjjsfDw2dyoD98VlrBnSlDaA
-         0jmfa4+G7M3GlYpJiBGbdk2z3wbWuAW5wOpOLqv2YioLJzpUlPySlH0bA+tjHXwHdipN
-         pZD6WzTUveD92AifoTIyAacg1JPzxExl6Wx4x5VUuNAnx6rL5XQF+K27EbgJMSUF4BRW
-         0AiQ==
-X-Gm-Message-State: ACrzQf09dLSeN4rNEDBgiEy+UfklX/VSXnX+Z+fJMKi81CyT7mNiUK2C
-        l+ZW/T9Cwe15KSB+7fmubzFQ/g==
-X-Google-Smtp-Source: AMsMyM5ATrQusUgyRLPhm8i+Xxz0V5beQbLVoUmOUwfeMSPV01vAXnRs9x5CHLxEWRXyIl5pvXZzww==
-X-Received: by 2002:a19:7406:0:b0:49d:d448:59c3 with SMTP id v6-20020a197406000000b0049dd44859c3mr7932629lfe.300.1663686385856;
-        Tue, 20 Sep 2022 08:06:25 -0700 (PDT)
-Received: from krzk-bin (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id s9-20020a056512202900b00493014c3d7csm339824lfs.309.2022.09.20.08.06.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 08:06:25 -0700 (PDT)
-Date:   Tue, 20 Sep 2022 17:06:23 +0200
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Cc:     quic_plai@quicinc.com, agross@kernel.org,
-        quic_rohkumar@quicinc.com, swboyd@chromium.org, tiwai@suse.com,
-        broonie@kernel.org, bgoswami@quicinc.com, perex@perex.cz,
-        devicetree@vger.kernel.org, srinivas.kandagatla@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, lgirdwood@gmail.com, andersson@kernel.org,
-        judyhsiao@chromium.org, linux-remoteproc@vger.kernel.org
-Subject: Re: [PATCH v7 1/8] dt-bindings: remoteproc: qcom: Add SC7280 ADSP
- support
-Message-ID: <20220920150623.rhpeizf7ufkwqz2i@krzk-bin>
-References: <1663655359-1402-1-git-send-email-quic_srivasam@quicinc.com>
- <1663655359-1402-2-git-send-email-quic_srivasam@quicinc.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=beo87QLkKwCHQVFvRevjYmIvSu6gsEO9BIku51wSlXE=;
+        b=oh7YQxx4Wx9STZnAnyUKAO4aBmPiOmY8n1uiYeyub4FEKBacxm14TDNpGlNv+WvVGE
+         IHtcriPs9cjt03oqVdhr9RuTSgs0wkIPM2nHBV7InOcFnOh0AupZgVYBraR6iIZtZ2L6
+         2JjmVXKD4HPdnfzmoQz/u9uzVIxg8F21QlkjPaeGoK7zEo8TRo2vIf8ewpk/3t/W0s2j
+         J6UtOL8/7ArswYZ5o2TKwZkos7gsUWKjwNgzSZ3fRBnAY1xQWP7ZbPRFWimDbDdZB/TM
+         ZOZHRxAl5IkGPNN8azOnL5eK7lwgLSfv4K3FICaZzHW8v1EhTXNOvSZSO5N1VrWYOw8V
+         v8tQ==
+X-Gm-Message-State: ACrzQf0VC8HcY2GxmbnHZXONX/zXyI40dcHfuJea8aaIpBqCZg1GkH5l
+        jfuSETEMliFwZToYlbbqIxfyyFEHv9WSyw==
+X-Google-Smtp-Source: AMsMyM7iTFuRDkRqCv4yKePkNuqurAmE9VL9By98xxAjL6Yj3lEfR372ozdeNWpjbYQPqVk7suPRCA==
+X-Received: by 2002:a05:620a:222f:b0:6cb:dc20:f0c3 with SMTP id n15-20020a05620a222f00b006cbdc20f0c3mr15932688qkh.366.1663686452218;
+        Tue, 20 Sep 2022 08:07:32 -0700 (PDT)
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com. [209.85.128.171])
+        by smtp.gmail.com with ESMTPSA id de4-20020a05620a370400b006bb87c4833asm230950qkb.109.2022.09.20.08.07.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Sep 2022 08:07:31 -0700 (PDT)
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-3452214cec6so30865657b3.1;
+        Tue, 20 Sep 2022 08:07:31 -0700 (PDT)
+X-Received: by 2002:a81:8d3:0:b0:34d:1215:fb4b with SMTP id
+ 202-20020a8108d3000000b0034d1215fb4bmr7135561ywi.383.1663686450814; Tue, 20
+ Sep 2022 08:07:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1663655359-1402-2-git-send-email-quic_srivasam@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220915181558.354737-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220915181558.354737-9-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CAMuHMdW99EutciosPtOTU9AztfvfMdKTaS+YRmpmS4VnhZ9KAA@mail.gmail.com> <CA+V-a8s9y0Jq4TJk9E_ptsZTW3iCoysaBSrUeQV8qfDFO3wzeQ@mail.gmail.com>
+In-Reply-To: <CA+V-a8s9y0Jq4TJk9E_ptsZTW3iCoysaBSrUeQV8qfDFO3wzeQ@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 20 Sep 2022 16:07:18 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWy=uU-QQgkz+-sBHfuK9tE-E4LijVLrYX7Efh9=C9vLg@mail.gmail.com>
+Message-ID: <CAMuHMdWy=uU-QQgkz+-sBHfuK9tE-E4LijVLrYX7Efh9=C9vLg@mail.gmail.com>
+Subject: Re: [PATCH v3 08/10] riscv: dts: renesas: Add minimal DTS for Renesas
+ RZ/Five SMARC EVK
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Atish Patra <atishp@rivosinc.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 20 Sep 2022 11:59:12 +0530, Srinivasa Rao Mandadapu wrote:
-> Add ADSP PIL loading support for SC7280 SoCs.
-> 
-> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-> ---
-> Changes since V6:
-> 	-- Update glink-edge property.
-> 	-- Add qcom,qmp property.
-> Changes since V5:
-> 	-- Remove qcom,adsp-memory-regions property.
-> Changes since V4:
-> 	-- Update halt registers description in dt bindings.
->  .../bindings/remoteproc/qcom,sc7280-adsp-pil.yaml  | 226 +++++++++++++++++++++
->  1 file changed, 226 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,sc7280-adsp-pil.yaml
-> 
+Hi Prabhakar,
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+On Tue, Sep 20, 2022 at 3:05 PM Lad, Prabhakar
+<prabhakar.csengg@gmail.com> wrote:
+> On Tue, Sep 20, 2022 at 1:32 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > On Thu, Sep 15, 2022 at 8:17 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > >
+> > > Enable the minimal blocks required for booting the Renesas RZ/Five
+> > > SMARC EVK with initramfs.
+> > >
+> > > Below are the blocks enabled:
+> > > - CPG
+> > > - CPU0
+> > > - DDR (memory regions)
+> > > - PINCTRL
+> > > - PLIC
+> > > - SCIF0
+> > >
+> > > Note we have deleted the nodes from the DT for which support needs to be
+> > > added for RZ/Five SoC and are enabled by RZ/G2UL SMARC EVK SoM/carrier
+> > > board DTS/I.
+> > >
+> > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-yamllint warnings/errors:
+> > > --- /dev/null
+> > > +++ b/arch/riscv/boot/dts/renesas/rzfive-smarc-som.dtsi
+> > > @@ -0,0 +1,42 @@
+> > > +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > +/*
+> > > + * Device Tree Source for the RZ/Five SMARC EVK SOM
+> > > + *
+> > > + * Copyright (C) 2022 Renesas Electronics Corp.
+> > > + */
+> > > +
+> > > +#include <arm64/renesas/rzg2ul-smarc-som.dtsi>
+> > > +
+> > > +/ {
+> > > +       aliases {
+> > > +               /delete-property/ ethernet0;
+> > > +               /delete-property/ ethernet1;
+> >
+> > OK
+> >
+> I assume you are OK with dropping the above too?
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-adsp-pil.yaml: properties:glink-edge:properties:qcom,remote-pid:maxItems: False schema does not allow 1
-	hint: Scalar properties should not have array keywords
-	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-adsp-pil.yaml: ignoring, error in schema: properties: glink-edge: properties: qcom,remote-pid: maxItems
-Documentation/devicetree/bindings/remoteproc/qcom,sc7280-adsp-pil.example.dtb:0:0: /example-0/remoteproc@3000000: failed to match any schema with compatible: ['qcom,sc7280-adsp-pil']
+I did intend to delete these properties (hence the "OK"), as their
+presence may confuse U-Boot.
 
-doc reference errors (make refcheckdocs):
+Gr{oetje,eeting}s,
 
-See https://patchwork.ozlabs.org/patch/
+                        Geert
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
