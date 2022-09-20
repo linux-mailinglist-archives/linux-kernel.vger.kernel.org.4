@@ -2,95 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6386D5BE6C7
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 15:12:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DBBE5BE6C4
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 15:11:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230271AbiITNMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 09:12:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46886 "EHLO
+        id S230397AbiITNLc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 09:11:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbiITNMS (ORCPT
+        with ESMTP id S229617AbiITNLa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 09:12:18 -0400
-Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9488A402E2
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 06:12:16 -0700 (PDT)
-Received: from SHSend.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
-        by SHSQR01.spreadtrum.com with ESMTPS id 28KDBRE4083462
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NO);
-        Tue, 20 Sep 2022 21:11:27 +0800 (CST)
-        (envelope-from zhaoyang.huang@unisoc.com)
-Received: from bj03382pcu.spreadtrum.com (10.0.74.65) by
- BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
- 15.0.1497.23; Tue, 20 Sep 2022 21:11:28 +0800
-From:   "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Zhaoyang Huang <huangzhaoyang@gmail.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <ke.wang@unisoc.com>,
-        <steve.kang@unisoc.com>
-Subject: [RFC PATCH] mm: track bad page via kmemleak
-Date:   Tue, 20 Sep 2022 21:11:08 +0800
-Message-ID: <1663679468-16757-1-git-send-email-zhaoyang.huang@unisoc.com>
-X-Mailer: git-send-email 1.9.1
+        Tue, 20 Sep 2022 09:11:30 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5951A40BE6
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 06:11:25 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id ay7-20020a05600c1e0700b003b49861bf48so991037wmb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 06:11:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date;
+        bh=XAzDYQxpLcJQ15DEP4UTiE0elKKEdLSe01IFkqD7taw=;
+        b=V4fg7TMm+n8WFyQJ1mY5aXpI8vuG9FVw99PYZyvLJ8aj/n1LV8tWoemOORB1vs0Nx+
+         NXaU1VEV7N5eb3Pci6agm5Qk1kydAGoXFYGktrZwrTRyBonZR1CTFKmi+Yt2d/sPls1Q
+         vqmVu+Rr+PUB6jbm9YOYebWZpB/xmzcfS6pet96fmMYS6UsY8Ug41aUUxpawZrfzrrig
+         uMpj2aJUGEDfiqAUEsaXhYX2/beYj/LNzE4tyyQXXwqsfzVkSXEwYL3b9N1GvK1AuR9s
+         l6UlgpDr9lRLzQBfeUOFzvhM2ZSpFSdaPHeWp8TKapEYKbMbQEigx52nk7WO9fn1RCSF
+         nTGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=XAzDYQxpLcJQ15DEP4UTiE0elKKEdLSe01IFkqD7taw=;
+        b=4uhb4sjvV/QfZYWtJ1yTqwzhF6Ief5ZmC7a5HQWLecTaHbjNmnj99556qLliQlHLxj
+         /W8wSS1VYIPDs577sBFyUCjA4gYzc0UVrWIKcVU/3tp7d120jhmZhx1gOlg6AI+cSBle
+         50q4REU6ZK3vDSbO9a8KvBklS+ii0bIXZVbO+92kD8iS/pvBBDSQsbQFbck4M3kEjmk/
+         BjENiItExW3dvGqiZqeGOAbV+IKSWwW7dTdZcXFb9cT6H9cLGxZ5cEmzAi9l0nB+Tf2c
+         KSL8b3ixN3aWOa1ryZUb8w/E0MHFiUe8noF4oM5uxBrmSVWwuwhTlZZPbGLH+/psHggB
+         JADQ==
+X-Gm-Message-State: ACrzQf2J6fJDhq6o+GBe61QlwZD4+yA6iUdIuuqtp6jasxAIqgvdjRlv
+        WzEvrkE0ThXcgVMiJE5NWQZKkKGLQA5GNyqQxok=
+X-Google-Smtp-Source: AMsMyM7wycy2aiv0SwUOkB8HTBfAJiDmuqPXKUj0bSK9kQNY9x92M/yAVXriRwtmO+nWqvx3NJ4tFNTELfq9jEwAuXY=
+X-Received: by 2002:a05:600c:211a:b0:3b4:75ee:c63e with SMTP id
+ u26-20020a05600c211a00b003b475eec63emr2453885wml.44.1663679483988; Tue, 20
+ Sep 2022 06:11:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.0.74.65]
-X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
- BJMBX01.spreadtrum.com (10.0.64.7)
-X-MAIL: SHSQR01.spreadtrum.com 28KDBRE4083462
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a5d:5958:0:0:0:0:0 with HTTP; Tue, 20 Sep 2022 06:11:23
+ -0700 (PDT)
+Reply-To: a16udu@gmail.com
+From:   audu bello <jhadgrs@gmail.com>
+Date:   Tue, 20 Sep 2022 06:11:23 -0700
+Message-ID: <CAKxEN0tv3kApVZ6xzZ5To_Qwe8vXdQo=rNWjZRD8a41kfC+z_w@mail.gmail.com>
+Subject: Hello
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-
-Bad pages will failed go back to allocator and leaved as orphan pages, track
-them down via kmemleak.
-
-Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
----
- mm/page_alloc.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
-
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index e5486d4..24f682e 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -1408,7 +1408,7 @@ static __always_inline bool free_pages_prepare(struct page *page,
- 			__memcg_kmem_uncharge_page(page, order);
- 		reset_page_owner(page, order);
- 		page_table_check_free(page, order);
--		return false;
-+		goto err;
- 	}
- 
- 	/*
-@@ -1442,7 +1442,7 @@ static __always_inline bool free_pages_prepare(struct page *page,
- 	if (check_free)
- 		bad += check_free_page(page);
- 	if (bad)
--		return false;
-+		goto err;
- 
- 	page_cpupid_reset_last(page);
- 	page->flags &= ~PAGE_FLAGS_CHECK_AT_PREP;
-@@ -1486,6 +1486,10 @@ static __always_inline bool free_pages_prepare(struct page *page,
- 	debug_pagealloc_unmap_pages(page, 1 << order);
- 
- 	return true;
-+err:
-+	kmemleak_alloc(page_address(page), PAGE_SIZE << order, 1, GFP_KERNEL);
-+	return false;
-+
- }
- 
- #ifdef CONFIG_DEBUG_VM
--- 
-1.9.1
-
+Hello,
+Could you help me received 4.2 million for Charity Projects in your country?
