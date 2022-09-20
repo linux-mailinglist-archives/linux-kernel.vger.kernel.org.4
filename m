@@ -2,207 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 366555BDBD1
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 06:51:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A8BC5BDBD6
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 06:53:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229557AbiITEvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 00:51:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34092 "EHLO
+        id S229611AbiITExz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 00:53:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbiITEvA (ORCPT
+        with ESMTP id S229437AbiITExv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 00:51:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A15852DC7;
-        Mon, 19 Sep 2022 21:50:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 001E5B818B6;
-        Tue, 20 Sep 2022 04:50:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7E9FC433D6;
-        Tue, 20 Sep 2022 04:50:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663649456;
-        bh=fzjnfFvXaoLalr68n3B2MZyIURza6L8/C5Yc3Wy/osI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oX7GvtQRx5hPjag0bbNf26qO81fekuU0755+qCCtZxI00VfTgFLg/j7/suGU+f0dL
-         BhH2cIEwfRo3I2lA2GS//8IkXQXMo1LQ7xSBsmPoKDZXPbXJSIYOuYWbTQzpQsG7l8
-         RE4lRC9d3vNLddHPdFIOMPRKIskmZtsbkbihaSp6qwrY3EyZE9iuKOhesLAhM3IBUr
-         mxRe01nWD/AjhC83Jd1VrnevgW/wW1qnBy5WDp+FHTths2Y2OnwTfI6QHNrQaCpW09
-         SdJYvV3SGeS2odprJfSpI8qFRmXVVezO+mnShkDhE9k4X0zpnnZbEiKY/4asR0F4gN
-         z5CEoJGxa7p8g==
-Date:   Tue, 20 Sep 2022 07:50:51 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     Evan Green <evgreen@chromium.org>, linux-kernel@vger.kernel.org,
-        gwendal@chromium.org, Eric Biggers <ebiggers@kernel.org>,
-        Matthew Garrett <mgarrett@aurora.tech>, zohar@linux.ibm.com,
-        linux-integrity@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
-        apronin@chromium.org, dlunev@google.com, rjw@rjwysocki.net,
-        linux-pm@vger.kernel.org, corbet@lwn.net, jejb@linux.ibm.com,
-        Matthew Garrett <matthewgarrett@google.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
-Subject: Re: [PATCH v2 02/10] tpm: Allow PCR 23 to be restricted to
- kernel-only use
-Message-ID: <YylGq7eUvaoSyA1u@kernel.org>
-References: <20220823222526.1524851-1-evgreen@chromium.org>
- <20220823152108.v2.2.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid>
- <4308c2d0-94ae-8a65-e0c7-69270e31d447@linux.ibm.com>
+        Tue, 20 Sep 2022 00:53:51 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F60E58DC9
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 21:53:50 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id e16so2320257wrx.7
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Sep 2022 21:53:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=colorfullife-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=Vyg2BS4OgoN4PABi0kgWr5r2OkJO3xdUk2Gib7RnQ68=;
+        b=pV5NEnzzTDNCMhIzv9W9eopezRmZC6OUF2OXuGZ9QRaxsXFUqT/5cgWD4AGCTFPCTe
+         TZim8aD+ldgXRmWVldy/lzKLR+IMaFm+0C190mV2ozj8V6y+ZSJSHpJ7IqXJJmosUFCe
+         4s8uLn1Bdg6rHPn6jCHn4OCyydLcbXzMGG8Z95MxVdlW+HPfIuqdrxfT+ZZ1c4VomHc5
+         NEuDuICS60ulIQzhJeDcTXqLVO3ycKcpMSZy7bsh4eRkUTJFGdMQaEhG5WhycshOQivE
+         nnUAE2gwIcb396TpI3cZHfZJWe9Ly9qgiXY2cVxwIZvbIlM88m9tp5qVxNmE0YewNwmX
+         8rLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=Vyg2BS4OgoN4PABi0kgWr5r2OkJO3xdUk2Gib7RnQ68=;
+        b=Ok4ZUntZfdwgkLWaPtstGJydtxwweI0mT9tRlrbJvFZ+lsBthK13S0U3Hcwyr83Bfj
+         T/fGrVq6QWQqZpsZQgUPyogszZhIVEudToXoS1tsUj2qQCptTm5glYNF2qgoFbFXr6x5
+         mJZP0N81FUp3nhpUPMzlX7T5vhseOuPDAbt1xG80JK/d7Bot/GCkbkGtir/VX0hMK/HZ
+         f5YkSFXQKyl/KUbfER5F4+C5UxstNIrYDMjTUoEUxy+HsRih9WtNRoq/cf+H4/QS1ouL
+         kagAKZ1cvIFs70SuprehPv5os3oxEbq9p4vPqF8/vwsRlp87IZJQrDv8C3J0gedkQkNb
+         BvYA==
+X-Gm-Message-State: ACrzQf3rW0OBnl6VDS2IdITQPy0ZuuBFz7Yxt1fYr8UZdPuSVcKVtOkj
+        osY/LsGkMNQdyucX2fB/ZDbMCg==
+X-Google-Smtp-Source: AMsMyM5T6ErMvRyjiulCy6Ti1NqzRjFy2W7YBOLNH2YjQZqju8DY9WfnCm2AB5oJUKaKhAVsKpJbhw==
+X-Received: by 2002:adf:d08d:0:b0:22a:4560:9c29 with SMTP id y13-20020adfd08d000000b0022a45609c29mr12541726wrh.579.1663649628800;
+        Mon, 19 Sep 2022 21:53:48 -0700 (PDT)
+Received: from ?IPV6:2003:d9:970b:c00:6690:5cde:f1af:9517? (p200300d9970b0c0066905cdef1af9517.dip0.t-ipconnect.de. [2003:d9:970b:c00:6690:5cde:f1af:9517])
+        by smtp.googlemail.com with ESMTPSA id r13-20020adfa14d000000b0022af5e36981sm522866wrr.9.2022.09.19.21.53.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Sep 2022 21:53:48 -0700 (PDT)
+Message-ID: <8d74a7d4-b80f-2a0f-ee95-243bdbd51ccd@colorfullife.com>
+Date:   Tue, 20 Sep 2022 06:53:47 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4308c2d0-94ae-8a65-e0c7-69270e31d447@linux.ibm.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v6 2/2] ipc/msg: mitigate the lock contention with percpu
+ counter
+To:     "Sun, Jiebin" <jiebin.sun@intel.com>, akpm@linux-foundation.org,
+        vasily.averin@linux.dev, shakeelb@google.com, dennis@kernel.org,
+        tj@kernel.org, cl@linux.com, ebiederm@xmission.com,
+        legion@kernel.org, alexander.mikhalitsyn@virtuozzo.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Cc:     tim.c.chen@intel.com, feng.tang@intel.com, ying.huang@intel.com,
+        tianyou.li@intel.com, wangyang.guo@intel.com,
+        Tim Chen <tim.c.chen@linux.intel.com>
+References: <20220902152243.479592-1-jiebin.sun@intel.com>
+ <20220913192538.3023708-1-jiebin.sun@intel.com>
+ <20220913192538.3023708-3-jiebin.sun@intel.com>
+ <aadf6c7e-dea8-4dff-1815-cca9c2c2da9e@colorfullife.com>
+ <6ed22478-0c89-92ea-a346-0349be2dd99c@intel.com>
+Content-Language: en-US
+From:   Manfred Spraul <manfred@colorfullife.com>
+In-Reply-To: <6ed22478-0c89-92ea-a346-0349be2dd99c@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 08:26:09AM -0400, Stefan Berger wrote:
-> 
-> 
-> On 8/23/22 18:25, Evan Green wrote:
-> > From: Matthew Garrett <matthewgarrett@google.com>
-> > 
-> > Under certain circumstances it might be desirable to enable the creation
-> > of TPM-backed secrets that are only accessible to the kernel. In an
-> > ideal world this could be achieved by using TPM localities, but these
-> > don't appear to be available on consumer systems. An alternative is to
-> > simply block userland from modifying one of the resettable PCRs, leaving
-> > it available to the kernel. If the kernel ensures that no userland can
-> > access the TPM while it is carrying out work, it can reset PCR 23,
-> > extend it to an arbitrary value, create or load a secret, and then reset
-> > the PCR again. Even if userland somehow obtains the sealed material, it
-> > will be unable to unseal it since PCR 23 will never be in the
-> > appropriate state.
-> > 
-> > From: Matthew Garrett <mjg59@google.com>
-> > Signed-off-by: Matthew Garrett <mjg59@google.com>
-> > 
-> > Signed-off-by: Evan Green <evgreen@chromium.org>
-> > ---
-> > Matthew's original version of this patch is at:
-> > https://patchwork.kernel.org/patch/12096491/
-> > 
-> > Changes in v2:
-> >   - Fixed sparse warnings
-> > 
-> >   drivers/char/tpm/Kconfig          | 10 +++++++++
-> >   drivers/char/tpm/tpm-dev-common.c |  8 +++++++
-> >   drivers/char/tpm/tpm.h            | 21 +++++++++++++++++++
-> >   drivers/char/tpm/tpm1-cmd.c       | 35 +++++++++++++++++++++++++++++++
-> >   drivers/char/tpm/tpm2-cmd.c       | 22 +++++++++++++++++++
-> >   drivers/char/tpm/tpm2-space.c     |  2 +-
-> >   6 files changed, 97 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
-> > index 927088b2c3d3f2..4483b61a428b11 100644
-> > --- a/drivers/char/tpm/Kconfig
-> > +++ b/drivers/char/tpm/Kconfig
-> > @@ -211,4 +211,14 @@ config TCG_FTPM_TEE
-> >   	  This driver proxies for firmware TPM running in TEE.
-> >   source "drivers/char/tpm/st33zp24/Kconfig"
-> > +
-> > +config TCG_TPM_RESTRICT_PCR
-> > +	bool "Restrict userland access to PCR 23"
-> > +	depends on TCG_TPM
-> > +	help
-> > +	  If set, block userland from extending or resetting PCR 23. This
-> > +	  allows it to be restricted to in-kernel use, preventing userland
-> > +	  from being able to make use of data sealed to the TPM by the kernel.
-> > +	  This is required for secure hibernation support, but should be left
-> > +	  disabled if any userland may require access to PCR23.
-> >   endif # TCG_TPM
-> > diff --git a/drivers/char/tpm/tpm-dev-common.c b/drivers/char/tpm/tpm-dev-common.c
-> > index dc4c0a0a512903..7a4e618c7d1942 100644
-> > --- a/drivers/char/tpm/tpm-dev-common.c
-> > +++ b/drivers/char/tpm/tpm-dev-common.c
-> > @@ -198,6 +198,14 @@ ssize_t tpm_common_write(struct file *file, const char __user *buf,
-> >   	priv->response_read = false;
-> >   	*off = 0;
-> > +	if (priv->chip->flags & TPM_CHIP_FLAG_TPM2)
-> > +		ret = tpm2_cmd_restricted(priv->chip, priv->data_buffer, size);
-> > +	else
-> > +		ret = tpm1_cmd_restricted(priv->chip, priv->data_buffer, size);
-> > +
-> > +	if (ret)
-> > +		goto out;
-> > +
-> >   	/*
-> >   	 * If in nonblocking mode schedule an async job to send
-> >   	 * the command return the size.
-> > diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
-> > index a80b341d38eb8c..077c3ca0a127ba 100644
-> > --- a/drivers/char/tpm/tpm.h
-> > +++ b/drivers/char/tpm/tpm.h
-> > @@ -229,6 +229,8 @@ void tpm2_shutdown(struct tpm_chip *chip, u16 shutdown_type);
-> >   unsigned long tpm2_calc_ordinal_duration(struct tpm_chip *chip, u32 ordinal);
-> >   int tpm2_probe(struct tpm_chip *chip);
-> >   int tpm2_get_cc_attrs_tbl(struct tpm_chip *chip);
-> > +int tpm_find_and_validate_cc(struct tpm_chip *chip, struct tpm_space *space,
-> > +			     const void *buf, size_t bufsiz);
-> >   int tpm2_find_cc(struct tpm_chip *chip, u32 cc);
-> >   int tpm2_init_space(struct tpm_space *space, unsigned int buf_size);
-> >   void tpm2_del_space(struct tpm_chip *chip, struct tpm_space *space);
-> > @@ -244,4 +246,23 @@ void tpm_bios_log_setup(struct tpm_chip *chip);
-> >   void tpm_bios_log_teardown(struct tpm_chip *chip);
-> >   int tpm_dev_common_init(void);
-> >   void tpm_dev_common_exit(void);
-> > +
-> > +#ifdef CONFIG_TCG_TPM_RESTRICT_PCR
-> > +#define TPM_RESTRICTED_PCR 23
-> > +
-> > +int tpm1_cmd_restricted(struct tpm_chip *chip, u8 *buffer, size_t size);
-> > +int tpm2_cmd_restricted(struct tpm_chip *chip, u8 *buffer, size_t size);
-> > +#else
-> > +static inline int tpm1_cmd_restricted(struct tpm_chip *chip, u8 *buffer,
-> > +				      size_t size)
-> > +{
-> > +	return 0;
-> > +}
-> > +
-> > +static inline int tpm2_cmd_restricted(struct tpm_chip *chip, u8 *buffer,
-> > +				      size_t size)
-> > +{
-> > +	return 0;
-> > +}
-> > +#endif
-> >   #endif
-> > diff --git a/drivers/char/tpm/tpm1-cmd.c b/drivers/char/tpm/tpm1-cmd.c
-> > index 8ec743dec26544..318e75ae42fb85 100644
-> > --- a/drivers/char/tpm/tpm1-cmd.c
-> > +++ b/drivers/char/tpm/tpm1-cmd.c
-> > @@ -845,3 +845,38 @@ int tpm1_get_pcr_allocation(struct tpm_chip *chip)
-> >   	return 0;
-> >   }
-> > +
-> > +#ifdef CONFIG_TCG_TPM_RESTRICT_PCR
-> > +int tpm1_cmd_restricted(struct tpm_chip *chip, u8 *buffer, size_t size)
-> > +{
-> > +	struct tpm_header *header = (struct tpm_header *)buffer;
-> > +	char len, offset;
-> > +	__be32 *pcr;
-> > +	int pos;
-> > +
-> > +	switch (be32_to_cpu(header->ordinal)) {
-> > +	case TPM_ORD_PCR_EXTEND:
-> > +		if (size < (TPM_HEADER_SIZE + sizeof(u32)))
-> > +			return -EINVAL;
-> > +		pcr = (__be32 *)&buffer[TPM_HEADER_SIZE];
-> > +		if (be32_to_cpu(*pcr) == TPM_RESTRICTED_PCR)
-> > +			return -EPERM;
-> 
-> FYI: TPM 1.2 has transport sessions where the command is tunneled in an
-> encrypted channel and this check could be circumvented...
+On 9/20/22 04:36, Sun, Jiebin wrote:
+>
+> On 9/18/2022 8:53 PM, Manfred Spraul wrote:
+>> Hi Jiebin,
+>>
+>> On 9/13/22 21:25, Jiebin Sun wrote:
+>>> The msg_bytes and msg_hdrs atomic counters are frequently
+>>> updated when IPC msg queue is in heavy use, causing heavy
+>>> cache bounce and overhead. Change them to percpu_counter
+>>> greatly improve the performance. Since there is one percpu
+>>> struct per namespace, additional memory cost is minimal.
+>>> Reading of the count done in msgctl call, which is infrequent.
+>>> So the need to sum up the counts in each CPU is infrequent.
+>>>
+>>> Apply the patch and test the pts/stress-ng-1.4.0
+>>> -- system v message passing (160 threads).
+>>>
+>>> Score gain: 3.99x
+>>>
+>>> CPU: ICX 8380 x 2 sockets
+>>> Core number: 40 x 2 physical cores
+>>> Benchmark: pts/stress-ng-1.4.0
+>>> -- system v message passing (160 threads)
+>>>
+>>> Signed-off-by: Jiebin Sun <jiebin.sun@intel.com>
+>>> Reviewed-by: Tim Chen <tim.c.chen@linux.intel.com>
+>> Reviewed-by: Manfred Spraul <manfred@colorfullif.com>
+>>> @@ -495,17 +496,18 @@ static int msgctl_info(struct ipc_namespace 
+>>> *ns, int msqid,
+>>>       msginfo->msgssz = MSGSSZ;
+>>>       msginfo->msgseg = MSGSEG;
+>>>       down_read(&msg_ids(ns).rwsem);
+>>> -    if (cmd == MSG_INFO) {
+>>> +    if (cmd == MSG_INFO)
+>>>           msginfo->msgpool = msg_ids(ns).in_use;
+>>> -        msginfo->msgmap = atomic_read(&ns->msg_hdrs);
+>>> -        msginfo->msgtql = atomic_read(&ns->msg_bytes);
+>>> +    max_idx = ipc_get_maxidx(&msg_ids(ns));
+>>> +    up_read(&msg_ids(ns).rwsem);
+>>> +    if (cmd == MSG_INFO) {
+>>> +        msginfo->msgmap = percpu_counter_sum(&ns->percpu_msg_hdrs);
+>>> +        msginfo->msgtql = percpu_counter_sum(&ns->percpu_msg_bytes);
+>>
+>> Not caused by your change, it just now becomes obvious:
+>>
+>> msginfo->msgmap and ->msgtql are type int, i.e. signed 32-bit, and 
+>> the actual counters are 64-bit.
+>> This can overflow - and I think the code should handle this. Just 
+>> clamp the values to INT_MAX.
+>>
+> Hi Manfred,
+>
+> Thanks for your advice. But I'm not sure if we could fix the overflow 
+> issue in ipc/msg totally by
+>
+> clamp(val, low, INT_MAX). If the value is over s32, we might avoid the 
+> reversal sign, but still could
+>
+> not get the accurate value.
 
-BTW, Why do we want to support TPM 1.2 at all.
+I think just clamping it to INT_MAX is the best approach.
+Reporting negative values is worse than clamping. If (and only if) there 
+are real users that need to know the total amount of memory allocated 
+for messages queues in one namespace, then we could add a MSG_INFO64 
+with long values. But I would not add that right now, I do not see a 
+real use case where the value would be needed.
 
-I would not support it for new features. This could be just TPM2 only
-feeature.
+Any other opinions?
 
-BR, Jarkko
+--
+
+     Manfred
+
