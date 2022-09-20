@@ -2,161 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 936DD5BE9D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 17:14:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1F965BE9AB
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 17:07:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231336AbiITPOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 11:14:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55582 "EHLO
+        id S230315AbiITPH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 11:07:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230456AbiITPOW (ORCPT
+        with ESMTP id S230220AbiITPHZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 11:14:22 -0400
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 096095A835;
-        Tue, 20 Sep 2022 08:14:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1663686861;
-  x=1695222861;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=PDXxWh6D8rkZ8qf1SR+LZVvNYgKTUnfKP/hI0dpGV9c=;
-  b=jUUPSUeLOl9bCrQ0GvQf63vr2Lo63CInGZfSU2UcJgAmAbqZ21CJEEqr
-   Q5SK6cc4gOg5sDC69dyG4R0FIdg76gd5iH7YzH10lANWtYFMr8iYn+y9K
-   U2Ucr086d40AnaR6LkvR7BTNtA15EkUf4R8Cg7PuFRfS1LKBP56PaSyJq
-   2nnM+96TUw1tYUXXt8PSzqMycOE7CrCr2W5BpeyCV0Ic1QO3aBwVy2cqa
-   0+LZx1FodJkkRH2nzvTIfSP/ya9hE2BtPQcN+5pcSqr700lVZhLdZxcPQ
-   YqGONF2Sz37f1fsh583ceXaOp2K3POcJFTYzO3yG0R20khIR8TIeCd2RS
-   g==;
-From:   Marcus Carlberg <marcus.carlberg@axis.com>
-To:     <lxu@maxlinear.com>, <andrew@lunn.ch>
-CC:     <linux-kernel@vger.kernel.org>, <kernel@axis.com>,
-        Marcus Carlberg <marcus.carlberg@axis.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        <devicetree@vger.kernel.org>, Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, <netdev@vger.kernel.org>
-Subject: [PATCH net-next 2/2] net: phy: mxl-gpy: Add mode for 2 leds
-Date:   Tue, 20 Sep 2022 17:14:11 +0200
-Message-ID: <20220920151411.12523-3-marcus.carlberg@axis.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220920151411.12523-1-marcus.carlberg@axis.com>
-References: <20220920151411.12523-1-marcus.carlberg@axis.com>
+        Tue, 20 Sep 2022 11:07:25 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7B3C03
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 08:07:21 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MX4YS5jqdzmVlF;
+        Tue, 20 Sep 2022 23:03:24 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 20 Sep 2022 23:07:19 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 20 Sep
+ 2022 23:07:18 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <alsa-devel@alsa-project.org>
+CC:     <oder_chiou@realtek.com>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>
+Subject: [PATCH -next] ASoC: rt5682s: simplify the return of rt5682s_probe()
+Date:   Tue, 20 Sep 2022 23:14:13 +0800
+Message-ID: <20220920151413.3455255-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-GPY211 phy default to using all four led pins.
-Hardwares using only two leds where led0 is used as the high
-network speed led and led1 the low network speed led will not
-get the correct behaviour since 1Gbit and 2.5Gbit will not be
-represented at all in the existing leds.
+After commit bfc5e8b860ad ("ASoC: rt5682s: Reduce coupling of
+Micbias and Vref2 settings"), the return of rt5682s_probe()
+can be simplified. No functional changed.
 
-This patch adds a property for switching to a two led mode as specified
-above.
-
-Signed-off-by: Marcus Carlberg <marcus.carlberg@axis.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
- drivers/net/phy/mxl-gpy.c | 45 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
+ sound/soc/codecs/rt5682s.c | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/drivers/net/phy/mxl-gpy.c b/drivers/net/phy/mxl-gpy.c
-index 24bae27eedef..0886fa21c4ff 100644
---- a/drivers/net/phy/mxl-gpy.c
-+++ b/drivers/net/phy/mxl-gpy.c
-@@ -12,6 +12,7 @@
- #include <linux/phy.h>
- #include <linux/polynomial.h>
- #include <linux/netdevice.h>
-+#include <linux/of_platform.h>
-
- /* PHY ID */
- #define PHY_ID_GPYx15B_MASK	0xFFFFFFFC
-@@ -32,6 +33,7 @@
- #define PHY_MIISTAT		0x18	/* MII state */
- #define PHY_IMASK		0x19	/* interrupt mask */
- #define PHY_ISTAT		0x1A	/* interrupt status */
-+#define PHY_LED			0x1B	/* LED control */
- #define PHY_FWV			0x1E	/* firmware version */
-
- #define PHY_MIISTAT_SPD_MASK	GENMASK(2, 0)
-@@ -59,6 +61,16 @@
- #define PHY_FWV_MAJOR_MASK	GENMASK(11, 8)
- #define PHY_FWV_MINOR_MASK	GENMASK(7, 0)
-
-+/* LED */
-+#define VSPEC1_LED0_CTRL	0x01
-+#define VSPEC1_LED1_CTRL	0x02
-+#define VSPEC1_LED2_CTRL	0x03
-+#define VSPEC1_LED3_CTRL	0x04
-+#define TWO_LED_CONFIG				0x0300
-+#define LED_BLINK_2500MBIT			0x0380
-+#define LED_BLINK_1000MBIT_100MBIT_10_MBIT	0x0370
-+#define LED_DUAL_MODE	2
-+
- /* SGMII */
- #define VSPEC1_SGMII_CTRL	0x08
- #define VSPEC1_SGMII_CTRL_ANEN	BIT(12)		/* Aneg enable */
-@@ -201,9 +213,34 @@ static int gpy_config_init(struct phy_device *phydev)
- 	return ret < 0 ? ret : 0;
- }
-
-+static int gpy_override_led_mode(struct phy_device
-+				*phydev, u32 led_mode)
-+{
-+	int ret;
-+
-+	if (led_mode == LED_DUAL_MODE) {
-+		ret = phy_write(phydev, PHY_LED, TWO_LED_CONFIG);
-+		if (ret < 0)
-+			return ret;
-+		ret = phy_write_mmd(phydev, MDIO_MMD_VEND1,
-+				    VSPEC1_LED0_CTRL,
-+				    LED_BLINK_2500MBIT);
-+		if (ret < 0)
-+			return ret;
-+		ret = phy_write_mmd(phydev, MDIO_MMD_VEND1,
-+				    VSPEC1_LED1_CTRL,
-+				    LED_BLINK_1000MBIT_100MBIT_10_MBIT);
-+		if (ret < 0)
-+			return ret;
-+	}
-+
-+	return 0;
-+}
-+
- static int gpy_probe(struct phy_device *phydev)
+diff --git a/sound/soc/codecs/rt5682s.c b/sound/soc/codecs/rt5682s.c
+index 9d7a70753c6f..466a37f3500c 100644
+--- a/sound/soc/codecs/rt5682s.c
++++ b/sound/soc/codecs/rt5682s.c
+@@ -2864,15 +2864,10 @@ static inline int rt5682s_dai_probe_clks(struct snd_soc_component *component)
+ static int rt5682s_probe(struct snd_soc_component *component)
  {
- 	struct device *dev = &phydev->mdio.dev;
-+	struct device_node *np = dev->of_node;
- 	struct gpy_priv *priv;
- 	int fw_version;
- 	int ret;
-@@ -234,6 +271,14 @@ static int gpy_probe(struct phy_device *phydev)
- 		    priv->fw_major, priv->fw_minor, fw_version,
- 		    fw_version & PHY_FWV_REL_MASK ? "" : " test version");
-
-+	/* Override led mode */
-+	ret  = of_property_read_bool(np, "mxl,dual-led-mode");
-+	if (ret) {
-+		ret = gpy_override_led_mode(phydev, LED_DUAL_MODE);
-+		if (ret < 0)
-+			return ret;
-+	}
-+
- 	return 0;
+ 	struct rt5682s_priv *rt5682s = snd_soc_component_get_drvdata(component);
+-	int ret;
+ 
+ 	rt5682s->component = component;
+ 
+-	ret = rt5682s_dai_probe_clks(component);
+-	if (ret)
+-		return ret;
+-
+-	return 0;
++	return rt5682s_dai_probe_clks(component);
  }
-
---
-2.20.1
+ 
+ static void rt5682s_remove(struct snd_soc_component *component)
+-- 
+2.25.1
 
