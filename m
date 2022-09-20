@@ -2,128 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 981FA5BE2F1
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 12:20:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F364E5BE2EF
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 12:20:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbiITKUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 06:20:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51634 "EHLO
+        id S229611AbiITKUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 06:20:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbiITKTx (ORCPT
+        with ESMTP id S230133AbiITKT6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 06:19:53 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E499BE9;
-        Tue, 20 Sep 2022 03:19:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663669191; x=1695205191;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=XqDK7i21s81xxS44B7twjWidjsGc/l3g36/jPctT8nA=;
-  b=hlxkm/YGJJcvZfmR/C9auEV7UxVxczyXhDfbszp+aBPvBqcQ1emiBJUT
-   ByovgrP002WR0OUshbC93cDZqdTLvw+y/SfF3MxG1GgAvlEfwXZStjR1/
-   ZNxpZvln+JWV711dOP2K6Uo9BwxSWxkKLSmPMFV3nqQDdEiapM7TPmCVb
-   MLDrOA78rEP4k9WjAkdLuZ3FCBYn7zSma/tiiy31hZAQ6tGIu0vr6PgzY
-   nJsLTSmzqF6LeBQuqiIIauT17vAeZzsKr/xyCXvDaiaw5bRjk1q4UQzHG
-   bpaHIPd2Pc1fLfEmGc1pl1enBYECnM8JmVQq3fujX0lT0LGqojvzJZZVi
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="385942876"
-X-IronPort-AV: E=Sophos;i="5.93,330,1654585200"; 
-   d="scan'208";a="385942876"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 03:19:51 -0700
-X-IronPort-AV: E=Sophos;i="5.93,330,1654585200"; 
-   d="scan'208";a="681249446"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.58.32])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 03:19:48 -0700
-Message-ID: <25977700-7ab7-9a3b-5c67-c6c5fe35a13a@intel.com>
-Date:   Tue, 20 Sep 2022 13:19:44 +0300
+        Tue, 20 Sep 2022 06:19:58 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 625B026561;
+        Tue, 20 Sep 2022 03:19:57 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id B68D56600368;
+        Tue, 20 Sep 2022 11:19:54 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1663669195;
+        bh=iUq+6SOQiYHg6R9Dqd5eD1XyHyTrpOd2jfDvPJ7B3OE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=oXSviiEBnEb3mN3mSMGpsPl5quu0E8RjJ8pK+7UR4nmiguSAC3BKIxhr4B0r7G7m/
+         gxrjVyyCLhyOVvWAYc7mxNppd2ejo3UTlHSYgyX3q35Lz1AqTkSFhkYgOppJBUp6TD
+         sd/fccKGgLgRZ+4/BDTBH+UlMHnJmlUd24csAq+M2FOWrbUh1NMgpybwVHNvFe0vy+
+         BkGSpxH1eutjiyi9sFAPUN8ede0nPu5WZY/hQVw5wQIb7ohatSElbpcyA8xXL/vlOU
+         4tbm9gxUcce6pYYgCpKeGLnqqotChSWHRn5jwuXQUhpa+5b/o95AeWBVHQLW4C7v6H
+         iWaZykJzDms6w==
+Message-ID: <5071cc60-313e-bd01-228f-f0a0f2ce99a8@collabora.com>
+Date:   Tue, 20 Sep 2022 12:19:52 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH] mmc: host: Fix data stomping during mmc recovery
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v1 06/17] dt-bindings: mediatek: set the hdmi to be
+ compatible with syscon
 Content-Language: en-US
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Wenchao Chen <wenchao.chen666@gmail.com>
-Cc:     baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        megoo.tang@gmail.com, lzx.stg@gmail.com
-References: <20220916090506.10662-1-wenchao.chen666@gmail.com>
- <CAPDyKFqNJzwizZduMj_ig=aEXAgssQM8AzbYxa_T9XEqNXeWPw@mail.gmail.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <CAPDyKFqNJzwizZduMj_ig=aEXAgssQM8AzbYxa_T9XEqNXeWPw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Guillaume Ranquet <granquet@baylibre.com>,
+        Vinod Koul <vkoul@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Rob Herring <robh+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        CK Hu <ck.hu@mediatek.com>, Jitao shi <jitao.shi@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-mediatek@lists.infradead.org,
+        dri-devel@lists.freedesktop.org,
+        Pablo Sun <pablo.sun@mediatek.com>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org
+References: <20220919-v1-0-4844816c9808@baylibre.com>
+ <20220919-v1-6-4844816c9808@baylibre.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220919-v1-6-4844816c9808@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/09/22 12:32, Ulf Hansson wrote:
-> + Adrian
+Il 19/09/22 18:56, Guillaume Ranquet ha scritto:
+> In order to share register with a dedicated ddc driver, set the hdmi
+> compatible to syscon.
 > 
-> On Fri, 16 Sept 2022 at 11:05, Wenchao Chen <wenchao.chen666@gmail.com> wrote:
->>
->> From: Wenchao Chen <wenchao.chen@unisoc.com>
->>
->> The block device uses multiple queues to access emmc. There will be up to 3
->> requests in the hsq of the host. The current code will check whether there
->> is a request doing recovery before entering the queue, but it will not check
->> whether there is a request when the lock is issued. The request is in recovery
->> mode. If there is a request in recovery, then a read and write request is
->> initiated at this time, and the conflict between the request and the recovery
->> request will cause the data to be trampled.
->>
->> Signed-off-by: Wenchao Chen <wenchao.chen@unisoc.com>
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
 > 
-> Looks like we should consider tagging this for stable kernels too, right?
-> 
->> ---
->>  drivers/mmc/host/mmc_hsq.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/mmc/host/mmc_hsq.c b/drivers/mmc/host/mmc_hsq.c
->> index a5e05ed0fda3..9d35453e7371 100644
->> --- a/drivers/mmc/host/mmc_hsq.c
->> +++ b/drivers/mmc/host/mmc_hsq.c
->> @@ -34,7 +34,7 @@ static void mmc_hsq_pump_requests(struct mmc_hsq *hsq)
->>         spin_lock_irqsave(&hsq->lock, flags);
->>
->>         /* Make sure we are not already running a request now */
->> -       if (hsq->mrq) {
->> +       if (hsq->mrq || hsq->recovery_halt) {
-> 
-> This still looks a bit odd to me, but I may not fully understand the
-> code, as it's been a while since I looked at this.
-> 
-> In particular, I wonder why the callers of mmc_hsq_pump_requests()
-> need to release the spin_lock before they call
-> mmc_hsq_pump_requests()? Is it because we want to allow some other
-> code that may be waiting for the spin_lock to be released, to run too?
+> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.yaml
+> index abb231a0694b..86297b7eb7f7 100644
+> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.yaml
+> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.yaml
+> @@ -16,12 +16,14 @@ description: |
+>   
+>   properties:
+>     compatible:
+> -    enum:
+> -      - mediatek,mt2701-hdmi
+> -      - mediatek,mt7623-hdmi
+> -      - mediatek,mt8167-hdmi
+> -      - mediatek,mt8173-hdmi
+> -      - mediatek,mt8195-hdmi
+> +    items:
+> +      - enum:
+> +          - mediatek,mt2701-hdmi
+> +          - mediatek,mt7623-hdmi
+> +          - mediatek,mt8167-hdmi
+> +          - mediatek,mt8173-hdmi
+> +      - const: syscon
+> +
 
-FWIW, I am not aware of any reason.
+This is an ABI breakage, you can't do that.
 
-> 
-> If that isn't the case, it seems better to let the callers of
-> mmc_hsq_pump_requests() to keep holding the lock - and thus we can
-> avoid the additional check(s). In that case, it means the
-> "recovery_halt" flag has already been checked, for example.
-> 
->>                 spin_unlock_irqrestore(&hsq->lock, flags);
->>                 return;
->>         }
->> --
->> 2.17.1
->>
-> 
-> Kind regards
-> Uffe
-
+Regards,
+Angelo
