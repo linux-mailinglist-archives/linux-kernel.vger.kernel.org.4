@@ -2,115 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6D585BE9BB
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 17:10:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EF4B5BE9BD
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 17:10:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230216AbiITPKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 11:10:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51186 "EHLO
+        id S230371AbiITPK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 11:10:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbiITPKS (ORCPT
+        with ESMTP id S229811AbiITPKU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 11:10:18 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8541317AA8
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 08:10:16 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id x27so4400510lfu.0
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 08:10:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=OViHu+PU5jEpPTNCIuO30uizM2q0/rKRcVFoq6MpQm8=;
-        b=Mgvo7+TX/PagCkx35EfYZnfTM/X0/MHnFq68QQT8p3Jk3ObhJqaUCACvhkdNJJqbVh
-         Ltc2Npmgy1AnwVWCTFGdpLsfdkUT0A4OYyslgLErhbyWsy+p1u+4pHURu0nqrVaNb9OV
-         72Qk2hivZMjiF9ExFGZgfQhhoWNNG+Uc/1Flszgk/oasmkw0F7LHcDuJ9ziQR0hp20Uo
-         A7Zh4rhp6CEwMH3cqlttkbIeojJvXrgqLP5JrpCuBnhOkDh4VeumfKgRI7og1Rg+Q0yV
-         5dK2iUkhugrslmwT9B2zWeU1/HrXcoTfYpxCYwg5Rc9KD/QgzflPFZ6hBiY0ig0hPgAl
-         PhYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=OViHu+PU5jEpPTNCIuO30uizM2q0/rKRcVFoq6MpQm8=;
-        b=HARWXEI75f/6WmXqI9T9b+Idb11ELxjLeqfBLaIf7TrPIGTPh53gDeHMcstvJKqdl9
-         yYiwUM+IKz9BFDW2O1vPVQqhV0qC7Eo9O5OOKprykUVpLvL9oUFsd8xavNaXs1bhViLx
-         oCgH5K1f6KSXlpkaIy+KVViRD5J6gez3g/wPOkploFxwzmvfpUyxJ3OmEGPEXGZJbQEA
-         qygZwe8nD3rD0NdkcZRWbUpUnDIN5gAUsqsLMtQh8EzGvQizBv5L2G99Alp6ZcgOaexp
-         iRPGCG0DmaQ9lFB5hOoumflbnSfIYFbxl1ZTpGaBgzuh/iWEXREgll+XbufQiTZbW5dk
-         spvQ==
-X-Gm-Message-State: ACrzQf3xBH4CGkbec8IGXYuSnQQiUG2qJLW7KcBdkjivAQzrRVyqOk98
-        VjsQksMwoALgardMRcJIUNhubg==
-X-Google-Smtp-Source: AMsMyM4glAPExuXIHfUSqwdUwYLj2e3fxyvPVe/CF6+S04oyl9aGtnJL4wIddz/70d4jhJ+atFfuTw==
-X-Received: by 2002:a05:6512:10c8:b0:49c:14c5:e081 with SMTP id k8-20020a05651210c800b0049c14c5e081mr8574761lfg.615.1663686614879;
-        Tue, 20 Sep 2022 08:10:14 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id a16-20020ac25e70000000b004974da17c2bsm18620lfr.0.2022.09.20.08.10.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Sep 2022 08:10:14 -0700 (PDT)
-Message-ID: <0a6b443c-33b4-5fc7-5a2f-e55f5387999f@linaro.org>
-Date:   Tue, 20 Sep 2022 17:10:13 +0200
+        Tue, 20 Sep 2022 11:10:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7CEA17E1D;
+        Tue, 20 Sep 2022 08:10:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8F08CB82A8E;
+        Tue, 20 Sep 2022 15:10:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1DB2DC43144;
+        Tue, 20 Sep 2022 15:10:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663686616;
+        bh=oYSh/U3z7ijrPAXsY6krRv1Q6/5AWE1umds5AazKZHY=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=duVAJffRkEoV73sPoy3a5MPSkKK5mQ9g9Isq3CPRtfa6whfJTzJ/S4V9HF8wtJF15
+         YkkmfKR9WAr1nHbmc19tVia8P6PQA1jJM61qtD7pey0bDuul42b6+SKDFD1f5gy987
+         uguw3LMf2Xz1rl0e7o/3ww/N5TOLjBw5kfjtf4SZsJSv+R7fNG/lll8qpwqqLyNUo7
+         CRGp8R/DaOLs9ZTI7Bz1bEG9HX2FjM5jWydk292B6mOiUbpQr3wOIjXB1n3QuoVVT9
+         +4yK9tbSErU4NQ3FLqfB/B0d0DBMRktMRZEIk7F5NI6wnpV5ojcp6BgEr7w9sS7uln
+         5Xg/3yhaypj5Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 03756E21EDF;
+        Tue, 20 Sep 2022 15:10:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v7 4/9] dt-bindings: qcom-qce: Add new SoC compatible
- strings for qcom-qce
-Content-Language: en-US
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     agross@kernel.org, herbert@gondor.apana.org.au,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        linux-arm-msm@vger.kernel.org, thara.gopinath@gmail.com,
-        robh@kernel.org, andersson@kernel.org, bhupesh.linux@gmail.com,
-        davem@davemloft.net, Jordan Crouse <jorcrous@amazon.com>
-References: <20220920114051.1116441-1-bhupesh.sharma@linaro.org>
- <20220920114051.1116441-5-bhupesh.sharma@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220920114051.1116441-5-bhupesh.sharma@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v2] net: phy: micrel: Add interrupts support for
+ LAN8804 PHY
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166368661600.24945.2457944521487534827.git-patchwork-notify@kernel.org>
+Date:   Tue, 20 Sep 2022 15:10:16 +0000
+References: <20220913142926.816746-1-horatiu.vultur@microchip.com>
+In-Reply-To: <20220913142926.816746-1-horatiu.vultur@microchip.com>
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, michael@walle.cc, UNGLinuxDriver@microchip.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/09/2022 13:40, Bhupesh Sharma wrote:
-> Newer Qualcomm chips support newer versions of the qce crypto IP, so add
-> soc specific compatible strings for qcom-qce instead of using crypto
-> IP version specific ones.
+Hello:
+
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Tue, 13 Sep 2022 16:29:26 +0200 you wrote:
+> Add support for interrupts for LAN8804 PHY.
 > 
-> Keep the old strings for backward-compatibility, but mark them as
-> deprecated.
-> 
-> Cc: Bjorn Andersson <andersson@kernel.org>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Tested-by: Jordan Crouse <jorcrous@amazon.com>
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> Tested-by: Michael Walle <michael@walle.cc> # on kontron-kswitch-d10
+> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
 > ---
->  .../devicetree/bindings/crypto/qcom-qce.yaml         | 12 ++++++++++--
->  1 file changed, 10 insertions(+), 2 deletions(-)
+> v1->v2:
+> - add Tested-by and Reviewed-by tags
+> - add better comments
 > 
-> diff --git a/Documentation/devicetree/bindings/crypto/qcom-qce.yaml b/Documentation/devicetree/bindings/crypto/qcom-qce.yaml
-> index 4e00e7925fed..aa2f676f5382 100644
-> --- a/Documentation/devicetree/bindings/crypto/qcom-qce.yaml
-> +++ b/Documentation/devicetree/bindings/crypto/qcom-qce.yaml
-> @@ -15,7 +15,15 @@ description:
->  
->  properties:
->    compatible:
-> -    const: qcom,crypto-v5.1
-> +    enum:
-> +      - qcom,crypto-v5.1 # Deprecated. Kept only for backward compatibility
+> [...]
 
-No changes since v6.
+Here is the summary with links:
+  - [net-next,v2] net: phy: micrel: Add interrupts support for LAN8804 PHY
+    https://git.kernel.org/netdev/net-next/c/b324c6e5e099
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-Best regards,
-Krzysztof
