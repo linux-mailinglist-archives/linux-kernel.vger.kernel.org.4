@@ -2,175 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E98945BE5EB
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 14:32:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4C9A5BE5EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 14:34:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231259AbiITMcx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 08:32:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48358 "EHLO
+        id S229973AbiITMeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 08:34:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231272AbiITMcn (ORCPT
+        with ESMTP id S229982AbiITMeM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 08:32:43 -0400
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC032753B2;
-        Tue, 20 Sep 2022 05:32:39 -0700 (PDT)
-Received: by mail-qv1-f54.google.com with SMTP id m9so1861750qvv.7;
-        Tue, 20 Sep 2022 05:32:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=Wf+OpOOgKm2MQUZNT6fzDTc2lerh5dFGABEYb4COJ4Y=;
-        b=oPJtUACPa+yeG10enZMgNzR4vA9vJARWIAbZcucDDNSzYHQ6QJKvomdVKAlYREF9kr
-         ZVWOo+2VQ90xxvW7Gcj3OjQ5XGWiD/wZosqBLN+QkeX1Ikp0fwwvIo0QJX3Ymd9fgOVb
-         W9mUT5E9wLPMRdWlpWXa1bUDqeN2omfHc4S75y8SoxmDxCzrpMQbWdefmve39sIzXUE8
-         C8zdqlc9QHSSDgd2RtNUxcZ/BjZ9pGu9vFg9I2KhyztXP0SOBIM1smIviKkdjZ+mb/p8
-         0KhoggbQmEiggnug9OVJ/ogbGsP1lwoBoVGqWIpBu+6XRb3GFfU02K4yuel82XjT78VS
-         /kWA==
-X-Gm-Message-State: ACrzQf2XHcxdD2/CYITzUYk47xfCR9pTQpfagQf9HO+cMxKK/vQOQg+s
-        PvplZV6hwVgB6tKfn3Eq2sTKIPadcJgTFA==
-X-Google-Smtp-Source: AMsMyM7Yo9TjkGZ98y/4LtdivMQ4NpD3iJ0oBbqoQctlUyO0brSTKE1Lzd4ZUWQRvbPTL6R9S7upig==
-X-Received: by 2002:a05:6214:27ed:b0:4ac:7fd7:7d8b with SMTP id jt13-20020a05621427ed00b004ac7fd77d8bmr18620641qvb.129.1663677158499;
-        Tue, 20 Sep 2022 05:32:38 -0700 (PDT)
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
-        by smtp.gmail.com with ESMTPSA id bn35-20020a05620a2ae300b006cbc00db595sm53521qkb.23.2022.09.20.05.32.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Sep 2022 05:32:37 -0700 (PDT)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-333a4a5d495so24781107b3.10;
-        Tue, 20 Sep 2022 05:32:37 -0700 (PDT)
-X-Received: by 2002:a81:6756:0:b0:345:525e:38 with SMTP id b83-20020a816756000000b00345525e0038mr19491451ywc.47.1663677157058;
- Tue, 20 Sep 2022 05:32:37 -0700 (PDT)
+        Tue, 20 Sep 2022 08:34:12 -0400
+Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 972825F110;
+        Tue, 20 Sep 2022 05:34:11 -0700 (PDT)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id 990341CAC;
+        Tue, 20 Sep 2022 14:34:09 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1663677249;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vy3394MDBwTyDF5riRpGQ1bWI/Uxx+v9aoRpfwrtVw8=;
+        b=KLIiwldTgLh6waIO/BXq7aQ3yTMHLFx/Y1z74gAe+OaI4pMml15WCZgkgZrCdsP6u5vQNx
+        OeS2VehbPnUXgzy91fu27zngDuZrZxgAytYqDtkFhEL7G2kfsddRuiqFVRIv2eTwkIJgbS
+        RvHNJz5HVTyPvHZJfQ55X7I2D8sEwsf8J4YkPZUtPzMZvQkTy7opNbd9C0SZ5lnlSbUbE+
+        5uRydG3+vo6VmB4dkIKBjMySCmNpcTtOkaGa1J2FmV89ufEl25Z9bT3U88Q/gOSmTFa9CJ
+        oon5pzB/dsvYF3ZWfvvWfwBrsFlY0PiQuAOwiieyHUrlSFlStg36lrMvKwqFwA==
 MIME-Version: 1.0
-References: <20220915181558.354737-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220915181558.354737-9-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220915181558.354737-9-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 20 Sep 2022 14:32:25 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdW99EutciosPtOTU9AztfvfMdKTaS+YRmpmS4VnhZ9KAA@mail.gmail.com>
-Message-ID: <CAMuHMdW99EutciosPtOTU9AztfvfMdKTaS+YRmpmS4VnhZ9KAA@mail.gmail.com>
-Subject: Re: [PATCH v3 08/10] riscv: dts: renesas: Add minimal DTS for Renesas
- RZ/Five SMARC EVK
-To:     Prabhakar <prabhakar.csengg@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Atish Patra <atishp@rivosinc.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Date:   Tue, 20 Sep 2022 14:34:09 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     horatiu.vultur@microchip.com, UNGLinuxDriver@microchip.com,
+        andy.shevchenko@gmail.com, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] pinctrl: ocelot: Fix interrupt controller
+In-Reply-To: <CACRpkdb70zawWDSxUM=hJYkOEbG5a5guZWBytqUmRG2FZLiXsQ@mail.gmail.com>
+References: <20220909145942.844102-1-horatiu.vultur@microchip.com>
+ <20220920120642.690340-1-michael@walle.cc>
+ <CACRpkdb70zawWDSxUM=hJYkOEbG5a5guZWBytqUmRG2FZLiXsQ@mail.gmail.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <faa173ddc1d55d2e3931246453e5e953@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
+Am 2022-09-20 14:28, schrieb Linus Walleij:
+> On Tue, Sep 20, 2022 at 2:06 PM Michael Walle <michael@walle.cc> wrote:
+> 
+>> Our board has a shared active low interrupt line, connected to a quad 
+>> PHY
+>> LAN8814 and two GPY215 PHYs. I've gave this a try but it doesn't seem 
+>> to
+>> work. It seems the interrupt fires multiple times. If I plug a cable 
+>> in
+>> one of the LAN8814 ports, I see that the interrupt count in
+>> /proc/interrupts has increased by two. If I use a GPY215 port, I see 
+>> about
+>> 40 interrupts firing.
+> 
+> A lot of interrupts firing is very typical for level IRQs.
 
-On Thu, Sep 15, 2022 at 8:17 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> Enable the minimal blocks required for booting the Renesas RZ/Five
-> SMARC EVK with initramfs.
->
-> Below are the blocks enabled:
-> - CPG
-> - CPU0
-> - DDR (memory regions)
-> - PINCTRL
-> - PLIC
-> - SCIF0
->
-> Note we have deleted the nodes from the DT for which support needs to be
-> added for RZ/Five SoC and are enabled by RZ/G2UL SMARC EVK SoM/carrier
-> board DTS/I.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
-> v2->v3
-> * Dropped RB tags from Conor and Geert
-> * Now re-using the SoM and carrier board DTS/I from RZ/G2UL
+Common but wrong? Except in the error case, /proc/interrupts
+was always reliable on our boards :)
 
-Thanks for the update!
+> So I assume these are wire-OR, i.e. exploiting open drain with
+> a pull-up resistor.
 
-> --- /dev/null
-> +++ b/arch/riscv/boot/dts/renesas/r9a07g043f01-smarc.dts
-> @@ -0,0 +1,27 @@
-> +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +/*
-> + * Device Tree Source for the RZ/Five SMARC EVK
-> + *
-> + * Copyright (C) 2022 Renesas Electronics Corp.
-> + */
-> +
-> +/dts-v1/;
-> +
-> +/*
-> + * DIP-Switch SW1 setting
-> + * 1 : High; 0: Low
-> + * SW1-2 : SW_SD0_DEV_SEL      (0: uSD; 1: eMMC)
-> + * SW1-3 : SW_ET0_EN_N         (0: ETHER0; 1: CAN0, CAN1, SSI1, RSPI1)
-> + * Please change below macros according to SW1 setting on SoM
+Yes, the usual shared line interrupts.
 
-"on the SoM" (like in r9a07g043u11-smarc.dts)?
+> Just checking: since these drivers obviously must pass pass
+> IRQF_SHARED, have you also made sure that each driver also
+> will properly return IRQ_HANDLED if the interrupt was for them
+> (triggered by "their" hardware) but IRQ_NONE if the interrupt was
+> not for them (triggered by something else)?
 
-> --- /dev/null
-> +++ b/arch/riscv/boot/dts/renesas/rzfive-smarc-som.dtsi
-> @@ -0,0 +1,42 @@
-> +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +/*
-> + * Device Tree Source for the RZ/Five SMARC EVK SOM
-> + *
-> + * Copyright (C) 2022 Renesas Electronics Corp.
-> + */
-> +
-> +#include <arm64/renesas/rzg2ul-smarc-som.dtsi>
-> +
-> +/ {
-> +       aliases {
-> +               /delete-property/ ethernet0;
-> +               /delete-property/ ethernet1;
+Thanks, I'll check it.
 
-OK
+> The IRQ core relies on all drivers to do the right thing here.
+> 
+> Otherwise the IRQ will just re-fire until someone/something
+> manages to properly handle it and drive the line high again.
+> 
+> A typical case would be the LAN8814 driver having been probed
+> first, thus its IRQ handler will be visited first, and always returning
+> IRQ_HANDLED thereby "stealing" the irq from everyone else.
+> 
+> Another possible problem is if you don't have an external pull-up
+> resistor and you need some pin config to enable pull-up on the
+> SoC input line. This will generate a lot of IRQs.
 
-> +       };
-> +
-> +       chosen {
-> +               bootargs = "ignore_loglevel";
-> +       };
-> +};
-> +
-> +#if (SW_SW0_DEV_SEL)
-> +/delete-node/ &adc;
-> +#endif
-> +
-> +#if (!SW_ET0_EN_N)
-> +/delete-node/ &eth0;
-> +#endif
-> +/delete-node/ &eth1;
-> +
-> +/delete-node/ &ostm1;
-> +/delete-node/ &ostm2;
+I've checked with a scope, the levels and edges look good.
 
-Given they are all placeholders, do you really need to delete them?
-(more below)
+> A third problem would be that the line need time to rise.
+> But that should be uncommon.
 
-Gr{oetje,eeting}s,
+I haven't looked at the code of this patch, but obiously it
+is emulating the level triggered behavior with just a pin change
+interrupt. There might also be something wrong there, too.
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-michael
