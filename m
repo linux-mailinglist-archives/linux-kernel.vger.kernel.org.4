@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A392D5BE9DF
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 17:16:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59F4D5BE9E4
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 17:16:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231321AbiITPQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 11:16:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32844 "EHLO
+        id S231450AbiITPQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 11:16:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231340AbiITPPu (ORCPT
+        with ESMTP id S231372AbiITPPv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 11:15:50 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC28060535;
-        Tue, 20 Sep 2022 08:15:48 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MX4lD0zS9zmVjB;
-        Tue, 20 Sep 2022 23:11:52 +0800 (CST)
+        Tue, 20 Sep 2022 11:15:51 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 474E161116;
+        Tue, 20 Sep 2022 08:15:49 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MX4mV62YhzpTJj;
+        Tue, 20 Sep 2022 23:12:58 +0800 (CST)
 Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.31; Tue, 20 Sep 2022 23:15:46 +0800
 Received: from ubuntu1804.huawei.com (10.67.175.36) by
@@ -39,9 +39,9 @@ CC:     <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
         <mhiramat@kernel.org>, <rostedt@goodmis.org>,
         <keescook@chromium.org>, <catalin.marinas@arm.com>,
         <chenzhongjin@huawei.com>
-Subject: [PATCH -next 4/7] riscv: syscall: Don't clobber s0 when syscall
-Date:   Tue, 20 Sep 2022 23:11:59 +0800
-Message-ID: <20220920151202.180057-5-chenzhongjin@huawei.com>
+Subject: [PATCH -next 5/7] riscv: stacktrace: Implement stacktrace for irq
+Date:   Tue, 20 Sep 2022 23:12:00 +0800
+Message-ID: <20220920151202.180057-6-chenzhongjin@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220920151202.180057-1-chenzhongjin@huawei.com>
 References: <20220920151202.180057-1-chenzhongjin@huawei.com>
@@ -59,65 +59,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syscall uses s0 to load address of sys_call_table.
+After adding encoded fp onto stack to record pt_regs, now the
+unwinder have ability to unwind frame through irq.
 
-Since now we uses s0 to save pt_regs for unwinding, clobber
-s0 can make unwinder treat s0 as pt_regs address. Use s1 for
-this job.
+There is two steps to unwind irq frame and the interrupted frame:
+
+1. When there is an encoded fp on stack, we can get the pt_regs
+and unwind frame by (regs->epc) and (regs->s0).
+
+2. To unwind the interrupted frame, there is two possibilities,
+we can determine the situation by checking whether the value in
+frame->ra position is a fp value.
+
+If there is a fp in ra position:
+We are inside a leaf frame and there is only fp on ra position.
+Get fp from ra position and get next pc from pt_regs.
+Else:
+Just get fp and next pc from stack frame.
+
+Stacktrace before this patch:
+
+ Call Trace:
+  ...
+  [<ffffffff800aa692>] __flush_smp_call_function_queue+0xde/0x1fa
+  [<ffffffff800ab404>] generic_smp_call_function_single_interrupt+0x22/0x2a
+  [<ffffffff800077b2>] handle_IPI+0xaa/0x108
+  [<ffffffff803f827e>] riscv_intc_irq+0x56/0x6e
+  [<ffffffff808d94b6>] generic_handle_arch_irq+0x4c/0x76
+  [<ffffffff80003ad0>] ret_from_exception+0x0/0xc
+
+Stacktrace after this patch:
+
+ Call Trace:
+  ...
+  [<ffffffff800aa6da>] __flush_smp_call_function_queue+0xde/0x1fa
+  [<ffffffff800ab44c>] generic_smp_call_function_single_interrupt+0x22/0x2a
+  [<ffffffff800077fa>] handle_IPI+0xaa/0x108
+  [<ffffffff803f82c6>] riscv_intc_irq+0x56/0x6e
+  [<ffffffff808d94fe>] generic_handle_arch_irq+0x4c/0x76
+  [<ffffffff80003ad0>] ret_from_exception+0x0/0xc
++ [<ffffffff80003d52>] arch_cpu_idle+0x22/0x28
++ [<ffffffff808e23a8>] default_idle_call+0x44/0xee
++ [<ffffffff80056ece>] do_idle+0x116/0x126
++ [<ffffffff8005706e>] cpu_startup_entry+0x36/0x38
++ [<ffffffff808d99ae>] kernel_init+0x0/0x15a
++ [<ffffffff80a007a0>] arch_post_acpi_subsys_init+0x0/0x38
++ [<ffffffff80a0100c>] start_kernel+0x7c4/0x7f2
 
 Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
 ---
- arch/riscv/kernel/entry.S | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+ arch/riscv/kernel/stacktrace.c | 45 ++++++++++++++++++++++++++++------
+ 1 file changed, 38 insertions(+), 7 deletions(-)
 
-diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-index ecb15c7430b4..a3b14a649782 100644
---- a/arch/riscv/kernel/entry.S
-+++ b/arch/riscv/kernel/entry.S
-@@ -205,33 +205,33 @@ handle_syscall:
- check_syscall_nr:
- 	/* Check to make sure we don't jump to a bogus syscall number. */
- 	li t0, __NR_syscalls
--	la s0, sys_ni_syscall
-+	la s1, sys_ni_syscall
- 	/*
- 	 * Syscall number held in a7.
- 	 * If syscall number is above allowed value, redirect to ni_syscall.
- 	 */
- 	bgeu a7, t0, 3f
- #ifdef CONFIG_COMPAT
--	REG_L s0, PT_STATUS(sp)
--	srli s0, s0, SR_UXL_SHIFT
--	andi s0, s0, (SR_UXL >> SR_UXL_SHIFT)
-+	REG_L s1, PT_STATUS(sp)
-+	srli s1, s1, SR_UXL_SHIFT
-+	andi s1, s1, (SR_UXL >> SR_UXL_SHIFT)
- 	li t0, (SR_UXL_32 >> SR_UXL_SHIFT)
--	sub t0, s0, t0
-+	sub t0, s1, t0
- 	bnez t0, 1f
+diff --git a/arch/riscv/kernel/stacktrace.c b/arch/riscv/kernel/stacktrace.c
+index e84e21868a3e..976dc298ab3b 100644
+--- a/arch/riscv/kernel/stacktrace.c
++++ b/arch/riscv/kernel/stacktrace.c
+@@ -16,29 +16,60 @@
  
- 	/* Call compat_syscall */
--	la s0, compat_sys_call_table
-+	la s1, compat_sys_call_table
- 	j 2f
- 1:
- #endif
- 	/* Call syscall */
--	la s0, sys_call_table
-+	la s1, sys_call_table
- 2:
- 	slli t0, a7, RISCV_LGPTR
--	add s0, s0, t0
--	REG_L s0, 0(s0)
-+	add s1, s1, t0
-+	REG_L s1, 0(s1)
- 3:
--	jalr s0
-+	jalr s1
+ #ifdef CONFIG_FRAME_POINTER
  
- ret_from_syscall:
- 	/* Set user a0 to kernel a0 */
++static struct pt_regs *decode_frame_pointer(unsigned long fp)
++{
++	if (!(fp & 0x1))
++		return NULL;
++
++	return (struct pt_regs *)(fp & ~0x1);
++}
++
+ static int notrace unwind_next(struct unwind_state *state)
+ {
+ 	unsigned long low, high, fp;
+ 	struct stackframe *frame;
++	struct pt_regs *regs;
+ 
+-	fp = state->fp;
++	regs = decode_frame_pointer(state->fp);
+ 
+ 	/* Validate frame pointer */
+-	low = state->sp + sizeof(struct stackframe);
++	if (regs) {
++		if user_mode(regs)
++			return -1;
++
++		fp = (unsigned long)regs;
++		low = state->sp;
++	} else {
++		fp = state->fp;
++		low = state->sp + sizeof(struct stackframe);
++	}
+ 	high = ALIGN(low, THREAD_SIZE);
+ 
+ 	if (fp < low || fp > high || fp & 0x7)
+ 		return -EINVAL;
+ 
+-	/* Unwind stack frame */
+ 	frame = (struct stackframe *)fp - 1;
+ 	state->sp = fp;
+ 
+-	if (state->regs && state->regs->epc == state->pc &&
+-		fp & 0x7) {
+-		state->fp = frame->ra;
+-		state->pc = state->regs->ra;
++	if (regs) {
++	/* Unwind from irq to interrupted function */
++		state->fp = regs->s0;
++		state->pc = regs->epc;
++		state->regs = regs;
++	} else if (state->regs && state->regs->epc == state->pc) {
++	/* Unwind from interrupted function to caller*/
++		if (frame->ra < low || frame->ra > high) {
++		/* normal function */
++			state->fp = frame->fp;
++			state->pc = frame->ra;
++		} else {
++		/* leaf function */
++			state->fp = frame->ra;
++			state->pc = state->regs->ra;
++		}
++		state->regs = NULL;
+ 	} else {
++	/* Unwind from normal stack frame */
+ 		state->fp = frame->fp;
+ 		state->pc = ftrace_graph_ret_addr(current, NULL, frame->ra,
+ 							(unsigned long *)fp - 1);
 -- 
 2.17.1
 
