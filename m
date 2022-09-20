@@ -2,110 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F7295BE710
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 15:28:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFFF15BE716
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Sep 2022 15:29:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229530AbiITN2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 09:28:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35986 "EHLO
+        id S230345AbiITN3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 09:29:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230020AbiITN1i (ORCPT
+        with ESMTP id S230179AbiITN3C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 09:27:38 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 233DE49B5B;
-        Tue, 20 Sep 2022 06:27:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C7B9DCE17D1;
-        Tue, 20 Sep 2022 13:27:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74AF0C4347C;
-        Tue, 20 Sep 2022 13:27:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663680451;
-        bh=1fcbXZeScQcLotv0gPiS1nNUsEdY9jyJFjsJdQHPPQI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n+FRQAnxkPyOxYuPptioo1CnZfLJ4GXyMQm14RjccLhABRTQZ/A1kp9/IfxmH1QIM
-         HG2yNpVQwu8TxZwklm8QhHfhzEO0kSPlHsHCEa5fWQ20oO+Gnga7PCnkb1kWWPbPwK
-         1UbDtg9j+k6ac0FRy2E6FZyQiOLzjLEfklchKHFEE3s1ydrQy4YhRkD2jXrGOpgOiw
-         L/rHEZtYF71vffBn2KBUkCQLnypLGNzZNWF1eKiDe6xTZRKYVX9917hKJPFlszNmcZ
-         iZVfNgqq7qIBxFC5oRyVZ/u7kgNFLhrPLKU2+2571HDR4sH42Z6OIh3VQC9IFG7orb
-         tbgofw/Ivi1fA==
-Received: by pali.im (Postfix)
-        id E25DB2E12; Tue, 20 Sep 2022 15:27:29 +0200 (CEST)
-From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Marcin Wojtas <mw@semihalf.com>
-Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 5/5] ARM: dts: turris-omnia: Define S/PDIF audio card
-Date:   Tue, 20 Sep 2022 15:26:48 +0200
-Message-Id: <20220920132648.2008-6-pali@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220920132648.2008-1-pali@kernel.org>
-References: <20220920132648.2008-1-pali@kernel.org>
+        Tue, 20 Sep 2022 09:29:02 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F2A4B497
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 06:29:00 -0700 (PDT)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MX2M51rYYzMnDn;
+        Tue, 20 Sep 2022 21:24:17 +0800 (CST)
+Received: from [10.67.110.112] (10.67.110.112) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 20 Sep 2022 21:28:58 +0800
+Subject: Re: [PATCH] mm/secretmem: remove reduntant return value
+To:     David Hildenbrand <david@redhat.com>, <akpm@linux-foundation.org>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        Binyi Han <dantengknight@gmail.com>
+References: <20220920012205.246217-1-xiujianfeng@huawei.com>
+ <3196b824-bcee-0c44-bfd3-f6cd8a1e6719@redhat.com>
+ <c4e99ea3-302d-b173-27f1-92c38ddaca8c@huawei.com>
+ <7f1cfee4-c6de-ea59-0aa9-9bd55054fb22@redhat.com>
+From:   xiujianfeng <xiujianfeng@huawei.com>
+Message-ID: <0761fca9-b9f0-f3d7-0bf2-e73089db9d84@huawei.com>
+Date:   Tue, 20 Sep 2022 21:28:57 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <7f1cfee4-c6de-ea59-0aa9-9bd55054fb22@redhat.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.67.110.112]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500023.china.huawei.com (7.185.36.114)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Turris Omnia has GPIO51 exported on pin header U16, which works in S/PDIF
-output mode. So define S/PDIF audio output card for this pin.
+Hi,
 
-Signed-off-by: Pali Rohár <pali@kernel.org>
----
- arch/arm/boot/dts/armada-385-turris-omnia.dts | 27 +++++++++++++++++++
- 1 file changed, 27 insertions(+)
+在 2022/9/20 21:22, David Hildenbrand 写道:
+> On 20.09.22 14:35, xiujianfeng wrote:
+>> Hi,
+>>
+>> 在 2022/9/20 20:10, David Hildenbrand 写道:
+>>> On 20.09.22 03:22, Xiu Jianfeng wrote:
+>>>> The return value @ret is always 0, so remove it and return 0 directly.
+>>>>
+>>>> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+>>>> ---
+>>>>    mm/secretmem.c | 6 ++----
+>>>>    1 file changed, 2 insertions(+), 4 deletions(-)
+>>>>
+>>>> diff --git a/mm/secretmem.c b/mm/secretmem.c
+>>>> index 6a44efb673b2..04c3ac9448a1 100644
+>>>> --- a/mm/secretmem.c
+>>>> +++ b/mm/secretmem.c
+>>>> @@ -278,10 +278,8 @@ static struct file_system_type secretmem_fs = {
+>>>>    static int __init secretmem_init(void)
+>>>>    {
+>>>> -    int ret = 0;
+>>>> -
+>>>>        if (!secretmem_enable)
+>>>> -        return ret;
+>>>> +        return 0;
+>>>>        secretmem_mnt = kern_mount(&secretmem_fs);
+>>>>        if (IS_ERR(secretmem_mnt))
+>>>
+>>> On top of which tree is that?
+>>>
+>>> 6.0-rc6 has here:
+>>>
+>>> if (IS_ERR(secretmem_mnt))
+>>>       ret = PTR_ERR(secretmem_mnt);
+>>>
+>> Sorry, it's on linux-next tree, I should have used [PATCH -next]:)
+>>
+> 
+> Maybe this change should be squashed into the patch from Binyi directly:
+> 
 
-diff --git a/arch/arm/boot/dts/armada-385-turris-omnia.dts b/arch/arm/boot/dts/armada-385-turris-omnia.dts
-index d1e0db6e5730..fd0960157589 100644
---- a/arch/arm/boot/dts/armada-385-turris-omnia.dts
-+++ b/arch/arm/boot/dts/armada-385-turris-omnia.dts
-@@ -105,6 +105,33 @@
- 		 */
- 		status = "disabled";
- 	};
-+
-+	sound {
-+		compatible = "simple-audio-card";
-+		simple-audio-card,name = "SPDIF";
-+		simple-audio-card,format = "i2s";
-+
-+		simple-audio-card,cpu {
-+			sound-dai = <&audio_controller 1>;
-+		};
-+
-+		simple-audio-card,codec {
-+			sound-dai = <&spdif_out>;
-+		};
-+	};
-+
-+	spdif_out: spdif-out {
-+		#sound-dai-cells = <0>;
-+		compatible = "linux,spdif-dit";
-+	};
-+};
-+
-+&audio_controller {
-+	/* Pin header U16, GPIO51 in SPDIFO mode */
-+	pinctrl-0 = <&spdif_pins>;
-+	pinctrl-names = "default";
-+	spdif-mode;
-+	status = "okay";
- };
- 
- &bm {
--- 
-2.20.1
+Looks good to me, thanks.
 
+> 
+> commit 4eb5bbde3ccb710d3b85bfb13466612e56393369 (mm/mm-hotfixes-stable)
+> Author: Binyi Han <dantengknight@gmail.com>
+> Date:   Sun Sep 4 00:46:47 2022 -0700
+> 
+>     mm: fix dereferencing possible ERR_PTR
+>     Smatch checker complains that 'secretmem_mnt' dereferencing possible
+>     ERR_PTR().  Let the function return if 'secretmem_mnt' is ERR_PTR, to
+>     avoid deferencing it.
+>     Link: https://lkml.kernel.org/r/20220904074647.GA64291@cloud-MacBookPro
+>     Fixes: 1507f51255c9f ("mm: introduce memfd_secret system call to 
+> create "secret" memory areas")
+>     Signed-off-by: Binyi Han <dantengknight@gmail.com>
+>     Reviewed-by: Andrew Morton <akpm@linux-foudation.org>
+>     Cc: Mike Rapoport <rppt@kernel.org>
+>     Cc: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+>     Cc: Hagen Paul Pfeifer <hagen@jauu.net>
+>     Cc: James Bottomley <James.Bottomley@HansenPartnership.com>
+>     Cc: <stable@vger.kernel.org>
+>     Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+> 
+> 
