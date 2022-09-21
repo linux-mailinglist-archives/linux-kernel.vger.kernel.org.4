@@ -2,123 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8876F5BFDAC
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 14:19:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F3B85BFDB1
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 14:20:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbiIUMTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 08:19:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42330 "EHLO
+        id S230028AbiIUMUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 08:20:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbiIUMTK (ORCPT
+        with ESMTP id S230002AbiIUMTp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 08:19:10 -0400
-Received: from mail.8bytes.org (mail.8bytes.org [IPv6:2a01:238:42d9:3f00:e505:6202:4f0c:f051])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 06AB997B10
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 05:19:07 -0700 (PDT)
-Received: from 8bytes.org (p549ad5ad.dip0.t-ipconnect.de [84.154.213.173])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.8bytes.org (Postfix) with ESMTPSA id ADBC624131B;
-        Wed, 21 Sep 2022 14:19:06 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
-        s=default; t=1663762746;
-        bh=hZ+WGEjggQCri78fagmsYANy5ntZstnG04jkIRuh9Xk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=KIGa4ncKuSILKD26U7g01VcKvxcOlg1IMCn7ThE7N3sngz9RcF5z1rtQGc1XQnLZn
-         E3B5iEjI9ewbtl2nqpGpo3mkbIoHenQnkMS7twCu81Zvf+L8F4TQB0f9iymCRftRs3
-         m7OqhdDQ9JRkxHAIAkDAFLVHOntHdyxiPD3WN5CNBc2iByF2zuBDp9opnyjRZHU/Uw
-         BvoqBtD6/x7ADrOPgncG0M066Bo1BvrUzofB43RbYZnTtBLUYCKWEDYE+ag4rm0O9b
-         d1+IFsGGmoljeNGm9KfLwQvyn4jEHSEajj4QZQJN04zBI9vmJPshhXlgOlXUXaQpnA
-         j1dgg41aBtqPg==
-Date:   Wed, 21 Sep 2022 14:19:05 +0200
-From:   Joerg Roedel <joro@8bytes.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        iommu@lists.linux.dev
-Subject: [git pull] IOMMU Fixes for Linux v6.0-rc6
-Message-ID: <YysBOff9ZGM/EfQh@8bytes.org>
+        Wed, 21 Sep 2022 08:19:45 -0400
+Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8478D111E;
+        Wed, 21 Sep 2022 05:19:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1663762785; x=1695298785;
+  h=message-id:date:mime-version:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:subject;
+  bh=SXknPu8p6P5GCLG1lEIpEVchBPddZY3bhhgvk01JZqw=;
+  b=r1ZR6Mf8bM16yiGwJiQxa/xL0W8TPGxrYWhNo58SVu884g76mWSwplvC
+   L4GXOPG2Fy4qlPFzvT9mP/woWKA6k63JLBlzRJg55p12/FB61O6nn3HxB
+   pkxwQhmmnOoJ6xHgOJzT5cXmJT8NuymBY7eGgsmdfpL5hyutulk60Gnzs
+   k=;
+X-IronPort-AV: E=Sophos;i="5.93,333,1654560000"; 
+   d="scan'208";a="261732813"
+Subject: Re: build failure of next-20220921 due to 94c025b6f735 ("hwmon: (mr75203)
+ modify the temperature equation according to series 5 datasheet")
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2a-11a39b7d.us-west-2.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-9102.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 12:19:45 +0000
+Received: from EX13MTAUEE002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2a-11a39b7d.us-west-2.amazon.com (Postfix) with ESMTPS id BA32D4546C;
+        Wed, 21 Sep 2022 12:19:43 +0000 (UTC)
+Received: from EX19D014UEC002.ant.amazon.com (10.252.135.185) by
+ EX13MTAUEE002.ant.amazon.com (10.43.62.24) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Wed, 21 Sep 2022 12:19:43 +0000
+Received: from EX13MTAUEE002.ant.amazon.com (10.43.62.24) by
+ EX19D014UEC002.ant.amazon.com (10.252.135.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
+ Wed, 21 Sep 2022 12:19:43 +0000
+Received: from [192.168.151.220] (10.85.143.178) by mail-relay.amazon.com
+ (10.43.62.224) with Microsoft SMTP Server id 15.0.1497.38 via Frontend
+ Transport; Wed, 21 Sep 2022 12:19:41 +0000
+Message-ID: <04cb2084-7023-2a0b-ef31-ce25a54132cf@amazon.com>
+Date:   Wed, 21 Sep 2022 15:19:41 +0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="l/vVzbqds+DTlzV7"
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+To:     "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>
+CC:     Jean Delvare <jdelvare@suse.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-next@vger.kernel.org>
+References: <Yyr7c4IjjcnWZ3mr@debian>
+Content-Language: en-US
+From:   "Farber, Eliav" <farbere@amazon.com>
+In-Reply-To: <Yyr7c4IjjcnWZ3mr@debian>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-18.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 9/21/2022 2:54 PM, Sudip Mukherjee (Codethink) wrote:
+> Hi All,
+>
+> The builds of arm, mips and xtensa allmodconfig have failed to build
+> next-20220921.
+>
+> Error from xtensa and mips build:
+> ERROR: modpost: "__udivdi3" [drivers/hwmon/mr75203.ko] undefined!
+> ERROR: modpost: "__divdi3" [drivers/hwmon/mr75203.ko] undefined!
+>
+> Error from arm build:
+> ERROR: modpost: "__aeabi_uldivmod" [drivers/hwmon/mr75203.ko] undefined!
+> ERROR: modpost: "__aeabi_ldivmod" [drivers/hwmon/mr75203.ko] undefined!
+>
+> git bisect pointed to 94c025b6f735 ("hwmon: (mr75203) modify the 
+> temperature equation according to series 5 datasheet")
+>
+> I will be happy to test any patch or provide any extra log if needed. 
 
---l/vVzbqds+DTlzV7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I just provided two potential fixes.
+One is an incremental patch on top of the previous series of patches.
+Second, I reworked it into the original series and modified two of the
+patches.
+You are recipient to both.
 
-Hi Linus,
-
-The following changes since commit 521a547ced6477c54b4b0cc206000406c221b4d6:
-
-  Linux 6.0-rc6 (2022-09-18 13:44:14 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu.git tags/iommu-fixes-v6.0-rc6
-
-for you to fetch changes up to 154897807050c1161cb2660e502fc0470d46b986:
-
-  iommu/vt-d: Check correct capability for sagaw determination (2022-09-21 10:22:54 +0200)
-
-----------------------------------------------------------------
-IOMMU Fixes for Linux v6.0-rc6
-
-Including:
-
-	- Two fixes for Intel VT-d:
-
-	  - Check the right capability bit for 5-level page table support.
-
-	  - Revert a previous fix which caused a regression with Thunderbolt
-	    devices.
-
-----------------------------------------------------------------
-Lu Baolu (1):
-      Revert "iommu/vt-d: Fix possible recursive locking in intel_iommu_init()"
-
-Yi Liu (1):
-      iommu/vt-d: Check correct capability for sagaw determination
-
- drivers/iommu/intel/dmar.c  |  7 -------
- drivers/iommu/intel/iommu.c | 29 ++++++++++++++++++++++++++---
- include/linux/dmar.h        |  4 +---
- 3 files changed, 27 insertions(+), 13 deletions(-)
-
-Please pull.
-
-Thanks,
-
-	Joerg
-
---l/vVzbqds+DTlzV7
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEr9jSbILcajRFYWYyK/BELZcBGuMFAmMrATkACgkQK/BELZcB
-GuOE0Q/9Gc1bFSEAY+dTpLKR3xX8cxepYcCjhssMGbQ/YXniVmVZOIR+eu6EUAHV
-Am0FQ5wSsbpvXlLu0bFjnbzNTuRW8dFBTgI+NJTWikh2KoDscF15K9YZ8JQYx6Ut
-bxI9ksqSVlfXmcOGzhJ+Ugj0nEgIPo1Ja1oTpQmMFLClxdx9aAyp60/KdpMPB7BP
-Duw/pJxu/Ofj6fVI18JSek0g1SmtbnklRWeHzLAVsoDrCd93Q7kuSfbdMharqXdF
-xfRWj+GYtZWUzQdBmQiJh7NOo5h7TJbdUJFFYo3+NXHax2IMR513/TDcxHcJeXrf
-+YSjFayeKhftwbdAN2Gc5q0tqhc1rxkkBXzFB/RjyBIk3BVgVFxTMux9OME4lhPX
-kjUuuqLPDyb5HEODejr7oOS/1kXFYqRQyoiFs0X2va3BDpumVU8kO8Fu5KvvtaXp
-+mJwriF8eWAxrjPUXiEviC92mY+jJNBoPL9ig3+OsUBzueFbBjgrsraLQk7fSjpD
-MmDTMLVV9SKTQAVWh0Zcuj/LsSVBDmEsqawUqvhc0GJgDqwq2QXMoZSVz1OSgTa0
-JHyF3NyCXjj85X/cbR6EScHUI9yfRKjd2d1fpKjm5AaEPIQV899p1GmeoIs+a55g
-tWpbXFNQz7kVaJLKJyIn/pr+bnstWAhlpOViI8RZeh88g8j0sv8=
-=VN65
------END PGP SIGNATURE-----
-
---l/vVzbqds+DTlzV7--
+--
+Regards, Eliav
