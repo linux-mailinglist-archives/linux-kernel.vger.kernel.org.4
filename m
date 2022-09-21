@@ -1,79 +1,101 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03D365C880B
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 19:55:51 +0200 (CEST)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.lfdr.de (Postfix) with ESMTP id 5600B5D022F
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 20:00:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbiIURzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 13:55:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54488 "EHLO
+        id S229490AbiIUR7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 13:59:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbiIURzm (ORCPT
+        with ESMTP id S229733AbiIUR7r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 13:55:42 -0400
-Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70A5A67172;
-        Wed, 21 Sep 2022 10:55:41 -0700 (PDT)
-Received: by mail-oi1-f182.google.com with SMTP id v130so9064953oie.2;
-        Wed, 21 Sep 2022 10:55:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=s9Q7cMJmdDRuuKdvp/pPqxKTaGT8PpSzhsxZsiJHZAg=;
-        b=Rpx+JsUS3m8fSxhUTW3aynhFaglPGsjpU07zwxJg92xxYfOrl8A1NIaKkxi48ynQj8
-         x0pa7E1sTHOYxPGM7JAsdaHTTjDrztLxQEPF/b6Ri7IY/yZiASsLJLd5tf/wQAn6VrVW
-         rr8WLt1a9lM5DEFMaL9XW/Ozc2xaIeSq9zJ+1Es9n5Cz5ZrnHWajz6dkds/+N/S/KYed
-         6ejTlqWdo1cjzTiGvusXPUjWYqlYrgtJZ4aI+FDjqbfrfL3sWtsEpKb4d3ut1CmOA8qL
-         vVpo5HFSegBDP/HygLlUleFNBazTwAikH8nK9zzgGRWqKk+lONo9idEcxrDS/kew+ePc
-         6l+g==
-X-Gm-Message-State: ACrzQf3WSqokHaoio7nRoMMAzwGifE6gKyoeFGgg8d5SSiU4x8cC+45v
-        /mbLKNW6mFR9q0/tFGwSo98Pck4g4S7itDg7bF4=
-X-Google-Smtp-Source: AMsMyM4cxoDxNdK8h/8vZTRhLxdDxVS/ML2la3aE5ty3U1DouzESL3gdgqD1T9sPePYIJREl8XghjM9tCxqLfxvogzQ=
-X-Received: by 2002:a05:6808:1a09:b0:350:107b:f89a with SMTP id
- bk9-20020a0568081a0900b00350107bf89amr4486494oib.218.1663782940697; Wed, 21
- Sep 2022 10:55:40 -0700 (PDT)
+        Wed, 21 Sep 2022 13:59:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 860481CFF7;
+        Wed, 21 Sep 2022 10:59:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 20BB0628ED;
+        Wed, 21 Sep 2022 17:59:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECFB7C433B5;
+        Wed, 21 Sep 2022 17:59:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663783184;
+        bh=4pOLMeztJIu3nEW0T2LRhuRZWiCYEs+UKkekq56DBPo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eNHZB5s5geTf6XpneECm156/eqIW/xBej9otdtyGKvacbkPzMeYTn+XcJBPWiBI5s
+         KjbNe9LHB/mSL3WogLp8DPbFTTJdThwyo2uEUCyeOYTLPArxza1+1Yc0o51SyvtODf
+         wUQ6Ye3NgEEYMk+ZAQiBD6K7Kv4tpc70XIySFsi7YpIzSBYBsmNq8+JgD6oTzewzVu
+         mFO5MkOa/Bp6WAfEMPbJ4JtJkwrIeAKmgtVkCj57F9UVF8ClX/1yDyBWBM48aWs2tn
+         mG7bVc0nhJHPGby20WH+ykUa95ntpnb8Rky+hDrqrBIcoMkenZYvS22eTXH2hlq791
+         05cmP+H6+/K/A==
+Date:   Wed, 21 Sep 2022 20:59:41 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Stefan Berger <stefanb@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, peterhuewe@gmx.de,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org, shuah@kernel.org
+Subject: Re: [PATCH v2] selftest: tpm2: Add Client.__del__() to close
+ /dev/tpm* handle
+Message-ID: <YytRDQ2/u8R3Z6dx@kernel.org>
+References: <20220920131518.1984701-1-stefanb@linux.ibm.com>
 MIME-Version: 1.0
-References: <20220920222822.2171056-1-namhyung@kernel.org> <20220920222822.2171056-2-namhyung@kernel.org>
- <YysWn/W3+dXlZnYG@kernel.org>
-In-Reply-To: <YysWn/W3+dXlZnYG@kernel.org>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Wed, 21 Sep 2022 10:55:31 -0700
-Message-ID: <CAM9d7cjtrVsccWUOCAtz1LbHoYxx7uV4SCaBMLdME-pdZjmjfw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] perf record: Save DSO build-ID for synthesizing
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220920131518.1984701-1-stefanb@linux.ibm.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 21, 2022 at 6:50 AM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
->
-> Em Tue, Sep 20, 2022 at 03:28:22PM -0700, Namhyung Kim escreveu:
-> > When synthesizing MMAP2 with build-id, it'd read the same file repeatedly as
-> > it has no idea if it's done already.  Maintain a dsos to check that and skip
-> > the file access if possible.
-> >
-> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> > ---
-> > v2 change)
-> >  * Remove perf_event__synthesize_{start,stop} and use machine->dsos  (Adrian)
->
-> Will wait till I merge perf/urgent into perf/core so that this applies.
+On Tue, Sep 20, 2022 at 09:15:18AM -0400, Stefan Berger wrote:
+> The following output can bee seen when the test is executed:
+> 
+>   test_flush_context (tpm2_tests.SpaceTest) ... \
+>     /usr/lib64/python3.6/unittest/case.py:605: ResourceWarning: \
+>     unclosed file <_io.FileIO name='/dev/tpmrm0' mode='rb+' closefd=True>
+> 
+> An instance of Client does not implicitly close /dev/tpm* handle, once it
+> gets destroyed. Close the file handle in the class destructor
+> Client.__del__().
+> 
+> Fixes: 6ea3dfe1e0732 ("selftests: add TPM 2.0 tests")
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: linux-kselftest@vger.kernel.org
+> Cc: Jarkko Sakkinen <jarkko@kernel.org>
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> 
+> ---
+>  tools/testing/selftests/tpm2/tpm2.py | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/tpm2/tpm2.py b/tools/testing/selftests/tpm2/tpm2.py
+> index 057a4f49c79d..c7363c6764fc 100644
+> --- a/tools/testing/selftests/tpm2/tpm2.py
+> +++ b/tools/testing/selftests/tpm2/tpm2.py
+> @@ -371,6 +371,10 @@ class Client:
+>              fcntl.fcntl(self.tpm, fcntl.F_SETFL, flags)
+>              self.tpm_poll = select.poll()
+>  
+> +    def __del__(self):
+> +        if self.tpm:
+> +            self.tpm.close()
+> +
+>      def close(self):
+>          self.tpm.close()
+>  
+> -- 
+> 2.36.1
+> 
 
-Sounds good, thanks!
-Namhyung
+
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+
+BR, Jarkko
