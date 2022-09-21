@@ -2,158 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E532A5BF57F
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 06:40:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F5405BF583
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 06:41:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229624AbiIUEkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 00:40:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47458 "EHLO
+        id S231187AbiIUEli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 00:41:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231244AbiIUEkS (ORCPT
+        with ESMTP id S230116AbiIUElF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 00:40:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 580A27DF53;
-        Tue, 20 Sep 2022 21:40:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 60053B822F6;
-        Wed, 21 Sep 2022 04:40:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51E05C433C1;
-        Wed, 21 Sep 2022 04:40:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663735211;
-        bh=vGuyQI+FIpieTlo0FPtCZO4Etx2WXiRfDhLbQSJCdRk=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=TRhzMDTurf2g0MLA+jsdQR2hU5WuzVsoYjoZTTP003TS3yZxFUrtflewh9u4HwOC1
-         0E5KMpp5cf71jk92IFfgM1Gf2dpuvCcGV73jFGwukMWpbLcjDhpl/kZtqdaz1oWpz/
-         akWC5JVgA+owxMuBDS1eDcK6B8X1QLiK0IIZT7NPfj7mR9r3+hwRJqP93pS+O/0w2a
-         o+nuzEgu5EQY/HgzkEUJGMXu80ybb3Byhk0MOZnWBHtehZDjTnGjsa1ae1vSXTWruo
-         bmW8IGbRbS0wVZous5A6bRKMXVjEEX7G2ObE0qmDBsmpteiMkMcdL4kRarV397NgtC
-         oIvK7EppA86OA==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-doc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        David Laight <David.Laight@ACULAB.COM>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andy Whitcroft <apw@canonical.com>,
-        Joe Perches <joe@perches.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
-        Dave Young <dyoung@redhat.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: Re: [PATCH v1 1/3] coding-style.rst: document BUG() and WARN() rules ("do not crash the kernel")
-References: <20220920122302.99195-1-david@redhat.com>
-        <20220920122302.99195-2-david@redhat.com>
-Date:   Wed, 21 Sep 2022 07:40:00 +0300
-In-Reply-To: <20220920122302.99195-2-david@redhat.com> (David Hildenbrand's
-        message of "Tue, 20 Sep 2022 14:23:00 +0200")
-Message-ID: <87pmfp8hnj.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Wed, 21 Sep 2022 00:41:05 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2099.outbound.protection.outlook.com [40.107.237.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAEB97F0AF;
+        Tue, 20 Sep 2022 21:40:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=entJfmPYI0quZDsO+wMpBFJKaJTRIw/nB4rnfm6rfSOkkc9rf+kusQ2rKU6bOfPGdpatwxghECGycnSvgYpJtT6u3GBxEGraACj6qVjBnHJWVO+RDjzw2hWJjsU0F1vZO3TqeZgDx0IwTrrrP8CJmoISBdG6PjoNPXyVtm3TA4ZnDYMOf9SyByHGIMXUCH971VgS4R7oevBOAJ+DXV5fVDw+QcIj5TvyApeDs7kykMkTGONfFGn8A7XsjQSYgI1zKA4KJ1ytOPZQsyf/Wb8/3AEwWFiO/Pa2TTcwBHsSBKChB8v8HtKmzUQ9Xb/qXhTC79Skkqrd7wse7rxVjHmyJQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=oFAXLMeGc2TFgzLu/qGWPivgOjyADbhKP3q6Y6AfD78=;
+ b=nQV0esdDVwDDc1m9HNe8smjRpkvHCPJujCbyFwiGQVGpEwFl3pNgek4L1oZFihyR4e8mRM463g/Z3HQXwLF5mwDynLFyArp7J2MdlgAbIbXJNqubT3BGR/qkoLRujwlH3F8M8AZrBJVRcI1JmNT6L2Q6hq0Wdv5SiZ7KBR++0JQe8EdenqgoOr0KdyJfDx+0ldUVLJLCJx+ElCMGCwyfBuTVzNTgO81a89ArBzsV2/ueCPL82snqsdVAQ+uL6VxfsdohS8lAWraRIe1jjP3HBertcd0wW8NuyRfZ69z5LLtR6hMD44q+tBQiwtL3iUjhPwDC5JP16RP/8wGkMdpiLg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=in-advantage.com; dmarc=pass action=none
+ header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=oFAXLMeGc2TFgzLu/qGWPivgOjyADbhKP3q6Y6AfD78=;
+ b=GWtzlZOITdk9CV4B85Oq/Xh91dkFMbhMbp303jHT0Fi/xHN+8LknqbFJA4oNXMrfL8ClhEFzLzUJB+iGiWNyy/hHcJt600d4Mf3rSiZ+Smlr9yyXQWLLjGpTh/gPcyzcauSFWVx1yaIudC0P5nAtzUr+oxiMcAeSpbOCbate4T8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=in-advantage.com;
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37) by MN2PR10MB4206.namprd10.prod.outlook.com
+ (2603:10b6:208:1df::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.21; Wed, 21 Sep
+ 2022 04:40:52 +0000
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::5811:8108:ab44:c4a8]) by MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::5811:8108:ab44:c4a8%7]) with mapi id 15.20.5654.014; Wed, 21 Sep 2022
+ 04:40:52 +0000
+Date:   Tue, 20 Sep 2022 21:40:48 -0700
+From:   Colin Foster <colin.foster@in-advantage.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Lee Jones <lee@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the net-next tree with Linus' tree
+Message-ID: <YyqV0IrItyL/70BJ@euler>
+References: <20220921110032.7cd28114@canb.auug.org.au>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220921110032.7cd28114@canb.auug.org.au>
+X-ClientProxiedBy: SJ0PR05CA0022.namprd05.prod.outlook.com
+ (2603:10b6:a03:33b::27) To MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MWHPR1001MB2351:EE_|MN2PR10MB4206:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6aca105f-08a9-48bd-5fa8-08da9b8b7680
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: CoFRY1pRU+vxVhc4qb78tAlArTLjUhSYdaKmyDgQ6qlwbkBm6gvyd1JCRw1spiBQIEnPj0zxZsyANSq+v0FgAk4gR9lVDPWcylnuXM6vzyloFeTNL6yc3GGzdJX4gDaEaEujMThEIQuM+tZkNtM2Dps9XkvbUqcS5uKZVii52J0SiA8vsvMgBxBu1cXiNJ7AMDVKcUgoHFQp5Gz/WVdMsMgMFhSh6YHaDiTIp5d52bjy/M8mzSMHP4j061xXTWQw8ZGhs6sru0jhTUR1URrNdXRpU9R0dc4KIJwfXZin8dcW9xjD+JeCs2R9PF0Ywy3u35b4RXYAFJEchMIWscJ5E6Us7q6UQGRY9IUjmw0iWJCaZfoKZiw7byAKYkXVGrkFpgnLGjkKNDgfMAPcPVBLtIZCXz09ebTvgEIJNOeDJL4fhc++Nwju8vyuzse/nDIsilyIchlmslJqdBBHPu0JDZ6DCuHqY1S65d9+XZQTn2hkGxj9bGNzhdQpuy+dmH83widaux6dJQYc5oFQCriACtdyrCLh0LE3hVNCJkl9A0k+ix/zFU22cBqd5wsAqTKa8ABRWHXybWivknXXmZjaIjMCmsJ8wJJdnR5xuh63c4tl+1caGuf6QNYVS1NIRmsto+RBRhVEYe2CQhfsGjfgDhGbGRjH0pnkQQCSnAM/kXj53a/QR+aHkC0TvGgtxVECm/U8fJXn10L+tK2HeTllDw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(396003)(376002)(39830400003)(366004)(136003)(346002)(451199015)(9686003)(26005)(6506007)(6512007)(38100700002)(5660300002)(478600001)(6486002)(2906002)(44832011)(66476007)(86362001)(33716001)(186003)(6666004)(66556008)(41300700001)(66946007)(8936002)(4326008)(6916009)(54906003)(316002)(8676002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?lyWoIl0uOY0iqtZCdhRizX4NY+MDZ7F0r1P44xQLBusER0fkU7OUqYhZnelN?=
+ =?us-ascii?Q?rNWtsTc2yKUDE6ntZIGuHVQMqubSq83t0FvuR0mHAqExidrMAuA7tWYn/XqS?=
+ =?us-ascii?Q?swNPPjl3KBzXHivCRekAJD+AwsM8RFAyUQ/14RwhmnbGUiwZrXBx/Wxots3m?=
+ =?us-ascii?Q?ZhpaIvJKjpkVqPcBxK+gIlpJNE9+zIQ6dD7r5DW9qi5U2qtB2DnLNs31UPj3?=
+ =?us-ascii?Q?OSl/35HXzicCBVeRBAdtdW4hEOfz4bME4VOl0lIODkg0mtOgW5sC2PK0Wag8?=
+ =?us-ascii?Q?BgabicsI7ppcUZu0M4Y1W49PuR4AwQyTqE2RrbYvcX9jsQSxgLTOVXUrZva2?=
+ =?us-ascii?Q?FQqKmWWZ4VRqnGiRLy4VlGDIswIlP7YkobX0KQQDkzi86+QUMZnc6Gm1+CLU?=
+ =?us-ascii?Q?C7IcFs9oyVbI9YV7U8NWadNKBcXASXKrxEhVvjSFLlGznc76I/DSG4JWoLDN?=
+ =?us-ascii?Q?RdrS3EvuZr/GFTqh66UJJvhjwebxEJ7E3k6G3wNLBweD1+fKWLwu8wwODtsy?=
+ =?us-ascii?Q?IYhVmOViZOwsEymPmNbIIO6n2MvegXuCTqtazvvOZeB5/xErFnI4m7/UkOof?=
+ =?us-ascii?Q?FJBPPSnuqLXjk8XOQqViYExDirAUzdw8pjvs2jQQQnGT3kEJg5lZlV/laKXp?=
+ =?us-ascii?Q?LewnKfIJtg5G3eo0A91/7t89LeqMUBrL3V1wWb/RG0z77Kw2Pge3pn3knSk2?=
+ =?us-ascii?Q?ItQAUnN6WtF+EWUPIqNirpgOxCh9rpWUtDxSFj0EezROrAnS7r4L/cnMfst1?=
+ =?us-ascii?Q?Uo6fXH1/lp63WNMu0cbCMF+WNFWHSMHnCreVivonE+yjcLiX5rJdw0iRj4t8?=
+ =?us-ascii?Q?pOGneJrxFAWdUG1K7gOAfWh06RbKqLdmtKy8GMnJHkpJFr2xn2rHkjegbUk9?=
+ =?us-ascii?Q?cldtJ9O+1IxGevVDvILE0GQM63IOVN73dmq3Cz0oANabxzl0OvJcl4rCSb0s?=
+ =?us-ascii?Q?ZrQdzXvWIoY5hP8YlGtZzELQwxw8VgwhjdBWxIReppN1GEbst0jteP02emwz?=
+ =?us-ascii?Q?ryhRElj+zE1r3U8ltJrAhM0l96ZOUNFNHpZR2S4NA+//6/1s1Hh2cq8H4te+?=
+ =?us-ascii?Q?ubMvSUe74tsGDvmMHp46iZP3mtX+od0AL6EKU/sHI6lJZ5txmOe9+1kECIo4?=
+ =?us-ascii?Q?JNO1laPMo4A7or4C4supO8+PtJXHo709ywyryBKAM2MnTAF5n09w4LNQrHGG?=
+ =?us-ascii?Q?+VL2q+agMGQfZzXlNv1Sbcl5r5Sb0f4ffrwQyEBell/yYbK4S4lAWM3tNuq0?=
+ =?us-ascii?Q?bNwzTuvdi2z4Ylz9NWDTF3VtwWzKci97kXSlYDynO99vOl/++tDyJxpMCOVf?=
+ =?us-ascii?Q?+BvF1+m3UJlKb+GMdYcLM4tzCHbyV4jFHUgpHY6KAaZnVo5rcyXBIMlFMjV4?=
+ =?us-ascii?Q?KQtolCzpGSh0z4eGSKZbk9CaGLf8wK0D7RQdZyKXJVrGf0606xZJZ+Sv7TGg?=
+ =?us-ascii?Q?qphmu/uFFy8B7nVSdLrZWUmDMmewwYnZIqYVk5iwQBygDrgoOV5LnRloNy7u?=
+ =?us-ascii?Q?egFKI6908Sah8oAG7Kt4YS++p8t6cRlkPOWtXJ5baJDNibRdW+wsf4qfhGSk?=
+ =?us-ascii?Q?UqOQmP6jkWULgvtqPxiE3Q/0+yFHldjK94/ZEc0u/i8f60hul4aMiuyufIvz?=
+ =?us-ascii?Q?LA=3D=3D?=
+X-OriginatorOrg: in-advantage.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6aca105f-08a9-48bd-5fa8-08da9b8b7680
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Sep 2022 04:40:51.9417
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: mHj4X/HExbeEik8gfvAxUPW+PQHmJrRvApmZPlNBO/azSvGFiCIk2jqHisrN4x95SfofBs7F9zdBFZ0uSBoJmnpwMciE7cPrQAbrWT3XMs4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR10MB4206
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-David Hildenbrand <david@redhat.com> writes:
+On Wed, Sep 21, 2022 at 11:00:32AM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the net-next tree got a conflict in:
+> 
+>   drivers/pinctrl/pinctrl-ocelot.c
+> 
+> between commit:
+> 
+>   c297561bc98a ("pinctrl: ocelot: Fix interrupt controller")
+> 
+> from Linus' tree and commit:
+> 
+>   181f604b33cd ("pinctrl: ocelot: add ability to be used in a non-mmio configuration")
+> 
+> from the net-next tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-> Linus notes [1] that the introduction of new code that uses VM_BUG_ON()
-> is just as bad as BUG_ON(), because it will crash the kernel on
-> distributions that enable CONFIG_DEBUG_VM (like Fedora):
->
->     VM_BUG_ON() has the exact same semantics as BUG_ON. It is literally
->     no different, the only difference is "we can make the code smaller
->     because these are less important". [2]
->
-> This resulted in a more generic discussion about usage of BUG() and
-> friends. While there might be corner cases that still deserve a BUG_ON(),
-> most BUG_ON() cases should simply use WARN_ON_ONCE() and implement a
-> recovery path if reasonable:
->
->     The only possible case where BUG_ON can validly be used is "I have
->     some fundamental data corruption and cannot possibly return an
->     error". [2]
->
-> As a very good approximation is the general rule:
->
->     "absolutely no new BUG_ON() calls _ever_" [2]
->
-> ... not even if something really shouldn't ever happen and is merely for
-> documenting that an invariant always has to hold. However, there are sill
-> exceptions where BUG_ON() may be used:
->
->     If you have a "this is major internal corruption, there's no way we can
->     continue", then BUG_ON() is appropriate. [3]
->
-> There is only one good BUG_ON():
->
->     Now, that said, there is one very valid sub-form of BUG_ON():
->     BUILD_BUG_ON() is absolutely 100% fine. [2]
->
-> While WARN will also crash the machine with panic_on_warn set, that's
-> exactly to be expected:
->
->     So we have two very different cases: the "virtual machine with good
->     logging where a dead machine is fine" - use 'panic_on_warn'. And
->     the actual real hardware with real drivers, running real loads by
->     users. [4]
->
-> The basic idea is that warnings will similarly get reported by users
-> and be found during testing. However, in contrast to a BUG(), there is a
-> way to actually influence the expected behavior (e.g., panic_on_warn)
-> and to eventually keep the machine alive to extract some debug info.
->
-> Ingo notes that not all WARN_ON_ONCE cases need recovery. If we don't ever
-> expect this code to trigger in any case, recovery code is not really
-> helpful.
->
->     I'd prefer to keep all these warnings 'simple' - i.e. no attempted
->     recovery & control flow, unless we ever expect these to trigger.
->     [5]
->
-> There have been different rules floating around that were never properly
-> documented. Let's try to clarify.
->
-> [1] https://lkml.kernel.org/r/CAHk-=wiEAH+ojSpAgx_Ep=NKPWHU8AdO3V56BXcCsU97oYJ1EA@mail.gmail.com
-> [2] https://lore.kernel.org/r/CAHk-=wg40EAZofO16Eviaj7mfqDhZ2gVEbvfsMf6gYzspRjYvw@mail.gmail.com
-> [2] https://lkml.kernel.org/r/CAHk-=wit-DmhMfQErY29JSPjFgebx_Ld+pnerc4J2Ag990WwAA@mail.gmail.com
-> [4] https://lore.kernel.org/r/CAHk-=wgF7K2gSSpy=m_=K3Nov4zaceUX9puQf1TjkTJLA2XC_g@mail.gmail.com
-> [5] https://lore.kernel.org/r/YwIW+mVeZoTOxn%2F4@gmail.com
->
-> Signed-off-by: David Hildenbrand <david@redhat.com>
+Hi Stephen,
 
-[...]
+I can see how this conflict came about. If there is anything specific I
+can do to try to recognize and avoid these in the future, please let me
+know. And other subsystem maintainers, please let me know if there is
+anything I have to do / should have done.
 
-> +Use WARN_ON_ONCE() rather than WARN() or WARN_ON()
-> +**************************************************
-> +
-> +WARN_ON_ONCE() is generally preferred over WARN() or WARN_ON(), because it
-> +is common for a given warning condition, if it occurs at all, to occur
-> +multiple times. This can fill up and wrap the kernel log, and can even slow
-> +the system enough that the excessive logging turns into its own, additional
-> +problem.
+Thanks, and apologies.
 
-FWIW I have had cases where WARN() messages caused a reboot, maybe
-mention that here? In my case the logging was so excessive that the
-watchdog wasn't updated and in the end the device was forcefully
-rebooted.
-
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+Colin Foster
