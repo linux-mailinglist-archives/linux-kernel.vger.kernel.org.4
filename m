@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B444B5C035A
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 18:03:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AA7F5C03CB
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 18:10:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbiIUQDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 12:03:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56048 "EHLO
+        id S232656AbiIUQKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 12:10:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232148AbiIUP6a (ORCPT
+        with ESMTP id S232944AbiIUQJm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 11:58:30 -0400
+        Wed, 21 Sep 2022 12:09:42 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3E0A1A54;
-        Wed, 21 Sep 2022 08:52:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAD75A59BF;
+        Wed, 21 Sep 2022 08:56:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 37F9E6314A;
-        Wed, 21 Sep 2022 15:50:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 396ACC433D6;
-        Wed, 21 Sep 2022 15:50:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E40563140;
+        Wed, 21 Sep 2022 15:50:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C047C433C1;
+        Wed, 21 Sep 2022 15:50:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663775446;
-        bh=IAXrtAU0MtO/djsOcVtVb20xhEmQ0ugsq4ceoUOnJMc=;
+        s=korg; t=1663775458;
+        bh=a6kGS/JjLChEg7RGBUV5+rcQ4j8aDYMFitWEjGVbpTk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eLvdlJusYhHO+jO7WfhGtE0k1ysWog+BZQv6iA8ab82TRB35qnbkve6OZqQBQ7ODP
-         dADhpoiOF8GKvWZ65AS9/OfwjGUJJcojIlZhDurG1N4ccGC2ZKXHx3svS+6w42zuXK
-         A8G0EZxIUoeeDlOtGJKGFN9nJKFNVy4VmPpp1rHY=
+        b=OWHyOxMONYgRf1iPwx3Z2h47wyTXcU49zMjwbFAyWa/bsGfg0Y2d0Yv3+ds9VPVrP
+         LZxo8+N6tPYo268ETTCx5jkn3wUToyM7+Qx0/nLXpJpEyv8a95ife/+z7v6p9Qfela
+         D1CygffqmvFq86dRokkUDLdpsV1NxW51BBd5A7Qs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alex Hung <alex.hung@canonical.com>,
-        Hans de Goede <hdegoede@redhat.com>,
+        stable@vger.kernel.org, Chuck Lever III <chuck.lever@oracle.com>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 10/39] platform/x86/intel: hid: add quirk to support Surface Go 3
-Date:   Wed, 21 Sep 2022 17:46:15 +0200
-Message-Id: <20220921153646.084870883@linuxfoundation.org>
+Subject: [PATCH 5.10 14/39] NFSv4: Turn off open-by-filehandle and NFS re-export for NFSv4.0
+Date:   Wed, 21 Sep 2022 17:46:19 +0200
+Message-Id: <20220921153646.212039036@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220921153645.663680057@linuxfoundation.org>
 References: <20220921153645.663680057@linuxfoundation.org>
@@ -54,42 +54,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alex Hung <alex.hung@canonical.com>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-[ Upstream commit 01e16cb67cce68afaeb9c7bed72299036dbb0bc1 ]
+[ Upstream commit 2a9d683b48c8a87e61a4215792d44c90bcbbb536 ]
 
-Similar to other systems Surface Go 3 requires a DMI quirk to enable
-5 button array for power and volume buttons.
+The NFSv4.0 protocol only supports open() by name. It cannot therefore
+be used with open_by_handle() and friends, nor can it be re-exported by
+knfsd.
 
-Buglink: https://github.com/linux-surface/linux-surface/issues/595
-
-Cc: stable@vger.kernel.org
-Signed-off-by: Alex Hung <alex.hung@canonical.com>
-Link: https://lore.kernel.org/r/20211203212810.2666508-1-alex.hung@canonical.com
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Reported-by: Chuck Lever III <chuck.lever@oracle.com>
+Fixes: 20fa19027286 ("nfs: add export operations")
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/platform/x86/intel-hid.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ fs/nfs/super.c | 27 ++++++++++++++++++---------
+ 1 file changed, 18 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/platform/x86/intel-hid.c b/drivers/platform/x86/intel-hid.c
-index 8a0cd5bf0065..cebddefba2f4 100644
---- a/drivers/platform/x86/intel-hid.c
-+++ b/drivers/platform/x86/intel-hid.c
-@@ -93,6 +93,13 @@ static const struct dmi_system_id button_array_table[] = {
- 			DMI_MATCH(DMI_PRODUCT_FAMILY, "ThinkPad X1 Tablet Gen 2"),
- 		},
- 	},
-+	{
-+		.ident = "Microsoft Surface Go 3",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "Microsoft Corporation"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "Surface Go 3"),
-+		},
-+	},
- 	{ }
- };
+diff --git a/fs/nfs/super.c b/fs/nfs/super.c
+index 4034102010f0..b3fcc27b9564 100644
+--- a/fs/nfs/super.c
++++ b/fs/nfs/super.c
+@@ -1029,22 +1029,31 @@ static void nfs_fill_super(struct super_block *sb, struct nfs_fs_context *ctx)
+ 	if (ctx && ctx->bsize)
+ 		sb->s_blocksize = nfs_block_size(ctx->bsize, &sb->s_blocksize_bits);
  
+-	if (server->nfs_client->rpc_ops->version != 2) {
+-		/* The VFS shouldn't apply the umask to mode bits. We will do
+-		 * so ourselves when necessary.
++	switch (server->nfs_client->rpc_ops->version) {
++	case 2:
++		sb->s_time_gran = 1000;
++		sb->s_time_min = 0;
++		sb->s_time_max = U32_MAX;
++		break;
++	case 3:
++		/*
++		 * The VFS shouldn't apply the umask to mode bits.
++		 * We will do so ourselves when necessary.
+ 		 */
+ 		sb->s_flags |= SB_POSIXACL;
+ 		sb->s_time_gran = 1;
+-		sb->s_export_op = &nfs_export_ops;
+-	} else
+-		sb->s_time_gran = 1000;
+-
+-	if (server->nfs_client->rpc_ops->version != 4) {
+ 		sb->s_time_min = 0;
+ 		sb->s_time_max = U32_MAX;
+-	} else {
++		sb->s_export_op = &nfs_export_ops;
++		break;
++	case 4:
++		sb->s_flags |= SB_POSIXACL;
++		sb->s_time_gran = 1;
+ 		sb->s_time_min = S64_MIN;
+ 		sb->s_time_max = S64_MAX;
++		if (server->caps & NFS_CAP_ATOMIC_OPEN_V1)
++			sb->s_export_op = &nfs_export_ops;
++		break;
+ 	}
+ 
+ 	sb->s_magic = NFS_SUPER_MAGIC;
 -- 
 2.35.1
 
