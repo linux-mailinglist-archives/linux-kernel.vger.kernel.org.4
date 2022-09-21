@@ -2,74 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9AA75E566A
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 00:56:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 357215E5673
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 00:59:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230243AbiIUW4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 18:56:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40970 "EHLO
+        id S230246AbiIUW7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 18:59:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230126AbiIUW4P (ORCPT
+        with ESMTP id S230171AbiIUW73 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 18:56:15 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E34CDA8943
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 15:56:14 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id d8so6319934iof.11
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 15:56:14 -0700 (PDT)
+        Wed, 21 Sep 2022 18:59:29 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98CA0A8977
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 15:59:27 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id rt12so5510777pjb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 15:59:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=7EMIiUheVMRIewD0sfGh5r4F5pJwhLiH6aNZws/GdNU=;
-        b=M05CFdrqCVwfTKa+KZT+7ZlWrqGFrMuzfOq/qanI/sqNlOjHhq4zi+5zwSUJu69c6b
-         vaSJrpcqo6eOTgm1Qoe3UKpjGY2FiGxPQA8rN1KSNyBPOH0onkntxqfDic21xHU6RiJ1
-         JipKH2n3P3Z7/wvQo3osMQacb9AIaEqDzvads=
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=gT7v+Iphr5H7tbmIRZ4mb0BW+PQRNn3bGFIrWMufP+Y=;
+        b=AnZtDAdv0bZ0a4j3wmHXs2IGZ2XGolBmvh/uAryz0wb0qyg0YKv05CwUHlOIJmSy81
+         JEAFibFTRKJSyAD++DWRxrnN40ZiOtmQr912AeYe7tnxIhVbIFcSGz3/tc8Tdqeqf7gu
+         DodA7UsbwIyRsIJWoTaGk4/hBJAIdRMPoBZboj7cjulmHO5XMZr4v0WtEOxrJ6ju+Sc5
+         hiyjmCK8Old/VWOe8FAEYzD95Pri41i3lZyvL63R6QwrM2yRJxH0jq9pQajlec5juX8S
+         3cMfmVYrjiZibrH1RR/Fd8WdEMQ1r0MxzykqTuTzX+PsOhp2XLOYBhAn1rwFgf5P392R
+         grxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=7EMIiUheVMRIewD0sfGh5r4F5pJwhLiH6aNZws/GdNU=;
-        b=NyJ9BGMXaZcDJ1p7Tk8bBFNL+svdTRdVfoQoQ5rCoEGOu5oad4Kp66G3qSxD3i78My
-         Y9865uyilRS4nQAPPs87TNu9C1ZMdU8OHJf2bbYSVWLGChUHhHt51krpEjvkJYMZQO7d
-         2yq9vr2Z3I2fbxnMnV8LwtOKxB/tA8QrTvGFJmmwn9VlJpRE4M4c+m0KLBohv/JK0A4O
-         rfSGcnZMe9NYbptzTTpzforOGS+oa+8zMdF7/s1Gnt3l0dYDO/QBpEfVSBlLnLEv03zq
-         hDvtP/gz86HzbkI3nVPkx+9V/gwM4IQUm/uy/937ihc0JCJhtzyQscQaIZr5TKFOh9P9
-         XWHQ==
-X-Gm-Message-State: ACrzQf1OXVXvON5wr+p/hYV8wTxY/l5wrvRxFNVV+crNKR0YQPf6BMsh
-        Fc50K2NBfs09+BpgGvYQmWfh+g==
-X-Google-Smtp-Source: AMsMyM4m/gQUqbd+EAzo1GlhXiglvapdQgcc4fxEPcLuPDYY+7MXBdgu+PsXBx8Yr2LpCQtmE7F23g==
-X-Received: by 2002:a05:6638:1683:b0:35a:4772:edc2 with SMTP id f3-20020a056638168300b0035a4772edc2mr339201jat.128.1663800974265;
-        Wed, 21 Sep 2022 15:56:14 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id w28-20020a02cf9c000000b0035a648fd47csm1565018jar.61.2022.09.21.15.56.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Sep 2022 15:56:13 -0700 (PDT)
-Message-ID: <45affad7-bbeb-ed6e-d664-c8f58f991671@linuxfoundation.org>
-Date:   Wed, 21 Sep 2022 16:56:12 -0600
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=gT7v+Iphr5H7tbmIRZ4mb0BW+PQRNn3bGFIrWMufP+Y=;
+        b=ZsIW8bFGQ0M1/pBlOs7cDDpk1b4X2ZtJb2Q6ty/S9/AvBe24J0Fq3Epw7dhHCEeezj
+         glLJlHOgNasMI1tgRlJVYdeyqmCZWWWvzXKvIIFW7A7I/LWcZlAo8LfOFvBEKBOIz92w
+         NdN0kfJTJpO5u+r8espRUjPQZeEbCdPJ5j2Jnzl0B9QHAN8tnh+3jr4bQy9U2NH1KJVG
+         1nLSnUbYz9vdqneMZUid/sJY5yJ5+8KYSniIfr/QP0Or7j2uaIuBQ21LlEOdkIbSYsx7
+         0mUcZ5YMPQ9nipVcGQ94xoYOKh3gOEBJnsKoo8nJpJtMCOHINQHLnYmYySCXzu4TG3/z
+         AYJw==
+X-Gm-Message-State: ACrzQf0u8EFIMv7LHavYyTUK2BFPt40BpEfni3b2BB8V8FQWQLGja1mi
+        9CZ7vsycVcd70EwA3HX45dVBig==
+X-Google-Smtp-Source: AMsMyM5O5t8wkIhl0mIR0WGZL4bf4gqSGyRSuEMHDKG4ZBSyueW3VtJOj0qT+ruNSQUIhUGAOr9Ewg==
+X-Received: by 2002:a17:90b:3883:b0:203:214d:4272 with SMTP id mu3-20020a17090b388300b00203214d4272mr11888667pjb.101.1663801166762;
+        Wed, 21 Sep 2022 15:59:26 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id m1-20020a17090a7f8100b002008ba3a74csm2356714pjl.52.2022.09.21.15.59.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Sep 2022 15:59:26 -0700 (PDT)
+Date:   Wed, 21 Sep 2022 22:59:22 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        Yuan Yao <yuan.yao@linux.intel.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v10 35/39] KVM: selftests: Create a vendor independent
+ helper to allocate Hyper-V specific test pages
+Message-ID: <YyuXSrF743wgFCgE@google.com>
+References: <20220921152436.3673454-1-vkuznets@redhat.com>
+ <20220921152436.3673454-36-vkuznets@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 5.10 00/39] 5.10.145-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220921153645.663680057@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20220921153645.663680057@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220921152436.3673454-36-vkuznets@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,29 +79,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/21/22 09:46, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.145 release.
-> There are 39 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 23 Sep 2022 15:36:33 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.145-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+On Wed, Sep 21, 2022, Vitaly Kuznetsov wrote:
+> diff --git a/tools/testing/selftests/kvm/include/x86_64/hyperv.h b/tools/testing/selftests/kvm/include/x86_64/hyperv.h
+> index 42213f5de17f..e00ce9e122f4 100644
+> --- a/tools/testing/selftests/kvm/include/x86_64/hyperv.h
+> +++ b/tools/testing/selftests/kvm/include/x86_64/hyperv.h
+> @@ -265,4 +265,19 @@ extern struct hv_vp_assist_page *current_vp_assist;
+>  
+>  int enable_vp_assist(uint64_t vp_assist_pa, void *vp_assist);
+>  
+> +struct hyperv_test_pages {
+> +	/* VP assist page */
+> +	void *vp_assist_hva;
+> +	uint64_t vp_assist_gpa;
+> +	void *vp_assist;
+> +
+> +	/* Enlightened VMCS */
+> +	void *enlightened_vmcs_hva;
+> +	uint64_t enlightened_vmcs_gpa;
+> +	void *enlightened_vmcs;
 
-Compiled and booted on my test system. No dmesg regressions.
+FYI (in case you or someone else is tempted to do further cleanup), at some point
+there will be a patch to wrap these triplets[*] to cut down on the copy+paste.
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+[*] https://lore.kernel.org/all/YwznLAqRb2i4lHiH@google.com
+ 
+> +};
+> +
+> +struct hyperv_test_pages *
+> +vcpu_alloc_hyperv_test_pages(struct kvm_vm *vm, vm_vaddr_t *p_hv_pages_gva);
 
-thanks,
--- Shuah
+Please don't wrap before the function name.
+
