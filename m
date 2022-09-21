@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 344A05C0347
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 18:01:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D90E5C02C9
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:55:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232248AbiIUQBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 12:01:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55956 "EHLO
+        id S231940AbiIUPzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 11:55:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232263AbiIUP6w (ORCPT
+        with ESMTP id S232024AbiIUPx6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 11:58:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B367CA1D33;
-        Wed, 21 Sep 2022 08:52:38 -0700 (PDT)
+        Wed, 21 Sep 2022 11:53:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24A6C9F0CC;
+        Wed, 21 Sep 2022 08:50:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DF09263141;
-        Wed, 21 Sep 2022 15:51:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCD5DC433C1;
-        Wed, 21 Sep 2022 15:51:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 20EB7B830B0;
+        Wed, 21 Sep 2022 15:49:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B37EC433C1;
+        Wed, 21 Sep 2022 15:49:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663775482;
-        bh=ROCsXVVApkm6chEKbL7Np0y3c7d+KTGop1OC8skkiyw=;
+        s=korg; t=1663775388;
+        bh=yPc3pK4iI9XZPqrYJsZqZ/Zle+cuZos6EuGS3O/unnI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nKHf7EcRGITZKGgz7fv3coiCv1SfmAiVsFcGFxUnwj6OxNWR3RXeU1ETkracsIs5F
-         3BC3ZnaFWjMAe1j85N/tE45KAgjcXuxuaKx8OP87MN54YF0sLIsH9Nc+wXYHaK47Lx
-         KwJ7JQ89mKBii8Y06B1FzdexSw7c6W0AjU4V3qRE=
+        b=BicASdw+nAqQRLlbp4e8/m79ZcDfIFwduCJpQ/0AUAGIlCwbEHBG1lwCLwZm6wiLl
+         ewMWi17PoHEjaeFfXCRZ4YxTw4vGyrkObMcBIfHFwliG1JIVUnhwYXykwsKsxXa7TN
+         rK2N4+T/vjHO94+nQeZuAPHAaF9FhmptsUGo87qA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Paulo Alcantara (SUSE)" <pc@cjr.nz>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Steve French <stfrench@microsoft.com>
-Subject: [PATCH 5.10 21/39] cifs: revalidate mapping when doing direct writes
-Date:   Wed, 21 Sep 2022 17:46:26 +0200
-Message-Id: <20220921153646.431596699@linuxfoundation.org>
+        stable@vger.kernel.org, David Howells <dhowells@redhat.com>,
+        Jeffrey E Altman <jaltman@auristor.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        linux-afs@lists.infradead.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 37/45] afs: Return -EAGAIN, not -EREMOTEIO, when a file already locked
+Date:   Wed, 21 Sep 2022 17:46:27 +0200
+Message-Id: <20220921153648.168092526@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220921153645.663680057@linuxfoundation.org>
-References: <20220921153645.663680057@linuxfoundation.org>
+In-Reply-To: <20220921153646.931277075@linuxfoundation.org>
+References: <20220921153646.931277075@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,37 +57,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ronnie Sahlberg <lsahlber@redhat.com>
+From: David Howells <dhowells@redhat.com>
 
-commit 7500a99281dfed2d4a84771c933bcb9e17af279b upstream.
+[ Upstream commit 0066f1b0e27556381402db3ff31f85d2a2265858 ]
 
-Kernel bugzilla: 216301
+When trying to get a file lock on an AFS file, the server may return
+UAEAGAIN to indicate that the lock is already held.  This is currently
+translated by the default path to -EREMOTEIO.
 
-When doing direct writes we need to also invalidate the mapping in case
-we have a cached copy of the affected page(s) in memory or else
-subsequent reads of the data might return the old/stale content
-before we wrote an update to the server.
+Translate it instead to -EAGAIN so that we know we can retry it.
 
-Cc: stable@vger.kernel.org
-Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
-Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
-Signed-off-by: Steve French <stfrench@microsoft.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: David Howells <dhowells@redhat.com>
+Reviewed-by: Jeffrey E Altman <jaltman@auristor.com>
+cc: Marc Dionne <marc.dionne@auristor.com>
+cc: linux-afs@lists.infradead.org
+Link: https://lore.kernel.org/r/166075761334.3533338.2591992675160918098.stgit@warthog.procyon.org.uk/
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/cifs/file.c |    3 +++
- 1 file changed, 3 insertions(+)
+ fs/afs/misc.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---- a/fs/cifs/file.c
-+++ b/fs/cifs/file.c
-@@ -3244,6 +3244,9 @@ static ssize_t __cifs_writev(
- 
- ssize_t cifs_direct_writev(struct kiocb *iocb, struct iov_iter *from)
- {
-+	struct file *file = iocb->ki_filp;
-+
-+	cifs_revalidate_mapping(file->f_inode);
- 	return __cifs_writev(iocb, from, true);
- }
- 
+diff --git a/fs/afs/misc.c b/fs/afs/misc.c
+index 933e67fcdab1..805328ca5428 100644
+--- a/fs/afs/misc.c
++++ b/fs/afs/misc.c
+@@ -69,6 +69,7 @@ int afs_abort_to_error(u32 abort_code)
+ 		/* Unified AFS error table */
+ 	case UAEPERM:			return -EPERM;
+ 	case UAENOENT:			return -ENOENT;
++	case UAEAGAIN:			return -EAGAIN;
+ 	case UAEACCES:			return -EACCES;
+ 	case UAEBUSY:			return -EBUSY;
+ 	case UAEEXIST:			return -EEXIST;
+-- 
+2.35.1
+
 
 
