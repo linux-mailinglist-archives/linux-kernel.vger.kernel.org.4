@@ -2,185 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9830D5BFC8B
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 12:43:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41D175BFC15
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 12:13:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbiIUKnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 06:43:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51682 "EHLO
+        id S230464AbiIUKNk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 06:13:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbiIUKns (ORCPT
+        with ESMTP id S231410AbiIUKNc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 06:43:48 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A93D8915E0;
-        Wed, 21 Sep 2022 03:43:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663757027; x=1695293027;
-  h=message-id:date:mime-version:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=6dl3gtcacoQl6ANvxmfNKeoatSMTHZtouqyF21KWxHQ=;
-  b=FBVN7oxaKvBOXSdz5HTtBCsLBPRW8PRGyOeAih5sAbUZXr+e7srWw4hR
-   i5XwGX8Q103DQZaN/n2ucSgXwLlP1J8EdcotCCWejuTcMTqxGGhCXD/rv
-   pvnkUnchn1pkdHryPpPZeqacJ1v366SJJsZP5uWkeoRE8cj92O3qkwlEa
-   q7ZXn3Cuq6DHPYYnEMZ+oUpg79HxTvjC6aN/PaEUeoDQ3co+R1mkMiSIl
-   SoRZiLTU4at83q1/gLSQORRQzXl+EiheTEllfm5S+YrbQWZO4pzKDkWME
-   vaEdTtx9vrG94cf/qX0h/nVCp9tRYP3CBtD0rCZ8MP/ILpcnLfnYuc4xR
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10476"; a="299953065"
-X-IronPort-AV: E=Sophos;i="5.93,333,1654585200"; 
-   d="scan'208";a="299953065"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 03:43:47 -0700
-X-IronPort-AV: E=Sophos;i="5.93,333,1654585200"; 
-   d="scan'208";a="708395857"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.33.27])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 03:43:45 -0700
-Message-ID: <7e0b9116-7e1f-fc4c-5528-ce5a3e565fa3@intel.com>
-Date:   Wed, 21 Sep 2022 13:11:53 +0300
+        Wed, 21 Sep 2022 06:13:32 -0400
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AC357FF84;
+        Wed, 21 Sep 2022 03:13:31 -0700 (PDT)
+Received: by mail-qv1-f46.google.com with SMTP id c6so4060210qvn.6;
+        Wed, 21 Sep 2022 03:13:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=9A/p6ZkdEYO1vNEWi1IhugiWPSS0Lp7RP7GaNC2clvU=;
+        b=K/x1XSIRZ5t+HB+JVsvkRjQDFnbL2VVu8BCx61zoQCo9Jr5r0FrejptJLoiR5WBfoq
+         UAhGcsVqb0v+Jh5P/SB5/Rcwc9TjDT8D2OW81HdPtr+GkycB7/mLMb1vZ/u6PArztIr3
+         vJdaCObs36dHh2IBZU9kJauWalpQApOQn1x8YF6/obprEXf3BfUKw2EzgA6RWHJulHPn
+         GPMcvTG6vOUBIW4pLC2s+twN/KwKCSogCpsbNR992AWAZ2/1IqhLC/VykOGtAcFI6dJe
+         qX1cfl6KzToI79U8rkW08Eam59EuSHcqtOwzoFMs4PxFCK7ZA/S3tiPSAI4bVjf+E6G9
+         H1IQ==
+X-Gm-Message-State: ACrzQf2y+CDhv7T+Hn1nP6WMLFg2LIHl2jwj5ClDhravPZ3A41npkLk0
+        VDSyylRinp81q/ThJFGGzroLz9/ISgEmvEP7
+X-Google-Smtp-Source: AMsMyM6ZWzpzfyKU2lzy4ycJrV9h3j4IcW2XogqOCaIjetJtBoxuYyM5td6cajWRJkj9KspQWyBnTg==
+X-Received: by 2002:a05:6214:5190:b0:4ad:41ed:80c7 with SMTP id kl16-20020a056214519000b004ad41ed80c7mr11741018qvb.53.1663755209954;
+        Wed, 21 Sep 2022 03:13:29 -0700 (PDT)
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
+        by smtp.gmail.com with ESMTPSA id fc11-20020a05622a488b00b003435bb7fe9csm1391920qtb.78.2022.09.21.03.13.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Sep 2022 03:13:29 -0700 (PDT)
+Received: by mail-yb1-f182.google.com with SMTP id a67so7350733ybb.3;
+        Wed, 21 Sep 2022 03:13:28 -0700 (PDT)
+X-Received: by 2002:a25:3746:0:b0:6b1:4a12:b2d5 with SMTP id
+ e67-20020a253746000000b006b14a12b2d5mr20690282yba.89.1663755208456; Wed, 21
+ Sep 2022 03:13:28 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH 3/4] perf record: Save DSO build-ID for synthesizing
-Content-Language: en-US
-From:   Adrian Hunter <adrian.hunter@intel.com>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>
-References: <20220916175902.1155177-1-namhyung@kernel.org>
- <20220916175902.1155177-4-namhyung@kernel.org>
- <571fb9aa-98e7-b42a-aa81-01658e131f11@intel.com>
- <CAM9d7ch4Rb6GxGc2NrHFVz=S5__XdCNCRy2=5Fj=XCYn2b6d3A@mail.gmail.com>
- <c288baa5-abb1-c34c-713c-b9d11873d34a@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <c288baa5-abb1-c34c-713c-b9d11873d34a@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CAMuHMdUPm36RsxHdVwspR3NCAR3C507AyB6R65W42N2gXWq0ag@mail.gmail.com>
+ <45d2e6c2-3b4b-5720-0431-002c74b1f9cc@arm.com>
+In-Reply-To: <45d2e6c2-3b4b-5720-0431-002c74b1f9cc@arm.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 21 Sep 2022 12:13:17 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWd5cmxgG8jdpDw3nrfrdSX6ecb+XwuJTLkkRgP5LbcHQ@mail.gmail.com>
+Message-ID: <CAMuHMdWd5cmxgG8jdpDw3nrfrdSX6ecb+XwuJTLkkRgP5LbcHQ@mail.gmail.com>
+Subject: Re: Similar SoCs with different CPUs and interrupt bindings
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/09/22 10:26, Adrian Hunter wrote:
-> On 20/09/22 21:30, Namhyung Kim wrote:
->> On Tue, Sep 20, 2022 at 7:00 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
->>>
->>> On 16/09/22 20:59, Namhyung Kim wrote:
->>>> When synthesizing MMAP2 with build-id, it'd read the same file repeatedly as
->>>> it has no idea if it's done already.  Maintain a dsos to check that and skip
->>>> the file access if possible.
->>>>
->>>> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
->>>> ---
->>>>  tools/perf/util/synthetic-events.c | 49 +++++++++++++++++++++++++-----
->>>>  1 file changed, 42 insertions(+), 7 deletions(-)
->>>>
->>>> diff --git a/tools/perf/util/synthetic-events.c b/tools/perf/util/synthetic-events.c
->>>> index 9d4f5dacd154..e6978b2dee8f 100644
->>>> --- a/tools/perf/util/synthetic-events.c
->>>> +++ b/tools/perf/util/synthetic-events.c
->>>> @@ -4,6 +4,7 @@
->>>>  #include "util/data.h"
->>>>  #include "util/debug.h"
->>>>  #include "util/dso.h"
->>>> +#include "util/dsos.h"
->>>>  #include "util/event.h"
->>>>  #include "util/evlist.h"
->>>>  #include "util/machine.h"
->>>> @@ -47,12 +48,25 @@
->>>>
->>>>  unsigned int proc_map_timeout = DEFAULT_PROC_MAP_PARSE_TIMEOUT;
->>>>
->>>> +static bool synth_init_done;
->>>> +static struct dsos synth_dsos;
->>>> +
->>>>  void perf_event__synthesize_start(void)
->>>>  {
->>>> +     if (synth_init_done)
->>>> +             return;
->>>> +
->>>> +     dsos__init(&synth_dsos);
->>>> +
->>>> +     synth_init_done = true;
->>>>  }
->>>>
->>>>  void perf_event__synthesize_stop(void)
->>>>  {
->>>> +     if (!synth_init_done)
->>>> +             return;
->>>> +
->>>> +     dsos__exit(&synth_dsos);
->>>>  }
->>>>
->>>>  int perf_tool__process_synth_event(struct perf_tool *tool,
->>>> @@ -374,26 +388,47 @@ static bool read_proc_maps_line(struct io *io, __u64 *start, __u64 *end,
->>>>  static void perf_record_mmap2__read_build_id(struct perf_record_mmap2 *event,
->>>>                                            bool is_kernel)
->>>>  {
->>>> -     struct build_id bid;
->>>> +     struct build_id _bid, *bid = &_bid;
->>>> +     struct dso *dso = NULL;
->>>> +     struct dso_id id;
->>>>       int rc;
->>>>
->>>> -     if (is_kernel)
->>>> -             rc = sysfs__read_build_id("/sys/kernel/notes", &bid);
->>>> -     else
->>>> -             rc = filename__read_build_id(event->filename, &bid) > 0 ? 0 : -1;
->>>> +     if (is_kernel) {
->>>> +             rc = sysfs__read_build_id("/sys/kernel/notes", bid);
->>>> +             goto out;
->>>> +     }
->>>> +
->>>> +     id.maj = event->maj;
->>>> +     id.min = event->min;
->>>> +     id.ino = event->ino;
->>>> +     id.ino_generation = event->ino_generation;
->>>>
->>>
->>> There might be some paths missing perf_event__synthesize_start()
->>> e.g. perf trace
->>> So it would probably be safer to use lazy initialization for
->>> synth_dsos.
->>
->> I thought about that too, but it'd need a cleanup routine at the end
->> anyway.  So I ended up having a pair of start/stop routines.
->>
->>>
->>> Also, callers of perf_record_mmap2__read_build_id() have a struct
->>> machine so I wonder about putting synth_dsos in struct machine ?
->>> Or even just using machine->dsos ?
->>
->> My intention was to use minimal info from struct dso - name, id and
->> build-id.  But as it already uses dsos/dso routines, it's not much
->> different from using the existing machine->dsos.
->>
->> So yeah, I think it's good to reuse the existing one as it'd benefit
->> the build-id processing at the end.  Will change.
->>
->> Thanks,
->> Namhyung
->>
->>
->>>
->>>> +     dso = dsos__findnew_id(&synth_dsos, event->filename, &id);
->>>> +     if (dso && dso->has_build_id) {
->>>> +             bid = &dso->bid;
->>>> +             rc = 0;
->>>> +             goto out;
->>>> +     }
-> 
-> Also I guess the dsos optimization could be a separate patch ?
+Hi Robin,
 
-Disregard that - I thought there were other changes too.
+On Wed, Sep 21, 2022 at 11:20 AM Robin Murphy <robin.murphy@arm.com> wrote:
+> On 2022-09-21 08:46, Geert Uytterhoeven wrote:
+> > This is a topic that came up at the RISC-V BoF at Plumbers, and it was
+> > suggested to bring it up with you.
+> >
+> > The same SoC may be available with either RISC-V or other (e.g. ARM) CPU
+> > cores (an example of this are the Renesas RZ/Five and RZ/G2UL SoCs).
+> > To avoid duplication, we would like to have:
+> >    - <riscv-soc>.dtsi includes <base-soc>.dtsi,
+> >    - <arm-soc>.dtsi includes <base-soc>.dtsi.
+> >
+> > Unfortunately RISC-V and ARM typically use different types of interrupt
+> > controllers, using different bindings (e.g. 2-cell vs. 3-cell), and
+> > possibly using different interrupt numbers.  Hence the interrupt-parent
+> > and interrupts{-extended} properties should be different, too.
+> >
+> > Possible solutions[1]:
+> >    1. interrupt-map
+> >
+> >    2. Use a SOC_PERIPHERAL_IRQ() macro in interrupts properties in
+> >       <base-soc>.dtsi, with
+> >         - #define SOC_PERIPHERAL_IRQ(nr, na) nr          // RISC-V
+> >         - #define SOC_PERIPHERAL_IRQ(nr, na) GIC_SPI na  // ARM
+> >       Note that the cpp/dtc combo does not support arithmetic, so even
+> >       the simple case where nr = 32 + na cannot be simplified.
+> >
+> >    3. Wrap inside RISCV() and ARM() macros, e.g.:
+> >
+> >          RISCV(interrupts = <412 IRQ_TYPE_LEVEL_HIGH>;)
+> >          ARM(interrupts = <GIC_SPI 380 IRQ_TYPE_LEVEL_HIGH>;)
+> >
+> >       Cfr. ARM() and THUMB() in arch/arm/include/asm/unified.h, as used
+> >       to express the same operation using plain ARM or ARM Thumb
+> >       instructions.
+>
+> 4. Put all the "interrupts" properties in the SoC-specific DTSI at the
+> same level as the interrupt controller to which they correspond. Works
+> out of the box with no horrible mystery macros, and is really no more or
+> less error-prone than any other approach. Yes, it means replicating a
+> bit of structure and/or having labels for everything (many of which may
+> be wanted anyway), but that's not necessarily a bad thing for
+> readability anyway. Hierarchical definitions are standard FDT practice
+> and should be well understood, so this is arguably the simplest and
+> least surprising approach :)
+
+Thanks for the suggestion!
+
+It does mean we have to update 3 .dtsi files when adding support
+for a new device. As long as all DT changes go through the same (soc)
+tree, we can easily manage the dependencies.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
