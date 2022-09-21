@@ -2,78 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDC155BF607
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 08:01:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BFD75BF608
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 08:03:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbiIUGA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 02:00:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56208 "EHLO
+        id S229686AbiIUGDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 02:03:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiIUGAz (ORCPT
+        with ESMTP id S229602AbiIUGDF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 02:00:55 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60785AC5E
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 23:00:53 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id q9-20020a17090a178900b0020265d92ae3so13101093pja.5
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 23:00:53 -0700 (PDT)
+        Wed, 21 Sep 2022 02:03:05 -0400
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3659A5AC5E
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 23:03:03 -0700 (PDT)
+Received: by mail-il1-x12a.google.com with SMTP id m16so2599607iln.9
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 23:03:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=KTDGCxw9K/m0IE28tp7il5a/gdZmEgkpTgtAKS0w1hU=;
-        b=zavTnr75v0R2Jmu8cIoC0kmMrrhsQQvbhW76Hf66/C/jT2G1mWEnnpJ839PsBq9ELp
-         WFiSsmkvt/IRYSgzyhQZrWfyWDBFRYEclPg69lfizcQH8FTm6mcKCIY3RVp9ovgBAZqn
-         FneLIZUucl1wT2e1UotyqMwmUJIsNdx9CU548SnPmQfYWrYCsRqzXlQlcF/r7DEd5vkh
-         P++dGV1h5bDlep/rHlOeYtQc7prD+FFwcLltzSbrZL2ebtvx32c7hQVjVlxQtGgYB3sA
-         fSzp8HAmHl0ezYQJtWqGLgk8IDLleBqVMVq04kaXPjLNGp5rPrbCfGRA+8rjboJj02oM
-         UqFw==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=sOA+/TKyOIxErphM8ulICJKXcjYIe3Hnn+mK8Vn1QTM=;
+        b=oLVCAIE0kI6LAeFqewe/GIlHsASV142Awdg1+e71ZG84q8Ma76uAIJvH/MEwFLRfFa
+         iGSksuK0U3DQU0eb6JX0VwDQlgwebwCoPTu9HzT/rewK7/EK2csGVlB6MGoKakc3mpV1
+         dPFjIWM89c9ry42h771FIhOkGDovVrNKmsIK8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=KTDGCxw9K/m0IE28tp7il5a/gdZmEgkpTgtAKS0w1hU=;
-        b=h4WmPeWOHA5wClOJxLOM8Bqi+aw/FuDz42TsXemVOZNjZcwcwAppM4zQaeihcTToF/
-         yTZsFGBgdxEoLTULd4FBhl0cXTBXfA5Ug+kzAW74T3xKnRLHRLirUNhkw/sQiaZFh3hY
-         pYqiS7IUKvFxmcZq0IocTJdrlYeha0CFrachLu9U28F1MIjmKavvQyqBBnL2IKyFDiTV
-         WJTGPh6wex0pt42yrwQuKRVMnQcbkS3lTlDjBlwO2/CdGMbK1py9MzJCNHY1dUJin+r0
-         Ho8Z3N1yyw3R2R3DrfK3szzxp20tf81a1XqGx/2bYFEQA6BVMC8CYrovc1d6ea4/vedq
-         jNBA==
-X-Gm-Message-State: ACrzQf29LXfPOEVa95tgiF5/r2har4quFV+80xkqorCGXrC1BXS1G2SX
-        LB7tiRM5dnnczyVJZbr/i/7nBw==
-X-Google-Smtp-Source: AMsMyM48UUe5Twj+PpfUDK1ckCFUCCN/BxyPPQt5HtY9M4iS4sCaXZhdfbYcbPvZflpt/9ByE6wOgA==
-X-Received: by 2002:a17:902:f394:b0:176:b7b7:2 with SMTP id f20-20020a170902f39400b00176b7b70002mr3132765ple.57.1663740053290;
-        Tue, 20 Sep 2022 23:00:53 -0700 (PDT)
-Received: from ?IPV6:2401:4900:1c61:8e50:8ba8:7ad7:f34c:2f5? ([2401:4900:1c61:8e50:8ba8:7ad7:f34c:2f5])
-        by smtp.gmail.com with ESMTPSA id 21-20020a170902c21500b00177efb56475sm998181pll.85.2022.09.20.23.00.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Sep 2022 23:00:52 -0700 (PDT)
-Message-ID: <05a1447e-51b1-cd6b-36bc-98f011e786e0@linaro.org>
-Date:   Wed, 21 Sep 2022 11:30:46 +0530
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=sOA+/TKyOIxErphM8ulICJKXcjYIe3Hnn+mK8Vn1QTM=;
+        b=e1dp/wi88dpdFqHgIEJ+V/aq0oz/X6DAE67kuUC0aCBJrkLaPjeXJuBb4DonS1VbAm
+         63rX4ZcVlaC0tasI9QsktOx7YLKaTv6PIXCTqXtQD2QNJm8tD8KPtJ0XF2hfESc17XQp
+         B1oykOEPrnAjFR3z3KaziJtnSuEoT0MAr186YC6k/NLn6sQYtIXOsfvZHXt1Ykpek6vt
+         8NprQjJtRDvMbZsSL+SA7qXEpcwhGxGMEOgseKJ6HYuDAuP6BZZxKwDAS/7br9+RnieB
+         yBILQn6R5L/rI5P4987gRg8NlJFmBozOnmHjsJ/c9S5JK1iphmqCS0aUWx/EmGruAsZ6
+         uNQQ==
+X-Gm-Message-State: ACrzQf1ZodbaCNhoQKTG82YRdGPuQBnE1XP7XNHdec/cUuhjvlt6fVkY
+        rsT9xEWjtr5FWJ1AGWRbOz1U8JAu+uhT7ARfutDGRQ==
+X-Google-Smtp-Source: AMsMyM72Uvd/+DyXlH3OoMGGh3CieEQrwrdTmZ9CZcO59IYmsDVk3q5CWFMYa/8qCcALFckXM8rJ41Y2C/851tvaA7g=
+X-Received: by 2002:a05:6e02:1a48:b0:2f3:2e91:b78 with SMTP id
+ u8-20020a056e021a4800b002f32e910b78mr11808724ilv.96.1663740182612; Tue, 20
+ Sep 2022 23:03:02 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v7 4/9] dt-bindings: qcom-qce: Add new SoC compatible
- strings for qcom-qce
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     agross@kernel.org, herbert@gondor.apana.org.au,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        linux-arm-msm@vger.kernel.org, thara.gopinath@gmail.com,
-        robh@kernel.org, andersson@kernel.org, bhupesh.linux@gmail.com,
-        davem@davemloft.net, Jordan Crouse <jorcrous@amazon.com>
-References: <20220920114051.1116441-1-bhupesh.sharma@linaro.org>
- <20220920114051.1116441-5-bhupesh.sharma@linaro.org>
- <0a6b443c-33b4-5fc7-5a2f-e55f5387999f@linaro.org>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-In-Reply-To: <0a6b443c-33b4-5fc7-5a2f-e55f5387999f@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20220920082005.2459826-1-denik@chromium.org> <877d1yl797.wl-maz@kernel.org>
+ <CAOYpmdHMbDdssEJJwXktEj1SDLncHTeL7x7aKxVe6j1vzSMgtw@mail.gmail.com>
+In-Reply-To: <CAOYpmdHMbDdssEJJwXktEj1SDLncHTeL7x7aKxVe6j1vzSMgtw@mail.gmail.com>
+From:   Denis Nikitin <denik@chromium.org>
+Date:   Tue, 20 Sep 2022 23:02:50 -0700
+Message-ID: <CADDJ8CW5MV3vUPdm4iwjwS4VyeV9rCAMZZpJbNFtNLFD-wThVA@mail.gmail.com>
+Subject: Re: [PATCH] KVM: arm64: nvhe: Disable profile optimization
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Manoj Gupta <manojgupta@google.com>,
+        David Brazdil <dbrazdil@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, Denis Nikitin <denik@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,44 +70,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Adding a few more comments...
 
-On 9/20/22 8:40 PM, Krzysztof Kozlowski wrote:
-> On 20/09/2022 13:40, Bhupesh Sharma wrote:
->> Newer Qualcomm chips support newer versions of the qce crypto IP, so add
->> soc specific compatible strings for qcom-qce instead of using crypto
->> IP version specific ones.
->>
->> Keep the old strings for backward-compatibility, but mark them as
->> deprecated.
->>
->> Cc: Bjorn Andersson <andersson@kernel.org>
->> Reviewed-by: Rob Herring <robh@kernel.org>
->> Tested-by: Jordan Crouse <jorcrous@amazon.com>
->> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
->> ---
->>   .../devicetree/bindings/crypto/qcom-qce.yaml         | 12 ++++++++++--
->>   1 file changed, 10 insertions(+), 2 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/crypto/qcom-qce.yaml b/Documentation/devicetree/bindings/crypto/qcom-qce.yaml
->> index 4e00e7925fed..aa2f676f5382 100644
->> --- a/Documentation/devicetree/bindings/crypto/qcom-qce.yaml
->> +++ b/Documentation/devicetree/bindings/crypto/qcom-qce.yaml
->> @@ -15,7 +15,15 @@ description:
->>   
->>   properties:
->>     compatible:
->> -    const: qcom,crypto-v5.1
->> +    enum:
->> +      - qcom,crypto-v5.1 # Deprecated. Kept only for backward compatibility
-> 
-> No changes since v6.
+On Tue, Sep 20, 2022 at 5:08 PM Denis Nikitin <denik@google.com> wrote:
+>
+> Hi Mark,
+>
+> Thank you for a quick response.
+>
+> On Tue, Sep 20, 2022 at 2:34 AM Marc Zyngier <maz@kernel.org> wrote:
+> >
+> > Hi Denis,
+> >
+> > On Tue, 20 Sep 2022 09:20:05 +0100,
+> > Denis Nikitin <denik@chromium.org> wrote:
+> > >
+> > > Kernel build with -fprofile-sample-use raises the following failure:
+> > >
+> > > error: arch/arm64/kvm/hyp/nvhe/kvm_nvhe.tmp.o: Unexpected SHT_REL
+> > > section ".rel.llvm.call-graph-profile"
+> >
+> > How is this flag provided? I don't see any occurrence of it in the
+> > kernel so far.
+>
+> On ChromeOS we build the kernel with sample profiles by adding
+> -fprofile-sample-use=/path/to/gcov.profile to KCFLAGS.
+>
+> >
+> > >
+> > > SHT_REL is generated by the latest lld, see
+> > > https://reviews.llvm.org/rGca3bdb57fa1ac98b711a735de048c12b5fdd8086.
+> >
+> > Is this part of a released toolchain? If so, can you spell out the
+> > first version where this occurs?
+>
+> Yes, it was added in llvm-13. I will update the patch.
+>
+> >
+> > > Disable profile optimization in kvm/nvhe to fix the build with
+> > > AutoFDO.
+> >
+> > It'd be good to at least mention how AutoFDO and -fprofile-sample-use
+> > relate to each other.
+>
+> Good point. AutoFDO is an example of sample profiles.
+> It's not actually relevant for the bug. I will better remove it.
+>
+> >
+> > >
+> > > Signed-off-by: Denis Nikitin <denik@chromium.org>
+> > > ---
+> > >  arch/arm64/kvm/hyp/nvhe/Makefile | 3 +++
+> > >  1 file changed, 3 insertions(+)
+> > >
+> > > diff --git a/arch/arm64/kvm/hyp/nvhe/Makefile b/arch/arm64/kvm/hyp/nvhe/Makefile
+> > > index b5c5119c7396..6a6188374a52 100644
+> > > --- a/arch/arm64/kvm/hyp/nvhe/Makefile
+> > > +++ b/arch/arm64/kvm/hyp/nvhe/Makefile
+> > > @@ -89,6 +89,9 @@ quiet_cmd_hypcopy = HYPCOPY $@
+> > >  # Remove ftrace, Shadow Call Stack, and CFI CFLAGS.
+> > >  # This is equivalent to the 'notrace', '__noscs', and '__nocfi' annotations.
+> > >  KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_FTRACE) $(CC_FLAGS_SCS) $(CC_FLAGS_CFI), $(KBUILD_CFLAGS))
+> > > +# Profile optimization creates SHT_REL section '.llvm.call-graph-profile' for
+> > > +# the hot code. SHT_REL is currently not supported by the KVM tools.
+> >
+> > 'KVM tools' seems vague. Maybe call out the actual helper that
+> > processes the relocations?
+>
+> Agreed.
+>
+> >
+> > > +KBUILD_CFLAGS += $(call cc-option,-fno-profile-sample-use,-fno-profile-use)
+> >
+> > Why adding these options instead of filtering out the offending option
+> > as it is done just above?
+>
+> That was actually the alternative solution and it worked as well.
+> Let me double check if profile optimization doesn't mess up with other
+> sections and if it doesn't I will remove the '.llvm.call-graph-profile'
+> section instead.
 
-Right. v7 is just to propose the new subset of patchsets and ordering 
-(since we changed it from v5 - which was a single patchset) and get some 
-early feedback and comments and get to know if the respective 
-maintainers are fine with the patch ordering, cc-list etc.
+When I remove the '.llvm.call-graph-profile' section the layout of other
+sections slightly changes (offsets and sizes) compared to
+`-fno-profile-sample-use`. But the list of sections remains the same.
 
-I will surely include your comments in v8.
+>
+> >
+> > Also, is this the only place the kernel fails to compile? The EFI stub
+> > does similar things AFAIR, and could potentially fail the same way.
+>
+> This was the only place in 5.15 where we tested it.
+> Let me see if EFI has this section.
 
-Thanks,
-Bhupesh
+EFI code is not marked as hot in the profile.
+
+Regarding "could potentially fail", I don't see any explicit manipulations
+with code sections in EFI.
+The hardcoded EFI stub entries should not be affected.
+
+>
+> >
+> > Thanks,
+> >
+> >         M.
+> >
+> > --
+> > Without deviation from the norm, progress is not possible.
+>
+> Thanks,
+> Denis
+
+- Denis
