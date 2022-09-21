@@ -2,420 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 842365BFC37
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 12:20:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2514C5BFC3A
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 12:20:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230467AbiIUKUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 06:20:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47274 "EHLO
+        id S230308AbiIUKUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 06:20:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231370AbiIUKUH (ORCPT
+        with ESMTP id S231425AbiIUKUV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 06:20:07 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B763324947
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 03:19:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=++yxnznCz49/cU0zFaV4CzILYsa0DKuhvWpOTb2HzYk=; b=DWSspLlyEN32pjrOIowAAeJVt6
-        np66Hm7w0+qCi+XXia+R6Uf7gfAjNC1mJFPIAKWA8QDPCxPwl9b/Iy49g5IlCYdwt9daeQpqqRsje
-        m3kYzNtoY/nuOmcBoIzGlfrgBZ6sYNCIe4vA9XTdoKQdQbrwKSDolZK4egZ12wpVc2X9AMc8LONQ8
-        qlq2/9qFUEyt9QzG/m9YyYo3TuPkCHZCgbguyPxOODyYNJHTkm248b80ApEDaZEvPrWT6QxRujJbf
-        HFEy2wGEfB/ri0cJh6X4wH4JQJVJ5RJfjf2ZJcT47qii5WYjECmJ8S7EIJlUSOSCWhWxScTd3vfJL
-        n/TsnyRg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oawoy-006Cyq-91; Wed, 21 Sep 2022 10:19:12 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6FA5530035F;
-        Wed, 21 Sep 2022 12:19:07 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 487132BB108A0; Wed, 21 Sep 2022 12:19:07 +0200 (CEST)
-Date:   Wed, 21 Sep 2022 12:19:07 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Johannes Wikner <kwikner@ethz.ch>,
-        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
-        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
-        Joao Moreira <joao.moreira@intel.com>,
-        Joseph Nuzman <joseph.nuzman@intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Juergen Gross <jgross@suse.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        K Prateek Nayak <kprateek.nayak@amd.com>,
-        Eric Dumazet <edumazet@google.com>
-Subject: [PATCH v3.1 58/59] x86/ftrace: Make it call depth tracking aware
-Message-ID: <YyrlGxdyenOcOQOH@hirez.programming.kicks-ass.net>
-References: <20220915111039.092790446@infradead.org>
- <20220915111148.927545073@infradead.org>
+        Wed, 21 Sep 2022 06:20:21 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA08685AAD
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 03:20:19 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id p5so6341293ljc.13
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 03:20:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=wOAG2nHa6V+mQVTn24MXKEjrtz2FiEQdyWfc/VJPXp4=;
+        b=e5OcUsAvRzypoYJDGBslX71DzA8KWabXMVX1vSTnJfgvbDoWQe9lySb5EMW+2q1x+m
+         6/mV9CPyDldV0G1YA8abb9/kiNN60Tk+2Tn9jELj+DnAvO47JPVfmvwSaEYbp+8UiBP3
+         AQ9VS3j9dnj/4elK6HU8XANNv3/351mR7HwvowWW5rSB1zXDhxugoBvRR+5skUpHr+E8
+         wemp9ZgtZt4ETUEseOBpne0jQ4Qqod5ir/XyqhLyLzOpECZYKiUmKjNB44jGhvdikUbn
+         Zc0Noc9sRKfRqZpm0bbsYOeCbrke0yhqnGqA0qnGh4gd7R7ZYUTgOI8WNIiWtlnTb+eN
+         deMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=wOAG2nHa6V+mQVTn24MXKEjrtz2FiEQdyWfc/VJPXp4=;
+        b=WlCQxYtb9oF9OA2exbshDrOLQcByu2GjIW4KiZMp9NaSS5Xw+hZEB8tzhe37Vf8bcp
+         vIvCKtEZltmdswg2ArqKzw/YNlvOZ9BrBzG6vexNeIiIHMS84of3PQ3uJgCC+HoVcM24
+         aVpuduvuOIs6Z5loiIO03gAN5Whe3nOl6YOdDYc7i8Zk9uoBrcWiYJA8h3xdVjIx5odZ
+         i+irloE+uSnkIp+Jletl76KPO++JQGiiuHC2SKdTesbknayjsnq1X10NclGMfcSOTOKe
+         v865VK2UONGvy4omL/5h7J5gFkGyo0W60psGt2+DiwxXeENWmds0HYubgwcufiX2iqoW
+         JiVw==
+X-Gm-Message-State: ACrzQf0w4b4QlI9mJVtjhw7qf9mjAl0uge0fbAgfCkQvZOjBFx7XMkAi
+        tupkYOJeDRRvx+slHdD/osnVuQ==
+X-Google-Smtp-Source: AMsMyM6VoW+pUqPYp9TXSCxXkAE/UAviHWwr6fNmxVv0f9q7qRUpKdY3dFHo53fnRU7xaklCK87blg==
+X-Received: by 2002:a2e:9dc6:0:b0:26c:5d06:e18 with SMTP id x6-20020a2e9dc6000000b0026c5d060e18mr2259266ljj.64.1663755617941;
+        Wed, 21 Sep 2022 03:20:17 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id b3-20020ac25e83000000b0049a6a9bc0dcsm368555lfq.134.2022.09.21.03.20.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Sep 2022 03:20:17 -0700 (PDT)
+Message-ID: <9f6c0330-b1e8-b71c-9883-95cbb6924b08@linaro.org>
+Date:   Wed, 21 Sep 2022 12:20:16 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220915111148.927545073@infradead.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: Similar SoCs with different CPUs and interrupt bindings
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Robin Murphy <robin.murphy@arm.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
+References: <CAMuHMdUPm36RsxHdVwspR3NCAR3C507AyB6R65W42N2gXWq0ag@mail.gmail.com>
+ <45d2e6c2-3b4b-5720-0431-002c74b1f9cc@arm.com>
+ <CAMuHMdWd5cmxgG8jdpDw3nrfrdSX6ecb+XwuJTLkkRgP5LbcHQ@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAMuHMdWd5cmxgG8jdpDw3nrfrdSX6ecb+XwuJTLkkRgP5LbcHQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 21/09/2022 12:13, Geert Uytterhoeven wrote:
+>> 4. Put all the "interrupts" properties in the SoC-specific DTSI at the
+>> same level as the interrupt controller to which they correspond. Works
+>> out of the box with no horrible mystery macros, and is really no more or
+>> less error-prone than any other approach. Yes, it means replicating a
+>> bit of structure and/or having labels for everything (many of which may
+>> be wanted anyway), but that's not necessarily a bad thing for
+>> readability anyway. Hierarchical definitions are standard FDT practice
+>> and should be well understood, so this is arguably the simplest and
+>> least surprising approach :)
+> 
+> Thanks for the suggestion!
+> 
+> It does mean we have to update 3 .dtsi files when adding support
+> for a new device. As long as all DT changes go through the same (soc)
+> tree, we can easily manage the dependencies.
 
-From: Peter Zijlstra <peterz@infradead.org>
+If the new nodes are disabled (in main shared DTSI), then it would not
+need immediate update in other arch. However enabling it in other arch
+would require cross-tree pull (AFAIR, RISC-V changes do not go to SoC tree).
 
-Since ftrace has trampolines, don't use thunks for the __fentry__ site
-but instead require that every function called from there includes
-accounting. This very much includes all the direct-call functions.
+Best regards,
+Krzysztof
 
-Additionally, ftrace uses ROP tricks in two places:
-
- - return_to_handler(), and
- - ftrace_regs_caller() when pt_regs->orig_ax is set by a direct-call.
-
-return_to_handler() already uses a retpoline to replace an
-indirect-jump to defeat IBT, since this is a jump-type retpoline, make
-sure there is no accounting done and ALTERNATIVE the RET into a ret.
-
-ftrace_regs_caller() does much the same and gets the same treatment.
-
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
-v3.1: fix s390 build fail
-
- arch/x86/include/asm/nospec-branch.h        |    9 +++++++++
- arch/x86/kernel/callthunks.c                |    2 +-
- arch/x86/kernel/ftrace.c                    |   16 ++++++++++++----
- arch/x86/kernel/ftrace_64.S                 |   22 ++++++++++++++++++++--
- arch/x86/net/bpf_jit_comp.c                 |    6 ++++++
- kernel/trace/trace_selftest.c               |    9 ++++++++-
- samples/ftrace/ftrace-direct-modify.c       |    3 +++
- samples/ftrace/ftrace-direct-multi-modify.c |    3 +++
- samples/ftrace/ftrace-direct-multi.c        |    2 ++
- samples/ftrace/ftrace-direct-too.c          |    2 ++
- samples/ftrace/ftrace-direct.c              |    2 ++
- 11 files changed, 68 insertions(+), 8 deletions(-)
-
---- a/arch/x86/include/asm/nospec-branch.h
-+++ b/arch/x86/include/asm/nospec-branch.h
-@@ -340,6 +340,12 @@ static inline void x86_set_skl_return_th
- {
- 	x86_return_thunk = &__x86_return_skl;
- }
-+
-+#define CALL_DEPTH_ACCOUNT					\
-+	ALTERNATIVE("",						\
-+		    __stringify(INCREMENT_CALL_DEPTH),		\
-+		    X86_FEATURE_CALL_DEPTH)
-+
- #ifdef CONFIG_CALL_THUNKS_DEBUG
- DECLARE_PER_CPU(u64, __x86_call_count);
- DECLARE_PER_CPU(u64, __x86_ret_count);
-@@ -348,6 +354,9 @@ DECLARE_PER_CPU(u64, __x86_ctxsw_count);
- #endif
- #else
- static inline void x86_set_skl_return_thunk(void) {}
-+
-+#define CALL_DEPTH_ACCOUNT ""
-+
- #endif
- 
- #ifdef CONFIG_RETPOLINE
---- a/arch/x86/kernel/callthunks.c
-+++ b/arch/x86/kernel/callthunks.c
-@@ -316,7 +316,7 @@ int x86_call_depth_emit_accounting(u8 **
- 		return 0;
- 
- 	/* Is function call target a thunk? */
--	if (is_callthunk(func))
-+	if (func && is_callthunk(func))
- 		return 0;
- 
- 	memcpy(*pprog, tmpl, tmpl_size);
---- a/arch/x86/kernel/ftrace.c
-+++ b/arch/x86/kernel/ftrace.c
-@@ -69,6 +69,10 @@ static const char *ftrace_nop_replace(vo
- 
- static const char *ftrace_call_replace(unsigned long ip, unsigned long addr)
- {
-+	/*
-+	 * No need to translate into a callthunk. The trampoline does
-+	 * the depth accounting itself.
-+	 */
- 	return text_gen_insn(CALL_INSN_OPCODE, (void *)ip, (void *)addr);
- }
- 
-@@ -317,7 +321,7 @@ create_trampoline(struct ftrace_ops *ops
- 	unsigned long size;
- 	unsigned long *ptr;
- 	void *trampoline;
--	void *ip;
-+	void *ip, *dest;
- 	/* 48 8b 15 <offset> is movq <offset>(%rip), %rdx */
- 	unsigned const char op_ref[] = { 0x48, 0x8b, 0x15 };
- 	unsigned const char retq[] = { RET_INSN_OPCODE, INT3_INSN_OPCODE };
-@@ -404,10 +408,14 @@ create_trampoline(struct ftrace_ops *ops
- 	/* put in the call to the function */
- 	mutex_lock(&text_mutex);
- 	call_offset -= start_offset;
-+	/*
-+	 * No need to translate into a callthunk. The trampoline does
-+	 * the depth accounting before the call already.
-+	 */
-+	dest = ftrace_ops_get_func(ops);
- 	memcpy(trampoline + call_offset,
--	       text_gen_insn(CALL_INSN_OPCODE,
--			     trampoline + call_offset,
--			     ftrace_ops_get_func(ops)), CALL_INSN_SIZE);
-+	       text_gen_insn(CALL_INSN_OPCODE, trampoline + call_offset, dest),
-+	       CALL_INSN_SIZE);
- 	mutex_unlock(&text_mutex);
- 
- 	/* ALLOC_TRAMP flags lets us know we created it */
---- a/arch/x86/kernel/ftrace_64.S
-+++ b/arch/x86/kernel/ftrace_64.S
-@@ -4,6 +4,7 @@
-  */
- 
- #include <linux/linkage.h>
-+#include <asm/asm-offsets.h>
- #include <asm/ptrace.h>
- #include <asm/ftrace.h>
- #include <asm/export.h>
-@@ -132,6 +133,7 @@
- #ifdef CONFIG_DYNAMIC_FTRACE
- 
- SYM_FUNC_START(__fentry__)
-+	CALL_DEPTH_ACCOUNT
- 	RET
- SYM_FUNC_END(__fentry__)
- EXPORT_SYMBOL(__fentry__)
-@@ -140,6 +142,8 @@ SYM_FUNC_START(ftrace_caller)
- 	/* save_mcount_regs fills in first two parameters */
- 	save_mcount_regs
- 
-+	CALL_DEPTH_ACCOUNT
-+
- 	/* Stack - skipping return address of ftrace_caller */
- 	leaq MCOUNT_REG_SIZE+8(%rsp), %rcx
- 	movq %rcx, RSP(%rsp)
-@@ -155,6 +159,9 @@ SYM_INNER_LABEL(ftrace_caller_op_ptr, SY
- 	/* Only ops with REGS flag set should have CS register set */
- 	movq $0, CS(%rsp)
- 
-+	/* Account for the function call below */
-+	CALL_DEPTH_ACCOUNT
-+
- SYM_INNER_LABEL(ftrace_call, SYM_L_GLOBAL)
- 	ANNOTATE_NOENDBR
- 	call ftrace_stub
-@@ -189,6 +196,8 @@ SYM_FUNC_START(ftrace_regs_caller)
- 	save_mcount_regs 8
- 	/* save_mcount_regs fills in first two parameters */
- 
-+	CALL_DEPTH_ACCOUNT
-+
- SYM_INNER_LABEL(ftrace_regs_caller_op_ptr, SYM_L_GLOBAL)
- 	ANNOTATE_NOENDBR
- 	/* Load the ftrace_ops into the 3rd parameter */
-@@ -219,6 +228,9 @@ SYM_INNER_LABEL(ftrace_regs_caller_op_pt
- 	/* regs go into 4th parameter */
- 	leaq (%rsp), %rcx
- 
-+	/* Account for the function call below */
-+	CALL_DEPTH_ACCOUNT
-+
- SYM_INNER_LABEL(ftrace_regs_call, SYM_L_GLOBAL)
- 	ANNOTATE_NOENDBR
- 	call ftrace_stub
-@@ -282,7 +294,9 @@ SYM_INNER_LABEL(ftrace_regs_caller_end,
- 	int3
- .Ldo_rebalance:
- 	add $8, %rsp
--	RET
-+	ALTERNATIVE __stringify(RET), \
-+		    __stringify(ANNOTATE_UNRET_SAFE; ret; int3), \
-+		    X86_FEATURE_CALL_DEPTH
- 
- SYM_FUNC_END(ftrace_regs_caller)
- STACK_FRAME_NON_STANDARD_FP(ftrace_regs_caller)
-@@ -291,6 +305,8 @@ STACK_FRAME_NON_STANDARD_FP(ftrace_regs_
- #else /* ! CONFIG_DYNAMIC_FTRACE */
- 
- SYM_FUNC_START(__fentry__)
-+	CALL_DEPTH_ACCOUNT
-+
- 	cmpq $ftrace_stub, ftrace_trace_function
- 	jnz trace
- 
-@@ -347,6 +363,8 @@ SYM_CODE_START(return_to_handler)
- 	int3
- .Ldo_rop:
- 	mov %rdi, (%rsp)
--	RET
-+	ALTERNATIVE __stringify(RET), \
-+		    __stringify(ANNOTATE_UNRET_SAFE; ret; int3), \
-+		    X86_FEATURE_CALL_DEPTH
- SYM_CODE_END(return_to_handler)
- #endif
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -12,6 +12,7 @@
- #include <linux/memory.h>
- #include <linux/sort.h>
- #include <asm/extable.h>
-+#include <asm/ftrace.h>
- #include <asm/set_memory.h>
- #include <asm/nospec-branch.h>
- #include <asm/text-patching.h>
-@@ -2095,6 +2096,11 @@ int arch_prepare_bpf_trampoline(struct b
- 	prog = image;
- 
- 	EMIT_ENDBR();
-+	/*
-+	 * This is the direct-call trampoline, as such it needs accounting
-+	 * for the __fentry__ call.
-+	 */
-+	x86_call_depth_emit_accounting(&prog, NULL);
- 	EMIT1(0x55);		 /* push rbp */
- 	EMIT3(0x48, 0x89, 0xE5); /* mov rbp, rsp */
- 	EMIT4(0x48, 0x83, 0xEC, stack_size); /* sub rsp, stack_size */
---- a/kernel/trace/trace_selftest.c
-+++ b/kernel/trace/trace_selftest.c
-@@ -785,7 +785,14 @@ static struct fgraph_ops fgraph_ops __in
- };
- 
- #ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
--noinline __noclone static void trace_direct_tramp(void) { }
-+#ifndef CALL_DEPTH_ACCOUNT
-+#define CALL_DEPTH_ACCOUNT ""
-+#endif
-+
-+noinline __noclone static void trace_direct_tramp(void)
-+{
-+	asm(CALL_DEPTH_ACCOUNT);
-+}
- #endif
- 
- /*
---- a/samples/ftrace/ftrace-direct-modify.c
-+++ b/samples/ftrace/ftrace-direct-modify.c
-@@ -3,6 +3,7 @@
- #include <linux/kthread.h>
- #include <linux/ftrace.h>
- #include <asm/asm-offsets.h>
-+#include <asm/nospec-branch.h>
- 
- extern void my_direct_func1(void);
- extern void my_direct_func2(void);
-@@ -34,6 +35,7 @@ asm (
- 	ASM_ENDBR
- "	pushq %rbp\n"
- "	movq %rsp, %rbp\n"
-+	CALL_DEPTH_ACCOUNT
- "	call my_direct_func1\n"
- "	leave\n"
- "	.size		my_tramp1, .-my_tramp1\n"
-@@ -45,6 +47,7 @@ asm (
- 	ASM_ENDBR
- "	pushq %rbp\n"
- "	movq %rsp, %rbp\n"
-+	CALL_DEPTH_ACCOUNT
- "	call my_direct_func2\n"
- "	leave\n"
- 	ASM_RET
---- a/samples/ftrace/ftrace-direct-multi-modify.c
-+++ b/samples/ftrace/ftrace-direct-multi-modify.c
-@@ -3,6 +3,7 @@
- #include <linux/kthread.h>
- #include <linux/ftrace.h>
- #include <asm/asm-offsets.h>
-+#include <asm/nospec-branch.h>
- 
- extern void my_direct_func1(unsigned long ip);
- extern void my_direct_func2(unsigned long ip);
-@@ -32,6 +33,7 @@ asm (
- 	ASM_ENDBR
- "	pushq %rbp\n"
- "	movq %rsp, %rbp\n"
-+	CALL_DEPTH_ACCOUNT
- "	pushq %rdi\n"
- "	movq 8(%rbp), %rdi\n"
- "	call my_direct_func1\n"
-@@ -46,6 +48,7 @@ asm (
- 	ASM_ENDBR
- "	pushq %rbp\n"
- "	movq %rsp, %rbp\n"
-+	CALL_DEPTH_ACCOUNT
- "	pushq %rdi\n"
- "	movq 8(%rbp), %rdi\n"
- "	call my_direct_func2\n"
---- a/samples/ftrace/ftrace-direct-multi.c
-+++ b/samples/ftrace/ftrace-direct-multi.c
-@@ -5,6 +5,7 @@
- #include <linux/ftrace.h>
- #include <linux/sched/stat.h>
- #include <asm/asm-offsets.h>
-+#include <asm/nospec-branch.h>
- 
- extern void my_direct_func(unsigned long ip);
- 
-@@ -27,6 +28,7 @@ asm (
- 	ASM_ENDBR
- "	pushq %rbp\n"
- "	movq %rsp, %rbp\n"
-+	CALL_DEPTH_ACCOUNT
- "	pushq %rdi\n"
- "	movq 8(%rbp), %rdi\n"
- "	call my_direct_func\n"
---- a/samples/ftrace/ftrace-direct-too.c
-+++ b/samples/ftrace/ftrace-direct-too.c
-@@ -4,6 +4,7 @@
- #include <linux/mm.h> /* for handle_mm_fault() */
- #include <linux/ftrace.h>
- #include <asm/asm-offsets.h>
-+#include <asm/nospec-branch.h>
- 
- extern void my_direct_func(struct vm_area_struct *vma,
- 			   unsigned long address, unsigned int flags);
-@@ -29,6 +30,7 @@ asm (
- 	ASM_ENDBR
- "	pushq %rbp\n"
- "	movq %rsp, %rbp\n"
-+	CALL_DEPTH_ACCOUNT
- "	pushq %rdi\n"
- "	pushq %rsi\n"
- "	pushq %rdx\n"
---- a/samples/ftrace/ftrace-direct.c
-+++ b/samples/ftrace/ftrace-direct.c
-@@ -4,6 +4,7 @@
- #include <linux/sched.h> /* for wake_up_process() */
- #include <linux/ftrace.h>
- #include <asm/asm-offsets.h>
-+#include <asm/nospec-branch.h>
- 
- extern void my_direct_func(struct task_struct *p);
- 
-@@ -26,6 +27,7 @@ asm (
- 	ASM_ENDBR
- "	pushq %rbp\n"
- "	movq %rsp, %rbp\n"
-+	CALL_DEPTH_ACCOUNT
- "	pushq %rdi\n"
- "	call my_direct_func\n"
- "	popq %rdi\n"
