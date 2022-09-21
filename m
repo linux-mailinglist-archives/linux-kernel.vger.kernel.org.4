@@ -2,432 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82F9D5E54F8
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 23:10:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94FAB5E54FD
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 23:11:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbiIUVKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 17:10:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38948 "EHLO
+        id S230096AbiIUVLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 17:11:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229908AbiIUVKO (ORCPT
+        with ESMTP id S229908AbiIUVLd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 17:10:14 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C7BE5A800;
-        Wed, 21 Sep 2022 14:10:11 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id x29so8595116ljq.2;
-        Wed, 21 Sep 2022 14:10:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=tXSUnGUBLFXfOgf8iNYD4niHvxte3rvXWwKqKi+jD3g=;
-        b=Clu9LI1lY0Ibub8/gX05u0rrvnfDsvzzkYrYOw4h/Dfry1IEylF2d03Hl/7Tw5QNtR
-         VtLw3DuuxYNE7YUmb945ecsXWfvVP+k/SyRozpJV73L3XM2LjTZzyEWqSFWY8lfvCave
-         pclA2RGuXdw8ApHC09AY9LQTFsenF0QP6S1bFj67Pii1CppeHZsun14t9vkZn4P/OMpb
-         Hm0GwXvsA+HEINbKMxTuhmptLUpdlA4xSyNPszMsm7mjbpa1d1ueE1rOqiwfaoSJJw4N
-         Vk931cUpNbS44T5uigE9syzrOKuBZ8o3xOWWhJX51dA1J9o0NyKVLKTtpsCuGOcVH92t
-         e2YA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=tXSUnGUBLFXfOgf8iNYD4niHvxte3rvXWwKqKi+jD3g=;
-        b=YwNlUyun7Bu9RAZSZUzE+aQd7CIGoe+dQ/EU1fEaExxeQx5Nmeem3pyo+x4fCIrsbE
-         UOOD1y7zjB6VCrr21Fq+I3CaotPRX3Gr5wPcWuQ6V/M5oUp68xZT8ezny52efAmK7MuD
-         lfnaipWrN/0ltLaeuOhDLz7LpWHhZj0VScx3zGq2UObCqYzH6fCsdUmAf0L5FSroa/g2
-         sUBLyS2GZK3z7I9A/aEUjb533rciP4OoRLb/6AMVCX1c8MOhEfSA64Ud4KRjL5xddDOs
-         yrVa6wUhxrLQD+QtQ/xTEW6RfgQ39Kvrx483ntz7KUA0dN8BExWSWeICSkW53oM+7zl3
-         rwtA==
-X-Gm-Message-State: ACrzQf2GIhc8X+AKA1MrV7XGiGpumE855wm3PQQWKA9XhDDxOtf2WA/t
-        EUnIPxLN9K60L8NbTbMgNQg=
-X-Google-Smtp-Source: AMsMyM5FI5nHSAs8d1kf2MrFoG/UYbjPvabBkSm6I6sLCh8tC+6AKO+4tqgRRkw7EOYBcGKRe0FMEg==
-X-Received: by 2002:a2e:a887:0:b0:25e:3174:fb67 with SMTP id m7-20020a2ea887000000b0025e3174fb67mr9039654ljq.337.1663794609912;
-        Wed, 21 Sep 2022 14:10:09 -0700 (PDT)
-Received: from DESKTOP-GSFPEC9.localdomain (broadband-46-242-10-176.ip.moscow.rt.ru. [46.242.10.176])
-        by smtp.gmail.com with ESMTPSA id z18-20020a19f712000000b0049adbc24b99sm599260lfe.24.2022.09.21.14.10.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Sep 2022 14:10:09 -0700 (PDT)
-From:   Konstantin Aladyshev <aladyshev22@gmail.com>
-Cc:     Konstantin Aladyshev <aladyshev22@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org
-Subject: [PATCH v4 2/2] ARM: dts: aspeed: Add AMD DaytonaX BMC
-Date:   Thu, 22 Sep 2022 00:09:47 +0300
-Message-Id: <20220921210950.10568-3-aladyshev22@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220921210950.10568-1-aladyshev22@gmail.com>
-References: <20220920165404.14099-1-aladyshev22@gmail.com>
- <20220921210950.10568-1-aladyshev22@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,WEIRD_QUOTING
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 21 Sep 2022 17:11:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567AD55094;
+        Wed, 21 Sep 2022 14:11:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4410BB82369;
+        Wed, 21 Sep 2022 21:11:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FD3CC433C1;
+        Wed, 21 Sep 2022 21:11:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663794687;
+        bh=q5iTDoMb1h594m9zBAcQ294TqIVliTEQoMBfbSTQOEc=;
+        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+        b=HXKQICEaWSNQF2IN43p5UTWR7wkEBhbRHnddHQoZkXz8gJLh7Pr2bkQPAxjcpnJi2
+         0Q/h6CzriwchnUlmsO9BDrIPtn/TeLnrVo5uHkw+szXrG+6sXl1ElJp1xhSdyvhMlJ
+         cuioDOWdEvguwOM6wEjHbayOspWvgVYmtrk92qmcaHWzfQCFkqJWQC2h1+eW5FaVCH
+         Wv0Tu9JJEiRYwy9ADZliY6hVGdYUT8dEXk/XfHpcHKoPPq7vjZWjV2QbbCcjdLDi+Z
+         vuZjF6LDsm0w768UHnwzYxUul0fXGQ4vzbQ9ilbulLqSISqwiHkJi3bQJ47+UV6Hyw
+         mrdSIgubNRwXg==
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 277B227C0054;
+        Wed, 21 Sep 2022 17:11:25 -0400 (EDT)
+Received: from imap48 ([10.202.2.98])
+  by compute2.internal (MEProxy); Wed, 21 Sep 2022 17:11:25 -0400
+X-ME-Sender: <xms:-n0rY_4N0LKpSTfU-17jxItIVA2IeOyeV3GBH-kTGeaQnD44QEGWsA>
+    <xme:-n0rY05FRoGSPXzqMPaO0MmZQgUZpWgYxdjP4kFXdAHqngqCBvxsuyaZNtPNWtT0M
+    maJP6ri53jokKJgZsg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeefuddgudeitdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    nhguhicunfhuthhomhhirhhskhhifdcuoehluhhtoheskhgvrhhnvghlrdhorhhgqeenuc
+    ggtffrrghtthgvrhhnpedvhfeuvddthfdufffhkeekffetgffhledtleegffetheeugeej
+    ffduhefgteeihfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpegrnhguhidomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqudduiedu
+    keehieefvddqvdeifeduieeitdekqdhluhhtoheppehkvghrnhgvlhdrohhrgheslhhinh
+    hugidrlhhuthhordhush
+X-ME-Proxy: <xmx:-n0rY2fud6xh0WVrheag-M-5En3oxyvmXPkXJRxC0S-XYaeJiPIqsw>
+    <xmx:-n0rYwJ4GI3Nzi4ft0zhvleIXE5-DX0-OH5WjOjQhfMBWzMBrktPoA>
+    <xmx:-n0rYzKpWKke8wVrjYykrrHICZQAPwgvRIuBwudPMdXnQbse-OJeWA>
+    <xmx:_X0rYxkptztuCef_-KiMtVyhiKBRT0-vPWSHiG4dcD54DzNMZcfFTWwsQ6o>
+Feedback-ID: ieff94742:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id C289931A0062; Wed, 21 Sep 2022 17:11:22 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-935-ge4ccd4c47b-fm-20220914.001-ge4ccd4c4
+Mime-Version: 1.0
+Message-Id: <84e81d21-c800-4fd5-ad7c-f20bcdd7508b@www.fastmail.com>
+In-Reply-To: <Yyi+l3+p9lbBAC4M@google.com>
+References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
+ <20220915142913.2213336-2-chao.p.peng@linux.intel.com>
+ <d16284f5-3493-2892-38e6-f1fa5c10bdbb@redhat.com>
+ <Yyi+l3+p9lbBAC4M@google.com>
+Date:   Wed, 21 Sep 2022 14:10:51 -0700
+From:   "Andy Lutomirski" <luto@kernel.org>
+To:     "Sean Christopherson" <seanjc@google.com>,
+        "David Hildenbrand" <david@redhat.com>
+Cc:     "Chao Peng" <chao.p.peng@linux.intel.com>,
+        "kvm list" <kvm@vger.kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        "Linux API" <linux-api@vger.kernel.org>, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, "Paolo Bonzini" <pbonzini@redhat.com>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        "Vitaly Kuznetsov" <vkuznets@redhat.com>,
+        "Wanpeng Li" <wanpengli@tencent.com>,
+        "Jim Mattson" <jmattson@google.com>,
+        "Joerg Roedel" <joro@8bytes.org>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Hugh Dickins" <hughd@google.com>,
+        "Jeff Layton" <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Shuah Khan" <shuah@kernel.org>, "Mike Rapoport" <rppt@kernel.org>,
+        "Steven Price" <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        "Vlastimil Babka" <vbabka@suse.cz>,
+        "Vishal Annapurve" <vannapurve@google.com>,
+        "Yu Zhang" <yu.c.zhang@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        "Nakajima, Jun" <jun.nakajima@intel.com>,
+        "Dave Hansen" <dave.hansen@intel.com>,
+        "Andi Kleen" <ak@linux.intel.com>, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        "Quentin Perret" <qperret@google.com>,
+        "Michael Roth" <michael.roth@amd.com>,
+        "Michal Hocko" <mhocko@suse.com>,
+        "Muchun Song" <songmuchun@bytedance.com>, wei.w.wang@intel.com,
+        "Will Deacon" <will@kernel.org>, "Marc Zyngier" <maz@kernel.org>,
+        "Fuad Tabba" <tabba@google.com>
+Subject: Re: [PATCH v8 1/8] mm/memfd: Introduce userspace inaccessible memfd
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add initial version of device tree for the BMC in the AMD DaytonaX
-platform.
+(please excuse any formatting disasters.  my internet went out as I was composing this, and i did my best to rescue it.)
 
-AMD DaytonaX platform is a customer reference board (CRB) with an
-Aspeed ast2500 BMC manufactured by AMD.
+On Mon, Sep 19, 2022, at 12:10 PM, Sean Christopherson wrote:
+> +Will, Marc and Fuad (apologies if I missed other pKVM folks)
+>
+> On Mon, Sep 19, 2022, David Hildenbrand wrote:
+>> On 15.09.22 16:29, Chao Peng wrote:
+>> > From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+>> > 
+>> > KVM can use memfd-provided memory for guest memory. For normal userspace
+>> > accessible memory, KVM userspace (e.g. QEMU) mmaps the memfd into its
+>> > virtual address space and then tells KVM to use the virtual address to
+>> > setup the mapping in the secondary page table (e.g. EPT).
+>> > 
+>> > With confidential computing technologies like Intel TDX, the
+>> > memfd-provided memory may be encrypted with special key for special
+>> > software domain (e.g. KVM guest) and is not expected to be directly
+>> > accessed by userspace. Precisely, userspace access to such encrypted
+>> > memory may lead to host crash so it should be prevented.
+>> 
+>> Initially my thaught was that this whole inaccessible thing is TDX specific
+>> and there is no need to force that on other mechanisms. That's why I
+>> suggested to not expose this to user space but handle the notifier
+>> requirements internally.
+>> 
+>> IIUC now, protected KVM has similar demands. Either access (read/write) of
+>> guest RAM would result in a fault and possibly crash the hypervisor (at
+>> least not the whole machine IIUC).
+>
+> Yep.  The missing piece for pKVM is the ability to convert from shared 
+> to private
+> while preserving the contents, e.g. to hand off a large buffer 
+> (hundreds of MiB)
+> for processing in the protected VM.  Thoughts on this at the bottom.
+>
+>> > This patch introduces userspace inaccessible memfd (created with
+>> > MFD_INACCESSIBLE). Its memory is inaccessible from userspace through
+>> > ordinary MMU access (e.g. read/write/mmap) but can be accessed via
+>> > in-kernel interface so KVM can directly interact with core-mm without
+>> > the need to map the memory into KVM userspace.
+>> 
+>> With secretmem we decided to not add such "concept switch" flags and instead
+>> use a dedicated syscall.
+>>
+>
+> I have no personal preference whatsoever between a flag and a dedicated syscall,
+> but a dedicated syscall does seem like it would give the kernel a bit more
+> flexibility.
 
-Signed-off-by: Konstantin Aladyshev <aladyshev22@gmail.com>
----
- arch/arm/boot/dts/Makefile                    |   1 +
- arch/arm/boot/dts/aspeed-bmc-amd-daytonax.dts | 319 ++++++++++++++++++
- 2 files changed, 320 insertions(+)
- create mode 100644 arch/arm/boot/dts/aspeed-bmc-amd-daytonax.dts
+The third option is a device node, e.g. /dev/kvm_secretmem or /dev/kvm_tdxmem or similar.  But if we need flags or other details in the future, maybe this isn't ideal.
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 05d8aef6e5d2..d81fe7ef5475 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -1574,6 +1574,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
- 	aspeed-ast2500-evb.dtb \
- 	aspeed-ast2600-evb-a1.dtb \
- 	aspeed-ast2600-evb.dtb \
-+	aspeed-bmc-amd-daytonax.dtb \
- 	aspeed-bmc-amd-ethanolx.dtb \
- 	aspeed-bmc-ampere-mtjade.dtb \
- 	aspeed-bmc-arm-stardragon4800-rep2.dtb \
-diff --git a/arch/arm/boot/dts/aspeed-bmc-amd-daytonax.dts b/arch/arm/boot/dts/aspeed-bmc-amd-daytonax.dts
-new file mode 100644
-index 000000000000..64bb9bf92de2
---- /dev/null
-+++ b/arch/arm/boot/dts/aspeed-bmc-amd-daytonax.dts
-@@ -0,0 +1,319 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/dts-v1/;
-+
-+#include "aspeed-g5.dtsi"
-+#include <dt-bindings/gpio/aspeed-gpio.h>
-+#include <dt-bindings/interrupt-controller/irq.h>
-+
-+/ {
-+	model = "AMD DaytonaX BMC";
-+	compatible = "amd,daytonax-bmc", "aspeed,ast2500";
-+
-+	memory@80000000 {
-+		reg = <0x80000000 0x20000000>;
-+	};
-+
-+	reserved-memory {
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges;
-+
-+		video_engine_memory: jpegbuffer {
-+			size = <0x02000000>;	/* 32M */
-+			alignment = <0x01000000>;
-+			compatible = "shared-dma-pool";
-+			reusable;
-+		};
-+	};
-+
-+	aliases {
-+		serial0 = &uart1;
-+		serial4 = &uart5;
-+	};
-+
-+	chosen {
-+		stdout-path = &uart5;
-+		bootargs = "console=ttyS4,115200";
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+
-+		led-fault {
-+			gpios = <&gpio ASPEED_GPIO(A, 2) GPIO_ACTIVE_LOW>;
-+		};
-+
-+		led-identify {
-+			gpios = <&gpio ASPEED_GPIO(A, 3) GPIO_ACTIVE_LOW>;
-+		};
-+	};
-+
-+	iio-hwmon {
-+		compatible = "iio-hwmon";
-+		io-channels = <&adc 0>, <&adc 1>, <&adc 2>, <&adc 3>, <&adc 4>,
-+			<&adc 5>, <&adc 6>, <&adc 7>, <&adc 8>, <&adc 9>,
-+			<&adc 10>, <&adc 11>, <&adc 12>, <&adc 13>, <&adc 14>,
-+			<&adc 15>;
-+	};
-+};
-+
-+&fmc {
-+	status = "okay";
-+	flash@0 {
-+		status = "okay";
-+		m25p,fast-read;
-+		label = "bmc";
-+		#include "openbmc-flash-layout.dtsi"
-+	};
-+};
-+
-+&mac0 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_rgmii1_default &pinctrl_mdio1_default>;
-+};
-+
-+&uart1 {
-+	//Host Console
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_txd1_default
-+		&pinctrl_rxd1_default
-+		&pinctrl_nrts1_default
-+		&pinctrl_ndtr1_default
-+		&pinctrl_ndsr1_default
-+		&pinctrl_ncts1_default
-+		&pinctrl_ndcd1_default
-+		&pinctrl_nri1_default>;
-+};
-+
-+&uart5 {
-+	//BMC Console
-+	status = "okay";
-+};
-+
-+&vuart {
-+	status = "okay";
-+	aspeed,lpc-io-reg = <0x3f8>;
-+	aspeed,lpc-interrupts = <4 IRQ_TYPE_LEVEL_HIGH>;
-+};
-+
-+&adc {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_adc0_default
-+		&pinctrl_adc1_default
-+		&pinctrl_adc2_default
-+		&pinctrl_adc3_default
-+		&pinctrl_adc4_default
-+		&pinctrl_adc5_default
-+		&pinctrl_adc6_default
-+		&pinctrl_adc7_default
-+		&pinctrl_adc8_default
-+		&pinctrl_adc9_default
-+		&pinctrl_adc10_default
-+		&pinctrl_adc11_default
-+		&pinctrl_adc12_default
-+		&pinctrl_adc13_default
-+		&pinctrl_adc14_default
-+		&pinctrl_adc15_default>;
-+};
-+
-+&gpio {
-+	status = "okay";
-+	gpio-line-names =
-+	/*A0-A7*/	"","","led-fault","led-identify","","","","",
-+	/*B0-B7*/	"","","","","","","","",
-+	/*C0-C7*/	"id-button","","","","","","","",
-+	/*D0-D7*/	"","","ASSERT_BMC_READY","","","","","",
-+	/*E0-E7*/	"reset-button","reset-control","power-button","power-control","",
-+			"power-good","power-ok","",
-+	/*F0-F7*/	"","","","","","","BATTERY_DETECT","",
-+	/*G0-G7*/	"","","","","","","","",
-+	/*H0-H7*/	"","","","","","","","",
-+	/*I0-I7*/	"","","","","","","","",
-+	/*J0-J7*/	"","","","","","","","",
-+	/*K0-K7*/	"","","","","","","","",
-+	/*L0-L7*/	"","","","","","","","",
-+	/*M0-M7*/	"","","","","","","","",
-+	/*N0-N7*/	"","","","","","","","",
-+	/*O0-O7*/	"","","","","","","","",
-+	/*P0-P7*/	"","","","","","","","",
-+	/*Q0-Q7*/	"","","","","","","","",
-+	/*R0-R7*/	"","","","","","","","",
-+	/*S0-S7*/	"","","","","","","","",
-+	/*T0-T7*/	"","","","","","","","",
-+	/*U0-U7*/	"","","","","","","","",
-+	/*V0-V7*/	"","","","","","","","",
-+	/*W0-W7*/	"","","","","","","","",
-+	/*X0-X7*/	"","","","","","","","",
-+	/*Y0-Y7*/	"","","","","","","","",
-+	/*Z0-Z7*/	"","","","","","","","",
-+	/*AA0-AA7*/	"","","","","","","","",
-+	/*AB0-AB7*/	"FM_BMC_READ_SPD_TEMP","","","","","","","",
-+	/*AC0-AC7*/	"","","","","","","","";
-+};
-+
-+&i2c0 {
-+	status = "okay";
-+};
-+
-+&i2c1 {
-+	status = "okay";
-+};
-+
-+&i2c2 {
-+	status = "okay";
-+};
-+
-+&i2c3 {
-+	status = "okay";
-+};
-+
-+&i2c4 {
-+	status = "okay";
-+};
-+
-+&i2c5 {
-+	status = "okay";
-+};
-+
-+&i2c6 {
-+	status = "okay";
-+};
-+
-+&i2c7 {
-+	status = "okay";
-+};
-+
-+&i2c8 {
-+	status = "okay";
-+};
-+
-+&i2c10 {
-+	status = "okay";
-+};
-+
-+&i2c11 {
-+	status = "okay";
-+};
-+
-+&i2c12 {
-+	status = "okay";
-+};
-+
-+&kcs3 {
-+	status = "okay";
-+	aspeed,lpc-io-reg = <0xca2>;
-+};
-+
-+&lpc_snoop {
-+	status = "okay";
-+	snoop-ports = <0x80>, <0x81>;
-+};
-+
-+&lpc_ctrl {
-+	status = "okay";
-+};
-+
-+&pwm_tacho {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_pwm0_default
-+		&pinctrl_pwm1_default
-+		&pinctrl_pwm2_default
-+		&pinctrl_pwm3_default
-+		&pinctrl_pwm4_default
-+		&pinctrl_pwm5_default
-+		&pinctrl_pwm6_default
-+		&pinctrl_pwm7_default>;
-+
-+	fan@0 {
-+		reg = <0x00>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x00>;
-+	};
-+
-+	fan@1 {
-+		reg = <0x00>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x01>;
-+	};
-+
-+	fan@2 {
-+		reg = <0x01>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x02>;
-+	};
-+
-+	fan@3 {
-+		reg = <0x01>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x03>;
-+	};
-+
-+	fan@4 {
-+		reg = <0x02>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x04>;
-+	};
-+
-+	fan@5 {
-+		reg = <0x02>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x05>;
-+	};
-+
-+	fan@6 {
-+		reg = <0x03>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x06>;
-+	};
-+
-+	fan@7 {
-+		reg = <0x03>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x07>;
-+	};
-+
-+	fan@8 {
-+		reg = <0x04>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x08>;
-+	};
-+
-+	fan@9 {
-+		reg = <0x04>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x09>;
-+	};
-+
-+	fan@10 {
-+		reg = <0x05>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x0a>;
-+	};
-+
-+	fan@11 {
-+		reg = <0x05>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x0b>;
-+	};
-+
-+	fan@12 {
-+		reg = <0x06>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x0c>;
-+	};
-+
-+	fan@13 {
-+		reg = <0x06>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x0d>;
-+	};
-+
-+	fan@14 {
-+		reg = <0x07>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x0e>;
-+	};
-+
-+	fan@15 {
-+		reg = <0x07>;
-+		aspeed,fan-tach-ch = /bits/ 8 <0x0f>;
-+	};
-+};
-+
-+&video {
-+	status = "okay";
-+	memory-region = <&video_engine_memory>;
-+};
-+
-+&vhub {
-+	status = "okay";
-+};
--- 
-2.25.1
+>
+>> What about memfd_inaccessible()? Especially, sealing and hugetlb are not
+>> even supported and it might take a while to support either.
+>
+> Don't know about sealing, but hugetlb support for "inaccessible" memory 
+> needs to
+> come sooner than later.  "inaccessible" in quotes because we might want 
+> to choose
+> a less binary name, e.g. "restricted"?.
+>
+> Regarding pKVM's use case, with the shim approach I believe this can be done by
+> allowing userspace mmap() the "hidden" memfd, but with a ton of restrictions
+> piled on top.
+>
+> My first thought was to make the uAPI a set of KVM ioctls so that KVM 
+> could tightly
+> tightly control usage without taking on too much complexity in the 
+> kernel, but
+> working through things, routing the behavior through the shim itself 
+> might not be
+> all that horrific.
+>
+> IIRC, we discarded the idea of allowing userspace to map the "private" 
+> fd because
+> things got too complex, but with the shim it doesn't seem _that_ bad.
 
+What's the exact use case?  Is it just to pre-populate the memory?
+
+>
+> E.g. on the memfd side:
+>
+>   1. The entire memfd must be mapped, and at most one mapping is allowed, i.e.
+>      mapping is all or nothing.
+>
+>   2. Acquiring a reference via get_pfn() is disallowed if there's a mapping for
+>      the restricted memfd.
+>
+>   3. Add notifier hooks to allow downstream users to further restrict things.
+>
+>   4. Disallow splitting VMAs, e.g. to force userspace to munmap() everything in
+>      one shot.
+>
+>   5. Require that there are no outstanding references at munmap().  Or if this
+>      can't be guaranteed by userspace, maybe add some way for userspace to wait
+>      until it's ok to convert to private?  E.g. so that get_pfn() doesn't need
+>      to do an expensive check every time.
+
+Hmm.  I haven't looked at the code to see if this would really work, but I think this could be done more in line with how the rest of the kernel works by using the rmap infrastructure.  When the pKVM memfd is in not-yet-private mode, just let it be mmapped as usual (but don't allow any form of GUP or pinning).  Then have an ioctl to switch to to shared mode that takes locks or sets flags so that no new faults can be serviced and does unmap_mapping_range.
+
+As long as the shim arranges to have its own vm_ops, I don't immediately see any reason this can't work.
