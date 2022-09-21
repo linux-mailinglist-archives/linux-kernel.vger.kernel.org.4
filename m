@@ -2,124 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E29F15C019D
+	by mail.lfdr.de (Postfix) with ESMTP id 971B95C019C
 	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:30:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231548AbiIUPaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 11:30:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60290 "EHLO
+        id S231375AbiIUPaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 11:30:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230426AbiIUP3h (ORCPT
+        with ESMTP id S231617AbiIUP3m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 11:29:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78FEE9AFCB
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 08:26:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663773986;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xtL61b3tSna80ylsVdKucB5pyXwMQL5dSA4NAnM5FLk=;
-        b=V/mczSf9qmUCsUhntcMBUZb8CnmIhR/oC40+grkO5p3gfgLOcpqqw2Mf5ppkYLPBedKkEW
-        Zyxoo9PjKuy/B97fc/oIUtXwTTMB+b6tRh02H4POlDsbyjgvY4XOyG0grQY+DUGqESbl2e
-        Z0ro9++y5aoyZlk6TpBE2Kx/Hi/AOEg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-528--E_LSOBMMBGyh4eVgx6abA-1; Wed, 21 Sep 2022 11:26:20 -0400
-X-MC-Unique: -E_LSOBMMBGyh4eVgx6abA-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 22B85101CC6D;
-        Wed, 21 Sep 2022 15:26:20 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.40.194.159])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id AC07D2166B26;
-        Wed, 21 Sep 2022 15:26:17 +0000 (UTC)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        Yuan Yao <yuan.yao@linux.intel.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v10 39/39] KVM: selftests: Rename 'evmcs_test' to 'hyperv_evmcs'
-Date:   Wed, 21 Sep 2022 17:24:36 +0200
-Message-Id: <20220921152436.3673454-40-vkuznets@redhat.com>
-In-Reply-To: <20220921152436.3673454-1-vkuznets@redhat.com>
-References: <20220921152436.3673454-1-vkuznets@redhat.com>
+        Wed, 21 Sep 2022 11:29:42 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAC418274E;
+        Wed, 21 Sep 2022 08:26:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663774001; x=1695310001;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=lMTxh6KYx1sJCFJc5psK98Sjm17IdZ/t7HUfiUBreIE=;
+  b=NBIspn2gKyEz/mWBBDhaa/EXLG2/SwJp9n+Rtg46yzoqJVoGxgicVCAm
+   I9ngsjt+x+FlcB4m/ommEF7r/I77rCLtA0BEPvfAv6/voN5mxKBRWAAO5
+   /dKJoyiBbzWHLqarYt98xyB55qvrkb9kFj+xReAm1Hl3+9Og3DDJnPO1t
+   NCwYnDAxIrbLAGz5qLLFq8YYthoBmtXXWGLdA+EXs3H2DGZb7HrLzkXKh
+   XVGoWhWw21wbuXUdC7ZCimFg4RmDPr7Pv4OES9XsvCvt9N2Mryrf68xNB
+   zA22n5g/4O1oQwLVvV/t2RmOSbA2w9MBbD82zAwKxzukWDC4IlV2FHD84
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="361793726"
+X-IronPort-AV: E=Sophos;i="5.93,333,1654585200"; 
+   d="scan'208";a="361793726"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 08:25:27 -0700
+X-IronPort-AV: E=Sophos;i="5.93,333,1654585200"; 
+   d="scan'208";a="864470733"
+Received: from johannes-mobl1.ger.corp.intel.com (HELO [10.249.46.195]) ([10.249.46.195])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 08:25:19 -0700
+Message-ID: <dd61f44e-8d4a-ac2e-0af4-56ced642c4bd@linux.intel.com>
+Date:   Wed, 21 Sep 2022 17:25:16 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH 1/2] ASoC: wcd9335: fix order of Slimbus unprepare/disable
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, Vinod Koul <vkoul@kernel.org>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org
+References: <20220921145354.1683791-1-krzysztof.kozlowski@linaro.org>
+ <20916c9d-3598-7c40-ee77-1148c3d2e4b1@linux.intel.com>
+ <af3bd3f4-dcd9-8f6c-6323-de1b53301225@linaro.org>
+ <9a210b04-2ff2-df98-ad1a-89e9d8b0f686@linaro.org>
+ <fd74e77c-f3d3-1f09-2e5a-0a94e2a3eeea@linux.intel.com>
+ <5e34eadc-ef6a-abeb-6bce-347593c275b7@linaro.org>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <5e34eadc-ef6a-abeb-6bce-347593c275b7@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Conform to the rest of Hyper-V emulation selftests which have 'hyperv'
-prefix. Get rid of '_test' suffix as well as the purpose of this code
-is fairly obvious.
 
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
----
- tools/testing/selftests/kvm/.gitignore                          | 2 +-
- tools/testing/selftests/kvm/Makefile                            | 2 +-
- .../selftests/kvm/x86_64/{evmcs_test.c => hyperv_evmcs.c}       | 0
- 3 files changed, 2 insertions(+), 2 deletions(-)
- rename tools/testing/selftests/kvm/x86_64/{evmcs_test.c => hyperv_evmcs.c} (100%)
 
-diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-index 8e9d208488a8..0ba43d0244c2 100644
---- a/tools/testing/selftests/kvm/.gitignore
-+++ b/tools/testing/selftests/kvm/.gitignore
-@@ -15,7 +15,6 @@
- /x86_64/cpuid_test
- /x86_64/cr4_cpuid_sync_test
- /x86_64/debug_regs
--/x86_64/evmcs_test
- /x86_64/emulator_error_test
- /x86_64/fix_hypercall_test
- /x86_64/get_msr_index_features
-@@ -23,6 +22,7 @@
- /x86_64/kvm_pv_test
- /x86_64/hyperv_clock
- /x86_64/hyperv_cpuid
-+/x86_64/hyperv_evmcs
- /x86_64/hyperv_features
- /x86_64/hyperv_ipi
- /x86_64/hyperv_svm_test
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index 36692fe34e10..781efe90518f 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -79,11 +79,11 @@ TEST_PROGS_x86_64 += x86_64/nx_huge_pages_test.sh
- TEST_GEN_PROGS_x86_64 = x86_64/cpuid_test
- TEST_GEN_PROGS_x86_64 += x86_64/cr4_cpuid_sync_test
- TEST_GEN_PROGS_x86_64 += x86_64/get_msr_index_features
--TEST_GEN_PROGS_x86_64 += x86_64/evmcs_test
- TEST_GEN_PROGS_x86_64 += x86_64/emulator_error_test
- TEST_GEN_PROGS_x86_64 += x86_64/fix_hypercall_test
- TEST_GEN_PROGS_x86_64 += x86_64/hyperv_clock
- TEST_GEN_PROGS_x86_64 += x86_64/hyperv_cpuid
-+TEST_GEN_PROGS_x86_64 += x86_64/hyperv_evmcs
- TEST_GEN_PROGS_x86_64 += x86_64/hyperv_features
- TEST_GEN_PROGS_x86_64 += x86_64/hyperv_ipi
- TEST_GEN_PROGS_x86_64 += x86_64/hyperv_svm_test
-diff --git a/tools/testing/selftests/kvm/x86_64/evmcs_test.c b/tools/testing/selftests/kvm/x86_64/hyperv_evmcs.c
-similarity index 100%
-rename from tools/testing/selftests/kvm/x86_64/evmcs_test.c
-rename to tools/testing/selftests/kvm/x86_64/hyperv_evmcs.c
--- 
-2.37.3
+On 9/21/22 17:19, Krzysztof Kozlowski wrote:
+> On 21/09/2022 17:11, Pierre-Louis Bossart wrote:
+>>>>> /**
+>>>>>  * slim_stream_unprepare() - Un-prepare a SLIMbus Stream
+>>>>>  *
+>>>>>  * @stream: instance of slim stream runtime to unprepare
+>>>>>  *
+>>>>>  * This API will un allocate all the ports and channels associated with
+>>>>>  * SLIMbus stream
+>>>>
+>>>> You mean this piece of doc? Indeed looks inaccurate. I'll update it.
+>>>
+>>> Wait, no, this is correct. Please point to what is wrong in kernel doc.
+>>> I don't see it. :(
+>>
+>> the TRIGGER_STOP and TRIGGER_PAUSE_PUSH do the same thing. There is no
+>> specific mapping of disable() to TRIGGER_STOP and unprepare() to
+>> TRIGGER_PAUSE_PUSH as the documentation hints at.
+> 
+> Which TRIGGER_STOP and TRIGGER_PAUSE_PUSH? In one specific codec driver?
+> If yes, I don't think Slimbus documentation should care how actual users
+> implement it (e.g. coalesce states).
 
+In both of the patches you just modified :-)
+
+diff --git a/sound/soc/codecs/wcd9335.c b/sound/soc/codecs/wcd9335.c
+index 06c6adbe5920..d2548fdf9ae5 100644
+--- a/sound/soc/codecs/wcd9335.c
++++ b/sound/soc/codecs/wcd9335.c
+@@ -1972,8 +1972,8 @@ static int wcd9335_trigger(struct
+snd_pcm_substream *substream, int cmd,
+ 	case SNDRV_PCM_TRIGGER_STOP:
+ 	case SNDRV_PCM_TRIGGER_SUSPEND:
+ 	case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
+-		slim_stream_unprepare(dai_data->sruntime);
+ 		slim_stream_disable(dai_data->sruntime);
++		slim_stream_unprepare(dai_data->sruntime);
+ 		break;
+ 	default:
+
+diff --git a/sound/soc/codecs/wcd934x.c b/sound/soc/codecs/wcd934x.c
+index f56907d0942d..28175c746b9a 100644
+--- a/sound/soc/codecs/wcd934x.c
++++ b/sound/soc/codecs/wcd934x.c
+@@ -1913,8 +1913,8 @@ static int wcd934x_trigger(struct
+snd_pcm_substream *substream, int cmd,
+ 	case SNDRV_PCM_TRIGGER_STOP:
+ 	case SNDRV_PCM_TRIGGER_SUSPEND:
+ 	case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
+-		slim_stream_unprepare(dai_data->sruntime);
+ 		slim_stream_disable(dai_data->sruntime);
++		slim_stream_unprepare(dai_data->sruntime);
+ 		break;
+ 	default:
+ 		break;
+
+the bus provides helpers to be used in well-defined transitions. A codec
+driver doing whatever it wants whenever it wants would create chaos for
+the bus.
