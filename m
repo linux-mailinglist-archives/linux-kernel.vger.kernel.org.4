@@ -2,153 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B5245BF35F
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 04:16:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E69F05BF360
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 04:16:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229920AbiIUCQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 22:16:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39366 "EHLO
+        id S230153AbiIUCQl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 22:16:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbiIUCQV (ORCPT
+        with ESMTP id S229916AbiIUCQZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 22:16:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F1132BBD;
-        Tue, 20 Sep 2022 19:16:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D191E62EFE;
-        Wed, 21 Sep 2022 02:16:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F9DBC433C1;
-        Wed, 21 Sep 2022 02:16:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663726579;
-        bh=EYEPB7TctVK1MJOFaPpqMASLveB5MBcqgaEPceOISKA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=UPgdWs2V0JbFash3XhbsDpjDpCf8Z+AoAs0PuEfcKm6Juh03KDEYySri2S/PGE9eU
-         iZ7/w1RTQ/1sAgOTAD19Mv2MQ23tMeFKOdWszAQQGSOREm6LveUJVoHlNIj2gVG/z4
-         3+RxB6r2eRXQybzONRJgSKkmP40YrmP59SWsVVw7ARVSwBFyle2IF7G0gy/hXHlRfZ
-         AUbzomiQ7JIfN3wxg+QafHkLFamqq934ed94FkLBt3CrQ6it6jIEOmMXS74PLDoYYE
-         Ujjjvs715MFDrdBFW1GCP87ZZqF3/fzL1EUFOHuZTqjRQ+wzudViDEfh+odjCkqCqP
-         maDnu3bPmhgTA==
-Received: by mail-oi1-f172.google.com with SMTP id m130so6270892oif.6;
-        Tue, 20 Sep 2022 19:16:19 -0700 (PDT)
-X-Gm-Message-State: ACrzQf0V0H+FoEM6Mb08N5dcrxfAswmN5x5je1PU1hafe3gpM1Me3ZCM
-        VAXaecaZocdecczdy3pHxIUUdxUXUw/CDPxkTF0=
-X-Google-Smtp-Source: AMsMyM79uqv3q186U8l25rFsKp6OWiPSshPlAPeAcre5Lg5KA8hmj9fN2O7iIcIDbbomULyKQ8h1AaVqvre1A4I9U2c=
-X-Received: by 2002:a05:6808:151f:b0:350:1b5e:2380 with SMTP id
- u31-20020a056808151f00b003501b5e2380mr2991346oiw.112.1663726578207; Tue, 20
- Sep 2022 19:16:18 -0700 (PDT)
+        Tue, 20 Sep 2022 22:16:25 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA07032BBD;
+        Tue, 20 Sep 2022 19:16:24 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id q9-20020a17090a178900b0020265d92ae3so12697553pja.5;
+        Tue, 20 Sep 2022 19:16:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=GnHGtgHj033COJKahffZStPIaXE02OICjJM2Z9aEkfE=;
+        b=ArRr74et4U1zLmXiJOghTrTMnedfdbF7K14oBBpNIc8qTkREGPO5v04fI1k1kbyrLx
+         aE9AvyteVh2+qhO2Mdb8OF0GMzIxHqqYA7AHgEMHz8m3ZBG0PwqpaX4uoFIQTg10zUkz
+         MwCcQnpBOkDxcL5Yt6/9QvFFjyx7CVdOExmelt+4nQuFpw3m7saN/EepKWFmT1xTW4Wv
+         coNsRQJPCjqBxC2R2jbd/LOVOzubUoQ1Gm37yLcX/MfefYirEknZw/ktLHoEDM/P0J76
+         fX0JWbhPys/CYrKJKqNQ6liKGabibcgJBuAF6GH29Vno10Zq+ui/epuVMeLTYcPMphfm
+         nFIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=GnHGtgHj033COJKahffZStPIaXE02OICjJM2Z9aEkfE=;
+        b=FqsWxyFbqZh31KikU2paLSCkMoltWCG88nEBnr+veg4oG3rlHOEi9VYqUi8hcJ7gQE
+         TqsO5HgtFx9wvSAadjO6hwGx2HX4rx4W0ykrMmzDRFiXwsIKsBARhKqpvIsdjLdmgNfs
+         g6cO0uLYrG/lwlSF4yaOe9VrKYbq+VUBeee/3jb3jo02cT9TXYf40Y7DNzBJPxiz+sgs
+         aMoGxXXKEjgnV0VxskRcMKScne5Ns0dRSQRCF8ejrBb+nWvIju0zQncEDHJkz3fQzZxl
+         6lPyfqN7EuBBDcG7iYJcFzdCXG3LJclHy/SJ59AVwuljwDa/5Jok25tccVbRf85MwPhM
+         bTqQ==
+X-Gm-Message-State: ACrzQf0cOirRQpdL/elru0rT3PdPnayyzHAZS1UCmDyTvfGftqtdaQU0
+        YhVUP0KxzYMWmzRTrm3STD8=
+X-Google-Smtp-Source: AMsMyM7MRypGCQbUxoyrc6WNFpMb9PFhoALdU/NO7Lw8H72HCSj9ZvzMDFM2cHVsH6lG7m+CxkybYQ==
+X-Received: by 2002:a17:90a:8909:b0:203:ab27:a41 with SMTP id u9-20020a17090a890900b00203ab270a41mr7073542pjn.163.1663726584165;
+        Tue, 20 Sep 2022 19:16:24 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id y1-20020a623201000000b0053e9ecf58f0sm661954pfy.20.2022.09.20.19.16.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Sep 2022 19:16:23 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     wei.liu@kernel.org
+Cc:     paul@xen.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, xen-devel@lists.xenproject.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] xen-netback: use kstrdup instead of open-coding it
+Date:   Wed, 21 Sep 2022 02:16:17 +0000
+Message-Id: <20220921021617.217784-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220920151202.180057-1-chenzhongjin@huawei.com>
- <20220920151202.180057-5-chenzhongjin@huawei.com> <CAJF2gTQ8QjUiRhQiM67SET=bCpppG2opcN3_ch7GEqdAkBnBUA@mail.gmail.com>
-In-Reply-To: <CAJF2gTQ8QjUiRhQiM67SET=bCpppG2opcN3_ch7GEqdAkBnBUA@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 21 Sep 2022 10:16:03 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTSR5A1vxz_5SSK207SaC-3QHLcKFvcy35VtrKEk4-D9iQ@mail.gmail.com>
-Message-ID: <CAJF2gTSR5A1vxz_5SSK207SaC-3QHLcKFvcy35VtrKEk4-D9iQ@mail.gmail.com>
-Subject: Re: [PATCH -next 4/7] riscv: syscall: Don't clobber s0 when syscall
-To:     Chen Zhongjin <chenzhongjin@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, peterz@infradead.org,
-        mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, namhyung@kernel.org,
-        jolsa@kernel.org, nsaenzju@redhat.com, frederic@kernel.org,
-        changbin.du@intel.com, vincent.chen@sifive.com, ardb@kernel.org,
-        mhiramat@kernel.org, rostedt@goodmis.org, keescook@chromium.org,
-        catalin.marinas@arm.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 21, 2022 at 9:30 AM Guo Ren <guoren@kernel.org> wrote:
->
-> On Tue, Sep 20, 2022 at 11:15 PM Chen Zhongjin <chenzhongjin@huawei.com> wrote:
-> >
-> > syscall uses s0 to load address of sys_call_table.
-> >
-> > Since now we uses s0 to save pt_regs for unwinding, clobber
-> > s0 can make unwinder treat s0 as pt_regs address. Use s1 for
-> > this job.
-> This patch does not make sense. Why couldn't we use s1 for pt_regs?
-Seems s0->fp can't be replaced. I take back the question.
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
->
-> No need to modify the entry.S here.
->
-> >
-> > Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
-> > ---
-> >  arch/riscv/kernel/entry.S | 20 ++++++++++----------
-> >  1 file changed, 10 insertions(+), 10 deletions(-)
-> >
-> > diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-> > index ecb15c7430b4..a3b14a649782 100644
-> > --- a/arch/riscv/kernel/entry.S
-> > +++ b/arch/riscv/kernel/entry.S
-> > @@ -205,33 +205,33 @@ handle_syscall:
-> >  check_syscall_nr:
-> >         /* Check to make sure we don't jump to a bogus syscall number. */
-> >         li t0, __NR_syscalls
-> > -       la s0, sys_ni_syscall
-> > +       la s1, sys_ni_syscall
-> >         /*
-> >          * Syscall number held in a7.
-> >          * If syscall number is above allowed value, redirect to ni_syscall.
-> >          */
-> >         bgeu a7, t0, 3f
-> >  #ifdef CONFIG_COMPAT
-> > -       REG_L s0, PT_STATUS(sp)
-> > -       srli s0, s0, SR_UXL_SHIFT
-> > -       andi s0, s0, (SR_UXL >> SR_UXL_SHIFT)
-> > +       REG_L s1, PT_STATUS(sp)
-> > +       srli s1, s1, SR_UXL_SHIFT
-> > +       andi s1, s1, (SR_UXL >> SR_UXL_SHIFT)
-> >         li t0, (SR_UXL_32 >> SR_UXL_SHIFT)
-> > -       sub t0, s0, t0
-> > +       sub t0, s1, t0
-> >         bnez t0, 1f
-> >
-> >         /* Call compat_syscall */
-> > -       la s0, compat_sys_call_table
-> > +       la s1, compat_sys_call_table
-> >         j 2f
-> >  1:
-> >  #endif
-> >         /* Call syscall */
-> > -       la s0, sys_call_table
-> > +       la s1, sys_call_table
-> >  2:
-> >         slli t0, a7, RISCV_LGPTR
-> > -       add s0, s0, t0
-> > -       REG_L s0, 0(s0)
-> > +       add s1, s1, t0
-> > +       REG_L s1, 0(s1)
-> >  3:
-> > -       jalr s0
-> > +       jalr s1
-> >
-> >  ret_from_syscall:
-> >         /* Set user a0 to kernel a0 */
-> > --
-> > 2.17.1
-> >
->
->
-> --
-> Best Regards
->  Guo Ren
+use kstrdup instead of open-coding it.
 
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+---
+ drivers/net/xen-netback/xenbus.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-
+diff --git a/drivers/net/xen-netback/xenbus.c b/drivers/net/xen-netback/xenbus.c
+index e85b3c5d4acc..c1ba4294f364 100644
+--- a/drivers/net/xen-netback/xenbus.c
++++ b/drivers/net/xen-netback/xenbus.c
+@@ -865,13 +865,12 @@ static int connect_data_rings(struct backend_info *be,
+ 	 * queue-N.
+ 	 */
+ 	if (num_queues == 1) {
+-		xspath = kzalloc(strlen(dev->otherend) + 1, GFP_KERNEL);
++		xspath = kstrdup(dev->otherend, GFP_KERNEL);
+ 		if (!xspath) {
+ 			xenbus_dev_fatal(dev, -ENOMEM,
+ 					 "reading ring references");
+ 			return -ENOMEM;
+ 		}
+-		strcpy(xspath, dev->otherend);
+ 	} else {
+ 		xspathsize = strlen(dev->otherend) + xenstore_path_ext_size;
+ 		xspath = kzalloc(xspathsize, GFP_KERNEL);
 -- 
-Best Regards
- Guo Ren
+2.25.1
