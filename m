@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 232A95C0214
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:47:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32F375C0216
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:47:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231442AbiIUPrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 11:47:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50794 "EHLO
+        id S231476AbiIUPr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 11:47:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231561AbiIUPrI (ORCPT
+        with ESMTP id S231328AbiIUPr1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 11:47:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6297A96FFB;
-        Wed, 21 Sep 2022 08:47:06 -0700 (PDT)
+        Wed, 21 Sep 2022 11:47:27 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08D098CA3;
+        Wed, 21 Sep 2022 08:47:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B5EB462C86;
-        Wed, 21 Sep 2022 15:47:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1313C433D6;
-        Wed, 21 Sep 2022 15:47:03 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 0D5F9CE1DEC;
+        Wed, 21 Sep 2022 15:47:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D42A8C433D6;
+        Wed, 21 Sep 2022 15:47:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663775224;
-        bh=APIfy+CENXuoyhydiMfxIatMOxxvZLvNCfx6BXp/sOo=;
+        s=korg; t=1663775227;
+        bh=eDDVGGUZV6WZWx5bcgZ+MyeNahQyU8/MG6bbtAH7YN4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QpZUP4kCfJw2uZJutoqqTahhJg79gt915tzmaVkj5wwuikIBHKB3NsM99P4IJtZD/
-         Xc8La9NRFfuSIvJd5505k+W/qf+oDcmR/kjA9CH7j/Bk8WhAusDoEAO39hPIkdQByY
-         etOlpAZ77tfyNT52vcL29a3a17WE8gaOFi+/sL5I=
+        b=CGlCOkPtQpW/hPa3IDC7mVSDPo7DiHvuoOrQSouvxO3x5jo9/CpwBSMHfh0X9hNX7
+         1aR4EZOUS4NMVTqokKr4wo6/W42jwXS/Kyw9sOSy1DIbFqKetCBW08e8XoVCXapNQK
+         agJXNRLRRM3jOUnhsU8ceiJgPgUrjt4nwkrXfYFw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Wu <michael@allwinnertech.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
+        stable@vger.kernel.org, Benjamin Coddington <bcodding@redhat.com>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 05/38] pinctrl: sunxi: Fix name for A100 R_PIO
-Date:   Wed, 21 Sep 2022 17:45:49 +0200
-Message-Id: <20220921153646.475718080@linuxfoundation.org>
+Subject: [PATCH 5.19 06/38] SUNRPC: Fix call completion races with call_decode()
+Date:   Wed, 21 Sep 2022 17:45:50 +0200
+Message-Id: <20220921153646.503251236@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220921153646.298361220@linuxfoundation.org>
 References: <20220921153646.298361220@linuxfoundation.org>
@@ -55,36 +54,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Wu <michael@allwinnertech.com>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-[ Upstream commit 76648c867c6c03b8a468d9c9222025873ecc613d ]
+[ Upstream commit 17814819ac9829a437e06fbb5c7056a1f4f893da ]
 
-The name of A100 R_PIO driver should be sun50i-a100-r-pinctrl,
-not sun50iw10p1-r-pinctrl.
+We need to make sure that the req->rq_private_buf is completely up to
+date before we make req->rq_reply_bytes_recvd visible to the
+call_decode() routine in order to avoid triggering the WARN_ON().
 
-Fixes: 473436e7647d6 ("pinctrl: sunxi: add support for the Allwinner A100 pin controller")
-Signed-off-by: Michael Wu <michael@allwinnertech.com>
-Acked-by: Samuel Holland <samuel@sholland.org>
-Link: https://lore.kernel.org/r/20220819024541.74191-1-michael@allwinnertech.com
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Reported-by: Benjamin Coddington <bcodding@redhat.com>
+Fixes: 72691a269f0b ("SUNRPC: Don't reuse bvec on retransmission of the request")
+Tested-by: Benjamin Coddington <bcodding@redhat.com>
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pinctrl/sunxi/pinctrl-sun50i-a100-r.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/sunrpc/xprt.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/pinctrl/sunxi/pinctrl-sun50i-a100-r.c b/drivers/pinctrl/sunxi/pinctrl-sun50i-a100-r.c
-index 21054fcacd34..18088f6f44b2 100644
---- a/drivers/pinctrl/sunxi/pinctrl-sun50i-a100-r.c
-+++ b/drivers/pinctrl/sunxi/pinctrl-sun50i-a100-r.c
-@@ -98,7 +98,7 @@ MODULE_DEVICE_TABLE(of, a100_r_pinctrl_match);
- static struct platform_driver a100_r_pinctrl_driver = {
- 	.probe	= a100_r_pinctrl_probe,
- 	.driver	= {
--		.name		= "sun50iw10p1-r-pinctrl",
-+		.name		= "sun50i-a100-r-pinctrl",
- 		.of_match_table	= a100_r_pinctrl_match,
- 	},
- };
+diff --git a/net/sunrpc/xprt.c b/net/sunrpc/xprt.c
+index 53b024cea3b3..5ecafffe7ce5 100644
+--- a/net/sunrpc/xprt.c
++++ b/net/sunrpc/xprt.c
+@@ -1179,11 +1179,8 @@ xprt_request_dequeue_receive_locked(struct rpc_task *task)
+ {
+ 	struct rpc_rqst *req = task->tk_rqstp;
+ 
+-	if (test_and_clear_bit(RPC_TASK_NEED_RECV, &task->tk_runstate)) {
++	if (test_and_clear_bit(RPC_TASK_NEED_RECV, &task->tk_runstate))
+ 		xprt_request_rb_remove(req->rq_xprt, req);
+-		xdr_free_bvec(&req->rq_rcv_buf);
+-		req->rq_private_buf.bvec = NULL;
+-	}
+ }
+ 
+ /**
+@@ -1221,6 +1218,8 @@ void xprt_complete_rqst(struct rpc_task *task, int copied)
+ 
+ 	xprt->stat.recvs++;
+ 
++	xdr_free_bvec(&req->rq_rcv_buf);
++	req->rq_private_buf.bvec = NULL;
+ 	req->rq_private_buf.len = copied;
+ 	/* Ensure all writes are done before we update */
+ 	/* req->rq_reply_bytes_recvd */
+@@ -1453,6 +1452,7 @@ xprt_request_dequeue_xprt(struct rpc_task *task)
+ 		xprt_request_dequeue_transmit_locked(task);
+ 		xprt_request_dequeue_receive_locked(task);
+ 		spin_unlock(&xprt->queue_lock);
++		xdr_free_bvec(&req->rq_rcv_buf);
+ 	}
+ }
+ 
 -- 
 2.35.1
 
