@@ -2,108 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D2D75BF2F5
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 03:33:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C4B85BF2F6
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 03:33:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbiIUBce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 21:32:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52142 "EHLO
+        id S231314AbiIUBdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 21:33:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231130AbiIUBcb (ORCPT
+        with ESMTP id S231447AbiIUBdl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 21:32:31 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A6F16746E;
-        Tue, 20 Sep 2022 18:32:30 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MXLWH4XnFz4xGH;
-        Wed, 21 Sep 2022 11:32:27 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1663723948;
-        bh=rtB06E46ZFDnzfIW4+t0U6tLtHydrIYpLQpImBfUZTM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=mCpyjTnvikXzGSL3O8whMnBzDfw9ROQraWkxX/goU4D9VI2XDs2d5lPmqJfMlf0QC
-         +NWf2Jl26QNzKC+Cf8ItOOqCrmDIkXfDmQknK1OgWNuH6WgtwU5IQbtoZYTgE0llOq
-         B9rV0gXgYP8C31PABgl0oTAWnMQSsD19J8RoQzHPXA3rb0EJcWIThGyLfeVHwztJg0
-         Yap1Hfr0TqVexd9nxpigfrMgD8z7z2JS0E9/2wPE/MnFrVOP2QdjIDhUyx9g6c2yuQ
-         h27LhuFWgL0+nNzSRyHZrpki4+Rp2pCjSIpgPzy9rBIr1KvUkqPSY0/ArNipO5k/qT
-         9p1T8YA8vDC3A==
-Date:   Wed, 21 Sep 2022 11:32:25 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>
-Cc:     Valentin Korenblit <vkorenblit@sequans.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the nand tree
-Message-ID: <20220921113225.2f45ba3b@canb.auug.org.au>
+        Tue, 20 Sep 2022 21:33:41 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 473446B8C0
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 18:33:40 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id x94so6409222ede.11
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 18:33:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=8mlxxabtfKsHhMFozr251XdLHRx1F56JdRqCnZFhvTQ=;
+        b=fXXKk5QlrVa6+lOdpJZ5s1kpNDwozLlk6Vb9Du7pwtM+NGL1F8gATbz68CW5jQdOvx
+         VKoN9f+gGQqgQabODV4Vmev+t0bBwGBd+Gh0Dxu/vuw3p5fFzLwKTAZpB+iEsWRbdJe4
+         v05uxZP4k6ZZd22R1YGgeMNOHQ3MF87ZtC8ZhSTiNrv/3Zyqv5eMTZh0klxIRn7xBM9k
+         XE90n6/HGzqF3YFmY/bQN2VZHmvNRlPJZh/kyRV4LF6ljOU3Fb8/p6E3tnUSpAUtszqm
+         2Itcdfma5cAHpMjPT5/FDdwxyzNZLiy00Ge05UJ0QDv7hebZr+WxnTtR9DVlEE0yic8X
+         bWxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=8mlxxabtfKsHhMFozr251XdLHRx1F56JdRqCnZFhvTQ=;
+        b=nBBgQRI/aVAPGP3INNSpds+66Wx02SdO3jt6Ykh6tvvUcW3PGMcN+fz1txjSwiOIG3
+         FAUlbBKF+7JQtGEU8N1FM7VoJ/NLT4RTewKUXXnGntaL3YIt78mM8kEXXBiQs2phylu/
+         mVyYN/5TCIlfhyrweAQGirYAI6utrBMAwAYsVvBoau+G1j8nhLEB1e7XFINkCULEdgup
+         iL2Pq0UYg3RVkfCx6ugsfbpIAQR1+rNZy1sNM4WL+cO66yhYTdr5HXwDxll4byGtLOLG
+         4gusIAVTBgSEy7ttol+nXmxYhZolktb26VuWwhJFVL6XNhBZmgeZ8KoynTBjbMUZSCsS
+         9G3w==
+X-Gm-Message-State: ACrzQf3L2Immf1GCZCqJeVtOc513XYqhh30Ixogu6w0x1pkLI7dnzaBN
+        a/IyB18hELTLX+jxcvMOtLnNSA==
+X-Google-Smtp-Source: AMsMyM4+AvKCRw/Ms46OQuuD/TNyAf1Wo1WG2BkKT0XGivbTdoE2Nt1NIovxjPRhaozmTd91g7zAEA==
+X-Received: by 2002:a05:6402:1849:b0:453:ba03:9e41 with SMTP id v9-20020a056402184900b00453ba039e41mr15287552edy.202.1663724018796;
+        Tue, 20 Sep 2022 18:33:38 -0700 (PDT)
+Received: from leoy-yangtze.lan ([104.245.97.25])
+        by smtp.gmail.com with ESMTPSA id f5-20020a056402004500b0044f1e64e9f4sm804899edu.17.2022.09.20.18.33.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Sep 2022 18:33:38 -0700 (PDT)
+Date:   Wed, 21 Sep 2022 09:33:33 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>
+Subject: Re: [PATCH v2 2/2] perf test: Introduce script for java symbol
+ testing
+Message-ID: <Yypp7ZAs0fozJFKT@leoy-yangtze.lan>
+References: <20220918031524.26719-1-leo.yan@linaro.org>
+ <20220918031524.26719-3-leo.yan@linaro.org>
+ <CAM9d7ciR0b5GSASVPxn-r5sBTJW9KZXcQYEsV4zRan5bdgmRCg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/mV0zhHIdp9yzgxsaWmhIeqM";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAM9d7ciR0b5GSASVPxn-r5sBTJW9KZXcQYEsV4zRan5bdgmRCg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/mV0zhHIdp9yzgxsaWmhIeqM
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Namhyung,
 
-Hi all,
+On Tue, Sep 20, 2022 at 02:47:05PM -0700, Namhyung Kim wrote:
 
-After merging the nand tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+[...]
 
-drivers/mtd/nand/raw/cadence-nand-controller.c: In function 'cadence_nand_r=
-ead_buf':
-drivers/mtd/nand/raw/cadence-nand-controller.c:1893:25: error: implicit dec=
-laration of function 'ioread64_rep'; did you mean 'ioread32_rep'? [-Werror=
-=3Dimplicit-function-declaration]
- 1893 |                         ioread64_rep(cdns_ctrl->io.virt, buf, len_i=
-n_words);
-      |                         ^~~~~~~~~~~~
-      |                         ioread32_rep
-drivers/mtd/nand/raw/cadence-nand-controller.c: In function 'cadence_nand_w=
-rite_buf':
-drivers/mtd/nand/raw/cadence-nand-controller.c:1962:25: error: implicit dec=
-laration of function 'iowrite64_rep'; did you mean 'iowrite32_rep'? [-Werro=
-r=3Dimplicit-function-declaration]
- 1962 |                         iowrite64_rep(cdns_ctrl->io.virt, buf, len_=
-in_words);
-      |                         ^~~~~~~~~~~~~
-      |                         iowrite32_rep
+> > +if [ -e "$PWD/tools/perf/libperf-jvmti.so" ]; then
+> > +       LIBJVMTI=$PWD/tools/perf/libperf-jvmti.so
+> > +elif [ -e "$PWD/libperf-jvmti.so" ]; then
+> > +       LIBJVMTI=$PWD/libperf-jvmti.so
+> > +elif [ -e "$PREFIX/lib64/libperf-jvmti.so" ]; then
+> > +       LIBJVMTI=$PREFIX/lib64/libperf-jvmti.so
+> > +elif [ -e "$PREFIX/lib/libperf-jvmti.so" ]; then
+> > +       LIBJVMTI=$PREFIX/lib/libperf-jvmti.so
+> > +if [ -e "/usr/lib/linux-tools-$(uname -a | awk '{ print $3 }' | sed -r 's/-generic//')/libperf-jvmti.so" ]; then
+> 
+> s/if/elif/ ?
 
-Caused by commit
+Ouch, will fix.
 
-  7e7dc04774b1 ("mtd: rawnand: cadence: support 64-bit slave dma interface")
+> > +       LIBJVMTI=/usr/lib/linux-tools-$(uname -a | awk '{ print $3 }' | sed -r 's/-generic//')/libperf-jvmti.so
+> > +else
+> > +       echo "Fail to find libperf-jvmti.so"
+> > +       # JVMTI is a build option, skip the test if fail to find lib
+> > +       exit 2
+> > +fi
+> > +
+> > +cat <<EOF | perf record -k 1 -o $PERF_DATA jshell -s -J-agentpath:$LIBJVMTI
+> 
+> Wouldn't it check if jshell is available first?
 
-I have used the nand tree from next-20220920 for today.
+Indeed.  Will check jshell and skip the testing if jshell doesn't
+exist.
 
---=20
-Cheers,
-Stephen Rothwell
+Thanks for reviewing.
 
---Sig_/mV0zhHIdp9yzgxsaWmhIeqM
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMqaakACgkQAVBC80lX
-0Gy5XQf+MWO/M/4peK1DDUGLlp+njV45csSTsJERTPs/A2+ebjyrScPAx8RM3xR2
-orZThO0eVmxjAZqA3tbBgeRLRHFYfsj2WJyQciOwqh1nywcH7jMF8Ju7T1lF1GK4
-oWObhumowgydijvrRFuIuEkFvQ18RmbYtvgQ4k6D+cd+2UlBGMNm+7wDYM3KQTeL
-eEOgNtM+Jz/1x7GB/Et6EOMnRpQXWqJewVFGk2gfsxPqrwvnzTJlokcq0tlRR3Y7
-FCjNl1XwIs97E05Vww3g5UOIzc1zfhFk2I9oT8U3ZDW7bHaDxOKSMVk7+WpUcwV1
-EwKpZJF6JGIEI13dlNPt/SW524qRJw==
-=8yO8
------END PGP SIGNATURE-----
-
---Sig_/mV0zhHIdp9yzgxsaWmhIeqM--
+Leo
