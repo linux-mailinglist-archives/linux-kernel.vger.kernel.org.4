@@ -2,56 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F0F35C01A8
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:32:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F7775C01C9
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:39:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbiIUPcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 11:32:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50504 "EHLO
+        id S231585AbiIUPjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 11:39:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229930AbiIUPbv (ORCPT
+        with ESMTP id S231499AbiIUPjC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 11:31:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED94998D06
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 08:28:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6FA17B82FD0
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 15:27:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F002C433C1;
-        Wed, 21 Sep 2022 15:27:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663774024;
-        bh=baNU578On5vMdGqKW96nH8LWdDtChPsuMJrrVtUkmQ4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sENXmj9bynvdCHq3fgVkXklZO4KKbk9WrJRjd+vdf2WMMT0TjKua/eUfu1r3zMM2G
-         m1bhkUZIeXBq8c3pzsTE9FDG642Cjs2IsW9hXipBi/Uss5O6E8Hju8TrItnV9LmBUC
-         2jmaIc5NikdCLjtop7BIUou+qFfrqV9L002CirEZNsByP2CF3oav7x9fcjOZbYw7lm
-         olvKIf4bkLxi/XV+bym9dKQ1QlNzRI5qDYJnZUvTDNeFpnIyTe+XAgEkL36Lp/jKjb
-         hmqtJuPMI17Bid1xRad1LC3G3K3AhQcuuCtChrbYSyhbXXJnZzXn5M8/gcPBMEf7xa
-         EAeaDOid2/Rgw==
-Date:   Wed, 21 Sep 2022 16:26:59 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     James Clark <james.clark@arm.com>
-Cc:     coresight@lists.linaro.org, catalin.marinas@arm.com,
-        linux-arm-kernel@lists.infradead.org, suzuki.poulose@arm.com,
-        mathieu.poirier@linaro.org, mike.leach@linaro.org,
-        leo.yan@linaro.org, linux-kernel@vger.kernel.org,
-        Will Deacon <will@kernel.org>
-Subject: Re: [PATCH 1/1] arm64: defconfig: Add Coresight as module
-Message-ID: <YystQ3pw3uBpi0CT@sirena.org.uk>
-References: <20220921140535.152627-1-james.clark@arm.com>
- <20220921140535.152627-2-james.clark@arm.com>
+        Wed, 21 Sep 2022 11:39:02 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F38898A7F
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 08:35:39 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id a10so7559915ljq.0
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 08:35:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=4fyDdd6hcvCfFZT9i19QE30bk4gB/G2w/iEESMxgbKA=;
+        b=svch8Vd6r5prc+EGUm5IRQ9iK6HudwOgs+E0/t3t6ZepH24yrJ3rb2q47vhpC/hSa5
+         eePSlz7Zb9Lw/5kBu1F+jrYiKW7u52M1oCGfMoxtxNcI7w52YP4ggol4vHs61087fQPn
+         zkxiUfstNdQLdKfuWntvkdn1pHs/VU98DT/nkc+fv9e+Ftq30wa8TJirz10+nLEQ2ViN
+         klJweBcRNlRpLGskSeJfL+qoawD1pAP/J3TUiQ+9G8AWEAWBch5rrkVYmw3a4n8m7z8D
+         Lw/hWf8MxPimo84973uQKVzW4JGaWScCmK/FaP7kjWGNqXvuYj0rKOpgn5Uy4E/17WQD
+         3YnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=4fyDdd6hcvCfFZT9i19QE30bk4gB/G2w/iEESMxgbKA=;
+        b=VWG3bKh45nkP7yarnIQVahCtYulAZE2X1l7wOq38tkirSIaKDvXj/iZYyU8buuthy3
+         yPAL4k5UDzSEjNaAqychLtdP1fPm8wDOOvUfVDi0QVGHME1uEbTwpMlEYeOcUbNagCP2
+         0oy5gO26KEuWy9tGpmmExFgzjry+kkCXAnrLJIMEiE6+bEyFLUVhBFboCgTCU36I5RWi
+         0Z+SyqG2B7mFxRcufoVMitHwyk7tEp+WPfljSZXOyd0OEmbBO1DsVxHu/B+INCeUE+Vk
+         PucYM05VFpusQG5LuJV+0rDjg4zioCAejGKdwMg5Z1nZNkim8eqgUq52N7EQxFKowKPr
+         dcTw==
+X-Gm-Message-State: ACrzQf2m72bgGTweCdK1ax7xf1kFDyeHJ1ShR+vh4cCC+KRwVh5ae7zO
+        wkxB9oogGgWPKMeQdMz4sCAfnx00oAkPEg==
+X-Google-Smtp-Source: AMsMyM4kgLEzuRCbwB9NE7eQli7CQSYE21f8z+xxXzyue6Db7mHLo03HzBf6cA9GZU7GrFsDfz3CmA==
+X-Received: by 2002:a2e:9d94:0:b0:26b:de12:7c9 with SMTP id c20-20020a2e9d94000000b0026bde1207c9mr9055575ljj.244.1663774098321;
+        Wed, 21 Sep 2022 08:28:18 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id n21-20020a05651203f500b00494a8fecacesm474505lfq.192.2022.09.21.08.28.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Sep 2022 08:28:17 -0700 (PDT)
+Message-ID: <df350235-3c50-c7ac-eb62-5fbc501fed0a@linaro.org>
+Date:   Wed, 21 Sep 2022 17:28:16 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="AIuU0qW1akm1CIIV"
-Content-Disposition: inline
-In-Reply-To: <20220921140535.152627-2-james.clark@arm.com>
-X-Cookie: One FISHWICH coming up!!
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 1/2] ASoC: wcd9335: fix order of Slimbus unprepare/disable
+Content-Language: en-US
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, Vinod Koul <vkoul@kernel.org>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org
+References: <20220921145354.1683791-1-krzysztof.kozlowski@linaro.org>
+ <20916c9d-3598-7c40-ee77-1148c3d2e4b1@linux.intel.com>
+ <af3bd3f4-dcd9-8f6c-6323-de1b53301225@linaro.org>
+ <9a210b04-2ff2-df98-ad1a-89e9d8b0f686@linaro.org>
+ <fd74e77c-f3d3-1f09-2e5a-0a94e2a3eeea@linux.intel.com>
+ <5e34eadc-ef6a-abeb-6bce-347593c275b7@linaro.org>
+ <dd61f44e-8d4a-ac2e-0af4-56ced642c4bd@linux.intel.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <dd61f44e-8d4a-ac2e-0af4-56ced642c4bd@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,33 +86,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 21/09/2022 17:25, Pierre-Louis Bossart wrote:
+>>>>
+>>>> Wait, no, this is correct. Please point to what is wrong in kernel doc.
+>>>> I don't see it. :(
+>>>
+>>> the TRIGGER_STOP and TRIGGER_PAUSE_PUSH do the same thing. There is no
+>>> specific mapping of disable() to TRIGGER_STOP and unprepare() to
+>>> TRIGGER_PAUSE_PUSH as the documentation hints at.
+>>
+>> Which TRIGGER_STOP and TRIGGER_PAUSE_PUSH? In one specific codec driver?
+>> If yes, I don't think Slimbus documentation should care how actual users
+>> implement it (e.g. coalesce states).
+> 
+> In both of the patches you just modified :-)
 
---AIuU0qW1akm1CIIV
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Yeah, but this is just some implementation. How this implementation
+calls, e.g. whether they split STOP from PAUSE is not the concern of
+Slimbus.
 
-On Wed, Sep 21, 2022 at 03:05:35PM +0100, James Clark wrote:
+> 
+> diff --git a/sound/soc/codecs/wcd9335.c b/sound/soc/codecs/wcd9335.c
+> index 06c6adbe5920..d2548fdf9ae5 100644
+> --- a/sound/soc/codecs/wcd9335.c
+> +++ b/sound/soc/codecs/wcd9335.c
+> @@ -1972,8 +1972,8 @@ static int wcd9335_trigger(struct
+> snd_pcm_substream *substream, int cmd,
+>  	case SNDRV_PCM_TRIGGER_STOP:
+>  	case SNDRV_PCM_TRIGGER_SUSPEND:
+>  	case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
+> -		slim_stream_unprepare(dai_data->sruntime);
+>  		slim_stream_disable(dai_data->sruntime);
+> +		slim_stream_unprepare(dai_data->sruntime);
+>  		break;
+>  	default:
+> 
+> diff --git a/sound/soc/codecs/wcd934x.c b/sound/soc/codecs/wcd934x.c
+> index f56907d0942d..28175c746b9a 100644
+> --- a/sound/soc/codecs/wcd934x.c
+> +++ b/sound/soc/codecs/wcd934x.c
+> @@ -1913,8 +1913,8 @@ static int wcd934x_trigger(struct
+> snd_pcm_substream *substream, int cmd,
+>  	case SNDRV_PCM_TRIGGER_STOP:
+>  	case SNDRV_PCM_TRIGGER_SUSPEND:
+>  	case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
+> -		slim_stream_unprepare(dai_data->sruntime);
+>  		slim_stream_disable(dai_data->sruntime);
+> +		slim_stream_unprepare(dai_data->sruntime);
+>  		break;
+>  	default:
+>  		break;
+> 
+> the bus provides helpers to be used in well-defined transitions. A codec
+> driver doing whatever it wants whenever it wants would create chaos for
+> the bus.
 
-> +CONFIG_CORESIGHT_CTI=m
-> +CONFIG_CORESIGHT_CTI_INTEGRATION_REGS=y
+True, but it's the problem of the codec, not the Slimbus.
 
-Do we want this turned on by default?  According to the
-description it's a bit dangerous and it's exposed via sysfs
-rather than debugfs.
+Best regards,
+Krzysztof
 
---AIuU0qW1akm1CIIV
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMrLUAACgkQJNaLcl1U
-h9DaPgf+OhI8crAfL7KWOMPYRW17MUXEjp3TTKHFhH8Osk725ykp/A+6DOYMCcNj
-ZcO7tSbk9rtGl8IM8/11F6/p1Y3nWdP9tmU/Pabru+qn2wJO9aLoyfbPcLvc8GOW
-8QzKIa10nH6aJ3JZGEn09D0SqcuZjAUvCk8K25CPPEw0ivhwyiWoXwDMPQ+X181D
-9qlb0dseriyShAOxelxjMBRYafaab8UjVDnCcu/ymiLcyIOCtT9cqGnRggAvy+Lv
-iLC2BlILtELLg0HCVU0bA5nRdswpwABHbgxpazL74z8730deFUgtXDhHCN5iRusR
-m/ZQNQPHxP5VWktwTh43vobzFO5bNQ==
-=56p6
------END PGP SIGNATURE-----
-
---AIuU0qW1akm1CIIV--
