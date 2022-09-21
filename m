@@ -2,69 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50D2A5BF2A7
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 03:19:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7D385BF2B1
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 03:21:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230269AbiIUBTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 21:19:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57154 "EHLO
+        id S231334AbiIUBVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 21:21:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbiIUBTR (ORCPT
+        with ESMTP id S230500AbiIUBVN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 21:19:17 -0400
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D62FB79A67
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 18:19:15 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R771e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0VQLOKsD_1663723152;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VQLOKsD_1663723152)
-          by smtp.aliyun-inc.com;
-          Wed, 21 Sep 2022 09:19:13 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     alexander.deucher@amd.com
-Cc:     harry.wentland@amd.com, sunpeng.li@amd.com,
-        Rodrigo.Siqueira@amd.com, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, airlied@linux.ie, daniel@ffwll.ch,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] drm/amd/display: clean up one inconsistent indenting
-Date:   Wed, 21 Sep 2022 09:19:10 +0800
-Message-Id: <20220921011910.2222-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Tue, 20 Sep 2022 21:21:13 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B8D6E8A9;
+        Tue, 20 Sep 2022 18:21:11 -0700 (PDT)
+Received: from weisslap.fritz.box ([31.19.218.61]) by mrelayeu.kundenserver.de
+ (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1M8QFi-1ofEGj1psu-004SVW; Wed, 21 Sep 2022 03:20:45 +0200
+From:   =?UTF-8?q?Michael=20Wei=C3=9F?= <michael.weiss@aisec.fraunhofer.de>
+To:     Paolo Abeni <pabeni@redhat.com>, Pravin B Shelar <pshelar@ovn.org>,
+        "David S . Miller" <davem@davemloft.net>
+Cc:     =?UTF-8?q?Michael=20Wei=C3=9F?= <michael.weiss@aisec.fraunhofer.de>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        dev@openvswitch.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 net 0/2] net: openvswitch: metering and conntrack in userns
+Date:   Wed, 21 Sep 2022 03:19:44 +0200
+Message-Id: <20220921011946.250228-1-michael.weiss@aisec.fraunhofer.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:kXdNCYr9qkIkQ/G2rddT+jcryJ80cRV+muK8wUT0VHYdsznKRze
+ IQqT2pFTjYm/PIBvm9h9SoBgcZpYDxtIG26rcgSQSfkUoY3di/gkPb1RqMjLr1gSm4yEh2f
+ 7P8Z5hz+lluu2M9vxXRvcndigCX+tBsWskRxJDW61BGIWb/YWV7b1U8QJ20uHtG7+X88LOe
+ FMFK6aQuv9uWFD6JjIRYQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:PsZjKvhrGFo=:Rk8R3BTsFZ7t/by0hJs7pY
+ zW9kuRctOlVZxGfLQDQV1h4HZ2ZN9+o0c/xmQoUjJ0t3bQcqaTid6ECTI+YYHVEr8wEQ49qjg
+ V5HM/XGuxhiBAZSjDYRZIOOmuVOKlZfUXH5XIbZVvOzQw+iv56SdR4Abiseu4dimr8tiLojZ3
+ mCzseY7J08rTLp94ECKeL+Lw5FHZQJ8VqNFHY54Gjq0bCWbHZc62XfPnbpPB/qdwJlVVctDCF
+ PNDw5gMD31RGU3HNKGoyMwD556F1rHY64wp0cXQZEQeZUzCmMWg4hHJ+WjZGr6neh66jHb+P3
+ f8rTeoiL4hAvpKnNDEEH8YbqNHyCWSQoNLVtrXClDX0AfWP2+AQqM2kdGEIkrRmDQYKHdtIor
+ QKJuOdN5OR8jm43CjTIjPxBYpfnwKPt1EYHASSrtUBdZG6IPRgJR/A8hCBcSXFPm07+bH6Fj0
+ DTfDcsWCoiFOCYYVj7+x/5F3b1J4Zf3LdHYZJC4CXvqUy9C3fyYyo2y+KQv44nLF8ZzyonKO8
+ A4QPxgjD6Ro38XgUWUvcxoh8UNHYQIJyPn+7uCHYgvV9ZhIGXvyYwyCYxScgl9sxvSOImymmm
+ n2NRqi2xHThLCi9K5l1orCWVR0e1HAa0FG+tviEI0AWQBDFaqteeE8yg7lpl0Kil5k1utQHD2
+ 3NgAnZDbJ2J+Sp8C102RqkSEKF0Bg+YxSEMWePbRq47cXvZVUbl+/D+kTO8o6NPnyyRViVyck
+ exSnpNWZGkdA6uJTLXQtUwh3KvHosiOBC6J/SBVkB8R+Yp5cJeeYu17cWhkDeo7APY7rjpo8t
+ SFCOCnEUzSZFSG51aR0QZstB8WViw==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-clean up one inconsistent indenting
+Currently using openvswitch in a non-initial user namespace, e.g., an
+unprivileged container, is possible but without metering and conntrack
+support. This is due to the restriction of the corresponding Netlink
+interfaces to the global CAP_NET_ADMIN.
 
-https://bugzilla.openanolis.cn/show_bug.cgi?id=2238
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- drivers/gpu/drm/amd/display/dc/dcn321/dcn321_resource.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This simple patches switch from GENL_ADMIN_PERM to GENL_UNS_ADMIN_PERM
+in several cases to allow this also for the unprivileged container
+use case.
 
-diff --git a/drivers/gpu/drm/amd/display/dc/dcn321/dcn321_resource.c b/drivers/gpu/drm/amd/display/dc/dcn321/dcn321_resource.c
-index c772ef962194..0f977d14f927 100644
---- a/drivers/gpu/drm/amd/display/dc/dcn321/dcn321_resource.c
-+++ b/drivers/gpu/drm/amd/display/dc/dcn321/dcn321_resource.c
-@@ -1653,7 +1653,7 @@ static bool dcn321_resource_construct(
- 
- #undef REG_STRUCT
- #define REG_STRUCT dccg_regs
--		dccg_regs_init();
-+	dccg_regs_init();
- 
- 
- 	ctx->dc_bios->regs = &bios_regs;
+We tested this for unprivileged containers created by the container
+manager of GyroidOS (gyroidos.github.io). However, for other container
+managers such as LXC or systemd which provide unprivileged containers
+this should be apply equally.
+
+Changes in v2:
+- changed GFP_KERNEL to GFP_KERNEL_ACCOUNT in dp_meter_create()
+  as suggested by Paolo
+- Rebased on net branch of networking tree
+
+Michael Weiß (2):
+  net: openvswitch: allow metering in non-initial user namespace
+  net: openvswitch: allow conntrack in non-initial user namespace
+
+ net/openvswitch/conntrack.c | 10 ++++++----
+ net/openvswitch/meter.c     | 14 +++++++-------
+ 2 files changed, 13 insertions(+), 11 deletions(-)
+
 -- 
-2.20.1.7.g153144c
+2.30.2
 
