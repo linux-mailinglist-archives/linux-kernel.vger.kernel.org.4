@@ -2,149 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 161595BF917
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 10:24:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A2425BF91D
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 10:25:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231335AbiIUIYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 04:24:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47698 "EHLO
+        id S230265AbiIUIZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 04:25:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiIUIYH (ORCPT
+        with ESMTP id S231390AbiIUIZJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 04:24:07 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2081.outbound.protection.outlook.com [40.107.244.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B437920BEF
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 01:24:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HC0OFVJtrAgbuZeZhnhxEbaxPauqqEfrQKQdM4ELZpHGnlbPBqT5kp9g0XtUdklsoDJBLKh8Xm4ukffKbtBZYGZGJrDdb6Oq5+c4m4VqcIrQ9W2D/YKMAh23e72jH89LljfMnGWBkJ6NqhEDVwXJquDgugbCbWf+3TyI7zTTx7HoDjnPAK9w4TmwwAotIRc3tx016YSaNu9BxSPxMHB9rALzzJMIY8BukLRo57Kams1oMF05RsDEAwRWuBZ/Uy9SKODNeNTjqcbgMjAHXibO5VNjYyfSo0E2712wakH6wM517wyCRJogTLKIqJOSEpHS3pwHPxdx8yrsiXyg2SdAxw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6FBAlYTbzpv+ZVa52FA+ghPKRnXlfos8t8xo4q6govk=;
- b=PonVzlQr2l+P6urB0kbPZYLeQmPX1w2Uel2v+/o8EG34pUFGMyUZOAzo4jaMJ33qYZ2P5c68EfXUzQioEO59fPSP/cgXPmul7UmHHYtj6lafPP72G534RrmwFUGVC2AAtyKQDoxVS1kqUODxm8/ro0U7BqgnATUMfHmtA4FBR0+XVF0PDw3gciHnMAUJPpO6w3s6Eeo9aL0JOdug3JnS2jMa7EuxpZLwAjp2NDJBVbYKE35BehRkAe9wkjbAzKLQisrNg5oC8aR7k6TdDzsP7SUY5knPxXf58HKN9gS4462QGlU2hzyUeNGkXP1a3k0Sj39NEnKLX5qTaRSmZEV+/g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=mediatek.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6FBAlYTbzpv+ZVa52FA+ghPKRnXlfos8t8xo4q6govk=;
- b=BG7AHOU5rhMGZlhtVVcLib+ULEZ8/QloYi8GKIbHY8XWflvJy8eXwfmp9LBHkldg1Da6r01sFGnS4xrAUKKAeAeiFL8GSoe2geuqKf4wtxCx9LOQAfYNiz6XNZWXqMyYWj/hwax7hgaTWBClfENvLLctIr33D1m5tqfO5Jm5btWAi98jAhHmggeyp4mBEupCwg1sOPZLcei6JNRfr4mejyrkAfU5cbxmr7EehyyWmU/fFYl5kZV4GlByNgwf5WewoAb+nPLx5CdFYqfyBfY8dTlS3w85CmdkVcPVs/rGYFrEqjpbwpGLuRQYWqC3A/DyMjl8Hf8dXbDfvpbqo7NRUA==
-Received: from DS7PR05CA0060.namprd05.prod.outlook.com (2603:10b6:8:2f::13) by
- DM4PR12MB6493.namprd12.prod.outlook.com (2603:10b6:8:b6::13) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5632.19; Wed, 21 Sep 2022 08:24:03 +0000
-Received: from DS1PEPF0000B075.namprd05.prod.outlook.com
- (2603:10b6:8:2f:cafe::51) by DS7PR05CA0060.outlook.office365.com
- (2603:10b6:8:2f::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.7 via Frontend
- Transport; Wed, 21 Sep 2022 08:24:03 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- DS1PEPF0000B075.mail.protection.outlook.com (10.167.17.6) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5654.11 via Frontend Transport; Wed, 21 Sep 2022 08:24:03 +0000
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Wed, 21 Sep
- 2022 01:23:54 -0700
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail205.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 21 Sep
- 2022 01:23:54 -0700
-Received: from Asurada-Nvidia.nvidia.com (10.127.8.14) by mail.nvidia.com
- (10.129.68.9) with Microsoft SMTP Server id 15.2.986.29 via Frontend
- Transport; Wed, 21 Sep 2022 01:23:53 -0700
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     <yong.wu@mediatek.com>, <joro@8bytes.org>, <will@kernel.org>,
-        <robin.murphy@arm.com>, <matthias.bgg@gmail.com>,
-        <jean-philippe@linaro.org>
-CC:     <jgg@nvidia.com>, <kevin.tian@intel.com>, <iommu@lists.linux.dev>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <virtualization@lists.linux-foundation.org>
-Subject: [PATCH v4 6/6] iommu: Propagate return value in ->attach_dev callback functions
-Date:   Wed, 21 Sep 2022 01:23:52 -0700
-Message-ID: <821361c6f523555cd33f0982d9fa2e1e9db70bd5.1663744983.git.nicolinc@nvidia.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <cover.1663744983.git.nicolinc@nvidia.com>
-References: <cover.1663744983.git.nicolinc@nvidia.com>
+        Wed, 21 Sep 2022 04:25:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA06389830;
+        Wed, 21 Sep 2022 01:24:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C866D62FCA;
+        Wed, 21 Sep 2022 08:24:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29921C43141;
+        Wed, 21 Sep 2022 08:24:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663748660;
+        bh=1NzIghPEBpq8uMJRc47K9lfgrGEpRXTiw8izcxlL2xQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=OKkCGAhnkRBD6nidQpKm62U9gGhDP7WgV8TW6Usene59SdBqik2nH7gw16qADXB6Q
+         kGN59L+qRA7IlhnmvB0CjAY8ecmvGXDfM40+CS4p2ZDCyDOe+IdPd1Nbg+netY/gG3
+         DaLsZaJASrsTVZuJcY9A8HtsGfTnIi6xg3laWFI7FW4CY9QONjoSY91XqpN5guqjNv
+         NT0ailSc9zSbCHEc8hVikRtzGJRBea18pdRRQ2FZ9zRjFy2c1+NBqEmjb1Gf9kiz9T
+         h4G5/Y4hjWOWf6RZm/TLBKPfj6oeI3iuTkivN18rfwB5A5srEd1XAQaZhmXiroHJxH
+         AKvLfQkjQq9VA==
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-11eab59db71so7958282fac.11;
+        Wed, 21 Sep 2022 01:24:20 -0700 (PDT)
+X-Gm-Message-State: ACrzQf2M2H3CnF9vMbKM5UDlxeg0yb92WM51h4Bh3rAjT60d2i7XDio2
+        qGOHHvrRVevRkwEeYgVmqNt2G8f661pzDJuMICY=
+X-Google-Smtp-Source: AMsMyM4V0nR6rYDAsi882MI6/ftf77j2yigATQcPA5I8IsYUbEUPObkhTn6sRCtBUuHkFuJRwBsb3fkrstWT3g/H0Qk=
+X-Received: by 2002:a05:6870:a78e:b0:12b:542b:e5b2 with SMTP id
+ x14-20020a056870a78e00b0012b542be5b2mr4387625oao.112.1663748659200; Wed, 21
+ Sep 2022 01:24:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS1PEPF0000B075:EE_|DM4PR12MB6493:EE_
-X-MS-Office365-Filtering-Correlation-Id: 02397e8e-c7b8-4b57-a5e4-08da9baaa493
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5CijtECgqBsGDdx7DawBoRTpRSPYWLnRJYMX5CRfg5Z5iWNWXjg2FnDG6ZOUSfE2a4g8MLbpF3vwo5ocsXnOFDR1xUULlDeMRw0bNEIjpxjm7tXDwdR/qp0JP69Z8OS0o6wkFApWDum7+QmJdLc3ZNJ9fs1EWkBFWMA0K6ompawas4fpWaV3TTKbyEhM1TWE61FXKFbjNLnftBFraynsYdoV/b1pATGErCQB+hTHOdU9U+/Fu/0yFXom2P/e4moTgk0oiILB+yTWMw7H4Z15t+yhgIMf5G/R/4UYg6eyUiJIzEcfEjHW1IDNmc5WQ3aBxxYDyRFcLO+IRzDVuziioFkyJJZc2kMbMIV0PO4+Zt9SrWSgoNBGUkcbRhmBrDZjnrA7sWg99WONSVahe2c1I/18WOBiAUdns+kCdQdTHw9utDHx/5MJD+/5pkRcDHCAX1IYoSYQ82Z9y8630TjeLL0vNcsa2ne0aYcXvXxD/fQAPs0xnn3t4Ga8g0ame5bGmr6YPFDhmjj1BcPW37a3jeNSAFac5LItfNMnsf8D2ThpogwNoYCVIf53KaCrw0aQ/RqKJgRneU3jkKkXK9zuVzaTzXRF4H84dXG12Pt/q9uVw62y0qEJrUaBEJ2e5bFcTEJG7usq861g3vSVyWxtNY+S424s3DI34ecLwNsHrKHgwtI2udaVrUOMq0hYNcvg+MB5vTrfIwZRGfI2lrCbemFRKp2BdLakz7UTkRNEuZJ5dllb8gQcjuhev1jdJhrXn3EZX2ic6RCb/NN01KG/NA==
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(136003)(396003)(376002)(346002)(39860400002)(451199015)(46966006)(36840700001)(40470700004)(82310400005)(40460700003)(86362001)(82740400003)(36756003)(356005)(478600001)(5660300002)(36860700001)(336012)(7416002)(2906002)(186003)(70206006)(4326008)(54906003)(110136005)(8676002)(70586007)(8936002)(316002)(7636003)(83380400001)(426003)(41300700001)(40480700001)(47076005)(2616005)(7696005)(26005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Sep 2022 08:24:03.2669
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 02397e8e-c7b8-4b57-a5e4-08da9baaa493
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000B075.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6493
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220908022506.1275799-1-guoren@kernel.org> <20220908022506.1275799-9-guoren@kernel.org>
+ <4babce64-e96d-454c-aa35-243b3f2dc315@www.fastmail.com> <CAJF2gTQAMCjNyqrSOvqDAKR5Z-PZiTVxmoK9cvNAVQs+k2fZBg@mail.gmail.com>
+ <8817af55-de0d-4e8f-a41b-25d01d5fa968@www.fastmail.com> <CAJF2gTRoKfJ25brnA=_CqNw9DPt8XKhcyNzmCbD6wX1q-jiR1w@mail.gmail.com>
+ <CAJF2gTRVH6pVqBn+n+wbccBcMWraRP3m4CbXz4g_y+=nPEU=Yw@mail.gmail.com>
+ <7a2379cf-c1cf-46af-9172-334d2b9b88d5@www.fastmail.com> <CAJF2gTSvaNh_m_hrub5Z=kqLAYJfRbpYzB1Mc5aOgdN+Bm8bag@mail.gmail.com>
+In-Reply-To: <CAJF2gTSvaNh_m_hrub5Z=kqLAYJfRbpYzB1Mc5aOgdN+Bm8bag@mail.gmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Wed, 21 Sep 2022 16:23:58 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQGB97kh=47dsZ8MFpTTpy7pxYyd=MoLOUzgF9kTm1wdA@mail.gmail.com>
+Message-ID: <CAJF2gTQGB97kh=47dsZ8MFpTTpy7pxYyd=MoLOUzgF9kTm1wdA@mail.gmail.com>
+Subject: Re: [PATCH V4 8/8] riscv: Add config of thread stack size
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        "Conor.Dooley" <conor.dooley@microchip.com>,
+        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        Jisheng Zhang <jszhang@kernel.org>, lazyparser@gmail.com,
+        falcon@tinylab.org, Huacai Chen <chenhuacai@kernel.org>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Andreas Schwab <schwab@suse.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The mtk_iommu and virtio drivers have places in the ->attach_dev callback
-functions that return hardcode errnos instead of the returned values, but
-callers of these ->attach_dv callback functions may care. Propagate them
-directly without the extra conversions.
+On Wed, Sep 21, 2022 at 2:13 PM Guo Ren <guoren@kernel.org> wrote:
+>
+> On Tue, Sep 20, 2022 at 3:18 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> >
+> > On Tue, Sep 20, 2022, at 2:46 AM, Guo Ren wrote:
+> >
+> > > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> > > index dfe600f3526c..8def456f328c 100644
+> > > --- a/arch/riscv/Kconfig
+> > > +++ b/arch/riscv/Kconfig
+> > > @@ -442,6 +442,16 @@ config IRQ_STACKS
+> > >           Add independent irq & softirq stacks for percpu to prevent
+> > > kernel stack
+> > >           overflows. We may save some memory footprint by disabling IRQ_STACKS.
+> > >
+> > > +config THREAD_SIZE
+> > > +       int "Kernel stack size (in bytes)" if EXPERT
+> > > +       range 4096 65536
+> > > +       default 8192 if 32BIT && !KASAN
+> > > +       default 32768 if 64BIT && KASAN
+> > > +       default 16384
+> > > +       help
+> > > +         Specify the Pages of thread stack size (from 4KB to 64KB), which also
+> > > +         affects irq stack size, which is equal to thread stack size.
+> >
+> > I still think this should be guarded in a way that prevents
+> > setting the stack to smaller than default values unless VMAP_STACK
+> > is set as well.
+> Current VMAP_STACK would double THREAD_SIZE. Let me see how to reduce
+> the VMAP_STACK.
+Sorry, for my miss understanding. I have no idea to reduce the
+VMAP_STACK's THREAD_ALIGN, THREAD_SIZE*2 is fine. Here is my new
+patch:
 
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
----
- drivers/iommu/mtk_iommu.c    | 2 +-
- drivers/iommu/virtio-iommu.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index 76bde12d9f8c..669ae57356a2 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -443,6 +443,16 @@ config IRQ_STACKS
+          Add independent irq & softirq stacks for percpu to prevent
+kernel stack
+          overflows. We may save some memory footprint by disabling IRQ_STACKS.
 
-diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-index be1a7d1cc630..c30dc8f81778 100644
---- a/drivers/iommu/mtk_iommu.c
-+++ b/drivers/iommu/mtk_iommu.c
-@@ -666,7 +666,7 @@ static int mtk_iommu_attach_device(struct iommu_domain *domain,
- 		ret = mtk_iommu_domain_finalise(dom, frstdata, region_id);
- 		if (ret) {
- 			mutex_unlock(&dom->mutex);
--			return -ENODEV;
-+			return ret;
- 		}
- 		dom->bank = &data->bank[bankid];
- 	}
-diff --git a/drivers/iommu/virtio-iommu.c b/drivers/iommu/virtio-iommu.c
-index 87128266b6e3..35de7b433b17 100644
---- a/drivers/iommu/virtio-iommu.c
-+++ b/drivers/iommu/virtio-iommu.c
-@@ -696,7 +696,7 @@ static int viommu_domain_finalise(struct viommu_endpoint *vdev,
- 		if (ret) {
- 			ida_free(&viommu->domain_ids, vdomain->id);
- 			vdomain->viommu = NULL;
--			return -EOPNOTSUPP;
-+			return ret;
- 		}
- 	}
- 
++config THREAD_SIZE
++       int "Kernel stack size (in bytes)" if VMAP_STACK && EXPERT
++       range 4096 65536
++       default 8192 if 32BIT && !KASAN
++       default 32768 if 64BIT && KASAN
++       default 16384
++       help
++         Specify the Pages of thread stack size (from 4KB to 64KB), which also
++         affects irq stack size, which is equal to thread stack size.
++
+ endmenu # "Platform type"
+
+ menu "Kernel features"
+diff --git a/arch/riscv/include/asm/thread_info.h
+b/arch/riscv/include/asm/thread_info.h
+index 043da8ccc7e6..e7ae3f13b879 100644
+--- a/arch/riscv/include/asm/thread_info.h
++++ b/arch/riscv/include/asm/thread_info.h
+@@ -11,32 +11,17 @@
+ #include <asm/page.h>
+ #include <linux/const.h>
+
+-#ifdef CONFIG_KASAN
+-#define KASAN_STACK_ORDER 1
+-#else
+-#define KASAN_STACK_ORDER 0
+-#endif
+-
+ /* thread information allocation */
+-#ifdef CONFIG_64BIT
+-#define THREAD_SIZE_ORDER      (2 + KASAN_STACK_ORDER)
+-#else
+-#define THREAD_SIZE_ORDER      (1 + KASAN_STACK_ORDER)
+-#endif
+-#define THREAD_SIZE            (PAGE_SIZE << THREAD_SIZE_ORDER)
++#define THREAD_SIZE            CONFIG_THREAD_SIZE
+
+ /*
+  * By aligning VMAP'd stacks to 2 * THREAD_SIZE, we can detect overflow by
+- * checking sp & (1 << THREAD_SHIFT), which we can do cheaply in the entry
+- * assembly.
++ * checking sp & THREAD_SIZE, which we can do cheaply in the entry assembly.
+  */
+ #ifdef CONFIG_VMAP_STACK
+ #define THREAD_ALIGN            (2 * THREAD_SIZE)
+-#else
+-#define THREAD_ALIGN            THREAD_SIZE
+ #endif
+
+-#define THREAD_SHIFT            (PAGE_SHIFT + THREAD_SIZE_ORDER)
+ #define OVERFLOW_STACK_SIZE     SZ_4K
+ #define SHADOW_OVERFLOW_STACK_SIZE (1024)
+
+diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+index 2207cf44a3bc..71ea850ff0db 100644
+--- a/arch/riscv/kernel/entry.S
++++ b/arch/riscv/kernel/entry.S
+@@ -29,8 +29,8 @@ _restore_kernel_tpsp:
+
+ #ifdef CONFIG_VMAP_STACK
+        addi sp, sp, -(PT_SIZE_ON_STACK)
+-       srli sp, sp, THREAD_SHIFT
+-       andi sp, sp, 0x1
++       srli sp, sp, PAGE_SHIFT
++       andi sp, sp, (THREAD_ALIGN >> PAGE_SHIFT >> 1)
+        bnez sp, handle_kernel_stack_overflow
+        REG_L sp, TASK_TI_KERNEL_SP(tp)
+ #endif
+
+
+>
+> >
+> >     Arnd
+>
+>
+>
+> --
+> Best Regards
+>  Guo Ren
+
+
+
 -- 
-2.17.1
-
+Best Regards
+ Guo Ren
