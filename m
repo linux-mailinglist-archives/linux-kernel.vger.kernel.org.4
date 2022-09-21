@@ -2,187 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C6415BF649
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 08:28:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 981495BF667
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 08:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbiIUG2l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 02:28:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54046 "EHLO
+        id S229895AbiIUGbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 02:31:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiIUG2j (ORCPT
+        with ESMTP id S229449AbiIUGbP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 02:28:39 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42E677FFBE
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 23:28:38 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id u18so7536702lfo.8
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 23:28:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=NjkZdkL1JldrqDVNu0N/8E6w/nwH+oo08ZTDDHx3Epc=;
-        b=xBlD5VT0+GduvjYgiHX+YZzlJUZA8q9L4yxkve+xXIEyB9mmDTfzAor1+U+jobGoNj
-         raXJkajU9gsQNIzU89o4Ptl9jtFEECS3k/NqFXOrKKc50pNnIcEnYIpTq9QITj9CA1qV
-         iJYA7nzbkN7XPLVWkcD2OakJVTbED9sa8mvlg3AFrasK//ROrpyE/J7TPenyCvNaoaFk
-         0UrzYZz2yOl4aEpfz3ThydDQJ3NPYDoahAalwOdGZQk1ho6akDe3xa2NReSuBsRWtAUD
-         rYCC73F7qCY3g7LR99Vndm3I1eY3rMSX0OaSN0Oei2c2iaVV5d1RbwfivMlD1iKHIHST
-         vTcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=NjkZdkL1JldrqDVNu0N/8E6w/nwH+oo08ZTDDHx3Epc=;
-        b=XRQgir+K+yv+DV5Oxxg37RNaX7DiYgoA3UpyDgkyoYUVy58upVjhBf3bWPucsqNJK1
-         CQBM1zIZnz9Hpp+NV2iHiaYFwStHPhMmz2HL2A2H25pHdmNKPeYAjlgUW8dUePG9OUyZ
-         ge/lYVKSP24wBOXagwnZg61NtTMQNqyHuYhvgHYLbdQmsIJDcbfRHp4yo58oefsK5Aso
-         4YVKrEClaskpPm9eZeF2AD9AP2NBDmlmLpWA2+SJD/75JaBQ36tEBZPC2SiQqqpRL6ES
-         BXdd/FlXChLHXQ+3bjWFPz5wJxZHRAq0aDKTofcO1o6gULXCZ36x5f80PaMzY4jan/ow
-         hktQ==
-X-Gm-Message-State: ACrzQf0mCo2twOwlcetotAc5nARzFqqwk+wHVS4yENttkQisJ3+sl97l
-        2CVEVd1wguP8cCtrF/dar9gG8w==
-X-Google-Smtp-Source: AMsMyM5EWxKhU/JvV1HGm5Jvoeu4U9WCBLswwA2sX1HdMqQ3ux4ZgMTlmqk875wqoOxHMnFPciKMGA==
-X-Received: by 2002:a05:6512:12c1:b0:49f:d13f:56f3 with SMTP id p1-20020a05651212c100b0049fd13f56f3mr2977436lfg.657.1663741716577;
-        Tue, 20 Sep 2022 23:28:36 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id x20-20020ac25dd4000000b00492a0f02758sm305109lfq.28.2022.09.20.23.28.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Sep 2022 23:28:35 -0700 (PDT)
-Message-ID: <29a06da0-ddf5-15eb-ac3d-0bc2e0006ae9@linaro.org>
-Date:   Wed, 21 Sep 2022 08:28:34 +0200
+        Wed, 21 Sep 2022 02:31:15 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9AD861DB3
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 23:31:13 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28L6EIFw022002;
+        Wed, 21 Sep 2022 06:31:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : content-type :
+ subject : message-id : date : cc : to : content-transfer-encoding :
+ mime-version; s=pp1; bh=vjk4eIKbdqnaddTSBrwhu12wc7vTtk5Lr5Xt0GcaCq4=;
+ b=b39rKPm3+hdbLJJ9JIpIctTGtop7X4q89BLV6xWqGvtWAfAQHybnaMynVNggroBAm0t/
+ DapLHg0t2RnGLZg0LKK/aOeCgZz2dgMEQ4qccr/2urORoVJzKRMkX35noSAepT33o9ea
+ 8BhPKaxg+uyhEdJohuQsgrLIrUDoEKu1Lrx+via9lmnV6BAPNjOBmWNzuq2GtXJs0+kA
+ 9TJgNSgclWCU6RQkAm8MvkAsjZDTqh7LGE/gKW6XvTHYKrpep1+70LRlt0Ub+UTsOf/C
+ Ny0U8Q2YJ3eMZtpzdRIheJPd+P/m8f78IsUoe3zhqRRQS9kWp3b8ksD8gm38LreFnncn YQ== 
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3jqw5m8dyc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 21 Sep 2022 06:31:04 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28L6L7EW023313;
+        Wed, 21 Sep 2022 06:31:02 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma01fra.de.ibm.com with ESMTP id 3jn5v8kjhj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 21 Sep 2022 06:31:02 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28L6Qxa842205694
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 21 Sep 2022 06:26:59 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DF40CAE04D;
+        Wed, 21 Sep 2022 06:30:59 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1C059AE045;
+        Wed, 21 Sep 2022 06:30:59 +0000 (GMT)
+Received: from smtpclient.apple (unknown [9.109.241.54])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 21 Sep 2022 06:30:58 +0000 (GMT)
+From:   Sachin Sant <sachinp@linux.ibm.com>
+Content-Type: text/plain;
+        charset=us-ascii
+Subject: [powerpc] Kernel crash with THP tests (next-20220920)
+Message-Id: <C2C8DA4F-F00F-43E9-ACD8-2A8BACA55893@linux.ibm.com>
+Date:   Wed, 21 Sep 2022 12:00:57 +0530
+Cc:     mike.kravetz@oracle.com, open list <linux-kernel@vger.kernel.org>
+To:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, linux-mm@kvack.org
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: FmHBtZGju_2Wpn0e6Rqc0-P0DWZ-YXBe
+X-Proofpoint-GUID: FmHBtZGju_2Wpn0e6Rqc0-P0DWZ-YXBe
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v3 1/6] dt-bindings: arm: mediatek: mmsys: change
- compatible for MT8195
-Content-Language: en-US
-To:     Jason-JH Lin <jason-jh.lin@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     CK Hu <ck.hu@mediatek.com>, Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        Singo Chang <singo.chang@mediatek.com>,
-        Nancy Lin <nancy.lin@mediatek.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220920140145.19973-1-jason-jh.lin@mediatek.com>
- <20220920140145.19973-2-jason-jh.lin@mediatek.com>
- <65c93c5d-941a-267b-408d-95be83dc2454@linaro.org>
- <8fba20bf37326504b871fb55ce171cd37720a9a0.camel@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <8fba20bf37326504b871fb55ce171cd37720a9a0.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-21_02,2022-09-20_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=665 phishscore=0
+ priorityscore=1501 adultscore=0 malwarescore=0 spamscore=0 bulkscore=0
+ suspectscore=0 clxscore=1011 lowpriorityscore=0 impostorscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
+ definitions=main-2209210040
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/09/2022 06:16, Jason-JH Lin wrote:
-> Hi Krzysztof,
-> 
-> Thanks for the reviews.
-> 
-> On Tue, 2022-09-20 at 17:25 +0200, Krzysztof Kozlowski wrote:
->> On 20/09/2022 16:01, Jason-JH.Lin wrote:
->>> For previous MediaTek SoCs, such as MT8173, there are 2 display HW
->>> pipelines binding to 1 mmsys with the same power domain, the same
->>> clock driver and the same mediatek-drm driver.
->>>
->>> For MT8195, VDOSYS0 and VDOSYS1 are 2 display HW pipelines binding
->>> to
->>> 2 different power domains, different clock drivers and different
->>> mediatek-drm drivers.
->>>
->>> Moreover, Hardware pipeline of VDOSYS0 has these components: COLOR,
->>> CCORR, AAL, GAMMA, DITHER. They are related to the PQ (Picture
->>> Quality)
->>> and they makes VDOSYS0 supports PQ function while they are not
->>> including in VDOSYS1.
->>>
->>> Hardware pipeline of VDOSYS1 has the component ETHDR (HDR related
->>> component). It makes VDOSYS1 supports the HDR function while it's
->>> not
->>> including in VDOSYS0.
->>>
->>> To summarize0:
->>> Only VDOSYS0 can support PQ adjustment.
->>> Only VDOSYS1 can support HDR adjustment.
->>>
->>> Therefore, we need to separate these two different mmsys hardwares
->>> to
->>> 2 different compatibles for MT8195.
->>>
->>> Fixes: 81c5a41d10b9 ("dt-bindings: arm: mediatek: mmsys: add mt8195
->>> SoC binding")
->>> Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
->>> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
->>> ---
->>>  .../devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml      | 4
->>> ++++
->>>  1 file changed, 4 insertions(+)
->>>
->>> diff --git
->>> a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yam
->>> l
->>> b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yam
->>> l
->>> index 6ad023eec193..df9184b6772c 100644
->>> ---
->>> a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yam
->>> l
->>> +++
->>> b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yam
->>> l
->>> @@ -38,6 +38,10 @@ properties:
->>>            - const: mediatek,mt7623-mmsys
->>>            - const: mediatek,mt2701-mmsys
->>>            - const: syscon
->>> +      - items:
->>> +          - const: mediatek,mt8195-vdosys0
->>> +          - const: mediatek,mt8195-mmsys
->>> +          - const: syscon
->>
->> and why mediatek,mt8195-mmsys is kept as non-deprecated?
-> 
-> Shouldn't we keep this for fallback compatible?
+While running transparent huge page tests [1] against 6.0.0-rc6-next-202209=
+20
+following crash is seen on IBM Power server.
 
-I am not talking about it.
+Kernel attempted to read user page (34) - exploit attempt? (uid: 0)
+BUG: Kernel NULL pointer dereference on read at 0x00000034
+Faulting instruction address: 0xc0000000004d2744
+Oops: Kernel access of bad area, sig: 11 [#1]
+LE PAGE_SIZE=3D64K MMU=3DRadix SMP NR_CPUS=3D2048 NUMA pSeries
+Modules linked in: dm_mod(E) bonding(E) rfkill(E) tls(E) sunrpc(E) nd_pmem(=
+E) nd_btt(E) dax_pmem(E) papr_scm(E) libnvdimm(E) pseries_rng(E) vmx_crypto=
+(E) ext4(E) mbcache(E) jbd2(E) sd_mod(E) t10_pi(E) crc64_rocksoft(E) crc64(=
+E) sg(E) ibmvscsi(E) scsi_transport_srp(E) ibmveth(E) fuse(E)
+CPU: 37 PID: 2219255 Comm: sysctl Tainted: G            E      6.0.0-rc6-ne=
+xt-20220920 #1
+NIP:  c0000000004d2744 LR: c0000000004d2734 CTR: 0000000000000000
+REGS: c0000012801bf660 TRAP: 0300   Tainted: G            E       (6.0.0-rc=
+6-next-20220920)
+MSR:  8000000000009033 <SF,EE,ME,IR,DR,RI,LE>  CR: 24048222  XER: 20040000
+CFAR: c0000000004b0eac DAR: 0000000000000034 DSISR: 40000000 IRQMASK: 0=20
+GPR00: c0000000004d2734 c0000012801bf900 c000000002a92300 0000000000000000=
+=20
+GPR04: c000000002ac8ac0 c000000001209340 0000000000000005 c000001286714b80=
+=20
+GPR08: 0000000000000034 0000000000000000 0000000000000000 0000000000000000=
+=20
+GPR12: 0000000028048242 c00000167fff6b00 0000000000000000 0000000000000000=
+=20
+GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000000=
+=20
+GPR20: c0000012801bfae8 0000000000000001 0000000000000100 0000000000000001=
+=20
+GPR24: c0000012801bfae8 c000000002ac8ac0 0000000000000002 0000000000000005=
+=20
+GPR28: 0000000000000000 0000000000000001 0000000000000000 0000000000346cca=
+=20
+NIP [c0000000004d2744] alloc_buddy_huge_page+0xd4/0x240
+LR [c0000000004d2734] alloc_buddy_huge_page+0xc4/0x240
+Call Trace:
+[c0000012801bf900] [c0000000004d2734] alloc_buddy_huge_page+0xc4/0x240 (unr=
+eliable)
+[c0000012801bf9b0] [c0000000004d46a4] alloc_fresh_huge_page.part.72+0x214/0=
+x2a0
+[c0000012801bfa40] [c0000000004d7f88] alloc_pool_huge_page+0x118/0x190
+[c0000012801bfa90] [c0000000004d84dc] __nr_hugepages_store_common+0x4dc/0x6=
+10
+[c0000012801bfb70] [c0000000004d88bc] hugetlb_sysctl_handler_common+0x13c/0=
+x180
+[c0000012801bfc10] [c0000000006380e0] proc_sys_call_handler+0x210/0x350
+[c0000012801bfc90] [c000000000551c00] vfs_write+0x2e0/0x460
+[c0000012801bfd50] [c000000000551f5c] ksys_write+0x7c/0x140
+[c0000012801bfda0] [c000000000033f58] system_call_exception+0x188/0x3f0
+[c0000012801bfe10] [c00000000000c53c] system_call_common+0xec/0x270
+--- interrupt: c00 at 0x7fffa9520c34
+NIP:  00007fffa9520c34 LR: 00000001024754bc CTR: 0000000000000000
+REGS: c0000012801bfe80 TRAP: 0c00   Tainted: G            E       (6.0.0-rc=
+6-next-20220920)
+MSR:  800000000280f033 <SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE>  CR: 28002202  =
+XER: 00000000
+IRQMASK: 0=20
+GPR00: 0000000000000004 00007fffccd76cd0 00007fffa9607300 0000000000000003=
+=20
+GPR04: 0000000138da6970 0000000000000006 fffffffffffffff6 0000000000000000=
+=20
+GPR08: 0000000138da6970 0000000000000000 0000000000000000 0000000000000000=
+=20
+GPR12: 0000000000000000 00007fffa9a40940 0000000000000000 0000000000000000=
+=20
+GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000000=
+=20
+GPR20: 0000000000000000 0000000000000000 0000000000000000 0000000000000000=
+=20
+GPR24: 0000000000000001 0000000000000010 0000000000000006 0000000138da8aa0=
+=20
+GPR28: 00007fffa95fc2c8 0000000138da8aa0 0000000000000006 0000000138da6930=
+=20
+NIP [00007fffa9520c34] 0x7fffa9520c34
+LR [00000001024754bc] 0x1024754bc
+--- interrupt: c00
+Instruction dump:
+3b400002 3ba00001 3b800000 7f26cb78 7fc5f378 7f64db78 7fe3fb78 4bfde5b9=20
+60000000 7c691b78 39030034 7c0004ac <7d404028> 7c0ae800 40c20010 7f80412d=20
+---[ end trace 0000000000000000 ]---
 
-> 
-> I think this items could support the device node like:
-> foo {
->   compatible = "mediatek,mt8195-vdosys0", "mediatek,mt8195-mmsys", 
-> 	       "syscon";
-> }
-> 
+Kernel panic - not syncing: Fatal exception
 
-Yes, this one ok.
+Bisect points to following patch:
+commit f2f3c25dea3acfb17aecb7273541e7266dfc8842
+    hugetlb: freeze allocated pages before creating hugetlb pages
 
-> 
-> Or should I change the items like this?
-> - items:
->     - const: mediatek,mt8195-vdosys0
->     - enum:
->         - mediatek,mt8195-mmsys
->     - const: syscon
-> 
+Reverting the patch allows the test to run successfully.
 
-No, this does not look correct.
+Thanks
+- Sachin
 
-I asked why do you keep old mediatek,mt8195-mmsys compatible in the same
-place (the alone one), without making it deprecated?
-
-Best regards,
-Krzysztof
+[1] https://github.com/avocado-framework-tests/avocado-misc-tests/blob/mast=
+er/memory/transparent_hugepages_defrag.py=
