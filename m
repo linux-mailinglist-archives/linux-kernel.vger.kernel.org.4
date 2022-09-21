@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF77B5C0322
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 18:00:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAA4B5C0346
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 18:01:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231941AbiIUQAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 12:00:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56084 "EHLO
+        id S232216AbiIUQBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 12:01:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232083AbiIUP6C (ORCPT
+        with ESMTP id S232245AbiIUP6u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 11:58:02 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0FFBA0337;
-        Wed, 21 Sep 2022 08:51:48 -0700 (PDT)
+        Wed, 21 Sep 2022 11:58:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15F6A1D06;
+        Wed, 21 Sep 2022 08:52:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 67A11CE1DEC;
-        Wed, 21 Sep 2022 15:50:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 565CFC433C1;
-        Wed, 21 Sep 2022 15:50:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B1B66314F;
+        Wed, 21 Sep 2022 15:51:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A50BC433C1;
+        Wed, 21 Sep 2022 15:51:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663775443;
-        bh=1T/Z2KvEm7OGMVSlMdj+JwHx3mo6B4tq2QxqS58Qryo=;
+        s=korg; t=1663775476;
+        bh=RWKCvOLRLjCO5BEUwePjalDi/C7pkfXgg4HX66/i7G0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KNEnyGujhXFGUJKaOFxdD1WcBoXGl7lnSu/7cjFqJLgNVhGKUKu1Y37jdeOOO/C0q
-         6gHeDUNgKBRFRASwfjOV/8/Zgo90eXidqv1YqKmgZJkFps/EW/tKi0+HaX/P1SHUJ8
-         bS/NQIFoxoBen30jpD9RWQLppxMuX3i768pML+kM=
+        b=gNMYFHY+jqzYlwztD+thNltd+pbdrOLiiImcxxt8JQeD754tXzb8nnwhHZgb6z3ij
+         qDeqqAXyuuz/C+YqXcpYIO9gZ0nhQCcuf6ISz5Q4SuJWig0wYgu72y5cDeSwLJRYmC
+         jKs8FaG8pzUgeka1fDEy+fVQXoty/sj8sRwKsCD0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
+        stable@vger.kernel.org, Laurent Vivier <lvivier@redhat.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 01/39] KVM: PPC: Book3S HV: Context tracking exit guest context before enabling irqs
-Date:   Wed, 21 Sep 2022 17:46:06 +0200
-Message-Id: <20220921153645.732495616@linuxfoundation.org>
+Subject: [PATCH 5.10 02/39] KVM: PPC: Tick accounting should defer vtime accounting til after IRQ handling
+Date:   Wed, 21 Sep 2022 17:46:07 +0200
+Message-Id: <20220921153645.774343053@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220921153645.663680057@linuxfoundation.org>
 References: <20220921153645.663680057@linuxfoundation.org>
 User-Agent: quilt/0.67
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -56,49 +55,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicholas Piggin <npiggin@gmail.com>
+From: Laurent Vivier <lvivier@redhat.com>
 
-[ Upstream commit 112665286d08c87e66d699e7cba43c1497ad165f ]
+[ Upstream commit 235cee162459d96153d63651ce7ff51752528c96 ]
 
-Interrupts that occur in kernel mode expect that context tracking
-is set to kernel. Enabling local irqs before context tracking
-switches from guest to host means interrupts can come in and trigger
-warnings about wrong context, and possibly worse.
+Commit 112665286d08 ("KVM: PPC: Book3S HV: Context tracking exit guest
+context before enabling irqs") moved guest_exit() into the interrupt
+protected area to avoid wrong context warning (or worse). The problem is
+that tick-based time accounting has not yet been updated at this point
+(because it depends on the timer interrupt firing), so the guest time
+gets incorrectly accounted to system time.
 
+To fix the problem, follow the x86 fix in commit 160457140187 ("Defer
+vtime accounting 'til after IRQ handling"), and allow host IRQs to run
+before accounting the guest exit time.
+
+In the case vtime accounting is enabled, this is not required because TB
+is used directly for accounting.
+
+Before this patch, with CONFIG_TICK_CPU_ACCOUNTING=y in the host and a
+guest running a kernel compile, the 'guest' fields of /proc/stat are
+stuck at zero. With the patch they can be observed increasing roughly as
+expected.
+
+Fixes: e233d54d4d97 ("KVM: booke: use __kvm_guest_exit")
+Fixes: 112665286d08 ("KVM: PPC: Book3S HV: Context tracking exit guest context before enabling irqs")
+Cc: stable@vger.kernel.org # 5.12+
+Signed-off-by: Laurent Vivier <lvivier@redhat.com>
+[np: only required for tick accounting, add Book3E fix, tweak changelog]
 Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
 Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20210130130852.2952424-3-npiggin@gmail.com
-Stable-dep-of: 235cee162459 ("KVM: PPC: Tick accounting should defer vtime accounting 'til after IRQ handling")
+Link: https://lore.kernel.org/r/20211027142150.3711582-1-npiggin@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/kvm/book3s_hv.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ arch/powerpc/kvm/book3s_hv.c | 30 ++++++++++++++++++++++++++++--
+ arch/powerpc/kvm/booke.c     | 16 +++++++++++++++-
+ 2 files changed, 43 insertions(+), 3 deletions(-)
 
 diff --git a/arch/powerpc/kvm/book3s_hv.c b/arch/powerpc/kvm/book3s_hv.c
-index 38b7a3491aac..d6c4e27f7ed9 100644
+index d6c4e27f7ed9..1d2593238995 100644
 --- a/arch/powerpc/kvm/book3s_hv.c
 +++ b/arch/powerpc/kvm/book3s_hv.c
-@@ -3399,8 +3399,9 @@ static noinline void kvmppc_run_core(struct kvmppc_vcore *vc)
+@@ -3399,7 +3399,20 @@ static noinline void kvmppc_run_core(struct kvmppc_vcore *vc)
  
  	kvmppc_set_host_core(pcpu);
  
-+	guest_exit_irqoff();
-+
- 	local_irq_enable();
--	guest_exit();
+-	guest_exit_irqoff();
++	context_tracking_guest_exit();
++	if (!vtime_accounting_enabled_this_cpu()) {
++		local_irq_enable();
++		/*
++		 * Service IRQs here before vtime_account_guest_exit() so any
++		 * ticks that occurred while running the guest are accounted to
++		 * the guest. If vtime accounting is enabled, accounting uses
++		 * TB rather than ticks, so it can be done without enabling
++		 * interrupts here, which has the problem that it accounts
++		 * interrupt processing overhead to the host.
++		 */
++		local_irq_disable();
++	}
++	vtime_account_guest_exit();
  
- 	/* Let secondaries go back to the offline loop */
- 	for (i = 0; i < controlled_threads; ++i) {
-@@ -4235,8 +4236,9 @@ int kvmhv_run_single_vcpu(struct kvm_vcpu *vcpu, u64 time_limit,
+ 	local_irq_enable();
+ 
+@@ -4236,7 +4249,20 @@ int kvmhv_run_single_vcpu(struct kvm_vcpu *vcpu, u64 time_limit,
  
  	kvmppc_set_host_core(pcpu);
  
-+	guest_exit_irqoff();
-+
- 	local_irq_enable();
--	guest_exit();
+-	guest_exit_irqoff();
++	context_tracking_guest_exit();
++	if (!vtime_accounting_enabled_this_cpu()) {
++		local_irq_enable();
++		/*
++		 * Service IRQs here before vtime_account_guest_exit() so any
++		 * ticks that occurred while running the guest are accounted to
++		 * the guest. If vtime accounting is enabled, accounting uses
++		 * TB rather than ticks, so it can be done without enabling
++		 * interrupts here, which has the problem that it accounts
++		 * interrupt processing overhead to the host.
++		 */
++		local_irq_disable();
++	}
++	vtime_account_guest_exit();
  
- 	cpumask_clear_cpu(pcpu, &kvm->arch.cpu_in_guest);
+ 	local_irq_enable();
+ 
+diff --git a/arch/powerpc/kvm/booke.c b/arch/powerpc/kvm/booke.c
+index b1abcb816439..75381beb7514 100644
+--- a/arch/powerpc/kvm/booke.c
++++ b/arch/powerpc/kvm/booke.c
+@@ -1016,7 +1016,21 @@ int kvmppc_handle_exit(struct kvm_vcpu *vcpu, unsigned int exit_nr)
+ 	}
+ 
+ 	trace_kvm_exit(exit_nr, vcpu);
+-	guest_exit_irqoff();
++
++	context_tracking_guest_exit();
++	if (!vtime_accounting_enabled_this_cpu()) {
++		local_irq_enable();
++		/*
++		 * Service IRQs here before vtime_account_guest_exit() so any
++		 * ticks that occurred while running the guest are accounted to
++		 * the guest. If vtime accounting is enabled, accounting uses
++		 * TB rather than ticks, so it can be done without enabling
++		 * interrupts here, which has the problem that it accounts
++		 * interrupt processing overhead to the host.
++		 */
++		local_irq_disable();
++	}
++	vtime_account_guest_exit();
+ 
+ 	local_irq_enable();
  
 -- 
 2.35.1
