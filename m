@@ -2,69 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 281315BFD5C
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 13:54:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD0715BFD61
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 13:56:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229842AbiIULyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 07:54:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43322 "EHLO
+        id S229879AbiIUL4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 07:56:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbiIULyd (ORCPT
+        with ESMTP id S229718AbiIUL43 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 07:54:33 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 881A9115C;
-        Wed, 21 Sep 2022 04:54:31 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id n12so9433144wrx.9;
-        Wed, 21 Sep 2022 04:54:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date;
-        bh=Gm0rzX0C2VtueedqY6oyqUEL0KO+3EFqhigkVvANuMY=;
-        b=m716+RhwFQujGe+RzkJCE1Od2LTIec4PvVl6l4NfPom4melvVT3xQ6pXvAeU933Pb+
-         ASrqpe67ibMWf0b+aKwQK5+LQ1e1G+JC146clhdx6j3XQevv/FWssty6+bwYpe61Oy7a
-         YcKV7V8NBYrKy4DoamDp+dPNfbELR8kCVMOJH0UfThJc7A/CAV+QLWqeILuLRA8aiRBd
-         fAvJrBDaMv57YBu4jI/AGY7Gb1Eirm7JQzT2FzH8XQH3B1IMf5sd6tyuEPV/eBvAOM6y
-         wGFNjAGo/CB58aD18But9zZHUrXvBnI2aRV5Majkdrq/ZFtuG19yZROqq58N3UEQveUB
-         tAsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Gm0rzX0C2VtueedqY6oyqUEL0KO+3EFqhigkVvANuMY=;
-        b=DMBEvmZc2qMWTxSrKw6GmIlMfrTvb/3masl6k95JXHpvuBo9wkoS3BcXgB/WLQB+J0
-         1JvsKVJ6RQZRNUyjyPcvBM6RG1Fg9tEjW4JMZovQvcUPDPSChO4EXsPZy+IJznbbKdyR
-         aMyCiFIZMu0jh2z1UydYjH5EvNVhgzQyJXmFj+1pKk3ApJNVpUCTiRCk1+xnXu0nsdE+
-         03N9dHd+joVMneCgZ0Kmi9mSCDKWzpjfEuYqfV9FZtILAq79wTWJyCMKfK24kYRUnfRG
-         08qZ0HGWw2fC5nE96pzk2tFn8Sa3KCdD3t9/ZawlN4b1GVG7ifMKO++9OFKwztBYdlT+
-         /ISQ==
-X-Gm-Message-State: ACrzQf2QRRqk7c2CwWhFcxKwLpYO7Phwjop+tQeGzFAcCmzCXSqc+P5m
-        GbrW/VuPwUeIEaqdmm3hhm9xtokXnOA=
-X-Google-Smtp-Source: AMsMyM6+bLaCCLfq2Y5Gvku94ch4fAR7cPcVVUAclbpniaRgBr/TItFM9zB1YWmXyaAc/ycMQLLlcQ==
-X-Received: by 2002:a5d:59c8:0:b0:22b:237c:3e1b with SMTP id v8-20020a5d59c8000000b0022b237c3e1bmr1636584wry.635.1663761269897;
-        Wed, 21 Sep 2022 04:54:29 -0700 (PDT)
-Received: from debian ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id y15-20020a05600c364f00b003b31c560a0csm2487422wmq.12.2022.09.21.04.54.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Sep 2022 04:54:29 -0700 (PDT)
-Date:   Wed, 21 Sep 2022 12:54:27 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Eliav Farber <farbere@amazon.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org
-Subject: build failure of next-20220921 due to 94c025b6f735 ("hwmon:
- (mr75203) modify the temperature equation according to series 5 datasheet")
-Message-ID: <Yyr7c4IjjcnWZ3mr@debian>
+        Wed, 21 Sep 2022 07:56:29 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F656895F8;
+        Wed, 21 Sep 2022 04:56:27 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MXcGV1RtnzlVwt;
+        Wed, 21 Sep 2022 19:52:18 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 21 Sep 2022 19:56:25 +0800
+Received: from [10.67.108.67] (10.67.108.67) by dggpemm500013.china.huawei.com
+ (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 21 Sep
+ 2022 19:56:25 +0800
+Message-ID: <df9590bc-1a61-28c0-55eb-9f9539d03144@huawei.com>
+Date:   Wed, 21 Sep 2022 19:56:25 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0
+Subject: Re: [PATCH V5 08/11] riscv: Support HAVE_IRQ_EXIT_ON_IRQ_STACK
+Content-Language: en-US
+To:     Guo Ren <guoren@kernel.org>
+CC:     <arnd@arndb.de>, <palmer@rivosinc.com>, <tglx@linutronix.de>,
+        <peterz@infradead.org>, <luto@kernel.org>,
+        <conor.dooley@microchip.com>, <heiko@sntech.de>,
+        <jszhang@kernel.org>, <lazyparser@gmail.com>, <falcon@tinylab.org>,
+        <chenhuacai@kernel.org>, <apatel@ventanamicro.com>,
+        <atishp@atishpatra.org>, <palmer@dabbelt.com>,
+        <paul.walmsley@sifive.com>, <mark.rutland@arm.com>,
+        <zouyipeng@huawei.com>, <bigeasy@linutronix.de>,
+        <David.Laight@aculab.com>, <linux-arch@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        Guo Ren <guoren@linux.alibaba.com>
+References: <20220918155246.1203293-1-guoren@kernel.org>
+ <20220918155246.1203293-9-guoren@kernel.org>
+ <afa17bdd-2d11-4015-6e2a-7a39db931d09@huawei.com>
+ <CAJF2gTRMt4zDQcvBOxge-4+6o1mqhWds_AiFKamdCzKJZfoKPw@mail.gmail.com>
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+In-Reply-To: <CAJF2gTRMt4zDQcvBOxge-4+6o1mqhWds_AiFKamdCzKJZfoKPw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.108.67]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,24 +66,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
+Hi,
 
-The builds of arm, mips and xtensa allmodconfig have failed to build
-next-20220921.
+Sorry to bother again, I just finished the test with your patches on 
+mine patch set.
 
-Error from xtensa and mips build:
-ERROR: modpost: "__udivdi3" [drivers/hwmon/mr75203.ko] undefined!
-ERROR: modpost: "__divdi3" [drivers/hwmon/mr75203.ko] undefined!
+On 2022/9/21 17:53, Guo Ren wrote:
+> On Wed, Sep 21, 2022 at 4:34 PM Chen Zhongjin <chenzhongjin@huawei.com> wrote:
+>> Hi,
+>>
+>> On 2022/9/18 23:52, guoren@kernel.org wrote:
+>>> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+>>> index 5f49517cd3a2..426529b84db0 100644
+>>> --- a/arch/riscv/kernel/entry.S
+>>> +++ b/arch/riscv/kernel/entry.S
+>>> @@ -332,6 +332,33 @@ ENTRY(ret_from_kernel_thread)
+>>>        tail syscall_exit_to_user_mode
+>>>    ENDPROC(ret_from_kernel_thread)
+>>>
+>>> +#ifdef CONFIG_IRQ_STACKS
+>>> +ENTRY(call_on_stack)
+>>> +     /* Create a frame record to save our ra and fp */
+>>> +     addi    sp, sp, -RISCV_SZPTR
+>>> +     REG_S   ra, (sp)
+>>> +     addi    sp, sp, -RISCV_SZPTR
+>>> +     REG_S   fp, (sp)
+>>> +
+>>> +     /* Save sp in fp */
+>>> +     move    fp, sp
+>>> +
 
-Error from arm build:
-ERROR: modpost: "__aeabi_uldivmod" [drivers/hwmon/mr75203.ko] undefined!
-ERROR: modpost: "__aeabi_ldivmod" [drivers/hwmon/mr75203.ko] undefined!
+Considering that s0 points to previous sp normally, I think here we 
+should have 'addi fp, sp, 2*RISCV_SZPTR'.
 
-git bisect pointed to 94c025b6f735 ("hwmon: (mr75203) modify the temperature equation according to series 5 datasheet")
+An example below:
 
-I will be happy to test any patch or provide any extra log if needed.
+     addi    sp, sp, -16
+     sd  ra, 8(sp)
+     sd  s0, 0(sp)
+     addi    s0, sp, 16    <- s0 is set to previous sp
+     ...
+
+     ld  ra,8(sp)
+     ld  s0,0(sp)
+     addi    sp,sp,16
+
+So maybe it's better to save the stack frame as below:
+
+     addi    sp, sp, -2*RISCV_SZPTR
+     REG_S   ra, RISCV_SZPTR(sp)
+     REG_S   s0, (sp)
+
+     /* Save sp in fp */
+     addi    s0, sp, 2*RISCV_SZPTR
+
+     ...
+
+     /*
+      * Restore sp from prev fp, and fp, ra from the frame
+      */
+     addi    sp, s0, -2*RISCV_SZPTR
+     REG_L   ra, RISCV_SZPTR(sp)
+     REG_L   s0, (sp)
+     addi    sp, sp, 2*RISCV_SZPTR
 
 
--- 
-Regards
-Sudip
+Anyway, lets set fp as sp + 2 * RISCV_SZPTR, so that unwinder can 
+connect two stacks same as normal function.
+
+I tested this with my patch and the unwinder works properly.
+
+
+Thanks for your time!
+
+Best,
+
+Chen
+
+>>> +     /* Move to the new stack and call the function there */
+>>> +     li      a3, IRQ_STACK_SIZE
+>>> +     add     sp, a1, a3
+>>> +     jalr    a2
+>>> +
+>>> +     /*
+>>> +      * Restore sp from prev fp, and fp, ra from the frame
+>>> +      */
+>>> +     move    sp, fp
+>>> +     REG_L   fp, (sp)
+>>> +     addi    sp, sp, RISCV_SZPTR
+>>> +     REG_L   ra, (sp)
+>>> +     addi    sp, sp, RISCV_SZPTR
+>>> +     ret
+>>> +ENDPROC(call_on_stack)
+>>> +#endif
+>> Seems my compiler (riscv64-linux-gnu-gcc 8.4.0, cross compiling from
+>> x86) cannot recognize the register `fp`.
+> The whole entry.S uses s0 instead of fp, so I approve of your advice. Thx.
+>
+>> After I changed it to `s0` this can pass compiling.
+>>
+>>
+>> Seems there is nowhere else using `fp`, can this just using `s0` instead?
+>>
+>> Best,
+>>
+>> Chen
+>>
+>>
