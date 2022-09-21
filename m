@@ -2,114 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF6795BFC17
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 12:14:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A8E45BFC1F
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 12:17:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231145AbiIUKOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 06:14:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41416 "EHLO
+        id S230027AbiIUKRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 06:17:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbiIUKOH (ORCPT
+        with ESMTP id S229528AbiIUKRC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 06:14:07 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D62CB7FF84;
-        Wed, 21 Sep 2022 03:14:05 -0700 (PDT)
-Received: from canpemm500004.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MXZ0P0DlrzlWv4;
-        Wed, 21 Sep 2022 18:09:57 +0800 (CST)
-Received: from localhost (10.175.101.6) by canpemm500004.china.huawei.com
- (7.192.104.92) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 21 Sep
- 2022 18:14:04 +0800
-From:   Weilong Chen <chenweilong@huawei.com>
-To:     <chenweilong@huawei.com>, <yangyicong@hisilicon.com>
-CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] i2c: hisi: Add support to get clock frequency from clock property
-Date:   Wed, 21 Sep 2022 18:15:40 +0800
-Message-ID: <20220921101540.352553-1-chenweilong@huawei.com>
-X-Mailer: git-send-email 2.31.GIT
+        Wed, 21 Sep 2022 06:17:02 -0400
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A64A993234
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 03:17:01 -0700 (PDT)
+Received: by mail-qk1-f179.google.com with SMTP id o7so3565019qkj.10
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 03:17:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=dXHLrhRIwlzhRG/KoQtkwVgS7+IGnxtoWbd/GyVKzFQ=;
+        b=bLu2XnbwHkXPeMDlUdwnpUF+9HAWp6Q6JBw/QNRB4kuB4guGVBR59qUGJuu7gLwTcC
+         LR869jUwYsSL7iPsy5ANvRcjXQjSzFiAemUcuNuAhTALIo+CIS6VEXaq2vzSX1hVvxOv
+         Da0RTb9Nh3crEDbaPJWAyX8zFITMJsnZ2spbKQg6xE1OZoaLcQ8X1HhbIo90NqUII5pk
+         9fmz9H1yJcMLtK8YnV2EyeaUGGxoMOBP09cOQp4PgzQq5kWM6DYJvCnPGrTEON3+wXA+
+         UOVkFJdRd3k+Cg0DxFlrA/9h9AEcIHgc8JTC8ehp1evzi4BpoKG2n+nFTWBY/VmV/jQv
+         x06w==
+X-Gm-Message-State: ACrzQf2JnVEuroSCYez0maZiklAXO+dFaqxtGkiDqmYIHn5c5d6DizeV
+        fQX7MxRKoTB+FuyLaaADptD1F4RdZTqpyJ8Q
+X-Google-Smtp-Source: AMsMyM5cT2JXg+td4+a4mI9FpZdjyo811bORWBJcIGnYh0LMdO4JBkBZdxfyHPh7dvpY8IpWgmLpdw==
+X-Received: by 2002:a37:de15:0:b0:6cb:cdc7:529a with SMTP id h21-20020a37de15000000b006cbcdc7529amr18791507qkj.208.1663755420605;
+        Wed, 21 Sep 2022 03:17:00 -0700 (PDT)
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
+        by smtp.gmail.com with ESMTPSA id bl21-20020a05620a1a9500b006ce30a5f892sm1515329qkb.102.2022.09.21.03.16.59
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Sep 2022 03:16:59 -0700 (PDT)
+Received: by mail-yb1-f173.google.com with SMTP id s14so7336542ybe.7
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 03:16:59 -0700 (PDT)
+X-Received: by 2002:a25:8e84:0:b0:696:466c:baa with SMTP id
+ q4-20020a258e84000000b00696466c0baamr21874382ybl.604.1663755419235; Wed, 21
+ Sep 2022 03:16:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500004.china.huawei.com (7.192.104.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220921092944.230413-1-ye.xingchen@zte.com.cn>
+In-Reply-To: <20220921092944.230413-1-ye.xingchen@zte.com.cn>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 21 Sep 2022 12:16:48 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUtXQJDBMDBROHa0md5eFvnjtLNNBVvWjLKEPRxFzgg2g@mail.gmail.com>
+Message-ID: <CAMuHMdUtXQJDBMDBROHa0md5eFvnjtLNNBVvWjLKEPRxFzgg2g@mail.gmail.com>
+Subject: Re: [PATCH linux-next] um: use strscpy() is more robust and safer
+To:     cgel.zte@gmail.com
+Cc:     richard@nod.at, anton.ivanov@cambridgegreys.com,
+        johannes@sipsolutions.net, baihaowen@meizu.com,
+        linux-um@lists.infradead.org, linux-kernel@vger.kernel.org,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Support the driver to obtain clock information by clk_rate or
-clock property. Find clock first, if not, fall back to clk_rate.
+Hi Ye,
 
-Signed-off-by: Weilong Chen <chenweilong@huawei.com>
----
- drivers/i2c/busses/i2c-hisi.c | 25 ++++++++++++++++++++-----
- 1 file changed, 20 insertions(+), 5 deletions(-)
+On Wed, Sep 21, 2022 at 11:45 AM <cgel.zte@gmail.com> wrote:
+> From: ye xingchen <ye.xingchen@zte.com.cn>
+>
+> The implementation of strscpy() is more robust and safer.
+>
+> That's now the recommended way to copy NUL terminated strings.
+>
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 
-diff --git a/drivers/i2c/busses/i2c-hisi.c b/drivers/i2c/busses/i2c-hisi.c
-index 67031024217c..5e48d4ee0c6d 100644
---- a/drivers/i2c/busses/i2c-hisi.c
-+++ b/drivers/i2c/busses/i2c-hisi.c
-@@ -8,6 +8,7 @@
- #include <linux/acpi.h>
- #include <linux/bits.h>
- #include <linux/bitfield.h>
-+#include <linux/clk.h>
- #include <linux/completion.h>
- #include <linux/i2c.h>
- #include <linux/interrupt.h>
-@@ -91,6 +92,7 @@ struct hisi_i2c_controller {
- 	void __iomem *iobase;
- 	struct device *dev;
- 	int irq;
-+	struct clk *clk;
- 
- 	/* Intermediates for recording the transfer process */
- 	struct completion *completion;
-@@ -456,10 +458,21 @@ static int hisi_i2c_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
--	ret = device_property_read_u64(dev, "clk_rate", &clk_rate_hz);
--	if (ret) {
--		dev_err(dev, "failed to get clock frequency, ret = %d\n", ret);
--		return ret;
-+	ctlr->clk = devm_clk_get_optional(&pdev->dev, NULL);
-+	if (IS_ERR(ctlr->clk)) {
-+		ret = device_property_read_u64(dev, "clk_rate", &clk_rate_hz);
-+		if (ret) {
-+			dev_err(dev, "failed to get clock frequency, ret = %d\n", ret);
-+			return ret;
-+		}
-+	} else {
-+		ret = clk_prepare_enable(ctlr->clk);
-+		if (ret) {
-+			dev_err(dev, "failed to enable clock, ret = %d\n", ret);
-+			return ret;
-+		}
-+
-+		clk_rate_hz = clk_get_rate(ctlr->clk);
- 	}
- 
- 	ctlr->clk_rate_khz = DIV_ROUND_UP_ULL(clk_rate_hz, HZ_PER_KHZ);
-@@ -475,8 +488,10 @@ static int hisi_i2c_probe(struct platform_device *pdev)
- 	i2c_set_adapdata(adapter, ctlr);
- 
- 	ret = devm_i2c_add_adapter(dev, adapter);
--	if (ret)
-+	if (ret) {
-+		clk_disable_unprepare(ctlr->clk);
- 		return ret;
-+	}
- 
- 	hw_version = readl(ctlr->iobase + HISI_I2C_VERSION);
- 	dev_info(ctlr->dev, "speed mode is %s. hw version 0x%x\n",
--- 
-2.31.GIT
+Thanks for your patch!
 
+> --- a/arch/um/os-Linux/umid.c
+> +++ b/arch/um/os-Linux/umid.c
+> @@ -262,7 +262,7 @@ static int __init make_umid(void)
+>         make_uml_dir();
+>
+>         if (*umid == '\0') {
+> -               strlcpy(tmp, uml_dir, sizeof(tmp));
+> +               strscpy(tmp, uml_dir, sizeof(tmp));
+>                 strlcat(tmp, "XXXXXX", sizeof(tmp));
+
+Do we need strscat(), too? ;-)
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
