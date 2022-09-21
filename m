@@ -2,131 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2CF25BFBBE
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 11:55:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF55B5BFBCD
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 11:57:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbiIUJyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 05:54:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33810 "EHLO
+        id S229936AbiIUJ4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 05:56:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232096AbiIUJyI (ORCPT
+        with ESMTP id S229718AbiIUJ4v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 05:54:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54246A18D;
-        Wed, 21 Sep 2022 02:53:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E4612B82F38;
-        Wed, 21 Sep 2022 09:53:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 717FBC43148;
-        Wed, 21 Sep 2022 09:53:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663754033;
-        bh=M7t6IiqXpQGB9XaRaXvCXP2eKsC0VvYqKrHAX2BqmOU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=HFF9B8PKG4sjnwYn/qRsqkY5pL/Avw/xcwxmQNH3bGXcYw0XgvT/7vdbeMgPt0L+y
-         ZtidYy6WjfWnnASa18lptSACPl9vGw452nq1nd4+wt6EOS/gfIEduAXmd2gZcbc0x8
-         VwqHMXTOE1Tb7RAgR5ghqNuqYbgTli5nEXvmsUw9uXhlIIBcOBdEqRweGeJ9/ETyZD
-         7FT1xJeLiEwsB8KcV0Et3Hy5hN1SAcZE6UJyR1qEghkydOQJoPuapbTnNxM4Wki8YZ
-         rTdejngZAzw7IwT+03z6g0QZWTGISoeTnCYeuDzhEr+V/eiX5hSmycbKwmu5oYt+l4
-         QgZmEJo51EK/g==
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-1280590722dso8307874fac.1;
-        Wed, 21 Sep 2022 02:53:53 -0700 (PDT)
-X-Gm-Message-State: ACrzQf330Wc6qUXeqb+xu9FB8NUVHBw2lypqmiq/Wqji2csGVDO1LMp/
-        vlZh/lhd2PLZKC3sWqSGx3TJGJ6D1Qkf6Eb7p8w=
-X-Google-Smtp-Source: AMsMyM491vQRywb4wDvkWp07dXKdsU6sntPmf24mps+H/A/7DIMj4uinS1kC9vZIpoBWnuepOdlaOPlfaWKaVAl63Ik=
-X-Received: by 2002:a05:6870:a78e:b0:12b:542b:e5b2 with SMTP id
- x14-20020a056870a78e00b0012b542be5b2mr4555356oao.112.1663754032361; Wed, 21
- Sep 2022 02:53:52 -0700 (PDT)
+        Wed, 21 Sep 2022 05:56:51 -0400
+Received: from EUR02-VE1-obe.outbound.protection.outlook.com (mail-eopbgr20065.outbound.protection.outlook.com [40.107.2.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF2CF111D;
+        Wed, 21 Sep 2022 02:56:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YOpSbErnE8uXGgvRpkXEKYtlnPwPUKomrzf2THL8ByueyNHnWj6FGVh+32r74IrztLs3IR4OoY0pL9PeeVJ4COAerrpwzu3OBHnFsqM/+t0avijjMepootvqpPEQWroXvR0uqZg13aD0oK2BJZkWpiZ0NEnfDqXN/LWKaZJ1fQPbxu+iN9j/qSsx2eVjhm8TQgVLKyEWNVaAcC/KDg38ztLOCX11+h9jD+TOAYOLfdXZu63B3NKX9tCLDADjE7G7SOPl8AeMV8qLfGTZL18x6JiJCHhaLXSWwsxkqDkOsAjsj05pB2Y93zRhvZK7D36XLAk7bE/3WFRFpvbEkMUMeQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=L8ev4+Nh0k4rNpxqrgTEfFvpwB/+XSnYrJXddrYllpA=;
+ b=EqxgCFFBz7Q+NzNfKwBfzCsquZb7VoNcchrRMTiVytEysxM7b6V0fD8pSM3cOsCsS6PpGI4qFjuRsWw49l5P8P3xcveHp4wG5Ut55lTtAMrWjkqscvbBW6bRivfUOSi6loBzA2P5CjquxpNgptD10GdpYxbttvIdirBUww/YaAf1ZsgSNyKRjzlc/MPDaCxgIbpp2E2fh36/GkElgzMbCXwg2ae7KNIKtXdl+AUpncGU2TcesEt3zwErl8ER4kld2jfNCN0AudH60T5kyHpXT8MQo5QuVvxVF3T0kTd+b7/x0cwJjrAp42RVN2mFP1l6b2o3id6DJqVbo4SHIcZybQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=L8ev4+Nh0k4rNpxqrgTEfFvpwB/+XSnYrJXddrYllpA=;
+ b=N8cBoiIBABS4DCNzTHtVYM81jGmDyvhK/mlhieDDoee775OOiUFybBNn3gpVCyLioDWAtvBpanp3OfS/0wg/7MC5S4bQnhqbTUhD1xcC9gbnFBAbF+EjSGbYxTz2Szn8l4eXmtT/LBNeCrYohYfCf+4EseVH4fDb3bdpFGswNIk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
+ by AM9PR04MB7490.eurprd04.prod.outlook.com (2603:10a6:20b:2d9::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.14; Wed, 21 Sep
+ 2022 09:56:44 +0000
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::a67a:849c:aeff:cad1]) by VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::a67a:849c:aeff:cad1%7]) with mapi id 15.20.5632.021; Wed, 21 Sep 2022
+ 09:56:44 +0000
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     netdev@vger.kernel.org
+Cc:     Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH net-next] net/sched: taprio: remove unnecessary taprio_list_lock
+Date:   Wed, 21 Sep 2022 12:56:31 +0300
+Message-Id: <20220921095632.1379251-1-vladimir.oltean@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: AM9P193CA0022.EURP193.PROD.OUTLOOK.COM
+ (2603:10a6:20b:21e::27) To VI1PR04MB5136.eurprd04.prod.outlook.com
+ (2603:10a6:803:55::19)
 MIME-Version: 1.0
-References: <20220918155246.1203293-1-guoren@kernel.org> <20220918155246.1203293-9-guoren@kernel.org>
- <afa17bdd-2d11-4015-6e2a-7a39db931d09@huawei.com>
-In-Reply-To: <afa17bdd-2d11-4015-6e2a-7a39db931d09@huawei.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 21 Sep 2022 17:53:39 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRMt4zDQcvBOxge-4+6o1mqhWds_AiFKamdCzKJZfoKPw@mail.gmail.com>
-Message-ID: <CAJF2gTRMt4zDQcvBOxge-4+6o1mqhWds_AiFKamdCzKJZfoKPw@mail.gmail.com>
-Subject: Re: [PATCH V5 08/11] riscv: Support HAVE_IRQ_EXIT_ON_IRQ_STACK
-To:     Chen Zhongjin <chenzhongjin@huawei.com>
-Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
-        peterz@infradead.org, luto@kernel.org, conor.dooley@microchip.com,
-        heiko@sntech.de, jszhang@kernel.org, lazyparser@gmail.com,
-        falcon@tinylab.org, chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, mark.rutland@arm.com,
-        zouyipeng@huawei.com, bigeasy@linutronix.de,
-        David.Laight@aculab.com, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1PR04MB5136:EE_|AM9PR04MB7490:EE_
+X-MS-Office365-Filtering-Correlation-Id: 81935b54-66de-409b-c254-08da9bb796ed
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: NOdij3/KtZH4KCSDJe2BUhDGJV+gWvzva5fOye+XNxSJY5wqhKL3a0OUqujwPIgt4iF04MIx9ZoZ7HElVTujQrhtdBJr45Vzmhghuh+0PIxrAheaovpsMUEB0s57E7r0jH67M81LC7fmWceIIObX7UuOarb8NOgTdsXamP1ntWeEy4WXxXopnTAGBIrtu5PwN55pKJt75M6VgXA6W7vxKDH0lpgTq9XTaEKODmTulRkTeHZnBXZVZ5cte7GZ64577isRZ31XyDL0TMtqAc3mBnjZaPWwmxVaXGMgrUOxmoTOh8og/F9WnAogmIqrCX56B70UWf2b4ueBGwYNWJexa682/ucDWINh3+d6wh8dmi4ApWGyR1vwg5jHnwmFphr74QfAwyNdGXW/5RQdEclEgmhWJF7c+A7tiv2l14z/WNh7DDkIu7ne6EP73FaKKx3o5El8kaWmU+GxgKBTtNkR3FgaiK2/CfZOPOVeeYxM+Xh4hnRDFK/soY24cHWp/KlZwSU0lH/sotTiLn2D14Z7opdaTewRMS+qOc7P+vvqOquiJ9NIP3TWky/UUX+myT4DGuZGYmB5ep/R/GkdwBc9ja0aIoXZc4dqWvEYTynVkLN5OmW98bdXo+r4YsBtH4bh8HuF44F9802zhnmymK6fsALAK8loXvRkqbP0zDaIvpKIlNREVk6BABPlBt9YA1evn4p0ibAgSFlVb/dzMx/o4H4qY4vesKL1uBQrgLsrHs7Dzxhfrw8uvwT4I+FC5q4T+uZFP0EB+3cTqZJ4tl4qLA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(366004)(136003)(346002)(376002)(396003)(451199015)(6916009)(86362001)(186003)(83380400001)(1076003)(38350700002)(38100700002)(6486002)(6512007)(6506007)(2906002)(6666004)(52116002)(26005)(478600001)(2616005)(54906003)(66946007)(316002)(66556008)(41300700001)(44832011)(4326008)(66476007)(8676002)(7416002)(8936002)(5660300002)(36756003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?uJLpnAC+wBcmROSKmD7zeGROvs2uXLaqIZ1Bate6b+O804izF3VHI8RSoVWi?=
+ =?us-ascii?Q?n9IT9pGBWXtkEjU537JbDdXEbXdJSdxGb+dV9EGH9zbtSVUgXRwEdtMiGMt2?=
+ =?us-ascii?Q?qyFRGdaRU6QzwlkZr9TDBka55ZEekGXdz69yBIqJq58f5vW/ieOkKEfVcwL1?=
+ =?us-ascii?Q?dez3Xu9lJ3VovPtCURsTZU5nrgYxpIn82Q2aKMdh/8F/n1h+9oELqO1lkhlN?=
+ =?us-ascii?Q?ov4RlqW8f3cZpxMP9QsOiVvKa6siewvbZaW6nS9D99VMDUC5briEATsxHlgI?=
+ =?us-ascii?Q?FI1lWsnu4iK/4D50NDeMRjEIBIMALpB1MoV/3hRfl8iEqkCVH2qbY2tA+NhT?=
+ =?us-ascii?Q?jId0C+/RmmX80Ji3t+xU6iHrBwLo99GIpzulRi01A4yrRginh71ml5h8r8S/?=
+ =?us-ascii?Q?bvogrrisjlFY5cyS6cxlkiDhBj7uXGpBSwsur6tjfBWZznstTH5mzfQAAmWb?=
+ =?us-ascii?Q?9M7GAv7ki0R4WAx7iMYZZRhg+ZyEBfe0DHX6RlQdjuKvx0awqWcfjy2n1ZuE?=
+ =?us-ascii?Q?J1phuDZv5H3/NszxYFjAfV5bYZBdW2bQsQcxDDPTQlYoD73LBONC3u08Ek1s?=
+ =?us-ascii?Q?r2XkKpVQvSgESGRHN1rw1QHfHAIWnQDd39FYJg2iF49BagDT218iezQgvl3A?=
+ =?us-ascii?Q?h68Lch9twKfLE6WUNuJPuSs3/CgbrDSx8Sw3WctcYFXyF4RDDl7JiDPrrT/2?=
+ =?us-ascii?Q?q8Sc94Z58O9lcMgTTZp/97LfJkp7szEXpbq5C9/fiRkE8Yl7eyDPlclexH9/?=
+ =?us-ascii?Q?BihVYyajT+MPwjJdGjFBTWalgzaLdacNzyJdhuHVmnCh5IdWYdUX1FPxIZLw?=
+ =?us-ascii?Q?o+Y3lx6y+FnYOtY7cI00UrSLsFYeYbP1aGcAntzSd8/Yx88R30nzj+LdEkd3?=
+ =?us-ascii?Q?g0RjJtIJ08B5turyhpUBUFn+0wr7OXH0bHo9+MYwNx6DjnIKMA5yhF3ehwt9?=
+ =?us-ascii?Q?6I+yjVwjtbupYTwU8F0g7NnnG2TrzhfEHkgilqzsgoTFkiustWpM5xPW140R?=
+ =?us-ascii?Q?qG1uJrTRPS461IA58A8HZhsG68BKQ3Krw4/2CtGZrorHwN5slmryjn2fb82r?=
+ =?us-ascii?Q?Yn6IPmhZWlsNOCkf8MxCwVdtzw0yzxsxslI3Voo27SebOyhuxhaYdoPnDasA?=
+ =?us-ascii?Q?V21FtzPa9KASbv9VCvd66xEEMpEDn9sn0PZ3T0AIGGEKXLbzs0VU8Jcn+YnS?=
+ =?us-ascii?Q?ZQcLLYINCnUHZqHjhqdGatVVUWaOFBg5cBrUR3dMZasLq5NH5Nzp/vu7h62a?=
+ =?us-ascii?Q?15F6tyE4ZqP+veGtkcDCPT1TewvqPcEtsgSE8pd6mANAfJWjDLXrp4+7WvDV?=
+ =?us-ascii?Q?vN6/bniomMkPNTMHdbkO2ilBV1sUdrtxMQKVn2+dbOTsXM+UUNsnAWzUiwgw?=
+ =?us-ascii?Q?WUpFCgF30alm4DIrN4IJ9TAttIXuLCMBfZ4Imyx/EhsSy+f6QI6n/E+i9Bup?=
+ =?us-ascii?Q?6YAZWngQcQjY8ld1Ro6O2cgqudc7iXlaliI/WaobumI4rinODEy1nUPaO2i8?=
+ =?us-ascii?Q?qT1+aFHQaBQIvHmw8GMdbOf8UtueNBl1baq3DEI/E7gaoUfo6YXJRAxkH0oF?=
+ =?us-ascii?Q?latWLdDAJdX5GsjxN4NizmPM01SxXK/Jv4JFJK+6FW4DnkNlX5tBbNA+pmJ0?=
+ =?us-ascii?Q?wQ=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 81935b54-66de-409b-c254-08da9bb796ed
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Sep 2022 09:56:44.2643
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8rrIl365MJ0zPE/+GkeIlauWnOQHsKDGdopjqBMei4C3ZWQeiMwsd2pdHm998cbaPOmmooRqXqqsDvVHAxHmhA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB7490
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 21, 2022 at 4:34 PM Chen Zhongjin <chenzhongjin@huawei.com> wrote:
->
-> Hi,
->
-> On 2022/9/18 23:52, guoren@kernel.org wrote:
-> > diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-> > index 5f49517cd3a2..426529b84db0 100644
-> > --- a/arch/riscv/kernel/entry.S
-> > +++ b/arch/riscv/kernel/entry.S
-> > @@ -332,6 +332,33 @@ ENTRY(ret_from_kernel_thread)
-> >       tail syscall_exit_to_user_mode
-> >   ENDPROC(ret_from_kernel_thread)
-> >
-> > +#ifdef CONFIG_IRQ_STACKS
-> > +ENTRY(call_on_stack)
-> > +     /* Create a frame record to save our ra and fp */
-> > +     addi    sp, sp, -RISCV_SZPTR
-> > +     REG_S   ra, (sp)
-> > +     addi    sp, sp, -RISCV_SZPTR
-> > +     REG_S   fp, (sp)
-> > +
-> > +     /* Save sp in fp */
-> > +     move    fp, sp
-> > +
-> > +     /* Move to the new stack and call the function there */
-> > +     li      a3, IRQ_STACK_SIZE
-> > +     add     sp, a1, a3
-> > +     jalr    a2
-> > +
-> > +     /*
-> > +      * Restore sp from prev fp, and fp, ra from the frame
-> > +      */
-> > +     move    sp, fp
-> > +     REG_L   fp, (sp)
-> > +     addi    sp, sp, RISCV_SZPTR
-> > +     REG_L   ra, (sp)
-> > +     addi    sp, sp, RISCV_SZPTR
-> > +     ret
-> > +ENDPROC(call_on_stack)
-> > +#endif
->
-> Seems my compiler (riscv64-linux-gnu-gcc 8.4.0, cross compiling from
-> x86) cannot recognize the register `fp`.
-The whole entry.S uses s0 instead of fp, so I approve of your advice. Thx.
+The 3 functions that want access to the taprio_list:
+taprio_dev_notifier(), taprio_destroy() and taprio_init() are all called
+with the rtnl_mutex held, therefore implicitly serialized with respect
+to each other. A spin lock serves no purpose.
 
->
-> After I changed it to `s0` this can pass compiling.
->
->
-> Seems there is nowhere else using `fp`, can this just using `s0` instead?
->
-> Best,
->
-> Chen
->
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+---
+ net/sched/sch_taprio.c | 7 -------
+ 1 file changed, 7 deletions(-)
 
-
+diff --git a/net/sched/sch_taprio.c b/net/sched/sch_taprio.c
+index 1ab92968c1e3..163255e0cd77 100644
+--- a/net/sched/sch_taprio.c
++++ b/net/sched/sch_taprio.c
+@@ -27,7 +27,6 @@
+ #include <net/tcp.h>
+ 
+ static LIST_HEAD(taprio_list);
+-static DEFINE_SPINLOCK(taprio_list_lock);
+ 
+ #define TAPRIO_ALL_GATES_OPEN -1
+ 
+@@ -1082,7 +1081,6 @@ static int taprio_dev_notifier(struct notifier_block *nb, unsigned long event,
+ 	if (event != NETDEV_UP && event != NETDEV_CHANGE)
+ 		return NOTIFY_DONE;
+ 
+-	spin_lock(&taprio_list_lock);
+ 	list_for_each_entry(q, &taprio_list, taprio_list) {
+ 		qdev = qdisc_dev(q->root);
+ 		if (qdev == dev) {
+@@ -1090,7 +1088,6 @@ static int taprio_dev_notifier(struct notifier_block *nb, unsigned long event,
+ 			break;
+ 		}
+ 	}
+-	spin_unlock(&taprio_list_lock);
+ 
+ 	if (found)
+ 		taprio_set_picos_per_byte(dev, q);
+@@ -1602,9 +1599,7 @@ static void taprio_destroy(struct Qdisc *sch)
+ 	struct sched_gate_list *oper, *admin;
+ 	unsigned int i;
+ 
+-	spin_lock(&taprio_list_lock);
+ 	list_del(&q->taprio_list);
+-	spin_unlock(&taprio_list_lock);
+ 
+ 	/* Note that taprio_reset() might not be called if an error
+ 	 * happens in qdisc_create(), after taprio_init() has been called.
+@@ -1653,9 +1648,7 @@ static int taprio_init(struct Qdisc *sch, struct nlattr *opt,
+ 	q->clockid = -1;
+ 	q->flags = TAPRIO_FLAGS_INVALID;
+ 
+-	spin_lock(&taprio_list_lock);
+ 	list_add(&q->taprio_list, &taprio_list);
+-	spin_unlock(&taprio_list_lock);
+ 
+ 	if (sch->parent != TC_H_ROOT) {
+ 		NL_SET_ERR_MSG_MOD(extack, "Can only be attached as root qdisc");
 -- 
-Best Regards
- Guo Ren
+2.34.1
+
