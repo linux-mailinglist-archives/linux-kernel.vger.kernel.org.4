@@ -2,263 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB4B35C04B4
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 18:52:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 112C85C04BC
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 18:53:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231945AbiIUQwk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 12:52:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33694 "EHLO
+        id S232167AbiIUQxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 12:53:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231245AbiIUQwP (ORCPT
+        with ESMTP id S231656AbiIUQwj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 12:52:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CF31E44;
-        Wed, 21 Sep 2022 09:48:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9E72BB831AC;
-        Wed, 21 Sep 2022 16:48:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91C43C433C1;
-        Wed, 21 Sep 2022 16:47:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663778880;
-        bh=Uq+7kCNXeOIRo5XwITrK2IWj1Ufg3iGwxOhE4kBFrR0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=J40hXYKCXdZlyaGQ3A4O2U1YOCccm76nvu2kOlyx1ef+LISqtylleTBEzqalFtso6
-         VL6ZB8UW8CvNLNUtgHnGCJv0kEUMCP5ixac8rFnJXxPd1RNqZWzoHe6cHLH1wYJDyG
-         rNA28PZKQYNJQL0psCbypd+6cSnsvfgWIShrnovs=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-Subject: [PATCH 5.19 00/39] 5.19.11-rc2 review
-Date:   Wed, 21 Sep 2022 18:47:57 +0200
-Message-Id: <20220921164741.757857192@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.3
+        Wed, 21 Sep 2022 12:52:39 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3F329B
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 09:48:46 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 207so6498982pgc.7
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 09:48:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
+        bh=/liW1qFYl/y6UrXav3eM11mYudj72cQq74iqPa7PHOU=;
+        b=nLZejgyw1SYn1NN5mIEXLlYJ5HgHbVVwHISf5mLxhwbIaKu5C2qZEqeUtEkIQUEoP0
+         8gW+S2p9vzqOukem8SLt6TV+4x3IEJi9zZ3N90Vlx8gRPWJaOUbQUZriz3G0M263Np3E
+         lplITQMPTgx0+++ZgTYNFRgkZ6cW68pEClUepwOzgoxSN4tuctYWRbAWJZNYTQVxMQQ8
+         9LgFImM6nNfJy6Tn7rCFpjzp3A+iuaMsFoBzmji9I2Rkm/h70oV3bRt7XJITeDu8ouZY
+         csWznXywohwEbZxdXQkzv+mVBNipdnNgD3QUENm3oLf43eOrlJE2bFbngKyRmBeRp1HP
+         40iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=/liW1qFYl/y6UrXav3eM11mYudj72cQq74iqPa7PHOU=;
+        b=BeB/YRTOadvEfzbLVR8my/w4qHRHfnFiHHRlKbbj5OWciW7XhSvPXWpsxrA75T7T09
+         iRVYlgxtplpqyVED5yv8MQkAr3cn+6I6WXpe+RxhryQAcNRFFYBHFvV0igcdX62b+wpc
+         mu64zr18JJ9MIqg5Db4Q4l22ekMdfPh5Hg7jhNYmHF1arLOslBBKED61lRX6HCcIf9UE
+         GAaf3DbJd/rnCE/hLAQEnjI29mV3QLZ/KP+7Q0WYZ6HWCAsIlStVUGeDGVFoaI96io2r
+         NY5ARkRA49ysYI4PdM6MCi+tJqC+lGKi9sf4bx7V300lfrUDyiVpXUqZQozoDlT9zXMZ
+         lBkg==
+X-Gm-Message-State: ACrzQf0Je5Km/04Sh8Y4wYwYh5QZGidMc15xSOp+osbBtudRslcmt0OB
+        HhHnkjJho+e9zHfBZRkXPcE=
+X-Google-Smtp-Source: AMsMyM7HAQcUErQtj6estDMz+rxgEZ0Z94bVqdgFXZWdIJMkw4T7Fyv+SiwT7MArRDnzpgdHVRV/rQ==
+X-Received: by 2002:a05:6a00:1d26:b0:54e:8c81:9f64 with SMTP id a38-20020a056a001d2600b0054e8c819f64mr17249134pfx.58.1663778925772;
+        Wed, 21 Sep 2022 09:48:45 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id 9-20020a621409000000b0053e6eae9668sm2417284pfu.2.2022.09.21.09.48.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Sep 2022 09:48:45 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 21 Sep 2022 06:48:43 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Qais Yousef <qais.yousef@arm.com>
+Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com, rostedt@goodmis.org,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, linux-kernel@vger.kernel.org,
+        parth@linux.ibm.com, chris.hyser@oracle.com,
+        valentin.schneider@arm.com, patrick.bellasi@matbug.net,
+        David.Laight@aculab.com, pjt@google.com, pavel@ucw.cz,
+        qperret@google.com, tim.c.chen@linux.intel.com, joshdon@google.com
+Subject: Re: [PATCH v4 6/8] sched/fair: Add sched group latency support
+Message-ID: <YytAa9a8DSyuJWhT@slm.duckdns.org>
+References: <20220916080305.29574-1-vincent.guittot@linaro.org>
+ <20220916080305.29574-7-vincent.guittot@linaro.org>
+ <000c2893-feb4-373d-2234-2ca74be94714@arm.com>
+ <CAKfTPtASminP4ogVRhcvQ4R3-x-E+UUzuMaEu-xQU_MtLr9+Xg@mail.gmail.com>
+ <YyioI4iBFq8ib9JT@slm.duckdns.org>
+ <20220921155521.qb3jb74nbjoenau6@airbuntu>
 MIME-Version: 1.0
-User-Agent: quilt/0.67
-X-stable: review
-X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.11-rc2.gz
-X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-5.19.y
-X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 5.19.11-rc2
-X-KernelTest-Deadline: 2022-09-23T16:47+00:00
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220921155521.qb3jb74nbjoenau6@airbuntu>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 5.19.11 release.
-There are 39 patches in this series, all will be posted as a response
-to this one.  If anyone has any issues with these being applied, please
-let me know.
+Hello,
 
-Responses should be made by Fri, 23 Sep 2022 16:47:28 +0000.
-Anything received after that time might be too late.
+On Wed, Sep 21, 2022 at 05:07:38PM +0100, Qais Yousef wrote:
+> Wouldn't cpu.latency.nice be enough? I think the latency_offset is
+> implementation detail that userspace shouldn't be concerned about.
 
-The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.11-rc2.gz
-or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
-and the diffstat can be found below.
+One option could be just using the same mapping as cpu.weight so that 100
+maps to neutral, 10000 maps close to -20, 1 maps close to 19. It isn't great
+that the value can't be interpreted in any intuitive way (e.g. a time
+duration based interface would be a lot easier to grok even if it still is
+best effort) but if that's what the per-task interface is gonna be, it'd be
+best to keep cgroup interface in line.
 
-thanks,
+As for whether a single value would fit the bill, it's again something which
+should be answered for both task and cgroup based interface at the same
+time. That said, my not-too-throught-through opinion is that a single value
+for per-task / per-cgroup interface + system level knobs to fine tune how
+that actually applies is likely enough and probably better than exposing
+exposing a host of internal details to applications directly.
 
-greg k-h
+Thanks.
 
--------------
-Pseudo-Shortlog of commits:
-
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 5.19.11-rc2
-
-Lu Baolu <baolu.lu@linux.intel.com>
-    Revert "iommu/vt-d: Fix possible recursive locking in intel_iommu_init()"
-
-Takashi Iwai <tiwai@suse.de>
-    ALSA: hda/sigmatel: Fix unused variable warning for beep power change
-
-Takashi Iwai <tiwai@suse.de>
-    ALSA: hda/sigmatel: Keep power up while beep is enabled
-
-Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-    cgroup: Add missing cpus_read_lock() to cgroup_attach_task_all()
-
-Janne Grunau <j@jannau.net>
-    dt-bindings: apple,aic: Fix required item "apple,fiq-index" in affinity description
-
-sewookseo <sewookseo@google.com>
-    net: Find dst with sk's xfrm policy not ctl_sk
-
-Alex Deucher <alexander.deucher@amd.com>
-    drm/amdgpu: move nbio sdma_doorbell_range() into sdma code for vega
-
-Alex Deucher <alexander.deucher@amd.com>
-    drm/amdgpu: move nbio ih_doorbell_range() into ih code for vega
-
-Lijo Lazar <lijo.lazar@amd.com>
-    drm/amdgpu: Don't enable LTR if not supported
-
-Alex Deucher <alexander.deucher@amd.com>
-    drm/amdgpu: make sure to init common IP before gmc
-
-Nirmoy Das <nirmoy.das@intel.com>
-    drm/i915: Set correct domains values at _i915_vma_move_to_active
-
-Ashutosh Dixit <ashutosh.dixit@intel.com>
-    drm/i915/gt: Fix perf limit reasons bit positions
-
-Ben Hutchings <benh@debian.org>
-    tools/include/uapi: Fix <asm/errno.h> for parisc and xtensa
-
-Helge Deller <deller@gmx.de>
-    parisc: Allow CONFIG_64BIT with ARCH=parisc
-
-Mikulas Patocka <mpatocka@redhat.com>
-    blk-lib: fix blkdev_issue_secure_erase
-
-Stefan Metzmacher <metze@samba.org>
-    cifs: always initialize struct msghdr smb_msg completely
-
-Stefan Metzmacher <metze@samba.org>
-    cifs: don't send down the destination address to sendmsg for a SOCK_STREAM
-
-Ronnie Sahlberg <lsahlber@redhat.com>
-    cifs: revalidate mapping when doing direct writes
-
-Jens Axboe <axboe@kernel.dk>
-    io_uring/msg_ring: check file type before putting
-
-Thierry Reding <treding@nvidia.com>
-    of/device: Fix up of_dma_configure_id() stub
-
-Yang Yingliang <yangyingliang@huawei.com>
-    parisc: ccio-dma: Add missing iounmap in error path in ccio_probe()
-
-Stefan Roesch <shr@fb.com>
-    block: blk_queue_enter() / __bio_queue_enter() must return -EAGAIN for nowait
-
-Umesh Nerlige Ramappa <umesh.nerlige.ramappa@intel.com>
-    drm/i915/guc: Cancel GuC engine busyness worker synchronously
-
-Alan Previn <alan.previn.teres.alexis@intel.com>
-    drm/i915/guc: Don't update engine busyness stats too frequently
-
-Ankit Nautiyal <ankit.k.nautiyal@intel.com>
-    drm/i915/vdsc: Set VDSC PIC_HEIGHT before using for DP DSC
-
-Sascha Hauer <s.hauer@pengutronix.de>
-    drm/rockchip: vop2: Fix eDP/HDMI sync polarities
-
-Stuart Menefy <stuart.menefy@mathembedded.com>
-    drm/meson: Fix OSD1 RGB to YCbCr coefficient
-
-Stuart Menefy <stuart.menefy@mathembedded.com>
-    drm/meson: Correct OSD1 global alpha value
-
-Chen-Yu Tsai <wenst@chromium.org>
-    drm/panel-edp: Fix delays for Innolux N116BCA-EA1
-
-Dan Aloni <dan.aloni@vastdata.com>
-    Revert "SUNRPC: Remove unreachable error condition"
-
-Anna Schumaker <Anna.Schumaker@Netapp.com>
-    NFSv4.2: Update mode bits after ALLOCATE and DEALLOCATE
-
-Pali Rohár <pali@kernel.org>
-    gpio: mpc8xxx: Fix support for IRQ_TYPE_LEVEL_LOW flow_type in mpc85xx
-
-Trond Myklebust <trond.myklebust@hammerspace.com>
-    NFSv4: Turn off open-by-filehandle and NFS re-export for NFSv4.0
-
-Trond Myklebust <trond.myklebust@hammerspace.com>
-    SUNRPC: Fix call completion races with call_decode()
-
-Michael Wu <michael@allwinnertech.com>
-    pinctrl: sunxi: Fix name for A100 R_PIO
-
-João H. Spies <jhlspies@gmail.com>
-    pinctrl: rockchip: Enhance support for IRQ_TYPE_EDGE_BOTH
-
-Molly Sophia <mollysophia379@gmail.com>
-    pinctrl: qcom: sc8180x: Fix wrong pin numbers
-
-Molly Sophia <mollysophia379@gmail.com>
-    pinctrl: qcom: sc8180x: Fix gpio_wakeirq_map
-
-Sergey Shtylyov <s.shtylyov@omp.ru>
-    of: fdt: fix off-by-one error in unflatten_dt_nodes()
-
-
--------------
-
-Diffstat:
-
- .../bindings/interrupt-controller/apple,aic.yaml   |  2 +-
- Makefile                                           |  4 ++--
- arch/parisc/Kconfig                                | 12 +++++++++-
- block/blk-core.c                                   |  4 ++--
- block/blk-lib.c                                    | 11 ++++++---
- drivers/gpio/gpio-mpc8xxx.c                        |  1 +
- drivers/gpio/gpio-rockchip.c                       |  4 ++--
- drivers/gpu/drm/amd/amdgpu/amdgpu_device.c         | 14 ++++++++---
- drivers/gpu/drm/amd/amdgpu/nbio_v2_3.c             |  9 +++++++-
- drivers/gpu/drm/amd/amdgpu/nbio_v6_1.c             |  9 +++++++-
- drivers/gpu/drm/amd/amdgpu/nbio_v7_4.c             |  9 +++++++-
- drivers/gpu/drm/amd/amdgpu/sdma_v4_0.c             |  5 ++++
- drivers/gpu/drm/amd/amdgpu/soc15.c                 | 25 --------------------
- drivers/gpu/drm/amd/amdgpu/vega10_ih.c             |  4 ++++
- drivers/gpu/drm/amd/amdgpu/vega20_ih.c             |  4 ++++
- drivers/gpu/drm/i915/display/icl_dsi.c             |  2 ++
- drivers/gpu/drm/i915/display/intel_dp.c            |  1 +
- drivers/gpu/drm/i915/display/intel_vdsc.c          |  1 -
- drivers/gpu/drm/i915/gt/uc/intel_guc.h             |  8 +++++++
- drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c  | 20 +++++++++++++++-
- drivers/gpu/drm/i915/i915_reg.h                    | 16 ++++++-------
- drivers/gpu/drm/i915/i915_vma.c                    |  3 ++-
- drivers/gpu/drm/meson/meson_plane.c                |  2 +-
- drivers/gpu/drm/meson/meson_viu.c                  |  2 +-
- drivers/gpu/drm/panel/panel-edp.c                  |  3 ++-
- drivers/gpu/drm/rockchip/rockchip_drm_vop2.c       |  4 ++++
- drivers/iommu/intel/dmar.c                         |  7 ------
- drivers/iommu/intel/iommu.c                        | 27 ++++++++++++++++++++--
- drivers/of/fdt.c                                   |  2 +-
- drivers/parisc/ccio-dma.c                          |  1 +
- drivers/pinctrl/qcom/pinctrl-sc8180x.c             | 10 ++++----
- drivers/pinctrl/sunxi/pinctrl-sun50i-a100-r.c      |  2 +-
- fs/cifs/connect.c                                  | 11 +++------
- fs/cifs/file.c                                     |  3 +++
- fs/cifs/transport.c                                |  6 +----
- fs/nfs/internal.h                                  | 25 ++++++++++++++++++++
- fs/nfs/nfs42proc.c                                 |  9 ++++++--
- fs/nfs/super.c                                     | 27 ++++++++++++++--------
- fs/nfs/write.c                                     | 25 --------------------
- include/linux/dmar.h                               |  4 +---
- include/linux/of_device.h                          |  5 ++--
- include/net/xfrm.h                                 |  2 ++
- io_uring/io_uring.c                                |  3 ++-
- kernel/cgroup/cgroup-v1.c                          |  2 ++
- net/ipv4/ip_output.c                               |  2 +-
- net/ipv4/tcp_ipv4.c                                |  2 ++
- net/ipv6/tcp_ipv6.c                                |  5 +++-
- net/sunrpc/clnt.c                                  |  3 +++
- net/sunrpc/xprt.c                                  |  8 +++----
- sound/pci/hda/patch_sigmatel.c                     | 24 +++++++++++++++++++
- tools/include/uapi/asm/errno.h                     |  4 ++--
- 51 files changed, 263 insertions(+), 135 deletions(-)
-
-
+-- 
+tejun
