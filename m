@@ -2,105 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 785AC5BF430
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 05:16:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F39F55BF439
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 05:17:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229916AbiIUDP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 23:15:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42544 "EHLO
+        id S231190AbiIUDQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 23:16:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230368AbiIUDOH (ORCPT
+        with ESMTP id S231238AbiIUDQV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 23:14:07 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DB337E337;
-        Tue, 20 Sep 2022 20:14:06 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 28L3E2Ox049781;
-        Tue, 20 Sep 2022 22:14:02 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1663730042;
-        bh=y2al6hjZb8dqRZ9ZTNFs31cv/SPNzLg+OmGkDoiB1Mc=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=bfcEVE51XSLNEODtO5AlMOD8ZjzF5FYO5fMWtLU/qOR8I1p7Y7UHTmhhRgjMPD0aD
-         rNJMXqiCtBL1CqGy3QrB3qGFrSBi6jtWJCfPfuHY/LerX/B2Jc4IFvtjMCgloyciEs
-         bS9ogOGxOMXlxO7J/p2zMt/UbU2LVKzy4obMyNIw=
-Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 28L3E24I118124
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 20 Sep 2022 22:14:02 -0500
-Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Tue, 20
- Sep 2022 22:14:02 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Tue, 20 Sep 2022 22:14:02 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 28L3Dx3N063245;
-        Tue, 20 Sep 2022 22:14:01 -0500
-From:   Matt Ranostay <mranostay@ti.com>
-To:     <vigneshr@ti.com>, <nm@ti.com>, <robh+dt@kernel.org>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3 9/9] arm64: dts: ti: k3-j721s2-common-proc-board: Enable PCIe
-Date:   Tue, 20 Sep 2022 20:13:27 -0700
-Message-ID: <20220921031327.4135-10-mranostay@ti.com>
-X-Mailer: git-send-email 2.38.0.rc0.52.gdda7228a83
-In-Reply-To: <20220921031327.4135-1-mranostay@ti.com>
-References: <20220921031327.4135-1-mranostay@ti.com>
+        Tue, 20 Sep 2022 23:16:21 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 084F36F253;
+        Tue, 20 Sep 2022 20:16:09 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MXNk65L9gzlWhP;
+        Wed, 21 Sep 2022 11:11:58 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 21 Sep 2022 11:16:05 +0800
+Received: from [10.67.108.67] (10.67.108.67) by dggpemm500013.china.huawei.com
+ (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 21 Sep
+ 2022 11:16:05 +0800
+Message-ID: <f7df65b0-ae41-8cce-01aa-84349efc387a@huawei.com>
+Date:   Wed, 21 Sep 2022 11:16:04 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0
+Subject: Re: [RFC] Objtool toolchain proposal:
+ -fannotate-{jump-table,noreturn}
+Content-Language: en-US
+To:     Ard Biesheuvel <ardb@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+CC:     Michael Matz <matz@suse.de>, Borislav Petkov <bp@alien8.de>,
+        "Josh Poimboeuf" <jpoimboe@kernel.org>,
+        <linux-toolchains@vger.kernel.org>,
+        "Indu Bhagat" <indu.bhagat@oracle.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        <linux-kernel@vger.kernel.org>,
+        "Jose E. Marchesi" <jemarch@gnu.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Will Deacon" <will@kernel.org>, <x86@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <live-patching@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
+        Sathvika Vasireddy <sv@linux.ibm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Mark Brown <broonie@kernel.org>
+References: <20220909180704.jwwed4zhwvin7uyi@treble>
+ <Yx8PcldkdOLN8eaw@nazgul.tnic>
+ <alpine.LSU.2.20.2209121200120.8265@wotan.suse.de>
+ <6a61aa57-141f-039c-5a2d-b2d79fecb8c2@huawei.com>
+ <YyLmhUxTUaNzaieC@hirez.programming.kicks-ass.net>
+ <CAMj1kXGa7D6TLOQruYF+0czWwxcRxN7k1rWTrhB2xnjTQ32c9Q@mail.gmail.com>
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+In-Reply-To: <CAMj1kXGa7D6TLOQruYF+0czWwxcRxN7k1rWTrhB2xnjTQ32c9Q@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.108.67]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aswath Govindraju <a-govindraju@ti.com>
+Hi,
 
-x1 lane PCIe slot in the common processor board is enabled and connected to
-J721S2 SOM. Add PCIe DT node in common processor board to reflect the
-same.
+On 2022/9/21 0:49, Ard Biesheuvel wrote:
+> On Thu, 15 Sept 2022 at 10:47, Peter Zijlstra <peterz@infradead.org> wrote:
+>> On Thu, Sep 15, 2022 at 10:56:58AM +0800, Chen Zhongjin wrote:
+>>
+>>> We have found some anonymous information on x86 in .rodata.
+>> Well yes, but that's still a bunch of heuristics on our side.
+>>
+>>> I'm not sure if those are *all* of Josh wanted on x86, however for arm64 we
+>>> did not found that in the same section so it is a problem on arm64 now.
+>> Nick found Bolt managed the ARM64 jumptables:
+>>
+>>    https://github.com/llvm/llvm-project/blob/main/bolt/lib/Target/AArch64/AArch64MCPlusBuilder.cpp#L484
+>>
+>> But that does look like a less than ideal solution too.
+>>
+>>> Does the compiler will emit these for all arches? At lease I tried and
+>>> didn't find anything meaningful (maybe I omitted it).
+>> That's the question; can we get the compiler to help us here in a well
+>> defined manner.
+> Do BTI landing pads help at all here? I.e., I assume that objtool just
+> treats any indirect call as a dangling edge in the control flow graph,
+> and the problem is identifying the valid targets. In the BTI case,
+> those will all start with a 'BTI J' instruction.
 
-Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
-Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
----
- .../boot/dts/ti/k3-j721s2-common-proc-board.dts    | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+Maybe not enough, I guess.
 
-diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
-index cb99a97af426..793ee77838f4 100644
---- a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
-+++ b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
-@@ -428,6 +428,20 @@ flash@0{
- 	};
- };
- 
-+&pcie1_rc {
-+	reset-gpios = <&exp1 2 GPIO_ACTIVE_HIGH>;
-+	phys = <&serdes0_pcie_link>;
-+	phy-names = "pcie-phy";
-+	num-lanes = <1>;
-+};
-+
-+&pcie1_ep {
-+	phys = <&serdes0_pcie_link>;
-+	phy-names = "pcie-phy";
-+	num-lanes = <1>;
-+	status = "disabled";
-+};
-+
- &mcu_mcan0 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&mcu_mcan0_pins_default>;
--- 
-2.37.2
+For switch jump tables we need to know its *own* jump targets so that we 
+can go through all its branches. If there are more than one indirect 
+jump inside one function, only marks targets with BTI J can't help 
+matching the entry and its targets.
+
+
+Anyway I think this job is more for compiler. Switch jump tables is 
+different from other indirect jump/call. It have fixed control flow just 
+as if/else flow and the indirect jump table is just a compiler 
+optimization which hide this.
+
+
+Best,
+
+Chen
 
