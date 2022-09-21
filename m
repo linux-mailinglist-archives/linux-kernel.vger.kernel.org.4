@@ -2,154 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE3005C0353
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 18:02:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 576FA5C0355
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 18:02:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231648AbiIUQCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 12:02:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54098 "EHLO
+        id S231950AbiIUQCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 12:02:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232629AbiIUQAH (ORCPT
+        with ESMTP id S232605AbiIUQAD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 12:00:07 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A9C175BC
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 08:53:23 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id q83so5381116iod.7
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 08:53:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=bZ+qtxPfho04MrKrUszJh9/TiBJm28a0YpVnjrNGpL8=;
-        b=mCF/QM7OAKcOvv9Q594jwoylSjpaNAuQp69j59Te3aQiMkxEPlUT3Dv1KiWFD5vrfv
-         MCjFg9iaUGoW/gzddaj0RyfUeYKk57WpX4j6N+0h+YCJBWaCsErdvmINwQ6DtHKZ9mWR
-         nUnR9Z8cdmKszF8iiy6up8A0cFeX85mFuPCdo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=bZ+qtxPfho04MrKrUszJh9/TiBJm28a0YpVnjrNGpL8=;
-        b=b6KBcm7xHYKYruh4kzBkS/DhUKghaPQQmGasgP2uRpNGl8M8GrLe9xyW0sQo3XENi4
-         80YAYOKdCLPARUmiJ3MGfN7zFWRZt/uaZFEMGOwg5t9Ry3c65TFs7+jh3EU/O67SL2Fb
-         MjBSPbz47p0hOoRpYoqKovi9FsfO+GvkUQLqi6MszL4nChr3w+FT2glj4rT3aFRYxwte
-         x1peH9MRPx7stVXSGFpdZwStyw+i37QafQ8j6jwVAgmonYlu15PvzN/6vDku7SQT2Nq/
-         L9e+JtKOJvCP9+OzHLj9zTp+RqSKU7LH+au2NU6CnGutfFwiErx3WVTJCnLpVDfX9xHD
-         7HYw==
-X-Gm-Message-State: ACrzQf2CU5iOKKb3VSTPS/LFpoO9P4CIa/uJDxbQQ5O/o4LTbuJq8Hoh
-        Pqi1FbhVhuUjrIyT4MV/JxeN7g==
-X-Google-Smtp-Source: AMsMyM72fliVsNACh53kZswB/oyGlBYQMe9bQa0Qfw0v0ff/8pEMI0VtdtEy3JWGxSjVxhW3kLi6dw==
-X-Received: by 2002:a5e:df43:0:b0:6a1:ffc6:4e30 with SMTP id g3-20020a5edf43000000b006a1ffc64e30mr11835391ioq.192.1663775534113;
-        Wed, 21 Sep 2022 08:52:14 -0700 (PDT)
-Received: from rrangel920.bld.corp.google.com (h24-56-189-219.arvdco.broadband.dynamic.tds.net. [24.56.189.219])
-        by smtp.gmail.com with ESMTPSA id c14-20020a023b0e000000b0035a8d644a31sm1148061jaa.117.2022.09.21.08.52.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Sep 2022 08:52:13 -0700 (PDT)
-From:   Raul E Rangel <rrangel@chromium.org>
-To:     linux-acpi@vger.kernel.org, linux-input@vger.kernel.org
-Cc:     rafael@kernel.org, timvp@google.com,
-        mika.westerberg@linux.intel.com, andriy.shevchenko@linux.intel.com,
-        dmitry.torokhov@gmail.com, jingle.wu@emc.com.tw,
-        hdegoede@redhat.com, mario.limonciello@amd.com,
-        linus.walleij@linaro.org, Raul E Rangel <rrangel@chromium.org>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v5 04/13] Input: raydium_ts_i2c - Use PM subsystem to manage wake irq
-Date:   Wed, 21 Sep 2022 09:51:56 -0600
-Message-Id: <20220921094736.v5.4.I06b417b274bbecb31775a73993a7a3c1bc80de7b@changeid>
-X-Mailer: git-send-email 2.37.3.968.ga6b4b080e4-goog
-In-Reply-To: <20220921155205.1332614-1-rrangel@chromium.org>
-References: <20220921155205.1332614-1-rrangel@chromium.org>
+        Wed, 21 Sep 2022 12:00:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0BD213E04;
+        Wed, 21 Sep 2022 08:53:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7676A6282E;
+        Wed, 21 Sep 2022 15:53:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB2EEC433C1;
+        Wed, 21 Sep 2022 15:53:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663775613;
+        bh=F0QpExpqRDTwj0Px6tY3UgvVq9CTES248BvTZVN/jfE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=MUOehtUEKu4u4hIZFUQtuxFNLNSfGl11AzN2jOdrkaavthdjd90gIBKR4jik1onkC
+         dSEcKH0dE12DKFSRpf1tQvudk9oSwlWuIaYryNZqZ6BgZvmsGz/F/dBWLLi/gzADRU
+         z0Ig244ppKaW8NYK9cLSi3e/B/nRiZyu16JkS4UnfFmKlc9J09BzvwrAYZPkxpgoOo
+         V9ahlQzGKZ3lIHBdlekhj2RTaulb9LV7+eKchPx8vhPkJVKWssXgFNAYEv15J+UpMq
+         f9/EH8KG+84HoMErzPyrEGDMQn/Z0838/loOxIRJaEmPqXUZwtNTVQIxE+XEkxGcgI
+         R19RilXgMOBVg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Sasha Levin <sashal@kernel.org>,
+        kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        decui@microsoft.com, linux-hyperv@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.19 01/16] Drivers: hv: Never allocate anything besides framebuffer from framebuffer memory region
+Date:   Wed, 21 Sep 2022 11:53:17 -0400
+Message-Id: <20220921155332.234913-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The raydium I2C touchscreen driver is currently manually managing the
-wake IRQ. This change removes the explicit enable_irq_wake /
-disable_irq_wake and instead relies on the PM subsystem. This is done by
-calling dev_pm_set_wake_irq.
+From: Vitaly Kuznetsov <vkuznets@redhat.com>
 
-i2c_device_probe already calls dev_pm_set_wake_irq when using device
-tree, and i2c_device_remove also already calls dev_pm_clear_wake_irq.
-There could be some device tree systems that have incorrectly declared
-`wake` capabilities, so this change will set the wake irq if one is
-missing. This matches the previous behavior.
+[ Upstream commit f0880e2cb7e1f8039a048fdd01ce45ab77247221 ]
 
-Signed-off-by: Raul E Rangel <rrangel@chromium.org>
+Passed through PCI device sometimes misbehave on Gen1 VMs when Hyper-V
+DRM driver is also loaded. Looking at IOMEM assignment, we can see e.g.
+
+$ cat /proc/iomem
+...
+f8000000-fffbffff : PCI Bus 0000:00
+  f8000000-fbffffff : 0000:00:08.0
+    f8000000-f8001fff : bb8c4f33-2ba2-4808-9f7f-02f3b4da22fe
+...
+fe0000000-fffffffff : PCI Bus 0000:00
+  fe0000000-fe07fffff : bb8c4f33-2ba2-4808-9f7f-02f3b4da22fe
+    fe0000000-fe07fffff : 2ba2:00:02.0
+      fe0000000-fe07fffff : mlx4_core
+
+the interesting part is the 'f8000000' region as it is actually the
+VM's framebuffer:
+
+$ lspci -v
+...
+0000:00:08.0 VGA compatible controller: Microsoft Corporation Hyper-V virtual VGA (prog-if 00 [VGA controller])
+	Flags: bus master, fast devsel, latency 0, IRQ 11
+	Memory at f8000000 (32-bit, non-prefetchable) [size=64M]
+...
+
+ hv_vmbus: registering driver hyperv_drm
+ hyperv_drm 5620e0c7-8062-4dce-aeb7-520c7ef76171: [drm] Synthvid Version major 3, minor 5
+ hyperv_drm 0000:00:08.0: vgaarb: deactivate vga console
+ hyperv_drm 0000:00:08.0: BAR 0: can't reserve [mem 0xf8000000-0xfbffffff]
+ hyperv_drm 5620e0c7-8062-4dce-aeb7-520c7ef76171: [drm] Cannot request framebuffer, boot fb still active?
+
+Note: "Cannot request framebuffer" is not a fatal error in
+hyperv_setup_gen1() as the code assumes there's some other framebuffer
+device there but we actually have some other PCI device (mlx4 in this
+case) config space there!
+
+The problem appears to be that vmbus_allocate_mmio() can use dedicated
+framebuffer region to serve any MMIO request from any device. The
+semantics one might assume of a parameter named "fb_overlap_ok"
+aren't implemented because !fb_overlap_ok essentially has no effect.
+The existing semantics are really "prefer_fb_overlap". This patch
+implements the expected and needed semantics, which is to not allocate
+from the frame buffer space when !fb_overlap_ok.
+
+Note, Gen2 VMs are usually unaffected by the issue because
+framebuffer region is already taken by EFI fb (in case kernel supports
+it) but Gen1 VMs may have this region unclaimed by the time Hyper-V PCI
+pass-through driver tries allocating MMIO space if Hyper-V DRM/FB drivers
+load after it. Devices can be brought up in any sequence so let's
+resolve the issue by always ignoring 'fb_mmio' region for non-FB
+requests, even if the region is unclaimed.
+
+Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+Link: https://lore.kernel.org/r/20220827130345.1320254-4-vkuznets@redhat.com
+Signed-off-by: Wei Liu <wei.liu@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
+ drivers/hv/vmbus_drv.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-(no changes since v2)
-
-Changes in v2:
-- Added raydium_ts_i2c to series
-
- drivers/input/touchscreen/raydium_i2c_ts.c | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/input/touchscreen/raydium_i2c_ts.c b/drivers/input/touchscreen/raydium_i2c_ts.c
-index 3a4952935366f9..66c5b577b791d4 100644
---- a/drivers/input/touchscreen/raydium_i2c_ts.c
-+++ b/drivers/input/touchscreen/raydium_i2c_ts.c
-@@ -21,6 +21,7 @@
- #include <linux/interrupt.h>
- #include <linux/module.h>
- #include <linux/of.h>
-+#include <linux/pm_wakeirq.h>
- #include <linux/regulator/consumer.h>
- #include <linux/slab.h>
- #include <asm/unaligned.h>
-@@ -134,8 +135,6 @@ struct raydium_data {
- 	u8 pkg_size;
+diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
+index 547ae334e5cd..027029efb008 100644
+--- a/drivers/hv/vmbus_drv.c
++++ b/drivers/hv/vmbus_drv.c
+@@ -2309,7 +2309,7 @@ int vmbus_allocate_mmio(struct resource **new, struct hv_device *device_obj,
+ 			bool fb_overlap_ok)
+ {
+ 	struct resource *iter, *shadow;
+-	resource_size_t range_min, range_max, start;
++	resource_size_t range_min, range_max, start, end;
+ 	const char *dev_n = dev_name(&device_obj->device);
+ 	int retval;
  
- 	enum raydium_boot_mode boot_mode;
--
--	bool wake_irq_enabled;
- };
- 
- /*
-@@ -1186,6 +1185,15 @@ static int raydium_i2c_probe(struct i2c_client *client,
- 		return error;
- 	}
- 
-+	/*
-+	 * The wake IRQ should be declared via device tree instead of assuming
-+	 * the IRQ can wake the system. This is here for legacy reasons and
-+	 * will be removed once the i2c-core supports querying ACPI for wake
-+	 * capabilities.
-+	 */
-+	if (!client->dev.power.wakeirq)
-+		dev_pm_set_wake_irq(&client->dev, client->irq);
+@@ -2344,6 +2344,14 @@ int vmbus_allocate_mmio(struct resource **new, struct hv_device *device_obj,
+ 		range_max = iter->end;
+ 		start = (range_min + align - 1) & ~(align - 1);
+ 		for (; start + size - 1 <= range_max; start += align) {
++			end = start + size - 1;
 +
- 	error = devm_device_add_group(&client->dev,
- 				   &raydium_i2c_attribute_group);
- 	if (error) {
-@@ -1222,8 +1230,6 @@ static int __maybe_unused raydium_i2c_suspend(struct device *dev)
- 
- 	if (device_may_wakeup(dev)) {
- 		raydium_enter_sleep(client);
--
--		ts->wake_irq_enabled = (enable_irq_wake(client->irq) == 0);
- 	} else {
- 		raydium_i2c_power_off(ts);
- 	}
-@@ -1237,8 +1243,6 @@ static int __maybe_unused raydium_i2c_resume(struct device *dev)
- 	struct raydium_data *ts = i2c_get_clientdata(client);
- 
- 	if (device_may_wakeup(dev)) {
--		if (ts->wake_irq_enabled)
--			disable_irq_wake(client->irq);
- 		raydium_i2c_sw_reset(client);
- 	} else {
- 		raydium_i2c_power_on(ts);
++			/* Skip the whole fb_mmio region if not fb_overlap_ok */
++			if (!fb_overlap_ok && fb_mmio &&
++			    (((start >= fb_mmio->start) && (start <= fb_mmio->end)) ||
++			     ((end >= fb_mmio->start) && (end <= fb_mmio->end))))
++				continue;
++
+ 			shadow = __request_region(iter, start, size, NULL,
+ 						  IORESOURCE_BUSY);
+ 			if (!shadow)
 -- 
-2.37.3.968.ga6b4b080e4-goog
+2.35.1
 
