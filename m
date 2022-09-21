@@ -2,188 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A8715E5602
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 00:00:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64F765E5632
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 00:20:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229472AbiIUWAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 18:00:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44050 "EHLO
+        id S231194AbiIUWTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 18:19:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbiIUWAn (ORCPT
+        with ESMTP id S229929AbiIUWTm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 18:00:43 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA3EE9F191
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 15:00:42 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id p18so6990195plr.8
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 15:00:42 -0700 (PDT)
+        Wed, 21 Sep 2022 18:19:42 -0400
+Received: from mail.sconnect.com.au (mail.sconnect.com.au [103.101.168.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F106DEAB;
+        Wed, 21 Sep 2022 15:19:37 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.sconnect.com.au (Postfix) with ESMTP id 773AB295CB8E;
+        Thu, 22 Sep 2022 07:18:14 +1000 (AEST)
+Received: from mail.sconnect.com.au ([127.0.0.1])
+        by localhost (mail.sconnect.com.au [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id mGamyfgGCqMs; Thu, 22 Sep 2022 07:18:14 +1000 (AEST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.sconnect.com.au (Postfix) with ESMTP id 780CA295C737;
+        Thu, 22 Sep 2022 07:18:12 +1000 (AEST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.sconnect.com.au 780CA295C737
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date;
-        bh=LOBnyRZinL+mvNsZ0ir5iBTMS0UFXibMLgUWm8nGILY=;
-        b=Cubklnkzo/KeKdYwjDV1MSHt/IosQdqyNAYGjaBcA/XnTAQc5lOrX6H/p5yodpKPuw
-         c21KbUu1gSuX3bkxEc91A9o3R8Jh6bHlWuZH0/LAKwao7b+exHy2RSAminYfjh7rJwAb
-         sMFvdGILxH9gfORxK4aT04MUhc5GNHmOmlmJKQhIWX3p5wdQZX/pqi5RydAnbTFEzQ/y
-         /a6eN7vlw9K2vze4+wf0Qtkr7z0a9h2V6tWxUAymVVlvtkaMf+8VH9/MTiK8QAY+0fWq
-         RHO0X+ppF0DqktUHZEz3whXwaodW+yzvIIydiChXC4z7p3trP0Wo25BZaICts2u4hd8/
-         U3dQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date;
-        bh=LOBnyRZinL+mvNsZ0ir5iBTMS0UFXibMLgUWm8nGILY=;
-        b=sp0y513++wDiZxvxTefnqQWbLadksvRy38hAuZeNecCTgluKD5RDN3gHwy/B/V6ALu
-         jtqM6vvs/uhd4mrFgXr/gMnklymzPXXu46b9YLPs+vnQ9Ro+sNr0WI7KPrLvUu/k4xEX
-         VUWnj4rPsEOSMF6/5R3U9zf5DdQ0FCroZx5HqcJ2zqwQwH5rKmVb6GhlSBMr5bxZKYld
-         ZPrRnj3NJ7NKo0siqZesPpi6v1etYOEc2K1M9Alt8EBGd9ElGszp52eYlUtwdxMZRKLd
-         JJXEaLDLi/2C46SYGSdFhrZF5mK3axWKnheckfh39qv2A7Bm9gppYgl81ze8mqcTcCPG
-         gidw==
-X-Gm-Message-State: ACrzQf2fi1lqIq3DGmESNepc35TMmKJPNF1PhVLsOA5boJfg8Ohq7H1T
-        vOQdbpNNt2n42x83iqqdbQc=
-X-Google-Smtp-Source: AMsMyM71iXfrr1a3S03hPCOX0xb8uf8XF1HOBW6IwFey80H7/rkIpMZqmYcp50D4CI6vcTkXg8He6Q==
-X-Received: by 2002:a17:90a:df90:b0:203:41e1:36db with SMTP id p16-20020a17090adf9000b0020341e136dbmr280293pjv.8.1663797642111;
-        Wed, 21 Sep 2022 15:00:42 -0700 (PDT)
-Received: from youngsil.svl.corp.google.com ([2620:15c:2d4:203:8bcd:ba5c:3c6b:4140])
-        by smtp.gmail.com with ESMTPSA id x20-20020a17090300d400b0017693722e7dsm2520554plc.6.2022.09.21.15.00.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Sep 2022 15:00:41 -0700 (PDT)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Stephane Eranian <eranian@google.com>,
-        Kan Liang <kan.liang@linux.intel.com>
-Subject: [PATCH 2/2] perf: Use sample_flags for raw_data
-Date:   Wed, 21 Sep 2022 15:00:32 -0700
-Message-Id: <20220921220032.2858517-2-namhyung@kernel.org>
-X-Mailer: git-send-email 2.37.3.968.ga6b4b080e4-goog
-In-Reply-To: <20220921220032.2858517-1-namhyung@kernel.org>
-References: <20220921220032.2858517-1-namhyung@kernel.org>
+        d=mail.sconnect.com.au; s=39ABBFB6-EEE4-11E8-B0D6-3EF6B7190DB6;
+        t=1663795092; bh=W/GvARc04ZPnD4B8eWYWtrSTF+TiaPBWKYHrLaGTP34=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=bMtdFrCgwRvDUVG9hW5rBiPxTHHhifc8D6+YExXx9uZUV2YvETfjRE+m3RbEFD45p
+         jIM+vcqE7/KuYctvQd0uK8z1kbvvJn8vM/6ouHi5/ZRjP3Zi4/Ijxhr5ZuMvy9ySrU
+         3XiMK1IVVlpEouep1GZJ8tqwTILf3OyR9sv74pP1FB8pOREQ8GvG5Nyi3ohbpCEmUn
+         TkoKUoVQCplUlCDoS+67JZX001W3RouCQNgRw3B52rLsRy5srfaSGxEPr1f1qmzng9
+         e8e/9fLy6a6ByIILPFCkbh7IUaZWXUi/rOoAoUJGFtOefolgHm9+8Edom3KSZVV8C6
+         0nZNJfQANr8Fg==
+X-Virus-Scanned: amavisd-new at mail.sconnect.com.au
+Received: from mail.sconnect.com.au ([127.0.0.1])
+        by localhost (mail.sconnect.com.au [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id ZcA6EV8NPSr4; Thu, 22 Sep 2022 07:18:12 +1000 (AEST)
+Received: from [46.148.40.140] (unknown [46.148.40.140])
+        by mail.sconnect.com.au (Postfix) with ESMTPA id 3DB0F295CCE7;
+        Thu, 22 Sep 2022 07:18:04 +1000 (AEST)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: PFC Loan
+To:     Recipients <Panola@mail.sconnect.com.au>
+From:   Panola@mail.sconnect.com.au, Finance@mail.sconnect.com.au,
+        dean@mail.sconnect.com.au
+Date:   Wed, 21 Sep 2022 14:17:56 -0700
+Reply-To: mbk@panolateam.com
+Message-Id: <20220921211805.3DB0F295CCE7@mail.sconnect.com.au>
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_ZBI,
+        SPF_HELO_PASS,SPF_PASS,T_PDS_TO_EQ_FROM_NAME autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the new sample_flags to indicate whether the raw data field is
-filled by the PMU driver.  Although it could check with the NULL,
-follow the same rule with other fields.
+We offer flexible loans and funding for various projects bypassing the usua=
+l rigorous procedures without any upfront fee. This Funding program allows =
+a client to enjoy low interest payback for as low as 2% per annum for a per=
+iod of 1-30 years and a six months grace period.
+ =
 
-Remove the raw field from the perf_sample_data_init() to minimize
-the number of cache lines touched.
+We Offer: -
+* Project Financing
+* Business Loan
+* Personal Loan
+ =
 
-Cc: Kan Liang <kan.liang@linux.intel.com>
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
----
- arch/s390/kernel/perf_cpum_cf.c    | 1 +
- arch/s390/kernel/perf_pai_crypto.c | 1 +
- arch/x86/events/amd/ibs.c          | 1 +
- include/linux/perf_event.h         | 5 ++---
- kernel/events/core.c               | 3 ++-
- 5 files changed, 7 insertions(+), 4 deletions(-)
+Should you be interested in any of our financial options, please do not hes=
+itate to contact us for more information. Loan processing and financing tak=
+es about 8 working days from the day you submit your loan application. Repl=
+y for more information: mail@panolafinancecompany.com
+ =
 
-diff --git a/arch/s390/kernel/perf_cpum_cf.c b/arch/s390/kernel/perf_cpum_cf.c
-index f7dd3c849e68..f043a7ff220b 100644
---- a/arch/s390/kernel/perf_cpum_cf.c
-+++ b/arch/s390/kernel/perf_cpum_cf.c
-@@ -664,6 +664,7 @@ static int cfdiag_push_sample(struct perf_event *event,
- 		raw.frag.data = cpuhw->stop;
- 		raw.size = raw.frag.size;
- 		data.raw = &raw;
-+		data.sample_flags |= PERF_SAMPLE_RAW;
- 	}
- 
- 	overflow = perf_event_overflow(event, &data, &regs);
-diff --git a/arch/s390/kernel/perf_pai_crypto.c b/arch/s390/kernel/perf_pai_crypto.c
-index b38b4ae01589..6826e2a69a21 100644
---- a/arch/s390/kernel/perf_pai_crypto.c
-+++ b/arch/s390/kernel/perf_pai_crypto.c
-@@ -366,6 +366,7 @@ static int paicrypt_push_sample(void)
- 		raw.frag.data = cpump->save;
- 		raw.size = raw.frag.size;
- 		data.raw = &raw;
-+		data.sample_flags |= PERF_SAMPLE_RAW;
- 	}
- 
- 	overflow = perf_event_overflow(event, &data, &regs);
-diff --git a/arch/x86/events/amd/ibs.c b/arch/x86/events/amd/ibs.c
-index ce5720bfb350..c29a006954c7 100644
---- a/arch/x86/events/amd/ibs.c
-+++ b/arch/x86/events/amd/ibs.c
-@@ -781,6 +781,7 @@ static int perf_ibs_handle_irq(struct perf_ibs *perf_ibs, struct pt_regs *iregs)
- 			},
- 		};
- 		data.raw = &raw;
-+		data.sample_flags |= PERF_SAMPLE_RAW;
- 	}
- 
- 	/*
-diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-index f4a13579b0e8..e9b151cde491 100644
---- a/include/linux/perf_event.h
-+++ b/include/linux/perf_event.h
-@@ -1028,7 +1028,6 @@ struct perf_sample_data {
- 	 * minimize the cachelines touched.
- 	 */
- 	u64				sample_flags;
--	struct perf_raw_record		*raw;
- 	u64				period;
- 
- 	/*
-@@ -1040,6 +1039,7 @@ struct perf_sample_data {
- 	union  perf_mem_data_src	data_src;
- 	u64				txn;
- 	u64				addr;
-+	struct perf_raw_record		*raw;
- 
- 	u64				type;
- 	u64				ip;
-@@ -1078,8 +1078,7 @@ static inline void perf_sample_data_init(struct perf_sample_data *data,
- 					 u64 addr, u64 period)
- {
- 	/* remaining struct members initialized in perf_prepare_sample() */
--	data->sample_flags = 0;
--	data->raw  = NULL;
-+	data->sample_flags = PERF_SAMPLE_PERIOD;
- 	data->period = period;
- 
- 	if (addr) {
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index a91f74db9fe9..04e19a857d4b 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -7332,7 +7332,7 @@ void perf_prepare_sample(struct perf_event_header *header,
- 		struct perf_raw_record *raw = data->raw;
- 		int size;
- 
--		if (raw) {
-+		if (raw && (data->sample_flags & PERF_SAMPLE_RAW)) {
- 			struct perf_raw_frag *frag = &raw->frag;
- 			u32 sum = 0;
- 
-@@ -7348,6 +7348,7 @@ void perf_prepare_sample(struct perf_event_header *header,
- 			frag->pad = raw->size - sum;
- 		} else {
- 			size = sizeof(u64);
-+			data->raw = NULL;
- 		}
- 
- 		header->size += size;
--- 
-2.37.3.968.ga6b4b080e4-goog
-
+With kind regards,
+Your Sales Team
+Contact Info:
+E-mail: mbk@panolateam.com
