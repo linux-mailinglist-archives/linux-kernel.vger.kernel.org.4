@@ -2,186 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 883095BFE78
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 14:55:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8395E5BFE73
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 14:53:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229566AbiIUMzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 08:55:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38192 "EHLO
+        id S229777AbiIUMxz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 08:53:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbiIUMzN (ORCPT
+        with ESMTP id S230513AbiIUMxg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 08:55:13 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 242E93137B;
-        Wed, 21 Sep 2022 05:55:12 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MXdZG6W7pzlVwv;
-        Wed, 21 Sep 2022 20:51:02 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 21 Sep 2022 20:55:10 +0800
-Received: from ubuntu1804.huawei.com (10.67.175.36) by
- dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 21 Sep 2022 20:55:09 +0800
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        <linux-perf-users@vger.kernel.org>
-CC:     <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
-        <aou@eecs.berkeley.edu>, <peterz@infradead.org>,
-        <mingo@redhat.com>, <acme@kernel.org>, <mark.rutland@arm.com>,
-        <alexander.shishkin@linux.intel.com>, <namhyung@kernel.org>,
-        <jolsa@kernel.org>, <guoren@kernel.org>, <frederic@kernel.org>,
-        <vincent.chen@sifive.com>, <ardb@kernel.org>,
-        <mhiramat@kernel.org>, <rostedt@goodmis.org>,
-        <keescook@chromium.org>, <catalin.marinas@arm.com>,
-        <chenzhongjin@huawei.com>
-Subject: [PATCH for-next v2 4/4] riscv: stacktrace: Implement stacktrace for irq
-Date:   Wed, 21 Sep 2022 20:51:27 +0800
-Message-ID: <20220921125128.33913-5-chenzhongjin@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220921125128.33913-1-chenzhongjin@huawei.com>
-References: <20220921125128.33913-1-chenzhongjin@huawei.com>
+        Wed, 21 Sep 2022 08:53:36 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 178002DF9
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 05:53:26 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2266A143D;
+        Wed, 21 Sep 2022 05:53:33 -0700 (PDT)
+Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id CB30E3F73B;
+        Wed, 21 Sep 2022 05:53:25 -0700 (PDT)
+From:   Robin Murphy <robin.murphy@arm.com>
+To:     joro@8bytes.org
+Cc:     will@kernel.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH v2] iommu: Optimise PCI SAC address trick
+Date:   Wed, 21 Sep 2022 13:53:19 +0100
+Message-Id: <2b0ca6254dd0102bf559b2a73e9b51da089afbe3.1663764627.git.robin.murphy@arm.com>
+X-Mailer: git-send-email 2.36.1.dirty
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.36]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After adding encoded fp onto stack to record pt_regs, now the
-unwinder have ability to unwind frame through irq.
+Per the reasoning in commit 4bf7fda4dce2 ("iommu/dma: Add config for
+PCI SAC address trick") and its subsequent revert, this mechanism no
+longer serves its original purpose, but now only works around broken
+hardware/drivers in a way that is unfortunately too impactful to remove.
 
-There is two steps to unwind irq frame and the interrupted frame:
+This does not, however prevent us from solving the performance impact
+which that workaround has on large-scale systems that don't need it.
+That kicks in once the 32-bit IOVA space fills up and we keep
+unsuccessfully trying to allocate from it. However, if we get to that
+point then in fact it's already the endgame. The nature of the allocator
+is such that the first IOVA we give to a device after the 32-bit space
+runs out will be the highest possible address for that device, ever.
+If that works, then great, we know we can optimise for speed by always
+allocating from the full range. And if it doesn't, then the worst has
+already happened and any brokenness is now showing, so there's no point
+continuing to try to hide it.
 
-1. When there is an encoded fp on stack, we can get the pt_regs
-and unwind frame by (regs->epc) and (regs->s0).
+To that end, implement a flag to refine this into a per-device policy
+that can automatically get itself out of the way if and when it stops
+being useful.
 
-2. To unwind the interrupted frame, there is two possibilities,
-we can determine the situation by checking whether the value in
-frame->ra position is a fp value.
-
-If there is a fp in ra position:
-We are inside a leaf frame and there is only fp on ra position.
-Get fp from ra position and get next pc from pt_regs.
-Else:
-Just get fp and next pc from stack frame.
-
-Stacktrace before this patch:
-
- Call Trace:
-  ...
-  [<ffffffff800aa692>] __flush_smp_call_function_queue+0xde/0x1fa
-  [<ffffffff800ab404>] generic_smp_call_function_single_interrupt+0x22/0x2a
-  [<ffffffff800077b2>] handle_IPI+0xaa/0x108
-  [<ffffffff803f827e>] riscv_intc_irq+0x56/0x6e
-  [<ffffffff808d94b6>] generic_handle_arch_irq+0x4c/0x76
-  [<ffffffff80003ad0>] ret_from_exception+0x0/0xc
-
-Stacktrace after this patch:
-
- Call Trace:
-  ...
-  [<ffffffff800aa6da>] __flush_smp_call_function_queue+0xde/0x1fa
-  [<ffffffff800ab44c>] generic_smp_call_function_single_interrupt+0x22/0x2a
-  [<ffffffff800077fa>] handle_IPI+0xaa/0x108
-  [<ffffffff803f82c6>] riscv_intc_irq+0x56/0x6e
-  [<ffffffff808d94fe>] generic_handle_arch_irq+0x4c/0x76
-  [<ffffffff80003ad0>] ret_from_exception+0x0/0xc
-+ [<ffffffff80003d52>] arch_cpu_idle+0x22/0x28
-+ [<ffffffff808e23a8>] default_idle_call+0x44/0xee
-+ [<ffffffff80056ece>] do_idle+0x116/0x126
-+ [<ffffffff8005706e>] cpu_startup_entry+0x36/0x38
-+ [<ffffffff808d99ae>] kernel_init+0x0/0x15a
-+ [<ffffffff80a007a0>] arch_post_acpi_subsys_init+0x0/0x38
-+ [<ffffffff80a0100c>] start_kernel+0x7c4/0x7f2
-
-Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+CC: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Robin Murphy <robin.murphy@arm.com>
 ---
- arch/riscv/kernel/stacktrace.c | 45 ++++++++++++++++++++++++++++------
- 1 file changed, 38 insertions(+), 7 deletions(-)
 
-diff --git a/arch/riscv/kernel/stacktrace.c b/arch/riscv/kernel/stacktrace.c
-index e84e21868a3e..976dc298ab3b 100644
---- a/arch/riscv/kernel/stacktrace.c
-+++ b/arch/riscv/kernel/stacktrace.c
-@@ -16,29 +16,60 @@
+v2: Refactor to avoid CONFIG_IOMMU_DMA=n breakage (oops)
+
+ drivers/iommu/dma-iommu.c | 5 ++++-
+ drivers/iommu/dma-iommu.h | 8 ++++++++
+ drivers/iommu/iommu.c     | 3 +++
+ include/linux/iommu.h     | 2 ++
+ 4 files changed, 17 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
+index 9297b741f5e8..1cebb16faa33 100644
+--- a/drivers/iommu/dma-iommu.c
++++ b/drivers/iommu/dma-iommu.c
+@@ -643,9 +643,12 @@ static dma_addr_t iommu_dma_alloc_iova(struct iommu_domain *domain,
+ 		dma_limit = min(dma_limit, (u64)domain->geometry.aperture_end);
  
- #ifdef CONFIG_FRAME_POINTER
+ 	/* Try to get PCI devices a SAC address */
+-	if (dma_limit > DMA_BIT_MASK(32) && !iommu_dma_forcedac && dev_is_pci(dev))
++	if (dma_limit > DMA_BIT_MASK(32) && dev->iommu->pci_workaround) {
+ 		iova = alloc_iova_fast(iovad, iova_len,
+ 				       DMA_BIT_MASK(32) >> shift, false);
++		if (!iova)
++			dev->iommu->pci_workaround = false;
++	}
  
-+static struct pt_regs *decode_frame_pointer(unsigned long fp)
+ 	if (!iova)
+ 		iova = alloc_iova_fast(iovad, iova_len, dma_limit >> shift,
+diff --git a/drivers/iommu/dma-iommu.h b/drivers/iommu/dma-iommu.h
+index 942790009292..c7be42d4f0cf 100644
+--- a/drivers/iommu/dma-iommu.h
++++ b/drivers/iommu/dma-iommu.h
+@@ -17,6 +17,10 @@ int iommu_dma_init_fq(struct iommu_domain *domain);
+ void iommu_dma_get_resv_regions(struct device *dev, struct list_head *list);
+ 
+ extern bool iommu_dma_forcedac;
++static inline void iommu_dma_set_pci_workaround(struct device *dev)
 +{
-+	if (!(fp & 0x1))
-+		return NULL;
-+
-+	return (struct pt_regs *)(fp & ~0x1);
++	dev->iommu->pci_workaround = !iommu_dma_forcedac;
++}
+ 
+ #else /* CONFIG_IOMMU_DMA */
+ 
+@@ -38,5 +42,9 @@ static inline void iommu_dma_get_resv_regions(struct device *dev, struct list_he
+ {
+ }
+ 
++static inline void iommu_dma_set_pci_workaround(struct device *dev)
++{
 +}
 +
- static int notrace unwind_next(struct unwind_state *state)
- {
- 	unsigned long low, high, fp;
- 	struct stackframe *frame;
-+	struct pt_regs *regs;
+ #endif	/* CONFIG_IOMMU_DMA */
+ #endif	/* __DMA_IOMMU_H */
+diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+index edc768bf8976..ba8afea63ef1 100644
+--- a/drivers/iommu/iommu.c
++++ b/drivers/iommu/iommu.c
+@@ -323,6 +323,9 @@ static int __iommu_probe_device(struct device *dev, struct list_head *group_list
  
--	fp = state->fp;
-+	regs = decode_frame_pointer(state->fp);
+ 	iommu_device_link(iommu_dev, dev);
  
- 	/* Validate frame pointer */
--	low = state->sp + sizeof(struct stackframe);
-+	if (regs) {
-+		if user_mode(regs)
-+			return -1;
++	if (dev_is_pci(dev))
++		iommu_dma_set_pci_workaround(dev);
 +
-+		fp = (unsigned long)regs;
-+		low = state->sp;
-+	} else {
-+		fp = state->fp;
-+		low = state->sp + sizeof(struct stackframe);
-+	}
- 	high = ALIGN(low, THREAD_SIZE);
+ 	return 0;
  
- 	if (fp < low || fp > high || fp & 0x7)
- 		return -EINVAL;
+ out_release:
+diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+index 79cb6eb560a8..0eb0f808109c 100644
+--- a/include/linux/iommu.h
++++ b/include/linux/iommu.h
+@@ -368,6 +368,7 @@ struct iommu_fault_param {
+  * @fwspec:	 IOMMU fwspec data
+  * @iommu_dev:	 IOMMU device this device is linked to
+  * @priv:	 IOMMU Driver private data
++ * @pci_workaround: Limit DMA allocations to 32-bit IOVAs
+  *
+  * TODO: migrate other per device data pointers under iommu_dev_data, e.g.
+  *	struct iommu_group	*iommu_group;
+@@ -379,6 +380,7 @@ struct dev_iommu {
+ 	struct iommu_fwspec		*fwspec;
+ 	struct iommu_device		*iommu_dev;
+ 	void				*priv;
++	bool				pci_workaround;
+ };
  
--	/* Unwind stack frame */
- 	frame = (struct stackframe *)fp - 1;
- 	state->sp = fp;
- 
--	if (state->regs && state->regs->epc == state->pc &&
--		fp & 0x7) {
--		state->fp = frame->ra;
--		state->pc = state->regs->ra;
-+	if (regs) {
-+	/* Unwind from irq to interrupted function */
-+		state->fp = regs->s0;
-+		state->pc = regs->epc;
-+		state->regs = regs;
-+	} else if (state->regs && state->regs->epc == state->pc) {
-+	/* Unwind from interrupted function to caller*/
-+		if (frame->ra < low || frame->ra > high) {
-+		/* normal function */
-+			state->fp = frame->fp;
-+			state->pc = frame->ra;
-+		} else {
-+		/* leaf function */
-+			state->fp = frame->ra;
-+			state->pc = state->regs->ra;
-+		}
-+		state->regs = NULL;
- 	} else {
-+	/* Unwind from normal stack frame */
- 		state->fp = frame->fp;
- 		state->pc = ftrace_graph_ret_addr(current, NULL, frame->ra,
- 							(unsigned long *)fp - 1);
+ int iommu_device_register(struct iommu_device *iommu,
 -- 
-2.17.1
+2.36.1.dirty
 
