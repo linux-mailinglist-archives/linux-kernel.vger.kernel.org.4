@@ -2,123 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB7065BF27A
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 02:53:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D1FD5BF283
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 02:58:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231204AbiIUAxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 20:53:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34248 "EHLO
+        id S230510AbiIUA6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 20:58:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbiIUAxv (ORCPT
+        with ESMTP id S229599AbiIUA6v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 20:53:51 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC30B79637;
-        Tue, 20 Sep 2022 17:53:47 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 20 Sep 2022 20:58:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D58379A55;
+        Tue, 20 Sep 2022 17:58:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MXKfZ0GkDz4xGG;
-        Wed, 21 Sep 2022 10:53:41 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1663721622;
-        bh=MYiu+s3OeBKd3nNk+MFnM9wVMRP+fbojbJFcGIJwzQE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=KsK9X9o4fuxiHmuG7OEE4R2TDEuQjFrSq0dJu93TQv2CM3j7a5fPjeF2XJG+WIFNP
-         w+iUFW8qrqoMe+HlYlieydgxOgB6pJO4IoSWLjWIHN9NVTRqSCxqcpghwdZyEBcxxg
-         OJPArFcnIlFt8evRrIOqzkuXq+AI6J4Qn4QAkvZHW8Trv1giW7WfT69nnY4UA0BhZT
-         vVQ+y334k8YUY+wyEiDhCvwtqmVBvSp7xCo79z8Ad8tJnTCBOgFVJm+apIQgAHNKCc
-         Wc/0zimWm7xZznFEbJROtcRRwb406CEiApwelmxAzN0xWLrLSBqExIVXINk9WST1/v
-         4JjDwn3+f5hOQ==
-Date:   Wed, 21 Sep 2022 10:53:37 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>
-Cc:     Networking <netdev@vger.kernel.org>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Wei Fang <wei.fang@nxp.com>
-Subject: linux-next: manual merge of the net-next tree with the net tree
-Message-ID: <20220921105337.62b41047@canb.auug.org.au>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 16510B8128A;
+        Wed, 21 Sep 2022 00:58:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B18D5C433D6;
+        Wed, 21 Sep 2022 00:58:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663721927;
+        bh=Tk5BZ3s9YloXqflrMgU4zATgp2PDiyQTeakuZwFxfJM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cta/AORVvHnTh04B4P8+nB9nYCUCnOkbBCigdJ92AcISI42UNbPXAKtG7h2zotGbl
+         v+qEtiNDoPyQNfAsPl/psNg2ZTKHSU2AycXrq8UWakpVNfrG9XAy4RmRq65MthNh8c
+         jVi21gUNufeRnUxUuoqv3jwH+t/EiT5DXt/1fRplerCe/bASJMkxJzjjtVE6XmD98z
+         NFH11cV4Poy3ddKcGWTSwFUVI3uAqk/36iS4mopI/+sN+2PzY4k+T23pJ+SLBWXZV2
+         258wU7Zzw9BzSlvBx7XYp7oj02O6xZuBmnWScCxEdHV/uvdxudw6sQX7vtid/396Lw
+         /4P1criyOQoBw==
+Date:   Tue, 20 Sep 2022 17:58:47 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     Shiyang Ruan <ruansy.fnst@fujitsu.com>,
+        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        nvdimm@lists.linux.dev, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, dan.j.williams@intel.com,
+        hch@infradead.org, jane.chu@oracle.com
+Subject: Re: [PATCH 3/3] mm, pmem, xfs: Introduce MF_MEM_REMOVE for unbind
+Message-ID: <Yyphx31m5fO+OZCI@magnolia>
+References: <9e9521a4-6e07-e226-2814-b78a2451656b@fujitsu.com>
+ <1662114961-66-1-git-send-email-ruansy.fnst@fujitsu.com>
+ <1662114961-66-4-git-send-email-ruansy.fnst@fujitsu.com>
+ <20220920024519.GQ3600936@dread.disaster.area>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/GKIy3cO/TxJifJRDSQPbg+Y";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220920024519.GQ3600936@dread.disaster.area>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/GKIy3cO/TxJifJRDSQPbg+Y
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Sep 20, 2022 at 12:45:19PM +1000, Dave Chinner wrote:
+> On Fri, Sep 02, 2022 at 10:36:01AM +0000, Shiyang Ruan wrote:
+> > This patch is inspired by Dan's "mm, dax, pmem: Introduce
+> > dev_pagemap_failure()"[1].  With the help of dax_holder and
+> > ->notify_failure() mechanism, the pmem driver is able to ask filesystem
+> > (or mapped device) on it to unmap all files in use and notify processes
+> > who are using those files.
+> > 
+> > Call trace:
+> > trigger unbind
+> >  -> unbind_store()
+> >   -> ... (skip)
+> >    -> devres_release_all()   # was pmem driver ->remove() in v1
+> >     -> kill_dax()
+> >      -> dax_holder_notify_failure(dax_dev, 0, U64_MAX, MF_MEM_PRE_REMOVE)
+> >       -> xfs_dax_notify_failure()
+> > 
+> > Introduce MF_MEM_PRE_REMOVE to let filesystem know this is a remove
+> > event.  So do not shutdown filesystem directly if something not
+> > supported, or if failure range includes metadata area.  Make sure all
+> > files and processes are handled correctly.
+> > 
+> > [1]: https://lore.kernel.org/linux-mm/161604050314.1463742.14151665140035795571.stgit@dwillia2-desk3.amr.corp.intel.com/
+> > 
+> > Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
+> > ---
+> >  drivers/dax/super.c         |  3 ++-
+> >  fs/xfs/xfs_notify_failure.c | 23 +++++++++++++++++++++++
+> >  include/linux/mm.h          |  1 +
+> >  3 files changed, 26 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/dax/super.c b/drivers/dax/super.c
+> > index 9b5e2a5eb0ae..cf9a64563fbe 100644
+> > --- a/drivers/dax/super.c
+> > +++ b/drivers/dax/super.c
+> > @@ -323,7 +323,8 @@ void kill_dax(struct dax_device *dax_dev)
+> >  		return;
+> >  
+> >  	if (dax_dev->holder_data != NULL)
+> > -		dax_holder_notify_failure(dax_dev, 0, U64_MAX, 0);
+> > +		dax_holder_notify_failure(dax_dev, 0, U64_MAX,
+> > +				MF_MEM_PRE_REMOVE);
+> >  
+> >  	clear_bit(DAXDEV_ALIVE, &dax_dev->flags);
+> >  	synchronize_srcu(&dax_srcu);
+> > diff --git a/fs/xfs/xfs_notify_failure.c b/fs/xfs/xfs_notify_failure.c
+> > index 3830f908e215..5e04ba7fa403 100644
+> > --- a/fs/xfs/xfs_notify_failure.c
+> > +++ b/fs/xfs/xfs_notify_failure.c
+> > @@ -22,6 +22,7 @@
+> >  
+> >  #include <linux/mm.h>
+> >  #include <linux/dax.h>
+> > +#include <linux/fs.h>
+> >  
+> >  struct xfs_failure_info {
+> >  	xfs_agblock_t		startblock;
+> > @@ -77,6 +78,9 @@ xfs_dax_failure_fn(
+> >  
+> >  	if (XFS_RMAP_NON_INODE_OWNER(rec->rm_owner) ||
+> >  	    (rec->rm_flags & (XFS_RMAP_ATTR_FORK | XFS_RMAP_BMBT_BLOCK))) {
+> > +		/* The device is about to be removed.  Not a really failure. */
+> > +		if (notify->mf_flags & MF_MEM_PRE_REMOVE)
+> > +			return 0;
+> >  		notify->want_shutdown = true;
+> >  		return 0;
+> >  	}
+> > @@ -182,12 +186,23 @@ xfs_dax_notify_failure(
+> >  	struct xfs_mount	*mp = dax_holder(dax_dev);
+> >  	u64			ddev_start;
+> >  	u64			ddev_end;
+> > +	int			error;
+> >  
+> >  	if (!(mp->m_super->s_flags & SB_BORN)) {
+> >  		xfs_warn(mp, "filesystem is not ready for notify_failure()!");
+> >  		return -EIO;
+> >  	}
+> >  
+> > +	if (mf_flags & MF_MEM_PRE_REMOVE) {
+> > +		xfs_info(mp, "device is about to be removed!");
+> > +		down_write(&mp->m_super->s_umount);
+> > +		error = sync_filesystem(mp->m_super);
+> > +		drop_pagecache_sb(mp->m_super, NULL);
+> > +		up_write(&mp->m_super->s_umount);
+> > +		if (error)
+> > +			return error;
+> 
+> If the device is about to go away unexpectedly, shouldn't this shut
+> down the filesystem after syncing it here?  If the filesystem has
+> been shut down, then everything will fail before removal finally
+> triggers, and the act of unmounting the filesystem post device
+> removal will clean up the page cache and all the other caches.
 
-Hi all,
+IIRC they want to kill all the processes with MAP_SYNC mappings sooner
+than whenever the admin gets around to unmounting the filesystem, which
+is why PRE_REMOVE will then go walk the rmapbt to find processes to
+shoot down.  I'm not sure, though, if drop_pagecache_sb only touches
+DRAM page cache or if it'll shoot down fsdax mappings too?
 
-Today's linux-next merge of the net-next tree got a conflict in:
+> IOWs, I don't understand why the page cache is considered special
+> here (as opposed to, say, the inode or dentry caches), nor why we
+> aren't shutting down the filesystem directly after syncing it to
+> disk to ensure that we don't end up with applications losing data as
+> a result of racing with the removal....
 
-  drivers/net/ethernet/freescale/fec.h
+But yeah, we might as well shut down the fs at the end of PRE_REMOVE
+handling, if the rmap walk hasn't already done that.
 
-between commit:
+--D
 
-  7b15515fc1ca ("Revert "fec: Restart PPS after link state change"")
-
-from the net tree and commit:
-
-  40c79ce13b03 ("net: fec: add stop mode support for imx8 platform")
-
-from the net-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/net/ethernet/freescale/fec.h
-index a5fed00cb971,dd055d734363..000000000000
---- a/drivers/net/ethernet/freescale/fec.h
-+++ b/drivers/net/ethernet/freescale/fec.h
-@@@ -639,6 -641,15 +642,8 @@@ struct fec_enet_private=20
-  	int pps_enable;
-  	unsigned int next_counter;
- =20
- -	struct {
- -		struct timespec64 ts_phc;
- -		u64 ns_sys;
- -		u32 at_corr;
- -		u8 at_inc_corr;
- -	} ptp_saved_state;
- -
-+ 	struct imx_sc_ipc *ipc_handle;
-+=20
-  	u64 ethtool_stats[];
-  };
- =20
-
---Sig_/GKIy3cO/TxJifJRDSQPbg+Y
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMqYJEACgkQAVBC80lX
-0GxcfQf/dI8QcD5v0qxaOm3B538bZTjUBhAXhzaA8ghgw0fI6f+36V/8+GtOxA/M
-XNUcTywy2t7r06Z+Dvz/P3hgnjtCITYdT42299eyO50cJrT0aNcrYYA7o9dYcIVV
-OjJ9F28uqGbJosDK9kymxcUQVNDXc1WVsZ/7i58KomS7IS+8Lv7fE4JPVcQzhFAA
-6cy4PQChhbTQtwjQn2jIpGAaQBAbYnsOnts0EUFqyyE8OHEgkyQUXoJ/maJRLerD
-NLS+HS29lpBo19JNrqrndCrccVmxINdsx5s9Wg3cY4MtSayj0VHKL8gAMAmEVsxi
-Gk9W63epwWTXvDWFw5iwwxP6Saa9Eg==
-=nrEK
------END PGP SIGNATURE-----
-
---Sig_/GKIy3cO/TxJifJRDSQPbg+Y--
+> Cheers,
+> 
+> Dave.
+> -- 
+> Dave Chinner
+> david@fromorbit.com
