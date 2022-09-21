@@ -2,50 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B99285BFB17
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 11:35:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D23F5BFB18
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 11:36:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231365AbiIUJfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 05:35:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33978 "EHLO
+        id S230468AbiIUJgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 05:36:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbiIUJfr (ORCPT
+        with ESMTP id S229555AbiIUJgI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 05:35:47 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3985582D04;
-        Wed, 21 Sep 2022 02:35:46 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 79DE3139F;
-        Wed, 21 Sep 2022 02:35:52 -0700 (PDT)
-Received: from [10.57.18.118] (unknown [10.57.18.118])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A0C373F73D;
-        Wed, 21 Sep 2022 02:35:43 -0700 (PDT)
-Message-ID: <2ce32413-d338-5032-71f1-7da183b2c561@arm.com>
-Date:   Wed, 21 Sep 2022 10:35:42 +0100
+        Wed, 21 Sep 2022 05:36:08 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14F4E8F966;
+        Wed, 21 Sep 2022 02:36:06 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id 9so5312954pfz.12;
+        Wed, 21 Sep 2022 02:36:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=EY7f1vye1qs5rWXV1baAbSmWO5OxmPowtv9FR9+ng6A=;
+        b=He6eVgwxCpvM7FQUloccwnQCjSmNWQO5WVzHyHQ1TdXo7p5QPBqdmNjTcbS+9Kc+eN
+         7tuXkc5/B9THod1wvklYIgD5Ubq99gLiKyNlWZ6UT6DtPjHHpTae3PIQbdHnzIFgaGUf
+         IPr/aAMHNiM/F8N7iGFKvXNCLdOVJt1eLXUqIsgy5MYzuWa/k79YG7SF8Z11rlRTKC41
+         06EoD6MoaOnaDr2CS4HnRyMLvn5d2uvF5Eb/Fw6kHCq8f4e1/7a6rEksLJ2/mCfyYyF0
+         8dySI1AMW8az5Ssqpx8vHKdXOieTt74scGpsllToIadpaIqxCZ2D13dfLKlfXKhbhFXn
+         xw4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=EY7f1vye1qs5rWXV1baAbSmWO5OxmPowtv9FR9+ng6A=;
+        b=QWK+VsrJibKopdkIcdrk2b58DndfBH8R/OI4JX6dw5TUIvnGhaatveY5GL3sjutvIU
+         R1EHk80bgLmEGR1AVAFd/yCzkzoueYRn+q19Z1FVA9AlfnkhCjzcbvF6VuGIzXY2lcjE
+         sPT2TUnjMJ5llUM4XEWmPlpDHmdDVxl38eEUVS9f4cnc3vfSglE1Za1g7ugBGde42JeP
+         F6DSJahYXjjs/Vt3mGcMOxAdo5jTTz+VELyt/ZzPuUBY9Hz55Ix+5ccktUgE46Qii4oh
+         WcJK1tz9F3fSn3FLZsu7KosFyqlGe2JIRGW1+isfjkoP/18q5yuA7EZOPnG3/GCZ1nsi
+         TChQ==
+X-Gm-Message-State: ACrzQf3fEUMnR0yegK3uj3VCFMZ1YU06fBTKuhlKyUaPDR1kGBKsQw+w
+        36ycXP28Ml2G+AB4jL4KRzE=
+X-Google-Smtp-Source: AMsMyM5B7rUk20yozOmMtYjdlwFX6VJiuf/VXkruaO2wVY4NOoEniG8ap3MLWcIdJcRoPsBJjVUTEQ==
+X-Received: by 2002:a63:da13:0:b0:438:e3cb:7a8c with SMTP id c19-20020a63da13000000b00438e3cb7a8cmr24169179pgh.31.1663752966383;
+        Wed, 21 Sep 2022 02:36:06 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id z188-20020a6265c5000000b0053e7293be0bsm1625372pfb.121.2022.09.21.02.36.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Sep 2022 02:36:06 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: ye.xingchen@zte.com.cn
+To:     acme@kernel.org
+Cc:     mingo@redhat.com, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ye xingchen <ye.xingchen@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH linux-next] tools x86 machine: use strscpy() is more robust and safer
+Date:   Wed, 21 Sep 2022 09:36:01 +0000
+Message-Id: <20220921093601.230800-1-ye.xingchen@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [RESEND PATCH v5 2/2] dmaengine: mxs: fix section mismatch
-Content-Language: en-GB
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        linux-kernel@vger.kernel.org
-Cc:     linux-amarula@amarulasolutions.com,
-        Michael Trimarchi <michael@amarulasolutions.com>,
-        stable@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        dmaengine@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20220904141020.2947725-1-dario.binacchi@amarulasolutions.com>
- <20220904141020.2947725-2-dario.binacchi@amarulasolutions.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220904141020.2947725-2-dario.binacchi@amarulasolutions.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,49 +72,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-04 15:10, Dario Binacchi wrote:
-> The patch was suggested by the following modpost warning:
-> 
-> WARNING: modpost: vmlinux.o(.data+0xa3900): Section mismatch in reference from the variable mxs_dma_driver to the function .init.text:mxs_dma_probe()
-> The variable mxs_dma_driver references
-> the function __init mxs_dma_probe()
-> If the reference is valid then annotate the
-> variable with __init* or __refdata (see linux/init.h) or name the variable:
-> *_template, *_timer, *_sht, *_ops, *_probe, *_probe_one, *_console
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
-This is very wrong - even *with* platform_driver_probe(), the driver may 
-remain registered beyond init, so when the driver core walks the list 
-trying to match a driver for some other device later it can access freed 
-data and crash. Which is absolutely no fun to debug...
+The implementation of strscpy() is more robust and safer.
 
-The correct fix is to remove the __init annotation from the probe 
-routine. If you want to support deferred probe, consider that even your 
-own probe call might potentially be delayed until after initdata is freed.
+That's now the recommended way to copy NUL terminated strings.
 
-Thanks,
-Robin.
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+---
+ tools/perf/arch/x86/util/machine.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Co-developed-by: Michael Trimarchi <michael@amarulasolutions.com>
-> Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> Cc: stable@vger.kernel.org
-> ---
-> 
-> (no changes since v1)
-> 
->   drivers/dma/mxs-dma.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/dma/mxs-dma.c b/drivers/dma/mxs-dma.c
-> index 18f8154b859b..a01953e06048 100644
-> --- a/drivers/dma/mxs-dma.c
-> +++ b/drivers/dma/mxs-dma.c
-> @@ -834,7 +834,7 @@ static int __init mxs_dma_probe(struct platform_device *pdev)
->   	return 0;
->   }
->   
-> -static struct platform_driver mxs_dma_driver = {
-> +static struct platform_driver mxs_dma_driver __initdata = {
->   	.driver		= {
->   		.name	= "mxs-dma",
->   		.of_match_table = mxs_dma_dt_ids,
+diff --git a/tools/perf/arch/x86/util/machine.c b/tools/perf/arch/x86/util/machine.c
+index 31679c35d493..1ff0be147205 100644
+--- a/tools/perf/arch/x86/util/machine.c
++++ b/tools/perf/arch/x86/util/machine.c
+@@ -40,7 +40,7 @@ static int add_extra_kernel_map(struct extra_kernel_map_info *mi, u64 start,
+ 	mi->maps[mi->cnt].start = start;
+ 	mi->maps[mi->cnt].end   = end;
+ 	mi->maps[mi->cnt].pgoff = pgoff;
+-	strlcpy(mi->maps[mi->cnt].name, name, KMAP_NAME_LEN);
++	strscpy(mi->maps[mi->cnt].name, name, KMAP_NAME_LEN);
+ 
+ 	mi->cnt += 1;
+ 
+-- 
+2.25.1
