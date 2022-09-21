@@ -2,70 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79CEB5BFF11
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 15:43:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 000B55BFF18
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 15:43:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbiIUNnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 09:43:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34894 "EHLO
+        id S230073AbiIUNny (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 09:43:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbiIUNnH (ORCPT
+        with ESMTP id S229825AbiIUNnm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 09:43:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F60B6D567
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 06:43:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663767786;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WbvVISdR0D5SgVri2kvUMTbYwrsa/O3VMAKDVY30tWE=;
-        b=MyfhgBuVgQXk9wN7FfeHxabYQyMgBFEGiuBkmA9ob2hopvllxgQgGgoWw+YCVOg47HP3Ta
-        m4Zl8czKAqlH2OSdBUFLBR6ZIviA8VtvWRnGhbNYZRffmjFmn3qrN0fXVlq7N5BMcJaIMD
-        f2NRmnOagTYgbUe19b+Kcw9ggIbikLc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-621-mu9sk1t3P66-vQ7fqDjLSg-1; Wed, 21 Sep 2022 09:43:03 -0400
-X-MC-Unique: mu9sk1t3P66-vQ7fqDjLSg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 21 Sep 2022 09:43:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E5556E2EF
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 06:43:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 73FA8803520;
-        Wed, 21 Sep 2022 13:43:02 +0000 (UTC)
-Received: from sirius.home.kraxel.org (unknown [10.39.192.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9AA17111D3DB;
-        Wed, 21 Sep 2022 13:42:47 +0000 (UTC)
-Received: by sirius.home.kraxel.org (Postfix, from userid 1000)
-        id 3A5B31800081; Wed, 21 Sep 2022 15:42:46 +0200 (CEST)
-Date:   Wed, 21 Sep 2022 15:42:46 +0200
-From:   Gerd Hoffmann <kraxel@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] kvm/x86: reserve bit
- KVM_HINTS_PHYS_ADDRESS_SIZE_DATA_VALID
-Message-ID: <20220921134246.xibospqoktp4wjie@sirius.home.kraxel.org>
-References: <20220908114146.473630-1-kraxel@redhat.com>
- <YxoBtD+3sgEEiaFF@google.com>
- <20220909050224.rzlt4x7tjrespw3k@sirius.home.kraxel.org>
+        by ams.source.kernel.org (Postfix) with ESMTPS id CDD3CB82FC5
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 13:43:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 930CBC43142
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 13:43:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663767818;
+        bh=Gmuw7RYv066IxRae4zmwgZqYaBan3eu2R7Ak+x42SkI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=epzRSJ0jyAlPZ16JH3+XPj16W+fgflBh69EoIUoCn+iYNALhGhq0EGN7hyvK6/xnz
+         tCrpO2MgL9f/JKcaFVIpdYkwWnKD81N8BqNwoKaIfVpULQLmOvz2ZVdroMjawrta0o
+         ltKZ/KorHpLGLupVh7L0N+yDipDQXa6ThxHz29DxoZb9DXxNv+/aKxvEEYH4WGYHYT
+         oaAootsA0LfuR1MUG3VujCM5P1GmGhokDptfnnqRKL295GKdkC9Z7vl9faJN982WEV
+         SSAWusvTxydhhjpXEPqqtH0teulP5+KXcoBUaMngLqObOmac7yPzK5i/UYTPtLUnEo
+         byWIA2B/BIBDA==
+Received: by mail-lf1-f53.google.com with SMTP id k10so9291726lfm.4
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 06:43:38 -0700 (PDT)
+X-Gm-Message-State: ACrzQf356T7NmSu2tpaiTnPTkpr0X+riNeXky2vVZUKDt/mm3NI2WK1/
+        njw1uuy3tzDFTxBNBdFvvwuf9x343nLhmOlA8UHIkA==
+X-Google-Smtp-Source: AMsMyM79gcUQDdS+aheFYCBSJgkOeTa2g6z7vtIVxydF5XAVlYV8l3YcMmi9Yn+KvZ/xQuuFPV3NVrj9PpUfx7TqFJ4=
+X-Received: by 2002:a2e:920a:0:b0:26c:f7b:95db with SMTP id
+ k10-20020a2e920a000000b0026c0f7b95dbmr9324650ljg.156.1663767805783; Wed, 21
+ Sep 2022 06:43:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220909050224.rzlt4x7tjrespw3k@sirius.home.kraxel.org>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+References: <20220920075951.929132-1-roberto.sassu@huaweicloud.com> <20220920075951.929132-3-roberto.sassu@huaweicloud.com>
+In-Reply-To: <20220920075951.929132-3-roberto.sassu@huaweicloud.com>
+From:   KP Singh <kpsingh@kernel.org>
+Date:   Wed, 21 Sep 2022 15:43:14 +0200
+X-Gmail-Original-Message-ID: <CACYkzJ7or3+zwZShXC7TdzhSbN4O9wEk6KEkbRBFh85=HZ87PQ@mail.gmail.com>
+Message-ID: <CACYkzJ7or3+zwZShXC7TdzhSbN4O9wEk6KEkbRBFh85=HZ87PQ@mail.gmail.com>
+Subject: Re: [PATCH v18 02/13] btf: Export bpf_dynptr definition
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, mykolal@fb.com, dhowells@redhat.com,
+        jarkko@kernel.org, rostedt@goodmis.org, mingo@redhat.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        shuah@kernel.org, bpf@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        deso@posteo.net, memxor@gmail.com,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        stable@vger.kernel.org, Joanne Koong <joannelkoong@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,33 +72,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 09, 2022 at 07:02:24AM +0200, Gerd Hoffmann wrote:
-> On Thu, Sep 08, 2022 at 02:52:36PM +0000, Sean Christopherson wrote:
-> > On Thu, Sep 08, 2022, Gerd Hoffmann wrote:
-> > > -#define KVM_HINTS_REALTIME      0
-> > > +#define KVM_HINTS_REALTIME                      0
-> > > +#define KVM_HINTS_PHYS_ADDRESS_SIZE_DATA_VALID  1
-> > 
-> > Why does KVM need to get involved?  This is purely a userspace problem.
-> 
-> It doesn't.  I only need reserve a hints bit, and the canonical source
-> for that happens to live in the kernel.  That's why this patch doesn't
-> touch any actual code ;)
-> 
-> > E.g. why not use QEMU's fw_cfg to communicate this information to the
-> > guest?
-> 
-> That is indeed the other obvious way to implement this.  Given this
-> information will be needed in code paths which already do CPUID queries
-> using CPUID to transport that information looked like the better option
-> to me.
+On Tue, Sep 20, 2022 at 10:01 AM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+>
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+>
+> eBPF dynamic pointers is a new feature recently added to upstream. It binds
+> together a pointer to a memory area and its size. The internal kernel
+> structure bpf_dynptr_kern is not accessible by eBPF programs in user space.
+> They instead see bpf_dynptr, which is then translated to the internal
+> kernel structure by the eBPF verifier.
+>
+> The problem is that it is not possible to include at the same time the uapi
+> include linux/bpf.h and the vmlinux BTF vmlinux.h, as they both contain the
+> definition of some structures/enums. The compiler complains saying that the
+> structures/enums are redefined.
+>
+> As bpf_dynptr is defined in the uapi include linux/bpf.h, this makes it
+> impossible to include vmlinux.h. However, in some cases, e.g. when using
+> kfuncs, vmlinux.h has to be included. The only option until now was to
+> include vmlinux.h and add the definition of bpf_dynptr directly in the eBPF
+> program source code from linux/bpf.h.
+>
+> Solve the problem by using the same approach as for bpf_timer (which also
+> follows the same scheme with the _kern suffix for the internal kernel
+> structure).
+>
+> Add the following line in one of the dynamic pointer helpers,
+> bpf_dynptr_from_mem():
+>
+> BTF_TYPE_EMIT(struct bpf_dynptr);
+>
+> Cc: stable@vger.kernel.org
+> Cc: Joanne Koong <joannelkoong@gmail.com>
+> Fixes: 97e03f521050c ("bpf: Add verifier support for dynptrs")
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Acked-by: Yonghong Song <yhs@fb.com>
 
-I'd like to move forward with this.
+I tested this out and it works, however for the BPF signing use case
+where "bpf_dynptr_kern" is added to struct bpf_prog_aux one still
+ends up defining the __ksym extern with bpf_dynptr_kern.
 
-So, any comment further comments and opinions?
-Is it ok to grab a hints bit given the explanation above?
-Or should I go for the fw_cfg approach?
+But let's discuss that when the series is posted.
 
-thanks & take care,
-  Gerd
-
+Tested-by: KP Singh <kpsingh@kernel.org>
