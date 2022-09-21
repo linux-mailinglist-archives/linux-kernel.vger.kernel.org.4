@@ -2,267 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D01575BF6B9
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 08:52:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CCB95BF6B3
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 08:52:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230125AbiIUGwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 02:52:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50590 "EHLO
+        id S229686AbiIUGv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 02:51:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229900AbiIUGvy (ORCPT
+        with ESMTP id S230239AbiIUGv2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 02:51:54 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61162CC6;
-        Tue, 20 Sep 2022 23:51:52 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MXTVN6XS7zMntD;
-        Wed, 21 Sep 2022 14:47:08 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 21 Sep 2022 14:51:50 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 21 Sep 2022 14:51:49 +0800
-Subject: Re: [PATCH v2 1/8] scripts/kallsyms: don't compress symbol type when
- CONFIG_KALLSYMS_ALL=y
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-To:     Petr Mladek <pmladek@suse.com>
-CC:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Masahiro Yamada" <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        <linux-modules@vger.kernel.org>
-References: <20220909130016.727-1-thunder.leizhen@huawei.com>
- <20220909130016.727-2-thunder.leizhen@huawei.com> <Yyn305PlgTZixR0V@alley>
- <42cdce86-8ccd-3cc1-9e30-13485a183d98@huawei.com>
-Message-ID: <0d55ce04-c926-78e8-464e-c3294c689715@huawei.com>
-Date:   Wed, 21 Sep 2022 14:51:38 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Wed, 21 Sep 2022 02:51:28 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F39233A28;
+        Tue, 20 Sep 2022 23:51:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 07125CE1C35;
+        Wed, 21 Sep 2022 06:51:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77391C433D6;
+        Wed, 21 Sep 2022 06:51:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1663743080;
+        bh=dE4QRI26YlOn4oFfwbVQHDdyoxQTuoDrVdmUDf2b+uA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rZanWWv0NIWceQXjh71GdU9Y347VUC6s/OMkt1j8tZj/6L5qWsUwVS8NjBz+rvf1t
+         KtiNliYS7zXqXWsenR5yHqxTxDFgsJ/Xtm/jYpicad00uiTW5HKkoBCc03LR6ed9RH
+         X4pV+g7pns+S16K6riSrWpBLODfYMkTxn2ULOz/M=
+Date:   Wed, 21 Sep 2022 08:51:48 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     stable-commits@vger.kernel.org, Marcin Wojtas <mw@semihalf.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: Re: Patch "net: mvpp2: debugfs: fix memory leak when using
+ debugfs_lookup()" has been added to the 5.10-stable tree
+Message-ID: <Yyq0hHcOTelikuOy@kroah.com>
+References: <20220920214625.206958-1-sashal@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <42cdce86-8ccd-3cc1-9e30-13485a183d98@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220920214625.206958-1-sashal@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Sep 20, 2022 at 05:46:25PM -0400, Sasha Levin wrote:
+> This is a note to let you know that I've just added the patch titled
+> 
+>     net: mvpp2: debugfs: fix memory leak when using debugfs_lookup()
+> 
+> to the 5.10-stable tree which can be found at:
+>     http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
+> 
+> The filename of the patch is:
+>      net-mvpp2-debugfs-fix-memory-leak-when-using-debugfs.patch
+> and it can be found in the queue-5.10 subdirectory.
+> 
+> If you, or anyone else, feels it should not be added to the stable tree,
+> please let <stable@vger.kernel.org> know about it.
+> 
+> 
+> 
+> commit 24f9e4af2b16c42327cde7198834a5d58aacb2f8
+> Author: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Date:   Fri Sep 2 15:41:11 2022 +0200
+> 
+>     net: mvpp2: debugfs: fix memory leak when using debugfs_lookup()
+>     
+>     [ Upstream commit fe2c9c61f668cde28dac2b188028c5299cedcc1e ]
+>     
+>     When calling debugfs_lookup() the result must have dput() called on it,
+>     otherwise the memory will leak over time.  Fix this up to be much
+>     simpler logic and only create the root debugfs directory once when the
+>     driver is first accessed.  That resolves the memory leak and makes
+>     things more obvious as to what the intent is.
+>     
+>     Cc: Marcin Wojtas <mw@semihalf.com>
+>     Cc: Russell King <linux@armlinux.org.uk>
+>     Cc: "David S. Miller" <davem@davemloft.net>
+>     Cc: Eric Dumazet <edumazet@google.com>
+>     Cc: Jakub Kicinski <kuba@kernel.org>
+>     Cc: Paolo Abeni <pabeni@redhat.com>
+>     Cc: netdev@vger.kernel.org
+>     Cc: stable <stable@kernel.org>
+>     Fixes: 21da57a23125 ("net: mvpp2: add a debugfs interface for the Header Parser")
+>     Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>     Signed-off-by: David S. Miller <davem@davemloft.net>
+>     Signed-off-by: Sasha Levin <sashal@kernel.org>
+> 
+> diff --git a/drivers/net/ethernet/marvell/mvpp2/mvpp2_debugfs.c b/drivers/net/ethernet/marvell/mvpp2/mvpp2_debugfs.c
+> index 4a3baa7e0142..0eec05d905eb 100644
+> --- a/drivers/net/ethernet/marvell/mvpp2/mvpp2_debugfs.c
+> +++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2_debugfs.c
+> @@ -700,10 +700,10 @@ void mvpp2_dbgfs_cleanup(struct mvpp2 *priv)
+>  
+>  void mvpp2_dbgfs_init(struct mvpp2 *priv, const char *name)
+>  {
+> -	struct dentry *mvpp2_dir, *mvpp2_root;
+> +	static struct dentry *mvpp2_root;
+> +	struct dentry *mvpp2_dir;
+>  	int ret, i;
+>  
+> -	mvpp2_root = debugfs_lookup(MVPP2_DRIVER_NAME, NULL);
+>  	if (!mvpp2_root)
+>  		mvpp2_root = debugfs_create_dir(MVPP2_DRIVER_NAME, NULL);
+>  
 
+I dropped this at the request of Russell last time around, and will be
+fixing this up in a "better" way later this week, so I will drop this
+from the stable queues as well.
 
-On 2022/9/21 10:42, Leizhen (ThunderTown) wrote:
-> 
-> 
-> On 2022/9/21 1:26, Petr Mladek wrote:
->> On Fri 2022-09-09 21:00:09, Zhen Lei wrote:
->>> Currently, to search for a symbol, we need to expand the symbols in
->>> 'kallsyms_names' one by one, and then use the expanded string for
->>> comparison. This is very slow.
->>>
->>> In fact, we can first compress the name being looked up and then use
->>> it for comparison when traversing 'kallsyms_names'.
->>
->> This does not explain how this patch modifies the compressed data
->> and why it is needed.
-> 
-> Yes, I have updated the description from the v3 version.
-> 
-> So if we don't compress the symbol type, we can first compress the
-> searched symbol and then make a quick comparison based on the compressed
-> length and content. In this way, for entries with mismatched lengths,
-> there is no need to expand and compare strings. And for those matching
-> lengths, there's no need to expand the symbol. This saves a lot of time.
-> 
->>
->>
->>> This increases the size of 'kallsyms_names'. About 48KiB, 2.67%, on x86
->>> with defconfig.
->>> Before: kallsyms_num_syms=131392, sizeof(kallsyms_names)=1823659
->>> After : kallsyms_num_syms=131392, sizeof(kallsyms_names)=1872418
->>>
->>> However, if CONFIG_KALLSYMS_ALL is not set, the size of 'kallsyms_names'
->>> does not change.
->>>
->>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
->>> ---
->>>  scripts/kallsyms.c | 15 ++++++++++++---
->>>  1 file changed, 12 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
->>> index f18e6dfc68c5839..ab6fe7cd014efd1 100644
->>> --- a/scripts/kallsyms.c
->>> +++ b/scripts/kallsyms.c
->>> @@ -60,6 +60,7 @@ static unsigned int table_size, table_cnt;
->>>  static int all_symbols;
->>>  static int absolute_percpu;
->>>  static int base_relative;
->>> +static int sym_start_idx;
->>>  
->>>  static int token_profit[0x10000];
->>>  
->>> @@ -511,7 +512,7 @@ static void learn_symbol(const unsigned char *symbol, int len)
->>>  {
->>>  	int i;
->>>  
->>> -	for (i = 0; i < len - 1; i++)
->>> +	for (i = sym_start_idx; i < len - 1; i++)
->>>  		token_profit[ symbol[i] + (symbol[i + 1] << 8) ]++;
->>
->> This skips the first character in the @symbol string. I do not see how
->> this is used in the new code, for example, in
->> kallsyms_on_each_match_symbol(), in the 5th patch. It seems to iterate
->> the compressed data from the 0th index:
->>
->> 	for (i = 0, off = 0; i < kallsyms_num_syms; i++)
->>
->>>  }
->>>  
->>> @@ -520,7 +521,7 @@ static void forget_symbol(const unsigned char *symbol, int len)
->>>  {
->>>  	int i;
->>>  
->>> -	for (i = 0; i < len - 1; i++)
->>> +	for (i = sym_start_idx; i < len - 1; i++)
->>>  		token_profit[ symbol[i] + (symbol[i + 1] << 8) ]--;
->>>  }
->>>  
->>> @@ -538,7 +539,7 @@ static unsigned char *find_token(unsigned char *str, int len,
->>>  {
->>>  	int i;
->>>  
->>> -	for (i = 0; i < len - 1; i++) {
->>> +	for (i = sym_start_idx; i < len - 1; i++) {
->>>  		if (str[i] == token[0] && str[i+1] == token[1])
->>>  			return &str[i];
->>>  	}
->>> @@ -780,6 +781,14 @@ int main(int argc, char **argv)
->>>  	} else if (argc != 1)
->>>  		usage();
->>>  
->>> +	/*
->>> +	 * Skip the symbol type, do not compress it to optimize the performance
->>> +	 * of finding or traversing symbols in kernel, this is good for modules
->>> +	 * such as livepatch.
->>
->> I see. The type is added as the first character here.
->>
->> in static struct sym_entry *read_symbol(FILE *in)
->> {
->> [...]
->> 	/* include the type field in the symbol name, so that it gets
->> 	 * compressed together */
-> 
-> Good catch. I should remove "so that it gets compressed together"
-> 
->> [...]
->> 	sym->sym[0] = type;
->> 	strcpy(sym_name(sym), name);
->>
->> It sounds a bit crazy. read_symbol() makes a trick so that the type
->> can be compressed. This patch does another trick to avoid it.
->>
->>
->>> +	 */
->>> +	if (all_symbols)
->>> +		sym_start_idx = 1;
->>
->> This looks a bit fragile. My understanding is that the new code in
->> kernel/kallsyms.c and kernel/module/kallsyms.c depends on this change.
-> 
-> They do not depend on this change, because the index in
-> insert_real_symbols_in_table() is still starting from 0. kallsyms_expand_symbol()
-> shows that it uses every byte of the compressed data to look up the token table.
-> The index in insert_real_symbols_in_table() starting from 0 make sure that the
-> raw character of 'type' occupies a separate position in kallsyms_token_table[].
-> So that kallsyms_expand_symbol() can still work well.
-> 
->>
->> The faster search is used when CONFIG_KALLSYMS_ALL is defined.
->> But the data are compressed this way when this script is called
->> with --all-symbols.
->>
->> Is it guaranteed that this script will generate the needed data
->> when CONFIG_KALLSYMS_ALL is defined?
-> 
-> Yes, see kallsyms() in scripts/link-vmlinux.sh
-> 	if is_enabled CONFIG_KALLSYMS_ALL; then
->                 kallsymopt="${kallsymopt} --all-symbols"
->         fi
-> 
->>
->> What about 3rd party modules?
-> 
-> Should they call the API directly?
-> 
->>
->> I would personally suggest to store the symbol type into a separate
->> sym->type entry in struct sym_entry and never compress it.
-> 
-> Yes，I've also considered this, for the purpose of increasing the
-> compression ratio. See below, if the sorting is performed based on
-> the address and then based on the type. We can record all the symbol
-> type information in less than 100 bytes. Of course, this makes the
-> functions that look up symbols based on the address loop serveral
-> times more. However, I would like to wait until the current patch
-> series is accepted. Otherwise, I'll have to rework a lot of patches
-> and it's too much work. To be honest, I've been coding for it these days.
+thanks,
 
-The main thing is, I don't know if there will be any other impact
-after this change. If this doesn't work, I don't have to do it all
-over again. I can refactor it after it have been fully reviewed.
-
-> 
-> cat /proc/kallsyms | awk '{print $2}' | sort | uniq -c | sort -r
->   44678 r
->   38299 t
->   28315 T
->   11644 d
->    3768 D
->    2778 b
->     778 R
->     641 B
->     282 A
->     178 W
->      37 V
-> 
->>
->> IMHO, the size win is not worth the code complexity.
->>
->> Well, people compiling the kernel for small devices might think
->> different. But they probably disable kallsyms completely.
-> 
-> Yes, to make the code look better, I've stopped binding CONFIG_KALLSYMS_ALL since v3.
-> 
-> 3. The symbol type is not compressed regardless of whether
->    CONFIG_KALLSYMS_ALL is set or not. The memory overhead is increased
->    by less than 20KiB if CONFIG_KALLSYMS_ALL=n.
-> 
->>
->> Best Regards,
->> Petr
->> .
->>
-> 
-
--- 
-Regards,
-  Zhen Lei
+greg k-h
