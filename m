@@ -2,100 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C0D25BFD36
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 13:47:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68EE75BFD2D
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 13:46:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230079AbiIULq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 07:46:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59302 "EHLO
+        id S229935AbiIULqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 07:46:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229979AbiIULqi (ORCPT
+        with ESMTP id S229774AbiIULq0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 07:46:38 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530B793208
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 04:46:35 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id b24so6655991ljk.6
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 04:46:35 -0700 (PDT)
+        Wed, 21 Sep 2022 07:46:26 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B56D88274E;
+        Wed, 21 Sep 2022 04:46:25 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id j16so8769395lfg.1;
+        Wed, 21 Sep 2022 04:46:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=mD9phxocXdXyOqXWSnmMDQ/BNPyFycCPprwFbHh4Wp4=;
-        b=KwuINMx+JpKTHKMPBgstiZdj3zgwHsg3WUjCFrqyrMvHRBB/ecHcVilqlgy7wen8VR
-         mUI2ZYRFrFxj/NSdmcljTzt/DEYtuR23a8V3wvjFlkyI5UFkyx+TRbecubLQxaWFg1bn
-         mBZNESVeVaJLBBRnF+LccgjuRtBAmXbPxmY/w=
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=cGOSHWHf030IkSak76+na5Q86ksMR3Kog0w1HGe6B7w=;
+        b=YvwQVCEcOX+91V2ztGsfXdJEhHHJWkRHmJM6klWRQDY+2Dn3XwragRB47ZO1bQbgxr
+         vi8J9f7TWxX3e7SEHx0osYHkk52Cyf1x8ASWd4RcAeIbktWq0d6fqlu/9Hrv1NmWHtjk
+         8tEYkFiAlYn+cbltH5A5dS2DrqzSB04pm7QJhJyBmZlj1OamQMFiJBsD0LHygCgO4Q+A
+         vwMxQ4qb/76oXmepA/ZQU4QjNjNqk4tqGTW6q0prF5aH9Kkc3UZx+K1QaEkljXnZ7YTR
+         xyXHgADYfq1fmiGpls5UeSjyFtJsFdNq4wBlQ1upnUmfDQQfv+BEEi8v9nX7qjTTv3DL
+         rXFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=mD9phxocXdXyOqXWSnmMDQ/BNPyFycCPprwFbHh4Wp4=;
-        b=HQ3W9JJ+XkEoSKoOtXIqCjnKTC54p03Qr2KuRmUM3nccMyN95I2Z4WFl7QzVzvGtO/
-         p5m6ysB2i0/7iKR/dPOV5mNYciJL7h20RajZinIDj/uh/SnYYCHvcqudqEPu4RqnTA8D
-         1okqcuAH/1yR898ZxQlE+3IU7yNheIlfV6byugHewfHyj+1nEpZhRkMDwuMBagqWplTI
-         lQjjoDdKZXrpqCtLCOivNWXrDdyjuB9hN86EfguqvWZVBgcXlvSFsoR8akaP6QT8ILQy
-         4LD8+4h9GH07LqmZjHqw4W7jYEjBSaK0oub911lQyVNy5xksp6SZIYbgEWLbk2JGFC+g
-         2bbg==
-X-Gm-Message-State: ACrzQf1FmXNUBYLSgLFy9N/4fxrToDVu1UmvfRGACbQQ5rEIoLYaHD+j
-        0XU5V7P0SyyO9zBSyGb+jB6jKQ==
-X-Google-Smtp-Source: AMsMyM78B2H20doAj1jTsRpSbKiXOoKQ+iq2H6mux7sSC15WXXOoAKpz3lUE8Kh4w8Zu0IZUjI0Obg==
-X-Received: by 2002:a2e:bd0e:0:b0:268:c03b:cf56 with SMTP id n14-20020a2ebd0e000000b00268c03bcf56mr9196763ljq.393.1663760793627;
-        Wed, 21 Sep 2022 04:46:33 -0700 (PDT)
-Received: from prevas-ravi.prevas.se ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id g4-20020a056512118400b00494618889c0sm405713lfr.42.2022.09.21.04.46.32
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=cGOSHWHf030IkSak76+na5Q86ksMR3Kog0w1HGe6B7w=;
+        b=yij/uo7qtgZWLZcGUXDO00wQ8X/MH5ydr77o37ToKoK2wp46xEq1oZnD/6A7HGCgHQ
+         qT6hKvi5XFiw9UE9k5qNDhjoGzbW8WYOTJLumJMk3RG5UWSKcYU5AvlKmaWXMMdR3MRW
+         uSx5gwzGweN6nMCmNeakWaKg7KJ6hE2nPSWvSYtYhKEt+rHKCVITOB/9za6ypNDv/NuT
+         t+3f7Kh/V5oWXx8mPDpJakh6y4NBMmXwoK/s3H1z+3DC2wHRJByL1S/nMM25DuoHuce5
+         pwTLpGWQLnJtmpgk4MmTxgTuss5PsIOW8avgUgpPLJ/P2A1Ia+JAews2THF9UW0riGqN
+         6DmA==
+X-Gm-Message-State: ACrzQf0XtKHgRN2r1CwgxXvAMdxxDHy9LzDHTkNRNA338h+2TZpITmvB
+        jPtNhRjcCVLOTOgc2KN8oSE=
+X-Google-Smtp-Source: AMsMyM7t/VO2lT3aSQgvK3Lr8FxWhe6n1kmdTneSbtTNXnbiiAq2oAiNTphzCbeeAnDpoCp63DKeww==
+X-Received: by 2002:a05:6512:3295:b0:497:a156:795a with SMTP id p21-20020a056512329500b00497a156795amr9532093lfe.345.1663760783934;
+        Wed, 21 Sep 2022 04:46:23 -0700 (PDT)
+Received: from dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
+        by smtp.gmail.com with ESMTPSA id y18-20020a197512000000b004946aef1814sm396307lfe.137.2022.09.21.04.46.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Sep 2022 04:46:33 -0700 (PDT)
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/9] rtc: isl12022: specify range_min and range_max
-Date:   Wed, 21 Sep 2022 13:46:17 +0200
-Message-Id: <20220921114624.3250848-3-linux@rasmusvillemoes.dk>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220921114624.3250848-1-linux@rasmusvillemoes.dk>
-References: <20220830100152.698506-1-linux@rasmusvillemoes.dk>
- <20220921114624.3250848-1-linux@rasmusvillemoes.dk>
+        Wed, 21 Sep 2022 04:46:23 -0700 (PDT)
+Date:   Wed, 21 Sep 2022 14:46:18 +0300
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
+        Cosmin Tanislav <demonsingur@gmail.com>,
+        Jagath Jog J <jagathjog1996@gmail.com>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [RFC PATCH 5/5] MAINTAINERS: Add KX022A maintainer entry
+Message-ID: <68ac8d4bb3f8bd1239bd22db43b5bf64f149fd79.1663760018.git.mazziesaccount@gmail.com>
+References: <cover.1663760018.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="7wJkDbAIU0Z2c5qr"
+Content-Disposition: inline
+In-Reply-To: <cover.1663760018.git.mazziesaccount@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The isl12022 can (only) keep track of times in the range
-2000-2099. The data sheet says
 
-  The calendar registers track date, month, year, and day of the week
-  and are accurate through 2099, with automatic leap year correction.
+--7wJkDbAIU0Z2c5qr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The lower bound of 2000 is obtained by simply observing that its YR
-register only counts from 00 through 99.
+Add maintainer entry for ROHM/Kionix KX022A accelerometer senor driver.
 
-Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
 ---
- drivers/rtc/rtc-isl12022.c | 2 ++
- 1 file changed, 2 insertions(+)
+ MAINTAINERS | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/rtc/rtc-isl12022.c b/drivers/rtc/rtc-isl12022.c
-index 2dc19061cf5f..3bc197f5548f 100644
---- a/drivers/rtc/rtc-isl12022.c
-+++ b/drivers/rtc/rtc-isl12022.c
-@@ -251,6 +251,8 @@ static int isl12022_probe(struct i2c_client *client)
- 		return PTR_ERR(isl12022->rtc);
- 
- 	isl12022->rtc->ops = &isl12022_rtc_ops;
-+	isl12022->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
-+	isl12022->rtc->range_max = RTC_TIMESTAMP_END_2099;
- 
- 	return devm_rtc_register_device(isl12022->rtc);
- }
--- 
-2.37.2
+diff --git a/MAINTAINERS b/MAINTAINERS
+index d30f26e07cd3..74f1c75775b5 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11355,6 +11355,11 @@ F:	drivers/mfd/khadas-mcu.c
+ F:	include/linux/mfd/khadas-mcu.h
+ F:	drivers/thermal/khadas_mcu_fan.c
+=20
++KIONIX/ROHM KX022A ACCELEROMETER
++R:	Matti Vaittinen <mazziesaccount@gmail.com>
++S:	Supported
++F:	drivers/iio/accel/kionix-kx022a*
++
+ KMEMLEAK
+ M:	Catalin Marinas <catalin.marinas@arm.com>
+ S:	Maintained
+--=20
+2.37.1
 
+
+--=20
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
+
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
+
+--7wJkDbAIU0Z2c5qr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmMq+YoACgkQeFA3/03a
+ocWAowgAk6DuKJCcAgFOYZfnpkzj7hW+EVAABH6aWX3iRepXOIrVFezMfQKNCvvm
+7KLu2JVZvrA8QwrVPBJFqWnORyDHL983RN3vuy7YfpOR1bXIdJk2567o8dIlfUM5
+XfutdC9JStRt+Mrz3F+dr3yWf3V7rrilCoFiy41yWwwGtDpkHtrdE5caDziZuqGw
+SoisqFraFm/+rbU5QwH3POUtT4cfZ46A5KTQKTvHdv3Ezvni8HVTNswcjjjhnzcF
+dCYJeMLSpuFuKCummrcJ8uWaqtfpMv60GHmoNESBJ/CoOqF0PHfxSBu6yPsmeSDB
+EkI8akyZtxYHJgWnqTjmElIzItKAhg==
+=+gvv
+-----END PGP SIGNATURE-----
+
+--7wJkDbAIU0Z2c5qr--
