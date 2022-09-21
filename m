@@ -2,65 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D61885BF750
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 09:13:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B3C75BF756
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 09:14:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229666AbiIUHNq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 03:13:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54604 "EHLO
+        id S229738AbiIUHOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 03:14:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbiIUHNn (ORCPT
+        with ESMTP id S229542AbiIUHOF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 03:13:43 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70003DEA4;
-        Wed, 21 Sep 2022 00:13:42 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 18FCB21AC7;
-        Wed, 21 Sep 2022 07:13:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1663744421; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zP9Fpa7PASRGajKoVnCpCT04C3FBGHn5IhRuCoFQgSM=;
-        b=hvvAg7SlryF9sPfsBE5rjYlV7Cynfttq7s1g0iHqcO7LADixZUcAjFETOmCfW/nCnq+oZ4
-        1Xwi4hHddLCcLS2j87ZTtkzhJ0FEEGGQnPDaD1KMW1oHpaxtnrprNjUieesnS5Za/UGxd9
-        sq7RWEC5h6RT0iA2tEh5SkG8f9vUTGY=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id D7EA32C141;
-        Wed, 21 Sep 2022 07:13:40 +0000 (UTC)
-Date:   Wed, 21 Sep 2022 09:13:40 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        linux-modules@vger.kernel.org
-Subject: Re: [PATCH v2 1/8] scripts/kallsyms: don't compress symbol type when
- CONFIG_KALLSYMS_ALL=y
-Message-ID: <Yyq5pNA2dEcW4h6Q@alley>
-References: <20220909130016.727-1-thunder.leizhen@huawei.com>
- <20220909130016.727-2-thunder.leizhen@huawei.com>
- <Yyn305PlgTZixR0V@alley>
- <42cdce86-8ccd-3cc1-9e30-13485a183d98@huawei.com>
+        Wed, 21 Sep 2022 03:14:05 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E0F881B33
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 00:14:03 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id t14so8289096wrx.8
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 00:14:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date;
+        bh=b3R9DZoCrYArCpmU71BmWGHj2dQq4IcyzDjXj86ttQs=;
+        b=wrleY46bAvW9orcPdmhsGXsqIOZo6+mJ/aKl/qobRPfSARZkDXHDIXKaDWEJgSh1BF
+         gjsbQU3f6mA7OZXAGqWtJ2jkHfyYGj9+pFPa5154c+wSrXeDe3h4OiRUwwXK9L0XtTvh
+         GioFbERE3aUbAlm1ElAXoYAPzF77rSiS+RzxHyREkrpFBOqjOLim+QHj7pTnK/oRAs6k
+         gUKdfJb1sbqFydZrZ7uQA3HqhV25QkUBd0yQGVPnrQ1lie7yDKaQwn8RDcxBOkLKuvef
+         CDdYGCTsYbLO/4boTiaWto7J6H06j6+Kasj2nSeNdAQUouPhPcOjjQCOVmAB0oTe8A1P
+         XBWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=b3R9DZoCrYArCpmU71BmWGHj2dQq4IcyzDjXj86ttQs=;
+        b=XTkpAq8TfIYKQKTwADZ5pbBM/c6Ki+i7Arw0Shm7bbhO8T0vtWY8UMFepxuQwaIcOh
+         cd6Vg2r8nTJU5VrruypE/ifZkPW8KRRB5aS3GXreUao3Hb1xjBGVY4A/UaObBDJF9rPr
+         cKnBFMyMu9rXBOCmh9V+5VpriQtUqnVWoQ2dNqFIZzayOpgS2W9JKl+gC/G2B6ajFxT5
+         wsQFzIkoanfL/eT33H7H5b6DoWTavkAJVH2WZtg47u6NxZkfAUZVpuejnYPrtIf7JrAA
+         0atJrsjrRbIx9cza+bFbIydwZhnlOhPZOL8ThV5Pe4s+Syzf3X+0sq1Nm/YRw3Ik8LL5
+         1hlw==
+X-Gm-Message-State: ACrzQf3ThClff8S9xpu9jIur4XD28Fw5zbqSInLI+XHRCvHA6RRVk2Kg
+        kKwaTnt7/6/O/YcI6ougThxJYg==
+X-Google-Smtp-Source: AMsMyM7zmNVSeMitft5m1bCKwdxJeXe8VrB5miovFwS9K97uh3EJKfGQh5sjBYY25eWcRqfGh4opKA==
+X-Received: by 2002:a5d:47a4:0:b0:226:e547:b602 with SMTP id 4-20020a5d47a4000000b00226e547b602mr16834338wrb.406.1663744441866;
+        Wed, 21 Sep 2022 00:14:01 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:8ce3:ff4e:ae9b:55f3? ([2a01:e0a:982:cbb0:8ce3:ff4e:ae9b:55f3])
+        by smtp.gmail.com with ESMTPSA id q63-20020a1c4342000000b003b4bd18a23bsm1866139wma.12.2022.09.21.00.14.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Sep 2022 00:14:01 -0700 (PDT)
+Message-ID: <18097f21-0c19-926a-2242-0aed1fb229b5@linaro.org>
+Date:   Wed, 21 Sep 2022 09:14:00 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <42cdce86-8ccd-3cc1-9e30-13485a183d98@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] cpufreq: qcom-cpufreq-hw: Fix uninitialized
+ throttled_freq warning
+Content-Language: en-US
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+Cc:     linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "v5 . 18+" <stable@vger.kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <8342b10a2716ec267ab89ea827f851b78b68470a.1663744088.git.viresh.kumar@linaro.org>
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Organization: Linaro
+In-Reply-To: <8342b10a2716ec267ab89ea827f851b78b68470a.1663744088.git.viresh.kumar@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,97 +86,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2022-09-21 10:42:56, Leizhen (ThunderTown) wrote:
+On 21/09/2022 09:10, Viresh Kumar wrote:
+> Commit 6240aaad75e1 was supposed to drop the reference count to the OPP,
+> instead it avoided more stuff if the OPP isn't found. This isn't
+> entirely correct. We already have a frequency value available, we just
+> couldn't align it with an OPP in case of IS_ERR(opp).
 > 
+> Lets continue with updating thermal pressure, etc, even if we aren't
+> able to find an OPP here.
 > 
-> On 2022/9/21 1:26, Petr Mladek wrote:
-> > On Fri 2022-09-09 21:00:09, Zhen Lei wrote:
-> >> Currently, to search for a symbol, we need to expand the symbols in
-> >> 'kallsyms_names' one by one, and then use the expanded string for
-> >> comparison. This is very slow.
-> >>
-> >> In fact, we can first compress the name being looked up and then use
-> >> it for comparison when traversing 'kallsyms_names'.
-> > 
-> > This does not explain how this patch modifies the compressed data
-> > and why it is needed.
+> This fixes warning generated by the 'smatch' tool.
 > 
-> Yes, I have updated the description from the v3 version.
+> Fixes: 6240aaad75e1 ("cpufreq: qcom-hw: fix the opp entries refcounting")
+> Cc: v5.18+ <stable@vger.kernel.org> # v5.18+
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> ---
+>   drivers/cpufreq/qcom-cpufreq-hw.c | 10 +++++-----
+>   1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
+> index d5ef3c66c762..bb32659820ce 100644
+> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
+> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+> @@ -316,14 +316,14 @@ static void qcom_lmh_dcvs_notify(struct qcom_cpufreq_data *data)
+>   	if (IS_ERR(opp)) {
+>   		dev_warn(dev, "Can't find the OPP for throttling: %pe!\n", opp);
+>   	} else {
+> -		throttled_freq = freq_hz / HZ_PER_KHZ;
+> -
+> -		/* Update thermal pressure (the boost frequencies are accepted) */
+> -		arch_update_thermal_pressure(policy->related_cpus, throttled_freq);
+> -
+>   		dev_pm_opp_put(opp);
+>   	}
+>   
+> +	throttled_freq = freq_hz / HZ_PER_KHZ;
+> +
+> +	/* Update thermal pressure (the boost frequencies are accepted) */
+> +	arch_update_thermal_pressure(policy->related_cpus, throttled_freq);
+> +
+>   	/*
+>   	 * In the unlikely case policy is unregistered do not enable
+>   	 * polling or h/w interrupt
 
-Ah, there is even v4. I have missed that. The commit message looks
-much better there.
-
-> So if we don't compress the symbol type, we can first compress the
-> searched symbol and then make a quick comparison based on the compressed
-> length and content. In this way, for entries with mismatched lengths,
-> there is no need to expand and compare strings. And for those matching
-> lengths, there's no need to expand the symbol. This saves a lot of time.
-> 
-> > 
-> > 
-> >> This increases the size of 'kallsyms_names'. About 48KiB, 2.67%, on x86
-> >> with defconfig.
-> >> Before: kallsyms_num_syms=131392, sizeof(kallsyms_names)=1823659
-> >> After : kallsyms_num_syms=131392, sizeof(kallsyms_names)=1872418
-> >>
-> >> However, if CONFIG_KALLSYMS_ALL is not set, the size of 'kallsyms_names'
-> >> does not change.
-> >>
-> >> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> >> ---
-> >>  scripts/kallsyms.c | 15 ++++++++++++---
-> >>  1 file changed, 12 insertions(+), 3 deletions(-)
-> >>
-> >> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-> >> index f18e6dfc68c5839..ab6fe7cd014efd1 100644
-> >> --- a/scripts/kallsyms.c
-> >> +++ b/scripts/kallsyms.c
-> >> +	 */
-> >> +	if (all_symbols)
-> >> +		sym_start_idx = 1;
-> > 
-> > This looks a bit fragile. My understanding is that the new code in
-> > kernel/kallsyms.c and kernel/module/kallsyms.c depends on this change.
-> 
-> They do not depend on this change, because the index in
-> insert_real_symbols_in_table() is still starting from 0. kallsyms_expand_symbol()
-> shows that it uses every byte of the compressed data to look up the token table.
-> The index in insert_real_symbols_in_table() starting from 0 make sure that the
-> raw character of 'type' occupies a separate position in kallsyms_token_table[].
-> So that kallsyms_expand_symbol() can still work well.
-
-I guess that we are talking about different things. Anyway, please
-ignore my concern about that it is fragile. The change in
-scripts/kallsyms.c does not longer depend on --all-symbols parameter
-in the last v4 patchset.
-
-> > I would personally suggest to store the symbol type into a separate
-> > sym->type entry in struct sym_entry and never compress it.
-> 
-> Yes，I've also considered this, for the purpose of increasing the
-> compression ratio. See below, if the sorting is performed based on
-> the address and then based on the type. We can record all the symbol
-> type information in less than 100 bytes. Of course, this makes the
-> functions that look up symbols based on the address loop serveral
-> times more. However, I would like to wait until the current patch
-> series is accepted. Otherwise, I'll have to rework a lot of patches
-> and it's too much work. To be honest, I've been coding for it these days.
-> 
-> cat /proc/kallsyms | awk '{print $2}' | sort | uniq -c | sort -r
->   44678 r
->   38299 t
->   28315 T
->   11644 d
->    3768 D
->    2778 b
->     778 R
->     641 B
->     282 A
->     178 W
->      37 V
-
-This is another optimization. I agree that we could do it later after
-this patchset is accepted.
-
-Best Regards,
-Petr
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
