@@ -2,98 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C29895C0412
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 18:26:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66D695C0410
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 18:26:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232112AbiIUQ0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 12:26:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45482 "EHLO
+        id S231974AbiIUQ0m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 12:26:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231883AbiIUQ0X (ORCPT
+        with ESMTP id S231644AbiIUQ0W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 12:26:23 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6698A5709;
-        Wed, 21 Sep 2022 09:09:18 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e77f329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e77f:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 6BAB71EC05DE;
-        Wed, 21 Sep 2022 18:07:11 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1663776431;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=LF62L5JnveC0NnOJbQNf2E4BueK3qIrzPtCOa4tW7jc=;
-        b=jbp8atHUTuocYg/a9SuXYpsQj1hHAqRBvHw9B8ANYKC1PVfOwd3jEDeZhIsOkUdx2glnlw
-        VDpC9JlLXobU1vjVhNnYcqSpXdCNtl9AqOeGb0jv9K3CUdgwLsemqhWEqeQMu0xwZX0HNK
-        FyzRLGkZeR7H3Vvc+VtkHEtHe+PGgwQ=
-Date:   Wed, 21 Sep 2022 18:07:11 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Jim Mattson <jmattson@google.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] x86/cpufeatures: Introduce X86_FEATURE_NO_LMSLE
-Message-ID: <Yys2r0QYWjeEXLe0@zn.tnic>
-References: <20220920205922.1564814-1-jmattson@google.com>
- <20220920205922.1564814-3-jmattson@google.com>
+        Wed, 21 Sep 2022 12:26:22 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4BB46B2CF2
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 09:09:15 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CC34813D5;
+        Wed, 21 Sep 2022 09:07:49 -0700 (PDT)
+Received: from wubuntu (unknown [10.57.50.172])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D56C93F5A1;
+        Wed, 21 Sep 2022 09:07:39 -0700 (PDT)
+Date:   Wed, 21 Sep 2022 17:07:38 +0100
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     Tejun Heo <tj@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com, rostedt@goodmis.org,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, linux-kernel@vger.kernel.org,
+        parth@linux.ibm.com, chris.hyser@oracle.com,
+        valentin.schneider@arm.com, patrick.bellasi@matbug.net,
+        David.Laight@aculab.com, pjt@google.com, pavel@ucw.cz,
+        qperret@google.com, tim.c.chen@linux.intel.com, joshdon@google.com
+Subject: Re: [PATCH v4 6/8] sched/fair: Add sched group latency support
+Message-ID: <20220921155521.qb3jb74nbjoenau6@airbuntu>
+References: <20220916080305.29574-1-vincent.guittot@linaro.org>
+ <20220916080305.29574-7-vincent.guittot@linaro.org>
+ <000c2893-feb4-373d-2234-2ca74be94714@arm.com>
+ <CAKfTPtASminP4ogVRhcvQ4R3-x-E+UUzuMaEu-xQU_MtLr9+Xg@mail.gmail.com>
+ <YyioI4iBFq8ib9JT@slm.duckdns.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220920205922.1564814-3-jmattson@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YyioI4iBFq8ib9JT@slm.duckdns.org>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 01:59:21PM -0700, Jim Mattson wrote:
-> When AMD introduced "Long Mode Segment Limit Enable" (a.k.a. "VMware
-> mode"), the feature was not enumerated by a CPUID bit. Now that VMware
-> has abandoned binary translation, AMD has deprecated EFER.LMSLE.
+On 09/19/22 07:34, Tejun Heo wrote:
+> On Mon, Sep 19, 2022 at 05:49:27PM +0200, Vincent Guittot wrote:
+> > > For `nice` we have `cpu.weight.nice` next to `cpu.weight` in cgroup v2 ?
+> > 
+> > If everybody is ok, I can add back the cpu.latency.nice interface in
+> > the v5 in addition to the cpu.latency
 > 
-> The absence of the feature *is* now enumerated by a CPUID bit (a la
-> Intel's X86_FEATURE_ZERO_FCS_DCS and X86_FEATURE_FDP_EXCPTN_ONLY).
-> 
-> This defeature bit is already present in feature word 13, but it was
-> previously anonymous. Name it X86_FEATURE_NO_LMSLE, so that KVM can
-> reference it when constructing a supported guest CPUID table.
-> 
-> Since this bit indicates the absence of a feature, don't enumerate it
-> in /proc/cpuinfo.
-> 
-> Signed-off-by: Jim Mattson <jmattson@google.com>
-> ---
->  arch/x86/include/asm/cpufeatures.h | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-> index ef4775c6db01..0f5a3285d8d8 100644
-> --- a/arch/x86/include/asm/cpufeatures.h
-> +++ b/arch/x86/include/asm/cpufeatures.h
-> @@ -319,6 +319,7 @@
->  #define X86_FEATURE_AMD_IBRS		(13*32+14) /* "" Indirect Branch Restricted Speculation */
->  #define X86_FEATURE_AMD_STIBP		(13*32+15) /* "" Single Thread Indirect Branch Predictors */
->  #define X86_FEATURE_AMD_STIBP_ALWAYS_ON	(13*32+17) /* "" Single Thread Indirect Branch Predictors always-on preferred */
-> +#define X86_FEATURE_NO_LMSLE		(13*32+20) /* "" EFER_LMSLE is unsupported */
->  #define X86_FEATURE_AMD_PPIN		(13*32+23) /* Protected Processor Inventory Number */
->  #define X86_FEATURE_AMD_SSBD		(13*32+24) /* "" Speculative Store Bypass Disable */
->  #define X86_FEATURE_VIRT_SSBD		(13*32+25) /* Virtualized Speculative Store Bypass Disable */
-> -- 
+> Yeah, that sounds fine to me.
 
-Acked-by: Borislav Petkov <bp@suse.de>
+I do have concerns about cpu.latency knob as it exposes latency_offset which
+won't be meaningful for all consumers of latency_nice [1].
 
--- 
-Regards/Gruss,
-    Boris.
+The current use case proposed by Vincent is not going to be the only consumer
+of this interface. The concept of converting this latency_nice value to weight
+in similar fashion to existing nice value is specific to it. In previous
+discussion this conversion was not required and I'd expect it to still not be
+required for those other use cases.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+Wouldn't cpu.latency.nice be enough? I think the latency_offset is
+implementation detail that userspace shouldn't be concerned about.
+
+
+[1] https://lwn.net/Articles/820659/
+
+
+Cheers
+
+--
+Qais Yousef
