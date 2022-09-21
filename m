@@ -2,218 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33F015E5490
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 22:37:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AECF5E5492
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 22:40:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230471AbiIUUhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 16:37:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58632 "EHLO
+        id S230223AbiIUUkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 16:40:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbiIUUhw (ORCPT
+        with ESMTP id S229496AbiIUUkr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 16:37:52 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3E6E90831;
-        Wed, 21 Sep 2022 13:37:50 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id l14so16328899eja.7;
-        Wed, 21 Sep 2022 13:37:50 -0700 (PDT)
+        Wed, 21 Sep 2022 16:40:47 -0400
+Received: from mail-oa1-x42.google.com (mail-oa1-x42.google.com [IPv6:2001:4860:4864:20::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE1009A9EF
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 13:40:46 -0700 (PDT)
+Received: by mail-oa1-x42.google.com with SMTP id 586e51a60fabf-12c8312131fso10895239fac.4
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 13:40:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
          :mime-version:from:to:cc:subject:date;
-        bh=HPfO/VKVsz2h8NBP6v7kelP5PZsFTYby/55Cdn94KwY=;
-        b=qZSXJTdtqnIIkxkAh47GBq1ANcxCu1MG2ykqCg5gwNNu00QUt8UatgFSAx7TGKvvFM
-         GFpFZjFIhg/7V9FJC8+5iyuX+Vtnf9giKaeYzK+ZQ23mwcH3FJ8uEd1PqlKoP8f8OXwz
-         cbIYyS2l9mFj8/mks9/siZgjwys33H9kt3HOrtit0nTwO2xQDlKrPSDdSP/ak9fraqxf
-         YMn9RVJLFEa0ht/iX/DTTiU8stNXuUBWjWhu+BT/Ji0eroq7eFf4t7b3Nh1MzIHyv7G2
-         bCDVX6RuROEr1t9HLvs3NSFVGFTmn6rszYlzdXK51BvGEHzY3RiaRv+I5q1nY7V6JZZi
-         fOHA==
+        bh=G71QDeZIK7R3zcfTG/iRObG/pJmlsMoiFD4eUJdIpIk=;
+        b=qzirRr7u0DDJhhCe1Y77bRB53FJkchK9KtG0IOL5c8TDdYCBbVr6WsCf1YE89OXR+3
+         TPjOHCyshc3/Ym6Bb3njVgBhoE5fiFiox8v635R+6eRMWSlXaYE+rI81ukBxPJjkmrqr
+         cvk26jV+Seq5JpjteBwBha7wKuqKC1S27lRS3IqbWChYeC1wpc9Z0FAtzj1lKmo2teeG
+         Gbj3HhQJ9k7me0E45cKuggBYpEIybx5+c3ugWpptJQ9MKPhftvXvwn4UYI7d+OwbRpMn
+         VIBdTeAMgz9droeX3+r/IUeQQJKyLdsUZnQthOCjIuVeYvqGIUEBZGhRLq8dmsBe2ugx
+         gNJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=HPfO/VKVsz2h8NBP6v7kelP5PZsFTYby/55Cdn94KwY=;
-        b=X1yx89VXMfITWV2U2bilAOpdJaKOfGMSfzDqRFninHICYf1bJiNTia5MZ7W/dFM54d
-         j9O191cbrPiYRvfP4hA1RBo8//8S11JiGtYVXySwq8BX+AIABsNydA2PrYCJVWyfoQFm
-         fUqGZYQl9eh2n8XJG15eMl2Y+5GDE5U1vm/lHTlLMBlC1tSIlu7A2FLJrXXHcXttpLKF
-         /qynj41qXHIfQrMhICjlfdv3ajpY0IjD/EiJshDJLnBCo5S1uQZ2C8MQolbbyP5sjRjg
-         EhBORy1+a0tAak55HKfm1u9tVchyisldyi/QxY+FJew2Rwf8Fy+biu8aou7BumGlJR5g
-         GG6A==
-X-Gm-Message-State: ACrzQf3r/a52LVuN7sZi5tHACUV2sikA+UxedKVECz4auc3+Nk6iWWjb
-        EuhS80e2pcW4anVCFsn/ixh90uFf7WwTb1H4v+dZ8HHU
-X-Google-Smtp-Source: AMsMyM6jTo5MSAwzoegW4vGsfRW2PkaIl6PqwOpFSbydWbv9JOw7u/aPypSXY3CXOz2rliacE9xE+tQVqi8hFJdvJcE=
-X-Received: by 2002:a17:907:96a3:b0:780:633:2304 with SMTP id
- hd35-20020a17090796a300b0078006332304mr54435ejc.115.1663792669258; Wed, 21
- Sep 2022 13:37:49 -0700 (PDT)
+        bh=G71QDeZIK7R3zcfTG/iRObG/pJmlsMoiFD4eUJdIpIk=;
+        b=Pvna7HvsNbkWdxHruEXeWLQ2NVrMx74qBT3pPjRCMu4rKs9gSIvkyWvEJn2WZI7/Ns
+         nsYRDsBIY+FcOXS1jwMCZUNsZsbRdlz9TVMRfJTQRChVI+//aJmxGZQ5IQ28BhNoLmSE
+         GueaPKLyuxJQe2KFlzSqylRCm6Ohrhw6fWKyVQ3PW9iiSnrRIslU0y4NKhd1yPudrB89
+         2lkfXMPVJb9CaQmdvpD9nyoJaU/FZm/wBLYgvEJR6baje/LJ5aHhmnAGQuKAmqMx0zCK
+         kj1B3wlsG4NOPCFJ+00PbiGYM9uZ5k2sL0fUP33774Yk4weqLq/vz9DjV1fYyLIfD/YK
+         ojew==
+X-Gm-Message-State: ACrzQf1/GAAmq7Dl8VylwyVEPzjSZ5M6XZz1vYYr3nQDQzHFXkIpc+Ps
+        NUVr+v6dASyws7kVZhIYpoq6aOjLI01S4AcPrTo=
+X-Google-Smtp-Source: AMsMyM4qqJvOJudsNJK4cZQD2AJQ3MUiqVTezErrmRx7kLgZjnDWPLProSMdVHoevgZPRGZgsrUa8Fnj/sjIHlDw6KY=
+X-Received: by 2002:a05:6870:a925:b0:122:8314:b7a4 with SMTP id
+ eq37-20020a056870a92500b001228314b7a4mr10485oab.118.1663792846226; Wed, 21
+ Sep 2022 13:40:46 -0700 (PDT)
 MIME-Version: 1.0
-References: <38269a1610deebf8d51127f15b1c55d00caa4283.1661392989.git.mqaio@linux.alibaba.com>
- <CAADnVQKm-TGJxjwByaMBcvFA_7g+wC2hB+cqkZKhSc83a2H0Pg@mail.gmail.com> <6308f39ddfecc_75c920884@john.notmuch>
-In-Reply-To: <6308f39ddfecc_75c920884@john.notmuch>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 21 Sep 2022 13:37:38 -0700
-Message-ID: <CAEf4BzbqdDUY-1mpGUBk-CpMLAC7jvgRV7rNbgvxr=5nMOsj2Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: fix incorrect fcntl call (test_sockmap.c)
-To:     John Fastabend <john.fastabend@gmail.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Qiao Ma <mqaio@linux.alibaba.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
-        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
+Sender: cowardjulia3@gmail.com
+Received: by 2002:a05:6358:441b:b0:b4:f987:26c9 with HTTP; Wed, 21 Sep 2022
+ 13:40:45 -0700 (PDT)
+From:   Mrs Lovelyn Raya <lovelynraya001@gmail.com>
+Date:   Wed, 21 Sep 2022 20:40:45 +0000
+X-Google-Sender-Auth: 7warlvX9fZT5nhwYyyXGcCRHNzM
+Message-ID: <CAOZ3-Pud=b6gXDD6Oruf7C7JD3y45ZMcJNgH=b2qpu-O9kKuEA@mail.gmail.com>
+Subject: My name is Mrs. lovelyn Raya from indonesia,
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=7.1 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
+        BAYES_80,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
+        T_MONEY_PERCENT,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2001:4860:4864:20:0:0:0:42 listed in]
+        [list.dnswl.org]
+        *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
+        *      [score: 0.8188]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [lovelynraya001[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [cowardjulia3[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.0 T_MONEY_PERCENT X% of a lot of money for you
+        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
+        *  2.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 9:24 AM John Fastabend <john.fastabend@gmail.com> wrote:
->
-> Alexei Starovoitov wrote:
-> > On Wed, Aug 24, 2022 at 7:11 PM Qiao Ma <mqaio@linux.alibaba.com> wrote:
-> > >
-> > > In test_sockmap.c, the testcase sets socket nonblock first, and then
-> > > calls select() and recvmsg() to receive data.
-> > > If some error occur, nonblock setting will make recvmsg() return
-> > > immediately, rather than blocking forever.
-> > >
-> > > However, the way to call fcntl() to set nonblock is wrong.
-> > > To set socket noblock, we need to use
-> > > > fcntl(fd, F_SETFL, O_NONBLOCK);
-> > > rather than:
-> > > > fcntl(fd, O_NONBLOCK);
-> > >
-> > > Signed-off-by: Qiao Ma <mqaio@linux.alibaba.com>
-> > > ---
-> > >  tools/testing/selftests/bpf/test_sockmap.c | 7 ++++++-
-> > >  1 file changed, 6 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/tools/testing/selftests/bpf/test_sockmap.c b/tools/testing/selftests/bpf/test_sockmap.c
-> > > index 0fbaccdc8861..abb4102f33b0 100644
-> > > --- a/tools/testing/selftests/bpf/test_sockmap.c
-> > > +++ b/tools/testing/selftests/bpf/test_sockmap.c
-> > > @@ -598,7 +598,12 @@ static int msg_loop(int fd, int iov_count, int iov_length, int cnt,
-> > >                 struct timeval timeout;
-> > >                 fd_set w;
-> > >
-> > > -               fcntl(fd, fd_flags);
-> > > +               err = fcntl(fd, F_SETFL, fd_flags);
-> > > +               if (err < 0) {
-> > > +                       perror("fcntl failed");
-> > > +                       goto out_errno;
-> > > +               }
-> > > +
-> >
-> > John, Jakub,
-> >
-> > Please review this.
-> > Unfortunately test_sockmap (and sockmap kernel) is broken
-> > before and after this patch,
-> > so I'm hesitant to apply it not to make thing harder to debug.
-> > Here is what I see:
-> > # ./test_sockmap
-> > recv failed(): Bad address
-> > rx thread exited with err 1.
-> > recv failed(): Bad address
-> > rx thread exited with err 1.
-> > recv failed(): Bad address
-> > rx thread exited with err 1.
-> > # 4/ 6  sockmap::txmsg test ingress redirect:FAIL
-> > detected skb data error with skb ingress update @iov[0]:0 "00 00 00
-> > 00" != "PASS"
-> > data verify msg failed: Unknown error -5
-> > rx thread exited with err 1.
-> > [   16.735850] ------------[ cut here ]------------
-> > [   16.736195] WARNING: CPU: 3 PID: 1480 at net/core/stream.c:205
-> > sk_stream_kill_queues+0x18a/0x1a0
-> > [   16.736799] Modules linked in:
-> > [   16.737007] CPU: 3 PID: 1480 Comm: test_sockmap Not tainted
-> > 5.19.0-14050-g343949e10798 #4212
-> > [   16.737543] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
-> > BIOS rel-1.12.0-59-gc9ba5276e321-prebuilt.qemu.org 04/01/2014
-> > [   16.738522] RIP: 0010:sk_stream_kill_queues+0x18a/0x1a0
-> > [   16.738883] Code: 41 5f c3 89 ee 48 89 df e8 13 69 fe ff 4c 89 e7
-> > e8 db 01 4f ff 8b ab 28 02 00 00 eb c1 0f 0b e9 62 ff ff ff 0f 0b 85
-> > ed 74 ce <0f> 0b 5b 5d 41 5c 41 5d 41 5e 41 5f c3 66 0f 1f 84 00 00 00
-> > 00 00
-> > [   16.740082] RSP: 0018:ffff888118007ab8 EFLAGS: 00010206
-> > [   16.740435] RAX: 0000000000000000 RBX: ffff8881174b2400 RCX: ffffffff81f5d47a
-> > [   16.740915] RDX: 0000000000000003 RSI: dffffc0000000000 RDI: ffff8881174b2670
-> > [   16.741374] RBP: 0000000000000b00 R08: fffffbfff08cfbdf R09: fffffbfff08cfbdf
-> > [   16.741841] R10: ffffffff8467def7 R11: fffffbfff08cfbde R12: ffff8881174b2628
-> > [   16.742298] R13: ffffffff85c13c00 R14: ffff88810611d824 R15: ffff8881174b25c8
-> > [   16.742768] FS:  00007f937403c400(0000) GS:ffff888628f80000(0000)
-> > knlGS:0000000000000000
-> > [   16.743283] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > [   16.743657] CR2: 00007f937403c378 CR3: 0000000125983005 CR4: 00000000003706e0
-> > [   16.744124] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > [   16.744584] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > [   16.745065] Call Trace:
-> > [   16.745241]  <TASK>
-> > [   16.745401]  inet_csk_destroy_sock+0x9f/0x1c0
-> > [   16.745707]  tcp_rcv_state_process+0x1a84/0x2120
-> > [   16.746013]  ? lock_release+0x3b0/0x3b0
-> > [   16.746271]  ? tcp_established_options+0x189/0x300
-> > [   16.746592]  ? tcp_finish_connect+0x240/0x240
-> > [   16.746894]  ? rcu_read_lock_bh_held+0xa0/0xa0
-> > [   16.747190]  ? rcu_read_lock_held_common+0x1a/0x50
-> > [   16.747505]  ? rcu_read_lock_sched_held+0x56/0xc0
-> > [   16.747823]  ? rcu_read_lock_held_common+0x1a/0x50
-> > [   16.748139]  ? lock_release+0xad/0x3b0
-> > [   16.748390]  ? __release_sock+0x83/0x150
-> > [   16.748646]  ? lock_downgrade+0x360/0x360
-> > [   16.748932]  ? lock_acquire+0xab/0x380
-> > [   16.749187]  ? lock_downgrade+0x360/0x360
-> > [   16.749440]  ? tcp_v4_do_rcv+0x195/0x4f0
-> > [   16.749696]  tcp_v4_do_rcv+0x195/0x4f0
-> > [   16.749933]  ? trace_hardirqs_on+0x2d/0xe0
-> > [   16.750194]  __release_sock+0xb9/0x150
-> > ...
-> > [  213.529908] ------------[ cut here ]------------
-> > [  213.530232] page_counter underflow: -7 nr_pages=31
-> > [  213.530571] WARNING: CPU: 1 PID: 1925 at mm/page_counter.c:57
-> > page_counter_cancel+0x56/0x80
-> > [  213.531125] Modules linked in:
-> > [  213.531332] CPU: 1 PID: 1925 Comm: test_sockmap Tainted: G        W
-> >          5.19.0-14050-g343949e10798 #4212
-> > [  213.531989] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
-> > BIOS rel-1.12.0-59-gc9ba5276e321-prebuilt.qemu.org 04/01/2014
-> > [  213.532734] RIP: 0010:page_counter_cancel+0x56/0x80
-> > [  213.533070] Code: 0a 48 89 df 5b 5d e9 89 fe ff ff 80 3d d1 b6 1e
-> > 03 00 75 18 48 89 ea 48 c7 c7 60 6a b3 82 c6 05 be b6 1e 03 01 e8 aa
-> > aa 0b 01 <0f> 0b be 08 00 00 00 48 89 df e8 bb 22 fe ff 48 89 df e8 13
-> > 1a fe
-> > [  213.534259] RSP: 0018:ffff88811ae2f8b0 EFLAGS: 00010086
-> > [  213.534607] RAX: 0000000000000000 RBX: ffff888100c08120 RCX: 0000000000000000
-> > [  213.535071] RDX: 0000000000000027 RSI: dffffc0000000000 RDI: ffffed10235c5f0c
-> > [  213.535535] RBP: 000000000000001f R08: ffffed10c51d4ee6 R09: ffffed10c51d4ee6
-> > [  213.536000] R10: ffff888628ea772b R11: ffffed10c51d4ee5 R12: ffff888628eb5d18
-> > [  213.536479] R13: ffff888628eb5d10 R14: ffff888628eb5d18 R15: 000000000000001f
-> > [  213.536953] FS:  00007fe0f0478400(0000) GS:ffff888628e80000(0000)
-> > knlGS:0000000000000000
-> > [  213.537463] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > [  213.537858] CR2: 00007fe0f04786d0 CR3: 000000011ab33004 CR4: 00000000003706e0
-> > [  213.538325] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > [  213.538838] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > [  213.539318] Call Trace:
-> > [  213.539488]  <TASK>
-> > [  213.539635]  page_counter_uncharge+0x1d/0x40
-> > [  213.539927]  drain_stock.isra.54+0x5d/0xb0
-> > [  213.540200]  __refill_stock+0x42/0xb0
-> > [  213.540451]  refill_stock+0xc1/0x1c0
-> > [  213.540688]  try_charge_memcg+0xb2e/0xb50
-> >
-> > and test_sockmap 'hangs' (or doing something for long time) after
-> > #31/ 6 sockhash:ktls:txmsg test drop:OK
->
-> Thanks for spotting I'll take a look.
+--=20
+-
+--
+My name is Mrs.Lovelyn Raya  from Mongolia,
 
-Friendly ping. John, did you get a chance to look at this? This patch
-is still marked as "Needs ACK" in Patchworks.
+I know that this message might come to you as surprise because we
+don't know each other nor have we ever met before but accept it with
+an open and positive mind. I have a Very important request that made
+me to contact you; I was diagnosed with ovarian cancer disease which
+doctors have confirmed and announced to me that i have just few days
+to leave, Now that I=E2=80=99m ending the race like this, without any famil=
+y
+members and no child, I just came across your email contact from my
+personal search.
+
+I=E2=80=99m a business woman from Mongolia dealing with gold exportation he=
+re
+in Republic of Burkina Faso. I have decided to hand over the sum of
+($10.5 Million Dollar) in my account to you for the help of orphanage
+homes/the needy once in your location to fulfill my wish on earth. But
+before handing over my data=E2=80=99s to you, kindly assure me that you wil=
+l
+take only 50% of the money and share the rest to orphanage homes/the
+needy once in your country, Return to enable me forward to you the
+bank contact details now that I have access to Internet in the
+hospital to enable you contact the bank, always check your e-mail
+always remember me for doing good.
+
+Your early response will be appreciated.
+
+Yours Faithfully,
+ Mrs.Lovelyn Raya
