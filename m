@@ -2,99 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21CD35BF7E7
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 09:39:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90C405BF7EB
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 09:40:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230271AbiIUHjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 03:39:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60028 "EHLO
+        id S230351AbiIUHkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 03:40:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230270AbiIUHji (ORCPT
+        with ESMTP id S230312AbiIUHkE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 03:39:38 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E60A2736
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 00:39:36 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id o2so7761684lfc.10
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 00:39:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=tNVLuYYtNnbltSH1rqkGLOPuwpfzM6MeggviQef2o3c=;
-        b=eeKsByuZdpqmneWBtxLifX0qYSG2bmYLjZyalf15bMTosJPkzUr/gCEWZLyngdl5nB
-         iPpAGlIamGrdSLy9QODUQc/I5W5SQjWRUFconeJ5pmif9mzieq8AWqGzTTeI8kwXrY9H
-         bosDBMxwk72pOPuCUIikaen2Oo6Ok72BVOQ+w3gIIvs8rxKMYY2Hq/p9TUlfzjMJVWiG
-         h71rQrotW+Ef2FQ61204fLN7r/yaYxiQP6yet5sg30e/lu+PrZXDbP9f0F1Vqez9srD4
-         /9BR2kiQRHaolnbGHM79h97j+59ktzI4GtKu2iCbPWsua7chMZlVqiOANtC2ZRqK12Yj
-         U0mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=tNVLuYYtNnbltSH1rqkGLOPuwpfzM6MeggviQef2o3c=;
-        b=3UISsZofasoyz9SF6aE7sAxHzSQSRaaF9rPXmM1boRv42gXL9j2b7kVap9cq7n73ml
-         MOWiCLCdVBC/KjANF/GfSJV5Q7/kHR4WoMs1vV+gESZ42nAVrDcL6B758w9wA9lZbRId
-         BC2kk8HwR1K2TPqDilJkiv4Hns6Avd4GOh4d+rfgA4JlDN/ffIh0wWZmJfCnD9Ya50aJ
-         IY4AdLy2aOiL5KNKH5kDMJVvQMginDfHDBoWXBES9AzcrJb4E/fCEmI9opKnbC01c6Qj
-         lO0S4n7BCEr0HvWwRMpnhQm8oLPTujD9Vx1bM4w3RDjJMsgvCSRUn745HGMFO5p7SJMr
-         JNog==
-X-Gm-Message-State: ACrzQf2tQ7LsjVVXg5MrMgZ2yDh/z4zT0iOzungAL/9DrMLglLC/n9Ea
-        X4/7sWMp44IJXJ0eaFZeDDFnhw==
-X-Google-Smtp-Source: AMsMyM72ZI2J7U3/gmd0qbBnFYhpkP11nSbXRVR9n3XjmBlVgP+lFhdLjbYR4M3dycy+3QB5oaH8VA==
-X-Received: by 2002:a05:6512:2210:b0:499:d710:9c0d with SMTP id h16-20020a056512221000b00499d7109c0dmr10393748lfu.325.1663745974473;
-        Wed, 21 Sep 2022 00:39:34 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id x15-20020a056512078f00b00498f00420e9sm316688lfr.194.2022.09.21.00.39.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Sep 2022 00:39:33 -0700 (PDT)
-Message-ID: <bd65f87f-4ef7-7191-594a-fad2df448503@linaro.org>
-Date:   Wed, 21 Sep 2022 09:39:32 +0200
+        Wed, 21 Sep 2022 03:40:04 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06A5327CF5;
+        Wed, 21 Sep 2022 00:40:00 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 72DD11F388;
+        Wed, 21 Sep 2022 07:39:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1663745999; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xnuXU4UZnRZGUPWDNH2YDDT/Zs/oJ/xBk/61+cuL7yk=;
+        b=Oka4W+OSOQHj5c2rLmWBL8Xjvq7VzpEzzQB4tDhWafzhs38MCqENmdBWFWeEgrYCuXiPrr
+        Usz7li0+SflrwVaGVWa1hli+JnHNueftR14iAItHD7JzJ+6bGwgf/1CTsziSK2yJsfV5VG
+        g+/bP8Jp/4+dyH0LiClu4XMVz8a12a8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1663745999;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xnuXU4UZnRZGUPWDNH2YDDT/Zs/oJ/xBk/61+cuL7yk=;
+        b=8qBsyoM9PZ67Zm/jPRszdv92ksT1R84+Fv4fJELUuJeXASTjI66U4tbw5GMQH/r58S4Otd
+        NNrFV78ovfGkJhDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 60CCC13A00;
+        Wed, 21 Sep 2022 07:39:59 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ywiZF8+/KmO7EQAAMHmgww
+        (envelope-from <jack@suse.cz>); Wed, 21 Sep 2022 07:39:59 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id C0833A0684; Wed, 21 Sep 2022 09:39:58 +0200 (CEST)
+Date:   Wed, 21 Sep 2022 09:39:58 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Zhihao Cheng <chengzhihao1@huawei.com>
+Cc:     jack@suse.com, tytso@mit.edu, brauner@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yukuai3@huawei.com
+Subject: Re: [PATCH 0/3] Check content after reading from quota file
+Message-ID: <20220921073958.77i7fj6s2qa7chbv@quack3>
+References: <20220820110514.881373-1-chengzhihao1@huawei.com>
+ <bd9bf3a4-70f9-f7bf-b133-a68e4e16deb8@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v4 1/3] dt-bindings: pinctrl: qcom: add sdm670 pinctrl
-Content-Language: en-US
-To:     Richard Acayan <mailingradian@gmail.com>,
-        linux-arm-msm@vger.kernel.org
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-References: <20220920222939.150330-1-mailingradian@gmail.com>
- <20220920222939.150330-2-mailingradian@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220920222939.150330-2-mailingradian@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <bd9bf3a4-70f9-f7bf-b133-a68e4e16deb8@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/09/2022 00:29, Richard Acayan wrote:
-> There is a new driver for the Snapdragon 670 TLMM (Top-Level Mode
-> Multiplexer). Document it.
+On Tue 13-09-22 09:16:11, Zhihao Cheng wrote:
+> 在 2022/8/20 19:05, Zhihao Cheng 写道:
 > 
-> Adapted from qcom,sm6350-pinctrl.yaml.
-> 
-> Signed-off-by: Richard Acayan <mailingradian@gmail.com>
-> ---
+> friendly ping.
 
+I'm sorry for the delay. Somehow our corporate spam filter decided to
+discard your patches. I'll have a look into your fixes shortly.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+								Honza
 
-
-Best regards,
-Krzysztof
+> > 1. Fix invalid memory access of dquot.
+> > 2. Cleanup, replace places of block number checking with helper function.
+> > 3. Add more sanity checking for the content read from quota file.
+> > 
+> > Zhihao Cheng (3):
+> >    quota: Check next/prev free block number after reading from quota file
+> >    quota: Replace all block number checking with helper function
+> >    quota: Add more checking after reading from quota file
+> > 
+> >   fs/quota/quota_tree.c | 81 ++++++++++++++++++++++++++++++++++++-------
+> >   1 file changed, 69 insertions(+), 12 deletions(-)
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
