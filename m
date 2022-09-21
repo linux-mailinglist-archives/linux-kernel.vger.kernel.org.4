@@ -2,89 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B62105BFBD2
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 11:58:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F4995BFBD3
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 11:58:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbiIUJ6X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 05:58:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47518 "EHLO
+        id S230135AbiIUJ62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 05:58:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbiIUJ6U (ORCPT
+        with ESMTP id S229972AbiIUJ6Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 05:58:20 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DC603ECE2;
-        Wed, 21 Sep 2022 02:58:19 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 4BC6A3200997;
-        Wed, 21 Sep 2022 05:58:17 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Wed, 21 Sep 2022 05:58:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=engestrom.ch; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1663754296; x=
-        1663840696; bh=eCra/b1EXsGAdvlyVpCtjB/oMgMMioXcrA1hoFjnEOk=; b=M
-        0aUWi+vFc6y7/RGkB95PXAlrOeEWJ6PWHOIhNttqp3rbysLc2ao+d4H3a2oRrSRg
-        qlr4hKw+m3Ugc4Ubj5mWTCZ5EFjsZZCKqYToWWQelDw4HHoY1HnJviL/URql10ip
-        IP30t72kdTvJvExTTvnB4MMIvmU/NFHQufyHHo0DHFDihVwxGm6v5YL7JD1gZYMO
-        mwej7mJpgZyZGSwQmSGRAfIgtsZ86C8ZTTA7regwHqakrZZxpZzEkEMXFODbPrsw
-        GyeOM54UXMCH4BeH5u1C88UGFigWkwOcPxHa8kpXEteCLhwH8LznYxAIxHQSQ7T0
-        ostC4oiFwX1AXHmgefwYA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1663754296; x=
-        1663840696; bh=eCra/b1EXsGAdvlyVpCtjB/oMgMMioXcrA1hoFjnEOk=; b=x
-        vEiM+dV9ObU/xEUmL9uWg+e/JWBeKglTCzFxWdjqOXhNXmzDG1bDGNc3FzDjsncf
-        NXWo9QD2EYyAQfi3NgIvcEaHhFIAhiLaeil9H24NL/Batgmg+Co2uFWQdiW28qak
-        EHxV4+kY/NwYFQL3THOB6KGjge9FskcnZZpoeGdGgDDW9EF/1iZ9zl0V0+vsaTOp
-        Gr+GMYUzxh7zoB9bZVwKA5/VwVHo++IH5lOMzQhPEyFO+c4ace3dWTCBUUzkVB9E
-        dOozWmytOHpNzpDCJFJg5JPMbh1Ziei4BWm8e4EYs4CSb3C6XP4/WtznmFYAZlet
-        bxg3KZ2afk2T0QbsqQBtg==
-X-ME-Sender: <xms:N-AqY7nY1U0eL0eseG3QZ6rH2LOIIO47eDbtWXuy_rNxguCzcuL-Vg>
-    <xme:N-AqY-2YRcWY8yWw6ESkAg53j2KJ51sMZWDxgDz7csbllXXClA6nNan9wgc89RHx_
-    biAMAdBlJ8XshfZDxU>
-X-ME-Received: <xmr:N-AqYxpj4_3BFRWjPiftQ3aaYc5fSovQ_hcdnk6jBosSAyL93DJL1vZoS34dzdNh9o7MbMtHmcpkNA0C1omi6GmBeUZwvg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeefuddgvdefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvvefukfhfgggtugfgjgesth
-    ekredttddtjeenucfhrhhomhepgfhrihgtucfgnhhgvghsthhrohhmuceovghrihgtsegv
-    nhhgvghsthhrohhmrdgthheqnecuggftrfgrthhtvghrnhepfeegleegudefkeeuvdefhf
-    eigefhkeelteeuvdfhvedtueetfefgfeffjedvleffnecuvehluhhsthgvrhfuihiivgep
-    tdenucfrrghrrghmpehmrghilhhfrhhomhepvghrihgtsegvnhhgvghsthhrohhmrdgthh
-X-ME-Proxy: <xmx:N-AqYzn6tZGSPgwSVpaSVw_dwleW40gvPw3wfbUhu8j7KNclW_Xzow>
-    <xmx:N-AqY52EGuDAWop-WJvl_qVmxqf9fFcIhSUlXT2fBMZ0B_VbjdmRtA>
-    <xmx:N-AqYyshEiZTGUfKMd0RL6MGe3NhBX0hRksONyqI0YmI8CjveIUs-Q>
-    <xmx:OOAqY14i_hrhuZ5uxNJoWkyBla1LvEYNhV9XRoNEuxMC_mfXUhtBQQ>
-Feedback-ID: ieaa94438:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 21 Sep 2022 05:58:12 -0400 (EDT)
-Date:   Wed, 21 Sep 2022 11:58:09 +0200
-From:   Eric Engestrom <eric@engestrom.ch>
-To:     Johan Jonker <jbx6244@gmail.com>
-Cc:     heiko@sntech.de, zhangqing@rock-chips.com,
-        finley.xiao@rock-chips.com, shawn.lin@rock-chips.com,
-        zhengxing@rock-chips.com, jeffy.chen@rock-chips.com,
-        andy.yan@rock-chips.com, mylene.josserand@collabora.com,
-        nfraprado@collabora.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, sboyd@kernel.org,
-        mturquette@baylibre.com, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] dt-bindings: clock: rockchip: change
- SPDX-License-Identifier
-Message-ID: <20220921095809.cr4kpqqcu7b5u76j@engestrom.ch>
-References: <20c6a502-2ff5-bdb1-fb4f-0741f3a2c19c@gmail.com>
+        Wed, 21 Sep 2022 05:58:24 -0400
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C8CD31233;
+        Wed, 21 Sep 2022 02:58:21 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 196031BF20E;
+        Wed, 21 Sep 2022 09:58:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1663754300;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DyHD1cpJLUHFIMs13MWIgjp+SJUxrqpST3FASTVSKyg=;
+        b=NKgx0wIhTPfQ5YxJxGGUmmnBRphvtN7QuHUpyH1cPD/8Ph1Qw3r+I4svJb9t8CV534EELl
+        3usa6Vb6KvFX6P1OoFx2BdG2IAaLed+v0IfcpsWTPkMe7cv/Q0rxMM2e+4hlpJqjG5a9TU
+        y78/qxC74wNo3nbRqLfZAQlIeBmdm2cJWDUpXvLtNUrA6tXLuehjmubX2k/RAT2Ne5bMMQ
+        onN/8FdpyDJ+1pEbMwqwv4B2MROBUm9XOlYifOg5FbE3cn9A7THPNKeMZJ7+Lxd4bqLtEh
+        wf1+htFsCdXcF/B3Zh3Zzpvv3TP+5o9JqBmNWYApH9rrSzR5qW3Ch4eBYxGn8g==
+Date:   Wed, 21 Sep 2022 11:58:13 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Frank Rowand <frowand.list@gmail.com>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Robert Marko <robert.marko@sartura.hr>
+Subject: Re: [PATCH v2 00/20] nvmem: core: introduce NVMEM layouts
+Message-ID: <20220921115813.208ff789@xps-13>
+In-Reply-To: <20220901221857.2600340-1-michael@walle.cc>
+References: <20220901221857.2600340-1-michael@walle.cc>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20c6a502-2ff5-bdb1-fb4f-0741f3a2c19c@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,25 +65,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tuesday, 2022-09-20 00:25:07 +0200, Johan Jonker wrote:
-> Change SPDX-License-Identifier to (GPL-2.0+ OR MIT)
-> for Rockchip clock bindings.
-> 
-> Cc: Heiko Stübner <heiko@sntech.de>
-> Cc: Elaine Zhang <zhangqing@rock-chips.com>
-> Cc: Xing Zheng <zhengxing@rock-chips.com>
-> Cc: Jeffy Chen <jeffy.chen@rock-chips.com>
-> Cc: Finley Xiao <finley.xiao@rock-chips.com>
-> Cc: Andy Yan <andy.yan@rock-chips.com>
-> Cc: Shawn Lin <shawn.lin@rock-chips.com>
-> Cc: Eric Engestrom <eric@engestrom.ch>
-> Cc: Mylène Josserand <mylene.josserand@collabora.com>
-> Cc: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
-> ---
-> 
-> Request for copyright holder approval.
-> Rockchip recently replied on other clock-patches to dual-license the
-> binding.
+Hi Michael, Srinivas,
 
-Acked-by: Eric Engestrom <eric@engestrom.ch>
++ Thomas and Robert
+
+michael@walle.cc wrote on Fri,  2 Sep 2022 00:18:37 +0200:
+
+> This is now the third attempt to fetch the MAC addresses from the VPD
+> for the Kontron sl28 boards. Previous discussions can be found here:
+> https://lore.kernel.org/lkml/20211228142549.1275412-1-michael@walle.cc/
+>=20
+>=20
+> NVMEM cells are typically added by board code or by the devicetree. But
+> as the cells get more complex, there is (valid) push back from the
+> devicetree maintainers to not put that handling in the devicetree.
+>=20
+> Therefore, introduce NVMEM layouts. They operate on the NVMEM device and
+> can add cells during runtime. That way it is possible to add more complex
+> cells than it is possible right now with the offset/length/bits
+> description in the device tree. For example, you can have post processing
+> for individual cells (think of endian swapping, or ethernet offset
+> handling).
+>=20
+> The imx-ocotp driver is the only user of the global post processing hook,
+> convert it to nvmem layouts and drop the global post pocessing hook. Plea=
+se
+> note, that this change is only compile-time tested.
+
+These layouts are an excellent idea. I actually have a new use case for
+them. In modern Ethernet switches which follow the ONIE standard [1]
+there is an nvmem device which contains a standardized
+type-length-value array with many information about manufacturing and
+mac addresses. There is no "static" pattern there and anyway so many
+possible entries that it would be very tedious to list all of them in
+the bindings, as each manufacturer chooses what it want to export on
+each of its devices (although reading the data sequentially and
+extracting the cells is rather straightforward).
+
+Moreover, the specification [1] does not define any storage device
+type, so it can be eg. an MTD device or an EEPROM. Having an
+nvmem device provider separated from the nvmem cells provider makes
+complete sense, the "layout" drivers idea proposed by Michael seem to be
+a perfect fit.
+
+Srinivas, can you give us an update on what you think about this
+series (not a commitment, just how you feel it overall)?
+
+Michael, is there a v3 in preparation? I'll try to write something on
+top of your v2 otherwise.
+
+> You can also have cells which have no static offset, like the
+> ones in an u-boot environment. The last patches will convert the current
+> u-boot environment driver to a NVMEM layout and lifting the restriction
+> that it only works with mtd devices. But as it will change the required
+> compatible strings, it is marked as RFC for now. It also needs to have
+> its device tree schema update which is left out here. These two patches
+> are not expected to be applied, but rather to show another example of
+> how to use the layouts.
+
+Actually I think these two matches make complete sense, right now one
+can only use the u-boot-env cells if the environment is stored in an
+mtd device, of course this covers many cases but not all of them and it
+would be really nice to have this first layout example merged, not only
+on the mailing list.
+
+> For now, the layouts are selected by a specific compatible string in a
+> device tree. E.g. the VPD on the kontron sl28 do (within a SPI flash node=
+):
+>   compatible =3D "kontron,sl28-vpd", "user-otp";
+> or if you'd use the u-boot environment (within an MTD patition):
+>   compatible =3D "u-boot,env", "nvmem";
+>=20
+> The "user-otp" (or "nvmem") will lead to a NVMEM device, the
+> "kontron,sl28-vpd" (or "u-boot,env") will then apply the specific layout
+> on top of the NVMEM device.
+
+Thanks,
+Miqu=C3=A8l
