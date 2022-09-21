@@ -2,147 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C49DD5C01B9
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:35:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E22645C01BA
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:38:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231235AbiIUPfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 11:35:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47754 "EHLO
+        id S231317AbiIUPiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 11:38:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232052AbiIUPem (ORCPT
+        with ESMTP id S230359AbiIUPhy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 11:34:42 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 308309F0CE;
-        Wed, 21 Sep 2022 08:32:04 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 6005F21B3F;
-        Wed, 21 Sep 2022 15:30:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1663774247; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XOTekTN/SuqiQ3r409np/Bru2x8KvP+5v99mZ3qdoUI=;
-        b=A/2iYUKksSP2Zg1LjadEKbTd/TuyxXJn2c4AASEMOSJHPPm9lDriBvsIpeTRhcrph3fhyM
-        01w8I0wgN2s6ZaLuBudCZMiA/a7DZLS8kV/uL2CSpvhAfGSP4wgAI60OqUW8nbrCahtbkc
-        OcO97Ekrw92s7gnzQvMfgMonxU7wc9U=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 3A3932C141;
-        Wed, 21 Sep 2022 15:30:47 +0000 (UTC)
-Date:   Wed, 21 Sep 2022 17:30:46 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        linux-modules@vger.kernel.org
-Subject: Re: [PATCH v4 5/8] kallsyms: Add helper
- kallsyms_on_each_match_symbol()
-Message-ID: <YysuJrpLYkVa2vCg@alley>
-References: <20220920071317.1787-1-thunder.leizhen@huawei.com>
- <20220920071317.1787-6-thunder.leizhen@huawei.com>
+        Wed, 21 Sep 2022 11:37:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B6C8F974
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 08:33:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663774381;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=7+IfXo3QneUTvZNphDXYsfYPPsR08u+bVDwtrNeIpao=;
+        b=U5xHEzGtH1xKFiYpo8QiLof6pkmY+WfuEAFbLaqZqiC8RZEbfQIHY+PSoE8EEv+9vD54Jr
+        KKAABWVgIN5ZEt9YFU5PU4HOshmLzvldCiXR1Jg58U0kRymmyK+Ad/t4mieQlWuBnTS/d2
+        4M+4wQWpl60+AlrHKzYkF0gtGRpCUNo=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-652-UB-OFcQsOXOrQfvahLMP0w-1; Wed, 21 Sep 2022 11:33:00 -0400
+X-MC-Unique: UB-OFcQsOXOrQfvahLMP0w-1
+Received: by mail-qk1-f199.google.com with SMTP id h7-20020a05620a400700b006cebec84734so4517879qko.23
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 08:33:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=7+IfXo3QneUTvZNphDXYsfYPPsR08u+bVDwtrNeIpao=;
+        b=qCJBuKxsrOH3ikslUuMVunkOoIoyzWTkvC0k1QD2kOPfDO0NSMsqACwmzz6asTwCwx
+         cbq4rRwdXxsgN1DRtNNUrBICOQw4COkxBXdPCsJTU1u+n+LskbSteWQgxLLrISlKYV2+
+         2/4W3rZScNmAQyzT/uMOVm5/NF2zhoROOf1hlOG5k2ELqukzA+fxwgqa5G8b326EVdZ3
+         hUB3krbMydglvO7AGjva8B5iDbQTlHE0Dwo+tGWzUarS+P+KvYNkfoiZ+Qaz9FJ+ulbz
+         S7kwKVpdbO+fH3i2V5l7eYZQK6Qa8YnArTuq/nc3t/bYdNwnzjTWjHCAWsl/JeRqk0ka
+         0QJw==
+X-Gm-Message-State: ACrzQf2Bf7UHKbFe3k+N749VI1EGlMtxIV5UVBmQMHNDInhGd8rDOB1t
+        Qa/NciuIERjJaYu084vtaFbVUqSzZeE1HmAXCdK8/1AEc6oJ1CzbYX0jJAeHQ+wfOsa45IYsoRR
+        LSQh9raQ53gES7iLhBuJKsuc1
+X-Received: by 2002:ac8:5895:0:b0:35c:bd1e:aed2 with SMTP id t21-20020ac85895000000b0035cbd1eaed2mr24073975qta.618.1663774380016;
+        Wed, 21 Sep 2022 08:33:00 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5x+IR5tky7En11b9XPJIO6r4GWLMl+xjgqJY4mIPE+hIi/vN1wx8EqtfecainIssiPt2yGDw==
+X-Received: by 2002:ac8:5895:0:b0:35c:bd1e:aed2 with SMTP id t21-20020ac85895000000b0035cbd1eaed2mr24073961qta.618.1663774379812;
+        Wed, 21 Sep 2022 08:32:59 -0700 (PDT)
+Received: from halaneylaptop.redhat.com ([2600:1700:1ff0:d0e0::46])
+        by smtp.gmail.com with ESMTPSA id u15-20020a05620a0c4f00b006cf19068261sm2100324qki.116.2022.09.21.08.32.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Sep 2022 08:32:59 -0700 (PDT)
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@somainline.org, mturquette@baylibre.com,
+        sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andrew Halaney <ahalaney@redhat.com>
+Subject: [PATCH] dt-bindings: clocks: qcom,gcc-sc8280xp: Fix typos
+Date:   Wed, 21 Sep 2022 10:31:56 -0500
+Message-Id: <20220921153155.279182-1-ahalaney@redhat.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220920071317.1787-6-thunder.leizhen@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 2022-09-20 15:13:14, Zhen Lei wrote:
-> Function kallsyms_on_each_symbol() traverses all symbols and submits each
-> symbol to the hook 'fn' for judgment and processing. For some cases, the
-> hook actually only handles the matched symbol, such as livepatch.
-> 
-> So that, we can first compress the name being looked up and then use
-> it for comparison when traversing 'kallsyms_names', this greatly reduces
-> the time consumed by traversing.
-> 
-> The pseudo code of the test case is as follows:
-> static int tst_find(void *data, const char *name,
-> 		    struct module *mod, unsigned long addr)
-> {
-> 	if (strcmp(name, "vmap") == 0)
-> 		*(unsigned long *)data = addr;
->         return 0;
-> }
-> 
-> static int tst_match(void *data, unsigned long addr)
-> {
->         *(unsigned long *)data = addr;
->         return 0;
-> }
-> 
-> start = sched_clock();
-> kallsyms_on_each_match_symbol(tst_match, "vmap", &addr);
-> end = sched_clock();
-> 
-> start = sched_clock();
-> kallsyms_on_each_symbol(tst_find, &addr);
-> end = sched_clock();
-> 
-> The test results are as follows (twice):
-> kallsyms_on_each_match_symbol:   557400,   583900
-> kallsyms_on_each_symbol      : 16659500, 16113950
-> 
-> kallsyms_on_each_match_symbol() consumes only 3.48% of
-> kallsyms_on_each_symbol()'s time.
-> 
-> --- a/kernel/kallsyms.c
-> +++ b/kernel/kallsyms.c
-> @@ -305,6 +305,31 @@ int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
->  	return 0;
->  }
->  
-> +int kallsyms_on_each_match_symbol(int (*fn)(void *, unsigned long),
-> +				  const char *name, void *data)
-> +{
-> +	unsigned int i, off;
-> +	int len, ret;
-> +	char namebuf[KSYM_NAME_LEN];
-> +
-> +	len = kallsyms_name_to_tokens(name, namebuf);
-> +	for (i = 0, off = 0; len && i < kallsyms_num_syms; i++) {
-> +		if ((i & 0xfff) == 0)
-> +			cond_resched();
-> +
-> +		if ((kallsyms_names[off] == len + 1) &&
-> +		    !memcmp(&kallsyms_names[off + 2], namebuf, len)) {
-> +			ret = fn(data, kallsyms_sym_address(i));
-> +			if (ret != 0)
-> +				return ret;
-> +			cond_resched();
-> +		}
-> +		off += kallsyms_names[off] + 1;
+pipegmux and SuperSpeed are the proper spelling for those terms.
 
-Similar tricky code is used also in kallsyms_lookup_name(). Please,
-avoid code duplication and put this into a helper funtion.
+Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
+---
+ .../devicetree/bindings/clock/qcom,gcc-sc8280xp.yaml          | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Best Regards,
-Petr
+diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-sc8280xp.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-sc8280xp.yaml
+index e33dea86fb9e..b1bf768530a3 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,gcc-sc8280xp.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,gcc-sc8280xp.yaml
+@@ -33,7 +33,7 @@ properties:
+       - description: Primary USB SuperSpeed pipe clock
+       - description: USB4 PHY pipegmux clock source
+       - description: USB4 PHY DP gmux clock source
+-      - description: USB4 PHY sys piegmux clock source
++      - description: USB4 PHY sys pipegmux clock source
+       - description: USB4 PHY PCIe pipe clock
+       - description: USB4 PHY router max pipe clock
+       - description: Primary USB4 RX0 clock
+@@ -46,7 +46,7 @@ properties:
+       - description: Second USB4 PHY router max pipe clock
+       - description: Secondary USB4 RX0 clock
+       - description: Secondary USB4 RX1 clock
+-      - description: Multiport USB first SupserSpeed pipe clock
++      - description: Multiport USB first SuperSpeed pipe clock
+       - description: Multiport USB second SuperSpeed pipe clock
+       - description: PCIe 2a pipe clock
+       - description: PCIe 2b pipe clock
+-- 
+2.37.3
 
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  static unsigned long get_symbol_pos(unsigned long addr,
->  				    unsigned long *symbolsize,
->  				    unsigned long *offset)
-> -- 
-> 2.25.1
