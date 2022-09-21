@@ -2,68 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E8745BFBFA
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 12:07:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10FCF5BFC01
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 12:08:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230311AbiIUKG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 06:06:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60844 "EHLO
+        id S229519AbiIUKIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 06:08:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230322AbiIUKGj (ORCPT
+        with ESMTP id S229695AbiIUKIA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 06:06:39 -0400
+        Wed, 21 Sep 2022 06:08:00 -0400
 Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27C1485AA7
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 03:06:37 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id bj12so12347891ejb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 03:06:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3820785B3;
+        Wed, 21 Sep 2022 03:07:57 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id hy2so8754404ejc.8;
+        Wed, 21 Sep 2022 03:07:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=i7AiJke0RXt3Y3gefpg024oHyymEk36+1L9tZaTyjZQ=;
-        b=t6+YqmRo2WFruAVVMiAUGdnIJlq1p0yLTMFevb2kYhYeYvpy4T1UvGBSg7PiELpuho
-         yZZhIdh6b4QvllAVxv2url55QjqY6KTbA3UjrK9RE2jUopTautClbplRgLEp0buJBZ0R
-         gGWTn6bqC+/ebZQxGqzFv2py0Mbk6cfaKdGooPdBYso/V6+vYccINUbEN/3vgJL5/BB6
-         orkD5otB5j0sq9tO1z1zgVwwbH7M4SuOAUMs1iBLHu1dxpZQaCmv4KqSuiMuAdgL5av2
-         vaXpQCNDduyUl6jpfyqpyLOnL4nAm9Ve8gUb1JVu602ULji+YIM/cMGJdniO3oUUoSzD
-         T/Mw==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=16JHpy8HOV5zOjzO41UWCeQsc//VdSkHGlgOJLsMd8k=;
+        b=W2nsBUXvxZW4u9Vlf0bwCXbGqjxzpcwSk+491KYGNutwKR5iVS/4+r1ZWnYID/AMjB
+         XMXv5w2GMh6+F8QGi7Io73MQA5tSGqmG2x/3U2WZN7mB/C3zCUl0vt1c7Li5kpJ5ieNe
+         r8r2OyPJyAxFaQXePEK0wOHZpVDUuuj7DJjhSGHEzNN9tpj70q+o/+LJhw5u9sVksOQr
+         T/FBkTX5G9QjyXlKxw1cBnk2Z5yk3gkHGF0DZ2+UvaT/knvTFCAVHRVNnH91qBVrvo8H
+         80e0lk7XR3ChVikb17npTnmpn70MchyWfxrtsQAYXUWDsUZhSg0+lJ+n9WpY5F7UyvaE
+         pQiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=i7AiJke0RXt3Y3gefpg024oHyymEk36+1L9tZaTyjZQ=;
-        b=YK3MABS+8KBtBbyXMyUftVrImu7rIdrDRk8qTNBa63rnS76ctlO8PJ2kcAvucPvOva
-         W+N1dAv6PavgZ/Ssv3I7qcX92RqySJNVBsWnBBNwt+dAWtbZaduwAQ6ruuj5WApB7zo5
-         n+W9u04m0xKcSggni/l3uIv0C6qZwXxgX9boX37cccyjcL/MC5DVV47IwhgTpnNbUvK/
-         Lyrx4fu5hm3HG4wQ7zgLT/LGFsmVNkxApKIcqjcfWpieUWjhOgJ6PF84w1dz+x4zAyr/
-         SIPeHw8ePDIHhWthw0UVmQa8cDCcj6QsvOfKSnc9tfMGNSeYv/CGmXvrfeJfUbB6hDrM
-         L2AA==
-X-Gm-Message-State: ACrzQf2/xHteDf++AO1VYpaQREKETr7d1EHnYgebQf0EAsaLE5ZtB3HQ
-        SX4N6YRj/JcpzBs6eOZ8j/rbCw==
-X-Google-Smtp-Source: AMsMyM50oCeyjRxK+fmYG030jR8TngTYGZrmO525DVI9C+v/ppgfZYe2k1gzpHyS6YpuEkF1O2lgBQ==
-X-Received: by 2002:a17:907:320c:b0:741:1e55:7a69 with SMTP id xg12-20020a170907320c00b007411e557a69mr20507637ejb.740.1663754795366;
-        Wed, 21 Sep 2022 03:06:35 -0700 (PDT)
-Received: from baylibre-ThinkPad-T14s-Gen-2i.. (32.31.102.84.rev.sfr.net. [84.102.31.32])
-        by smtp.gmail.com with ESMTPSA id v1-20020a170906292100b0074134543f82sm1087710ejd.90.2022.09.21.03.06.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Sep 2022 03:06:35 -0700 (PDT)
-From:   Julien Panis <jpanis@baylibre.com>
-To:     william.gray@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, mranostay@ti.com
-Subject: [PATCH v7 4/4] MAINTAINERS: add TI ECAP driver info
-Date:   Wed, 21 Sep 2022 12:06:27 +0200
-Message-Id: <20220921100627.124085-5-jpanis@baylibre.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220921100627.124085-1-jpanis@baylibre.com>
-References: <20220921100627.124085-1-jpanis@baylibre.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=16JHpy8HOV5zOjzO41UWCeQsc//VdSkHGlgOJLsMd8k=;
+        b=dcC3LGwj3pgCe7ObXfI0e1KitgTpUqZ2Kw/5ijPrBW92BbAF04UZb4ypnW5WMt4kxc
+         APkhp1e8dIrp5nZ5IYW46QHxUNsZtqJq/nRcZ6CUPCR1edlMJw4/zdomdgAjso/zoozn
+         pv2VmOoEnijqhnuZX2LhIb4+rBMp2Wlfk3sujDI5r89iCbBv0X3017wTygd/61KoedHS
+         nI7l169xfPGgcHxfFNTmt9Gl0khpubMqEAbWs4OyKEAKvlieXORxGWBr73RLD8a0nqqU
+         veW2ncMq0NChL9hTQjzU6o6xuQYe01FqAA2/p6SUxQP5n+PugiwEP6dMVITd6vKn5xDw
+         jCJw==
+X-Gm-Message-State: ACrzQf1hUsjmAjH6ybMnh3q0TEJZvZb5Cu20xLQRg6axjJfqKY14nxTo
+        FOtr8YkjCdsuhkH59tU+UXpnUNwN/jOxRKpe1qTuIzMUrh4=
+X-Google-Smtp-Source: AMsMyM5rh1KQ7KgFpMv+pJ3tu52sOsSxVxHqI6HzSneUdWNk74IBai04tZfLSooyjz4dTz8BOkizUbI1Qgl4nYk8Jqs=
+X-Received: by 2002:a17:906:591:b0:73d:c3ef:84ae with SMTP id
+ 17-20020a170906059100b0073dc3ef84aemr20462081ejn.155.1663754876285; Wed, 21
+ Sep 2022 03:07:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <CAMuHMdUPm36RsxHdVwspR3NCAR3C507AyB6R65W42N2gXWq0ag@mail.gmail.com>
+ <b0f2e13a-ff5d-5bfc-6dda-ca39bb57803e@linaro.org> <CA+V-a8t3ukpa1PNz=5fP+BTjWkFJmwDo_EJJYjO9YctF2=K1Vg@mail.gmail.com>
+ <df9ff0bd-ad0e-4b5b-859d-dd913628edc8@linaro.org>
+In-Reply-To: <df9ff0bd-ad0e-4b5b-859d-dd913628edc8@linaro.org>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Wed, 21 Sep 2022 11:07:29 +0100
+Message-ID: <CA+V-a8svcTXceeLSVD4D9VazTc9nN5MXsFmvcFaDd2mM0REDhg@mail.gmail.com>
+Subject: Re: Similar SoCs with different CPUs and interrupt bindings
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,30 +83,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit adds driver info for TI ECAP used in capture operating mode.
+On Wed, Sep 21, 2022 at 10:26 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 21/09/2022 11:20, Lad, Prabhakar wrote:
+> >>
+> >> What do you mean? Macros support string concatenation and simple
+> >> arithmetic like adding numbers. I just tested it.
+> >>
+> > I did try the below:
+> >
+> > diff --git a/arch/arm64/boot/dts/renesas/r9a07g043.dtsi
+> > b/arch/arm64/boot/dts/renesas/r9a07g043.dtsi
+> > index 689aa4ba416b..0f923c276cd3 100644
+> > --- a/arch/arm64/boot/dts/renesas/r9a07g043.dtsi
+> > +++ b/arch/arm64/boot/dts/renesas/r9a07g043.dtsi
+> > @@ -8,6 +8,8 @@
+> >  #include <dt-bindings/interrupt-controller/arm-gic.h>
+> >  #include <dt-bindings/clock/r9a07g043-cpg.h>
+> >
+> > +#define SOC_PERIPHERAL_IRQ(nr, na) GIC_SPI nr na
+> > +
+> >  / {
+> >      compatible = "renesas,r9a07g043";
+> >      #address-cells = <2>;
+> > @@ -128,7 +130,7 @@ ssi1: ssi@1004a000 {
+> >              compatible = "renesas,r9a07g043-ssi",
+> >                       "renesas,rz-ssi";
+> >              reg = <0 0x1004a000 0 0x400>;
+> > -            interrupts = <GIC_SPI 330 IRQ_TYPE_LEVEL_HIGH>,
+> > +            interrupts = <SOC_PERIPHERAL_IRQ(330, IRQ_TYPE_LEVEL_HIGH)>,
+> >                       <GIC_SPI 331 IRQ_TYPE_EDGE_RISING>,
+> >                       <GIC_SPI 332 IRQ_TYPE_EDGE_RISING>,
+> >                       <GIC_SPI 333 IRQ_TYPE_EDGE_RISING>;
+> >
+> > This worked as expected, but couldn't get the arithmetic operation
+> > working. Could you please provide an example?
+>
+> diff --git a/arch/arm64/boot/dts/renesas/r9a07g043.dtsi b/arch/arm64/boot/dts/renesas/r9a07g043.dtsi
+> index ff6aab388eb7..0ecca775fa3f 100644
+> --- a/arch/arm64/boot/dts/renesas/r9a07g043.dtsi
+> +++ b/arch/arm64/boot/dts/renesas/r9a07g043.dtsi
+> @@ -8,6 +8,8 @@
+>  #include <dt-bindings/interrupt-controller/arm-gic.h>
+>  #include <dt-bindings/clock/r9a07g043-cpg.h>
+>
+> +#define SOC_PERIPHERAL_IRQ_NUMBER(na)  (na + 32)
+> +#define SOC_PERIPHERAL_IRQ(nr, na) GIC_SPI nr SOC_PERIPHERAL_IRQ_NUMBER(na)
+>  / {
+>         compatible = "renesas,r9a07g043";
+>         #address-cells = <2>;
+> @@ -128,7 +130,7 @@ ssi1: ssi@1004a000 {
+>                         compatible = "renesas,r9a07g043-ssi",
+>                                      "renesas,rz-ssi";
+>                         reg = <0 0x1004a000 0 0x400>;
+> -                       interrupts = <GIC_SPI 330 IRQ_TYPE_LEVEL_HIGH>,
+> +                       interrupts = <SOC_PERIPHERAL_IRQ(330, IRQ_TYPE_LEVEL_HIGH)>,
+>
+>
+>
+> Or any other method like that....
+>
+Thanks for the pointer! (Ive tested the above and it works)
 
-Signed-off-by: Julien Panis <jpanis@baylibre.com>
----
- MAINTAINERS | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d4999f68bda8..fa92518b22ef 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -20322,6 +20322,12 @@ T:	git git://linuxtv.org/mhadli/v4l-dvb-davinci_devices.git
- F:	drivers/media/platform/ti/davinci/
- F:	include/media/davinci/
- 
-+TI ENHANCED CAPTURE (eCAP) DRIVER
-+R:	Julien Panis <jpanis@baylibre.com>
-+L:	linux-iio@vger.kernel.org
-+F:	Documentation/devicetree/bindings/counter/ti,am62-ecap-capture.yaml
-+F:	drivers/counter/ti-ecap-capture.c
-+
- TI ENHANCED QUADRATURE ENCODER PULSE (eQEP) DRIVER
- R:	David Lechner <david@lechnology.com>
- L:	linux-iio@vger.kernel.org
--- 
-2.37.3
-
+Cheers,
+Prabhakar
