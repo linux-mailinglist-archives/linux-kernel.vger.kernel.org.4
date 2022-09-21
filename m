@@ -2,86 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17E2D5E53FA
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 21:52:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA76F5E5401
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 21:53:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbiIUTwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 15:52:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33762 "EHLO
+        id S230016AbiIUTxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 15:53:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbiIUTv5 (ORCPT
+        with ESMTP id S229745AbiIUTxT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 15:51:57 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B8C58E988;
-        Wed, 21 Sep 2022 12:51:57 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e77f329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e77f:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 6D68D1EC058B;
-        Wed, 21 Sep 2022 21:51:51 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1663789911;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=8DJCtm+AGQW+D9iEfDkNEgfP/xvG+kPWvU5Z7Kgh+Pg=;
-        b=Zn2ZhEzdpvYtf90dGnrIHXcsjl0swnVCCbqksE8wDq6uZ6VCOOHXGS8io3JvD50Oo3t14b
-        GpmL/JJFiGwIVB2K0s54P7sfjRp+uE7AsNdJT0UTU7Wnt7TR86cO345jLw0lTwEawVT6KX
-        aPvplQTwkYIbg6i3gvCFzjZ5AoFJY78=
-Date:   Wed, 21 Sep 2022 21:51:51 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     K Prateek Nayak <kprateek.nayak@amd.com>,
-        linux-kernel@vger.kernel.org, rafael@kernel.org, lenb@kernel.org,
-        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-        dave.hansen@linux.intel.com, tglx@linutronix.de, andi@lisas.de,
-        puwen@hygon.cn, mario.limonciello@amd.com, peterz@infradead.org,
-        rui.zhang@intel.com, gpiccoli@igalia.com,
-        daniel.lezcano@linaro.org, ananth.narayan@amd.com,
-        gautham.shenoy@amd.com, Calvin Ong <calvin.ong@amd.com>,
-        stable@vger.kernel.org, regressions@lists.linux.dev
-Subject: Re: [PATCH] ACPI: processor_idle: Skip dummy wait for processors
- based on the Zen microarchitecture
-Message-ID: <YytrV2UMah8555+s@zn.tnic>
-References: <20220921063638.2489-1-kprateek.nayak@amd.com>
- <2b6143b6-9db4-05bc-1e8d-c5d129126f99@intel.com>
+        Wed, 21 Sep 2022 15:53:19 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F471A1A53;
+        Wed, 21 Sep 2022 12:53:17 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 02E1D1884DA8;
+        Wed, 21 Sep 2022 19:53:14 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id D2565250007B;
+        Wed, 21 Sep 2022 19:53:08 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id CAE7F9EC0002; Wed, 21 Sep 2022 19:53:08 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <2b6143b6-9db4-05bc-1e8d-c5d129126f99@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Date:   Wed, 21 Sep 2022 21:53:08 +0200
+From:   netdev@kapio-technology.com
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 net-next 6/6] selftests: forwarding: add test of
+ MAC-Auth Bypass to locked port tests
+In-Reply-To: <Yx73FOpN5uhPQhFl@shredder>
+References: <YwzjPcQjfLPk3q/k@shredder>
+ <f1a17512266ac8b61444e7f0e568aca7@kapio-technology.com>
+ <YxNo/0+/Sbg9svid@shredder>
+ <5cee059b65f6f7671e099150f9da79c1@kapio-technology.com>
+ <Yxmgs7Du62V1zyjK@shredder>
+ <8dfc9b525f084fa5ad55019f4418a35e@kapio-technology.com>
+ <20220908112044.czjh3xkzb4r27ohq@skbuf>
+ <152c0ceadefbd742331c340bec2f50c0@kapio-technology.com>
+ <20220911001346.qno33l47i6nvgiwy@skbuf>
+ <15ee472a68beca4a151118179da5e663@kapio-technology.com>
+ <Yx73FOpN5uhPQhFl@shredder>
+User-Agent: Gigahost Webmail
+Message-ID: <0ab294b9fe5673cc5ad3de233cf64122@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 21, 2022 at 07:15:07AM -0700, Dave Hansen wrote:
-> In the end, the delay is because of buggy, circa 2006 chipsets?  So, we
-> use a CPU vendor specific check to approximate that the chipset is
-> recent and not affected by the bug?  If so, is there no better way to
-> check for a newer chipset than this?
+On 2022-09-12 11:08, Ido Schimmel wrote:
+> 
+> The new "blackhole" flag requires changes in the bridge driver and
+> without allowing user space to add such entries, the only way to test
+> these changes is with mv88e6xxx which many of us do not have...
 
-So I did some git archeology but that particular addition is in some
-conglomerate, glued-together patch from 2007 which added the cpuidle
-tree:
-
-commit 4f86d3a8e297205780cca027e974fd5f81064780
-Author: Len Brown <len.brown@intel.com>
-Date:   Wed Oct 3 18:58:00 2007 -0400
-
-    cpuidle: consolidate 2.6.22 cpuidle branch into one patch
-
-
-so the most precise check here should be to limit that dummy read to
-that Intel chipset which needed it. Damned if I knew how to figure out
-which...
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+There seems to be a little inconvenience when adding/deleting blackhole 
+entries, and that is since all slaves are the listeners to 
+SWITCHDEV_FDB_ADD(DEL)_TO_DEVICE events and blackhole entries are not to 
+any slave devices, the ops will be called for every slave device as 
+there is no way to distinguish. This said, the add and del operations 
+work.
