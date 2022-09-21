@@ -2,218 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D9A65BF19F
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 02:01:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 374855BF1A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 02:02:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230480AbiIUAAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 20:00:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58156 "EHLO
+        id S230525AbiIUABf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 20:01:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230373AbiIUAAn (ORCPT
+        with ESMTP id S230469AbiIUAB3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 20:00:43 -0400
-Received: from mail104.syd.optusnet.com.au (mail104.syd.optusnet.com.au [211.29.132.246])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0A0F34A137;
-        Tue, 20 Sep 2022 17:00:40 -0700 (PDT)
-Received: from dread.disaster.area (pa49-181-106-210.pa.nsw.optusnet.com.au [49.181.106.210])
-        by mail104.syd.optusnet.com.au (Postfix) with ESMTPS id 7ED8A8A99A0;
-        Wed, 21 Sep 2022 10:00:34 +1000 (AEST)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1oanAG-00AByJ-Lc; Wed, 21 Sep 2022 10:00:32 +1000
-Date:   Wed, 21 Sep 2022 10:00:32 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Theodore Ts'o <tytso@mit.edu>, NeilBrown <neilb@suse.de>,
-        Trond Myklebust <trondmy@hammerspace.com>,
-        "bfields@fieldses.org" <bfields@fieldses.org>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "djwong@kernel.org" <djwong@kernel.org>,
-        "brauner@kernel.org" <brauner@kernel.org>,
-        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "chuck.lever@oracle.com" <chuck.lever@oracle.com>,
-        "linux-man@vger.kernel.org" <linux-man@vger.kernel.org>,
-        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
-        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
-        "jack@suse.cz" <jack@suse.cz>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "xiubli@redhat.com" <xiubli@redhat.com>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "adilger.kernel@dilger.ca" <adilger.kernel@dilger.ca>,
-        "lczerner@redhat.com" <lczerner@redhat.com>,
-        "ceph-devel@vger.kernel.org" <ceph-devel@vger.kernel.org>,
-        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>
-Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
- STATX_INO_VERSION field
-Message-ID: <20220921000032.GR3600936@dread.disaster.area>
-References: <871f9c5153ddfe760854ca31ee36b84655959b83.camel@hammerspace.com>
- <e8922bc821a40f5a3f0a1301583288ed19b6891b.camel@kernel.org>
- <166328063547.15759.12797959071252871549@noble.neil.brown.name>
- <YyQdmLpiAMvl5EkU@mit.edu>
- <7027d1c2923053fe763e9218d10ce8634b56e81d.camel@kernel.org>
- <24005713ad25370d64ab5bd0db0b2e4fcb902c1c.camel@kernel.org>
- <20220918235344.GH3600936@dread.disaster.area>
- <87fb43b117472c0a4c688c37a925ac51738c8826.camel@kernel.org>
- <20220920001645.GN3600936@dread.disaster.area>
- <5832424c328ea427b5c6ecdaa6dd53f3b99c20a0.camel@kernel.org>
-MIME-Version: 1.0
+        Tue, 20 Sep 2022 20:01:29 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 214953F30F
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 17:01:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Seb+jA7/kiwj4343NypHpQXpqJEBLyP5GUYO7t0a+VAP09Peb/oFPZtM9W9M8z01TN6o23YopXK3BIciha8+TQ06s0L9j2j2ibaS/7Fhxcdx6Br/wceRiJVdGCn+q9RWzV8EqdqsY7/Bk8n4L+U6ZGmQLN2vOPPykrC1WibjylaPys7YJ+bBDSpdRIDEoclsVlmBYIxouDB1rePAkwXcU+Of85sHdMVh4gUECecKFNPhvDOq94L5QvzUbtloQWMHlXT6KN04w/ZuuEk4Gqd4O8rTqPkNIHjOeVu11axlf8iCs0UnaTAs9wssGpxnUt3k1d29vmYjP04JLleca66m+Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XgHOn6ZetKr9/xD/si8qg141dTq9rXn4xdQkhJokqCM=;
+ b=cwyLrD+v/fyWxS4W+tOKs85HfBTybM0jtQpHcY5VGfwoM6T/ylcnhU16RJwQ7RpyCFOWaf54hLIJ7v+3QkrMJ60W0PSZNKbolNDQ5Rm/II6RW1sjX9gQ+76epY88bwP9w1TGDxViaMVsHBV7kjZhTNzYNq60qdA0lzLsThclYzrJgebkPijTqLRSr+/2ERL0hP17By8XR+FEZtLcQTjSNv/tWL8ayw+TFCSfrhrd3S1w02x2YrHkWqYrKDMKDUrZCxrzgtq8Ga7oEmdeY1DR1Itn+c6LduwIb0dw27YTkKMjyW6IQdULvho4m7GA/oRO3qWrBLSrnjaV8GB/p1RsNA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XgHOn6ZetKr9/xD/si8qg141dTq9rXn4xdQkhJokqCM=;
+ b=MCIu2BkwpvvYOJjp42hLOlVOXIVaqJRgmazKkNXWEpenbjs5WuEh+BiHuX/VInLM/pc51PjEgb6CCr2Yljrw1P4BQvuQavHnPbcsIUzmcUvOHHxcGzronKNjUmNP3KAIhIEHqjuCcJXH5koKcYgyqHdQWo+yKZorvLIDvMw9y+jZzw1YARMEE8BbOvha9LYmMRoTtLaEuFUFBycxQQJvn/f0e+B5nuUx714TUEd4V8PMBI6ItPjHfXRYVaoh9gICmKMsx4YLz/7XYlFmFYSFXyQzq9WszBWddtmfgZ0rKPed8fchvUT94g2RlB6Sox9C2EQooEvejbWNrol32sRRHQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CH2PR12MB4181.namprd12.prod.outlook.com (2603:10b6:610:a8::16)
+ by DM4PR12MB6663.namprd12.prod.outlook.com (2603:10b6:8:bb::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5632.21; Wed, 21 Sep 2022 00:01:26 +0000
+Received: from CH2PR12MB4181.namprd12.prod.outlook.com
+ ([fe80::3d9f:c18a:7310:ae46]) by CH2PR12MB4181.namprd12.prod.outlook.com
+ ([fe80::3d9f:c18a:7310:ae46%8]) with mapi id 15.20.5632.021; Wed, 21 Sep 2022
+ 00:01:26 +0000
+Date:   Tue, 20 Sep 2022 21:01:25 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Jacob Pan <jacob.jun.pan@linux.intel.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Jacob Pan <jacob.jun.pan@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Ashok Raj <ashok_raj@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        Kostya Serebryany <kcc@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Taras Madan <tarasmadan@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Joerg Roedel <joro@8bytes.org>
+Subject: Re: [PATCHv8 00/11] Linear Address Masking enabling
+Message-ID: <YypUVe2YGcM+xkog@nvidia.com>
+References: <20220914154532.mmxfsr7eadgnxt3s@box.shutemov.name>
+ <20220914165116.24f82d74@jacob-builder>
+ <20220915090135.fpeokbokkdljv7rw@box.shutemov.name>
+ <20220915172858.pl62a5w3m5binxrk@box.shutemov.name>
+ <Yym8zsuXbYaW3alU@nvidia.com>
+ <15741fdf-68b6-bd32-b0c2-63fde3bb0db2@intel.com>
+ <Yynp77km4SaHpe/3@nvidia.com>
+ <20220920113742.277ac497@jacob-builder>
+ <YyoLedkOx59KUjSw@nvidia.com>
+ <20220920134430.20111b7f@jacob-builder>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5832424c328ea427b5c6ecdaa6dd53f3b99c20a0.camel@kernel.org>
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.4 cv=OJNEYQWB c=1 sm=1 tr=0 ts=632a5426
-        a=j6JUzzrSC7wlfFge/rmVbg==:117 a=j6JUzzrSC7wlfFge/rmVbg==:17
-        a=kj9zAlcOel0A:10 a=xOM3xZuef0cA:10 a=7-415B0cAAAA:8
-        a=4ZEok6cz2qKiNJG-cq0A:9 a=CjuIK1q_8ugA:10 a=biEYGPWJfzWAr4FL6Ov7:22
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220920134430.20111b7f@jacob-builder>
+X-ClientProxiedBy: BL1P223CA0023.NAMP223.PROD.OUTLOOK.COM
+ (2603:10b6:208:2c4::28) To CH2PR12MB4181.namprd12.prod.outlook.com
+ (2603:10b6:610:a8::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH2PR12MB4181:EE_|DM4PR12MB6663:EE_
+X-MS-Office365-Filtering-Correlation-Id: c08685fd-a4af-4831-7cb0-08da9b646d73
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Ndy0NMMfiSP5klj/07z79giyAP36DzX2x7wBMQVVmT3FOC46e/no6Rh7VFvw3z0xmuWRBeXw7X3A3UchdnU7qGVV2q/Lw/1aYXebaA/uy78cp10VsAucR0Nmu+gbTPkwmm3ePjvVAwo1bqjzFyDussjS7ikXVaHcsc0A3bqb5Zi1+4Jla6SwfgkRBFJse0/JtroLtGKXEILtSu+79Q6TWJjdGw7vEgIybo9gUDwvEP7aXCd60gIJUFBfX0JXbqKqNnA5FtEST3LKId1kZL8a/GcVXMjiYhi9vuGzQqTMzJVmuFV0wrzsO2KjkYxj9gIgR16+s8uFao54RbOwPoFfDbuyioMjBHtzgxBL9QxX2NuEdu4SI3fR++4QMmDarONM0adT040MEG3TSNImcGTWG1ZRebqm0fBhyMBKq/JNrQphdTvxiCSqhyisv09O9bc00puLBTbWuEzCaE4rRE6YpWnZkojp4zGDztzTfmXKOZO/jRfkPQoIfQYSBxrgkumydV0ixLVFITWa7ZTT47jzrmGKEuxdlIWdW9TbqF6XQOg5vuZv6JVEHZhLvLhEnCM0LkjXx8QCgWfozVknm4xBEWoAGoVKATtQGaJhhLF9/o2YvhHbsub5A5gJW7j7Q6P7vpExsKYxh3PbqsVZ+4fpaGupZXnfm7fzEs4G6cUmb693a1BaH9kbPm+OIBrCg0hdpSY6G9wzvQhRAYg3bgQjqcfVOr0oYVCouegLmkaDbV+ZBBEfIdebYceRs5JKeOb4
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR12MB4181.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(136003)(396003)(346002)(366004)(451199015)(7416002)(66476007)(8676002)(66946007)(5660300002)(6916009)(54906003)(86362001)(66556008)(316002)(4326008)(38100700002)(8936002)(41300700001)(6506007)(6486002)(478600001)(2616005)(186003)(6512007)(26005)(2906002)(36756003)(67856001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zXrYt8sZn94e0yp+rGz73HA3BH0FIAynj3a+s+2/yuQrPeDZjtnJWF2pswaT?=
+ =?us-ascii?Q?AmV51kA6/9AC5BYUkfP3K0n78GgxR+GNk4plaGe6Ic/oo+udE0NYwD923Pos?=
+ =?us-ascii?Q?e7nNLjAI12WH8NqxtDekjXQyEqhTD3ZWu/35qo1OFixQjIi9A3I+94tsW60K?=
+ =?us-ascii?Q?Y7VCiE+Ti5+wqlHMhWTCGCOkKMg0RxuI2uElY2TkC91DAGFLnW82WywEEV12?=
+ =?us-ascii?Q?CFGQNt+Wv7YEdFYsGqWHAQUwOb/8yTsunNY/WDy59ua0DS7gnPWvrXGvoq3q?=
+ =?us-ascii?Q?5N0Fghp73/f9ZI3XXd9vFdM8Pod174XU9TNNA6YxqWW+L5IGYqabJpUOFRZf?=
+ =?us-ascii?Q?ARyI4kjOeWbnDJ0LORgBR4gWiPKLkPzEZYUm8TcycNEi1Ds6wscsDkwN6ail?=
+ =?us-ascii?Q?kS4H3ByrQljXRZ9sVKvLMpaAeejZKEk5NMdvlQh5YwtogDRJ/b1U78xOxYSz?=
+ =?us-ascii?Q?I9Al8ohdk9ASMvNuKoutff4sRLUFc7O4BGcycAyJi+D1/7sWItbs6rn3VDuX?=
+ =?us-ascii?Q?/fE7EqWMm2c74nkf3tlnfZTBiEQ6qRa2TBfNSGz2U9TWAfSgNF8wmaGFbPjj?=
+ =?us-ascii?Q?sdQnNhTO8TuVTiINJVRJK8UWUQAGLIg+Uspi9zVg4u/yubwTmMbVmmvV55zw?=
+ =?us-ascii?Q?OG3RB4X2TZGaRRLZZbDrFNNFYOm65FRVQA5t/pU2dOEcV0mAKjcIGVyU6Y72?=
+ =?us-ascii?Q?rR/bnZqb6riwlVTDxXY4KdsDTSRPEdwSb95kG7fo3Z+9amtfd68W6DSg6wgS?=
+ =?us-ascii?Q?QNKs4hbkeb33y4aoiJ2vRS5+6vQvOSmgCieNGTFiks5Y1Kexyb76AE5zWb7b?=
+ =?us-ascii?Q?K+cUu0PXyEZC/p2Vs6TXUSzepYn53e8xt/UDmt9KWxO/lXubjCeGCmBROi3Y?=
+ =?us-ascii?Q?eONc7mUoY08/xhZ9kh594nKI2fJZ5kq7QU2ufC0wmX0qQJfvWHjM8gfuaLCv?=
+ =?us-ascii?Q?UabumUlzIqZDWl1zHg+HlyoAlBE6vIhKVZ6Aaiam9q5TqkxJI7YnTvICMUjO?=
+ =?us-ascii?Q?Y8takyYTyifoAmvZbyxDXGleQJzmM0tzWvLkqamwJArF6hyaHj7v+b3tcexE?=
+ =?us-ascii?Q?wOphsHTk9b7jRRx9ElYZTImH7Nx2jMcwmsCe1UQVMM4zok43/yKJRjUBXU3F?=
+ =?us-ascii?Q?UGonpiYdt5I+6f6PeaEeKrnXcRxqOELH9Ldu3DFoQ+K+GBVlTr4pwlOebUTD?=
+ =?us-ascii?Q?qGyf9jcMTf/j4MobZcNa0WveDaPDwTKxeJ4p1AihlzmvhddmJ8Pc5MXuKAXN?=
+ =?us-ascii?Q?hLm9SACtrB/3Rgnkv58mnh41x0y0aOqlE1RGbQ9hYtAcIhJXX1GwV0XzUY/d?=
+ =?us-ascii?Q?OInYEuZEUkFfA3ea+8hUMDcsQ7JYwkO4Srn+eyv/A5agjxFrg/s52YGsK825?=
+ =?us-ascii?Q?9mTPGVLGH6UYtkMVXbN102qnUvfEhKKn3h/73m1Dxg/JsJmFpnbQHl5Wn/3k?=
+ =?us-ascii?Q?KuNwCf7Ngtum/msORHUAHsC9nUlVf/m6EefmnVPFq/8yGmmvaajiAZ2hPTZZ?=
+ =?us-ascii?Q?4T36dC8FpWJ6svEHuauWCeKX+qOyyX4K775k4LjlZlZtqvnRnLG+bTOgED6/?=
+ =?us-ascii?Q?Y9UaZxU7s8L7BQrOP1s1kbhvzLFGAHQcuNWXWJme?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c08685fd-a4af-4831-7cb0-08da9b646d73
+X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB4181.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Sep 2022 00:01:26.4322
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hM5iDDITnMd2bHCikSBSOUHE6u63Z7iaNgTKHGv+4z44ZN78aMnTHH+Ljm1h3dMZ
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6663
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 06:26:05AM -0400, Jeff Layton wrote:
-> On Tue, 2022-09-20 at 10:16 +1000, Dave Chinner wrote:
-> > IOWs, the NFS server can define it's own on-disk persistent metadata
-> > using xattrs, and you don't need local filesystems to be modified at
-> > all. You can add the crash epoch into the change attr that is sent
-> > to NFS clients without having to change the VFS i_version
-> > implementation at all.
+On Tue, Sep 20, 2022 at 01:44:30PM -0700, Jacob Pan wrote:
+
+> > In general I'm not so keen on arch unique code for general ideas like
+> > this (ARM probably has the same issue), but sure it could work.
 > > 
-> > This whole problem is solvable entirely within the NFS server code,
-> > and we don't need to change local filesystems at all. NFS can
-> > control the persistence and format of the xattrs it uses, and it
-> > does not need new custom on-disk format changes from every
-> > filesystem to support this new application requirement.
-> > 
-> > At this point, NFS server developers don't need to care what the
-> > underlying filesystem format provides - the xattrs provide the crash
-> > detection and enumeration the NFS server functionality requires.
-> > 
-> 
-> Doesn't the filesystem already detect when it's been mounted after an
-> unclean shutdown?
+> Creating an abstraction seems to belong to a separate endeavor when we
+> have more than one user. For now, are you ok with  the current approach?
 
-Not every filesystem will be able to guarantee unclean shutdown
-detection at the next mount. That's the whole problem - NFS
-developers are asking for something that cannot be provided as
-generic functionality by individual filesystems, so the NFS server
-application is going to have to work around any filesytem that
-cannot provide the information it needs.
+Sure, just don't give it a silly name like pasid or sva
 
-e.g. ext4 has it journal replayed by the userspace tools prior
-to mount, so when it then gets mounted by the kernel it's seen as a
-clean mount.
+> > You need to assert that the page table format is one of the
+> > formats that the iommu understands and configure the iommu to match
+> > it. It is a very simple question about what ruleset and memory layout
+> > govern the page table memory used by the CPU.
 
-If we shut an XFS filesystem down due to a filesystem corruption or
-failed IO to the journal code, the kernel might not be able to
-replay the journal on mount (i.e. it is corrupt).  We then run
-xfs_repair, and that fixes the corruption issue and -cleans the
-log-. When we next mount the filesystem, it results in a _clean
-mount_, and the kernel filesystem code can not signal to NFS that an
-unclean mount occurred and so it should bump it's crash counter.
+> the problem is more relevant to  things like  canonical address
+> requirement  than  page table format.
 
-IOWs, this whole "filesystems need to tell NFS about crashes"
-propagates all the way through *every filesystem tool chain*, not
-just the kernel mount code. And we most certainly don't control
-every 3rd party application that walks around in the filesystem on
-disk format, and so there are -zero- guarantees that the kernel
-filesystem mount code can give that an unclean shutdown occurred
-prior to the current mount.
+The translation of an VA to a PA is entirely within the realm of the
+page table format, IMHO. If the rules change then the format clearly
+differs, even if your arch documents talk about "canonical address" or
+something to define the different parsing behaviors.
 
-And then for niche NFS server applications (like transparent
-fail-over between HA NFS servers) there are even more rigid
-constraints on NFS change attributes. And you're asking local
-filesystems to know about these application constraints and bake
-them into their on-disk format again.
-
-This whole discussion has come about because we baked certain
-behaviour for NFS into the on-disk format many, many years ago, and
-it's only now that it is considered inadequate for *new* NFS
-application related functionality (e.g. fscache integration and
-cache validity across server side mount cycles).
-
-We've learnt a valuable lesson from this: don't bake application
-specific persistent metadata requirements into the on-disk format
-because when the application needs to change, it requires every
-filesystem that supports taht application level functionality
-to change their on-disk formats...
-
-> I'm not sure what good we'll get out of bolting this
-> scheme onto the NFS server, when the filesystem could just as easily
-> give us this info.
-
-The xattr scheme guarantees the correct application behaviour that the NFS
-server requires, all at the NFS application level without requiring
-local filesystems to support the NFS requirements in their on-disk
-format. THe NFS server controls the format and versioning of it's
-on-disk persistent metadata (i.e. the xattrs it uses) and so any
-changes to the application level requirements of that functionality
-are now completely under the control of the application.
-
-i.e. the application gets to manage version control, backwards and
-forwards compatibility of it's persistent metadata, etc. What you
-are asking is that every local filesystem takes responsibility for
-managing the long term persistent metadata that only NFS requires.
-It's more complex to do this at the filesystem level, and we have to
-replicate the same work for every filesystem that is going to
-support this on-disk functionality.
-
-Using xattrs means the functionality is implemented once, it's
-common across all local filesystems, and no exportable filesystem
-needs to know anything about it as it's all self-contained in the
-NFS server code. THe code is smaller, easier to maintain, consistent
-across all systems, easy to test, etc.
-
-It also can be implemented and rolled out *immediately* to all
-existing supported NFS server implementations, without having to
-wait months/years (or never!) for local filesystem on-disk format
-changes to roll out to production systems.
-
-Asking individual filesystems to implement application specific
-persistent metadata is a *last resort* and should only be done if
-correctness or performance cannot be obtained in any other way.
-
-So, yeah, the only sane direction to take here is to use xattrs to
-store this NFS application level information. It's less work for
-everyone, and in the long term it means when the NFS application
-requirements change again, we don't need to modify the on-disk
-format of multiple local filesystems.
-
-> In any case, the main problem at this point is not so much in detecting
-> when there has been an unclean shutdown, but rather what to do when
-> there is one. We need to to advance the presented change attributes
-> beyond the largest possible one that may have been handed out prior to
-> the crash. 
-
-Sure, but you're missing my point: by using xattrs for detection,
-you don't need to involve anything to do with local filesystems at
-all.
-
-> How do we determine what that offset should be? Your last email
-> suggested that there really is no limit to the number of i_version bumps
-> that can happen in memory before one of them makes it to disk. What can
-> we do to address that?
-
-<shrug>
-
-I'm just pointing out problems I see when defining this as behaviour
-for on-disk format purposes. If we define it as part of the on-disk
-format, then we have to be concerned about how it may be used
-outside the scope of just the NFS server application. 
-
-However, If NFS keeps this metadata and functionaly entirely
-contained at the application level via xattrs, I really don't care
-what algorithm NFS developers decides to use for their crash
-sequencing. It's not my concern at this point, and that's precisely
-why NFS should be using xattrs for this NFS specific functionality.
-
--Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+Jason
