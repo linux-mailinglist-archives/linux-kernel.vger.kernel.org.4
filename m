@@ -2,113 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E161E5BFF1E
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 15:45:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4CB75BFF23
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 15:48:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbiIUNpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 09:45:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38736 "EHLO
+        id S229544AbiIUNsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 09:48:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbiIUNph (ORCPT
+        with ESMTP id S229563AbiIUNsO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 09:45:37 -0400
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6214361DBA
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 06:45:36 -0700 (PDT)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-11eab59db71so9067825fac.11
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 06:45:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=daM5SZuwdOe2eGE+YL1ULmOjBp3NnXTMo4uiOWS2OVE=;
-        b=aGH0TbhAfgk6UcR3AI8lvnSS0bGyuDs8bIOFRCGclOMU7vt2EIWwv8lvc1sGRgxz2e
-         LogUgmIaGgiZl+ht3rm7OQT3Vo6VyWT5kLXh3wVzD5THB6318xi1t9B50JZmd90QU2MD
-         RMsvifUw9Tfo7N4mmcI80hFM5njRE7ZZaLRRnwBcoZ46yE5GhgAJYTpc+s8oDYBzeorA
-         E2+kjC/2CB/yTTpnKHrSvtsX0GwkJYwFWVnikwMPPH2f//sexa89ZaeZGlgo1lALlE/1
-         wCwGkSgBuHqtyTvGDol/8BgXD4vejhqEIRMUECDZrMDsqenDeFgu24AI2bVeUf6FO/II
-         Av0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=daM5SZuwdOe2eGE+YL1ULmOjBp3NnXTMo4uiOWS2OVE=;
-        b=an5x4E3vGqz7DQhvwjd7dhE0Z6I2hBysuR8gb58/l4R99l0kUzZsD3Kl0rn8IzoXN5
-         pnAWT77mAi2YEuhx3EpYqKP7jK1j6BFLTVlWuU3gGrl32aSo6W5RguFX7Aqwg9eD6enY
-         7Xzu76AR4UL90WHu98MPJiC+4d0N7CDilR/XDUmH/28BTZle4z/fM9y93a1LE4fFuA8z
-         Nm1CK/l1TQGDWcwnRsqtWR0LLFNgaXwI1YUbHKrqaIRe2cwZOeJN466unIvVLMaCA0Hm
-         elr/tEzDxORYz3MJNjEcHKaBxTS8NT/EBMmd9cFGagYNbC/vc6/FPupzcAB+XBbqzk67
-         OS/A==
-X-Gm-Message-State: ACrzQf3CxMFXqVyng5fwJq5X8dfrtu+65oc3fJym2oOz+11QGn4/KdTy
-        XiDgvnBE2oszjBKYNsiK3BxKfNF4GXMvuzqc0NiBdQ==
-X-Google-Smtp-Source: AMsMyM6kDCucurtRzljq5Vk7PcEyMfqTtEicuc3Flh+wvpieWHr91t5EPzb/GYRQVkuJ5G1vo/Rt24YVcr8roDhjucs=
-X-Received: by 2002:a05:6870:580c:b0:12a:f136:a8f5 with SMTP id
- r12-20020a056870580c00b0012af136a8f5mr4956761oap.269.1663767935409; Wed, 21
- Sep 2022 06:45:35 -0700 (PDT)
+        Wed, 21 Sep 2022 09:48:14 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD637285C;
+        Wed, 21 Sep 2022 06:48:13 -0700 (PDT)
+Received: from notapiano (unknown [71.190.76.4])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 98C5D660035D;
+        Wed, 21 Sep 2022 14:48:10 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1663768091;
+        bh=kHonNTF/Lzlr8aSshRxKzH5rWoJVYD+SKE3V/t0eknU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YhoFbIAxA6bxocnv8A8BbQ2z9aflUs/v/bLdPBGTtbJx6ZWh92NoUz6Hvmt/5CySh
+         qv9JK0gbugoCOmDebyFePqygFBJ01yH1JAhiRXb1L0GXahjmozyrX/l8M/ameLEskL
+         YRj14SGj1VhfC+occC/FEnzAoBLi6AB8E/DcRvsy8gcFHFpV1rEY2asLRXifO6y8kk
+         +1Dpv6ia2erykaS2SCM298Fl8hL+8mOkKLyLnH2ZyAY1VjEcJpAs8RRmh3EwK/RylK
+         Mg3CoppufEHx61ro0O3vgMOJhUf11v7SfDC/oRkj5OWGL25jiTUTuvp3u40eWXraNT
+         uGIESuRMOTOzw==
+Date:   Wed, 21 Sep 2022 09:48:06 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Chen-Yu Tsai <wenst@chromium.org>, kernel@collabora.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH 1/3] arm64: dts: mediatek: asurada: Add display regulators
+Message-ID: <20220921134806.lbg5meuy4fn6pifm@notapiano>
+References: <20220908171153.670762-1-nfraprado@collabora.com>
+ <20220908171153.670762-2-nfraprado@collabora.com>
+ <ab2027b9-17e8-4fe8-3847-84c54d6f9d58@collabora.com>
 MIME-Version: 1.0
-References: <20220920205922.1564814-1-jmattson@google.com> <Yyot34LGkFR2/j5f@zn.tnic>
- <CALMp9eQijCKS-E_OWJkxdqAur3BthciOWEtEPH5YKd0-HJiQQA@mail.gmail.com> <YyrZOLq8z+lIORvP@zn.tnic>
-In-Reply-To: <YyrZOLq8z+lIORvP@zn.tnic>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Wed, 21 Sep 2022 06:45:24 -0700
-Message-ID: <CALMp9eRG6g-95zCxTD1NnxpZ+Vm6VMTA0_uaHV=b-hDkeOYSuA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] KVM: EFER.LMSLE cleanup
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ab2027b9-17e8-4fe8-3847-84c54d6f9d58@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 21, 2022 at 2:28 AM Borislav Petkov <bp@alien8.de> wrote:
->
-> On Tue, Sep 20, 2022 at 09:36:18PM +0000, Sean Christopherson wrote:
-> > Yes, but ideally KVM would explicitly tell the guest "you don't have LMSLE".
-> > Probably a moot point, but at the same time I don't see a reason not to be
-> > explicit.
->
-> Yes but...
->
-> On Tue, Sep 20, 2022 at 02:36:34PM -0700, Jim Mattson wrote:
-> > Reporting that CPUID bit gives us the right to raise #GP. AMD CPUs
-> > (going way back) that don't report EferLmsleUnsupported do not raise
-> > #GP.
->
-> ... what does "gives us the right" mean exactly?
->
-> I'm pretty sure I'm missing something about how KVM works but wouldn't
-> it raise a guest #GP when the guest tries to set an unsupported EFER
-> bit? I.e., why do you need to explicitly do
->
->         kvm_cpu_cap_set(X86_FEATURE_NO_LMSLE);
->
-> and not handle this like any other EFER reserved bit?
+On Fri, Sep 09, 2022 at 09:46:33AM +0200, AngeloGioacchino Del Regno wrote:
+> Il 08/09/22 19:11, Nícolas F. R. A. Prado ha scritto:
+> > Add the regulators present on the Asurada platform that are used to
+> > power the internal and external displays.
+> > 
+> > Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> > 
+> > ---
+> > 
+> >   .../boot/dts/mediatek/mt8192-asurada.dtsi     | 114 ++++++++++++++++++
+> >   1 file changed, 114 insertions(+)
+> > 
+> > diff --git a/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi b/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
+> > index 4b314435f8fd..1d99e470ea1a 100644
+> > --- a/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
+> > +++ b/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
+> 
+> ..snip..
+> 
+> > @@ -56,6 +116,18 @@ pp3300_ldo_z: regulator-3v3-z {
+> >   		vin-supply = <&ppvar_sys>;
+> >   	};
+> 
+> Can you please add a comment here advertising that this regulator
+> will not only provide power to the MIPI bridge, but *also* to the
+> display panel itself?
+> 
+> This is to make sure that everyone understands what's going on, and
+> also that we ourselves don't forget about that.
+> 
+> Probably something like:
+> /* pp3300_mipibrdg also enables pp3300_panel */
+> 
+> I would then propose to add a "regulator-fixed" that has no GPIO
+> but with vin-supply as this one.
+> 
+> pp3300_panel: regulator-3v3-panel {
+> 	compatible = "regulator-fixed";
+> 	regulator-name = "pp3300_panel";
+> 	regulator-min-microvolt = <3300000>;
+> 	regulator-max-microvolt = <3300000>;
+> 
+> 	vin-supply = <&pp3300_mipibrdg>;
+> };
+> 
+> I would also test assigning this regulator to the panel node, as this
+> will make sure to cover future corner cases (think about PM suspend/resume).
+> 
+> P.S.: If you add the pp3300_panel regulator-fixed with that vin-supply,
+>       maybe the proposed comment would become a bit overkill. Your choice!
 
-EFER.LMLSE is not a reserved bit on AMD64 CPUs, unless
-CPUID.80000008:EBX[20] is set (or you're running very, very old
-hardware).
+Hi Angelo,
 
-We really shouldn't just decide on a whim to treat EFER.LMSLE as
-reserved under KVM. The guest CPUID information represents our
-detailed contract with the guest software. By setting
-CPUID.80000008:EBX[20], we are telling the guest that if it tries to
-set EFER.LMSLE, we will raise a #GP.
+thanks for the feedback.
 
-If we don't set that bit in the guest CPUID information and we raise
-#GP on an attempt to set EFER.LMSLE, the virtual hardware is
-defective. We could document this behavior as an erratum, but since a
-mechanism exists to declare that the guest can expect EFER.LMSLE to
-#GP, doesn't it make sense to use it?
+I think the current layout makes more sense based on my understanding of the
+power routing here: a single power line output by the pp3300_mipibrdg regulator
+powers both the ANX chip as well as the panel. So I'm going to keep it the way
+it is for now. If there are any other concerns please let me know.
+
+Thanks,
+Nícolas
+
+> 
+> Cheers,
+> Angelo
+> 
+> > +	pp3300_mipibrdg: regulator-3v3-mipibrdg {
+> > +		compatible = "regulator-fixed";
+> > +		regulator-name = "pp3300_mipibrdg";
+> > +		pinctrl-names = "default";
+> > +		pinctrl-0 = <&pp3300_mipibrdg_en_pins>;
+> > +		regulator-min-microvolt = <3300000>;
+> > +		regulator-max-microvolt = <3300000>;
+> > +		enable-active-high;
+> > +		regulator-boot-on;
+> > +		gpio = <&pio 127 GPIO_ACTIVE_HIGH>;
+> > +	};
+> > +
+> >   	/* separately switched 3.3V power rail */
+> >   	pp3300_u: regulator-3v3-u {
+> >   		compatible = "regulator-fixed";
+> 
