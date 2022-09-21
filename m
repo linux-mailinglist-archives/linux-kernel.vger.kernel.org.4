@@ -2,103 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C97035BFA50
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 11:12:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 448955BFA55
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 11:12:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230147AbiIUJMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 05:12:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40148 "EHLO
+        id S230329AbiIUJMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 05:12:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230118AbiIUJMG (ORCPT
+        with ESMTP id S229974AbiIUJMf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 05:12:06 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B38B88C44D
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 02:12:04 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id a14so6172488ljj.8
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 02:12:04 -0700 (PDT)
+        Wed, 21 Sep 2022 05:12:35 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E4E97754D
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 02:12:34 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id f20so7661563edf.6
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 02:12:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=ZjHHQRJGwuqbDb8JIxiASWCllE12kTjIQC60uJoZPaI=;
-        b=YuErZJV2pcu4GLKPVzROsL/ZFPM/2cBi3CO3JcxSL0sLn2a0aoSKkQ49biOU3vQFl4
-         rFuD5jTF7kr/tV/QRX8D7qFA4+NjcdWbKqSzzSyPvg2lSv6TrOUf3HyOY0NbL0s4aWHy
-         2ZmoNFiV9Dv8RFiDbHC6rVPqvP9/ldz9T9uENNTe17wpDE28tSUHmDwCWExEO7+1m0mO
-         ipGEVyO8kYnFhGKEO4gt8A1wYCvy8+23sKy+bq9zQSJuILIqOP1SZx0Ng6Y4pEZGQPfw
-         IqU4IdRvxGTPaDsvwhCU02Pr40YgjsYT6mGUkHsACiHdCUGtJC23f+kBzWr2ZhbmixBh
-         kLWg==
+        d=chromium.org; s=google;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:from:to:cc:subject:date;
+        bh=EUT7U16Zxb0ZExEemxBABTNFCTWV0UDUspkxIn18yIE=;
+        b=RmyMZIVdigRGiSJK9ug4SPUwCvbOYt5uXxjoVzDCxmoVfr3AnDCuT4xq6iCx3t397D
+         CBWlp932QgpzumiSJ90dCDEUB5+SCtxJCmeUbC2XssRvj8hG2BwllAANU+bSARgUIRjt
+         b4pwla+S4WmrrsF2Kk4W851z3czNTNz6MJhgE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=ZjHHQRJGwuqbDb8JIxiASWCllE12kTjIQC60uJoZPaI=;
-        b=FGy5JaMdu50kaZu2yCwRggj/FY17nTqgoQi6Jl4OIhNh+1u2QTOZQifM2OpN84ElOM
-         UhyTkemLf2jG5pCPrRtU3J/8uwhDDNL99pblz/4ZZ1+uh7iP9/jqk3EXSArWUBXE8/B1
-         S4x95J3HtcqD5zvJPIcQw1o/HXdLL1RuyC3aeCSa74pNVbXu7W9ZoOmgYSlnFuAuoSVK
-         qRYwVvl68kX8lRkoaA4/cVTlueRfKCaZYxILJPPU3yjknlk6LdnxLGUzYiiJrBI6C0Zo
-         1cKyWxYZ4FwtT3gTX/NdCFb8xxeHVZuiAAp6FymHMx0OWsJT/vWrINSz09C3eElvzrVi
-         Khcw==
-X-Gm-Message-State: ACrzQf3RmAE/mH/31HzOE6BA47HvQJjTwgdc2St3E0TWUjj1mjbNd0V5
-        KH9YSK+zWtvzik/jZdpiLlvUbA==
-X-Google-Smtp-Source: AMsMyM65d5eh3QTDjIdjafQW8dzPMN1JuhFSyd33DcYi8WKHjVw2P4dSaMoRtYcFZO8HGZNMKcwuxQ==
-X-Received: by 2002:a05:651c:1043:b0:26c:565b:2942 with SMTP id x3-20020a05651c104300b0026c565b2942mr3569911ljm.440.1663751523110;
-        Wed, 21 Sep 2022 02:12:03 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id m14-20020ac24ace000000b0049462af8614sm347898lfp.145.2022.09.21.02.12.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Sep 2022 02:12:02 -0700 (PDT)
-Message-ID: <7f8f15bf-806f-a638-f35b-a66d2cb93db7@linaro.org>
-Date:   Wed, 21 Sep 2022 11:12:01 +0200
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:x-gm-message-state:from:to:cc:subject:date;
+        bh=EUT7U16Zxb0ZExEemxBABTNFCTWV0UDUspkxIn18yIE=;
+        b=qBVdPwPBuBFg4DAGgZb4iiWJsACqH7tyl9AHPsHpVrcLwSJzafhrq5uELo8qEkZNdM
+         uTH2kFKiWfbe5lbRQAN0Ay6FGGQ9iSMtUR9kXxRnzoMLKfsW5ZIqqp4dN1v9lgOJYhOP
+         JCzVecB9SFcqPhpY5KfqIdtaZ6KgN9sVRKZ5APlRLIAems9I0X4JNuH2c7vLK1iGu23y
+         Qwjo3eg0DLRYC4/hu3UpW3b2tmPHyWGnkCa0EZbua8TNNqbEmgoKfmvcNIONHfBLrMDC
+         HQAQ+hS9vbwiAwg7Smb1IDRtK6sh/5ErpmIvSj0OeXcASSoko8UVGqRHKPDg8ImoysrS
+         2uPA==
+X-Gm-Message-State: ACrzQf0f8Dul9Jj3ECryuf3UhgkpDZB510kSanVEAVkV2UUIqh0V0Y3E
+        jzeLNyvREpXuduQT/vGsUYb7MA==
+X-Google-Smtp-Source: AMsMyM7DJ5F/JsPnlz8SNEaLEwm7FyfXZsg07sqfKLlxCDefE7CrVQakliNWhQ2I4mQsX2GoZ4Cr1g==
+X-Received: by 2002:a05:6402:14cb:b0:452:f1b4:7e52 with SMTP id f11-20020a05640214cb00b00452f1b47e52mr23506137edx.177.1663751552599;
+        Wed, 21 Sep 2022 02:12:32 -0700 (PDT)
+Received: from alco.roam.corp.google.com ([2620:0:1059:10:160b:cee7:2e8b:f72c])
+        by smtp.gmail.com with ESMTPSA id v4-20020a17090690c400b00771cb506149sm1031913ejw.59.2022.09.21.02.12.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Sep 2022 02:12:32 -0700 (PDT)
+Subject: [PATCH v2 0/7] [RESEND] Follow-up patches for uvc v4l2-compliance
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v4 2/3] dt-bindings: clock: add SM6375 QCOM global clock
- bindings
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        ~postmarketos/upstreaming@lists.sr.ht
-Cc:     martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220921001303.56151-1-konrad.dybcio@somainline.org>
- <20220921001303.56151-2-konrad.dybcio@somainline.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220921001303.56151-2-konrad.dybcio@somainline.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-b4-tracking: H4sIAGnVKmMC/4WNQQ7CIBREr9Kw9hv4UrWuvIdxUeC3kFAwH0timt5d4gVcTd5MZmYThThQEbduE0
+ w1lJBTAzx0wvoxzQTBNRYoEeWAEpgKJQdVRwSbl1cMY7IEenKG9GTcxfSilc1YCAy3zLd6WmNspg/l
+ nfnzO6uqyePvblUg4apOZ21VjziYu/Wcl7Aux8yzeO77/gVbO3FwxAAAAA==
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Wed, 21 Sep 2022 11:12:09 +0200
+Message-Id: <20220920-resend-v4l2-compliance-v2-0-7c0942040004@chromium.org>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org, Hans Verkuil <hans.verkuil@cisco.com>,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        linux-kernel@vger.kernel.org
+X-Mailer: b4 0.11.0-dev-d93f8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1888; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=MMjSLZT6eS0B8Bc0AeIXpf2+IIYhod4p4XLb8hr5I+8=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjKtVst+MgB8+USDe0HYhBUikfa4zIgh+mP/aMVo6M
+ e0C725GJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCYyrVbAAKCRDRN9E+zzrEiPS5D/
+ 9Ss2Rr6+kQ/6HAwhbL5r03vDQ+EIu68x/tVlMYGtkRbfBNbYOknBvqfvNGGsVF4f1aXCrDjGSnVI5+
+ qvauh/Pz4r6Q3o9awAjIeucFTvU1WeD6fTi2+kGutHV1oCNMCeDLePAunKnLs0a3BnDXaz7Uzsl9Uk
+ IThunq1X9DNQX7qbFIV9BPuZFGKzZrnU5lkDvZY8cBwd5DC9Jz9v9fj6c0eQ4ks5sSbsRFMPdLR5YB
+ 1suQ+Q9rtMVcFsDuXBAmx66n+/rWvmCZjjiaPmG639McfdrkHmsFsOX+y5FbNkhmeQaxjBjswcP5wC
+ 9WrrqoS0p91HCw2+f/f4Kh1A0d11ar0MCkcN5oe6SehzD1Wd0Zy6BpOmOvryAy/GOFaOUJnpqZb3fv
+ 80QZUfB77dysDLBFqWkRhou+i74sxvjy7P6ee5q27j675FIUkc0HQ49ayT/wmsZa3FQpHtCGgRV+3I
+ ZD+Pu8Iz1bxLR5UFyQUHvR7P88Mig8jEGCHUDJWxzZrSnmJmgJnF+gMdaMi6fRsYrkNmx+QbsWeGS2
+ UgO6d6koxoSx1iDJJM57hJBswVc+JVCGuqSeX9JBTQPUKu8OuQDTJRn+RPaRKCEfoFtMB8mNmw0rSo
+ 2txEpe5FGzS9Vz412t+HOxpGbk+6eA6ES1jJlW3XwzsVWqXX+mhVPSKCebBw==
+X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
+ fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/09/2022 02:13, Konrad Dybcio wrote:
-> Add device tree bindings for global clock controller for SM6375 SoCs.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-> ---
-> Changes since v3:
-> - bring back clocks and compatible as required
-> 
+This patchset contains the fixes for the comments on "v10 of Fix
+v4l2-compliance errors series". In particular to the patches
 
+-uvcvideo: uvc_ctrl_is_accessible: check for INACTIVE
+-uvcvideo: improve error handling in uvc_query_ctrl()
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+And the patch:
+-uvcvideo: Fix handling on Bitmask controls
+
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-media@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: Hans Verkuil <hans.verkuil@cisco.com>
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+
+---
+Changes in v2:
+- Include "Get menu names from framework series"
+  https://lore.kernel.org/r/20220920-standard-menues-v2-0-a35af3243c2f@chromium.org
+- Link to v1: https://lore.kernel.org/r/20220920-resend-v4l2-compliance-v1-0-81364c15229b@chromium.org
+
+---
+Hans Verkuil (2):
+      media: uvcvideo: uvc_ctrl_is_accessible: check for INACTIVE
+      media: uvcvideo: improve error logging in uvc_query_ctrl()
+
+Ricardo Ribalda (5):
+      media: uvcvideo: Return -EACCES for Wrong state error
+      media: uvcvideo: Do not return positive errors in uvc_query_ctrl()
+      media: uvcvideo: Fix handling on Bitmask controls
+      media: uvcvideo: Implement mask for V4L2_CTRL_TYPE_MENU
+      media: uvcvideo: Use standard names for menus
+
+ drivers/media/usb/uvc/uvc_ctrl.c   | 230 ++++++++++++++++++++++++++++---------
+ drivers/media/usb/uvc/uvc_driver.c |   9 +-
+ drivers/media/usb/uvc/uvc_v4l2.c   |  85 ++++++++++----
+ drivers/media/usb/uvc/uvc_video.c  |  15 +--
+ drivers/media/usb/uvc/uvcvideo.h   |   8 +-
+ include/uapi/linux/uvcvideo.h      |   3 +-
+ 6 files changed, 258 insertions(+), 92 deletions(-)
+---
+base-commit: 521a547ced6477c54b4b0cc206000406c221b4d6
+change-id: 20220920-resend-v4l2-compliance-4fdbe4fbd7b5
 
 Best regards,
-Krzysztof
-
+-- 
+Ricardo Ribalda <ribalda@chromium.org>
