@@ -2,56 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BA1B5BF1C4
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 02:10:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F96A5BF1C6
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 02:10:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230333AbiIUAKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 20:10:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40038 "EHLO
+        id S231408AbiIUAKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 20:10:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229917AbiIUAKU (ORCPT
+        with ESMTP id S231172AbiIUAKl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 20:10:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7BBA481C4;
-        Tue, 20 Sep 2022 17:10:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 82475B81E64;
-        Wed, 21 Sep 2022 00:10:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3EC9CC43143;
-        Wed, 21 Sep 2022 00:10:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663719015;
-        bh=w5vkJLN1HmTosoecgDPhBJzrA8lMSYftqBKJV4MCgzQ=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=dMPMaDUU+Kp4bFkjPv1set0WwX+ct9OM6AvPmYdsj9UrDrmkOgqJ7twjnPNM5Hcet
-         dfiNotqRjyuJ8y3gHHaxpYcblbisbMizRanZhYoMpIuIXcjrgOK0/ywZMein2dx4u9
-         XMQNLsHxc8YQzUFO1gvOplA08dW0hv7z23IhhrJZVQoFfMc2TLBaWNNqhhf27wPhSX
-         ELXu8WaKE7EfhlLXcnRmGy/Cnf2ZBH8FT7vK5A+yrWqxESKwrREdDzHBgI7ieTR2AR
-         uB1KSSf89NIRoCJmLLzgg6+0483FvwwMmHECHmIG4XvKX06D2bcHXQRZUYhf/SlcFC
-         X9xbAdI53FYBQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2B9B5E21EE2;
-        Wed, 21 Sep 2022 00:10:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 20 Sep 2022 20:10:41 -0400
+Received: from relay05.th.seeweb.it (relay05.th.seeweb.it [5.144.164.166])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C43594A82C
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 17:10:27 -0700 (PDT)
+Received: from localhost.localdomain (95.49.29.188.neoplus.adsl.tpnet.pl [95.49.29.188])
+        by m-r2.th.seeweb.it (Postfix) with ESMTPA id 5248F3F5C8;
+        Wed, 21 Sep 2022 02:10:24 +0200 (CEST)
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+To:     ~postmarketos/upstreaming@lists.sr.ht
+Cc:     martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Robert Marko <robimarko@gmail.com>,
+        Das Srinagesh <quic_gurus@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: firmware: document Qualcomm SM6375 SCM
+Date:   Wed, 21 Sep 2022 02:10:19 +0200
+Message-Id: <20220921001020.55307-1-konrad.dybcio@somainline.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v5] liquidio: CN23XX: delete repeated words,
- add missing words and fix typo in comment
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166371901517.22206.7947276284436995760.git-patchwork-notify@kernel.org>
-Date:   Wed, 21 Sep 2022 00:10:15 +0000
-References: <20220919053447.5702-1-RuffaloLavoisier@gmail.com>
-In-Reply-To: <20220919053447.5702-1-RuffaloLavoisier@gmail.com>
-To:     Ruffalo Lavoisier <ruffalolavoisier@gmail.com>
-Cc:     dchickles@marvell.com, sburla@marvell.com, fmanlunas@marvell.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, RuffaloLavoisier@gmail.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,29 +46,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Document the compatible for Qualcomm SM6375 SCM.
 
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+---
+ Documentation/devicetree/bindings/firmware/qcom,scm.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-On Mon, 19 Sep 2022 14:34:46 +0900 you wrote:
-> - Delete the repeated word 'to' in the comment.
-> 
-> - Add the missing 'use' word within the sentence.
-> 
-> - Correct spelling on 'malformation', 'needs'.
-> 
-> Signed-off-by: Ruffalo Lavoisier <RuffaloLavoisier@gmail.com>
-> 
-> [...]
-
-Here is the summary with links:
-  - [v5] liquidio: CN23XX: delete repeated words, add missing words and fix typo in comment
-    https://git.kernel.org/netdev/net-next/c/c29b06821590
-
-You are awesome, thank you!
+diff --git a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+index c5b76c9f7ad0..abcb1fae9eb2 100644
+--- a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
++++ b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+@@ -47,6 +47,7 @@ properties:
+           - qcom,scm-sm6115
+           - qcom,scm-sm6125
+           - qcom,scm-sm6350
++          - qcom,scm-sm6375
+           - qcom,scm-sm8150
+           - qcom,scm-sm8250
+           - qcom,scm-sm8350
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.37.3
 
