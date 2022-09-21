@@ -2,91 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62E0C5BF370
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 04:23:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A2B55BF354
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 04:13:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230179AbiIUCW5 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 20 Sep 2022 22:22:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45202 "EHLO
+        id S229619AbiIUCNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 22:13:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbiIUCWz (ORCPT
+        with ESMTP id S229540AbiIUCNG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 22:22:55 -0400
-X-Greylist: delayed 598 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 20 Sep 2022 19:22:53 PDT
-Received: from relay.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9529C49B79;
-        Tue, 20 Sep 2022 19:22:53 -0700 (PDT)
-Received: from omf11.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay02.hostedemail.com (Postfix) with ESMTP id 4A97C120DD9;
-        Wed, 21 Sep 2022 02:06:59 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf11.hostedemail.com (Postfix) with ESMTPA id 4158C2003A;
-        Wed, 21 Sep 2022 02:06:54 +0000 (UTC)
-Message-ID: <19451295e1563de5e6628e51fa8222b843f55eed.camel@perches.com>
-Subject: Re: [PATCH v2 1/3] MAINTAINERS: add maintainer for thermal driver
- for loongson2 SoCs
-From:   Joe Perches <joe@perches.com>
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     zhanghongchen <zhanghongchen@loongson.cn>
-Date:   Tue, 20 Sep 2022 19:06:55 -0700
-In-Reply-To: <20220921015605.17078-1-zhuyinbo@loongson.cn>
-References: <20220921015605.17078-1-zhuyinbo@loongson.cn>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        Tue, 20 Sep 2022 22:13:06 -0400
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E6F85E304;
+        Tue, 20 Sep 2022 19:13:04 -0700 (PDT)
+Received: by mail-io1-xd31.google.com with SMTP id z191so3916659iof.10;
+        Tue, 20 Sep 2022 19:13:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=3SHNagHJHSTdbA63dtSW/yOSqmd6hb+O+bm6iebyLxs=;
+        b=AcewuZHFiHmecKbXctkUKLuE9iqhQIgqu77kqqC426CEdV7XK17pnBm43DCD1e3rR1
+         M958o3rA0rGC9owGYfOpaBKMnuSuMzYjJN+/gD160L6v6CvkfRvd6E1JZIliQnmBSzh0
+         KliePdLcTnsdIC5jSISYCEkIyoPW5ufc3bpzbaowWMNTa7Jeo6H/2P6+FkFBsZ17DRwp
+         0K1JAgU6/A3hLLb37KFt3xwZZ+r5GKwM3yBrWyfGbzOAQlXmMz80L83cqkL/eV4KKqWd
+         UcHoQyqxz4J3wzyTwaLV9vQ9p8rG8fdoClauA+JpWiym0MTcCughT0wqq9+OdrD3fCXJ
+         d8Bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=3SHNagHJHSTdbA63dtSW/yOSqmd6hb+O+bm6iebyLxs=;
+        b=NUrZ64jSGbmy+bTM08qhpktapXNqEVE/v+vrvrpVdmcuMnV6sN+rFb11gw14t4chmb
+         TEWLGhvhE4N4TRwfRvyHQuPXKs35NdegVnHc+qUkBq4ZhbOXuoAtic9eZMBn68S0/yWG
+         GXKrovEpffJ8r1nDgFnqf8AS5GmTT7K5Bk+LwCrcstV5ZECokfCr4W8ErCOc41rbCBxF
+         gZAkABcdmTHTqgoMH6qz3HD5/psFG+sTDwLJbRLbsZYEU2v9YRtOU6Y/H1ZIjpYQLDcl
+         54Zj+YyJfj3a3GdSXs1MLp9ywuzR8LZhOR4L7sG9bJq8PAWIV1+ABQ+5SypfI+R+9Pqc
+         9axg==
+X-Gm-Message-State: ACgBeo1YgLUkiy6i1o8w9FD5Ouf57NPG4jEMSe6EIUPLx8icQTWNygku
+        FJR8b1phF7M+PImJ/23MXxY=
+X-Google-Smtp-Source: AMsMyM5QpQBkDx09I8R7l4ImhrquJJ4WxtG7jfdctvc4gbTtUJCOVsnBMuCzvZN3X6uOjWbu0mMGkA==
+X-Received: by 2002:a05:6638:2502:b0:35a:271b:abef with SMTP id v2-20020a056638250200b0035a271babefmr12042766jat.54.1663726383819;
+        Tue, 20 Sep 2022 19:13:03 -0700 (PDT)
+Received: from hestia.gfnd.rcn-ee.org (208-107-176-7-dynamic.midco.net. [208.107.176.7])
+        by smtp.gmail.com with ESMTPSA id z3-20020a05660229c300b0069e265cabb1sm648471ioq.0.2022.09.20.19.13.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Sep 2022 19:13:03 -0700 (PDT)
+From:   Robert Nelson <robertcnelson@gmail.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     Robert Nelson <robertcnelson@gmail.com>,
+        Rob Herring <robh@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Jason Kridner <jkridner@beagleboard.org>,
+        Drew Fustini <drew@beagleboard.org>
+Subject: [PATCH v3 1/2] dt-bindings: arm: ti: Add bindings for BeagleBone AI-64
+Date:   Tue, 20 Sep 2022 21:12:59 -0500
+Message-Id: <20220921021300.4111283-1-robertcnelson@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-Rspamd-Queue-Id: 4158C2003A
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Stat-Signature: at3trdms4184ip35153phfm8wty56ds6
-X-Rspamd-Server: rspamout05
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX18vk2v0h79TMwArk0zyIJjHZvYwoZxRoW0=
-X-HE-Tag: 1663726014-147625
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-09-21 at 09:56 +0800, Yinbo Zhu wrote:
-> Add zhanghongchen and myself as maintainer of the loongson2 SoC
-> series thermal driver.
-[]
-> diff --git a/MAINTAINERS b/MAINTAINERS
-[]
-> @@ -11899,6 +11899,14 @@ F:	drivers/*/*loongarch*
->  F:	Documentation/loongarch/
->  F:	Documentation/translations/zh_CN/loongarch/
->  
-> +LOONGSON2 SOC SERIES THERMAL DRIVER
-> +M:	zhanghongchen <zhanghongchen@loongson.cn>
-> +M:	Yinbo Zhu <zhuyinbo@loongson.cn>
-> +L:	linux-pm@vger.kernel.org
-> +S:	Maintained
-> +F:	Documentation/devicetree/bindings/thermal/loongson2-thermal.yaml
-> +F:	drivers/thermal/loongson2_thermal.c
-> +
->  LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
->  M:	Sathya Prakash <sathya.prakash@broadcom.com>
->  M:	Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+This board is based on the ti,j721e
 
-From the MAINTAINERS headers:
+https://beagleboard.org/ai-64
+https://git.beagleboard.org/beagleboard/beaglebone-ai-64
 
-	S: *Status*, one of the following:
-	   Supported:	Someone is actually paid to look after this.
-	   Maintained:	Someone actually looks after it.
+Signed-off-by: Robert Nelson <robertcnelson@gmail.com>
+CC: Rob Herring <robh@kernel.org>
+CC: Nishanth Menon <nm@ti.com>
+CC: Jason Kridner <jkridner@beagleboard.org>
+CC: Drew Fustini <drew@beagleboard.org>
+---
+Changes since v2:
+ - rebased on next after k3.yaml alphabetical sort
+Changes since v1:
+ - added documenation links
+ - add board in alphabetical order
+---
+ Documentation/devicetree/bindings/arm/ti/k3.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-If you both are being paid to maintain this driver,
-this S: entry should be Supported.
-
+diff --git a/Documentation/devicetree/bindings/arm/ti/k3.yaml b/Documentation/devicetree/bindings/arm/ti/k3.yaml
+index 28b8232e1c5b..09e6845ff243 100644
+--- a/Documentation/devicetree/bindings/arm/ti/k3.yaml
++++ b/Documentation/devicetree/bindings/arm/ti/k3.yaml
+@@ -61,6 +61,7 @@ properties:
+           - const: ti,j721e
+           - items:
+               - enum:
++                  - beagle,j721e-beagleboneai64
+                   - ti,j721e-evm
+                   - ti,j721e-sk
+               - const: ti,j721e
+-- 
+2.30.2
 
