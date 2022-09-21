@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C4735BF226
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 02:34:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2787E5BF21E
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 02:34:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231510AbiIUAdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 20:33:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34138 "EHLO
+        id S231526AbiIUAda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 20:33:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231340AbiIUAdA (ORCPT
+        with ESMTP id S231185AbiIUAdC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 20:33:00 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 965537962A
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 17:32:56 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id d1-20020a17090a2a4100b00202ec7968c0so2050818pjg.6
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 17:32:56 -0700 (PDT)
+        Tue, 20 Sep 2022 20:33:02 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A0279686
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 17:32:58 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id s15-20020a63524f000000b0043891d55a30so2492257pgl.16
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 17:32:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date;
-        bh=efA5iJVbRrRgyy7qejkmxwve22ULxnh+arH50++PU/o=;
-        b=LKQ43lhsEV6qkmBZlofrSrdl8EJ6mizwyIEMQYN4yuGNXkQj4E20I0hn2n1os/W8rc
-         FBABKu95Qjg91h2stXYOQw+qADMR7XZ6aWiaoE4AtE31UgVml4CNZ7U+iemEDcQM7Qu4
-         t9Z+X0wLCYzA/PywBX4R2TbwY4IqErPsq7pWjccSbHgqlIcJodfmwDsORX1S0hnpHOqL
-         beWZAka2S0YLzR5F93gSfrPtpqFy0vHNPuMIF2SvlDmkv6DmDFSXlrSQYeY1mlT0WWNb
-         xuXG79A1mSLbxXjRXjfR/KkQ6hWyNCiYg0/oAhyTPT5fIKU53548mJXGWrhfghBolN1K
-         JXJw==
+        bh=MbPfwZWv+I6kc3yY72JCQSO5yCJ8JCb5ELGKfLOjwok=;
+        b=grJuuh2+k9rqNemRgEr/i3C9qelUa8pmjrIwpZzOZWsob4m9BMj0id2HZJEYNqX2vk
+         IyiBqggCegoMniVIEZ7ve0Pcy1+h2jKB9+MbFtK10I6z6o71JeWojaaos6m7WE8fir0j
+         heFLVTWw3UN27mkc0NRFrTsxNKdJe5TptRVjlgbhxvmnLYxPIxj71ZtTzy+8U9psEbMq
+         /DJvRQaVwnNJl+52DMbtmS4ycyYoramkBPdq9kNpcRPXozDD2tMcpY+VTWl4f/e0cZ1u
+         xUxifAHZRm7LM+0f4tqB8q/MJPB9s8lTaVH0t++C99WkByoXTjU2cYt2Zh/7y53Gwmu9
+         hSqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date;
-        bh=efA5iJVbRrRgyy7qejkmxwve22ULxnh+arH50++PU/o=;
-        b=zJ1QlWacDLKEMnJQmk7B4cRPreXsRTfh+mTgsN8oLgfitUw0RoMgSziDg9EvsBwXFR
-         EpaDKWE9ZSu6BCplA4OsKWNQh4lX6Z9GuqeSsj77a05e9O4HUuHfGidtFPBp7nj8ZEKY
-         ZgWY5DEwJy1FriczFAFEtTKCl9/26lmPMa5b4MR7t4h+SX/JCBqV6zvgj4fzkEyBLPMx
-         fEJvRh3ojdGubLcFyu7DZVaFgHmHNvUyc62Az2OJ5mz8RuI9dKgJi4ncqxpALvDqEsgN
-         IbX7GpTxMzA08K448GToBtVXdr2/ymxoacqQpPiE6xoDFq6Dxq4Ivg7x2uxCDeKi3swy
-         H43Q==
-X-Gm-Message-State: ACrzQf026RZwxP6ErmRCpX2HNrsAYs73uxoKDqs8loQu8PVcxmQYQmdU
-        RKqxf9APg+3DnUyx5ooczBO+FeKCoDQ=
-X-Google-Smtp-Source: AMsMyM4y6HKockrgOW/pRtDhYoSBz/Hgk7Jbboq2yxWPlcCYVwqDxT8mse4oLg7p1D+UQZFuX9F/d/ndT2k=
+        bh=MbPfwZWv+I6kc3yY72JCQSO5yCJ8JCb5ELGKfLOjwok=;
+        b=39XjwaSathn9xYRXIcaT9mO5xb/o5azF/3/7EU+AAevPmgkjWLmhPPOisY2PIPrD6k
+         GGolxSoupd4zctEifKghtz/FebaSYWQMeKNhJT4V4mGOCToGMGRbZUBjnD4NJ5FB/kL7
+         VKnjhNtnOGHAacvsGiooo/qfR57Tzn5syZ5b1yIdW7SmpxXDKyLlvAqTsL6052ckvXA5
+         9a9YxBWaEGpimK+5AuKRMa1fZ03kMorZLl625Bi1Z68RvDB7xF45a3Jse7FEOaSFg3Bg
+         uYnMXwxBtNA9BiYOdS2asPSbTEveFup4TXyyVZZIYIenVeF772I0LC0Un1d1PDKhSFOT
+         eUEA==
+X-Gm-Message-State: ACrzQf3+VNdHIMdIfoRWdtY3urwlFiAJ9vM06TjLRl2eNTGbb/dzEmcS
+        tSzVrGAPD642MMdDaaqcBfyrsfkmgPs=
+X-Google-Smtp-Source: AMsMyM7f/RJC1MtdX6LkmKjLrG4mZov+EsK6V2BR+rQVSc6X+vDgdbpWXXujI7vaEWcw3mjY8BTW5lUZVRw=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:be03:b0:178:6f5d:e979 with SMTP id
- r3-20020a170902be0300b001786f5de979mr2126922pls.163.1663720376093; Tue, 20
- Sep 2022 17:32:56 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a17:902:dac7:b0:178:b5e0:3627 with SMTP id
+ q7-20020a170902dac700b00178b5e03627mr2094501plx.147.1663720377687; Tue, 20
+ Sep 2022 17:32:57 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Wed, 21 Sep 2022 00:31:54 +0000
+Date:   Wed, 21 Sep 2022 00:31:55 +0000
 In-Reply-To: <20220921003201.1441511-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220921003201.1441511-1-seanjc@google.com>
 X-Mailer: git-send-email 2.37.3.968.ga6b4b080e4-goog
-Message-ID: <20220921003201.1441511-6-seanjc@google.com>
-Subject: [PATCH v4 05/12] KVM: x86: lapic does not have to process INIT if it
- is blocked
+Message-ID: <20220921003201.1441511-7-seanjc@google.com>
+Subject: [PATCH v4 06/12] KVM: SVM: Make an event request if INIT or SIPI is
+ pending when GIF is set
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         Huacai Chen <chenhuacai@kernel.org>,
@@ -88,33 +88,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paolo Bonzini <pbonzini@redhat.com>
+Set KVM_REQ_EVENT if INIT or SIPI is pending when the guest enables GIF.
+INIT in particular is blocked when GIF=0 and needs to be processed when
+GIF is toggled to '1'.  This bug has been masked by (a) KVM calling
+->check_nested_events() in the core run loop and (b) hypervisors toggling
+GIF from 0=>1 only when entering guest mode (L1 entering L2).
 
-Do not return true from kvm_vcpu_has_events() if the vCPU isn' going to
-immediately process a pending INIT/SIPI.  INIT/SIPI shouldn't be treated
-as wake events if they are blocked.
-
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-[sean: rebase onto refactored INIT/SIPI helpers, massage changelog]
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/x86.c | 3 ++-
+ arch/x86/kvm/svm/svm.c | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 16a24dd28f26..dcc675d4e44b 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -12765,7 +12765,8 @@ static inline bool kvm_vcpu_has_events(struct kvm_vcpu *vcpu)
- 	if (!list_empty_careful(&vcpu->async_pf.done))
- 		return true;
- 
--	if (kvm_apic_has_pending_init_or_sipi(vcpu))
-+	if (kvm_apic_has_pending_init_or_sipi(vcpu) &&
-+	    kvm_apic_init_sipi_allowed(vcpu))
- 		return true;
- 
- 	if (vcpu->arch.pv.pv_unhalted)
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index dd599afc85f5..58f0077d9357 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -2339,7 +2339,8 @@ void svm_set_gif(struct vcpu_svm *svm, bool value)
+ 		enable_gif(svm);
+ 		if (svm->vcpu.arch.smi_pending ||
+ 		    svm->vcpu.arch.nmi_pending ||
+-		    kvm_cpu_has_injectable_intr(&svm->vcpu))
++		    kvm_cpu_has_injectable_intr(&svm->vcpu) ||
++		    kvm_apic_has_pending_init_or_sipi(&svm->vcpu))
+ 			kvm_make_request(KVM_REQ_EVENT, &svm->vcpu);
+ 	} else {
+ 		disable_gif(svm);
 -- 
 2.37.3.968.ga6b4b080e4-goog
 
