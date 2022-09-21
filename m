@@ -2,132 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FA2D5E5513
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 23:17:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05D605E5510
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 23:16:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbiIUVQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 17:16:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46240 "EHLO
+        id S230145AbiIUVQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 17:16:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbiIUVQt (ORCPT
+        with ESMTP id S229967AbiIUVQn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 17:16:49 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3D3BA2853;
-        Wed, 21 Sep 2022 14:16:47 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1D9336BE;
-        Wed, 21 Sep 2022 23:16:45 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1663795005;
-        bh=uYeJJ+u55Mqbk9ZLBFbpfCcBTgKXtawh0fzIcnY06CM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XPVeEN2tnQAHITiOODoEPTby2941qgid10y/F9iUpJcnR7ptwMPy9/Q77R5L+h0AS
-         WRvZMYe2HLaYRfR6xN+5Yrs4CbXQheDXbHefl2CEyFzKaj564v27EmIxtF19wqDGtL
-         o9Ms5l76nnnhSkxWUT5Ys8Yc26BQEwd35Cybpj8g=
-Date:   Thu, 22 Sep 2022 00:16:30 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzbot <syzkaller@googlegroups.com>
-Subject: Re: [PATCH v1 1/1] media: uvc: Handle cameras with invalid
- descriptors
-Message-ID: <Yyt/LhNoEEfjly54@pendragon.ideasonboard.com>
-References: <20220920-invalid-desc-v1-0-76a93174f3bc@chromium.org>
- <20220920-invalid-desc-v1-1-76a93174f3bc@chromium.org>
- <Yypgi6Jc9/tZLtIw@pendragon.ideasonboard.com>
- <CANiDSCsbwYfnqcWOjAJw2qvZnB-qE66LqGMhpD8youDj=f+U-g@mail.gmail.com>
+        Wed, 21 Sep 2022 17:16:43 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C57EDA00D9
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 14:16:42 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id u69so7191628pgd.2
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 14:16:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=sh4nf/tEmUd1miKJn6/kAcl9Wj3E8kd7WVZbt4jNU8o=;
+        b=ogBoxO3LrxwqQQ7SRIVuERoVZE6Gdagy1dx3mdn2ut0gBZE9tATELfzGad5xs2nkXy
+         iOis2gAR0XFaycsbSWI7J84SkuLJXjevcZwhGG+l06YQ215B0SJ4oHKY3LiMVPwdNE6e
+         8tnQgmJkM1gaEGfkkJfJiL1eOBW4HMp219Dh6GKkU0c3ltuwMqkhLiaxgRd7nHYkrLyG
+         SFeJUscRP74uqSPopi6C6W7kl8FHwpp2AHzCcRG758pCQLNNRYFYaPNO72HR9ntReZ2v
+         2GnHQX3jnhG2RMgsUI5S5rQD3k+GMsGiUGcpEp0wRWFIu78f9dNdgxsN1SnHTVVOu/Uf
+         DhAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=sh4nf/tEmUd1miKJn6/kAcl9Wj3E8kd7WVZbt4jNU8o=;
+        b=LVOZLjnX3yZhypkcLAv+xCnadsWxEmHmPV7jI3JQukbT1zLs9JosYQAYCfaDJq3Jcd
+         B/V9RxWrC3TXzTrb1b53fisxq5bGllrCpO8zIGnyX6f8NI6g9wcPkCaP53n640V7hozb
+         h93juYfWre0WyCZu6IH9MGI7S0WNN4e6IkInNNV48nemhRv2ASgdpc/gcFhEct+J0G1E
+         6g7MSHTSMoYEJX063k+ClKEKiye+/iN68cyatZfQGRHbF3zrz1N+Bht1e1gaIOCFZDk/
+         K8V4AgfqcvtVOkK8++IZElZJpFCq7JScKgt1tADPnYl5vmV4WumIG1+e/GJewTvi1KRi
+         Hzew==
+X-Gm-Message-State: ACrzQf0hVkzOUe2rT6hXcBBphYxf4LJWM2MRV2844POJe2hmz4ZkTvrz
+        2gBbfv/UxoKLD11ypB+X4dxbRQ==
+X-Google-Smtp-Source: AMsMyM7gUWK7/YOwc4h5OK29M6VGYSvbsUATTBbOxYuD/sb6e6iIXhXseR+CdxxwL9TdRz+8Zk5pUA==
+X-Received: by 2002:a63:581d:0:b0:42b:399:f15a with SMTP id m29-20020a63581d000000b0042b0399f15amr106401pgb.337.1663795002163;
+        Wed, 21 Sep 2022 14:16:42 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id n2-20020a634d42000000b0042a55fb60bbsm2337315pgl.28.2022.09.21.14.16.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Sep 2022 14:16:41 -0700 (PDT)
+Date:   Wed, 21 Sep 2022 21:16:38 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        Yuan Yao <yuan.yao@linux.intel.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v10 14/39] KVM: nSVM: Keep track of Hyper-V
+ hv_vm_id/hv_vp_id
+Message-ID: <Yyt/Nrh4aoLrNt11@google.com>
+References: <20220921152436.3673454-1-vkuznets@redhat.com>
+ <20220921152436.3673454-15-vkuznets@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CANiDSCsbwYfnqcWOjAJw2qvZnB-qE66LqGMhpD8youDj=f+U-g@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220921152436.3673454-15-vkuznets@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ricardo,
-
-On Wed, Sep 21, 2022 at 09:51:44AM +0200, Ricardo Ribalda wrote:
-> Do you mean something like this?
+On Wed, Sep 21, 2022, Vitaly Kuznetsov wrote:
+> Similar to nSVM, KVM needs to know L2's VM_ID/VP_ID and Partition
+> assist page address to handle L2 TLB flush requests.
 > 
-> diff --git a/drivers/media/usb/uvc/uvc_entity.c
-> b/drivers/media/usb/uvc/uvc_entity.c
-> index 7c4d2f93d351..66d1f5da4ec7 100644
-> --- a/drivers/media/usb/uvc/uvc_entity.c
-> +++ b/drivers/media/usb/uvc/uvc_entity.c
-> @@ -37,7 +37,7 @@ static int uvc_mc_create_links(struct uvc_video_chain *chain,
->                         continue;
+> Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> ---
+>  arch/x86/kvm/svm/hyperv.h | 16 ++++++++++++++++
+>  arch/x86/kvm/svm/nested.c |  2 ++
+>  2 files changed, 18 insertions(+)
 > 
->                 remote = uvc_entity_by_id(chain->dev, entity->baSourceID[i]);
-> -               if (remote == NULL)
-> +               if (remote == NULL || remote->num_pads == 0)
->                         return -EINVAL;
+> diff --git a/arch/x86/kvm/svm/hyperv.h b/arch/x86/kvm/svm/hyperv.h
+> index 7d6d97968fb9..8cf702fed7e5 100644
+> --- a/arch/x86/kvm/svm/hyperv.h
+> +++ b/arch/x86/kvm/svm/hyperv.h
+> @@ -9,6 +9,7 @@
+>  #include <asm/mshyperv.h>
+>  
+>  #include "../hyperv.h"
+> +#include "svm.h"
+>  
+>  /*
+>   * Hyper-V uses the software reserved 32 bytes in VMCB
+> @@ -32,4 +33,19 @@ struct hv_enlightenments {
+>   */
+>  #define VMCB_HV_NESTED_ENLIGHTENMENTS VMCB_SW
+>  
+> +static inline void nested_svm_hv_update_vm_vp_ids(struct kvm_vcpu *vcpu)
+> +{
+> +	struct vcpu_svm *svm = to_svm(vcpu);
+> +	struct hv_enlightenments *hve =
+> +		(struct hv_enlightenments *)svm->nested.ctl.reserved_sw;
 
-Yes.
+Eww :-)
 
-> 
->                 source = (UVC_ENTITY_TYPE(remote) == UVC_TT_STREAMING)
-> @@ -46,6 +46,9 @@ static int uvc_mc_create_links(struct uvc_video_chain *chain,
->                 if (source == NULL)
->                         continue;
-> 
-> +               if (source->num_pads != remote->num_pads)
-> +                       return -EINVAL;
-> +
+I posted a small series to fix the casting[*], and as noted in the cover letter it's
+going to conflict mightily.  Ignoring merge order for the moment, looking at the
+series as a whole, if the Hyper-V definitions are moved to hyperv-tlfs.h, then I'm
+tempted to say there's no need for svm/hyperv.h.
 
-But this I would have dropped, as the media_entity num_pads is
-initialized from uvc_entity num_pads and neither are changed after.
+There should never be users of this stuff outside of svm/nested.c, and IMO there's
+not enough stuff to warrant a separate set of files.  nested_svm_hv_update_vp_assist()
+isn't SVM specific and fits better alongside kvm_hv_get_assist_page().
 
->                 remote_pad = remote->num_pads - 1;
->                 ret = media_create_pad_link(source, remote_pad,
->                                                sink, i, flags);
-> 
-> regarding making a new patch, whatever is easier for you ;)
-> 
-> 
-> On Wed, 21 Sept 2022 at 02:53, Laurent Pinchart wrote:
-> >
-> > Hi Ricardo,
-> >
-> > Thank you for the patch.
-> >
-> > On Tue, Sep 20, 2022 at 04:04:55PM +0200, Ricardo Ribalda wrote:
-> > > If the source entity does not contain any pads, do not create a link.
-> > >
-> > > Reported-by: syzbot <syzkaller@googlegroups.com>
-> > > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> > >
-> > > diff --git a/drivers/media/usb/uvc/uvc_entity.c b/drivers/media/usb/uvc/uvc_entity.c
-> > > index 7c4d2f93d351..1f730cb72e58 100644
-> > > --- a/drivers/media/usb/uvc/uvc_entity.c
-> > > +++ b/drivers/media/usb/uvc/uvc_entity.c
-> > > @@ -43,7 +43,7 @@ static int uvc_mc_create_links(struct uvc_video_chain *chain,
-> > >               source = (UVC_ENTITY_TYPE(remote) == UVC_TT_STREAMING)
-> > >                      ? (remote->vdev ? &remote->vdev->entity : NULL)
-> > >                      : &remote->subdev.entity;
-> > > -             if (source == NULL)
-> > > +             if (source == NULL || source->num_pads == 0)
-> >
-> > source->num_pads and remote->num_pads should always be identical, but as
-> > the next line uses remote->num_pads, wouldn't it be better to test that
-> > variable ? If so, I'd move the test a file lines earlier, with the
-> > remote == NULL test.
-> >
-> > What do you think ? If you agree I can make that change when applying,
-> > there's no need for a new version. Otherwise I'll keep the patch as-is.
-> >
-> > >                       continue;
-> > >
-> > >               remote_pad = remote->num_pads - 1;
-> > >
+That leaves three functions and ~40 lines of code, which can easily go directly
+into svm/nested.c.
 
--- 
-Regards,
+I'm definitely not dead set against having hyperv.{ch}, but unless there's a high
+probability of SVM+Hyper-V getting to eVMCS levels of enlightenment, my vote is
+to put these helpers in svm/nested.c and move then if/when we do end up accumulating
+more SVM+Hyper-V code.
+  
+As for merge order, I don't think there's a need for this series to take a
+dependency on the cleanup, especially if these helpers land in nested.c.  Fixing
+up the casting and s/hv_enlightenments/hv_vmcb_enlightenments is straightforward.
 
-Laurent Pinchart
+[*] https://lore.kernel.org/all/20220921201607.3156750-1-seanjc@google.com
