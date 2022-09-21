@@ -2,49 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA9045BFEC5
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 15:16:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ABCA5BFEC8
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 15:16:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229861AbiIUNQQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 09:16:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35368 "EHLO
+        id S229977AbiIUNQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 09:16:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbiIUNQN (ORCPT
+        with ESMTP id S229993AbiIUNQV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 09:16:13 -0400
-Received: from out28-170.mail.aliyun.com (out28-170.mail.aliyun.com [115.124.28.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E65B89929;
-        Wed, 21 Sep 2022 06:16:10 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436431|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_news_journal|0.00638819-0.00303347-0.990578;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047204;MF=kant@allwinnertech.com;NM=1;PH=DS;RN=6;RT=6;SR=0;TI=SMTPD_---.PL-Vbxz_1663766154;
-Received: from 192.168.220.136(mailfrom:kant@allwinnertech.com fp:SMTPD_---.PL-Vbxz_1663766154)
-          by smtp.aliyun-inc.com;
-          Wed, 21 Sep 2022 21:15:57 +0800
-Message-ID: <ff876f76-85c8-15d6-4f55-831722608edd@allwinnertech.com>
-Date:   Wed, 21 Sep 2022 21:15:54 +0800
+        Wed, 21 Sep 2022 09:16:21 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906A88A1DD;
+        Wed, 21 Sep 2022 06:16:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663766180; x=1695302180;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=w4D1hy6/ConbgVe3GY3+9RnenGbVC1tZcfM3biXtUBA=;
+  b=LpXFeHgiyUjelKkCr2kJ2FfYkf+pu+NiexwTIKFd7EGazITVa9+LmOpn
+   zUCxVEY+gkjmr2UVgBwDIweCu+TCNZ9xQ0FkjGSbXE94VoJAKkX//vW5l
+   cLpjKKoiKX/JShzlLhus951wx2zi/JjoK5LjCrtI7wggzHp/wK7dlZfk7
+   ZJejKX1DJR/60PsG+Dw1T4jHpa6oPpOQYtzSXgkV399cYdaXU3/hwsTlr
+   jnM1VVOOEnEABlABnehPbgGRYd3oCLBL2ryBz2y2V3hr6Eg3eLEu7JppK
+   /tOv4pG8XJC4YkdOG+grqme/7BcySTWwH1uMbplAGqbtHmeAXnxRvGgtY
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="300835484"
+X-IronPort-AV: E=Sophos;i="5.93,333,1654585200"; 
+   d="scan'208";a="300835484"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 06:16:20 -0700
+X-IronPort-AV: E=Sophos;i="5.93,333,1654585200"; 
+   d="scan'208";a="687865725"
+Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 06:16:15 -0700
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with SMTP id B42B22055A;
+        Wed, 21 Sep 2022 16:16:13 +0300 (EEST)
+Date:   Wed, 21 Sep 2022 13:16:13 +0000
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Mikhail Rudenko <mike.rudenko@gmail.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Shawn Tu <shawnx.tu@intel.com>, Jimmy Su <jimmy.su@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>, Arec Kao <arec.kao@intel.com>,
+        Marek Vasut <marex@denx.de>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] Add Omnivision OV4689 image sensor driver
+Message-ID: <YysOnZt+yRGNw2CN@paasikivi.fi.intel.com>
+References: <20220911200147.375198-1-mike.rudenko@gmail.com>
+ <CAPY8ntCA3jbpBOiNfoft58sHPeTFSLoLop0VUmkOCWP3cX_rdw@mail.gmail.com>
+ <87czbwp9xx.fsf@gmail.com>
+ <YygOzWAHyoP+KwTv@paasikivi.fi.intel.com>
+ <87wn9zreic.fsf@gmail.com>
+ <YyhE5voxRz7gEYHY@paasikivi.fi.intel.com>
+ <YyhzUvu0Ky8+VohC@pendragon.ideasonboard.com>
+ <87leqdkcbm.fsf@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [RESEND] devfreq: governor: Save void *data in the governor
- userspace
-Content-Language: en-US
-From:   Kant Fan <kant@allwinnertech.com>
-To:     myungjoo.ham@samsung.com,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "allwinner-opensource-support@allwinnertech.com" 
-        <allwinner-opensource-support@allwinnertech.com>
-References: <a040e16c-e8e9-f550-7251-99ec1d18f508@allwinnertech.com>
- <20220329091449.105308-1-kant@allwinnertech.com>
- <CGME20220914091525epcas1p31c8a9b11ba7a36da4678e3254b0ea962@epcms1p8>
- <20220914094355epcms1p8d6eeb0834e2d7c782d49558fac0ce6c4@epcms1p8>
- <8599d9df-3f56-1762-959d-01ee8c753a5b@allwinnertech.com>
-In-Reply-To: <8599d9df-3f56-1762-959d-01ee8c753a5b@allwinnertech.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87leqdkcbm.fsf@gmail.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,162 +78,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/15/2022 3:41 PM, Kant Fan wrote:
->>>>     static int devfreq_userspace_handler(struct devfreq *devfreq,
->>>
->>> Dear MyungJoo, Kyungmin & Chanwoo,
->>> Gently ping this issue... Does this patch has a chance to be accepted?
->>> This seems to be a bug in devfreq userspace governor, which affects the
->>> switching between governors -- When switching from userspace to
->>> ondemand, the ondemand governor would be invalid.
->>> If there's any question, please let me know.
->>> Thank you.
->>
->> Yes, indeed. This is a bug.
->>
->> Actually, it appears that allocating a new memory buffer for
->> devfreq->data itself is a bug for a governor, this is supposed
->> to be allocated by a device driver. Thus, the comment of
->> "void *data" of "struct devfreq" should be updated:
->> "/* private data for governors given by device drivers */"
->>
->> It'd be better to have something like, "void *internal_data"
->> for governors to freely handle within its context of init-exit,
->> which is not touched by its users (device drivers).
->>
->> @Chanwoo: what's your opinion on this?
->>
->> Cheers,
->> MyungJoo.
->>
-> 
-> Hi MyungJoo,
-> Thanks for your suggestion. Here's the patch-v2, please have a look:
-> 
-> -- 
-> Subject: [PATCH] devfreq: governor: Add a private governor_data for 
-> governors in devfreq
-> 
-> The member void *data in the structure devfreq can be overwrite
-> by governor_userspace. For example:
-> 1. The device driver assigned the devfreq governor to simple_ondemand
-> by the function devfreq_add_device() and init the devfreq member
-> void *data to a pointer of a static structure devfreq_simple_ondemand_data
-> by the function devfreq_add_device().
-> 2. The user changed the devfreq governor to userspace by the command
-> "echo userspace > /sys/class/devfreq/.../governor".
-> 3. The governor userspace alloced a dynamic memory for the struct
-> userspace_data and assigend the member void *data of devfreq to
-> this memory by the function userspace_init().
-> 4. The user changed the devfreq governor back to simple_ondemand
-> by the command "echo simple_ondemand > /sys/class/devfreq/.../governor".
-> 5. The governor userspace exited and assigned the member void *data
-> in the structure devfreq to NULL by the function userspace_exit().
-> 6. The governor simple_ondemand fetched the static information of
-> devfreq_simple_ondemand_data in the function
-> devfreq_simple_ondemand_func() but the member void *data of devfreq was
-> assigned to NULL by the function userspace_exit().
-> 7. The information of upthreshold and downdifferential is lost
-> and the governor simple_ondemand can't work correctly.
-> 
-> The member void *data in the structure devfreq is designed for
-> a static pointer used in a governor and inited by the function
-> devfreq_add_device(). This patch add an element named governor_data
-> in the devfreq structure which can be used by a governor(E.g userspace)
-> who want to assign a private data to do some private things.
-> 
-> Signed-off-by: Kant Fan <kant@allwinnertech.com>
-> ---
-> 
-> diff --git a/drivers/devfreq/governor_userspace.c 
-> b/drivers/devfreq/governor_userspace.c
-> index ab9db7a..d69672c 100644
-> --- a/drivers/devfreq/governor_userspace.c
-> +++ b/drivers/devfreq/governor_userspace.c
-> @@ -21,7 +21,7 @@
-> 
->   static int devfreq_userspace_func(struct devfreq *df, unsigned long 
-> *freq)
->   {
-> -    struct userspace_data *data = df->data;
-> +    struct userspace_data *data = df->governor_data;
-> 
->       if (data->valid)
->           *freq = data->user_frequency;
-> @@ -40,7 +40,7 @@
->       int err = 0;
-> 
->       mutex_lock(&devfreq->lock);
-> -    data = devfreq->data;
-> +    data = devfreq->governor_data;
-> 
->       sscanf(buf, "%lu", &wanted);
->       data->user_frequency = wanted;
-> @@ -60,7 +60,7 @@
->       int err = 0;
-> 
->       mutex_lock(&devfreq->lock);
-> -    data = devfreq->data;
-> +    data = devfreq->governor_data;
-> 
->       if (data->valid)
->           err = sprintf(buf, "%lu\n", data->user_frequency);
-> @@ -91,7 +91,7 @@
->           goto out;
->       }
->       data->valid = false;
-> -    devfreq->data = data;
-> +    devfreq->governor_data = data;
-> 
->       err = sysfs_create_group(&devfreq->dev.kobj, &dev_attr_group);
->   out:
-> @@ -107,8 +107,8 @@
->       if (devfreq->dev.kobj.sd)
->           sysfs_remove_group(&devfreq->dev.kobj, &dev_attr_group);
-> 
-> -    kfree(devfreq->data);
-> -    devfreq->data = NULL;
-> +    kfree(devfreq->governor_data);
-> +    devfreq->governor_data = NULL;
->   }
-> 
->   static int devfreq_userspace_handler(struct devfreq *devfreq,
-> diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
-> index 34aab4d..d265af3 100644
-> --- a/include/linux/devfreq.h
-> +++ b/include/linux/devfreq.h
-> @@ -152,8 +152,8 @@
->    * @max_state:        count of entry present in the frequency table.
->    * @previous_freq:    previously configured frequency value.
->    * @last_status:    devfreq user device info, performance statistics
-> - * @data:    Private data of the governor. The devfreq framework does not
-> - *        touch this.
-> + * @data:    devfreq core pass to governors, governor should not change 
-> it.
-> + * @governor_data:    private data for governors, devfreq core doesn't 
-> touch it.
->    * @user_min_freq_req:    PM QoS minimum frequency request from user 
-> (via sysfs)
->    * @user_max_freq_req:    PM QoS maximum frequency request from user 
-> (via sysfs)
->    * @scaling_min_freq:    Limit minimum frequency requested by OPP 
-> interface
-> @@ -193,7 +193,8 @@
->       unsigned long previous_freq;
->       struct devfreq_dev_status last_status;
-> 
-> -    void *data; /* private data for governors */
-> +    void *data;
-> +    void *governor_data;
-> 
->       struct dev_pm_qos_request user_min_freq_req;
->       struct dev_pm_qos_request user_max_freq_req;
-> 
+Hi Mikhail,
 
-Hi MyungJoo,
-Sorry to disturb. Just want to say that I'm looking forward to your 
-advice on this patch. Thank you :>
+On Tue, Sep 20, 2022 at 11:31:01PM +0300, Mikhail Rudenko wrote:
+> 
+> Hi Laurent, Sakari,
+> 
+> On 2022-09-19 at 16:49 +03, Laurent Pinchart <laurent.pinchart@ideasonboard.com> wrote:
+> 
+> > Hello,
+> >
+> > On Mon, Sep 19, 2022 at 10:31:02AM +0000, Sakari Ailus wrote:
+> >> On Mon, Sep 19, 2022 at 10:01:06AM +0300, Mikhail Rudenko wrote:
+> >> > On 2022-09-19 at 06:40 GMT, Sakari Ailus wrote:
+> >> > > On Fri, Sep 16, 2022 at 12:27:42AM +0300, Mikhail Rudenko wrote:
+> >> > >> On 2022-09-14 at 10:58 +01, Dave Stevenson wrote:
+> >> > >> > On Sun, 11 Sept 2022 at 21:02, Mikhail Rudenko wrote:
+> >> > >> >>
+> >> > >> >> Hello,
+> >> > >> >>
+> >> > >> >> this series implements support for Omnivision OV4689 image
+> >> > >> >> sensor. The Omnivision OV4689 is a high performance, 1/3-inch, 4
+> >> > >> >> megapixel image sensor. Ihis chip supports high frame rate speeds up
+> >> > >> >> to 90 fps at 2688x1520 resolution. It is programmable through an I2C
+> >> > >> >> interface, and sensor output is sent via 1/2/4 lane MIPI CSI-2
+> >> > >> >> connection.
+> >> > >> >>
+> >> > >> >> The driver is based on Rockchip BSP kernel [1]. It implements 4-lane CSI-2
+> >> > >> >> and single 2688x1520 @ 30 fps mode. The driver was tested on Rockchip
+> >> > >> >> 3399-based FriendlyElec NanoPi M4 board with MCAM400 camera
+> >> > >> >> module.
+> >> > >> >> While porting the driver, I stumbled upon two issues:
+> >> >
+> >> > [snip]
+> >> >
+> >> > >> >> (2) The original driver exposes analog gain range 0x0 - 0x7ff, but the
+> >> > >> >> gain is not linear across that range. Instead, it is piecewise linear
+> >> > >> >> (and discontinuous). 0x0-0xff register values result in 0x-2x gain,
+> >> > >> >> 0x100-0x1ff to 0x-4x, 0x300-0x3ff to 0x-8x, and 0x700-0x7ff to 0x-16x,
+> >> > >> >> with more linear segments in between. Rockchip's camera engine code
+> >> > >> >> chooses one of the above segments depenging on the desired gain
+> >> > >> >> value. The question is, how should we proceed keeping in mind
+> >> > >> >> libcamera use case? Should the whole 0x0-0x7ff be exposed as-is and
+> >> > >> >> libcamera will do the mapping, or the driver will do the mapping
+> >> > >> >> itself and expose some logical gain units not tied to the actual gain
+> >> > >> >> register value? Meanwhile, this driver conservatively exposes only
+> >> > >> >> 0x0-0xf8 gain register range.
+> >> > >> >
+> >> > >> > The datasheet linked above says "for the gain formula, please contact
+> >> > >> > your local OmniVision FAE" :-(
+> >> > >> > I would assume that the range is from 1x rather than 0x - people
+> >> > >> > rarely want a totally black image that 0x would give. Or is it ranges
+> >> > >> > of 1x - 2x, 2x - 4x, 4x - 8x, and 8x - 16x?
+> >> > >>
+> >> > >> A picture is worth a thousand words, so I've attached the results of my
+> >> > >> experimentation with the gain register. They were obtained with Rockchip
+> >> > >> 3399, with AEC, AGC and black level subtraction disabled. The image was
+> >> > >> converted from 10-bit RGGB to 8-bit YUV 4:2:0 by the Rockchip ISP.
+> >
+> > Is that full or limited range YUV ?
+> >
+> >> > > Based on that it looks like their medication may have been a little too
+> >> > > strong.
+> >> > >
+> >> > > Could this be implemented so that the control value would be linear linear
+> >> > > but its range would correspond 1x--16x values?
+> >> > >
+> >> > > libcamera will be able to cope with that.
+> >> >
+> >> > According to the following fragment of the Rockchip camera engine sensor
+> >> > configuration file for ov4689 [1]
+> >> >
+> >> >     <Linear index="1" type="double" size="[4 7]">
+> >> >        [1 2 128 0 1 128 255
+> >> >         2 4 64 -248 1 376 504
+> >> >         4 8 32 -756 1 884 1012
+> >> >         8 16 16 -1784 1 1912 2040]
+> >> >     </Linear>,
+> >> >
+> >> > it uses gain register value range 128-255 for gain 1x-2x, 376-504 for
+> >> > gain 2x-4x, 884-1024 for 4x-8x, and 1912-2040 for 8x-16x. Do you suggest
+> >
+> > That looks *really* weird. I would have understood [384, 511], [896,
+> > 1023] and [1920, 2047], but not those intervals.
+> >
+> > The driver hardcodes bit 0x3503[2] to 1, which means "sensor gain
+> > format". Maybe setting it to 0 ("real gain format") would produce saner
+> > results ?
+> >
+> >> > to implement this calculation in the sensor driver and expose some
+> >> > linear "logical" gain to userspace (ranging, e.g., 128-2048 for gains
+> >> > 1x-16x)?
+> >>
+> >> Yes. This way the user space can somehow work without knowing this special
+> >> implementation, even though the granularity changes over the range. I guess
+> >> the granularity would need to be known in libcamera but that's a separate
+> >> issue.
+> >
+> > I can live with that.
+> 
+> I got some fresh data regarding gain setting, with gain register value
+> ranging from 0 to 4096, please check the attached plot. What is the best
+> way to expose this to userspace in your opinion?
+
+I know I requested this to be changed to be as linear as possible, but it
+would seem that the gain values do not seem to match exactly what is
+documented. So you'd need to experimentally find where you'd need to switch
+the range and you might arrive at better values after the initial
+implementation. There might be differences between units, too, and if there
+were tuning values, you'd find this in sensor EEPROM.
+
+Therefore I think this appears to fit less well for driver implementation.
+I'm fine with exposing this to the user space as-is although it doesn't
+make a great user space inteface. It's just a poor hardware implementation
+but there's nothing we can do about it.
 
 -- 
-Best Regards,
-Kant Fan
+Kind regards,
+
+Sakari Ailus
