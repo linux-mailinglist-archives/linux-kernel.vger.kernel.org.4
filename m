@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BA695BFA5A
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 11:13:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 301A65BFA5D
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 11:13:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230426AbiIUJMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 05:12:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41072 "EHLO
+        id S231267AbiIUJMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 05:12:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230308AbiIUJMh (ORCPT
+        with ESMTP id S230357AbiIUJMj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 05:12:37 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E94E17754D
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 02:12:35 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id z97so7638008ede.8
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 02:12:35 -0700 (PDT)
+        Wed, 21 Sep 2022 05:12:39 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE1168C461
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 02:12:36 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id hy2so8439002ejc.8
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 02:12:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date;
-        bh=IsXtqWi3aYMJWgr4SCjULTHnfzXmNkyNP5+0rfZs3GE=;
-        b=D5dWOBVCXSFCIYutIjsZl3tuC7Gbz1jUg3Jqlrd+KveJIV4oHb9x461iEStk9ydmel
-         7gIaoD0QqbpcR+M8WP7JkH30/C9/H47vFcmAVGIZ3Cf6WrOyVxz/DzM8JRQjruJoyLrD
-         td43m0lqDpmccDYZ30s2YBTEQe8B4O3OXg6eU=
+        bh=fZx/rWrR7bth2k3zX90922HeFwXDXF4+XRCwzM0uxDU=;
+        b=XTQI0onfMaHBbtdQRuQf8MDtTygrDqa/VSdYaoxUM+eeXFUGyDA4s6uMV+EW6KJZVE
+         4uA4zUWou6VgpnP1jfM+PNq4tAyqOnwdltiKlX5aFCmI0O9TiZl0uazpwsZO09h8+dOD
+         5vsyWR64mnxxsJvirPzNyf7n0gsEcZmXYABL4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=IsXtqWi3aYMJWgr4SCjULTHnfzXmNkyNP5+0rfZs3GE=;
-        b=lT4jKrVWeaiGhUWNZs4Slo9R8f0+OTMXpKlUiM9xGwoAxEMYen8BtHkmsWrlQPKFSm
-         dPZgXppHFA7C5SfOz7vIzJZZPA5nCX4uoY5R+TL00hPooenlBsMZLcigBw09zI2AzxUw
-         0QcdnJISveQIMMQmZJ/0014g/bGV1wJKepYMK+vcA7Vo7CHx696MqTcH6ftKrJkTGbfj
-         LLZYE1l56o50o26VM1C65CBvCbVWd/9zNF2bYNjepKpd1hcRQucex6EtzWZ8CWgy1LhO
-         2IFrSNXEpYQjZJssIbKiW+rgK2TpxVMsvEk7R1Ky5HHWzW74Im610NeuR0wDx7FGfynh
-         /iUA==
-X-Gm-Message-State: ACrzQf1UQCajNToxAMbDIIxv5LAMU8rgPinVFiPsZiFiHYuyDIstYRiN
-        nMoJAC9cXYvv+BMKPHI8B1Klpw==
-X-Google-Smtp-Source: AMsMyM4iDz6AGIhyiulChGF8onMxrBupc/sNx2B0SKGHn+GNycyiSHWZ8Q0DnwgBwOhFQo8wym4PWQ==
-X-Received: by 2002:a05:6402:538f:b0:444:c17b:1665 with SMTP id ew15-20020a056402538f00b00444c17b1665mr24115315edb.98.1663751554504;
-        Wed, 21 Sep 2022 02:12:34 -0700 (PDT)
+        bh=fZx/rWrR7bth2k3zX90922HeFwXDXF4+XRCwzM0uxDU=;
+        b=pBGDCgiQbcUW5RQOB349exhGv/axz587hXSS/PO04334cgXz8Xlq+c0zPzo3WfIj3G
+         IMGYZaMbM7W8UX5hLkh1zdUYFx8RAcPFS1SmMrv0VrS4d+j/il7I81uNg3z640pheW3K
+         DGB1zGFPzZy1CRLWoSruRx/pZYWkkru+GKIgxwqwVUGFJe8Le+dAVCMyn0B54xFDTRbN
+         WNfuMueEt/O14SPTUY1qBBYxOn4qAE8lz83eET2U9QH1U0tEdPUVteUMN7V0nvKJBw3u
+         qJ7b48Zr7kYuY1oQP7FYl3b3kirhlrQr4XE1/PjrmtAX1A0KYaG7MMZU7rAnIt1oVFW4
+         lfNA==
+X-Gm-Message-State: ACrzQf0ezroPGqpZRuB8o+D4Fd81kCxej1Zh7KhjeFZB1W0UqvRrFG6M
+        I5ja8tS60CDPrYC5UimJXTzlqQ==
+X-Google-Smtp-Source: AMsMyM5C5U51pqKsCjwMiaIc9LnHXhy1k02TcRKZqYKkqXUVk0pBMQXu/uScAX+Mmnt0Zi0QsklyMg==
+X-Received: by 2002:a17:907:7293:b0:782:2665:aa39 with SMTP id dt19-20020a170907729300b007822665aa39mr588302ejc.303.1663751555406;
+        Wed, 21 Sep 2022 02:12:35 -0700 (PDT)
 Received: from alco.roam.corp.google.com ([2620:0:1059:10:160b:cee7:2e8b:f72c])
-        by smtp.gmail.com with ESMTPSA id v4-20020a17090690c400b00771cb506149sm1031913ejw.59.2022.09.21.02.12.33
+        by smtp.gmail.com with ESMTPSA id v4-20020a17090690c400b00771cb506149sm1031913ejw.59.2022.09.21.02.12.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Sep 2022 02:12:34 -0700 (PDT)
+        Wed, 21 Sep 2022 02:12:35 -0700 (PDT)
 From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Wed, 21 Sep 2022 11:12:11 +0200
-Subject: [PATCH v2 2/7] media: uvcvideo: improve error logging in uvc_query_ctrl()
+Date:   Wed, 21 Sep 2022 11:12:12 +0200
+Subject: [PATCH v2 3/7] media: uvcvideo: Return -EACCES for Wrong state error
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20220920-resend-v4l2-compliance-v2-2-7c0942040004@chromium.org>
+Message-Id: <20220920-resend-v4l2-compliance-v2-3-7c0942040004@chromium.org>
 References: <20220920-resend-v4l2-compliance-v2-0-7c0942040004@chromium.org>
 In-Reply-To: <20220920-resend-v4l2-compliance-v2-0-7c0942040004@chromium.org>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>
@@ -61,63 +61,52 @@ Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Ricardo Ribalda <ribalda@chromium.org>,
         linux-kernel@vger.kernel.org
 X-Mailer: b4 0.11.0-dev-d93f8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1125; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=xuDJMTqPwFnBT90gGjW9sM+//WBwScMY4uWO/jQUOuQ=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjKtV2RPEvj88EgsUg65wSnyUdNi4LSH8DMQKZ3kGB
- eS8lFF6JAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCYyrVdgAKCRDRN9E+zzrEiGkvEA
- CDWupK2HASX3jyHXFdbPjDfnZRZ6DuAdx4X7fjB+vQkdIA2cGSRE8IOQX5ebjbc7ghiDUPDVM5sxH/
- KKr/sVF6wsd5x03qIaIYSs9yIBJyN6r58KMh7WWAVOEkfog9Gb1mcXf7q3x52LJ9nqY4xCrWg4HpL5
- GyWP7WUteO6Peowx6euwQ7yr1v+CteV0XQJjDfOSfrbnyjW6Yfz782ZyIHPdbZ+MZkXayVchQO3QKN
- 58jG7rN1PPKzMaGsRqksHGxsAkPnlv42/3V70tCJtGBvCiFmFC0Xg8+YDiDZvezyCTSPJX6cthkgCj
- J9uPl4mNpogil2bsrXCUkPFrWmitZx+jKEDbJw99Qft7hxztwy4bCPY7iDgPc6ng+5SQojVpQVeShB
- bMEJpRf+TbAobyPTUlf5fRdhjnbrUO6Vk7tRch5halXh7oyZG8HomLUrNea0ZF6FRQVxC7PTlsQAzt
- qmRzWx+OOqjhkCOBCr4N8ha165pruzGKcO6PCH7bZ+mwX//meRExlXQZcTjl89xEDMdKHGGHoC++sa
- FA6akvATIHZWrn3J9t/qvDKu4fgB9Ndjcb39WlgvoIyF0N059BGHMsv1Ob7qPqJhOYeLocRwDK2tfY
- w/gy9m+I4SzchuPUbDtqEpmmEAcw4j55NWzkUqVi17Iks2DuJmptpY6qCuBQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=854; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=l3Tve8hGJ5W5tTbag9O5QNFnAI00qvVi1fN45JRNTAM=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjKtV41S1sqbl3AcCGC0bbfcwzPIlmTH+3xTAvTXu1
+ WH5B4Y+JAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCYyrVeAAKCRDRN9E+zzrEiJZYD/
+ sHsPdAVHioOyDsFUawCfvmCQEtk3WOcmFioNVLGFFdB9Jw2J3myyLOCET3ojk3irhXmXIi5EyP5JK2
+ scg6aBpNHP+066OOhMwymngr1F74FEz/9Y6CD7oflu7DhUColNSr73o3e9X7j0Oba4tCX1YZktm3ty
+ kbEB3a5STpzjlLMqSbE/SpRy5eQ64FKNexZGJc+ZGlOYREdEoHhVXU6Qv+eFRhDfmfyscZl5RVCuXJ
+ pX5IyTiyS5fT5Pix82M/oXlpjWpZAUcMS8jKNTt3ZgFTVQ6djCI2yt9VR3qFY4uykkhz39rF28IBIt
+ 9wD96ZzR+eldZq288z+b7Z/JJKBvX15VLztM8MHWzkf2IpoVv0qXp9h5P9KSTcv6pXq7Y5S8K7wS8i
+ +CprRps6omD7uPJVDhDPJNavD+9rO7OrzBiwEyW2rWfybZEqWeQVnGwXsTfKjpdEPH3Tk9JiYAS1tM
+ RV3pQgB06j+SBNFwYZfomyhwouzBzQtb6wSPTVFjBPspxK1N0Kwhn7zKirlqgQU2qkCwXTkJ1h9mQq
+ NHS0+mKCAFZ2lB8KmOq/PkC2YSPMjjIpBjiVB9OjN7k0bhkA9Oo3aRr3B7A5ES1CcuQcfTXN/OJEkj
+ NUdyF8a/2x7QVzGr6PjG24nKfveBBwsW3pTChO+e9MiWaW5EdAA8G8zIAtgA==
 X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
  fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+For error 2 (Wrong state) return -EACCES instead of -EILSEQ.
+EACCES is a much more appropriate error code. EILSEQ will return
+"Invalid or incomplete multibyte or wide character." in strerror(),
+which is a *very* confusing message.
 
-If __uvc_query_ctrl() failed with a non-EPIPE error, then
-report that with dev_err. If an error code is obtained, then
-report that with dev_dbg.
-
-Reviewed-by: Ricardo Ribalda <ribalda@chromium.org>
-Signed-off-by: Hans Verkuil <hans.verkuil@cisco.com>
+Suggested-by: Hans Verkuil <hans.verkuil@cisco.com>
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 
 diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
-index 170a008f4006..2cf7f692c0bb 100644
+index 2cf7f692c0bb..497073a50194 100644
 --- a/drivers/media/usb/uvc/uvc_video.c
 +++ b/drivers/media/usb/uvc/uvc_video.c
-@@ -79,13 +79,14 @@ int uvc_query_ctrl(struct uvc_device *dev, u8 query, u8 unit,
- 	if (likely(ret == size))
- 		return 0;
- 
--	dev_err(&dev->udev->dev,
--		"Failed to query (%s) UVC control %u on unit %u: %d (exp. %u).\n",
--		uvc_query_name(query), cs, unit, ret, size);
--
--	if (ret != -EPIPE)
-+	if (ret != -EPIPE) {
-+		dev_err(&dev->udev->dev,
-+			"Failed to query (%s) UVC control %u on unit %u: %d (exp. %u).\n",
-+			uvc_query_name(query), cs, unit, ret, size);
- 		return ret;
-+	}
- 
-+	/* reuse data[0] to request the error code. */
- 	tmp = *(u8 *)data;
- 
- 	ret = __uvc_query_ctrl(dev, UVC_GET_CUR, 0, intfnum,
+@@ -108,7 +108,7 @@ int uvc_query_ctrl(struct uvc_device *dev, u8 query, u8 unit,
+ 	case 1: /* Not ready */
+ 		return -EBUSY;
+ 	case 2: /* Wrong state */
+-		return -EILSEQ;
++		return -EACCES;
+ 	case 3: /* Power */
+ 		return -EREMOTE;
+ 	case 4: /* Out of range */
 
 -- 
 b4 0.11.0-dev-d93f8
