@@ -2,110 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEA345BF8D4
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 10:17:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6B795BF8DF
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 10:19:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231365AbiIUIRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 04:17:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55222 "EHLO
+        id S231356AbiIUIS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 04:18:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbiIUIQh (ORCPT
+        with ESMTP id S230073AbiIUISQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 04:16:37 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE8D4BE2A
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 01:15:44 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C3DC36601F3F;
-        Wed, 21 Sep 2022 09:15:42 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1663748143;
-        bh=XH9jh6d/hbkh2EaYj2CvFnDhMpxuJds1twj/Gjm5QII=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=n6N75gL0cvd7s2ORUOI6HiDaAATa+J+CFW2qnVM07rXmVNZdqrxfaQ/SnVqiAR3Ui
-         KrKJAZfDhqFDlTbrqYYMFygw5NGnBObQ6i57rbeTQxXi33u4qix6JWe3HPs+Q+OFv0
-         9b2nJT8Hl0DQbgkhUEqhuMyPYbIYKK+xYr765lsey+cKk0LdXt9S6T10WcQrDDpqbE
-         X2qV1/Mp5jC7hS3CdH/pfQMDVRPuINTxtihbx5kkezlXKdIBOWYPZdQ+pfHeDvYCdL
-         iD+kdPhLt7PxdbkFAjdJ79s7ZhLFWQBgKv0Jk7+PP8LmRoJRr/Cne0Bx42srTYeoAk
-         p2LYSYU+7SK8g==
-Message-ID: <2d13b383-7d25-240b-bdbb-e53848df4d47@collabora.com>
-Date:   Wed, 21 Sep 2022 10:15:39 +0200
+        Wed, 21 Sep 2022 04:18:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E77087681
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 01:17:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663748278;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UB796Vt6XXX5oZ6lyqB/fr2UDx3FHm5YRogO/KgZ0Gc=;
+        b=d3t820yXoiqrP34u15TXuopgVgQ0MUYW8PrNqs9QN1ArynxJaBUwiKYy82cpSsVVYbTrpo
+        jU7U4JJKqApblC7w93/AkrlDH9ihuhnuImRWQV/l61EsECPwXK8Lpo1wfP+fB+gNpQMLDH
+        alFFde6Z2mYWsvQiIYh6Gn/JB+F4+Sc=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-515-kPHlno2ONly6Inv9oTGz6Q-1; Wed, 21 Sep 2022 04:17:56 -0400
+X-MC-Unique: kPHlno2ONly6Inv9oTGz6Q-1
+Received: by mail-wm1-f70.google.com with SMTP id c128-20020a1c3586000000b003b324bb08c5so7552466wma.9
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 01:17:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date;
+        bh=UB796Vt6XXX5oZ6lyqB/fr2UDx3FHm5YRogO/KgZ0Gc=;
+        b=OH9yOFRkM0Xjif5GQ+98OL3M1N2MFUU2XH2gkTMLO+Z5wcHqlKGIPVcPsKMHUOLspv
+         hFkT3r7QUR8DFaZXI8NWFgCxlWRkhZYbcxCiyb2BZbdXX0zXBgO992PGDZ5wKH/AfzbL
+         f4QE5GFMFAi7tlm/kPm7/ljZAKKSScQgXKSY0VgCdKVz1UOjL+Vb+2XnoEKvMbFO69G0
+         P5rqDSWvyI/HuFQYccZyMdxU+8rf0r1yVM+iCXBt2LvPLnVsDXay/cWEUXQ7WqxJUhqj
+         TcZdhKyNmfw3ujOAWAugAaq9/fI5+n9eLC+YQ1Y9hEo/9+XIXz16qMZzKVT6c8rRV82G
+         S3bA==
+X-Gm-Message-State: ACrzQf1i/YHxOdLwvqYhv30tiAKlHGxFiIvlYfLEp3Lfy5HUGtqNhWlB
+        Nt8fihyrCWIfd76xcUOEkl/P283ZBk66YLPTyWMZ9jiSFlaLYQGCqpJi4KfcbnjhnA/O2etnq4W
+        PTGeQaIevbkzUrtfIojZ2JWP/PS6Kvm/cpJBMs78URT56LFeU8L0InhIOJnM4xfdt2TJUADBnU4
+        gd
+X-Received: by 2002:a5d:4444:0:b0:22a:2a64:a0fd with SMTP id x4-20020a5d4444000000b0022a2a64a0fdmr16661965wrr.293.1663748275663;
+        Wed, 21 Sep 2022 01:17:55 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM43v7wWRoXSXV6v4Az3dSj1S/kPw0MIiHrhTuij8Z+2yQa1grcSowSXQ8ZmRtHUuPrI50y4HQ==
+X-Received: by 2002:a5d:4444:0:b0:22a:2a64:a0fd with SMTP id x4-20020a5d4444000000b0022a2a64a0fdmr16661948wrr.293.1663748275362;
+        Wed, 21 Sep 2022 01:17:55 -0700 (PDT)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id i15-20020adfaacf000000b00228df23bd51sm1767242wrc.82.2022.09.21.01.17.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Sep 2022 01:17:54 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/6] KVM: x86: Introduce CPUID_8000_0007_EDX
+ 'scattered' leaf
+In-Reply-To: <YypEReJYrI0c7Oii@google.com>
+References: <20220916135205.3185973-1-vkuznets@redhat.com>
+ <20220916135205.3185973-3-vkuznets@redhat.com>
+ <YypEReJYrI0c7Oii@google.com>
+Date:   Wed, 21 Sep 2022 10:17:53 +0200
+Message-ID: <8735clp2dq.fsf@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH 01/18] phy: mediatek: add a new helper to update bitfield
-Content-Language: en-US
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jitao Shi <jitao.shi@mediatek.com>,
-        Stanley Chu <stanley.chu@mediatek.com>
-References: <20220920090038.15133-1-chunfeng.yun@mediatek.com>
- <20220920090038.15133-2-chunfeng.yun@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220920090038.15133-2-chunfeng.yun@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 20/09/22 11:00, Chunfeng Yun ha scritto:
-> Due to FIELD_PREP() macro can be used to prepare a bitfield value,
-> local ones can be remove; add the new helper to make bitfield update
-> easier.
-> 
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> ---
->   drivers/phy/mediatek/phy-mtk-io.h | 7 +++++++
->   1 file changed, 7 insertions(+)
-> 
-> diff --git a/drivers/phy/mediatek/phy-mtk-io.h b/drivers/phy/mediatek/phy-mtk-io.h
-> index 500fcdab165d..a723d4afc9b4 100644
-> --- a/drivers/phy/mediatek/phy-mtk-io.h
-> +++ b/drivers/phy/mediatek/phy-mtk-io.h
-> @@ -8,6 +8,7 @@
->   #ifndef __PHY_MTK_H__
->   #define __PHY_MTK_H__
->   
-> +#include <linux/bitfield.h>
->   #include <linux/io.h>
->   
->   static inline void mtk_phy_clear_bits(void __iomem *reg, u32 bits)
-> @@ -35,4 +36,10 @@ static inline void mtk_phy_update_bits(void __iomem *reg, u32 mask, u32 val)
->   	writel(tmp, reg);
->   }
->   
-> +/* field @mask should be constant and continuous */
+Sean Christopherson <seanjc@google.com> writes:
 
-"Field @mask shall be [...]"
-              ^^^^^
-
-> +static inline void mtk_phy_update_field(void __iomem *reg, u32 mask, u32 val)
-
-...so, (void __iomem *reg, const u32 mask, u32 val)
-
-> +{
-> +	mtk_phy_update_bits(reg, mask, FIELD_PREP(mask, val));
-> +}
+> On Fri, Sep 16, 2022, Vitaly Kuznetsov wrote:
+>> CPUID_8000_0007_EDX may come handy when X86_FEATURE_CONSTANT_TSC
+>> needs to be checked.
+>> 
+>> No functional change intended.
+>> 
+>> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+>> ---
+>>  arch/x86/kvm/cpuid.c         | 4 ++++
+>>  arch/x86/kvm/reverse_cpuid.h | 9 ++++++++-
+>>  2 files changed, 12 insertions(+), 1 deletion(-)
+>> 
+>> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+>> index 75dcf7a72605..f68b14053c9b 100644
+>> --- a/arch/x86/kvm/cpuid.c
+>> +++ b/arch/x86/kvm/cpuid.c
+>> @@ -669,6 +669,10 @@ void kvm_set_cpu_caps(void)
+>>  	if (!tdp_enabled && IS_ENABLED(CONFIG_X86_64))
+>>  		kvm_cpu_cap_set(X86_FEATURE_GBPAGES);
+>>  
+>> +	kvm_cpu_cap_init_scattered(CPUID_8000_0007_EDX,
+>> +		SF(CONSTANT_TSC)
+>> +	);
+>
+> The scattered leaf needs to be used in __do_cpuid_func(), e.g.
+>
+> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+> index ffdc28684cb7..c91f23bb3605 100644
+> --- a/arch/x86/kvm/cpuid.c
+> +++ b/arch/x86/kvm/cpuid.c
+> @@ -1137,8 +1137,8 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
+>                 /* L2 cache and TLB: pass through host info. */
+>                 break;
+>         case 0x80000007: /* Advanced power management */
+> -               /* invariant TSC is CPUID.80000007H:EDX[8] */
+> -               entry->edx &= (1 << 8);
+> +               cpuid_entry_override(entry, CPUID_8000_0007_EDX);
 > +
->   #endif
 
+Ah, missed that part! Will add.
+
+>                 /* mask against host */
+>                 entry->edx &= boot_cpu_data.x86_power;
+>                 entry->eax = entry->ebx = entry->ecx = 0;
+>
+
+-- 
+Vitaly
 
