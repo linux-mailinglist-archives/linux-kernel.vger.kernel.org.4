@@ -2,150 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A5B15E56D6
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 01:46:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E06975E56D8
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 01:52:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbiIUXql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 19:46:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58494 "EHLO
+        id S229910AbiIUXwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 19:52:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbiIUXqj (ORCPT
+        with ESMTP id S229543AbiIUXws (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 19:46:39 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3D12A0604
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 16:46:38 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id 9so7527507pfz.12
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 16:46:38 -0700 (PDT)
+        Wed, 21 Sep 2022 19:52:48 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58FC49C235
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 16:52:47 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id c11so5254888qtw.8
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 16:52:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=joelfernandes.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=oLmfKWuUTNL21IQ6HESQaaXbmI+ko3s/zbVnpQNTyfQ=;
-        b=ZhPjG3hJi+MYcKRihGUdAC68xvTWiMoW7SPD8OTcOZ26+dN5JNCX/1w6nFfyBCMstE
-         5HYD4Fse3n9roNiceTXE44Upoj73OH2Cq728vb6uC7wyB1ELBnRp3QOIas5WBcfDDtZW
-         yGRjURMv19EhBh2rt5Wo+TBFMeOe50xrac1nFYO5ruNLvMCpxjlZjTnlUAwipjgnm1Qr
-         guH3EBQ4F/A3bEWfskdvaLhydQ9rr+SiKQoTVq1/gvGGHky725DBu8BYhOgkv7ojic15
-         LdbhRd81llw9FC383cjWQzz9qSVioH+77jgRKVTCjN52Cx0QDwCaR7JId0drMgzjd18G
-         VQVg==
+        bh=FECpFjJKptYi5/betqKscw8Hm9Di8iX5KVsNY1fQlRU=;
+        b=kFqIxb3c7aTOYtvRywPvr9C0DSxKXgUgqp0kyxd19QkCGttl5By0bLXCvIZgFE55pl
+         3PvK57KsFb4puWctDuYXpLaBq0qYJjuftNOL7Nw5kb0U1/xv2ftOS+r9LToZNnfFR/SS
+         BxWW7hkSw3f7hehfX+r7ESdZgWZw/L/b97cgE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=oLmfKWuUTNL21IQ6HESQaaXbmI+ko3s/zbVnpQNTyfQ=;
-        b=b19VhyXirbdUuAb0m5E+08cEKmeiSaWIXU2qKxEYGkxUJRhNlTXbdC8muT8CN04e8D
-         Gd6v9PCc2kAwbP5+nIV2OUh8XA0BzzO+1+3NCM9kQv9u/2NuS7eNwJFwGDrv3pV/X13I
-         auFz8LcMXmuHfWrQ0SMJ8Uzl1FtqMOlD+jO8gTy418RnGXSxwXNKWFDhHgCNjmmFU1Fo
-         VYnCcPddGVAERF0jeKf9+o8QDJy7oRYixF0+VBUyF80YYeVn85sAl80HaI7N2GGKmjMk
-         fdzwms+ttEW+SbbVdLTAbuW1xsKTYTy0jzUj+35MthlBeYKpczlF/L6XleAnx3nNXeUj
-         fXBQ==
-X-Gm-Message-State: ACrzQf0VLH7b0zrVWAk2ee44tsawO+/GT6m9/a93qxlGrEyn2uBFH4v5
-        0jjcUnD7xoUPQSEIohMppDToMQ==
-X-Google-Smtp-Source: AMsMyM6XbKjJMUzlns8HLCwuDBcHPQZk6TBhuf7BAseDGdPOhjE8XWL38BgMGblaP5ZfSFJoRXpHQw==
-X-Received: by 2002:a05:6a00:1249:b0:543:aa0a:9c0a with SMTP id u9-20020a056a00124900b00543aa0a9c0amr580002pfi.2.1663803998248;
-        Wed, 21 Sep 2022 16:46:38 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id z4-20020a1709027e8400b00177e5d83d3dsm2579190pla.170.2022.09.21.16.46.37
+        bh=FECpFjJKptYi5/betqKscw8Hm9Di8iX5KVsNY1fQlRU=;
+        b=6SM/1i6J4+0GShg50c8QehyXcA0MMg2lmswyUCYGDl07V0R99ZgcmIte5lyBm5iPy5
+         kAcwjnD2L/Albj0M/0neI9wRq8oG+zA8MpcFHCOgl23noGVisXReYLQ5Din5ucdvPc2P
+         sSiZPx/+F8iTcR81D70oIPG5MlCnb+1MxJOy3WQUmWAmqu+hf++wSkf5zZC+xLeWRfDC
+         hLkyJLtcTo8I4xFabQ/g2LTapRIQuVxXWaF7smk6zQtRLHCW8GfCjcyHSGs4BkPzSPPd
+         UqDFG/aa1uNo9w7RvVAiCK8hUh8LuCIkP+f7plOMzkFGU0J0TkKqI4O1uKru3q0DPZZQ
+         q9bA==
+X-Gm-Message-State: ACrzQf10J/MmFrqNkvYUcYArOaodO5+QoANbVpznwoCAIhKjyncp0t2i
+        bRI+pt7NWMEMIcIHdh5CSC/+Dw==
+X-Google-Smtp-Source: AMsMyM7ptLfmiaAWJuvmyCcT2G+Lv43MG0ZAuZIBYJ10L0kPb08iAHb2HGZmAJkSzKA2lpAbe7GA+g==
+X-Received: by 2002:a05:622a:241:b0:35d:75:88a0 with SMTP id c1-20020a05622a024100b0035d007588a0mr765726qtx.370.1663804366400;
+        Wed, 21 Sep 2022 16:52:46 -0700 (PDT)
+Received: from localhost (48.230.85.34.bc.googleusercontent.com. [34.85.230.48])
+        by smtp.gmail.com with ESMTPSA id l3-20020a05620a28c300b006b872b606b1sm2930436qkp.128.2022.09.21.16.52.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Sep 2022 16:46:37 -0700 (PDT)
-Date:   Wed, 21 Sep 2022 23:46:34 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Jim Mattson <jmattson@google.com>
-Cc:     Vipin Sharma <vipinsh@google.com>, pbonzini@redhat.com,
-        vkuznets@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: selftests: Fix hyperv_features test failure when
- built on Clang
-Message-ID: <YyuiWk/4TFYqf0qN@google.com>
-References: <20220921231151.2321058-1-vipinsh@google.com>
- <CALMp9eQ8Rr-rSjXiZ_4O0mA=k3kk=hYrfB_NTszu=9DFOwNUaQ@mail.gmail.com>
+        Wed, 21 Sep 2022 16:52:45 -0700 (PDT)
+Date:   Wed, 21 Sep 2022 23:52:45 +0000
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rushikesh.s.kadam@intel.com, urezki@gmail.com,
+        neeraj.iitr10@gmail.com, paulmck@kernel.org, rostedt@goodmis.org,
+        vineeth@bitbyteword.org, boqun.feng@gmail.com
+Subject: Re: [PATCH v5 06/18] rcu: Introduce call_rcu_lazy() API
+ implementation
+Message-ID: <YyujzQ/sU/aAdx4r@google.com>
+References: <20220901221720.1105021-1-joel@joelfernandes.org>
+ <20220901221720.1105021-7-joel@joelfernandes.org>
+ <20220902152132.GA115525@lothringen>
+ <Yxa5Ch574cRZxRdo@google.com>
+ <20220906151757.GA183806@lothringen>
+ <Yxfggt1/cLBhUi/y@google.com>
+ <20220907094014.GA193994@lothringen>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CALMp9eQ8Rr-rSjXiZ_4O0mA=k3kk=hYrfB_NTszu=9DFOwNUaQ@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220907094014.GA193994@lothringen>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 21, 2022, Jim Mattson wrote:
-> On Wed, Sep 21, 2022 at 4:11 PM Vipin Sharma <vipinsh@google.com> wrote:
-> >
-> > hyperv_features test fails when built on Clang. It throws error:
-> >
-> >          Failed guest assert: !hcall->ud_expected || res == hcall->expect at
-> >          x86_64/hyperv_features.c:90
-> >
-> > On GCC, EAX is set to 0 before the hypercall whereas in Clang it is not,
-> > this causes EAX to have garbage value when hypercall is returned in Clang
-> > binary.
-> >
-> > Fix by executing the guest assertion only when ud_expected is false.
-
-TL;DR: please rewrite the changelog to explain the actual bug (checking the
-result when the hypercall is expected to fault) and the fix, and only mention the
-gcc vs. clang behavior as a footnote.
-
-As Jim pointed out, the bug has nothing to do with clang.  Ha, figured out why
-gcc passes; it uses RAX as the scratch reg that the asm blob loads into R8,
-i.e. loads RAX with @output_address.  So ignore my earlier suggestion of:
-
-	*hv_status = -EFAULT,
-
-even better is to do:
-
-diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_features.c b/tools/testing/selftests/kvm/x86_64/hyperv_features.c
-index 79ab0152d281..673085f6edfd 100644
---- a/tools/testing/selftests/kvm/x86_64/hyperv_features.c
-+++ b/tools/testing/selftests/kvm/x86_64/hyperv_features.c
-@@ -26,7 +26,8 @@ static inline uint8_t hypercall(u64 control, vm_vaddr_t input_address,
-                     : "=a" (*hv_status),
-                       "+c" (control), "+d" (input_address),
-                       KVM_ASM_SAFE_OUTPUTS(vector)
--                    : [output_address] "r"(output_address)
-+                    : [output_address] "r"(output_address),
-+                      "a"(-EFAULT)
-                     : "cc", "memory", "r8", KVM_ASM_SAFE_CLOBBERS);
-        return vector;
- }
-
-so that there is zero chance of getting a false positive due to the compiler
-(but not KVM) modifying RAX.
-
-Anyways, this bug is not clang's fault, with above patch it fails as "expected".
-
-==== Test Assertion Failure ====
-  x86_64/hyperv_features.c:622: false
-  pid=283847 tid=283847 errno=4 - Interrupted system call
-     1	0x0000000000402842: guest_test_hcalls_access at hyperv_features.c:622
-     2	 (inlined by) main at hyperv_features.c:642
-     3	0x00007f23fc513082: ?? ??:0
-     4	0x0000000000402ebd: _start at ??:?
-  Failed guest assert: !hcall->ud_expected || res == hcall->expect at x86_64/hyperv_features.c:90
-arg1 = 0, arg2 = fffffff2
-
-
-> > Fixes: cc5851c6be86 ("KVM: selftests: Use exception fixup for #UD/#GP Hyper-V MSR/hcall tests")
-> > Signed-off-by: Vipin Sharma <vipinsh@google.com>
-> > Suggested-by: Sean Christopherson <seanjc@google.com>
-> >
-> > ---
-> >  tools/testing/selftests/kvm/x86_64/hyperv_features.c | 8 ++++----
-> >  1 file changed, 4 insertions(+), 4 deletions(-)
+On Wed, Sep 07, 2022 at 11:40:14AM +0200, Frederic Weisbecker wrote:
+> On Wed, Sep 07, 2022 at 12:06:26AM +0000, Joel Fernandes wrote:
+> > > > @@ -326,13 +372,20 @@ static bool rcu_nocb_do_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
+> > > >   * Note that this function always returns true if rhp is NULL.
+> > > >   */
+> > > >  static bool rcu_nocb_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
+> > > > -				  unsigned long j)
+> > > > +				  unsigned long j, unsigned long flush_flags)
+> > > >  {
+> > > > +	bool ret;
+> > > > +
+> > > >  	if (!rcu_rdp_is_offloaded(rdp))
+> > > >  		return true;
+> > > >  	rcu_lockdep_assert_cblist_protected(rdp);
+> > > >  	rcu_nocb_bypass_lock(rdp);
+> > > > -	return rcu_nocb_do_flush_bypass(rdp, rhp, j);
+> > > > +	ret = rcu_nocb_do_flush_bypass(rdp, rhp, j, flush_flags);
+> > > > +
+> > > > +	if (flush_flags & FLUSH_BP_WAKE)
+> > > > +		wake_nocb_gp(rdp, true);
+> > > 
+> > > Why the true above?
+> > > 
+> > > Also should we check if the wake up is really necessary (otherwise it means we
+> > > force a wake up for all rdp's from rcu_barrier())?
+> > > 
+> > >        was_alldone = rcu_segcblist_pend_cbs(&rdp->cblist);
+> > >        ret = rcu_nocb_do_flush_bypass(rdp, rhp, j, flush_flags);
+> > >        if (was_alldone && rcu_segcblist_pend_cbs(&rdp->cblist))
+> > >        	  wake_nocb_gp(rdp, false);
+> > 
+> > You mean something like the following right? Though I'm thinking if its
+> > better to call wake_nocb_gp() from tree.c in entrain() and let that handle
+> > the wake. That way, we can get rid of the extra FLUSH_BP flags as well and
+> > let the flush callers deal with the wakeups..
 > 
-> In case Sean doesn't point it out, be wary of starting a shortlog with
-> "Fix." You may later regret it.
+> Ah yes that could make sense if only one caller cares.
+> 
+> > 
+> > Anyway, for testing this should be good...
+> > 
+> > ---8<-----------------------
+> > 
+> > diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+> > index bd8f39ee2cd0..e3344c262672 100644
+> > --- a/kernel/rcu/tree_nocb.h
+> > +++ b/kernel/rcu/tree_nocb.h
+> > @@ -382,15 +382,19 @@ static bool rcu_nocb_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
+> >  				  unsigned long j, unsigned long flush_flags)
+> >  {
+> >  	bool ret;
+> > +	bool was_alldone;
+> >  
+> >  	if (!rcu_rdp_is_offloaded(rdp))
+> >  		return true;
+> >  	rcu_lockdep_assert_cblist_protected(rdp);
+> >  	rcu_nocb_bypass_lock(rdp);
+> > +	if (flush_flags & FLUSH_BP_WAKE)
+> > +		was_alldone = !rcu_segcblist_pend_cbs(&rdp->cblist);
+> > +
+> 
+> You can check that outside bypass lock (but you still need nocb_lock).
+> 
+> >  	ret = rcu_nocb_do_flush_bypass(rdp, rhp, j, flush_flags);
+> >  
+> > -	if (flush_flags & FLUSH_BP_WAKE)
+> > -		wake_nocb_gp(rdp, true);
+> > +	if (flush_flags & FLUSH_BP_WAKE && was_alldone)
+> > +		wake_nocb_gp(rdp, false);
+> 
+> That doesn't check if the bypass list was empty.
 
-Heh, I think our record is "Really, really fix xyz" for a shortlog.
+I am ending up with something like the below for v6, after discussing with
+Paul on IRC he pointed out we only need to do the rcu_barrier() related
+wakeup when all the CBs are lazy in the bypass list. Otherwise timer goes
+off. I think Frederic mentioned something similar above in different words.
 
-> Also, I think the "clang" part is a red herring. You are fixing a
-> latent bug in the code.
+I prefer to keep this logic in tree_nocb.h since rcu_barrier_entrain()
+shouldn't have to deal with nocb internals (in theory anyway).
 
-Ya, it's definitely a good idea to call out why a bug was missed, but clang is
-not to blame here, at all.  
+Looks Ok?
+
+thanks,
+
+ - Joel
+
+---8<-----------------------
+
+From: "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Subject: [PATCH for v6] fixup! rcu: Introduce call_rcu_lazy() API implementation
+
+Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+---
+ kernel/rcu/tree_nocb.h | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
+
+diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+index c197534d0c99..fd056358f041 100644
+--- a/kernel/rcu/tree_nocb.h
++++ b/kernel/rcu/tree_nocb.h
+@@ -375,18 +375,26 @@ static bool rcu_nocb_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
+ 				  unsigned long j, unsigned long flush_flags)
+ {
+ 	bool ret;
+-	bool was_alldone;
++	bool was_alldone = false;
++	bool bypass_all_lazy = false;
+ 
+ 	if (!rcu_rdp_is_offloaded(rdp))
+ 		return true;
+ 	rcu_lockdep_assert_cblist_protected(rdp);
+ 	rcu_nocb_bypass_lock(rdp);
+-	if (flush_flags & FLUSH_BP_WAKE)
++
++	if (flush_flags & FLUSH_BP_WAKE) {
+ 		was_alldone = !rcu_segcblist_pend_cbs(&rdp->cblist);
++		bypass_all_lazy =
++		  (rcu_cblist_n_cbs(&rdp->nocb_bypass) == rdp->lazy_len);
++	}
+ 
+ 	ret = rcu_nocb_do_flush_bypass(rdp, rhp, j, flush_flags);
+ 
+-	if (flush_flags & FLUSH_BP_WAKE && was_alldone)
++	// Wake up the nocb GP thread if needed. GP thread could be sleeping
++	// while waiting for lazy timer to expire (otherwise rcu_barrier may
++	// end up waiting for the duration of the lazy timer).
++	if (flush_flags & FLUSH_BP_WAKE && was_alldone && bypass_all_lazy)
+ 		wake_nocb_gp(rdp, false);
+ 
+ 	return ret;
+-- 
+2.37.3.998.g577e59143f-goog
+
