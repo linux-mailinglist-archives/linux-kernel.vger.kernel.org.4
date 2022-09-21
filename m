@@ -2,168 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0C235BF596
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 06:51:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E04C85BF5A5
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 06:56:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229916AbiIUEv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 00:51:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58106 "EHLO
+        id S229669AbiIUE4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 00:56:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbiIUEvJ (ORCPT
+        with ESMTP id S229525AbiIUE4P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 00:51:09 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 712057D1F4
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 21:51:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663735866; x=1695271866;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=qQODaH30nCexuxzGdRDmgvd2Yn0DUhVfstRv7Lm9h9E=;
-  b=N5R6VAZETFLEYdpT5Gkqp8hgQxqNKddP/74T9iytU4sGUpzhqK5CeMpL
-   epFuSdTw+xoMh/8FN7XmJtQ1hd1GDMGtc3bQw9ZxLO7ND2WohvVcq1Xo6
-   kKD5fKEPgHKbtWqs4WZZq++QvqPHU/boIEJ6KWdk/JTyksvVvTjKaf79c
-   xqtUPSTvLIjSGJZDGvNe2Dq7+uv4QGAN6f/UWnecqGzFLXbGc2QaoA32T
-   Wy77b0Pby7sFLD1s1lk+bPO+1zSr+jhvOF+9k9t+mlplxrwNTr8xNOjOE
-   R4Tg3yolbcb9OwoqrXGq2DWmLfMH40N3jWRa+Dh+HR0PposNgOgBcPDQn
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10476"; a="282945194"
-X-IronPort-AV: E=Sophos;i="5.93,332,1654585200"; 
-   d="scan'208";a="282945194"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 21:51:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,332,1654585200"; 
-   d="scan'208";a="596814474"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 20 Sep 2022 21:51:04 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oarhP-0003F6-1v;
-        Wed, 21 Sep 2022 04:51:03 +0000
-Date:   Wed, 21 Sep 2022 12:50:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: include/linux/atomic/atomic-instrumented.h:476:16: sparse: sparse:
- cast truncates bits from constant value (ffffffffaaa31337 becomes 37)
-Message-ID: <202209211209.ikyCliaa-lkp@intel.com>
+        Wed, 21 Sep 2022 00:56:15 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26A887C1AF
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 21:56:14 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id p18so4492717plr.8
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 21:56:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=uLS0pqX8ABlHPyY6IrFy7TWkhrlEvTMPKR/GQlZ1z0w=;
+        b=hNex4eY8EhXjnt1674fczrOqm70GjFPvOV1SNGPjimcyMKTk2Jh5me9A1MpxXqw39r
+         iJf0sJrHHqz3rzTJF2FltTmteto7EU4nfh7HfjIxFcvLwG7fwnIju+VC/A+F98h+h0cD
+         l/v2jC3fOkRIpIvZn/3DxFbtwM8d6gVOyqVYrRFJ2JlXWjl1vpxg92Dg+SGtWK39Affi
+         eSMBCnqEPlb/VDKmziCuN8m5R41/EhIlES8lhm/qPqIBHGZ81VifTJpnEbEUTHwsd6PR
+         lK1wo0ZqJL2G9RktxofIa1MhsrRxrS0ZZXtmRvAHObgrI8nBfZ36SSYjncl6g7KL58+H
+         PDIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=uLS0pqX8ABlHPyY6IrFy7TWkhrlEvTMPKR/GQlZ1z0w=;
+        b=67zCpw/9z4THgxgvcXYnG/jP3IqMqeWxq3/odW/kAsUcOWwV8+7MXB3XL8K26JTzCA
+         8OnbdzRZlQW+IoS18QPWJnWWEFazmRmLq3EenFLv9fULAFtKkXiwCi2BxO+DuX0a3MW3
+         F4dCG1GYT59I4hdzzUz9/+M+QXjVIqm3355lqK8sz69VtwTUWkned0csgU5sO+zpztGZ
+         4YYHt3md2I7p2FBIyaMm7OGZK58UsND9Q0K1kZ0vz8W29TCGfrKrTXYCmCSk/b1gBaOS
+         p3pmiWtINUGnBpPlr9So9GRbyvn9xwGIEkepmL3LJkeOZg5brrxgFkWQCrCMLkq4+Dzb
+         SiOg==
+X-Gm-Message-State: ACrzQf1SXaepc0WcOv7WIvQJEUTwKfSKUPJ5m74G4+tYqOAPSr+uY1U6
+        U9z0mmJ+xuPJXedVUCZPid9DaA==
+X-Google-Smtp-Source: AMsMyM5nWzgZ2Rl60J9B4u0WHGfzX97RusUs4fUlT2dpP12UcASoz+ZehA35R85RZDRSQO/R+ynJRg==
+X-Received: by 2002:a17:902:b7c6:b0:178:b625:e9f7 with SMTP id v6-20020a170902b7c600b00178b625e9f7mr2959524plz.128.1663736173521;
+        Tue, 20 Sep 2022 21:56:13 -0700 (PDT)
+Received: from localhost.localdomain ([2401:4900:1c61:8e50:8ba8:7ad7:f34c:2f5])
+        by smtp.gmail.com with ESMTPSA id p12-20020a170902e74c00b00176e2fa216csm871829plf.52.2022.09.20.21.56.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Sep 2022 21:56:12 -0700 (PDT)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org
+Cc:     agross@kernel.org, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, thara.gopinath@gmail.com,
+        devicetree@vger.kernel.org, robh@kernel.org,
+        krzysztof.kozlowski@linaro.org, andersson@kernel.org,
+        bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
+        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+        Jordan Crouse <jorcrous@amazon.com>
+Subject: [PATCH v7 0/4] ARM: dts + defconfig: Add support for Qualcomm QCE block on new SoCs and in defconfig
+Date:   Wed, 21 Sep 2022 10:25:58 +0530
+Message-Id: <20220921045602.1462007-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   60891ec99e141b74544d11e897a245ef06263052
-commit: e3d18cee258b898017b298b5b93f8134dd62aee3 locking/atomic: centralize generated headers
-date:   1 year, 2 months ago
-config: ia64-randconfig-s053-20220921 (https://download.01.org/0day-ci/archive/20220921/202209211209.ikyCliaa-lkp@intel.com/config)
-compiler: ia64-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e3d18cee258b898017b298b5b93f8134dd62aee3
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout e3d18cee258b898017b298b5b93f8134dd62aee3
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=ia64 SHELL=/bin/bash
+Changes since v6:
+=================
+- v6 can be seen here: https://lore.kernel.org/linux-arm-msm/30756e6f-952f-ccf2-b493-e515ba4f0a64@linaro.org/
+- No code changes since v6.
+- As per Krzysztof's suggestion on v6, clubbed the crypto driver and
+  dt-bindings changes together. Now the overall v5 patchset into 3
+  separate patchsets, one each for the following areas to allow easier
+  review and handling from the maintainer:
+        arm-msm, crypto and dma 
+- This patch targets the arm/arm-msm tree specifically.
+- This patchset is dependent on the crypto + dt-binding patchset, which
+  can be seen here:  https://lore.kernel.org/linux-arm-msm/20220920114051.1116441-1-bhupesh.sharma@linaro.org/
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+Changes since v5:
+=================
+- v5 can be seen here: https://lore.kernel.org/lkml/20211110105922.217895-1-bhupesh.sharma@linaro.org/
+- As per Bjorn's suggestion on irc, broke down the patchset into 4
+  separate patchsets, one each for the following areas to allow easier
+  review and handling from the respective maintainer(s):
+        'arm-msm', 'crypto', 'dma' and 'devicetree'
+  This patchset is directed for the 'arm-msm' tree / area.
+- Addressed Rob's, Vladimir's and Bjorn's review comments on v5.
+- Added Tested-by from Jordan received on the v5.
+- Also added a 'defconfig' change where I enabled the QCE block as a module.
 
-sparse warnings: (new ones prefixed by >>)
-   lib/atomic64_test.c: note: in included file (through include/linux/atomic.h):
->> include/linux/atomic/atomic-instrumented.h:476:16: sparse: sparse: cast truncates bits from constant value (ffffffffaaa31337 becomes 37)
-   include/linux/atomic/atomic-instrumented.h:476:16: sparse: sparse: cast truncates bits from constant value (ffffffffaaa31337 becomes 1337)
-   include/linux/atomic/atomic-instrumented.h:483:16: sparse: sparse: cast truncates bits from constant value (ffffffffaaa31337 becomes 37)
-   include/linux/atomic/atomic-instrumented.h:483:16: sparse: sparse: cast truncates bits from constant value (ffffffffaaa31337 becomes 1337)
-   include/linux/atomic/atomic-instrumented.h:490:16: sparse: sparse: cast truncates bits from constant value (ffffffffaaa31337 becomes 37)
-   include/linux/atomic/atomic-instrumented.h:490:16: sparse: sparse: cast truncates bits from constant value (ffffffffaaa31337 becomes 1337)
-   include/linux/atomic/atomic-instrumented.h:497:16: sparse: sparse: cast truncates bits from constant value (ffffffffaaa31337 becomes 37)
-   include/linux/atomic/atomic-instrumented.h:497:16: sparse: sparse: cast truncates bits from constant value (ffffffffaaa31337 becomes 1337)
->> include/linux/atomic/atomic-instrumented.h:476:16: sparse: sparse: cast truncates bits from constant value (11112222 becomes 22)
-   include/linux/atomic/atomic-instrumented.h:476:16: sparse: sparse: cast truncates bits from constant value (11112222 becomes 2222)
-   include/linux/atomic/atomic-instrumented.h:483:16: sparse: sparse: cast truncates bits from constant value (11112222 becomes 22)
-   include/linux/atomic/atomic-instrumented.h:483:16: sparse: sparse: cast truncates bits from constant value (11112222 becomes 2222)
-   include/linux/atomic/atomic-instrumented.h:490:16: sparse: sparse: cast truncates bits from constant value (11112222 becomes 22)
-   include/linux/atomic/atomic-instrumented.h:490:16: sparse: sparse: cast truncates bits from constant value (11112222 becomes 2222)
-   include/linux/atomic/atomic-instrumented.h:497:16: sparse: sparse: cast truncates bits from constant value (11112222 becomes 22)
-   include/linux/atomic/atomic-instrumented.h:497:16: sparse: sparse: cast truncates bits from constant value (11112222 becomes 2222)
->> include/linux/atomic/atomic-instrumented.h:1054:16: sparse: sparse: cast truncates bits from constant value (aaa31337c001d00d becomes d)
->> include/linux/atomic/atomic-instrumented.h:1054:16: sparse: sparse: cast truncates bits from constant value (aaa31337c001d00d becomes d00d)
->> include/linux/atomic/atomic-instrumented.h:1054:16: sparse: sparse: cast truncates bits from constant value (aaa31337c001d00d becomes c001d00d)
-   include/linux/atomic/atomic-instrumented.h:1061:16: sparse: sparse: cast truncates bits from constant value (aaa31337c001d00d becomes d)
-   include/linux/atomic/atomic-instrumented.h:1061:16: sparse: sparse: cast truncates bits from constant value (aaa31337c001d00d becomes d00d)
-   include/linux/atomic/atomic-instrumented.h:1061:16: sparse: sparse: cast truncates bits from constant value (aaa31337c001d00d becomes c001d00d)
-   include/linux/atomic/atomic-instrumented.h:1068:16: sparse: sparse: cast truncates bits from constant value (aaa31337c001d00d becomes d)
-   include/linux/atomic/atomic-instrumented.h:1068:16: sparse: sparse: cast truncates bits from constant value (aaa31337c001d00d becomes d00d)
-   include/linux/atomic/atomic-instrumented.h:1068:16: sparse: sparse: cast truncates bits from constant value (aaa31337c001d00d becomes c001d00d)
-   include/linux/atomic/atomic-instrumented.h:1075:16: sparse: sparse: cast truncates bits from constant value (aaa31337c001d00d becomes d)
-   include/linux/atomic/atomic-instrumented.h:1075:16: sparse: sparse: cast truncates bits from constant value (aaa31337c001d00d becomes d00d)
-   include/linux/atomic/atomic-instrumented.h:1075:16: sparse: sparse: cast truncates bits from constant value (aaa31337c001d00d becomes c001d00d)
->> include/linux/atomic/atomic-instrumented.h:1054:16: sparse: sparse: cast truncates bits from constant value (faceabadf00df001 becomes 1)
->> include/linux/atomic/atomic-instrumented.h:1054:16: sparse: sparse: cast truncates bits from constant value (faceabadf00df001 becomes f001)
->> include/linux/atomic/atomic-instrumented.h:1054:16: sparse: sparse: cast truncates bits from constant value (faceabadf00df001 becomes f00df001)
-   include/linux/atomic/atomic-instrumented.h:1061:16: sparse: sparse: cast truncates bits from constant value (faceabadf00df001 becomes 1)
-   include/linux/atomic/atomic-instrumented.h:1061:16: sparse: sparse: cast truncates bits from constant value (faceabadf00df001 becomes f001)
-   include/linux/atomic/atomic-instrumented.h:1061:16: sparse: sparse: cast truncates bits from constant value (faceabadf00df001 becomes f00df001)
-   include/linux/atomic/atomic-instrumented.h:1068:16: sparse: sparse: cast truncates bits from constant value (faceabadf00df001 becomes 1)
-   include/linux/atomic/atomic-instrumented.h:1068:16: sparse: sparse: cast truncates bits from constant value (faceabadf00df001 becomes f001)
-   include/linux/atomic/atomic-instrumented.h:1068:16: sparse: sparse: cast truncates bits from constant value (faceabadf00df001 becomes f00df001)
-   include/linux/atomic/atomic-instrumented.h:1075:16: sparse: sparse: cast truncates bits from constant value (faceabadf00df001 becomes 1)
-   include/linux/atomic/atomic-instrumented.h:1075:16: sparse: sparse: cast truncates bits from constant value (faceabadf00df001 becomes f001)
-   include/linux/atomic/atomic-instrumented.h:1075:16: sparse: sparse: cast truncates bits from constant value (faceabadf00df001 becomes f00df001)
+Changes since v4:
+=================
+- v4 for sm8250 can be seen here: https://lore.kernel.org/linux-arm-msm/20211013105541.68045-1-bhupesh.sharma@linaro.org/
+- v1 for sm8150 qce enablement can be seen here: https://lore.kernel.org/linux-arm-msm/20211013165823.88123-1-bhupesh.sharma@linaro.org/
+- Merged the sm8150 and sm8250 enablement patches in the same patchset,
+  as per suggestions from Bjorn.
+- Dropped a couple of patches from v4, as these have been picked by
+  Bjorn already via his tree.
+- Addressed review comments from Vladimir, Thara and Rob.
+- Collect Reviewed-by from Rob and Thara on some of the patches from the
+  v4 patchset.
 
-vim +476 include/linux/atomic/atomic-instrumented.h
+Changes since v3:
+=================
+- v3 can be seen here: https://lore.kernel.org/linux-arm-msm/20210519143700.27392-1-bhupesh.sharma@linaro.org/
+- Dropped a couple of patches from v3, on basis of the review comments:
+   ~ [PATCH 13/17] crypto: qce: core: Make clocks optional
+   ~ [PATCH 15/17] crypto: qce: Convert the device found dev_dbg() to dev_info()
+- Addressed review comments from Thara, Rob and Stephan Gerhold.
+- Collect Reviewed-by from Rob and Thara on some of the patches from the
+  v3 patchset.
 
-aa525d063851a9 include/asm-generic/atomic-instrumented.h Mark Rutland 2018-09-04  471  
-c020395b6634b7 include/asm-generic/atomic-instrumented.h Marco Elver  2019-11-26  472  static __always_inline int
-aa525d063851a9 include/asm-generic/atomic-instrumented.h Mark Rutland 2018-09-04  473  atomic_cmpxchg(atomic_t *v, int old, int new)
-aa525d063851a9 include/asm-generic/atomic-instrumented.h Mark Rutland 2018-09-04  474  {
-3570a1bcf45e9a include/asm-generic/atomic-instrumented.h Marco Elver  2020-07-24  475  	instrument_atomic_read_write(v, sizeof(*v));
-aa525d063851a9 include/asm-generic/atomic-instrumented.h Mark Rutland 2018-09-04 @476  	return arch_atomic_cmpxchg(v, old, new);
-aa525d063851a9 include/asm-generic/atomic-instrumented.h Mark Rutland 2018-09-04  477  }
-aa525d063851a9 include/asm-generic/atomic-instrumented.h Mark Rutland 2018-09-04  478  
-c020395b6634b7 include/asm-generic/atomic-instrumented.h Marco Elver  2019-11-26  479  static __always_inline int
-aa525d063851a9 include/asm-generic/atomic-instrumented.h Mark Rutland 2018-09-04  480  atomic_cmpxchg_acquire(atomic_t *v, int old, int new)
-aa525d063851a9 include/asm-generic/atomic-instrumented.h Mark Rutland 2018-09-04  481  {
-3570a1bcf45e9a include/asm-generic/atomic-instrumented.h Marco Elver  2020-07-24  482  	instrument_atomic_read_write(v, sizeof(*v));
-aa525d063851a9 include/asm-generic/atomic-instrumented.h Mark Rutland 2018-09-04  483  	return arch_atomic_cmpxchg_acquire(v, old, new);
-aa525d063851a9 include/asm-generic/atomic-instrumented.h Mark Rutland 2018-09-04  484  }
-aa525d063851a9 include/asm-generic/atomic-instrumented.h Mark Rutland 2018-09-04  485  
-c020395b6634b7 include/asm-generic/atomic-instrumented.h Marco Elver  2019-11-26  486  static __always_inline int
-aa525d063851a9 include/asm-generic/atomic-instrumented.h Mark Rutland 2018-09-04  487  atomic_cmpxchg_release(atomic_t *v, int old, int new)
-aa525d063851a9 include/asm-generic/atomic-instrumented.h Mark Rutland 2018-09-04  488  {
-3570a1bcf45e9a include/asm-generic/atomic-instrumented.h Marco Elver  2020-07-24  489  	instrument_atomic_read_write(v, sizeof(*v));
-aa525d063851a9 include/asm-generic/atomic-instrumented.h Mark Rutland 2018-09-04  490  	return arch_atomic_cmpxchg_release(v, old, new);
-aa525d063851a9 include/asm-generic/atomic-instrumented.h Mark Rutland 2018-09-04  491  }
-aa525d063851a9 include/asm-generic/atomic-instrumented.h Mark Rutland 2018-09-04  492  
-c020395b6634b7 include/asm-generic/atomic-instrumented.h Marco Elver  2019-11-26  493  static __always_inline int
-aa525d063851a9 include/asm-generic/atomic-instrumented.h Mark Rutland 2018-09-04  494  atomic_cmpxchg_relaxed(atomic_t *v, int old, int new)
-aa525d063851a9 include/asm-generic/atomic-instrumented.h Mark Rutland 2018-09-04  495  {
-3570a1bcf45e9a include/asm-generic/atomic-instrumented.h Marco Elver  2020-07-24  496  	instrument_atomic_read_write(v, sizeof(*v));
-aa525d063851a9 include/asm-generic/atomic-instrumented.h Mark Rutland 2018-09-04 @497  	return arch_atomic_cmpxchg_relaxed(v, old, new);
-aa525d063851a9 include/asm-generic/atomic-instrumented.h Mark Rutland 2018-09-04  498  }
-aa525d063851a9 include/asm-generic/atomic-instrumented.h Mark Rutland 2018-09-04  499  
+Changes since v2:
+=================
+- v2 can be seen here: https://lore.kernel.org/dmaengine/20210505213731.538612-1-bhupesh.sharma@linaro.org/
+- Drop a couple of patches from v1, which tried to address the defered
+  probing of qce driver in case bam dma driver is not yet probed.
+  Replace it instead with a single (simpler) patch [PATCH 16/17].
+- Convert bam dma and qce crypto dt-bindings to YAML.
+- Addressed review comments from Thara, Bjorn, Vinod and Rob.
 
-:::::: The code at line 476 was first introduced by commit
-:::::: aa525d063851a98e020b827fdd1d7776ae652301 locking/atomics: Switch to generated instrumentation
+Changes since v1:
+=================
+- v1 can be seen here: https://lore.kernel.org/linux-arm-msm/20210310052503.3618486-1-bhupesh.sharma@linaro.org/
+- v1 did not work well as reported earlier by Dmitry, so v2 contains the following
+  changes/fixes:
+  ~ Enable the interconnect path b/w BAM DMA and main memory first
+    before trying to access the BAM DMA registers.
+  ~ Enable the interconnect path b/w qce crytpo and main memory first
+    before trying to access the qce crypto registers.
+  ~ Make sure to document the required and optional properties for both
+    BAM DMA and qce crypto drivers.
+  ~ Add a few debug related print messages in case the qce crypto driver
+    passes or fails to probe.
+  ~ Convert the qce crypto driver probe to a defered one in case the BAM DMA
+    or the interconnect driver(s) (needed on specific Qualcomm parts) are not
+    yet probed.
 
-:::::: TO: Mark Rutland <mark.rutland@arm.com>
-:::::: CC: Ingo Molnar <mingo@kernel.org>
+Qualcomm crypto engine (qce) is available on several Snapdragon SoCs.
+The qce block supports hardware accelerated algorithms for encryption
+and authentication. It also provides support for aes, des, 3des
+encryption algorithms and sha1, sha256, hmac(sha1), hmac(sha256)
+authentication algorithms.
+
+Tested the enabled crypto algorithms with cryptsetup test utilities
+on sm8150-mtp, sa8155p-adp, sm8250-mtp and RB5 boards (see [1]) and
+also with crypto self-tests, including the fuzz tests
+ (CONFIG_CRYPTO_MANAGER_EXTRA_TESTS=y).
+
+[1]. https://linux.die.net/man/8/cryptsetup
+
+Cc: thara.gopinath@gmail.com
+Cc: robh@kernel.org
+Cc: andersson@kernel.org
+Tested-by: Jordan Crouse <jorcrous@amazon.com>
+
+Bhupesh Sharma (4):
+  ARM: dts: qcom: Use new compatibles for crypto nodes
+  arm64: dts: qcom: sm8250: Add dt entries to support crypto engine.
+  arm64: dts: qcom: sm8150: Add dt entries to support crypto engine.
+  arm64: defconfig: Enable Qualcomm QCE crypto
+
+ arch/arm/boot/dts/qcom-ipq4019.dtsi   |  2 +-
+ arch/arm64/boot/dts/qcom/ipq6018.dtsi |  2 +-
+ arch/arm64/boot/dts/qcom/ipq8074.dtsi |  2 +-
+ arch/arm64/boot/dts/qcom/msm8996.dtsi |  2 +-
+ arch/arm64/boot/dts/qcom/sdm845.dtsi  |  2 +-
+ arch/arm64/boot/dts/qcom/sm8150.dtsi  | 28 +++++++++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sm8250.dtsi  | 28 +++++++++++++++++++++++++++
+ arch/arm64/configs/defconfig          |  1 +
+ 8 files changed, 62 insertions(+), 5 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.1
+
