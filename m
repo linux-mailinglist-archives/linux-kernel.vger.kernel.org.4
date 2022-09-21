@@ -2,176 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 486065BFC20
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 12:17:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F334D5BFC23
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 12:17:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230409AbiIUKR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 06:17:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46394 "EHLO
+        id S230420AbiIUKRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 06:17:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231310AbiIUKRU (ORCPT
+        with ESMTP id S231339AbiIUKRj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 06:17:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1465495AFE
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 03:17:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663755437;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tXJHoz876JXyWdIzmz4FeK1YaPw2FwSEN3I5pptho3c=;
-        b=EKjXB1gu2N1EJQsc0nJYGs488iwnT7UeLBYH/R47A7YK5zUPD3MM6CD0YgaWGj0J5Fk2/A
-        M0D7DTtn5pPJ2R3i6b8tKfpmW0E0EyVUtcW/Kpecl9qBLeveryQFPLlsZ4VV7UJN1GmBFE
-        G7gdwq7wm6XSHEkUZpX3v9A0HaDTccE=
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com
- [209.85.166.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-621-UpUffXoLOHOugyt1w4IE2w-1; Wed, 21 Sep 2022 06:17:16 -0400
-X-MC-Unique: UpUffXoLOHOugyt1w4IE2w-1
-Received: by mail-io1-f70.google.com with SMTP id x22-20020a6bda16000000b006a123cb02beso2831954iob.18
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 03:17:16 -0700 (PDT)
+        Wed, 21 Sep 2022 06:17:39 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E0793234
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 03:17:37 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id a3so8361784lfk.9
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 03:17:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=yzjx6E9igsuTXnzRNP3+K/9v8BB+rrIrI9XXW0kAwts=;
+        b=N3jo3aH8q00MNnQwdAGWJul1Hg8tzQq8aTnbigvxcRhGj7gFPgLKkbgDiLdQRfPd58
+         iF3CKoXL0ngKYxKjZFQIRaxxQzLFI+FSihQtBzKsxDkinM96LdTl6A3TOQTOOFk4nT/y
+         RfsalRLJPWoZOUORCbMo4+TShCiXW7Jk6dSKwe10RrV9eJM8tr3ZDzr9DAu1R7eUuvk9
+         YkWj0AvdIFK2rwI+zO1xDGMJE7v4WoHuJUTBYYksWNulOW14rcKFrSPXt/zY/92zjImr
+         x7FU5Ny2wAxyZT7p7XqdkjOL27WxQt0qcgcQ7xFiiSLF6EoOOsJcOWnPrG1rlJqKzVG6
+         Mbow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=tXJHoz876JXyWdIzmz4FeK1YaPw2FwSEN3I5pptho3c=;
-        b=CaU6Yyp5T9jjchd6hxzulpGqf5hz0pPcLzdNEE53yafoZTK0xPNkN3fn0Ys3t+QXvo
-         9hO30AI6NeykvWTDcvpK7/Ej2HM/b+1KUIHYn1k7M4FDzpNQ4zG1y286sNy4EBxH3E8w
-         +u+Ol5hFHQMmzKep10SXH2NOINKx/D5NVtDx4HbFdLGmcSFULOfcB40CPQWTbJX2TMHV
-         ABkOuizqSOt1MIBMk8MhIYQh0pnQqhZF73EvrhVthXulE+eAwBlyYTH+Cbxr0ihy5B5j
-         B+wfpFIqVk/zNQ7Hs4pZkkS8d5srxAo8FnkGvJOO4XUAm48y0ErpUl1Blsme5Oyc7YeK
-         4mTw==
-X-Gm-Message-State: ACrzQf2GMLanLASJpelRRwLVzBkicNcEqAujXRpf8lGuPxiJ50wNWBb+
-        NnWsNCqXSoSW6+lz/G8HIiVg6LehOeuXqxZht+3ZSaindbvMh/ArfQ3ouAcufRwKxvuBnh8Uq6F
-        ouOLHNxzJNGx5xN99a/PZaOEcz0t48n9NbhhD4eBy
-X-Received: by 2002:a05:6638:25d3:b0:35a:41e1:bb6a with SMTP id u19-20020a05663825d300b0035a41e1bb6amr13596405jat.36.1663755435558;
-        Wed, 21 Sep 2022 03:17:15 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM688ewOCyJLZ/txeb59b05RRH+aUBqA1+qGDipJrnApOiSoUL2NrJFNlfnTCiqiiwvpKfPTErDMDcjRgo3gi9I=
-X-Received: by 2002:a05:6638:25d3:b0:35a:41e1:bb6a with SMTP id
- u19-20020a05663825d300b0035a41e1bb6amr13596395jat.36.1663755435297; Wed, 21
- Sep 2022 03:17:15 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=yzjx6E9igsuTXnzRNP3+K/9v8BB+rrIrI9XXW0kAwts=;
+        b=A/r9W+QbGgwVaIoin1s826CuB8dLL6ZmculqtnBAimZmeZMxXHhAUk4AQZkY+jKe9C
+         GdGm3k0lpXW0uN4cEQx1lsrMp9cv3M7x8qMpyWpLSLzufB/2JcTHkwbdT6+spQ2RKwkA
+         NV0rImLoy2wOJKkzAS3td77N0SGdgvbaOstOVzHzDLxkBjeNiDQXTU5dlfhH8LyhkjB4
+         nO/lJ61Zqb3LeogmADHhqoHIBHZfKoBPgejUWHUQybHEsMFDHDaD2yscZDG6phEoTYHk
+         xvd+7vfWjkhMwAhrQZHlUYHo3pXArlmgswbkw05UVMqh8J3/waZPNk0qF/3By7QZJF22
+         GRtg==
+X-Gm-Message-State: ACrzQf2TONVpJK3yOBhMCSOyKMuvinAXu8ca36pgRtx4NdS6FxRpOEfo
+        nmVNP6+RoYbinUQOTB3bjOHO+A==
+X-Google-Smtp-Source: AMsMyM7cHVHULWLnULj9mK8sInlgIqpR3q7VVoVLlsSAKejKuWD0ZCRo9zwghPn7eLFT6gBaZ17SKg==
+X-Received: by 2002:a05:6512:110c:b0:49f:99f0:5a3a with SMTP id l12-20020a056512110c00b0049f99f05a3amr5913755lfg.384.1663755455262;
+        Wed, 21 Sep 2022 03:17:35 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id m26-20020a05651202fa00b0048b3a92a2dbsm362277lfq.215.2022.09.21.03.17.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Sep 2022 03:17:34 -0700 (PDT)
+Message-ID: <b49de03c-2d88-ad81-7bdb-a33e6841481e@linaro.org>
+Date:   Wed, 21 Sep 2022 12:17:33 +0200
 MIME-Version: 1.0
-References: <CA+5PVA5ymJ-ghhhCfEBPxBynucF3gD+nHVNwcZkC5bsVotatDQ@mail.gmail.com>
-In-Reply-To: <CA+5PVA5ymJ-ghhhCfEBPxBynucF3gD+nHVNwcZkC5bsVotatDQ@mail.gmail.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Wed, 21 Sep 2022 12:17:04 +0200
-Message-ID: <CAO-hwJJY+sRiHX9KWqTAuR7Q8=3J8vu=FneusRago87uQYSxfw@mail.gmail.com>
-Subject: Re: linux-firmware signed commits; does anyone care?
-To:     Josh Boyer <jwboyer@kernel.org>
-Cc:     Linux Firmware <linux-firmware@kernel.org>,
-        Juerg Haefliger <juerg.haefliger@canonical.com>,
-        Peter Robinson <pbrobinson@fedoraproject.org>,
-        Takashi Iwai <tiwai@suse.com>, contact@laurentcarlier.com,
-        mpagano@gentoo.org,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        Jared Dominguez <jaredz@redhat.com>,
-        Alex Deucher <alexdeucher@gmail.com>,
-        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: Similar SoCs with different CPUs and interrupt bindings
+Content-Language: en-US
+To:     Robin Murphy <robin.murphy@arm.com>,
+        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
+References: <CAMuHMdUPm36RsxHdVwspR3NCAR3C507AyB6R65W42N2gXWq0ag@mail.gmail.com>
+ <b0f2e13a-ff5d-5bfc-6dda-ca39bb57803e@linaro.org>
+ <CA+V-a8t3ukpa1PNz=5fP+BTjWkFJmwDo_EJJYjO9YctF2=K1Vg@mail.gmail.com>
+ <df9ff0bd-ad0e-4b5b-859d-dd913628edc8@linaro.org>
+ <567e9e6c-e34c-4ded-9622-9ad8387dd24b@arm.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <567e9e6c-e34c-4ded-9622-9ad8387dd24b@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 3:33 PM Josh Boyer <jwboyer@kernel.org> wrote:
->
-> Some time ago, we went back to doing ~monthly releases for
-> linux-firmware primarily to help distributions package firmware in a
-> simpler manner.  We GPG sign the tarballs, as is good practice, but as
-> part of reintroducing the tarballs we also started having a
-> linux-firmware maintainer GPG sign *every* commit done by a
-> maintainer.  The intention there was that because we're dealing with
-> binary blobs we really have no recourse to see changes unlike a source
-> code repo.  The signed commits at least provides a measure for
-> interested people to ensure the repo itself is only being committed to
-> by a recognized maintainer and it isn't compromised (in theory).  The
-> downside is that pull requests are merged non-ff and we wind up
-> signing the merge commit.
->
-> The question at hand though, is does anyone care about the GPG signed
-> commits?  It's not clear to me this practice is even noticed nor if it
-> is bringing any value to this project.  Since we've started this
-> practice, I am literally the only one committing to the repo and while
-> it isn't hard to do I want to know if it's actually useful to anyone.
->
-> I ask for two separate reasons.  The first is that a group of
-> interested firmware submitters is looking at modernizing the workflow
-> for the linux-firmware project and moving to a merge request workflow
-> instead of submitting giant binary blob patches via email.  This would
-> allow us to put some CI in place for simple checks to the WHENCE file,
-> etc.  Doing this while still having GPG signed commits isn't
-> impossible but it certainly complicates things a bit, and would likely
-> require a trusted bot to sign commits.  That has implications on
-> secret storage and changes the dynamic on trust levels that make the
-> whole thing even more questionable.
+On 21/09/2022 12:14, Robin Murphy wrote:
+>> +#define SOC_PERIPHERAL_IRQ_NUMBER(na)  (na + 32)
+>> +#define SOC_PERIPHERAL_IRQ(nr, na) GIC_SPI nr SOC_PERIPHERAL_IRQ_NUMBER(na)
+>>   / {
+>>          compatible = "renesas,r9a07g043";
+>>          #address-cells = <2>;
+>> @@ -128,7 +130,7 @@ ssi1: ssi@1004a000 {
+>>                          compatible = "renesas,r9a07g043-ssi",
+>>                                       "renesas,rz-ssi";
+>>                          reg = <0 0x1004a000 0 0x400>;
+>> -                       interrupts = <GIC_SPI 330 IRQ_TYPE_LEVEL_HIGH>,
+>> +                       interrupts = <SOC_PERIPHERAL_IRQ(330, IRQ_TYPE_LEVEL_HIGH)>,
+>>
+>>
+>>
+>> Or any other method like that....
+> 
+> Which will generate the text:
+> 
+> 	"interrupts = <GIC_SPI 330 (IRQ_TYPE_LEVEL_HIGH + 32)>,"
+> 
+> (give or take some whitespace)
+> 
+> CPP supports constant expressions in #if and #elif directives, but 
+> macros are purely literal text replacement. It might technically be 
+> achievable with some insane CPP metaprogramming, but for all practical 
+> purposes this is a non-starter unless dtc itself grows the ability to 
+> process arithmetic expressions.
 
-People already are saying that they do not see value in GPG signed
-commits, but I'd like to add a few bits here.
+Except I put it into flags, not to IRQ number, it works, so I am not
+sure why do you call it non-starter?
 
-As Josh said, the idea is that we modernize the workflow for
-linux-firmware by automating what can be automated.
-The first thing that seems to be possible is automatically merge
-submitted MR assuming:
-- the general CI tests are passing (Mario already has a few sanity ones)
-- the commits do not touch WHENCE (so we have a reference on who is
-responsible for what)
-- the commits are signed by the maintainer of that said blobs (which
-would be matched against the WHENCE file)
-
-The idea is that if a maintainers of a blob submits a commit and signs
-it, there is no real reason to not merge it ASAP, given that we can
-always say: "well, it's the fault of X who is responsible of this file
-and who signed it, so we know it's actually X".
-
-Then comes the question of maintainers signing commits. If we ask
-submitters to sign their commits to have a fast track, it makes IMO
-sense to also ask the maintainers to sign their commits to show the
-way it is supposed to be done. I wouldn't care much about the
-automated bot that would merge the commit. If we need to have it sign
-the merge commit, we can do it, and this will only give the
-information that the process was followed.
-
->
-> The second reason is that even if people are validating the GPG signed
-> commits, it's not exactly user friendly.  I've been looking at
-> sigstore and recor and that might be a better solution in the long run
-> if we do want to utilize something like the current scheme.
-
-TBH, do we ever need to validate signed commits besides in the CI case
-or if something wrong happens?
-
-To make a parallel, Linus requires people to sign their PR, but he
-doesn't need to sign his commits. Because whatever goes into his tree
-is from him, obviously him. However, he requires maintainers to send
-signed PR to ensure this is coming from a trusted source. So he is the
-only one caring for signed PR, and we just trust him.
-
-So in our case, if signing for maintainers is not too much of a pain I
-would say:
-- to automate inclusion of blobs, we should ask vendors to sign their commits
-- to show the way, maintainers should still sign their commits (even
-if no one cares)
-- the CI should verify who signed what and if the signature is valid
-- end users only care about the signed tarball, that they trust the
-maintainers will build from a tree that is trusted
-
-OTOH, dropping the signing of the merge commit from the maintainers
-would allow them to just hit the merge button in the UI, which might
-be a simpler thing than having to forward that MR to a bot.
-
->
-> I'll still GPG sign the tarballs, but I'd like to propose dropping our
-> current self-imposed requirement that all commits are GPG signed.
-> Thoughts?
->
-
-I hope I didn't add too much confusion :)
-
-Cheers,
-Benjamin
+Best regards,
+Krzysztof
 
