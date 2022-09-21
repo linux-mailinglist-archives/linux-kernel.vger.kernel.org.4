@@ -2,161 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F30B85BF98E
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 10:44:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 045A45BF9A3
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 10:46:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbiIUIot (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 04:44:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54010 "EHLO
+        id S231268AbiIUIqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 04:46:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbiIUIop (ORCPT
+        with ESMTP id S231340AbiIUIqW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 04:44:45 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F57E13CD3
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 01:44:42 -0700 (PDT)
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 1C6523F173
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 08:44:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1663749879;
-        bh=DqH0K51UyTYbMdPeDdb50Ry7JZRrT9mZT8SvU172pnE=;
-        h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-         MIME-Version:Content-Type;
-        b=DulQt+lYZLmcxVrL3GOAGzql8FiJv28hUy9zV8ASdCzngN50PBFkClRtw1A3+DvfP
-         PAO2wB44avbs9FxX9A9hPqYCoLqgbGrV98N+uaSRMmBhJBaJaMpvzdhCSNkPJHH0T0
-         nYPCzohRC/sOwPxKKNnBgoid4Itpe6N8Dln/Axwl8sdaOnJez65FS3JWd+FilyevwM
-         /eX6WCP+qfD0VEreqCjAZvOhcwVbnkwbmEn7fLlnFVnV/FvxrxRHjehexSi7rXFQdh
-         4+sTqAxpOSZmEA5HbtWtWwljIvCFqAyPdmI4y/PHYVjoiEJsQUqKRyg/Mbvrm1Bf5l
-         cXmKbzsIRJZMA==
-Received: by mail-ed1-f72.google.com with SMTP id m13-20020a056402510d00b004519332f0b1so3824712edd.7
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 01:44:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:organization:references:in-reply-to:message-id:subject
-         :cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=DqH0K51UyTYbMdPeDdb50Ry7JZRrT9mZT8SvU172pnE=;
-        b=r2s4vr52RyNdqlKmJaE2ioHlCEAeMGLIYNT5w484LoO2DKuzezilElel8cX2PlL69B
-         4cDStRcpICFYbeRtmnP3P39svi2Gw2lFN/jOHwlx/SbWlsRLbMnshPzg0u7Jb9EkjLqz
-         0zhM2MhFjjaEyEfMloRZo3B9Aht3J1XWHKyAih7wluhT+ikbqvQfJJfnjZxEIXLWZFmU
-         PUD2JbgG/eAxoLj/FfyxdNzQkTdSGvIcpRZtUamNQeAI3RzxitD/rMbhRnqOutItBh2A
-         pskHCSk0n/PbHRa5Kto0aeL4HlOxQg8SgpKuPdMl/g9qaUgZS09WExHF3l/V2bKzv66V
-         s8Bg==
-X-Gm-Message-State: ACrzQf12ovtg6v02nredPnyged+0Ze9c/C+fxBnoM54V8la5h2qH0038
-        M5XCgao3CYB9d6oh8KVNsHxirBeBbTsoqlwI38LdlgVE88oYpOff30S/oxnT9/LuNaJS1g9gscO
-        pUy7eI0zMW8Nlwef3aPCco7ccveucN/U0ucwZG0dWew==
-X-Received: by 2002:a05:6402:440d:b0:450:de54:3fcf with SMTP id y13-20020a056402440d00b00450de543fcfmr23466752eda.312.1663749878094;
-        Wed, 21 Sep 2022 01:44:38 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5FW8Ihpne98QK7GKfHf3O43P8AlLC1ErQ10ZILYuYb6+RHESHYxpgqfolFFnhgsAZzdZkxNw==
-X-Received: by 2002:a05:6402:440d:b0:450:de54:3fcf with SMTP id y13-20020a056402440d00b00450de543fcfmr23466739eda.312.1663749877878;
-        Wed, 21 Sep 2022 01:44:37 -0700 (PDT)
-Received: from smeagol ([194.191.244.86])
-        by smtp.gmail.com with ESMTPSA id b10-20020aa7df8a000000b0044e01e2533asm1429972edy.43.2022.09.21.01.44.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Sep 2022 01:44:37 -0700 (PDT)
-Date:   Wed, 21 Sep 2022 10:44:34 +0200
-From:   Juerg Haefliger <juerg.haefliger@canonical.com>
-To:     Josh Boyer <jwboyer@kernel.org>
-Cc:     Linux Firmware <linux-firmware@kernel.org>,
-        Peter Robinson <pbrobinson@fedoraproject.org>,
-        Takashi Iwai <tiwai@suse.com>, contact@laurentcarlier.com,
-        mpagano@gentoo.org,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        Jared Dominguez <jaredz@redhat.com>,
-        Alex Deucher <alexdeucher@gmail.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>
-Subject: Re: linux-firmware signed commits; does anyone care?
-Message-ID: <20220921104434.2529c45d@smeagol>
-In-Reply-To: <CA+5PVA5ymJ-ghhhCfEBPxBynucF3gD+nHVNwcZkC5bsVotatDQ@mail.gmail.com>
-References: <CA+5PVA5ymJ-ghhhCfEBPxBynucF3gD+nHVNwcZkC5bsVotatDQ@mail.gmail.com>
-Organization: Canonical Ltd
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Wed, 21 Sep 2022 04:46:22 -0400
+X-Greylist: delayed 64 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 21 Sep 2022 01:46:10 PDT
+Received: from esa2.hc353-39.eu.iphmx.com (esa2.hc353-39.eu.iphmx.com [207.54.65.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EA5F796B0
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 01:46:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=sequans.com; i=@sequans.com; l=7858; q=dns/txt;
+  s=corp; t=1663749970; x=1695285970;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=7sI0bK0Uik8Q0EifSq+urV7lPUg1NRSirxwJIUilZ6I=;
+  b=mKekmwQqW/jnW9bmhCN2pk92gpfj+ONOSZLCh1DJ/OWhdS89l0fPs438
+   kLkHv1cOhwLJLgS5vx/YbGJ5B9jJ0KGgrYP3+9AWpqnLKS/HAWdbVPeZ4
+   uZ/4qzj93vyVCRrsNUzeafN/8I9o9i3WadqSehCNICyYyVVFMq2yVeszu
+   A=;
+X-IPAS-Result: =?us-ascii?q?A2EaAAC+zSpjf5bSIB9aHAEBAQEBAQcBARIBAQQEAQFAg?=
+ =?us-ascii?q?TsHAQELAYMkgViET4gfiEcuA4QmmGuBfAsBAQEBAQEBAQEJQgSFBwKEbCc0C?=
+ =?us-ascii?q?Q4BAgQBAQEBAwIDAQEBAQEBAwEBAQUBAQEBAQEGAgEBAQECEAEBPEqFL0aCN?=
+ =?us-ascii?q?SkBg20BAQEDIwQLAQVBEAsYAgIfBwICVwYBDAYCAQGCeQGDIKBDAYsafzOBA?=
+ =?us-ascii?q?YgdgV8GgREsAYtqhDxDgUlEgRUnDIJ3PogagmYEgQmTd4QVJgQOAxkrHUECA?=
+ =?us-ascii?q?QtCNAMVAxQDBSQHAxkPIw0NBBYHDAMDBSUDAgIbBwICAwIGEwUCAk04CAQIB?=
+ =?us-ascii?q?CskDwUCBy8FBC8CHgQFBhEIAhYCBgQEBAQVAhAIAggmFwcTGBsZAQVZEAkhH?=
+ =?us-ascii?q?AoEGg0FBhMDIG8FCjsPKDJrKx0bCoEMKigVAwQEAwIGEwMDIgIQKjEUBCkTE?=
+ =?us-ascii?q?i0HK3MJAgMiZwUDAwQoLAMJIR8HKCY8B1g7BAMDECI9BgMJAwIkW3cCNxMVB?=
+ =?us-ascii?q?QMNGSYIBSMXHgQIPAIFBlmaVnoTLBcJEIF3CwuTFJtQkG+CNINgoB0GEy6Wc?=
+ =?us-ascii?q?wiSCS2WXSCiHIR6MIE/IoIWTSODN1EZD45XjhtzOwIGAQoBAQMJhkeEEwEB?=
+IronPort-PHdr: A9a23:96t4txLLdAy7RA0cJ9mcuEBgWUAX0o4c3iYr45Yqw4hDbr6kt8y7e
+ hCFvrM21waCBdqTwskHotKei7rnV20E7MTJm1E5W7sIaSU4j94LlRcrGs+PBB6zBvfraysnA
+ JYKDwc9rDm0PkdPBcnxeUDZrGGs4j4OABX/Mhd+KvjoFoLIgMm7ye6/94fdbghGmTaxbq9+I
+ RerpgjNq8cahpdvJLwswRXTuHtIfOpWxWJsJV2Nmhv3+9m98p1+/SlOovwt78FPX7n0cKQ+V
+ rxYES8pM3sp683xtBnMVhWA630BWWgLiBVIAgzF7BbnXpfttybxq+Rw1DWGMcDwULs5Qiqp4
+ bt1RxD0iScHLz85/3/Risxsl6JQvRatqwViz4LIfI2ZMfxzdb7fc9wHX2pMRsVfWSJODYyyc
+ oUBEfQMPehYoYb/u1QAogCzBRWvCe711jNEmnH70K883u88EQ/GxgsgH9cWvXvbttr1MLkdU
+ eapzKnJyzXIcvZY2TDn6IfWdBAuuvWMXbNsccHMzkQvCQDFjlKKqYP7OTOazeANs2mH7+d7T
+ uKglXcnqxxrrTip3ccgkJXGhoUQyl3d8yhy3Yk6K8GiRkFhfd6kDIVftzucN4ZuXs4vX2Flt
+ Skkx7AYpJO2YDQHxpo5yxLDdvGJfZSE7g/sWuueIzp1gHBodb2hihu97EStyO7xWMmw3VtLo
+ CRLkt/BvW0D2RzU78iIUPp9/kG51DmT1gDT8f1LIUcumaXHLJ4hx6Y8lpkNvkTZGC/5hkH2g
+ LWRdkU+9eik8/jrbqj8qp+bLY90hRnyMqsvmsyjAeQ4LxMBU3KH9uS70b3v5UL5QLRWjv02j
+ 6nWq43aJd8Fqa6jHwBV1YAj6wqhADegzNQUh2UILFVAeB+BkoPnOEnOLej2APuimVihnilny
+ +rYMrH8HpnBNGXPnbf9cbt79kVS0hA8zcpF6JJRErwBJfXzVVLvu9HAFR85NhC0w/7gCNVgy
+ oMSQWKPDbGdMKPVqVKJ5+MvI+yXa48PojnxMeMl6OD3jX8kg1Ade7Kp0YELZ3C/G/RqO0SZY
+ XzyjdcdCWoHsBcyQPbkhVGcSzJfeWu+U74m6j0mCI+qEZ/PRoW3j7yA2Ce7EIdWZmdDCl2UD
+ 3fodIKEW+0SZyKUOcBhlj0EVaS6Ro86yx6urRL6xKBhLurP4CEXqZXj1N1t6+3Vjh497SZ0A
+ NiF02GRU2F0mXsFSj8u0KBlvUN90kuD0bR/g/FAENxT5upJUhokOp7Y1eB6Ecr9WwLHftiTT
+ FarWc6pATY2TtItx98OYkB9F8++gRDE2iqmG6UVmKCTBJwo7qLc2GD8J8J+y3bez6Qhjl8mQ
+ tdROm2inKJw6w/TB4vRn0WDi6mqbbgc3DLK9GqbzmqBp1xYUA90UarYRHwQfE/WrdDi60PGT
+ r+uEqgnMhBbxcKeN6dGcNrpjU9JRPv7ItTRf3qxm3usBRaP3r6MaI7qe3sY3CjGDEgEkhsT/
+ WqdNQQkAiehomTeDCFhFF71fkzj7/d+pGuhTkAo1wGKc1Fh172t9x4RhPycTe4T370dtCcit
+ Tp0BlC90MzSC9ebuQphc7tTYckn7FdEy23ZrQp9MYKkL6x4gV4eaQt37AvS0EBSC5xdnMxil
+ no7ygN2Yfad0Upcejfex5nhPLTTAmP1+wyraqiQ0VbbhpLe+aoV7vk840nupx3hDE0o9Gkvh
+ 91Wy1Od4InHCEwZVpenAWgt8B0vmbjeby8h5oWc9np2PK++tj7ek4Y3B+w/xxCqe9ZDGLiJD
+ RL7FdZcDM+rfr9502O1Zw4JabgBvJU/ONmrIr7fgPbDAQ==
+IronPort-Data: A9a23:w+2gfqAeSXzZrRVW/9jjw5YqxClBgxIJ4kV8jS/XYbTApGh00z0Dz
+ mQXWWuGM/eOZWuge4hzbIu/pxsEvsfRzodgTANkpHpgZkwTlceUXt7xwmUcns+xBp2YHBI5t
+ 5V2hv3odp1coqr0/0/1WlTHhSckjfngqp3UV7KfZUidfSc9FGF7z0oLd9cR2uZAmcK+Dx6Gp
+ eT8qsjePE7N8zNvOycf5rnrRClH5ZwegxtF+A1lDRx3lAWGzSNNXchGffjZw0bQG+G4IMbrH
+ 44v85nkpgs1zz91Yvu5n7DydFE9Q7K6FWBiXVIPBsBOKjAbzsAD+v5T2Mg0MC+7uB3Q9zxF8
+ +ihgLTpIesfFvOTwbxNA0cEe81JFfQuFLfveRBTuOTJnx2eKxMAyd03ZK09FdRwFupfXjsWr
+ ZT0gd3CB/yOr7ve/V61dgVjruhkAsjSA7oSg34jyzbaMcQ7fszHTJyfsLe03B9o7ixPNeTfY
+ sADYHx0YQ3dahtUfFwQDfrSns/z3z+kKXsC8QrT/Pdvi4TQ5FUZPLzFLtnSYNGMT8FUgm6Dq
+ 3vb9mLiRBodMbRzzBLZqyvy3rSU9c/9cI4RJeaV7dphvFiKzTEaGD0oRHTmjPbs3yZSXPoFc
+ RVOoULCt5Ma8U2yU9T5GQexsXiNujYWXN1MF+w8rgqKz8L85wWBLmkCUjNFLtchsaceRjY31
+ 1uF2trtARRrsaaJUjTFr/GTtzzaESwRM2oqYS4fURBD59jlvZF1gh/RJv5nEaionpj2FCv2z
+ jSisicznfMQgNQN2qH9+krI6w9AvbDbTws//AyRRW+88wp/f8iuYInABUXnAehoAMG3T2C+h
+ XU9lIuY6+MyP4yyyCiCebBYdF223MppIAEwkHY2Qcd6qWjxoCX/FWxDyG0udBY0bq7obRezO
+ hKM5Wu98bcJZBOXgblLj5WZJf5CIULIPtP4TPrZcN1Pb/CdnyfWpn02PSZ8M0hGdkwh1K0yf
+ LmBeMCnAB4n5UVbINmeHrZ1PUcDnHxW+I8qbcmTI+6b+bSffmWJbrwOLUGDaOs0hIvd/luOr
+ YcPaZHUm04DOAEbXsUx2dBKRbztBSVqba0aV+QOL4Zv3yI5QDB6VqeNqV/fU9U5xfsK/gs3w
+ p1NchUCkQCk7ZE2AQ+Nd2Fsdb70FYpyqX8wOilEALpb8yZLXGpb149GLsNfQFXS3LY8pRKCZ
+ 6VaJp7o7zUmYmivxgnxmrGk9dcyL0vz31nSV8dnCRBmF6Ndq8Xy0oeMVmPSGOMmVUJbaeNWT
+ 2Wc6z7m
+IronPort-HdrOrdr: A9a23:fyAQj6HdeUimLVdrpLqE1ceALOsnbusQ8zAXPo5KOHhom7+j5q
+ KTdZMgpGTJYVcqKQkdcL+7VpVoLUmsk6KdpLNhRItKPzOGhILLFu5fBOLZqlWKdkHDH6xmpM
+ BdmsNFeb7N5DZB/KPHCUWDc+rIH+PszJyV
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-AV: E=Sophos;i="5.93,332,1654552800"; 
+   d="scan'208";a="4116033"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+X-Virus-Scanned: amavisd-new at sequans.com
+Message-ID: <ffde44bc-d4ae-4052-c60c-35c8775a5101@sequans.com>
+Date:   Wed, 21 Sep 2022 10:45:03 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/SMLZX+r.Pk4dPIyz4DXcpay";
- protocol="application/pgp-signature"; micalg=pgp-sha512
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [mtd:nand/next 11/31]
+ drivers/mtd/nand/raw/cadence-nand-controller.c:1893:4: error: implicit
+ declaration of function 'ioread64_rep' is invalid in C99
+Content-Language: en-US
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        kernel test robot <lkp@intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+References: <202209210641.MziHAbW7-lkp@intel.com>
+ <20220921104002.226ff3f6@xps-13>
+From:   Valentin Korenblit <vkorenblit@sequans.com>
+In-Reply-To: <20220921104002.226ff3f6@xps-13>
+Content-Type: text/plain; charset="utf-8"; format="flowed"
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/SMLZX+r.Pk4dPIyz4DXcpay
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+SGkgTWlxdWVsLAoKSSB3aWxsIHRha2UgYSBsb29rIGF0IGl0IHRvZGF5LgoKQmVzdCByZWdhcmRz
+LAoKVmFsZW50aW4KCk9uIDkvMjEvMjIgMTA6NDAsIE1pcXVlbCBSYXluYWwgd3JvdGU6Cj4gSGkg
+VmFsZW50aW4sCj4KPiBsa3BAaW50ZWwuY29tIHdyb3RlIG9uIFdlZCwgMjEgU2VwIDIwMjIgMDY6
+MzE6MjMgKzA4MDA6Cj4KPj4gdHJlZTogICBodHRwczovL3NlY3VyZS13ZWIuY2lzY28uY29tLzFa
+N29sS1NKal9GV2IzMzVtbWpITmlETTRGT2JoMm0yS3I0Q1ZtelJEWDctd1o5SHpTVXZ4TE5fT3lG
+M05XUzF2cGxGN3F1aWhLbzk3b2NLcXNwU0hTX3hTVWNCcTdTb1l5VDRhaVAwQlZKdEFHbTU1UDFr
+OU1zc2E3N0tLUE5VYkFNeXE0TXpENGQ5MzY3SUhTbFUtOF9ZbWExeHN3eUs3MnBCeXFvalREUmFH
+ZVNMTWNkM0VmcDlKQi03ZXRCTk9aME1xXzdkcU15S3VVd2JaVThXSW5hLVp3SFdfQ0N2UzdESFhw
+ODZaRlVvUlhQc3p0M3N6WWVSYThxUkNHY25mNUhfTG1aWFVVNDZPY3dFMU1PODVxd3pZbi0wanJT
+QkswWjBMbkw2M0R4TWNncExCa0lVQnRUZ1B0cUZpNGVITFdJNnUyQlRkYWRMUWRmUXJrVDdVY3Js
+MVViR2htZm5pWlI3R3ZwUWNwQ3NseVBWYkVQalFNOTRjeWdUbWZuUmZDUWVFc0lrQjJTeElCUjdE
+X1hLcV84VkRsbVhCVjFQdWllbE1qcU1MN0NidFRpV1VaOFVRQmNhSHBybWxLRFloL2h0dHBzJTNB
+JTJGJTJGZ2l0Lmtlcm5lbC5vcmclMkZwdWIlMkZzY20lMkZsaW51eCUyRmtlcm5lbCUyRmdpdCUy
+Rm10ZCUyRmxpbnV4LmdpdCBuYW5kL25leHQKPj4gaGVhZDogICA2M2RlMjRmY2NiNmI4MzFiZTFh
+YmZlMDcyOTI0NDkxMDViNDY3NzMxCj4+IGNvbW1pdDogN2U3ZGMwNDc3NGIxOGMwZTQyY2U3NGFh
+MzM1NzAyMWNkYTk3OTY3NCBbMTEvMzFdIG10ZDogcmF3bmFuZDogY2FkZW5jZTogc3VwcG9ydCA2
+NC1iaXQgc2xhdmUgZG1hIGludGVyZmFjZQo+PiBjb25maWc6IHg4Nl82NC1yYW5kY29uZmlnLWEw
+MDEgKGh0dHBzOi8vc2VjdXJlLXdlYi5jaXNjby5jb20vMTBsc0hxazIzcDR2aklJNGhkd3lEVktq
+STVyVmtXd3l4MWpJN2YxUWZ0RERSdi1DaEQ3aEdqdlR0QU96S0RjQzVXTlZKemdJT0hfSDVpWDE0
+ampOWFJabUhueEFsTnNjalRielNRNlhGZ0FfX0drLXVaQTIxZFd1UC1rLXhTT1FtYWdXNk9ubnN2
+bGJOdmFqNHozQjMtSzEwTWlvN1poYUhtS3B2WGt1Rm5Ua29wREVGQl8xOGpZd0tCenFGSDRIcUs3
+T1FzOHoybGRBRkFQeWVTNHBmMlFCNmdXdFU3dXczX0RNMEZmbjIyRjdlNkVyWjVUQVJXUk9YSEVy
+YTNxOEhUTEw4WXV1QnRnLW85OEx0X3VvLXAwbHBfQjUwbEdQUmIxYW90ejczVEd0Y01QcWFjY3Rf
+Z3dlb29wUnRoMTM4aXFjcWhvS1ZVdHdEbXZpMENxN01ORVVXMkkxU25sQjdqbDdtTE5icDY2c3cy
+Y0NkcXRfOTd0aW9LNkkxTmF6c05VWjVnVzRrdUtGZXZjZ25hclY0WjhLT1F0UFh5eUM2RFJlUUo5
+dEJDSDR5V0M4SXlZVVFOMDI0NnoyczFsY2IvaHR0cHMlM0ElMkYlMkZkb3dubG9hZC4wMS5vcmcl
+MkYwZGF5LWNpJTJGYXJjaGl2ZSUyRjIwMjIwOTIxJTJGMjAyMjA5MjEwNjQxLk16aUhBYlc3LWxr
+cCU0MGludGVsLmNvbSUyRmNvbmZpZykKPj4gY29tcGlsZXI6IGNsYW5nIHZlcnNpb24gMTQuMC42
+IChodHRwczovL3NlY3VyZS13ZWIuY2lzY28uY29tLzFoRlE2YjlJNXJFYmdKVEJyU05ZUTk2TkIy
+SEJabC12Rm4wNGZBenp4OVRnVnItWkkyWWg3OGVKU0h1VklYWFV0N1kwRkFRZDVIYzVXYmZoQTNm
+QnY5Q1pnaVIxdFNGU0VrLVRsUThmSHFFelVzTzZwS1Z4VmJxOU53RnYzeklJQ3Q3TTBLanRfeHlG
+WkZEX3BMcmwtSWxna2RkZHZXV0drcnM2QVVYd0xLcWZDUktyYjRkM3RHc2ZETk1ONVBUajJTRGp3
+blhCckZGQzkyTEJ4ak5VMWNLM1ZhanFEeEo5OW9WZ05EbGhhSlRsbXN2NDhUY3BPVnVnbllUZjlx
+cFFoMmd4b1FqNlJxam9ZLWE5WWxNWUt0R2p1YllHZ1Z5djB0OWJlZ2FsRGdFZUhVLVlZT2dMUk5D
+aGRZWm41X0Rjb2pnWXhqZ1NWcjY1UnpCRHQ3ODJKbms5NFNTTWNJNFJWOXlFVG1Sd3BTNmh5aVFL
+WHhXMmlpZ3hsaXNvZDROcVUzNGN0TzN4VUVDU3N4UUVuSGprb2RwNzJhTVdXRjJJRVVwbm5uWjlr
+UUhIbGRCNV9xUU5aMGpHeU0yTi1ZcmdtL2h0dHBzJTNBJTJGJTJGZ2l0aHViLmNvbSUyRmxsdm0l
+MkZsbHZtLXByb2plY3QgZjI4YzAwNmE1ODk1ZmMwZTMyOWZlMTVmZWFkODFlMzc0NTdjYjFkMSkK
+Pj4gcmVwcm9kdWNlICh0aGlzIGlzIGEgVz0xIGJ1aWxkKToKPj4gICAgICAgICAgd2dldCBodHRw
+czovL3NlY3VyZS13ZWIuY2lzY28uY29tLzFOaXhSOHlNNmNJUVM3bmNwMjM1NW5fODVEalE3UHdR
+OExKNEF0UVJaNXZWQUtzWlVlMlVEWlc3NXRXazZuU290QlpoNHhYQTRIbGFCV2NfWFhpRDVXTndF
+UEVHNlJJYUZEWnc3dnBOU0VPNVVjcm1uanFsZWpIOGFKNnFCc05MR1NpLTlOeHpCYm9IM3RYMlBG
+am5kNzUxQ1A3WFpOYXl5LWpRZWFvZHdrUlMzcVdhR2R3blFJNzV1Nl9FMlQ0emhOVUN3UzVueG1o
+NUdrVE43Z2s3N2xRb0g4OV9FeXB0RmJHdlUxemsxY2JDZE1WX1hTOWFEZmpIMFN5bG9PX0plMzhp
+cmVfY2FRc25aYlJpNWxHUmpjemJoYmh2bGJnbnNINWpTNHE4a05neE1RY2FZWHhyNTd1LVlodFg5
+RnFyM3ZKaW5mdHNZVHQwMHd0ZXhjNGtkeDJuVUR1WTFGMU5OVV93VDBPaUgwTXh1dXp2QW1henox
+dGpnd0V4aTlEX0tuSER1NGNYbmJmT3lTX2FFcjNGUFpJVXZnSktiZUp5dkRwRTZGMXNSWTRxclNP
+NGRtdUJSVFFPM1lhNFQteFRKL2h0dHBzJTNBJTJGJTJGcmF3LmdpdGh1YnVzZXJjb250ZW50LmNv
+bSUyRmludGVsJTJGbGtwLXRlc3RzJTJGbWFzdGVyJTJGc2JpbiUyRm1ha2UuY3Jvc3MgLU8gfi9i
+aW4vbWFrZS5jcm9zcwo+PiAgICAgICAgICBjaG1vZCAreCB+L2Jpbi9tYWtlLmNyb3NzCj4+ICAg
+ICAgICAgICMgaHR0cHM6Ly9zZWN1cmUtd2ViLmNpc2NvLmNvbS8xR2JWMFdHRDA1M2Z6Z1h3YWZO
+YjlnSXo2bF9hVktkYXZaOWhCaUdyeExRNEZ1RkdsZnBySFNrZXhOVElpUlNmN1dNUlMybjBZRU1O
+a3NicnF6YWpRcmU0VWRrYUdQcmgtbVVHWkRXUFdURDVYOTB5cFZBazdMdDl0XzVrMldCWVBFQ0d6
+VzlVMEhOTURnWnFIdXhNUFoxUG5BZ3VVTm13N1R0dE5ENTZIdnc2YWdRZDBOekFib2UxYmNTZzUx
+SUdZeExaWHFEYjFTU2RfXzJXQ2tyQWI1a05FY3hNUzhuS05yQjU1WkQxMTEtVVYza1prenZFd2VT
+c2NpUzBMT1RhLU9xWURVRWVBMHk5NERoU09takdxWnBaWElVMVpBNG1aMF82aFNrZG1jMURGMXNQ
+ckIyUWlRX0U2M0NZOUMtOTA4R0NtSUdtckJaaXZ5dVJ1eHN1UjB5OWFsMzhmS1g4WnZtazlzenk4
+YWZlMzZzR1VwTW9YaWpyUExVblBLbWRWLTJPQ1ZqMjZzU2FYS1J0a3RyT3NPSTBiOGVzZ0VIdUIx
+RnhCSFpqS3hMQ0hPTlplY0lkTk81QjltQVVUdTNVVi9odHRwcyUzQSUyRiUyRmdpdC5rZXJuZWwu
+b3JnJTJGcHViJTJGc2NtJTJGbGludXglMkZrZXJuZWwlMkZnaXQlMkZtdGQlMkZsaW51eC5naXQl
+MkZjb21taXQlMkYlM0ZpZCUzRDdlN2RjMDQ3NzRiMThjMGU0MmNlNzRhYTMzNTcwMjFjZGE5Nzk2
+NzQKPj4gICAgICAgICAgZ2l0IHJlbW90ZSBhZGQgbXRkIGh0dHBzOi8vc2VjdXJlLXdlYi5jaXNj
+by5jb20vMVo3b2xLU0pqX0ZXYjMzNW1takhOaURNNEZPYmgybTJLcjRDVm16UkRYNy13WjlIelNV
+dnhMTl9PeUYzTldTMXZwbEY3cXVpaEtvOTdvY0txc3BTSFNfeFNVY0JxN1NvWXlUNGFpUDBCVkp0
+QUdtNTVQMWs5TXNzYTc3S0tQTlViQU15cTRNekQ0ZDkzNjdJSFNsVS04X1ltYTF4c3d5SzcycEJ5
+cW9qVERSYUdlU0xNY2QzRWZwOUpCLTdldEJOT1owTXFfN2RxTXlLdVV3YlpVOFdJbmEtWndIV19D
+Q3ZTN0RIWHA4NlpGVW9SWFBzenQzc3pZZVJhOHFSQ0djbmY1SF9MbVpYVVU0Nk9jd0UxTU84NXF3
+elluLTBqclNCSzBaMExuTDYzRHhNY2dwTEJrSVVCdFRnUHRxRmk0ZUhMV0k2dTJCVGRhZExRZGZR
+cmtUN1VjcmwxVWJHaG1mbmlaUjdHdnBRY3BDc2x5UFZiRVBqUU05NGN5Z1RtZm5SZkNRZUVzSWtC
+MlN4SUJSN0RfWEtxXzhWRGxtWEJWMVB1aWVsTWpxTUw3Q2J0VGlXVVo4VVFCY2FIcHJtbEtEWWgv
+aHR0cHMlM0ElMkYlMkZnaXQua2VybmVsLm9yZyUyRnB1YiUyRnNjbSUyRmxpbnV4JTJGa2VybmVs
+JTJGZ2l0JTJGbXRkJTJGbGludXguZ2l0Cj4+ICAgICAgICAgIGdpdCBmZXRjaCAtLW5vLXRhZ3Mg
+bXRkIG5hbmQvbmV4dAo+PiAgICAgICAgICBnaXQgY2hlY2tvdXQgN2U3ZGMwNDc3NGIxOGMwZTQy
+Y2U3NGFhMzM1NzAyMWNkYTk3OTY3NAo+PiAgICAgICAgICAjIHNhdmUgdGhlIGNvbmZpZyBmaWxl
+Cj4+ICAgICAgICAgIG1rZGlyIGJ1aWxkX2RpciAmJiBjcCBjb25maWcgYnVpbGRfZGlyLy5jb25m
+aWcKPj4gICAgICAgICAgQ09NUElMRVJfSU5TVEFMTF9QQVRIPSRIT01FLzBkYXkgQ09NUElMRVI9
+Y2xhbmcgbWFrZS5jcm9zcyBXPTEgTz1idWlsZF9kaXIgQVJDSD14ODZfNjQgU0hFTEw9L2Jpbi9i
+YXNoIGRyaXZlcnMvbXRkL25hbmQvcmF3Lwo+Pgo+PiBJZiB5b3UgZml4IHRoZSBpc3N1ZSwga2lu
+ZGx5IGFkZCBmb2xsb3dpbmcgdGFnIHdoZXJlIGFwcGxpY2FibGUKPj4gfCBSZXBvcnRlZC1ieTog
+a2VybmVsIHRlc3Qgcm9ib3QgPGxrcEBpbnRlbC5jb20+Cj4+Cj4+IEFsbCBlcnJvcnMgKG5ldyBv
+bmVzIHByZWZpeGVkIGJ5ID4+KToKPj4KPj4+PiBkcml2ZXJzL210ZC9uYW5kL3Jhdy9jYWRlbmNl
+LW5hbmQtY29udHJvbGxlci5jOjE4OTM6NDogZXJyb3I6IGltcGxpY2l0IGRlY2xhcmF0aW9uIG9m
+IGZ1bmN0aW9uICdpb3JlYWQ2NF9yZXAnIGlzIGludmFsaWQgaW4gQzk5IFstV2Vycm9yLC1XaW1w
+bGljaXQtZnVuY3Rpb24tZGVjbGFyYXRpb25dCj4+ICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICBpb3JlYWQ2NF9yZXAoY2Ruc19jdHJsLT5pby52aXJ0LCBidWYsIGxlbl9pbl93b3Jkcyk7Cj4+
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICBeCj4+Pj4gZHJpdmVycy9tdGQvbmFuZC9yYXcv
+Y2FkZW5jZS1uYW5kLWNvbnRyb2xsZXIuYzoxOTYyOjQ6IGVycm9yOiBpbXBsaWNpdCBkZWNsYXJh
+dGlvbiBvZiBmdW5jdGlvbiAnaW93cml0ZTY0X3JlcCcgaXMgaW52YWxpZCBpbiBDOTkgWy1XZXJy
+b3IsLVdpbXBsaWNpdC1mdW5jdGlvbi1kZWNsYXJhdGlvbl0KPj4gICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgIGlvd3JpdGU2NF9yZXAoY2Ruc19jdHJsLT5pby52aXJ0LCBidWYsIGxlbl9pbl93
+b3Jkcyk7Cj4+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICBeCj4+ICAgICAyIGVycm9ycyBn
+ZW5lcmF0ZWQuCj4gSSd2ZSBkcm9wcGVkIHlvdXIgcGF0Y2ggZnJvbSBuYW5kL25leHQsIGhlcmUg
+eW91IGNhbiBjaGVjayB3aGF0J3MKPiBtaXNzaW5nIGluIHRoZSBjb25maWd1cmF0aW9uLCBzaG91
+bGQgbm90IGJlIHRvbyBoYXJkIHRvIHNvbHZlLiBPbmNlCj4gZG9uZSwgeW91IGNhbiBzZW5kIGEg
+bmV3IHZlcnNpb24gb2YgdGhlIHBhdGNoLgo+Cj4gVGhhbmtzLAo+IE1pcXXDqGwKPgotLSBJTVBP
+UlRBTlQgTk9USUNFOgoKCgpUaGUgY29udGVudHMgb2YgdGhpcyBlbWFpbCBhbmQgYW55IGF0dGFj
+aG1lbnRzIGFyZSBjb25maWRlbnRpYWwgYW5kIG1heSBhbHNvIGJlIHByaXZpbGVnZWQuIElmIHlv
+dSBhcmUgbm90IHRoZSBpbnRlbmRlZCByZWNpcGllbnQsIHBsZWFzZSBub3RpZnkgdGhlIHNlbmRl
+ciBpbW1lZGlhdGVseSBhbmQgZG8gbm90IGRpc2Nsb3NlIHRoZSBjb250ZW50cyB0byBhbnkgb3Ro
+ZXIgcGVyc29uLCB1c2UgaXQgZm9yIGFueSBwdXJwb3NlLCBvciBzdG9yZSBvciBjb3B5IHRoZSBp
+bmZvcm1hdGlvbiBpbiBhbnkgbWVkaXVtLgoKCgpUaGFuayB5b3UuCg==
 
-I don't care much about GPG signed commits so dropping them is fine by me.
-
-...Juerg
-
-
-> Some time ago, we went back to doing ~monthly releases for
-> linux-firmware primarily to help distributions package firmware in a
-> simpler manner.  We GPG sign the tarballs, as is good practice, but as
-> part of reintroducing the tarballs we also started having a
-> linux-firmware maintainer GPG sign *every* commit done by a
-> maintainer.  The intention there was that because we're dealing with
-> binary blobs we really have no recourse to see changes unlike a source
-> code repo.  The signed commits at least provides a measure for
-> interested people to ensure the repo itself is only being committed to
-> by a recognized maintainer and it isn't compromised (in theory).  The
-> downside is that pull requests are merged non-ff and we wind up
-> signing the merge commit.
->=20
-> The question at hand though, is does anyone care about the GPG signed
-> commits?  It's not clear to me this practice is even noticed nor if it
-> is bringing any value to this project.  Since we've started this
-> practice, I am literally the only one committing to the repo and while
-> it isn't hard to do I want to know if it's actually useful to anyone.
->=20
-> I ask for two separate reasons.  The first is that a group of
-> interested firmware submitters is looking at modernizing the workflow
-> for the linux-firmware project and moving to a merge request workflow
-> instead of submitting giant binary blob patches via email.  This would
-> allow us to put some CI in place for simple checks to the WHENCE file,
-> etc.  Doing this while still having GPG signed commits isn't
-> impossible but it certainly complicates things a bit, and would likely
-> require a trusted bot to sign commits.  That has implications on
-> secret storage and changes the dynamic on trust levels that make the
-> whole thing even more questionable.
->=20
-> The second reason is that even if people are validating the GPG signed
-> commits, it's not exactly user friendly.  I've been looking at
-> sigstore and recor and that might be a better solution in the long run
-> if we do want to utilize something like the current scheme.
->=20
-> I'll still GPG sign the tarballs, but I'd like to propose dropping our
-> current self-imposed requirement that all commits are GPG signed.
-> Thoughts?
->=20
-> josh
-
-
---Sig_/SMLZX+r.Pk4dPIyz4DXcpay
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEEhZfU96IuprviLdeLD9OLCQumQrcFAmMqzvIACgkQD9OLCQum
-QreUbw//Qs3WlJnIyQRd4qkIDZUZH+d+Qn9dDXPXCWKP4n60mm2oqZQaSBCLombt
-Lba5wqFF6Zva9lmo22Tg4ojBkt8KgmYSW0SRgJLOJV6iHBI/x+WiWG6aklSvAGIv
-Q8F/H6HbkXCHak1wiNb8f5XsBMsYE8BwqUELY65emfSBJhS2aZ1I2buHX7w5j011
-gWXZI2gbMmUyF616WqMcpbNxdo+CRb1Y4n9EgZBnU3fNyY/dTeQaH6FNAooCEWRa
-KGw49nX2uIZoYRh7NBuU106GT4RGXQiQ8zgCpB+8WpA3Qw9Yxtpu3unL0KMbdZMa
-9XKwEWIV7d/jSRUWrDRGXtn+YSv8uXwOf9PfxtZNiw7aqiI7iG7j2gIpaWWjkV75
-osRzI/jWLKrxDRh1ucz5AM9vSM4GSzKM/Fpi+PyjD0RtTsCcIkKi9cCem/vjMqjs
-AqZBI+l4lkuy3D1Kf3z0G64ILeoHz3t1ww1tPoWJhMjvya07Oni+vJeKnIENCKf0
-hoMtFeQ/ePm9lkq1/bsFVrydEqWS0aQJg+9zO8cBswVgwJTyot2BM596Vloxp0i1
-qD8aoVaBweI72IDUmTUkzF5Y5NW4aYcNpe29nRL4qKXhghwUvexpE8G1M+IXsswn
-IT+xcsk7Pk0cQwEvxVQiFsIhljukuPsXB307iylfMkEFBpfgQ7c=
-=vITi
------END PGP SIGNATURE-----
-
---Sig_/SMLZX+r.Pk4dPIyz4DXcpay--
