@@ -2,81 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EBC95BF6CF
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 08:56:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ECF75BF6D2
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 08:57:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230012AbiIUG4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 02:56:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35150 "EHLO
+        id S230002AbiIUG5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 02:57:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiIUG4d (ORCPT
+        with ESMTP id S229602AbiIUG5H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 02:56:33 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF827961E;
-        Tue, 20 Sep 2022 23:56:32 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id BCCDF1F747;
-        Wed, 21 Sep 2022 06:56:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1663743390; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oh/7h2aPF1mzV4xLKAoOojrZB7GOctUET+2KxBXzCs0=;
-        b=NTLtYUFjbBCX3rM7ziXwx+AQTuXbKy4GU7SFAo0bUYrWvPNU9glzBi1XqqNoB1D+dDdmLa
-        ASk8JL/nvqGhRKWCoqsuLH//blAyDpjkTeV7gvzKeK0N1VK+2L2ONq3YkbeHZVVmEnz55g
-        p+lZ9yzFvwCOi1R1kixwt0f/Dphu5RU=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 8FC592C141;
-        Wed, 21 Sep 2022 06:56:30 +0000 (UTC)
-Date:   Wed, 21 Sep 2022 08:56:27 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        linux-modules@vger.kernel.org
-Subject: Re: [PATCH v2 7/8] livepatch: Improve the search performance of
- module_kallsyms_on_each_symbol()
-Message-ID: <Yyq1m1pF7ErHjuMU@alley>
-References: <20220909130016.727-1-thunder.leizhen@huawei.com>
- <20220909130016.727-8-thunder.leizhen@huawei.com>
- <YymtJwYB7Q9mTPgS@alley>
- <263d1b98-463f-79b0-a4ff-41b9af900e9c@huawei.com>
+        Wed, 21 Sep 2022 02:57:07 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 154AB79618
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 23:57:06 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id a10so5885633ljq.0
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 23:57:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=ST9LOdbD8b98u8DVosLruAc6e3OeQDMBIjH+I77FEAc=;
+        b=UVBobvtXONp5sEgR8szPLKrisdM9tw8wMEIIHlozjTfTtlIcAUDoqQKrewG2GMZkKu
+         orDz/31Ow+IGh0Va8POh4vixsmmfGzysUZPkSzLUWNqZCUVP01u8jB68iFDrouetJlQm
+         AdLLFUk9mqEFUAKAa/WlVzyDV+YL4TfewLmgEIK7Fs6Ppx9y2Ss9SWy0JMvlxae+SaB/
+         sVU/wVmA0ntOGryI4CJGmXZWWuq7Ate3SilFf6LeixFKU9ecAF+panDZ70GGCwrXY42a
+         BtGBnZp2ZYkYgtVL1MWYyQwWtccBCZiKO9/htt6Q3DLl6EcC659cG7JnIjgPICg/BLRz
+         mDLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=ST9LOdbD8b98u8DVosLruAc6e3OeQDMBIjH+I77FEAc=;
+        b=ZkPZqErk8tbGU5mOSPwSjMipLJ2YXzfUugziug8VIxCYWtOyQ9aJPYkCOCwm/eIvUf
+         Vzltpfkhu1M7KNcgWU5Lim+wLmbT8atyaj/rLzlixPfHlJZoLcTCQsdUMEFZ32xusukx
+         oGsBPSbJgzVknxvzAyoz10h8oUbn6AeRpEfZQ4OMKtG07WU2VWi5xQbvxW6h+l0rLUNB
+         V41U5a6oApzxyjglALUnsmWalVAuHLGBs094RCTilg8vX9XpTgn8UYGDvXBFUlHXKXYN
+         t2gwmztTU6rLJrJNnT8jRCQT8UaRldo7dRHhxe/LAgWlf1DHWo/NIR1L06e3d5c/gktT
+         ToOw==
+X-Gm-Message-State: ACrzQf2dTGl7p26qgC8e/ltd3beU9XqRBl7S0qZIzvrLOdgsNsCd1PuS
+        12/QioVT3o1y3LsMOisSzv9+cw==
+X-Google-Smtp-Source: AMsMyM6Lh8r3OYaAI/zAuEnTruNBaeAE4CPnkzf/pkZBfrvX2/sCoKDAKa4Mgf/qH6kcJJ478fb9ww==
+X-Received: by 2002:a05:651c:626:b0:26c:9cc:e094 with SMTP id k38-20020a05651c062600b0026c09cce094mr8584535lje.409.1663743424410;
+        Tue, 20 Sep 2022 23:57:04 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id x25-20020a0565123f9900b0048cf7e8145asm307753lfa.117.2022.09.20.23.57.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Sep 2022 23:57:03 -0700 (PDT)
+Message-ID: <f8495316-42f4-59f9-a824-7e944b7185fb@linaro.org>
+Date:   Wed, 21 Sep 2022 08:57:03 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <263d1b98-463f-79b0-a4ff-41b9af900e9c@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v5 8/8] i2c: i2c-mlxbf.c: Update binding devicetree
+Content-Language: en-US
+To:     Asmaa Mnebhi <asmaa@nvidia.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        robh@kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     Khalil Blaiech <kblaiech@nvidia.com>
+References: <20220920174736.9766-1-asmaa@nvidia.com>
+ <20220920174736.9766-9-asmaa@nvidia.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220920174736.9766-9-asmaa@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 2022-09-20 22:01:44, Leizhen (ThunderTown) wrote:
-> On 2022/9/20 20:08, Petr Mladek wrote:
-> > On Fri 2022-09-09 21:00:15, Zhen Lei wrote:
-> > 3. As a result the *mod parameter won't be used by any existing
-> >    fn() callback and could be removed. This should be done as
-> >    a separate patch. It touches also ftrace_lookup_symbols().
+On 20/09/2022 19:47, Asmaa Mnebhi wrote:
+> In the latest version of the i2c-mlxbf.c driver, the "Smbus block"
+> resource was broken down to 3 separate resources "Smbus timer",
+> "Smbus master" and "Smbus slave" to accommodate for BlueField-3
+> SoC registers' changes.
 > 
-> OK, I will do it tomorrow. The next version is v5.
+> Reviewed-by: Khalil Blaiech <kblaiech@nvidia.com>
+> Signed-off-by: Asmaa Mnebhi <asmaa@nvidia.com>
 
-Please, wait a bit. I have missed that there was already v4
-that solved some my concerns. I am going to look at it.
+Use scripts/get_maintainers.pl to CC all maintainers and relevant
+mailing lists.
 
-Best Regards,
-Petr
+You keep cc-ing other addresses or you rebased your patch on some old
+tree (like 1 year old...). If this is the second case, please be sure it
+is rebased on LATEST kernel, maintainer's tree or linux-next.
+
+By not-ccing people, you will not get reviews from maintainers.
+
+Best regards,
+Krzysztof
