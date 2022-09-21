@@ -2,68 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84A965BF68D
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 08:43:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C87205BF694
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 08:47:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229974AbiIUGnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 02:43:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43892 "EHLO
+        id S229992AbiIUGrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 02:47:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbiIUGnQ (ORCPT
+        with ESMTP id S229687AbiIUGrW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 02:43:16 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3ABD796B5;
-        Tue, 20 Sep 2022 23:43:15 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id t70so4992790pgc.5;
-        Tue, 20 Sep 2022 23:43:15 -0700 (PDT)
+        Wed, 21 Sep 2022 02:47:22 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEFAC77E87
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 23:47:20 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id go6so5464210pjb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 23:47:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:content-disposition:mime-version:message-id:subject:to
-         :from:date:from:to:cc:subject:date;
-        bh=4OoemoqY03kwE/AES+O6nYI9GibmetWZKgTywgqbXVk=;
-        b=Cdlu9ugblpLjxtMTv8T1E0QgdC92dLmJ9eALZY+V+j70X7VvVQ0h59gr7+k976fRmM
-         t5HMxJbhR5kxqW9SYL0EQQrQjBMOuM/wFvm9WmQ5H0NSrGKQJNZY889998ILbRcdnR5U
-         SsMqJAB8JPaE23G7J7uHcOeruUH5JdOzZQuRG+o2vgmPVJUJ4v1KvXLasPdtZVDlNPtE
-         wjfGhEKc43K7nZajqD6AsyrLLxm3tw5XZBK5em/qj4e0zJLYPoZka2vVWlSut2UWO2mR
-         RNHkBHmzwNJt+4nm2QM5SdFmDz2PGUesIE2f5NahLaDQr/NMSFkyc+JqV9q6feZlHup+
-         qYRA==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=YKmiNCL23WE57xBpMjvetlOGzH6dcSznAfjUp/F/KjI=;
+        b=S/OWLpu8/5jFvci3PF6KKFjZAWV8sfpD6EB2HvvJtYHmbS1wDhf2tqEqrHhsxPdznr
+         7Xl63Ro2rdWamL1oT8uEx/ZrWq2QnonCQijnSrGXJjznTUy+kMnvk5GmBUWryYjemC/T
+         iF7482K53z7grnG8c8F87VkM0VIX164G7R7/xsKj6HuMAhwa4+0vM7D9+TCKrltHyEWx
+         HLWv/DHgAtI6Sp9HJH6wCX/sjVQkaPS6sn99HM23MxS8s3XiJY15q1EaTL8YqK21MBsw
+         Xr6SIM+1oU7JDT1DQiyRAewiPqdocLGFYdjYpzNi/PrqNFsKD8jowDT8NWtIiKLW4gaX
+         Jy7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:content-disposition:mime-version:message-id:subject:to
-         :from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=4OoemoqY03kwE/AES+O6nYI9GibmetWZKgTywgqbXVk=;
-        b=2eVD94VD0E/8CbLVN/rBTSTFOsQyBMmXJ87ImHYPQJokr8z4/OIAbdqs/4j6C+Ia4e
-         iN5T24RSl6fH4sRwSO3TIB6RZSfXGGPjh+iUOY+pJ0qAjT+9mS1F1OdhnxDSwnAPV605
-         JrbjbyNnAUFC/TdEqC1T458UPP2HwFrGDNIRl0Yzc00hqIwlZ1s6TLusdzleJIV5PqcG
-         grrEhRm8frLRmShdkv5dD9K3EPBjgyj/2xE7MJrYx4WZBUKbsrMM/caY150lhIzVN6um
-         gM+uS5PmvqkXsUswSOKoCnia410GUj/h/JAXAvwD3ne7enYq5zGEq43XQFNG/ON+R+Sz
-         f1ig==
-X-Gm-Message-State: ACrzQf3t8oGGr+c34dXGGEP3Bdi7QlV8lx8FAVfstZGENMHPEMagQKJ8
-        k1kgmxzeNweDjhYk3es64hk=
-X-Google-Smtp-Source: AMsMyM5GoiNadp9pZlmdf85gfN7sInYz4kz0i/l9s9SSP9mUaVvqWWPpOlwENy6IRXcjPmMG8qpYhQ==
-X-Received: by 2002:a63:8a4a:0:b0:438:6a17:f0bb with SMTP id y71-20020a638a4a000000b004386a17f0bbmr22722052pgd.267.1663742595348;
-        Tue, 20 Sep 2022 23:43:15 -0700 (PDT)
-Received: from hcl-ThinkPad-T495 ([2401:4900:1ce2:b8f9:48c4:2ac5:ccad:657d])
-        by smtp.gmail.com with ESMTPSA id jg11-20020a17090326cb00b001769ee307d8sm1117799plb.59.2022.09.20.23.43.12
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 20 Sep 2022 23:43:14 -0700 (PDT)
-Date:   Wed, 21 Sep 2022 12:13:09 +0530
-From:   Karthikeyan Pasupathi <pkarthikeyan1509@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        openbmc@lists.ozlabs.org, kernel test robot <lkp@intel.com>
-Subject: [PATCH v4] ARM: dts: aspeed: yosemit V2: Enable OCP debug card
-Message-ID: <20220921064309.GA18932@hcl-ThinkPad-T495>
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=YKmiNCL23WE57xBpMjvetlOGzH6dcSznAfjUp/F/KjI=;
+        b=eINNqCKx7gEPTRVUOqiK1Kl9gZ1FKiRli/FrR6ASpsZXr/diORjhDdxxB+Dj/9MGpe
+         i02REUSBncoIIh9Me3uiP4Fm0ISBzeE3pig1E7nqKLTafqD4lbfSOTR++SM1xPBW2mbq
+         dd3QBCtcvQndzk5fTHvRGtRB/ZFkIjMsA1zB0MKvCz/8ET3m93q1SYzf/k+J1LmIiGiM
+         APFxA2IHpVUaV6CnpvUNC1QpHdhFJBoGhebUxNpe9DS21BrZg7ibLF3Vr9uWLCyY8EOA
+         oLjAqjQE6/f20Fxw2El5FopMPbUAntXjN3JjNti7aPyIxBTELNBWgwPJRSpcw20cTg4X
+         tQEA==
+X-Gm-Message-State: ACrzQf0coQB8weo6XealcPfTDb7bZCcEOG+mbfBki2HL6mjob1X52tfl
+        fGTc1O3AWrFze47hJ/xoNPtuEA==
+X-Google-Smtp-Source: AMsMyM6IYXtcl8JigvWFGHGaYTLwP/VPUq1AhrmnirNeyBBNcQK9GdMREOc7AKVTMzq+4eU0rtnu4A==
+X-Received: by 2002:a17:90b:3811:b0:202:9e26:bc00 with SMTP id mq17-20020a17090b381100b002029e26bc00mr7971482pjb.223.1663742840298;
+        Tue, 20 Sep 2022 23:47:20 -0700 (PDT)
+Received: from C02FT5A6MD6R.bytedance.net ([139.177.225.238])
+        by smtp.gmail.com with ESMTPSA id l6-20020a170902d34600b0017825ab5320sm1067802plk.251.2022.09.20.23.47.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Sep 2022 23:47:19 -0700 (PDT)
+From:   Gang Li <ligang.bdlg@bytedance.com>
+To:     Zefan Li <lizefan.x@bytedance.com>, Tejun Heo <tj@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Gang Li <ligang.bdlg@bytedance.com>,
+        Michal Hocko <mhocko@suse.com>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [RFC PATCH v1] mm: oom: introduce cpuset oom
+Date:   Wed, 21 Sep 2022 14:47:09 +0800
+Message-Id: <20220921064710.89663-1-ligang.bdlg@bytedance.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,46 +70,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Added IPMB-13 channel for Debug Card communication.
-which improve the readability of the machine and makes
-easier to debug the server.  and it will display the some
-informations about the server like "system info",
-"Critical sensors" and "critical sel".
+cpuset confine processes to processor and memory node subsets.
+When a process in cpuset triggers oom, it may kill a completely
+irrelevant process on another numa node, which will not release any
+memory for this cpuset.
 
----
---- v4- Resolved syntax error
---- v3- Updated the title and commit
---- v2- Updated the title
---- v1- Initial draft
----
+It seems that `CONSTRAINT_CPUSET` is not really doing much these
+days. Using CONSTRAINT_CPUSET, we can easily achieve node aware oom
+killing by selecting victim from the cpuset which triggers oom.
 
-Signed-off-by: Karthikeyan Pasupathi <pkarthikeyan1509@gmail.com>
+Suggested-by: Michal Hocko <mhocko@suse.com>
+Signed-off-by: Gang Li <ligang.bdlg@bytedance.com>
 ---
- arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+This idea comes from a previous patch:
+mm, oom: Introduce per numa node oom for CONSTRAINT_MEMORY_POLICY
+https://lore.kernel.org/all/YoJ%2FioXwGTdCywUE@dhcp22.suse.cz/
 
-diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts b/arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts
-index 8864e9c312a8..84236df522dc 100644
---- a/arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts
-+++ b/arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts
-@@ -215,6 +215,17 @@
- 	};
- };
+Any comments are welcome.
+---
+ include/linux/cpuset.h |  6 ++++++
+ kernel/cgroup/cpuset.c | 17 +++++++++++++++++
+ mm/oom_kill.c          |  4 ++++
+ 3 files changed, 27 insertions(+)
+
+diff --git a/include/linux/cpuset.h b/include/linux/cpuset.h
+index d58e0476ee8e..7475f613ab90 100644
+--- a/include/linux/cpuset.h
++++ b/include/linux/cpuset.h
+@@ -178,6 +178,8 @@ static inline void set_mems_allowed(nodemask_t nodemask)
+ 	task_unlock(current);
+ }
  
-+&i2c13 {
-+	status = "okay";
-+	// Debug Card
-+	multi-master;
-+	ipmb13@10 {
-+		compatible = "ipmb-dev";
-+		reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
-+		i2c-protocol;
-+	};
-+};
++int cpuset_cgroup_scan_tasks(int (*fn)(struct task_struct *, void *), void *arg);
 +
- &pwm_tacho {
- 	status = "okay";
- 	//FSC
+ #else /* !CONFIG_CPUSETS */
+ 
+ static inline bool cpusets_enabled(void) { return false; }
+@@ -299,6 +301,10 @@ static inline bool read_mems_allowed_retry(unsigned int seq)
+ 	return false;
+ }
+ 
++static inline int cpuset_cgroup_scan_tasks(int (*fn)(struct task_struct *, void *), void *arg)
++{
++	return 0;
++}
+ #endif /* !CONFIG_CPUSETS */
+ 
+ #endif /* _LINUX_CPUSET_H */
+diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+index b474289c15b8..1f1238b4276d 100644
+--- a/kernel/cgroup/cpuset.c
++++ b/kernel/cgroup/cpuset.c
+@@ -3943,6 +3943,23 @@ void cpuset_print_current_mems_allowed(void)
+ 	rcu_read_unlock();
+ }
+ 
++int cpuset_cgroup_scan_tasks(int (*fn)(struct task_struct *, void *), void *arg)
++{
++	int ret = 0;
++	struct cgroup *cgrp;
++	struct css_task_iter it;
++	struct task_struct *task;
++
++	rcu_read_lock();
++	css_task_iter_start(&(task_cs(current)->css), CSS_TASK_ITER_PROCS, &it);
++	while (!ret && (task = css_task_iter_next(&it)))
++		ret = fn(task, arg);
++	css_task_iter_end(&it);
++	rcu_read_unlock();
++
++	return ret;
++}
++
+ /*
+  * Collection of memory_pressure is suppressed unless
+  * this flag is enabled by writing "1" to the special
+diff --git a/mm/oom_kill.c b/mm/oom_kill.c
+index 46e7e073f137..8cea787b359c 100644
+--- a/mm/oom_kill.c
++++ b/mm/oom_kill.c
+@@ -367,6 +367,8 @@ static void select_bad_process(struct oom_control *oc)
+ 
+ 	if (is_memcg_oom(oc))
+ 		mem_cgroup_scan_tasks(oc->memcg, oom_evaluate_task, oc);
++	else if (oc->constraint == CONSTRAINT_CPUSET)
++		cpuset_cgroup_scan_tasks(oom_evaluate_task, oc);
+ 	else {
+ 		struct task_struct *p;
+ 
+@@ -427,6 +429,8 @@ static void dump_tasks(struct oom_control *oc)
+ 
+ 	if (is_memcg_oom(oc))
+ 		mem_cgroup_scan_tasks(oc->memcg, dump_task, oc);
++	else if (oc->constraint == CONSTRAINT_CPUSET)
++		cpuset_cgroup_scan_tasks(dump_task, oc);
+ 	else {
+ 		struct task_struct *p;
+ 
 -- 
-2.17.1
+2.20.1
 
