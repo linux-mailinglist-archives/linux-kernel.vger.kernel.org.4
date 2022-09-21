@@ -2,52 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 001045C0054
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 16:54:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 415115C0053
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 16:54:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbiIUOyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 10:54:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42396 "EHLO
+        id S229942AbiIUOyI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 10:54:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbiIUOyG (ORCPT
+        with ESMTP id S229912AbiIUOyG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 21 Sep 2022 10:54:06 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75CBC5E665
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BFFC5EDD1
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 07:54:05 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id u18so9631809lfo.8
         for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 07:54:04 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id x29so7344585ljq.2
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 07:54:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=fc9rvJk53jSt+31V+DshEMPT99txfYe0aFmQRodV1Rk=;
-        b=F4Gm9tI8bRPXoj3MXzslfn42dKJ9CgrIkN+dQlksRQKb2QLs69cZEM0rHakPqe4mcu
-         up6+zxUBsLdj0T2BXHtQdgNVXWrMZesU27ALdOMc38XiOmvh5GMWAC5cVSVz6SQoxbx9
-         ZHMwDp3ZjpbkxgL3Hxq5EkIXlZv+d7pbZO0ynDSDGWqWBqJMlLYB5xOqcgu+XpcWT7Tb
-         GbabFZlH0rtEyW1Ee0eaC8P1Q9vzWucAf+hZuTksj5oB3Ahjp4C3kNIVxKgVbSTrPY07
-         s0+uJlvEYH+Sy/8Bk1JCF1/rZB2P5OANFbxtBFwA0H4bL4bblkOrFgtEwL8LlOOMI2/R
-         Q8rg==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=3xh6qSfnk72aIq5PPq1PboXWTaapoBlxdPaCgFLtKR4=;
+        b=lgpK/4OuqSfkaiYhGhtq2E2966wSCB2Sl2SOz4WjFcJb/C/JO5oJjSqfOEpeVKbt80
+         WMtMs7hpEeXbSI2tLBpX9gEofcY7LnfnaHatInklDKx0rzBRb8U2Lh9G6s42p5b6XlXz
+         sh4HkV+KPh1sJNaVQhH5/YZypLKXpnyEgqEVYoLlaTHDTZG48XyUKLcxdlhBO13Ljpuo
+         gt4WXXyALNuQzPooN06izrjfYigYAhusPXz6Ro2cLW2vYRqYrBmP9ReGcDEQnqeez05U
+         Lt4MpKtRCB2laihvVk1I4z9xhVeh96q5jh67AOkyjFGbqB/6o8m6BVQDq2O8+juUJbR4
+         rqsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=fc9rvJk53jSt+31V+DshEMPT99txfYe0aFmQRodV1Rk=;
-        b=CUOajQMWeE+nmRW4e9biy0cprRWSprQTzeeeTjatlb0Oj0ALMUIsgMg831nrAXBJZm
-         8s3UsXqeDNo3W4HZe7HiQQUZyQVBngZXdAAiosHWcPUkvQatClThNOVZFacKIMAtl5XU
-         cgnR4jbVVnwhABCHITu8+qXsORTUFu/cY1UwRz1Qh1EqLbjQxm84u21PFkg9d8fqi5LN
-         TkWk7i7CimMJYz2qUQM/g1BnaZosOMGMg32J6exrVIV/3MsL5aejGE1Y2RWo8jdpt07Y
-         PIDd8ojoYffQ+kOXmIPHds+mqHwiLvgybAbXa1SDv7cHDyFIcuR43d01tOoqTfTZaPm1
-         sryA==
-X-Gm-Message-State: ACrzQf1U4LC7QGbEEuBU+uB6xfY+GYElfEie0X1+1QLHFHZ4cews3oxk
-        NXx1KiVl/H7IorJXEI4DhfRllw==
-X-Google-Smtp-Source: AMsMyM4tHSgnHedkMCUmL9LyyL8xnzoHnFXiLsg6lWP/gbuPqkGj9AKlLPlXgXc33q+Uy5gjk24+AA==
-X-Received: by 2002:a2e:5344:0:b0:26c:417b:aa78 with SMTP id t4-20020a2e5344000000b0026c417baa78mr7614255ljd.298.1663772042208;
-        Wed, 21 Sep 2022 07:54:02 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=3xh6qSfnk72aIq5PPq1PboXWTaapoBlxdPaCgFLtKR4=;
+        b=KlsA+6jfc1oMMmsgqjIna50l+a3MbhxejSkS2IVAUYMEPZaNroXqNO2EfRwKEEp1Vb
+         UjyG9fcXWd2xw0Piejoit+LEADhk5/7UJpNNjeIpklRA3v4Gaqg/x69NqYiZt9sbmH2m
+         3ajYzt2r7ma8Sx4R/6uZ16aU1Usd8HMuxicpFpcElHvtJopopmw5MJwWsy91kHH8QxCh
+         opDI8qfgFDxc/SPDQT0nr9HrcjDYBt9541IPhxcPlYAHnzC2No13EgtOyJ2uFPfukffL
+         8jKugLwGpfyfftyAZn0n7moGScZmmo8Ch8ShASNhy+M08CcdMqVutWbA2e0NH8hBWYz6
+         WeWQ==
+X-Gm-Message-State: ACrzQf2u82/P3QbMETUlDWk11QKLhSmpWXv9m2WSVTfpdxhJKJL/qhne
+        UNT8zjJGwerwltGpuGpZlssaXA==
+X-Google-Smtp-Source: AMsMyM4iJNIrY+YOXPembYGou4Yel/GzNQeJh3rqW/SiaUkEjZsRJ/PsN9t8Fdy7GfD/l5rRB6FiiA==
+X-Received: by 2002:ac2:53a1:0:b0:49f:6086:4868 with SMTP id j1-20020ac253a1000000b0049f60864868mr8245124lfh.518.1663772043369;
+        Wed, 21 Sep 2022 07:54:03 -0700 (PDT)
 Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id c24-20020a056512075800b00494a1e875a9sm461981lfs.191.2022.09.21.07.54.00
+        by smtp.gmail.com with ESMTPSA id c24-20020a056512075800b00494a1e875a9sm461981lfs.191.2022.09.21.07.54.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Sep 2022 07:54:01 -0700 (PDT)
+        Wed, 21 Sep 2022 07:54:02 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Banajit Goswami <bgoswami@quicinc.com>,
@@ -59,16 +60,17 @@ To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         stable@vger.kernel.org
-Subject: [PATCH 1/2] ASoC: wcd9335: fix order of Slimbus unprepare/disable
-Date:   Wed, 21 Sep 2022 16:53:53 +0200
-Message-Id: <20220921145354.1683791-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 2/2] ASoC: wcd934x: fix order of Slimbus unprepare/disable
+Date:   Wed, 21 Sep 2022 16:53:54 +0200
+Message-Id: <20220921145354.1683791-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220921145354.1683791-1-krzysztof.kozlowski@linaro.org>
+References: <20220921145354.1683791-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -81,18 +83,18 @@ the stream->ports.  Calling disable after unprepare was not really
 effective (channels was not deactivated) and could lead to further
 issues due to making transfers on unprepared stream.
 
-Fixes: 20aedafdf492 ("ASoC: wcd9335: add support to wcd9335 codec")
+Fixes: a61f3b4f476e ("ASoC: wcd934x: add support to wcd9340/wcd9341 codec")
 Cc: <stable@vger.kernel.org>
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- sound/soc/codecs/wcd9335.c | 2 +-
+ sound/soc/codecs/wcd934x.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/soc/codecs/wcd9335.c b/sound/soc/codecs/wcd9335.c
-index 06c6adbe5920..d2548fdf9ae5 100644
---- a/sound/soc/codecs/wcd9335.c
-+++ b/sound/soc/codecs/wcd9335.c
-@@ -1972,8 +1972,8 @@ static int wcd9335_trigger(struct snd_pcm_substream *substream, int cmd,
+diff --git a/sound/soc/codecs/wcd934x.c b/sound/soc/codecs/wcd934x.c
+index f56907d0942d..28175c746b9a 100644
+--- a/sound/soc/codecs/wcd934x.c
++++ b/sound/soc/codecs/wcd934x.c
+@@ -1913,8 +1913,8 @@ static int wcd934x_trigger(struct snd_pcm_substream *substream, int cmd,
  	case SNDRV_PCM_TRIGGER_STOP:
  	case SNDRV_PCM_TRIGGER_SUSPEND:
  	case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
