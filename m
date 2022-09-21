@@ -2,197 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 009D65E54BB
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 22:51:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D353B5E54BE
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 22:52:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229785AbiIUUvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 16:51:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45762 "EHLO
+        id S229985AbiIUUwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 16:52:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbiIUUvH (ORCPT
+        with ESMTP id S229777AbiIUUwB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 16:51:07 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E33D79F743
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 13:51:01 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id c24so6872315plo.3
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 13:51:01 -0700 (PDT)
+        Wed, 21 Sep 2022 16:52:01 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B4E59F8FB
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 13:51:59 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id e68so7206247pfe.1
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 13:51:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=EpFVglis/hXur8vqCFv/kcVmjP57HwC3X+RG3Se8aB0=;
-        b=LaJWe/boRhue4Y6QklLItBbLYLFPSnqap8c+FiuCAxzA7PttnG+4/3rx9O9jrOIZdm
-         z4gh92TH2x1TKT2WuZlLmvNio4bkM4YSKBoQl4WKS51J1lpPB5Wkxjl+8hkqNI7J8cL/
-         yhf1MibgLchwej915W7FoJPdJ15Ta6uT/rLs5gSf1q4W+hCMeMvPWxUuks2razJd20jV
-         0mnYz4Td/y7SX69rZbNUjkhkKw5V6w6A9QILgk7CCqU7cGuVRAgKU6frb/XbHKY/A6+Q
-         +Oo6Xnr5Kue7rDp/AMLz2Mg7toq24INuL2ieFzaAOvHPVFaCvtnhVI76OiqV+RG4guvk
-         OKPA==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=D80WZfucxT3T2jixHx4bvU4f4glNNHDVHDNbaBiNbuQ=;
+        b=WJ7vftjYdQLkD940fWG48kQOGPwWIwtjmcDQBLyGs95BRKwv0eoPa5OFr2AYkC7V80
+         f9B+0Sc+QNYibiS0EvcxPrGaKU8d1DlLXvuipvj3lUidU4MeLT2/VJ/g68UHwbB1RVcw
+         8+U02lIJ/hhK3v+qc4033/gXZISHphYuDQHfo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=EpFVglis/hXur8vqCFv/kcVmjP57HwC3X+RG3Se8aB0=;
-        b=TM8Ss7RX0t/uUJicv4vVYLPx2R8NZbxE3vE/veJ1jq8XHgSVYxPvQ5sdwD8ps/erCg
-         gtI+QnpT02nkZpM4hbQmD7Ww+ICBN6MayGc0SNO7W7ZqM87W8ElrlFoHT3nORheGJCCW
-         UT3phKoIIWXCUYtQ5DksE8itKYG6U84ZX4sR28DahbHr4poiUhltcgscdBbCisFM6LNL
-         sPoiD1BpJ/ENX0GoXKkdfJSHkFJ0VXWw/deXAw77tqScugSH1F02hJZkRKRce9fssXH4
-         DkWkM7jxYc+5qxl+2RwZ7PXwgychUerYue2NMKIVk34xxGi7/a4WWgmQCgTjB9QQboD1
-         NX0Q==
-X-Gm-Message-State: ACrzQf32WCqg8MCKMXs5P0w5E2N7i/kkZKuucERF0wubd374NO7K1ckI
-        ET6CXW+bhVqe1Vimr3TkFQh8kA==
-X-Google-Smtp-Source: AMsMyM5u+8ZqtRUMwpOPW2zQtWT/VHgLH9DbNZ57Xkt0W8p0Cg6tdgOsf6/nwKjEsZH/Zkujq3oLMw==
-X-Received: by 2002:a17:902:d484:b0:178:1b69:1488 with SMTP id c4-20020a170902d48400b001781b691488mr44695plg.156.1663793461187;
-        Wed, 21 Sep 2022 13:51:01 -0700 (PDT)
-Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
-        by smtp.gmail.com with ESMTPSA id rm10-20020a17090b3eca00b001fba4716f11sm2464843pjb.22.2022.09.21.13.50.59
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=D80WZfucxT3T2jixHx4bvU4f4glNNHDVHDNbaBiNbuQ=;
+        b=wFTHY+73lxmga69rrjrqMd9UrAo7y6UrLZ9cpPRoDU5JX+X4zsTmZblfEKghtaKvKP
+         jeXgrY2goyE1KmIhrJcAynsJ4LB9MFKFrIKnjUi0dCsHZrxqzA2+IuvgSy2gCYn8WSEI
+         oAQjB+X3hdX/e0PmcRKWs2mtwV351IeJphxM9EZRJreaEm6ZUoBW5MbYjisfTvb2MABI
+         wT1/68oNDu2d7KKUJmo0FquJ531BO4xjacLHeWLEdAwMDgP0l9EI6p+oICh2Mb9ljyGE
+         TdDeui4+LH95NVyp8xEcsGs/3pbQRx27TkRQ5Ygkn11rKXW5i8Ikj+1zzzneoeaZMC3U
+         PDTw==
+X-Gm-Message-State: ACrzQf0jrBXnO+WIEjLq0ExwFqSy0KRGpShaHxfsqlFF4ux8/wAFjGg1
+        ZaZi0djkZ2hIkfI4ArMRs4YFOg==
+X-Google-Smtp-Source: AMsMyM5x/YqAvJnNkuP3s9sudYjK2UWyxBpl4qhk/dsQz/kD2YM+cCHOYeHwTWoTCsY65S3tY/T91g==
+X-Received: by 2002:a65:4c85:0:b0:43b:f860:98f9 with SMTP id m5-20020a654c85000000b0043bf86098f9mr48699pgt.368.1663793519127;
+        Wed, 21 Sep 2022 13:51:59 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id i32-20020a632220000000b00422c003cf78sm2267673pgi.82.2022.09.21.13.51.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Sep 2022 13:51:00 -0700 (PDT)
-Date:   Wed, 21 Sep 2022 13:50:56 -0700
-From:   David Matlack <dmatlack@google.com>
-To:     Vishal Annapurve <vannapurve@google.com>
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-        shuah@kernel.org, bgardon@google.com, seanjc@google.com,
-        oupton@google.com, peterx@redhat.com, vkuznets@redhat.com
-Subject: Re: [V2 PATCH 2/8] KVM: selftests: Add arch specific initialization
-Message-ID: <Yyt5MHc1bwPfvBq/@google.com>
-References: <20220915000448.1674802-1-vannapurve@google.com>
- <20220915000448.1674802-3-vannapurve@google.com>
+        Wed, 21 Sep 2022 13:51:58 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     "James E.J. Bottomley" <jejb@linux.ibm.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Sachin Sant <sachinp@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH] scsi: scsi_transport_fc: Adjust struct fc_nl_event flex array usage
+Date:   Wed, 21 Sep 2022 13:51:55 -0700
+Message-Id: <20220921205155.1451649-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220915000448.1674802-3-vannapurve@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3180; h=from:subject; bh=HTYO6DRAcJ0YYvNgnwbkgU3hR5o+67BVqpamWRTBFhs=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjK3lqCxkl8/+3fSy7f7uw22pne0hq/v2+EXdc5unX 3g0ywfSJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYyt5agAKCRCJcvTf3G3AJgxsEA CRYo81nzmI4fc8o5wOEqs7W5LE56q0N+KDpzyoinEebkPkLBy9cfnnZ9IZ4uqGx6ql3/k5AfUbjIN1 VOlNweshUp4eFbH9dvygIwI4A1iMBIMYflwNw1nzFzEfMF5ivWNA1625KTcxaaXy2MFPqyAfKcKhKQ Ah6CSfZ80NPSV9Ku41sbuV1dbvmI9cLn+vHkzTeCt4JI+c3KQ7FCdVYgZT5ezS2bNfCLsJrp9tc2Qc mHMqxsGQYYfsBLd+l418aqM9EsgNxZB0/WvsWnxvZEMlsvcYK3qrTJ1cEYuqsfakUMsneAPGfBgPm7 TtvT1T+BVEzuPUynHHMKOAUdKhLV5tDynM/0ILQb5whePXTw3G9MXZE65Nd5yNOjmsAiBWTLhRxl67 luoxLNmyBF0N3ayCoDFgUocr1NNsjSpGKX39IPzTT85h0f6A/pgLML5l5SBpiihEZEOBOcCC69dyPT lO3CTNvu3yelHnrIb+CX+weji6t0ty5gJklkQPZUiVr4SGiluhDoZFNDIlAOM2p/QOoLqR9bQStJA9 WZzCGqSrXJammpEt2Xt3C5zDkun6J4n+x3JWZPJcJxPwL1kGJmZxQkwIv3YS1/k1Y7mqsyJi86tnW/ AtlIF07G7jUvINEO67RaAT2Sx99E3FCKCIG+3chWg3EdXVSuDNY1BnIwW9qQ==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 15, 2022 at 12:04:42AM +0000, Vishal Annapurve wrote:
-> Introduce arch specific API: kvm_selftest_arch_init to allow each arch to
-> handle initialization before running any selftest logic.
-> 
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Vishal Annapurve <vannapurve@google.com>
-> ---
->  .../selftests/kvm/include/kvm_util_base.h      |  5 +++++
->  .../selftests/kvm/lib/aarch64/processor.c      | 18 +++++++++---------
->  tools/testing/selftests/kvm/lib/kvm_util.c     |  2 ++
->  .../selftests/kvm/lib/riscv/processor.c        |  4 ++++
->  .../selftests/kvm/lib/s390x/processor.c        |  4 ++++
->  .../selftests/kvm/lib/x86_64/processor.c       |  4 ++++
->  6 files changed, 28 insertions(+), 9 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> index 24fde97f6121..98edbbda9f97 100644
-> --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-> +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> @@ -834,4 +834,9 @@ static inline int __vm_disable_nx_huge_pages(struct kvm_vm *vm)
->  	return __vm_enable_cap(vm, KVM_CAP_VM_DISABLE_NX_HUGE_PAGES, 0);
->  }
->  
-> +/*
-> + * API to execute architecture specific setup before executing selftest logic.
+In order to help the compiler reason about the destination buffer in
+struct fc_nl_event, add a flexible array member for this purpose.
+However, since the header is UAPI, it must not change size or layout, so
+a union is used.
 
-nit: s/before executing selftest logic/before main()/
+The allocation size calculations are also corrected (it was potentially
+allocating an extra 8 bytes), and the padding is zeroed to avoid leaking
+kernel heap memory contents.
 
-("selftest logic" is vague)
+Detected at run-time by the recently added memcpy() bounds checking:
 
-> + */
-> +void kvm_selftest_arch_init(void);
-> +
->  #endif /* SELFTEST_KVM_UTIL_BASE_H */
-> diff --git a/tools/testing/selftests/kvm/lib/aarch64/processor.c b/tools/testing/selftests/kvm/lib/aarch64/processor.c
-> index 6f5551368944..2281d6c5d02f 100644
-> --- a/tools/testing/selftests/kvm/lib/aarch64/processor.c
-> +++ b/tools/testing/selftests/kvm/lib/aarch64/processor.c
-> @@ -495,15 +495,6 @@ void aarch64_get_supported_page_sizes(uint32_t ipa,
->  	close(kvm_fd);
->  }
->  
-> -/*
-> - * arm64 doesn't have a true default mode, so start by computing the
-> - * available IPA space and page sizes early.
-> - */
-> -void __attribute__((constructor)) init_guest_modes(void)
-> -{
-> -       guest_modes_append_default();
-> -}
-> -
->  void smccc_hvc(uint32_t function_id, uint64_t arg0, uint64_t arg1,
->  	       uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5,
->  	       uint64_t arg6, struct arm_smccc_res *res)
-> @@ -528,3 +519,12 @@ void smccc_hvc(uint32_t function_id, uint64_t arg0, uint64_t arg1,
->  		       [arg4] "r"(arg4), [arg5] "r"(arg5), [arg6] "r"(arg6)
->  		     : "x0", "x1", "x2", "x3", "x4", "x5", "x6", "x7");
->  }
-> +
-> +/*
-> + * arm64 doesn't have a true default mode, so start by computing the
-> + * available IPA space and page sizes early.
-> + */
-> +void kvm_selftest_arch_init(void)
-> +{
-> +	guest_modes_append_default();
-> +}
-> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-> index 3c83838999f5..dafe4471a6c7 100644
-> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
-> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> @@ -1984,4 +1984,6 @@ void __attribute((constructor)) kvm_selftest_init(void)
->  {
->  	/* Tell stdout not to buffer its content. */
->  	setbuf(stdout, NULL);
-> +
-> +	kvm_selftest_arch_init();
->  }
+  memcpy: detected field-spanning write (size 8) of single field "&event->event_data" at drivers/scsi/scsi_transport_fc.c:581 (size 4)
 
-Suggest defining a default no-op implementation of
-kvm_selftest_arch_init() using __weak since most architectures do not
-actually need an implementation.
+Reported-by: Sachin Sant <sachinp@linux.ibm.com>
+Link: https://lore.kernel.org/linux-next/42404B5E-198B-4FD3-94D6-5E16CF579EF3@linux.ibm.com/
+Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: linux-scsi@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ drivers/scsi/scsi_transport_fc.c    | 8 +++++---
+ include/uapi/scsi/scsi_netlink_fc.h | 7 +++++--
+ 2 files changed, 10 insertions(+), 5 deletions(-)
 
-> diff --git a/tools/testing/selftests/kvm/lib/riscv/processor.c b/tools/testing/selftests/kvm/lib/riscv/processor.c
-> index 604478151212..26660dd2ba78 100644
-> --- a/tools/testing/selftests/kvm/lib/riscv/processor.c
-> +++ b/tools/testing/selftests/kvm/lib/riscv/processor.c
-> @@ -362,3 +362,7 @@ void vcpu_args_set(struct kvm_vcpu *vcpu, unsigned int num, ...)
->  void assert_on_unhandled_exception(struct kvm_vcpu *vcpu)
->  {
->  }
-> +
-> +void kvm_selftest_arch_init(void)
-> +{
-> +}
-> diff --git a/tools/testing/selftests/kvm/lib/s390x/processor.c b/tools/testing/selftests/kvm/lib/s390x/processor.c
-> index 89d7340d9cbd..8654ec74009a 100644
-> --- a/tools/testing/selftests/kvm/lib/s390x/processor.c
-> +++ b/tools/testing/selftests/kvm/lib/s390x/processor.c
-> @@ -218,3 +218,7 @@ void vcpu_arch_dump(FILE *stream, struct kvm_vcpu *vcpu, uint8_t indent)
->  void assert_on_unhandled_exception(struct kvm_vcpu *vcpu)
->  {
->  }
-> +
-> +void kvm_selftest_arch_init(void)
-> +{
-> +}
-> diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-> index 2e6e61bbe81b..20bf125f9363 100644
-> --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-> +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-> @@ -1311,3 +1311,7 @@ bool vm_is_unrestricted_guest(struct kvm_vm *vm)
->  
->  	return val == 'Y';
->  }
-> +
-> +void kvm_selftest_arch_init(void)
-> +{
-> +}
-> -- 
-> 2.37.2.789.g6183377224-goog
-> 
+diff --git a/drivers/scsi/scsi_transport_fc.c b/drivers/scsi/scsi_transport_fc.c
+index a2524106206d..0d798f11dc34 100644
+--- a/drivers/scsi/scsi_transport_fc.c
++++ b/drivers/scsi/scsi_transport_fc.c
+@@ -543,7 +543,7 @@ fc_host_post_fc_event(struct Scsi_Host *shost, u32 event_number,
+ 	struct nlmsghdr	*nlh;
+ 	struct fc_nl_event *event;
+ 	const char *name;
+-	u32 len;
++	size_t len, padding;
+ 	int err;
+ 
+ 	if (!data_buf || data_len < 4)
+@@ -554,7 +554,7 @@ fc_host_post_fc_event(struct Scsi_Host *shost, u32 event_number,
+ 		goto send_fail;
+ 	}
+ 
+-	len = FC_NL_MSGALIGN(sizeof(*event) + data_len);
++	len = FC_NL_MSGALIGN(sizeof(*event) - sizeof(event->event_data) + data_len);
+ 
+ 	skb = nlmsg_new(len, GFP_KERNEL);
+ 	if (!skb) {
+@@ -578,7 +578,9 @@ fc_host_post_fc_event(struct Scsi_Host *shost, u32 event_number,
+ 	event->event_num = event_number;
+ 	event->event_code = event_code;
+ 	if (data_len)
+-		memcpy(&event->event_data, data_buf, data_len);
++		memcpy(event->event_data_flex, data_buf, data_len);
++	padding = len - offsetof(typeof(*event), event_data_flex) - data_len;
++	memset(event->event_data_flex + data_len, 0, padding);
+ 
+ 	nlmsg_multicast(scsi_nl_sock, skb, 0, SCSI_NL_GRP_FC_EVENTS,
+ 			GFP_KERNEL);
+diff --git a/include/uapi/scsi/scsi_netlink_fc.h b/include/uapi/scsi/scsi_netlink_fc.h
+index 7535253f1a96..b46e9cbeb001 100644
+--- a/include/uapi/scsi/scsi_netlink_fc.h
++++ b/include/uapi/scsi/scsi_netlink_fc.h
+@@ -35,7 +35,7 @@
+  * FC Transport Broadcast Event Message :
+  *   FC_NL_ASYNC_EVENT
+  *
+- * Note: if Vendor Unique message, &event_data will be  start of
++ * Note: if Vendor Unique message, event_data_flex will be start of
+  * 	 vendor unique payload, and the length of the payload is
+  *       per event_datalen
+  *
+@@ -50,7 +50,10 @@ struct fc_nl_event {
+ 	__u16 event_datalen;
+ 	__u32 event_num;
+ 	__u32 event_code;
+-	__u32 event_data;
++	union {
++		__u32 event_data;
++		__DECLARE_FLEX_ARRAY(__u8, event_data_flex);
++	};
+ } __attribute__((aligned(sizeof(__u64))));
+ 
+ 
+-- 
+2.34.1
+
