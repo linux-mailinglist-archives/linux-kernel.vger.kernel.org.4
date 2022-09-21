@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 101D15BFE7C
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 14:55:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 883095BFE78
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 14:55:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbiIUMze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 08:55:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38212 "EHLO
+        id S229566AbiIUMzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 08:55:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229880AbiIUMzN (ORCPT
+        with ESMTP id S229873AbiIUMzN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 21 Sep 2022 08:55:13 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB24B2E9C9;
-        Wed, 21 Sep 2022 05:55:11 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MXdZH14Zxz14RgJ;
-        Wed, 21 Sep 2022 20:51:03 +0800 (CST)
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 242E93137B;
+        Wed, 21 Sep 2022 05:55:12 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MXdZG6W7pzlVwv;
+        Wed, 21 Sep 2022 20:51:02 +0800 (CST)
 Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.31; Wed, 21 Sep 2022 20:55:10 +0800
 Received: from ubuntu1804.huawei.com (10.67.175.36) by
@@ -38,9 +38,9 @@ CC:     <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
         <mhiramat@kernel.org>, <rostedt@goodmis.org>,
         <keescook@chromium.org>, <catalin.marinas@arm.com>,
         <chenzhongjin@huawei.com>
-Subject: [PATCH for-next v2 3/4] riscv: stacktrace: Save pt_regs in ENCODE_FRAME_POINTER
-Date:   Wed, 21 Sep 2022 20:51:26 +0800
-Message-ID: <20220921125128.33913-4-chenzhongjin@huawei.com>
+Subject: [PATCH for-next v2 4/4] riscv: stacktrace: Implement stacktrace for irq
+Date:   Wed, 21 Sep 2022 20:51:27 +0800
+Message-ID: <20220921125128.33913-5-chenzhongjin@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220921125128.33913-1-chenzhongjin@huawei.com>
 References: <20220921125128.33913-1-chenzhongjin@huawei.com>
@@ -58,176 +58,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To support stack unwinding when there is a pt_regs on stack, the position
-of pt_regs is nessesary. Because for some functions, compiler only push
-s0/fp on stack without ra.
+After adding encoded fp onto stack to record pt_regs, now the
+unwinder have ability to unwind frame through irq.
 
-As the situation described in
-commit f766f77a74f5("riscv/stacktrace: Fix stack output without ra on the stack top")
+There is two steps to unwind irq frame and the interrupted frame:
 
-When irq happens there, the function frame looks like:
+1. When there is an encoded fp on stack, we can get the pt_regs
+and unwind frame by (regs->epc) and (regs->s0).
 
-prev function	|       ...       |
-		|                 |
-normal function +-----------------+
-		| ra to prev      |
-		| s0 of prev      |
-		|       ...       |<-+
-leaf function	+-----------------+  |
-		| s0 of normal    |  |
-		| empty slot      |  |
-irq pt_regs	+-----------------+  |
-		| epc (ra to leaf)|  |
-		| ra  (ra to norm)|  |
-		| ...             |  |
-                | s0 of leaf      |--+
-		| ...             |
-		+-----------------+
+2. To unwind the interrupted frame, there is two possibilities,
+we can determine the situation by checking whether the value in
+frame->ra position is a fp value.
 
-When unwinding from unwinding from leaf to normal, beacause (ra to norm)
-is saved in pt_regs, but not stackframe of leaf, we have to get pt_regs
-for that.
+If there is a fp in ra position:
+We are inside a leaf frame and there is only fp on ra position.
+Get fp from ra position and get next pc from pt_regs.
+Else:
+Just get fp and next pc from stack frame.
 
-To get pt_regs position on stack, we can save the encoded *pt_regs
-in s0, as x86 architecture did. Then we can get s0, epc and ra
-easily.
+Stacktrace before this patch:
 
-Add ENCODE_FRAME_POINTER in irq, ftrace and kretprobe trampoline entries.
-For ftrace and kretprobes we should also set pt_regs as kernel mode
-so that they are not mistaken as user_mode pt_regs.
+ Call Trace:
+  ...
+  [<ffffffff800aa692>] __flush_smp_call_function_queue+0xde/0x1fa
+  [<ffffffff800ab404>] generic_smp_call_function_single_interrupt+0x22/0x2a
+  [<ffffffff800077b2>] handle_IPI+0xaa/0x108
+  [<ffffffff803f827e>] riscv_intc_irq+0x56/0x6e
+  [<ffffffff808d94b6>] generic_handle_arch_irq+0x4c/0x76
+  [<ffffffff80003ad0>] ret_from_exception+0x0/0xc
+
+Stacktrace after this patch:
+
+ Call Trace:
+  ...
+  [<ffffffff800aa6da>] __flush_smp_call_function_queue+0xde/0x1fa
+  [<ffffffff800ab44c>] generic_smp_call_function_single_interrupt+0x22/0x2a
+  [<ffffffff800077fa>] handle_IPI+0xaa/0x108
+  [<ffffffff803f82c6>] riscv_intc_irq+0x56/0x6e
+  [<ffffffff808d94fe>] generic_handle_arch_irq+0x4c/0x76
+  [<ffffffff80003ad0>] ret_from_exception+0x0/0xc
++ [<ffffffff80003d52>] arch_cpu_idle+0x22/0x28
++ [<ffffffff808e23a8>] default_idle_call+0x44/0xee
++ [<ffffffff80056ece>] do_idle+0x116/0x126
++ [<ffffffff8005706e>] cpu_startup_entry+0x36/0x38
++ [<ffffffff808d99ae>] kernel_init+0x0/0x15a
++ [<ffffffff80a007a0>] arch_post_acpi_subsys_init+0x0/0x38
++ [<ffffffff80a0100c>] start_kernel+0x7c4/0x7f2
 
 Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
-Reviewed-by: Guo Ren <guoren@kernel.org>
 ---
- arch/riscv/include/asm/frame.h                | 45 +++++++++++++++++++
- arch/riscv/kernel/entry.S                     |  3 ++
- arch/riscv/kernel/mcount-dyn.S                |  7 +++
- arch/riscv/kernel/probes/kprobes_trampoline.S |  7 +++
- 4 files changed, 62 insertions(+)
- create mode 100644 arch/riscv/include/asm/frame.h
+ arch/riscv/kernel/stacktrace.c | 45 ++++++++++++++++++++++++++++------
+ 1 file changed, 38 insertions(+), 7 deletions(-)
 
-diff --git a/arch/riscv/include/asm/frame.h b/arch/riscv/include/asm/frame.h
-new file mode 100644
-index 000000000000..2a1f45cf3a4e
---- /dev/null
-+++ b/arch/riscv/include/asm/frame.h
-@@ -0,0 +1,45 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ASM_RISCV_FRAME_H
-+#define _ASM_RISCV_FRAME_H
-+
-+#include <asm/asm.h>
-+
-+#ifdef CONFIG_FRAME_POINTER
-+
-+#ifdef __ASSEMBLY__
-+
-+/*
-+ * This is a sneaky trick to help the unwinder find pt_regs on the stack.  The
-+ * frame pointer is replaced with an encoded pointer to pt_regs.  The encoding
-+ * is just setting the LSB, which makes it an invalid stack address and is also
-+ * a signal to the unwinder that it's a pt_regs pointer in disguise.
-+ *
-+ * This macro must be used when sp point to pt_regs
-+ */
-+.macro ENCODE_FRAME_POINTER
-+	add s0, sp, 0x1
-+.endm
-+
-+#else /* !__ASSEMBLY__ */
-+
-+#define ENCODE_FRAME_POINTER			\
-+	"add s0, sp, 0x1\n\t"
-+
-+#endif /* __ASSEMBLY__ */
-+
-+#else /* !CONFIG_FRAME_POINTER */
-+
-+#ifdef __ASSEMBLY__
-+
-+.macro ENCODE_FRAME_POINTER ptregs_offset=0
-+.endm
-+
-+#else /* !__ASSEMBLY */
-+
-+#define ENCODE_FRAME_POINTER
-+
-+#endif /* !__ASSEMBLY */
-+
-+#endif /* CONFIG_FRAME_POINTER */
-+
-+#endif /* _ASM_RISCV_FRAME_H */
-diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-index b9eda3fcbd6d..ecb15c7430b4 100644
---- a/arch/riscv/kernel/entry.S
-+++ b/arch/riscv/kernel/entry.S
-@@ -13,6 +13,7 @@
- #include <asm/thread_info.h>
- #include <asm/asm-offsets.h>
- #include <asm/errata_list.h>
-+#include <asm/frame.h>
+diff --git a/arch/riscv/kernel/stacktrace.c b/arch/riscv/kernel/stacktrace.c
+index e84e21868a3e..976dc298ab3b 100644
+--- a/arch/riscv/kernel/stacktrace.c
++++ b/arch/riscv/kernel/stacktrace.c
+@@ -16,29 +16,60 @@
  
- #if !IS_ENABLED(CONFIG_PREEMPTION)
- .set resume_kernel, restore_all
-@@ -95,6 +96,8 @@ _save_context:
- 	REG_S s4, PT_CAUSE(sp)
- 	REG_S s5, PT_TP(sp)
+ #ifdef CONFIG_FRAME_POINTER
  
-+	ENCODE_FRAME_POINTER
++static struct pt_regs *decode_frame_pointer(unsigned long fp)
++{
++	if (!(fp & 0x1))
++		return NULL;
 +
- 	/*
- 	 * Set the scratch register to 0, so that if a recursive exception
- 	 * occurs, the exception vector knows it came from the kernel
-diff --git a/arch/riscv/kernel/mcount-dyn.S b/arch/riscv/kernel/mcount-dyn.S
-index d171eca623b6..a362521e030e 100644
---- a/arch/riscv/kernel/mcount-dyn.S
-+++ b/arch/riscv/kernel/mcount-dyn.S
-@@ -10,6 +10,8 @@
- #include <asm/asm-offsets.h>
- #include <asm-generic/export.h>
- #include <asm/ftrace.h>
-+#include <asm/frame.h>
-+#include <asm/csr.h>
++	return (struct pt_regs *)(fp & ~0x1);
++}
++
+ static int notrace unwind_next(struct unwind_state *state)
+ {
+ 	unsigned long low, high, fp;
+ 	struct stackframe *frame;
++	struct pt_regs *regs;
  
- 	.text
+-	fp = state->fp;
++	regs = decode_frame_pointer(state->fp);
  
-@@ -172,6 +174,11 @@ ENDPROC(ftrace_caller)
- #ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
- ENTRY(ftrace_regs_caller)
- 	SAVE_ALL
-+#ifdef CONFIG_FRAME_POINTER
-+	li s0, SR_PP
-+	REG_S s0, PT_STATUS(sp)
-+	ENCODE_FRAME_POINTER
-+#endif
+ 	/* Validate frame pointer */
+-	low = state->sp + sizeof(struct stackframe);
++	if (regs) {
++		if user_mode(regs)
++			return -1;
++
++		fp = (unsigned long)regs;
++		low = state->sp;
++	} else {
++		fp = state->fp;
++		low = state->sp + sizeof(struct stackframe);
++	}
+ 	high = ALIGN(low, THREAD_SIZE);
  
- 	addi	a0, ra, -FENTRY_RA_OFFSET
- 	la	a1, function_trace_op
-diff --git a/arch/riscv/kernel/probes/kprobes_trampoline.S b/arch/riscv/kernel/probes/kprobes_trampoline.S
-index 7bdb09ded39b..70760a16784f 100644
---- a/arch/riscv/kernel/probes/kprobes_trampoline.S
-+++ b/arch/riscv/kernel/probes/kprobes_trampoline.S
-@@ -6,6 +6,8 @@
+ 	if (fp < low || fp > high || fp & 0x7)
+ 		return -EINVAL;
  
- #include <asm/asm.h>
- #include <asm/asm-offsets.h>
-+#include <asm/frame.h>
-+#include <asm/csr.h>
+-	/* Unwind stack frame */
+ 	frame = (struct stackframe *)fp - 1;
+ 	state->sp = fp;
  
- 	.text
- 	.altmacro
-@@ -78,6 +80,11 @@
- ENTRY(__kretprobe_trampoline)
- 	addi sp, sp, -(PT_SIZE_ON_STACK)
- 	save_all_base_regs
-+#ifdef CONFIG_FRAME_POINTER
-+	li s0, SR_PP
-+	REG_S s0, PT_STATUS(sp)
-+	ENCODE_FRAME_POINTER
-+#endif
- 
- 	move a0, sp /* pt_regs */
- 
+-	if (state->regs && state->regs->epc == state->pc &&
+-		fp & 0x7) {
+-		state->fp = frame->ra;
+-		state->pc = state->regs->ra;
++	if (regs) {
++	/* Unwind from irq to interrupted function */
++		state->fp = regs->s0;
++		state->pc = regs->epc;
++		state->regs = regs;
++	} else if (state->regs && state->regs->epc == state->pc) {
++	/* Unwind from interrupted function to caller*/
++		if (frame->ra < low || frame->ra > high) {
++		/* normal function */
++			state->fp = frame->fp;
++			state->pc = frame->ra;
++		} else {
++		/* leaf function */
++			state->fp = frame->ra;
++			state->pc = state->regs->ra;
++		}
++		state->regs = NULL;
+ 	} else {
++	/* Unwind from normal stack frame */
+ 		state->fp = frame->fp;
+ 		state->pc = ftrace_graph_ret_addr(current, NULL, frame->ra,
+ 							(unsigned long *)fp - 1);
 -- 
 2.17.1
 
