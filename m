@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AC805C0232
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:49:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 628825C02F1
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:57:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231128AbiIUPtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 11:49:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50390 "EHLO
+        id S231998AbiIUP5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 11:57:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231750AbiIUPsw (ORCPT
+        with ESMTP id S231931AbiIUP4X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 11:48:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6CE9DF95;
-        Wed, 21 Sep 2022 08:47:53 -0700 (PDT)
+        Wed, 21 Sep 2022 11:56:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A3969FA94;
+        Wed, 21 Sep 2022 08:51:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E5D406312F;
-        Wed, 21 Sep 2022 15:47:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB75CC433C1;
-        Wed, 21 Sep 2022 15:47:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ADAEC63138;
+        Wed, 21 Sep 2022 15:50:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ED57C433C1;
+        Wed, 21 Sep 2022 15:50:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663775267;
-        bh=spInQ7coVvtdxGMBzr2GLkS2P4ddh6lYh6Po0asyqQ4=;
+        s=korg; t=1663775423;
+        bh=IsyHi3wSqK4hM1NhPP/hH6CMqg72K/1A8UFLZTLCdAQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YP3mKAjYpbXm3D39Ln6M/o5x9hKzQqXntXdSQf+O5zLtdTPECnSzDZ02Qw5CEXxgQ
-         6lrCpR06UAveubQaKv8Ui9EfmjfDkLmGGYnzb8wAz25Ra4LEzM5OhPohJ2g0eC1Ac7
-         pMgSCdJfVcQ4p6hI9bx7UfWODzNzsDVZpb8II9TI=
+        b=WDSQ4YQpCEaL4yjkSgEVGdH2xUK7hp2gkFRCnN/sxg7jurXzDL7jvfg95gmBxm7YG
+         7J5KvqABmEDwoNQPU7EnDabpqbG5pbqW7KxMMhF8GmnANbOOx6Q2jf9LuCODIWRHFo
+         N3MoVI31idmYvR0hKbwVHNnLGAyd8PiM9ItgBH1g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Janne Grunau <j@jannau.net>,
-        Marc Zyngier <maz@kernel.org>, Rob Herring <robh@kernel.org>
-Subject: [PATCH 5.19 35/38] dt-bindings: apple,aic: Fix required item "apple,fiq-index" in affinity description
-Date:   Wed, 21 Sep 2022 17:46:19 +0200
-Message-Id: <20220921153647.376565933@linuxfoundation.org>
+        stable@vger.kernel.org, James Smart <jsmart2021@gmail.com>,
+        Hannes Reinecke <hare@suse.de>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 30/45] scsi: lpfc: Return DID_TRANSPORT_DISRUPTED instead of DID_REQUEUE
+Date:   Wed, 21 Sep 2022 17:46:20 +0200
+Message-Id: <20220921153647.883050090@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220921153646.298361220@linuxfoundation.org>
-References: <20220921153646.298361220@linuxfoundation.org>
+In-Reply-To: <20220921153646.931277075@linuxfoundation.org>
+References: <20220921153646.931277075@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,34 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Janne Grunau <j@jannau.net>
+From: Hannes Reinecke <hare@suse.de>
 
-commit da3b1c294d470b2cf3c7046cc9e0d5c66f0a6c65 upstream.
+[ Upstream commit c0a50cd389c3ed54831e240023dd12bafa56b3a6 ]
 
-The required list used "fiq-index" instead of "apple,fiq-index"
-described as property and used in the dts. Add the missing "apple,"
-prefix.
+When the driver hits an internal error condition returning DID_REQUEUE the
+I/O will be retried on the same ITL nexus.  This will inhibit multipathing,
+resulting in endless retries even if the error could have been resolved by
+using a different ITL nexus.  Return DID_TRANSPORT_DISRUPTED to allow for
+multipath to engage and route I/O to another ITL nexus.
 
-Fixes: dba07ad11384 ("dt-bindings: apple,aic: Add affinity description for per-cpu pseudo-interrupts")
-Signed-off-by: Janne Grunau <j@jannau.net>
-Acked-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220909135103.98179-2-j@jannau.net
-Signed-off-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://lore.kernel.org/r/20220824060033.138661-1-hare@suse.de
+Reviewed-by: James Smart <jsmart2021@gmail.com>
+Signed-off-by: Hannes Reinecke <hare@suse.de>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- Documentation/devicetree/bindings/interrupt-controller/apple,aic.yaml |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/lpfc/lpfc_scsi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/Documentation/devicetree/bindings/interrupt-controller/apple,aic.yaml
-+++ b/Documentation/devicetree/bindings/interrupt-controller/apple,aic.yaml
-@@ -96,7 +96,7 @@ properties:
-               Documentation/devicetree/bindings/arm/cpus.yaml).
- 
-         required:
--          - fiq-index
-+          - apple,fiq-index
-           - cpus
- 
- required:
+diff --git a/drivers/scsi/lpfc/lpfc_scsi.c b/drivers/scsi/lpfc/lpfc_scsi.c
+index 7da8e4c845df..41313fcaf84a 100644
+--- a/drivers/scsi/lpfc/lpfc_scsi.c
++++ b/drivers/scsi/lpfc/lpfc_scsi.c
+@@ -4278,7 +4278,7 @@ lpfc_fcp_io_cmd_wqe_cmpl(struct lpfc_hba *phba, struct lpfc_iocbq *pwqeIn,
+ 		    lpfc_cmd->result == IOERR_NO_RESOURCES ||
+ 		    lpfc_cmd->result == IOERR_ABORT_REQUESTED ||
+ 		    lpfc_cmd->result == IOERR_SLER_CMD_RCV_FAILURE) {
+-			cmd->result = DID_REQUEUE << 16;
++			cmd->result = DID_TRANSPORT_DISRUPTED << 16;
+ 			break;
+ 		}
+ 		if ((lpfc_cmd->result == IOERR_RX_DMA_FAILED ||
+@@ -4567,7 +4567,7 @@ lpfc_scsi_cmd_iocb_cmpl(struct lpfc_hba *phba, struct lpfc_iocbq *pIocbIn,
+ 			    lpfc_cmd->result == IOERR_NO_RESOURCES ||
+ 			    lpfc_cmd->result == IOERR_ABORT_REQUESTED ||
+ 			    lpfc_cmd->result == IOERR_SLER_CMD_RCV_FAILURE) {
+-				cmd->result = DID_REQUEUE << 16;
++				cmd->result = DID_TRANSPORT_DISRUPTED << 16;
+ 				break;
+ 			}
+ 			if ((lpfc_cmd->result == IOERR_RX_DMA_FAILED ||
+-- 
+2.35.1
+
 
 
