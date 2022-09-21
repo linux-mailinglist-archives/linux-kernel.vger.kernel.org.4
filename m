@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36BFC5C0278
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:53:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C69E5C022C
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:49:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231769AbiIUPxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 11:53:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57366 "EHLO
+        id S231319AbiIUPtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 11:49:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231765AbiIUPwH (ORCPT
+        with ESMTP id S231666AbiIUPsi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 11:52:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9261055E;
-        Wed, 21 Sep 2022 08:49:38 -0700 (PDT)
+        Wed, 21 Sep 2022 11:48:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D58F57C304;
+        Wed, 21 Sep 2022 08:47:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 40BEDB830A9;
-        Wed, 21 Sep 2022 15:49:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 745A0C433D6;
-        Wed, 21 Sep 2022 15:49:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2480C6312A;
+        Wed, 21 Sep 2022 15:47:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16B24C433C1;
+        Wed, 21 Sep 2022 15:47:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663775355;
-        bh=gpGbiPYmFVOo/lLFhBYn1vWhkcCQKUcxoGDoaiLWFy4=;
+        s=korg; t=1663775258;
+        bh=iqaezEEeiDG99/bBFyg4bCNJe4txiqLmFcEDC6sXYqc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lx4N+nvoKMU4TSaadfBiXdkBTS02UyS0zPsBpRcyGA2keKZ2sMNjkMGHsqmr1ThJf
-         2FSCG8R1MjFbOEtc4BfbrXu+mwqWpEc7W2KMAQPJuLsAWXfj8kcMVM4Ddwp916nUVh
-         I8NDzaCauvuNtuTL7ycIOplwrrka29Bxtlt9JqkM=
+        b=WSAeoSkttwf9IK8i6N/Nq6wvBR+EKIbzYhaknuzJZLnqU1sc/RmihlPdEdhPoWi8B
+         WIAOn99LBPa4bj7GWFc9C9r2JGdDhbu7i7zM1X9gHuCLuZby901YXcOEXruhfNTKVs
+         GuhnYJAYbAvMHS6z6eZxZS9h000lbNvJVBbNhYGY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liam Howlett <liam.howlett@oracle.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Carlos Llamas <cmllamas@google.com>
-Subject: [PATCH 5.15 25/45] binder: remove inaccurate mmap_assert_locked()
-Date:   Wed, 21 Sep 2022 17:46:15 +0200
-Message-Id: <20220921153647.712630577@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Lijo Lazar <lijo.lazar@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>
+Subject: [PATCH 5.19 32/38] drm/amdgpu: move nbio ih_doorbell_range() into ih code for vega
+Date:   Wed, 21 Sep 2022 17:46:16 +0200
+Message-Id: <20220921153647.292908167@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220921153646.931277075@linuxfoundation.org>
-References: <20220921153646.931277075@linuxfoundation.org>
+In-Reply-To: <20220921153646.298361220@linuxfoundation.org>
+References: <20220921153646.298361220@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,85 +55,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Carlos Llamas <cmllamas@google.com>
+From: Alex Deucher <alexander.deucher@amd.com>
 
-Acquiring the mmap_lock during exit_mmap() was only added recently in
-v5.17 by commit 64591e8605d6 ("mm: protect free_pgtables with mmap_lock
-write lock in exit_mmap"). Soon after, asserts for holding this lock
-were added to the binder_alloc_set_vma() callback by the following two
-fix commits in mainline: commit b0cab80ecd54 ("android: binder: fix
-lockdep check on clearing vma") and commit a43cfc87caaf ("android:
-binder: stop saving a pointer to the VMA").
+commit dc1d85cb790f2091eea074cee24a704b2d6c4a06 upstream.
 
-These two fix commits were picked for stable trees including v5.15 were
-unfortunately the mmap_lock is not held during exit_mmap() yet and this
-unmet dependency leads to the following BUG report:
+This mirrors what we do for other asics and this way we are
+sure the ih doorbell range is properly initialized.
 
-  ------------[ cut here ]------------
-  kernel BUG at include/linux/mmap_lock.h:156!
-  Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
-  Modules linked in:
-  CPU: 3 PID: 437 Comm: binder Not tainted 5.15.68 #5
-  Hardware name: linux,dummy-virt (DT)
-  pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-  pc : binder_alloc_vma_close+0x6c/0x70
-  lr : binder_alloc_vma_close+0x6c/0x70
-  sp : ffff800008687a70
-  x29: ffff800008687a70 x28: ffff02a7ccf89d00 x27: ffff02a7c92f99e8
-  x26: 000000000000012a x25: ffff02a7c6284740 x24: ffff02a7ccf8a360
-  x23: ffff02a7c92f9980 x22: 1ffff000010d0f6c x21: ffff02a7c92f99e8
-  x20: ffff02a7c92f9980 x19: ffff02a7d16b79a8 x18: 0000ffffe1702d20
-  x17: 3334373239343932 x16: 34206e6163735f74 x15: 78656e5f616d756e
-  x14: 0a30303030303030 x13: 7366666f5f6e6163 x12: ffff60550564a12b
-  x11: 1fffe0550564a12a x10: ffff60550564a12a x9 : dfff800000000000
-  x8 : ffff02a82b250957 x7 : 0000000000000001 x6 : ffff60550564a12a
-  x5 : ffff02a82b250950 x4 : dfff800000000000 x3 : 0000000000000000
-  x2 : 0000000000000000 x1 : ffff02a7ccf89d00 x0 : 0000000000000374
-  Call trace:
-   binder_alloc_vma_close+0x6c/0x70
-   binder_vma_close+0x38/0xf4
-   remove_vma+0x4c/0x94
-   exit_mmap+0x14c/0x2bc
-   __mmput+0x70/0x19c
-   mmput+0x68/0x80
-   do_exit+0x484/0xeb0
-   do_group_exit+0x5c/0x100
-   [...]
+There is a comment about the way doorbells on gfx9 work that
+requires that they are initialized for other IPs before GFX
+is initialized.  In this case IH is initialized before GFX,
+so there should be no issue.
 
-This patch removes the inaccurate assert specifically from v5.15 since
-it's the only release with such issue. Note the mmap_lock is technically
-not needed here as the mm->mm_users has dropped to zero at this point.
-More context: https://lore.kernel.org/all/YxpQaio7xm3z9TUw@google.com/.
+This is a prerequisite for fixing the Unsupported Request error
+reported through AER during driver load.
 
-Fixes: b0cab80ecd54 ("android: binder: fix lockdep check on clearing vma")
-Fixes: a43cfc87caaf ("android: binder: stop saving a pointer to the VMA")
-Cc: Liam Howlett <liam.howlett@oracle.com>
-Cc: Suren Baghdasaryan <surenb@google.com>
-Cc: <stable@vger.kernel.org> # v5.15
-Signed-off-by: Carlos Llamas <cmllamas@google.com>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=216373
+
+The error was unnoticed before and got visible because of the commit
+referenced below. This doesn't fix anything in the commit below, rather
+fixes the issue in amdgpu exposed by the commit. The reference is only
+to associate this commit with below one so that both go together.
+
+Fixes: 8795e182b02d ("PCI/portdrv: Don't disable AER reporting in get_port_device_capability()")
+
+Acked-by: Christian König <christian.koenig@amd.com>
+Reviewed-by: Lijo Lazar <lijo.lazar@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Cc: stable@vger.kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/android/binder_alloc.c |    7 -------
- 1 file changed, 7 deletions(-)
+ drivers/gpu/drm/amd/amdgpu/soc15.c     |    3 ---
+ drivers/gpu/drm/amd/amdgpu/vega10_ih.c |    4 ++++
+ drivers/gpu/drm/amd/amdgpu/vega20_ih.c |    4 ++++
+ 3 files changed, 8 insertions(+), 3 deletions(-)
 
---- a/drivers/android/binder_alloc.c
-+++ b/drivers/android/binder_alloc.c
-@@ -315,16 +315,9 @@ static inline void binder_alloc_set_vma(
- {
- 	unsigned long vm_start = 0;
+--- a/drivers/gpu/drm/amd/amdgpu/soc15.c
++++ b/drivers/gpu/drm/amd/amdgpu/soc15.c
+@@ -1224,9 +1224,6 @@ static void soc15_doorbell_range_init(st
+ 				ring->use_doorbell, ring->doorbell_index,
+ 				adev->doorbell_index.sdma_doorbell_range);
+ 		}
+-
+-		adev->nbio.funcs->ih_doorbell_range(adev, adev->irq.ih.use_doorbell,
+-						adev->irq.ih.doorbell_index);
+ 	}
+ }
  
--	/*
--	 * Allow clearing the vma with holding just the read lock to allow
--	 * munmapping downgrade of the write lock before freeing and closing the
--	 * file using binder_alloc_vma_close().
--	 */
- 	if (vma) {
- 		vm_start = vma->vm_start;
- 		mmap_assert_write_locked(alloc->vma_vm_mm);
--	} else {
--		mmap_assert_locked(alloc->vma_vm_mm);
+--- a/drivers/gpu/drm/amd/amdgpu/vega10_ih.c
++++ b/drivers/gpu/drm/amd/amdgpu/vega10_ih.c
+@@ -289,6 +289,10 @@ static int vega10_ih_irq_init(struct amd
+ 		}
  	}
  
- 	alloc->vma_addr = vm_start;
++	if (!amdgpu_sriov_vf(adev))
++		adev->nbio.funcs->ih_doorbell_range(adev, adev->irq.ih.use_doorbell,
++						    adev->irq.ih.doorbell_index);
++
+ 	pci_set_master(adev->pdev);
+ 
+ 	/* enable interrupts */
+--- a/drivers/gpu/drm/amd/amdgpu/vega20_ih.c
++++ b/drivers/gpu/drm/amd/amdgpu/vega20_ih.c
+@@ -340,6 +340,10 @@ static int vega20_ih_irq_init(struct amd
+ 		}
+ 	}
+ 
++	if (!amdgpu_sriov_vf(adev))
++		adev->nbio.funcs->ih_doorbell_range(adev, adev->irq.ih.use_doorbell,
++						    adev->irq.ih.doorbell_index);
++
+ 	pci_set_master(adev->pdev);
+ 
+ 	/* enable interrupts */
 
 
