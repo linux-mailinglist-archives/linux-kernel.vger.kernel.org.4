@@ -2,74 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DFC55C047F
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 18:45:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82F105C0484
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 18:46:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231140AbiIUQpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 12:45:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44788 "EHLO
+        id S230408AbiIUQqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 12:46:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230351AbiIUQog (ORCPT
+        with ESMTP id S230205AbiIUQps (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 12:44:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF99C48;
-        Wed, 21 Sep 2022 09:34:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 30413B83181;
-        Wed, 21 Sep 2022 16:34:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id EABEAC433D6;
-        Wed, 21 Sep 2022 16:34:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663778066;
-        bh=4zrBKD8p+a54Do+feopb+gqIFXrxU78pdFojW+ucLfU=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=J3QCuee4s29ve2tV6oh4IFghBWy5ckvmTP9jyy3WWKKqa4lVP9D3HlrU2tDBsD3mC
-         UKEYAcVI6CYD4HnQ88uwCNIUterxrnwcyiS9wddwGMx/pstfoLAgmmN/1wRo1w4ltx
-         IuiSzZpaNtXcufXu6HtoOE1CrAX9voSRoXqWEBrNQRlkA9OO0mpCco0gxtkEbDh0zo
-         DtJXJdNy0cZshJz0fYF7N85p7UBWJRT8BfX52vBzOhhFhhJS0zJz2OGstjlWeGSpF1
-         SFA6BzjTJrSj5MrW69OMQDaMIbUhadtaXW++D01PKSbsHrZ2Ck2AanPhA0KPvR5PNQ
-         V2gASgG8rlKWA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CBA66E21ECF;
-        Wed, 21 Sep 2022 16:34:25 +0000 (UTC)
-Subject: Re: [GIT PULL]: dmaengine fixes for v6.0
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YysQ6+o7IqJUwTdY@matsya>
-References: <YysQ6+o7IqJUwTdY@matsya>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <YysQ6+o7IqJUwTdY@matsya>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git tags/dmaengine-fix-6.0
-X-PR-Tracked-Commit-Id: e0f1b21c504f050de83922dd49e6a425dad2d518
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 88e6546b36771daa145e7f6cf29f3496341634a6
-Message-Id: <166377806582.17149.5464169894846940042.pr-tracker-bot@kernel.org>
-Date:   Wed, 21 Sep 2022 16:34:25 +0000
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        dma <dmaengine@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 21 Sep 2022 12:45:48 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D012A6C15;
+        Wed, 21 Sep 2022 09:36:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=7kE5JdBiW9yulAgHix06z8Dq9UFAx7J6x1i9LFdWSw4=;
+        t=1663778203; x=1664987803; b=lxdxDMfqO903d3uRan+2DNXLcDdnFsAQzU0UpWPPEzW+rRr
+        +JSzoBf6ClUQ/g8InH2pzVpYrBdydVg48AGZ9Exgstg9LOiGHGPHhm1IIcPt/4ovLjL9i4ULunN32
+        0ni2TOyLdCWDGulljcaabAfvs/AM0LQaZ29tv6PhVy+0ABAjroNiERx3+VYY+fnbW7UzkWK7aHJTF
+        8ciuAXwub2iOz+7UW2yeXvjZhZEWMh9r78wZwWg5cd+YeK8yrhhSt42OeR22cSPWQS9Nf9rnXdiTF
+        uUn8psPvGOWqcibQnCoSGhQkoAE2PksXkQEuIoYzLl91U+537f/k13K+fm8Xwitg==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.96)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1ob2hy-004vvK-29;
+        Wed, 21 Sep 2022 18:36:23 +0200
+Message-ID: <3e819d22808f7f1f232bc1242f2260106f37f875.camel@sipsolutions.net>
+Subject: Re: [PATCH 1/2] cfg80211: fix dead lock for nl80211_new_interface()
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     Aran Dalton <arda@allwinnertech.com>, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 21 Sep 2022 18:36:18 +0200
+In-Reply-To: <20220921091913.110749-1-arda@allwinnertech.com>
+References: <20220921091913.110749-1-arda@allwinnertech.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+MIME-Version: 1.0
+X-malware-bazaar: not-scanned
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Wed, 21 Sep 2022 18:56:03 +0530:
+On Wed, 2022-09-21 at 17:19 +0800, Aran Dalton wrote:
+> Both nl80211_new_interface and cfg80211_netdev_notifier_call hold the
+> same wiphy_lock, then cause deadlock.
+>=20
+> The main call stack as bellow:
+>=20
+> nl80211_new_interface() takes wiphy_lock
+>  -> _nl80211_new_interface:
+>   -> rdev_add_virtual_intf
+>    -> rdev->ops->add_virtual_intf
+>     -> register_netdevice
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git tags/dmaengine-fix-6.0
+The bug is yours, here, you're no longer allowed to call
+register_netdevice() here.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/88e6546b36771daa145e7f6cf29f3496341634a6
+If you have an out-of-tree driver that we couldn't update when doing
+tree-wide changes, you probably shouldn't assume that the bug is
+upstream and send random locking patches ... :)
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+johannes
