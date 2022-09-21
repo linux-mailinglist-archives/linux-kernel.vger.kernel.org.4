@@ -2,117 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C4B85BF2F6
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 03:33:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E14B65BF2F9
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 03:35:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231314AbiIUBdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 21:33:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53332 "EHLO
+        id S229862AbiIUBfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 21:35:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231447AbiIUBdl (ORCPT
+        with ESMTP id S230426AbiIUBfn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 21:33:41 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 473446B8C0
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 18:33:40 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id x94so6409222ede.11
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 18:33:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=8mlxxabtfKsHhMFozr251XdLHRx1F56JdRqCnZFhvTQ=;
-        b=fXXKk5QlrVa6+lOdpJZ5s1kpNDwozLlk6Vb9Du7pwtM+NGL1F8gATbz68CW5jQdOvx
-         VKoN9f+gGQqgQabODV4Vmev+t0bBwGBd+Gh0Dxu/vuw3p5fFzLwKTAZpB+iEsWRbdJe4
-         v05uxZP4k6ZZd22R1YGgeMNOHQ3MF87ZtC8ZhSTiNrv/3Zyqv5eMTZh0klxIRn7xBM9k
-         XE90n6/HGzqF3YFmY/bQN2VZHmvNRlPJZh/kyRV4LF6ljOU3Fb8/p6E3tnUSpAUtszqm
-         2Itcdfma5cAHpMjPT5/FDdwxyzNZLiy00Ge05UJ0QDv7hebZr+WxnTtR9DVlEE0yic8X
-         bWxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=8mlxxabtfKsHhMFozr251XdLHRx1F56JdRqCnZFhvTQ=;
-        b=nBBgQRI/aVAPGP3INNSpds+66Wx02SdO3jt6Ykh6tvvUcW3PGMcN+fz1txjSwiOIG3
-         FAUlbBKF+7JQtGEU8N1FM7VoJ/NLT4RTewKUXXnGntaL3YIt78mM8kEXXBiQs2phylu/
-         mVyYN/5TCIlfhyrweAQGirYAI6utrBMAwAYsVvBoau+G1j8nhLEB1e7XFINkCULEdgup
-         iL2Pq0UYg3RVkfCx6ugsfbpIAQR1+rNZy1sNM4WL+cO66yhYTdr5HXwDxll4byGtLOLG
-         4gusIAVTBgSEy7ttol+nXmxYhZolktb26VuWwhJFVL6XNhBZmgeZ8KoynTBjbMUZSCsS
-         9G3w==
-X-Gm-Message-State: ACrzQf3L2Immf1GCZCqJeVtOc513XYqhh30Ixogu6w0x1pkLI7dnzaBN
-        a/IyB18hELTLX+jxcvMOtLnNSA==
-X-Google-Smtp-Source: AMsMyM4+AvKCRw/Ms46OQuuD/TNyAf1Wo1WG2BkKT0XGivbTdoE2Nt1NIovxjPRhaozmTd91g7zAEA==
-X-Received: by 2002:a05:6402:1849:b0:453:ba03:9e41 with SMTP id v9-20020a056402184900b00453ba039e41mr15287552edy.202.1663724018796;
-        Tue, 20 Sep 2022 18:33:38 -0700 (PDT)
-Received: from leoy-yangtze.lan ([104.245.97.25])
-        by smtp.gmail.com with ESMTPSA id f5-20020a056402004500b0044f1e64e9f4sm804899edu.17.2022.09.20.18.33.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 18:33:38 -0700 (PDT)
-Date:   Wed, 21 Sep 2022 09:33:33 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>
-Subject: Re: [PATCH v2 2/2] perf test: Introduce script for java symbol
- testing
-Message-ID: <Yypp7ZAs0fozJFKT@leoy-yangtze.lan>
-References: <20220918031524.26719-1-leo.yan@linaro.org>
- <20220918031524.26719-3-leo.yan@linaro.org>
- <CAM9d7ciR0b5GSASVPxn-r5sBTJW9KZXcQYEsV4zRan5bdgmRCg@mail.gmail.com>
+        Tue, 20 Sep 2022 21:35:43 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 092C74D4FC
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 18:35:39 -0700 (PDT)
+X-UUID: 5b6aa906dd8e4244b5d75bd58c3bb2b6-20220921
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=51K6Jn+TjrZy99Tw3yXtrCTM6sMA3NQF9UYRankQZFk=;
+        b=FIgupq7kNnozk0t9HhjtvmVsdd886Lm2HVmAIqwzNsjtT8bkgA4io6ZlbVraSX1x/zghI4B8mYUB3z8z9Mk1/1J4Jk9BbbGsDWz/8nLNaes3ZOdZa+L+X+e7J+yKPbKvZ6ioPfS4keccQILzBihGo9mFSGy4UGrP7W/IM2cZT3c=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:0a4f56bf-08c5-4ccd-8aa7-c7de12904823,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:45
+X-CID-INFO: VERSION:1.1.11,REQID:0a4f56bf-08c5-4ccd-8aa7-c7de12904823,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+        elease,TS:45
+X-CID-META: VersionHash:39a5ff1,CLOUDID:16df16f7-6e85-48d9-afd8-0504bbfe04cb,B
+        ulkID:220921093536M8MG0DJ5,BulkQuantity:0,Recheck:0,SF:28|17|19|48|823|824
+        ,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL
+        :0
+X-UUID: 5b6aa906dd8e4244b5d75bd58c3bb2b6-20220921
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1109342403; Wed, 21 Sep 2022 09:35:33 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Wed, 21 Sep 2022 09:35:31 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Wed, 21 Sep 2022 09:35:31 +0800
+Message-ID: <6c3de76f1ecf5fb0f4e96469738d383e89cb0eca.camel@mediatek.com>
+Subject: Re: [PATCH v6,2/3] drm: mediatek: Adjust the dpi output format to
+ MT8186
+From:   CK Hu <ck.hu@mediatek.com>
+To:     <xinlei.lee@mediatek.com>, <matthias.bgg@gmail.com>,
+        <jason-jh.lin@mediatek.com>, <rex-bc.chen@mediatek.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <p.zabel@pengutronix.de>, <airlied@linux.ie>, <daniel@ffwll.ch>
+CC:     <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <jitao.shi@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Wed, 21 Sep 2022 09:35:31 +0800
+In-Reply-To: <1663161662-1598-3-git-send-email-xinlei.lee@mediatek.com>
+References: <1663161662-1598-1-git-send-email-xinlei.lee@mediatek.com>
+         <1663161662-1598-3-git-send-email-xinlei.lee@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAM9d7ciR0b5GSASVPxn-r5sBTJW9KZXcQYEsV4zRan5bdgmRCg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Namhyung,
+Hi, Xinlei:
 
-On Tue, Sep 20, 2022 at 02:47:05PM -0700, Namhyung Kim wrote:
-
-[...]
-
-> > +if [ -e "$PWD/tools/perf/libperf-jvmti.so" ]; then
-> > +       LIBJVMTI=$PWD/tools/perf/libperf-jvmti.so
-> > +elif [ -e "$PWD/libperf-jvmti.so" ]; then
-> > +       LIBJVMTI=$PWD/libperf-jvmti.so
-> > +elif [ -e "$PREFIX/lib64/libperf-jvmti.so" ]; then
-> > +       LIBJVMTI=$PREFIX/lib64/libperf-jvmti.so
-> > +elif [ -e "$PREFIX/lib/libperf-jvmti.so" ]; then
-> > +       LIBJVMTI=$PREFIX/lib/libperf-jvmti.so
-> > +if [ -e "/usr/lib/linux-tools-$(uname -a | awk '{ print $3 }' | sed -r 's/-generic//')/libperf-jvmti.so" ]; then
+On Wed, 2022-09-14 at 21:21 +0800, xinlei.lee@mediatek.com wrote:
+> From: Xinlei Lee <xinlei.lee@mediatek.com>
 > 
-> s/if/elif/ ?
+> Dpi output needs to adjust the output format to dual edge for MT8186.
+> The bridge ic on MT8186 uses the output format of RGB888_dual_edge. 
 
-Ouch, will fix.
+I think different sink ic may support different output format, so query
+the sink information to decide which outout format.
 
-> > +       LIBJVMTI=/usr/lib/linux-tools-$(uname -a | awk '{ print $3 }' | sed -r 's/-generic//')/libperf-jvmti.so
-> > +else
-> > +       echo "Fail to find libperf-jvmti.so"
-> > +       # JVMTI is a build option, skip the test if fail to find lib
-> > +       exit 2
-> > +fi
-> > +
-> > +cat <<EOF | perf record -k 1 -o $PERF_DATA jshell -s -J-agentpath:$LIBJVMTI
+> Due
+> to hardware changes, we need to modify the output format
+> corresponding
+> to the mmsys register.
 > 
-> Wouldn't it check if jshell is available first?
+> Co-developed-by: Jitao Shi <jitao.shi@mediatek.com>
+> Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
+> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
+> Reviewed-by: Nís F. R. A. Prado <nfraprado@collabora.com>
+> ---
+>  drivers/gpu/drm/mediatek/mtk_dpi.c | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> index fb0b79704636..6e02f02f163c 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> @@ -14,6 +14,7 @@
+>  #include <linux/of_graph.h>
+>  #include <linux/pinctrl/consumer.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/soc/mediatek/mtk-mmsys.h>
+>  #include <linux/types.h>
+>  
+>  #include <video/videomode.h>
+> @@ -28,6 +29,7 @@
+>  #include "mtk_disp_drv.h"
+>  #include "mtk_dpi_regs.h"
+>  #include "mtk_drm_ddp_comp.h"
+> +#include "mtk_drm_drv.h"
+>  
+>  enum mtk_dpi_out_bit_num {
+>  	MTK_DPI_OUT_BIT_NUM_8BITS,
+> @@ -58,6 +60,11 @@ enum mtk_dpi_out_color_format {
+>  	MTK_DPI_COLOR_FORMAT_YCBCR_422
+>  };
+>  
+> +enum mtk_dpi_out_format_con {
+> +	MTK_DPI_RGB888_DDR_CON,
+> +	MTK_DPI_RGB565_SDR_CON
+> +};
+> +
+>  struct mtk_dpi {
+>  	struct drm_encoder encoder;
+>  	struct drm_bridge bridge;
+> @@ -80,6 +87,7 @@ struct mtk_dpi {
+>  	struct pinctrl_state *pins_dpi;
+>  	u32 output_fmt;
+>  	int refcount;
+> +	struct device *mmsys_dev;
+>  };
+>  
+>  static inline struct mtk_dpi *bridge_to_dpi(struct drm_bridge *b)
+> @@ -133,6 +141,7 @@ struct mtk_dpi_yc_limit {
+>   * @yuv422_en_bit: Enable bit of yuv422.
+>   * @csc_enable_bit: Enable bit of CSC.
+>   * @pixels_per_iter: Quantity of transferred pixels per iteration.
+> + * @edge_cfg_in_mmsys: If the edge configuration for DPI's output
+> needs to be set in MMSYS.
+>   */
+>  struct mtk_dpi_conf {
+>  	unsigned int (*cal_factor)(int clock);
+> @@ -151,6 +160,7 @@ struct mtk_dpi_conf {
+>  	u32 yuv422_en_bit;
+>  	u32 csc_enable_bit;
+>  	u32 pixels_per_iter;
+> +	bool edge_cfg_in_mmsys;
+>  };
+>  
+>  static void mtk_dpi_mask(struct mtk_dpi *dpi, u32 offset, u32 val,
+> u32 mask)
+> @@ -447,6 +457,8 @@ static void mtk_dpi_dual_edge(struct mtk_dpi
+> *dpi)
+>  		mtk_dpi_mask(dpi, DPI_OUTPUT_SETTING,
+>  			     dpi->output_fmt ==
+> MEDIA_BUS_FMT_RGB888_2X12_LE ?
+>  			     EDGE_SEL : 0, EDGE_SEL);
+> +		if (dpi->conf->edge_cfg_in_mmsys)
+> +			mtk_mmsys_ddp_dpi_fmt_config(dpi->mmsys_dev,
+> MTK_DPI_RGB888_DDR_CON);
 
-Indeed.  Will check jshell and skip the testing if jshell doesn't
-exist.
+Why do you set a DPI driver defined value MTK_DPI_RGB888_DDR_CON into
+mmsys driver? I think you should set a value which mmsys driver
+understand.
 
-Thanks for reviewing.
+Regards,
+CK
 
-Leo
+>  	} else {
+>  		mtk_dpi_mask(dpi, DPI_DDR_SETTING, DDR_EN | DDR_4PHASE,
+> 0);
+>  	}
+> @@ -776,8 +788,10 @@ static int mtk_dpi_bind(struct device *dev,
+> struct device *master, void *data)
+>  {
+>  	struct mtk_dpi *dpi = dev_get_drvdata(dev);
+>  	struct drm_device *drm_dev = data;
+> +	struct mtk_drm_private *priv = drm_dev->dev_private;
+>  	int ret;
+>  
+> +	dpi->mmsys_dev = priv->mmsys_dev;
+>  	ret = drm_simple_encoder_init(drm_dev, &dpi->encoder,
+>  				      DRM_MODE_ENCODER_TMDS);
+>  	if (ret) {
+
