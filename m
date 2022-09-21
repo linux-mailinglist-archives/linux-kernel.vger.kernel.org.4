@@ -2,169 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 268065E561E
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 00:11:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98AA55E5623
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 00:13:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231143AbiIUWLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 18:11:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53902 "EHLO
+        id S231179AbiIUWNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 18:13:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiIUWK5 (ORCPT
+        with ESMTP id S231126AbiIUWNW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 18:10:57 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281EBA74D5;
-        Wed, 21 Sep 2022 15:10:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 4A1BCCE1F99;
-        Wed, 21 Sep 2022 22:10:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC275C433D7;
-        Wed, 21 Sep 2022 22:10:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663798252;
-        bh=+2dcsh6U86YXPRcXsm713bvwRn2unPZV3ef6JCbwu0g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HbtASwkEVz8s3MYG70czCb4Q3OKyfSy87gAZmcq2dlNyAK84ieWrqX6NJqVn+Dzh1
-         DPuoaQSgZEsr0WOBgW408vXNK/wc+xIzKj9j+Pdu2vWHns8YJIsQssP84QSahCOf1d
-         KgKTvVhKjX++Nn1N+IpAU47RAyrkkdpT+hHMP5UT6Y0paRILAbEZPZ168gf9NpUkj3
-         LPWdTfFIn1wiUpSjkWvsRE4aDr6eif/nssqs0dKwkva7X2Xg54sQ++iOb3NnN7Py9P
-         16jFywBDSrfcO3aZ30yNcUYB8U6qDGAOInAQy3s7w2DtXliX8TMmRlgF5ikrXGkaCT
-         rT1QBjs0QGtfg==
-Date:   Wed, 21 Sep 2022 17:10:49 -0500
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Lee Jones <lee@kernel.org>, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH 2/2] power: supply: Add Lenovo Yoga C630 EC driver
-Message-ID: <20220921221049.7gsnalyyh33a2fji@builder.lan>
-References: <20220810030500.2793882-1-bjorn.andersson@linaro.org>
- <20220810030500.2793882-3-bjorn.andersson@linaro.org>
- <20220913104545.2u6mcyy3bg4dp6ly@mercury.elektranox.org>
- <20220915212545.q6vxcnrffwr3buq2@builder.lan>
- <CAA8EJpoNyc1_eM7mi3D3s4voqLZFHvJtiBd_TOB4dmxcSpwdWg@mail.gmail.com>
+        Wed, 21 Sep 2022 18:13:22 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41256A7A8F
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 15:13:21 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id q3so7889194pjg.3
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 15:13:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=jxDb2PQQp083SZ+8DQYQxmqpzie5/L1hGZiwQ6Jt/dw=;
+        b=c1kfxGqaWCT0XZcmdXWHM7cH44sL3VxgcFcQsPcQaTqVEnXRcLtryRyAxM5tlCqL1N
+         2yf7Wp9k39nCrPqRk4BhGdkYqlly5YLZTsVd5EkZFucGk+c5ddeqPxM4uveodQwH+hgP
+         mUb2zqahvOIdmQd25S3cp9YGYKPZtCy8x06MwX+oz6Q77kDTqkJFjJx/ooctMmbSUEgZ
+         00JOZa+pJpbxrW9313svl0nkYM8i62kg24CTFTpyrV1+H/h/mnI7KOPw+5zLYOgOmeAK
+         X75EW8paDoSwjGdHtnKrn6uWMiI2hwZZiZDMvT2efEMmxEZ2kAj18pzkC5B30o0/pby6
+         FjCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=jxDb2PQQp083SZ+8DQYQxmqpzie5/L1hGZiwQ6Jt/dw=;
+        b=U2Svut97BFGDK5RaXwTnX11CHlbCjsnmsgjrvc5q66FCtjYXfmLZwDhyDMaxw2Ypqx
+         Z5KtfIsCWZ1zm7WWBlkLq6SHCKyRdgI7g0gxgx/etf1H6xPcEsbcUFrtdbpTejoLDi8S
+         GHn3xdj333ks28eJlK7IKXz1KGf0thxQ3Jezuwumuyd/g62+XRwRd3aK5KBd50cvr/Hk
+         zx+dtlNwG4vSXohRNjWIBPxfGWRYM+i76K9c0OrowV24Gcyhr+sYMbYaAy7dz4ScSQ/c
+         koAgaqw2u6pduPLV+2qpBMM5jFpwquanKMV4jHSTm7+z7VcG+/hJhQNlkpFDRnBRY77V
+         dbTA==
+X-Gm-Message-State: ACrzQf3P3FtH20LnkVfijW/3gmcvjdRNIZFRrVWRQ070i2ZMtps+E2hb
+        3On0Maz28hmk8joLkCm9nKRCsA==
+X-Google-Smtp-Source: AMsMyM5hwUhwrLmP/i2U0oQ94AXczjzNYmL0SX/E04t0Z8nwZiZhv2/WPpgVSkPmFLgBmbqoC1LRGw==
+X-Received: by 2002:a17:902:bd85:b0:178:8e76:c77e with SMTP id q5-20020a170902bd8500b001788e76c77emr363506pls.38.1663798400646;
+        Wed, 21 Sep 2022 15:13:20 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id 4-20020a170902c10400b00168dadc7354sm2531001pli.78.2022.09.21.15.13.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Sep 2022 15:13:20 -0700 (PDT)
+Date:   Wed, 21 Sep 2022 22:13:16 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        Yuan Yao <yuan.yao@linux.intel.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v10 29/39] KVM: selftests: Export
+ _vm_get_page_table_entry()
+Message-ID: <YyuMfG51iMMfa2mR@google.com>
+References: <20220921152436.3673454-1-vkuznets@redhat.com>
+ <20220921152436.3673454-30-vkuznets@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAA8EJpoNyc1_eM7mi3D3s4voqLZFHvJtiBd_TOB4dmxcSpwdWg@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220921152436.3673454-30-vkuznets@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 12:53:42AM +0300, Dmitry Baryshkov wrote:
-> On Fri, 16 Sept 2022 at 00:25, Bjorn Andersson <andersson@kernel.org> wrote:
-> >
-> > On Tue, Sep 13, 2022 at 12:45:45PM +0200, Sebastian Reichel wrote:
-> > > Hi,
-> > >
-> > > [+Cc Lee Jones, DRI devel]
-> > >
-> > > On Tue, Aug 09, 2022 at 10:05:00PM -0500, Bjorn Andersson wrote:
-> > > > The Qualcomm Snapdragon-based Lenovo Yoga C630 has some sort of EC
-> > > > providing AC-adapter and battery status, as well as USB Type-C altmode
-> > > > notifications for Displayport operation.
-> > > >
-> > > > The Yoga C630 ships with Windows, where these operations primarily are
-> > > > implemented in ACPI, but due to various issues with the hardware
-> > > > representation therein it's not possible to run Linux on this
-> > > > information. As such this is a best-effort re-implementation of these
-> > > > operations, based on the register map expressed in ACPI and a fair
-> > > > amount of trial and error.
-> > > >
-> > > > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > > > ---
-> > > > [...]
-> > > > +   val = yoga_c630_ec_read8(ec, LENOVO_EC_BAT_ATTRIBUTES);
-> > > > +   if (val < 0)
-> > > > +           goto out_unlock;
-> > > > +   ec->unit_ma = val & LENOVO_EC_BAT_ATTR_UNIT_IS_MA;
-> > > > +   if (!ec->unit_ma)
-> > > > +           ec->scale = 1000;
-> > > > +   else
-> > > > +           ec->scale = 1;
-> > >
-> > > Since I'm not sure how much of information was gained by reverse
-> > > engineering: Is this really milliamps vs microamps and not milliamps
-> > > vs milliwatt? SBS batteries usually report either mA or mW.
-> > >
-> >
-> > Unfortunately I don't know the answer to this.
-> >
-> > > > [...]
-> > > > +   case POWER_SUPPLY_PROP_SERIAL_NUMBER:
-> > > > +           val->strval = "05072018";
-> > > > +           break;
-> > >
-> > > why is this hardcoded? :)
-> > >
-> >
-> > I don't know, but as Daniel suggests, it would make sense to just drop
-> > it.
-> >
-> > > > [...]
-> > > > +   device_for_each_child_node(dev, fwnode) {
-> > > > +           ret = fwnode_property_read_u32(fwnode, "reg", &port);
-> > > > +           if (ret < 0)
-> > > > +                   continue;
-> > > > +
-> > > > +           /* Got multiple ports, but altmode is only possible on port 1 */
-> > > > +           if (port != 1)
-> > > > +                   continue;
-> > > > +
-> > > > +           ec->bridge.funcs = &yoga_c630_ec_bridge_funcs;
-> > > > +           ec->bridge.of_node = to_of_node(fwnode);
-> > > > +           ec->bridge.ops = DRM_BRIDGE_OP_HPD;
-> > > > +           ec->bridge.type = DRM_MODE_CONNECTOR_USB;
-> > > > +
-> > > > +           ret = devm_drm_bridge_add(dev, &ec->bridge);
-> > > > +           if (ret) {
-> > > > +                   dev_err(dev, "failed to register drm bridge\n");
-> > > > +                   fwnode_handle_put(fwnode);
-> > > > +                   return ret;
-> > > > +           }
-> > >
-> > > I wonder if DRM people want to see this in drivers/gpu/drm/bridge.
-> > > Maybe it's better to make this a MFD driver?
-> > >
-> >
-> > I did consider it, but it adds a whole bunch of boiler plate code
-> > without a lot of benefit.
-> >
-> > There are a few other cases where I think it would make sense to have
-> > drm bridges outside of drivers/gpu/drm, such as
-> > drivers/usb/typec/altmodes/ and drivers/platform/chrome/...
+On Wed, Sep 21, 2022, Vitaly Kuznetsov wrote:
+> Make it possible for tests to mangle guest's page table entries in
+> addition to just getting them (available with vm_get_page_table_entry()).
 > 
-> What about a solution which might sound simpler than MFD: from your
-> driver's probe() register a platform device which represents a drm
-> bridge. Add drm_bridge driver for it into drivers/gpu/drm/bridges/.
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> ---
+>  tools/testing/selftests/kvm/include/x86_64/processor.h | 2 ++
+>  tools/testing/selftests/kvm/lib/x86_64/processor.c     | 5 ++---
+>  2 files changed, 4 insertions(+), 3 deletions(-)
 > 
+> diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
+> index 1c7805de8c27..500d711eb989 100644
+> --- a/tools/testing/selftests/kvm/include/x86_64/processor.h
+> +++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
+> @@ -827,6 +827,8 @@ static inline uint8_t wrmsr_safe(uint32_t msr, uint64_t val)
+>  	return kvm_asm_safe("wrmsr", "a"(val & -1u), "d"(val >> 32), "c"(msr));
+>  }
+>  
+> +uint64_t *_vm_get_page_table_entry(struct kvm_vm *vm, struct kvm_vcpu *vcpu,
+> +				   uint64_t vaddr);
+>  uint64_t vm_get_page_table_entry(struct kvm_vm *vm, struct kvm_vcpu *vcpu,
+>  				 uint64_t vaddr);
+>  void vm_set_page_table_entry(struct kvm_vm *vm, struct kvm_vcpu *vcpu,
+> diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> index 2e6e61bbe81b..5c135f896ada 100644
+> --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> @@ -214,9 +214,8 @@ void virt_arch_pg_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr)
+>  	__virt_pg_map(vm, vaddr, paddr, PG_LEVEL_4K);
+>  }
+>  
+> -static uint64_t *_vm_get_page_table_entry(struct kvm_vm *vm,
+> -					  struct kvm_vcpu *vcpu,
+> -					  uint64_t vaddr)
+> +uint64_t *_vm_get_page_table_entry(struct kvm_vm *vm, struct kvm_vcpu *vcpu,
+> +				   uint64_t vaddr)
 
-That is indeed simpler
+Ugh, obviously not your fault, but this is a terrible name.  Aside from using a
+single underscore, it's semantically very different than vm_get_page_table_entry(),
+i.e. violates the stand "double underscores is an inner helper".
 
-But then rather than just calling drm_bridge_hpd_notify(status) we need
-a new custom interface for this driver to call the other drive when
-status changes and we waste 840 bytes just to track another struct
-platform_device.
+The innards of vm_{g,s}et_page_table_entry() are quite hilarious too as they cast
+a "uint64_t *" to  "uint64_t*" now that KVM no longer uses structs to manage PTEs
+(commit f18b4aebe107 ("kvm: selftests: do not use bitfields larger than 32-bits
+for PTEs")).
 
-Perhaps that could be made generic, so we'd have "proxy_drm_bridge"
-driver for drivers who implements a HPD drm_bridge but don't want to
-implement that outside drivers/gpu/drm.
+And looking at the sole usage in emulator_error_test.c, provide get+set helpers
+is silly.
 
-But this is just based on the assumption that the "DRM people" require
-drm_bridges to only live in drivers/gpu/drm/. It's all one kernel and
-the API is well defined, so I don't think there's a concrete problem to
-solve.
+Rather than expose this weirdness, what about slotting in the below to drop the
+wrappers and just let tests modify PTEs directly?
 
-Regards,
-Bjorn
+---
+From: Sean Christopherson <seanjc@google.com>
+Date: Wed, 21 Sep 2022 15:08:49 -0700
+Subject: [PATCH] KVM: selftests: Drop helpers to read/write page table entries
+
+Drop vm_{g,s}et_page_table_entry() and instead expose the "inner"
+helper (was _vm_get_page_table_entry()) that returns a _pointer_ to the
+PTE, i.e. let tests directly modify PTEs instead of bouncing through
+helpers that just make life difficult.
+
+Opportunsitically use BIT_ULL() in emulator_error_test, and use the
+MAXPHYADDR define to set the "rogue" GPA bit instead of open coding the
+same value.
+
+No functional change intended.
+
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ .../selftests/kvm/include/x86_64/processor.h  |  6 ++----
+ .../selftests/kvm/lib/x86_64/processor.c      | 21 ++-----------------
+ .../kvm/x86_64/emulator_error_test.c          |  6 ++++--
+ 3 files changed, 8 insertions(+), 25 deletions(-)
+
+diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
+index 0cbc71b7af50..5999e974a150 100644
+--- a/tools/testing/selftests/kvm/include/x86_64/processor.h
++++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
+@@ -825,10 +825,8 @@ static inline uint8_t wrmsr_safe(uint32_t msr, uint64_t val)
+ 	return kvm_asm_safe("wrmsr", "a"(val & -1u), "d"(val >> 32), "c"(msr));
+ }
+ 
+-uint64_t vm_get_page_table_entry(struct kvm_vm *vm, struct kvm_vcpu *vcpu,
+-				 uint64_t vaddr);
+-void vm_set_page_table_entry(struct kvm_vm *vm, struct kvm_vcpu *vcpu,
+-			     uint64_t vaddr, uint64_t pte);
++uint64_t *vm_get_page_table_entry(struct kvm_vm *vm, struct kvm_vcpu *vcpu,
++				  uint64_t vaddr);
+ 
+ uint64_t kvm_hypercall(uint64_t nr, uint64_t a0, uint64_t a1, uint64_t a2,
+ 		       uint64_t a3);
+diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+index 2e6e61bbe81b..5e4bbe71dbff 100644
+--- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
++++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+@@ -214,9 +214,8 @@ void virt_arch_pg_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr)
+ 	__virt_pg_map(vm, vaddr, paddr, PG_LEVEL_4K);
+ }
+ 
+-static uint64_t *_vm_get_page_table_entry(struct kvm_vm *vm,
+-					  struct kvm_vcpu *vcpu,
+-					  uint64_t vaddr)
++uint64_t *vm_get_page_table_entry(struct kvm_vm *vm, struct kvm_vcpu *vcpu,
++				  uint64_t vaddr)
+ {
+ 	uint16_t index[4];
+ 	uint64_t *pml4e, *pdpe, *pde;
+@@ -286,22 +285,6 @@ static uint64_t *_vm_get_page_table_entry(struct kvm_vm *vm,
+ 	return &pte[index[0]];
+ }
+ 
+-uint64_t vm_get_page_table_entry(struct kvm_vm *vm, struct kvm_vcpu *vcpu,
+-				 uint64_t vaddr)
+-{
+-	uint64_t *pte = _vm_get_page_table_entry(vm, vcpu, vaddr);
+-
+-	return *(uint64_t *)pte;
+-}
+-
+-void vm_set_page_table_entry(struct kvm_vm *vm, struct kvm_vcpu *vcpu,
+-			     uint64_t vaddr, uint64_t pte)
+-{
+-	uint64_t *new_pte = _vm_get_page_table_entry(vm, vcpu, vaddr);
+-
+-	*(uint64_t *)new_pte = pte;
+-}
+-
+ void virt_arch_dump(FILE *stream, struct kvm_vm *vm, uint8_t indent)
+ {
+ 	uint64_t *pml4e, *pml4e_start;
+diff --git a/tools/testing/selftests/kvm/x86_64/emulator_error_test.c b/tools/testing/selftests/kvm/x86_64/emulator_error_test.c
+index 236e11755ba6..bde247f3c8a1 100644
+--- a/tools/testing/selftests/kvm/x86_64/emulator_error_test.c
++++ b/tools/testing/selftests/kvm/x86_64/emulator_error_test.c
+@@ -152,8 +152,9 @@ int main(int argc, char *argv[])
+ {
+ 	struct kvm_vcpu *vcpu;
+ 	struct kvm_vm *vm;
+-	uint64_t gpa, pte;
++	uint64_t *pte;
+ 	uint64_t *hva;
++	uint64_t gpa;
+ 	int rc;
+ 
+ 	/* Tell stdout not to buffer its content */
+@@ -178,8 +179,9 @@ int main(int argc, char *argv[])
+ 	virt_map(vm, MEM_REGION_GVA, MEM_REGION_GPA, 1);
+ 	hva = addr_gpa2hva(vm, MEM_REGION_GPA);
+ 	memset(hva, 0, PAGE_SIZE);
++
+ 	pte = vm_get_page_table_entry(vm, vcpu, MEM_REGION_GVA);
+-	vm_set_page_table_entry(vm, vcpu, MEM_REGION_GVA, pte | (1ull << 36));
++	*pte |= BIT_ULL(MAXPHYADDR);
+ 
+ 	vcpu_run(vcpu);
+ 	process_exit_on_emulation_error(vcpu);
+
+base-commit: 3b69d246e2f1eef553508c79f5d3b2dfc4978bc1
+-- 
