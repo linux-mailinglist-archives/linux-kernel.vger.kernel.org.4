@@ -2,165 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36FCA5BFE66
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 14:51:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89FD65BFE6F
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 14:52:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbiIUMvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 08:51:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54160 "EHLO
+        id S229835AbiIUMwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 08:52:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbiIUMva (ORCPT
+        with ESMTP id S230307AbiIUMwK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 08:51:30 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA797E305;
-        Wed, 21 Sep 2022 05:49:45 -0700 (PDT)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28LChkEK022742;
-        Wed, 21 Sep 2022 12:49:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=RPrhIYPH7SzVN6HwjOBFFXL4u49GpdB6I2XBq1Lzios=;
- b=ksxJ7iqOtnmfOauEV0J6gaCR9a0PVfkifEskPjrsdzCGoHYtjL+mu6/rZ90yT1hBt2+q
- TW5rKaXjOmewP4wRiiuZGHf9Hf4bVH0PiNL5oOllhUd5s8oiCzyaJU0ktIYJHDU0wgcR
- 53e6S/s1hNoBmz0pNs3NzfoxECP8QH50f5eKVaH7+eL6CvZG6Pim4xS6Tu45QENFwS28
- qsEAb1i/jaVoFdPNgiD/j+xV5QmZp6kjq2RkbI1yCeezIOHo+tRKeZferhEm+2wOSytn
- jVgKfvJD/3kfeTpSb5nUtdQF9DO3nbUFRixrxy3wsSbRWFPeSkYML0nHZPePlEF8wIUl 7Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jr2veg4rb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 21 Sep 2022 12:49:39 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28LCmAe4007649;
-        Wed, 21 Sep 2022 12:49:38 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jr2veg4qv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 21 Sep 2022 12:49:38 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28LCaKPb027788;
-        Wed, 21 Sep 2022 12:49:37 GMT
-Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
-        by ppma01dal.us.ibm.com with ESMTP id 3jn5va0ea4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 21 Sep 2022 12:49:37 +0000
-Received: from smtpav04.dal12v.mail.ibm.com ([9.208.128.131])
-        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28LCnZb412518080
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 21 Sep 2022 12:49:35 GMT
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E55E55805E;
-        Wed, 21 Sep 2022 12:49:35 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4CE225804E;
-        Wed, 21 Sep 2022 12:49:35 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.107.198])
-        by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 21 Sep 2022 12:49:35 +0000 (GMT)
-Message-ID: <6b4229386dced275f745619f190f64a71b7c0aec.camel@linux.ibm.com>
-Subject: Re: [PATCH] KEYS: encrypted: fix key instantiation with
- user-provided data
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Nikolaus Voss <nv@vosn.de>
-Cc:     David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yael Tzur <yaelt@google.com>
-Date:   Wed, 21 Sep 2022 08:49:34 -0400
-In-Reply-To: <439012d8-dd4-7fd2-3788-49cf72faa99@vosn.de>
-References: <20220919072317.E41421357@mail.steuer-voss.de>
-          <53730789a41358673b1715dd650706e9ffcb1199.camel@linux.ibm.com>
-          <35fd816-d755-967-5712-b5496875ac7a@vosn.de>
-         <2ee1e3e68d847001c4bf856d980a553e52de5023.camel@linux.ibm.com>
-         <439012d8-dd4-7fd2-3788-49cf72faa99@vosn.de>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 2dY3ILXBob7WRe2aAeF3SYN3PuTWn9EX
-X-Proofpoint-ORIG-GUID: e-nAJ2Xvwd5N_o5uMkmNTOSwLwSp7gS1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-21_06,2022-09-20_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1015
- priorityscore=1501 malwarescore=0 mlxlogscore=999 phishscore=0 mlxscore=0
- bulkscore=0 lowpriorityscore=0 adultscore=0 impostorscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
- definitions=main-2209210086
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 21 Sep 2022 08:52:10 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6A3D985BD
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 05:50:21 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id ay7-20020a05600c1e0700b003b49861bf48so2430177wmb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 05:50:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=vJMrnlWIsNWeWYN8YHacPX0ArBJjqAyGF/BjcGaKPnw=;
+        b=q7be6nMqyfGgNl/V+qFZPUp2UBRO4K9yDDdaOL7YEzDRaaIG+McG6mKoiFGqwSMNg3
+         nEVVTmRxX2eR9rawn9ZO6Oa4RPW9TvVMAr42v+6/9xap2SPItL6u7w2yMtsTD8U7+KVq
+         VJu8SQyfDlDdrf/9WFpzSIZF6aYcDBDo5wxCL7n3OYycb9WYi5syA58R/C6ZYcAQiGEy
+         kGY6MIY6QpicpZSzRcdbQCd5zBBc4jslX0pbRsfBuptn29j9VnsKTKHL9eB0KTgfxZy/
+         mLjwjUnlnQAqjAUxcWPQ8Y6bIzAocu5MroYDcSEXPZYmaiCoRNdaz5mDNMWJt7OjK2Ey
+         F2aQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=vJMrnlWIsNWeWYN8YHacPX0ArBJjqAyGF/BjcGaKPnw=;
+        b=YGqNkiJIWKqYIV1+wbFxlfWqqHDIQk7y6+yPaJ0uCesBoFBgiBo8IWIBA2oO8C4KGx
+         q4yz+rC9LMfUV6wIQDhlnIf620AghfIedugM+6BxaD7nHGJwD/AD55/K72I2gW9x4dhB
+         Ul8PH3bFvFO96yNXy4yljHLrnmJswWE8mZSY7SOfVgJ7IIESbiyqFXZ2tww5c45MLYm0
+         MvQKA49tCV0iHr/LxTvYOj0sP0U91ohzbxoOY3SdxKqm9abWE2F+S6+wXvoEHza7T4q0
+         Lt29Oa5lpZOikYQ1/5avJ+E5XIj1AuQK7zeKinC4GR/MpAZ6I374z4MzqtSK6AK/VBtU
+         awJg==
+X-Gm-Message-State: ACrzQf0DJ01L8wk2j0b3Eh5SxUcEHmWh4Py23/H9GhoI06IatEy9XQRm
+        dO5rQvefq30a2c9NN5qk/3lGxLAjivC/ifOccO4yoQ==
+X-Google-Smtp-Source: AMsMyM7vpB6vpet3ZiwTncBW3bfr50z9gxhKSdE4/PdQ1dL6VgKyU3i8XgKS9eid/rqu0hieRYhZ+JwQKlIWFRJ0W8s=
+X-Received: by 2002:a1c:f406:0:b0:3a5:d667:10 with SMTP id z6-20020a1cf406000000b003a5d6670010mr5872114wma.70.1663764618771;
+ Wed, 21 Sep 2022 05:50:18 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220914014010.2076169-1-briannorris@chromium.org>
+In-Reply-To: <20220914014010.2076169-1-briannorris@chromium.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 21 Sep 2022 14:49:42 +0200
+Message-ID: <CAPDyKFrm3Q0rYSMqMXcsMCxZSkohU9K+f+a4wMx4nWP3wrcn=A@mail.gmail.com>
+Subject: Re: [PATCH] mmd: core: Terminate infinite loop in SD-UHS voltage switch
+To:     Brian Norris <briannorris@chromium.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>, stable@vger.kernel.org,
+        Arindam Nath <arindam.nath@amd.com>,
+        Chris Ball <cjb@laptop.org>,
+        Philip Rakity <prakity@marvell.com>,
+        Zhangfei Gao <zhangfei.gao@marvell.com>,
+        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-09-21 at 09:24 +0200, Nikolaus Voss wrote:
-> On Tue, 20 Sep 2022, Mimi Zohar wrote:
-> > On Tue, 2022-09-20 at 18:23 +0200, Nikolaus Voss wrote:
-> >> On Tue, 20 Sep 2022, Mimi Zohar wrote:
-> >>> On Fri, 2022-09-16 at 07:45 +0200, Nikolaus Voss wrote:
-> >>>> Commit cd3bc044af48 ("KEYS: encrypted: Instantiate key with user-provided
-> >>>> decrypted data") added key instantiation with user provided decrypted data.
-> >>>> The user data is hex-ascii-encoded but was just memcpy'ed to the binary buffer.
-> >>>> Fix this to use hex2bin instead.
-> >>>
-> >>> Thanks, Nikolaus.  We iterated a number of times over what would be the
-> >>> safest userspace input.  One of the last changes was that the key data
-> >>> should be hex-ascii-encoded.  Unfortunately, the LTP
-> >>> testcases/kernel/syscalls/keyctl09.c example isn't hex-ascii-encoded
-> >>> and the example in Documentation/security/keys/trusted-encrypted.rst
-> >>> just cat's a file.  Both expect the length to be the length of the
-> >>> userspace provided data.   With this patch, when hex2bin() fails, there
-> >>> is no explanation.
-> >>
-> >> That's true. But it's true for all occurrences of hex2bin() in this file.
-> >> I could pr_err() an explanation, improve the trusted-encrypted.rst example
-> >> and respin the patch. Should I, or do you have another suggestion?
-> >
-> >> I wasn't aware of keyctl09.c, but quickly looking into it, the user data
-> >> _is_ hex-ascii-encoded, only the length is "wrong": Imho, the specified
-> >> length should be the binary length as this is consistent with key-length
-> >> specs in other cases (e.g. when loading the key from a blob).
-> >> keyctl09.c could be easy to fix, if only the length is modified. Should
-> >> I propose a patch? What is the correct/appropriate workflow there?
-> >
-> > I'm concerned that this change breaks existing encrypted keys created
-> > with user-provided data.  Otherwise I'm fine with your suggestion.
-> 
-> Ok, but this change does not touch the hex-ascii format of encrypted key 
-> blobs?
+On Wed, 14 Sept 2022 at 03:40, Brian Norris <briannorris@chromium.org> wrote:
+>
+> This loop intends to retry a max of 10 times, with some implicit
+> termination based on the SD_{R,}OCR_S18A bit. Unfortunately, the
+> termination condition depends on the value reported by the SD card
+> (*rocr), which may or may not correctly reflect what we asked it to do.
+>
+> Needless to say, it's not wise to rely on the card doing what we expect;
+> we should at least terminate the loop regardless. So, check both the
+> input and output values, so we ensure we will terminate regardless of
+> the SD card behavior.
+>
+> Note that SDIO learned a similar retry loop in commit 0797e5f1453b
+> ("mmc: core: Fixup signal voltage switch"), but that used the 'ocr'
+> result, and so the current pre-terminating condition looks like:
+>
+>     rocr & ocr & R4_18V_PRESENT
+>
+> (i.e., it doesn't have the same bug.)
+>
+> This addresses a number of crash reports seen on ChromeOS that look
+> like the following:
+>
+>     ... // lots of repeated: ...
+>     <4>[13142.846061] mmc1: Skipping voltage switch
+>     <4>[13143.406087] mmc1: Skipping voltage switch
+>     <4>[13143.964724] mmc1: Skipping voltage switch
+>     <4>[13144.526089] mmc1: Skipping voltage switch
+>     <4>[13145.086088] mmc1: Skipping voltage switch
+>     <4>[13145.645941] mmc1: Skipping voltage switch
+>     <3>[13146.153969] INFO: task halt:30352 blocked for more than 122 seconds.
+>     ...
+>
+> Fixes: f2119df6b764 mmc: sd: add support for signal voltage switch procedure
+> Cc: <stable@vger.kernel.org>
+> Signed-off-by: Brian Norris <briannorris@chromium.org>
 
-True, but any persistent data based on this key would be affected.
+Wow, that was an ugly bug you fixed! Applied for fixes, thanks!
 
-> 
-> >
-> > The LTP example decrypted data length is 32, but the minimum decrypted
-> > data size is  20.  So it's a bit more than just changing the LTP
-> > decrypted data size.   The modified LTP test should work on kernels
-> > with and without this patch.
-> 
-> So this would mean OR-ing old and new variant for the test?
-> 
-> The current implementation of the test will fail anyway as the key size is 
-> below the minimum of 20 and thus should have failed before.
+Kind regards
+Uffe
 
-The existing keyctl09 test is a plain text string.  Converting it to
-hex-ascii (e.g. hexdump, xdd) solves the length issue.  For those
-already using encrypted keys with user provided data, this might also
-resolve the persistent data usage case mentioned above.
 
-Perhaps keep the existing test.  On success issue a warning.  On
-failure, retry with the converted plain text string.
-
--- 
-thanks,
-
-Mimi
-
+> ---
+>
+>  drivers/mmc/core/sd.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/mmc/core/sd.c b/drivers/mmc/core/sd.c
+> index 06aa62ce0ed1..3662bf5320ce 100644
+> --- a/drivers/mmc/core/sd.c
+> +++ b/drivers/mmc/core/sd.c
+> @@ -870,7 +870,8 @@ int mmc_sd_get_cid(struct mmc_host *host, u32 ocr, u32 *cid, u32 *rocr)
+>          * the CCS bit is set as well. We deliberately deviate from the spec in
+>          * regards to this, which allows UHS-I to be supported for SDSC cards.
+>          */
+> -       if (!mmc_host_is_spi(host) && rocr && (*rocr & SD_ROCR_S18A)) {
+> +       if (!mmc_host_is_spi(host) && (ocr & SD_OCR_S18R) &&
+> +           rocr && (*rocr & SD_ROCR_S18A)) {
+>                 err = mmc_set_uhs_voltage(host, pocr);
+>                 if (err == -EAGAIN) {
+>                         retries--;
+> --
+> 2.37.2.789.g6183377224-goog
+>
