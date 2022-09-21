@@ -2,63 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 290C55BFB10
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 11:34:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB1C05BFB14
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 11:35:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230095AbiIUJeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 05:34:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58796 "EHLO
+        id S230211AbiIUJfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 05:35:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbiIUJee (ORCPT
+        with ESMTP id S229555AbiIUJfW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 05:34:34 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0983AD9E;
-        Wed, 21 Sep 2022 02:34:32 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id q3so5824522pjg.3;
-        Wed, 21 Sep 2022 02:34:32 -0700 (PDT)
+        Wed, 21 Sep 2022 05:35:22 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 009C182D31;
+        Wed, 21 Sep 2022 02:35:21 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id v1so5050483plo.9;
+        Wed, 21 Sep 2022 02:35:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date;
-        bh=k49E7LJbSiVZNjNmcdoBwgiJRae2/LsEELVD7CSs6d0=;
-        b=CmF7p64TL4djtFyI7TU+R/j7TjJ9Z+mREOlgBJkqiSLeP9PEWV4aj5gEsqHJwDR9Qa
-         OEvsl+K5nxJKHr5oUL7dT3x7rbqHUi5iDmX07TT+Y67e/Taaly7OkPIXoSt/RNE/N/RM
-         aq89zYZa8Bt322mk5uPftcywPORmileacfoL4zKsRdWG/bDmMAdzO169gjOAOznMzaBc
-         LAUrKunGhyUZ8Kr7dzKLUEoTbHue1bS7ogTb8DeitPdWLXd1Lw3nkpIrkadkRDxLyUM1
-         zGf4JH9Qf//fRXyZB4lONCl3pxw4egnV+9nG5weiEEKA2H9eg1j8brAlSr1bBvixFP97
-         bW6A==
+        bh=EhnBpCpoeRYQHc027CvFJhCGZMSO3kz4CSNF4MCSNW0=;
+        b=kVgHRrSzTLNMS7eqZGl2QTHvGOioL1m/DacQIY37AIn5NlUE+7WtjZL2IOapjMEv7t
+         9eGAUGhzhwvg5i21Sv6uCQOfBv84TV9JJ9TS3gPAyojcOFP9xMjN0t5tYEx3aQX+YxZW
+         lroMzn6Go11/EeSOOR8I1wUlbnVg+bzLfK0lSOPSJXtqrTlzv/uejD03/l40ulBM/Gru
+         XAObuW4umiyFXBSL9IcS/xu+RzEuAE7uZXcRZSxoODMN4CgyR95hiZGDnsBZCi8br7Wx
+         10C8rUAS4X+GFPE7RbmHrNIb9uR2du0+/7Ewp8Rrho2MQq73GsDv3K8FoPrJtD0wYpRu
+         zQ1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=k49E7LJbSiVZNjNmcdoBwgiJRae2/LsEELVD7CSs6d0=;
-        b=fvqIh5jM3dFdMy37rdowNL1GKzMdFM/hUXhqmeLtNlGWCJOlju65Qn4leBXjALc5We
-         FFQvuopkSGWZAumRNXe0U5pNYCINcOEc1Kr/J/K7cjzpHKAcXkri/4Yr0IdTWOV3S6E1
-         F8KugY64YExrevrwMcX8Gqr0eFrqPf/fvT+09Zt6bmRQ+aN1iUYNSnvsYLJI5QsOq3H0
-         mEXj4Mbt0rSWaMV2M6o/H+1dKu86Qxvy50t3dJg6xGvD+lCpXovokOCRq2ueua14v4fW
-         eMXzozHaPhYhU+NMCDnbJTEOKtQYj1W4q73j1vHYBGS7js61ZZZNkiB+I38JMlrzhj08
-         3vPQ==
-X-Gm-Message-State: ACrzQf2TIxmGNiwMtQ+tGaaY+YeXkKwcgu6T9u0Q4GjsUUUZEf4M+rQm
-        b6nh3fpGr6US89PUB+Ky20U=
-X-Google-Smtp-Source: AMsMyM6hnvUGWyd2NbU9gXkthouxGbjR+e4oNp+w2YxPZaZRLNM1G9c/878YJ9yi8NHQnUzNeJwKdw==
-X-Received: by 2002:a17:90b:1bc7:b0:200:7f05:3c2 with SMTP id oa7-20020a17090b1bc700b002007f0503c2mr8512188pjb.95.1663752871642;
-        Wed, 21 Sep 2022 02:34:31 -0700 (PDT)
+        bh=EhnBpCpoeRYQHc027CvFJhCGZMSO3kz4CSNF4MCSNW0=;
+        b=FCZTfDQc4iFjOrE49Sz14ZqKzTU6f2OKtSaQrx0bjUYyd1cFWNsJhHRNHAQ99EdGsZ
+         8dqXGjEiIQeCC7A/AUJHOB2B2//out05Xvu2NbwC45VnAZiDfMV99u5RedsDVbJS41hQ
+         0cfDYvn20adqaCFf1iIeLMEu1gHc0LULjF2/aJHTc5fdQitEsw+TUiTqkwTTj52geEBl
+         z1WUNfmlk9tneLt6tkC2+uSYBe6NAW0e0UFE69lyKp/V5Zhkgih9UAmSYgdYY5wH/WNM
+         yX2QOIZoS1QGETlDYs2BsfxzE/xYYzu9Kk3zBbVWv1KMeiSUI7WYy7ocCdC4+5uwJVzH
+         8k4g==
+X-Gm-Message-State: ACrzQf2+ErCf7WhI/MeMMBZh5Qfm1gZvrQdCKBdzkaJqaOmMr0rz1o6J
+        qKPGElzwZgiqnND7WN7oH3E=
+X-Google-Smtp-Source: AMsMyM6sznCwBf5tSLVKL+x7mLR4EfcL3gD/X9uZO6evzhZrAg0sEHyGNQOekZs6DjGiFXs/lSxd+g==
+X-Received: by 2002:a17:902:f54a:b0:176:c443:e885 with SMTP id h10-20020a170902f54a00b00176c443e885mr3865592plf.28.1663752921558;
+        Wed, 21 Sep 2022 02:35:21 -0700 (PDT)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id na18-20020a17090b4c1200b001fde265ff4bsm1480330pjb.4.2022.09.21.02.34.29
+        by smtp.gmail.com with ESMTPSA id d6-20020a170903230600b001767f6f04efsm1528682plh.242.2022.09.21.02.35.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Sep 2022 02:34:31 -0700 (PDT)
+        Wed, 21 Sep 2022 02:35:21 -0700 (PDT)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: ye.xingchen@zte.com.cn
-To:     acme@kernel.org
-Cc:     mingo@redhat.com, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ye xingchen <ye.xingchen@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] perf daemon: use strscpy() is more robust and safer
-Date:   Wed, 21 Sep 2022 09:34:27 +0000
-Message-Id: <20220921093427.230690-1-ye.xingchen@zte.com.cn>
+To:     tj@kernel.org
+Cc:     lizefan.x@bytedance.com, hannes@cmpxchg.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ye xingchen <ye.xingchen@zte.com.cn>
+Subject: [PATCH linux-next] cgroup: use strscpy() is more robust and safer
+Date:   Wed, 21 Sep 2022 09:35:17 +0000
+Message-Id: <20220921093517.230745-1-ye.xingchen@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -78,33 +76,23 @@ The implementation of strscpy() is more robust and safer.
 
 That's now the recommended way to copy NUL terminated strings.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 ---
- tools/perf/builtin-daemon.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ kernel/cgroup/cgroup.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/perf/builtin-daemon.c b/tools/perf/builtin-daemon.c
-index 6cb3f6cc36d0..1e927c4dcc81 100644
---- a/tools/perf/builtin-daemon.c
-+++ b/tools/perf/builtin-daemon.c
-@@ -606,7 +606,7 @@ static int setup_server_socket(struct daemon *daemon)
- 	memset(&addr, 0, sizeof(addr));
- 	addr.sun_family = AF_UNIX;
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index 829aa42e773e..48a8e8fb3e91 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -2374,7 +2374,7 @@ int task_cgroup_path(struct task_struct *task, char *buf, size_t buflen)
+ 		ret = cgroup_path_ns_locked(cgrp, buf, buflen, &init_cgroup_ns);
+ 	} else {
+ 		/* if no hierarchy exists, everyone is in "/" */
+-		ret = strlcpy(buf, "/", buflen);
++		ret = strscpy(buf, "/", buflen);
+ 	}
  
--	strlcpy(addr.sun_path, path, sizeof(addr.sun_path) - 1);
-+	strscpy(addr.sun_path, path, sizeof(addr.sun_path) - 1);
- 	unlink(path);
- 
- 	if (bind(fd, (struct sockaddr *)&addr, sizeof(addr)) == -1) {
-@@ -877,7 +877,7 @@ static int setup_client_socket(struct daemon *daemon)
- 
- 	memset(&addr, 0, sizeof(addr));
- 	addr.sun_family = AF_UNIX;
--	strlcpy(addr.sun_path, path, sizeof(addr.sun_path) - 1);
-+	strscpy(addr.sun_path, path, sizeof(addr.sun_path) - 1);
- 
- 	if (connect(fd, (struct sockaddr *) &addr, sizeof(addr)) == -1) {
- 		perror("failed: connect");
+ 	spin_unlock_irq(&css_set_lock);
 -- 
 2.25.1
