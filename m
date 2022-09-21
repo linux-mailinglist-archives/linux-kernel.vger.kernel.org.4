@@ -2,305 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F2AA5E537B
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 21:02:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D308D5E537E
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 21:03:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbiIUTCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 15:02:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42494 "EHLO
+        id S229900AbiIUTDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 15:03:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbiIUTCS (ORCPT
+        with ESMTP id S229657AbiIUTDI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 15:02:18 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E33D89DFB6
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 12:02:16 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id a80so6885889pfa.4
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 12:02:16 -0700 (PDT)
+        Wed, 21 Sep 2022 15:03:08 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C9F19E0D3
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 12:03:07 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id w28so10129132edi.7
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 12:03:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=A7qJ7loq8NakX1yXI2Uuk1qgGF4MGPJUoCt7Oy1BvQs=;
-        b=aRfNkY8+WQWJTMoZzWBk2IENPLbxiRij3ZHbjXFjFTRw0xcQS8dGXxWj/pht0cB7nl
-         G5MS8pyKsSERHVHBPh4i/ZIX2CY4UlKAcWckwscCz+wCVZNFqemagJ9R56g/I2rf4/L9
-         ELrgqt+fm9F3I4SjwFhaEK8yKSG5Mot7/YwzXYD2kb7dvZ8rh7pL2JGllcPoDVpBBymV
-         0mOwEqIuspht12j5IDmEPwX0jgFXrVaBQ4WBxgquDfNF9Yq69PqWJc5XjTb4FaBjTnwm
-         IKlbWFeL389A37OhxdwaTlfWwYl5k1q9gqzVvisQSjfxkaS5epQf3vNa3abtCyJIP937
-         xWEg==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=7feVe2Z6rcTKy2SDvo6HS8e1lVg9U6CuFNCTUYVU2Io=;
+        b=Ygs+KqdlIK9gXgIHKkdIxoZzNSz9lQd1DupuCw2DqcE/FqqSKVFya1zK9f6ASyl1C+
+         NO7apJQgQ/KMAAko1i3tt8ym5pqE8JWeFodtcxho07zVR4IzR9GpPzkFuFIcSUFy9uGY
+         FYE9iZM8GoSCasz6Re57hnyu+VL/l71q5JfmE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=A7qJ7loq8NakX1yXI2Uuk1qgGF4MGPJUoCt7Oy1BvQs=;
-        b=Pk4p63tKJgavm/zi+bqLLjJsmZxFr5o7YtrfToMaJTbb7hMi5gyOVKcr9z7uCsWq42
-         5zIBSjUlpsJZBe7mCEUnjDwT5J2O1ee0J0m4pYFszJoACnxTJwTLuHFL2vCvgxLpCLFs
-         LhYLQcQrFIizCBW344TylXmsOpnDmD+k0dfXeF3qj6fpP9bjU36eb4y2GmontdgMngh2
-         EHnwJbng1p2ppcfVtzxug6W310XJDAzP/Bukf0vI8JAqxFaWD7Fv8oByeE1TNbo5KJOr
-         lobipbg+VFNPc437aOABOCRBSUOxpyUG7FGNtRAVcHYqBdZRotirHQGT9Ra9g1CjBktO
-         oqfw==
-X-Gm-Message-State: ACrzQf0dLjlBCH4wUpBx7kjbamOS+Qp6+4r1JxPORpKmx+DX+/BajqYZ
-        FuUsRl4o9bSWtB5r8fsUvnkwJg==
-X-Google-Smtp-Source: AMsMyM4yMkGi15k/8sXc49YJwzzUZ4BLLinUs243eWnivvLQ0tU9aE8i3afQSxp4M9YapzsLSE9cJw==
-X-Received: by 2002:a63:ed4d:0:b0:438:8ba7:e598 with SMTP id m13-20020a63ed4d000000b004388ba7e598mr25374446pgk.226.1663786936212;
-        Wed, 21 Sep 2022 12:02:16 -0700 (PDT)
-Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
-        by smtp.gmail.com with ESMTPSA id f11-20020a170902684b00b0016ee3d7220esm2436037pln.24.2022.09.21.12.02.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Sep 2022 12:02:15 -0700 (PDT)
-Date:   Wed, 21 Sep 2022 12:02:11 -0700
-From:   David Matlack <dmatlack@google.com>
-To:     Vipin Sharma <vipinsh@google.com>
-Cc:     seanjc@google.com, pbonzini@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 4/4] KVM: selftests: Run dirty_log_perf_test on
- specific cpus
-Message-ID: <Yytfs1+IbsFs6Yea@google.com>
-References: <20220826184500.1940077-1-vipinsh@google.com>
- <20220826184500.1940077-5-vipinsh@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=7feVe2Z6rcTKy2SDvo6HS8e1lVg9U6CuFNCTUYVU2Io=;
+        b=qjA2K5/yizfpe5omNVhMZXPpe82Rpn826tQFrUg2sYecFy5g6QAQCxxPjMlCayYC8i
+         oHbGpuLsd4UjwJVz1c4nfvBEU3axBwub5BGbnvaIXrjGL4ee5gtWHTXKayueoyALpNjn
+         ryr/VsA3DpCADVirIcjMfBKGP+v4cRQypZ5Gnr+hIIbOxZRjt89UQPzng3mAZUSLS6m9
+         h8ZHEb0RwLCFPkP9UA/R6VaShmNsx3bmEfAxe/NALl1BQXfbOe4UgdQieoyZ0bNEBsq5
+         S/kSVS3pWMvsi4Bc99TDXr4rucJ7w0b5jg4pp+UJxlESnDkc1z9xK67W1UV4HZQ6qEt2
+         OtTQ==
+X-Gm-Message-State: ACrzQf14Wxb+5tL36zKvigUdLpAKTMXI+6Ys4NXXjvdTtdd9vBkMn+OC
+        idfS80NDoCkp+D9YXLsnmLUIlDYNQ+njjw==
+X-Google-Smtp-Source: AMsMyM73EggII9fftuFXMoBf6bLTZmBjjvK3115QVbNuPQvfwLuTv5m/kvAUKJIhWIy/a30r3hcS8g==
+X-Received: by 2002:a50:fc15:0:b0:44e:4895:b290 with SMTP id i21-20020a50fc15000000b0044e4895b290mr27200907edr.394.1663786985824;
+        Wed, 21 Sep 2022 12:03:05 -0700 (PDT)
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com. [209.85.128.53])
+        by smtp.gmail.com with ESMTPSA id c17-20020a17090618b100b0072b7d76211dsm1620194ejf.107.2022.09.21.12.03.04
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Sep 2022 12:03:05 -0700 (PDT)
+Received: by mail-wm1-f53.google.com with SMTP id n35-20020a05600c502300b003b4924c6868so2776629wmr.1
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 12:03:04 -0700 (PDT)
+X-Received: by 2002:a05:600c:524d:b0:3b4:8ad0:6d with SMTP id
+ fc13-20020a05600c524d00b003b48ad0006dmr7135005wmb.194.1663786983431; Wed, 21
+ Sep 2022 12:03:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220826184500.1940077-5-vipinsh@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220823222526.1524851-1-evgreen@chromium.org>
+ <20220823152108.v2.2.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid>
+ <4308c2d0-94ae-8a65-e0c7-69270e31d447@linux.ibm.com> <YylGq7eUvaoSyA1u@kernel.org>
+ <CAE=gft4-TLDvjtMH+qRJNppkJb798jpKXKXF8nytW7v9d2euRg@mail.gmail.com>
+ <YytRqguZRuGPVz3G@kernel.org> <YytSgGQrInFGWQzE@kernel.org>
+In-Reply-To: <YytSgGQrInFGWQzE@kernel.org>
+From:   Evan Green <evgreen@chromium.org>
+Date:   Wed, 21 Sep 2022 12:02:26 -0700
+X-Gmail-Original-Message-ID: <CAE=gft6CLDb+C9D0NGjzeSokTAbKOtRxutwG-2pMgOnscFdF-A@mail.gmail.com>
+Message-ID: <CAE=gft6CLDb+C9D0NGjzeSokTAbKOtRxutwG-2pMgOnscFdF-A@mail.gmail.com>
+Subject: Re: [PATCH v2 02/10] tpm: Allow PCR 23 to be restricted to
+ kernel-only use
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Stefan Berger <stefanb@linux.ibm.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Gwendal Grignou <gwendal@chromium.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Matthew Garrett <mgarrett@aurora.tech>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
+        apronin@chromium.org, Daniil Lunev <dlunev@google.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Matthew Garrett <matthewgarrett@google.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 11:45:00AM -0700, Vipin Sharma wrote:
-> Add command line options, -c,  to run the vcpus and optionally the main
-> process on the specific cpus on a host machine. This is useful as it
-> provides a way to analyze performance based on the vcpus and dirty log
-> worker locations, like on the different numa nodes or on the same numa
-> nodes.
-> 
-> Link: https://lore.kernel.org/lkml/20220801151928.270380-1-vipinsh@google.com
-> Signed-off-by: Vipin Sharma <vipinsh@google.com>
-> Suggested-by: David Matlack <dmatlack@google.com>
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Suggested-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
->  .../selftests/kvm/dirty_log_perf_test.c       | 23 ++++++-
->  .../selftests/kvm/include/perf_test_util.h    |  4 ++
->  .../selftests/kvm/lib/perf_test_util.c        | 62 ++++++++++++++++++-
->  3 files changed, 86 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/dirty_log_perf_test.c b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-> index 1346f6b5a9bd..9514b5f28b67 100644
-> --- a/tools/testing/selftests/kvm/dirty_log_perf_test.c
-> +++ b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-> @@ -353,7 +353,7 @@ static void help(char *name)
->  	puts("");
->  	printf("usage: %s [-h] [-i iterations] [-p offset] [-g] "
->  	       "[-m mode] [-n] [-b vcpu bytes] [-v vcpus] [-o] [-s mem type]"
-> -	       "[-x memslots]\n", name);
-> +	       "[-x memslots] [-c physical cpus to run test on]\n", name);
->  	puts("");
->  	printf(" -i: specify iteration counts (default: %"PRIu64")\n",
->  	       TEST_HOST_LOOP_N);
-> @@ -383,6 +383,18 @@ static void help(char *name)
->  	backing_src_help("-s");
->  	printf(" -x: Split the memory region into this number of memslots.\n"
->  	       "     (default: 1)\n");
-> +	printf(" -c: Comma separated values of the physical CPUs, which will run\n"
-> +	       "     the vCPUs, optionally, followed by the main application thread cpu.\n"
-> +	       "     Number of values must be at least the number of vCPUs.\n"
-> +	       "     The very next number is used to pin main application thread.\n\n"
-> +	       "     Example: ./dirty_log_perf_test -v 3 -c 22,23,24,50\n"
-> +	       "     This means that the vcpu 0 will run on the physical cpu 22,\n"
-> +	       "     vcpu 1 on the physical cpu 23, vcpu 2 on the physical cpu 24\n"
-> +	       "     and the main thread will run on cpu 50.\n\n"
-> +	       "     Example: ./dirty_log_perf_test -v 3 -c 22,23,24\n"
-> +	       "     Same as the previous example except now main application\n"
-> +	       "     thread can run on any physical cpu\n\n"
-> +	       "     (default: No cpu mapping)\n");
->  	puts("");
->  	exit(0);
->  }
-> @@ -398,6 +410,7 @@ int main(int argc, char *argv[])
->  		.slots = 1,
->  	};
->  	int opt;
-> +	const char *pcpu_list = NULL;
->  
->  	dirty_log_manual_caps =
->  		kvm_check_cap(KVM_CAP_MANUAL_DIRTY_LOG_PROTECT2);
-> @@ -406,11 +419,14 @@ int main(int argc, char *argv[])
->  
->  	guest_modes_append_default();
->  
-> -	while ((opt = getopt(argc, argv, "b:ef:ghi:m:nop:s:v:x:")) != -1) {
-> +	while ((opt = getopt(argc, argv, "b:c:ef:ghi:m:nop:s:v:x:")) != -1) {
->  		switch (opt) {
->  		case 'b':
->  			guest_percpu_mem_size = parse_size(optarg);
->  			break;
-> +		case 'c':
-> +			pcpu_list = optarg;
-> +			break;
->  		case 'e':
->  			/* 'e' is for evil. */
->  			run_vcpus_while_disabling_dirty_logging = true;
-> @@ -459,6 +475,9 @@ int main(int argc, char *argv[])
->  		}
->  	}
->  
-> +	if (pcpu_list)
-> +		perf_test_setup_pinning(pcpu_list, nr_vcpus);
-> +
->  	TEST_ASSERT(p.iterations >= 2, "The test should have at least two iterations");
->  
->  	pr_info("Test iterations: %"PRIu64"\n",	p.iterations);
-> diff --git a/tools/testing/selftests/kvm/include/perf_test_util.h b/tools/testing/selftests/kvm/include/perf_test_util.h
-> index eaa88df0555a..d02619f153a2 100644
-> --- a/tools/testing/selftests/kvm/include/perf_test_util.h
-> +++ b/tools/testing/selftests/kvm/include/perf_test_util.h
-> @@ -27,6 +27,8 @@ struct perf_test_vcpu_args {
->  	/* Only used by the host userspace part of the vCPU thread */
->  	struct kvm_vcpu *vcpu;
->  	int vcpu_idx;
-> +	bool pin_pcpu;
-> +	int pcpu;
->  };
->  
->  struct perf_test_args {
-> @@ -60,4 +62,6 @@ void perf_test_guest_code(uint32_t vcpu_id);
->  uint64_t perf_test_nested_pages(int nr_vcpus);
->  void perf_test_setup_nested(struct kvm_vm *vm, int nr_vcpus, struct kvm_vcpu *vcpus[]);
->  
-> +int perf_test_setup_pinning(const char *pcpus_string, int nr_vcpus);
-> +
->  #endif /* SELFTEST_KVM_PERF_TEST_UTIL_H */
-> diff --git a/tools/testing/selftests/kvm/lib/perf_test_util.c b/tools/testing/selftests/kvm/lib/perf_test_util.c
-> index 9618b37c66f7..7a1e8223e7c7 100644
-> --- a/tools/testing/selftests/kvm/lib/perf_test_util.c
-> +++ b/tools/testing/selftests/kvm/lib/perf_test_util.c
-> @@ -2,7 +2,10 @@
->  /*
->   * Copyright (C) 2020, Google LLC.
->   */
-> +#define _GNU_SOURCE
-> +
->  #include <inttypes.h>
-> +#include <sched.h>
->  
->  #include "kvm_util.h"
->  #include "perf_test_util.h"
-> @@ -240,9 +243,26 @@ void __weak perf_test_setup_nested(struct kvm_vm *vm, int nr_vcpus, struct kvm_v
->  	exit(KSFT_SKIP);
->  }
->  
-> +static void pin_me_to_pcpu(int pcpu)
-> +{
-> +	cpu_set_t cpuset;
-> +	int err;
-> +
-> +	CPU_ZERO(&cpuset);
-> +	CPU_SET(pcpu, &cpuset);
-> +	errno = 0;
+On Wed, Sep 21, 2022 at 11:05 AM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+>
+> On Wed, Sep 21, 2022 at 09:02:29PM +0300, Jarkko Sakkinen wrote:
+> > On Wed, Sep 21, 2022 at 08:35:35AM -0700, Evan Green wrote:
+> > > On Mon, Sep 19, 2022 at 9:51 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> > > >
+> > > > On Tue, Sep 13, 2022 at 08:26:09AM -0400, Stefan Berger wrote:
+> > > > >
+> > > > >
+> > > > > On 8/23/22 18:25, Evan Green wrote:
+> > > > > > From: Matthew Garrett <matthewgarrett@google.com>
+> > > > > >
+> > > > > > Under certain circumstances it might be desirable to enable the creation
+> > > > > > of TPM-backed secrets that are only accessible to the kernel. In an
+> > > > > > ideal world this could be achieved by using TPM localities, but these
+> > > > > > don't appear to be available on consumer systems. An alternative is to
+> > > > > > simply block userland from modifying one of the resettable PCRs, leaving
+> > > > > > it available to the kernel. If the kernel ensures that no userland can
+> > > > > > access the TPM while it is carrying out work, it can reset PCR 23,
+> > > > > > extend it to an arbitrary value, create or load a secret, and then reset
+> > > > > > the PCR again. Even if userland somehow obtains the sealed material, it
+> > > > > > will be unable to unseal it since PCR 23 will never be in the
+> > > > > > appropriate state.
+> > > > > >
+> > > > > > From: Matthew Garrett <mjg59@google.com>
+> > > > > > Signed-off-by: Matthew Garrett <mjg59@google.com>
+> > > > > >
+> > > > > > Signed-off-by: Evan Green <evgreen@chromium.org>
+> > > > > > ---
+> > > > > > Matthew's original version of this patch is at:
+> > > > > > https://patchwork.kernel.org/patch/12096491/
+> > > > > >
+> > > > > > Changes in v2:
+> > > > > >   - Fixed sparse warnings
+> > > > > >
+> > > > > >   drivers/char/tpm/Kconfig          | 10 +++++++++
+> > > > > >   drivers/char/tpm/tpm-dev-common.c |  8 +++++++
+> > > > > >   drivers/char/tpm/tpm.h            | 21 +++++++++++++++++++
+> > > > > >   drivers/char/tpm/tpm1-cmd.c       | 35 +++++++++++++++++++++++++++++++
+> > > > > >   drivers/char/tpm/tpm2-cmd.c       | 22 +++++++++++++++++++
+> > > > > >   drivers/char/tpm/tpm2-space.c     |  2 +-
+> > > > > >   6 files changed, 97 insertions(+), 1 deletion(-)
+> > > > > >
+> > > > > > diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
+> > > > > > index 927088b2c3d3f2..4483b61a428b11 100644
+> > > > > > --- a/drivers/char/tpm/Kconfig
+> > > > > > +++ b/drivers/char/tpm/Kconfig
+> > > > > > @@ -211,4 +211,14 @@ config TCG_FTPM_TEE
+> > > > > >       This driver proxies for firmware TPM running in TEE.
+> > > > > >   source "drivers/char/tpm/st33zp24/Kconfig"
+> > > > > > +
+> > > > > > +config TCG_TPM_RESTRICT_PCR
+> > > > > > +   bool "Restrict userland access to PCR 23"
+> > > > > > +   depends on TCG_TPM
+> > > > > > +   help
+> > > > > > +     If set, block userland from extending or resetting PCR 23. This
+> > > > > > +     allows it to be restricted to in-kernel use, preventing userland
+> > > > > > +     from being able to make use of data sealed to the TPM by the kernel.
+> > > > > > +     This is required for secure hibernation support, but should be left
+> > > > > > +     disabled if any userland may require access to PCR23.
+> > > > > >   endif # TCG_TPM
+> > > > > > diff --git a/drivers/char/tpm/tpm-dev-common.c b/drivers/char/tpm/tpm-dev-common.c
+> > > > > > index dc4c0a0a512903..7a4e618c7d1942 100644
+> > > > > > --- a/drivers/char/tpm/tpm-dev-common.c
+> > > > > > +++ b/drivers/char/tpm/tpm-dev-common.c
+> > > > > > @@ -198,6 +198,14 @@ ssize_t tpm_common_write(struct file *file, const char __user *buf,
+> > > > > >     priv->response_read = false;
+> > > > > >     *off = 0;
+> > > > > > +   if (priv->chip->flags & TPM_CHIP_FLAG_TPM2)
+> > > > > > +           ret = tpm2_cmd_restricted(priv->chip, priv->data_buffer, size);
+> > > > > > +   else
+> > > > > > +           ret = tpm1_cmd_restricted(priv->chip, priv->data_buffer, size);
+> > > > > > +
+> > > > > > +   if (ret)
+> > > > > > +           goto out;
+> > > > > > +
+> > > > > >     /*
+> > > > > >      * If in nonblocking mode schedule an async job to send
+> > > > > >      * the command return the size.
+> > > > > > diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+> > > > > > index a80b341d38eb8c..077c3ca0a127ba 100644
+> > > > > > --- a/drivers/char/tpm/tpm.h
+> > > > > > +++ b/drivers/char/tpm/tpm.h
+> > > > > > @@ -229,6 +229,8 @@ void tpm2_shutdown(struct tpm_chip *chip, u16 shutdown_type);
+> > > > > >   unsigned long tpm2_calc_ordinal_duration(struct tpm_chip *chip, u32 ordinal);
+> > > > > >   int tpm2_probe(struct tpm_chip *chip);
+> > > > > >   int tpm2_get_cc_attrs_tbl(struct tpm_chip *chip);
+> > > > > > +int tpm_find_and_validate_cc(struct tpm_chip *chip, struct tpm_space *space,
+> > > > > > +                        const void *buf, size_t bufsiz);
+> > > > > >   int tpm2_find_cc(struct tpm_chip *chip, u32 cc);
+> > > > > >   int tpm2_init_space(struct tpm_space *space, unsigned int buf_size);
+> > > > > >   void tpm2_del_space(struct tpm_chip *chip, struct tpm_space *space);
+> > > > > > @@ -244,4 +246,23 @@ void tpm_bios_log_setup(struct tpm_chip *chip);
+> > > > > >   void tpm_bios_log_teardown(struct tpm_chip *chip);
+> > > > > >   int tpm_dev_common_init(void);
+> > > > > >   void tpm_dev_common_exit(void);
+> > > > > > +
+> > > > > > +#ifdef CONFIG_TCG_TPM_RESTRICT_PCR
+> > > > > > +#define TPM_RESTRICTED_PCR 23
+> > > > > > +
+> > > > > > +int tpm1_cmd_restricted(struct tpm_chip *chip, u8 *buffer, size_t size);
+> > > > > > +int tpm2_cmd_restricted(struct tpm_chip *chip, u8 *buffer, size_t size);
+> > > > > > +#else
+> > > > > > +static inline int tpm1_cmd_restricted(struct tpm_chip *chip, u8 *buffer,
+> > > > > > +                                 size_t size)
+> > > > > > +{
+> > > > > > +   return 0;
+> > > > > > +}
+> > > > > > +
+> > > > > > +static inline int tpm2_cmd_restricted(struct tpm_chip *chip, u8 *buffer,
+> > > > > > +                                 size_t size)
+> > > > > > +{
+> > > > > > +   return 0;
+> > > > > > +}
+> > > > > > +#endif
+> > > > > >   #endif
+> > > > > > diff --git a/drivers/char/tpm/tpm1-cmd.c b/drivers/char/tpm/tpm1-cmd.c
+> > > > > > index 8ec743dec26544..318e75ae42fb85 100644
+> > > > > > --- a/drivers/char/tpm/tpm1-cmd.c
+> > > > > > +++ b/drivers/char/tpm/tpm1-cmd.c
+> > > > > > @@ -845,3 +845,38 @@ int tpm1_get_pcr_allocation(struct tpm_chip *chip)
+> > > > > >     return 0;
+> > > > > >   }
+> > > > > > +
+> > > > > > +#ifdef CONFIG_TCG_TPM_RESTRICT_PCR
+> > > > > > +int tpm1_cmd_restricted(struct tpm_chip *chip, u8 *buffer, size_t size)
+> > > > > > +{
+> > > > > > +   struct tpm_header *header = (struct tpm_header *)buffer;
+> > > > > > +   char len, offset;
+> > > > > > +   __be32 *pcr;
+> > > > > > +   int pos;
+> > > > > > +
+> > > > > > +   switch (be32_to_cpu(header->ordinal)) {
+> > > > > > +   case TPM_ORD_PCR_EXTEND:
+> > > > > > +           if (size < (TPM_HEADER_SIZE + sizeof(u32)))
+> > > > > > +                   return -EINVAL;
+> > > > > > +           pcr = (__be32 *)&buffer[TPM_HEADER_SIZE];
+> > > > > > +           if (be32_to_cpu(*pcr) == TPM_RESTRICTED_PCR)
+> > > > > > +                   return -EPERM;
+> > > > >
+> > > > > FYI: TPM 1.2 has transport sessions where the command is tunneled in an
+> > > > > encrypted channel and this check could be circumvented...
+> > > >
+> > > > BTW, Why do we want to support TPM 1.2 at all.
+> > > >
+> > > > I would not support it for new features. This could be just TPM2 only
+> > > > feeature.
+> > >
+> > > I didn't know about the TPM1.2 tunnelling thing, thanks Stefan. Yes,
+> > > maybe in light of that and Jarkko's comment we shouldn't bend over
+> > > backwards to make this work on TPM1 and just make it a TPM2-only
+> > > feature.
+> > >
+> > > Downstream of this decision, in the other patch, "Add support for
+> > > in-kernel resetting of PCRs", my instinct is to keep the addition of
+> > > tpm1_pcr_reset() just so the newly introduced generic tpm_pcr_reset()
+> > > is fully implemented. Let me know if instead I should also drop the
+> > > tpm1 side of that as well, in the name of "don't add stuff you're not
+> > > using".
+> > > -Evan
+> >
+> > You should drop TPM 1.2 support.
+> >
+> > General policy with TPM 1.2:
+> >
+> > 1. Support legacy.
+> > 2. Do no extend the functionality.
+>
+> Why? Because we do not want to add legacy to something that is dying.
 
-No need to set errno explicitly here since sched_setaffinity() is
-defined to set errno if it returns -1.
-
-> +	err = sched_setaffinity(0, sizeof(cpu_set_t), &cpuset);
-> +	TEST_ASSERT(err == 0, "sched_setaffinity errored out: %d\n", errno);
-
-TEST_ASSERT() already prints errno. It would be more useful to print
-@pcpu to help the user debug the failure.
-
-Also, use "()" after function names.
-
-> +}
-> +
->  static void *vcpu_thread_main(void *data)
->  {
->  	struct vcpu_thread *vcpu = data;
-> +	int idx = vcpu->vcpu_idx;
-> +	struct perf_test_vcpu_args *vcpu_args = &perf_test_args.vcpu_args[idx];
-> +
-> +	if (vcpu_args->pin_pcpu)
-> +		pin_me_to_pcpu(vcpu_args->pcpu);
->  
->  	WRITE_ONCE(vcpu->running, true);
->  
-> @@ -255,7 +275,7 @@ static void *vcpu_thread_main(void *data)
->  	while (!READ_ONCE(all_vcpu_threads_running))
->  		;
->  
-> -	vcpu_thread_fn(&perf_test_args.vcpu_args[vcpu->vcpu_idx]);
-> +	vcpu_thread_fn(vcpu_args);
->  
->  	return NULL;
->  }
-> @@ -292,3 +312,43 @@ void perf_test_join_vcpu_threads(int nr_vcpus)
->  	for (i = 0; i < nr_vcpus; i++)
->  		pthread_join(vcpu_threads[i].thread, NULL);
->  }
-> +
-> +int perf_test_setup_pinning(const char *pcpus_string, int nr_vcpus)
-> +{
-> +	char delim[2] = ",";
-> +	char *cpu, *cpu_list;
-> +	int i = 0, pcpu_num;
-> +
-> +	cpu_list = strdup(pcpus_string);
-> +	TEST_ASSERT(cpu_list, "strdup() allocation failed.\n");
-> +
-> +	cpu = strtok(cpu_list, delim);
-> +
-> +	// 1. Get all pcpus for vcpus
-> +	while (cpu && i < nr_vcpus) {
-> +		pcpu_num = atoi_paranoid(cpu);
-> +		TEST_ASSERT(pcpu_num >= 0, "Invalid cpu number: %d\n", pcpu_num);
-> +
-> +		perf_test_args.vcpu_args[i].pin_pcpu = true;
-
-Since pinning vCPU is all or nothing, this can be a single bool instead
-of per-vCPUs.
-
-        /* True if vCPUs are pinned to pCPUs. */
-        perf_test_args.pin_vcpus
-
-        /* The pCPU to which this vCPU is pinned. Only valid if pin_vcpus is true. */
-        perf_test_args.vcpus_args[i].pcpu
-
-> +		perf_test_args.vcpu_args[i++].pcpu = pcpu_num;
-> +
-> +		cpu = strtok(NULL, delim);
-> +	}
-> +
-> +	TEST_ASSERT(i == nr_vcpus,
-> +		    "Number of pcpus (%d) not sufficient for the number of vcpus (%d).",
-> +		    i, nr_vcpus);
-> +
-> +	// 2. Check if main worker is provided
-> +	if (cpu) {
-> +		pcpu_num = atoi_paranoid(cpu);
-> +		TEST_ASSERT(pcpu_num >= 0, "Invalid cpu number: %d\n", pcpu_num);
-
-nite: Create a helper function for this since it's repeated twice.
-
-> +
-> +		pin_me_to_pcpu(pcpu_num);
-> +
-> +		cpu = strtok(NULL, delim);
-
-Delete?
-
-> +	}
-> +
-> +	free(cpu_list);
-> +	return i;
-
-The return value is unused. Drop it until we have a usecase for it.
-
-> +}
-> -- 
-> 2.37.2.672.g94769d06f0-goog
-> 
+Sounds good, I'll drop the TPM1 stuff from the next spin. Thanks!
+-Evan
