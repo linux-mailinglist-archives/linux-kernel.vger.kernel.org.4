@@ -2,390 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DB325E55A5
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 23:56:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62E675E555E
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 23:45:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230488AbiIUV40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 17:56:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39474 "EHLO
+        id S230234AbiIUVpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 17:45:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230426AbiIUV4W (ORCPT
+        with ESMTP id S229814AbiIUVpm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 17:56:22 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA1F2A74C2
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 14:56:19 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id u69so7278568pgd.2
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 14:56:19 -0700 (PDT)
+        Wed, 21 Sep 2022 17:45:42 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14CF585A95
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 14:45:41 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id u9so16764661ejy.5
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 14:45:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=nS6duVJdRpy7VzEDbeuUiz7BRgby2LGBHTgBEvvIt40=;
-        b=tjpF60fiDMo8Hp79sblUDwhbNESEOQ84S6zPjYO6+5DyJUVJ/QopYsgVRSL8uJ2n4c
-         ZPT2Qw3dhXdov9tlFNovScCJpiwpUU86XiclidfdW1njjtkAk931axbm2bs1oOM6M1Iz
-         zGf9sFOrCYS+LsE5K72TRh8c8F6rKRoisDV1iGUb5YpBiCvatrSBCV1vifRVPv/vV+iV
-         i6eRKB9Mh6ebx0CSewJVuIgZBNscXgv8u7XeaqFfGrxRPe/swmXV96anwn24NmhzkqL+
-         oSv7H/uWDSmLvFLrjvVjbPf4bprpIcdSHC69Yjb8B/GskqoDB5LaX0qNK/WMzK3l3oGE
-         F/CA==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=PP10F3Y0rcwOin699T+VT+YNy+4k2+MIHT3lRb8/XtU=;
+        b=DVb2DSMUSaoIaMXwXn8381gqIGhbiZk1dU2tLaN03hgwXIkPycTAjZloAJx37anXce
+         wcDZ1FnNC+1R63ywzRlviuAyah6fOjeEyu3J5L8JWhy6+fiDVQLM9EtMWPGXHoumuMSB
+         D3Na/GE5zxxWxvgLXRj/Np1ERpCt7r+pZtXxov0blVxnqeb4ZiR5Ghbyfks+AzZ4o8GJ
+         XTfovIAlyrI+MmcbjeE+YxqzubAeI4/O9W3fdoKcCWvfH2L2sNkN1ZpIOnlw4H9x9Clo
+         8CuxCzPrqEsZwCDY4afGaLX6oP96w9RqwZLV+x0UHCjiaklMlbYM3YcWuEJY5ViUfOf+
+         T8mA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=nS6duVJdRpy7VzEDbeuUiz7BRgby2LGBHTgBEvvIt40=;
-        b=GFhKBxF14DyhhNDVe26lEmfs/gUINngySUBDOYLYRIrtGo0F4LYDObute16AGVdfEm
-         3wQ0Xw8OG+t2Cpq7kMSmNqKOWUpJ1wrNr/d4FMzWgwXQB1GoOuKSkxDirkig4VzBbnlu
-         9YhsF+XGw3kT19FqguM/YZ4VToT4aK3pkQh5BkLSdMO0FAESHihqAsANdjjxvMLhMQwo
-         cr4Cg1BcqGg2VnCq7OxrGpChlkxudC8lMbfXLGStQ43fWu/C/YTp0ewgaydqyKPs+nxA
-         cEul5WjOWYYRPKOwUNjB2bg5gFuxgidH96ZSgtNlaYBwZSev24CMPSb5T6fEu2vbsdpd
-         NrLA==
-X-Gm-Message-State: ACrzQf3GxK3pAfxrO+e2ws8Claq9DClDl5Hv8VpcQO8hEruAPxyAf/xE
-        CjVN8VLWRVxwPf4uMYrHFqTXFg==
-X-Google-Smtp-Source: AMsMyM4eI1QZHxWSIPvoJijVfop0chBMt0kkLqJBs6N8ucJKxntXUdb9sZC80mjW3BJ/veY4quk7Rw==
-X-Received: by 2002:a05:6a02:104:b0:430:93ec:776f with SMTP id bg4-20020a056a02010400b0043093ec776fmr236548pgb.544.1663797379221;
-        Wed, 21 Sep 2022 14:56:19 -0700 (PDT)
-Received: from stillson.ba.rivosinc.com ([66.220.2.162])
-        by smtp.gmail.com with ESMTPSA id k7-20020aa79727000000b005484d133127sm2634536pfg.129.2022.09.21.14.56.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Sep 2022 14:56:18 -0700 (PDT)
-From:   Chris Stillson <stillson@rivosinc.com>
-Cc:     Chris Stillson <stillson@rivosinc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Oleg Nesterov <oleg@redhat.com>, Guo Ren <guoren@kernel.org>,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-        Mayuresh Chitale <mchitale@ventanamicro.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Qinglin Pan <panqinglin2020@iscas.ac.cn>,
-        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Vincent Chen <vincent.chen@sifive.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Dao Lu <daolu@rivosinc.com>,
-        Sunil V L <sunilvl@ventanamicro.com>,
-        Han-Kuan Chen <hankuan.chen@sifive.com>,
-        Changbin Du <changbin.du@intel.com>,
-        Li Zhengyu <lizhengyu3@huawei.com>,
-        Alexander Graf <graf@amazon.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Tsukasa OI <research_trasio@irq.a4lg.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Chen Lu <181250012@smail.nju.edu.cn>,
-        Vitaly Wool <vitaly.wool@konsulko.com>,
-        Myrtle Shah <gatecat@ds0.me>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Brown <broonie@kernel.org>, Will Deacon <will@kernel.org>,
-        Luis Machado <luis.machado@linaro.org>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Colin Cross <ccross@google.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Barret Rhoden <brho@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org
-Subject: [PATCH v12 17/17] riscv: prctl to enable vector commands
-Date:   Wed, 21 Sep 2022 14:43:59 -0700
-Message-Id: <20220921214439.1491510-17-stillson@rivosinc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220921214439.1491510-1-stillson@rivosinc.com>
-References: <20220921214439.1491510-1-stillson@rivosinc.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=PP10F3Y0rcwOin699T+VT+YNy+4k2+MIHT3lRb8/XtU=;
+        b=MG9OAqDlygqDOSNyNyETPcO9L0q2eN9abKk3n4DjwzwcVT0AM+6qXIycIzLIotkM//
+         VxsmnXUY0RQdc3lRTR/723Dz8jZ1WcLw3UCUFSAaLlzdHm23noeiDTRmXu8Fq/IrMtvm
+         j8xADDB7l4QsoEkgZ9tfVifiIP73xE8hpO3dvS1PqzOGI54KP/BGOoGEBylBPa0DRwQO
+         coPqaG5WLYdP3Hl0akWbrN75AxzaBficEMYJvfc2G2o0Ec9sELNZFgg4WqPo9blrITSz
+         lHp+w5t4RpBiSJzVwDfAugTNnJzu57ybEU66/fZIAzFReUJTBeUOm+4wbtkNnxAn5eGz
+         lzrQ==
+X-Gm-Message-State: ACrzQf1AZ0JmRquDoVT4aSv/Lz6fob5Q9G0gQZscq92+P4fteLw+p9Tg
+        iL0xTnG3wwqCb9BJobG6Cmn48LVR1cRYpk6Z+EY=
+X-Google-Smtp-Source: AMsMyM4CcfYm0WYJOXpqSpj3F0bkBrNOmVgLu3b5ublR4Ns1GRyvUNIG4Tzl1k8iGgHH7q/RpTePv7je1EC8Q2yP75E=
+X-Received: by 2002:a17:907:97d4:b0:781:c182:c45c with SMTP id
+ js20-20020a17090797d400b00781c182c45cmr268765ejc.170.1663796739458; Wed, 21
+ Sep 2022 14:45:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20220921074841.382615-1-rppt@kernel.org> <CAGsJ_4yMOC5M9rnfgv9TXWAm2aMDUVOdDYvNjzqzu_oj9DBn8Q@mail.gmail.com>
+ <Yysqq0/bxxSY9rcP@kernel.org>
+In-Reply-To: <Yysqq0/bxxSY9rcP@kernel.org>
+From:   Barry Song <21cnbao@gmail.com>
+Date:   Thu, 22 Sep 2022 09:45:28 +1200
+Message-ID: <CAGsJ_4xLZR1x-so3jnpYxDUWGGFA2LKTOskPESi7hiQw+FeMgQ@mail.gmail.com>
+Subject: Re: [PATCH] arm64/mm: fold check for KFENCE into can_set_direct_map()
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This code makes enabling the vector extension on a riscv manchine
-optional by adding an option to prctl() to allow a process to enable,
-disable or query its vector context state.
+On Thu, Sep 22, 2022 at 3:16 AM Mike Rapoport <rppt@kernel.org> wrote:
+>
+> Hi Barry,
+>
+> On Wed, Sep 21, 2022 at 09:00:28PM +1200, Barry Song wrote:
+> > On Wed, Sep 21, 2022 at 8:26 PM Mike Rapoport <rppt@kernel.org> wrote:
+> > >
+> > > From: Mike Rapoport <rppt@linux.ibm.com>
+> > >
+> > > KFENCE requires linear map to be mapped at page granularity, so that it
+> > > is possible to protect/unprotect single pages, just like with
+> > > rodata_full and DEBUG_PAGEALLOC.
+> > >
+> > > Instead of repating
+> > >
+> > >         can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE)
+> > >
+> > > make can_set_direct_map() handle the KFENCE case.
+> > >
+> > > This also prevents potential false positives in kernel_page_present()
+> > > that may return true for non-present page if CONFIG_KFENCE is enabled.
+> > >
+> > > Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> > > ---
+> > >  arch/arm64/mm/mmu.c      | 8 ++------
+> > >  arch/arm64/mm/pageattr.c | 8 +++++++-
+> > >  2 files changed, 9 insertions(+), 7 deletions(-)
+> > >
+> > > diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+> > > index e7ad44585f40..c5065abec55a 100644
+> > > --- a/arch/arm64/mm/mmu.c
+> > > +++ b/arch/arm64/mm/mmu.c
+> > > @@ -535,7 +535,7 @@ static void __init map_mem(pgd_t *pgdp)
+> > >          */
+> > >         BUILD_BUG_ON(pgd_index(direct_map_end - 1) == pgd_index(direct_map_end));
+> > >
+> > > -       if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE))
+> > > +       if (can_set_direct_map())
+> > >                 flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
+> > >
+> > >         /*
+> > > @@ -1547,11 +1547,7 @@ int arch_add_memory(int nid, u64 start, u64 size,
+> > >
+> > >         VM_BUG_ON(!mhp_range_allowed(start, size, true));
+> > >
+> > > -       /*
+> > > -        * KFENCE requires linear map to be mapped at page granularity, so that
+> > > -        * it is possible to protect/unprotect single pages in the KFENCE pool.
+> > > -        */
+> > > -       if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE))
+> > > +       if (can_set_direct_map())
+> > >                 flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
+> > >
+> > >         __create_pgd_mapping(swapper_pg_dir, start, __phys_to_virt(start),
+> > > diff --git a/arch/arm64/mm/pageattr.c b/arch/arm64/mm/pageattr.c
+> > > index 64e985eaa52d..d107c3d434e2 100644
+> > > --- a/arch/arm64/mm/pageattr.c
+> > > +++ b/arch/arm64/mm/pageattr.c
+> > > @@ -21,7 +21,13 @@ bool rodata_full __ro_after_init = IS_ENABLED(CONFIG_RODATA_FULL_DEFAULT_ENABLED
+> > >
+> > >  bool can_set_direct_map(void)
+> > >  {
+> > > -       return rodata_full || debug_pagealloc_enabled();
+> > > +       /*
+> > > +        * rodata_full, DEBUG_PAGEALLOC and KFENCE require linear map to be
+> > > +        * mapped at page granularity, so that it is possible to
+> > > +        * protect/unprotect single pages.
+> > > +        */
+> > > +       return rodata_full || debug_pagealloc_enabled() ||
+> > > +               IS_ENABLED(CONFIG_KFENCE);
+> >
+> > might be irrelevant, i wonder if rodata_full is too strict as
+> > rodata_full is almost
+> > always true since RODATA_FULL_DEFAULT_ENABLED is default true.
+>
+> Not sure I follow. If either of these conditions is true the linear map
+> consists of base pages and it's possible to change attributes of each base
+> page. Whenever linear map contains block mapping, page attributes cannot be
+> modified.
 
--added prctl to enable/disable/query current vector state
--added actual function in riscv specific code to change/query the process
-state
-- Fixed problem with initial set of patches
-	(missing some EXPORT_SYMBOL() macro calls)
-- rebased to 6.0-rc1
----
- arch/riscv/configs/defconfig             |  6 ++++++
- arch/riscv/include/asm/kvm_vcpu_vector.h |  8 ++++----
- arch/riscv/include/asm/processor.h       |  6 ++++++
- arch/riscv/include/asm/switch_to.h       | 11 +++++++++++
- arch/riscv/kernel/cpufeature.c           |  3 ++-
- arch/riscv/kernel/process.c              | 20 +++++++++++++++++++-
- arch/riscv/kvm/vcpu_vector.c             | 14 +++++++-------
- include/uapi/linux/prctl.h               |  6 ++++++
- kernel/sys.c                             |  7 +++++++
- 9 files changed, 68 insertions(+), 13 deletions(-)
+Hi Mike,
+My question is irrelevant with your patch. It is more of another
+topic.  i understand
+we need to protect read-only data of kernel, but it seems overly
+defensive. We are
+getting the whole linear mapping PTE-mapped.
 
-diff --git a/arch/riscv/configs/defconfig b/arch/riscv/configs/defconfig
-index aed332a9d4ea..fce054286b1f 100644
---- a/arch/riscv/configs/defconfig
-+++ b/arch/riscv/configs/defconfig
-@@ -209,3 +209,9 @@ CONFIG_RCU_EQS_DEBUG=y
- # CONFIG_FTRACE is not set
- # CONFIG_RUNTIME_TESTING_MENU is not set
- CONFIG_MEMTEST=y
-+CONFIG_ARCH_RV64I=y
-+CONFIG_64BIT=y
-+CONFIG_VECTOR=y
-+CONFIG_ARCH_RV64I=y
-+CONFIG_64BIT=y
-+CONFIG_VECTOR=y
-diff --git a/arch/riscv/include/asm/kvm_vcpu_vector.h b/arch/riscv/include/asm/kvm_vcpu_vector.h
-index 1dcc1b2e05bb..c7101ff943a0 100644
---- a/arch/riscv/include/asm/kvm_vcpu_vector.h
-+++ b/arch/riscv/include/asm/kvm_vcpu_vector.h
-@@ -22,9 +22,9 @@ void __kvm_riscv_vector_save(struct kvm_cpu_context *context);
- void __kvm_riscv_vector_restore(struct kvm_cpu_context *context);
- void kvm_riscv_vcpu_vector_reset(struct kvm_vcpu *vcpu);
- void kvm_riscv_vcpu_guest_vector_save(struct kvm_cpu_context *cntx,
--				      unsigned long isa);
-+				      unsigned long *isa);
- void kvm_riscv_vcpu_guest_vector_restore(struct kvm_cpu_context *cntx,
--					 unsigned long isa);
-+					 unsigned long *isa);
- void kvm_riscv_vcpu_host_vector_save(struct kvm_cpu_context *cntx);
- void kvm_riscv_vcpu_host_vector_restore(struct kvm_cpu_context *cntx);
- void kvm_riscv_vcpu_free_vector_context(struct kvm_vcpu *vcpu);
-@@ -34,12 +34,12 @@ static inline void kvm_riscv_vcpu_vector_reset(struct kvm_vcpu *vcpu)
- }
- 
- static inline void kvm_riscv_vcpu_guest_vector_save(struct kvm_cpu_context *cntx,
--						    unsigned long isa)
-+						    unsigned long *isa)
- {
- }
- 
- static inline void kvm_riscv_vcpu_guest_vector_restore(struct kvm_cpu_context *cntx,
--						       unsigned long isa)
-+						       unsigned long *isa)
- {
- }
- 
-diff --git a/arch/riscv/include/asm/processor.h b/arch/riscv/include/asm/processor.h
-index a09141ecf6aa..f2d0a91ce174 100644
---- a/arch/riscv/include/asm/processor.h
-+++ b/arch/riscv/include/asm/processor.h
-@@ -88,6 +88,12 @@ extern void riscv_fill_hwcap(void);
- extern int arch_dup_task_struct(struct task_struct *dst, struct task_struct *src);
- 
- extern unsigned long signal_minsigstksz __ro_after_init;
-+
-+#ifdef CONFIG_VECTOR
-+extern int rvv_proc_enable(unsigned long x);
-+#define RVV_PROC_ENABLE(x) rvv_proc_enable(x)
-+#endif
-+
- #endif /* __ASSEMBLY__ */
- 
- #endif /* _ASM_RISCV_PROCESSOR_H */
-diff --git a/arch/riscv/include/asm/switch_to.h b/arch/riscv/include/asm/switch_to.h
-index 527951c033d4..d9747450311c 100644
---- a/arch/riscv/include/asm/switch_to.h
-+++ b/arch/riscv/include/asm/switch_to.h
-@@ -80,6 +80,17 @@ extern unsigned long riscv_vsize;
- extern void __vstate_save(struct __riscv_v_state *save_to, void *datap);
- extern void __vstate_restore(struct __riscv_v_state *restore_from, void *datap);
- 
-+static inline bool vstate_query(struct pt_regs *regs)
-+{
-+	return (regs->status & SR_VS) != 0;
-+}
-+
-+static inline void vstate_on(struct task_struct *task,
-+				struct pt_regs *regs)
-+{
-+	regs->status = (regs->status & ~(SR_VS)) | SR_VS_INITIAL;
-+}
-+
- static inline void __vstate_clean(struct pt_regs *regs)
- {
- 	regs->status = (regs->status & ~(SR_VS)) | SR_VS_CLEAN;
-diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-index 0487ab19b234..3be469cb9266 100644
---- a/arch/riscv/kernel/cpufeature.c
-+++ b/arch/riscv/kernel/cpufeature.c
-@@ -37,6 +37,8 @@ __ro_after_init DEFINE_STATIC_KEY_FALSE(cpu_hwcap_fpu);
- #include <asm/vector.h>
- __ro_after_init DEFINE_STATIC_KEY_FALSE(cpu_hwcap_vector);
- unsigned long riscv_vsize __read_mostly;
-+EXPORT_SYMBOL(cpu_hwcap_vector);
-+EXPORT_SYMBOL(riscv_vsize);
- #endif
- 
- /**
-@@ -346,4 +348,3 @@ void __init_or_module riscv_cpufeature_patch_func(struct alt_entry *begin,
- 	}
- }
- #endif
--}
-diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
-index e88a37fc77ed..a5a76d1374ec 100644
---- a/arch/riscv/kernel/process.c
-+++ b/arch/riscv/kernel/process.c
-@@ -15,6 +15,7 @@
- #include <linux/tick.h>
- #include <linux/ptrace.h>
- #include <linux/uaccess.h>
-+#include <linux/prctl.h>
- 
- #include <asm/unistd.h>
- #include <asm/processor.h>
-@@ -134,7 +135,6 @@ void start_thread(struct pt_regs *regs, unsigned long pc,
- 			if (WARN_ON(!vstate->datap))
- 				return;
- 		}
--		regs->status |= SR_VS_INITIAL;
- 
- 		/*
- 		 * Restore the initial value to the vector register
-@@ -230,3 +229,22 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
- 	p->thread.sp = (unsigned long)childregs; /* kernel sp */
- 	return 0;
- }
-+
-+#ifdef CONFIG_VECTOR
-+int rvv_proc_enable(unsigned long x)
-+{
-+	switch (x) {
-+	case PR_RVV_DISABLE:
-+		vstate_off(current, task_pt_regs(current));
-+		return 0;
-+	case PR_RVV_ENABLE:
-+		vstate_on(current, task_pt_regs(current));
-+		return 0;
-+	case PR_RVV_QUERY:
-+		return vstate_query(task_pt_regs(current));
-+	default:
-+		return -(EINVAL);
-+
-+	}
-+}
-+#endif
-diff --git a/arch/riscv/kvm/vcpu_vector.c b/arch/riscv/kvm/vcpu_vector.c
-index 37bf4ffd47dd..9d1613da561a 100644
---- a/arch/riscv/kvm/vcpu_vector.c
-+++ b/arch/riscv/kvm/vcpu_vector.c
-@@ -20,7 +20,7 @@
- extern unsigned long riscv_vsize;
- void kvm_riscv_vcpu_vector_reset(struct kvm_vcpu *vcpu)
- {
--	unsigned long isa = vcpu->arch.isa;
-+	unsigned long isa = *vcpu->arch.isa;
- 	struct kvm_cpu_context *cntx = &vcpu->arch.guest_context;
- 
- 	cntx->sstatus &= ~SR_VS;
-@@ -39,20 +39,20 @@ static void kvm_riscv_vcpu_vector_clean(struct kvm_cpu_context *cntx)
- }
- 
- void kvm_riscv_vcpu_guest_vector_save(struct kvm_cpu_context *cntx,
--				      unsigned long isa)
-+				      unsigned long *isa)
- {
- 	if ((cntx->sstatus & SR_VS) == SR_VS_DIRTY) {
--		if (riscv_isa_extension_available(&isa, v))
-+		if (riscv_isa_extension_available(isa, v))
- 			__kvm_riscv_vector_save(cntx);
- 		kvm_riscv_vcpu_vector_clean(cntx);
- 	}
- }
- 
- void kvm_riscv_vcpu_guest_vector_restore(struct kvm_cpu_context *cntx,
--					 unsigned long isa)
-+					 unsigned long *isa)
- {
- 	if ((cntx->sstatus & SR_VS) != SR_VS_OFF) {
--		if (riscv_isa_extension_available(&isa, v))
-+		if (riscv_isa_extension_available(isa, v))
- 			__kvm_riscv_vector_restore(cntx);
- 		kvm_riscv_vcpu_vector_clean(cntx);
- 	}
-@@ -122,7 +122,7 @@ int kvm_riscv_vcpu_get_reg_vector(struct kvm_vcpu *vcpu,
- 				  const struct kvm_one_reg *reg,
- 				  unsigned long rtype)
- {
--	unsigned long isa = vcpu->arch.isa;
-+	unsigned long isa = *vcpu->arch.isa;
- 	unsigned long __user *uaddr =
- 			(unsigned long __user *)(unsigned long)reg->addr;
- 	unsigned long reg_num = reg->id & ~(KVM_REG_ARCH_MASK |
-@@ -149,7 +149,7 @@ int kvm_riscv_vcpu_set_reg_vector(struct kvm_vcpu *vcpu,
- 				  const struct kvm_one_reg *reg,
- 				  unsigned long rtype)
- {
--	unsigned long isa = vcpu->arch.isa;
-+	unsigned long isa = *vcpu->arch.isa;
- 	unsigned long __user *uaddr =
- 			(unsigned long __user *)(unsigned long)reg->addr;
- 	unsigned long reg_num = reg->id & ~(KVM_REG_ARCH_MASK |
-diff --git a/include/uapi/linux/prctl.h b/include/uapi/linux/prctl.h
-index a5e06dcbba13..8ea56e4c48f8 100644
---- a/include/uapi/linux/prctl.h
-+++ b/include/uapi/linux/prctl.h
-@@ -281,6 +281,12 @@ struct prctl_mm_map {
- # define PR_SME_VL_LEN_MASK		0xffff
- # define PR_SME_VL_INHERIT		(1 << 17) /* inherit across exec */
- 
-+/* RISC-V V vector extension */
-+#define PR_RVV_STATE			65
-+# define PR_RVV_DISABLE			0
-+# define PR_RVV_ENABLE			1
-+# define PR_RVV_QUERY			2
-+
- #define PR_SET_VMA		0x53564d41
- # define PR_SET_VMA_ANON_NAME		0
- 
-diff --git a/kernel/sys.c b/kernel/sys.c
-index b911fa6d81ab..3049b1823273 100644
---- a/kernel/sys.c
-+++ b/kernel/sys.c
-@@ -138,6 +138,9 @@
- #ifndef GET_TAGGED_ADDR_CTRL
- # define GET_TAGGED_ADDR_CTRL()		(-EINVAL)
- #endif
-+#ifndef RVV_PROC_ENABLE
-+# define RVV_PROC_ENABLE(x)			(-EINVAL)
-+#endif
- 
- /*
-  * this is where the system-wide overflow UID and GID are defined, for
-@@ -2620,6 +2623,10 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
- 		error = sched_core_share_pid(arg2, arg3, arg4, arg5);
- 		break;
- #endif
-+	case PR_RVV_STATE:
-+		error = RVV_PROC_ENABLE(arg2);
-+		break;
-+
- 	case PR_SET_VMA:
- 		error = prctl_set_vma(arg2, arg3, arg4, arg5);
- 		break;
--- 
-2.25.1
+/sys/kernel/debug# cat kernel_page_tables
+0x0000000000000000-0xffff608000000000   17179705856G PGD
+0xffff608000000000-0xffff60bf40000000         253G PUD
+0xffff60bf40000000-0xffff60bf40200000           2M PTE       RW NX SHD
+AF NG         UXN    MEM/NORMAL-TAGGED
+0xffff60bf40200000-0xffff60bf41800000          22M PMD       ro NX SHD
+AF NG     BLK UXN    MEM/NORMAL
+0xffff60bf41800000-0xffff60bf41890000         576K PTE       ro NX SHD
+AF NG         UXN    MEM/NORMAL
+0xffff60bf41890000-0xffff60c04022e000     4171384K PTE       RW NX SHD
+AF NG         UXN    MEM/NORMAL-TAGGED
+0xffff60c04022e000-0xffff60c04022f000           4K PTE       ro NX SHD
+AF NG         UXN    MEM/NORMAL-TAGGED
+0xffff60c04022f000-0xffff60c042a3c000       41012K PTE       RW NX SHD
+AF NG         UXN    MEM/NORMAL-TAGGED
+0xffff60c042a3c000-0xffff60c042a3d000           4K PTE       ro NX SHD
+AF NG         UXN    MEM/NORMAL-TAGGED
+0xffff60c042a3d000-0xffff60c043431000       10192K PTE       RW NX SHD
+AF NG         UXN    MEM/NORMAL-TAGGED
+0xffff60c043431000-0xffff60c043432000           4K PTE       ro NX SHD
+AF NG         UXN    MEM/NORMAL-TAGGED
+0xffff60c043432000-0xffff60c0448e8000       21208K PTE       RW NX SHD
+AF NG         UXN    MEM/NORMAL-TAGGED
+0xffff60c0448e8000-0xffff60c0448e9000           4K PTE       ro NX SHD
+AF NG         UXN    MEM/NORMAL-TAGGED
+0xffff60c0448e9000-0xffff60c0448ed000          16K PTE       RW NX SHD
+AF NG         UXN    MEM/NORMAL-TAGGED
+0xffff60c0448ed000-0xffff60c0448ee000           4K PTE       ro NX SHD
+AF NG         UXN    MEM/NORMAL-TAGGED
+0xffff60c0448ee000-0xffff60c044a6b000        1524K PTE       RW NX SHD
+AF NG         UXN    MEM/NORMAL-TAGGED
+0xffff60c044a6b000-0xffff60c044a6c000           4K PTE       ro NX SHD
+AF NG         UXN    MEM/NORMAL-TAGGED
+0xffff60c044a6c000-0xffff60c044a74000          32K PTE       RW NX SHD
+AF NG         UXN    MEM/NORMAL-TAGGED
+0xffff60c044a74000-0xffff60c044a75000           4K PTE       ro NX SHD
+AF NG         UXN    MEM/NORMAL-TAGGED
+0xffff60c044a75000-0xffff60c044aaa000         212K PTE       RW NX SHD
+AF NG         UXN    MEM/NORMAL-TAGGED
+0xffff60c044aaa000-0xffff60c044aab000           4K PTE       ro NX SHD
+AF NG         UXN    MEM/NORMAL-TAGGED
+0xffff60c044aab000-0xffff60c053000000      234836K PTE       RW NX SHD
+AF NG         UXN    MEM/NORMAL-TAGGED
+0xffff60c053000000-0xffff60c080000000         720M PMD
+0xffff60c080000000-0xffff610000000000         254G PUD
+0xffff610000000000-0xffff800000000000          31T PGD
+---[ Linear Mapping end ]---
 
+
+For example, for the below,
+0xffff60c04022e000-0xffff60c04022f000           4K PTE       ro NX SHD
+AF NG         UXN    MEM/NORMAL-TAGGED
+0xffff60c04022f000-0xffff60c042a3c000       41012K PTE       RW NX SHD
+AF NG         UXN    MEM/NORMAL-TAGGED
+
+41012K PTE is really big, don't we have a chance to make it
+block/cont-pte mapped by
+some alignment tricks such as,
+
+0xffff60c04022e000-0xffff60c04022f000           4K PTE       ro NX SHD
+AF NG         UXN    MEM/NORMAL-TAGGED
+0xffff60c04022e000-0xffff60c040230000          4K PTE       RW NX SHD
+AF NG         UXN    MEM/NORMAL-TAGGED
+0xffff60c040230000-0xffff60c040400000-         4K PTE       CONT..
+0xffff60c040400000-                                           2MB PMD.....
+
+>
+> And rodata_full might be false because
+> CONFIG_RODATA_FULL_DEFAULT_ENABLED was disabled at build time.
+>
+> > >  }
+> > >
+> > >  static int change_page_range(pte_t *ptep, unsigned long addr, void *data)
+> > > --
+> > > 2.35.3
+> > >
+> >
+> > Thanks
+> > Barry
+>
+> --
+> Sincerely yours,
+> Mike.
+
+Thanks
+Barry
