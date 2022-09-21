@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1CCE5C0337
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 18:01:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A5F65C02F5
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:57:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232170AbiIUQAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 12:00:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56532 "EHLO
+        id S231989AbiIUP5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 11:57:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232204AbiIUP6n (ORCPT
+        with ESMTP id S231956AbiIUP4f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 11:58:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1E85A1A5F;
-        Wed, 21 Sep 2022 08:52:18 -0700 (PDT)
+        Wed, 21 Sep 2022 11:56:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 687389FA8D;
+        Wed, 21 Sep 2022 08:50:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BD7B963168;
-        Wed, 21 Sep 2022 15:52:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB940C433D6;
-        Wed, 21 Sep 2022 15:52:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B355EB830AE;
+        Wed, 21 Sep 2022 15:50:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F25CCC433C1;
+        Wed, 21 Sep 2022 15:50:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663775536;
-        bh=w/n5KhdA3MVKZUaifbVJ8pga5w6qC0rPdRyADTfyPrc=;
+        s=korg; t=1663775413;
+        bh=bRmbJyoukGDORNxxyNwdRx9+bZox2KdRIYgPsKDYFUM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ft3QqJ8fHOqf6hDzsfYhBgNRVkT6gmnFcdMfh1oy8hOsZIS708YdBgbVI2toIEgUK
-         MPueij7yYhgLYpsg/ierXpfK6vudWvksLtGrsXi+onhLE3ynXrQ6Wax5Z9/A698NVn
-         GMTiawi+dCQoCZRe/kzoIPNFicHPPu4b4GF+CP00=
+        b=2PxqP7/sEcj5KYdEslPMNN/zAVXyPls5V1dK4ob+KALicE+w928SAA3f60Wc37ZXc
+         t/L+tmltTh1zkt4IXL9Tj4a3Fj7xd2QADr5LQhoc218PEt2Z3UgiOE1irM5TOOwWqH
+         4ttLGzXK3DrFMZ4TP71jpgbCL6V5BkPR0ztaj+Bg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Howells <dhowells@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 29/39] rxrpc: Fix calc of resend age
-Date:   Wed, 21 Sep 2022 17:46:34 +0200
-Message-Id: <20220921153646.690594739@linuxfoundation.org>
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.15 45/45] ALSA: hda/sigmatel: Fix unused variable warning for beep power change
+Date:   Wed, 21 Sep 2022 17:46:35 +0200
+Message-Id: <20220921153648.535357005@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220921153645.663680057@linuxfoundation.org>
-References: <20220921153645.663680057@linuxfoundation.org>
+In-Reply-To: <20220921153646.931277075@linuxfoundation.org>
+References: <20220921153646.931277075@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,34 +53,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Howells <dhowells@redhat.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-[ Upstream commit 214a9dc7d852216e83acac7b75bc18f01ce184c2 ]
+commit 51bdc8bb82525cd70feb92279c8b7660ad7948dd upstream.
 
-Fix the calculation of the resend age to add a microsecond value as
-microseconds, not nanoseconds.
+The newly added stac_check_power_status() caused a compile warning
+when CONFIG_SND_HDA_INPUT_BEEP is disabled.  Fix it.
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 414d38ba8710 ("ALSA: hda/sigmatel: Keep power up while beep is enabled")
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/r/20220905130630.2845-1-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/rxrpc/call_event.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ sound/pci/hda/patch_sigmatel.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/net/rxrpc/call_event.c b/net/rxrpc/call_event.c
-index f8ecad2b730e..2a93e7b5fbd0 100644
---- a/net/rxrpc/call_event.c
-+++ b/net/rxrpc/call_event.c
-@@ -166,7 +166,7 @@ static void rxrpc_resend(struct rxrpc_call *call, unsigned long now_j)
- 	_enter("{%d,%d}", call->tx_hard_ack, call->tx_top);
+--- a/sound/pci/hda/patch_sigmatel.c
++++ b/sound/pci/hda/patch_sigmatel.c
+@@ -4447,7 +4447,9 @@ static int stac_suspend(struct hda_codec
  
- 	now = ktime_get_real();
--	max_age = ktime_sub(now, jiffies_to_usecs(call->peer->rto_j));
-+	max_age = ktime_sub_us(now, jiffies_to_usecs(call->peer->rto_j));
+ static int stac_check_power_status(struct hda_codec *codec, hda_nid_t nid)
+ {
++#ifdef CONFIG_SND_HDA_INPUT_BEEP
+ 	struct sigmatel_spec *spec = codec->spec;
++#endif
+ 	int ret = snd_hda_gen_check_power_status(codec, nid);
  
- 	spin_lock_bh(&call->lock);
- 
--- 
-2.35.1
-
+ #ifdef CONFIG_SND_HDA_INPUT_BEEP
 
 
