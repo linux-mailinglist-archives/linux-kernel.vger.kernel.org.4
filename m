@@ -2,175 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B26875C04DE
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 18:58:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F9345C04DF
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 18:58:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230393AbiIUQ6L convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 21 Sep 2022 12:58:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44404 "EHLO
+        id S231250AbiIUQ6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 12:58:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230372AbiIUQ5b (ORCPT
+        with ESMTP id S230463AbiIUQ5e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 12:57:31 -0400
-Received: from relay.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4918114;
-        Wed, 21 Sep 2022 09:57:29 -0700 (PDT)
-Received: from omf14.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay04.hostedemail.com (Postfix) with ESMTP id A3B5F1A0137;
-        Wed, 21 Sep 2022 16:57:27 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf14.hostedemail.com (Postfix) with ESMTPA id 2BD0442;
-        Wed, 21 Sep 2022 16:57:21 +0000 (UTC)
-Message-ID: <9735b34d490b9774d883b8caf37ccb2e842cccfb.camel@perches.com>
-Subject: Re: [PATCH v7] checkpatch: warn for non-standard fixes tag style
-From:   Joe Perches <joe@perches.com>
-To:     Niklas =?ISO-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@corigine.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andy Whitcroft <apw@canonical.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Philippe Schenker <philippe.schenker@toradex.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     oss-drivers@corigine.com, Simon Horman <simon.horman@corigine.com>,
-        Louis Peens <louis.peens@corigine.com>
-Date:   Wed, 21 Sep 2022 09:57:23 -0700
-In-Reply-To: <20220914100255.1048460-1-niklas.soderlund@corigine.com>
-References: <20220914100255.1048460-1-niklas.soderlund@corigine.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        Wed, 21 Sep 2022 12:57:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A9A0222;
+        Wed, 21 Sep 2022 09:57:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 36E866321F;
+        Wed, 21 Sep 2022 16:57:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D0D8C433C1;
+        Wed, 21 Sep 2022 16:57:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663779452;
+        bh=LeK5JLTbFJzs1hR1169CAEELd2s0T4NEbTDkGk4Qc78=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=hMwpdt1IY3z7GH5nlskxk3QBoXR7H/soWjBbsLnMGh7thd+WpGZvhB/EGa49p57qd
+         Odsp1gZRPTma06dVip7Pj1Tcpn+yXEiyIWdIiF5aRYvuQ4Dj4Ybz4h4TIpnZsdkSrw
+         Bn1t8q0F1aXLM3MpCMRXHwPNNPfGqSar3kjCU1DX/m/+C889aHp9QLOwgv5pPlN5T5
+         EL3/YYWwNXTDH4A8sC2LIHKsbxGL6rgj9J7xc5UeKBZecoAQBDeYK97MOOv8/781VC
+         hAAdJyWL6tEBMRfGgG5Q5RULdFzA3x/eRxH7piUsz/W4xMvMwaDuZxi25n1K65AU6u
+         +YRiP7pw75M+g==
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1ob32Q-00BizR-D0;
+        Wed, 21 Sep 2022 17:57:30 +0100
 MIME-Version: 1.0
-X-Rspamd-Server: rspamout03
-X-Rspamd-Queue-Id: 2BD0442
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Stat-Signature: 5auhrq3z3n7q7kp4ym5irfo6dfcgippf
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/a4BkMAYN1IzZGlaMLaXwLXHNoKlMAuiE=
-X-HE-Tag: 1663779441-445637
+Date:   Wed, 21 Sep 2022 17:57:30 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linusw@kernel.org,
+        kaloz@openwrt.org, khalasa@piap.pl,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 5.4 2/5] gpio: ixp4xx: Make irqchip immutable
+In-Reply-To: <20220921155436.235371-2-sashal@kernel.org>
+References: <20220921155436.235371-1-sashal@kernel.org>
+ <20220921155436.235371-2-sashal@kernel.org>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <fec2e2e2e74d680d5f9de6d68fb5fe18@kernel.org>
+X-Sender: maz@kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: sashal@kernel.org, linux-kernel@vger.kernel.org, stable@vger.kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, linusw@kernel.org, kaloz@openwrt.org, khalasa@piap.pl, linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-09-14 at 12:02 +0200, Niklas Söderlund wrote:
-> Add a warning for fixes tags that does not follow community conventions.
+On 2022-09-21 16:54, Sasha Levin wrote:
+> From: Linus Walleij <linus.walleij@linaro.org>
 > 
-> Signed-off-by: Niklas Söderlund <niklas.soderlund@corigine.com>
-> Reviewed-by: Simon Horman <simon.horman@corigine.com>
-> Reviewed-by: Louis Peens <louis.peens@corigine.com>
-> Reviewed-by: Philippe Schenker <philippe.schenker@toradex.com>
-> Acked-by: Dwaipayan Ray <dwaipayanray1@gmail.com>
-> Reviewed-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> Acked-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> [ Upstream commit 94e9bc73d85aa6ecfe249e985ff57abe0ab35f34 ]
+> 
+> This turns the IXP4xx GPIO irqchip into an immutable
+> irqchip, a bit different from the standard template due
+> to being hierarchical.
+> 
+> Tested on the IXP4xx which uses drivers/ata/pata_ixp4xx_cf.c
+> for a rootfs on compact flash with IRQs from this GPIO
+> block to the CF ATA controller.
+> 
+> Cc: Marc Zyngier <maz@kernel.org>
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> Acked-by: Marc Zyngier <maz@kernel.org>
+> Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
 
-Acked-by: Joe Perches <joe@perches.com>
+Why? The required dependencies are only in 5,19, and are
+definitely NOT a stable candidate...
 
-> ---
-> * Changes since v6
-> - Update first check to make sure that there is a likely SHA1 of some
->   minimum length after the fixes line.
-> - s/fall in line with community standard/follow community conventions/.
-> - Improve grammar, thanks Lukas.
-> 
-> * Changes since v5
-> - Add support for --fix option for checkpatch.pl.
-> 
-> * Changes since v4
-> - Extend test to cover lines with whitespace before the fixes: tag, e.g.
->   match check on /^\s*fixes:?/i.
-> 
-> * Changes since v3
-> - Add test that title in tag match title of commit referenced by sha1.
-> 
-> * Changes since v2
-> - Change the pattern to match on 'fixes:?' to catch more malformed
->   tags.
-> 
-> * Changes since v1
-> - Update the documentation wording and add mention one cause of the
->   message can be that email program splits the tag over multiple lines.
-> ---
->  Documentation/dev-tools/checkpatch.rst |  7 ++++
->  scripts/checkpatch.pl                  | 44 ++++++++++++++++++++++++++
->  2 files changed, 51 insertions(+)
-> 
-> diff --git a/Documentation/dev-tools/checkpatch.rst b/Documentation/dev-tools/checkpatch.rst
-> index b52452bc2963..c3389c6f3838 100644
-> --- a/Documentation/dev-tools/checkpatch.rst
-> +++ b/Documentation/dev-tools/checkpatch.rst
-> @@ -612,6 +612,13 @@ Commit message
->  
->      See: https://www.kernel.org/doc/html/latest/process/submitting-patches.html#describe-your-changes
->  
-> +  **BAD_FIXES_TAG**
-> +    The Fixes: tag is malformed or does not follow the community conventions.
-> +    This can occur if the tag have been split into multiple lines (e.g., when
-> +    pasted in an email program with word wrapping enabled).
-> +
-> +    See: https://www.kernel.org/doc/html/latest/process/submitting-patches.html#describe-your-changes
-> +
->  
->  Comparison style
->  ----------------
-> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-> index 79e759aac543..ddc5c9d730c3 100755
-> --- a/scripts/checkpatch.pl
-> +++ b/scripts/checkpatch.pl
-> @@ -3140,6 +3140,50 @@ sub process {
->  			}
->  		}
->  
-> +# Check Fixes: styles is correct
-> +		if (!$in_header_lines &&
-> +		    $line =~ /^\s*fixes:?\s*(?:commit\s*)?[0-9a-f]{5,}\b/i) {
-> +			my $orig_commit = "";
-> +			my $id = "0123456789ab";
-> +			my $title = "commit title";
-> +			my $tag_case = 1;
-> +			my $tag_space = 1;
-> +			my $id_length = 1;
-> +			my $id_case = 1;
-> +			my $title_has_quotes = 0;
-> +
-> +			if ($line =~ /(\s*fixes:?)\s+([0-9a-f]{5,})\s+($balanced_parens)/i) {
-> +				my $tag = $1;
-> +				$orig_commit = $2;
-> +				$title = $3;
-> +
-> +				$tag_case = 0 if $tag eq "Fixes:";
-> +				$tag_space = 0 if ($line =~ /^fixes:? [0-9a-f]{5,} ($balanced_parens)/i);
-> +
-> +				$id_length = 0 if ($orig_commit =~ /^[0-9a-f]{12}$/i);
-> +				$id_case = 0 if ($orig_commit !~ /[A-F]/);
-> +
-> +				# Always strip leading/trailing parens then double quotes if existing
-> +				$title = substr($title, 1, -1);
-> +				if ($title =~ /^".*"$/) {
-> +					$title = substr($title, 1, -1);
-> +					$title_has_quotes = 1;
-> +				}
-> +			}
-> +
-> +			my ($cid, $ctitle) = git_commit_info($orig_commit, $id,
-> +							     $title);
-> +
-> +			if ($ctitle ne $title || $tag_case || $tag_space ||
-> +			    $id_length || $id_case || !$title_has_quotes) {
-> +				if (WARN("BAD_FIXES_TAG",
-> +				     "Please use correct Fixes: style 'Fixes: <12 chars of sha1> (\"<title line>\")' - ie: 'Fixes: $cid (\"$ctitle\")'\n" . $herecurr) &&
-> +				    $fix) {
-> +					$fixed[$fixlinenr] = "Fixes: $cid (\"$ctitle\")";
-> +				}
-> +			}
-> +		}
-> +
->  # Check email subject for common tools that don't need to be mentioned
->  		if ($in_header_lines &&
->  		    $line =~ /^Subject:.*\b(?:checkpatch|sparse|smatch)\b[^:]/i) {
+This isn't a fix by any stretch of the imagination.
 
+         M.
+-- 
+Jazz is not dead. It just smells funny...
