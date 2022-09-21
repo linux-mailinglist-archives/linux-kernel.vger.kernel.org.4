@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 242B35C035F
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 18:03:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51A3C5C035D
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 18:03:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232259AbiIUQDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 12:03:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56592 "EHLO
+        id S231972AbiIUQDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 12:03:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232719AbiIUQAU (ORCPT
+        with ESMTP id S232689AbiIUQAQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 12:00:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B311A9DF8F;
-        Wed, 21 Sep 2022 08:53:55 -0700 (PDT)
+        Wed, 21 Sep 2022 12:00:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B52674BA3;
+        Wed, 21 Sep 2022 08:53:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B4C8FB830C9;
-        Wed, 21 Sep 2022 15:52:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05345C433D6;
-        Wed, 21 Sep 2022 15:52:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A5F963147;
+        Wed, 21 Sep 2022 15:52:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F900C433C1;
+        Wed, 21 Sep 2022 15:52:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663775542;
-        bh=jN0Lc6jlIOmgTulc4MuV92P93WKXoBBKqq7m2qRdg0g=;
+        s=korg; t=1663775548;
+        bh=q2rdojOC/Y1HNKXuY19Te1mgE+B3k63DiAodRvNHeOM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fOksCevsErLwmgIRhoRNf5dZ21BEjnxpAmKXN5ap4+MkBD534ydygtSdqynkb854M
-         3ttByukG+68mtlw/c7zAhaUiRNvg96OI1rcLuQlhylZrdse0V+S2QWwV/HcZvakgHc
-         A+zuIrkkNqDy6prQihm6X5ZI310TwFZZ1CDJKuoE=
+        b=ukjai7ahWEcba/vrZBYQB26SlclsCJF29aU2jSdZp4sBcqScS4Sw0VNKpIruDjX4D
+         c/nOpLqZ/4aHJR/BCzToDCtUBv1h3kV/sXjiSwgIj+LW6/0MFQLOP+RkeK/nCVS8uk
+         LoSgO7NGasMR3x5TSAjmhK0oOaFPs3ThTf6aFy1E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
+        stable@vger.kernel.org, "jerry.meng" <jerry-meng@foxmail.com>,
+        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
+        Paolo Abeni <pabeni@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 31/39] ALSA: hda/sigmatel: Keep power up while beep is enabled
-Date:   Wed, 21 Sep 2022 17:46:36 +0200
-Message-Id: <20220921153646.747170273@linuxfoundation.org>
+Subject: [PATCH 5.10 33/39] net: usb: qmi_wwan: add Quectel RM520N
+Date:   Wed, 21 Sep 2022 17:46:38 +0200
+Message-Id: <20220921153646.802396852@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220921153645.663680057@linuxfoundation.org>
 References: <20220921153645.663680057@linuxfoundation.org>
@@ -53,69 +55,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: jerry.meng <jerry-meng@foxmail.com>
 
-[ Upstream commit 414d38ba871092aeac4ed097ac4ced89486646f7 ]
+[ Upstream commit e1091e226a2bab4ded1fe26efba2aee1aab06450 ]
 
-It seems that the beep playback doesn't work well on IDT codec devices
-when the codec auto-pm is enabled.  Keep the power on while the beep
-switch is enabled.
+add support for Quectel RM520N which is based on Qualcomm SDX62 chip.
 
-Link: https://bugzilla.suse.com/show_bug.cgi?id=1200544
-Link: https://lore.kernel.org/r/20220904072750.26164-1-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+0x0801: DIAG + NMEA + AT + MODEM + RMNET
+
+T:  Bus=03 Lev=01 Prnt=01 Port=01 Cnt=02 Dev#= 10 Spd=480  MxCh= 0
+D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=2c7c ProdID=0801 Rev= 5.04
+S:  Manufacturer=Quectel
+S:  Product=RM520N-GL
+S:  SerialNumber=384af524
+C:* #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
+I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=40 Driver=option
+E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
+E:  Ad=88(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=0f(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+
+Signed-off-by: jerry.meng <jerry-meng@foxmail.com>
+Acked-by: Bjørn Mork <bjorn@mork.no>
+Link: https://lore.kernel.org/r/tencent_E50CA8A206904897C2D20DDAE90731183C05@qq.com
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/pci/hda/patch_sigmatel.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ drivers/net/usb/qmi_wwan.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/sound/pci/hda/patch_sigmatel.c b/sound/pci/hda/patch_sigmatel.c
-index c662431bf13a..e9d0b0a30b99 100644
---- a/sound/pci/hda/patch_sigmatel.c
-+++ b/sound/pci/hda/patch_sigmatel.c
-@@ -209,6 +209,7 @@ struct sigmatel_spec {
+diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+index 48e8b94e4a7c..1502069f3a4e 100644
+--- a/drivers/net/usb/qmi_wwan.c
++++ b/drivers/net/usb/qmi_wwan.c
+@@ -1024,6 +1024,7 @@ static const struct usb_device_id products[] = {
+ 	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0512)},	/* Quectel EG12/EM12 */
+ 	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0620)},	/* Quectel EM160R-GL */
+ 	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0800)},	/* Quectel RM500Q-GL */
++	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0801)},	/* Quectel RM520N */
  
- 	/* beep widgets */
- 	hda_nid_t anabeep_nid;
-+	bool beep_power_on;
- 
- 	/* SPDIF-out mux */
- 	const char * const *spdif_labels;
-@@ -4447,6 +4448,26 @@ static int stac_suspend(struct hda_codec *codec)
- 	stac_shutup(codec);
- 	return 0;
- }
-+
-+static int stac_check_power_status(struct hda_codec *codec, hda_nid_t nid)
-+{
-+	struct sigmatel_spec *spec = codec->spec;
-+	int ret = snd_hda_gen_check_power_status(codec, nid);
-+
-+#ifdef CONFIG_SND_HDA_INPUT_BEEP
-+	if (nid == spec->gen.beep_nid && codec->beep) {
-+		if (codec->beep->enabled != spec->beep_power_on) {
-+			spec->beep_power_on = codec->beep->enabled;
-+			if (spec->beep_power_on)
-+				snd_hda_power_up_pm(codec);
-+			else
-+				snd_hda_power_down_pm(codec);
-+		}
-+		ret |= spec->beep_power_on;
-+	}
-+#endif
-+	return ret;
-+}
- #else
- #define stac_suspend		NULL
- #endif /* CONFIG_PM */
-@@ -4459,6 +4480,7 @@ static const struct hda_codec_ops stac_patch_ops = {
- 	.unsol_event = snd_hda_jack_unsol_event,
- #ifdef CONFIG_PM
- 	.suspend = stac_suspend,
-+	.check_power_status = stac_check_power_status,
- #endif
- 	.reboot_notify = stac_shutup,
- };
+ 	/* 3. Combined interface devices matching on interface number */
+ 	{QMI_FIXED_INTF(0x0408, 0xea42, 4)},	/* Yota / Megafon M100-1 */
 -- 
 2.35.1
 
