@@ -2,84 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69C105BFAA0
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 11:19:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CC175BFA9D
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 11:19:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231574AbiIUJTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 05:19:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50878 "EHLO
+        id S231545AbiIUJTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 05:19:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231774AbiIUJS5 (ORCPT
+        with ESMTP id S231743AbiIUJSx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 05:18:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D680F915C8;
-        Wed, 21 Sep 2022 02:18:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Wed, 21 Sep 2022 05:18:53 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D219971BC4
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 02:18:16 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 6BE4121A86;
+        Wed, 21 Sep 2022 09:17:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1663751857; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=tfNl4o9+urnDQa8kJpnjW95lk/YUU1fVTkOxttWkYV0=;
+        b=bJA9yq+tvPSgDOqW0hGseYqWjf1OycU778ZoYFcVNfnWYQCC/yJDUsax1jvqhrK5d+Gz21
+        9dMnpw3yvmmesMpS2nVEN4hZ6wisfTuyKzpLO2/m8Mq3KRikMXq4PREUNh2t/+cn2UHbP7
+        MzhzkHZdPlyl17LjRWVxAnKmQMCz21Y=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1663751857;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=tfNl4o9+urnDQa8kJpnjW95lk/YUU1fVTkOxttWkYV0=;
+        b=IXai/28aksOC8RhTwLXeZzaikswsNejvvEoTpXJHAzKL2umq7/WJfBbtZUTXGo5ndUhztz
+        5widlaBb2Kd5K9Bw==
+Received: from localhost.localdomain (unknown [10.100.208.98])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 76F72622CA;
-        Wed, 21 Sep 2022 09:17:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1966C433D6;
-        Wed, 21 Sep 2022 09:17:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663751847;
-        bh=U2I2rOq/quTseGcL7DoJKHssxhvKxWZ6qbZ9HMmsUr8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=MMANVzFW/zdQo1U0bB0i/Nms58BzOuxVMG+5x1D4ML5Tkw20Vhw0oUVrTQjQAVnpH
-         BJ/L64eo/6IyMcffKvO8Ewcdt0PxjXDknoj9Waxlk+YNi9HbxabUvz94AI7Uh/Q2nw
-         k+uAwa+VU3/nkKIiJ1s0XMyuVkew6sI3Y6v8oPKyhM9a5Pco0Y+ef4x+B3XMhdlNlQ
-         rmJb9lqBFiH1xd+Tx5aEKPKCK4Nc/GREVndzeN117qo4v7GxTA0+mqPAeww3j1TVWa
-         XBxIzXWfMs+Z7cJqr5iFuw2dqDzVvFRybbHW0l7vMacU/KyMus14VkOW9nWfJGTygp
-         MBf0CaGG0YG2A==
-Message-ID: <eec6e8b9-f39f-425a-4217-9c15b52600af@kernel.org>
-Date:   Wed, 21 Sep 2022 11:17:20 +0200
+        by relay2.suse.de (Postfix) with ESMTPS id C9FA92C142;
+        Wed, 21 Sep 2022 09:17:36 +0000 (UTC)
+From:   Jiri Slaby <jslaby@suse.cz>
+To:     peterz@infradead.org
+Cc:     linux-kernel@vger.kernel.org, Jiri Slaby <jslaby@suse.cz>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jason Baron <jbaron@akamai.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ard Biesheuvel <ardb@kernel.org>
+Subject: [PATCH] MAINTAINERS: add static_call_inline.c to STATIC BRANCH/CALL
+Date:   Wed, 21 Sep 2022 11:17:33 +0200
+Message-Id: <20220921091733.13146-1-jslaby@suse.cz>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v3 0/3] Add watchdog support for MT8188 Soc
-Content-Language: en-US
-To:     Runyang Chen <Runyang.Chen@mediatek.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, nfraprado@collabora.com
-Cc:     angelogioacchino.delregno@collabora.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
-References: <20220920105622.25666-1-Runyang.Chen@mediatek.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220920105622.25666-1-Runyang.Chen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/09/2022 12:56, Runyang Chen wrote:
-> From: Runyang Chen <runyang.chen@mediatek.com>
-> 
-> Based on tag: next-20220919, linux-next/master
-> 
-> Refer to the discussion in the link:
-> https://patchwork.kernel.org/project/linux-mediatek/patch/20220721014845.19044-2-allen-kh.cheng@mediatek.com/
-> The other wdt compatible strings are unchanged.So, won't apply the
-> series above
-> 
-> v3:
-> Rebase on 6.0-rc5 and add reviewed-by and acked-by tag.
+Commit 8fd4ddda2f49 (static_call: Don't make __static_call_return0
+static) split static_call.c and static_call_inline.c was created. This
+was not reflected in MAINTAINERS.
 
-If you rebased in, then why do you keep Ccing different address than one
-in scripts/get_maintainers.pl?
+Fix it now by adding a static_call*.c glob.
 
-Best regards,
-Krzysztof
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: Jason Baron <jbaron@akamai.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Ard Biesheuvel <ardb@kernel.org>
+Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+---
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 9ae989b32ebb..22b2b12d0478 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -19430,7 +19430,7 @@ F:	arch/*/kernel/static_call.c
+ F:	include/linux/jump_label*.h
+ F:	include/linux/static_call*.h
+ F:	kernel/jump_label.c
+-F:	kernel/static_call.c
++F:	kernel/static_call*.c
+ 
+ STI AUDIO (ASoC) DRIVERS
+ M:	Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+-- 
+2.37.3
 
