@@ -2,86 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 462765BF6C2
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 08:53:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C4B85BF6C7
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 08:54:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230064AbiIUGxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 02:53:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58544 "EHLO
+        id S229870AbiIUGyB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 02:54:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiIUGxo (ORCPT
+        with ESMTP id S230107AbiIUGx4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 02:53:44 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26C466178;
-        Tue, 20 Sep 2022 23:53:43 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1oatc4-00073A-Ea; Wed, 21 Sep 2022 08:53:40 +0200
-Message-ID: <1d1844f0-c773-6222-36c6-862e14f6020d@leemhuis.info>
-Date:   Wed, 21 Sep 2022 08:53:39 +0200
+        Wed, 21 Sep 2022 02:53:56 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4E8653340C;
+        Tue, 20 Sep 2022 23:53:54 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 16D8C143D;
+        Tue, 20 Sep 2022 23:54:00 -0700 (PDT)
+Received: from [10.162.41.8] (unknown [10.162.41.8])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0949D3F73D;
+        Tue, 20 Sep 2022 23:54:11 -0700 (PDT)
+Message-ID: <888da5f3-104c-3929-c21e-c710922d6f1e@arm.com>
+Date:   Wed, 21 Sep 2022 12:23:40 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Content-Language: en-US, de-DE
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Joerg Roedel <joro@8bytes.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>, iommu@lists.linux.dev,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: Getting the regression
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 4/4] arm64: support batched/deferred tlb shootdown
+ during page reclamation
+Content-Language: en-US
+To:     Yicong Yang <yangyicong@huawei.com>, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
+        x86@kernel.org, catalin.marinas@arm.com, will@kernel.org,
+        linux-doc@vger.kernel.org
+Cc:     corbet@lwn.net, peterz@infradead.org, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, darren@os.amperecomputing.com,
+        yangyicong@hisilicon.com, huzhanyuan@oppo.com, lipeifeng@oppo.com,
+        zhangshiming@oppo.com, guojian@oppo.com, realmz6@gmail.com,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, Barry Song <21cnbao@gmail.com>,
+        wangkefeng.wang@huawei.com, xhao@linux.alibaba.com,
+        prime.zeng@hisilicon.com, Barry Song <v-songbaohua@oppo.com>,
+        Nadav Amit <namit@vmware.com>, Mel Gorman <mgorman@suse.de>
+References: <20220822082120.8347-1-yangyicong@huawei.com>
+ <20220822082120.8347-5-yangyicong@huawei.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <20220822082120.8347-5-yangyicong@huawei.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1663743223;3ac4ea60;
-X-HE-SMSGID: 1oatc4-00073A-Ea
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg! As you likely heard already, 5.19.9 introduced a regression
-that breaks Thunderbolt and USB-C docks (and apparently Wifi in some
-cases as well) on quite a few (many?) modern systems. It's one of those
-problems where I think "hey, we ideally should fix this in stable as
-fast as possible" we briefly talked about last week on the LPC hallways.
-That made me wonder how to actually archive that in this particular case
-while keeping all involved parties happy and not skipping any CI testing
-queues considered important.
 
-FWIW, here are a few few reports about the issue (I assume there are
-some for Arch Linux and openSUSE Tumbleweed as well, but didn't check).
+On 8/22/22 13:51, Yicong Yang wrote:
+> +static inline void arch_tlbbatch_add_mm(struct arch_tlbflush_unmap_batch *batch,
+> +					struct mm_struct *mm,
+> +					unsigned long uaddr)
+> +{
+> +	__flush_tlb_page_nosync(mm, uaddr);
+> +}
+> +
+> +static inline void arch_tlbbatch_flush(struct arch_tlbflush_unmap_batch *batch)
+> +{
+> +	dsb(ish);
+> +}
 
-https://lore.kernel.org/linux-iommu/485A6EA5-6D58-42EA-B298-8571E97422DE@getmailspring.com/
-https://bugzilla.kernel.org/show_bug.cgi?id=216497
-https://bugzilla.redhat.com/show_bug.cgi?id=2128458
-https://bugzilla.redhat.com/show_bug.cgi?id=2127753
+Just wondering if arch_tlbbatch_add_mm() could also detect continuous mapping
+TLB invalidation requests on a given mm and try to generate a range based TLB
+invalidation such as flush_tlb_range().
 
-A revert of the culprit (9cd4f1434479f ("iommu/vt-d: Fix possible
-recursive locking in intel_iommu_init()"); in 5.19.y it's 	9516acba29e3)
-for mainline is here:
-https://lore.kernel.org/lkml/20220920081701.3453504-1-baolu.lu@linux.intel.com/
+struct arch_tlbflush_unmap_batch via task->tlb_ubc->arch can track continuous
+ranges while being queued up via arch_tlbbatch_add_mm(), any range formed can
+later be flushed in subsequent arch_tlbbatch_flush() ?
 
-A few hours ago the revert was queued to get send to Joerg:
-https://lore.kernel.org/linux-iommu/20220921024054.3570256-1-baolu.lu@linux.intel.com/
+OR
 
-I fear it could easily take another week to get this fixed in stable
-depending on how fast the patch makes it to mainline and the timing of
-the next 5.19.y release and its -rc phase. That to me sounds like way
-too long for a problem like this that apparently plagues quite a few
-people.
-
-That made me wonder: would you in cases like this be willing to start
-the -rc phase for a interim 5.19.y release with just that revert while
-it's still heading towards mainline? Then the CI systems that test
-stable -rcs could chew on things already; and the new stable release
-could go out right after the revert landed in mainline (unless the
-testing finds any problems, of course).
-
-Ciao, Thorsten
+It might not be worth the effort and complexity, in comparison to performance
+improvement, TLB range flush brings in ?
