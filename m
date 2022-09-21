@@ -2,146 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4CB75BFF23
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 15:48:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BFCF5BFF24
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 15:49:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229544AbiIUNsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 09:48:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40196 "EHLO
+        id S229887AbiIUNtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 09:49:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbiIUNsO (ORCPT
+        with ESMTP id S229775AbiIUNtO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 09:48:14 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD637285C;
-        Wed, 21 Sep 2022 06:48:13 -0700 (PDT)
-Received: from notapiano (unknown [71.190.76.4])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Wed, 21 Sep 2022 09:49:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0592572696;
+        Wed, 21 Sep 2022 06:49:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 98C5D660035D;
-        Wed, 21 Sep 2022 14:48:10 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1663768091;
-        bh=kHonNTF/Lzlr8aSshRxKzH5rWoJVYD+SKE3V/t0eknU=;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9D177B82370;
+        Wed, 21 Sep 2022 13:49:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C744C433D6;
+        Wed, 21 Sep 2022 13:49:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663768151;
+        bh=7CdrmSk3ix6XsmoJN2/gSLhPpcd8E1qqS0s4+WhE+kM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YhoFbIAxA6bxocnv8A8BbQ2z9aflUs/v/bLdPBGTtbJx6ZWh92NoUz6Hvmt/5CySh
-         qv9JK0gbugoCOmDebyFePqygFBJ01yH1JAhiRXb1L0GXahjmozyrX/l8M/ameLEskL
-         YRj14SGj1VhfC+occC/FEnzAoBLi6AB8E/DcRvsy8gcFHFpV1rEY2asLRXifO6y8kk
-         +1Dpv6ia2erykaS2SCM298Fl8hL+8mOkKLyLnH2ZyAY1VjEcJpAs8RRmh3EwK/RylK
-         Mg3CoppufEHx61ro0O3vgMOJhUf11v7SfDC/oRkj5OWGL25jiTUTuvp3u40eWXraNT
-         uGIESuRMOTOzw==
-Date:   Wed, 21 Sep 2022 09:48:06 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Chen-Yu Tsai <wenst@chromium.org>, kernel@collabora.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH 1/3] arm64: dts: mediatek: asurada: Add display regulators
-Message-ID: <20220921134806.lbg5meuy4fn6pifm@notapiano>
-References: <20220908171153.670762-1-nfraprado@collabora.com>
- <20220908171153.670762-2-nfraprado@collabora.com>
- <ab2027b9-17e8-4fe8-3847-84c54d6f9d58@collabora.com>
+        b=Jotdytc7f/1m3zYiQOk8bcz8FjQFfp2MuUe/TmuURUsjlD23vZpZ9nZjiBJpndVMe
+         ZsWX5CyrJ7CDPDloWLp3U4AXhUmJBjW50QCqhsrYjGUy4c9uAof9LcCUwH8qDy7+ti
+         j8FEa2bfoe9EbEXtPqBymBFYyViUMBBdGnlSGrMRotUAa4E34CHCc3u+RUT6ZzUjRe
+         JlTJuKnP/phC/DrCAestDzE7oLokxmKF6nP/jCn8yVFlAdfMs3hywkE7jZclWe3mo9
+         9Y80PMvNzvDN08UylBSaMr3C88Bp2k/khYifok/7XvMvKhIG7hYd/wsB7t2BcPiEe8
+         0Qt0ZhgF4UeHw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id C059C40856; Wed, 21 Sep 2022 14:49:08 +0100 (IST)
+Date:   Wed, 21 Sep 2022 14:49:08 +0100
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] perf tools: Honor namespace when synthesizing
+ build-id
+Message-ID: <YysWVB724LBSFhII@kernel.org>
+References: <20220920222822.2171056-1-namhyung@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ab2027b9-17e8-4fe8-3847-84c54d6f9d58@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220920222822.2171056-1-namhyung@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 09, 2022 at 09:46:33AM +0200, AngeloGioacchino Del Regno wrote:
-> Il 08/09/22 19:11, Nícolas F. R. A. Prado ha scritto:
-> > Add the regulators present on the Asurada platform that are used to
-> > power the internal and external displays.
-> > 
-> > Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> > 
-> > ---
-> > 
-> >   .../boot/dts/mediatek/mt8192-asurada.dtsi     | 114 ++++++++++++++++++
-> >   1 file changed, 114 insertions(+)
-> > 
-> > diff --git a/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi b/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
-> > index 4b314435f8fd..1d99e470ea1a 100644
-> > --- a/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
-> > +++ b/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
+Em Tue, Sep 20, 2022 at 03:28:21PM -0700, Namhyung Kim escreveu:
+> It needs to go into a namespace before reading a file.
 > 
-> ..snip..
-> 
-> > @@ -56,6 +116,18 @@ pp3300_ldo_z: regulator-3v3-z {
-> >   		vin-supply = <&ppvar_sys>;
-> >   	};
-> 
-> Can you please add a comment here advertising that this regulator
-> will not only provide power to the MIPI bridge, but *also* to the
-> display panel itself?
-> 
-> This is to make sure that everyone understands what's going on, and
-> also that we ourselves don't forget about that.
-> 
-> Probably something like:
-> /* pp3300_mipibrdg also enables pp3300_panel */
-> 
-> I would then propose to add a "regulator-fixed" that has no GPIO
-> but with vin-supply as this one.
-> 
-> pp3300_panel: regulator-3v3-panel {
-> 	compatible = "regulator-fixed";
-> 	regulator-name = "pp3300_panel";
-> 	regulator-min-microvolt = <3300000>;
-> 	regulator-max-microvolt = <3300000>;
-> 
-> 	vin-supply = <&pp3300_mipibrdg>;
-> };
-> 
-> I would also test assigning this regulator to the panel node, as this
-> will make sure to cover future corner cases (think about PM suspend/resume).
-> 
-> P.S.: If you add the pp3300_panel regulator-fixed with that vin-supply,
->       maybe the proposed comment would become a bit overkill. Your choice!
+> Fixes: 4183a8d70a28 ("perf tools: Allow synthesizing the build id for kernel/modules/tasks in PERF_RECORD_MMAP2")
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 
-Hi Angelo,
+Thanks, applied to perf/urgent.
 
-thanks for the feedback.
+- Arnaldo
 
-I think the current layout makes more sense based on my understanding of the
-power routing here: a single power line output by the pp3300_mipibrdg regulator
-powers both the ANX chip as well as the panel. So I'm going to keep it the way
-it is for now. If there are any other concerns please let me know.
-
-Thanks,
-Nícolas
-
+> ---
+>  tools/perf/util/synthetic-events.c | 17 ++++++++++++++---
+>  1 file changed, 14 insertions(+), 3 deletions(-)
 > 
-> Cheers,
-> Angelo
-> 
-> > +	pp3300_mipibrdg: regulator-3v3-mipibrdg {
-> > +		compatible = "regulator-fixed";
-> > +		regulator-name = "pp3300_mipibrdg";
-> > +		pinctrl-names = "default";
-> > +		pinctrl-0 = <&pp3300_mipibrdg_en_pins>;
-> > +		regulator-min-microvolt = <3300000>;
-> > +		regulator-max-microvolt = <3300000>;
-> > +		enable-active-high;
-> > +		regulator-boot-on;
-> > +		gpio = <&pio 127 GPIO_ACTIVE_HIGH>;
-> > +	};
-> > +
-> >   	/* separately switched 3.3V power rail */
-> >   	pp3300_u: regulator-3v3-u {
-> >   		compatible = "regulator-fixed";
-> 
+> diff --git a/tools/perf/util/synthetic-events.c b/tools/perf/util/synthetic-events.c
+> index 0ff57ca24577..289ea17ac5f7 100644
+> --- a/tools/perf/util/synthetic-events.c
+> +++ b/tools/perf/util/synthetic-events.c
+> @@ -367,13 +367,24 @@ static void perf_record_mmap2__read_build_id(struct perf_record_mmap2 *event,
+>  					     bool is_kernel)
+>  {
+>  	struct build_id bid;
+> +	struct nsinfo *nsi;
+> +	struct nscookie nc;
+>  	int rc;
+>  
+> -	if (is_kernel)
+> +	if (is_kernel) {
+>  		rc = sysfs__read_build_id("/sys/kernel/notes", &bid);
+> -	else
+> -		rc = filename__read_build_id(event->filename, &bid) > 0 ? 0 : -1;
+> +		goto out;
+> +	}
+> +
+> +	nsi = nsinfo__new(event->pid);
+> +	nsinfo__mountns_enter(nsi, &nc);
+>  
+> +	rc = filename__read_build_id(event->filename, &bid) > 0 ? 0 : -1;
+> +
+> +	nsinfo__mountns_exit(&nc);
+> +	nsinfo__put(nsi);
+> +
+> +out:
+>  	if (rc == 0) {
+>  		memcpy(event->build_id, bid.data, sizeof(bid.data));
+>  		event->build_id_size = (u8) bid.size;
+> -- 
+> 2.37.3.968.ga6b4b080e4-goog
+
+-- 
+
+- Arnaldo
