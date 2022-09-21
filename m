@@ -2,79 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 952A25BF87B
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 10:01:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01ADB5BF87E
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 10:01:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231239AbiIUIAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 04:00:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39830 "EHLO
+        id S231247AbiIUIBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 04:01:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbiIUIAt (ORCPT
+        with ESMTP id S229693AbiIUIAu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 04:00:49 -0400
-Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CBEA82847;
-        Wed, 21 Sep 2022 01:00:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1663747248;
-  x=1695283248;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=eQ9kdscepu/ZIW6IjLVX0T4gfipwtAWzN3YK8J7p8n0=;
-  b=M+cg4qgWqPFV4RKgFypIbCwauKoUkBAJOprRwFSltLmN2QCXKE3VpKPq
-   CO2S5JUtp3g2Sg214c9IcZ3k8OKXHbCdT+yFUec3SrfpVHP+u2SRyE+mD
-   Qvc/xpL2qtd6sWcJv13NggC1UMkcDa3f3G3ohxjc6LiIn3z//XzPai7/D
-   V5HcL2HPk+/PkWTQ5CDWRFSzDAF3JF01lJ6TXABNTbpk6zUfNbx1i0d8o
-   bxEaIZGFptlmnJ8a2jyWUniDtS/lShuGCDXWqg5UAehSOvzCcgLNbhwCy
-   oRMxq+9ne0GsL8U7CjKZTbCYYhWJTfaaaA8L44QEQtpeWKHc6s9SNj3kk
-   Q==;
-Message-ID: <9074bb0e-5490-ebe4-6518-1efd7416aa5c@axis.com>
-Date:   Wed, 21 Sep 2022 10:00:43 +0200
+        Wed, 21 Sep 2022 04:00:50 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCECC82847;
+        Wed, 21 Sep 2022 01:00:49 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8A2926601F3F;
+        Wed, 21 Sep 2022 09:00:47 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1663747248;
+        bh=+67XwHwwwVr9Zy9Tqbi6F11v6db9RC2DSdJJb+2KAFg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=dpDnNOEO+DMIu1yXKQmnHpntygMwx1e12LaxutdYdaimetWWIwy7foz7wDU40z3vM
+         Nd3lG58+67iMOvxcchRHkDSstgnRgy1JPghhFsNNCP5XWH0YLwJZ/NJrJcM5wln0KE
+         Fwqf9Hyx8WX0301IWn670STkn+waoXjhec1qNgnKimhxbTwOAIMcdkjkRRpex1wSbh
+         qr4/n7LWVig9ZommdUMWzieQGpzMJQLgCDbNinI34cuS4kKZTRzQ2jWXtea+zokkrx
+         3EcQCYKBwOjZ6/VR9LALPixyXTfon+fXR28vkjdGGIjqBusyOXjREvBdgralwVQfJi
+         W59s+B3omIdaw==
+Message-ID: <66aa53cf-25ed-fc08-f92f-6a0aae48f2e7@collabora.com>
+Date:   Wed, 21 Sep 2022 10:00:44 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v3 2/3] dt-bindings: sound: ti,s3a227e: add control of
- debounce
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v5 2/4] thermal: mediatek: control buffer enablement
+ tweaks
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Astrid Rost <Astrid.Rost@axis.com>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        Amit Kucheria <amitk@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Dylan Reid <dgreid@chromium.org>
-CC:     kernel <kernel@axis.com>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-References: <20220919111258.3774-1-astrid.rost@axis.com>
- <20220919111258.3774-3-astrid.rost@axis.com>
- <79658ad6-fd1c-68aa-88e0-6ad5274bea9d@linaro.org>
-From:   Astrid Rost <astridr@axis.com>
-In-Reply-To: <79658ad6-fd1c-68aa-88e0-6ad5274bea9d@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.0.5.60]
-X-ClientProxiedBy: se-mail06w.axis.com (10.20.40.12) To se-mail05w.axis.com
- (10.20.40.11)
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Fabien Parent <fparent@baylibre.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Markus Schneider-Pargmann <msp@baylibre.com>,
+        linux-pm@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Michael Kao <michael.kao@mediatek.com>,
+        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220920-i350-thermal-up-v5-0-123bc852d199@baylibre.com>
+ <20220920-i350-thermal-up-v5-2-123bc852d199@baylibre.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220920-i350-thermal-up-v5-2-123bc852d199@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
->> +  ti,debounce-release-ms:
->> +    description: key release debounce time in ms (datasheet section 9.6.7).
->> +    enum:
->> +      - 0  #  0 ms
->> +      - 20 # 20 ms
+Il 20/09/22 17:03, Amjad Ouled-Ameur ha scritto:
+> From: Markus Schneider-Pargmann <msp@baylibre.com>
 > 
-> I don't see any improvements here.
+> Add logic in order to be able to turn on the control buffer on MT8365.
+> This change now allows to have control buffer support for MTK_THERMAL_V1,
+> and it allows to define the register offset, and mask used to enable it.
+> 
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
 
-Sorry, I miss understood. I have now just kept the enum values.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Astrid
+
