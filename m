@@ -2,105 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B1B75C050C
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 19:03:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C43105C0516
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 19:06:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230500AbiIURD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 13:03:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50090 "EHLO
+        id S229911AbiIURGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 13:06:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbiIURDE (ORCPT
+        with ESMTP id S229862AbiIURGr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 13:03:04 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1B718284D;
-        Wed, 21 Sep 2022 10:03:02 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 3007C1F8CA;
-        Wed, 21 Sep 2022 17:03:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1663779781; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CSBNW4JvmKppsNMMHKaTcBQ/8SMBBa+a7IGCYeQgCtE=;
-        b=HMTzIHmeWUNV9l2wsxzfUSlYDCzoRFpj2D0Jd4idAYXKkplJwnqSsc7We8fOPTXX3mCCbs
-        lq+ffxVoyltT0YQUQDkoVgNfX/WJnYakasL+RuA16GPfGeekVHOakGz3EjnLAMxmiR9e9E
-        N5K9L8Lt4ptHe5BvEeMqjedNyt/Gd68=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D1B9513A89;
-        Wed, 21 Sep 2022 17:03:00 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id WqE7MsRDK2ORFwAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Wed, 21 Sep 2022 17:03:00 +0000
-Date:   Wed, 21 Sep 2022 19:02:59 +0200
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Anatoly Pugachev <matorola@gmail.com>
-Cc:     Vasily Averin <vvs@openvz.org>,
-        Andrew Morton <akpm@linux-foundation.org>, kernel@openvz.org,
-        Linux Kernel list <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>, cgroups@vger.kernel.org,
-        Sparc kernel list <sparclinux@vger.kernel.org>
-Subject: Re: [sparc64] fails to boot, (was: Re: [PATCH memcg v6] net: set
- proper memcg for net_init hooks allocations)
-Message-ID: <20220921170259.GI8331@blackbody.suse.cz>
-References: <6b362c6e-9c80-4344-9430-b831f9871a3c@openvz.org>
- <f9394752-e272-9bf9-645f-a18c56d1c4ec@openvz.org>
- <20220918092849.GA10314@u164.east.ru>
- <CADxRZqyyHAtzaaPjcKi8AichGew2yi-_vQcKoLoxPanLvXZL0g@mail.gmail.com>
+        Wed, 21 Sep 2022 13:06:47 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FFEA95682
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 10:06:46 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id m3so9631695eda.12
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 10:06:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=13KrUn/vK4OvwOsT1GyfzamKvbOZHawCA5zcRq7muWw=;
+        b=K08ArTlVGsyc0SAIljgyi30InRUPlMtrNCxpDmu1hgp81UAVnxk/nCuUHorbHVEIwR
+         6S29osbtR09bB8cVoWs/j3VPhB4VSJ4E57HIk3O9wj/CaNvmV/GbulyUmDtlEn5gNZ4k
+         hZFUYg6ISBFf1gJp8MwoTnpoQdlhjnm8v9Rlo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=13KrUn/vK4OvwOsT1GyfzamKvbOZHawCA5zcRq7muWw=;
+        b=hU0omLJny+nEiSbRFeThqjMQkKRmfOqRt6xYFz5tEVAOZaOKyUD5ipUZ3+ikCfjzWh
+         NPQPaYbuEpEFMM67wxRSxapSg+xm8GK+qrNFkk14ITW52MN7q6dj4HKOGrQd7jXIy1eC
+         Ui+11OYTxtjNNLG0nsl/c6AaZdvx7utuhS0R4J9rXgrU31gcDmVjPUfH/Keke7Bndhgn
+         Wdo1J7rhN1hlRVyAe68tSEycbqE7eIJTj4fs9NtAXRy/U3dTGDxU7wUUtI1ItdZ4Gu1B
+         ZD7DQxTBT8A/4LTizZ3zn26YqXXB+KUyMjUKyM0QUVrvXMOlzNhBSGIXS3xwDiRts0X5
+         Qflg==
+X-Gm-Message-State: ACrzQf3vzbD20Dp6lcao6lP7LVtQihfSN6nCpH8AFCAWd5tSbewGMKes
+        91G/xzBhDmFssiG0djfp36tzAT6I4HLZPA==
+X-Google-Smtp-Source: AMsMyM5LostbLMrQ/ZLX3Zv+Rf1hWT+t6mpBiz9T0uqd2GeK3MULwy/v1qfzz59wqxZEro4/2cgLcg==
+X-Received: by 2002:a05:6402:d05:b0:425:b5c8:faeb with SMTP id eb5-20020a0564020d0500b00425b5c8faebmr25420939edb.273.1663780004402;
+        Wed, 21 Sep 2022 10:06:44 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-95-232-92-192.retail.telecomitalia.it. [95.232.92.192])
+        by smtp.gmail.com with ESMTPSA id t15-20020a170906608f00b0077a8fa8ba55sm1468940ejj.210.2022.09.21.10.06.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Sep 2022 10:06:43 -0700 (PDT)
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Michael Trimarchi <michael@amarulasolutions.com>,
+        linux-amarula@amarulasolutions.com,
+        Robin Murphy <robin.murphy@arm.com>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>, stable@vger.kernel.org,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        dmaengine@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v6] dmaengine: mxs: use platform_driver_register
+Date:   Wed, 21 Sep 2022 19:05:56 +0200
+Message-Id: <20220921170556.1055962-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CADxRZqyyHAtzaaPjcKi8AichGew2yi-_vQcKoLoxPanLvXZL0g@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello.
+Driver registration fails on SOC imx8mn as its supplier, the clock
+control module, is probed later than subsys initcall level. This driver
+uses platform_driver_probe which is not compatible with deferred probing
+and won't be probed again later if probe function fails due to clock not
+being available at that time.
 
-Thanks for the report.
+This patch replaces the use of platform_driver_probe with
+platform_driver_register which will allow probing the driver later again
+when the clock control module will be available.
 
-On Wed, Sep 21, 2022 at 05:44:56PM +0300, Anatoly Pugachev <matorola@gmail.com> wrote:
-> On Sun, Sep 18, 2022 at 12:39 PM Anatoly Pugachev <matorola@gmail.com> wrote:
-> >
-> >
-> > I'm unable to boot my sparc64 VM anymore (5.19 still boots, 6.0-rc1 does not),
-> > bisected up to this patch,
-> >
-> > mator@ttip:~/linux-2.6$ git bisect bad
-> > 1d0403d20f6c281cb3d14c5f1db5317caeec48e9 is the first bad commit
-> > commit 1d0403d20f6c281cb3d14c5f1db5317caeec48e9
-> 
-> reverting this patch makes my sparc64 box boot successfully.
+The __init annotation has been dropped because it is not compatible with
+deferred probing. The code is not executed once and its memory cannot be
+freed.
 
-The failed address falls into vmmemmap region (per your boot log
-output). It looks like the respective page/folio (of init_net struct) is
-unbacked there (and likely folio_test_slab fails dereferencing ->flags). 
+Fixes: a580b8c5429a ("dmaengine: mxs-dma: add dma support for i.MX23/28")
+Co-developed-by: Michael Trimarchi <michael@amarulasolutions.com>
+Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Acked-by: Sascha Hauer <s.hauer@pengutronix.de>
+Cc: stable@vger.kernel.org
 
-Would you mind sharing your kernel's config?
-(I'm most curious about CONFIG_SPARSMEM_VMEMMAP, I'm not familiar with
-your arch at all though.)
+---
 
-Thanks,
-Michal
+Changes in v6:
+- Drop __init annotation.
+- Drop the "dmaengine: mxs: fix section mismatch" patch.
+- Update the commit message.
+- Add Sascha Hauer's Acked-by tag.
+
+Changes in v5:
+- Update the commit message.
+- Add the patch "dmaengine: mxs: fix section mismatch" to remove the
+  warning raised by this patch.
+
+Changes in v4:
+- Restore __init in front of mxs_dma_probe() definition.
+- Rename the mxs_dma_driver variable to mxs_dma_driver_probe.
+- Update the commit message.
+- Use builtin_platform_driver() instead of module_platform_driver().
+
+Changes in v3:
+- Restore __init in front of mxs_dma_init() definition.
+
+Changes in v2:
+- Add the tag "Cc: stable@vger.kernel.org" in the sign-off area.
+
+ drivers/dma/mxs-dma.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/dma/mxs-dma.c b/drivers/dma/mxs-dma.c
+index 994fc4d2aca4..dc147cc2436e 100644
+--- a/drivers/dma/mxs-dma.c
++++ b/drivers/dma/mxs-dma.c
+@@ -670,7 +670,7 @@ static enum dma_status mxs_dma_tx_status(struct dma_chan *chan,
+ 	return mxs_chan->status;
+ }
+ 
+-static int __init mxs_dma_init(struct mxs_dma_engine *mxs_dma)
++static int mxs_dma_init(struct mxs_dma_engine *mxs_dma)
+ {
+ 	int ret;
+ 
+@@ -741,7 +741,7 @@ static struct dma_chan *mxs_dma_xlate(struct of_phandle_args *dma_spec,
+ 				     ofdma->of_node);
+ }
+ 
+-static int __init mxs_dma_probe(struct platform_device *pdev)
++static int mxs_dma_probe(struct platform_device *pdev)
+ {
+ 	struct device_node *np = pdev->dev.of_node;
+ 	const struct mxs_dma_type *dma_type;
+@@ -839,10 +839,7 @@ static struct platform_driver mxs_dma_driver = {
+ 		.name	= "mxs-dma",
+ 		.of_match_table = mxs_dma_dt_ids,
+ 	},
++	.probe = mxs_dma_probe,
+ };
+ 
+-static int __init mxs_dma_module_init(void)
+-{
+-	return platform_driver_probe(&mxs_dma_driver, mxs_dma_probe);
+-}
+-subsys_initcall(mxs_dma_module_init);
++builtin_platform_driver(mxs_dma_driver);
+-- 
+2.32.0
+
