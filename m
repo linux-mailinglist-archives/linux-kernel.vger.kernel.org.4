@@ -2,161 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F20E5BF325
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 03:51:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B584F5BF32F
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 03:56:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231592AbiIUBvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 21:51:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45064 "EHLO
+        id S231608AbiIUB40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 21:56:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231230AbiIUBvo (ORCPT
+        with ESMTP id S229993AbiIUB4U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 21:51:44 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 515E45A8BC;
-        Tue, 20 Sep 2022 18:51:43 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id b35so6581149edf.0;
-        Tue, 20 Sep 2022 18:51:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=exktuqp3Yz0O7DTOQAZcnS95GYeriR3HpkAUKtRfC9k=;
-        b=prR2d7IC8d3KTQfnrJuC6umcuUbOTsTHYnt/TN+mB7C0ksEVF09+y5pzwSr5hUcgfQ
-         3S6TNC1vUWzt0CWTWTgxvQjIa+srt85URQX7boT8YzDwD04EMRwBIQ5wnmBXQh5ojZFP
-         mb5cXtroEJ1QUj5aQRtcZ2eSbRkZJBKgrfwSP3a1AOX3PzhiPJyWAxUHhPNM+zljeEdC
-         RPEj/BOnWcjjlJYt0fOi284UWlelcdxkXKEvCjZSCzcEsRYi4gcGLSaSfe1/qg6igU91
-         8UMCYOG2BCz3q0FrpJnwDfEEW2sdvH6TIn+LqzqIaLzJkw4LJ5e/RUB96Vy1z5+wyzxa
-         40yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=exktuqp3Yz0O7DTOQAZcnS95GYeriR3HpkAUKtRfC9k=;
-        b=S55VB+qTcprBHueLRMfKA/50Dfh98PowgptRj/vawGlrO265TOYv9zllgi/6T9BSRA
-         iLMw7G+CbV0p1CXCgV2o44Uq58DSbEV1U9aWtxEw7ooXy2jBN32IbahrHuddQWmk98FN
-         1aFirpfUSwunAag1Ukdix6sf5xcThvvmhFqZ17zXKCBbNbMxuLoUof1vU+pWsdwjDo9D
-         jeoLgFGuxL1XEu9e68oSp0zobNfJIEFWVpHoLENsaybGYX7yXmef15hn4lLb8+t73BnL
-         fhBEsL4LbvJFBkU8ws8tvTIkUXQlAotB3m1Jy6IKINZn4z4jJroDgeZSkBuu2MSTlauQ
-         JUyA==
-X-Gm-Message-State: ACrzQf3OsbW8d+x2tIxvFWpWhk2Xj3H6XGBo24j7SdF3S0S1m2d4Nm+h
-        7rA92mEvemi0WWWpP9hjHhmwv0BT9HZq003e+Mo=
-X-Google-Smtp-Source: AMsMyM5v9dTlzaqMHbzByB0iQp6q4d17pnEGAvmmK5ZnmNrYfXTWs2nOXnV+B27bLIMXIY5zqA4ppXvLi5hsTQlRwTY=
-X-Received: by 2002:a05:6402:184:b0:442:fd54:2a21 with SMTP id
- r4-20020a056402018400b00442fd542a21mr22357803edv.129.1663725101717; Tue, 20
- Sep 2022 18:51:41 -0700 (PDT)
+        Tue, 20 Sep 2022 21:56:20 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D3C0879631;
+        Tue, 20 Sep 2022 18:56:17 -0700 (PDT)
+Received: from localhost.localdomain (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxReI3bypj2yYfAA--.51844S2;
+        Wed, 21 Sep 2022 09:56:13 +0800 (CST)
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     zhanghongchen <zhanghongchen@loongson.cn>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>
+Subject: [PATCH v2 1/3] MAINTAINERS: add maintainer for thermal driver for loongson2 SoCs
+Date:   Wed, 21 Sep 2022 09:56:03 +0800
+Message-Id: <20220921015605.17078-1-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20220822082120.8347-1-yangyicong@huawei.com> <20220822082120.8347-5-yangyicong@huawei.com>
- <302febae-508c-d73e-8676-d51752946645@arm.com> <CAGsJ_4ywwFJFi+q3Ra5UE3twzS9eExtvuXgoGK-8u4c1ZdXCBw@mail.gmail.com>
- <8c4f103b-8f04-d0ad-b30a-2db7e52b36a3@arm.com> <CAGsJ_4xCpSFneh7dPriGeM2_z5njB71cXKGfrarc8Kq0CA37CQ@mail.gmail.com>
-In-Reply-To: <CAGsJ_4xCpSFneh7dPriGeM2_z5njB71cXKGfrarc8Kq0CA37CQ@mail.gmail.com>
-From:   Barry Song <21cnbao@gmail.com>
-Date:   Wed, 21 Sep 2022 13:51:30 +1200
-Message-ID: <CAGsJ_4y0HrWd90ApAn=eDpYrkCigM6MyH=3cYnSuunZ5QpsD3w@mail.gmail.com>
-Subject: Re: [PATCH v3 4/4] arm64: support batched/deferred tlb shootdown
- during page reclamation
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     Yicong Yang <yangyicong@huawei.com>, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
-        x86@kernel.org, catalin.marinas@arm.com, will@kernel.org,
-        linux-doc@vger.kernel.org, corbet@lwn.net, peterz@infradead.org,
-        arnd@arndb.de, linux-kernel@vger.kernel.org,
-        darren@os.amperecomputing.com, yangyicong@hisilicon.com,
-        huzhanyuan@oppo.com, lipeifeng@oppo.com, zhangshiming@oppo.com,
-        guojian@oppo.com, realmz6@gmail.com, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        wangkefeng.wang@huawei.com, xhao@linux.alibaba.com,
-        prime.zeng@hisilicon.com, Barry Song <v-songbaohua@oppo.com>,
-        Nadav Amit <namit@vmware.com>, Mel Gorman <mgorman@suse.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8DxReI3bypj2yYfAA--.51844S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Xw1kAFWxZryrXF1kAw15XFb_yoWDJFb_AF
+        1Iqa18Za18AF1ak3ykZryxJ343Zr4xGF13A3Zrt39rA34Dtay3AFyDJwnxuw18Cr4UuryS
+        ya97Gr1xur12qjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbV8FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+        Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
+        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
+        8cxan2IY04v7MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJV
+        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
+        1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
+        IIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvE
+        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvj
+        DU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 21, 2022 at 1:50 PM Barry Song <21cnbao@gmail.com> wrote:
->
-> On Tue, Sep 20, 2022 at 8:45 PM Anshuman Khandual
-> <anshuman.khandual@arm.com> wrote:
-> >
-> >
-> >
-> > On 9/20/22 09:09, Barry Song wrote:
-> > > On Tue, Sep 20, 2022 at 3:00 PM Anshuman Khandual
-> > > <anshuman.khandual@arm.com> wrote:
-> > >>
-> > >>
-> > >> On 8/22/22 13:51, Yicong Yang wrote:
-> > >>> +static inline bool arch_tlbbatch_should_defer(struct mm_struct *mm)
-> > >>> +{
-> > >>> +     return true;
-> > >>> +}
-> > >>
-> > >> This needs to be conditional on systems, where there will be performance
-> > >> improvements, and should not just be enabled all the time on all systems.
-> > >> num_online_cpus() > X, which does not hold any cpu hotplug lock would be
-> > >> a good metric ?
-> > >
-> > > for a small system, i don't see how this patch will help, e.g. cpus <= 4;
-> > > so we can actually disable tlb-batch on small systems.
-> >
-> > Do not subscribe ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH based on NR_CPUS ?
-> > That might not help much as the default value is 256 for NR_CPUS.
-> >
-> > OR
-> >
-> > arch_tlbbatch_should_defer() checks on
-> >
-> > 1. online cpus                  (dont enable batched TLB if <= X)
-> > 2. ARM64_WORKAROUND_REPEAT_TLBI (dont enable batched TLB)
-> >
-> > > just need to check if we will have any race condition since hotplug will
-> > > make the condition true and false dynamically.
-> >
-> > If should_defer_flush() evaluate to be false, then ptep_clear_flush()
-> > clears and flushes the entry right away. This should not race with other
-> > queued up TLBI requests, which will be flushed separately. Wondering how
-> > there can be a race here !
->
-> Right. How about we make something as below?
->
-> static inline bool arch_tlbbatch_should_defer(struct mm_struct *mm)
-> {
->     /* for a small system very small number of CPUs, TLB shootdown is cheap */
->     if (num_online_cpus() <= 4 ||
-> unlikely(this_cpu_has_cap(ARM64_WORKAROUND_REPEAT_TLBI)))
->           return false;
->
-> #ifdef CONFIG_ARM64_WORKAROUND_REPEAT_TLBI
->     if (unlikely(this_cpu_has_cap(ARM64_WORKAROUND_REPEAT_TLBI)))
->          return false;
-> #endif
->
->     return true;
-> }
+Add zhanghongchen and myself as maintainer of the loongson2 SoC
+series thermal driver.
 
-sorry, i mean
+Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+---
+Change in v2:
+		1. Update file name.
 
-static inline bool arch_tlbbatch_should_defer(struct mm_struct *mm)
-{
-    /* for a small system very small number of CPUs, TLB shootdown is cheap */
-    if (num_online_cpus() <= 4)
-            return false;
+ MAINTAINERS | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-#ifdef CONFIG_ARM64_WORKAROUND_REPEAT_TLBI
-    if (unlikely(this_cpu_has_cap(ARM64_WORKAROUND_REPEAT_TLBI)))
-            return false;
-#endif
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 589517372408..63076e12c91a 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11899,6 +11899,14 @@ F:	drivers/*/*loongarch*
+ F:	Documentation/loongarch/
+ F:	Documentation/translations/zh_CN/loongarch/
+ 
++LOONGSON2 SOC SERIES THERMAL DRIVER
++M:	zhanghongchen <zhanghongchen@loongson.cn>
++M:	Yinbo Zhu <zhuyinbo@loongson.cn>
++L:	linux-pm@vger.kernel.org
++S:	Maintained
++F:	Documentation/devicetree/bindings/thermal/loongson2-thermal.yaml
++F:	drivers/thermal/loongson2_thermal.c
++
+ LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
+ M:	Sathya Prakash <sathya.prakash@broadcom.com>
+ M:	Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+-- 
+2.31.1
 
-    return true;
-}
-
->
-> Thanks
-> Barry
