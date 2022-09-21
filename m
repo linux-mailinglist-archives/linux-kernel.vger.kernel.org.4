@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90C045C022B
+	by mail.lfdr.de (Postfix) with ESMTP id 455885C022A
 	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:49:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231262AbiIUPtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 11:49:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50768 "EHLO
+        id S231191AbiIUPtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 11:49:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231610AbiIUPrz (ORCPT
+        with ESMTP id S231338AbiIUPr4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 11:47:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4FA091D13;
-        Wed, 21 Sep 2022 08:47:29 -0700 (PDT)
+        Wed, 21 Sep 2022 11:47:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9EE3923D3;
+        Wed, 21 Sep 2022 08:47:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6608FB82714;
-        Wed, 21 Sep 2022 15:47:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB644C433D6;
-        Wed, 21 Sep 2022 15:47:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CC50761BD5;
+        Wed, 21 Sep 2022 15:47:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD097C433C1;
+        Wed, 21 Sep 2022 15:47:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663775246;
-        bh=ROmjALs2aLv+mU6hjgmn6dS843ULyMub8FPpmP4DHrw=;
+        s=korg; t=1663775249;
+        bh=ithr9k7O+nzM2l5y5r8KeGH+jQGPQyK/7KtGeFY4fJE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OSo/R639pqZVTsW+VBiAf702QNd8qOPx69MeadDxnaGfpdxKRJKobXNuhewY+ebz0
-         WOBzHzY3XOBPyRGRvxU0r62QQHgZrxKzNEKT4/LlC58C/CF8jdcttxjAnhaqafyfdq
-         1UXHWGWf5PecRReHlSSsfI+jB4a210T3D2924ZnA=
+        b=zX1pcrUP5OwYv37JM7sjLeddSdUnE4HeIvRRURDmVHpiip4z5QZMeG2Ld2Kek3lbR
+         b6gZsTPNFsK55nepBwISd3L6Dz41ILFhRPtC6je+ItUbR6EO4NS6uTORpWCtFXxbfx
+         gJRw8mGb+7Wn95Np14V74hXNFbCjtZWqKXCAjryU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ashutosh Dixit <ashutosh.dixit@intel.com>,
-        Andi Shyti <andi.shyti@linux.intel.com>,
-        Sujaritha Sundaresan <sujaritha.sundaresan@intel.com>,
-        Matt Roper <matthew.d.roper@intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        stable@vger.kernel.org, Nirmoy Das <nirmoy.das@intel.com>,
+        Matthew Auld <matthew.auld@intel.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
         Rodrigo Vivi <rodrigo.vivi@intel.com>
-Subject: [PATCH 5.19 28/38] drm/i915/gt: Fix perf limit reasons bit positions
-Date:   Wed, 21 Sep 2022 17:46:12 +0200
-Message-Id: <20220921153647.157448691@linuxfoundation.org>
+Subject: [PATCH 5.19 29/38] drm/i915: Set correct domains values at _i915_vma_move_to_active
+Date:   Wed, 21 Sep 2022 17:46:13 +0200
+Message-Id: <20220921153647.186661288@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220921153646.298361220@linuxfoundation.org>
 References: <20220921153646.298361220@linuxfoundation.org>
@@ -57,51 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ashutosh Dixit <ashutosh.dixit@intel.com>
+From: Nirmoy Das <nirmoy.das@intel.com>
 
-commit d654f60898d56ffda461ef4ffd7bbe15159feb8d upstream.
+commit 08b812985996924c0ccf79d54a31fc9757c0a6ca upstream.
 
-Perf limit reasons bit positions were off by one.
+Fix regression introduced by commit:
+"drm/i915: Individualize fences before adding to dma_resv obj"
+which sets obj->read_domains to 0 for both read and write paths.
+Also set obj->write_domain to 0 on read path which was removed by
+the commit.
 
-Fixes: fa68bff7cf27 ("drm/i915/gt: Add sysfs throttle frequency interfaces")
-Cc: stable@vger.kernel.org # v5.18+
-Signed-off-by: Ashutosh Dixit <ashutosh.dixit@intel.com>
-Acked-by: Andi Shyti <andi.shyti@linux.intel.com>
-Reviewed-by: Sujaritha Sundaresan <sujaritha.sundaresan@intel.com>
-Signed-off-by: Matt Roper <matthew.d.roper@intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220908155821.1662110-1-ashutosh.dixit@intel.com
-Signed-off-by: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
-(cherry picked from commit 60017f34fc334d1bb25476b0b0996b4073e76c90)
+Fixes: 420a07b841d0 ("drm/i915: Individualize fences before adding to dma_resv obj")
+Signed-off-by: Nirmoy Das <nirmoy.das@intel.com>
+Cc: <stable@vger.kernel.org> # v5.16+
+Cc: Matthew Auld <matthew.auld@intel.com>
+Cc: Andrzej Hajda <andrzej.hajda@intel.com>
+Reviewed-by: Andrzej Hajda <andrzej.hajda@intel.com>
+Signed-off-by: Matthew Auld <matthew.auld@intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220907172641.12555-1-nirmoy.das@intel.com
+(cherry picked from commit 04f7eb3d4582a0a4da67c86e55fda7de2df86d91)
 Signed-off-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/i915/i915_reg.h |   16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ drivers/gpu/drm/i915/i915_vma.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/drivers/gpu/drm/i915/i915_reg.h
-+++ b/drivers/gpu/drm/i915/i915_reg.h
-@@ -1849,14 +1849,14 @@
+--- a/drivers/gpu/drm/i915/i915_vma.c
++++ b/drivers/gpu/drm/i915/i915_vma.c
+@@ -1870,12 +1870,13 @@ int _i915_vma_move_to_active(struct i915
+ 		enum dma_resv_usage usage;
+ 		int idx;
  
- #define GT0_PERF_LIMIT_REASONS		_MMIO(0x1381a8)
- #define   GT0_PERF_LIMIT_REASONS_MASK	0xde3
--#define   PROCHOT_MASK			REG_BIT(1)
--#define   THERMAL_LIMIT_MASK		REG_BIT(2)
--#define   RATL_MASK			REG_BIT(6)
--#define   VR_THERMALERT_MASK		REG_BIT(7)
--#define   VR_TDC_MASK			REG_BIT(8)
--#define   POWER_LIMIT_4_MASK		REG_BIT(9)
--#define   POWER_LIMIT_1_MASK		REG_BIT(11)
--#define   POWER_LIMIT_2_MASK		REG_BIT(12)
-+#define   PROCHOT_MASK			REG_BIT(0)
-+#define   THERMAL_LIMIT_MASK		REG_BIT(1)
-+#define   RATL_MASK			REG_BIT(5)
-+#define   VR_THERMALERT_MASK		REG_BIT(6)
-+#define   VR_TDC_MASK			REG_BIT(7)
-+#define   POWER_LIMIT_4_MASK		REG_BIT(8)
-+#define   POWER_LIMIT_1_MASK		REG_BIT(10)
-+#define   POWER_LIMIT_2_MASK		REG_BIT(11)
+-		obj->read_domains = 0;
+ 		if (flags & EXEC_OBJECT_WRITE) {
+ 			usage = DMA_RESV_USAGE_WRITE;
+ 			obj->write_domain = I915_GEM_DOMAIN_RENDER;
++			obj->read_domains = 0;
+ 		} else {
+ 			usage = DMA_RESV_USAGE_READ;
++			obj->write_domain = 0;
+ 		}
  
- #define CHV_CLK_CTL1			_MMIO(0x101100)
- #define VLV_CLK_CTL2			_MMIO(0x101104)
+ 		dma_fence_array_for_each(curr, idx, fence)
 
 
