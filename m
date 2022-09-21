@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 605A75C02C4
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:55:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 045875C0228
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:49:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231916AbiIUPzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 11:55:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39998 "EHLO
+        id S230077AbiIUPs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 11:48:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232007AbiIUPxz (ORCPT
+        with ESMTP id S231630AbiIUPsR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 11:53:55 -0400
+        Wed, 21 Sep 2022 11:48:17 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A72B9F0C6;
-        Wed, 21 Sep 2022 08:50:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4530D96FD3;
+        Wed, 21 Sep 2022 08:47:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 538C6B830A8;
-        Wed, 21 Sep 2022 15:49:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0872C433D6;
-        Wed, 21 Sep 2022 15:49:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8136EB830A0;
+        Wed, 21 Sep 2022 15:47:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7459C433D6;
+        Wed, 21 Sep 2022 15:47:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663775353;
-        bh=AAt8U3nEEEqK3vcBFMpse9zvDo4+DEuCbJMdlNlca+E=;
+        s=korg; t=1663775255;
+        bh=3ivMZ11AgPCuYA4AoxzTj/EVjww+87Beeoga76D963M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s4krf1o8JGQrQ/DZbwggikRb0pJRDm9l2lA50Zaq/Cpi/qhqsxy0CoDs0Z596TzNc
-         QMUFAqE+2Kw638tAiUi5LK1mJZxPLgvyit9wTJ6RORfucmqmsPMUaDp3O+5wLHqVpu
-         RDFAnsYhwhJj2HX9WWaSZyHwvV+flEg73tEhjiqM=
+        b=HmqKppku515muD6EuOaRDsK7dSp5SJe/Vcgp4aPtBu5/i+VhLevOB99hphlX3gS1Y
+         HVBeLbmVLSR/sU0a8fMQfPT5x0T3Ii+shhIi0ZekvIbzbGAQ4SOYVN/eJ/6mBVjOLx
+         72rHtPEb3JrK4MDrXP+iuq2qvrkI03cvsy6uM9qY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        stable@vger.kernel.org, Gustaw Smolarczyk <wielkiegie@gmail.com>,
         Lijo Lazar <lijo.lazar@amd.com>,
         Alex Deucher <alexander.deucher@amd.com>
-Subject: [PATCH 5.15 24/45] drm/amdgpu: move nbio sdma_doorbell_range() into sdma code for vega
-Date:   Wed, 21 Sep 2022 17:46:14 +0200
-Message-Id: <20220921153647.671726258@linuxfoundation.org>
+Subject: [PATCH 5.19 31/38] drm/amdgpu: Dont enable LTR if not supported
+Date:   Wed, 21 Sep 2022 17:46:15 +0200
+Message-Id: <20220921153647.245053881@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220921153646.931277075@linuxfoundation.org>
-References: <20220921153646.931277075@linuxfoundation.org>
+In-Reply-To: <20220921153646.298361220@linuxfoundation.org>
+References: <20220921153646.298361220@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,24 +54,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alex Deucher <alexander.deucher@amd.com>
+From: Lijo Lazar <lijo.lazar@amd.com>
 
-commit e3163bc8ffdfdb405e10530b140135b2ee487f89 upstream.
+commit 6c20490663553cd7e07d8de8af482012329ab9d6 upstream.
 
-This mirrors what we do for other asics and this way we are
-sure the sdma doorbell range is properly initialized.
+As per PCIE Base Spec r4.0 Section 6.18
+'Software must not enable LTR in an Endpoint unless the Root Complex
+and all intermediate Switches indicate support for LTR.'
 
-There is a comment about the way doorbells on gfx9 work that
-requires that they are initialized for other IPs before GFX
-is initialized.  However, the statement says that it applies to
-multimedia as well, but the VCN code currently initializes
-doorbells after GFX and there are no known issues there.  In my
-testing at least I don't see any problems on SDMA.
+This fixes the Unsupported Request error reported through AER during
+ASPM enablement.
 
-This is a prerequisite for fixing the Unsupported Request error
-reported through AER during driver load.
-
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216373
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=216455
 
 The error was unnoticed before and got visible because of the commit
 referenced below. This doesn't fix anything in the commit below, rather
@@ -81,67 +74,144 @@ to associate this commit with below one so that both go together.
 
 Fixes: 8795e182b02d ("PCI/portdrv: Don't disable AER reporting in get_port_device_capability()")
 
-Acked-by: Christian König <christian.koenig@amd.com>
-Reviewed-by: Lijo Lazar <lijo.lazar@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Cc: stable@vger.kernel.org
+Reported-by: Gustaw Smolarczyk <wielkiegie@gmail.com>
+Signed-off-by: Lijo Lazar <lijo.lazar@amd.com>
+Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/gpu/drm/amd/amdgpu/sdma_v4_0.c |    5 +++++
- drivers/gpu/drm/amd/amdgpu/soc15.c     |   22 ----------------------
- 2 files changed, 5 insertions(+), 22 deletions(-)
 
---- a/drivers/gpu/drm/amd/amdgpu/sdma_v4_0.c
-+++ b/drivers/gpu/drm/amd/amdgpu/sdma_v4_0.c
-@@ -1507,6 +1507,11 @@ static int sdma_v4_0_start(struct amdgpu
- 		WREG32_SDMA(i, mmSDMA0_CNTL, temp);
- 
- 		if (!amdgpu_sriov_vf(adev)) {
-+			ring = &adev->sdma.instance[i].ring;
-+			adev->nbio.funcs->sdma_doorbell_range(adev, i,
-+				ring->use_doorbell, ring->doorbell_index,
-+				adev->doorbell_index.sdma_doorbell_range);
-+
- 			/* unhalt engine */
- 			temp = RREG32_SDMA(i, mmSDMA0_F32_CNTL);
- 			temp = REG_SET_FIELD(temp, SDMA0_F32_CNTL, HALT, 0);
---- a/drivers/gpu/drm/amd/amdgpu/soc15.c
-+++ b/drivers/gpu/drm/amd/amdgpu/soc15.c
-@@ -1416,22 +1416,6 @@ static int soc15_common_sw_fini(void *ha
- 	return 0;
+Cc: stable@vger.kernel.org
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+---
+ drivers/gpu/drm/amd/amdgpu/nbio_v2_3.c |    9 ++++++++-
+ drivers/gpu/drm/amd/amdgpu/nbio_v6_1.c |    9 ++++++++-
+ drivers/gpu/drm/amd/amdgpu/nbio_v7_4.c |    9 ++++++++-
+ 3 files changed, 24 insertions(+), 3 deletions(-)
+
+--- a/drivers/gpu/drm/amd/amdgpu/nbio_v2_3.c
++++ b/drivers/gpu/drm/amd/amdgpu/nbio_v2_3.c
+@@ -380,6 +380,7 @@ static void nbio_v2_3_enable_aspm(struct
+ 		WREG32_PCIE(smnPCIE_LC_CNTL, data);
  }
  
--static void soc15_doorbell_range_init(struct amdgpu_device *adev)
--{
--	int i;
--	struct amdgpu_ring *ring;
--
--	/* sdma/ih doorbell range are programed by hypervisor */
--	if (!amdgpu_sriov_vf(adev)) {
--		for (i = 0; i < adev->sdma.num_instances; i++) {
--			ring = &adev->sdma.instance[i].ring;
--			adev->nbio.funcs->sdma_doorbell_range(adev, i,
--				ring->use_doorbell, ring->doorbell_index,
--				adev->doorbell_index.sdma_doorbell_range);
--		}
--	}
--}
--
- static int soc15_common_hw_init(void *handle)
++#ifdef CONFIG_PCIEASPM
+ static void nbio_v2_3_program_ltr(struct amdgpu_device *adev)
  {
- 	struct amdgpu_device *adev = (struct amdgpu_device *)handle;
-@@ -1451,12 +1435,6 @@ static int soc15_common_hw_init(void *ha
- 
- 	/* enable the doorbell aperture */
- 	soc15_enable_doorbell_aperture(adev, true);
--	/* HW doorbell routing policy: doorbell writing not
--	 * in SDMA/IH/MM/ACV range will be routed to CP. So
--	 * we need to init SDMA/IH/MM/ACV doorbell range prior
--	 * to CP ip block init and ring test.
--	 */
--	soc15_doorbell_range_init(adev);
- 
- 	return 0;
+ 	uint32_t def, data;
+@@ -401,9 +402,11 @@ static void nbio_v2_3_program_ltr(struct
+ 	if (def != data)
+ 		WREG32_PCIE(smnBIF_CFG_DEV0_EPF0_DEVICE_CNTL2, data);
  }
++#endif
+ 
+ static void nbio_v2_3_program_aspm(struct amdgpu_device *adev)
+ {
++#ifdef CONFIG_PCIEASPM
+ 	uint32_t def, data;
+ 
+ 	def = data = RREG32_PCIE(smnPCIE_LC_CNTL);
+@@ -459,7 +462,10 @@ static void nbio_v2_3_program_aspm(struc
+ 	if (def != data)
+ 		WREG32_PCIE(smnPCIE_LC_CNTL6, data);
+ 
+-	nbio_v2_3_program_ltr(adev);
++	/* Don't bother about LTR if LTR is not enabled
++	 * in the path */
++	if (adev->pdev->ltr_path)
++		nbio_v2_3_program_ltr(adev);
+ 
+ 	def = data = RREG32_SOC15(NBIO, 0, mmRCC_BIF_STRAP3);
+ 	data |= 0x5DE0 << RCC_BIF_STRAP3__STRAP_VLINK_ASPM_IDLE_TIMER__SHIFT;
+@@ -483,6 +489,7 @@ static void nbio_v2_3_program_aspm(struc
+ 	data &= ~PCIE_LC_CNTL3__LC_DSC_DONT_ENTER_L23_AFTER_PME_ACK_MASK;
+ 	if (def != data)
+ 		WREG32_PCIE(smnPCIE_LC_CNTL3, data);
++#endif
+ }
+ 
+ static void nbio_v2_3_apply_lc_spc_mode_wa(struct amdgpu_device *adev)
+--- a/drivers/gpu/drm/amd/amdgpu/nbio_v6_1.c
++++ b/drivers/gpu/drm/amd/amdgpu/nbio_v6_1.c
+@@ -282,6 +282,7 @@ static void nbio_v6_1_init_registers(str
+ 			mmBIF_BX_DEV0_EPF0_VF0_HDP_MEM_COHERENCY_FLUSH_CNTL) << 2;
+ }
+ 
++#ifdef CONFIG_PCIEASPM
+ static void nbio_v6_1_program_ltr(struct amdgpu_device *adev)
+ {
+ 	uint32_t def, data;
+@@ -303,9 +304,11 @@ static void nbio_v6_1_program_ltr(struct
+ 	if (def != data)
+ 		WREG32_PCIE(smnBIF_CFG_DEV0_EPF0_DEVICE_CNTL2, data);
+ }
++#endif
+ 
+ static void nbio_v6_1_program_aspm(struct amdgpu_device *adev)
+ {
++#ifdef CONFIG_PCIEASPM
+ 	uint32_t def, data;
+ 
+ 	def = data = RREG32_PCIE(smnPCIE_LC_CNTL);
+@@ -361,7 +364,10 @@ static void nbio_v6_1_program_aspm(struc
+ 	if (def != data)
+ 		WREG32_PCIE(smnPCIE_LC_CNTL6, data);
+ 
+-	nbio_v6_1_program_ltr(adev);
++	/* Don't bother about LTR if LTR is not enabled
++	 * in the path */
++	if (adev->pdev->ltr_path)
++		nbio_v6_1_program_ltr(adev);
+ 
+ 	def = data = RREG32_PCIE(smnRCC_BIF_STRAP3);
+ 	data |= 0x5DE0 << RCC_BIF_STRAP3__STRAP_VLINK_ASPM_IDLE_TIMER__SHIFT;
+@@ -385,6 +391,7 @@ static void nbio_v6_1_program_aspm(struc
+ 	data &= ~PCIE_LC_CNTL3__LC_DSC_DONT_ENTER_L23_AFTER_PME_ACK_MASK;
+ 	if (def != data)
+ 		WREG32_PCIE(smnPCIE_LC_CNTL3, data);
++#endif
+ }
+ 
+ const struct amdgpu_nbio_funcs nbio_v6_1_funcs = {
+--- a/drivers/gpu/drm/amd/amdgpu/nbio_v7_4.c
++++ b/drivers/gpu/drm/amd/amdgpu/nbio_v7_4.c
+@@ -673,6 +673,7 @@ struct amdgpu_nbio_ras nbio_v7_4_ras = {
+ };
+ 
+ 
++#ifdef CONFIG_PCIEASPM
+ static void nbio_v7_4_program_ltr(struct amdgpu_device *adev)
+ {
+ 	uint32_t def, data;
+@@ -694,9 +695,11 @@ static void nbio_v7_4_program_ltr(struct
+ 	if (def != data)
+ 		WREG32_PCIE(smnBIF_CFG_DEV0_EPF0_DEVICE_CNTL2, data);
+ }
++#endif
+ 
+ static void nbio_v7_4_program_aspm(struct amdgpu_device *adev)
+ {
++#ifdef CONFIG_PCIEASPM
+ 	uint32_t def, data;
+ 
+ 	if (adev->ip_versions[NBIO_HWIP][0] == IP_VERSION(7, 4, 4))
+@@ -755,7 +758,10 @@ static void nbio_v7_4_program_aspm(struc
+ 	if (def != data)
+ 		WREG32_PCIE(smnPCIE_LC_CNTL6, data);
+ 
+-	nbio_v7_4_program_ltr(adev);
++	/* Don't bother about LTR if LTR is not enabled
++	 * in the path */
++	if (adev->pdev->ltr_path)
++		nbio_v7_4_program_ltr(adev);
+ 
+ 	def = data = RREG32_PCIE(smnRCC_BIF_STRAP3);
+ 	data |= 0x5DE0 << RCC_BIF_STRAP3__STRAP_VLINK_ASPM_IDLE_TIMER__SHIFT;
+@@ -779,6 +785,7 @@ static void nbio_v7_4_program_aspm(struc
+ 	data &= ~PCIE_LC_CNTL3__LC_DSC_DONT_ENTER_L23_AFTER_PME_ACK_MASK;
+ 	if (def != data)
+ 		WREG32_PCIE(smnPCIE_LC_CNTL3, data);
++#endif
+ }
+ 
+ const struct amdgpu_nbio_funcs nbio_v7_4_funcs = {
 
 
