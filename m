@@ -2,79 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D5845BF2AB
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 03:21:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBAD15BF2B7
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 03:23:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230474AbiIUBVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 21:21:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60296 "EHLO
+        id S230268AbiIUBW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 21:22:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbiIUBVK (ORCPT
+        with ESMTP id S229716AbiIUBWw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 21:21:10 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D644C6557B;
-        Tue, 20 Sep 2022 18:21:08 -0700 (PDT)
-Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 28L1KuLH028389
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 20 Sep 2022 21:20:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1663723259; bh=NrGo1J/yaUQZV0M6HG36XVcFnHjaPNu8ns6pV8ouas8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=HpAMjrjgMZhY28HgKz3urMhG4/AK9qRJBWqcYWhn8zRGlO7h3YWSYyZgZqFt7Aku8
-         Dze7spACka9BbtL84rUycuF0dfyoqkbJDBWLF+jMnoMqqMiPHuiKELiR1koFLrpMFe
-         ZBM9JrsuIgsHQjqkbGVaxKCUWtbzNOm43L+lor1e2myfVCmIJ5MpfqBYTWAz3trEs6
-         fcrMj3GsaS2pvOfjNx8tRvoKDI7D1DNa1igTL6Z2h5yRXDmm4F7sMKKbP/pD8eF/uy
-         XPZ8gNL16fMFi9k5PMr7fLp0L7a+J4nc8uDkOTAKt7OH4HE39ViZc2Sfx7hso7vByc
-         p6RvdH0tpqgig==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id CA62715C526C; Tue, 20 Sep 2022 21:20:56 -0400 (EDT)
-Date:   Tue, 20 Sep 2022 21:20:56 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Ian Kent <raven@themaw.net>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Siddhesh Poyarekar <siddhesh@gotplt.org>,
-        David Howells <dhowells@redhat.com>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Carlos Maiolino <cmaiolino@redhat.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [REPOST PATCH v3 0/2] vfs: fix a mount table handling problem
-Message-ID: <Yypm+GO6eMdV0QQ0@mit.edu>
-References: <166365872189.39016.10771273319597352356.stgit@donald.themaw.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <166365872189.39016.10771273319597352356.stgit@donald.themaw.net>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 20 Sep 2022 21:22:52 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 18F0A72EF9;
+        Tue, 20 Sep 2022 18:22:51 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1004)
+        id B312C2052E21; Tue, 20 Sep 2022 18:22:50 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B312C2052E21
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxonhyperv.com;
+        s=default; t=1663723370;
+        bh=ocsfRLJrMVLP3MRnHo1K6nXfRnHcqUIq5gLAJuaSbmo=;
+        h=From:To:Cc:Subject:Date:Reply-To:From;
+        b=CtVu9Dz4CXagejkTzC2j2DGGo2sVvEWk6OWKSM6H4qNfaU9/ae0ZpTkSwl3mi/Ic7
+         kJ4+QNM37WjpM2a9jYbdtEC7mfx3nVwmXLia0/+A5CXLYys+19a9OIyka0sj5dRGDv
+         Yo8p2xbnV8yNLslb6NVjAPAPN3XWfeLMsh3m5BpI=
+From:   longli@linuxonhyperv.com
+To:     "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>, edumazet@google.com,
+        shiraz.saleem@intel.com, Ajay Sharma <sharmaajay@microsoft.com>
+Cc:     linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        Long Li <longli@microsoft.com>
+Subject: [Patch v6 00/12] Introduce Microsoft Azure Network Adapter (MANA) RDMA driver
+Date:   Tue, 20 Sep 2022 18:22:20 -0700
+Message-Id: <1663723352-598-1-git-send-email-longli@linuxonhyperv.com>
+X-Mailer: git-send-email 1.8.3.1
+Reply-To: longli@microsoft.com
+X-Spam-Status: No, score=-11.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 03:26:17PM +0800, Ian Kent wrote:
-> Whenever a mount has an empty "source" (aka mnt_fsname), the glibc
-> function getmntent incorrectly parses its input, resulting in reporting
-> incorrect data to the caller.
-> 
-> The problem is that the get_mnt_entry() function in glibc's
-> misc/mntent_r.c assumes that leading whitespace on a line can always
-> be discarded because it will always be followed by a # for the case
-> of a comment or a non-whitespace character that's part of the value
-> of the first field. However, this assumption is violated when the
-> value of the first field is an empty string.
-> 
-> This is fixed in the mount API code by simply checking for a pointer
-> that contains a NULL and treating it as a NULL pointer.
+From: Long Li <longli@microsoft.com>
 
-Why not simply have the mount API code disallow a zero-length "source"
-/ mnt_fsname?
+This patchset implements a RDMA driver for Microsoft Azure Network
+Adapter (MANA). In MANA, the RDMA device is modeled as an auxiliary device
+to the Ethernet device.
 
-					- Ted
+The first 11 patches modify the MANA Ethernet driver to support RDMA driver.
+The last patch implementes the RDMA driver.
+
+The user-mode of the driver is being reviewed at:
+https://github.com/linux-rdma/rdma-core/pull/1177
+
+
+Ajay Sharma (3):
+  net: mana: Set the DMA device max segment size
+  net: mana: Define and process GDMA response code
+    GDMA_STATUS_MORE_ENTRIES
+  net: mana: Define data structures for protection domain and memory
+    registration
+
+Long Li (9):
+  net: mana: Add support for auxiliary device
+  net: mana: Record the physical address for doorbell page region
+  net: mana: Handle vport sharing between devices
+  net: mana: Add functions for allocating doorbell page from GDMA
+  net: mana: Export Work Queue functions for use by RDMA driver
+  net: mana: Record port number in netdev
+  net: mana: Move header files to a common location
+  net: mana: Define max values for SGL entries
+  RDMA/mana_ib: Add a driver for Microsoft Azure Network Adapter
+
+ MAINTAINERS                                   |   4 +
+ drivers/infiniband/Kconfig                    |   1 +
+ drivers/infiniband/hw/Makefile                |   1 +
+ drivers/infiniband/hw/mana/Kconfig            |   7 +
+ drivers/infiniband/hw/mana/Makefile           |   4 +
+ drivers/infiniband/hw/mana/cq.c               |  80 +++
+ drivers/infiniband/hw/mana/device.c           | 129 ++++
+ drivers/infiniband/hw/mana/main.c             | 555 ++++++++++++++++++
+ drivers/infiniband/hw/mana/mana_ib.h          | 165 ++++++
+ drivers/infiniband/hw/mana/mr.c               | 133 +++++
+ drivers/infiniband/hw/mana/qp.c               | 501 ++++++++++++++++
+ drivers/infiniband/hw/mana/wq.c               | 114 ++++
+ drivers/net/ethernet/microsoft/Kconfig        |   1 +
+ .../net/ethernet/microsoft/mana/gdma_main.c   |  96 ++-
+ .../net/ethernet/microsoft/mana/hw_channel.c  |   6 +-
+ .../net/ethernet/microsoft/mana/mana_bpf.c    |   2 +-
+ drivers/net/ethernet/microsoft/mana/mana_en.c | 176 +++++-
+ .../ethernet/microsoft/mana/mana_ethtool.c    |   2 +-
+ .../net/ethernet/microsoft/mana/shm_channel.c |   2 +-
+ .../microsoft => include/net}/mana/gdma.h     | 162 ++++-
+ .../net}/mana/hw_channel.h                    |   0
+ .../microsoft => include/net}/mana/mana.h     |  23 +-
+ include/net/mana/mana_auxiliary.h             |  10 +
+ .../net}/mana/shm_channel.h                   |   0
+ include/uapi/rdma/ib_user_ioctl_verbs.h       |   1 +
+ include/uapi/rdma/mana-abi.h                  |  66 +++
+ 26 files changed, 2196 insertions(+), 45 deletions(-)
+ create mode 100644 drivers/infiniband/hw/mana/Kconfig
+ create mode 100644 drivers/infiniband/hw/mana/Makefile
+ create mode 100644 drivers/infiniband/hw/mana/cq.c
+ create mode 100644 drivers/infiniband/hw/mana/device.c
+ create mode 100644 drivers/infiniband/hw/mana/main.c
+ create mode 100644 drivers/infiniband/hw/mana/mana_ib.h
+ create mode 100644 drivers/infiniband/hw/mana/mr.c
+ create mode 100644 drivers/infiniband/hw/mana/qp.c
+ create mode 100644 drivers/infiniband/hw/mana/wq.c
+ rename {drivers/net/ethernet/microsoft => include/net}/mana/gdma.h (80%)
+ rename {drivers/net/ethernet/microsoft => include/net}/mana/hw_channel.h (100%)
+ rename {drivers/net/ethernet/microsoft => include/net}/mana/mana.h (95%)
+ create mode 100644 include/net/mana/mana_auxiliary.h
+ rename {drivers/net/ethernet/microsoft => include/net}/mana/shm_channel.h (100%)
+ create mode 100644 include/uapi/rdma/mana-abi.h
+
+-- 
+2.17.1
+
