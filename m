@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 455885C022A
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:49:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C1355C034F
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 18:02:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231191AbiIUPtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 11:49:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50976 "EHLO
+        id S232318AbiIUQCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 12:02:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231338AbiIUPr4 (ORCPT
+        with ESMTP id S232469AbiIUP7k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 11:47:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9EE3923D3;
-        Wed, 21 Sep 2022 08:47:30 -0700 (PDT)
+        Wed, 21 Sep 2022 11:59:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF58DF07;
+        Wed, 21 Sep 2022 08:53:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CC50761BD5;
-        Wed, 21 Sep 2022 15:47:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD097C433C1;
-        Wed, 21 Sep 2022 15:47:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 33CB2B830BE;
+        Wed, 21 Sep 2022 15:51:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88397C433D6;
+        Wed, 21 Sep 2022 15:51:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663775249;
-        bh=ithr9k7O+nzM2l5y5r8KeGH+jQGPQyK/7KtGeFY4fJE=;
+        s=korg; t=1663775515;
+        bh=6oQzxkb02QcR3Mx59Ou0InQg5DA/3T7eaiqyxw073nw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zX1pcrUP5OwYv37JM7sjLeddSdUnE4HeIvRRURDmVHpiip4z5QZMeG2Ld2Kek3lbR
-         b6gZsTPNFsK55nepBwISd3L6Dz41ILFhRPtC6je+ItUbR6EO4NS6uTORpWCtFXxbfx
-         gJRw8mGb+7Wn95Np14V74hXNFbCjtZWqKXCAjryU=
+        b=pBXPY5VNXPGQxdgddE01nEHp+441Pv/Dq+E37oipfotxpFoj+a7gMhpMlPhz8ZmMs
+         5lbMmCiDg2kpCKwwSScUDFgmCLwngVFiyq2itm9X46Vl1QE9qN1lGaVv/L5iCaLw0o
+         3Da5xq4HAxNV7u+Ecjn2/E8rT+M+RBast6w4OLPQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nirmoy Das <nirmoy.das@intel.com>,
-        Matthew Auld <matthew.auld@intel.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>
-Subject: [PATCH 5.19 29/38] drm/i915: Set correct domains values at _i915_vma_move_to_active
+        stable@vger.kernel.org, Nathan Lynch <nathanl@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 08/39] powerpc/pseries/mobility: ignore ibm, platform-facilities updates
 Date:   Wed, 21 Sep 2022 17:46:13 +0200
-Message-Id: <20220921153647.186661288@linuxfoundation.org>
+Message-Id: <20220921153646.013669582@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220921153646.298361220@linuxfoundation.org>
-References: <20220921153646.298361220@linuxfoundation.org>
+In-Reply-To: <20220921153645.663680057@linuxfoundation.org>
+References: <20220921153645.663680057@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,47 +54,178 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nirmoy Das <nirmoy.das@intel.com>
+From: Nathan Lynch <nathanl@linux.ibm.com>
 
-commit 08b812985996924c0ccf79d54a31fc9757c0a6ca upstream.
+[ Upstream commit 319fa1a52e438a6e028329187783a25ad498c4e6 ]
 
-Fix regression introduced by commit:
-"drm/i915: Individualize fences before adding to dma_resv obj"
-which sets obj->read_domains to 0 for both read and write paths.
-Also set obj->write_domain to 0 on read path which was removed by
-the commit.
+On VMs with NX encryption, compression, and/or RNG offload, these
+capabilities are described by nodes in the ibm,platform-facilities device
+tree hierarchy:
 
-Fixes: 420a07b841d0 ("drm/i915: Individualize fences before adding to dma_resv obj")
-Signed-off-by: Nirmoy Das <nirmoy.das@intel.com>
-Cc: <stable@vger.kernel.org> # v5.16+
-Cc: Matthew Auld <matthew.auld@intel.com>
-Cc: Andrzej Hajda <andrzej.hajda@intel.com>
-Reviewed-by: Andrzej Hajda <andrzej.hajda@intel.com>
-Signed-off-by: Matthew Auld <matthew.auld@intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220907172641.12555-1-nirmoy.das@intel.com
-(cherry picked from commit 04f7eb3d4582a0a4da67c86e55fda7de2df86d91)
-Signed-off-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+  $ tree -d /sys/firmware/devicetree/base/ibm,platform-facilities/
+  /sys/firmware/devicetree/base/ibm,platform-facilities/
+  ├── ibm,compression-v1
+  ├── ibm,random-v1
+  └── ibm,sym-encryption-v1
+
+  3 directories
+
+The acceleration functions that these nodes describe are not disrupted by
+live migration, not even temporarily.
+
+But the post-migration ibm,update-nodes sequence firmware always sends
+"delete" messages for this hierarchy, followed by an "add" directive to
+reconstruct it via ibm,configure-connector (log with debugging statements
+enabled in mobility.c):
+
+  mobility: removing node /ibm,platform-facilities/ibm,random-v1:4294967285
+  mobility: removing node /ibm,platform-facilities/ibm,compression-v1:4294967284
+  mobility: removing node /ibm,platform-facilities/ibm,sym-encryption-v1:4294967283
+  mobility: removing node /ibm,platform-facilities:4294967286
+  ...
+  mobility: added node /ibm,platform-facilities:4294967286
+
+Note we receive a single "add" message for the entire hierarchy, and what
+we receive from the ibm,configure-connector sequence is the top-level
+platform-facilities node along with its three children. The debug message
+simply reports the parent node and not the whole subtree.
+
+Also, significantly, the nodes added are almost completely equivalent to
+the ones removed; even phandles are unchanged. ibm,shared-interrupt-pool in
+the leaf nodes is the only property I've observed to differ, and Linux does
+not use that. So in practice, the sum of update messages Linux receives for
+this hierarchy is equivalent to minor property updates.
+
+We succeed in removing the original hierarchy from the device tree. But the
+vio bus code is ignorant of this, and does not unbind or relinquish its
+references. The leaf nodes, still reachable through sysfs, of course still
+refer to the now-freed ibm,platform-facilities parent node, which makes
+use-after-free possible:
+
+  refcount_t: addition on 0; use-after-free.
+  WARNING: CPU: 3 PID: 1706 at lib/refcount.c:25 refcount_warn_saturate+0x164/0x1f0
+  refcount_warn_saturate+0x160/0x1f0 (unreliable)
+  kobject_get+0xf0/0x100
+  of_node_get+0x30/0x50
+  of_get_parent+0x50/0xb0
+  of_fwnode_get_parent+0x54/0x90
+  fwnode_count_parents+0x50/0x150
+  fwnode_full_name_string+0x30/0x110
+  device_node_string+0x49c/0x790
+  vsnprintf+0x1c0/0x4c0
+  sprintf+0x44/0x60
+  devspec_show+0x34/0x50
+  dev_attr_show+0x40/0xa0
+  sysfs_kf_seq_show+0xbc/0x200
+  kernfs_seq_show+0x44/0x60
+  seq_read_iter+0x2a4/0x740
+  kernfs_fop_read_iter+0x254/0x2e0
+  new_sync_read+0x120/0x190
+  vfs_read+0x1d0/0x240
+
+Moreover, the "new" replacement subtree is not correctly added to the
+device tree, resulting in ibm,platform-facilities parent node without the
+appropriate leaf nodes, and broken symlinks in the sysfs device hierarchy:
+
+  $ tree -d /sys/firmware/devicetree/base/ibm,platform-facilities/
+  /sys/firmware/devicetree/base/ibm,platform-facilities/
+
+  0 directories
+
+  $ cd /sys/devices/vio ; find . -xtype l -exec file {} +
+  ./ibm,sym-encryption-v1/of_node: broken symbolic link to
+    ../../../firmware/devicetree/base/ibm,platform-facilities/ibm,sym-encryption-v1
+  ./ibm,random-v1/of_node:         broken symbolic link to
+    ../../../firmware/devicetree/base/ibm,platform-facilities/ibm,random-v1
+  ./ibm,compression-v1/of_node:    broken symbolic link to
+    ../../../firmware/devicetree/base/ibm,platform-facilities/ibm,compression-v1
+
+This is because add_dt_node() -> dlpar_attach_node() attaches only the
+parent node returned from configure-connector, ignoring any children. This
+should be corrected for the general case, but fixing that won't help with
+the stale OF node references, which is the more urgent problem.
+
+One way to address that would be to make the drivers respond to node
+removal notifications, so that node references can be dropped
+appropriately. But this would likely force the drivers to disrupt active
+clients for no useful purpose: equivalent nodes are immediately re-added.
+And recall that the acceleration capabilities described by the nodes remain
+available throughout the whole process.
+
+The solution I believe to be robust for this situation is to convert
+remove+add of a node with an unchanged phandle to an update of the node's
+properties in the Linux device tree structure. That would involve changing
+and adding a fair amount of code, and may take several iterations to land.
+
+Until that can be realized we have a confirmed use-after-free and the
+possibility of memory corruption. So add a limited workaround that
+discriminates on the node type, ignoring adds and removes. This should be
+amenable to backporting in the meantime.
+
+Fixes: 410bccf97881 ("powerpc/pseries: Partition migration in the kernel")
+Cc: stable@vger.kernel.org
+Signed-off-by: Nathan Lynch <nathanl@linux.ibm.com>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20211020194703.2613093-1-nathanl@linux.ibm.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/i915/i915_vma.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/powerpc/platforms/pseries/mobility.c | 34 +++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
---- a/drivers/gpu/drm/i915/i915_vma.c
-+++ b/drivers/gpu/drm/i915/i915_vma.c
-@@ -1870,12 +1870,13 @@ int _i915_vma_move_to_active(struct i915
- 		enum dma_resv_usage usage;
- 		int idx;
+diff --git a/arch/powerpc/platforms/pseries/mobility.c b/arch/powerpc/platforms/pseries/mobility.c
+index acf1664d1ad7..f386a7bc3811 100644
+--- a/arch/powerpc/platforms/pseries/mobility.c
++++ b/arch/powerpc/platforms/pseries/mobility.c
+@@ -61,6 +61,27 @@ static int mobility_rtas_call(int token, char *buf, s32 scope)
  
--		obj->read_domains = 0;
- 		if (flags & EXEC_OBJECT_WRITE) {
- 			usage = DMA_RESV_USAGE_WRITE;
- 			obj->write_domain = I915_GEM_DOMAIN_RENDER;
-+			obj->read_domains = 0;
- 		} else {
- 			usage = DMA_RESV_USAGE_READ;
-+			obj->write_domain = 0;
- 		}
+ static int delete_dt_node(struct device_node *dn)
+ {
++	struct device_node *pdn;
++	bool is_platfac;
++
++	pdn = of_get_parent(dn);
++	is_platfac = of_node_is_type(dn, "ibm,platform-facilities") ||
++		     of_node_is_type(pdn, "ibm,platform-facilities");
++	of_node_put(pdn);
++
++	/*
++	 * The drivers that bind to nodes in the platform-facilities
++	 * hierarchy don't support node removal, and the removal directive
++	 * from firmware is always followed by an add of an equivalent
++	 * node. The capability (e.g. RNG, encryption, compression)
++	 * represented by the node is never interrupted by the migration.
++	 * So ignore changes to this part of the tree.
++	 */
++	if (is_platfac) {
++		pr_notice("ignoring remove operation for %pOFfp\n", dn);
++		return 0;
++	}
++
+ 	pr_debug("removing node %pOFfp\n", dn);
+ 	dlpar_detach_node(dn);
+ 	return 0;
+@@ -219,6 +240,19 @@ static int add_dt_node(struct device_node *parent_dn, __be32 drc_index)
+ 	if (!dn)
+ 		return -ENOENT;
  
- 		dma_fence_array_for_each(curr, idx, fence)
++	/*
++	 * Since delete_dt_node() ignores this node type, this is the
++	 * necessary counterpart. We also know that a platform-facilities
++	 * node returned from dlpar_configure_connector() has children
++	 * attached, and dlpar_attach_node() only adds the parent, leaking
++	 * the children. So ignore these on the add side for now.
++	 */
++	if (of_node_is_type(dn, "ibm,platform-facilities")) {
++		pr_notice("ignoring add operation for %pOF\n", dn);
++		dlpar_free_cc_nodes(dn);
++		return 0;
++	}
++
+ 	rc = dlpar_attach_node(dn, parent_dn);
+ 	if (rc)
+ 		dlpar_free_cc_nodes(dn);
+-- 
+2.35.1
+
 
 
