@@ -2,81 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5837F5E541D
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 22:03:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 800CD5E541F
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 22:04:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbiIUUDd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 16:03:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45374 "EHLO
+        id S230103AbiIUUER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 16:04:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbiIUUDa (ORCPT
+        with ESMTP id S229745AbiIUUEP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 16:03:30 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C920086898;
-        Wed, 21 Sep 2022 13:03:29 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id D09E61C0001; Wed, 21 Sep 2022 22:03:27 +0200 (CEST)
-Date:   Wed, 21 Sep 2022 22:03:27 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.10 00/39] 5.10.145-rc1 review
-Message-ID: <20220921200327.GA31713@duo.ucw.cz>
-References: <20220921153645.663680057@linuxfoundation.org>
+        Wed, 21 Sep 2022 16:04:15 -0400
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE6D86898;
+        Wed, 21 Sep 2022 13:04:14 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id E5BB82B0;
+        Wed, 21 Sep 2022 20:04:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net E5BB82B0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1663790654; bh=ZXfnpjWDlX3KQSHO3WoZdVME2upfsgqm8E4qpRArojY=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=tJs+BGuJCnJXpNsSB2i5gyyBgxtCCmNKEiIm2nr+F1baBdHtTGHTtVdibZFRUtWci
+         xRlHfSen+QITXpoHL1/hM9FHOuLkTYpLi1GHOu5pvNWYRZNdl2gispqXOUJ9qXAO/f
+         ju4z6os/qNHDYFFJn+pkSH+rY/wPVLZJxn0gJnQy4H0MywTA5+F4WYewv68/sSRs8B
+         8pTcDdF+Vy3UGDW632QaGiPsqhpFsDAtcvTfS0EyawqXDXOgQg7M6tsYQz1JaUXEGz
+         s8LCjppyMDEOMKZHrhCDoIIdOLP6Zok9kswIB5fjRNO7UaiNy7el7JkDVc0pku3Mwz
+         3qkkIYnx5jjdQ==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Shuah Khan <skhan@linuxfoundation.org>, gregkh@linuxfoundation.org
+Cc:     Shuah Khan <skhan@linuxfoundation.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, joanna.lee@gesmer.com
+Subject: Re: [PATCH] docs: update mediator information in CoC docs
+In-Reply-To: <20220901212319.56644-1-skhan@linuxfoundation.org>
+References: <20220901212319.56644-1-skhan@linuxfoundation.org>
+Date:   Wed, 21 Sep 2022 14:04:13 -0600
+Message-ID: <87tu50v6iq.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="KsGdsel6WgEHnImy"
-Content-Disposition: inline
-In-Reply-To: <20220921153645.663680057@linuxfoundation.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Shuah Khan <skhan@linuxfoundation.org> writes:
 
---KsGdsel6WgEHnImy
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Update mediator information in the CoC interpretation document.
+>
+> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+> ---
+>  Documentation/process/code-of-conduct-interpretation.rst | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/Documentation/process/code-of-conduct-interpretation.rst b/Documentation/process/code-of-conduct-interpretation.rst
+> index e899f14a4ba2..4f8a06b00f60 100644
+> --- a/Documentation/process/code-of-conduct-interpretation.rst
+> +++ b/Documentation/process/code-of-conduct-interpretation.rst
+> @@ -51,7 +51,7 @@ the Technical Advisory Board (TAB) or other maintainers if you're
+>  uncertain how to handle situations that come up.  It will not be
+>  considered a violation report unless you want it to be.  If you are
+>  uncertain about approaching the TAB or any other maintainers, please
+> -reach out to our conflict mediator, Mishi Choudhary <mishi@linux.com>.
+> +reach out to our conflict mediator, Joanna Lee <joanna.lee@gesmer.com>.
+>  
+>  In the end, "be kind to each other" is really what the end goal is for
+>  everybody.  We know everyone is human and we all fail at times, but the
 
-Hi!
+Applied (finally), thanks.
 
-> This is the start of the stable review cycle for the 5.10.145 release.
-> There are 39 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+I stuck a Cc: stable on there, it seems this should be updated in all of
+the distributed kernels.
 
-CIP testing did not find any problems here:
+Thanks,
 
-https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tree/linux-=
-5.10.y
-
-Tested-by: Pavel Machek (CIP) <pavel@denx.de>
-
-Best regards,
-                                                                Pavel
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---KsGdsel6WgEHnImy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYytuDwAKCRAw5/Bqldv6
-8gO9AKCUoT1p3hWFjAKT3TgtDsjbFkKhRgCffj3Y57zMTrlO0lFEI/KxjWcLzdk=
-=w2V+
------END PGP SIGNATURE-----
-
---KsGdsel6WgEHnImy--
+jon
