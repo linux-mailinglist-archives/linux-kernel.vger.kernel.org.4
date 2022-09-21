@@ -2,159 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD7CF5BF1AB
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 02:03:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBD205BF1B3
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 02:07:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231268AbiIUADm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 20:03:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60252 "EHLO
+        id S231284AbiIUAHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 20:07:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230513AbiIUADe (ORCPT
+        with ESMTP id S229885AbiIUAHA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 20:03:34 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 156A461B20
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 17:03:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663718612; x=1695254612;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=rQ+iFKkuQtEcheUC1jaDcNruGi7AmbNVjbER7qSv6cc=;
-  b=B4cc9dAK+OTTW8K36x8uLVrzn6gMbFssSuG4pacSLLj9klV5FKlJkJAu
-   UMBR03yegO/+n5/WFQOTaQuFXuCNheq5M2t/2dkQSv9FhxtwuQd7Y+s+D
-   ZlHP2QgHZco5JWYf13prhlAqae6RsLnMmmQKNWu/yWtsF+6p3ytCuBRhY
-   dbPxUH5dAHOY6ZXQ7xwaz3JahCTOLm8c+ixHlywCXXSTdR3EYslINZ5LS
-   o2vF0sNCEunM2NUUb/r+tTe9x4LW9eAC7+wC2K8PJOkSTd67quRIjNxLj
-   +tyHyNSgS7uLLz2Uwnnz9W0AblGAk/kZPuAbEc+Lcl6FQBGWTcLUCsGkA
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10476"; a="386138266"
-X-IronPort-AV: E=Sophos;i="5.93,331,1654585200"; 
-   d="scan'208";a="386138266"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 17:03:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,331,1654585200"; 
-   d="scan'208";a="570299184"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 20 Sep 2022 17:03:30 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oanD7-00033c-1r;
-        Wed, 21 Sep 2022 00:03:29 +0000
-Date:   Wed, 21 Sep 2022 08:03:19 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [nathan:wip/i915-kcfi 1/1]
- drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c:441:1: warning: data definition
- has no type or storage class
-Message-ID: <202209210813.ckU6XX3t-lkp@intel.com>
+        Tue, 20 Sep 2022 20:07:00 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F34125EDCC
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 17:06:58 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id j188so6034066oih.0
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 17:06:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=aDXDJv0PiVlu2MaphcSlhIa7kj9qTqu4WRX6MdDaSeI=;
+        b=KI5Kor4XJ+E6V6jTH2yVn0FBhhj9xD7UIuGPlj5DmwLy1eccLl9b8sCVT6VpX3mGw8
+         RgkE1+ewqG4ckA4Zflm6wZrkpfD8CKMusVSybyOGIgsL+Gvaucy78npVfSKuDgYq//vy
+         6GNV1E8GKsO/8JEh7ISaeg62IAbXYnjgj2ehBQEwMbA0CpWZ6zcoDyKekrXCpliuBzDZ
+         6ohpmrrg9wYWSy8fhTUQB2DcZo4kdSsbno4676XZNkwpfoAi1AGsCbvSWn2FBbYRZQ1w
+         XrSl5AxtBD3/V2BqctirSb7qCP1b0KY0NKJvp9emA9KDWXx50fLApNM5yaxAVDTnLCg9
+         bjiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=aDXDJv0PiVlu2MaphcSlhIa7kj9qTqu4WRX6MdDaSeI=;
+        b=IY44uS/+uJGNLr81epsv3kJArqNWrsXIH32m7oVuSCYUtvbNiulEUESpDhCyvNCnP+
+         dFYLf6ASExO1IL+G0GEzFmFwkrsREhf+2yauQj3mKlGJZh4dKzgv3vIoMhZMaqnUA2B/
+         OquwMIQbX2kwpdj+Kf0IAGRfb1k01AIE7+CamnGIOPoVfDZ3keNcCOWZ4j0ROn+7LcjW
+         Q0119HUI729G2/NmPiVpX8fT34Zo0O6FcAkQYUbQlxmo/mtfG4bXsOhDOkTt/4UjX+E5
+         3lwBhGVWs0jNO9WiiDGAiW/yTuZp0QOnhIv3/nzkAN+dVjuNXQ+oBxXQm6+tuvI/hTOU
+         3gEw==
+X-Gm-Message-State: ACrzQf0dNW2VpIYqOAcZrBkxDsAItR5H+tDa10ktwkALVeymq6yMIM/2
+        w3ipUdFgR2SYm4i1cjHvkWVjOtySd3mtTyfiZ18XLw==
+X-Google-Smtp-Source: AMsMyM7AWHtq6wIvSd1mCteY/A8A9kShPpWdDD8mlB2afF/LGFrFBU0hGiWSRAmTgdFYmHUMQGVIpJ8vx1XCkAEz9kY=
+X-Received: by 2002:aca:b205:0:b0:34f:3303:4014 with SMTP id
+ b5-20020acab205000000b0034f33034014mr2718170oif.269.1663718818135; Tue, 20
+ Sep 2022 17:06:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220919093453.71737-1-likexu@tencent.com> <20220919093453.71737-3-likexu@tencent.com>
+In-Reply-To: <20220919093453.71737-3-likexu@tencent.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Tue, 20 Sep 2022 17:06:47 -0700
+Message-ID: <CALMp9eTnAsi7xYDPkN02wK23ndH5mZxoTNj39uS1s05UdLeQVQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] KVM: x86/svm/pmu: Add AMD PerfMonV2 support
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Sandipan Das <sandipan.das@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/nathan/linux.git wip/i915-kcfi
-head:   5aed167ba402539d4fb1c48c7c7801569feaf0d5
-commit: 5aed167ba402539d4fb1c48c7c7801569feaf0d5 [1/1] WIP: drm/i915: Fix CFI violation
-config: x86_64-randconfig-a011 (https://download.01.org/0day-ci/archive/20220921/202209210813.ckU6XX3t-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/nathan/linux.git/commit/?id=5aed167ba402539d4fb1c48c7c7801569feaf0d5
-        git remote add nathan https://git.kernel.org/pub/scm/linux/kernel/git/nathan/linux.git
-        git fetch --no-tags nathan wip/i915-kcfi
-        git checkout 5aed167ba402539d4fb1c48c7c7801569feaf0d5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/i915/ drivers/mtd/nand/raw/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c:441:1: warning: data definition has no type or storage class
-     441 | INTEL_GT_ATTR_RO(vlv_rpe_freq_mhz);
-         | ^~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c:441:1: error: type defaults to 'int' in declaration of 'INTEL_GT_ATTR_RO' [-Werror=implicit-int]
->> drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c:441:1: warning: parameter names (without types) in function declaration
-   drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c:499:1: warning: data definition has no type or storage class
-     499 | INTEL_GT_ATTR_RO(punit_req_freq_mhz);
-         | ^~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c:499:1: error: type defaults to 'int' in declaration of 'INTEL_GT_ATTR_RO' [-Werror=implicit-int]
-   drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c:499:1: warning: parameter names (without types) in function declaration
-   drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c:511:10: error: 'attr_punit_req_freq_mhz' undeclared here (not in a function); did you mean 'attr_rps_RPn_freq_mhz'?
-     511 |         &attr_punit_req_freq_mhz.attr,
-         |          ^~~~~~~~~~~~~~~~~~~~~~~
-         |          attr_rps_RPn_freq_mhz
-   drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c:678:1: warning: data definition has no type or storage class
-     678 | INTEL_GT_ATTR_RW(media_freq_factor);
-         | ^~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c:678:1: error: type defaults to 'int' in declaration of 'INTEL_GT_ATTR_RW' [-Werror=implicit-int]
-   drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c:678:1: warning: parameter names (without types) in function declaration
-   drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c:681:1: warning: data definition has no type or storage class
-     681 | INTEL_GT_ATTR_RO(media_RP0_freq_mhz);
-         | ^~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c:681:1: error: type defaults to 'int' in declaration of 'INTEL_GT_ATTR_RO' [-Werror=implicit-int]
-   drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c:681:1: warning: parameter names (without types) in function declaration
-   drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c:682:1: warning: data definition has no type or storage class
-     682 | INTEL_GT_ATTR_RO(media_RPn_freq_mhz);
-         | ^~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c:682:1: error: type defaults to 'int' in declaration of 'INTEL_GT_ATTR_RO' [-Werror=implicit-int]
-   drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c:682:1: warning: parameter names (without types) in function declaration
-   drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c:685:10: error: 'attr_media_freq_factor' undeclared here (not in a function); did you mean 'attr_media_freq_factor_scale'?
-     685 |         &attr_media_freq_factor.attr,
-         |          ^~~~~~~~~~~~~~~~~~~~~~
-         |          attr_media_freq_factor_scale
-   drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c:687:10: error: 'attr_media_RP0_freq_mhz' undeclared here (not in a function); did you mean 'attr_rps_RP0_freq_mhz'?
-     687 |         &attr_media_RP0_freq_mhz.attr,
-         |          ^~~~~~~~~~~~~~~~~~~~~~~
-         |          attr_rps_RP0_freq_mhz
-   drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c:688:10: error: 'attr_media_RPn_freq_mhz' undeclared here (not in a function); did you mean 'attr_rps_RPn_freq_mhz'?
-     688 |         &attr_media_RPn_freq_mhz.attr,
-         |          ^~~~~~~~~~~~~~~~~~~~~~~
-         |          attr_rps_RPn_freq_mhz
-   drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c: In function 'intel_sysfs_rps_init':
-   drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c:705:48: error: 'attr_vlv_rpe_freq_mhz' undeclared (first use in this function); did you mean 'attr_rps_RPn_freq_mhz'?
-     705 |                 ret = sysfs_create_file(kobj, &attr_vlv_rpe_freq_mhz.attr);
-         |                                                ^~~~~~~~~~~~~~~~~~~~~
-         |                                                attr_rps_RPn_freq_mhz
-   drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c:705:48: note: each undeclared identifier is reported only once for each function it appears in
-   At top level:
-   drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c:657:16: warning: 'media_RPn_freq_mhz_show' defined but not used [-Wunused-function]
-     657 | static ssize_t media_RPn_freq_mhz_show(struct kobject *kobj,
-         |                ^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c:636:16: warning: 'media_RP0_freq_mhz_show' defined but not used [-Wunused-function]
-     636 | static ssize_t media_RP0_freq_mhz_show(struct kobject *kobj,
-         |                ^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c:607:16: warning: 'media_freq_factor_store' defined but not used [-Wunused-function]
-     607 | static ssize_t media_freq_factor_store(struct kobject *kobj,
-         |                ^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c:576:16: warning: 'media_freq_factor_show' defined but not used [-Wunused-function]
-     576 | static ssize_t media_freq_factor_show(struct kobject *kobj,
-         |                ^~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c:461:16: warning: 'punit_req_freq_mhz_show' defined but not used [-Wunused-function]
-     461 | static ssize_t punit_req_freq_mhz_show(struct kobject *kobj,
-         |                ^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c:401:16: warning: 'vlv_rpe_freq_mhz_show' defined but not used [-Wunused-function]
-     401 | static ssize_t vlv_rpe_freq_mhz_show(struct kobject *kobj,
-         |                ^~~~~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
-
-
-vim +441 drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c
-
-   440	
- > 441	INTEL_GT_ATTR_RO(vlv_rpe_freq_mhz);
-   442	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+On Mon, Sep 19, 2022 at 2:35 AM Like Xu <like.xu.linux@gmail.com> wrote:
+>
+> From: Like Xu <likexu@tencent.com>
+>
+> If AMD Performance Monitoring Version 2 (PerfMonV2) is detected
+> by the guest, it can use a new scheme to manage the Core PMCs using
+> the new global control and status registers.
+>
+> In addition to benefiting from the PerfMonV2 functionality in the same
+> way as the host (higher precision), the guest also can reduce the number
+> of vm-exits by lowering the total number of MSRs accesses.
+>
+> In terms of implementation details, amd_is_valid_msr() is resurrected
+> since three newly added MSRs could not be mapped to one vPMC.
+> The possibility of emulating PerfMonV2 on the mainframe has also
+> been eliminated for reasons of precision.
+>
+> Co-developed-by: Sandipan Das <sandipan.das@amd.com>
+> Signed-off-by: Sandipan Das <sandipan.das@amd.com>
+> Signed-off-by: Like Xu <likexu@tencent.com>
+Reviewed-by: Jim Mattson <jmattson@google.com>
