@@ -2,116 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2D2C5BF8A4
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 10:09:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03AAB5BF8A8
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 10:10:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229902AbiIUIJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 04:09:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49132 "EHLO
+        id S229804AbiIUIKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 04:10:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbiIUIJj (ORCPT
+        with ESMTP id S230204AbiIUIKN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 04:09:39 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A56AA657C;
-        Wed, 21 Sep 2022 01:09:38 -0700 (PDT)
-Date:   Wed, 21 Sep 2022 08:09:36 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1663747777;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=rSCDS0tyqksrm3HSWhobL6knyut0HnefiJMEnf6Ljqk=;
-        b=4eErGJuQC2cteOD/+abVAiFMajUElsm6M8fY+5X3+rZ5ioQe1SECgOjbsvlM0jQkMe/C9m
-        bqhKZeJfXhMins77qqSgc2UvnoKTH9hmDUAddMatvqu6Y+plgHozlcNdLZBXt5Fua7fhpu
-        c3H5M1SQubwBO9lWFh/3qbipNeo2OqEoGG2J8DZqKS4BFF41sq3AcyVjJzbpZkq/ANyNUS
-        MiadGetigVQvLBahwyn9f1jum2pt4XqovAtrCn4gNDxtKDLYfGPmhxgZUjsYbNt0KpmVwl
-        D6VehpmdvKW7QZQEhCkoK6zYQmr5yXiiTZ+mXwjCXKPy5Ir37zX6dZnoMiw1rQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1663747777;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=rSCDS0tyqksrm3HSWhobL6knyut0HnefiJMEnf6Ljqk=;
-        b=2MrpHonxzPDPtCC8GvdntGx1wxgVMiwnRUxFXg9LMmFkZUwnaZT+xPI3g1KymZm2KREwav
-        R5sbIgWVKw1g1QBw==
-From:   "tip-bot2 for Dave Hansen" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/mm] x86/mm/32: Fix W^X detection when page tables do not support NX
-Cc:     kernel test robot <yujie.liu@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
+        Wed, 21 Sep 2022 04:10:13 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FD1324F1F
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 01:10:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663747813; x=1695283813;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=FtupuEEq48sNG6dabCaExeYGA1olK93KQDsye1OyWyU=;
+  b=jxPbN0xk8NQl0tnW5mV4qnTaVoC3STsoor6vGjNsyQJNoLTkMEI9Z7mb
+   zvqsGrsQB/ZnuiHfCB1C0Pg9bx4Fc3wftcaKtdrW/UG5FUQQHcceCOCod
+   BcNISSq6eZATDFKeFEJzjKAIkTNv5IruyIhHB6SH7u/LqmhGyVImui91X
+   U20C9EdyFINMYLNwMDk8IC1iEJg6R2y5BQa/TCkt7fbuNYnhSAlzY+8lC
+   C97EKXf7yXXzY3cQdC9QkKCK1ZF86EWCUUSM4Ur0N1PFjSfOx0suNgnwP
+   3BByWvRLV5GzJkdC8mAAWF42kKWQbEV5XdcE/nVHIS3aqaM3LCUOY36eF
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10476"; a="280309880"
+X-IronPort-AV: E=Sophos;i="5.93,332,1654585200"; 
+   d="scan'208";a="280309880"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 01:10:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,332,1654585200"; 
+   d="scan'208";a="570436331"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 21 Sep 2022 01:10:11 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oauo6-0003Ov-1k;
+        Wed, 21 Sep 2022 08:10:10 +0000
+Date:   Wed, 21 Sep 2022 16:09:42 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Stafford Horne <shorne@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: drivers/pci/pci.c:4195 pci_pio_to_address() warn: always true
+ condition '(pio >= (0 - 0)) => (0-u32max >= 0)'
+Message-ID: <202209211647.5COmF7fM-lkp@intel.com>
 MIME-Version: 1.0
-Message-ID: <166374777604.401.7460421443660500438.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/mm branch of tip:
+Hi Stafford,
 
-Commit-ID:     a3d3163fbe690cfec354fc20808adf0629adf8da
-Gitweb:        https://git.kernel.org/tip/a3d3163fbe690cfec354fc20808adf0629adf8da
-Author:        Dave Hansen <dave.hansen@intel.com>
-AuthorDate:    Tue, 20 Sep 2022 11:54:54 -07:00
-Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Wed, 21 Sep 2022 10:02:55 +02:00
+First bad commit (maybe != root cause):
 
-x86/mm/32: Fix W^X detection when page tables do not support NX
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   60891ec99e141b74544d11e897a245ef06263052
+commit: ded2ee36313c941f1a12b6f85cde295b575264ae openrisc: Add pci bus support
+date:   8 weeks ago
+config: openrisc-randconfig-m041-20220919 (https://download.01.org/0day-ci/archive/20220921/202209211647.5COmF7fM-lkp@intel.com/config)
+compiler: or1k-linux-gcc (GCC) 12.1.0
 
-The x86 MM code now actively refuses to create writable+executable mappings,
-and warns when there is an attempt to create one.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-The 0day test robot ran across a warning triggered by module unloading on
-32-bit kernels.  This was only seen on CPUs with NX support, but where a
-32-bit kernel was built without PAE support.
+smatch warnings:
+drivers/pci/pci.c:4195 pci_pio_to_address() warn: always true condition '(pio >= (0 - 0)) => (0-u32max >= 0)'
+drivers/media/pci/cx23885/cx23885-dvb.c:2579 dvb_register() error: we previously assumed 'fe1->dvb.frontend' could be null (see line 1743)
 
-On those systems, there is no room for the NX bit in the page
-tables and _PAGE_NX is #defined to 0, breaking some of the W^X
-detection logic in verify_rwx().  The X86_FEATURE_NX check in
-there does not do any good here because the CPU itself supports
-NX.
+vim +4195 drivers/pci/pci.c
 
-Fix it by checking for _PAGE_NX support directly instead of
-checking CPU support for NX.
+c5076cfe768998 Tomasz Nowicki 2016-05-11  4189  
+c5076cfe768998 Tomasz Nowicki 2016-05-11  4190  phys_addr_t pci_pio_to_address(unsigned long pio)
+c5076cfe768998 Tomasz Nowicki 2016-05-11  4191  {
+c5076cfe768998 Tomasz Nowicki 2016-05-11  4192  	phys_addr_t address = (phys_addr_t)OF_BAD_ADDR;
+c5076cfe768998 Tomasz Nowicki 2016-05-11  4193  
+c5076cfe768998 Tomasz Nowicki 2016-05-11  4194  #ifdef PCI_IOBASE
+5745392e0c2b78 Zhichang Yuan  2018-03-15 @4195  	if (pio >= MMIO_UPPER_LIMIT)
+c5076cfe768998 Tomasz Nowicki 2016-05-11  4196  		return address;
+c5076cfe768998 Tomasz Nowicki 2016-05-11  4197  
+5745392e0c2b78 Zhichang Yuan  2018-03-15  4198  	address = logic_pio_to_hwaddr(pio);
+c5076cfe768998 Tomasz Nowicki 2016-05-11  4199  #endif
+c5076cfe768998 Tomasz Nowicki 2016-05-11  4200  
+c5076cfe768998 Tomasz Nowicki 2016-05-11  4201  	return address;
+c5076cfe768998 Tomasz Nowicki 2016-05-11  4202  }
+9cc742078c9a90 Jianjun Wang   2021-04-20  4203  EXPORT_SYMBOL_GPL(pci_pio_to_address);
+c5076cfe768998 Tomasz Nowicki 2016-05-11  4204  
 
-Note that since _PAGE_NX is actually defined to be 0 at
-compile-time this fix should also end up letting the compiler
-optimize away most of verify_rwx() on non-PAE kernels.
+:::::: The code at line 4195 was first introduced by commit
+:::::: 5745392e0c2b78e0d73203281d5c42cbd6993194 PCI: Apply the new generic I/O management on PCI IO hosts
 
-Fixes: 652c5bf380ad ("x86/mm: Refuse W^X violations")
-Reported-by: kernel test robot <yujie.liu@intel.com>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/all/fcf89147-440b-e478-40c9-228c9fe56691@intel.com/
----
- arch/x86/mm/pat/set_memory.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+:::::: TO: Zhichang Yuan <yuanzhichang@hisilicon.com>
+:::::: CC: Bjorn Helgaas <helgaas@kernel.org>
 
-diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-index 1a2d637..20b1e24 100644
---- a/arch/x86/mm/pat/set_memory.c
-+++ b/arch/x86/mm/pat/set_memory.c
-@@ -587,7 +587,8 @@ static inline pgprot_t verify_rwx(pgprot_t old, pgprot_t new, unsigned long star
- {
- 	unsigned long end;
- 
--	if (!cpu_feature_enabled(X86_FEATURE_NX))
-+	/* Only enforce when NX is supported: */
-+	if (!(__supported_pte_mask & _PAGE_NX))
- 		return new;
- 
- 	if (!((pgprot_val(old) ^ pgprot_val(new)) & (_PAGE_RW | _PAGE_NX)))
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
