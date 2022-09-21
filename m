@@ -2,124 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7869D5BF9A6
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 10:47:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E06DD5BF9AA
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 10:47:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231406AbiIUIq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 04:46:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58108 "EHLO
+        id S229630AbiIUIrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 04:47:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231466AbiIUIqX (ORCPT
+        with ESMTP id S231450AbiIUIrB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 04:46:23 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F9DE8A1FE;
-        Wed, 21 Sep 2022 01:46:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663749977; x=1695285977;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WBh2EVZ4QSU9Dq3/ASp3Wt8vZVQtrj4URFPR++R12AM=;
-  b=C5z+id/WnD40LUksP0avuExMuGnjDk23BQ40N22KfuXK/dnnK7yg5715
-   xdKm3IwcxLzfTkWR+vdQfAMeLHj1hH3wg1qSQSmaftT+V5ZtKf109FMBi
-   8dlx5hCKqUxwc4uSel0ggjLFprifeC5t04aq0q+cQNLuhvr6XBH46zeVP
-   NRyj3K0jsnfVef3igm6WjvYY/PWf/Znic/Xjxo6+PftdXmHWehwYmXkin
-   HA12Byv+4DvGjI+qJ/r0mbf+s+xwBMcYtaB0otCrF1jlIDKmswOU272TB
-   8CHtwShp4WUZ2CKHJ7S8RWWcs9k24fSB06/lo6mRiukNBRvuDR914V1+H
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10476"; a="363918096"
-X-IronPort-AV: E=Sophos;i="5.93,332,1654585200"; 
-   d="scan'208";a="363918096"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 01:46:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,332,1654585200"; 
-   d="scan'208";a="570447933"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 21 Sep 2022 01:46:13 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oavMy-0003Qb-0t;
-        Wed, 21 Sep 2022 08:46:12 +0000
-Date:   Wed, 21 Sep 2022 16:45:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        Wed, 21 Sep 2022 04:47:01 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C1CA89CDB
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 01:46:58 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id f9so8044803lfr.3
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 01:46:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=9XDmMSkErfJxFmN4ZvQmXQrGhNtHHsv05+YAnAlzpks=;
+        b=PC8yTTvPRBQpgdJ31Yt4NsBPePaj0m09Ho5t1UiVzsRsiwcI48Xxecb0a3C5O6DriO
+         LW4IsbyHiBfAifg6NDFeCswah8f1AlEgYVIf3ocXrYg8wN7gdSt7iRXt46PlnPehLsBP
+         Nf8RzciXCNmfoHUL0UMQA4G0Icg2m57DCnIi48wK9ZkFTjy8P+cw+XPhJFuiNZtfPjF5
+         HoQP+KFkTti1UwEuprNwo/dyhP3WklIR6a6YQB2GjpBUj7V3BzfEqshxdCorLdAB3Mkk
+         5fzA+XnFE3c3fPFj7tKnPcFct+VMlqOh7U6FcoOY6dpzIctojWTp1DY6dpLOnC+UjXDs
+         FWtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=9XDmMSkErfJxFmN4ZvQmXQrGhNtHHsv05+YAnAlzpks=;
+        b=1DFmAzpO0zTNSjJGt6mH6zxlIaGz5lII1zWbSGXGxVs7n6a7Y5xInLDgOP0ADZRiMI
+         6PlssuwrAsbWnT80Ytg5h0MIJpREuAl53nCQeDove1LRipNQIDXjEI4eNu7J2VjSQXyv
+         72Mr4RZuc3ODy+CQDpRrZ1iXEiwfoOnAo79s+5d7EkpxKPN5oskr9iKrl0Tpwfkme6YV
+         jVQsqk9Nm8B7Ry/QVhCh2EV4a1qF36ty6oKTlgcFrpDiy2kI1vdMfNxLV8wm7Ng3eQ3E
+         YnMYgHduq1VrepYi4tWc0iZcOc7ummUuIBwKsnKXvS6RNtyIG2ckGhTkypk/HcJRoqGf
+         WEzg==
+X-Gm-Message-State: ACrzQf015xM2Wsp/WhsWwfCaStrZ1sfyhWwD7pDdXyG0ZiGI5oYlPQ6l
+        BjSGfYq8Irk06KnuPgHmPmw/XMUCk9jYrA==
+X-Google-Smtp-Source: AMsMyM4RB9R3GoHhkgWd/q4jSX09mjpDoHUp6y2OzcGRbdSNR5ZNtu32JNMZN/EivKSvm50+5Vs+qQ==
+X-Received: by 2002:a05:6512:b17:b0:4a0:13c:9b3f with SMTP id w23-20020a0565120b1700b004a0013c9b3fmr375196lfu.91.1663750016500;
+        Wed, 21 Sep 2022 01:46:56 -0700 (PDT)
+Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id o12-20020a056512052c00b00497a41b3a42sm344715lfc.88.2022.09.21.01.46.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Sep 2022 01:46:55 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, zhanghongchen <zhanghongchen@loongson.cn>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>
-Subject: Re: [PATCH v2 3/3] thermal: loongson2: add thermal management support
-Message-ID: <202209211644.16Ox1qeg-lkp@intel.com>
-References: <20220921015605.17078-3-zhuyinbo@loongson.cn>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] usb: dwc3: qcom: drop unneeded compatibles
+Date:   Wed, 21 Sep 2022 10:46:54 +0200
+Message-Id: <20220921084654.118230-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220921015605.17078-3-zhuyinbo@loongson.cn>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yinbo,
+All Qualcomm SoC DWC3 USB devices have a qcom,dwc3 fallback, thus there
+is no need to keep the list of compatibles growing.
 
-I love your patch! Perhaps something to improve:
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ drivers/usb/dwc3/dwc3-qcom.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-[auto build test WARNING on rafael-pm/thermal]
-[also build test WARNING on linus/master v6.0-rc6 next-20220920]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Yinbo-Zhu/MAINTAINERS-add-maintainer-for-thermal-driver-for-loongson2-SoCs/20220921-095737
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
-config: x86_64-randconfig-a011 (https://download.01.org/0day-ci/archive/20220921/202209211644.16Ox1qeg-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/c21dcaa77e2e7514efdb4c97c805b14c9a05ec35
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Yinbo-Zhu/MAINTAINERS-add-maintainer-for-thermal-driver-for-loongson2-SoCs/20220921-095737
-        git checkout c21dcaa77e2e7514efdb4c97c805b14c9a05ec35
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/thermal/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/thermal/loongson2_thermal.c:183:5: warning: no previous prototype for 'loongson2_thermal_remove' [-Wmissing-prototypes]
-     183 | int loongson2_thermal_remove(struct platform_device *pdev)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/loongson2_thermal_remove +183 drivers/thermal/loongson2_thermal.c
-
-   182	
- > 183	int loongson2_thermal_remove(struct platform_device *pdev)
-   184	{
-   185		struct loongson2_thermal_data *data = platform_get_drvdata(pdev);
-   186		int reg_off = data->id * 2;
-   187	
-   188		/* disable interrupt */
-   189		writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
-   190		writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
-   191	
-   192		return 0;
-   193	}
-   194	
-
+diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+index 9a94b1ab8f7a..7c40f3ffc054 100644
+--- a/drivers/usb/dwc3/dwc3-qcom.c
++++ b/drivers/usb/dwc3/dwc3-qcom.c
+@@ -1007,10 +1007,6 @@ static const struct dev_pm_ops dwc3_qcom_dev_pm_ops = {
+ 
+ static const struct of_device_id dwc3_qcom_of_match[] = {
+ 	{ .compatible = "qcom,dwc3" },
+-	{ .compatible = "qcom,msm8996-dwc3" },
+-	{ .compatible = "qcom,msm8998-dwc3" },
+-	{ .compatible = "qcom,sdm660-dwc3" },
+-	{ .compatible = "qcom,sdm845-dwc3" },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(of, dwc3_qcom_of_match);
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.34.1
+
