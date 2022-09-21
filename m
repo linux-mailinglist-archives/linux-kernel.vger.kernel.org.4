@@ -2,140 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 032DD5BF2F0
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 03:31:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93CDE5BF2F3
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 03:32:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230526AbiIUBba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 21:31:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51444 "EHLO
+        id S229914AbiIUBcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 21:32:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230391AbiIUBb1 (ORCPT
+        with ESMTP id S229528AbiIUBcR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 21:31:27 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFE9711178
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 18:31:26 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id go6so4915223pjb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 18:31:26 -0700 (PDT)
+        Tue, 20 Sep 2022 21:32:17 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A34659C8
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 18:32:16 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id w20so4135948ply.12
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 18:32:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date;
-        bh=vrZbq/hL3g85/CLbfG3JsdHSRD/rOZmQkOZ2dFbbZj8=;
-        b=YqklhaPHAumP+mpxQOMS2PTelXmDSbHwCVTEGId5S3oUI9NHDbl3DkUrpKbtLeeWIA
-         2WRjwBq6oyFsyn+/5x6Et1CVVbUyKjy6N+R226ZrKm3P/Ns8EZ2LRYk1jY8sreF2KCrj
-         AchXRJWyZ9X06oJC8Vb8eTak93idcRf06/8x4SK0xitQThUCRgUGo791HcIAgLH6vjo0
-         fG4EiNk502ObStRIHJ93rGf9TT5wqenR5W0pLfVeh3v4Gj7qdfO4a6fJPraLO+U3QXPI
-         /Am0t2yKYt+bj/bFIu3hGl3JRolfa+FypTnrEBImAJ7WGuKI4iWXfHU6JFrKBdXNClJa
-         bQVA==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date;
+        bh=44W1iWoe/OCt3N1YUGhGLpWVuBp9xFH3tOMlpEc38Fs=;
+        b=aI3jaQBXmj1V42iRAkISQxqC0rLlpScMW8O7m3XLv2NXAw17rCHCE2O09zJ7rIdEsf
+         7/AOj8AgKPGBCYMvCW7zuAM2H8xpUhKLOkCMLoTFPp5aYiMuUAAEzjfTXNpov+pyH4v0
+         v6B1oADuSWvMBvVHqEcC5TSlsS2sWAZkBHSNM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=vrZbq/hL3g85/CLbfG3JsdHSRD/rOZmQkOZ2dFbbZj8=;
-        b=sSz/p52WSyTM/O3HCspuy9KxIO4oGuRr5Sl4GoblJ4fEephR/7LCM/OsjMZa7AK//f
-         WKlu6sLFVElSLQSTvHOA4hP5Vhv+5snFzE9WamJ1l2nZqteHdyUkJI5q7zBXmo9IrFHI
-         /4ETFFFGJ4KmMkqFtTEBFKmp9RMapRHPaBFhj/ak09AkImSPcGoPC+EfMG8lUe6xkRuw
-         FtMd7nWl8toVJlpvdSSFGhfvgN+H4Pt27HBd3kK7AJJVt0gv+SJFlYt333ck2NOne6J+
-         PuJnqTOGegCPcI/qjDhWTB7//rfeM/Z03jJ0Czwdn8pSmTfNnbhOs6KBehViMuhCOp0r
-         PWXQ==
-X-Gm-Message-State: ACrzQf1sjOgeCA18yYzGvZ6BCQPfzqdfBZk7l1YDvozPnjziTpcgBJ+V
-        LN0LOm6o2SzKP1WfDm3wPrM=
-X-Google-Smtp-Source: AMsMyM7UX7WEXDteCamL95O73fPuFXTYXrivpQulkszrFaInrAveKAYA0XX4sTgJrGenGvos4OnP1A==
-X-Received: by 2002:a17:90a:b00b:b0:203:a6de:5b0f with SMTP id x11-20020a17090ab00b00b00203a6de5b0fmr6752757pjq.134.1663723885976;
-        Tue, 20 Sep 2022 18:31:25 -0700 (PDT)
-Received: from smtpclient.apple ([66.170.99.95])
-        by smtp.gmail.com with ESMTPSA id y2-20020a17090322c200b00177fb862a87sm603621plg.20.2022.09.20.18.31.24
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 20 Sep 2022 18:31:25 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [RFC PATCH] x86/syscalls: allow tracing of __do_sys_[syscall]
- functions
-From:   Nadav Amit <nadav.amit@gmail.com>
-In-Reply-To: <D0F82355-EB17-46A3-82AA-CC0B26344A08@gmail.com>
-Date:   Tue, 20 Sep 2022 18:31:24 -0700
-Cc:     "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <72644F1F-7A13-4CC1-8C24-BE271323FE94@gmail.com>
-References: <20220913135213.720368-1-namit@vmware.com>
- <2D09BBFE-45F3-4B9C-8734-D002CA99FD94@gmail.com>
- <Yymds595qthVSnt0@hirez.programming.kicks-ass.net>
- <D0F82355-EB17-46A3-82AA-CC0B26344A08@gmail.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=44W1iWoe/OCt3N1YUGhGLpWVuBp9xFH3tOMlpEc38Fs=;
+        b=FzvtHHPl5X1QAPEF2W7VTzI/Vek+HaO73qlu3ZCQMc73hGhPp4rcZ2YvIkq2g97CGg
+         wOq2OLN8XY9dzQhrgFtyHlUP6wcJUu50+I2RESuqfEP3qk+TEJBfH3X3Zc/63TNqsCdx
+         75l7hAcsBze/eDdPECopXItlgGmAObSLZsej2T/Ufp6CdMn/c5sPlDTM1NvOt/TpumJS
+         iKh7dI9mg1/lPC4kpIOC92SPgV8Er69x5JMoFLWWmJEBJpFMF6GGAWP5kjuEr4EfQ9dj
+         YkPm10wqHO9wK8eCowsqox5QqtYiMMNIKnJJ8nHSiVPZDbRqOX5qkV0YZfQmqvXWya7d
+         YFIw==
+X-Gm-Message-State: ACrzQf3sXyC5FMNTUOb5sfIlsyaSE5/1gsOD3KBmKHJT5Zyq98AXoiPL
+        Z8myUS7l4F8H8NjlVo8u4ZNSu6ckXhrAVQ==
+X-Google-Smtp-Source: AMsMyM6W8Iwua8n8vvSxHt1iyG1sRK19IEa4cnmXps3dmtdRz6Mtf2Z7l0dCfQ5FtKeo0HpZfKsiOA==
+X-Received: by 2002:a17:90b:1d08:b0:200:823f:9745 with SMTP id on8-20020a17090b1d0800b00200823f9745mr6757655pjb.84.1663723936033;
+        Tue, 20 Sep 2022 18:32:16 -0700 (PDT)
+Received: from google.com ([2401:fa00:8f:203:cc93:90d7:674f:156a])
+        by smtp.gmail.com with ESMTPSA id m2-20020a170902d18200b001728ac8af94sm535623plb.248.2022.09.20.18.32.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Sep 2022 18:32:15 -0700 (PDT)
+From:   Hidenori Kobayashi <hidenorik@chromium.org>
+X-Google-Original-From: Hidenori Kobayashi <hidenorik@google.com>
+Date:   Wed, 21 Sep 2022 10:32:12 +0900
+To:     Sakari Ailus <sakari.ailus@iki.fi>
+Cc:     Hidenori Kobayashi <hidenorik@chromium.org>,
+        Dongchun Zhu <dongchun.zhu@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: ov8856: Add runtime PM callbacks
+Message-ID: <20220921013212.m7sqb4v7hk5rddfa@google.com>
+References: <20220920020002.710533-1-hidenorik@chromium.org>
+ <Yyl7spRDgJ+R39Pj@valkosipuli.retiisi.eu>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yyl7spRDgJ+R39Pj@valkosipuli.retiisi.eu>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Just following my questions with the answers I figured out, just to save
-others time.
+Hi Sakari,
 
-On Sep 20, 2022, at 9:48 AM, Nadav Amit <nadav.amit@gmail.com> wrote:
+Thanks for your review!
 
-> On Sep 20, 2022, at 4:02 AM, Peter Zijlstra <peterz@infradead.org> =
-wrote:
->=20
->> On Mon, Sep 19, 2022 at 07:35:42PM -0700, Nadav Amit wrote:
->>=20
->>> 1. What is the reason that inline functions are marked with notrace?
->>=20
->> IIRC the concern is that a notrace function using an inline function;
->> GCC deciding to not inline and then still hitting tracing.
->>=20
->> For noinstr we've mandated __always_inline to avoid this problem. The
->> direct advantage is that those inlined into instrumented code get, =
-well,
->> instrumented.
+On Tue, Sep 20, 2022 at 11:37:06AM +0300, Sakari Ailus wrote:
+> Hi Hidenori,
+> 
+> On Tue, Sep 20, 2022 at 11:00:01AM +0900, Hidenori Kobayashi wrote:
+> > There were no runtime PM callbacks registered, leaving regulators being
+> > enabled while the device is suspended on DT systems. Calling existing
+> > power controlling functions from callbacks properly turn them off/on.
+> > 
+> > Signed-off-by: Hidenori Kobayashi <hidenorik@chromium.org>
+> > ---
+> >  drivers/media/i2c/ov8856.c | 21 +++++++++++++++++++++
+> >  1 file changed, 21 insertions(+)
+> > 
+> > diff --git a/drivers/media/i2c/ov8856.c b/drivers/media/i2c/ov8856.c
+> > index a9728afc81d4..3f57bc30b78b 100644
+> > --- a/drivers/media/i2c/ov8856.c
+> > +++ b/drivers/media/i2c/ov8856.c
+> > @@ -2200,6 +2200,26 @@ static int __maybe_unused ov8856_resume(struct device *dev)
+> >  	return 0;
+> >  }
+> >  
+> > +static int __maybe_unused ov8856_runtime_suspend(struct device *dev)
+> > +{
+> > +	struct i2c_client *client = to_i2c_client(dev);
+> > +	struct v4l2_subdev *sd = i2c_get_clientdata(client);
+> > +	struct ov8856 *ov8856 = to_ov8856(sd);
+> > +
+> > +	__ov8856_power_off(ov8856);
+> 
+> Could you refactor this a bit, changing the __ov8856_power_off() argument
+> to struct dev *?
 
-Commit 45959ee7aa645 (=E2=80=9Cftrace: Do not function trace inlined =
-functions=E2=80=9D)
-gives two reasons which correspond with what you were saying: (1)
-consistency and (2) function that should not be traced are mostly marked =
-as
-inline.
+Sure. I'll make V2 with this refactoring. I'm guessing that we want the
+same for __ov8856_power_on(). Please let me know if otherwise.
 
-I am not sure I fully agree with the arguments, specifically the =
-consistency
-(any function might be inlined and not traceable). But I am too =
-afraid/lazy
-to cause damage and fix it. I will remove the inline and play a bit with =
-the
-kernel to see how it behaves.
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int __maybe_unused ov8856_runtime_resume(struct device *dev)
+> > +{
+> > +	struct i2c_client *client = to_i2c_client(dev);
+> > +	struct v4l2_subdev *sd = i2c_get_clientdata(client);
+> > +	struct ov8856 *ov8856 = to_ov8856(sd);
+> > +
+> > +	return __ov8856_power_on(ov8856);
+> > +}
+> > +
+> >  static int ov8856_set_format(struct v4l2_subdev *sd,
+> >  			     struct v4l2_subdev_state *sd_state,
+> >  			     struct v4l2_subdev_format *fmt)
+> > @@ -2540,6 +2560,7 @@ static int ov8856_probe(struct i2c_client *client)
+> >  
+> >  static const struct dev_pm_ops ov8856_pm_ops = {
+> >  	SET_SYSTEM_SLEEP_PM_OPS(ov8856_suspend, ov8856_resume)
+> > +	SET_RUNTIME_PM_OPS(ov8856_runtime_suspend, ov8856_runtime_resume, NULL)
+> >  };
+> >  
+> >  #ifdef CONFIG_ACPI
 
->>> 2. Is probing function that is called from do_idle() supposed to =
-work, or
->>>  should the kernel prevent it?
->>=20
->> Should work for some :-) Specifically it doesn't work for those that
->> disable RCU, and that's (largely) being fixed here:
->>=20
->> =
-https://lore.kernel.org/all/20220919095939.761690562@infradead.org/T/#u
->>=20
->> Although looking at it just now, I think I missed a spot.. lemme go =
-fix
->> ;-)
-
-I did not try your patches, but I do think I figured out what=E2=80=99s =
-wrong and
-sent a patch.
-
-=
-https://lore.kernel.org/lkml/EECE6FD7-FC3D-40E2-A957-151A1BE2B2F9@vmware.c=
-om/T/#t
-
-Thanks again,
-Nadav=
+Best regards,
+Hidenori
