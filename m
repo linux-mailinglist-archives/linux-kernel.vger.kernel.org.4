@@ -2,147 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 001C25E5550
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 23:41:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3F255E555D
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 23:45:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229842AbiIUVlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 17:41:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43334 "EHLO
+        id S230315AbiIUVpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 17:45:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiIUVlb (ORCPT
+        with ESMTP id S229814AbiIUVpK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 17:41:31 -0400
-Received: from mail105.syd.optusnet.com.au (mail105.syd.optusnet.com.au [211.29.132.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 02665A61F1;
-        Wed, 21 Sep 2022 14:41:29 -0700 (PDT)
-Received: from dread.disaster.area (pa49-181-106-210.pa.nsw.optusnet.com.au [49.181.106.210])
-        by mail105.syd.optusnet.com.au (Postfix) with ESMTPS id CD09A1100972;
-        Thu, 22 Sep 2022 07:41:25 +1000 (AEST)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1ob7TA-00AY5T-EA; Thu, 22 Sep 2022 07:41:24 +1000
-Date:   Thu, 22 Sep 2022 07:41:24 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Theodore Ts'o <tytso@mit.edu>, NeilBrown <neilb@suse.de>,
-        Trond Myklebust <trondmy@hammerspace.com>,
-        "bfields@fieldses.org" <bfields@fieldses.org>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "djwong@kernel.org" <djwong@kernel.org>,
-        "brauner@kernel.org" <brauner@kernel.org>,
-        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "chuck.lever@oracle.com" <chuck.lever@oracle.com>,
-        "linux-man@vger.kernel.org" <linux-man@vger.kernel.org>,
-        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
-        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
-        "jack@suse.cz" <jack@suse.cz>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "xiubli@redhat.com" <xiubli@redhat.com>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "adilger.kernel@dilger.ca" <adilger.kernel@dilger.ca>,
-        "lczerner@redhat.com" <lczerner@redhat.com>,
-        "ceph-devel@vger.kernel.org" <ceph-devel@vger.kernel.org>,
-        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>
-Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
- STATX_INO_VERSION field
-Message-ID: <20220921214124.GS3600936@dread.disaster.area>
-References: <166328063547.15759.12797959071252871549@noble.neil.brown.name>
- <YyQdmLpiAMvl5EkU@mit.edu>
- <7027d1c2923053fe763e9218d10ce8634b56e81d.camel@kernel.org>
- <24005713ad25370d64ab5bd0db0b2e4fcb902c1c.camel@kernel.org>
- <20220918235344.GH3600936@dread.disaster.area>
- <87fb43b117472c0a4c688c37a925ac51738c8826.camel@kernel.org>
- <20220920001645.GN3600936@dread.disaster.area>
- <5832424c328ea427b5c6ecdaa6dd53f3b99c20a0.camel@kernel.org>
- <20220921000032.GR3600936@dread.disaster.area>
- <93b6d9f7cf997245bb68409eeb195f9400e55cd0.camel@kernel.org>
+        Wed, 21 Sep 2022 17:45:10 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A17358276F
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 14:45:09 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id go6so7859809pjb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 14:45:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=pNiBU06AGrcp2W7TASu6fynoklavjSC6OPveK31UOzA=;
+        b=AODJ1Met9EqOFJ4cncAvFVOLy/vjD28tPZRu9cI+tOqlRM3XwC4eEObWXuwfBkBDN9
+         mOxBzSvjST4aYkBWFRHz1i1TJdk+/i5lB5ynpkAt6eAlo+QxDJrBkrn0Nz9SAtAVDY1g
+         INj4t/p1sDMlNYYXorqVirr7LRBXBgWuUwvt84cU+QVW9pprJuTsmbWkhd9pB/4afNoF
+         fKHaWzrCX4Q+5bdJiBCMYtqwKZfI1kNxNfYAeaCtFoSNcog9h4iY5lkEtpEu8/gIQtT+
+         B29rZ0Im5wgfComzCEXUmaqTAJ0b2hW9OHNlgL53UFClryljl0yxXK494k68dC0RE4nK
+         lZ7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=pNiBU06AGrcp2W7TASu6fynoklavjSC6OPveK31UOzA=;
+        b=wXj3NrpWQFqWQgRzZy00ItyYAbSqZCNPDBhroKjwBqzqKhxfuOQwBeio2ET+/EhC6A
+         J6C2epMBnyl5vdufI2k/17PDafVm/kCvxiVtL5UU/I/lBpxhDypDs8FBu8MoUD8tEtVr
+         LuRx+GPexcazdKN97yZUGU5qyvEr+x84vrk9ZXl5kVrih0D/y9USXbw7Ha0IOpzzaKW3
+         tv75gKlFk6ZzjbXXPyBI8O01+mKHKcgwEuYyhFekne4hf3lKC2yYWjAcDsRblCesgyuN
+         A2SpIE5obx50mN8dOJhiEnadkJ38wTOIRJTa48GlXV3Q96eoQ5lDkqaZxe7dUVU01thx
+         WuSQ==
+X-Gm-Message-State: ACrzQf2v9GopYXISeZTE+puODBS2/X8fX+8yZQvgX3B6bMq5/OV3cHaG
+        NKQaQKRB/CCdFLec5y28brwCMQ==
+X-Google-Smtp-Source: AMsMyM66myoGyBDoxPP1OWRrxSd6epYp/I3FF3zSvwBuBEey8VV+8fee78OywI4HTAiLpldibOjvXA==
+X-Received: by 2002:a17:902:e547:b0:178:7cf4:90e9 with SMTP id n7-20020a170902e54700b001787cf490e9mr232284plf.158.1663796709143;
+        Wed, 21 Sep 2022 14:45:09 -0700 (PDT)
+Received: from stillson.ba.rivosinc.com ([66.220.2.162])
+        by smtp.gmail.com with ESMTPSA id k7-20020aa79727000000b005484d133127sm2634536pfg.129.2022.09.21.14.45.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Sep 2022 14:45:08 -0700 (PDT)
+From:   Chris Stillson <stillson@rivosinc.com>
+Cc:     Guo Ren <ren_guo@c-sky.com>, Guo Ren <guoren@linux.alibaba.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Anup Patel <anup@brainfault.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Oleg Nesterov <oleg@redhat.com>, Guo Ren <guoren@kernel.org>,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
+        Chris Stillson <stillson@rivosinc.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Vincent Chen <vincent.chen@sifive.com>,
+        Heiko Stuebner <heiko@sntech.de>, Dao Lu <daolu@rivosinc.com>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        Nick Knight <nick.knight@sifive.com>,
+        Han-Kuan Chen <hankuan.chen@sifive.com>,
+        Changbin Du <changbin.du@intel.com>,
+        Li Zhengyu <lizhengyu3@huawei.com>,
+        Alexander Graf <graf@amazon.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Tsukasa OI <research_trasio@irq.a4lg.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Vitaly Wool <vitaly.wool@konsulko.com>,
+        Myrtle Shah <gatecat@ds0.me>,
+        Ruinland Tsai <ruinland.tsai@sifive.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Brown <broonie@kernel.org>, Will Deacon <will@kernel.org>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Colin Cross <ccross@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Barret Rhoden <brho@google.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org
+Subject: [PATCH v12 01/17] riscv: Rename __switch_to_aux -> fpu
+Date:   Wed, 21 Sep 2022 14:43:43 -0700
+Message-Id: <20220921214439.1491510-1-stillson@rivosinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <93b6d9f7cf997245bb68409eeb195f9400e55cd0.camel@kernel.org>
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.4 cv=OJNEYQWB c=1 sm=1 tr=0 ts=632b8509
-        a=j6JUzzrSC7wlfFge/rmVbg==:117 a=j6JUzzrSC7wlfFge/rmVbg==:17
-        a=kj9zAlcOel0A:10 a=xOM3xZuef0cA:10 a=7-415B0cAAAA:8
-        a=8pfsZ2Olh1enfcy7SOgA:9 a=CjuIK1q_8ugA:10 a=Fg_2k2EkwPauNWe-Eirz:22
-        a=biEYGPWJfzWAr4FL6Ov7:22
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 21, 2022 at 06:33:28AM -0400, Jeff Layton wrote:
-> On Wed, 2022-09-21 at 10:00 +1000, Dave Chinner wrote:
-> > > How do we determine what that offset should be? Your last email
-> > > suggested that there really is no limit to the number of i_version bumps
-> > > that can happen in memory before one of them makes it to disk. What can
-> > > we do to address that?
-> > 
-> > <shrug>
-> > 
-> > I'm just pointing out problems I see when defining this as behaviour
-> > for on-disk format purposes. If we define it as part of the on-disk
-> > format, then we have to be concerned about how it may be used
-> > outside the scope of just the NFS server application. 
-> > 
-> > However, If NFS keeps this metadata and functionaly entirely
-> > contained at the application level via xattrs, I really don't care
-> > what algorithm NFS developers decides to use for their crash
-> > sequencing. It's not my concern at this point, and that's precisely
-> > why NFS should be using xattrs for this NFS specific functionality.
-> > 
-> 
-> I get it: you'd rather not have to deal with what you see as an NFS
-> problem, but I don't get how what you're proposing solves anything. We
-> might be able to use that scheme to detect crashes, but that's only part
-> of the problem (and it's a relatively simple part of the problem to
-> solve, really).
-> 
-> Maybe you can clarify it for me:
-> 
-> Suppose we go with what you're saying and store some information in
-> xattrs that allows us to detect crashes in some fashion. The server
-> crashes and comes back up and we detect that there was a crash earlier.
-> 
-> What does nfsd need to do now to ensure that it doesn't hand out a
-> duplicate change attribute? 
+From: Guo Ren <ren_guo@c-sky.com>
 
-As I've already stated, the NFS server can hold the persistent NFS
-crash counter value in a second xattr that it bumps whenever it
-detects a crash and hence we take the local filesystem completely
-out of the equation.  How the crash counter is then used by the nfsd
-to fold it into the NFS protocol change attribute is a nfsd problem,
-not a local filesystem problem.
+The name of __switch_to_aux is not clear and rename it with the
+determine function: __switch_to_fpu. Next we could add other regs'
+switch.
 
-If you're worried about maximum number of writes outstanding vs
-i_version bumps that are held in memory, then *bound the maximum
-number of uncommitted i_version changes that the NFS server will
-allow to build up in memory*. By moving the crash counter to being a
-NFS server only function, the NFS server controls the entire
-algorithm and it doesn't have to care about external 3rd party
-considerations like local filesystems have to.
+Signed-off-by: Guo Ren <ren_guo@c-sky.com>
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Signed-off-by: Greentime Hu <greentime.hu@sifive.com>
+Reviewed-by: Anup Patel <anup@brainfault.org>
+Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
+---
+ arch/riscv/include/asm/switch_to.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-e.g. The NFS server can track the i_version values when the NFSD
-syncs/commits a given inode. The nfsd can sample i_version it when
-calls ->commit_metadata or flushed data on the inode, and then when
-it peeks at i_version when gathering post-op attrs (or any other
-getattr op) it can decide that there is too much in-memory change
-(e.g. 10,000 counts since last sync) and sync the inode.
-
-i.e. the NFS server can trivially cap the maximum number of
-uncommitted NFS change attr bumps it allows to build up in memory.
-At that point, the NFS server has a bound "maximum write count" that
-can be used in conjunction with the xattr based crash counter to
-determine how the change_attr is bumped by the crash counter.
-
--Dave.
+diff --git a/arch/riscv/include/asm/switch_to.h b/arch/riscv/include/asm/switch_to.h
+index 11463489fec6..df1aa589b7fd 100644
+--- a/arch/riscv/include/asm/switch_to.h
++++ b/arch/riscv/include/asm/switch_to.h
+@@ -46,7 +46,7 @@ static inline void fstate_restore(struct task_struct *task,
+ 	}
+ }
+ 
+-static inline void __switch_to_aux(struct task_struct *prev,
++static inline void __switch_to_fpu(struct task_struct *prev,
+ 				   struct task_struct *next)
+ {
+ 	struct pt_regs *regs;
+@@ -65,7 +65,7 @@ static __always_inline bool has_fpu(void)
+ static __always_inline bool has_fpu(void) { return false; }
+ #define fstate_save(task, regs) do { } while (0)
+ #define fstate_restore(task, regs) do { } while (0)
+-#define __switch_to_aux(__prev, __next) do { } while (0)
++#define __switch_to_fpu(__prev, __next) do { } while (0)
+ #endif
+ 
+ extern struct task_struct *__switch_to(struct task_struct *,
+@@ -76,7 +76,7 @@ do {							\
+ 	struct task_struct *__prev = (prev);		\
+ 	struct task_struct *__next = (next);		\
+ 	if (has_fpu())					\
+-		__switch_to_aux(__prev, __next);	\
++		__switch_to_fpu(__prev, __next);	\
+ 	((last) = __switch_to(__prev, __next));		\
+ } while (0)
+ 
 -- 
-Dave Chinner
-david@fromorbit.com
+2.25.1
+
