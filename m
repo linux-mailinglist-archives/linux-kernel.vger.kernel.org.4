@@ -2,100 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 459E75BFE7E
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 14:55:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B76B5BFE8B
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 15:01:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230255AbiIUMzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 08:55:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38680 "EHLO
+        id S229870AbiIUNBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 09:01:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229992AbiIUMzU (ORCPT
+        with ESMTP id S229771AbiIUNBL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 08:55:20 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EA9C5D0EA
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 05:55:19 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id s6so9049582lfo.7
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 05:55:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date;
-        bh=EXA4F3p30nEaqGYROy3yOPrseSGy+qOozb7BeUALkVM=;
-        b=omC4XcT29feYNjcxfz27EcryKYY2z/cDfe+sNcKmKUZYqFhuMgd7Ne+es9pQyV+ZhK
-         MsKiVg6WBe+fm0DPGMOZOyDbHXMSirUc6XJ/yYgulUpSVdv7STKoLvG4xl7o1/vFBflu
-         VEOJgXcLjxz6JtDzKSXlgtQkKNWm4/AWP5NupWFPfYqmLMn3brfZAA2kUKcSj5xgGuXf
-         LIObSAgSu8fI+TSuVozxtEQpZeKBofNjYBX97iNhxE42Ss2+oTVry4HUENhIfFWGeT4T
-         KcKB/brYjAgP6xfR7AoCvMNLbG8QWdGwnjYclowND3RR1QeAsMQhQuks6KdJP0e5TseH
-         OBbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=EXA4F3p30nEaqGYROy3yOPrseSGy+qOozb7BeUALkVM=;
-        b=dGf3w3Ikx9YYLN2fIsNHdR2qKHv1AIAZEqhI8DXrV7Jx9Aczv7v5wXgXqE4Gnf4fls
-         qij2anQUp8ZHuZ+pQbjX2IGzqzPADX4tBISlJRM9cK/m+3nZ1fWC4zXtohrvVQIYzr/u
-         hTkwx90Hp3y+oinjdy/3zkUJkL4Ndk7EVgmvwY9yZf+7XiR/wyUOQrURM1blnOGpNQrG
-         YnzoRW01gSWVyX2u1+nqxvwSTjgMM3WV5umbLn74PsZ7g1lpv12erlxkOnUx9Ie/tdwR
-         gf5KSuUuA6A6wwdCj4tpUUdLG9QdbNLHh7uUYPTlKt40SUd4UbGhHnQ/rN1sw4IS/HMA
-         r3/A==
-X-Gm-Message-State: ACrzQf0zr+RkQRnCJzzq8NLoDSdmH/sRFtDNeDyt7viUVCHbAmuX3j1F
-        HORtjw67AJTTFIp41N+4+gHnyYTIgRvugvQTryc=
-X-Google-Smtp-Source: AMsMyM6tlDFjGksgKumkFNPMe7nhfI1D61Znnoz91A3AcUBaV6BlNMfV8Yqe6IYadYnFQPlXB6iBHXXtOPD+kaA77OY=
-X-Received: by 2002:a05:6512:3183:b0:498:fa29:35fe with SMTP id
- i3-20020a056512318300b00498fa2935femr9888260lfe.523.1663764917331; Wed, 21
- Sep 2022 05:55:17 -0700 (PDT)
+        Wed, 21 Sep 2022 09:01:11 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF9C229C96;
+        Wed, 21 Sep 2022 06:01:08 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 6B4F61F88F;
+        Wed, 21 Sep 2022 13:01:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1663765267;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=SNOx7u/YQMIaTFhVzek1ee94itBFfBqVi5hVjzogOrM=;
+        b=w96BX+RZ4LI2I1gSSCNz1WzUxOSmT/ftdP87PZsC/lhCyeX+JSmn5MNEKJCk6rxCZaZJ5i
+        q4qup0ww94M49Z18AIlv9NnY3fKzaQbk9R4ra4EbELxgDy2tfUTO/faed177fpkYWa+at3
+        1GUaKRbgLJn21ONDnXP5UmldQRL8dbQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1663765267;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=SNOx7u/YQMIaTFhVzek1ee94itBFfBqVi5hVjzogOrM=;
+        b=/bDdRRT7yb0B3YNd+chIJllTtWIpxxXPvL9XfsQSP49oD5NrC+KdNEvE/CGcRivMRsMFLK
+        ECPigt2cFFDZJeAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3ECF613A89;
+        Wed, 21 Sep 2022 13:01:07 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id bCdrDhMLK2PYLwAAMHmgww
+        (envelope-from <dsterba@suse.cz>); Wed, 21 Sep 2022 13:01:07 +0000
+Date:   Wed, 21 Sep 2022 14:55:35 +0200
+From:   David Sterba <dsterba@suse.cz>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org,
+        Jules Irenge <jbi.octave@gmail.com>, x86@kernel.org
+Subject: Re: [tip: perf/core] perf/core: Convert snprintf() to scnprintf()
+Message-ID: <20220921125535.GF32411@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+References: <166374773592.401.16831946846027095231.tip-bot2@tip-bot2>
+ <YyrMmyUPk+4t6OLm@hirez.programming.kicks-ass.net>
+ <YyrrE8vpFSR+kdHQ@gmail.com>
 MIME-Version: 1.0
-Received: by 2002:aa6:da48:0:b0:21e:5fac:d54a with HTTP; Wed, 21 Sep 2022
- 05:55:16 -0700 (PDT)
-Reply-To: mglt777779@gmail.com
-From:   Maria Gilbert <eikon715@gmail.com>
-Date:   Wed, 21 Sep 2022 14:55:16 +0200
-Message-ID: <CAJBcqof+f2ynRgAGtY1RWgDauYiBqUJxeHKRx7+XXFAUhq_-7g@mail.gmail.com>
-Subject: cher
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:12c listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4998]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [eikon715[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [mglt777779[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [eikon715[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  3.0 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YyrrE8vpFSR+kdHQ@gmail.com>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-7Lmc7JWg7ZWY64qUIOyduOyCrCwNCuyggOuKlCDsmIHqta3snZggTWFyeSBHaWxiZXJ0IOu2gOyd
-uOyeheuLiOuLpC4g7KCA64qUIDYw7IS47J6F64uI64ukLiDrgpjripQg64u57Iug6rO8IOqzteyc
-oO2VmOqzoCDsi7bsnYAg6rOE7JW97J2EIOychO2VtCDri7nsi6Dsl5Dqsowg7Jew65297ZWp64uI
-64ukLg0K6rOg66eZ7Iq164uI64ukDQrrqZTrpqwg6ri467KE7Yq4IOu2gOyduA0K
+On Wed, Sep 21, 2022 at 12:44:35PM +0200, Ingo Molnar wrote:
+> 
+> * Peter Zijlstra <peterz@infradead.org> wrote:
+> 
+> > On Wed, Sep 21, 2022 at 08:08:55AM -0000, tip-bot2 for Jules Irenge wrote:
+> > > The following commit has been merged into the perf/core branch of tip:
+> > > 
+> > > Commit-ID:     678739d622ae7b75b62d550858b6bf104c43e2df
+> > > Gitweb:        https://git.kernel.org/tip/678739d622ae7b75b62d550858b6bf104c43e2df
+> > > Author:        Jules Irenge <jbi.octave@gmail.com>
+> > > AuthorDate:    Sun, 18 Sep 2022 00:41:08 +01:00
+> > > Committer:     Ingo Molnar <mingo@kernel.org>
+> > > CommitterDate: Wed, 21 Sep 2022 10:01:20 +02:00
+> > > 
+> > > perf/core: Convert snprintf() to scnprintf()
+> > > 
+> > > Coccinelle reports a warning:
+> > > 
+> > >     WARNING: use scnprintf or sprintf
+> > > 
+> > > Adding to that, there has also been some slow migration from snprintf to scnprintf.
+> > > 
+> > > This LWN article explains the rationale for this change:
+> > > 
+> > >     https: //lwn.net/Articles/69419/
+> > > 
+> > > No change in behavior.
+> > > 
+> > > [ mingo: Improved the changelog. ]
+> > 
+> > And yet, at this point I still have no clue what's wrong with
+> > snprintf(). So not much improvement :/
+> 
+> I've added this to the changelog:
+> 
+>     perf/core: Convert snprintf() to scnprintf()
+
+I'm not sure if it would apply in this case as it's for a device
+attribute, but there's another helper sysfs_emit that does the safe
+print to string and one does not have to care which flavor of s*printf
+it is. We had patches in btrfs converting from snprintf to scnprintf and
+the latest one is sysfs_emit which is convenient to use but assumes the
+PAGE_SIZE of the buffer.
