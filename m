@@ -2,82 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 800CD5E541F
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 22:04:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4971E5E5422
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 22:04:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbiIUUER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 16:04:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45696 "EHLO
+        id S230212AbiIUUE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 16:04:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbiIUUEP (ORCPT
+        with ESMTP id S230247AbiIUUEn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 16:04:15 -0400
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE6D86898;
-        Wed, 21 Sep 2022 13:04:14 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id E5BB82B0;
-        Wed, 21 Sep 2022 20:04:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net E5BB82B0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1663790654; bh=ZXfnpjWDlX3KQSHO3WoZdVME2upfsgqm8E4qpRArojY=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=tJs+BGuJCnJXpNsSB2i5gyyBgxtCCmNKEiIm2nr+F1baBdHtTGHTtVdibZFRUtWci
-         xRlHfSen+QITXpoHL1/hM9FHOuLkTYpLi1GHOu5pvNWYRZNdl2gispqXOUJ9qXAO/f
-         ju4z6os/qNHDYFFJn+pkSH+rY/wPVLZJxn0gJnQy4H0MywTA5+F4WYewv68/sSRs8B
-         8pTcDdF+Vy3UGDW632QaGiPsqhpFsDAtcvTfS0EyawqXDXOgQg7M6tsYQz1JaUXEGz
-         s8LCjppyMDEOMKZHrhCDoIIdOLP6Zok9kswIB5fjRNO7UaiNy7el7JkDVc0pku3Mwz
-         3qkkIYnx5jjdQ==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Shuah Khan <skhan@linuxfoundation.org>, gregkh@linuxfoundation.org
-Cc:     Shuah Khan <skhan@linuxfoundation.org>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, joanna.lee@gesmer.com
-Subject: Re: [PATCH] docs: update mediator information in CoC docs
-In-Reply-To: <20220901212319.56644-1-skhan@linuxfoundation.org>
-References: <20220901212319.56644-1-skhan@linuxfoundation.org>
-Date:   Wed, 21 Sep 2022 14:04:13 -0600
-Message-ID: <87tu50v6iq.fsf@meer.lwn.net>
+        Wed, 21 Sep 2022 16:04:43 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B44B1275E
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 13:04:39 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id e18so10412740edj.3
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 13:04:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=5SzmEU5uFGHIMVBxtfSrpE8XTcmMoLba7c07JMSX94M=;
+        b=jqHxXUWSw8KYNEp6iKPNjSYmp7GdqAtepWcsIdNZ1kBO3CXElJCRA2nr7gPcn1y0xX
+         Kq5OkI0I5tFbrM8ELjAjFko9r0omPMcpOCg19L01KjnS5o22PbdLRc75HlngNu+uR2jI
+         HmE6rAqUmscei6kcs3DgDtiJTRQmecfgjEVEA6u+v+XohSNqjo8EjAz2zwTPTHT5QPOR
+         JJIi+dXUvSARpAAcOSPQ0yHSf5S98FOQuSY5n5BYYBRxVBY0k2MtyttnZhgwLrJB9Pad
+         Xkjs3qXwiLq9quF46t1Xc4aqeCoX91S9rT9xEQlal3W6VQmKtq2HDOh2hX/1wXqMSHJC
+         YWKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=5SzmEU5uFGHIMVBxtfSrpE8XTcmMoLba7c07JMSX94M=;
+        b=n0y8hM3N9SDhdLJGgPk+aC+pexh5eipS3NPf/icHxQZIxt5qlWLCCrSVzQhH+w3OTT
+         9YIeX3UWtQEUcd4S957v7BYhAyfG2JH/Vuw3sCHqde9KhlbK13arQZfVdLvdbhWyB9a8
+         t7FDvP6nRutEKWkWMNGUgit7788Mc2bKKkxdKDqzfJB+YJEqoxjyejE6rrKciYcyhB42
+         m+5FCBoXeFqNKBS26dGpXJI1j3hUQ9P1Oti0WAvtOMiStAPlnk/OSJJRbNbnyDFRbtPS
+         hoNDtkdk5p3Qws6uUZZZF3tqBY+U92V3L4LdjReFdW2nrLz1nuNx0sK6H5OejFUTd+us
+         r4ZQ==
+X-Gm-Message-State: ACrzQf1tx0unFerx6K8J+XPJILKlYmF3C6iTg8x67pNoyOSloF8Z3lIb
+        FbtizIqmpPa4/aQIrAsAHCpjwajTll70z1rTWHBBCQ==
+X-Google-Smtp-Source: AMsMyM5QWdx5gJvHaXBfcXrvmiktKPbeLPsxRIsKC2pchJljihFyJvMZPyJNJytbuaJBjyfB/y3QWvDqvADHEejMp1g=
+X-Received: by 2002:aa7:dd02:0:b0:44e:f7af:b996 with SMTP id
+ i2-20020aa7dd02000000b0044ef7afb996mr26767551edv.422.1663790678153; Wed, 21
+ Sep 2022 13:04:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220921155436.235371-1-sashal@kernel.org> <20220921155436.235371-2-sashal@kernel.org>
+ <fec2e2e2e74d680d5f9de6d68fb5fe18@kernel.org>
+In-Reply-To: <fec2e2e2e74d680d5f9de6d68fb5fe18@kernel.org>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 21 Sep 2022 22:04:27 +0200
+Message-ID: <CAMRc=MexqLhu3ZWt1AbzBestswqmHNpct1LQiif0JGECTjHz4Q@mail.gmail.com>
+Subject: Re: [PATCH AUTOSEL 5.4 2/5] gpio: ixp4xx: Make irqchip immutable
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
+        linusw@kernel.org, kaloz@openwrt.org, khalasa@piap.pl,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Shuah Khan <skhan@linuxfoundation.org> writes:
-
-> Update mediator information in the CoC interpretation document.
+On Wed, Sep 21, 2022 at 6:57 PM Marc Zyngier <maz@kernel.org> wrote:
 >
-> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-> ---
->  Documentation/process/code-of-conduct-interpretation.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> On 2022-09-21 16:54, Sasha Levin wrote:
+> > From: Linus Walleij <linus.walleij@linaro.org>
+> >
+> > [ Upstream commit 94e9bc73d85aa6ecfe249e985ff57abe0ab35f34 ]
+> >
+> > This turns the IXP4xx GPIO irqchip into an immutable
+> > irqchip, a bit different from the standard template due
+> > to being hierarchical.
+> >
+> > Tested on the IXP4xx which uses drivers/ata/pata_ixp4xx_cf.c
+> > for a rootfs on compact flash with IRQs from this GPIO
+> > block to the CF ATA controller.
+> >
+> > Cc: Marc Zyngier <maz@kernel.org>
+> > Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> > Acked-by: Marc Zyngier <maz@kernel.org>
+> > Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+> > Signed-off-by: Sasha Levin <sashal@kernel.org>
 >
-> diff --git a/Documentation/process/code-of-conduct-interpretation.rst b/Documentation/process/code-of-conduct-interpretation.rst
-> index e899f14a4ba2..4f8a06b00f60 100644
-> --- a/Documentation/process/code-of-conduct-interpretation.rst
-> +++ b/Documentation/process/code-of-conduct-interpretation.rst
-> @@ -51,7 +51,7 @@ the Technical Advisory Board (TAB) or other maintainers if you're
->  uncertain how to handle situations that come up.  It will not be
->  considered a violation report unless you want it to be.  If you are
->  uncertain about approaching the TAB or any other maintainers, please
-> -reach out to our conflict mediator, Mishi Choudhary <mishi@linux.com>.
-> +reach out to our conflict mediator, Joanna Lee <joanna.lee@gesmer.com>.
->  
->  In the end, "be kind to each other" is really what the end goal is for
->  everybody.  We know everyone is human and we all fail at times, but the
+> Why? The required dependencies are only in 5,19, and are
+> definitely NOT a stable candidate...
+>
+> This isn't a fix by any stretch of the imagination.
+>
 
-Applied (finally), thanks.
+Hi Marc,
 
-I stuck a Cc: stable on there, it seems this should be updated in all of
-the distributed kernels.
+While I didn't mark it for stable (and it shouldn't go into any branch
+earlier than 5.19.x), I did send the patches making the irqchips
+immutable to Linus Torvalds as fixes as they technically do *fix* the
+warning emitted by gpiolib and make the implementation correct.
 
-Thanks,
+I think these patches should still be part of the v5.19.x stable branch.
 
-jon
+Bart
