@@ -2,73 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B44F5C045F
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 18:38:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3DA25C0463
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 18:39:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229962AbiIUQiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 12:38:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39224 "EHLO
+        id S231455AbiIUQjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 12:39:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230097AbiIUQiW (ORCPT
+        with ESMTP id S230035AbiIUQir (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 12:38:22 -0400
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 968D896FC1
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 09:23:52 -0700 (PDT)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-11eab59db71so9776342fac.11
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 09:23:52 -0700 (PDT)
+        Wed, 21 Sep 2022 12:38:47 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 351A222515
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 09:24:48 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-1278624b7c4so9813452fac.5
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 09:24:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linux-foundation.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=c0RkeYzaVmPEsrZ5EMX9GaWUzmBrwnO4Ngp7mcr6270=;
-        b=mclHjr/Fs7SL8F+F1lWzX0r9UcdRoDguRRxPSp+ho6sqozHcX+AjvJ5xpr0V3e1/Q/
-         +c+WVecvKeIFAn8SIlKHOt/eEiV+zHBPoLKh+fwlCmVx7Lm4QtY1uOW1czzBfhvybyUF
-         +HoxJk/yRuTrdb2Ot8vLIw2Pyv+VmyEMNe8x8ORYb9gPlZaqR4i3mw7IBvtsQiUQ5qMl
-         zD2bNR3+acOJOi+D7XFMIEwwKFdUTK/G4gViPhJ9xLHg8rpDx8UZlaI+HyckwibnSeSh
-         r05ZMc6qgdf1jRIPWKNygBlVDuBxocBMoye/PC88Kpau/Z6Pe2cbvkw+8QITUJ9Chgt/
-         GZfA==
+        bh=IIhmePtQyz8T33+pbjoIxj/dwgnHGLvrBq+uOaeYXY8=;
+        b=U/VqAntmt8ExRWsNRYhZR0oaZfqMSxDhubxnGHZSPRrgQiW26iLuvsTs6LtUI+90KI
+         MR/9+tEfV6l2HZz9PKe9QcXt27cEbSot0ICn2vHp+Scu+p4Z4fCvFnfO7cPiR7YB20w6
+         ICE2BcrAD9m6xArawiTjvB6dFxpzWP+B9KTgs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=c0RkeYzaVmPEsrZ5EMX9GaWUzmBrwnO4Ngp7mcr6270=;
-        b=m/oMQ9XGywYsYnyPmstKV4xe5PMCyoAfeo178dHgVlApuL3Fc558Jdtgh+d25N5vBS
-         RJidEtnoZZZGpSAjQaVqNIUMXG75VcVqlgT4A6XRxCnpu9YZ0gdY77LbdyxpSupCTzTY
-         Dn+7cT/n2bWjTRVd37xfXLIr2cfLeoYOanHh3CdNTWvlblgIEU/pGAvB2fqp3zh911RV
-         2chI0yEBxqlwk+JY61z4+VGT86p4sXFI2/sirrI/+lpyfu7HYrqmXlm3k29HcEE4MvS5
-         n0jnb6KLuGLS1EG8OOg0Lc2cdoM1jDwQdFmIwjbtu+R+4hNWRL6ZBRKiJbe7DugLRphg
-         Xrbw==
-X-Gm-Message-State: ACrzQf2adrls1KLl4wdnU7gbEU/HNjZcAI9NnLB23swKwLYorRACpAdX
-        H+HzQkWCSht/yx+PsGY8DfWewihMEUPYHVG8ay9Tlw==
-X-Google-Smtp-Source: AMsMyM6udKO0mM416CuGNqHAwIob8j7/AVRQHFn1HV+/sWmesQmURFFmLUYUAP/MZg19xYHGWdzVHZOYi3AOvF4Mwuc=
-X-Received: by 2002:a05:6870:580c:b0:12a:f136:a8f5 with SMTP id
- r12-20020a056870580c00b0012af136a8f5mr5412294oap.269.1663777431692; Wed, 21
- Sep 2022 09:23:51 -0700 (PDT)
+        bh=IIhmePtQyz8T33+pbjoIxj/dwgnHGLvrBq+uOaeYXY8=;
+        b=6DcP7r9zwtOb11/irrFhzw6E7szh+a5Bb93Gk9+JUM2RZi6medXTtqk0bkl9lIP4Uw
+         UA60H++2zSbCYJdUAOgtGbUi7Nn+4avSwq2CjcIf5hnKsmxcE2GX4FM9sRVGIPP2w60+
+         HEiNMMO0Mdg/TB4onij86aHdhYgtDFl7VtY/FbS4x0gKVCBQvJkqBajBOBO0xnjeixKL
+         aFVxFzVt3zIA6lyy7UMzpcBRif1rhmDAepK+7AhIj09o4DEAfbF4hKdfvJ0UZAxUKcK6
+         GIM7Q1e4hdVf0V7gYq+Mf64CNdxWL1g7QaN4ZzYTszC/SzVaFDAGaOyuHm6dPyJwQSyr
+         N/pA==
+X-Gm-Message-State: ACrzQf205HMdS8U3oAgBOcET6OX8hv9O4UNsxmkJsqHWv8xYGWXZL9LI
+        JiVV2CYPyoBJspBOuD3+MlDKLGROjmQN5w==
+X-Google-Smtp-Source: AMsMyM55hghA/XeqLfklYfTRYiAf8kz5kPoHs4naBK0bnJ64qO2OwLvVLa5H7iC4PImq7zktLEjAtA==
+X-Received: by 2002:a05:6870:f213:b0:12d:6a9d:3fb2 with SMTP id t19-20020a056870f21300b0012d6a9d3fb2mr4029264oao.78.1663777487705;
+        Wed, 21 Sep 2022 09:24:47 -0700 (PDT)
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com. [209.85.167.174])
+        by smtp.gmail.com with ESMTPSA id t12-20020a056870e74c00b0012752d3212fsm1734295oak.53.2022.09.21.09.24.45
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Sep 2022 09:24:45 -0700 (PDT)
+Received: by mail-oi1-f174.google.com with SMTP id j188so8790390oih.0
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 09:24:45 -0700 (PDT)
+X-Received: by 2002:a05:6808:11cf:b0:34b:8f4f:314b with SMTP id
+ p15-20020a05680811cf00b0034b8f4f314bmr4299822oiv.126.1663777485133; Wed, 21
+ Sep 2022 09:24:45 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220920205922.1564814-1-jmattson@google.com> <Yyot34LGkFR2/j5f@zn.tnic>
- <CALMp9eQijCKS-E_OWJkxdqAur3BthciOWEtEPH5YKd0-HJiQQA@mail.gmail.com>
- <YyrZOLq8z+lIORvP@zn.tnic> <CALMp9eRG6g-95zCxTD1NnxpZ+Vm6VMTA0_uaHV=b-hDkeOYSuA@mail.gmail.com>
- <YysXeXKY36yXj68q@zn.tnic> <CALMp9eTuO79+NfHxLi8FnqdOpzXO7eQUntvN23EfR+shg+wg2Q@mail.gmail.com>
- <Yys2ikzV73upzlEj@zn.tnic>
-In-Reply-To: <Yys2ikzV73upzlEj@zn.tnic>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Wed, 21 Sep 2022 09:23:40 -0700
-Message-ID: <CALMp9eQ-qkjBm8qPhOaMzZLWeHJcrwksV+XLQ9DfOQ_i1aykqQ@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] KVM: EFER.LMSLE cleanup
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+References: <2b0ca6254dd0102bf559b2a73e9b51da089afbe3.1663764627.git.robin.murphy@arm.com>
+In-Reply-To: <2b0ca6254dd0102bf559b2a73e9b51da089afbe3.1663764627.git.robin.murphy@arm.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 21 Sep 2022 09:24:29 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whdwG2LaaktZTYab2JO2TkPYEmSc-sOJ=qL5wtOWpRpKA@mail.gmail.com>
+Message-ID: <CAHk-=whdwG2LaaktZTYab2JO2TkPYEmSc-sOJ=qL5wtOWpRpKA@mail.gmail.com>
+Subject: Re: [PATCH v2] iommu: Optimise PCI SAC address trick
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     joro@8bytes.org, will@kernel.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,24 +73,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 21, 2022 at 9:06 AM Borislav Petkov <bp@alien8.de> wrote:
+On Wed, Sep 21, 2022 at 5:53 AM Robin Murphy <robin.murphy@arm.com> wrote:
 >
-> On Wed, Sep 21, 2022 at 08:11:29AM -0700, Jim Mattson wrote:
-> > Yes, after the revert, KVM will treat the bit as reserved, and it will
-> > synthesize a #GP, *in violation of the architectural specification.*
->
-> Architectural, schmarchitectural... Intel hasn't implemented it so meh.
->
-> > KVM can't just decide willy nilly to reserve arbitrary bits. If it is
-> > in violation of AMD's architectural specification, the virtual CPU is
-> > defective.
->
-> Grrr, after your revert that this bit was *only* reserved and nothing
-> else to KVM. Like every other reserved bit in EFER. Yeah, yeah, AMD
-> specified it as architectural but Intel didn't implement it so there's
-> this thing on paper and there's reality...
+> Per the reasoning in commit 4bf7fda4dce2 ("iommu/dma: Add config for
+> PCI SAC address trick") and its subsequent revert, this mechanism no
+> longer serves its original purpose, but now only works around broken
+> hardware/drivers in a way that is unfortunately too impactful to remove.
 
-AMD defined the 64-bit x86 extensions while Intel was distracted with
-their VLIW science fair project. In this space, Intel produces AMD64
-compatible CPUs. The definitive specification comes from AMD (which is
-sad, because AMD's documentation is abysmal).
+I was going to test this, since the previous version failed for me.
+But it's based on linux-next, and I didn't want to fight the conflicts
+(including - but not limited to - the header file being moved) so I
+dropped that plan.
+
+If you think it's worth testing on the setup that used to fail, and
+you send me a version that applies on my current tree, I can do so.
+
+               Linus
