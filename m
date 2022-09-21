@@ -2,95 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9392E5BF699
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 08:48:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 135265BF69B
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 08:48:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229673AbiIUGsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 02:48:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48426 "EHLO
+        id S230024AbiIUGsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 02:48:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbiIUGr4 (ORCPT
+        with ESMTP id S229787AbiIUGsS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 02:47:56 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30E677A516
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 23:47:55 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id a8so7549705lff.13
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 23:47:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=e/qlMRjeLI7cvdXCPMm7XCLXM8gfF+H0TRh7nH7eUmc=;
-        b=OlkRaPzT/EsGVCYhp7QKngqgMhN2WB7xIl3iSkBNblcK1aMQf/e3vV3uImji2L/okS
-         irQ4+OVGKyqvaPjBBDRBqYV++TVSc/TbpxptrDPORPR9yoK9G16+Ff6xylkU66LGlWQH
-         jjMoA6MONOBG5PIVUsXNCV1Za5TfUMExx+q9tiUFOthrs1v+jmguuKCxpYqMray+JJZm
-         yGos339JbYAb34YtrSKGCy6ZCAOKnTP2rRZeldsi07f+j1rS23tG5mx3/YFliGxCt+gG
-         H01wlsf893s+yU7aLO4sqqs9vWRYuyeR4S7XPOGgoSyYFStGRuD4VVu3ChwrirChO0ki
-         Wjgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=e/qlMRjeLI7cvdXCPMm7XCLXM8gfF+H0TRh7nH7eUmc=;
-        b=Htql+5ocrsjZBUK7FjFHstT5nHXUL5SIDVDyYtZpFoQY6sutDPSDms/aubA0O3EIdO
-         TXKN0IVHfEpORYJUzAK2xLm5BRHl1xWmypSaGuL6kUIcGRNrms1j9dOCW4+F1gVCBUJR
-         U7thM65AoDIZeFy6zUm7noiVcffWbUj63jT29t5w5kgikJUokqWjAeeToNCCXP3e0QR4
-         CESN910K7/zvr3Uot8M8+gWitjlVqsbdCOm+HlO0L+aVpvtyt0kcolYPxwH6mCZZ209A
-         vmqpK1BnBQS8qEPI3TIH1OmZfie26LEtsRiqNPFZ1SISBTSbdEgh72dzaTRnNrXiypWm
-         cLQQ==
-X-Gm-Message-State: ACrzQf2RTdSQ/MC1OO56eIxtwM2YfAq4j/WRnASFQQppBvcbFylOfbAt
-        ckAb0PahX6V47VqkbpTaY6JfVA==
-X-Google-Smtp-Source: AMsMyM6VSdl6GKknWuhyDqBfXdVFdqC5rXDETmWwrMAV8AsKNNZpVThYjbK5rNepO9cRHCPXEhPTIA==
-X-Received: by 2002:a05:6512:3d9f:b0:497:a108:544f with SMTP id k31-20020a0565123d9f00b00497a108544fmr9018351lfv.688.1663742873480;
-        Tue, 20 Sep 2022 23:47:53 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id j16-20020ac253b0000000b004948378080csm295277lfh.290.2022.09.20.23.47.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Sep 2022 23:47:52 -0700 (PDT)
-Message-ID: <f49144d0-4e26-6907-d2bb-0bb15ddb7954@linaro.org>
-Date:   Wed, 21 Sep 2022 08:47:51 +0200
+        Wed, 21 Sep 2022 02:48:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B45F80F62;
+        Tue, 20 Sep 2022 23:48:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 07D2F6216B;
+        Wed, 21 Sep 2022 06:48:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61A4DC433C1;
+        Wed, 21 Sep 2022 06:48:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663742896;
+        bh=TvyVP6RlE55q2MwRdD1Tyx/Kp0Yj7xC9kH/TAmfA2Vc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VwlyA/O05Nj92M8e0nW2ptnU1oYJr+7dMoKfxx537bMl8DnM13RJRa5upM4TAb632
+         QpaPJv0n8+raAoQnRaoPE4NOoWvs5JSPGQ1Y+97xl/WBkfiiE9Se0F0Iad7T6fGOu6
+         2yyj1VqbE3/66dK7QRjVtJS4K39wg+V9ACgobCGTKzKLCIRrR+Qjvl4QgzITe8Smwy
+         Ov3JSSZDxtAm5K5Dj7rpg9xdowCP/Sb4r8/Xn69ogGra2TiPwjEwD7L1QRBr89Tw2o
+         +vPUT3SWagCj/X5sgzA1pFMM8/G6lYmObCaZCOz61A4WH/zUV8izVWHnxStR/6ctT2
+         GO78jX5Wb5soQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oatWr-0003a9-MX; Wed, 21 Sep 2022 08:48:17 +0200
+Date:   Wed, 21 Sep 2022 08:48:17 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Parikshit Pareek <quic_ppareek@quicinc.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Andrew Halaney <ahalaney@redhat.com>,
+        Shazad Hussain <quic_shazhuss@quicinc.com>
+Subject: Re: [PATCH v4 2/3] arm64: dts: qcom: sa8295p: move common nodes to
+ dtsi
+Message-ID: <YyqzsZVL05cegWNv@hovoldconsulting.com>
+References: <20220920120802.14321-1-quic_ppareek@quicinc.com>
+ <20220920120802.14321-3-quic_ppareek@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 2/4] dt-binding: input: egalax-ts: fix GPIO and IRQ in
- example
-Content-Language: en-US
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-input@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Fabio Estevam <festevam@gmail.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220920042608.1865560-1-dmitry.torokhov@gmail.com>
- <20220920042608.1865560-2-dmitry.torokhov@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220920042608.1865560-2-dmitry.torokhov@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220920120802.14321-3-quic_ppareek@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/09/2022 06:26, Dmitry Torokhov wrote:
-> The driver is using level triggered interrupt (low) which is backed by
-> and active low GPIO that can be used to wake the controller by driving it
-> low. Let's annotate it properly in the example.
-> 
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+On Tue, Sep 20, 2022 at 05:38:01PM +0530, Parikshit Pareek wrote:
+> There are many ADP boards with lot of common features. Move common
+> nodes to sa8540p-adp.dtsi file. This will be base for many ADP boards
+> to be introduced in near future.
 
+I already asked you to include a description of those differences here
+in the commit message so that we can make a decision on whether this
+change makes sense or not.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+This also needs to be documented for future changes. For example, when
+I'll be adding PCIe support to sa8295p-adp I'd need to know whether this
+should go in a shared dtsi or in the board file.
 
+For reasons like this, I'm still not convinced that this is a good idea.
 
-Best regards,
-Krzysztof
+> Signed-off-by: Parikshit Pareek <quic_ppareek@quicinc.com>
+> ---
+>  arch/arm64/boot/dts/qcom/sa8295p-adp.dts      | 392 +-----------------
+>  .../{sa8295p-adp.dts => sa8540p-adp.dtsi}     |   0
+>  2 files changed, 14 insertions(+), 378 deletions(-)
+>  rewrite arch/arm64/boot/dts/qcom/sa8295p-adp.dts (96%)
+>  copy arch/arm64/boot/dts/qcom/{sa8295p-adp.dts => sa8540p-adp.dtsi} (100%)
+
+Johan
