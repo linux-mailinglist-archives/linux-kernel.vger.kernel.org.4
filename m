@@ -2,46 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98C8E5BF27B
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 02:54:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB7065BF27A
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 02:53:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231316AbiIUAx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 20:53:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34266 "EHLO
+        id S231204AbiIUAxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 20:53:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230419AbiIUAxw (ORCPT
+        with ESMTP id S229599AbiIUAxv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 20:53:52 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E23B79A78;
-        Tue, 20 Sep 2022 17:53:51 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 11D76415;
-        Wed, 21 Sep 2022 02:53:45 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1663721626;
-        bh=NKIBgvf5EtOAYU3QLWV5VyxZpPJqOS7yx89s5sYlf5U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=blZQMaVfVNLDa8/2YPRtCI2NTuYDjtw7wWUSk53LSLafVL+bdwF3IKdvzsQCLxVjH
-         YZwU+N+JJJFfjx5+t0j4vSnuQQoza3kRv3jW4u+4MKsV0eB1kxhs+5ZDlhhXilYBAp
-         9RAsNZKa0rASQSZ4tNPsxPmk1zEVY4oxB1+aQN2w=
-Date:   Wed, 21 Sep 2022 03:53:31 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzbot <syzkaller@googlegroups.com>
-Subject: Re: [PATCH v1 1/1] media: uvc: Handle cameras with invalid
- descriptors
-Message-ID: <Yypgi6Jc9/tZLtIw@pendragon.ideasonboard.com>
-References: <20220920-invalid-desc-v1-0-76a93174f3bc@chromium.org>
- <20220920-invalid-desc-v1-1-76a93174f3bc@chromium.org>
+        Tue, 20 Sep 2022 20:53:51 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC30B79637;
+        Tue, 20 Sep 2022 17:53:47 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MXKfZ0GkDz4xGG;
+        Wed, 21 Sep 2022 10:53:41 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1663721622;
+        bh=MYiu+s3OeBKd3nNk+MFnM9wVMRP+fbojbJFcGIJwzQE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=KsK9X9o4fuxiHmuG7OEE4R2TDEuQjFrSq0dJu93TQv2CM3j7a5fPjeF2XJG+WIFNP
+         w+iUFW8qrqoMe+HlYlieydgxOgB6pJO4IoSWLjWIHN9NVTRqSCxqcpghwdZyEBcxxg
+         OJPArFcnIlFt8evRrIOqzkuXq+AI6J4Qn4QAkvZHW8Trv1giW7WfT69nnY4UA0BhZT
+         vVQ+y334k8YUY+wyEiDhCvwtqmVBvSp7xCo79z8Ad8tJnTCBOgFVJm+apIQgAHNKCc
+         Wc/0zimWm7xZznFEbJROtcRRwb406CEiApwelmxAzN0xWLrLSBqExIVXINk9WST1/v
+         4JjDwn3+f5hOQ==
+Date:   Wed, 21 Sep 2022 10:53:37 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>
+Cc:     Networking <netdev@vger.kernel.org>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Wei Fang <wei.fang@nxp.com>
+Subject: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <20220921105337.62b41047@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220920-invalid-desc-v1-1-76a93174f3bc@chromium.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+Content-Type: multipart/signed; boundary="Sig_/GKIy3cO/TxJifJRDSQPbg+Y";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,41 +53,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ricardo,
+--Sig_/GKIy3cO/TxJifJRDSQPbg+Y
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for the patch.
+Hi all,
 
-On Tue, Sep 20, 2022 at 04:04:55PM +0200, Ricardo Ribalda wrote:
-> If the source entity does not contain any pads, do not create a link.
-> 
-> Reported-by: syzbot <syzkaller@googlegroups.com>
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> 
-> diff --git a/drivers/media/usb/uvc/uvc_entity.c b/drivers/media/usb/uvc/uvc_entity.c
-> index 7c4d2f93d351..1f730cb72e58 100644
-> --- a/drivers/media/usb/uvc/uvc_entity.c
-> +++ b/drivers/media/usb/uvc/uvc_entity.c
-> @@ -43,7 +43,7 @@ static int uvc_mc_create_links(struct uvc_video_chain *chain,
->  		source = (UVC_ENTITY_TYPE(remote) == UVC_TT_STREAMING)
->  		       ? (remote->vdev ? &remote->vdev->entity : NULL)
->  		       : &remote->subdev.entity;
-> -		if (source == NULL)
-> +		if (source == NULL || source->num_pads == 0)
+Today's linux-next merge of the net-next tree got a conflict in:
 
-source->num_pads and remote->num_pads should always be identical, but as
-the next line uses remote->num_pads, wouldn't it be better to test that
-variable ? If so, I'd move the test a file lines earlier, with the
-remote == NULL test.
+  drivers/net/ethernet/freescale/fec.h
 
-What do you think ? If you agree I can make that change when applying,
-there's no need for a new version. Otherwise I'll keep the patch as-is.
+between commit:
 
->  			continue;
->  
->  		remote_pad = remote->num_pads - 1;
-> 
+  7b15515fc1ca ("Revert "fec: Restart PPS after link state change"")
 
--- 
-Regards,
+from the net tree and commit:
 
-Laurent Pinchart
+  40c79ce13b03 ("net: fec: add stop mode support for imx8 platform")
+
+from the net-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/net/ethernet/freescale/fec.h
+index a5fed00cb971,dd055d734363..000000000000
+--- a/drivers/net/ethernet/freescale/fec.h
++++ b/drivers/net/ethernet/freescale/fec.h
+@@@ -639,6 -641,15 +642,8 @@@ struct fec_enet_private=20
+  	int pps_enable;
+  	unsigned int next_counter;
+ =20
+ -	struct {
+ -		struct timespec64 ts_phc;
+ -		u64 ns_sys;
+ -		u32 at_corr;
+ -		u8 at_inc_corr;
+ -	} ptp_saved_state;
+ -
++ 	struct imx_sc_ipc *ipc_handle;
++=20
+  	u64 ethtool_stats[];
+  };
+ =20
+
+--Sig_/GKIy3cO/TxJifJRDSQPbg+Y
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMqYJEACgkQAVBC80lX
+0GxcfQf/dI8QcD5v0qxaOm3B538bZTjUBhAXhzaA8ghgw0fI6f+36V/8+GtOxA/M
+XNUcTywy2t7r06Z+Dvz/P3hgnjtCITYdT42299eyO50cJrT0aNcrYYA7o9dYcIVV
+OjJ9F28uqGbJosDK9kymxcUQVNDXc1WVsZ/7i58KomS7IS+8Lv7fE4JPVcQzhFAA
+6cy4PQChhbTQtwjQn2jIpGAaQBAbYnsOnts0EUFqyyE8OHEgkyQUXoJ/maJRLerD
+NLS+HS29lpBo19JNrqrndCrccVmxINdsx5s9Wg3cY4MtSayj0VHKL8gAMAmEVsxi
+Gk9W63epwWTXvDWFw5iwwxP6Saa9Eg==
+=nrEK
+-----END PGP SIGNATURE-----
+
+--Sig_/GKIy3cO/TxJifJRDSQPbg+Y--
