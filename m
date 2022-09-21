@@ -2,300 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DCAA5BF9F8
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 11:00:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A94A5BF9F9
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 11:00:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbiIUJAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 05:00:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49062 "EHLO
+        id S229612AbiIUJAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 05:00:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbiIUJA1 (ORCPT
+        with ESMTP id S230035AbiIUJAm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 05:00:27 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A6B612768;
-        Wed, 21 Sep 2022 02:00:25 -0700 (PDT)
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 51DCC660201E;
-        Wed, 21 Sep 2022 10:00:23 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1663750823;
-        bh=v39Ls358YlCiDDLISWXbQWKLjkzVmreN/vKulfgXwOU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Nl58T+/9Ga9PN5Knl5/g7YAc9MzTN9OLnMlOVSkJj9/+ROwrjC+V9OK81vb3ZKGtc
-         TJk+ZIIv2DO1vvPE27TiP4xLInXutWujcj7B8fStNb4jmdrZcXoMdubs7x/dtaE8Tu
-         X9ewCA9wqgVcAkoz8Q3wd52jELCb2eEgbQTDPPOD/XdPGtjEOxAUgYtQyOblwYlCvf
-         0b/pwoUVgWPXU/R6NKVg+xvKRysz61vQp3VVLRXlxQSjgTesZCs18dGmOznl4lYU2i
-         TClQlvaXYvCubfVoxUa9tEso6ZVfgSlj/6wxkZCaJrb3K0hoI+UnUzsie5N8dMwNqk
-         PsTbKmD0BVt3Q==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     robh+dt@kernel.org
-Cc:     jassisinghbrar@gmail.com, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, houlong.wei@mediatek.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v4] dt-bindings: mailbox: Convert mtk-gce to DT schema
-Date:   Wed, 21 Sep 2022 11:00:06 +0200
-Message-Id: <20220921090006.37642-1-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.37.2
+        Wed, 21 Sep 2022 05:00:42 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4724F13F6C
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 02:00:41 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id dv25so11963653ejb.12
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 02:00:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=C4VPMMY4HXw4Oekj8wk8jcgdOutzg+K1mTd8apbGcww=;
+        b=RCziy0AjXqscuqvV5yiptKJgwG5cCQp6yTrfQi2XtYK/V/An1ZiHlfucaPYAglNhR/
+         iQ8ZnrGiPebgr750t7qCXhBMhtl5HGJv+1JXmmeAE4qri6NDJuhHdSwIkQ/eaGzE0+ZX
+         H/b+qIK1ebI5L+6n+tUbXuG/qGLPUbFNsDzZBKjY9gfjcTmusJ6tXFk/c7C1DU8uYa8A
+         X7PuMZUui32qsu8OWRhRcMalPSnfjRNuGdLuZe5Tfwnu+1MYXkWX3pBhjaKcQSvq6e3F
+         wcNMXJoBzCBA1qbrqAcjtVr/SFhI/VsDXZM2KJQclZGXGqPNLaFLcwI6dm015DrAdxaD
+         LJqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=C4VPMMY4HXw4Oekj8wk8jcgdOutzg+K1mTd8apbGcww=;
+        b=Da9TcfLvk9Ybf5zJo/1AJwrnS+kvBdK692Qsad/aLxp9vPEhXZ7a9aJ71ZstT2iV8t
+         qsAwMSsnZOhlO6XuR+Z+O4FngJpCL4kX/rR2dCfzlEciQhI14pOdPKhvDENAiOLJZwON
+         qSDrtuwSxXv7+qD6B4h2pv0+ZwHR/9Nnzi2YEGfT/uBUhFdIgekp01+gnpgxX5ml/kU7
+         Ld+ZPHdBMvvjJjLchmVdTxWQHba7bghNX/2el64wR041Ha00PmPdIeg8SjzP/ZaCSXDB
+         Pes54f3u8Dm9YFsb28/iR/frCQa5voPjA7IM9aEiTYbmGejv0hjjKsZ44jf3J1S9ovux
+         GQkw==
+X-Gm-Message-State: ACrzQf2CGJgdYaNXgX83SFEqUDxjLZ4SIDMoVKIKsAhHSYGtuokCS+Y6
+        rc5MHzOeR9BLEVnQ60oo/9RKtXsNuwNPMMYTEfE=
+X-Google-Smtp-Source: AMsMyM6cwjcI/x6qSq+0ZRJAQqFKygt/4E7JIgAA3LMBWrQp4UhSCSz3AjiRlDEU1MclMyoig+ZVs3IC3mxcHByXYRc=
+X-Received: by 2002:a17:907:7f8e:b0:780:ec2b:bcc5 with SMTP id
+ qk14-20020a1709077f8e00b00780ec2bbcc5mr14450418ejc.192.1663750839653; Wed, 21
+ Sep 2022 02:00:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220921074841.382615-1-rppt@kernel.org>
+In-Reply-To: <20220921074841.382615-1-rppt@kernel.org>
+From:   Barry Song <21cnbao@gmail.com>
+Date:   Wed, 21 Sep 2022 21:00:28 +1200
+Message-ID: <CAGsJ_4yMOC5M9rnfgv9TXWAm2aMDUVOdDYvNjzqzu_oj9DBn8Q@mail.gmail.com>
+Subject: Re: [PATCH] arm64/mm: fold check for KFENCE into can_set_direct_map()
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the mtk-gce mailbox binding to DT schema format.
+On Wed, Sep 21, 2022 at 8:26 PM Mike Rapoport <rppt@kernel.org> wrote:
+>
+> From: Mike Rapoport <rppt@linux.ibm.com>
+>
+> KFENCE requires linear map to be mapped at page granularity, so that it
+> is possible to protect/unprotect single pages, just like with
+> rodata_full and DEBUG_PAGEALLOC.
+>
+> Instead of repating
+>
+>         can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE)
+>
+> make can_set_direct_map() handle the KFENCE case.
+>
+> This also prevents potential false positives in kernel_page_present()
+> that may return true for non-present page if CONFIG_KFENCE is enabled.
+>
+> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> ---
+>  arch/arm64/mm/mmu.c      | 8 ++------
+>  arch/arm64/mm/pageattr.c | 8 +++++++-
+>  2 files changed, 9 insertions(+), 7 deletions(-)
+>
+> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+> index e7ad44585f40..c5065abec55a 100644
+> --- a/arch/arm64/mm/mmu.c
+> +++ b/arch/arm64/mm/mmu.c
+> @@ -535,7 +535,7 @@ static void __init map_mem(pgd_t *pgdp)
+>          */
+>         BUILD_BUG_ON(pgd_index(direct_map_end - 1) == pgd_index(direct_map_end));
+>
+> -       if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE))
+> +       if (can_set_direct_map())
+>                 flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
+>
+>         /*
+> @@ -1547,11 +1547,7 @@ int arch_add_memory(int nid, u64 start, u64 size,
+>
+>         VM_BUG_ON(!mhp_range_allowed(start, size, true));
+>
+> -       /*
+> -        * KFENCE requires linear map to be mapped at page granularity, so that
+> -        * it is possible to protect/unprotect single pages in the KFENCE pool.
+> -        */
+> -       if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE))
+> +       if (can_set_direct_map())
+>                 flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
+>
+>         __create_pgd_mapping(swapper_pg_dir, start, __phys_to_virt(start),
+> diff --git a/arch/arm64/mm/pageattr.c b/arch/arm64/mm/pageattr.c
+> index 64e985eaa52d..d107c3d434e2 100644
+> --- a/arch/arm64/mm/pageattr.c
+> +++ b/arch/arm64/mm/pageattr.c
+> @@ -21,7 +21,13 @@ bool rodata_full __ro_after_init = IS_ENABLED(CONFIG_RODATA_FULL_DEFAULT_ENABLED
+>
+>  bool can_set_direct_map(void)
+>  {
+> -       return rodata_full || debug_pagealloc_enabled();
+> +       /*
+> +        * rodata_full, DEBUG_PAGEALLOC and KFENCE require linear map to be
+> +        * mapped at page granularity, so that it is possible to
+> +        * protect/unprotect single pages.
+> +        */
+> +       return rodata_full || debug_pagealloc_enabled() ||
+> +               IS_ENABLED(CONFIG_KFENCE);
 
-During the conversion, the examples for client device/mutex nodes
-were removed, as these are found in their respective bindings:
-arm/mediatek/mediatek,mmsys.yaml for "mediatek,mt8173-mmsys"
-soc/mediatek/mediatek,mutex.yaml for "mediatek,mt8173-disp-mutex"
-
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
-
-Changes in v4:
- - Removed deprecated examples comment
- - Fixed address for gce example
- - clock-names variation is now in allOf block
- - Added soc bus node with two address/size cells, as to
-   provide a more practical example for the gce node
-
-Changes in v3:
- - Removed '|' from description
- - Removed mbox client examples
- - Squashed patch dt-bindings: arm: mediatek:
-   mmsys: Reference to mediatek,gce-mailbox.yaml
-
-Changes in v2:
- - Changed mtk-gce.txt references to new yaml file
+might be irrelevant, i wonder if rodata_full is too strict as
+rodata_full is almost
+always true since RODATA_FULL_DEFAULT_ENABLED is default true.
 
 
-A previous attempt for this was made at [1], but it was changing
-the way of getting clocks (by name for all).
-Keeping clock-names not required for the multi-gce case makes this
-binding simpler, hence I chose to abandon the change at [1] and go
-for this one instead.
+>  }
+>
+>  static int change_page_range(pte_t *ptep, unsigned long addr, void *data)
+> --
+> 2.35.3
+>
 
-Any Reviewed-by or Acked-by tag was dropped, as this conversion was
-completely redone from scratch and differs from [1] for the
-aforementioned reasons.
-
-[1]: https://lore.kernel.org/all/20220524151512.247435-1-angelogioacchino.delregno@collabora.com/
-
- .../bindings/arm/mediatek/mediatek,mmsys.yaml |  3 +-
- .../mailbox/mediatek,gce-mailbox.yaml         | 85 +++++++++++++++++++
- .../devicetree/bindings/mailbox/mtk-gce.txt   | 82 ------------------
- 3 files changed, 87 insertions(+), 83 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/mailbox/mediatek,gce-mailbox.yaml
- delete mode 100644 Documentation/devicetree/bindings/mailbox/mtk-gce.txt
-
-diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
-index 6ad023eec193..85e6f4f621fc 100644
---- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
-+++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
-@@ -52,7 +52,8 @@ properties:
-     description:
-       Using mailbox to communicate with GCE, it should have this
-       property and list of phandle, mailbox specifiers. See
--      Documentation/devicetree/bindings/mailbox/mtk-gce.txt for details.
-+      Documentation/devicetree/bindings/mailbox/mediatek,gce-mailbox.yaml
-+      for details.
-     $ref: /schemas/types.yaml#/definitions/phandle-array
- 
-   mediatek,gce-client-reg:
-diff --git a/Documentation/devicetree/bindings/mailbox/mediatek,gce-mailbox.yaml b/Documentation/devicetree/bindings/mailbox/mediatek,gce-mailbox.yaml
-new file mode 100644
-index 000000000000..c579ac074ca7
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mailbox/mediatek,gce-mailbox.yaml
-@@ -0,0 +1,85 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mailbox/mediatek,gce-mailbox.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Mediatek Global Command Engine Mailbox
-+
-+maintainers:
-+  - Houlong Wei <houlong.wei@mediatek.com>
-+
-+description:
-+  The Global Command Engine (GCE) is used to help read/write registers with
-+  critical time limitation, such as updating display configuration during the
-+  vblank. The GCE can be used to implement the Command Queue (CMDQ) driver.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - mediatek,mt6779-gce
-+      - mediatek,mt8173-gce
-+      - mediatek,mt8183-gce
-+      - mediatek,mt8186-gce
-+      - mediatek,mt8192-gce
-+      - mediatek,mt8195-gce
-+
-+  "#mbox-cells":
-+    const: 2
-+    description:
-+      The first cell describes the Thread ID of the GCE,
-+      the second cell describes the priority of the GCE thread
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: Global Command Engine clock
-+
-+  clock-names:
-+    items:
-+      - const: gce
-+
-+required:
-+  - compatible
-+  - "#mbox-cells"
-+  - reg
-+  - interrupts
-+  - clocks
-+
-+allOf:
-+  - if:
-+      not:
-+        properties:
-+          compatible:
-+            contains:
-+              const: mediatek,mt8195-gce
-+    then:
-+      required:
-+        - clock-names
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/mt8173-clk.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    soc {
-+        #address-cells = <2>;
-+        #size-cells = <2>;
-+
-+        gce: mailbox@10212000 {
-+            compatible = "mediatek,mt8173-gce";
-+            reg = <0 0x10212000 0 0x1000>;
-+            interrupts = <GIC_SPI 135 IRQ_TYPE_LEVEL_LOW>;
-+            #mbox-cells = <2>;
-+            clocks = <&infracfg CLK_INFRA_GCE>;
-+            clock-names = "gce";
-+        };
-+    };
-diff --git a/Documentation/devicetree/bindings/mailbox/mtk-gce.txt b/Documentation/devicetree/bindings/mailbox/mtk-gce.txt
-deleted file mode 100644
-index c2aeba63bd47..000000000000
---- a/Documentation/devicetree/bindings/mailbox/mtk-gce.txt
-+++ /dev/null
-@@ -1,82 +0,0 @@
--MediaTek GCE
--===============
--
--The Global Command Engine (GCE) is used to help read/write registers with
--critical time limitation, such as updating display configuration during the
--vblank. The GCE can be used to implement the Command Queue (CMDQ) driver.
--
--CMDQ driver uses mailbox framework for communication. Please refer to
--mailbox.txt for generic information about mailbox device-tree bindings.
--
--Required properties:
--- compatible: can be "mediatek,mt8173-gce", "mediatek,mt8183-gce",
--  "mediatek,mt8186-gce", "mediatek,mt8192-gce", "mediatek,mt8195-gce" or
--  "mediatek,mt6779-gce".
--- reg: Address range of the GCE unit
--- interrupts: The interrupt signal from the GCE block
--- clock: Clocks according to the common clock binding
--- clock-names: Must be "gce" to stand for GCE clock
--- #mbox-cells: Should be 2.
--	<&phandle channel priority>
--	phandle: Label name of a gce node.
--	channel: Channel of mailbox. Be equal to the thread id of GCE.
--	priority: Priority of GCE thread.
--
--Required properties for a client device:
--- mboxes: Client use mailbox to communicate with GCE, it should have this
--  property and list of phandle, mailbox specifiers.
--Optional properties for a client device:
--- mediatek,gce-client-reg: Specify the sub-system id which is corresponding
--  to the register address, it should have this property and list of phandle,
--  sub-system specifiers.
--  <&phandle subsys_number start_offset size>
--  phandle: Label name of a gce node.
--  subsys_number: specify the sub-system id which is corresponding
--                 to the register address.
--  start_offset: the start offset of register address that GCE can access.
--  size: the total size of register address that GCE can access.
--
--Optional properties for a client mutex node:
--- mediatek,gce-events: GCE events used by clients. The event numbers are
--  defined in 'dt-bindings/gce/<chip>-gce.h'.
--
--Some vaules of properties are defined in 'dt-bindings/gce/mt8173-gce.h',
--'dt-bindings/gce/mt8183-gce.h', 'dt-bindings/gce/mt8186-gce.h'
--'dt-bindings/gce/mt8192-gce.h', 'dt-bindings/gce/mt8195-gce.h' or
--'dt-bindings/gce/mt6779-gce.h'.
--Such as sub-system ids, thread priority, event ids.
--
--Example:
--
--	gce: gce@10212000 {
--		compatible = "mediatek,mt8173-gce";
--		reg = <0 0x10212000 0 0x1000>;
--		interrupts = <GIC_SPI 135 IRQ_TYPE_LEVEL_LOW>;
--		clocks = <&infracfg CLK_INFRA_GCE>;
--		clock-names = "gce";
--		#mbox-cells = <2>;
--	};
--
--Example for a client device:
--
--	mmsys: clock-controller@14000000 {
--		compatible = "mediatek,mt8173-mmsys";
--		mboxes = <&gce 0 CMDQ_THR_PRIO_LOWEST>,
--			 <&gce 1 CMDQ_THR_PRIO_LOWEST>;
--		mutex-event-eof = <CMDQ_EVENT_MUTEX0_STREAM_EOF
--				CMDQ_EVENT_MUTEX1_STREAM_EOF>;
--		mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x3000 0x1000>,
--					  <&gce SUBSYS_1401XXXX 0x2000 0x100>;
--		...
--	};
--
--Example for a client mutex node:
--	mutex: mutex@14020000 {
--		compatible = "mediatek,mt8173-disp-mutex";
--		reg = <0 0x14020000 0 0x1000>;
--		interrupts = <GIC_SPI 169 IRQ_TYPE_LEVEL_LOW>;
--		power-domains = <&scpsys MT8173_POWER_DOMAIN_MM>;
--		clocks = <&mmsys CLK_MM_MUTEX_32K>;
--		mediatek,gce-events = <CMDQ_EVENT_MUTEX0_STREAM_EOF>,
--				      <CMDQ_EVENT_MUTEX1_STREAM_EOF>;
--	};
--- 
-2.37.2
-
+Thanks
+Barry
