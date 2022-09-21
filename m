@@ -2,173 +2,270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 530595BFDDE
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 14:32:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E478C5BFDD8
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 14:32:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbiIUMca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 08:32:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60086 "EHLO
+        id S229518AbiIUMcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 08:32:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229985AbiIUMcV (ORCPT
+        with ESMTP id S229726AbiIUMcP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 08:32:21 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A76C475CE7;
-        Wed, 21 Sep 2022 05:32:20 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id f20so8433933edf.6;
-        Wed, 21 Sep 2022 05:32:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=hiqLbKca8k6bq2csBR6EohjwEjpvjpypWz+SdN+bVt4=;
-        b=emT9vTaCD7+oG6jkAJp0Dn3lwh2mDqMiYurK3U9c46Fpo30G2g3NOIehp1VNLJ17q8
-         jyyKS/PCt42kw8LyUwb3LHTVj/ziK/zWyTIJBQnPWfIQ0xXIaYXnNwOvULus0JAo5HZb
-         bhGav7kBsMR0v4wy0j3M1xz9k7LEXVhXqLoVwNmMG93KjVz6igYjjCeMtOxWgIxTTmvc
-         zHCGDEuwEr7NjBNYycHg9IVET+L5upk7STERCgz8BUlO1l546SjBI0IiPAWAViZObB2h
-         CwRCmpzSiNZArUw9PNLRGiiangQyANEA6lAmPYJ0GtDtqaZT9rPdlcvIhrjr7vU9TYn1
-         Ez5Q==
+        Wed, 21 Sep 2022 08:32:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38C792F2
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 05:32:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663763533;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DmmiulZMt100BXRKk69magtMbbZrqOsVx99Jfsr3JpY=;
+        b=TkyilK0F8GsrZHKV42eQ+VjDeAYgyCMyZa2BOO9nClDvOKHC/dRdBH7GoH86J2zNL/YgwZ
+        bBXWet78g+TPoMWMgTc891/xlQjLcx2Xxk8awRLdvOyCm9W5ehUOE9ej7Db/BCmygozXPD
+        xZ1pWCfdz/e6WddDXfSUWQA3nCHXmtI=
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com
+ [209.85.166.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-155-2OsTSYGKMBWrp42zz-Yrjw-1; Wed, 21 Sep 2022 08:32:12 -0400
+X-MC-Unique: 2OsTSYGKMBWrp42zz-Yrjw-1
+Received: by mail-io1-f70.google.com with SMTP id e9-20020a6b7309000000b006a27af93e45so2982726ioh.9
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 05:32:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=hiqLbKca8k6bq2csBR6EohjwEjpvjpypWz+SdN+bVt4=;
-        b=WU5S7f5iPer6ynvc3+bl4ep9vv9lf1DC9IVqLOPCP4zrJjHeCq7hW8VrYsxbDhcZlQ
-         PlNQvZ7o+EN6Li/9VJ0nw5tdTr8BkogfbZKuZ+ffvAfbJgIp+GMu2jqyU81juKTpjsRc
-         Bdlmv7xVqkOMydfUkIFKbQ0WLT/OYysSK9MarbiUfh+aVbjx+DtpTQJTmanuBUjDTBLw
-         HicuyQixUisAxh/F/Z/dDee1RtUaWMYWE9np1fb8/smAh/OBLKWLI24xaNP9ndoQ52VR
-         giN+I9GCNqO8vBbLDT7KYu3slm8hMNJTcNGOK74Lvl6y7l4a1bJgNptoX2E1ZI+HbNWs
-         UYuA==
-X-Gm-Message-State: ACrzQf1T8eDa2JPWE1nivts6heDzFxUl/j8+roFntF5r6O4P8kz33BqY
-        5mDF1Bd0jjw4oNX/uvxNY69YUAtpZKXiJngba/I=
-X-Google-Smtp-Source: AMsMyM4SN4E8Ngfb+QYCpcTmdG3S1tlw3imbL7osycTOyOh35D599SmTIqI4BpaF36WSCZMdWOSNDEX2Br5DvF7JJdw=
-X-Received: by 2002:a05:6402:50d1:b0:452:899e:77c with SMTP id
- h17-20020a05640250d100b00452899e077cmr24591975edb.0.1663763538931; Wed, 21
- Sep 2022 05:32:18 -0700 (PDT)
+        bh=DmmiulZMt100BXRKk69magtMbbZrqOsVx99Jfsr3JpY=;
+        b=X3Zb7R3FgG8XgLBAIL0/GV6A5UtHbBb/NQdrxS4NauN5lEdCpQ9lK6PGcGmTkC851v
+         CUMpDj7n6oB03oaqpiMdWbR09YkrZx2EkQT4v9Avh/MR/+Ga5hvZ30LciYcMY6zrmy7P
+         Ys/McfAlvGB/2Dl5o1ndyMcCW1Sy46VAV7u0d/8wNd1LsLcrCfbYLRNf5scQXkmCCz9B
+         eJxRiJhWrHtzmoY/+uGbISjcP9tc8n7sHeQT4vKgCuVXZGih09kSsenwCVJfonkTFpLV
+         hgGiAMip2X+eq4UDg3xdrmx4uq6prYrYxY8/ko2u9OXmty5ewYf6eh2IPrzhiI2P0ID7
+         E2ow==
+X-Gm-Message-State: ACrzQf0Gcnhxtx+clWLuWmvAVVV87x32482arAzth5Pe4sYPw554PgdJ
+        LEZaXBpyz0Ik0kdoOO96yuTfDhitZbkPn+kd/mWgQgBXMFu6Jkaj69egK6zVeIvtYwGeq7qCuxk
+        2M+3kE0uggOkTrlzYBWGdS/SSM2PZtiQhRaGbgGrX
+X-Received: by 2002:a05:6e02:1bc7:b0:2f2:406:3ede with SMTP id x7-20020a056e021bc700b002f204063edemr12019633ilv.240.1663763530678;
+        Wed, 21 Sep 2022 05:32:10 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5gIXYTDEJ4X0JsF2+pTcRPoS+mmRke7eGpb75znwPwewB68fGejE6MyPAd3eBQj6Zhi4tIVxcImzFPBwr3SqE=
+X-Received: by 2002:a05:6e02:1bc7:b0:2f2:406:3ede with SMTP id
+ x7-20020a056e021bc700b002f204063edemr12019618ilv.240.1663763530356; Wed, 21
+ Sep 2022 05:32:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220905230406.30801-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220905230406.30801-2-prabhakar.mahadev-lad.rj@bp.renesas.com> <961b4821-4111-b48e-1ae0-60da8c427fbb@linaro.org>
-In-Reply-To: <961b4821-4111-b48e-1ae0-60da8c427fbb@linaro.org>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Wed, 21 Sep 2022 13:31:52 +0100
-Message-ID: <CA+V-a8vrixnR2fXv8a8YS+tfK3KHmO1qJxE=RaFw4FPopubdBA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] media: dt-bindings: Document Renesas RZ/G2L CSI-2 block
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>
+References: <kn4CB9QoD1YwWTQC8wlBFUvXoEsYgDRtcx91dvd913pHTzuNw0ZnYoh8rWsN2WUSnghQm8nCz4xqwH4NbsK04MWihIvP3HWkV9kPi4KMK_I=@protonmail.com>
+ <20220921083420.sm72vrsemaldjsz2@mail.corp.redhat.com> <sYmiVRgE2W0l3bBHFNqT-qFvK1mCRziesWwHDHPoYiefTpHS1T2hJkyDN23WfIWqbreMT3CGcTwgVQrcINwci0CsD19z1io-49Yv2G2cBi4=@protonmail.com>
+In-Reply-To: <sYmiVRgE2W0l3bBHFNqT-qFvK1mCRziesWwHDHPoYiefTpHS1T2hJkyDN23WfIWqbreMT3CGcTwgVQrcINwci0CsD19z1io-49Yv2G2cBi4=@protonmail.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Wed, 21 Sep 2022 14:31:59 +0200
+Message-ID: <CAO-hwJLar_mQdUVAEjhoTqCzpwnFq66J3-K5MTYTgLLq5rUm6g@mail.gmail.com>
+Subject: Re: [PATCH v3] HID: nintendo: check analog user calibration for plausibility
+To:     Johnothan King <johnothanking@protonmail.com>
+Cc:     "Daniel J. Ogorchock" <djogorchock@gmail.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
-
-On Thu, Sep 8, 2022 at 12:39 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
+On Wed, Sep 21, 2022 at 12:53 PM Johnothan King
+<johnothanking@protonmail.com> wrote:
 >
-> On 06/09/2022 01:04, Lad Prabhakar wrote:
-> > Document the CSI-2 block which is part of CRU found in Renesas
-> > RZ/G2L (and alike) SoCs.
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-> > ---
-> > v1 -> v2
-> > * Dropped media prefix from subject
-> > * Renamed node name csi20 -> csi
-> > * Used 4 spaces for indentation in example node
-> > * Dropped reset-names and interrupt-names properties
-> > * Dropped oneOf from compatible
-> > * Included RB tag from Laurent
-> >
-> > RFC v2 -> v1
-> > * Fixed review comments pointed by Rob and Jacopo.
-> >
-> > RFC v1 -> RFC v2
-> > * New patch
-> > ---
-> >  .../bindings/media/renesas,rzg2l-csi2.yaml    | 140 ++++++++++++++++++
-> >  1 file changed, 140 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/media/renesas,rzg2l-csi2.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/media/renesas,rzg2l-csi2.yaml b/Documentation/devicetree/bindings/media/renesas,rzg2l-csi2.yaml
-> > new file mode 100644
-> > index 000000000000..79beace4dec2
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/media/renesas,rzg2l-csi2.yaml
-> > @@ -0,0 +1,140 @@
-> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > +# Copyright (C) 2022 Renesas Electronics Corp.
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/media/renesas,rzg2l-csi2.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Renesas RZ/G2L (and alike SoC's) MIPI CSI-2 receiver
-> > +
-> > +maintainers:
-> > +  - Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > +
-> > +description:
-> > +  The CSI-2 receiver device provides MIPI CSI-2 capabilities for the Renesas RZ/G2L
-> > +  (and alike SoCs). MIPI CSI-2 is part of the CRU block which is used in conjunction
-> > +  with the Image Processing module, which provides the video capture capabilities.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    items:
-> > +      - enum:
-> > +          - renesas,r9a07g044-csi2       # RZ/G2{L,LC}
-> > +          - renesas,r9a07g054-csi2       # RZ/V2L
-> > +      - const: renesas,rzg2l-csi2
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +
-> > +  clocks:
-> > +    items:
-> > +      - description: Internal clock for connecting CRU and MIPI
-> > +      - description: CRU Main clock
-> > +      - description: CPU Register access clock
-> > +
-> > +  clock-names:
-> > +    items:
-> > +      - const: sysclk
-> > +      - const: vclk
-> > +      - const: pclk
->
-> One more: drop the "clk" suffixes. Remaining names could be made a bit
-> more readable.
->
-The clock names are coming from the clock-list document provided along
-with the HW manual:
+> For my v4 patch I'll just change the check back to using >=. The
+> signedness of the min, max and center values will probably need some
+> sort of fix, but that's out of the scope of this patch.
 
-- CRU_SYSCLK
-- CRU_VCLK
-- CRU_PCLK
-
-Ive dropped the CRU_ prefix, do you still want me to rename them?
+Yeah, no worries. The signedness issue was more a FYI, in case you
+ever need signed integers from that function. I hope we won't have the
+case here and that we are actually having unsigned integers in the
+data.
 
 Cheers,
-Prabhakar
+Benjamin
+
+>
+> - Johnothan King
+>
+> ------- Original Message -------
+> On Wednesday, September 21st, 2022 at 1:34 AM, Benjamin Tissoires <benjamin.tissoires@redhat.com> wrote:
+>
+>
+> > Hi Johnothan,
+> >
+> > On Sep 21 2022, Johnothan King wrote:
+> >
+> > > Arne Wendt writes:
+> > > Cheap clone controllers may (falsely) report as having a user
+> > > calibration for the analog sticks in place, but return
+> > > wrong/impossible values for the actual calibration data.
+> > > In the present case at mine, the controller reports having a
+> > > user calibration in place and successfully executes the read
+> > > commands. The reported user calibration however is
+> > > min = center = max = 0.
+> > >
+> > > This pull request addresses problems of this kind by checking the
+> > > provided user calibration-data for plausibility (min < center < max)
+> > > and falling back to the default values if implausible.
+> > >
+> > > I'll note that I was experiencing a crash because of this bug when using
+> > > the GuliKit KingKong 2 controller. The crash manifests as a divide by
+> > > zero error in the kernel logs:
+> > > kernel: divide error: 0000 [#1] PREEMPT SMP NOPTI
+> > >
+> > > Changes in v2:
+> > > - Move the plausibility check to joycon_read_stick_calibration() and
+> > > have that function return -EINVAL if the check fails.
+> > > - In the plausibility check, change >= to ==. hid_field_extract() never
+> > > returns a negative value, so a scenario involving min > center or
+> > > center > max is impossible.
+> >
+> >
+> > I am not so sure this is a great idea. I agree this is correct, but it
+> > definitely requires some processing from my brain and double
+> > verifications in the code that this is correct.
+> >
+> > The problem is that all of the values are declared as s32.
+> > hid_field_extract() returns a u32, yes, but I haven't checked the report
+> > descriptor if that value can be a negative one. What needs to be done,
+> > if the logical min value is negative is that we should call hid_snto32()
+> > to convert into a proper s32 (I doubt you have to do it but I am putting
+> > it here for completeness).
+> >
+> > So basically, you are blindly converting a u32 into a s32 and do not
+> > take rollover into account.
+> >
+> > Given that this function is only called at probe time where timing is
+> > not the biggest of our concerns, I would simply leave the more human
+> > friendy with obvious failures cases with >= and <=.
+> >
+> >
+> >
+> > Second note: please move all "Changes in v*" below the first '---' and
+> > before the file stats. This way they will be stripped out when applying
+> > the patch. People who want to see the changes can always follow the lore
+> > link that should be applied to the commit when this patch gets applied.
+> >
+> > > - To reduce code duplication, move the code for setting default
+> > > calibration values into a single function called
+> > > joycon_use_default_calibration().
+> > >
+> > > Changes in v3:
+> > > - Unbreak warning string to conform to coding style.
+> > > - Change joycon_use_default_calibration() to accept a struct hid_device
+> > > pointer instead of a struct joycon_ctlr pointer.
+> > >
+> > > Link: https://github.com/nicman23/dkms-hid-nintendo/pull/25
+> > > Link: https://github.com/DanielOgorchock/linux/issues/36
+> > > Co-authored-by: Arne Wendt arne.wendt@tuhh.de
+> > > Signed-off-by: Johnothan King johnothanking@protonmail.com
+> > > ---
+> > > drivers/hid/hid-nintendo.c | 55 +++++++++++++++++++++-----------------
+> > > 1 file changed, 30 insertions(+), 25 deletions(-)
+> > >
+> > > diff --git a/drivers/hid/hid-nintendo.c b/drivers/hid/hid-nintendo.c
+> > > index 6028af3c3aae..f25b7b19e9a4 100644
+> > > --- a/drivers/hid/hid-nintendo.c
+> > > +++ b/drivers/hid/hid-nintendo.c
+> > > @@ -760,12 +760,31 @@ static int joycon_read_stick_calibration(struct joycon_ctlr *ctlr, u16 cal_addr,
+> > > cal_y->max = cal_y->center + y_max_above;
+> > > cal_y->min = cal_y->center - y_min_below;
+> > >
+> > > - return 0;
+> > > + /* check if values are plausible */
+> > > + if (cal_x->min == cal_x->center || cal_x->center == cal_x->max ||
+> > > + cal_y->min == cal_y->center || cal_y->center == cal_y->max)
+> > > + ret = -EINVAL;
+> > > +
+> > > + return ret;
+> > > }
+> > >
+> > > static const u16 DFLT_STICK_CAL_CEN = 2000;
+> > > static const u16 DFLT_STICK_CAL_MAX = 3500;
+> > > static const u16 DFLT_STICK_CAL_MIN = 500;
+> > > +static void joycon_use_default_calibration(struct hid_device *hdev,
+> > > + struct joycon_stick_cal *cal_x,
+> > > + struct joycon_stick_cal *cal_y,
+> > > + const char *stick, int ret)
+> > > +{
+> > > + hid_warn(hdev,
+> > > + "Failed to read %s stick cal, using defaults; e=%d\n", stick,
+> > > + ret);
+> >
+> >
+> > nitpick: why not putting the format string on the line above and leave
+> > "stick" and "ret in the second line? It should be OK for checkpatch and
+> > will be less weird to have "ret" on its line all by itself.
+> >
+> > > +
+> > > + cal_x->center = cal_y->center = DFLT_STICK_CAL_CEN;
+> > > + cal_x->max = cal_y->max = DFLT_STICK_CAL_MAX;
+> > > + cal_x->min = cal_y->min = DFLT_STICK_CAL_MIN;
+> > > +}
+> > > +
+> > > static int joycon_request_calibration(struct joycon_ctlr *ctlr)
+> > > {
+> > > u16 left_stick_addr = JC_CAL_FCT_DATA_LEFT_ADDR;
+> > > @@ -793,38 +812,24 @@ static int joycon_request_calibration(struct joycon_ctlr *ctlr)
+> > > &ctlr->left_stick_cal_x,
+> > > &ctlr->left_stick_cal_y,
+> > > true);
+> > > - if (ret) {
+> > > - hid_warn(ctlr->hdev,
+> > > - "Failed to read left stick cal, using dflts; e=%d\n",
+> > > - ret);
+> > > -
+> > > - ctlr->left_stick_cal_x.center = DFLT_STICK_CAL_CEN;
+> > > - ctlr->left_stick_cal_x.max = DFLT_STICK_CAL_MAX;
+> > > - ctlr->left_stick_cal_x.min = DFLT_STICK_CAL_MIN;
+> > >
+> > > - ctlr->left_stick_cal_y.center = DFLT_STICK_CAL_CEN;
+> > > - ctlr->left_stick_cal_y.max = DFLT_STICK_CAL_MAX;
+> > > - ctlr->left_stick_cal_y.min = DFLT_STICK_CAL_MIN;
+> > > - }
+> > > + if (ret)
+> > > + joycon_use_default_calibration(ctlr->hdev,
+> > > + &ctlr->left_stick_cal_x,
+> > > + &ctlr->left_stick_cal_y,
+> > > + "left", ret);
+> > >
+> > > /* read the right stick calibration data */
+> > > ret = joycon_read_stick_calibration(ctlr, right_stick_addr,
+> > > &ctlr->right_stick_cal_x,
+> > > &ctlr->right_stick_cal_y,
+> > > false);
+> > > - if (ret) {
+> > > - hid_warn(ctlr->hdev,
+> > > - "Failed to read right stick cal, using dflts; e=%d\n",
+> > > - ret);
+> > > -
+> > > - ctlr->right_stick_cal_x.center = DFLT_STICK_CAL_CEN;
+> > > - ctlr->right_stick_cal_x.max = DFLT_STICK_CAL_MAX;
+> > > - ctlr->right_stick_cal_x.min = DFLT_STICK_CAL_MIN;
+> > >
+> > > - ctlr->right_stick_cal_y.center = DFLT_STICK_CAL_CEN;
+> > > - ctlr->right_stick_cal_y.max = DFLT_STICK_CAL_MAX;
+> > > - ctlr->right_stick_cal_y.min = DFLT_STICK_CAL_MIN;
+> > > - }
+> > > + if (ret)
+> > > + joycon_use_default_calibration(ctlr->hdev,
+> > > + &ctlr->right_stick_cal_x,
+> > > + &ctlr->right_stick_cal_y,
+> > > + "right", ret);
+> > >
+> > > hid_dbg(ctlr->hdev, "calibration:\n"
+> > > "l_x_c=%d l_x_max=%d l_x_min=%d\n"
+> > > --
+> > > 2.37.3
+> >
+> >
+> > Cheers,
+> > Benjamin
+>
+
