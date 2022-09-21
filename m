@@ -2,50 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D75B5BF7F7
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 09:41:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A87845BF7F9
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 09:42:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229987AbiIUHlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 03:41:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35572 "EHLO
+        id S230150AbiIUHlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 03:41:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230317AbiIUHl1 (ORCPT
+        with ESMTP id S230352AbiIUHla (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 03:41:27 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6A7BF303C3
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 00:41:25 -0700 (PDT)
-Received: from localhost.localdomain.localdomain (unknown [111.9.175.10])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxT+AZwCpjyE0fAA--.52706S2;
-        Wed, 21 Sep 2022 15:41:15 +0800 (CST)
-From:   Jinyang He <hejinyang@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Oleg Nesterov <oleg@redhat.com>
-Cc:     Jinyang He <hejinyang@loongson.cn>, loongarch@lists.linux.dev,
+        Wed, 21 Sep 2022 03:41:30 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B673C38465;
+        Wed, 21 Sep 2022 00:41:28 -0700 (PDT)
+Date:   Wed, 21 Sep 2022 07:41:25 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1663746087;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=wu+BruCALwUpD2lDrO0YO7yShipqAZGwJY0ERPsOUY4=;
+        b=t8cD8SuSvSXXGZnw9H+BILREcgc+qggDovQeBCXDLqsPgVTJqu1g4ahLfz02dnJQHKRtgs
+        KIB4TkkrJTl8LHf0kgXKQQ+MLtIhgjFhNsHGvivuZu+/jVuHFQCBXW0xhr8yjSHwWs4dV0
+        2gURhneRzXx3BerMcKlBZxEkvJgS9qEhfmdosr+BH33scnrmUxf5O7J0lDcYfvEpNrt18f
+        I+umE5orI/u5YRXNpvlBUGExREbdjI3OCByNRyIKaZObxxvjMoETv0JpfIfFZ+Ea4quAru
+        8Y5rEOmJJy13jO3lgiPBJ3x9bkYTVS7SJIMLHvDI67sBBenpnrsFAJ4TO0BJiw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1663746087;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=wu+BruCALwUpD2lDrO0YO7yShipqAZGwJY0ERPsOUY4=;
+        b=F/FK704gs6pyI0QchpM2MS3c2umoQwZ5K/EnbUHkXcub3JL/TQyp/SFasNPXmaMNfWSyeI
+        f6dt44qItdxtHTDg==
+From:   "tip-bot2 for Dave Hansen" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/mm] x86/mm/32: Fix W^X detection when page tables do not support NX
+Cc:     kernel test robot <yujie.liu@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@kernel.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2] LoongArch: Remove unused kernel stack padding
-Date:   Wed, 21 Sep 2022 15:41:13 +0800
-Message-Id: <1663746073-12584-1-git-send-email-hejinyang@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf8CxT+AZwCpjyE0fAA--.52706S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxZF4DKw4DuF4Uur4UKF4UArb_yoWrXry7pF
-        9rAw1DGr4jkFnYyryDtrs8ZryDJwn7Kw1aga17ta4rArnFqF1rZryxAryDXFyYqa95Kay0
-        gFy3Kwsxta15X3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUym14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1l42xK82IYc2Ij64vI
-        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
-        xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0
-        cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8V
-        AvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E
-        14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUywZ7UUUUU=
-X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+MIME-Version: 1.0
+Message-ID: <166374608563.401.6842745762071109491.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,101 +59,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kernel stack padding looks like obey MIPS o32 Calling Convention, as
-LoongArch is inspired by MIPS and keep it. Remove it avoid not clear
-code.
+The following commit has been merged into the x86/mm branch of tip:
 
-Link: https://lore.kernel.org/loongarch/1662130897-13156-1-git-send-email-hejinyang@loongson.cn/
+Commit-ID:     9377ad7b61bff3abfb375d307770d6aa454bc516
+Gitweb:        https://git.kernel.org/tip/9377ad7b61bff3abfb375d307770d6aa454bc516
+Author:        Dave Hansen <dave.hansen@intel.com>
+AuthorDate:    Tue, 20 Sep 2022 11:54:54 -07:00
+Committer:     Ingo Molnar <mingo@kernel.org>
+CommitterDate: Wed, 21 Sep 2022 09:32:55 +02:00
 
-Signed-off-by: Jinyang He <hejinyang@loongson.cn>
+x86/mm/32: Fix W^X detection when page tables do not support NX
+
+The x86 MM code now actively refuses to create writable+executable mappings,
+and warns when there is an attempt to create one.
+
+The 0day test robot ran across a warning triggered by module unloading on
+32-bit kernels.  This was only seen on CPUs with NX support, but where a
+32-bit kernel was built without PAE support.
+
+On those systems, there is no room for the NX bit in the page
+tables and _PAGE_NX is #defined to 0, breaking some of the W^X
+detection logic in verify_rwx().  The X86_FEATURE_NX check in
+there does not do any good here because the CPU itself supports
+NX.
+
+Fix it by checking for _PAGE_NX support directly instead of
+checking CPU support for NX.
+
+Note that since _PAGE_NX is actually defined to be 0 at
+compile-time this fix should also end up letting the compiler
+optimize away most of verify_rwx() on non-PAE kernels.
+
+Fixes: 652c5bf380ad ("x86/mm: Refuse W^X violations")
+Reported-by: kernel test robot <yujie.liu@intel.com>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Link: https://lore.kernel.org/all/fcf89147-440b-e478-40c9-228c9fe56691@intel.com/
 ---
- v2: Remove TOP_OF_KERNEL_STACK_PADDING
-     Remove 'init stack pointer' in head.S
+ arch/x86/mm/pat/set_memory.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
- arch/loongarch/include/asm/processor.h | 2 +-
- arch/loongarch/include/asm/ptrace.h    | 2 +-
- arch/loongarch/kernel/head.S           | 3 +--
- arch/loongarch/kernel/process.c        | 4 ++--
- arch/loongarch/kernel/switch.S         | 2 +-
- 5 files changed, 6 insertions(+), 7 deletions(-)
-
-diff --git a/arch/loongarch/include/asm/processor.h b/arch/loongarch/include/asm/processor.h
-index 1c4b4308378d..780e0d39f638 100644
---- a/arch/loongarch/include/asm/processor.h
-+++ b/arch/loongarch/include/asm/processor.h
-@@ -194,7 +194,7 @@ static inline void flush_thread(void)
- unsigned long __get_wchan(struct task_struct *p);
- 
- #define __KSTK_TOS(tsk) ((unsigned long)task_stack_page(tsk) + \
--			 THREAD_SIZE - 32 - sizeof(struct pt_regs))
-+			 THREAD_SIZE - sizeof(struct pt_regs))
- #define task_pt_regs(tsk) ((struct pt_regs *)__KSTK_TOS(tsk))
- #define KSTK_EIP(tsk) (task_pt_regs(tsk)->csr_era)
- #define KSTK_ESP(tsk) (task_pt_regs(tsk)->regs[3])
-diff --git a/arch/loongarch/include/asm/ptrace.h b/arch/loongarch/include/asm/ptrace.h
-index 17838c6b7ccd..82649a78fec1 100644
---- a/arch/loongarch/include/asm/ptrace.h
-+++ b/arch/loongarch/include/asm/ptrace.h
-@@ -133,7 +133,7 @@ static inline void die_if_kernel(const char *str, struct pt_regs *regs)
- #define current_pt_regs()						\
- ({									\
- 	unsigned long sp = (unsigned long)__builtin_frame_address(0);	\
--	(struct pt_regs *)((sp | (THREAD_SIZE - 1)) + 1 - 32) - 1;	\
-+	(struct pt_regs *)((sp | (THREAD_SIZE - 1)) + 1) - 1;		\
- })
- 
- /* Helpers for working with the user stack pointer */
-diff --git a/arch/loongarch/kernel/head.S b/arch/loongarch/kernel/head.S
-index 4d352230fbc3..0e1752fbc857 100644
---- a/arch/loongarch/kernel/head.S
-+++ b/arch/loongarch/kernel/head.S
-@@ -81,10 +81,9 @@ SYM_CODE_START(kernel_entry)			# kernel entry point
- 
- 	la.pcrel	tp, init_thread_union
- 	/* Set the SP after an empty pt_regs.  */
--	PTR_LI		sp, (_THREAD_SIZE - 32 - PT_SIZE)
-+	PTR_LI		sp, (_THREAD_SIZE - PT_SIZE)
- 	PTR_ADD		sp, sp, tp
- 	set_saved_sp	sp, t0, t1
--	PTR_ADDI	sp, sp, -4 * SZREG	# init stack pointer
- 
- 	bl		start_kernel
- 
-diff --git a/arch/loongarch/kernel/process.c b/arch/loongarch/kernel/process.c
-index 660492f064e7..dae087d6c458 100644
---- a/arch/loongarch/kernel/process.c
-+++ b/arch/loongarch/kernel/process.c
-@@ -129,7 +129,7 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
- 	unsigned long clone_flags = args->flags;
- 	struct pt_regs *childregs, *regs = current_pt_regs();
- 
--	childksp = (unsigned long)task_stack_page(p) + THREAD_SIZE - 32;
-+	childksp = (unsigned long)task_stack_page(p) + THREAD_SIZE;
- 
- 	/* set up new TSS. */
- 	childregs = (struct pt_regs *) childksp - 1;
-@@ -236,7 +236,7 @@ bool in_task_stack(unsigned long stack, struct task_struct *task,
- 			struct stack_info *info)
+diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
+index 1a2d637..20b1e24 100644
+--- a/arch/x86/mm/pat/set_memory.c
++++ b/arch/x86/mm/pat/set_memory.c
+@@ -587,7 +587,8 @@ static inline pgprot_t verify_rwx(pgprot_t old, pgprot_t new, unsigned long star
  {
- 	unsigned long begin = (unsigned long)task_stack_page(task);
--	unsigned long end = begin + THREAD_SIZE - 32;
-+	unsigned long end = begin + THREAD_SIZE;
+ 	unsigned long end;
  
- 	if (stack < begin || stack >= end)
- 		return false;
-diff --git a/arch/loongarch/kernel/switch.S b/arch/loongarch/kernel/switch.S
-index 43ebbc3990f7..202a163cb32f 100644
---- a/arch/loongarch/kernel/switch.S
-+++ b/arch/loongarch/kernel/switch.S
-@@ -26,7 +26,7 @@ SYM_FUNC_START(__switch_to)
- 	move	tp, a2
- 	cpu_restore_nonscratch a1
+-	if (!cpu_feature_enabled(X86_FEATURE_NX))
++	/* Only enforce when NX is supported: */
++	if (!(__supported_pte_mask & _PAGE_NX))
+ 		return new;
  
--	li.w		t0, _THREAD_SIZE - 32
-+	li.w		t0, _THREAD_SIZE
- 	PTR_ADD		t0, t0, tp
- 	set_saved_sp	t0, t1, t2
- 
--- 
-2.31.1
-
+ 	if (!((pgprot_val(old) ^ pgprot_val(new)) & (_PAGE_RW | _PAGE_NX)))
