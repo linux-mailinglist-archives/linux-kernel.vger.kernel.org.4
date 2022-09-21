@@ -2,207 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0BD45BF773
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 09:18:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28B6F5BF77C
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 09:19:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229718AbiIUHSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 03:18:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34594 "EHLO
+        id S229861AbiIUHTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 03:19:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiIUHSA (ORCPT
+        with ESMTP id S229523AbiIUHTR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 03:18:00 -0400
-Received: from na01-obe.outbound.protection.outlook.com (mail-westcentralusazon11010008.outbound.protection.outlook.com [40.93.198.8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 837425EDEA;
-        Wed, 21 Sep 2022 00:17:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=P8vznlvv3a+MBfEHgul81D58WTHR7Sb1vi+01e2obJWwUMlmJl2t2wSpw6HniCxXfDaKfd89eJApDJNi794j3pIbWri/X4MuPoDZqjxVCYOdZEPDW8YyGWkTQKSHZF3A0DeSwcENhsR4BhZpM0c0JjoPqYMd40VGtXUAzfecNxti7qEBG1bj6G/OFlNxkLbXZjWMk9Fnvq71cSwTOiKdyPlknWIqeuxA5t1GYfWeSQmgKZGom89brkzhlIS5m415ugoH7nkbD/4LlFakdJpg0/vZ5PVUodja70liSZ4leGItNHF5cEYoQjJPLROIf3029qxcKDmkuOxJvfJTKVu9Dg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZA6SaT1wuHCo9Mt0BBpdOovWMtMfcCDZb2bQkCrwkCM=;
- b=eC1232EfagsqIw89PDOIWeYNtJMDH/VjtbHTRhAMXpUQwTGPmCJ9en3PDu8/YOz8S/azGrn9v7cZ7xmJi5AnXGt8LivYx0gkFAeXhMhl0bTWD1c4SosX0Qx4/zXdMp0b/3dh4YK6w6whTexMBG6zbstkqmCVLyhoNRLwHFeo8OlPK6b2CG4GULgcHXyzXMFmmrGgXKOmBjyzAs42/Y4xnE7y2p4tTFD2CFZIk+hyiJlRMc2dyBGuwSB1HJjqyJ02gtokW8y1G6lY1S54LtgujpM1snWtlkL+V4Ucg+hFCtfaZtiIjXQL7Yp5OyENu4aXVFZ0Js5ZwAezdq1qKRwHEg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
- dkim=pass header.d=vmware.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZA6SaT1wuHCo9Mt0BBpdOovWMtMfcCDZb2bQkCrwkCM=;
- b=M1Da2f6k8qYiQKY9p2peANYDd8FSvaqqM/2MZF45LKE6X0xi6Ou1ul0Xfds6Ho8ybx8dLHnObkiMxb4JUD/4eJ8lfOpVStzaCKHzxSW6gziWUX0C83a7AULFBk97KjiwEjLOvcS/27TkupBp47YZu2VU94VVYO9RNMtmP6eRBtg=
-Received: from SA1PR05MB8534.namprd05.prod.outlook.com (2603:10b6:806:1dd::19)
- by DM6PR05MB5273.namprd05.prod.outlook.com (2603:10b6:5:7f::33) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.14; Wed, 21 Sep
- 2022 07:17:57 +0000
-Received: from SA1PR05MB8534.namprd05.prod.outlook.com
- ([fe80::5117:14:be1e:3dd0]) by SA1PR05MB8534.namprd05.prod.outlook.com
- ([fe80::5117:14:be1e:3dd0%3]) with mapi id 15.20.5654.016; Wed, 21 Sep 2022
- 07:17:57 +0000
-From:   Nadav Amit <namit@vmware.com>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-CC:     Yicong Yang <yangyicong@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux MM <linux-mm@kvack.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "darren@os.amperecomputing.com" <darren@os.amperecomputing.com>,
-        "yangyicong@hisilicon.com" <yangyicong@hisilicon.com>,
-        "huzhanyuan@oppo.com" <huzhanyuan@oppo.com>,
-        "lipeifeng@oppo.com" <lipeifeng@oppo.com>,
-        "zhangshiming@oppo.com" <zhangshiming@oppo.com>,
-        "guojian@oppo.com" <guojian@oppo.com>,
-        "realmz6@gmail.com" <realmz6@gmail.com>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        Barry Song <21cnbao@gmail.com>,
-        "wangkefeng.wang@huawei.com" <wangkefeng.wang@huawei.com>,
-        "xhao@linux.alibaba.com" <xhao@linux.alibaba.com>,
-        "prime.zeng@hisilicon.com" <prime.zeng@hisilicon.com>,
-        Barry Song <v-songbaohua@oppo.com>,
-        Mel Gorman <mgorman@suse.de>
-Subject: Re: [PATCH v3 4/4] arm64: support batched/deferred tlb shootdown
- during page reclamation
-Thread-Topic: [PATCH v3 4/4] arm64: support batched/deferred tlb shootdown
- during page reclamation
-Thread-Index: AQHYtgB7WHPVSXtcQ0CQkErpE23BFq3pocIAgAAGxwA=
-Date:   Wed, 21 Sep 2022 07:17:56 +0000
-Message-ID: <36B9DE22-E3BC-4CB2-8E3F-B21B61434CD3@vmware.com>
-References: <20220822082120.8347-1-yangyicong@huawei.com>
- <20220822082120.8347-5-yangyicong@huawei.com>
- <888da5f3-104c-3929-c21e-c710922d6f1e@arm.com>
-In-Reply-To: <888da5f3-104c-3929-c21e-c710922d6f1e@arm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3696.120.41.1.1)
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vmware.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR05MB8534:EE_|DM6PR05MB5273:EE_
-x-ms-office365-filtering-correlation-id: 1a4cb670-5c6a-4bd4-b186-08da9ba16855
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: uNm1YrCKUijT1CZdiI9V7KpjjDNtjSIdR75YY6VMEwp+qg8ZFQjWwX7arPY0y0Ge/ug9rtf4GhQTO3nNkuxgNJwenx6jPEWuYnEz/Kp952qCeQihdMA8Ktd4NiRpo+UqQlasTgFa+J61j8hpJFtJ+5kgtpEENV9881Dp0N09c6QsSjr7HTsHMh9Wm0Wzgs5uNkjUYmBXdmebiIcbklm/xYMJWj4pK+H6OvjfPR0GBAdwCRRlQqJHiTjcN51JciGbKry9WiiatAD9qoMZdyG+sQzTvtjA5l+IRd3xyhlubdAmHoNia92UIpG18cIgGg3mye3lOCXyKJhibvuT0R4EaEbNJu0hDJHBZYmpViVNTMqpIkrpH8RspSkqAMHBJhp8/5C/HrAQuYHRg4gFaUt5CD+TfOA1vv5pZJ/Q28F+Spw5STJxyeEbuSleHuStTI2eNgsmh+mrs6Y/EPLj5tl/+crA/qtYQPemUYlrR0yKKWpWxoqCvqCdxP20zyr+Nce0vvtdeUFf28898xLrmPUrPwFbP5jHCcoyX4aWzfyL3JoEzT2QpwjlcIu1Wj+NepRZuRsg4WzFbny+vujCZ8OItOPrjGDRd0x8K/Ks/gGRMV5qvPMqEs8+uqci/JRwsyjxtzj4G2Lg6AYq+ElU/Z/gFEFgvE2795o9Z4SxprAF2RissWRJ3j5+vp7A9s0H89YH9n6GCGkQIsaXybfcwRlPbEZZKYwNrUc5xz6TjLI8avaLKF2yX+4N6MI3KunXwFMvH8OMQN50G/Sraznmh4lAp16FmVYjKieRQsp6rxU2nh0=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR05MB8534.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(366004)(396003)(346002)(136003)(376002)(451199015)(122000001)(38100700002)(38070700005)(2906002)(71200400001)(478600001)(186003)(6506007)(66556008)(66946007)(76116006)(6486002)(2616005)(66476007)(6916009)(91956017)(54906003)(316002)(6512007)(36756003)(41300700001)(33656002)(7406005)(26005)(8936002)(5660300002)(86362001)(83380400001)(7416002)(8676002)(66446008)(64756008)(4326008)(53546011)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OUZiaTFPb2plTUZKVDVBV2hGZU42WlJTa1djWDNrbHdkR2pkU25FSkxuYnpk?=
- =?utf-8?B?endXeGY1bFVrdTdLVUpKSFFQWGhiMVIrMzJiOGRNdnhFQWthT3pUZHZ5TTht?=
- =?utf-8?B?Z3BpMEtyd1dUMTdkUGROSnJuMys2MWRIRmRZdEh6Q2VtQUdvN1ZtZWl1RS9j?=
- =?utf-8?B?amZXdDZxbjE3b04xbmRMUlBkVTF0RE95dW9mdnphRWJaS3dCVnNmM0dlN3FV?=
- =?utf-8?B?WjdWbjY0bUNwMVVieitZc1JzWlhPMnl2VFlvZ0J2SlVUaFZZekxUSEh2b2JS?=
- =?utf-8?B?K1FhZGpyMDVhdVNxWmFVWm45K3BiWUsrYkxNN1RUb3Q5SFBjanZBTk8xQS9s?=
- =?utf-8?B?am9rcE90WkJ2aFM1eS9rUmRMNDFnRFg4SytYUjB2UnNqRFdkRjY1Y01TTWV0?=
- =?utf-8?B?L0hIdWVXUlArcFZsWnR4V29pdnkyQTFWSzdJdWt6bXhiN3RocExKYUF3VHlt?=
- =?utf-8?B?SGNtUmVBanJNeStyOThNc3JVZ1FKY0l0WmdIdXEwZDZhUTliSGtZSkZFbVNY?=
- =?utf-8?B?ODBFN2FzUHJaZGZlTDJkbWdRbzZVZTJNcERwZkJrNnZvQW8xbllONXh4Tm53?=
- =?utf-8?B?N1NQSXRKdjN0REFjMThVWThabEJ3cEk5MHZIOEcyTXdSVEdKbFdyV0VlUXo5?=
- =?utf-8?B?elkveWRudisyTHN1Qk5OQ3c2ejU3T2poNnN5dWdZTGFHbnJQSWtCV0YxcG16?=
- =?utf-8?B?eWRzdiswQkRXcGxHZndpdlVkcFVOSldOSSsyWElUS0wra3Z1ZUh1UTVQOHl5?=
- =?utf-8?B?VU1IYnlocDczWlNoOUVYWFIyRURidWlhQ0lyd2tRdjhHbUNTQXFzTWdQMTdK?=
- =?utf-8?B?WWZhL0pUajlZQmxXbmJ6QXBLeUU0SWphbXU5U0IwYUxLZ2ZQUm1XM3FSa052?=
- =?utf-8?B?S3hYTDN6U1dPRnJDNXV6Yy9Zd1VqZGo4djZXY1c0b0c2YTlzY3FQNllZR1lj?=
- =?utf-8?B?eGtYcWJXcmhWNHNWUkNZeUlOaUhBV3ZVeUQvdnBBd0dtN1RmTThxdUhtSnN2?=
- =?utf-8?B?Z28xbHZLREhxS3FnMkIzc3RUVEZGWFVRZU14QUtKaVFUZ1ZWK2dENFFxbHRJ?=
- =?utf-8?B?ZTJ0YkROTUNza01yUjN3UGplMkRidmJGY3lMK2dWeFBFVDIzWXFra2tQZEpq?=
- =?utf-8?B?RStFdUJGV0lidzg0bzFPRTg2YVNaQmJWUmtuVUN5eDYxS2dNZWhLZHlIekYv?=
- =?utf-8?B?RVNPSk9NdTZaWWxpY0dlbCtxSXlKdFJvTGFGQ2UvWXVMMTNnRjVYcE9kc1Mz?=
- =?utf-8?B?OHNEZHdoMUlVdGEzUTI5YThaSlpSdngwMlVtNzRXQzhsQU1VQjk0cmJxYzZa?=
- =?utf-8?B?YTQwNlVzdFNGdXVJWmZPdFlOVkNEWTZsTEMrZXJpTzdJcHRsdXE5emNXWTQ0?=
- =?utf-8?B?RWxiZUlkWEE2aFlXeU9DR1BEdmdmeVBKSmtRN29EU25sK0k4WXc4dGdRdTEr?=
- =?utf-8?B?akVOeXRNakduN2VndXZ5UGxyZ3hBRWNONHhEcGJNN2krUTUrc3h3T2dTck9t?=
- =?utf-8?B?RDF3TTdGUVpka25PN0FLYjJvTmRxb21DYmNiMkk2bjVMUWZjbnh2aEtzdmwv?=
- =?utf-8?B?dERzTnZXN0l6UlFOUEpkM3FzRk5SVGE2WE8xaGdhQmNQMC9CVlZsQTEzZWxY?=
- =?utf-8?B?OFMrVHRkRlA3cDVKejdwclpEK3oySytlQktvV0I5enAzOVM1UlIvRWRIOUtj?=
- =?utf-8?B?L3VORjBBYitSTSs3eU9tdVFoaDIwYmJ2a2ZnMTJVcWtaOWd6SzlXNURrQko5?=
- =?utf-8?B?cVJzNU92WHF6dmVGeWNNRGsvRFNGS2Q4WUNLckg1ZTdnMjUxblVadDVmbFhX?=
- =?utf-8?B?emdZSExYN0ppVlJEcHg3V0lkK1RsbVVtNmE4SW5iMHgzajI2Q2pIOHJjbWlY?=
- =?utf-8?B?QkFTbW8zYUQrZ3M4NXVDeFJPZktlZ1NSYmRYeEdyeGx6WFM3MDd5c1Q0NTN6?=
- =?utf-8?B?Y0Y5QVVrd0t6MTM0K1NxRUtsejJXcUpac3h1OVJvL1B3RTQ0QVU0cGI3STRl?=
- =?utf-8?B?K1NBNk55RE4za3I0U0wvaTRBUTBuTW5pSmNNVVVUeVYvem5kOFlqaUVJalFr?=
- =?utf-8?B?enplUmxzQitrVnFJdGo4cXhZY1lWa2Z3c1J6NUpmOGlucEprRDBZOGt5eHp6?=
- =?utf-8?Q?XwNyXgv4A56vATIsN9ldAqArJ?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <ABBD0AF6C16C594A87A5FC31915EDA0A@namprd05.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Wed, 21 Sep 2022 03:19:17 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9595EDEA
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 00:19:17 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id y11so5505603pjv.4
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 00:19:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=mbP07g1noMtBwAovb+f0lmPWi5E4lDqv0e8jXEcwP6s=;
+        b=oQbEPWxAcGvQuj9r0zyTmcLJVaJrtHFahYYDBAVBgeb4unPu9qypUBqPWBsRRYPyT+
+         XslA0Pr4C39y/TT04dqc4q8GwXoB3QMXnc++pX+TS6Kr9B7TejCZzLO1VTCpbXuZemEk
+         HBTUGHu4LwPimDuPK/IeEuVhqP9ir2/fDHIrJwSBtaMocBm/WhL2B2jAHUdpQ5xifvJX
+         Nk3iLbIOwQs/cP3V27vT0TZGMv0XT29YdV4lNlQM/tIQP+3YDiA5TJMIeK73CyUL15Gt
+         mltNWdNbJ3eQHdolr2RGjdocrPblT4MHt6xkrEyRTgMeflRwQwdauJBikrO1qqy9Qg+F
+         Rv4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=mbP07g1noMtBwAovb+f0lmPWi5E4lDqv0e8jXEcwP6s=;
+        b=mwNsgjSfjKIlIQJKElJLY7XiF8J1JDKzMpm/dye4Wq/Hz97CYQfKRSivYoOLpGs5P+
+         fxQSgM7e/oW/ShxrkZ3X3a8cquSgIH5mXSIbACQvsqhcJidTKULv4ol+5MqoZvi0YdFo
+         s6vfTDpkAOiB2N1kjLvssvJcZ5nvadGyO0Yud6c0sBfx1fpVw44z6AD0LQBOg2Ww3FWd
+         4OFOGkt2qGU7eZISso+uOVTSTfqXlmcAx39rS1mDphAsEvXkYipi+j63RVn9baMFoYAo
+         qGYFYJLhErQNq+BH6dKbLhKF7uHX/hbBysDyZOugf9vW8yBy3T3ngMfmvaZGgQLNvATk
+         zb7A==
+X-Gm-Message-State: ACrzQf3/ufwmGr9EGENz2bmZk/dWGTp/RfF/6MGngNp4zm3GBAmCWeTr
+        VqTfQFspO9W51ipDMqpyXLX6xw==
+X-Google-Smtp-Source: AMsMyM6s2EteCzlJrPISAF0j3JIEyARdyuJl1a5kIdKFotyiQw8rJN1Kx6iEB4hdoanME+dtrQjWqA==
+X-Received: by 2002:a17:902:c941:b0:177:e69a:a517 with SMTP id i1-20020a170902c94100b00177e69aa517mr3413184pla.144.1663744756561;
+        Wed, 21 Sep 2022 00:19:16 -0700 (PDT)
+Received: from localhost ([122.171.20.238])
+        by smtp.gmail.com with ESMTPSA id c10-20020a170903234a00b001743ba85d39sm1212084plh.110.2022.09.21.00.19.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Sep 2022 00:19:15 -0700 (PDT)
+Date:   Wed, 21 Sep 2022 12:49:13 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     jia-wei.chang@mediatek.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     rafael@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
+        matthias.bgg@gmail.com, andrew-sh.cheng@mediatek.com,
+        rex-bc.chen@mediatek.com, nfraprado@collabora.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH] cpufreq: mediatek: Fix KP and lockups on proc/sram
+ regulators error
+Message-ID: <20220921071913.p7kwsjnnuad2jgvk@vireshk-i7>
+References: <20220909093724.40078-1-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
-X-OriginatorOrg: vmware.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR05MB8534.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1a4cb670-5c6a-4bd4-b186-08da9ba16855
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Sep 2022 07:17:56.8207
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: U3Wn17R9tHY95Xxxw0HrbxdEQ3cc1KIvLAQPmyaRzCLbN0NHTCMwvNCYi33hZfsO2H3GimrSOfBZME3CF43Thw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR05MB5273
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220909093724.40078-1-angelogioacchino.delregno@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gU2VwIDIwLCAyMDIyLCBhdCAxMTo1MyBQTSwgQW5zaHVtYW4gS2hhbmR1YWwgPGFuc2h1bWFu
-LmtoYW5kdWFsQGFybS5jb20+IHdyb3RlOg0KDQo+IOKaoCBFeHRlcm5hbCBFbWFpbA0KPiANCj4g
-T24gOC8yMi8yMiAxMzo1MSwgWWljb25nIFlhbmcgd3JvdGU6DQo+PiArc3RhdGljIGlubGluZSB2
-b2lkIGFyY2hfdGxiYmF0Y2hfYWRkX21tKHN0cnVjdCBhcmNoX3RsYmZsdXNoX3VubWFwX2JhdGNo
-ICpiYXRjaCwNCj4+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgc3RydWN0
-IG1tX3N0cnVjdCAqbW0sDQo+PiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-IHVuc2lnbmVkIGxvbmcgdWFkZHIpDQo+PiArew0KPj4gKyAgICAgX19mbHVzaF90bGJfcGFnZV9u
-b3N5bmMobW0sIHVhZGRyKTsNCj4+ICt9DQo+PiArDQo+PiArc3RhdGljIGlubGluZSB2b2lkIGFy
-Y2hfdGxiYmF0Y2hfZmx1c2goc3RydWN0IGFyY2hfdGxiZmx1c2hfdW5tYXBfYmF0Y2ggKmJhdGNo
-KQ0KPj4gK3sNCj4+ICsgICAgIGRzYihpc2gpOw0KPj4gK30NCj4gDQo+IEp1c3Qgd29uZGVyaW5n
-IGlmIGFyY2hfdGxiYmF0Y2hfYWRkX21tKCkgY291bGQgYWxzbyBkZXRlY3QgY29udGludW91cyBt
-YXBwaW5nDQo+IFRMQiBpbnZhbGlkYXRpb24gcmVxdWVzdHMgb24gYSBnaXZlbiBtbSBhbmQgdHJ5
-IHRvIGdlbmVyYXRlIGEgcmFuZ2UgYmFzZWQgVExCDQo+IGludmFsaWRhdGlvbiBzdWNoIGFzIGZs
-dXNoX3RsYl9yYW5nZSgpLg0KPiANCj4gc3RydWN0IGFyY2hfdGxiZmx1c2hfdW5tYXBfYmF0Y2gg
-dmlhIHRhc2stPnRsYl91YmMtPmFyY2ggY2FuIHRyYWNrIGNvbnRpbnVvdXMNCj4gcmFuZ2VzIHdo
-aWxlIGJlaW5nIHF1ZXVlZCB1cCB2aWEgYXJjaF90bGJiYXRjaF9hZGRfbW0oKSwgYW55IHJhbmdl
-IGZvcm1lZCBjYW4NCj4gbGF0ZXIgYmUgZmx1c2hlZCBpbiBzdWJzZXF1ZW50IGFyY2hfdGxiYmF0
-Y2hfZmx1c2goKSA/DQo+IA0KPiBPUg0KPiANCj4gSXQgbWlnaHQgbm90IGJlIHdvcnRoIHRoZSBl
-ZmZvcnQgYW5kIGNvbXBsZXhpdHksIGluIGNvbXBhcmlzb24gdG8gcGVyZm9ybWFuY2UNCj4gaW1w
-cm92ZW1lbnQsIFRMQiByYW5nZSBmbHVzaCBicmluZ3MgaW4gPw0KDQpTbyBoZXJlIGFyZSBteSAy
-IGNlbnRzLCBiYXNlZCBvbiBteSBleHBlcmllbmNlIHdpdGggSW50ZWwteDg2LiBJdCBpcyBsaWtl
-bHkNCmRpZmZlcmVudCBvbiBhcm02NCwgYnV0IHBlcmhhcHMgaXQgY2FuIHByb3ZpZGUgeW91IHNv
-bWUgaW5zaWdodCBpbnRvIHdoYXQNCnBhcmFtZXRlcnMgeW91IHNob3VsZCBtZWFzdXJlIGFuZCBj
-b25zaWRlci4NCg0KSW4gZ2VuZXJhbCB0aGVyZSBpcyBhIHRyYWRlb2ZmIGJldHdlZW4gZnVsbCBU
-TEIgZmx1c2hlcyBhbmQgZW50cnktc3BlY2lmaWMNCm9uZXMuIEZsdXNoaW5nIHNwZWNpZmljIGVu
-dHJpZXMgdGFrZXMgbW9yZSB0aW1lIHRoYW4gZmx1c2hpbmcgdGhlIGVudGlyZQ0KVExCLCBidXQg
-c2FkZSBUTEIgcmVmaWxscy4NCg0KRGF2ZSBIYW5zZW4gbWFkZSBzb21lIGNhbGN1bGF0aW9ucyBp
-biB0aGUgcGFzdCBhbmQgY2FtZSB1cCB3aXRoIDMzIGFzIGENCm1hZ2ljIGN1dG9mZiBudW1iZXIs
-IGkuZS4sIGlmIHlvdSBuZWVkIHRvIGZsdXNoIG1vcmUgdGhhbiAzMyBlbnRyaWVzLCBqdXN0DQpm
-bHVzaCB0aGUgZW50aXJlIFRMQi4gSSBhbSBub3Qgc3VyZSB0aGF0IHRoaXMgZXhhY3QgbnVtYmVy
-IGlzIHZlcnkNCm1lYW5pbmdmdWwsIHNpbmNlIG9uZSBtaWdodCBhcmd1ZSB0aGF0IGl0IHNob3Vs
-ZOKAmXZlIHRha2VuIFBUSSBpbnRvIGFjY291bnQNCih3aGljaCBtaWdodCByZXF1aXJlIHR3aWNl
-IGFzIG1hbnkgVExCIGludmFsaWRhdGlvbnMpLg0KDQpBbnlob3csIGJhY2sgdG8gYXJjaF90bGJi
-YXRjaF9hZGRfbW0oKS4gSXQgbWF5IGJlIHBvc3NpYmxlIHRvIHRyYWNrIHJhbmdlcywNCmJ1dCB0
-aGUgcXVlc3Rpb24gaXMgd2hldGhlciB5b3Ugd291bGQgYWN0dWFsbHkgc3VjY2VlZCBpbiBmb3Jt
-aW5nIGNvbnRpbnVvdXMNCnJhbmdlcyB0aGF0IGFyZSBldmVudHVhbGx5IChvbiB4ODYpIHNtYWxs
-ZXIgdGhhbiB0aGUgZnVsbCBUTEIgZmx1c2ggY3V0b2ZmDQooPTMzKS4gUXVlc3Rpb25hYmxlIChw
-ZXJoYXBzIGJldHRlciB3aXRoIE1HTFJVPykuDQoNClRoZW4sIHlvdSBzaG91bGQgcmVtZW1iZXIg
-dGhhdCB0cmFja2luZyBzaG91bGQgYmUgdmVyeSBlZmZpY2llbnQsIHNpbmNlIGV2ZW4NCmZldyBj
-YWNoZSBtaXNzZXMgbWlnaHQgaGF2ZSBncmVhdGVyIGNvc3QgdGhhbiB3aGF0IHlvdSBzYXZlIGJ5
-DQpzZWxlY3RpdmUtZmx1c2hpbmcuIEZpbmFsbHksIG9uIHg4NiB5b3Ugd291bGQgbmVlZCB0byBp
-bnZva2UgdGhlIHNtcC9JUEkNCmxheWVyIG11bHRpcGxlIHRpbWVzIHRvIHNlbmQgZGlmZmVyZW50
-IGNvcmVzIHRoZSByZWxldmFudCByYW5nZSB0aGV5IG5lZWQgdG8NCmZsdXNoLg0KDQpJT1c6IEl0
-IGlzIHNvbWV3aGF0IGNvbXBsaWNhdGVkIHRvIGltcGxlbWVudCBlZmZpY2VpbnRseS4gT24geDg2
-LCBhbmQNCnByb2JhYmx5IG90aGVyIElQSS1iYXNlZCBUTEIgc2hvb3Rkb3duIHN5c3RlbXMsIGRv
-ZXMgbm90IGhhdmUgY2xlYXINCnBlcmZvcm1hbmNlIGJlbmVmaXQgKElNSE8pLg0KDQo=
+Jia, do you want to reply to this thread as the Fixes patch was added
+by you ?
+
+On 09-09-22, 11:37, AngeloGioacchino Del Regno wrote:
+> Function regulator_get_optional() returns a negative error number on
+> any kind of regulator_get() failure: failing to check for that in the
+> teardown path will lead to a kernel panic due to a call to function
+> regulator_disable().
+
+I don't see how this can happen. The code does check if the regulators
+are enabled earlier or not.
+
+> Besides that, the "proc" regulator does actually provide power to the
+> CPU cluster(s): disabling it will produce a lockup on at least some
+> SoCs, such as MT8173.
+
+We are just dropping the count that we increased earlier, how will
+that disable the regulator which was already enabled ?
+
+> That consideration is also valid for the "sram" regulator, providing
+> power to the CPU caches instead, present on some other SoCs, such as
+> MT8183, MT8186 (and others).
+> 
+> Resolve both situations and by simply removing the entire faulty
+> branches responsible for disabling the aforementioned regulators if
+> enabled, keeping in mind that these are enabled (and left enabled)
+> by the bootloader before booting the kernel.
+
+This looks fishy, we just keep on increasing the ref count of the
+regulator but never take it down.
+
+-- 
+viresh
