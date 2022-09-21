@@ -2,87 +2,273 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C59915BFEB9
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 15:13:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30CA95BFEBC
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 15:13:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbiIUNNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 09:13:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59262 "EHLO
+        id S230015AbiIUNNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 09:13:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbiIUNNK (ORCPT
+        with ESMTP id S229703AbiIUNNa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 09:13:10 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC5C382752;
-        Wed, 21 Sep 2022 06:13:07 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MXf3k1QZlz4xG9;
-        Wed, 21 Sep 2022 23:13:06 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1663765986;
-        bh=TeiuUTqhylaxbG26Vkxwskt7S9E7Di1Y1ogWtwqFpLI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=WZ6Odkc8579eE9eGk1ygkEhagBvkolmEXkh4yV4z20KWP+FEExfT/X61ZaqgWra6Y
-         8Cl0DwzcVgAbbTxWcHCbuONAWzWid+Fw8fR17N9uK9XGO/uSqCELIXr40bHdlCy/3D
-         kTJ+/g2xfk4dF49aMtDx7GybVCH5jY1sYJQS9MbxuOnxpI0wisqTX0/bdImOdcKbu6
-         GXGMeV+Hf+CzgQ6wE+hWf/FePcA/vnpkGDnxR7SQGKT9KEN8bzsyg4IBHYF90LwmlV
-         ZtEhOCkQiIuo3kc5mvK9D3pQxaoSiaOwXmF3gXJFCUzOyf1oD8Ub0nx2zuxH+vd65U
-         LtiB/ftAA1CuA==
-Date:   Wed, 21 Sep 2022 23:13:04 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: Tree for Sep 21
-Message-ID: <20220921231304.5a5d0624@canb.auug.org.au>
-In-Reply-To: <20220921185740.6e19ee1e@canb.auug.org.au>
-References: <20220921185740.6e19ee1e@canb.auug.org.au>
+        Wed, 21 Sep 2022 09:13:30 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C88388DF0;
+        Wed, 21 Sep 2022 06:13:27 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MXf0r3crKzpTqx;
+        Wed, 21 Sep 2022 21:10:36 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 21 Sep 2022 21:13:25 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 21 Sep 2022 21:13:24 +0800
+Subject: Re: [PATCH v4 3/8] scripts/kallsyms: don't compress symbol types
+To:     Petr Mladek <pmladek@suse.com>
+CC:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Masahiro Yamada" <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        <linux-modules@vger.kernel.org>
+References: <20220920071317.1787-1-thunder.leizhen@huawei.com>
+ <20220920071317.1787-4-thunder.leizhen@huawei.com> <YyrSwnvMn5N5lV6Q@alley>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <5fe18639-0a0c-70b5-8fa5-83ed83ffcaf3@huawei.com>
+Date:   Wed, 21 Sep 2022 21:13:13 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/NPRJe6Mb+a72t65YBDPIDdX";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YyrSwnvMn5N5lV6Q@alley>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/NPRJe6Mb+a72t65YBDPIDdX
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-On Wed, 21 Sep 2022 18:57:40 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> Changes since 20220920:
+On 2022/9/21 17:00, Petr Mladek wrote:
+> On Tue 2022-09-20 15:13:12, Zhen Lei wrote:
+>> Currently, to search for a symbol, we need to expand the symbols in
+>> 'kallsyms_names' one by one, and then use the expanded string for
+>> comparison. Because we do not know the symbol type, and the symbol type
+>> may be combined with the following characters to form a token.
+>>
+>> So if we don't compress the symbol type, we can first compress the
+>> searched symbol and then make a quick comparison based on the compressed
+>> length and content. In this way, for entries with mismatched lengths,
+>> there is no need to expand and compare strings. And for those matching
+>> lengths, there's no need to expand the symbol. This saves a lot of time.
+>> According to my test results, the average performance of
+>> kallsyms_lookup_name() can be improved by 20 to 30 times.
+>>
+>> Of course, because the symbol type is forcibly not compressed, the
+>> compression rate also decreases. Here are the test results with
+>> defconfig:
+>>
+>> arm64: <<<<<<
+>>         ---------------------------------------------------------------
+>>        | ALL | nr_symbols | compressed size | original size | ratio(%) |
+>>         -----|---------------------------------------------------------|
+>> Before |  Y  |     174094 |       1884938   |      3750653  |  50.25   |
+>> After  |  Y  |     174099 |       1960154   |      3750756  |  52.26   |
+>> Before |  N  |      61744 |        725507   |      1222737  |  59.33   |
+>> After  |  N  |      61747 |        745733   |      1222801  |  60.98   |
+>>         ---------------------------------------------------------------
+>> The memory overhead is increased by:
+>>   73.5KiB and 4.0% if CONFIG_KALLSYMS_ALL=y.
+>>   19.8KiB and 2.8% if CONFIG_KALLSYMS_ALL=n.
+>>
+>> x86: <<<<<<<<
+>>        ---------------------------------------------------------------
+>>        | ALL | nr_symbols | compressed size | original size | ratio(%) |
+>>         -----|---------------------------------------------------------|
+>> Before |  Y  |     131415 |       1697542   |      3161216  |  53.69   |
+>> After  |  Y  |     131540 |       1747769   |      3163933  |  55.24   |
+>> Before |  N  |      60695 |        737627   |      1283046  |  57.49   |
+>> After  |  N  |      60699 |        754797   |      1283149  |  58.82   |
+>>         ---------------------------------------------------------------
+>> The memory overhead is increased by:
+>>   49.0KiB and 3.0% if CONFIG_KALLSYMS_ALL=y.
+>>   16.8KiB and 2.3% if CONFIG_KALLSYMS_ALL=n.
+>>
+>> This additional memory overhead is worth it compared to the performance
+>> improvement, I think.
+> 
+> I agree. The speedup mentioned in the followup patches looks big.
+> I just suggest to do this change a cleaner way, see below.
+> 
+>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+>> ---
+>>  scripts/kallsyms.c | 15 ++++++++++++---
+>>  1 file changed, 12 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+>> index 3319d9f38d7a5f2..1ae9ce773d2a31d 100644
+>> --- a/scripts/kallsyms.c
+>> +++ b/scripts/kallsyms.c
+>> @@ -61,6 +61,15 @@ static int all_symbols;
+>>  static int absolute_percpu;
+>>  static int base_relative;
+>>  
+>> +/*
+>> + * Each entry in the symbol table consists of the symbol type and the symbol
+>> + * itself. To optimize the performance of finding or traversing symbols in
+>> + * kernel, do not compress the symbol type. In this way, when looking for a
+>> + * symbol of unknown type, we can first compress the searched symbol and then
+>> + * make a quick comparison based on the compressed length and content.
+>> + */
+>> +static int sym_start_idx = 1;
+>> +
+>>  static int token_profit[0x10000];
+>>  
+>>  /* the table that holds the result of the compression */
+>> @@ -511,7 +520,7 @@ static void learn_symbol(const unsigned char *symbol, int len)
+>>  {
+>>  	int i;
+>>  
+>> -	for (i = 0; i < len - 1; i++)
+>> +	for (i = sym_start_idx; i < len - 1; i++)
+> 
+> It creates yet another twists in scripts/kallsyms.c. read_symbol()
+> explicitely adds the type as the first character so that it can be
+> compressed. And this patch adds a hack to skip it.
+> 
+> Let's do it a clean way and store the type serarately:
+> 
+> struct sym_entry {
+> 	unsigned long long addr;
+> 	unsigned int len;
+> 	unsigned int start_pos;
+> 	unsigned int percpu_absolute;
+> 	unsigned char type;
 
-I forgot to mention that there will be no linux-next release tomorrow
-(while all Aussies remember their Queen) or next week.
+Yes, it's very necessary. Thanks.
 
---=20
-Cheers,
-Stephen Rothwell
+> 	unsigned char name[];
 
---Sig_/NPRJe6Mb+a72t65YBDPIDdX
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Yes, using "name[]" will be clearer than using "sym[]"
 
------BEGIN PGP SIGNATURE-----
+> };
+> 
+> static struct sym_entry *read_symbol(FILE *in)
+> {
+> [...]
+> 	name_len = strlen(name);
+> 
+> 	sym = malloc(sizeof(*sym) + name_len);
+> 	if (!sym) {
+> 		fprintf(stderr, "kallsyms failure: "
+> 			"unable to allocate required amount of memory\n");
+> 		exit(EXIT_FAILURE);
+> 	}
+> 	sym->addr = addr;
+> 	sym->len = name_len;
+> 	sym->type = type;
+> 	strcpy(sys->name, name);
+> 	sym->percpu_absolute = 0;
+> }
+> 
+> It would allow to remove the tricky:
+> 
+> 	static char *sym_name(const struct sym_entry *s)
+> 	{
+> 		return (char *)s->sym + 1;
+> 	}
+> 
+> and access s->name directly.
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMrDeAACgkQAVBC80lX
-0GyG6Qf+NEH4vx7QEhgPxHbWzjaK4uWsV8u9y+Pn/GS6UywukXIxjiFmRUm8cTUS
-/MTNz9KH45sMriaAZzU1BnDmdq1nynw0cEW3yBYHQtOWJcQc3A9zz2IOSKVrlMvy
-4qL/mNXu8RlVfpj4MVhzocKBCP3qYmgJ7jtauvI1iko1TR7YCsZKWMThwB3ZfWsF
-GYWOCcZONFzUqf5L2PhgOL7lRFWPrO4iYJ8uaqJGIV2G3Dv2yVeXLlFepYTQ0Nw4
-FY7rsN5HkBn94hn0lXUEN8yYmOZLZVZTfC7FGMsZv5OeOu6Xp7WDz4fi7IA/XtaA
-otRoY5oSCmp/8GeBaY3/PEF+4tmQrQ==
-=coar
------END PGP SIGNATURE-----
+OK
 
---Sig_/NPRJe6Mb+a72t65YBDPIDdX--
+> 
+> OK, the problem is how to store the type. The clean way would be
+> to put it into a separate section, for example:
+> 
+> static void write_src(void)
+> {
+> [...]
+> 	output_label("kallsyms_types");
+> 	off = 0;
+> 	for (i = 0; i < table_cnt; i++) {
+> 		printf("\t.byte 0x%02x\n", table[i]->type);
+> 	}
+> 	printf("\n");
+> [...]
+> }
+> 
+> It would probably increase the size even more. Another problem
+> is that it would need changes in the crash dump tools, see:
+> 
+> static int __init crash_save_vmcoreinfo_init(void)
+> {
+> [...]
+> 	VMCOREINFO_SYMBOL(kallsyms_names);
+> [...]
+> }
+> 
+> A solution would be to store it the old way:
+
+I'll use this compatibility mode first. Because I'm going to compress
+the type later.
+
+> 
+> static void write_src(void)
+> {
+> [...]
+> 	output_label("kallsyms_names");
+> 	off = 0;
+> 	for (i = 0; i < table_cnt; i++) {
+> 		if ((i & 0xFF) == 0)
+> 			markers[i >> 8] = off;
+> 
+> 		/*
+> 		 * Store the symbol type togerher with symbol name.
+> 		 * It helps to reduce the size.
+> 		 */
+> 		printf("\t.byte 0x%02x", table[i]->len + 1);
+> 		printf(", 0x%02x", table[i]->type);
+> 		for (k = 0; k < table[i]->len; k++)
+> 			printf(", 0x%02x", table[i]->sym[k]);
+> 		printf("\n");
+> 
+> 		/* symbol name lenght + type + "\n" */
+> 		off += table[i]->len + 2;
+> 	}
+> 	printf("\n");
+> [...]
+> }
+> 
+> The result would be the same as with your patch. But the code would be
+> even cleaner than before.
+
+Yes，Thank you for your valuable comments.
+
+> 
+> Best Regards,
+> Petr
+> .
+> 
+
+-- 
+Regards,
+  Zhen Lei
