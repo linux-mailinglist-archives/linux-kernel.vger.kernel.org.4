@@ -2,206 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DDA35C0551
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 19:33:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2B445C0553
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 19:34:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230028AbiIURdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 13:33:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58124 "EHLO
+        id S230195AbiIUReL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 13:34:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbiIURdB (ORCPT
+        with ESMTP id S229437AbiIUReI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 13:33:01 -0400
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C2E0A1D67
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 10:32:55 -0700 (PDT)
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20220921173250euoutp01a28ac2779ed94690f71ebbf7f14c1498~W8IXipzj03068430684euoutp01O
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 17:32:50 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20220921173250euoutp01a28ac2779ed94690f71ebbf7f14c1498~W8IXipzj03068430684euoutp01O
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1663781570;
-        bh=3Ci10O2BVi/HktN0SRzO4buCtgT/msmMdQxBp8IfR8Y=;
-        h=Date:Subject:To:CC:From:In-Reply-To:References:From;
-        b=jFi1QKww3b6OGjZPqJJFuVmrch3IxUK9rBO4jjLJafGHkWikJOOUb7TDJvenuAiM5
-         lB1cu5h5/F/WW4RQQK/3drIjzlIfwFi9VibTd+eu1vEpgAaKr6hJnxBynJJg9x3Cdo
-         WnEewb/A/jYp6lE29W6DyYDM5aNQDwYRPafSeiZw=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20220921173249eucas1p205c67c6120e3314a1324332e3c725528~W8IWuikMW0485404854eucas1p2f;
-        Wed, 21 Sep 2022 17:32:49 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id 52.87.19378.1CA4B236; Wed, 21
-        Sep 2022 18:32:49 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20220921173248eucas1p23403baa578aa335747fb8a62145a577f~W8IWL9LNd0562805628eucas1p2p;
-        Wed, 21 Sep 2022 17:32:48 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220921173248eusmtrp1119dd3978522ddbd060337edcc92edd2~W8IWLHoqA1591515915eusmtrp1V;
-        Wed, 21 Sep 2022 17:32:48 +0000 (GMT)
-X-AuditID: cbfec7f5-a4dff70000014bb2-1a-632b4ac1bb46
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 0A.7B.10862.0CA4B236; Wed, 21
-        Sep 2022 18:32:48 +0100 (BST)
-Received: from CAMSVWEXC01.scsc.local (unknown [106.1.227.71]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20220921173248eusmtip2825416e5fdc058383a65eb9819720136~W8IWAmJkC2186421864eusmtip20;
-        Wed, 21 Sep 2022 17:32:48 +0000 (GMT)
-Received: from [192.168.8.130] (106.210.248.192) by CAMSVWEXC01.scsc.local
-        (2002:6a01:e347::6a01:e347) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-        Wed, 21 Sep 2022 18:32:46 +0100
-Message-ID: <fc7d88a5-f65b-3962-22e5-cc393535d66d@samsung.com>
-Date:   Wed, 21 Sep 2022 19:32:45 +0200
+        Wed, 21 Sep 2022 13:34:08 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FEE6A1D69
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 10:34:07 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id 207so6619151pgc.7
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 10:34:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=tqW8IrEN/2v5/od3wWBPeJsmt7XPs5O3rrI2SPgUWJU=;
+        b=OV+pX2ADGO9Thd3w6cm3wsy6HdwQyBOvRf3huuNhr2e0lzE8RaczFP0LrefxluscY9
+         ZPCVPDcdkhtnnUZfzL7ttXlzZ85N/hsaAAFVphy/dScnDWmX9cgnmEr4d28k3H12SJDv
+         ch+plLUbtXcWNmsNJtbjOriDr4ATFMmz1WmnoUoIQ3l1bcOm7LlQ2WO1a2dhuyhR+oD3
+         UVnH3JrOVmFbwlAv7t8cC65sf5+dZuLd7HRKWWFLq1tsZIMitML2ga+3690alWtTGHSi
+         b6xihVujC5Bn2qvaStzOR6jWtE+yBBdoXICHz4rU6A9zXNuR1Me+6mjcyQhH4DxkWQ2X
+         AGBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=tqW8IrEN/2v5/od3wWBPeJsmt7XPs5O3rrI2SPgUWJU=;
+        b=KqpaIUIWWiIRpbcIzoo6UA4X+nnYgXf30iO7n1UTIFCmmul0fnDXs4d7/XWe95EaIz
+         daUExv5TINlTQsoC8hqdv975jwHjMBiEj+5crNLVhdjNKhNvOB7yeq9Et3aTEW8V/iAb
+         t1DOTqML6FD35PgZ1wKNsuQHVOLm1JlgUYDnz5nVYUvrT9xFhSWLublifXf2KsuGJIW1
+         iFY+H9S8iKf/SOjyPvIcEuiCLGFzyOCkLgx2TYpY+IKgB9Plx8VJSwkIGWLLO/LIbDW6
+         f81N5kkUxE9ufPCfX6Ug2xCixYgIiL1+TJoztWjJ2iUc5PGWygHBLKyQBnTxMjM566fk
+         L3MQ==
+X-Gm-Message-State: ACrzQf2EgY+q74qnibTia+YOUkDCmV/yT3mFool+5zqJ6gCFttbofKIN
+        r1GJNnpBLCJ47S597doh33G5Vw==
+X-Google-Smtp-Source: AMsMyM4pLXs9BEKjMLbhvSH92Rqr3M26qZQoo1sXp7W9nWSNMBersFVbi36c3lLwS/o5v+HDmjXqOg==
+X-Received: by 2002:a05:6a00:1781:b0:53a:8572:4453 with SMTP id s1-20020a056a00178100b0053a85724453mr30657060pfg.76.1663781647136;
+        Wed, 21 Sep 2022 10:34:07 -0700 (PDT)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id f11-20020a170902e98b00b001751c61d3b8sm2288550plb.211.2022.09.21.10.34.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Sep 2022 10:34:05 -0700 (PDT)
+Date:   Wed, 21 Sep 2022 11:34:03 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Shengjiu Wang <shengjiu.wang@nxp.com>
+Cc:     andersson@kernel.org, arnaud.pouliquen@foss.st.com,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        shengjiu.wang@gmail.com
+Subject: Re: [PATCH v2] rpmsg: char: Avoid double destroy of default endpoint
+Message-ID: <20220921173403.GB1126145@p14s>
+References: <1663725523-6514-1-git-send-email-shengjiu.wang@nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
-        Thunderbird/91.11.0
-Subject: Re: [PATCH v14 13/13] dm: add power-of-2 target for zoned devices
- with non power-of-2 zone sizes
-Content-Language: en-US
-To:     Mike Snitzer <snitzer@redhat.com>
-CC:     <agk@redhat.com>, <snitzer@kernel.org>, <axboe@kernel.dk>,
-        <damien.lemoal@opensource.wdc.com>, <hch@lst.de>,
-        Damien Le Moal <damien.lemoal@wdc.com>, <bvanassche@acm.org>,
-        <pankydev8@gmail.com>, <gost.dev@samsung.com>,
-        <linux-kernel@vger.kernel.org>, <linux-nvme@lists.infradead.org>,
-        <linux-block@vger.kernel.org>, <dm-devel@redhat.com>,
-        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
-        <jaegeuk@kernel.org>, <matias.bjorling@wdc.com>
-From:   Pankaj Raghav <p.raghav@samsung.com>
-In-Reply-To: <Yys9sTqCIzxVFwyX@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [106.210.248.192]
-X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
-        CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrPKsWRmVeSWpSXmKPExsWy7djP87oHvbSTDT4c4rNYf+oYs8Xqu/1s
-        FtM+/GS2+H32PLNFa/s3Jou972azWqxcfZTJ4sn6WcwWf7vuAcVuaVtc3jWHzWL+sqfsFhPa
-        vjJbrLn5lMXixC1pi7aNXxkdBDwuX/H22DnrLrvH5bOlHptWdbJ5bF5S77H7ZgObx87W+6we
-        7/ddZfP4vEnOo/1AN1MAVxSXTUpqTmZZapG+XQJXRsuJSSwFLcIVt+9MYGxgbOHvYuTkkBAw
-        kTh3bgtbFyMXh5DACkaJXSv3s0I4XxglGpdeYoJwPjNK9De/ZINpWTHnMSOILSSwnFHiw2E/
-        uKKPPxrYIZzdjBJ91zYAdXBw8ArYSbSvkAVpYBFQlXi29BgTiM0rIChxcuYTFhBbVCBSYs3u
-        s+wgtrBAtsSrC9PAFjALiEvcejKfCWSMCFDvrWkuIOOZBQ4xS6xrew0WZxPQkmjsBGvlBDIP
-        vvzKAtGqKdG6/Tc7hC0vsf3tHGaI+5UlZt6cCmXXSqw9dgbsZAmBR5wSv873QD3pInG28yQj
-        hC0s8er4FnYIW0bi9OQeFgi7WuLpjd/MEM0twBDauR7sXwkBa4m+MzkQNY4S565uYocI80nc
-        eCsIcQ+fxKRt05knMKrOQgqJWUg+noXkhVlIXljAyLKKUTy1tDg3PbXYOC+1XK84Mbe4NC9d
-        Lzk/dxMjMA2e/nf86w7GFa8+6h1iZOJgPMQowcGsJMI7+45mshBvSmJlVWpRfnxRaU5q8SFG
-        aQ4WJXFethlayUIC6YklqdmpqQWpRTBZJg5OqQamlun7tzMdF9oxaYZZlnzYkncdod/m51V4
-        btu54+2p8HLrC/f1+m8cyV7kUf/64ErVmdM4PlbOWHdi7buJX/JCe5s/zrTh+c+qsE/0PMec
-        FbLrivoPG/rPlYpk/PvX9ON79eveJ+ICjqpMcWt71qJ8qO+Wg4OT5ocSle2rWt4VXA1bV6nE
-        7To/6L7O7KDo+6bikmaGVzeZTIrN5j8vs+Bj+7PuWWKiJR/C/H7PeHr/QHDXVLEwhnWMXR9F
-        hPr0Io9c+3Rm3Y5Hro4zb2e/0WZyPz+L52T43CDr3t5rr5X4BBYtFb9kMvGfnfyzb0oBx53F
-        T002eWetZXX6i/La3zLe1xand6/zYL2v13Odq+THCSWW4oxEQy3mouJEAGmuP8jyAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprKKsWRmVeSWpSXmKPExsVy+t/xe7oHvLSTDX62aFisP3WM2WL13X42
-        i2kffjJb/D57ntmitf0bk8Xed7NZLVauPspk8WT9LGaLv133gGK3tC0u75rDZjF/2VN2iwlt
-        X5kt1tx8ymJx4pa0RdvGr4wOAh6Xr3h77Jx1l93j8tlSj02rOtk8Ni+p99h9s4HNY2frfVaP
-        9/uusnl83iTn0X6gmymAK0rPpii/tCRVISO/uMRWKdrQwkjP0NJCz8jEUs/Q2DzWyshUSd/O
-        JiU1J7MstUjfLkEvo+XEJJaCFuGK23cmMDYwtvB3MXJySAiYSKyY85ixi5GLQ0hgKaPE3et/
-        WSESMhKfrnxkh7CFJf5c62KDKPrIKPH+6FVmCGc3o8S2B/OAqjg4eAXsJNpXyII0sAioSjxb
-        eowJxOYVEJQ4OfMJC4gtKhAp8XBZE1hcWCBb4tWFaYwgNrOAuMStJ/OZQMaIAPXemuYCMp5Z
-        4BCzxLq210wQu+4xSmzufc0GUsQmoCXR2Al2HCeQefDlVxaIOZoSrdt/s0PY8hLb385hhnhA
-        WWLmzalQdq3Eq/u7GScwis5Cct4sJGfMQjJqFpJRCxhZVjGKpJYW56bnFhvpFSfmFpfmpesl
-        5+duYgSmj23Hfm7Zwbjy1Ue9Q4xMHIyHGCU4mJVEeGff0UwW4k1JrKxKLcqPLyrNSS0+xGgK
-        DKOJzFKiyfnABJZXEm9oZmBqaGJmaWBqaWasJM7rWdCRKCSQnliSmp2aWpBaBNPHxMEp1cDk
-        K6PW+rD/4XSJvANHuOwzNaXkbr7S3JDJtf/hrVPCPDPYJ+bsMw1WvSDQeC5+CY8MG+NbVXmH
-        61PmGh2YlWG83Id5c5/T/IgPBeHzrVifWz9ZbClnPPdAmInT4XD7yLTfoQoszSsjNlUcWp3t
-        dC5Yys8yo1bwBsOPJZ/LuA6GZbcVuf9+9+yJX6ZlTrEDm9TWD5rNLT2fTzqdZF66bkPY8o65
-        qaFs5mm55REn4s7UND6c2pY+a+fKtUxGoTKpEV1K/35nvRA+89IzWdv5tGP1P5fpXq4z9FO4
-        nt1/rjybeUKB+PHXLkd9tPkj395alNSYwGN6O2PJ9OWvNl7fPuVxR1eq1R33f3tu8xlmPVBi
-        Kc5INNRiLipOBAATeEQ9qAMAAA==
-X-CMS-MailID: 20220921173248eucas1p23403baa578aa335747fb8a62145a577f
-X-Msg-Generator: CA
-X-RootMTR: 20220920091134eucas1p275585b70fab48ba1f19eb5d2cc515b6d
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20220920091134eucas1p275585b70fab48ba1f19eb5d2cc515b6d
-References: <20220920091119.115879-1-p.raghav@samsung.com>
-        <CGME20220920091134eucas1p275585b70fab48ba1f19eb5d2cc515b6d@eucas1p2.samsung.com>
-        <20220920091119.115879-14-p.raghav@samsung.com>
-        <Yys9sTqCIzxVFwyX@redhat.com>
-X-Spam-Status: No, score=-10.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1663725523-6514-1-git-send-email-shengjiu.wang@nxp.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->> +/*
->> + * This target works on the complete zoned device. Partial mapping is not
->> + * supported.
->> + * Construct a zoned po2 logical device: <dev-path>
->> + */
->> +static int dm_po2z_ctr(struct dm_target *ti, unsigned int argc, char **argv)
->> +{
->> +	struct dm_po2z_target *dmh = NULL;
->> +	int ret;
->> +	sector_t zone_size;
->> +	sector_t dev_capacity;
->> +
->> +	if (argc != 1)
->> +		return -EINVAL;
->> +
->> +	dmh = kmalloc(sizeof(*dmh), GFP_KERNEL);
->> +	if (!dmh)
->> +		return -ENOMEM;
->> +
->> +	ret = dm_get_device(ti, argv[0], dm_table_get_mode(ti->table),
->> +			    &dmh->dev);
->> +	if (ret) {
->> +		ti->error = "Device lookup failed";
->> +		goto bad;
->> +	}
->> +
->> +	if (!bdev_is_zoned(dmh->dev->bdev)) {
->> +		DMERR("%pg is not a zoned device", dmh->dev->bdev);
->> +		ret = -EINVAL;
->> +		goto bad;
->> +	}
->> +
->> +	zone_size = bdev_zone_sectors(dmh->dev->bdev);
->> +	dev_capacity = get_capacity(dmh->dev->bdev->bd_disk);
->> +	if (ti->len != dev_capacity) {
->> +		DMERR("%pg Partial mapping of the target is not supported",
->> +		      dmh->dev->bdev);
->> +		ret = -EINVAL;
->> +		goto bad;
->> +	}
->> +
->> +	if (is_power_of_2(zone_size))
->> +		DMWARN("%pg: underlying device has a power-of-2 number of sectors per zone",
->> +		       dmh->dev->bdev);
->> +
->> +	dmh->zone_size = zone_size;
->> +	dmh->zone_size_po2 = 1 << get_count_order_long(zone_size);
->> +	dmh->zone_size_po2_shift = ilog2(dmh->zone_size_po2);
->> +	dmh->zone_size_diff = dmh->zone_size_po2 - dmh->zone_size;
->> +	ti->private = dmh;
->> +	ti->max_io_len = dmh->zone_size_po2;
->> +	dmh->nr_zones = npo2_zone_no(dmh, ti->len);
->> +	ti->len = dmh->zone_size_po2 * dmh->nr_zones;
->> +	return 0;
->> +
->> +bad:
->> +	kfree(dmh);
->> +	return ret;
->> +}
+On Wed, Sep 21, 2022 at 09:58:43AM +0800, Shengjiu Wang wrote:
+> The rpmsg_dev_remove() in rpmsg_core is the place for releasing
+> this default endpoint.
 > 
-> This error handling still isn't correct.  You're using
-> dm_get_device().  If you return early due to error, _after_
-> dm_get_device(), you need to dm_put_device().
+> So need to avoid destroying the default endpoint in
+> rpmsg_chrdev_eptdev_destroy(), this should be the same as
+> rpmsg_eptdev_release(). Otherwise there will be double destroy
+> issue that ept->refcount report warning:
 > 
-> Basically you need a new label above "bad:" that calls dm_put_device()
-> then falls through to "bad:".  Or you need to explcitly call
-> dm_put_device() before "goto bad;" in the if (ti->len != dev_capacity)
-> error branch.
+> refcount_t: underflow; use-after-free.
 > 
+> Call trace:
+>  refcount_warn_saturate+0xf8/0x150
+>  virtio_rpmsg_destroy_ept+0xd4/0xec
+>  rpmsg_dev_remove+0x60/0x70
+> 
+> The issue can be reproduced by stopping remoteproc before
+> closing the /dev/rpmsgX.
+> 
+> Fixes: bea9b79c2d10 ("rpmsg: char: Add possibility to use default endpoint of the rpmsg device")
+> Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+> Reviewed-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+> ---
+> changes in v2:
+> - Add comments
+> 
+>  drivers/rpmsg/rpmsg_char.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
+> index 0850ae34fb88..3e0b8f3496ed 100644
+> --- a/drivers/rpmsg/rpmsg_char.c
+> +++ b/drivers/rpmsg/rpmsg_char.c
+> @@ -76,7 +76,9 @@ int rpmsg_chrdev_eptdev_destroy(struct device *dev, void *data)
+>  
+>  	mutex_lock(&eptdev->ept_lock);
+>  	if (eptdev->ept) {
+> -		rpmsg_destroy_ept(eptdev->ept);
+> +		/* The default endpoint is released by the rpmsg core */
+> +		if (!eptdev->default_ept)
+> +			rpmsg_destroy_ept(eptdev->ept);
 
-Ah. I naively assumed dtr will be called to cleanup but not in this case as
-the ctr itself fails.
+Applied.
 
-I will add an extra label on top of `bad` and use it for errors that
-happens after `dm_get_device`. Thanks for pointing it out Mike.
+Thanks,
+Mathieu
+
+>  		eptdev->ept = NULL;
+>  	}
+>  	mutex_unlock(&eptdev->ept_lock);
+> -- 
+> 2.34.1
+> 
