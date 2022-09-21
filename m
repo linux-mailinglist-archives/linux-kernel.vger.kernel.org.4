@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2E255C02DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:56:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ECD05C0345
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 18:01:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232020AbiIUPzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 11:55:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38296 "EHLO
+        id S232251AbiIUQBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 12:01:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232077AbiIUPyG (ORCPT
+        with ESMTP id S232412AbiIUP7a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 11:54:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7670F9F1A2;
-        Wed, 21 Sep 2022 08:50:30 -0700 (PDT)
+        Wed, 21 Sep 2022 11:59:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A96359C2FF;
+        Wed, 21 Sep 2022 08:52:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 29B88B830AC;
-        Wed, 21 Sep 2022 15:49:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78C3FC433C1;
-        Wed, 21 Sep 2022 15:49:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5FDA5B830C0;
+        Wed, 21 Sep 2022 15:51:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6819C43470;
+        Wed, 21 Sep 2022 15:51:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663775395;
-        bh=PiPB3YXJpRtdxlglaBYvNy66rA4xrQRCPhLTiCXSEBE=;
+        s=korg; t=1663775494;
+        bh=kzCNxv+kLufdcqXotvyEBwyGJdVv5iQKf9LnXXFoGVc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AMH7rJDIBItpqZE/UeszK18UPErmba41DGWxpTJVpxzGqdQFgHhUIfHNWsFcPdJW3
-         1+6GQKOvnIaGkbOz5ryhCDzEtr2yhILZtNDPyZ+dsGT7CyfA2rHfeOGty2omTyaJQ6
-         DNYS1Cfouz9yE2bsXJsdSYJxaW2gET+f7sgrkXbg=
+        b=S6yJdWeuULlr46rlSe9upNLIolH+bvmqU5hGopk9c3/m22CGIK0lQ1wKyLIQLnud1
+         8CPSVXwRSI1s1HAdUNw/LvbsAwcZoGgzKl/IgUvJTyncMqTWQMOknjurTDCyqI+i+S
+         ISDII03llVI0wcU34o/kvDUrgNvzZPBQzZEKWoks=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Viresh Kumar <viresh.kumar@linaro.org>,
-        =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>,
-        Steven Price <steven.price@arm.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 39/45] drm/panfrost: devfreq: set opp to the recommended one to configure regulator
-Date:   Wed, 21 Sep 2022 17:46:29 +0200
-Message-Id: <20220921153648.265528220@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 5.10 25/39] Revert "serial: 8250: Fix reporting real baudrate value in c_ospeed field"
+Date:   Wed, 21 Sep 2022 17:46:30 +0200
+Message-Id: <20220921153646.560456712@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220921153646.931277075@linuxfoundation.org>
-References: <20220921153646.931277075@linuxfoundation.org>
+In-Reply-To: <20220921153645.663680057@linuxfoundation.org>
+References: <20220921153645.663680057@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,62 +54,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Clément Péron <peron.clem@gmail.com>
+From: Johan Hovold <johan@kernel.org>
 
-[ Upstream commit d76034a427a2660b080bc155e4fd8f6393eefb48 ]
+commit d02b006b29de14968ba4afa998bede0d55469e29 upstream.
 
-Enabling panfrost GPU OPP with dynamic regulator will make OPP
-responsible to enable and configure it.
+This reverts commit 32262e2e429cdb31f9e957e997d53458762931b7.
 
-Unfortunately OPP configure and enable the regulator when an OPP
-is asked to be set, which is not the case during
-panfrost_devfreq_init().
+The commit in question claims to determine the inverse of
+serial8250_get_divisor() but failed to notice that some drivers override
+the default implementation using a get_divisor() callback.
 
-This leave the regulator unconfigured and if no GPU load is
-triggered, no OPP is asked to be set which make the regulator framework
-switching it off during regulator_late_cleanup() without
-noticing and therefore make the board hang as any access to GPU
-memory space make bus locks up.
+This means that the computed line-speed values can be completely wrong
+and results in regular TCSETS requests failing (the incorrect values
+would also be passed to any overridden set_divisor() callback).
 
-Call dev_pm_opp_set_opp() with the recommend OPP in
-panfrost_devfreq_init() to enable the regulator, this will properly
-configure and enable the regulator and will avoid any switch off
-by regulator_late_cleanup().
+Similarly, it also failed to honour the old (deprecated) ASYNC_SPD_FLAGS
+and would break applications relying on those when re-encoding the
+actual line speed.
 
-Suggested-by: Viresh Kumar <viresh.kumar@linaro.org>
-Signed-off-by: Clément Péron <peron.clem@gmail.com>
-Reviewed-by: Steven Price <steven.price@arm.com>
-Signed-off-by: Steven Price <steven.price@arm.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220906153034.153321-5-peron.clem@gmail.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+There are also at least two quirks, UART_BUG_QUOT and an OMAP1510
+workaround, which were happily ignored and that are now broken.
+
+Finally, even if the offending commit were to be implemented correctly,
+this is a new feature and not something which should be backported to
+stable.
+
+Cc: Pali Rohár <pali@kernel.org>
+Fixes: 32262e2e429c ("serial: 8250: Fix reporting real baudrate value in c_ospeed field")
+Cc: stable <stable@vger.kernel.org>
+Signed-off-by: Johan Hovold <johan@kernel.org>
+Link: https://lore.kernel.org/r/20211007133146.28949-1-johan@kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/panfrost/panfrost_devfreq.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/tty/serial/8250/8250_port.c |   17 -----------------
+ 1 file changed, 17 deletions(-)
 
-diff --git a/drivers/gpu/drm/panfrost/panfrost_devfreq.c b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-index 194af7f607a6..be36dd060a2b 100644
---- a/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-+++ b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-@@ -132,6 +132,17 @@ int panfrost_devfreq_init(struct panfrost_device *pfdev)
- 		return PTR_ERR(opp);
+--- a/drivers/tty/serial/8250/8250_port.c
++++ b/drivers/tty/serial/8250/8250_port.c
+@@ -2547,19 +2547,6 @@ static unsigned int serial8250_get_divis
+ 	return serial8250_do_get_divisor(port, baud, frac);
+ }
  
- 	panfrost_devfreq_profile.initial_freq = cur_freq;
-+
-+	/*
-+	 * Set the recommend OPP this will enable and configure the regulator
-+	 * if any and will avoid a switch off by regulator_late_cleanup()
-+	 */
-+	ret = dev_pm_opp_set_opp(dev, opp);
-+	if (ret) {
-+		DRM_DEV_ERROR(dev, "Couldn't set recommended OPP\n");
-+		return ret;
-+	}
-+
- 	dev_pm_opp_put(opp);
+-static unsigned int serial8250_compute_baud_rate(struct uart_port *port,
+-						 unsigned int quot)
+-{
+-	if ((port->flags & UPF_MAGIC_MULTIPLIER) && quot == 0x8001)
+-		return port->uartclk / 4;
+-	else if ((port->flags & UPF_MAGIC_MULTIPLIER) && quot == 0x8002)
+-		return port->uartclk / 8;
+-	else if (port->type == PORT_NPCM)
+-		return DIV_ROUND_CLOSEST(port->uartclk - 2 * (quot + 2), 16 * (quot + 2));
+-	else
+-		return DIV_ROUND_CLOSEST(port->uartclk, 16 * quot);
+-}
+-
+ static unsigned char serial8250_compute_lcr(struct uart_8250_port *up,
+ 					    tcflag_t c_cflag)
+ {
+@@ -2701,14 +2688,11 @@ void serial8250_update_uartclk(struct ua
+ 
+ 	baud = serial8250_get_baud_rate(port, termios, NULL);
+ 	quot = serial8250_get_divisor(port, baud, &frac);
+-	baud = serial8250_compute_baud_rate(port, quot);
+ 
+ 	serial8250_rpm_get(up);
+ 	spin_lock_irqsave(&port->lock, flags);
+ 
+ 	uart_update_timeout(port, termios->c_cflag, baud);
+-	if (tty_termios_baud_rate(termios))
+-		tty_termios_encode_baud_rate(termios, baud, baud);
+ 
+ 	serial8250_set_divisor(port, baud, quot, frac);
+ 	serial_port_out(port, UART_LCR, up->lcr);
+@@ -2742,7 +2726,6 @@ serial8250_do_set_termios(struct uart_po
+ 
+ 	baud = serial8250_get_baud_rate(port, termios, old);
+ 	quot = serial8250_get_divisor(port, baud, &frac);
+-	baud = serial8250_compute_baud_rate(port, quot);
  
  	/*
--- 
-2.35.1
-
+ 	 * Ok, we're now changing the port state.  Do it with
 
 
