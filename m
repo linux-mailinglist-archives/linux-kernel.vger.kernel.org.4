@@ -2,98 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 791CD5C0206
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:47:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 322875C02AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:54:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231546AbiIUPrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 11:47:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50632 "EHLO
+        id S231826AbiIUPyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 11:54:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231161AbiIUPqx (ORCPT
+        with ESMTP id S231844AbiIUPxE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 11:46:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCDB76E2EC;
-        Wed, 21 Sep 2022 08:46:44 -0700 (PDT)
+        Wed, 21 Sep 2022 11:53:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35065857FB;
+        Wed, 21 Sep 2022 08:50:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7A29EB81D4E;
-        Wed, 21 Sep 2022 15:46:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E194EC433D6;
-        Wed, 21 Sep 2022 15:46:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B05D263143;
+        Wed, 21 Sep 2022 15:49:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4162C433C1;
+        Wed, 21 Sep 2022 15:49:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663775202;
-        bh=8KchVOiklKldhDSmnwE9qC9ds7RMp8LSqO/hd4CFmxA=;
+        s=korg; t=1663775374;
+        bh=MjVpQg01ZuAjFEFCSzFirXe7GMa7gxyPJoxPoKsIjd0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GrwoWYndGtJqjIroAnMNuX+ITi0yRi1tE/YK0mflp6hVqSg1KpfPkvGI9pj7/pLIY
-         ZXiFhpWlfNUS07QJJzULA1NiLlgFnyLxAIPZQbLMH/1fwLSwRn2PIalCF+svd7Rg65
-         NwHiDXrgxCqyj3IKl9EqI6XJbUoBDi5wimeg3Xcw=
+        b=B6gV01iZVPBm6KgmcWZkcrAkKaH4ITgx/Ae09AbV4T0CUEv80GRh6OKMplQ4EHUPL
+         tlpxZtA8gTTZcBb266mWkFcSW/PcPammEI3tByB22k2hj2OHCycHFsf227pJ686wmt
+         Emu/v6KJycbbQNBWQwo5tkjhWN+XbBXd/OiXhnNc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Stuart Menefy <stuart.menefy@mathembedded.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
+        "=?UTF-8?q?Jo=C3=A3o=20H . =20Spies?=" <jhlspies@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 13/38] drm/meson: Fix OSD1 RGB to YCbCr coefficient
-Date:   Wed, 21 Sep 2022 17:45:57 +0200
-Message-Id: <20220921153646.711370175@linuxfoundation.org>
+Subject: [PATCH 5.15 08/45] pinctrl: rockchip: Enhance support for IRQ_TYPE_EDGE_BOTH
+Date:   Wed, 21 Sep 2022 17:45:58 +0200
+Message-Id: <20220921153647.182046742@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220921153646.298361220@linuxfoundation.org>
-References: <20220921153646.298361220@linuxfoundation.org>
+In-Reply-To: <20220921153646.931277075@linuxfoundation.org>
+References: <20220921153646.931277075@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAD_ENC_HEADER,BAYES_00,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stuart Menefy <stuart.menefy@mathembedded.com>
+From: João H. Spies <jhlspies@gmail.com>
 
-[ Upstream commit 6463d3930ba5b6addcfc8f80a4543976a2fc7656 ]
+[ Upstream commit b871656aa4f54e04207f62bdd0d7572be1d86b36 ]
 
-VPP_WRAP_OSD1_MATRIX_COEF22.Coeff22 is documented as being bits 0-12,
-not 16-28.
+Switching between falling/rising edges for IRQ_TYPE_EDGE_BOTH on pins that
+require debounce can cause the device to lose events due to a desync
+between pin state and irq type.
 
-Without this the output tends to have a pink hue, changing it results
-in better color accuracy.
+This problem is resolved by switching between IRQ_TYPE_LEVEL_LOW and
+IRQ_TYPE_LEVEL_HIGH instead.
 
-The vendor kernel doesn't use this register. However the code which
-sets VIU2_OSD1_MATRIX_COEF22 also uses bits 0-12. There is a slightly
-different style of registers for configuring some of the other matrices,
-which do use bits 16-28 for this coefficient, but those have names
-ending in MATRIX_COEF22_30, and this is not one of those.
-
-Signed-off-by: Stuart Menefy <stuart.menefy@mathembedded.com>
-Fixes: 728883948b0d ("drm/meson: Add G12A Support for VIU setup")
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220908155243.687143-1-stuart.menefy@mathembedded.com
+Fixes: 936ee2675eee ("gpio/rockchip: add driver for rockchip gpio")
+Signed-off-by: João H. Spies <jhlspies@gmail.com>
+Link: https://lore.kernel.org/r/20220808025121.110223-1-jhlspies@gmail.com
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/meson/meson_viu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpio/gpio-rockchip.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/meson/meson_viu.c b/drivers/gpu/drm/meson/meson_viu.c
-index bb7e109534de..d4b907889a21 100644
---- a/drivers/gpu/drm/meson/meson_viu.c
-+++ b/drivers/gpu/drm/meson/meson_viu.c
-@@ -94,7 +94,7 @@ static void meson_viu_set_g12a_osd1_matrix(struct meson_drm *priv,
- 		priv->io_base + _REG(VPP_WRAP_OSD1_MATRIX_COEF11_12));
- 	writel(((m[9] & 0x1fff) << 16) | (m[10] & 0x1fff),
- 		priv->io_base + _REG(VPP_WRAP_OSD1_MATRIX_COEF20_21));
--	writel((m[11] & 0x1fff) << 16,
-+	writel((m[11] & 0x1fff),
- 		priv->io_base +	_REG(VPP_WRAP_OSD1_MATRIX_COEF22));
+diff --git a/drivers/gpio/gpio-rockchip.c b/drivers/gpio/gpio-rockchip.c
+index 22b8f0aa80f1..f31b0947eaaa 100644
+--- a/drivers/gpio/gpio-rockchip.c
++++ b/drivers/gpio/gpio-rockchip.c
+@@ -418,11 +418,11 @@ static int rockchip_irq_set_type(struct irq_data *d, unsigned int type)
+ 			goto out;
+ 		} else {
+ 			bank->toggle_edge_mode |= mask;
+-			level |= mask;
++			level &= ~mask;
  
- 	writel(((m[18] & 0xfff) << 16) | (m[19] & 0xfff),
+ 			/*
+ 			 * Determine gpio state. If 1 next interrupt should be
+-			 * falling otherwise rising.
++			 * low otherwise high.
+ 			 */
+ 			data = readl(bank->reg_base + bank->gpio_regs->ext_port);
+ 			if (data & mask)
 -- 
 2.35.1
 
