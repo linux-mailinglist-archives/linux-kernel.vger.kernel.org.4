@@ -2,110 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC9505E5591
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 23:52:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B199D5E557F
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 23:51:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231152AbiIUVwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 17:52:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58764 "EHLO
+        id S230333AbiIUVvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 17:51:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230484AbiIUVwA (ORCPT
+        with ESMTP id S230340AbiIUVv1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 17:52:00 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 91597A7203;
-        Wed, 21 Sep 2022 14:51:48 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DE5D51684;
-        Wed, 21 Sep 2022 14:51:53 -0700 (PDT)
-Received: from e126311.manchester.arm.com (unknown [10.57.76.246])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6F35F3F73B;
-        Wed, 21 Sep 2022 14:51:19 -0700 (PDT)
-Date:   Wed, 21 Sep 2022 22:51:10 +0100
-From:   Kajetan Puchalski <kajetan.puchalski@arm.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
-        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
-        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
-        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
-        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
-        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
-        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
-        dinguyen@kernel.org, jonas@southpole.se,
-        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
-        James.Bottomley@HansenPartnership.com, deller@gmx.de,
-        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
-        davem@davemloft.net, richard@nod.at,
-        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
-        amakhalov@vmware.com, pv-drivers@vmware.com,
-        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
-        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
-        gregkh@linuxfoundation.org, mturquette@baylibre.com,
-        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
-        sudeep.holla@arm.com, agross@kernel.org,
-        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
-        anup@brainfault.org, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, jacob.jun.pan@linux.intel.com,
-        atishp@atishpatra.org, Arnd Bergmann <arnd@arndb.de>,
-        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk, dennis@kernel.org, tj@kernel.org,
-        cl@linux.com, rostedt@goodmis.org, pmladek@suse.com,
-        senozhatsky@chromium.org, john.ogness@linutronix.de,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, fweisbec@gmail.com,
-        ryabinin.a.a@gmail.com, glider@google.com, andreyknvl@gmail.com,
-        dvyukov@google.com, vincenzo.frascino@arm.com,
-        Andrew Morton <akpm@linux-foundation.org>, jpoimboe@kernel.org,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-perf-users@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-arch@vger.kernel.org, kasan-dev@googlegroups.com
-Subject: Re: [PATCH v2 07/44] cpuidle,psci: Push RCU-idle into driver
-Message-ID: <YyuHTgRh7t6vYjHw@e126311.manchester.arm.com>
-References: <20220919095939.761690562@infradead.org>
- <20220919101520.802976773@infradead.org>
+        Wed, 21 Sep 2022 17:51:27 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C5DAA6C4D
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 14:51:24 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id c24so6996475plo.3
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 14:51:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=NgbONa/JLrIJmOkn0CBqxCxDowwxjWoWs2Rsui1X0KI=;
+        b=FWvucp8C7NSejl3BHBuBIg1NxNS9DZ7c3Jqiurti4tcdCRdol5m+vQG7QltXtbcpzO
+         3W8gW2CM5N/6HEp9HPytppWqpt5fBPeCs+S6iBx4sgOwxARDlAap6uU8dwB7mR4Y517/
+         FXVYd6oYAFBlRI595Ey9sRfrSmUc4V/5ETJRgnmBaggNifM7/By7p2mz3nFaH6Cx0U+F
+         4i0qjMYR2VoMH7ymgzavCcCWQ52bQPD5/gPQhzyrqpv9jI5BPMMtE1pn+vP3+vRGQ7Jr
+         hBwB1GqpxY+XzwuwUMUivArA4YEw91XTSZYBHS0hbbZgVbzHMz2fgrLg3bOv1uRCbGbU
+         i8Dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=NgbONa/JLrIJmOkn0CBqxCxDowwxjWoWs2Rsui1X0KI=;
+        b=P7kMlOegkFD1XgAaMz0ZmOYTWvg8azuHR7k+mP6ofkX+bS1oAAFjEKNDpQHjhJlkaP
+         5oYWoIIm+EtXnZSt6wcrP3OoAzk7e5p76tOPYpc2xe2lv5KOMEamc2g5gsLfpQ+GA69Q
+         tlm6aSMi0/4quAcOfJF+Hw9TMfMN6uxIlDzB8lDW1r7A56OwjqnslriU/gbF9lQfF4pR
+         1qQC2DT870lPfaRHTrrjNnKtrWEmPCvs94AAJJfvG3eUymyKZUyJux2jHJkgFEg83bD5
+         3e4s9eTeMFx9BCO8x92bIBip72yR6v/dWWBVEPipwfZW69YHEXXPF+22bQ5uE4Ds9uRz
+         xYdQ==
+X-Gm-Message-State: ACrzQf0aA+zJi4xzjgPGszCoD/9aHWMpZF+x0FYs/3d3Rs4vP9E4Nn1l
+        3PCX5FfqU9yNayfIoc4c7SvE0g==
+X-Google-Smtp-Source: AMsMyM4aIDcK41T2ZRt2R6AWvsRZzPd8M+xtr9rkQdV+bvj+aCThLN/hvruZIVlUapXGsf2BGYbBQQ==
+X-Received: by 2002:a17:902:7e42:b0:178:489:86ac with SMTP id a2-20020a1709027e4200b00178048986acmr214779pln.68.1663797084005;
+        Wed, 21 Sep 2022 14:51:24 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id j6-20020a17090276c600b001789b724712sm2439580plt.232.2022.09.21.14.51.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Sep 2022 14:51:23 -0700 (PDT)
+Date:   Wed, 21 Sep 2022 21:51:20 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        Yuan Yao <yuan.yao@linux.intel.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vipin Sharma <vipinsh@google.com>
+Subject: Re: [PATCH v10 25/39] KVM: selftests: Move the function doing
+ Hyper-V hypercall to a common header
+Message-ID: <YyuHWNdZq9/oYTZ+@google.com>
+References: <20220921152436.3673454-1-vkuznets@redhat.com>
+ <20220921152436.3673454-26-vkuznets@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220919101520.802976773@infradead.org>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220921152436.3673454-26-vkuznets@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 11:59:46AM +0200, Peter Zijlstra wrote:
-> Doing RCU-idle outside the driver, only to then temporarily enable it
-> again, at least twice, before going idle is daft.
++Vipin
+
+On Wed, Sep 21, 2022, Vitaly Kuznetsov wrote:
+> All Hyper-V specific tests issuing hypercalls need this.
 > 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> ---
+>  .../selftests/kvm/include/x86_64/hyperv.h      | 16 ++++++++++++++++
+>  .../selftests/kvm/x86_64/hyperv_features.c     | 18 +-----------------
+>  2 files changed, 17 insertions(+), 17 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/include/x86_64/hyperv.h b/tools/testing/selftests/kvm/include/x86_64/hyperv.h
+> index f0a8a93694b2..285e9ff73573 100644
+> --- a/tools/testing/selftests/kvm/include/x86_64/hyperv.h
+> +++ b/tools/testing/selftests/kvm/include/x86_64/hyperv.h
+> @@ -185,6 +185,22 @@
+>  /* hypercall options */
+>  #define HV_HYPERCALL_FAST_BIT		BIT(16)
+>  
+> +static inline uint8_t hyperv_hypercall(u64 control, vm_vaddr_t input_address,
+> +				       vm_vaddr_t output_address,
+> +				       uint64_t *hv_status)
+> +{
+> +	uint8_t vector;
 
-Tried it on Pixel 6 running psci_idle, looks good with no apparent issues.
+Newline after the variable declaration.
 
-Tested-by: Kajetan Puchalski <kajetan.puchalski@arm.com>
+> +	/* Note both the hypercall and the "asm safe" clobber r9-r11. */
+> +	asm volatile("mov %[output_address], %%r8\n\t"
+> +		     KVM_ASM_SAFE("vmcall")
+> +		     : "=a" (*hv_status),
+> +		       "+c" (control), "+d" (input_address),
+> +		       KVM_ASM_SAFE_OUTPUTS(vector)
+> +		     : [output_address] "r"(output_address)
+> +		     : "cc", "memory", "r8", KVM_ASM_SAFE_CLOBBERS);
+> +	return vector;
+> +}
+> +
+>  /* Proper HV_X64_MSR_GUEST_OS_ID value */
+>  #define HYPERV_LINUX_OS_ID ((u64)0x8100 << 48)
+>  
+> diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_features.c b/tools/testing/selftests/kvm/x86_64/hyperv_features.c
+> index 1144bd1ea626..c464d324cde0 100644
+> --- a/tools/testing/selftests/kvm/x86_64/hyperv_features.c
+> +++ b/tools/testing/selftests/kvm/x86_64/hyperv_features.c
+> @@ -13,22 +13,6 @@
+>  #include "processor.h"
+>  #include "hyperv.h"
+>  
+> -static inline uint8_t hypercall(u64 control, vm_vaddr_t input_address,
+> -				vm_vaddr_t output_address, uint64_t *hv_status)
+> -{
+> -	uint8_t vector;
+> -
+> -	/* Note both the hypercall and the "asm safe" clobber r9-r11. */
+> -	asm volatile("mov %[output_address], %%r8\n\t"
+> -		     KVM_ASM_SAFE("vmcall")
+> -		     : "=a" (*hv_status),
+> -		       "+c" (control), "+d" (input_address),
+> -		       KVM_ASM_SAFE_OUTPUTS(vector)
+> -		     : [output_address] "r"(output_address)
+> -		     : "cc", "memory", "r8", KVM_ASM_SAFE_CLOBBERS);
+> -	return vector;
+> -}
+> -
+>  struct msr_data {
+>  	uint32_t idx;
+>  	bool available;
+> @@ -78,7 +62,7 @@ static void guest_hcall(vm_vaddr_t pgs_gpa, struct hcall_data *hcall)
+>  		input = output = 0;
+>  	}
+>  
+> -	vector = hypercall(hcall->control, input, output, &res);
+> +	vector = hyperv_hypercall(hcall->control, input, output, &res);
+>  	if (hcall->ud_expected)
+>  		GUEST_ASSERT_2(vector == UD_VECTOR, hcall->control, vector);
+>  	else
+
+Just out of sight here, but I broke this code in commit cc5851c6be86 ("KVM: selftests:
+Use exception fixup for #UD/#GP Hyper-V MSR/hcall tests").  I got too fancy and
+inverted the ud_expected logic when checking the result.  The broken code skips the
+check when #UD _not_ expected.
+
+I.e. this
+
+	if (hcall->ud_expected)
+		GUEST_ASSERT_2(vector == UD_VECTOR, hcall->control, vector);
+	else
+		GUEST_ASSERT_2(!vector, hcall->control, vector);
+
+	GUEST_ASSERT_2(!hcall->ud_expected || res == hcall->expect,
+			hcall->expect, res);
+
+should be
+
+	if (hcall->ud_expected) {
+		GUEST_ASSERT_2(vector == UD_VECTOR, hcall->control, vector);
+	} else {
+		GUEST_ASSERT_2(!vector, hcall->control, vector);
+		GUEST_ASSERT_2(res == hcall->expect, hcall->expect, res);
+	}
+
+The reason I bring this up here is because of the reason the test passes: gcc
+zeros RAX before the hypercall (not entirely sure why), and so res=0 on #UD due
+to nothing changing RAX.  But clang doesn't zero RAX and so the test fails due
+to RAX holding garbage (probably '1' from the lower 32 bits of HV_X64_MSR_HYPERCALL).
+
+So, what do you think about explicitly setting hv_status, e.g. to -EFAULT, prior
+to the hypercall, both to defend against selftest bugs and to verify that _KVM_
+actually zeros the result?
+
