@@ -2,134 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BABF5E533E
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 20:39:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76FDB5E5345
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 20:43:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbiIUSjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 14:39:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45830 "EHLO
+        id S230041AbiIUSnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 14:43:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiIUSjH (ORCPT
+        with ESMTP id S230020AbiIUSnM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 14:39:07 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DC6EAA0316;
-        Wed, 21 Sep 2022 11:39:06 -0700 (PDT)
-Received: from skinsburskii-cloud-desktop.internal.cloudapp.net (unknown [20.14.88.254])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 3B448205D10E;
-        Wed, 21 Sep 2022 11:39:06 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 3B448205D10E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1663785546;
-        bh=nmCc3UD/Zke6v9UtckBzTcZfSDMVeN9H7aJMP3kVrF8=;
-        h=Subject:From:To:Cc:Date:From;
-        b=qcpxKcNRxybVStd/mmCLR+4fP87jT9BEYYNTL0o8ij7x9lw9101q2HZvrFIi9CpWB
-         GFSkKgrI9jOVn/+PasebnRhwcwSJJD5kNvDqmUSNLHDXOLHnHz8gjR8OjJ7WGF9Xv7
-         eHTW/7GNXAXK9KMOuhMjVml1F9Tp13GJmLTh3zJw=
-Subject: [PATCH] Drivers: hv: vmbus: Don't wait for the ACPI device upon
- initialization
-From:   Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
-To:     skinsburskii@microsoft.com
-Cc:     Stanislav Kinsburskiy <stanislav.kinsburskiy@gmail.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 21 Sep 2022 18:39:05 +0000
-Message-ID: <166378554568.581670.1124852716698789244.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
-User-Agent: StGit/0.19
+        Wed, 21 Sep 2022 14:43:12 -0400
+Received: from relay03.th.seeweb.it (relay03.th.seeweb.it [5.144.164.164])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21569A1D39;
+        Wed, 21 Sep 2022 11:43:09 -0700 (PDT)
+Received: from [192.168.1.101] (95.49.29.188.neoplus.adsl.tpnet.pl [95.49.29.188])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 800B7201E8;
+        Wed, 21 Sep 2022 20:43:06 +0200 (CEST)
+Message-ID: <8faecd72-0cfd-18eb-d07a-53b3a23ed05a@somainline.org>
+Date:   Wed, 21 Sep 2022 20:43:05 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] dt-bindings: firmware: document Qualcomm SM6375 SCM
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        ~postmarketos/upstreaming@lists.sr.ht
+Cc:     martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Robert Marko <robimarko@gmail.com>,
+        Das Srinagesh <quic_gurus@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220921001020.55307-1-konrad.dybcio@somainline.org>
+ <95fb2bfb-6eb8-012d-88f8-c739d229ef70@linaro.org>
+Content-Language: en-US
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <95fb2bfb-6eb8-012d-88f8-c739d229ef70@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stanislav Kinsburskiy <stanislav.kinsburskiy@gmail.com>
-
-Waiting to 5 seconds in case of missing VMBUS ACPI device is redundant as the
-device is either present already or won't be available at all.
-This patch enforces synchronous probing to make sure the bus traversal,
-happening upon driver registering will either find the device (if present) or
-not spend any additional time if device is absent.
-
-Signed-off-by: Stanislav Kinsburskiy <stanislav.kinsburskiy@gmail.com>
-CC: "K. Y. Srinivasan" <kys@microsoft.com>
-CC: Haiyang Zhang <haiyangz@microsoft.com>
-CC: Stephen Hemminger <sthemmin@microsoft.com>
-CC: Wei Liu <wei.liu@kernel.org>
-CC: Dexuan Cui <decui@microsoft.com>
-CC: linux-hyperv@vger.kernel.org
-CC: linux-kernel@vger.kernel.org
----
- drivers/hv/vmbus_drv.c |   13 ++++---------
- 1 file changed, 4 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
-index 7b9f3fc3adf7..32d0009631a6 100644
---- a/drivers/hv/vmbus_drv.c
-+++ b/drivers/hv/vmbus_drv.c
-@@ -46,8 +46,6 @@ struct vmbus_dynid {
- 
- static struct acpi_device  *hv_acpi_dev;
- 
--static struct completion probe_event;
--
- static int hyperv_cpuhp_online;
- 
- static void *hv_panic_page;
-@@ -2468,7 +2466,6 @@ static int vmbus_acpi_add(struct acpi_device *device)
- 	ret_val = 0;
- 
- acpi_walk_err:
--	complete(&probe_event);
- 	if (ret_val)
- 		vmbus_acpi_remove(device);
- 	return ret_val;
-@@ -2647,6 +2644,7 @@ static struct acpi_driver vmbus_acpi_driver = {
- 		.remove = vmbus_acpi_remove,
- 	},
- 	.drv.pm = &vmbus_bus_pm,
-+	.drv.probe_type = PROBE_FORCE_SYNCHRONOUS,
- };
- 
- static void hv_kexec_handler(void)
-@@ -2719,7 +2717,7 @@ static struct syscore_ops hv_synic_syscore_ops = {
- 
- static int __init hv_acpi_init(void)
- {
--	int ret, t;
-+	int ret;
- 
- 	if (!hv_is_hyperv_initialized())
- 		return -ENODEV;
-@@ -2727,8 +2725,6 @@ static int __init hv_acpi_init(void)
- 	if (hv_root_partition)
- 		return 0;
- 
--	init_completion(&probe_event);
--
- 	/*
- 	 * Get ACPI resources first.
- 	 */
-@@ -2737,9 +2733,8 @@ static int __init hv_acpi_init(void)
- 	if (ret)
- 		return ret;
- 
--	t = wait_for_completion_timeout(&probe_event, 5*HZ);
--	if (t == 0) {
--		ret = -ETIMEDOUT;
-+	if (!hv_acpi_dev) {
-+		ret = -ENODEV;
- 		goto cleanup;
- 	}
- 
 
 
+On 21.09.2022 09:07, Krzysztof Kozlowski wrote:
+> On 21/09/2022 02:10, Konrad Dybcio wrote:
+>> Document the compatible for Qualcomm SM6375 SCM.
+>>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+>> ---
+>>  Documentation/devicetree/bindings/firmware/qcom,scm.yaml | 1 +
+> 
+> allOf needs to be updated.
+Does it? I did not define this compatible in the driver, so it does
+not consume any clocks.
+
+Konrad
+> 
+> 
+> Best regards,
+> Krzysztof
