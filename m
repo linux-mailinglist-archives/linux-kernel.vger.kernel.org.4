@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F27C5E5458
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 22:16:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E0535E545E
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 22:16:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230488AbiIUUQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 16:16:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35844 "EHLO
+        id S230476AbiIUUQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 16:16:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230380AbiIUUQO (ORCPT
+        with ESMTP id S230475AbiIUUQQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 16:16:14 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D642A9CCF4
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 13:16:11 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id m188-20020a633fc5000000b00434dccacd4aso4020851pga.10
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 13:16:11 -0700 (PDT)
+        Wed, 21 Sep 2022 16:16:16 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E897A4B0F
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 13:16:14 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id bu13-20020a056902090d00b00671743601f1so6193787ybb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 13:16:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date;
-        bh=85AbQQlrxSyNOvkklUzdnLL8SyGBcXrNMjiPdjNbViM=;
-        b=GRc1XP6pFfXy+MKZXSkWMWzT1GELN5Jwabnv/SNslVgH962Xpspgo2fYtTGD0wD1yO
-         EyDnc2Iv8VL1SoB8JGww4seaGNzIiBGtGJqoEhn0/65bfykOoJr1AqSl9cwPSjHF4gBG
-         9BT3JzcOSNTQYZ+EulPuwyqOdBLoRsUsD0iWuGQLzB3RslV8e1ku2UbmzEOs4ddC6jbo
-         kwM2kdb7P0yFMuASjfoCnlNLOHjHhlEkAvncZI346xaZBoDAHc9Sefwl3j/AnJ3rxFs1
-         eLY6FCz8ZRiHCXxP4cRVO6OWSGPra020qJUeYughUtf5Pko4ioaDFSo1epv/kfT1VBAQ
-         a1gg==
+        bh=9UwbrQ0jbfkdWibvQjcC8zTWLX7OGdH/X8ruvlS1WMg=;
+        b=d6OxGnQwB6PfvAxP09aDlfsT7F+vltfemklLt+BdEo9n3HeF5TNxtuhbxj95cNx1OX
+         4YGu4iYzkQN5Ev8cwMJSQ5djfM0aw7Zw94hSpNKrxRfotDdC0JTQWVUJy23fYusp5S5X
+         B2PGbCjiSWD1+qdythdWEj2fHw7RFJnUVJewsM+/yYxUVpQAljsB+LJXxUXbFxMyE8sl
+         whhTLh+BC5S5B3avSV8SuylbxXaiDiSVFrEwImHUcTnHEU+cGdeCZe1x4u4tiILhKll0
+         7y5FUfiRtE4tOIXhUj2vd8/+vIPN6TPW/O8sk3U2l0JFvs2J4KU2hzO30G+IfuB+yGE+
+         1y1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date;
-        bh=85AbQQlrxSyNOvkklUzdnLL8SyGBcXrNMjiPdjNbViM=;
-        b=JK7KvuAk51luiUhMRjycdkCPA/IS+HfuQcM8cIX4ZGj9q6DuO0aScVke7gzyhEK8/v
-         C+QJJgh+/6GXXat1htqcg4zTGBHTpQCdFpyDRTmhX+7PCzEpTEOCHaNRj0ZIoHCfKw07
-         XYJUgrNZ5e2yF7HEht/OI56H/eCTyfm0cGg7CvoVbFMZo8/LnrF4YU7ms3QgzNtcpAFM
-         z/1s8e4dHQu5aiItkcuSAvvFjjS6CTXHA2LLzNRDsjIIkRtf+jk/C9p/EdmXbcn74j14
-         Fv8BjbVbewV9GSGxqY7/LgNduvxzkHveXQeDMQUVYzQHJ/ypgZ/Woj8KDKdTKIK3stgj
-         hRZg==
-X-Gm-Message-State: ACrzQf2x8zzGJjciBesRmOF4dR/QzY46dy5iEIbuTH+pNTSyieVugKLz
-        2UxMo8yyRUHirGqsFjxKwcuZitau8Yo=
-X-Google-Smtp-Source: AMsMyM5I2QA6CA+YVRl4Wf7yGB3m1KxYD3Hht8hY5ewEgA+2X6rfKd57lWaEKou7/sOuvb39Yu776+rxPGY=
+        bh=9UwbrQ0jbfkdWibvQjcC8zTWLX7OGdH/X8ruvlS1WMg=;
+        b=SudK4mfFuAq2/6TXPFSE3uAKygwkydW7vOAfmBGpy0+12jTHZMSEoTt2C4faHS0NkB
+         kbdLJ44fUfdlAzu2BPxCkQs+Cm6GBQTMTEA42gHeU30bBsXH5NJt47CV1uWrpXVXHFfg
+         WVFKLASkdxRLo8qN9ZJqSMj6niJYWJG9gfRkY6crir7EFAV/lJxORGN+eeI4Osv9TmvY
+         8nUEFpkBqCUbhzH4cnvtzj6ysDcCPsbkKSNBoWSVwyxI7sAlMQ5pJlNqiYRXvbGqOTyF
+         ygQT5gYApKF/HC+51rLMuJmxYGc1bk+xDBxqhzssrVbirJEQfEX1CGAcq5vZ4DV+61tf
+         UmWw==
+X-Gm-Message-State: ACrzQf3OSdnTZ9h9JTcERIgEcbxqoamDO9AcSZ+eAciuNH7xhyyl/7W4
+        kIDA6y95xwldHd3okz+ewbCS527F1Fs=
+X-Google-Smtp-Source: AMsMyM5oooDD0bapnTTsN91Ujsfq/81cDKDLq8MhjvmiTpwq+/VM4sHbdG7LLT/W813IB7Q5fZK3VMMV1bU=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:2402:b0:52c:81cf:8df2 with SMTP id
- z2-20020a056a00240200b0052c81cf8df2mr30477098pfh.40.1663791370910; Wed, 21
- Sep 2022 13:16:10 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a25:2187:0:b0:6b0:1abc:2027 with SMTP id
+ h129-20020a252187000000b006b01abc2027mr110766ybh.348.1663791372853; Wed, 21
+ Sep 2022 13:16:12 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Wed, 21 Sep 2022 20:16:04 +0000
+Date:   Wed, 21 Sep 2022 20:16:05 +0000
 In-Reply-To: <20220921201607.3156750-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220921201607.3156750-1-seanjc@google.com>
 X-Mailer: git-send-email 2.37.3.968.ga6b4b080e4-goog
-Message-ID: <20220921201607.3156750-2-seanjc@google.com>
-Subject: [PATCH 1/4] x86/hyperv: Move VMCB enlightenment definitions to hyperv-tlfs.h
+Message-ID: <20220921201607.3156750-3-seanjc@google.com>
+Subject: [PATCH 2/4] KVM: selftests: Move "struct hv_enlightenments" to x86_64/svm.h
 From:   Sean Christopherson <seanjc@google.com>
 To:     "K. Y. Srinivasan" <kys@microsoft.com>,
         Haiyang Zhang <haiyangz@microsoft.com>,
@@ -75,33 +75,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move Hyper-V's VMCB enlightenment definitions to the TLFS header; the
-definitions come directly from the TLFS[*], not from KVM.
+Move Hyper-V's VMCB "struct hv_enlightenments" to the svm.h header so
+that the struct can be referenced in "struct vmcb_control_area".
+Alternatively, a dedicated header for SVM+Hyper-V could be added, a la
+x86_64/evmcs.h, but it doesn't appear that Hyper-V will end up needing
+a wholesale replacement for the VMCB.
 
 No functional change intended.
 
-[*] https://learn.microsoft.com/en-us/virtualization/hyper-v-on-windows/tlfs/datatypes/hv_svm_enlightened_vmcb_fields
-
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/include/asm/hyperv-tlfs.h | 22 +++++++++++++++++++
- arch/x86/kvm/svm/hyperv.h          | 35 ------------------------------
- arch/x86/kvm/svm/svm_onhyperv.h    |  3 ++-
- 3 files changed, 24 insertions(+), 36 deletions(-)
- delete mode 100644 arch/x86/kvm/svm/hyperv.h
+ .../testing/selftests/kvm/include/x86_64/svm.h | 17 +++++++++++++++++
+ .../selftests/kvm/x86_64/hyperv_svm_test.c     | 18 ------------------
+ 2 files changed, 17 insertions(+), 18 deletions(-)
 
-diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
-index 0a9407dc0859..4c4f81daf5a2 100644
---- a/arch/x86/include/asm/hyperv-tlfs.h
-+++ b/arch/x86/include/asm/hyperv-tlfs.h
-@@ -584,6 +584,28 @@ struct hv_enlightened_vmcs {
+diff --git a/tools/testing/selftests/kvm/include/x86_64/svm.h b/tools/testing/selftests/kvm/include/x86_64/svm.h
+index c8343ff84f7f..10b9d0d4e0ec 100644
+--- a/tools/testing/selftests/kvm/include/x86_64/svm.h
++++ b/tools/testing/selftests/kvm/include/x86_64/svm.h
+@@ -58,6 +58,23 @@ enum {
+ 	INTERCEPT_RDPRU,
+ };
  
- #define HV_VMX_ENLIGHTENED_CLEAN_FIELD_ALL			0xFFFF
- 
-+/*
-+ * Hyper-V uses the software reserved 32 bytes in VMCB control area to expose
-+ * SVM enlightenments to guests.
-+ */
 +struct hv_enlightenments {
 +	struct __packed hv_enlightenments_control {
 +		u32 nested_flush_hypercall:1;
@@ -116,35 +111,20 @@ index 0a9407dc0859..4c4f81daf5a2 100644
 +} __packed;
 +
 +/*
-+ * Hyper-V uses the software reserved clean bit in VMCB.
++ * Hyper-V uses the software reserved clean bit in VMCB
 + */
-+#define VMCB_HV_NESTED_ENLIGHTENMENTS		31
-+
- struct hv_partition_assist_pg {
- 	u32 tlb_lock_count;
- };
-diff --git a/arch/x86/kvm/svm/hyperv.h b/arch/x86/kvm/svm/hyperv.h
-deleted file mode 100644
-index 7d6d97968fb9..000000000000
---- a/arch/x86/kvm/svm/hyperv.h
-+++ /dev/null
-@@ -1,35 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-only */
--/*
-- * Common Hyper-V on KVM and KVM on Hyper-V definitions (SVM).
-- */
--
--#ifndef __ARCH_X86_KVM_SVM_HYPERV_H__
--#define __ARCH_X86_KVM_SVM_HYPERV_H__
--
--#include <asm/mshyperv.h>
--
--#include "../hyperv.h"
--
--/*
-- * Hyper-V uses the software reserved 32 bytes in VMCB
-- * control area to expose SVM enlightenments to guests.
-- */
++#define VMCB_HV_NESTED_ENLIGHTENMENTS (1U << 31)
+ 
+ struct __attribute__ ((__packed__)) vmcb_control_area {
+ 	u32 intercept_cr;
+diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_svm_test.c b/tools/testing/selftests/kvm/x86_64/hyperv_svm_test.c
+index a380ad7bb9b3..b366b197759f 100644
+--- a/tools/testing/selftests/kvm/x86_64/hyperv_svm_test.c
++++ b/tools/testing/selftests/kvm/x86_64/hyperv_svm_test.c
+@@ -23,24 +23,6 @@
+ 
+ #define L2_GUEST_STACK_SIZE 256
+ 
 -struct hv_enlightenments {
 -	struct __packed hv_enlightenments_control {
 -		u32 nested_flush_hypercall:1;
@@ -161,24 +141,11 @@ index 7d6d97968fb9..000000000000
 -/*
 - * Hyper-V uses the software reserved clean bit in VMCB
 - */
--#define VMCB_HV_NESTED_ENLIGHTENMENTS VMCB_SW
+-#define VMCB_HV_NESTED_ENLIGHTENMENTS (1U << 31)
 -
--#endif /* __ARCH_X86_KVM_SVM_HYPERV_H__ */
-diff --git a/arch/x86/kvm/svm/svm_onhyperv.h b/arch/x86/kvm/svm/svm_onhyperv.h
-index e2fc59380465..8d02654ad6f8 100644
---- a/arch/x86/kvm/svm/svm_onhyperv.h
-+++ b/arch/x86/kvm/svm/svm_onhyperv.h
-@@ -8,8 +8,9 @@
- 
- #if IS_ENABLED(CONFIG_HYPERV)
- 
-+#include <asm/mshyperv.h>
-+
- #include "kvm_onhyperv.h"
--#include "svm/hyperv.h"
- 
- static struct kvm_x86_ops svm_x86_ops;
- 
+ void l2_guest_code(void)
+ {
+ 	GUEST_SYNC(3);
 -- 
 2.37.3.968.ga6b4b080e4-goog
 
