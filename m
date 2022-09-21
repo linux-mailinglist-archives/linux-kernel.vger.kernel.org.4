@@ -2,74 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E57685BF6DA
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 08:59:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DB835BF6DE
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 08:59:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230054AbiIUG7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 02:59:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36534 "EHLO
+        id S230078AbiIUG72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 02:59:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbiIUG7M (ORCPT
+        with ESMTP id S230089AbiIUG7V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 02:59:12 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE8579A4B
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 23:59:10 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id k10so7658130lfm.4
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 23:59:10 -0700 (PDT)
+        Wed, 21 Sep 2022 02:59:21 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D878168A
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 23:59:18 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id h3so5849359lja.1
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 23:59:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=HgFRLa6RZfxCSzyKzG51QeSheAMqgBptz4NFN1+wABA=;
-        b=yK8M5MqvestK5tuVqPXXMT4E3PSbxbGxQYxddSfYgkVNtGTRe2EJowMAWc7iZ8JTyk
-         FI8CR/ZY5FRxklQX5lxiWxXo1Str92tn4o6p9Cqt8QQuNsArRdG+g3y15GozaN86E6p0
-         G8GFt4yCtX65S6VOCO7bfjoHssnFqhwGvfmi0KAbgZTRFZPtN+0JlWbcXb2x7/l7Ozkb
-         9f/d1dIQBVbWdQLMkCIULJXNfcFq4Ikr1l/FC7Et397BKZ5/EjQpPaw93K9Cq6hBgEJl
-         0NZTnMyshBZMmcZSLN2ppzkGCPVFMTD9oRR3uVGMb4B/0qzGY7VrodhNkk5dc70AZ9f/
-         PDWA==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=NmJ1ky94R3TydWshdEnT7QkhQ55Opa2pbsWIWb/PLzU=;
+        b=HhNHKhYTz5ALtyqiXfUOHtKrrko2VcWHyahB3IZyhU+pGovf+Px5ox5tDcszKkebuW
+         uLxlzDq0VY9I7JFg5+iZ4yHABGNgVM0RsWEHH6s55s6tMsHKv4UUa014BPj1blI63sGa
+         4XhBKkPRX+bTyW7unTw7E5xsjr85aJCLVdra1RGqewk0CMvXMB2Sauu/AchjyL3cdaLH
+         mHlBeRUQMMsUMPRfFwTt8RSLHphN6/2uM/KBhtlvOlWTydFGkvE/38NtgXm3xIya9cPR
+         oQ+Dhj+TOk42XKizmI334nAXG05yhcPmYEPUsi0oshLFMBxOCfZuKCiAcZZoRxaMh0Sj
+         M2RQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=HgFRLa6RZfxCSzyKzG51QeSheAMqgBptz4NFN1+wABA=;
-        b=efduInOOTc1ZyXKlkMsnZD8onInjth9SCmL6OxgHyf5+20AMPvIizE7M8s4Zr3sLRg
-         2DzKcAoaIjWpnEyFfWH/EflBNfzL7rEX1vlFG3/OQIz/Z4bVmxz0bfEwdVVMc5uMlRXg
-         hFdNJNd4KDI1J+VQh1MARpVVsvfsoneygr8BGE7/beQq3tBLWr6nz8EMRFeXCLgIwkmn
-         pWkvtaFhrLepOhYfgABgFDq7DHcQUNd2fqZZab/D15Zv4w3cXOU2vK2Skvh0FU6aICiN
-         SUp5EeCR3DRiOdj5tqd62sE6RPcbR+6wojNSkhHGi5YBqGw4Rvxn9o2C4PKfidD63vcn
-         dPXQ==
-X-Gm-Message-State: ACrzQf1jI45qJO3/VqVUaP/ps5ZModVJ0t4LUNkV3NWc9C9KRHjXwqwX
-        QtHQaKmQX3uEm5q/QfIMRzuRQN6y2YYzxQ==
-X-Google-Smtp-Source: AMsMyM7HnQKXnVoP9WXO58OKStdAy4yp8cOYJrfYs5ikswC1P3+8W8uEveKoGIX/yvZX+3kbHCVc9g==
-X-Received: by 2002:a05:6512:11c8:b0:497:c19e:c709 with SMTP id h8-20020a05651211c800b00497c19ec709mr10425195lfr.152.1663743548671;
-        Tue, 20 Sep 2022 23:59:08 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id z12-20020a2eb52c000000b00261e2aab7c2sm306813ljm.58.2022.09.20.23.59.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Sep 2022 23:59:08 -0700 (PDT)
-Message-ID: <b71a576b-170c-d596-a024-884223be44c6@linaro.org>
-Date:   Wed, 21 Sep 2022 08:59:07 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v5 8/8] i2c: i2c-mlxbf.c: Update binding devicetree
-Content-Language: en-US
-To:     Asmaa Mnebhi <asmaa@nvidia.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        robh@kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     Khalil Blaiech <kblaiech@nvidia.com>
-References: <20220920174736.9766-1-asmaa@nvidia.com>
- <20220920174736.9766-9-asmaa@nvidia.com>
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=NmJ1ky94R3TydWshdEnT7QkhQ55Opa2pbsWIWb/PLzU=;
+        b=t4ZJJLKCvI9wF0Lw42qnU8GY4HvxlvNafKLt7iux/YSkyVdsbzHh+tY1phmvCwieJN
+         5J8ZPH24mvrVjBk+sOTUHSY/73Shb9HDp0tZXayScO/KBpxkO8Fud0yIyHfqtLBMY2I6
+         DPvXZthOMEHmJbvXmsDpLmIDsdwGazacMW9wRrbRjfw5xXRkQF6E7VtXZerILOAPoQ30
+         j9Mlp1N+pNdXcBkmJYzEXGT9AqK1xXSNKXRyt8zaKxW5+LKMIHjq6muM5JiK4srZiz38
+         2WZe4brYih5Tm8ScQheeq2dBL/ZRSLWOT3aUg/GxDO9oRRn9OtaC85A6nzEvZSuZuKqR
+         XHeQ==
+X-Gm-Message-State: ACrzQf3q8+QspAMMznRJC/VKNaMEZ+6JSMRWF/VHyy9dU3hHtSAo10as
+        PyLhVVooLjczJyUmflgWbLc2Hw==
+X-Google-Smtp-Source: AMsMyM67+W3xcMYvbfC92MP7UbXJppeQ+yXtwC3sCdPRGsLIkYI+reN4Vwxfb2fdjEwwiptxfRSJYQ==
+X-Received: by 2002:a2e:a887:0:b0:26a:871b:a16d with SMTP id m7-20020a2ea887000000b0026a871ba16dmr8815200ljq.482.1663743557201;
+        Tue, 20 Sep 2022 23:59:17 -0700 (PDT)
+Received: from krzk-bin (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id z2-20020a2e7e02000000b00267232d0652sm308120ljc.46.2022.09.20.23.59.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Sep 2022 23:59:16 -0700 (PDT)
+Date:   Wed, 21 Sep 2022 08:59:14 +0200
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220920174736.9766-9-asmaa@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     Amit Kucheria <amitk@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        zhanghongchen <zhanghongchen@loongson.cn>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v2 2/3] dt-bindings: thermal: Convert loongson2 to
+ json-schema
+Message-ID: <20220921065914.xvsj664dgwmd3vcr@krzk-bin>
+References: <20220921015605.17078-1-zhuyinbo@loongson.cn>
+ <20220921015605.17078-2-zhuyinbo@loongson.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220921015605.17078-2-zhuyinbo@loongson.cn>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,109 +78,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/09/2022 19:47, Asmaa Mnebhi wrote:
-> In the latest version of the i2c-mlxbf.c driver, the "Smbus block"
-> resource was broken down to 3 separate resources "Smbus timer",
-> "Smbus master" and "Smbus slave" to accommodate for BlueField-3
-> SoC registers' changes.
+On Wed, 21 Sep 2022 09:56:04 +0800, Yinbo Zhu wrote:
+> Convert the loongson2 thermal binding to DT schema format using
+> json-schema.
 > 
-> Reviewed-by: Khalil Blaiech <kblaiech@nvidia.com>
-> Signed-off-by: Asmaa Mnebhi <asmaa@nvidia.com>
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
 > ---
+> Change in v2:
+> 		1. Add description and type about the "id".
+> 		2. Make the filename was based on compatible.
+> 
+>  .../bindings/thermal/loongson2-thermal.yaml   | 52 +++++++++++++++++++
+>  1 file changed, 52 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/thermal/loongson2-thermal.yaml
+> 
 
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
->    reg:
->      minItems: 3
-> @@ -25,6 +27,9 @@ properties:
->        - description: Cause master registers
->        - description: Cause slave registers
->        - description: Cause coalesce registers
-> +      - description: Smbus timer registers
-> +      - description: Smbus master registers
-> +      - description: Smbus slave registers
->  
->    interrupts:
->      maxItems: 1
-> @@ -35,6 +40,13 @@ properties:
->        bus frequency used to configure timing registers;
->        The frequency is expressed in Hz. Default is 100000.
->  
-> +  resource_version:
+yamllint warnings/errors:
 
-No underscores in names.
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/thermal/loongson2-thermal.yaml: properties:id:$ref: '//schemas/types.yaml#/definitions/uint32' does not match '^(/schemas/|\\.\\./|#(/|$)|[a-zA-Z0-9]+)'
+	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
+./Documentation/devicetree/bindings/thermal/loongson2-thermal.yaml: <urlopen error [Errno -2] Name or service not known>
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/thermal/loongson2-thermal.yaml: ignoring, error in schema: properties: id: $ref
+Documentation/devicetree/bindings/thermal/loongson2-thermal.example.dtb:0:0: /example-0/thermal@1fe01500: failed to match any schema with compatible: ['loongson,loongson2-thermal']
 
-> +    enum: [ 0, 1 ]
-> +    description:
-> +      Version of the device tree. resource_version = 0 when the driver uses
-> +      Smbus block resource. resource_version = 1 when the driver uses Smbus
-> +      timer, Smbus master and Smbus slave resources.
+doc reference errors (make refcheckdocs):
 
-No way. That's not a DT property.
+See https://patchwork.ozlabs.org/patch/
 
-> +
->  required:
->    - compatible
->    - reg
-> @@ -42,18 +54,6 @@ required:
->  
->  unevaluatedProperties: false
->  
-> -if:
-> -  properties:
-> -    compatible:
-> -      contains:
-> -        enum:
-> -          - mellanox,i2c-mlxbf1
-> -
-> -then:
-> -  properties:
-> -    reg:
-> -      maxItems: 3
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
-Why?
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-> -
->  examples:
->    - |
->      i2c@2804000 {
-> @@ -61,8 +61,13 @@ examples:
->          reg = <0x02804000 0x800>,
->                <0x02801200 0x020>,
->                <0x02801260 0x020>;
-> +              <0x00000001 0x1>;
-> +              <0x02804000 0x40>,
-> +              <0x02804200 0x200>,
-> +              <0x02804400 0x200>,
->          interrupts = <57>;
->          clock-frequency = <100000>;
-> +        resource_version = <1>;
->      };
->  
->    - |
-> @@ -72,6 +77,25 @@ examples:
->                <0x02808e00 0x020>,
->                <0x02808e20 0x020>,
->                <0x02808e40 0x010>;
-> +              <0x02808800 0x040>;
-> +              <0x02808a00 0x200>,
-> +              <0x02808c00 0x200>,
->          interrupts = <57>;
->          clock-frequency = <400000>;
-> +        resource_version = <1>;
-> +    };
-> +
-> +  - |
-> +    i2c@2808800 {
-> +        compatible = "mellanox,i2c-mlxbf3";
-> +        reg = <0x00000001 0x1>,
-> +              <0x13404400 0x020>,
-> +              <0x13404420 0x020>,
-> +              <0x13404440 0x010>;
-> +              <0x13404480 0x40>,
-> +              <0x13404200 0x200>,
-> +              <0x13404000 0x200>,
+pip3 install dtschema --upgrade
 
-No need for the same example.
-
-Best regards,
-Krzysztof
+Please check and re-submit.
