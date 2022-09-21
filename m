@@ -2,138 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD10D5E5350
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 20:46:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A44945E5352
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 20:47:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbiIUSqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 14:46:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54688 "EHLO
+        id S229560AbiIUSrD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 14:47:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbiIUSqO (ORCPT
+        with ESMTP id S229610AbiIUSrA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 14:46:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0538DA2A80;
-        Wed, 21 Sep 2022 11:46:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E0ED6329B;
-        Wed, 21 Sep 2022 18:46:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA781C433C1;
-        Wed, 21 Sep 2022 18:46:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663785968;
-        bh=wQYUGUyqzwJsJO/RsNaU0FisMh34F4MXdG+St95jVqE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=RXZREq02msg/nsxCzBqwwOSmIv3HyMK69Qxg6sIItJPhh+/+0QuDAOLwlmdouwavg
-         /oy/p7KbsKdl22+utCwKiehAgFXxRA6ZT4LVxROeLWPEv+gRT3BfAxHsxBe6+bvXJA
-         0xTcI1xfBzxoP3YC7WOlFthNzemO6SPy6mn46upu1qzZlD7jfIueTjrVFco+81+Yog
-         IFOHyvNxqk21YfCLU5E2ERsRnypQQDYpIpxvoPmpe8uJTMoit5AesDDbJDpSWooP10
-         b3lK9YCgB50IQamXR7s83gW/O36aWwT5fxP6qoyMkvHQwqx12AfN+RACNav7fECjo1
-         ktiO4fkxxET/g==
-Date:   Wed, 21 Sep 2022 13:46:03 -0500
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH][next] mm/pgtable: Fix multiple -Wstringop-overflow warnings
-Message-ID: <Yytb67xvrnctxnEe@work>
+        Wed, 21 Sep 2022 14:47:00 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B384A2868
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 11:46:59 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id iv17so571110wmb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 11:46:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=i9nU2qhEVkaH0qsXajGvw+bqIsCyy4CpxvTYAsdncBw=;
+        b=wKgfh/x6w1hy61X74ZCRReBG7aVh/GYV0ah/rfS6Ev2L+fcOv5OZ+IlcPuOL7iIQIs
+         c8hGpbrqM5aTbNdkNRtKRR5u2AVClZponhe/tTBosiGm9G4cjOK2snZXsfKN2nD5TSGH
+         2RXAEmd3vaKpgZpJ4h7QWeipohASSFSW+O7kIa7Te07exRDZkXYT/5SK8opLTFmQdkoV
+         OE9SCyTBoRV6KkNDZFgbP2ZAIj3OkijXDEBFuH/CJL19ope+ObUVECfqcaDKd3PczK5c
+         hwGdnblTGtSU1UuiHuLFaOasv5e2NxIaZHWsGoi0Yq1QtTrqYD6pbFybMV63xB/DQxbp
+         zH+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=i9nU2qhEVkaH0qsXajGvw+bqIsCyy4CpxvTYAsdncBw=;
+        b=LQzr5WeFx5KQhhyQiTN6sozgSjB0C35TpKNo4nWOPYxFr1ODiCrwJFWJnfaDNzKW8t
+         GnqLHkfNrbLblgsUHUYIEuwheS80oQoFslZckpxlfGpF9YLFG5Q3FGaOY+oNIVbioc1k
+         d/zasyDiX3eEo2wMHQxLMCM5J/tP1Ze+2jq23Ox0+saVyGGfTNuUMMCx18kIzP6a3Qhi
+         ZLisL6mjMOG6Wi5DjZsSJrfOqq7a/vOH8GDEXQCL6St4uuCdAPqoJ/I0+a+sy4UlFZbT
+         4qy0lYppCk+cv2V2JQy3OUczHpf5i8/1Lp8SIQIZrwjkof4WgvG6ImlqBNyFSyh1xCnS
+         King==
+X-Gm-Message-State: ACrzQf2vWZoJv00CbzrsXkHxlNVDnWCAc5eKMoJybIqKG0RBEwCa0Ypq
+        ojKF4eOMoEl0GU4bEoV3hKVohApdtQ2PKnIz7BBj7A==
+X-Google-Smtp-Source: AMsMyM69MX8NQNgSTouZLoWMk5jLkqAJWAyDqxBLyjSG7wrk4Qhr8rvK+rscCvSZHH8RV9wWifVNX6kb/JFzeZ8ungQ=
+X-Received: by 2002:a05:600c:4f8d:b0:3b4:9f2f:4311 with SMTP id
+ n13-20020a05600c4f8d00b003b49f2f4311mr6600919wmq.17.1663786017787; Wed, 21
+ Sep 2022 11:46:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220919122033.86126-1-ulf.hansson@linaro.org> <20220921155634.owr5lncydsfpo7ua@bogus>
+In-Reply-To: <20220921155634.owr5lncydsfpo7ua@bogus>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 21 Sep 2022 20:46:21 +0200
+Message-ID: <CAPDyKFpgHDzc5Rv+0Tn4zegDTrc_wuymez02XLEdVUaEOornNw@mail.gmail.com>
+Subject: Re: [PATCH] Revert "firmware: arm_scmi: Add clock management to the
+ SCMI power domain"
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Dien Pham <dien.pham.ry@renesas.com>,
+        Gaku Inami <gaku.inami.xh@renesas.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        linux-arm-kernel@lists.infradead.org, Peng Fan <peng.fan@nxp.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Nicolas Pitre <npitre@baylibre.com>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The actual size of the following arrays at run-time depends on
-CONFIG_X86_PAE.
+On Wed, 21 Sept 2022 at 17:56, Sudeep Holla <sudeep.holla@arm.com> wrote:
+>
+> Hi Dien, Gaku,
+>
+> On Mon, Sep 19, 2022 at 02:20:33PM +0200, Ulf Hansson wrote:
+> > This reverts commit a3b884cef873 ("firmware: arm_scmi: Add clock management
+> > to the SCMI power domain").
+> >
+> > Using the GENPD_FLAG_PM_CLK tells genpd to gate/ungate the consumer
+> > device's clock(s) during runtime suspend/resume through the PM clock API.
+> > More precisely, in genpd_runtime_resume() the clock(s) for the consumer
+> > device would become ungated prior to the driver-level ->runtime_resume()
+> > callbacks gets invoked.
+> >
+> > This behaviour isn't a good fit for all platforms/drivers. For example, a
+> > driver may need to make some preparations of its device in its
+> > ->runtime_resume() callback, like calling clk_set_rate() before the
+> > clock(s) should be ungated. In these cases, it's easier to let the clock(s)
+> > to be managed solely by the driver, rather than at the PM domain level.
+> >
+> > For these reasons, let's drop the use GENPD_FLAG_PM_CLK for the SCMI PM
+> > domain, as to enable it to be more easily adopted across ARM platforms.
+> >
+> > Fixes: a3b884cef873 ("firmware: arm_scmi: Add clock management to the SCMI power domain")
+> > Cc: Nicolas Pitre <npitre@baylibre.com>
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > ---
+> >
+> > To get some more background to $subject patch, please have a look at the
+> > lore-link below.
+> >
+> > https://lore.kernel.org/all/DU0PR04MB94173B45A2CFEE3BF1BD313A88409@DU0PR04MB9417.eurprd04.prod.outlook.com/
+> >
+>
+> If you have any objections, this is your last chance to speak up before
+> the original change gets reverted in the mainline with this patch.
+>
+> Hi Ulf,
+>
+> I don't have any other SCMI changes for v6.0 fixes or v6.1
+> I am fine if you are happy to take this via your tree or I can send it
+> to SoC team. Let me know. I will give final one or 2 days for Renesas
+> to get back if they really care much.
 
-427         pmd_t *u_pmds[MAX_PREALLOCATED_USER_PMDS];
-428         pmd_t *pmds[MAX_PREALLOCATED_PMDS];
+I have a slew of fixes for mmc that I intend to send next week, I can
+funnel them through that pull request.
 
-If CONFIG_X86_PAE is not enabled, their final size will be zero. In that
-case, the compiler complains about trying to access objects of size zero
-when calling functions where these objects are passed as arguments.
+Assuming, Renesas folkz are okay, I consider that as an ack from you, right?
 
-Fix this by sanity-checking the size of those arrays just before the
-function calls. Also, the following warnings are fixed by these changes
-when building with GCC-11 and -Wstringop-overflow enabled:
-
-arch/x86/mm/pgtable.c:437:13: warning: ‘preallocate_pmds.constprop’ accessing 8 bytes in a region of size 0 [-Wstringop-overflow=]
-arch/x86/mm/pgtable.c:440:13: warning: ‘preallocate_pmds.constprop’ accessing 8 bytes in a region of size 0 [-Wstringop-overflow=]
-arch/x86/mm/pgtable.c:462:9: warning: ‘free_pmds.constprop’ accessing 8 bytes in a region of size 0 [-Wstringop-overflow=]
-arch/x86/mm/pgtable.c:455:9: warning: ‘pgd_prepopulate_user_pmd’ accessing 8 bytes in a region of size 0 [-Wstringop-overflow=]
-arch/x86/mm/pgtable.c:464:9: warning: ‘free_pmds.constprop’ accessing 8 bytes in a region of size 0 [-Wstringop-overflow=]
-
-This helps with the ongoing efforts to globally enable
--Wstringop-overflow.
-
-Link: https://github.com/KSPP/linux/issues/203
-Link: https://github.com/KSPP/linux/issues/181
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
- arch/x86/mm/pgtable.c | 19 +++++++++++++------
- 1 file changed, 13 insertions(+), 6 deletions(-)
-
-diff --git a/arch/x86/mm/pgtable.c b/arch/x86/mm/pgtable.c
-index 8525f2876fb4..5116df6a308c 100644
---- a/arch/x86/mm/pgtable.c
-+++ b/arch/x86/mm/pgtable.c
-@@ -434,10 +434,12 @@ pgd_t *pgd_alloc(struct mm_struct *mm)
- 
- 	mm->pgd = pgd;
- 
--	if (preallocate_pmds(mm, pmds, PREALLOCATED_PMDS) != 0)
-+	if (sizeof(pmds) != 0 &&
-+			preallocate_pmds(mm, pmds, PREALLOCATED_PMDS) != 0)
- 		goto out_free_pgd;
- 
--	if (preallocate_pmds(mm, u_pmds, PREALLOCATED_USER_PMDS) != 0)
-+	if (sizeof(u_pmds) != 0 &&
-+			preallocate_pmds(mm, u_pmds, PREALLOCATED_USER_PMDS) != 0)
- 		goto out_free_pmds;
- 
- 	if (paravirt_pgd_alloc(mm) != 0)
-@@ -451,17 +453,22 @@ pgd_t *pgd_alloc(struct mm_struct *mm)
- 	spin_lock(&pgd_lock);
- 
- 	pgd_ctor(mm, pgd);
--	pgd_prepopulate_pmd(mm, pgd, pmds);
--	pgd_prepopulate_user_pmd(mm, pgd, u_pmds);
-+	if (sizeof(pmds) != 0)
-+		pgd_prepopulate_pmd(mm, pgd, pmds);
-+
-+	if (sizeof(u_pmds) != 0)
-+		pgd_prepopulate_user_pmd(mm, pgd, u_pmds);
- 
- 	spin_unlock(&pgd_lock);
- 
- 	return pgd;
- 
- out_free_user_pmds:
--	free_pmds(mm, u_pmds, PREALLOCATED_USER_PMDS);
-+	if (sizeof(u_pmds) != 0)
-+		free_pmds(mm, u_pmds, PREALLOCATED_USER_PMDS);
- out_free_pmds:
--	free_pmds(mm, pmds, PREALLOCATED_PMDS);
-+	if (sizeof(pmds) != 0)
-+		free_pmds(mm, pmds, PREALLOCATED_PMDS);
- out_free_pgd:
- 	_pgd_free(pgd);
- out:
--- 
-2.34.1
-
+Kind regards
+Uffe
