@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0D865BF1FD
+	by mail.lfdr.de (Postfix) with ESMTP id 950B05BF1FC
 	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 02:31:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231137AbiIUAbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 20:31:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33146 "EHLO
+        id S230315AbiIUAba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 20:31:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230415AbiIUAb1 (ORCPT
+        with ESMTP id S230391AbiIUAb1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 20 Sep 2022 20:31:27 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B91FA6E89D
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 17:31:23 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id j11-20020a056a00234b00b005415b511595so2570157pfj.12
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 17:31:23 -0700 (PDT)
+Received: from mail-oi1-x249.google.com (mail-oi1-x249.google.com [IPv6:2607:f8b0:4864:20::249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31D426E8BF
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 17:31:26 -0700 (PDT)
+Received: by mail-oi1-x249.google.com with SMTP id r199-20020acaa8d0000000b0034d86517c12so2328824oie.20
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 17:31:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date;
-        bh=qGRWDcFaYPLFs5iWMNHMwoViduFR4vpceIvIvEWEb0c=;
-        b=G/i8U4vsIWYH1IV3aQaZ8DdVienjwPw+dGLNUpALgd9qJL9wRtqvDlpY2jR2q0Gp47
-         dQF6hd8ktTKq8bkBWYsSbPpTjkq8PxlniHwl8mxkV5bFucQ5ldvyyW/ZQXO1jluuWYEM
-         ENub1isdMitvr5tLh+nytU+E9lfIQ08H/nN0anELye/l5GyImtPxh7jBvhs/jxakPeuZ
-         EPfabH75hZf5j5pKqpoTFqIq5OlhjZ+0QUVk+K26FKvYxpeD7rXW1ENEs1Oqpy0e6yOf
-         KLYEWMEXYDPEksnzj67jt9o3rXGFpecCkK5Orv0JoRJ+ks/e9BBzWvl2vBMrJb+DfJxk
-         s4jw==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date;
+        bh=+JIzKRX0KewNagwHaVVH4mYdPKt+vEM8H/N+SPJENUQ=;
+        b=fNVyn4PQ7mq1A3EsQwiqTooTDXZ+GGgHHKz01T6NMBrIZkahm6maPPmRCdh6VckrRk
+         cVUHkBnYnyet+X0AHqjNTq0qlEynG/K2XXhnRsFspiz1TVniPmBd7PMZG/qG7humHER2
+         s/W/w3ro/5GxlzJPaAKVGrwe43f8a2SxW8tXZ+XoafZi5uPXz7XRvRweYeDxX5ROO9aJ
+         8Jv+DpYribZUX8VpR10w3nI2mym1VuOphOrQFEIY6QKHtzhDFA1MxS79H/WPK94gIYlH
+         fQGqajsSboFplgAoQxr5OfWFDKdNqPNM6/ADvVhExtT2wvtysjcqkGpG2SqAQW7FwTlR
+         gbQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=qGRWDcFaYPLFs5iWMNHMwoViduFR4vpceIvIvEWEb0c=;
-        b=RRzU3Sblj6OCVHm+2Zc/tCU4LGG1/G0boxmf3XuHgTpuiUIAJoAVYiuQqDVuzXNxHR
-         4TatTLcrgZrXaLp+Gvb9/1mil++D3ltIXIy+B89i723h0cYP2soCd8/4hWceG8O2TXkb
-         D0ew4Hp8sSD7mnToudy6iqX3VGXs8yS3n7+9CmJUT8bL4frUz/tG1G55Fl1rsgak1p5m
-         4pXJmPnR98qO/omOgXxnONaf0E9jTlU2TrRa/rvR2CAouPSl6CD/mSgPRGq/M09fXEnM
-         grCWhvdkA36MjWxmBvddgPeiQYiRLyzwRmScYxTpYtnnL7+2jCddlYWQ/m7S5cexBrWx
-         vpOA==
-X-Gm-Message-State: ACrzQf3FQfsnrzFUN977f4pY266zfqGgGn8hCLcHhQhdYF5mDckQbcOA
-        1xWhsmGj1xpbK/d+kpeohs2EmgYmPjk=
-X-Google-Smtp-Source: AMsMyM6b+/mMnOuAYp2ZKCTY6zX8DuHGYF9oOBrlhFMVXmv5SjeuOTGX+grjgWST4otL4YpXIj2/zMiW6LM=
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date;
+        bh=+JIzKRX0KewNagwHaVVH4mYdPKt+vEM8H/N+SPJENUQ=;
+        b=16qyPSioYuVePYEIZ6yZvM2m6U6bpZPgchh/hXVJBCbjvqTTZx+XSmwEe4k4si7itK
+         Lo9x3Ovb3fas/Tmug3vHGaouJOtEER8OsgfKSmK/567bhWMafxH9FM6MEmei6wCKWjtu
+         hvCRcimkIt6ky5vp4y1Q+Vywxx70W7ukqPeBovVNFpn9h7Bvj6196d8qWJULgmfMpCnZ
+         w7nCbUSb3+crGKtkUZFi58YFMIZVQffgmg97LKo24BdYB1GuML+311cpKZ+iUIQopVLQ
+         43014xX33FnYrQkdqVuwGxRB9hCYkvwvSoLU5e2OB45cpbkjXo+MWe29EKPoW4t97K/u
+         cvvg==
+X-Gm-Message-State: ACrzQf1IM2T/2mCqltPhxeEsgITYym+CTwrIQDBVu3P74c8ybnurCI4X
+        e6abQidrT+Hm3BTZmvJYEN9kmYx7yRM=
+X-Google-Smtp-Source: AMsMyM5dHuqKMlozPsLHvHlTx848IHi69ByjD3zY6y51I1+qF4RF7iNG/MiuyyWTtfNQ4e/Scbj8KiE8moA=
 X-Received: from avagin.kir.corp.google.com ([2620:15c:29:204:2436:675:9889:e5ed])
- (user=avagin job=sendgmr) by 2002:aa7:90d4:0:b0:544:9a9c:f563 with SMTP id
- k20-20020aa790d4000000b005449a9cf563mr27182997pfk.70.1663720283342; Tue, 20
- Sep 2022 17:31:23 -0700 (PDT)
-Date:   Tue, 20 Sep 2022 17:31:19 -0700
+ (user=avagin job=sendgmr) by 2002:a05:6870:170b:b0:127:6654:6768 with SMTP id
+ h11-20020a056870170b00b0012766546768mr3559656oae.256.1663720285304; Tue, 20
+ Sep 2022 17:31:25 -0700 (PDT)
+Date:   Tue, 20 Sep 2022 17:31:20 -0700
+In-Reply-To: <20220921003120.209637-1-avagin@google.com>
 Mime-Version: 1.0
+References: <20220921003120.209637-1-avagin@google.com>
 X-Mailer: git-send-email 2.37.3.968.ga6b4b080e4-goog
-Message-ID: <20220921003120.209637-1-avagin@google.com>
-Subject: [PATCH 1/2] fs/exec: switch timens when a task gets a new mm
+Message-ID: <20220921003120.209637-2-avagin@google.com>
+Subject: [PATCH 2/2] selftests/timens: add a test for vfork+exit
 From:   Andrei Vagin <avagin@google.com>
 To:     Kees Cook <keescook@chromium.org>
 Cc:     linux-kernel@vger.kernel.org, Andrei Vagin <avagin@gmail.com>,
@@ -72,147 +74,183 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Andrei Vagin <avagin@gmail.com>
 
-Changing a time namespace requires remapping a vvar page, so we don't want
-to allow doing that if any other tasks can use the same mm.
+* check that a child process is in parent's time namespace after vfork.
+* check that a child process is in the target namespace after exec.
 
-Currently, we install a time namespace when a task is created with a new
-vm. exec() is another case when a task gets a new mm and so it can switch
-a time namespace safely, but it isn't handled now.
+Output on success:
+ 1..5
+ ok 1 parent before vfork
+ ok 2 child before exec
+ ok 3 child after exec
+ ok 4 wait for child
+ ok 5 parent after vfork
+ # Totals: pass:5 fail:0 xfail:0 xpass:0 skip:0 error:0
 
-One more issue of the current interface is that clone() with CLONE_VM isn't
-allowed if the current task has unshared a time namespace
-(timens_for_children doesn't match the current timens).
-
-Both these issues make some inconvenience for users. For example, Alexey
-and Florian reported that posix_spawn() uses vfork+exec and this pattern
-doesn't work with time namespaces due to the both described issues.
-LXC needed to workaround the exec() issue by calling setns.
-
-In the commit 133e2d3e81de5 ("fs/exec: allow to unshare a time namespace on
-vfork+exec"), we tried to fix these issues with minimal impact on UAPI. But
-it adds extra complexity and some undesirable side effects. Eric suggested
-fixing the issues properly because here are all the reasons to suppose that
-there are no users that depend on the old behavior.
-
-Cc: Alexey Izbyshev <izbyshev@ispras.ru>
-Cc: Christian Brauner <brauner@kernel.org>
-Cc: Dmitry Safonov <0x7f454c46@gmail.com>
-Cc: "Eric W. Biederman" <ebiederm@xmission.com>
-Cc: Florian Weimer <fweimer@redhat.com>
-Cc: Kees Cook <keescook@chromium.org>
-Suggested-by: "Eric W. Biederman" <ebiederm@xmission.com>
-Origin-author: "Eric W. Biederman" <ebiederm@xmission.com>
 Signed-off-by: Andrei Vagin <avagin@gmail.com>
 ---
- fs/exec.c               |  5 +++++
- include/linux/nsproxy.h |  1 +
- kernel/fork.c           |  9 ---------
- kernel/nsproxy.c        | 23 +++++++++++++++++++++--
- 4 files changed, 27 insertions(+), 11 deletions(-)
+ tools/testing/selftests/timens/.gitignore   |   1 +
+ tools/testing/selftests/timens/Makefile     |   2 +-
+ tools/testing/selftests/timens/vfork_exec.c | 132 ++++++++++++++++++++
+ 3 files changed, 134 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/timens/vfork_exec.c
 
-diff --git a/fs/exec.c b/fs/exec.c
-index d046dbb9cbd0..71284188b96d 100644
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -65,6 +65,7 @@
- #include <linux/io_uring.h>
- #include <linux/syscall_user_dispatch.h>
- #include <linux/coredump.h>
-+#include <linux/time_namespace.h>
+diff --git a/tools/testing/selftests/timens/.gitignore b/tools/testing/selftests/timens/.gitignore
+index fe1eb8271b35..cae8dca0fbff 100644
+--- a/tools/testing/selftests/timens/.gitignore
++++ b/tools/testing/selftests/timens/.gitignore
+@@ -8,3 +8,4 @@ procfs
+ timens
+ timer
+ timerfd
++vfork_exec
+diff --git a/tools/testing/selftests/timens/Makefile b/tools/testing/selftests/timens/Makefile
+index 3a5936cc10ab..f0d51d4d2c87 100644
+--- a/tools/testing/selftests/timens/Makefile
++++ b/tools/testing/selftests/timens/Makefile
+@@ -1,4 +1,4 @@
+-TEST_GEN_PROGS := timens timerfd timer clock_nanosleep procfs exec futex
++TEST_GEN_PROGS := timens timerfd timer clock_nanosleep procfs exec futex vfork_exec
+ TEST_GEN_PROGS_EXTENDED := gettime_perf
  
- #include <linux/uaccess.h>
- #include <asm/mmu_context.h>
-@@ -1296,6 +1297,10 @@ int begin_new_exec(struct linux_binprm * bprm)
- 
- 	bprm->mm = NULL;
- 
-+	retval = exec_task_namespaces();
-+	if (retval)
-+		goto out_unlock;
+ CFLAGS := -Wall -Werror -pthread
+diff --git a/tools/testing/selftests/timens/vfork_exec.c b/tools/testing/selftests/timens/vfork_exec.c
+new file mode 100644
+index 000000000000..9fd8a64d25a9
+--- /dev/null
++++ b/tools/testing/selftests/timens/vfork_exec.c
+@@ -0,0 +1,132 @@
++// SPDX-License-Identifier: GPL-2.0
++#define _GNU_SOURCE
++#include <errno.h>
++#include <fcntl.h>
++#include <sched.h>
++#include <stdio.h>
++#include <stdbool.h>
++#include <sys/stat.h>
++#include <sys/syscall.h>
++#include <sys/types.h>
++#include <sys/wait.h>
++#include <time.h>
++#include <unistd.h>
++#include <string.h>
++#include <pthread.h>
 +
- #ifdef CONFIG_POSIX_TIMERS
- 	spin_lock_irq(&me->sighand->siglock);
- 	posix_cpu_timers_exit(me);
-diff --git a/include/linux/nsproxy.h b/include/linux/nsproxy.h
-index cdb171efc7cb..fee881cded01 100644
---- a/include/linux/nsproxy.h
-+++ b/include/linux/nsproxy.h
-@@ -94,6 +94,7 @@ static inline struct cred *nsset_cred(struct nsset *set)
- int copy_namespaces(unsigned long flags, struct task_struct *tsk);
- void exit_task_namespaces(struct task_struct *tsk);
- void switch_task_namespaces(struct task_struct *tsk, struct nsproxy *new);
-+int exec_task_namespaces(void);
- void free_nsproxy(struct nsproxy *ns);
- int unshare_nsproxy_namespaces(unsigned long, struct nsproxy **,
- 	struct cred *, struct fs_struct *);
-diff --git a/kernel/fork.c b/kernel/fork.c
-index 2b6bd511c6ed..4eb803f75225 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -2044,15 +2044,6 @@ static __latent_entropy struct task_struct *copy_process(
- 			return ERR_PTR(-EINVAL);
- 	}
- 
--	/*
--	 * If the new process will be in a different time namespace
--	 * do not allow it to share VM or a thread group with the forking task.
--	 */
--	if (clone_flags & (CLONE_THREAD | CLONE_VM)) {
--		if (nsp->time_ns != nsp->time_ns_for_children)
--			return ERR_PTR(-EINVAL);
--	}
--
- 	if (clone_flags & CLONE_PIDFD) {
- 		/*
- 		 * - CLONE_DETACHED is blocked so that we can potentially
-diff --git a/kernel/nsproxy.c b/kernel/nsproxy.c
-index eec72ca962e2..a487ff24129b 100644
---- a/kernel/nsproxy.c
-+++ b/kernel/nsproxy.c
-@@ -157,7 +157,8 @@ int copy_namespaces(unsigned long flags, struct task_struct *tsk)
- 	if (likely(!(flags & (CLONE_NEWNS | CLONE_NEWUTS | CLONE_NEWIPC |
- 			      CLONE_NEWPID | CLONE_NEWNET |
- 			      CLONE_NEWCGROUP | CLONE_NEWTIME)))) {
--		if (likely(old_ns->time_ns_for_children == old_ns->time_ns)) {
-+		if ((flags & CLONE_VM) ||
-+		    likely(old_ns->time_ns_for_children == old_ns->time_ns)) {
- 			get_nsproxy(old_ns);
- 			return 0;
- 		}
-@@ -179,7 +180,8 @@ int copy_namespaces(unsigned long flags, struct task_struct *tsk)
- 	if (IS_ERR(new_ns))
- 		return  PTR_ERR(new_ns);
- 
--	timens_on_fork(new_ns, tsk);
-+	if ((flags & CLONE_VM) == 0)
-+		timens_on_fork(new_ns, tsk);
- 
- 	tsk->nsproxy = new_ns;
- 	return 0;
-@@ -254,6 +256,23 @@ void exit_task_namespaces(struct task_struct *p)
- 	switch_task_namespaces(p, NULL);
- }
- 
-+int exec_task_namespaces(void)
++#include "log.h"
++#include "timens.h"
++
++#define OFFSET (36000)
++
++static void *tcheck(void *arg)
 +{
-+	struct task_struct *tsk = current;
-+	struct nsproxy *new;
++	struct timespec *now = arg, tst;
++	int i;
 +
-+	if (tsk->nsproxy->time_ns_for_children == tsk->nsproxy->time_ns)
-+		return 0;
++	for (i = 0; i < 2; i++) {
++		_gettime(CLOCK_MONOTONIC, &tst, i);
++		if (abs(tst.tv_sec - now->tv_sec) > 5) {
++			pr_fail("thread: unexpected value: %ld (%ld)\n",
++				tst.tv_sec, now->tv_sec);
++			return (void *)1UL;
++		}
++	}
++	return NULL;
++}
 +
-+	new = create_new_namespaces(0, tsk, current_user_ns(), tsk->fs);
-+	if (IS_ERR(new))
-+		return PTR_ERR(new);
++static int check_in_thread(struct timespec *now)
++{
++	pthread_t th;
++	void *retval;
 +
-+	timens_on_fork(new, tsk);
-+	switch_task_namespaces(tsk, new);
++	if (pthread_create(&th, NULL, tcheck, now))
++		return pr_perror("thread");
++	if (pthread_join(th, &retval))
++		return pr_perror("pthread_join");
++	return !(retval == NULL);
++}
++
++static int check(char *tst_name, struct timespec *now)
++{
++	struct timespec tst;
++	int i;
++
++	for (i = 0; i < 2; i++) {
++		_gettime(CLOCK_MONOTONIC, &tst, i);
++		if (abs(tst.tv_sec - now->tv_sec) > 5)
++			return pr_fail("%s: unexpected value: %ld (%ld)\n",
++					tst.tv_sec, now->tv_sec);
++	}
++	if (check_in_thread(now))
++		return 1;
++	ksft_test_result_pass("%s\n", tst_name);
 +	return 0;
 +}
 +
- static int check_setns_flags(unsigned long flags)
- {
- 	if (!flags || (flags & ~(CLONE_NEWNS | CLONE_NEWUTS | CLONE_NEWIPC |
++int main(int argc, char *argv[])
++{
++	struct timespec now;
++	int status;
++	pid_t pid;
++
++	if (argc > 1) {
++		char *endptr;
++
++		ksft_cnt.ksft_pass = 2;
++		now.tv_sec = strtoul(argv[1], &endptr, 0);
++		if (*endptr != 0)
++			return pr_perror("strtoul");
++
++		return check("child after exec", &now);
++	}
++
++	nscheck();
++
++	ksft_set_plan(5);
++
++	clock_gettime(CLOCK_MONOTONIC, &now);
++
++	if (unshare_timens())
++		return 1;
++
++	if (_settime(CLOCK_MONOTONIC, OFFSET))
++		return 1;
++
++	if (check("parent before vfork", &now))
++		return 1;
++
++	pid = vfork();
++	if (pid < 0)
++		return pr_perror("fork");
++
++	if (pid == 0) {
++		char now_str[64];
++		char *cargv[] = {"exec", now_str, NULL};
++		char *cenv[] = {NULL};
++
++		// Check that we are still in the source timens.
++		if (check("child before exec", &now))
++			return 1;
++
++		/* Check for proper vvar offsets after execve. */
++		snprintf(now_str, sizeof(now_str), "%ld", now.tv_sec + OFFSET);
++		execve("/proc/self/exe", cargv, cenv);
++		return pr_perror("execve");
++	}
++
++	if (waitpid(pid, &status, 0) != pid)
++		return pr_perror("waitpid");
++
++	if (status)
++		ksft_exit_fail();
++	ksft_inc_pass_cnt();
++	ksft_test_result_pass("wait for child\n");
++
++	// Check that we are still in the source timens.
++	if (check("parent after vfork", &now))
++		return 1;
++
++	ksft_exit_pass();
++	return 0;
++}
 -- 
 2.37.3.968.ga6b4b080e4-goog
 
