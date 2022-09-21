@@ -2,171 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 571405BFF05
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 15:36:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6209C5BFF09
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 15:37:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230255AbiIUNgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 09:36:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57600 "EHLO
+        id S229622AbiIUNhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 09:37:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230286AbiIUNg3 (ORCPT
+        with ESMTP id S229762AbiIUNhS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 09:36:29 -0400
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2058.outbound.protection.outlook.com [40.107.96.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1BCA7675E;
-        Wed, 21 Sep 2022 06:36:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hEHSE+XmFnPux4YUYjacuT5Q0qI3p0cY+TnOxcgD0KTVuPmOVfoE90j3C4Lj14QXqKi1ZpDVL8HajedW0g7UVHJSfJqEHHpJiYJOkJV19E0tUHuHt9/AKi44S2TC/4bG3FCuZBxPeedD3VX04T2/hmBSwbepO5cz9A7HoF/3iny6ZDhwO3AlHPFL1ayPMpAJ3gzwwz4A3t+/L6GLNZYp4g4oGEcka0YsXW3muWeQGGHZj4+w47KuhLrrzOP3vf5B+7QWpXbxXKrluWocRZMnH+0ycB9jK51phb9JfVSNfTRMVS5Y03GOjsCil2HJzVGhZM/3tX4wtnYCfIrDdqxxyg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NU4CuKkdpk1jiVSddf5kT1bGQMoUBT+mbBbS53oPc6g=;
- b=a+bxSmJh5POPY0ELCR+ZwfG2bGFFSCZ63SVWHwlwdxcmYD7VC+5xJWMq3ta++IqcwgmiQCoQ8lmE0Od0BiaxhsoZh21zkFWr4sSUOf/Te4VZ10PLrbz7DV9Tn/Q/O+VEV7kDD5c0xwlJBzdhIG+U9W4N1ZKQBUJbx9tIowEhFXVPYkoian99op8ZHu4wR79tObG1L33YEcFKNacgXDZNWW7EA2sVmSis9BQcKf9x6p2GzieaRT0mJs/Cm1+p6aeRkBiTuBzlNUn718Wr78bfIeBahmMokc/hlmv+oLtpblomSbXRBzh9wN4bG0ckYYRbYnnMoulhyQ4bWkKx/4y1sw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=amd.com smtp.mailfrom=xilinx.com;
- dmarc=temperror action=none header.from=amd.com; dkim=none (message not
- signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NU4CuKkdpk1jiVSddf5kT1bGQMoUBT+mbBbS53oPc6g=;
- b=F5mnRopJjfq7f0Nl7oEsKjwI+bUSOUPxFdeTuQ8VcebYW+RjvpR9p4mwYjvlHv0HtW+1+nHdYzyickWJuaMlfHGiH7cXM7wncZ9g3uo1S7vEMV33bIRkXbxpNiMtwv7GqsznyI4rNmKzFjDCpwpl5ubVWZC1Yz5AfF3DfczgJjA=
-Received: from BN9PR03CA0627.namprd03.prod.outlook.com (2603:10b6:408:106::32)
- by SA0PR02MB7194.namprd02.prod.outlook.com (2603:10b6:806:d9::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.17; Wed, 21 Sep
- 2022 13:36:26 +0000
-Received: from BN1NAM02FT005.eop-nam02.prod.protection.outlook.com
- (2603:10b6:408:106:cafe::9a) by BN9PR03CA0627.outlook.office365.com
- (2603:10b6:408:106::32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.17 via Frontend
- Transport; Wed, 21 Sep 2022 13:36:26 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=temperror action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com; pr=C
-Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- BN1NAM02FT005.mail.protection.outlook.com (10.13.2.124) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5654.14 via Frontend Transport; Wed, 21 Sep 2022 13:36:24 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.9; Wed, 21 Sep 2022 06:36:24 -0700
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2507.9 via Frontend Transport; Wed, 21 Sep 2022 06:36:24 -0700
-Envelope-to: git@amd.com,
- radhey.shyam.pandey@amd.com,
- linux@armlinux.org.uk,
- robert.hancock@calian.com,
- davem@davemloft.net,
- edumazet@google.com,
- kuba@kernel.org,
- claudiu.beznea@microchip.com,
- nicolas.ferre@microchip.com,
- pabeni@redhat.com,
- linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org
-Received: from [172.23.64.3] (port=52903 helo=xhdvnc103.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <radhey.shyam.pandey@xilinx.com>)
-        id 1oazto-0004Qi-1o; Wed, 21 Sep 2022 06:36:24 -0700
-Received: by xhdvnc103.xilinx.com (Postfix, from userid 13245)
-        id 472311054C9; Wed, 21 Sep 2022 19:06:23 +0530 (IST)
-From:   Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-To:     <nicolas.ferre@microchip.com>, <claudiu.beznea@microchip.com>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <linux@armlinux.org.uk>,
-        <robert.hancock@calian.com>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <git@amd.com>, Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-Subject: [PATCH net] net: macb: Fix ZynqMP SGMII non-wakeup source resume failure
-Date:   Wed, 21 Sep 2022 19:06:10 +0530
-Message-ID: <1663767370-11089-1-git-send-email-radhey.shyam.pandey@amd.com>
-X-Mailer: git-send-email 2.1.1
+        Wed, 21 Sep 2022 09:37:18 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 997817285C;
+        Wed, 21 Sep 2022 06:37:17 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 4BAF321A0F;
+        Wed, 21 Sep 2022 13:37:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1663767436; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4ylSKvd0aYxKEDLTkKv0Q1hmaMWKUMWHX4BYfXBmAW4=;
+        b=t5ICRRPW2WPstvfbXz8mvH/FyMnoYTudZqv2jCgW8JV6iEmQK5oapD4aUKNw7D0zrK3kKZ
+        uc/nkpJGVWasO3Ta/hep8V6CC4jfYE2/AG0IAasaZCZE/m+jOBqhvMbnzO8tRvJe0DAbVF
+        rTb61XIyrWbgyWlUqyL7+woH14UdXXQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1663767436;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4ylSKvd0aYxKEDLTkKv0Q1hmaMWKUMWHX4BYfXBmAW4=;
+        b=B6hH3EpXwyYL87Uq4xZjGNoLA4KhoaHFggxjIYWK9rIu6hKtOEt6liUjXx4P3byiqqxhEp
+        2C8tFD9F/VJVUXAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3B30813A00;
+        Wed, 21 Sep 2022 13:37:16 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id wTtrDowTK2OpQAAAMHmgww
+        (envelope-from <jack@suse.cz>); Wed, 21 Sep 2022 13:37:16 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id BCAF9A0684; Wed, 21 Sep 2022 15:37:15 +0200 (CEST)
+Date:   Wed, 21 Sep 2022 15:37:15 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Zhihao Cheng <chengzhihao1@huawei.com>
+Cc:     jack@suse.com, tytso@mit.edu, brauner@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yukuai3@huawei.com
+Subject: Re: [PATCH 1/3] quota: Check next/prev free block number after
+ reading from quota file
+Message-ID: <20220921133715.7tesk3qylombwmyk@quack3>
+References: <20220820110514.881373-1-chengzhihao1@huawei.com>
+ <20220820110514.881373-2-chengzhihao1@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN1NAM02FT005:EE_|SA0PR02MB7194:EE_
-X-MS-Office365-Filtering-Correlation-Id: 36075d79-4d80-4284-61f2-08da9bd64776
-X-MS-Exchange-SenderADCheck: 0
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0GYdrmnp/853pFHzHKezTMW8urPd3O/dUCtPk/67ch2XDcAGJAk8aCQfxGf0mmUaX4+jpzKlJ588uFzP3YfQvkIjFzbN88hPC1UBgQWMsM/SczcMHw3hajX8AFwTWrHGQNPzgsBZ0hY66g7RFxvkiOcCUA8XcvjJio89CgFVakNHUiSU6Z24LpL4seeFX0HoewINgWz87j0EhPF3w/nPAZTVxcQNSSJssg7XEifzYL15sxfRu2/ex0NsbvsnUkzfSZjOCJWG4/IV9wz7ujjFyZuDZUQRiQgmn2ZzJ8VKsW4tgizlDY/zSVIOMvVZ07W1a+lwMuxI+p5C/qXOqClftwzXEhvjoCqjUiQ4TJHijH/RR0JptlufHz+RXR5Ki7nrSO6O0uisPaiA6bYu6VEELqvLnlRRRsgQJjw+Wk4teZ9sO8LcfYwBTSMTxbRzTQsUcmZgW2GGP3KnCZspGg+a/SIhqtQ3HgnJUK+KeI7FMOwW51pHW3mO7zP2L5rJDPzK40VHm5mfVkOpK/ZfFpCgRnUA230sxLmvyp9oYLnQ2YaEcrBvhmRnRRRRn1Y+HzJZ/zzj2VJBZ8IKo67TUkQaRRAhvajMEM6m5YmUn5l8ZRfWlVV9h4VwBZ153GDB5whvBJ2p23N9U2GTqHBrYVb2iaRPTKKYzRCXhLEOeywv5rKrvJE1kR1KbeybDcUDpcftFgZOhr9D6RQD+cw+5Z19xteOXxIqSimWh3vi4194dxHGpt2hP/1AU+HHc8kmIFO0Q/mRCcP2KZQMWDPELiY8eYqgv3QYJBXiDm4OcaRX78A=
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(376002)(396003)(136003)(346002)(451199015)(36840700001)(40470700004)(46966006)(82740400003)(47076005)(83380400001)(36756003)(2906002)(356005)(63370400001)(54906003)(70206006)(70586007)(478600001)(6666004)(4326008)(8676002)(110136005)(82310400005)(186003)(8936002)(5660300002)(42186006)(83170400001)(2616005)(40460700003)(7416002)(336012)(42882007)(41300700001)(26005)(7636003)(6266002)(316002)(36860700001)(40480700001)(102446001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Sep 2022 13:36:24.9031
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 36075d79-4d80-4284-61f2-08da9bd64776
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT005.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR02MB7194
-X-Spam-Status: No, score=1.3 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
-        DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220820110514.881373-2-chengzhihao1@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When GEM is in SGMII mode and disabled as a wakeup source, the power
-management controller can power down the entire full power domain(FPD)
-if none of the FPD devices are in use.
+On Sat 20-08-22 19:05:12, Zhihao Cheng wrote:
+> Following process:
+>  Init: v2_read_file_info: <3> dqi_free_blk 0 dqi_free_entry 5 dqi_blks 6
+> 
+>  Step 1. chown bin f_a -> dquot_acquire -> v2_write_dquot:
+>   qtree_write_dquot
+>    do_insert_tree
+>     find_free_dqentry
+>      get_free_dqblk
+>       write_blk(info->dqi_blocks) // info->dqi_blocks = 6, failure. The
+> 	   content in physical block (corresponding to blk 6) is random.
+> 
+>  Step 2. chown root f_a -> dquot_transfer -> dqput_all -> dqput ->
+>          ext4_release_dquot -> v2_release_dquot -> qtree_delete_dquot:
+>   dquot_release
+>    remove_tree
+>     free_dqentry
+>      put_free_dqblk(6)
+>       info->dqi_free_blk = blk    // info->dqi_free_blk = 6
+> 
+>  Step 3. drop cache (buffer head for block 6 is released)
+> 
+>  Step 4. chown bin f_b -> dquot_acquire -> commit_dqblk -> v2_write_dquot:
+>   qtree_write_dquot
+>    do_insert_tree
+>     find_free_dqentry
+>      get_free_dqblk
+>       dh = (struct qt_disk_dqdbheader *)buf
+>       blk = info->dqi_free_blk     // 6
+>       ret = read_blk(info, blk, buf)  // The content of buf is random
+>       info->dqi_free_blk = le32_to_cpu(dh->dqdh_next_free)  // random blk
+> 
+>  Step 5. chown bin f_c -> notify_change -> ext4_setattr -> dquot_transfer:
+>   dquot = dqget -> acquire_dquot -> ext4_acquire_dquot -> dquot_acquire ->
+>           commit_dqblk -> v2_write_dquot -> dq_insert_tree:
+>    do_insert_tree
+>     find_free_dqentry
+>      get_free_dqblk
+>       blk = info->dqi_free_blk    // If blk < 0 and blk is not an error
+> 				     code, it will be returned as dquot
+> 
+>   transfer_to[USRQUOTA] = dquot  // A random negative value
+>   __dquot_transfer(transfer_to)
+>    dquot_add_inodes(transfer_to[cnt])
+>     spin_lock(&dquot->dq_dqb_lock)  // page fault
+> 
+> , which will lead to kernel page fault:
+>  Quota error (device sda): qtree_write_dquot: Error -8000 occurred
+>  while creating quota
+>  BUG: unable to handle page fault for address: ffffffffffffe120
+>  #PF: supervisor write access in kernel mode
+>  #PF: error_code(0x0002) - not-present page
+>  Oops: 0002 [#1] PREEMPT SMP
+>  CPU: 0 PID: 5974 Comm: chown Not tainted 6.0.0-rc1-00004
+>  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)
+>  RIP: 0010:_raw_spin_lock+0x3a/0x90
+>  Call Trace:
+>   dquot_add_inodes+0x28/0x270
+>   __dquot_transfer+0x377/0x840
+>   dquot_transfer+0xde/0x540
+>   ext4_setattr+0x405/0x14d0
+>   notify_change+0x68e/0x9f0
+>   chown_common+0x300/0x430
+>   __x64_sys_fchownat+0x29/0x40
+> 
+> In order to avoid accessing invalid quota memory address, this patch adds
+> block number checking of next/prev free block read from quota file.
+> 
+> Fetch a reproducer in [Link].
+> 
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216372
+> Fixes: 1da177e4c3f4152 ("Linux-2.6.12-rc2")
 
-Incase of FPD off, there are below ethernet link up issues on non-wakeup
-suspend/resume. To fix it add phy_exit() in suspend and phy_init() in the
-resume path which reinitializes PS GTR SGMII lanes.
+It's better to just have:
 
-$ echo +20 > /sys/class/rtc/rtc0/wakealarm
-$ echo mem > /sys/power/state
+CC: stable@vger.kernel.org
 
-After resume:
+here. Fixes tag pointing to kernel release is not very useful.
 
-$ ifconfig eth0 up
-xilinx-psgtr fd400000.phy: lane 0 (type 10, protocol 5): PLL lock timeout
-phy phy-fd400000.phy.0: phy poweron failed --> -110
-xilinx-psgtr fd400000.phy: lane 0 (type 10, protocol 5): PLL lock timeout
-SIOCSIFFLAGS: Connection timed out
-phy phy-fd400000.phy.0: phy poweron failed --> -110
+> --- a/fs/quota/quota_tree.c
+> +++ b/fs/quota/quota_tree.c
+> @@ -71,6 +71,35 @@ static ssize_t write_blk(struct qtree_mem_dqinfo *info, uint blk, char *buf)
+>  	return ret;
+>  }
+>  
+> +static inline int do_check_range(struct super_block *sb, uint val, uint max_val)
+> +{
+> +	if (val >= max_val) {
+> +		quota_error(sb, "Getting block too big (%u >= %u)",
+> +			    val, max_val);
+> +		return -EUCLEAN;
+> +	}
+> +
+> +	return 0;
+> +}
 
-Fixes: 8b73fa3ae02b ("net: macb: Added ZynqMP-specific initialization")
-Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
----
- drivers/net/ethernet/cadence/macb_main.c | 4 ++++
- 1 file changed, 4 insertions(+)
+I'd already provide min_val and the string for the message here as well (as
+you do in patch 2). It is less churn in the next patch and free blocks
+checking actually needs that as well. See below.
 
-diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
-index 66c7d08d376a..a2897549f9c4 100644
---- a/drivers/net/ethernet/cadence/macb_main.c
-+++ b/drivers/net/ethernet/cadence/macb_main.c
-@@ -5109,6 +5109,7 @@ static int __maybe_unused macb_suspend(struct device *dev)
- 	if (!(bp->wol & MACB_WOL_ENABLED)) {
- 		rtnl_lock();
- 		phylink_stop(bp->phylink);
-+		phy_exit(bp->sgmii_phy);
- 		rtnl_unlock();
- 		spin_lock_irqsave(&bp->lock, flags);
- 		macb_reset_hw(bp);
-@@ -5198,6 +5199,9 @@ static int __maybe_unused macb_resume(struct device *dev)
- 	macb_set_rx_mode(netdev);
- 	macb_restore_features(bp);
- 	rtnl_lock();
-+	if (!device_may_wakeup(&bp->dev->dev))
-+		phy_init(bp->sgmii_phy);
-+
- 	phylink_start(bp->phylink);
- 	rtnl_unlock();
- 
+> +
+> +static int check_free_block(struct qtree_mem_dqinfo *info,
+> +			    struct qt_disk_dqdbheader *dh)
+> +{
+> +	int err = 0;
+> +	uint nextblk, prevblk;
+> +
+> +	nextblk = le32_to_cpu(dh->dqdh_next_free);
+> +	err = do_check_range(info->dqi_sb, nextblk, info->dqi_blocks);
+> +	if (err)
+> +		return err;
+> +	prevblk = le32_to_cpu(dh->dqdh_prev_free);
+> +	err = do_check_range(info->dqi_sb, prevblk, info->dqi_blocks);
+> +	if (err)
+> +		return err;
+
+The free block should actually be > QT_TREEOFF so I'd add the check to
+do_check_range().
+
+Also rather than having check_free_block(), I'd provide a helper function
+like check_dquot_block_header() which will check only free blocks pointers
+now and in later patches you can add other checks there.
+
+								Honza
 -- 
-2.25.1
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
