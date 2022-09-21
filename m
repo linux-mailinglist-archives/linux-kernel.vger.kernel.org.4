@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84E615C027C
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:53:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE5065C024A
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:51:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231714AbiIUPx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 11:53:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38816 "EHLO
+        id S231609AbiIUPvF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 11:51:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231701AbiIUPwT (ORCPT
+        with ESMTP id S230126AbiIUPuP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 11:52:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ECED175BC;
-        Wed, 21 Sep 2022 08:49:44 -0700 (PDT)
+        Wed, 21 Sep 2022 11:50:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E31B9E2E9;
+        Wed, 21 Sep 2022 08:48:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8EC0CB830AC;
-        Wed, 21 Sep 2022 15:48:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAA9BC433D6;
-        Wed, 21 Sep 2022 15:48:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B70BF6312C;
+        Wed, 21 Sep 2022 15:48:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9125BC433C1;
+        Wed, 21 Sep 2022 15:48:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663775318;
-        bh=8KchVOiklKldhDSmnwE9qC9ds7RMp8LSqO/hd4CFmxA=;
+        s=korg; t=1663775282;
+        bh=wCAQJ4eQrrJ3APQcolF3jIUnI0Y+3eKZnUZwa06m/G0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RG48jCIjrpGb7/Mc9o8zLEM2Z4N473t//GrrO3qvcP9e+R2kGK/H+o+zQ28+PuVVF
-         Bx+W0s5+X0K1svGmB5hLUnhhdY1xxn5AX2UdUDn9WJASkDlofrEktN4QSQ/ea9cNpW
-         IeX29A1Mw/vX+NKSRFBTak3R/K1Gux3d62T+rNwY=
+        b=AuZuBt56E/Gs/r/Pd+IjwjVWUg5jnskpPtzdNdGCy+W9Nnba2Al0agFcksgyT2HNQ
+         9fD4NZBj+8ebgn03lk/xwk3ITDEVerTx7H4ilvL2w4SmrVtJDSVtM3DO61a0ZnnYmB
+         2qLNemZWgwHja3rP9RHshjBhR7f3TagG3/mAIuRc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Stuart Menefy <stuart.menefy@mathembedded.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 13/45] drm/meson: Fix OSD1 RGB to YCbCr coefficient
-Date:   Wed, 21 Sep 2022 17:46:03 +0200
-Message-Id: <20220921153647.322623957@linuxfoundation.org>
+        stable@vger.kernel.org, Thierry Reding <treding@nvidia.com>,
+        Frank Rowand <frank.rowand@sony.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH 5.19 20/38] of/device: Fix up of_dma_configure_id() stub
+Date:   Wed, 21 Sep 2022 17:46:04 +0200
+Message-Id: <20220921153646.910874595@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220921153646.931277075@linuxfoundation.org>
-References: <20220921153646.931277075@linuxfoundation.org>
+In-Reply-To: <20220921153646.298361220@linuxfoundation.org>
+References: <20220921153646.298361220@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,47 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stuart Menefy <stuart.menefy@mathembedded.com>
+From: Thierry Reding <treding@nvidia.com>
 
-[ Upstream commit 6463d3930ba5b6addcfc8f80a4543976a2fc7656 ]
+commit 40bfe7a86d84cf08ac6a8fe2f0c8bf7a43edd110 upstream.
 
-VPP_WRAP_OSD1_MATRIX_COEF22.Coeff22 is documented as being bits 0-12,
-not 16-28.
+Since the stub version of of_dma_configure_id() was added in commit
+a081bd4af4ce ("of/device: Add input id to of_dma_configure()"), it has
+not matched the signature of the full function, leading to build failure
+reports when code using this function is built on !OF configurations.
 
-Without this the output tends to have a pink hue, changing it results
-in better color accuracy.
-
-The vendor kernel doesn't use this register. However the code which
-sets VIU2_OSD1_MATRIX_COEF22 also uses bits 0-12. There is a slightly
-different style of registers for configuring some of the other matrices,
-which do use bits 16-28 for this coefficient, but those have names
-ending in MATRIX_COEF22_30, and this is not one of those.
-
-Signed-off-by: Stuart Menefy <stuart.menefy@mathembedded.com>
-Fixes: 728883948b0d ("drm/meson: Add G12A Support for VIU setup")
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220908155243.687143-1-stuart.menefy@mathembedded.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: a081bd4af4ce ("of/device: Add input id to of_dma_configure()")
+Cc: stable@vger.kernel.org
+Signed-off-by: Thierry Reding <treding@nvidia.com>
+Reviewed-by: Frank Rowand <frank.rowand@sony.com>
+Acked-by: Lorenzo Pieralisi <lpieralisi@kernel.org>
+Link: https://lore.kernel.org/r/20220824153256.1437483-1-thierry.reding@gmail.com
+Signed-off-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/meson/meson_viu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/of_device.h |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/meson/meson_viu.c b/drivers/gpu/drm/meson/meson_viu.c
-index bb7e109534de..d4b907889a21 100644
---- a/drivers/gpu/drm/meson/meson_viu.c
-+++ b/drivers/gpu/drm/meson/meson_viu.c
-@@ -94,7 +94,7 @@ static void meson_viu_set_g12a_osd1_matrix(struct meson_drm *priv,
- 		priv->io_base + _REG(VPP_WRAP_OSD1_MATRIX_COEF11_12));
- 	writel(((m[9] & 0x1fff) << 16) | (m[10] & 0x1fff),
- 		priv->io_base + _REG(VPP_WRAP_OSD1_MATRIX_COEF20_21));
--	writel((m[11] & 0x1fff) << 16,
-+	writel((m[11] & 0x1fff),
- 		priv->io_base +	_REG(VPP_WRAP_OSD1_MATRIX_COEF22));
+--- a/include/linux/of_device.h
++++ b/include/linux/of_device.h
+@@ -101,8 +101,9 @@ static inline struct device_node *of_cpu
+ }
  
- 	writel(((m[18] & 0xfff) << 16) | (m[19] & 0xfff),
--- 
-2.35.1
-
+ static inline int of_dma_configure_id(struct device *dev,
+-				   struct device_node *np,
+-				   bool force_dma)
++				      struct device_node *np,
++				      bool force_dma,
++				      const u32 *id)
+ {
+ 	return 0;
+ }
 
 
