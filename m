@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 359DD5C0076
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 16:55:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA71F5C0055
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 16:54:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbiIUOzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 10:55:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45016 "EHLO
+        id S229975AbiIUOyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 10:54:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230292AbiIUOzE (ORCPT
+        with ESMTP id S230030AbiIUOyU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 10:55:04 -0400
+        Wed, 21 Sep 2022 10:54:20 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2043D2A24E;
-        Wed, 21 Sep 2022 07:54:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04AA55FF50;
+        Wed, 21 Sep 2022 07:54:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8BDCCB82FFB;
-        Wed, 21 Sep 2022 14:54:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8407EC433C1;
-        Wed, 21 Sep 2022 14:54:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 67ABBB83027;
+        Wed, 21 Sep 2022 14:54:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27719C433D6;
+        Wed, 21 Sep 2022 14:54:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663772089;
-        bh=Mx/PIkv+IJsR2kRCaN1LFYMt4suxqTqn0Z2DZ65HT2g=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KI1HIH1B3UIqqKYDe2y8/OfovTvzY7qeU2FFb5KcN+X8PvcimVrS0kTTGB5eI2UGw
-         CeDeUYAbpRpDnw7TiAPnxu72bL94URrRZGlXB+nfCb7qCby2X72EC8ztgZWaSdczJl
-         +VfUPtOZ11pwpnWIhUsEXgiH41GYqK/0TYfFgNy0qfo9s7bBjAy8iLMEq02Bk9bdrm
-         9Q94LCEuKHXMhyy5YLa4YZhEjp1ip5YpXvi7Ss1MJ5Cppc5QU9SwFxV2OWonQwRK0v
-         dVZnYVWq9iMUR1BXGYG8MxSrtWR28D/vCT/ZshUUZYA2S/n6nUsQ87EWj3WDHuypz1
-         IMe1XRh38ytBA==
-From:   Ard Biesheuvel <ardb@kernel.org>
-To:     linux-efi@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Michael Roth <michael.roth@amd.com>
-Subject: [PATCH v2 09/16] x86/compressed: avoid touching ECX in startup32_set_idt_entry()
-Date:   Wed, 21 Sep 2022 16:54:15 +0200
-Message-Id: <20220921145422.437618-10-ardb@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220921145422.437618-1-ardb@kernel.org>
-References: <20220921145422.437618-1-ardb@kernel.org>
+        s=k20201202; t=1663772056;
+        bh=N7rXLPz/wHSQhimjH/4apy7jZtngaME80JDdD/mzkoQ=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=JIVQ2fNUPaf7W3WVf7fTO7oslichj/bTyvJR7SQQmvTP6kLdzTAFMSEzA+ALUrwT2
+         oY8VnbFN0mITjBcsHM98sUBf0BFy+525Za30M0CWuIdMgB59Swo0lxeG88WUBTdJZl
+         DL5NhPecvnlb3PDIP2KsdW76+P+nT4uWzzSLMtlsfHpZZrl/er3C9s41z18RrXbRfh
+         uEp01aWE4Yo2ryCP0m1mdRevRCfZJL6me3Ki8muZ3vYTFGijrxxTZ1B4RdDOIrgZW2
+         dJeNefD7cYwUfdAx+B02GvKKND7pazO16QvZpjQKG9RWKTA/PSoF3TF+rUQdgPJUid
+         cP2YdIB+W7spg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id BF51B5C0849; Wed, 21 Sep 2022 07:54:15 -0700 (PDT)
+Date:   Wed, 21 Sep 2022 07:54:15 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rushikesh.s.kadam@intel.com, urezki@gmail.com,
+        neeraj.iitr10@gmail.com, frederic@kernel.org, rostedt@goodmis.org
+Subject: Re: [PATCH rcu/next 2/3] rcu: Fix late wakeup when flush of bypass
+ cblist happens (v6)
+Message-ID: <20220921145415.GC4196@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220917164200.511783-1-joel@joelfernandes.org>
+ <20220917164200.511783-3-joel@joelfernandes.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1564; i=ardb@kernel.org; h=from:subject; bh=Mx/PIkv+IJsR2kRCaN1LFYMt4suxqTqn0Z2DZ65HT2g=; b=owEB7QES/pANAwAKAcNPIjmS2Y8kAcsmYgBjKyWSszwdIxgcgQI2r3csojaetczLgrN62zrr6DKI jolMsPaJAbMEAAEKAB0WIQT72WJ8QGnJQhU3VynDTyI5ktmPJAUCYyslkgAKCRDDTyI5ktmPJOUNDA C1mFPmt8GXzx8NbyDpyg3eF/l2Rp4krkOTg0xRjZFmKFihtuBDVnSiP5M80Oq3+tav6OuvW2aZCTa9 YWd0gbwmi8bR/vRfnHQBXWXWRy06nbsbIom7m8c0eJNPsFSuBiKJF06WVyIz2VsyY5AjsIz8ofAnGs 9KJ2B1VMVTBTm7gc49G2HT9PI0kPsLXd8V9P3e93B8z6Vf1pLFvueDvqc+SCX5XtaDHsA6aN8kpO7/ pEG91f2GMvCsgFMtdzzbFe3yhc5rvtjkri3gOSWTlHCGVaZNDVI3W6r7bphh4JTKLD5oc33YkRBpLJ OEqZVy/MZdr8lMKpYy7SXgo15phvT40w9+7Bwta79cGFOIK5E7UzrJPt5/FIFw3yf9cf7LkZ55LAHy z3Rj3/QlL1VhgOZCJslmqNIOuGXujd4SLTHyrGAfl4isUwxSZnTeEk1KfEFCy8Oa5q1mV5TYjMon5f M3Ry2j/GlKXlzzqh/b3j0qWid7vGgshFU1YN8a0ebJNxc=
-X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220917164200.511783-3-joel@joelfernandes.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -58,51 +59,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Avoid touching register %ecx in startup32_set_idt_entry(), by folding
-the MOV, SHL and ORL instructions into a single ORL which no longer
-requires a temp register.
+On Sat, Sep 17, 2022 at 04:41:59PM +0000, Joel Fernandes (Google) wrote:
+> When the bypass cblist gets too big or its timeout has occurred, it is
+> flushed into the main cblist. However, the bypass timer is still running
+> and the behavior is that it would eventually expire and wake the GP
+> thread.
+> 
+> Since we are going to use the bypass cblist for lazy CBs, do the wakeup
+> soon as the flush for "too big or too long" bypass list happens.
+> Otherwise, long delays can happen for callbacks which get promoted from
+> lazy to non-lazy.
+> 
+> This is a good thing to do anyway (regardless of future lazy patches),
+> since it makes the behavior consistent with behavior of other code paths
+> where flushing into the ->cblist makes the GP kthread into a
+> non-sleeping state quickly.
+> 
+> [ Frederic Weisbec: changes to not do wake up GP thread unless needed,
+> 		    comment changes ].
+> 
+> Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
+> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 
-This permits ECX to be used as a function argument in a subsequent
-patch.
+Queued and pushed this and 1/3, thank you both!
 
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
----
- arch/x86/boot/compressed/head_64.S | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+							Thanx, Paul
 
-diff --git a/arch/x86/boot/compressed/head_64.S b/arch/x86/boot/compressed/head_64.S
-index 90b119fbef58..3db7e4a634b0 100644
---- a/arch/x86/boot/compressed/head_64.S
-+++ b/arch/x86/boot/compressed/head_64.S
-@@ -733,7 +733,6 @@ SYM_DATA_END_LABEL(boot32_idt, SYM_L_GLOBAL, boot32_idt_end)
-  */
- SYM_FUNC_START(startup32_set_idt_entry)
- 	push    %ebx
--	push    %ecx
- 
- 	/* IDT entry address to %ebx */
- 	leal    rva(boot32_idt)(%ebp), %ebx
-@@ -742,10 +741,8 @@ SYM_FUNC_START(startup32_set_idt_entry)
- 
- 	/* Build IDT entry, lower 4 bytes */
- 	movl    %eax, %edx
--	andl    $0x0000ffff, %edx	# Target code segment offset [15:0]
--	movl    $__KERNEL32_CS, %ecx	# Target code segment selector
--	shl     $16, %ecx
--	orl     %ecx, %edx
-+	andl    $0x0000ffff, %edx		# Target code segment offset [15:0]
-+	orl	$(__KERNEL32_CS << 16), %edx	# Target code segment selector
- 
- 	/* Store lower 4 bytes to IDT */
- 	movl    %edx, (%ebx)
-@@ -758,7 +755,6 @@ SYM_FUNC_START(startup32_set_idt_entry)
- 	/* Store upper 4 bytes to IDT */
- 	movl    %edx, 4(%ebx)
- 
--	pop     %ecx
- 	pop     %ebx
- 	RET
- SYM_FUNC_END(startup32_set_idt_entry)
--- 
-2.35.1
-
+> ---
+>  kernel/rcu/tree_nocb.h | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+> index 0a5f0ef41484..04c87f250e01 100644
+> --- a/kernel/rcu/tree_nocb.h
+> +++ b/kernel/rcu/tree_nocb.h
+> @@ -433,8 +433,9 @@ static bool rcu_nocb_try_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
+>  	if ((ncbs && j != READ_ONCE(rdp->nocb_bypass_first)) ||
+>  	    ncbs >= qhimark) {
+>  		rcu_nocb_lock(rdp);
+> +		*was_alldone = !rcu_segcblist_pend_cbs(&rdp->cblist);
+> +
+>  		if (!rcu_nocb_flush_bypass(rdp, rhp, j)) {
+> -			*was_alldone = !rcu_segcblist_pend_cbs(&rdp->cblist);
+>  			if (*was_alldone)
+>  				trace_rcu_nocb_wake(rcu_state.name, rdp->cpu,
+>  						    TPS("FirstQ"));
+> @@ -447,7 +448,12 @@ static bool rcu_nocb_try_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
+>  			rcu_advance_cbs_nowake(rdp->mynode, rdp);
+>  			rdp->nocb_gp_adv_time = j;
+>  		}
+> -		rcu_nocb_unlock_irqrestore(rdp, flags);
+> +
+> +		// The flush succeeded and we moved CBs into the regular list.
+> +		// Don't wait for the wake up timer as it may be too far ahead.
+> +		// Wake up the GP thread now instead, if the cblist was empty.
+> +		__call_rcu_nocb_wake(rdp, *was_alldone, flags);
+> +
+>  		return true; // Callback already enqueued.
+>  	}
+>  
+> -- 
+> 2.37.3.968.ga6b4b080e4-goog
+> 
