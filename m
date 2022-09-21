@@ -2,179 +2,300 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DBB35BFC5F
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 12:32:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 629785BFC5C
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 12:32:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbiIUKce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 06:32:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37534 "EHLO
+        id S230088AbiIUKcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 06:32:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230115AbiIUKcb (ORCPT
+        with ESMTP id S229852AbiIUKcK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 06:32:31 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00D6690C5A
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 03:32:29 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id n12so9085116wrx.9
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 03:32:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=Y5JLfg2pqC8RO5BhkI7jAQbg+r/DxfqgDVqU4h6u7qU=;
-        b=VvVajjqwBX64U8dWjJylZ09tBwKNaRtldtI6/LawRnc+pvREeiKaO4a7YZFT0sp9cR
-         I+R4z/V8h6JmfCSQSdZ7eojsyb51qS5g/a4EnDjUyqmxY1xQnXSlmH9Kw9pV16vPFsVe
-         2VMUpH5wnsxVZ96c8+QJcFsGJvyO8AI2hk8IxWWqcLWqktM+gIA/+PPRVQ7q7qwwM7xO
-         UKHIYgi07SNTxHtluFN93UpOsHN/dyFZ85OSoEpXRHh5QH6Tg86AjiC+hkUWWFnGK+aK
-         K6BXJ1QiDoG9WHBqSbPDv0MFi71ipCZk2DsroaKdlfxaQiK2QHCV6ZdAVbrMDyTirm1a
-         AnmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=Y5JLfg2pqC8RO5BhkI7jAQbg+r/DxfqgDVqU4h6u7qU=;
-        b=RdrmwHiYs0e0WJaHBQnuCAvnq//GZhPV1296G0hjx3g/lt+nqokctVPZEBU7H04udZ
-         IbAqdl7XNDIgYGIoOkMXIkWK1o2iJm4rm3aaDkVaqHZ3H5reSrThKzAaRJkzuBRj94z0
-         xm9kL5yT8fHmmsSquu43gk3aRt3KO/jqKw/+b/0X4TK+EHwTKyyqIGeQCGE30xVkoZIu
-         Buq1xES1di1zdAnj3n0p+RxEMpDk8ODARF99L2C3XvEVqpgjwMfFlbDyU3AqTIX4dZXt
-         9Ds7I7EJbV21JZP+dZSNNURo++svgSmvdrQtvbaOcpJxzEbUsCQpnRx0rre9fd7029jC
-         Kz5w==
-X-Gm-Message-State: ACrzQf1rmMHTOHtywmXvXfvrgljnOFjEb3Na0JMepzzy29a32dtq5rp7
-        EO6LlYKlbRdHXEpJ1UpaCh126VYcdsMnHbxBtZw5GQ==
-X-Google-Smtp-Source: AMsMyM7lHyvT1H8bURac3iIYrn13yuUKAIkzFQ4nOhI5AgXVWL4DVuEm7D0a6h73h9bVGNRdmhbtDIv9kGo19eXSZZ0=
-X-Received: by 2002:a05:6000:81e:b0:228:a17f:92f0 with SMTP id
- bt30-20020a056000081e00b00228a17f92f0mr17216767wrb.31.1663756348493; Wed, 21
- Sep 2022 03:32:28 -0700 (PDT)
+        Wed, 21 Sep 2022 06:32:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4813890822;
+        Wed, 21 Sep 2022 03:32:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CDA6FB81F05;
+        Wed, 21 Sep 2022 10:32:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E428C43145;
+        Wed, 21 Sep 2022 10:32:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663756326;
+        bh=RO40wJv6C6r0uIN8oUy8Bnx6thZE549fS8XAeveAnzM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=RnMsd+m+liySDC4jM3W4ZgpYEBqlc92oTTnRVkuMj/FjPFASi7pij/KntxZUetnEg
+         l2NgM57Iuw/L9OZv80Oz+A4gxoJEvgBBViJ6tyMkHYkzQSxNPgiSBKoj7cEOAmsk1f
+         /Zg+fOAoFmE5VzN4C39BwlwDFY0mdaiq5Q0n8UkOOGS7Gb6rM1+5BPwKg5J6asyNy+
+         YnplcSsgleIeAzZS3vXu9GJ8S3k+P4JvZYF6varP6oWXCOOGC/RHUKaGblVp9Y4owD
+         wyPKQwqdunw8YRWydIsrd+Or4VRBLQgvNGAVaZ1BuiH48nfbVkE8DA0xkGjr8SU7wM
+         ZA7oYf5ZzwUrw==
+Received: by mail-oi1-f176.google.com with SMTP id c81so5293302oif.3;
+        Wed, 21 Sep 2022 03:32:06 -0700 (PDT)
+X-Gm-Message-State: ACrzQf0yhocn011Vfz7aw8W9g3i4ALBEzVkNmi3ynnspYMwEd0bFLIeu
+        mKU5md/nbsvk5Ukmqt3llpb2+/8Pp0LwRDKv3tI=
+X-Google-Smtp-Source: AMsMyM4I9eDtJF76P9tPl5czQg+bMIJuYsfIPbg4wB/spY5r7eg4gvt+hbea7dg77NFoOMkXpT5l3NN/NvbTNcENtxQ=
+X-Received: by 2002:a05:6808:201f:b0:34f:9fdf:dbbf with SMTP id
+ q31-20020a056808201f00b0034f9fdfdbbfmr3457106oiw.19.1663756325508; Wed, 21
+ Sep 2022 03:32:05 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220919181309.286611-1-dinguyen@kernel.org> <20220919181309.286611-2-dinguyen@kernel.org>
- <CAPDyKFoB7Z6kDOBd9rVLXU5yRQK7d5A-ut5CRroepbAfQpuByw@mail.gmail.com>
- <50c7d35b-f395-6421-1422-56e30a580318@kernel.org> <07c118cb-4daf-8e82-2969-1cff072ec52a@linaro.org>
-In-Reply-To: <07c118cb-4daf-8e82-2969-1cff072ec52a@linaro.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 21 Sep 2022 12:31:50 +0200
-Message-ID: <CAPDyKFoQJsf4EAoQRO9hoKWug+QTX2Hw1ukFqhr0sNQCCwR8Bg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] mmc: dw_mmc-pltfm: socfpga: add method to configure clk-phase
-To:     Dinh Nguyen <dinguyen@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     jh80.chung@samsung.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220908022506.1275799-1-guoren@kernel.org> <20220908022506.1275799-9-guoren@kernel.org>
+ <4babce64-e96d-454c-aa35-243b3f2dc315@www.fastmail.com> <CAJF2gTQAMCjNyqrSOvqDAKR5Z-PZiTVxmoK9cvNAVQs+k2fZBg@mail.gmail.com>
+ <8817af55-de0d-4e8f-a41b-25d01d5fa968@www.fastmail.com> <CAJF2gTRoKfJ25brnA=_CqNw9DPt8XKhcyNzmCbD6wX1q-jiR1w@mail.gmail.com>
+ <CAJF2gTRVH6pVqBn+n+wbccBcMWraRP3m4CbXz4g_y+=nPEU=Yw@mail.gmail.com>
+ <7a2379cf-c1cf-46af-9172-334d2b9b88d5@www.fastmail.com> <CAJF2gTSvaNh_m_hrub5Z=kqLAYJfRbpYzB1Mc5aOgdN+Bm8bag@mail.gmail.com>
+ <CAJF2gTQGB97kh=47dsZ8MFpTTpy7pxYyd=MoLOUzgF9kTm1wdA@mail.gmail.com>
+In-Reply-To: <CAJF2gTQGB97kh=47dsZ8MFpTTpy7pxYyd=MoLOUzgF9kTm1wdA@mail.gmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Wed, 21 Sep 2022 18:31:52 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSWHMfE-Tyn=cwJLDDsvFKXPyGXgxT9DCUT3Aqf6FTDgA@mail.gmail.com>
+Message-ID: <CAJF2gTSWHMfE-Tyn=cwJLDDsvFKXPyGXgxT9DCUT3Aqf6FTDgA@mail.gmail.com>
+Subject: Re: [PATCH V4 8/8] riscv: Add config of thread stack size
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        "Conor.Dooley" <conor.dooley@microchip.com>,
+        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        Jisheng Zhang <jszhang@kernel.org>, lazyparser@gmail.com,
+        falcon@tinylab.org, Huacai Chen <chenhuacai@kernel.org>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Andreas Schwab <schwab@suse.de>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 20 Sept 2022 at 17:19, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
+On Wed, Sep 21, 2022 at 4:23 PM Guo Ren <guoren@kernel.org> wrote:
 >
-> On 20/09/2022 15:24, Dinh Nguyen wrote:
+> On Wed, Sep 21, 2022 at 2:13 PM Guo Ren <guoren@kernel.org> wrote:
 > >
-> > Hi Ulf,
+> > On Tue, Sep 20, 2022 at 3:18 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> > >
+> > > On Tue, Sep 20, 2022, at 2:46 AM, Guo Ren wrote:
+> > >
+> > > > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> > > > index dfe600f3526c..8def456f328c 100644
+> > > > --- a/arch/riscv/Kconfig
+> > > > +++ b/arch/riscv/Kconfig
+> > > > @@ -442,6 +442,16 @@ config IRQ_STACKS
+> > > >           Add independent irq & softirq stacks for percpu to prevent
+> > > > kernel stack
+> > > >           overflows. We may save some memory footprint by disabling IRQ_STACKS.
+> > > >
+> > > > +config THREAD_SIZE
+> > > > +       int "Kernel stack size (in bytes)" if EXPERT
+> > > > +       range 4096 65536
+> > > > +       default 8192 if 32BIT && !KASAN
+> > > > +       default 32768 if 64BIT && KASAN
+> > > > +       default 16384
+> > > > +       help
+> > > > +         Specify the Pages of thread stack size (from 4KB to 64KB), which also
+> > > > +         affects irq stack size, which is equal to thread stack size.
+> > >
+> > > I still think this should be guarded in a way that prevents
+> > > setting the stack to smaller than default values unless VMAP_STACK
+> > > is set as well.
+> > Current VMAP_STACK would double THREAD_SIZE. Let me see how to reduce
+> > the VMAP_STACK.
+> Sorry, for my miss understanding. I have no idea to reduce the
+> VMAP_STACK's THREAD_ALIGN, THREAD_SIZE*2 is fine. Here is my new
+> patch:
+>
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index 76bde12d9f8c..669ae57356a2 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -443,6 +443,16 @@ config IRQ_STACKS
+>           Add independent irq & softirq stacks for percpu to prevent
+> kernel stack
+>           overflows. We may save some memory footprint by disabling IRQ_STACKS.
+>
+> +config THREAD_SIZE
+> +       int "Kernel stack size (in bytes)" if VMAP_STACK && EXPERT
+> +       range 4096 65536
+> +       default 8192 if 32BIT && !KASAN
+> +       default 32768 if 64BIT && KASAN
+> +       default 16384
+> +       help
+> +         Specify the Pages of thread stack size (from 4KB to 64KB), which also
+> +         affects irq stack size, which is equal to thread stack size.
+> +
+>  endmenu # "Platform type"
+>
+>  menu "Kernel features"
+> diff --git a/arch/riscv/include/asm/thread_info.h
+> b/arch/riscv/include/asm/thread_info.h
+> index 043da8ccc7e6..e7ae3f13b879 100644
+> --- a/arch/riscv/include/asm/thread_info.h
+> +++ b/arch/riscv/include/asm/thread_info.h
+> @@ -11,32 +11,17 @@
+>  #include <asm/page.h>
+>  #include <linux/const.h>
+>
+> -#ifdef CONFIG_KASAN
+> -#define KASAN_STACK_ORDER 1
+> -#else
+> -#define KASAN_STACK_ORDER 0
+> -#endif
+> -
+>  /* thread information allocation */
+> -#ifdef CONFIG_64BIT
+> -#define THREAD_SIZE_ORDER      (2 + KASAN_STACK_ORDER)
+> -#else
+> -#define THREAD_SIZE_ORDER      (1 + KASAN_STACK_ORDER)
+> -#endif
+> -#define THREAD_SIZE            (PAGE_SIZE << THREAD_SIZE_ORDER)
+> +#define THREAD_SIZE            CONFIG_THREAD_SIZE
+>
+>  /*
+>   * By aligning VMAP'd stacks to 2 * THREAD_SIZE, we can detect overflow by
+> - * checking sp & (1 << THREAD_SHIFT), which we can do cheaply in the entry
+> - * assembly.
+> + * checking sp & THREAD_SIZE, which we can do cheaply in the entry assembly.
+>   */
+>  #ifdef CONFIG_VMAP_STACK
+>  #define THREAD_ALIGN            (2 * THREAD_SIZE)
+> -#else
+> -#define THREAD_ALIGN            THREAD_SIZE
+>  #endif
+>
+> -#define THREAD_SHIFT            (PAGE_SHIFT + THREAD_SIZE_ORDER)
+>  #define OVERFLOW_STACK_SIZE     SZ_4K
+>  #define SHADOW_OVERFLOW_STACK_SIZE (1024)
+>
+> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+> index 2207cf44a3bc..71ea850ff0db 100644
+> --- a/arch/riscv/kernel/entry.S
+> +++ b/arch/riscv/kernel/entry.S
+> @@ -29,8 +29,8 @@ _restore_kernel_tpsp:
+>
+>  #ifdef CONFIG_VMAP_STACK
+>         addi sp, sp, -(PT_SIZE_ON_STACK)
+> -       srli sp, sp, THREAD_SHIFT
+> -       andi sp, sp, 0x1
+> +       srli sp, sp, PAGE_SHIFT
+> +       andi sp, sp, (THREAD_ALIGN >> PAGE_SHIFT >> 1)
+>         bnez sp, handle_kernel_stack_overflow
+>         REG_L sp, TASK_TI_KERNEL_SP(tp)
+>  #endif
+Sorry for the update again, fixup !VMAP_STACK compile error.
+
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index 76bde12d9f8c..602e577c429c 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -443,6 +443,16 @@ config IRQ_STACKS
+          Add independent irq & softirq stacks for percpu to prevent
+kernel stack
+          overflows. We may save some memory footprint by disabling IRQ_STACKS.
+
++config THREAD_SIZE_ORDER
++       int "Kernel stack size (in power-of-two numbers of page size)"
+if VMAP_STACK && EXPERT
++       range 0 4
++       default 1 if 32BIT && !KASAN
++       default 3 if 64BIT && KASAN
++       default 2
++       help
++         Specify the Pages of thread stack size (from 4KB to 64KB), which also
++         affects irq stack size, which is equal to thread stack size.
++
+ endmenu # "Platform type"
+
+ menu "Kernel features"
+diff --git a/arch/riscv/include/asm/thread_info.h
+b/arch/riscv/include/asm/thread_info.h
+index 043da8ccc7e6..3f382490d8ed 100644
+--- a/arch/riscv/include/asm/thread_info.h
++++ b/arch/riscv/include/asm/thread_info.h
+@@ -11,24 +11,13 @@
+ #include <asm/page.h>
+ #include <linux/const.h>
+
+-#ifdef CONFIG_KASAN
+-#define KASAN_STACK_ORDER 1
+-#else
+-#define KASAN_STACK_ORDER 0
+-#endif
+-
+ /* thread information allocation */
+-#ifdef CONFIG_64BIT
+-#define THREAD_SIZE_ORDER      (2 + KASAN_STACK_ORDER)
+-#else
+-#define THREAD_SIZE_ORDER      (1 + KASAN_STACK_ORDER)
+-#endif
+-#define THREAD_SIZE            (PAGE_SIZE << THREAD_SIZE_ORDER)
++#define THREAD_SIZE_ORDER      CONFIG_THREAD_SIZE_ORDER
++#define THREAD_SIZE            (1 << PAGE_SHIFT << THREAD_SIZE_ORDER)
+
+ /*
+  * By aligning VMAP'd stacks to 2 * THREAD_SIZE, we can detect overflow by
+- * checking sp & (1 << THREAD_SHIFT), which we can do cheaply in the entry
+- * assembly.
++ * checking sp & THREAD_SIZE, which we can do cheaply in the entry assembly.
+  */
+ #ifdef CONFIG_VMAP_STACK
+ #define THREAD_ALIGN            (2 * THREAD_SIZE)
+@@ -36,7 +25,6 @@
+ #define THREAD_ALIGN            THREAD_SIZE
+ #endif
+
+-#define THREAD_SHIFT            (PAGE_SHIFT + THREAD_SIZE_ORDER)
+ #define OVERFLOW_STACK_SIZE     SZ_4K
+ #define SHADOW_OVERFLOW_STACK_SIZE (1024)
+
+diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+index 5cbd6684ef52..62e8f3a3c942 100644
+--- a/arch/riscv/kernel/entry.S
++++ b/arch/riscv/kernel/entry.S
+@@ -29,8 +29,8 @@ _restore_kernel_tpsp:
+
+ #ifdef CONFIG_VMAP_STACK
+        addi sp, sp, -(PT_SIZE_ON_STACK)
+-       srli sp, sp, THREAD_SHIFT
+-       andi sp, sp, 0x1
++       srli sp, sp, PAGE_SHIFT
++       andi sp, sp, (THREAD_ALIGN >> PAGE_SHIFT >> 1)
+        bnez sp, handle_kernel_stack_overflow
+        REG_L sp, TASK_TI_KERNEL_SP(tp)
+ #endif
+
+>
+>
 > >
-> > Thanks for the review!
+> > >
+> > >     Arnd
 > >
-> > On 9/20/22 07:17, Ulf Hansson wrote:
-> >> On Mon, 19 Sept 2022 at 20:13, Dinh Nguyen <dinguyen@kernel.org> wrote:
-> >>>
-> >>> The clock-phase settings for the SDMMC controller in the SoCFPGA
-> >>> Strarix10/Agilex/N5X platforms reside in a register in the System
-> >>> Manager. Add a method to access that register through the syscon
-> >>> interface.
-> >>>
-> >>> Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
-> >>> ---
-> >>>   drivers/mmc/host/dw_mmc-pltfm.c | 68 ++++++++++++++++++++++++++++++++-
-> >>>   1 file changed, 67 insertions(+), 1 deletion(-)
-> >>>
-> >>> diff --git a/drivers/mmc/host/dw_mmc-pltfm.c b/drivers/mmc/host/dw_mmc-pltfm.c
-> >>> index 9901208be797..9e3237c18a9d 100644
-> >>> --- a/drivers/mmc/host/dw_mmc-pltfm.c
-> >>> +++ b/drivers/mmc/host/dw_mmc-pltfm.c
-> >>> @@ -17,10 +17,15 @@
-> >>>   #include <linux/mmc/host.h>
-> >>>   #include <linux/mmc/mmc.h>
-> >>>   #include <linux/of.h>
-> >>> +#include <linux/mfd/altera-sysmgr.h>
-> >>> +#include <linux/regmap.h>
-> >>>
-> >>>   #include "dw_mmc.h"
-> >>>   #include "dw_mmc-pltfm.h"
-> >>>
-> >>> +#define SYSMGR_SDMMC_CTRL_SET(smplsel, drvsel) \
-> >>> +       ((((smplsel) & 0x7) << 4) | (((drvsel) & 0x7) << 0))
-> >>> +
-> >>>   int dw_mci_pltfm_register(struct platform_device *pdev,
-> >>>                            const struct dw_mci_drv_data *drv_data)
-> >>>   {
-> >>> @@ -62,9 +67,70 @@ const struct dev_pm_ops dw_mci_pltfm_pmops = {
-> >>>   };
-> >>>   EXPORT_SYMBOL_GPL(dw_mci_pltfm_pmops);
-> >>>
-> >>> +static int dw_mci_socfpga_priv_init(struct dw_mci *host)
-> >>> +{
-> >>> +       struct device_node *np = host->dev->of_node;
-> >>> +       struct regmap *sys_mgr_base_addr;
-> >>> +       u32 clk_phase[2] = {0}, reg_offset;
-> >>> +       int i, rc, hs_timing;
-> >>> +
-> >>> +       rc = of_property_read_variable_u32_array(np, "clk-phase-sd-hs", &clk_phase[0], 2, 0);
-> >>
-> >> This needs to be documented through updated DT bindings.
 > >
-> > Ok, but it looks like clk-phase-sd-hs is already documented in
-> > Documentation/devicetree/bindings/mmc/mmc-controller.yaml
->
-> Not in next-20220919.
-
-Dinh is right!
-
-It seems like both me and Krzysztof missed the already documented
-binding. Probably because the property is named like below and that I
-did "git grep clk-phase-sd" :-)
-
-"^clk-phase-(legacy|sd-hs|mmc-(hs|hs[24]00|ddr52)|uhs-(sdr(12|25|50|104)|ddr50))$":
-
->
 > >
-> > Should I create a specific documentation just for
-> > "altr,socfpga-dw-mshc" and document "clk-phase-sd-hs"?
+> > --
+> > Best Regards
+> >  Guo Ren
 >
-> All properties must be documented.
-
-Yes, but as stated above, we should be okay in this case.
-
 >
-> >
-> >>
-> >>> +       if (rc) {
-> >>> +               sys_mgr_base_addr =
-> >>> +                       altr_sysmgr_regmap_lookup_by_phandle(np, "altr,sysmgr-syscon");
-> >>
-> >> DT bindings?
-> >
-> > "altr,sysmgr-syscon" has already been documented in
-> > Documentation/devicetree/bindings/net/socfpga-dwmac.txt
 >
-> This is not documentation of nodes you are changing here and in patch 1.
->
-> You linked altr,socfpga-stmmac and here you have altr,socfpga-dw-mshc...
+> --
+> Best Regards
+>  Guo Ren
 
-Right.
 
-I guess an option is to convert
-Documentation/devicetree/bindings/net/socfpga-dwmac.txt into the yaml
-based format and then reference that binding from
-synopsys-dw-mshc-common.yaml?
 
->
-> Best regards,
-> Krzysztof
-
-Kind regards
-Uffe
+-- 
+Best Regards
+ Guo Ren
