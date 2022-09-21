@@ -2,66 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14E085BFA02
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 11:01:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD7E75BF9FC
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 11:01:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230490AbiIUJB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 05:01:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50392 "EHLO
+        id S230142AbiIUJA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 05:00:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230369AbiIUJBU (ORCPT
+        with ESMTP id S230002AbiIUJAy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 05:01:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE44E83F2B;
-        Wed, 21 Sep 2022 02:01:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Wed, 21 Sep 2022 05:00:54 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB7257B7B6;
+        Wed, 21 Sep 2022 02:00:52 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 3AB1321B86;
+        Wed, 21 Sep 2022 09:00:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1663750851; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ERipPuYm9PsrnFO25+L/tEf4e173NPhooE7JS4FNcuw=;
+        b=WvZLW+E/H4mA0uA++NrM5cmFSj8F+zm+z4fCQeaCjE6eUBrxHtw2lafHkJWGR3awGW7XN+
+        daXrL2o0IM7bImY0GI81+JfV5vHydhVbYV8p4k0httdk/zqnNoVHeW/Mj2WPX/oczz2MP6
+        ZamHcq+v25wIVaPtxdwpfEa4MJVjVpY=
+Received: from suse.cz (unknown [10.100.201.202])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 64A1BB8247B;
-        Wed, 21 Sep 2022 09:01:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F7FCC43142;
-        Wed, 21 Sep 2022 09:01:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663750875;
-        bh=jl2oV5i16ki6VCpkCVQxdBmt935eV2tFvF9P4yvpxqw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=n7BV9Dg64dkQRWnFiKOj+lbIHfdZlvuyNPPyloO7EymFhFJpPtXcVR4oOPevfLvYm
-         PSVUtmCXrXA5mHMZiRKsUovbXHH9y0hSefKByG1Pg43BgXS5SCYnh/J68zBkjQSEBX
-         MPKCR39OR1c+IKC3fug8qFh/safeuEixzy19J9r8PaAuknQJfnkIvxaqgsorBZR7En
-         je3lOfCY3sffrX+kJ5UasC6+yexmNtgcwNMfsKSLSCvagNgmvveG4P2xlrQ5e3kXEv
-         IGuE9FxqgrUIMX7b4q+WL3CT6IiVYVY+RPLbk/gz3ne4yfbGT+doeZjw1eP4Nm/CID
-         MHdwpxZDQY9+A==
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-11eab59db71so8065447fac.11;
-        Wed, 21 Sep 2022 02:01:15 -0700 (PDT)
-X-Gm-Message-State: ACrzQf19CJWZ+AX1RMDNF81IXEJQoAt8fKQ/3NBXXTTgo6KfTrFz+Kgz
-        61CZOymNzBxySUcCg/zpi5rO6KcJFSiVgUPXu1c=
-X-Google-Smtp-Source: AMsMyM6rm74CgJN8PL6/wEivAfR6BHAbm8xmQx2bG9QU1VuwgB38ZZcRjUaDPJBWif3Jh0lqXG6zbL87q3XtkfwkSzc=
-X-Received: by 2002:a05:6870:63a6:b0:12b:85ee:59ff with SMTP id
- t38-20020a05687063a600b0012b85ee59ffmr4487685oap.98.1663750874161; Wed, 21
- Sep 2022 02:01:14 -0700 (PDT)
+        by relay2.suse.de (Postfix) with ESMTPS id 136CF2C141;
+        Wed, 21 Sep 2022 09:00:50 +0000 (UTC)
+Date:   Wed, 21 Sep 2022 11:00:50 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        linux-modules@vger.kernel.org
+Subject: Re: [PATCH v4 3/8] scripts/kallsyms: don't compress symbol types
+Message-ID: <YyrSwnvMn5N5lV6Q@alley>
+References: <20220920071317.1787-1-thunder.leizhen@huawei.com>
+ <20220920071317.1787-4-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
-References: <YuwUw2JLKtIa9X+S@localhost.localdomain> <21dd32c6-f1f9-f44a-466a-e18fdc6788a7@virtuozzo.com>
- <YuzI7Tqi3n+d+V+P@atmark-techno.com> <20220805095407.GA1876904@falcondesktop>
- <20220901132512.GA3946576@falcondesktop> <Yyq9lfH3AP8I/pwd@atmark-techno.com>
-In-Reply-To: <Yyq9lfH3AP8I/pwd@atmark-techno.com>
-From:   Filipe Manana <fdmanana@kernel.org>
-Date:   Wed, 21 Sep 2022 10:00:37 +0100
-X-Gmail-Original-Message-ID: <CAL3q7H5cL+4W6SQApq=ZhkzffvZAR2cEWK0bduNun+OkFevk=g@mail.gmail.com>
-Message-ID: <CAL3q7H5cL+4W6SQApq=ZhkzffvZAR2cEWK0bduNun+OkFevk=g@mail.gmail.com>
-Subject: Re: fiemap is slow on btrfs on files with multiple extents
-To:     Dominique MARTINET <dominique.martinet@atmark-techno.com>
-Cc:     Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
-        Josef Bacik <josef@toxicpanda.com>, Chris Mason <clm@fb.com>,
-        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
-        lkml <linux-kernel@vger.kernel.org>,
-        Chen Liang-Chun <featherclc@gmail.com>,
-        Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
-        kernel@openvz.org, Yu Kuai <yukuai3@huawei.com>,
-        "Theodore Ts'o" <tytso@mit.edu>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220920071317.1787-4-thunder.leizhen@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,155 +63,185 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 21, 2022 at 8:30 AM Dominique MARTINET
-<dominique.martinet@atmark-techno.com> wrote:
+On Tue 2022-09-20 15:13:12, Zhen Lei wrote:
+> Currently, to search for a symbol, we need to expand the symbols in
+> 'kallsyms_names' one by one, and then use the expanded string for
+> comparison. Because we do not know the symbol type, and the symbol type
+> may be combined with the following characters to form a token.
 >
-> Filipe Manana wrote on Thu, Sep 01, 2022 at 02:25:12PM +0100:
-> > It took me a bit more than I expected, but here is the patchset to make fiemap
-> > (and lseek) much more efficient on btrfs:
-> >
-> > https://lore.kernel.org/linux-btrfs/cover.1662022922.git.fdmanana@suse.com/
-> >
-> > And also available in this git branch:
-> >
-> > https://git.kernel.org/pub/scm/linux/kernel/git/fdmanana/linux.git/log/?h=lseek_fiemap_scalability
+> So if we don't compress the symbol type, we can first compress the
+> searched symbol and then make a quick comparison based on the compressed
+> length and content. In this way, for entries with mismatched lengths,
+> there is no need to expand and compare strings. And for those matching
+> lengths, there's no need to expand the symbol. This saves a lot of time.
+> According to my test results, the average performance of
+> kallsyms_lookup_name() can be improved by 20 to 30 times.
 >
-> Thanks a lot!
-> Sorry for the slow reply, it took me a while to find time to get back to
-> my test setup.
+> Of course, because the symbol type is forcibly not compressed, the
+> compression rate also decreases. Here are the test results with
+> defconfig:
+> 
+> arm64: <<<<<<
+>         ---------------------------------------------------------------
+>        | ALL | nr_symbols | compressed size | original size | ratio(%) |
+>         -----|---------------------------------------------------------|
+> Before |  Y  |     174094 |       1884938   |      3750653  |  50.25   |
+> After  |  Y  |     174099 |       1960154   |      3750756  |  52.26   |
+> Before |  N  |      61744 |        725507   |      1222737  |  59.33   |
+> After  |  N  |      61747 |        745733   |      1222801  |  60.98   |
+>         ---------------------------------------------------------------
+> The memory overhead is increased by:
+>   73.5KiB and 4.0% if CONFIG_KALLSYMS_ALL=y.
+>   19.8KiB and 2.8% if CONFIG_KALLSYMS_ALL=n.
+> 
+> x86: <<<<<<<<
+>        ---------------------------------------------------------------
+>        | ALL | nr_symbols | compressed size | original size | ratio(%) |
+>         -----|---------------------------------------------------------|
+> Before |  Y  |     131415 |       1697542   |      3161216  |  53.69   |
+> After  |  Y  |     131540 |       1747769   |      3163933  |  55.24   |
+> Before |  N  |      60695 |        737627   |      1283046  |  57.49   |
+> After  |  N  |      60699 |        754797   |      1283149  |  58.82   |
+>         ---------------------------------------------------------------
+> The memory overhead is increased by:
+>   49.0KiB and 3.0% if CONFIG_KALLSYMS_ALL=y.
+>   16.8KiB and 2.3% if CONFIG_KALLSYMS_ALL=n.
 >
-> There's still this weird behaviour that later calls to cp are slower
-> than the first, but the improvement is so good that it doesn't matter
-> quite as much -- I haven't been able to reproduce the rcu stalls in qemu
-> so I can't say for sure but they probably won't be a problem anymore.
->
-> From a quick look with perf record/report the difference still seems to
-> stem from fiemap (time spent there goes from 4.13 to 45.20%), so there
-> is still more processing once the file is (at least partially) in cache,
-> but it has gotten much better.
->
->
-> (tests run on a laptop so assume some inconsistency with thermal
-> throttling etc)
->
-> /mnt/t/t # compsize bigfile
-> Processed 1 file, 194955 regular extents (199583 refs), 0 inline.
-> Type       Perc     Disk Usage   Uncompressed Referenced
-> TOTAL       15%      3.7G          23G          23G
-> none       100%      477M         477M         514M
-> zstd        14%      3.2G          23G          23G
-> /mnt/t/t # time cp bigfile /dev/null
-> real    0m 44.52s
-> user    0m 0.49s
-> sys     0m 32.91s
-> /mnt/t/t # time cp bigfile /dev/null
-> real    0m 46.81s
-> user    0m 0.55s
-> sys     0m 35.63s
-> /mnt/t/t # time cp bigfile /dev/null
-> real    1m 13.63s
-> user    0m 0.55s
-> sys     1m 1.89s
-> /mnt/t/t # time cp bigfile /dev/null
-> real    1m 13.44s
-> user    0m 0.53s
-> sys     1m 2.08s
->
->
-> For comparison here's how it was on 6.0-rc2 your branch is based on:
-> /mnt/t/t # time cp atde-test /dev/null
-> real    0m 46.17s
-> user    0m 0.60s
-> sys     0m 33.21s
-> /mnt/t/t # time cp atde-test /dev/null
-> real    5m 35.92s
-> user    0m 0.57s
-> sys     5m 24.20s
->
->
->
-> If you're curious the report blames set_extent_bit and
-> clear_state_bit as follow; get_extent_skip_holes is completely gone; but
-> I wouldn't necessarily say this needs much more time spent on it.
+> This additional memory overhead is worth it compared to the performance
+> improvement, I think.
 
-get_extent_skip_holes() no longer exists, so 0% of time spent there :)
+I agree. The speedup mentioned in the followup patches looks big.
+I just suggest to do this change a cleaner way, see below.
 
-Yes, I know. The reason you see so much time spent on
-lock_extent_bits() is basically
-because cp does too many fiemap calls with a very small extent buffer size.
-I pointed that out here:
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> ---
+>  scripts/kallsyms.c | 15 ++++++++++++---
+>  1 file changed, 12 insertions(+), 3 deletions(-)
+> 
+> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+> index 3319d9f38d7a5f2..1ae9ce773d2a31d 100644
+> --- a/scripts/kallsyms.c
+> +++ b/scripts/kallsyms.c
+> @@ -61,6 +61,15 @@ static int all_symbols;
+>  static int absolute_percpu;
+>  static int base_relative;
+>  
+> +/*
+> + * Each entry in the symbol table consists of the symbol type and the symbol
+> + * itself. To optimize the performance of finding or traversing symbols in
+> + * kernel, do not compress the symbol type. In this way, when looking for a
+> + * symbol of unknown type, we can first compress the searched symbol and then
+> + * make a quick comparison based on the compressed length and content.
+> + */
+> +static int sym_start_idx = 1;
+> +
+>  static int token_profit[0x10000];
+>  
+>  /* the table that holds the result of the compression */
+> @@ -511,7 +520,7 @@ static void learn_symbol(const unsigned char *symbol, int len)
+>  {
+>  	int i;
+>  
+> -	for (i = 0; i < len - 1; i++)
+> +	for (i = sym_start_idx; i < len - 1; i++)
 
-https://lore.kernel.org/linux-btrfs/CAL3q7H5NSVicm7nYBJ7x8fFkDpno8z3PYt5aPU43Bajc1H0h1Q@mail.gmail.com/
+It creates yet another twists in scripts/kallsyms.c. read_symbol()
+explicitely adds the type as the first character so that it can be
+compressed. And this patch adds a hack to skip it.
 
-Making it use a larger buffer (say 500 or 1000 extents), would make it
-a lot better.
-But as I pointed out there, last year cp was changed to not use fiemap
-to detect holes anymore,
-now it uses lseek with SEEK_HOLE mode. So with time, everyone will get
-a cp version that does
-not use fiemap anymore.
+Let's do it a clean way and store the type serarately:
 
-Also, for the cp case, since it does many read and fiemap calls to the
-source file, the following
-patch probably helps too:
+struct sym_entry {
+	unsigned long long addr;
+	unsigned int len;
+	unsigned int start_pos;
+	unsigned int percpu_absolute;
+	unsigned char type;
+	unsigned char name[];
+};
 
-https://lore.kernel.org/linux-btrfs/20220819024408.9714-1-ethanlien@synology.com/
+static struct sym_entry *read_symbol(FILE *in)
+{
+[...]
+	name_len = strlen(name);
 
-Because it will make the io tree smaller. That should land on 6.1 too.
+	sym = malloc(sizeof(*sym) + name_len);
+	if (!sym) {
+		fprintf(stderr, "kallsyms failure: "
+			"unable to allocate required amount of memory\n");
+		exit(EXIT_FAILURE);
+	}
+	sym->addr = addr;
+	sym->len = name_len;
+	sym->type = type;
+	strcpy(sys->name, name);
+	sym->percpu_absolute = 0;
+}
 
-Thanks for testing and the report.
+It would allow to remove the tricky:
 
->
-> 45.20%--extent_fiemap
-> |
-> |--31.02%--lock_extent_bits
-> |          |
-> |           --30.78%--set_extent_bit
-> |                     |
-> |                     |--6.93%--insert_state
-> |                     |          |
-> |                     |           --0.70%--set_state_bits
-> |                     |
-> |                     |--4.25%--alloc_extent_state
-> |                     |          |
-> |                     |           --3.86%--kmem_cache_alloc
-> |                     |
-> |                     |--2.77%--_raw_spin_lock
-> |                     |          |
-> |                     |           --1.23%--preempt_count_add
-> |                     |
-> |                     |--2.48%--rb_next
-> |                     |
-> |                     |--1.13%--_raw_spin_unlock
-> |                     |          |
-> |                     |           --0.55%--preempt_count_sub
-> |                     |
-> |                      --0.92%--set_state_bits
-> |
->  --13.80%--__clear_extent_bit
->            |
->             --13.30%--clear_state_bit
->                       |
->                       |           --3.48%--_raw_spin_unlock_irqrestore
->                       |
->                       |--2.45%--merge_state.part.0
->                       |          |
->                       |           --1.57%--rb_next
->                       |
->                       |--2.14%--__slab_free
->                       |          |
->                       |           --1.26%--cmpxchg_double_slab.constprop.0.isra.0
->                       |
->                       |--0.74%--free_extent_state
->                       |
->                       |--0.70%--kmem_cache_free
->                       |
->                       |--0.69%--btrfs_clear_delalloc_extent
->                       |
->                        --0.52%--rb_next
->
->
->
-> Thanks!
-> --
-> Dominique
+	static char *sym_name(const struct sym_entry *s)
+	{
+		return (char *)s->sym + 1;
+	}
+
+and access s->name directly.
+
+OK, the problem is how to store the type. The clean way would be
+to put it into a separate section, for example:
+
+static void write_src(void)
+{
+[...]
+	output_label("kallsyms_types");
+	off = 0;
+	for (i = 0; i < table_cnt; i++) {
+		printf("\t.byte 0x%02x\n", table[i]->type);
+	}
+	printf("\n");
+[...]
+}
+
+It would probably increase the size even more. Another problem
+is that it would need changes in the crash dump tools, see:
+
+static int __init crash_save_vmcoreinfo_init(void)
+{
+[...]
+	VMCOREINFO_SYMBOL(kallsyms_names);
+[...]
+}
+
+A solution would be to store it the old way:
+
+static void write_src(void)
+{
+[...]
+	output_label("kallsyms_names");
+	off = 0;
+	for (i = 0; i < table_cnt; i++) {
+		if ((i & 0xFF) == 0)
+			markers[i >> 8] = off;
+
+		/*
+		 * Store the symbol type togerher with symbol name.
+		 * It helps to reduce the size.
+		 */
+		printf("\t.byte 0x%02x", table[i]->len + 1);
+		printf(", 0x%02x", table[i]->type);
+		for (k = 0; k < table[i]->len; k++)
+			printf(", 0x%02x", table[i]->sym[k]);
+		printf("\n");
+
+		/* symbol name lenght + type + "\n" */
+		off += table[i]->len + 2;
+	}
+	printf("\n");
+[...]
+}
+
+The result would be the same as with your patch. But the code would be
+even cleaner than before.
+
+Best Regards,
+Petr
