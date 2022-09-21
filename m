@@ -2,239 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 464875D1C97
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 20:07:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B4445DC360
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 20:11:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230019AbiIUSG7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 14:06:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38958 "EHLO
+        id S230490AbiIUSLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 14:11:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbiIUSG5 (ORCPT
+        with ESMTP id S230483AbiIUSLT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 14:06:57 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 571EA75FD1
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 11:06:54 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id t3so6459131ply.2
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 11:06:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=ZmaPuLYMyXSi8pa5Ffg0dP+gxXhcRRdC4OxDDiOEqxU=;
-        b=emEHyGSl8xe1q4RrCrKnlY483K5aKI0sJAS0tSGI/UgwioPCr9LfjZh7J9OZBZbW2U
-         Vws8kEDLJijRGrH7L+XHt5bz1jLXL+dTkkZnqo7ovP9Ly67LpYxC2Q6xZSu4KxVobglL
-         bvjLiSDYoN0AoayOKElGD8KE2ih7/Oimqa5Fto751WE4qn6YsN+bDSun0nSm16Y3PTKr
-         W5SgVVHyWwAVyNqiO2FOBa8sfyvwIKrV0TSVgQxuTZHVEEMmQmALECGnHtMGjoyg7NtU
-         8xGH2OQsRobG+/65KpmLzouA5r2jAW8FK+WsCAr4bzoUpsHXk0mBZKscXxt1BiaSceK5
-         j2Eg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=ZmaPuLYMyXSi8pa5Ffg0dP+gxXhcRRdC4OxDDiOEqxU=;
-        b=6Ii3FkldwrvO/17pCc1ci30Y3l9PruJporDEkW2jf1fN331VoN+3FhRP9aZukem1Rc
-         2I+MKrFb1jYmUgDdGMc+XU3C/90JI+YA5CE88FWzvS/skKF3na9hqCgWD+IvsQ6c+kc+
-         Q7Pxw6sG2gZ6l4YyhsR2forKzV5BCkSYmpun1wyWPIv3PC2Q7IQkkF6xymygbOqt8HjV
-         D2IjfzKCDkmtoRMFimkUKfarDLWZ4LHHqI3Mcg0newynA3dVBHYKo9eNTO/jmvAz8aTW
-         cLmO+gZXJjFgSNO/09Dzsj3BZLon/evLj+4vviTQH7UIGK7C2k0NNRRSR1ECXyk5gM+m
-         wfhA==
-X-Gm-Message-State: ACrzQf3Nd2RXmWnf7vU85Jzq+y04DbK+Vpepu9JEFv40LegsOWsU9N/c
-        5jDOmy6fhe2FphlFosoptJg=
-X-Google-Smtp-Source: AMsMyM52E6XNCFF5LEzyB6B5IdKLaN1AaWgmRDZcngIhgE2/fS0qlfz6Nwlp48bH07/de2uqk9oHJw==
-X-Received: by 2002:a17:902:f612:b0:178:a692:b20a with SMTP id n18-20020a170902f61200b00178a692b20amr6009585plg.55.1663783613509;
-        Wed, 21 Sep 2022 11:06:53 -0700 (PDT)
-Received: from sc2-hs2-b1628.eng.vmware.com ([66.170.99.1])
-        by smtp.gmail.com with ESMTPSA id i64-20020a62c143000000b0053617cbe2d2sm2442590pfg.168.2022.09.21.11.06.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Sep 2022 11:06:53 -0700 (PDT)
-From:   Nadav Amit <nadav.amit@gmail.com>
-X-Google-Original-From: Nadav Amit
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        Nadav Amit <namit@vmware.com>,
-        Peter Zijlstra <peterz@infradead.org>, stable@kernel.org
-Subject: [PATCH v2] x86/alternative: Fix race in try_get_desc()
-Date:   Wed, 21 Sep 2022 18:09:32 +0000
-Message-Id: <20220921180932.30401-1-namit@vmware.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 21 Sep 2022 14:11:19 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52CFB80516;
+        Wed, 21 Sep 2022 11:11:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663783871; x=1695319871;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WckjFb8TNTyStYJTGw886rcvghznTu4Iq8hyPcV6+aA=;
+  b=BtU2tGR5gRM/dX86a2L4FZ8t4STOryFNG50H+tqO5UaeYZQXq0hGguyK
+   D9fpGkbyxk2T+eaeJHurdaYn2puwCGx3OVjZQpQlwsHffu19LjcPW47A9
+   e6Hh1fvBZ1XCmZEiz/aKlGDZu4S4yVF+of2n4kvSO+jNi+DCIWFPW/e8p
+   rmItMBa6S54yKajsVoOln7/wrMRf5SPb55uiga/8iU63LMTaAR6RwEPnK
+   SlbFMKUP8IOdzjDUyY5OZtffw4FEfyuuhR7Bt9KA17AxbaKtc7ZEg2ksB
+   kKHCb8yh4vCG1SjFRzG2wb1ycH1fyHbv2qIaG5cqAg0zHDE3OAWUC1wt/
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="300925913"
+X-IronPort-AV: E=Sophos;i="5.93,333,1654585200"; 
+   d="scan'208";a="300925913"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 11:10:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,333,1654585200"; 
+   d="scan'208";a="652641729"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 21 Sep 2022 11:10:32 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ob4B5-0003pz-2H;
+        Wed, 21 Sep 2022 18:10:31 +0000
+Date:   Thu, 22 Sep 2022 02:10:19 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Julien Panis <jpanis@baylibre.com>, william.gray@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     kbuild-all@lists.01.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        mranostay@ti.com
+Subject: Re: [PATCH v7 3/4] counter: ti-ecap-capture: capture driver support
+ for ECAP
+Message-ID: <202209220145.SYlF1Xt8-lkp@intel.com>
+References: <20220921100627.124085-4-jpanis@baylibre.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220921100627.124085-4-jpanis@baylibre.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nadav Amit <namit@vmware.com>
+Hi Julien,
 
-The text poke mechanism claims to have an RCU-like behavior, but it does
-not appear that there is any quiescent state to ensure that nobody holds
-reference to desc. As a result, the following race appears to be
-possible, which can lead to memory corruption.
+Thank you for the patch! Perhaps something to improve:
 
-  CPU0					CPU1
-  ----					----
-  text_poke_bp_batch()
-  -> smp_store_release(&bp_desc, &desc)
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on linus/master v6.0-rc6 next-20220921]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-  [ notice that desc is on
-    the stack			]
+url:    https://github.com/intel-lab-lkp/linux/commits/Julien-Panis/ECAP-support-on-TI-AM62x-SoC/20220921-180742
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+config: s390-allyesconfig (https://download.01.org/0day-ci/archive/20220922/202209220145.SYlF1Xt8-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/f8a0bbe39ba2d6018559e92fb0c66b789387b293
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Julien-Panis/ECAP-support-on-TI-AM62x-SoC/20220921-180742
+        git checkout f8a0bbe39ba2d6018559e92fb0c66b789387b293
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/counter/
 
-					poke_int3_handler()
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-					[ int3 might be kprobe's
-					  so sync events are do not
-					  help ]
+All warnings (new ones prefixed by >>):
 
-					-> try_get_desc(descp=&bp_desc)
-					   desc = __READ_ONCE(bp_desc)
+   drivers/counter/ti-ecap-capture.c: In function 'ecap_cnt_watch_validate':
+   drivers/counter/ti-ecap-capture.c:234:66: error: 'COUNTER_EVENT_CAPTURE' undeclared (first use in this function); did you mean 'COUNTER_EVENT_INDEX'?
+     234 |         if ((watch->channel <= ECAP_CEVT_LAST && watch->event == COUNTER_EVENT_CAPTURE) ||
+         |                                                                  ^~~~~~~~~~~~~~~~~~~~~
+         |                                                                  COUNTER_EVENT_INDEX
+   drivers/counter/ti-ecap-capture.c:234:66: note: each undeclared identifier is reported only once for each function it appears in
+   drivers/counter/ti-ecap-capture.c: At top level:
+>> drivers/counter/ti-ecap-capture.c:253:47: warning: 'enum counter_signal_polarity' declared inside parameter list will not be visible outside of this definition or declaration
+     253 |                              size_t idx, enum counter_signal_polarity *pol)
+         |                                               ^~~~~~~~~~~~~~~~~~~~~~~
+   drivers/counter/ti-ecap-capture.c: In function 'ecap_cnt_pol_read':
+   drivers/counter/ti-ecap-capture.c:259:16: error: 'COUNTER_SIGNAL_POLARITY_NEGATIVE' undeclared (first use in this function)
+     259 |                COUNTER_SIGNAL_POLARITY_NEGATIVE :
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/counter/ti-ecap-capture.c:260:16: error: 'COUNTER_SIGNAL_POLARITY_POSITIVE' undeclared (first use in this function)
+     260 |                COUNTER_SIGNAL_POLARITY_POSITIVE;
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/counter/ti-ecap-capture.c:258:14: error: invalid use of undefined type 'enum counter_signal_polarity'
+     258 |         *pol = regmap_test_bits(ecap_dev->regmap, ECAP_ECCTL_REG, ECAP_CAPPOL_BIT(idx)) ?
+         |              ^
+   drivers/counter/ti-ecap-capture.c: At top level:
+   drivers/counter/ti-ecap-capture.c:268:48: warning: 'enum counter_signal_polarity' declared inside parameter list will not be visible outside of this definition or declaration
+     268 |                               size_t idx, enum counter_signal_polarity pol)
+         |                                                ^~~~~~~~~~~~~~~~~~~~~~~
+   drivers/counter/ti-ecap-capture.c:268:72: error: parameter 4 ('pol') has incomplete type
+     268 |                               size_t idx, enum counter_signal_polarity pol)
+         |                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
+   drivers/counter/ti-ecap-capture.c:266:12: error: function declaration isn't a prototype [-Werror=strict-prototypes]
+     266 | static int ecap_cnt_pol_write(struct counter_device *counter,
+         |            ^~~~~~~~~~~~~~~~~~
+   drivers/counter/ti-ecap-capture.c: In function 'ecap_cnt_pol_write':
+   drivers/counter/ti-ecap-capture.c:276:20: error: 'COUNTER_SIGNAL_POLARITY_NEGATIVE' undeclared (first use in this function)
+     276 |         if (pol == COUNTER_SIGNAL_POLARITY_NEGATIVE)
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/counter/ti-ecap-capture.c: At top level:
+   drivers/counter/ti-ecap-capture.c:375:43: error: array type has incomplete element type 'enum counter_signal_polarity'
+     375 | static const enum counter_signal_polarity ecap_cnt_pol_avail[] = {
+         |                                           ^~~~~~~~~~~~~~~~~~
+   drivers/counter/ti-ecap-capture.c:376:9: error: 'COUNTER_SIGNAL_POLARITY_POSITIVE' undeclared here (not in a function)
+     376 |         COUNTER_SIGNAL_POLARITY_POSITIVE,
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/counter/ti-ecap-capture.c:377:9: error: 'COUNTER_SIGNAL_POLARITY_NEGATIVE' undeclared here (not in a function)
+     377 |         COUNTER_SIGNAL_POLARITY_NEGATIVE,
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/counter/ti-ecap-capture.c:380:77: error: expected ')' before '(' token
+     380 | static DEFINE_COUNTER_ARRAY_POLARITY(ecap_cnt_pol_array, ecap_cnt_pol_avail, ECAP_NB_CEVT);
+         |                                                                             ^
+         |                                                                             )
+   drivers/counter/ti-ecap-capture.c:383:9: error: implicit declaration of function 'COUNTER_COMP_ARRAY_POLARITY' [-Werror=implicit-function-declaration]
+     383 |         COUNTER_COMP_ARRAY_POLARITY(ecap_cnt_pol_read, ecap_cnt_pol_write, ecap_cnt_pol_array),
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/counter/ti-ecap-capture.c:383:76: error: 'ecap_cnt_pol_array' undeclared here (not in a function); did you mean 'ecap_cnt_pol_read'?
+     383 |         COUNTER_COMP_ARRAY_POLARITY(ecap_cnt_pol_read, ecap_cnt_pol_write, ecap_cnt_pol_array),
+         |                                                                            ^~~~~~~~~~~~~~~~~~
+         |                                                                            ecap_cnt_pol_read
+   drivers/counter/ti-ecap-capture.c:414:52: error: expected ')' before '(' token
+     414 | static DEFINE_COUNTER_ARRAY_U64(ecap_cnt_cap_array, ECAP_NB_CEVT);
+         |                                                    ^
+         |                                                    )
+   drivers/counter/ti-ecap-capture.c:417:9: error: implicit declaration of function 'COUNTER_COMP_COUNT_ARRAY_U64'; did you mean 'COUNTER_COMP_COUNT_U64'? [-Werror=implicit-function-declaration]
+     417 |         COUNTER_COMP_COUNT_ARRAY_U64("capture", ecap_cnt_cap_read, NULL, ecap_cnt_cap_array),
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |         COUNTER_COMP_COUNT_U64
+   drivers/counter/ti-ecap-capture.c:417:74: error: 'ecap_cnt_cap_array' undeclared here (not in a function); did you mean 'ecap_cnt_cap_read'?
+     417 |         COUNTER_COMP_COUNT_ARRAY_U64("capture", ecap_cnt_cap_read, NULL, ecap_cnt_cap_array),
+         |                                                                          ^~~~~~~~~~~~~~~~~~
+         |                                                                          ecap_cnt_cap_read
+   drivers/counter/ti-ecap-capture.c: In function 'ecap_cnt_isr':
+   drivers/counter/ti-ecap-capture.c:449:57: error: 'COUNTER_EVENT_CAPTURE' undeclared (first use in this function); did you mean 'COUNTER_EVENT_INDEX'?
+     449 |                         counter_push_event(counter_dev, COUNTER_EVENT_CAPTURE, i);
+         |                                                         ^~~~~~~~~~~~~~~~~~~~~
+         |                                                         COUNTER_EVENT_INDEX
+   drivers/counter/ti-ecap-capture.c: At top level:
+   drivers/counter/ti-ecap-capture.c:375:43: warning: 'ecap_cnt_pol_avail' defined but not used [-Wunused-variable]
+     375 | static const enum counter_signal_polarity ecap_cnt_pol_avail[] = {
+         |                                           ^~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
 
-					   if (!desc) [false, success]
-  WRITE_ONCE(bp_desc, NULL);
-  atomic_dec_and_test(&desc.refs)
 
-  [ success, desc space on the stack
-    is being reused and might have
-    non-zero value. ]
-					arch_atomic_inc_not_zero(&desc->refs)
+vim +253 drivers/counter/ti-ecap-capture.c
 
-					[ might succeed since desc points to
-					  stack memory that was freed and might
-					  be reused. ]
+   250	
+   251	static int ecap_cnt_pol_read(struct counter_device *counter,
+   252				     struct counter_signal *signal,
+ > 253				     size_t idx, enum counter_signal_polarity *pol)
+   254	{
+   255		struct ecap_cnt_dev *ecap_dev = counter_priv(counter);
+   256	
+   257		pm_runtime_get_sync(counter->parent);
+   258		*pol = regmap_test_bits(ecap_dev->regmap, ECAP_ECCTL_REG, ECAP_CAPPOL_BIT(idx)) ?
+   259		       COUNTER_SIGNAL_POLARITY_NEGATIVE :
+   260		       COUNTER_SIGNAL_POLARITY_POSITIVE;
+   261		pm_runtime_put_sync(counter->parent);
+   262	
+   263		return 0;
+   264	}
+   265	
 
-I encountered some occasional crashes of poke_int3_handler() when
-kprobes are set, while accessing desc->vec. The analysis has been done
-offline and I did not corroborate the cause of the crashes. Yet, it
-seems that this race might be the root cause.
-
-Fix this issue with small backportable patch. Instead of trying to make
-RCU-like behavior for bp_desc, just eliminate the unnecessary level of
-indirection of bp_desc, and hold the whole descriptor as a global.
-Anyhow, there is only a single descriptor at any given moment.
-
-Fixes: 1f676247f36a4 ("x86/alternatives: Implement a better poke_int3_handler() completion scheme")
-Signed-off-by: Nadav Amit <namit@vmware.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Cc: stable@kernel.org
-Link: https://lkml.kernel.org/r/20220920224743.3089-1-namit@vmware.com
----
- arch/x86/kernel/alternative.c | 45 ++++++++++++++++++-----------------
- 1 file changed, 23 insertions(+), 22 deletions(-)
-
-diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-index 62f6b8b7c4a5..4f3204364caa 100644
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -1319,22 +1319,23 @@ struct bp_patching_desc {
- 	atomic_t refs;
- };
- 
--static struct bp_patching_desc *bp_desc;
-+static struct bp_patching_desc bp_desc;
- 
- static __always_inline
--struct bp_patching_desc *try_get_desc(struct bp_patching_desc **descp)
-+struct bp_patching_desc *try_get_desc(void)
- {
--	/* rcu_dereference */
--	struct bp_patching_desc *desc = __READ_ONCE(*descp);
-+	struct bp_patching_desc *desc = &bp_desc;
- 
--	if (!desc || !arch_atomic_inc_not_zero(&desc->refs))
-+	if (!arch_atomic_inc_not_zero(&desc->refs))
- 		return NULL;
- 
- 	return desc;
- }
- 
--static __always_inline void put_desc(struct bp_patching_desc *desc)
-+static __always_inline void put_desc(void)
- {
-+	struct bp_patching_desc *desc = &bp_desc;
-+
- 	smp_mb__before_atomic();
- 	arch_atomic_dec(&desc->refs);
- }
-@@ -1367,15 +1368,15 @@ noinstr int poke_int3_handler(struct pt_regs *regs)
- 
- 	/*
- 	 * Having observed our INT3 instruction, we now must observe
--	 * bp_desc:
-+	 * bp_desc with non-zero refcount:
- 	 *
--	 *	bp_desc = desc			INT3
-+	 *	bp_desc.refs = 1		INT3
- 	 *	WMB				RMB
--	 *	write INT3			if (desc)
-+	 *	write INT3			if (bp_desc.refs != 0)
- 	 */
- 	smp_rmb();
- 
--	desc = try_get_desc(&bp_desc);
-+	desc = try_get_desc();
- 	if (!desc)
- 		return 0;
- 
-@@ -1429,7 +1430,7 @@ noinstr int poke_int3_handler(struct pt_regs *regs)
- 	ret = 1;
- 
- out_put:
--	put_desc(desc);
-+	put_desc();
- 	return ret;
- }
- 
-@@ -1460,18 +1461,20 @@ static int tp_vec_nr;
-  */
- static void text_poke_bp_batch(struct text_poke_loc *tp, unsigned int nr_entries)
- {
--	struct bp_patching_desc desc = {
--		.vec = tp,
--		.nr_entries = nr_entries,
--		.refs = ATOMIC_INIT(1),
--	};
- 	unsigned char int3 = INT3_INSN_OPCODE;
- 	unsigned int i;
- 	int do_sync;
- 
- 	lockdep_assert_held(&text_mutex);
- 
--	smp_store_release(&bp_desc, &desc); /* rcu_assign_pointer */
-+	bp_desc.vec = tp;
-+	bp_desc.nr_entries = nr_entries;
-+
-+	/*
-+	 * Corresponds to the implicit memory barrier in try_get_desc() to
-+	 * ensure reading a non-zero refcount provides up to date bp_desc data.
-+	 */
-+	atomic_set_release(&bp_desc.refs, 1);
- 
- 	/*
- 	 * Corresponding read barrier in int3 notifier for making sure the
-@@ -1559,12 +1562,10 @@ static void text_poke_bp_batch(struct text_poke_loc *tp, unsigned int nr_entries
- 		text_poke_sync();
- 
- 	/*
--	 * Remove and synchronize_rcu(), except we have a very primitive
--	 * refcount based completion.
-+	 * Remove and wait for refs to be zero.
- 	 */
--	WRITE_ONCE(bp_desc, NULL); /* RCU_INIT_POINTER */
--	if (!atomic_dec_and_test(&desc.refs))
--		atomic_cond_read_acquire(&desc.refs, !VAL);
-+	if (!atomic_dec_and_test(&bp_desc.refs))
-+		atomic_cond_read_acquire(&bp_desc.refs, !VAL);
- }
- 
- static void text_poke_loc_init(struct text_poke_loc *tp, void *addr,
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
