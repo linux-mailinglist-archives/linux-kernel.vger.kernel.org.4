@@ -2,165 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAEE65BF840
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 09:51:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 951EA5BF848
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 09:52:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231161AbiIUHv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 03:51:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53608 "EHLO
+        id S230256AbiIUHwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 03:52:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231128AbiIUHvT (ORCPT
+        with ESMTP id S231193AbiIUHwK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 03:51:19 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E6BF85F99;
-        Wed, 21 Sep 2022 00:51:10 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id EE2A86601FFC;
-        Wed, 21 Sep 2022 08:51:07 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1663746668;
-        bh=BNV50hEdKXctIBRcQ+PptlssxFpSxId9klX7ELMc9cg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=fqBbICgEmlslGqp+WPNr9vxlOrn61Ws1p1ZaC7NvtoTORIu4Lm+L9LzDRNti66UYM
-         ao0YF+I8tHNRjFZzZmbA9PH5B2c8dm5l97gINKjjYgY3yBs/kQndbLxaG9jmnbFqCO
-         ZLZ33It1SYQmu3TOJCujlWvXCpGXTPZXlnCm7VXSdbrJvm8FWOIPcTyhS1hrsbJ2f1
-         ElUUmpKCl3Tqe3hF6Gie3fPKj7ygyCYTpJTJvhVzp7o5xoxauuiFF6L4SY67/8WDyl
-         3sDYINIDWolIr4o9rYUvsXHWG2KV4FBNG4/yr2MvMeUrfu1sdd5ZboEEIeZ7gysgjK
-         aNtfM9ccVeBqw==
-Message-ID: <1a845259-fce2-d239-588b-a70ea5b19680@collabora.com>
-Date:   Wed, 21 Sep 2022 09:51:04 +0200
+        Wed, 21 Sep 2022 03:52:10 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7533844FD
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 00:52:01 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id sb3so11668460ejb.9
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 00:52:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=3t0QSICbCHMFeqWwEhSbFChZlPVdEP7jp9Mgy19n9ZI=;
+        b=RcWUp3AC8ik5xA3FFb8AqV/B9BBLXdzlUOvbVcqm+KKvWeH+heXwvMZuNq688Yf6nN
+         Oge7CqEuI5p1WGMwFEqHKJ4ClPT/ogD3VfsiILMeW0j6CZ3vBcsUfTEqyLiWkWZtIGqM
+         YkFmYrMx0x7yHEoGmvVCJqgvdYWZIhlpmukNI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=3t0QSICbCHMFeqWwEhSbFChZlPVdEP7jp9Mgy19n9ZI=;
+        b=A678/sKy5zJ83K7Kt3rUDnzipZJBdCTPEd6I0YbeRq4gB5mappJ9cfvpupzgPhCq32
+         aZ583Io/qrXDfEzWBGyYOaGFBfd6royFkQTTBSU2ia05XtYvFi6lFFbuJPvQcEbxYT5s
+         ValRo01zcudmxvhwqXXjTcrl6I4n0YbCHTZdb/nLjfUevM/jgkghxs4bDsuN5iA5lYXs
+         E0huEEyihlAgjhc8SGs8+RRoUQMHYx1/w+/uGT5uQgpdF/uJK4wmWQlSZTynbKYcSsqs
+         U+7fkv4Ljoke2iu1ZXlRukdQJwtvW+W5HFKUppBldrny1+GC3q73FwwT1ZhESueeDWcy
+         EbbA==
+X-Gm-Message-State: ACrzQf3sOff4bICSuysGCyZbEtpLQWOF9nwpGCzkOOkkTc/VBf+g14qw
+        20uXIrxzn9qdrLtCQJ7D33aP+J6QfK2HLtuA
+X-Google-Smtp-Source: AMsMyM7ZHj8i+Y3IQCwzyHWP8t90mGoIyRwqDzEJDxb0328Vc0cAAlIc/12RbM+5zsorQNZ0Vq+v3g==
+X-Received: by 2002:a17:907:3f87:b0:781:ee94:7f91 with SMTP id hr7-20020a1709073f8700b00781ee947f91mr3241852ejc.52.1663746716825;
+        Wed, 21 Sep 2022 00:51:56 -0700 (PDT)
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com. [209.85.218.43])
+        by smtp.gmail.com with ESMTPSA id s21-20020a1709062ed500b0077077b59085sm891677eji.184.2022.09.21.00.51.55
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Sep 2022 00:51:56 -0700 (PDT)
+Received: by mail-ej1-f43.google.com with SMTP id dv25so11597168ejb.12
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 00:51:55 -0700 (PDT)
+X-Received: by 2002:a17:907:94c7:b0:780:7ccd:aca7 with SMTP id
+ dn7-20020a17090794c700b007807ccdaca7mr19896147ejc.136.1663746715369; Wed, 21
+ Sep 2022 00:51:55 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v3 1/3] clk: qcom: gdsc: Fix the handling of PWRSTS_RET
- support
-To:     Rajendra Nayak <quic_rjendra@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@somainline.org,
-        mturquette@baylibre.com, sboyd@kernel.org, mka@chromium.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        johan+linaro@kernel.org, quic_kriskura@quicinc.com,
-        dianders@chromium.org, linux-clk@vger.kernel.org
-References: <20220920111517.10407-1-quic_rjendra@quicinc.com>
- <d813e8a5-9eba-b3f7-2eee-cd721d120a30@collabora.com>
- <096205ee-2c8a-facf-87ce-2309c63d2400@quicinc.com>
-Content-Language: en-US
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <096205ee-2c8a-facf-87ce-2309c63d2400@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220920-invalid-desc-v1-0-76a93174f3bc@chromium.org>
+ <20220920-invalid-desc-v1-1-76a93174f3bc@chromium.org> <Yypgi6Jc9/tZLtIw@pendragon.ideasonboard.com>
+In-Reply-To: <Yypgi6Jc9/tZLtIw@pendragon.ideasonboard.com>
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Wed, 21 Sep 2022 09:51:44 +0200
+X-Gmail-Original-Message-ID: <CANiDSCsbwYfnqcWOjAJw2qvZnB-qE66LqGMhpD8youDj=f+U-g@mail.gmail.com>
+Message-ID: <CANiDSCsbwYfnqcWOjAJw2qvZnB-qE66LqGMhpD8youDj=f+U-g@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] media: uvc: Handle cameras with invalid descriptors
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzbot <syzkaller@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 20/09/22 15:39, Rajendra Nayak ha scritto:
-> 
-> On 9/20/2022 6:09 PM, AngeloGioacchino Del Regno wrote:
->> Il 20/09/22 13:15, Rajendra Nayak ha scritto:
->>> GDSCs cannot be transitioned into a Retention state in SW.
->>> When either the RETAIN_MEM bit, or both the RETAIN_MEM and
->>> RETAIN_PERIPH bits are set, and the GDSC is left ON, the HW
->>> takes care of retaining the memory/logic for the domain when
->>> the parent domain transitions to power collapse/power off state.
->>>
->>> On some platforms where the parent domains lowest power state
->>> itself is Retention, just leaving the GDSC in ON (without any
->>> RETAIN_MEM/RETAIN_PERIPH bits being set) will also transition
->>> it to Retention.
->>>
->>> The existing logic handling the PWRSTS_RET seems to set the
->>> RETAIN_MEM/RETAIN_PERIPH bits if the cxcs offsets are specified
->>> but then explicitly turns the GDSC OFF as part of _gdsc_disable().
->>> Fix that by leaving the GDSC in ON state.
->>>
->>> Signed-off-by: Rajendra Nayak <quic_rjendra@quicinc.com>
->>> Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->>> ---
->>> v3:
->>> Updated changelog
->>>
->>> There are a few existing users of PWRSTS_RET and I am not
->>> sure if they would be impacted with this change
->>>
->>> 1. mdss_gdsc in mmcc-msm8974.c, I am expecting that the
->>> gdsc is actually transitioning to OFF and might be left
->>> ON as part of this change, atleast till we hit system wide
->>> low power state.
->>> If we really leak more power because of this
->>> change, the right thing to do would be to update .pwrsts for
->>> mdss_gdsc to PWRSTS_OFF_ON instead of PWRSTS_RET_ON
->>> I dont have a msm8974 hardware, so if anyone who has can report
->>> any issues I can take a look further on how to fix it.
->>
->> I think that the safest option is to add a PWRSTS_RET_HW_CTRL flag (or similar),
->> used for the specific cases of SC7180 and SC7280 (and possibly others) where the
->> GDSC is automatically transitioned to a Retention state by HW control, with no
->> required software (kernel driver) intervention.
-> 
-> Having a PWRSTS_RET_HW_CTRL flag would make sense if there was also a
-> PWRSTS_RET_SW_CTRL way of achieving Retention state, but FWIK there isn't.
-> I am sure that's the way it is on 8974 as well, I just don't have hardware to
-> confirm.
-> 
->>
->>>
->>> 2. gpu_gx_gdsc in gpucc-msm8998.c and
->>>     gpu_gx_gdsc in gpucc-sdm660.c
->>> Both of these seem to add support for 3 power state
->>> OFF, RET and ON, however I dont see any logic in gdsc
->>> driver to handle 3 different power states.
->>> So I am expecting that these are infact just transitioning
->>> between ON and OFF and RET state is never really used.
->>> The ideal fix for them would be to just update their resp.
->>> .pwrsts to PWRSTS_OFF_ON only.
->>
->> static int gdsc_init(struct gdsc *sc)
->> {
->>
->>      ...
->>
->>      if (on || (sc->pwrsts & PWRSTS_RET))
->>          gdsc_force_mem_on(sc);
->>      else
->>          gdsc_clear_mem_on(sc);
->>
->>      ...
->> }
->>
->> On MSM8998 and SDM630/636/660, we're reaching that point with a GDSC that is
->> left OFF from the bootloader, but we want (at least for 630/660) memretain
->> without periph-retain: this is required to make the hypervisor happy.
-> 
-> Ideally setting the memretain bits while the GDSC is OFF should have no affect
-> at all. Is this for the gpu_gx_gdsc on 630/660? Is this needed only at the init
-> time (when the bootloader has left it OFF) or is it needed everytime the kernel
-> turns it OFF too?
+Do you mean something like this?
 
-Even though I don't remember the flow in a clear way (this entire thing was done
-years ago), I'm sure that for PWRSTS_OFF memretain can be cleared, so, the current
-flow that we have in gdsc.c does work correctly.
+diff --git a/drivers/media/usb/uvc/uvc_entity.c
+b/drivers/media/usb/uvc/uvc_entity.c
+index 7c4d2f93d351..66d1f5da4ec7 100644
+--- a/drivers/media/usb/uvc/uvc_entity.c
++++ b/drivers/media/usb/uvc/uvc_entity.c
+@@ -37,7 +37,7 @@ static int uvc_mc_create_links(struct uvc_video_chain *chain,
+                        continue;
 
-Ideally, I agree with you that the memretain bits should have no effect at all
-while the GDSC is OFF, but that's the situation on these platforms.
+                remote = uvc_entity_by_id(chain->dev, entity->baSourceID[i]);
+-               if (remote == NULL)
++               if (remote == NULL || remote->num_pads == 0)
+                        return -EINVAL;
 
-> How did we come up with this trick to keep the hypervisor happy, was it picked
-> up from some downstream reference code?
+                source = (UVC_ENTITY_TYPE(remote) == UVC_TT_STREAMING)
+@@ -46,6 +46,9 @@ static int uvc_mc_create_links(struct uvc_video_chain *chain,
+                if (source == NULL)
+                        continue;
 
-Yes, it was found in various releases of the downstream kernel for 8998/630/660.
++               if (source->num_pads != remote->num_pads)
++                       return -EINVAL;
++
+                remote_pad = remote->num_pads - 1;
+                ret = media_create_pad_link(source, remote_pad,
+                                               sink, i, flags);
 
-> 
->>
->> Regards,
->> Angelo
->>
+regarding making a new patch, whatever is easier for you ;)
 
+
+On Wed, 21 Sept 2022 at 02:53, Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
+>
+> Hi Ricardo,
+>
+> Thank you for the patch.
+>
+> On Tue, Sep 20, 2022 at 04:04:55PM +0200, Ricardo Ribalda wrote:
+> > If the source entity does not contain any pads, do not create a link.
+> >
+> > Reported-by: syzbot <syzkaller@googlegroups.com>
+> > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> >
+> > diff --git a/drivers/media/usb/uvc/uvc_entity.c b/drivers/media/usb/uvc/uvc_entity.c
+> > index 7c4d2f93d351..1f730cb72e58 100644
+> > --- a/drivers/media/usb/uvc/uvc_entity.c
+> > +++ b/drivers/media/usb/uvc/uvc_entity.c
+> > @@ -43,7 +43,7 @@ static int uvc_mc_create_links(struct uvc_video_chain *chain,
+> >               source = (UVC_ENTITY_TYPE(remote) == UVC_TT_STREAMING)
+> >                      ? (remote->vdev ? &remote->vdev->entity : NULL)
+> >                      : &remote->subdev.entity;
+> > -             if (source == NULL)
+> > +             if (source == NULL || source->num_pads == 0)
+>
+> source->num_pads and remote->num_pads should always be identical, but as
+> the next line uses remote->num_pads, wouldn't it be better to test that
+> variable ? If so, I'd move the test a file lines earlier, with the
+> remote == NULL test.
+>
+> What do you think ? If you agree I can make that change when applying,
+> there's no need for a new version. Otherwise I'll keep the patch as-is.
+>
+> >                       continue;
+> >
+> >               remote_pad = remote->num_pads - 1;
+> >
+>
+> --
+> Regards,
+>
+> Laurent Pinchart
+
+
+
+-- 
+Ricardo Ribalda
