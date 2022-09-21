@@ -2,85 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECC535BF410
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 05:07:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E0275BF414
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 05:07:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230139AbiIUDF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 23:05:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36142 "EHLO
+        id S230355AbiIUDHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 23:07:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbiIUDFt (ORCPT
+        with ESMTP id S230024AbiIUDHI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 23:05:49 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28EDD7DF56
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 20:05:48 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id c7-20020a056e020bc700b002e59be6ce85so2769369ilu.12
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 20:05:48 -0700 (PDT)
+        Tue, 20 Sep 2022 23:07:08 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C947A7E018
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 20:07:05 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id v4so4589067pgi.10
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 20:07:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=RP/caS4k+vesM0CIuvxZsJk410Ex/gFQMNBRq9bVzyM=;
+        b=eZeYSMXHVVqYPsM9TEiuYxVPWCxElo2q5vJrD/tlmINXA+cfV7umyG3GTuN3AGbTxb
+         imHSLRtysmwPySq+gbc1ax0j4AFvgFxI7n16eGESuYqqSYKrpliTaqhJKc6XGJCK0jM0
+         X1kxEmCimxP212cpKl3+E8wViBMMqvNfQp1LSjwgNUMMFkLdzB5NxqYOeapgruEr0w5E
+         dQKv5hduqfioF+Cj26fWAhiL9WVFtGkcOUtZHJembo9kMuhaJwDXN8XzvOXI9muewrS0
+         3/g/GdLhCm9n5N5EvpnIjlf0gUNpkGMyHsss5OwIFy1Y1WdPBAYdDlR7fmYvpeZTHsWH
+         kB8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=zjMW5JpZNeylEySDRSxzvGcNVH92bjDki2aPoXwnTyM=;
-        b=EUTm1BXXnRLOFi8s6td13Z3PINCWqXaQ1r74OzTwjYBfxiyXr7/FCoLy9mwZHDdsKA
-         biuMiVOU3Buw0sRDBVHoZJcYMihUBYybMXkOpDfjLv2nVh2GeKQRNa1FbVV7va+5f98F
-         9tTpM0Swe/cKT9ah63JqU+eklg1+2ppFf4d60eqMNSjNxPLWSbRUdWZ3Xybu/XqY+RpA
-         v6Rqexv5HnouBGU6XSX0VP6YAuzYQO20o62olPOgyydOJ8w8u86eoV+ftZxnSwiJRPkv
-         Fs0t8ykEGyZxr/nsOxds4GsZSIzr0telGdv0jKFTHtOkCWbtxuXDw+jnZ9F0L1E1joX/
-         +2bQ==
-X-Gm-Message-State: ACgBeo2E0tvtcGFDUiMysVrp9f4KNHlTT3ONrxB9aT5LziHql3ctRmvJ
-        +ALq9ZUqkDocPnkCeiTEAz8KTC9URd2Cl9H7ZkgrpCDRI9IG
-X-Google-Smtp-Source: AMsMyM4QQl2kfWaV+F4UtpCi8awesIlJDzUAfmibkH+jqVXoQkSAEHUaNEbHSmotqZZ9NG7A+ERqcxvUckpnQad15aGphI/b6YEf
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=RP/caS4k+vesM0CIuvxZsJk410Ex/gFQMNBRq9bVzyM=;
+        b=qiTlPc59j/muAjMNeDwiy4YVqw/HmIWJXFB2n43MwIjibNdSyVUn+9lI//pIQsnJdf
+         LA2+jTK5l4533h06ZFfvUh9Kc8IiN0DItqD0Ne8arBix83ttCZb7vFzmgSqYQ5GXLIH9
+         /8WseB6llY3VNdtWCgcMybFF6/X83YNIbSlW2zWKMEGzYGm4fjHp8KlmrEbGJiBg3ATf
+         Cz147jCVEyX/68aWP/JtiAtoc/oKhKzoscHUXOXfH9FM2KfP7jK0p2zkvxHKk/KwOGEw
+         zv5nu6iHAqMyHa9qYDiLLQn+KItCygL8BFXDklli84gcYheuz4qU6XkL29KSP5LsTFRv
+         NSfg==
+X-Gm-Message-State: ACrzQf2X1QIWSyZsJmEujrsFt5itK63GRv8BEvbulfibCrzMUxzdSOHE
+        9s5Tfj3RqOZRgdkWqM4uWs+YaeXWlUN3Ew==
+X-Google-Smtp-Source: AMsMyM7vVL5mcvDYb2/3vYQblfdRKQXt71WVm4AzOi9UUbWzVe39x4rCrgvnnz5XJ4tpKKYz77A/mg==
+X-Received: by 2002:a63:e442:0:b0:438:7919:adf with SMTP id i2-20020a63e442000000b0043879190adfmr22828745pgk.4.1663729625212;
+        Tue, 20 Sep 2022 20:07:05 -0700 (PDT)
+Received: from localhost.localdomain ([2401:4900:1c61:8e50:8ba8:7ad7:f34c:2f5])
+        by smtp.gmail.com with ESMTPSA id y23-20020aa78f37000000b0053e61633057sm690846pfr.132.2022.09.20.20.07.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Sep 2022 20:07:04 -0700 (PDT)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     dmaengine@vger.kernel.org
+Cc:     agross@kernel.org, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        thara.gopinath@gmail.com, devicetree@vger.kernel.org,
+        andersson@kernel.org, bhupesh.sharma@linaro.org,
+        bhupesh.linux@gmail.com, vkoul@kernel.org,
+        Jordan Crouse <jorcrous@amazon.com>
+Subject: [PATCH v7 0/1] dma: qcom: bam_dma: Add support to initialize interconnect path
+Date:   Wed, 21 Sep 2022 08:36:48 +0530
+Message-Id: <20220921030649.1436434-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-X-Received: by 2002:a02:b907:0:b0:35a:2ff:1156 with SMTP id
- v7-20020a02b907000000b0035a02ff1156mr12396902jan.190.1663729547459; Tue, 20
- Sep 2022 20:05:47 -0700 (PDT)
-Date:   Tue, 20 Sep 2022 20:05:47 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000add76005e9273808@google.com>
-Subject: [syzbot] WARNING: fbcon: Driver 'vkmsdrmfb' missed to adjust virtual
- screen size (0x57
-From:   syzbot <syzbot+54d3f9e629fdb9b95020@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Changes since v6:
+=================
+- v6 can be seen here: https://lore.kernel.org/linux-arm-msm/30756e6f-952f-ccf2-b493-e515ba4f0a64@linaro.org/
+- As per Krzysztof's suggestion on v6, clubbed the crypto driver and
+  dt-bindings changes together. Now the overall v5 patchset into 3
+  separate patchsets, one each for the following areas to allow easier
+  review and handling from the maintainer:
+        arm-msm, crypto and dma
+- This patch targets the dma tree specifically.
 
-syzbot found the following issue on:
+Changes since v5:
+=================
+- v5 can be seen here: https://lore.kernel.org/lkml/20211110105922.217895-1-bhupesh.sharma@linaro.org/
+- As per Bjorn's suggestion on irc, broke down the patchset into 4
+  separate patchsets, one each for the following areas to allow easier
+  review and handling from the maintainer:
+        arm-msm, crypto, dma and devicetree
+- Addressed Rob's, Vladimir's and Bjorn's review comments received on
+  v5.
+- Added Tested-by from Jordan received on the v5.
 
-HEAD commit:    e47eb90a0a9a Add linux-next specific files for 20220901
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=12747480880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=7933882276523081
-dashboard link: https://syzkaller.appspot.com/bug?extid=54d3f9e629fdb9b95020
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=170d8c6f080000
+Changes since v4:
+=================
+- v4 for sm8250 can be seen here: https://lore.kernel.org/linux-arm-msm/20211013105541.68045-1-bhupesh.sharma@linaro.org/
+- v1 for sm8150 qce enablement can be seen here: https://lore.kernel.org/linux-arm-msm/20211013165823.88123-1-bhupesh.sharma@linaro.org/
+- Merged the sm8150 and sm8250 enablement patches in the same patchset,
+  as per suggestions from Bjorn.
+- Dropped a couple of patches from v4, as these have been picked by
+  Bjorn already via his tree.
+- Addressed review comments from Vladimir, Thara and Rob.
+- Collect Reviewed-by from Rob and Thara on some of the patches from the
+  v4 patchset.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/d3bf639370bc/disk-e47eb90a.raw.xz
-vmlinux: https://storage.googleapis.com/1c9c27c6eeef/vmlinux-e47eb90a.xz
+Changes since v3:
+=================
+- v3 can be seen here: https://lore.kernel.org/linux-arm-msm/20210519143700.27392-1-bhupesh.sharma@linaro.org/
+- Dropped a couple of patches from v3, on basis of the review comments:
+   ~ [PATCH 13/17] crypto: qce: core: Make clocks optional
+   ~ [PATCH 15/17] crypto: qce: Convert the device found dev_dbg() to dev_info()
+- Addressed review comments from Thara, Rob and Stephan Gerhold.
+- Collect Reviewed-by from Rob and Thara on some of the patches from the
+  v3 patchset.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+54d3f9e629fdb9b95020@syzkaller.appspotmail.com
+Changes since v2:
+=================
+- v2 can be seen here: https://lore.kernel.org/dmaengine/20210505213731.538612-1-bhupesh.sharma@linaro.org/
+- Drop a couple of patches from v1, which tried to address the defered
+  probing of qce driver in case bam dma driver is not yet probed.
+  Replace it instead with a single (simpler) patch [PATCH 16/17].
+- Convert bam dma and qce crypto dt-bindings to YAML.
+- Addressed review comments from Thara, Bjorn, Vinod and Rob.
 
-WARNING: fbcon: Driver 'vkmsdrmfb' missed to adjust virtual screen size (0x57
+Changes since v1:
+=================
+- v1 can be seen here: https://lore.kernel.org/linux-arm-msm/20210310052503.3618486-1-bhupesh.sharma@linaro.org/
+- v1 did not work well as reported earlier by Dmitry, so v2 contains the following
+  changes/fixes:
+  ~ Enable the interconnect path b/w BAM DMA and main memory first
+    before trying to access the BAM DMA registers.
+  ~ Enable the interconnect path b/w qce crytpo and main memory first
+    before trying to access the qce crypto registers.
+  ~ Make sure to document the required and optional properties for both
+    BAM DMA and qce crypto drivers.
+  ~ Add a few debug related print messages in case the qce crypto driver
+    passes or fails to probe.
+  ~ Convert the qce crypto driver probe to a defered one in case the BAM DMA
+    or the interconnect driver(s) (needed on specific Qualcomm parts) are not
+    yet probed.
 
+BAM dma engine associated with certain Qualcomm Snapdragon hardware blocks requires
+relevant interconnect pieces be initialized prior to the dma engine initialization.
+For e.g. crypto bam dma engine on sm8250. 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Such requirement is passed on to the bam dma driver from dt via the "interconnects"
+property. Add support in bam_dma driver to check whether the interconnect
+path is accessible/enabled prior to attempting driver intializations.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+If interconnects are not yet setup, defer the BAM DMA driver probe().
+
+Tested on sm8150-mtp, sa8155p-adp, sm8250-mtp and RB5 boards.
+
+Cc: vkoul@kernel.org
+Cc: thara.gopinath@gmail.com
+Cc: andersson@kernel.org
+Tested-by: Jordan Crouse <jorcrous@amazon.com>
+
+Thara Gopinath (1):
+  dma: qcom: bam_dma: Add support to initialize interconnect path
+
+ drivers/dma/qcom/bam_dma.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+-- 
+2.37.1
+
