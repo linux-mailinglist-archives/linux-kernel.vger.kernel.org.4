@@ -2,92 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EA625BFA4E
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 11:11:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C97035BFA50
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 11:12:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229641AbiIUJLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 05:11:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39802 "EHLO
+        id S230147AbiIUJMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 05:12:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbiIUJLk (ORCPT
+        with ESMTP id S230118AbiIUJMG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 05:11:40 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 023C289CCC
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 02:11:36 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id y17so12137065ejo.6
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 02:11:36 -0700 (PDT)
+        Wed, 21 Sep 2022 05:12:06 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B38B88C44D
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 02:12:04 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id a14so6172488ljj.8
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 02:12:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=hlC2p+E/yc6bwCFB5rHdNjGD3v4BzbiXxKD6+IxrA4w=;
-        b=Jx0F84042gQuC89Ameu9TN2kZwDhxx/lJ5KA/eLm1Uwq9Z8TCHSQYr/2G+Ebtvl4Yb
-         Qix3GWI32LGeKyNNC76h5+V3GISpuVL31z20P7lb1J1QduuILrRJTBxhYPbxNmzKgKoY
-         YoNDA7tVKJZVcm16TziNbtw1sibOjFtmVrWew=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=ZjHHQRJGwuqbDb8JIxiASWCllE12kTjIQC60uJoZPaI=;
+        b=YuErZJV2pcu4GLKPVzROsL/ZFPM/2cBi3CO3JcxSL0sLn2a0aoSKkQ49biOU3vQFl4
+         rFuD5jTF7kr/tV/QRX8D7qFA4+NjcdWbKqSzzSyPvg2lSv6TrOUf3HyOY0NbL0s4aWHy
+         2ZmoNFiV9Dv8RFiDbHC6rVPqvP9/ldz9T9uENNTe17wpDE28tSUHmDwCWExEO7+1m0mO
+         ipGEVyO8kYnFhGKEO4gt8A1wYCvy8+23sKy+bq9zQSJuILIqOP1SZx0Ng6Y4pEZGQPfw
+         IqU4IdRvxGTPaDsvwhCU02Pr40YgjsYT6mGUkHsACiHdCUGtJC23f+kBzWr2ZhbmixBh
+         kLWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=hlC2p+E/yc6bwCFB5rHdNjGD3v4BzbiXxKD6+IxrA4w=;
-        b=atUEqfQbDHJ2L7sAlkig9SWvA1pYeNnDsL/6O/FEHf0+OsFZKp6fvHe0MP/Z8g3BWl
-         YbVMYv3Lwp70FdlnKKoF6g4yCBZy7fPDwJ17ru5nN/zxN9rqR6ycdhR2GlhUUniaKQJ1
-         38cu5yAzgrE2FY3oBVVZ5eWLp66511O3DiwR8CgEiQTmVpsQ+dteRDsHAZqOJmbYcsMv
-         F0rueXRMKEUz7V57Ze9yaNGkxofCCrX/RyZc6U641AwhHjuAbYJom3HcK5xSQVawC3D9
-         zThcAHv93kbmzjTWIHXiPZB/Av5Cu/i7Kj/G214lTzWKFXHcD+5ge7f+KE8R7pWnxeP/
-         yQdQ==
-X-Gm-Message-State: ACrzQf1B8ufGiAFAGIyHMALvxsIcK3XnfS89jgoTOpxFILe9ECQRZjqB
-        CLiIDUJghrjeypTmXuKtVbTrhzzdhq0WS5jr
-X-Google-Smtp-Source: AMsMyM6gh29yNviXmhHMEYJUnt8aXyuQYYrcsm6GXA5KZueXMCxCcEDVGE/tBgDtIPB4CaOg0x+cPQ==
-X-Received: by 2002:a17:906:5a4c:b0:76f:3e98:b453 with SMTP id my12-20020a1709065a4c00b0076f3e98b453mr20386077ejc.509.1663751495050;
-        Wed, 21 Sep 2022 02:11:35 -0700 (PDT)
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com. [209.85.208.41])
-        by smtp.gmail.com with ESMTPSA id r14-20020a056402034e00b004478be33bddsm1469726edw.15.2022.09.21.02.11.34
-        for <linux-kernel@vger.kernel.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=ZjHHQRJGwuqbDb8JIxiASWCllE12kTjIQC60uJoZPaI=;
+        b=FGy5JaMdu50kaZu2yCwRggj/FY17nTqgoQi6Jl4OIhNh+1u2QTOZQifM2OpN84ElOM
+         UhyTkemLf2jG5pCPrRtU3J/8uwhDDNL99pblz/4ZZ1+uh7iP9/jqk3EXSArWUBXE8/B1
+         S4x95J3HtcqD5zvJPIcQw1o/HXdLL1RuyC3aeCSa74pNVbXu7W9ZoOmgYSlnFuAuoSVK
+         qRYwVvl68kX8lRkoaA4/cVTlueRfKCaZYxILJPPU3yjknlk6LdnxLGUzYiiJrBI6C0Zo
+         1cKyWxYZ4FwtT3gTX/NdCFb8xxeHVZuiAAp6FymHMx0OWsJT/vWrINSz09C3eElvzrVi
+         Khcw==
+X-Gm-Message-State: ACrzQf3RmAE/mH/31HzOE6BA47HvQJjTwgdc2St3E0TWUjj1mjbNd0V5
+        KH9YSK+zWtvzik/jZdpiLlvUbA==
+X-Google-Smtp-Source: AMsMyM65d5eh3QTDjIdjafQW8dzPMN1JuhFSyd33DcYi8WKHjVw2P4dSaMoRtYcFZO8HGZNMKcwuxQ==
+X-Received: by 2002:a05:651c:1043:b0:26c:565b:2942 with SMTP id x3-20020a05651c104300b0026c565b2942mr3569911ljm.440.1663751523110;
+        Wed, 21 Sep 2022 02:12:03 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id m14-20020ac24ace000000b0049462af8614sm347898lfp.145.2022.09.21.02.12.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Sep 2022 02:11:34 -0700 (PDT)
-Received: by mail-ed1-f41.google.com with SMTP id w28so7669004edi.7
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 02:11:34 -0700 (PDT)
-X-Received: by 2002:a05:6402:3547:b0:451:3be6:d55b with SMTP id
- f7-20020a056402354700b004513be6d55bmr23668147edd.57.1663751494159; Wed, 21
- Sep 2022 02:11:34 -0700 (PDT)
+        Wed, 21 Sep 2022 02:12:02 -0700 (PDT)
+Message-ID: <7f8f15bf-806f-a638-f35b-a66d2cb93db7@linaro.org>
+Date:   Wed, 21 Sep 2022 11:12:01 +0200
 MIME-Version: 1.0
-References: <20220920-standard-menues-v2-0-a35af3243c2f@chromium.org>
- <20220920-standard-menues-v2-1-a35af3243c2f@chromium.org> <YypjfCLkmHRrsD66@pendragon.ideasonboard.com>
-In-Reply-To: <YypjfCLkmHRrsD66@pendragon.ideasonboard.com>
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Wed, 21 Sep 2022 11:11:23 +0200
-X-Gmail-Original-Message-ID: <CANiDSCsk7nOTjW2j08LM4++221TXTrZHpMuJwtBF8rHp_x+MZg@mail.gmail.com>
-Message-ID: <CANiDSCsk7nOTjW2j08LM4++221TXTrZHpMuJwtBF8rHp_x+MZg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] media: uvcvideo: Implement mask for V4L2_CTRL_TYPE_MENU
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v4 2/3] dt-bindings: clock: add SM6375 QCOM global clock
+ bindings
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        ~postmarketos/upstreaming@lists.sr.ht
+Cc:     martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220921001303.56151-1-konrad.dybcio@somainline.org>
+ <20220921001303.56151-2-konrad.dybcio@somainline.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220921001303.56151-2-konrad.dybcio@somainline.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Laurent
+On 21/09/2022 02:13, Konrad Dybcio wrote:
+> Add device tree bindings for global clock controller for SM6375 SoCs.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> ---
+> Changes since v3:
+> - bring back clocks and compatible as required
+> 
 
-On Wed, 21 Sept 2022 at 03:06, Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
->
-> Hi Ricardo,
->
-> Thank you for the patch.
 
-Thank you for the review. I think I have addressed all your comments.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-I have tested it on real hardware at
-https://git.kernel.org/pub/scm/linux/kernel/git/ribalda/linux.git/log/?h=ribalda-next
+Best regards,
+Krzysztof
 
-And this set conflicts with the v4l2-compliance one. So I have rebased
-this set on top of the other one.
-
-Thanks!
