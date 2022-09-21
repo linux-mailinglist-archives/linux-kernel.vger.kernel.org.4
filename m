@@ -2,123 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4A9C5BF67F
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 08:39:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A44165BF672
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 08:36:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbiIUGjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 02:39:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39718 "EHLO
+        id S229944AbiIUGgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 02:36:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229953AbiIUGjo (ORCPT
+        with ESMTP id S229928AbiIUGfz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 02:39:44 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14F88F583
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 23:39:38 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id k10so7594199lfm.4
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 23:39:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=otR0nNYDhUnhsN3OyUB7km5BpUtGxbbyPiKzEuh5rHI=;
-        b=uWqCYraJmg5iZcIkkkQ1ppjz9FlMoAWe8koubDIbSUfiUm7l6y13QkhT8JTdY9XHsE
-         GDG/QBKBKOdxc/txbI3G09XcWf1RMZ8ZLFXe7+lsZohI0VYm5mXgBYosyZrpjQLw8OY8
-         n6SmAetLMdG9ab4Tex4A2xtMGVb1xCsRRX8yDO3pCeORDmHmnKZn6uQfseBTOmE83SDH
-         I9ai6Eww7Rj1nsyeyZIAl+8ITNQLHLclJ5kRS41ylbnysmRRzatgulSuwRaPUGNmfl7i
-         fp748ddLWr0c2u+4H3DdoWPhUgB+YofWUOhsmVcopJmiUDuA2gfdYwuj4+8DH4sjQL7a
-         kINA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=otR0nNYDhUnhsN3OyUB7km5BpUtGxbbyPiKzEuh5rHI=;
-        b=rf7rtZAyWZeA0AfCTbrXsQCfwmngvisEC8FF3Akiw1PGgtZwVQ6se4MSjx3qQZHBql
-         VusF9nnEGH/KiTGXOKJPgSRMKRZVbWxK7m5n3PVsnGch5uPuXdOG4LWip8Ug0LG1SYav
-         WC7LGsM014gSOykxhwMflQfdypJV0hTfwnVd2IB50NYxR1qZzSnPq4Z6CljITBiBNXkT
-         ngjjGNA1kZpWQbqaO4wX1HAj3cdwPGDAnO0DqawQCF/N8AfAv/D7QSWDt0fQEWB9bINf
-         JmX5OeR0kqlGsmK4vnFWeG4P3q4MK/dDah0CQGI9v/1dY+z6obohD++5reQZyEoEFS52
-         VoTg==
-X-Gm-Message-State: ACrzQf2VBMdHDHWM2XJn+ozF8tXXMgAsNHlhFBkni54CjSw+ZCB/0V6V
-        B9X3vpGwDQMOsW7WFQGo0K0fcg==
-X-Google-Smtp-Source: AMsMyM6xeNvDHsWcEi+fZKXEaCmx5B60tduf07EnI0POnx4LZUYmhJpUhA/mzARjbAI6D73G9SISFA==
-X-Received: by 2002:a05:6512:22c6:b0:498:fff7:b57f with SMTP id g6-20020a05651222c600b00498fff7b57fmr9150098lfu.582.1663742376985;
-        Tue, 20 Sep 2022 23:39:36 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id g11-20020ac24d8b000000b00497a61453a9sm295228lfe.243.2022.09.20.23.39.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Sep 2022 23:39:36 -0700 (PDT)
-Message-ID: <011ce9d2-ea39-9235-323a-eac453effb66@linaro.org>
-Date:   Wed, 21 Sep 2022 08:39:35 +0200
+        Wed, 21 Sep 2022 02:35:55 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0A3880526;
+        Tue, 20 Sep 2022 23:35:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1663742155; x=1695278155;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Nkxt24wv5HxrgUvepgEnI0awH/CBrinsjOv6eoBXr4Y=;
+  b=Xl7E4hbMLh6RWzUqKcKz5IWSUsV7MSgWAyIyDD8l07LoHoQbJDwgvEm1
+   MQCvOvN7Zl3L/7tBknVOzv55DkrDHv1qRM/vRKoA6KUfG0v+EjwJI+Rjx
+   roxRyi1A0kDI2aywTbVaqnyGr1eYTymXm3YQSPNYdsqI5BIkT8/MckjQc
+   p+EPSx2ydkVFSTHAK3/AQ/gPqEJP6urbS7Iwj0Cqle66ZNkcACDouph+f
+   7Dsz35eJIAvrYwuNfN38aRIWINbvqK8oJCr4cYsyTDeKClirK61oBfKt7
+   9Ng9KmcLpPc4prLUUXqxEQrivbanS4TAUyS2h9YMXwbMi5YowOYR256QH
+   w==;
+X-IronPort-AV: E=Sophos;i="5.93,332,1654585200"; 
+   d="scan'208";a="181271568"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 20 Sep 2022 23:35:54 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Tue, 20 Sep 2022 23:35:53 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
+ Transport; Tue, 20 Sep 2022 23:35:53 -0700
+Date:   Wed, 21 Sep 2022 08:40:19 +0200
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Michael Walle <michael@walle.cc>
+CC:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Divya Koppera <Divya.Koppera@microchip.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net] net: phy: micrel: fix shared interrupt on LAN8814
+Message-ID: <20220921064019.at4pbog6d2gzjyjq@soft-dev3-1.localhost>
+References: <20220920141619.808117-1-michael@walle.cc>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 1/6] dt-bindings: phy: ti: phy-gmii-sel: Add bindings for
- J721e
-Content-Language: en-US
-To:     Siddharth Vadapalli <s-vadapalli@ti.com>,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     robh+dt@kernel.org, lee.jones@linaro.org, kishon@ti.com,
-        vkoul@kernel.org, dan.carpenter@oracle.com, rogerq@kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, sjakhade@cadence.com
-References: <20220914093911.187764-1-s-vadapalli@ti.com>
- <20220914093911.187764-2-s-vadapalli@ti.com>
- <2dfb57cd-d9d4-9a26-dd4c-f116894c9baf@linaro.org>
- <fdeb4f4f-2712-fe35-a5c2-935d3a4baf38@ti.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <fdeb4f4f-2712-fe35-a5c2-935d3a4baf38@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <20220920141619.808117-1-michael@walle.cc>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/09/2022 06:27, Siddharth Vadapalli wrote:
-> Hello Krzysztof,
->
->>> +    then:
->>> +      properties:
->>> +        ti,qsgmii-main-ports:
->>> +          minItems: 2
->>> +          maxItems: 2
->>> +          items:
->>> +            minimum: 1
->>> +            maximum: 8
->>> +
->>>    - if:
->>>        not:
->>>          properties:
->>> @@ -94,6 +133,7 @@ allOf:
->>>              contains:
->>>                enum:
->>>                  - ti,j7200-cpsw5g-phy-gmii-sel
->>> +                - ti,j721e-cpsw9g-phy-gmii-sel
->>>      then:
->>>        properties:
->>>          ti,qsgmii-main-ports: false
->>
->> This is interesting here... Did you test the bindings with your DTS?
+The 09/20/2022 16:16, Michael Walle wrote:
 > 
-> Yes, I tried it out with different compatibles in the DTS file for the
-> node, making sure that the property "ti,qsgmii-main-ports" is allowed
-> only for the "ti,j7200-cpsw5g-phy-gmii-sel" and the
-> "ti,j721e-cpsw9g-phy-gmii-sel" compatibles. Additionally, I also tested
-> that the "minItems", "maxItems", "minimum" and "maximum" checks apply.
-> All of the rules within the "allOf", are enforced one after the other in
-> sequence, based on my testing. Please let me know in case of any
-> suggestions to implement it in a better way.
+> Since commit ece19502834d ("net: phy: micrel: 1588 support for LAN8814
+> phy") the handler always returns IRQ_HANDLED, except in an error case.
+> Before that commit, the interrupt status register was checked and if
+> it was empty, IRQ_NONE was returned. Restore that behavior to play nice
+> with the interrupt line being shared with others.
+> 
+> Fixes: ece19502834d ("net: phy: micrel: 1588 support for LAN8814 phy")
+> Signed-off-by: Michael Walle <michael@walle.cc>
 
-Great! I think I see now what I missed previously. The last hunk with
-"ti,qsgmii-main-ports: false" is in a if: with negation ("not:")?
+Reviewed-by: Horatiu Vultur <horatiu.vultur@microchip.com>
 
-Best regards,
-Krzysztof
+> ---
+>  drivers/net/phy/micrel.c | 18 ++++++++++++------
+>  1 file changed, 12 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
+> index 98e9bc101d96..21b6facf6e76 100644
+> --- a/drivers/net/phy/micrel.c
+> +++ b/drivers/net/phy/micrel.c
+> @@ -2732,16 +2732,19 @@ static int lan8804_config_intr(struct phy_device *phydev)
+>  static irqreturn_t lan8814_handle_interrupt(struct phy_device *phydev)
+>  {
+>         int irq_status, tsu_irq_status;
+> +       int ret = IRQ_NONE;
+> 
+>         irq_status = phy_read(phydev, LAN8814_INTS);
+> -       if (irq_status > 0 && (irq_status & LAN8814_INT_LINK))
+> -               phy_trigger_machine(phydev);
+> -
+>         if (irq_status < 0) {
+>                 phy_error(phydev);
+>                 return IRQ_NONE;
+>         }
+> 
+> +       if (irq_status & LAN8814_INT_LINK) {
+> +               phy_trigger_machine(phydev);
+> +               ret = IRQ_HANDLED;
+> +       }
+> +
+>         while (1) {
+>                 tsu_irq_status = lanphy_read_page_reg(phydev, 4,
+>                                                       LAN8814_INTR_STS_REG);
+> @@ -2750,12 +2753,15 @@ static irqreturn_t lan8814_handle_interrupt(struct phy_device *phydev)
+>                     (tsu_irq_status & (LAN8814_INTR_STS_REG_1588_TSU0_ |
+>                                        LAN8814_INTR_STS_REG_1588_TSU1_ |
+>                                        LAN8814_INTR_STS_REG_1588_TSU2_ |
+> -                                      LAN8814_INTR_STS_REG_1588_TSU3_)))
+> +                                      LAN8814_INTR_STS_REG_1588_TSU3_))) {
+>                         lan8814_handle_ptp_interrupt(phydev);
+> -               else
+> +                       ret = IRQ_HANDLED;
+> +               } else {
+>                         break;
+> +               }
+>         }
+> -       return IRQ_HANDLED;
+> +
+> +       return ret;
+>  }
+> 
+>  static int lan8814_ack_interrupt(struct phy_device *phydev)
+> --
+> 2.30.2
+> 
+
+-- 
+/Horatiu
