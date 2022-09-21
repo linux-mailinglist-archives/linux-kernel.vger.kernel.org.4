@@ -2,84 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B1055BF9AE
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 10:48:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 291C45BF9B0
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 10:48:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230212AbiIUIsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 04:48:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57432 "EHLO
+        id S229910AbiIUIs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 04:48:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbiIUIrt (ORCPT
+        with ESMTP id S230330AbiIUIsQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 04:47:49 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A50988992D;
-        Wed, 21 Sep 2022 01:47:48 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e77f329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e77f:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2044A1EC026E;
-        Wed, 21 Sep 2022 10:47:43 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1663750063;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=tzMHhEDZuTOBGQYO9nZSxmxDwWOqbotCVVhf4wZFx9I=;
-        b=rNxXZgjonwEW/Ld03lcLz37OjGRogsgsOhBQKAj7qTCeRpoTWeJ38fWf72a/srUbmoE8oD
-        967VuTVwVpj5dvvicWxSVXBZ2RpdTEc5M0SPtcunGBdz+AQNIwMM8nL97l3E5Wo3kuln+Q
-        yeas9l0yzMdsu4N+/b35KJpW2qe/iIY=
-Date:   Wed, 21 Sep 2022 10:47:38 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     K Prateek Nayak <kprateek.nayak@amd.com>
-Cc:     linux-kernel@vger.kernel.org, rafael@kernel.org, lenb@kernel.org,
-        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-        dave.hansen@linux.intel.com, tglx@linutronix.de, andi@lisas.de,
-        puwen@hygon.cn, mario.limonciello@amd.com, peterz@infradead.org,
-        rui.zhang@intel.com, gpiccoli@igalia.com,
-        daniel.lezcano@linaro.org, ananth.narayan@amd.com,
-        gautham.shenoy@amd.com, Calvin Ong <calvin.ong@amd.com>,
-        stable@vger.kernel.org, regressions@lists.linux.dev
-Subject: Re: [PATCH] ACPI: processor_idle: Skip dummy wait for processors
- based on the Zen microarchitecture
-Message-ID: <YyrPqlo/ysCeh4qU@zn.tnic>
-References: <20220921063638.2489-1-kprateek.nayak@amd.com>
+        Wed, 21 Sep 2022 04:48:16 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9373B7B78D;
+        Wed, 21 Sep 2022 01:48:15 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MXX5L6wcmzlVjg;
+        Wed, 21 Sep 2022 16:44:06 +0800 (CST)
+Received: from [10.174.178.66] (10.174.178.66) by
+ dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 21 Sep 2022 16:48:13 +0800
+Message-ID: <c416473b-af8b-3bf6-7ede-e1198b3496f5@huawei.com>
+Date:   Wed, 21 Sep 2022 16:48:13 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220921063638.2489-1-kprateek.nayak@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.2
+Subject: Re: [PATCH v4,bpf-next] bpf: Don't redirect packets with invalid
+ pkt_len
+To:     Lorenz Bauer <oss@lmb.io>, Stanislav Fomichev <sdf@google.com>
+CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <bpf@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <yuehaibing@huawei.com>
+References: <20220715115559.139691-1-shaozhengchao@huawei.com>
+ <20220914111936.19881-1-oss@lmb.io>
+ <CAKH8qBujKnFh8_g+npxHpo7RGFshus3N0iysmVBohTtG1X2yow@mail.gmail.com>
+ <5a3c5ea9-d557-6070-d778-1092f3c51257@huawei.com>
+ <aec8ef40-260c-4ded-b806-d381a3075ff0@www.fastmail.com>
+From:   shaozhengchao <shaozhengchao@huawei.com>
+In-Reply-To: <aec8ef40-260c-4ded-b806-d381a3075ff0@www.fastmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.66]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500026.china.huawei.com (7.185.36.106)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 21, 2022 at 12:06:38PM +0530, K Prateek Nayak wrote:
-> diff --git a/drivers/acpi/processor_idle.c b/drivers/acpi/processor_idle.c
-> index 16a1663d02d4..18850aa2b79b 100644
-> --- a/drivers/acpi/processor_idle.c
-> +++ b/drivers/acpi/processor_idle.c
-> @@ -528,8 +528,11 @@ static int acpi_idle_bm_check(void)
->  static void wait_for_freeze(void)
->  {
->  #ifdef	CONFIG_X86
-> -	/* No delay is needed if we are in guest */
-> -	if (boot_cpu_has(X86_FEATURE_HYPERVISOR))
-> +	/*
-> +	 * No delay is needed if we are in guest or on a processor
-> +	 * based on the Zen microarchitecture.
-> +	 */
-> +	if (boot_cpu_has(X86_FEATURE_HYPERVISOR) || boot_cpu_has(X86_FEATURE_ZEN))
 
-s/boot_cpu_has/cpu_feature_enabled/g
 
-while at it.
+On 2022/9/20 22:42, Lorenz Bauer wrote:
+> On Mon, 19 Sep 2022, at 11:55, shaozhengchao wrote:
+>> Sorry for the delay. I'm busy testing the TC module recently. I'm very
+>> sorry for the user-space breakage.
+>>
+>> The root cause of this problem is that eth_type_trans() is called when
+>> the protocol type of the SKB is parsed. The len value of the SKB is
+>> reduced to 0. If the user mode requires that the forwarding succeed, or
+>>    if the MAC header is added again after the MAC header is subtracted,
+>> is this appropriate?
+> 
+> We don't require forwarding to succeed with a 14 byte input buffer. We also don't look at the MAC header.
+> 
+> I think refusing to forward 0 length packets would be OK. Not 100% certain I understood you correctly, let me know if this helps.
+> 
+> Best
+> Lorenz
+Hi Lorenz
+	Sorry. But how does the rejection of the 0 length affect the
+test case? Is the return value abnormal, send packet failure or some
+others?
 
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Zhengchao Shao
