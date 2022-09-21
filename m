@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 489DA5C034C
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 18:02:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C1055C0273
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:53:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232326AbiIUQCJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 12:02:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56592 "EHLO
+        id S231749AbiIUPw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 11:52:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232477AbiIUP7l (ORCPT
+        with ESMTP id S231720AbiIUPvh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 11:59:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE1AE6352;
-        Wed, 21 Sep 2022 08:52:57 -0700 (PDT)
+        Wed, 21 Sep 2022 11:51:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DE0B339;
+        Wed, 21 Sep 2022 08:49:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2B59EB8309E;
-        Wed, 21 Sep 2022 15:51:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7624DC433D6;
-        Wed, 21 Sep 2022 15:51:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D6B76313C;
+        Wed, 21 Sep 2022 15:49:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E66CC433D6;
+        Wed, 21 Sep 2022 15:49:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663775511;
-        bh=GmYtHqZTuF5fWSgoRICml3viR5xWpFXum0y9yUTkJaY=;
+        s=korg; t=1663775347;
+        bh=jnrtrwVThl7jBOaHqlfiiHiaXpyyPz87zg3tkY08qJc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bxHwE1oDnoMVypf0ZAf3AubC50WWn+1nCg7LHMPitkQdmBLOlYlksJeVlHJTNL5YO
-         AQhHEdr8fp8tsU5T1Iv3Fk2jo35u1W14Moseu0K0EEfccaUYVO1Vu4CGIGMd/y4Dwc
-         ICOJyxBCJsqRnvOEgfL1UA1jbFEmK79wVEODx73U=
+        b=VUT3/NW9hmcQAaPJYQhmuVxDuYlXY8yVJZ52Ky8OwUcyYiD3xZJX/rVzHBXSFdA+y
+         eliaU5FURzggPNkgaw+9m5SYwR986RXmFruLIRmUa9F2VpMQw9BH0LPphRvzif5wLA
+         kRaAxz5bvluYyW+KmvrpFlygG7Rl8t1ULB0+OEf8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nathan Lynch <nathanl@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 07/39] powerpc/pseries/mobility: refactor node lookup during DT update
+        stable@vger.kernel.org, Gustaw Smolarczyk <wielkiegie@gmail.com>,
+        Lijo Lazar <lijo.lazar@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>
+Subject: [PATCH 5.15 22/45] drm/amdgpu: Dont enable LTR if not supported
 Date:   Wed, 21 Sep 2022 17:46:12 +0200
-Message-Id: <20220921153645.970431712@linuxfoundation.org>
+Message-Id: <20220921153647.598306582@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220921153645.663680057@linuxfoundation.org>
-References: <20220921153645.663680057@linuxfoundation.org>
+In-Reply-To: <20220921153646.931277075@linuxfoundation.org>
+References: <20220921153646.931277075@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,154 +54,164 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nathan Lynch <nathanl@linux.ibm.com>
+From: Lijo Lazar <lijo.lazar@amd.com>
 
-[ Upstream commit 2efd7f6eb9b7107e469837d8452e750d7d080a5d ]
+commit 6c20490663553cd7e07d8de8af482012329ab9d6 upstream.
 
-In pseries_devicetree_update(), with each call to ibm,update-nodes the
-partition firmware communicates the node to be deleted or updated by
-placing its phandle in the work buffer. Each of delete_dt_node(),
-update_dt_node(), and add_dt_node() have duplicate lookups using the
-phandle value and corresponding refcount management.
+As per PCIE Base Spec r4.0 Section 6.18
+'Software must not enable LTR in an Endpoint unless the Root Complex
+and all intermediate Switches indicate support for LTR.'
 
-Move the lookup and of_node_put() into pseries_devicetree_update(),
-and emit a warning on any failed lookups.
+This fixes the Unsupported Request error reported through AER during
+ASPM enablement.
 
-Signed-off-by: Nathan Lynch <nathanl@linux.ibm.com>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20201207215200.1785968-29-nathanl@linux.ibm.com
-Stable-dep-of: 319fa1a52e43 ("powerpc/pseries/mobility: ignore ibm, platform-facilities updates")
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=216455
+
+The error was unnoticed before and got visible because of the commit
+referenced below. This doesn't fix anything in the commit below, rather
+fixes the issue in amdgpu exposed by the commit. The reference is only
+to associate this commit with below one so that both go together.
+
+Fixes: 8795e182b02d ("PCI/portdrv: Don't disable AER reporting in get_port_device_capability()")
+
+Reported-by: Gustaw Smolarczyk <wielkiegie@gmail.com>
+Signed-off-by: Lijo Lazar <lijo.lazar@amd.com>
+Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+Cc: stable@vger.kernel.org
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 ---
- arch/powerpc/platforms/pseries/mobility.c | 49 ++++++++---------------
- 1 file changed, 17 insertions(+), 32 deletions(-)
+ drivers/gpu/drm/amd/amdgpu/nbio_v2_3.c |    9 ++++++++-
+ drivers/gpu/drm/amd/amdgpu/nbio_v6_1.c |    9 ++++++++-
+ drivers/gpu/drm/amd/amdgpu/nbio_v7_4.c |    9 ++++++++-
+ 3 files changed, 24 insertions(+), 3 deletions(-)
 
-diff --git a/arch/powerpc/platforms/pseries/mobility.c b/arch/powerpc/platforms/pseries/mobility.c
-index 2f73cb5bf12d..acf1664d1ad7 100644
---- a/arch/powerpc/platforms/pseries/mobility.c
-+++ b/arch/powerpc/platforms/pseries/mobility.c
-@@ -59,18 +59,10 @@ static int mobility_rtas_call(int token, char *buf, s32 scope)
- 	return rc;
+--- a/drivers/gpu/drm/amd/amdgpu/nbio_v2_3.c
++++ b/drivers/gpu/drm/amd/amdgpu/nbio_v2_3.c
+@@ -366,6 +366,7 @@ static void nbio_v2_3_enable_aspm(struct
+ 		WREG32_PCIE(smnPCIE_LC_CNTL, data);
  }
  
--static int delete_dt_node(__be32 phandle)
-+static int delete_dt_node(struct device_node *dn)
++#ifdef CONFIG_PCIEASPM
+ static void nbio_v2_3_program_ltr(struct amdgpu_device *adev)
  {
--	struct device_node *dn;
--
--	dn = of_find_node_by_phandle(be32_to_cpu(phandle));
--	if (!dn)
--		return -ENOENT;
--
- 	pr_debug("removing node %pOFfp\n", dn);
--
- 	dlpar_detach_node(dn);
--	of_node_put(dn);
- 	return 0;
+ 	uint32_t def, data;
+@@ -387,9 +388,11 @@ static void nbio_v2_3_program_ltr(struct
+ 	if (def != data)
+ 		WREG32_PCIE(smnBIF_CFG_DEV0_EPF0_DEVICE_CNTL2, data);
  }
++#endif
  
-@@ -135,10 +127,9 @@ static int update_dt_property(struct device_node *dn, struct property **prop,
- 	return 0;
- }
- 
--static int update_dt_node(__be32 phandle, s32 scope)
-+static int update_dt_node(struct device_node *dn, s32 scope)
+ static void nbio_v2_3_program_aspm(struct amdgpu_device *adev)
  {
- 	struct update_props_workarea *upwa;
--	struct device_node *dn;
- 	struct property *prop = NULL;
- 	int i, rc, rtas_rc;
- 	char *prop_data;
-@@ -155,14 +146,8 @@ static int update_dt_node(__be32 phandle, s32 scope)
- 	if (!rtas_buf)
- 		return -ENOMEM;
++#ifdef CONFIG_PCIEASPM
+ 	uint32_t def, data;
  
--	dn = of_find_node_by_phandle(be32_to_cpu(phandle));
--	if (!dn) {
--		kfree(rtas_buf);
--		return -ENOENT;
--	}
--
- 	upwa = (struct update_props_workarea *)&rtas_buf[0];
--	upwa->phandle = phandle;
-+	upwa->phandle = cpu_to_be32(dn->phandle);
+ 	def = data = RREG32_PCIE(smnPCIE_LC_CNTL);
+@@ -445,7 +448,10 @@ static void nbio_v2_3_program_aspm(struc
+ 	if (def != data)
+ 		WREG32_PCIE(smnPCIE_LC_CNTL6, data);
  
- 	do {
- 		rtas_rc = mobility_rtas_call(update_properties_token, rtas_buf,
-@@ -221,26 +206,18 @@ static int update_dt_node(__be32 phandle, s32 scope)
- 		cond_resched();
- 	} while (rtas_rc == 1);
+-	nbio_v2_3_program_ltr(adev);
++	/* Don't bother about LTR if LTR is not enabled
++	 * in the path */
++	if (adev->pdev->ltr_path)
++		nbio_v2_3_program_ltr(adev);
  
--	of_node_put(dn);
- 	kfree(rtas_buf);
- 	return 0;
+ 	def = data = RREG32_SOC15(NBIO, 0, mmRCC_BIF_STRAP3);
+ 	data |= 0x5DE0 << RCC_BIF_STRAP3__STRAP_VLINK_ASPM_IDLE_TIMER__SHIFT;
+@@ -469,6 +475,7 @@ static void nbio_v2_3_program_aspm(struc
+ 	data &= ~PCIE_LC_CNTL3__LC_DSC_DONT_ENTER_L23_AFTER_PME_ACK_MASK;
+ 	if (def != data)
+ 		WREG32_PCIE(smnPCIE_LC_CNTL3, data);
++#endif
  }
  
--static int add_dt_node(__be32 parent_phandle, __be32 drc_index)
-+static int add_dt_node(struct device_node *parent_dn, __be32 drc_index)
+ static void nbio_v2_3_apply_lc_spc_mode_wa(struct amdgpu_device *adev)
+--- a/drivers/gpu/drm/amd/amdgpu/nbio_v6_1.c
++++ b/drivers/gpu/drm/amd/amdgpu/nbio_v6_1.c
+@@ -278,6 +278,7 @@ static void nbio_v6_1_init_registers(str
+ 		WREG32_PCIE(smnPCIE_CI_CNTL, data);
+ }
+ 
++#ifdef CONFIG_PCIEASPM
+ static void nbio_v6_1_program_ltr(struct amdgpu_device *adev)
  {
- 	struct device_node *dn;
--	struct device_node *parent_dn;
- 	int rc;
+ 	uint32_t def, data;
+@@ -299,9 +300,11 @@ static void nbio_v6_1_program_ltr(struct
+ 	if (def != data)
+ 		WREG32_PCIE(smnBIF_CFG_DEV0_EPF0_DEVICE_CNTL2, data);
+ }
++#endif
  
--	parent_dn = of_find_node_by_phandle(be32_to_cpu(parent_phandle));
--	if (!parent_dn)
--		return -ENOENT;
--
- 	dn = dlpar_configure_connector(drc_index, parent_dn);
--	if (!dn) {
--		of_node_put(parent_dn);
-+	if (!dn)
- 		return -ENOENT;
--	}
+ static void nbio_v6_1_program_aspm(struct amdgpu_device *adev)
+ {
++#ifdef CONFIG_PCIEASPM
+ 	uint32_t def, data;
  
- 	rc = dlpar_attach_node(dn, parent_dn);
- 	if (rc)
-@@ -248,7 +225,6 @@ static int add_dt_node(__be32 parent_phandle, __be32 drc_index)
+ 	def = data = RREG32_PCIE(smnPCIE_LC_CNTL);
+@@ -357,7 +360,10 @@ static void nbio_v6_1_program_aspm(struc
+ 	if (def != data)
+ 		WREG32_PCIE(smnPCIE_LC_CNTL6, data);
  
- 	pr_debug("added node %pOFfp\n", dn);
+-	nbio_v6_1_program_ltr(adev);
++	/* Don't bother about LTR if LTR is not enabled
++	 * in the path */
++	if (adev->pdev->ltr_path)
++		nbio_v6_1_program_ltr(adev);
  
--	of_node_put(parent_dn);
- 	return rc;
+ 	def = data = RREG32_PCIE(smnRCC_BIF_STRAP3);
+ 	data |= 0x5DE0 << RCC_BIF_STRAP3__STRAP_VLINK_ASPM_IDLE_TIMER__SHIFT;
+@@ -381,6 +387,7 @@ static void nbio_v6_1_program_aspm(struc
+ 	data &= ~PCIE_LC_CNTL3__LC_DSC_DONT_ENTER_L23_AFTER_PME_ACK_MASK;
+ 	if (def != data)
+ 		WREG32_PCIE(smnPCIE_LC_CNTL3, data);
++#endif
  }
  
-@@ -281,22 +257,31 @@ int pseries_devicetree_update(s32 scope)
- 			data++;
+ const struct amdgpu_nbio_funcs nbio_v6_1_funcs = {
+--- a/drivers/gpu/drm/amd/amdgpu/nbio_v7_4.c
++++ b/drivers/gpu/drm/amd/amdgpu/nbio_v7_4.c
+@@ -630,6 +630,7 @@ const struct amdgpu_nbio_ras_funcs nbio_
+ 	.ras_fini = amdgpu_nbio_ras_fini,
+ };
  
- 			for (i = 0; i < node_count; i++) {
-+				struct device_node *np;
- 				__be32 phandle = *data++;
- 				__be32 drc_index;
++#ifdef CONFIG_PCIEASPM
+ static void nbio_v7_4_program_ltr(struct amdgpu_device *adev)
+ {
+ 	uint32_t def, data;
+@@ -651,9 +652,11 @@ static void nbio_v7_4_program_ltr(struct
+ 	if (def != data)
+ 		WREG32_PCIE(smnBIF_CFG_DEV0_EPF0_DEVICE_CNTL2, data);
+ }
++#endif
  
-+				np = of_find_node_by_phandle(be32_to_cpu(phandle));
-+				if (!np) {
-+					pr_warn("Failed lookup: phandle 0x%x for action 0x%x\n",
-+						be32_to_cpu(phandle), action);
-+					continue;
-+				}
-+
- 				switch (action) {
- 				case DELETE_DT_NODE:
--					delete_dt_node(phandle);
-+					delete_dt_node(np);
- 					break;
- 				case UPDATE_DT_NODE:
--					update_dt_node(phandle, scope);
-+					update_dt_node(np, scope);
- 					break;
- 				case ADD_DT_NODE:
- 					drc_index = *data++;
--					add_dt_node(phandle, drc_index);
-+					add_dt_node(np, drc_index);
- 					break;
- 				}
+ static void nbio_v7_4_program_aspm(struct amdgpu_device *adev)
+ {
++#ifdef CONFIG_PCIEASPM
+ 	uint32_t def, data;
  
-+				of_node_put(np);
- 				cond_resched();
- 			}
- 		}
--- 
-2.35.1
-
+ 	def = data = RREG32_PCIE(smnPCIE_LC_CNTL);
+@@ -709,7 +712,10 @@ static void nbio_v7_4_program_aspm(struc
+ 	if (def != data)
+ 		WREG32_PCIE(smnPCIE_LC_CNTL6, data);
+ 
+-	nbio_v7_4_program_ltr(adev);
++	/* Don't bother about LTR if LTR is not enabled
++	 * in the path */
++	if (adev->pdev->ltr_path)
++		nbio_v7_4_program_ltr(adev);
+ 
+ 	def = data = RREG32_PCIE(smnRCC_BIF_STRAP3);
+ 	data |= 0x5DE0 << RCC_BIF_STRAP3__STRAP_VLINK_ASPM_IDLE_TIMER__SHIFT;
+@@ -733,6 +739,7 @@ static void nbio_v7_4_program_aspm(struc
+ 	data &= ~PCIE_LC_CNTL3__LC_DSC_DONT_ENTER_L23_AFTER_PME_ACK_MASK;
+ 	if (def != data)
+ 		WREG32_PCIE(smnPCIE_LC_CNTL3, data);
++#endif
+ }
+ 
+ const struct amdgpu_nbio_funcs nbio_v7_4_funcs = {
 
 
