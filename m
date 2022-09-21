@@ -2,145 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29FF25BFED0
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 15:17:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DFD05BFED5
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 15:18:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbiIUNRM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 09:17:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36408 "EHLO
+        id S230232AbiIUNSK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 09:18:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230019AbiIUNRK (ORCPT
+        with ESMTP id S230126AbiIUNSH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 09:17:10 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE74C89CE4;
-        Wed, 21 Sep 2022 06:17:09 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id r133-20020a1c448b000000b003b494ffc00bso8522906wma.0;
-        Wed, 21 Sep 2022 06:17:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date;
-        bh=q3YuTWNeJ5V53+QAPS3mdAfc+O8icEhJa5RM3K6ShEo=;
-        b=Jkl3nISiWDGyLlOQL0e9gqcOHTMqtSHF/DZqJJiNwZxnMIuxU0dlsYOSDOG+n5PTGa
-         coc1iimk5rxdbEmHxzPzkcbsJXQcekGNd4YKD7HlDzMwxWjETv9u7ZkyU8fO9E39CC5i
-         Ng789mjmXRAovoZpPUnfsRU7iUcL3AgcsYObN8UWg8mXXJ9x1K8u60VznlGREVI9u42w
-         kI0JLRzqCMAtQV8L0Tc7Idz5TKVvw+8ZDa1FwZ+jI2zipj5W6ftQIiTG8kzgrYIHpmDz
-         CEGl8znSNIL/5kigfz4vA+uBCRhPfIWXOokM3osHaucM6idSGpgaPNnCeIDl8tZJyBKt
-         sK+w==
+        Wed, 21 Sep 2022 09:18:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 178218FD69
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 06:18:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663766283;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+Ycsm6u9sZ82A3jlHCGPvt/qqS1OZ6xDjvbs1owMubI=;
+        b=JN4pmasW8uoF2azvEMQ3FJ5heU8z2jf4zqWDSApTlCSKuEMgsverxdeelUhQZqJu/xWFIW
+        nRCyi/q35HzsjRaogBKUACmtlZBkOzdqKDT3OIb8waR4fXkPYe/V0py5IWs5M9OwsTcPow
+        UfBV8Hvnde+tLMKhZxvGCQ8xeU8hucY=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-158-mBWT2m5rNui6RnCgxjMu1g-1; Wed, 21 Sep 2022 09:18:01 -0400
+X-MC-Unique: mBWT2m5rNui6RnCgxjMu1g-1
+Received: by mail-wr1-f71.google.com with SMTP id v22-20020adf8b56000000b0022af189148bso2400539wra.22
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 06:18:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=q3YuTWNeJ5V53+QAPS3mdAfc+O8icEhJa5RM3K6ShEo=;
-        b=zdTIInUOHKbfxj6g6wTRhbV/9gu05x4mPsDhYQ4IT5/1YNnhSGNye3NjGDs2IgGXUi
-         n9L73YEkcSWTFzYCma9Ko17P/8UX7ojjFUeu306SAledRFLHEB3Muy74xxKMMxJlyfnB
-         ZXC/dPdVY9qMtpbDyN089tzivQBFOK302GN1nCfJo++HmQBaHhRZ1218inXINP1S0Swe
-         d1qMBoj2yDs0QhIJbjNaTaamP/YKsMxc0YdTO13M6U6RbYWUzfCwqokawWhB/qAHCbgx
-         SIzN9+FFb3iuswOP1VLYPCHdOMZfBvnK1j8nIIMUU+43uyEVDoIHp1Adk9mTQpQf3oyx
-         xngA==
-X-Gm-Message-State: ACrzQf14L33LY/zvqY1xO5PGoBDgicPu4c/6X4C84JCN5dMadGrdnoOr
-        gxRVgm/c1SgwHCotY1sZPBA=
-X-Google-Smtp-Source: AMsMyM7d4JMhEzdd/OG4Sf7n6l1qjqqV6WqIm4PrPOLv6puF5rGooxtVwpaWFDuYudt7StImPRCQ6A==
-X-Received: by 2002:a05:600c:2043:b0:3b3:c84c:ca33 with SMTP id p3-20020a05600c204300b003b3c84cca33mr5875258wmg.15.1663766228183;
-        Wed, 21 Sep 2022 06:17:08 -0700 (PDT)
-Received: from ipe420-102 ([2a00:1398:4:ac00:ec4:7aff:fe32:721b])
-        by smtp.gmail.com with ESMTPSA id p25-20020a7bcc99000000b003b476bb2624sm2849112wma.6.2022.09.21.06.17.07
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date;
+        bh=+Ycsm6u9sZ82A3jlHCGPvt/qqS1OZ6xDjvbs1owMubI=;
+        b=LZjli0J58F3iSJLV3G2DD/cJd1qoF3OhaSTXDyHM4W19oVsrEUExLobHQdL0i6SIlB
+         +AzSTLbDeZzyp/UTbVVx4ZoRn8qb4KXLKkoMaXW9VQ3lxt0/VDOSKV/GCeBMx0AmwKYs
+         jBGBBgwCIWVs2X+GMl58PF57v4W+ncY39ZVyO44GGu5t/0+2+IjwSMD2Zd5idr9sXkp9
+         RUtM9UzdJrqKoRKJ35FGNjcLplCq/tAM38hjt2eEF9jgPEPRijAMuL6wIT3+8399+0ga
+         nmZ/AU7Nl8xqQ7y6m4sug2vKkB0k3gB44zzOF5lykD7aGBMCMvnoa7jF36Z6c+Zz1xvq
+         ANQg==
+X-Gm-Message-State: ACrzQf2YNTUvTOZMQkXLPbAYCcYLO+Ag82rvfSm/+qDUdlU5w6bacFDa
+        pfDGtsNvJpmC7nht9AQDLDviud1Ije+BscVr1rZ0VQCf1KcsSezEamJ94DuKsUVDAT6oY8MK22L
+        1op/FBZc2DnH+xF30cTOq4171
+X-Received: by 2002:a5d:550c:0:b0:22b:1942:4bf6 with SMTP id b12-20020a5d550c000000b0022b19424bf6mr4553173wrv.520.1663766278408;
+        Wed, 21 Sep 2022 06:17:58 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5Erew7wBLP+9LtOkgcbJj5JZHqOUD/OpDcGOqy2mOcO/Om9etdvAhViz9GLTajLlLqxrqRjg==
+X-Received: by 2002:a5d:550c:0:b0:22b:1942:4bf6 with SMTP id b12-20020a5d550c000000b0022b19424bf6mr4553150wrv.520.1663766278091;
+        Wed, 21 Sep 2022 06:17:58 -0700 (PDT)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id f15-20020a1cc90f000000b003b2878b9e0dsm2769590wmb.20.2022.09.21.06.17.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Sep 2022 06:17:07 -0700 (PDT)
-Date:   Wed, 21 Sep 2022 13:17:07 +0000
-From:   Jalal Mostafa <jalal.a.mostapha@gmail.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        maciej.fijalkowski@intel.com
-Cc:     bjorn@kernel.org, magnus.karlsson@intel.com,
-        maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, daniel@iogearbox.net, john.fastabend@gmail.com,
-        hawk@kernel.org, ast@kernel.org, linux-kernel@vger.kernel.org,
-        jalal.mostafa@kit.edu, jalal.a.mostapha@gmail.com
-Subject: [PATCH v3] xsk: inherit need_wakeup flag for shared sockets
-Message-ID: <YysO03uVFwGO8dHf@ipe420-102>
+        Wed, 21 Sep 2022 06:17:57 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Matlack <dmatlack@google.com>,
+        Mingwei Zhang <mizhang@google.com>,
+        Yan Zhao <yan.y.zhao@intel.com>,
+        Ben Gardon <bgardon@google.com>
+Subject: Re: [PATCH v4 1/9] KVM: x86/mmu: Bug the VM if KVM attempts to
+ double count an NX huge page
+In-Reply-To: <20220830235537.4004585-2-seanjc@google.com>
+References: <20220830235537.4004585-1-seanjc@google.com>
+ <20220830235537.4004585-2-seanjc@google.com>
+Date:   Wed, 21 Sep 2022 15:17:56 +0200
+Message-ID: <87tu50oohn.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The flag for need_wakeup is not set for xsks with `XDP_SHARED_UMEM`
-flag and of different queue ids and/or devices. They should inherit
-the flag from the first socket buffer pool since no flags can be
-specified once `XDP_SHARED_UMEM` is specified.
+Sean Christopherson <seanjc@google.com> writes:
 
-Fixes: b5aea28dca134 ("xsk: Add shared umem support between queue ids")
+> WARN and kill the VM if KVM attempts to double count an NX huge page,
+> i.e. attempts to re-tag a shadow page with "NX huge page disallowed".
+> KVM does NX huge page accounting only when linking a new shadow page, and
+> it should be impossible for a new shadow page to be already accounted.
+> E.g. even in the TDP MMU case, where vCPUs can race to install a new
+> shadow page, only the "winner" will account the installed page.
+>
+> Kill the VM instead of continuing on as either KVM has an egregious bug,
+> e.g. didn't zero-initialize the data, or there's host data corruption, in
+> which carrying on is dangerous, e.g. could cause silent data corruption
+> in the guest.
+>
+> Reported-by: David Matlack <dmatlack@google.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> Reviewed-by: Mingwei Zhang <mizhang@google.com>
+> ---
+>  arch/x86/kvm/mmu/mmu.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 32b60a6b83bd..74afee3f2476 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -804,7 +804,7 @@ static void account_shadowed(struct kvm *kvm, struct kvm_mmu_page *sp)
+>  
+>  void account_huge_nx_page(struct kvm *kvm, struct kvm_mmu_page *sp)
+>  {
+> -	if (sp->lpage_disallowed)
+> +	if (KVM_BUG_ON(sp->lpage_disallowed, kvm))
+>  		return;
+>  
+>  	++kvm->stat.nx_lpage_splits;
 
-Signed-off-by: Jalal Mostafa <jalal.a.mostapha@gmail.com>
-Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
----
- include/net/xsk_buff_pool.h | 2 +-
- net/xdp/xsk.c               | 4 ++--
- net/xdp/xsk_buff_pool.c     | 5 +++--
- 3 files changed, 6 insertions(+), 5 deletions(-)
+This patch (now in sean/for_paolo/6.1) causes nested Hyper-V guests to
+break early in the boot sequence but the fault is not
+Hyper-V-enlightenments related, e.g. even without them I see:
 
-diff --git a/include/net/xsk_buff_pool.h b/include/net/xsk_buff_pool.h
-index 647722e847b4..f787c3f524b0 100644
---- a/include/net/xsk_buff_pool.h
-+++ b/include/net/xsk_buff_pool.h
-@@ -95,7 +95,7 @@ struct xsk_buff_pool *xp_create_and_assign_umem(struct xdp_sock *xs,
- 						struct xdp_umem *umem);
- int xp_assign_dev(struct xsk_buff_pool *pool, struct net_device *dev,
- 		  u16 queue_id, u16 flags);
--int xp_assign_dev_shared(struct xsk_buff_pool *pool, struct xdp_umem *umem,
-+int xp_assign_dev_shared(struct xsk_buff_pool *pool, struct xdp_sock *umem_xs,
- 			 struct net_device *dev, u16 queue_id);
- int xp_alloc_tx_descs(struct xsk_buff_pool *pool, struct xdp_sock *xs);
- void xp_destroy(struct xsk_buff_pool *pool);
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index 5b4ce6ba1bc7..7bada4e8460b 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -954,8 +954,8 @@ static int xsk_bind(struct socket *sock, struct sockaddr *addr, int addr_len)
- 				goto out_unlock;
- 			}
- 
--			err = xp_assign_dev_shared(xs->pool, umem_xs->umem,
--						   dev, qid);
-+			err = xp_assign_dev_shared(xs->pool, umem_xs, dev,
-+						   qid);
- 			if (err) {
- 				xp_destroy(xs->pool);
- 				xs->pool = NULL;
-diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
-index a71a8c6edf55..ed6c71826d31 100644
---- a/net/xdp/xsk_buff_pool.c
-+++ b/net/xdp/xsk_buff_pool.c
-@@ -212,17 +212,18 @@ int xp_assign_dev(struct xsk_buff_pool *pool,
- 	return err;
- }
- 
--int xp_assign_dev_shared(struct xsk_buff_pool *pool, struct xdp_umem *umem,
-+int xp_assign_dev_shared(struct xsk_buff_pool *pool, struct xdp_sock *umem_xs,
- 			 struct net_device *dev, u16 queue_id)
- {
- 	u16 flags;
-+	struct xdp_umem *umem = umem_xs->umem;
- 
- 	/* One fill and completion ring required for each queue id. */
- 	if (!pool->fq || !pool->cq)
- 		return -EINVAL;
- 
- 	flags = umem->zc ? XDP_ZEROCOPY : XDP_COPY;
--	if (pool->uses_need_wakeup)
-+	if (umem_xs->pool->uses_need_wakeup)
- 		flags |= XDP_USE_NEED_WAKEUP;
- 
- 	return xp_assign_dev(pool, dev, queue_id, flags);
+# ~/qemu/build/qemu-system-x86_64 -machine q35,accel=kvm,kernel-irqchip=split -name guest=win10 -cpu host -smp 4 -m 16384 -drive file=/home/VMs/WinDev2202Eval.qcow2,if=none,id=drive-ide0-0-0 -device ide-hd,bus=ide.0,unit=0,drive=drive-ide0-0-0,id=ide0-0-0,bootindex=1 -vnc :0 -rtc base=localtime,driftfix=slew --no-hpet -monitor stdio --no-reboot
+QEMU 7.0.50 monitor - type 'help' for more information
+(qemu) 
+error: kvm run failed Input/output error
+EAX=00000020 EBX=0000ffff ECX=00000000 EDX=0000ffff
+ESI=00000000 EDI=00002300 EBP=00000000 ESP=00006d8c
+EIP=00000018 EFL=00000046 [---Z-P-] CPL=0 II=0 A20=1 SMM=0 HLT=0
+ES =f000 000f0000 ffffffff 00809300
+CS =cb00 000cb000 ffffffff 00809b00
+SS =0000 00000000 ffffffff 00809300
+DS =0000 00000000 ffffffff 00809300
+FS =0000 00000000 ffffffff 00809300
+GS =0000 00000000 ffffffff 00809300
+LDT=0000 00000000 0000ffff 00008200
+TR =0000 00000000 0000ffff 00008b00
+GDT=     00000000 00000000
+IDT=     00000000 000003ff
+CR0=00000010 CR2=00000000 CR3=00000000 CR4=00000000
+DR0=0000000000000000 DR1=0000000000000000 DR2=0000000000000000 DR3=0000000000000000 
+DR6=00000000ffff0ff0 DR7=0000000000000400
+EFER=0000000000000000
+Code=0e 07 31 c0 b9 00 10 8d 3e 00 03 fc f3 ab 07 b8 20 00 e7 7e <cb> 0f 1f 80 00 00 00 00 6b 76 6d 20 61 50 69 43 20 00 00 00 2d 02 00 00 d9 02 00 00 00 03
+KVM_GET_CLOCK failed: Input/output error
+Aborted (core dumped)
+
+(FWIW, KVM_GET_CLOCK is obviously unrelated here, KVM_BUG_ON'ed VMs are
+just like that for all ioctls)
+
+I can also see
+
+[  962.063025] WARNING: CPU: 2 PID: 20511 at arch/x86/kvm/mmu/mmu.c:808 account_huge_nx_page+0x2c/0xc0 [kvm]
+[  962.072654] Modules linked in: kvm_intel(E) kvm(E) qrtr rfkill sunrpc intel_rapl_msr intel_rapl_common intel_uncore_frequency intel_uncore_frequency_common isst_if_common skx_edac nfit libnvdimm x86_pkg_temp_thermal intel_powerclamp coretemp ipmi_ssif mlx5_ib ib_uverbs irqbypass acpi_ipmi ib_core rapl dcdbas ipmi_si mei_me intel_cstate i2c_i801 ipmi_devintf dell_smbios mei intel_uncore dell_wmi_descriptor wmi_bmof pcspkr i2c_smbus lpc_ich ipmi_msghandler acpi_power_meter xfs libcrc32c mlx5_core sd_mod t10_pi crc64_rocksoft_generic crc64_rocksoft crc64 sg mgag200 drm_shmem_helper drm_kms_helper syscopyarea sysfillrect sysimgblt fb_sys_fops ahci libahci crct10dif_pclmul drm igb crc32_pclmul libata crc32c_intel mlxfw megaraid_sas ghash_clmulni_intel psample dca i2c_algo_bit pci_hyperv_intf wmi dm_mirror dm_region_hash dm_log dm_mod fuse [last unloaded: kvm]
+[  962.148222] CPU: 2 PID: 20511 Comm: qemu-system-x86 Tainted: G          I E      6.0.0-rc1+ #158
+[  962.157005] Hardware name: Dell Inc. PowerEdge R740/0WRPXK, BIOS 2.12.2 07/09/2021
+[  962.164572] RIP: 0010:account_huge_nx_page+0x2c/0xc0 [kvm]
+[  962.170101] Code: 44 00 00 41 56 48 8d 86 90 00 00 00 41 55 41 54 55 48 89 fd 53 4c 8b a6 90 00 00 00 49 39 c4 74 29 80 bf f4 9d 00 00 00 75 2b <0f> 0b b8 01 01 00 00 be 01 03 00 00 66 89 87 f4 9d 00 00 5b 5d 41
+[  962.188854] RSP: 0018:ffffbb2243e17b10 EFLAGS: 00010246
+[  962.194081] RAX: ffffa0b5d39c5790 RBX: 0000000000000600 RCX: ffffa0b5e610e018
+[  962.201212] RDX: 0000000000000001 RSI: ffffa0b5d39c5700 RDI: ffffbb2243de9000
+[  962.208346] RBP: ffffbb2243de9000 R08: 0000000000000001 R09: 0000000000000001
+[  962.215481] R10: ffffa0b4c0000000 R11: ffffa0b5d39c5700 R12: ffffbb2243df22d8
+[  962.222612] R13: ffffa0b5d3b22880 R14: 0000000000000002 R15: ffffa0b5c884b018
+[  962.229745] FS:  00007fdaf5177640(0000) GS:ffffa0b92fc40000(0000) knlGS:0000000000000000
+[  962.237830] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  962.243577] CR2: 0000000000000000 CR3: 000000014ef9e004 CR4: 00000000007726e0
+[  962.250710] PKRU: 55555554
+[  962.253422] Call Trace:
+[  962.255879]  <TASK>
+[  962.257992]  ept_fetch+0x504/0x5a0 [kvm]
+[  962.261959]  ept_page_fault+0x2d7/0x300 [kvm]
+[  962.266362]  ? kvm_mmu_slot_gfn_write_protect+0xb1/0xd0 [kvm]
+[  962.272150]  ? kvm_slot_page_track_add_page+0x5b/0x90 [kvm]
+[  962.277766]  ? kvm_mmu_alloc_shadow_page+0x33c/0x3c0 [kvm]
+[  962.283297]  ? mmu_alloc_root+0x9d/0xf0 [kvm]
+[  962.287701]  kvm_mmu_page_fault+0x258/0x290 [kvm]
+[  962.292451]  vmx_handle_exit+0xe/0x40 [kvm_intel]
+[  962.297173]  vcpu_enter_guest+0x665/0xfc0 [kvm]
+[  962.301741]  ? vmx_check_nested_events+0x12d/0x2e0 [kvm_intel]
+[  962.307580]  vcpu_run+0x33/0x250 [kvm]
+[  962.311367]  kvm_arch_vcpu_ioctl_run+0xf7/0x460 [kvm]
+[  962.316456]  kvm_vcpu_ioctl+0x271/0x670 [kvm]
+[  962.320843]  __x64_sys_ioctl+0x87/0xc0
+[  962.324602]  do_syscall_64+0x38/0x90
+[  962.328192]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+[  962.333252] RIP: 0033:0x7fdaf7d073fb
+[  962.336832] Code: ff ff ff 85 c0 79 9b 49 c7 c4 ff ff ff ff 5b 5d 4c 89 e0 41 5c c3 66 0f 1f 84 00 00 00 00 00 f3 0f 1e fa b8 10 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d fd 29 0f 00 f7 d8 64 89 01 48
+[  962.355578] RSP: 002b:00007fdaf51767b8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+[  962.363148] RAX: ffffffffffffffda RBX: 000000000000ae80 RCX: 00007fdaf7d073fb
+[  962.370286] RDX: 0000000000000000 RSI: 000000000000ae80 RDI: 000000000000000c
+[  962.377417] RBP: 000055a84ef30900 R08: 000055a84d638be0 R09: 0000000000000000
+[  962.384550] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+[  962.391685] R13: 000055a84d65e0ce R14: 00007fdaf7c8d810 R15: 0000000000000000
+[  962.398818]  </TASK>
+[  962.401009] ---[ end trace 0000000000000000 ]---
+[ 1213.265975] ------------[ cut here ]------------
+
+which can hopefully give a hint on where the real issue is ...
+
 -- 
-2.34.1
+Vitaly
 
