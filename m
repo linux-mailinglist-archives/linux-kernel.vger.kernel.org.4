@@ -2,65 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F3BA5E56C3
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 01:32:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAA005E56C5
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 01:33:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbiIUXcg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 19:32:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44750 "EHLO
+        id S229892AbiIUXdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 19:33:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbiIUXcc (ORCPT
+        with ESMTP id S229543AbiIUXdd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 19:32:32 -0400
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4070A59A5
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 16:32:29 -0700 (PDT)
-Received: by mail-ot1-x32b.google.com with SMTP id l7-20020a056830154700b0065563d564dfso5110521otp.0
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 16:32:29 -0700 (PDT)
+        Wed, 21 Sep 2022 19:33:33 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1529A5980;
+        Wed, 21 Sep 2022 16:33:31 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id y17so17236519ejo.6;
+        Wed, 21 Sep 2022 16:33:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=SqzcULGafomcPfL0238nMURblSS0a/kOzo9VibmLWz0=;
-        b=nHW7hBkMCvhOQcKutMmPzSfS5wSHoQgRVQsiLawYD3+JHh3e9hlw89NKuU4b8n65TM
-         J7W8snejUmJ+MiAkdhXsuak1+kifyvYepHdet3km65zK5ao+LxznJG4tqLDoe+1lhD3N
-         9MHDZUTzMwh+aLn+yHFtHkpIu1tjRx3aiV+H+FayIccpvCnNxNOzAPchV+BgoH8dsz+e
-         suXjjvM2GIpCmJR+lfWpA94D9a43Y6Wc6K3RRugQ1PoGP8qWsbL6eMFdJgY+jUjQUcJy
-         iMK1xwSDPGi2aA8qarBUDEjMbE+njuusNNz5BjxFBcedJbbjfHW9r9Xot3SVP4yIBWWv
-         fXaw==
+        bh=wcBwRfOcQ0aBAEAgR2fCpIMAURfzSlApHm2GvjuJp+I=;
+        b=QiG5+P5UyRh+xcWeHuWwWXVwsmEl3xKYP0TkikiZvurzaYzDbNmEEVLI5FmB0MIfgt
+         pag5jJepynQEHN/+t3aUVs8GmXMtDDoUIyRovTtXxTof7TqA13a95FH2Lg7xUDuxM/2A
+         jvbbKgQ5dTvOGhDsMsJgIwtvNCpiRKLheP9tYl3q/i3lXbHqNiXNm7IWceL+AlyE3sCt
+         dcnPBkaIMA8I6M0gJN8+1/2LoNCO9GpbQE+tptun9J+iwWlrcUZWjIH+s9iRKRnh/3l3
+         JsjLxEIOk5lvQQ+uWgbaDiv6ha8angSfIc8MqQZ1gVA1YmsZN/GJ771kyqelJPqwDDZV
+         adRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=SqzcULGafomcPfL0238nMURblSS0a/kOzo9VibmLWz0=;
-        b=CIOR4SxbJsgtRrPReuf78IQwiPc0XfgoOGc9BFUD5E/WU2NEXmPNXGyV4csk+3Z6oB
-         4yTG0V+Lyz4D8rsFBJ/VMSN4kCbs+cKKbU9d1qaPckTedffH0TR4Ga5qQsHzIQL00cdT
-         RwtpnbRjZoQEOnxjk0vVxEffzhksKGaqku8NKSqq3bdURv1HsS3m6FiU2i3Ggrm7zYFI
-         ldbqlCloaL1adA7ZDDrRrKkYnXF2uDJF5FZ5bwIRRcqv9Eeaq0b0vxQoZ+ihVS58MJut
-         EG2M7xua3YHiRKb/koBbfmBGfmlY60i+1AzCo2L1NmTfCqdTwnSA4cQHW4gFeDpX81ui
-         eivA==
-X-Gm-Message-State: ACrzQf1byhobQ8787VLWwLVY0Wf0OSZgjpcFNv/nI2EnePohL3yw/hCl
-        kuyy6VBXHLXLuPrgeF/0/hFgEi9UjTEAEmY3epgfJw==
-X-Google-Smtp-Source: AMsMyM4P4tSeGfFSdj2TFSMxnw3Pnb6Rkdj16/B2lEqqPJivMxbm2W/5/M+6fyNGUhAY4IKj9Lzm2wbXRju7Q1alP5M=
-X-Received: by 2002:a9d:6296:0:b0:656:761:28bc with SMTP id
- x22-20020a9d6296000000b00656076128bcmr318414otk.14.1663803148668; Wed, 21 Sep
- 2022 16:32:28 -0700 (PDT)
+        bh=wcBwRfOcQ0aBAEAgR2fCpIMAURfzSlApHm2GvjuJp+I=;
+        b=pMypRiL1wX1XzOFNbID3R1jti4nxHDHmfDKQso3d+pxi3f1O9a3XpGSxbckyu8lLg6
+         R4K1P8iYQDX5I2guiVuZvrBcHZk0jPv2KfL/KV+tH3Qz2x3txiNamponG7yn/GgbHG2Y
+         kgvvxcrH/qNMCqf0GQNTC0NkjUsCigRfpg5tKMmPwvVogyv1NIpJXPxRWShotBHqKI+j
+         4pF6zwjasJbvZW6PZNur7gMNeccHx8VwdYHSj4QjwdmsCw6cqu8BhBpNiTy/TZW4n2Fz
+         u+DgTba/bib5MgkHnaH6LHmH06k8JHo+/RfPTzhe9kOQWCg612ou0Omdpgh57/Yu+kdP
+         WxSA==
+X-Gm-Message-State: ACrzQf2ajeVNFAgq2uR1fAEf4pXqSGz9/lW3JiBgymKFLgZ2QBKs0YQ4
+        nxWHfK5j7/6xfQ8u4J4VUVys6LSOlggj9ydHLuk=
+X-Google-Smtp-Source: AMsMyM6+QFIVTHOS3tuB+2McWRGJl9t/4olnCXq9ndUaWJsvK03ifHsJOjfhEbmrLu4hk1RTx4Bbe8/G2z1OgAYZJC4=
+X-Received: by 2002:a17:906:99c5:b0:73d:70c5:1a4f with SMTP id
+ s5-20020a17090699c500b0073d70c51a4fmr529596ejn.302.1663803210145; Wed, 21 Sep
+ 2022 16:33:30 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220921231151.2321058-1-vipinsh@google.com>
-In-Reply-To: <20220921231151.2321058-1-vipinsh@google.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Wed, 21 Sep 2022 16:32:17 -0700
-Message-ID: <CALMp9eQ8Rr-rSjXiZ_4O0mA=k3kk=hYrfB_NTszu=9DFOwNUaQ@mail.gmail.com>
-Subject: Re: [PATCH] KVM: selftests: Fix hyperv_features test failure when
- built on Clang
-To:     Vipin Sharma <vipinsh@google.com>
-Cc:     seanjc@google.com, pbonzini@redhat.com, vkuznets@redhat.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220920000100.477320-1-void@manifault.com> <20220920000100.477320-3-void@manifault.com>
+In-Reply-To: <20220920000100.477320-3-void@manifault.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 21 Sep 2022 16:33:18 -0700
+Message-ID: <CAEf4Bzb1AHvn1=P=1_P84r35NyFtAN1B=zNtJ13po_JORjqBvA@mail.gmail.com>
+Subject: Re: [PATCH v6 2/4] bpf: Add bpf_user_ringbuf_drain() helper
+To:     David Vernet <void@manifault.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, kernel-team@fb.com, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org, tj@kernel.org,
+        brho@google.com, joshdon@google.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,31 +70,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 21, 2022 at 4:11 PM Vipin Sharma <vipinsh@google.com> wrote:
+On Mon, Sep 19, 2022 at 5:01 PM David Vernet <void@manifault.com> wrote:
 >
-> hyperv_features test fails when built on Clang. It throws error:
+> In a prior change, we added a new BPF_MAP_TYPE_USER_RINGBUF map type which
+> will allow user-space applications to publish messages to a ring buffer
+> that is consumed by a BPF program in kernel-space. In order for this
+> map-type to be useful, it will require a BPF helper function that BPF
+> programs can invoke to drain samples from the ring buffer, and invoke
+> callbacks on those samples. This change adds that capability via a new BPF
+> helper function:
 >
->          Failed guest assert: !hcall->ud_expected || res == hcall->expect at
->          x86_64/hyperv_features.c:90
+> bpf_user_ringbuf_drain(struct bpf_map *map, void *callback_fn, void *ctx,
+>                        u64 flags)
 >
-> On GCC, EAX is set to 0 before the hypercall whereas in Clang it is not,
-> this causes EAX to have garbage value when hypercall is returned in Clang
-> binary.
+> BPF programs may invoke this function to run callback_fn() on a series of
+> samples in the ring buffer. callback_fn() has the following signature:
 >
-> Fix by executing the guest assertion only when ud_expected is false.
+> long callback_fn(struct bpf_dynptr *dynptr, void *context);
 >
-> Fixes: cc5851c6be86 ("KVM: selftests: Use exception fixup for #UD/#GP Hyper-V MSR/hcall tests")
-> Signed-off-by: Vipin Sharma <vipinsh@google.com>
-> Suggested-by: Sean Christopherson <seanjc@google.com>
+> Samples are provided to the callback in the form of struct bpf_dynptr *'s,
+> which the program can read using BPF helper functions for querying
+> struct bpf_dynptr's.
 >
+> In order to support bpf_ringbuf_drain(), a new PTR_TO_DYNPTR register
+> type is added to the verifier to reflect a dynptr that was allocated by
+> a helper function and passed to a BPF program. Unlike PTR_TO_STACK
+> dynptrs which are allocated on the stack by a BPF program, PTR_TO_DYNPTR
+> dynptrs need not use reference tracking, as the BPF helper is trusted to
+> properly free the dynptr before returning. The verifier currently only
+> supports PTR_TO_DYNPTR registers that are also DYNPTR_TYPE_LOCAL.
+>
+> Note that while the corresponding user-space libbpf logic will be added
+> in a subsequent patch, this patch does contain an implementation of the
+> .map_poll() callback for BPF_MAP_TYPE_USER_RINGBUF maps. This
+> .map_poll() callback guarantees that an epoll-waiting user-space
+> producer will receive at least one event notification whenever at least
+> one sample is drained in an invocation of bpf_user_ringbuf_drain(),
+> provided that the function is not invoked with the BPF_RB_NO_WAKEUP
+> flag. If the BPF_RB_FORCE_WAKEUP flag is provided, a wakeup
+> notification is sent even if no sample was drained.
+>
+> Signed-off-by: David Vernet <void@manifault.com>
 > ---
->  tools/testing/selftests/kvm/x86_64/hyperv_features.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+>  include/linux/bpf.h            |  11 +-
+>  include/uapi/linux/bpf.h       |  38 +++++++
+>  kernel/bpf/helpers.c           |   2 +
+>  kernel/bpf/ringbuf.c           | 181 ++++++++++++++++++++++++++++++++-
+>  kernel/bpf/verifier.c          |  61 ++++++++++-
+>  tools/include/uapi/linux/bpf.h |  38 +++++++
+>  6 files changed, 320 insertions(+), 11 deletions(-)
 
-In case Sean doesn't point it out, be wary of starting a shortlog with
-"Fix." You may later regret it.
+[...]
 
-Also, I think the "clang" part is a red herring. You are fixing a
-latent bug in the code.
+>  #define __BPF_FUNC_MAPPER(FN)          \
+>         FN(unspec),                     \
+> @@ -5599,6 +5636,7 @@ union bpf_attr {
+>         FN(tcp_raw_check_syncookie_ipv4),       \
+>         FN(tcp_raw_check_syncookie_ipv6),       \
+>         FN(ktime_get_tai_ns),           \
+> +       FN(user_ringbuf_drain),         \
+>         /* */
+>
+>  /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 41aeaf3862ec..66217b1857ca 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -1627,6 +1627,8 @@ bpf_base_func_proto(enum bpf_func_id func_id)
+>                 return &bpf_dynptr_write_proto;
+>         case BPF_FUNC_dynptr_data:
+>                 return &bpf_dynptr_data_proto;
+> +       case BPF_FUNC_user_ringbuf_drain:
+> +               return &bpf_user_ringbuf_drain_proto;
 
-Reviewed-by: Jim Mattson <jmattson@google.com>
+In light of [0], where we now allow dynptr only with CAP_BPF, I've
+moved this lower behind CAP_BPF check while applying. Thanks!
+
+  [0] https://patchwork.kernel.org/project/netdevbpf/patch/20220921143550.30247-1-memxor@gmail.com/
+
+>         default:
+>                 break;
+>         }
+
+[...]
