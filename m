@@ -2,95 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D10765E53EC
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 21:44:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 048505E53F2
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 21:48:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbiIUTou (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 15:44:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54696 "EHLO
+        id S229876AbiIUTsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 15:48:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbiIUTor (ORCPT
+        with ESMTP id S229560AbiIUTsU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 15:44:47 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0CE9205D5
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 12:44:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=w7Jz7/VDSsr+SsQrXK7cOIx370sW
-        OKMeCPTSlhrhFlw=; b=3Ar+4IImnhbXjhqG3o0toAna9ImYlBOzXHgVm2SgPnIc
-        4u46S/lZLx4iaLI+ClNhhePAnNbVxh+iuy4CRTKYl/3P3dO6LVOuA79dKzUyN32o
-        FHmpUFt7qaI0SVJPoYdCQFonBAa1ActmizNlnAXr225rfM7rUruohrWFk7R+/18=
-Received: (qmail 1343371 invoked from network); 21 Sep 2022 21:44:39 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 21 Sep 2022 21:44:39 +0200
-X-UD-Smtp-Session: l3s3148p1@wAXnLDXpHu0gAwDtxwncAPgJb5TsabMI
-Date:   Wed, 21 Sep 2022 21:44:39 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Asmaa Mnebhi <asmaa@nvidia.com>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Khalil Blaiech <kblaiech@nvidia.com>
-Subject: Re: [PATCH v5 1/8] i2c: i2c-mlxbf.c: Fix frequency calculation
-Message-ID: <Yytpp4c9Brcnx5s3@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Asmaa Mnebhi <asmaa@nvidia.com>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Khalil Blaiech <kblaiech@nvidia.com>
-References: <20220920174736.9766-1-asmaa@nvidia.com>
- <20220920174736.9766-2-asmaa@nvidia.com>
+        Wed, 21 Sep 2022 15:48:20 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03FFCA0254;
+        Wed, 21 Sep 2022 12:48:19 -0700 (PDT)
+Received: from zn.tnic (p200300ea9733e77f329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e77f:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 90A921EC04E4;
+        Wed, 21 Sep 2022 21:48:13 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1663789693;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=RQsSCmnaA3tja2xxzLfdQayRM2Puy3vWH21v7at91H8=;
+        b=BhqYk4Apw3euLWYnEfH1ZSXzy2nIQwCIItrx7JT1KgUH3QjrHXIXwWuIKzq4Jp6WS8bd4z
+        Ne0pLLDtHIF4r/o5rdtQyGdAlvopxks92MXl007Unbp6yDIM5qBV9U6fGkSyK2T0K+xpNr
+        FYsrp7QrFQ3xsziRJslwmeUfYvzN32Y=
+Date:   Wed, 21 Sep 2022 21:48:13 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     K Prateek Nayak <kprateek.nayak@amd.com>,
+        linux-kernel@vger.kernel.org, rafael@kernel.org, lenb@kernel.org,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        dave.hansen@linux.intel.com, tglx@linutronix.de, andi@lisas.de,
+        puwen@hygon.cn, mario.limonciello@amd.com, rui.zhang@intel.com,
+        gpiccoli@igalia.com, daniel.lezcano@linaro.org,
+        ananth.narayan@amd.com, gautham.shenoy@amd.com,
+        Calvin Ong <calvin.ong@amd.com>, stable@vger.kernel.org,
+        regressions@lists.linux.dev
+Subject: Re: [PATCH] ACPI: processor_idle: Skip dummy wait for processors
+ based on the Zen microarchitecture
+Message-ID: <YytqfVUCWfv0XyZO@zn.tnic>
+References: <20220921063638.2489-1-kprateek.nayak@amd.com>
+ <YysnE8rcZAOOj28A@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kEdobICLCmpuclNb"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220920174736.9766-2-asmaa@nvidia.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <YysnE8rcZAOOj28A@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Sep 21, 2022 at 05:00:35PM +0200, Peter Zijlstra wrote:
+> On Wed, Sep 21, 2022 at 12:06:38PM +0530, K Prateek Nayak wrote:
+> > Processors based on the Zen microarchitecture support IOPORT based deeper
+> > C-states. 
+> 
+> I've just gotta ask; why the heck are you using IO port based idle
+> states in 2022 ?!?! You have have MWAIT, right?
 
---kEdobICLCmpuclNb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+They have both. And both is Intel technology. And as I'm sure you
+know AMD can't do their own thing - they kinda have to follow Intel.
+Unfortunately.
 
-On Tue, Sep 20, 2022 at 01:47:29PM -0400, Asmaa Mnebhi wrote:
-> The i2c-mlxbf.c driver is currently broken because there is a bug
-> in the calculation of the frequency. core_f, core_r and core_od
-> are components read from hardware registers and are used to
-> compute the frequency used to compute different timing parameters.
-> The shifting mechanism used to get core_f, core_r and core_od is
-> wrong. Use FIELD_GET to mask and shift the bitfields properly.
->=20
-> Fixes: b5b5b32081cd206b (i2c: mlxbf: I2C SMBus driver for Mellanox BlueFi=
-eld SoC)
-> Reviewed-by: Khalil Blaiech <kblaiech@nvidia.com>
-> Signed-off-by: Asmaa Mnebhi <asmaa@nvidia.com>
+Are you saying modern Intel chipsets don't do IO-based C-states anymore?
 
-Applied to for-current, thanks!
+-- 
+Regards/Gruss,
+    Boris.
 
-
---kEdobICLCmpuclNb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMraaMACgkQFA3kzBSg
-KbaDyxAArpwpuUrb/wfiY+JkxPCflO3ZZlFXlWe5Uw0RjM6gYUcE/xyZ3ulYi7sE
-Gm0dcxcvB70a4PJod3w3/z0ELyUbS7pbnvIDpO7FUeJeG7bodeXbnLSFpN4rwOLv
-ftNrs1KZMxJXr4/fzYUz5Kg7kCXr1GLstUwEbAfUoWmAyL7skW+FITPvY0mg7F+0
-PmAOwUkRABB1WWGeioAK/ryHjOvyI0zmT0/8MV3K+1EHfTQVGIW8Nlr+BqOjhQqs
-eQmgkbLuNaN4vUHVDfxXQ5Beuf/fP1HgdOqlL4ZhRWi2DG6Snx03GEoBgGMVgQda
-sCx/QuhardNmBjCqhQA/GChxapHTpGf4y54o7t1kNUhIyUJwlSfPmbYLWxdFFK5j
-hPo3/dXsrVRjM3YfJbbL3YA9TzGHO+9fRDFSQ/998wz5hvIRHgZOS6gGs9Wf8KWM
-8vIxY5V6GDTMZ0gtalmHV6vFSB+lDkyJIoB5UBwQa5BzUBj405r4yh5sJUdFFx1C
-5d08fLfn8VFxTgtJhP5VcCfgc1ND96lZ8dPWHIZN4DT5l2XxWzndHPTDoHE6m7tT
-iEm6yRvjGI3k4/ra8nceCUSHlnslHaFmAA7HErQBCW05YP146bzM6eW8JrP49oAa
-2CozuN86wKvK776hszp5z1w53xLCfyQ/VNj2N3DmSQb5M84J3Wc=
-=UQHf
------END PGP SIGNATURE-----
-
---kEdobICLCmpuclNb--
+https://people.kernel.org/tglx/notes-about-netiquette
