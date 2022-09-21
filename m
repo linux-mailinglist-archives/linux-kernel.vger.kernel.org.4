@@ -2,68 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CBAA5BFD4B
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 13:49:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B5905BFD62
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 13:57:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230217AbiIULtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 07:49:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60554 "EHLO
+        id S229612AbiIUL5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 07:57:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbiIULtY (ORCPT
+        with ESMTP id S229580AbiIUL5N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 07:49:24 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9F1C956A0
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 04:48:21 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id a8so8690887lff.13
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 04:48:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=/bkvkg6Y/dOHYzJXqWmZEeA+K66PQILGYp9YS1M0cwc=;
-        b=D+kbMAIHUt/hAXJQ6YNcDB6QBMkRX0C8kmsmq3Zi7dg+BbSNqXSYABQsDRRaLoSn5l
-         kCYvIKo7l4keR2NYazOrzeSfULco6eGEf+lmP7fiddz/byTQQbqX4vheOUm0TOFGwrPx
-         HEjnlRmZGm2MeOv4/OjZNgwRihWw7TMJ6vqqRS0cqHujjc+r+RyPOgh6mxwDXxGEy5bZ
-         qSvp5AropTw3Ibh8WO/8UurNMMQgjYFjBWJIUYrS8oIQ7VK8MTSJBfyCKcJ0zR1yZKn9
-         3oj4Tv5qKdLeeOPbpTeBYvlE7JSv22TjcmYkRKTH3JDHR7xOIzi8mPUUKk54zpAnoQWW
-         Xkgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=/bkvkg6Y/dOHYzJXqWmZEeA+K66PQILGYp9YS1M0cwc=;
-        b=le8xC8cyKFMERR+uKRF2o3srN6LKONALWBAD+52Fmj9D6VmhCcPPMVz9vmJXSZa1vN
-         uV42/yfq5S3MGjScQSidwgH4GY/ZRBaKUm7UOcDcL5CoPlxSgZdN7mJT+LFudl8G9wLP
-         wLsjwPYvGHYTeuPSNKCYH7is2DA1HgnN0jA+ik5kEGrx63AJzFIGI4QH3V0C+ET7ZPs7
-         eqOV40Jvf+QxhQmILcd8FvDF7KnYyYobPQwFPdZnaFunOWCrKzYVusD5GoFT/Oe2XFk3
-         ODiOAo1iyIdshBNaL8/aksFR6W/MKHhGGbceX7UMwhJhS5VTTwHcXCs8w0Z2dGUtcJHU
-         H6xQ==
-X-Gm-Message-State: ACrzQf0fLcTrk7exAJinTrgo5a0MGtYL9Qe9iB8iAPR7fGScA5J++b3f
-        i7M18y8s8TZ6OLIrsX2XPJ8JYJoCm2UD/2l002bKEA==
-X-Google-Smtp-Source: AMsMyM4kPRwu7Whg21VqI/2ELsxh4kcFhn3kO6akAghoUVhGsD9+JwZdbUmGbgo1xU0h3C55Xlj95l76mF+xYgafF50=
-X-Received: by 2002:a05:6512:a86:b0:499:f794:5cc2 with SMTP id
- m6-20020a0565120a8600b00499f7945cc2mr9323922lfu.100.1663760885551; Wed, 21
- Sep 2022 04:48:05 -0700 (PDT)
+        Wed, 21 Sep 2022 07:57:13 -0400
+Received: from beige.elm.relay.mailchannels.net (beige.elm.relay.mailchannels.net [23.83.212.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C623489900;
+        Wed, 21 Sep 2022 04:57:11 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|siddhesh@gotplt.org
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 92BC33C1695;
+        Wed, 21 Sep 2022 11:48:48 +0000 (UTC)
+Received: from pdx1-sub0-mail-a305 (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id BFA8F3C1381;
+        Wed, 21 Sep 2022 11:48:47 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1663760927; a=rsa-sha256;
+        cv=none;
+        b=pKPBwF6pxbd1LU8Lc9aJoFH/gqyP6dbNdLhqjxAUqCuLuSt3oS161J5mWqjSHzdJ4E3Obw
+        XL1s/5b4v6KGQhAXqbo5YyJbO0f8hkCMmPLs7Bb6nszp3zZpz3fwNBwyb7GA85wyytuR4c
+        bx8yQxW+CZ3IuEIzvpwpmKxmh/GI3C/h4MaqWdlTGLHJXYAqdIMRQMxukYa9fgyN2ZlG8L
+        7tf/oFVEuSb/ajmjPprPVswTHYofw3NASVkf6tv698EETa7gv0KgZBg+Rijsj8NOxtePUW
+        ldVmHtAuFOXMz72znqdXlgwAOggc1wEMHvW/H4aV03zWLbEEMftot2aJdQyTGg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1663760927;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=turS0/qDnZ8iNE8y4GFP580mlFQaC1N6+0yaiTc66YM=;
+        b=ATAbUebTwYDHRWc0lyjt/qAJBb+3HtdHy/ZsEDljfyzG2jTQBIajlo5Bl2sN2YvI0W/Xh+
+        hGdqRIbnVCC09pU/hOtUSFppmpaComsZcTF3IRH5xKcLbJ4f3PXcHNKc/UrhCMyFQPxOMw
+        gAa9ds03BiZ+ZwNf9mb9GBzfoKnUw4gf4y3wefEURsGX+bgcOIAu/xce37fiI9pWXnuqlU
+        cp4nfRntGH7DpdweSXvxFhuft/3f/YoNv6LklcNFz4zD+IWDOSnrDtzVZ6u+9y8UPYlDlk
+        lrqEtjN6AVoMBpL6q01dvVp9Jnai0sqMTQ5HbNI0hMG1qFzNWkmUPWQji7jgeg==
+ARC-Authentication-Results: i=1;
+        rspamd-f776c45b8-4rvqn;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=siddhesh@gotplt.org
+X-Sender-Id: dreamhost|x-authsender|siddhesh@gotplt.org
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|siddhesh@gotplt.org
+X-MailChannels-Auth-Id: dreamhost
+X-Keen-Decisive: 171df644725e00e6_1663760928146_3647263239
+X-MC-Loop-Signature: 1663760928146:295560323
+X-MC-Ingress-Time: 1663760928146
+Received: from pdx1-sub0-mail-a305 (pop.dreamhost.com [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.126.129.208 (trex/6.7.1);
+        Wed, 21 Sep 2022 11:48:48 +0000
+Received: from [192.168.0.182] (bras-vprn-toroon4834w-lp130-16-184-147-84-238.dsl.bell.ca [184.147.84.238])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: siddhesh@gotplt.org)
+        by pdx1-sub0-mail-a305 (Postfix) with ESMTPSA id 4MXcBQ0kg7zQk;
+        Wed, 21 Sep 2022 04:48:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gotplt.org;
+        s=dreamhost; t=1663760927;
+        bh=turS0/qDnZ8iNE8y4GFP580mlFQaC1N6+0yaiTc66YM=;
+        h=Date:Subject:To:Cc:From:Content-Type:Content-Transfer-Encoding;
+        b=sQ0uPr+QE8N73w9wUEu6/3L6Z7YDzh5EOIrMydkuHzDPZWmu5/nys3EFcgjvL0LtC
+         EptS0OsTiUPkFKfceHLREwhwsC3by7Fmz/X0ybKSR674bPepdOxKcB0PALwV7nTrpr
+         GWINZGg3bdDePFi9bUZaZsQ869ejcC+f3lPwJPtyFKe6bhoE620kBvEchFtJtl/JLf
+         E6kevXFkJTIVFq3KRyKEK/ldwQDjDR3e86LmhliHsRJVfcG3O18aHbTm91nNRSWSFh
+         Yi6CybDVTdV/y4iOrHhWkFCQaR3qKnh0r0sIGt8dCMRHAkTZ4gVy6WaEq6XqgYPVd2
+         x8Pvl6t9IOlGA==
+Message-ID: <b8f5f716-3ee6-87fd-d0e2-b1c35c98e0b0@gotplt.org>
+Date:   Wed, 21 Sep 2022 07:48:44 -0400
 MIME-Version: 1.0
-References: <20220903161309.32848-1-apatel@ventanamicro.com>
-In-Reply-To: <20220903161309.32848-1-apatel@ventanamicro.com>
-From:   Anup Patel <apatel@ventanamicro.com>
-Date:   Wed, 21 Sep 2022 17:17:54 +0530
-Message-ID: <CAK9=C2WxjFD27HhqCWEtyZSXFrwsqpWjqvU1HFwN5pAnbc0zmg@mail.gmail.com>
-Subject: Re: [PATCH v9 0/7] RISC-V IPI Improvements
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Anup Patel <anup@brainfault.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 2/4] fortify: Explicitly check bounds are compile-time
+ constants
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>, linux-hardening@vger.kernel.org
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Arnd Bergmann <arnd@arndb.de>, Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Tom Rix <trix@redhat.com>, Miguel Ojeda <ojeda@kernel.org>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20220920192202.190793-1-keescook@chromium.org>
+ <20220920192202.190793-3-keescook@chromium.org>
+From:   Siddhesh Poyarekar <siddhesh@gotplt.org>
+In-Reply-To: <20220920192202.190793-3-keescook@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,117 +104,189 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marc,
 
-On Sat, Sep 3, 2022 at 9:43 PM Anup Patel <apatel@ventanamicro.com> wrote:
->
-> This series aims to improve IPI support in Linux RISC-V in following ways:
->  1) Treat IPIs as normal per-CPU interrupts instead of having custom RISC-V
->     specific hooks. This also makes Linux RISC-V IPI support aligned with
->     other architectures.
->  2) Remote TLB flushes and icache flushes should prefer local IPIs instead
->     of SBI calls whenever we have specialized hardware (such as RISC-V AIA
->     IMSIC and RISC-V SWI) which allows S-mode software to directly inject
->     IPIs without any assistance from M-mode runtime firmware.
->
-> These patches were originally part of the "Linux RISC-V ACLINT Support"
-> series but this now a separate series so that it can be merged independently
-> of the "Linux RISC-V ACLINT Support" series.
-> (Refer, https://lore.kernel.org/lkml/20211007123632.697666-1-anup.patel@wdc.com/)
->
-> These patches are also a preparatory patches for the up-coming:
->  1) Linux RISC-V AIA support
->  2) Linux RISC-V SWI support
->
-> These patches can also be found in riscv_ipi_imp_v9 branch at:
-> https://github.com/avpatel/linux.git
->
-> Changes since v8:
->  - Rebased on Linux-6.0-rc3
->  - Use dummy percpu data as parameter for request_percpu_irq() in PATCH4.
->
-> Changes since v7:
->  - Rebased on Linux-6.0-rc1
->  - Use atomic operations to track per-CPU pending and enabled IPIs in PATCH3.
->    (Note: this is inspired from IPI muxing implemented in
->     drivers/irqchip/irq-apple-aic.c)
->  - Made "struct ipi_mux_ops" (added by PATCH3) flexible so that
->    drivers/irqchip/irq-apple-aic.c can adopt it in future.
->
-> Changes since v6:
->  - Rebased on Linux-5.19-rc7
->  - Added documentation for struct ipi_mux_ops in PATCH3
->  - Dropped dummy irq_mask()/unmask() in PATCH3
->  - Added const for "ipi_mux_chip" in PATCH3
->  - Removed "type" initialization from ipi_mux_domain_alloc() in PATCH3
->  - Dropped translate() from "ipi_mux_domain_ops" in PATCH3
->  - Improved barrier documentation in ipi_mux_process() of PATCH3
->  - Added percpu check in ipi_mux_create() for parent_virq of PATCH3
->  - Added nr_ipi parameter in ipi_mux_create() of PATCH3
->
-> Changes since v5:
->  - Rebased on Linux-5.18-rc3
->  - Used kernel doc style in PATCH3
->  - Removed redundant loop in ipi_mux_process() of PATCH3
->  - Removed "RISC-V" prefix form ipi_mux_chip.name of PATCH3
->  - Removed use of "this patch" in PATCH3 commit description
->  - Addressed few other nit comments in PATCH3
->
-> Changes since v4:
->  - Rebased on Linux-5.17
->  - Includes new PATCH3 which adds mechanism to multiplex a single HW IPI
->
-> Changes since v3:
->  - Rebased on Linux-5.17-rc6
->  - Updated PATCH2 to not export riscv_set_intc_hwnode_fn()
->  - Simplified riscv_intc_hwnode() in PATCH2
->
-> Changes since v2:
->  - Rebased on Linux-5.17-rc4
->  - Updated PATCH2 to not create synthetic INTC fwnode and instead provide
->    a function which allows drivers to directly discover INTC fwnode
->
-> Changes since v1:
->  - Use synthetic fwnode for INTC instead of irq_set_default_host() in PATCH2
->
-> Anup Patel (7):
->   RISC-V: Clear SIP bit only when using SBI IPI operations
->   irqchip/riscv-intc: Allow drivers to directly discover INTC hwnode
->   genirq: Add mechanism to multiplex a single HW IPI
->   RISC-V: Treat IPIs as normal Linux IRQs
->   RISC-V: Allow marking IPIs as suitable for remote FENCEs
->   RISC-V: Use IPIs for remote TLB flush when possible
->   RISC-V: Use IPIs for remote icache flush when possible
 
-Friendly, ping ?
+On 2022-09-20 15:22, Kees Cook wrote:
+> In preparation for replacing __builtin_object_size() with
+> __builtin_dynamic_object_size(), all the compile-time size checks need
+> to check that the bounds variables are, in fact, known at compile-time.
+> Enforce what was guaranteed with __bos(). In other words, since all uses
+> of __bos() were constant expressions, it was not required to test for
+> this. When these change to __bdos(), they _may_ be constant expressions,
+> and the checks are only valid when the prior condition holds. This
+> results in no binary differences.
+> 
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>   include/linux/fortify-string.h | 50 +++++++++++++++++++++-------------
+>   1 file changed, 31 insertions(+), 19 deletions(-)
+> 
+> diff --git a/include/linux/fortify-string.h b/include/linux/fortify-string.h
+> index ff879efe94ed..71c0a432c638 100644
+> --- a/include/linux/fortify-string.h
+> +++ b/include/linux/fortify-string.h
+> @@ -80,6 +80,12 @@ extern char *__underlying_strncpy(char *p, const char *q, __kernel_size_t size)
+>   #define POS	__pass_object_size(1)
+>   #define POS0	__pass_object_size(0)
+>   
+> +#define __compiletime_lessthan(bounds, length)	(	\
+> +	__builtin_constant_p(length) &&			\
+> +	__builtin_constant_p(bounds) &&			\
+> +	bounds < length					\
+> +)
 
-Regards,
-Anup
+So with the gcc ranger, the compiler has lately been quite successful at 
+computing a constant `bounds < length` even though bounds and length are 
+not constant.  So perhaps this:
 
->
->  arch/riscv/Kconfig                |   2 +
->  arch/riscv/include/asm/irq.h      |   4 +
->  arch/riscv/include/asm/sbi.h      |   7 +
->  arch/riscv/include/asm/smp.h      |  49 ++++--
->  arch/riscv/kernel/Makefile        |   1 +
->  arch/riscv/kernel/cpu-hotplug.c   |   3 +-
->  arch/riscv/kernel/irq.c           |  21 ++-
->  arch/riscv/kernel/sbi-ipi.c       |  60 ++++++++
->  arch/riscv/kernel/sbi.c           |  11 --
->  arch/riscv/kernel/smp.c           | 166 ++++++++++----------
->  arch/riscv/kernel/smpboot.c       |   5 +-
->  arch/riscv/mm/cacheflush.c        |   5 +-
->  arch/riscv/mm/tlbflush.c          |  93 ++++++++++--
->  drivers/clocksource/timer-clint.c |  42 +++--
->  drivers/irqchip/irq-riscv-intc.c  |  60 ++++----
->  include/linux/irq.h               |  18 +++
->  kernel/irq/Kconfig                |   5 +
->  kernel/irq/Makefile               |   1 +
->  kernel/irq/ipi-mux.c              | 244 ++++++++++++++++++++++++++++++
->  19 files changed, 630 insertions(+), 167 deletions(-)
->  create mode 100644 arch/riscv/kernel/sbi-ipi.c
->  create mode 100644 kernel/irq/ipi-mux.c
->
-> --
-> 2.34.1
->
+#define __compiletime_lessthan (bounds, length) (	\
+	__builtin_constant (bounds < length) &&		\
+	bounds < length					\
+)
+
+might succeed in a few more cases.
+
+Thanks,
+Sid
+
+> +
+>   /**
+>    * strncpy - Copy a string to memory with non-guaranteed NUL padding
+>    *
+> @@ -117,7 +123,7 @@ char *strncpy(char * const POS p, const char *q, __kernel_size_t size)
+>   {
+>   	size_t p_size = __builtin_object_size(p, 1);
+>   
+> -	if (__builtin_constant_p(size) && p_size < size)
+> +	if (__compiletime_lessthan(p_size, size))
+>   		__write_overflow();
+>   	if (p_size < size)
+>   		fortify_panic(__func__);
+> @@ -224,7 +230,7 @@ __FORTIFY_INLINE ssize_t strscpy(char * const POS p, const char * const POS q, s
+>   	 * If size can be known at compile time and is greater than
+>   	 * p_size, generate a compile time write overflow error.
+>   	 */
+> -	if (__builtin_constant_p(size) && size > p_size)
+> +	if (__compiletime_lessthan(p_size, size))
+>   		__write_overflow();
+>   
+>   	/*
+> @@ -281,15 +287,16 @@ __FORTIFY_INLINE void fortify_memset_chk(__kernel_size_t size,
+>   		/*
+>   		 * Length argument is a constant expression, so we
+>   		 * can perform compile-time bounds checking where
+> -		 * buffer sizes are known.
+> +		 * buffer sizes are also known at compile time.
+>   		 */
+>   
+>   		/* Error when size is larger than enclosing struct. */
+> -		if (p_size > p_size_field && p_size < size)
+> +		if (__compiletime_lessthan(p_size_field, p_size) &&
+> +		    __compiletime_lessthan(p_size, size))
+>   			__write_overflow();
+>   
+>   		/* Warn when write size is larger than dest field. */
+> -		if (p_size_field < size)
+> +		if (__compiletime_lessthan(p_size_field, size))
+>   			__write_overflow_field(p_size_field, size);
+>   	}
+>   	/*
+> @@ -365,25 +372,28 @@ __FORTIFY_INLINE bool fortify_memcpy_chk(__kernel_size_t size,
+>   		/*
+>   		 * Length argument is a constant expression, so we
+>   		 * can perform compile-time bounds checking where
+> -		 * buffer sizes are known.
+> +		 * buffer sizes are also known at compile time.
+>   		 */
+>   
+>   		/* Error when size is larger than enclosing struct. */
+> -		if (p_size > p_size_field && p_size < size)
+> +		if (__compiletime_lessthan(p_size_field, p_size) &&
+> +		    __compiletime_lessthan(p_size, size))
+>   			__write_overflow();
+> -		if (q_size > q_size_field && q_size < size)
+> +		if (__compiletime_lessthan(q_size_field, q_size) &&
+> +		    __compiletime_lessthan(q_size, size))
+>   			__read_overflow2();
+>   
+>   		/* Warn when write size argument larger than dest field. */
+> -		if (p_size_field < size)
+> +		if (__compiletime_lessthan(p_size_field, size))
+>   			__write_overflow_field(p_size_field, size);
+>   		/*
+>   		 * Warn for source field over-read when building with W=1
+>   		 * or when an over-write happened, so both can be fixed at
+>   		 * the same time.
+>   		 */
+> -		if ((IS_ENABLED(KBUILD_EXTRA_WARN1) || p_size_field < size) &&
+> -		    q_size_field < size)
+> +		if ((IS_ENABLED(KBUILD_EXTRA_WARN1) ||
+> +		     __compiletime_lessthan(p_size_field, size)) &&
+> +		    __compiletime_lessthan(q_size_field, size))
+>   			__read_overflow2_field(q_size_field, size);
+>   	}
+>   	/*
+> @@ -494,7 +504,7 @@ __FORTIFY_INLINE void *memscan(void * const POS0 p, int c, __kernel_size_t size)
+>   {
+>   	size_t p_size = __builtin_object_size(p, 0);
+>   
+> -	if (__builtin_constant_p(size) && p_size < size)
+> +	if (__compiletime_lessthan(p_size, size))
+>   		__read_overflow();
+>   	if (p_size < size)
+>   		fortify_panic(__func__);
+> @@ -508,9 +518,9 @@ int memcmp(const void * const POS0 p, const void * const POS0 q, __kernel_size_t
+>   	size_t q_size = __builtin_object_size(q, 0);
+>   
+>   	if (__builtin_constant_p(size)) {
+> -		if (p_size < size)
+> +		if (__compiletime_lessthan(p_size, size))
+>   			__read_overflow();
+> -		if (q_size < size)
+> +		if (__compiletime_lessthan(q_size, size))
+>   			__read_overflow2();
+>   	}
+>   	if (p_size < size || q_size < size)
+> @@ -523,7 +533,7 @@ void *memchr(const void * const POS0 p, int c, __kernel_size_t size)
+>   {
+>   	size_t p_size = __builtin_object_size(p, 0);
+>   
+> -	if (__builtin_constant_p(size) && p_size < size)
+> +	if (__compiletime_lessthan(p_size, size))
+>   		__read_overflow();
+>   	if (p_size < size)
+>   		fortify_panic(__func__);
+> @@ -535,7 +545,7 @@ __FORTIFY_INLINE void *memchr_inv(const void * const POS0 p, int c, size_t size)
+>   {
+>   	size_t p_size = __builtin_object_size(p, 0);
+>   
+> -	if (__builtin_constant_p(size) && p_size < size)
+> +	if (__compiletime_lessthan(p_size, size))
+>   		__read_overflow();
+>   	if (p_size < size)
+>   		fortify_panic(__func__);
+> @@ -547,7 +557,7 @@ __FORTIFY_INLINE void *kmemdup(const void * const POS0 p, size_t size, gfp_t gfp
+>   {
+>   	size_t p_size = __builtin_object_size(p, 0);
+>   
+> -	if (__builtin_constant_p(size) && p_size < size)
+> +	if (__compiletime_lessthan(p_size, size))
+>   		__read_overflow();
+>   	if (p_size < size)
+>   		fortify_panic(__func__);
+> @@ -563,11 +573,13 @@ char *strcpy(char * const POS p, const char * const POS q)
+>   	size_t size;
+>   
+>   	/* If neither buffer size is known, immediately give up. */
+> -	if (p_size == SIZE_MAX && q_size == SIZE_MAX)
+> +	if (__builtin_constant_p(p_size) &&
+> +	    __builtin_constant_p(q_size) &&
+> +	    p_size == SIZE_MAX && q_size == SIZE_MAX)
+>   		return __underlying_strcpy(p, q);
+>   	size = strlen(q) + 1;
+>   	/* Compile-time check for const size overflow. */
+> -	if (__builtin_constant_p(size) && p_size < size)
+> +	if (__compiletime_lessthan(p_size, size))
+>   		__write_overflow();
+>   	/* Run-time check for dynamic size overflow. */
+>   	if (p_size < size)
