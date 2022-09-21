@@ -2,77 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61FF55BF70C
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 09:08:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DB1E5BF71A
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 09:10:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230337AbiIUHIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 03:08:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46054 "EHLO
+        id S230088AbiIUHKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 03:10:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229641AbiIUHH4 (ORCPT
+        with ESMTP id S229764AbiIUHJk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 03:07:56 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64DE04663F
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 00:07:55 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id a2so7684322lfb.6
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 00:07:55 -0700 (PDT)
+        Wed, 21 Sep 2022 03:09:40 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E2C782D0C
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 00:08:56 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id q17so5814176lji.11
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 00:08:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=rasmusvillemoes.dk; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=APb0/Hlj8PJfzMK/j/1WprkzmQ0RATqS+JRrEg6OtBI=;
-        b=sOX0bkzdu+sZDtr8Q5SphkdzB1/ROEzLAP17FzCDCvxf8Mv6GI+0wiGyJiPZkveZPx
-         kGgZlAEqiwFlJS4G9tdIXv9fLwfShJZI8QKDNOWEBiuKLUjRhXdMwPNhlSywjXG0+02V
-         zIWJI5L5MfL/o7sOXPQ+PFYJDYqZfnzqCjqpS7l68M20RJbdNMWshDtOfpo/4WJ2cIKA
-         VTdRiP7oHO//AJ902pphqDhUz3Z+rCc2FzkW7oDy1VvDNUY1dW2l24b5A4tsDf7R3hqO
-         gKSEc1w3Q9Ne9Fwkp+QI+bM4mZuPDRg3Qs9SgYXHX0Rc0bBBKTXL6mEtIgvDXaBuRoYj
-         LQMw==
+        bh=UpnmxEZjYtOG6g/lpNXAceVawQxLWFCGGEaQrDHy5V4=;
+        b=CpjuGH7fQ3hfn0TArXKJBCYatTvVXo5Hnq/Xt7HFV6pvjSQMFDv4By3E8wxD3tnnNz
+         k/PHTrQi3V+0/7Ctfe1q4iBr9LG/qFaCejdFc3GeRVdkbh7th3zf7e53tTs2qU51ZHet
+         cHEoHqShQvIe1l1nZThOW6MVl4+ijLd1vMyqc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=APb0/Hlj8PJfzMK/j/1WprkzmQ0RATqS+JRrEg6OtBI=;
-        b=KmRqXAJuwSTbi3eC3Mtph7qMwOI42m/QqTy9vd0C28xxsyVkuen6MkDWqc8vmkX+1k
-         pEiBAJ1lYTbCw54QgeKixUxisG5dDS6s/42wHXp/7GRlwN9AishXVQTUSZgbyB6x2cZ/
-         aByMrluz8VS2On/ZECEzY6aEWb7d0sMkRhq9MeN3UyVDaRav45QVWy3ICr8/8FZWa9+V
-         Met7an2s0Pxi7zfKVwcyM9deLk1VCkMKIDTc11QZzFo+kPNHT7NSJ/EuAQlqRYPIP4R9
-         Ou/dITTtIw/x2JXbJNfet0BcTUO84PlMjOf/t9MMU7OWsiZNxT12ex1ovMZXZiLvUqcw
-         wVkQ==
-X-Gm-Message-State: ACrzQf1TbDdqUnG2EtGyIy9PjS7Df0WQjZWYQq+FowMRDt4etrV/NgKJ
-        +lBUwTbya6Q+6pjFo2l2jATBgw==
-X-Google-Smtp-Source: AMsMyM4gqxAQvcV8ga0K7YyxcBClQ/kW2wmIe0eJRgZ9zQemRycPrYGF8vU2GgeKuVirXwB5Ah7e8w==
-X-Received: by 2002:a19:7619:0:b0:49f:6cd7:45c2 with SMTP id c25-20020a197619000000b0049f6cd745c2mr7191079lff.7.1663744073769;
-        Wed, 21 Sep 2022 00:07:53 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id b15-20020a19644f000000b00499fe9ce5f2sm307613lfj.175.2022.09.21.00.07.52
+        bh=UpnmxEZjYtOG6g/lpNXAceVawQxLWFCGGEaQrDHy5V4=;
+        b=OdKLSGRjWFbnwfheZlRUQhPyVoN9VjJrfPBDNtyaJZn00s4IwhzTEYqMz42b+EF9pd
+         pzmQYIJzEMPNVUYwJmHcJa/G3PjZetQzixN7y3/rpu+Yt97eixicBDqLa/vM1qEqS0YK
+         Zkm1pLjIxUJ9+7H0LMAj1eOYh2MBpWbKXtFerkSIsq4NxhNDbuY+qaNWDdEgVSaX9DmY
+         OwFQOR1h+yikjrgIJk98UdolUOMwEYDc5CcsoZVK90/ctRLrVcfxCmrZF6FgnMF344cK
+         G7El5MsslBKi/Qx6jKyqNy23O3OZzKhPqZWsMW+xwDa6F8C56B7x9xm6EzNLzVpKw2NS
+         jRFQ==
+X-Gm-Message-State: ACrzQf3XkLSQYms1T1qKCOTswUJpdoDItheyiU3jKjimJCc2vZ3SU8ye
+        VOh4x5V6Ub+FN5OdhL32+LYlmpmW0Hndu7/V
+X-Google-Smtp-Source: AMsMyM5ym1ZyeDbfxTShbmvZgQ4KMmkg6nQqN1T0yNgq8tr5nRsRPZgIQ2nsDVOkvnR+UHG25qYmXQ==
+X-Received: by 2002:a2e:940b:0:b0:268:fa1c:106f with SMTP id i11-20020a2e940b000000b00268fa1c106fmr7905996ljh.101.1663744134250;
+        Wed, 21 Sep 2022 00:08:54 -0700 (PDT)
+Received: from [172.16.11.74] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id b15-20020a19644f000000b00499fe9ce5f2sm307894lfj.175.2022.09.21.00.08.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Sep 2022 00:07:53 -0700 (PDT)
-Message-ID: <95fb2bfb-6eb8-012d-88f8-c739d229ef70@linaro.org>
-Date:   Wed, 21 Sep 2022 09:07:52 +0200
+        Wed, 21 Sep 2022 00:08:53 -0700 (PDT)
+Message-ID: <4fdd52c9-2de7-b86b-f081-cb59a8f72c5a@rasmusvillemoes.dk>
+Date:   Wed, 21 Sep 2022 09:08:52 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH] dt-bindings: firmware: document Qualcomm SM6375 SCM
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 2/6] rtc: isl12022: simplify some expressions
 Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        ~postmarketos/upstreaming@lists.sr.ht
-Cc:     martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Robert Marko <robimarko@gmail.com>,
-        Das Srinagesh <quic_gurus@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20220921001020.55307-1-konrad.dybcio@somainline.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220921001020.55307-1-konrad.dybcio@somainline.org>
+References: <20220830100152.698506-1-linux@rasmusvillemoes.dk>
+ <20220830100152.698506-3-linux@rasmusvillemoes.dk>
+ <YyHugb47cJPNuHbs@mail.local>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <YyHugb47cJPNuHbs@mail.local>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -84,15 +73,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/09/2022 02:10, Konrad Dybcio wrote:
-> Document the compatible for Qualcomm SM6375 SCM.
+On 14/09/2022 17.08, Alexandre Belloni wrote:
+> Hi,
 > 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-> ---
->  Documentation/devicetree/bindings/firmware/qcom,scm.yaml | 1 +
+> On 30/08/2022 12:01:48+0200, Rasmus Villemoes wrote:
+>> These instances of '&client->dev' might as well be spelled 'dev', since
+>> 'client' has been computed from 'dev' via 'client =
+>> to_i2c_client(dev)'.
+>>
+>> Later patches will get rid of that local variable 'client', so remove
+>> these unnecessary references so those later patches become easier to
+>> read.
+>>
+>> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+>> ---
+>>  drivers/rtc/rtc-isl12022.c | 11 +++++------
+>>  1 file changed, 5 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/drivers/rtc/rtc-isl12022.c b/drivers/rtc/rtc-isl12022.c
+>> index 2dc19061cf5f..5e6bb9153c89 100644
+>> --- a/drivers/rtc/rtc-isl12022.c
+>> +++ b/drivers/rtc/rtc-isl12022.c
+>> @@ -112,13 +112,13 @@ static int isl12022_rtc_read_time(struct device *dev, struct rtc_time *tm)
+>>  		return ret;
+>>  
+>>  	if (buf[ISL12022_REG_SR] & (ISL12022_SR_LBAT85 | ISL12022_SR_LBAT75)) {
+>> -		dev_warn(&client->dev,
+>> +		dev_warn(dev,
+> 
+> While at it, I would prefer that one to also become a dev_dbg
 
-allOf needs to be updated.
+Well, I prefer to keep it, because my customer actually wants to use
+this information. Grepping it out from dmesg is of course not the best
+interface, but if it gets demoted to a dev_dbg() it doesn't even get there.
 
+I'll address your other comments and respin. Thanks.
 
-Best regards,
-Krzysztof
+Rasmus
