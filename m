@@ -2,115 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63D5A5BFD41
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 13:47:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2D2B5BFD31
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 13:46:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbiIULrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 07:47:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59668 "EHLO
+        id S229967AbiIULqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 07:46:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbiIULrA (ORCPT
+        with ESMTP id S229879AbiIULq2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 07:47:00 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D2CC90C5F
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 04:46:41 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id p5so6609599ljc.13
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 04:46:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=m9+Zmy++ta7sMSatXKhKoM2rtE1PAA0b2u/bqTy/9Yo=;
-        b=hY7GTvbSgNOU09X0DCba8ho6mZShPG9k3hNdmr2t1K3aOuagsPyICR6YM/Guhur5Zi
-         Hxxspf+em6oL8GsG0v8hQh0lLBfv0/45h5GwU6B/38kmuhk0d4c7k0noV/IiWRI+vlBK
-         1tVcjPW7Y1k575XuJStd/o/SranxSgOj3LT10=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=m9+Zmy++ta7sMSatXKhKoM2rtE1PAA0b2u/bqTy/9Yo=;
-        b=z6ogDYOssOeRjdfsitUDDiwZFXpY+NFDKrUjSaCMHnkMH9uB1dy4YxcGhTJ4WyyDnv
-         PKa2qaG95QDpeLkBc02KaQ5VnUZGuzGrxr85pJzy7VbIFgBOWsJfosJUPn+EpEYEKOqc
-         bFf4Ze66t7Xb+A88OkhG+e04axdjLxQ4S9HX6ynmxugprbpqDiVKjAWfKmetrRjGuH4G
-         FLCVWMn+FIiijLIlqMoip9qu6kDwcA7avQpgPyPbyHKE1B+Dg6PVyE8P5d8X9fCXy+Xu
-         w0jHlOkkMtT45o/RuylrSp2XTCLmuAPXgakiunn0E9qAzFOavcmXibMmoSrxl0BepxpJ
-         mn6A==
-X-Gm-Message-State: ACrzQf1a5kKcJPoaN3k1Ce4DM7wf0yb+nf0pHz2L1ulYv0xJLkzHrgd8
-        XXZJTtBBsr5TU5459lPYkXA0bw==
-X-Google-Smtp-Source: AMsMyM7qN5dEJxOUF9bSZZtyudDeKm4BTi/9npAp2ELjfLp7ivsmOvQQT71JKcXCUwyUhWVDNnU81A==
-X-Received: by 2002:a2e:90da:0:b0:26c:8dc:3c52 with SMTP id o26-20020a2e90da000000b0026c08dc3c52mr8886029ljg.474.1663760799695;
-        Wed, 21 Sep 2022 04:46:39 -0700 (PDT)
-Received: from prevas-ravi.prevas.se ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id g4-20020a056512118400b00494618889c0sm405713lfr.42.2022.09.21.04.46.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Sep 2022 04:46:39 -0700 (PDT)
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 7/9] rtc: isl12022: drop redundant write to HR register
+        Wed, 21 Sep 2022 07:46:28 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 385998709D;
+        Wed, 21 Sep 2022 04:46:27 -0700 (PDT)
+From:   Kurt Kanzenbach <kurt@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1663760785;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+h5OB886Dzz/hwPi6y3bnH4tBaZnTz6gSDGhoyX42fM=;
+        b=EKqm+o89UidMbgUhAt1wAmGnHDv5RQ2OoSdOS6hA9VZWTWvQFLRPfXeHzxEpGIwAbZBIu3
+        UnTdgA5cyyWt0y3rLbDCVWY3GXQmgGtDKBlmawzYzDus9UHXYQQA4uc2MfKxqO/bBbcjCp
+        P609VGxyP/EBJqKokiON4shumesBkVFHh+/uTo96yHg7pO+eMZSvdEqwQDkxZIu0ID1ems
+        9KhdFvpTDK7B9FwnS+qx+1XDhNPIvGhG+0btFIOOFmJCXqKbSVbdcCoXrM1GzLKJ8UTyOo
+        +73x9Z5sO/X/mZSxPU1TxF+8frBnuoeAr1imqodzHBAxgWuOAxlwTFZPyxH2EQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1663760785;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+h5OB886Dzz/hwPi6y3bnH4tBaZnTz6gSDGhoyX42fM=;
+        b=281BLSmmIT4ZtfMUGMyANtLWIeS0k+Bg/wnoPYtsL4nsgBRSaXkknrVm0/YyEPy99a9JbN
+        Ai5EVTGkRku4MsAA==
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
+        Rui Sousa <rui.sousa@nxp.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Michael Walle <michael@walle.cc>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        Maxim Kochetkov <fido_max@inbox.ru>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Richie Pearn <richard.pearn@nxp.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Gerhard Engleder <gerhard@engleder-embedded.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net-next 08/13] net: dsa: hellcreek: deny tc-taprio
+ changes to per-tc max SDU
+In-Reply-To: <20220921112916.umvtccuuygacbqbb@skbuf>
+References: <20220914153303.1792444-1-vladimir.oltean@nxp.com>
+ <20220914153303.1792444-9-vladimir.oltean@nxp.com> <87a671bz8e.fsf@kurt>
+ <20220914184051.2awuutgr4vm4tfgf@skbuf> <87r10dxiw5.fsf@kurt>
+ <20220915115925.zujsneox4jqzod2g@skbuf> <87bkr9m0nn.fsf@kurt>
+ <20220921112916.umvtccuuygacbqbb@skbuf>
 Date:   Wed, 21 Sep 2022 13:46:22 +0200
-Message-Id: <20220921114624.3250848-8-linux@rasmusvillemoes.dk>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220921114624.3250848-1-linux@rasmusvillemoes.dk>
-References: <20220830100152.698506-1-linux@rasmusvillemoes.dk>
- <20220921114624.3250848-1-linux@rasmusvillemoes.dk>
+Message-ID: <878rmdlzld.fsf@kurt>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha512; protocol="application/pgp-signature"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There's nothing in the data sheet that says writing to one of the time
-keeping registers is necessary to start the RTC. It does so at the
-stop condition of the i2c transfer setting the WRTC bit:
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-  Upon initialization or power-up, the WRTC must be set to "1" to
-  enable the RTC. Upon the completion of a valid write (STOP), the RTC
-  starts counting.
+On Wed Sep 21 2022, Vladimir Oltean wrote:
+> On Wed, Sep 21, 2022 at 01:23:24PM +0200, Kurt Kanzenbach wrote:
+>> On Thu Sep 15 2022, Vladimir Oltean wrote:
+>> > On Thu, Sep 15, 2022 at 08:15:54AM +0200, Kurt Kanzenbach wrote:
+>> >> > So the maxSDU hardware register tracks exactly the L2 payload size,=
+ like
+>> >> > the software variable does, or does it include the Ethernet header =
+size
+>> >> > and/or FCS?
+>> >>=20
+>> >> This is something I'm not sure about. I'll ask the HW engineer when h=
+e's
+>> >> back from vacation.
+>> >
+>> > You can also probably figure this out by limiting the max-sdu to a val=
+ue
+>> > like 200 and seeing what frame sizes pass through.
+>>=20
+>> So, configured to 128 and 132 bytes (including VLAN Ethernet header) is
+>> the maximum frame size which passes through.
+>
+> Frame size means MAC DA + MAC SA + VLAN header + Ethertype + L2 payload,
+> and without FCS, right?
 
-Moreover, even if such a write to one of the timekeeping registers was
-necessary, that's exactly what we do anyway just below when we
-actually write the given struct rtc_time to the device.
+Yes.
 
-Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
----
- drivers/rtc/rtc-isl12022.c | 14 --------------
- 1 file changed, 14 deletions(-)
+>
+> Because max_sdu 128 only counts the L2 payload, so the maximum frame
+> size that passes should be 142 octets, or 146 octets with VLAN.
 
-diff --git a/drivers/rtc/rtc-isl12022.c b/drivers/rtc/rtc-isl12022.c
-index df6d91f4e8f3..6fb13a5d17f1 100644
---- a/drivers/rtc/rtc-isl12022.c
-+++ b/drivers/rtc/rtc-isl12022.c
-@@ -171,20 +171,6 @@ static int isl12022_rtc_set_time(struct device *dev, struct rtc_time *tm)
- 						 buf[0] | ISL12022_INT_WRTC);
- 			if (ret)
- 				return ret;
--
--			/* Write to any RTC register to start RTC, we use the
--			 * HR register, setting the MIL bit to use the 24 hour
--			 * format. */
--			ret = isl12022_read_regs(client, ISL12022_REG_HR,
--						 buf, 1);
--			if (ret)
--				return ret;
--
--			ret = isl12022_write_reg(client,
--						 ISL12022_REG_HR,
--						 buf[0] | ISL12022_HR_MIL);
--			if (ret)
--				return ret;
- 		}
- 
- 		isl12022->write_enabled = true;
--- 
-2.37.2
+Ok, i see. So, for 128 max-sdu we should end up with something like this
+in the prio config register:
 
+ schedule->max_sdu[tc] + VLAN_ETH_HLEN - 4
+
+Thanks,
+Kurt
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJHBAEBCgAxFiEEvLm/ssjDfdPf21mSwZPR8qpGc4IFAmMq+Y4THGt1cnRAbGlu
+dXRyb25peC5kZQAKCRDBk9HyqkZzgsQMD/9WRNdSk5bgkVm3cV5TvCmIaW9J5DID
+qcw8at7AMpg33GRleT0ovLrCYdP/jpuG1bL9ODgs6hB9WG/sxTae0ElfWpiwQdpx
+7F/5pImKfg3EXARHVULww3L63xFYgdeoYHyqjNYscWtxCtTS+uO6paksZBpga6Gf
+zYM0p/W0fIPAjBsvzdI3+BCy42ut6K2iwMGvD9YZ7zbHr8RdGtnW1+gsfzzuu/Iz
+15erg05SpFZGTNYpSGJ4KZAU09IvtjUqVA9m7DAunQaRvq7def7OSrtb+Plvbym2
+wz6rU16pULDvm1i9e7lAwXAmaGu34H/Pb7xp0q9k14mxrztmrouRc22XGvI328b0
+eAPHDSZcRyNgSG6GEvjR8jDMwg+Zrp+/dgtnNjIj+lOvSKrBAsUAfyN2UWfvCU5Y
+YfV1r5sa/0rfUE3CvxgTwnFiCk36F5DO+n9kWiCdNqST6bsibLBuzdZvoBRcuAu/
+/fA8VCfX+xeRTNkHyWzuoHHwgfmU74vbmL4P4poQZeY5Sallr7LXzIh9OYR+3NFh
+iqd7xEgSVdT1OZsgaXI4trWzvr1dlWlsx22FANwMPL8/ar80HdPsU5eRKm1+i/mJ
+3iVcakxcj4GbQBHuSaerIAJexJ02luKwrlxJn+i0Xll+N/+FkqzQzuD5NNhjJTDk
+Pj9SEV4COxIFEw==
+=ywiY
+-----END PGP SIGNATURE-----
+--=-=-=--
