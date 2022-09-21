@@ -2,193 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B199D5E557F
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 23:51:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 219315E5597
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 23:53:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230333AbiIUVvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 17:51:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58230 "EHLO
+        id S231180AbiIUVxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 17:53:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230340AbiIUVv1 (ORCPT
+        with ESMTP id S230274AbiIUVwq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 17:51:27 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C5DAA6C4D
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 14:51:24 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id c24so6996475plo.3
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 14:51:24 -0700 (PDT)
+        Wed, 21 Sep 2022 17:52:46 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED66A6C57
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 14:52:44 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id e18so10829552edj.3
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 14:52:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=NgbONa/JLrIJmOkn0CBqxCxDowwxjWoWs2Rsui1X0KI=;
-        b=FWvucp8C7NSejl3BHBuBIg1NxNS9DZ7c3Jqiurti4tcdCRdol5m+vQG7QltXtbcpzO
-         3W8gW2CM5N/6HEp9HPytppWqpt5fBPeCs+S6iBx4sgOwxARDlAap6uU8dwB7mR4Y517/
-         FXVYd6oYAFBlRI595Ey9sRfrSmUc4V/5ETJRgnmBaggNifM7/By7p2mz3nFaH6Cx0U+F
-         4i0qjMYR2VoMH7ymgzavCcCWQ52bQPD5/gPQhzyrqpv9jI5BPMMtE1pn+vP3+vRGQ7Jr
-         hBwB1GqpxY+XzwuwUMUivArA4YEw91XTSZYBHS0hbbZgVbzHMz2fgrLg3bOv1uRCbGbU
-         i8Dw==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=lRVqvxjsImICcLNKUVbFrgWAVXSPuGFIVQqIM5gPKIE=;
+        b=BUzD055h0ufytcC9dWBKCLUhoW4ASESdfaphkVEQZnZJaGF9ESzis/omVqNIyqzq6/
+         h0HVaA5F9Z3CpOUIuj3VUGesCabJm+ufUlaDlC8oPTJh4EiH1o1o1y+8IHNYrBLTbGw4
+         pAlCcmlv1meJ1eodkNghM4xK/amx9BoxiwjdY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=NgbONa/JLrIJmOkn0CBqxCxDowwxjWoWs2Rsui1X0KI=;
-        b=P7kMlOegkFD1XgAaMz0ZmOYTWvg8azuHR7k+mP6ofkX+bS1oAAFjEKNDpQHjhJlkaP
-         5oYWoIIm+EtXnZSt6wcrP3OoAzk7e5p76tOPYpc2xe2lv5KOMEamc2g5gsLfpQ+GA69Q
-         tlm6aSMi0/4quAcOfJF+Hw9TMfMN6uxIlDzB8lDW1r7A56OwjqnslriU/gbF9lQfF4pR
-         1qQC2DT870lPfaRHTrrjNnKtrWEmPCvs94AAJJfvG3eUymyKZUyJux2jHJkgFEg83bD5
-         3e4s9eTeMFx9BCO8x92bIBip72yR6v/dWWBVEPipwfZW69YHEXXPF+22bQ5uE4Ds9uRz
-         xYdQ==
-X-Gm-Message-State: ACrzQf0aA+zJi4xzjgPGszCoD/9aHWMpZF+x0FYs/3d3Rs4vP9E4Nn1l
-        3PCX5FfqU9yNayfIoc4c7SvE0g==
-X-Google-Smtp-Source: AMsMyM4aIDcK41T2ZRt2R6AWvsRZzPd8M+xtr9rkQdV+bvj+aCThLN/hvruZIVlUapXGsf2BGYbBQQ==
-X-Received: by 2002:a17:902:7e42:b0:178:489:86ac with SMTP id a2-20020a1709027e4200b00178048986acmr214779pln.68.1663797084005;
-        Wed, 21 Sep 2022 14:51:24 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id j6-20020a17090276c600b001789b724712sm2439580plt.232.2022.09.21.14.51.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Sep 2022 14:51:23 -0700 (PDT)
-Date:   Wed, 21 Sep 2022 21:51:20 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        Yuan Yao <yuan.yao@linux.intel.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vipin Sharma <vipinsh@google.com>
-Subject: Re: [PATCH v10 25/39] KVM: selftests: Move the function doing
- Hyper-V hypercall to a common header
-Message-ID: <YyuHWNdZq9/oYTZ+@google.com>
-References: <20220921152436.3673454-1-vkuznets@redhat.com>
- <20220921152436.3673454-26-vkuznets@redhat.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=lRVqvxjsImICcLNKUVbFrgWAVXSPuGFIVQqIM5gPKIE=;
+        b=qGMkanC7dUBDCczxrBZ9tt5OZxCM5qj/xvlLyzK8Rp+lvBPJFV3e+Rg6hkhIZ6VnDL
+         LOxbUqvRXcLCuPOkUkbcrXUVvNKKZFceCLeU+LtGrBJSjbFkTEu6SqPneNbAaouQEUfV
+         pNE/H7L+r0iXk2CbQavI8fP+9eIQKwSh82BfIjGVRkOXUND/jYFObMNCC0duuZai9z8q
+         Q4IslE2w275pispaKlLarGCKgrkZ5uEjaPjbtKZ6awQpORFpEyB19l0oRtZb2DSK/i22
+         2rWgHmcp6wz5eG7HXxeyJ4uk61pbhVs+IPbJMXhAEhj70jcZf1C2FABhQrHLpElavwUb
+         O11Q==
+X-Gm-Message-State: ACrzQf1f5S6saSqYe6W9jPsP91uyZrIScOes3aWSkGPf2f5daXpGiQJX
+        DUducz47Puz1+Kz/HTJWQGvrpitWLq35kblvc08=
+X-Google-Smtp-Source: AMsMyM4BWGwoOd6Urpp8iguHuW8XKk1WWZ+idyk5xJCLQ9cnQJyJzvWJdZ5+zQCrJ+GHi7vJJTlSeg==
+X-Received: by 2002:a05:6402:1655:b0:44e:b208:746d with SMTP id s21-20020a056402165500b0044eb208746dmr163059edx.229.1663797163234;
+        Wed, 21 Sep 2022 14:52:43 -0700 (PDT)
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com. [209.85.208.47])
+        by smtp.gmail.com with ESMTPSA id 7-20020a170906308700b00781b589a1afsm1754343ejv.159.2022.09.21.14.52.41
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Sep 2022 14:52:42 -0700 (PDT)
+Received: by mail-ed1-f47.google.com with SMTP id z2so10823945edi.1
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 14:52:41 -0700 (PDT)
+X-Received: by 2002:a05:6402:298b:b0:44f:20a:2db2 with SMTP id
+ eq11-20020a056402298b00b0044f020a2db2mr197728edb.138.1663797161592; Wed, 21
+ Sep 2022 14:52:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220921152436.3673454-26-vkuznets@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220920-invalid-desc-v1-0-76a93174f3bc@chromium.org>
+ <20220920-invalid-desc-v1-1-76a93174f3bc@chromium.org> <Yypgi6Jc9/tZLtIw@pendragon.ideasonboard.com>
+ <CANiDSCsbwYfnqcWOjAJw2qvZnB-qE66LqGMhpD8youDj=f+U-g@mail.gmail.com> <Yyt/LhNoEEfjly54@pendragon.ideasonboard.com>
+In-Reply-To: <Yyt/LhNoEEfjly54@pendragon.ideasonboard.com>
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Wed, 21 Sep 2022 23:52:29 +0200
+X-Gmail-Original-Message-ID: <CANiDSCsSsKk37JtBZjQiuw6MoH+f-iCf47MqU9BH18gbd4EKAg@mail.gmail.com>
+Message-ID: <CANiDSCsSsKk37JtBZjQiuw6MoH+f-iCf47MqU9BH18gbd4EKAg@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] media: uvc: Handle cameras with invalid descriptors
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzbot <syzkaller@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+Vipin
+Hi Laurent
 
-On Wed, Sep 21, 2022, Vitaly Kuznetsov wrote:
-> All Hyper-V specific tests issuing hypercalls need this.
-> 
-> Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> ---
->  .../selftests/kvm/include/x86_64/hyperv.h      | 16 ++++++++++++++++
->  .../selftests/kvm/x86_64/hyperv_features.c     | 18 +-----------------
->  2 files changed, 17 insertions(+), 17 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/include/x86_64/hyperv.h b/tools/testing/selftests/kvm/include/x86_64/hyperv.h
-> index f0a8a93694b2..285e9ff73573 100644
-> --- a/tools/testing/selftests/kvm/include/x86_64/hyperv.h
-> +++ b/tools/testing/selftests/kvm/include/x86_64/hyperv.h
-> @@ -185,6 +185,22 @@
->  /* hypercall options */
->  #define HV_HYPERCALL_FAST_BIT		BIT(16)
->  
-> +static inline uint8_t hyperv_hypercall(u64 control, vm_vaddr_t input_address,
-> +				       vm_vaddr_t output_address,
-> +				       uint64_t *hv_status)
-> +{
-> +	uint8_t vector;
+On Wed, 21 Sept 2022 at 23:16, Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
+>
+> Hi Ricardo,
+>
+> On Wed, Sep 21, 2022 at 09:51:44AM +0200, Ricardo Ribalda wrote:
+> > Do you mean something like this?
+> >
+> > diff --git a/drivers/media/usb/uvc/uvc_entity.c
+> > b/drivers/media/usb/uvc/uvc_entity.c
+> > index 7c4d2f93d351..66d1f5da4ec7 100644
+> > --- a/drivers/media/usb/uvc/uvc_entity.c
+> > +++ b/drivers/media/usb/uvc/uvc_entity.c
+> > @@ -37,7 +37,7 @@ static int uvc_mc_create_links(struct uvc_video_chain *chain,
+> >                         continue;
+> >
+> >                 remote = uvc_entity_by_id(chain->dev, entity->baSourceID[i]);
+> > -               if (remote == NULL)
+> > +               if (remote == NULL || remote->num_pads == 0)
+> >                         return -EINVAL;
+>
+> Yes.
+>
+> >
+> >                 source = (UVC_ENTITY_TYPE(remote) == UVC_TT_STREAMING)
+> > @@ -46,6 +46,9 @@ static int uvc_mc_create_links(struct uvc_video_chain *chain,
+> >                 if (source == NULL)
+> >                         continue;
+> >
+> > +               if (source->num_pads != remote->num_pads)
+> > +                       return -EINVAL;
+> > +
+>
+> But this I would have dropped, as the media_entity num_pads is
+> initialized from uvc_entity num_pads and neither are changed after.
 
-Newline after the variable declaration.
+Works for me. Shall I send a v2 or you can take it?
 
-> +	/* Note both the hypercall and the "asm safe" clobber r9-r11. */
-> +	asm volatile("mov %[output_address], %%r8\n\t"
-> +		     KVM_ASM_SAFE("vmcall")
-> +		     : "=a" (*hv_status),
-> +		       "+c" (control), "+d" (input_address),
-> +		       KVM_ASM_SAFE_OUTPUTS(vector)
-> +		     : [output_address] "r"(output_address)
-> +		     : "cc", "memory", "r8", KVM_ASM_SAFE_CLOBBERS);
-> +	return vector;
-> +}
-> +
->  /* Proper HV_X64_MSR_GUEST_OS_ID value */
->  #define HYPERV_LINUX_OS_ID ((u64)0x8100 << 48)
->  
-> diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_features.c b/tools/testing/selftests/kvm/x86_64/hyperv_features.c
-> index 1144bd1ea626..c464d324cde0 100644
-> --- a/tools/testing/selftests/kvm/x86_64/hyperv_features.c
-> +++ b/tools/testing/selftests/kvm/x86_64/hyperv_features.c
-> @@ -13,22 +13,6 @@
->  #include "processor.h"
->  #include "hyperv.h"
->  
-> -static inline uint8_t hypercall(u64 control, vm_vaddr_t input_address,
-> -				vm_vaddr_t output_address, uint64_t *hv_status)
-> -{
-> -	uint8_t vector;
-> -
-> -	/* Note both the hypercall and the "asm safe" clobber r9-r11. */
-> -	asm volatile("mov %[output_address], %%r8\n\t"
-> -		     KVM_ASM_SAFE("vmcall")
-> -		     : "=a" (*hv_status),
-> -		       "+c" (control), "+d" (input_address),
-> -		       KVM_ASM_SAFE_OUTPUTS(vector)
-> -		     : [output_address] "r"(output_address)
-> -		     : "cc", "memory", "r8", KVM_ASM_SAFE_CLOBBERS);
-> -	return vector;
-> -}
-> -
->  struct msr_data {
->  	uint32_t idx;
->  	bool available;
-> @@ -78,7 +62,7 @@ static void guest_hcall(vm_vaddr_t pgs_gpa, struct hcall_data *hcall)
->  		input = output = 0;
->  	}
->  
-> -	vector = hypercall(hcall->control, input, output, &res);
-> +	vector = hyperv_hypercall(hcall->control, input, output, &res);
->  	if (hcall->ud_expected)
->  		GUEST_ASSERT_2(vector == UD_VECTOR, hcall->control, vector);
->  	else
+Thanks!
+>
+> >                 remote_pad = remote->num_pads - 1;
+> >                 ret = media_create_pad_link(source, remote_pad,
+> >                                                sink, i, flags);
+> >
+> > regarding making a new patch, whatever is easier for you ;)
+> >
+> >
+> > On Wed, 21 Sept 2022 at 02:53, Laurent Pinchart wrote:
+> > >
+> > > Hi Ricardo,
+> > >
+> > > Thank you for the patch.
+> > >
+> > > On Tue, Sep 20, 2022 at 04:04:55PM +0200, Ricardo Ribalda wrote:
+> > > > If the source entity does not contain any pads, do not create a link.
+> > > >
+> > > > Reported-by: syzbot <syzkaller@googlegroups.com>
+> > > > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> > > >
+> > > > diff --git a/drivers/media/usb/uvc/uvc_entity.c b/drivers/media/usb/uvc/uvc_entity.c
+> > > > index 7c4d2f93d351..1f730cb72e58 100644
+> > > > --- a/drivers/media/usb/uvc/uvc_entity.c
+> > > > +++ b/drivers/media/usb/uvc/uvc_entity.c
+> > > > @@ -43,7 +43,7 @@ static int uvc_mc_create_links(struct uvc_video_chain *chain,
+> > > >               source = (UVC_ENTITY_TYPE(remote) == UVC_TT_STREAMING)
+> > > >                      ? (remote->vdev ? &remote->vdev->entity : NULL)
+> > > >                      : &remote->subdev.entity;
+> > > > -             if (source == NULL)
+> > > > +             if (source == NULL || source->num_pads == 0)
+> > >
+> > > source->num_pads and remote->num_pads should always be identical, but as
+> > > the next line uses remote->num_pads, wouldn't it be better to test that
+> > > variable ? If so, I'd move the test a file lines earlier, with the
+> > > remote == NULL test.
+> > >
+> > > What do you think ? If you agree I can make that change when applying,
+> > > there's no need for a new version. Otherwise I'll keep the patch as-is.
+> > >
+> > > >                       continue;
+> > > >
+> > > >               remote_pad = remote->num_pads - 1;
+> > > >
+>
+> --
+> Regards,
+>
+> Laurent Pinchart
 
-Just out of sight here, but I broke this code in commit cc5851c6be86 ("KVM: selftests:
-Use exception fixup for #UD/#GP Hyper-V MSR/hcall tests").  I got too fancy and
-inverted the ud_expected logic when checking the result.  The broken code skips the
-check when #UD _not_ expected.
 
-I.e. this
 
-	if (hcall->ud_expected)
-		GUEST_ASSERT_2(vector == UD_VECTOR, hcall->control, vector);
-	else
-		GUEST_ASSERT_2(!vector, hcall->control, vector);
-
-	GUEST_ASSERT_2(!hcall->ud_expected || res == hcall->expect,
-			hcall->expect, res);
-
-should be
-
-	if (hcall->ud_expected) {
-		GUEST_ASSERT_2(vector == UD_VECTOR, hcall->control, vector);
-	} else {
-		GUEST_ASSERT_2(!vector, hcall->control, vector);
-		GUEST_ASSERT_2(res == hcall->expect, hcall->expect, res);
-	}
-
-The reason I bring this up here is because of the reason the test passes: gcc
-zeros RAX before the hypercall (not entirely sure why), and so res=0 on #UD due
-to nothing changing RAX.  But clang doesn't zero RAX and so the test fails due
-to RAX holding garbage (probably '1' from the lower 32 bits of HV_X64_MSR_HYPERCALL).
-
-So, what do you think about explicitly setting hv_status, e.g. to -EFAULT, prior
-to the hypercall, both to defend against selftest bugs and to verify that _KVM_
-actually zeros the result?
-
+-- 
+Ricardo Ribalda
