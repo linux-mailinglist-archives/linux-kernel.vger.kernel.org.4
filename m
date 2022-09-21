@@ -2,143 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F5E45C0138
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:26:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF3175C00FD
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:19:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230337AbiIUP0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 11:26:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59880 "EHLO
+        id S230072AbiIUPTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 11:19:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230415AbiIUPZ1 (ORCPT
+        with ESMTP id S229563AbiIUPTc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 11:25:27 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDA88481F0
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 08:25:12 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id y141so5315752iof.5
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 08:25:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=KLCmAE9UlNDGgLGs2ArJ00VmIdhhVt7eh934lDS0138=;
-        b=JURosBZkyeDvy/vyZPMqlVgB6IuAkyD75OrRJfNUt8s3w3vxLN7VamcPkqlyzdXLxr
-         6swKXk3vZvHZYdWG8NrSs5fqQ4zSAGVnpshII0vyAtAUYXty40xxoz50U7xZkAXpCBnl
-         B3sxf5HQVWZvvDPtd3cWBMqGFvqnM1X5cb4es=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=KLCmAE9UlNDGgLGs2ArJ00VmIdhhVt7eh934lDS0138=;
-        b=DiFTPnSpF93sU0K+ONJrVoy9snqUEf6LpgMsr+MJQ0bNWQY8jakORDHMQw8Axbg++z
-         our1wAMKKbVdxXq6Pp1B406W4jqdgicmcXEUhzfhICPWYw3uPILCuWOU/OeVnpPRxIOx
-         zIvToKQNp3ShzFEgMmWkbx/EzOJwC2k4H059pAvRpNVbI6uZBMipA3SH73YCMpmUc7K/
-         WNUIBhkm76qzvnPZpAwyE0rpDXMo0hZA5bRGU698HnshjCbQ0GY64MY3yIL5iITDXqPc
-         yjJEoZVkFP50dumDajVIUbahzRH5LXFnAx8xVQdh3afkm2sonkwBUAEI+iGTmQFz70n5
-         Dv+A==
-X-Gm-Message-State: ACrzQf0/A1sQPezuuBH0+VORCXWQJpPrqpnZ+mOKi+ox2lqYk8NGWgL5
-        CQMwfqcZGG9Gsogzuurz+bcFkdN8ohW3ng==
-X-Google-Smtp-Source: AMsMyM7UL3o8DhxHnv1IfDUPXm6aXa1Cx345t2+KDy91j7wozInNx7XIRZr4EzXJ7rZZ7xhKyFrTJw==
-X-Received: by 2002:a05:6602:2dd5:b0:6a2:38e6:eaad with SMTP id l21-20020a0566022dd500b006a238e6eaadmr11778384iow.144.1663773910807;
-        Wed, 21 Sep 2022 08:25:10 -0700 (PDT)
-Received: from mail-io1-f53.google.com (mail-io1-f53.google.com. [209.85.166.53])
-        by smtp.gmail.com with ESMTPSA id l3-20020a026a03000000b0035a06313244sm1169208jac.26.2022.09.21.08.25.10
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Sep 2022 08:25:10 -0700 (PDT)
-Received: by mail-io1-f53.google.com with SMTP id d8so5285560iof.11
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 08:25:10 -0700 (PDT)
-X-Received: by 2002:a92:c569:0:b0:2f5:927d:b61a with SMTP id
- b9-20020a92c569000000b002f5927db61amr7672947ilj.151.1663773525104; Wed, 21
- Sep 2022 08:18:45 -0700 (PDT)
+        Wed, 21 Sep 2022 11:19:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED60B33E
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 08:19:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A5886B8304F
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 15:19:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 275CDC433C1;
+        Wed, 21 Sep 2022 15:19:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663773566;
+        bh=dbFiBb96XQe4U0eDZ+uXd3wxcpqjYtrh6LsgsTTGho0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MPCgfALMkZMmrCpvLjMnb44QHoCKH55Z7hBvgBWNEX8T7NtvVuFFgpxyyuqVIZfTk
+         2ZF5WpTBGufJ/KRLGDuNlpZ4FtW7jWJoFnm7xHIzqSznBcYX8pJTsBAX7FVf5cGhem
+         t/a4srQMQNtpXPZ6a6XEn7Gql/oz4OjT/sPt7M56GW/vAUXRNoDNXcoS4lFuEoOcFA
+         8zohy5kQhU9WqapK5dtERlOjEJ1gBQWxAdoZzCQyWO8szqFLSkGAaC/znVgbcwoC5W
+         J1HJwHSPUKppX3cuAgwczPwn/nEbPsJD116nq0xDSDhu83GJ8lesjhimNef+4lH7P1
+         h3j4br5CKHM1w==
+Date:   Wed, 21 Sep 2022 18:19:12 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64/mm: fold check for KFENCE into can_set_direct_map()
+Message-ID: <YysrcNmdz5t30cQQ@kernel.org>
+References: <20220921074841.382615-1-rppt@kernel.org>
+ <1a87b8a4-46f0-69c9-83ec-10cce8f0aa72@arm.com>
 MIME-Version: 1.0
-References: <20220919155916.1044219-1-rrangel@chromium.org>
- <20220919095504.v4.7.I8af4282adc72eb9f247adcd03676a43893a020a6@changeid> <Yymyzcfp7gqdTYam@smile.fi.intel.com>
-In-Reply-To: <Yymyzcfp7gqdTYam@smile.fi.intel.com>
-From:   Raul Rangel <rrangel@chromium.org>
-Date:   Wed, 21 Sep 2022 09:18:34 -0600
-X-Gmail-Original-Message-ID: <CAHQZ30C3Wsqbwnpn+9tP2DCDdtMGOqOZ8di77agDcLM7idWxuQ@mail.gmail.com>
-Message-ID: <CAHQZ30C3Wsqbwnpn+9tP2DCDdtMGOqOZ8di77agDcLM7idWxuQ@mail.gmail.com>
-Subject: Re: [PATCH v4 07/13] i2c: acpi: Use ACPI wake capability bit to set wake_irq
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        linux-input <linux-input@vger.kernel.org>,
-        Tim Van Patten <timvp@google.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>,
-        "jingle.wu" <jingle.wu@emc.com.tw>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1a87b8a4-46f0-69c9-83ec-10cce8f0aa72@arm.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 6:32 AM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Mon, Sep 19, 2022 at 09:59:09AM -0600, Raul E Rangel wrote:
-> > Device tree already has a mechanism to pass the wake_irq. It does this
-> > by looking for the wakeup-source property and setting the
-> > I2C_CLIENT_WAKE flag. This CL adds the ACPI equivalent. It uses the
-> > ACPI interrupt wake flag to determine if the interrupt can be used to
-> > wake the system. Previously the i2c drivers had to make assumptions and
-> > blindly enable the wake IRQ. This can cause spurious wake events. e.g.,
-> > If there is a device with an Active Low interrupt and the device gets
-> > powered off while suspending, the interrupt line will go low since it's
-> > no longer powered and wakes the system. For this reason we should
-> > respect the board designers wishes and honor the wake bit defined on the
-> > interrupt.
->
-> ...
->
-> > +     if (irq_ctx.irq == -ENOENT)
-> > +             irq_ctx.irq = acpi_dev_gpio_irq_wake_get(adev, 0, &irq_ctx.wake_capable);
->
-> I just realized, that there is an inconsistency on how we fill the wake_capable
-> parameter. In some cases we check for IRQ for an error condition (IRQ not found)
-> and in some the wake_capable still be filled.
->
-> Here the best approach I believe is to add
->
->         if (irq_ctx.irq < 0)
->                 return irq_ctx.irq;
->
-> I.o.w. we apply the rule "do not fill the output parameters when it's known
-> to be an error condition".
->
-> > +     if (wake_capable)
-> > +             *wake_capable = irq_ctx.wake_capable;
->
-> > +     return irq_ctx.irq;
->
+Hi Anshuman,
 
-I applied the following:
-diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
-index ba64e505183595..1618f5619d5ed9 100644
---- a/drivers/i2c/i2c-core-acpi.c
-+++ b/drivers/i2c/i2c-core-acpi.c
-@@ -220,7 +220,7 @@ int i2c_acpi_get_irq(struct i2c_client *client,
-bool *wake_capable)
-        if (irq_ctx.irq == -ENOENT)
-                irq_ctx.irq = acpi_dev_gpio_irq_wake_get(adev, 0,
-&irq_ctx.wake_capable);
+On Wed, Sep 21, 2022 at 05:09:19PM +0530, Anshuman Khandual wrote:
+> 
+> 
+> On 9/21/22 13:18, Mike Rapoport wrote:
+> > From: Mike Rapoport <rppt@linux.ibm.com>
+> > 
+> > KFENCE requires linear map to be mapped at page granularity, so that it
+> > is possible to protect/unprotect single pages, just like with
+> > rodata_full and DEBUG_PAGEALLOC.
+> > 
+> > Instead of repating
+> > 
+> > 	can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE)
+> > 
+> > make can_set_direct_map() handle the KFENCE case.
+> > 
+> > This also prevents potential false positives in kernel_page_present()
+> > that may return true for non-present page if CONFIG_KFENCE is enabled.
+> > 
+> > Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> > ---
+> >  arch/arm64/mm/mmu.c      | 8 ++------
+> >  arch/arm64/mm/pageattr.c | 8 +++++++-
+> >  2 files changed, 9 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+> > index e7ad44585f40..c5065abec55a 100644
+> > --- a/arch/arm64/mm/mmu.c
+> > +++ b/arch/arm64/mm/mmu.c
+> > @@ -535,7 +535,7 @@ static void __init map_mem(pgd_t *pgdp)
+> >  	 */
+> >  	BUILD_BUG_ON(pgd_index(direct_map_end - 1) == pgd_index(direct_map_end));
+> >  
+> > -	if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE))
+> > +	if (can_set_direct_map())
+> >  		flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
+> >  
+> >  	/*
+> > @@ -1547,11 +1547,7 @@ int arch_add_memory(int nid, u64 start, u64 size,
+> >  
+> >  	VM_BUG_ON(!mhp_range_allowed(start, size, true));
+> >  
+> > -	/*
+> > -	 * KFENCE requires linear map to be mapped at page granularity, so that
+> > -	 * it is possible to protect/unprotect single pages in the KFENCE pool.
+> > -	 */
+> > -	if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE))
+> > +	if (can_set_direct_map())
+> >  		flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
+> >  
+> >  	__create_pgd_mapping(swapper_pg_dir, start, __phys_to_virt(start),
+> > diff --git a/arch/arm64/mm/pageattr.c b/arch/arm64/mm/pageattr.c
+> > index 64e985eaa52d..d107c3d434e2 100644
+> > --- a/arch/arm64/mm/pageattr.c
+> > +++ b/arch/arm64/mm/pageattr.c
+> > @@ -21,7 +21,13 @@ bool rodata_full __ro_after_init = IS_ENABLED(CONFIG_RODATA_FULL_DEFAULT_ENABLED
+> >  
+> >  bool can_set_direct_map(void)
+> >  {
+> > -	return rodata_full || debug_pagealloc_enabled();
+> > +	/*
+> > +	 * rodata_full, DEBUG_PAGEALLOC and KFENCE require linear map to be
+> > +	 * mapped at page granularity, so that it is possible to
+> > +	 * protect/unprotect single pages.
+> > +	 */
+> > +	return rodata_full || debug_pagealloc_enabled() ||
+> > +		IS_ENABLED(CONFIG_KFENCE);
+> >  }
+> 
+> Changing can_set_direct_map() also changes behaviour for other functions such as 
+> 
+> set_direct_map_default_noflush()
+> set_direct_map_invalid_noflush()
+> __kernel_map_pages()
+> 
+> Is that okay ?
+ 
+Yes. Since KFENCE disables block mappings, these will actually change the
+page tables.
+Actually, before this change the test for can_set_direct_map() in these
+functions was false negative when CONFIG_KFENCE=y
+  
+> >  static int change_page_range(pte_t *ptep, unsigned long addr, void *data)
 
--       if (wake_capable)
-+       if (irq_ctx.irq > 0 && wake_capable)
-                *wake_capable = irq_ctx.wake_capable;
-
-        return irq_ctx.irq;
-
-Thanks!
+-- 
+Sincerely yours,
+Mike.
