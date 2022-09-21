@@ -2,112 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE80A5C0495
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 18:49:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE2875C04A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 18:50:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231182AbiIUQtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 12:49:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51870 "EHLO
+        id S231734AbiIUQuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 12:50:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231633AbiIUQsl (ORCPT
+        with ESMTP id S231351AbiIUQuQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 12:48:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E5DF2F012
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 09:41:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B8299B8273B
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 16:41:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06198C433D6;
-        Wed, 21 Sep 2022 16:41:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663778505;
-        bh=TPnWwHt82eNripHM/TYcNEM4j+W6BPqrNNPqcMZfY2Y=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DssCK6+5FXzjyCL6XPkfhP19N3vuzZwpdHEi9FoT3tAIJLv4uLcPmDkU3/ASW5rqJ
-         +LpEimYm461rx6A8qD2Gg/miof6u/D2og2ABIlZkE159gh9yUHyxmZ0h+PCBkEBzOw
-         UkfkGOGijvBa2Y/vGW2GzS41KcT8hN5+t7NKgTFP7ypazxp0b8LLV3elnNvEFV6lC6
-         D+1vcgOVV4v2l0I5E1UEy9pb5Nr+nx1HCzMr/mn8wN2bSir3g+Qu7uk5qYSLlRIHEl
-         mI4Fb40bAXyiaJOce//FWlBxNhlvoM26mBRpn2932H7dIKNyDNklrmpSvAPueagsvZ
-         atpk3RPMiQqjQ==
-From:   SeongJae Park <sj@kernel.org>
-To:     Xin Hao <xhao@linux.alibaba.com>
-Cc:     sj@kernel.org, akpm@linux-foundation.org, damon@lists.linux.dev,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] mm/damon: add DAMON_OBJ macro
-Date:   Wed, 21 Sep 2022 16:41:43 +0000
-Message-Id: <20220921164143.59971-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220921034942.88568-1-xhao@linux.alibaba.com>
-References: 
+        Wed, 21 Sep 2022 12:50:16 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2498644568;
+        Wed, 21 Sep 2022 09:45:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663778731; x=1695314731;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=laXgAb+WMN2z204oCnwMZwdSHX27n7WQtFDeOEih/Gg=;
+  b=jCM1/VheGGE+iXYOTfgpB6UoTsgvG+BydYn/x3ASM8KvZd5Xv8muGbza
+   Nzi/3Jhlev63vwn0ASZQU9fqX2bDAnrguVQM6Y3MRZxQws7BK2JBWbkIw
+   NYsLkNo/Gk1Zk10uuGWeJ5V3uqhnT1RShFaW2SaTYjO5G0cd8Hrp3X0SP
+   aGL/W5wY5xZljJkr3QqdkHxf3VJfjPTkqqrF1L/YAIn4f+Ouhqp8HQJhg
+   BhX2M6rI2TXVUff0NTXfzHorsLySWtvr6JzwTIjchYy6W3kxPvgho64ap
+   L3LDtZe45+z7nts2XKKk/Sbrqn901hYXK9HqKr7sTdLQgYw9GjVyvVIno
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="300044908"
+X-IronPort-AV: E=Sophos;i="5.93,333,1654585200"; 
+   d="scan'208";a="300044908"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 09:45:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,333,1654585200"; 
+   d="scan'208";a="948227885"
+Received: from lxy-dell.sh.intel.com ([10.239.48.38])
+  by fmsmga005.fm.intel.com with ESMTP; 21 Sep 2022 09:45:22 -0700
+From:   Xiaoyao Li <xiaoyao.li@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, wei.w.wang@intel.com,
+        kan.liang@linux.intel.com
+Cc:     xiaoyao.li@intel.com, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: [RFC PATCH v2 0/3] KVM: VMX: Fix VM entry failure on PT_MODE_HOST_GUEST while host is using PT
+Date:   Thu, 22 Sep 2022 00:45:18 +0800
+Message-Id: <20220921164521.2858932-1-xiaoyao.li@intel.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Xin,
+There is one bug in KVM that can hit vm-entry failure 100% on platform
+supporting PT_MODE_HOST_GUEST mode following below steps:
 
-On Wed, 21 Sep 2022 11:49:42 +0800 Xin Hao <xhao@linux.alibaba.com> wrote:
+  1. #modprobe -r kvm_intel
+  2. #modprobe kvm_intel pt_mode=1
+  3. start a VM with QEMU
+  4. on host: #perf record -e intel_pt//
 
-> In damon/sysfs.c file, we use 'container_of' macro to get
-> damon_sysfs_xxx struct instances, but i think it has a little
-> inconvenience, because we have to pass three arguments to
-> 'container_of', and the codes also look a bit long, so there i add a
-> 'DAMON_OBJ' macro, you just need to pass one arguments, then you can get
-> the right damon_sysfs_xxx struct instance.
+The vm-entry failure happens because it violates the requirement stated
+in Intel SDM 26.2.1.1 VM-Execution Control Fields
 
-Thank you always for your helps and efforts, but I have some comments below.
+  If the logical processor is operating with Intel PT enabled (if
+  IA32_RTIT_CTL.TraceEn = 1) at the time of VM entry, the "load
+  IA32_RTIT_CTL" VM-entry control must be 0.
 
-> 
-> Signed-off-by: Xin Hao <xhao@linux.alibaba.com>
-> ---
->  include/linux/damon.h |   7 ++
->  mm/damon/sysfs.c      | 230 +++++++++++++++++-------------------------
->  2 files changed, 102 insertions(+), 135 deletions(-)
-> 
-> diff --git a/include/linux/damon.h b/include/linux/damon.h
-> index e7808a84675f..a3b577677caa 100644
-> --- a/include/linux/damon.h
-> +++ b/include/linux/damon.h
-> @@ -24,6 +24,13 @@ static inline unsigned long damon_rand(unsigned long l, unsigned long r)
->  	return l + prandom_u32_max(r - l);
->  }
->  
-> +/*
-> + * Get damon_sysfs_xxx relative struct instance.
-> + */
-> +#define DAMON_OBJ(_type) ({						\
-> +	const typeof(((struct _type *)0)->kobj)*__mptr = (kobj);	\
-> +	(struct _type *)((char *)__mptr - offsetof(struct _type, kobj)); })
-> +
+On PT_MODE_HOST_GUEST node, vm-entry load RTIT is always set. Thus KVM
+needs to ensure IA32_RTIT_CTL.TraceEn is 0 before VM-entry. Currently KVM
+manually WRMSR(IA32_RTIT_CTL) to clear TraceEn bit. However, it doesn't
+work everytime since there is a posibility that IA32_RTIT_CTL.TraceEn is
+re-enabled in PT PMI handler before vm-entry.
 
-So, this macro assumes two implicit rules.
-1. The caller would have a relevant 'struct kobject *' variable called 'kobj',
-   and
-2. The '_type' would have the field 'kobj'.
+This series tries to fix the issue by exposing and calling perf driver
+API to stop host PT event (if any) before vm-entry and resume PT event
+after vm-exit. Perf API can prevent PT PMI handler from re-enabling PT.
 
-I think the implicit rules could make some people confused, so would be better
-to be well documented.  Even though those are well documented, I think it
-cannot intuitively read by everyone.  Making the name better self-explaining
-might help, but then the length of the code would be not so different.
+By the way, drop the save/restore of PT MSRs of host because the resume
+of PT event after vm-exit doesn't rely on the previous value of PT MSRs.
 
-So IMHO, this change makes the code a little bit shorter but unclear to
-understand what it does.  And at least to my humble eyes, use of
-'container_of()' makes the code a little bit more verbose, but clear to
-understand.  I have no idea how we can make this code shorter while keeping it
-still easily understandable, and I think the level of verboseness is acceptable
-for the readability.  So Nack at the moment, sorry.
+Changes in v1:
+ - Export perf_event_{en,dis}able_local() and pt_get_curr_event() for KVM to
+   stop/resume PT event; (Suggested-by Wang, Wei W <wei.w.wang@intel.com>)
+ - Drop the save/restore of host PT MSRs.
 
+v1: https://lore.kernel.org/all/20220825085625.867763-1-xiaoyao.li@intel.com/
 
-Thanks,
-SJ
+Xiaoyao Li (3):
+  perf/core: Expose perf_event_{en,dis}able_local()
+  perf/x86/intel/pt: Introduce and export pt_get_curr_event()
+  KVM: VMX: Stop/resume host PT before/after VMX transition when
+    PT_MODE_HOST_GUEST
 
-[...]
+ arch/x86/events/intel/pt.c        |  8 ++++++++
+ arch/x86/include/asm/perf_event.h |  2 ++
+ arch/x86/kvm/vmx/vmx.c            | 31 +++++++++++++------------------
+ arch/x86/kvm/vmx/vmx.h            |  2 +-
+ include/linux/perf_event.h        |  1 +
+ kernel/events/core.c              |  7 +++++++
+ 6 files changed, 32 insertions(+), 19 deletions(-)
+
+-- 
+2.27.0
+
