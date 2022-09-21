@@ -2,67 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB1C05BFB14
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 11:35:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B99285BFB17
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 11:35:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbiIUJfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 05:35:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33204 "EHLO
+        id S231365AbiIUJfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 05:35:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbiIUJfW (ORCPT
+        with ESMTP id S229555AbiIUJfr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 05:35:22 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 009C182D31;
-        Wed, 21 Sep 2022 02:35:21 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id v1so5050483plo.9;
-        Wed, 21 Sep 2022 02:35:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=EhnBpCpoeRYQHc027CvFJhCGZMSO3kz4CSNF4MCSNW0=;
-        b=kVgHRrSzTLNMS7eqZGl2QTHvGOioL1m/DacQIY37AIn5NlUE+7WtjZL2IOapjMEv7t
-         9eGAUGhzhwvg5i21Sv6uCQOfBv84TV9JJ9TS3gPAyojcOFP9xMjN0t5tYEx3aQX+YxZW
-         lroMzn6Go11/EeSOOR8I1wUlbnVg+bzLfK0lSOPSJXtqrTlzv/uejD03/l40ulBM/Gru
-         XAObuW4umiyFXBSL9IcS/xu+RzEuAE7uZXcRZSxoODMN4CgyR95hiZGDnsBZCi8br7Wx
-         10C8rUAS4X+GFPE7RbmHrNIb9uR2du0+/7Ewp8Rrho2MQq73GsDv3K8FoPrJtD0wYpRu
-         zQ1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=EhnBpCpoeRYQHc027CvFJhCGZMSO3kz4CSNF4MCSNW0=;
-        b=FCZTfDQc4iFjOrE49Sz14ZqKzTU6f2OKtSaQrx0bjUYyd1cFWNsJhHRNHAQ99EdGsZ
-         8dqXGjEiIQeCC7A/AUJHOB2B2//out05Xvu2NbwC45VnAZiDfMV99u5RedsDVbJS41hQ
-         0cfDYvn20adqaCFf1iIeLMEu1gHc0LULjF2/aJHTc5fdQitEsw+TUiTqkwTTj52geEBl
-         z1WUNfmlk9tneLt6tkC2+uSYBe6NAW0e0UFE69lyKp/V5Zhkgih9UAmSYgdYY5wH/WNM
-         yX2QOIZoS1QGETlDYs2BsfxzE/xYYzu9Kk3zBbVWv1KMeiSUI7WYy7ocCdC4+5uwJVzH
-         8k4g==
-X-Gm-Message-State: ACrzQf2+ErCf7WhI/MeMMBZh5Qfm1gZvrQdCKBdzkaJqaOmMr0rz1o6J
-        qKPGElzwZgiqnND7WN7oH3E=
-X-Google-Smtp-Source: AMsMyM6sznCwBf5tSLVKL+x7mLR4EfcL3gD/X9uZO6evzhZrAg0sEHyGNQOekZs6DjGiFXs/lSxd+g==
-X-Received: by 2002:a17:902:f54a:b0:176:c443:e885 with SMTP id h10-20020a170902f54a00b00176c443e885mr3865592plf.28.1663752921558;
-        Wed, 21 Sep 2022 02:35:21 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id d6-20020a170903230600b001767f6f04efsm1528682plh.242.2022.09.21.02.35.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Sep 2022 02:35:21 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: ye.xingchen@zte.com.cn
-To:     tj@kernel.org
-Cc:     lizefan.x@bytedance.com, hannes@cmpxchg.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ye xingchen <ye.xingchen@zte.com.cn>
-Subject: [PATCH linux-next] cgroup: use strscpy() is more robust and safer
-Date:   Wed, 21 Sep 2022 09:35:17 +0000
-Message-Id: <20220921093517.230745-1-ye.xingchen@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Wed, 21 Sep 2022 05:35:47 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3985582D04;
+        Wed, 21 Sep 2022 02:35:46 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 79DE3139F;
+        Wed, 21 Sep 2022 02:35:52 -0700 (PDT)
+Received: from [10.57.18.118] (unknown [10.57.18.118])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A0C373F73D;
+        Wed, 21 Sep 2022 02:35:43 -0700 (PDT)
+Message-ID: <2ce32413-d338-5032-71f1-7da183b2c561@arm.com>
+Date:   Wed, 21 Sep 2022 10:35:42 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [RESEND PATCH v5 2/2] dmaengine: mxs: fix section mismatch
+Content-Language: en-GB
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        linux-kernel@vger.kernel.org
+Cc:     linux-amarula@amarulasolutions.com,
+        Michael Trimarchi <michael@amarulasolutions.com>,
+        stable@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        dmaengine@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20220904141020.2947725-1-dario.binacchi@amarulasolutions.com>
+ <20220904141020.2947725-2-dario.binacchi@amarulasolutions.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220904141020.2947725-2-dario.binacchi@amarulasolutions.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,29 +53,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+On 2022-09-04 15:10, Dario Binacchi wrote:
+> The patch was suggested by the following modpost warning:
+> 
+> WARNING: modpost: vmlinux.o(.data+0xa3900): Section mismatch in reference from the variable mxs_dma_driver to the function .init.text:mxs_dma_probe()
+> The variable mxs_dma_driver references
+> the function __init mxs_dma_probe()
+> If the reference is valid then annotate the
+> variable with __init* or __refdata (see linux/init.h) or name the variable:
+> *_template, *_timer, *_sht, *_ops, *_probe, *_probe_one, *_console
 
-The implementation of strscpy() is more robust and safer.
+This is very wrong - even *with* platform_driver_probe(), the driver may 
+remain registered beyond init, so when the driver core walks the list 
+trying to match a driver for some other device later it can access freed 
+data and crash. Which is absolutely no fun to debug...
 
-That's now the recommended way to copy NUL terminated strings.
+The correct fix is to remove the __init annotation from the probe 
+routine. If you want to support deferred probe, consider that even your 
+own probe call might potentially be delayed until after initdata is freed.
 
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- kernel/cgroup/cgroup.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks,
+Robin.
 
-diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-index 829aa42e773e..48a8e8fb3e91 100644
---- a/kernel/cgroup/cgroup.c
-+++ b/kernel/cgroup/cgroup.c
-@@ -2374,7 +2374,7 @@ int task_cgroup_path(struct task_struct *task, char *buf, size_t buflen)
- 		ret = cgroup_path_ns_locked(cgrp, buf, buflen, &init_cgroup_ns);
- 	} else {
- 		/* if no hierarchy exists, everyone is in "/" */
--		ret = strlcpy(buf, "/", buflen);
-+		ret = strscpy(buf, "/", buflen);
- 	}
- 
- 	spin_unlock_irq(&css_set_lock);
--- 
-2.25.1
+> Co-developed-by: Michael Trimarchi <michael@amarulasolutions.com>
+> Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> Cc: stable@vger.kernel.org
+> ---
+> 
+> (no changes since v1)
+> 
+>   drivers/dma/mxs-dma.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/dma/mxs-dma.c b/drivers/dma/mxs-dma.c
+> index 18f8154b859b..a01953e06048 100644
+> --- a/drivers/dma/mxs-dma.c
+> +++ b/drivers/dma/mxs-dma.c
+> @@ -834,7 +834,7 @@ static int __init mxs_dma_probe(struct platform_device *pdev)
+>   	return 0;
+>   }
+>   
+> -static struct platform_driver mxs_dma_driver = {
+> +static struct platform_driver mxs_dma_driver __initdata = {
+>   	.driver		= {
+>   		.name	= "mxs-dma",
+>   		.of_match_table = mxs_dma_dt_ids,
