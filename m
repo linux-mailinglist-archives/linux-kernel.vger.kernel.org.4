@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 743105C0209
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:47:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 089685C02DF
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:56:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231436AbiIUPrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 11:47:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50784 "EHLO
+        id S232051AbiIUP4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 11:56:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231216AbiIUPqy (ORCPT
+        with ESMTP id S232103AbiIUPyK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 11:46:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6820B77574;
-        Wed, 21 Sep 2022 08:46:46 -0700 (PDT)
+        Wed, 21 Sep 2022 11:54:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA4339F77A;
+        Wed, 21 Sep 2022 08:50:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 07122630B2;
-        Wed, 21 Sep 2022 15:46:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6A35C433D6;
-        Wed, 21 Sep 2022 15:46:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8C665B830B1;
+        Wed, 21 Sep 2022 15:49:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDC25C433D7;
+        Wed, 21 Sep 2022 15:49:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663775205;
-        bh=MOWdypYyqnky78kZC6msHskSNBx7xgN9K0cfvYK41j0=;
+        s=korg; t=1663775377;
+        bh=APIfy+CENXuoyhydiMfxIatMOxxvZLvNCfx6BXp/sOo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=t3M4hZWYZUvWwxzY47KrSCgtyzqPMWQAfjEEsUX09+fW/LXdlK54vhmVtGdjL4ila
-         zyOIMXtNbRJ0trlXWlYcjE9VnBIwZZbd3VpKAf/p/LeJcH6St7TDkyBd9+E4Rdkfue
-         13XxBH2uvTv+Cey62NZYeA1HmRKtWsZImwBV3MRY=
+        b=jyXCz0Tpn0XsAD4q0SVxTI3dJy78FnHh/KZBUiG4iUmrSPMSENfDS822ucHe8zLot
+         UuJLRW8YN8fKUgwsLjuLiwldGutpaJWcwd4cTP5oX8cXm88WSVg7wGy0g9UGxKt3Bz
+         O0srvdVUM18t33vMf9qDqFss3/gEZGNtrh+OBW0A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Heiko Stuebner <heiko@sntech.de>,
+        stable@vger.kernel.org, Michael Wu <michael@allwinnertech.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 14/38] drm/rockchip: vop2: Fix eDP/HDMI sync polarities
-Date:   Wed, 21 Sep 2022 17:45:58 +0200
-Message-Id: <20220921153646.739629402@linuxfoundation.org>
+Subject: [PATCH 5.15 09/45] pinctrl: sunxi: Fix name for A100 R_PIO
+Date:   Wed, 21 Sep 2022 17:45:59 +0200
+Message-Id: <20220921153647.210173201@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220921153646.298361220@linuxfoundation.org>
-References: <20220921153646.298361220@linuxfoundation.org>
+In-Reply-To: <20220921153646.931277075@linuxfoundation.org>
+References: <20220921153646.931277075@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,44 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sascha Hauer <s.hauer@pengutronix.de>
+From: Michael Wu <michael@allwinnertech.com>
 
-[ Upstream commit 35b513a74eabf09bd718e04fd9e62b09c022807f ]
+[ Upstream commit 76648c867c6c03b8a468d9c9222025873ecc613d ]
 
-The hsync/vsync polarities were not honoured for the eDP and HDMI ports.
-Add the register settings to configure the polarities as requested by the
-DRM_MODE_FLAG_PHSYNC/DRM_MODE_FLAG_PVSYNC flags.
+The name of A100 R_PIO driver should be sun50i-a100-r-pinctrl,
+not sun50iw10p1-r-pinctrl.
 
-Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-Fixes: 604be85547ce ("drm/rockchip: Add VOP2 driver")
-Tested-by: Michael Riesch <michael.riesch@wolfvision.net>
-Signed-off-by: Heiko Stuebner <heiko@sntech.de>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220815133942.4051532-1-s.hauer@pengutronix.de
+Fixes: 473436e7647d6 ("pinctrl: sunxi: add support for the Allwinner A100 pin controller")
+Signed-off-by: Michael Wu <michael@allwinnertech.com>
+Acked-by: Samuel Holland <samuel@sholland.org>
+Link: https://lore.kernel.org/r/20220819024541.74191-1-michael@allwinnertech.com
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/rockchip/rockchip_drm_vop2.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/pinctrl/sunxi/pinctrl-sun50i-a100-r.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c b/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
-index d6e831576cd2..88271f04615b 100644
---- a/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
-+++ b/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
-@@ -1436,11 +1436,15 @@ static void rk3568_set_intf_mux(struct vop2_video_port *vp, int id,
- 		die &= ~RK3568_SYS_DSP_INFACE_EN_HDMI_MUX;
- 		die |= RK3568_SYS_DSP_INFACE_EN_HDMI |
- 			   FIELD_PREP(RK3568_SYS_DSP_INFACE_EN_HDMI_MUX, vp->id);
-+		dip &= ~RK3568_DSP_IF_POL__HDMI_PIN_POL;
-+		dip |= FIELD_PREP(RK3568_DSP_IF_POL__HDMI_PIN_POL, polflags);
- 		break;
- 	case ROCKCHIP_VOP2_EP_EDP0:
- 		die &= ~RK3568_SYS_DSP_INFACE_EN_EDP_MUX;
- 		die |= RK3568_SYS_DSP_INFACE_EN_EDP |
- 			   FIELD_PREP(RK3568_SYS_DSP_INFACE_EN_EDP_MUX, vp->id);
-+		dip &= ~RK3568_DSP_IF_POL__EDP_PIN_POL;
-+		dip |= FIELD_PREP(RK3568_DSP_IF_POL__EDP_PIN_POL, polflags);
- 		break;
- 	case ROCKCHIP_VOP2_EP_MIPI0:
- 		die &= ~RK3568_SYS_DSP_INFACE_EN_MIPI0_MUX;
+diff --git a/drivers/pinctrl/sunxi/pinctrl-sun50i-a100-r.c b/drivers/pinctrl/sunxi/pinctrl-sun50i-a100-r.c
+index 21054fcacd34..18088f6f44b2 100644
+--- a/drivers/pinctrl/sunxi/pinctrl-sun50i-a100-r.c
++++ b/drivers/pinctrl/sunxi/pinctrl-sun50i-a100-r.c
+@@ -98,7 +98,7 @@ MODULE_DEVICE_TABLE(of, a100_r_pinctrl_match);
+ static struct platform_driver a100_r_pinctrl_driver = {
+ 	.probe	= a100_r_pinctrl_probe,
+ 	.driver	= {
+-		.name		= "sun50iw10p1-r-pinctrl",
++		.name		= "sun50i-a100-r-pinctrl",
+ 		.of_match_table	= a100_r_pinctrl_match,
+ 	},
+ };
 -- 
 2.35.1
 
