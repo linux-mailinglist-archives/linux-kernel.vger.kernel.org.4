@@ -2,120 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 132DB5E552A
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 23:27:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECFFF5E552F
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 23:28:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230125AbiIUV1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 17:27:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56312 "EHLO
+        id S230122AbiIUV2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 17:28:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbiIUV1D (ORCPT
+        with ESMTP id S230357AbiIUV2H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 17:27:03 -0400
-Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [5.144.164.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60115A61C8;
-        Wed, 21 Sep 2022 14:27:02 -0700 (PDT)
-Received: from [192.168.1.101] (95.49.29.188.neoplus.adsl.tpnet.pl [95.49.29.188])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 9AD6D3F341;
-        Wed, 21 Sep 2022 23:26:58 +0200 (CEST)
-Message-ID: <13b8c67c-399c-d1a6-4929-61aea27aa57d@somainline.org>
-Date:   Wed, 21 Sep 2022 23:26:57 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2] brcmfmac: Add support for BCM43596 PCIe Wi-Fi
-Content-Language: en-US
-To:     Hector Martin <marcan@marcan.st>,
-        ~postmarketos/upstreaming@lists.sr.ht
-Cc:     martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        =?UTF-8?Q?Alvin_=c5=a0ipraga?= <alsi@bang-olufsen.dk>,
-        Marek Vasut <marex@denx.de>,
-        "Zhao, Jiaqing" <jiaqing.zhao@intel.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Soontak Lee <soontak.lee@cypress.com>,
-        linux-wireless@vger.kernel.org,
-        brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220921001630.56765-1-konrad.dybcio@somainline.org>
- <83b90478-3974-28e6-cf13-35fc4f62e0db@marcan.st>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <83b90478-3974-28e6-cf13-35fc4f62e0db@marcan.st>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Wed, 21 Sep 2022 17:28:07 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5192FA5C7D
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 14:28:06 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id x13-20020a170902ec8d00b00177f0fa642cso4608207plg.10
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 14:28:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date;
+        bh=Rj57beHCIEQ+ldfbuTVP/EURNkRb2EXXRe6WPMDPyCc=;
+        b=GYVh1Hv2Gcij7haZHYTZEMfH/lnByf/3y5MSsbXvhHiBfK+A+BYPENJDuzsSzoR7NW
+         Iy9Tz1XcjiMkpveXZpqcgEfFCrMGSEqgpO+hWaUIjqkuxF0QT36fZtYb7UFmM+iW0eGh
+         meDKyvNcKVG4/6WdDGEzHaD6LlsfLTJQPp/Ij6mzKeCo3bovst4NjEOSjKzsUzmnrvAy
+         xh/xKWaS0ZGrxoHVqWbwAZc26NlkKS2n96WMBCwuENEbgWcAVTCQqwNbpY5RwVDnH8mf
+         +APEBFXVKaU7t0YLDp3Bq6aV8wOHoyd1vuRX9liZHfCY7CuMAv4wXqWZfc62vYBLw4KU
+         +SlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=Rj57beHCIEQ+ldfbuTVP/EURNkRb2EXXRe6WPMDPyCc=;
+        b=cg9yrgjMIrzjywaW3F4q0oR99h32g+eEhdMKs8pqkoGkD+L1Ez86KCVdUOZzCjZ4LM
+         DY5ifWA5PNBIIHKQ2blxpHK09aZZp1WfPVdmHxHIoX7dahsahfmhKypv9Qq37p0taHUt
+         B4cKDcY+0r/GxW3LZk0K8JYQHVeY6qyF1HI7HPY0O4NQ7Uh8G0iFKHO//TkxsCJNs81C
+         NpzZ5zwrYsufaBlAqRey65lR1eeGws9ehhKdW57G3UvGM4UlpN7GyKemznp1eT/+Zr5I
+         ReUSqs6FZIn7PIGQ7pvWK1NMvhaXweWfMQogDlldY8GG3YqfC7WdfZy3n5iGF0HuZCE2
+         mO5A==
+X-Gm-Message-State: ACrzQf0fBRxaqQ23BDcCvClM8ouJbOE5i5bTgBaYMkg/7wlQpKS6fJ4S
+        9h5f2MD5X54nWwbaEFVz1FocACXp98ZRGyZ8jcM=
+X-Google-Smtp-Source: AMsMyM5mAkA1kCKFW+/25JHt+67NH6269Gra3l4xUtoGcl1oXEHtJf1kgg3hlPjQjU1VBuulUjPXtNOUjkRczoTgxWE=
+X-Received: from wmcvicker.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5ebe])
+ (user=willmcvicker job=sendgmr) by 2002:a05:6a00:1342:b0:545:4d30:eecb with
+ SMTP id k2-20020a056a00134200b005454d30eecbmr164457pfu.69.1663795685856; Wed,
+ 21 Sep 2022 14:28:05 -0700 (PDT)
+Date:   Wed, 21 Sep 2022 21:27:35 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.3.968.ga6b4b080e4-goog
+Message-ID: <20220921212735.2131588-1-willmcvicker@google.com>
+Subject: [PATCH v4] PCI/PM: Switch D3hot delay to use usleep_range()
+From:   Will McVicker <willmcvicker@google.com>
+To:     Bjorn Helgaas <bhelgaas@google.com>
+Cc:     kernel-team@android.com, Sajid Dalvi <sdalvi@google.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Will McVicker <willmcvicker@google.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Sajid Dalvi <sdalvi@google.com>
 
+The PCIe r6.0, sec 5.9 spec requires a 10ms D3hot delay (defined by
+PCI_PM_D3HOT_WAIT) for transitions to or from D3hot. So let's switch to
+usleep_range() for the delay time to improve the delay accuracy.
 
-On 21.09.2022 06:37, Hector Martin wrote:
-> On 21/09/2022 09.16, Konrad Dybcio wrote:
->> Add support for BCM43596 dual-band AC chip, found in
->> SONY Xperia X Performance, XZ and XZs smartphones (and
->> *possibly* other devices from other manufacturers).
->> The chip doesn't require any special handling and seems to work
->> just fine OOTB.
->>
->> PCIe IDs taken from: https://github.com/sonyxperiadev/kernel/commit/9e43fefbac8e43c3d7792e73ca52a052dd86d7e3.patch
->>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
->> ---
->> Changes since v1:
->> - rebased the patch against -next
->>
->>  drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c       | 2 ++
->>  drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c       | 4 ++++
->>  drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h | 4 ++++
->>  3 files changed, 10 insertions(+)
->>
-> [...]
->> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
->> index f98641bb1528..2e7fc66adf31 100644
->> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
->> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
->> @@ -81,6 +81,7 @@ static const struct brcmf_firmware_mapping brcmf_pcie_fwnames[] = {
->>  	BRCMF_FW_ENTRY(BRCM_CC_43570_CHIP_ID, 0xFFFFFFFF, 43570),
->>  	BRCMF_FW_ENTRY(BRCM_CC_4358_CHIP_ID, 0xFFFFFFFF, 4358),
->>  	BRCMF_FW_ENTRY(BRCM_CC_4359_CHIP_ID, 0xFFFFFFFF, 4359),
->> +	BRCMF_FW_ENTRY(BRCM_CC_43596_CHIP_ID, 0xFFFFFFFF, 4359),
-> 
-> So this works with the same firmware as 4359? That sounds a bit off. Is
-> that really the case?
-> 
-> brcmfmac4359-pcie isn't in linux-firmware, but presumably there is
-> *some* semi-canonical firmware you can find for that chip that other
-> people are already using. If that works on 43596 *and* you plan on using
-> that firmware or some other firmware marked 4359, then this is fine. If
-> you are using separate firmware that shipped with a 43596 device and
-> isn't itself marked 4359, please make it a separate firmware entry. We
-> can always symlink the firmwares if it later turns out there is no
-> reason to have different ones for each chip.
-The firmware that SONY originally gave us for the devices that we know use
-this chip seems to be marked 4359 [1]. That said, I have no other info
-about the relation between the two models.
+This patch is based off of a commit from Sajid Dalvi <sdalvi@google.com>
+in the Pixel 6 kernel tree [1]. Testing on a Pixel 6, found that the
+10ms delay for the Exynos PCIe device was on average delaying for 19ms
+when the spec requires 10ms. Switching from msleep() to usleep_range()
+therefore decreases the resume time on a Pixel 6 on average by 9ms.
 
-[1] https://github.com/sonyxperiadev/device-sony-kagura/tree/q-mr1/rootdir/vendor/firmware
+Note: some ancient Intel chips do have a quirk that sets the delay to
+120ms. Using usleep_delay() may add a few extra milliseconds for those
+chips.
 
-Konrad
-> 
-> - Hector
+[1] https://android.googlesource.com/kernel/gs/+/18a8cad68d8e6d50f339a716a18295e6d987cee3
+
+Signed-off-by: Sajid Dalvi <sdalvi@google.com>
+Signed-off-by: Will McVicker <willmcvicker@google.com>
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+---
+ drivers/pci/pci.c | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
+
+v4:
+ * Drop use of msleep() in favor of always using usleep_range().
+ * Update the commit message.
+
+v3:
+ * Use DIV_ROUND_CLOSEST instead of bit manipulation.
+ * Minor refactor to use max() where relavant.
+
+v2:
+ * Update to use 20-25% upper bound
+ * Update to use usleep_range() for <=20ms, else use msleep()
+
+diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+index 516bf0c2ca02..2127aba3550b 100644
+--- a/drivers/pci/pci.c
++++ b/drivers/pci/pci.c
+@@ -66,13 +66,15 @@ struct pci_pme_device {
+ 
+ static void pci_dev_d3_sleep(struct pci_dev *dev)
+ {
+-	unsigned int delay = dev->d3hot_delay;
+-
+-	if (delay < pci_pm_d3hot_delay)
+-		delay = pci_pm_d3hot_delay;
+-
+-	if (delay)
+-		msleep(delay);
++	unsigned int delay_ms = max(dev->d3hot_delay, pci_pm_d3hot_delay);
++	unsigned int upper;
++
++	if (delay_ms) {
++		/* Use a 20% upper bound, 1ms minimum */
++		upper = max(DIV_ROUND_CLOSEST(delay_ms, 5), 1U);
++		usleep_range(delay_ms * USEC_PER_MSEC,
++			     (delay_ms + upper) * USEC_PER_MSEC);
++	}
+ }
+ 
+ bool pci_reset_supported(struct pci_dev *dev)
+
+base-commit: fcf773ae8016c6bffe5d408d3eda50d981b946e6
+-- 
+2.37.3.968.ga6b4b080e4-goog
+
