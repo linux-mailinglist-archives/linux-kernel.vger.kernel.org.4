@@ -2,228 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB7885C04B1
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 18:52:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB4B35C04B4
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 18:52:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231792AbiIUQwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 12:52:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34196 "EHLO
+        id S231945AbiIUQwk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 12:52:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231715AbiIUQwD (ORCPT
+        with ESMTP id S231245AbiIUQwP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 12:52:03 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26A112BD4;
-        Wed, 21 Sep 2022 09:47:25 -0700 (PDT)
-X-UUID: bf5d6c1f19ab4f1a859ed31f237b4d29-20220922
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=F2F19Vqk4oTeChl6tfimZoIWmEP62hPQK3JzSGtep98=;
-        b=E23Y54WTmCJxlqA2sbjDdjVOBjkFNYOsyc6SGBohpKvB6kBQQTvZNZamFOj/mu10XuYvacBRTO21XWRe3TABiZKHpoW672hyp2CDecSJvwr6QFg8QdgclKjlAtbXcR6v9zXQu5h3mTfG59VAAxjZSqeK9Ijq7B0mKtYVShnO8yc=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:decbf236-6c9c-49ab-bf0b-b12fdd3828e0,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:39a5ff1,CLOUDID:a961705e-5ed4-4e28-8b00-66ed9f042fbd,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: bf5d6c1f19ab4f1a859ed31f237b4d29-20220922
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
-        (envelope-from <jason-jh.lin@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1851693329; Thu, 22 Sep 2022 00:47:19 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Thu, 22 Sep 2022 00:47:17 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Thu, 22 Sep 2022 00:47:17 +0800
-Message-ID: <4c9c9ad5b5ab8ce88c28c01832195d196b1ef964.camel@mediatek.com>
-Subject: Re: [PATCH v3 1/6] dt-bindings: arm: mediatek: mmsys: change
- compatible for MT8195
-From:   Jason-JH Lin <jason-jh.lin@mediatek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-CC:     CK Hu <ck.hu@mediatek.com>, Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        Singo Chang <singo.chang@mediatek.com>,
-        Nancy Lin <nancy.lin@mediatek.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Thu, 22 Sep 2022 00:47:17 +0800
-In-Reply-To: <29a06da0-ddf5-15eb-ac3d-0bc2e0006ae9@linaro.org>
-References: <20220920140145.19973-1-jason-jh.lin@mediatek.com>
-         <20220920140145.19973-2-jason-jh.lin@mediatek.com>
-         <65c93c5d-941a-267b-408d-95be83dc2454@linaro.org>
-         <8fba20bf37326504b871fb55ce171cd37720a9a0.camel@mediatek.com>
-         <29a06da0-ddf5-15eb-ac3d-0bc2e0006ae9@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 21 Sep 2022 12:52:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CF31E44;
+        Wed, 21 Sep 2022 09:48:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9E72BB831AC;
+        Wed, 21 Sep 2022 16:48:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91C43C433C1;
+        Wed, 21 Sep 2022 16:47:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1663778880;
+        bh=Uq+7kCNXeOIRo5XwITrK2IWj1Ufg3iGwxOhE4kBFrR0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=J40hXYKCXdZlyaGQ3A4O2U1YOCccm76nvu2kOlyx1ef+LISqtylleTBEzqalFtso6
+         VL6ZB8UW8CvNLNUtgHnGCJv0kEUMCP5ixac8rFnJXxPd1RNqZWzoHe6cHLH1wYJDyG
+         rNA28PZKQYNJQL0psCbypd+6cSnsvfgWIShrnovs=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+Subject: [PATCH 5.19 00/39] 5.19.11-rc2 review
+Date:   Wed, 21 Sep 2022 18:47:57 +0200
+Message-Id: <20220921164741.757857192@linuxfoundation.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY,
-        URIBL_CSS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: quilt/0.67
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.11-rc2.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-5.19.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 5.19.11-rc2
+X-KernelTest-Deadline: 2022-09-23T16:47+00:00
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-09-21 at 08:28 +0200, Krzysztof Kozlowski wrote:
-> On 21/09/2022 06:16, Jason-JH Lin wrote:
-> > Hi Krzysztof,
-> > 
-> > Thanks for the reviews.
-> > 
-> > On Tue, 2022-09-20 at 17:25 +0200, Krzysztof Kozlowski wrote:
-> > > On 20/09/2022 16:01, Jason-JH.Lin wrote:
-> > > > For previous MediaTek SoCs, such as MT8173, there are 2 display
-> > > > HW
-> > > > pipelines binding to 1 mmsys with the same power domain, the
-> > > > same
-> > > > clock driver and the same mediatek-drm driver.
-> > > > 
-> > > > For MT8195, VDOSYS0 and VDOSYS1 are 2 display HW pipelines
-> > > > binding
-> > > > to
-> > > > 2 different power domains, different clock drivers and
-> > > > different
-> > > > mediatek-drm drivers.
-> > > > 
-> > > > Moreover, Hardware pipeline of VDOSYS0 has these components:
-> > > > COLOR,
-> > > > CCORR, AAL, GAMMA, DITHER. They are related to the PQ (Picture
-> > > > Quality)
-> > > > and they makes VDOSYS0 supports PQ function while they are not
-> > > > including in VDOSYS1.
-> > > > 
-> > > > Hardware pipeline of VDOSYS1 has the component ETHDR (HDR
-> > > > related
-> > > > component). It makes VDOSYS1 supports the HDR function while
-> > > > it's
-> > > > not
-> > > > including in VDOSYS0.
-> > > > 
-> > > > To summarize0:
-> > > > Only VDOSYS0 can support PQ adjustment.
-> > > > Only VDOSYS1 can support HDR adjustment.
-> > > > 
-> > > > Therefore, we need to separate these two different mmsys
-> > > > hardwares
-> > > > to
-> > > > 2 different compatibles for MT8195.
-> > > > 
-> > > > Fixes: 81c5a41d10b9 ("dt-bindings: arm: mediatek: mmsys: add
-> > > > mt8195
-> > > > SoC binding")
-> > > > Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
-> > > > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> > > > ---
-> > > >  .../devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml      
-> > > > | 4
-> > > > ++++
-> > > >  1 file changed, 4 insertions(+)
-> > > > 
-> > > > diff --git
-> > > > a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys
-> > > > .yam
-> > > > l
-> > > > b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys
-> > > > .yam
-> > > > l
-> > > > index 6ad023eec193..df9184b6772c 100644
-> > > > ---
-> > > > a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys
-> > > > .yam
-> > > > l
-> > > > +++
-> > > > b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys
-> > > > .yam
-> > > > l
-> > > > @@ -38,6 +38,10 @@ properties:
-> > > >            - const: mediatek,mt7623-mmsys
-> > > >            - const: mediatek,mt2701-mmsys
-> > > >            - const: syscon
-> > > > +      - items:
-> > > > +          - const: mediatek,mt8195-vdosys0
-> > > > +          - const: mediatek,mt8195-mmsys
-> > > > +          - const: syscon
-> > > 
-> > > and why mediatek,mt8195-mmsys is kept as non-deprecated?
-> > 
-> > Shouldn't we keep this for fallback compatible?
-> 
-> I am not talking about it.
-> 
-> > 
-> > I think this items could support the device node like:
-> > foo {
-> >   compatible = "mediatek,mt8195-vdosys0", "mediatek,mt8195-mmsys", 
-> > 	       "syscon";
-> > }
-> > 
-> 
-> Yes, this one ok.
-> 
-> > 
-> > Or should I change the items like this?
-> > - items:
-> >     - const: mediatek,mt8195-vdosys0
-> >     - enum:
-> >         - mediatek,mt8195-mmsys
-> >     - const: syscon
-> > 
-> 
-> No, this does not look correct.
+This is the start of the stable review cycle for the 5.19.11 release.
+There are 39 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-OK, I'll keep this one:
-- items:
-    - const: mediatek,mt8195-vdosys0
-    - const: mediatek,mt8195-mmsys
-    - const: syscon
+Responses should be made by Fri, 23 Sep 2022 16:47:28 +0000.
+Anything received after that time might be too late.
 
-Thanks for the reviews.
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.11-rc2.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
+and the diffstat can be found below.
 
-> 
-> I asked why do you keep old mediatek,mt8195-mmsys compatible in the
-> same
-> place (the alone one), without making it deprecated?
+thanks,
 
- - items:
-          - enum:
-              - mediatek,mt2701-mmsys
-              - mediatek,mt2712-mmsys
-              - mediatek,mt6765-mmsys
-              - mediatek,mt6779-mmsys
-              - mediatek,mt6797-mmsys
-              - mediatek,mt8167-mmsys
-              - mediatek,mt8173-mmsys
-              - mediatek,mt8183-mmsys
-              - mediatek,mt8186-mmsys
-              - mediatek,mt8192-mmsys
-              - mediatek,mt8195-mmsys
-Do you mean this one can be deprecated?
-I'm not sure if I should keep this after adding the new item.
-If so, I can remove this at the next version.
+greg k-h
 
-              - mediatek,mt8365-mmsys
-          - const: syscon
+-------------
+Pseudo-Shortlog of commits:
 
-Regards,
-Jason-JH.Lin
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 5.19.11-rc2
 
-> 
-> Best regards,
-> Krzysztof
--- 
-Jason-JH Lin <jason-jh.lin@mediatek.com>
+Lu Baolu <baolu.lu@linux.intel.com>
+    Revert "iommu/vt-d: Fix possible recursive locking in intel_iommu_init()"
+
+Takashi Iwai <tiwai@suse.de>
+    ALSA: hda/sigmatel: Fix unused variable warning for beep power change
+
+Takashi Iwai <tiwai@suse.de>
+    ALSA: hda/sigmatel: Keep power up while beep is enabled
+
+Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+    cgroup: Add missing cpus_read_lock() to cgroup_attach_task_all()
+
+Janne Grunau <j@jannau.net>
+    dt-bindings: apple,aic: Fix required item "apple,fiq-index" in affinity description
+
+sewookseo <sewookseo@google.com>
+    net: Find dst with sk's xfrm policy not ctl_sk
+
+Alex Deucher <alexander.deucher@amd.com>
+    drm/amdgpu: move nbio sdma_doorbell_range() into sdma code for vega
+
+Alex Deucher <alexander.deucher@amd.com>
+    drm/amdgpu: move nbio ih_doorbell_range() into ih code for vega
+
+Lijo Lazar <lijo.lazar@amd.com>
+    drm/amdgpu: Don't enable LTR if not supported
+
+Alex Deucher <alexander.deucher@amd.com>
+    drm/amdgpu: make sure to init common IP before gmc
+
+Nirmoy Das <nirmoy.das@intel.com>
+    drm/i915: Set correct domains values at _i915_vma_move_to_active
+
+Ashutosh Dixit <ashutosh.dixit@intel.com>
+    drm/i915/gt: Fix perf limit reasons bit positions
+
+Ben Hutchings <benh@debian.org>
+    tools/include/uapi: Fix <asm/errno.h> for parisc and xtensa
+
+Helge Deller <deller@gmx.de>
+    parisc: Allow CONFIG_64BIT with ARCH=parisc
+
+Mikulas Patocka <mpatocka@redhat.com>
+    blk-lib: fix blkdev_issue_secure_erase
+
+Stefan Metzmacher <metze@samba.org>
+    cifs: always initialize struct msghdr smb_msg completely
+
+Stefan Metzmacher <metze@samba.org>
+    cifs: don't send down the destination address to sendmsg for a SOCK_STREAM
+
+Ronnie Sahlberg <lsahlber@redhat.com>
+    cifs: revalidate mapping when doing direct writes
+
+Jens Axboe <axboe@kernel.dk>
+    io_uring/msg_ring: check file type before putting
+
+Thierry Reding <treding@nvidia.com>
+    of/device: Fix up of_dma_configure_id() stub
+
+Yang Yingliang <yangyingliang@huawei.com>
+    parisc: ccio-dma: Add missing iounmap in error path in ccio_probe()
+
+Stefan Roesch <shr@fb.com>
+    block: blk_queue_enter() / __bio_queue_enter() must return -EAGAIN for nowait
+
+Umesh Nerlige Ramappa <umesh.nerlige.ramappa@intel.com>
+    drm/i915/guc: Cancel GuC engine busyness worker synchronously
+
+Alan Previn <alan.previn.teres.alexis@intel.com>
+    drm/i915/guc: Don't update engine busyness stats too frequently
+
+Ankit Nautiyal <ankit.k.nautiyal@intel.com>
+    drm/i915/vdsc: Set VDSC PIC_HEIGHT before using for DP DSC
+
+Sascha Hauer <s.hauer@pengutronix.de>
+    drm/rockchip: vop2: Fix eDP/HDMI sync polarities
+
+Stuart Menefy <stuart.menefy@mathembedded.com>
+    drm/meson: Fix OSD1 RGB to YCbCr coefficient
+
+Stuart Menefy <stuart.menefy@mathembedded.com>
+    drm/meson: Correct OSD1 global alpha value
+
+Chen-Yu Tsai <wenst@chromium.org>
+    drm/panel-edp: Fix delays for Innolux N116BCA-EA1
+
+Dan Aloni <dan.aloni@vastdata.com>
+    Revert "SUNRPC: Remove unreachable error condition"
+
+Anna Schumaker <Anna.Schumaker@Netapp.com>
+    NFSv4.2: Update mode bits after ALLOCATE and DEALLOCATE
+
+Pali Rohár <pali@kernel.org>
+    gpio: mpc8xxx: Fix support for IRQ_TYPE_LEVEL_LOW flow_type in mpc85xx
+
+Trond Myklebust <trond.myklebust@hammerspace.com>
+    NFSv4: Turn off open-by-filehandle and NFS re-export for NFSv4.0
+
+Trond Myklebust <trond.myklebust@hammerspace.com>
+    SUNRPC: Fix call completion races with call_decode()
+
+Michael Wu <michael@allwinnertech.com>
+    pinctrl: sunxi: Fix name for A100 R_PIO
+
+João H. Spies <jhlspies@gmail.com>
+    pinctrl: rockchip: Enhance support for IRQ_TYPE_EDGE_BOTH
+
+Molly Sophia <mollysophia379@gmail.com>
+    pinctrl: qcom: sc8180x: Fix wrong pin numbers
+
+Molly Sophia <mollysophia379@gmail.com>
+    pinctrl: qcom: sc8180x: Fix gpio_wakeirq_map
+
+Sergey Shtylyov <s.shtylyov@omp.ru>
+    of: fdt: fix off-by-one error in unflatten_dt_nodes()
+
+
+-------------
+
+Diffstat:
+
+ .../bindings/interrupt-controller/apple,aic.yaml   |  2 +-
+ Makefile                                           |  4 ++--
+ arch/parisc/Kconfig                                | 12 +++++++++-
+ block/blk-core.c                                   |  4 ++--
+ block/blk-lib.c                                    | 11 ++++++---
+ drivers/gpio/gpio-mpc8xxx.c                        |  1 +
+ drivers/gpio/gpio-rockchip.c                       |  4 ++--
+ drivers/gpu/drm/amd/amdgpu/amdgpu_device.c         | 14 ++++++++---
+ drivers/gpu/drm/amd/amdgpu/nbio_v2_3.c             |  9 +++++++-
+ drivers/gpu/drm/amd/amdgpu/nbio_v6_1.c             |  9 +++++++-
+ drivers/gpu/drm/amd/amdgpu/nbio_v7_4.c             |  9 +++++++-
+ drivers/gpu/drm/amd/amdgpu/sdma_v4_0.c             |  5 ++++
+ drivers/gpu/drm/amd/amdgpu/soc15.c                 | 25 --------------------
+ drivers/gpu/drm/amd/amdgpu/vega10_ih.c             |  4 ++++
+ drivers/gpu/drm/amd/amdgpu/vega20_ih.c             |  4 ++++
+ drivers/gpu/drm/i915/display/icl_dsi.c             |  2 ++
+ drivers/gpu/drm/i915/display/intel_dp.c            |  1 +
+ drivers/gpu/drm/i915/display/intel_vdsc.c          |  1 -
+ drivers/gpu/drm/i915/gt/uc/intel_guc.h             |  8 +++++++
+ drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c  | 20 +++++++++++++++-
+ drivers/gpu/drm/i915/i915_reg.h                    | 16 ++++++-------
+ drivers/gpu/drm/i915/i915_vma.c                    |  3 ++-
+ drivers/gpu/drm/meson/meson_plane.c                |  2 +-
+ drivers/gpu/drm/meson/meson_viu.c                  |  2 +-
+ drivers/gpu/drm/panel/panel-edp.c                  |  3 ++-
+ drivers/gpu/drm/rockchip/rockchip_drm_vop2.c       |  4 ++++
+ drivers/iommu/intel/dmar.c                         |  7 ------
+ drivers/iommu/intel/iommu.c                        | 27 ++++++++++++++++++++--
+ drivers/of/fdt.c                                   |  2 +-
+ drivers/parisc/ccio-dma.c                          |  1 +
+ drivers/pinctrl/qcom/pinctrl-sc8180x.c             | 10 ++++----
+ drivers/pinctrl/sunxi/pinctrl-sun50i-a100-r.c      |  2 +-
+ fs/cifs/connect.c                                  | 11 +++------
+ fs/cifs/file.c                                     |  3 +++
+ fs/cifs/transport.c                                |  6 +----
+ fs/nfs/internal.h                                  | 25 ++++++++++++++++++++
+ fs/nfs/nfs42proc.c                                 |  9 ++++++--
+ fs/nfs/super.c                                     | 27 ++++++++++++++--------
+ fs/nfs/write.c                                     | 25 --------------------
+ include/linux/dmar.h                               |  4 +---
+ include/linux/of_device.h                          |  5 ++--
+ include/net/xfrm.h                                 |  2 ++
+ io_uring/io_uring.c                                |  3 ++-
+ kernel/cgroup/cgroup-v1.c                          |  2 ++
+ net/ipv4/ip_output.c                               |  2 +-
+ net/ipv4/tcp_ipv4.c                                |  2 ++
+ net/ipv6/tcp_ipv6.c                                |  5 +++-
+ net/sunrpc/clnt.c                                  |  3 +++
+ net/sunrpc/xprt.c                                  |  8 +++----
+ sound/pci/hda/patch_sigmatel.c                     | 24 +++++++++++++++++++
+ tools/include/uapi/asm/errno.h                     |  4 ++--
+ 51 files changed, 263 insertions(+), 135 deletions(-)
+
 
