@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 492E05BF229
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 02:34:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA0EB5BF223
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 02:34:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231660AbiIUAd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 20:33:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34308 "EHLO
+        id S231666AbiIUAeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 20:34:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231314AbiIUAdN (ORCPT
+        with ESMTP id S231469AbiIUAdO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 20:33:13 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40880796B4
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 17:33:05 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 66-20020a251145000000b006a7b4a27d04so3690813ybr.20
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 17:33:05 -0700 (PDT)
+        Tue, 20 Sep 2022 20:33:14 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 748937963B
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 17:33:06 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id y16-20020a17090aa41000b001fdf0a76a4eso2386825pjp.3
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 17:33:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date;
-        bh=6n3oC51LepjybeCO/G1gnLj/7i8/kZTfCzCfh49ZsFY=;
-        b=W1Ft16I2z4KyotR0zf9JcaxskVjiFIoTSvcCvM9GzqpfMZjOnkUbTlyR/YK2GifRmv
-         QrwJq8VMURYEAE2WuDaeBV1lpmfmiUr9qttHXPB25xmfj0zo/Rm8dS6hBczWKfely1To
-         iBZYJPxQgEmeTx4V8oSgxXgoc7fmc8jL0B2eJu/Yc6c7NQPqonrY7m5HwsjgveG5t8/q
-         DMeMlr+fihRcdrCqNFWVENW4RNE2K4oabECK0hGgUMWhs07ZJGDjNFB5aD/IHo4M7B6i
-         xV1aDtVsD/LclbxQq81QXFA9WSGbWt0X054O++Zklv0EWWKP7bGtdKwjb1syoi10fSBt
-         trFw==
+        bh=K+eJDVrRDoT/6MhRD9TeI/5Knz9Tn6rS//AmvrkEOco=;
+        b=RumQH9j9B8TemfcYt2a6b2x/yZUXUUkBbA8gdyrJEr38nDZ7RuvyLCRaRk5ZkufEy6
+         p2NCHI5GbrqhMqhjM/+4WM5CnKN5bBsM+xcVusQQyjpPw3Ksepa4epiazoqa1DtUlznH
+         D3jXrYZbhuvR8NS9oP9hxXzcyaKZyMMMzC8Q3AsRqni5HUkhRX+jDr6NPQVgVd+hQMGt
+         1BKLvJS2NkApQBW4GGR8+r3gbwLtcfbqmtTVZArU0N3RAW9Bb+ckWgOW049H7NaAmkBn
+         CgE9T8i2GbNr42RCENeJzZg+9RVQrzeyxaiopWDNfB1fyskDMaEA2WCUkePT/lJ5TLD+
+         i91w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date;
-        bh=6n3oC51LepjybeCO/G1gnLj/7i8/kZTfCzCfh49ZsFY=;
-        b=kiZwg71MIP0hxwh2IpAVyb0GqAjlrV6C1anKjXI2FOPGfChpD8kucwVjPWDMgMTMRs
-         JduD1YQQ68Jy+wL2KP4rysdm6+aYylonvWzDBJoxmk6ghxyH85bGybxSPpGpdrewJVxw
-         wIqbom2fQNaCacBgBcnXEqfVsgPfDQyL09Y2UdE598X3skqfQ+W7rWpnyH1XkUPzv6qZ
-         h54Lypd/12TFAlGs1onDVevRCwqospqyEWM3z5XbllA+43hfCyQygWQoX782h3Tj5YMt
-         37AXw5NOYYuhUv7MxQ2YZfrHY4P8ZNYzk6gp5rBtM0k4x28fzJK6h7cUT529mt7JLrUS
-         AZqA==
-X-Gm-Message-State: ACrzQf1fr1F1rflHA4RUcH4euvuS2tbNXbRX4R1g5mGC5CB67W9MAoUs
-        jtLa5KHYoXLRdFB9AKhyWCOpJEyVwcM=
-X-Google-Smtp-Source: AMsMyM6ajbNthck8O3WF1o+1c/8Kt+/LZ69NQ6nvF17LZv5xSYaJvw/YRsOuqwhN87Jz4vl4Gma5UjnRyp0=
+        bh=K+eJDVrRDoT/6MhRD9TeI/5Knz9Tn6rS//AmvrkEOco=;
+        b=AS9Ulj0pYaV/mcLomPQhFvOb1blDZgh0RG1FNJ3N6fYF9jLk53dJAWqzONe7Ot2cNV
+         /rbw6hX2fNn7zkqIWyJUnVSOATDZgf7f/PQlN6bc6ChkZYfvFrb/oVXs6fsTzQTzgMw+
+         4xTw1mM0mI1+H4wNGljOTae8xz38FjPR+pIeemLPHR8JlJd/cqzUD/J/j8+at5HatokZ
+         G6gATOM0DXtYVBVADt9HzacxQCW/FTUi3gBq1xZbOHyVvcPnLYgHE4zZ2MG11cV3Rmha
+         APiDcnf2ylxvwlDi6XL5dMx36L6WRQeGcUdV8v8RIFlHxdevSN3ZR9bDsblDJX+D8F++
+         afCQ==
+X-Gm-Message-State: ACrzQf3In5jg8afEJext+kMmC1tmU+TT9q/CVAoHt1xIdG0ZRZnMuZbl
+        mtBNwnIWYrXDrevc/0nWpxALr5mywYM=
+X-Google-Smtp-Source: AMsMyM7p74m7+dmjyK72nsLPYB9lNVLqfhypVno6piUFMo/NwEAnZPXgFzPrJP9ozDKFIC2/tvBZej6i8L4=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:c04f:0:b0:6ae:96ac:ac2d with SMTP id
- c76-20020a25c04f000000b006ae96acac2dmr21142783ybf.227.1663720384571; Tue, 20
- Sep 2022 17:33:04 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:134d:b0:545:4d30:eebf with SMTP id
+ k13-20020a056a00134d00b005454d30eebfmr26543768pfu.32.1663720386171; Tue, 20
+ Sep 2022 17:33:06 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Wed, 21 Sep 2022 00:31:59 +0000
+Date:   Wed, 21 Sep 2022 00:32:00 +0000
 In-Reply-To: <20220921003201.1441511-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220921003201.1441511-1-seanjc@google.com>
 X-Mailer: git-send-email 2.37.3.968.ga6b4b080e4-goog
-Message-ID: <20220921003201.1441511-11-seanjc@google.com>
-Subject: [PATCH v4 10/12] KVM: x86: never write to memory from kvm_vcpu_check_block()
+Message-ID: <20220921003201.1441511-12-seanjc@google.com>
+Subject: [PATCH v4 11/12] KVM: mips, x86: do not rely on KVM_REQ_UNHALT
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         Huacai Chen <chenhuacai@kernel.org>,
@@ -89,65 +89,64 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Paolo Bonzini <pbonzini@redhat.com>
 
-kvm_vcpu_check_block() is called while not in TASK_RUNNING, and therefore
-it cannot sleep.  Writing to guest memory is therefore forbidden, but it
-can happen on AMD processors if kvm_check_nested_events() causes a vmexit.
+KVM_REQ_UNHALT is a weird request that simply reports the value of
+kvm_arch_vcpu_runnable() on exit from kvm_vcpu_halt().  Only
+MIPS and x86 are looking at it, the others just clear it.  Check
+the state of the vCPU directly so that the request is handled
+as a nop on all architectures.
 
-Fortunately, all events that are caught by kvm_check_nested_events() are
-also recognized by kvm_vcpu_has_events() through vendor callbacks such as
-kvm_x86_interrupt_allowed() or kvm_x86_ops.nested_ops->has_events(), so
-remove the call and postpone the actual processing to vcpu_block().
+No functional change intended, except for corner cases where an
+event arrive immediately after a signal become pending or after
+another similar host-side event.
 
-Opportunistically honor the return of kvm_check_nested_events().  KVM
-punted on the check in kvm_vcpu_running() because the only error path is
-if vmx_complete_nested_posted_interrupt() fails, in which case KVM exits
-to userspace with "internal error" i.e. the VM is likely dead anyways so
-it wasn't worth overloading the return of kvm_vcpu_running().
-
-Add the check mostly so that KVM is consistent with itself; the return of
-the call via kvm_apic_accept_events()=>kvm_check_nested_events() that
-immediately follows  _is_ checked.
-
-Reported-by: Maxim Levitsky <mlevitsk@redhat.com>
 Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-[sean: check and handle return of kvm_check_nested_events()]
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/x86.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+ arch/mips/kvm/emulate.c | 7 +++----
+ arch/x86/kvm/x86.c      | 9 ++++++++-
+ 2 files changed, 11 insertions(+), 5 deletions(-)
 
+diff --git a/arch/mips/kvm/emulate.c b/arch/mips/kvm/emulate.c
+index b494d8d39290..1d7c56defe93 100644
+--- a/arch/mips/kvm/emulate.c
++++ b/arch/mips/kvm/emulate.c
+@@ -955,13 +955,12 @@ enum emulation_result kvm_mips_emul_wait(struct kvm_vcpu *vcpu)
+ 		kvm_vcpu_halt(vcpu);
+ 
+ 		/*
+-		 * We we are runnable, then definitely go off to user space to
++		 * We are runnable, then definitely go off to user space to
+ 		 * check if any I/O interrupts are pending.
+ 		 */
+-		if (kvm_check_request(KVM_REQ_UNHALT, vcpu)) {
+-			kvm_clear_request(KVM_REQ_UNHALT, vcpu);
++		kvm_clear_request(KVM_REQ_UNHALT, vcpu);
++		if (kvm_arch_vcpu_runnable(vcpu))
+ 			vcpu->run->exit_reason = KVM_EXIT_IRQ_WINDOW_OPEN;
+-		}
+ 	}
+ 
+ 	return EMULATE_DONE;
 diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index dcc675d4e44b..8aeacbc2bff9 100644
+index 8aeacbc2bff9..8b1ff7e91ecb 100644
 --- a/arch/x86/kvm/x86.c
 +++ b/arch/x86/kvm/x86.c
-@@ -10815,6 +10815,17 @@ static inline int vcpu_block(struct kvm_vcpu *vcpu)
+@@ -10811,7 +10811,14 @@ static inline int vcpu_block(struct kvm_vcpu *vcpu)
+ 		if (hv_timer)
+ 			kvm_lapic_switch_to_hv_timer(vcpu);
+ 
+-		if (!kvm_check_request(KVM_REQ_UNHALT, vcpu))
++		kvm_clear_request(KVM_REQ_UNHALT, vcpu);
++
++		/*
++		 * If the vCPU is not runnable, a signal or another host event
++		 * of some kind is pending; service it without changing the
++		 * vCPU's activity state.
++		 */
++		if (!kvm_arch_vcpu_runnable(vcpu))
  			return 1;
  	}
  
-+	/*
-+	 * Evaluate nested events before exiting the halted state.  This allows
-+	 * the halt state to be recorded properly in the VMCS12's activity
-+	 * state field (AMD does not have a similar field and a VM-Exit always
-+	 * causes a spurious wakeup from HLT).
-+	 */
-+	if (is_guest_mode(vcpu)) {
-+		if (kvm_check_nested_events(vcpu) < 0)
-+			return 0;
-+	}
-+
- 	if (kvm_apic_accept_events(vcpu) < 0)
- 		return 0;
- 	switch(vcpu->arch.mp_state) {
-@@ -10837,9 +10848,6 @@ static inline int vcpu_block(struct kvm_vcpu *vcpu)
- 
- static inline bool kvm_vcpu_running(struct kvm_vcpu *vcpu)
- {
--	if (is_guest_mode(vcpu))
--		kvm_check_nested_events(vcpu);
--
- 	return (vcpu->arch.mp_state == KVM_MP_STATE_RUNNABLE &&
- 		!vcpu->arch.apf.halted);
- }
 -- 
 2.37.3.968.ga6b4b080e4-goog
 
