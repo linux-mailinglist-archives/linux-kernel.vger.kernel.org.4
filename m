@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59E495BFC05
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 12:09:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85A165BFC0B
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 12:11:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231436AbiIUKIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 06:08:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34240 "EHLO
+        id S230487AbiIUKKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 06:10:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230487AbiIUKIc (ORCPT
+        with ESMTP id S230072AbiIUKKU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 06:08:32 -0400
-Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A11585FB6;
-        Wed, 21 Sep 2022 03:08:26 -0700 (PDT)
-Received: by mail-qv1-f52.google.com with SMTP id z9so4037777qvn.9;
-        Wed, 21 Sep 2022 03:08:26 -0700 (PDT)
+        Wed, 21 Sep 2022 06:10:20 -0400
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F65B65826;
+        Wed, 21 Sep 2022 03:10:20 -0700 (PDT)
+Received: by mail-qt1-f181.google.com with SMTP id g23so3695779qtu.2;
+        Wed, 21 Sep 2022 03:10:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=Q42qokBJHSJ02Yiksv4KQyCcXIUfc5O74ntw/Bpmgc0=;
-        b=fhNGXeg3wDJnHhMmI8wNf1Tij6Pg5moL5mGDF3Iy4OBnFN8vaju6hczdziOevSJZLS
-         VDOQ2IbITpgiQX8X24VsLhB3ZOk0QWcJP4iB0bOLNk06NOzrKaqbddodruLfQAfm2GXn
-         z6aPg6H4VC4yHlgE+Sj/mQRdKDm4UEyd3+uR8fQ1wQUOhb8CH2OHHOqX0/+YOBe2FBXE
-         hAXC7ZTIQBagA5KI+xADfGsJwHIku7v1acfiyed8XCIxtA2SRWLIKgVyI+O/pHTL13ge
-         kMQH26Vehf6HV6/iWKEG5uxdx+GbRGU554f1A6dRIU6FFUHIYshrPoRvKWl6+0hC+e26
-         edjg==
-X-Gm-Message-State: ACrzQf0dyxA7q4VaF8YhVt1YHI5cM7kZprhzCaBExsC0sf0VRfWHirlj
-        80e4BGpdS4Y+AZMXwJXTwR8Mj2oyHsVyarVm
-X-Google-Smtp-Source: AMsMyM5zUfaboCdscy/A0la4qv/yz1+y8wOa95gNR2yHdwGqkMLVEsV6mWcmLu4lbmzsC/qZgcEonA==
-X-Received: by 2002:a0c:e0d3:0:b0:4aa:9d28:6603 with SMTP id x19-20020a0ce0d3000000b004aa9d286603mr22469277qvk.91.1663754905200;
-        Wed, 21 Sep 2022 03:08:25 -0700 (PDT)
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
-        by smtp.gmail.com with ESMTPSA id d20-20020ae9ef14000000b006ce5fe31c2dsm1540455qkg.65.2022.09.21.03.08.22
+        bh=/SSEuwrmJLJj9UMZKTCar/0/cGO6w/t/L7XekBxJJtM=;
+        b=qifR23m+5qwnjumNkChgxvkSA4OnaJwIJGST3orenlU+RlPakWWnVK8DvEZmYXs1W1
+         xQSMjVakdg7VPUzuP2RDZvNRtcBGTMJ/vX0sdeC1L7xCFQW/ICSz4uZhgDbAmxoOloHE
+         Mdc+cMQFAuVcoO64uK9u4h6A/PtI9x298E5CGh0kraxju3pCxShuAiQQeBHAsH1drtc3
+         bmlyS8jgEmwfN9HoM6k6MIttuG6SPno8/zUl0DSI8A3vIkxiz2T3ttmmICeuSLmrtIJG
+         oKjGhDtjQFnq4/0inlhdjikmYF+oQCIdQGF/Acj6CsrOTFnWeK+8oLP7LywT5JtZk9UB
+         gapQ==
+X-Gm-Message-State: ACrzQf0CzWnPdwB27ORmnHuHeQng8xC+lzZ/zVlYbAZum+Ih7dO2JKBV
+        bxpcPpx1ZNr6RN52ysL5cLGsTIBixn/wTpDQ
+X-Google-Smtp-Source: AMsMyM4b2MpSD2szwGj4+wZUUhpxVjAzdBW0EUTrk5EtZ3kClIFjSuBPwenyWVYxly8uku2wudfDmQ==
+X-Received: by 2002:a05:622a:5d4:b0:344:98a8:8dae with SMTP id d20-20020a05622a05d400b0034498a88daemr23067150qtb.164.1663755018880;
+        Wed, 21 Sep 2022 03:10:18 -0700 (PDT)
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
+        by smtp.gmail.com with ESMTPSA id w7-20020ac857c7000000b0035bbb6268e2sm1560858qta.67.2022.09.21.03.10.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Sep 2022 03:08:23 -0700 (PDT)
-Received: by mail-yb1-f174.google.com with SMTP id g5so7278586ybg.11;
-        Wed, 21 Sep 2022 03:08:22 -0700 (PDT)
-X-Received: by 2002:a5b:104:0:b0:6b0:429:3fe9 with SMTP id 4-20020a5b0104000000b006b004293fe9mr23028012ybx.543.1663754902653;
- Wed, 21 Sep 2022 03:08:22 -0700 (PDT)
+        Wed, 21 Sep 2022 03:10:17 -0700 (PDT)
+Received: by mail-yb1-f179.google.com with SMTP id 130so7295812ybz.9;
+        Wed, 21 Sep 2022 03:10:16 -0700 (PDT)
+X-Received: by 2002:a05:6902:2c1:b0:6b2:8bb0:79a0 with SMTP id
+ w1-20020a05690202c100b006b28bb079a0mr18992385ybh.202.1663755016378; Wed, 21
+ Sep 2022 03:10:16 -0700 (PDT)
 MIME-Version: 1.0
 References: <CAMuHMdUPm36RsxHdVwspR3NCAR3C507AyB6R65W42N2gXWq0ag@mail.gmail.com>
- <b0f2e13a-ff5d-5bfc-6dda-ca39bb57803e@linaro.org> <CA+V-a8t3ukpa1PNz=5fP+BTjWkFJmwDo_EJJYjO9YctF2=K1Vg@mail.gmail.com>
- <df9ff0bd-ad0e-4b5b-859d-dd913628edc8@linaro.org>
-In-Reply-To: <df9ff0bd-ad0e-4b5b-859d-dd913628edc8@linaro.org>
+ <b0f2e13a-ff5d-5bfc-6dda-ca39bb57803e@linaro.org>
+In-Reply-To: <b0f2e13a-ff5d-5bfc-6dda-ca39bb57803e@linaro.org>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 21 Sep 2022 12:08:11 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXaWz4zP-Zrc4drxwVmbMjmGZHABVbUtO91fZXKawathw@mail.gmail.com>
-Message-ID: <CAMuHMdXaWz4zP-Zrc4drxwVmbMjmGZHABVbUtO91fZXKawathw@mail.gmail.com>
+Date:   Wed, 21 Sep 2022 12:10:05 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVKcikM0b97G99UhVtSwrxc07asB0nBqB6OL9XNXFb-gw@mail.gmail.com>
+Message-ID: <CAMuHMdVKcikM0b97G99UhVtSwrxc07asB0nBqB6OL9XNXFb-gw@mail.gmail.com>
 Subject: Re: Similar SoCs with different CPUs and interrupt bindings
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
+Cc:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Andre Przywara <andre.przywara@arm.com>,
         Conor Dooley <conor.dooley@microchip.com>,
@@ -72,8 +71,8 @@ Cc:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -82,71 +81,16 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Krzysztof,
 
-On Wed, Sep 21, 2022 at 11:26 AM Krzysztof Kozlowski
+On Wed, Sep 21, 2022 at 10:49 AM Krzysztof Kozlowski
 <krzysztof.kozlowski@linaro.org> wrote:
-> On 21/09/2022 11:20, Lad, Prabhakar wrote:
-> >> What do you mean? Macros support string concatenation and simple
-> >> arithmetic like adding numbers. I just tested it.
-> >>
-> > I did try the below:
-> >
-> > diff --git a/arch/arm64/boot/dts/renesas/r9a07g043.dtsi
-> > b/arch/arm64/boot/dts/renesas/r9a07g043.dtsi
-> > index 689aa4ba416b..0f923c276cd3 100644
-> > --- a/arch/arm64/boot/dts/renesas/r9a07g043.dtsi
-> > +++ b/arch/arm64/boot/dts/renesas/r9a07g043.dtsi
-> > @@ -8,6 +8,8 @@
-> >  #include <dt-bindings/interrupt-controller/arm-gic.h>
-> >  #include <dt-bindings/clock/r9a07g043-cpg.h>
-> >
-> > +#define SOC_PERIPHERAL_IRQ(nr, na) GIC_SPI nr na
-> > +
-> >  / {
-> >      compatible = "renesas,r9a07g043";
-> >      #address-cells = <2>;
-> > @@ -128,7 +130,7 @@ ssi1: ssi@1004a000 {
-> >              compatible = "renesas,r9a07g043-ssi",
-> >                       "renesas,rz-ssi";
-> >              reg = <0 0x1004a000 0 0x400>;
-> > -            interrupts = <GIC_SPI 330 IRQ_TYPE_LEVEL_HIGH>,
-> > +            interrupts = <SOC_PERIPHERAL_IRQ(330, IRQ_TYPE_LEVEL_HIGH)>,
-> >                       <GIC_SPI 331 IRQ_TYPE_EDGE_RISING>,
-> >                       <GIC_SPI 332 IRQ_TYPE_EDGE_RISING>,
-> >                       <GIC_SPI 333 IRQ_TYPE_EDGE_RISING>;
-> >
-> > This worked as expected, but couldn't get the arithmetic operation
-> > working. Could you please provide an example?
+> On 21/09/2022 09:46, Geert Uytterhoeven wrote:
+> > This is a topic that came up at the RISC-V BoF at Plumbers, and it was
+> > suggested to bring it up with you.
 >
-> diff --git a/arch/arm64/boot/dts/renesas/r9a07g043.dtsi b/arch/arm64/boot/dts/renesas/r9a07g043.dtsi
-> index ff6aab388eb7..0ecca775fa3f 100644
-> --- a/arch/arm64/boot/dts/renesas/r9a07g043.dtsi
-> +++ b/arch/arm64/boot/dts/renesas/r9a07g043.dtsi
-> @@ -8,6 +8,8 @@
->  #include <dt-bindings/interrupt-controller/arm-gic.h>
->  #include <dt-bindings/clock/r9a07g043-cpg.h>
->
-> +#define SOC_PERIPHERAL_IRQ_NUMBER(na)  (na + 32)
-> +#define SOC_PERIPHERAL_IRQ(nr, na) GIC_SPI nr SOC_PERIPHERAL_IRQ_NUMBER(na)
+> I guess you also need SoC maintainers as well (+Cc Arnd and Olof). :)
 
-#define SOC_PERIPHERAL_IRQ(nr, flags) GIC_SPI
-SOC_PERIPHERAL_IRQ_NUMBER(nr) flags
-
->  / {
->         compatible = "renesas,r9a07g043";
->         #address-cells = <2>;
-> @@ -128,7 +130,7 @@ ssi1: ssi@1004a000 {
->                         compatible = "renesas,r9a07g043-ssi",
->                                      "renesas,rz-ssi";
->                         reg = <0 0x1004a000 0 0x400>;
-> -                       interrupts = <GIC_SPI 330 IRQ_TYPE_LEVEL_HIGH>,
-> +                       interrupts = <SOC_PERIPHERAL_IRQ(330, IRQ_TYPE_LEVEL_HIGH)>,
->
->
->
-> Or any other method like that....
-
-Oh cool, seems like arithmetic is supported.
-No idea what I did wrong last time I tried...
+Indeed, I had intended to include them, but forgot in the end.
+Thanks for adding!
 
 Gr{oetje,eeting}s,
 
