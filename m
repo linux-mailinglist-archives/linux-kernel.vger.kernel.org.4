@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B56F5BF216
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 02:33:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37DF25BF218
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 02:33:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231346AbiIUAdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 20:33:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33980 "EHLO
+        id S231255AbiIUAdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 20:33:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231168AbiIUAcw (ORCPT
+        with ESMTP id S231236AbiIUAcw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 20 Sep 2022 20:32:52 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E53760F1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 17:32:49 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id g15-20020a17090a708f00b00203a68c9acaso2047643pjk.8
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 17:32:49 -0700 (PDT)
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0519792D0
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 17:32:51 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-34a03cb9679so38065327b3.21
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 17:32:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date;
-        bh=v7YHpsXihO1IGC0K/PKlA8GEkrI37lPnwhd36LF7pVk=;
-        b=T4Pq1vwhu58JKk9S6MS0EL1IJhE9KPvx6f3kP5213oRycLCnCPGalTsox3aAjnkBY+
-         bvrARzyrfMnXa376luKHrUSUC3r41vDBz/363U0/GCT1m+sgrmqVasY3fcU9OUU8ZnQr
-         fGLzK1tbOFeQ4wKJzJP+i1caYDQsEDEbwf5IEBhf8mxzB0P/PeEP0jzwrUt5tUlgn1vs
-         khV0dI6DS92WUbMb+SK3UCu6WG61MT61dVs3It8NhZZ7b/6/vq2QNm9LhdsajCmXKYhu
-         RM5VBfvag1jIjc/ktzcq5owOd+kKUM+xzeu/Nh4l3/G9+HsymuEMfqdrfo6zFFuJfavG
-         EM4A==
+        bh=MOTPXqlRM/VeyDMLdvanelesLQo1zQAim2hnWRvX5Ck=;
+        b=YBqAHda81cZL+XoxjJlGZuZuboXTXgUC0z4uqSgz7QVH6dpNmadTy2MF1qyxWTzse+
+         Bm4tIE92SduAzP3ZIMtRF2tHutR8pP7xlWpK1ArY4DnG03povI4wausutZUl5/iFFjm4
+         TVHVZG9uLcywTpZWMGs36ucGtqVhhGObHn0VVjekmG1+dp+mNh3xufw2ncJL/mts4ZIh
+         7z9P/A8X9TowwqnweXUdspRxboWu77JnECKkB3W0l/4PI0O4qSiM4m96bzkM3yIhCnUQ
+         IS3oC/wRtMwluha1XcW0DRroQd63c6ike/sLIVwGS1L4peBPZN+rGOVKwA2aeOQ8Ropo
+         ukqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date;
-        bh=v7YHpsXihO1IGC0K/PKlA8GEkrI37lPnwhd36LF7pVk=;
-        b=6JgYD2QZrkFLSZbys4LsLqhG5jVVLeGLVJzhpWOaWMyFNraheYlu+3Lk3d8FEgPpLj
-         TdIas5eM8OBYsrdlbuXQqhUMmLxpZMQ/IFIu7XRolvpnBv717vIZNrO5AlSiAZQ3O78y
-         gap6JzOrOID8sa90ABPJ7FDz45ZFR8JTk8j6BpS5GHLfebgWPU5ptkz7jI5wkPPZwZek
-         Aibe2CTXDp5qsiBnkXOwYouZje5pZcdpG05qavsVFvXCKOHCzLiFay3qibKWxvQPlvKr
-         iLr0v5Ht0gwW0hF2RTW7K5e50fFShcqlN14uz878nm3m0HIs0oXJ/R/qi7iaceSa2zvW
-         k9IA==
-X-Gm-Message-State: ACrzQf1IOAp926E75FW3pRVxEOZnpcopNMT7rm30WP/MdzhiU+8UOAI/
-        aFVWCmVQxs2VbzEX/kdwooQ14ZRr1+g=
-X-Google-Smtp-Source: AMsMyM7sgUnowEJxKriF2nS2mMYPc53K7RWElo5y1ug5fX5KhtVWX0U//x1MzIKxCHK8PGNETQVSyl6SEZ4=
+        bh=MOTPXqlRM/VeyDMLdvanelesLQo1zQAim2hnWRvX5Ck=;
+        b=FHKlvIzFF/XYk+G8HKv6EW0oNQ+TIJjEQhqiqOBd8le7+kfRktnkM6KeSCBbmtfTwL
+         O29elOIeoXcA18zqXC5CZtl2p8zNo41IWh804V1A+7N+zE38nZjc4vo9YUyObkR+J7bO
+         KAxCrS38uEVsh9a0wkugqIcMoeicXzEkZZI6o3POiz04cKxM7UYndqbAt8H/bZTbs6HK
+         1BbHz0DOUJdIIVAVN7BS4EOCahhGxzXj96qt0+3+/cfCQLZPtCaghoai58iA8fvbA6aS
+         ai/SAvu/r6rFN59Y1e9DtrvBjD2lOwJ8ph1gn+4E39eVF9+qC2X85jw6cdgn1uA1C6l2
+         ofEw==
+X-Gm-Message-State: ACrzQf1g73IvPb0o1t8TN7xy6hRHBnclLGqwgV3aEcY73YYF6hCjDoDW
+        rH8xqLKJz1LT8juUbD4vH6YPlRauNFA=
+X-Google-Smtp-Source: AMsMyM6m3bS7RPF5fQr/eH5ncPqvFCJtkoDqyUevH+R4X807matv5uzc8TD1ePhtwCCU0OlXVNBl8o1DpUw=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:f644:b0:172:b074:d1f5 with SMTP id
- m4-20020a170902f64400b00172b074d1f5mr2177656plg.29.1663720369344; Tue, 20 Sep
- 2022 17:32:49 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a81:9256:0:b0:349:e25e:9bfe with SMTP id
+ j83-20020a819256000000b00349e25e9bfemr22039190ywg.111.1663720371023; Tue, 20
+ Sep 2022 17:32:51 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Wed, 21 Sep 2022 00:31:50 +0000
+Date:   Wed, 21 Sep 2022 00:31:51 +0000
 In-Reply-To: <20220921003201.1441511-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220921003201.1441511-1-seanjc@google.com>
 X-Mailer: git-send-email 2.37.3.968.ga6b4b080e4-goog
-Message-ID: <20220921003201.1441511-2-seanjc@google.com>
-Subject: [PATCH v4 01/12] KVM: x86: make vendor code check for all nested events
+Message-ID: <20220921003201.1441511-3-seanjc@google.com>
+Subject: [PATCH v4 02/12] KVM: nVMX: Make an event request when pending an MTF
+ nested VM-Exit
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         Huacai Chen <chenhuacai@kernel.org>,
@@ -79,7 +80,7 @@ Cc:     James Morse <james.morse@arm.com>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,97 +88,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paolo Bonzini <pbonzini@redhat.com>
+Set KVM_REQ_EVENT when MTF becomes pending to ensure that KVM will run
+through inject_pending_event() and thus vmx_check_nested_events() prior
+to re-entering the guest.
 
-Interrupts, NMIs etc. sent while in guest mode are already handled
-properly by the *_interrupt_allowed callbacks, but other events can
-cause a vCPU to be runnable that are specific to guest mode.
+MTF currently works by virtue of KVM's hack that calls
+kvm_check_nested_events() from kvm_vcpu_running(), but that hack will
+be removed in the near future.  Until that call is removed, the patch
+introduces no real functional change.
 
-In the case of VMX there are two, the preemption timer and the
-monitor trap.  The VMX preemption timer is already special cased via
-the hv_timer_pending callback, but the purpose of the callback can be
-easily extended to MTF or in fact any other event that can occur only
-in guest mode.
-
-Rename the callback and add an MTF check; kvm_arch_vcpu_runnable()
-now can return true if an MTF is pending, without relying on
-kvm_vcpu_running()'s call to kvm_check_nested_events().  Until that call
-is removed, however, the patch introduces no functional change.
-
+Fixes: 5ef8acbdd687 ("KVM: nVMX: Emulate MTF when performing instruction emulation")
+Cc: stable@vger.kernel.org
 Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/include/asm/kvm_host.h | 2 +-
- arch/x86/kvm/vmx/nested.c       | 8 +++++++-
- arch/x86/kvm/x86.c              | 8 ++++----
- 3 files changed, 12 insertions(+), 6 deletions(-)
+ arch/x86/kvm/vmx/nested.c | 3 +++
+ arch/x86/kvm/vmx/vmx.c    | 6 ++++--
+ 2 files changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index ee940c4c0f64..c03590d1c5e1 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -1649,7 +1649,7 @@ struct kvm_x86_nested_ops {
- 	bool (*is_exception_vmexit)(struct kvm_vcpu *vcpu, u8 vector,
- 				    u32 error_code);
- 	int (*check_events)(struct kvm_vcpu *vcpu);
--	bool (*hv_timer_pending)(struct kvm_vcpu *vcpu);
-+	bool (*has_events)(struct kvm_vcpu *vcpu);
- 	void (*triple_fault)(struct kvm_vcpu *vcpu);
- 	int (*get_state)(struct kvm_vcpu *vcpu,
- 			 struct kvm_nested_state __user *user_kvm_nested_state,
 diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index 4da0558943ce..85318d803f4f 100644
+index 85318d803f4f..3a080051a4ec 100644
 --- a/arch/x86/kvm/vmx/nested.c
 +++ b/arch/x86/kvm/vmx/nested.c
-@@ -3929,6 +3929,12 @@ static bool nested_vmx_preemption_timer_pending(struct kvm_vcpu *vcpu)
- 	       to_vmx(vcpu)->nested.preemption_timer_expired;
+@@ -6632,6 +6632,9 @@ static int vmx_set_nested_state(struct kvm_vcpu *vcpu,
+ 	if (ret)
+ 		goto error_guest_mode;
+ 
++	if (vmx->nested.mtf_pending)
++		kvm_make_request(KVM_REQ_EVENT, vcpu);
++
+ 	return 0;
+ 
+ error_guest_mode:
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 94c314dc2393..9dba04b6b019 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -1665,10 +1665,12 @@ static void vmx_update_emulated_instruction(struct kvm_vcpu *vcpu)
+ 	    (!vcpu->arch.exception.pending ||
+ 	     vcpu->arch.exception.vector == DB_VECTOR) &&
+ 	    (!vcpu->arch.exception_vmexit.pending ||
+-	     vcpu->arch.exception_vmexit.vector == DB_VECTOR))
++	     vcpu->arch.exception_vmexit.vector == DB_VECTOR)) {
+ 		vmx->nested.mtf_pending = true;
+-	else
++		kvm_make_request(KVM_REQ_EVENT, vcpu);
++	} else {
+ 		vmx->nested.mtf_pending = false;
++	}
  }
  
-+static bool vmx_has_nested_events(struct kvm_vcpu *vcpu)
-+{
-+	return nested_vmx_preemption_timer_pending(vcpu) ||
-+	       to_vmx(vcpu)->nested.mtf_pending;
-+}
-+
- /*
-  * Per the Intel SDM's table "Priority Among Concurrent Events", with minor
-  * edits to fill in missing examples, e.g. #DB due to split-lock accesses,
-@@ -6971,7 +6977,7 @@ struct kvm_x86_nested_ops vmx_nested_ops = {
- 	.leave_nested = vmx_leave_nested,
- 	.is_exception_vmexit = nested_vmx_is_exception_vmexit,
- 	.check_events = vmx_check_nested_events,
--	.hv_timer_pending = nested_vmx_preemption_timer_pending,
-+	.has_events = vmx_has_nested_events,
- 	.triple_fault = nested_vmx_triple_fault,
- 	.get_state = vmx_get_nested_state,
- 	.set_state = vmx_set_nested_state,
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 5b8328cb6c14..e1a25e46dbf7 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -9966,8 +9966,8 @@ static int kvm_check_and_inject_events(struct kvm_vcpu *vcpu,
- 	}
- 
- 	if (is_guest_mode(vcpu) &&
--	    kvm_x86_ops.nested_ops->hv_timer_pending &&
--	    kvm_x86_ops.nested_ops->hv_timer_pending(vcpu))
-+	    kvm_x86_ops.nested_ops->has_events &&
-+	    kvm_x86_ops.nested_ops->has_events(vcpu))
- 		*req_immediate_exit = true;
- 
- 	WARN_ON(kvm_is_exception_pending(vcpu));
-@@ -12792,8 +12792,8 @@ static inline bool kvm_vcpu_has_events(struct kvm_vcpu *vcpu)
- 		return true;
- 
- 	if (is_guest_mode(vcpu) &&
--	    kvm_x86_ops.nested_ops->hv_timer_pending &&
--	    kvm_x86_ops.nested_ops->hv_timer_pending(vcpu))
-+	    kvm_x86_ops.nested_ops->has_events &&
-+	    kvm_x86_ops.nested_ops->has_events(vcpu))
- 		return true;
- 
- 	if (kvm_xen_has_pending_events(vcpu))
+ static int vmx_skip_emulated_instruction(struct kvm_vcpu *vcpu)
 -- 
 2.37.3.968.ga6b4b080e4-goog
 
