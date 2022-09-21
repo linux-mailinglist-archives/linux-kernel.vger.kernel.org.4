@@ -2,306 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3835D5E562B
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 00:16:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6673A5E563B
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 00:26:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231178AbiIUWQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 18:16:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59126 "EHLO
+        id S230449AbiIUW0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 18:26:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbiIUWQX (ORCPT
+        with ESMTP id S229641AbiIUW0N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 18:16:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16478A6C4D
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 15:16:22 -0700 (PDT)
+        Wed, 21 Sep 2022 18:26:13 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B557A8307;
+        Wed, 21 Sep 2022 15:26:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ADEB6632FE
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 22:16:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42DCFC433D6;
-        Wed, 21 Sep 2022 22:16:20 +0000 (UTC)
-Date:   Wed, 21 Sep 2022 18:17:21 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] tracing: Use proper do_arch_spin_lock() API
-Message-ID: <20220921181721.3a51afe9@gandalf.local.home>
-In-Reply-To: <20220921132152.1622616-3-longman@redhat.com>
-References: <20220921132152.1622616-1-longman@redhat.com>
-        <20220921132152.1622616-3-longman@redhat.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 964C0CE1FA1;
+        Wed, 21 Sep 2022 22:26:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BADBBC433C1;
+        Wed, 21 Sep 2022 22:26:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663799168;
+        bh=eCz+7ykAr0o97vQ4d0dHFt5bI+cqs4JXKrGw8rTT0kY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=SMY9Vp2hEevfHx7SItZiK0H97UQYuU6XDNkgha1jrNcrWVKHKhf6ZynvQ69JHD3mM
+         nmG5QkaXYWamQ7eiRzbbEoRgyMoZ5ozbvvEPZ6BPGvW7l7eZccpxwOCVM1Uyv6XtEr
+         L9hQnP5eEY4cJSvBllpUR8TL0KnGIIaa6UodDyBh0Uh7ReNb3RrAP7m4FWvKp8uw9k
+         bKVArTGw4dcwKw/GzR+7Zr7zVI39J1m7Pe4tMdpV3g/3f2iZN9CD3XDRjonbxmAyKU
+         bfccHxr2kppd3FnPjzmkQLl74yJWfBA9PySVzz45HEroLzbwNDyzT1t0JrC5JWO/CB
+         E+hjuMHGP5CeQ==
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Clark Williams <williams@redhat.com>,
+        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Dao <dqminh@cloudflare.com>,
+        Leo Yan <leo.yan@linaro.org>, Lieven Hey <lieven.hey@kdab.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Subject: [GIT PULL] perf tools changes for v6.0: 4th batch
+Date:   Wed, 21 Sep 2022 23:26:00 +0100
+Message-Id: <20220921222600.29851-1-acme@kernel.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 21 Sep 2022 09:21:52 -0400
-Waiman Long <longman@redhat.com> wrote:
+Hi Linus,
 
-> It was found that some tracing functions acquire a arch_spinlock_t with
-> preemption and irqs enabled.  That can be problematic in case preemption
-> happens after acquiring the lock. Use the proper do_arch_spin_lock()
-> API with preemption disabled to make sure that this won't happen unless
-> it is obvious that either preemption or irqs has been disabled .
-> 
-> Signed-off-by: Waiman Long <longman@redhat.com>
-> ---
->  kernel/trace/trace.c | 52 ++++++++++++++++++++------------------------
->  1 file changed, 24 insertions(+), 28 deletions(-)
-> 
-> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-> index d3005279165d..cbb8520842ad 100644
-> --- a/kernel/trace/trace.c
-> +++ b/kernel/trace/trace.c
-> @@ -1193,12 +1193,12 @@ void *tracing_cond_snapshot_data(struct trace_array *tr)
->  {
->  	void *cond_data = NULL;
->  
-> -	arch_spin_lock(&tr->max_lock);
-> +	do_arch_spin_lock(&tr->max_lock);
+	Please consider pulling,
 
-This should actually disable interrupts and not preemption.
+Best regards,
 
->  
->  	if (tr->cond_snapshot)
->  		cond_data = tr->cond_snapshot->cond_data;
->  
-> -	arch_spin_unlock(&tr->max_lock);
-> +	do_arch_spin_unlock(&tr->max_lock);
->  
->  	return cond_data;
->  }
-> @@ -1334,9 +1334,9 @@ int tracing_snapshot_cond_enable(struct trace_array *tr, void *cond_data,
->  		goto fail_unlock;
->  	}
->  
-> -	arch_spin_lock(&tr->max_lock);
-> +	do_arch_spin_lock(&tr->max_lock);
+- Arnaldo
 
-Same here.
+The following changes since commit 60891ec99e141b74544d11e897a245ef06263052:
 
->  	tr->cond_snapshot = cond_snapshot;
-> -	arch_spin_unlock(&tr->max_lock);
-> +	do_arch_spin_unlock(&tr->max_lock);
->  
->  	mutex_unlock(&trace_types_lock);
->  
-> @@ -1363,7 +1363,7 @@ int tracing_snapshot_cond_disable(struct trace_array *tr)
->  {
->  	int ret = 0;
->  
-> -	arch_spin_lock(&tr->max_lock);
-> +	do_arch_spin_lock(&tr->max_lock);
+  Merge tag 'for-6.0-rc6-tag' of git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux (2022-09-20 10:23:24 -0700)
 
-And here.
+are available in the Git repository at:
 
->  
->  	if (!tr->cond_snapshot)
->  		ret = -EINVAL;
-> @@ -1372,7 +1372,7 @@ int tracing_snapshot_cond_disable(struct trace_array *tr)
->  		tr->cond_snapshot = NULL;
->  	}
->  
-> -	arch_spin_unlock(&tr->max_lock);
-> +	do_arch_spin_unlock(&tr->max_lock);
->  
->  	return ret;
->  }
-> @@ -1819,7 +1819,7 @@ update_max_tr(struct trace_array *tr, struct task_struct *tsk, int cpu,
->  		return;
->  	}
->  
-> -	arch_spin_lock(&tr->max_lock);
-> +	do_arch_spin_lock(&tr->max_lock);
+  git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git tags/perf-tools-fixes-for-v6.0-2022-09-21
 
-Nothing here is needed, as interrupts had better be disabled when this
-function is called. And there's already a:
+for you to fetch changes up to 999e4eaa4b3691acf85d094836260ec4b66c74fd:
 
-	WARN_ON_ONCE(!irqs_disabled());
+  perf tools: Honor namespace when synthesizing build-ids (2022-09-21 16:08:00 -0300)
 
->  
->  	/* Inherit the recordable setting from array_buffer */
->  	if (ring_buffer_record_is_set_on(tr->array_buffer.buffer))
-> @@ -1836,7 +1836,7 @@ update_max_tr(struct trace_array *tr, struct task_struct *tsk, int cpu,
->  	__update_max_tr(tr, tsk, cpu);
->  
->   out_unlock:
-> -	arch_spin_unlock(&tr->max_lock);
-> +	do_arch_spin_unlock(&tr->max_lock);
+----------------------------------------------------------------
+perf tools fixes for v6.0: 4th batch
 
-Nothing needs to be done here.
+- Fix polling of system-wide events related to mixing per-cpu and per-thread
+  events.
 
->  }
->  
->  /**
-> @@ -1862,7 +1862,7 @@ update_max_tr_single(struct trace_array *tr, struct task_struct *tsk, int cpu)
->  		return;
->  	}
->  
-> -	arch_spin_lock(&tr->max_lock);
-> +	do_arch_spin_lock(&tr->max_lock);
+- Do not check if /proc/modules is unchanged when copying /proc/kcore,
+  that doesn't get in the way of post processing analysis.
 
-Same here. Interrupts had better be disabled in this function.
+- Include program header in ELF files generated for JIT files, so that they can
+  be opened by tools using elfutils libraries.
 
->  
->  	ret = ring_buffer_swap_cpu(tr->max_buffer.buffer, tr->array_buffer.buffer, cpu);
->  
-> @@ -1880,7 +1880,7 @@ update_max_tr_single(struct trace_array *tr, struct task_struct *tsk, int cpu)
->  	WARN_ON_ONCE(ret && ret != -EAGAIN && ret != -EBUSY);
->  
->  	__update_max_tr(tr, tsk, cpu);
-> -	arch_spin_unlock(&tr->max_lock);
-> +	do_arch_spin_unlock(&tr->max_lock);
+- Enter namespaces when synthesizing build-ids.
 
-Nothing to do here.
+- Fix some bugs related to a recent cpu_map overhaul where we should be
+  using an index and not the cpu number.
 
->  }
->  #endif /* CONFIG_TRACER_MAX_TRACE */
->  
-> @@ -2413,7 +2413,7 @@ static int trace_save_cmdline(struct task_struct *tsk)
->  	 * nor do we want to disable interrupts,
->  	 * so if we miss here, then better luck next time.
->  	 */
-> -	if (!arch_spin_trylock(&trace_cmdline_lock))
-> +	if (!do_arch_spin_trylock(&trace_cmdline_lock))
+- Fix BPF program ELF section name, using the naming expected by libbpf when
+  using BPF counters in 'perf stat'.
 
-This is called within the scheduler and wake up, so interrupts had better
-be disabled (run queue lock is held).
+- Add a new test for perf stat cgroup BPF counter.
 
->  		return 0;
->  
->  	idx = savedcmd->map_pid_to_cmdline[tpid];
-> @@ -2427,7 +2427,7 @@ static int trace_save_cmdline(struct task_struct *tsk)
->  	savedcmd->map_cmdline_to_pid[idx] = tsk->pid;
->  	set_cmdline(idx, tsk->comm);
->  
-> -	arch_spin_unlock(&trace_cmdline_lock);
-> +	do_arch_spin_unlock(&trace_cmdline_lock);
+- Adjust check on 'perf test wp' for older kernels, where the
+  PERF_EVENT_IOC_MODIFY_ATTRIBUTES ioctl isn't supported.
 
-Nothing to do here.
+- Sync x86 cpufeatures with the kernel sources, no changes in tooling.
 
->  
->  	return 1;
->  }
-> @@ -2461,13 +2461,11 @@ static void __trace_find_cmdline(int pid, char comm[])
->  
->  void trace_find_cmdline(int pid, char comm[])
->  {
-> -	preempt_disable();
-> -	arch_spin_lock(&trace_cmdline_lock);
-> +	do_arch_spin_lock(&trace_cmdline_lock);
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-Keep this as is (with the open coded preempt_disable()).
+----------------------------------------------------------------
+Adrian Hunter (3):
+      perf record: Fix cpu mask bit setting for mixed mmaps
+      libperf evlist: Fix polling of system-wide events
+      perf kcore_copy: Do not check /proc/modules is unchanged
 
->  
->  	__trace_find_cmdline(pid, comm);
->  
-> -	arch_spin_unlock(&trace_cmdline_lock);
-> -	preempt_enable();
-> +	do_arch_spin_unlock(&trace_cmdline_lock);
->  }
->  
->  static int *trace_find_tgid_ptr(int pid)
-> @@ -5829,8 +5827,7 @@ static void *saved_cmdlines_start(struct seq_file *m, loff_t *pos)
->  	void *v;
->  	loff_t l = 0;
->  
-> -	preempt_disable();
-> -	arch_spin_lock(&trace_cmdline_lock);
-> +	do_arch_spin_lock(&trace_cmdline_lock);
+Arnaldo Carvalho de Melo (1):
+      tools headers cpufeatures: Sync with the kernel sources
 
-This too.
+Lieven Hey (1):
+      perf jit: Include program header in ELF files
 
->  
->  	v = &savedcmd->map_cmdline_to_pid[0];
->  	while (l <= *pos) {
-> @@ -5844,8 +5841,7 @@ static void *saved_cmdlines_start(struct seq_file *m, loff_t *pos)
->  
->  static void saved_cmdlines_stop(struct seq_file *m, void *v)
->  {
-> -	arch_spin_unlock(&trace_cmdline_lock);
-> -	preempt_enable();
-> +	do_arch_spin_unlock(&trace_cmdline_lock);
+Namhyung Kim (6):
+      perf stat: Fix BPF program section name
+      perf stat: Fix cpu map index in bperf cgroup code
+      perf stat: Use evsel->core.cpus to iterate cpus in BPF cgroup counters
+      perf test: Add a new test for perf stat cgroup BPF counter
+      perf test: Skip wp modify test on old kernels
+      perf tools: Honor namespace when synthesizing build-ids
 
-And this.
-
->  }
->  
->  static int saved_cmdlines_show(struct seq_file *m, void *v)
-> @@ -5890,9 +5886,9 @@ tracing_saved_cmdlines_size_read(struct file *filp, char __user *ubuf,
->  	char buf[64];
->  	int r;
->  
-> -	arch_spin_lock(&trace_cmdline_lock);
-> +	do_arch_spin_lock(&trace_cmdline_lock);
-
-Yeah, we should add preempt_disable() here.
-
->  	r = scnprintf(buf, sizeof(buf), "%u\n", savedcmd->cmdline_num);
-> -	arch_spin_unlock(&trace_cmdline_lock);
-> +	do_arch_spin_unlock(&trace_cmdline_lock);
->  
->  	return simple_read_from_buffer(ubuf, cnt, ppos, buf, r);
->  }
-> @@ -5917,10 +5913,10 @@ static int tracing_resize_saved_cmdlines(unsigned int val)
->  		return -ENOMEM;
->  	}
->  
-> -	arch_spin_lock(&trace_cmdline_lock);
-> +	do_arch_spin_lock(&trace_cmdline_lock);
-
-And here.
-
->  	savedcmd_temp = savedcmd;
->  	savedcmd = s;
-> -	arch_spin_unlock(&trace_cmdline_lock);
-> +	do_arch_spin_unlock(&trace_cmdline_lock);
->  	free_saved_cmdlines_buffer(savedcmd_temp);
->  
->  	return 0;
-> @@ -6373,10 +6369,10 @@ int tracing_set_tracer(struct trace_array *tr, const char *buf)
->  
->  #ifdef CONFIG_TRACER_SNAPSHOT
->  	if (t->use_max_tr) {
-> -		arch_spin_lock(&tr->max_lock);
-> +		do_arch_spin_lock(&tr->max_lock);
-
-Add preemption disabling.
-
->  		if (tr->cond_snapshot)
->  			ret = -EBUSY;
-> -		arch_spin_unlock(&tr->max_lock);
-> +		do_arch_spin_unlock(&tr->max_lock);
->  		if (ret)
->  			goto out;
->  	}
-> @@ -7436,10 +7432,10 @@ tracing_snapshot_write(struct file *filp, const char __user *ubuf, size_t cnt,
->  		goto out;
->  	}
->  
-> -	arch_spin_lock(&tr->max_lock);
-> +	do_arch_spin_lock(&tr->max_lock);
-
-And this should disable interrupts first.
-
--- Steve
-
->  	if (tr->cond_snapshot)
->  		ret = -EBUSY;
-> -	arch_spin_unlock(&tr->max_lock);
-> +	do_arch_spin_unlock(&tr->max_lock);
->  	if (ret)
->  		goto out;
->  
-
+ tools/arch/x86/include/asm/cpufeatures.h         |  5 +-
+ tools/lib/perf/evlist.c                          |  5 +-
+ tools/perf/builtin-record.c                      |  2 +
+ tools/perf/tests/shell/stat_bpf_counters_cgrp.sh | 83 ++++++++++++++++++++++++
+ tools/perf/tests/wp.c                            | 10 ++-
+ tools/perf/util/bpf_counter_cgroup.c             | 10 +--
+ tools/perf/util/bpf_skel/bperf_cgroup.bpf.c      |  2 +-
+ tools/perf/util/genelf.c                         | 14 ++++
+ tools/perf/util/genelf.h                         |  4 ++
+ tools/perf/util/symbol-elf.c                     |  7 +-
+ tools/perf/util/synthetic-events.c               | 17 ++++-
+ 11 files changed, 139 insertions(+), 20 deletions(-)
+ create mode 100755 tools/perf/tests/shell/stat_bpf_counters_cgrp.sh
