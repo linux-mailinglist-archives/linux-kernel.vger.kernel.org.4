@@ -2,185 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47BE45E54C7
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 22:54:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98E5C5E54CC
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 22:55:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229996AbiIUUyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 16:54:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48544 "EHLO
+        id S229939AbiIUUzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 16:55:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbiIUUyl (ORCPT
+        with ESMTP id S229472AbiIUUzU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 16:54:41 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A895712ACB
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 13:54:39 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id c7so7110168pgt.11
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 13:54:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=dWgCHmwtaVMOWvPLiLtxN+wSpQ47L+GlwZ+oGbBWrIU=;
-        b=h0k/7QwmM22p54PBBDL8qRy1KTjPPLxqBedhbVOanackvYMabGMnri/tUPnROymwvM
-         iHpMKiYzJGE4aMfljcWn8WMM1t5HMvQG50pnBOcsVnQ9rbvffEueJij6KXJO/3TT+cwL
-         Hkv02ifJTmsklbkqgyJ0Fyp3UOLJ9QNH9kBKWgM7rYaYtw4F82S/N675quiS85RmbiGs
-         khEbgeABCUe4MLi7kdCHpqTS46IkeItpqSbwoG2g2Xb1tNBIK7+TUNIv7MpTADbeWqaz
-         HpSF+WZF0FCBbuorBMCi5kkff6hcGl92JHYd8USQsKcXGWPARb0qN+b8kOneJWQb0wDS
-         vMGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=dWgCHmwtaVMOWvPLiLtxN+wSpQ47L+GlwZ+oGbBWrIU=;
-        b=5WAOXdSIF4YIRr8opsWbEUWNB+uvlqN5nsgwuq3i8+mFTOFBk84Idr8jY0pOzJeu7m
-         PMAxEbrCQxl/m53sxft9tPuwKTei6peGaLIvJjOrQRcxw3w/jl4jJYv7BnBEfjfPHx4b
-         hU1BCHIxDVzZ7nLH3vzezkjbeMu3fm5JCudfQgKkpTKF63PS5hA22DRhIlKuRWzOHTL0
-         pGbG6lkC7mG2JP1yk/CiFJLsHcwkbMgWvE3GrATP8yNgIbljjyY/vK1OxTZnt0ILBPYl
-         Dtco+H2tGkvtyueALHd+1YU73pTTPAfVdifUQ+BJb1zafNYi/q6/jFtkwCkRyDaQAH1f
-         lVgw==
-X-Gm-Message-State: ACrzQf0RLAOIHe7VEVa4xdN67eP7osgJkqJC+vZTtmPlppfrIsxo3w4K
-        y3JreoxRsi64qA/G3P8qPdJgBQ==
-X-Google-Smtp-Source: AMsMyM6mhqVCjpzRVWzQWBhmm1HNoRW7irLWmFzWydShPHcqk2sZTzcAY1nF0dQc06rr6XF57bn99w==
-X-Received: by 2002:a63:ff50:0:b0:439:ae51:503c with SMTP id s16-20020a63ff50000000b00439ae51503cmr67639pgk.158.1663793679088;
-        Wed, 21 Sep 2022 13:54:39 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id ay11-20020a17090b030b00b001fdcb792181sm2297408pjb.43.2022.09.21.13.54.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Sep 2022 13:54:38 -0700 (PDT)
-Date:   Wed, 21 Sep 2022 20:54:34 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        Yuan Yao <yuan.yao@linux.intel.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v10 10/39] KVM: x86: hyper-v: Don't use
- sparse_set_to_vcpu_mask() in kvm_hv_send_ipi()
-Message-ID: <Yyt6Clofhg7u+bI+@google.com>
-References: <20220921152436.3673454-1-vkuznets@redhat.com>
- <20220921152436.3673454-11-vkuznets@redhat.com>
+        Wed, 21 Sep 2022 16:55:20 -0400
+Received: from proxmox1.postmarketos.org (proxmox1.postmarketos.org [213.239.216.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2AB2A2AE3B;
+        Wed, 21 Sep 2022 13:55:17 -0700 (PDT)
+Received: from [192.168.20.2] (unknown [77.239.252.99])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by proxmox1.postmarketos.org (Postfix) with ESMTPSA id 88F6B14023D;
+        Wed, 21 Sep 2022 20:55:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=postmarketos.org;
+        s=donut; t=1663793715;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nGYXTPOt3zCzwp92JW8LyqdaThQz7kjvGR8CDOfHJf0=;
+        b=khdERCMXn98k8bYp7rsHWjm6DOW67jNr8VfAlgsY+kvPG+JkChAH2wwgUKv2EcbPf9+ei2
+        E/rYR2CbZriDsixJ2oMihcGo8PMGaHW7alVasFOJRvRO+VzfAoNqMqeKBSAwPmxwOY4swh
+        QNL8g8wjbyPhbZWU//9qGeJ5aidaaD4=
+Message-ID: <37ebdd21-e46a-fac9-7e87-57042ab67d5c@postmarketos.org>
+Date:   Wed, 21 Sep 2022 23:55:13 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220921152436.3673454-11-vkuznets@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v4 3/3] ARM: dts: qcom: msm8974: switch TCSR mutex to MMIO
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220920150414.637634-1-krzysztof.kozlowski@linaro.org>
+ <20220920150414.637634-4-krzysztof.kozlowski@linaro.org>
+From:   Alexey Minnekhanov <alexeymin@postmarketos.org>
+In-Reply-To: <20220920150414.637634-4-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 21, 2022, Vitaly Kuznetsov wrote:
-> Get rid of on-stack allocation of vcpu_mask and optimize kvm_hv_send_ipi()
-> for a smaller number of vCPUs in the request. When Hyper-V TLB flush
-> is in  use, HvSendSyntheticClusterIpi{,Ex} calls are not commonly used to
-> send IPIs to a large number of vCPUs (and are rarely used in general).
-> 
-> Introduce hv_is_vp_in_sparse_set() to directly check if the specified
-> VP_ID is present in sparse vCPU set.
-> 
-> Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> ---
->  arch/x86/kvm/hyperv.c | 37 ++++++++++++++++++++++++++-----------
->  1 file changed, 26 insertions(+), 11 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
-> index 69891c48c12a..9764ebb7fd5f 100644
-> --- a/arch/x86/kvm/hyperv.c
-> +++ b/arch/x86/kvm/hyperv.c
-> @@ -1741,6 +1741,25 @@ static void sparse_set_to_vcpu_mask(struct kvm *kvm, u64 *sparse_banks,
->  	}
->  }
->  
-> +static bool hv_is_vp_in_sparse_set(u32 vp_id, u64 valid_bank_mask, u64 sparse_banks[])
-> +{
-> +	int bank, sbank = 0;
-> +
-> +	if (!test_bit(vp_id / HV_VCPUS_PER_SPARSE_BANK,
-> +		      (unsigned long *)&valid_bank_mask))
-> +		return false;
-> +
-> +	for_each_set_bit(bank, (unsigned long *)&valid_bank_mask,
-> +			 KVM_HV_MAX_SPARSE_VCPU_SET_BITS) {
-> +		if (bank == vp_id / HV_VCPUS_PER_SPARSE_BANK)
-> +			break;
-> +		sbank++;
+Hi,
 
-At the risk of being too clever, this can be heavily optimized, which given what
-this helper is used for is probably worth doing.  The index into sparse_banks is
-the number of bits preceding the target bit, and POPCNT can determine the number
-of bits.  So, to get the index, simply strip off the upper bits and do hweight64().
+On 20.09.2022 18:04, Krzysztof Kozlowski wrote:
 
-And to avoid bugs while also optimizing for "small" VMs, the math can be skipped
-if vp_id < 64, i.e. if bank==0, because in that case there can't possibly be
-preceding bits.
+> -	tcsr_mutex: tcsr-mutex {
+> -		compatible = "qcom,tcsr-mutex";
+> -		syscon = <&tcsr_mutex_block 0 0x80>;
 
-Compile tested only...
+I'm looking and don't understand where does this information go, is it 
+lost in the conversion? I mean those "0 0x80" parameters to syscon 
+reference.
 
-	int valid_bit_nr = vp_id / HV_VCPUS_PER_SPARSE_BANK;
-	unsigned long sbank;
+Looking at the code of qcom_hwspinlock driver those seem to be read by 
+qcom_hwspinlock_probe_syscon() [1] using  of_property_read_u32_index() 
+as base and stride values and those would be 0 nad 0x80 respectively as 
+is now.
 
-	if (!test_bit(valid_bit_nr, (unsigned long *)&valid_bank_mask))
-		return false;
+But without syscon reference, in mmio mode, code goes through 
+qcom_hwspinlock_probe_mmio() few lines below, which says
 
-	/*
-	 * The index into the sparse bank is the number of preceding bits in
-	 * the valid mask.  Optimize for VMs with <64 vCPUs by skipping the
-	 * fancy math if there can't possibly be preceding bits.
-	 */
-	if (valid_bit_nr)
-		sbank = hweight64(valid_bank_mask & GENMASK_ULL(valid_bit_nr - 1, 0));
-	else
-		sbank = 0;
+	/* All modern platform has offset 0 and stride of 4k */
+	*offset = 0;
+	*stride = 0x1000;
 
-	return test_bit(vp_id % HV_VCPUS_PER_SPARSE_BANK,
-			(unsigned long *)&sparse_banks[sbank]);
+So after this conversion stride value will jump from 0x80  to 0x1000, 
+which does not seem to be 1 to 1 identical conversion to me, unless I am 
+missing something.
 
-yields this, where the "call __sw_hweight64" will be patched to POPCNT on 64-bit
-hosts (POPCNT has been around for a long time).
+Perhaps msm8974 does not fall into category of "All modern platform"?
 
-   	call   0xffffffff810c3ea0 <__fentry__>
-   	push   %rbp
-   	mov    %edi,%eax
-   	mov    %rsp,%rbp
-   	shr    $0x6,%eax
-   	sub    $0x8,%rsp
-   	mov    %rsi,-0x8(%rbp)
-   	mov    %eax,%ecx
-   	bt     %rcx,-0x8(%rbp)
-   	setb   %cl
-   	jae    0xffffffff81064784 <hv_is_vp_in_sparse_set+52>
-   	test   %eax,%eax
-   	mov    %edi,%r8d
-   	jne    0xffffffff8106478c <hv_is_vp_in_sparse_set+60>
-   	and    $0x3f,%r8d
-   	bt     %r8,(%rdx)
-   	setb   %cl
-   	leave  
-   	mov    %ecx,%eax
-   	jmp    0xffffffff81c02200 <__x86_return_thunk>
-   	mov    $0x40,%ecx
-   	mov    $0xffffffffffffffff,%rdi
-   	sub    %eax,%ecx
-   	shr    %cl,%rdi
-   	and    -0x8(%rbp),%rdi
-   	call   0xffffffff815beea0 <__sw_hweight64>
-   	lea    (%rdx,%rax,8),%rdx
-   	jmp    0xffffffff81064779 <hv_is_vp_in_sparse_set+41>
 
-Alternatively, we could choose not to optimize bit==0 and just do:
+[1] 
+https://elixir.bootlin.com/linux/latest/source/drivers/hwspinlock/qcom_hwspinlock.c#L73
 
-	sbank = hweight64(valid_bank_mask & GENMASK_ULL(valid_bit_nr, 0)) - 1;
-
-but there's enough prep work needed for hweight64() that I think it's worth
-opimtizing because "small" VMs are probably very common.
+-- 
+Regards
+Alexey Minnekhanov
