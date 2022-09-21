@@ -2,138 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B0725BFC1A
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 12:14:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B98E5BFC1B
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 12:14:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231220AbiIUKOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 06:14:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41572 "EHLO
+        id S231178AbiIUKOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 06:14:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230500AbiIUKOP (ORCPT
+        with ESMTP id S231279AbiIUKOo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 06:14:15 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AA28E9352A;
-        Wed, 21 Sep 2022 03:14:14 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B2E9313D5;
-        Wed, 21 Sep 2022 03:14:20 -0700 (PDT)
-Received: from [10.57.18.118] (unknown [10.57.18.118])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 71CA13F73D;
-        Wed, 21 Sep 2022 03:14:11 -0700 (PDT)
-Message-ID: <567e9e6c-e34c-4ded-9622-9ad8387dd24b@arm.com>
-Date:   Wed, 21 Sep 2022 11:14:10 +0100
+        Wed, 21 Sep 2022 06:14:44 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D796515A34
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 03:14:42 -0700 (PDT)
+Received: from [10.180.13.185] (unknown [10.180.13.185])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bx32sG5Cpj+WYfAA--.45921S3;
+        Wed, 21 Sep 2022 18:14:32 +0800 (CST)
+Subject: Re: [PATCH] mm/vmscan: don't scan adjust too much if current is not
+ kswapd
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Mel Gorman <mgorman@suse.de>, Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20220914023318.549118-1-zhanghongchen@loongson.cn>
+ <20220914155142.bf388515a39fb45bae987231@linux-foundation.org>
+ <6bcb4883-03d0-88eb-4c42-84fff0a9a141@loongson.cn>
+ <YyLUGnqtZXn4MjJF@casper.infradead.org>
+ <54813a74-cc0e-e470-c632-78437a0d0ad4@loongson.cn>
+ <YyLpls9/t6LKQefS@casper.infradead.org>
+ <b52b3f49-ebf5-6f63-da1a-f57711c3f97d@loongson.cn>
+ <YyQ2m9vU/plyBNas@casper.infradead.org>
+ <4bd0012e-77ff-9d0d-e295-800471994aeb@loongson.cn>
+ <c3f4d1bb-418c-fbf5-c251-fd448f4d4e86@loongson.cn>
+ <20220921091303.hihmb3qvfvl3s365@techsingularity.net>
+From:   Hongchen Zhang <zhanghongchen@loongson.cn>
+Message-ID: <f946fbd8-89f6-67c9-44c1-10ef6e3bdb68@loongson.cn>
+Date:   Wed, 21 Sep 2022 18:14:30 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: Similar SoCs with different CPUs and interrupt bindings
-Content-Language: en-GB
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
-References: <CAMuHMdUPm36RsxHdVwspR3NCAR3C507AyB6R65W42N2gXWq0ag@mail.gmail.com>
- <b0f2e13a-ff5d-5bfc-6dda-ca39bb57803e@linaro.org>
- <CA+V-a8t3ukpa1PNz=5fP+BTjWkFJmwDo_EJJYjO9YctF2=K1Vg@mail.gmail.com>
- <df9ff0bd-ad0e-4b5b-859d-dd913628edc8@linaro.org>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <df9ff0bd-ad0e-4b5b-859d-dd913628edc8@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <20220921091303.hihmb3qvfvl3s365@techsingularity.net>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8Bx32sG5Cpj+WYfAA--.45921S3
+X-Coremail-Antispam: 1UD129KBjvdXoWruF18AryDAFW5ur15Zw47Arb_yoWfCFg_ZF
+        W8Ar4vkw4qqF4qqay3tr42krs7WryvkFy8X3yrXwnF9a4UKa4DXFykt3s3X3Z5tan7t3sx
+        CFyYv345Ar9a9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbx8YjsxI4VWkCwAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I
+        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
+        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0
+        cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I
+        8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
+        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8Jw
+        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCY
+        02Avz4vE-syl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1D
+        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+        0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
+        JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07j04E
+        _UUUUU=
+X-CM-SenderInfo: x2kd0w5krqwupkhqwqxorr0wxvrqhubq/
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-21 10:26, Krzysztof Kozlowski wrote:
-> On 21/09/2022 11:20, Lad, Prabhakar wrote:
->>>
->>> What do you mean? Macros support string concatenation and simple
->>> arithmetic like adding numbers. I just tested it.
->>>
->> I did try the below:
+Hi Mel,
+
+Thanks for your reply.
+
+On 2022/9/21 pm 5:13, Mel Gorman wrote:
+> On Tue, Sep 20, 2022 at 10:23:05AM +0800, Hongchen Zhang wrote:
+>> Hi Mel,
 >>
->> diff --git a/arch/arm64/boot/dts/renesas/r9a07g043.dtsi
->> b/arch/arm64/boot/dts/renesas/r9a07g043.dtsi
->> index 689aa4ba416b..0f923c276cd3 100644
->> --- a/arch/arm64/boot/dts/renesas/r9a07g043.dtsi
->> +++ b/arch/arm64/boot/dts/renesas/r9a07g043.dtsi
->> @@ -8,6 +8,8 @@
->>   #include <dt-bindings/interrupt-controller/arm-gic.h>
->>   #include <dt-bindings/clock/r9a07g043-cpg.h>
+>> The scan adjust algorithm was originally introduced by you from
+>> commmit e82e0561dae9 ("mm: vmscan: obey proportional scanning requirements
+>> for kswapd"), any suggestion about this fix patch?
+>> In short, proportional scanning is not friendly to processes other than
+>> kswapd.
 >>
->> +#define SOC_PERIPHERAL_IRQ(nr, na) GIC_SPI nr na
->> +
->>   / {
->>       compatible = "renesas,r9a07g043";
->>       #address-cells = <2>;
->> @@ -128,7 +130,7 @@ ssi1: ssi@1004a000 {
->>               compatible = "renesas,r9a07g043-ssi",
->>                        "renesas,rz-ssi";
->>               reg = <0 0x1004a000 0 0x400>;
->> -            interrupts = <GIC_SPI 330 IRQ_TYPE_LEVEL_HIGH>,
->> +            interrupts = <SOC_PERIPHERAL_IRQ(330, IRQ_TYPE_LEVEL_HIGH)>,
->>                        <GIC_SPI 331 IRQ_TYPE_EDGE_RISING>,
->>                        <GIC_SPI 332 IRQ_TYPE_EDGE_RISING>,
->>                        <GIC_SPI 333 IRQ_TYPE_EDGE_RISING>;
->>
->> This worked as expected, but couldn't get the arithmetic operation
->> working. Could you please provide an example?
 > 
-> diff --git a/arch/arm64/boot/dts/renesas/r9a07g043.dtsi b/arch/arm64/boot/dts/renesas/r9a07g043.dtsi
-> index ff6aab388eb7..0ecca775fa3f 100644
-> --- a/arch/arm64/boot/dts/renesas/r9a07g043.dtsi
-> +++ b/arch/arm64/boot/dts/renesas/r9a07g043.dtsi
-> @@ -8,6 +8,8 @@
->   #include <dt-bindings/interrupt-controller/arm-gic.h>
->   #include <dt-bindings/clock/r9a07g043-cpg.h>
->   
-> +#define SOC_PERIPHERAL_IRQ_NUMBER(na)  (na + 32)
-> +#define SOC_PERIPHERAL_IRQ(nr, na) GIC_SPI nr SOC_PERIPHERAL_IRQ_NUMBER(na)
->   / {
->          compatible = "renesas,r9a07g043";
->          #address-cells = <2>;
-> @@ -128,7 +130,7 @@ ssi1: ssi@1004a000 {
->                          compatible = "renesas,r9a07g043-ssi",
->                                       "renesas,rz-ssi";
->                          reg = <0 0x1004a000 0 0x400>;
-> -                       interrupts = <GIC_SPI 330 IRQ_TYPE_LEVEL_HIGH>,
-> +                       interrupts = <SOC_PERIPHERAL_IRQ(330, IRQ_TYPE_LEVEL_HIGH)>,
+> I suspect that 6eb90d649537 ("mm: vmscan: fix extreme overreclaim and swap
+> floods") is a more appropriate fix. While it also has a fairness impact,
+> it's a more general approach that is likely more robust and while
+> fairness is important, completely thrashing a full LRU is neither fair
+> nor expected.
 > 
-> 
-> 
-> Or any other method like that....
+OK,got it. Let's wait for the 6eb90d649537 ("mm: vmscan: fix extreme 
+overreclaim and swap floods") enter the stable repository.
 
-Which will generate the text:
+Best Regards
+Hongchen Zhang
 
-	"interrupts = <GIC_SPI 330 (IRQ_TYPE_LEVEL_HIGH + 32)>,"
-
-(give or take some whitespace)
-
-CPP supports constant expressions in #if and #elif directives, but 
-macros are purely literal text replacement. It might technically be 
-achievable with some insane CPP metaprogramming, but for all practical 
-purposes this is a non-starter unless dtc itself grows the ability to 
-process arithmetic expressions.
-
-Thanks,
-Robin.
