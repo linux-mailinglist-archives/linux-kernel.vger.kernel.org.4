@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73F715BFC89
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 12:42:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31CE05BFC86
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 12:42:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230269AbiIUKmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 06:42:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49920 "EHLO
+        id S230038AbiIUKmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 06:42:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiIUKmM (ORCPT
+        with ESMTP id S229814AbiIUKmN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 06:42:12 -0400
-Received: from us-smtp-delivery-44.mimecast.com (us-smtp-delivery-44.mimecast.com [207.211.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B494191D16
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 03:42:07 -0700 (PDT)
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        Wed, 21 Sep 2022 06:42:13 -0400
+Received: from us-smtp-delivery-44.mimecast.com (us-smtp-delivery-44.mimecast.com [205.139.111.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE3992A97F
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 03:42:08 -0700 (PDT)
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-169-Eu-kxv1ONa-VuPXCa1cVSg-1; Wed, 21 Sep 2022 06:42:03 -0400
-X-MC-Unique: Eu-kxv1ONa-VuPXCa1cVSg-1
+ us-mta-596-fVaee8P7MsmZEkuHPkr8Dw-1; Wed, 21 Sep 2022 06:42:04 -0400
+X-MC-Unique: fVaee8P7MsmZEkuHPkr8Dw-1
 Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 91ABE29DD9A0;
-        Wed, 21 Sep 2022 10:42:02 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4AE83811E81;
+        Wed, 21 Sep 2022 10:42:04 +0000 (UTC)
 Received: from comp-core-i7-2640m-0182e6.redhat.com (unknown [10.40.208.17])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 28D7817582;
-        Wed, 21 Sep 2022 10:42:01 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DD59C17582;
+        Wed, 21 Sep 2022 10:42:02 +0000 (UTC)
 From:   Alexey Gladkov <legion@kernel.org>
 To:     LKML <linux-kernel@vger.kernel.org>,
         Linux Containers <containers@lists.linux.dev>
@@ -36,11 +36,11 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         "Eric W . Biederman" <ebiederm@xmission.com>,
         Kees Cook <keescook@chromium.org>,
         Manfred Spraul <manfred@colorfullife.com>
-Subject: [PATCH v3 0/3] Allow to change ipc/mq sysctls inside ipc namespace
-Date:   Wed, 21 Sep 2022 12:41:46 +0200
-Message-Id: <cover.1663756794.git.legion@kernel.org>
-In-Reply-To: <202209211737.0Bu0F40t-lkp@intel.com>
-References: <202209211737.0Bu0F40t-lkp@intel.com>
+Subject: [PATCH v3 1/3] sysctl: Allow change system v ipc sysctls inside ipc namespace
+Date:   Wed, 21 Sep 2022 12:41:47 +0200
+Message-Id: <e2d84d3ec0172cfff759e6065da84ce0cc2736f8.1663756794.git.legion@kernel.org>
+In-Reply-To: <cover.1663756794.git.legion@kernel.org>
+References: <202209211737.0Bu0F40t-lkp@intel.com> <cover.1663756794.git.legion@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
@@ -53,27 +53,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Right now ipc and mq limits count as per ipc namespace, but only real
-root can change them. By default, the current values of these limits are
-such that it can only be reduced. Since only root can change the values,
-it is impossible to reduce these limits in the rootless container.
+Rootless containers are not allowed to modify kernel IPC parameters.
 
-We can allow limit changes within ipc namespace because mq parameters
-are limited by RLIMIT_MSGQUEUE and ipc parameters are not limited to
-anything other than cgroups.
+All default limits are set to such high values that in fact there are no
+limits at all. All limits are not inherited and are initialized to
+default values when a new ipc_namespace is created.
 
---
+For new ipc_namespace:
 
-Alexey Gladkov (3):
-  sysctl: Allow change system v ipc sysctls inside ipc namespace
-  sysctl: Allow to change limits for posix messages queues
-  docs: Add information about ipc sysctls limitations
+size_t       ipc_ns.shm_ctlmax = SHMMAX; // (ULONG_MAX - (1UL << 24))
+size_t       ipc_ns.shm_ctlall = SHMALL; // (ULONG_MAX - (1UL << 24))
+int          ipc_ns.shm_ctlmni = IPCMNI; // (1 << 15)
+int          ipc_ns.shm_rmid_forced = 0;
+unsigned int ipc_ns.msg_ctlmax = MSGMAX; // 8192
+unsigned int ipc_ns.msg_ctlmni = MSGMNI; // 32000
+unsigned int ipc_ns.msg_ctlmnb = MSGMNB; // 16384
 
- Documentation/admin-guide/sysctl/kernel.rst | 14 ++++++--
- ipc/ipc_sysctl.c                            | 36 +++++++++++++++++++--
- ipc/mq_sysctl.c                             | 36 +++++++++++++++++++++
- 3 files changed, 81 insertions(+), 5 deletions(-)
+The shm_tot (total amount of shared pages) has also ceased to be
+global, it is located in ipc_namespace and is not inherited from
+anywhere.
 
+In such conditions, it cannot be said that these limits limit anything.
+The real limiter for them is cgroups.
+
+If we allow rootless containers to change these parameters, then it can
+only be reduced.
+
+Signed-off-by: Alexey Gladkov <legion@kernel.org>
+---
+ ipc/ipc_sysctl.c | 36 ++++++++++++++++++++++++++++++++++--
+ 1 file changed, 34 insertions(+), 2 deletions(-)
+
+diff --git a/ipc/ipc_sysctl.c b/ipc/ipc_sysctl.c
+index ef313ecfb53a..31282e0a630d 100644
+--- a/ipc/ipc_sysctl.c
++++ b/ipc/ipc_sysctl.c
+@@ -190,25 +190,57 @@ static int set_is_seen(struct ctl_table_set *set)
+ 	return &current->nsproxy->ipc_ns->ipc_set == set;
+ }
+ 
++static void ipc_set_ownership(struct ctl_table_header *head,
++			      struct ctl_table *table,
++			      kuid_t *uid, kgid_t *gid)
++{
++	struct ipc_namespace *ns =
++		container_of(head->set, struct ipc_namespace, ipc_set);
++
++	kuid_t ns_root_uid = make_kuid(ns->user_ns, 0);
++	kgid_t ns_root_gid = make_kgid(ns->user_ns, 0);
++
++	*uid = uid_valid(ns_root_uid) ? ns_root_uid : GLOBAL_ROOT_UID;
++	*gid = gid_valid(ns_root_gid) ? ns_root_gid : GLOBAL_ROOT_GID;
++}
++
+ static int ipc_permissions(struct ctl_table_header *head, struct ctl_table *table)
+ {
+ 	int mode = table->mode;
+ 
+ #ifdef CONFIG_CHECKPOINT_RESTORE
+-	struct ipc_namespace *ns = current->nsproxy->ipc_ns;
++	struct ipc_namespace *ns =
++		container_of(head->set, struct ipc_namespace, ipc_set);
+ 
+ 	if (((table->data == &ns->ids[IPC_SEM_IDS].next_id) ||
+ 	     (table->data == &ns->ids[IPC_MSG_IDS].next_id) ||
+ 	     (table->data == &ns->ids[IPC_SHM_IDS].next_id)) &&
+ 	    checkpoint_restore_ns_capable(ns->user_ns))
+ 		mode = 0666;
++	else
+ #endif
+-	return mode;
++	{
++		kuid_t ns_root_uid;
++		kgid_t ns_root_gid;
++
++		ipc_set_ownership(head, table, &ns_root_uid, &ns_root_gid);
++
++		if (uid_eq(current_euid(), ns_root_uid))
++			mode >>= 6;
++
++		else if (in_egroup_p(ns_root_gid))
++			mode >>= 3;
++	}
++
++	mode &= 7;
++
++	return (mode << 6) | (mode << 3) | mode;
+ }
+ 
+ static struct ctl_table_root set_root = {
+ 	.lookup = set_lookup,
+ 	.permissions = ipc_permissions,
++	.set_ownership = ipc_set_ownership,
+ };
+ 
+ bool setup_ipc_sysctls(struct ipc_namespace *ns)
 -- 
 2.33.4
 
