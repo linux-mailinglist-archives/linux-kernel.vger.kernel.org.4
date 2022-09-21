@@ -2,59 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13E3F5E5562
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 23:46:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79B1F5E5569
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 23:47:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229808AbiIUVqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 17:46:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49536 "EHLO
+        id S230126AbiIUVrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 17:47:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbiIUVqe (ORCPT
+        with ESMTP id S229969AbiIUVrR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 17:46:34 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94129A6ACB
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 14:46:33 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id c7so7228272pgt.11
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 14:46:33 -0700 (PDT)
+        Wed, 21 Sep 2022 17:47:17 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E153A6AFF
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 14:47:15 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id l65so7303399pfl.8
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 14:47:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=d2FRAtCKVgQ9Y5TpjSPH0GfFjJSalodszbXO/KC34yw=;
-        b=SqB//mwo/47ysApdTgzQ+IrvUnDTUj6re2dbVZCaupyv86WbxYsQTfHGpKAf0ygC/3
-         eQyXlZ7swsfhtoATSV/TiAXCCV7uE7KJk62yVyyOIjWHOQRhaY1NKVNoc8IpuVPd33y2
-         gpSwomTb3kJy8rvXDssyaHfMLON0VK5Fl6B+YmCc2DCMUCZSTO1ycs2ucIoKgmoWOsCh
-         5ieOGz0sQ0k28Su5Yk11GG2UI8jPiw8LNgTYvI8nYQHj3ofOJQJNctGLgj/lRkkXOrSv
-         5UY9eEcvOKR0VR24IBZuBHBatGXcU37zKM+tZvFnmYcSS7uzUJVBwdnYAMGuhx1aAWCv
-         DHww==
+        bh=a9YZZj3lGUqe+IwHRLjiPb6pN/UWuamlTiBoCYoLPmI=;
+        b=eM8rXH1YNLqnI3aZCrzM5BieJX3ga8duNSoe/8R5upRbhLPRd3MoHhOKs4r0GxEAqr
+         pXpOPdfWgJrJWqJUAX8niFvqVNe5quwQUBoqleWQvk27EHeKkl885UO2oskB3f5asvIJ
+         CZtwCokZz6WhyvpeOg/ipE2OWvmXVyYlPFjt+6CWcGhggNEbjBBKMv6cQ1+fiEK4MK5J
+         1S2oYNmIYq+XpfbvdMUuI7ZSmvogwAeUIOpWfMY63z1z755SIPzSMOsoouU1fOxvP8eu
+         p7dtlmVeQ3ZtamhVH/YnVjP5exxi7qKGEqIUyz2NTKGb5Gz1IwCqpphu6l7QKfUjzr/x
+         doxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=d2FRAtCKVgQ9Y5TpjSPH0GfFjJSalodszbXO/KC34yw=;
-        b=2nO1Df2TunfjclIX/359o+gK2evogwURMx9FBfxil4nWpFdZKZbQ8+/BzCATvUxnU7
-         mCdStcx64/92LEX4wP3bw1pKr8d75PfbrbdJPWLaQXh6xRGekO4KXj7fAseEVT6Bon9e
-         OezcEFXMjN4Y5pIWNCJljOSX4ys91Eh0Ohu7a5aWcdPzzwhb4TiBVoAExZ+f7IzaYMDc
-         cDJtpzQHXXuLpCcFM4MgVPyGIeaWySdN8GSKe3H0aJvly4D335bxa+XNnsaBUkaqeymD
-         M2PDUBa0NsDqxWNeC8IN/8Ls5huA84hyE3+3RL4Dfs6HFFuMUZXzTbbMzFSD2xWH3kbt
-         bX0w==
-X-Gm-Message-State: ACrzQf3Qdj+Njkz3K0+IumjhBGHRjJwRFVwM5JYZGp5lGskz7MwfR4l+
-        l/GfFWl9hnbPpS8M/vOH32OZBg==
-X-Google-Smtp-Source: AMsMyM5Qt8Pvo37QN7eXSDoRzNuC77tgBB1y5EtyGSgOU6Vhj8bk55Sf8HK9POA+9Umi2py1cO7Q4w==
-X-Received: by 2002:a63:5a05:0:b0:434:23a5:a5ca with SMTP id o5-20020a635a05000000b0043423a5a5camr190906pgb.515.1663796792969;
-        Wed, 21 Sep 2022 14:46:32 -0700 (PDT)
+        bh=a9YZZj3lGUqe+IwHRLjiPb6pN/UWuamlTiBoCYoLPmI=;
+        b=mfYdJ8/9eEDC0KBjJKsz0Ome9LioVh3+i+RDTcXWXEuSTho6WN+31WFCmBJmVzv+2V
+         P4RgmsweUjZ7uiGjrrh86Mmp06uzZN2w3/Hzrz+x9HPOhKCTQqeLJ0OIznhy6YbA2mff
+         /LBUKXKoHgwe2i4fH1oqUwzSttvUAbawa3cmT8eAB+a8b2HAcsziwM57B1b0bbANyyjZ
+         FJvzwGx8NNkkiywDL8GRP3U4fjJWs4t4jZXkE0JFTL3HeALsbjHVWt7OrRGMgcDJRfUF
+         LfYBLWDfk1i6SgIGxKDlPSWLlknMQcvjwwDJ0dKcBS/RxjqQdp1pkRSBqapSe3wNW/ec
+         laJA==
+X-Gm-Message-State: ACrzQf2yM61BXRLS5d+E3TUNzVMOEQXU7V6V6ECSzdsGJmGTLhDnLHo5
+        aTeeVezO0elB9e2D9W9pkkYWOw==
+X-Google-Smtp-Source: AMsMyM60JVIQaMBi8F6B6H9VWCAEoqB3LzloqkN8qP6PRsvgKyd54CVQbymc+KSYViAOXyhEMGgkhA==
+X-Received: by 2002:a62:3808:0:b0:543:8e90:2810 with SMTP id f8-20020a623808000000b005438e902810mr172763pfa.45.1663796834851;
+        Wed, 21 Sep 2022 14:47:14 -0700 (PDT)
 Received: from stillson.ba.rivosinc.com ([66.220.2.162])
-        by smtp.gmail.com with ESMTPSA id k7-20020aa79727000000b005484d133127sm2634536pfg.129.2022.09.21.14.46.30
+        by smtp.gmail.com with ESMTPSA id k7-20020aa79727000000b005484d133127sm2634536pfg.129.2022.09.21.14.47.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Sep 2022 14:46:32 -0700 (PDT)
+        Wed, 21 Sep 2022 14:47:14 -0700 (PDT)
 From:   Chris Stillson <stillson@rivosinc.com>
-Cc:     Greentime Hu <greentime.hu@sifive.com>,
-        Guo Ren <guoren@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Vincent Chen <vincent.chen@sifive.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
+Cc:     Guo Ren <guoren@linux.alibaba.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
@@ -62,60 +59,61 @@ Cc:     Greentime Hu <greentime.hu@sifive.com>,
         Kees Cook <keescook@chromium.org>,
         Anup Patel <anup@brainfault.org>,
         Atish Patra <atishp@atishpatra.org>,
-        Oleg Nesterov <oleg@redhat.com>,
+        Oleg Nesterov <oleg@redhat.com>, Guo Ren <guoren@kernel.org>,
         Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
         Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
-        Mayuresh Chitale <mchitale@ventanamicro.com>,
         Chris Stillson <stillson@rivosinc.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Qinglin Pan <panqinglin2020@iscas.ac.cn>,
         Alexandre Ghiti <alexandre.ghiti@canonical.com>,
+        Vincent Chen <vincent.chen@sifive.com>,
         Arnd Bergmann <arnd@arndb.de>,
         Heiko Stuebner <heiko@sntech.de>,
         Jisheng Zhang <jszhang@kernel.org>,
         Dao Lu <daolu@rivosinc.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Sunil V L <sunilvl@ventanamicro.com>,
         Han-Kuan Chen <hankuan.chen@sifive.com>,
+        Changbin Du <changbin.du@intel.com>,
         Li Zhengyu <lizhengyu3@huawei.com>,
         Alexander Graf <graf@amazon.com>,
         Ard Biesheuvel <ardb@kernel.org>,
         Tsukasa OI <research_trasio@irq.a4lg.com>,
         Yury Norov <yury.norov@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
         Frederic Weisbecker <frederic@kernel.org>,
-        Changbin Du <changbin.du@intel.com>,
-        hasheddan <georgedanielmangum@gmail.com>,
-        Vitaly Wool <vitaly.wool@konsulko.com>,
+        Mark Rutland <mark.rutland@arm.com>,
         Myrtle Shah <gatecat@ds0.me>,
+        Vitaly Wool <vitaly.wool@konsulko.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Will Deacon <will@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
         Huacai Chen <chenhuacai@kernel.org>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
         Janosch Frank <frankja@linux.ibm.com>,
         Christian Brauner <brauner@kernel.org>,
         Evgenii Stepanov <eugenis@google.com>,
-        Colin Cross <ccross@google.com>,
         Peter Collingbourne <pcc@google.com>,
         Eugene Syromiatnikov <esyr@redhat.com>,
-        Barret Rhoden <brho@google.com>,
+        Colin Cross <ccross@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Suren Baghdasaryan <surenb@google.com>,
+        Barret Rhoden <brho@google.com>,
         Davidlohr Bueso <dave@stgolabs.net>,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, kvm@vger.kernel.org,
         kvm-riscv@lists.infradead.org
-Subject: [PATCH v12 03/17] riscv: Add new csr defines related to vector extension
-Date:   Wed, 21 Sep 2022 14:43:45 -0700
-Message-Id: <20220921214439.1491510-3-stillson@rivosinc.com>
+Subject: [PATCH v12 04/17] riscv: Add vector feature to compile
+Date:   Wed, 21 Sep 2022 14:43:46 -0700
+Message-Id: <20220921214439.1491510-4-stillson@rivosinc.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220921214439.1491510-1-stillson@rivosinc.com>
 References: <20220921214439.1491510-1-stillson@rivosinc.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 To:     unlisted-recipients:; (no To-header on input)
@@ -123,64 +121,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Greentime Hu <greentime.hu@sifive.com>
+From: Guo Ren <guoren@linux.alibaba.com>
 
-Follow the riscv vector spec to add new csr numbers.
+This patch adds a new config option which could enable assembler's
+vector feature.
 
-[guoren@linux.alibaba.com: first porting for new vector related csr]
-Acked-by: Guo Ren <guoren@kernel.org>
-Co-developed-by: Guo Ren <guoren@linux.alibaba.com>
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Co-developed-by: Vincent Chen <vincent.chen@sifive.com>
-Signed-off-by: Vincent Chen <vincent.chen@sifive.com>
+Co-developed-by: Greentime Hu <greentime.hu@sifive.com>
 Signed-off-by: Greentime Hu <greentime.hu@sifive.com>
-Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
 ---
- arch/riscv/include/asm/csr.h | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+ arch/riscv/Kconfig  | 15 +++++++++++++--
+ arch/riscv/Makefile |  1 +
+ 2 files changed, 14 insertions(+), 2 deletions(-)
 
-diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
-index 0e571f6483d9..78a68f29c3ba 100644
---- a/arch/riscv/include/asm/csr.h
-+++ b/arch/riscv/include/asm/csr.h
-@@ -24,6 +24,12 @@
- #define SR_FS_CLEAN	_AC(0x00004000, UL)
- #define SR_FS_DIRTY	_AC(0x00006000, UL)
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index ed66c31e4655..e294d85bfb7d 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -432,7 +432,17 @@ config FPU
  
-+#define SR_VS           _AC(0x00000600, UL) /* Vector Status */
-+#define SR_VS_OFF       _AC(0x00000000, UL)
-+#define SR_VS_INITIAL   _AC(0x00000200, UL)
-+#define SR_VS_CLEAN     _AC(0x00000400, UL)
-+#define SR_VS_DIRTY     _AC(0x00000600, UL)
+ 	  If you don't know what to do here, say Y.
+ 
+-endmenu # "Platform type"
++config VECTOR
++	bool "VECTOR support"
++	depends on GCC_VERSION >= 120000 || CLANG_VERSION >= 130000
++	default n
++	help
++	  Say N here if you want to disable all vector related procedure
++	  in the kernel.
 +
- #define SR_XS		_AC(0x00018000, UL) /* Extension Status */
- #define SR_XS_OFF	_AC(0x00000000, UL)
- #define SR_XS_INITIAL	_AC(0x00008000, UL)
-@@ -31,9 +37,9 @@
- #define SR_XS_DIRTY	_AC(0x00018000, UL)
- 
- #ifndef CONFIG_64BIT
--#define SR_SD		_AC(0x80000000, UL) /* FS/XS dirty */
-+#define SR_SD		_AC(0x80000000, UL) /* FS/VS/XS dirty */
- #else
--#define SR_SD		_AC(0x8000000000000000, UL) /* FS/XS dirty */
-+#define SR_SD		_AC(0x8000000000000000, UL) /* FS/VS/XS dirty */
- #endif
- 
- #ifdef CONFIG_64BIT
-@@ -297,6 +303,12 @@
- #define CSR_MIMPID		0xf13
- #define CSR_MHARTID		0xf14
- 
-+#define CSR_VSTART		0x8
-+#define CSR_VCSR		0xf
-+#define CSR_VL			0xc20
-+#define CSR_VTYPE		0xc21
-+#define CSR_VLENB		0xc22
++	  If you don't know what to do here, say Y.
 +
- #ifdef CONFIG_RISCV_M_MODE
- # define CSR_STATUS	CSR_MSTATUS
- # define CSR_IE		CSR_MIE
++endmenu
+ 
+ menu "Kernel features"
+ 
+@@ -556,6 +566,7 @@ config CMDLINE_EXTEND
+ 	  cases where the provided arguments are insufficient and
+ 	  you don't want to or cannot modify them.
+ 
++
+ config CMDLINE_FORCE
+ 	bool "Always use the default kernel command string"
+ 	help
+@@ -648,7 +659,7 @@ config XIP_PHYS_ADDR
+ 	  be linked for and stored to.  This address is dependent on your
+ 	  own flash usage.
+ 
+-endmenu # "Boot options"
++endmenu
+ 
+ config BUILTIN_DTB
+ 	bool
+diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+index 3fa8ef336822..1ec17f3d6d09 100644
+--- a/arch/riscv/Makefile
++++ b/arch/riscv/Makefile
+@@ -50,6 +50,7 @@ riscv-march-$(CONFIG_ARCH_RV32I)	:= rv32ima
+ riscv-march-$(CONFIG_ARCH_RV64I)	:= rv64ima
+ riscv-march-$(CONFIG_FPU)		:= $(riscv-march-y)fd
+ riscv-march-$(CONFIG_RISCV_ISA_C)	:= $(riscv-march-y)c
++riscv-march-$(CONFIG_VECTOR)		:= $(riscv-march-y)v
+ 
+ # Newer binutils versions default to ISA spec version 20191213 which moves some
+ # instructions from the I extension to the Zicsr and Zifencei extensions.
 -- 
 2.25.1
 
