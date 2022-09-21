@@ -2,164 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49FC65BFB24
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 11:39:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 655785BFB1F
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 11:39:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230149AbiIUJj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 05:39:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37746 "EHLO
+        id S231381AbiIUJi6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 05:38:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231689AbiIUJjS (ORCPT
+        with ESMTP id S229521AbiIUJiz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 05:39:18 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFB47923E3
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 02:39:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663753157; x=1695289157;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VJnMfkjVt6R4xqCodT1PncCAy2K/67p9tish/CyCUBQ=;
-  b=AaLHV8I+0d5HJPhX4o/pb+zYAUQZHjOMTYC0A7V4F2X0fdA+/RA8FGEJ
-   UJnhNMsd1LXprOcBzlAVRR4BgrrlYjPmeiZvC1C7E6kGdfdMkJAgxkgpg
-   Z6+KxIvL69UEsFvAcmWl/quyJ43hY53bS8SEl5paWNbDFJnBZ7cxIpboG
-   82x8FvY4bvbUoFPEytOxbuZfBCUwfKfxveOpTPxO4HgvOVGYwe2IAM4VB
-   FFi6K0iyXYiQKzBaCoyCBGPkjHtnQk6cQ/X+PmXVvobYfQ7Bm/sCQFmve
-   f2nGSTKFgoOX7Ks4uxJOnyeGh8QdBFn5Th3ecKV1CabTwJgacGCT1nP0d
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10476"; a="280328208"
-X-IronPort-AV: E=Sophos;i="5.93,333,1654585200"; 
-   d="scan'208";a="280328208"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 02:39:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,333,1654585200"; 
-   d="scan'208";a="761681806"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 21 Sep 2022 02:39:15 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oawCI-0003Tl-0N;
-        Wed, 21 Sep 2022 09:39:14 +0000
-Date:   Wed, 21 Sep 2022 17:38:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alexey Gladkov <legion@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Containers <containers@lists.linux.dev>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Christian Brauner <brauner@kernel.org>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Manfred Spraul <manfred@colorfullife.com>
-Subject: Re: [PATCH v2 1/3] sysctl: Allow change system v ipc sysctls inside
- ipc namespace
-Message-ID: <202209211737.0Bu0F40t-lkp@intel.com>
-References: <0895bd453013370eb4f9600e26e2a9969ee755de.1663696560.git.legion@kernel.org>
+        Wed, 21 Sep 2022 05:38:55 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34174915C8;
+        Wed, 21 Sep 2022 02:38:55 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id f193so5409573pgc.0;
+        Wed, 21 Sep 2022 02:38:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=KFVO8fVW480r7sdNg7zIhF6BeTKJDflqx7N33XmrmLw=;
+        b=B0O+peQ9GPse538cFMImXkVVEgzI2N7S9OOXM4GtJtRUoLvGHJiILpx7V0yLqj5aGo
+         TLH9++W5VKpgGvOPslIbS1a1TwqhF9K1w5wtZqnj2hpqCgxCaJ3Q2o9sstIfci3wP94f
+         gUWrK44ALw4vwC5HpHi3ehM2WQsv4RaxGM9pRQ5TrLq1Pq+y8v9FgMJZvRb6fP0e63mA
+         Dkr83m0zm8lGC/ES04KGH0K7UpG3T5a419tJnBrE5a+Q05psm8eCGXBGrOJp6H6GS3zC
+         DeGD99OQeMjQLHPp+hmp2MsBBkEyvC+rfSzgei9sHp+9kwqBLffiL0TPhH/Ql7nthi7n
+         m5Cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=KFVO8fVW480r7sdNg7zIhF6BeTKJDflqx7N33XmrmLw=;
+        b=vMsdpLh7XcRIqnfdth/cLU5v4Pan4prm9hrOTAtmXirtc0HN/9MXHl8c3iXQKN/RA7
+         vWhUh9lcGPWZb9EeCS+NZKo3pEq3i0dMpZqefr7hxFVA0eZsDceS0DdFpZKiTInvIneY
+         n111ZOp0d5O23dM2OXcQcZYFXE5aScUf8Z8J9Yr5b5gKV0SsS+MbYPoJuj70MiEFD7jG
+         GV7na9rEbHFBLB02tFgwZQbodLp8gMWuYIgT9J6a1RpvSPyWhNoZE57PH2dhzcUsgQl/
+         EnpT85Lix4hjNvJ2dCB3j6MfskAM6RRbabZJzPTlxG2LCmfN8GAEeZMCnRJ86aAqaVu6
+         o+Fg==
+X-Gm-Message-State: ACrzQf1b327t+LOkvEVe/TlZvZ4TPqmFhqUBJDtEJvmyKAroQS5MTGlu
+        vQGeXO0c5G6fG244SI2ZWXE=
+X-Google-Smtp-Source: AMsMyM41zgqidZsHKEdDqXihhnAlvXs3uPB1yM86uJY+Yx5+rcaq6pf9HawGCWNswtCxNp2KBfKnJA==
+X-Received: by 2002:a63:7843:0:b0:42b:4e77:a508 with SMTP id t64-20020a637843000000b0042b4e77a508mr23518088pgc.449.1663753134634;
+        Wed, 21 Sep 2022 02:38:54 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id i2-20020a17090332c200b00176ea6ce0efsm1522926plr.109.2022.09.21.02.38.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Sep 2022 02:38:54 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: ye.xingchen@zte.com.cn
+To:     acme@kernel.org
+Cc:     mingo@redhat.com, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, adrian.hunter@intel.com, irogers@google.com,
+        james.clark@arm.com, alexandre.truong@arm.com,
+        blakejones@google.com, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ye xingchen <ye.xingchen@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH linux-next] perf machine: use strscpy() is more robust and safer
+Date:   Wed, 21 Sep 2022 09:38:48 +0000
+Message-Id: <20220921093848.230966-1-ye.xingchen@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0895bd453013370eb4f9600e26e2a9969ee755de.1663696560.git.legion@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alexey,
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
-Thank you for the patch! Yet something to improve:
+The implementation of strscpy() is more robust and safer.
 
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on kees/for-next/pstore linus/master v6.0-rc6 next-20220920]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+That's now the recommended way to copy NUL terminated strings.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alexey-Gladkov/sysctl-Allow-change-system-v-ipc-sysctls-inside-ipc-namespace/20220921-030939
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-config: hexagon-randconfig-r041-20220921 (https://download.01.org/0day-ci/archive/20220921/202209211737.0Bu0F40t-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/eb972fb9aad60123519d8dd32df26cb58985ce4a
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Alexey-Gladkov/sysctl-Allow-change-system-v-ipc-sysctls-inside-ipc-namespace/20220921-030939
-        git checkout eb972fb9aad60123519d8dd32df26cb58985ce4a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+---
+ tools/perf/util/machine.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> ipc/ipc_sysctl.c:215:47: error: passing 'kgid_t' to parameter of incompatible type 'kgid_t *'; take the address with &
-           ipc_set_ownership(head, table, &ns_root_uid, ns_root_gid);
-                                                        ^~~~~~~~~~~
-                                                        &
-   ipc/ipc_sysctl.c:195:31: note: passing argument to parameter 'gid' here
-                                 kuid_t *uid, kgid_t *gid)
-                                                      ^
->> ipc/ipc_sysctl.c:225:13: error: call to undeclared function 'current_euid'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           if (uid_eq(current_euid(), ns_root_uid))
-                      ^
-   ipc/ipc_sysctl.c:225:13: note: did you mean 'current_work'?
-   include/linux/workqueue.h:467:28: note: 'current_work' declared here
-   extern struct work_struct *current_work(void);
-                              ^
->> ipc/ipc_sysctl.c:225:13: error: passing 'int' to parameter of incompatible type 'kuid_t'
-           if (uid_eq(current_euid(), ns_root_uid))
-                      ^~~~~~~~~~~~~~
-   include/linux/uidgid.h:61:34: note: passing argument to parameter 'left' here
-   static inline bool uid_eq(kuid_t left, kuid_t right)
-                                    ^
->> ipc/ipc_sysctl.c:228:11: error: call to undeclared function 'in_egroup_p'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           else if (in_egroup_p(ns_root_gid))
-                    ^
-   4 errors generated.
-
-
-vim +215 ipc/ipc_sysctl.c
-
-   206	
-   207	static int ipc_permissions(struct ctl_table_header *head, struct ctl_table *table)
-   208	{
-   209		struct ipc_namespace *ns =
-   210			container_of(head->set, struct ipc_namespace, ipc_set);
-   211		int mode = table->mode;
-   212		kuid_t ns_root_uid;
-   213		kgid_t ns_root_gid;
-   214	
- > 215		ipc_set_ownership(head, table, &ns_root_uid, ns_root_gid);
-   216	
-   217	#ifdef CONFIG_CHECKPOINT_RESTORE
-   218		if (((table->data == &ns->ids[IPC_SEM_IDS].next_id) ||
-   219		     (table->data == &ns->ids[IPC_MSG_IDS].next_id) ||
-   220		     (table->data == &ns->ids[IPC_SHM_IDS].next_id)) &&
-   221		    checkpoint_restore_ns_capable(ns->user_ns))
-   222			mode = 0666;
-   223		else
-   224	#endif
- > 225		if (uid_eq(current_euid(), ns_root_uid))
-   226			mode >>= 6;
-   227	
- > 228		else if (in_egroup_p(ns_root_gid))
-   229			mode >>= 3;
-   230	
-   231		mode &= 7;
-   232	
-   233		return (mode << 6) | (mode << 3) | mode;
-   234	}
-   235	
-
+diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
+index 2a16cae28407..5d0f817cef63 100644
+--- a/tools/perf/util/machine.c
++++ b/tools/perf/util/machine.c
+@@ -1198,7 +1198,7 @@ int machine__create_extra_kernel_map(struct machine *machine,
+ 
+ 	kmap = map__kmap(map);
+ 
+-	strlcpy(kmap->name, xm->name, KMAP_NAME_LEN);
++	strscpy(kmap->name, xm->name, KMAP_NAME_LEN);
+ 
+ 	maps__insert(machine__kernel_maps(machine), map);
+ 
+@@ -1287,7 +1287,7 @@ int machine__map_x86_64_entry_trampolines(struct machine *machine,
+ 			.pgoff = pgoff,
+ 		};
+ 
+-		strlcpy(xm.name, ENTRY_TRAMPOLINE_NAME, KMAP_NAME_LEN);
++		strscpy(xm.name, ENTRY_TRAMPOLINE_NAME, KMAP_NAME_LEN);
+ 
+ 		if (machine__create_extra_kernel_map(machine, kernel, &xm) < 0)
+ 			return -1;
+@@ -1892,7 +1892,7 @@ int machine__process_mmap2_event(struct machine *machine,
+ 			.pgoff = event->mmap2.pgoff,
+ 		};
+ 
+-		strlcpy(xm.name, event->mmap2.filename, KMAP_NAME_LEN);
++		strscpy(xm.name, event->mmap2.filename, KMAP_NAME_LEN);
+ 		ret = machine__process_kernel_mmap_event(machine, &xm, bid);
+ 		if (ret < 0)
+ 			goto out_problem;
+@@ -1949,7 +1949,7 @@ int machine__process_mmap_event(struct machine *machine, union perf_event *event
+ 			.pgoff = event->mmap.pgoff,
+ 		};
+ 
+-		strlcpy(xm.name, event->mmap.filename, KMAP_NAME_LEN);
++		strscpy(xm.name, event->mmap.filename, KMAP_NAME_LEN);
+ 		ret = machine__process_kernel_mmap_event(machine, &xm, NULL);
+ 		if (ret < 0)
+ 			goto out_problem;
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
