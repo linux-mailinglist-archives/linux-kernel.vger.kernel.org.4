@@ -2,99 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 915145C0110
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:24:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAD095C0152
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:27:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230266AbiIUPYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 11:24:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57852 "EHLO
+        id S231231AbiIUP1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 11:27:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbiIUPYS (ORCPT
+        with ESMTP id S229624AbiIUP0R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 11:24:18 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F3538E4DE
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 08:24:15 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id k10so9807811lfm.4
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 08:24:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=IkfBzR1pPL4sqH+SzuxDp3p3OntI0w5vunqXgMMZcmo=;
-        b=rNBsowUvNyhij2xBv5rDeBpR/yfpdhLrm03ppABwWh8FFbkd/2LG/aHo3skupAQDvq
-         56axzEakXeiqhXDy7AL26VkZtFfcHWwtdDe7XC+F2XHK6QeAcQYI7YriAKuk8Q5jXif8
-         DSg6iPIcvh4ipe9t90qFpASbcrJ0LsjFYGLGCwAKGqQAH5wJ8z6tI3sV883v1vc4yrKZ
-         nmAO6qHeNrD0KQbj8HPcIqlCkJSHP8ftl1/rhz9RsJo/kohlgbdJNfP/ruplDpE9Bkxz
-         AemZrWm0VrxTeapXQRFbKWRNUqYeR3p5PgqWvjDHhYb+59d84pFwkPxkmCMupiX/jFmN
-         kq7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=IkfBzR1pPL4sqH+SzuxDp3p3OntI0w5vunqXgMMZcmo=;
-        b=Cpbwc48W1hpLydubS0ZDPnblzqsfO5cpbv7+7MvdqBZ1IlxchwdTGbF7HNmMN6hVhy
-         ABinF5Bw3Hjr/REVSuv2nEbn1zvV1uNrTjexGU7vwjdAzW16PomLt6TpqyBb0MNglNxy
-         1r6fQtmRNeNDwEukTF5234lPHoL7jicPcE1qw/NQPxWAyE9n832UNbft7H09mNPDroXB
-         fzL0GVKOzPcjL5fugiH2/7C6TXxYOHPjBzEsHUH22zn0wXqY1KErn8+duS0BdnKmz9ev
-         xSUcJpdU/BnfC9oBi6IalAQhLxbP4A/JzgnwDsYaX8ZvOX8A8uZVGtYOyd/yS4SzmFkC
-         HeFg==
-X-Gm-Message-State: ACrzQf11w0vSQUnPfjO+W8gIdydDbM6+37G24v1oXWaPD4/P7LAOXFqv
-        76sY1zPIZABNIgerwwoak2VLsg==
-X-Google-Smtp-Source: AMsMyM6t3a9lk8UQZAxKjOsgUpQi1lKsFwa3+vxfPNHOsjx9aGEV8R/rZQ6AF7qqASbhYiSJ3jVZyA==
-X-Received: by 2002:a05:6512:c13:b0:49f:9a2f:8b86 with SMTP id z19-20020a0565120c1300b0049f9a2f8b86mr6452173lfu.413.1663773853473;
-        Wed, 21 Sep 2022 08:24:13 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id z18-20020a19f712000000b0049adbc24b99sm483777lfe.24.2022.09.21.08.24.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Sep 2022 08:24:13 -0700 (PDT)
-Message-ID: <a1ec1143-6340-8572-c46b-0a4f923d7a92@linaro.org>
-Date:   Wed, 21 Sep 2022 17:24:12 +0200
+        Wed, 21 Sep 2022 11:26:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7A5901B4
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 08:25:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663773927;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=p5kD7cCzBwmvmc2H0DQlJ8VpkWFbcoQTaU8KeQ/I8QE=;
+        b=hA51XnyVQF3fXbG7os13zd3J15cndZ2k+xY+2SILmKbWIsiEYroEqEgjp6ypGZ3O5FDf+C
+        SyXmDar4Z5vRQ3Rxe6r/f9BiCxH4ovbfHsV9c+1eRdiqxiNyAk93jljx9g/T1d22bCWDNd
+        7PuktWyXLgyXTXulskCFwV3uZfwmRkI=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-626-ytXzuVruM8uwKKjuVNcWDg-1; Wed, 21 Sep 2022 11:25:24 -0400
+X-MC-Unique: ytXzuVruM8uwKKjuVNcWDg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 02B3D1C07548;
+        Wed, 21 Sep 2022 15:25:24 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.40.194.159])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E80AD2166B36;
+        Wed, 21 Sep 2022 15:25:21 +0000 (UTC)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        Yuan Yao <yuan.yao@linux.intel.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v10 16/39] KVM: x86: hyper-v: Introduce kvm_hv_is_tlb_flush_hcall()
+Date:   Wed, 21 Sep 2022 17:24:13 +0200
+Message-Id: <20220921152436.3673454-17-vkuznets@redhat.com>
+In-Reply-To: <20220921152436.3673454-1-vkuznets@redhat.com>
+References: <20220921152436.3673454-1-vkuznets@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v4 10/30] thermal/drivers/exynos: Replace
- of_thermal_is_trip_valid() by thermal_zone_get_trip()
-Content-Language: en-US
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        rui.zhang@intel.com,
-        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "open list:SAMSUNG THERMAL DRIVER" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <20220921094244.606948-1-daniel.lezcano@linaro.org>
- <20220921094244.606948-11-daniel.lezcano@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220921094244.606948-11-daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/09/2022 11:42, Daniel Lezcano wrote:
-> The thermal_zone_get_trip() does the same check as
-> of_thermal_is_trip_valid(). Replace the call to
-> of_thermal_is_trip_valid() by thermal_zone_get_trip().
-> 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
+The newly introduced helper checks whether vCPU is performing a
+Hyper-V TLB flush hypercall. This is required to filter out L2 TLB
+flush hypercalls for processing.
 
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+---
+ arch/x86/kvm/hyperv.h | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
+diff --git a/arch/x86/kvm/hyperv.h b/arch/x86/kvm/hyperv.h
+index ca7f1d2c134e..d16f62e4f43a 100644
+--- a/arch/x86/kvm/hyperv.h
++++ b/arch/x86/kvm/hyperv.h
+@@ -176,6 +176,24 @@ static inline void kvm_hv_vcpu_empty_flush_tlb(struct kvm_vcpu *vcpu)
+ 
+ 	kfifo_reset_out(&tlb_flush_fifo->entries);
+ }
++
++static inline bool kvm_hv_is_tlb_flush_hcall(struct kvm_vcpu *vcpu)
++{
++	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
++	u16 code;
++
++	if (!hv_vcpu)
++		return false;
++
++	code = is_64_bit_hypercall(vcpu) ? kvm_rcx_read(vcpu) :
++					   kvm_rax_read(vcpu);
++
++	return (code == HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE ||
++		code == HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST ||
++		code == HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE_EX ||
++		code == HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST_EX);
++}
++
+ void kvm_hv_vcpu_flush_tlb(struct kvm_vcpu *vcpu);
+ 
+ 
+-- 
+2.37.3
 
