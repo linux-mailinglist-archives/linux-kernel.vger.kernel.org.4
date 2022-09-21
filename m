@@ -2,111 +2,459 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 612905E4F6B
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 20:29:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4552D5E4F6C
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 20:29:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229777AbiIUS3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 14:29:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33486 "EHLO
+        id S229935AbiIUS3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 14:29:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiIUS26 (ORCPT
+        with ESMTP id S229437AbiIUS3d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 14:28:58 -0400
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0547A1D58;
-        Wed, 21 Sep 2022 11:28:57 -0700 (PDT)
-Received: by mail-qt1-f172.google.com with SMTP id cj27so4720892qtb.7;
-        Wed, 21 Sep 2022 11:28:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=O9UTDnRHflfsX+CFhFUlYBP0gI2mmaMDwE85Cy4YTjc=;
-        b=TwD3KXA9MaN9HL/v8qJDLpdwuz9xNt1KgB6EzcaDsufdhrqN51n6jcubQzawrqCkUn
-         LBXwij/Qb/54t51XYXQyVmSxrp8GLr84za5bE6obS1DWGbbw1O7NamHcKOFNsDEiNh/L
-         S0h58Chhv74HXS5O8wDab3/eswwDMn/bnGz7L0/DPBgsl6BMrOsHF+lHO1jRmoDhOYJW
-         Pj1sqdCHLw+dZ6AbCmEY10VS0ODp2ammReDx6f350w8ltb35dUAlMq/gQmjkp/qaclou
-         BlljJNx5KY3KwR+6m7/LZdacH1T4st1jJ5aLWMa2dSFrHl+MTWK75IHGHQOxtVvv9p8k
-         MZsQ==
-X-Gm-Message-State: ACrzQf3QF6wn+7cAg/P4fE6Lxx53VncunlSTiZxhKqjcfHe0qy8G3aHn
-        ruvYJRX6AW7BQC12VBhRFLSkk9vN3alMx+Vhe/xarkH3
-X-Google-Smtp-Source: AMsMyM6gZl77XOFOJuPFhAH/SoYbIKYFNO163WyNcm1yzR1Ck0AopH+l5c0bpp7dPIqwSMZ6WqjH+0oK954Q5XQ3zj4=
-X-Received: by 2002:a05:622a:620a:b0:35c:bf9e:8748 with SMTP id
- hj10-20020a05622a620a00b0035cbf9e8748mr24946021qtb.494.1663784936806; Wed, 21
- Sep 2022 11:28:56 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220920110657.1948320-1-srinivas.pandruvada@linux.intel.com>
-In-Reply-To: <20220920110657.1948320-1-srinivas.pandruvada@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 21 Sep 2022 20:28:45 +0200
-Message-ID: <CAJZ5v0gWxtm195_SC+Ak+CYRng0GLU4JOfRjiuFtPyVxA-fBVQ@mail.gmail.com>
-Subject: Re: [PATCH] thermal/drivers/intel_powerclamp: Fix bug for smp_processor_id
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
+        Wed, 21 Sep 2022 14:29:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22079A2638
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 11:29:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 88119B83283
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 18:29:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 099F3C433C1;
+        Wed, 21 Sep 2022 18:29:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663784965;
+        bh=DVw0JgPB3RrhBg/5J0QQ/EgkG35ZtIOlPR8GiuMhB88=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=fEv4CNPrP9corZmb583bB/1nnlnHybLEbw5JZB6T2zRe98Ez/lN4erK6N3FtRkrb0
+         pG0aLZAudmzdJ0Ze7S4vWk3x0MQ9NxaPr/7x4axit0cBgwL6mM5Sw2HFmL+eMxQkNz
+         /IUC4ejPan1rI1ZRjrUdPMMqDHbyRRYTPiHwBHgWwgObD7+T5Sttusj/fGrvcXxYpv
+         MNu6FwjCbZZ/rsXdNFk4DsQn/EMWahFMQGwTCqBZJATxQJFS/5UaDjwqI/NRZxu1aT
+         NT0nHZaJDeiQjKq4wW64E7eJfJ1+NhjROKtik5VUWg+RgxwUkStRk6oVteUulEk9rq
+         ndIkPrKLEwdOA==
+Received: from 185-176-101-241.host.sccbroadband.ie ([185.176.101.241] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1ob4TK-00Bjqi-L8;
+        Wed, 21 Sep 2022 19:29:22 +0100
+Date:   Wed, 21 Sep 2022 19:29:21 +0100
+Message-ID: <87k05wk2da.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Chen Yu <yu.c.chen@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v9 3/7] genirq: Add mechanism to multiplex a single HW IPI
+In-Reply-To: <20220903161309.32848-4-apatel@ventanamicro.com>
+References: <20220903161309.32848-1-apatel@ventanamicro.com>
+        <20220903161309.32848-4-apatel@ventanamicro.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.176.101.241
+X-SA-Exim-Rcpt-To: apatel@ventanamicro.com, palmer@dabbelt.com, paul.walmsley@sifive.com, tglx@linutronix.de, daniel.lezcano@linaro.org, atishp@atishpatra.org, Alistair.Francis@wdc.com, anup@brainfault.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 1:07 PM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> When CPU 0 is offline and intel_powerclamp is used to inject
-> idle, it generates kernel BUG:
->
-> BUG: using smp_processor_id() in preemptible [00000000] code: bash/15687
-> caller is debug_smp_processor_id+0x17/0x20
-> CPU: 4 PID: 15687 Comm: bash Not tainted 5.19.0-rc7+ #57
-> Call Trace:
-> <TASK>
-> dump_stack_lvl+0x49/0x63
-> dump_stack+0x10/0x16
-> check_preemption_disabled+0xdd/0xe0
-> debug_smp_processor_id+0x17/0x20
-> powerclamp_set_cur_state+0x7f/0xf9 [intel_powerclamp]
-> ...
-> ...
->
-> Here CPU 0 is the control CPU by default and changed to the current CPU,
-> if CPU 0 offlined. This check has to be performed under cpus_read_lock(),
-> hence the above warning.
->
-> Use get_cpu() instead of smp_processor_id() to avoid this BUG.
->
-> Suggested-by: Chen Yu <yu.c.chen@intel.com>
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+On Sat, 03 Sep 2022 17:13:05 +0100,
+Anup Patel <apatel@ventanamicro.com> wrote:
+> 
+> All RISC-V platforms have a single HW IPI provided by the INTC local
+> interrupt controller. The HW method to trigger INTC IPI can be through
+> external irqchip (e.g. RISC-V AIA), through platform specific device
+> (e.g. SiFive CLINT timer), or through firmware (e.g. SBI IPI call).
+> 
+> To support multiple IPIs on RISC-V, we add a generic IPI multiplexing
+> mechanism which help us create multiple virtual IPIs using a single
+> HW IPI. This generic IPI multiplexing is shared among various RISC-V
+> irqchip drivers.
+> 
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
 > ---
->  drivers/thermal/intel/intel_powerclamp.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
-> index c841ab37e7c6..46cd799af148 100644
-> --- a/drivers/thermal/intel/intel_powerclamp.c
-> +++ b/drivers/thermal/intel/intel_powerclamp.c
-> @@ -532,8 +532,10 @@ static int start_power_clamp(void)
->
->         /* prefer BSP */
->         control_cpu = 0;
-> -       if (!cpu_online(control_cpu))
-> -               control_cpu = smp_processor_id();
-> +       if (!cpu_online(control_cpu)) {
-> +               control_cpu = get_cpu();
-> +               put_cpu();
-> +       }
->
->         clamping = true;
->         schedule_delayed_work(&poll_pkg_cstate_work, 0);
-> --
+>  include/linux/irq.h  |  18 ++++
+>  kernel/irq/Kconfig   |   5 +
+>  kernel/irq/Makefile  |   1 +
+>  kernel/irq/ipi-mux.c | 244 +++++++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 268 insertions(+)
+>  create mode 100644 kernel/irq/ipi-mux.c
+> 
+> diff --git a/include/linux/irq.h b/include/linux/irq.h
+> index c3eb89606c2b..5ab702cb0a5b 100644
+> --- a/include/linux/irq.h
+> +++ b/include/linux/irq.h
+> @@ -1266,6 +1266,24 @@ int __ipi_send_mask(struct irq_desc *desc, const struct cpumask *dest);
+>  int ipi_send_single(unsigned int virq, unsigned int cpu);
+>  int ipi_send_mask(unsigned int virq, const struct cpumask *dest);
+>  
+> +/**
+> + * struct ipi_mux_ops - IPI multiplex operations
+> + *
+> + * @ipi_mux_pre_handle:	Optional function called before handling parent IPI
+> + * @ipi_mux_post_handle:Optional function called after handling parent IPI
+> + * @ipi_mux_send:	Trigger parent IPI on target CPUs
+> + */
+> +struct ipi_mux_ops {
+> +	void (*ipi_mux_pre_handle)(unsigned int parent_virq, void *data);
+> +	void (*ipi_mux_post_handle)(unsigned int parent_virq, void *data);
+> +	void (*ipi_mux_send)(unsigned int parent_virq, void *data,
+> +			     const struct cpumask *mask);
+> +};
 
-Applied as 6.1 material with modified subject, thanks!
+What is the rational for these pre/post handling functions? We don't
+have them for normal interrupts, why are they required for IPIs?
+
+> +
+> +void ipi_mux_process(void);
+> +int ipi_mux_create(unsigned int parent_virq, unsigned int nr_ipi,
+> +		   const struct ipi_mux_ops *ops, void *data);
+> +
+>  #ifdef CONFIG_GENERIC_IRQ_MULTI_HANDLER
+>  /*
+>   * Registers a generic IRQ handling function as the top-level IRQ handler in
+> diff --git a/kernel/irq/Kconfig b/kernel/irq/Kconfig
+> index db3d174c53d4..df17dbc54b02 100644
+> --- a/kernel/irq/Kconfig
+> +++ b/kernel/irq/Kconfig
+> @@ -86,6 +86,11 @@ config GENERIC_IRQ_IPI
+>  	depends on SMP
+>  	select IRQ_DOMAIN_HIERARCHY
+>  
+> +# Generic IRQ IPI Mux support
+> +config GENERIC_IRQ_IPI_MUX
+> +	bool
+> +	depends on SMP
+> +
+>  # Generic MSI interrupt support
+>  config GENERIC_MSI_IRQ
+>  	bool
+> diff --git a/kernel/irq/Makefile b/kernel/irq/Makefile
+> index b4f53717d143..f19d3080bf11 100644
+> --- a/kernel/irq/Makefile
+> +++ b/kernel/irq/Makefile
+> @@ -15,6 +15,7 @@ obj-$(CONFIG_GENERIC_IRQ_MIGRATION) += cpuhotplug.o
+>  obj-$(CONFIG_PM_SLEEP) += pm.o
+>  obj-$(CONFIG_GENERIC_MSI_IRQ) += msi.o
+>  obj-$(CONFIG_GENERIC_IRQ_IPI) += ipi.o
+> +obj-$(CONFIG_GENERIC_IRQ_IPI_MUX) += ipi-mux.o
+>  obj-$(CONFIG_SMP) += affinity.o
+>  obj-$(CONFIG_GENERIC_IRQ_DEBUGFS) += debugfs.o
+>  obj-$(CONFIG_GENERIC_IRQ_MATRIX_ALLOCATOR) += matrix.o
+> diff --git a/kernel/irq/ipi-mux.c b/kernel/irq/ipi-mux.c
+> new file mode 100644
+> index 000000000000..8939fa2be73c
+> --- /dev/null
+> +++ b/kernel/irq/ipi-mux.c
+> @@ -0,0 +1,244 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Multiplex several virtual IPIs over a single HW IPI.
+> + *
+> + * Copyright (c) 2022 Ventana Micro Systems Inc.
+
+Basic courtesy would be to at least mention where this was lifted
+from, as well as the original copyrights. Also, the original code
+states "GPL-2.0-or-later". Since this is a derivative work, the same
+licence should apply, shouldn't it?
+
+> + */
+> +
+> +#define pr_fmt(fmt) "ipi-mux: " fmt
+> +#include <linux/cpu.h>
+> +#include <linux/init.h>
+> +#include <linux/irq.h>
+> +#include <linux/irqchip.h>
+> +#include <linux/irqchip/chained_irq.h>
+> +#include <linux/irqdomain.h>
+> +#include <linux/smp.h>
+> +
+> +static void *ipi_mux_data;
+> +static unsigned int ipi_mux_nr;
+> +static unsigned int ipi_mux_parent_virq;
+> +static struct irq_domain *ipi_mux_domain;
+> +static const struct ipi_mux_ops *ipi_mux_ops;
+> +static DEFINE_PER_CPU(atomic_t, ipi_mux_enable);
+> +static DEFINE_PER_CPU(atomic_t, ipi_mux_bits);
+
+How about making these fields part of a structure, and only allocate
+them on creation of an IPI irqdomain? Most platforms do not require
+this at all.
+
+> +
+> +static void ipi_mux_mask(struct irq_data *d)
+> +{
+> +	atomic_andnot(BIT(irqd_to_hwirq(d)), this_cpu_ptr(&ipi_mux_enable));
+> +}
+> +
+> +static void ipi_mux_unmask(struct irq_data *d)
+> +{
+> +	u32 ipi_bit = BIT(irqd_to_hwirq(d));
+> +
+> +	atomic_or(ipi_bit, this_cpu_ptr(&ipi_mux_enable));
+> +
+> +	/*
+> +	 * The atomic_or() above must complete before the atomic_read()
+> +	 * below to avoid racing ipi_mux_send_mask().
+> +	 */
+> +	smp_mb__after_atomic();
+> +
+> +	/* If a pending IPI was unmasked, raise a parent IPI immediately. */
+> +	if (atomic_read(this_cpu_ptr(&ipi_mux_bits)) & ipi_bit)
+> +		ipi_mux_ops->ipi_mux_send(ipi_mux_parent_virq, ipi_mux_data,
+> +					  cpumask_of(smp_processor_id()));
+> +}
+> +
+> +static void ipi_mux_send_mask(struct irq_data *d, const struct cpumask *mask)
+> +{
+> +	u32 ipi_bit = BIT(irqd_to_hwirq(d));
+> +	struct cpumask pmask = { 0 };
+
+Urgh, no (see the comment in cpumask.h). struct cpumask can be really
+huge (it uses NR_CPUS), and we only want to depend on nr_cpus. Use a
+per-CPU temp if you must, but don't allocate something like this on
+the stack.
+
+> +	unsigned long pending;
+> +	int cpu;
+> +
+> +	for_each_cpu(cpu, mask) {
+> +		pending = atomic_fetch_or_release(ipi_bit,
+> +					per_cpu_ptr(&ipi_mux_bits, cpu));
+> +
+> +		/*
+> +		 * The atomic_fetch_or_release() above must complete before
+> +		 * the atomic_read() below to avoid racing ipi_mux_unmask().
+> +		 */
+> +		smp_mb__after_atomic();
+> +
+> +		if (!(pending & ipi_bit) &&
+> +		    (atomic_read(per_cpu_ptr(&ipi_mux_enable, cpu)) & ipi_bit))
+> +			cpumask_set_cpu(cpu, &pmask);
+> +	}
+> +
+> +	/* Trigger the parent IPI */
+> +	ipi_mux_ops->ipi_mux_send(ipi_mux_parent_virq, ipi_mux_data, &pmask);
+> +}
+> +
+> +static const struct irq_chip ipi_mux_chip = {
+> +	.name		= "IPI Mux",
+> +	.irq_mask	= ipi_mux_mask,
+> +	.irq_unmask	= ipi_mux_unmask,
+> +	.ipi_send_mask	= ipi_mux_send_mask,
+> +};
+> +
+> +static int ipi_mux_domain_alloc(struct irq_domain *d, unsigned int virq,
+> +				unsigned int nr_irqs, void *arg)
+> +{
+> +	struct irq_fwspec *fwspec = arg;
+> +	irq_hw_number_t hwirq;
+> +	unsigned int type;
+> +	int i, ret;
+> +
+> +	ret = irq_domain_translate_onecell(d, fwspec, &hwirq, &type);
+
+Where is the format of this fwspec documented?
+
+> +	if (ret)
+> +		return ret;
+> +
+> +	for (i = 0; i < nr_irqs; i++) {
+> +		irq_set_percpu_devid(virq + i);
+> +		irq_domain_set_info(d, virq + i, hwirq + i,
+> +				    &ipi_mux_chip, d->host_data,
+> +				    handle_percpu_devid_irq, NULL, NULL);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct irq_domain_ops ipi_mux_domain_ops = {
+> +	.alloc		= ipi_mux_domain_alloc,
+> +	.free		= irq_domain_free_irqs_top,
+> +};
+> +
+> +/**
+> + * ipi_mux_process - Process multiplexed virtual IPIs
+> + */
+> +void ipi_mux_process(void)
+> +{
+> +	irq_hw_number_t hwirq;
+> +	unsigned long ipis;
+> +	int en, err;
+> +
+> +	if (ipi_mux_ops->ipi_mux_pre_handle)
+
+Given that this shouldn't change in the lifetime of the system, this
+needs to be turned into a static key in order to avoid the overhead of
+accessing this on each and every IPI.
+
+> +		ipi_mux_ops->ipi_mux_pre_handle(ipi_mux_parent_virq,
+> +						ipi_mux_data);
+> +
+> +	/*
+> +	 * Reading enable mask does not need to be ordered as long as
+> +	 * this function called from interrupt handler because only
+> +	 * the CPU itself can change it's own enable mask.
+> +	 */
+> +	en = atomic_read(this_cpu_ptr(&ipi_mux_enable));
+> +
+> +	/*
+> +	 * Clear the IPIs we are about to handle. This pairs with the
+> +	 * atomic_fetch_or_release() in ipi_mux_send_mask().
+> +	 */
+> +	ipis = atomic_fetch_andnot(en, this_cpu_ptr(&ipi_mux_bits)) & en;
+> +
+> +	for_each_set_bit(hwirq, &ipis, ipi_mux_nr) {
+> +		err = generic_handle_domain_irq(ipi_mux_domain,
+> +						hwirq);
+> +		if (unlikely(err))
+> +			pr_warn_ratelimited(
+> +				"can't find mapping for hwirq %lu\n",
+> +				hwirq);
+
+How can this happen?
+
+> +	}
+> +
+> +	if (ipi_mux_ops->ipi_mux_post_handle)
+
+Same thing as above.
+
+> +		ipi_mux_ops->ipi_mux_post_handle(ipi_mux_parent_virq,
+> +						 ipi_mux_data);
+> +}
+> +
+> +static void ipi_mux_handler(struct irq_desc *desc)
+> +{
+> +	struct irq_chip *chip = irq_desc_get_chip(desc);
+> +
+> +	chained_irq_enter(chip, desc);
+> +	ipi_mux_process();
+> +	chained_irq_exit(chip, desc);
+> +}
+> +
+> +static int ipi_mux_dying_cpu(unsigned int cpu)
+> +{
+> +	disable_percpu_irq(ipi_mux_parent_virq);
+> +	return 0;
+> +}
+> +
+> +static int ipi_mux_starting_cpu(unsigned int cpu)
+> +{
+> +	enable_percpu_irq(ipi_mux_parent_virq,
+> +			  irq_get_trigger_type(ipi_mux_parent_virq));
+> +	return 0;
+> +}
+> +
+> +/**
+> + * ipi_mux_create - Create virtual IPIs multiplexed on top of a single
+> + * parent IPI.
+> + * @parent_virq:	virq of the parent per-CPU IRQ
+> + * @nr_ipi:		number of virtual IPIs to create. This should
+> + *			be <= BITS_PER_TYPE(int)
+
+In general, please use 'long' rather than 'int', like for most other
+things in the kernel.
+
+> + * @ops:		multiplexing operations for the parent IPI
+> + * @data:		opaque data used by the multiplexing operations
+> + *
+> + * If the parent IPI > 0 then ipi_mux_process() will be automatically
+> + * called via chained handler.
+> + *
+> + * If the parent IPI <= 0 then it is responsibility of irqchip drivers
+> + * to explicitly call ipi_mux_process() for processing muxed IPIs.
+> + *
+> + * Returns first virq of the newly created virtual IPIs upon success
+> + * or <=0 upon failure
+> + */
+> +int ipi_mux_create(unsigned int parent_virq, unsigned int nr_ipi,
+> +		   const struct ipi_mux_ops *ops, void *data)
+> +{
+> +	struct fwnode_handle *fwnode;
+> +	struct irq_domain *domain;
+> +	struct irq_fwspec ipi;
+> +	int virq;
+> +
+> +	if (ipi_mux_domain || BITS_PER_TYPE(int) < nr_ipi ||
+> +	    !ops || !ops->ipi_mux_send)
+> +		return -EINVAL;
+> +
+> +	if (parent_virq &&
+> +	    !irqd_is_per_cpu(irq_desc_get_irq_data(irq_to_desc(parent_virq))))
+> +		return -EINVAL;
+> +
+> +	fwnode = irq_domain_alloc_named_fwnode("IPI-Mux");
+> +	if (!fwnode) {
+> +		pr_err("unable to create IPI Mux fwnode\n");
+> +		return -ENOMEM;
+> +	}
+> +
+> +	domain = irq_domain_create_simple(fwnode, nr_ipi, 0,
+> +					  &ipi_mux_domain_ops, NULL);
+> +	if (!domain) {
+> +		pr_err("unable to add IPI Mux domain\n");
+> +		irq_domain_free_fwnode(fwnode);
+> +		return -ENOMEM;
+> +	}
+> +
+> +	ipi.fwnode = domain->fwnode;
+> +	ipi.param_count = 1;
+> +	ipi.param[0] = 0;
+
+This really deserves some documentation if this is to be used at scale
+(and not be a riscv-special).
+
+> +	virq = __irq_domain_alloc_irqs(domain, -1, nr_ipi,
+> +				       NUMA_NO_NODE, &ipi, false, NULL);
+> +	if (virq <= 0) {
+> +		pr_err("unable to alloc IRQs from IPI Mux domain\n");
+> +		irq_domain_remove(domain);
+> +		irq_domain_free_fwnode(fwnode);
+> +		return virq;
+> +	}
+> +
+> +	ipi_mux_domain = domain;
+> +	ipi_mux_data = data;
+> +	ipi_mux_nr = nr_ipi;
+> +	ipi_mux_parent_virq = parent_virq;
+> +	ipi_mux_ops = ops;
+> +
+> +	if (parent_virq > 0) {
+> +		irq_set_chained_handler(parent_virq, ipi_mux_handler);
+> +		cpuhp_setup_state(CPUHP_AP_ONLINE_DYN,
+> +				  "irqchip/ipi-mux:starting",
+> +				  ipi_mux_starting_cpu, ipi_mux_dying_cpu);
+> +	}
+
+This whole CPUHP thing feels like something that should stay outside
+of the generic code. I'm pretty sure some architectures would have
+specific requirements and wouldn't be able to just use any odd dynamic
+value...
+
+> +
+> +	return virq;
+> +}
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
