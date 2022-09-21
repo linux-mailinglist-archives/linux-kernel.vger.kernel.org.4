@@ -2,119 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B76B5BFE8B
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 15:01:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01F8D5BFE81
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 14:57:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbiIUNBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 09:01:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46674 "EHLO
+        id S229590AbiIUM5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 08:57:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbiIUNBL (ORCPT
+        with ESMTP id S229496AbiIUM51 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 09:01:11 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF9C229C96;
-        Wed, 21 Sep 2022 06:01:08 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Wed, 21 Sep 2022 08:57:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 232BB6CF58
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 05:57:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 6B4F61F88F;
-        Wed, 21 Sep 2022 13:01:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1663765267;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=SNOx7u/YQMIaTFhVzek1ee94itBFfBqVi5hVjzogOrM=;
-        b=w96BX+RZ4LI2I1gSSCNz1WzUxOSmT/ftdP87PZsC/lhCyeX+JSmn5MNEKJCk6rxCZaZJ5i
-        q4qup0ww94M49Z18AIlv9NnY3fKzaQbk9R4ra4EbELxgDy2tfUTO/faed177fpkYWa+at3
-        1GUaKRbgLJn21ONDnXP5UmldQRL8dbQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1663765267;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=SNOx7u/YQMIaTFhVzek1ee94itBFfBqVi5hVjzogOrM=;
-        b=/bDdRRT7yb0B3YNd+chIJllTtWIpxxXPvL9XfsQSP49oD5NrC+KdNEvE/CGcRivMRsMFLK
-        ECPigt2cFFDZJeAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3ECF613A89;
-        Wed, 21 Sep 2022 13:01:07 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id bCdrDhMLK2PYLwAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Wed, 21 Sep 2022 13:01:07 +0000
-Date:   Wed, 21 Sep 2022 14:55:35 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org,
-        Jules Irenge <jbi.octave@gmail.com>, x86@kernel.org
-Subject: Re: [tip: perf/core] perf/core: Convert snprintf() to scnprintf()
-Message-ID: <20220921125535.GF32411@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-References: <166374773592.401.16831946846027095231.tip-bot2@tip-bot2>
- <YyrMmyUPk+4t6OLm@hirez.programming.kicks-ass.net>
- <YyrrE8vpFSR+kdHQ@gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B47E162B3C
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 12:57:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B58A7C433D6;
+        Wed, 21 Sep 2022 12:57:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663765046;
+        bh=OGgXPceGJJkLuXVPedJyDxmwKaBfo87tdcas+G7ybtk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nMWUMwS/MzJ6pLnBI0IxFYB9qkdvRmn3atnmw6qHtxUXK4uJcHbwZwmXml2Ipj2Hg
+         LmE37t+J31lAlNcztOHWK2UsAIYpL2iq7Hg5Ov5YRaeKWy3cD2Q6JP3mOP+Vf+KE2W
+         rI/UFuovWCsPPuOhF5eXJFHMsth1BuAWPf8tSTAzasuXHR2Nj+KmxJPr7kCSHNtSgD
+         A+UdV5MQH47BVb6sLcPgMm/wFAzisbqn2c5IsnEiqn4XRRem7XHiyf7o8qH9Rhm+oJ
+         Tv5AjzeFe9sHC8LWnK440NsVjefNzSwQkvjuJf/4IpOOeLuqd1jJ1rp7WlcdjPWcNs
+         S5YCFPVLa2MHg==
+Received: by pali.im (Postfix)
+        id 9E10C789; Wed, 21 Sep 2022 14:57:22 +0200 (CEST)
+Date:   Wed, 21 Sep 2022 14:57:22 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] phy: marvell: phy-mvebu-a3700-comphy: Reset COMPHY
+ registers before USB 3.0 power on
+Message-ID: <20220921125722.enp2tffhuz55enwv@pali>
+References: <20220920121154.30115-1-pali@kernel.org>
+ <20220921050300.riwyofdncxscrwe3@shindev>
+ <20220921080557.jdg5wywpa5qxcyo2@pali>
+ <20220921124457.26hjljy7fcv45zfk@shindev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YyrrE8vpFSR+kdHQ@gmail.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220921124457.26hjljy7fcv45zfk@shindev>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 21, 2022 at 12:44:35PM +0200, Ingo Molnar wrote:
-> 
-> * Peter Zijlstra <peterz@infradead.org> wrote:
-> 
-> > On Wed, Sep 21, 2022 at 08:08:55AM -0000, tip-bot2 for Jules Irenge wrote:
-> > > The following commit has been merged into the perf/core branch of tip:
+On Wednesday 21 September 2022 12:44:58 Shinichiro Kawasaki wrote:
+> On Sep 21, 2022 / 08:05, Pali Rohár wrote:
+> > On Wednesday 21 September 2022 05:03:01 Shinichiro Kawasaki wrote:
+> > > On Sep 20, 2022 / 14:11, Pali Rohár wrote:
+> > > > Turris MOX board with older ARM Trusted Firmware version v1.5 is not able
+> > > > to detect any USB 3.0 device connected to USB-A port on Mox-A module after
+> > > > commit 0a6fc70d76bd ("phy: marvell: phy-mvebu-a3700-comphy: Remove broken
+> > > > reset support"). On the other hand USB 2.0 devices connected to the same
+> > > > USB-A port are working fine.
+> > > > 
+> > > > It looks as if the older firmware configures COMPHY registers for USB 3.0
+> > > > somehow incompatibly for kernel driver. Experiments show that resetting
+> > > > COMPHY registers via setting SFT_RST auto-clearing bit in COMPHY_SFT_RESET
+> > > > register fixes this issue.
+> > > > 
+> > > > Reset the COMPHY in mvebu_a3700_comphy_usb3_power_on() function as a first
+> > > > step after selecting COMPHY lane and USB 3.0 function. With this change
+> > > > Turris MOX board can successfully detect USB 3.0 devices again.
+> > > > 
+> > > > Before the above mentioned commit this reset was implemented in PHY reset
+> > > > method, so this is the reason why there was no issue with older firmware
+> > > > version then.
+> > > > 
+> > > > Fixes: 0a6fc70d76bd ("phy: marvell: phy-mvebu-a3700-comphy: Remove broken reset support")
+> > > > Reported-by: Marek Behún <kabel@kernel.org>
+> > > > Signed-off-by: Pali Rohár <pali@kernel.org>
+> > > > ---
+> > > > Shinichiro, could you please check that all USB functionality still
+> > > > works correctly on your board?
+> > > > ---
 > > > 
-> > > Commit-ID:     678739d622ae7b75b62d550858b6bf104c43e2df
-> > > Gitweb:        https://git.kernel.org/tip/678739d622ae7b75b62d550858b6bf104c43e2df
-> > > Author:        Jules Irenge <jbi.octave@gmail.com>
-> > > AuthorDate:    Sun, 18 Sep 2022 00:41:08 +01:00
-> > > Committer:     Ingo Molnar <mingo@kernel.org>
-> > > CommitterDate: Wed, 21 Sep 2022 10:01:20 +02:00
+> > > Sure. TL;DR, this patch works ok for my espressobin v7 board.
 > > > 
-> > > perf/core: Convert snprintf() to scnprintf()
+> > > Tested-by: Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
 > > > 
-> > > Coccinelle reports a warning:
-> > > 
-> > >     WARNING: use scnprintf or sprintf
-> > > 
-> > > Adding to that, there has also been some slow migration from snprintf to scnprintf.
-> > > 
-> > > This LWN article explains the rationale for this change:
-> > > 
-> > >     https: //lwn.net/Articles/69419/
-> > > 
-> > > No change in behavior.
-> > > 
-> > > [ mingo: Improved the changelog. ]
+> > > I prepared base kernel v5.19.10 applying the commit 0a6fc70d76bd. Regardless
+> > > whether this fix patch for Turrix MOX board is applied or not, two USB ports on
+> > > my esprssobin v7 board worked as expected. I confirmed it by using USB thumb
+> > > drive. The drive was detected and its partition was mounted successfully using
+> > > either of the two USB ports.
 > > 
-> > And yet, at this point I still have no clue what's wrong with
-> > snprintf(). So not much improvement :/
+> > Thank you for testing! Anyway, please check that USB 3.0 device is
+> > working fine. Because as I wrote in commit message, on Turris Mox was
+> > USB 2.0 device working fine, but USB 3.0 not. And maybe check in system
+> > (lsusb) that USB 3.0 device was really detected as USB 3.0 because USB
+> > 3.0 devices have supported also fallback USB 2.0/1.x legacy mode.
 > 
-> I've added this to the changelog:
+> Ah, I see. For that check, I connected my USB 3.1 drive to the USB 3.0 port of
+> my espressobin, then checked 'lsusb -vt' and sysfs:
 > 
->     perf/core: Convert snprintf() to scnprintf()
+> $ lsusb -vt
+> /:  Bus 03.Port 1: Dev 1, Class=root_hub, Driver=xhci-hcd/1p, 5000M
+>     ID 1d6b:0003 Linux Foundation 3.0 root hub
+>     |__ Port 1: Dev 2, If 0, Class=Mass Storage, Driver=usb-storage, 5000M
+>         ID 0781:5583 SanDisk Corp. Ultra Fit
+> /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci-hcd/1p, 480M
+>     ID 1d6b:0002 Linux Foundation 2.0 root hub
+> /:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=orion-ehci/1p, 480M
+>     ID 1d6b:0002 Linux Foundation 2.0 root hub
+> 
+> $ cat /sys/bus/usb/devices/3-1/version 
+>  3.00
+> 
+> USB3 port is listed under the Bus 03, "3.0" root hub. According to sysfs, its
+> USB version is 3.00. I observed same outputs with and without the patch for
+> Turris MOX board.
+> 
+> Are these good enough? If other check is needed, please let me know.
 
-I'm not sure if it would apply in this case as it's for a device
-attribute, but there's another helper sysfs_emit that does the safe
-print to string and one does not have to care which flavor of s*printf
-it is. We had patches in btrfs converting from snprintf to scnprintf and
-the latest one is sysfs_emit which is convenient to use but assumes the
-PAGE_SIZE of the buffer.
+Perfect, that is enough! If USB 3.1 drive is detected and working then
+everything is OK.
