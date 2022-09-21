@@ -2,83 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E0245BFF6E
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 16:00:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0785B5BFF75
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 16:02:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229503AbiIUOAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 10:00:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54228 "EHLO
+        id S229675AbiIUOCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 10:02:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230398AbiIUN7s (ORCPT
+        with ESMTP id S229525AbiIUOCd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 09:59:48 -0400
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CCBA85AB7;
-        Wed, 21 Sep 2022 06:59:10 -0700 (PDT)
-Received: by mail-pl1-f175.google.com with SMTP id p18so5741177plr.8;
-        Wed, 21 Sep 2022 06:59:10 -0700 (PDT)
+        Wed, 21 Sep 2022 10:02:33 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465F78993C;
+        Wed, 21 Sep 2022 07:02:32 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id i15-20020a17090a4b8f00b0020073b4ac27so5940895pjh.3;
+        Wed, 21 Sep 2022 07:02:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date;
+        bh=TjMGlzRi9/9H0RzSJ0Wk0DHEdZrEgqy/4cen7DiALFs=;
+        b=Yrru6+VrnZ/wP8pnwqrXKsJKkW6kdD/tpUGsMJEl96p9dMyaRXP5KneH8C095U3VFp
+         xgWHy4+SOlte1Mu7JWRAqPPiqo8fm9TULHP3/KDiHj0zXpYCw19NjNJjP0c6oJDErGUD
+         P8MPQwoslH2qQPE+TOIiDCquWmQhsCvH+I3gfdpTjPHb5AQYB9K/EmBIUmpo/1RH/FwW
+         MnPwHn8uTQ7nRmC+wQgVoPVw/LMMHASUvfQWnHJZu6K1EdH9lz4Ai3iujY7zfOiqHAF/
+         kOx9Vfms1TLec8cGdwSSfjM+6hnMAp2FoksgUp/0iaXT25e2gll+JfFecBiVR4DVmlLo
+         Mr4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=XcrH19rkVkrzaIEdLr1nJOEgaNcx3faC+s92DUduPqk=;
-        b=hE2c9DMooRXpSNFD1KneZwNWLmPJ8xVyj+7qAHpkSA/mtAqBWnvcv31l8TNp7IYh1F
-         4ysi0r3/ygFuW7dOZeXgCE32HNKKzZIvQAREsx/x1O3LlZc1BVm5KYPdnx4Ux/2cUGyv
-         OoKxI3cV1x4lKyccZsHeBWrvwakOY6oNuMsqZaN4J+MICn/UqP6jtOOnEAUaSC1Gsh8y
-         GWk9+YJ6JuwUdfDrp0VQYLdPZuBLpCs0qmxzYDGd+5kk2cbCwDsINSY3d8HfYJ3gNkzp
-         KNxLfLgIr/dBI4Nqs0VhzXojXTw0exYh/V9Ld6Fh0OtpYt18tSzhftUm6f8Fr0445V6H
-         ZEvQ==
-X-Gm-Message-State: ACrzQf0TFE87PiV0oNHOCZ3HKmf85+/xdRtM8mh3MqtD9h5VRu9us7bD
-        /4nIwiZKlrOCAcBTGgMIox8=
-X-Google-Smtp-Source: AMsMyM4yJW6okjrqzTegmVWGzcvp8/Ui57uAp7IyEAXUrUXvQ5UGb9vl+nrXHWlQrpeWdoxBRwHsLw==
-X-Received: by 2002:a17:902:7c05:b0:178:1f92:288e with SMTP id x5-20020a1709027c0500b001781f92288emr4859560pll.92.1663768749275;
-        Wed, 21 Sep 2022 06:59:09 -0700 (PDT)
-Received: from [192.168.3.219] ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id b7-20020a170903228700b0016c78f9f024sm2106648plh.104.2022.09.21.06.59.07
+         :sender:x-gm-message-state:from:to:cc:subject:date;
+        bh=TjMGlzRi9/9H0RzSJ0Wk0DHEdZrEgqy/4cen7DiALFs=;
+        b=NCkw+KdAcjRaeOQDOoezzoFetxyYg5B6JCv606agrJaCgUxKE4M+c7OvucOagdmoWw
+         Qvg8Zo/Veiegr0SXHZTBbK5rjQss+C4D2ppTlopB8IDYwcDKFOOGxbLTikShNik/9sNe
+         5zqbIDfn8RwV1mzWtb2sELNrhwmbm86pBxAPTO4tIZoWYE5B2Zwz9Mh2I6ynOFNWngsB
+         SxYv3hWaWUh9aAGrCeIQ4kPD04+Gm/ke3MobjxVKfFrXcebQrOTFkx+WnMVLWPRqIFW4
+         ITPUXU01Fc5Y90AreHIj5ZfNU6kHZfe3AnxwlxnRn1XKCyVk2fjFixOayKgy+Uie3UHm
+         GKBA==
+X-Gm-Message-State: ACrzQf11Ap6RVTKQ2VeurYu6WNyNg4saToaxeZIRR2gx579m1wjwNmAi
+        YQYMNAyPOAhzuIvsunjKo4Fy/DMMGci0OQ==
+X-Google-Smtp-Source: AMsMyM73J4VT9C2uxUqDTrHQMocE0+BLNyq35dD0FtisGQcq02O3lz0Kgb7f/2XCtQ/1d7sQkREpjQ==
+X-Received: by 2002:a17:902:ceca:b0:177:fa1f:4abc with SMTP id d10-20020a170902ceca00b00177fa1f4abcmr4948576plg.99.1663768951780;
+        Wed, 21 Sep 2022 07:02:31 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c85-20020a621c58000000b0053653c6b9f9sm2114779pfc.204.2022.09.21.07.02.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Sep 2022 06:59:08 -0700 (PDT)
-Message-ID: <cbe64efd-9fef-70a7-898b-995acfd2f88e@acm.org>
-Date:   Wed, 21 Sep 2022 06:59:07 -0700
+        Wed, 21 Sep 2022 07:02:30 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <57f5b28d-3a21-3d1e-422d-d79eebefb8e5@roeck-us.net>
+Date:   Wed, 21 Sep 2022 07:02:27 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH v2] scsi: ufs: Remove redundant function definitions from
- ufshcd.h
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] hwmon: (mr75203) fix undefined reference to `__divdi3'
 Content-Language: en-US
-To:     Arthur Simchaev <Arthur.Simchaev@wdc.com>,
-        martin.petersen@oracle.com
-Cc:     -cc=avri.altman@wdc.com, Avi.Shchislowski@wdc.com,
-        beanhuo@micron.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1663761485-2532-1-git-send-email-Arthur.Simchaev@wdc.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <1663761485-2532-1-git-send-email-Arthur.Simchaev@wdc.com>
+To:     Eliav Farber <farbere@amazon.com>, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        andriy.shevchenko@intel.com, sudipm.mukherjee@gmail.com
+Cc:     hhhawa@amazon.com, jonnyc@amazon.com,
+        kernel test robot <lkp@intel.com>
+References: <20220921121723.6726-1-farbere@amazon.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220921121723.6726-1-farbere@amazon.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/21/22 04:58, Arthur Simchaev wrote:
-> v1->v2: Remove redundant comment, modify commit message
+On 9/21/22 05:17, Eliav Farber wrote:
+> Fix build error on 32-bit machines.
 > 
-> This patch removes Query-Request API functions declaration from
-> include/ufs/ufshcd.h. Those declarations solely to
-> ufs core private header.
+> Fixes: 381a86c545f1 ("hwmon: (mr75203) modify the temperature equation according to series 5 datasheet")
+> Signed-off-by: Eliav Farber <farbere@amazon.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+
+Applied.
+
+> ---
+> I will also rework it into the original series (since it's not just a
+> trivial squash into one previous commit) and you can decide what to use
+> according to your preference.
 > 
-> Signed-off-by: Arthur Simchaev <Arthur.Simchaev@wdc.com>
-> Reviewed-by: Bean Huo <beanhuo@micron.com>
 
-The changelog (v1->v2) should occur under the three hyphens (---) and 
-Reviewed-by tags should occur before the Signed-off-by tag.
+I rather keep this patch separate.
 
-Anyway:
+Thanks,
+Guenter
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+>   drivers/hwmon/mr75203.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
+> index 0fea443dc3e1..9c400cf790b5 100644
+> --- a/drivers/hwmon/mr75203.c
+> +++ b/drivers/hwmon/mr75203.c
+> @@ -266,9 +266,9 @@ static long pvt_calc_temp(struct pvt_device *pvt, u32 nbs)
+>   	struct temp_coeff *ts_coeff = &pvt->ts_coeff;
+>   
+>   	s64 tmp = ts_coeff->g +
+> -		ts_coeff->h * (s64)nbs / ts_coeff->cal5 -
+> +		div_s64(ts_coeff->h * (s64)nbs, ts_coeff->cal5) -
+>   		ts_coeff->h / 2 +
+> -		ts_coeff->j * (s64)pvt->ip_freq / HZ_PER_MHZ;
+> +		div_s64(ts_coeff->j * (s64)pvt->ip_freq, HZ_PER_MHZ);
+>   
+>   	return clamp_val(tmp, PVT_TEMP_MIN_mC, PVT_TEMP_MAX_mC);
+>   }
+
