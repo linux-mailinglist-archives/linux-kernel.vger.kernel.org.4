@@ -2,140 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 381235BFB9F
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 11:49:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D958A5BFB9A
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 11:48:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231526AbiIUJs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 05:48:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44984 "EHLO
+        id S229716AbiIUJr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 05:47:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231842AbiIUJsN (ORCPT
+        with ESMTP id S231789AbiIUJrg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 05:48:13 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA80D95E42
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 02:45:30 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id lc7so12472865ejb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 02:45:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=qcQnQhLaO6fGinlzAYyFGlxrfQHdXifdne2D0+nwBo8=;
-        b=BtZBIL1KHuomtHqRQXk7130LxJRBG6iEPPC108i/uUc1zv4vtgKCRLoo92bcByFpIF
-         vI0ROss4+TZ0r+d44NYvZKCBsnoPZuAaj06CgUJ7JbIbTHS5sVUVr4LxWDMIW18cS9Bl
-         pieAUjljj9sMT9Hasg62luiSjPpBOsazARnp17BOwJkZeYBc6tUKcrI+m7W7QL2jDWhp
-         nIJDgX1yQ527pxCDbpF1FQo+d5dPY+mc/sTH5NJtyfswXR39RJ+Snip4BC2SultPg1cT
-         pcqBmuDE3fTWldjF7WFhFQPW2KMdJTYPj+AwyAWjg0M1DT25+IKfP54wYaJJpaTXj8ph
-         E+dA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=qcQnQhLaO6fGinlzAYyFGlxrfQHdXifdne2D0+nwBo8=;
-        b=NXIAfnSiPU6krlxhyH3sdx3/uTrZwd8arEfbxGOJpdtnzQbN7GAFSNWBeU95s19UoB
-         vuqudyftD5ilH8eZMXLe5QdeAX4GS75ZK+F2eUMsqNU7S27lSFFLBgz9buZXrpUBxdjl
-         SliTMyJ35cmQH8qBALHP9yEYoItsuHRpVbPVi36tMqL/+eaIY8Qpgk0optwknjmNKIDA
-         s7spaUd0HxnyOM7uu0rPaegcXxLATYXxuvQALjtEbiN9j+thY73bTWWvG5X1z6DsXwPK
-         nnFMXkTFYhA9Br5DNs3CRUghXUtM96cehdKMZjQAzPS0pfoWFNgn5HDuGDy6FfFtmJoN
-         yWVA==
-X-Gm-Message-State: ACrzQf1nT6d0ozAtGHCsrGuBszc4wboOy8HBDbA++KGx0lA4OVV6aAap
-        SQiHHzRRw2XHUT2alZ+A99/nwUuWdLxi9kW8nUk/kg==
-X-Google-Smtp-Source: AMsMyM5SFTgTYiX8ufQU/7T9uAxbJb2nQtH8wwq24aVCveMh7Phf3u4mkG9wFMawfgPj/2o3XFsj+LE+O93wVevFl1c=
-X-Received: by 2002:a17:906:fd8b:b0:779:dcbe:3a9d with SMTP id
- xa11-20020a170906fd8b00b00779dcbe3a9dmr20557155ejb.235.1663753505689; Wed, 21
- Sep 2022 02:45:05 -0700 (PDT)
+        Wed, 21 Sep 2022 05:47:36 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0253E915E9
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 02:44:53 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 50DD3139F;
+        Wed, 21 Sep 2022 02:44:58 -0700 (PDT)
+Received: from [10.57.17.233] (unknown [10.57.17.233])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D40383F73D;
+        Wed, 21 Sep 2022 02:44:50 -0700 (PDT)
+Message-ID: <ad42d19d-959c-61b4-8581-02ce0990c23f@arm.com>
+Date:   Wed, 21 Sep 2022 10:44:48 +0100
 MIME-Version: 1.0
-References: <20220817080757.352021-1-bchihi@baylibre.com> <20220817080757.352021-3-bchihi@baylibre.com>
- <716d6471-f0e2-489e-5f9e-9e38e9e7953a@collabora.com> <CAGuA+orxfcycwcUMpLe+dkjnXPQkELQsz0vBggGKTQ04XRGc+g@mail.gmail.com>
- <2073b6bd-a4bd-4ab5-300d-2ce989e25d5f@linaro.org>
-In-Reply-To: <2073b6bd-a4bd-4ab5-300d-2ce989e25d5f@linaro.org>
-From:   Balsam CHIHI <bchihi@baylibre.com>
-Date:   Wed, 21 Sep 2022 11:44:29 +0200
-Message-ID: <CAGuA+or40GSH2QvVw033+KsGC-B9D6nRYj8zXvTs91iNDqgr8Q@mail.gmail.com>
-Subject: Re: [PATCH v9,2/7] dt-bindings: thermal: Add dt-binding document for
- LVTS thermal controllers
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, rafael@kernel.org,
-        rui.zhang@intel.com, daniel.lezcano@linaro.org, amitk@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        khilman@baylibre.com, mka@chromium.org, robh+dt@kernel.org,
-        krzk+dt@kernel.org, matthias.bgg@gmail.com, p.zabel@pengutronix.de,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
-        fan.chen@mediatek.com, louis.yu@mediatek.com,
-        rex-bc.chen@mediatek.com, abailon@baylibre.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] lib/vdso: use "grep -E" instead of "egrep"
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+References: <20220920170633.3133829-1-gregkh@linuxfoundation.org>
+From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
+In-Reply-To: <20220920170633.3133829-1-gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof, Angelo,
+On 9/20/22 18:06, Greg Kroah-Hartman wrote:
+> The latest version of grep claims the egrep is now obsolete so the build
+> now contains warnings that look like:
+> 	egrep: warning: egrep is obsolescent; using grep -E
+> fix this up by moving the vdso Makefile to use "grep -E" instead.
+> 
+> Cc: Andy Lutomirski <luto@kernel.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
 
-Thank you for the suggestions.
+Reviewed-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
 
-I tested this (below) and it worked without any problem.
-"make DT_CHECKER_FLAGS=-m dt_binding_check
-DT_SCHEMA_FILES=Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml"
-"make dtbs_check
-DT_SCHEMA_FILES=Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml"
-Should I keep it like this and submit it in v10?
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+>  lib/vdso/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/lib/vdso/Makefile b/lib/vdso/Makefile
+> index c415a685d61b..e814061d6aa0 100644
+> --- a/lib/vdso/Makefile
+> +++ b/lib/vdso/Makefile
+> @@ -17,6 +17,6 @@ $(error ARCH_REL_TYPE_ABS is not set)
+>  endif
+>  
+>  quiet_cmd_vdso_check = VDSOCHK $@
+> -      cmd_vdso_check = if $(OBJDUMP) -R $@ | egrep -h "$(ARCH_REL_TYPE_ABS)"; \
+> +      cmd_vdso_check = if $(OBJDUMP) -R $@ | grep -E -h "$(ARCH_REL_TYPE_ABS)"; \
+>  		       then (echo >&2 "$@: dynamic relocations are not supported"; \
+>  			     rm -f $@; /bin/false); fi
 
-[...]
-nvmem-cells:
-  minItems: 1
-  items:
-    - description: Calibration eFuse data 1 for LVTS
-    - description: Calibration eFuse data 2 for LVTS
-
-nvmem-cell-names:
-  minItems: 1
-  items:
-    - const: lvts-calib-data-1
-    - const: lvts-calib-data-2
-
-"#thermal-sensor-cells":
-  const: 1
-
-allOf:
-  - $ref: thermal-sensor.yaml#
-
-- if:
-  properties:
-    compatible:
-      contains:
-        enum:
-          - mediatek,mt8192-lvts-ap
-          - mediatek,mt8192-lvts-mcu
-  then:
-    properties:
-      nvmem-cells:
-        maxItems: 1
-
-     nvmem-cell-names:
-       maxItems: 1
-
-  - if:
-    properties:
-      compatible:
-        contains:
-          enum:
-           - mediatek,mt8195-lvts-ap
-           - mediatek,mt8195-lvts-mcu
-  then:
-    properties:
-      nvmem-cells:
-        maxItems: 2
-
-     nvmem-cell-names:
-       maxItems: 2
-[...]
-
-Best regards,
-Balsam
+-- 
+Regards,
+Vincenzo
