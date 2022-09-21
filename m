@@ -2,128 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62EAB5BFEF5
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 15:31:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79CEB5BFF11
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 15:43:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230237AbiIUNbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 09:31:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52876 "EHLO
+        id S229771AbiIUNnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 09:43:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbiIUNbf (ORCPT
+        with ESMTP id S229580AbiIUNnH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 09:31:35 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20128A7EC;
-        Wed, 21 Sep 2022 06:31:33 -0700 (PDT)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MXfQV1SXLzHp5r;
-        Wed, 21 Sep 2022 21:29:22 +0800 (CST)
-Received: from huawei.com (10.175.127.227) by dggpeml500021.china.huawei.com
- (7.185.36.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 21 Sep
- 2022 21:31:31 +0800
-From:   Baokun Li <libaokun1@huawei.com>
-To:     <linux-ext4@vger.kernel.org>
-CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>, <jack@suse.cz>,
-        <ritesh.list@gmail.com>, <lczerner@redhat.com>,
-        <enwlinux@gmail.com>, <linux-kernel@vger.kernel.org>,
-        <yi.zhang@huawei.com>, <yebin10@huawei.com>,
-        <chengzhihao1@huawei.com>, <yukuai3@huawei.com>,
-        <libaokun1@huawei.com>
-Subject: [PATCH] ext4: fix use-after-free in ext4_ext_shift_extents
-Date:   Wed, 21 Sep 2022 21:42:18 +0800
-Message-ID: <20220921134218.3577001-1-libaokun1@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Wed, 21 Sep 2022 09:43:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F60B6D567
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 06:43:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663767786;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WbvVISdR0D5SgVri2kvUMTbYwrsa/O3VMAKDVY30tWE=;
+        b=MyfhgBuVgQXk9wN7FfeHxabYQyMgBFEGiuBkmA9ob2hopvllxgQgGgoWw+YCVOg47HP3Ta
+        m4Zl8czKAqlH2OSdBUFLBR6ZIviA8VtvWRnGhbNYZRffmjFmn3qrN0fXVlq7N5BMcJaIMD
+        f2NRmnOagTYgbUe19b+Kcw9ggIbikLc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-621-mu9sk1t3P66-vQ7fqDjLSg-1; Wed, 21 Sep 2022 09:43:03 -0400
+X-MC-Unique: mu9sk1t3P66-vQ7fqDjLSg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 73FA8803520;
+        Wed, 21 Sep 2022 13:43:02 +0000 (UTC)
+Received: from sirius.home.kraxel.org (unknown [10.39.192.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9AA17111D3DB;
+        Wed, 21 Sep 2022 13:42:47 +0000 (UTC)
+Received: by sirius.home.kraxel.org (Postfix, from userid 1000)
+        id 3A5B31800081; Wed, 21 Sep 2022 15:42:46 +0200 (CEST)
+Date:   Wed, 21 Sep 2022 15:42:46 +0200
+From:   Gerd Hoffmann <kraxel@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] kvm/x86: reserve bit
+ KVM_HINTS_PHYS_ADDRESS_SIZE_DATA_VALID
+Message-ID: <20220921134246.xibospqoktp4wjie@sirius.home.kraxel.org>
+References: <20220908114146.473630-1-kraxel@redhat.com>
+ <YxoBtD+3sgEEiaFF@google.com>
+ <20220909050224.rzlt4x7tjrespw3k@sirius.home.kraxel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml500021.china.huawei.com (7.185.36.21)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220909050224.rzlt4x7tjrespw3k@sirius.home.kraxel.org>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the starting position of our insert range happens to be in the hole
-between the two ext4_extent_idx, because the lblk of the ext4_extent in
-the previous ext4_extent_idx is always less than the start, which leads
-to the "extent" variable access across the boundary, the following UAF is
-triggered:
-==================================================================
-BUG: KASAN: use-after-free in ext4_ext_shift_extents+0x257/0x790
-Read of size 4 at addr ffff88819807a008 by task fallocate/8010
-CPU: 3 PID: 8010 Comm: fallocate Tainted: G            E     5.10.0+ #492
-Call Trace:
- dump_stack+0x7d/0xa3
- print_address_description.constprop.0+0x1e/0x220
- kasan_report.cold+0x67/0x7f
- ext4_ext_shift_extents+0x257/0x790
- ext4_insert_range+0x5b6/0x700
- ext4_fallocate+0x39e/0x3d0
- vfs_fallocate+0x26f/0x470
- ksys_fallocate+0x3a/0x70
- __x64_sys_fallocate+0x4f/0x60
- do_syscall_64+0x33/0x40
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-==================================================================
+On Fri, Sep 09, 2022 at 07:02:24AM +0200, Gerd Hoffmann wrote:
+> On Thu, Sep 08, 2022 at 02:52:36PM +0000, Sean Christopherson wrote:
+> > On Thu, Sep 08, 2022, Gerd Hoffmann wrote:
+> > > -#define KVM_HINTS_REALTIME      0
+> > > +#define KVM_HINTS_REALTIME                      0
+> > > +#define KVM_HINTS_PHYS_ADDRESS_SIZE_DATA_VALID  1
+> > 
+> > Why does KVM need to get involved?  This is purely a userspace problem.
+> 
+> It doesn't.  I only need reserve a hints bit, and the canonical source
+> for that happens to live in the kernel.  That's why this patch doesn't
+> touch any actual code ;)
+> 
+> > E.g. why not use QEMU's fw_cfg to communicate this information to the
+> > guest?
+> 
+> That is indeed the other obvious way to implement this.  Given this
+> information will be needed in code paths which already do CPUID queries
+> using CPUID to transport that information looked like the better option
+> to me.
 
-To solve this issue, when the ee_block of the last extent is less than
-the start, exit the loop in advance to avoid UAF.
+I'd like to move forward with this.
 
-Fixes: 331573febb6a ("ext4: Add support FALLOC_FL_INSERT_RANGE for fallocate")
-Signed-off-by: Baokun Li <libaokun1@huawei.com>
-Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
----
-We can try to reproduce this problem by following the steps below:
-1. Create an ext4 containing two ext4_extent_idx
- mkfs.ext4 -F -O ^resize_inode,meta_bg,^sparse_super,^has_journal,^metadata_csum,quota,ea_inode -b 1024 -I 128 /dev/sda 4G
- mount /dev/sda /tmp/test
- touch file
- dd if=/dev/urandom of=/tmp/test/file bs=1k count=800000
- sync
- echo 3 > /proc/sys/vm/drop_caches
+So, any comment further comments and opinions?
+Is it ok to grab a hints bit given the explanation above?
+Or should I go for the fw_cfg approach?
 
-2. Create a hole between two ext4_extent_idx, 528482304 is the starting position of idx2
- fallocate -i -o 528482304 -l 10M /tmp/test/file
-
-3. Keep moving right to make variable extent out of bounds
- for i in `seq 0 500000`; do fallocate -i -o $[ 533725184 + 5242880 * i ] -l 10M /tmp/test/file ;done
-
-4. Execute "drop_caches" in another window try to trigger UAF
- echo 3 > /proc/sys/vm/drop_caches
-
- fs/ext4/extents.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
-
-diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
-index c148bb97b527..25fc1f4b35a5 100644
---- a/fs/ext4/extents.c
-+++ b/fs/ext4/extents.c
-@@ -5216,11 +5216,18 @@ ext4_ext_shift_extents(struct inode *inode, handle_t *handle,
- 		}
- 
- 		tmp = *iterator;
-+		extent = EXT_LAST_EXTENT(path[depth].p_hdr);
- 		if (SHIFT == SHIFT_LEFT) {
--			extent = EXT_LAST_EXTENT(path[depth].p_hdr);
- 			*iterator = le32_to_cpu(extent->ee_block) +
- 					ext4_ext_get_actual_len(extent);
- 		} else {
-+			/*
-+			 * start happens to be in the hole between
-+			 * the two ext4_extent_idx.
-+			 */
-+			if (le32_to_cpu(extent->ee_block) < start)
-+				break;
-+
- 			extent = EXT_FIRST_EXTENT(path[depth].p_hdr);
- 			if (le32_to_cpu(extent->ee_block) > 0)
- 				*iterator = le32_to_cpu(extent->ee_block) - 1;
--- 
-2.31.1
+thanks & take care,
+  Gerd
 
