@@ -2,165 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B8965BF29C
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 03:15:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F3AD5BF29E
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 03:16:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbiIUBPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 21:15:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53662 "EHLO
+        id S230368AbiIUBQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 21:16:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbiIUBPA (ORCPT
+        with ESMTP id S229669AbiIUBP5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 21:15:00 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBB351A380;
-        Tue, 20 Sep 2022 18:14:52 -0700 (PDT)
-X-UUID: 00dbde89468e48c8980368407c5174c2-20220921
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=ktfKjkuCSlQ6+XBcD3iNIlUZc9IseljbIXo3FqlLINs=;
-        b=ONomnynQNKYp/OtLRjDQSsdjunAulXc1ExepZW83eEyolFjTf/K2V4hU9q+NGLNwuri/TnbdNG4N7UITHO9xQ0jAi5EAWM4rEpM46EguIoWOcOXrFQDT0rfE8KMxckJJc0xDRl3ihTdZCjWQSkdl27exgzBUw3VjdEsdIrJ6j2k=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:a6447ef3-ae29-4966-8222-13df92a4bb1b,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:39a5ff1,CLOUDID:ffe915f7-6e85-48d9-afd8-0504bbfe04cb,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 00dbde89468e48c8980368407c5174c2-20220921
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
-        (envelope-from <jianguo.zhang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 423726621; Wed, 21 Sep 2022 09:14:47 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Wed, 21 Sep 2022 09:14:46 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 21 Sep 2022 09:14:45 +0800
-Message-ID: <63ca556b81bc2874d3f0a5b87ee0e2f7a4fdeb18.camel@mediatek.com>
-Subject: Re: [PATCH 1/2] dt-bindings: net: mediatek-dwmac: add support for
- mt8188
-From:   Jianguo Zhang <jianguo.zhang@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Biao Huang <biao.huang@mediatek.com>, <netdev@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Date:   Wed, 21 Sep 2022 09:14:44 +0800
-In-Reply-To: <3ed55b0d-6c14-79a1-b4c1-5764c667d195@collabora.com>
-References: <20220920083617.4177-1-jianguo.zhang@mediatek.com>
-         <20220920083617.4177-2-jianguo.zhang@mediatek.com>
-         <3ed55b0d-6c14-79a1-b4c1-5764c667d195@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 20 Sep 2022 21:15:57 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65EF2606B0
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 18:15:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663722956; x=1695258956;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=e26F26g8QmxrZhvE6Nka2LOszyC14tafaQA1+o5P0mM=;
+  b=a5BOeZxDCf1gjOzaqF+a3cRtC3GRPeZMmuEvAFFklgt31NLi90OAoy2U
+   pMGy8XZ32XJiCs6jkY6QfqbKdNMYfr9v6PNkGoPF+PczMIreHWIV1hhfX
+   npKR7vNOZQsjFfy4W8sENd1R3boueZ/Fyrl1bw/R3w6hrmbwMPp8Rl7TD
+   p66wycWplrt+Hhaq6v36pkhC5RwCdqk1GXbYR3oL3AwJ38zyLLn1s/80n
+   LCyvx5y6SdPiCinmrK9sEhedRRKuEq/0drK5XKwxfZdleh9Pd24jYmp9/
+   BVgqsx7BVLOi1xp28xYoQ05t1OG3BlzfxZEGApSVL3lawQbn2c7KFUnwG
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10476"; a="298585609"
+X-IronPort-AV: E=Sophos;i="5.93,332,1654585200"; 
+   d="scan'208";a="298585609"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 18:15:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,332,1654585200"; 
+   d="scan'208";a="947925168"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 20 Sep 2022 18:15:53 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oaoLA-00035l-2y;
+        Wed, 21 Sep 2022 01:15:52 +0000
+Date:   Wed, 21 Sep 2022 09:14:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:paulmck/linux-rcu/dev.2022.09.03a 36/36]
+ kernel/rcu/srcutree.c:647:1: error: use of undeclared identifier 'u'
+Message-ID: <202209210942.YUFSaizJ-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,T_SPF_TEMPERROR,
-        UNPARSEABLE_RELAY,URIBL_CSS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear AngeloGioacchino
+tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/dev.2022.09.03a
+head:   607762184099b5d0b6765f69673fafa1d7eb4d30
+commit: 607762184099b5d0b6765f69673fafa1d7eb4d30 [36/36] srcu: Check for consistent per-CPU per-srcu_struct NMI safety
+config: arm-randconfig-r013-20220921 (https://download.01.org/0day-ci/archive/20220921/202209210942.YUFSaizJ-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/ammarfaizi2/linux-block/commit/607762184099b5d0b6765f69673fafa1d7eb4d30
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/dev.2022.09.03a
+        git checkout 607762184099b5d0b6765f69673fafa1d7eb4d30
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash kernel/rcu/
 
-	Thanks for your comment.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-On Tue, 2022-09-20 at 15:22 +0200, AngeloGioacchino Del Regno wrote:
-> Il 20/09/22 10:36, Jianguo Zhang ha scritto:
-> > Add binding document for the ethernet on mt8188
-> > 
-> > Signed-off-by: Jianguo Zhang <jianguo.zhang@mediatek.com>
-> > ---
-> >   .../devicetree/bindings/net/mediatek-dwmac.yaml        | 10
-> > ++++++++--
-> >   1 file changed, 8 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/net/mediatek-
-> > dwmac.yaml b/Documentation/devicetree/bindings/net/mediatek-
-> > dwmac.yaml
-> > index 61b2fb9e141b..eaf7e8d53432 100644
-> > --- a/Documentation/devicetree/bindings/net/mediatek-dwmac.yaml
-> > +++ b/Documentation/devicetree/bindings/net/mediatek-dwmac.yaml
-> > @@ -20,6 +20,7 @@ select:
-> >           enum:
-> >             - mediatek,mt2712-gmac
-> 
-> Please keep the list ordered by name. MT8188 goes before 8195.
-> 
-We will adjust the order in next version patches.
+All errors (new ones prefixed by >>):
 
-> >             - mediatek,mt8195-gmac
-> > +          - mediatek,mt8188-gmac
-> >     required:
-> >       - compatible
-> >   
-> > @@ -37,6 +38,11 @@ properties:
-> >             - enum:
-> >                 - mediatek,mt8195-gmac
-> >             - const: snps,dwmac-5.10a
-> > +      - items:
-> > +          - enum:
-> > +              - mediatek,mt8188-gmac
-> > +          - const: mediatek,mt8195-gmac
-> > +          - const: snps,dwmac-5.10a
-> >   
-> >     clocks:
-> >       minItems: 5
-> > @@ -74,7 +80,7 @@ properties:
-> >         or will round down. Range 0~31*170.
-> >         For MT2712 RMII/MII interface, Allowed value need to be a
-> > multiple of 550,
-> >         or will round down. Range 0~31*550.
-> > -      For MT8195 RGMII/RMII/MII interface, Allowed value need to
-> > be a multiple of 290,
-> > +      For MT8195/MT8188 RGMII/RMII/MII interface, Allowed value
-> > need to be a multiple of 290,
-> 
-> For MT8188/MT8195
-> 
-We will adjust the order in next version patches.
+>> kernel/rcu/srcutree.c:647:1: error: use of undeclared identifier 'u'
+   u);
+   ^
+   1 error generated.
 
-> >         or will round down. Range 0~31*290.
-> >   
-> >     mediatek,rx-delay-ps:
-> > @@ -84,7 +90,7 @@ properties:
-> >         or will round down. Range 0~31*170.
-> >         For MT2712 RMII/MII interface, Allowed value need to be a
-> > multiple of 550,
-> >         or will round down. Range 0~31*550.
-> > -      For MT8195 RGMII/RMII/MII interface, Allowed value need to
-> > be a multiple
-> > +      For MT8195/MT8188 RGMII/RMII/MII interface, Allowed value
-> > need to be a multiple
-> 
-> For MT8188/MT8195
-> 
-We will adjust the order in next version patches.
 
-> >         of 290, or will round down. Range 0~31*290.
-> >   
-> >     mediatek,rmii-rxc:
-> 
-> 
-BRS
-Jianguo
+vim +/u +647 kernel/rcu/srcutree.c
 
+   628	
+   629	/*
+   630	 * Check for consistent NMI safety.
+   631	 */
+   632	static void srcu_check_nmi_safety(struct srcu_struct *ssp, bool nmi_safe)
+   633	{
+   634		int nmi_safe_mask = 1 << nmi_safe;
+   635		int old_nmi_safe_mask;
+   636		struct srcu_data *sdp;
+   637	
+   638		if (!IS_ENABLED(CONFIG_PROVE_RCU))
+   639			return;
+   640		sdp = raw_cpu_ptr(ssp->sda);
+   641		old_nmi_safe_mask = READ_ONCE(sdp->srcu_nmi_safety);
+   642		if (!old_nmi_safe_mask) {
+   643			WRITE_ONCE(sdp->srcu_nmi_safety, nmi_safe_mask);
+   644			return;
+   645		}
+   646		WARN_ONCE(old_nmi_safe_mask != nmi_safe_mask, "CPU %d old state %d new state %d\n", sdp->cpu, old_nmi_safe_mask, nmi_safe_mask);
+ > 647	u);
+   648	}
+   649	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
