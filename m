@@ -2,145 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6673A5E563B
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 00:26:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FF675E5647
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 00:33:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230449AbiIUW0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 18:26:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41022 "EHLO
+        id S229741AbiIUWdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 18:33:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229641AbiIUW0N (ORCPT
+        with ESMTP id S229563AbiIUWdA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 18:26:13 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B557A8307;
-        Wed, 21 Sep 2022 15:26:12 -0700 (PDT)
+        Wed, 21 Sep 2022 18:33:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 739839A6BB;
+        Wed, 21 Sep 2022 15:32:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 964C0CE1FA1;
-        Wed, 21 Sep 2022 22:26:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BADBBC433C1;
-        Wed, 21 Sep 2022 22:26:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663799168;
-        bh=eCz+7ykAr0o97vQ4d0dHFt5bI+cqs4JXKrGw8rTT0kY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=SMY9Vp2hEevfHx7SItZiK0H97UQYuU6XDNkgha1jrNcrWVKHKhf6ZynvQ69JHD3mM
-         nmG5QkaXYWamQ7eiRzbbEoRgyMoZ5ozbvvEPZ6BPGvW7l7eZccpxwOCVM1Uyv6XtEr
-         L9hQnP5eEY4cJSvBllpUR8TL0KnGIIaa6UodDyBh0Uh7ReNb3RrAP7m4FWvKp8uw9k
-         bKVArTGw4dcwKw/GzR+7Zr7zVI39J1m7Pe4tMdpV3g/3f2iZN9CD3XDRjonbxmAyKU
-         bfccHxr2kppd3FnPjzmkQLl74yJWfBA9PySVzz45HEroLzbwNDyzT1t0JrC5JWO/CB
-         E+hjuMHGP5CeQ==
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Clark Williams <williams@redhat.com>,
-        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Dao <dqminh@cloudflare.com>,
-        Leo Yan <leo.yan@linaro.org>, Lieven Hey <lieven.hey@kdab.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: [GIT PULL] perf tools changes for v6.0: 4th batch
-Date:   Wed, 21 Sep 2022 23:26:00 +0100
-Message-Id: <20220921222600.29851-1-acme@kernel.org>
-X-Mailer: git-send-email 2.37.3
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0EA88B83335;
+        Wed, 21 Sep 2022 22:32:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F3FCC433D6;
+        Wed, 21 Sep 2022 22:32:55 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Z9tHNzdK"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1663799573;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xCLdxIJDdgK5TMm1FGBh4DcV2twQXChhVg3rbR78gBI=;
+        b=Z9tHNzdK3zxH3AP9r927EPZZleSQ4XQZaqI+CQPnqtNuOqunt8OteDYIBRJI+m8lh9xuuS
+        J+gTe+n2pZLYBJbDdCQKrnQCDmG9VCSCFrEf2XqMAGmLaU3om2+zG9DNW5j1Gmuuguc2UO
+        qKgbwt1wOTtvrG6xHaKIzEgJvWGZsV4=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 2a6eb7b2 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Wed, 21 Sep 2022 22:32:53 +0000 (UTC)
+Date:   Thu, 22 Sep 2022 00:32:49 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Sherry Yang <sherry.yang@oracle.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rt-users@vger.kernel.org,
+        Tejun Heo <tj@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Sebastian Siewior <bigeasy@linutronix.de>
+Cc:     Sebastian Siewior <bigeasy@linutronix.de>,
+        Jack Vogel <jack.vogel@oracle.com>,
+        Tariq Toukan <tariqt@nvidia.com>
+Subject: Re: 10% regression in qperf tcp latency after introducing commit
+ "4a61bf7f9b18 random: defer fast pool mixing to worker"
+Message-ID: <YyuREcGAXV9828w5@zx2c4.com>
+References: <B1BC4DB8-8F40-4975-B8E7-9ED9BFF1D50E@oracle.com>
+ <CAHmME9rUn0b5FKNFYkxyrn5cLiuW_nOxUZi3mRpPaBkUo9JWEQ@mail.gmail.com>
+ <04044E39-B150-4147-A090-3D942AF643DF@oracle.com>
+ <CAHmME9oKcqceoFpKkooCp5wriLLptpN=+WrrG0KcDWjBahM0bQ@mail.gmail.com>
+ <BD03BFF6-C369-4D34-A38B-49653F1CBC53@oracle.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <BD03BFF6-C369-4D34-A38B-49653F1CBC53@oracle.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Hi Sherry (and Sebastian and Netdev and Tejun and whomever),
 
-	Please consider pulling,
+I'm top-replying so that I can provide an overview of what's up to other
+readers, and then I'll leave your email below for additional context.
 
-Best regards,
+random.c used to have a hard IRQ handler that did something like this:
 
-- Arnaldo
+    do_some_stuff()
+    spin_lock()
+    do_some_other_stuff()
+    spin_lock()
 
-The following changes since commit 60891ec99e141b74544d11e897a245ef06263052:
+That worked fine, but Sebastian pointed out that having spinlocks in a
+hard IRQ handler was a big no-no for RT. Not wanting to make those into
+raw spinlocks, he suggested we hoist things into a workqueue. So that's
+what we did together, and now that function reads:
 
-  Merge tag 'for-6.0-rc6-tag' of git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux (2022-09-20 10:23:24 -0700)
+    do_some_stuff()
+    queue_work_on(raw_smp_processor_id(), other_stuff_worker);
 
-are available in the Git repository at:
+That seemed reasonable to me -- it's a pattern practiced a million times
+all over the kernel -- and is currently how random.c's
+add_interrupt_randomness() functions.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git tags/perf-tools-fixes-for-v6.0-2022-09-21
+Sherry, however, has reported a ~10% performance regression using qperf
+with TCP over some heavy duty infiniband cards. According to Sherry's
+tests, removing the call to queue_work_on() makes the performance
+regression go away.
 
-for you to fetch changes up to 999e4eaa4b3691acf85d094836260ec4b66c74fd:
+That leads me to suspect that queue_work_on() might actually not be as
+cheap as I assumed? If so, is that surprising to anybody else? And what
+should we do about this?
 
-  perf tools: Honor namespace when synthesizing build-ids (2022-09-21 16:08:00 -0300)
+Unfortunately, as you'll see from reading below, I'm hopeless in trying
+to recreate Sherry's test rig, and even Sherry was unable to reproduce
+it on different hardware. Nonetheless, a 10% regression on fancy 40gbps
+hardware seems like something worthy of wider concern.
 
-----------------------------------------------------------------
-perf tools fixes for v6.0: 4th batch
+What are our options? Investigate queue_work_on() bottlenecks? Move back
+to the original pattern, but use raw spinlocks? Some thing else?
 
-- Fix polling of system-wide events related to mixing per-cpu and per-thread
-  events.
+Sherry -- are you able to do a bit of profiling to see which
+instructions or which area of a function is the hottest or creating that
+bottleneck? I think we probably need more information to do something
+with this.
 
-- Do not check if /proc/modules is unchanged when copying /proc/kcore,
-  that doesn't get in the way of post processing analysis.
+Also, because I still have no idea how I can reproduce this myself, you
+might need to take the reigns with helping to develop and test a patch,
+since I'm kind of stabbing in the dark here.
 
-- Include program header in ELF files generated for JIT files, so that they can
-  be opened by tools using elfutils libraries.
+Anyway, because this might be rather involved, I figure it's best to
+move this conversation on list in case other folks have insights.
 
-- Enter namespaces when synthesizing build-ids.
+Regards,
+Jason
 
-- Fix some bugs related to a recent cpu_map overhaul where we should be
-  using an index and not the cpu number.
-
-- Fix BPF program ELF section name, using the naming expected by libbpf when
-  using BPF counters in 'perf stat'.
-
-- Add a new test for perf stat cgroup BPF counter.
-
-- Adjust check on 'perf test wp' for older kernels, where the
-  PERF_EVENT_IOC_MODIFY_ATTRIBUTES ioctl isn't supported.
-
-- Sync x86 cpufeatures with the kernel sources, no changes in tooling.
-
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-
-----------------------------------------------------------------
-Adrian Hunter (3):
-      perf record: Fix cpu mask bit setting for mixed mmaps
-      libperf evlist: Fix polling of system-wide events
-      perf kcore_copy: Do not check /proc/modules is unchanged
-
-Arnaldo Carvalho de Melo (1):
-      tools headers cpufeatures: Sync with the kernel sources
-
-Lieven Hey (1):
-      perf jit: Include program header in ELF files
-
-Namhyung Kim (6):
-      perf stat: Fix BPF program section name
-      perf stat: Fix cpu map index in bperf cgroup code
-      perf stat: Use evsel->core.cpus to iterate cpus in BPF cgroup counters
-      perf test: Add a new test for perf stat cgroup BPF counter
-      perf test: Skip wp modify test on old kernels
-      perf tools: Honor namespace when synthesizing build-ids
-
- tools/arch/x86/include/asm/cpufeatures.h         |  5 +-
- tools/lib/perf/evlist.c                          |  5 +-
- tools/perf/builtin-record.c                      |  2 +
- tools/perf/tests/shell/stat_bpf_counters_cgrp.sh | 83 ++++++++++++++++++++++++
- tools/perf/tests/wp.c                            | 10 ++-
- tools/perf/util/bpf_counter_cgroup.c             | 10 +--
- tools/perf/util/bpf_skel/bperf_cgroup.bpf.c      |  2 +-
- tools/perf/util/genelf.c                         | 14 ++++
- tools/perf/util/genelf.h                         |  4 ++
- tools/perf/util/symbol-elf.c                     |  7 +-
- tools/perf/util/synthetic-events.c               | 17 ++++-
- 11 files changed, 139 insertions(+), 20 deletions(-)
- create mode 100755 tools/perf/tests/shell/stat_bpf_counters_cgrp.sh
+On Wed, Sep 21, 2022 at 06:09:27PM +0000, Sherry Yang wrote:
+> > On Sep 20, 2022, at 7:44 AM, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> > 
+> > Anyway, a few questions:
+> > 1) Does the regression disappear if you change this line:
+> > - queue_work_on(raw_smp_processor_id(), system_highpri_wq, &fast_pool->mix);
+> > + schedule_work_on(raw_smp_processor_id(), &fast_pool->mix);
+> 
+> After applying this change, we still see performance regression there on linux-stable v5.15
+> 
+> > 
+> > 2) Does the regression disappear if you remove this line:
+> > - queue_work_on(raw_smp_processor_id(), system_highpri_wq, &fast_pool->mix);
+> > + //queue_work_on(raw_smp_processor_id(), system_highpri_wq, &fast_pool->mix);
+> 
+> After applying this change, we see performance get recovered on linux-stable v5.15.
+> 
+> > 
+> >> We could see performance regression there.
+> > 
+> > Can you give me some detailed instructions on how I can reproduce
+> > this? Can it be reproduced inside of a single VM using network
+> > namespaces, for example? Something like that would greatly help me
+> > nail this down. For example, if you can give me a bash script that
+> > does everything entirely on a single host?
+> We are dong qperf tcp latency test there. All test results above are collected from X7 server with Mellanox Technologies 
+> MT27500 Family [ConnectX-3] cards: 
+> Infiniband device 'mlx4_0' port 1 status: 
+> default gid: fe80:0000:0000:0000:0010:e000:0178:9eb1 
+> base lid: 0x6 
+> sm lid: 0x1 
+> state: 4: ACTIVE 
+> phys state: 5: LinkUp 
+> rate: 40 Gb/sec (4X QDR) 
+> link_layer: InfiniBand 
+> 
+> Cards are configured with IP addresses on private subnet for IPoIB 
+> performance testing. 
+> Regression identified in this bug is in TCP latency in this stack as reported 
+> by qperf tcp_lat metric: 
+> 
+> We have one system listen as a qperf server:
+> [root@yourQperfServer ~]# qperf
+> 
+> Have the other system connect to qperf server as a client (in this case, it’s X7 server with Mellanox card):
+> [root@yourQperfClient ~]# numactl -m0 -N0 qperf 20.20.20.101 -v -uu -ub --time 60 --wait_server 20 -oo msg_size:4K:1024K:*2 tcp_lat
+> 
+> However, our test team ran other experiments yesterday.
+> * Ran benchmark on X5-2 system over ixgbe interface 
+> * Ran 8 processes of the benchmark on the original system over the Mellanox card 
+> Both these experiments failed to reproduce the regression. This highlights that the regression is not seen over ethernet network devices 
+> and is only seen when running a single instance of the qperf benchmark.
