@@ -2,100 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05AA35BFC75
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 12:38:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D31BC5BFD4A
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 13:49:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230346AbiIUKh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 06:37:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43844 "EHLO
+        id S230192AbiIULtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 07:49:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbiIUKhy (ORCPT
+        with ESMTP id S229827AbiIULtV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 06:37:54 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABE08883F0;
-        Wed, 21 Sep 2022 03:37:52 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id D6A42240003;
-        Wed, 21 Sep 2022 10:37:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1663756671;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hRyV869MMgVK7tdzah/59H1NCr8I0pXUftnnb2Omlnw=;
-        b=BfwpWdFGgsgb6hcA0xwT4keRDMomtfabg9ZMIfH4FnLef2kMtqWK7Daop0sNNTzBuhLL8N
-        s23992Tiq5yUiGtoLj+i2TImgmcDkGg4sxoGmDZQxRA6N1FC4wIVpDveTeygb5Wju/9IHd
-        iG0Q3/wfT0RCQWF/PgHPqSsx49n+ymxi5MBdZ9NPH16LnpHkFwsrtbTCu2uoCUj3WthKLY
-        o5zszKzjLpYht9Nvp0bKhKvCFVZJ3T0lPxYC8EYToa0AZDn+fDLOuetKICQRKhgevkTWSx
-        IqJntZ5h0APBBEHjpxkEOhHhzPLGTLDFPcAz86Wxaa0895v6mCtLUXJAs/FEvg==
-Date:   Wed, 21 Sep 2022 12:37:45 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Michael Walle <michael@walle.cc>
-Cc:     Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Subject: Re: [RFC PATCH v2 19/20] nvmem: layouts: rewrite the u-boot-env
- driver as a NVMEM layout
-Message-ID: <20220921123745.61299d6a@xps-13>
-In-Reply-To: <20220901221857.2600340-20-michael@walle.cc>
-References: <20220901221857.2600340-1-michael@walle.cc>
-        <20220901221857.2600340-20-michael@walle.cc>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Wed, 21 Sep 2022 07:49:21 -0400
+Received: from mail.sconnect.com.au (mail.sconnect.com.au [103.101.168.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1C4795E5F;
+        Wed, 21 Sep 2022 04:48:17 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.sconnect.com.au (Postfix) with ESMTP id 1808B291FBB9;
+        Wed, 21 Sep 2022 20:38:50 +1000 (AEST)
+Received: from mail.sconnect.com.au ([127.0.0.1])
+        by localhost (mail.sconnect.com.au [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id Jzzo1bJxv86P; Wed, 21 Sep 2022 20:38:49 +1000 (AEST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.sconnect.com.au (Postfix) with ESMTP id C3835291FBA9;
+        Wed, 21 Sep 2022 20:38:46 +1000 (AEST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.sconnect.com.au C3835291FBA9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mail.sconnect.com.au; s=39ABBFB6-EEE4-11E8-B0D6-3EF6B7190DB6;
+        t=1663756726; bh=W/GvARc04ZPnD4B8eWYWtrSTF+TiaPBWKYHrLaGTP34=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=LY9seDDTqxGqUW1GglJVf/Z6+17v7hkLWkmZ4Z9K/eRj9mqkb7WO54We7AlLEIn/b
+         qqZ8Xx1FsEhLdm5/AyJ9N6EvL3SegxvU19PV13W2DPlK5MrxCe4R1oMPsCzmIVOQcQ
+         0y+nY4dkVy/xlbgd0EEwLr72GVltuXD8hR+1YTvVCOVwwt5LbPfG/ehIoynRRA2xHz
+         8WRc+cALy+MbWFoDF8sWysRhOhBLvwvUKumF1WID8n9YIXZdqxAP42Y26CcjTHlb6F
+         HeN71MInzp4mS56V3ZAYoYH6kIF/iSZKWgE2pKebkmdOlyea6tkykc2boS9tRge0mQ
+         gZVILQxbL1Wyg==
+X-Virus-Scanned: amavisd-new at mail.sconnect.com.au
+Received: from mail.sconnect.com.au ([127.0.0.1])
+        by localhost (mail.sconnect.com.au [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id ybnrLCXO5Glp; Wed, 21 Sep 2022 20:38:46 +1000 (AEST)
+Received: from [46.148.40.140] (unknown [46.148.40.140])
+        by mail.sconnect.com.au (Postfix) with ESMTPA id 6765928CFCC6;
+        Wed, 21 Sep 2022 20:38:37 +1000 (AEST)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Description: Mail message body
+Subject: PFC Loan Offer
+To:     Recipients <Panola@mail.sconnect.com.au>
+From:   Panola@mail.sconnect.com.au, Finance@mail.sconnect.com.au,
+        dean@mail.sconnect.com.au
+Date:   Wed, 21 Sep 2022 03:38:25 -0700
+Reply-To: mbk@panolateam.com
+Message-Id: <20220921103837.6765928CFCC6@mail.sconnect.com.au>
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_ZBI,
+        SPF_HELO_PASS,SPF_PASS,T_PDS_TO_EQ_FROM_NAME autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael,
+We offer flexible loans and funding for various projects bypassing the usua=
+l rigorous procedures without any upfront fee. This Funding program allows =
+a client to enjoy low interest payback for as low as 2% per annum for a per=
+iod of 1-30 years and a six months grace period.
+ =
 
-michael@walle.cc wrote on Fri,  2 Sep 2022 00:18:56 +0200:
+We Offer: -
+* Project Financing
+* Business Loan
+* Personal Loan
+ =
 
-> Instead of hardcoding the underlying access method mtd_read() and
-> duplicating all the error handling, rewrite the driver as a nvmem
-> layout which just uses nvmem_device_read() and thus works with any
-> NVMEM device.
->=20
-> But because this is now not a device anymore, the compatible string
-> will have to be changed so the device will still be probed:
->   compatible =3D "u-boot,env";
-> to
->   compatible =3D "u-boot,env", "nvmem-cells";
->=20
-> "nvmem-cells" will tell the mtd layer to register a nvmem_device().
-> "u-boot,env" will tell the NVMEM that it should apply the u-boot
-> environment layout to the NVMEM device.
->=20
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> ---
-> changes since v1:
->  - none
->=20
->  drivers/nvmem/layouts/Kconfig      |   8 ++
->  drivers/nvmem/layouts/Makefile     |   1 +
->  drivers/nvmem/layouts/u-boot-env.c | 144 +++++++++++++++++++
->  drivers/nvmem/u-boot-env.c         | 218 -----------------------------
+Should you be interested in any of our financial options, please do not hes=
+itate to contact us for more information. Loan processing and financing tak=
+es about 8 working days from the day you submit your loan application. Repl=
+y for more information: mail@panolafinancecompany.com
+ =
 
-Nit: IIRC there is a MAINTAINERS entry to update as well.
-
-Thanks,
-Miqu=C3=A8l
+With kind regards,
+Your Sales Team
+Contact Info:
+E-mail: mbk@panolateam.com
