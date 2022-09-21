@@ -2,60 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 521B75C0048
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 16:49:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 001045C0054
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 16:54:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229884AbiIUOtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 10:49:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37532 "EHLO
+        id S229992AbiIUOyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 10:54:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbiIUOs7 (ORCPT
+        with ESMTP id S229895AbiIUOyG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 10:48:59 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7BCAB8E9BB;
-        Wed, 21 Sep 2022 07:48:58 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C63C913D5;
-        Wed, 21 Sep 2022 07:49:04 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 106183F73B;
-        Wed, 21 Sep 2022 07:48:56 -0700 (PDT)
-Date:   Wed, 21 Sep 2022 15:48:54 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Vijayenthiran Subramaniam <vijayenthiran.subramaniam@arm.com>,
-        rafael@kernel.org
-Cc:     lenb@kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        coresight@lists.linaro.org, suzuki.poulose@arm.com,
-        thomas.abraham@arm.com
-Subject: Re: [PATCH v2] ACPI: amba: Add Arm DMA-330 controller to the
- supported list
-Message-ID: <20220921144854.ug2adlz4ofglxp7c@bogus>
-References: <20220921143244.16282-1-vijayenthiran.subramaniam@arm.com>
+        Wed, 21 Sep 2022 10:54:06 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75CBC5E665
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 07:54:04 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id x29so7344585ljq.2
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 07:54:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=fc9rvJk53jSt+31V+DshEMPT99txfYe0aFmQRodV1Rk=;
+        b=F4Gm9tI8bRPXoj3MXzslfn42dKJ9CgrIkN+dQlksRQKb2QLs69cZEM0rHakPqe4mcu
+         up6+zxUBsLdj0T2BXHtQdgNVXWrMZesU27ALdOMc38XiOmvh5GMWAC5cVSVz6SQoxbx9
+         ZHMwDp3ZjpbkxgL3Hxq5EkIXlZv+d7pbZO0ynDSDGWqWBqJMlLYB5xOqcgu+XpcWT7Tb
+         GbabFZlH0rtEyW1Ee0eaC8P1Q9vzWucAf+hZuTksj5oB3Ahjp4C3kNIVxKgVbSTrPY07
+         s0+uJlvEYH+Sy/8Bk1JCF1/rZB2P5OANFbxtBFwA0H4bL4bblkOrFgtEwL8LlOOMI2/R
+         Q8rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=fc9rvJk53jSt+31V+DshEMPT99txfYe0aFmQRodV1Rk=;
+        b=CUOajQMWeE+nmRW4e9biy0cprRWSprQTzeeeTjatlb0Oj0ALMUIsgMg831nrAXBJZm
+         8s3UsXqeDNo3W4HZe7HiQQUZyQVBngZXdAAiosHWcPUkvQatClThNOVZFacKIMAtl5XU
+         cgnR4jbVVnwhABCHITu8+qXsORTUFu/cY1UwRz1Qh1EqLbjQxm84u21PFkg9d8fqi5LN
+         TkWk7i7CimMJYz2qUQM/g1BnaZosOMGMg32J6exrVIV/3MsL5aejGE1Y2RWo8jdpt07Y
+         PIDd8ojoYffQ+kOXmIPHds+mqHwiLvgybAbXa1SDv7cHDyFIcuR43d01tOoqTfTZaPm1
+         sryA==
+X-Gm-Message-State: ACrzQf1U4LC7QGbEEuBU+uB6xfY+GYElfEie0X1+1QLHFHZ4cews3oxk
+        NXx1KiVl/H7IorJXEI4DhfRllw==
+X-Google-Smtp-Source: AMsMyM4tHSgnHedkMCUmL9LyyL8xnzoHnFXiLsg6lWP/gbuPqkGj9AKlLPlXgXc33q+Uy5gjk24+AA==
+X-Received: by 2002:a2e:5344:0:b0:26c:417b:aa78 with SMTP id t4-20020a2e5344000000b0026c417baa78mr7614255ljd.298.1663772042208;
+        Wed, 21 Sep 2022 07:54:02 -0700 (PDT)
+Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id c24-20020a056512075800b00494a1e875a9sm461981lfs.191.2022.09.21.07.54.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Sep 2022 07:54:01 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, Vinod Koul <vkoul@kernel.org>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        stable@vger.kernel.org
+Subject: [PATCH 1/2] ASoC: wcd9335: fix order of Slimbus unprepare/disable
+Date:   Wed, 21 Sep 2022 16:53:53 +0200
+Message-Id: <20220921145354.1683791-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220921143244.16282-1-vijayenthiran.subramaniam@arm.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 21, 2022 at 08:02:44PM +0530, Vijayenthiran Subramaniam wrote:
-> Add ACPI ID for ARM DMA-330 controller to AMBA id supported list to
-> allow the probing of the device.
->
+Slimbus streams are first prepared and then enabled, so the cleanup path
+should reverse it.  The unprepare sets stream->num_ports to 0 and frees
+the stream->ports.  Calling disable after unprepare was not really
+effective (channels was not deactivated) and could lead to further
+issues due to making transfers on unprepared stream.
 
-Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+Fixes: 20aedafdf492 ("ASoC: wcd9335: add support to wcd9335 codec")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ sound/soc/codecs/wcd9335.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Rafael,
-
-I assume you will pick this up as usual through your tree.
-
+diff --git a/sound/soc/codecs/wcd9335.c b/sound/soc/codecs/wcd9335.c
+index 06c6adbe5920..d2548fdf9ae5 100644
+--- a/sound/soc/codecs/wcd9335.c
++++ b/sound/soc/codecs/wcd9335.c
+@@ -1972,8 +1972,8 @@ static int wcd9335_trigger(struct snd_pcm_substream *substream, int cmd,
+ 	case SNDRV_PCM_TRIGGER_STOP:
+ 	case SNDRV_PCM_TRIGGER_SUSPEND:
+ 	case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
+-		slim_stream_unprepare(dai_data->sruntime);
+ 		slim_stream_disable(dai_data->sruntime);
++		slim_stream_unprepare(dai_data->sruntime);
+ 		break;
+ 	default:
+ 		break;
 -- 
-Regards,
-Sudeep
+2.34.1
+
