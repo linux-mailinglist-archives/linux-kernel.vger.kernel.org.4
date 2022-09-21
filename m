@@ -2,123 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D5035BFD8E
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 14:14:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EA275BFD94
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 14:15:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229901AbiIUMOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 08:14:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35182 "EHLO
+        id S229518AbiIUMPQ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 21 Sep 2022 08:15:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbiIUMOB (ORCPT
+        with ESMTP id S229612AbiIUMPO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 08:14:01 -0400
-Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C8DFF95AD3;
-        Wed, 21 Sep 2022 05:13:59 -0700 (PDT)
-Received: from ubuntu.localdomain (unknown [10.162.98.155])
-        by mail-app3 (Coremail) with SMTP id cC_KCgB3Xajs_ypjJ5XdBg--.55807S2;
-        Wed, 21 Sep 2022 20:13:39 +0800 (CST)
-From:   Duoming Zhou <duoming@zju.edu.cn>
-To:     peterz@infradead.org, linux-perf-users@vger.kernel.org,
+        Wed, 21 Sep 2022 08:15:14 -0400
+Received: from de-smtp-delivery-113.mimecast.com (de-smtp-delivery-113.mimecast.com [194.104.109.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A5F0303C5
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 05:15:11 -0700 (PDT)
+Received: from CHE01-GV0-obe.outbound.protection.outlook.com
+ (mail-gv0che01lp2047.outbound.protection.outlook.com [104.47.22.47]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ de-mta-31-GYxk_rdbOl6W6Ke5QUN3ng-2; Wed, 21 Sep 2022 14:15:07 +0200
+X-MC-Unique: GYxk_rdbOl6W6Ke5QUN3ng-2
+Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:2e::8) by
+ GV0P278MB0100.CHEP278.PROD.OUTLOOK.COM (2603:10a6:710:1e::14) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5654.14; Wed, 21 Sep 2022 12:15:05 +0000
+Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::6c6d:333:ab23:3f5b]) by ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::6c6d:333:ab23:3f5b%2]) with mapi id 15.20.5632.021; Wed, 21 Sep 2022
+ 12:15:05 +0000
+Date:   Wed, 21 Sep 2022 14:15:05 +0200
+From:   Francesco Dolcini <francesco.dolcini@toradex.com>
+To:     Marcel Ziswiler <marcel@ziswiler.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, tglx@linutronix.de, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        Duoming Zhou <duoming@zju.edu.cn>
-Subject: [PATCH V3] perf/x86/rapl: fix deadlock in rapl_pmu_event_stop
-Date:   Wed, 21 Sep 2022 20:13:32 +0800
-Message-Id: <20220921121332.24363-1-duoming@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: cC_KCgB3Xajs_ypjJ5XdBg--.55807S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7ZF47XryxCr4rWFW5WFyfWFg_yoW8tF4Upr
-        WxAryaqr1jv3ZFqay8t3WkXrW3Zan7GanxJw4fGw1rA3ZxWan5ta1xGayF9FW3AF93X3sa
-        yw10qrWrAFZrZ37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvl1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
-        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
-        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j
-        6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
-        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28I
-        cxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJV
-        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
-        1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
-        IIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvE
-        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvj
-        DU0xZFpf9x0JUdHUDUUUUU=
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAg4AAVZdtbktIAAEsD
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v1 4/4] arm: dts: imx7-colibri: remove spurious debounce
+ property
+Message-ID: <20220921121505.GA41442@francesco-nb.int.toradex.com>
+References: <20220920092227.286306-1-marcel@ziswiler.com>
+ <20220920092227.286306-5-marcel@ziswiler.com>
+In-Reply-To: <20220920092227.286306-5-marcel@ziswiler.com>
+X-ClientProxiedBy: ZR0P278CA0122.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:20::19) To ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:2e::8)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: ZRAP278MB0495:EE_|GV0P278MB0100:EE_
+X-MS-Office365-Filtering-Correlation-Id: d744c161-387d-49df-8d98-08da9bcaeaff
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0
+X-Microsoft-Antispam-Message-Info: iR4YugbDRxavRMb3B+Fcd9L0ZRzBMYhCRtFp4qTMHem5v2zWA4yen2um1UpHN9qAvRFsnhYskN/r9YDi40VB6MWm2i0qUJvr6/K6BUUk59RgwwrZ3aFF2HVF8K7N8smLc9CG7yXrvaQdM9COdWkKQlfrNsMuo/0l9Bp1fvwmPOxBsYG8oFGiIoHRLMvja6SlFcsYGZdfShHEQCsntO11dmmDFrM9CL7UdbF9K09UQFw1JC0rjeeidN0wJRczctvM8OY+zpv+YEE3W05FWDI+UL0tPYAVctNHJezYIHl7s1vukXpWt8lK2TCnc5WNbuQWv6gl9aFmOeWJtH08iW+OM3X89beTmPexncN5zjZea3GtuGY9fOV6+zMhmcIbMY8Jg6FcwKsBPzEXx9Vf3DYD9AcwH061Q78G8ESMtlQKzkxoB/ZHPx3f0m99ymthXizHwPB1gI9/LFsJbTRmJSMgeoMiATJTHmkyLW/VJxBcjd6e2TQs7QvDEJuOXkwkhxEcyk301X6xlAJk1+f01B0NpHx720aWYDOTE3ecdkJoLAJTDDQ4LJeojnh3gKwiFRCrB/xJWrtC7YUF/rP2yRXcQ4NN/GlkvCFAhfBOuOlqWzsnMgBguel1W+MV92/OyVDdK/1NUYzrtaVnx2CCF9xTns2tejUWxvyhqSGgX5Vl0HRE3W89lg7dQiEZYAPQ8pC/ObgRVQ8nbRFRYcqphytaEZdclE/IC9RaEHx/kxDObCfQv+q3Lz6se8I8sIerbJouNLDHDEmV8MkNQODicEAh6w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(366004)(39850400004)(136003)(396003)(451199015)(6506007)(52116002)(6512007)(26005)(66476007)(66556008)(110136005)(54906003)(8676002)(4326008)(66946007)(41300700001)(86362001)(33656002)(38350700002)(38100700002)(6486002)(478600001)(186003)(1076003)(2906002)(316002)(5660300002)(44832011)(7416002)(8936002);DIR:OUT;SFP:1102
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?VwMcy5PUd7CmfNkEp7zn86HIq4nm4jEO+ZmfCIcFFdx74YNEMrtsoIREWWMk?=
+ =?us-ascii?Q?3a6KYcVhW7yX/9akKPVUxECUHYCjrlblCxy6WX91j+pUtV2YOutihI3gnmPT?=
+ =?us-ascii?Q?rcU0RqBfhTJK3YWNQPWeDMLdwtdn1FtQpfRProM24DSVEEz91YhkJ5RVPXnA?=
+ =?us-ascii?Q?x51jsztoZoe4arXlZ9go403rX4E60nq1D+4QDAqV+d8rGEHbR6eIG2axVKtW?=
+ =?us-ascii?Q?QztVGCEofX1oqlkG8iEH0b415s4QOC5wXOUbObVi6Fn36iltBf4szBBfvrEY?=
+ =?us-ascii?Q?CxwrKLb6pyrgEgT7c0U9PuraitwqxooA8XM+OUDYU2I3h9qWAAbfFnr86ZIa?=
+ =?us-ascii?Q?yDUKLW1wvzZoDNKg8j62vZdvjhYJssTcTAgye7uhHZTU51gJfq+Sbub+3KuR?=
+ =?us-ascii?Q?UG94yDkBJTf0JBmukP8S4CGOMxwgtGa9j9lPqPkoWIN3Qjq1acCPDRquPd9V?=
+ =?us-ascii?Q?PyGLaM1AHeKAXrTaFzZL31YNvjBvkgSeyhUCr83kulmAiNZ7NpI1CBzjXzRU?=
+ =?us-ascii?Q?Lo3Gg6CMaSrppTfczWYjnXUzjmMOit1hsUcqvblHUOJIiTRyC4nAZX+1Oce3?=
+ =?us-ascii?Q?0zm8tfwGJukelXEFZnqLjx0Db/y7xqxT4wfHlnfpwYhsepLen1JlWWwZU5/B?=
+ =?us-ascii?Q?/gpAq8RvlSq/JMF9oX1OYp5sM2ZEJ4P21GONkHvvUK0URpgCzOc9uSizbQa4?=
+ =?us-ascii?Q?tjI0s/1taVAWaR9keseHmT+Znwf6XwAneQrjcZoKkTPF+8INvEhR1pUVaOIj?=
+ =?us-ascii?Q?X/jMMqLo6XgG/dTMgUa4g5Pci2NC32t+UxQ6I9wx/JqZ/e7uN1/csv72Fp8K?=
+ =?us-ascii?Q?Iuj/Hx9scUiukr5zNArS4eee8n++8oZYy+Bc4kCNPpO7lydNt2npOMaYX7IA?=
+ =?us-ascii?Q?yYGuNAguCSYQ3IGuSU5bRm8Uqjbzsgxtq6YxUDyWEaUb1ireDJJsUDgnVkyu?=
+ =?us-ascii?Q?IRix+ZzmuDzkOJlOK/ULWtDtV5JRGYxfAcKEdbOWgAed75y/cATUXVM8+zbw?=
+ =?us-ascii?Q?cWnigvoyk1NjKTwq9wG3FkiOpG7KPQd9oZMT+hVYoSr+Y0gGFUB087CiFcRO?=
+ =?us-ascii?Q?y4yqBmOnJbw7hXnEji1rwYYdjmwyvIJotupp3Cx+froKCiUKW93zQiXjk7IP?=
+ =?us-ascii?Q?ibI1UyAe9p6SIP+OIHTPpGhYQLTjeULJ0jcu9sx0oTL1fDsJBTfHV2bNJgyp?=
+ =?us-ascii?Q?3z/vXFWLdWrV5we99kOynKHOjNQarx8W1AK941ThAgiHTJy4+n3qx0pxY58g?=
+ =?us-ascii?Q?BHbrSp/O4qtzjLVJ14ZW3BJF/WCytB1Uazd0SgJxZ30MsPDy/ftR2y2pEx17?=
+ =?us-ascii?Q?eRIlMPlxYI6oqaoEpQVwLxWDbukdUYWNs/rMA8oPzK4Y6ZjJbncOSzDiLbJn?=
+ =?us-ascii?Q?jxA+uTVXpxna10Bi3DVc/0kwyd3P0SQZGeEGkz98jBy1m8DLWhS3ZtTij7Er?=
+ =?us-ascii?Q?lIsCVhs0p5tYhHwKV10ziXhrwMY2LpfwDSvOndwexoUbcDJ+sMg2Q8u675R1?=
+ =?us-ascii?Q?C4rPIKWdVe9OLHZnqL1+RZ20rHqZ3N418tioKvnCrJUyMWrCOqmpQejwm7Lf?=
+ =?us-ascii?Q?TMVugJcxASvKV2dUw6swWxH/oWKj+y6Aa4UQnnpVjfy1DlCn2L4NB1V/boM7?=
+ =?us-ascii?Q?13SWKAVC6GQ0CcoNkuZGhAE=3D?=
+X-OriginatorOrg: toradex.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d744c161-387d-49df-8d98-08da9bcaeaff
+X-MS-Exchange-CrossTenant-AuthSource: ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Sep 2022 12:15:05.5755
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: d9995866-0d9b-4251-8315-093f062abab4
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hENmIHWGLvTMnkOupFmiPL1mHcRX/uLF5VxLZZXoJ8sMQlCCnBCWQeqBwDv7P4GUGcgdcivntV2Vj0I5VOZmNckssVqSzEwIzTFshTyys44=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV0P278MB0100
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: toradex.com
+Content-Type: text/plain; charset=WINDOWS-1252
+Content-Disposition: inline
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a deadlock in rapl_pmu_event_stop(), the process is
-shown below:
++Greg, to get an opinion on the fixes tag.
 
-    (thread 1)                 |        (thread 2)
-rapl_pmu_event_stop()          | rapl_hrtimer_handle()
- ...                           |  if (!pmu->n_active)
- raw_spin_lock_irqsave() //(1) |  ...
-  ...                          |
-  hrtimer_cancel()             |  raw_spin_lock_irqsave() //(2)
-  (block forever)
+On Tue, Sep 20, 2022 at 11:22:27AM +0200, Marcel Ziswiler wrote:
+> From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+> 
+> Remove spurious debounce property from linux,extcon-usb-gpio.
+> 
+> Note that debouncing is hard-coded to 20 ms (USB_GPIO_DEBOUNCE_MS
+> define).
+> 
+> Fixes: 0ef1969ea569 ("ARM: dts: imx7-colibri: move aliases, chosen, extcon and gpio-keys")
+> Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-We hold pmu->lock in position (1) and use hrtimer_cancel() to wait
-rapl_hrtimer_handle() to stop, but rapl_hrtimer_handle() also need
-pmu->lock in position (2). As a result, the rapl_pmu_event_stop()
-will be blocked forever.
+Hello all,
+we did have some (internal) discussion if this patch should have the
+fixes tag or not.
 
-This patch uses hrtimer_try_to_cancel() to replace hrtimer_cancel()
-and moves the check "if (!pmu->n_active)" into the protection scope
-of pmu->lock. If the timer callback function is running, the
-hrtimer_try_to_cancel() will directly return. After the
-rapl_pmu_event_stop() has finished, the "pmu->n_active" equals to 0
-and the rapl_hrtimer_handle() will return "HRTIMER_NORESTART".
+I do personally think it should not have it and should not be backported
+to stable tree, since this is not fixing a real bug, it's just a
+cleanup.
 
-Fixes: 65661f96d3b3 ("perf/x86: Add RAPL hrtimer support")
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
----
-Changes in V3:
-  - Use hrtimer_try_to_cancel() to replace hrtimer_cancel().
-  - Use pmu->lock to protect the check "if (!pmu->n_active)".
+On the other hand the original patch was not correct, and this change is
+making it right.
 
- arch/x86/events/rapl.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+What is the general opinion on this topic? What do the stable kernel
+maintainers would expect?
 
-diff --git a/arch/x86/events/rapl.c b/arch/x86/events/rapl.c
-index 77e3a47af5a..a526a08ee6e 100644
---- a/arch/x86/events/rapl.c
-+++ b/arch/x86/events/rapl.c
-@@ -219,11 +219,13 @@ static enum hrtimer_restart rapl_hrtimer_handle(struct hrtimer *hrtimer)
- 	struct perf_event *event;
- 	unsigned long flags;
- 
--	if (!pmu->n_active)
--		return HRTIMER_NORESTART;
--
- 	raw_spin_lock_irqsave(&pmu->lock, flags);
- 
-+	if (!pmu->n_active) {
-+		raw_spin_unlock_irqrestore(&pmu->lock, flags);
-+		return HRTIMER_NORESTART;
-+	}
-+
- 	list_for_each_entry(event, &pmu->active_list, active_entry)
- 		rapl_event_update(event);
- 
-@@ -282,7 +284,7 @@ static void rapl_pmu_event_stop(struct perf_event *event, int mode)
- 		WARN_ON_ONCE(pmu->n_active <= 0);
- 		pmu->n_active--;
- 		if (pmu->n_active == 0)
--			hrtimer_cancel(&pmu->hrtimer);
-+			hrtimer_try_to_cancel(&pmu->hrtimer);
- 
- 		list_del(&event->active_entry);
- 
--- 
-2.17.1
+Documentation/process/stable-kernel-rules.rst is about rules for
+backporting, it does not really talk about the fixes tag, but today this
+is used to decide if a patch should be backported or not.
+
+Francesco
 
