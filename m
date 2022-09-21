@@ -2,68 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A4325E5517
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 23:19:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDDE25E5519
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 23:19:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230188AbiIUVTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 17:19:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47686 "EHLO
+        id S230137AbiIUVTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 17:19:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbiIUVTK (ORCPT
+        with ESMTP id S229967AbiIUVTL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 17:19:10 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F31BA5C7C
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 14:19:08 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id x1so6918798plv.5
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 14:19:07 -0700 (PDT)
+        Wed, 21 Sep 2022 17:19:11 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE214A5C69
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 14:19:10 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id a29so7258167pfk.5
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 14:19:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=cVhxa2A/nQQB1gcuL+Q0FTqCG2B+iraWTdgWSmrMTK0=;
-        b=Rf3znSeTDbeIZxLDpXIV6tlAStO2/wDGFBCb+5L1paeNgKL4+GtfP3tWt+RYxEi26J
-         54Y21Ew2Cy7qTG2LluP1aAEfolNKlK+pq8jofBHfzN7dT+R4VjpuKgwkmQDZDGtpm2CH
-         JDHewjvm7iXkjz3N0mnpOvXOz9X+hLmgp34iyT9VJTbbFKzUzxvN7XkeTD3sQPRQEUjd
-         pPFpuQwJNgqlJSpo4J9hP6Qkbz4cKJgByP12O8N6bcbHwx/lb5Wg7wQeZ4SiIxMNumER
-         vK88Hm8gkTYzD5xOtuadZxUr+ym3H8HOM6r9/ZODOdXvYe6mg/9Bg2iUuyBhSH4wEG38
-         LVYg==
+        bh=qn2Tyr5BBZtLc4Q3iyya3S9UpHREHtk3JzWAYU0n/Xs=;
+        b=lrCrFnJwDqg8lDvVHSiB+LouuHDaJu2gqUZm46RhmQ6BqLAfOIqs39DLUFOH5A02O2
+         /Qx9DbpVmcOTFg5n05d9GFQNcSgsYRHmcTyARBaMzZBW/ykLtS0C4r4FDt+rET9IJuI6
+         /2/oNlWepPwjg/wX4KiSj6aqQpXn0bxMQ/OTpN2Cjx+/lRL7BWCMhgux3d4JdUYnHs7V
+         zbefxEvtHUlFl8/nmUyQ/AWKEKOAzCbjAcbijwUG23yLWyA50QKka/yTpNU8E6f0Z7Mv
+         5hHnB/QotfaoVRYtQ9mlTtabSiRs9NXGGU55wRi7wY+ltf9aoHqh9ARlfxX08c2jyo7O
+         +nog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=cVhxa2A/nQQB1gcuL+Q0FTqCG2B+iraWTdgWSmrMTK0=;
-        b=Yjn3dh5twPe4LHp0YvZVlEfpFwkjTdiB72j5H/8vZAiY0hz8Xl8ZIaeUEA8VbIl8FI
-         PfC7uf3HEaz6Ys5pfIf1qYDRHhfKPDmnlaYiEamzKacEh2Zf7xF8auU4Dex3SV/pre4a
-         sEaTIT6+Wgta5yA7ytAWSN3fXbs+C4fOU0dfknwEyIqJpXpEDtS4hW8IlBwV4I0rxBsu
-         SMrBZx09m+JV12OXGBWj6/bhsAXZr3N9/7BNwjqVxTutkCW/0B4XZmqZdm80wT4LkSsw
-         NO3Bz6yxpDno0HXhrvFr2nwmJBCsm147EPJAIm/oktalYXh7xlkitjwCeaglCOhJ5js1
-         Q59A==
-X-Gm-Message-State: ACrzQf3ja3BXIuCLxyWEhi9ZvZ+PpM+l+vkrhUB9UYif/tn00LSU7D1G
-        RaK0ZtHtmpDR09ZUqEUj/BNN1A==
-X-Google-Smtp-Source: AMsMyM6zqAY+UlJw/Jp/dmFBovhmCOG2qPta/rZnpfpDZX4Es9D2YfJuZBXqmWUT0Dm4YZLP4TsD9w==
-X-Received: by 2002:a17:902:aa46:b0:178:9ee5:c7f1 with SMTP id c6-20020a170902aa4600b001789ee5c7f1mr6877940plr.69.1663795147141;
-        Wed, 21 Sep 2022 14:19:07 -0700 (PDT)
-Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
-        by smtp.gmail.com with ESMTPSA id k17-20020a170902c41100b001750361f430sm2520669plk.155.2022.09.21.14.19.06
+        bh=qn2Tyr5BBZtLc4Q3iyya3S9UpHREHtk3JzWAYU0n/Xs=;
+        b=YJaDc5wXmGwvKS9mU+CrCqoPmtfmMbNiVOq7yBPNdAxdrMsXzO7mWIgs/tsExRHxoc
+         dW/nU8rD+x2Ap1PAjD4ycGZn8fSxannySxEA4KiFkPw5dpDU/lMNN2eaUbMrY4f8RnO9
+         pa3eiAtsyGtb5tjSJEoPmbThfKcXK8bT1n/woJSNg7STTG5JPY7192JBMi1evpJfBpff
+         +FuHenTzp//xp8GChLcDsA7CmX0Ezs5DunwgrJULVW/HVMp79XsDaP+2rdBnRobozjjp
+         B8YbFgSnSQ7KKIrJVtLsXGOUMOH6yoD4vAbGytYKpMg4s3sIhpqXpWhjaEF2y9N+cx2W
+         rqjQ==
+X-Gm-Message-State: ACrzQf1WnETl5/poiZ/QdtxCYjXeVOeYaifk6Wu/LlwnhjvQECf9PN+p
+        NASQ0O0mMqHDQu+oKV9PV6Y60g==
+X-Google-Smtp-Source: AMsMyM7NDWr1OHvf4/DOTuO46c9LjjzZYkWEszB0swaN+tiWynXVjEvc8rod3Lqug5SO6bxMqtcDMA==
+X-Received: by 2002:a63:8542:0:b0:43a:5ca7:c710 with SMTP id u63-20020a638542000000b0043a5ca7c710mr143996pgd.264.1663795150087;
+        Wed, 21 Sep 2022 14:19:10 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id h5-20020a170902680500b00178b717a0a3sm2430996plk.69.2022.09.21.14.19.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Sep 2022 14:19:06 -0700 (PDT)
-Date:   Wed, 21 Sep 2022 14:19:02 -0700
-From:   David Matlack <dmatlack@google.com>
-To:     Vishal Annapurve <vannapurve@google.com>
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-        shuah@kernel.org, bgardon@google.com, seanjc@google.com,
-        oupton@google.com, peterx@redhat.com, vkuznets@redhat.com
-Subject: Re: [V2 PATCH 4/8] KVM: selftests: x86: Precompute the result for
- is_{intel,amd}_cpu()
-Message-ID: <Yyt/xgPkHfbOE3vH@google.com>
-References: <20220915000448.1674802-1-vannapurve@google.com>
- <20220915000448.1674802-5-vannapurve@google.com>
+        Wed, 21 Sep 2022 14:19:09 -0700 (PDT)
+Date:   Wed, 21 Sep 2022 21:19:06 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        Yuan Yao <yuan.yao@linux.intel.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v10 18/39] KVM: x86: hyper-v: Introduce fast
+ guest_hv_cpuid_has_l2_tlb_flush() check
+Message-ID: <Yyt/ylgNjsgGTQMN@google.com>
+References: <20220921152436.3673454-1-vkuznets@redhat.com>
+ <20220921152436.3673454-19-vkuznets@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220915000448.1674802-5-vannapurve@google.com>
+In-Reply-To: <20220921152436.3673454-19-vkuznets@redhat.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -75,107 +79,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 15, 2022 at 12:04:44AM +0000, Vishal Annapurve wrote:
-> Cache the vendor CPU type in a global variable so that multiple calls
-> to is_intel_cpu() do not need to re-execute CPUID.
+On Wed, Sep 21, 2022, Vitaly Kuznetsov wrote:
+> Introduce a helper to quickly check if KVM needs to handle VMCALL/VMMCALL
+> from L2 in L0 to process L2 TLB flush requests.
 > 
-> Add cpu vendor check in kvm_hypercall() so that it executes correct
-> vmcall/vmmcall instruction when running on Intel/AMD hosts. This avoids
-> exit to KVM which anyway tries to patch the instruction according to
-> the cpu type.
-
-The commit shortlog makes no mention (nor even implies) that this commit
-adds AMD support to kvm_hypercall(). Please break this commit up into 2.
-One to precompute the result of is_{intel,amd}_cpu() and one to add AMD
-support to kvm_hypercall().
-
-If you really want to keep this as one commit (I don't know what the
-benefit would be), please change the shortlog and commit message to
-focus on the kvm_hypercall() change, as that is the real goal of this
-commit. The precomputation is arguably and implementation detail. e.g.
-
-  KVM: selftest: Add support for AMD to kvm_hypercall()
-
-  Make it possible to use kvm_hypercall() on AMD by checking if running
-  on an AMD CPU and, if so, using vmmcall instead of vmcall. In order to
-  avoid executing CPUID in the guest on every call t kvm_hypercall()
-  (which would be slow), pre-compute the result of is_{intel,amd}_cpu()
-  as part of kvm_selftest_arch_init() and sync it into the guest
-  after loading the ELF image.
-
-But again, it'd be cleaner just to split it up. Caching the result of
-is_{intel,amd}_cpu() is useful in its own right, independent of the
-kvm_hypercall() change.
-
-> 
-> As part of this change, sync the global variable is_cpu_amd into the
-> guest so the guest can determine which hypercall instruction to use
-> without needing to re-execute CPUID for every hypercall.
-> 
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Vishal Annapurve <vannapurve@google.com>
+> Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
 > ---
->  .../testing/selftests/kvm/lib/x86_64/processor.c  | 15 ++++++++++++---
->  1 file changed, 12 insertions(+), 3 deletions(-)
+>  arch/x86/kvm/hyperv.h | 7 +++++++
+>  1 file changed, 7 insertions(+)
 > 
-> diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-> index 25ae972f5c71..c0ae938772f6 100644
-> --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-> +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-> @@ -19,6 +19,7 @@
->  #define MAX_NR_CPUID_ENTRIES 100
->  
->  vm_vaddr_t exception_handlers;
-> +static bool is_cpu_amd;
->  
->  static void regs_dump(FILE *stream, struct kvm_regs *regs, uint8_t indent)
->  {
-> @@ -1019,7 +1020,7 @@ static bool cpu_vendor_string_is(const char *vendor)
->  
->  bool is_intel_cpu(void)
->  {
-> -	return cpu_vendor_string_is("GenuineIntel");
-> +	return (is_cpu_amd == false);
+> diff --git a/arch/x86/kvm/hyperv.h b/arch/x86/kvm/hyperv.h
+> index 1b53dd4cff4d..3fff3a6f4bb9 100644
+> --- a/arch/x86/kvm/hyperv.h
+> +++ b/arch/x86/kvm/hyperv.h
+> @@ -174,6 +174,13 @@ static inline void kvm_hv_vcpu_empty_flush_tlb(struct kvm_vcpu *vcpu)
+>  	kfifo_reset_out(&tlb_flush_fifo->entries);
 >  }
 >  
->  /*
-> @@ -1027,7 +1028,7 @@ bool is_intel_cpu(void)
->   */
->  bool is_amd_cpu(void)
->  {
-> -	return cpu_vendor_string_is("AuthenticAMD");
-> +	return (is_cpu_amd == true);
->  }
->  
->  void kvm_get_cpu_address_width(unsigned int *pa_bits, unsigned int *va_bits)
-> @@ -1182,9 +1183,15 @@ uint64_t kvm_hypercall(uint64_t nr, uint64_t a0, uint64_t a1, uint64_t a2,
->  {
->  	uint64_t r;
->  
-> -	asm volatile("vmcall"
-> +	if (is_amd_cpu())
-> +		asm volatile("vmmcall"
->  		     : "=a"(r)
->  		     : "a"(nr), "b"(a0), "c"(a1), "d"(a2), "S"(a3));
-> +	else
-> +		asm volatile("vmcall"
-> +		     : "=a"(r)
-> +		     : "a"(nr), "b"(a0), "c"(a1), "d"(a2), "S"(a3));
+> +static inline bool guest_hv_cpuid_has_l2_tlb_flush(struct kvm_vcpu *vcpu)
+> +{
+> +	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
 > +
->  	return r;
->  }
->  
-> @@ -1314,8 +1321,10 @@ bool vm_is_unrestricted_guest(struct kvm_vm *vm)
->  
->  void kvm_selftest_arch_init(void)
+> +	return hv_vcpu && (hv_vcpu->cpuid_cache.nested_eax & HV_X64_NESTED_DIRECT_FLUSH);
+
+Nit, IMO this is long enough that it's worth wrapping to fit under the soft char limit.
+
+	return hv_vcpu &&
+	       (hv_vcpu->cpuid_cache.nested_eax & HV_X64_NESTED_DIRECT_FLUSH);
+
+> +}
+> +
+>  static inline bool kvm_hv_is_tlb_flush_hcall(struct kvm_vcpu *vcpu)
 >  {
-> +	is_cpu_amd = cpu_vendor_string_is("AuthenticAMD");
->  }
->  
->  void kvm_arch_post_vm_elf_load(struct kvm_vm *vm)
->  {
-> +	sync_global_to_guest(vm, is_cpu_amd);
->  }
+>  	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
 > -- 
-> 2.37.2.789.g6183377224-goog
+> 2.37.3
 > 
