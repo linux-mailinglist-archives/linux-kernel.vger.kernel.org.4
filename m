@@ -2,129 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 414435BFBC2
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 11:55:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C5185BFBBC
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 11:55:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231482AbiIUJxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 05:53:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59272 "EHLO
+        id S230150AbiIUJy2 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 21 Sep 2022 05:54:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231741AbiIUJxB (ORCPT
+        with ESMTP id S230392AbiIUJxZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 05:53:01 -0400
-Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4C9B2196;
-        Wed, 21 Sep 2022 02:50:51 -0700 (PDT)
-Received: by ajax-webmail-mail-app3 (Coremail) ; Wed, 21 Sep 2022 17:50:18
- +0800 (GMT+08:00)
-X-Originating-IP: [10.162.98.155]
-Date:   Wed, 21 Sep 2022 17:50:18 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   duoming@zju.edu.cn
-To:     "Ingo Molnar" <mingo@kernel.org>
-Cc:     peterz@infradead.org, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mingo@redhat.com, acme@kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, namhyung@kernel.org, tglx@linutronix.de,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com
-Subject: Re: [PATCH V2] perf/x86/rapl: fix deadlock in rapl_pmu_event_stop
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
- Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
-In-Reply-To: <YyrC4OyP2BtY8tNl@gmail.com>
-References: <20220920014447.71946-1-duoming@zju.edu.cn>
- <YyrC4OyP2BtY8tNl@gmail.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Wed, 21 Sep 2022 05:53:25 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D09D792F6C
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 02:52:06 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-323-s3vy6a1IM_qw-LkxN2iECw-1; Wed, 21 Sep 2022 10:52:03 +0100
+X-MC-Unique: s3vy6a1IM_qw-LkxN2iECw-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Wed, 21 Sep
+ 2022 10:52:01 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.040; Wed, 21 Sep 2022 10:52:01 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Al Viro' <viro@zeniv.linux.org.uk>,
+        Jiangshan Yi <13667453960@163.com>
+CC:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Jiangshan Yi <yijiangshan@kylinos.cn>
+Subject: RE: [PATCH] fs/efs/inode.c: use __func__ instead of function name
+Thread-Topic: [PATCH] fs/efs/inode.c: use __func__ instead of function name
+Thread-Index: AQHYzIdskrFLZR+H2ka5LnnQ208eAK3ppj5g
+Date:   Wed, 21 Sep 2022 09:52:01 +0000
+Message-ID: <c024f9d09a68417f8326ec318aec87ce@AcuMS.aculab.com>
+References: <20220919023314.3622391-1-13667453960@163.com>
+ <YykIOg0ApQycqOxu@ZenIV>
+In-Reply-To: <YykIOg0ApQycqOxu@ZenIV>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Message-ID: <187941a5.e3508.1835f748feb.Coremail.duoming@zju.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: cC_KCgC3vQxa3ipj56bbBg--.33667W
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgQAAVZdtbkYVQAAsN
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGVsbG8sCgpPbiBXZWQsIDIxIFNlcCAyMDIyIDA5OjUzOjA0ICswMjAwIEluZ28gTW9sbmFyIHdy
-b3RlOgoKPiAqIER1b21pbmcgWmhvdSA8ZHVvbWluZ0B6anUuZWR1LmNuPiB3cm90ZToKPiAKPiA+
-IFRoZXJlIGlzIGEgZGVhZGxvY2sgaW4gcmFwbF9wbXVfZXZlbnRfc3RvcCgpLCB0aGUgcHJvY2Vz
-cyBpcwo+ID4gc2hvd24gYmVsb3c6Cj4gPiAKPiA+ICAgICAodGhyZWFkIDEpICAgICAgICAgICAg
-ICAgICB8ICAgICAgICAodGhyZWFkIDIpCj4gPiByYXBsX3BtdV9ldmVudF9zdG9wKCkgICAgICAg
-ICAgfCByYXBsX2hydGltZXJfaGFuZGxlKCkKPiA+ICAuLi4gICAgICAgICAgICAgICAgICAgICAg
-ICAgICB8ICBpZiAoIXBtdS0+bl9hY3RpdmUpCj4gPiAgcmF3X3NwaW5fbG9ja19pcnFzYXZlKCkg
-Ly8oMSkgfCAgLi4uCj4gPiAgIC4uLiAgICAgICAgICAgICAgICAgICAgICAgICAgfAo+ID4gICBo
-cnRpbWVyX2NhbmNlbCgpICAgICAgICAgICAgIHwgIHJhd19zcGluX2xvY2tfaXJxc2F2ZSgpIC8v
-KDIpCj4gPiAgIChibG9jayBmb3JldmVyKQo+ID4gCj4gPiBXZSBob2xkIHBtdS0+bG9jayBpbiBw
-b3NpdGlvbiAoMSkgYW5kIHVzZSBocnRpbWVyX2NhbmNlbCgpIHRvIHdhaXQKPiA+IHJhcGxfaHJ0
-aW1lcl9oYW5kbGUoKSB0byBzdG9wLCBidXQgcmFwbF9ocnRpbWVyX2hhbmRsZSgpIGFsc28gbmVl
-ZAo+ID4gcG11LT5sb2NrIGluIHBvc2l0aW9uICgyKS4gQXMgYSByZXN1bHQsIHRoZSByYXBsX3Bt
-dV9ldmVudF9zdG9wKCkKPiA+IHdpbGwgYmUgYmxvY2tlZCBmb3JldmVyLgo+ID4gCj4gPiBUaGlz
-IHBhdGNoIGV4dHJhY3RzIGhydGltZXJfY2FuY2VsKCkgZnJvbSB0aGUgcHJvdGVjdGlvbiBvZgo+
-ID4gcmF3X3NwaW5fbG9ja19pcnFzYXZlKCkuIEFzIGEgcmVzdWx0LCB0aGUgcmFwbF9ocnRpbWVy
-X2hhbmRsZSgpCj4gPiBjb3VsZCBvYnRhaW4gdGhlIHBtdS0+bG9jay4KPiA+IAo+ID4gRml4ZXM6
-IDY1NjYxZjk2ZDNiMyAoInBlcmYveDg2OiBBZGQgUkFQTCBocnRpbWVyIHN1cHBvcnQiKQo+ID4g
-U2lnbmVkLW9mZi1ieTogRHVvbWluZyBaaG91IDxkdW9taW5nQHpqdS5lZHUuY24+Cj4gPiAtLS0K
-PiA+IENoYW5nZXMgaW4gdjI6Cj4gPiAgIC0gTW92ZSBocnRpbWVyX2NhbmNlbCgpIHRvIHRoZSBl
-bmQgb2YgcmFwbF9wbXVfZXZlbnRfc3RvcCgpIGZ1bmN0aW9uLgo+ID4gCj4gPiAgYXJjaC94ODYv
-ZXZlbnRzL3JhcGwuYyB8IDcgKysrKystLQo+ID4gIDEgZmlsZSBjaGFuZ2VkLCA1IGluc2VydGlv
-bnMoKyksIDIgZGVsZXRpb25zKC0pCj4gPiAKPiA+IGRpZmYgLS1naXQgYS9hcmNoL3g4Ni9ldmVu
-dHMvcmFwbC5jIGIvYXJjaC94ODYvZXZlbnRzL3JhcGwuYwo+ID4gaW5kZXggNzdlM2E0N2FmNWEu
-LjdjMTEwMDkyYzgzIDEwMDY0NAo+ID4gLS0tIGEvYXJjaC94ODYvZXZlbnRzL3JhcGwuYwo+ID4g
-KysrIGIvYXJjaC94ODYvZXZlbnRzL3JhcGwuYwo+ID4gQEAgLTI4MSw4ICsyODEsNiBAQCBzdGF0
-aWMgdm9pZCByYXBsX3BtdV9ldmVudF9zdG9wKHN0cnVjdCBwZXJmX2V2ZW50ICpldmVudCwgaW50
-IG1vZGUpCj4gPiAgCWlmICghKGh3Yy0+c3RhdGUgJiBQRVJGX0hFU19TVE9QUEVEKSkgewo+ID4g
-IAkJV0FSTl9PTl9PTkNFKHBtdS0+bl9hY3RpdmUgPD0gMCk7Cj4gPiAgCQlwbXUtPm5fYWN0aXZl
-LS07Cj4gPiAtCQlpZiAocG11LT5uX2FjdGl2ZSA9PSAwKQo+ID4gLQkJCWhydGltZXJfY2FuY2Vs
-KCZwbXUtPmhydGltZXIpOwo+ID4gIAo+ID4gIAkJbGlzdF9kZWwoJmV2ZW50LT5hY3RpdmVfZW50
-cnkpOwo+ID4gIAo+ID4gQEAgLTMwMCw2ICsyOTgsMTEgQEAgc3RhdGljIHZvaWQgcmFwbF9wbXVf
-ZXZlbnRfc3RvcChzdHJ1Y3QgcGVyZl9ldmVudCAqZXZlbnQsIGludCBtb2RlKQo+ID4gIAkJaHdj
-LT5zdGF0ZSB8PSBQRVJGX0hFU19VUFRPREFURTsKPiA+ICAJfQo+ID4gIAo+ID4gKwlpZiAoIXBt
-dS0+bl9hY3RpdmUpIHsKPiA+ICsJCXJhd19zcGluX3VubG9ja19pcnFyZXN0b3JlKCZwbXUtPmxv
-Y2ssIGZsYWdzKTsKPiA+ICsJCWhydGltZXJfY2FuY2VsKCZwbXUtPmhydGltZXIpOwo+ID4gKwkJ
-cmV0dXJuOwo+ID4gKwl9Cj4gCj4gTG9va3MgcmFjeSBub3c6IEFGQUlDUyBub3cgaXQncyBwb3Nz
-aWJsZSBmb3IgcmFwbF9ocnRpbWVyX2hhbmRsZSgpIHRvIAo+IGV4ZWN1dGUgYXQgYW4gYXJiaXRy
-YXJ5IG1vbWVudCBhZnRlciBwbXUtPmxvY2sgaXMgZHJvcHBlZCAtIHdoaWNoIGNvdWxkIGJlIAo+
-IHVzZS1hZnRlci1mcmVlIGFmdGVyIGNsZWFudXBfcmFwbF9wbXVzKCkgZXhlY3V0ZXMgYW5kIHRo
-ZSBQTVUgaXMgZnJlZWQsIAo+IHJpZ2h0Pwo+IAo+IFRoZXJlJ3MgYWxzbyB0aGUgcXVhbGl0eS1v
-Zi1pbXBsZW1lbnRhdGlvbiBpc3N1ZSBvZiB0aGUgaHJ0aW1lciBleGVjdXRpbmcgCj4gaW4gYSBk
-ZWxheWVkIGZhc2hpb24gZm9yIHRoZSAqbmV4dCogZXZlbnQgdGhhdCBtYXkgaGF2ZSBiZWVuIGFk
-ZGVkLCBsZWFkaW5nIAo+IHRvIHBvc3NpYmx5IHVuZXhwZWN0ZWQgcmVzdWx0cy4KClRoYW5rIHlv
-dXIgZm9yIHlvdXIgc3VnZ2VzdGlvbnMhIEluIG9yZGVyIHRvIHNvbHZlIHRoZSBhYm92ZSBwcm9i
-bGVtcywKSSBjb21lIHVwIHdpdGggdGhlIGZvbGxvd2luZyBzb2x1dGlvbi4KCmRpZmYgLS1naXQg
-YS9hcmNoL3g4Ni9ldmVudHMvcmFwbC5jIGIvYXJjaC94ODYvZXZlbnRzL3JhcGwuYwppbmRleCA3
-N2UzYTQ3YWY1YS4uYTUyNmEwOGVlNmUgMTAwNjQ0Ci0tLSBhL2FyY2gveDg2L2V2ZW50cy9yYXBs
-LmMKKysrIGIvYXJjaC94ODYvZXZlbnRzL3JhcGwuYwpAQCAtMjE5LDExICsyMTksMTMgQEAgc3Rh
-dGljIGVudW0gaHJ0aW1lcl9yZXN0YXJ0IHJhcGxfaHJ0aW1lcl9oYW5kbGUoc3RydWN0IGhydGlt
-ZXIgKmhydGltZXIpCiAgICAgICAgc3RydWN0IHBlcmZfZXZlbnQgKmV2ZW50OwogICAgICAgIHVu
-c2lnbmVkIGxvbmcgZmxhZ3M7CgotICAgICAgIGlmICghcG11LT5uX2FjdGl2ZSkKLSAgICAgICAg
-ICAgICAgIHJldHVybiBIUlRJTUVSX05PUkVTVEFSVDsKLQogICAgICAgIHJhd19zcGluX2xvY2tf
-aXJxc2F2ZSgmcG11LT5sb2NrLCBmbGFncyk7CgorICAgICAgIGlmICghcG11LT5uX2FjdGl2ZSkg
-eworICAgICAgICAgICAgICAgcmF3X3NwaW5fdW5sb2NrX2lycXJlc3RvcmUoJnBtdS0+bG9jaywg
-ZmxhZ3MpOworICAgICAgICAgICAgICAgcmV0dXJuIEhSVElNRVJfTk9SRVNUQVJUOworICAgICAg
-IH0KKwogICAgICAgIGxpc3RfZm9yX2VhY2hfZW50cnkoZXZlbnQsICZwbXUtPmFjdGl2ZV9saXN0
-LCBhY3RpdmVfZW50cnkpCiAgICAgICAgICAgICAgICByYXBsX2V2ZW50X3VwZGF0ZShldmVudCk7
-CgpAQCAtMjgyLDcgKzI4NCw3IEBAIHN0YXRpYyB2b2lkIHJhcGxfcG11X2V2ZW50X3N0b3Aoc3Ry
-dWN0IHBlcmZfZXZlbnQgKmV2ZW50LCBpbnQgbW9kZSkKICAgICAgICAgICAgICAgIFdBUk5fT05f
-T05DRShwbXUtPm5fYWN0aXZlIDw9IDApOwogICAgICAgICAgICAgICAgcG11LT5uX2FjdGl2ZS0t
-OwogICAgICAgICAgICAgICAgaWYgKHBtdS0+bl9hY3RpdmUgPT0gMCkKLSAgICAgICAgICAgICAg
-ICAgICAgICAgaHJ0aW1lcl9jYW5jZWwoJnBtdS0+aHJ0aW1lcik7CisgICAgICAgICAgICAgICAg
-ICAgICAgIGhydGltZXJfdHJ5X3RvX2NhbmNlbCgmcG11LT5ocnRpbWVyKTsKCiAgICAgICAgICAg
-ICAgICBsaXN0X2RlbCgmZXZlbnQtPmFjdGl2ZV9lbnRyeSk7CgpGaXJzdGx5LCB0aGUgZGVhZGxv
-Y2sgY291bGQgYmUgbWl0aWdhdGVkLiBCZWNhdXNlIGlmIHRoZSB0aW1lciBjYWxsYmFjayBmdW5j
-dGlvbgppcyBydW5uaW5nLCB0aGUgaHJ0aW1lcl90cnlfdG9fY2FuY2VsKCkgd2lsbCBkaXJlY3Rs
-eSByZXR1cm4uIAoKU2Vjb25kbHksIHRoZSByYWNlIGNvdWxkIGJlIGF2b2lkZWQuIEJlY2F1c2Ug
-d2UgdXNlIHBtdS0+bG9jayB0byBzeW5jaHJvbml6ZSBhbmQKbW92ZSB0aGUgY2hlY2sgImlmICgh
-cG11LT5uX2FjdGl2ZSkiIGludG8gdGhlIHByb3RlY3Rpb24gc2NvcGUgb2YgcG11LT5sb2NrLgpJ
-ZiB0aGUgcmFwbF9wbXVfZXZlbnRfc3RvcCgpIGhhcyBmaW5pc2hlZCwgdGhlICJwbXUtPm5fYWN0
-aXZlIiBlcXVhbHMgdG8gMCBhbmQKdGhlIHJhcGxfaHJ0aW1lcl9oYW5kbGUoKSB3aWxsIHJldHVy
-biAiSFJUSU1FUl9OT1JFU1RBUlQiLgoKVGhpcmRseSwgdGhpcyBzb2x1dGlvbiB3aWxsIG5vdCBj
-YXVzZSBxdWFsaXR5LW9mLWltcGxlbWVudGF0aW9uIGlzc3VlIG9mIHRoZSBocnRpbWVyLgoKQmVz
-dCByZWdhcmRzLApEdW9taW5nIFpob3UK
+From: Al Viro
+> Sent: 20 September 2022 01:24
+> 
+> On Mon, Sep 19, 2022 at 10:33:14AM +0800, Jiangshan Yi wrote:
+> > From: Jiangshan Yi <yijiangshan@kylinos.cn>
+> >
+> > It is better to use __func__ instead of function name.
+> 
+> 	Why is it better?  And why is it *not* sent to (active)
+> maintainers of fs/erofs?  I'm not going to apply that behind their
+> backs and I would ask akpm to abstain from taking that one.
+
+It is distinctly worse.
+Anyone grepping the kernel source for the message text will
+fail to find it.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
