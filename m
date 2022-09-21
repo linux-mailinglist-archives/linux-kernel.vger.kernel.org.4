@@ -2,154 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D0885BF69D
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 08:48:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE0B35BF6A4
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 08:49:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbiIUGsv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 02:48:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49118 "EHLO
+        id S230163AbiIUGtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 02:49:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbiIUGss (ORCPT
+        with ESMTP id S230094AbiIUGtR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 02:48:48 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7D7780F62;
-        Tue, 20 Sep 2022 23:48:47 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id q3so5445040pjg.3;
-        Tue, 20 Sep 2022 23:48:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=xurnjg6bo3Owb0E+vv7NZukh9QWZAaSruqg+66dadlY=;
-        b=pKj7d6eQ8vGfmarpTQk/mOmGqK97CL1G3DQ5G1gqqLmmreBImdCWoaC0FFEXoAQMf7
-         yANnTJgiTXKE1rSl/0b/mEkomFsdrg9L4eWTDDmXlo56hN3r75T84fA9okWrXMZshjL+
-         peCH0sXazbPml9XnuiqgAj2jRz5FA9ZJ1TKx+3aX4TFlhlQhLvJWLnGpn+xEFwNd8MgL
-         eROy97HwNxHcTvy8wfwxWJyhkCKBFzivpulX+BkpKj3BQaaYBiCaRtp93LnEZg7NxqVj
-         pRHop+cJh/BQfPncmxEhfbJs94qpI7ZADhWA7H6neCNYrm5szYnACZXPxEM1rSCmT8/y
-         OSRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=xurnjg6bo3Owb0E+vv7NZukh9QWZAaSruqg+66dadlY=;
-        b=XOan4XHJs0wiXZj4ZHaTmPU8zGRPfKnpO/VYvdxwCr4pUART7nHKYz1xlMJTFHairL
-         9uiRWsM96qxmxER9filE4CVMUiupYqHbmnKA8IYRedCGBs5zxfxEF+wUruvsvOKJmDIU
-         SC5ulPEiCZwfW8BNXjU/X284yAKqTIOKEqgzSRsnZbhuSON73ES1LfF4DivY3/9NbDBp
-         4UkjUMBITfTQdNgBf3A/nvBUvUqMw3JF3OW0A3h5yxoU+t8fBHc0PrYlEsnvF7dUO9kZ
-         pg15S7IWmTW89g1fsjlnXB4zacf2X8K8tvkPbHdbcBQV+DbqIOxqqLLVa1xvAMfJBBeb
-         IU1A==
-X-Gm-Message-State: ACrzQf2ly76cnFCwEinZxO1kGbWYp0V5TP75epfZhX0YRBNSWSTLItPK
-        03Bf8Zhro6BcP4llquYDkp0=
-X-Google-Smtp-Source: AMsMyM7mVdKvFAF5LQMcscRjuFHOXhziJthXNKphDNdpbJqDhMsIVZyYp0B+p/Avfq2LesmEkn83uQ==
-X-Received: by 2002:a17:902:c245:b0:178:3912:f1fe with SMTP id 5-20020a170902c24500b001783912f1femr3384019plg.13.1663742927300;
-        Tue, 20 Sep 2022 23:48:47 -0700 (PDT)
-Received: from localhost.localdomain ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id b15-20020a170902d50f00b00174c235e1fdsm1086625plg.199.2022.09.20.23.48.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 23:48:46 -0700 (PDT)
-From:   Like Xu <like.xu.linux@gmail.com>
-X-Google-Original-From: Like Xu <likexu@tencent.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Kan Liang <kan.liang@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Jim Mattson <jmattson@google.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Subject: [PATCH] KVM: x86/pmu: Add PEBS support for Intel Sapphire Rapids
-Date:   Wed, 21 Sep 2022 14:48:27 +0800
-Message-Id: <20220921064827.936-1-likexu@tencent.com>
-X-Mailer: git-send-email 2.37.3
+        Wed, 21 Sep 2022 02:49:17 -0400
+Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76C9C80F7E;
+        Tue, 20 Sep 2022 23:49:12 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1663742950;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=W1RFpst4VQOTLpVGnlysDlt9TL1azrIROKSRIvQcbkY=;
+        b=kJyl8jiP5pCaeGDe3exP3MRVWRc7uuhKh9BtrFe+4swwagCERUTaP0JH0OP6XFsQdSC9Gm
+        QbCrc4IpqI1qRenK2fP53KKq6FYFQLA6kB9C2uti9Y+lSaYX3lczEcrTPHw2BfakrqyER0
+        FAve+P9y18RTk8xKGedDmPaRmO+f7Z4=
+From:   Cai Huoqing <cai.huoqing@linux.dev>
+To:     fancer.lancer@gmail.com
+Cc:     caihuoqing <caihuoqing@baidu.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org
+Subject: [PATCH 0/3] dmaengine: dw-edma: Add support for native HDMA
+Date:   Wed, 21 Sep 2022 14:48:49 +0800
+Message-Id: <20220921064859.10328-1-cai.huoqing@linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Like Xu <likexu@tencent.com>
+From: caihuoqing <caihuoqing@baidu.com>
 
-Virtualization support for SPR PEBS has officially available in the
-Intel SDM (June 2022) and has been validated on late stepping machines:
+Add support for HDMA NATIVE, as long the IP design has set
+the compatible register map parameter-HDMA_NATIVE,
+which allows compatibility for native HDMA register configuration.
 
-Compared to Ice Lake Server, the PDIR counter available (Fixed 0) on SPR
-is unchanged, but the capability is enhanced to Instruction-Accurate PDIR
-(PDIR++), where PEBS is taken on the next instruction after the one that
-caused the overflow. Also, it introduces a new Precise Distribution (PDist)
-facility that eliminates the skid when a precise event is programmed
-on general programmable counter 0.
+The HDMA Hyper-DMA IP is an enhancement of the eDMA embedded-DMA IP.
+And the native HDMA registers are different from eDMA,
+so this patch add support for HDMA NATIVE mode.
 
-For guest usage, KVM will raise attr.precise_ip to 3 in both cases
-mentioned above, requesting the correct hardware counter (PRIR++
-or PDist) from the perf sub-system on the host as usual.
+HDMA write and read channels operate independently to maximize
+the performance of the HDMA read and write data transfer over
+the link When you configure the HDMA with multiple read channels,
+then it uses a round robin (RR) arbitration scheme to select
+the next read channel to be serviced.
+The same applies when you have multiple write channels.
 
-Cc: Kan Liang <kan.liang@linux.intel.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Signed-off-by: Like Xu <likexu@tencent.com>
----
- arch/x86/events/intel/core.c |  1 +
- arch/x86/kvm/pmu.c           | 17 ++++++++++++++---
- 2 files changed, 15 insertions(+), 3 deletions(-)
+The native HDMA driver also supports a maximum of 16 independent
+channels (8 write + 8 read), which can run simultaneously.
+Both SAR (Source Address Register) and DAR (Destination Address Register)
+are alignmented to byte.dmaengine: dw-edma: Add support for native HDMA
 
-diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
-index 2db93498ff71..804540ba4599 100644
---- a/arch/x86/events/intel/core.c
-+++ b/arch/x86/events/intel/core.c
-@@ -6288,6 +6288,7 @@ __init int intel_pmu_init(void)
- 		x86_pmu.pebs_constraints = intel_spr_pebs_event_constraints;
- 		x86_pmu.extra_regs = intel_spr_extra_regs;
- 		x86_pmu.limit_period = spr_limit_period;
-+		x86_pmu.pebs_ept = 1;
- 		x86_pmu.pebs_aliases = NULL;
- 		x86_pmu.pebs_prec_dist = true;
- 		x86_pmu.pebs_block = true;
-diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
-index 02f9e4f245bd..81e9d7c2332d 100644
---- a/arch/x86/kvm/pmu.c
-+++ b/arch/x86/kvm/pmu.c
-@@ -28,9 +28,18 @@
- struct x86_pmu_capability __read_mostly kvm_pmu_cap;
- EXPORT_SYMBOL_GPL(kvm_pmu_cap);
- 
--static const struct x86_cpu_id vmx_icl_pebs_cpu[] = {
-+/* Precise Distribution of Instructions Retired (PDIR) */
-+static const struct x86_cpu_id vmx_pebs_pdir_cpu[] = {
- 	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_D, NULL),
- 	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_X, NULL),
-+	/* Instruction-Accurate PDIR (PDIR++) */
-+	X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X, NULL),
-+	{}
-+};
-+
-+/* Precise Distribution (PDist) */
-+static const struct x86_cpu_id vmx_pebs_pdist_cpu[] = {
-+	X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X, NULL),
- 	{}
- };
- 
-@@ -181,12 +190,14 @@ static void pmc_reprogram_counter(struct kvm_pmc *pmc, u32 type,
- 		 * the accuracy of the PEBS profiling result, because the "event IP"
- 		 * in the PEBS record is calibrated on the guest side.
- 		 *
--		 * On Icelake everything is fine. Other hardware (GLC+, TNT+) that
-+		 * On Icelake everything is fine. Other hardware (TNT+) that
- 		 * could possibly care here is unsupported and needs changes.
- 		 */
- 		attr.precise_ip = 1;
--		if (x86_match_cpu(vmx_icl_pebs_cpu) && pmc->idx == 32)
-+		if ((pmc->idx == 32 && x86_match_cpu(vmx_pebs_pdir_cpu)) ||
-+		    (pmc->idx == 0 && x86_match_cpu(vmx_pebs_pdist_cpu))) {
- 			attr.precise_ip = 3;
-+		}
- 	}
- 
- 	event = perf_event_create_kernel_counter(&attr, -1, current,
+These series based on the series
+https://lore.kernel.org/dmaengine/20220822185332.26149-1-Sergey.Semin@baikalelectronics.ru/
+
+Cai Huoqing (3):
+  dmaengine: dw-edma: Rename dw_edma_core_ops structure to
+    dw_edma_plat_ops
+  dmaengine: dw-edma: Create a new dw_edma_core_ops structure to
+    abstract controller operation
+  dmaengine: dw-edma: Add support for native HDMA
+
+ drivers/dma/dw-edma/Makefile             |   6 +-
+ drivers/dma/dw-edma/dw-edma-core.c       |  65 ++---
+ drivers/dma/dw-edma/dw-edma-core.h       |  19 ++
+ drivers/dma/dw-edma/dw-edma-pcie.c       |   4 +-
+ drivers/dma/dw-edma/dw-edma-v0-core.c    |  90 ++++++-
+ drivers/dma/dw-edma/dw-edma-v0-core.h    |  14 +-
+ drivers/dma/dw-edma/dw-hdma-v0-core.c    | 304 +++++++++++++++++++++++
+ drivers/dma/dw-edma/dw-hdma-v0-core.h    |  17 ++
+ drivers/dma/dw-edma/dw-hdma-v0-debugfs.c | 150 +++++++++++
+ drivers/dma/dw-edma/dw-hdma-v0-debugfs.h |  22 ++
+ drivers/dma/dw-edma/dw-hdma-v0-regs.h    |  98 ++++++++
+ include/linux/dma/edma.h                 |   7 +-
+ 12 files changed, 725 insertions(+), 71 deletions(-)
+ create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-core.c
+ create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-core.h
+ create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.c
+ create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.h
+ create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-regs.h
+
 -- 
-2.37.3
+2.25.1
 
