@@ -2,112 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EBED5BF6CC
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 08:55:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EBC95BF6CF
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 08:56:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229996AbiIUGzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 02:55:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33522 "EHLO
+        id S230012AbiIUG4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 02:56:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbiIUGzO (ORCPT
+        with ESMTP id S229602AbiIUG4d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 02:55:14 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF0352E6F
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 23:55:10 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id f9so7650534lfr.3
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 23:55:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=sRNPPxQwMPWqLWjhj5YW/0hO23m4s4pA3ZxgfGEgLeQ=;
-        b=G/8D3dSTttTpzXOjAWi9d1DQ7rTiVYMus6IL0Yb5KZ5Q2Ga7EPgRD7cGkuN3oXp67N
-         dmtxinE/F2lefDeiN5Ij/Rt1oeRF82EaERJRGGA3NUnVDVE0zQ/nia9twKkSN5yQ/dVP
-         tkp4MTTuTJW8soQP+qoOjyxARqSjRRf7zBaSx8LRkvWGDZ/5UM1zl78GaptJVuhgNSta
-         JZ/U7v7Cj1TxFgdm9RzH2//TZ3zWesVB1P0DaKR5KcLqi3QJpDgjIy28r1eOz7p0oG/3
-         /ulJnrHBrByf2SlZluGEDoOay0gHJNS7q3f9v/bFip0SATm9KZ4IihcB0S/d+KHU6QHK
-         PARQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=sRNPPxQwMPWqLWjhj5YW/0hO23m4s4pA3ZxgfGEgLeQ=;
-        b=Pyz/3zYtLlh6Z26253SNKSoIPdOO3L59E3DiAmYL3/uElIj8amHEfKuvhsI0TKBnq9
-         mNtdFz4m6dl2rTWLFMe40Oaa1bWxeEdE0pti4Ws1Q7gA6gYPOKdKWuyupXLyx4CVR88i
-         P8ovs8VxbF+CyPXtEMipNobAas817R3ucui4v8uAjD2Wpz78biIaJt/J0hzHGowYIcXH
-         aaJ0syyFitTcifUyIlH18/glLzbEuDgQLTxEqAA9EdKPCMuACHbqUNpw2Qre+PE+Hqc+
-         MexN52c+45qsQWXRkeXSWNHrHeWV+9wL1mwzTXNJpDOytr+lKxtK9sXRnQfaQ+o4Ziqw
-         oWPw==
-X-Gm-Message-State: ACrzQf0O63GamdqrLEC5E2qau3AZlxZOsqNIIYp/AifpZzWpjQ7ZbqZK
-        0jdZn14qhGTUgUwnHujKX2q/Xw==
-X-Google-Smtp-Source: AMsMyM4DTkJhb6tltXybTUjMwPnetSGfYqWpxsNwBGB5mUV9PpXWl3QlTC+kYnYLuO4XT7A9lMwEEw==
-X-Received: by 2002:a19:5f59:0:b0:497:a72e:e0a1 with SMTP id a25-20020a195f59000000b00497a72ee0a1mr8976594lfj.259.1663743308568;
-        Tue, 20 Sep 2022 23:55:08 -0700 (PDT)
-Received: from krzk-bin (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id j21-20020a056512345500b004946274b7d6sm305694lfr.166.2022.09.20.23.55.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 23:55:08 -0700 (PDT)
-Date:   Wed, 21 Sep 2022 08:55:06 +0200
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Asmaa Mnebhi <asmaa@nvidia.com>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-kernel@vger.kernel.org, robh@kernel.org,
-        devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Khalil Blaiech <kblaiech@nvidia.com>
-Subject: Re: [PATCH v5 8/8] i2c: i2c-mlxbf.c: Update binding devicetree
-Message-ID: <20220921065506.6cu6p2cpu3zfhtie@krzk-bin>
-References: <20220920174736.9766-1-asmaa@nvidia.com>
- <20220920174736.9766-9-asmaa@nvidia.com>
+        Wed, 21 Sep 2022 02:56:33 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF827961E;
+        Tue, 20 Sep 2022 23:56:32 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id BCCDF1F747;
+        Wed, 21 Sep 2022 06:56:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1663743390; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=oh/7h2aPF1mzV4xLKAoOojrZB7GOctUET+2KxBXzCs0=;
+        b=NTLtYUFjbBCX3rM7ziXwx+AQTuXbKy4GU7SFAo0bUYrWvPNU9glzBi1XqqNoB1D+dDdmLa
+        ASk8JL/nvqGhRKWCoqsuLH//blAyDpjkTeV7gvzKeK0N1VK+2L2ONq3YkbeHZVVmEnz55g
+        p+lZ9yzFvwCOi1R1kixwt0f/Dphu5RU=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 8FC592C141;
+        Wed, 21 Sep 2022 06:56:30 +0000 (UTC)
+Date:   Wed, 21 Sep 2022 08:56:27 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        linux-modules@vger.kernel.org
+Subject: Re: [PATCH v2 7/8] livepatch: Improve the search performance of
+ module_kallsyms_on_each_symbol()
+Message-ID: <Yyq1m1pF7ErHjuMU@alley>
+References: <20220909130016.727-1-thunder.leizhen@huawei.com>
+ <20220909130016.727-8-thunder.leizhen@huawei.com>
+ <YymtJwYB7Q9mTPgS@alley>
+ <263d1b98-463f-79b0-a4ff-41b9af900e9c@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220920174736.9766-9-asmaa@nvidia.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <263d1b98-463f-79b0-a4ff-41b9af900e9c@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 20 Sep 2022 13:47:36 -0400, Asmaa Mnebhi wrote:
-> In the latest version of the i2c-mlxbf.c driver, the "Smbus block"
-> resource was broken down to 3 separate resources "Smbus timer",
-> "Smbus master" and "Smbus slave" to accommodate for BlueField-3
-> SoC registers' changes.
+On Tue 2022-09-20 22:01:44, Leizhen (ThunderTown) wrote:
+> On 2022/9/20 20:08, Petr Mladek wrote:
+> > On Fri 2022-09-09 21:00:15, Zhen Lei wrote:
+> > 3. As a result the *mod parameter won't be used by any existing
+> >    fn() callback and could be removed. This should be done as
+> >    a separate patch. It touches also ftrace_lookup_symbols().
 > 
-> Reviewed-by: Khalil Blaiech <kblaiech@nvidia.com>
-> Signed-off-by: Asmaa Mnebhi <asmaa@nvidia.com>
-> ---
->  .../bindings/i2c/mellanox,i2c-mlxbf.yaml      | 48 ++++++++++++++-----
->  1 file changed, 36 insertions(+), 12 deletions(-)
-> 
+> OK, I will do it tomorrow. The next version is v5.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Please, wait a bit. I have missed that there was already v4
+that solved some my concerns. I am going to look at it.
 
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-Error: Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.example.dts:26.19-20 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:384: Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.example.dtb] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1420: dt_binding_check] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+Best Regards,
+Petr
