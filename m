@@ -2,138 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14A8A5BFAB8
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 11:21:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DF155BFAC0
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 11:22:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231499AbiIUJVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 05:21:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34062 "EHLO
+        id S231558AbiIUJWc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 05:22:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231599AbiIUJVU (ORCPT
+        with ESMTP id S231436AbiIUJWL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 05:21:20 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3368E90C73;
-        Wed, 21 Sep 2022 02:20:16 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 22BC2139F;
-        Wed, 21 Sep 2022 02:20:23 -0700 (PDT)
-Received: from [10.57.18.118] (unknown [10.57.18.118])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 661D83F73D;
-        Wed, 21 Sep 2022 02:20:14 -0700 (PDT)
-Message-ID: <45d2e6c2-3b4b-5720-0431-002c74b1f9cc@arm.com>
-Date:   Wed, 21 Sep 2022 10:20:08 +0100
+        Wed, 21 Sep 2022 05:22:11 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21CD780EAF
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 02:21:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663752094; x=1695288094;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=qsKMzCluRP2kHi9aODYj+J7wVo+5h8nDNgj2t0qCdFk=;
+  b=eedklE79bfLczNDR31W4kHZISLhuEfQUz0RGkdKgErn2VlBDn5A5hAlo
+   fkUrM2YcUTSobvNvGcbDrgjTIbExj4cjj/5GeYiR/Nj1AbmYOOM911Dap
+   0uLJ/Ge/3SUxIHd0Fphx+DRceSjnhFrl7BWiiYmArgW+zWhcoxDDlICjs
+   9zsPqeAjIvWJZBqOvDG8aMNgqzqrIJx6wGTjVpRPUsVKGHWWZ7BI0FWbs
+   MIFxgWmLF+8pRnCDr4AzXe+cnBV7AZs9uWzRBxdxgGtR54hOuTSsJkHoH
+   yRfUAjJH4mV9QfctAG4YsGW6ObIuDKI08LNsdirAl8MzAAXMldsrY6TCk
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10476"; a="297550206"
+X-IronPort-AV: E=Sophos;i="5.93,333,1654585200"; 
+   d="scan'208";a="297550206"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 02:21:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,333,1654585200"; 
+   d="scan'208";a="649976924"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 21 Sep 2022 02:21:14 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oavur-0003T5-27;
+        Wed, 21 Sep 2022 09:21:13 +0000
+Date:   Wed, 21 Sep 2022 17:20:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:dev.2022.09.03a] BUILD REGRESSION
+ 607762184099b5d0b6765f69673fafa1d7eb4d30
+Message-ID: <632ad758.4SlheXgFz4bm2lB9%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: Similar SoCs with different CPUs and interrupt bindings
-Content-Language: en-GB
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Andre Przywara <andre.przywara@arm.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <CAMuHMdUPm36RsxHdVwspR3NCAR3C507AyB6R65W42N2gXWq0ag@mail.gmail.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <CAMuHMdUPm36RsxHdVwspR3NCAR3C507AyB6R65W42N2gXWq0ag@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-21 08:46, Geert Uytterhoeven wrote:
->          Hi Rob, Krzysztof,
-> 
-> This is a topic that came up at the RISC-V BoF at Plumbers, and it was
-> suggested to bring it up with you.
-> 
-> The same SoC may be available with either RISC-V or other (e.g. ARM) CPU
-> cores (an example of this are the Renesas RZ/Five and RZ/G2UL SoCs).
-> To avoid duplication, we would like to have:
->    - <riscv-soc>.dtsi includes <base-soc>.dtsi,
->    - <arm-soc>.dtsi includes <base-soc>.dtsi.
-> 
-> Unfortunately RISC-V and ARM typically use different types of interrupt
-> controllers, using different bindings (e.g. 2-cell vs. 3-cell), and
-> possibly using different interrupt numbers.  Hence the interrupt-parent
-> and interrupts{-extended} properties should be different, too.
-> 
-> Possible solutions[1]:
->    1. interrupt-map
-> 
->    2. Use a SOC_PERIPHERAL_IRQ() macro in interrupts properties in
->       <base-soc>.dtsi, with
->         - #define SOC_PERIPHERAL_IRQ(nr, na) nr          // RISC-V
->         - #define SOC_PERIPHERAL_IRQ(nr, na) GIC_SPI na  // ARM
->       Note that the cpp/dtc combo does not support arithmetic, so even
->       the simple case where nr = 32 + na cannot be simplified.
-> 
->    3. Wrap inside RISCV() and ARM() macros, e.g.:
-> 
->          RISCV(interrupts = <412 IRQ_TYPE_LEVEL_HIGH>;)
->          ARM(interrupts = <GIC_SPI 380 IRQ_TYPE_LEVEL_HIGH>;)
-> 
->       Cfr. ARM() and THUMB() in arch/arm/include/asm/unified.h, as used
->       to express the same operation using plain ARM or ARM Thumb
->       instructions.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2022.09.03a
+branch HEAD: 607762184099b5d0b6765f69673fafa1d7eb4d30  srcu: Check for consistent per-CPU per-srcu_struct NMI safety
 
-4. Put all the "interrupts" properties in the SoC-specific DTSI at the 
-same level as the interrupt controller to which they correspond. Works 
-out of the box with no horrible mystery macros, and is really no more or 
-less error-prone than any other approach. Yes, it means replicating a 
-bit of structure and/or having labels for everything (many of which may 
-be wanted anyway), but that's not necessarily a bad thing for 
-readability anyway. Hierarchical definitions are standard FDT practice 
-and should be well understood, so this is arguably the simplest and 
-least surprising approach :)
+Error/Warning reports:
 
-Cheers,
-Robin.
+https://lore.kernel.org/lkml/202209210942.YUFSaizJ-lkp@intel.com
+https://lore.kernel.org/lkml/202209211114.7li0O31k-lkp@intel.com
 
-> Personally, I'm leaning towards the third solution, as it is the most
-> flexible, and allows us to extend to more than 2 interrupt controllers.
-> 
-> Note that this is actually not a new issue.  For years, ARM SoCs have
-> existed with multiple types of cores on the same die, using Cortex-A
-> cores for the application, and Cortex-R/SuperH/V850/... cores for
-> real-time and/or baseband operation.  So far this wasn't an issue, as
-> only the Cortex-A cores ran Linux, and we ignored the other cores (and
-> the related interrupt controllers and hierarchy) in DT.
-> 
-> What do you think?
-> Thanks for your comments!
-> 
-> [1] https://lore.kernel.org/lkml/20220815050815.22340-7-samuel@sholland.org
-> 
-> Gr{oetje,eeting}s,
-> 
->                          Geert
-> 
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-> 
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                  -- Linus Torvalds
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Error/Warning: (recently discovered and may have been fixed)
+
+ERROR: modpost: "__srcu_read_lock_nmisafe" [kernel/rcu/rcutorture.ko] undefined!
+ERROR: modpost: "__srcu_read_unlock_nmisafe" [kernel/rcu/rcutorture.ko] undefined!
+kernel/rcu/srcutree.c:647:1: error: 'u' undeclared (first use in this function); did you mean 'u8'?
+kernel/rcu/srcutree.c:647:1: error: 'u' undeclared (first use in this function); did you mean 'up'?
+kernel/rcu/srcutree.c:647:2: error: expected ';' before ')' token
+kernel/rcu/srcutree.c:647:2: error: expected statement before ')' token
+
+Error/Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- parisc-randconfig-r005-20220921
+|   |-- kernel-rcu-srcutree.c:error:expected-before-)-token
+|   |-- kernel-rcu-srcutree.c:error:expected-statement-before-)-token
+|   `-- kernel-rcu-srcutree.c:error:u-undeclared-(first-use-in-this-function)
+|-- riscv-allmodconfig
+|   |-- kernel-rcu-srcutree.c:error:expected-before-)-token
+|   |-- kernel-rcu-srcutree.c:error:expected-statement-before-)-token
+|   `-- kernel-rcu-srcutree.c:error:u-undeclared-(first-use-in-this-function)
+|-- s390-allyesconfig
+|   |-- kernel-rcu-srcutree.c:error:expected-before-)-token
+|   |-- kernel-rcu-srcutree.c:error:expected-statement-before-)-token
+|   `-- kernel-rcu-srcutree.c:error:u-undeclared-(first-use-in-this-function)
+|-- x86_64-allmodconfig
+|   |-- kernel-rcu-srcutree.c:error:expected-before-)-token
+|   |-- kernel-rcu-srcutree.c:error:expected-statement-before-)-token
+|   `-- kernel-rcu-srcutree.c:error:u-undeclared-(first-use-in-this-function)
+|-- x86_64-allyesconfig
+|   |-- kernel-rcu-srcutree.c:error:expected-before-)-token
+|   |-- kernel-rcu-srcutree.c:error:expected-statement-before-)-token
+|   `-- kernel-rcu-srcutree.c:error:u-undeclared-(first-use-in-this-function)
+`-- x86_64-randconfig-a002
+    |-- ERROR:__srcu_read_lock_nmisafe-kernel-rcu-rcutorture.ko-undefined
+    `-- ERROR:__srcu_read_unlock_nmisafe-kernel-rcu-rcutorture.ko-undefined
+clang_recent_errors
+|-- arm-randconfig-r013-20220921
+|   `-- kernel-rcu-srcutree.c:error:use-of-undeclared-identifier-u
+`-- powerpc-randconfig-r004-20220921
+    `-- kernel-rcu-srcutree.c:error:use-of-undeclared-identifier-u
+
+elapsed time: 827m
+
+configs tested: 54
+configs skipped: 2
+
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+powerpc                          allmodconfig
+mips                             allyesconfig
+powerpc                           allnoconfig
+sh                               allmodconfig
+arc                                 defconfig
+s390                             allmodconfig
+alpha                               defconfig
+s390                                defconfig
+s390                             allyesconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+arc                  randconfig-r043-20220921
+riscv                randconfig-r042-20220921
+s390                 randconfig-r044-20220921
+i386                                defconfig
+i386                             allyesconfig
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a006
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+x86_64                              defconfig
+x86_64                               rhel-8.3
+arm                                 defconfig
+x86_64                           allyesconfig
+arm                              allyesconfig
+arm64                            allyesconfig
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                        randconfig-a015
+x86_64                    rhel-8.3-kselftests
+i386                          randconfig-a005
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-syz
+ia64                             allmodconfig
+
+clang tested configs:
+hexagon              randconfig-r041-20220921
+hexagon              randconfig-r045-20220921
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a006
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
