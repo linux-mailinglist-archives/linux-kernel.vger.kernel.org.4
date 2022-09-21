@@ -2,107 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E9E65BF837
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 09:50:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D33845BF835
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 09:50:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231127AbiIUHue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 03:50:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52052 "EHLO
+        id S230525AbiIUHua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 03:50:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230506AbiIUHu2 (ORCPT
+        with ESMTP id S229519AbiIUHuZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 03:50:28 -0400
-Received: from mail.kapsi.fi (mail.kapsi.fi [IPv6:2001:67c:1be8::25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9873C67440;
-        Wed, 21 Sep 2022 00:50:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
-        s=20161220; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=yDU7cULxVdpJ/UBJp8aYy02w14Tx6aVcHKBJ/fAjBHk=; b=1j1J0Nfa6b+RwDngJH/QJ9P1Dd
-        8rUbvZzpqajDqRXZXukqpeO3bisSbhdTUWh3RndHaZGCB0jYWafxCOKyZkixUKMruSNt2o8iRv32U
-        +KXZ/B1mA7tgg8E9w/zA50K8p4do+dvOl4HAZ+0vi8Y5RUBBQGlWsWtnWVPiPCVoNgjniAa5C3YM2
-        y8KpvDE3p0637ZNGddh8z/vT1pfe46cpDil5aEIlr1XTJQXgkc7usijYJqTuxCvZze7vc5ezUMq7u
-        qxpxpUKYMGXNN3ZYUendoIxt1ZePaSzQeOKCYn+KldbLH2qmpL+Sp+a80eRyefnZ4memqD7LOrwbE
-        UgTlClQQ==;
-Received: from 91-158-25-70.elisa-laajakaista.fi ([91.158.25.70] helo=[192.168.1.10])
-        by mail.kapsi.fi with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <cyndis@kapsi.fi>)
-        id 1oauUq-0076Jh-I3; Wed, 21 Sep 2022 10:50:16 +0300
-Message-ID: <de7f5e65-c939-558a-277d-01320f93eedc@kapsi.fi>
-Date:   Wed, 21 Sep 2022 10:50:15 +0300
+        Wed, 21 Sep 2022 03:50:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEA464F388
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 00:50:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 82FAEB81055
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 07:50:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34316C433B5
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 07:50:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663746621;
+        bh=nVIQxsI1fDK6fXn9zNbWd1QMba1kdG0XRFSh5nV6HV8=;
+        h=From:Date:Subject:To:Cc:From;
+        b=thUkHxVCjYu82LJhVtAbgKj5l+kx1dKwyCRGe2PL0HXfLBrJmy2dy5oVgnmO9+FOJ
+         wlNGEvI+Eu9OToFcm5fmrDIwndb2/cj+NilaE2i8IO6Ah4obooRY6N044nOcNcOMS2
+         RJgRoaFWq6YMfFyr/eCZPvKOJBFtdeoU7FERtI7BNNivSwxc/N1XYb6p3XquFg+Q+e
+         816gnO7z5F2TwxPottDa/A9zzB73rhHYOf3rVGKtwsum56RAuYHzMuuEy7wEamhRcl
+         9hzFkyZHLJP+NJy/BLjmyGbeMYQHY2QXtNaWIQidGP9evPbqkQwZcuTs9y0KyywwOb
+         b1ROFWjrUxSfg==
+Received: by mail-ot1-f51.google.com with SMTP id 102-20020a9d0bef000000b0065a08449ab3so3396629oth.2
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 00:50:21 -0700 (PDT)
+X-Gm-Message-State: ACrzQf3UeTXLGGz4iX/xd/mqFIA42s1Yyo8VlEvWnthUhQZMDQsktUTe
+        yCCVKsEnYSFzXqYeStp5KAE2+h5moHoD6oCD0B8=
+X-Google-Smtp-Source: AMsMyM60zxGFkKQfMHKedmO+VXjF1y625raOQPUAdapQBfu9n3jGkg3W45NArjRWCRjQjrL4FatZpYIV3O7TJx6V9ic=
+X-Received: by 2002:a9d:da6:0:b0:655:dd4e:7afc with SMTP id
+ 35-20020a9d0da6000000b00655dd4e7afcmr11680961ots.339.1663746620280; Wed, 21
+ Sep 2022 00:50:20 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH v3 0/8] Support for NVDEC on Tegra234
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Cc:     Mikko Perttunen <mperttunen@nvidia.com>,
-        Ashish Mhetre <amhetre@nvidia.com>,
-        Sameer Pujar <spujar@nvidia.com>,
-        dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220920081203.3237744-1-cyndis@kapsi.fi>
- <89d925ea-f550-6903-1c24-b320ae5a82c0@linaro.org>
-From:   Mikko Perttunen <cyndis@kapsi.fi>
-In-Reply-To: <89d925ea-f550-6903-1c24-b320ae5a82c0@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 91.158.25.70
-X-SA-Exim-Mail-From: cyndis@kapsi.fi
-X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6838:27c7:0:0:0:0 with HTTP; Wed, 21 Sep 2022 00:50:19
+ -0700 (PDT)
+From:   Namjae Jeon <linkinjeon@kernel.org>
+Date:   Wed, 21 Sep 2022 16:50:19 +0900
+X-Gmail-Original-Message-ID: <CAKYAXd-ns2vr_JHJ9ZBvS43Mng2s-xDoV_4rMz2kvJf65zs16w@mail.gmail.com>
+Message-ID: <CAKYAXd-ns2vr_JHJ9ZBvS43Mng2s-xDoV_4rMz2kvJf65zs16w@mail.gmail.com>
+Subject: [GIT PULL] exfat fixes for 6.0-rc7
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sungjong Seo <sj1557.seo@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/21/22 10:26, Krzysztof Kozlowski wrote:
-> On 20/09/2022 10:11, Mikko Perttunen wrote:
->> From: Mikko Perttunen <mperttunen@nvidia.com>
->>
->> v3:
->> * Updated patch 3 based on comments
->>
->> v2:
->> * Updated patches 1,3 based on comments
->> * Added Acked-by to patch 2
->>
->> Original message:
->>
->> Hi all,
->>
->> this series adds support for the HW video decoder, NVDEC,
->> on Tegra234 (Orin). The main change is a switch from Falcon
->> to RISC-V for the internal microcontroller, which brings along
->> a change in how the engine is booted. Otherwise it is backwards
->> compatible with earlier versions.
-> 
-> I asked you to describe the dependencies and patch merging strategy.
-> It's still not here, so I assume there are no and I am taking patches
-> relevant to me.
-> 
-> Best regards,
-> Krzysztof
+Hi Linus,
 
-Sorry, I described it in the earlier email and forgot to add it to the 
-cover letter..
+This is exfat fixes pull request for v6.0-rc7. I add description of
+this pull request on below. Please pull exfat with following fixes.
 
-Patch 8 does depend on patch 1 so it would be better to take the memory 
-patch with it, or however works best from maintainership point of view 
-(not my expertise).
+Thanks!
 
-thanks,
-Mikko
+The following changes since commit 4c612826bec1441214816827979b62f84a097e91:
+
+  Merge tag 'net-6.0-rc3' of
+git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net (2022-08-25
+14:03:58 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/linkinjeon/exfat.git
+tags/exfat-for-6.0-rc7
+
+for you to fetch changes up to 2e9ceb6728f1dc2fa4b5d08f37d88cbc49a20a62:
+
+  exfat: fix overflow for large capacity partition (2022-09-04 09:38:40 +0900)
+
+----------------------------------------------------------------
+Description for this pull request:
+ - fix integer overflow on large partition.
+
+----------------------------------------------------------------
+Yuezhang Mo (1):
+      exfat: fix overflow for large capacity partition
+
+ fs/exfat/fatent.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
