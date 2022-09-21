@@ -2,227 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A5105BF98C
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 10:43:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F30B85BF98E
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 10:44:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229777AbiIUInq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 04:43:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52688 "EHLO
+        id S229872AbiIUIot (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 04:44:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231214AbiIUInk (ORCPT
+        with ESMTP id S229779AbiIUIop (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 04:43:40 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 588177331B;
-        Wed, 21 Sep 2022 01:43:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663749819; x=1695285819;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=GFvWUsBI6PkgCRX8mshboJMjgXfbyH3ZuVvnUjHR6mc=;
-  b=KokexMs7KShv01IpxK7tXJa4xucMjv3MeNSJtjTiKxesQt38PGneh7r1
-   MyhsI+NbDsoJSIR4Qid/pinXcPSlqSOHJ0Flt3ZBUPkwTztrTmKU0Jj1L
-   wEtChesiWp8EGAj2XEaHbaEqt15SyH52mDLaow07MTMOB1k/Avq6KIeIW
-   I5oVDP53pvYnWcCSTtdVt9r5gAN4XGXPlsGHr6biOtbJymIRamX/87hun
-   OWaci1hlfeFJkBcpiqSkrNbBq867eHQLXM66gdrH8DySqVKOn3nWX7MNV
-   mEsRkSxgxcaUxrqrPtwxuDqWhovyMM91cu812fc9wpYoTctyEbnvC3XP/
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10476"; a="297540904"
-X-IronPort-AV: E=Sophos;i="5.93,332,1654585200"; 
-   d="scan'208";a="297540904"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 01:43:38 -0700
-X-IronPort-AV: E=Sophos;i="5.93,332,1654585200"; 
-   d="scan'208";a="744872129"
-Received: from dgonsal1-mobl1.ger.corp.intel.com ([10.252.58.151])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 01:43:36 -0700
-Date:   Wed, 21 Sep 2022 11:43:29 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Sherry Sun <sherry.sun@nxp.com>
-cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "jirislaby@kernel.org" <jirislaby@kernel.org>,
-        "bhuvanchandra.dv@toradex.com" <bhuvanchandra.dv@toradex.com>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: RE: [PATCH] tty: serial: fsl_lpuart: disable dma rx/tx use flags in
- lpuart_dma_shutdown
-In-Reply-To: <AS8PR04MB84049C72D2B47640CC32BBDB924C9@AS8PR04MB8404.eurprd04.prod.outlook.com>
-Message-ID: <f2be5df-cda5-e18-9beb-5ebd75b6e0bc@linux.intel.com>
-References: <20220920111703.1532-1-sherry.sun@nxp.com> <ba937cd2-8a79-5352-c6bc-e553ee9baeed@linux.intel.com> <AS8PR04MB84049C72D2B47640CC32BBDB924C9@AS8PR04MB8404.eurprd04.prod.outlook.com>
+        Wed, 21 Sep 2022 04:44:45 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F57E13CD3
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 01:44:42 -0700 (PDT)
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 1C6523F173
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 08:44:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1663749879;
+        bh=DqH0K51UyTYbMdPeDdb50Ry7JZRrT9mZT8SvU172pnE=;
+        h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+         MIME-Version:Content-Type;
+        b=DulQt+lYZLmcxVrL3GOAGzql8FiJv28hUy9zV8ASdCzngN50PBFkClRtw1A3+DvfP
+         PAO2wB44avbs9FxX9A9hPqYCoLqgbGrV98N+uaSRMmBhJBaJaMpvzdhCSNkPJHH0T0
+         nYPCzohRC/sOwPxKKNnBgoid4Itpe6N8Dln/Axwl8sdaOnJez65FS3JWd+FilyevwM
+         /eX6WCP+qfD0VEreqCjAZvOhcwVbnkwbmEn7fLlnFVnV/FvxrxRHjehexSi7rXFQdh
+         4+sTqAxpOSZmEA5HbtWtWwljIvCFqAyPdmI4y/PHYVjoiEJsQUqKRyg/Mbvrm1Bf5l
+         cXmKbzsIRJZMA==
+Received: by mail-ed1-f72.google.com with SMTP id m13-20020a056402510d00b004519332f0b1so3824712edd.7
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 01:44:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:organization:references:in-reply-to:message-id:subject
+         :cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=DqH0K51UyTYbMdPeDdb50Ry7JZRrT9mZT8SvU172pnE=;
+        b=r2s4vr52RyNdqlKmJaE2ioHlCEAeMGLIYNT5w484LoO2DKuzezilElel8cX2PlL69B
+         4cDStRcpICFYbeRtmnP3P39svi2Gw2lFN/jOHwlx/SbWlsRLbMnshPzg0u7Jb9EkjLqz
+         0zhM2MhFjjaEyEfMloRZo3B9Aht3J1XWHKyAih7wluhT+ikbqvQfJJfnjZxEIXLWZFmU
+         PUD2JbgG/eAxoLj/FfyxdNzQkTdSGvIcpRZtUamNQeAI3RzxitD/rMbhRnqOutItBh2A
+         pskHCSk0n/PbHRa5Kto0aeL4HlOxQg8SgpKuPdMl/g9qaUgZS09WExHF3l/V2bKzv66V
+         s8Bg==
+X-Gm-Message-State: ACrzQf12ovtg6v02nredPnyged+0Ze9c/C+fxBnoM54V8la5h2qH0038
+        M5XCgao3CYB9d6oh8KVNsHxirBeBbTsoqlwI38LdlgVE88oYpOff30S/oxnT9/LuNaJS1g9gscO
+        pUy7eI0zMW8Nlwef3aPCco7ccveucN/U0ucwZG0dWew==
+X-Received: by 2002:a05:6402:440d:b0:450:de54:3fcf with SMTP id y13-20020a056402440d00b00450de543fcfmr23466752eda.312.1663749878094;
+        Wed, 21 Sep 2022 01:44:38 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5FW8Ihpne98QK7GKfHf3O43P8AlLC1ErQ10ZILYuYb6+RHESHYxpgqfolFFnhgsAZzdZkxNw==
+X-Received: by 2002:a05:6402:440d:b0:450:de54:3fcf with SMTP id y13-20020a056402440d00b00450de543fcfmr23466739eda.312.1663749877878;
+        Wed, 21 Sep 2022 01:44:37 -0700 (PDT)
+Received: from smeagol ([194.191.244.86])
+        by smtp.gmail.com with ESMTPSA id b10-20020aa7df8a000000b0044e01e2533asm1429972edy.43.2022.09.21.01.44.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Sep 2022 01:44:37 -0700 (PDT)
+Date:   Wed, 21 Sep 2022 10:44:34 +0200
+From:   Juerg Haefliger <juerg.haefliger@canonical.com>
+To:     Josh Boyer <jwboyer@kernel.org>
+Cc:     Linux Firmware <linux-firmware@kernel.org>,
+        Peter Robinson <pbrobinson@fedoraproject.org>,
+        Takashi Iwai <tiwai@suse.com>, contact@laurentcarlier.com,
+        mpagano@gentoo.org,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        Jared Dominguez <jaredz@redhat.com>,
+        Alex Deucher <alexdeucher@gmail.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>
+Subject: Re: linux-firmware signed commits; does anyone care?
+Message-ID: <20220921104434.2529c45d@smeagol>
+In-Reply-To: <CA+5PVA5ymJ-ghhhCfEBPxBynucF3gD+nHVNwcZkC5bsVotatDQ@mail.gmail.com>
+References: <CA+5PVA5ymJ-ghhhCfEBPxBynucF3gD+nHVNwcZkC5bsVotatDQ@mail.gmail.com>
+Organization: Canonical Ltd
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1239297179-1663749818=:1741"
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/SMLZX+r.Pk4dPIyz4DXcpay";
+ protocol="application/pgp-signature"; micalg=pgp-sha512
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+--Sig_/SMLZX+r.Pk4dPIyz4DXcpay
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
---8323329-1239297179-1663749818=:1741
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+I don't care much about GPG signed commits so dropping them is fine by me.
 
-On Tue, 20 Sep 2022, Sherry Sun wrote:
+...Juerg
 
-> 
-> 
-> > -----Original Message-----
-> > From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> > Sent: 2022年9月20日 20:26
-> > To: Sherry Sun <sherry.sun@nxp.com>
-> > Cc: gregkh@linuxfoundation.org; jirislaby@kernel.org;
-> > bhuvanchandra.dv@toradex.com; linux-serial@vger.kernel.org; linux-
-> > kernel@vger.kernel.org; dl-linux-imx <linux-imx@nxp.com>
-> > Subject: Re: [PATCH] tty: serial: fsl_lpuart: disable dma rx/tx use flags in
-> > lpuart_dma_shutdown
-> > 
-> > On Tue, 20 Sep 2022, Sherry Sun wrote:
-> > 
-> > > lpuart_dma_shutdown tears down lpuart dma, but lpuart_flush_buffer can
-> > > still occur which in turn tries to access dma apis if
-> > > lpuart_dma_tx_use flag is true. At this point since dma is torn down,
-> > > these dma apis can abort. Set lpuart_dma_tx_use and the corresponding
-> > > rx flag lpuart_dma_rx_use to false in lpuart_dma_shutdown so that dmas
-> > > are not accessed after they are relinquished.
-> > >
-> > > Otherwise, when try to kill btattach, kernel may panic. This patch may
-> > > fix this issue.
-> > > root@imx8ulpevk:~# btattach -B /dev/ttyLP2 -S 115200
-> > > ^C[   90.182296] Internal error: synchronous external abort: 96000210 [#1]
-> > PREEMPT SMP
-> > > [   90.189806] Modules linked in: moal(O) mlan(O)
-> > > [   90.194258] CPU: 0 PID: 503 Comm: btattach Tainted: G           O
-> > 5.15.32-06136-g34eecdf2f9e4 #37
-> > > [   90.203554] Hardware name: NXP i.MX8ULP 9X9 EVK (DT)
-> > > [   90.208513] pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO -DIT -SSBS
-> > BTYPE=--)
-> > > [   90.215470] pc : fsl_edma3_disable_request+0x8/0x60
-> > > [   90.220358] lr : fsl_edma3_terminate_all+0x34/0x20c
-> > > [   90.225237] sp : ffff800013f0bac0
-> > > [   90.228548] x29: ffff800013f0bac0 x28: 0000000000000001 x27:
-> > ffff000008404800
-> > > [   90.235681] x26: ffff000008404960 x25: ffff000008404a08 x24:
-> > ffff000008404a00
-> > > [   90.242813] x23: ffff000008404a60 x22: 0000000000000002 x21:
-> > 0000000000000000
-> > > [   90.249946] x20: ffff800013f0baf8 x19: ffff00000559c800 x18:
-> > 0000000000000000
-> > > [   90.257078] x17: 0000000000000000 x16: 0000000000000000 x15:
-> > 0000000000000000
-> > > [   90.264211] x14: 0000000000000003 x13: 0000000000000000 x12:
-> > 0000000000000040
-> > > [   90.271344] x11: ffff00000600c248 x10: ffff800013f0bb10 x9 :
-> > ffff000057bcb090
-> > > [   90.278477] x8 : fffffc0000241a08 x7 : ffff00000534ee00 x6 :
-> > ffff000008404804
-> > > [   90.285609] x5 : 0000000000000000 x4 : 0000000000000000 x3 :
-> > ffff0000055b3480
-> > > [   90.292742] x2 : ffff8000135c0000 x1 : ffff00000534ee00 x0 :
-> > ffff00000559c800
-> > > [   90.299876] Call trace:
-> > > [   90.302321]  fsl_edma3_disable_request+0x8/0x60
-> > > [   90.306851]  lpuart_flush_buffer+0x40/0x160
-> > > [   90.311037]  uart_flush_buffer+0x88/0x120
-> > > [   90.315050]  tty_driver_flush_buffer+0x20/0x30
-> > > [   90.319496]  hci_uart_flush+0x44/0x90
-> > > [   90.323162]  +0x34/0x12c
-> > > [   90.327253]  tty_ldisc_close+0x38/0x70
-> > > [   90.331005]  tty_ldisc_release+0xa8/0x190
-> > > [   90.335018]  tty_release_struct+0x24/0x8c
-> > > [   90.339022]  tty_release+0x3ec/0x4c0
-> > > [   90.342593]  __fput+0x70/0x234
-> > > [   90.345652]  ____fput+0x14/0x20
-> > > [   90.348790]  task_work_run+0x84/0x17c
-> > > [   90.352455]  do_exit+0x310/0x96c
-> > > [   90.355688]  do_group_exit+0x3c/0xa0
-> > > [   90.359259]  __arm64_sys_exit_group+0x1c/0x20
-> > > [   90.363609]  invoke_syscall+0x48/0x114
-> > > [   90.367362]  el0_svc_common.constprop.0+0xd4/0xfc
-> > > [   90.372068]  do_el0_svc+0x2c/0x94
-> > > [   90.375379]  el0_svc+0x28/0x80
-> > > [   90.378438]  el0t_64_sync_handler+0xa8/0x130
-> > > [   90.382711]  el0t_64_sync+0x1a0/0x1a4
-> > > [   90.386376] Code: 17ffffda d503201f d503233f f9409802 (b9400041)
-> > > [   90.392467] ---[ end trace 2f60524b4a43f1f6 ]---
-> > > [   90.397073] note: btattach[503] exited with preempt_count 1
-> > > [   90.402636] Fixing recursive fault but reboot is needed!
-> > >
-> > > Fixes: 6250cc30c4c4 ("tty: serial: fsl_lpuart: Use scatter/gather DMA
-> > > for Tx")
-> > > Signed-off-by: Thara Gopinath <tgopinath@microsoft.com>
-> > > Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
-> > > ---
-> > >  drivers/tty/serial/fsl_lpuart.c | 2 ++
-> > >  1 file changed, 2 insertions(+)
-> > >
-> > > diff --git a/drivers/tty/serial/fsl_lpuart.c
-> > > b/drivers/tty/serial/fsl_lpuart.c index f21915015d67..064bd1f33c21
-> > > 100644
-> > > --- a/drivers/tty/serial/fsl_lpuart.c
-> > > +++ b/drivers/tty/serial/fsl_lpuart.c
-> > > @@ -1771,6 +1771,7 @@ static void lpuart_dma_shutdown(struct
-> > lpuart_port *sport)
-> > >  	if (sport->lpuart_dma_rx_use) {
-> > >  		del_timer_sync(&sport->lpuart_timer);
-> > >  		lpuart_dma_rx_free(&sport->port);
-> > > +		sport->lpuart_dma_rx_use = false;
-> > >  	}
-> > >
-> > >  	if (sport->lpuart_dma_tx_use) {
-> > > @@ -1779,6 +1780,7 @@ static void lpuart_dma_shutdown(struct
-> > lpuart_port *sport)
-> > >  			sport->dma_tx_in_progress = false;
-> > >  			dmaengine_terminate_all(sport->dma_tx_chan);
-> > >  		}
-> > > +		sport->lpuart_dma_tx_use = false;
-> > >  	}
-> > >
-> > >  	if (sport->dma_tx_chan)
-> > 
-> > Isn't it still racy because lpuart_dma_shutdown() is called outside of port's
-> > lock?
-> 
-> Hi Ilpo, do you think add the following changes should work for this?
-> 
-> diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
-> index 064bd1f33c21..b3c53935fbc8 100644
-> --- a/drivers/tty/serial/fsl_lpuart.c
-> +++ b/drivers/tty/serial/fsl_lpuart.c
-> @@ -1768,10 +1768,14 @@ static int lpuart32_startup(struct uart_port *port)
-> 
->  static void lpuart_dma_shutdown(struct lpuart_port *sport)
->  {
-> +       unsigned long flags;
-> +
->         if (sport->lpuart_dma_rx_use) {
->                 del_timer_sync(&sport->lpuart_timer);
->                 lpuart_dma_rx_free(&sport->port);
-> +               spin_lock_irqsave(&sport->port.lock, flags);
->                 sport->lpuart_dma_rx_use = false;
-> +               spin_unlock_irqrestore(&sport->port.lock, flags);
->         }
-> 
->         if (sport->lpuart_dma_tx_use) {
-> @@ -1780,7 +1784,9 @@ static void lpuart_dma_shutdown(struct lpuart_port *sport)
->                         sport->dma_tx_in_progress = false;
->                         dmaengine_terminate_all(sport->dma_tx_chan);
->                 }
-> +               spin_lock_irqsave(&sport->port.lock, flags);
->                 sport->lpuart_dma_tx_use = false;
-> +               spin_unlock_irqrestore(&sport->port.lock, flags);
->         }
 
-After reading a bit more, I think the original patch is likely fine since 
-shutdown doesn't seem to be racing with flush_buffer.
+> Some time ago, we went back to doing ~monthly releases for
+> linux-firmware primarily to help distributions package firmware in a
+> simpler manner.  We GPG sign the tarballs, as is good practice, but as
+> part of reintroducing the tarballs we also started having a
+> linux-firmware maintainer GPG sign *every* commit done by a
+> maintainer.  The intention there was that because we're dealing with
+> binary blobs we really have no recourse to see changes unlike a source
+> code repo.  The signed commits at least provides a measure for
+> interested people to ensure the repo itself is only being committed to
+> by a recognized maintainer and it isn't compromised (in theory).  The
+> downside is that pull requests are merged non-ff and we wind up
+> signing the merge commit.
+>=20
+> The question at hand though, is does anyone care about the GPG signed
+> commits?  It's not clear to me this practice is even noticed nor if it
+> is bringing any value to this project.  Since we've started this
+> practice, I am literally the only one committing to the repo and while
+> it isn't hard to do I want to know if it's actually useful to anyone.
+>=20
+> I ask for two separate reasons.  The first is that a group of
+> interested firmware submitters is looking at modernizing the workflow
+> for the linux-firmware project and moving to a merge request workflow
+> instead of submitting giant binary blob patches via email.  This would
+> allow us to put some CI in place for simple checks to the WHENCE file,
+> etc.  Doing this while still having GPG signed commits isn't
+> impossible but it certainly complicates things a bit, and would likely
+> require a trusted bot to sign commits.  That has implications on
+> secret storage and changes the dynamic on trust levels that make the
+> whole thing even more questionable.
+>=20
+> The second reason is that even if people are validating the GPG signed
+> commits, it's not exactly user friendly.  I've been looking at
+> sigstore and recor and that might be a better solution in the long run
+> if we do want to utilize something like the current scheme.
+>=20
+> I'll still GPG sign the tarballs, but I'd like to propose dropping our
+> current self-imposed requirement that all commits are GPG signed.
+> Thoughts?
+>=20
+> josh
 
--- 
- i.
 
---8323329-1239297179-1663749818=:1741--
+--Sig_/SMLZX+r.Pk4dPIyz4DXcpay
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEhZfU96IuprviLdeLD9OLCQumQrcFAmMqzvIACgkQD9OLCQum
+QreUbw//Qs3WlJnIyQRd4qkIDZUZH+d+Qn9dDXPXCWKP4n60mm2oqZQaSBCLombt
+Lba5wqFF6Zva9lmo22Tg4ojBkt8KgmYSW0SRgJLOJV6iHBI/x+WiWG6aklSvAGIv
+Q8F/H6HbkXCHak1wiNb8f5XsBMsYE8BwqUELY65emfSBJhS2aZ1I2buHX7w5j011
+gWXZI2gbMmUyF616WqMcpbNxdo+CRb1Y4n9EgZBnU3fNyY/dTeQaH6FNAooCEWRa
+KGw49nX2uIZoYRh7NBuU106GT4RGXQiQ8zgCpB+8WpA3Qw9Yxtpu3unL0KMbdZMa
+9XKwEWIV7d/jSRUWrDRGXtn+YSv8uXwOf9PfxtZNiw7aqiI7iG7j2gIpaWWjkV75
+osRzI/jWLKrxDRh1ucz5AM9vSM4GSzKM/Fpi+PyjD0RtTsCcIkKi9cCem/vjMqjs
+AqZBI+l4lkuy3D1Kf3z0G64ILeoHz3t1ww1tPoWJhMjvya07Oni+vJeKnIENCKf0
+hoMtFeQ/ePm9lkq1/bsFVrydEqWS0aQJg+9zO8cBswVgwJTyot2BM596Vloxp0i1
+qD8aoVaBweI72IDUmTUkzF5Y5NW4aYcNpe29nRL4qKXhghwUvexpE8G1M+IXsswn
+IT+xcsk7Pk0cQwEvxVQiFsIhljukuPsXB307iylfMkEFBpfgQ7c=
+=vITi
+-----END PGP SIGNATURE-----
+
+--Sig_/SMLZX+r.Pk4dPIyz4DXcpay--
