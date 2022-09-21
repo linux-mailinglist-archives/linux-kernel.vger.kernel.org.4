@@ -2,60 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10FCF5BFC01
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 12:08:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59E495BFC05
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 12:09:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229519AbiIUKIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 06:08:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33970 "EHLO
+        id S231436AbiIUKIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 06:08:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbiIUKIA (ORCPT
+        with ESMTP id S230487AbiIUKIc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 06:08:00 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3820785B3;
-        Wed, 21 Sep 2022 03:07:57 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id hy2so8754404ejc.8;
-        Wed, 21 Sep 2022 03:07:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=16JHpy8HOV5zOjzO41UWCeQsc//VdSkHGlgOJLsMd8k=;
-        b=W2nsBUXvxZW4u9Vlf0bwCXbGqjxzpcwSk+491KYGNutwKR5iVS/4+r1ZWnYID/AMjB
-         XMXv5w2GMh6+F8QGi7Io73MQA5tSGqmG2x/3U2WZN7mB/C3zCUl0vt1c7Li5kpJ5ieNe
-         r8r2OyPJyAxFaQXePEK0wOHZpVDUuuj7DJjhSGHEzNN9tpj70q+o/+LJhw5u9sVksOQr
-         T/FBkTX5G9QjyXlKxw1cBnk2Z5yk3gkHGF0DZ2+UvaT/knvTFCAVHRVNnH91qBVrvo8H
-         80e0lk7XR3ChVikb17npTnmpn70MchyWfxrtsQAYXUWDsUZhSg0+lJ+n9WpY5F7UyvaE
-         pQiA==
+        Wed, 21 Sep 2022 06:08:32 -0400
+Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A11585FB6;
+        Wed, 21 Sep 2022 03:08:26 -0700 (PDT)
+Received: by mail-qv1-f52.google.com with SMTP id z9so4037777qvn.9;
+        Wed, 21 Sep 2022 03:08:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=16JHpy8HOV5zOjzO41UWCeQsc//VdSkHGlgOJLsMd8k=;
-        b=dcC3LGwj3pgCe7ObXfI0e1KitgTpUqZ2Kw/5ijPrBW92BbAF04UZb4ypnW5WMt4kxc
-         APkhp1e8dIrp5nZ5IYW46QHxUNsZtqJq/nRcZ6CUPCR1edlMJw4/zdomdgAjso/zoozn
-         pv2VmOoEnijqhnuZX2LhIb4+rBMp2Wlfk3sujDI5r89iCbBv0X3017wTygd/61KoedHS
-         nI7l169xfPGgcHxfFNTmt9Gl0khpubMqEAbWs4OyKEAKvlieXORxGWBr73RLD8a0nqqU
-         veW2ncMq0NChL9hTQjzU6o6xuQYe01FqAA2/p6SUxQP5n+PugiwEP6dMVITd6vKn5xDw
-         jCJw==
-X-Gm-Message-State: ACrzQf1hUsjmAjH6ybMnh3q0TEJZvZb5Cu20xLQRg6axjJfqKY14nxTo
-        FOtr8YkjCdsuhkH59tU+UXpnUNwN/jOxRKpe1qTuIzMUrh4=
-X-Google-Smtp-Source: AMsMyM5rh1KQ7KgFpMv+pJ3tu52sOsSxVxHqI6HzSneUdWNk74IBai04tZfLSooyjz4dTz8BOkizUbI1Qgl4nYk8Jqs=
-X-Received: by 2002:a17:906:591:b0:73d:c3ef:84ae with SMTP id
- 17-20020a170906059100b0073dc3ef84aemr20462081ejn.155.1663754876285; Wed, 21
- Sep 2022 03:07:56 -0700 (PDT)
+        bh=Q42qokBJHSJ02Yiksv4KQyCcXIUfc5O74ntw/Bpmgc0=;
+        b=fhNGXeg3wDJnHhMmI8wNf1Tij6Pg5moL5mGDF3Iy4OBnFN8vaju6hczdziOevSJZLS
+         VDOQ2IbITpgiQX8X24VsLhB3ZOk0QWcJP4iB0bOLNk06NOzrKaqbddodruLfQAfm2GXn
+         z6aPg6H4VC4yHlgE+Sj/mQRdKDm4UEyd3+uR8fQ1wQUOhb8CH2OHHOqX0/+YOBe2FBXE
+         hAXC7ZTIQBagA5KI+xADfGsJwHIku7v1acfiyed8XCIxtA2SRWLIKgVyI+O/pHTL13ge
+         kMQH26Vehf6HV6/iWKEG5uxdx+GbRGU554f1A6dRIU6FFUHIYshrPoRvKWl6+0hC+e26
+         edjg==
+X-Gm-Message-State: ACrzQf0dyxA7q4VaF8YhVt1YHI5cM7kZprhzCaBExsC0sf0VRfWHirlj
+        80e4BGpdS4Y+AZMXwJXTwR8Mj2oyHsVyarVm
+X-Google-Smtp-Source: AMsMyM5zUfaboCdscy/A0la4qv/yz1+y8wOa95gNR2yHdwGqkMLVEsV6mWcmLu4lbmzsC/qZgcEonA==
+X-Received: by 2002:a0c:e0d3:0:b0:4aa:9d28:6603 with SMTP id x19-20020a0ce0d3000000b004aa9d286603mr22469277qvk.91.1663754905200;
+        Wed, 21 Sep 2022 03:08:25 -0700 (PDT)
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
+        by smtp.gmail.com with ESMTPSA id d20-20020ae9ef14000000b006ce5fe31c2dsm1540455qkg.65.2022.09.21.03.08.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Sep 2022 03:08:23 -0700 (PDT)
+Received: by mail-yb1-f174.google.com with SMTP id g5so7278586ybg.11;
+        Wed, 21 Sep 2022 03:08:22 -0700 (PDT)
+X-Received: by 2002:a5b:104:0:b0:6b0:429:3fe9 with SMTP id 4-20020a5b0104000000b006b004293fe9mr23028012ybx.543.1663754902653;
+ Wed, 21 Sep 2022 03:08:22 -0700 (PDT)
 MIME-Version: 1.0
 References: <CAMuHMdUPm36RsxHdVwspR3NCAR3C507AyB6R65W42N2gXWq0ag@mail.gmail.com>
  <b0f2e13a-ff5d-5bfc-6dda-ca39bb57803e@linaro.org> <CA+V-a8t3ukpa1PNz=5fP+BTjWkFJmwDo_EJJYjO9YctF2=K1Vg@mail.gmail.com>
  <df9ff0bd-ad0e-4b5b-859d-dd913628edc8@linaro.org>
 In-Reply-To: <df9ff0bd-ad0e-4b5b-859d-dd913628edc8@linaro.org>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Wed, 21 Sep 2022 11:07:29 +0100
-Message-ID: <CA+V-a8svcTXceeLSVD4D9VazTc9nN5MXsFmvcFaDd2mM0REDhg@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 21 Sep 2022 12:08:11 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXaWz4zP-Zrc4drxwVmbMjmGZHABVbUtO91fZXKawathw@mail.gmail.com>
+Message-ID: <CAMuHMdXaWz4zP-Zrc4drxwVmbMjmGZHABVbUtO91fZXKawathw@mail.gmail.com>
 Subject: Re: Similar SoCs with different CPUs and interrupt bindings
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+Cc:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Andre Przywara <andre.przywara@arm.com>,
@@ -73,21 +70,21 @@ Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 21, 2022 at 10:26 AM Krzysztof Kozlowski
+Hi Krzysztof,
+
+On Wed, Sep 21, 2022 at 11:26 AM Krzysztof Kozlowski
 <krzysztof.kozlowski@linaro.org> wrote:
->
 > On 21/09/2022 11:20, Lad, Prabhakar wrote:
-> >>
 > >> What do you mean? Macros support string concatenation and simple
 > >> arithmetic like adding numbers. I just tested it.
 > >>
@@ -130,6 +127,10 @@ On Wed, Sep 21, 2022 at 10:26 AM Krzysztof Kozlowski
 >
 > +#define SOC_PERIPHERAL_IRQ_NUMBER(na)  (na + 32)
 > +#define SOC_PERIPHERAL_IRQ(nr, na) GIC_SPI nr SOC_PERIPHERAL_IRQ_NUMBER(na)
+
+#define SOC_PERIPHERAL_IRQ(nr, flags) GIC_SPI
+SOC_PERIPHERAL_IRQ_NUMBER(nr) flags
+
 >  / {
 >         compatible = "renesas,r9a07g043";
 >         #address-cells = <2>;
@@ -143,8 +144,17 @@ On Wed, Sep 21, 2022 at 10:26 AM Krzysztof Kozlowski
 >
 >
 > Or any other method like that....
->
-Thanks for the pointer! (Ive tested the above and it works)
 
-Cheers,
-Prabhakar
+Oh cool, seems like arithmetic is supported.
+No idea what I did wrong last time I tried...
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
