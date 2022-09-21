@@ -2,69 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA3105C0364
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 18:04:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2A865C0372
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 18:05:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232268AbiIUQD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 12:03:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55346 "EHLO
+        id S232145AbiIUQE5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 12:04:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232724AbiIUQAV (ORCPT
+        with ESMTP id S232517AbiIUQED (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 12:00:21 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 583B51659B
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 08:53:44 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id y9so3343739ily.11
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 08:53:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=uhn02vEcgNMuC4NDL/sdnIiKkA3NV83noPVamoKM5ng=;
-        b=J+m/6s3OweW7a/eo9st4eaQgCj5FBjVxWu4cd0CaPO5cml8TYlNkg/w5YMuvK+r+GQ
-         wzhrojO6SeTZXM/fmsxo/ctc7AJ+AoKGqVMF18GQ8VM2foK5SHjyhGHiByVZJBVAX1i1
-         obzlAwJ08YXB3oRiWQZ0lmKoLJMRn+Pegtamw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=uhn02vEcgNMuC4NDL/sdnIiKkA3NV83noPVamoKM5ng=;
-        b=rRDj+fsNpThpN/2wfbhSCnBhZHEqf6YgEhQhuOAp1SF2f2am1fit4XaMxeZOEfpuFW
-         JGlmi9+v2EUrdpJppGc0XWG1H3zog4ae4xCsAiXJh09dwVKXmCvr34eaL87YVICzC9Kd
-         AiLEjqttb9uqDqAAN3n60z5UKjEUS+PK7Eo4DCmbinakqhQeBBuxpC2O/uShFHDKYe2H
-         7nXPButeROJDKPevW5ryIhGSjswm7TMGKHdamx7CPvuarALdkrK/n+EKNBVTHn3R1ovy
-         Dun8GveBaSdvlJkOJj4QYjzZEHnBTX2q4YuMBXcOALn8PHEMfk8iG537+9A5rmEehgxR
-         h7tg==
-X-Gm-Message-State: ACrzQf3ilVin0QvfRJXKFtF5KzixTDCHy6n5AcOZWN5eXkzS5aO7nwl8
-        9hsBM0b27aXzO72TpPZb5zKQhA==
-X-Google-Smtp-Source: AMsMyM5y+0hpMGJsf2ExwaciR2mijAedWncBixNTzl39icNIG8bLyvsSsOzqJ1lKOuRVy46al2qq4w==
-X-Received: by 2002:a05:6e02:20ce:b0:2f3:4a1f:3db4 with SMTP id 14-20020a056e0220ce00b002f34a1f3db4mr12919850ilq.278.1663775545355;
-        Wed, 21 Sep 2022 08:52:25 -0700 (PDT)
-Received: from rrangel920.bld.corp.google.com (h24-56-189-219.arvdco.broadband.dynamic.tds.net. [24.56.189.219])
-        by smtp.gmail.com with ESMTPSA id c14-20020a023b0e000000b0035a8d644a31sm1148061jaa.117.2022.09.21.08.52.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Sep 2022 08:52:25 -0700 (PDT)
-From:   Raul E Rangel <rrangel@chromium.org>
-To:     linux-acpi@vger.kernel.org, linux-input@vger.kernel.org
-Cc:     rafael@kernel.org, timvp@google.com,
-        mika.westerberg@linux.intel.com, andriy.shevchenko@linux.intel.com,
-        dmitry.torokhov@gmail.com, jingle.wu@emc.com.tw,
-        hdegoede@redhat.com, mario.limonciello@amd.com,
-        linus.walleij@linaro.org, Raul E Rangel <rrangel@chromium.org>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v5 13/13] Input: raydium_ts_i2c - Don't set wake_capable and wake_irq
-Date:   Wed, 21 Sep 2022 09:52:05 -0600
-Message-Id: <20220921094736.v5.13.Ia0b24ab02c22125c5fd686cc25872bd26c27ac23@changeid>
-X-Mailer: git-send-email 2.37.3.968.ga6b4b080e4-goog
-In-Reply-To: <20220921155205.1332614-1-rrangel@chromium.org>
-References: <20220921155205.1332614-1-rrangel@chromium.org>
+        Wed, 21 Sep 2022 12:04:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88EC7656B;
+        Wed, 21 Sep 2022 08:54:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7D873B830CC;
+        Wed, 21 Sep 2022 15:53:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2665EC433D7;
+        Wed, 21 Sep 2022 15:53:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663775614;
+        bh=Q2ax4nHmUIsuSF4ftZGVkIdUdYbh9VYCFtJUZ59qKPw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=hNfheLbukkPI6W6hNGkbc62RWNzwm6h5Wab3yea1fqEqylTt7jvBa54nFTogtKvn6
+         O5N3FQ+01aOUwt6xsO7TId+tloqQXIiAooB36Z0ejInNPOd4CFs1kD5bc+Xun5t/fK
+         cSe3kLF+Zo6pk/D+r7i4sCtliYdJzcBTB1MQ+eWMlimi0Ys42LfdB0Tt0abY5EEEKr
+         far64Vs3FQ4iuTqycTF4KKFpDg3Ujnu0SmSqwLIweCpvpaELezxb5JuejodCrbMZtg
+         UA4LqVNW7zQfdD7YyjrCSpj0uMNGaiF91bfrvO+QSt0usCdsI6GucTkzbLyswurN1E
+         isuha9WA3T3XQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
+        Sasha Levin <sashal@kernel.org>, airlied@linux.ie,
+        daniel@ffwll.ch, dri-devel@lists.freedesktop.org
+Subject: [PATCH AUTOSEL 5.19 02/16] drm/gma500: Fix BUG: sleeping function called from invalid context errors
+Date:   Wed, 21 Sep 2022 11:53:18 -0400
+Message-Id: <20220921155332.234913-2-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220921155332.234913-1-sashal@kernel.org>
+References: <20220921155332.234913-1-sashal@kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,37 +57,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The i2c-core will now handle setting the wake_irq and wake capability
-for DT and ACPI systems.
+From: Hans de Goede <hdegoede@redhat.com>
 
-Signed-off-by: Raul E Rangel <rrangel@chromium.org>
+[ Upstream commit 63e37a79f7bd939314997e29c2f5a9f0ef184281 ]
+
+gma_crtc_page_flip() was holding the event_lock spinlock while calling
+crtc_funcs->mode_set_base() which takes ww_mutex.
+
+The only reason to hold event_lock is to clear gma_crtc->page_flip_event
+on mode_set_base() errors.
+
+Instead unlock it after setting gma_crtc->page_flip_event and on
+errors re-take the lock and clear gma_crtc->page_flip_event it
+it is still set.
+
+This fixes the following WARN/stacktrace:
+
+[  512.122953] BUG: sleeping function called from invalid context at kernel/locking/mutex.c:870
+[  512.123004] in_atomic(): 1, irqs_disabled(): 1, non_block: 0, pid: 1253, name: gnome-shell
+[  512.123031] preempt_count: 1, expected: 0
+[  512.123048] RCU nest depth: 0, expected: 0
+[  512.123066] INFO: lockdep is turned off.
+[  512.123080] irq event stamp: 0
+[  512.123094] hardirqs last  enabled at (0): [<0000000000000000>] 0x0
+[  512.123134] hardirqs last disabled at (0): [<ffffffff8d0ec28c>] copy_process+0x9fc/0x1de0
+[  512.123176] softirqs last  enabled at (0): [<ffffffff8d0ec28c>] copy_process+0x9fc/0x1de0
+[  512.123207] softirqs last disabled at (0): [<0000000000000000>] 0x0
+[  512.123233] Preemption disabled at:
+[  512.123241] [<0000000000000000>] 0x0
+[  512.123275] CPU: 3 PID: 1253 Comm: gnome-shell Tainted: G        W         5.19.0+ #1
+[  512.123304] Hardware name: Packard Bell dot s/SJE01_CT, BIOS V1.10 07/23/2013
+[  512.123323] Call Trace:
+[  512.123346]  <TASK>
+[  512.123370]  dump_stack_lvl+0x5b/0x77
+[  512.123412]  __might_resched.cold+0xff/0x13a
+[  512.123458]  ww_mutex_lock+0x1e/0xa0
+[  512.123495]  psb_gem_pin+0x2c/0x150 [gma500_gfx]
+[  512.123601]  gma_pipe_set_base+0x76/0x240 [gma500_gfx]
+[  512.123708]  gma_crtc_page_flip+0x95/0x130 [gma500_gfx]
+[  512.123808]  drm_mode_page_flip_ioctl+0x57d/0x5d0
+[  512.123897]  ? drm_mode_cursor2_ioctl+0x10/0x10
+[  512.123936]  drm_ioctl_kernel+0xa1/0x150
+[  512.123984]  drm_ioctl+0x21f/0x420
+[  512.124025]  ? drm_mode_cursor2_ioctl+0x10/0x10
+[  512.124070]  ? rcu_read_lock_bh_held+0xb/0x60
+[  512.124104]  ? lock_release+0x1ef/0x2d0
+[  512.124161]  __x64_sys_ioctl+0x8d/0xd0
+[  512.124203]  do_syscall_64+0x58/0x80
+[  512.124239]  ? do_syscall_64+0x67/0x80
+[  512.124267]  ? trace_hardirqs_on_prepare+0x55/0xe0
+[  512.124300]  ? do_syscall_64+0x67/0x80
+[  512.124340]  ? rcu_read_lock_sched_held+0x10/0x80
+[  512.124377]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+[  512.124411] RIP: 0033:0x7fcc4a70740f
+[  512.124442] Code: 00 48 89 44 24 18 31 c0 48 8d 44 24 60 c7 04 24 10 00 00 00 48 89 44 24 08 48 8d 44 24 20 48 89 44 24 10 b8 10 00 00 00 0f 05 <89> c2 3d 00 f0 ff ff 77 18 48 8b 44 24 18 64 48 2b 04 25 28 00 00
+[  512.124470] RSP: 002b:00007ffda73f5390 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+[  512.124503] RAX: ffffffffffffffda RBX: 000055cc9e474500 RCX: 00007fcc4a70740f
+[  512.124524] RDX: 00007ffda73f5420 RSI: 00000000c01864b0 RDI: 0000000000000009
+[  512.124544] RBP: 00007ffda73f5420 R08: 000055cc9c0b0cb0 R09: 0000000000000034
+[  512.124564] R10: 0000000000000000 R11: 0000000000000246 R12: 00000000c01864b0
+[  512.124584] R13: 0000000000000009 R14: 000055cc9df484d0 R15: 000055cc9af5d0c0
+[  512.124647]  </TASK>
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220906203852.527663-2-hdegoede@redhat.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
+ drivers/gpu/drm/gma500/gma_display.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-(no changes since v1)
-
- drivers/input/touchscreen/raydium_i2c_ts.c | 9 ---------
- 1 file changed, 9 deletions(-)
-
-diff --git a/drivers/input/touchscreen/raydium_i2c_ts.c b/drivers/input/touchscreen/raydium_i2c_ts.c
-index 66c5b577b791d4..88d187dc5d325f 100644
---- a/drivers/input/touchscreen/raydium_i2c_ts.c
-+++ b/drivers/input/touchscreen/raydium_i2c_ts.c
-@@ -1185,15 +1185,6 @@ static int raydium_i2c_probe(struct i2c_client *client,
- 		return error;
- 	}
+diff --git a/drivers/gpu/drm/gma500/gma_display.c b/drivers/gpu/drm/gma500/gma_display.c
+index 34ec3fca09ba..12287c9bb4d8 100644
+--- a/drivers/gpu/drm/gma500/gma_display.c
++++ b/drivers/gpu/drm/gma500/gma_display.c
+@@ -531,15 +531,18 @@ int gma_crtc_page_flip(struct drm_crtc *crtc,
+ 		WARN_ON(drm_crtc_vblank_get(crtc) != 0);
  
--	/*
--	 * The wake IRQ should be declared via device tree instead of assuming
--	 * the IRQ can wake the system. This is here for legacy reasons and
--	 * will be removed once the i2c-core supports querying ACPI for wake
--	 * capabilities.
--	 */
--	if (!client->dev.power.wakeirq)
--		dev_pm_set_wake_irq(&client->dev, client->irq);
+ 		gma_crtc->page_flip_event = event;
++		spin_unlock_irqrestore(&dev->event_lock, flags);
+ 
+ 		/* Call this locked if we want an event at vblank interrupt. */
+ 		ret = crtc_funcs->mode_set_base(crtc, crtc->x, crtc->y, old_fb);
+ 		if (ret) {
+-			gma_crtc->page_flip_event = NULL;
+-			drm_crtc_vblank_put(crtc);
++			spin_lock_irqsave(&dev->event_lock, flags);
++			if (gma_crtc->page_flip_event) {
++				gma_crtc->page_flip_event = NULL;
++				drm_crtc_vblank_put(crtc);
++			}
++			spin_unlock_irqrestore(&dev->event_lock, flags);
+ 		}
 -
- 	error = devm_device_add_group(&client->dev,
- 				   &raydium_i2c_attribute_group);
- 	if (error) {
+-		spin_unlock_irqrestore(&dev->event_lock, flags);
+ 	} else {
+ 		ret = crtc_funcs->mode_set_base(crtc, crtc->x, crtc->y, old_fb);
+ 	}
 -- 
-2.37.3.968.ga6b4b080e4-goog
+2.35.1
 
