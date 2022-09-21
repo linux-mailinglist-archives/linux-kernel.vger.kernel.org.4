@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C000B5C020A
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:47:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 853AA5C020C
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:47:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230081AbiIUPrO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 11:47:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50656 "EHLO
+        id S231601AbiIUPrT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 11:47:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231236AbiIUPqy (ORCPT
+        with ESMTP id S230511AbiIUPq4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 11:46:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AC7F81B39;
-        Wed, 21 Sep 2022 08:46:49 -0700 (PDT)
+        Wed, 21 Sep 2022 11:46:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE6E27E329;
+        Wed, 21 Sep 2022 08:46:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EAE9B62C7F;
-        Wed, 21 Sep 2022 15:46:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFAE4C433D7;
-        Wed, 21 Sep 2022 15:46:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8C174B81D87;
+        Wed, 21 Sep 2022 15:46:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F151FC433D7;
+        Wed, 21 Sep 2022 15:46:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663775208;
-        bh=uRxN/pnkVBant0KUWFnWEcMugLocOezPnMpJaeG74Bg=;
+        s=korg; t=1663775211;
+        bh=KGEIq67dvPNj2TD93txwrrk9cX4Fxe3xdIJc/dUsAdM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YO4lh29I+1n/zEoR1Swl+q4nQymE1ch1VXnkzHh2g617TiZJK+8xI/z9Rx1GWxGSI
-         A0pv1Pj4KmnnFhDiKi9wt3z9Iy9B+mGGmTbD75FSA2Hb9QbshL2E9VWe+sNLx0NT4a
-         xrHbbczRdEh0U/GtCytyadSSEJj7QxBKI2M0B0Bw=
+        b=F/kEZG0QwzqWcah7TfjmJX37QgL1kQYZ+crEeEHDC1bl1w13E7dCuDfgBgE8svAD6
+         2X804N7Zi4+WN3eIwnU5xzgpMX8d/C9wW2z0erDRLtPgs3pUU8X53QMjLHWG1dN5DS
+         QuBRgJiAiNGJeIyBMM8RxcVDYjlpcpTMd/VVPF9o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Manasi Navare <manasi.d.navare@intel.com>,
-        Vandita Kulkarni <vandita.kulkarni@intel.com>,
-        Matt Roper <matthew.d.roper@intel.com>,
-        Ankit Nautiyal <ankit.k.nautiyal@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        stable@vger.kernel.org,
+        Alan Previn <alan.previn.teres.alexis@intel.com>,
+        Umesh Nerlige Ramappa <umesh.nerlige.ramappa@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        John Harrison <John.C.Harrison@Intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 15/38] drm/i915/vdsc: Set VDSC PIC_HEIGHT before using for DP DSC
-Date:   Wed, 21 Sep 2022 17:45:59 +0200
-Message-Id: <20220921153646.768201725@linuxfoundation.org>
+Subject: [PATCH 5.19 16/38] drm/i915/guc: Dont update engine busyness stats too frequently
+Date:   Wed, 21 Sep 2022 17:46:00 +0200
+Message-Id: <20220921153646.796421323@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220921153646.298361220@linuxfoundation.org>
 References: <20220921153646.298361220@linuxfoundation.org>
@@ -57,70 +57,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ankit Nautiyal <ankit.k.nautiyal@intel.com>
+From: Alan Previn <alan.previn.teres.alexis@intel.com>
 
-[ Upstream commit 0785691f5711a8f210bb15a5177c2999ebd3702e ]
+[ Upstream commit 59bcdb564b3bac3e86cc274e5dec05d4647ce47f ]
 
-Currently, pic_height of vdsc_cfg structure is being used to calculate
-slice_height, before it is set for DP.
+Using two different types of workoads, it was observed that
+guc_update_engine_gt_clks was being called too frequently and/or
+causing a CPU-to-lmem bandwidth hit over PCIE. Details on
+the workloads and numbers are in the notes below.
 
-So taking out the lines to set pic_height from the helper
-intel_dp_dsc_compute_params() to individual encoders, and setting
-pic_height, before it is used to calculate slice_height for DP.
+Background: At the moment, guc_update_engine_gt_clks can be invoked
+via one of 3 ways. #1 and #2 are infrequent under normal operating
+conditions:
+     1.When a predefined "ping_delay" timer expires so that GuC-
+       busyness can sample the GTPM clock counter to ensure it
+       doesn't miss a wrap-around of the 32-bits of the HW counter.
+       (The ping_delay is calculated based on 1/8th the time taken
+       for the counter go from 0x0 to 0xffffffff based on the
+       GT frequency. This comes to about once every 28 seconds at a
+       GT frequency of 19.2Mhz).
+     2.In preparation for a gt reset.
+     3.In response to __gt_park events (as the gt power management
+       puts the gt into a lower power state when there is no work
+       being done).
 
-Fixes: 5a6d866f8e1b ("drm/i915: Get slice height before computing rc params")
-Cc: Manasi Navare <manasi.d.navare@intel.com>
-Cc: Vandita Kulkarni <vandita.kulkarni@intel.com>
-Cc: Matt Roper <matthew.d.roper@intel.com>
-Signed-off-by: Ankit Nautiyal <ankit.k.nautiyal@intel.com>
-Reviewed-by: Vandita Kulkarni <vandita.kulkarni@intel.com>
-Signed-off-by: Matt Roper <matthew.d.roper@intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220902103219.1168781-1-ankit.k.nautiyal@intel.com
-(cherry picked from commit e72df53dcb01ec58e0410da353551adf94c8d0f1)
-Signed-off-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
+Root-cause: For both the workloads described farther below, it was
+observed that when user space calls IOCTLs that unparks the
+gt momentarily and repeats such calls many times in quick succession,
+it triggers calling guc_update_engine_gt_clks as many times. However,
+the primary purpose of guc_update_engine_gt_clks is to ensure we don't
+miss the wraparound while the counter is ticking. Thus, the solution
+is to ensure we skip that check if gt_park is calling this function
+earlier than necessary.
+
+Solution: Snapshot jiffies when we do actually update the busyness
+stats. Then get the new jiffies every time intel_guc_busyness_park
+is called and bail if we are being called too soon. Use half of the
+ping_delay as a safe threshold.
+
+NOTE1: Workload1: IGTs' gem_create was modified to create a file handle,
+allocate memory with sizes that range from a min of 4K to the max supported
+(in power of two step-sizes). Its maps, modifies and reads back the
+memory. Allocations and modification is repeated until total memory
+allocation reaches the max. Then the file handle is closed. With this
+workload, guc_update_engine_gt_clks was called over 188 thousand times
+in the span of 15 seconds while this test ran three times. With this patch,
+the number of calls reduced to 14.
+
+NOTE2: Workload2: 30 transcode sessions are created in quick succession.
+While these sessions are created, pcm-iio tool was used to measure I/O
+read operation bandwidth consumption sampled at 100 milisecond intervals
+over the course of 20 seconds. The total bandwidth consumed over 20 seconds
+without this patch was measured at average at 311KBps per sample. With this
+patch, the number went down to about 175Kbps which is about a 43% savings.
+
+Signed-off-by: Alan Previn <alan.previn.teres.alexis@intel.com>
+Reviewed-by: Umesh Nerlige Ramappa <umesh.nerlige.ramappa@intel.com>
+Acked-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Signed-off-by: John Harrison <John.C.Harrison@Intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220623023157.211650-2-alan.previn.teres.alexis@intel.com
+Stable-dep-of: aee5ae7c8492 ("drm/i915/guc: Cancel GuC engine busyness worker synchronously")
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/i915/display/icl_dsi.c    | 2 ++
- drivers/gpu/drm/i915/display/intel_dp.c   | 1 +
- drivers/gpu/drm/i915/display/intel_vdsc.c | 1 -
- 3 files changed, 3 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/i915/gt/uc/intel_guc.h            |  8 ++++++++
+ drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c | 13 +++++++++++++
+ 2 files changed, 21 insertions(+)
 
-diff --git a/drivers/gpu/drm/i915/display/icl_dsi.c b/drivers/gpu/drm/i915/display/icl_dsi.c
-index 19bf717fd4cb..5508ebb9eb43 100644
---- a/drivers/gpu/drm/i915/display/icl_dsi.c
-+++ b/drivers/gpu/drm/i915/display/icl_dsi.c
-@@ -1629,6 +1629,8 @@ static int gen11_dsi_dsc_compute_config(struct intel_encoder *encoder,
- 	/* FIXME: initialize from VBT */
- 	vdsc_cfg->rc_model_size = DSC_RC_MODEL_SIZE_CONST;
- 
-+	vdsc_cfg->pic_height = crtc_state->hw.adjusted_mode.crtc_vdisplay;
+diff --git a/drivers/gpu/drm/i915/gt/uc/intel_guc.h b/drivers/gpu/drm/i915/gt/uc/intel_guc.h
+index 9feda105f913..a7acffbf15d1 100644
+--- a/drivers/gpu/drm/i915/gt/uc/intel_guc.h
++++ b/drivers/gpu/drm/i915/gt/uc/intel_guc.h
+@@ -235,6 +235,14 @@ struct intel_guc {
+ 		 * @shift: Right shift value for the gpm timestamp
+ 		 */
+ 		u32 shift;
 +
- 	ret = intel_dsc_compute_params(crtc_state);
- 	if (ret)
- 		return ret;
-diff --git a/drivers/gpu/drm/i915/display/intel_dp.c b/drivers/gpu/drm/i915/display/intel_dp.c
-index 41aaa6c98114..fe8b6b72970a 100644
---- a/drivers/gpu/drm/i915/display/intel_dp.c
-+++ b/drivers/gpu/drm/i915/display/intel_dp.c
-@@ -1379,6 +1379,7 @@ static int intel_dp_dsc_compute_params(struct intel_encoder *encoder,
- 	 * DP_DSC_RC_BUF_SIZE for this.
- 	 */
- 	vdsc_cfg->rc_model_size = DSC_RC_MODEL_SIZE_CONST;
-+	vdsc_cfg->pic_height = crtc_state->hw.adjusted_mode.crtc_vdisplay;
++		/**
++		 * @last_stat_jiffies: jiffies at last actual stats collection time
++		 * We use this timestamp to ensure we don't oversample the
++		 * stats because runtime power management events can trigger
++		 * stats collection at much higher rates than required.
++		 */
++		unsigned long last_stat_jiffies;
+ 	} timestamp;
  
- 	/*
- 	 * Slice Height of 8 works for all currently available panels. So start
-diff --git a/drivers/gpu/drm/i915/display/intel_vdsc.c b/drivers/gpu/drm/i915/display/intel_vdsc.c
-index 43e1bbc1e303..ca530f0733e0 100644
---- a/drivers/gpu/drm/i915/display/intel_vdsc.c
-+++ b/drivers/gpu/drm/i915/display/intel_vdsc.c
-@@ -460,7 +460,6 @@ int intel_dsc_compute_params(struct intel_crtc_state *pipe_config)
- 	u8 i = 0;
+ #ifdef CONFIG_DRM_I915_SELFTEST
+diff --git a/drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c b/drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c
+index 26a051ef119d..96022f49f9b5 100644
+--- a/drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c
++++ b/drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c
+@@ -1365,6 +1365,8 @@ static void __update_guc_busyness_stats(struct intel_guc *guc)
+ 	unsigned long flags;
+ 	ktime_t unused;
  
- 	vdsc_cfg->pic_width = pipe_config->hw.adjusted_mode.crtc_hdisplay;
--	vdsc_cfg->pic_height = pipe_config->hw.adjusted_mode.crtc_vdisplay;
- 	vdsc_cfg->slice_width = DIV_ROUND_UP(vdsc_cfg->pic_width,
- 					     pipe_config->dsc.slice_count);
++	guc->timestamp.last_stat_jiffies = jiffies;
++
+ 	spin_lock_irqsave(&guc->timestamp.lock, flags);
+ 
+ 	guc_update_pm_timestamp(guc, &unused);
+@@ -1437,6 +1439,17 @@ void intel_guc_busyness_park(struct intel_gt *gt)
+ 		return;
+ 
+ 	cancel_delayed_work(&guc->timestamp.work);
++
++	/*
++	 * Before parking, we should sample engine busyness stats if we need to.
++	 * We can skip it if we are less than half a ping from the last time we
++	 * sampled the busyness stats.
++	 */
++	if (guc->timestamp.last_stat_jiffies &&
++	    !time_after(jiffies, guc->timestamp.last_stat_jiffies +
++			(guc->timestamp.ping_delay / 2)))
++		return;
++
+ 	__update_guc_busyness_stats(guc);
+ }
  
 -- 
 2.35.1
