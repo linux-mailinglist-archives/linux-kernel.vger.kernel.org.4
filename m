@@ -2,114 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6A485C0539
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 19:24:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23B485C053C
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 19:25:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229833AbiIURYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 13:24:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47962 "EHLO
+        id S230072AbiIURZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 13:25:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbiIURYb (ORCPT
+        with ESMTP id S229741AbiIURZM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 13:24:31 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2A4E74
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 10:24:29 -0700 (PDT)
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 21 Sep 2022 13:25:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ABF4543F0
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 10:25:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 566373F179
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 17:24:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1663781068;
-        bh=9piyT/VCnJlMmHymPvmNLYxbTaKtOFLio9F+8h9hJ9c=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=a2ZngO40iK8x1Kw9MJT3uWsIz1QdxLC9nQrFF86CM6T8HfHTcJhoIfu5rC/dz3oV4
-         gV5Z3kym1LyMOuLmcPHF+iorQIzjQpypS62qbk9SJmjawQVtLXA8CyE92OYzQXGfjY
-         MsxrRCNq3jz4iC5Vgk/UiTY+B1x8nzZd4NpqBliGSdtkZwMuBBYuSxuXpz0sy54RLe
-         YQVOKCF+I+YenG64Wm0Mp32/ODnyX+uB6nJ5PUpomYz047mfq3txaJ6soaiB9cXtc7
-         JXU+HRA4zffACi5Wouw4zgVOi/pui7SHM8AS7aMee5a1GU6R4S19zD2POs3VSa5pOx
-         Udl2DyHev8FXw==
-Received: by mail-pf1-f197.google.com with SMTP id u10-20020a056a00098a00b00543b3eb6416so3897314pfg.15
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 10:24:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=9piyT/VCnJlMmHymPvmNLYxbTaKtOFLio9F+8h9hJ9c=;
-        b=XkGtFzGIfyhCJS525UklunPVREcg7IkvMhZ8XP5pTRwfoBzWdPBIFvYJNTMDVEhN1N
-         7ISdHLZaOVK9ZNOXGpDarJaxXI9/4tqNw/i97+Y9mdDubylKJAtsx2WRZgzV0PSKBcnP
-         VGXNrRZg8IYzI27enC4C5K9isshyUWGvc1JeBevq1ccVT5XAlIrza88wAroS2XBBZJt1
-         aPXEE40K7BgLp87ERfmqNp6FM3OhDhqvcZCqkcPHa9iO4bBIyfpIvT0l3U1doJzHojPs
-         TA8F+72dzFvLOk2wSD1D8PBoPxfayru+jSJuu8m0P4DZxjipBwtp6eiGvsTU6ryH8QB1
-         oEmQ==
-X-Gm-Message-State: ACrzQf1zJu5+00U6VThACXnTPdjA3qK9GYXMoxmn2ueWWkHHIhsYkTmg
-        pGT65C/1NEy4/KCjmVPlMf3MGhac3YzNXfl1L3XnI/7uOPYQvEPV14RTlAsPyXnxt5+JGq/JoVK
-        U18qR2jqNjH85iXTKVPDtjw6z75NYaSoqC9ewLqUy1g==
-X-Received: by 2002:a17:902:d4c1:b0:176:b795:c639 with SMTP id o1-20020a170902d4c100b00176b795c639mr5717730plg.154.1663781065317;
-        Wed, 21 Sep 2022 10:24:25 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4WX1aYTbIwRcfCVN4W588CV/XvjYWHcK6PVkEXvP4qjobX++S8B4HCEEzInRCAY75VXKnmwQ==
-X-Received: by 2002:a17:902:d4c1:b0:176:b795:c639 with SMTP id o1-20020a170902d4c100b00176b795c639mr5717712plg.154.1663781065065;
-        Wed, 21 Sep 2022 10:24:25 -0700 (PDT)
-Received: from workstation.canonical.bluequartz.xyz (c-68-84-194-247.hsd1.az.comcast.net. [68.84.194.247])
-        by smtp.gmail.com with ESMTPSA id b8-20020a170902650800b00178a9b193cfsm2310861plk.140.2022.09.21.10.24.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Sep 2022 10:24:24 -0700 (PDT)
-From:   Kellen Renshaw <kellen.renshaw@canonical.com>
-To:     linux-acpi@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, rafael@kernel.org, lenb@kernel.org,
-        hui.wang@canonical.com, kellen.renshaw@canonical.com
-Subject: [PATCH] ACPI: resources: Add ASUS model S5402ZA to quirks
-Date:   Wed, 21 Sep 2022 10:24:22 -0700
-Message-Id: <20220921172422.650880-1-kellen.renshaw@canonical.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 285446236C
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 17:25:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F949C433C1;
+        Wed, 21 Sep 2022 17:25:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663781108;
+        bh=wKJthoQT0tsR8fGFfaCS09xqQkAr5tvsQxNAnhR8RFU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=eH3mhQXPUz2GfmoUsDDY2HRV2RPhz0t+JgXI6vYPdsU9TTLIWbFuqncPkhLoA+Kjg
+         UrVB5KXqAN4/rHMGT4PyHMXxiTx5S+o9lr8rHONUK+7rTsNYnNh0dxKcl5uIdaiP5v
+         uswXymCWTM0j/n1DbJ0kkEZ4wWL7w17MdEjQlN3+eqgaajgeizVxAbK2MbI0xcSdgi
+         UBDnIx2J0Cv1C30fIPP8b7Ci3HSIgp1/E/VMz/OBlRoauyWXlEW9kXh6HTLw6nZw06
+         V+z03qa6u+f4PXIhE7JnF2cDKDksQdgPuqlD36zPfnm57CyGFjC+T7AF54YyHIEl/l
+         +0zKigVQGTkvA==
+Received: from 185-176-101-241.host.sccbroadband.ie ([185.176.101.241] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1ob3T8-00BjHQ-7T;
+        Wed, 21 Sep 2022 18:25:06 +0100
+Date:   Wed, 21 Sep 2022 18:25:04 +0100
+Message-ID: <87o7v8k5cf.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Denis Nikitin <denik@chromium.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Manoj Gupta <manojgupta@google.com>,
+        David Brazdil <dbrazdil@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: arm64: nvhe: Disable profile optimization
+In-Reply-To: <CADDJ8CW5MV3vUPdm4iwjwS4VyeV9rCAMZZpJbNFtNLFD-wThVA@mail.gmail.com>
+References: <20220920082005.2459826-1-denik@chromium.org>
+        <877d1yl797.wl-maz@kernel.org>
+        <CAOYpmdHMbDdssEJJwXktEj1SDLncHTeL7x7aKxVe6j1vzSMgtw@mail.gmail.com>
+        <CADDJ8CW5MV3vUPdm4iwjwS4VyeV9rCAMZZpJbNFtNLFD-wThVA@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.176.101.241
+X-SA-Exim-Rcpt-To: denik@chromium.org, catalin.marinas@arm.com, will@kernel.org, james.morse@arm.com, alexandru.elisei@arm.com, ndesaulniers@google.com, manojgupta@google.com, dbrazdil@google.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Asus Vivobook S5402ZA has the same keyboard issue as Asus Vivobook 
-K3402ZA/K3502ZA. The kernel overrides IRQ 1 to Edge_High when it
-should be Active_Low.
+On Wed, 21 Sep 2022 07:02:50 +0100,
+Denis Nikitin <denik@chromium.org> wrote:
+> 
+> Adding a few more comments...
+> 
+> On Tue, Sep 20, 2022 at 5:08 PM Denis Nikitin <denik@google.com> wrote:
+> >
+> > Hi Mark,
+> >
+> > Thank you for a quick response.
+> >
+> > On Tue, Sep 20, 2022 at 2:34 AM Marc Zyngier <maz@kernel.org> wrote:
+> > >
+> > > Hi Denis,
+> > >
+> > > On Tue, 20 Sep 2022 09:20:05 +0100,
+> > > Denis Nikitin <denik@chromium.org> wrote:
+> > > >
+> > > > Kernel build with -fprofile-sample-use raises the following failure:
+> > > >
+> > > > error: arch/arm64/kvm/hyp/nvhe/kvm_nvhe.tmp.o: Unexpected SHT_REL
+> > > > section ".rel.llvm.call-graph-profile"
+> > >
+> > > How is this flag provided? I don't see any occurrence of it in the
+> > > kernel so far.
+> >
+> > On ChromeOS we build the kernel with sample profiles by adding
+> > -fprofile-sample-use=/path/to/gcov.profile to KCFLAGS.
+> >
+> > >
+> > > >
+> > > > SHT_REL is generated by the latest lld, see
+> > > > https://reviews.llvm.org/rGca3bdb57fa1ac98b711a735de048c12b5fdd8086.
+> > >
+> > > Is this part of a released toolchain? If so, can you spell out the
+> > > first version where this occurs?
+> >
+> > Yes, it was added in llvm-13. I will update the patch.
+> >
+> > >
+> > > > Disable profile optimization in kvm/nvhe to fix the build with
+> > > > AutoFDO.
+> > >
+> > > It'd be good to at least mention how AutoFDO and -fprofile-sample-use
+> > > relate to each other.
+> >
+> > Good point. AutoFDO is an example of sample profiles.
+> > It's not actually relevant for the bug. I will better remove it.
+> >
+> > >
+> > > >
+> > > > Signed-off-by: Denis Nikitin <denik@chromium.org>
+> > > > ---
+> > > >  arch/arm64/kvm/hyp/nvhe/Makefile | 3 +++
+> > > >  1 file changed, 3 insertions(+)
+> > > >
+> > > > diff --git a/arch/arm64/kvm/hyp/nvhe/Makefile b/arch/arm64/kvm/hyp/nvhe/Makefile
+> > > > index b5c5119c7396..6a6188374a52 100644
+> > > > --- a/arch/arm64/kvm/hyp/nvhe/Makefile
+> > > > +++ b/arch/arm64/kvm/hyp/nvhe/Makefile
+> > > > @@ -89,6 +89,9 @@ quiet_cmd_hypcopy = HYPCOPY $@
+> > > >  # Remove ftrace, Shadow Call Stack, and CFI CFLAGS.
+> > > >  # This is equivalent to the 'notrace', '__noscs', and '__nocfi' annotations.
+> > > >  KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_FTRACE) $(CC_FLAGS_SCS) $(CC_FLAGS_CFI), $(KBUILD_CFLAGS))
+> > > > +# Profile optimization creates SHT_REL section '.llvm.call-graph-profile' for
+> > > > +# the hot code. SHT_REL is currently not supported by the KVM tools.
+> > >
+> > > 'KVM tools' seems vague. Maybe call out the actual helper that
+> > > processes the relocations?
+> >
+> > Agreed.
+> >
+> > >
+> > > > +KBUILD_CFLAGS += $(call cc-option,-fno-profile-sample-use,-fno-profile-use)
+> > >
+> > > Why adding these options instead of filtering out the offending option
+> > > as it is done just above?
+> >
+> > That was actually the alternative solution and it worked as well.
+> > Let me double check if profile optimization doesn't mess up with other
+> > sections and if it doesn't I will remove the '.llvm.call-graph-profile'
+> > section instead.
+> 
+> When I remove the '.llvm.call-graph-profile' section the layout of other
+> sections slightly changes (offsets and sizes) compared to
+> `-fno-profile-sample-use`. But the list of sections remains the same.
 
-This patch adds the S5402ZA model to the quirk list.
+If this method works well enough, I'd rather we stick to it, instead
+of having two ways to disable this sort of things.
 
-BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=216158
-Tested-by: Kellen Renshaw <kellen.renshaw@canonical.com>
-Signed-off-by: Kellen Renshaw <kellen.renshaw@canonical.com>
----
-Follows e12dee373673 (ACPI: resource: Skip IRQ override on Asus Vivobook 
-K3402ZA/K3502ZA).
+> > > Also, is this the only place the kernel fails to compile? The EFI stub
+> > > does similar things AFAIR, and could potentially fail the same way.
+> >
+> > This was the only place in 5.15 where we tested it.
+> > Let me see if EFI has this section.
+> 
+> EFI code is not marked as hot in the profile.
+> 
+> Regarding "could potentially fail", I don't see any explicit manipulations
+> with code sections in EFI.
+> The hardcoded EFI stub entries should not be affected.
 
- drivers/acpi/resource.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+I was more worried by the runtime relocation that the EFI stub
+performs for the kernel, but if you've checked that already, that
+works for me.
 
-diff --git a/drivers/acpi/resource.c b/drivers/acpi/resource.c
-index 8b4faec8cae7..5d688e546239 100644
---- a/drivers/acpi/resource.c
-+++ b/drivers/acpi/resource.c
-@@ -414,6 +414,13 @@ static const struct dmi_system_id asus_laptop[] = {
- 			DMI_MATCH(DMI_BOARD_NAME, "K3502ZA"),
- 		},
- 	},
-+	{
-+		.ident = "Asus Vivobook S5402ZA",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
-+			DMI_MATCH(DMI_BOARD_NAME, "S5402ZA"),
-+		},
-+	},
- 	{ }
- };
- 
+Thanks,
+
+	M.
+
 -- 
-2.25.1
-
+Without deviation from the norm, progress is not possible.
