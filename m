@@ -2,75 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB4055C01DE
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:42:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D7B25C01E2
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:43:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230397AbiIUPmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 11:42:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40814 "EHLO
+        id S229694AbiIUPnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 11:43:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbiIUPlp (ORCPT
+        with ESMTP id S229738AbiIUPmw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 11:41:45 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A4E818E0B
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 08:41:13 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id c198so6271373pfc.13
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 08:41:13 -0700 (PDT)
+        Wed, 21 Sep 2022 11:42:52 -0400
+Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7F6262
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 08:42:45 -0700 (PDT)
+Received: by mail-vk1-xa34.google.com with SMTP id b15so3410620vkp.2
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 08:42:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=91sIiMMXf+XZf2y2yqdicbq+CnNERKB1i2IpRNulDOM=;
-        b=aAlj1VFD0eGAuI+68oUtYoEH6yhLMs3ZDu0i5jonRbSV3/zwextdKWRSYNlpAoz/wM
-         dXLm8N1GwbRZiBiDRlIe7udz0/0AVVCSnjxOb78D7rRjV56ux6dJu8IGKQG1eNRxoRFH
-         0cGlfs+MLoTfGix1o2F+wJN5DverGAmFOgSvItgCQ7krW3LbqqVZ+H7wt7LOTFougB74
-         ILPWgusRqEuo4/neFDbDSc6fYOt/2/xDS+AdPBlFVJ1q08tCZ1Q2N29wdv1iikwWQs21
-         /LapXhcam+oQ8fLA7AHOhb9mMFhLxSiNL8NAy32SXReB5QxSw9ih4L8pmfFQ0PeOj4m6
-         ui4w==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=KFeAEomN6wc2bkWtpf7+3E3G4vNJtHK0TABPjM591K4=;
+        b=j6PEQKDXbzUpUGsJj0J+L4yZap4hN7mS78EpJrWYFNixgNWVKNiEtyDcTICM/z3M5n
+         +tDBwuVpgHHKDRFmb9RlDE9xeSbsI7mWOO/Sz5aqrtbnhjY6hlM9Y2fXwWwo9voH1TO8
+         Xw5zZfYWWY/wbEFAbrOv/3c+hwsND/kX6/yxGbu1aUIkmLoTT6KyS+g9QGRwz7JcKqg5
+         rb6TdYJ3+OkZGAyDjq3wPqTfbFCKYJVkM1BjYOn58bhAPG0dXkhCZhm0g96pkBdbOm61
+         v7+RDpgU6n9f3+F39IHq/X9vB/tSQTzVAvV4aW6hL8Nvke04kTTqfFHUjvMZvwTNlIjT
+         juZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=91sIiMMXf+XZf2y2yqdicbq+CnNERKB1i2IpRNulDOM=;
-        b=RzmwKZ6y2trvNlY2Fvqr+OjRc2kMSmWZmX7NSnAHDQpIv1Wp+jhEPzHKOKquu+2EzK
-         gFYNNjorREwIlwnt3PBfwOh5sI+3P1oairbc/rmmUhm6vCuKsW/s/QYrJlM+UL8diWWU
-         JLiMbu4W1tK0km2No3+y/3/xUhnRwVZHlFC4YRqZFgleF/bIMkEVEAS0YwOUF0OWd5+4
-         BByVCLG0uCQnz9UkSrNZOBgkWvzepytw5uOG6D1HlIOnpcVnh06gqjQ7pt26mjA+rw3z
-         UrpX1HeN5R3FrQkNvoYFxUTFdx7X9ljIi6BrzvfChDf1EcuyQ1noo49olW+8nqBZ0zkR
-         txRw==
-X-Gm-Message-State: ACrzQf1p+tMeXwU/sax3uveCRnx5JFF6ThMhHMrf2LixfxcElJazVttf
-        1dmzn4Fj3rjltHkhLCW5CiiLAg==
-X-Google-Smtp-Source: AMsMyM7wFmaOmyLX5T/GZckzAlfHslLzY7kkHRSDQZwjjOFcvQrM4xRm0MGsDc+7uCn5SdoKDr4vnQ==
-X-Received: by 2002:a63:5a50:0:b0:429:8580:fc61 with SMTP id k16-20020a635a50000000b004298580fc61mr26000546pgm.215.1663774872529;
-        Wed, 21 Sep 2022 08:41:12 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id a13-20020a170902eccd00b0016be596c8afsm2170943plh.282.2022.09.21.08.41.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Sep 2022 08:41:12 -0700 (PDT)
-Date:   Wed, 21 Sep 2022 15:41:08 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
-        Mingwei Zhang <mizhang@google.com>,
-        Yan Zhao <yan.y.zhao@intel.com>,
-        Ben Gardon <bgardon@google.com>
-Subject: Re: [PATCH v4 1/9] KVM: x86/mmu: Bug the VM if KVM attempts to
- double count an NX huge page
-Message-ID: <YyswlLykptcOciOS@google.com>
-References: <20220830235537.4004585-1-seanjc@google.com>
- <20220830235537.4004585-2-seanjc@google.com>
- <87tu50oohn.fsf@redhat.com>
- <YysjGNtYJbbPuxSN@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=KFeAEomN6wc2bkWtpf7+3E3G4vNJtHK0TABPjM591K4=;
+        b=rfbcgiUMVYOhasbVqsIv0abzVFEqnqMMPqxq9r/Uv96Con7c6RkegZL67iWgHfjx4F
+         GFQmK53UEyrhL8DrrW22ptBMWRnX6dOFEqirnMDz+rh0oQcxl+Hdxfjh8qVG0Zudyyo/
+         GU6HpYcPq2GDp8S25vem7fvY+zRKP2lCNcfHgKS2ltYsuWg17RNno1I3O/sDY1Sl3LBX
+         awC8kh+tGR7vZF/yY5/aLAmvIrqht7Zlvg5/VMooTWHOU8P6+REWnDGeAkSt9VvXZjA3
+         JeQd6bVUb0lFqTm6XzEeIPR3YvWgWy8pSNZTHlUSpe2x4EXlnyYxbjdWxk2yBi4I9OyI
+         G3AA==
+X-Gm-Message-State: ACrzQf016GWTgkIldoPKBmuHRQEkd/PTb69kBVv+kuyXVTEC2MZ3v2lU
+        zrJk2xoFnUik3PqTtx2TbNzeC0HlsCkYAxEKYZ8=
+X-Google-Smtp-Source: AMsMyM5mjgzhOyC1PfAPpGTaYduU7yMyFn4EYyHHMTNna6jnabAfwzyN0ukBimpQT8PKeQpgILa2hQZG5+l4ShB5bcQ=
+X-Received: by 2002:a05:6122:a02:b0:3a3:1672:171f with SMTP id
+ 2-20020a0561220a0200b003a31672171fmr8723463vkn.17.1663774964578; Wed, 21 Sep
+ 2022 08:42:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YysjGNtYJbbPuxSN@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+References: <CAB7eexJP7w1B0mVgDF0dQ+gWor7UdkiwPczmL7pn91xx8xpzOA@mail.gmail.com>
+ <87y1ufh3u9.wl-tiwai@suse.de> <875yhigtxe.wl-tiwai@suse.de>
+In-Reply-To: <875yhigtxe.wl-tiwai@suse.de>
+From:   Rondreis <linhaoguo86@gmail.com>
+Date:   Wed, 21 Sep 2022 23:42:33 +0800
+Message-ID: <CAB7eexJu+4Nc+YA3Bi+1Y1-zU6rfO5YtC6R7c70Qhoj0J36JoA@mail.gmail.com>
+Subject: Re: possible deadlock in snd_rawmidi_free
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,56 +67,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 21, 2022, Sean Christopherson wrote:
-> On Wed, Sep 21, 2022, Vitaly Kuznetsov wrote:
-> > [  962.257992]  ept_fetch+0x504/0x5a0 [kvm]
-> > [  962.261959]  ept_page_fault+0x2d7/0x300 [kvm]
-> > [  962.287701]  kvm_mmu_page_fault+0x258/0x290 [kvm]
-> > [  962.292451]  vmx_handle_exit+0xe/0x40 [kvm_intel]
-> > [  962.297173]  vcpu_enter_guest+0x665/0xfc0 [kvm]
-> > [  962.307580]  vcpu_run+0x33/0x250 [kvm]
-> > [  962.311367]  kvm_arch_vcpu_ioctl_run+0xf7/0x460 [kvm]
-> > [  962.316456]  kvm_vcpu_ioctl+0x271/0x670 [kvm]
-> > [  962.320843]  __x64_sys_ioctl+0x87/0xc0
-> > [  962.324602]  do_syscall_64+0x38/0x90
-> > [  962.328192]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> 
-> Ugh, past me completely forgot the basics of shadow paging[*].  The shadow MMU
-> can reuse existing shadow pages, whereas the TDP MMU always links in new pages.
-> 
-> I got turned around by the "doesn't exist" check, which only means "is there
-> already a _SPTE_ here", not "is there an existing SP for the target gfn+role that
-> can be used".
-> 
-> I'll drop the series from the queue, send a new pull request, and spin a v5
-> targeting 6.2, which amusing will look a lot like v1...
+Thank you for your solution! I am sorry that I was not able to extract
+the reproducer. But I am improving the solution to reproduce the crash.
+If I succeed in reproducing it, I will check it for you as soon as possible!
 
-Huh.  I was expecting more churn, but dropping the offending patch and then
-"reworking" the series yields a very trivial overall diff.  
+Best Regards,
+Rondreis
 
-Vitaly, can you easily re-test with the below, i.e. simply delete the KVM_BUG_ON()?
-I'll still spin a v5, but assuming all is well I think this can go into 6.1 and
-not get pushed out to 6.2.
-
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 54ee48a87f81..e6f19e605979 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -804,7 +804,15 @@ static void account_shadowed(struct kvm *kvm, struct kvm_mmu_page *sp)
- 
- void track_possible_nx_huge_page(struct kvm *kvm, struct kvm_mmu_page *sp)
- {
--       if (KVM_BUG_ON(!list_empty(&sp->possible_nx_huge_page_link), kvm))
-+       /*
-+        * If it's possible to replace the shadow page with an NX huge page,
-+        * i.e. if the shadow page is the only thing currently preventing KVM
-+        * from using a huge page, add the shadow page to the list of "to be
-+        * zapped for NX recovery" pages.  Note, the shadow page can already be
-+        * on the list if KVM is reusing an existing shadow page, i.e. if KVM
-+        * links a shadow page at multiple points.
-+        */
-+       if (!list_empty(&sp->possible_nx_huge_page_link))
-                return;
- 
-        ++kvm->stat.nx_lpage_splits;
-
+On Tue, Sep 20, 2022 at 7:35 PM Takashi Iwai <tiwai@suse.de> wrote:
+>
+> On Mon, 19 Sep 2022 15:49:02 +0200,
+> Takashi Iwai wrote:
+> >
+> > On Mon, 19 Sep 2022 14:46:13 +0200,
+> > Rondreis wrote:
+> > >
+> > > Hello,
+> > >
+> > > When fuzzing the Linux kernel driver v6.0-rc4, the following crash was
+> > > triggered.
+> > >
+> > > HEAD commit: 7e18e42e4b280c85b76967a9106a13ca61c16179
+> > > git tree: upstream
+> > >
+> > > kernel config: https://pastebin.com/raw/xtrgsXP3
+> > > console output: https://pastebin.com/raw/9tabWDtu
+> > >
+> > > Sorry for failing to extract the reproducer, and the crash occurred at
+> > > the moment of disconnecting the midi device. On other versions of
+> > > Linux, I also triggered this crash.
+> > >
+> > > I would appreciate it if you have any idea how to solve this bug.
+> >
+> > I think there are two ways to work around it.
+> >
+> > The first one is to move the unregister_sound*() calls out of the
+> > sound_oss_mutex, something like:
+> > -- 8< --
+> >
+> > --- a/sound/core/sound_oss.c
+> > +++ b/sound/core/sound_oss.c
+> > @@ -162,7 +162,6 @@ int snd_unregister_oss_device(int type, struct snd_card *card, int dev)
+> >               mutex_unlock(&sound_oss_mutex);
+> >               return -ENOENT;
+> >       }
+> > -     unregister_sound_special(minor);
+> >       switch (SNDRV_MINOR_OSS_DEVICE(minor)) {
+> >       case SNDRV_MINOR_OSS_PCM:
+> >               track2 = SNDRV_MINOR_OSS(cidx, SNDRV_MINOR_OSS_AUDIO);
+> > @@ -174,12 +173,18 @@ int snd_unregister_oss_device(int type, struct snd_card *card, int dev)
+> >               track2 = SNDRV_MINOR_OSS(cidx, SNDRV_MINOR_OSS_DMMIDI1);
+> >               break;
+> >       }
+> > -     if (track2 >= 0) {
+> > -             unregister_sound_special(track2);
+> > +     if (track2 >= 0)
+> >               snd_oss_minors[track2] = NULL;
+> > -     }
+> >       snd_oss_minors[minor] = NULL;
+> >       mutex_unlock(&sound_oss_mutex);
+> > +
+> > +     /* call unregister_sound_special() outside sound_oss_mutex;
+> > +      * otherwise may deadlock, as it can trigger the release of a card
+> > +      */
+> > +     unregister_sound_special(minor);
+> > +     if (track2 >= 0)
+> > +             unregister_sound_special(track2);
+> > +
+> >       kfree(mptr);
+> >       return 0;
+> >  }
+> > -- 8< --
+> >
+> > This should be OK, as the unregister_sound_*() itself can be called
+> > concurrently.
+> >
+> > Another workaround would be just to remove the register_mutex call at
+> > snd_rawmidi_free(), e.g. something like:
+> >
+> > -- 8< --
+> > --- a/sound/core/rawmidi.c
+> > +++ b/sound/core/rawmidi.c
+> > @@ -1899,10 +1899,8 @@ static int snd_rawmidi_free(struct snd_rawmidi *rmidi)
+> >
+> >       snd_info_free_entry(rmidi->proc_entry);
+> >       rmidi->proc_entry = NULL;
+> > -     mutex_lock(&register_mutex);
+> >       if (rmidi->ops && rmidi->ops->dev_unregister)
+> >               rmidi->ops->dev_unregister(rmidi);
+> > -     mutex_unlock(&register_mutex);
+> >
+> >       snd_rawmidi_free_substreams(&rmidi->streams[SNDRV_RAWMIDI_STREAM_INPUT]);
+> >       snd_rawmidi_free_substreams(&rmidi->streams[SNDRV_RAWMIDI_STREAM_OUTPUT]);
+> > -- 8< --
+> >
+> > This register_mutex there should be superfluous since the device has
+> > been already processed and detached by snd_rawmidi_dev_disconnect()
+> > beforehand.  But if the first one is confirmed to work, the second one
+> > can be left untouched.
+>
+> Could you check whether one of two changes above fixes the bug?
+> Once after confirmed, I'll cook a proper patch for the submission.
+>
+>
+> thanks,
+>
+> Takashi
