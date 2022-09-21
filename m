@@ -2,132 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD9A15C008A
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 16:59:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35A105C0098
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:00:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230360AbiIUO7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 10:59:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46546 "EHLO
+        id S229669AbiIUPAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 11:00:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbiIUO6y (ORCPT
+        with ESMTP id S230317AbiIUPAZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 10:58:54 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4E606E89F
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 07:57:09 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id h194so5237570iof.4
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 07:57:09 -0700 (PDT)
+        Wed, 21 Sep 2022 11:00:25 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD521481E6
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 08:00:08 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id u132so6190422pfc.6
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 08:00:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date;
-        bh=hllEYxW7NsLIs9BxyKkI80/JYA+jxi2TNvDqwFspVTQ=;
-        b=zRd+ASngO80XK6wz9GY4RXmrP2PfVaUEHPGr/LtU+8SG2JyHQeZOP9ZSbJIi4tRygw
-         kCaEaBGHJJBFBc/UOxidK5GxrXpprMfL1OQq74jKvqbDBawXEE1eJWJSmP7Hfzzx4y69
-         dP3LIurDHzU7q1VmoHrvJ7RLEi0kV5MPossBlHUlQfnQ/ztrAm8og0UEU8tTx6UTQ8p/
-         vR5IK9+AdKohw2XC34CgulB2ffMqn85ig6xRbU/fgOSJufU4/feIOhihEzaWg0oznHVI
-         fDXAGb3G+AWb/wGH03CoFC5SX0K9JROfStWyGty/ymIIF4dC3CnNEN0VH7pOyisdQ+Qk
-         bXVg==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=ZOknaCryBKAmeWlgxRHW7gHjFXTydOeqelKEYGngjXY=;
+        b=PUy7PwdFlbjhMX+HV+EVVByukRTiTcclVk3Gh3p29DOE3kIfB0GQWHxiBypE8wQ1I2
+         Z5KsAhe1HJRtTwOCCXQgvQEzICZJtmMFMOpDNQxGCsTzN/b/f+FD0mW6fiXKpEWlRd3G
+         1hbZjt6pUwie9IkNCMPRDBPRr4YHkFKa1A1n8eqWs2/IBaB0pJ8wbZyvex1sCP9EH9l6
+         kFM+ajhQLhkRUtyScLSy4cUh4d7F40UEFDeYx/rloGyLfbI/90SvFmQ86dIlhrFt5ZrW
+         pU1sv0zA8Z0uwHPeyZFnsh8JB1kcn4F5q3BI+r644UPVJex3SCEzi3X6T7dCFHMw73hQ
+         9FCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=hllEYxW7NsLIs9BxyKkI80/JYA+jxi2TNvDqwFspVTQ=;
-        b=uZ54MUIRkzscqhpVeF9rtf6LgVhg/yTE62ND3AaUwD6bkKlOf1j0fShQz218qBPto2
-         5SwxNFD+VlVtQVUHaCFZzejrSoIkw1Ajdd4v86yDPOe4biuyZhYuhaRTT1Ifqfx8BpbA
-         42S3MrcV0AcL1qal8gzLAmsUJfu1nhFHvDqNeGAiNlF7+ieeqW7N0swQuQcKRwOeAX6X
-         9uQcKi48jI9/nU/R12V7NepD53nWae0FhwI20DYfFCxbmIxmo1D2SYbT2HrAFEYLFkqc
-         hnN7bPU7DAHTZ1gbmIr8a+QsqrYS5NXi2XeD/jiBImorAKKMJhx/biaUWDTDjIjXWV4s
-         81gQ==
-X-Gm-Message-State: ACrzQf2WZQsH3uO/wzP95XA7KXLvRe6coCSz1y25tOcIMu/GQWVvTkT4
-        kwk6MjWt9uQkfubTDlEwSlm75swMQ5LAuw==
-X-Google-Smtp-Source: AMsMyM6gfJ0QxVIXyl6uTDviE8hjyB8sEV+XmAWYwTCskwgn2uYAlG3uY5TJIKGr2enjFCWiQtCKFA==
-X-Received: by 2002:a05:6638:13cb:b0:33f:336c:34ae with SMTP id i11-20020a05663813cb00b0033f336c34aemr12834269jaj.317.1663772217433;
-        Wed, 21 Sep 2022 07:56:57 -0700 (PDT)
-Received: from [192.168.1.94] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id p7-20020a92c107000000b002eac38773cdsm1041001ile.82.2022.09.21.07.56.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Sep 2022 07:56:56 -0700 (PDT)
-Message-ID: <cecf4c71-14be-4ff8-df83-cfd1da102bcf@kernel.dk>
-Date:   Wed, 21 Sep 2022 08:56:53 -0600
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=ZOknaCryBKAmeWlgxRHW7gHjFXTydOeqelKEYGngjXY=;
+        b=ZdemGS1M9eHhm14qYOKyJsLKMusQQq5YizFWHcHhnMvBmWPjFMshdnJgmAUrGJSiTb
+         PeUa6UCU97pcHEY3H0PwuYbVOlvOFPH3ATJLDDVsyAG45pqzcOSmos3eki3ppph8dOD0
+         dNK698iF07X+TCgFTQfp591pZv9AM16yWG9S5xKBCIA5fQBsAbOwq6loZr9jS9fsjE9z
+         vluNwwC6Q9DWX0GxUdxwMQbNRheK2IxnFeiXI3SrJOQVYUBHt+ms4nopwvNmNMXNNt3g
+         DVhc0/SGkZIWEEJDay37LVeB+hdBAe4M5vHzD3UylGmpUujYHX7nyaUkObJNm98DnwJ3
+         H6Fg==
+X-Gm-Message-State: ACrzQf3aeOVIBs1+XumHudL50gFcd5/6e14qxywz7WDt375MxsO1zrG+
+        222WwaL94VrQrkE68JXDHfv4Lw==
+X-Google-Smtp-Source: AMsMyM6IzBR+IPGklvkXyceN25rdGLZW+kwuaS+8kPvv30SaIVCr6t2lDehTPAThSJ/06p88g02mIw==
+X-Received: by 2002:a63:e352:0:b0:42b:dc03:cc38 with SMTP id o18-20020a63e352000000b0042bdc03cc38mr24169745pgj.545.1663772407953;
+        Wed, 21 Sep 2022 08:00:07 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id v9-20020aa799c9000000b00540d03f522fsm2304782pfi.66.2022.09.21.08.00.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Sep 2022 08:00:07 -0700 (PDT)
+Date:   Wed, 21 Sep 2022 15:00:03 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Gerd Hoffmann <kraxel@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] kvm/x86: reserve bit
+ KVM_HINTS_PHYS_ADDRESS_SIZE_DATA_VALID
+Message-ID: <Yysm8/Nkt6EUI5+k@google.com>
+References: <20220908114146.473630-1-kraxel@redhat.com>
+ <YxoBtD+3sgEEiaFF@google.com>
+ <20220909050224.rzlt4x7tjrespw3k@sirius.home.kraxel.org>
+ <20220921134246.xibospqoktp4wjie@sirius.home.kraxel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-From:   Jens Axboe <axboe@kernel.dk>
-Subject: Re: regression caused by block: freeze the queue earlier in
- del_gendisk
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        Christoph Hellwig <hch@lst.de>,
-        Dusty Mabe <dusty@dustymabe.com>,
-        Ming Lei <ming.lei@redhat.com>, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-References: <Yxr4SD4d0rZ9TZik@T590> <20220912071618.GA4971@lst.de>
- <Yx/jLTknQm9VeHi4@T590> <95cbd47d-46ed-850e-7d4f-851b35d03069@dustymabe.com>
- <f2c28043-59e6-0aee-b8bf-df38525ee899@leemhuis.info>
- <d39e9149-fcb6-1f7c-4c19-234e74f286f8@kernel.dk>
- <20220920141217.GA12560@lst.de>
- <9594af4b-eb16-0a51-9a4a-e21bbce3317d@kernel.dk>
- <6a3660b2-fa7d-14a2-6977-f50926ad369c@leemhuis.info>
- <c7c909aa-71d9-b43c-293e-d4801a00861e@kernel.dk> <Yysj6AXQ44/el4pS@kroah.com>
-Content-Language: en-US
-In-Reply-To: <Yysj6AXQ44/el4pS@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220921134246.xibospqoktp4wjie@sirius.home.kraxel.org>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 21, 2022 at 8:47 AM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Wed, Sep 21, 2022 at 08:34:26AM -0600, Jens Axboe wrote:
-> > On 9/21/22 3:25 AM, Thorsten Leemhuis wrote:
-> > > On 20.09.22 16:14, Jens Axboe wrote:
-> > >> On 9/20/22 8:12 AM, Christoph Hellwig wrote:
-> > >>> On Tue, Sep 20, 2022 at 08:05:06AM -0600, Jens Axboe wrote:
-> > >>>> Christoph and I discussed this one last week, and he has a plan to try
-> > >>>> a flag approach. Christoph, did you get a chance to bang that out? Would
-> > >>>> be nice to get this one wrapped up.
-> > >>>
-> > >>> I gave up on that as it will be far too much change so late in
-> > >>> the cycle and sent you the revert yesterday.
-> > >>
-> > >> Gotcha, haven't made it all the way through the emails of the morning yet.
-> > >> I'll queue it up.
-> > >
-> > > Thx to both of you for taking care of this.
-> > >
-> > > Nitpicking: that patch is missing a "CC: stable@..." tag to ensure
-> > > automatic and quick backporting to 5.19.y. Or is the block layer among
-> > > the subsystems that prefer to handle such things manually?
-> > >
-> > > Ohh, and a fixes tag might have been good as well; a "Link:" tag
-> > > pointing to the report, too. If either would have been there, regzbot
-> > > would have noticed Christoph's patch posting and I wouldn't have
-> > > bothered you yesterday. :-) But whatever, not that important.
-> >
-> > We'll just have to ensure we ping stable on it when it goes in.
->
-> If you have a git id that is not going to change, I can watch out for it
-> to land in Linus's tree...
+On Wed, Sep 21, 2022, Gerd Hoffmann wrote:
+> On Fri, Sep 09, 2022 at 07:02:24AM +0200, Gerd Hoffmann wrote:
+> > On Thu, Sep 08, 2022 at 02:52:36PM +0000, Sean Christopherson wrote:
+> > > On Thu, Sep 08, 2022, Gerd Hoffmann wrote:
+> > > > -#define KVM_HINTS_REALTIME      0
+> > > > +#define KVM_HINTS_REALTIME                      0
+> > > > +#define KVM_HINTS_PHYS_ADDRESS_SIZE_DATA_VALID  1
+> > > 
+> > > Why does KVM need to get involved?  This is purely a userspace problem.
+> > 
+> > It doesn't.  I only need reserve a hints bit, and the canonical source
+> > for that happens to live in the kernel.  That's why this patch doesn't
+> > touch any actual code ;)
 
-This is the one:
+The issue is that this "hint" effectively breaks other VMMs that already provide
+an accurate guest.MAXPHYADDR.
 
-commit 4c66a326b5ab784cddd72de07ac5b6210e9e1b06 (origin/block-6.0, block-6.0)
-Author: Christoph Hellwig <hch@lst.de>
-Date:   Mon Sep 19 16:40:49 2022 +0200
+> > > E.g. why not use QEMU's fw_cfg to communicate this information to the
+> > > guest?
+> > 
+> > That is indeed the other obvious way to implement this.  Given this
+> > information will be needed in code paths which already do CPUID queries
+> > using CPUID to transport that information looked like the better option
+> > to me.
+> 
+> I'd like to move forward with this.
+> 
+> So, any comment further comments and opinions?
+> Is it ok to grab a hints bit given the explanation above?
+> Or should I go for the fw_cfg approach?
 
-    Revert "block: freeze the queue earlier in del_gendisk"
-
-Thanks Greg!
-
--- 
-Jens Axboe
+My strong preference is the fw_cfg approach, or if the guest side really wants to
+use CPUID, have QEMU define it's own CPUID signature and provide QEMU-specific
+hints/quirks that way.
