@@ -2,184 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D44A5BFAA6
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 11:20:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79D465BFAA3
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 11:19:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231410AbiIUJUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 05:20:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50774 "EHLO
+        id S231598AbiIUJTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 05:19:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231474AbiIUJTL (ORCPT
+        with ESMTP id S230271AbiIUJTF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 05:19:11 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5F5B915C9;
-        Wed, 21 Sep 2022 02:18:31 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 132076602003;
-        Wed, 21 Sep 2022 10:18:12 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1663751892;
-        bh=H6Sqt7KTUivS3Jmf3bUZEfhBN7LHFHUTeJKxA8piVAY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=WUbv+S4fpzF+cwNdPRleHyZF7CzR843vO2Ai2W1FQ4D/4MlyQpOseSfudz8q04CEQ
-         XzZqAzwrmq4lZGeOrYurW2N2Xz02A2Pn9bYvK2hyWHUTGnGXVusZJBFvsav7o4jYYk
-         /SLDFTNHcpKQ8J0dIvyksJl1y9+ej8Di8yiZkKiPUEzkRMODAS2yxX+mHXHaF71GOr
-         UFHQaIjTca9p6YPJY7hzfv9yYdJjQ96Ksn7gEV9pIkXzPkdHX4wuMakiKcC0ZuSp5L
-         ErrJBGOsdoMKbfGHikdmUyoU5bZbc6KFtSI79pUJ36Oj58DJKH6Y56OXO73mP6ZhPD
-         3Oq1ssPzfQQkw==
-Message-ID: <b0982780-7dd3-7c12-6de5-1c04a4359f57@collabora.com>
-Date:   Wed, 21 Sep 2022 11:18:10 +0200
+        Wed, 21 Sep 2022 05:19:05 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEEA08E46D
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 02:18:24 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id w28so7694407edi.7
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 02:18:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tessares.net; s=google;
+        h=in-reply-to:from:references:cc:to:content-language:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date;
+        bh=g9hIzzknQ13g39V8zpuvSuUDV45dCJUmErfkHCUCb8c=;
+        b=NYwy1GLqAsBJD7t33Akjui0Lw79QpqGY9V+l6RjjMPtpTrZIwVW4J6FsuZE1LR+0Cm
+         V/L4MrzwTLRWYQHh03VZOL40WVAGx+gzyqOiZjNjUlNPXTBjSUoeqd+gKcv6UQqPFH0U
+         MEgcuRJUKE+bpTD9v4bchtMJ2aeD4Db35Lo7cFro9DbaVLz9rNlEbuyuqCgJmAXrvOQy
+         chSq+cYuDwRVxlmguvhBFI51ZvSVMokkZD/xX7pGlV/SWYj+/nsv12Grztrraj0LemLX
+         BC7u0mGI0Jdo0RzaEeHGoxKIgSXDEH3dYe33H1S4lhrYx/HH+0KmXLZVGJ6lAeVN5J2k
+         sPUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:from:references:cc:to:content-language:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date;
+        bh=g9hIzzknQ13g39V8zpuvSuUDV45dCJUmErfkHCUCb8c=;
+        b=3wsk7li3ooUwZ0dxRk6bjV9n4zrpLZZ1BINzewfk+cBb5B7Nj7h9vVXHmceWryylNs
+         0x8jGpRBCu8n1bYvS+tGIJu3oC1wU+vQ++QPAjhLpwkeK23BBLEPTp5TEntDYBsqH0R+
+         17Jri/IlokhdbwdB0EoxgwOGjDGn4BEwtZNvLzMoWv5ZmV2+BuTeSoq+ageoI08HWQnu
+         w2OxCZ6WHu4MWMxvtulCZccf+4B08v+LdfwSb6sj+yrdgYA0NzOb6N81EuqavLX7VxUg
+         b9xabH5EMiNGX7+Fk4EXq38KetgVmdxo7q9FeIgZIaDMrc3z/mIJHhAGa4fvglW4gv00
+         rUqA==
+X-Gm-Message-State: ACrzQf3WEwuCUtRaiDjweocR2mioeVJ3KcRm4TaVEOw3H17Va5Y7s+pA
+        kptA05APu1ICcobXWUzrgJci1Q==
+X-Google-Smtp-Source: AMsMyM6bPQ7zayJ+9UZNoM2Gek0kEtRZlXiCyyRJsqf5v+folfznpu2y8B5YkymscGMGAOTjv8C3Bg==
+X-Received: by 2002:aa7:c415:0:b0:44d:f432:3e84 with SMTP id j21-20020aa7c415000000b0044df4323e84mr24335129edq.56.1663751898858;
+        Wed, 21 Sep 2022 02:18:18 -0700 (PDT)
+Received: from ?IPV6:2a02:578:8593:1200:e650:9a94:d180:442c? ([2a02:578:8593:1200:e650:9a94:d180:442c])
+        by smtp.gmail.com with ESMTPSA id gs13-20020a170906f18d00b007724b8e6576sm1073164ejb.32.2022.09.21.02.18.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Sep 2022 02:18:18 -0700 (PDT)
+Content-Type: multipart/mixed; boundary="------------PnZdDX0mbgnHJpzmr15LlbVj"
+Message-ID: <2b4722a2-04cd-5e8f-ee09-c01c55aee7a7@tessares.net>
+Date:   Wed, 21 Sep 2022 11:18:17 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v3 1/3] clk: qcom: gdsc: Fix the handling of PWRSTS_RET
- support
-Content-Language: en-US
-To:     Rajendra Nayak <quic_rjendra@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@somainline.org,
-        mturquette@baylibre.com, sboyd@kernel.org, mka@chromium.org,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        johan+linaro@kernel.org, quic_kriskura@quicinc.com,
-        dianders@chromium.org, linux-clk@vger.kernel.org
-References: <20220920111517.10407-1-quic_rjendra@quicinc.com>
- <d813e8a5-9eba-b3f7-2eee-cd721d120a30@collabora.com>
- <096205ee-2c8a-facf-87ce-2309c63d2400@quicinc.com>
- <1a845259-fce2-d239-588b-a70ea5b19680@collabora.com>
- <4aa3c16e-fb5a-980c-feb6-883fcbff077c@quicinc.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <4aa3c16e-fb5a-980c-feb6-883fcbff077c@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+ Thunderbird/102.3.0
+Subject: Re: linux-next: manual merge of the net-next tree with the net tree
+Content-Language: en-GB
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Benjamin Poirier <bpoirier@nvidia.com>,
+        Hangbin Liu <liuhangbin@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        MPTCP Upstream <mptcp@lists.linux.dev>
+References: <20220921110437.5b7dbd82@canb.auug.org.au>
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+In-Reply-To: <20220921110437.5b7dbd82@canb.auug.org.au>
 X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 21/09/22 11:05, Rajendra Nayak ha scritto:
+This is a multi-part message in MIME format.
+--------------PnZdDX0mbgnHJpzmr15LlbVj
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+Hi Stephen,
+
+On 21/09/2022 03:04, Stephen Rothwell wrote:
+> Hi all,
 > 
-> On 9/21/2022 1:21 PM, AngeloGioacchino Del Regno wrote:
->> Il 20/09/22 15:39, Rajendra Nayak ha scritto:
->>>
->>> On 9/20/2022 6:09 PM, AngeloGioacchino Del Regno wrote:
->>>> Il 20/09/22 13:15, Rajendra Nayak ha scritto:
->>>>> GDSCs cannot be transitioned into a Retention state in SW.
->>>>> When either the RETAIN_MEM bit, or both the RETAIN_MEM and
->>>>> RETAIN_PERIPH bits are set, and the GDSC is left ON, the HW
->>>>> takes care of retaining the memory/logic for the domain when
->>>>> the parent domain transitions to power collapse/power off state.
->>>>>
->>>>> On some platforms where the parent domains lowest power state
->>>>> itself is Retention, just leaving the GDSC in ON (without any
->>>>> RETAIN_MEM/RETAIN_PERIPH bits being set) will also transition
->>>>> it to Retention.
->>>>>
->>>>> The existing logic handling the PWRSTS_RET seems to set the
->>>>> RETAIN_MEM/RETAIN_PERIPH bits if the cxcs offsets are specified
->>>>> but then explicitly turns the GDSC OFF as part of _gdsc_disable().
->>>>> Fix that by leaving the GDSC in ON state.
->>>>>
->>>>> Signed-off-by: Rajendra Nayak <quic_rjendra@quicinc.com>
->>>>> Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->>>>> ---
->>>>> v3:
->>>>> Updated changelog
->>>>>
->>>>> There are a few existing users of PWRSTS_RET and I am not
->>>>> sure if they would be impacted with this change
->>>>>
->>>>> 1. mdss_gdsc in mmcc-msm8974.c, I am expecting that the
->>>>> gdsc is actually transitioning to OFF and might be left
->>>>> ON as part of this change, atleast till we hit system wide
->>>>> low power state.
->>>>> If we really leak more power because of this
->>>>> change, the right thing to do would be to update .pwrsts for
->>>>> mdss_gdsc to PWRSTS_OFF_ON instead of PWRSTS_RET_ON
->>>>> I dont have a msm8974 hardware, so if anyone who has can report
->>>>> any issues I can take a look further on how to fix it.
->>>>
->>>> I think that the safest option is to add a PWRSTS_RET_HW_CTRL flag (or similar),
->>>> used for the specific cases of SC7180 and SC7280 (and possibly others) where the
->>>> GDSC is automatically transitioned to a Retention state by HW control, with no
->>>> required software (kernel driver) intervention.
->>>
->>> Having a PWRSTS_RET_HW_CTRL flag would make sense if there was also a
->>> PWRSTS_RET_SW_CTRL way of achieving Retention state, but FWIK there isn't.
->>> I am sure that's the way it is on 8974 as well, I just don't have hardware to
->>> confirm.
->>>
->>>>
->>>>>
->>>>> 2. gpu_gx_gdsc in gpucc-msm8998.c and
->>>>>     gpu_gx_gdsc in gpucc-sdm660.c
->>>>> Both of these seem to add support for 3 power state
->>>>> OFF, RET and ON, however I dont see any logic in gdsc
->>>>> driver to handle 3 different power states.
->>>>> So I am expecting that these are infact just transitioning
->>>>> between ON and OFF and RET state is never really used.
->>>>> The ideal fix for them would be to just update their resp.
->>>>> .pwrsts to PWRSTS_OFF_ON only.
->>>>
->>>> static int gdsc_init(struct gdsc *sc)
->>>> {
->>>>
->>>>      ...
->>>>
->>>>      if (on || (sc->pwrsts & PWRSTS_RET))
->>>>          gdsc_force_mem_on(sc);
->>>>      else
->>>>          gdsc_clear_mem_on(sc);
->>>>
->>>>      ...
->>>> }
->>>>
->>>> On MSM8998 and SDM630/636/660, we're reaching that point with a GDSC that is
->>>> left OFF from the bootloader, but we want (at least for 630/660) memretain
->>>> without periph-retain: this is required to make the hypervisor happy.
->>>
->>> Ideally setting the memretain bits while the GDSC is OFF should have no affect
->>> at all. Is this for the gpu_gx_gdsc on 630/660? Is this needed only at the init
->>> time (when the bootloader has left it OFF) or is it needed everytime the kernel
->>> turns it OFF too?
->>
->> Even though I don't remember the flow in a clear way (this entire thing was done
->> years ago), I'm sure that for PWRSTS_OFF memretain can be cleared, so, the current
->> flow that we have in gdsc.c does work correctly.
->>
->> Ideally, I agree with you that the memretain bits should have no effect at all
->> while the GDSC is OFF, but that's the situation on these platforms.
+> Today's linux-next merge of the net-next tree got a conflict in:
 > 
-> Would you be able to test this patch on these platforms to see if we end up
-> with regressions?
+>   tools/testing/selftests/drivers/net/bonding/Makefile
 > 
+> between commit:
+> 
+>   bbb774d921e2 ("net: Add tests for bonding and team address list management")
+> 
+> from the net tree and commit:
+> 
+>   152e8ec77640 ("selftests/bonding: add a test for bonding lladdr target")
+> 
+> from the net-next tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary.
+Thank you for sharing this fix (and all the others!).
 
-Not in a timely manner.
+I also had this conflict on my side[1] and I resolved it differently,
+more like what is done in the -net tree I think, please see the patch
+attached to this email.
 
-Konrad, Marijn, Jami, can any of you perform a "fast" test?
+I guess I should probably use your version. It is just I saw it after
+having resolved the conflict on my side :)
+I will check later how the network maintainers will resolve this
+conflict and update my tree if needed.
 
-Thanks.
+Cheers,
+Matt
 
->>
->>> How did we come up with this trick to keep the hypervisor happy, was it picked
->>> up from some downstream reference code?
->>
->> Yes, it was found in various releases of the downstream kernel for 8998/630/660.
->>
->>>
->>>>
->>>> Regards,
->>>> Angelo
->>>>
->>
+[1] https://github.com/multipath-tcp/mptcp_net-next/commit/c02e0180887c
+-- 
+Tessares | Belgium | Hybrid Access Solutions
+www.tessares.net
+--------------PnZdDX0mbgnHJpzmr15LlbVj
+Content-Type: text/x-patch; charset=UTF-8;
+ name="c02e0180887cdb8c2bc98fcbb0ad6a6d7c68578c.patch"
+Content-Disposition: attachment;
+ filename="c02e0180887cdb8c2bc98fcbb0ad6a6d7c68578c.patch"
+Content-Transfer-Encoding: base64
 
+ZGlmZiAtLWNjIHRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2RyaXZlcnMvbmV0L2JvbmRpbmcv
+TWFrZWZpbGUKaW5kZXggMGY5NjU5NDA3OTY5LGQyMDlmN2E5OGI2Yy4uMWVkMDFlOTYwZDUx
+Ci0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2RyaXZlcnMvbmV0L2JvbmRpbmcvTWFr
+ZWZpbGUKKysrIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvZHJpdmVycy9uZXQvYm9uZGlu
+Zy9NYWtlZmlsZQpAQEAgLTEsOSAtMSw3ICsxLDEwIEBAQAogICMgU1BEWC1MaWNlbnNlLUlk
+ZW50aWZpZXI6IEdQTC0yLjAKICAjIE1ha2VmaWxlIGZvciBuZXQgc2VsZnRlc3RzCiAgCiAt
+VEVTVF9QUk9HUyA6PSBib25kLWJyZWFrLWxhY3BkdS10eC5zaAogLVRFU1RfUFJPR1MgKz0g
+Ym9uZC1sbGFkZHItdGFyZ2V0LnNoCiArVEVTVF9QUk9HUyA6PSBib25kLWJyZWFrLWxhY3Bk
+dS10eC5zaCBcCisrCSAgICAgIGJvbmQtbGxhZGRyLXRhcmdldC5zaCBcCiArCSAgICAgIGRl
+dl9hZGRyX2xpc3RzLnNoCiArCiArVEVTVF9GSUxFUyA6PSBsYWdfbGliLnNoCiAgCiAgaW5j
+bHVkZSAuLi8uLi8uLi9saWIubWsK
+
+--------------PnZdDX0mbgnHJpzmr15LlbVj--
