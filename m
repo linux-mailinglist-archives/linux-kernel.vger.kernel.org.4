@@ -2,70 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58C6F5BF8E6
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 10:20:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E02B5BF8E9
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 10:20:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231440AbiIUIUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 04:20:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36660 "EHLO
+        id S230328AbiIUIUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 04:20:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231477AbiIUITf (ORCPT
+        with ESMTP id S231410AbiIUITn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 04:19:35 -0400
-Received: from mail.8bytes.org (mail.8bytes.org [IPv6:2a01:238:42d9:3f00:e505:6202:4f0c:f051])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4CC8B3AE6B;
-        Wed, 21 Sep 2022 01:19:20 -0700 (PDT)
-Received: from 8bytes.org (p549ad5ad.dip0.t-ipconnect.de [84.154.213.173])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.8bytes.org (Postfix) with ESMTPSA id 427A624131B;
-        Wed, 21 Sep 2022 10:19:11 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
-        s=default; t=1663748351;
-        bh=9uqI9Ns9iqcTyBsCQpYejhiG2FuX8TbJQ1GMJeVpisc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AkHPVg/lsqesEvKEOavrXFZUtjoepND0S3TO1/AbOcI+9ZxKr8WbSgbfNN2RE9FI6
-         nrbp0Vkd/fYVVGHzKDQU931AWM2tXNX2/t5E6YHsj1QpcG+XkJYnzuqKydq116cPR3
-         6LM5+bsFSHOqCEWqO/NabpD2mGOVKp/NRFQToYUa71/MI8sPvblkU045qlpQlOUsgU
-         bZaDPiKCo5RyulHbeV1NAUH2V+OwLpw+nE7NSu+N4vud6IeUHKG/umsphGvT9Fo8Q+
-         RinbwdBqIHSSko892V4L/bdoHKPQsNJW80CFgIhEhvPU2mDlCpaSLZbY5hp9yrOmP4
-         LAhE9L/gjvD/Q==
-Date:   Wed, 21 Sep 2022 10:19:10 +0200
-From:   Joerg Roedel <joro@8bytes.org>
-To:     Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>, iommu@lists.linux.dev,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: Re: How to quickly resolve the IOMMU regression that currently
- plagues a lot of people in 5.19.y
-Message-ID: <YyrI/qzx/EWapzck@8bytes.org>
-References: <1d1844f0-c773-6222-36c6-862e14f6020d@leemhuis.info>
- <fd672632-7935-14ff-e2be-0db8443b0907@leemhuis.info>
+        Wed, 21 Sep 2022 04:19:43 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B9D1895ED;
+        Wed, 21 Sep 2022 01:19:25 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MXWTT6X3SzpTtm;
+        Wed, 21 Sep 2022 16:16:29 +0800 (CST)
+Received: from dggpemm500005.china.huawei.com (7.185.36.74) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 21 Sep 2022 16:19:18 +0800
+Received: from [10.67.103.158] (10.67.103.158) by
+ dggpemm500005.china.huawei.com (7.185.36.74) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 21 Sep 2022 16:19:18 +0800
+Message-ID: <3dd984c1-d17f-0a6a-c52e-87e161f867fc@huawei.com>
+Date:   Wed, 21 Sep 2022 16:19:18 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fd672632-7935-14ff-e2be-0db8443b0907@leemhuis.info>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [RFC PATCH 0/6] crypto: benchmark - add the crypto benchmark
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+CC:     <davem@davemloft.net>, <linux-kernel@vger.kernel.org>,
+        <linux-crypto@vger.kernel.org>, <gregkh@linuxfoundation.org>
+References: <20220919120537.39258-1-shenyang39@huawei.com>
+ <Yyl5yKQCAgPBbFd7@gondor.apana.org.au>
+From:   Yang Shen <shenyang39@huawei.com>
+In-Reply-To: <Yyl5yKQCAgPBbFd7@gondor.apana.org.au>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.103.158]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thorsten,
 
-On Wed, Sep 21, 2022 at 09:15:17AM +0200, Thorsten Leemhuis wrote:
-> [resend with proper subject, sorry for the noise]
 
-Thanks for the noise :) I will queue the fix today and send it upstream.
+在 2022/9/20 16:28, Herbert Xu 写道:
+> On Mon, Sep 19, 2022 at 08:05:31PM +0800, Yang Shen wrote:
+>> Add crypto benchmark - A tool to help the users quickly get the
+>> performance of a algorithm registered in crypto.
+> Please explain how this relates to the existing speed testing
+> functionality in tcrypt.
+>
+> Thanks,
 
-Regards,
+In fact, the purpose for I is to get a crypto benchmark tool which is 
+customizable
+and easy to called. For example, I test the hardware performance every 
+rc1 to check
+whether the modification of the common module affects it. For me, I need 
+to test
+the mutil threads, mutil numas, mutil requests of one tfm and so on. 
+These test
+cases are used to simulate some service scenarios. And in these cases, I 
+can find
+if any common module apply a patch that has an impact on us.
 
-	Joerg
+I know the tcrypt.ko has the speed test cases. But the tcrypt.ko test 
+case is fixed.
+If I understand correctly, the design model of tcrypt.ko is test the 
+algorithms with
+determined case conditions. It can provide some standardized testing to 
+ensure
+that the implementation of the algorithm meets the requirements. This is a
+reasonable developer test tool, but it is not flexible enough for 
+testers and users.
+
+There are two main reasons for this:
+1> For testers, the performance is not only related to algorithms and 
+algorithm
+configurations. Many configurations may have obvious effect on 
+performance which
+are not provided on tcrypt.ko. Of course, this problem can fix by add 
+these as module
+parameters.
+2> For users, a friendly tool is that they can use the tool directly 
+rather to need to
+watch the source code to know how to use it. In tcrypt.ko, users need to 
+get the 'mode'
+number of case they want to test if exist.
+
+So this tool's original intention is to allow users test more complex 
+scenarios and get the
+parameters usage directly.
+
+If I have any misunderstanding about tcrypt.ko, please correct me. And 
+I'll try to use the
+tcrytp.ko to meet my request.
+
+Thanks,
+
+Yang
