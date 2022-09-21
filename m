@@ -2,319 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C41F05C0428
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 18:30:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 073F25C042D
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 18:31:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229884AbiIUQaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 12:30:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53016 "EHLO
+        id S232255AbiIUQbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 12:31:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231154AbiIUQ3q (ORCPT
+        with ESMTP id S232154AbiIUQap (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 12:29:46 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2060f.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e8a::60f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B16A7B5E4D
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 09:11:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=X+s3GFQ18MzjWUjxI9TpRSIoDoaOzuhb+1Xn9xrxgnzXL7BWY9DVHPd0jMvoqFpVGyJGmFsngmne87xzCU7Rv7p6sLo1cU4B03qJpzbkTU1fBEDZnJI0U+Dis712vT29dn/HBEfyaHrQAVqCYaxO9NQMLI/8wOZlvHZjVXNa3H/zUAIIfCPpdwxpE5KDaLPUZDlNLJF2rjh884pMSfYPGluoR7SsR4VAMWZFX9OAjr0E89UMFHqqCcUWMBlGpvPVPA9zmNGkbg10ugA196iy1L7dAzIRLKc4bhYxL1zza/X1dlL4BJ2cRcHhgleNwkDWCJXqn2RBI6XTV+VYNrIxdw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=riSLAkl6rxNHdjeR2CG3Ds6WUJg+c2K2xL6W/ZABtaw=;
- b=c+wmTUfLMteZ4g6OT20d1VA9xo+nAzU0FsxdcABxAVMW1gRN4w1KA5OQ+Tu6nXoPcIUoE2JqG/hn1upOVpb8ndm0ndYlGzenYDYtRyMeZg5U+31W36ZQi56JlIdMJnJiLs2MEmduySJYGoC2/xe7mCldAWm/O8N5pt293lvPvyjqXycYGeu56ydqmWakY31dHNUY4MVOiS2+8CCrrOfld00y3FXTiBHTr2k46vYPdvX7e9AsrlS0FeWsdybFeMBSxr+PZVfgyILeIGkytnsyhX6YaW2bUjCmAogamwIINkv1kUS8GA5LLz/I1MAXmBtGduaZ5grTCO0mG9D89MNTFw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=riSLAkl6rxNHdjeR2CG3Ds6WUJg+c2K2xL6W/ZABtaw=;
- b=qzzHq3MKCsVgkksmF3TMtoBbAKNG9A2xLuHuxrtI/IgsBwuHEd8kjk++EyKpDoTczmbECEMJwec4ETGS/5SLJqDbGIcNTyA6MpPtn48lTfxS2GW5rQBXCeDJyUEOa+7gUZAj7fjsPSqvHK1omjGCao+q58cAWVQRcfJKgfkh0JRq9gXHtRBFlm2nlpSdVlLRNSDuDzvixdRk0vXdXauIHIMZmRsT8YBuo4S97uHj1seirQTmSpkCcvWyK193BH8pkoomxv9kHn+0zA+Pbg39IGu/TMn+UqK9/AZdAsTG90hrdAKXGACYfYIKDXlJJ+6oHwoz9k83aNIvichxs4kQTg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS7PR12MB5744.namprd12.prod.outlook.com (2603:10b6:8:73::18) by
- DM4PR12MB5248.namprd12.prod.outlook.com (2603:10b6:5:39c::15) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5654.16; Wed, 21 Sep 2022 16:10:39 +0000
-Received: from DS7PR12MB5744.namprd12.prod.outlook.com
- ([fe80::94df:bc2b:6294:8cc6]) by DS7PR12MB5744.namprd12.prod.outlook.com
- ([fe80::94df:bc2b:6294:8cc6%6]) with mapi id 15.20.5612.022; Wed, 21 Sep 2022
- 16:10:39 +0000
-From:   Zi Yan <ziy@nvidia.com>
-To:     Huang Ying <ying.huang@intel.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Matthew Wilcox <willy@infradead.org>
-Subject: Re: [RFC 3/6] mm/migrate_pages: restrict number of pages to migrate
- in batch
-Date:   Wed, 21 Sep 2022 12:10:37 -0400
-X-Mailer: MailMate (1.14r5916)
-Message-ID: <46D92605-FED0-4473-9CBD-C3CB7DD46655@nvidia.com>
-In-Reply-To: <20220921060616.73086-4-ying.huang@intel.com>
-References: <20220921060616.73086-1-ying.huang@intel.com>
- <20220921060616.73086-4-ying.huang@intel.com>
-Content-Type: multipart/signed;
- boundary="=_MailMate_B915BCCE-90FA-437B-8AC6-7F71BE6D2230_=";
- micalg=pgp-sha512; protocol="application/pgp-signature"
-X-ClientProxiedBy: BL1PR13CA0136.namprd13.prod.outlook.com
- (2603:10b6:208:2bb::21) To DS7PR12MB5744.namprd12.prod.outlook.com
- (2603:10b6:8:73::18)
+        Wed, 21 Sep 2022 12:30:45 -0400
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB241B656A;
+        Wed, 21 Sep 2022 09:12:07 -0700 (PDT)
+Received: by mail-vs1-xe2d.google.com with SMTP id 63so6004262vse.2;
+        Wed, 21 Sep 2022 09:12:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=TiAEA4SS+kpOpt2BiCuBaMfmVTOkDDRmYKTCqxWQu+0=;
+        b=mE7Q+i/GN1rrqqUq4EoplvRX9RlJi6TKJ1purRuW59DIE24h218azfYfM6OBUWPKL0
+         nNqUNjtF6ILJmsfoJDHN22vb1IzBOE4BQxAZZHcZ7hH6hqlI8R9SDZDTSIoFXMtceM4g
+         peZh/9ropfSB53F5Fs7n0dkTVDXakjPdlxaw5UWgWCO5KOvFw7MCUM+6THQLzU8f6qLU
+         oke5fereBTbVESJ2w3lsv6UMTx4+cjDapgmsTruGbNswhsspcMt3gafBrqgqDcGOA8uY
+         lCUnOad6LCVlDA41zCI3P3AHCxgcdjsrZr2hzIB+6I7AzpEGswn48CJJN3Ozq5ARfGXs
+         WBAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=TiAEA4SS+kpOpt2BiCuBaMfmVTOkDDRmYKTCqxWQu+0=;
+        b=0PYdchU5NOfKH015fdJrkh0WF4LPmO04zxmFY5ZYk2fYwNoO1ajRXWVMMKjsy7dfBj
+         tPWODMW7vl6BDIUUKtehX1SDQypkKz6slTkO/y9rjphiORo6c4wdmkowhHyevnWdvxBh
+         RpL/aoLBdKzJ8zfoO4mrz72BeA1CCjOAi5I2oIZCmW7WGiKnomIcSNaX2/86t6YkUHPX
+         9MtjkjccWkn32ILmDG1HdKyMULMgItHTI1jAwJjI4URoNFn5SRTdXiVNbRGib0LoCy+i
+         Ushnc/UxQy0RgW/HpHCcN2errdfzz9u1an9J3po2nF58AdQWhFZUjkG5lz1DSRo1gy8R
+         ZWOw==
+X-Gm-Message-State: ACrzQf0/6nylW9PZtqG0DAOOt0lxGAZVJf4fxB7la/U/GChm+fHWd/wV
+        AVtb8fTcBRjyX2Zck+Jska/PEAzdBlLm0OA7bvY=
+X-Google-Smtp-Source: AMsMyM7eo9W/ZK8FqZMcYHq247rrhZjVyN9mqqGS/uN4xrkk+MqpGxrZF0ZmQ/Iq0ibyf9sIpl3+dqg/3jHIO3KBuTM=
+X-Received: by 2002:a05:6102:5709:b0:390:e360:88e8 with SMTP id
+ dg9-20020a056102570900b00390e36088e8mr10506418vsb.22.1663776679765; Wed, 21
+ Sep 2022 09:11:19 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB5744:EE_|DM4PR12MB5248:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7f4a83bb-dd07-4665-e261-08da9bebd397
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yF5Q9koZOYsVWzAqU0pU43qVGCJ4xFiKiu7QUVa+aHt8RMGA0MCwZ75Jkiut/E3yaXORCtmIPA3uL6mHT1tESWHidDVZULQ7dwU7FrHgp2MWCTw73yP+Y/tvaGl++mr0NmBoUVwt7J9jzwNFyprVY2j0YJd1aFLTzLscn4o6ntxFaaIjLFTZNDFkx+UES/qBvea8X8aXW1XqlShLVtyPKooiTQfDAoPComjDFsF5fhYmYjtTGRcLc0kYRHAnzYJpfTRO5VeFlLTNg4C0J2CYnd0TqgfgzcvWWeEtHgwM+i2FJzraZojg+wU3+OekJGLu7TjSsENWqLgYRyTODJrDdXNjZYq1I7TLWqcaBwqvRupxu6W2nVmkCI7+53vjhji7Ns/yO0MA/9oB5djSeQRWvhEYQkShT1wIIwP1OoYQ8xI/HAAA3XkkkSxDMxs2aLrYdPzDkMg2PJMB/DVyIG/HmxDXJUxIS96jOgoHRkWOK6ADd0mpv+8/ZERaCjU14WdL1pa46EXaySGwOhLa2ZYsWbQ2d692jwtTMAOPIO9iv+7l2RKZGAu6zm2sYmY9htuBKjk9c7PccliKN3X8dAhrvswhJGzb151RXre4ggvLhebxdN6OOpqqidRja134rYBx3IyM6tACh/oL2Asp7AD4gj5/GOEGtaTSMfc3Jt4APUaJBWW+bmF+rukdFF9LK5UjlibMptBOz7v08/tN2tjbg27RG8Z5h2XlniSB+rEwlCFdZEdwOHWYD2dOny+ukoHgBX/hX3AdzHZoGcvA+YlHANyl3UrSWr7cwYd3ZFGU8I4=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB5744.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(366004)(346002)(39860400002)(136003)(451199015)(2616005)(83380400001)(6486002)(38100700002)(66556008)(5660300002)(2906002)(235185007)(41300700001)(8936002)(53546011)(478600001)(6506007)(26005)(6512007)(66946007)(8676002)(66476007)(4326008)(316002)(6916009)(54906003)(186003)(33656002)(86362001)(36756003)(45980500001)(72826004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?bcksv8bJXPKGdKpJCTiipTE4COxkOEdpiUFPj7bvas1dSYkfktVy+jLYfsZl?=
- =?us-ascii?Q?VXsCiCxWDYVVJf/nmfkvWwlaUGitVoaxCytQTII4vEo8EZW19qig5oHpFhc5?=
- =?us-ascii?Q?m08X1gIijDVeIq2o2omEcl8aCAy7lh+arCrWGx/heDZh0XTFw44P/58mk0F3?=
- =?us-ascii?Q?U6eB89AWPMu9YctnY34MEbk4+V4bcMjLAWfrnlAD5Jrx2pbp3OYL1ZXQ0NEg?=
- =?us-ascii?Q?Rkm9VgpS+E4bpcKve/qjjE9AmZSFnJZ6aDE8mJgi77j1vkm7dEPDLKx9NZAR?=
- =?us-ascii?Q?Qim4vpMOHQ5/pM5R+wLdfkhfZk0QRFOU/zc+Qr7L+Y/N5NPsW9UVO0swAA9Z?=
- =?us-ascii?Q?XRJ2dbhDDMPmqSQvz5hPDwSDI3oSZX821wmRDeh6v1KsG3bUguPOYSDLPWwd?=
- =?us-ascii?Q?b+Ll0PKOB0IhLYmZyKUp7hecBiszBgwiYBtkHmi7XIYQ/K5Ih6xE8nJxNL5l?=
- =?us-ascii?Q?YNESemBzQ6IJjIpp/qioHZvt8G2rRMhrMFBxgj1qwhVPAhwbenPRVmqRxXBe?=
- =?us-ascii?Q?YEMloPdHWGbDxSwl3aNbTjmxArQqg9Hql0AtJzHwynY/5nvXtNaw0/cSjLSO?=
- =?us-ascii?Q?kmf0yF2EhEVJyvTCjWhV4zpLyVmYJkNaa81/5J7UgnZW4iMpp2v1S2uiy3Ak?=
- =?us-ascii?Q?izugic3KCAPvoKaSQwxNbBSSFxzf5C7uuKxh6FsT4l8jdjf/+vcnlfUSnAJ7?=
- =?us-ascii?Q?jYmyhY1/wZTXf0C8GrLKbYo5Nhyyev8tdO/GU6XKob91+OEZdSt7z+YQtPEN?=
- =?us-ascii?Q?0LCFb/33B9eyND9vjXXZE+32EhceUCNOlVJjF4L3+1z+4WVGyfGoJD0IScxp?=
- =?us-ascii?Q?lsykCWT8RpNOvD9T/feslHWHmfvmLIvPCjQf9cWuZznC8nf2NKGN9OJwrlUP?=
- =?us-ascii?Q?EyPqzW67VWi5LFpGg7SWgsMZGmfwzUFZNhgufXeO1JkKxY2MmN6EIeerS2DS?=
- =?us-ascii?Q?mmK283LbLvz3Rtj2MSBL9Nn7sgBYBtWz7letF08hfCJ0CtMBIgThm2i1jXhA?=
- =?us-ascii?Q?PcjE7zc5yCGj+/Of8X0gY1zFjngbAlfuxoQRQg43R/nsZt9ALDv7QUbhLqhe?=
- =?us-ascii?Q?DaQkHbKf6NCy16VjGLCWWAzE57KDFHrQcwMzv7Dnh6tIjMeSavFAuWdx+nkU?=
- =?us-ascii?Q?oLdxdvecnw8vxkQDvaiUCSDi/zA2YKrLMUa9a2oqYKQUl6Cv2ZrbCe6WYOxO?=
- =?us-ascii?Q?u1vEMl5eqsOxh3ESaNzsVQ6Do3eHKFjcyH7ZUJ1I32utBhncljhdoVoKr01n?=
- =?us-ascii?Q?2vsPUKajRNz34S6GxJjlo/xdC8omp1BZw7y6j8W5kZmdHKXogYc/a6sMkHE8?=
- =?us-ascii?Q?Whxbyf/UQ3HhIFH4dcz+bEb9VqSDHOEx9rvsN9YAw3O3u+DTGeN5LyRmRr69?=
- =?us-ascii?Q?tKndvQ/kj4bzaCMTYlMrAJ4fCpC33pBx4EWWxDur9MtV+PldHizm+6Gz10vU?=
- =?us-ascii?Q?MK5CIRTo/oMXqnwWRpzCj5UQV8yo1fck+Q2bMhAajpg093WaSignLuKPINM7?=
- =?us-ascii?Q?msWGrN/tOd0baP0TJfEt/O4wtUr5p59BrjF2nDkVFwUpgKqSO19k/R1LYGfb?=
- =?us-ascii?Q?3mCSkelTiOy+gA5TH1ujy+DIGdpKMxku478u6YrW?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7f4a83bb-dd07-4665-e261-08da9bebd397
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB5744.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Sep 2022 16:10:39.6850
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: hFJ2Sv2mRph6FZyEkopVKm48OMel1Q3mZARGTVSupHssrPUPvU0/+wFX/I0BBf/E
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5248
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        SPF_HELO_PASS,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+References: <000000000000117bf405e9321346@google.com>
+In-Reply-To: <000000000000117bf405e9321346@google.com>
+From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Date:   Thu, 22 Sep 2022 01:11:03 +0900
+Message-ID: <CAKFNMoncn4BAmLzX87OMUz9w3VZdKNhWp5UmoN-rMcyR3Qv5UA@mail.gmail.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in nilfs_mdt_destroy
+To:     syzbot <syzbot+3974efaf68c77533b42d@syzkaller.appspotmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-nilfs@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=_MailMate_B915BCCE-90FA-437B-8AC6-7F71BE6D2230_=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-
-On 21 Sep 2022, at 2:06, Huang Ying wrote:
-
-> This is a preparation patch to batch the page unmapping and moving
-> for the normal pages and THP.
+On Thu, Sep 22, 2022 at 1:02 AM syzbot  wrote:
 >
-> If we had batched the page unmapping, all pages to be migrated would
-> be unmapped before copying the contents and flags of the pages.  If
-> the number of pages that were passed to migrate_pages() was too large,
-> too many pages would be unmapped.  Then, the execution of their
-> processes would be stopped for too long time.  For example,
-> migrate_pages() syscall will call migrate_pages() with all pages of a
-> process.  To avoid this possible issue, in this patch, we restrict the
-> number of pages to be migrated to be no more than HPAGE_PMD_NR.  That
-> is, the influence is at the same level of THP migration.
+> Hello,
 >
-> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
-> Cc: Zi Yan <ziy@nvidia.com>
-> Cc: Yang Shi <shy828301@gmail.com>
-> Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
-> Cc: Oscar Salvador <osalvador@suse.de>
-> Cc: Matthew Wilcox <willy@infradead.org>
+> syzbot found the following issue on:
+>
+> HEAD commit:    a335366bad13 Merge tag 'gpio-fixes-for-v6.0-rc6' of git://..
+> git tree:       upstream
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=13af94f8880000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=98a30118ec9215e9
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3974efaf68c77533b42d
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11e17937080000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1570a75d080000
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+3974efaf68c77533b42d@syzkaller.appspotmail.com
+>
+> ==================================================================
+> BUG: KASAN: use-after-free in nilfs_mdt_destroy+0x6f/0x80 fs/nilfs2/mdt.c:497
+> Read of size 8 at addr ffff888020124498 by task syz-executor134/3740
+>
+> CPU: 0 PID: 3740 Comm: syz-executor134 Not tainted 6.0.0-rc5-syzkaller-00094-ga335366bad13 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
+> Call Trace:
+>  <TASK>
+>  __dump_stack lib/dump_stack.c:88 [inline]
+>  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+>  print_address_description mm/kasan/report.c:317 [inline]
+>  print_report.cold+0x2ba/0x719 mm/kasan/report.c:433
+>  kasan_report+0xb1/0x1e0 mm/kasan/report.c:495
+>  nilfs_mdt_destroy+0x6f/0x80 fs/nilfs2/mdt.c:497
+>  nilfs_free_inode+0x3e/0x60 fs/nilfs2/super.c:168
+>  i_callback fs/inode.c:249 [inline]
+>  alloc_inode+0x13b/0x230 fs/inode.c:274
+>  new_inode_pseudo fs/inode.c:1019 [inline]
+>  new_inode+0x27/0x270 fs/inode.c:1047
+>  nilfs_new_inode+0xca/0x830 fs/nilfs2/inode.c:334
+>  nilfs_create fs/nilfs2/namei.c:85 [inline]
+>  nilfs_create+0xfe/0x300 fs/nilfs2/namei.c:75
+>  vfs_create fs/namei.c:3115 [inline]
+>  vfs_create+0x3e9/0x670 fs/namei.c:3101
+>  do_mknodat+0x3d9/0x530 fs/namei.c:3942
+>  __do_sys_mknodat fs/namei.c:3970 [inline]
+>  __se_sys_mknodat fs/namei.c:3967 [inline]
+>  __x64_sys_mknodat+0xaa/0xe0 fs/namei.c:3967
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> RIP: 0033:0x7f2443bec549
+> Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007ffdd9390cc8 EFLAGS: 00000246 ORIG_RAX: 0000000000000103
+> RAX: ffffffffffffffda RBX: 0000000000000001 RCX: 00007f2443bec549
+> RDX: 0000000000000000 RSI: 0000000020000040 RDI: 0000000000000005
+> RBP: 00007ffdd9390cf0 R08: 0000000000000001 R09: 00007ffdd9390d00
+> R10: 0000000000000103 R11: 0000000000000246 R12: 0000000000000003
+> R13: 00007ffdd9390d30 R14: 00007ffdd9390d10 R15: 0000000000000009
+>  </TASK>
+>
+> Allocated by task 3621:
+>  kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+>  kasan_set_track mm/kasan/common.c:45 [inline]
+>  set_alloc_info mm/kasan/common.c:437 [inline]
+>  ____kasan_kmalloc mm/kasan/common.c:516 [inline]
+>  ____kasan_kmalloc mm/kasan/common.c:475 [inline]
+>  __kasan_kmalloc+0xa9/0xd0 mm/kasan/common.c:525
+>  kmalloc include/linux/slab.h:605 [inline]
+>  kzalloc include/linux/slab.h:733 [inline]
+>  nilfs_mdt_init+0x2c/0x1e0 fs/nilfs2/mdt.c:451
+>  nilfs_sufile_read+0x191/0x5a0 fs/nilfs2/sufile.c:1183
+>  nilfs_load_super_root fs/nilfs2/the_nilfs.c:130 [inline]
+>  load_nilfs+0x671/0x1330 fs/nilfs2/the_nilfs.c:269
+>  nilfs_fill_super fs/nilfs2/super.c:1059 [inline]
+>  nilfs_mount+0xa9a/0xfb0 fs/nilfs2/super.c:1317
+>  legacy_get_tree+0x105/0x220 fs/fs_context.c:610
+>  vfs_get_tree+0x89/0x2f0 fs/super.c:1530
+>  do_new_mount fs/namespace.c:3040 [inline]
+>  path_mount+0x1326/0x1e20 fs/namespace.c:3370
+>  do_mount fs/namespace.c:3383 [inline]
+>  __do_sys_mount fs/namespace.c:3591 [inline]
+>  __se_sys_mount fs/namespace.c:3568 [inline]
+>  __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>
+> The buggy address belongs to the object at ffff888020124400
+>  which belongs to the cache kmalloc-256 of size 256
+> The buggy address is located 152 bytes inside of
+>  256-byte region [ffff888020124400, ffff888020124500)
+>
+> The buggy address belongs to the physical page:
+> page:ffffea0000804900 refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff888020124a00 pfn:0x20124
+> head:ffffea0000804900 order:1 compound_mapcount:0 compound_pincount:0
+> flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
+> raw: 00fff00000010200 ffffea0001ff2508 ffff888011840708 ffff888011841b40
+> raw: 0000000000000000 0000000080100010 00000001ffffffff 0000000000000000
+> page dumped because: kasan: bad access detected
+> page_owner tracks the page as allocated
+> page last allocated via order 1, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 1, tgid 1 (swapper/0), ts 7456347523, free_ts 0
+>  prep_new_page mm/page_alloc.c:2532 [inline]
+>  get_page_from_freelist+0x109b/0x2ce0 mm/page_alloc.c:4283
+>  __alloc_pages+0x1c7/0x510 mm/page_alloc.c:5515
+>  alloc_page_interleave+0x1e/0x200 mm/mempolicy.c:2103
+>  alloc_pages+0x22f/0x270 mm/mempolicy.c:2265
+>  alloc_slab_page mm/slub.c:1824 [inline]
+>  allocate_slab+0x27e/0x3d0 mm/slub.c:1969
+>  new_slab mm/slub.c:2029 [inline]
+>  ___slab_alloc+0x7f1/0xe10 mm/slub.c:3031
+>  __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3118
+>  slab_alloc_node mm/slub.c:3209 [inline]
+>  slab_alloc mm/slub.c:3251 [inline]
+>  __kmalloc+0x32b/0x340 mm/slub.c:4420
+>  kmalloc include/linux/slab.h:605 [inline]
+>  kzalloc include/linux/slab.h:733 [inline]
+>  rh_call_control drivers/usb/core/hcd.c:514 [inline]
+>  rh_urb_enqueue drivers/usb/core/hcd.c:848 [inline]
+>  usb_hcd_submit_urb+0x661/0x2220 drivers/usb/core/hcd.c:1552
+>  usb_submit_urb+0x86d/0x1880 drivers/usb/core/urb.c:594
+>  usb_start_wait_urb+0x101/0x4b0 drivers/usb/core/message.c:58
+>  usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
+>  usb_control_msg+0x31c/0x4a0 drivers/usb/core/message.c:153
+>  usb_get_string+0xbe/0x1b0 drivers/usb/core/message.c:843
+>  usb_string_sub+0xfa/0x3d0 drivers/usb/core/message.c:882
+>  usb_string+0x2fb/0x530 drivers/usb/core/message.c:987
+>  usb_cache_string+0x82/0x140 drivers/usb/core/message.c:1029
+> page_owner free stack trace missing
+>
+> Memory state around the buggy address:
+>  ffff888020124380: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>  ffff888020124400: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> >ffff888020124480: 00 00 00 00 00 00 00 00 00 00 00 00 fc fc fc fc
+>                             ^
+>  ffff888020124500: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>  ffff888020124580: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+> ==================================================================
+>
+>
 > ---
->  mm/migrate.c | 93 +++++++++++++++++++++++++++++++++++++---------------=
-
->  1 file changed, 67 insertions(+), 26 deletions(-)
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
 >
-> diff --git a/mm/migrate.c b/mm/migrate.c
-> index 4a81e0bfdbcd..1077af858e36 100644
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-> @@ -1439,32 +1439,7 @@ static inline int try_split_thp(struct page *pag=
-e, struct list_head *split_pages
->  	return rc;
->  }
->
-> -/*
-> - * migrate_pages - migrate the pages specified in a list, to the free =
-pages
-> - *		   supplied as the target for the page migration
-> - *
-> - * @from:		The list of pages to be migrated.
-> - * @get_new_page:	The function used to allocate free pages to be used
-> - *			as the target of the page migration.
-> - * @put_new_page:	The function used to free target pages if migration
-> - *			fails, or NULL if no special handling is necessary.
-> - * @private:		Private data to be passed on to get_new_page()
-> - * @mode:		The migration mode that specifies the constraints for
-> - *			page migration, if any.
-> - * @reason:		The reason for page migration.
-> - * @ret_succeeded:	Set to the number of normal pages migrated successf=
-ully if
-> - *			the caller passes a non-NULL pointer.
-> - *
-> - * The function returns after 10 attempts or if no pages are movable a=
-ny more
-> - * because the list has become empty or no retryable pages exist any m=
-ore.
-> - * It is caller's responsibility to call putback_movable_pages() to re=
-turn pages
-> - * to the LRU or free list only if ret !=3D 0.
-> - *
-> - * Returns the number of {normal page, THP, hugetlb} that were not mig=
-rated, or
-> - * an error code. The number of THP splits will be considered as the n=
-umber of
-> - * non-migrated THP, no matter how many subpages of the THP are migrat=
-ed successfully.
-> - */
-> -int migrate_pages(struct list_head *from, new_page_t get_new_page,
-> +static int migrate_pages_batch(struct list_head *from, new_page_t get_=
-new_page,
->  		free_page_t put_new_page, unsigned long private,
->  		enum migrate_mode mode, int reason, unsigned int *ret_succeeded)
->  {
-> @@ -1709,6 +1684,72 @@ int migrate_pages(struct list_head *from, new_pa=
-ge_t get_new_page,
->  	return rc;
->  }
->
-> +/*
-> + * migrate_pages - migrate the pages specified in a list, to the free =
-pages
-> + *		   supplied as the target for the page migration
-> + *
-> + * @from:		The list of pages to be migrated.
-> + * @get_new_page:	The function used to allocate free pages to be used
-> + *			as the target of the page migration.
-> + * @put_new_page:	The function used to free target pages if migration
-> + *			fails, or NULL if no special handling is necessary.
-> + * @private:		Private data to be passed on to get_new_page()
-> + * @mode:		The migration mode that specifies the constraints for
-> + *			page migration, if any.
-> + * @reason:		The reason for page migration.
-> + * @ret_succeeded:	Set to the number of normal pages migrated successf=
-ully if
-> + *			the caller passes a non-NULL pointer.
-> + *
-> + * The function returns after 10 attempts or if no pages are movable a=
-ny more
-> + * because the list has become empty or no retryable pages exist any m=
-ore.
-> + * It is caller's responsibility to call putback_movable_pages() to re=
-turn pages
-> + * to the LRU or free list only if ret !=3D 0.
-> + *
-> + * Returns the number of {normal page, THP, hugetlb} that were not mig=
-rated, or
-> + * an error code. The number of THP splits will be considered as the n=
-umber of
-> + * non-migrated THP, no matter how many subpages of the THP are migrat=
-ed successfully.
-> + */
-> +int migrate_pages(struct list_head *from, new_page_t get_new_page,
-> +		free_page_t put_new_page, unsigned long private,
-> +		enum migrate_mode mode, int reason, unsigned int *pret_succeeded)
-> +{
-> +	int rc, rc_gether =3D 0;
-> +	int ret_succeeded, ret_succeeded_gether =3D 0;
-> +	int nr_pages;
-> +	struct page *page;
-> +	LIST_HEAD(pagelist);
-> +	LIST_HEAD(ret_pages);
-> +
-> +again:
-> +	nr_pages =3D 0;
-> +	list_for_each_entry(page, from, lru) {
-> +		nr_pages +=3D compound_nr(page);
-> +		if (nr_pages > HPAGE_PMD_NR)
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> syzbot can test patches for this issue, for details see:
+> https://goo.gl/tpsmEJ#testing-patches
 
-It is better to define a new MACRO like NR_MAX_BATCHED_MIGRATION to be
-HPAGE_PMD_NR. It makes code easier to understand and change.
+This looks like the same issue as the report [1]:
 
-> +			break;
-> +	}
-> +	if (nr_pages > HPAGE_PMD_NR)
-> +		list_cut_before(&pagelist, from, &page->lru);
-> +	else
-> +		list_splice_init(from, &pagelist);
-> +	rc =3D migrate_pages_batch(&pagelist, get_new_page, put_new_page, pri=
-vate,
-> +				 mode, reason, &ret_succeeded);
-> +	ret_succeeded_gether +=3D ret_succeeded;
-> +	list_splice_tail_init(&pagelist, &ret_pages);
-> +	if (rc =3D=3D -ENOMEM) {
-> +		rc_gether =3D rc;
-> +		goto out;
-> +	}
-> +	rc_gether +=3D rc;
-> +	if (!list_empty(from))
-> +		goto again;
-> +out:
-> +	if (pret_succeeded)
-> +		*pret_succeeded =3D ret_succeeded_gether;
-> +	list_splice(&ret_pages, from);
-> +
-> +	return rc_gether;
-> +}
-> +
->  struct page *alloc_migration_target(struct page *page, unsigned long p=
-rivate)
->  {
->  	struct folio *folio =3D page_folio(page);
-> -- =
+[1] https://lore.kernel.org/all/CAFcO6XOcf1Jj2SeGt=jJV59wmhESeSKpfR0omdFRq+J9nD1vfQ@mail.gmail.com/T/#u
 
-> 2.35.1
+The bug fix patch for this, is queued in the vfs tree with the title
+"fs: fix UAF/GPF bug in nilfs_mdt_destroy"  [2]:
 
+[2] https://lkml.kernel.org/r/20220816040859.659129-1-dzm91@hust.edu.cn
 
---
-Best Regards,
-Yan, Zi
+It's in the latest linux-next as well.
+As the outlook for now, this patch would be merged to the mainline
+after Linux kernel 6.0 is released, and then backported to stable
+trees.
 
---=_MailMate_B915BCCE-90FA-437B-8AC6-7F71BE6D2230_=
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename=signature.asc
-Content-Type: application/pgp-signature; name=signature.asc
-
------BEGIN PGP SIGNATURE-----
-
-iQJDBAEBCgAtFiEE6rR4j8RuQ2XmaZol4n+egRQHKFQFAmMrN34PHHppeUBudmlk
-aWEuY29tAAoJEOJ/noEUByhUAHsP/1DBmrl21abDmdQMo4HFo5hvoWrLeQcMg6bc
-ncYV9KThXJu7cZJ6zsj9dikxQuHmclzbAfRZAZT0L19NysWOtXHccAyWe1eH2tET
-xaFEDWSEZdhZGCG+OwK78Y4JdIpf2seZ72YEsARa/u4VxDfcc55ntv4wok8GplWn
-dqaljqdT/EhhSMJIygT+3626ixY9L/MarL9lVprVz+UBujlQITDtj+UGmhowv+oI
-E2UX64aeKkc9BX9ToR7pVGd4GE5uaYNU6jBXnH0u4l+sIaalUIYqKWeF3VvZ462z
-Q2XGJx0wt8krboLIH+hpD70krkBkG5NGjLoidbva8h0PqmuHW1RVGZ3wmMZUslDn
-GaqiKhfcmMWSKYXJkIM7RjVM73hMeUTn3hIgvzd8t2DPegx8INq1z19HPi6to+Ji
-Bq9qwGteThZlSjsq/2Bz1XacW6i1fxrq/6VvkrTmjsIbyopToTnIWgMVJT6OcPkl
-Hq6I/tFx8k/I2ZjLa+VLKMxLzue19A2Hm5hnGGGsD3BhMngiNixJMQPRIfIwAcMf
-k7A9pN/cdU8wS65xvR9oafwNdObgXmyCycj8Sv2dJxG7xmee8RFQqKyEfl4LbAmJ
-TqfTqkrQHfmSutyxZNkGtFEHebG5mabSlU398CJHzL9URZ4OiSlfW9XTMp4iaaTt
-XDmoS5XH
-=kx4N
------END PGP SIGNATURE-----
-
---=_MailMate_B915BCCE-90FA-437B-8AC6-7F71BE6D2230_=--
+Thanks,
+Ryusuke Konishi
