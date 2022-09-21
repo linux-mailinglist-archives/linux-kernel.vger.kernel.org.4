@@ -2,272 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E27625BFE3D
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 14:48:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DC725BFE57
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 14:49:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230171AbiIUMsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 08:48:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52176 "EHLO
+        id S229900AbiIUMtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 08:49:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbiIUMsJ (ORCPT
+        with ESMTP id S230252AbiIUMsf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 08:48:09 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E29A8A7D0
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 05:48:07 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oaz8r-0001uQ-Bh; Wed, 21 Sep 2022 14:47:53 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oaz8p-0023oH-Ue; Wed, 21 Sep 2022 14:47:50 +0200
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oaz8n-000J9Q-19; Wed, 21 Sep 2022 14:47:49 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
-        David Jander <david@protonic.nl>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Robert Marko <robert.marko@sartura.hr>
-Subject: [PATCH net-next v6 7/7] net: pse-pd: add regulator based PSE driver
-Date:   Wed, 21 Sep 2022 14:47:47 +0200
-Message-Id: <20220921124748.73495-8-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220921124748.73495-1-o.rempel@pengutronix.de>
-References: <20220921124748.73495-1-o.rempel@pengutronix.de>
+        Wed, 21 Sep 2022 08:48:35 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2087.outbound.protection.outlook.com [40.107.220.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4FFB98340;
+        Wed, 21 Sep 2022 05:48:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TSkhM6kyeJaGOcgeE+AXlzOI/UucAU0KtGTcQWviNFH0EZ6De7guhU2CqcnaRq0nqkbMqqxufLsTI8dmBdJOgTiwjrJmXv1ErvbFIeP/N7upiM8mquWKE5cDoRkvHrCFjN5GbNa5l1BI10W56S35iZF5WwVRq5azaxfgEy9WWpTQAz8GZXp9haKiTNAmVqe4TqqH1H4GLwPewkukLZsR9Nj4VWemcl1+laPT54y5BUa9KOQd6iBpEh9GKtReeWYpzkJxiPcAXiOzgW8bGRC+fIrqpsfCRjXoitbAl6Tf16RMKfCL7GqhdofyIepG5qF0PbyyN5wf4Nm/gTFNtqp7nA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IqOL5Bq6nlefC78y3XxrrlJG/k+d7vdZpm8o3yTkMDA=;
+ b=iZTqy29zShaDnIdkX7q5dLNL2RHdXKxphwUesFF2zyYdhuyS8pR55ueE8oxMHdT9l5jlOaR163R3PwA06tZfathEaAWAEUG8JCj2CRtG9ZlH5g6TwOlOkenGqeudMh8GlW1ZRm3n99O2NoW1z3HiJTkt4+uEflzGb1Isc2lIDB7TwznQjaymofgYdtSI1xbGmLMoHNvDbjo/D0BcUav2AbFyORII+CRxNARec7DD/K003gC8nwQlNArsmizXx331QsKJRFcU68eIoitucW/PwoVUoDrQsyuiFJXRJTElld8d+KGgq6vq/mi/7H4hRNBwle3zwufGuU5RcZV2ZDD4Aw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IqOL5Bq6nlefC78y3XxrrlJG/k+d7vdZpm8o3yTkMDA=;
+ b=jTI98G4UUjP1cXZpk9/VpPBtb9L8lDQANXu94yJ8BW/toI4QF75Ja+s3ppM6zIswWglddyC3oL9Ng00nCYv+d5OjKavRl6zOAPhVAlTK7bv7Slydbl8d+omFzRt8Rs3aYsxxws0VVAxLbTx7mMHgdCcoV7tqblLMoe/E8ZJ4lVEoE4gr294MUegdDRoSFm8QTL/jS9bYAaBW1+G0AQYoxqYcKBD4iMcaUbu0i8poJ6yxwLLZsFtoJOCyUStYlHwcL6su3GNIEMBBeodOiGGzIRU+OKF08yjkNH7wG12aOXTnxiqw8ult6Ymg8VSYzG0sctZrLd28Vjcjvdd8FkJExg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by PH7PR12MB5951.namprd12.prod.outlook.com (2603:10b6:510:1da::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.21; Wed, 21 Sep
+ 2022 12:48:19 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::462:7fe:f04f:d0d5]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::462:7fe:f04f:d0d5%7]) with mapi id 15.20.5654.016; Wed, 21 Sep 2022
+ 12:48:18 +0000
+Date:   Wed, 21 Sep 2022 09:48:17 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Marc Zygnier <maz@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        "Dey, Megha" <megha.dey@intel.com>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jon Mason <jdmason@kudzu.us>, Allen Hubbe <allenbh@gmail.com>,
+        "linux-ntb@googlegroups.com" <linux-ntb@googlegroups.com>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        "x86@kernel.org" <x86@kernel.org>, "Rodel, Jorg" <jroedel@suse.de>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>
+Subject: Re: [patch 21/32] NTB/msi: Convert to msi_on_each_desc()
+Message-ID: <YysIEUbxjS328TAX@nvidia.com>
+References: <BN9PR11MB527619B099061B3814EB40408C719@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <20211210123938.GF6385@nvidia.com>
+ <87fsr0xp31.ffs@tglx>
+ <BN9PR11MB527625E8A9BB854F3C0D19AE8C729@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <875yrvwavf.ffs@tglx>
+ <BL1PR11MB5271326D39DAB692F07587768C739@BL1PR11MB5271.namprd11.prod.outlook.com>
+ <87fsqxv8zf.ffs@tglx>
+ <BN9PR11MB5276961D838169BF237928E18C499@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <YynJqID/E5dFCakg@nvidia.com>
+ <BN9PR11MB5276CAB439EE27557FC17B1A8C4F9@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BN9PR11MB5276CAB439EE27557FC17B1A8C4F9@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-ClientProxiedBy: MN2PR19CA0064.namprd19.prod.outlook.com
+ (2603:10b6:208:19b::41) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN2PR12MB4192:EE_|PH7PR12MB5951:EE_
+X-MS-Office365-Filtering-Correlation-Id: a40e8b16-104c-4811-1cc0-08da9bcf8edd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: XG9D2k63KXFSiWbpf9Zkz6bQ2gzTYu7SC9nQHkn13xYw9Mnh7A2xz4SPj5cassulGSVpMYeAWqAYhM8Co3fnEsU0CCiC5Ne9LHHEMu6MVkCF0DWeW2VKRcMV1WnjxVyK3ow8uXk+UYmL9Abf11E1YZzhpfPH3qkAFTs29SB8NprD/jnnn1tpXk9q46+/Onr+ecfzxA3QX8cJIf+uk7m/sg/9k2Purm3MMDX3lVC8jAMSqAXM2Vc9n10MvsCH7CQJE1jACQeTwfEuxZ/MO3Oyo6V8b+mch+1Gqnqe0x/FYDP6A7SrxmkN91wTfqZxYIGwYmHU2HpjbLICZJEe9dcbTvNunlo4Wynz1uob/z4megVnqtwsJ53UkSAKTYlJm7JWwFjBmPmkt6lW1xc09EI4P+vdGpaJcflsxU0N0prO+LrJbixjrprEwUnP4lZxJwWEENmt0bvvwuRdZUkCE3pDoq58K6e1vTDGlTeRCNoEeRReWDxD7RFOTy+xAQsOajN/+nuLBnVWWfwgPjPgdVZpTFanLAIRSLno1abVmmLEhG30a2qXPjYR1yzSKxkr39sZmRt6CPLcEbLE36v0URts1vIdgSZVfVJdP1fijJZPftI7nT8T/q0KviaK6slIr/cq1bgoE9o41YPkSkjFN4hP9ct6fCdB/olf7w2/4fPL+IdxTBajlTV2qAyFu0GhQdwcQOJboXbxQlsDzPUD67MYVg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(136003)(366004)(346002)(396003)(451199015)(6506007)(2616005)(6512007)(26005)(2906002)(186003)(86362001)(54906003)(6486002)(6916009)(316002)(8676002)(41300700001)(66946007)(66556008)(66476007)(478600001)(36756003)(7416002)(4326008)(66899012)(5660300002)(8936002)(83380400001)(38100700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?t9GLFHUrIGPBDvKB2YIv/h93SExmgshaW5t8ejeBix+8IiR7DmDKQPevjVoF?=
+ =?us-ascii?Q?Jyxe9eFioDpjQgvnxPCA42HCMp0Yejp1hdbIuZaYJ0e3XIzenl38DsSXrtsL?=
+ =?us-ascii?Q?03oRRhPXfqZcC61Sn4oQn0YDRQV5C8W48AeKB23MCYccGrQ3MisGq2BJPX9x?=
+ =?us-ascii?Q?+LXi3b2xU1wvGw48f+AJToYEd+j+eeDnTt9k+dw9+nyhhsLc1t6AqshNo4oT?=
+ =?us-ascii?Q?0aqcvxKrV/z0AP2aCxn3ROssrX0DcA7VAb4FwewY8DhBUbUvospRCFWif2JG?=
+ =?us-ascii?Q?L0sQhaQTAHFiQhj3XWp5LyOLtGo5QO5B4UijDFTF/an6MAnDwBXc7wdlJ2NZ?=
+ =?us-ascii?Q?KzU9md2ecJkTDushnYdZ+zzb3oPFjp5WjoW3Up+IbLggNMZ3H2QCXpk6XK4r?=
+ =?us-ascii?Q?9qoiPDH9N+5WU6o37INqiLgDauH6vqTHbM3t89sNnN/uvgF8zWZwDNaiidH5?=
+ =?us-ascii?Q?7vgmMQxDCyB/MibLKdr7CqRdcNffSxhwVXncqQfKcmWnukkPuCCnMIgHR0Vo?=
+ =?us-ascii?Q?Aw7KaWpM352dfdZMhLSk68kI17v5ZHsHgG2T/OxkJ0IZYqvhJ8OYr1R2m1Q+?=
+ =?us-ascii?Q?efOuyCRc/inutlcpFI4g0w94hdvHj7U2KPaZ4YRH4n1r3d1lcmczoNmn8znR?=
+ =?us-ascii?Q?S4Xb75MiEBB2EODCbCXpIz4bUuWlH195DslYaDsbrbATcetVnW6pyLU2+msg?=
+ =?us-ascii?Q?63Dyl/8EuUvNInptBBQGpvBh3lSOU3/1b1xnWH6R6Qe2AI3xGMPretqaLzKR?=
+ =?us-ascii?Q?ZnwJGdgpjVZwin7u5DgXtA5qBv1mF/sAj+18duvoHlK3GZeuiDm4QcdHtduE?=
+ =?us-ascii?Q?dmv2FjF6E4Uh50w0mRsKLyRAm2WwMkxdcRt9HGsPYRF/Wul2iIPpS56i9Q19?=
+ =?us-ascii?Q?PGhvHPoVjhlfjhQk/q5KT/HvuAo36LfQD0uyaAey9ZKsoZTAPXjTgYzDknEk?=
+ =?us-ascii?Q?Sh4V8/sSzrY5zq/T6e/hOB2AgLSE0zoj05QL8fhRJ+CCmw9BiIOTP4wNw7PZ?=
+ =?us-ascii?Q?I/B/wsvcAzJgFtjRL6vbL2lrb6Pva/5i8PLLgC39jfrTF/2BQc8DM72hTc57?=
+ =?us-ascii?Q?ZV8ukZnzzGvAjjj6edKWsOAvZoVib4QZBBbGX0d7hf4Cau36zjSjuceZtx8n?=
+ =?us-ascii?Q?zOKXsuJw0mrdy3uGeVPaUyyKwqsXkVYhc2v/WnBHrt/PRHS8gLaT7StYcz4q?=
+ =?us-ascii?Q?yfT4/8kIqKHix4jIdmWA5mToIQgeY4T/dGujLlHOMDn9vhgFpfumMKq72hY5?=
+ =?us-ascii?Q?0sX0BP+/XYoPOsEAxYeVFeY7vak3KfGopttUiMUqHJmEjiy7704wpZFkwi1U?=
+ =?us-ascii?Q?IegjOidaUlgGf5j14RRxAczfTrTbAdR7qqfxWbOQB6txspDle0oiyg+1ELC9?=
+ =?us-ascii?Q?7RLAp1g16maAsibrLxCMv6/zgkKC/e1Pehyy6PHCzzdL6mB+5vJYFF6Cbwrr?=
+ =?us-ascii?Q?P1txJZskEuY1F28GMOEQycQ5OCjDRhC7M9kVhRWtVJQcdVD6Rp6wtJX39Yd2?=
+ =?us-ascii?Q?LhqFV80orC4k2ycxbN6TaWMWrK997NjZOnXfdSYhZOzc4anOZPlVE7MFE3z3?=
+ =?us-ascii?Q?JC5TDlNefzAks5JWKQHqp9vme+dnFWPHB5BixB5w?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a40e8b16-104c-4811-1cc0-08da9bcf8edd
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Sep 2022 12:48:18.5924
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: CZT09jc7jbRg/Yx+/TlIlwq2WpQBUZR3iyF5rGpOlLdKRXtM7gMgPHagfhYa2KB3
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5951
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add generic, regulator based PSE driver to support simple Power Sourcing
-Equipment without automatic classification support.
+On Wed, Sep 21, 2022 at 07:57:00AM +0000, Tian, Kevin wrote:
+> > From: Jason Gunthorpe <jgg@nvidia.com>
+> > Sent: Tuesday, September 20, 2022 10:10 PM
+> > 
+> > On Thu, Sep 15, 2022 at 09:24:07AM +0000, Tian, Kevin wrote:
+> > 
+> > > After migration the IRTE index could change hence the addr/data pair
+> > > acquired before migration becomes stale and must be fixed.
+> > 
+> > The migration has to keep this stuff stable somehow, it seems
+> > infeasible to fix it after the fact.
+> > 
+> 
+> This is not how live migration typically works, i.e. we don't try to
+> freeze the same host resource cross migration. It's pretty fragile
+> and the chance of failure is high.
 
-This driver was tested on 10Bast-T1L switch with regulator based PoDL PSE.
+Thinking of the interrupt routing as a host resource is the problem -
+it is a device resource and just like PASID the ideal design would
+have each RID have its own stable numberspace scoped within it. The
+entire RID and all its stable numberspace would be copied over.
 
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
----
-changes v5:
-- use dev_err_probe on devm_regulator_get_exclusive() error
-- add __maybe_unused to the of_device_id
-changes v4:
-- rename to pse_regulator
-changes v2:
-- add regulator_enable test to the probe
-- migrate to the new PSE ethtool API
----
- drivers/net/pse-pd/Kconfig         |  11 +++
- drivers/net/pse-pd/Makefile        |   2 +
- drivers/net/pse-pd/pse_regulator.c | 147 +++++++++++++++++++++++++++++
- 3 files changed, 160 insertions(+)
- create mode 100644 drivers/net/pse-pd/pse_regulator.c
+This includes any pPASIDs and MSI routing.
 
-diff --git a/drivers/net/pse-pd/Kconfig b/drivers/net/pse-pd/Kconfig
-index 49c7f0bcff52..73d163704068 100644
---- a/drivers/net/pse-pd/Kconfig
-+++ b/drivers/net/pse-pd/Kconfig
-@@ -9,3 +9,14 @@ menuconfig PSE_CONTROLLER
- 	  Generic Power Sourcing Equipment Controller support.
- 
- 	  If unsure, say no.
-+
-+if PSE_CONTROLLER
-+
-+config PSE_REGULATOR
-+	tristate "Regulator based PSE controller"
-+	help
-+	  This module provides support for simple regulator based Ethernet Power
-+	  Sourcing Equipment without automatic classification support. For
-+	  example for basic implementation of PoDL (802.3bu) specification.
-+
-+endif
-diff --git a/drivers/net/pse-pd/Makefile b/drivers/net/pse-pd/Makefile
-index cfa780c7801d..1b8aa4c70f0b 100644
---- a/drivers/net/pse-pd/Makefile
-+++ b/drivers/net/pse-pd/Makefile
-@@ -2,3 +2,5 @@
- # Makefile for Linux PSE drivers
- 
- obj-$(CONFIG_PSE_CONTROLLER) += pse_core.o
-+
-+obj-$(CONFIG_PSE_REGULATOR) += pse_regulator.o
-diff --git a/drivers/net/pse-pd/pse_regulator.c b/drivers/net/pse-pd/pse_regulator.c
-new file mode 100644
-index 000000000000..e2bf8306ca90
---- /dev/null
-+++ b/drivers/net/pse-pd/pse_regulator.c
-@@ -0,0 +1,147 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+//
-+// Driver for the regulator based Ethernet Power Sourcing Equipment, without
-+// auto classification support.
-+//
-+// Copyright (c) 2022 Pengutronix, Oleksij Rempel <kernel@pengutronix.de>
-+//
-+
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+#include <linux/pse-pd/pse.h>
-+#include <linux/regulator/consumer.h>
-+
-+struct pse_reg_priv {
-+	struct pse_controller_dev pcdev;
-+	struct regulator *ps; /*power source */
-+	enum ethtool_podl_pse_admin_state admin_state;
-+};
-+
-+static struct pse_reg_priv *to_pse_reg(struct pse_controller_dev *pcdev)
-+{
-+	return container_of(pcdev, struct pse_reg_priv, pcdev);
-+}
-+
-+static int
-+pse_reg_ethtool_set_config(struct pse_controller_dev *pcdev, unsigned long id,
-+			   struct netlink_ext_ack *extack,
-+			   const struct pse_control_config *config)
-+{
-+	struct pse_reg_priv *priv = to_pse_reg(pcdev);
-+	int ret;
-+
-+	if (priv->admin_state == config->admin_cotrol)
-+		return 0;
-+
-+	switch (config->admin_cotrol) {
-+	case ETHTOOL_PODL_PSE_ADMIN_STATE_ENABLED:
-+		ret = regulator_enable(priv->ps);
-+		break;
-+	case ETHTOOL_PODL_PSE_ADMIN_STATE_DISABLED:
-+		ret = regulator_disable(priv->ps);
-+		break;
-+	default:
-+		dev_err(pcdev->dev, "Unknown admin state %i\n",
-+			config->admin_cotrol);
-+		ret = -ENOTSUPP;
-+	}
-+
-+	if (ret)
-+		return ret;
-+
-+	priv->admin_state = config->admin_cotrol;
-+
-+	return 0;
-+}
-+
-+static int
-+pse_reg_ethtool_get_status(struct pse_controller_dev *pcdev, unsigned long id,
-+			   struct netlink_ext_ack *extack,
-+			   struct pse_control_status *status)
-+{
-+	struct pse_reg_priv *priv = to_pse_reg(pcdev);
-+	int ret;
-+
-+	ret = regulator_is_enabled(priv->ps);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (!ret)
-+		status->podl_pw_status = ETHTOOL_PODL_PSE_PW_D_STATUS_DISABLED;
-+	else
-+		status->podl_pw_status =
-+			ETHTOOL_PODL_PSE_PW_D_STATUS_DELIVERING;
-+
-+	status->podl_admin_state = priv->admin_state;
-+
-+	return 0;
-+}
-+
-+static const struct pse_controller_ops pse_reg_ops = {
-+	.ethtool_get_status = pse_reg_ethtool_get_status,
-+	.ethtool_set_config = pse_reg_ethtool_set_config,
-+};
-+
-+static int
-+pse_reg_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct pse_reg_priv *priv;
-+	int ret;
-+
-+	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	if (!pdev->dev.of_node)
-+		return -ENOENT;
-+
-+	priv->ps = devm_regulator_get_exclusive(dev, "pse");
-+	if (IS_ERR(priv->ps))
-+		return dev_err_probe(dev, PTR_ERR(priv->ps),
-+				     "failed to get PSE regulator.\n");
-+
-+	platform_set_drvdata(pdev, priv);
-+
-+	ret = regulator_is_enabled(priv->ps);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (ret)
-+		priv->admin_state = ETHTOOL_PODL_PSE_ADMIN_STATE_ENABLED;
-+	else
-+		priv->admin_state = ETHTOOL_PODL_PSE_ADMIN_STATE_DISABLED;
-+
-+	priv->pcdev.owner = THIS_MODULE;
-+	priv->pcdev.ops = &pse_reg_ops;
-+	priv->pcdev.dev = dev;
-+	ret = devm_pse_controller_register(dev, &priv->pcdev);
-+	if (ret) {
-+		dev_err(dev, "failed to register PSE controller (%pe)\n",
-+			ERR_PTR(ret));
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static const __maybe_unused struct of_device_id pse_reg_of_match[] = {
-+	{ .compatible = "podl-pse-regulator", },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, pse_reg_of_match);
-+
-+static struct platform_driver pse_reg_driver = {
-+	.probe		= pse_reg_probe,
-+	.driver		= {
-+		.name		= "PSE regulator",
-+		.of_match_table = of_match_ptr(pse_reg_of_match),
-+	},
-+};
-+module_platform_driver(pse_reg_driver);
-+
-+MODULE_AUTHOR("Oleksij Rempel <kernel@pengutronix.de>");
-+MODULE_DESCRIPTION("regulator based Ethernet Power Sourcing Equipment");
-+MODULE_LICENSE("GPL v2");
-+MODULE_ALIAS("platform:pse-regulator");
--- 
-2.30.2
+> btw isn't it the same reason why we don't want to expose host
+> PASID into guest in iommufd discussion?
 
+Not quite, the only reason not to expose the physical pasid is ENQCMD
+and other mdev based approaches.
+
+If IMS is being used with a mdev then perhaps the mdev driver can do
+the vIMS/pIMS translation much like we want to do for pPASID/vPASID
+
+But if a RID is being used with IMS then the MSI under the RID should
+be stable, IMHO.
+
+Jason
