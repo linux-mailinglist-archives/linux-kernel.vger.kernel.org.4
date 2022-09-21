@@ -2,148 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EA275BFD94
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 14:15:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37B895BFD9A
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 14:17:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229518AbiIUMPQ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 21 Sep 2022 08:15:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37908 "EHLO
+        id S229841AbiIUMQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 08:16:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbiIUMPO (ORCPT
+        with ESMTP id S229459AbiIUMQv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 08:15:14 -0400
-Received: from de-smtp-delivery-113.mimecast.com (de-smtp-delivery-113.mimecast.com [194.104.109.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A5F0303C5
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 05:15:11 -0700 (PDT)
-Received: from CHE01-GV0-obe.outbound.protection.outlook.com
- (mail-gv0che01lp2047.outbound.protection.outlook.com [104.47.22.47]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- de-mta-31-GYxk_rdbOl6W6Ke5QUN3ng-2; Wed, 21 Sep 2022 14:15:07 +0200
-X-MC-Unique: GYxk_rdbOl6W6Ke5QUN3ng-2
-Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:2e::8) by
- GV0P278MB0100.CHEP278.PROD.OUTLOOK.COM (2603:10a6:710:1e::14) with Microsoft
+        Wed, 21 Sep 2022 08:16:51 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DB18F46;
+        Wed, 21 Sep 2022 05:16:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663762610; x=1695298610;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=omzs0I/n2qRCyyjS414rnpKIf7/VXLZ93F6/HwMNDv4=;
+  b=bIH0CSuPM9MxhaqlFZlzf0rPXP7yuyEvMXFS2gRUG8HurMx3n49GUSYl
+   gGuwMHEDaA39JwB/wb2SYO9JLdxkGS9kH6kjam1ztTed/DhKtG7eZ+rLK
+   2SIHERBu1/YNOnbMX7f6wvYPZ8Zm4LcgiCRGhdLF7zEXnyaRSP1/5UWlF
+   oqvObiL4NpqrXCW0GwM8NvLqIc+S2M/97fZ2I6bAoKx37WgJszgpAq05+
+   +RNqMXpGBv41vj6TBZD+ndqx9vDcoTnzFIA1rkXum+q94W8w+EV9dVzWp
+   e55wwZpyr+DM1QOAJqPDIBPLaKP/K1tmWCrlLoS2kLNphp9/SSIaLSRyB
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10476"; a="280358075"
+X-IronPort-AV: E=Sophos;i="5.93,333,1654585200"; 
+   d="scan'208";a="280358075"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 05:16:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,333,1654585200"; 
+   d="scan'208";a="596959022"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga006.jf.intel.com with ESMTP; 21 Sep 2022 05:16:49 -0700
+Received: from fmsmsx607.amr.corp.intel.com (10.18.126.87) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 21 Sep 2022 05:16:49 -0700
+Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
+ fmsmsx607.amr.corp.intel.com (10.18.126.87) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 21 Sep 2022 05:16:48 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Wed, 21 Sep 2022 05:16:48 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.176)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Wed, 21 Sep 2022 05:16:48 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lF/UN07xjM46sIeuOKG9Buhrcg7JgWiG6IwZnlF2Q+Xl0IUEggOBDHlBE/6dr7H9l4julknwHmeONE2Ivf3SVnVk8ZnBdqvUY/dOy9RDxuoXhS6scrGiieDy7RKvwov1KFQPwokSnU0vpSoDs1vfeU1pMXeffgnHHz1eY57o2VOfF+Y6/I1dAwgrcwzXikb5g3Z/El2p80aIjYEmOwFLEQ6SMt+G6vNiu0jaGcMCHt2ErSTaTrpEazYyL4H+0JF1hSxslIVHGKg1mZhlFXeKKjlrYFDIiQGJst90KZ5ktFn0zUzryWM38xNLAOueOoAo2rniGv1HdSGIe6ti266Thw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eyw8VfBgDeUDqM2zvU9ztxXQWr34eSo8E+LcI8FQ7Zo=;
+ b=YgigL0tWNBsy6nR558FXDvBMTNx04Ka7yWe7A9T5Y9Pl5d+scRRJnWcTgHBOJes6QP5dVV5M8xxoOHVucsnfUj37xAxGSoPZNf230Z253MR5bx/bjicnFQ6RqkqPFi/V/FGwkd5jVzrAsJxVFnoeMmaHE9XBh56oKHY8t9Gtp+InzQRouSjfvwnfaTEwTHRLI25EGJclXgQC+4vRyhNlhyuqa5kaNd1eGqUccRKQ30zmRhzslzXwzKXCo6Lb8F3eVjn6hs5CQrMKJKi2HexKvIuSMLRI0S+C4hYgA/yuDVl1ZYXSPUR44VDT/kE2NYHQk/lVuinrHREgIGr22xeW0w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com (2603:10b6:8:b3::19) by
+ PH7PR11MB6029.namprd11.prod.outlook.com (2603:10b6:510:1d0::7) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5654.14; Wed, 21 Sep 2022 12:15:05 +0000
-Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
- ([fe80::6c6d:333:ab23:3f5b]) by ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
- ([fe80::6c6d:333:ab23:3f5b%2]) with mapi id 15.20.5632.021; Wed, 21 Sep 2022
- 12:15:05 +0000
-Date:   Wed, 21 Sep 2022 14:15:05 +0200
-From:   Francesco Dolcini <francesco.dolcini@toradex.com>
-To:     Marcel Ziswiler <marcel@ziswiler.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 4/4] arm: dts: imx7-colibri: remove spurious debounce
- property
-Message-ID: <20220921121505.GA41442@francesco-nb.int.toradex.com>
-References: <20220920092227.286306-1-marcel@ziswiler.com>
- <20220920092227.286306-5-marcel@ziswiler.com>
-In-Reply-To: <20220920092227.286306-5-marcel@ziswiler.com>
-X-ClientProxiedBy: ZR0P278CA0122.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:20::19) To ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:2e::8)
+ 15.20.5632.19; Wed, 21 Sep 2022 12:16:46 +0000
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::cd55:6bab:8dac:9a80]) by DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::cd55:6bab:8dac:9a80%6]) with mapi id 15.20.5654.015; Wed, 21 Sep 2022
+ 12:16:46 +0000
+Date:   Wed, 21 Sep 2022 14:16:39 +0200
+From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To:     Magnus Karlsson <magnus.karlsson@gmail.com>
+CC:     Jalal Mostafa <jalal.a.mostapha@gmail.com>,
+        <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <bjorn@kernel.org>, <magnus.karlsson@intel.com>,
+        <jonathan.lemon@gmail.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <daniel@iogearbox.net>, <linux-kernel@vger.kernel.org>,
+        <jalal.mostafa@kit.edu>
+Subject: Re: [PATCH bpf v2] xsk: inherit need_wakeup flag for shared sockets
+Message-ID: <YysApyiP4S3xdT8H@boxer>
+References: <Yymq2WLA6q6TxnNq@ipe420-102>
+ <CAJ8uoz2D9mGjZzo6SmAWtgbb0A3AB_Nk4eYXajenv3VDBA11=A@mail.gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <CAJ8uoz2D9mGjZzo6SmAWtgbb0A3AB_Nk4eYXajenv3VDBA11=A@mail.gmail.com>
+X-ClientProxiedBy: FR0P281CA0101.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a9::19) To DM4PR11MB6117.namprd11.prod.outlook.com
+ (2603:10b6:8:b3::19)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: ZRAP278MB0495:EE_|GV0P278MB0100:EE_
-X-MS-Office365-Filtering-Correlation-Id: d744c161-387d-49df-8d98-08da9bcaeaff
+X-MS-TrafficTypeDiagnostic: DM4PR11MB6117:EE_|PH7PR11MB6029:EE_
+X-MS-Office365-Filtering-Correlation-Id: 01ba1279-5372-4b88-b0d3-08da9bcb2707
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0
-X-Microsoft-Antispam-Message-Info: iR4YugbDRxavRMb3B+Fcd9L0ZRzBMYhCRtFp4qTMHem5v2zWA4yen2um1UpHN9qAvRFsnhYskN/r9YDi40VB6MWm2i0qUJvr6/K6BUUk59RgwwrZ3aFF2HVF8K7N8smLc9CG7yXrvaQdM9COdWkKQlfrNsMuo/0l9Bp1fvwmPOxBsYG8oFGiIoHRLMvja6SlFcsYGZdfShHEQCsntO11dmmDFrM9CL7UdbF9K09UQFw1JC0rjeeidN0wJRczctvM8OY+zpv+YEE3W05FWDI+UL0tPYAVctNHJezYIHl7s1vukXpWt8lK2TCnc5WNbuQWv6gl9aFmOeWJtH08iW+OM3X89beTmPexncN5zjZea3GtuGY9fOV6+zMhmcIbMY8Jg6FcwKsBPzEXx9Vf3DYD9AcwH061Q78G8ESMtlQKzkxoB/ZHPx3f0m99ymthXizHwPB1gI9/LFsJbTRmJSMgeoMiATJTHmkyLW/VJxBcjd6e2TQs7QvDEJuOXkwkhxEcyk301X6xlAJk1+f01B0NpHx720aWYDOTE3ecdkJoLAJTDDQ4LJeojnh3gKwiFRCrB/xJWrtC7YUF/rP2yRXcQ4NN/GlkvCFAhfBOuOlqWzsnMgBguel1W+MV92/OyVDdK/1NUYzrtaVnx2CCF9xTns2tejUWxvyhqSGgX5Vl0HRE3W89lg7dQiEZYAPQ8pC/ObgRVQ8nbRFRYcqphytaEZdclE/IC9RaEHx/kxDObCfQv+q3Lz6se8I8sIerbJouNLDHDEmV8MkNQODicEAh6w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(366004)(39850400004)(136003)(396003)(451199015)(6506007)(52116002)(6512007)(26005)(66476007)(66556008)(110136005)(54906003)(8676002)(4326008)(66946007)(41300700001)(86362001)(33656002)(38350700002)(38100700002)(6486002)(478600001)(186003)(1076003)(2906002)(316002)(5660300002)(44832011)(7416002)(8936002);DIR:OUT;SFP:1102
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: THl3XYtUXAihpVG9o9GuiUIVmQu2AW7rYPstFW78LMyHRfXXOSk6/53QWZjVcR7IyOYac21n+pp55xYojO3VBUtxukZE//e6fpKEsS8ihuJe4sSp6lEZDuwpIqhitnhMX4kli7zTPBqdpKl+AiHt/JByjfF3czjUjj3H+SI60giEfJnWIA1dZKU7+h2ixzE+Eqplpg3PVm7cHtpJde/79104hVKIhb+gbN02nj9vvKoeWi9GurxsLuVwvFZE7No0bzovJW4bZckTn79NNkI4XFzgYEwZEwT7t/5NWnCgXojxlF/j+Ewn+yK+hrS7PZFhCu7uYibycFnFwcjhQm4m256waf7UsQpgUPjK3srE/ftks1Wv1nlHDpVi20QBoy6kvTzPXXnHX9vpabGDHUXYeJIK9e0BMV+WDdPWh+PCgoPds5GXw+91spYKrBLYlrsS32QfS3cxR9J+wKCSHBxcuoee6vKzAxEW95eEVKP3x0bm1pbnS15eqTUJvaAgJh43KUxGNSf94odBQ5WilL8sfoTEhphJKbDenSMHe0+QQ+Smq/QSQEev+C3xCjWQAmi2s+eTHyHOYxTWIZNyrn3m2Wlfz5amrtMfSCYWVYcKN+jSKUuSZ/oMTSv+4+B/qUrufEDzLsslXUHaPIQrSQEje1vG0syJRJX9S4REGxaCJCTbf6Sr0xsJ+SuLaSyzTbw6teMft3JEjjjfTgGJmd54GA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6117.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(136003)(346002)(366004)(39860400002)(396003)(376002)(451199015)(66476007)(6506007)(86362001)(38100700002)(82960400001)(478600001)(5660300002)(7416002)(44832011)(6486002)(2906002)(66556008)(186003)(4326008)(8676002)(6916009)(8936002)(316002)(83380400001)(66946007)(33716001)(41300700001)(6666004)(9686003)(26005)(6512007)(53546011);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?VwMcy5PUd7CmfNkEp7zn86HIq4nm4jEO+ZmfCIcFFdx74YNEMrtsoIREWWMk?=
- =?us-ascii?Q?3a6KYcVhW7yX/9akKPVUxECUHYCjrlblCxy6WX91j+pUtV2YOutihI3gnmPT?=
- =?us-ascii?Q?rcU0RqBfhTJK3YWNQPWeDMLdwtdn1FtQpfRProM24DSVEEz91YhkJ5RVPXnA?=
- =?us-ascii?Q?x51jsztoZoe4arXlZ9go403rX4E60nq1D+4QDAqV+d8rGEHbR6eIG2axVKtW?=
- =?us-ascii?Q?QztVGCEofX1oqlkG8iEH0b415s4QOC5wXOUbObVi6Fn36iltBf4szBBfvrEY?=
- =?us-ascii?Q?CxwrKLb6pyrgEgT7c0U9PuraitwqxooA8XM+OUDYU2I3h9qWAAbfFnr86ZIa?=
- =?us-ascii?Q?yDUKLW1wvzZoDNKg8j62vZdvjhYJssTcTAgye7uhHZTU51gJfq+Sbub+3KuR?=
- =?us-ascii?Q?UG94yDkBJTf0JBmukP8S4CGOMxwgtGa9j9lPqPkoWIN3Qjq1acCPDRquPd9V?=
- =?us-ascii?Q?PyGLaM1AHeKAXrTaFzZL31YNvjBvkgSeyhUCr83kulmAiNZ7NpI1CBzjXzRU?=
- =?us-ascii?Q?Lo3Gg6CMaSrppTfczWYjnXUzjmMOit1hsUcqvblHUOJIiTRyC4nAZX+1Oce3?=
- =?us-ascii?Q?0zm8tfwGJukelXEFZnqLjx0Db/y7xqxT4wfHlnfpwYhsepLen1JlWWwZU5/B?=
- =?us-ascii?Q?/gpAq8RvlSq/JMF9oX1OYp5sM2ZEJ4P21GONkHvvUK0URpgCzOc9uSizbQa4?=
- =?us-ascii?Q?tjI0s/1taVAWaR9keseHmT+Znwf6XwAneQrjcZoKkTPF+8INvEhR1pUVaOIj?=
- =?us-ascii?Q?X/jMMqLo6XgG/dTMgUa4g5Pci2NC32t+UxQ6I9wx/JqZ/e7uN1/csv72Fp8K?=
- =?us-ascii?Q?Iuj/Hx9scUiukr5zNArS4eee8n++8oZYy+Bc4kCNPpO7lydNt2npOMaYX7IA?=
- =?us-ascii?Q?yYGuNAguCSYQ3IGuSU5bRm8Uqjbzsgxtq6YxUDyWEaUb1ireDJJsUDgnVkyu?=
- =?us-ascii?Q?IRix+ZzmuDzkOJlOK/ULWtDtV5JRGYxfAcKEdbOWgAed75y/cATUXVM8+zbw?=
- =?us-ascii?Q?cWnigvoyk1NjKTwq9wG3FkiOpG7KPQd9oZMT+hVYoSr+Y0gGFUB087CiFcRO?=
- =?us-ascii?Q?y4yqBmOnJbw7hXnEji1rwYYdjmwyvIJotupp3Cx+froKCiUKW93zQiXjk7IP?=
- =?us-ascii?Q?ibI1UyAe9p6SIP+OIHTPpGhYQLTjeULJ0jcu9sx0oTL1fDsJBTfHV2bNJgyp?=
- =?us-ascii?Q?3z/vXFWLdWrV5we99kOynKHOjNQarx8W1AK941ThAgiHTJy4+n3qx0pxY58g?=
- =?us-ascii?Q?BHbrSp/O4qtzjLVJ14ZW3BJF/WCytB1Uazd0SgJxZ30MsPDy/ftR2y2pEx17?=
- =?us-ascii?Q?eRIlMPlxYI6oqaoEpQVwLxWDbukdUYWNs/rMA8oPzK4Y6ZjJbncOSzDiLbJn?=
- =?us-ascii?Q?jxA+uTVXpxna10Bi3DVc/0kwyd3P0SQZGeEGkz98jBy1m8DLWhS3ZtTij7Er?=
- =?us-ascii?Q?lIsCVhs0p5tYhHwKV10ziXhrwMY2LpfwDSvOndwexoUbcDJ+sMg2Q8u675R1?=
- =?us-ascii?Q?C4rPIKWdVe9OLHZnqL1+RZ20rHqZ3N418tioKvnCrJUyMWrCOqmpQejwm7Lf?=
- =?us-ascii?Q?TMVugJcxASvKV2dUw6swWxH/oWKj+y6Aa4UQnnpVjfy1DlCn2L4NB1V/boM7?=
- =?us-ascii?Q?13SWKAVC6GQ0CcoNkuZGhAE=3D?=
-X-OriginatorOrg: toradex.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d744c161-387d-49df-8d98-08da9bcaeaff
-X-MS-Exchange-CrossTenant-AuthSource: ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?qUZlIHciofcd4CWGfc8fgBszBYBaDlmSbOW4dD1qMUXNikPiXQtNW8hdhOO/?=
+ =?us-ascii?Q?NeyU7yyGvudHRxbKMTpag3u8MhXM81P3jpV7f9zM1oMDMQiop7N09bc2nJUL?=
+ =?us-ascii?Q?Yg0T4NPBb0krFcwV7HV+WTfuYNnpJWjXIYTUe/bNbeQECBmHQkV1cJml+gME?=
+ =?us-ascii?Q?Aill/3vD5kZc04VvgdFKOwE0TFAXnoQh8ky2Rmjnx3e6l5RMgro0xiPqqWrV?=
+ =?us-ascii?Q?0EFX83FSjqooUDOQxYkkcIDPwmmzdX7NxhrIqKcHwV2S+e/lSQovJeZwZTfD?=
+ =?us-ascii?Q?e6SnJiik/yOWuE6k4pwzMgfMpzL/mVfJdozRczTxoKWgYiKbGjJkx/LRljsp?=
+ =?us-ascii?Q?YKqKIfSxbYxNd9SoBaF9L4eO/Uh57WWYx0qsaPhOazHBkkBqIvbdS5a8RZdX?=
+ =?us-ascii?Q?MJvH2zT8/0kietRrxtj39VW1yT8YG7Ln7Sn9s/3HdFq8r3XVKmmtvOx19me4?=
+ =?us-ascii?Q?FTBF2ABOMXPvgDIk/R4rh5JAe/Dqsbmx+blKB5+QtIzQPb1COZLsT3unOKB6?=
+ =?us-ascii?Q?8C9xXz0pB0Iz4FC2BujokyZlWm0azI4BatxO/+m8WDIXYe+N5YWhYxhz1c51?=
+ =?us-ascii?Q?1Df+T1tp/cIFFc3KCKsFPRLVFir0ejJvW0RrfY8IudIIblLVZwQra1Bx4srE?=
+ =?us-ascii?Q?oOzyIejSRKUBH6qsJpeSxaKdTFV4i4Ts29zxVFSRA+l4qWLsBpCoJM+nJU6c?=
+ =?us-ascii?Q?xD7rq5pMfifhgvTvrmbR4pnXiecimAszzG+UGgJgJo1qbcZreK7NHtXSewXs?=
+ =?us-ascii?Q?BFZF5ccbYon6Ak1R1Dx5kM4Bq6GGLeASB/Rb+4Q9xjhRjVIOKUrjO4utNPSV?=
+ =?us-ascii?Q?NLCiuCp5XibrNeMqyqeYT8wlspROQw6yGtVuCJF1WGn2gNGw+OImGsXykhPt?=
+ =?us-ascii?Q?PgaCdkQyS2Y+WQ9GlC8lQon5TKLR8aBCGSWq6aVCk6Dt87WQY6DyXQUjaH2e?=
+ =?us-ascii?Q?1UYCiYYEOVnlC4Alme/fTpxu92obfr+PaT+NLEMAydDJJgsHEqq1fUVZAZCj?=
+ =?us-ascii?Q?ho3hprQQG2DGGUrSt3Op5DwLOWuq1DK7fLuztdKAuRnkI5OQ6gkxwTVsTcJF?=
+ =?us-ascii?Q?Ohox8LbQIbcYOtp+LeXxNlHjBJgOboRdDKkXpJ7lDKHHP2n0V+Dy2HfEnvr5?=
+ =?us-ascii?Q?Z6fSt2Q0tdobhPKU1xretZvqR+ExAYljGa6PSVE6J19Q6v52WlA8EHLzuU6C?=
+ =?us-ascii?Q?cifWFM/1rA/8vs8tZYiJKl05GXcGFmv4Bs0tV/GBSReZXIMLSpYDEMeYQQSN?=
+ =?us-ascii?Q?w7ypkc5GQGzBT0pSpFdJs9PM75MGDT+u+7AnysNF5sEF3ass//Txre/EHY/+?=
+ =?us-ascii?Q?j7J8JC6TwITNueLp3ohfH5+0+V1JZuLTtw5ertlTQbHPI4uBaUMb4Hl29MRJ?=
+ =?us-ascii?Q?JYZmXHSlABAEWbww/cSK3d10A04hhmwqsGR/5OhufTknV2JVWSLl6Gn8wMF3?=
+ =?us-ascii?Q?3hqPZcry208k7+MgJFSFMbJhEpPafA5EjjFrs2/Ahwk0MFNC3sciCPKGF6kT?=
+ =?us-ascii?Q?yNTo5PAxlI+UZV8My92O1QS+sr5HtqG+rlc+OwzV6nsf2gS8m1Ns5N5vYLPb?=
+ =?us-ascii?Q?vsGeKoWPGBN1GrTfU6uLqAVnS32m8uZxCXDyXAExQ278Ao+lgG3/NTQVOuel?=
+ =?us-ascii?Q?Cg=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 01ba1279-5372-4b88-b0d3-08da9bcb2707
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6117.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Sep 2022 12:15:05.5755
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Sep 2022 12:16:46.3078
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: d9995866-0d9b-4251-8315-093f062abab4
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: hENmIHWGLvTMnkOupFmiPL1mHcRX/uLF5VxLZZXoJ8sMQlCCnBCWQeqBwDv7P4GUGcgdcivntV2Vj0I5VOZmNckssVqSzEwIzTFshTyys44=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV0P278MB0100
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: toradex.com
-Content-Type: text/plain; charset=WINDOWS-1252
-Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: /DGbXU/w17GVl0k0iOsrZQYsrfb1DG/rOl5v/ZdcEQKsdIDcFK5/XzUuA+xOzVqQNYQBawYV3ep+41Gg+8JYLi8bqMgZf/XrnKTpaH37GKM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB6029
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+Greg, to get an opinion on the fixes tag.
+On Tue, Sep 20, 2022 at 03:34:19PM +0200, Magnus Karlsson wrote:
+> On Tue, Sep 20, 2022 at 1:58 PM Jalal Mostafa
+> <jalal.a.mostapha@gmail.com> wrote:
+> >
+> > The flag for need_wakeup is not set for xsks with `XDP_SHARED_UMEM`
+> > flag and of different queue ids and/or devices. They should inherit
+> > the flag from the first socket buffer pool since no flags can be
+> > specified once `XDP_SHARED_UMEM` is specified. The issue is fixed
+> > by creating a new function `xp_create_and_assign_umem_shared` to
+> > create xsk_buff_pool for xsks with the shared umem flag set.
 
-On Tue, Sep 20, 2022 at 11:22:27AM +0200, Marcel Ziswiler wrote:
-> From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Hi Jalal,
+
+Please update commit msg and remove reference to the new function that you
+were creating on v1.
+
 > 
-> Remove spurious debounce property from linux,extcon-usb-gpio.
+> Thanks!
 > 
-> Note that debouncing is hard-coded to 20 ms (USB_GPIO_DEBOUNCE_MS
-> define).
+> Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
 > 
-> Fixes: 0ef1969ea569 ("ARM: dts: imx7-colibri: move aliases, chosen, extcon and gpio-keys")
-> Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
-
-Hello all,
-we did have some (internal) discussion if this patch should have the
-fixes tag or not.
-
-I do personally think it should not have it and should not be backported
-to stable tree, since this is not fixing a real bug, it's just a
-cleanup.
-
-On the other hand the original patch was not correct, and this change is
-making it right.
-
-What is the general opinion on this topic? What do the stable kernel
-maintainers would expect?
-
-Documentation/process/stable-kernel-rules.rst is about rules for
-backporting, it does not really talk about the fixes tag, but today this
-is used to decide if a patch should be backported or not.
-
-Francesco
-
+> > Fixes: b5aea28dca134 ("xsk: Add shared umem support between queue ids")
+> > Signed-off-by: Jalal Mostafa <jalal.a.mostapha@gmail.com>
+> > ---
+> >  include/net/xsk_buff_pool.h | 2 +-
+> >  net/xdp/xsk.c               | 4 ++--
+> >  net/xdp/xsk_buff_pool.c     | 5 +++--
+> >  3 files changed, 6 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/include/net/xsk_buff_pool.h b/include/net/xsk_buff_pool.h
+> > index 647722e847b4..f787c3f524b0 100644
+> > --- a/include/net/xsk_buff_pool.h
+> > +++ b/include/net/xsk_buff_pool.h
+> > @@ -95,7 +95,7 @@ struct xsk_buff_pool *xp_create_and_assign_umem(struct xdp_sock *xs,
+> >                                                 struct xdp_umem *umem);
+> >  int xp_assign_dev(struct xsk_buff_pool *pool, struct net_device *dev,
+> >                   u16 queue_id, u16 flags);
+> > -int xp_assign_dev_shared(struct xsk_buff_pool *pool, struct xdp_umem *umem,
+> > +int xp_assign_dev_shared(struct xsk_buff_pool *pool, struct xdp_sock *umem_xs,
+> >                          struct net_device *dev, u16 queue_id);
+> >  int xp_alloc_tx_descs(struct xsk_buff_pool *pool, struct xdp_sock *xs);
+> >  void xp_destroy(struct xsk_buff_pool *pool);
+> > diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> > index 5b4ce6ba1bc7..7bada4e8460b 100644
+> > --- a/net/xdp/xsk.c
+> > +++ b/net/xdp/xsk.c
+> > @@ -954,8 +954,8 @@ static int xsk_bind(struct socket *sock, struct sockaddr *addr, int addr_len)
+> >                                 goto out_unlock;
+> >                         }
+> >
+> > -                       err = xp_assign_dev_shared(xs->pool, umem_xs->umem,
+> > -                                                  dev, qid);
+> > +                       err = xp_assign_dev_shared(xs->pool, umem_xs, dev,
+> > +                                                  qid);
+> >                         if (err) {
+> >                                 xp_destroy(xs->pool);
+> >                                 xs->pool = NULL;
+> > diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
+> > index a71a8c6edf55..ed6c71826d31 100644
+> > --- a/net/xdp/xsk_buff_pool.c
+> > +++ b/net/xdp/xsk_buff_pool.c
+> > @@ -212,17 +212,18 @@ int xp_assign_dev(struct xsk_buff_pool *pool,
+> >         return err;
+> >  }
+> >
+> > -int xp_assign_dev_shared(struct xsk_buff_pool *pool, struct xdp_umem *umem,
+> > +int xp_assign_dev_shared(struct xsk_buff_pool *pool, struct xdp_sock *umem_xs,
+> >                          struct net_device *dev, u16 queue_id)
+> >  {
+> >         u16 flags;
+> > +       struct xdp_umem *umem = umem_xs->umem;
+> >
+> >         /* One fill and completion ring required for each queue id. */
+> >         if (!pool->fq || !pool->cq)
+> >                 return -EINVAL;
+> >
+> >         flags = umem->zc ? XDP_ZEROCOPY : XDP_COPY;
+> > -       if (pool->uses_need_wakeup)
+> > +       if (umem_xs->pool->uses_need_wakeup)
+> >                 flags |= XDP_USE_NEED_WAKEUP;
+> >
+> >         return xp_assign_dev(pool, dev, queue_id, flags);
+> > --
+> > 2.34.1
+> >
