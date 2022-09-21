@@ -2,126 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEA825BF3A9
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 04:45:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71D9A5BF524
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 06:05:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230489AbiIUCoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 22:44:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38340 "EHLO
+        id S231137AbiIUEFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 00:05:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230322AbiIUCoM (ORCPT
+        with ESMTP id S229905AbiIUEFD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 22:44:12 -0400
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9C717D784;
-        Tue, 20 Sep 2022 19:44:10 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4MXN3l2yJpz6T8t2;
-        Wed, 21 Sep 2022 10:42:11 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.67.175.61])
-        by APP1 (Coremail) with SMTP id cCh0CgD3xCh3eipjRFhmBA--.50399S5;
-        Wed, 21 Sep 2022 10:44:09 +0800 (CST)
-From:   Pu Lehui <pulehui@huaweicloud.com>
-To:     Martin KaFai Lau <martin.lau@linux.dev>,
-        Stanislav Fomichev <sdf@google.com>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Jiri Olsa <jolsa@kernel.org>, Pu Lehui <pulehui@huawei.com>,
-        Pu Lehui <pulehui@huaweicloud.com>
-Subject: [PATCH bpf v5 3/3] selftests/bpf: Adapt cgroup effective query uapi change
-Date:   Wed, 21 Sep 2022 10:46:04 +0000
-Message-Id: <20220921104604.2340580-4-pulehui@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220921104604.2340580-1-pulehui@huaweicloud.com>
-References: <20220921104604.2340580-1-pulehui@huaweicloud.com>
+        Wed, 21 Sep 2022 00:05:03 -0400
+Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CC04606BF
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 21:05:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1663733102; x=1695269102;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=svKOck3oyqxOGmX/wIBYWDNycIDz93EQP6gWTNu82pc=;
+  b=dZWootTqBDdnH5m15fYmp0FOq5z+yFodSQNlf7P4K2FATPYNQBu7Sxve
+   iB7Xbj8tXKRXWmvaUCYGzjKjk0wokTbVQlprshLknZwIgnFwaW1v6DqRi
+   t/kLPV6PN7DDOEbfVL0FPeUPQl9u3PZitvKYWFl0alPgPVTjk8AtP0LHB
+   tZm2eqYZwpI63ukNJ9G3aDXFrYJgr6/4IkAXwl11nRjAE5l1vxpkzduMh
+   QRz9nt9jmDCKaPQih9rLpq5D6ZP8cgXVu9Sr/+TUySCUYXvMzxeQILC4O
+   F7AwctZ8AR3ZbjpirKuqopFc1E3AZEqp+nU30Zaqup7zOCepR8xIGs+A3
+   A==;
+X-IronPort-AV: E=Sophos;i="5.93,332,1654531200"; 
+   d="scan'208";a="316158378"
+Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 21 Sep 2022 12:04:59 +0800
+IronPort-SDR: 9IVJhCnbdSjebFoFfvgVVkBZ/romFK+kxONUQtRkbOehdvD/52cZEappvOcUC/Fcibq5JownDv
+ Mfsd5JQE8GEpgqcQM/Oy6wvCcfEqSm5YOYWOtQyx7EWfqirDBG6tBKg4N3gm3T9dyhPlhqSxY4
+ 82JEVIcKjTpHMndxB8V5IGEcsdhKovLLktKjY3nnqnnjWVo3vK9ISdMJnH8iDf1fZZQ9Hx7DsK
+ WieNXhMGl/rNeBkbByoP+q0BnqAP7gHU2jd5uK2EVdLwJn/GpJ3+KggZYWO8WCRif4fDvwMOCw
+ H1H2KngttHFZNlcewQzJaiZb
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 20 Sep 2022 20:25:04 -0700
+IronPort-SDR: 4rI+b6ThFPU38rTs42p6Ung5/it7WmrGOSNhoP9QiP7yVHMr1280sjEwqIMJJN0k/6srvr3MFm
+ 1qBusjl7pjXfhaIeH7rJTJIHfs6BP7cLTAv0ntDaysCUrPzqZtbd3NcftvLUH4GXtBb4+LnRUv
+ Tsw6YyXR1EcqGnvIP7/uq2Rnr7Tv7G90RA12vb4Jg9R+RPrUN1Eq+GJZ34cvNnvHgfqcdY6o16
+ mZGetWuYthkamrI7bdOJaTLvjkUbBThZRfkuP+Fm4rPxOyTWNMO+Th5oU4GzD+wpY7XaDuGEqD
+ /oI=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 20 Sep 2022 21:05:00 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4MXPvG5wMWz1RwqL
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 21:04:58 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1663733098; x=1666325099; bh=svKOck3oyqxOGmX/wIBYWDNycIDz93EQP6g
+        WTNu82pc=; b=cNiO4y5MwHm7QceJhqfX1yJLF6V/01fLp34oiAA1oBv5pq4qqUz
+        qQKs8z+1hVWuQAsVXCI3GUyO5jJMRVQkG7UGznWRtdBFIvIPklqXM/js4yjqS0cQ
+        UIAXdJqf2D08e7qX3l3nl2/aJSl0/mp6jK1IcmQ/8BxBFMwc8njxWAwMWmYtkNbB
+        dnxFyP2W8n6n/PE1JgbuPuj4KTYhEHc2+64cbSsLt/+Ez1eeM5wso8/w2Ekc2jMe
+        ocEYCBvs1zd335osegG2+E/yZ6RQn2vB07MOcXFUMaa3IDpxIgqsJgHFNmhzdOX6
+        WcQaDYPZZTdjxE6d3mDU2UqDbHtSSYFpjFA==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id Xe3sVUFKfypa for <linux-kernel@vger.kernel.org>;
+        Tue, 20 Sep 2022 21:04:58 -0700 (PDT)
+Received: from [10.149.53.254] (washi.fujisawa.hgst.com [10.149.53.254])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4MXPvB5DRZz1RvLy;
+        Tue, 20 Sep 2022 21:04:54 -0700 (PDT)
+Message-ID: <40b9e090-5ba3-1191-4fe9-80467284ae72@opensource.wdc.com>
+Date:   Wed, 21 Sep 2022 13:04:51 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: cCh0CgD3xCh3eipjRFhmBA--.50399S5
-X-Coremail-Antispam: 1UD129KBjvJXoW7uFyUXw1xJr43ZF47XF48Crg_yoW8uw1kpF
-        ykZ34Ut3WrWr1agF1kA3s2vrWI9FsxW3WIyF4UJrW3ZFy2vr10vr1xKws0vF1rJrWvyw4F
-        va4Yy398XF4UZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUmI14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2jI8I6cxK62vIxIIY0VWUZVW8XwA2048vs2IY02
-        0E87I2jVAFwI0_JrWl82xGYIkIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2
-        F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjx
-        v20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2
-        z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0V
-        AKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1l
-        Ox8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErc
-        IFxwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkE
-        bVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67
-        AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI
-        42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCw
-        CI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnI
-        WIevJa73UjIFyTuYvjTRNzVbUUUUU
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH RFC 0/6] libata/scsi/libsas: Allocate SCSI device earlier
+ for ata port probe
+Content-Language: en-US
+To:     John Garry <john.garry@huawei.com>, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, hare@suse.de, hch@lst.de
+Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, brking@us.ibm.com
+References: <1663669630-21333-1-git-send-email-john.garry@huawei.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <1663669630-21333-1-git-send-email-john.garry@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pu Lehui <pulehui@huawei.com>
+On 9/20/22 19:27, John Garry wrote:
+> Currently for libata the SCSI device (sdev) associated with an ata_device
+> is allocated when the port probe has completed.
+> 
+> It's useful to have the SCSI device and its associated request queue
+> available earlier for the port probe. Specifically if we have the
+> request queue available, then we can:
+> - Easily put ATA qc in SCSI cmnd priv data
+> - Send ATA internal commands on SCSI device request queue for [0]. The
+>    current solution there is to use the shost sdev request queue, which
+>    isn't great.
+>    
+> This series changes the ata port probe to alloc the sdev in the
+> ata_device revalidation, and then just do a SCSI starget scan afterwards.
+> 
+> Why an RFC?
+> 1. IPR  driver needs to be fixed up - it does not use ATA EH port probe
+>     Mail [1] needs following up
 
-The attach flags is meaningless for effective query and
-its value will always be set as 0 during effective query.
-Root cg's effective progs is always its attached progs,
-so we use non-effective query to get its progs count and
-attach flags. And we don't need the remain attach flags
-check.
+Yes. If IPR could be converted to ata error_handler, a lot of code can 
+be simplified in libata too.
 
-Fixes: b79c9fc9551b ("bpf: implement BPF_PROG_QUERY for BPF_LSM_CGROUP")
-Signed-off-by: Pu Lehui <pulehui@huawei.com>
----
- tools/testing/selftests/bpf/prog_tests/cgroup_link.c | 11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
+> 2. SATA PMP support needs verification, but I don't have a setup
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_link.c b/tools/testing/selftests/bpf/prog_tests/cgroup_link.c
-index 9e6e6aad347c..15093a69510e 100644
---- a/tools/testing/selftests/bpf/prog_tests/cgroup_link.c
-+++ b/tools/testing/selftests/bpf/prog_tests/cgroup_link.c
-@@ -71,10 +71,9 @@ void serial_test_cgroup_link(void)
- 
- 	ping_and_check(cg_nr, 0);
- 
--	/* query the number of effective progs and attach flags in root cg */
-+	/* query the number of attached progs and attach flags in root cg */
- 	err = bpf_prog_query(cgs[0].fd, BPF_CGROUP_INET_EGRESS,
--			     BPF_F_QUERY_EFFECTIVE, &attach_flags, NULL,
--			     &prog_cnt);
-+			     0, &attach_flags, NULL, &prog_cnt);
- 	CHECK_FAIL(err);
- 	CHECK_FAIL(attach_flags != BPF_F_ALLOW_MULTI);
- 	if (CHECK(prog_cnt != 1, "effect_cnt", "exp %d, got %d\n", 1, prog_cnt))
-@@ -85,17 +84,15 @@ void serial_test_cgroup_link(void)
- 			     BPF_F_QUERY_EFFECTIVE, NULL, NULL,
- 			     &prog_cnt);
- 	CHECK_FAIL(err);
--	CHECK_FAIL(attach_flags != BPF_F_ALLOW_MULTI);
- 	if (CHECK(prog_cnt != cg_nr, "effect_cnt", "exp %d, got %d\n",
- 		  cg_nr, prog_cnt))
- 		goto cleanup;
- 
- 	/* query the effective prog IDs in last cg */
- 	err = bpf_prog_query(cgs[last_cg].fd, BPF_CGROUP_INET_EGRESS,
--			     BPF_F_QUERY_EFFECTIVE, &attach_flags,
--			     prog_ids, &prog_cnt);
-+			     BPF_F_QUERY_EFFECTIVE, NULL, prog_ids,
-+			     &prog_cnt);
- 	CHECK_FAIL(err);
--	CHECK_FAIL(attach_flags != BPF_F_ALLOW_MULTI);
- 	if (CHECK(prog_cnt != cg_nr, "effect_cnt", "exp %d, got %d\n",
- 		  cg_nr, prog_cnt))
- 		goto cleanup;
+Port multiplier behind a sas HBA will be challenging to setup :)
+I can try, but I will need to open up one of my servers and hook a small 
+PMP box to one of the pm8001 plugs. I may have the cables for that... 
+Let me check.
+
+> 3. This series needs to be merged into or go after [0]
+> 
+> Patch 1/6 could be merged now.
+> 
+> [0] https://lore.kernel.org/linux-ide/1654770559-101375-1-git-send-email-john.garry@huawei.com/
+> [1] https://lore.kernel.org/linux-ide/369448ed-f89a-c2db-1850-91450d8b5998@opensource.wdc.com/
+> 
+> Any comments welcome - please have a look.
+> 
+> Based on v6.0-rc4 and tested for QEMU AHCI and libsas.
+> 
+> John Garry (6):
+>    scsi: core: Use SCSI_SCAN_RESCAN in  __scsi_add_device()
+>    scsi: scsi_transport_sas: Allocate end device target id in the rphy
+>      alloc
+>    scsi: core: Add scsi_get_dev()
+>    ata: libata-scsi: Add ata_scsi_setup_sdev()
+>    scsi: libsas: Add sas_ata_setup_device()
+>    ata: libata-scsi: Allocate sdev early in port probe
+> 
+>   drivers/ata/libata-eh.c           |  4 +++
+>   drivers/ata/libata-scsi.c         | 45 +++++++++++++++++++++----------
+>   drivers/ata/libata.h              |  1 +
+>   drivers/scsi/libsas/sas_ata.c     | 20 ++++++++++++++
+>   drivers/scsi/scsi_scan.c          | 28 ++++++++++++++++++-
+>   drivers/scsi/scsi_transport_sas.c | 25 +++++++++++------
+>   include/linux/libata.h            |  2 ++
+>   include/scsi/scsi_host.h          |  3 +++
+>   8 files changed, 105 insertions(+), 23 deletions(-)
+> 
+
 -- 
-2.25.1
+Damien Le Moal
+Western Digital Research
 
