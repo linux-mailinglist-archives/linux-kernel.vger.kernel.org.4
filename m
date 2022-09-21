@@ -2,97 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 276FB5E54D6
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 23:00:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE5AC5E54C3
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 22:54:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230046AbiIUVAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 17:00:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55412 "EHLO
+        id S230019AbiIUUyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 16:54:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230107AbiIUU75 (ORCPT
+        with ESMTP id S229816AbiIUUyW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 16:59:57 -0400
-X-Greylist: delayed 421 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 21 Sep 2022 13:59:55 PDT
-Received: from novek.ru (unknown [213.148.174.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3071A79EFA
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 13:59:53 -0700 (PDT)
-Received: from [192.168.0.18] (unknown [37.228.234.7])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by novek.ru (Postfix) with ESMTPSA id A1DD1504D02;
-        Wed, 21 Sep 2022 23:49:09 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 novek.ru A1DD1504D02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=novek.ru; s=mail;
-        t=1663793351; bh=+FOY44FFFHbhCZX3hBs0Td2GFcgqZ+wLRlydeq/m0eY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ZZXxMT7jZjhm8ILPmyA6obyMYbMuFE7ok5qU0/+IsRJdbTQFn56DWtY8nemEw1OQ6
-         rzcB5FU2FVTA3A9z0TdBhSqJbEFKor0HQzx9PTg3LfoBosdIl4DNGKqPFoCOXDUAIG
-         I+mjmSTIISD7XuycCb+4ndCiUcUO3LOka/O1Rj0w=
-Message-ID: <b7536b94-b37c-9e8a-363f-cbca652f1cbd@novek.ru>
-Date:   Wed, 21 Sep 2022 21:52:15 +0100
+        Wed, 21 Sep 2022 16:54:22 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD4A5A5705
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 13:54:16 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id b21so6856653plz.7
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 13:54:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=yRyK8uVIf6sgbn5S18i1u/lBRRBtPkKWicLJZ1+DWS0=;
+        b=Z6ok7PvI18J/cu5qKQfW3/k/bpLSLP3R7uGuWlKinMlBE+yY2dnqp16xqQoGK/jFH3
+         kQ8l4pWTPQtK+EaH4QXeleDMRoIS1A+6qqDuFR3UmBcDamrX9VbqRgLRS5PNe37jUU4L
+         rFP3foWkIFLePNT0aGyiFarW0GWuSV4SPeBaTmOHhhb65aLp92SJlHZCCMVRJ+nD4AGN
+         lFTb8VZXdyCfYpJYWg0l1fDWIxVCSla1Bp5m3u9HecH3Is1ItdJ1mdTvK9EMB3qbwJBb
+         o1XpN2JbZ4PGTWPbUGuFEXg+6MGAfc2lbmOf0APWAu7xtXTM76xXtxoVRGyZfGttyZmJ
+         L2KQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=yRyK8uVIf6sgbn5S18i1u/lBRRBtPkKWicLJZ1+DWS0=;
+        b=uBDvVvF+fO1stAv6awn3+f/g4F7HKU2GrjEId9E9lkWjl19NIk/nrKKruySf9FG95X
+         1kzh3o21pSz4qr+slospZCSPvqeB1Y8tWMWWJmKTJL3LxJoNJc7VipYkr6DayL1FsOEd
+         mTFq+wTRRS4oBf/gTlyAqfS5EK8i8PGx+QC8DUFTD7BLNRyZJN8xFF4FtcInrN++HpRX
+         X2XYUaEhF3kfVcWqAkpkBB2PW7XiIJofH16ruPzI00Q5B3CjY4vzKQAvS0TJVRynDhMB
+         uJ0bbhKk/R0BTAPRuX0vZhqMlvVW/MPbW41IGaWemgMx0ea/ekTYiZpN0Z8WLac7LZAd
+         q0rw==
+X-Gm-Message-State: ACrzQf0y+2kBO6SM1A0UAB88vF+B+07tbRr3qS90yaDWugDEsQ5eByHD
+        33osFD4hg1Eq1x7V7VlhivWK2A==
+X-Google-Smtp-Source: AMsMyM5orVQbA2y3SJp18iff5y/Pbllqj96/O+d1kUIsFRn0DQJwGF/cqk6KPwEXZKR6/vrwvCk59Q==
+X-Received: by 2002:a17:90b:180e:b0:202:e725:19e2 with SMTP id lw14-20020a17090b180e00b00202e72519e2mr11738515pjb.163.1663793655850;
+        Wed, 21 Sep 2022 13:54:15 -0700 (PDT)
+Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
+        by smtp.gmail.com with ESMTPSA id u16-20020a632350000000b004277f43b736sm2280395pgm.92.2022.09.21.13.54.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Sep 2022 13:54:15 -0700 (PDT)
+Date:   Wed, 21 Sep 2022 13:54:11 -0700
+From:   David Matlack <dmatlack@google.com>
+To:     Vishal Annapurve <vannapurve@google.com>
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        shuah@kernel.org, bgardon@google.com, seanjc@google.com,
+        oupton@google.com, peterx@redhat.com, vkuznets@redhat.com
+Subject: Re: [V2 PATCH 3/8] KVM: selftests: Add arch specific post vm load
+ setup
+Message-ID: <Yyt586xOWrNEoCYF@google.com>
+References: <20220915000448.1674802-1-vannapurve@google.com>
+ <20220915000448.1674802-4-vannapurve@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v1 1/1] ptp_ocp: use device_find_any_child() instead of
- custom approach
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Vadim Fedorenko <vadfed@fb.com>,
-        Richard Cochran <richardcochran@gmail.com>
-References: <20220921141005.2443-1-andriy.shevchenko@linux.intel.com>
-From:   Vadim Fedorenko <vfedorenko@novek.ru>
-In-Reply-To: <20220921141005.2443-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220915000448.1674802-4-vannapurve@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21.09.2022 15:10, Andy Shevchenko wrote:
-> We have already a helper to get the first child device, use it and
-> drop custom approach.
+On Thu, Sep 15, 2022 at 12:04:43AM +0000, Vishal Annapurve wrote:
+> Add arch specific API kvm_selftest_post_vm_elf_load to possibly communicate
+> information to VM that is already known to selftest VMM logic.
 > 
-
-LGTM. This patch should go to net-next, I believe.
-
-Acked-by: Vadim Fedorenko <vadfed@fb.com>
-
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> This API will be used in followup commit to convey cpu vendor type to the
+> guest vm.
+> 
+> Suggested-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Vishal Annapurve <vannapurve@google.com>
 > ---
->   drivers/ptp/ptp_ocp.c | 8 +-------
->   1 file changed, 1 insertion(+), 7 deletions(-)
+>  tools/testing/selftests/kvm/include/kvm_util_base.h | 4 ++++
+>  tools/testing/selftests/kvm/lib/aarch64/processor.c | 4 ++++
+>  tools/testing/selftests/kvm/lib/elf.c               | 2 ++
+>  tools/testing/selftests/kvm/lib/riscv/processor.c   | 4 ++++
+>  tools/testing/selftests/kvm/lib/s390x/processor.c   | 4 ++++
+>  tools/testing/selftests/kvm/lib/x86_64/processor.c  | 4 ++++
+>  6 files changed, 22 insertions(+)
 > 
-> diff --git a/drivers/ptp/ptp_ocp.c b/drivers/ptp/ptp_ocp.c
-> index 83da36e69361..ebed0161879e 100644
-> --- a/drivers/ptp/ptp_ocp.c
-> +++ b/drivers/ptp/ptp_ocp.c
-> @@ -1311,12 +1311,6 @@ ptp_ocp_read_eeprom(struct ptp_ocp *bp)
->   	goto out;
->   }
->   
-> -static int
-> -ptp_ocp_firstchild(struct device *dev, void *data)
-> -{
-> -	return 1;
-> -}
-> -
->   static struct device *
->   ptp_ocp_find_flash(struct ptp_ocp *bp)
->   {
-> @@ -1325,7 +1319,7 @@ ptp_ocp_find_flash(struct ptp_ocp *bp)
->   	last = NULL;
->   	dev = &bp->spi_flash->dev;
->   
-> -	while ((dev = device_find_child(dev, NULL, ptp_ocp_firstchild))) {
-> +	while ((dev = device_find_any_child(dev))) {
->   		if (!strcmp("mtd", dev_bus_name(dev)))
->   			break;
->   		put_device(last);
+> diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> index 98edbbda9f97..73cfee3ebd76 100644
+> --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
+> +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> @@ -839,4 +839,8 @@ static inline int __vm_disable_nx_huge_pages(struct kvm_vm *vm)
+>   */
+>  void kvm_selftest_arch_init(void);
+>  
+> +/*
+> + * API to execute architecture specific setup after loading the vm elf.
 
+It's not a "vm elf" per-se, it's "loading the elf into the VM". How
+about:
+
+/*
+ * API to execute arch-specific logic after loading the selftest ELF image
+ * into the VM.
+ */
+
+> + */
+> +void kvm_arch_post_vm_elf_load(struct kvm_vm *vm);
+>  #endif /* SELFTEST_KVM_UTIL_BASE_H */
+> diff --git a/tools/testing/selftests/kvm/lib/aarch64/processor.c b/tools/testing/selftests/kvm/lib/aarch64/processor.c
+> index 2281d6c5d02f..12627c560f66 100644
+> --- a/tools/testing/selftests/kvm/lib/aarch64/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/aarch64/processor.c
+> @@ -528,3 +528,7 @@ void kvm_selftest_arch_init(void)
+>  {
+>  	guest_modes_append_default();
+>  }
+> +
+> +void kvm_arch_post_vm_elf_load(struct kvm_vm *vm)
+> +{
+> +}
+> diff --git a/tools/testing/selftests/kvm/lib/elf.c b/tools/testing/selftests/kvm/lib/elf.c
+> index 9f54c098d9d0..b8963a7146ce 100644
+> --- a/tools/testing/selftests/kvm/lib/elf.c
+> +++ b/tools/testing/selftests/kvm/lib/elf.c
+> @@ -189,4 +189,6 @@ void kvm_vm_elf_load(struct kvm_vm *vm, const char *filename)
+>  				phdr.p_filesz);
+>  		}
+>  	}
+> +
+> +	kvm_arch_post_vm_elf_load(vm);
+>  }
+
+Same suggestion here as the previous patch: Use __weak to define a
+default no-op implementation of kvm_arch_post_vm_elf_load().
+
+> diff --git a/tools/testing/selftests/kvm/lib/riscv/processor.c b/tools/testing/selftests/kvm/lib/riscv/processor.c
+> index 26660dd2ba78..4491c0d4be45 100644
+> --- a/tools/testing/selftests/kvm/lib/riscv/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/riscv/processor.c
+> @@ -366,3 +366,7 @@ void assert_on_unhandled_exception(struct kvm_vcpu *vcpu)
+>  void kvm_selftest_arch_init(void)
+>  {
+>  }
+> +
+> +void kvm_arch_post_vm_elf_load(struct kvm_vm *vm)
+> +{
+> +}
+> diff --git a/tools/testing/selftests/kvm/lib/s390x/processor.c b/tools/testing/selftests/kvm/lib/s390x/processor.c
+> index 8654ec74009a..332501b3693f 100644
+> --- a/tools/testing/selftests/kvm/lib/s390x/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/s390x/processor.c
+> @@ -222,3 +222,7 @@ void assert_on_unhandled_exception(struct kvm_vcpu *vcpu)
+>  void kvm_selftest_arch_init(void)
+>  {
+>  }
+> +
+> +void kvm_arch_post_vm_elf_load(struct kvm_vm *vm)
+> +{
+> +}
+> diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> index 20bf125f9363..25ae972f5c71 100644
+> --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> @@ -1315,3 +1315,7 @@ bool vm_is_unrestricted_guest(struct kvm_vm *vm)
+>  void kvm_selftest_arch_init(void)
+>  {
+>  }
+> +
+> +void kvm_arch_post_vm_elf_load(struct kvm_vm *vm)
+> +{
+> +}
+> -- 
+> 2.37.2.789.g6183377224-goog
+> 
