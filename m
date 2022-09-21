@@ -2,78 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 462CE5BF988
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 10:41:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E4865BF98A
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 10:42:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231216AbiIUIlg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 04:41:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50250 "EHLO
+        id S230306AbiIUImS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 04:42:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231310AbiIUIlZ (ORCPT
+        with ESMTP id S229520AbiIUImP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 04:41:25 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 774FF67465
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 01:41:24 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 09DE8FF807;
-        Wed, 21 Sep 2022 08:41:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1663749683;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RkIYDz0g1aDOn6XHJK7GdoNw26KyCG2dLZgmn/ut9Q8=;
-        b=YJK5n+/qK2TnS6XJ2Gmp4n7EtE/tOjmztMshZcUB51PzZR4mosZT5tLStt650DlOB0UL2Z
-        WSTh9CDEeROZNuRQKV7HrtP/BkqrVl2GwQ5WBIDYpD/XM3eq+leZR9Wv2BtSapaWWcJJxa
-        eWOFhz1BeM5/jFmKQD5PFaHfbFUrzqBauYRGbcyO78oBbzwclh9Dm8JtehTcEoThN0rTrW
-        Z8kIeumwURgOLtlmnFUWh9dmjbHoGfrqBQU/RGzgL7ZiacYGVxq1+YcVkWES8AxirZWNlY
-        U2v57beoNmzYkTP50h5tLbcT9GMeNypEYHNuhxBLunGCzpuDKkGm2T6oK3bhVw==
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     =?utf-8?b?TWljaGHFgiBLxJlwaWXFhA==?= <kernel@kempniu.pl>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Cc:     Boris Brezillon <boris.brezillon@collabora.com>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/4] mtd: track maximum number of bitflips for each read request
-Date:   Wed, 21 Sep 2022 10:41:20 +0200
-Message-Id: <20220921084120.733357-1-miquel.raynal@bootlin.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220629125737.14418-2-kernel@kempniu.pl>
-References: 
+        Wed, 21 Sep 2022 04:42:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E7D45F64;
+        Wed, 21 Sep 2022 01:42:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FC73623F6;
+        Wed, 21 Sep 2022 08:42:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C885C433D6;
+        Wed, 21 Sep 2022 08:42:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1663749733;
+        bh=0GtndUAX9QGEdlFlTyfog2IdLqe1o69t51NBUAd7SDA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=K71vEzCNwiodN3DboG0aaQ9oEql1VhmGWZg5kQbM0v51hdhJWh1iH+F87q/1QhWGg
+         YjSsqqjVhYAzOkMK5B8ciBzjQvrlPM6EXa2QomNyl0DDsi1R+yvi9c9gSFRtfX7nx+
+         LHr+573awWCWsDUYBzAkymQoCtLcwhmR5ShpmXSQ=
+Date:   Wed, 21 Sep 2022 10:42:10 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Joerg Roedel <joro@8bytes.org>
+Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
+        Lu Baolu <baolu.lu@linux.intel.com>, iommu@lists.linux.dev,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: Re: How to quickly resolve the IOMMU regression that currently
+ plagues a lot of people in 5.19.y
+Message-ID: <YyrOYnneEH/lS+n0@kroah.com>
+References: <1d1844f0-c773-6222-36c6-862e14f6020d@leemhuis.info>
+ <fd672632-7935-14ff-e2be-0db8443b0907@leemhuis.info>
+ <YyrI/qzx/EWapzck@8bytes.org>
 MIME-Version: 1.0
-X-linux-mtd-patch-notification: thanks
-X-linux-mtd-patch-commit: b'65394169bdae073bfb2c6816f5bf095bd7d53e61'
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YyrI/qzx/EWapzck@8bytes.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-06-29 at 12:57:34 UTC, =?utf-8?b?TWljaGHFgiBLxJlwaWXFhA==?= wrote:
-> mtd_read_oob() callers are currently oblivious to the details of ECC
-> errors detected during the read operation - they only learn (through the
-> return value) whether any corrected bitflips or uncorrectable errors
-> occurred.  More detailed ECC information can be useful to user-space
-> applications for making better-informed choices about moving data
-> around.
+On Wed, Sep 21, 2022 at 10:19:10AM +0200, Joerg Roedel wrote:
+> Hi Thorsten,
 > 
-> Extend struct mtd_oob_ops with a pointer to a newly-introduced struct
-> mtd_req_stats and set its 'max_bitflips' field to the maximum number of
-> bitflips found in a single ECC step during the read operation performed
-> by mtd_read_oob().  This is a prerequisite for ultimately passing that
-> value back to user space.
+> On Wed, Sep 21, 2022 at 09:15:17AM +0200, Thorsten Leemhuis wrote:
+> > [resend with proper subject, sorry for the noise]
 > 
-> Suggested-by: Boris Brezillon <boris.brezillon@collabora.com>
-> Signed-off-by: Michał Kępień <kernel@kempniu.pl>
+> Thanks for the noise :) I will queue the fix today and send it upstream.
 
-Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git mtd/next, thanks.
+Great, thanks for doing this.
 
-Miquel
+greg k-h
