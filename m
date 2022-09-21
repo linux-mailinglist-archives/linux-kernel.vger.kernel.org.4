@@ -2,126 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6907F5BF744
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 09:12:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A9895BF74A
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 09:12:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230296AbiIUHL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 03:11:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52618 "EHLO
+        id S229749AbiIUHMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 03:12:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbiIUHLR (ORCPT
+        with ESMTP id S229996AbiIUHMQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 03:11:17 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F21C1165B1
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 00:11:15 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id s6so7684338lfo.7
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 00:11:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=wiXy5ZIaldVPRdkC0O1dXknFlmQtPsl+IQZh9q4Cgmo=;
-        b=BNWeozDy1dKboNi6UK9bXjuRFkSY55U3BDN4+3Qq9dKjQPYnJxKQzyMV9NS9gbfT0Z
-         7hjI0sUzfTo8iAhQ/mvIcUwuPsG5nfoDQ3bJXuUH7zUymrDAwlo3qF25z5yxuhnpkfQv
-         sz+JtUst9JhzKCNnpVaKaVZulJT8eVGh7IRKbJHjv2TZYOq7vK8lokKDyLFcDduKwBG5
-         gwznPs7AshqOMlIcUut0mCwUxZ+91gDbwVCrxaPq1JK6XH+zwfxhjXfXEO5HnoPbk73X
-         gc+ouQVeSVZ22tggHhOAtQqHHfxbsrp0m0ch5KqGK4RvqfvlZbFaSI4sv7nFlwKv2HuI
-         3SfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=wiXy5ZIaldVPRdkC0O1dXknFlmQtPsl+IQZh9q4Cgmo=;
-        b=K/FKh1UuJ7XB10C+YQE+QZshOrbkZTqCf9w5OakMV5lDCOMIH7SA4YyP8WCsH+L5VN
-         BsLEIY2mtCtbYWaLRtn4fguqMT6yMVNwTUfYQkU7QEdsXHQKsIYqaFYtHCQYXFkE4nud
-         zElxMHh+txTLURBREyI/av1B6uYEQgpRXuvt8mZ9Yenk2QU1bRhw3wvRLwL0xfuiBovH
-         2UNgvbCQUA5lOzmvlE4wfyWo/d1qjx0MC3GmQ7exWASWW1P2laC+iuunsYUUiB3HvVDm
-         PVdG1UFciy61+q1LTqZ/v9LuCh572+cgwhY22fHYq4eZVbk6xWA/GqtgGXa3TEDxIHbV
-         mZVQ==
-X-Gm-Message-State: ACrzQf1d2wP8bUz9TIIYJ0G4qcdse+yyw83w+RkPfq1hNvmuRPQcqf7H
-        xNTlx4gWsVMyMBcbJOfEya+nYg==
-X-Google-Smtp-Source: AMsMyM6S3qg1XzFgFQZ4Arx5bMNo57o7Uhkt5ibKjTwMAKsPl7xPucNJNMl7abyEQ7e0sR6YFidK7w==
-X-Received: by 2002:a05:6512:20d2:b0:497:a29f:cada with SMTP id u18-20020a05651220d200b00497a29fcadamr9075345lfr.45.1663744274292;
-        Wed, 21 Sep 2022 00:11:14 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id w16-20020a05651c119000b0026c18aa8587sm309565ljo.75.2022.09.21.00.11.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Sep 2022 00:11:13 -0700 (PDT)
-Message-ID: <1860b0ff-5544-5e74-ccfc-beda18824927@linaro.org>
-Date:   Wed, 21 Sep 2022 09:11:12 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 1/4] dt-bindings: pinctrl: Combine MediaTek MT67xx pinctrl
- binding docs
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Yassine Oudjana <yassine.oudjana@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        Andy Teng <andy.teng@mediatek.com>
-Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
-        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Wed, 21 Sep 2022 03:12:16 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBE6D3D581;
+        Wed, 21 Sep 2022 00:12:10 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id F1284C000B;
+        Wed, 21 Sep 2022 07:12:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1663744329;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OPV61B8fcJib1mvJP+g7glWnejDZkZxpKL+a1xKlpbM=;
+        b=kyrfLl9Uhdn67c6A1JzrK3qRcgAQSCwpJpdFXnHFAcS9FOUVPtsIgLJIpiswpsK2X5Ohck
+        Xm6DuWcCmoLZeSWY6uRxafAIkLT07Xm4VYJ7MTGjYq5cT+L+osQTaEg1toB2oROKZEoaVk
+        iIcOdt0dl21rHNviLBD4B9kf3o7OJC606Qq6C61UFwA9gUxYzMJcSu3QYcfxRrcAnefTBh
+        U8z5aBt3O/k5hPII6ArndGre9Xqtlxm8oG5tpqp9dGCG2wMVx7Q1xo1fD6pv+aDbWz2FgX
+        VgIfx0JOm0aweqvsWJ3cxsC6/7aFEngujAVs1hIIddk0K1ubfC5U67phKfwuHg==
+Date:   Wed, 21 Sep 2022 09:12:08 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20220919170115.94873-1-y.oudjana@protonmail.com>
- <20220919170115.94873-2-y.oudjana@protonmail.com>
- <4c425cf8-f9ca-969c-f8ed-688410bfb922@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <4c425cf8-f9ca-969c-f8ed-688410bfb922@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 2/6] rtc: isl12022: simplify some expressions
+Message-ID: <Yyq5SEDjaimLpy/B@mail.local>
+References: <20220830100152.698506-1-linux@rasmusvillemoes.dk>
+ <20220830100152.698506-3-linux@rasmusvillemoes.dk>
+ <YyHugb47cJPNuHbs@mail.local>
+ <4fdd52c9-2de7-b86b-f081-cb59a8f72c5a@rasmusvillemoes.dk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4fdd52c9-2de7-b86b-f081-cb59a8f72c5a@rasmusvillemoes.dk>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/09/2022 10:06, AngeloGioacchino Del Regno wrote:
-> Il 19/09/22 19:01, Yassine Oudjana ha scritto:
->> From: Yassine Oudjana <y.oudjana@protonmail.com>
->>
->> Documents for MT6779, MT6795 and MT6797 that currently exist share
->> most properties, and each one has slightly differently worded
->> descriptions for those properties. Combine all three documents into
->> one common document for all MT67xx SoC pin controllers, picking a few
->> parts from each and accounting for differences such as items in reg
->> and reg-names properties. Also document the MT6765 pin controller
->> which currently has a driver but no DT binding documentation. It should
->> be possible to also include bindings for MT8183 and MT8188, but these
->> have some additional properties that might complicate things a bit,
->> so they are left alone for now.
->>
->> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
->> ---
->>   .../pinctrl/mediatek,mt6779-pinctrl.yaml      | 207 ------------------
->>   .../pinctrl/mediatek,mt6797-pinctrl.yaml      | 176 ---------------
->>   ...6795.yaml => mediatek,mt67xx-pinctrl.yaml} | 181 +++++++++++----
+On 21/09/2022 09:08:52+0200, Rasmus Villemoes wrote:
+> On 14/09/2022 17.08, Alexandre Belloni wrote:
+> > Hi,
+> > 
+> > On 30/08/2022 12:01:48+0200, Rasmus Villemoes wrote:
+> >> These instances of '&client->dev' might as well be spelled 'dev', since
+> >> 'client' has been computed from 'dev' via 'client =
+> >> to_i2c_client(dev)'.
+> >>
+> >> Later patches will get rid of that local variable 'client', so remove
+> >> these unnecessary references so those later patches become easier to
+> >> read.
+> >>
+> >> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> >> ---
+> >>  drivers/rtc/rtc-isl12022.c | 11 +++++------
+> >>  1 file changed, 5 insertions(+), 6 deletions(-)
+> >>
+> >> diff --git a/drivers/rtc/rtc-isl12022.c b/drivers/rtc/rtc-isl12022.c
+> >> index 2dc19061cf5f..5e6bb9153c89 100644
+> >> --- a/drivers/rtc/rtc-isl12022.c
+> >> +++ b/drivers/rtc/rtc-isl12022.c
+> >> @@ -112,13 +112,13 @@ static int isl12022_rtc_read_time(struct device *dev, struct rtc_time *tm)
+> >>  		return ret;
+> >>  
+> >>  	if (buf[ISL12022_REG_SR] & (ISL12022_SR_LBAT85 | ISL12022_SR_LBAT75)) {
+> >> -		dev_warn(&client->dev,
+> >> +		dev_warn(dev,
+> > 
+> > While at it, I would prefer that one to also become a dev_dbg
 > 
-> Hello Yassine,
-> nice cleanup over here!
+> Well, I prefer to keep it, because my customer actually wants to use
+> this information. Grepping it out from dmesg is of course not the best
+> interface, but if it gets demoted to a dev_dbg() it doesn't even get there.
 > 
-> There's a catch though: as far as I know, wildcards are not permitted... so you
-> should, at this point, merge all of these in mediatek,mt6779-pinctrl.yaml instead.
-> 
-> Before jumping to that, though... Krzysztof, can you please confirm (or deny)?
 
-Wildcards are not allowed in compatibles. In filename wildcards or
-family name could work if they are really going to match the devices. I
-have doubts here. 67xx is quite a lot of different devices, so I am not
-sure this will cover them all.
+There is a proper userspace interface, look for RTC_VL_READ.
 
-I would prefer one name (oldest SoC or lowest number).
-
-Best regards,
-Krzysztof
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
