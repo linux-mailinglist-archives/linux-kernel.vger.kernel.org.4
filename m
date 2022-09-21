@@ -2,86 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31A985BFBC7
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 11:55:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2CF25BFBBE
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 11:55:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230454AbiIUJzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 05:55:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39988 "EHLO
+        id S229895AbiIUJyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 05:54:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232130AbiIUJyP (ORCPT
+        with ESMTP id S232096AbiIUJyI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 05:54:15 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04DC2D5E;
-        Wed, 21 Sep 2022 02:54:14 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28L8dIP6003301;
-        Wed, 21 Sep 2022 09:53:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=uJlL+knB2fMw5vo335fNPEXeuy4SlqC7wRoCMhp2kHw=;
- b=kdvvH7r++bwXUrf+HYA3l8YNKXjaX4ub/1PsBSNR8OIvb//r9Swfn2YEUBPoJbEfXYfb
- MRZb1IecLvDvfdbKWa6CgUyJyf+RPb64eQeVgLE5ohHgfucjXWKdqcfVNml65EHJXlie
- FFj9BUNNSNQtEgIiGeMU4vpTxN1yzmdgRihLOLE1GmvNkj0HPLw8amSAdpA5A2gwrjn4
- 1HBKgIrdmEsaQCLRIqdDaH5BreDdT4dBQmBxWRXIuRsedsrAuyUV2/p+xj9NmeeFXrqY
- lh86fsUkiK+3AJfw37Yllg5Xb3kUG04TxqpJFye3CEc0L+j0GyPraCNV/t6aWnwQOYyP 3w== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jqtd6j2mu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 21 Sep 2022 09:53:47 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28L9rksu004685
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 21 Sep 2022 09:53:46 GMT
-Received: from [10.216.24.214] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 21 Sep
- 2022 02:53:38 -0700
-Message-ID: <ed1a1260-0ef4-203a-f073-f5232bfc8466@quicinc.com>
-Date:   Wed, 21 Sep 2022 15:23:35 +0530
+        Wed, 21 Sep 2022 05:54:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54246A18D;
+        Wed, 21 Sep 2022 02:53:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E4612B82F38;
+        Wed, 21 Sep 2022 09:53:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 717FBC43148;
+        Wed, 21 Sep 2022 09:53:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663754033;
+        bh=M7t6IiqXpQGB9XaRaXvCXP2eKsC0VvYqKrHAX2BqmOU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=HFF9B8PKG4sjnwYn/qRsqkY5pL/Avw/xcwxmQNH3bGXcYw0XgvT/7vdbeMgPt0L+y
+         ZtidYy6WjfWnnASa18lptSACPl9vGw452nq1nd4+wt6EOS/gfIEduAXmd2gZcbc0x8
+         VwqHMXTOE1Tb7RAgR5ghqNuqYbgTli5nEXvmsUw9uXhlIIBcOBdEqRweGeJ9/ETyZD
+         7FT1xJeLiEwsB8KcV0Et3Hy5hN1SAcZE6UJyR1qEghkydOQJoPuapbTnNxM4Wki8YZ
+         rTdejngZAzw7IwT+03z6g0QZWTGISoeTnCYeuDzhEr+V/eiX5hSmycbKwmu5oYt+l4
+         QgZmEJo51EK/g==
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-1280590722dso8307874fac.1;
+        Wed, 21 Sep 2022 02:53:53 -0700 (PDT)
+X-Gm-Message-State: ACrzQf330Wc6qUXeqb+xu9FB8NUVHBw2lypqmiq/Wqji2csGVDO1LMp/
+        vlZh/lhd2PLZKC3sWqSGx3TJGJ6D1Qkf6Eb7p8w=
+X-Google-Smtp-Source: AMsMyM491vQRywb4wDvkWp07dXKdsU6sntPmf24mps+H/A/7DIMj4uinS1kC9vZIpoBWnuepOdlaOPlfaWKaVAl63Ik=
+X-Received: by 2002:a05:6870:a78e:b0:12b:542b:e5b2 with SMTP id
+ x14-20020a056870a78e00b0012b542be5b2mr4555356oao.112.1663754032361; Wed, 21
+ Sep 2022 02:53:52 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v7 1/5] PCI: qcom: Add system suspend and resume support
-Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>
-CC:     <linux-pci@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <mka@chromium.org>,
-        <quic_vbadigan@quicinc.com>, <quic_hemantk@quicinc.com>,
-        <quic_nitegupt@quicinc.com>, <quic_skananth@quicinc.com>,
-        <quic_ramkri@quicinc.com>, <manivannan.sadhasivam@linaro.org>,
-        <swboyd@chromium.org>, <dmitry.baryshkov@linaro.org>,
-        <svarbanov@mm-sol.com>, <agross@kernel.org>,
-        <andersson@kernel.org>, <konrad.dybcio@somainline.org>,
-        <lpieralisi@kernel.org>, <robh@kernel.org>, <kw@linux.com>,
-        <bhelgaas@google.com>, <linux-phy@lists.infradead.org>,
-        <vkoul@kernel.org>, <kishon@ti.com>, <mturquette@baylibre.com>,
-        <linux-clk@vger.kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-References: <20220920181637.GA1121154@bhelgaas>
-From:   Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
-In-Reply-To: <20220920181637.GA1121154@bhelgaas>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: yoLzCr68NDAXE4Ox9--c6_X5lW-4ZsSS
-X-Proofpoint-GUID: yoLzCr68NDAXE4Ox9--c6_X5lW-4ZsSS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-21_05,2022-09-20_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
- mlxlogscore=999 malwarescore=0 mlxscore=0 adultscore=0 clxscore=1015
- priorityscore=1501 suspectscore=0 lowpriorityscore=0 impostorscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209210066
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+References: <20220918155246.1203293-1-guoren@kernel.org> <20220918155246.1203293-9-guoren@kernel.org>
+ <afa17bdd-2d11-4015-6e2a-7a39db931d09@huawei.com>
+In-Reply-To: <afa17bdd-2d11-4015-6e2a-7a39db931d09@huawei.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Wed, 21 Sep 2022 17:53:39 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRMt4zDQcvBOxge-4+6o1mqhWds_AiFKamdCzKJZfoKPw@mail.gmail.com>
+Message-ID: <CAJF2gTRMt4zDQcvBOxge-4+6o1mqhWds_AiFKamdCzKJZfoKPw@mail.gmail.com>
+Subject: Re: [PATCH V5 08/11] riscv: Support HAVE_IRQ_EXIT_ON_IRQ_STACK
+To:     Chen Zhongjin <chenzhongjin@huawei.com>
+Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
+        peterz@infradead.org, luto@kernel.org, conor.dooley@microchip.com,
+        heiko@sntech.de, jszhang@kernel.org, lazyparser@gmail.com,
+        falcon@tinylab.org, chenhuacai@kernel.org, apatel@ventanamicro.com,
+        atishp@atishpatra.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, mark.rutland@arm.com,
+        zouyipeng@huawei.com, bigeasy@linutronix.de,
+        David.Laight@aculab.com, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,65 +70,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 9/20/2022 11:46 PM, Bjorn Helgaas wrote:
-> On Tue, Sep 20, 2022 at 03:52:23PM +0530, Krishna chaitanya chundru wrote:
->> Add suspend and resume syscore ops.
->>
->> Few PCIe endpoints like NVMe and WLANs are always expecting the device
->> to be in D0 state and the link to be active (or in l1ss) all the time
->> (including in S3 state).
-> What does this have to do with the patch?  I don't see any NVMe or
-> WLAN patches here.
-Existing NVMe driver expecting NVMe device to be in D0 during S3 also. 
-If we turn off the link in
-suspend, the NVMe resume path is broken as the state machine is getting 
-reset in the NVMe device.
-Due to this, the host driver state machine and the device state machine 
-are going out of sync, and all NVMe commands
-after resumes are getting timed out.
-
-IIRC, Tegra is also facing this issue with NVMe.
-
-This issue has been discussed below threads:
-
-https://lore.kernel.org/all/Yl+6V3pWuyRYuVV8@infradead.org/T/
-
-https://lore.kernel.org/linux-nvme/20220201165006.3074615-1-kbusch@kernel.org/
-
->> In qcom platform PCIe resources( clocks, phy etc..) can released
->> when the link is in L1ss to reduce the power consumption. So if the link
->> is in L1ss, release the PCIe resources. And when the system resumes,
->> enable the PCIe resources if they released in the suspend path.
-> What's the connection with L1.x?  Links enter L1.x based on activity
-> and timing.  That doesn't seem like a reliable indicator to turn PHYs
-> off and disable clocks.
-This is a Qcom PHY-specific feature (retaining the link state in L1.x 
-with clocks turned off).
-It is possible only with the link being in l1.x. PHY can't retain the 
-link state in L0 with the
-clocks turned off and we need to re-train the link if it's in L2 or L3. 
-So we can support this feature only with L1.x.
-That is the reason we are taking l1.x as the trigger to turn off clocks 
-(in only suspend path).
->> is_suspended flag indicates if the PCIe resources are released or not
->> in the suspend path.
-> Why is "is_suspended" important for the commit log?  It looks like
-> just a standard implementation detail.
-Someone in one of the previous patch asked to include this in the commit 
-text.
->> Its observed that access to Ep PCIe space to mask MSI/MSIX is happening
->> at the very late stage of suspend path (access by affinity changes while
->> making CPUs offline during suspend, this will happen after devices are
->> suspended (after all phases of suspend ops)). If we turn off clocks in
->> any PM callback, afterwards running into crashes due to un-clocked access
->> due to above mentioned MSI/MSIx access.
->> So, we are making use of syscore framework to turn off the PCIe clocks
->> which will be called after making CPUs offline.
-> Add blank lines between paragraphs.  Or rewrap into a single paragraph.
+On Wed, Sep 21, 2022 at 4:34 PM Chen Zhongjin <chenzhongjin@huawei.com> wrote:
 >
-> s/Its observed/It's observed/
-> s/MSIX/MSI-X/ throughout
-> s/MSIx/MSI-X/ throughout
+> Hi,
 >
-> Bjorn
+> On 2022/9/18 23:52, guoren@kernel.org wrote:
+> > diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+> > index 5f49517cd3a2..426529b84db0 100644
+> > --- a/arch/riscv/kernel/entry.S
+> > +++ b/arch/riscv/kernel/entry.S
+> > @@ -332,6 +332,33 @@ ENTRY(ret_from_kernel_thread)
+> >       tail syscall_exit_to_user_mode
+> >   ENDPROC(ret_from_kernel_thread)
+> >
+> > +#ifdef CONFIG_IRQ_STACKS
+> > +ENTRY(call_on_stack)
+> > +     /* Create a frame record to save our ra and fp */
+> > +     addi    sp, sp, -RISCV_SZPTR
+> > +     REG_S   ra, (sp)
+> > +     addi    sp, sp, -RISCV_SZPTR
+> > +     REG_S   fp, (sp)
+> > +
+> > +     /* Save sp in fp */
+> > +     move    fp, sp
+> > +
+> > +     /* Move to the new stack and call the function there */
+> > +     li      a3, IRQ_STACK_SIZE
+> > +     add     sp, a1, a3
+> > +     jalr    a2
+> > +
+> > +     /*
+> > +      * Restore sp from prev fp, and fp, ra from the frame
+> > +      */
+> > +     move    sp, fp
+> > +     REG_L   fp, (sp)
+> > +     addi    sp, sp, RISCV_SZPTR
+> > +     REG_L   ra, (sp)
+> > +     addi    sp, sp, RISCV_SZPTR
+> > +     ret
+> > +ENDPROC(call_on_stack)
+> > +#endif
+>
+> Seems my compiler (riscv64-linux-gnu-gcc 8.4.0, cross compiling from
+> x86) cannot recognize the register `fp`.
+The whole entry.S uses s0 instead of fp, so I approve of your advice. Thx.
+
+>
+> After I changed it to `s0` this can pass compiling.
+>
+>
+> Seems there is nowhere else using `fp`, can this just using `s0` instead?
+>
+> Best,
+>
+> Chen
+>
+
+
+-- 
+Best Regards
+ Guo Ren
