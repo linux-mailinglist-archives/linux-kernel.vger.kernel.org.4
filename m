@@ -2,114 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D1DB5E5533
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 23:30:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C27E55E5536
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 23:31:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230016AbiIUVa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 17:30:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60400 "EHLO
+        id S230197AbiIUVbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 17:31:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbiIUVaZ (ORCPT
+        with ESMTP id S229695AbiIUVbX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 17:30:25 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A90683BCD
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 14:30:24 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id u9so16689217ejy.5
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 14:30:24 -0700 (PDT)
+        Wed, 21 Sep 2022 17:31:23 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E21C923FB
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 14:31:22 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id e68so7301578pfe.1
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 14:31:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=stonybrook.edu; s=sbu-gmail;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=S6OlODLlRXmKNL50YCQqt5lgeaLHQuWL/ZJMAREBJ0A=;
-        b=Caf11FqlvGUab3Tifw+V44ztFnLp5/fDqGIpoMIQIDrWIIV7LaoLOZ9oRm1su2M8Lf
-         I5Vt6IVH8xprpDrg12FVR8ObSewEwJI4qB01meW6l8CbPHshVLZtUGqggLApgIx19rUT
-         GIAlPzpHLqHtP0KrHSv+EDv5Br/G+5nbjinIc=
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=MtHodFxpfz6Gd8VuxCE0ViD4vs9jhJutX1fWItr/j34=;
+        b=d/69TAR/VfwBMGYP3zlfZyRm+hhaplJtmqpWZYe78x77tqVCAbJn1D2nLta5dg+KGo
+         x7jupg9vOzqIDJCLP5FIU//ELQEMV7Ym28srfz2QQ9/YFOfW6fz4m7kHAsRKW7qa4GSi
+         SqG1hpNajJYSuUwHSwks6GRNlCWlY0KjZ1bFroyxvkUZT2F1j3bKuKruOBDIHRNxs/s3
+         ZTnb1Fa4O97KAElFERhEFxcyMt3wLqRFs7Zt5qsK7aZpz8/1O/gPZIxDzzP4tXNol4hV
+         xThWMpqFyLKwxwdtqD98Sk3a6CXxbee8MDfm+8Lm5kvv4Qau/dmst0JEsOLoVNExktUw
+         rcZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=S6OlODLlRXmKNL50YCQqt5lgeaLHQuWL/ZJMAREBJ0A=;
-        b=eN2AAQOQztpQXkxyjYnaolf74iTUtab6IutC/ES8irLOJNx6vplQveDS7TlLrWM7uz
-         DemnlLLWoZAKW/Fob8HyOyAz2VlLEeKxP1J056kun0SRRWGoOg9PZmBGesb+f+G5aJzA
-         b7CSwcL1UWODF0U29NZPxKvVxCaPPu+LAkSXQ7MXONExlwLpXZwoSrAEQJ5OMEWuWagi
-         1LbDL/zBs/QDSoIOxtL8Cl6KC+Ataxo3rXNKWqleuSmyyKulEqBidN6oQnTPLwiMp/Uh
-         rRL38wsi+nRSRTldI3K3uMbrllBNFpPu+M89lQJwWB/E7q3Hoxh8xc3jKChAQaDx4iUO
-         G+dw==
-X-Gm-Message-State: ACrzQf3rgEYVN4TewaNPPVh0Hj8wMr8/PIuep639rbwwV/lGdgL860oN
-        yYNTfC/FYecAf7q8oD1LYA76oTgzqTYcXhPBwaOGxA==
-X-Google-Smtp-Source: AMsMyM78m/PWvYaqpBf48Y65NI+GdYJh6wJVzsI5jPhdy/wHwbA88IRaEy9tHXwgYnxZybuGcbowj1RObia+ntX3VuE=
-X-Received: by 2002:a17:907:270b:b0:77b:17b3:f446 with SMTP id
- w11-20020a170907270b00b0077b17b3f446mr189422ejk.415.1663795822597; Wed, 21
- Sep 2022 14:30:22 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=MtHodFxpfz6Gd8VuxCE0ViD4vs9jhJutX1fWItr/j34=;
+        b=mN0fKtDbvBZdNdcGNLcB1g4WzQpXOzreX8zkG3dhyzTb7lXXQUtU9bwWRt+M72QNCP
+         zmImkQokA9IGuGWXR/+BhigtFreHtFBmuq9Fz1Ls6xppNOMQhROzOpq0R0zk3YqJGtRD
+         AVPOrc+3nojEANPaOutBRqE0JJ+2F+IEUX+DvJbG6BDZDVaVJfxGl5aStiQ6bDVQXst5
+         D0xICKznZck4s0Qt6L0tC+hjQqUwofLg9ziOly59kgMV4vI4dXkJ5pPMi+3Zi/FLUFVi
+         1usD894rRh3/u4dhjeWkVzzfidEC5hPD9Fz0CLuQhTQbUl1Zn4DRfrdiZigynR1uUrJP
+         WlMQ==
+X-Gm-Message-State: ACrzQf38VWi3QF4jW3ZPaDd+fN1E7aelvOfAEDqX4Dzwte2wsjDekvkh
+        KPDrWOjVEtSUea437H5eIAQCyg==
+X-Google-Smtp-Source: AMsMyM5h3bF9mCl9EVNRQPewWgdZv/U+piqP0003MlWzlT8JkoV1js20ExBLIK/x/qJWpUey0JIIoQ==
+X-Received: by 2002:a63:a501:0:b0:434:ff77:1fda with SMTP id n1-20020a63a501000000b00434ff771fdamr183421pgf.310.1663795881839;
+        Wed, 21 Sep 2022 14:31:21 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id w13-20020a170902e88d00b00176dc67df44sm2528349plg.132.2022.09.21.14.31.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Sep 2022 14:31:21 -0700 (PDT)
+Date:   Wed, 21 Sep 2022 21:31:17 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        Yuan Yao <yuan.yao@linux.intel.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v10 21/39] KVM: nSVM: hyper-v: Enable L2 TLB flush
+Message-ID: <YyuCpelHQa00qNNF@google.com>
+References: <20220921152436.3673454-1-vkuznets@redhat.com>
+ <20220921152436.3673454-22-vkuznets@redhat.com>
 MIME-Version: 1.0
-References: <20220803155315.2073584-1-yifeliu@cs.stonybrook.edu>
- <PH0PR10MB46153A784F27AE96DA69120DF46E9@PH0PR10MB4615.namprd10.prod.outlook.com>
- <513220739.132330.1661149559308.JavaMail.zimbra@nod.at> <CABHrer3ho5aAWN4KNSwF3iP=+4uLA1y9-=oF9-GzOwFewzK9Qw@mail.gmail.com>
-In-Reply-To: <CABHrer3ho5aAWN4KNSwF3iP=+4uLA1y9-=oF9-GzOwFewzK9Qw@mail.gmail.com>
-From:   Yifei Liu <yifeliu@cs.stonybrook.edu>
-Date:   Wed, 21 Sep 2022 17:30:11 -0400
-Message-ID: <CABHrer2ATkdEy-rb9H=qWeZ+r9C7sZ_Euxa=fOrHzi_97t2awg@mail.gmail.com>
-Subject: Re: [PATCH] jffs2: correct logic when creating a hole in jffs2_write_begin
-To:     Richard Weinberger <richard@nod.at>
-Cc:     Joakim Tjernlund <Joakim.Tjernlund@infinera.com>,
-        ezk@cs.stonybrook.edu, madkar@cs.stonybrook.edu,
-        David Woodhouse <dwmw2@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Kyeong Yoo <kyeong.yoo@alliedtelesis.co.nz>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        stable@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220921152436.3673454-22-vkuznets@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A reminder about a JFFS2 patch submitted months ago.
+On Wed, Sep 21, 2022, Vitaly Kuznetsov wrote:
+> diff --git a/arch/x86/kvm/svm/hyperv.h b/arch/x86/kvm/svm/hyperv.h
+> index dd2e393f84a0..7b01722838bf 100644
+> --- a/arch/x86/kvm/svm/hyperv.h
+> +++ b/arch/x86/kvm/svm/hyperv.h
+> @@ -33,6 +33,9 @@ struct hv_enlightenments {
+>   */
+>  #define VMCB_HV_NESTED_ENLIGHTENMENTS VMCB_SW
+>  
+> +#define HV_SVM_EXITCODE_ENL 0xF0000000
+> +#define HV_SVM_ENL_EXITCODE_TRAP_AFTER_FLUSH   (1)
 
-Best Regards,
-Yifei
+Same as the synthetic VMX exit reason, these should go in hyperv-tlfs.h.  Keeping
+these out of KVM also helps avoid the need for svm/hyperv.h.
 
+https://learn.microsoft.com/en-us/virtualization/hyper-v-on-windows/tlfs/nested-virtualization#synthetic-vm-exit
 
-On Sun, Sep 4, 2022 at 3:39 PM Yifei Liu <yifeliu@cs.stonybrook.edu> wrote:
->
-> A gentle reminder.
->
-> Best Regards,
-> Yifei
->
-> Best Regards,
-> Yifei
->
->
-> On Mon, Aug 22, 2022 at 2:26 AM Richard Weinberger <richard@nod.at> wrote=
-:
-> >
-> > ----- Urspr=C3=BCngliche Mail -----
-> > > Von: "Joakim Tjernlund" <Joakim.Tjernlund@infinera.com>
-> > > An: "Yifei Liu" <yifeliu@cs.stonybrook.edu>
-> > > CC: ezk@cs.stonybrook.edu, madkar@cs.stonybrook.edu, "David Woodhouse=
-" <dwmw2@infradead.org>, "richard"
-> > > <richard@nod.at>, "Matthew Wilcox" <willy@infradead.org>, "Kyeong Yoo=
-" <kyeong.yoo@alliedtelesis.co.nz>, "linux-mtd"
-> > > <linux-mtd@lists.infradead.org>, "linux-kernel" <linux-kernel@vger.ke=
-rnel.org>
-> > > Gesendet: Sonntag, 21. August 2022 20:21:04
-> > > Betreff: Re: [PATCH] jffs2: correct logic when creating a hole in jff=
-s2_write_begin
-> >
-> > > What happened with this patch? Looks like a important fix but I don't=
- see it
-> > > applied ?
-> >
-> > It will be part of the next fixes PR after I had a chance to review it.
-> >
-> > Thanks,
-> > //richard
+> +
+>  static inline void nested_svm_hv_update_vm_vp_ids(struct kvm_vcpu *vcpu)
+>  {
+>  	struct vcpu_svm *svm = to_svm(vcpu);
+> @@ -48,6 +51,33 @@ static inline void nested_svm_hv_update_vm_vp_ids(struct kvm_vcpu *vcpu)
+>  	hv_vcpu->nested.vp_id = hve->hv_vp_id;
+>  }
+>  
+> +static inline bool
+
+Strongly prefer 'int' with 0/-errno over a boolean.  Hrm, maybe add a prep patch
+to convert kvm_hv_get_assist_page() to return 0/-errno?  That way this can still
+return kvm_hv_get_assist_page() directly.
+
+> nested_svm_hv_update_vp_assist(struct kvm_vcpu *vcpu)
+
+Maybe s/update/verify since there isn't a true update anywhere?
+
+> +{
+> +	if (!to_hv_vcpu(vcpu))
+
+This check isn't necessary, it's covered by kvm_hv_assist_page_enabled().
+
+> +		return true;
+> +
+> +	if (!kvm_hv_assist_page_enabled(vcpu))
+> +		return true;
+> +
+> +	return kvm_hv_get_assist_page(vcpu);
+
+As mentioned earlier, I think this belongs in arch/x86/kvm/hyperv.h.
