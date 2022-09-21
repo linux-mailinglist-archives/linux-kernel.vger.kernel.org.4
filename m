@@ -2,81 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 791665BF2EA
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 03:27:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C79B55BF2EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 03:28:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231442AbiIUB1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 21:27:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34484 "EHLO
+        id S229791AbiIUB2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 21:28:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231620AbiIUB1D (ORCPT
+        with ESMTP id S231509AbiIUB1R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 21:27:03 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92FD92AC4D
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 18:26:14 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id k2-20020a170902c40200b001782bd6c416so2811926plk.20
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 18:26:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date;
-        bh=o4GP7+7x/i3LtS7KDRY9k8uFn9y3A3mtuqvfdAnDEoY=;
-        b=fplXy7xMgyYMI0/pnBdIDKGKPtgJG9PvrNQ89OyMBQQMHbmB9zpEMFcCoYHvKLSUOT
-         R1ID/N2FjdFsSkIt27kDa5UWzPyWUh237BWk1qhWjSZ3noAmHpMqIcxwChCkZy7MtCV/
-         RrBeb1KmC3esXIM4nmuo2j8wtLEyHCvfErS5d2+ICdj8wGu0ok/WLFbt7+9ApfaLAprw
-         hgqMAV9SbFZIIovy2eSHC8DnqKh1nstwiQat4up9D3YaIcoccgcIpZ4VvMXTl0yxRgQr
-         FD/ZsrthLVzgVI+5+wEoBrWLK2qHbMXcqi6QGlJj6tXoZ0BM45Oco3LrhthlmajSQSEG
-         ObSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=o4GP7+7x/i3LtS7KDRY9k8uFn9y3A3mtuqvfdAnDEoY=;
-        b=WbVr8dffVv4CyhvFjhyZYu+g450kxkJQgF8a67g4F/EmcW+OOkdY3owT18roeSsmFR
-         oIOdrAnl+Gos4XFXclKV2FcrgP0we3PCE96n50fjOlAUe+4H4cqlgCT5xnDpA05p1xAe
-         3jNs/7ai43Yv1487lbYuIEMbgyCBNbz1QNEFsKKCBv5SMMteNe8vEfYCtXb6bQEYnM/j
-         RCM09PaxpWQi8tro492a2dxMOadsO2PCX6noEF29gd1Z4LaUz34lqKDFqBpn6RtAiseT
-         bCFJapMsptHoEChp59MYj0MeUDbwTVrQKJMqcxSO0QVzN8P/lrcRQsnkEqTFw7wRvTTW
-         Ff6A==
-X-Gm-Message-State: ACrzQf2M7KDpG1Uyieo2D65c1gu1UjVivjibbELwU/gofWZAZRRbIiuj
-        f/CJyS+cEdfcLgU9ir9Rkmxd0wiW+nXy5Qt6TOYZ3A0o8GW20YesPZK/FvsHratrBNqsv+m94MD
-        FMjD1ouwybh2bQldLbmBcr3qGuX1A9lmkuXzErcUb1MXLHRt7kdVgCGolSTKi9K7UfT4jX+4=
-X-Google-Smtp-Source: AMsMyM6VqagCzwuSTSYERNYGUCuQNM8wx242vXGPOX2H8q4XFF1j/srEpI+pIrXLI11alZemQldL7iqKGW2v
-X-Received: from jstultz-noogler2.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:600])
- (user=jstultz job=sendgmr) by 2002:a62:1b8f:0:b0:54b:8114:e762 with SMTP id
- b137-20020a621b8f000000b0054b8114e762mr22951951pfb.7.1663723560518; Tue, 20
- Sep 2022 18:26:00 -0700 (PDT)
-Date:   Wed, 21 Sep 2022 01:25:50 +0000
-In-Reply-To: <20220921012550.3288570-1-jstultz@google.com>
-Mime-Version: 1.0
-References: <20220921012550.3288570-1-jstultz@google.com>
-X-Mailer: git-send-email 2.37.3.968.ga6b4b080e4-goog
-Message-ID: <20220921012550.3288570-4-jstultz@google.com>
-Subject: [RFC PATCH v3 3/3] softirq: defer softirq processing to ksoftirqd if
- CPU is busy with RT
-From:   John Stultz <jstultz@google.com>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Pavankumar Kondeti <pkondeti@codeaurora.org>,
-        John Dias <joaodias@google.com>,
-        "Connor O'Brien" <connoro@google.com>,
-        Rick Yiu <rickyiu@google.com>, John Kacur <jkacur@redhat.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Chris Redpath <chris.redpath@arm.com>,
-        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>, kernel-team@android.com,
-        Satya Durga Srinivasu Prabhala <satyap@codeaurora.org>,
-        "J . Avila" <elavila@google.com>, John Stultz <jstultz@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        Tue, 20 Sep 2022 21:27:17 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50F3F7B78B;
+        Tue, 20 Sep 2022 18:26:27 -0700 (PDT)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MXLJs32cmzpSw1;
+        Wed, 21 Sep 2022 09:23:25 +0800 (CST)
+Received: from [10.174.178.185] (10.174.178.185) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 21 Sep 2022 09:26:13 +0800
+Subject: Re: [PATCH -next 1/2] ext4: fix potential memory leak in
+ ext4_fc_record_regions()
+To:     Damien Guibouret <damien.guibouret@partition-saving.com>,
+        <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
+        <linux-ext4@vger.kernel.org>
+References: <20220919144021.2162295-1-yebin10@huawei.com>
+ <20220919144021.2162295-2-yebin10@huawei.com>
+ <02fc228b-7cc5-b470-9b5c-8ad726b18158@partition-saving.com>
+ <6329126D.8060704@huawei.com>
+ <d49a38ed-5523-8339-e1e8-d52b0ab41fdf@partition-saving.com>
+CC:     <linux-kernel@vger.kernel.org>, <jack@suse.cz>
+From:   yebin <yebin10@huawei.com>
+Message-ID: <632A6835.9080705@huawei.com>
+Date:   Wed, 21 Sep 2022 09:26:13 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101
+ Thunderbird/38.1.0
+MIME-Version: 1.0
+In-Reply-To: <d49a38ed-5523-8339-e1e8-d52b0ab41fdf@partition-saving.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.178.185]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,185 +55,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pavankumar Kondeti <pkondeti@codeaurora.org>
 
-Defer the softirq processing to ksoftirqd if a RT task is
-running or queued on the current CPU. This complements the RT
-task placement algorithm which tries to find a CPU that is not
-currently busy with softirqs.
 
-Currently NET_TX, NET_RX, BLOCK and TASKLET softirqs are only
-deferred as they can potentially run for long time.
-
-Additionally, this patch stubs out ksoftirqd_running() logic,
-in the CONFIG_RT_SOFTIRQ_OPTIMIZATION case, as deferring
-potentially long-running softirqs will cause the logic to not
-process shorter-running softirqs immediately. By stubbing it out
-the potentially long running softirqs are deferred, but the
-shorter running ones can still run immediately.
-
-This patch includes folded-in fixes by:
-  Lingutla Chandrasekhar <clingutla@codeaurora.org>
-  Satya Durga Srinivasu Prabhala <satyap@codeaurora.org>
-  J. Avila <elavila@google.com>
-
-Cc: John Dias <joaodias@google.com>
-Cc: Connor O'Brien <connoro@google.com>
-Cc: Rick Yiu <rickyiu@google.com>
-Cc: John Kacur <jkacur@redhat.com>
-Cc: Qais Yousef <qais.yousef@arm.com>
-Cc: Chris Redpath <chris.redpath@arm.com>
-Cc: Abhijeet Dharmapurikar <adharmap@quicinc.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Juri Lelli <juri.lelli@redhat.com>
-Cc: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: kernel-team@android.com
-Signed-off-by: Pavankumar Kondeti <pkondeti@codeaurora.org>
-[satyap@codeaurora.org: trivial merge conflict resolution.]
-Signed-off-by: Satya Durga Srinivasu Prabhala <satyap@codeaurora.org>
-[elavila: Port to mainline, squash with bugfix]
-Signed-off-by: J. Avila <elavila@google.com>
-[jstultz: Rebase to linus/HEAD, minor rearranging of code,
- included bug fix Reported-by: Qais Yousef <qais.yousef@arm.com> ]
-Signed-off-by: John Stultz <jstultz@google.com>
----
- include/linux/sched.h | 10 ++++++++++
- kernel/sched/cpupri.c | 13 +++++++++++++
- kernel/softirq.c      | 25 +++++++++++++++++++++++--
- 3 files changed, 46 insertions(+), 2 deletions(-)
-
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index e7b2f8a5c711..7f76371cbbb0 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -1826,6 +1826,16 @@ current_restore_flags(unsigned long orig_flags, unsigned long flags)
- 
- extern int cpuset_cpumask_can_shrink(const struct cpumask *cur, const struct cpumask *trial);
- extern int task_can_attach(struct task_struct *p, const struct cpumask *cs_effective_cpus);
-+
-+#ifdef CONFIG_RT_SOFTIRQ_OPTIMIZATION
-+extern bool cpupri_check_rt(void);
-+#else
-+static inline bool cpupri_check_rt(void)
-+{
-+	return false;
-+}
-+#endif
-+
- #ifdef CONFIG_SMP
- extern void do_set_cpus_allowed(struct task_struct *p, const struct cpumask *new_mask);
- extern int set_cpus_allowed_ptr(struct task_struct *p, const struct cpumask *new_mask);
-diff --git a/kernel/sched/cpupri.c b/kernel/sched/cpupri.c
-index fa9ce9d83683..18dc75d16951 100644
---- a/kernel/sched/cpupri.c
-+++ b/kernel/sched/cpupri.c
-@@ -64,6 +64,19 @@ static int convert_prio(int prio)
- 	return cpupri;
- }
- 
-+#ifdef CONFIG_RT_SOFTIRQ_OPTIMIZATION
-+/*
-+ * cpupri_check_rt - check if CPU has a RT task
-+ * should be called from rcu-sched read section.
-+ */
-+bool cpupri_check_rt(void)
-+{
-+	int cpu = raw_smp_processor_id();
-+
-+	return cpu_rq(cpu)->rd->cpupri.cpu_to_pri[cpu] > CPUPRI_NORMAL;
-+}
-+#endif
-+
- static inline int __cpupri_find(struct cpupri *cp, struct task_struct *p,
- 				struct cpumask *lowest_mask, int idx)
- {
-diff --git a/kernel/softirq.c b/kernel/softirq.c
-index 35ee79dd8786..203a70dc9459 100644
---- a/kernel/softirq.c
-+++ b/kernel/softirq.c
-@@ -87,6 +87,7 @@ static void wakeup_softirqd(void)
- 		wake_up_process(tsk);
- }
- 
-+#ifndef CONFIG_RT_SOFTIRQ_OPTIMIZATION
- /*
-  * If ksoftirqd is scheduled, we do not want to process pending softirqs
-  * right now. Let ksoftirqd handle this at its own rate, to get fairness,
-@@ -101,6 +102,9 @@ static bool ksoftirqd_running(unsigned long pending)
- 		return false;
- 	return tsk && task_is_running(tsk) && !__kthread_should_park(tsk);
- }
-+#else
-+#define ksoftirqd_running(pending) (false)
-+#endif /* CONFIG_RT_SOFTIRQ_OPTIMIZATION */
- 
- #ifdef CONFIG_TRACE_IRQFLAGS
- DEFINE_PER_CPU(int, hardirqs_enabled);
-@@ -532,6 +536,17 @@ static inline bool lockdep_softirq_start(void) { return false; }
- static inline void lockdep_softirq_end(bool in_hardirq) { }
- #endif
- 
-+static __u32 softirq_deferred_for_rt(__u32 *pending)
-+{
-+	__u32 deferred = 0;
-+
-+	if (cpupri_check_rt()) {
-+		deferred = *pending & LONG_SOFTIRQ_MASK;
-+		*pending &= ~LONG_SOFTIRQ_MASK;
-+	}
-+	return deferred;
-+}
-+
- asmlinkage __visible void __softirq_entry __do_softirq(void)
- {
- 	unsigned long end = jiffies + MAX_SOFTIRQ_TIME;
-@@ -539,6 +554,7 @@ asmlinkage __visible void __softirq_entry __do_softirq(void)
- 	int max_restart = MAX_SOFTIRQ_RESTART;
- 	struct softirq_action *h;
- 	bool in_hardirq;
-+	__u32 deferred;
- 	__u32 pending;
- 	int softirq_bit;
- 
-@@ -551,13 +567,15 @@ asmlinkage __visible void __softirq_entry __do_softirq(void)
- 
- 	pending = local_softirq_pending();
- 
-+	deferred = softirq_deferred_for_rt(&pending);
- 	softirq_handle_begin();
-+
- 	in_hardirq = lockdep_softirq_start();
- 	account_softirq_enter(current);
- 
- restart:
- 	/* Reset the pending bitmask before enabling irqs */
--	set_softirq_pending(0);
-+	set_softirq_pending(deferred);
- 	__this_cpu_write(active_softirqs, pending);
- 
- 	local_irq_enable();
-@@ -596,13 +614,16 @@ asmlinkage __visible void __softirq_entry __do_softirq(void)
- 	local_irq_disable();
- 
- 	pending = local_softirq_pending();
-+	deferred = softirq_deferred_for_rt(&pending);
-+
- 	if (pending) {
- 		if (time_before(jiffies, end) && !need_resched() &&
- 		    --max_restart)
- 			goto restart;
-+	}
- 
-+	if (pending | deferred)
- 		wakeup_softirqd();
--	}
- 
- 	account_softirq_exit(current);
- 	lockdep_softirq_end(in_hardirq);
--- 
-2.37.3.968.ga6b4b080e4-goog
+On 2022/9/21 2:25, Damien Guibouret wrote:
+> Hello,
+>
+> Le 20/09/2022 à 03:07, yebin a écrit :
+>>
+>>
+>> On 2022/9/20 2:40, Damien Guibouret wrote:
+>>> Hello,
+>>>
+>>> Le 19/09/2022 à 16:40, Ye Bin a écrit :
+>>>> As krealloc may return NULL, in this case 'state->fc_regions' may 
+>>>> not be
+>>>> freed by krealloc, but 'state->fc_regions' already set NULL. Then will
+>>>> lead to 'state->fc_regions' memory leak.
+>>>>
+>>>> Signed-off-by: Ye Bin <yebin10@huawei.com>
+>>>> ---
+>>>>   fs/ext4/fast_commit.c | 14 ++++++++------
+>>>>   1 file changed, 8 insertions(+), 6 deletions(-)
+>>>>
+>>>> diff --git a/fs/ext4/fast_commit.c b/fs/ext4/fast_commit.c
+>>>> index 9217a588afd1..cc8c8db075ba 100644
+>>>> --- a/fs/ext4/fast_commit.c
+>>>> +++ b/fs/ext4/fast_commit.c
+>>>> @@ -1677,15 +1677,17 @@ int ext4_fc_record_regions(struct 
+>>>> super_block *sb, int ino,
+>>>>       if (replay && state->fc_regions_used != state->fc_regions_valid)
+>>>>           state->fc_regions_used = state->fc_regions_valid;
+>>>>       if (state->fc_regions_used == state->fc_regions_size) {
+>>>> +        struct ext4_fc_alloc_region *fc_regions;
+>>>> +
+>>>>           state->fc_regions_size +=
+>>>>               EXT4_FC_REPLAY_REALLOC_INCREMENT;
+>>>> -        state->fc_regions = krealloc(
+>>>> -                    state->fc_regions,
+>>>> -                    state->fc_regions_size *
+>>>> -                    sizeof(struct ext4_fc_alloc_region),
+>>>> -                    GFP_KERNEL);
+>>>> -        if (!state->fc_regions)
+>>>> +        fc_regions = krealloc(state->fc_regions,
+>>>> +                      state->fc_regions_size *
+>>>> +                      sizeof(struct ext4_fc_alloc_region),
+>>>> +                      GFP_KERNEL);
+>>>> +        if (!fc_regions)
+>>>
+>>> Would it not be safer to restore state->fc_regions_size to its 
+>>> previous value in that case to keep consistency between size value 
+>>> and allocated size (or to update state->fc_regions_size only after 
+>>> allocation as it is done in second part of this patch) ?
+>>>
+>> Actually, If   'ext4_fc_record_regions()' return -ENOMEM, then will 
+>> stop replay journal.
+>> 'state->fc_regions_size' will not be used any more, so it's safe.
+>
+> There are at least two calls in ext4_ext_clear_bb (ext4/extents.c) 
+> that do not check for return code of ext4_fc_record_regions. But 
+> perhaps these are these calls that should be fixed.
+>
+Thanks very much,
+Indeed, it's better to repair it here.
+>>>>               return -ENOMEM;
+>>>> +        state->fc_regions = fc_regions;
+>>>>       }
+>>>>       region = &state->fc_regions[state->fc_regions_used++];
+>>>>       region->ino = ino;
+>>>
+>
+> Regards,
+>
+> Damien
+>
+>
+> .
+>
 
