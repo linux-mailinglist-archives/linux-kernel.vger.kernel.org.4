@@ -2,101 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E14235BF687
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 08:42:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84A965BF68D
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 08:43:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229976AbiIUGm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 02:42:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43214 "EHLO
+        id S229974AbiIUGnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 02:43:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbiIUGmY (ORCPT
+        with ESMTP id S229580AbiIUGnQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 02:42:24 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F27DF80F41;
-        Tue, 20 Sep 2022 23:42:23 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id u28so3360208qku.2;
-        Tue, 20 Sep 2022 23:42:23 -0700 (PDT)
+        Wed, 21 Sep 2022 02:43:16 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3ABD796B5;
+        Tue, 20 Sep 2022 23:43:15 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id t70so4992790pgc.5;
+        Tue, 20 Sep 2022 23:43:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date;
-        bh=E8I9rBfQ5kkDMM02r33jjyjvis+HSRyzLrad88lTqXk=;
-        b=YL+dYDNj+S7MpBPdlQLQpKnh1GekYhLusBiVSqhfu5/pKOLZi9CVWRPKwDBeJSyX7j
-         kXXwRsYWJaZXGqzYQMOlix/p/ydrFKtV/DlaF1uXDNnWjm7Hs2FOjp46Qtc90TBq9vgx
-         cU1QSByZBj+u7ypE4y9vgALDUmEKWPTJrHxaIx0UxYKkR4DjwV+VW4Tp5i1/zLIDoN6k
-         rXY+vrF4bw9FfjwSIRjOst+tcha/1m7llkkmqwC1cFs6rCEXd5JmOHtx4FiVtKWuiHjX
-         mWL4h+wY9Xj507+6DgsaRTrk32H+g1QZUv9QqBz9JfxkxwDJpOhjgRIkYyYKkiQT+drd
-         GuJQ==
+        h=user-agent:content-disposition:mime-version:message-id:subject:to
+         :from:date:from:to:cc:subject:date;
+        bh=4OoemoqY03kwE/AES+O6nYI9GibmetWZKgTywgqbXVk=;
+        b=Cdlu9ugblpLjxtMTv8T1E0QgdC92dLmJ9eALZY+V+j70X7VvVQ0h59gr7+k976fRmM
+         t5HMxJbhR5kxqW9SYL0EQQrQjBMOuM/wFvm9WmQ5H0NSrGKQJNZY889998ILbRcdnR5U
+         SsMqJAB8JPaE23G7J7uHcOeruUH5JdOzZQuRG+o2vgmPVJUJ4v1KvXLasPdtZVDlNPtE
+         wjfGhEKc43K7nZajqD6AsyrLLxm3tw5XZBK5em/qj4e0zJLYPoZka2vVWlSut2UWO2mR
+         RNHkBHmzwNJt+4nm2QM5SdFmDz2PGUesIE2f5NahLaDQr/NMSFkyc+JqV9q6feZlHup+
+         qYRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=E8I9rBfQ5kkDMM02r33jjyjvis+HSRyzLrad88lTqXk=;
-        b=nmfV8YV4GD5TEuOWPndXURGEq84sMc8P7u+rLHg7yfIS7XuKZyeO4a4Yo9ffnL1JzI
-         uXuzLm0VIw5FZ+PuKRYENKrbFiiz6IqD/cYatrkpNNAaipdWVeCAYZP4SatC7QTTsUZH
-         ik4pOv8kaaxPBUs780UnJjdb0KnAh6oJ8UnWYDapWzFW9s68oMZbunaSUKKw1gDZsLfu
-         t2woMqHlmfR/CvnwPF8xUomZnbB7lmp2N9Okpb+YwRfOn3z64RsgwNQtdMTwghtNML5/
-         +mENOAawMGPLFvO5NCkcc57Gxxuwin41P1GvNUMUFzVUSH6ozzAyR9imq91Li5LeRJkk
-         bdxg==
-X-Gm-Message-State: ACrzQf24hczsShas7gnq1xHW20R/O+oL7GcdWheFyV2pvxy+pQgBun7J
-        l0a4y5PGI618g60RCH4yb+I=
-X-Google-Smtp-Source: AMsMyM5vNeur7GXJTuMTn4PsiPjjeN5I0wfzn23jiONcct+nwbDwCbwuJ13oqgPc0a+yCKBiselFoQ==
-X-Received: by 2002:a05:620a:1b8b:b0:6cf:4dbc:e0a9 with SMTP id dv11-20020a05620a1b8b00b006cf4dbce0a9mr672098qkb.342.1663742543051;
-        Tue, 20 Sep 2022 23:42:23 -0700 (PDT)
-Received: from smtpclient.apple (pool-162-84-172-44.nycmny.fios.verizon.net. [162.84.172.44])
-        by smtp.gmail.com with ESMTPSA id h5-20020ac87145000000b0034454d0c8f3sm1057520qtp.93.2022.09.20.23.42.19
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 20 Sep 2022 23:42:20 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH v9 12/27] rust: add `kernel` crate
-From:   comex <comexk@gmail.com>
-In-Reply-To: <20220920233947.0000345c@garyguo.net>
-Date:   Wed, 21 Sep 2022 02:42:18 -0400
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Konstantin Shelekhin <k.shelekhin@yadro.com>, ojeda@kernel.org,
-        ark.email@gmail.com, bjorn3_gh@protonmail.com, bobo1239@web.de,
-        bonifaido@gmail.com, Boqun Feng <boqun.feng@gmail.com>,
-        davidgow@google.com, dev@niklasmohrin.de, dsosnowski@dsosnowski.pl,
-        foxhlchen@gmail.com, geofft@ldpreload.com,
-        gregkh@linuxfoundation.org, jarkko@kernel.org,
-        john.m.baublitz@gmail.com, leseulartichaut@gmail.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        me@kloenk.de, milan@mdaverde.com, mjmouse9999@gmail.com,
-        patches@lists.linux.dev, rust-for-linux@vger.kernel.org,
-        thesven73@gmail.com, viktor@v-gar.de,
-        Andreas Hindborg <andreas.hindborg@wdc.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <C85081E7-99CB-421F-AA3D-60326A5181EB@gmail.com>
-References: <20220805154231.31257-13-ojeda@kernel.org>
- <Yu5Bex9zU6KJpcEm@yadro.com>
- <CANiq72=3j2NM2kS8iw14G6MnGirb0=O6XQyCsY9vVgsZ1DfLaQ@mail.gmail.com>
- <Yu6BXwtPZwYPIDT6@casper.infradead.org> <Yyh3kFUvt2aMh4nq@wedsonaf-dev>
- <CAHk-=wgaBaVaK2K=N05fwWSSLM6YJx=yLmP4f7j6d6o=nCAtdw@mail.gmail.com>
- <CAHk-=whTDbFZKB4KJ6=74hoLcerTm3JuN3PV8G6ktcz+Xm1qew@mail.gmail.com>
- <YyivY6WIl/ahZQqy@wedsonaf-dev>
- <CAHk-=whm5Ujw-yroDPZWRsHK76XxZWF1E9806jNOicVTcQC6jw@mail.gmail.com>
- <Yyjut3MHooCwzHRc@wedsonaf-dev>
- <CAHk-=wityPWw4YkHeMNU4iGanyiC3UwDRhbOHYCJrhB2paCGwA@mail.gmail.com>
- <CAFRnB2VPpLSMqQwFPEjZhde8+-c6LLms54QkMt+wZPjOTULESw@mail.gmail.com>
- <CAHk-=wiyD6KqZN8jFkMHPRPxrbyJEUDRP6+WaH9Q9hjDB5i1zg@mail.gmail.com>
- <CAHk-=wj6sDFk8ZXSEKUMj-J9zfrMSSO3jhBEaveVaJSUpr=O=w@mail.gmail.com>
- <87a66uxcpc.fsf@email.froward.int.ebiederm.org>
- <20220920233947.0000345c@garyguo.net>
-To:     Gary Guo <gary@garyguo.net>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        h=user-agent:content-disposition:mime-version:message-id:subject:to
+         :from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=4OoemoqY03kwE/AES+O6nYI9GibmetWZKgTywgqbXVk=;
+        b=2eVD94VD0E/8CbLVN/rBTSTFOsQyBMmXJ87ImHYPQJokr8z4/OIAbdqs/4j6C+Ia4e
+         iN5T24RSl6fH4sRwSO3TIB6RZSfXGGPjh+iUOY+pJ0qAjT+9mS1F1OdhnxDSwnAPV605
+         JrbjbyNnAUFC/TdEqC1T458UPP2HwFrGDNIRl0Yzc00hqIwlZ1s6TLusdzleJIV5PqcG
+         grrEhRm8frLRmShdkv5dD9K3EPBjgyj/2xE7MJrYx4WZBUKbsrMM/caY150lhIzVN6um
+         gM+uS5PmvqkXsUswSOKoCnia410GUj/h/JAXAvwD3ne7enYq5zGEq43XQFNG/ON+R+Sz
+         f1ig==
+X-Gm-Message-State: ACrzQf3t8oGGr+c34dXGGEP3Bdi7QlV8lx8FAVfstZGENMHPEMagQKJ8
+        k1kgmxzeNweDjhYk3es64hk=
+X-Google-Smtp-Source: AMsMyM5GoiNadp9pZlmdf85gfN7sInYz4kz0i/l9s9SSP9mUaVvqWWPpOlwENy6IRXcjPmMG8qpYhQ==
+X-Received: by 2002:a63:8a4a:0:b0:438:6a17:f0bb with SMTP id y71-20020a638a4a000000b004386a17f0bbmr22722052pgd.267.1663742595348;
+        Tue, 20 Sep 2022 23:43:15 -0700 (PDT)
+Received: from hcl-ThinkPad-T495 ([2401:4900:1ce2:b8f9:48c4:2ac5:ccad:657d])
+        by smtp.gmail.com with ESMTPSA id jg11-20020a17090326cb00b001769ee307d8sm1117799plb.59.2022.09.20.23.43.12
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 20 Sep 2022 23:43:14 -0700 (PDT)
+Date:   Wed, 21 Sep 2022 12:13:09 +0530
+From:   Karthikeyan Pasupathi <pkarthikeyan1509@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        openbmc@lists.ozlabs.org, kernel test robot <lkp@intel.com>
+Subject: [PATCH v4] ARM: dts: aspeed: yosemit V2: Enable OCP debug card
+Message-ID: <20220921064309.GA18932@hcl-ThinkPad-T495>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -104,18 +71,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Added IPMB-13 channel for Debug Card communication.
+which improve the readability of the machine and makes
+easier to debug the server.  and it will display the some
+informations about the server like "system info",
+"Critical sensors" and "critical sel".
 
+---
+--- v4- Resolved syntax error
+--- v3- Updated the title and commit
+--- v2- Updated the title
+--- v1- Initial draft
+---
 
-> On Sep 20, 2022, at 6:39 PM, Gary Guo <gary@garyguo.net> wrote:
->=20
-> It should be noted however, atomic context is not something that a
-> token can represent. You can only use tokens to restrict what you =
-*can*
-> do, but not what you *can't* do. There is no negative reasoning with
-> tokens, you can't create a function that can only be called when you
-> don't have token.
+Signed-off-by: Karthikeyan Pasupathi <pkarthikeyan1509@gmail.com>
+---
+ arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-On the other hand, it ought to be feasible to implement that kind of =
-=E2=80=99negative reasoning' as a custom lint.  It might not work as =
-well as something built into the language, but it should work decently =
-well, and could serve as a prototype for a future built-in feature.=
+diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts b/arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts
+index 8864e9c312a8..84236df522dc 100644
+--- a/arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts
++++ b/arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts
+@@ -215,6 +215,17 @@
+ 	};
+ };
+ 
++&i2c13 {
++	status = "okay";
++	// Debug Card
++	multi-master;
++	ipmb13@10 {
++		compatible = "ipmb-dev";
++		reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
++		i2c-protocol;
++	};
++};
++
+ &pwm_tacho {
+ 	status = "okay";
+ 	//FSC
+-- 
+2.17.1
+
