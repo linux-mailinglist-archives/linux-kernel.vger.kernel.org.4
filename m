@@ -2,139 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C07DD5E5680
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 01:04:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE2475E5694
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 01:08:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230476AbiIUXD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 19:03:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47856 "EHLO
+        id S229585AbiIUXIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 19:08:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230171AbiIUXDs (ORCPT
+        with ESMTP id S229512AbiIUXIm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 19:03:48 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6BF47CAB6
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 16:03:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663801427; x=1695337427;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=KaGy2JRnMUpWrOPK29tmlsRUXEm7ZfLtX6JAe9fCkYQ=;
-  b=GfXRK4KdB87XhM2CzRCaTkBkWYnlgIlBazR/7n9bywWr8oX0bRw+34Bu
-   gqPG9O0JaTsK1tvlAd8cEumr7eKkYW3LoueAT2ond56tmxxWXU8HUqvTq
-   T4ZtthUZ6HuD4cX+3GizRDZpmjtefW5Ugt5sELcggqq97KbdSbIMCNd+N
-   pXguJS9C7kcu6fAcyuAqRmSBf7qstp7BoubvGyfRiBD9CH6GcTOuT3Zc/
-   zqVcbWQwk73msEndpNnCSwaaoX2w2o6q0b5HH6Iso46ahroRGPvLoU93i
-   /rMvyjVi2EJltqelbrLP1/546GRKJAakLYofA4hdZPQKUO5Z/emIGipQk
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="283196061"
-X-IronPort-AV: E=Sophos;i="5.93,334,1654585200"; 
-   d="scan'208";a="283196061"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 16:03:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,334,1654585200"; 
-   d="scan'208";a="597193662"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 21 Sep 2022 16:03:46 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ob8kr-00043g-26;
-        Wed, 21 Sep 2022 23:03:45 +0000
-Date:   Thu, 22 Sep 2022 07:03:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- 08ed00508bc1fa0a0bc6dd2420f982b55051de23
-Message-ID: <632b9839.Cre9RNZTqu53EicW%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Wed, 21 Sep 2022 19:08:42 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 605D6A6C20;
+        Wed, 21 Sep 2022 16:08:40 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MXvGp45RXz4xG9;
+        Thu, 22 Sep 2022 09:08:34 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1663801714;
+        bh=o8A11v5386hRj0+IwrIDdZxBNoP6APmGk3QIng37BRA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=BlsDbVHmeiFpI1pIalAN4wcffG41hC0PvhqpDHw4qUZLXghCiM5vTk04YLk6vnYuR
+         l5ftPMlxDHrDM8e0qEehjVah6S+lBr6K/Urh6BJWjJupNNKByyvRJOFvdr2dqpWSve
+         DPvmT3scSKoKR1DEFxZGHeq3GRlUKIDLwwbF/FgBb6DilwMsmStG6OWJilYHOj52V7
+         L8jtJqymUyf+Bdwm1tSk1QEJ9553BT2VXAMFTuGfNvw2msrOiy34M7eVDEIGbEQ1QX
+         iwGvCQiufZ4NQZi1uXR+u74bRRPEUq7v6Aro7U9CwL3i0BNUQnrKYNh3zEV1zSPKpY
+         eYvDBGsBkoaQQ==
+Date:   Thu, 22 Sep 2022 09:08:32 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: Tree for Sep 21
+Message-ID: <20220922090832.4eb474ce@canb.auug.org.au>
+In-Reply-To: <Yysv1zoONYyZnM+u@sirena.org.uk>
+References: <20220921185740.6e19ee1e@canb.auug.org.au>
+        <20220921231304.5a5d0624@canb.auug.org.au>
+        <Yysv1zoONYyZnM+u@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/eUsKL/VPu1cRxJ.wXWscxre";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: 08ed00508bc1fa0a0bc6dd2420f982b55051de23  Merge branch into tip/master: 'x86/mm'
+--Sig_/eUsKL/VPu1cRxJ.wXWscxre
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-elapsed time: 723m
+Hi Mark,
 
-configs tested: 58
-configs skipped: 2
+On Wed, 21 Sep 2022 16:37:59 +0100 Mark Brown <broonie@kernel.org> wrote:
+>
+> On Wed, Sep 21, 2022 at 11:13:04PM +1000, Stephen Rothwell wrote:
+> > Hi all,
+> >=20
+> > On Wed, 21 Sep 2022 18:57:40 +1000 Stephen Rothwell <sfr@canb.auug.org.=
+au> wrote: =20
+> > >
+> > > Changes since 20220920: =20
+> >=20
+> > I forgot to mention that there will be no linux-next release tomorrow
+> > (while all Aussies remember their Queen) or next week. =20
+>=20
+> I'll not be able to pick this up tomorrow but I should be able to
+> provide some cover for next week.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Today should be fine (I skip a day or two every now and then anyway and
+I will do Friday). Thanks for considering next week.  I think just one
+or two should be OK.  I may even have time to do a couple myself (this
+is not a holiday so much (helping my daughter move)).
 
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-arc                                 defconfig
-s390                             allmodconfig
-alpha                               defconfig
-i386                                defconfig
-m68k                             allyesconfig
-x86_64                              defconfig
-s390                                defconfig
-m68k                             allmodconfig
-x86_64                           allyesconfig
-arc                  randconfig-r043-20220921
-s390                             allyesconfig
-riscv                randconfig-r042-20220921
-powerpc                          allmodconfig
-mips                             allyesconfig
-i386                          randconfig-a001
-x86_64                               rhel-8.3
-powerpc                           allnoconfig
-i386                          randconfig-a003
-sh                               allmodconfig
-i386                             allyesconfig
-s390                 randconfig-r044-20220921
-arm                                 defconfig
-i386                          randconfig-a005
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                    rhel-8.3-kselftests
-x86_64                          rhel-8.3-func
-x86_64                        randconfig-a006
-arm                              allyesconfig
-x86_64                         rhel-8.3-kunit
-x86_64                        randconfig-a013
-x86_64                           rhel-8.3-kvm
-arm64                            allyesconfig
-x86_64                           rhel-8.3-syz
-x86_64                        randconfig-a011
-ia64                             allmodconfig
-x86_64                        randconfig-a015
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
+It is a pain that it is at this end of the cycle again, sorry.
 
-clang tested configs:
-hexagon              randconfig-r041-20220921
-hexagon              randconfig-r045-20220921
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-x86_64                        randconfig-a012
-x86_64                        randconfig-a016
-x86_64                        randconfig-a014
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
+--=20
+Cheers,
+Stephen Rothwell
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+--Sig_/eUsKL/VPu1cRxJ.wXWscxre
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMrmXAACgkQAVBC80lX
+0Gy6lQf/UMIP3yUNfOIhv/nzUwTtQF7GecU91M1/x0lxuTxBz6uIeIIoA3/O//Tf
+DrcU80jg57eM+jMP7mmj3Lbig8vNJ5OOUMTd3QhzxMYsphI0m4E/G8KKQ2BdO/WM
+4ZqDWOIrSIkkZ7NVAd4n8asaXkTRt0ymAfopyn3H9KQ8AC6jfgqJdMn99eeScQxC
+CVn7RrWE961gM16rkWXEFxoMYoIUYq11gjRG9NwsLtgue2LYExZ1h1IJZswaFJns
+gAOEht400KNyzjdhDs/LjwDnHb/TQJJ9ibQaPEsqIF0YGTSew93p9NFRLB5FRutY
+6+ssyJwRewPZn1fOWAOtBmx5n7OIRQ==
+=nYwU
+-----END PGP SIGNATURE-----
+
+--Sig_/eUsKL/VPu1cRxJ.wXWscxre--
