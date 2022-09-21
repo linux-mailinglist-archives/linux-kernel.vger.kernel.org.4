@@ -2,49 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63BFC5BF89F
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 10:09:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2D2C5BF8A4
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 10:09:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbiIUIJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 04:09:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48188 "EHLO
+        id S229902AbiIUIJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 04:09:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229918AbiIUII7 (ORCPT
+        with ESMTP id S229822AbiIUIJj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 04:08:59 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9A1B80EA3;
-        Wed, 21 Sep 2022 01:08:58 -0700 (PDT)
-Date:   Wed, 21 Sep 2022 08:08:55 -0000
+        Wed, 21 Sep 2022 04:09:39 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A56AA657C;
+        Wed, 21 Sep 2022 01:09:38 -0700 (PDT)
+Date:   Wed, 21 Sep 2022 08:09:36 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1663747737;
+        s=2020; t=1663747777;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=zPza9GfvfCzuDa1HTfIXTm9tWsA3CcYZ82dbV7tKWcg=;
-        b=1NJ1AVQcZNVQd2+Kk+92P/AiFXqq+LfXiCbDgRU6xRDygNhy0Tvl4l54e++P6Glg+ba6W1
-        FMb8qklPaWXLtTm1+GXbpqJlwok3/mpuAKjcgw+Z/JmqtJniVwLF2l7G+cHNNptoqgboiR
-        ghpRcpDJjPAV51ILeQbaS3onVtTSVvyAt5Yd9FTXEHa+SU5IeouP00e7cNoeLfQWIcJ+Ma
-        fUDpa7DoSMLkl/tOaYuebywuU3Z6xfqIBc7Tu1kQiTSh9fkTsjrEdH0gYNbnrahtQbaTa+
-        TMCnTbOY+jl71AiYmnlWOiAtMI0opGtG7A7ss85mDd04nndqyrI+AcMNGgi8dw==
+        bh=rSCDS0tyqksrm3HSWhobL6knyut0HnefiJMEnf6Ljqk=;
+        b=4eErGJuQC2cteOD/+abVAiFMajUElsm6M8fY+5X3+rZ5ioQe1SECgOjbsvlM0jQkMe/C9m
+        bqhKZeJfXhMins77qqSgc2UvnoKTH9hmDUAddMatvqu6Y+plgHozlcNdLZBXt5Fua7fhpu
+        c3H5M1SQubwBO9lWFh/3qbipNeo2OqEoGG2J8DZqKS4BFF41sq3AcyVjJzbpZkq/ANyNUS
+        MiadGetigVQvLBahwyn9f1jum2pt4XqovAtrCn4gNDxtKDLYfGPmhxgZUjsYbNt0KpmVwl
+        D6VehpmdvKW7QZQEhCkoK6zYQmr5yXiiTZ+mXwjCXKPy5Ir37zX6dZnoMiw1rQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1663747737;
+        s=2020e; t=1663747777;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=zPza9GfvfCzuDa1HTfIXTm9tWsA3CcYZ82dbV7tKWcg=;
-        b=2whLIOsFLsxkUsWwJIR6CzYh1mid1NLsDhBofl1QBizqs/+tH5/L8z/DZyGsH9ZQC46Qi6
-        zYfLoUSyMHDhkLDw==
-From:   "tip-bot2 for Jules Irenge" <tip-bot2@linutronix.de>
+        bh=rSCDS0tyqksrm3HSWhobL6knyut0HnefiJMEnf6Ljqk=;
+        b=2MrpHonxzPDPtCC8GvdntGx1wxgVMiwnRUxFXg9LMmFkZUwnaZT+xPI3g1KymZm2KREwav
+        R5sbIgWVKw1g1QBw==
+From:   "tip-bot2 for Dave Hansen" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/core] perf/core: Convert snprintf() to scnprintf()
-Cc:     Jules Irenge <jbi.octave@gmail.com>,
-        Ingo Molnar <mingo@kernel.org>, x86@kernel.org,
+Subject: [tip: x86/mm] x86/mm/32: Fix W^X detection when page tables do not support NX
+Cc:     kernel test robot <yujie.liu@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-Message-ID: <166374773592.401.16831946846027095231.tip-bot2@tip-bot2>
+Message-ID: <166374777604.401.7460421443660500438.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -58,65 +60,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the perf/core branch of tip:
+The following commit has been merged into the x86/mm branch of tip:
 
-Commit-ID:     678739d622ae7b75b62d550858b6bf104c43e2df
-Gitweb:        https://git.kernel.org/tip/678739d622ae7b75b62d550858b6bf104c43e2df
-Author:        Jules Irenge <jbi.octave@gmail.com>
-AuthorDate:    Sun, 18 Sep 2022 00:41:08 +01:00
+Commit-ID:     a3d3163fbe690cfec354fc20808adf0629adf8da
+Gitweb:        https://git.kernel.org/tip/a3d3163fbe690cfec354fc20808adf0629adf8da
+Author:        Dave Hansen <dave.hansen@intel.com>
+AuthorDate:    Tue, 20 Sep 2022 11:54:54 -07:00
 Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Wed, 21 Sep 2022 10:01:20 +02:00
+CommitterDate: Wed, 21 Sep 2022 10:02:55 +02:00
 
-perf/core: Convert snprintf() to scnprintf()
+x86/mm/32: Fix W^X detection when page tables do not support NX
 
-Coccinelle reports a warning:
+The x86 MM code now actively refuses to create writable+executable mappings,
+and warns when there is an attempt to create one.
 
-    WARNING: use scnprintf or sprintf
+The 0day test robot ran across a warning triggered by module unloading on
+32-bit kernels.  This was only seen on CPUs with NX support, but where a
+32-bit kernel was built without PAE support.
 
-Adding to that, there has also been some slow migration from snprintf to scnprintf.
+On those systems, there is no room for the NX bit in the page
+tables and _PAGE_NX is #defined to 0, breaking some of the W^X
+detection logic in verify_rwx().  The X86_FEATURE_NX check in
+there does not do any good here because the CPU itself supports
+NX.
 
-This LWN article explains the rationale for this change:
+Fix it by checking for _PAGE_NX support directly instead of
+checking CPU support for NX.
 
-    https: //lwn.net/Articles/69419/
+Note that since _PAGE_NX is actually defined to be 0 at
+compile-time this fix should also end up letting the compiler
+optimize away most of verify_rwx() on non-PAE kernels.
 
-No change in behavior.
-
-[ mingo: Improved the changelog. ]
-
-Signed-off-by: Jules Irenge <jbi.octave@gmail.com>
+Fixes: 652c5bf380ad ("x86/mm: Refuse W^X violations")
+Reported-by: kernel test robot <yujie.liu@intel.com>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
 Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lore.kernel.org/all/fcf89147-440b-e478-40c9-228c9fe56691@intel.com/
 ---
- kernel/events/core.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ arch/x86/mm/pat/set_memory.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 7da5515..c07e9a3 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -10952,7 +10952,7 @@ static ssize_t nr_addr_filters_show(struct device *dev,
+diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
+index 1a2d637..20b1e24 100644
+--- a/arch/x86/mm/pat/set_memory.c
++++ b/arch/x86/mm/pat/set_memory.c
+@@ -587,7 +587,8 @@ static inline pgprot_t verify_rwx(pgprot_t old, pgprot_t new, unsigned long star
  {
- 	struct pmu *pmu = dev_get_drvdata(dev);
+ 	unsigned long end;
  
--	return snprintf(page, PAGE_SIZE - 1, "%d\n", pmu->nr_addr_filters);
-+	return scnprintf(page, PAGE_SIZE - 1, "%d\n", pmu->nr_addr_filters);
- }
- DEVICE_ATTR_RO(nr_addr_filters);
+-	if (!cpu_feature_enabled(X86_FEATURE_NX))
++	/* Only enforce when NX is supported: */
++	if (!(__supported_pte_mask & _PAGE_NX))
+ 		return new;
  
-@@ -10963,7 +10963,7 @@ type_show(struct device *dev, struct device_attribute *attr, char *page)
- {
- 	struct pmu *pmu = dev_get_drvdata(dev);
- 
--	return snprintf(page, PAGE_SIZE-1, "%d\n", pmu->type);
-+	return scnprintf(page, PAGE_SIZE - 1, "%d\n", pmu->type);
- }
- static DEVICE_ATTR_RO(type);
- 
-@@ -10974,7 +10974,7 @@ perf_event_mux_interval_ms_show(struct device *dev,
- {
- 	struct pmu *pmu = dev_get_drvdata(dev);
- 
--	return snprintf(page, PAGE_SIZE-1, "%d\n", pmu->hrtimer_interval_ms);
-+	return scnprintf(page, PAGE_SIZE - 1, "%d\n", pmu->hrtimer_interval_ms);
- }
- 
- static DEFINE_MUTEX(mux_interval_mutex);
+ 	if (!((pgprot_val(old) ^ pgprot_val(new)) & (_PAGE_RW | _PAGE_NX)))
