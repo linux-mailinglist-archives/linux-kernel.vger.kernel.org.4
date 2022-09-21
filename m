@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 762F85E5426
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 22:05:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CD6C5E5428
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 22:06:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230250AbiIUUFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 16:05:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49794 "EHLO
+        id S230164AbiIUUGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 16:06:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230150AbiIUUFk (ORCPT
+        with ESMTP id S230150AbiIUUGF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 16:05:40 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21967A00F7;
-        Wed, 21 Sep 2022 13:05:39 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id D0C8E536;
-        Wed, 21 Sep 2022 20:05:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net D0C8E536
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1663790739; bh=u14fgRgMkkiwOLD10xSCZEwAd8j/HfxpBhhIHX+IJLs=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=OnCzCox+tIxEqUmfUVI+Cu3YKQ3R8Dv7OQX0V+cHckmjGahM8tg3sT3Q9Zu+cdjmM
-         FTUvumScc+c/vbZle3BKM/Mq+0saxgwRSZ+DncVzCimk4d3d32vYe5gf7C+Kr5BfSy
-         B1NwZyjHj9pbXZN9NpMQa/+yXKgqQm6xPEzLRwceqdNYDMqpvaFO44wcSVlJS8QTb6
-         12Iz8pSUDSx/7orTAeLAavMc95tWZH5cLKjBRM0O/2qd6aWMX5vc0dCQC9zZkhKDd1
-         joaDaQIYtbjZYgItrdFTfbHx0uI4UIf6mfcmqJGgTMktJA/9+PFQsKdR49O5jSmKg6
-         O3sUwhNef9oAw==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Salvatore Bonaccorso <carnil@debian.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Salvatore Bonaccorso <carnil@debian.org>
-Subject: Re: [PATCH v3] Documentation: stable: Document alternative for
- referring upstream commit hash
-In-Reply-To: <20220901184328.4075701-1-carnil@debian.org>
-References: <20220901184328.4075701-1-carnil@debian.org>
-Date:   Wed, 21 Sep 2022 14:05:38 -0600
-Message-ID: <87pmfov6gd.fsf@meer.lwn.net>
+        Wed, 21 Sep 2022 16:06:05 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7B96A0261;
+        Wed, 21 Sep 2022 13:06:03 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 8C04C1C0001; Wed, 21 Sep 2022 22:06:02 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
+        t=1663790762;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=omSxbeRuWfGoqRrj59tV4BZ/8Tdv+u60XdujG3jn7Y4=;
+        b=fl0FonWmTOJ84tAxKRGe0jo17sep+Cwu8OQIxoJSC8RhXXJtL/A614esM6mNHmf6VVogOI
+        WMXQUVYJ4R9bNSYaEkwZYKY5mq2wQ3wB3MTdiNFOFuXx+z9LHsrchaiYBT0tXxd/hGB7qz
+        g11RTnNfwPh7c3zWxaz/kDGK20emTgQ=
+Date:   Wed, 21 Sep 2022 22:06:02 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Youling Tang <tangyouling@loongson.cn>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: Re: [PATCH 5.10 36/39] mksysmap: Fix the mismatch of L0 symbols in
+ System.map
+Message-ID: <20220921200602.GB32055@duo.ucw.cz>
+References: <20220921153645.663680057@linuxfoundation.org>
+ <20220921153646.896567524@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="vGgW1X5XWziG23Ko"
+Content-Disposition: inline
+In-Reply-To: <20220921153646.896567524@linuxfoundation.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,43 +53,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Salvatore Bonaccorso <carnil@debian.org> writes:
 
-> Additionally to the "commit <sha1> upstream." variant, "[ Upstream
-> commit <sha1> ]" is used as well as alternative to refer to the upstream
-> commit hash.
->
-> Signed-off-by: Salvatore Bonaccorso <carnil@debian.org>
-> ---
-> Changes in v3:
->  - Revert to initial version as not adding the code-block:: none will
->    reformat the block differently than the first variant.
->
-> Changes in v2:
->  - Drop extra RST markup which just only clutters things without any
->    advantage.
->
->  Documentation/process/stable-kernel-rules.rst | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/Documentation/process/stable-kernel-rules.rst b/Documentation/process/stable-kernel-rules.rst
-> index c61865e91f52..2fd8aa593a28 100644
-> --- a/Documentation/process/stable-kernel-rules.rst
-> +++ b/Documentation/process/stable-kernel-rules.rst
-> @@ -97,6 +97,12 @@ text, like this:
->  
->      commit <sha1> upstream.
->  
-> +or alternatively:
-> +
-> +.. code-block:: none
-> +
-> +    [ Upstream commit <sha1> ]
-> +
->  Additionally, some patches submitted via :ref:`option_1` may have additional
->  patch prerequisites which can be cherry-picked. This can be specified in the
->  following format in the sign-off area:
+--vGgW1X5XWziG23Ko
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Applied, thanks.
+Hi!
 
-jon
+> From: Youling Tang <tangyouling@loongson.cn>
+>=20
+> [ Upstream commit c17a2538704f926ee4d167ba625e09b1040d8439 ]
+>=20
+> When System.map was generated, the kernel used mksysmap to filter the
+> kernel symbols, we need to filter "L0" symbols in LoongArch architecture.
+>=20
+> $ cat System.map | grep L0
+> 9000000000221540 t L0
+>=20
+> The L0 symbol exists in System.map, but not in .tmp_System.map. When
+> "cmp -s System.map .tmp_System.map" will show "Inconsistent kallsyms
+> data" error message in link-vmlinux.sh script.
+
+LoongArch is not supported in 5.10 (nor 4.19) so we should not have
+this patch.
+
+Best regards,
+								Pavel
+--=20
+People of Russia, stop Putin before his war on Ukraine escalates.
+
+--vGgW1X5XWziG23Ko
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYytuqgAKCRAw5/Bqldv6
+8mMgAKCO9t7E4JONM65xtmy4wDVRo1q+1QCgjA7vkylhQb6A3uL9vnN3V7TlCFk=
+=WqN1
+-----END PGP SIGNATURE-----
+
+--vGgW1X5XWziG23Ko--
