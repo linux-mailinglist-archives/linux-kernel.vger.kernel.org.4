@@ -2,227 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 215D65C01DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:41:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7C825C01E0
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:42:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231281AbiIUPlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 11:41:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33958 "EHLO
+        id S229970AbiIUPmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 11:42:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbiIUPkq (ORCPT
+        with ESMTP id S231258AbiIUPmT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 11:40:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C63E18E0B
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 08:39:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663774760;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qdyn6X4um0jOmxbVbIVJ/ritfQu0YXAwmpkbuktXlco=;
-        b=ZAQDVawnxBa85cfZGBaTFYDU8GMXzZedDdRm3NXAbXDCkYu+GSoFHJ+dvAL48OzX2Q7hdi
-        1/uYwAOhiJONGLXbaqCxikSBNr4XUwkTLzLTWqfdDZ5rJFnd/S+qhucoanGKrM9VgomUNZ
-        /vU1J6qwGSDItaSvGUSQWKu/gZMTT5E=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-149-P7i4JYPLOAecU5iBZy2WBg-1; Wed, 21 Sep 2022 11:39:19 -0400
-X-MC-Unique: P7i4JYPLOAecU5iBZy2WBg-1
-Received: by mail-qt1-f197.google.com with SMTP id fy20-20020a05622a5a1400b0035bef08641dso4404276qtb.18
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 08:39:19 -0700 (PDT)
+        Wed, 21 Sep 2022 11:42:19 -0400
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB26426C9
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 08:42:13 -0700 (PDT)
+Received: by mail-ot1-x32f.google.com with SMTP id r22-20020a9d7516000000b00659ef017e34so4183026otk.13
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 08:42:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=I0fSDhuSIAYb58A0bxYinMYKDF5504dZb9BZT2Lq62M=;
+        b=qoGY2XDB5R/3CRkKcAWGJFUsnFs8hUSEFlqDSljzngkB+SlnvPu2vTteeBNnnRuz10
+         9xv8wYRH3QGnG8ln8l9ytSLaqwSM1jH5AIZ+w/OUXutg3N5RCjXkTV7POwj2awOlQHd5
+         fFbq2hNF49LtvgonWA2lWowrdO02sj59mlUtNFysqt0NRR2kYn4YfNgRfqZyq+zUTDTZ
+         7u5qQ4Ufjm8EpihHMkzgmiTx+S1W2Z/XJH2X9JHZTKzQu23jVxhfTCn4h0vMBFKIbU8b
+         o7WsF/c8nWksDhmrneD5DD1vQ15XXUPaRODvgzvJ0c52M0Eb9Co/8sV5lawyYYf4RQHn
+         igzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=qdyn6X4um0jOmxbVbIVJ/ritfQu0YXAwmpkbuktXlco=;
-        b=3JAbAR415eJVvZ66xH72tk0x6kastJ2xuYj0VnmcdICn8nX59UhWV1SffU9GBKBXDJ
-         JiyH7yevsN3zs/9I61bAnkN6pePpIs67AEe3M1uCu4LODNmztfI7XBFlpiLydLX30Wkl
-         LW0zVNeBdoxtCZrQPMeUS5Cf/osVN8jiH51HYCDOdnnnUClqHHZUTxu6NsK0aRKVTTzl
-         8FegOhqrdf6RTGJgzDhNs74tDc6w8n1UCJPv/cqH91sr2Y34ypQvMKAhhVcC/V4XqSbh
-         5qE0cVQg1RRT12ODuTkSqIMC6RJax+w+X5Y70h+KgRnYW3uz/j/NikmJfuGqxxPq7agg
-         2K1g==
-X-Gm-Message-State: ACrzQf2vRSem/gyiIp1OehxXL7r7ZLD2wwqHzVoCTGhqaWNUBkEiseL7
-        TvFG8VumqICmJRS/ykH/PJX2ltqQRsw4++H0p73MH2YbmngY9GR4UDww254OQBsE3U15W+/8IeK
-        23Mrw1vl4oVTztuthkzDpyRYA
-X-Received: by 2002:ac8:5a13:0:b0:35c:e9b0:430b with SMTP id n19-20020ac85a13000000b0035ce9b0430bmr13368715qta.472.1663774758902;
-        Wed, 21 Sep 2022 08:39:18 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM594zwhYYo497Gbf01p/qkC0k5EzOtGiVtB6LsJU02syDsCgiXnnQXhpz8ER02eO+Lp+Qd8CQ==
-X-Received: by 2002:ac8:5a13:0:b0:35c:e9b0:430b with SMTP id n19-20020ac85a13000000b0035ce9b0430bmr13368681qta.472.1663774758598;
-        Wed, 21 Sep 2022 08:39:18 -0700 (PDT)
-Received: from bfoster (c-24-61-119-116.hsd1.ma.comcast.net. [24.61.119.116])
-        by smtp.gmail.com with ESMTPSA id f25-20020ac84659000000b0035ccd148026sm1791612qto.69.2022.09.21.08.39.17
+        bh=I0fSDhuSIAYb58A0bxYinMYKDF5504dZb9BZT2Lq62M=;
+        b=fpp2XTjXp/fI5sVyh6gSeUQldLjvip48w7ARRB+VktZR2LmAsJVnYX5Ejgt/SR2aLt
+         RTE8Bmq0Hticve1MZdq2P2jksjhqVu8YUPGs6FAP1Vby+1tkCvy0nAL/W283ZkIt9G8c
+         4vYI8TGCz4qBP5nRbUvKW0M7o8SoQwu+BtqmD9o2oq+f4oU8BkvQLhDyYON1kR8KjUHd
+         cLO+ItmDEQroLwA2PVukTcrSqRalK8FK3vPQCrva6lSuznPsgxOsK/RCo79YZ8JXY6i9
+         fySuZ99ll36sU8+nl+Mx9SGBXEVc2TsppHdEk6y48FznTy4LeEtVetQCYU2SiCPjpoXE
+         sTMw==
+X-Gm-Message-State: ACrzQf1hiPmmyuYmslZHd8mPrFodDlXBcnMP06dAOyJSnrvfRybXkO8X
+        KTWntkO20ewckWGdRZcR9zM=
+X-Google-Smtp-Source: AMsMyM7oSQz3SPx7yZe/Htb5tFDOXe5H3/p0aTNzHE7zmkGDJOdBF1NlzFc6v5GNCZFuQ58UN5pXrQ==
+X-Received: by 2002:a05:6830:6387:b0:651:30e9:c47f with SMTP id ch7-20020a056830638700b0065130e9c47fmr12532760otb.188.1663774932624;
+        Wed, 21 Sep 2022 08:42:12 -0700 (PDT)
+Received: from localhost ([12.97.180.36])
+        by smtp.gmail.com with ESMTPSA id o83-20020acaf056000000b0034f684ca159sm1333457oih.29.2022.09.21.08.42.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Sep 2022 08:39:18 -0700 (PDT)
-Date:   Wed, 21 Sep 2022 11:39:15 -0400
-From:   Brian Foster <bfoster@redhat.com>
-To:     Sarthak Kukreti <sarthakkukreti@chromium.org>
-Cc:     dm-devel@redhat.com, linux-block@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Jens Axboe <axboe@kernel.dk>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Bart Van Assche <bvanassche@google.com>,
-        Daniil Lunev <dlunev@google.com>,
-        Evan Green <evgreen@google.com>,
-        Gwendal Grignou <gwendal@google.com>
-Subject: Re: [PATCH RFC 4/8] fs: Introduce FALLOC_FL_PROVISION
-Message-ID: <YyswI57JH7gcs9+S@bfoster>
-References: <20220915164826.1396245-1-sarthakkukreti@google.com>
- <20220915164826.1396245-5-sarthakkukreti@google.com>
- <YyRkd8YAH1lal8/N@bfoster>
- <CAG9=OMNL1Z3DiO-usdH0k90NDsDkDQ7A7CHc4Nu6MCXKNKjWdw@mail.gmail.com>
+        Wed, 21 Sep 2022 08:42:12 -0700 (PDT)
+Date:   Wed, 21 Sep 2022 08:40:00 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     Alexey Klimov <klimov.linux@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andy Whitcroft <apw@canonical.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        David Laight <David.Laight@aculab.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Kees Cook <keescook@chromium.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Russell King <linux@armlinux.org.uk>
+Subject: Re: [PATCH v4 0/4] lib: optimize find_bit() functions
+Message-ID: <YyswUKLcRiuRoUrn@yury-laptop>
+References: <20220915020730.852234-1-yury.norov@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAG9=OMNL1Z3DiO-usdH0k90NDsDkDQ7A7CHc4Nu6MCXKNKjWdw@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220915020730.852234-1-yury.norov@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 02:02:31PM -0700, Sarthak Kukreti wrote:
-> On Fri, Sep 16, 2022 at 4:56 AM Brian Foster <bfoster@redhat.com> wrote:
-> >
-> > On Thu, Sep 15, 2022 at 09:48:22AM -0700, Sarthak Kukreti wrote:
-> > > From: Sarthak Kukreti <sarthakkukreti@chromium.org>
-> > >
-> > > FALLOC_FL_PROVISION is a new fallocate() allocation mode that
-> > > sends a hint to (supported) thinly provisioned block devices to
-> > > allocate space for the given range of sectors via REQ_OP_PROVISION.
-> > >
-> > > Signed-off-by: Sarthak Kukreti <sarthakkukreti@chromium.org>
-> > > ---
-> > >  block/fops.c                | 7 ++++++-
-> > >  include/linux/falloc.h      | 3 ++-
-> > >  include/uapi/linux/falloc.h | 8 ++++++++
-> > >  3 files changed, 16 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/block/fops.c b/block/fops.c
-> > > index b90742595317..a436a7596508 100644
-> > > --- a/block/fops.c
-> > > +++ b/block/fops.c
-> > ...
-> > > @@ -661,6 +662,10 @@ static long blkdev_fallocate(struct file *file, int mode, loff_t start,
-> > >               error = blkdev_issue_discard(bdev, start >> SECTOR_SHIFT,
-> > >                                            len >> SECTOR_SHIFT, GFP_KERNEL);
-> > >               break;
-> > > +     case FALLOC_FL_PROVISION:
-> > > +             error = blkdev_issue_provision(bdev, start >> SECTOR_SHIFT,
-> > > +                                            len >> SECTOR_SHIFT, GFP_KERNEL);
-> > > +             break;
-> > >       default:
-> > >               error = -EOPNOTSUPP;
-> > >       }
-> >
-> > Hi Sarthak,
-> >
-> > Neat mechanism.. I played with something very similar in the past (that
-> > was much more crudely hacked up to target dm-thin) to allow filesystems
-> > to request a thinly provisioned device to allocate blocks and try to do
-> > a better job of avoiding inactivation when overprovisioned.
-> >
-> > One thing I'm a little curious about here.. what's the need for a new
-> > fallocate mode? On a cursory glance, the provision mode looks fairly
-> > analogous to normal (mode == 0) allocation mode with the exception of
-> > sending the request down to the bdev. blkdev_fallocate() already maps
-> > some of the logical falloc modes (i.e. punch hole, zero range) to
-> > sending write sames or discards, etc., and it doesn't currently look
-> > like it supports allocation mode, so could it not map such requests to
-> > the underlying REQ_OP_PROVISION op?
-> >
-> > I guess the difference would be at the filesystem level where we'd
-> > probably need to rely on a mount option or some such to control whether
-> > traditional fallocate issues provision ops (like you've implemented for
-> > ext4) vs. the specific falloc command, but that seems fairly consistent
-> > with historical punch hole/discard behavior too. Hm? You might want to
-> > cc linux-fsdevel in future posts in any event to get some more feedback
-> > on how other filesystems might want to interact with such a thing.
-> >
-> Thanks for the feedback!
-> Argh, I completely forgot that I should add linux-fsdevel. Let me
-> re-send this with linux-fsdevel cc'd
-> 
-> There's a slight distinction is that the current filesystem-level
-> controls are usually for default handling, but userspace can still
-> call the relevant functions manually if they need to. For example, for
-> ext4, the 'discard' mount option dictates whether free blocks are
-> discarded, but it doesn't set the policy to allow/disallow userspace
-> from manually punching holes into files even if the mount opt is
-> 'nodiscard'. FALLOC_FL_PROVISION is similar in that regard; it adds a
-> manual mechanism for users to provision the files' extents, that is
-> separate from the filesystems' default handling of provisioning files.
-> 
+If no other comments, I'll address Andy's comments on formatting and
+move it in bitmap-for-next.
 
-What I'm trying to understand is why not let blkdev_fallocate() issue a
-provision based on the default mode (i.e. mode == 0) of fallocate(),
-which is already defined to mean "perform allocation?" It currently
-issues discards or write zeroes based on variants of
-FALLOC_FL_PUNCH_HOLE without the need for a separate FALLOC_FL_DISCARD
-mode, for example.
+Thanks,
+Yury
 
-Brian
-
-> > BTW another thing that might be useful wrt to dm-thin is to support
-> > FALLOC_FL_UNSHARE. I.e., it looks like the previous dm-thin patch only
-> > checks that blocks are allocated, but not whether those blocks are
-> > shared (re: lookup_result.shared). It might be useful to do the COW in
-> > such cases if the caller passes down a REQ_UNSHARE or some such flag.
-> >
-> That's an interesting idea! There's a few more things on the TODO list
-> for this patch series but I think we can follow up with a patch to
-> handle that as well.
+On Wed, Sep 14, 2022 at 07:07:26PM -0700, Yury Norov wrote:
+> In the recent discussion, it was noticed that find_next_bit() functions may
+> be improved by adding wrappers around common __find_next_bit() in .c file.
 > 
-> Sarthak
+> As suggested by Linus, I tried the meta-programming trick with the
+> EXPRESSION macro, which is passed from wrapper into find_bit()
+> helpers:
 > 
-> > Brian
-> >
-> > > diff --git a/include/linux/falloc.h b/include/linux/falloc.h
-> > > index f3f0b97b1675..a0e506255b20 100644
-> > > --- a/include/linux/falloc.h
-> > > +++ b/include/linux/falloc.h
-> > > @@ -30,7 +30,8 @@ struct space_resv {
-> > >                                        FALLOC_FL_COLLAPSE_RANGE |     \
-> > >                                        FALLOC_FL_ZERO_RANGE |         \
-> > >                                        FALLOC_FL_INSERT_RANGE |       \
-> > > -                                      FALLOC_FL_UNSHARE_RANGE)
-> > > +                                      FALLOC_FL_UNSHARE_RANGE |                          \
-> > > +                                      FALLOC_FL_PROVISION)
-> > >
-> > >  /* on ia32 l_start is on a 32-bit boundary */
-> > >  #if defined(CONFIG_X86_64)
-> > > diff --git a/include/uapi/linux/falloc.h b/include/uapi/linux/falloc.h
-> > > index 51398fa57f6c..2d323d113eed 100644
-> > > --- a/include/uapi/linux/falloc.h
-> > > +++ b/include/uapi/linux/falloc.h
-> > > @@ -77,4 +77,12 @@
-> > >   */
-> > >  #define FALLOC_FL_UNSHARE_RANGE              0x40
-> > >
-> > > +/*
-> > > + * FALLOC_FL_PROVISION acts as a hint for thinly provisioned devices to allocate
-> > > + * blocks for the range/EOF.
-> > > + *
-> > > + * FALLOC_FL_PROVISION can only be used with allocate-mode fallocate.
-> > > + */
-> > > +#define FALLOC_FL_PROVISION          0x80
-> > > +
-> > >  #endif /* _UAPI_FALLOC_H_ */
-> > > --
-> > > 2.31.0
-> > >
-> >
+>   #define BIT_FIND_BODY(addr, size, start, EXPRESSION)          \
+>         BIT_FIND_SETUP(addr, size, start)                       \
+>         BIT_FIND_FIRST_WORD(addr, size, start, EXPRESSION)      \
+>         BIT_WORD_LOOP(addr, size, idx, val, EXPRESSION)         \
+>         return size;                                            \
+>   found:        BIT_WORD_SWAB(val);                             \
+>         return min((idx)*BITS_PER_LONG + __ffs(val), size)
 > 
-
+>   unsigned long _find_next_and_bit(const unsigned long *addr1,
+>                                  const unsigned long *addr2,
+>                                  unsigned long size,
+>                                  unsigned long start)
+>   { BIT_FIND_BODY(addr, size, start, addr1[idx] & addr2[idx]); }
+> 
+> I appreciated the potential of how the EXPRESSION works, but I don't like
+> that the resulting macro is constructed from pieces because it makes it
+> harder to understand what happens behind the ifdefery. Checkpatch isn't
+> happy as well because the final macro contains 'return' statement; and I
+> would agree that it's better to avoid it.
+> 
+> I spun the idea one more time, trying to make FIND helper a more or
+> less standard looking macro.
+> 
+> This new approach saves 10-11K of Image size, and is 15% faster in the
+> performance benchmark. See the 3rd patch for some statistics.
+> 
+> v1: https://lore.kernel.org/all/20220728161208.865420-2-yury.norov@gmail.com/T/
+> v2: https://lore.kernel.org/lkml/YwaXvphVpy5A7fSs@yury-laptop/t/
+> v3: https://lore.kernel.org/all/xhsmhedwnb15r.mognet@vschneid.remote.csb/T/
+> v4:
+>  - fix for-loop break condition in FIND_NEXT_BIT;
+>  - add review tags from Valentin Schneider.
+> 
+> Yury Norov (4):
+>   lib/find_bit: introduce FIND_FIRST_BIT() macro
+>   lib/find_bit: create find_first_zero_bit_le()
+>   lib/find_bit: optimize find_next_bit() functions
+>   tools: sync find_bit() implementation
+> 
+>  include/linux/find.h       |  46 +++++++---
+>  lib/find_bit.c             | 178 ++++++++++++++++++++++---------------
+>  tools/include/linux/find.h |  61 +++----------
+>  tools/lib/find_bit.c       | 149 ++++++++++++++-----------------
+>  4 files changed, 220 insertions(+), 214 deletions(-)
+> 
+> -- 
+> 2.34.1
