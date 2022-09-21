@@ -2,313 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF3435E56DC
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 01:56:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8C035E56DF
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 01:58:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbiIUX4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 19:56:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39134 "EHLO
+        id S229727AbiIUX6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 19:58:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbiIUX4D (ORCPT
+        with ESMTP id S229588AbiIUX6F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 19:56:03 -0400
-Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3E4AA0270
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 16:56:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1663804561; x=1695340561;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=R6QuspugV33sv/Nyw/jFGeLxlZk7c4W6yvVLK3L2FAo=;
-  b=n8G5PIO9AbbUuAV960+X8Vq3i8FbM8SETtmcD2r+PZ5JFN1f/FsHYtuU
-   CBAZ780HwZTki8a9u200NfI7ZWeE/02YJYg2xr5KAi9cLjST4pQCS7pRj
-   c3qMQYh7TVibIxXaeY3mjUM+HdxEBxuRW/R+vs99e+0dq1cOM0YkSDyQW
-   vyaotRukOXmaBTGbFWuf31zzflybIdnmfNYTr6KaqRWc2LzhUVQV5EhQU
-   OKOsO35uOUFrg7iHStqKWfzlZypchG8w3qsusrT4vPPRkW/ZUEKTmzq8Z
-   4cu2GRbEePbcJv0HIPbdKIpOduElcALsyQhx2WK2S8Uu0XkUwip6p9piL
-   g==;
-X-IronPort-AV: E=Sophos;i="5.93,334,1654531200"; 
-   d="scan'208";a="212393165"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 22 Sep 2022 07:55:58 +0800
-IronPort-SDR: naE7yTAt8uQg5ddrWJR9OqBlrLVncfyKU+Ai/nj1rrBvJc65klX1DyRMRTolrIorp8xJFaa8Zy
- pSpQy6qDupLxnp5mNW2G7m/l9TyvxOAp+d7sFsw8zY7mcidOz82LGY3B9++9B/NttjPLbUItyL
- acNZb4YenxnSxHe+jtJilgwiiHz2W+Mgly6Hw49dIOkAFR5W8JlIyLOPI7XjGyzpAxO1HPQWRr
- 5qCfBtzLqG+c71aDzRnV4DkKh/cQpl2w4X+neGFADssAR+QBKw2A0T7BDWpJAMVIpkT3fBQA+m
- cAA5gN8xnffHjyv2Ve/Lr7Xr
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 21 Sep 2022 16:10:32 -0700
-IronPort-SDR: VS2gT/0fTHfMFnN4Kr5/FyQLKpNs6tKjA9aZaJ7SX6rP+Msozx3G15pnd685xZK1FwT1z9iuEg
- c7lECi/WiFrSQtk4kbJUl0KWMTCCxr2PQVQyrWteTrdP2YRZsBjWrepFiyFT54bqoSwZY8vPFZ
- Z7xSoM04ZrRhgoYwdh1Hlp318gg73UWmBLYxWAndQ7rgrba+L3r5bzyKVPLT7SQRp4UKPo9SN4
- wFo0G3J4I5ZkY4t6wjFmcVRIplolJeOQ5hZLDzGxQP0HYiBYl6U2u5d5aCCDYw/0LRIajCrBs3
- s+M=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 21 Sep 2022 16:55:58 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4MXwKT5MdRz1RwvL
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 16:55:57 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1663804554; x=1666396555; bh=R6QuspugV33sv/Nyw/jFGeLxlZk7c4W6yvV
-        LK3L2FAo=; b=eNHxOBlVsoK+cUKCyD9rk9mD9UapAH8S50Gd/aF6G73xvEjiVFt
-        IPahmf+oO/PfuDBsbPev/J9gy4p41ePyNN7c+o2/mYyRfizL5IHCu/hofli6rSP/
-        X7m3nvMbNqPklHHZONhKe2aPHooH/Ri3nAtu8SYFpP0/lzyapsY9A0z0R2f5z79f
-        N4wg1kGcM0kGtkYxKveO6fwtrE8KfBaNOwg9cEI429jNWkhytreX3pgs/WfiwAJ9
-        askQpSeu44kr/gQRw7bPMi3D6YQOMll8FLIYvljLueSh/4KSAk3fWlmIS+CTmklT
-        XyUJHKxgM4gbQ0Lq196ni2r5gA/K/iAQ9KQ==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id SXfpmramXAvU for <linux-kernel@vger.kernel.org>;
-        Wed, 21 Sep 2022 16:55:54 -0700 (PDT)
-Received: from [10.225.163.81] (unknown [10.225.163.81])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4MXwKJ1tkpz1RvLy;
-        Wed, 21 Sep 2022 16:55:47 -0700 (PDT)
-Message-ID: <7dd9dbc0-b08b-fa47-5452-d448d86ca56b@opensource.wdc.com>
-Date:   Thu, 22 Sep 2022 08:55:45 +0900
+        Wed, 21 Sep 2022 19:58:05 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F5639FAA4
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 16:58:02 -0700 (PDT)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28LMwr4V003835;
+        Wed, 21 Sep 2022 23:57:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2022-7-12;
+ bh=uyQ7NLMBLCZuFJkE9qqW1ftB0nmYRW+syVDy4jniNSw=;
+ b=P9H94x5jAxXOm5I/pIm/DhXmm/v0jAxEb4BHjkJChwql7HgfO4QJH1qDQh3aevuNuTZt
+ cGVqR+N33GDJmpssSgqgUtb4uVHBA7jhT2u/lSAyYUU55zh9Ar7jvuqZoZn1XtI7g7yB
+ UBm6zGGgat8wezS3aXv0fTfE8fFyN6MuFuUZrv/ujXMPblomdx8w3DMIVmBubiFqZtmN
+ bTNnizgRMAxCV4T3ekDl4bHz5QN4pTFSo8ty1kb2kJ14Ldv4ftWk5aK5BCby12a6iucQ
+ Hw77KDGFwfj1DEPBj6FhKQc4IBpCpj71mrf54cDhR6KHJIVAmYhbrGvbYbZ6KadNtSq6 Lg== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3jn69kuya9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 21 Sep 2022 23:57:45 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 28LLcjkA037990;
+        Wed, 21 Sep 2022 23:57:44 GMT
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2170.outbound.protection.outlook.com [104.47.55.170])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3jp39s6b47-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 21 Sep 2022 23:57:44 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=N8i9GmRKDBZ/2AEG31VjQ7B+dz4tBt5XIb4tUD6oHx5ER7FhkjklZ/cEiQAnkNDas9tcwiVug0pz3lWThZWMS9qjs0KFF/UtQ52IvRSEXKtL6IeRVeWc9WhlnwMwHMQv0u+CVnsDcUSFKTf01/pM0FNu1K+qtZAxWRA0v/pWkEI08qc/pJl5eCLCPZEXpRu+uxI2kqtc15bZCb/vr/npFAT90/WbeP1KjYfIBjjoK6JF7FaLYSKFMwM/3OFvJnKj+93udxIpQ2cvKZtSjof/v2uj54banUyYFdJ7o+S3o3L598YsjvrOQIS1BNXPDa8qHkH60H/owL/bkJCXZ7REgA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=uyQ7NLMBLCZuFJkE9qqW1ftB0nmYRW+syVDy4jniNSw=;
+ b=QzPS15ANzJLgKyZAOn+99Wt4MxzQb9887PX81yqU9qLPVwV8qJKyz4zATaeSwY/RBgX7PwLvv/WPZ7DpgwU3hgNu+/3Cf9D2EbhdLoy35S+68qT6+eCJX8XLeM0xkgkNHUIbJ2WpD8+QjKzOdE6td0b9cg5xPu0xhlZM+aZtgYdBm2rlfYj5gAqdLAw85VY0PLMTmbfD9x6Pnl2yRJ+l9ZknweJmLni5l5K0E8U0iuOCzEfGO3NgZoh+T9mF1eQt8GwLov30VThW7o9hCPz4sJwB12mKMwEmx6n81gJCOtYOSgNnqET56MWmdyxWibdaRK6i9AJX1+C7Tg2LJblviQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uyQ7NLMBLCZuFJkE9qqW1ftB0nmYRW+syVDy4jniNSw=;
+ b=Z4pDAWMl7ys3YOYCCgkQGvqhnaeM/AAI2Uq6RlVY6IR2g0TE4aoMuCad8JI0ls0CQAYlZt1bScNveg18ZL/JIWPAF5+siFosuj/QLzV0k2QXP5glWnJPyk4Ou47+f53g5jbp5lSYXErWRd1AmZmln8Zh/z4+mXDeGlGgsoAbeJA=
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
+ by SA2PR10MB4460.namprd10.prod.outlook.com (2603:10b6:806:118::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.17; Wed, 21 Sep
+ 2022 23:57:42 +0000
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::dfde:308:42fe:6c5a]) by BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::dfde:308:42fe:6c5a%3]) with mapi id 15.20.5654.014; Wed, 21 Sep 2022
+ 23:57:42 +0000
+Date:   Wed, 21 Sep 2022 16:57:39 -0700
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+To:     Liu Shixin <liushixin2@huawei.com>
+Cc:     Liu Zixian <liuzixian4@huawei.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>
+Subject: Re: [PATCH] mm: hugetlb: fix UAF in hugetlb_handle_userfault
+Message-ID: <Yyuk83B4VHh+pbFp@monkey>
+References: <20220921083440.1267903-1-liushixin2@huawei.com>
+ <YytOYH1MSo5cNoB6@monkey>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YytOYH1MSo5cNoB6@monkey>
+X-ClientProxiedBy: MW4P221CA0020.NAMP221.PROD.OUTLOOK.COM
+ (2603:10b6:303:8b::25) To BY5PR10MB4196.namprd10.prod.outlook.com
+ (2603:10b6:a03:20d::23)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: Please further explain Linux's "zoned storage" roadmap [was: Re:
- [PATCH v14 00/13] support zoned block devices with non-power-of-2 zone sizes]
-Content-Language: en-US
-To:     Mike Snitzer <snitzer@redhat.com>,
-        Pankaj Raghav <p.raghav@samsung.com>
-Cc:     agk@redhat.com, snitzer@kernel.org, axboe@kernel.dk, hch@lst.de,
-        bvanassche@acm.org, pankydev8@gmail.com, gost.dev@samsung.com,
-        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, dm-devel@redhat.com,
-        Johannes.Thumshirn@wdc.com, jaegeuk@kernel.org,
-        matias.bjorling@wdc.com
-References: <CGME20220920091120eucas1p2c82c18f552d6298d24547cba2f70b7fc@eucas1p2.samsung.com>
- <20220920091119.115879-1-p.raghav@samsung.com> <YytJhEywBhqcr7MX@redhat.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <YytJhEywBhqcr7MX@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|SA2PR10MB4460:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6f6c84e1-761e-4caf-45ba-08da9c2d1240
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: hDbgQ2Yy9OS4FEWCCrr+g10Z3ItfuLbBOl/zGG1yHv2xKJZIAiTyOuwOmqNvfraepFRQEsriHIVBwL0p1QQ2Lmqmsi7BGfjuFp86bar6HubDts/F83TGsI0F1f/g9qTDs7iGyEPmIbSoEZTWCyBMGMcyS708gKa6Hg630U+zClDLkXHQah1OSN4Z4gt/EC7EBjMJhmhYy5EDh7F3o/2tL+ZLqFFb7gV4ohzpmJXU3fAgV8p4U1ZHrKhtabWD+Kc/O+kjoiMNVRSrdcTKiZKfrFFitops7N83aApW0K2RJXVN4Fh0Qn+Nh79u4lUQID8m+IEU1x5jFK/NIqjBZgcR5rAWsiuwwn1EDFrYqvc0jqHGdAoBiBJ8v558c1hZm6C8p+IrTeEM1pVBDu2qniMQ6Q5HYDHCaNaRmHyZOt1Mba0GLx5O5vYIpeiNGlRvrktvayyAObelZnmD7pg5I2pqV53WYD0cnLudS8BNkBnFQWq6GZk9Rk5inAnDkJMHOXFyDJNzVi2RwmZy5sPgWoolnQKamFnkfnifr33rswRraZecik3LkSYU1Y9krdIP3uTJinv9oLbznkmA9FkU2xSRBKWNJ/2InAlqcaNHnYc+uxS5hqk5kiYAi8SqAIw+IYS+pfPfZYVKy1QkJb6+mTr31jHDKiP3q76ERP1oGMDYSWX95erIfd1rBHLjy/0NUhzZRZ3cw5s3vl0saItJukFud88+wjTh+80O8MEHEzCMd6NMg6M1UJY3LGsMIufoaQYN
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(136003)(346002)(396003)(366004)(376002)(39860400002)(451199015)(9686003)(478600001)(6666004)(66556008)(86362001)(66476007)(33716001)(6916009)(54906003)(4326008)(66946007)(8676002)(44832011)(38100700002)(83380400001)(2906002)(6506007)(316002)(41300700001)(26005)(6486002)(53546011)(66899012)(6512007)(5660300002)(8936002)(186003)(7416002)(67856001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?sLigpcaPhUYFFLVDrCJMVB5qp26kUzN24l8mVbu0Ga4XAT0pb8J9Zb/710o/?=
+ =?us-ascii?Q?OdTlqN38uOQGlOM0GVJNLP1M+jZzY8/AYSSK8Tij5kzeD28p5bkbbNOWPxe+?=
+ =?us-ascii?Q?zSiMldNjAVZRBqsm1pokleYsMYsTegD02mD2lzyE/e7IwYYm9kFEvdxH7uCp?=
+ =?us-ascii?Q?VLL3RVrL2xwyJThBJo/pdC9aWpuTksqjLROtNz67BqhcRXbHEvYVOM8twJms?=
+ =?us-ascii?Q?742oNGByMwFjNUJ61AedkBxXimcegDRXJ624Y2XapbkRFCfhj5YWDCHuh7md?=
+ =?us-ascii?Q?7UWjcKVj43tfG0UXfUOaPuHJq8gBvE9LDukJEsyk0vj5jpjieWMie027f8K1?=
+ =?us-ascii?Q?uyobtQ3VvhpQXWiPjCgYYAF1Ky+SDiE7vhsw8T94h8eUPnorv+qXGnhNHVyA?=
+ =?us-ascii?Q?ofhcayHrcVVLUe5HE/XKnzh2fqurDMsrpdCNFtCsPMaMj+WKSjyWiSuf8/wR?=
+ =?us-ascii?Q?1Y7zBb62sDX5n3C9buR6Qgqg3GjmeJdmcgqwHqjhWOyoGfcTMT3Bh7cquMOr?=
+ =?us-ascii?Q?PF4teqb1KsE134dsxOMFUPBnIx9kd+eNyQm1QoE/b4yHC4zVkaU+ic07Aywm?=
+ =?us-ascii?Q?sD0rmkCMcHKbfIPxRDIDFIqANQm2atFLBt+zTI0Sgz/NFPSa1LtOa11/0rLc?=
+ =?us-ascii?Q?9h0za2ZuJ3mIt9q7fWLm5BM3GGBb+BzSXYhpKaYzVmmX1ylgt2DkTrOYDybQ?=
+ =?us-ascii?Q?nKvw76QUQMDkWkO6hKu8iz16VAuXXi9AmAK59aidQtnaz/sVv5kpxJaJu0hN?=
+ =?us-ascii?Q?4x2f96Mop0OoWNA2rPfFIuXs8curOC/v4PKo3buo4ywwFWm5F6T9ZzAThISP?=
+ =?us-ascii?Q?/0YGY1dfL9Pm5iNRfGAzQYEYxkYiwL69dXkN8cQBWIUq2U2jt2I9HIER8MGk?=
+ =?us-ascii?Q?eNKvMZgrjh3zLSk4KRhPQNmXWUntbulmm3Z0MQ6Qf3j9QHglq5bhT6x4jGTs?=
+ =?us-ascii?Q?ZeM9AA7pqnUTLxJYRcPFflo5JTdYg0sY8hG6fVYVGr1ADAgsw6KaZui58wfx?=
+ =?us-ascii?Q?OcnshkRJ1sZ1oAX6jSvjcak0krHZ1eeuiU9xxVPapyJjbpnrTxvOiPALPaCY?=
+ =?us-ascii?Q?ddnWUuQv4mJ+5XQRDeQGaRxOhIkfeAAGSxNepuRFMptuVqI9jHZAYQmwYHk+?=
+ =?us-ascii?Q?yhSlHUR6Xd3WL+MDI9BJNPSpVH422SA4V0bxaIPX1wZY+OMPUNtTFr3FtHMa?=
+ =?us-ascii?Q?X5L1gM5mg/uhxwByU/648xXD73pp/KnRJ0kWiYHPDtyKh++IfcSmtoe80UMV?=
+ =?us-ascii?Q?WKsFhtt0DiWz37caxKlzvYvncveM9FvaiMHRk0hwD1c4/ErCV3w8CT+333G7?=
+ =?us-ascii?Q?TZVNcQPFpQKNxG6xq9fgDwQD9PBueQCBw7wBdwMEpGepaUi978mRKvPPauJY?=
+ =?us-ascii?Q?x2M8CS7mMf53nCxP+4EGVUKc+5E8raQmGaXJM4j8e1kaoGYXWvTn31l3iGTc?=
+ =?us-ascii?Q?cm75q0NkdnfOkzcdUkw4kgtTC1PRj4pMEfV/fYlkJGDjwpbcypalJS6Kzvw0?=
+ =?us-ascii?Q?nRDYMr1ihk60L1T3WtSeqkCNtj4ASQ/XGrik2i5m0PWewR6JIKhK8cubs7b0?=
+ =?us-ascii?Q?UXBkl5+7QD3rBlSaDJyifW9qad/kqcVqeeGtt9sVj/2Fh5u6LCHDo30RyRpe?=
+ =?us-ascii?Q?8A=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6f6c84e1-761e-4caf-45ba-08da9c2d1240
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Sep 2022 23:57:42.1103
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Ldh8rlRdA5t3TbiES0fxJUXyoeW845lF4sr01JOmDhG3TLdwfd53LaajAsWX4uRgBQjqYhUmhv9LMIZkUjr4pw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR10MB4460
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-21_12,2022-09-20_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=656 adultscore=0
+ phishscore=0 bulkscore=0 malwarescore=0 spamscore=0 suspectscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209210161
+X-Proofpoint-ORIG-GUID: 57IWppuiOQVLMIqcH2NSaOvwb2bLcbls
+X-Proofpoint-GUID: 57IWppuiOQVLMIqcH2NSaOvwb2bLcbls
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/22/22 02:27, Mike Snitzer wrote:
-> On Tue, Sep 20 2022 at  5:11P -0400,
-> Pankaj Raghav <p.raghav@samsung.com> wrote:
+On 09/21/22 10:48, Mike Kravetz wrote:
+> On 09/21/22 16:34, Liu Shixin wrote:
+> > The vma_lock and hugetlb_fault_mutex are dropped before handling
+> > userfault and reacquire them again after handle_userfault(), but
+> > reacquire the vma_lock could lead to UAF[1] due to the following
+> > race,
+> > 
+> > hugetlb_fault
+> >   hugetlb_no_page
+> >     /*unlock vma_lock */
+> >     hugetlb_handle_userfault
+> >       handle_userfault
+> >         /* unlock mm->mmap_lock*/
+> >                                            vm_mmap_pgoff
+> >                                              do_mmap
+> >                                                mmap_region
+> >                                                  munmap_vma_range
+> >                                                    /* clean old vma */
+> >         /* lock vma_lock again  <--- UAF */
+> >     /* unlock vma_lock */
+> > 
+> > Since the vma_lock will unlock immediately after hugetlb_handle_userfault(),
+> > let's drop the unneeded lock and unlock in hugetlb_handle_userfault() to fix
+> > the issue.
 > 
->> - Background and Motivation:
->>
->> The zone storage implementation in Linux, introduced since v4.10, first
->> targetted SMR drives which have a power of 2 (po2) zone size alignment
->> requirement. The po2 zone size was further imposed implicitly by the
->> block layer's blk_queue_chunk_sectors(), used to prevent IO merging
->> across chunks beyond the specified size, since v3.16 through commit
->> 762380ad9322 ("block: add notion of a chunk size for request merging").
->> But this same general block layer po2 requirement for blk_queue_chunk_sectors()
->> was removed on v5.10 through commit 07d098e6bbad ("block: allow 'chunk_sectors'
->> to be non-power-of-2").
->>
->> NAND, which is the media used in newer zoned storage devices, does not
->> naturally align to po2. In these devices, zone capacity(cap) is not the
->> same as the po2 zone size. When the zone cap != zone size, then unmapped
->> LBAs are introduced to cover the space between the zone cap and zone size.
->> po2 requirement does not make sense for these type of zone storage devices.
->> This patch series aims to remove these unmapped LBAs for zoned devices when
->> zone cap is npo2. This is done by relaxing the po2 zone size constraint
->> in the kernel and allowing zoned device with npo2 zone sizes if zone cap
->> == zone size.
->>
->> Removing the po2 requirement from zone storage should be possible
->> now provided that no userspace regression and no performance regressions are
->> introduced. Stop-gap patches have been already merged into f2fs-tools to
->> proactively not allow npo2 zone sizes until proper support is added [1].
->>
->> There were two efforts previously to add support to npo2 devices: 1) via
->> device level emulation [2] but that was rejected with a final conclusion
->> to add support for non po2 zoned device in the complete stack[3] 2)
->> adding support to the complete stack by removing the constraint in the
->> block layer and NVMe layer with support to btrfs, zonefs, etc which was
->> rejected with a conclusion to add a dm target for FS support [0]
->> to reduce the regression impact.
->>
->> This series adds support to npo2 zoned devices in the block and nvme
->> layer and a new **dm target** is added: dm-po2zoned-target. This new
->> target will be initially used for filesystems such as btrfs and
->> f2fs until native npo2 zone support is added.
+> Thank you very much!
 > 
-> As this patchset nears the point of being "ready for merge" and DM's
-> "zoned" oriented targets are multiplying, I need to understand: where
-> are we collectively going?  How long are we expecting to support the
-> "stop-gap zoned storage" layers we've constructed?
+> When I saw this report, the obvious fix was to do something like what you have
+> done below.  That looks fine with a few minor comments.
 > 
-> I know https://zonedstorage.io/docs/introduction exists... but it
-> _seems_ stale given the emergence of ZNS and new permutations of zoned
-> hardware. Maybe that isn't quite fair (it does cover A LOT!) but I'm
-> still left wanting (e.g. "bring it all home for me!")...
+> One question I have not yet answered is, "Does this same issue apply to
+> follow_hugetlb_page()?".  I believe it does.  follow_hugetlb_page calls
+> hugetlb_fault which could result in the fault being processed by userfaultfd.
+> If we experience the race above, then the associated vma could no longer be
+> valid when returning from hugetlb_fault.  follow_hugetlb_page and callers
+> have a flag (locked) to deal with dropping mmap lock.  However, I am not sure
+> if it is handled correctly WRT userfaultfd.  I think this needs to be answered
+> before fixing.  And, if the follow_hugetlb_page code needs to be fixed it
+> should be done at the same time.
 > 
-> Damien, as the most "zoned storage" oriented engineer I know, can you
-> please kick things off by shedding light on where Linux is now, and
-> where it's going, for "zoned storage"?
 
-Let me first start with what we have seen so far with deployments in the
-field.
+To at least verify this code path, I added userfaultfd handling to the gup_test
+program in kernel selftests.  When doing basic gup test on a hugetlb page in
+a userfaultfd registered range, I hit this warning:
 
-The largest user base for zoned storage is for now hyperscalers (cloud
-services) deploying SMR disks. E.g. Dropbox has many times publicized its
-use of SMR HDDs. ZNS is fairly new, and while it is being actively
-evaluated by many, there are not yet any large scale deployments that I am
-aware of.
+[ 6939.867796] FAULT_FLAG_ALLOW_RETRY missing 1
+[ 6939.871503] CPU: 2 PID: 5720 Comm: gup_test Not tainted 6.0.0-rc6-next-20220921+ #72
+[ 6939.874562] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.15.0-1.fc35 04/01/2014
+[ 6939.877707] Call Trace:
+[ 6939.878745]  <TASK>
+[ 6939.879779]  dump_stack_lvl+0x6c/0x9f
+[ 6939.881199]  handle_userfault.cold+0x14/0x1e
+[ 6939.882830]  ? find_held_lock+0x2b/0x80
+[ 6939.884370]  ? __mutex_unlock_slowpath+0x45/0x280
+[ 6939.886145]  hugetlb_handle_userfault+0x90/0xf0
+[ 6939.887936]  hugetlb_fault+0xb7e/0xda0
+[ 6939.889409]  ? vprintk_emit+0x118/0x3a0
+[ 6939.890903]  ? _printk+0x58/0x73
+[ 6939.892279]  follow_hugetlb_page.cold+0x59/0x145
+[ 6939.894116]  __get_user_pages+0x146/0x750
+[ 6939.895580]  __gup_longterm_locked+0x3e9/0x680
+[ 6939.897023]  ? seqcount_lockdep_reader_access.constprop.0+0xa5/0xb0
+[ 6939.898939]  ? lockdep_hardirqs_on+0x7d/0x100
+[ 6939.901243]  gup_test_ioctl+0x320/0x6e0
+[ 6939.902202]  __x64_sys_ioctl+0x87/0xc0
+[ 6939.903220]  do_syscall_64+0x38/0x90
+[ 6939.904233]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+[ 6939.905423] RIP: 0033:0x7fbb53830f7b
 
-Most of the large scale SMR users today mainly use the zoned storage
-drives directly, without a file system, similarly to their use of regular
-block devices. Some erasure coded object store sits on top of the zoned
-drives and manage them. The interface used for that has now switched to
-using the kernel API, from libzbc pass-through in the early days of SMR
-support. With the inclusion of zonefs in kernel 5.6, many are now
-switching to using that instead of directly accessing the block device
-file. zonefs makes the application development somewhat easier (there is
-no need for issuing zone management ioctls) and can also result in
-applications that can actually run almost as-is on top of regular block
-devices with a file system. That is a very interesting property,
-especially in development phase for the user.
+This is because userfaultfd is expecting FAULT_FLAG_ALLOW_RETRY which is not
+set in this path.
 
-Beside these large scale SMR deployments, there are also many smaller
-users. For these cases, dm-zoned seemed to be used a lot. In particular,
-the Chia cryptocurrency boom (now fading ?) did generate a fair amount of
-new SMR users relying on dm-zoned. With btrfs zoned storage support
-maturing, dm-zoned is not as needed as it used to though. SMR drives can
-be used directly under btrfs and I certainly am always recommending this
-approach over dm-zoned+ext4 or dm-zoned+xfs as performance is much better
-for write intensive workloads.
-
-For Linux kernel overall, zoned storage is in a very good shape for raw
-block device use and zonefs use. Production deployments we are seeing are
-a proof of that. Currently, my team effort is mostly focused on btrfs and
-zonefs and increasing zoned storage use cases.
-
-1) For btrfs, Johannes and Naohiro are working on stabilizing support for
-ZNS (we still have some issues with the management of active zones) and
-implementing de-clustered parity RAID support so that zoned drives can be
-used in RAID 0, 1, 10, 5, 6 and erasure coded volumes. This will address
-use cases such as home NAS boxes, backup servers, small file servers,
-video applications (e.g. video surveillance) etc. Essentially, any
-application with large storage capacity needs that is not a distributed
-setup. There are many.
-
-2) For zonefs, I have some to-do items lined up to improve performance
-(better read IO tail latency) and further improve ease of use (e.g. remove
-the O_DIRECT write constraint).
-
-3) At the block device level, we are also working on adding zoned block
-device specifications to virtio and implementing that support in qemu and
-the kernel. Patches are floating around now but not yet merged. This
-addresses the use of zoned storage in VM environments through virtio
-interface instead of directly attaching devices to guests.
-
-> To give some additional context to help me when you answer: I'm left
-> wondering what, if any, role dm-zoned has to play moving forward given
-> ZNS is "the future" (and yeah "the future" is now but...)?  E.g.: Does
-> it make sense to stack dm-zoned ontop of dm-po2zoned!?
-
-That is a lot to unfold in a small paragraph :)
-
-First of all, I would rephrase "ZNS is the future" into "ZNS is a very
-interesting alternative to generic NVMe SSDs". The reason being that HDD
-are not dead, far from it. They still are way cheaper than SSDs in $/TB :)
-So ZNS is not really in competition with SMR HDDs jere. The 2 are
-complementary, exactly like regular SSDs are complementary to regular HDDs.
-
-dm-zoned serves some use cases for SMR HDDs (see above) but does not
-address ZNS (more on this below). And given that all SMR HDD on the market
-today have a zone size that is a power of 2 number of LBAs (256MB zone
-size is by far the most common), dm-po2zoned is not required at all for SMR.
-
-Pankaj patch series is all about supporting ZNS devices that have a zone
-size that is not a power of 2 number of LBAs as some vendors want to
-produce such drives. There is no such move happening in the SMR world as
-all users are happy with the current zone sizes which match the kernel
-support (which currently requires power-of-2 number of LBAs for the zone
-size).
-
-I do not think we have yet reached a consensus on if we really want to
-accept any zone size for zoned storage. I personally am not a big fan of
-removing the existing constraint as that makes the code somewhat heavier
-(multiplication & divisions instead of bit shifts) without introducing any
-benefit to the user that I can see (or agree with). And there is also a
-risk of forcing onto the users to redesign/change their code to support
-different devices in the same system. That is never nice to fragment
-support like this for the same device class. This is why several people,
-including me, requested something like dm-po2zoned, to avoid breaking user
-applications if non-power-of-2 zone size drives support is merged. Better
-than nothing for sure, but not ideal either. That is only my opinion.
-There are different opinions out there.
-
-> Yet more context: When I'm asked to add full-blown support for
-> dm-zoned to RHEL my gut is "please no, why!?".  And if we really
-> should add dm-zoned is dm-po2zoned now also a requirement (to support
-> non-power-of-2 ZNS devices in our never-ending engineering of "zoned
-> storage" compatibility stop-gaps)?
-
-Support for dm-zoned in RHEL really depends on if your customers need it.
-Having SMR and ZNS block device (CONFIG_BLK_DEV_ZONED) and zonefs support
-enabled would already cover a lot of use cases on their own, at least the
-ones we see in the field today.
-
-Going forward, we expect more use cases to rely on btrfs rather than
-dm-zoned or any equivalent DM target for ZNS. And that can also include
-non power of 2 zone size drives as btrfs should normally be able to handle
-such devices, if the support for them is merged. But we are not there yet
-with btrfs support, hence dm-po2zoned.
-
-But again, that all depends on if Pankaj patch series is accepted, that
-is, on everybody accepting that we lift the power-of-2 zone size constraint.
-> In addition, it was my understanding that WDC had yet another zoned DM
-> target called "dm-zap" that is for ZNS based devices... It's all a bit
-> messy in my head (that's on me for not keeping up, but I think we need
-> a recap!)
-
-Since the ZNS specification does not define conventional zones, dm-zoned
-cannot be used as a standalone DM target (read: single block device) with
-NVMe zoned block devices. Furthermore, due to its block mapping scheme,
-dm-zoned does not support devices with zones that have a capacity lower
-than the zone size. So ZNS is really a big *no* for dm-zoned. dm-zap is a
-prototype and in a nutshell is the equivalent of dm-zoned for ZNS. dm-zap
-can deal with the smaller zone capacity and does not require conventional
-zones. We are not trying to push for dm-zap to be merged for now as we are
-still evaluating its potential use cases. We also have a different but
-functionally equivalent approach implemented as a block device driver that
-we are evaluating internally.
-
-Given the above mentioned usage pattern we have seen so far for zoned
-storage, it is not yet clear if something like dm-zap for ZNS is needed
-beside some niche use cases.
-
-> So please help me, and others, become more informed as quickly as
-> possible! ;)
-
-I hope the above helps. If you want me to develop further any of the
-points above, feel free to let me know.
-
-> ps. I'm asking all this in the open on various Linux mailing lists
-> because it doesn't seem right to request a concall to inform only
-> me... I think others may need similar "zoned storage" help.
-
-All good with me :)
+Adding John, Peter and David on Cc: as they are much more fluent in all the
+fault and FOLL combinations and might have immediate suggestions.  It is going
+to take me a little while to figure out:
+1) How to make sure we get the right flags passed to handle_userfault
+2) How to modify follow_hugetlb_page as userfaultfd can certainly drop
+   mmap_lock.  So we can not assume vma still exists upon return.
 
 -- 
-Damien Le Moal
-Western Digital Research
-
+Mike Kravetz
