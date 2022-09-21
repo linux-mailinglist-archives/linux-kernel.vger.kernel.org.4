@@ -2,180 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 981495BF667
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 08:31:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 444B65BF66A
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 08:32:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbiIUGbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 02:31:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58650 "EHLO
+        id S229872AbiIUGcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 02:32:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiIUGbP (ORCPT
+        with ESMTP id S229449AbiIUGcU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 02:31:15 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9AD861DB3
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 23:31:13 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28L6EIFw022002;
-        Wed, 21 Sep 2022 06:31:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : content-type :
- subject : message-id : date : cc : to : content-transfer-encoding :
- mime-version; s=pp1; bh=vjk4eIKbdqnaddTSBrwhu12wc7vTtk5Lr5Xt0GcaCq4=;
- b=b39rKPm3+hdbLJJ9JIpIctTGtop7X4q89BLV6xWqGvtWAfAQHybnaMynVNggroBAm0t/
- DapLHg0t2RnGLZg0LKK/aOeCgZz2dgMEQ4qccr/2urORoVJzKRMkX35noSAepT33o9ea
- 8BhPKaxg+uyhEdJohuQsgrLIrUDoEKu1Lrx+via9lmnV6BAPNjOBmWNzuq2GtXJs0+kA
- 9TJgNSgclWCU6RQkAm8MvkAsjZDTqh7LGE/gKW6XvTHYKrpep1+70LRlt0Ub+UTsOf/C
- Ny0U8Q2YJ3eMZtpzdRIheJPd+P/m8f78IsUoe3zhqRRQS9kWp3b8ksD8gm38LreFnncn YQ== 
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3jqw5m8dyc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 21 Sep 2022 06:31:04 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28L6L7EW023313;
-        Wed, 21 Sep 2022 06:31:02 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma01fra.de.ibm.com with ESMTP id 3jn5v8kjhj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 21 Sep 2022 06:31:02 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28L6Qxa842205694
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 21 Sep 2022 06:26:59 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DF40CAE04D;
-        Wed, 21 Sep 2022 06:30:59 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1C059AE045;
-        Wed, 21 Sep 2022 06:30:59 +0000 (GMT)
-Received: from smtpclient.apple (unknown [9.109.241.54])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 21 Sep 2022 06:30:58 +0000 (GMT)
-From:   Sachin Sant <sachinp@linux.ibm.com>
-Content-Type: text/plain;
-        charset=us-ascii
-Subject: [powerpc] Kernel crash with THP tests (next-20220920)
-Message-Id: <C2C8DA4F-F00F-43E9-ACD8-2A8BACA55893@linux.ibm.com>
-Date:   Wed, 21 Sep 2022 12:00:57 +0530
-Cc:     mike.kravetz@oracle.com, open list <linux-kernel@vger.kernel.org>
-To:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, linux-mm@kvack.org
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: FmHBtZGju_2Wpn0e6Rqc0-P0DWZ-YXBe
-X-Proofpoint-GUID: FmHBtZGju_2Wpn0e6Rqc0-P0DWZ-YXBe
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Wed, 21 Sep 2022 02:32:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91ED18050B;
+        Tue, 20 Sep 2022 23:32:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D301CB82284;
+        Wed, 21 Sep 2022 06:32:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0844C433D6;
+        Wed, 21 Sep 2022 06:32:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663741935;
+        bh=rC4E+19FVQlROChcbwNhPnEipKbJ85MCL4IuRpFzwOk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DCX08OfxusX2gqMseGQrdErer7hzwsDaE1J5thbETa2jedwzVjozRsXli1yim7cN+
+         dHdllCUxRqIKNIkfXYMxdIlpikvRm6ilL5niBuojwX2g9AYkZeplB9dZjXxhJpzE8h
+         r7+UxVFryZpe4crXBEUOZ9wuPkhc3KQFA5hhRGBEAhguEJi62O5d1Uho2RutfMesQb
+         /Z/bM4ieVSJK2la2jujblVAM3jBWw5yRiD352MBVK0t/WFdT0Mkj994x1q1TFAVbpL
+         FG/MduCrQqH/SWuMuGp+57qBaXZnz5BjByOhJiSTI0wOR/ehzIZA7V7XZdLxBj0+W7
+         JNmeY3L2aLfIA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oatHK-0003Sf-0R; Wed, 21 Sep 2022 08:32:14 +0200
+Date:   Wed, 21 Sep 2022 08:32:14 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Greg KH <greg@kroah.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the tty tree with the usb-serial tree
+Message-ID: <Yyqv7rwuy3dedbqI@hovoldconsulting.com>
+References: <20220921151109.174cad24@canb.auug.org.au>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-21_02,2022-09-20_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=665 phishscore=0
- priorityscore=1501 adultscore=0 malwarescore=0 spamscore=0 bulkscore=0
- suspectscore=0 clxscore=1011 lowpriorityscore=0 impostorscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
- definitions=main-2209210040
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="mMFeO+J6G+9SD2f2"
+Content-Disposition: inline
+In-Reply-To: <20220921151109.174cad24@canb.auug.org.au>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While running transparent huge page tests [1] against 6.0.0-rc6-next-202209=
-20
-following crash is seen on IBM Power server.
 
-Kernel attempted to read user page (34) - exploit attempt? (uid: 0)
-BUG: Kernel NULL pointer dereference on read at 0x00000034
-Faulting instruction address: 0xc0000000004d2744
-Oops: Kernel access of bad area, sig: 11 [#1]
-LE PAGE_SIZE=3D64K MMU=3DRadix SMP NR_CPUS=3D2048 NUMA pSeries
-Modules linked in: dm_mod(E) bonding(E) rfkill(E) tls(E) sunrpc(E) nd_pmem(=
-E) nd_btt(E) dax_pmem(E) papr_scm(E) libnvdimm(E) pseries_rng(E) vmx_crypto=
-(E) ext4(E) mbcache(E) jbd2(E) sd_mod(E) t10_pi(E) crc64_rocksoft(E) crc64(=
-E) sg(E) ibmvscsi(E) scsi_transport_srp(E) ibmveth(E) fuse(E)
-CPU: 37 PID: 2219255 Comm: sysctl Tainted: G            E      6.0.0-rc6-ne=
-xt-20220920 #1
-NIP:  c0000000004d2744 LR: c0000000004d2734 CTR: 0000000000000000
-REGS: c0000012801bf660 TRAP: 0300   Tainted: G            E       (6.0.0-rc=
-6-next-20220920)
-MSR:  8000000000009033 <SF,EE,ME,IR,DR,RI,LE>  CR: 24048222  XER: 20040000
-CFAR: c0000000004b0eac DAR: 0000000000000034 DSISR: 40000000 IRQMASK: 0=20
-GPR00: c0000000004d2734 c0000012801bf900 c000000002a92300 0000000000000000=
-=20
-GPR04: c000000002ac8ac0 c000000001209340 0000000000000005 c000001286714b80=
-=20
-GPR08: 0000000000000034 0000000000000000 0000000000000000 0000000000000000=
-=20
-GPR12: 0000000028048242 c00000167fff6b00 0000000000000000 0000000000000000=
-=20
-GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000000=
-=20
-GPR20: c0000012801bfae8 0000000000000001 0000000000000100 0000000000000001=
-=20
-GPR24: c0000012801bfae8 c000000002ac8ac0 0000000000000002 0000000000000005=
-=20
-GPR28: 0000000000000000 0000000000000001 0000000000000000 0000000000346cca=
-=20
-NIP [c0000000004d2744] alloc_buddy_huge_page+0xd4/0x240
-LR [c0000000004d2734] alloc_buddy_huge_page+0xc4/0x240
-Call Trace:
-[c0000012801bf900] [c0000000004d2734] alloc_buddy_huge_page+0xc4/0x240 (unr=
-eliable)
-[c0000012801bf9b0] [c0000000004d46a4] alloc_fresh_huge_page.part.72+0x214/0=
-x2a0
-[c0000012801bfa40] [c0000000004d7f88] alloc_pool_huge_page+0x118/0x190
-[c0000012801bfa90] [c0000000004d84dc] __nr_hugepages_store_common+0x4dc/0x6=
-10
-[c0000012801bfb70] [c0000000004d88bc] hugetlb_sysctl_handler_common+0x13c/0=
-x180
-[c0000012801bfc10] [c0000000006380e0] proc_sys_call_handler+0x210/0x350
-[c0000012801bfc90] [c000000000551c00] vfs_write+0x2e0/0x460
-[c0000012801bfd50] [c000000000551f5c] ksys_write+0x7c/0x140
-[c0000012801bfda0] [c000000000033f58] system_call_exception+0x188/0x3f0
-[c0000012801bfe10] [c00000000000c53c] system_call_common+0xec/0x270
---- interrupt: c00 at 0x7fffa9520c34
-NIP:  00007fffa9520c34 LR: 00000001024754bc CTR: 0000000000000000
-REGS: c0000012801bfe80 TRAP: 0c00   Tainted: G            E       (6.0.0-rc=
-6-next-20220920)
-MSR:  800000000280f033 <SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE>  CR: 28002202  =
-XER: 00000000
-IRQMASK: 0=20
-GPR00: 0000000000000004 00007fffccd76cd0 00007fffa9607300 0000000000000003=
-=20
-GPR04: 0000000138da6970 0000000000000006 fffffffffffffff6 0000000000000000=
-=20
-GPR08: 0000000138da6970 0000000000000000 0000000000000000 0000000000000000=
-=20
-GPR12: 0000000000000000 00007fffa9a40940 0000000000000000 0000000000000000=
-=20
-GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000000=
-=20
-GPR20: 0000000000000000 0000000000000000 0000000000000000 0000000000000000=
-=20
-GPR24: 0000000000000001 0000000000000010 0000000000000006 0000000138da8aa0=
-=20
-GPR28: 00007fffa95fc2c8 0000000138da8aa0 0000000000000006 0000000138da6930=
-=20
-NIP [00007fffa9520c34] 0x7fffa9520c34
-LR [00000001024754bc] 0x1024754bc
---- interrupt: c00
-Instruction dump:
-3b400002 3ba00001 3b800000 7f26cb78 7fc5f378 7f64db78 7fe3fb78 4bfde5b9=20
-60000000 7c691b78 39030034 7c0004ac <7d404028> 7c0ae800 40c20010 7f80412d=20
----[ end trace 0000000000000000 ]---
+--mMFeO+J6G+9SD2f2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Kernel panic - not syncing: Fatal exception
+On Wed, Sep 21, 2022 at 03:11:09PM +1000, Stephen Rothwell wrote:
+> Hi all,
+>=20
+> Today's linux-next merge of the tty tree got a conflict in:
+>=20
+>   drivers/usb/serial/ftdi_sio.c
+>=20
+> between commit:
+>=20
+>   a8619505a778 ("USB: serial: ftdi_sio: move driver structure")
+>=20
+> from the usb-serial tree and commit:
+>=20
+>   f6d47fe5921a ("usb: serial: Make ->set_termios() old ktermios const")
+>=20
+> from the tty tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-Bisect points to following patch:
-commit f2f3c25dea3acfb17aecb7273541e7266dfc8842
-    hugetlb: freeze allocated pages before creating hugetlb pages
+Looks good. Thanks for the heads-up.
 
-Reverting the patch allows the test to run successfully.
+Johan
 
-Thanks
-- Sachin
+--mMFeO+J6G+9SD2f2
+Content-Type: application/pgp-signature; name="signature.asc"
 
-[1] https://github.com/avocado-framework-tests/avocado-misc-tests/blob/mast=
-er/memory/transparent_hugepages_defrag.py=
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQQHbPq+cpGvN/peuzMLxc3C7H1lCAUCYyqv5gAKCRALxc3C7H1l
+CM9QAQDCjz9Hkb6MIXN/oNp9h2S/r7htSlL5C8tiIAyg5MOyvwD/dMaYY/0Yi+na
+fPTEgcLoOpv1gOgWJSWItDmzYlYIyQc=
+=5KBK
+-----END PGP SIGNATURE-----
+
+--mMFeO+J6G+9SD2f2--
