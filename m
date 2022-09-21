@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B23A55C0242
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:50:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ADD65C02FA
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:57:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231660AbiIUPun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 11:50:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51764 "EHLO
+        id S232055AbiIUP5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 11:57:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230326AbiIUPt4 (ORCPT
+        with ESMTP id S232030AbiIUP4v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 11:49:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B39649DB5C;
-        Wed, 21 Sep 2022 08:48:02 -0700 (PDT)
+        Wed, 21 Sep 2022 11:56:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A1A89F8DC;
+        Wed, 21 Sep 2022 08:51:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C259162C83;
-        Wed, 21 Sep 2022 15:47:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2D91C433C1;
-        Wed, 21 Sep 2022 15:47:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 555A9B830BE;
+        Wed, 21 Sep 2022 15:50:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97098C433B5;
+        Wed, 21 Sep 2022 15:50:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663775270;
-        bh=yHOKXtx+Gl0du+lF7DmbIPAKD/iEhZIrQblOEAIr2F8=;
+        s=korg; t=1663775426;
+        bh=VFkvvxFCc18O/kmq1Jd3OItHZjzJyz5jqz9K3qY0pVU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gjlCnA/EfpidfjZ39zx1hI63qDeVphgrlktMr9u59izWlhBbwHIxBB++bw80bOa9G
-         /o26YSo84dwXwt2noZWE2VKIePa6Z1nXKvRrF3o0qw/Qx0PkcgLBUw5LaLhlHN8/PN
-         vSod2FSo75mvMR5YSuGoFMgTcZAkJ60HYHpFZHWg=
+        b=QnYaTL4Eplhn3BBhykdATptGi4DHYkGOvDm3xiJSX7O7g6Xa3JcrG07xNSyor3wQG
+         t8nkxisOgFSJzQJ2PlIXNAc0xZlvGOhBzHckjmypk3oK99RaJTiaG+Xm6N6Dzts3IJ
+         IpLGlxHBfqSSoXJCcVkRYkheeeCRKScq1pzGzlgU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot <syzbot+29d3a3b4d86c8136ad9e@syzkaller.appspotmail.com>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        Tejun Heo <tj@kernel.org>
-Subject: [PATCH 5.19 36/38] cgroup: Add missing cpus_read_lock() to cgroup_attach_task_all()
-Date:   Wed, 21 Sep 2022 17:46:20 +0200
-Message-Id: <20220921153647.405603171@linuxfoundation.org>
+        stable@vger.kernel.org, David Howells <dhowells@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 31/45] rxrpc: Fix local destruction being repeated
+Date:   Wed, 21 Sep 2022 17:46:21 +0200
+Message-Id: <20220921153647.920686447@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220921153646.298361220@linuxfoundation.org>
-References: <20220921153646.298361220@linuxfoundation.org>
+In-Reply-To: <20220921153646.931277075@linuxfoundation.org>
+References: <20220921153646.931277075@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,43 +53,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+From: David Howells <dhowells@redhat.com>
 
-commit 43626dade36fa74d3329046f4ae2d7fdefe401c6 upstream.
+[ Upstream commit d3d863036d688313f8d566b87acd7d99daf82749 ]
 
-syzbot is hitting percpu_rwsem_assert_held(&cpu_hotplug_lock) warning at
-cpuset_attach() [1], for commit 4f7e7236435ca0ab ("cgroup: Fix
-threadgroup_rwsem <-> cpus_read_lock() deadlock") missed that
-cpuset_attach() is also called from cgroup_attach_task_all().
-Add cpus_read_lock() like what cgroup_procs_write_start() does.
+If the local processor work item for the rxrpc local endpoint gets requeued
+by an event (such as an incoming packet) between it getting scheduled for
+destruction and the UDP socket being closed, the rxrpc_local_destroyer()
+function can get run twice.  The second time it can hang because it can end
+up waiting for cleanup events that will never happen.
 
-Link: https://syzkaller.appspot.com/bug?extid=29d3a3b4d86c8136ad9e [1]
-Reported-by: syzbot <syzbot+29d3a3b4d86c8136ad9e@syzkaller.appspotmail.com>
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Fixes: 4f7e7236435ca0ab ("cgroup: Fix threadgroup_rwsem <-> cpus_read_lock() deadlock")
-Signed-off-by: Tejun Heo <tj@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: David Howells <dhowells@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/cgroup/cgroup-v1.c |    2 ++
- 1 file changed, 2 insertions(+)
+ net/rxrpc/local_object.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/kernel/cgroup/cgroup-v1.c
-+++ b/kernel/cgroup/cgroup-v1.c
-@@ -59,6 +59,7 @@ int cgroup_attach_task_all(struct task_s
- 	int retval = 0;
+diff --git a/net/rxrpc/local_object.c b/net/rxrpc/local_object.c
+index ef43fe8bdd2f..1d15940f61d7 100644
+--- a/net/rxrpc/local_object.c
++++ b/net/rxrpc/local_object.c
+@@ -406,6 +406,9 @@ static void rxrpc_local_processor(struct work_struct *work)
+ 		container_of(work, struct rxrpc_local, processor);
+ 	bool again;
  
- 	mutex_lock(&cgroup_mutex);
-+	cpus_read_lock();
- 	percpu_down_write(&cgroup_threadgroup_rwsem);
- 	for_each_root(root) {
- 		struct cgroup *from_cgrp;
-@@ -72,6 +73,7 @@ int cgroup_attach_task_all(struct task_s
- 			break;
- 	}
- 	percpu_up_write(&cgroup_threadgroup_rwsem);
-+	cpus_read_unlock();
- 	mutex_unlock(&cgroup_mutex);
++	if (local->dead)
++		return;
++
+ 	trace_rxrpc_local(local->debug_id, rxrpc_local_processing,
+ 			  atomic_read(&local->usage), NULL);
  
- 	return retval;
+-- 
+2.35.1
+
 
 
