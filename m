@@ -2,54 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1745D5BF1DE
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 02:16:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F9715BF1F1
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 02:26:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbiIUAQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 20:16:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48704 "EHLO
+        id S230341AbiIUA0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 20:26:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbiIUAQk (ORCPT
+        with ESMTP id S230054AbiIUA0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 20:16:40 -0400
-Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [5.144.164.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A50D36EF25
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 17:16:39 -0700 (PDT)
-Received: from localhost.localdomain (95.49.29.188.neoplus.adsl.tpnet.pl [95.49.29.188])
-        by m-r2.th.seeweb.it (Postfix) with ESMTPA id 4824C3F63D;
-        Wed, 21 Sep 2022 02:16:36 +0200 (CEST)
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-To:     ~postmarketos/upstreaming@lists.sr.ht
-Cc:     martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Kalle Valo <kvalo@kernel.org>,
+        Tue, 20 Sep 2022 20:26:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D78D5AC4A;
+        Tue, 20 Sep 2022 17:26:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 37DBC6260A;
+        Wed, 21 Sep 2022 00:26:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09145C433C1;
+        Wed, 21 Sep 2022 00:26:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663719969;
+        bh=kOc9LBTqYjvRnyqiu2NdEtQAsHH6QxXzcA0/fNkr1jA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=EkQJNjycvM9XX2NLnWE9bHxfpRrLRzubgoehVa/v1+XWC5VA2tzociUkz/SmqTm6s
+         al7FyMeI4EFcYjTPoB04QLDtsZKPfpuMDR2DTHPRwwLAqRIC4Q+8g3OlKyASRLy3h0
+         MWbK0PJoFGJXhXAigjdYEGmGVEz/6Dn+TdrXMN4yVkLSTO0h3KXjwqAT2BSJva9eBX
+         35fCSVA3XiKJMwLn+j9YqYaHDxrmhpL2mNfeFxfPaTYN5RWP6ak25v0t2TmEP6XGWJ
+         Yl0vjMlMSb4H5aFCdvRmh32kx49v0TYjuBL4/sNuPPMTeAx8I0o9ZKJpgyReJ2LEjL
+         EcfovXk0an+dw==
+Date:   Tue, 20 Sep 2022 17:26:08 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hector Martin <marcan@marcan.st>,
-        =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
-        Marek Vasut <marex@denx.de>,
-        "Zhao, Jiaqing" <jiaqing.zhao@intel.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Soontak Lee <soontak.lee@cypress.com>,
-        linux-wireless@vger.kernel.org,
-        brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] brcmfmac: Add support for BCM43596 PCIe Wi-Fi
-Date:   Wed, 21 Sep 2022 02:16:27 +0200
-Message-Id: <20220921001630.56765-1-konrad.dybcio@somainline.org>
-X-Mailer: git-send-email 2.37.3
+        Voon Weifeng <weifeng.voon@intel.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 net-next 7/7] net/sched: taprio: replace safety
+ precautions with comments
+Message-ID: <20220920172608.5cf6bac1@kernel.org>
+In-Reply-To: <20220921001625.jwpr5r5tneyoxect@skbuf>
+References: <20220915105046.2404072-1-vladimir.oltean@nxp.com>
+        <20220915105046.2404072-8-vladimir.oltean@nxp.com>
+        <20220920140119.481f74a3@kernel.org>
+        <20220921001625.jwpr5r5tneyoxect@skbuf>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,88 +67,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for BCM43596 dual-band AC chip, found in
-SONY Xperia X Performance, XZ and XZs smartphones (and
-*possibly* other devices from other manufacturers).
-The chip doesn't require any special handling and seems to work
-just fine OOTB.
+On Wed, 21 Sep 2022 00:16:26 +0000 Vladimir Oltean wrote:
+> On Tue, Sep 20, 2022 at 02:01:19PM -0700, Jakub Kicinski wrote:
+> > Another option is DEBUG_NET_WARN_ON_ONCE() FWIW, you probably know..  
+> 
+> Just for replacing WARN_ON_ONCE(), yes, maybe, but when you factor in
+> that the code also had calls to qdisc_drop(), I suppose you meant
+> replacing it with something like this?
+> 
+> 	if (DEBUG_NET_WARN_ON_ONCE(unlikely(FULL_OFFLOAD_IS_ENABLED(q->flags))))
+> 		return qdisc_drop(skb, sch, to_free);
+> 
+> This won't work because DEBUG_NET_WARN_ON_ONCE() force-casts WARN_ON_ONCE()
+> to void, discarding its evaluated value.
+> 
+> We'd be left with something custom like below:
+> 
+> 	if (IS_ENABLED(CONFIG_DEBUG_NET) && unlikely(FULL_OFFLOAD_IS_ENABLED(q->flags))) {
+> 		WARN_ONCE(1, "Trying to enqueue skb into the root of a taprio qdisc configured with full offload\n");
+> 		return qdisc_drop(skb, sch, to_free);
+> 	}
+> 
+> which may work, but it's so odd looking that it's just not worth the
+> trouble, I feel?
 
-PCIe IDs taken from: https://github.com/sonyxperiadev/kernel/commit/9e43fefbac8e43c3d7792e73ca52a052dd86d7e3.patch
+I meant as a way of retaining the sanity check, a bare:
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
----
-Changes since v1:
-- rebased the patch against -next
+	DEBUG_NET_WARN_ON_ONCE(FULL_OFFLOAD_IS_ENABLED(q->flags));
 
- drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c       | 2 ++
- drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c       | 4 ++++
- drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h | 4 ++++
- 3 files changed, 10 insertions(+)
-
-diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c
-index 3026166a56c1..6234e7475a1a 100644
---- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c
-+++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c
-@@ -727,6 +727,7 @@ static u32 brcmf_chip_tcm_rambase(struct brcmf_chip_priv *ci)
- 	case BRCM_CC_43666_CHIP_ID:
- 		return 0x200000;
- 	case BRCM_CC_4359_CHIP_ID:
-+	case BRCM_CC_43596_CHIP_ID:
- 		return (ci->pub.chiprev < 9) ? 0x180000 : 0x160000;
- 	case BRCM_CC_4364_CHIP_ID:
- 	case CY_CC_4373_CHIP_ID:
-@@ -1430,6 +1431,7 @@ bool brcmf_chip_sr_capable(struct brcmf_chip *pub)
- 		reg = chip->ops->read32(chip->ctx, addr);
- 		return (reg & CC_SR_CTL0_ENABLE_MASK) != 0;
- 	case BRCM_CC_4359_CHIP_ID:
-+	case BRCM_CC_43596_CHIP_ID:
- 	case CY_CC_43752_CHIP_ID:
- 	case CY_CC_43012_CHIP_ID:
- 		addr = CORE_CC_REG(pmu->base, retention_ctl);
-diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-index f98641bb1528..2e7fc66adf31 100644
---- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-+++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-@@ -81,6 +81,7 @@ static const struct brcmf_firmware_mapping brcmf_pcie_fwnames[] = {
- 	BRCMF_FW_ENTRY(BRCM_CC_43570_CHIP_ID, 0xFFFFFFFF, 43570),
- 	BRCMF_FW_ENTRY(BRCM_CC_4358_CHIP_ID, 0xFFFFFFFF, 4358),
- 	BRCMF_FW_ENTRY(BRCM_CC_4359_CHIP_ID, 0xFFFFFFFF, 4359),
-+	BRCMF_FW_ENTRY(BRCM_CC_43596_CHIP_ID, 0xFFFFFFFF, 4359),
- 	BRCMF_FW_ENTRY(BRCM_CC_4364_CHIP_ID, 0xFFFFFFFF, 4364),
- 	BRCMF_FW_ENTRY(BRCM_CC_4365_CHIP_ID, 0x0000000F, 4365B),
- 	BRCMF_FW_ENTRY(BRCM_CC_4365_CHIP_ID, 0xFFFFFFF0, 4365C),
-@@ -2451,6 +2452,9 @@ static const struct pci_device_id brcmf_pcie_devid_table[] = {
- 	BRCMF_PCIE_DEVICE(BRCM_PCIE_43570_RAW_DEVICE_ID),
- 	BRCMF_PCIE_DEVICE(BRCM_PCIE_4358_DEVICE_ID),
- 	BRCMF_PCIE_DEVICE(BRCM_PCIE_4359_DEVICE_ID),
-+	BRCMF_PCIE_DEVICE(BRCM_PCIE_43596_DEVICE_ID),
-+	BRCMF_PCIE_DEVICE(BRCM_PCIE_43596_2G_DEVICE_ID),
-+	BRCMF_PCIE_DEVICE(BRCM_PCIE_43596_5G_DEVICE_ID),
- 	BRCMF_PCIE_DEVICE(BRCM_PCIE_43602_DEVICE_ID),
- 	BRCMF_PCIE_DEVICE(BRCM_PCIE_43602_2G_DEVICE_ID),
- 	BRCMF_PCIE_DEVICE(BRCM_PCIE_43602_5G_DEVICE_ID),
-diff --git a/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h b/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h
-index 1003f123ec25..c9c8701039c5 100644
---- a/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h
-+++ b/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h
-@@ -44,6 +44,7 @@
- #define BRCM_CC_43570_CHIP_ID		43570
- #define BRCM_CC_4358_CHIP_ID		0x4358
- #define BRCM_CC_4359_CHIP_ID		0x4359
-+#define BRCM_CC_43596_CHIP_ID		43596
- #define BRCM_CC_43602_CHIP_ID		43602
- #define BRCM_CC_4364_CHIP_ID		0x4364
- #define BRCM_CC_4365_CHIP_ID		0x4365
-@@ -77,6 +78,9 @@
- #define BRCM_PCIE_43570_RAW_DEVICE_ID	0xaa31
- #define BRCM_PCIE_4358_DEVICE_ID	0x43e9
- #define BRCM_PCIE_4359_DEVICE_ID	0x43ef
-+#define BRCM_PCIE_43596_DEVICE_ID	0x4415
-+#define BRCM_PCIE_43596_2G_DEVICE_ID	0x4416
-+#define BRCM_PCIE_43596_5G_DEVICE_ID	0x4417
- #define BRCM_PCIE_43602_DEVICE_ID	0x43ba
- #define BRCM_PCIE_43602_2G_DEVICE_ID	0x43bb
- #define BRCM_PCIE_43602_5G_DEVICE_ID	0x43bc
--- 
-2.37.3
-
+no other handling. Not sure how much sense it makes here,
+it's best suited as syzbot fodder, perhaps the combination
+with offload is pointless.
