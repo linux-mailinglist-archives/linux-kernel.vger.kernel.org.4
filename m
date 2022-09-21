@@ -2,72 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB5385BFA68
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 11:14:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28DE55BFA6A
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 11:14:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231246AbiIUJOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 05:14:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41906 "EHLO
+        id S231372AbiIUJOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 05:14:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231546AbiIUJNj (ORCPT
+        with ESMTP id S231428AbiIUJOU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 05:13:39 -0400
-Received: from outbound-smtp60.blacknight.com (outbound-smtp60.blacknight.com [46.22.136.244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 489818E9A7
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 02:13:13 -0700 (PDT)
-Received: from mail.blacknight.com (pemlinmail03.blacknight.ie [81.17.254.16])
-        by outbound-smtp60.blacknight.com (Postfix) with ESMTPS id 2BB8AFABF8
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 10:13:11 +0100 (IST)
-Received: (qmail 17661 invoked from network); 21 Sep 2022 09:13:11 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 21 Sep 2022 09:13:10 -0000
-Date:   Wed, 21 Sep 2022 10:13:03 +0100
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Hongchen Zhang <zhanghongchen@loongson.cn>
-Cc:     Mel Gorman <mgorman@suse.de>, Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/vmscan: don't scan adjust too much if current is not
- kswapd
-Message-ID: <20220921091303.hihmb3qvfvl3s365@techsingularity.net>
-References: <20220914023318.549118-1-zhanghongchen@loongson.cn>
- <20220914155142.bf388515a39fb45bae987231@linux-foundation.org>
- <6bcb4883-03d0-88eb-4c42-84fff0a9a141@loongson.cn>
- <YyLUGnqtZXn4MjJF@casper.infradead.org>
- <54813a74-cc0e-e470-c632-78437a0d0ad4@loongson.cn>
- <YyLpls9/t6LKQefS@casper.infradead.org>
- <b52b3f49-ebf5-6f63-da1a-f57711c3f97d@loongson.cn>
- <YyQ2m9vU/plyBNas@casper.infradead.org>
- <4bd0012e-77ff-9d0d-e295-800471994aeb@loongson.cn>
- <c3f4d1bb-418c-fbf5-c251-fd448f4d4e86@loongson.cn>
+        Wed, 21 Sep 2022 05:14:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A4E18E4D9
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 02:13:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DF1F5B82EAD
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 09:13:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47C5EC433B5;
+        Wed, 21 Sep 2022 09:13:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1663751633;
+        bh=mm3yWg4zUv+RoBBZFdZLopMIwemsd56mkYyPQK/6HS4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=0A+4yjY/JQQeWtBGzF12XnpGj3FiC8Y2cMfveHyaSBD5UiP5Mftz7PtVn8pSLwctQ
+         mmqEuMPGohxKOe/bTGar8uZDV88PSYa9mqsPPLpMVP3JPeaU4GiCTF1MMjvWdadFP+
+         YcAOvt585YTQsBIrWhnmaIcPhrlWMKZd53zcJHDQ=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     cocci@inria.fr
+Cc:     linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        Nicolas Palix <nicolas.palix@imag.fr>
+Subject: [PATCH] scripts: coccicheck: use "grep -E" instead of "egrep"
+Date:   Wed, 21 Sep 2022 11:13:41 +0200
+Message-Id: <20220921091341.217365-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <c3f4d1bb-418c-fbf5-c251-fd448f4d4e86@loongson.cn>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=979; i=gregkh@linuxfoundation.org; h=from:subject; bh=mm3yWg4zUv+RoBBZFdZLopMIwemsd56mkYyPQK/6HS4=; b=owGbwMvMwCRo6H6F97bub03G02pJDMlaV48uZA/1NjKcvF3n4q8zzZ15lytKd7FEtviJ61207Kjj t5/YEcvCIMjEICumyPJlG8/R/RWHFL0MbU/DzGFlAhnCwMUpABPxfcGwoJ03pLxb5HQtz+Y9xYJn68 qKyrMEGRZctyu2nm2yh2Oy63zJ1uJNj86bcc4AAA==
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 10:23:05AM +0800, Hongchen Zhang wrote:
-> Hi Mel,
-> 
-> The scan adjust algorithm was originally introduced by you from
-> commmit e82e0561dae9 ("mm: vmscan: obey proportional scanning requirements
-> for kswapd"), any suggestion about this fix patch?
-> In short, proportional scanning is not friendly to processes other than
-> kswapd.
-> 
+The latest version of grep claims that egrep is now obsolete so the build
+now contains warnings that look like:
+        egrep: warning: egrep is obsolescent; using grep -E
+fix this up by moving the vdso Makefile to use "grep -E" instead.
 
-I suspect that 6eb90d649537 ("mm: vmscan: fix extreme overreclaim and swap
-floods") is a more appropriate fix. While it also has a fairness impact,
-it's a more general approach that is likely more robust and while
-fairness is important, completely thrashing a full LRU is neither fair
-nor expected.
+Cc: Julia Lawall <Julia.Lawall@inria.fr>
+Cc: Nicolas Palix <nicolas.palix@imag.fr>
+Cc: cocci@inria.fr
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ scripts/coccicheck | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/scripts/coccicheck b/scripts/coccicheck
+index caba0bff6da7..2956fce8fa4f 100755
+--- a/scripts/coccicheck
++++ b/scripts/coccicheck
+@@ -47,7 +47,7 @@ FLAGS="--very-quiet"
+ # inspected there.
+ #
+ # --profile will not output if --very-quiet is used, so avoid it.
+-echo $SPFLAGS | egrep -e "--profile|--show-trying" 2>&1 > /dev/null
++echo $SPFLAGS | grep -E -e "--profile|--show-trying" 2>&1 > /dev/null
+ if [ $? -eq 0 ]; then
+ 	FLAGS="--quiet"
+ fi
 -- 
-Mel Gorman
-SUSE Labs
+2.37.3
+
