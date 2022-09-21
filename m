@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C69E5C022C
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:49:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18DBB5C02E7
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:56:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231319AbiIUPtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 11:49:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50710 "EHLO
+        id S231983AbiIUP4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 11:56:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231666AbiIUPsi (ORCPT
+        with ESMTP id S231902AbiIUPzo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 11:48:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D58F57C304;
-        Wed, 21 Sep 2022 08:47:39 -0700 (PDT)
+        Wed, 21 Sep 2022 11:55:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E229F8D9;
+        Wed, 21 Sep 2022 08:50:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2480C6312A;
-        Wed, 21 Sep 2022 15:47:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16B24C433C1;
-        Wed, 21 Sep 2022 15:47:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2B875B8236C;
+        Wed, 21 Sep 2022 15:50:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72D38C433D6;
+        Wed, 21 Sep 2022 15:50:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663775258;
-        bh=iqaezEEeiDG99/bBFyg4bCNJe4txiqLmFcEDC6sXYqc=;
+        s=korg; t=1663775440;
+        bh=/svY6D8V5JfD8BnwrmWDILcFtql5BiIckjIaZs3HME4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WSAeoSkttwf9IK8i6N/Nq6wvBR+EKIbzYhaknuzJZLnqU1sc/RmihlPdEdhPoWi8B
-         WIAOn99LBPa4bj7GWFc9C9r2JGdDhbu7i7zM1X9gHuCLuZby901YXcOEXruhfNTKVs
-         GuhnYJAYbAvMHS6z6eZxZS9h000lbNvJVBbNhYGY=
+        b=ELe8M/8FHZbFZ0fwr95mEXt3VyERMCYnKLwcaFzSntitH9pGaTYnD6qhxjB+RHm9v
+         iqnIuEKWTSHmnTv5GMfQidTTwHPzh09FoLsHVLDo78mLBoY185Th2B4BeARQ5lK9sI
+         kWbfMV90RU4a4Wl6Xo7Ub4WT4QGzXl8I7RMExT8A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Lijo Lazar <lijo.lazar@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: [PATCH 5.19 32/38] drm/amdgpu: move nbio ih_doorbell_range() into ih code for vega
+        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Stefan Ghinea <stefan.ghinea@windriver.com>
+Subject: [PATCH 5.15 26/45] video: fbdev: i740fb: Error out if pixclock equals zero
 Date:   Wed, 21 Sep 2022 17:46:16 +0200
-Message-Id: <20220921153647.292908167@linuxfoundation.org>
+Message-Id: <20220921153647.748658902@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220921153646.298361220@linuxfoundation.org>
-References: <20220921153646.298361220@linuxfoundation.org>
+In-Reply-To: <20220921153646.931277075@linuxfoundation.org>
+References: <20220921153646.931277075@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,78 +54,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alex Deucher <alexander.deucher@amd.com>
+From: Zheyu Ma <zheyuma97@gmail.com>
 
-commit dc1d85cb790f2091eea074cee24a704b2d6c4a06 upstream.
+commit 15cf0b82271b1823fb02ab8c377badba614d95d5 upstream.
 
-This mirrors what we do for other asics and this way we are
-sure the ih doorbell range is properly initialized.
+The userspace program could pass any values to the driver through
+ioctl() interface. If the driver doesn't check the value of 'pixclock',
+it may cause divide error.
 
-There is a comment about the way doorbells on gfx9 work that
-requires that they are initialized for other IPs before GFX
-is initialized.  In this case IH is initialized before GFX,
-so there should be no issue.
+Fix this by checking whether 'pixclock' is zero in the function
+i740fb_check_var().
 
-This is a prerequisite for fixing the Unsupported Request error
-reported through AER during driver load.
+The following log reveals it:
 
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216373
+divide error: 0000 [#1] PREEMPT SMP KASAN PTI
+RIP: 0010:i740fb_decode_var drivers/video/fbdev/i740fb.c:444 [inline]
+RIP: 0010:i740fb_set_par+0x272f/0x3bb0 drivers/video/fbdev/i740fb.c:739
+Call Trace:
+    fb_set_var+0x604/0xeb0 drivers/video/fbdev/core/fbmem.c:1036
+    do_fb_ioctl+0x234/0x670 drivers/video/fbdev/core/fbmem.c:1112
+    fb_ioctl+0xdd/0x130 drivers/video/fbdev/core/fbmem.c:1191
+    vfs_ioctl fs/ioctl.c:51 [inline]
+    __do_sys_ioctl fs/ioctl.c:874 [inline]
 
-The error was unnoticed before and got visible because of the commit
-referenced below. This doesn't fix anything in the commit below, rather
-fixes the issue in amdgpu exposed by the commit. The reference is only
-to associate this commit with below one so that both go together.
-
-Fixes: 8795e182b02d ("PCI/portdrv: Don't disable AER reporting in get_port_device_capability()")
-
-Acked-by: Christian König <christian.koenig@amd.com>
-Reviewed-by: Lijo Lazar <lijo.lazar@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Cc: stable@vger.kernel.org
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
+Signed-off-by: Stefan Ghinea <stefan.ghinea@windriver.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/amdgpu/soc15.c     |    3 ---
- drivers/gpu/drm/amd/amdgpu/vega10_ih.c |    4 ++++
- drivers/gpu/drm/amd/amdgpu/vega20_ih.c |    4 ++++
- 3 files changed, 8 insertions(+), 3 deletions(-)
+ drivers/video/fbdev/i740fb.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/drivers/gpu/drm/amd/amdgpu/soc15.c
-+++ b/drivers/gpu/drm/amd/amdgpu/soc15.c
-@@ -1224,9 +1224,6 @@ static void soc15_doorbell_range_init(st
- 				ring->use_doorbell, ring->doorbell_index,
- 				adev->doorbell_index.sdma_doorbell_range);
- 		}
--
--		adev->nbio.funcs->ih_doorbell_range(adev, adev->irq.ih.use_doorbell,
--						adev->irq.ih.doorbell_index);
- 	}
- }
+--- a/drivers/video/fbdev/i740fb.c
++++ b/drivers/video/fbdev/i740fb.c
+@@ -662,6 +662,9 @@ static int i740fb_decode_var(const struc
  
---- a/drivers/gpu/drm/amd/amdgpu/vega10_ih.c
-+++ b/drivers/gpu/drm/amd/amdgpu/vega10_ih.c
-@@ -289,6 +289,10 @@ static int vega10_ih_irq_init(struct amd
- 		}
- 	}
- 
-+	if (!amdgpu_sriov_vf(adev))
-+		adev->nbio.funcs->ih_doorbell_range(adev, adev->irq.ih.use_doorbell,
-+						    adev->irq.ih.doorbell_index);
+ static int i740fb_check_var(struct fb_var_screeninfo *var, struct fb_info *info)
+ {
++	if (!var->pixclock)
++		return -EINVAL;
 +
- 	pci_set_master(adev->pdev);
- 
- 	/* enable interrupts */
---- a/drivers/gpu/drm/amd/amdgpu/vega20_ih.c
-+++ b/drivers/gpu/drm/amd/amdgpu/vega20_ih.c
-@@ -340,6 +340,10 @@ static int vega20_ih_irq_init(struct amd
- 		}
- 	}
- 
-+	if (!amdgpu_sriov_vf(adev))
-+		adev->nbio.funcs->ih_doorbell_range(adev, adev->irq.ih.use_doorbell,
-+						    adev->irq.ih.doorbell_index);
-+
- 	pci_set_master(adev->pdev);
- 
- 	/* enable interrupts */
+ 	switch (var->bits_per_pixel) {
+ 	case 8:
+ 		var->red.offset	= var->green.offset = var->blue.offset = 0;
 
 
