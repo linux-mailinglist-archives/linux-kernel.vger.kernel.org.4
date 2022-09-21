@@ -2,252 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74B005BFF7D
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 16:03:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 469305BFF82
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 16:05:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229437AbiIUODn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 10:03:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34158 "EHLO
+        id S229701AbiIUOFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 10:05:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229932AbiIUODg (ORCPT
+        with ESMTP id S229522AbiIUOFs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 10:03:36 -0400
-Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB9848E468
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 07:03:33 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id B35C3581D3E;
-        Wed, 21 Sep 2022 10:03:30 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Wed, 21 Sep 2022 10:03:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1663769010; x=1663776210; bh=SjCV1aL+n8
-        mn4MalH4ZLXgXlFA2w5RWP6Yn0pmJfmvo=; b=f34NjqNDiMXQlvOtdR+IEK/N60
-        M8qCLSQ1LNbCdB8Kg0iWuG8e6JMGZAws9tXdbB/hfBTKuJzqox3UQ3PKSWcng5im
-        LyjQtwLbEyDfzqt8b8RPOm1EjECy98daoKd9HmvCFtaKlRGxZbNU2nlvxydTdXDm
-        k/elnCmCxGYV5BcOjqP58PAHQIJ/vP/xX0GAb560tuw0hAE7gTJ0OHQP3PfwdBl5
-        IGxGH5nyCYAY0+Nb8Zv+XfCzbGT+/zx8mlkfIXvG50ILvs0spro1yVtet1ETHxGc
-        hS0vaRMPf+M+1KiVR6KWrqtE+jgrHJIvU/2B+paJ9AJqGCbSEaZMeSDCgRDw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1663769010; x=1663776210; bh=SjCV1aL+n8mn4MalH4ZLXgXlFA2w
-        5RWP6Yn0pmJfmvo=; b=0+pEkgbdgqPT7ximSdQZLog67+grue8Hi6koY6gk8/U8
-        fCrktc1/JQNviSaxMUEdSAQnSf/HndJbgnH5QXZ0rOunwYbjeYB15JGbvxWmxvGg
-        VjAxwEaJd7b5Qw1ijt1cJjKKnb9K/VJLdXnSdLrNV3O1Dbq5xoe5LqdliA/w6UiX
-        pcHWQXjQTz6D1Wd1C10ma63C/DBdp6aZ1XW7Qi1q9sIoS6hKzxRXIZCC9EOtt+rY
-        fe000jaaNNkQQMwdjb+ohHvKIJ1s4VFcJsPUYqSygaqncCDjAyaBlCMAGO/Rsdm/
-        Tw72vi5wtdGIjONUed4cVTX0N5bCqGp5QsHJ/zQnuw==
-X-ME-Sender: <xms:sBkrY3Zc2mmCQZ3F3STmdk-hWC79v--7_MlCdg57msasm3hrnKj6Gg>
-    <xme:sBkrY2Z-yRmrAmBFpOOeX8m4FJjz3LzjVQ_jk7yv0esDt84iQVVPOHj19Sk_PDzQJ
-    cMShLmFklZda1FEzKE>
-X-ME-Received: <xmr:sBkrY5_NwvOKk7lJMPBMaCjJSkOMm3qbytB9pxoVtJWqUDrFlIV8W-saGe0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeefuddgjedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtudenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeevuddthffgfeeiffejgfeghfeludegkedtgefgffejtdegtddvleduvdfh
-    teehveenucffohhmrghinhepghhithhhuhgsrdgtohhmnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
-    hh
-X-ME-Proxy: <xmx:sBkrY9rSJYSj8MuT99VnZo31roZHnay2y67VJzgcjetJ7tspID5EIQ>
-    <xmx:sBkrYypnxugNjzejH0MRV8gb-0_g-eWne_PJrQcIIbnNd6CpSXEHhg>
-    <xmx:sBkrYzRFyGQSlCHebOYmVx5k5a8GwAMUV6CAiictE0goKTb_gJD20g>
-    <xmx:shkrY6GJGnVQrhQG_9cv0ekwJ1qgNXTe0U_zdr_SwRKKPt4rxbuA9w>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 21 Sep 2022 10:03:27 -0400 (EDT)
-Date:   Wed, 21 Sep 2022 16:03:24 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>
-Cc:     Stefan Wahren <stefan.wahren@i2se.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        David Airlie <airlied@linux.ie>, Chen-Yu Tsai <wens@csie.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Lyude Paul <lyude@redhat.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Karol Herbst <kherbst@redhat.com>,
-        Emma Anholt <emma@anholt.net>, Daniel Vetter <daniel@ffwll.ch>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Dom Cobley <dom@raspberrypi.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        intel-gfx@lists.freedesktop.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        nouveau@lists.freedesktop.org, linux-sunxi@lists.linux.dev,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: Re: [PATCH v2 00/41] drm: Analog TV Improvements
-Message-ID: <20220921140324.sbeadfr7kz4avqcr@houat>
-References: <20220728-rpi-analog-tv-properties-v2-0-459522d653a7@cerno.tech>
- <24e09a29-6d04-3b1e-63ce-cd3c31d350e2@tronnes.org>
- <020d44e6-884b-a817-8265-3461638cac71@tronnes.org>
- <20220905145729.ln675jko3aw6sgzs@houat>
- <965de5c0-bc6a-7210-c946-b916ae2219fc@i2se.com>
- <eb06337b-d501-3ca7-0e50-eda3aec75683@tronnes.org>
+        Wed, 21 Sep 2022 10:05:48 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8484795E50
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 07:05:47 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D59B9143D;
+        Wed, 21 Sep 2022 07:05:53 -0700 (PDT)
+Received: from e121896.arm.com (unknown [10.57.15.63])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 7AC873F73B;
+        Wed, 21 Sep 2022 07:05:45 -0700 (PDT)
+From:   James Clark <james.clark@arm.com>
+To:     coresight@lists.linaro.org, catalin.marinas@arm.com,
+        linux-arm-kernel@lists.infradead.org
+Cc:     suzuki.poulose@arm.com, mathieu.poirier@linaro.org,
+        mike.leach@linaro.org, leo.yan@linaro.org, broonie@kernel.org,
+        linux-kernel@vger.kernel.org, James Clark <james.clark@arm.com>,
+        Will Deacon <will@kernel.org>
+Subject: [PATCH 0/1] arm64: defconfig: Add Coresight as module
+Date:   Wed, 21 Sep 2022 15:05:34 +0100
+Message-Id: <20220921140535.152627-1-james.clark@arm.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6coko5gqdpzknuh6"
-Content-Disposition: inline
-In-Reply-To: <eb06337b-d501-3ca7-0e50-eda3aec75683@tronnes.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+As suggested by Catalin here's the change to add Coresight to defconfig.
 
---6coko5gqdpzknuh6
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Unfortunately I don't think we should add CONFIG_CORESIGHT_SOURCE_ETM4X
+which builds a few files until [1] is merged because of the overhead
+of CONFIG_PID_IN_CONTEXTIDR.
 
-On Wed, Sep 07, 2022 at 06:44:53PM +0200, Noralf Tr=F8nnes wrote:
->=20
->=20
-> Den 07.09.2022 12.36, skrev Stefan Wahren:
-> > Hi Maxime,
-> >=20
-> > Am 05.09.22 um 16:57 schrieb Maxime Ripard:
-> >> On Fri, Sep 02, 2022 at 01:28:16PM +0200, Noralf Tr=F8nnes wrote:
-> >>>
-> >>> Den 01.09.2022 21.35, skrev Noralf Tr=F8nnes:
-> >>>>
-> >>>> I have finally found a workaround for my kernel hangs.
-> >>>>
-> >>>> Dom had a look at my kernel and found that the VideoCore was fine, a=
-nd
-> >>>> he said this:
-> >>>>
-> >>>>> That suggests cause of lockup was on arm side rather than VC side.
-> >>>>>
-> >>>>> But it's hard to diagnose further. Once you've had a peripheral not
-> >>>>> respond, the AXI bus locks up and no further operations are possibl=
-e.
-> >>>>> Usual causes of this are required clocks being stopped or domains
-> >>>>> disabled and then trying to access the hardware.
-> >>>>>
-> >>>> So when I got this on my 64-bit build:
-> >>>>
-> >>>> [=A0 166.702171] SError Interrupt on CPU1, code 0x00000000bf000002 --
-> >>>> SError
-> >>>> [=A0 166.702187] CPU: 1 PID: 8 Comm: kworker/u8:0 Tainted: G=A0=A0=
-=A0=A0=A0=A0=A0 W
-> >>>> =A0=A0=A0=A0 5.19.0-rc6-00096-gba7973977976-dirty #1
-> >>>> [=A0 166.702200] Hardware name: Raspberry Pi 4 Model B Rev 1.1 (DT)
-> >>>> [=A0 166.702206] Workqueue: events_freezable_power_
-> >>>> thermal_zone_device_check
-> >>>> [=A0 166.702231] pstate: 200000c5 (nzCv daIF -PAN -UAO -TCO -DIT -SS=
-BS
-> >>>> BTYPE=3D--)
-> >>>> [=A0 166.702242] pc : regmap_mmio_read32le+0x10/0x28
-> >>>> [=A0 166.702261] lr : regmap_mmio_read+0x44/0x70
-> >>>> ...
-> >>>> [=A0 166.702606]=A0 bcm2711_get_temp+0x58/0xb0 [bcm2711_thermal]
-> >>>>
-> >>>> I wondered if that reg read was stalled due to a clock being stopped.
-> >>>>
-> >>>> Lo and behold, disabling runtime pm and keeping the vec clock running
-> >>>> all the time fixed it[1].
-> >>>>
-> >>>> I don't know what the problem is, but at least I can now test this
-> >>>> patchset.
-> >>>>
-> >>>> [1] https://gist.github.com/notro/23b984e7fa05cfbda2db50a421cac065
-> >>>>
-> >>> It turns out I didn't have to disable runtime pm:
-> >>> https://gist.github.com/notro/0adcfcb12460b54e54458afe11dc8ea2
-> >> If the bcm2711_thermal IP needs that clock to be enabled, it should gr=
-ab
-> >> a reference itself, but it looks like even the device tree binding
-> >> doesn't ask for one.
-> > The missing clock in the device tree binding is expected, because
-> > despite of the code there is not much information about the BCM2711
-> > clock tree. But i'm skeptical that the AVS IP actually needs the VEC
-> > clock, i think it's more likely that the VEC clock parent is changed and
-> > that cause this issue. I could take care of the bcm2711 binding & driver
-> > if i know which clock is really necessary.
->=20
-> Seems you're right, keeping the parent always enabled is enough:
->=20
-> 	clk_prepare_enable(clk_get_parent(vec->clock)); // pllc_per
->=20
-> I tried enabling just the grandparent clock as well, but that didn't help.
+[1]: https://lore.kernel.org/lkml/20211021134530.206216-1-leo.yan@linaro.org/T/
 
-Yeah, adding tracing to the clock framework shows that it indeed
-disables PLLC_PER. So there's probably some other device that depends on
-it but doesn't take a reference to it.
+James Clark (1):
+  arm64: defconfig: Add Coresight as module
 
-I had a look, but it's not really obvious what that might be.
+ arch/arm64/configs/defconfig | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-This patch makes sure that the PLL*_PER are never disabled, could you
-test it? It seems to work for me.
+-- 
+2.28.0
 
-
-diff --git a/drivers/clk/bcm/clk-bcm2835.c b/drivers/clk/bcm/clk-bcm2835.c
-index 48a1eb9f2d55..3839261ee419 100644
---- a/drivers/clk/bcm/clk-bcm2835.c
-+++ b/drivers/clk/bcm/clk-bcm2835.c
-@@ -1675,7 +1675,7 @@ static const struct bcm2835_clk_desc clk_desc_array[]=
- =3D {
- 		.load_mask =3D CM_PLLA_LOADPER,
- 		.hold_mask =3D CM_PLLA_HOLDPER,
- 		.fixed_divider =3D 1,
--		.flags =3D CLK_SET_RATE_PARENT),
-+		.flags =3D CLK_IS_CRITICAL | CLK_SET_RATE_PARENT),
- 	[BCM2835_PLLA_DSI0]	=3D REGISTER_PLL_DIV(
- 		SOC_ALL,
- 		.name =3D "plla_dsi0",
-@@ -1784,7 +1784,7 @@ static const struct bcm2835_clk_desc clk_desc_array[]=
- =3D {
- 		.load_mask =3D CM_PLLC_LOADPER,
- 		.hold_mask =3D CM_PLLC_HOLDPER,
- 		.fixed_divider =3D 1,
--		.flags =3D CLK_SET_RATE_PARENT),
-+		.flags =3D CLK_IS_CRITICAL | CLK_SET_RATE_PARENT),
-
- 	/*
- 	 * PLLD is the display PLL, used to drive DSI display panels.
-@@ -1891,7 +1891,7 @@ static const struct bcm2835_clk_desc clk_desc_array[]=
- =3D {
- 		.load_mask =3D CM_PLLH_LOADAUX,
- 		.hold_mask =3D 0,
- 		.fixed_divider =3D 1,
--		.flags =3D CLK_SET_RATE_PARENT),
-+		.flags =3D CLK_IS_CRITICAL | CLK_SET_RATE_PARENT),
- 	[BCM2835_PLLH_PIX]	=3D REGISTER_PLL_DIV(
- 		SOC_BCM2835,
- 		.name =3D "pllh_pix",
-
-
-Maxime
-
---6coko5gqdpzknuh6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYysZrAAKCRDj7w1vZxhR
-xYouAQCzedVE8SevoxP631JtGSdk1hKiDSM7W5u5fI6bk8XEbwEAiGbnl7UDk3zF
-vgobikzXCdP494qgxQLaLW/GmvhxFAQ=
-=/MQ7
------END PGP SIGNATURE-----
-
---6coko5gqdpzknuh6--
