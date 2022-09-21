@@ -2,133 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B3C75BF756
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 09:14:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FE2F5BF759
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 09:14:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbiIUHOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 03:14:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55210 "EHLO
+        id S229774AbiIUHOg convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 21 Sep 2022 03:14:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbiIUHOF (ORCPT
+        with ESMTP id S229983AbiIUHOa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 03:14:05 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E0F881B33
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 00:14:03 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id t14so8289096wrx.8
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 00:14:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date;
-        bh=b3R9DZoCrYArCpmU71BmWGHj2dQq4IcyzDjXj86ttQs=;
-        b=wrleY46bAvW9orcPdmhsGXsqIOZo6+mJ/aKl/qobRPfSARZkDXHDIXKaDWEJgSh1BF
-         gjsbQU3f6mA7OZXAGqWtJ2jkHfyYGj9+pFPa5154c+wSrXeDe3h4OiRUwwXK9L0XtTvh
-         GioFbERE3aUbAlm1ElAXoYAPzF77rSiS+RzxHyREkrpFBOqjOLim+QHj7pTnK/oRAs6k
-         gUKdfJb1sbqFydZrZ7uQA3HqhV25QkUBd0yQGVPnrQ1lie7yDKaQwn8RDcxBOkLKuvef
-         CDdYGCTsYbLO/4boTiaWto7J6H06j6+Kasj2nSeNdAQUouPhPcOjjQCOVmAB0oTe8A1P
-         XBWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=b3R9DZoCrYArCpmU71BmWGHj2dQq4IcyzDjXj86ttQs=;
-        b=XTkpAq8TfIYKQKTwADZ5pbBM/c6Ki+i7Arw0Shm7bbhO8T0vtWY8UMFepxuQwaIcOh
-         cd6Vg2r8nTJU5VrruypE/ifZkPW8KRRB5aS3GXreUao3Hb1xjBGVY4A/UaObBDJF9rPr
-         cKnBFMyMu9rXBOCmh9V+5VpriQtUqnVWoQ2dNqFIZzayOpgS2W9JKl+gC/G2B6ajFxT5
-         wsQFzIkoanfL/eT33H7H5b6DoWTavkAJVH2WZtg47u6NxZkfAUZVpuejnYPrtIf7JrAA
-         0atJrsjrRbIx9cza+bFbIydwZhnlOhPZOL8ThV5Pe4s+Syzf3X+0sq1Nm/YRw3Ik8LL5
-         1hlw==
-X-Gm-Message-State: ACrzQf3ThClff8S9xpu9jIur4XD28Fw5zbqSInLI+XHRCvHA6RRVk2Kg
-        kKwaTnt7/6/O/YcI6ougThxJYg==
-X-Google-Smtp-Source: AMsMyM7zmNVSeMitft5m1bCKwdxJeXe8VrB5miovFwS9K97uh3EJKfGQh5sjBYY25eWcRqfGh4opKA==
-X-Received: by 2002:a5d:47a4:0:b0:226:e547:b602 with SMTP id 4-20020a5d47a4000000b00226e547b602mr16834338wrb.406.1663744441866;
-        Wed, 21 Sep 2022 00:14:01 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:8ce3:ff4e:ae9b:55f3? ([2a01:e0a:982:cbb0:8ce3:ff4e:ae9b:55f3])
-        by smtp.gmail.com with ESMTPSA id q63-20020a1c4342000000b003b4bd18a23bsm1866139wma.12.2022.09.21.00.14.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Sep 2022 00:14:01 -0700 (PDT)
-Message-ID: <18097f21-0c19-926a-2242-0aed1fb229b5@linaro.org>
-Date:   Wed, 21 Sep 2022 09:14:00 +0200
+        Wed, 21 Sep 2022 03:14:30 -0400
+Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AC6882D10
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 00:14:26 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by lithops.sigma-star.at (Postfix) with ESMTP id 452E0615C9E8;
+        Wed, 21 Sep 2022 09:14:24 +0200 (CEST)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id uqfChHppESoA; Wed, 21 Sep 2022 09:14:23 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by lithops.sigma-star.at (Postfix) with ESMTP id CD736615C9E5;
+        Wed, 21 Sep 2022 09:14:23 +0200 (CEST)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id sKKJxMACFNv4; Wed, 21 Sep 2022 09:14:23 +0200 (CEST)
+Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
+        by lithops.sigma-star.at (Postfix) with ESMTP id A28C861418B6;
+        Wed, 21 Sep 2022 09:14:23 +0200 (CEST)
+Date:   Wed, 21 Sep 2022 09:14:23 +0200 (CEST)
+From:   Richard Weinberger <richard@nod.at>
+To:     davidgow <davidgow@google.com>
+Cc:     anton ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        tglx <tglx@linutronix.de>, mingo <mingo@redhat.com>,
+        dave hansen <dave.hansen@linux.intel.com>,
+        torvalds <torvalds@linux-foundation.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Daniel Latypov <dlatypov@google.com>,
+        linux-um <linux-um@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        kunit-dev <kunit-dev@googlegroups.com>, x86 <x86@kernel.org>,
+        Lukas Straub <lukasstraub2@web.de>,
+        Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <290835862.246902.1663744463482.JavaMail.zimbra@nod.at>
+In-Reply-To: <20220921064855.2841607-1-davidgow@google.com>
+References: <20220921064855.2841607-1-davidgow@google.com>
+Subject: Re: [PATCH v2] arch: um: Mark the stack non-executable to fix a
+ binutils warning
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] cpufreq: qcom-cpufreq-hw: Fix uninitialized
- throttled_freq warning
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-Cc:     linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "v5 . 18+" <stable@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <8342b10a2716ec267ab89ea827f851b78b68470a.1663744088.git.viresh.kumar@linaro.org>
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Organization: Linaro
-In-Reply-To: <8342b10a2716ec267ab89ea827f851b78b68470a.1663744088.git.viresh.kumar@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [195.201.40.130]
+X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF97 (Linux)/8.8.12_GA_3809)
+Thread-Topic: arch: um: Mark the stack non-executable to fix a binutils warning
+Thread-Index: yN/1TZSRNS5/MluFQBII4RZMgomCPA==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/09/2022 09:10, Viresh Kumar wrote:
-> Commit 6240aaad75e1 was supposed to drop the reference count to the OPP,
-> instead it avoided more stuff if the OPP isn't found. This isn't
-> entirely correct. We already have a frequency value available, we just
-> couldn't align it with an OPP in case of IS_ERR(opp).
+----- Ursprüngliche Mail -----
+> Von: "davidgow" <davidgow@google.com>
 > 
-> Lets continue with updating thermal pressure, etc, even if we aren't
-> able to find an OPP here.
-> 
-> This fixes warning generated by the 'smatch' tool.
-> 
-> Fixes: 6240aaad75e1 ("cpufreq: qcom-hw: fix the opp entries refcounting")
-> Cc: v5.18+ <stable@vger.kernel.org> # v5.18+
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
->   drivers/cpufreq/qcom-cpufreq-hw.c | 10 +++++-----
->   1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-> index d5ef3c66c762..bb32659820ce 100644
-> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
-> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-> @@ -316,14 +316,14 @@ static void qcom_lmh_dcvs_notify(struct qcom_cpufreq_data *data)
->   	if (IS_ERR(opp)) {
->   		dev_warn(dev, "Can't find the OPP for throttling: %pe!\n", opp);
->   	} else {
-> -		throttled_freq = freq_hz / HZ_PER_KHZ;
-> -
-> -		/* Update thermal pressure (the boost frequencies are accepted) */
-> -		arch_update_thermal_pressure(policy->related_cpus, throttled_freq);
-> -
->   		dev_pm_opp_put(opp);
->   	}
->   
-> +	throttled_freq = freq_hz / HZ_PER_KHZ;
-> +
-> +	/* Update thermal pressure (the boost frequencies are accepted) */
-> +	arch_update_thermal_pressure(policy->related_cpus, throttled_freq);
-> +
->   	/*
->   	 * In the unlikely case policy is unregistered do not enable
->   	 * polling or h/w interrupt
+> Changes since v1:
+> http://lists.infradead.org/pipermail/linux-um/2022-August/004234.html
+> - Pass the -z noexecstack and --no-warn-rwx-segments flags as LDFLAGS,
+>  rather than as CFLAGS via -Wl
+> - Check that --no-warn-rwx-segments exists with the ld-option function
+>  (Thanks Richard)
+> - Add Lukas and Randy's tags.
 
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+Now it passes the test. :)
+Applied.
+
+Thanks,
+//richard
