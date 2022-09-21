@@ -2,69 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CF4C5BF266
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 02:46:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E15A35BF26A
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 02:46:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231453AbiIUApw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 20:45:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54588 "EHLO
+        id S231519AbiIUAqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 20:46:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231425AbiIUApo (ORCPT
+        with ESMTP id S230527AbiIUAqb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 20:45:44 -0400
-Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [IPv6:2001:4b7a:2000:18::169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B804A796B3;
-        Tue, 20 Sep 2022 17:45:42 -0700 (PDT)
-Received: from localhost.localdomain (95.49.29.188.neoplus.adsl.tpnet.pl [95.49.29.188])
-        by m-r2.th.seeweb.it (Postfix) with ESMTPA id 990E63F62F;
-        Wed, 21 Sep 2022 02:45:40 +0200 (CEST)
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-To:     ~postmarketos/upstreaming@lists.sr.ht
-Cc:     martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] soc: qcom: smd-rpm: Add SM6375 compatible
-Date:   Wed, 21 Sep 2022 02:45:33 +0200
-Message-Id: <20220921004534.151990-2-konrad.dybcio@somainline.org>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220921004534.151990-1-konrad.dybcio@somainline.org>
-References: <20220921004534.151990-1-konrad.dybcio@somainline.org>
+        Tue, 20 Sep 2022 20:46:31 -0400
+X-Greylist: delayed 28300 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 20 Sep 2022 17:46:30 PDT
+Received: from mail-40137.protonmail.ch (mail-40137.protonmail.ch [185.70.40.137])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C827B796A5
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 17:46:30 -0700 (PDT)
+Date:   Wed, 21 Sep 2022 00:46:23 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1663721188; x=1663980388;
+        bh=vsY6bpnDXXQyofo2pcWGC3Wr4RLYUZCP3JxTNYrryxs=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID;
+        b=QMBU3DJ1SOrkU6IcvK/HOVXq2wtl3VnQXVUorDWf8Bf1Kk1JXJ1NaQ1FZOhl3gYNh
+         ia32TI9UAeNw+lNcXcTrdmb3oz/XodtNNA4aom17pVjDy8QD9x+MIPDRKsOfK5Wnsw
+         MfO/E2Vndm6/aUlI4MsNkyh8z54lk0HwLe+eNaA5ozkyNBCBMKP6SK0cn3akyBZtdz
+         hLF5G3IehFlrbfiUA3Y6L6MpieIU515+D39yqoU39GiAVO73hBvqZOYDjaqPgtwUA/
+         UKBlZz/W6CVDQzKnuwPSLhU4bpYmA4shxcijRhfl1jNHRi/pxQR6Un90kSTTgpwrzi
+         FTnYUfnG9DnuQ==
+To:     Daniel Ogorchock <djogorchock@gmail.com>
+From:   Johnothan King <johnothanking@protonmail.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>
+Subject: Re: [PATCH v2] HID: nintendo: check analog user calibration for plausibility
+Message-ID: <f468kPVeU3xgbeIr3VAo9yn79tU-Wk94UJlr9uMsGP-XxyE1MbYejfHRmGsyhoujW5vwobD6wwfRhSjAtZdtlfm-ccqNxkCvSuHMnurhlbc=@protonmail.com>
+In-Reply-To: <CAEVj2t=F-zF9jTmfJuqx=DRFopygKDXVv0wX91nRLqP1QZqS_w@mail.gmail.com>
+References: <RINjeKS0brZzIa6F-fgBKuiHrrcZB8zfTg_chbQIT3BRLqx-l9SmsxvV3LXx7upuctFCki33uAIhXNsM92YWTub8vbzSQHcJibhPkN5ijB8=@protonmail.com> <CAEVj2tn8byGn2RHmvYc77rv2BZkApW3yQ5qSDDzNGxhbygO2Ag@mail.gmail.com> <CAEVj2t=F-zF9jTmfJuqx=DRFopygKDXVv0wX91nRLqP1QZqS_w@mail.gmail.com>
+Feedback-ID: 1750573:user:proton
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a compatible for the SM6375 SoC.
+I'll submit a third version that fixes the warning string. I've also
+made another minor tweak to joycon_use_default_calibration() for
+the v3 patch.
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
----
-Changes since v1:
-- changed the compatible to match the style used in the file
+- Johnothan King
 
- drivers/soc/qcom/smd-rpm.c | 1 +
- 1 file changed, 1 insertion(+)
+------- Original Message -------
+On Tuesday, September 20th, 2022 at 3:06 PM, Daniel Ogorchock <djogorchock@=
+gmail.com> wrote:
 
-diff --git a/drivers/soc/qcom/smd-rpm.c b/drivers/soc/qcom/smd-rpm.c
-index 413f9f4ae9cd..15671a917fb9 100644
---- a/drivers/soc/qcom/smd-rpm.c
-+++ b/drivers/soc/qcom/smd-rpm.c
-@@ -246,6 +246,7 @@ static const struct of_device_id qcom_smd_rpm_of_match[] = {
- 	{ .compatible = "qcom,rpm-sdm660" },
- 	{ .compatible = "qcom,rpm-sm6115" },
- 	{ .compatible = "qcom,rpm-sm6125" },
-+	{ .compatible = "qcom,rpm-sm6375" },
- 	{ .compatible = "qcom,rpm-qcm2290" },
- 	{ .compatible = "qcom,rpm-qcs404" },
- 	{}
--- 
-2.37.3
 
+> > static const u16 DFLT_STICK_CAL_CEN =3D 2000;
+> > static const u16 DFLT_STICK_CAL_MAX =3D 3500;
+> > static const u16 DFLT_STICK_CAL_MIN =3D 500;
+> > +static void joycon_use_default_calibration(struct joycon_ctlr *ctlr,
+> > + struct joycon_stick_cal *cal_x,
+> > + struct joycon_stick_cal *cal_y,
+> > + const char *stick, int ret)
+> > +{
+> > + hid_warn(ctlr->hdev,
+> > + "Failed to read %s stick cal, "
+> > + "using defaults; e=3D%d\n",
+> > + stick, ret);
+> > +
+>=20
+>=20
+> Sorry, missed this on my first readthrough. I think the coding style
+> mentions not to break up the logged string into multiple lines, since
+> it'll harm greppability.
+>=20
+> -Daniel
