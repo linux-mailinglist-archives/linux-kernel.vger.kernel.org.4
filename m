@@ -2,131 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9D9C5BFEDE
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 15:20:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CAC65BFEE0
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 15:21:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230144AbiIUNUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 09:20:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42184 "EHLO
+        id S230337AbiIUNVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 09:21:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229918AbiIUNUw (ORCPT
+        with ESMTP id S230042AbiIUNU6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 09:20:52 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 168D093514;
-        Wed, 21 Sep 2022 06:20:51 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5ADA9143D;
-        Wed, 21 Sep 2022 06:20:57 -0700 (PDT)
-Received: from [10.1.32.30] (010265703453.arm.com [10.1.32.30])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1985A3F73B;
-        Wed, 21 Sep 2022 06:20:46 -0700 (PDT)
-Message-ID: <11708ed1-b74a-5d45-0ce3-e2649dac1e8a@arm.com>
-Date:   Wed, 21 Sep 2022 14:20:40 +0100
+        Wed, 21 Sep 2022 09:20:58 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB38293532;
+        Wed, 21 Sep 2022 06:20:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663766456; x=1695302456;
+  h=date:from:cc:subject:in-reply-to:message-id:references:
+   mime-version;
+  bh=vYgIHBqQT1LOSTdLXHjE2GGwmevR+anrYC3oXAZSnJk=;
+  b=m91KiL9EZBDNnPeO1yVHjcRDB20rUWU5T65pw2VHoXqtkehKzATSHejm
+   UrDD8dQWsi29FQ1qDdnXJyXzPU1+AetHWp4e4jB12Bsn05NMspcxerA3J
+   pPu99Ez9wp356DMkAtfAo3icXcnIpSb7bspKKOMO1iq8GfQv1pHDaC21t
+   NfDPXBvMflgiEVB57iTraW8n/qYEny5VJmw4IqQyCHqjRG1nMLS50x5Y/
+   T3ak3XqSMkundQanGycngiTxsXE9gqA/2+FovvVLKEXrFYCjT5Z7CsX3P
+   fSVecyAXlMaxb3uylLozxcCVY9soez+ABD3QMc/7MZuTmDK7rMndoFcBs
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="298715561"
+X-IronPort-AV: E=Sophos;i="5.93,333,1654585200"; 
+   d="scan'208";a="298715561"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 06:20:56 -0700
+X-IronPort-AV: E=Sophos;i="5.93,333,1654585200"; 
+   d="scan'208";a="794668445"
+Received: from dgonsal1-mobl1.ger.corp.intel.com ([10.252.58.151])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 06:20:52 -0700
+Date:   Wed, 21 Sep 2022 16:20:50 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+cc:     Lennert Buytenhek <buytenh@wantstofly.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Alex Williamson <alex.williamson@hp.com>,
+        Aristeu Sergio Rozanski Filho <aris@cathedrallabs.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Lennert Buytenhek <buytenh@arista.com>
+Subject: Re: [PATCH v3 1/1] serial: 8250: Toggle IER bits on only after irq
+ has been set up
+In-Reply-To: <20220919144057.12241-1-ilpo.jarvinen@linux.intel.com>
+Message-ID: <24ec3f1f-b39c-eeb1-d53-ed97e2ccdb4f@linux.intel.com>
+References: <20220919144057.12241-1-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v5 0/5] iommu: M1 Pro/Max DART support
-Content-Language: en-GB
-To:     Joerg Roedel <joro@8bytes.org>
-Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        asahi@lists.linux.dev, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Hector Martin <marcan@marcan.st>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sven Peter <sven@svenpeter.dev>, Will Deacon <will@kernel.org>,
-        devicetree@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        iommu@lists.linux.dev, Janne Grunau <j@jannau.net>
-References: <20220916094152.87137-1-j@jannau.net>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220916094152.87137-1-j@jannau.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-1816087576-1663766455=:1741"
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,MISSING_HEADERS,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-16 10:41, Janne Grunau wrote:
-> Hej,
-> 
-> this is the next attempt adding support for the DART found in Apple's
-> M1 Pro/Max/Ultra. This adds a separate io-pgtable implementation for
-> DART. As already mentioned in v2 the pte format is not fully compatible
-> with io-pgtable-arm. Especially the 2nd least significant bit is used
-> and is not available to tag tables/pages.
-> io-pgtable-dart.c is copied from io-pgtable-arm.c and support for
-> unused features is removed. Support for 4k IO pages is left for A7 to
-> A11 SoCs as there's work underway to run Linux on them.
-> 
-> The incompatibilities between both Apple DART pte seems manageable in
-> their own io-pgtable implementation. A short list of the known
-> differences:
-> 
->   - the physical addresses are shifted left by 4 bits and and have 2 more
->     bits inside the PTE entries
->   - the read/write protection flags are at a different position
->   - the subpage protection feature is now mandatory. For Linux we can
->     just configure it to always allow access to the entire page.
->   - BIT(1) tags "uncached" mappings (used for the display controller)
-> 
-> There is second type of DART (t8110) present on M1 Pro/Max SoCs which
-> uses the same PTE format as t6000.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-FWIW I think there's minimal risk in queueing this up as a late addition 
-for 6.1, lest it get forgotten again. I've not been following it since 
-I've been busy with other things and I largely trust that DART patches 
-are well-tested, but from a quick skim it all earns a solid "yeah, why 
-not" from me :)
+--8323329-1816087576-1663766455=:1741
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
-Cheers,
-Robin.
+On Mon, 19 Sep 2022, Ilpo Järvinen wrote:
 
-> Changes in v5:
-> - collected Sven's ack
-> - minor fixes in "iommu/io-pgtable: Move Apple DART support to its own
->    file"
+> Invoking TIOCVHANGUP on 8250_mid port on Ice Lake-D and then reopening
+> the port triggers these faults during serial8250_do_startup():
 > 
-> Changes in v4:
-> - split dart and io-pgtable-dart build to allow building dart as module
-> - add missing "SELECT IOMMU_IO_PGTABLE"
-> - made map/unmap_pages/iova_to_phys inon-recursive
-> - replace pgd concatenation with multiple table handling
-> - simplified config and page size checks
-> - collected Robin's Ack
+>   DMAR: DRHD: handling fault status reg 3
+>   DMAR: [DMA Write NO_PASID] Request device [00:1a.0] fault addr 0x0 [fault reason 0x05] PTE Write access is not set
 > 
-> Changes in v3:
-> - move APPLE_DART to its own io-pgtable implementation, copied from
->    io-pgtable-arm and simplified
+> If the IRQ hasn't been set up yet, the UART will have zeroes in its MSI
+> address/data registers. Disabling the IRQ at the interrupt controller
+> won't stop the UART from performing a DMA write to the address programmed
+> in its MSI address register (zero) when it wants to signal an interrupt.
 > 
-> Changes in v2:
-> - added Rob's Acked-by:
-> - add APPLE_DART2 io-pgtable format
+> The UARTs (in Ice Lake-D) implement PCI 2.1 style MSI without masking
+> capability, so there is no way to mask the interrupt at the source PCI
+> function level, except disabling the MSI capability entirely, but that
+> would cause it to fall back to INTx# assertion, and the PCI specification
+> prohibits disabling the MSI capability as a way to mask a function's
+> interrupt service request.
 > 
-> Janne Grunau (1):
->    iommu/io-pgtable: Move Apple DART support to its own file
+> The MSI address register is zeroed during by the hangup as the irq is
+> freed. The interrupt is signalled during serial8250_do_startup()
+> performing a THRE test that temporarily toggles THRI in IER. The THRE
+> test currently occurs before UART's irq (and MSI address) is properly
+> set up.
 > 
-> Sven Peter (4):
->    dt-bindings: iommu: dart: add t6000 compatible
->    iommu/io-pgtable: Add DART subpage protection support
->    iommu/io-pgtable-dart: Add DART PTE support for t6000
->    iommu: dart: Support t6000 variant
+> Refactor serial8250_do_startup() such that irq is set up before the
+> THRE test. The current irq setup code is intermixed with the timer
+> setup code. As THRE test must be performed prior to the timer setup,
+> extract it into own function and call it only after the THRE test.
 > 
->   .../devicetree/bindings/iommu/apple,dart.yaml |   4 +-
->   MAINTAINERS                                   |   1 +
->   drivers/iommu/Kconfig                         |  13 +-
->   drivers/iommu/Makefile                        |   1 +
->   drivers/iommu/apple-dart.c                    |  24 +-
->   drivers/iommu/io-pgtable-arm.c                |  63 ---
->   drivers/iommu/io-pgtable-dart.c               | 470 ++++++++++++++++++
->   drivers/iommu/io-pgtable.c                    |   3 +
->   include/linux/io-pgtable.h                    |   1 +
->   9 files changed, 512 insertions(+), 68 deletions(-)
->   create mode 100644 drivers/iommu/io-pgtable-dart.c
+> Reported-by: Lennert Buytenhek <buytenh@arista.com>
+> Tested-by: Lennert Buytenhek <buytenh@arista.com>
+> Fixes: 40b36daad0ac ("[PATCH] 8250 UART backup timer")
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> ---
 > 
+> v3:
+> - Improved the commit with Lennert's superior descriptions.
+> - Added Andy's Rev-by
+> 
+>  drivers/tty/serial/8250/8250.h      |  2 ++
+>  drivers/tty/serial/8250/8250_core.c | 16 +++++++++++-----
+>  drivers/tty/serial/8250/8250_port.c |  8 +++++---
+>  3 files changed, 18 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/8250/8250.h b/drivers/tty/serial/8250/8250.h
+> index 287153d32536..dbf4c1204bf3 100644
+> --- a/drivers/tty/serial/8250/8250.h
+> +++ b/drivers/tty/serial/8250/8250.h
+> @@ -403,3 +403,5 @@ static inline int serial_index(struct uart_port *port)
+>  {
+>  	return port->minor - 64;
+>  }
+> +
+> +void univ8250_setup_timer(struct uart_8250_port *up);
+> diff --git a/drivers/tty/serial/8250/8250_core.c b/drivers/tty/serial/8250/8250_core.c
+> index 2e83e7367441..10d535640434 100644
+> --- a/drivers/tty/serial/8250/8250_core.c
+> +++ b/drivers/tty/serial/8250/8250_core.c
+> @@ -298,10 +298,9 @@ static void serial8250_backup_timeout(struct timer_list *t)
+>  		jiffies + uart_poll_timeout(&up->port) + HZ / 5);
+>  }
+>  
+> -static int univ8250_setup_irq(struct uart_8250_port *up)
+> +void univ8250_setup_timer(struct uart_8250_port *up)
+>  {
+>  	struct uart_port *port = &up->port;
+> -	int retval = 0;
+>  
+>  	/*
+>  	 * The above check will only give an accurate result the first time
+> @@ -322,10 +321,17 @@ static int univ8250_setup_irq(struct uart_8250_port *up)
+>  	 */
+>  	if (!port->irq)
+>  		mod_timer(&up->timer, jiffies + uart_poll_timeout(port));
+> -	else
+> -		retval = serial_link_irq_chain(up);
+> +}
+> +EXPORT_SYMBOL_GPL(univ8250_setup_timer);
+>  
+> -	return retval;
+> +static int univ8250_setup_irq(struct uart_8250_port *up)
+> +{
+> +	struct uart_port *port = &up->port;
+> +
+> +	if (port->irq)
+> +		return serial_link_irq_chain(up);
+> +
+> +	return 0;
+>  }
+>  
+>  static void univ8250_release_irq(struct uart_8250_port *up)
+> diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+> index 39b35a61958c..6e8e16227a3a 100644
+> --- a/drivers/tty/serial/8250/8250_port.c
+> +++ b/drivers/tty/serial/8250/8250_port.c
+> @@ -2294,6 +2294,10 @@ int serial8250_do_startup(struct uart_port *port)
+>  	if (port->irq && (up->port.flags & UPF_SHARE_IRQ))
+>  		up->port.irqflags |= IRQF_SHARED;
+>  
+> +	retval = up->ops->setup_irq(up);
+> +	if (retval)
+> +		goto out;
+> +
+>  	if (port->irq && !(up->port.flags & UPF_NO_THRE_TEST)) {
+>  		unsigned char iir1;
+>  
+> @@ -2336,9 +2340,7 @@ int serial8250_do_startup(struct uart_port *port)
+>  		}
+>  	}
+>  
+> -	retval = up->ops->setup_irq(up);
+> -	if (retval)
+> -		goto out;
+> +	univ8250_setup_timer(up);
+>  
+>  	/*
+>  	 * Now, initialize the UART
+
+Hi Greg,
+
+Please scratch this patch. It seems to create a circular dependency issue 
+with allmodconfig. I'll send v4 once the problem is sorted out.
+
+-- 
+ i.
+
+--8323329-1816087576-1663766455=:1741--
