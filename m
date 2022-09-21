@@ -2,270 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2C5F5E565D
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 00:52:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5163D5E565F
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 00:53:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230113AbiIUWws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 18:52:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35496 "EHLO
+        id S229876AbiIUWxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 18:53:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230102AbiIUWwp (ORCPT
+        with ESMTP id S229499AbiIUWxs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 18:52:45 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C358DA3D61
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 15:52:42 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id p18so7089778plr.8
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 15:52:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=S3hwfKvotVXsthfCnxkxJbZinClhF0B7HMknMNXolO0=;
-        b=LMt/PzB+ynhMDVTJGXdJP5bVpTZg4kePhiSSgzehGwKZs1xlYsxqcHH4nsbJG1FB4L
-         lJLuYpg6kWRiUTy/ovhiLC5ZIZYW7KRTdBszisRPeoXbH3lgrFzovwH6FicYauihSi7G
-         OJB5SjOyMhJEJiOXDnuFOQaThh0ffZRegaDMWvUuN72PluWjWsL9anHFNKm4boZ4W2x0
-         vh6EyAgrCGyWUGJ7f/n0RLLhwxtJ0sDfHwoAUMP9Qt5PjRN4B+5YGs+hLRp39BmUvZ8+
-         8JhNGft43mmZl1/5Ezw6zBL0B1xV4g5TTJqBonSqClmiDOXb29qMxmbW5JMkYD/krz4Y
-         XoZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=S3hwfKvotVXsthfCnxkxJbZinClhF0B7HMknMNXolO0=;
-        b=kDFx+79Qwkhk3BF4knYT36r7c8+T8eFeL3HaKsgf/8BQd2w76OG2lSjxdUalsJ4Vup
-         TjxtV4OPxXaYCJoP99ZPBa4oRPLRBhoCx+q6guz9VQ9/zviIXtlfIXmJ/H8ZAO/TXHSv
-         JfRrjt/XL0CRkmsyGLAdXcs2DDfrEHSCCxKAwS47BYepS3kEMluqrVVqNR87j2mCQk+D
-         DjKXMtPmZyJoBOc/+HuHzSKDKHVCWlsmYUYVPcXchZAZdCDa4s9eOUMqdRHvOzOSWUuJ
-         krrKz5IxvG1TN2JB/0izSl99hm/YkF3VbpzAGO9w290K4v4t8MudsAOHCJ69b+5lEkcS
-         dbug==
-X-Gm-Message-State: ACrzQf1ochIEWw8SB5yI4gZ0C88uDfQjXF1ihO7KTzd+QhFAs0VLAPqq
-        cM9KNcAe85ygLrI/tI/HzAkAPVxIgn8Z0Q==
-X-Google-Smtp-Source: AMsMyM4JQyt8CDl8rUdZX0cVMhZDqQTD6flVYpXf46pDsc+IfoHNzZ2Ketv34Q5sLeWOkVDC6fXRnw==
-X-Received: by 2002:a17:902:db0f:b0:176:e70f:6277 with SMTP id m15-20020a170902db0f00b00176e70f6277mr457269plx.13.1663800762099;
-        Wed, 21 Sep 2022 15:52:42 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id r26-20020a63441a000000b0042b5095b7b4sm2501018pga.5.2022.09.21.15.52.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Sep 2022 15:52:41 -0700 (PDT)
-Date:   Wed, 21 Sep 2022 22:52:38 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        Yuan Yao <yuan.yao@linux.intel.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v10 30/39] KVM: selftests: Hyper-V PV TLB flush selftest
-Message-ID: <YyuVtrpQwZGHs4ez@google.com>
-References: <20220921152436.3673454-1-vkuznets@redhat.com>
- <20220921152436.3673454-31-vkuznets@redhat.com>
+        Wed, 21 Sep 2022 18:53:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2368DA8963;
+        Wed, 21 Sep 2022 15:53:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B6321B8233D;
+        Wed, 21 Sep 2022 22:53:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A8D9C433D6;
+        Wed, 21 Sep 2022 22:53:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663800824;
+        bh=FdIa27SWPDMGLCdX1VXeZ1En6voNOFpY4QHXOclcR6w=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=QL/xvaoGNBWdp6ygoBAgZOwKlo2l5BwIvVUIp1XVJXQg92PGKZt9yXEWympGsL6j7
+         e90ZYVw1zuVuCwuReDo2xs0nNot7aKbrpEl4gwv2RexOFo9t+L7qwjgwX9TKCf0ypB
+         4Iidf4llmDbsrdfcllLXAhXltndTDexm/oGDMTfxxzOIed1RUGEe/rbqk8NuIZkZ5K
+         AY+Svj6+6tzMXJyPJsMR0yCibv7QqK1JqWIu0g4qwSn++oOQFo0ZGOHxoY/kk3Pt/r
+         G62kZCwgk90vPKfitnweMegFvCEqANFaniegw0yyDE9N2a9gzGFQ/G27qr1KJqKiCW
+         1LBNPaaoRFUKg==
+Date:   Wed, 21 Sep 2022 17:53:42 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] PCI: Sanitise firmware BAR assignments behind a
+ PCI-PCI bridge
+Message-ID: <20220921225342.GA1233029@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220921152436.3673454-31-vkuznets@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <alpine.DEB.2.21.2209211921250.29493@angie.orcam.me.uk>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 21, 2022, Vitaly Kuznetsov wrote:
-> +/* 'Worker' vCPU code checking the contents of the test page */
-> +static void worker_guest_code(vm_vaddr_t test_data)
-> +{
-> +	struct test_data *data = (struct test_data *)test_data;
-> +	u32 vcpu_id = rdmsr(HV_X64_MSR_VP_INDEX);
-> +	unsigned char chr_exp1, chr_exp2, chr_cur;
+On Wed, Sep 21, 2022 at 08:49:16PM +0100, Maciej W. Rozycki wrote:
+> Fix an issue with the Tyan Tomcat IV S1564D system, the BIOS of which 
+> does not assign PCI buses beyond #2, where our resource reallocation 
+> code preserves the reset default of an I/O BAR assignment outside its 
+> upstream PCI-to-PCI bridge's I/O forwarding range:
+> 
+> pci 0000:06:08.0: BAR 4: no space for [io  size 0x0020]
+> pci 0000:06:08.0: BAR 4: trying firmware assignment [io  0xfce0-0xfcff]
+> pci 0000:06:08.0: BAR 4: assigned [io  0xfce0-0xfcff]
+> [...]
+> pci_bus 0000:06: resource 0 [io  0x2000-0x2fff]
+> 
+> Consequently when the device driver tries to access 06:08.0 according to 
+> its designated address range it pokes at an unassigned I/O location, 
+> likely subtractively decoded by the southbridge and forwarded to ISA, 
+> causing the driver to become confused and bail out:
+> 
+> uhci_hcd 0000:06:08.0: host system error, PCI problems?
+> uhci_hcd 0000:06:08.0: host controller process error, something bad happened!
+> uhci_hcd 0000:06:08.0: host controller halted, very bad!
+> uhci_hcd 0000:06:08.0: HCRESET not completed yet!
+> uhci_hcd 0000:06:08.0: HC died; cleaning up
+> 
+> if good luck happens or if bad luck does, an infinite flood of messages:
+> 
+> uhci_hcd 0000:06:08.0: host system error, PCI problems?
+> uhci_hcd 0000:06:08.0: host controller process error, something bad happened!
+> 
+> making the system virtually unusable.
+> 
+> This is because we try to retain any BAR assignment the firmware may 
+> have made here, which may be necessary for devices on the root bus with 
+> some systems, but cannot work for devices that are behind a PCI-to-PCI 
+> bridge where the BAR assignment is outside the upstream bridge's 
+> forwarding range.
+> 
+> Make sure then for a device behind a PCI-to-PCI bridge that any firmware 
+> assignment is within the bridge's relevant forwarding window or do not 
+> restore the assignment, fixing the system concerned as follows:
+> 
+> pci 0000:06:08.0: BAR 4: no space for [io  size 0x0020]
+> pci 0000:06:08.0: BAR 4: failed to assign [io  0xfce0-0xfcff]
+> [...]
+> pci 0000:06:08.0: BAR 4: assigned [io  0x2000-0x201f]
+> 
+> and making device 06:08.0 work correctly.
+> 
+> Cf. <https://bugzilla.kernel.org/show_bug.cgi?id=16263>
+> 
+> Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+> Link: https://lore.kernel.org/r/alpine.DEB.2.21.2203012338460.46819@angie.orcam.me.uk
+> Fixes: 58c84eda0756 ("PCI: fall back to original BIOS BAR addresses")
+> Cc: stable@vger.kernel.org # v2.6.35+
+> ---
+> Hi Bjorn,
+> 
+>  I have trimmed the change description down as you requested and left the 
+> change proper unmodified, as discussed in my earlier response.
 
-Any reason for "unsigned char" over uint8_t?
+I think this is great.  It shouldn't have taken me this long, so
+thanks for persevering.
 
-And the "chr_" prefix is rather weird, IMO it just makes the code harder to read.
+I think we can use pci_upstream_bridge() as below.  Let me know if
+not.
 
-Actually, why a single char?  E.g. why not do a uint64_t?  Oooh, because the
-offset is only by vcpu_id, not by vcpu_id * PAGE_SIZE.  Maybe add a comment about
-that somewhere?
+Here it is as I applied to pci/resource for v6.1:
 
-> +
-> +	x2apic_enable();
-> +	wrmsr(HV_X64_MSR_GUEST_OS_ID, HYPERV_LINUX_OS_ID);
-> +
-> +	for (;;) {
-> +		/* Read the expected char, then check what's in the test pages and then
-> +		 * check the expectation again to make sure it wasn't updated in the meantime.
+commit 0e3281839742 ("PCI: Sanitise firmware BAR assignments behind a PCI-PCI bridge")
+Author: Maciej W. Rozycki <macro@orcam.me.uk>
+Date:   Wed Sep 21 20:49:16 2022 +0100
 
-Please wrap at the soft limit.
+    PCI: Sanitise firmware BAR assignments behind a PCI-PCI bridge
+    
+    When pci_assign_resource() is unable to assign resources to a BAR, it uses
+    pci_revert_fw_address() to fall back to a firmware assignment (if any).
+    Previously pci_revert_fw_address() assumed all addresses could reach the
+    device, but this is not true if the device is below a bridge that only
+    forwards addresses within its windows.
+    
+    This problem was observed on a Tyan Tomcat IV S1564D system where the BIOS
+    did not assign valid addresses to several bridges and USB devices:
+    
+      pci 0000:00:11.0: PCI-to-PCIe bridge to [bus 01-ff]
+      pci 0000:00:11.0:   bridge window [io  0xe000-0xefff]
+      pci 0000:01:00.0: PCIe Upstream Port to [bus 02-ff]
+      pci 0000:01:00.0:   bridge window [io  0x0000-0x0fff]   # unreachable
+      pci 0000:02:02.0: PCIe Downstream Port to [bus 05-ff]
+      pci 0000:02:02.0:   bridge window [io  0x0000-0x0fff]   # unreachable
+      pci 0000:05:00.0: PCIe-to-PCI bridge to [bus 06-ff]
+      pci 0000:05:00.0:   bridge window [io  0x0000-0x0fff]   # unreachable
+      pci 0000:06:08.0: USB UHCI 1.1
+      pci 0000:06:08.0: BAR 4: [io  0xfce0-0xfcff]            # unreachable
+      pci 0000:06:08.1: USB UHCI 1.1
+      pci 0000:06:08.1: BAR 4: [io  0xfce0-0xfcff]            # unreachable
+      pci 0000:06:08.0: can't claim BAR 4 [io  0xfce0-0xfcff]: no compatible bridge window
+      pci 0000:06:08.1: can't claim BAR 4 [io  0xfce0-0xfcff]: no compatible bridge window
+    
+    During the first pass of assigning unassigned resources, there was not
+    enough I/O space available, so we couldn't assign the 06:08.0 BAR and
+    reverted to the firmware assignment (still unreachable).  Reverting the
+    06:08.1 assignment failed because it conflicted with 06:08.0:
+    
+      pci 0000:00:11.0:   bridge window [io  0xe000-0xefff]
+      pci 0000:01:00.0: no space for bridge window [io  size 0x2000]
+      pci 0000:02:02.0: no space for bridge window [io  size 0x1000]
+      pci 0000:05:00.0: no space for bridge window [io  size 0x1000]
+      pci 0000:06:08.0: BAR 4: no space for [io  size 0x0020]
+      pci 0000:06:08.0: BAR 4: trying firmware assignment [io  0xfce0-0xfcff]
+      pci 0000:06:08.1: BAR 4: no space for [io  size 0x0020]
+      pci 0000:06:08.1: BAR 4: trying firmware assignment [io  0xfce0-0xfcff]
+      pci 0000:06:08.1: BAR 4: [io  0xfce0-0xfcff] conflicts with 0000:06:08.0 [io  0xfce0-0xfcff]
+    
+    A subsequent pass assigned valid bridge windows and a valid 06:08.1 BAR,
+    but left the 06:08.0 BAR alone, so the UHCI device was still unusable:
+    
+      pci 0000:00:11.0:   bridge window [io  0xe000-0xefff] released
+      pci 0000:00:11.0:   bridge window [io  0x1000-0x2fff]   # reassigned
+      pci 0000:01:00.0:   bridge window [io  0x1000-0x2fff]   # reassigned
+      pci 0000:02:02.0:   bridge window [io  0x2000-0x2fff]   # reassigned
+      pci 0000:05:00.0:   bridge window [io  0x2000-0x2fff]   # reassigned
+      pci 0000:06:08.0: BAR 4: assigned [io  0xfce0-0xfcff]   # left alone
+      pci 0000:06:08.1: BAR 4: assigned [io  0x2000-0x201f]
+      ...
+      uhci_hcd 0000:06:08.0: host system error, PCI problems?
+      uhci_hcd 0000:06:08.0: host controller process error, something bad happened!
+      uhci_hcd 0000:06:08.0: host controller halted, very bad!
+      uhci_hcd 0000:06:08.0: HCRESET not completed yet!
+      uhci_hcd 0000:06:08.0: HC died; cleaning up
+    
+    If the address assigned by firmware is not reachable because it's not
+    within upstream bridge windows, fail instead of assigning the unusable
+    address from firmware.
+    
+    [bhelgaas: commit log, use pci_upstream_bridge()]
+    Link: https://bugzilla.kernel.org/show_bug.cgi?id=16263
+    Link: https://lore.kernel.org/r/alpine.DEB.2.21.2203012338460.46819@angie.orcam.me.uk
+    Link: https://lore.kernel.org/r/alpine.DEB.2.21.2209211921250.29493@angie.orcam.me.uk
+    Fixes: 58c84eda0756 ("PCI: fall back to original BIOS BAR addresses")
+    Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+    Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+    Cc: stable@vger.kernel.org # v2.6.35+
 
-> +		 */
-
-Except for apparently networking, kernel preferred style for block comments is:
-
-		/*
-		 * This comment is for KVM.
-		 */
-
-> +		chr_exp1 = READ_ONCE(*(unsigned char *)
-> +				     (data->test_pages + PAGE_SIZE * NTEST_PAGES + vcpu_id));
-
-Use a local variable for the pointer, then these line lengths are much more sane.
-Hmm, and if you give them descriptive names, I think it will make the code much
-easier to follow.  E.g. I've been staring at this test for ~10 minutes and am still
-not entirely sure what shenanigans are going on.
-
-> +		asm volatile("lfence");
-
-The kernel versions of these are provided by tools/arch/x86/include/asm/barrier.h,
-which I think is available?  I forget if we can use those in the selftests mess.
-
-Regardless, this needs a comment explaining why LFENCE/rmb() is needed, and why
-the writer needs MFENCE/mb().
-
-> +		chr_cur = *(unsigned char *)data->test_pages;
-
-READ_ONCE()?
-
-> +		asm volatile("lfence");
-> +		chr_exp2 = READ_ONCE(*(unsigned char *)
-> +				     (data->test_pages + PAGE_SIZE * NTEST_PAGES + vcpu_id));
-> +		if (chr_exp1 && chr_exp1 == chr_exp2)
-
-IIUC, the "chr_exp1 != 0" check is the read side of "0 == disable".  Splitting
-that out and adding a comment would be helpful.
-
-And if a local variable is used to hold the pointer, there's no need for an "exp2"
-variable.
-
-> +			GUEST_ASSERT(chr_cur == chr_exp1);
-> +		asm volatile("nop");
-
-Use cpu_relax(), which KVM selftests provide.
-
-All in all, something like this?
-
-	for (;;) {
-		cpu_relax();
-
-		expected = READ_ONCE(*this_vcpu);
-		
-		/* ??? */
-		rmb();
-		val = READ_ONCE(*???);
-		/* ??? */
-		rmb();
-
-		/*
-		 * '0' indicates the sender is between iterations, wait until
-		 * the sender is ready for this vCPU to start checking again.
-		 */
-		if (!expected)
-			continue;
-
-		/*
-		 * Re-read the per-vCPU byte to ensure the sender didn't move
-		 * onto a new iteration.
-		 */	
-		if (expected != READ_ONCE(*this_vcpu))
-			continue;
-		
-		GUEST_ASSERT(val == expected);
-	}
-
-> +	}
-> +}
-> +
-> +/*
-> + * Write per-CPU info indicating what each 'worker' CPU is supposed to see in
-> + * test page. '0' means don't check.
-> + */
-> +static void set_expected_char(void *addr, unsigned char chr, int vcpu_id)
-> +{
-> +	asm volatile("mfence");
-
-Why MFENCE?
-
-> +	*(unsigned char *)(addr + NTEST_PAGES * PAGE_SIZE + vcpu_id) = chr;
-> +}
-> +
-> +/* Update PTEs swapping two test pages */
-> +static void swap_two_test_pages(vm_paddr_t pte_gva1, vm_paddr_t pte_gva2)
-> +{
-> +	uint64_t pte[2];
-> +
-> +	pte[0] = *(uint64_t *)pte_gva1;
-> +	pte[1] = *(uint64_t *)pte_gva2;
-> +
-> +	*(uint64_t *)pte_gva1 = pte[1];
-> +	*(uint64_t *)pte_gva2 = pte[0];
-
-xchg()?  swap()?
-
-> +}
-> +
-> +/* Delay */
-> +static inline void rep_nop(void)
-
-LOL, rep_nop() is a hilariously confusing function name.  "REP NOP" is "PAUSE",
-and for whatever reason the kernel proper use rep_nop() as the function name for
-the wrapper.  My reaction to the MFENCE+rep_nop() below was "how the hell does
-MFENCE+PAUSE guarantee a delay?!?".
-
-Anyways, why not do e.g. usleep(1)?  And if you really need a udelay() and not a
-usleep(), IMO it's worth adding exactly that instead of throwing NOPs at the CPU.
-E.g. aarch64 KVM selftests already implements udelay(), so adding an x86 variant
-would move us one step closer to being able to use it in common tests.
-
-
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < 1000000; i++)
-> +		asm volatile("nop");
-> +}
-> +	r = pthread_create(&threads[0], NULL, vcpu_thread, vcpu[1]);
-> +	TEST_ASSERT(r == 0,
-
-!r is preferred
-
-> +		    "pthread_create failed errno=%d", errno);
-
-TEST_ASSERT() already captures errno, e.g. these can be:
-
-	TEST_ASSERT(!r, "pthread_create() failed");
-
-> +
-> +	r = pthread_create(&threads[1], NULL, vcpu_thread, vcpu[2]);
-> +	TEST_ASSERT(r == 0,
-> +		    "pthread_create failed errno=%d", errno);
-> +
-> +	while (true) {
-> +		r = _vcpu_run(vcpu[0]);
-> +		exit_reason = vcpu[0]->run->exit_reason;
-> +
-> +		TEST_ASSERT(!r, "vcpu_run failed: %d\n", r);
-
-Pretty sure newlines in asserts aren't necessary, though I forget if they cause
-weirdness or just end up being ignored.
-
-> +		TEST_ASSERT(exit_reason == KVM_EXIT_IO,
-> +			    "unexpected exit reason: %u (%s)",
-> +			    exit_reason, exit_reason_str(exit_reason));
-> +
-> +		switch (get_ucall(vcpu[0], &uc)) {
-> +		case UCALL_SYNC:
-> +			TEST_ASSERT(uc.args[1] == stage,
-> +				    "Unexpected stage: %ld (%d expected)\n",
-> +				    uc.args[1], stage);
-> +			break;
-> +		case UCALL_ABORT:
-> +			TEST_FAIL("%s at %s:%ld", (const char *)uc.args[0],
-> +				  __FILE__, uc.args[1]);
-
-			REPORT_GUEST_ASSERT(uc);
+diff --git a/drivers/pci/setup-res.c b/drivers/pci/setup-res.c
+index 439ac5f5907a..b492e67c3d87 100644
+--- a/drivers/pci/setup-res.c
++++ b/drivers/pci/setup-res.c
+@@ -214,6 +214,17 @@ static int pci_revert_fw_address(struct resource *res, struct pci_dev *dev,
+ 
+ 	root = pci_find_parent_resource(dev, res);
+ 	if (!root) {
++		/*
++		 * If dev is behind a bridge, accesses will only reach it
++		 * if res is inside the relevant bridge window.
++		 */
++		if (pci_upstream_bridge(dev))
++			return -ENXIO;
++
++		/*
++		 * On the root bus, assume the host bridge will forward
++		 * everything.
++		 */
+ 		if (res->flags & IORESOURCE_IO)
+ 			root = &ioport_resource;
+ 		else
