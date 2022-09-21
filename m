@@ -2,239 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77D345BF84B
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 09:52:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FD555BF850
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 09:53:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231174AbiIUHwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 03:52:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56142 "EHLO
+        id S231182AbiIUHxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 03:53:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231139AbiIUHwm (ORCPT
+        with ESMTP id S230471AbiIUHxJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 03:52:42 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D1EE844FD;
-        Wed, 21 Sep 2022 00:52:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=I529aHH/Kq3yZa57wzdor75Vu3gZs2tmTvHaoGyFizY=; b=ne42DcaBo0XJ3Hgf81izdLp1lj
-        ezorS+oP9dU71qdzOuZMImiCiH71LsNnyuooL3WqYt9V/rjKeCkJ8rLzHVyv0sibOMzkDgm2T408y
-        yvjz41HOv+NrCH80aci7xbeTdP5ED1Gj79db9SNCDXqW6tKoMhsugh8z/AQAx0KBJsezVIzF0pO1X
-        JGFb6a70OOqCRVCTZeBRs8MKFs2/6OPz5s+k3hfpwGzmX9UsEVSQwa3vU3/qInoCxHfwcdNFPWW8V
-        o3n5ypU0R7WU6TeLiHqAU3VGXpeel0DzZLy3BAOtlG3oyhmSYwnakz3KA52l9Tf1n9yFGccXek8wW
-        VrgOlXBg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oauWk-00EYYR-Eb; Wed, 21 Sep 2022 07:52:15 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 689AD300202;
-        Wed, 21 Sep 2022 09:52:12 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 2101720161C88; Wed, 21 Sep 2022 09:52:12 +0200 (CEST)
-Date:   Wed, 21 Sep 2022 09:52:12 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Nadav Amit <nadav.amit@gmail.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        Nadav Amit <namit@vmware.com>, stable@vger.kernel.org,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Subject: Re: [PATCH] x86/alternative: fix race in try_get_desc()
-Message-ID: <YyrCrN6RwibR505Z@hirez.programming.kicks-ass.net>
-References: <20220920224743.3089-1-namit@vmware.com>
+        Wed, 21 Sep 2022 03:53:09 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E93D3844C2
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 00:53:07 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id j24so5456489lja.4
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 00:53:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=OS0CSjnlW5ADVTuZSK4e/8bQa+nM61/76HZjRJHlhE8=;
+        b=UHWL6t56LIFGZHwdc/+WL+z0SYzWxEENolMyzH7nOCm8KzikH68NrxBkjqGr70SXNW
+         3mZWGxLEC+XHRUKKNrwh7WhDCiNlhPUnKoFfo+UiqbYQaGdpKclRAwHbhTKWmkkXRaWM
+         v1RFmVq194hS8C/YXDzo4R+l/FI8t+G1jsKqwxLovg/6D/Rklc35jn1pkBqU/GD9rwzn
+         hlECjQKZIu9ER1b2twWm9OxlWSc1gODdrFORxJi5HewVDvJM/prvlNHMJ3us67Ee1+gN
+         1Zr6BKxKw3U0V5bncc9hYanXdxZh8Db9LGrHAw1ZkP4uqaaAt2RH4kWWmzjQP3IhfgB4
+         +x2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=OS0CSjnlW5ADVTuZSK4e/8bQa+nM61/76HZjRJHlhE8=;
+        b=rcKvfGjcS6Xsg2GenKi+0GwQynvAa3EdmHYQqJEAwbB+catTo4PwBDhVV4b96tjG9P
+         6yMdmosVnbWQLgaiY6CSqojue8OGNyTzfBCTKZRcM4n3Op3BXgkycR3AMiGC8d65bzUN
+         txOd5S+ZV/k5vC/qw2Gp8dM1GKlkzDF4wzwzNlR7xJERed8pWYPEsuYssbUZp7B2R+EL
+         3upSfO+Wt6IQzdR4HTHjdhOlvuA2XXtRvWc8YMVoHAYpUURgJ7RRbimj61ezOMgFIhxk
+         axy0kiks/Q9nnOoFSKAGNIW1nkLdJH17rsYmNv22bf+KS3goLIhR+XU3uPyO/H2pXsxM
+         PhJg==
+X-Gm-Message-State: ACrzQf0KkeLi8VDqXp1WY+G1WhtmsSuo9dW5K+hVCQ4nTckSAiuNpLGb
+        ayGoL2WiBxHGCju8SZ5VQQ1dAQ==
+X-Google-Smtp-Source: AMsMyM4KNz309yv4EvSMp9zHGKrkbtkYd/2U0LDBcwFkpEnNdcd3KlhL/+LDBSpIdSdcUpYQn3T7Ag==
+X-Received: by 2002:a2e:9005:0:b0:26c:14d9:cea0 with SMTP id h5-20020a2e9005000000b0026c14d9cea0mr7733489ljg.300.1663746786270;
+        Wed, 21 Sep 2022 00:53:06 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id b26-20020a0565120b9a00b00497a99e7b73sm317674lfv.246.2022.09.21.00.53.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Sep 2022 00:53:05 -0700 (PDT)
+Message-ID: <9ada8d37-83b8-8bd2-2b02-d821b1b1c8e7@linaro.org>
+Date:   Wed, 21 Sep 2022 09:53:04 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220920224743.3089-1-namit@vmware.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v3 0/8] Support for NVDEC on Tegra234
+Content-Language: en-US
+To:     Mikko Perttunen <cyndis@kapsi.fi>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>
+Cc:     Mikko Perttunen <mperttunen@nvidia.com>,
+        Ashish Mhetre <amhetre@nvidia.com>,
+        Sameer Pujar <spujar@nvidia.com>,
+        dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220920081203.3237744-1-cyndis@kapsi.fi>
+ <89d925ea-f550-6903-1c24-b320ae5a82c0@linaro.org>
+ <de7f5e65-c939-558a-277d-01320f93eedc@kapsi.fi>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <de7f5e65-c939-558a-277d-01320f93eedc@kapsi.fi>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 10:47:43PM +0000, Nadav Amit wrote:
+On 21/09/2022 09:50, Mikko Perttunen wrote:
+> On 9/21/22 10:26, Krzysztof Kozlowski wrote:
+>> On 20/09/2022 10:11, Mikko Perttunen wrote:
+>>> From: Mikko Perttunen <mperttunen@nvidia.com>
+>>>
+>>> v3:
+>>> * Updated patch 3 based on comments
+>>>
+>>> v2:
+>>> * Updated patches 1,3 based on comments
+>>> * Added Acked-by to patch 2
+>>>
+>>> Original message:
+>>>
+>>> Hi all,
+>>>
+>>> this series adds support for the HW video decoder, NVDEC,
+>>> on Tegra234 (Orin). The main change is a switch from Falcon
+>>> to RISC-V for the internal microcontroller, which brings along
+>>> a change in how the engine is booted. Otherwise it is backwards
+>>> compatible with earlier versions.
+>>
+>> I asked you to describe the dependencies and patch merging strategy.
+>> It's still not here, so I assume there are no and I am taking patches
+>> relevant to me.
+>>
+>> Best regards,
+>> Krzysztof
+> 
+> Sorry, I described it in the earlier email and forgot to add it to the 
+> cover letter..
 
-> Fix this issue with small backportable patch. Instead of trying to make
-> RCU-like behavior for bp_desc, just eliminate the unnecessary level of
-> indirection of bp_desc, and hold the whole descriptor on the stack.
-> Anyhow, there is only a single descriptor at any given moment.
+Please keep it in cover letter. We all get too many emails and too many
+patchsets to remember. Plus, things can change and such dependency can
+disappear after some versions.
 
-Because of text_mutex; indeed. No idea why I put that thing on the
-stack.
-
-I've done a few minor edits to your patch, but it otherwise looks good
-to me.
-
----
-Subject: x86/alternative: Fix race in try_get_desc()
-From: Nadav Amit <namit@vmware.com>
-Date: Tue, 20 Sep 2022 22:47:43 +0000
-
-From: Nadav Amit <namit@vmware.com>
-
-The text poke mechanism claims to have an RCU-like behavior, but it does
-not appear that there is any quiescent state to ensure that nobody holds
-reference to desc. As a result, the following race appears to be
-possible, which can lead to memory corruption.
-
-  CPU0					CPU1
-  ----					----
-  text_poke_bp_batch()
-  -> smp_store_release(&bp_desc, &desc)
-
-  [ notice that desc is on
-    the stack			]
-
-					poke_int3_handler()
-
-					[ int3 might be kprobe's
-					  so sync events are do not
-					  help ]
-
-					-> try_get_desc(descp=&bp_desc)
-					   desc = __READ_ONCE(bp_desc)
-
-					   if (!desc) [false, success]
-  WRITE_ONCE(bp_desc, NULL);
-  atomic_dec_and_test(&desc.refs)
-
-  [ success, desc space on the stack
-    is being reused and might have
-    non-zero value. ]
-					arch_atomic_inc_not_zero(&desc->refs)
-
-					[ might succeed since desc points to
-					  stack memory that was freed and might
-					  be reused. ]
-
-I encountered some occasional crashes of poke_int3_handler() when
-kprobes are set, while accessing desc->vec. The analysis has been done
-offline and I did not corroborate the cause of the crashes. Yet, it
-seems that this race might be the root cause.
-
-Fix this issue with small backportable patch. Instead of trying to make
-RCU-like behavior for bp_desc, just eliminate the unnecessary level of
-indirection of bp_desc, and hold the whole descriptor on the stack.
-Anyhow, there is only a single descriptor at any given moment.
-
-Fixes: 1f676247f36a4 ("x86/alternatives: Implement a better poke_int3_handler() completion scheme")
-Signed-off-by: Nadav Amit <namit@vmware.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Cc: stable@kernel.org
-Link: https://lkml.kernel.org/r/20220920224743.3089-1-namit@vmware.com
----
- arch/x86/kernel/alternative.c |   45 +++++++++++++++++++++---------------------
- 1 file changed, 23 insertions(+), 22 deletions(-)
-
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -1319,22 +1319,23 @@ struct bp_patching_desc {
- 	atomic_t refs;
- };
- 
--static struct bp_patching_desc *bp_desc;
-+static struct bp_patching_desc bp_desc;
- 
- static __always_inline
--struct bp_patching_desc *try_get_desc(struct bp_patching_desc **descp)
-+struct bp_patching_desc *try_get_desc(void)
- {
--	/* rcu_dereference */
--	struct bp_patching_desc *desc = __READ_ONCE(*descp);
-+	struct bp_patching_desc *desc = &bp_desc;
- 
--	if (!desc || !arch_atomic_inc_not_zero(&desc->refs))
-+	if (!arch_atomic_inc_not_zero(&desc->refs))
- 		return NULL;
- 
- 	return desc;
- }
- 
--static __always_inline void put_desc(struct bp_patching_desc *desc)
-+static __always_inline void put_desc(void)
- {
-+	struct bp_patching_desc *desc = &bp_desc;
-+
- 	smp_mb__before_atomic();
- 	arch_atomic_dec(&desc->refs);
- }
-@@ -1367,15 +1368,15 @@ noinstr int poke_int3_handler(struct pt_
- 
- 	/*
- 	 * Having observed our INT3 instruction, we now must observe
--	 * bp_desc:
-+	 * bp_desc with non-zero refcount:
- 	 *
--	 *	bp_desc = desc			INT3
-+	 *	bp_desc.refs = 1		INT3
- 	 *	WMB				RMB
--	 *	write INT3			if (desc)
-+	 *	write INT3			if (bp_desc.refs != 0)
- 	 */
- 	smp_rmb();
- 
--	desc = try_get_desc(&bp_desc);
-+	desc = try_get_desc();
- 	if (!desc)
- 		return 0;
- 
-@@ -1429,7 +1430,7 @@ noinstr int poke_int3_handler(struct pt_
- 	ret = 1;
- 
- out_put:
--	put_desc(desc);
-+	put_desc();
- 	return ret;
- }
- 
-@@ -1460,18 +1461,20 @@ static int tp_vec_nr;
-  */
- static void text_poke_bp_batch(struct text_poke_loc *tp, unsigned int nr_entries)
- {
--	struct bp_patching_desc desc = {
--		.vec = tp,
--		.nr_entries = nr_entries,
--		.refs = ATOMIC_INIT(1),
--	};
- 	unsigned char int3 = INT3_INSN_OPCODE;
- 	unsigned int i;
- 	int do_sync;
- 
- 	lockdep_assert_held(&text_mutex);
- 
--	smp_store_release(&bp_desc, &desc); /* rcu_assign_pointer */
-+	bp_desc.vec = tp;
-+	bp_desc.nr_entries = nr_entries;
-+
-+	/*
-+	 * Corresponds to the implicit memory barrier in try_get_desc() to
-+	 * ensure reading a non-zero refcount provides up to date bp_desc data.
-+	 */
-+	atomic_set_release(&bp_desc.refs, 1);
- 
- 	/*
- 	 * Corresponding read barrier in int3 notifier for making sure the
-@@ -1559,12 +1562,10 @@ static void text_poke_bp_batch(struct te
- 		text_poke_sync();
- 
- 	/*
--	 * Remove and synchronize_rcu(), except we have a very primitive
--	 * refcount based completion.
-+	 * Remove and wait for refs to be zero.
- 	 */
--	WRITE_ONCE(bp_desc, NULL); /* RCU_INIT_POINTER */
--	if (!atomic_dec_and_test(&desc.refs))
--		atomic_cond_read_acquire(&desc.refs, !VAL);
-+	if (!atomic_dec_and_test(&bp_desc.refs))
-+		atomic_cond_read_acquire(&bp_desc.refs, !VAL);
- }
- 
- static void text_poke_loc_init(struct text_poke_loc *tp, void *addr,
+Best regards,
+Krzysztof
