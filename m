@@ -2,110 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB2695BF97C
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 10:40:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E2BC5BF984
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 10:40:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230410AbiIUIkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 04:40:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47776 "EHLO
+        id S231192AbiIUIkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 04:40:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbiIUIkK (ORCPT
+        with ESMTP id S229610AbiIUIkk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 04:40:10 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76CAC3A48A
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 01:40:08 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 92580FF808;
-        Wed, 21 Sep 2022 08:40:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1663749607;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oH68prWr+K6M/+VJN9mzBk6EPAXOvKLVuiYE0zxGZhw=;
-        b=Y/YVy0AYv5xSD1rLRsws62bKktXHFgH5j56412XfcXvwjPG+kKQGANrM/mpAYWax33jv2S
-        vZzKtPKH1DKS811KpQ7LvZW+sO5WIuAp/JgtRkF1Orq00jY70w17oH9k8NT327PMHKLA0j
-        1zPqh/K56pYtNqn0uaOOywpbBcTXbYam11imD4zg8DuRHTuPv8ZcSchelLO0MnkjrTwhgk
-        5ewiaDtCC67j0mVFvU/LUhVqOAC851zBtzT1+IzluBFwpXbrNqZMaoE4iUZwI7z6IZBESm
-        UCCyrMrOGXzC0KDXzr42t4rsLd0h3G9FAflmPwHC0xAMU9KdPmpGWGbovQINhA==
-Date:   Wed, 21 Sep 2022 10:40:02 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Valentin Korenblit <vkorenblit@sequans.com>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: Re: [mtd:nand/next 11/31]
- drivers/mtd/nand/raw/cadence-nand-controller.c:1893:4: error: implicit
- declaration of function 'ioread64_rep' is invalid in C99
-Message-ID: <20220921104002.226ff3f6@xps-13>
-In-Reply-To: <202209210641.MziHAbW7-lkp@intel.com>
-References: <202209210641.MziHAbW7-lkp@intel.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Wed, 21 Sep 2022 04:40:40 -0400
+Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B9567CAD;
+        Wed, 21 Sep 2022 01:40:38 -0700 (PDT)
+Received: from [10.18.29.47] (10.18.29.47) by mail-sh.amlogic.com (10.18.11.5)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.9; Wed, 21 Sep
+ 2022 16:40:35 +0800
+Message-ID: <21e14cc1-6b34-e6b0-8da2-ad4b34dac149@amlogic.com>
+Date:   Wed, 21 Sep 2022 16:40:34 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH V3 3/6] clk: meson: S4: add support for Amlogic S4 SoC PLL
+ clock driver
+Content-Language: en-US
+From:   Yu Tu <yu.tu@amlogic.com>
+To:     Jerome Brunet <jbrunet@baylibre.com>, <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+References: <20220805085716.5635-1-yu.tu@amlogic.com>
+ <20220805085716.5635-4-yu.tu@amlogic.com>
+ <1jiln0yzgj.fsf@starbuckisacylon.baylibre.com>
+ <ed4038fb-c230-fc27-800c-c99bd1770a1c@amlogic.com>
+ <4e3cdd6b-5861-8a4f-1df7-af763f77bad5@amlogic.com>
+ <1jsflftm1y.fsf@starbuckisacylon.baylibre.com>
+ <0c7e6d90-2ce3-25ab-84b6-026ce8a238a8@amlogic.com>
+ <1jtu5uz0ry.fsf@starbuckisacylon.baylibre.com>
+ <9f9cf980-c0c6-d5c3-ced8-8ab50e392470@amlogic.com>
+In-Reply-To: <9f9cf980-c0c6-d5c3-ced8-8ab50e392470@amlogic.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.18.29.47]
+X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
+ (10.18.11.5)
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Valentin,
+Hi Jerome，
 
-lkp@intel.com wrote on Wed, 21 Sep 2022 06:31:23 +0800:
+On 2022/8/30 15:37, Yu Tu wrote:
+> 
+> 
+> On 2022/8/30 14:44, Jerome Brunet wrote:
+>> [ EXTERNAL EMAIL ]
+>>
+>>
+>> On Tue 30 Aug 2022 at 14:13, Yu Tu <yu.tu@amlogic.com> wrote:
+>>
+>>> On 2022/8/29 17:48, Jerome Brunet wrote:
+>>>> [ EXTERNAL EMAIL ]
+>>>> On Mon 15 Aug 2022 at 21:20, Yu Tu <yu.tu@amlogic.com> wrote:
+>>>>
+>>>>>>>> +
+>>>>>>>> +static struct clk_regmap s4_hdmi_pll_dco = {
+>>>>>>>> +    .data = &(struct meson_clk_pll_data){
+>>>>>>>> +        .en = {
+>>>>>>>> +            .reg_off = ANACTRL_HDMIPLL_CTRL0,
+>>>>>>>> +            .shift   = 28,
+>>>>>>>> +            .width   = 1,
+>>>>>>>> +        },
+>>>>>>>> +        .m = {
+>>>>>>>> +            .reg_off = ANACTRL_HDMIPLL_CTRL0,
+>>>>>>>> +            .shift   = 0,
+>>>>>>>> +            .width   = 8,
+>>>>>>>> +        },
+>>>>>>>> +        .n = {
+>>>>>>>> +            .reg_off = ANACTRL_HDMIPLL_CTRL0,
+>>>>>>>> +            .shift   = 10,
+>>>>>>>> +            .width   = 5,
+>>>>>>>> +        },
+>>>>>>>> +        .frac = {
+>>>>>>>> +            .reg_off = ANACTRL_HDMIPLL_CTRL1,
+>>>>>>>> +            .shift   = 0,
+>>>>>>>> +            .width   = 17,
+>>>>>>>> +        },
+>>>>>>>> +        .l = {
+>>>>>>>> +            .reg_off = ANACTRL_HDMIPLL_CTRL0,
+>>>>>>>> +            .shift   = 31,
+>>>>>>>> +            .width   = 1,
+>>>>>>>> +        },
+>>>>>>>> +        .rst = {
+>>>>>>>> +            .reg_off = ANACTRL_HDMIPLL_CTRL0,
+>>>>>>>> +            .shift   = 29,
+>>>>>>>> +            .width   = 1,
+>>>>>>>> +        },
+>>>>>>>> +    },
+>>>>>>>> +    .hw.init = &(struct clk_init_data){
+>>>>>>>> +        .name = "hdmi_pll_dco",
+>>>>>>>> +        .ops = &meson_clk_pll_ro_ops,
+>>>>>>>> +        .parent_data = (const struct clk_parent_data []) {
+>>>>>>>> +            { .fw_name = "xtal", }
+>>>>>>>> +        },
+>>>>>>>> +        .num_parents = 1,
+>>>>>>>> +        /*
+>>>>>>>> +         * Display directly handle hdmi pll registers ATM, we need
+>>>>>>>> +         * NOCACHE to keep our view of the clock as accurate as
+>>>>>>>> +         * possible
+>>>>>>>> +         */
+>>>>>>>
+>>>>>>> Is it really ?
+>>>>>>>
+>>>>>>> Given that HDMI support for the s4 is there yet, the
+>>>>>>> addresses have changes and the region is no longer a syscon, it 
+>>>>>>> is time
+>>>>>>> for the HDMI driver to get fixed.
+>>>>> The HDMI PLL is configured in the Uboot phase and does not change the
+>>>>> frequency in the kernel phase. So we use the NOCACHE flag and
+>>>>> "ro_ops".
+>>>> That's no reason to put NOCACHE or ro-ops
+>>>> If you want the frequencies to be statically assinged, the correct way
+>>>> would be through assigned-rate in DT I guess.
+>>>
+>>> Okay. You're right. However, when registering with OPS, HDMI PLL will be
+>>> reset. It takes time for PLL to stabilize the output frequency, which 
+>>> will
+>>> lead to the startup screen flashing.
+>>>
+>>> I would like to know how to solve this problem if not using ro_ops.
+>>>
+>>>>
+>>
+>> You can add new ops or tweak the current init function.
+> 
+> HDMI PLL is not different from other PLLS, so I think adding OPS is weird.
+> 
+>>
+>> Safest would be to do the following :
+>>   * Check if the PLLs is already on.
+>>   * Check if the 'pll->init_regs' matches what is already set
+>>     - if so, you can skip the reset
+>>     - if not, you need to reset as usual
+> 
+> static int meson_clk_pll_init(struct clk_hw *hw)
+> {
+>          struct clk_regmap *clk = to_clk_regmap(hw);
+>          struct meson_clk_pll_data *pll = meson_clk_pll_data(clk);
+> 
+> 
+>          if (pll->init_count) {
+>                  meson_parm_write(clk->map, &pll->rst, 1);
+>                  regmap_multi_reg_write(clk->map, pll->init_regs,
+>                                  |      pll->init_count);
+>                  meson_parm_write(clk->map, &pll->rst, 0);
+>          }
+> 
+> 
+>          return 0;
+> }
+> 
+> Because the init function looks like this. Therefore, HDMI PLL 
+> init_count is not given. Can I change it like this?
 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nan=
-d/next
-> head:   63de24fccb6b831be1abfe07292449105b467731
-> commit: 7e7dc04774b18c0e42ce74aa3357021cda979674 [11/31] mtd: rawnand: ca=
-dence: support 64-bit slave dma interface
-> config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/2=
-0220921/202209210641.MziHAbW7-lkp@intel.com/config)
-> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c=
-006a5895fc0e329fe15fead81e37457cb1d1)
-> reproduce (this is a W=3D1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
-n/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git/c=
-ommit/?id=3D7e7dc04774b18c0e42ce74aa3357021cda979674
->         git remote add mtd https://git.kernel.org/pub/scm/linux/kernel/gi=
-t/mtd/linux.git
->         git fetch --no-tags mtd nand/next
->         git checkout 7e7dc04774b18c0e42ce74aa3357021cda979674
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=
-=3D1 O=3Dbuild_dir ARCH=3Dx86_64 SHELL=3D/bin/bash drivers/mtd/nand/raw/
->=20
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
->=20
-> All errors (new ones prefixed by >>):
->=20
-> >> drivers/mtd/nand/raw/cadence-nand-controller.c:1893:4: error: implicit=
- declaration of function 'ioread64_rep' is invalid in C99 [-Werror,-Wimplic=
-it-function-declaration] =20
->                            ioread64_rep(cdns_ctrl->io.virt, buf, len_in_w=
-ords);
->                            ^
-> >> drivers/mtd/nand/raw/cadence-nand-controller.c:1962:4: error: implicit=
- declaration of function 'iowrite64_rep' is invalid in C99 [-Werror,-Wimpli=
-cit-function-declaration] =20
->                            iowrite64_rep(cdns_ctrl->io.virt, buf, len_in_=
-words);
->                            ^
->    2 errors generated.
+I don't know if this change meets your requirements? Please give us your 
+valuable advice.
 
-I've dropped your patch from nand/next, here you can check what's
-missing in the configuration, should not be too hard to solve. Once
-done, you can send a new version of the patch.
-
-Thanks,
-Miqu=C3=A8l
