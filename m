@@ -2,204 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CAC65BFEE0
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 15:21:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 649FA5BFEE3
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 15:23:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230337AbiIUNVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 09:21:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42286 "EHLO
+        id S229530AbiIUNXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 09:23:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230042AbiIUNU6 (ORCPT
+        with ESMTP id S229706AbiIUNXU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 09:20:58 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB38293532;
-        Wed, 21 Sep 2022 06:20:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663766456; x=1695302456;
-  h=date:from:cc:subject:in-reply-to:message-id:references:
-   mime-version;
-  bh=vYgIHBqQT1LOSTdLXHjE2GGwmevR+anrYC3oXAZSnJk=;
-  b=m91KiL9EZBDNnPeO1yVHjcRDB20rUWU5T65pw2VHoXqtkehKzATSHejm
-   UrDD8dQWsi29FQ1qDdnXJyXzPU1+AetHWp4e4jB12Bsn05NMspcxerA3J
-   pPu99Ez9wp356DMkAtfAo3icXcnIpSb7bspKKOMO1iq8GfQv1pHDaC21t
-   NfDPXBvMflgiEVB57iTraW8n/qYEny5VJmw4IqQyCHqjRG1nMLS50x5Y/
-   T3ak3XqSMkundQanGycngiTxsXE9gqA/2+FovvVLKEXrFYCjT5Z7CsX3P
-   fSVecyAXlMaxb3uylLozxcCVY9soez+ABD3QMc/7MZuTmDK7rMndoFcBs
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="298715561"
-X-IronPort-AV: E=Sophos;i="5.93,333,1654585200"; 
-   d="scan'208";a="298715561"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 06:20:56 -0700
-X-IronPort-AV: E=Sophos;i="5.93,333,1654585200"; 
-   d="scan'208";a="794668445"
-Received: from dgonsal1-mobl1.ger.corp.intel.com ([10.252.58.151])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 06:20:52 -0700
-Date:   Wed, 21 Sep 2022 16:20:50 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-cc:     Lennert Buytenhek <buytenh@wantstofly.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Alex Williamson <alex.williamson@hp.com>,
-        Aristeu Sergio Rozanski Filho <aris@cathedrallabs.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Lennert Buytenhek <buytenh@arista.com>
-Subject: Re: [PATCH v3 1/1] serial: 8250: Toggle IER bits on only after irq
- has been set up
-In-Reply-To: <20220919144057.12241-1-ilpo.jarvinen@linux.intel.com>
-Message-ID: <24ec3f1f-b39c-eeb1-d53-ed97e2ccdb4f@linux.intel.com>
-References: <20220919144057.12241-1-ilpo.jarvinen@linux.intel.com>
+        Wed, 21 Sep 2022 09:23:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E230A9351B
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 06:23:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663766599;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=gAmZ3Aq0yQw/itkslHGF953uDDwcJAEu2PS67so2ayg=;
+        b=KvnfTTQOkTB1BEgeRbpaYOyMIEXMv21aEE6sqTjiLNfYwBIIJZNwyEdINJpNfM4C7BjISh
+        BLOxfjDJWU4TX+DO3moo47cXFFx3+tGz3kra+lsCNTphVx+FSReeuPgBs+e6z86syYtcy4
+        l8Tign53lXJ15G7afD41degRTAy9VJ0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-482-zpCnSiHbOrumJIKuPmaWSg-1; Wed, 21 Sep 2022 09:23:15 -0400
+X-MC-Unique: zpCnSiHbOrumJIKuPmaWSg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 51EED85530E;
+        Wed, 21 Sep 2022 13:23:15 +0000 (UTC)
+Received: from llong.com (dhcp-17-215.bos.redhat.com [10.18.17.215])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0E96239DB3;
+        Wed, 21 Sep 2022 13:23:15 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org, Waiman Long <longman@redhat.com>
+Subject: [PATCH 0/2] locking, tracing: Fix incorrect use of arch_spin_lock()
+Date:   Wed, 21 Sep 2022 09:21:50 -0400
+Message-Id: <20220921132152.1622616-1-longman@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1816087576-1663766455=:1741"
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,MISSING_HEADERS,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+It is found that running the LTP read_all_proc test may cause the
+following warning to show up:
 
---8323329-1816087576-1663766455=:1741
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+[12512.905036] BUG: using smp_processor_id() in preemptible [00000000] code: read_all/133711
+[12512.913499] caller is __pv_queued_spin_lock_slowpath+0x7f/0xd30
+[12512.921163] CPU: 3 PID: 133711 Comm: read_all Kdump: loaded Tainted: G           OE    --------- ---  5.14.0-163.el9.x86_64+debug #1
+[12512.936652] Hardware name: Red Hat KVM, BIOS 0.5.1 01/01/2011
+[12512.944213] Call Trace:
+[12512.950660]  dump_stack_lvl+0x57/0x81
+[12512.957400]  check_preemption_disabled+0xcc/0xd0
+[12512.964487]  __pv_queued_spin_lock_slowpath+0x7f/0xd30
+[12512.971552]  ? pv_hash+0x110/0x110
+[12512.978119]  ? __lock_acquire+0xb72/0x1870
+[12512.984683]  tracing_saved_cmdlines_size_read+0x177/0x190
+[12512.991655]  ? saved_cmdlines_start+0x2c0/0x2c0
+[12512.998355]  ? inode_security+0x54/0xf0
+[12513.004548]  ? selinux_file_permission+0x324/0x420
+[12513.011185]  ? lock_downgrade+0x130/0x130
+[12513.017423]  ? fsnotify_perm.part.0+0x14a/0x4c0
+[12513.023715]  vfs_read+0x126/0x4d0
+[12513.029432]  ksys_read+0xf9/0x1d0
+[12513.035131]  ? __ia32_sys_pwrite64+0x1e0/0x1e0
+[12513.041028]  ? ktime_get_coarse_real_ts64+0x130/0x170
+[12513.047167]  do_syscall_64+0x59/0x90
+[12513.052656]  ? lockdep_hardirqs_on+0x79/0x100
+[12513.058268]  ? do_syscall_64+0x69/0x90
+[12513.063593]  ? lockdep_hardirqs_on+0x79/0x100
+[12513.069022]  ? do_syscall_64+0x69/0x90
+[12513.074137]  ? lockdep_hardirqs_on+0x79/0x100
+[12513.079533]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+[12513.085015] RIP: 0033:0x7f93f09d38c2
 
-On Mon, 19 Sep 2022, Ilpo Järvinen wrote:
+So tracing_saved_cmdlines_size_read() does call arch_spin_lock() with
+preemption enabled. Looking at other arch_spin_lock() call sites in
+kernel/trace/trace.c, there are several others that may have the same
+problem. Other arch_spin_lock() callers under kernel look OK as
+irqs has been disabled before calling arch_spin_lock().
 
-> Invoking TIOCVHANGUP on 8250_mid port on Ice Lake-D and then reopening
-> the port triggers these faults during serial8250_do_startup():
-> 
->   DMAR: DRHD: handling fault status reg 3
->   DMAR: [DMA Write NO_PASID] Request device [00:1a.0] fault addr 0x0 [fault reason 0x05] PTE Write access is not set
-> 
-> If the IRQ hasn't been set up yet, the UART will have zeroes in its MSI
-> address/data registers. Disabling the IRQ at the interrupt controller
-> won't stop the UART from performing a DMA write to the address programmed
-> in its MSI address register (zero) when it wants to signal an interrupt.
-> 
-> The UARTs (in Ice Lake-D) implement PCI 2.1 style MSI without masking
-> capability, so there is no way to mask the interrupt at the source PCI
-> function level, except disabling the MSI capability entirely, but that
-> would cause it to fall back to INTx# assertion, and the PCI specification
-> prohibits disabling the MSI capability as a way to mask a function's
-> interrupt service request.
-> 
-> The MSI address register is zeroed during by the hangup as the irq is
-> freed. The interrupt is signalled during serial8250_do_startup()
-> performing a THRE test that temporarily toggles THRI in IER. The THRE
-> test currently occurs before UART's irq (and MSI address) is properly
-> set up.
-> 
-> Refactor serial8250_do_startup() such that irq is set up before the
-> THRE test. The current irq setup code is intermixed with the timer
-> setup code. As THRE test must be performed prior to the timer setup,
-> extract it into own function and call it only after the THRE test.
-> 
-> Reported-by: Lennert Buytenhek <buytenh@arista.com>
-> Tested-by: Lennert Buytenhek <buytenh@arista.com>
-> Fixes: 40b36daad0ac ("[PATCH] 8250 UART backup timer")
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> ---
-> 
-> v3:
-> - Improved the commit with Lennert's superior descriptions.
-> - Added Andy's Rev-by
-> 
->  drivers/tty/serial/8250/8250.h      |  2 ++
->  drivers/tty/serial/8250/8250_core.c | 16 +++++++++++-----
->  drivers/tty/serial/8250/8250_port.c |  8 +++++---
->  3 files changed, 18 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/8250/8250.h b/drivers/tty/serial/8250/8250.h
-> index 287153d32536..dbf4c1204bf3 100644
-> --- a/drivers/tty/serial/8250/8250.h
-> +++ b/drivers/tty/serial/8250/8250.h
-> @@ -403,3 +403,5 @@ static inline int serial_index(struct uart_port *port)
->  {
->  	return port->minor - 64;
->  }
-> +
-> +void univ8250_setup_timer(struct uart_8250_port *up);
-> diff --git a/drivers/tty/serial/8250/8250_core.c b/drivers/tty/serial/8250/8250_core.c
-> index 2e83e7367441..10d535640434 100644
-> --- a/drivers/tty/serial/8250/8250_core.c
-> +++ b/drivers/tty/serial/8250/8250_core.c
-> @@ -298,10 +298,9 @@ static void serial8250_backup_timeout(struct timer_list *t)
->  		jiffies + uart_poll_timeout(&up->port) + HZ / 5);
->  }
->  
-> -static int univ8250_setup_irq(struct uart_8250_port *up)
-> +void univ8250_setup_timer(struct uart_8250_port *up)
->  {
->  	struct uart_port *port = &up->port;
-> -	int retval = 0;
->  
->  	/*
->  	 * The above check will only give an accurate result the first time
-> @@ -322,10 +321,17 @@ static int univ8250_setup_irq(struct uart_8250_port *up)
->  	 */
->  	if (!port->irq)
->  		mod_timer(&up->timer, jiffies + uart_poll_timeout(port));
-> -	else
-> -		retval = serial_link_irq_chain(up);
-> +}
-> +EXPORT_SYMBOL_GPL(univ8250_setup_timer);
->  
-> -	return retval;
-> +static int univ8250_setup_irq(struct uart_8250_port *up)
-> +{
-> +	struct uart_port *port = &up->port;
-> +
-> +	if (port->irq)
-> +		return serial_link_irq_chain(up);
-> +
-> +	return 0;
->  }
->  
->  static void univ8250_release_irq(struct uart_8250_port *up)
-> diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-> index 39b35a61958c..6e8e16227a3a 100644
-> --- a/drivers/tty/serial/8250/8250_port.c
-> +++ b/drivers/tty/serial/8250/8250_port.c
-> @@ -2294,6 +2294,10 @@ int serial8250_do_startup(struct uart_port *port)
->  	if (port->irq && (up->port.flags & UPF_SHARE_IRQ))
->  		up->port.irqflags |= IRQF_SHARED;
->  
-> +	retval = up->ops->setup_irq(up);
-> +	if (retval)
-> +		goto out;
-> +
->  	if (port->irq && !(up->port.flags & UPF_NO_THRE_TEST)) {
->  		unsigned char iir1;
->  
-> @@ -2336,9 +2340,7 @@ int serial8250_do_startup(struct uart_port *port)
->  		}
->  	}
->  
-> -	retval = up->ops->setup_irq(up);
-> -	if (retval)
-> -		goto out;
-> +	univ8250_setup_timer(up);
->  
->  	/*
->  	 * Now, initialize the UART
+Add a do_arch_spin_lock() helper that disables preemption and make
+kernel/trace/trace.c use it if it is not obvious that either preemption
+or interrupt has been disabled.
 
-Hi Greg,
+Waiman Long (2):
+  locking: Provide a low overhead do_arch_spin_lock() API
+  tracing: Use proper do_arch_spin_lock() API
 
-Please scratch this patch. It seems to create a circular dependency issue 
-with allmodconfig. I'll send v4 once the problem is sorted out.
+ include/linux/spinlock.h | 27 +++++++++++++++++++++
+ kernel/trace/trace.c     | 52 +++++++++++++++++++---------------------
+ 2 files changed, 51 insertions(+), 28 deletions(-)
 
 -- 
- i.
+2.31.1
 
---8323329-1816087576-1663766455=:1741--
