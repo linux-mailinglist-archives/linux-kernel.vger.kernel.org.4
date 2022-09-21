@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8D6A5BF2B0
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 03:21:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D5845BF2AB
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 03:21:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231248AbiIUBVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 21:21:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60322 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230489AbiIUBVN (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S230474AbiIUBVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 20 Sep 2022 21:21:13 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEEC16E2F5;
-        Tue, 20 Sep 2022 18:21:10 -0700 (PDT)
-Received: from weisslap.fritz.box ([31.19.218.61]) by mrelayeu.kundenserver.de
- (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1N3bCH-1pIZCO2eUF-010d9d; Wed, 21 Sep 2022 03:20:47 +0200
-From:   =?UTF-8?q?Michael=20Wei=C3=9F?= <michael.weiss@aisec.fraunhofer.de>
-To:     Paolo Abeni <pabeni@redhat.com>, Pravin B Shelar <pshelar@ovn.org>,
-        "David S . Miller" <davem@davemloft.net>
-Cc:     =?UTF-8?q?Michael=20Wei=C3=9F?= <michael.weiss@aisec.fraunhofer.de>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        dev@openvswitch.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 net 2/2] net: openvswitch: allow conntrack in non-initial user namespace
-Date:   Wed, 21 Sep 2022 03:19:46 +0200
-Message-Id: <20220921011946.250228-3-michael.weiss@aisec.fraunhofer.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220921011946.250228-1-michael.weiss@aisec.fraunhofer.de>
-References: <20220921011946.250228-1-michael.weiss@aisec.fraunhofer.de>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60296 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229885AbiIUBVK (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 20 Sep 2022 21:21:10 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D644C6557B;
+        Tue, 20 Sep 2022 18:21:08 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 28L1KuLH028389
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Sep 2022 21:20:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1663723259; bh=NrGo1J/yaUQZV0M6HG36XVcFnHjaPNu8ns6pV8ouas8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=HpAMjrjgMZhY28HgKz3urMhG4/AK9qRJBWqcYWhn8zRGlO7h3YWSYyZgZqFt7Aku8
+         Dze7spACka9BbtL84rUycuF0dfyoqkbJDBWLF+jMnoMqqMiPHuiKELiR1koFLrpMFe
+         ZBM9JrsuIgsHQjqkbGVaxKCUWtbzNOm43L+lor1e2myfVCmIJ5MpfqBYTWAz3trEs6
+         fcrMj3GsaS2pvOfjNx8tRvoKDI7D1DNa1igTL6Z2h5yRXDmm4F7sMKKbP/pD8eF/uy
+         XPZ8gNL16fMFi9k5PMr7fLp0L7a+J4nc8uDkOTAKt7OH4HE39ViZc2Sfx7hso7vByc
+         p6RvdH0tpqgig==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id CA62715C526C; Tue, 20 Sep 2022 21:20:56 -0400 (EDT)
+Date:   Tue, 20 Sep 2022 21:20:56 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Ian Kent <raven@themaw.net>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Siddhesh Poyarekar <siddhesh@gotplt.org>,
+        David Howells <dhowells@redhat.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Carlos Maiolino <cmaiolino@redhat.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [REPOST PATCH v3 0/2] vfs: fix a mount table handling problem
+Message-ID: <Yypm+GO6eMdV0QQ0@mit.edu>
+References: <166365872189.39016.10771273319597352356.stgit@donald.themaw.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:BZwZqra0fOpBo5DVYUl5XUVi7Kok+GGwO5onMDYdcGcI7jZt+Za
- 5QHLkghZdmb6mEzWfUu3bebBmpyDEUBMN8ytbZLBK2BlqhltE0PmQUiN7lc7xBLGvVqhOG3
- Ix/n2Cy72dQ+lWNUQf+UOAgryZI6qJuwB1kDvYRxfGL7Q0bvX7nqbNBJuxt2xYGNgS5syc4
- dWsEDIIcNfJyoHq2pFoow==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:oc1+IDA1xcs=:1w107+qGS9SSneJIbfovYW
- qSxlP3HtT60j3vdnGvTDgF4JZJUFxacnPDhYT0JMpIoD/U2x0yMJqLvOWQfIPqX/skSKlzDoJ
- wPt4WAlSfKst4e7FWu8NReJr0A5ON5Y7lB3pssU2Jesy2dFNk+gUfKg3ypK8G4eWJAvdv7uyU
- AXH0fYRRlRj0nJOk+s8f3nl+Yd9jgaRZpR3VxmeBwDIHaj7UhmrrJZPFecFX/rPUZknFMIGrJ
- HOOtFkpNLjXOXu2AjTA7Ei97UGoH/78vtsW8H8/Fmal5Ttk4mVv4Khxd6MLcxFLpCQPmJvqYA
- GfPnpdb2tfYNIFxncb4kE6CwcJ+G42gNxJNd9f8i/xd9E6gAzMbZykxxe0PvEux1dPogL0t1O
- Be6o1D/mSwdeZ9S47y2/vuBLbRutummtdTGeGEsGQwDIp7bLRTv2tY48JodFIh4GoHaTqnBh1
- MQEfKOVsObM3sDL8UlplgKRPsN7mJzN7V+dN/NomsHjCkJAEauddsTGpY1PAfeLafLfUkMofY
- zf8uvjvUO53BZjS2Idv56xdvfLoG5dO8a0CUuuD/RAf4nZD7yo1VvoUyTB3PCSKjboJMiM+bD
- QK4oj0A8gtf6QNFp5BoHlJE13DKejCYhgb71RtXFPniXu8pNTPc9ZN4p4fVlYjAPu2HbFdNFM
- B4acUQsm8C1xe9xY7uI+RmFlsX13ndWnLEQTkiHgo1U4w0kD4PmQu0mtHY/5UyqOV/gqRCe2n
- /SykCRMD/p9/EOIz0pFWD6PchwvxH/lJXnvZoXJjX8RGZLA7JYf75DAf269zPXmWV+ZIfyuH8
- +wsj4Le4S8AtywXG/E4We/gcEu70Q==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <166365872189.39016.10771273319597352356.stgit@donald.themaw.net>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,41 +59,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Similar to the previous commit, the Netlink interface of the OVS
-conntrack module was restricted to global CAP_NET_ADMIN by using
-GENL_ADMIN_PERM. This is changed to GENL_UNS_ADMIN_PERM to support
-unprivileged containers in non-initial user namespace.
+On Tue, Sep 20, 2022 at 03:26:17PM +0800, Ian Kent wrote:
+> Whenever a mount has an empty "source" (aka mnt_fsname), the glibc
+> function getmntent incorrectly parses its input, resulting in reporting
+> incorrect data to the caller.
+> 
+> The problem is that the get_mnt_entry() function in glibc's
+> misc/mntent_r.c assumes that leading whitespace on a line can always
+> be discarded because it will always be followed by a # for the case
+> of a comment or a non-whitespace character that's part of the value
+> of the first field. However, this assumption is violated when the
+> value of the first field is an empty string.
+> 
+> This is fixed in the mount API code by simply checking for a pointer
+> that contains a NULL and treating it as a NULL pointer.
 
-Signed-off-by: Michael Weiß <michael.weiss@aisec.fraunhofer.de>
----
- net/openvswitch/conntrack.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+Why not simply have the mount API code disallow a zero-length "source"
+/ mnt_fsname?
 
-diff --git a/net/openvswitch/conntrack.c b/net/openvswitch/conntrack.c
-index 4e70df91d0f2..9142ba322991 100644
---- a/net/openvswitch/conntrack.c
-+++ b/net/openvswitch/conntrack.c
-@@ -2252,14 +2252,16 @@ static int ovs_ct_limit_cmd_get(struct sk_buff *skb, struct genl_info *info)
- static const struct genl_small_ops ct_limit_genl_ops[] = {
- 	{ .cmd = OVS_CT_LIMIT_CMD_SET,
- 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
--		.flags = GENL_ADMIN_PERM, /* Requires CAP_NET_ADMIN
--					   * privilege. */
-+		.flags = GENL_UNS_ADMIN_PERM, /* Requires CAP_NET_ADMIN
-+					       * privilege.
-+					       */
- 		.doit = ovs_ct_limit_cmd_set,
- 	},
- 	{ .cmd = OVS_CT_LIMIT_CMD_DEL,
- 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
--		.flags = GENL_ADMIN_PERM, /* Requires CAP_NET_ADMIN
--					   * privilege. */
-+		.flags = GENL_UNS_ADMIN_PERM, /* Requires CAP_NET_ADMIN
-+					       * privilege.
-+					       */
- 		.doit = ovs_ct_limit_cmd_del,
- 	},
- 	{ .cmd = OVS_CT_LIMIT_CMD_GET,
--- 
-2.30.2
-
+					- Ted
