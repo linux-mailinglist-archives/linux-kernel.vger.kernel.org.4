@@ -2,115 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8506E5E54B3
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 22:45:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C98505E54BC
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 22:51:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbiIUUpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 16:45:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41010 "EHLO
+        id S229891AbiIUUvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 16:51:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiIUUpV (ORCPT
+        with ESMTP id S229563AbiIUUvJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 16:45:21 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA499DFAB;
-        Wed, 21 Sep 2022 13:45:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663793120; x=1695329120;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=l/G74zZaxudvWZKszn/5aJm/frFg9KrxRccC2qSWFEw=;
-  b=bjIaYva4QR5cDeFbKI3HcB7aH9MBkDU2XgCmo9jhGsvXDR+cLm++QRI8
-   iup/gcPX9HYhtKJDBNy/ahd8jUakgUqP5PUP9o3Rc20gaAmZbJD7+TA7f
-   E8KMLSyw0bMpypP2yOKIyyiYvD3wqKwMVNGfWMNPyyjQYW9qawlFnWotX
-   ABIzUnYcM9I7CnxkqalDn+tSjcQIQwEljBEqd5oNUgKN79b3luKQqm410
-   CTgnEzje2rhDL/i9ubnuXPPXMWQsduMkMpF7K8bxUflCblkFnQIg7/ysG
-   w+v52puIWtqJBxz5DR0EVIxBPlRQHLZhkJJJ4htlS4nBj1fwcWLe+2SOg
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="287196383"
-X-IronPort-AV: E=Sophos;i="5.93,334,1654585200"; 
-   d="scan'208";a="287196383"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 13:45:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,334,1654585200"; 
-   d="scan'208";a="708610769"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by FMSMGA003.fm.intel.com with ESMTP; 21 Sep 2022 13:45:17 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 516AAF7; Wed, 21 Sep 2022 23:45:35 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Wei Yongjun <weiyongjun@huaweicloud.com>,
-        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] spi: Introduce spi_get_device_match_data() helper
-Date:   Wed, 21 Sep 2022 23:45:20 +0300
-Message-Id: <20220921204520.23984-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 21 Sep 2022 16:51:09 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9309F8EB;
+        Wed, 21 Sep 2022 13:51:04 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id DD1331F919;
+        Wed, 21 Sep 2022 20:51:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1663793462; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YY7dZM2RgswCeE+tarol02HEAaXHE+xMggA7bqRg/GQ=;
+        b=lUxIcBlbUr9nD7t0diiiPo8UE30tv/6bQJq3I405zPUljr8JoVFwaJAA9UkNLOnvidbHTN
+        rceDp+cvM6qQNIsaKfozsRFWV8jnhnG41mxaA7TVWgGcOTBZFX1vKEQFgNGVOhYINrlhNc
+        HgbZgablgus2YdWj+3DqQA14hTZp5dc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1663793462;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YY7dZM2RgswCeE+tarol02HEAaXHE+xMggA7bqRg/GQ=;
+        b=PArShemOXqTCZirUDlrE4yJ/kebXi2P73ObDavm1PzoCefruqs4Lc6fEbtXcexN0yMTeIK
+        bz//wiT1R7ZWvCBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D123613A00;
+        Wed, 21 Sep 2022 20:51:02 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id xmkHMzZ5K2OkagAAMHmgww
+        (envelope-from <bp@suse.de>); Wed, 21 Sep 2022 20:51:02 +0000
+Date:   Wed, 21 Sep 2022 22:50:53 +0200
+From:   Borislav Petkov <bp@suse.de>
+To:     "Limonciello, Mario" <mario.limonciello@amd.com>
+Cc:     Jan =?utf-8?B?RMSFYnJvxZs=?= <jsd@semihalf.com>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
+        wsa@kernel.org, rrangel@chromium.org, upstream@semihalf.com,
+        Muralidhara M K <muralimk@amd.com>,
+        Naveen Krishna Chatradhi <nchatrad@amd.com>
+Subject: Re: [PATCH -next 1/2] i2c: designware: Switch from using MMIO access
+ to SMN access
+Message-ID: <Yyt5LSxSz+6QeWF1@zn.tnic>
+References: <20220916131854.687371-1-jsd@semihalf.com>
+ <20220916131854.687371-2-jsd@semihalf.com>
+ <eafc7bb5-a406-132b-4b7d-167917cdab05@amd.com>
+ <CAOtMz3Pgh+cERiXVetDZJrQa9C0kUUbZ9dRRhdghgm5Or8kwhg@mail.gmail.com>
+ <YytwNvSyhq380YNT@zn.tnic>
+ <60a52348-7d50-1056-a596-e154f87c99d2@amd.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <60a52348-7d50-1056-a596-e154f87c99d2@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The proposed spi_get_device_match_data() helper is for retrieving
-a driver data associated with the ID in an ID table. First, it tries
-to get driver data of the device enumerated by firmware interface
-(usually Device Tree or ACPI). If none is found it falls back to
-the SPI ID table matching.
+On Wed, Sep 21, 2022 at 03:19:26PM -0500, Limonciello, Mario wrote:
+> Jan mentioned this in the commit message:
+> 
+> > The function which registers i2c-designware-platdrv is a
+> > subsys_initcall that is executed before fs_initcall (when enumeration > of
+> NB descriptors occurs).
+> 
+> So if it's not exported again, then it means that we somehow
+> need to get i2c-designware-platdrv to register earlier too.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/spi/spi.c       | 12 ++++++++++++
- include/linux/spi/spi.h |  3 +++
- 2 files changed, 15 insertions(+)
+So I have this there:
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index ad254b94308e..a0947d63afbc 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -360,6 +360,18 @@ const struct spi_device_id *spi_get_device_id(const struct spi_device *sdev)
- }
- EXPORT_SYMBOL_GPL(spi_get_device_id);
- 
-+const void *spi_get_device_match_data(const struct spi_device *sdev)
-+{
-+	const void *match;
-+
-+	match = device_get_match_data(&sdev->dev);
-+	if (match)
-+		return match;
-+
-+	return (const void *)spi_get_device_id(sdev)->driver_data;
-+}
-+EXPORT_SYMBOL_GPL(spi_get_device_match_data);
-+
- static int spi_match_device(struct device *dev, struct device_driver *drv)
- {
- 	const struct spi_device	*spi = to_spi_device(dev);
-diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-index 6ea889df0813..f2565c24ef27 100644
---- a/include/linux/spi/spi.h
-+++ b/include/linux/spi/spi.h
-@@ -1510,6 +1510,9 @@ extern void spi_unregister_device(struct spi_device *spi);
- extern const struct spi_device_id *
- spi_get_device_id(const struct spi_device *sdev);
- 
-+extern const void *
-+spi_get_device_match_data(const struct spi_device *sdev);
-+
- static inline bool
- spi_transfer_is_last(struct spi_controller *ctlr, struct spi_transfer *xfer)
- {
+/* This has to go after the PCI subsystem */
+fs_initcall(init_amd_nbs);
+
+as I need PCI. It itself does
+
+arch_initcall(pci_arch_init);
+
+so I guess init_amd_nbs() could be a subsys_initcall...
+
+Or why is
+
+subsys_initcall(dw_i2c_init_driver);
+
+a subsys initcall in the first place?
+
+Looking at
+
+  104522806a7d ("i2c: designware: dw_i2c_init_driver as subsys initcall")
+
+I don't see a particular reason why it should be a subsys_initcall...
+
+In any case, this should be fixed without an export which was crap in
+the first place.
+
+Hm.
+
 -- 
-2.35.1
+Regards/Gruss,
+    Boris.
 
+SUSE Software Solutions Germany GmbH
+GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
+(HRB 36809, AG Nürnberg)
