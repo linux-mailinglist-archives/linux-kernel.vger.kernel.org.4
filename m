@@ -2,124 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B2795C05AE
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 19:51:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5881F5C665D
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 19:55:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbiIURvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 13:51:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50072 "EHLO
+        id S229977AbiIURzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 13:55:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbiIURvW (ORCPT
+        with ESMTP id S229794AbiIURzT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 13:51:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 390C89E12D;
-        Wed, 21 Sep 2022 10:51:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C66B2630DA;
-        Wed, 21 Sep 2022 17:51:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC0EFC433D6;
-        Wed, 21 Sep 2022 17:51:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663782680;
-        bh=VXiZehO8k5frfzE5P3ISP2HDghL9EApuPKkqrRgnTzQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Qs5uM2aNrf01eP1l8i0TjLjG5XLKrtRVRU23eEWnCazUXfX+33s8vlIgxWRwdIk54
-         PyZEy/KJMYC34rzdBWRh4bbeTp6FLhpot9h1pvzvI2FfFy+6AgnF9cjaddic+iCkn1
-         Cv+fVrccgkpHAerj+D12kvxmJEW6waLDZ+wnGS4/kvynlHsYetnhYAYr1FIlG6NONO
-         hS4Hu7CPUE6Vw5x03wFMclP0zNtddlMy3soWVQucCuQMhHgsTAMDQi5qEs27VWrbkl
-         85VYwd2G6qG3lFZDaO1kO6uGYKzLPdrPyHYR2EMCgFdMXICvyO8dWuPvBZfdpacU0C
-         Jl+v+rhsah33w==
-Date:   Wed, 21 Sep 2022 20:51:16 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Nikolaus Voss <nv@vosn.de>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        Yael Tzur <yaelt@google.com>, James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KEYS: encrypted: fix key instantiation with
- user-provided data
-Message-ID: <YytPFLsOHHmHEB5I@kernel.org>
-References: <20220919072317.E41421357@mail.steuer-voss.de>
- <YylKR1UQZGhN0+UW@kernel.org>
- <372b91d-5ee6-ae24-2279-0dc7621489c@vosn.de>
+        Wed, 21 Sep 2022 13:55:19 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21FF1578A0
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 10:55:19 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id q15-20020a17090a304f00b002002ac83485so6762964pjl.0
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 10:55:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=6zseYLWfMQl699NSYlSkulwSYga25k2VOd8kmGGDZqA=;
+        b=HF1GO28QnOsgPyjvlZwBtrm8nRj4a37NZoVS5Xs0nafeLYz+REY6KzOMOqDMAc6b80
+         dG6jVcE6eQEy5LLzzS2cWLwJkcassxeNo4cZPl5DUBJOj/T0/NtYkygSddZwMxt+ZYlT
+         POUtRHieTNX1aRGfes8sNIWUztwqlANp9phuRT/KPG+LfmT4VFuPHLToJtlx8W5Dr3m6
+         cAFui5GQyLeZf2ewtNQLjaBQBmSFgn+lQamAp2KtpFI0x0Tr50LCAgL839BhOcMb1Rs3
+         1ttPdFRElrOpKnKxF05T/ZsA4xD/4kfEIlCq7eqiTQbFx/mDTMwrbOF2TxB25WQcjwRL
+         X02w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=6zseYLWfMQl699NSYlSkulwSYga25k2VOd8kmGGDZqA=;
+        b=ibF/8a/wb85awM9xA5OrbU+bAMVBkuDhwB+qfmKC65Nr6tHODB6qco7qEdydCdz+uh
+         UotYx4xuMEgmkLQptEHwVt9CBnhfjbZV5alX0GBINfpTSpSeALg86O8Z2/uSQGD/ywAx
+         itGyiRKKTUhO6F8II+HUXMRKo+rhH7KT7IdC6WkD35pPf+xRSUbMu/bieRyK7bNDy0iU
+         6eqhYkx6HWdm6lLTnBOZ6In6dQpuTho0x0ONE99oEGkyDq7NCV+ew3DU+zxOigPf9X4V
+         JYzbkiPHXOCKRq9r5cwDPoJ3XvXJ4JNpTRapmNcZU0RZpBzg+AOomMaKIEzcOLGzJAdV
+         iijw==
+X-Gm-Message-State: ACrzQf3QvR3tlZyubOmx93vwQjZsRN2qbgyRTAoyITmIpvQit8MLyqUw
+        Cd1Pe2H31lzAt38mOowyMsCZyg==
+X-Google-Smtp-Source: AMsMyM7JRMOlfWKYd/bO5/MnMIvgz5EQcEWb9H8mLgiVoQ7Y7kgRGUJn9FoE0EMYZb98seiF60t5vw==
+X-Received: by 2002:a17:90a:e7c5:b0:200:ab1a:f32 with SMTP id kb5-20020a17090ae7c500b00200ab1a0f32mr10602649pjb.100.1663782918084;
+        Wed, 21 Sep 2022 10:55:18 -0700 (PDT)
+Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
+        by smtp.gmail.com with ESMTPSA id l25-20020a635b59000000b0043395af24f6sm2221034pgm.25.2022.09.21.10.55.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Sep 2022 10:55:17 -0700 (PDT)
+Date:   Wed, 21 Sep 2022 10:55:13 -0700
+From:   David Matlack <dmatlack@google.com>
+To:     Vipin Sharma <vipinsh@google.com>
+Cc:     seanjc@google.com, pbonzini@redhat.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/4] KVM: selftests: Explicitly set variables based on
+ options in dirty_log_perf_test
+Message-ID: <YytQAbu+uWOZChsT@google.com>
+References: <20220826184500.1940077-1-vipinsh@google.com>
+ <20220826184500.1940077-2-vipinsh@google.com>
+ <CAHVum0e0piX9zS6BuqzzeCu1M=2fdOjdov18aA-AEOm=+bd2mg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <372b91d-5ee6-ae24-2279-0dc7621489c@vosn.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAHVum0e0piX9zS6BuqzzeCu1M=2fdOjdov18aA-AEOm=+bd2mg@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 09:58:56AM +0200, Nikolaus Voss wrote:
-> On Tue, 20 Sep 2022, Jarkko Sakkinen wrote:
-> > On Fri, Sep 16, 2022 at 07:45:29AM +0200, Nikolaus Voss wrote:
-> > > Commit cd3bc044af48 ("KEYS: encrypted: Instantiate key with user-provided
-> > > decrypted data") added key instantiation with user provided decrypted data.
-> > > The user data is hex-ascii-encoded but was just memcpy'ed to the binary buffer.
-> > > Fix this to use hex2bin instead.
-> > > 
-> > > Fixes: cd3bc044af48 ("KEYS: encrypted: Instantiate key with user-provided decrypted data")
-> > > Cc: stable <stable@kernel.org>
-> > > Signed-off-by: Nikolaus Voss <nikolaus.voss@haag-streit.com>
-> > > ---
-> > >  security/keys/encrypted-keys/encrypted.c | 6 +++---
-> > >  1 file changed, 3 insertions(+), 3 deletions(-)
-> > > 
-> > > diff --git a/security/keys/encrypted-keys/encrypted.c b/security/keys/encrypted-keys/encrypted.c
-> > > index e05cfc2e49ae..1e313982af02 100644
-> > > --- a/security/keys/encrypted-keys/encrypted.c
-> > > +++ b/security/keys/encrypted-keys/encrypted.c
-> > > @@ -627,7 +627,7 @@ static struct encrypted_key_payload *encrypted_key_alloc(struct key *key,
-> > >  			pr_err("encrypted key: instantiation of keys using provided decrypted data is disabled since CONFIG_USER_DECRYPTED_DATA is set to false\n");
-> > >  			return ERR_PTR(-EINVAL);
-> > >  		}
-> > > -		if (strlen(decrypted_data) != decrypted_datalen) {
-> > > +		if (strlen(decrypted_data) != decrypted_datalen * 2) {
-> > 
-> > This looks wrong. What does cap decrypted_data, and why strnlen()
-> > is not used?
+On Fri, Aug 26, 2022 at 02:12:49PM -0700, Vipin Sharma wrote:
+> On Fri, Aug 26, 2022 at 11:45 AM Vipin Sharma <vipinsh@google.com> wrote:
+> >
+> > Variable set via -g are also indirectly set by -e option by omitting
+> > break statement. Set them explicitly so that movement of switch-case
+> > statements does not unintentionally break features.
+> >
+> > No functional change intended.
+> >
+> > Signed-off-by: Vipin Sharma <vipinsh@google.com>
+> > ---
+> >  tools/testing/selftests/kvm/dirty_log_perf_test.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/tools/testing/selftests/kvm/dirty_log_perf_test.c b/tools/testing/selftests/kvm/dirty_log_perf_test.c
+> > index f99e39a672d3..a03db7f9f4c0 100644
+> > --- a/tools/testing/selftests/kvm/dirty_log_perf_test.c
+> > +++ b/tools/testing/selftests/kvm/dirty_log_perf_test.c
+> > @@ -411,6 +411,8 @@ int main(int argc, char *argv[])
+> >                 case 'e':
+> >                         /* 'e' is for evil. */
+> >                         run_vcpus_while_disabling_dirty_logging = true;
+> > +                       dirty_log_manual_caps = 0;
+> > +                       break;
 > 
-> This is a plausibility check to ensure the user-specified key length
-> (decrypted_datalen) matches the length of the user specified key. strnlen()
-> would not add any extra security here, the data has already been copied.
+> @Sean, I hope you intentionally didn't write a break between -e and -g
+> when you created the patch and it is not just a missed thing :)
 
-I'd prefer unconditional use of strnlen() because it always
-gives you at least some guarantees over deducing why strlen()
-is fine in a particular code block.
+I'm pretty sure the missing break here is by accident. If it was on
+purpose I would expect Sean (especially) to have called it out the
+subtle change in the commit message and probably add a comment here.
+Also I can't think of any reason why
+run_vcpus_while_disabling_dirty_logging=true would require
+dirty_log_manual_caps=0.
+
+Can you change this patch to just add a break and add a fixes tag to the
+commit message?
+
+Fixes: cfe12e64b065 ("KVM: selftests: Add an option to run vCPUs while disabling dirty logging")
 
 
-> > 
-> > >  			pr_err("encrypted key: decrypted data provided does not match decrypted data length provided\n");
-> > 
-> > Using pr_err() is probably wrong here and has different prefix
-> > than elsewhere in the file (also most of other uses of pr_err()
-> > are wrong apparently). Nothing bad is really happening.
 > 
-> It actually _is_ an error preventing key instatiation. User space keyctl
-> cannot be verbose about the reason why instantiation failed so it makes
-> sense to be verbose in kernel space. To me, this seems consistent with other
-> occurrences of pr_err() in this file, maybe I misunderstood you?
-
-Then it should be pr_info(), or even pr_debug(), given that it is not a
-kernel issue.
-
-> Btw, this patch changes neither string length checking nor log levels.
-
-I understand this. It has been my own mistake to ack that pr_err().
-
-However, does not fully apply to strlen() part. Since you are
-changing that line anyway, it'd be better to replace strlen()
-with strnlen(). This e.g. protects the code block changes in
-the context where it is called.
-
-BR, Jarkko
+> 
+> >                 case 'g':
+> >                         dirty_log_manual_caps = 0;
+> >                         break;
+> > --
+> > 2.37.2.672.g94769d06f0-goog
+> >
