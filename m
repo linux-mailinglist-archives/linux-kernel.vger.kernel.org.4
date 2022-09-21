@@ -2,70 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90C405BF7EB
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 09:40:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D22245BF7F5
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 09:41:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230351AbiIUHkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 03:40:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33178 "EHLO
+        id S230359AbiIUHk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 03:40:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230312AbiIUHkE (ORCPT
+        with ESMTP id S230380AbiIUHkm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 03:40:04 -0400
+        Wed, 21 Sep 2022 03:40:42 -0400
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06A5327CF5;
-        Wed, 21 Sep 2022 00:40:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18AA780513
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 00:40:24 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 72DD11F388;
-        Wed, 21 Sep 2022 07:39:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1663745999; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xnuXU4UZnRZGUPWDNH2YDDT/Zs/oJ/xBk/61+cuL7yk=;
-        b=Oka4W+OSOQHj5c2rLmWBL8Xjvq7VzpEzzQB4tDhWafzhs38MCqENmdBWFWeEgrYCuXiPrr
-        Usz7li0+SflrwVaGVWa1hli+JnHNueftR14iAItHD7JzJ+6bGwgf/1CTsziSK2yJsfV5VG
-        g+/bP8Jp/4+dyH0LiClu4XMVz8a12a8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1663745999;
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 318841F747;
+        Wed, 21 Sep 2022 07:40:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1663746023; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=ByyVYeJ+WqXEdzVQA0jIwq72JohVYHRy6rtQiNlIw6k=;
+        b=E0BGTvppO2UfGR8vyRmX+o3dRAO5VULIy7IFDx1o/8rsfQg2sgy/YxbQij/lmnm4TpoGGv
+        HdLRpsK2uulsN0LpE3Hl1sMopr59NPH6FaqKFxgeXCnB/vufqj2pc1LSJ5Ntg+ckOe1IMD
+        td8s/GPOxhqX59/EdhexaUzpHhwf92w=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1663746023;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xnuXU4UZnRZGUPWDNH2YDDT/Zs/oJ/xBk/61+cuL7yk=;
-        b=8qBsyoM9PZ67Zm/jPRszdv92ksT1R84+Fv4fJELUuJeXASTjI66U4tbw5GMQH/r58S4Otd
-        NNrFV78ovfGkJhDw==
+         mime-version:mime-version:content-type:content-type;
+        bh=ByyVYeJ+WqXEdzVQA0jIwq72JohVYHRy6rtQiNlIw6k=;
+        b=liKL5Y/bL5KCpwYVAVtk/JKKw1lbZBwyFueTsqqJQ290+cmunNlimTMrdCbSgJLhbyUvTt
+        J84n9GcCEm7PnMDA==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 60CCC13A00;
-        Wed, 21 Sep 2022 07:39:59 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1AED213A00;
+        Wed, 21 Sep 2022 07:40:23 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id ywiZF8+/KmO7EQAAMHmgww
-        (envelope-from <jack@suse.cz>); Wed, 21 Sep 2022 07:39:59 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id C0833A0684; Wed, 21 Sep 2022 09:39:58 +0200 (CEST)
-Date:   Wed, 21 Sep 2022 09:39:58 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Zhihao Cheng <chengzhihao1@huawei.com>
-Cc:     jack@suse.com, tytso@mit.edu, brauner@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yukuai3@huawei.com
-Subject: Re: [PATCH 0/3] Check content after reading from quota file
-Message-ID: <20220921073958.77i7fj6s2qa7chbv@quack3>
-References: <20220820110514.881373-1-chengzhihao1@huawei.com>
- <bd9bf3a4-70f9-f7bf-b133-a68e4e16deb8@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <bd9bf3a4-70f9-f7bf-b133-a68e4e16deb8@huawei.com>
+        id 4Yb1Bee/KmPvEQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 21 Sep 2022 07:40:23 +0000
+Date:   Wed, 21 Sep 2022 09:40:22 +0200
+Message-ID: <87o7v9gopl.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] sound fixes for 6.0-rc7
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -75,27 +63,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 13-09-22 09:16:11, Zhihao Cheng wrote:
-> 在 2022/8/20 19:05, Zhihao Cheng 写道:
-> 
-> friendly ping.
+Linus,
 
-I'm sorry for the delay. Somehow our corporate spam filter decided to
-discard your patches. I'll have a look into your fixes shortly.
+please pull sound fixes for v6.0-rc7 from:
 
-								Honza
+  git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/sound-6.0-rc7
 
-> > 1. Fix invalid memory access of dquot.
-> > 2. Cleanup, replace places of block number checking with helper function.
-> > 3. Add more sanity checking for the content read from quota file.
-> > 
-> > Zhihao Cheng (3):
-> >    quota: Check next/prev free block number after reading from quota file
-> >    quota: Replace all block number checking with helper function
-> >    quota: Add more checking after reading from quota file
-> > 
-> >   fs/quota/quota_tree.c | 81 ++++++++++++++++++++++++++++++++++++-------
-> >   1 file changed, 69 insertions(+), 12 deletions(-)
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+The topmost commit is 79764ec772bc1346441ae1c4b1f3bd1991d634e8
+
+----------------------------------------------------------------
+
+sound fixes for 5.0-rc7
+
+A bit more changes than wished, but still manageable ammount.
+
+Most of commits are HD-audio specific device fixes / quirks, while
+there is a revert for the previous fix due to regressions and a
+double-free fix in ALSA core code.
+
+----------------------------------------------------------------
+
+Callum Osmotherly (2):
+      ALSA: hda/realtek: Enable 4-speaker output Dell Precision 5570 laptop
+      ALSA: hda/realtek: Enable 4-speaker output Dell Precision 5530 laptop
+
+Daniel Houldsworth (1):
+      ALSA: hda/realtek: Add a quirk for HP OMEN 16 (8902) mute LED
+
+Jaroslav Kysela (1):
+      ALSA: hda/hdmi: Fix the converter reuse for the silent stream
+
+Kai Vehmanen (1):
+      ALSA: hda: add Intel 5 Series / 3400 PCI DID
+
+Luke D. Jones (3):
+      ALSA: hda/realtek: Add pincfg for ASUS G513 HP jack
+      ALSA: hda/realtek: Add pincfg for ASUS G533Z HP jack
+      ALSA: hda/realtek: Add quirk for ASUS GA503R laptop
+
+Mohan Kumar (2):
+      ALSA: hda/tegra: set depop delay for tegra
+      ALSA: hda: Fix Nvidia dp infoframe
+
+Takashi Iwai (4):
+      ALSA: hda: Fix hang at HD-audio codec unbinding due to refcount saturation
+      ALSA: hda/realtek: Re-arrange quirk table entries
+      ALSA: core: Fix double-free at snd_card_new()
+      Revert "ALSA: usb-audio: Split endpoint setups for hw_params and prepare"
+
+huangwenhui (1):
+      ALSA: hda/realtek: Add quirk for Huawei WRT-WX9
+
+---
+ sound/core/init.c             | 10 +++++-----
+ sound/pci/hda/hda_bind.c      |  4 ++--
+ sound/pci/hda/hda_intel.c     |  2 ++
+ sound/pci/hda/patch_hdmi.c    | 25 +++++++++++++++++++++----
+ sound/pci/hda/patch_realtek.c | 33 ++++++++++++++++++++++++++++++---
+ sound/usb/endpoint.c          | 23 ++++++++++++++---------
+ sound/usb/endpoint.h          |  6 ++----
+ sound/usb/pcm.c               | 14 ++++----------
+ 8 files changed, 80 insertions(+), 37 deletions(-)
+
