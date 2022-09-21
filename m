@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F381D5BF8C0
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 10:14:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A99865BF8C3
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 10:15:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231349AbiIUIOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 04:14:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54432 "EHLO
+        id S230323AbiIUIPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 04:15:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231348AbiIUIOQ (ORCPT
+        with ESMTP id S230103AbiIUIOv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 04:14:16 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6AA8883C6
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 01:14:05 -0700 (PDT)
+        Wed, 21 Sep 2022 04:14:51 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0D5888DC5
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 01:14:21 -0700 (PDT)
 Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4864B6602002;
-        Wed, 21 Sep 2022 09:14:03 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 15EA76601FFE;
+        Wed, 21 Sep 2022 09:14:19 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1663748044;
-        bh=SRIF+BE4y6ayL9qbaLOyz0oXw3nZG/Mv2C9ZyzBP8/Q=;
+        s=mail; t=1663748059;
+        bh=CDAAI6Co5oKSxmC/WU+ejDOCRrId2TgONMu4RgUgOmo=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=CMcw+0SDi9/7dOzSrbr2XIqpu038PEVNgTFh0iWDLLkKgGH4JCEOij6lGo/8l5CXn
-         Tz+iNDggAu2sgJUhHfskNnCg82qjdCLtyQB7LhjYlkGGew4hzJROuGLpn9fPpHZDzx
-         hHIASo2FTWUA8ZdIBlSVHy13qNMjmS3eDlBzzPF7Ldhyz+fPcg2bIL8/6O5vC1QnzJ
-         8h55CCoKzH5MCJ2lf84iOGHfKQ/h5x3dunBYnJyTwW9CmzVd+CWvlmmAfQwKycxalr
-         PVBqwm1nSgK4lv/lejWR6KGqjmaZ3atuRa1QY5e0mTmn6AoiNxFaflelUtj6Jgxl/3
-         uB/HPRxPXM75A==
-Message-ID: <18e220f0-885c-97cf-38e0-dfd16c807be6@collabora.com>
-Date:   Wed, 21 Sep 2022 10:14:00 +0200
+        b=om9zS49/xndnlKInZ65WFYdF5WN7lucREuxp+RRAFXqQ6shtd53hMl/iDyzp1NJuy
+         UC6oI8aqNT58Bmwe7omjNy/356JpksM6Yz8xGXqxvR0N7DDsHBtP+fjItbB0kb2WQv
+         psCEwVVNbq85Yi924iIpaOsf/Yi076i7Z76nQxlsHo0hX3/HMbZqA/NZ2M4Kt7MK++
+         9fzrIv/BUuj40fX7hY7nq8zDdQv6bOZrGw8SN2ufhDTcFLfWebNRVxeNlXqWGnr0mu
+         KBhpoaODH+wyMoeFgMX7zz4ERa2njPK1IcQj4IPe54kCKsQDBQsGHJniHNmJxOvmKg
+         q9owdG6yMxK3w==
+Message-ID: <6c8eac8c-92e1-f60d-0182-df4c6038ff34@collabora.com>
+Date:   Wed, 21 Sep 2022 10:14:16 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.0
-Subject: Re: [PATCH 11/18] phy: mediatek: hdmi: mt8173: use common helper to
- access registers
+Subject: Re: [PATCH 14/18] phy: mediatek: mipi: mt8173: use FIELD_PREP to
+ prepare bits field
 Content-Language: en-US
 To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
         Chun-Kuang Hu <chunkuang.hu@kernel.org>,
@@ -53,10 +53,10 @@ Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
         Jitao Shi <jitao.shi@mediatek.com>,
         Stanley Chu <stanley.chu@mediatek.com>
 References: <20220920090038.15133-1-chunfeng.yun@mediatek.com>
- <20220920090038.15133-12-chunfeng.yun@mediatek.com>
+ <20220920090038.15133-15-chunfeng.yun@mediatek.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220920090038.15133-12-chunfeng.yun@mediatek.com>
+In-Reply-To: <20220920090038.15133-15-chunfeng.yun@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -69,8 +69,8 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Il 20/09/22 11:00, Chunfeng Yun ha scritto:
-> Use MediaTek phy's common helper to access registers, then we can remove
-> hdmi's I/O helpers.
+> Use FIELD_PREP() macro to prepare bits field value, then no need define
+> macros of bits offset.
 > 
 > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 
