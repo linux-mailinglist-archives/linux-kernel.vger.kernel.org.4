@@ -2,128 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 383175BF6EA
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 09:03:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E57685BF6DA
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 08:59:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229607AbiIUHDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 03:03:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41376 "EHLO
+        id S230054AbiIUG7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 02:59:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbiIUHDm (ORCPT
+        with ESMTP id S229872AbiIUG7M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 03:03:42 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E482A7E805
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 00:03:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663743821; x=1695279821;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=VLf2RXUYKKOmZoPjWdX8Te/gPeu4nHe4ezJN9Uc4fRI=;
-  b=hYtJqUFwwKQhfak4vbjjJQDSSvT+30352JAhL2df2JFiLp0yRU8K66Wd
-   yen30cxXZSVBxEVGiroW5SykiYWKz9fMaeKO+uU1HMU4PjJQzTu9mtwNR
-   u93HUEuMmhPKJQnJ8StqWLNiz2XAtjw6zYrg5F726hlh6kK54mk9ZHgIS
-   Rto/M1l5QhKhOtbv6+agLsWZm5E8i2bCryUHvsEG/WGA6x/ivHTU8syBk
-   KeeJyqr6Hf5WZzl7JL8iCjXLpN4p2RkQgv18rOqhKgATa9AVBff3tdoic
-   JPn8wMTDerEvz0fIyd/2MfckGcmQ2zeeAeuOgPc8CU7PIDROgWSQ+m8El
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10476"; a="282967929"
-X-IronPort-AV: E=Sophos;i="5.93,332,1654585200"; 
-   d="scan'208";a="282967929"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 00:03:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,332,1654585200"; 
-   d="scan'208";a="681648663"
-Received: from allen-box.sh.intel.com ([10.239.159.48])
-  by fmsmga008.fm.intel.com with ESMTP; 21 Sep 2022 00:03:38 -0700
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-To:     iommu@lists.linux.dev
-Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        linux-kernel@vger.kernel.org, Lu Baolu <baolu.lu@linux.intel.com>,
-        Jerry Snitselaar <jsnitsel@redhat.com>
-Subject: [PATCH v2 1/1] iommu/vt-d: Avoid unnecessary global IRTE cache invalidation
-Date:   Wed, 21 Sep 2022 14:57:41 +0800
-Message-Id: <20220921065741.3572495-1-baolu.lu@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 21 Sep 2022 02:59:12 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE8579A4B
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 23:59:10 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id k10so7658130lfm.4
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 23:59:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=HgFRLa6RZfxCSzyKzG51QeSheAMqgBptz4NFN1+wABA=;
+        b=yK8M5MqvestK5tuVqPXXMT4E3PSbxbGxQYxddSfYgkVNtGTRe2EJowMAWc7iZ8JTyk
+         FI8CR/ZY5FRxklQX5lxiWxXo1Str92tn4o6p9Cqt8QQuNsArRdG+g3y15GozaN86E6p0
+         G8GFt4yCtX65S6VOCO7bfjoHssnFqhwGvfmi0KAbgZTRFZPtN+0JlWbcXb2x7/l7Ozkb
+         9f/d1dIQBVbWdQLMkCIULJXNfcFq4Ikr1l/FC7Et397BKZ5/EjQpPaw93K9Cq6hBgEJl
+         0NZTnMyshBZMmcZSLN2ppzkGCPVFMTD9oRR3uVGMb4B/0qzGY7VrodhNkk5dc70AZ9f/
+         PDWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=HgFRLa6RZfxCSzyKzG51QeSheAMqgBptz4NFN1+wABA=;
+        b=efduInOOTc1ZyXKlkMsnZD8onInjth9SCmL6OxgHyf5+20AMPvIizE7M8s4Zr3sLRg
+         2DzKcAoaIjWpnEyFfWH/EflBNfzL7rEX1vlFG3/OQIz/Z4bVmxz0bfEwdVVMc5uMlRXg
+         hFdNJNd4KDI1J+VQh1MARpVVsvfsoneygr8BGE7/beQq3tBLWr6nz8EMRFeXCLgIwkmn
+         pWkvtaFhrLepOhYfgABgFDq7DHcQUNd2fqZZab/D15Zv4w3cXOU2vK2Skvh0FU6aICiN
+         SUp5EeCR3DRiOdj5tqd62sE6RPcbR+6wojNSkhHGi5YBqGw4Rvxn9o2C4PKfidD63vcn
+         dPXQ==
+X-Gm-Message-State: ACrzQf1jI45qJO3/VqVUaP/ps5ZModVJ0t4LUNkV3NWc9C9KRHjXwqwX
+        QtHQaKmQX3uEm5q/QfIMRzuRQN6y2YYzxQ==
+X-Google-Smtp-Source: AMsMyM7HnQKXnVoP9WXO58OKStdAy4yp8cOYJrfYs5ikswC1P3+8W8uEveKoGIX/yvZX+3kbHCVc9g==
+X-Received: by 2002:a05:6512:11c8:b0:497:c19e:c709 with SMTP id h8-20020a05651211c800b00497c19ec709mr10425195lfr.152.1663743548671;
+        Tue, 20 Sep 2022 23:59:08 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id z12-20020a2eb52c000000b00261e2aab7c2sm306813ljm.58.2022.09.20.23.59.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Sep 2022 23:59:08 -0700 (PDT)
+Message-ID: <b71a576b-170c-d596-a024-884223be44c6@linaro.org>
+Date:   Wed, 21 Sep 2022 08:59:07 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v5 8/8] i2c: i2c-mlxbf.c: Update binding devicetree
+Content-Language: en-US
+To:     Asmaa Mnebhi <asmaa@nvidia.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        robh@kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     Khalil Blaiech <kblaiech@nvidia.com>
+References: <20220920174736.9766-1-asmaa@nvidia.com>
+ <20220920174736.9766-9-asmaa@nvidia.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220920174736.9766-9-asmaa@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some VT-d hardware implementations invalidate all interrupt remapping
-hardware translation caches as part of SIRTP flow. The VT-d spec adds
-a ESIRTPS (Enhanced Set Interrupt Remap Table Pointer Support, section
-11.4.2 in VT-d spec) capability bit to indicate this.
+On 20/09/2022 19:47, Asmaa Mnebhi wrote:
+> In the latest version of the i2c-mlxbf.c driver, the "Smbus block"
+> resource was broken down to 3 separate resources "Smbus timer",
+> "Smbus master" and "Smbus slave" to accommodate for BlueField-3
+> SoC registers' changes.
+> 
+> Reviewed-by: Khalil Blaiech <kblaiech@nvidia.com>
+> Signed-off-by: Asmaa Mnebhi <asmaa@nvidia.com>
+> ---
 
-The spec also states in 11.4.4 that hardware also performs global
-invalidation on all interrupt remapping caches as part of Interrupt
-Remapping Disable operation if ESIRTPS capability bit is set.
 
-This checks the ESIRTPS capability bit and skip software global cache
-invalidation if it's set.
+>    reg:
+>      minItems: 3
+> @@ -25,6 +27,9 @@ properties:
+>        - description: Cause master registers
+>        - description: Cause slave registers
+>        - description: Cause coalesce registers
+> +      - description: Smbus timer registers
+> +      - description: Smbus master registers
+> +      - description: Smbus slave registers
+>  
+>    interrupts:
+>      maxItems: 1
+> @@ -35,6 +40,13 @@ properties:
+>        bus frequency used to configure timing registers;
+>        The frequency is expressed in Hz. Default is 100000.
+>  
+> +  resource_version:
 
-Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
-Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
----
- drivers/iommu/intel/iommu.h         | 1 +
- drivers/iommu/intel/irq_remapping.c | 6 ++++--
- 2 files changed, 5 insertions(+), 2 deletions(-)
+No underscores in names.
 
-Change log:
+> +    enum: [ 0, 1 ]
+> +    description:
+> +      Version of the device tree. resource_version = 0 when the driver uses
+> +      Smbus block resource. resource_version = 1 when the driver uses Smbus
+> +      timer, Smbus master and Smbus slave resources.
 
-v2:
- - Add ESIRTPS check in iommu_disable_irq_remapping() path as well.
+No way. That's not a DT property.
 
-v1: https://lore.kernel.org/r/20220919062523.3438951-2-baolu.lu@linux.intel.com
+> +
+>  required:
+>    - compatible
+>    - reg
+> @@ -42,18 +54,6 @@ required:
+>  
+>  unevaluatedProperties: false
+>  
+> -if:
+> -  properties:
+> -    compatible:
+> -      contains:
+> -        enum:
+> -          - mellanox,i2c-mlxbf1
+> -
+> -then:
+> -  properties:
+> -    reg:
+> -      maxItems: 3
 
-diff --git a/drivers/iommu/intel/iommu.h b/drivers/iommu/intel/iommu.h
-index 99cc75ecac63..bddf6c69587d 100644
---- a/drivers/iommu/intel/iommu.h
-+++ b/drivers/iommu/intel/iommu.h
-@@ -146,6 +146,7 @@
- /*
-  * Decoding Capability Register
-  */
-+#define cap_esirtps(c)		(((c) >> 62) & 1)
- #define cap_fl5lp_support(c)	(((c) >> 60) & 1)
- #define cap_pi_support(c)	(((c) >> 59) & 1)
- #define cap_fl1gp_support(c)	(((c) >> 56) & 1)
-diff --git a/drivers/iommu/intel/irq_remapping.c b/drivers/iommu/intel/irq_remapping.c
-index 2e9683e970f8..5962bb5027d0 100644
---- a/drivers/iommu/intel/irq_remapping.c
-+++ b/drivers/iommu/intel/irq_remapping.c
-@@ -494,7 +494,8 @@ static void iommu_set_irq_remapping(struct intel_iommu *iommu, int mode)
- 	 * Global invalidation of interrupt entry cache to make sure the
- 	 * hardware uses the new irq remapping table.
- 	 */
--	qi_global_iec(iommu);
-+	if (!cap_esirtps(iommu->cap))
-+		qi_global_iec(iommu);
- }
- 
- static void iommu_enable_irq_remapping(struct intel_iommu *iommu)
-@@ -680,7 +681,8 @@ static void iommu_disable_irq_remapping(struct intel_iommu *iommu)
- 	 * global invalidation of interrupt entry cache before disabling
- 	 * interrupt-remapping.
- 	 */
--	qi_global_iec(iommu);
-+	if (!cap_esirtps(iommu->cap))
-+		qi_global_iec(iommu);
- 
- 	raw_spin_lock_irqsave(&iommu->register_lock, flags);
- 
--- 
-2.34.1
+Why?
 
+> -
+>  examples:
+>    - |
+>      i2c@2804000 {
+> @@ -61,8 +61,13 @@ examples:
+>          reg = <0x02804000 0x800>,
+>                <0x02801200 0x020>,
+>                <0x02801260 0x020>;
+> +              <0x00000001 0x1>;
+> +              <0x02804000 0x40>,
+> +              <0x02804200 0x200>,
+> +              <0x02804400 0x200>,
+>          interrupts = <57>;
+>          clock-frequency = <100000>;
+> +        resource_version = <1>;
+>      };
+>  
+>    - |
+> @@ -72,6 +77,25 @@ examples:
+>                <0x02808e00 0x020>,
+>                <0x02808e20 0x020>,
+>                <0x02808e40 0x010>;
+> +              <0x02808800 0x040>;
+> +              <0x02808a00 0x200>,
+> +              <0x02808c00 0x200>,
+>          interrupts = <57>;
+>          clock-frequency = <400000>;
+> +        resource_version = <1>;
+> +    };
+> +
+> +  - |
+> +    i2c@2808800 {
+> +        compatible = "mellanox,i2c-mlxbf3";
+> +        reg = <0x00000001 0x1>,
+> +              <0x13404400 0x020>,
+> +              <0x13404420 0x020>,
+> +              <0x13404440 0x010>;
+> +              <0x13404480 0x40>,
+> +              <0x13404200 0x200>,
+> +              <0x13404000 0x200>,
+
+No need for the same example.
+
+Best regards,
+Krzysztof
