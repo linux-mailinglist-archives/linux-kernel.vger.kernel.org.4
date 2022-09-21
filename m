@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37DF25BF218
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 02:33:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E3435BF215
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 02:33:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231255AbiIUAdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 20:33:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34136 "EHLO
+        id S231455AbiIUAdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 20:33:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231236AbiIUAcw (ORCPT
+        with ESMTP id S231179AbiIUAcy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 20:32:52 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0519792D0
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 17:32:51 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-34a03cb9679so38065327b3.21
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 17:32:51 -0700 (PDT)
+        Tue, 20 Sep 2022 20:32:54 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 374C6792F5
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 17:32:53 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id x1-20020a17090a8a8100b00200a805fba9so7364462pjn.7
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 17:32:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date;
-        bh=MOTPXqlRM/VeyDMLdvanelesLQo1zQAim2hnWRvX5Ck=;
-        b=YBqAHda81cZL+XoxjJlGZuZuboXTXgUC0z4uqSgz7QVH6dpNmadTy2MF1qyxWTzse+
-         Bm4tIE92SduAzP3ZIMtRF2tHutR8pP7xlWpK1ArY4DnG03povI4wausutZUl5/iFFjm4
-         TVHVZG9uLcywTpZWMGs36ucGtqVhhGObHn0VVjekmG1+dp+mNh3xufw2ncJL/mts4ZIh
-         7z9P/A8X9TowwqnweXUdspRxboWu77JnECKkB3W0l/4PI0O4qSiM4m96bzkM3yIhCnUQ
-         IS3oC/wRtMwluha1XcW0DRroQd63c6ike/sLIVwGS1L4peBPZN+rGOVKwA2aeOQ8Ropo
-         ukqQ==
+        bh=U5vFo4bt4S1YBkw7qJ/8SsXR9dI8fRaWN+LYTLGRLXc=;
+        b=FGingks1cs8K3eS5eyjPLfgz2EyXv6C+mz7GjFjIsR+ztzCwCbQq/48DDu5g/uZ1Qf
+         TKdHFjxeqF2i0gKdcBxhcxSwZQh25TbMTEUem6xBx1Il6mlI/R35MG7zDJLXZ+I7LRBZ
+         mB01ACY29IvkNpuZxo5f8s86udAgXwT4AOfA1e8PAgFjsJzWl66pgmnkr+XqCz1Pxayf
+         V7RA+S0PCVWgQtIYKdUAP6E/DVuSBq5M3Pu7Pd23qTYkXbQU93GZE0OA4qnvuhDPMOMn
+         IE+AwnDKCJLEXKQ6ToCeXyPtQN6f4t7z2J4mxlNIQNjfcIA2lIcoI5cSSKDW/YvjdeCG
+         Unmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date;
-        bh=MOTPXqlRM/VeyDMLdvanelesLQo1zQAim2hnWRvX5Ck=;
-        b=FHKlvIzFF/XYk+G8HKv6EW0oNQ+TIJjEQhqiqOBd8le7+kfRktnkM6KeSCBbmtfTwL
-         O29elOIeoXcA18zqXC5CZtl2p8zNo41IWh804V1A+7N+zE38nZjc4vo9YUyObkR+J7bO
-         KAxCrS38uEVsh9a0wkugqIcMoeicXzEkZZI6o3POiz04cKxM7UYndqbAt8H/bZTbs6HK
-         1BbHz0DOUJdIIVAVN7BS4EOCahhGxzXj96qt0+3+/cfCQLZPtCaghoai58iA8fvbA6aS
-         ai/SAvu/r6rFN59Y1e9DtrvBjD2lOwJ8ph1gn+4E39eVF9+qC2X85jw6cdgn1uA1C6l2
-         ofEw==
-X-Gm-Message-State: ACrzQf1g73IvPb0o1t8TN7xy6hRHBnclLGqwgV3aEcY73YYF6hCjDoDW
-        rH8xqLKJz1LT8juUbD4vH6YPlRauNFA=
-X-Google-Smtp-Source: AMsMyM6m3bS7RPF5fQr/eH5ncPqvFCJtkoDqyUevH+R4X807matv5uzc8TD1ePhtwCCU0OlXVNBl8o1DpUw=
+        bh=U5vFo4bt4S1YBkw7qJ/8SsXR9dI8fRaWN+LYTLGRLXc=;
+        b=ZTBSf9JXyDBWE/pQVOm7xT/nZvymVPkBxnM5Kh8QEisphHu+a8sQ6xJY0DOGae4UTU
+         /h0K3bzzj0YojEiQ/dVszgWV6w+Etd33qJEaO2mgiwXiW8TuqI3r0Dm4Aa3fIOt6likE
+         aMEOVh7z7MlpVQ4lkUZduTfhFAS9Vowb9lbutbsulWebAi6BcjW26EeHxjouScPFu0a8
+         BvYh2Mv+RxC7F5C0mR6l22gvTrHDfkX783SDi7YL89MgneVjADOlRkerUGGJ318JQTNZ
+         c/8ZJDgq+RUs4y1XlZi8qWAbswBd2c/hXpjibxRCG9bUnHqMgdsqOwlcZSmJMjUoBIwV
+         BXVA==
+X-Gm-Message-State: ACrzQf2ZfBH2GT3R/XJvHjsP4fPw5MtLY+KrltdREADrWdtaFh0WWIY3
+        As4dsgoUcto5PL2gTO90UZHDPyL6GbQ=
+X-Google-Smtp-Source: AMsMyM7I8M2k58LdiY9Bn17s48fNmOAL5wLIHciB2Qx2fxuZBU4hSU51h5SdBz6suytGhuqo6XNaa5/wPfk=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:9256:0:b0:349:e25e:9bfe with SMTP id
- j83-20020a819256000000b00349e25e9bfemr22039190ywg.111.1663720371023; Tue, 20
- Sep 2022 17:32:51 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a17:902:a9c6:b0:178:b2d4:f8b2 with SMTP id
+ b6-20020a170902a9c600b00178b2d4f8b2mr2142306plr.79.1663720372595; Tue, 20 Sep
+ 2022 17:32:52 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Wed, 21 Sep 2022 00:31:51 +0000
+Date:   Wed, 21 Sep 2022 00:31:52 +0000
 In-Reply-To: <20220921003201.1441511-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220921003201.1441511-1-seanjc@google.com>
 X-Mailer: git-send-email 2.37.3.968.ga6b4b080e4-goog
-Message-ID: <20220921003201.1441511-3-seanjc@google.com>
-Subject: [PATCH v4 02/12] KVM: nVMX: Make an event request when pending an MTF
- nested VM-Exit
+Message-ID: <20220921003201.1441511-4-seanjc@google.com>
+Subject: [PATCH v4 03/12] KVM: x86: Rename and expose helper to detect if
+ INIT/SIPI are allowed
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         Huacai Chen <chenhuacai@kernel.org>,
@@ -80,7 +80,7 @@ Cc:     James Morse <james.morse@arm.com>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,57 +88,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Set KVM_REQ_EVENT when MTF becomes pending to ensure that KVM will run
-through inject_pending_event() and thus vmx_check_nested_events() prior
-to re-entering the guest.
+Rename and invert kvm_vcpu_latch_init() to kvm_apic_init_sipi_allowed()
+so as to match the behavior of {interrupt,nmi,smi}_allowed(), and expose
+the helper so that it can be used by kvm_vcpu_has_events() to determine
+whether or not an INIT or SIPI is pending _and_ can be taken immediately.
 
-MTF currently works by virtue of KVM's hack that calls
-kvm_check_nested_events() from kvm_vcpu_running(), but that hack will
-be removed in the near future.  Until that call is removed, the patch
-introduces no real functional change.
+Opportunistically replaced usage of the "latch" terminology with "blocked"
+and/or "allowed", again to align with KVM's terminology used for all other
+event types.
 
-Fixes: 5ef8acbdd687 ("KVM: nVMX: Emulate MTF when performing instruction emulation")
-Cc: stable@vger.kernel.org
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+No functional change intended.
+
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/vmx/nested.c | 3 +++
- arch/x86/kvm/vmx/vmx.c    | 6 ++++--
- 2 files changed, 7 insertions(+), 2 deletions(-)
+ arch/x86/kvm/lapic.c | 4 ++--
+ arch/x86/kvm/lapic.h | 7 +++++++
+ arch/x86/kvm/x86.c   | 9 +++++----
+ arch/x86/kvm/x86.h   | 5 -----
+ 4 files changed, 14 insertions(+), 11 deletions(-)
 
-diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index 85318d803f4f..3a080051a4ec 100644
---- a/arch/x86/kvm/vmx/nested.c
-+++ b/arch/x86/kvm/vmx/nested.c
-@@ -6632,6 +6632,9 @@ static int vmx_set_nested_state(struct kvm_vcpu *vcpu,
- 	if (ret)
- 		goto error_guest_mode;
+diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+index 9dda989a1cf0..2bd90effc653 100644
+--- a/arch/x86/kvm/lapic.c
++++ b/arch/x86/kvm/lapic.c
+@@ -3051,14 +3051,14 @@ int kvm_apic_accept_events(struct kvm_vcpu *vcpu)
+ 	}
  
-+	if (vmx->nested.mtf_pending)
-+		kvm_make_request(KVM_REQ_EVENT, vcpu);
-+
- 	return 0;
+ 	/*
+-	 * INITs are latched while CPU is in specific states
++	 * INITs are blocked while CPU is in specific states
+ 	 * (SMM, VMX root mode, SVM with GIF=0).
+ 	 * Because a CPU cannot be in these states immediately
+ 	 * after it has processed an INIT signal (and thus in
+ 	 * KVM_MP_STATE_INIT_RECEIVED state), just eat SIPIs
+ 	 * and leave the INIT pending.
+ 	 */
+-	if (kvm_vcpu_latch_init(vcpu)) {
++	if (!kvm_apic_init_sipi_allowed(vcpu)) {
+ 		WARN_ON_ONCE(vcpu->arch.mp_state == KVM_MP_STATE_INIT_RECEIVED);
+ 		if (test_bit(KVM_APIC_SIPI, &pe))
+ 			clear_bit(KVM_APIC_SIPI, &apic->pending_events);
+diff --git a/arch/x86/kvm/lapic.h b/arch/x86/kvm/lapic.h
+index 117a46df5cc1..c3ce6b0b1ea3 100644
+--- a/arch/x86/kvm/lapic.h
++++ b/arch/x86/kvm/lapic.h
+@@ -7,6 +7,7 @@
+ #include <linux/kvm_host.h>
  
- error_guest_mode:
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 94c314dc2393..9dba04b6b019 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -1665,10 +1665,12 @@ static void vmx_update_emulated_instruction(struct kvm_vcpu *vcpu)
- 	    (!vcpu->arch.exception.pending ||
- 	     vcpu->arch.exception.vector == DB_VECTOR) &&
- 	    (!vcpu->arch.exception_vmexit.pending ||
--	     vcpu->arch.exception_vmexit.vector == DB_VECTOR))
-+	     vcpu->arch.exception_vmexit.vector == DB_VECTOR)) {
- 		vmx->nested.mtf_pending = true;
--	else
-+		kvm_make_request(KVM_REQ_EVENT, vcpu);
-+	} else {
- 		vmx->nested.mtf_pending = false;
-+	}
+ #include "hyperv.h"
++#include "kvm_cache_regs.h"
+ 
+ #define KVM_APIC_INIT		0
+ #define KVM_APIC_SIPI		1
+@@ -228,6 +229,12 @@ static inline bool kvm_apic_has_events(struct kvm_vcpu *vcpu)
+ 	return lapic_in_kernel(vcpu) && vcpu->arch.apic->pending_events;
  }
  
- static int vmx_skip_emulated_instruction(struct kvm_vcpu *vcpu)
++static inline bool kvm_apic_init_sipi_allowed(struct kvm_vcpu *vcpu)
++{
++	return !is_smm(vcpu) &&
++	       !static_call(kvm_x86_apic_init_signal_blocked)(vcpu);
++}
++
+ static inline bool kvm_lowest_prio_delivery(struct kvm_lapic_irq *irq)
+ {
+ 	return (irq->delivery_mode == APIC_DM_LOWEST ||
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index e1a25e46dbf7..59be7b16b92f 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -11293,11 +11293,12 @@ int kvm_arch_vcpu_ioctl_set_mpstate(struct kvm_vcpu *vcpu,
+ 		goto out;
+ 
+ 	/*
+-	 * KVM_MP_STATE_INIT_RECEIVED means the processor is in
+-	 * INIT state; latched init should be reported using
+-	 * KVM_SET_VCPU_EVENTS, so reject it here.
++	 * Pending INITs are reported using KVM_SET_VCPU_EVENTS, disallow
++	 * forcing the guest into INIT/SIPI if those events are supposed to be
++	 * blocked.  KVM prioritizes SMI over INIT, so reject INIT/SIPI state
++	 * if an SMI is pending as well.
+ 	 */
+-	if ((kvm_vcpu_latch_init(vcpu) || vcpu->arch.smi_pending) &&
++	if ((!kvm_apic_init_sipi_allowed(vcpu) || vcpu->arch.smi_pending) &&
+ 	    (mp_state->mp_state == KVM_MP_STATE_SIPI_RECEIVED ||
+ 	     mp_state->mp_state == KVM_MP_STATE_INIT_RECEIVED))
+ 		goto out;
+diff --git a/arch/x86/kvm/x86.h b/arch/x86/kvm/x86.h
+index a784ff90740b..829d3134c1eb 100644
+--- a/arch/x86/kvm/x86.h
++++ b/arch/x86/kvm/x86.h
+@@ -275,11 +275,6 @@ static inline bool kvm_check_has_quirk(struct kvm *kvm, u64 quirk)
+ 	return !(kvm->arch.disabled_quirks & quirk);
+ }
+ 
+-static inline bool kvm_vcpu_latch_init(struct kvm_vcpu *vcpu)
+-{
+-	return is_smm(vcpu) || static_call(kvm_x86_apic_init_signal_blocked)(vcpu);
+-}
+-
+ void kvm_inject_realmode_interrupt(struct kvm_vcpu *vcpu, int irq, int inc_eip);
+ 
+ u64 get_kvmclock_ns(struct kvm *kvm);
 -- 
 2.37.3.968.ga6b4b080e4-goog
 
