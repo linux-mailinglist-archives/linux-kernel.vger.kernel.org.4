@@ -2,79 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6941F5BF92E
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 10:27:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87FDA5BF935
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 10:28:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbiIUI1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 04:27:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56178 "EHLO
+        id S229904AbiIUI2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 04:28:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229928AbiIUI1O (ORCPT
+        with ESMTP id S231214AbiIUI1x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 04:27:14 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90DF989916
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 01:27:12 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id a8so7894131lff.13
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 01:27:11 -0700 (PDT)
+        Wed, 21 Sep 2022 04:27:53 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FDED12778
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 01:27:46 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id go6so5692330pjb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 01:27:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=gY2lzq3N2Qe2ssVBMXnL/s3SN8sMkBLrkElMWRrbxsA=;
-        b=DziEZGWtHcHI4L/Gz3wfDxdm66CUhwr+qYwy2jz88G11sb0IHdQPEg0QPm9mNALHFi
-         WCWgcC7pK3OrLLH5jhaZk1rPcM1wn3HheatWrvhwTM2BUiHTGwZUVsiYGuumE5KpUABx
-         e4HHzRHWaE0XysvOCB8tZzUJgUd1PpPUw17eV7/L7fvGTpSirkV7oVGCnRupcQUDpYuw
-         EfGz0Y6NgEJOX2b6iGU5LaKH5eT8Loc30hfbaQUgtiRI3YpQKbA7KXwoAvgSretfdhJE
-         PKfzKPRx4R25Z4Y3QC1grCq5kHAsZB47xjyeSC8h7W/9l40YVzqZEmYdstJ3jgmDJmeH
-         6IhA==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date;
+        bh=5AT8mOkKWjY5PWdM9jcjIYkswAmUffltx4x7PbMSoHI=;
+        b=djiaXEiyV8nu1S2vVKUxdA6Mg8lW0dwLT3uGAPMS7ENbuq+sG8AFf7gIaIWr2ZWY5Y
+         1TZBz2LWhVJ5s2J/DUYzl5FUA9kCR31TKNkB7xKwdP2GVYtJrfh1PAH8MXuH1yZy6qN9
+         aSWHqY2QpCU95iIGviFJ/1TdozsEUzzsaFnhs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=gY2lzq3N2Qe2ssVBMXnL/s3SN8sMkBLrkElMWRrbxsA=;
-        b=1cDBQSs3nzQ4/T7No1YwQVf1rbsRx2bExtwvXifqSYjJ6JJhG/l1tL5/4JKoaUDxie
-         VYdSLJLjn+Kd2l5Wwni1vCkC+jA8hWXRLjgHalJV2wZjurH6IWT2ONWospNSs5JbyrrH
-         V9svRN+/NE6/jvYu6Fir0QRftoHOGG28P6OoQgtFO160wPcpIekAzZNusjwsdohTHuBG
-         oCrs/Xr7pB42To6l5Mv4dWH8jY7zGu8sw3kfu/RMu3g4oT2UTZUTd4yTXsYK2QkkgFxO
-         H8r4yCPDLMggGcfeGltQDh8opJlY0Ub0gwDADePm0tg+Joswf8W1eNfTKMNYiiG8s1Aj
-         QK0g==
-X-Gm-Message-State: ACrzQf0l7yWujcG6gEhvRW8tfO+ewKAGe9LeFPixl+7Fb9tVnjoDu0z5
-        VT57Kh+/ueixLiit4NjeCFRM8Q==
-X-Google-Smtp-Source: AMsMyM4pf0Cx6J3kAlAnrQDlQNIDLladkdySQ9qoP9yZpwNjyJlZIkYXTUAypORtMZkYYohrGTiAkg==
-X-Received: by 2002:ac2:4d2b:0:b0:498:fbf0:4f89 with SMTP id h11-20020ac24d2b000000b00498fbf04f89mr9327153lfk.500.1663748830232;
-        Wed, 21 Sep 2022 01:27:10 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id c20-20020a056512075400b00492e3c8a986sm325857lfs.264.2022.09.21.01.27.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Sep 2022 01:27:08 -0700 (PDT)
-Message-ID: <df77a1d2-ee85-75d4-7341-6949d5b82ccf@linaro.org>
-Date:   Wed, 21 Sep 2022 10:27:07 +0200
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=5AT8mOkKWjY5PWdM9jcjIYkswAmUffltx4x7PbMSoHI=;
+        b=QC3OSKFbYQVX0pYHoDEgAEmClbHP02zlIcW94Qzz9nmREFfDLB5E/ORyggKMEEBYIO
+         JZ6uJrPMvMMsT4CQGtLzVlD7jdRp6/MiJvWSfX4NeYRxwbt9O2LWtBmpOwSzYvDBbvh2
+         ILlYMtHpMH75wOpc+PR0SVn5wQ1nE9KFGN0620IyFq8nNJRHIY/+xjCGRaYPPpyUCFmQ
+         JOeCzeTD1nBoLpqkpOq82t1/PeholQcldw58ZpjXY0zZBzA+lWzKg7YQ+UfsKXrmDtH9
+         g/kVQZJB4h/e8Raly/4S1rMyb1k18wCRf0CEr6vKR2lREaGXk7CBAJtN3Q5GOEHFpeeM
+         nlWQ==
+X-Gm-Message-State: ACrzQf23kWHxijY+hVgU+XB/MeseqcQiMq4laDRQt8DFUoB601P+PqGM
+        cUEJTtgAvYMVDckLd9gb4UBeAA==
+X-Google-Smtp-Source: AMsMyM6dMk7BgaHyy8W1l5PZ4gjmxp4MolRVNSdMI32fir6PU+gJStSn6cHQyCyuWs0A6yjWaJmtrg==
+X-Received: by 2002:a17:90b:38cb:b0:203:100:bb53 with SMTP id nn11-20020a17090b38cb00b002030100bb53mr8401805pjb.107.1663748866049;
+        Wed, 21 Sep 2022 01:27:46 -0700 (PDT)
+Received: from google.com ([2401:fa00:8f:203:cc93:90d7:674f:156a])
+        by smtp.gmail.com with ESMTPSA id q12-20020a170902eb8c00b0016dbe37cebdsm1296944plg.246.2022.09.21.01.27.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Sep 2022 01:27:45 -0700 (PDT)
+From:   Hidenori Kobayashi <hidenorik@chromium.org>
+X-Google-Original-From: Hidenori Kobayashi <hidenorik@google.com>
+Date:   Wed, 21 Sep 2022 17:27:42 +0900
+To:     Sakari Ailus <sakari.ailus@iki.fi>
+Cc:     Hidenori Kobayashi <hidenorik@chromium.org>,
+        Dongchun Zhu <dongchun.zhu@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] media: ov8856: Add runtime PM callbacks
+Message-ID: <20220921082742.bhdgpxzuk32hfgvc@google.com>
+References: <20220921081536.2551789-1-hidenorik@chromium.org>
+ <YyrJPBXzL+MZH8az@valkosipuli.retiisi.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v4 2/3] dt-bindings: sound: ti,ts3a227e: add control of
- debounce
-Content-Language: en-US
-To:     Astrid Rost <astrid.rost@axis.com>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Dylan Reid <dgreid@chromium.org>
-Cc:     kernel@axis.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, Astrid Rost <astridr@axis.com>,
-        devicetree@vger.kernel.org
-References: <20220921081834.22009-1-astrid.rost@axis.com>
- <20220921081834.22009-3-astrid.rost@axis.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220921081834.22009-3-astrid.rost@axis.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YyrJPBXzL+MZH8az@valkosipuli.retiisi.eu>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,15 +70,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/09/2022 10:18, Astrid Rost wrote:
-> Add devicetree parameters to control the insertion, release and press
-> debounce times.
+Hi Sakari,
+
+On Wed, Sep 21, 2022 at 11:20:12AM +0300, Sakari Ailus wrote:
+> Hi Hidenori,
 > 
-> Signed-off-by: Astrid Rost <astrid.rost@axis.com>
+> On Wed, Sep 21, 2022 at 05:15:35PM +0900, Hidenori Kobayashi wrote:
+> >  
+> > +static int __maybe_unused ov8856_runtime_suspend(struct device *dev)
+> > +{
+> > +	__ov8856_power_off(dev);
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int __maybe_unused ov8856_runtime_resume(struct device *dev)
+> > +{
+> > +	return __ov8856_power_on(dev);
+> > +}
+> 
+> These two functions are redundant now, you can call __ov8856_power_on /
+> __ov8856_power_off directly. The return type of __ov8856_power_off needs to
+> be changed to int. You could also remove the underscores from the names at
+> the same time.
 
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
+Will fix it as above. I just wasn't sure about the policy. Thanks!
 
 Best regards,
-Krzysztof
+Hidenori
