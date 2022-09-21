@@ -2,222 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 045A45BF9A3
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 10:46:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57CB55BF9A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 10:46:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231268AbiIUIqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 04:46:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57672 "EHLO
+        id S230293AbiIUIpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 04:45:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231340AbiIUIqW (ORCPT
+        with ESMTP id S230322AbiIUIpk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 04:46:22 -0400
-X-Greylist: delayed 64 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 21 Sep 2022 01:46:10 PDT
-Received: from esa2.hc353-39.eu.iphmx.com (esa2.hc353-39.eu.iphmx.com [207.54.65.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EA5F796B0
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 01:46:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=sequans.com; i=@sequans.com; l=7858; q=dns/txt;
-  s=corp; t=1663749970; x=1695285970;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=7sI0bK0Uik8Q0EifSq+urV7lPUg1NRSirxwJIUilZ6I=;
-  b=mKekmwQqW/jnW9bmhCN2pk92gpfj+ONOSZLCh1DJ/OWhdS89l0fPs438
-   kLkHv1cOhwLJLgS5vx/YbGJ5B9jJ0KGgrYP3+9AWpqnLKS/HAWdbVPeZ4
-   uZ/4qzj93vyVCRrsNUzeafN/8I9o9i3WadqSehCNICyYyVVFMq2yVeszu
-   A=;
-X-IPAS-Result: =?us-ascii?q?A2EaAAC+zSpjf5bSIB9aHAEBAQEBAQcBARIBAQQEAQFAg?=
- =?us-ascii?q?TsHAQELAYMkgViET4gfiEcuA4QmmGuBfAsBAQEBAQEBAQEJQgSFBwKEbCc0C?=
- =?us-ascii?q?Q4BAgQBAQEBAwIDAQEBAQEBAwEBAQUBAQEBAQEGAgEBAQECEAEBPEqFL0aCN?=
- =?us-ascii?q?SkBg20BAQEDIwQLAQVBEAsYAgIfBwICVwYBDAYCAQGCeQGDIKBDAYsafzOBA?=
- =?us-ascii?q?YgdgV8GgREsAYtqhDxDgUlEgRUnDIJ3PogagmYEgQmTd4QVJgQOAxkrHUECA?=
- =?us-ascii?q?QtCNAMVAxQDBSQHAxkPIw0NBBYHDAMDBSUDAgIbBwICAwIGEwUCAk04CAQIB?=
- =?us-ascii?q?CskDwUCBy8FBC8CHgQFBhEIAhYCBgQEBAQVAhAIAggmFwcTGBsZAQVZEAkhH?=
- =?us-ascii?q?AoEGg0FBhMDIG8FCjsPKDJrKx0bCoEMKigVAwQEAwIGEwMDIgIQKjEUBCkTE?=
- =?us-ascii?q?i0HK3MJAgMiZwUDAwQoLAMJIR8HKCY8B1g7BAMDECI9BgMJAwIkW3cCNxMVB?=
- =?us-ascii?q?QMNGSYIBSMXHgQIPAIFBlmaVnoTLBcJEIF3CwuTFJtQkG+CNINgoB0GEy6Wc?=
- =?us-ascii?q?wiSCS2WXSCiHIR6MIE/IoIWTSODN1EZD45XjhtzOwIGAQoBAQMJhkeEEwEB?=
-IronPort-PHdr: A9a23:96t4txLLdAy7RA0cJ9mcuEBgWUAX0o4c3iYr45Yqw4hDbr6kt8y7e
- hCFvrM21waCBdqTwskHotKei7rnV20E7MTJm1E5W7sIaSU4j94LlRcrGs+PBB6zBvfraysnA
- JYKDwc9rDm0PkdPBcnxeUDZrGGs4j4OABX/Mhd+KvjoFoLIgMm7ye6/94fdbghGmTaxbq9+I
- RerpgjNq8cahpdvJLwswRXTuHtIfOpWxWJsJV2Nmhv3+9m98p1+/SlOovwt78FPX7n0cKQ+V
- rxYES8pM3sp683xtBnMVhWA630BWWgLiBVIAgzF7BbnXpfttybxq+Rw1DWGMcDwULs5Qiqp4
- bt1RxD0iScHLz85/3/Risxsl6JQvRatqwViz4LIfI2ZMfxzdb7fc9wHX2pMRsVfWSJODYyyc
- oUBEfQMPehYoYb/u1QAogCzBRWvCe711jNEmnH70K883u88EQ/GxgsgH9cWvXvbttr1MLkdU
- eapzKnJyzXIcvZY2TDn6IfWdBAuuvWMXbNsccHMzkQvCQDFjlKKqYP7OTOazeANs2mH7+d7T
- uKglXcnqxxrrTip3ccgkJXGhoUQyl3d8yhy3Yk6K8GiRkFhfd6kDIVftzucN4ZuXs4vX2Flt
- Skkx7AYpJO2YDQHxpo5yxLDdvGJfZSE7g/sWuueIzp1gHBodb2hihu97EStyO7xWMmw3VtLo
- CRLkt/BvW0D2RzU78iIUPp9/kG51DmT1gDT8f1LIUcumaXHLJ4hx6Y8lpkNvkTZGC/5hkH2g
- LWRdkU+9eik8/jrbqj8qp+bLY90hRnyMqsvmsyjAeQ4LxMBU3KH9uS70b3v5UL5QLRWjv02j
- 6nWq43aJd8Fqa6jHwBV1YAj6wqhADegzNQUh2UILFVAeB+BkoPnOEnOLej2APuimVihnilny
- +rYMrH8HpnBNGXPnbf9cbt79kVS0hA8zcpF6JJRErwBJfXzVVLvu9HAFR85NhC0w/7gCNVgy
- oMSQWKPDbGdMKPVqVKJ5+MvI+yXa48PojnxMeMl6OD3jX8kg1Ade7Kp0YELZ3C/G/RqO0SZY
- XzyjdcdCWoHsBcyQPbkhVGcSzJfeWu+U74m6j0mCI+qEZ/PRoW3j7yA2Ce7EIdWZmdDCl2UD
- 3fodIKEW+0SZyKUOcBhlj0EVaS6Ro86yx6urRL6xKBhLurP4CEXqZXj1N1t6+3Vjh497SZ0A
- NiF02GRU2F0mXsFSj8u0KBlvUN90kuD0bR/g/FAENxT5upJUhokOp7Y1eB6Ecr9WwLHftiTT
- FarWc6pATY2TtItx98OYkB9F8++gRDE2iqmG6UVmKCTBJwo7qLc2GD8J8J+y3bez6Qhjl8mQ
- tdROm2inKJw6w/TB4vRn0WDi6mqbbgc3DLK9GqbzmqBp1xYUA90UarYRHwQfE/WrdDi60PGT
- r+uEqgnMhBbxcKeN6dGcNrpjU9JRPv7ItTRf3qxm3usBRaP3r6MaI7qe3sY3CjGDEgEkhsT/
- WqdNQQkAiehomTeDCFhFF71fkzj7/d+pGuhTkAo1wGKc1Fh172t9x4RhPycTe4T370dtCcit
- Tp0BlC90MzSC9ebuQphc7tTYckn7FdEy23ZrQp9MYKkL6x4gV4eaQt37AvS0EBSC5xdnMxil
- no7ygN2Yfad0Upcejfex5nhPLTTAmP1+wyraqiQ0VbbhpLe+aoV7vk840nupx3hDE0o9Gkvh
- 91Wy1Od4InHCEwZVpenAWgt8B0vmbjeby8h5oWc9np2PK++tj7ek4Y3B+w/xxCqe9ZDGLiJD
- RL7FdZcDM+rfr9502O1Zw4JabgBvJU/ONmrIr7fgPbDAQ==
-IronPort-Data: A9a23:w+2gfqAeSXzZrRVW/9jjw5YqxClBgxIJ4kV8jS/XYbTApGh00z0Dz
- mQXWWuGM/eOZWuge4hzbIu/pxsEvsfRzodgTANkpHpgZkwTlceUXt7xwmUcns+xBp2YHBI5t
- 5V2hv3odp1coqr0/0/1WlTHhSckjfngqp3UV7KfZUidfSc9FGF7z0oLd9cR2uZAmcK+Dx6Gp
- eT8qsjePE7N8zNvOycf5rnrRClH5ZwegxtF+A1lDRx3lAWGzSNNXchGffjZw0bQG+G4IMbrH
- 44v85nkpgs1zz91Yvu5n7DydFE9Q7K6FWBiXVIPBsBOKjAbzsAD+v5T2Mg0MC+7uB3Q9zxF8
- +ihgLTpIesfFvOTwbxNA0cEe81JFfQuFLfveRBTuOTJnx2eKxMAyd03ZK09FdRwFupfXjsWr
- ZT0gd3CB/yOr7ve/V61dgVjruhkAsjSA7oSg34jyzbaMcQ7fszHTJyfsLe03B9o7ixPNeTfY
- sADYHx0YQ3dahtUfFwQDfrSns/z3z+kKXsC8QrT/Pdvi4TQ5FUZPLzFLtnSYNGMT8FUgm6Dq
- 3vb9mLiRBodMbRzzBLZqyvy3rSU9c/9cI4RJeaV7dphvFiKzTEaGD0oRHTmjPbs3yZSXPoFc
- RVOoULCt5Ma8U2yU9T5GQexsXiNujYWXN1MF+w8rgqKz8L85wWBLmkCUjNFLtchsaceRjY31
- 1uF2trtARRrsaaJUjTFr/GTtzzaESwRM2oqYS4fURBD59jlvZF1gh/RJv5nEaionpj2FCv2z
- jSisicznfMQgNQN2qH9+krI6w9AvbDbTws//AyRRW+88wp/f8iuYInABUXnAehoAMG3T2C+h
- XU9lIuY6+MyP4yyyCiCebBYdF223MppIAEwkHY2Qcd6qWjxoCX/FWxDyG0udBY0bq7obRezO
- hKM5Wu98bcJZBOXgblLj5WZJf5CIULIPtP4TPrZcN1Pb/CdnyfWpn02PSZ8M0hGdkwh1K0yf
- LmBeMCnAB4n5UVbINmeHrZ1PUcDnHxW+I8qbcmTI+6b+bSffmWJbrwOLUGDaOs0hIvd/luOr
- YcPaZHUm04DOAEbXsUx2dBKRbztBSVqba0aV+QOL4Zv3yI5QDB6VqeNqV/fU9U5xfsK/gs3w
- p1NchUCkQCk7ZE2AQ+Nd2Fsdb70FYpyqX8wOilEALpb8yZLXGpb149GLsNfQFXS3LY8pRKCZ
- 6VaJp7o7zUmYmivxgnxmrGk9dcyL0vz31nSV8dnCRBmF6Ndq8Xy0oeMVmPSGOMmVUJbaeNWT
- 2Wc6z7m
-IronPort-HdrOrdr: A9a23:fyAQj6HdeUimLVdrpLqE1ceALOsnbusQ8zAXPo5KOHhom7+j5q
- KTdZMgpGTJYVcqKQkdcL+7VpVoLUmsk6KdpLNhRItKPzOGhILLFu5fBOLZqlWKdkHDH6xmpM
- BdmsNFeb7N5DZB/KPHCUWDc+rIH+PszJyV
-X-IronPort-Anti-Spam-Filtered: true
-X-IronPort-AV: E=Sophos;i="5.93,332,1654552800"; 
-   d="scan'208";a="4116033"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-X-Virus-Scanned: amavisd-new at sequans.com
-Message-ID: <ffde44bc-d4ae-4052-c60c-35c8775a5101@sequans.com>
-Date:   Wed, 21 Sep 2022 10:45:03 +0200
+        Wed, 21 Sep 2022 04:45:40 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD76078589;
+        Wed, 21 Sep 2022 01:45:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663749938; x=1695285938;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-id;
+  bh=sbIV5wkTfCBxJtan/BjTAdWJ6wgE2neJJGgffXqXZIw=;
+  b=FtC759o/J8HckGeLMyFfozX2LGaehEMMI0utzLikd3rM9nFHhLjIo0wa
+   ovjW6qQtXYD4Dfceb+AmrQnu8aejKHLqGbcLqDPIGkh2ZfBBa1xCftQgQ
+   OrU2PexG30B8sILMbG5/vIuR1JjMfhjm8LotnOhSSBCj+atndNMlg4z9O
+   w4SwWKw6cTKMggTXIu0nwJdfzUvJJ6pDFDmlZZEcus2c92cOh9bhl2+hf
+   ZOIUloahuOY+omGfLu62mHni3876iOsCyz2xNIbF8s701iH9nqi1j12j1
+   KSuWgjecakFVPq0Tl7rNy0rU0QFtfo1OKD0xsMZNszaPhr564Fq6bCtke
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10476"; a="287014012"
+X-IronPort-AV: E=Sophos;i="5.93,332,1654585200"; 
+   d="scan'208";a="287014012"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 01:45:38 -0700
+X-IronPort-AV: E=Sophos;i="5.93,332,1654585200"; 
+   d="scan'208";a="744872801"
+Received: from dgonsal1-mobl1.ger.corp.intel.com ([10.252.58.151])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 01:45:35 -0700
+Date:   Wed, 21 Sep 2022 11:45:33 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Sherry Sun <sherry.sun@nxp.com>
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        bhuvanchandra.dv@toradex.com,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-imx@nxp.com
+Subject: Re: [PATCH] tty: serial: fsl_lpuart: disable dma rx/tx use flags in
+ lpuart_dma_shutdown
+In-Reply-To: <20220920111703.1532-1-sherry.sun@nxp.com>
+Message-ID: <a4671a85-70b5-71ce-72e6-8452a36cf4e@linux.intel.com>
+References: <20220920111703.1532-1-sherry.sun@nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [mtd:nand/next 11/31]
- drivers/mtd/nand/raw/cadence-nand-controller.c:1893:4: error: implicit
- declaration of function 'ioread64_rep' is invalid in C99
-Content-Language: en-US
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        kernel test robot <lkp@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-References: <202209210641.MziHAbW7-lkp@intel.com>
- <20220921104002.226ff3f6@xps-13>
-From:   Valentin Korenblit <vkorenblit@sequans.com>
-In-Reply-To: <20220921104002.226ff3f6@xps-13>
-Content-Type: text/plain; charset="utf-8"; format="flowed"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; BOUNDARY="8323329-275608948-1663749918=:1741"
+Content-ID: <307511ca-eab6-314-3ba1-baac702c93f4@linux.intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgTWlxdWVsLAoKSSB3aWxsIHRha2UgYSBsb29rIGF0IGl0IHRvZGF5LgoKQmVzdCByZWdhcmRz
-LAoKVmFsZW50aW4KCk9uIDkvMjEvMjIgMTA6NDAsIE1pcXVlbCBSYXluYWwgd3JvdGU6Cj4gSGkg
-VmFsZW50aW4sCj4KPiBsa3BAaW50ZWwuY29tIHdyb3RlIG9uIFdlZCwgMjEgU2VwIDIwMjIgMDY6
-MzE6MjMgKzA4MDA6Cj4KPj4gdHJlZTogICBodHRwczovL3NlY3VyZS13ZWIuY2lzY28uY29tLzFa
-N29sS1NKal9GV2IzMzVtbWpITmlETTRGT2JoMm0yS3I0Q1ZtelJEWDctd1o5SHpTVXZ4TE5fT3lG
-M05XUzF2cGxGN3F1aWhLbzk3b2NLcXNwU0hTX3hTVWNCcTdTb1l5VDRhaVAwQlZKdEFHbTU1UDFr
-OU1zc2E3N0tLUE5VYkFNeXE0TXpENGQ5MzY3SUhTbFUtOF9ZbWExeHN3eUs3MnBCeXFvalREUmFH
-ZVNMTWNkM0VmcDlKQi03ZXRCTk9aME1xXzdkcU15S3VVd2JaVThXSW5hLVp3SFdfQ0N2UzdESFhw
-ODZaRlVvUlhQc3p0M3N6WWVSYThxUkNHY25mNUhfTG1aWFVVNDZPY3dFMU1PODVxd3pZbi0wanJT
-QkswWjBMbkw2M0R4TWNncExCa0lVQnRUZ1B0cUZpNGVITFdJNnUyQlRkYWRMUWRmUXJrVDdVY3Js
-MVViR2htZm5pWlI3R3ZwUWNwQ3NseVBWYkVQalFNOTRjeWdUbWZuUmZDUWVFc0lrQjJTeElCUjdE
-X1hLcV84VkRsbVhCVjFQdWllbE1qcU1MN0NidFRpV1VaOFVRQmNhSHBybWxLRFloL2h0dHBzJTNB
-JTJGJTJGZ2l0Lmtlcm5lbC5vcmclMkZwdWIlMkZzY20lMkZsaW51eCUyRmtlcm5lbCUyRmdpdCUy
-Rm10ZCUyRmxpbnV4LmdpdCBuYW5kL25leHQKPj4gaGVhZDogICA2M2RlMjRmY2NiNmI4MzFiZTFh
-YmZlMDcyOTI0NDkxMDViNDY3NzMxCj4+IGNvbW1pdDogN2U3ZGMwNDc3NGIxOGMwZTQyY2U3NGFh
-MzM1NzAyMWNkYTk3OTY3NCBbMTEvMzFdIG10ZDogcmF3bmFuZDogY2FkZW5jZTogc3VwcG9ydCA2
-NC1iaXQgc2xhdmUgZG1hIGludGVyZmFjZQo+PiBjb25maWc6IHg4Nl82NC1yYW5kY29uZmlnLWEw
-MDEgKGh0dHBzOi8vc2VjdXJlLXdlYi5jaXNjby5jb20vMTBsc0hxazIzcDR2aklJNGhkd3lEVktq
-STVyVmtXd3l4MWpJN2YxUWZ0RERSdi1DaEQ3aEdqdlR0QU96S0RjQzVXTlZKemdJT0hfSDVpWDE0
-ampOWFJabUhueEFsTnNjalRielNRNlhGZ0FfX0drLXVaQTIxZFd1UC1rLXhTT1FtYWdXNk9ubnN2
-bGJOdmFqNHozQjMtSzEwTWlvN1poYUhtS3B2WGt1Rm5Ua29wREVGQl8xOGpZd0tCenFGSDRIcUs3
-T1FzOHoybGRBRkFQeWVTNHBmMlFCNmdXdFU3dXczX0RNMEZmbjIyRjdlNkVyWjVUQVJXUk9YSEVy
-YTNxOEhUTEw4WXV1QnRnLW85OEx0X3VvLXAwbHBfQjUwbEdQUmIxYW90ejczVEd0Y01QcWFjY3Rf
-Z3dlb29wUnRoMTM4aXFjcWhvS1ZVdHdEbXZpMENxN01ORVVXMkkxU25sQjdqbDdtTE5icDY2c3cy
-Y0NkcXRfOTd0aW9LNkkxTmF6c05VWjVnVzRrdUtGZXZjZ25hclY0WjhLT1F0UFh5eUM2RFJlUUo5
-dEJDSDR5V0M4SXlZVVFOMDI0NnoyczFsY2IvaHR0cHMlM0ElMkYlMkZkb3dubG9hZC4wMS5vcmcl
-MkYwZGF5LWNpJTJGYXJjaGl2ZSUyRjIwMjIwOTIxJTJGMjAyMjA5MjEwNjQxLk16aUhBYlc3LWxr
-cCU0MGludGVsLmNvbSUyRmNvbmZpZykKPj4gY29tcGlsZXI6IGNsYW5nIHZlcnNpb24gMTQuMC42
-IChodHRwczovL3NlY3VyZS13ZWIuY2lzY28uY29tLzFoRlE2YjlJNXJFYmdKVEJyU05ZUTk2TkIy
-SEJabC12Rm4wNGZBenp4OVRnVnItWkkyWWg3OGVKU0h1VklYWFV0N1kwRkFRZDVIYzVXYmZoQTNm
-QnY5Q1pnaVIxdFNGU0VrLVRsUThmSHFFelVzTzZwS1Z4VmJxOU53RnYzeklJQ3Q3TTBLanRfeHlG
-WkZEX3BMcmwtSWxna2RkZHZXV0drcnM2QVVYd0xLcWZDUktyYjRkM3RHc2ZETk1ONVBUajJTRGp3
-blhCckZGQzkyTEJ4ak5VMWNLM1ZhanFEeEo5OW9WZ05EbGhhSlRsbXN2NDhUY3BPVnVnbllUZjlx
-cFFoMmd4b1FqNlJxam9ZLWE5WWxNWUt0R2p1YllHZ1Z5djB0OWJlZ2FsRGdFZUhVLVlZT2dMUk5D
-aGRZWm41X0Rjb2pnWXhqZ1NWcjY1UnpCRHQ3ODJKbms5NFNTTWNJNFJWOXlFVG1Sd3BTNmh5aVFL
-WHhXMmlpZ3hsaXNvZDROcVUzNGN0TzN4VUVDU3N4UUVuSGprb2RwNzJhTVdXRjJJRVVwbm5uWjlr
-UUhIbGRCNV9xUU5aMGpHeU0yTi1ZcmdtL2h0dHBzJTNBJTJGJTJGZ2l0aHViLmNvbSUyRmxsdm0l
-MkZsbHZtLXByb2plY3QgZjI4YzAwNmE1ODk1ZmMwZTMyOWZlMTVmZWFkODFlMzc0NTdjYjFkMSkK
-Pj4gcmVwcm9kdWNlICh0aGlzIGlzIGEgVz0xIGJ1aWxkKToKPj4gICAgICAgICAgd2dldCBodHRw
-czovL3NlY3VyZS13ZWIuY2lzY28uY29tLzFOaXhSOHlNNmNJUVM3bmNwMjM1NW5fODVEalE3UHdR
-OExKNEF0UVJaNXZWQUtzWlVlMlVEWlc3NXRXazZuU290QlpoNHhYQTRIbGFCV2NfWFhpRDVXTndF
-UEVHNlJJYUZEWnc3dnBOU0VPNVVjcm1uanFsZWpIOGFKNnFCc05MR1NpLTlOeHpCYm9IM3RYMlBG
-am5kNzUxQ1A3WFpOYXl5LWpRZWFvZHdrUlMzcVdhR2R3blFJNzV1Nl9FMlQ0emhOVUN3UzVueG1o
-NUdrVE43Z2s3N2xRb0g4OV9FeXB0RmJHdlUxemsxY2JDZE1WX1hTOWFEZmpIMFN5bG9PX0plMzhp
-cmVfY2FRc25aYlJpNWxHUmpjemJoYmh2bGJnbnNINWpTNHE4a05neE1RY2FZWHhyNTd1LVlodFg5
-RnFyM3ZKaW5mdHNZVHQwMHd0ZXhjNGtkeDJuVUR1WTFGMU5OVV93VDBPaUgwTXh1dXp2QW1henox
-dGpnd0V4aTlEX0tuSER1NGNYbmJmT3lTX2FFcjNGUFpJVXZnSktiZUp5dkRwRTZGMXNSWTRxclNP
-NGRtdUJSVFFPM1lhNFQteFRKL2h0dHBzJTNBJTJGJTJGcmF3LmdpdGh1YnVzZXJjb250ZW50LmNv
-bSUyRmludGVsJTJGbGtwLXRlc3RzJTJGbWFzdGVyJTJGc2JpbiUyRm1ha2UuY3Jvc3MgLU8gfi9i
-aW4vbWFrZS5jcm9zcwo+PiAgICAgICAgICBjaG1vZCAreCB+L2Jpbi9tYWtlLmNyb3NzCj4+ICAg
-ICAgICAgICMgaHR0cHM6Ly9zZWN1cmUtd2ViLmNpc2NvLmNvbS8xR2JWMFdHRDA1M2Z6Z1h3YWZO
-YjlnSXo2bF9hVktkYXZaOWhCaUdyeExRNEZ1RkdsZnBySFNrZXhOVElpUlNmN1dNUlMybjBZRU1O
-a3NicnF6YWpRcmU0VWRrYUdQcmgtbVVHWkRXUFdURDVYOTB5cFZBazdMdDl0XzVrMldCWVBFQ0d6
-VzlVMEhOTURnWnFIdXhNUFoxUG5BZ3VVTm13N1R0dE5ENTZIdnc2YWdRZDBOekFib2UxYmNTZzUx
-SUdZeExaWHFEYjFTU2RfXzJXQ2tyQWI1a05FY3hNUzhuS05yQjU1WkQxMTEtVVYza1prenZFd2VT
-c2NpUzBMT1RhLU9xWURVRWVBMHk5NERoU09takdxWnBaWElVMVpBNG1aMF82aFNrZG1jMURGMXNQ
-ckIyUWlRX0U2M0NZOUMtOTA4R0NtSUdtckJaaXZ5dVJ1eHN1UjB5OWFsMzhmS1g4WnZtazlzenk4
-YWZlMzZzR1VwTW9YaWpyUExVblBLbWRWLTJPQ1ZqMjZzU2FYS1J0a3RyT3NPSTBiOGVzZ0VIdUIx
-RnhCSFpqS3hMQ0hPTlplY0lkTk81QjltQVVUdTNVVi9odHRwcyUzQSUyRiUyRmdpdC5rZXJuZWwu
-b3JnJTJGcHViJTJGc2NtJTJGbGludXglMkZrZXJuZWwlMkZnaXQlMkZtdGQlMkZsaW51eC5naXQl
-MkZjb21taXQlMkYlM0ZpZCUzRDdlN2RjMDQ3NzRiMThjMGU0MmNlNzRhYTMzNTcwMjFjZGE5Nzk2
-NzQKPj4gICAgICAgICAgZ2l0IHJlbW90ZSBhZGQgbXRkIGh0dHBzOi8vc2VjdXJlLXdlYi5jaXNj
-by5jb20vMVo3b2xLU0pqX0ZXYjMzNW1takhOaURNNEZPYmgybTJLcjRDVm16UkRYNy13WjlIelNV
-dnhMTl9PeUYzTldTMXZwbEY3cXVpaEtvOTdvY0txc3BTSFNfeFNVY0JxN1NvWXlUNGFpUDBCVkp0
-QUdtNTVQMWs5TXNzYTc3S0tQTlViQU15cTRNekQ0ZDkzNjdJSFNsVS04X1ltYTF4c3d5SzcycEJ5
-cW9qVERSYUdlU0xNY2QzRWZwOUpCLTdldEJOT1owTXFfN2RxTXlLdVV3YlpVOFdJbmEtWndIV19D
-Q3ZTN0RIWHA4NlpGVW9SWFBzenQzc3pZZVJhOHFSQ0djbmY1SF9MbVpYVVU0Nk9jd0UxTU84NXF3
-elluLTBqclNCSzBaMExuTDYzRHhNY2dwTEJrSVVCdFRnUHRxRmk0ZUhMV0k2dTJCVGRhZExRZGZR
-cmtUN1VjcmwxVWJHaG1mbmlaUjdHdnBRY3BDc2x5UFZiRVBqUU05NGN5Z1RtZm5SZkNRZUVzSWtC
-MlN4SUJSN0RfWEtxXzhWRGxtWEJWMVB1aWVsTWpxTUw3Q2J0VGlXVVo4VVFCY2FIcHJtbEtEWWgv
-aHR0cHMlM0ElMkYlMkZnaXQua2VybmVsLm9yZyUyRnB1YiUyRnNjbSUyRmxpbnV4JTJGa2VybmVs
-JTJGZ2l0JTJGbXRkJTJGbGludXguZ2l0Cj4+ICAgICAgICAgIGdpdCBmZXRjaCAtLW5vLXRhZ3Mg
-bXRkIG5hbmQvbmV4dAo+PiAgICAgICAgICBnaXQgY2hlY2tvdXQgN2U3ZGMwNDc3NGIxOGMwZTQy
-Y2U3NGFhMzM1NzAyMWNkYTk3OTY3NAo+PiAgICAgICAgICAjIHNhdmUgdGhlIGNvbmZpZyBmaWxl
-Cj4+ICAgICAgICAgIG1rZGlyIGJ1aWxkX2RpciAmJiBjcCBjb25maWcgYnVpbGRfZGlyLy5jb25m
-aWcKPj4gICAgICAgICAgQ09NUElMRVJfSU5TVEFMTF9QQVRIPSRIT01FLzBkYXkgQ09NUElMRVI9
-Y2xhbmcgbWFrZS5jcm9zcyBXPTEgTz1idWlsZF9kaXIgQVJDSD14ODZfNjQgU0hFTEw9L2Jpbi9i
-YXNoIGRyaXZlcnMvbXRkL25hbmQvcmF3Lwo+Pgo+PiBJZiB5b3UgZml4IHRoZSBpc3N1ZSwga2lu
-ZGx5IGFkZCBmb2xsb3dpbmcgdGFnIHdoZXJlIGFwcGxpY2FibGUKPj4gfCBSZXBvcnRlZC1ieTog
-a2VybmVsIHRlc3Qgcm9ib3QgPGxrcEBpbnRlbC5jb20+Cj4+Cj4+IEFsbCBlcnJvcnMgKG5ldyBv
-bmVzIHByZWZpeGVkIGJ5ID4+KToKPj4KPj4+PiBkcml2ZXJzL210ZC9uYW5kL3Jhdy9jYWRlbmNl
-LW5hbmQtY29udHJvbGxlci5jOjE4OTM6NDogZXJyb3I6IGltcGxpY2l0IGRlY2xhcmF0aW9uIG9m
-IGZ1bmN0aW9uICdpb3JlYWQ2NF9yZXAnIGlzIGludmFsaWQgaW4gQzk5IFstV2Vycm9yLC1XaW1w
-bGljaXQtZnVuY3Rpb24tZGVjbGFyYXRpb25dCj4+ICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICBpb3JlYWQ2NF9yZXAoY2Ruc19jdHJsLT5pby52aXJ0LCBidWYsIGxlbl9pbl93b3Jkcyk7Cj4+
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICBeCj4+Pj4gZHJpdmVycy9tdGQvbmFuZC9yYXcv
-Y2FkZW5jZS1uYW5kLWNvbnRyb2xsZXIuYzoxOTYyOjQ6IGVycm9yOiBpbXBsaWNpdCBkZWNsYXJh
-dGlvbiBvZiBmdW5jdGlvbiAnaW93cml0ZTY0X3JlcCcgaXMgaW52YWxpZCBpbiBDOTkgWy1XZXJy
-b3IsLVdpbXBsaWNpdC1mdW5jdGlvbi1kZWNsYXJhdGlvbl0KPj4gICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgIGlvd3JpdGU2NF9yZXAoY2Ruc19jdHJsLT5pby52aXJ0LCBidWYsIGxlbl9pbl93
-b3Jkcyk7Cj4+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICBeCj4+ICAgICAyIGVycm9ycyBn
-ZW5lcmF0ZWQuCj4gSSd2ZSBkcm9wcGVkIHlvdXIgcGF0Y2ggZnJvbSBuYW5kL25leHQsIGhlcmUg
-eW91IGNhbiBjaGVjayB3aGF0J3MKPiBtaXNzaW5nIGluIHRoZSBjb25maWd1cmF0aW9uLCBzaG91
-bGQgbm90IGJlIHRvbyBoYXJkIHRvIHNvbHZlLiBPbmNlCj4gZG9uZSwgeW91IGNhbiBzZW5kIGEg
-bmV3IHZlcnNpb24gb2YgdGhlIHBhdGNoLgo+Cj4gVGhhbmtzLAo+IE1pcXXDqGwKPgotLSBJTVBP
-UlRBTlQgTk9USUNFOgoKCgpUaGUgY29udGVudHMgb2YgdGhpcyBlbWFpbCBhbmQgYW55IGF0dGFj
-aG1lbnRzIGFyZSBjb25maWRlbnRpYWwgYW5kIG1heSBhbHNvIGJlIHByaXZpbGVnZWQuIElmIHlv
-dSBhcmUgbm90IHRoZSBpbnRlbmRlZCByZWNpcGllbnQsIHBsZWFzZSBub3RpZnkgdGhlIHNlbmRl
-ciBpbW1lZGlhdGVseSBhbmQgZG8gbm90IGRpc2Nsb3NlIHRoZSBjb250ZW50cyB0byBhbnkgb3Ro
-ZXIgcGVyc29uLCB1c2UgaXQgZm9yIGFueSBwdXJwb3NlLCBvciBzdG9yZSBvciBjb3B5IHRoZSBp
-bmZvcm1hdGlvbiBpbiBhbnkgbWVkaXVtLgoKCgpUaGFuayB5b3UuCg==
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
+--8323329-275608948-1663749918=:1741
+Content-Type: text/plain; CHARSET=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
+Content-ID: <7f36fa4e-8476-b9b7-6c2e-87e5828c31b2@linux.intel.com>
+
+On Tue, 20 Sep 2022, Sherry Sun wrote:
+
+> lpuart_dma_shutdown tears down lpuart dma, but lpuart_flush_buffer can
+> still occur which in turn tries to access dma apis if lpuart_dma_tx_use
+> flag is true. At this point since dma is torn down, these dma apis can
+> abort. Set lpuart_dma_tx_use and the corresponding rx flag
+> lpuart_dma_rx_use to false in lpuart_dma_shutdown so that dmas are not
+> accessed after they are relinquished.
+> 
+> Otherwise, when try to kill btattach, kernel may panic. This patch may
+> fix this issue.
+> root@imx8ulpevk:~# btattach -B /dev/ttyLP2 -S 115200
+> ^C[   90.182296] Internal error: synchronous external abort: 96000210 [#1] PREEMPT SMP
+> [   90.189806] Modules linked in: moal(O) mlan(O)
+> [   90.194258] CPU: 0 PID: 503 Comm: btattach Tainted: G           O      5.15.32-06136-g34eecdf2f9e4 #37
+> [   90.203554] Hardware name: NXP i.MX8ULP 9X9 EVK (DT)
+> [   90.208513] pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [   90.215470] pc : fsl_edma3_disable_request+0x8/0x60
+> [   90.220358] lr : fsl_edma3_terminate_all+0x34/0x20c
+> [   90.225237] sp : ffff800013f0bac0
+> [   90.228548] x29: ffff800013f0bac0 x28: 0000000000000001 x27: ffff000008404800
+> [   90.235681] x26: ffff000008404960 x25: ffff000008404a08 x24: ffff000008404a00
+> [   90.242813] x23: ffff000008404a60 x22: 0000000000000002 x21: 0000000000000000
+> [   90.249946] x20: ffff800013f0baf8 x19: ffff00000559c800 x18: 0000000000000000
+> [   90.257078] x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+> [   90.264211] x14: 0000000000000003 x13: 0000000000000000 x12: 0000000000000040
+> [   90.271344] x11: ffff00000600c248 x10: ffff800013f0bb10 x9 : ffff000057bcb090
+> [   90.278477] x8 : fffffc0000241a08 x7 : ffff00000534ee00 x6 : ffff000008404804
+> [   90.285609] x5 : 0000000000000000 x4 : 0000000000000000 x3 : ffff0000055b3480
+> [   90.292742] x2 : ffff8000135c0000 x1 : ffff00000534ee00 x0 : ffff00000559c800
+> [   90.299876] Call trace:
+> [   90.302321]  fsl_edma3_disable_request+0x8/0x60
+> [   90.306851]  lpuart_flush_buffer+0x40/0x160
+> [   90.311037]  uart_flush_buffer+0x88/0x120
+> [   90.315050]  tty_driver_flush_buffer+0x20/0x30
+> [   90.319496]  hci_uart_flush+0x44/0x90
+> [   90.323162]  +0x34/0x12c
+> [   90.327253]  tty_ldisc_close+0x38/0x70
+> [   90.331005]  tty_ldisc_release+0xa8/0x190
+> [   90.335018]  tty_release_struct+0x24/0x8c
+> [   90.339022]  tty_release+0x3ec/0x4c0
+> [   90.342593]  __fput+0x70/0x234
+> [   90.345652]  ____fput+0x14/0x20
+> [   90.348790]  task_work_run+0x84/0x17c
+> [   90.352455]  do_exit+0x310/0x96c
+> [   90.355688]  do_group_exit+0x3c/0xa0
+> [   90.359259]  __arm64_sys_exit_group+0x1c/0x20
+> [   90.363609]  invoke_syscall+0x48/0x114
+> [   90.367362]  el0_svc_common.constprop.0+0xd4/0xfc
+> [   90.372068]  do_el0_svc+0x2c/0x94
+> [   90.375379]  el0_svc+0x28/0x80
+> [   90.378438]  el0t_64_sync_handler+0xa8/0x130
+> [   90.382711]  el0t_64_sync+0x1a0/0x1a4
+> [   90.386376] Code: 17ffffda d503201f d503233f f9409802 (b9400041)
+> [   90.392467] ---[ end trace 2f60524b4a43f1f6 ]---
+> [   90.397073] note: btattach[503] exited with preempt_count 1
+> [   90.402636] Fixing recursive fault but reboot is needed!
+> 
+> Fixes: 6250cc30c4c4 ("tty: serial: fsl_lpuart: Use scatter/gather DMA for Tx")
+> Signed-off-by: Thara Gopinath <tgopinath@microsoft.com>
+> Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
+> ---
+>  drivers/tty/serial/fsl_lpuart.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
+> index f21915015d67..064bd1f33c21 100644
+> --- a/drivers/tty/serial/fsl_lpuart.c
+> +++ b/drivers/tty/serial/fsl_lpuart.c
+> @@ -1771,6 +1771,7 @@ static void lpuart_dma_shutdown(struct lpuart_port *sport)
+>  	if (sport->lpuart_dma_rx_use) {
+>  		del_timer_sync(&sport->lpuart_timer);
+>  		lpuart_dma_rx_free(&sport->port);
+> +		sport->lpuart_dma_rx_use = false;
+>  	}
+>  
+>  	if (sport->lpuart_dma_tx_use) {
+> @@ -1779,6 +1780,7 @@ static void lpuart_dma_shutdown(struct lpuart_port *sport)
+>  			sport->dma_tx_in_progress = false;
+>  			dmaengine_terminate_all(sport->dma_tx_chan);
+>  		}
+> +		sport->lpuart_dma_tx_use = false;
+>  	}
+>  
+>  	if (sport->dma_tx_chan)
+
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+
+-- 
+ i.
+--8323329-275608948-1663749918=:1741--
