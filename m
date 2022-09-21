@@ -2,76 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 330655E5440
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 22:12:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CFE55E5446
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 22:13:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230346AbiIUUMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 16:12:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57172 "EHLO
+        id S230292AbiIUUNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 16:13:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230292AbiIUUMk (ORCPT
+        with ESMTP id S230147AbiIUUNJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 16:12:40 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 069A0A4043;
-        Wed, 21 Sep 2022 13:12:39 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Wed, 21 Sep 2022 16:13:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10279A4064;
+        Wed, 21 Sep 2022 13:13:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 911AC21AD1;
-        Wed, 21 Sep 2022 20:12:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1663791158; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sVAnArdXy3VOpvaRjysTIUckxIMGCOeYnd8hokW+7m8=;
-        b=Ex/ob4kUMGYwnu9Kup31js+dMKExi4A1KuwPacTeaSJAU6GbdJ6CFEuNfgRuERwAuidLF2
-        6Lp6ow8iIM1PFm292F2Yp00YFhpdhS70r1cNpWAZns0WuRvsHL/5yHIrwzpeE1ryOOmKId
-        GbFIMKb0Iu/FYmPSXKxnm654OlofDdA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1663791158;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sVAnArdXy3VOpvaRjysTIUckxIMGCOeYnd8hokW+7m8=;
-        b=pUcCWsFvpFUsQkTqSXgYX9UR/b1DHebNWyp04ydzLVi5Fd/3ZpfOsBnCo5zrkM39iZwOpo
-        GZy0J6jTVLGmNtBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8314413A00;
-        Wed, 21 Sep 2022 20:12:38 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id zXb5HzZwK2MWXQAAMHmgww
-        (envelope-from <bp@suse.de>); Wed, 21 Sep 2022 20:12:38 +0000
-Date:   Wed, 21 Sep 2022 22:12:38 +0200
-From:   Borislav Petkov <bp@suse.de>
-To:     Jan =?utf-8?B?RMSFYnJvxZs=?= <jsd@semihalf.com>
-Cc:     "Limonciello, Mario" <mario.limonciello@amd.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
-        wsa@kernel.org, rrangel@chromium.org, upstream@semihalf.com,
-        Muralidhara M K <muralimk@amd.com>,
-        Naveen Krishna Chatradhi <nchatrad@amd.com>
-Subject: Re: [PATCH -next 1/2] i2c: designware: Switch from using MMIO access
- to SMN access
-Message-ID: <YytwNvSyhq380YNT@zn.tnic>
-References: <20220916131854.687371-1-jsd@semihalf.com>
- <20220916131854.687371-2-jsd@semihalf.com>
- <eafc7bb5-a406-132b-4b7d-167917cdab05@amd.com>
- <CAOtMz3Pgh+cERiXVetDZJrQa9C0kUUbZ9dRRhdghgm5Or8kwhg@mail.gmail.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8E5F2B832B8;
+        Wed, 21 Sep 2022 20:13:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2201EC433C1;
+        Wed, 21 Sep 2022 20:13:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663791185;
+        bh=X7z+fI3ZRL+DFxQVMWPW8bnZDmrWwwWcqlWdAoxgJO0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ozcTn7OSEJyck68gtMf9+g0Eu5/pco2mYKS28tu27Amm8Pg8/yPK0pQTN8gupcZHU
+         9bv77+RHbetL/njKR3LYaLImeVcRcYylMmOf3cqXnX4HXaKQ52YOzNlkKsApQE/6Ip
+         jtV4T5uwvuJr7JCjl6nprJsfvJ4UkRNBHDJRs68ZeMeXjqR9VFJevMD65LGWgVDvHf
+         A7bg/wRurEDr71CTG2zKWtVoTdRCRjCzVsykMIc5+tGMCPzx8+bTtzMMFMAiaF7nZX
+         iiwwr0oVaiRw8vfX6ONfl+EdJquDtXTa93RnTd6XALF9lSkNufNgnYa+e/llpJR+W4
+         gkkk+lQGQKWiw==
+Date:   Wed, 21 Sep 2022 21:13:08 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Marcus Folkesson <marcus.folkesson@gmail.com>
+Cc:     Kent Gustavsson <kent@minoris.se>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 4/9] iio: adc: mcp3911: use resource-managed version
+ of iio_device_register
+Message-ID: <20220921211308.40d33c50@jic23-huawei>
+In-Reply-To: <20220919163600.77b50331@jic23-huawei>
+References: <20220815061625.35568-1-marcus.folkesson@gmail.com>
+        <20220815061625.35568-5-marcus.folkesson@gmail.com>
+        <20220820134150.2b45339c@jic23-huawei>
+        <Yx8Ru3x1IgmUYzUA@gmail.com>
+        <20220919163600.77b50331@jic23-huawei>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOtMz3Pgh+cERiXVetDZJrQa9C0kUUbZ9dRRhdghgm5Or8kwhg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,17 +64,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 06:24:39PM +0200, Jan Dąbroś wrote:
-> > > +EXPORT_SYMBOL_GPL(amd_cache_northbridges);
+On Mon, 19 Sep 2022 16:36:00 +0100
+Jonathan Cameron <jic23@kernel.org> wrote:
 
-Why is this being exported again?
+> On Mon, 12 Sep 2022 13:02:19 +0200
+> Marcus Folkesson <marcus.folkesson@gmail.com> wrote:
+> 
+> > Hi,
+> > 
+> > On Sat, Aug 20, 2022 at 01:41:50PM +0100, Jonathan Cameron wrote:  
+> > > On Mon, 15 Aug 2022 08:16:20 +0200
+> > > Marcus Folkesson <marcus.folkesson@gmail.com> wrote:
+> > >     
+> > > > Keep using managed resources as much as possible.
+> > > > 
+> > > > Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+> > > > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> > > > ---
+> > > >  drivers/iio/adc/mcp3911.c | 53 ++++++++++++---------------------------
+> > > >  1 file changed, 16 insertions(+), 37 deletions(-)
+> > > > 
+> > > > diff --git a/drivers/iio/adc/mcp3911.c b/drivers/iio/adc/mcp3911.c
+> > > > index 890af7dca62d..7e2efe702e57 100644
+> > > > --- a/drivers/iio/adc/mcp3911.c
+> > > > +++ b/drivers/iio/adc/mcp3911.c
+> > > > @@ -258,6 +258,13 @@ static int mcp3911_config(struct mcp3911 *adc)
+> > > >  	return  mcp3911_write(adc, MCP3911_REG_CONFIG, configreg, 2);
+> > > >  }
+> > > >  
+> > > > +static void mcp3911_cleanup_regulator(void *_adc)    
+> > > 
+> > > Missed this on previous versions, but why not pass
+> > > the regulator pointer in as the parameter for the callback?
+> > > 
+> > > static void mcp391_cleanup_regulator(void *reg)
+> > > {
+> > > 	regulator_disable(adc->vref);
+> > > }
+> > > 
+> > > Note this can't use the new devm_regulator_get_enable()
+> > > because we need access to the regulator within the driver.
+> > > 
+> > > I can tidy this up whilst applying (or given it's really minor I might
+> > > not bother :)
+> > > 
+> > > Note we are stalled at the moment with this series on getting the
+> > > fixes upstream.  I'll probably send that pull request shortly.    
+> > 
+> > Just a friendly reminder to not forget to pick up this series.  
+> 
+> If things go according to plan, Greg will take the pull request
+> I sent the other day and I can fast forward the tree such that
+> the first 3 patches are in my upstream, then do a second pull
+> request with these applied. They aim here being to keep the
+> history reasonably clean rather than spaghetti merges.
+> Fingers crossed on timing working out. This all got delayed
+> because I sat on the pull request for a week due to travel and
+> dodgy airport wifi etc.
+> 
 
-It is called unconditionally as a fs_initcall()...
+Now applied to the togreg branch of iio.git.
+Pushed out as testing for some brief testing by 0day etc.
 
--- 
-Regards/Gruss,
-    Boris.
+Jonathan
 
-SUSE Software Solutions Germany GmbH
-GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
-(HRB 36809, AG Nürnberg)
+> Jonathan
+> 
+> > 
+> > Thanks,
+> > 
+> > /Marcus  
+> 
+
