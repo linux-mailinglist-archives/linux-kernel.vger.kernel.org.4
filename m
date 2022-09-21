@@ -2,110 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C1755C00FB
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:19:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A07705C0105
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:21:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229960AbiIUPTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 11:19:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52388 "EHLO
+        id S230164AbiIUPVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 11:21:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbiIUPTc (ORCPT
+        with ESMTP id S229774AbiIUPVo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 11:19:32 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 544AFE8D
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 08:19:30 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id s6so9779718lfo.7
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 08:19:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=0OQNwidXfglALVVRMIJX0eA8njvh8tvja1lgxaI+Bb8=;
-        b=URPgkLc1/gEOLl+n4W6SG44A8sW0ivmUThd6wN1YUN4N6g3JnC2/j/1QYSftU7xaaz
-         2a+TEBvw2H3iWYXTihvWlTi4WbCu0Vx0ykuJev8WVHbHOupHTP1OpyE7hsGIraPkOlzE
-         VL/eSNVkW8icU54So/jIoYxDwNz3+ICSus9RWWpHKwAbNdbDH4f+4A5KZx24rWjM2cfe
-         DC43cw4b0n7Jc7ymx+0uemUcdX+w2/LCn/uF/sKKhaOD0DhlUjHfOEvxQcnjglcQSp+l
-         wtLLoC6MS7jOht05JoAdVj4CwHafjJHlKGcXfrpHPgggnfD4HBk9MZSlVf6TRuYVkLme
-         efaQ==
+        Wed, 21 Sep 2022 11:21:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33DD7883E1
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 08:21:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663773703;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YKklums/Err7Bepni4gts8csmAXQyEMPG5WxwPmhH+I=;
+        b=PHyOe+361YoQwAXf2enmFaT3H6nrBFeBlaUbzKUxyrxch8o9iZM8go/jst1M8cRDSBs0GZ
+        COge2o9yZz1pYZ7dQ0a6vHDZAJsoMkUn5I5Ejz7QSGKK4OGN4ZD5PMeYT/17opxtFO87mg
+        D27eyU9lVBY+J+2894U5tSwo3POkTiU=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-616-rQLOytVAP1O-Cx6xi37dQQ-1; Wed, 21 Sep 2022 11:21:40 -0400
+X-MC-Unique: rQLOytVAP1O-Cx6xi37dQQ-1
+Received: by mail-qt1-f197.google.com with SMTP id b13-20020ac87fcd000000b0035cbe5d58afso4365192qtk.9
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 08:21:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=0OQNwidXfglALVVRMIJX0eA8njvh8tvja1lgxaI+Bb8=;
-        b=e4JLzNiNjOGlP8hpTH1iklRMJHFtQGIOgox0i2ePsv0gSqFQUCjbKXhAbtHySlrBIU
-         DhBoxNk+mm2iYIDZ9BQaGmBH15oIrpTqhIeZYRsF0aC0E1NmbiOnvU2TFu9Zvx7rnoVt
-         5cf6Rz48yD9YEN1x0KS90Y5U5Ch3Aw4ByqKW/tDbqHWVbLBQwyztE6SoiJClUjOUseiS
-         jzUsqbLbkp3g8ErPb2BTUlhBgW2dm/ImOCuMb0us2+Oc9ojYmy/xaXNxrlkqJQxglNt9
-         FpT+FnbmMloUFnun+9V4HQzUUQMlqHv+Uo76KIIHi+mCkXzONdrJY+ooGIGoJO9Gm6X2
-         SEYQ==
-X-Gm-Message-State: ACrzQf2P37847qjGglgXA/YnvLRlWSiLFx5KE4uqwGzqr3D4f+gTct1r
-        vJYbU8qD6cGEz/Ft1qI90rDfFQ==
-X-Google-Smtp-Source: AMsMyM5W8d7QEhX0GyaMcafFqQFoeDrLIcJcGcKbJeXZ90zLpEd3zhpdII+hyLJ5GGWSp/H+vapy2Q==
-X-Received: by 2002:a05:6512:3b8e:b0:49a:d2f4:6b7d with SMTP id g14-20020a0565123b8e00b0049ad2f46b7dmr9680650lfv.627.1663773567480;
-        Wed, 21 Sep 2022 08:19:27 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id m6-20020a056512114600b004896ed8dce3sm485158lfg.2.2022.09.21.08.19.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Sep 2022 08:19:27 -0700 (PDT)
-Message-ID: <5e34eadc-ef6a-abeb-6bce-347593c275b7@linaro.org>
-Date:   Wed, 21 Sep 2022 17:19:26 +0200
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=YKklums/Err7Bepni4gts8csmAXQyEMPG5WxwPmhH+I=;
+        b=YohQY7Pl54scR6O1BEFtvwzbL+z2ykmBook5jF8X4H6n1S0dS97y6FxTm507nhUcYg
+         xXqRph7Rb9+crkrNNrpFGrHTYJtxNV21n7E8GOQifswXLW7Zeq+1CXMScT9fJXkpYlVx
+         qWaKytHKQ1xzEW3aDbD+4Pman8ur9VusoEojuOAS015V2aN5426R2N/5CeCwlMtv40dk
+         zDx9er9ldrtLDQ591g/Sd304VPYTx64cyuh/fABqI7zi0byjTJJsBYOmryX6XKyU2N3k
+         SihaZyl1c96vQlwBlRG3QF3zAv2zrU0dLLfVGxMw+ELJR9HHC7+KRtDQFdFLgj4/raNV
+         q+IQ==
+X-Gm-Message-State: ACrzQf0mqwfbg+JEFgbImfmHSXGL5wBkdl6mTKjJWNUcq/u5AajZZ8+S
+        0grN+bNoe+o3TCZq44O6f8z5qn3J/q+TkodI5tfhItNFtfa3Ze0wU7mHXgOJKKfzzvWTS4XLsep
+        3kp6jbsK39aCjK5xwuBm+o78=
+X-Received: by 2002:a05:622a:613:b0:342:f81f:4f7e with SMTP id z19-20020a05622a061300b00342f81f4f7emr23848811qta.198.1663773699675;
+        Wed, 21 Sep 2022 08:21:39 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7OzWfjG2GRtTFHT6VQqKwenYDGxd0vRx6UOENP8cSn03FrcY2GR/YED/OGOmZJunHnK1JMlw==
+X-Received: by 2002:a05:622a:613:b0:342:f81f:4f7e with SMTP id z19-20020a05622a061300b00342f81f4f7emr23848782qta.198.1663773699383;
+        Wed, 21 Sep 2022 08:21:39 -0700 (PDT)
+Received: from localhost ([217.138.198.196])
+        by smtp.gmail.com with ESMTPSA id cf14-20020a05622a400e00b0031f41ea94easm1815844qtb.28.2022.09.21.08.21.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Sep 2022 08:21:39 -0700 (PDT)
+Date:   Wed, 21 Sep 2022 11:21:37 -0400
+From:   Mike Snitzer <snitzer@redhat.com>
+To:     Sarthak Kukreti <sarthakkukreti@chromium.org>
+Cc:     Christoph Hellwig <hch@infradead.org>, dm-devel@redhat.com,
+        linux-block@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Jens Axboe <axboe@kernel.dk>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Bart Van Assche <bvanassche@google.com>,
+        Daniil Lunev <dlunev@google.com>,
+        Evan Green <evgreen@google.com>,
+        Gwendal Grignou <gwendal@google.com>
+Subject: Re: [PATCH RFC 4/8] fs: Introduce FALLOC_FL_PROVISION
+Message-ID: <YyssAb/zTcIG2bev@redhat.com>
+References: <20220915164826.1396245-1-sarthakkukreti@google.com>
+ <20220915164826.1396245-5-sarthakkukreti@google.com>
+ <YylweQAZkIdb5ixo@infradead.org>
+ <CAG9=OMNoG01UUStNs_Zhsv6mXZw0M0q2v54ZriJvHZ4aspvjEQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 1/2] ASoC: wcd9335: fix order of Slimbus unprepare/disable
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, Vinod Koul <vkoul@kernel.org>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org
-References: <20220921145354.1683791-1-krzysztof.kozlowski@linaro.org>
- <20916c9d-3598-7c40-ee77-1148c3d2e4b1@linux.intel.com>
- <af3bd3f4-dcd9-8f6c-6323-de1b53301225@linaro.org>
- <9a210b04-2ff2-df98-ad1a-89e9d8b0f686@linaro.org>
- <fd74e77c-f3d3-1f09-2e5a-0a94e2a3eeea@linux.intel.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <fd74e77c-f3d3-1f09-2e5a-0a94e2a3eeea@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAG9=OMNoG01UUStNs_Zhsv6mXZw0M0q2v54ZriJvHZ4aspvjEQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/09/2022 17:11, Pierre-Louis Bossart wrote:
->>>> /**
->>>>  * slim_stream_unprepare() - Un-prepare a SLIMbus Stream
->>>>  *
->>>>  * @stream: instance of slim stream runtime to unprepare
->>>>  *
->>>>  * This API will un allocate all the ports and channels associated with
->>>>  * SLIMbus stream
->>>
->>> You mean this piece of doc? Indeed looks inaccurate. I'll update it.
->>
->> Wait, no, this is correct. Please point to what is wrong in kernel doc.
->> I don't see it. :(
+On Wed, Sep 21 2022 at  1:54P -0400,
+Sarthak Kukreti <sarthakkukreti@chromium.org> wrote:
+
+> On Tue, Sep 20, 2022 at 12:49 AM Christoph Hellwig <hch@infradead.org> wrote:
+> >
+> > On Thu, Sep 15, 2022 at 09:48:22AM -0700, Sarthak Kukreti wrote:
+> > > From: Sarthak Kukreti <sarthakkukreti@chromium.org>
+> > >
+> > > FALLOC_FL_PROVISION is a new fallocate() allocation mode that
+> > > sends a hint to (supported) thinly provisioned block devices to
+> > > allocate space for the given range of sectors via REQ_OP_PROVISION.
+> >
+> > So, how does that "provisioning" actually work in todays world where
+> > storage is usually doing out of place writes in one or more layers,
+> > including the flash storage everyone is using.  Does it give you one
+> > write?  And unlimited number?  Some undecided number inbetween?
 > 
-> the TRIGGER_STOP and TRIGGER_PAUSE_PUSH do the same thing. There is no
-> specific mapping of disable() to TRIGGER_STOP and unprepare() to
-> TRIGGER_PAUSE_PUSH as the documentation hints at.
+> Apologies, the patchset was a bit short on describing the semantics so
+> I'll expand more in the next revision; I'd say that it's the minimum
+> of regular mode fallocate() guarantees at each allocation layer. For
+> example, the guarantees from a contrived storage stack like (left to
+> right is bottom to top):
+> 
+> [ mmc0blkp1 | ext4(1) | sparse file | loop | dm-thinp | dm-thin | ext4(2) ]
+> 
+> would be predicated on the guarantees of fallocate() per allocation
+> layer; if ext4(1) was replaced by a filesystem that did not support
+> fallocate(), then there would be no guarantee that a write to a file
+> on ext4(2) succeeds.
+> 
+> For dm-thinp, in the current implementation, the provision request
+> allocates blocks for the range specified and adds the mapping to the
+> thinpool metadata. All subsequent writes are to the same block, so
+> you'll be able to write to the same block inifinitely. Brian mentioned
+> this above, one case it doesn't cover is if provision is called on a
+> shared block, but the natural extension would be to allocate and
+> assign a new block and copy the contents of the shared block (kind of
+> like copy-on-provision).
 
-Which TRIGGER_STOP and TRIGGER_PAUSE_PUSH? In one specific codec driver?
-If yes, I don't think Slimbus documentation should care how actual users
-implement it (e.g. coalesce states).
+It follows that ChromiumOS isn't using dm-thinp's snapshot support?
 
-Best regards,
-Krzysztof
+But please do fold in incremental dm-thinp support to properly handle
+shared blocks (dm-thinp already handles breaking sharing, etc.. so
+I'll need to see where you're hooking into that you don't get this
+"for free").
+
+Mike
 
