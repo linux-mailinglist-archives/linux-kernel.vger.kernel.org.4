@@ -2,102 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 897165BF290
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 03:05:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 884EA5BF293
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 03:06:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231262AbiIUBFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 21:05:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46550 "EHLO
+        id S231298AbiIUBGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 21:06:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230366AbiIUBF3 (ORCPT
+        with ESMTP id S230368AbiIUBGV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 21:05:29 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 538BD17AA9;
-        Tue, 20 Sep 2022 18:05:28 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id cj27so3099958qtb.7;
-        Tue, 20 Sep 2022 18:05:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=NpSOfoxet6fpFE78x3YM7TEF5iWYleKq0HWQ8JXp4es=;
-        b=L+vbQVXyN74JEnV20w0WoCNLCR0ZWgmXoDrA9JRcwvYNiXt1Nrb55mlCQph+16Y3HI
-         AIbs//xJzjYl80dj8xINDTazyeU+Tk2Ck/bKWtEhzGD97Xzvhkh9R8tJhgGnwo4qKv/b
-         cnBt5/QnrbaaUWPnzahD4M5V1ZJgjtMQDHAygpvhKxzvP4YyhPDUThmgtvumvp24KGOl
-         O6YG4XB8412LfsiaMq6wSrjZbvLwxT173iNZhExISe99ih7W/xvO27TQ3YpF7hAAN2UQ
-         lGdRqjhgcJOJKGRyV6he1XqdDVK76G/yC+9ALyqLdDNfg9OY+hkvCM+fZlUxERfTbvd1
-         q3ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=NpSOfoxet6fpFE78x3YM7TEF5iWYleKq0HWQ8JXp4es=;
-        b=PYZP5BImtBA0/2Bh7cORVPMT7pE1A+l9kD4KPeSVdshBePoq5zUAIYB4xVz1VAAFzE
-         vXoWHBzQDCGGWPD0tIhxcLzPxTjrUvC2/flCRDpEH4kXO9FgvHRQUPM/tCtXjgK+aoDa
-         9qswYwJa8tVathd3PR4/4DrBsoGKWo1DyW4n/MVGRBHn0Cnh2FYi26i8J7AkdD89pBps
-         pWw36kJmTzIKE/NnatqSaYccVlzoUy0zV+HVYQnoG16hS0lBFtwKoDIKIuoMoBzY68Mi
-         ffCwaW2WItWOK3M+6RfyaMdJC8/AbI25M1pyJVZ2YYH2pniuEkToELdKWNBofSz0ZzlJ
-         7rfA==
-X-Gm-Message-State: ACrzQf3fbS/GqgeI4m9CDxjhFi3iJErkTcg7eTEUdunnFCu1JPWE7lnP
-        Zvlt7uDQnIIatcHGmxBfYQ==
-X-Google-Smtp-Source: AMsMyM4scnSyNObpXqp6+NVFEG38jdtFZ65wDMOQ8XhGqWdnt4WEMwi/LbspcFAziI/szGOT6MVf9w==
-X-Received: by 2002:a05:622a:110b:b0:35c:d403:6d95 with SMTP id e11-20020a05622a110b00b0035cd4036d95mr19170291qty.495.1663722327486;
-        Tue, 20 Sep 2022 18:05:27 -0700 (PDT)
-Received: from bytedance (ec2-3-231-65-244.compute-1.amazonaws.com. [3.231.65.244])
-        by smtp.gmail.com with ESMTPSA id bn29-20020a05620a2add00b006bbf85cad0fsm881171qkb.20.2022.09.20.18.05.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 18:05:26 -0700 (PDT)
-Date:   Tue, 20 Sep 2022 18:05:23 -0700
-From:   Peilin Ye <yepeilin.cs@gmail.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Peilin Ye <peilin.ye@bytedance.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Alexei Starovoitov <ast@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 1/2] udp: Refactor udp_read_skb()
-Message-ID: <20220921010523.GA2835@bytedance>
-References: <03db9765fe1ef0f61bfc87fc68b5a95b4126aa4e.1663143016.git.peilin.ye@bytedance.com>
- <20220920173859.6137f9e9@kernel.org>
- <20220920174052.47d9858b@kernel.org>
+        Tue, 20 Sep 2022 21:06:21 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4365E3E76D;
+        Tue, 20 Sep 2022 18:06:20 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5F222415;
+        Wed, 21 Sep 2022 03:06:18 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1663722378;
+        bh=DOKp4yUVL0lOKfBdZ5Y2c9aGr/a6xlSB9ZXblqDfDkQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dWsc7VPHZeP0J1RRT+U/yLzf+sqpnMzgMPKqDyzBGoCHCqlklJ/UECR9K1vjw3mhR
+         Y3vb1XJbvkVGwHfy6ZOuq0AXXPOljt0o1yG0usjHZioODnp6Y/zcAidOu4f2i70v0x
+         T0GhDOP4FN0kYun+xzYTDxjzjh5RO7iojQ7V8IeM=
+Date:   Wed, 21 Sep 2022 04:06:04 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] media: uvcvideo: Implement mask for
+ V4L2_CTRL_TYPE_MENU
+Message-ID: <YypjfCLkmHRrsD66@pendragon.ideasonboard.com>
+References: <20220920-standard-menues-v2-0-a35af3243c2f@chromium.org>
+ <20220920-standard-menues-v2-1-a35af3243c2f@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220920174052.47d9858b@kernel.org>
+In-Reply-To: <20220920-standard-menues-v2-1-a35af3243c2f@chromium.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 05:40:52PM -0700, Jakub Kicinski wrote:
-> On Tue, 20 Sep 2022 17:38:59 -0700 Jakub Kicinski wrote:
-> > On Wed, 14 Sep 2022 01:15:30 -0700 Peilin Ye wrote:
-> > > Delete the unnecessary while loop in udp_read_skb() for readability.
-> > > Additionally, since recv_actor() cannot return a value greater than
-> > > skb->len (see sk_psock_verdict_recv()), remove the redundant check.  
-> > 
-> > These don't apply cleanly, please rebase?
+Hi Ricardo,
+
+Thank you for the patch.
+
+On Wed, Sep 21, 2022 at 12:57:29AM +0200, Ricardo Ribalda wrote:
+> Replace the count with a mask field that let us choose not only the max
+
+s/let/lets/
+
+> value, but also the minimum value and what values are valid in between.
 > 
-> Ah, it's the WARN_ON_ONCE() change. In that case please resend after
-> net is merged into net-next (Thu evening).
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> Suggested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+>
+> diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+> index 8c208db9600b..13bc57e2a08d 100644
+> --- a/drivers/media/usb/uvc/uvc_ctrl.c
+> +++ b/drivers/media/usb/uvc/uvc_ctrl.c
 
-Sure, but only the TCP part was merged [1] into net.  I just sent the
-UDP part again [2], and will resend this patchset after both [1] and [2]
-are merged into net-next.  Thanks!
+Let's include <linux/bitops.h> in this file for ffs() and fls().
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/commit/?id=96628951869c0dedf0377adca01c8675172d8639
-[2] https://lore.kernel.org/netdev/20220921005915.2697-1-yepeilin.cs@gmail.com/T/#u
+> @@ -524,7 +524,8 @@ static const struct uvc_control_mapping uvc_ctrl_mappings[] = {
+>  		.v4l2_type	= V4L2_CTRL_TYPE_MENU,
+>  		.data_type	= UVC_CTRL_DATA_TYPE_BITMASK,
+>  		.menu_info	= exposure_auto_controls,
+> -		.menu_count	= ARRAY_SIZE(exposure_auto_controls),
+> +		.menu_mask	=
+> +			BIT_MASK(ARRAY_SIZE(exposure_auto_controls)),
 
-Peilin Ye
+This fits on a single line.
 
+>  		.slave_ids	= { V4L2_CID_EXPOSURE_ABSOLUTE, },
+>  	},
+>  	{
+> @@ -730,7 +731,8 @@ static const struct uvc_control_mapping uvc_ctrl_mappings_uvc11[] = {
+>  		.v4l2_type	= V4L2_CTRL_TYPE_MENU,
+>  		.data_type	= UVC_CTRL_DATA_TYPE_ENUM,
+>  		.menu_info	= power_line_frequency_controls,
+> -		.menu_count	= ARRAY_SIZE(power_line_frequency_controls) - 1,
+> +		.menu_mask	=
+> +			BIT_MASK(ARRAY_SIZE(power_line_frequency_controls) - 1),
+
+And this and the next hunk would benefit, I think, from exceeding the 80
+columns.
+
+>  	},
+>  };
+>  
+> @@ -744,7 +746,8 @@ static const struct uvc_control_mapping uvc_ctrl_mappings_uvc15[] = {
+>  		.v4l2_type	= V4L2_CTRL_TYPE_MENU,
+>  		.data_type	= UVC_CTRL_DATA_TYPE_ENUM,
+>  		.menu_info	= power_line_frequency_controls,
+> -		.menu_count	= ARRAY_SIZE(power_line_frequency_controls),
+> +		.menu_mask	=
+> +			BIT_MASK(ARRAY_SIZE(power_line_frequency_controls)),
+>  	},
+>  };
+>  
+> @@ -974,7 +977,9 @@ static s32 __uvc_ctrl_get_value(struct uvc_control_mapping *mapping,
+>  		const struct uvc_menu_info *menu = mapping->menu_info;
+>  		unsigned int i;
+>  
+> -		for (i = 0; i < mapping->menu_count; ++i, ++menu) {
+> +		for (i = 1; BIT(i) <= mapping->menu_mask; ++i, ++menu) {
+> +			if (!test_bit(i, &mapping->menu_mask))
+
+I may be missing something, but if i starts at 1, aren't you testing bit
+N+1 for menu entry N ?
+
+> +				continue;
+>  			if (menu->value == value) {
+>  				value = i;
+>  				break;
+> @@ -1148,12 +1153,14 @@ static int __uvc_query_v4l2_ctrl(struct uvc_video_chain *chain,
+>  
+>  	switch (mapping->v4l2_type) {
+>  	case V4L2_CTRL_TYPE_MENU:
+> -		v4l2_ctrl->minimum = 0;
+> -		v4l2_ctrl->maximum = mapping->menu_count - 1;
+> +		v4l2_ctrl->minimum = ffs(mapping->menu_mask) - 1;
+> +		v4l2_ctrl->maximum = fls(mapping->menu_mask) - 1;
+>  		v4l2_ctrl->step = 1;
+>  
+>  		menu = mapping->menu_info;
+> -		for (i = 0; i < mapping->menu_count; ++i, ++menu) {
+> +		for (i = 1; BIT(i) <= mapping->menu_mask; ++i, ++menu) {
+> +			if (!test_bit(i, &mapping->menu_mask))
+
+Same here.
+
+> +				continue;
+>  			if (menu->value == v4l2_ctrl->default_value) {
+>  				v4l2_ctrl->default_value = i;
+>  				break;
+> @@ -1268,7 +1275,7 @@ int uvc_query_v4l2_menu(struct uvc_video_chain *chain,
+>  		goto done;
+>  	}
+>  
+> -	if (query_menu->index >= mapping->menu_count) {
+> +	if (!test_bit(query_menu->index, &mapping->menu_mask)) {
+>  		ret = -EINVAL;
+>  		goto done;
+>  	}
+> @@ -1776,8 +1783,13 @@ int uvc_ctrl_set(struct uvc_fh *handle,
+>  		break;
+>  
+>  	case V4L2_CTRL_TYPE_MENU:
+> -		if (xctrl->value < 0 || xctrl->value >= mapping->menu_count)
+> +		if (xctrl->value < (ffs(mapping->menu_mask) - 1) ||
+> +		    xctrl->value > (fls(mapping->menu_mask) - 1))
+>  			return -ERANGE;
+> +
+> +		if (!test_bit(xctrl->value, &mapping->menu_mask))
+> +			return -EINVAL;
+> +
+>  		value = mapping->menu_info[xctrl->value].value;
+>  
+>  		/*
+> @@ -2227,7 +2239,7 @@ static int __uvc_ctrl_add_mapping(struct uvc_video_chain *chain,
+>  
+>  	INIT_LIST_HEAD(&map->ev_subs);
+>  
+> -	size = sizeof(*mapping->menu_info) * mapping->menu_count;
+> +	size = sizeof(*mapping->menu_info) * fls(mapping->menu_mask);
+>  	map->menu_info = kmemdup(mapping->menu_info, size, GFP_KERNEL);
+>  	if (map->menu_info == NULL) {
+>  		kfree(map->name);
+> diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+> index 9c05776f11d1..09cc459c1253 100644
+> --- a/drivers/media/usb/uvc/uvc_driver.c
+> +++ b/drivers/media/usb/uvc/uvc_driver.c
+> @@ -2675,7 +2675,8 @@ static const struct uvc_control_mapping uvc_ctrl_power_line_mapping_limited = {
+>  	.v4l2_type	= V4L2_CTRL_TYPE_MENU,
+>  	.data_type	= UVC_CTRL_DATA_TYPE_ENUM,
+>  	.menu_info	= power_line_frequency_controls_limited,
+> -	.menu_count	= ARRAY_SIZE(power_line_frequency_controls_limited),
+> +	.menu_mask	=
+> +		BIT_MASK(ARRAY_SIZE(power_line_frequency_controls_limited)),
+
+Here too I'd avoid the line wrap.
+
+>  };
+>  
+>  static const struct uvc_device_info uvc_ctrl_power_line_limited = {
+> diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
+> index 4cc3fa6b8c98..07c7acce8025 100644
+> --- a/drivers/media/usb/uvc/uvc_v4l2.c
+> +++ b/drivers/media/usb/uvc/uvc_v4l2.c
+> @@ -80,7 +80,7 @@ static int uvc_ioctl_ctrl_map(struct uvc_video_chain *chain,
+>  			goto free_map;
+>  		}
+>  
+> -		map->menu_count = xmap->menu_count;
+> +		map->menu_mask = BIT_MASK(xmap->menu_count);
+>  		break;
+>  
+>  	default:
+> diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+> index 24c911aeebce..fde4e975334f 100644
+> --- a/drivers/media/usb/uvc/uvcvideo.h
+> +++ b/drivers/media/usb/uvc/uvcvideo.h
+> @@ -255,7 +255,7 @@ struct uvc_control_mapping {
+>  	u32 data_type;
+>  
+>  	const struct uvc_menu_info *menu_info;
+> -	u32 menu_count;
+> +	unsigned long menu_mask;
+>  
+>  	u32 master_id;
+>  	s32 master_manual;
+
+-- 
+Regards,
+
+Laurent Pinchart
