@@ -2,146 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E6255BFAA2
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 11:19:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D44A5BFAA6
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 11:20:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231266AbiIUJT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 05:19:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50904 "EHLO
+        id S231410AbiIUJUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 05:20:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231776AbiIUJS6 (ORCPT
+        with ESMTP id S231474AbiIUJTL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 05:18:58 -0400
-Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7626915CE;
-        Wed, 21 Sep 2022 02:18:20 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id E8F0E5817D8;
-        Wed, 21 Sep 2022 05:17:52 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Wed, 21 Sep 2022 05:17:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1663751872; x=1663759072; bh=mDRCW58754
-        cJxsMgzdDDTe0R8uGcv3CYi1zG8IpvdW8=; b=J6Y9pJauLu6Ni+2JRRbpeLEBUG
-        KCrjiOg7u5/nvy1tfBlBXdLThLcQbw010xly84RHJAb8MsrKt6tsecxAmo5to0x0
-        LbNwbcDe9+VBoU8ShH4QCV9mbjvGzxpUL4fxW23ftAON3xmHQRwh/7E1hiwqU+TZ
-        LEMwHQzZhrfEOx+5NAlROYE7STj7HwTvu206sxNPd/4q0gIoHsfhbCyCWCQBKhbm
-        YcEY+OPRIt4bZH57edAs6Ve3AivmSw/oqWmSwe4HRo35urF4KD0CqT2xnuCcAV/E
-        aWybGKcvUi1uMvApEht/6nlow+STqVbQxfwLDFryEqlJ+gnb+ELjHUkDZV2g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1663751872; x=1663759072; bh=mDRCW58754cJxsMgzdDDTe0R8uGc
-        v3CYi1zG8IpvdW8=; b=eEIceKVPN0B77cF3oztkJIgtT3vMZEE4z/ja3I1oTJcz
-        hlzSZ7fY7QqXvFXfIJGuenjd3/HV1nQ1wpc/BpWFfz1QGQsCJ82q3zBsqUoO/wM8
-        doOPVQPFilJjiRElC7bO0wlFRu0s/EyPL0mdxaYdbbPMAqaZDFwbyGEXSZQkYgk7
-        oDw3hbrOMrAJzcUgbwsdSBLiNt2B5vn5a/FU8JoTaxzsazKGhrfnhOyKUXo1S2b3
-        ipqAu9ube0T8iCDLQUocA+LkbndEh3NUc1kk3UmXTzMxqGScqND8Xp170pqp0xt1
-        PTTx13K7c2QODzbAG9OmOybBOZnD3tv/7TdApBY2Bw==
-X-ME-Sender: <xms:wNYqY_70IrP5apPEhgA7V9JHdHPm2un5C-Uj4mXXSPEaUIriQ9AcvQ>
-    <xme:wNYqY06gHBRAqK-OzQ6Q-N7RrYSMw03rY6uCPsQR1dAZdB698WseY3lLAc5EvzHdU
-    SFQ64aOdgvHvKL-xlg>
-X-ME-Received: <xmr:wNYqY2etfqvbVfs81sOyrartK9-_pBavX-PSwt5mRVn6oxXNK1KLzUP_9TU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeefuddgudehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeetfefffefgkedtfefgledugfdtjeefjedvtddtkeetieffjedvgfehheff
-    hfevudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:wNYqYwLLkUZZAvsEGxZUHhTtYgnXUyQqkFmWEZEtBoWFe59jvAZCqQ>
-    <xmx:wNYqYzIAkyYhq_zyF8vAz6Mcg4-iA0ilNH0IuiLa280eiB59aQvyww>
-    <xmx:wNYqY5ydwoknO7YcBbmG1IZomjhSOxalL9g0d8jAljqq0iP-9MQMFQ>
-    <xmx:wNYqYyWr8cA7k58iemG67EwkPA88zbY21YNJGBYIUbYvDpUkItoDaQ>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 21 Sep 2022 05:17:51 -0400 (EDT)
-Date:   Wed, 21 Sep 2022 11:17:48 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Stefan Wahren <stefan.wahren@i2se.com>
-Cc:     Daniel Vetter <daniel@ffwll.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Stephen Boyd <sboyd@kernel.org>, Emma Anholt <emma@anholt.net>,
-        Ray Jui <rjui@broadcom.com>,
-        linux-rpi-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Dom Cobley <popcornmix@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 2/7] firmware: raspberrypi: Move the clock IDs to the
- firmware header
-Message-ID: <20220921091748.u6qcba6nwclvezzg@houat>
-References: <20220815-rpi-fix-4k-60-v2-0-983276b83f62@cerno.tech>
- <20220815-rpi-fix-4k-60-v2-2-983276b83f62@cerno.tech>
- <688777fc-e6af-8cbe-b19d-c531a7a66b32@i2se.com>
+        Wed, 21 Sep 2022 05:19:11 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5F5B915C9;
+        Wed, 21 Sep 2022 02:18:31 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 132076602003;
+        Wed, 21 Sep 2022 10:18:12 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1663751892;
+        bh=H6Sqt7KTUivS3Jmf3bUZEfhBN7LHFHUTeJKxA8piVAY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=WUbv+S4fpzF+cwNdPRleHyZF7CzR843vO2Ai2W1FQ4D/4MlyQpOseSfudz8q04CEQ
+         XzZqAzwrmq4lZGeOrYurW2N2Xz02A2Pn9bYvK2hyWHUTGnGXVusZJBFvsav7o4jYYk
+         /SLDFTNHcpKQ8J0dIvyksJl1y9+ej8Di8yiZkKiPUEzkRMODAS2yxX+mHXHaF71GOr
+         UFHQaIjTca9p6YPJY7hzfv9yYdJjQ96Ksn7gEV9pIkXzPkdHX4wuMakiKcC0ZuSp5L
+         ErrJBGOsdoMKbfGHikdmUyoU5bZbc6KFtSI79pUJ36Oj58DJKH6Y56OXO73mP6ZhPD
+         3Oq1ssPzfQQkw==
+Message-ID: <b0982780-7dd3-7c12-6de5-1c04a4359f57@collabora.com>
+Date:   Wed, 21 Sep 2022 11:18:10 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="itnh57rcj5wjjcou"
-Content-Disposition: inline
-In-Reply-To: <688777fc-e6af-8cbe-b19d-c531a7a66b32@i2se.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v3 1/3] clk: qcom: gdsc: Fix the handling of PWRSTS_RET
+ support
+Content-Language: en-US
+To:     Rajendra Nayak <quic_rjendra@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@somainline.org,
+        mturquette@baylibre.com, sboyd@kernel.org, mka@chromium.org,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        johan+linaro@kernel.org, quic_kriskura@quicinc.com,
+        dianders@chromium.org, linux-clk@vger.kernel.org
+References: <20220920111517.10407-1-quic_rjendra@quicinc.com>
+ <d813e8a5-9eba-b3f7-2eee-cd721d120a30@collabora.com>
+ <096205ee-2c8a-facf-87ce-2309c63d2400@quicinc.com>
+ <1a845259-fce2-d239-588b-a70ea5b19680@collabora.com>
+ <4aa3c16e-fb5a-980c-feb6-883fcbff077c@quicinc.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <4aa3c16e-fb5a-980c-feb6-883fcbff077c@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Il 21/09/22 11:05, Rajendra Nayak ha scritto:
+> 
+> On 9/21/2022 1:21 PM, AngeloGioacchino Del Regno wrote:
+>> Il 20/09/22 15:39, Rajendra Nayak ha scritto:
+>>>
+>>> On 9/20/2022 6:09 PM, AngeloGioacchino Del Regno wrote:
+>>>> Il 20/09/22 13:15, Rajendra Nayak ha scritto:
+>>>>> GDSCs cannot be transitioned into a Retention state in SW.
+>>>>> When either the RETAIN_MEM bit, or both the RETAIN_MEM and
+>>>>> RETAIN_PERIPH bits are set, and the GDSC is left ON, the HW
+>>>>> takes care of retaining the memory/logic for the domain when
+>>>>> the parent domain transitions to power collapse/power off state.
+>>>>>
+>>>>> On some platforms where the parent domains lowest power state
+>>>>> itself is Retention, just leaving the GDSC in ON (without any
+>>>>> RETAIN_MEM/RETAIN_PERIPH bits being set) will also transition
+>>>>> it to Retention.
+>>>>>
+>>>>> The existing logic handling the PWRSTS_RET seems to set the
+>>>>> RETAIN_MEM/RETAIN_PERIPH bits if the cxcs offsets are specified
+>>>>> but then explicitly turns the GDSC OFF as part of _gdsc_disable().
+>>>>> Fix that by leaving the GDSC in ON state.
+>>>>>
+>>>>> Signed-off-by: Rajendra Nayak <quic_rjendra@quicinc.com>
+>>>>> Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>>>>> ---
+>>>>> v3:
+>>>>> Updated changelog
+>>>>>
+>>>>> There are a few existing users of PWRSTS_RET and I am not
+>>>>> sure if they would be impacted with this change
+>>>>>
+>>>>> 1. mdss_gdsc in mmcc-msm8974.c, I am expecting that the
+>>>>> gdsc is actually transitioning to OFF and might be left
+>>>>> ON as part of this change, atleast till we hit system wide
+>>>>> low power state.
+>>>>> If we really leak more power because of this
+>>>>> change, the right thing to do would be to update .pwrsts for
+>>>>> mdss_gdsc to PWRSTS_OFF_ON instead of PWRSTS_RET_ON
+>>>>> I dont have a msm8974 hardware, so if anyone who has can report
+>>>>> any issues I can take a look further on how to fix it.
+>>>>
+>>>> I think that the safest option is to add a PWRSTS_RET_HW_CTRL flag (or similar),
+>>>> used for the specific cases of SC7180 and SC7280 (and possibly others) where the
+>>>> GDSC is automatically transitioned to a Retention state by HW control, with no
+>>>> required software (kernel driver) intervention.
+>>>
+>>> Having a PWRSTS_RET_HW_CTRL flag would make sense if there was also a
+>>> PWRSTS_RET_SW_CTRL way of achieving Retention state, but FWIK there isn't.
+>>> I am sure that's the way it is on 8974 as well, I just don't have hardware to
+>>> confirm.
+>>>
+>>>>
+>>>>>
+>>>>> 2. gpu_gx_gdsc in gpucc-msm8998.c and
+>>>>>     gpu_gx_gdsc in gpucc-sdm660.c
+>>>>> Both of these seem to add support for 3 power state
+>>>>> OFF, RET and ON, however I dont see any logic in gdsc
+>>>>> driver to handle 3 different power states.
+>>>>> So I am expecting that these are infact just transitioning
+>>>>> between ON and OFF and RET state is never really used.
+>>>>> The ideal fix for them would be to just update their resp.
+>>>>> .pwrsts to PWRSTS_OFF_ON only.
+>>>>
+>>>> static int gdsc_init(struct gdsc *sc)
+>>>> {
+>>>>
+>>>>      ...
+>>>>
+>>>>      if (on || (sc->pwrsts & PWRSTS_RET))
+>>>>          gdsc_force_mem_on(sc);
+>>>>      else
+>>>>          gdsc_clear_mem_on(sc);
+>>>>
+>>>>      ...
+>>>> }
+>>>>
+>>>> On MSM8998 and SDM630/636/660, we're reaching that point with a GDSC that is
+>>>> left OFF from the bootloader, but we want (at least for 630/660) memretain
+>>>> without periph-retain: this is required to make the hypervisor happy.
+>>>
+>>> Ideally setting the memretain bits while the GDSC is OFF should have no affect
+>>> at all. Is this for the gpu_gx_gdsc on 630/660? Is this needed only at the init
+>>> time (when the bootloader has left it OFF) or is it needed everytime the kernel
+>>> turns it OFF too?
+>>
+>> Even though I don't remember the flow in a clear way (this entire thing was done
+>> years ago), I'm sure that for PWRSTS_OFF memretain can be cleared, so, the current
+>> flow that we have in gdsc.c does work correctly.
+>>
+>> Ideally, I agree with you that the memretain bits should have no effect at all
+>> while the GDSC is OFF, but that's the situation on these platforms.
+> 
+> Would you be able to test this patch on these platforms to see if we end up
+> with regressions?
+> 
 
---itnh57rcj5wjjcou
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Not in a timely manner.
 
-Hi,
+Konrad, Marijn, Jami, can any of you perform a "fast" test?
 
-On Tue, Sep 20, 2022 at 06:01:08PM +0200, Stefan Wahren wrote:
-> Am 20.09.22 um 14:50 schrieb Maxime Ripard:
-> > We'll need the clock IDs in more drivers than just the clock driver from
-> > now on, so let's move them in the firmware header.
->=20
-> recently as i reviewed the clk-raspberrypi i noticed this, too. But from =
-my
-> point of view the clock ids should go to include/dt-bindings/clock (like
-> bcm2835.h) because these clock ids are actually referenced in the DTS fil=
-es
-> and we need to make sure they are in sync. AFAIR this would also result in
-> change from enum to defines.
->=20
-> Sorry, i didn't had the time to send a patch for this.
+Thanks.
 
-IMO, we need both, and this enum still belongs in the firmware header.
-We have two separate things, the firmware interface and the DT
-interface. The kernel is a consumer for both, but the fact that they
-match is an implementation detail. It might even change in the future
-for all we know.
+>>
+>>> How did we come up with this trick to keep the hypervisor happy, was it picked
+>>> up from some downstream reference code?
+>>
+>> Yes, it was found in various releases of the downstream kernel for 8998/630/660.
+>>
+>>>
+>>>>
+>>>> Regards,
+>>>> Angelo
+>>>>
+>>
 
-So having a header to use defines for the clock indices in the DT looks
-like a good idea to me, but I think we should keep that enum in the
-firmware header as well.
-
-Maxime
-
---itnh57rcj5wjjcou
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYyrWvAAKCRDj7w1vZxhR
-xQb6AP9gsTEDLx4N2ddX7AdtvgY6eQfDUqVGB8S6WhNsSuhe/gD7B0sPmldeC8DV
-XTcG9b2xt1s+i4ha7GqV2l+eQU2chAQ=
-=Um8H
------END PGP SIGNATURE-----
-
---itnh57rcj5wjjcou--
