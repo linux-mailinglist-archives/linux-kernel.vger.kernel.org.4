@@ -2,176 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D1FD5BF283
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 02:58:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AFFE5BF285
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 02:59:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230510AbiIUA6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 20:58:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39030 "EHLO
+        id S229751AbiIUA7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 20:59:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbiIUA6v (ORCPT
+        with ESMTP id S230102AbiIUA7e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 20:58:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D58379A55;
-        Tue, 20 Sep 2022 17:58:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 16510B8128A;
-        Wed, 21 Sep 2022 00:58:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B18D5C433D6;
-        Wed, 21 Sep 2022 00:58:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663721927;
-        bh=Tk5BZ3s9YloXqflrMgU4zATgp2PDiyQTeakuZwFxfJM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cta/AORVvHnTh04B4P8+nB9nYCUCnOkbBCigdJ92AcISI42UNbPXAKtG7h2zotGbl
-         v+qEtiNDoPyQNfAsPl/psNg2ZTKHSU2AycXrq8UWakpVNfrG9XAy4RmRq65MthNh8c
-         jVi21gUNufeRnUxUuoqv3jwH+t/EiT5DXt/1fRplerCe/bASJMkxJzjjtVE6XmD98z
-         NFH11cV4Poy3ddKcGWTSwFUVI3uAqk/36iS4mopI/+sN+2PzY4k+T23pJ+SLBWXZV2
-         258wU7Zzw9BzSlvBx7XYp7oj02O6xZuBmnWScCxEdHV/uvdxudw6sQX7vtid/396Lw
-         /4P1criyOQoBw==
-Date:   Tue, 20 Sep 2022 17:58:47 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Shiyang Ruan <ruansy.fnst@fujitsu.com>,
-        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        nvdimm@lists.linux.dev, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, dan.j.williams@intel.com,
-        hch@infradead.org, jane.chu@oracle.com
-Subject: Re: [PATCH 3/3] mm, pmem, xfs: Introduce MF_MEM_REMOVE for unbind
-Message-ID: <Yyphx31m5fO+OZCI@magnolia>
-References: <9e9521a4-6e07-e226-2814-b78a2451656b@fujitsu.com>
- <1662114961-66-1-git-send-email-ruansy.fnst@fujitsu.com>
- <1662114961-66-4-git-send-email-ruansy.fnst@fujitsu.com>
- <20220920024519.GQ3600936@dread.disaster.area>
+        Tue, 20 Sep 2022 20:59:34 -0400
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52670F27;
+        Tue, 20 Sep 2022 17:59:31 -0700 (PDT)
+Received: by mail-qt1-x829.google.com with SMTP id w2so3091963qtv.9;
+        Tue, 20 Sep 2022 17:59:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=2a9zfDnHDp8v+TWqoFXXlEJw2dZ6+6f8B99krfO7sq8=;
+        b=TFasKd16JpFp1SAV6lXBv66eyOBM6wkBRUYFyvh05hEurroqxrpJAmcpqVP3CZLMAV
+         /vstiufhLPxzWjvEDufT7BGN8tY22O599KiKtph1SGnPUJ1Sp1s4o0oSFRfyVrGqneBe
+         j60mH8nlktDoYXOZ1HdJWRNTzhNDLLfb0rrJMor/wCNHY7lroyikSBHLS+nFOElQzh5h
+         ljT3Ttf61IChxdHJO5gYhWVAwP5+yTpn6T6NQbWeZ2lOqZTn//SQEiDPCGkbOa1kzEc9
+         UBJ82Zz4i2/6A93NdcFEwX9hNAa1AePe9EYlvL7Hl2t4RuUQTho4uSxw48SgI85CosTk
+         wzFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=2a9zfDnHDp8v+TWqoFXXlEJw2dZ6+6f8B99krfO7sq8=;
+        b=fpu+Gah7IN4JXoDYqgmhZYU26sOQx3449QCEXEJy71eg5dVdoTYdFauMrcWm8U3aMi
+         D6paL1w4WOrOf/sT5dXUxSZpthtSbR7UPihIUQn0mwPI8WoWrnOLT+4Dn9ncDT4YIqeG
+         ygVg3tOdw5wLA3ExqkvlvAGgHje3zz3/JcR6fGAvxcM3hXZhgS+gLv5kbovIcL8UmRSn
+         tR5Go2Nl85UNOWL5cb4N4/6gAyTq7ND14Yckk/lxNjISOpABetsLVm3rePPEQOQRE7yO
+         1HlSirxF9A6DOxeOurWPCk/odzRBUYybMidoR0kO40IxLSLPLxhqZFS87LqtwjarPMDL
+         bV7w==
+X-Gm-Message-State: ACrzQf3di/kOM2/wgKGR8e3OGzA4gC2YLdLCbYxoF18ztLiljpm8UrHT
+        SfgjvrzNfNQBo+e+Nf2DdA==
+X-Google-Smtp-Source: AMsMyM5pQpBItci7qAMnH3K+LAj466I/ZoOkv3HgGo7usnS6HmpG9yWNLf5O/u+rWhsSCoYA06/pJg==
+X-Received: by 2002:ac8:4e8f:0:b0:35c:f42e:5a64 with SMTP id 15-20020ac84e8f000000b0035cf42e5a64mr7677441qtp.680.1663721970305;
+        Tue, 20 Sep 2022 17:59:30 -0700 (PDT)
+Received: from bytedance.attlocal.net (ec2-3-231-65-244.compute-1.amazonaws.com. [3.231.65.244])
+        by smtp.gmail.com with ESMTPSA id l15-20020ac8148f000000b0034456277e3asm627748qtj.89.2022.09.20.17.59.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Sep 2022 17:59:29 -0700 (PDT)
+From:   Peilin Ye <yepeilin.cs@gmail.com>
+To:     Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Peilin Ye <peilin.ye@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Alexei Starovoitov <ast@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Peilin Ye <yepeilin.cs@gmail.com>
+Subject: [PATCH net] udp: Use WARN_ON_ONCE() in udp_read_skb()
+Date:   Tue, 20 Sep 2022 17:59:15 -0700
+Message-Id: <20220921005915.2697-1-yepeilin.cs@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220920024519.GQ3600936@dread.disaster.area>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 12:45:19PM +1000, Dave Chinner wrote:
-> On Fri, Sep 02, 2022 at 10:36:01AM +0000, Shiyang Ruan wrote:
-> > This patch is inspired by Dan's "mm, dax, pmem: Introduce
-> > dev_pagemap_failure()"[1].  With the help of dax_holder and
-> > ->notify_failure() mechanism, the pmem driver is able to ask filesystem
-> > (or mapped device) on it to unmap all files in use and notify processes
-> > who are using those files.
-> > 
-> > Call trace:
-> > trigger unbind
-> >  -> unbind_store()
-> >   -> ... (skip)
-> >    -> devres_release_all()   # was pmem driver ->remove() in v1
-> >     -> kill_dax()
-> >      -> dax_holder_notify_failure(dax_dev, 0, U64_MAX, MF_MEM_PRE_REMOVE)
-> >       -> xfs_dax_notify_failure()
-> > 
-> > Introduce MF_MEM_PRE_REMOVE to let filesystem know this is a remove
-> > event.  So do not shutdown filesystem directly if something not
-> > supported, or if failure range includes metadata area.  Make sure all
-> > files and processes are handled correctly.
-> > 
-> > [1]: https://lore.kernel.org/linux-mm/161604050314.1463742.14151665140035795571.stgit@dwillia2-desk3.amr.corp.intel.com/
-> > 
-> > Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
-> > ---
-> >  drivers/dax/super.c         |  3 ++-
-> >  fs/xfs/xfs_notify_failure.c | 23 +++++++++++++++++++++++
-> >  include/linux/mm.h          |  1 +
-> >  3 files changed, 26 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/dax/super.c b/drivers/dax/super.c
-> > index 9b5e2a5eb0ae..cf9a64563fbe 100644
-> > --- a/drivers/dax/super.c
-> > +++ b/drivers/dax/super.c
-> > @@ -323,7 +323,8 @@ void kill_dax(struct dax_device *dax_dev)
-> >  		return;
-> >  
-> >  	if (dax_dev->holder_data != NULL)
-> > -		dax_holder_notify_failure(dax_dev, 0, U64_MAX, 0);
-> > +		dax_holder_notify_failure(dax_dev, 0, U64_MAX,
-> > +				MF_MEM_PRE_REMOVE);
-> >  
-> >  	clear_bit(DAXDEV_ALIVE, &dax_dev->flags);
-> >  	synchronize_srcu(&dax_srcu);
-> > diff --git a/fs/xfs/xfs_notify_failure.c b/fs/xfs/xfs_notify_failure.c
-> > index 3830f908e215..5e04ba7fa403 100644
-> > --- a/fs/xfs/xfs_notify_failure.c
-> > +++ b/fs/xfs/xfs_notify_failure.c
-> > @@ -22,6 +22,7 @@
-> >  
-> >  #include <linux/mm.h>
-> >  #include <linux/dax.h>
-> > +#include <linux/fs.h>
-> >  
-> >  struct xfs_failure_info {
-> >  	xfs_agblock_t		startblock;
-> > @@ -77,6 +78,9 @@ xfs_dax_failure_fn(
-> >  
-> >  	if (XFS_RMAP_NON_INODE_OWNER(rec->rm_owner) ||
-> >  	    (rec->rm_flags & (XFS_RMAP_ATTR_FORK | XFS_RMAP_BMBT_BLOCK))) {
-> > +		/* The device is about to be removed.  Not a really failure. */
-> > +		if (notify->mf_flags & MF_MEM_PRE_REMOVE)
-> > +			return 0;
-> >  		notify->want_shutdown = true;
-> >  		return 0;
-> >  	}
-> > @@ -182,12 +186,23 @@ xfs_dax_notify_failure(
-> >  	struct xfs_mount	*mp = dax_holder(dax_dev);
-> >  	u64			ddev_start;
-> >  	u64			ddev_end;
-> > +	int			error;
-> >  
-> >  	if (!(mp->m_super->s_flags & SB_BORN)) {
-> >  		xfs_warn(mp, "filesystem is not ready for notify_failure()!");
-> >  		return -EIO;
-> >  	}
-> >  
-> > +	if (mf_flags & MF_MEM_PRE_REMOVE) {
-> > +		xfs_info(mp, "device is about to be removed!");
-> > +		down_write(&mp->m_super->s_umount);
-> > +		error = sync_filesystem(mp->m_super);
-> > +		drop_pagecache_sb(mp->m_super, NULL);
-> > +		up_write(&mp->m_super->s_umount);
-> > +		if (error)
-> > +			return error;
-> 
-> If the device is about to go away unexpectedly, shouldn't this shut
-> down the filesystem after syncing it here?  If the filesystem has
-> been shut down, then everything will fail before removal finally
-> triggers, and the act of unmounting the filesystem post device
-> removal will clean up the page cache and all the other caches.
+From: Peilin Ye <peilin.ye@bytedance.com>
 
-IIRC they want to kill all the processes with MAP_SYNC mappings sooner
-than whenever the admin gets around to unmounting the filesystem, which
-is why PRE_REMOVE will then go walk the rmapbt to find processes to
-shoot down.  I'm not sure, though, if drop_pagecache_sb only touches
-DRAM page cache or if it'll shoot down fsdax mappings too?
+Prevent udp_read_skb() from flooding the syslog.
 
-> IOWs, I don't understand why the page cache is considered special
-> here (as opposed to, say, the inode or dentry caches), nor why we
-> aren't shutting down the filesystem directly after syncing it to
-> disk to ensure that we don't end up with applications losing data as
-> a result of racing with the removal....
+Suggested-by: Jakub Sitnicki <jakub@cloudflare.com>
+Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
+---
+ net/ipv4/udp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-But yeah, we might as well shut down the fs at the end of PRE_REMOVE
-handling, if the rmap walk hasn't already done that.
+diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+index cd72158e953a..560d9eadeaa5 100644
+--- a/net/ipv4/udp.c
++++ b/net/ipv4/udp.c
+@@ -1821,7 +1821,7 @@ int udp_read_skb(struct sock *sk, skb_read_actor_t recv_actor)
+ 			continue;
+ 		}
+ 
+-		WARN_ON(!skb_set_owner_sk_safe(skb, sk));
++		WARN_ON_ONCE(!skb_set_owner_sk_safe(skb, sk));
+ 		used = recv_actor(sk, skb);
+ 		if (used <= 0) {
+ 			if (!copied)
+-- 
+2.20.1
 
---D
-
-> Cheers,
-> 
-> Dave.
-> -- 
-> Dave Chinner
-> david@fromorbit.com
