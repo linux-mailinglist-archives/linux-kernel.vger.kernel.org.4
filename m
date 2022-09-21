@@ -2,127 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B720C5E56C8
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 01:36:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 291645E56CA
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 01:40:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbiIUXgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 19:36:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49824 "EHLO
+        id S229701AbiIUXkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 19:40:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiIUXgB (ORCPT
+        with ESMTP id S229551AbiIUXkU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 19:36:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A01A1A72;
-        Wed, 21 Sep 2022 16:36:00 -0700 (PDT)
+        Wed, 21 Sep 2022 19:40:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2388F67141;
+        Wed, 21 Sep 2022 16:40:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2085D62DF6;
-        Wed, 21 Sep 2022 23:36:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A973C433C1;
-        Wed, 21 Sep 2022 23:35:58 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ijKVoCKw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1663803356;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=S/n8TJNSRzdFdOsY5cyk0+HSK5arZ9DdVtB31KuuOXM=;
-        b=ijKVoCKweZnyiZ3Wu+h804zCQJcUcpRaPjO8yQKTRFTwqXl0jjDqaHNkDsNLdJQHoHaNAK
-        IrhuwrGKq9pqJkQVzAxSqnJBv8prKkbMJaFaoeIOiprzxh3fsqgNvHJe2Kyt5pHd6nW2F+
-        xjdgYFxFcRmg6q1egiMIA/OqBdZgxXQ=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 123ba1c6 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Wed, 21 Sep 2022 23:35:56 +0000 (UTC)
-Date:   Thu, 22 Sep 2022 01:35:53 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Sherry Yang <sherry.yang@oracle.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rt-users@vger.kernel.org,
-        Tejun Heo <tj@kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Sebastian Siewior <bigeasy@linutronix.de>,
-        sultan@kerneltoast.com
-Cc:     Jack Vogel <jack.vogel@oracle.com>,
-        Tariq Toukan <tariqt@nvidia.com>
-Subject: Re: 10% regression in qperf tcp latency after introducing commit
- "4a61bf7f9b18 random: defer fast pool mixing to worker"
-Message-ID: <Yyuf2aXlLdCu9pi1@zx2c4.com>
-References: <B1BC4DB8-8F40-4975-B8E7-9ED9BFF1D50E@oracle.com>
- <CAHmME9rUn0b5FKNFYkxyrn5cLiuW_nOxUZi3mRpPaBkUo9JWEQ@mail.gmail.com>
- <04044E39-B150-4147-A090-3D942AF643DF@oracle.com>
- <CAHmME9oKcqceoFpKkooCp5wriLLptpN=+WrrG0KcDWjBahM0bQ@mail.gmail.com>
- <BD03BFF6-C369-4D34-A38B-49653F1CBC53@oracle.com>
- <YyuREcGAXV9828w5@zx2c4.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id CC31EB8336D;
+        Wed, 21 Sep 2022 23:40:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 67A7CC433D7;
+        Wed, 21 Sep 2022 23:40:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663803616;
+        bh=gx8WMZqzq0+H7zdC8DGV7XVEwgg9fq7Lx1nSTcqWSL8=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=O2b7qP8QFLVI7Or467AX5aZXnXOIwz3mEI0cEpKuGBkDDl0RGaUDm3O8tVF8srRnr
+         JkhzhswZAAHVr7p7n4EkfHvypauoEV9qT1L7TOgIMs1aw3tvA4c49hfgjr581iPgfp
+         JMvfnbjSj9Y2p0MzpCkQeIEzs6JSgQLp7tdyvcvnfjdNsGuDmQyI8wDpCHJwxzBsyw
+         ZMdkSGvxXpJDgeIkOKfj3PyLL206I7+s8qaI+LyF/XU/ihVNkhoxtp/FfDhYChyLJZ
+         ojAitAoIba+scr/muk7G2CXMTT3PirmpSC9rJpluhLDo/9mavYHOMTOf8us+0j/ugL
+         9Op54QyyjSBnA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 460D7E4D03D;
+        Wed, 21 Sep 2022 23:40:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YyuREcGAXV9828w5@zx2c4.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v6 0/4] bpf: Add user-space-publisher ring buffer map type
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166380361628.10161.4038336755255982198.git-patchwork-notify@kernel.org>
+Date:   Wed, 21 Sep 2022 23:40:16 +0000
+References: <20220920000100.477320-1-void@manifault.com>
+In-Reply-To: <20220920000100.477320-1-void@manifault.com>
+To:     David Vernet <void@manifault.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, kernel-team@fb.com, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org, tj@kernel.org,
+        brho@google.com, joshdon@google.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey again Sherry,
+Hello:
 
-On Thu, Sep 22, 2022 at 12:32:49AM +0200, Jason A. Donenfeld wrote:
-> That leads me to suspect that queue_work_on() might actually not be as
-> cheap as I assumed? If so, is that surprising to anybody else? And what
-> should we do about this?
+This series was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
 
-Sultan (CC'd) suggested I look at the much less expensive softirq
-tasklet for this, which matches the use case pretty much entirely as
-well. Can you try out this patch below and see if it resolves the
-performance regression?
+On Mon, 19 Sep 2022 19:00:56 -0500 you wrote:
+> This patch set defines a new map type, BPF_MAP_TYPE_USER_RINGBUF, which
+> provides single-user-space-producer / single-kernel-consumer semantics over
+> a ring buffer.  Along with the new map type, a helper function called
+> bpf_user_ringbuf_drain() is added which allows a BPF program to specify a
+> callback with the following signature, to which samples are posted by the
+> helper:
+> 
+> [...]
 
-Thanks,
-Jason
+Here is the summary with links:
+  - [v6,1/4] bpf: Define new BPF_MAP_TYPE_USER_RINGBUF map type
+    https://git.kernel.org/bpf/bpf-next/c/583c1f420173
+  - [v6,2/4] bpf: Add bpf_user_ringbuf_drain() helper
+    https://git.kernel.org/bpf/bpf-next/c/205715673844
+  - [v6,3/4] bpf: Add libbpf logic for user-space ring buffer
+    https://git.kernel.org/bpf/bpf-next/c/b66ccae01f1d
+  - [v6,4/4] selftests/bpf: Add selftests validating the user ringbuf
+    https://git.kernel.org/bpf/bpf-next/c/e5a9df51c746
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index 520a385c7dab..ad17b36cf977 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -918,13 +918,16 @@ EXPORT_SYMBOL_GPL(unregister_random_vmfork_notifier);
- #endif
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
- struct fast_pool {
--	struct work_struct mix;
-+	struct tasklet_struct mix;
- 	unsigned long pool[4];
- 	unsigned long last;
- 	unsigned int count;
- };
-
-+static void mix_interrupt_randomness(struct tasklet_struct *work);
-+
- static DEFINE_PER_CPU(struct fast_pool, irq_randomness) = {
-+	.mix = { .use_callback = true, .callback = mix_interrupt_randomness },
- #ifdef CONFIG_64BIT
- #define FASTMIX_PERM SIPHASH_PERMUTATION
- 	.pool = { SIPHASH_CONST_0, SIPHASH_CONST_1, SIPHASH_CONST_2, SIPHASH_CONST_3 }
-@@ -973,7 +976,7 @@ int __cold random_online_cpu(unsigned int cpu)
- }
- #endif
-
--static void mix_interrupt_randomness(struct work_struct *work)
-+static void mix_interrupt_randomness(struct tasklet_struct *work)
- {
- 	struct fast_pool *fast_pool = container_of(work, struct fast_pool, mix);
- 	/*
-@@ -1027,10 +1030,8 @@ void add_interrupt_randomness(int irq)
- 	if (new_count < 1024 && !time_is_before_jiffies(fast_pool->last + HZ))
- 		return;
-
--	if (unlikely(!fast_pool->mix.func))
--		INIT_WORK(&fast_pool->mix, mix_interrupt_randomness);
- 	fast_pool->count |= MIX_INFLIGHT;
--	queue_work_on(raw_smp_processor_id(), system_highpri_wq, &fast_pool->mix);
-+	tasklet_hi_schedule(&fast_pool->mix);
- }
- EXPORT_SYMBOL_GPL(add_interrupt_randomness);
 
