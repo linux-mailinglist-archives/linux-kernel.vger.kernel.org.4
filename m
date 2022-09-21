@@ -2,746 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0A825BFDBE
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 14:21:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7336C5BFDD2
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 14:28:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbiIUMVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 08:21:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47606 "EHLO
+        id S229833AbiIUM2k convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 21 Sep 2022 08:28:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbiIUMV3 (ORCPT
+        with ESMTP id S229677AbiIUM2h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 08:21:29 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DE308A1FF;
-        Wed, 21 Sep 2022 05:21:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1663762888; x=1695298888;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=dgdYLbX1qUoPFjIGrn3C5L3BLZi553PH1I2pPFQxoeg=;
-  b=XTYUyf6nWNwniT2AqdLDzD6eXIlihBKyJ3SuEjlmZ+vK+5+I4SrBttb1
-   y95P59ruP88FctudLQXbPcda6bUDHuwvjidpo66HpjVkDcg9EyrVFxD5M
-   5c5WS9KCXIQ3GL2gpRUvCHfPlJ0CQsy/RRJjMduHIk09emjrTFyXYAC0E
-   wUBV5gGlxvYz+XKnU18Toj+YS7AwaD2qziOPBSPD9E5Q9ty00OBy73Ev+
-   VqvF6jxpiuZgGnuCIZneySQEe37KU9Vw4JDxV0QJyWRKq8XNnJMQuJSzN
-   QhFlCvCcwH3v31fvj0QulmZ++tg/WXX26t6a6zhyvsrzti/j8S/DriA1k
-   g==;
-X-IronPort-AV: E=Sophos;i="5.93,333,1654585200"; 
-   d="scan'208";a="174903322"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 21 Sep 2022 05:21:28 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Wed, 21 Sep 2022 05:21:27 -0700
-Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Wed, 21 Sep 2022 05:21:25 -0700
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     <UNGLinuxDriver@microchip.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: [PATCH net-next v2 4/4] net: lan966x: Add offload support for taprio
-Date:   Wed, 21 Sep 2022 14:25:38 +0200
-Message-ID: <20220921122538.2079744-5-horatiu.vultur@microchip.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220921122538.2079744-1-horatiu.vultur@microchip.com>
-References: <20220921122538.2079744-1-horatiu.vultur@microchip.com>
+        Wed, 21 Sep 2022 08:28:37 -0400
+Received: from de-smtp-delivery-113.mimecast.com (de-smtp-delivery-113.mimecast.com [194.104.111.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 455883D59F
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 05:28:35 -0700 (PDT)
+Received: from CHE01-ZR0-obe.outbound.protection.outlook.com
+ (mail-zr0che01lp2109.outbound.protection.outlook.com [104.47.22.109]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ de-mta-54-ACdG82exPDmw7D2lqQ5xdw-2; Wed, 21 Sep 2022 14:28:30 +0200
+X-MC-Unique: ACdG82exPDmw7D2lqQ5xdw-2
+Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:2e::8) by
+ ZRAP278MB0128.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:13::14) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5654.16; Wed, 21 Sep 2022 12:28:28 +0000
+Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::6c6d:333:ab23:3f5b]) by ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::6c6d:333:ab23:3f5b%2]) with mapi id 15.20.5632.021; Wed, 21 Sep 2022
+ 12:28:28 +0000
+Date:   Wed, 21 Sep 2022 14:28:27 +0200
+From:   Francesco Dolcini <francesco.dolcini@toradex.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Marcel Ziswiler <marcel@ziswiler.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 4/4] arm: dts: imx7-colibri: remove spurious debounce
+ property
+Message-ID: <20220921122827.GB41442@francesco-nb.int.toradex.com>
+References: <20220920092227.286306-1-marcel@ziswiler.com>
+ <20220920092227.286306-5-marcel@ziswiler.com>
+ <20220921121505.GA41442@francesco-nb.int.toradex.com>
+ <YysCNT2/qOi/BUC4@kroah.com>
+In-Reply-To: <YysCNT2/qOi/BUC4@kroah.com>
+X-ClientProxiedBy: ZR0P278CA0084.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:22::17) To ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:2e::8)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: ZRAP278MB0495:EE_|ZRAP278MB0128:EE_
+X-MS-Office365-Filtering-Correlation-Id: c17aa327-49e0-4d6d-f5bd-08da9bccc96b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0
+X-Microsoft-Antispam-Message-Info: RZ+F9U0g6GKz4PbPbGUqPpWToCYkLf+j5DZOSQb9PkMStWHnrNXdGhQkrSvmrxMfH+gPCd+zgW8L/xicDxjrBBVqV2q9DNfMp8Esn4jdN0mOmgYW2v84Hu1pTq3ksWXCFvdxpWVFWKvgefA9ZXnab5dmbA0bQEnW9EolCg3dDUDG15V4tSy4I9TsyYBUzwIE7Veqqj0d4KXVL+FM9FHrQCVJmlzxzVE+PyVwL4N7ivDyFfT4dSQ8JRJelG9tmP/5/Fcr1Stdj+u9smowOGPJ0p8bcQWp6dvruPmG88pD1PfGm0b8LXmqqaLkIgBjt0q/5/9hxy9qUmwUQjj8CUPA9FKQF0GAKG7BG5dQTZE7suM7dHJK34IFuws4bvPRQDdHxqu1ERk9vSQdgZuQIRMjM72Sc6z0euU2OKrCerIhFsTx7wNy9KDt0ghow1GnsPMK/7oXyiXPF0/Ra4uRKGluw5JJxpDokeMlBvWdPWsA7CpE+nC2yea3Vs/arw6Vtw+XYAT4txMp4ZONvw8OAZsOCVDEMW1Zx3Lvh0MOB4aYsyNys0oXaZ2wMWw1UL2WHbhjAJfl9OxUXd8ZdV1alkDvUzbUTWZ6eh/lR2FPCRxnLpj0jvI7H5hMQUfYfCFKPxpmrGieeavmJED/8hFcOV7zHA6rfCodfrYdJDXimBgLaRR0ExtJDf7SY6M2u0AaXIyq5uzUEkQ86ARobQmwljE/PKaBkf1/NZ5vUt7GMkpIPQ9BXG+rRsL909OfmsTfM5HQzzvcLpcOhum3lnyWJqFGdA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(366004)(39850400004)(376002)(346002)(396003)(451199015)(44832011)(186003)(33656002)(6916009)(8936002)(54906003)(7416002)(316002)(86362001)(66946007)(66476007)(8676002)(4326008)(66556008)(5660300002)(41300700001)(83380400001)(6486002)(6506007)(478600001)(1076003)(38100700002)(38350700002)(52116002)(6512007)(26005)(2906002);DIR:OUT;SFP:1102
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Ym1LywUC6rcjPaK2JXP3E8Dfp8JHZKKn0weRUpxcnJ1mim2stR/wDLs9ZiA6?=
+ =?us-ascii?Q?S1ScDs/d7huJ8w5SMSOALPzlCe2pFr0jim3l2+U+uCCB3VVTvHCiUdBc1vtv?=
+ =?us-ascii?Q?rCwrE+vT9XGTR2wey/1tTgfd8ZUvzlnAtiOzl+4y2v4osMo5A3vdR7lHh/0O?=
+ =?us-ascii?Q?OMw4WU8BY17WEX5P1bvrptV37drdxbFAR+OvARp5tVLsydt/qNaGxlZmGiPk?=
+ =?us-ascii?Q?X8eKzGHqNDJsK6R9nV+uA5Eitfw5QJe0EEW4ZSaNZ1iYSzBMflPDEzHl9ySD?=
+ =?us-ascii?Q?TNp9fS+fT784bfeGt0v1X6ibhjWuzTL6gDcqA7X/brx/KXbXHzQg9vL1Q3cP?=
+ =?us-ascii?Q?GUnAYTRg+GTKFV1yde8OP2SSAwwV8H4yVzp4QiJ7C2qIrSs8L1ympkZurK0c?=
+ =?us-ascii?Q?gvHzFNnbONEeafTh/FDIi8mt67NEN3KxFIHESGXUK5KYuUzn5i0Ou+t81/LE?=
+ =?us-ascii?Q?CjZ7YSYfQOZNE3s2eac5DP+J/g1JNREzGaJZdOYM/c8cihvEphZsWjoqvBYF?=
+ =?us-ascii?Q?h2FWUhpDFjWNUvnlt8tydgFHRL3zptJlmDMWSKZfjWfsqWqnWBCMb5c/90g7?=
+ =?us-ascii?Q?h50ovSnMIjtdXeULrSxjhsw9FXIQ3Q/V5UiKwMeJSJD41iFREAYIzKpIZYYS?=
+ =?us-ascii?Q?GK4J8O4w88iE/kcrERbmsN84k79ls8lJdV7P7GcYNCplXErlEIBqxAizelk9?=
+ =?us-ascii?Q?09o0RIaghwXrsJmj/OPgisiIiZWLvua/VWSIcy2V0Q1qNE78bCsZHqLA0GdU?=
+ =?us-ascii?Q?JVyjM+KuBKrjV7O5sJlhrm/eBfrkOX/e4Z8Qg3cEbvn1WZOwxxjlcyRaPsdR?=
+ =?us-ascii?Q?woM6am2qRQp1fMLiqV/70NIorSogo1rmTK9ApBbRqhVaQCRoes6EA5Ci4PDn?=
+ =?us-ascii?Q?DIaWBf36/pnQWHTLvmYmCYGvTzNU9M3Fc8rNT7V5ahSaMufDOHO76WRs5S2I?=
+ =?us-ascii?Q?Z65uIrc4GzQCJ3Az1Cf+I2DHAqxeMqj/lV5TVtaxKbhWJrgWA7R/iV79/IXD?=
+ =?us-ascii?Q?ziOcZiZwQjtwuSvZZErPdVXaN6hl/vNxeOJIVgfUq3n66KPxJjGabArZanPJ?=
+ =?us-ascii?Q?fE6Etjs+aZtdFLA1wlw0oRx/c2R43dCdbI9kuxUxUa1DIowY9ocRCcCo2rlA?=
+ =?us-ascii?Q?v3xoUiTshNvJKUu0XIOzZvAoRWYEO9gvpCIBdGeTIe8PHThx0YxXxY4ViPCB?=
+ =?us-ascii?Q?uQiQaeXyA1EkczOy1lKHUImpiIOgWrsfHZuMaPxQApmVaPKYL2jr3d9cEhKV?=
+ =?us-ascii?Q?MbzB9ElkU4VW3bwzyVHXiTo7vwMRr9NjMJse3uRPzP2qKvGcu9mpBlp57zFm?=
+ =?us-ascii?Q?dn9xoK3u1V4gToUJYb9O/0+ti6S7GQ05Dm6/zDV5GOiLHz4LJwv8Zrava7Jc?=
+ =?us-ascii?Q?urqDF1/325HK7vL6oKC2GUWlrjDAyPWn7aDzQya3tziT7LKXwHOsNyw5y5lU?=
+ =?us-ascii?Q?JVwru/tAyXelnZ077IhOLDf8AzGW/y9I4Dob2GG95Lft2OTJ/WkXPJ63qiz4?=
+ =?us-ascii?Q?Hh399GY9T9OL2Iv1Vv/soGVJ42quFmPGKXa2EXfc1yYJ7k9wCVe3BrGGOAGI?=
+ =?us-ascii?Q?d37LO++pOR87JIPHe2STVeQNRVQheN2Q6gXI1yEkcfXwibzfcOq3obVqQQ8J?=
+ =?us-ascii?Q?dGbfarn73/ko5ZqdfY1DrWQ=3D?=
+X-OriginatorOrg: toradex.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c17aa327-49e0-4d6d-f5bd-08da9bccc96b
+X-MS-Exchange-CrossTenant-AuthSource: ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Sep 2022 12:28:28.2056
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: d9995866-0d9b-4251-8315-093f062abab4
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: dKdhZvh1WRHOrVektjnIgpnSrcuOgPPtlX8QgRhXoxp6SO1AbJPnFINjaZ5O08pBbBW3thmN/rQjSFEDiS8+zdpEw51fzWcZAppASzaHZUc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZRAP278MB0128
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: toradex.com
+Content-Type: text/plain; charset=WINDOWS-1252
+Content-Disposition: inline
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Lan966x switch supports time-based egress shaping in hardware
-according to IEEE 802.1Qbv. Add support for TAS configuration on
-egress port of lan966x switch.
+On Wed, Sep 21, 2022 at 02:23:17PM +0200, Greg Kroah-Hartman wrote:
+> On Wed, Sep 21, 2022 at 02:15:05PM +0200, Francesco Dolcini wrote:
+> > +Greg, to get an opinion on the fixes tag.
+> > 
+> > On Tue, Sep 20, 2022 at 11:22:27AM +0200, Marcel Ziswiler wrote:
+> > > From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+> > > 
+> > > Remove spurious debounce property from linux,extcon-usb-gpio.
+> > > 
+> > > Note that debouncing is hard-coded to 20 ms (USB_GPIO_DEBOUNCE_MS
+> > > define).
+> > > 
+> > > Fixes: 0ef1969ea569 ("ARM: dts: imx7-colibri: move aliases, chosen, extcon and gpio-keys")
+> > > Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+> > 
+> > Hello all,
+> > we did have some (internal) discussion if this patch should have the
+> > fixes tag or not.
+> > 
+> > I do personally think it should not have it and should not be backported
+> > to stable tree, since this is not fixing a real bug, it's just a
+> > cleanup.
+> 
+> If it's not a real bug, why would you have a Fixes: tag on the commit?
+> 
+> > On the other hand the original patch was not correct, and this change is
+> > making it right.
+> 
+> Ah, so it is a bugfix.
 
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
----
- .../net/ethernet/microchip/lan966x/Makefile   |   2 +-
- .../ethernet/microchip/lan966x/lan966x_main.c |   3 +
- .../ethernet/microchip/lan966x/lan966x_main.h |  10 +
- .../ethernet/microchip/lan966x/lan966x_port.c |   2 +
- .../ethernet/microchip/lan966x/lan966x_ptp.c  |   9 +-
- .../microchip/lan966x/lan966x_taprio.c        | 528 ++++++++++++++++++
- .../ethernet/microchip/lan966x/lan966x_tc.c   |   9 +
- 7 files changed, 560 insertions(+), 3 deletions(-)
- create mode 100644 drivers/net/ethernet/microchip/lan966x/lan966x_taprio.c
+The DTS file should not contain this unknown property, however having
+this property present does not change the behavior of the code.
 
-diff --git a/drivers/net/ethernet/microchip/lan966x/Makefile b/drivers/net/ethernet/microchip/lan966x/Makefile
-index 2ea66b94abac9..cac8b3901eaef 100644
---- a/drivers/net/ethernet/microchip/lan966x/Makefile
-+++ b/drivers/net/ethernet/microchip/lan966x/Makefile
-@@ -9,4 +9,4 @@ lan966x-switch-objs  := lan966x_main.o lan966x_phylink.o lan966x_port.o \
- 			lan966x_mac.o lan966x_ethtool.o lan966x_switchdev.o \
- 			lan966x_vlan.o lan966x_fdb.o lan966x_mdb.o \
- 			lan966x_ptp.o lan966x_fdma.o lan966x_lag.o \
--			lan966x_tc.o lan966x_mqprio.o
-+			lan966x_tc.o lan966x_mqprio.o lan966x_taprio.o
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-index 033120a5b056c..b98d37c76edbc 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-@@ -963,6 +963,8 @@ static void lan966x_init(struct lan966x *lan966x)
- 		lan966x, ANA_ANAINTR);
- 
- 	spin_lock_init(&lan966x->tx_lock);
-+
-+	lan966x_taprio_init(lan966x);
- }
- 
- static int lan966x_ram_init(struct lan966x *lan966x)
-@@ -1172,6 +1174,7 @@ static int lan966x_remove(struct platform_device *pdev)
- {
- 	struct lan966x *lan966x = platform_get_drvdata(pdev);
- 
-+	lan966x_taprio_deinit(lan966x);
- 	lan966x_fdma_deinit(lan966x);
- 	lan966x_cleanup_ports(lan966x);
- 
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-index b037b1feec8f3..935c116715939 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-@@ -9,6 +9,7 @@
- #include <linux/phy.h>
- #include <linux/phylink.h>
- #include <linux/ptp_clock_kernel.h>
-+#include <net/pkt_sched.h>
- #include <net/switchdev.h>
- 
- #include "lan966x_regs.h"
-@@ -410,6 +411,8 @@ void lan966x_ptp_txtstamp_release(struct lan966x_port *port,
- 				  struct sk_buff *skb);
- irqreturn_t lan966x_ptp_irq_handler(int irq, void *args);
- irqreturn_t lan966x_ptp_ext_irq_handler(int irq, void *args);
-+u32 lan966x_ptp_get_period_ps(void);
-+int lan966x_ptp_gettime64(struct ptp_clock_info *ptp, struct timespec64 *ts);
- 
- int lan966x_fdma_xmit(struct sk_buff *skb, __be32 *ifh, struct net_device *dev);
- int lan966x_fdma_change_mtu(struct lan966x *lan966x);
-@@ -452,6 +455,13 @@ int lan966x_tc_setup(struct net_device *dev, enum tc_setup_type type,
- int lan966x_mqprio_add(struct lan966x_port *port, u8 num_tc);
- int lan966x_mqprio_del(struct lan966x_port *port);
- 
-+void lan966x_taprio_init(struct lan966x *lan966x);
-+void lan966x_taprio_deinit(struct lan966x *lan966x);
-+int lan966x_taprio_add(struct lan966x_port *port,
-+		       struct tc_taprio_qopt_offload *qopt);
-+int lan966x_taprio_del(struct lan966x_port *port);
-+int lan966x_taprio_speed_set(struct lan966x_port *port, int speed);
-+
- static inline void __iomem *lan_addr(void __iomem *base[],
- 				     int id, int tinst, int tcnt,
- 				     int gbase, int ginst,
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_port.c b/drivers/net/ethernet/microchip/lan966x/lan966x_port.c
-index 702542fa0902d..0050fcb988b75 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_port.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_port.c
-@@ -165,6 +165,8 @@ static void lan966x_port_link_up(struct lan966x_port *port)
- 		break;
- 	}
- 
-+	lan966x_taprio_speed_set(port, config->speed);
-+
- 	/* Also the GIGA_MODE_ENA(1) needs to be set regardless of the
- 	 * port speed for QSGMII ports.
- 	 */
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_ptp.c b/drivers/net/ethernet/microchip/lan966x/lan966x_ptp.c
-index 3a621c5165bc5..e5a2bbe064f8f 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_ptp.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_ptp.c
-@@ -464,8 +464,7 @@ static int lan966x_ptp_settime64(struct ptp_clock_info *ptp,
- 	return 0;
- }
- 
--static int lan966x_ptp_gettime64(struct ptp_clock_info *ptp,
--				 struct timespec64 *ts)
-+int lan966x_ptp_gettime64(struct ptp_clock_info *ptp, struct timespec64 *ts)
- {
- 	struct lan966x_phc *phc = container_of(ptp, struct lan966x_phc, info);
- 	struct lan966x *lan966x = phc->lan966x;
-@@ -890,3 +889,9 @@ void lan966x_ptp_rxtstamp(struct lan966x *lan966x, struct sk_buff *skb,
- 	shhwtstamps = skb_hwtstamps(skb);
- 	shhwtstamps->hwtstamp = full_ts_in_ns;
- }
-+
-+u32 lan966x_ptp_get_period_ps(void)
-+{
-+	/* This represents the system clock period in picoseconds */
-+	return 15125;
-+}
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_taprio.c b/drivers/net/ethernet/microchip/lan966x/lan966x_taprio.c
-new file mode 100644
-index 0000000000000..3f5b212066c5c
---- /dev/null
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_taprio.c
-@@ -0,0 +1,528 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+
-+#include "lan966x_main.h"
-+
-+#define LAN966X_TAPRIO_TIMEOUT_MS		1000
-+#define LAN966X_TAPRIO_ENTRIES_PER_PORT		2
-+
-+/* Minimum supported cycle time in nanoseconds */
-+#define LAN966X_TAPRIO_MIN_CYCLE_TIME_NS	NSEC_PER_USEC
-+
-+/* Maximum supported cycle time in nanoseconds */
-+#define LAN966X_TAPRIO_MAX_CYCLE_TIME_NS	(NSEC_PER_SEC - 1)
-+
-+/* Total number of TAS GCL entries */
-+#define LAN966X_TAPRIO_NUM_GCL			256
-+
-+/* TAPRIO link speeds for calculation of guard band */
-+enum lan966x_taprio_link_speed {
-+	LAN966X_TAPRIO_SPEED_NO_GB,
-+	LAN966X_TAPRIO_SPEED_10,
-+	LAN966X_TAPRIO_SPEED_100,
-+	LAN966X_TAPRIO_SPEED_1000,
-+	LAN966X_TAPRIO_SPEED_2500,
-+};
-+
-+/* TAPRIO list states */
-+enum lan966x_taprio_state {
-+	LAN966X_TAPRIO_STATE_ADMIN,
-+	LAN966X_TAPRIO_STATE_ADVANCING,
-+	LAN966X_TAPRIO_STATE_PENDING,
-+	LAN966X_TAPRIO_STATE_OPERATING,
-+	LAN966X_TAPRIO_STATE_TERMINATING,
-+	LAN966X_TAPRIO_STATE_MAX,
-+};
-+
-+/* TAPRIO GCL command */
-+enum lan966x_taprio_gcl_cmd {
-+	LAN966X_TAPRIO_GCL_CMD_SET_GATE_STATES = 0,
-+};
-+
-+static u32 lan966x_taprio_list_index(struct lan966x_port *port, u8 entry)
-+{
-+	return port->chip_port * LAN966X_TAPRIO_ENTRIES_PER_PORT + entry;
-+}
-+
-+static u32 lan966x_taprio_list_state_get(struct lan966x_port *port)
-+{
-+	struct lan966x *lan966x = port->lan966x;
-+	u32 val;
-+
-+	val = lan_rd(lan966x, QSYS_TAS_LST);
-+	return QSYS_TAS_LST_LIST_STATE_GET(val);
-+}
-+
-+static u32 lan966x_taprio_list_index_state_get(struct lan966x_port *port,
-+					       u32 list)
-+{
-+	struct lan966x *lan966x = port->lan966x;
-+
-+	lan_rmw(QSYS_TAS_CFG_CTRL_LIST_NUM_SET(list),
-+		QSYS_TAS_CFG_CTRL_LIST_NUM,
-+		lan966x, QSYS_TAS_CFG_CTRL);
-+
-+	return lan966x_taprio_list_state_get(port);
-+}
-+
-+static void lan966x_taprio_list_state_set(struct lan966x_port *port,
-+					  u32 state)
-+{
-+	struct lan966x *lan966x = port->lan966x;
-+
-+	lan_rmw(QSYS_TAS_LST_LIST_STATE_SET(state),
-+		QSYS_TAS_LST_LIST_STATE,
-+		lan966x, QSYS_TAS_LST);
-+}
-+
-+static int lan966x_taprio_list_shutdown(struct lan966x_port *port,
-+					u32 list)
-+{
-+	struct lan966x *lan966x = port->lan966x;
-+	bool pending, operating;
-+	unsigned long end;
-+	u32 state;
-+
-+	end = jiffies +  msecs_to_jiffies(LAN966X_TAPRIO_TIMEOUT_MS);
-+	/* It is required to try multiple times to set the state of list,
-+	 * because the HW can overwrite this.
-+	 */
-+	do {
-+		state = lan966x_taprio_list_state_get(port);
-+
-+		pending = false;
-+		operating = false;
-+
-+		if (state == LAN966X_TAPRIO_STATE_ADVANCING ||
-+		    state == LAN966X_TAPRIO_STATE_PENDING) {
-+			lan966x_taprio_list_state_set(port,
-+						      LAN966X_TAPRIO_STATE_ADMIN);
-+			pending = true;
-+		}
-+
-+		if (state == LAN966X_TAPRIO_STATE_OPERATING) {
-+			lan966x_taprio_list_state_set(port,
-+						      LAN966X_TAPRIO_STATE_TERMINATING);
-+			operating = true;
-+		}
-+
-+		/* If the entry was in pending and now gets in admin, then there
-+		 * is nothing else to do, so just bail out
-+		 */
-+		state = lan966x_taprio_list_state_get(port);
-+		if (pending &&
-+		    state == LAN966X_TAPRIO_STATE_ADMIN)
-+			return 0;
-+
-+		/* If the list was in operating and now is in terminating or
-+		 * admin, then is OK to exit but it needs to wait until the list
-+		 * will get in admin. It is not required to set the state
-+		 * again.
-+		 */
-+		if (operating &&
-+		    (state == LAN966X_TAPRIO_STATE_TERMINATING ||
-+		     state == LAN966X_TAPRIO_STATE_ADMIN))
-+			break;
-+
-+	} while (!time_after(jiffies, end));
-+
-+	end = jiffies + msecs_to_jiffies(LAN966X_TAPRIO_TIMEOUT_MS);
-+	do {
-+		state = lan966x_taprio_list_state_get(port);
-+		if (state == LAN966X_TAPRIO_STATE_ADMIN)
-+			break;
-+
-+	} while (!time_after(jiffies, end));
-+
-+	/* If the list was in operating mode, it could be stopped while some
-+	 * queues where closed, so make sure to restore "all-queues-open"
-+	 */
-+	if (operating) {
-+		lan_wr(QSYS_TAS_GS_CTRL_HSCH_POS_SET(port->chip_port),
-+		       lan966x, QSYS_TAS_GS_CTRL);
-+
-+		lan_wr(QSYS_TAS_GATE_STATE_TAS_GATE_STATE_SET(0xff),
-+		       lan966x, QSYS_TAS_GATE_STATE);
-+	}
-+
-+	return 0;
-+}
-+
-+static int lan966x_taprio_shutdown(struct lan966x_port *port)
-+{
-+	u32 i, list, state;
-+	int err;
-+
-+	for (i = 0; i < LAN966X_TAPRIO_ENTRIES_PER_PORT; ++i) {
-+		list = lan966x_taprio_list_index(port, i);
-+		state = lan966x_taprio_list_index_state_get(port, list);
-+		if (state == LAN966X_TAPRIO_STATE_ADMIN)
-+			continue;
-+
-+		err = lan966x_taprio_list_shutdown(port, list);
-+		if (err)
-+			return err;
-+	}
-+
-+	return 0;
-+}
-+
-+/* Find a suitable list for a new schedule. First priority is a list in state
-+ * pending. Second priority is a list in state admin.
-+ */
-+static int lan966x_taprio_find_list(struct lan966x_port *port,
-+				    struct tc_taprio_qopt_offload *qopt,
-+				    int *new_list, int *obs_list)
-+{
-+	int state[LAN966X_TAPRIO_ENTRIES_PER_PORT];
-+	int list[LAN966X_TAPRIO_ENTRIES_PER_PORT];
-+	int err, oper = -1;
-+	u32 i;
-+
-+	*new_list = -1;
-+	*obs_list = -1;
-+
-+	/* If there is already an entry in operating mode, return this list in
-+	 * obs_list, such that when the new list will get activated the
-+	 * operating list will be stopped. In this way is possible to have
-+	 * smooth transitions between the lists
-+	 */
-+	for (i = 0; i < LAN966X_TAPRIO_ENTRIES_PER_PORT; ++i) {
-+		list[i] = lan966x_taprio_list_index(port, i);
-+		state[i] = lan966x_taprio_list_index_state_get(port, list[i]);
-+		if (state[i] == LAN966X_TAPRIO_STATE_OPERATING)
-+			oper = list[i];
-+	}
-+
-+	for (i = 0; i < LAN966X_TAPRIO_ENTRIES_PER_PORT; ++i) {
-+		if (state[i] == LAN966X_TAPRIO_STATE_PENDING) {
-+			err = lan966x_taprio_shutdown(port);
-+			if (err)
-+				return err;
-+
-+			*new_list = list[i];
-+			*obs_list = (oper == -1) ? *new_list : oper;
-+			return 0;
-+		}
-+	}
-+
-+	for (i = 0; i < LAN966X_TAPRIO_ENTRIES_PER_PORT; ++i) {
-+		if (state[i] == LAN966X_TAPRIO_STATE_ADMIN) {
-+			*new_list = list[i];
-+			*obs_list = (oper == -1) ? *new_list : oper;
-+			return 0;
-+		}
-+	}
-+
-+	return -ENOSPC;
-+}
-+
-+static int lan966x_taprio_check(struct tc_taprio_qopt_offload *qopt)
-+{
-+	u64 total_time = 0;
-+	u32 i;
-+
-+	/* This is not supported by th HW */
-+	if (qopt->cycle_time_extension)
-+		return -EOPNOTSUPP;
-+
-+	/* There is a limited number of gcl entries that can be used, they are
-+	 * shared by all ports
-+	 */
-+	if (qopt->num_entries > LAN966X_TAPRIO_NUM_GCL)
-+		return -EINVAL;
-+
-+	/* Don't allow cycle times bigger than 1 sec or smaller than 1 usec */
-+	if (qopt->cycle_time < LAN966X_TAPRIO_MIN_CYCLE_TIME_NS ||
-+	    qopt->cycle_time > LAN966X_TAPRIO_MAX_CYCLE_TIME_NS)
-+		return -EINVAL;
-+
-+	for (i = 0; i < qopt->num_entries; ++i) {
-+		struct tc_taprio_sched_entry *entry = &qopt->entries[i];
-+
-+		/* Don't allow intervals bigger than 1 sec or smaller than 1
-+		 * usec
-+		 */
-+		if (entry->interval < LAN966X_TAPRIO_MIN_CYCLE_TIME_NS ||
-+		    entry->interval > LAN966X_TAPRIO_MAX_CYCLE_TIME_NS)
-+			return -EINVAL;
-+
-+		if (qopt->entries[i].command != TC_TAPRIO_CMD_SET_GATES)
-+			return -EINVAL;
-+
-+		total_time += qopt->entries[i].interval;
-+	}
-+
-+	/* Don't allow the total time of intervals be bigger than 1 sec */
-+	if (total_time > LAN966X_TAPRIO_MAX_CYCLE_TIME_NS)
-+		return -EINVAL;
-+
-+	/* The HW expects that the cycle time to be at least as big as sum of
-+	 * each interval of gcl
-+	 */
-+	if (qopt->cycle_time < total_time)
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
-+static int lan966x_taprio_gcl_free_get(struct lan966x_port *port,
-+				       unsigned long *free_list)
-+{
-+	struct lan966x *lan966x = port->lan966x;
-+	u32 num_free, state, list;
-+	u32 base, next, max_list;
-+
-+	/* By default everything is free */
-+	bitmap_fill(free_list, LAN966X_TAPRIO_NUM_GCL);
-+	num_free = LAN966X_TAPRIO_NUM_GCL;
-+
-+	/* Iterate over all gcl entries and find out which are free. And mark
-+	 * those that are not free.
-+	 */
-+	max_list = lan966x->num_phys_ports * LAN966X_TAPRIO_ENTRIES_PER_PORT;
-+	for (list = 0; list < max_list; ++list) {
-+		state = lan966x_taprio_list_index_state_get(port, list);
-+		if (state == LAN966X_TAPRIO_STATE_ADMIN)
-+			continue;
-+
-+		base = lan_rd(lan966x, QSYS_TAS_LIST_CFG);
-+		base = QSYS_TAS_LIST_CFG_LIST_BASE_ADDR_GET(base);
-+		next = base;
-+
-+		do {
-+			clear_bit(next, free_list);
-+			num_free--;
-+
-+			lan_rmw(QSYS_TAS_CFG_CTRL_GCL_ENTRY_NUM_SET(next),
-+				QSYS_TAS_CFG_CTRL_GCL_ENTRY_NUM,
-+				lan966x, QSYS_TAS_CFG_CTRL);
-+
-+			next = lan_rd(lan966x, QSYS_TAS_GCL_CT_CFG2);
-+			next = QSYS_TAS_GCL_CT_CFG2_NEXT_GCL_GET(next);
-+		} while (base != next);
-+	}
-+
-+	return num_free;
-+}
-+
-+static void lan966x_taprio_gcl_setup_entry(struct lan966x_port *port,
-+					   struct tc_taprio_sched_entry *entry,
-+					   u32 next_entry)
-+{
-+	struct lan966x *lan966x = port->lan966x;
-+
-+	/* Setup a single gcl entry */
-+	lan_wr(QSYS_TAS_GCL_CT_CFG_GATE_STATE_SET(entry->gate_mask) |
-+	       QSYS_TAS_GCL_CT_CFG_HSCH_POS_SET(port->chip_port) |
-+	       QSYS_TAS_GCL_CT_CFG_OP_TYPE_SET(LAN966X_TAPRIO_GCL_CMD_SET_GATE_STATES),
-+	       lan966x, QSYS_TAS_GCL_CT_CFG);
-+
-+	lan_wr(QSYS_TAS_GCL_CT_CFG2_PORT_PROFILE_SET(port->chip_port) |
-+	       QSYS_TAS_GCL_CT_CFG2_NEXT_GCL_SET(next_entry),
-+	       lan966x, QSYS_TAS_GCL_CT_CFG2);
-+
-+	lan_wr(entry->interval, lan966x, QSYS_TAS_GCL_TM_CFG);
-+}
-+
-+static int lan966x_taprio_gcl_setup(struct lan966x_port *port,
-+				    struct tc_taprio_qopt_offload *qopt,
-+				    int list)
-+{
-+	DECLARE_BITMAP(free_list, LAN966X_TAPRIO_NUM_GCL);
-+	struct lan966x *lan966x = port->lan966x;
-+	u32 i, base, next;
-+
-+	if (lan966x_taprio_gcl_free_get(port, free_list) < qopt->num_entries)
-+		return -ENOSPC;
-+
-+	/* Select list */
-+	lan_rmw(QSYS_TAS_CFG_CTRL_LIST_NUM_SET(list),
-+		QSYS_TAS_CFG_CTRL_LIST_NUM,
-+		lan966x, QSYS_TAS_CFG_CTRL);
-+
-+	/* Setup the address of the first gcl entry */
-+	base = find_first_bit(free_list, LAN966X_TAPRIO_NUM_GCL);
-+	lan_rmw(QSYS_TAS_LIST_CFG_LIST_BASE_ADDR_SET(base),
-+		QSYS_TAS_LIST_CFG_LIST_BASE_ADDR,
-+		lan966x, QSYS_TAS_LIST_CFG);
-+
-+	/* Iterate over entries and add them to the gcl list */
-+	next = base;
-+	for (i = 0; i < qopt->num_entries; ++i) {
-+		lan_rmw(QSYS_TAS_CFG_CTRL_GCL_ENTRY_NUM_SET(next),
-+			QSYS_TAS_CFG_CTRL_GCL_ENTRY_NUM,
-+			lan966x, QSYS_TAS_CFG_CTRL);
-+
-+		/* If the entry is last, point back to the start of the list */
-+		if (i == qopt->num_entries - 1)
-+			next = base;
-+		else
-+			next = find_next_bit(free_list, LAN966X_TAPRIO_NUM_GCL,
-+					     next + 1);
-+
-+		lan966x_taprio_gcl_setup_entry(port, &qopt->entries[i], next);
-+	}
-+
-+	return 0;
-+}
-+
-+/* Calculate new base_time based on cycle_time. The HW recommends to have the
-+ * new base time at least 2 * cycle type + current time
-+ */
-+static void lan966x_taprio_new_base_time(struct lan966x *lan966x,
-+					 const u32 cycle_time,
-+					 const ktime_t org_base_time,
-+					 ktime_t *new_base_time)
-+{
-+	ktime_t current_time, threshold_time;
-+	struct timespec64 ts;
-+
-+	/* Get the current time and calculate the threshold_time */
-+	lan966x_ptp_gettime64(&lan966x->phc[LAN966X_PHC_PORT].info, &ts);
-+	current_time = timespec64_to_ktime(ts);
-+	threshold_time = current_time + (2 * cycle_time);
-+
-+	/* If the org_base_time is in enough in future just use it */
-+	if (org_base_time >= threshold_time) {
-+		*new_base_time = org_base_time;
-+		return;
-+	}
-+
-+	/* If the org_base_time is smaller than current_time, calculate the new
-+	 * base time as following.
-+	 */
-+	if (org_base_time <= current_time) {
-+		u64 tmp = current_time - org_base_time;
-+		u32 rem = 0;
-+
-+		if (tmp > cycle_time)
-+			div_u64_rem(tmp, cycle_time, &rem);
-+		rem = cycle_time - rem;
-+		*new_base_time = threshold_time + rem;
-+		return;
-+	}
-+
-+	/* The only left place for org_base_time is between current_time and
-+	 * threshold_time. In this case the new_base_time is calculated like
-+	 * org_base_time + 2 * cycletime
-+	 */
-+	*new_base_time = org_base_time + 2 * cycle_time;
-+}
-+
-+int lan966x_taprio_speed_set(struct lan966x_port *port, int speed)
-+{
-+	struct lan966x *lan966x = port->lan966x;
-+	u8 taprio_speed;
-+
-+	switch (speed) {
-+	case SPEED_10:
-+		taprio_speed = LAN966X_TAPRIO_SPEED_10;
-+		break;
-+	case SPEED_100:
-+		taprio_speed = LAN966X_TAPRIO_SPEED_100;
-+		break;
-+	case SPEED_1000:
-+		taprio_speed = LAN966X_TAPRIO_SPEED_1000;
-+		break;
-+	case SPEED_2500:
-+		taprio_speed = LAN966X_TAPRIO_SPEED_2500;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	lan_rmw(QSYS_TAS_PROFILE_CFG_LINK_SPEED_SET(taprio_speed),
-+		QSYS_TAS_PROFILE_CFG_LINK_SPEED,
-+		lan966x, QSYS_TAS_PROFILE_CFG(port->chip_port));
-+
-+	return 0;
-+}
-+
-+int lan966x_taprio_add(struct lan966x_port *port,
-+		       struct tc_taprio_qopt_offload *qopt)
-+{
-+	struct lan966x *lan966x = port->lan966x;
-+	int err, new_list, obs_list;
-+	struct timespec64 ts;
-+	ktime_t base_time;
-+
-+	err = lan966x_taprio_check(qopt);
-+	if (err)
-+		return err;
-+
-+	err = lan966x_taprio_find_list(port, qopt, &new_list, &obs_list);
-+	if (err)
-+		return err;
-+
-+	err = lan966x_taprio_gcl_setup(port, qopt, new_list);
-+	if (err)
-+		return err;
-+
-+	lan966x_taprio_new_base_time(lan966x, qopt->cycle_time,
-+				     qopt->base_time, &base_time);
-+
-+	ts = ktime_to_timespec64(base_time);
-+	lan_wr(QSYS_TAS_BT_NSEC_NSEC_SET(ts.tv_nsec),
-+	       lan966x, QSYS_TAS_BT_NSEC);
-+
-+	lan_wr(lower_32_bits(ts.tv_sec),
-+	       lan966x, QSYS_TAS_BT_SEC_LSB);
-+
-+	lan_wr(QSYS_TAS_BT_SEC_MSB_SEC_MSB_SET(upper_32_bits(ts.tv_sec)),
-+	       lan966x, QSYS_TAS_BT_SEC_MSB);
-+
-+	lan_wr(qopt->cycle_time, lan966x, QSYS_TAS_CT_CFG);
-+
-+	lan_rmw(QSYS_TAS_STARTUP_CFG_OBSOLETE_IDX_SET(obs_list),
-+		QSYS_TAS_STARTUP_CFG_OBSOLETE_IDX,
-+		lan966x, QSYS_TAS_STARTUP_CFG);
-+
-+	/* Start list processing */
-+	lan_rmw(QSYS_TAS_LST_LIST_STATE_SET(LAN966X_TAPRIO_STATE_ADVANCING),
-+		QSYS_TAS_LST_LIST_STATE,
-+		lan966x, QSYS_TAS_LST);
-+
-+	return err;
-+}
-+
-+int lan966x_taprio_del(struct lan966x_port *port)
-+{
-+	return lan966x_taprio_shutdown(port);
-+}
-+
-+void lan966x_taprio_init(struct lan966x *lan966x)
-+{
-+	int num_taprio_lists;
-+	int p;
-+
-+	lan_wr(QSYS_TAS_STM_CFG_REVISIT_DLY_SET((256 * 1000) /
-+						lan966x_ptp_get_period_ps()),
-+	       lan966x, QSYS_TAS_STM_CFG);
-+
-+	num_taprio_lists = lan966x->num_phys_ports *
-+			   LAN966X_TAPRIO_ENTRIES_PER_PORT;
-+
-+	/* For now we always use guard band on all queues */
-+	lan_rmw(QSYS_TAS_CFG_CTRL_LIST_NUM_MAX_SET(num_taprio_lists) |
-+		QSYS_TAS_CFG_CTRL_ALWAYS_GB_SCH_Q_SET(1),
-+		QSYS_TAS_CFG_CTRL_LIST_NUM_MAX |
-+		QSYS_TAS_CFG_CTRL_ALWAYS_GB_SCH_Q,
-+		lan966x, QSYS_TAS_CFG_CTRL);
-+
-+	for (p = 0; p < lan966x->num_phys_ports; p++)
-+		lan_rmw(QSYS_TAS_PROFILE_CFG_PORT_NUM_SET(p),
-+			QSYS_TAS_PROFILE_CFG_PORT_NUM,
-+			lan966x, QSYS_TAS_PROFILE_CFG(p));
-+}
-+
-+void lan966x_taprio_deinit(struct lan966x *lan966x)
-+{
-+	int p;
-+
-+	for (p = 0; p < lan966x->num_phys_ports; ++p) {
-+		if (!lan966x->ports[p])
-+			continue;
-+
-+		lan966x_taprio_del(lan966x->ports[p]);
-+	}
-+}
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_tc.c b/drivers/net/ethernet/microchip/lan966x/lan966x_tc.c
-index 3fea0937076e1..cabc563f67685 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_tc.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_tc.c
-@@ -15,6 +15,13 @@ static int lan966x_tc_setup_qdisc_mqprio(struct lan966x_port *port,
- 			lan966x_mqprio_del(port);
- }
- 
-+static int lan966x_tc_setup_qdisc_taprio(struct lan966x_port *port,
-+					 struct tc_taprio_qopt_offload *taprio)
-+{
-+	return taprio->enable ? lan966x_taprio_add(port, taprio) :
-+				lan966x_taprio_del(port);
-+}
-+
- int lan966x_tc_setup(struct net_device *dev, enum tc_setup_type type,
- 		     void *type_data)
- {
-@@ -23,6 +30,8 @@ int lan966x_tc_setup(struct net_device *dev, enum tc_setup_type type,
- 	switch (type) {
- 	case TC_SETUP_QDISC_MQPRIO:
- 		return lan966x_tc_setup_qdisc_mqprio(port, type_data);
-+	case TC_SETUP_QDISC_TAPRIO:
-+		return lan966x_tc_setup_qdisc_taprio(port, type_data);
- 	default:
- 		return -EOPNOTSUPP;
- 	}
--- 
-2.33.0
+It's more like an unused variable kind of error that could trigger a
+warning in the compiler.
+
+Francesco
 
