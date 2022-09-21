@@ -2,119 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F39F55BF439
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 05:17:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12D775BF43C
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 05:20:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231190AbiIUDQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 23:16:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47092 "EHLO
+        id S229736AbiIUDUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 23:20:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231238AbiIUDQV (ORCPT
+        with ESMTP id S229490AbiIUDUB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 23:16:21 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 084F36F253;
-        Tue, 20 Sep 2022 20:16:09 -0700 (PDT)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MXNk65L9gzlWhP;
-        Wed, 21 Sep 2022 11:11:58 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 21 Sep 2022 11:16:05 +0800
-Received: from [10.67.108.67] (10.67.108.67) by dggpemm500013.china.huawei.com
- (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 21 Sep
- 2022 11:16:05 +0800
-Message-ID: <f7df65b0-ae41-8cce-01aa-84349efc387a@huawei.com>
-Date:   Wed, 21 Sep 2022 11:16:04 +0800
+        Tue, 20 Sep 2022 23:20:01 -0400
+Received: from SHSQR01.spreadtrum.com (unknown [222.66.158.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34435101E5
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 20:19:57 -0700 (PDT)
+Received: from SHSend.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
+        by SHSQR01.spreadtrum.com with ESMTPS id 28L3HnXk067053
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NO);
+        Wed, 21 Sep 2022 11:17:50 +0800 (CST)
+        (envelope-from zhaoyang.huang@unisoc.com)
+Received: from bj03382pcu.spreadtrum.com (10.0.74.65) by
+ BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.23; Wed, 21 Sep 2022 11:17:49 +0800
+From:   "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Zhaoyang Huang <huangzhaoyang@gmail.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <ke.wang@unisoc.com>,
+        <steve.kang@unisoc.com>
+Subject: [PATCHv2] mm: introduce NR_BAD_PAGES and track them via kmemleak
+Date:   Wed, 21 Sep 2022 11:17:26 +0800
+Message-ID: <1663730246-11968-1-git-send-email-zhaoyang.huang@unisoc.com>
+X-Mailer: git-send-email 1.9.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0
-Subject: Re: [RFC] Objtool toolchain proposal:
- -fannotate-{jump-table,noreturn}
-Content-Language: en-US
-To:     Ard Biesheuvel <ardb@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-CC:     Michael Matz <matz@suse.de>, Borislav Petkov <bp@alien8.de>,
-        "Josh Poimboeuf" <jpoimboe@kernel.org>,
-        <linux-toolchains@vger.kernel.org>,
-        "Indu Bhagat" <indu.bhagat@oracle.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        <linux-kernel@vger.kernel.org>,
-        "Jose E. Marchesi" <jemarch@gnu.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Will Deacon" <will@kernel.org>, <x86@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <live-patching@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
-        Sathvika Vasireddy <sv@linux.ibm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Mark Brown <broonie@kernel.org>
-References: <20220909180704.jwwed4zhwvin7uyi@treble>
- <Yx8PcldkdOLN8eaw@nazgul.tnic>
- <alpine.LSU.2.20.2209121200120.8265@wotan.suse.de>
- <6a61aa57-141f-039c-5a2d-b2d79fecb8c2@huawei.com>
- <YyLmhUxTUaNzaieC@hirez.programming.kicks-ass.net>
- <CAMj1kXGa7D6TLOQruYF+0czWwxcRxN7k1rWTrhB2xnjTQ32c9Q@mail.gmail.com>
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-In-Reply-To: <CAMj1kXGa7D6TLOQruYF+0czWwxcRxN7k1rWTrhB2xnjTQ32c9Q@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.108.67]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.0.74.65]
+X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
+ BJMBX01.spreadtrum.com (10.0.64.7)
+X-MAIL: SHSQR01.spreadtrum.com 28L3HnXk067053
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
 
-On 2022/9/21 0:49, Ard Biesheuvel wrote:
-> On Thu, 15 Sept 2022 at 10:47, Peter Zijlstra <peterz@infradead.org> wrote:
->> On Thu, Sep 15, 2022 at 10:56:58AM +0800, Chen Zhongjin wrote:
->>
->>> We have found some anonymous information on x86 in .rodata.
->> Well yes, but that's still a bunch of heuristics on our side.
->>
->>> I'm not sure if those are *all* of Josh wanted on x86, however for arm64 we
->>> did not found that in the same section so it is a problem on arm64 now.
->> Nick found Bolt managed the ARM64 jumptables:
->>
->>    https://github.com/llvm/llvm-project/blob/main/bolt/lib/Target/AArch64/AArch64MCPlusBuilder.cpp#L484
->>
->> But that does look like a less than ideal solution too.
->>
->>> Does the compiler will emit these for all arches? At lease I tried and
->>> didn't find anything meaningful (maybe I omitted it).
->> That's the question; can we get the compiler to help us here in a well
->> defined manner.
-> Do BTI landing pads help at all here? I.e., I assume that objtool just
-> treats any indirect call as a dangling edge in the control flow graph,
-> and the problem is identifying the valid targets. In the BTI case,
-> those will all start with a 'BTI J' instruction.
+Bad pages could be introduced by extra reference among high order pages or compound
+tail pages which cause the pages failed go back to allocator and leaved as orphan
+pages. Booking them down and tracking them via kmemleak.
 
-Maybe not enough, I guess.
+Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+---
+change of v2: add booking for bad pages
+---
+---
+ include/linux/mmzone.h |  1 +
+ mm/page_alloc.c        | 13 ++++++++++---
+ mm/vmstat.c            |  1 +
+ 3 files changed, 12 insertions(+), 3 deletions(-)
 
-For switch jump tables we need to know its *own* jump targets so that we 
-can go through all its branches. If there are more than one indirect 
-jump inside one function, only marks targets with BTI J can't help 
-matching the entry and its targets.
-
-
-Anyway I think this job is more for compiler. Switch jump tables is 
-different from other indirect jump/call. It have fixed control flow just 
-as if/else flow and the indirect jump table is just a compiler 
-optimization which hide this.
-
-
-Best,
-
-Chen
+diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
+index e24b40c..11c1422 100644
+--- a/include/linux/mmzone.h
++++ b/include/linux/mmzone.h
+@@ -166,6 +166,7 @@ enum zone_stat_item {
+ 	NR_ZSPAGES,		/* allocated in zsmalloc */
+ #endif
+ 	NR_FREE_CMA_PAGES,
++	NR_BAD_PAGES,
+ 	NR_VM_ZONE_STAT_ITEMS };
+ 
+ enum node_stat_item {
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index e5486d4..a3768c96 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -1408,7 +1408,7 @@ static __always_inline bool free_pages_prepare(struct page *page,
+ 			__memcg_kmem_uncharge_page(page, order);
+ 		reset_page_owner(page, order);
+ 		page_table_check_free(page, order);
+-		return false;
++		goto err;
+ 	}
+ 
+ 	/*
+@@ -1442,7 +1442,7 @@ static __always_inline bool free_pages_prepare(struct page *page,
+ 	if (check_free)
+ 		bad += check_free_page(page);
+ 	if (bad)
+-		return false;
++		goto err;
+ 
+ 	page_cpupid_reset_last(page);
+ 	page->flags &= ~PAGE_FLAGS_CHECK_AT_PREP;
+@@ -1486,6 +1486,11 @@ static __always_inline bool free_pages_prepare(struct page *page,
+ 	debug_pagealloc_unmap_pages(page, 1 << order);
+ 
+ 	return true;
++err:
++	__mod_zone_page_state(page_zone(page), NR_BAD_PAGES, 1 << order);
++	kmemleak_alloc(page_address(page), PAGE_SIZE << order, 1, GFP_KERNEL);
++	return false;
++
+ }
+ 
+ #ifdef CONFIG_DEBUG_VM
+@@ -1587,8 +1592,10 @@ static void free_pcppages_bulk(struct zone *zone, int count,
+ 			count -= nr_pages;
+ 			pcp->count -= nr_pages;
+ 
+-			if (bulkfree_pcp_prepare(page))
++			if (bulkfree_pcp_prepare(page)) {
++				__mod_zone_page_state(page_zone(page), NR_BAD_PAGES, 1 << order);
+ 				continue;
++			}
+ 
+ 			/* MIGRATE_ISOLATE page should not go to pcplists */
+ 			VM_BUG_ON_PAGE(is_migrate_isolate(mt), page);
+diff --git a/mm/vmstat.c b/mm/vmstat.c
+index 90af9a8..d391352 100644
+--- a/mm/vmstat.c
++++ b/mm/vmstat.c
+@@ -1193,6 +1193,7 @@ int fragmentation_index(struct zone *zone, unsigned int order)
+ 	"nr_zspages",
+ #endif
+ 	"nr_free_cma",
++	"nr_bad_pages",
+ 
+ 	/* enum numa_stat_item counters */
+ #ifdef CONFIG_NUMA
+-- 
+1.9.1
 
