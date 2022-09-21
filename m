@@ -2,50 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4254E5BF87F
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 10:01:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 707525BF898
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 10:06:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231305AbiIUIBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 04:01:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40326 "EHLO
+        id S229666AbiIUIGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 04:06:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231237AbiIUIBJ (ORCPT
+        with ESMTP id S229498AbiIUIGF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 04:01:09 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B4B8861FE
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 01:00:58 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MXW305QXdzmWJR;
-        Wed, 21 Sep 2022 15:57:00 +0800 (CST)
-Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 21 Sep 2022 16:00:56 +0800
-Received: from huawei.com (10.175.113.32) by dggpemm100009.china.huawei.com
- (7.185.36.113) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 21 Sep
- 2022 16:00:55 +0800
-From:   Liu Shixin <liushixin2@huawei.com>
-To:     Liu Zixian <liuzixian4@huawei.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>
-CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: [PATCH] mm: hugetlb: fix UAF in hugetlb_handle_userfault
-Date:   Wed, 21 Sep 2022 16:34:40 +0800
-Message-ID: <20220921083440.1267903-1-liushixin2@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 21 Sep 2022 04:06:05 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 126BB3FA34
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 01:06:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 77F96CE1C36
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 08:06:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AF84C433D6;
+        Wed, 21 Sep 2022 08:06:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663747560;
+        bh=iiGgNNFdcLKteCa878KTXhVaJVoiH2Je1zOl3/yPFqU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=M3WdeFWERpiU/U3gFJ1lwxlTQPCvouHm0KycEjUTajbzf8LUOHXD3tHyi+kkI0pBK
+         qq3gyM2HFadro4Ms0dCA5mIJ33Tsx6Qg3v5DZkEoqX8lr4epcxjhgGPi4kZNL71kQI
+         zv2wbOA6YujKG5HqS1N+m2MpNuJK3TOpV5s8yCcQ2smF5M0dK5PxCBXwOrl7pbtc+t
+         9Xi18gN1tVp1SH/FPrl4WG/BTOIU+kxvn9r9Q0p57qVH29vbMblsHT5j2tuFEKgFJX
+         cTm3+ymeRUVVhKFFA+ak4vLfcz3ZSkWtGx+6Lx+mXDMqCPw+/k3RaSslaYKib0cHnl
+         Jl9VZXGJ+vnuA==
+Received: by pali.im (Postfix)
+        id 282D0789; Wed, 21 Sep 2022 10:05:57 +0200 (CEST)
+Date:   Wed, 21 Sep 2022 10:05:57 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] phy: marvell: phy-mvebu-a3700-comphy: Reset COMPHY
+ registers before USB 3.0 power on
+Message-ID: <20220921080557.jdg5wywpa5qxcyo2@pali>
+References: <20220920121154.30115-1-pali@kernel.org>
+ <20220921050300.riwyofdncxscrwe3@shindev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.32]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm100009.china.huawei.com (7.185.36.113)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220921050300.riwyofdncxscrwe3@shindev>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,136 +62,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The vma_lock and hugetlb_fault_mutex are dropped before handling
-userfault and reacquire them again after handle_userfault(), but
-reacquire the vma_lock could lead to UAF[1] due to the following
-race,
+On Wednesday 21 September 2022 05:03:01 Shinichiro Kawasaki wrote:
+> On Sep 20, 2022 / 14:11, Pali Rohár wrote:
+> > Turris MOX board with older ARM Trusted Firmware version v1.5 is not able
+> > to detect any USB 3.0 device connected to USB-A port on Mox-A module after
+> > commit 0a6fc70d76bd ("phy: marvell: phy-mvebu-a3700-comphy: Remove broken
+> > reset support"). On the other hand USB 2.0 devices connected to the same
+> > USB-A port are working fine.
+> > 
+> > It looks as if the older firmware configures COMPHY registers for USB 3.0
+> > somehow incompatibly for kernel driver. Experiments show that resetting
+> > COMPHY registers via setting SFT_RST auto-clearing bit in COMPHY_SFT_RESET
+> > register fixes this issue.
+> > 
+> > Reset the COMPHY in mvebu_a3700_comphy_usb3_power_on() function as a first
+> > step after selecting COMPHY lane and USB 3.0 function. With this change
+> > Turris MOX board can successfully detect USB 3.0 devices again.
+> > 
+> > Before the above mentioned commit this reset was implemented in PHY reset
+> > method, so this is the reason why there was no issue with older firmware
+> > version then.
+> > 
+> > Fixes: 0a6fc70d76bd ("phy: marvell: phy-mvebu-a3700-comphy: Remove broken reset support")
+> > Reported-by: Marek Behún <kabel@kernel.org>
+> > Signed-off-by: Pali Rohár <pali@kernel.org>
+> > ---
+> > Shinichiro, could you please check that all USB functionality still
+> > works correctly on your board?
+> > ---
+> 
+> Sure. TL;DR, this patch works ok for my espressobin v7 board.
+> 
+> Tested-by: Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+> 
+> I prepared base kernel v5.19.10 applying the commit 0a6fc70d76bd. Regardless
+> whether this fix patch for Turrix MOX board is applied or not, two USB ports on
+> my esprssobin v7 board worked as expected. I confirmed it by using USB thumb
+> drive. The drive was detected and its partition was mounted successfully using
+> either of the two USB ports.
 
-hugetlb_fault
-  hugetlb_no_page
-    /*unlock vma_lock */
-    hugetlb_handle_userfault
-      handle_userfault
-        /* unlock mm->mmap_lock*/
-                                           vm_mmap_pgoff
-                                             do_mmap
-                                               mmap_region
-                                                 munmap_vma_range
-                                                   /* clean old vma */
-        /* lock vma_lock again  <--- UAF */
-    /* unlock vma_lock */
+Thank you for testing! Anyway, please check that USB 3.0 device is
+working fine. Because as I wrote in commit message, on Turris Mox was
+USB 2.0 device working fine, but USB 3.0 not. And maybe check in system
+(lsusb) that USB 3.0 device was really detected as USB 3.0 because USB
+3.0 devices have supported also fallback USB 2.0/1.x legacy mode.
 
-Since the vma_lock will unlock immediately after hugetlb_handle_userfault(),
-let's drop the unneeded lock and unlock in hugetlb_handle_userfault() to fix
-the issue.
-
-[1] https://lore.kernel.org/linux-mm/20220921014457.1668-1-liuzixian4@huawei.com/
-Reported-by: Liu Zixian <liuzixian4@huawei.com>
-Signed-off-by: Liu Shixin <liushixin2@huawei.com>
-Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
----
- mm/hugetlb.c | 30 +++++++++++-------------------
- 1 file changed, 11 insertions(+), 19 deletions(-)
-
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 9b8526d27c29..5a5d466692cf 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -5489,7 +5489,6 @@ static inline vm_fault_t hugetlb_handle_userfault(struct vm_area_struct *vma,
- 						  unsigned long addr,
- 						  unsigned long reason)
- {
--	vm_fault_t ret;
- 	u32 hash;
- 	struct vm_fault vmf = {
- 		.vma = vma,
-@@ -5508,17 +5507,12 @@ static inline vm_fault_t hugetlb_handle_userfault(struct vm_area_struct *vma,
- 
- 	/*
- 	 * vma_lock and hugetlb_fault_mutex must be
--	 * dropped before handling userfault.  Reacquire
--	 * after handling fault to make calling code simpler.
-+	 * dropped before handling userfault.
- 	 */
- 	hugetlb_vma_unlock_read(vma);
- 	hash = hugetlb_fault_mutex_hash(mapping, idx);
- 	mutex_unlock(&hugetlb_fault_mutex_table[hash]);
--	ret = handle_userfault(&vmf, reason);
--	mutex_lock(&hugetlb_fault_mutex_table[hash]);
--	hugetlb_vma_lock_read(vma);
--
--	return ret;
-+	return handle_userfault(&vmf, reason);
- }
- 
- static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
-@@ -5537,6 +5531,7 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
- 	unsigned long haddr = address & huge_page_mask(h);
- 	bool new_page, new_pagecache_page = false;
- 	bool reserve_alloc = false;
-+	u32 hash = hugetlb_fault_mutex_hash(mapping, idx);
- 
- 	/*
- 	 * Currently, we are forced to kill the process in the event the
-@@ -5547,7 +5542,7 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
- 	if (is_vma_resv_set(vma, HPAGE_RESV_UNMAPPED)) {
- 		pr_warn_ratelimited("PID %d killed due to inadequate hugepage pool\n",
- 			   current->pid);
--		return ret;
-+		goto out;
- 	}
- 
- 	/*
-@@ -5561,12 +5556,10 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
- 		if (idx >= size)
- 			goto out;
- 		/* Check for page in userfault range */
--		if (userfaultfd_missing(vma)) {
--			ret = hugetlb_handle_userfault(vma, mapping, idx,
-+		if (userfaultfd_missing(vma))
-+			return hugetlb_handle_userfault(vma, mapping, idx,
- 						       flags, haddr, address,
- 						       VM_UFFD_MISSING);
--			goto out;
--		}
- 
- 		page = alloc_huge_page(vma, haddr, 0);
- 		if (IS_ERR(page)) {
-@@ -5634,10 +5627,9 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
- 		if (userfaultfd_minor(vma)) {
- 			unlock_page(page);
- 			put_page(page);
--			ret = hugetlb_handle_userfault(vma, mapping, idx,
-+			return hugetlb_handle_userfault(vma, mapping, idx,
- 						       flags, haddr, address,
- 						       VM_UFFD_MINOR);
--			goto out;
- 		}
- 	}
- 
-@@ -5695,6 +5687,8 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
- 
- 	unlock_page(page);
- out:
-+	hugetlb_vma_unlock_read(vma);
-+	mutex_unlock(&hugetlb_fault_mutex_table[hash]);
- 	return ret;
- 
- backout:
-@@ -5792,11 +5786,9 @@ vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
- 
- 	entry = huge_ptep_get(ptep);
- 	/* PTE markers should be handled the same way as none pte */
--	if (huge_pte_none_mostly(entry)) {
--		ret = hugetlb_no_page(mm, vma, mapping, idx, address, ptep,
-+	if (huge_pte_none_mostly(entry))
-+		return hugetlb_no_page(mm, vma, mapping, idx, address, ptep,
- 				      entry, flags);
--		goto out_mutex;
--	}
- 
- 	ret = 0;
- 
--- 
-2.25.1
-
+> I also confirmed SATA port is ok (my SSD card was detected without error
+> message) and three network ports works ok ("Link is Up" message on network cable
+> connection). I did same confirmations with the latest firmware (TF-A and U-boot)
+> and old firmware (with version date in 2017). All looks good for me.
+> 
+> -- 
+> Shin'ichiro Kawasaki
