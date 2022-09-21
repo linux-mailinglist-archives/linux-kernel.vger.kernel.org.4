@@ -2,63 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C7ED5BF94B
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 10:31:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 004145BF94A
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 10:31:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbiIUIbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 04:31:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35462 "EHLO
+        id S230035AbiIUIb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 04:31:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbiIUIbY (ORCPT
+        with ESMTP id S229687AbiIUIbX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 04:31:24 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE7F976951;
+        Wed, 21 Sep 2022 04:31:23 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E46AF7DF44;
         Wed, 21 Sep 2022 01:31:18 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MXWk13FChzmVTn;
-        Wed, 21 Sep 2022 16:27:21 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 21 Sep 2022 16:31:16 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 21 Sep 2022 16:31:16 +0800
-Subject: Re: [PATCH v4 2/8] scripts/kallsyms: ensure that all possible
- combinations are compressed
-To:     Petr Mladek <pmladek@suse.com>
-CC:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Masahiro Yamada" <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        <linux-modules@vger.kernel.org>
-References: <20220920071317.1787-1-thunder.leizhen@huawei.com>
- <20220920071317.1787-3-thunder.leizhen@huawei.com> <YyrEh+fbhYh6ltLp@alley>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <f1eaedb1-fc3e-cd0e-e63a-6e3caa9e015e@huawei.com>
-Date:   Wed, 21 Sep 2022 16:31:04 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+Received: by mail-ed1-x535.google.com with SMTP id w28so7527896edi.7;
+        Wed, 21 Sep 2022 01:31:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=DEz21CqJnQdDFUCM4krQvks0WhIiWv4YsiIoxyo+oFk=;
+        b=JRiStm1KS1kpNMq2xf4Z6FcQk6g+31kMDbOgeBIibakKg7CGg/jXyFc1kIPEnc2vIt
+         VRAUSqS7dHNEq7Lwj12HjYWWEGjoSuhjNgtoT/eMjyqOoINCEP85JaQR034Cx6YEd3ld
+         Z3Na/oXZ8stQw1jnnBjlb6a2tyxwrhiCpOy/xM0MMjSjx6uaWZNaqyBJeHh76txWK+2t
+         QPIJX0xVa4a99mH1l2ZJEjV2dREJzqpI3nwS2Nbqj7XMAP3MoVWkuhJxJoTiIYiUL6TK
+         hU/K9MKx4QPFa7Omy5qKz6WnPS3pqlNrZ9MZZd3zo8j1eqU3gh8ob/2CjaFXg2f3Rfwl
+         L6sQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=DEz21CqJnQdDFUCM4krQvks0WhIiWv4YsiIoxyo+oFk=;
+        b=OTfdv5R7wFQfwUBo4LDliVWWmCcXkKci4sDNAQgdPJPEFNpMP369K0EKQ6Sm643tVk
+         qyDaLOPOmR/7fjfJbpwno71wI6rUNiyb42fVU9zjn+t89plYSDlwSF6YQ7jxXLU8Ztnj
+         UNmKt7MINokiCqUyP3CHJTqM2NGuJ/TgQTkHgQnHrFO9Tfyz405k1+9VLqBG6HGCrweL
+         fO4knvmV2uz8USRW9eDIGntZPGurN3PnLpqpc7qO+ITPlWocSQ6NxSW25dGQG4wQhWJC
+         BtEPT4OG8wN6lm0iF2cSJ9xzQSlvHRt0SfTx5k+uAL+zr2QkNRe1qK2tPsLOBfPD4J2k
+         kaqg==
+X-Gm-Message-State: ACrzQf1hqfdwrKCzlU9ZSMnrZAAv5x173r84dOOeYsMToO0YhYXKVzA4
+        hAYgnptyT24ZSmjyopPxIr4+CGygnfetczx3gvY=
+X-Google-Smtp-Source: AMsMyM6HpN6sWx6pjoW7ofh1gaIlbazcDw/iG+FW6QN+wMRPcsho+idl1BNof/7YAbdjBv6VythbcNK4/vUQqca3gaQ=
+X-Received: by 2002:aa7:d51a:0:b0:453:9086:fc37 with SMTP id
+ y26-20020aa7d51a000000b004539086fc37mr19860298edq.174.1663749077301; Wed, 21
+ Sep 2022 01:31:17 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <YyrEh+fbhYh6ltLp@alley>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20220917022602.3843619-1-floridsleeves@gmail.com>
+ <20220920113744.64b16924@kernel.org> <CAMEuxRq3YDsCVBrdP78HnPeL7UcFiLWwKt6mEB2D+EVeSWG+pw@mail.gmail.com>
+ <20220920124148.58e8aab5@kernel.org>
+In-Reply-To: <20220920124148.58e8aab5@kernel.org>
+From:   Li Zhong <floridsleeves@gmail.com>
+Date:   Wed, 21 Sep 2022 01:31:06 -0700
+Message-ID: <CAMEuxRrRJ6RZQ5Pjoxb+5cn1Z5iKZNvZ_ydATBwB1NV5S-pEog@mail.gmail.com>
+Subject: Re: [PATCH v1] net/ethtool/tunnels: check the return value of nla_nest_start()
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, edumazet@google.com, davem@davemloft.net
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,70 +68,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Sep 20, 2022 at 12:41 PM Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> On Tue, 20 Sep 2022 12:31:29 -0700 Li Zhong wrote:
+> > On Tue, Sep 20, 2022 at 11:37 AM Jakub Kicinski <kuba@kernel.org> wrote:
+> > > On Fri, 16 Sep 2022 19:26:02 -0700 Li Zhong wrote:
+> > > >                       goto err_cancel_table;
+> > > >
+> > > >               entry = nla_nest_start(skb, ETHTOOL_A_TUNNEL_UDP_TABLE_ENTRY);
+> > > > +             if (!entry)
+> > > > +                     return -EMSGSIZE;
+> > >
+> > > not even correct, and completely harmless
+> >
+> > Thanks for your reply. Maybe a more suitable way of error handling is 'goto
+> > err_cancel_table;'?
+>
+> Yes, but you _most_ provide the detailed analysis of the impact
+> in the commit message for the patches to be considered for merging.
 
-
-On 2022/9/21 16:00, Petr Mladek wrote:
-> On Tue 2022-09-20 15:13:11, Zhen Lei wrote:
->> For a symbol, there may be more than one place that can be merged. For
->> example: nfs_fs_proc_net_init, there are two "f"+"s_" combinations.
->> And we're only compressing the first combination at the moment.
-> 
-> Really?
-
-Yes, there are about 200 such functions.
-
-> 
->> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
->> index 8caccc8f4a23703..3319d9f38d7a5f2 100644
->> --- a/scripts/kallsyms.c
->> +++ b/scripts/kallsyms.c
->> @@ -553,7 +553,7 @@ static void compress_symbols(const unsigned char *str, int idx)
->>  	unsigned char *p1, *p2;
->>  
->>  	for (i = 0; i < table_cnt; i++) {
->> -
->> +retry:
->>  		len = table[i]->len;
->>  		p1 = table[i]->sym;
->>  
->> @@ -585,6 +585,9 @@ static void compress_symbols(const unsigned char *str, int idx)
->>  
->>  		/* increase the counts for this symbol's new tokens */
->>  		learn_symbol(table[i]->sym, len);
->> +
->> +		/* May be more than one place that can be merged, try again */
->> +		goto retry;
->>  	}
->>  }
-> 
-> My understanding is that the code already tries to find the same
-> token several times. Here are the important parts of the existing
-> code:
-> 
-> static void compress_symbols(const unsigned char *str, int idx)
-> {
-> 
-> 		p2 = find_token(p1, len, str);
-> 
-> 		do {
-> 			/* replace the found token with idx */
-> 			*p2 = idx;
-> 			[...]
-> 
-> 			/* find the token on the symbol */
-> 			p2 = find_token(p1, size, str);
-
-Oh, yes, it retries. Let me reanalyze it. However, the problem is
-real, and there may be a problem somewhere in the loop.
-
-> 
-> 		} while (p2);
-> 
-> Best Regards,
-> Petr
-> .
-> 
-
--- 
-Regards,
-  Zhen Lei
+Thanks for the suggestion. The commit message is updated with more details.
