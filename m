@@ -2,254 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFBF75BF671
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 08:35:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D309E5BF679
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 08:37:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbiIUGfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 02:35:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36350 "EHLO
+        id S229950AbiIUGhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 02:37:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229888AbiIUGfu (ORCPT
+        with ESMTP id S229554AbiIUGh3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 02:35:50 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6EBB78584
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 23:35:47 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id x27so7672386lfu.0
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Sep 2022 23:35:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=n+2ZxJcjb49lGiDrPW53e358mRm61CpTv1V9K9mM2/k=;
-        b=Vk8cu70b2BLhdL9QfU4XqEGV6y9ItVyPNeaDVEKQyONGnm8PDjErRHMix23+F4/i+x
-         DUYYEkTJv4KMbAP3ZEpf/j+LCOronifjSow3KNMiGQcTSLzm8XujG0zwvFL1JGAUrrpT
-         9b7KffmeyonCFVjs0h/gXS6WI8crxWYY2Inol3d2eR+ZP4niDck6cqAFIgX0uDb28wGg
-         2Hp9+yBzzBSABfL0yYGQLKS4UWWWOpl/u+yBq7z8ncvfMa1mMJ8aJp5oPJ5aI+wXKa7k
-         N46xiO+36aPa1CMAq1XLpZHfoTwmKcN7amcuerVq4aup0IbPkUb2Xaf9aDm3SYq5vBAB
-         PTLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=n+2ZxJcjb49lGiDrPW53e358mRm61CpTv1V9K9mM2/k=;
-        b=BBplQY6pRyOvbiRiN+UFydXnMH306C10WiGWze6S8ocVfmhcJniUV4XKfBChejpEzv
-         rspquPQ/yeto1ComnNztgi3ghvzb2T5/Uld/Lnz+Pn2Zm+r18+nfbvY8Oz5ySZjjRb2z
-         FQoXJ8NVtiB3nb5Z6+gJWqPSvrjbWgKPZm85yd80HlyBHAGpW4iobtBlfIQsvBJ8qBBb
-         P/EggbbCuMaaNd1ETXAd/r835IJ7iv0V1K1/0dnd9sywPDOlDbPjbkSbCTZ+z4kbCvg4
-         B7zp0SF/zl2ZUAauvU+PenS2w07ZE9oQL/m2c4nwL5r1srjB4o80Fa/DYEPxzEnKMfHg
-         vP9w==
-X-Gm-Message-State: ACrzQf3sIrwOigpZVWra8Blub8Fj9L9vCqvI0/te7fOV5M3fmbVEg6Nx
-        Lmt/8YNiYKVHI36EhMvQecxM0A==
-X-Google-Smtp-Source: AMsMyM7z6wDETlJm0X+kjb9NEoIfdgdDOeXnatO8onpzRYKhOrbOEkKmLam1fVWH+llISeTX/u+4Nw==
-X-Received: by 2002:a05:6512:6d6:b0:499:27c:1aa0 with SMTP id u22-20020a05651206d600b00499027c1aa0mr9963497lff.88.1663742145891;
-        Tue, 20 Sep 2022 23:35:45 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id l10-20020a056512110a00b0049f9c732858sm292693lfg.254.2022.09.20.23.35.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Sep 2022 23:35:45 -0700 (PDT)
-Message-ID: <12602c20-d653-4d64-8589-b33270e2baa2@linaro.org>
-Date:   Wed, 21 Sep 2022 08:35:43 +0200
+        Wed, 21 Sep 2022 02:37:29 -0400
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2057.outbound.protection.outlook.com [40.107.96.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A1EA804A1;
+        Tue, 20 Sep 2022 23:37:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OIBf8qImdUMZUFwFYNCcsIhpR79OPV4kv0O9ITvp7KoKcTjqzH12gtwG0Hk6wQTlbqd96YwmHZxBIXNkWp7MMZaiGjVoHt87g2S22/oHqry1CqkUFqDGExeGzPk4a1SeCQQ3oEIA+zORhQJ4WBmfIJRvEVGELQOV8eHIdE6axPalb9uJJaYDcmbFJ2cW6YRCWWZs/x+njFCTTZvzgvLGcZM8dbGkWP0Wdr81sZdGeyJEsOG/+5T8EEXxF4e4iLt5kQBCP17qfrJo+SLCUmm4jtTO3+/JCLTMWrGSFnZ9v8MV+D6QLKzt+bryR9TtRP8OH127EJj+AWuINYIGJlUDuA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OFZUrob1MKW8MJEFnvgdtmTB67esIn0EtMWyk4PUanw=;
+ b=cIpaWyTZ7b/y6xzRHJ5o1gjDHO/kW7GfLbUDTF42cwF4wZUjsPSQl9KAWQnjlqwDtVQ11fqFTscEHuyZQTfC4AhCWfJJ6M1olFHAc5dBDqJQdOP9n/STUmHEFow52MR6NNgN+QuGwP/WyEqK0uRv2dSiD+3pqS5o9ChNC88KyGq9Kc1+OHHQ2ci/eheeZ0nb8G7Pk5pMG0NB4Vacr32nHCe/HIEX4UoriqxMrRvBpj9txjHccq/ysiLas7ohrjGW4jlref5MR/gw2frQR6hMJ+G/EvdmDmmN5znpQ8h73EKb4yamn8sjiDIztkIpwPCruSRush5neFL+LY9zhuGoWA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OFZUrob1MKW8MJEFnvgdtmTB67esIn0EtMWyk4PUanw=;
+ b=VQ9T4tISTzVqR5cVfVTf9hkAX6XHAAURLZ067TRwul8PEhkTVyZ3qqx+gEq5VVp4So3IIcLk3vdSU9YaOa8f1cxRJ2P/ZQnel/q4rgFB3FZ6KPBGUCsGOsgDnXGdmNstHmHh1iw8MC3SU9wSywH85ceBy2Tamd4mheiA7z2WsIE=
+Received: from MW4P222CA0015.NAMP222.PROD.OUTLOOK.COM (2603:10b6:303:114::20)
+ by DM4PR12MB6039.namprd12.prod.outlook.com (2603:10b6:8:aa::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.21; Wed, 21 Sep
+ 2022 06:37:25 +0000
+Received: from CO1NAM11FT039.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:114:cafe::9b) by MW4P222CA0015.outlook.office365.com
+ (2603:10b6:303:114::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.17 via Frontend
+ Transport; Wed, 21 Sep 2022 06:37:25 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT039.mail.protection.outlook.com (10.13.174.110) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5654.14 via Frontend Transport; Wed, 21 Sep 2022 06:37:25 +0000
+Received: from BLR5CG134614W.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Wed, 21 Sep
+ 2022 01:36:55 -0500
+From:   K Prateek Nayak <kprateek.nayak@amd.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     <rafael@kernel.org>, <lenb@kernel.org>,
+        <linux-acpi@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <dave.hansen@linux.intel.com>, <bp@alien8.de>,
+        <tglx@linutronix.de>, <andi@lisas.de>, <puwen@hygon.cn>,
+        <mario.limonciello@amd.com>, <peterz@infradead.org>,
+        <rui.zhang@intel.com>, <gpiccoli@igalia.com>,
+        <daniel.lezcano@linaro.org>, <ananth.narayan@amd.com>,
+        <gautham.shenoy@amd.com>, K Prateek Nayak <kprateek.nayak@amd.com>,
+        "Calvin Ong" <calvin.ong@amd.com>, <stable@vger.kernel.org>,
+        <regressions@lists.linux.dev>
+Subject: [PATCH] ACPI: processor_idle: Skip dummy wait for processors based on the Zen microarchitecture
+Date:   Wed, 21 Sep 2022 12:06:38 +0530
+Message-ID: <20220921063638.2489-1-kprateek.nayak@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 16/21] dt-bindings: reserved-memory: introduce
- designated-movable-block
-Content-Language: en-US
-To:     Doug Berger <opendmb@gmail.com>, Rob Herring <robh@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Borislav Petkov <bp@suse.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        David Hildenbrand <david@redhat.com>, Zi Yan <ziy@nvidia.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        Kees Cook <keescook@chromium.org>,
-        - <devicetree-spec@vger.kernel.org>,
-        KOSAKI Motohiro <kosaki.motohiro@jp.fujitsu.com>,
-        Mel Gorman <mgorman@suse.de>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mm@kvack.org, iommu@lists.linux.dev
-References: <20220913195508.3511038-1-opendmb@gmail.com>
- <20220913195508.3511038-17-opendmb@gmail.com>
- <20220914145506.GA2149379-robh@kernel.org>
- <57f19774-39a1-03a6-fe68-83d7e4b16521@gmail.com>
- <07d87203-6fe1-c612-cb79-9080e1988454@linaro.org>
- <b4b2b4c6-52b6-80f0-5db3-7f7b751989c3@gmail.com>
- <e0e043aa-0f79-59a8-05ab-e48046860524@linaro.org>
- <92a2cf9f-c371-fb7d-11ff-90cdc09dcae6@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <92a2cf9f-c371-fb7d-11ff-90cdc09dcae6@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT039:EE_|DM4PR12MB6039:EE_
+X-MS-Office365-Filtering-Correlation-Id: f68be7b3-0c33-47da-7ce7-08da9b9bbf19
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: weARpWcvIWSaHbhk/RmyWRZ4YMLP+Ipn+m9Czcpq+0Sr42PDSnZIUf6iX0HSeeqtTKvzg/VbmFz3vzTaW7FCmdym+tx8PE7oJisfSCb0SNYCO4ZSVDPKJCEKGO1mV1tMZpTo7VRabOsy9b0kbTDdUwYdyUUTJAh87r6G/helCSkREfGHxx87bvFnpEFPNcRVKeExuYuwKsvbiDhiOGMzOLsktNO2ct25aZ/Ka1D96cpdNJtNiol+uri1SLdpfjSWIjTyhlvys2OW+qFAhvA/HDClyQ9TDWex3OXJibbhS4V/XGMtczFqOYC7kKBJxNlyq9/1DEWlUen0ouRj9NkO8mYt8rBNdsFoRpYgsLDAdjcsZ0TvV0jRAMA3rAeAWp3ZR0H+S1ups7Gh61jBu/IYi0lpWO0ui8s5ABRsfg1otXs23lyEQj71wAMYwpHzlMNbUAr6iQxUkf/B1v9YVNlktinlGoj7GotCQCsQNFWQoywXmFlzLmG20+BRVlHeJGiJiDcjXOrBMRVr49LSjzid18tyEq6hxFufstGGTjOt1iF1HWaQRPVF56lYSs3vluzyXhcJLiY7sdJ7EAVcXeO6B7CS+5BxKwFN7XgmTMgesjouCdRb5Ay+9WXtPoNwy5lYGtbe3d9meqai0uho2H3Rv3liZOjj9npXed2xSZgjTIHmikTZot6JDaKDtHUhGAsYZR4OX3IiKpX7d2KIWVVbT4OUFoBPIEsGf9UcCLOwF8CBI8eEGyAA8OuMsb42Cs5PJqawppp1Ivn/z1r88TVSF4hzXdY6q3Khmq6xbDaPa1W+en2BAqjWYk6MYxUxmbLYQQto4CT6svEspPf7jsfq4DZqUcY4T1jovEd1BPnYqj938q75OjBOOb0jFROhPrAD
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(396003)(136003)(39860400002)(451199015)(46966006)(36840700001)(40470700004)(36860700001)(40460700003)(36756003)(86362001)(40480700001)(81166007)(356005)(8676002)(316002)(82740400003)(6916009)(16526019)(83380400001)(54906003)(2906002)(70206006)(7416002)(5660300002)(8936002)(70586007)(41300700001)(4326008)(426003)(336012)(82310400005)(186003)(1076003)(47076005)(6666004)(2616005)(478600001)(966005)(26005)(7696005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Sep 2022 06:37:25.2982
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f68be7b3-0c33-47da-7ce7-08da9b9bbf19
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT039.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6039
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/09/2022 02:14, Doug Berger wrote:
-> On 9/19/2022 4:03 AM, Krzysztof Kozlowski wrote:
->> On 19/09/2022 01:12, Doug Berger wrote:
->>> On 9/18/2022 3:31 AM, Krzysztof Kozlowski wrote:
->>>> On 14/09/2022 18:13, Doug Berger wrote:
->>>>> On 9/14/2022 7:55 AM, Rob Herring wrote:
->>>>>> On Tue, Sep 13, 2022 at 12:55:03PM -0700, Doug Berger wrote:
->>>>>>> Introduce designated-movable-block.yaml to document the
->>>>>>> devicetree binding for Designated Movable Block children of the
->>>>>>> reserved-memory node.
->>>>>>
->>>>>> What is a Designated Movable Block? This patch needs to stand on its
->>>>>> own.
->>>>> As noted in my reply to your [PATCH 00/21] comment, my intention in
->>>>> submitting the entire patch set (and specifically PATCH 00/21]) was to
->>>>> communicate this context. Now that I believe I understand that only this
->>>>> patch should have been submitted to the devicetree-spec mailing list, I
->>>>> will strive harder to make it more self contained.
->>>>
->>>> The submission of entire thread was ok. What is missing is the
->>>> explanation in this commit. This commit must be self-explanatory (e.g.
->>>> in explaining "Why are you doing it?"), not rely on other commits for
->>>> such explanation.
->>>>
->>>>>
->>>>>>
->>>>>> Why does this belong or need to be in DT?
->>>>> While my preferred method of declaring Designated Movable Blocks is
->>>>> through the movablecore kernel parameter, I can conceive that others may
->>>>> wish to take advantage of the reserved-memory DT nodes. In particular,
->>>>> it has the advantage that a device can claim ownership of the
->>>>> reserved-memory via device tree, which is something that has yet to be
->>>>> implemented for DMBs defined with movablecore.
->>>>
->>>> Rephrasing the question: why OS memory layout and OS behavior is a
->>>> property of hardware (DTS)?
->>> I would say the premise is fundamentally the same as the existing
->>> reserved-memory child node.
->>
->> I don't think it is fundamentally the same.
->>
->> The existing reserved-memory node describes memory used by hardware - by
->> other devices. The OS way of handling this memory - movable, reclaimable
->> etc - is not part of it.
->>
->> So no, it is not the same.
->>
->>>
->>> I've been rethinking how this should be specified. I am now thinking
->>> that it may be better to introduce a new Reserved Memory property that
->>> serves as a modifier to the 'reusable' property. The 'reusable' property
->>> allows the OS to use memory that has been reserved for a device and
->>> therefore requires the device driver to reclaim the memory prior to its
->>> use. However, an OS may have multiple ways of implementing such reuse
->>> and reclamation.
->>
->> ... and I repeat the question - why OS way of implementing reuse and
->> reclamation is relevant to DT?
->>
->>> I am considering introducing the vendor specific 'linux,dmb' property
->>> that is dependent on the 'reusable' property to allow both the OS and
->>> the device driver to identify the method used by the Linux OS to support
->>> reuse and reclamation of the reserved-memory child node.
->>
->> Sure, but why? Why OS and Linux driver specific pieces should be in DT?
->>> Such a property would remove any need for new compatible strings to the
->>> device tree. Does that approach seem reasonable to you?
->>
->> No, because you did not explain original question. At all.
-> I apologize if I have somehow offended you, but please recognize that my 
-> apparent inability to answer your question does not come from an 
-> unwillingness to do so.
-> 
-> I believe an example of the reserved-memory node being used the way you 
-> indicate (though there are other uses) can be expressed with device tree 
-> nodes like these:
-> 
-> reserved-memory {
-> 	#address-cells = <0x1>;
-> 	#size-cells = <0x1>;
-> 	ranges;
-> 
-> 	multimedia_reserved: multimedia@80000000 {
-> 		reg = <0x80000000 0x10000000>;
-> 	};
-> };
-> 
-> decoder@8012000 {
-> 	memory-region = <&multimedia_reserved>;
-> 	/* ... */
-> };
-> 
-> Here a 256MB chunk of memory is reserved for use by a hardware decoder 
-> as part of rendering a video stream. In this case the memory is reserved 
-> for the exclusive use of the decoder device and its associated device 
-> driver.
-> 
-> The Devicetree Specification includes a property named 'reusable' that 
-> could be applied to the multimedia node to allow the OS to "use the 
-> memory in this region with the limitation that the device driver(s) 
-> owning the region need to be able to reclaim it back". 
+Processors based on the Zen microarchitecture support IOPORT based deeper
+C-states. The idle driver reads the acpi_gbl_FADT.xpm_timer_block.address
+in the IOPORT based C-state exit path which is claimed to be a
+"Dummy wait op" and has been around since ACPI introduction to Linux
+dating back to Andy Grover's Mar 14, 2002 posting [1].
+The comment above the dummy operation was elaborated by Andreas Mohr back
+in 2006 in commit b488f02156d3d ("ACPI: restore comment justifying 'extra'
+P_LVLx access") [2] where the commit log claims:
+"this dummy read was about: STPCLK# doesn't get asserted in time on
+(some) chipsets, which is why we need to have a dummy I/O read to delay
+further instruction processing until the CPU is fully stopped."
 
-Indeed, there is such.... and should be used instead. :)
+However, sampling certain workloads with IBS on AMD Zen3 system shows
+that a significant amount of time is spent in the dummy op, which
+incorrectly gets accounted as C-State residency. A large C-State
+residency value can prime the cpuidle governor to recommend a deeper
+C-State during the subsequent idle instances, starting a vicious cycle,
+leading to performance degradation on workloads that rapidly switch
+between busy and idle phases.
 
-> This is a good 
-> idea, because this memory could probably be put to good use when the 
-> decoder is not active. Unfortunately, the methods for reusing this 
-> memory are not defined for Linux so the multimedia reserved memory would 
-> not be reused even though the devicetree indicates that it is allowed.
+One such workload is tbench where a massive performance degradation can
+be observed during certain runs. Following are some statistics gathered
+by running tbench with 128 clients, on a dual socket (2 x 64C/128T) Zen3
+system with the baseline kernel, baseline kernel keeping C2 disabled,
+and baseline kernel with this patch applied keeping C2 enabled:
 
-Then rather implementation has to be changed, not Devicetree bindings.
+baseline kernel was tip:sched/core at
+commit f3dd3f674555 ("sched: Remove the limitation of WF_ON_CPU on
+wakelist if wakee cpu is idle")
 
-> 
-> The notion behind this commit was to introduce the 
-> 'designated-movable-block' compatible string that could be added to the 
-> multimedia node to allow the Client Program (i.e. Linux) to select a 
-> device driver that knows how to reclaim reserved memory back from the OS 
-> when it is needed by the decoder device and release it back to the OS 
-> when the decoder no longer needs it. In this way, the purpose of the 
-> multimedia node remains the same (i.e. to reserve memory for use by a 
-> device), but a new compatible string is defined to allow for selection 
-> of an appropriate device driver and allow successful reuse of the memory 
-> for the benefit of the system.
+Kernel        : baseline      baseline + C2 disabled   baseline + patch
 
-We don't need a new compatible for it but use that existing property.
+Min (MB/s)    : 2215.06       33072.10 (+1393.05%)     33016.10 (+1390.52%)
+Max (MB/s)    : 32938.80      34399.10                 34774.50
+Median (MB/s) : 32191.80      33476.60                 33805.70
+AMean (MB/s)  : 22448.55      33649.27 (+49.89%)       33865.43 (+50.85%)
+AMean Stddev  : 17526.70      680.14                   880.72
+AMean CoefVar : 78.07%        2.02%                    2.60%
 
-> 
->  From Rob's feedback it is clear that 'designated-movable-block' is not 
-> an appropriate name, but maybe 'linux,dmb' might have been. However, it 
-> would be more flexible if a 'linux,dmb' property could be introduced as 
-> a modifier to the existing 'reusable' property to provide a general 
-> mechanism for clarifying how 'reusable' should be supported by the 
-> Client Software and its device drivers.
-> 
-> Such a property is not directly relevant to hardware, but the devicetree 
-> is not wholly concerned with hardware. Reserved memory node children 
-> include support for 'linux,cma-default' and 'linux,dma-default' 
-> properties that signal behavioral intent to the Linux OS. Some aspects 
-> of the devicetree (e.g. the /chosen node and 'reusable' property) are 
-> for the benefit of the Client Program.
+The data shows there are edge cases that can cause massive regressions
+in case of tbench. Profiling the bad runs with IBS shows a significant
+amount of time being spent in acpi_idle_do_entry method:
 
-Fair enough, although there is difference between generic property for
-reusable/reclaimable memory and a property describing one of Linux
-memory-management zones.
+Overhead  Command          Shared Object             Symbol
+  74.76%  swapper          [kernel.kallsyms]         [k] acpi_idle_do_entry
+   0.71%  tbench           [kernel.kallsyms]         [k] update_sd_lb_stats.constprop.0
+   0.69%  tbench_srv       [kernel.kallsyms]         [k] update_sd_lb_stats.constprop.0
+   0.49%  swapper          [kernel.kallsyms]         [k] psi_group_change
+   ...
 
-Best regards,
-Krzysztof
+Annotation of acpi_idle_do_entry method reveals almost all the time in
+acpi_idle_do_entry is spent on the port I/O in wait_for_freeze():
+
+  0.14 │      in     (%dx),%al       # <------ First "in" corresponding to inb(cx->address)
+  0.51 │      mov    0x144d64d(%rip),%rax
+  0.00 │      test   $0x80000000,%eax
+       │    ↓ jne    62 	     # <------ Skip if running in guest
+  0.00 │      mov    0x19800c3(%rip),%rdx
+ 99.33 │      in     (%dx),%eax      # <------ Second "in" corresponding to inl(acpi_gbl_FADT.xpm_timer_block.address)
+  0.00 │62:   mov    -0x8(%rbp),%r12
+  0.00 │      leave
+  0.00 │    ← ret
+
+This overhead is reflected in the C2 residency on the test system where
+C2 is an IOPORT based C-State. The total C-state residency reported by
+"cpupower idle-info" on CPU0 for good and bad case over the 80s tbench
+run is as follows (all numbers are in microseconds):
+
+			    Good Run 		Bad Run
+			   (Baseline)
+
+POLL: 			       43338		   6231  (-85.62%)
+C1 (MWAIT Based): 	    23576156 		 363861  (-98.45%)
+C2 (IOPORT Based): 	    10781218 	       77027280  (+614.45%)
+
+The larger residency value in bad case leads to the system recommending
+C2 state again for subsequent idle instances. The pattern lasts till the
+end of the tbench run. Following is the breakdown of "entry_method"
+passed to acpi_idle_do_entry during good run and bad run:
+
+                                        			Good Run    Bad Run
+							       (Baseline)
+
+Number of times acpi_idle_do_entry was called:             	6149573     6149050  (-0.01%)
+ |-> Number of times entry_method was "ACPI_CSTATE_FFH":        6141494       88144  (-98.56%)
+ |-> Number of times entry_method was "ACPI_CSTATE_HALT":             0           0  (+0.00%)
+ |-> Number of times entry_method was "ACPI_CSTATE_SYSTEMIO":      8079     6060906  (+74920.49%)
+
+For processors based on the Zen microarchitecture, this dummy wait op is
+unnecessary and can be skipped when choosing IOPORT based C-States to
+avoid polluting the C-state residency information.
+
+Link: https://git.kernel.org/pub/scm/linux/kernel/git/mpe/linux-fullhistory.git/commit/?id=972c16130d9dc182cedcdd408408d9eacc7d6a2d [1]
+Link: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b488f02156d3deb08f5ad7816d565c370a8cc6f1 [2]
+
+Suggested-by: Calvin Ong <calvin.ong@amd.com>
+Cc: stable@vger.kernel.org
+Cc: regressions@lists.linux.dev
+Signed-off-by: K Prateek Nayak <kprateek.nayak@amd.com>
+---
+ drivers/acpi/processor_idle.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/acpi/processor_idle.c b/drivers/acpi/processor_idle.c
+index 16a1663d02d4..18850aa2b79b 100644
+--- a/drivers/acpi/processor_idle.c
++++ b/drivers/acpi/processor_idle.c
+@@ -528,8 +528,11 @@ static int acpi_idle_bm_check(void)
+ static void wait_for_freeze(void)
+ {
+ #ifdef	CONFIG_X86
+-	/* No delay is needed if we are in guest */
+-	if (boot_cpu_has(X86_FEATURE_HYPERVISOR))
++	/*
++	 * No delay is needed if we are in guest or on a processor
++	 * based on the Zen microarchitecture.
++	 */
++	if (boot_cpu_has(X86_FEATURE_HYPERVISOR) || boot_cpu_has(X86_FEATURE_ZEN))
+ 		return;
+ #endif
+ 	/* Dummy wait op - must do something useless after P_LVL2 read
+-- 
+2.25.1
+
