@@ -2,145 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0EFD5D2C9E
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 20:08:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9454F5D2CA2
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 20:09:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230179AbiIUSIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 14:08:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40442 "EHLO
+        id S230351AbiIUSJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 14:09:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbiIUSIu (ORCPT
+        with ESMTP id S230101AbiIUSJJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 14:08:50 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF3777D1CA
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 11:08:48 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id e205so5739806iof.1
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 11:08:48 -0700 (PDT)
+        Wed, 21 Sep 2022 14:09:09 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA3980EB5
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 11:09:07 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id c19so4541092qkm.7
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 11:09:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=zgcz1Ul6i9PXeI/P/ZQ+OncdDs4YJohaTrFfyIJlyi8=;
-        b=L/CajF85H6Pe/cI6xZHVxuCazlHeSVvBa8AG8BJwImFT1Tn1aTR82LT0SiIB63rS6+
-         qYanS79/LnMDGbFgcT/4tubGjl6RAoflXl+ztralKVSwtWVbJcyK2WOVUi6EqPsvmqv8
-         DEqSEtEbzw8qj+FsGdugIgMq8hWPAYmAWeH7c=
+        d=ziepe.ca; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=2KAjKe3iq+QwXIwjpYW0v2WCVk5payTUoCJDsQmbzI8=;
+        b=fHDduti3CxdhlR7cTOA3bHhFjSsFgLzHd7cyUqMp7cDXRqkMCXpLOCc22ysE/u6Kh2
+         HIGYwvhJxEZfTaOngML/3hnx0h432B4fP7654sKJhbc5rtbz36iNUhGVxIJi+7ZkpwJK
+         Hjm/3CgbuCWlweV9iNYNfgs81GLrkku0T+vBnkfB6J2jO02uzYEZ3hQ0SfGKaqtZL6v1
+         TyJGu1wof5Q41gchlf9KraJgvFxDWjGIzqspgvV9PCaNgCxTeXJuBXQlqrVf41ZO3v41
+         l0igml8T46Gi/I4N/N2ciB7wX2RNoBfMYAPi5C86mv/+8zmytwTakT45ZHsr8oD2zbaV
+         YSuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=zgcz1Ul6i9PXeI/P/ZQ+OncdDs4YJohaTrFfyIJlyi8=;
-        b=OhsLxuGHGckcxpKgU53Bx44j5X86DXQaNEuxVtsIfpQHnIZQoUCgAZ3ntHKRBOkdDL
-         XdxcKQ//fQ0n7q9fY3FIvoxyAJHkuyC5BeObWQxwtVUSNudb63cZw9TqIlXp8v7iPCLq
-         6k9Ntpvjx/V5N74fS7pRiYPtchjG7qU7ZNX4OsJ6PgR/KEwPyrwf6UBM21eEwdnTg55r
-         +XYlMhbiH91MfZ6RT9Tq0cyjdReMwu7l2EsWOuRXAB4DBffatZLPBgE0QfJ1SZ4m3/cH
-         3kc04o/PCP1/4c2RvuBGtnV9nORTgbiKePMRqRsloA3RFa/z8R5CHRvCnZ/mJ0M034wK
-         7LlA==
-X-Gm-Message-State: ACrzQf1UTzJeNh/jB70qV0nvi+mhdghad/2FHw2UgtbodwZ/PguofvMp
-        E3nLnE3NphXQtzn1ykKCvv3ejsMKrwxWVLkZACDD8g==
-X-Google-Smtp-Source: AMsMyM691nV87AVQASfKNBWi3Ophm3NA6FDzejuedQw6Z9f9ySuzMcOF42M6fueIQaOxEbKvmDe0TiEvzVBd+oAM9Ds=
-X-Received: by 2002:a02:1d08:0:b0:35b:9c9:f8ff with SMTP id
- 8-20020a021d08000000b0035b09c9f8ffmr3425999jaj.281.1663783728026; Wed, 21 Sep
- 2022 11:08:48 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=2KAjKe3iq+QwXIwjpYW0v2WCVk5payTUoCJDsQmbzI8=;
+        b=Vy1JRq0v8DcHJomKxBGmGsz8dhdpTPFEJMewBcfQtan1E2ekzxvkpii/i5WXhLe2jD
+         z5asw+lDIVZeMV6Jf6qtC4f94eq0gzcaO7xBN1YQm8FnO2ACPRy2COklKfpFklP8WAaG
+         KwtKfBqQnMyqC+Gf1cnzMpAPhmM8K+9M52u5+5pAIyAuF2vQpEvyNC2no/7qHwBmkLrm
+         RM6opoxfPEqMMhUI6lzFUS7Pk9H4O5xNEYlr2Vb2bfKZvBsGgNPluaQhAEoAvMKtsItw
+         iq703SjgCl5fwxEsAWW/VPFIMgR+JdAnrEazO68Nj9Cl0pMdYHqfayqaAg2AcTOcWpf7
+         eh8g==
+X-Gm-Message-State: ACrzQf36k+u2P60UntnzDj76JSCsVRpZjTLHeT1r/eekPrel6B3f0Mer
+        dSCFLfs49brjc75cZn2plTL80w==
+X-Google-Smtp-Source: AMsMyM4UCVkUuJlIWCzIoLcjoOrjvEbZNm7U4braBDAIgp5TxPj0szTxk92o8GSPD6WK1CcXL2nSfg==
+X-Received: by 2002:ae9:eb04:0:b0:6cb:d287:d6d4 with SMTP id b4-20020ae9eb04000000b006cbd287d6d4mr20476883qkg.310.1663783746781;
+        Wed, 21 Sep 2022 11:09:06 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
+        by smtp.gmail.com with ESMTPSA id o10-20020ac841ca000000b00339163a06fcsm2075049qtm.6.2022.09.21.11.09.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Sep 2022 11:09:05 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1ob49g-001Gq7-T9;
+        Wed, 21 Sep 2022 15:09:04 -0300
+Date:   Wed, 21 Sep 2022 15:09:04 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     Evan Green <evgreen@chromium.org>, linux-kernel@vger.kernel.org,
+        gwendal@chromium.org, Eric Biggers <ebiggers@kernel.org>,
+        Matthew Garrett <mgarrett@aurora.tech>, jarkko@kernel.org,
+        zohar@linux.ibm.com, linux-integrity@vger.kernel.org,
+        apronin@chromium.org, dlunev@google.com, rjw@rjwysocki.net,
+        linux-pm@vger.kernel.org, corbet@lwn.net, jejb@linux.ibm.com,
+        David Howells <dhowells@redhat.com>,
+        Hao Wu <hao.wu@rubrik.com>, James Morris <jmorris@namei.org>,
+        Len Brown <len.brown@intel.com>,
+        Matthew Garrett <matthewgarrett@google.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, axelj <axelj@axis.com>,
+        keyrings@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v2 00/10] Encrypted Hibernation
+Message-ID: <YytTQPOlAC58Bk7W@ziepe.ca>
+References: <20220823222526.1524851-1-evgreen@chromium.org>
+ <20220920084648.GA17087@duo.ucw.cz>
 MIME-Version: 1.0
-References: <20220920190617.2539-1-ivan@cloudflare.com> <b6aa0151527a4ee39ae85dfd34e71864@AcuMS.aculab.com>
-In-Reply-To: <b6aa0151527a4ee39ae85dfd34e71864@AcuMS.aculab.com>
-From:   Ivan Babrou <ivan@cloudflare.com>
-Date:   Wed, 21 Sep 2022 11:08:37 -0700
-Message-ID: <CABWYdi2QrsVNngD1ypp+WPg_56DRVk01HuBDjOAKBaav8KJncQ@mail.gmail.com>
-Subject: Re: [PATCH] proc: report open files as size in stat() for /proc/pid/fd
-To:     David Laight <David.Laight@aculab.com>
-Cc:     "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel-team@cloudflare.com" <kernel-team@cloudflare.com>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        "Theodore Ts'o" <tytso@mit.edu>, Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Christoph Anton Mitterer <mail@christoph.anton.mitterer.name>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Paul Gortmaker <paul.gortmaker@windriver.com>,
-        Kalesh Singh <kaleshsingh@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220920084648.GA17087@duo.ucw.cz>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 21, 2022 at 3:21 AM David Laight <David.Laight@aculab.com> wrote:
->
-> From: Ivan Babrou
-> > Sent: 20 September 2022 20:06
-> ...
-> >
-> > +static int proc_readfd_count(struct inode *inode)
-> > +{
-> > +     struct task_struct *p = get_proc_task(inode);
-> > +     struct fdtable *fdt;
-> > +     unsigned int i, size, open_fds = 0;
-> > +
-> > +     if (!p)
-> > +             return -ENOENT;
-> > +
-> > +     if (p->files) {
-> > +             fdt = files_fdtable(p->files);
-> > +             size = fdt->max_fds;
-> > +
-> > +             for (i = size / BITS_PER_LONG; i > 0;)
-> > +                     open_fds += hweight64(fdt->open_fds[--i]);
-> > +     }
+On Tue, Sep 20, 2022 at 10:46:48AM +0200, Pavel Machek wrote:
+> Hi!
+> 
+> > We are exploring enabling hibernation in some new scenarios. However,
+> > our security team has a few requirements, listed below:
+> > 1. The hibernate image must be encrypted with protection derived from
+> >    both the platform (eg TPM) and user authentication data (eg
+> >    password).
+> > 2. Hibernation must not be a vector by which a malicious userspace can
+> >    escalate to the kernel.
+> 
+> Why is #2 reasonable requirement?
 
-I'm missing put_task_struct(p) here.
+These days with kernel lockdown we don't allow userspace to enter the
+kernel
 
-> > +
-> > +     return open_fds;
-> > +}
-> > +
->
-> Doesn't that need (at least) rcu protection?
+> We normally allow userspace with appropriate permissions to update the
+> kernel, for example.
 
-Should I enclose the "if" in rcu_read_lock() / rcu_read_unlock()?
+And in a lockdown secure boot environment only a signed kernel can be
+booted in the first place.
 
-files_fdtable() is this:
+A series like this is effectively carrying the secure boot trust
+across the hibernation
 
-* https://elixir.bootlin.com/linux/v6.0-rc6/source/include/linux/fdtable.h#L77
+Jason
 
-#define files_fdtable(files) \
-    rcu_dereference_check_fdtable((files), (files)->fdt)
-
-And rcu_dereference_check_fdtable() is
-
-#define rcu_dereference_check_fdtable(files, fdtfd) \
-  rcu_dereference_check((fdtfd), lockdep_is_held(&(files)->file_lock))
-
-I definitely need some help with locking here.
-
-> There might also be issues reading p->files twice.
-
-This block for reading twice:
-
-if (p->files) {
-    fdt = files_fdtable(p->files);
-
-Already exists in fs/proc/array.c in task_state():
-
-* https://elixir.bootlin.com/linux/v6.0-rc6/source/fs/proc/array.c#L173
-
-There's task_lock(p) there, so maybe that's why it's allowed.
-
-Should I run files_fdtable(p->files) unconditionally and then check
-the result instead? I'm happy to change it to something else if you
-can tell me what it should be.
-
-If there are kernel options I should enable for testing this, I'd be
-happy to hear them. So far we've tried running with KASAN with no
-issues.
