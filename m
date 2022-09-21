@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E2DF5BF247
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 02:40:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64F515BF249
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 02:41:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231187AbiIUAkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 20:40:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47320 "EHLO
+        id S230514AbiIUAlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Sep 2022 20:41:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbiIUAkS (ORCPT
+        with ESMTP id S229624AbiIUAk5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 20:40:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EEEB1A061;
-        Tue, 20 Sep 2022 17:40:17 -0700 (PDT)
+        Tue, 20 Sep 2022 20:40:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A4D14362B;
+        Tue, 20 Sep 2022 17:40:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 30BA9B82DC4;
-        Wed, 21 Sep 2022 00:40:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D274DC433C1;
-        Wed, 21 Sep 2022 00:40:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2F788B82DC4;
+        Wed, 21 Sep 2022 00:40:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FE9BC433C1;
+        Wed, 21 Sep 2022 00:40:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663720814;
-        bh=QuGlF4oR80+iV2zM2o3vgC0PY/352i8eVnDT5Cp2rfo=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=a/HvLO/znD9YbyO11olBSY/R3aXRi3dfqa9Cd2YSebXwkfWIDktMOcBa68EIOAjlf
-         jHah1wXyvPDa8GznNI8zMNUfDhyEiDZD7UrABkYffufwr5XbDrM+YTQLVDsWQvYZW7
-         l3CgtlhjcUg+vkscUHQi9m32VnPTXkN+sh08upqNiMfiZmtCOmXK94JTgsYCBZSuIJ
-         7Ko+ZIhPboLV698c5x/T4O0UQ4JM/GlsylE798IllW8biDgfAiySPjFZPSjLiVK8o1
-         QipR8FomO4QhoCggkWpoFpL1MPE2JBCEttPfGCFPJAocjrn09olEDLw4G63KAIZc0/
-         eQZc9+x1GV+2Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B40B0E21EE0;
-        Wed, 21 Sep 2022 00:40:14 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1663720853;
+        bh=MWlEw1UNRXi3JxOk0I3huE7q55AKj+oZp9V5gN/1Zdc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=I++YjRKdI0zD1tkCO51gbFlBwiSDBKlfCD6c7OYxEsTSXyTFtRMPi+/r4UQP6GQ10
+         M/cgyGPdypYcGOLi7hxiIdC0AUhbmjFqOYsICzw2DNxU1VT1bdDb/+5uU/3dKIu6p3
+         gP3xPJMTVQtpiu+2QvMA0EOzf24JeNJZKJBnlwL3P8lsO3sOx9qbg9FvvX4us2X4rE
+         OMqrSumpDVXvUL3N5y4CTV0o4X5Va4IC8UVcfjd8SmMU7mik7JPWJ4tIXY/Rvs9ZCY
+         ynOZDa7jL34aiurlNB9GrLQaZUHj30/bZzvgZ8w/F7RQGsongu1mZIrEVVBKqVpo1k
+         qQHXrY5jD4vEQ==
+Date:   Tue, 20 Sep 2022 17:40:52 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Peilin Ye <yepeilin.cs@gmail.com>
+Cc:     Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Peilin Ye <peilin.ye@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Alexei Starovoitov <ast@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 1/2] udp: Refactor udp_read_skb()
+Message-ID: <20220920174052.47d9858b@kernel.org>
+In-Reply-To: <20220920173859.6137f9e9@kernel.org>
+References: <03db9765fe1ef0f61bfc87fc68b5a95b4126aa4e.1663143016.git.peilin.ye@bytedance.com>
+        <20220920173859.6137f9e9@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] libbpf: Fix NULL pointer exception in API
- btf_dump__dump_type_data
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166372081471.5331.6260558640505751145.git-patchwork-notify@kernel.org>
-Date:   Wed, 21 Sep 2022 00:40:14 +0000
-References: <20220917084809.30770-1-liuxin350@huawei.com>
-In-Reply-To: <20220917084809.30770-1-liuxin350@huawei.com>
-To:     Xin Liu <liuxin350@huawei.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yanan@huawei.com,
-        wuchangye@huawei.com, xiesongyang@huawei.com, zhudi2@huawei.com,
-        kongweibin2@huawei.com
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -62,30 +62,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
-
-On Sat, 17 Sep 2022 16:48:09 +0800 you wrote:
-> We found that function btf_dump__dump_type_data can be called by the
-> user as an API, but in this function, the `opts` parameter may be used
-> as a null pointer.This causes `opts->indent_str` to trigger a NULL
-> pointer exception.
+On Tue, 20 Sep 2022 17:38:59 -0700 Jakub Kicinski wrote:
+> On Wed, 14 Sep 2022 01:15:30 -0700 Peilin Ye wrote:
+> > Delete the unnecessary while loop in udp_read_skb() for readability.
+> > Additionally, since recv_actor() cannot return a value greater than
+> > skb->len (see sk_psock_verdict_recv()), remove the redundant check.  
 > 
-> Fixes: 2ce8450ef5a3 ("libbpf: add bpf_object__open_{file, mem} w/ extensible opts")
-> Signed-off-by: Xin Liu <liuxin350@huawei.com>
-> Signed-off-by: Weibin Kong <kongweibin2@huawei.com>
-> 
-> [...]
+> These don't apply cleanly, please rebase?
 
-Here is the summary with links:
-  - [v2] libbpf: Fix NULL pointer exception in API btf_dump__dump_type_data
-    https://git.kernel.org/bpf/bpf-next/c/7620bffbf72c
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Ah, it's the WARN_ON_ONCE() change. In that case please resend after
+net is merged into net-next (Thu evening).
