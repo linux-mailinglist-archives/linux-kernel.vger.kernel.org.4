@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51A3C5C035D
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 18:03:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D85845C036C
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 18:04:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231972AbiIUQDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 12:03:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56152 "EHLO
+        id S230133AbiIUQEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 12:04:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232689AbiIUQAQ (ORCPT
+        with ESMTP id S232206AbiIUQBC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 12:00:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B52674BA3;
-        Wed, 21 Sep 2022 08:53:45 -0700 (PDT)
+        Wed, 21 Sep 2022 12:01:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14C1192B1;
+        Wed, 21 Sep 2022 08:54:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A5F963147;
-        Wed, 21 Sep 2022 15:52:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F900C433C1;
-        Wed, 21 Sep 2022 15:52:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E9E5FB830C4;
+        Wed, 21 Sep 2022 15:52:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 420D7C433D6;
+        Wed, 21 Sep 2022 15:52:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663775548;
-        bh=q2rdojOC/Y1HNKXuY19Te1mgE+B3k63DiAodRvNHeOM=;
+        s=korg; t=1663775551;
+        bh=4KhrI3t+rQ/9ga4NdwiecOGkzsjg8dy9tzWflldE8DA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ukjai7ahWEcba/vrZBYQB26SlclsCJF29aU2jSdZp4sBcqScS4Sw0VNKpIruDjX4D
-         c/nOpLqZ/4aHJR/BCzToDCtUBv1h3kV/sXjiSwgIj+LW6/0MFQLOP+RkeK/nCVS8uk
-         LoSgO7NGasMR3x5TSAjmhK0oOaFPs3ThTf6aFy1E=
+        b=oZQzFP7fpLaeR1Qc2hUWkNcAKK4xNj9mIeWbj3b749f2mH3gCs2YZClP5W53sMJ9Q
+         OgOhjn9MS8kGiQy4SgyMlBxwQo+q5/JUeBFvyaje8EKvyqn0XMiXCk6+A0NF8U1Gjd
+         28VpOkFdjNQ48uvyS5U9AXgk/VCsx7gfIAjgztjQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "jerry.meng" <jerry-meng@foxmail.com>,
-        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
-        Paolo Abeni <pabeni@redhat.com>,
+        stable@vger.kernel.org, David Howells <dhowells@redhat.com>,
+        Jeffrey E Altman <jaltman@auristor.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        linux-afs@lists.infradead.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 33/39] net: usb: qmi_wwan: add Quectel RM520N
-Date:   Wed, 21 Sep 2022 17:46:38 +0200
-Message-Id: <20220921153646.802396852@linuxfoundation.org>
+Subject: [PATCH 5.10 34/39] afs: Return -EAGAIN, not -EREMOTEIO, when a file already locked
+Date:   Wed, 21 Sep 2022 17:46:39 +0200
+Message-Id: <20220921153646.830284734@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220921153645.663680057@linuxfoundation.org>
 References: <20220921153645.663680057@linuxfoundation.org>
@@ -55,62 +57,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: jerry.meng <jerry-meng@foxmail.com>
+From: David Howells <dhowells@redhat.com>
 
-[ Upstream commit e1091e226a2bab4ded1fe26efba2aee1aab06450 ]
+[ Upstream commit 0066f1b0e27556381402db3ff31f85d2a2265858 ]
 
-add support for Quectel RM520N which is based on Qualcomm SDX62 chip.
+When trying to get a file lock on an AFS file, the server may return
+UAEAGAIN to indicate that the lock is already held.  This is currently
+translated by the default path to -EREMOTEIO.
 
-0x0801: DIAG + NMEA + AT + MODEM + RMNET
+Translate it instead to -EAGAIN so that we know we can retry it.
 
-T:  Bus=03 Lev=01 Prnt=01 Port=01 Cnt=02 Dev#= 10 Spd=480  MxCh= 0
-D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-P:  Vendor=2c7c ProdID=0801 Rev= 5.04
-S:  Manufacturer=Quectel
-S:  Product=RM520N-GL
-S:  SerialNumber=384af524
-C:* #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
-I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=40 Driver=option
-E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
-E:  Ad=88(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=0f(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-
-Signed-off-by: jerry.meng <jerry-meng@foxmail.com>
-Acked-by: Bjørn Mork <bjorn@mork.no>
-Link: https://lore.kernel.org/r/tencent_E50CA8A206904897C2D20DDAE90731183C05@qq.com
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: David Howells <dhowells@redhat.com>
+Reviewed-by: Jeffrey E Altman <jaltman@auristor.com>
+cc: Marc Dionne <marc.dionne@auristor.com>
+cc: linux-afs@lists.infradead.org
+Link: https://lore.kernel.org/r/166075761334.3533338.2591992675160918098.stgit@warthog.procyon.org.uk/
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/usb/qmi_wwan.c | 1 +
+ fs/afs/misc.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index 48e8b94e4a7c..1502069f3a4e 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -1024,6 +1024,7 @@ static const struct usb_device_id products[] = {
- 	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0512)},	/* Quectel EG12/EM12 */
- 	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0620)},	/* Quectel EM160R-GL */
- 	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0800)},	/* Quectel RM500Q-GL */
-+	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0801)},	/* Quectel RM520N */
- 
- 	/* 3. Combined interface devices matching on interface number */
- 	{QMI_FIXED_INTF(0x0408, 0xea42, 4)},	/* Yota / Megafon M100-1 */
+diff --git a/fs/afs/misc.c b/fs/afs/misc.c
+index 1d1a8debe472..f1dc2162900a 100644
+--- a/fs/afs/misc.c
++++ b/fs/afs/misc.c
+@@ -69,6 +69,7 @@ int afs_abort_to_error(u32 abort_code)
+ 		/* Unified AFS error table */
+ 	case UAEPERM:			return -EPERM;
+ 	case UAENOENT:			return -ENOENT;
++	case UAEAGAIN:			return -EAGAIN;
+ 	case UAEACCES:			return -EACCES;
+ 	case UAEBUSY:			return -EBUSY;
+ 	case UAEEXIST:			return -EEXIST;
 -- 
 2.35.1
 
