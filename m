@@ -2,64 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B7925BF803
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 09:44:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA6775BF806
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 09:45:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230027AbiIUHot (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 03:44:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40874 "EHLO
+        id S230416AbiIUHpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 03:45:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbiIUHoq (ORCPT
+        with ESMTP id S229788AbiIUHo6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 03:44:46 -0400
-Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF56A65B6;
-        Wed, 21 Sep 2022 00:44:43 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by a.mx.secunet.com (Postfix) with ESMTP id 77A2B201E2;
-        Wed, 21 Sep 2022 09:44:41 +0200 (CEST)
-X-Virus-Scanned: by secunet
-Received: from a.mx.secunet.com ([127.0.0.1])
-        by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id EY6uRd3Yvca6; Wed, 21 Sep 2022 09:44:40 +0200 (CEST)
-Received: from mailout1.secunet.com (mailout1.secunet.com [62.96.220.44])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 21 Sep 2022 03:44:58 -0400
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC5B74DB65;
+        Wed, 21 Sep 2022 00:44:51 -0700 (PDT)
+Received: from hillosipuli.retiisi.eu (dkwl20tj04snw15cjtflt-3.rev.dnainternet.fi [IPv6:2001:14ba:4493:6f40:fec3:d72a:e447:8113])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by a.mx.secunet.com (Postfix) with ESMTPS id EFA0020189;
-        Wed, 21 Sep 2022 09:44:40 +0200 (CEST)
-Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
-        by mailout1.secunet.com (Postfix) with ESMTP id DFCFC80004A;
-        Wed, 21 Sep 2022 09:44:40 +0200 (CEST)
-Received: from mbx-essen-01.secunet.de (10.53.40.197) by
- cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 21 Sep 2022 09:44:40 +0200
-Received: from gauss2.secunet.de (10.182.7.193) by mbx-essen-01.secunet.de
- (10.53.40.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 21 Sep
- 2022 09:44:40 +0200
-Received: by gauss2.secunet.de (Postfix, from userid 1000)
-        id 16C8C31829EC; Wed, 21 Sep 2022 09:44:40 +0200 (CEST)
-Date:   Wed, 21 Sep 2022 09:44:40 +0200
-From:   Steffen Klassert <steffen.klassert@secunet.com>
-To:     Li Zhong <floridsleeves@gmail.com>
-CC:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <f.fainelli@gmail.com>, <pabeni@redhat.com>, <kuba@kernel.org>,
-        <edumazet@google.com>, <davem@davemloft.net>, <klassert@kernel.org>
-Subject: Re: [PATCH v1] drivers/net/ethernet/3com: check the return value of
- vortex_up()
-Message-ID: <20220921074440.GA2950045@gauss3.secunet.de>
-References: <20220919073631.1574577-1-floridsleeves@gmail.com>
- <20220920100157.GV2950045@gauss3.secunet.de>
- <CAMEuxRo9oy4uc3XK7wQ26zgwmpwwp+iOT_47OsshAv-94tGgtw@mail.gmail.com>
+        (Authenticated sender: sailus)
+        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 49FD91B00215;
+        Wed, 21 Sep 2022 10:44:45 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+        t=1663746285;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vnGbC6DaaST+f3TKNbuJYJjswXZQ3tjchI+CtHy59hc=;
+        b=foXLrmtENA4hr4Ca1Oax+awTlkh46H2D9gkqxkXS0FkDdLDS7tgjSV7dRkbmsDla960FQl
+        XdRl1ON4Mrj5J7wBsEcHsQAiRLETC0PaV4UZeydpY1ieuS493R9//LlNVbcJJBdv5MiGGK
+        XXOiC8PPbhSbFyyxvhheovI1Cm/Rcpc+mUcvsugjpjdGddNkCtVUOnzlMvL7Pe7ScRGxxj
+        OlM9O4+cJKoxT2yBs+kFRjQhDHTgw9Faf6Gq+LfLYkwtIfjiNWg7XdnwyA7aoriJkyHyBp
+        CL33EbhK7Bmmi7y6coh5TDqUhZjoMRWbdaF5HPbPXcc/R5nhbB895XudAzhNZw==
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id E22E9634CAA;
+        Wed, 21 Sep 2022 10:44:44 +0300 (EEST)
+Date:   Wed, 21 Sep 2022 10:44:44 +0300
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Hidenori Kobayashi <hidenorik@chromium.org>
+Cc:     Dongchun Zhu <dongchun.zhu@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: ov8856: Add runtime PM callbacks
+Message-ID: <YyrA7PQP3yrQM0XW@valkosipuli.retiisi.eu>
+References: <20220920020002.710533-1-hidenorik@chromium.org>
+ <Yyl7spRDgJ+R39Pj@valkosipuli.retiisi.eu>
+ <20220921013212.m7sqb4v7hk5rddfa@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMEuxRo9oy4uc3XK7wQ26zgwmpwwp+iOT_47OsshAv-94tGgtw@mail.gmail.com>
-X-ClientProxiedBy: cas-essen-02.secunet.de (10.53.40.202) To
- mbx-essen-01.secunet.de (10.53.40.197)
-X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+In-Reply-To: <20220921013212.m7sqb4v7hk5rddfa@google.com>
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=lahtoruutu; t=1663746285;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vnGbC6DaaST+f3TKNbuJYJjswXZQ3tjchI+CtHy59hc=;
+        b=fnERBLw1zhKIvk3NKKFQMs5LEZ/mclKIvT75C49LwOkRTETDjX+ZSxR2S4JNDtYPgRhKkT
+        eHwi6RKkl1Bo/fzr+3ZB8H9brRC5J+PjpT6PJbII4iMPLbpsnUzkTJ46aTOde2WflWihUw
+        tvGlZWqj+a50DVlXDWFXN/dNS6Bc4vefg5Temv3YPh5olfbUZjpkIHkSuilAq5rv0/7Tab
+        05Vl3aQhozfIYvHFjePq3EHQSD4R1X/4lNTKKv0MLtkEwRdBSoosfOn6CKDHlqW9lroOvp
+        30eQ5snpTbKOIsq3pBDQcy20uTLHHxoIqmPKW+ZzLpxicJuZ+c80LAgdozE1Kg==
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1663746285; a=rsa-sha256;
+        cv=none;
+        b=UDL5S5Nu7tyIg2N6Y1gxL4DHYf9VoOeGJIq5T0HGvMYvz6RWDiI4tLsfu3hQzyl9P+6/Er
+        oJss2HaHjkoIGI12RDCOB7eAPMtIX7Ki4vhIlEzO6JfO4CB5eNuwhe1EJ012X5vb/f2vN9
+        SHnx8rBTL/faYpdisIYJWUy66zXaFGSYQQpsk9ypkTChMXgFRdoqcfPCTM2P45gA9wGqzL
+        0T9WaejVWG8kuPb/yxedsXsPc0NcDoLJo6+pqxl6qrpeF8lhoyb3V+xtS6okCDpgt+8KRq
+        BeBZoDGpM3iqmAVapmjwxfEtM9yy6fdjKO1bMyTv+RuoKKZMFKAaVmRugoV51Q==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,51 +84,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 09:15:35AM -0700, Li Zhong wrote:
-> On Tue, Sep 20, 2022 at 3:02 AM Steffen Klassert
-> <steffen.klassert@secunet.com> wrote:
-> >
-> > On Mon, Sep 19, 2022 at 12:36:31AM -0700, Li Zhong wrote:
-> > > Check the return value of vortex_up(), which could be error code when
-> > > the rx ring is not full.
-> > >
-> > > Signed-off-by: Li Zhong <floridsleeves@gmail.com>
-> > > ---
-> > >  drivers/net/ethernet/3com/3c59x.c | 5 ++++-
-> > >  1 file changed, 4 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/net/ethernet/3com/3c59x.c b/drivers/net/ethernet/3com/3c59x.c
-> > > index ccf07667aa5e..7806c5f60ac8 100644
-> > > --- a/drivers/net/ethernet/3com/3c59x.c
-> > > +++ b/drivers/net/ethernet/3com/3c59x.c
-> > > @@ -1942,6 +1942,7 @@ vortex_error(struct net_device *dev, int status)
-> > >       void __iomem *ioaddr = vp->ioaddr;
-> > >       int do_tx_reset = 0, reset_mask = 0;
-> > >       unsigned char tx_status = 0;
-> > > +     int err;
-> > >
-> > >       if (vortex_debug > 2) {
-> > >               pr_err("%s: vortex_error(), status=0x%x\n", dev->name, status);
-> > > @@ -2016,7 +2017,9 @@ vortex_error(struct net_device *dev, int status)
-> > >                       /* Must not enter D3 or we can't legally issue the reset! */
-> > >                       vortex_down(dev, 0);
-> > >                       issue_and_wait(dev, TotalReset | 0xff);
-> > > -                     vortex_up(dev);         /* AKPM: bug.  vortex_up() assumes that the rx ring is full. It may not be. */
-> > > +                     err = vortex_up(dev);
-> > > +                     if (err)
-> > > +                             return;
-> >
-> > Why does that fix the bug mentioned in the above comment?
-> >
+Hi Hidenori,
+
+On Wed, Sep 21, 2022 at 10:32:12AM +0900, Hidenori Kobayashi wrote:
+> Hi Sakari,
 > 
-> Since the bug is an unchecked error
+> Thanks for your review!
 
-No, it is not. It is completely pointless to check the error value here.
+You're welcome!
 
-> we detect it with static analysis and
-> validate it's a bug by the comment we see above the code.
+> I'm guessing that we want the
+> same for __ov8856_power_on().
 
-This code is from the nineties, so it is unfixed for more
-then 20 years. Do you really think Andrew Morton would have
-added this comment if the fix is that easy?
+Yes, please!
 
+-- 
+Sakari Ailus
