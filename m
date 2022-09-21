@@ -2,180 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 616255BFEE8
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 15:24:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A38A5BFEEB
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 15:26:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229503AbiIUNYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 09:24:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44260 "EHLO
+        id S229967AbiIUN0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 09:26:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbiIUNYH (ORCPT
+        with ESMTP id S229624AbiIUN0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 09:24:07 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2082.outbound.protection.outlook.com [40.107.223.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 243059353A;
-        Wed, 21 Sep 2022 06:24:06 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jAEhFRUjA2RDl48TgXW0Y1JdCNH/uuH8SVleVC+PzfKnnYWBVJHTETVl5SLUsAak/DhDMHrWtAigFpM8pj/xnHflmeET5f/oSJDxAhRcld3p2YtXPUULbtni5S8jL8PJ/3J1uK5EI6toyu60N6Vo1EpYxTd4hf3hXn0/mMwXCA/kT2mcu6MhttOlYwUMHrNkJXK2llfJtqxqHCkNv+IljslyAW9xJ3CSiNdvpwEv749ORKPLIrz2wRdHuwO3CMTJ938L0rEIsfZwbB4ub79ZTFAzextqzCsXRgVapuyw5Aj1WQdnt6iL6oUaFSM+sGywrG+NFCebh0uNUR2hRuBnog==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZREIf7PqrhyD4QbRkrBicUw1IoR/QLyuVPso1ZnwYbQ=;
- b=hIrBdjjOqkWLA3Fo58rbAOZn9ESjAKk5LGfn+5hnVMAxU8tfTg0MhQOlEzA6ToNdcy2Y36pdAYw+TX5ZsXAuTYnd/n8MvKHnV3rkN7ObNBrvSBZN5KzwNaluPA5yov6/+0sJdnOPXJTMPY8E2qoHmGUtqwglXyO3tEmUZHpqqmW+g9mrDoEQ9xaWYn25q2U27uBXLutduA1nU0uucxXDJckBDDlom9nEwSgRrvUFmSC3yIi2d2FU8Ne4NnEieQbf0R4uK1wgZsL3VffmjhENbxOPXJQQFZFG36voiAz02PCCaw2+gFXwXDslG1PIBLnKmwLBqBWNnsGq2pUsFajISA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZREIf7PqrhyD4QbRkrBicUw1IoR/QLyuVPso1ZnwYbQ=;
- b=VKKKaQlGYtcAtS7eSq7QMmafnDPBXEXEeXOZ+FLOPee9B9SWTFAT0hA+WrF2esrK7hVyB1Rraf3S/XJQUJD9MxcDN3RBeNApGBS1QKkZOumEe8WNW7aWuiBSt+r4YL5dUYmKta2Itrbq/cnijap+43wyX90gmnjXZjpoPdiNQjbWJCur61KpzJTPYbR8KPvYF1ut6WLi6XyvK4eFT/3Ns7UcSRGvBa+jPcChrAo2GFAg3VPTaJJsA531h62d3uUBQhzV6EK+USfgPvqIOYqgGT2E4F27BMQ022yy8AMH1gstos11PkZ3cauG4r/S9JSrOITuXZ0KELoa3nOoXhIpew==
-Received: from CH2PR12MB3895.namprd12.prod.outlook.com (2603:10b6:610:2a::13)
- by SJ0PR12MB5610.namprd12.prod.outlook.com (2603:10b6:a03:423::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.19; Wed, 21 Sep
- 2022 13:24:04 +0000
-Received: from CH2PR12MB3895.namprd12.prod.outlook.com
- ([fe80::7129:e05:131a:b109]) by CH2PR12MB3895.namprd12.prod.outlook.com
- ([fe80::7129:e05:131a:b109%5]) with mapi id 15.20.5654.017; Wed, 21 Sep 2022
- 13:24:04 +0000
-From:   Asmaa Mnebhi <asmaa@nvidia.com>
-To:     Asmaa Mnebhi <asmaa@nvidia.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        "robh@kernel.org" <robh@kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: RE: [PATCH v5 0/8] i2c: i2c-mlxbf.c: bug fixes and new feature
- support
-Thread-Topic: [PATCH v5 0/8] i2c: i2c-mlxbf.c: bug fixes and new feature
- support
-Thread-Index: AQHYzRkmhNx/4tIlJ0at8rY3SZEbQa3p39YQ
-Date:   Wed, 21 Sep 2022 13:24:04 +0000
-Message-ID: <CH2PR12MB38957C25C9DA618D7E101DDBD74F9@CH2PR12MB3895.namprd12.prod.outlook.com>
-References: <20220920174736.9766-1-asmaa@nvidia.com>
-In-Reply-To: <20220920174736.9766-1-asmaa@nvidia.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CH2PR12MB3895:EE_|SJ0PR12MB5610:EE_
-x-ms-office365-filtering-correlation-id: 5f97c6a9-12b1-42af-defa-08da9bd48df1
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 3pq9Ak7sTm0zZGXcxMb264GUiGSygxIxwhXLI2IWwxgKNWcq0q+1eRA46EBuo8Yb06hWpNpTSrM+rA60hFTqwCp5EXgLFCgoODu/8Ol4GTMcnchFnXuU2XuzhfsvjS7Sah6xnlOKK/vfW7ekEJkYjmiDXr4M7N/y//qoyaoVftPMVIhW0lq4XfHoi9L33CQ++PLenNM+aj9b9+M5c/VedUDL23vdhh/JbeOBGBK5pireSA9Ayk4kfrWlh0DLt1mxCr4ueNOQLTRpz6AX803kEXa2cuT2bXnKfGVCIDiB4KuBsok8+42yhCp/njJ5X+IY0pNsdAdkDZbsdL5b7H0/i+mYowAhTdr8m7OkolR8zqPYz4coKik86lq044qBSaFqgurW5igLqFXv3heuJ6pvjN1PDJeWSz77bot8c7ofXXwNuyg2GF4mxxaXlaXdwbLqBHtD5YzqYYShJD88olx+pYheOZao06XviS/6LrRmOBJKHjJrcM5M57X3bZl0EVscBm5XZzxDgCdlNNlv5mF5IroxHUzRrvi7/tB5oi/TqbCIhs9fbICgDFYDzG6JAvEyTEJCFfPGCAOr2GokQot/jyi7bQphZaCUyQRyiVwvpudgu4SEvL7YJP5nxl3eBKxbcl44rZAUcMwIHdzajIjfsYR6OVBJY3MEXr2dmS05juNB8jEYeohjkAXLLZ9Ebl8iRBeCIR3dUYNCOPHnzK1m3pXaaYe9cAHPbJ+dj33rmXi30wVm8owIKG0g93F8j97TwV4GoUKoPyoJyfgLnMWgeQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR12MB3895.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(39860400002)(376002)(346002)(136003)(396003)(451199015)(9686003)(6506007)(7696005)(53546011)(26005)(110136005)(38070700005)(478600001)(2906002)(5660300002)(38100700002)(64756008)(66446008)(66476007)(86362001)(33656002)(122000001)(55016003)(186003)(66556008)(41300700001)(71200400001)(83380400001)(76116006)(66946007)(8936002)(52536014)(316002)(8676002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?tzL1/gp1sHUi1BXEp4MtJTzunMOkCtk+dbhfHyZ7Y+XqNySRR4EhExM1wqf1?=
- =?us-ascii?Q?MbQ6XgR8nRI6YUxqaZVc5/rOOn4koztJyfuDLcK5K4apTXNIW+umvinzO96U?=
- =?us-ascii?Q?HqS98hTaVkY2HQOgRiTELQcBqXKRnUNvkKe/huOj2Dv9g5N4u2iuCU2tIvCP?=
- =?us-ascii?Q?g7hbv95+8SB0bT5tgHHJX+RHk7n1nylMXoUh6Ww2MHj6Td4quWOm7qBZ1/bw?=
- =?us-ascii?Q?ADE0mUFctJ91LMqWkGIsxUtGh0zKXwtVEoPmE06X5x6pq/JwwPzoM2LM6omQ?=
- =?us-ascii?Q?8yRsMZSifNr35XCWlW3+kg0zHZO65qCHX82tX/PEcUWF/vDjhA+S3N6KrJ3z?=
- =?us-ascii?Q?W6FePKuxncxKulbru7XJxBx7hkUbRH8n8FKUERFw/atWLa1mmWfziOFpBYXj?=
- =?us-ascii?Q?Wb/rbqFjmAVkWILCUcP4qElkyVDOtSXpni+VfYqjSx8vKQGPsEMAL55Zmxze?=
- =?us-ascii?Q?rMrmkTIuhud1B9usgSrj4jr8agbxF3SBNEnEln3f3Sjj5BMk8e3R755sL+gP?=
- =?us-ascii?Q?0i0h80eNxmQWosPzZHe5p6ji+7MZ0enGrgEzQTPgwda0xt4bCyTBBDRfB/w2?=
- =?us-ascii?Q?ymnzripV2OHoG1Ksm/D5lHCmbdDtoo5TzwfZB26SvzlavCQXXYPIae+kXR0O?=
- =?us-ascii?Q?bUtSAqG5laIIczBFMgNDX+/oDtpqfmRUdiE0kiRu9tuVeIjHZFQybWYYmuB3?=
- =?us-ascii?Q?yAF0BBbOZ7IcZkwHqo/5wb7cwd2e4deG/HpLnEbIq7JeolLN2doy4Tdvcf7Z?=
- =?us-ascii?Q?lHbUjVEPCZukhmKgn7sp8twf5HrGGxpf/y3h5DkNoRuiuY2jILFHhdU7QtD3?=
- =?us-ascii?Q?BjtGeZMfQ5XafBVg8OeopNGi/d+F2PjtR2pMDeUkw72iCZHVfF+LGwuZvnIp?=
- =?us-ascii?Q?pYxlQRNExmXbPCynKmtuDhHOG8s4p+wG2lNT/ty+qZAtTbgwkhanHxWbBwI3?=
- =?us-ascii?Q?Nc/uLz0ISS+iULpa/NClIabuNS66OxeKoTEqeWZ4oVS4Mwf8oqBgNAdKzg+f?=
- =?us-ascii?Q?UdaVk5uyaH7Jn6fbTRuwrEaXBAcwJaV2NJk3q7hwYAthR6c0pQAV9wWFtR43?=
- =?us-ascii?Q?nTJaA4Awx2nm1ZHylbZ+0MwThK+aUg+L6SPRFG+t85srBKRRlywiRvqSc5WI?=
- =?us-ascii?Q?EfPycOCn+XDIJJeT51Oe/ZeNn153MeqJC01VzF6yQtqQjwMpc2w+VWwQT8WR?=
- =?us-ascii?Q?vQSOsNiylKvD8SE9+3giMm1ycjr0x36YcfSQqa7AX8dpqZ1rrOCProV49p1L?=
- =?us-ascii?Q?ujeR1V6axJ3LJPjFvqqBffMH43pQWkz6eIxqgpJp13ZcQg57RjdXIdpNB5Mp?=
- =?us-ascii?Q?oxQwuk8pix/4NxpuwhFOGlP+8FnGHJtQANVXenALkE+LmkjBsF+2IR0o0fQs?=
- =?us-ascii?Q?up4a44SA48ldNilf8ukihI7Kly5KGM1UP1uOtYKDzDaem5mPgcLi0NujMLwh?=
- =?us-ascii?Q?fUvL8/j4lms/Ra2TrjpWUkk7eaUuJidwgMWMc5rirTFkHT69cky2XcNqFMMK?=
- =?us-ascii?Q?JTOpD+9mTrcgjDy49uPyv0yb7jYG7vNidr16XHmDv73U7EfKRA65tHuH6zg3?=
- =?us-ascii?Q?lrYqNREBKL6xZj7Zm3A=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 21 Sep 2022 09:26:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51FC97A539;
+        Wed, 21 Sep 2022 06:26:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0418FB810AA;
+        Wed, 21 Sep 2022 13:26:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29226C433D6;
+        Wed, 21 Sep 2022 13:26:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663766767;
+        bh=+wfYsp2xtCeuhYApN7yC7RNJT+HOL1bcyd1pFjfc0hc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=aIdaEevZb/JningGmHtmM5dyWkBXCO9QospOTGcX4+1Rud8S4jUYvF4FUgK+4FVsT
+         VS7bHFkSGoy/9B4Zv4Tn7SnwUPVmj2Et+Gydj8R2M9K5g3Q+wtmCQF+/FidBNeioI8
+         4EzjpiOhGjhtUt8cDbno8wqyl1J/mL4dCK4vcKaHVThJpLMWRXvK5/AwAQKATv120M
+         2UiMdLK3xS9MfKd5NnGgVyFmDctAZBKT93pCBYKUhV7rW+cnYDm5w2Q3gm9Jm7LFNj
+         pu0iAf2jM283bNOsHHMRIXVy2o9C2np1g3QalSaWw6XfFpr1nK0sBpQCtAjSsXvxKA
+         hZ5EoDiPCodfA==
+Date:   Wed, 21 Sep 2022 18:56:03 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     dma <dmaengine@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL]: dmaengine fixes for v6.0
+Message-ID: <YysQ6+o7IqJUwTdY@matsya>
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB3895.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5f97c6a9-12b1-42af-defa-08da9bd48df1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Sep 2022 13:24:04.2844
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: IyQoLFXtH+LHb1CjPH0utZCu0pYtDP4iYmaHIRI4/lcm2wpV+obsVkIDQHwM9iloC2jubj1eadMQO4D72lr6pg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5610
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="PT7C8PxsyWx/oBKW"
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wolfram,
 
-Is there any requirement to support DTs in i2c drivers?
-I would like to remove it in the v6 series because we don't support device =
-tree, only ACPI.
+--PT7C8PxsyWx/oBKW
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thank you,
-Asmaa
+Hey Linus,
 
------Original Message-----
-From: Asmaa Mnebhi <asmaa@nvidia.com>=20
-Sent: Tuesday, September 20, 2022 1:47 PM
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>; robh@kernel.org; linux=
--i2c@vger.kernel.org; linux-kernel@vger.kernel.org; devicetree@vger.kernel.=
-org
-Cc: Asmaa Mnebhi <asmaa@nvidia.com>
-Subject: [PATCH v5 0/8] i2c: i2c-mlxbf.c: bug fixes and new feature support
+Please pull to receive couple of small dmaengine driver fixes for v6.0.
 
-This is a series of patches fixing several bugs and implementing new featur=
-es.
+The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
 
-Bug fixes:
-1) Fix the frequency calculation
-2) Fix incorrect base address passed during io write
-3) prevent stack overflow in mlxbf_i2c_smbus_start_transaction()
-4) Support lock mechanism to avoid race condition between entities
-   using the i2c bus
+  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
 
-Cleanup:
-5) remove IRQF_ONESHOT flag as it is no longer needed.
+are available in the Git repository at:
 
-Features:
-6) Support multi slave functionality
-7) Support BlueField-3 SoC
-8) Update binding devicetree
+  git://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git tags/dm=
+aengine-fix-6.0
 
-What has changed from v4->v5:
-Fix build error in the mellanox i2c device tree documentation
+for you to fetch changes up to e0f1b21c504f050de83922dd49e6a425dad2d518:
 
-Asmaa Mnebhi (8):
-  i2c: i2c-mlxbf.c: Fix frequency calculation
-  i2c: i2c-mlxbf.c: remove IRQF_ONESHOT
-  i2c: i2c-mlxbf.c: incorrect base address passed during io write
-  i2c: i2c-mlxbf: prevent stack overflow in
-    mlxbf_i2c_smbus_start_transaction()
-  i2c: i2c-mlxbf.c: support lock mechanism
-  i2c: i2c-mlxbf: add multi slave functionality
-  i2c: i2c-mlxbf.c: support BlueField-3 SoC
-  i2c: i2c-mlxbf.c: Update binding devicetree
+  dmaengine: zynqmp_dma: Typecast with enum to fix the coverity warning (20=
+22-09-05 11:54:50 +0530)
 
- .../bindings/i2c/mellanox,i2c-mlxbf.yaml      |  48 +-
- MAINTAINERS                                   |   1 +
- drivers/i2c/busses/i2c-mlxbf.c                | 862 ++++++++++--------
- 3 files changed, 521 insertions(+), 390 deletions(-)
+----------------------------------------------------------------
+dmaengine fixes for v6.0
 
---
-2.30.1
+Driver fixes for:
+ - xilinx_dma: devm_platform_ioremap_resource error handling,
+   dma_set_mask_and_coherent failure handling, dt property read cleanup
+ - refcount leak fix for of_xudma_dev_get()
+ - zynqmp_dma: coverity fix for enum typecast
 
+----------------------------------------------------------------
+Liang He (1):
+      dmaengine: ti: k3-udma-private: Fix refcount leak bug in of_xudma_dev=
+_get()
+
+Shravya Kumbham (1):
+      dmaengine: zynqmp_dma: Typecast with enum to fix the coverity warning
+
+Swati Agarwal (3):
+      dmaengine: xilinx_dma: Fix devm_platform_ioremap_resource error handl=
+ing
+      dmaengine: xilinx_dma: cleanup for fetching xlnx,num-fstores property
+      dmaengine: xilinx_dma: Report error in case of dma_set_mask_and_coher=
+ent API failure
+
+ drivers/dma/ti/k3-udma-private.c |  6 +++---
+ drivers/dma/xilinx/xilinx_dma.c  | 21 +++++++++++++--------
+ drivers/dma/xilinx/zynqmp_dma.c  |  2 +-
+ 3 files changed, 17 insertions(+), 12 deletions(-)
+
+
+--=20
+~Vinod
+
+--PT7C8PxsyWx/oBKW
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEE+vs47OPLdNbVcHzyfBQHDyUjg0cFAmMrEOsACgkQfBQHDyUj
+g0cMehAAl89JEbOA6sVbm/w9Px0JvaewHRhXR3auxfxzSXzHQlcuNcNJ/mlNZ9rX
+i9WBt3jDu8/9eycvNsoDO2JfbDoVvQtpcpMkz2MPT2RGsIBdCR/0wI8h5aQalwgS
+A8VCztJfuYnrdo+sBXZ3/0i9XkH4xhjrlMcOKwM3HBUDIY0OS/FmHKY6T4MZZkeU
+VVN2d99hQH7sns/KU/llQbEZe3k5NWON+RZhXXTlW8ZhbARyvBMKbOKIofpPe+BJ
+lOUJQlFKVh7MPUyST12MRwBLdJNSB/L5i1pkWQq/4XkLKG6P2RvkAIEC7KJzNkCW
+v/jgxzxf6G1tBKu7E41I1C32n7RASK3WIgDtAXUO5HxvcP3cotrd1Qdx+O30xyDt
+BnhHMNl+Y+npThJOS3jzGuSdVb8uAS3jT9VUezEyByHS39jzYodDiVhjCQSY2EC5
+d65lM7UJVwuUJcfjW/MRpSQcekx8lLjnjGbLRQKG6ZObWAS+9EahRmEzPZmyJa8m
+mriaWpD7EdFRlmZ43Bg0SwECAoBnYK+KWQV/9TEhDujJR1oLMqaMSFx6Z/O6VwKa
+D53GV1cFjv2EIrzUpBTtKxwmVLu7rwHn7Q5lb0odvVhn6rdggAXybfW7zaiXkEyF
+6Rdn0bzXXxjn4mU6XcpZR4Qw/PbPvIcbqnHU5gcE00KCops7ftQ=
+=jc1h
+-----END PGP SIGNATURE-----
+
+--PT7C8PxsyWx/oBKW--
