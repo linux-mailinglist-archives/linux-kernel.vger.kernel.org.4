@@ -2,163 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57CB55BF9A0
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 10:46:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C46565BF9A7
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 10:47:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230293AbiIUIpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 04:45:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56100 "EHLO
+        id S230382AbiIUIqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 04:46:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230322AbiIUIpk (ORCPT
+        with ESMTP id S231361AbiIUIqX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 04:45:40 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD76078589;
-        Wed, 21 Sep 2022 01:45:38 -0700 (PDT)
+        Wed, 21 Sep 2022 04:46:23 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A398A1C9
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 01:46:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663749938; x=1695285938;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=sbIV5wkTfCBxJtan/BjTAdWJ6wgE2neJJGgffXqXZIw=;
-  b=FtC759o/J8HckGeLMyFfozX2LGaehEMMI0utzLikd3rM9nFHhLjIo0wa
-   ovjW6qQtXYD4Dfceb+AmrQnu8aejKHLqGbcLqDPIGkh2ZfBBa1xCftQgQ
-   OrU2PexG30B8sILMbG5/vIuR1JjMfhjm8LotnOhSSBCj+atndNMlg4z9O
-   w4SwWKw6cTKMggTXIu0nwJdfzUvJJ6pDFDmlZZEcus2c92cOh9bhl2+hf
-   ZOIUloahuOY+omGfLu62mHni3876iOsCyz2xNIbF8s701iH9nqi1j12j1
-   KSuWgjecakFVPq0Tl7rNy0rU0QFtfo1OKD0xsMZNszaPhr564Fq6bCtke
+  t=1663749976; x=1695285976;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=OtvwF4Pfps/Yz2EfcPEjnzA4EIdvExd24ETOq4zZfF0=;
+  b=gt+v6gy1JjZVsWtacI3W77dSnFvluawGRSiUSa2KztFFJvLIvBsuZ1mE
+   6rlMDFfIDBWhHSW40gM75CsW2l5M/zlDewfg4RL3bCR5oDqGlMXTNDRUB
+   YhPb8EyN8G3RKHkyV7bkVRmju7UAseDf+3ReGWGCQh9uQTMWMSGLlbP+m
+   vkutNMr+8K7PC8qyr7WuuOmE7pH2/CJZ3oUA45JekNejGlmHegR8fsxQy
+   NPT7oelX9w5Cip7BtbWKZLSu3xrb4LGX8Utg8n4SyS1dPOE8fIL2aThWB
+   5R2df54ow5Rp6CKDm+oCb3UZICxlLcE2RF1Ntd/PtoqH8icXD90TNiS6U
    Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10476"; a="287014012"
+X-IronPort-AV: E=McAfee;i="6500,9779,10476"; a="299930174"
 X-IronPort-AV: E=Sophos;i="5.93,332,1654585200"; 
-   d="scan'208";a="287014012"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 01:45:38 -0700
+   d="scan'208";a="299930174"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 01:46:14 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,332,1654585200"; 
-   d="scan'208";a="744872801"
-Received: from dgonsal1-mobl1.ger.corp.intel.com ([10.252.58.151])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 01:45:35 -0700
-Date:   Wed, 21 Sep 2022 11:45:33 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Sherry Sun <sherry.sun@nxp.com>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        bhuvanchandra.dv@toradex.com,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-imx@nxp.com
-Subject: Re: [PATCH] tty: serial: fsl_lpuart: disable dma rx/tx use flags in
- lpuart_dma_shutdown
-In-Reply-To: <20220920111703.1532-1-sherry.sun@nxp.com>
-Message-ID: <a4671a85-70b5-71ce-72e6-8452a36cf4e@linux.intel.com>
-References: <20220920111703.1532-1-sherry.sun@nxp.com>
+   d="scan'208";a="614725023"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 21 Sep 2022 01:46:12 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oavMy-0003Qh-14;
+        Wed, 21 Sep 2022 08:46:12 +0000
+Date:   Wed, 21 Sep 2022 16:45:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Tony Luck <tony.luck@intel.com>
+Subject: [intel-tdx:guest-attest-wip 2/3]
+ drivers/virt/coco/tdx-guest/tdx-guest.c:129:32: warning: 'tdx_guest_ids'
+ defined but not used
+Message-ID: <202209211607.tCtTWKbV-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323329-275608948-1663749918=:1741"
-Content-ID: <307511ca-eab6-314-3ba1-baac702c93f4@linux.intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+tree:   https://github.com/intel/tdx.git guest-attest-wip
+head:   33cc9e3b6141b4339bceb2591c188d866c7a9052
+commit: 3a38d73702055606f2b0a1ea0610767e7142e0cb [2/3] virt: Add TDX guest driver
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220921/202209211607.tCtTWKbV-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel/tdx/commit/3a38d73702055606f2b0a1ea0610767e7142e0cb
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx guest-attest-wip
+        git checkout 3a38d73702055606f2b0a1ea0610767e7142e0cb
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/virt/coco/tdx-guest/
 
---8323329-275608948-1663749918=:1741
-Content-Type: text/plain; CHARSET=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-Content-ID: <7f36fa4e-8476-b9b7-6c2e-87e5828c31b2@linux.intel.com>
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-On Tue, 20 Sep 2022, Sherry Sun wrote:
+All warnings (new ones prefixed by >>):
 
-> lpuart_dma_shutdown tears down lpuart dma, but lpuart_flush_buffer can
-> still occur which in turn tries to access dma apis if lpuart_dma_tx_use
-> flag is true. At this point since dma is torn down, these dma apis can
-> abort. Set lpuart_dma_tx_use and the corresponding rx flag
-> lpuart_dma_rx_use to false in lpuart_dma_shutdown so that dmas are not
-> accessed after they are relinquished.
-> 
-> Otherwise, when try to kill btattach, kernel may panic. This patch may
-> fix this issue.
-> root@imx8ulpevk:~# btattach -B /dev/ttyLP2 -S 115200
-> ^C[   90.182296] Internal error: synchronous external abort: 96000210 [#1] PREEMPT SMP
-> [   90.189806] Modules linked in: moal(O) mlan(O)
-> [   90.194258] CPU: 0 PID: 503 Comm: btattach Tainted: G           O      5.15.32-06136-g34eecdf2f9e4 #37
-> [   90.203554] Hardware name: NXP i.MX8ULP 9X9 EVK (DT)
-> [   90.208513] pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [   90.215470] pc : fsl_edma3_disable_request+0x8/0x60
-> [   90.220358] lr : fsl_edma3_terminate_all+0x34/0x20c
-> [   90.225237] sp : ffff800013f0bac0
-> [   90.228548] x29: ffff800013f0bac0 x28: 0000000000000001 x27: ffff000008404800
-> [   90.235681] x26: ffff000008404960 x25: ffff000008404a08 x24: ffff000008404a00
-> [   90.242813] x23: ffff000008404a60 x22: 0000000000000002 x21: 0000000000000000
-> [   90.249946] x20: ffff800013f0baf8 x19: ffff00000559c800 x18: 0000000000000000
-> [   90.257078] x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
-> [   90.264211] x14: 0000000000000003 x13: 0000000000000000 x12: 0000000000000040
-> [   90.271344] x11: ffff00000600c248 x10: ffff800013f0bb10 x9 : ffff000057bcb090
-> [   90.278477] x8 : fffffc0000241a08 x7 : ffff00000534ee00 x6 : ffff000008404804
-> [   90.285609] x5 : 0000000000000000 x4 : 0000000000000000 x3 : ffff0000055b3480
-> [   90.292742] x2 : ffff8000135c0000 x1 : ffff00000534ee00 x0 : ffff00000559c800
-> [   90.299876] Call trace:
-> [   90.302321]  fsl_edma3_disable_request+0x8/0x60
-> [   90.306851]  lpuart_flush_buffer+0x40/0x160
-> [   90.311037]  uart_flush_buffer+0x88/0x120
-> [   90.315050]  tty_driver_flush_buffer+0x20/0x30
-> [   90.319496]  hci_uart_flush+0x44/0x90
-> [   90.323162]  +0x34/0x12c
-> [   90.327253]  tty_ldisc_close+0x38/0x70
-> [   90.331005]  tty_ldisc_release+0xa8/0x190
-> [   90.335018]  tty_release_struct+0x24/0x8c
-> [   90.339022]  tty_release+0x3ec/0x4c0
-> [   90.342593]  __fput+0x70/0x234
-> [   90.345652]  ____fput+0x14/0x20
-> [   90.348790]  task_work_run+0x84/0x17c
-> [   90.352455]  do_exit+0x310/0x96c
-> [   90.355688]  do_group_exit+0x3c/0xa0
-> [   90.359259]  __arm64_sys_exit_group+0x1c/0x20
-> [   90.363609]  invoke_syscall+0x48/0x114
-> [   90.367362]  el0_svc_common.constprop.0+0xd4/0xfc
-> [   90.372068]  do_el0_svc+0x2c/0x94
-> [   90.375379]  el0_svc+0x28/0x80
-> [   90.378438]  el0t_64_sync_handler+0xa8/0x130
-> [   90.382711]  el0t_64_sync+0x1a0/0x1a4
-> [   90.386376] Code: 17ffffda d503201f d503233f f9409802 (b9400041)
-> [   90.392467] ---[ end trace 2f60524b4a43f1f6 ]---
-> [   90.397073] note: btattach[503] exited with preempt_count 1
-> [   90.402636] Fixing recursive fault but reboot is needed!
-> 
-> Fixes: 6250cc30c4c4 ("tty: serial: fsl_lpuart: Use scatter/gather DMA for Tx")
-> Signed-off-by: Thara Gopinath <tgopinath@microsoft.com>
-> Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
-> ---
->  drivers/tty/serial/fsl_lpuart.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
-> index f21915015d67..064bd1f33c21 100644
-> --- a/drivers/tty/serial/fsl_lpuart.c
-> +++ b/drivers/tty/serial/fsl_lpuart.c
-> @@ -1771,6 +1771,7 @@ static void lpuart_dma_shutdown(struct lpuart_port *sport)
->  	if (sport->lpuart_dma_rx_use) {
->  		del_timer_sync(&sport->lpuart_timer);
->  		lpuart_dma_rx_free(&sport->port);
-> +		sport->lpuart_dma_rx_use = false;
->  	}
->  
->  	if (sport->lpuart_dma_tx_use) {
-> @@ -1779,6 +1780,7 @@ static void lpuart_dma_shutdown(struct lpuart_port *sport)
->  			sport->dma_tx_in_progress = false;
->  			dmaengine_terminate_all(sport->dma_tx_chan);
->  		}
-> +		sport->lpuart_dma_tx_use = false;
->  	}
->  
->  	if (sport->dma_tx_chan)
+>> drivers/virt/coco/tdx-guest/tdx-guest.c:129:32: warning: 'tdx_guest_ids' defined but not used [-Wunused-const-variable=]
+     129 | static const struct x86_cpu_id tdx_guest_ids[] = {
+         |                                ^~~~~~~~~~~~~
 
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+
+vim +/tdx_guest_ids +129 drivers/virt/coco/tdx-guest/tdx-guest.c
+
+   128	
+ > 129	static const struct x86_cpu_id tdx_guest_ids[] = {
+   130		X86_MATCH_FEATURE(X86_FEATURE_TDX_GUEST, NULL),
+   131		{}
+   132	};
+   133	MODULE_DEVICE_TABLE(x86cpu, tdx_guest_ids);
+   134	
 
 -- 
- i.
---8323329-275608948-1663749918=:1741--
+0-DAY CI Kernel Test Service
+https://01.org/lkp
