@@ -2,762 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7F925C04AB
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 18:51:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 248DC5C04AC
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 18:51:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230426AbiIUQvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 12:51:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55564 "EHLO
+        id S231759AbiIUQva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 12:51:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229820AbiIUQua (ORCPT
+        with ESMTP id S231671AbiIUQuj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 12:50:30 -0400
-Received: from finn.localdomain (finn.gateworks.com [108.161.129.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B15326113;
-        Wed, 21 Sep 2022 09:46:26 -0700 (PDT)
-Received: from 068-189-091-139.biz.spectrum.com ([68.189.91.139] helo=tharvey.pdc.gateworks.com)
-        by finn.localdomain with esmtp (Exim 4.93)
-        (envelope-from <tharvey@gateworks.com>)
-        id 1ob2re-00Gscu-U3; Wed, 21 Sep 2022 16:46:23 +0000
-From:   Tim Harvey <tharvey@gateworks.com>
-To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     NXP Linux Team <linux-imx@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tim Harvey <tharvey@gateworks.com>
-Subject: [PATCH] arm64: dts: imx8m*-venice: add I2C GPIO bus recovery support
-Date:   Wed, 21 Sep 2022 09:46:20 -0700
-Message-Id: <20220921164620.3298914-1-tharvey@gateworks.com>
+        Wed, 21 Sep 2022 12:50:39 -0400
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01olkn2068.outbound.protection.outlook.com [40.92.99.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A7898363
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 09:46:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RmkvumER24sM3cEM323YYDWmvpig4FIpECJEthPqjlGsXl+RWfwCdYEbh/t0RAeo3OiAdTUubAhMrooRAS+t5hcDaXmqALjpJ6awsly2xDZCHDY52sQOW8w3w9R2QvPjzvFD5JHBsMIE+8iGWi6rsnof2vz2ydn8RjUa9jfhOT1au5vc7g5zV17ZbyCLmzxFVh0plpu6qhtE7j4fpgd28uFbIXXxAAa6fUYTFw/u/hd5BvbWkVDn1234PL9fz/jploNmTjjOmK9YC3KuPGSrMYqNJLu4ASm98UT8NkFl9rZP1FPx5JNfqhQPPsUgfgpU1n/qXRB293aqqhVIgOqAKQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3VLv+ChILk/ZFvL4qMEyh8rYOwzv3JPGRcpKvLgSTmU=;
+ b=eVo56Uu1C93rBVO+Q+gP+Azv8/AXOPTMm9C72yV9UdPfREWhgXyUvkSaCuo5GQZ9CC//POnbNVZ2FPPYRu/V/XqK+gZKfTKDI4oIyXuce58JR4fLdKMrwqH58zJf7JSF0M9+beWSrbZ6mT/R9vCMTrplq2mVpjuKti7czMAqHyT2zi71GtZ1yDP41bT3q/0SnCHdGvHT7U6xf4yyYelFE9iCkcI5oSuHdGucMcyaUu8Tge6ZRIR1BXAOpCUMqBmm+ntqHWmUV2pfIUvyhi349c9GxBr9shJnN/bBb7CSHExSBmEEyVLJM0MTuK0+bw6Qjsg3SAIMaqdx8c9i3fQ9ZA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3VLv+ChILk/ZFvL4qMEyh8rYOwzv3JPGRcpKvLgSTmU=;
+ b=sUH4Zj90dREsbjSHGz5d6Z2LDz+fmPXXSazRQUgzcwq7Ydz7rulbJcygZDk2bteZf0Gw/GIKF9ShE/fcFLoUwsc6MaBPxTMBRsJEzhRimcumny8cQb9yP/BLST9/GqCnWnfjecwWQ/UqfL6UHfvpcSJ4lcmKd2SHnZ6c40w20yYNNfzKuNR8oFvm7dZUlIZ9imauc9x+LWesPwbKpFQdl4vzVU/uAXOKVgTPOOcyhVFd/j4W5h/vOCstzm8sJM4wkUCGaxsW9oqhj0s2FR/r/zQex5cOL6Ork0eJGrrLQplDNqT6IMZsKgQGOBRd6kfUq0ne3QsQ3BMY5D3tnu/RDA==
+Received: from TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:152::9)
+ by TYWP286MB2683.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:24e::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.14; Wed, 21 Sep
+ 2022 16:46:34 +0000
+Received: from TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::f093:ab8c:7e3:f312]) by TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::f093:ab8c:7e3:f312%4]) with mapi id 15.20.5654.017; Wed, 21 Sep 2022
+ 16:46:34 +0000
+From:   Dawei Li <set_pte_at@outlook.com>
+To:     zackr@vmware.com
+Cc:     linux-graphics-maintainer@vmware.com, airlied@linux.ie,
+        daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Dawei Li <set_pte_at@outlook.com>
+Subject: [PATCH] drm/vmwgfx: Protect pin_user_pages with mmap_lock
+Date:   Thu, 22 Sep 2022 00:46:22 +0800
+Message-ID: <TYCP286MB23235C9A9FCF85C045F95EA7CA4F9@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
 X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-TMN:  [wB63a1nI2eSfo0bM3nJYgBeElOtFmbmbGX1jvoDwffg=]
+X-ClientProxiedBy: SI1PR02CA0021.apcprd02.prod.outlook.com
+ (2603:1096:4:1f4::14) To TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:400:152::9)
+X-Microsoft-Original-Message-ID: <20220921164622.651969-1-set_pte_at@outlook.com>
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYCP286MB2323:EE_|TYWP286MB2683:EE_
+X-MS-Office365-Filtering-Correlation-Id: 386957fb-cc0d-4fbc-e01c-08da9bf0d7b8
+X-MS-Exchange-SLBlob-MailProps: rYPt1fhvLTX15y/mp8GCG83TOVSPOMmUkYtyR4RpB1LeBqupdwcKUbFq/FhHzT/qtGBKYwZqYkrrehka4NvXUn2U6jA/RAvHOU0WUTEvH624z1zxhCIR/BEFhqRTikGoSHLWvbCzEby4yjx3KDPHWeXjWAudXRtepXRC4tGTuy/uOEvLdxY8mgT0JRgduS571R7JPMPodCT3tQJFNTgwafX1KCiKCLnYp171ogYWptCTRPIsx/Rh4pc6EgWLmFxi+GdbzdWL6HsMjxCizN6k3OEFLlENBbA6cYTHxiMOnJDcCwQM0YwFAnaMG4nEp8EDqrx9YMXQ/BLsz9JQnw8G6QHwT7zkd0OoERzjh6kPl0pwC3OoGXKyyPMtIyxDD0eg5niTEMASu5BKrI6SixE2I1H9hWrpJuGaufkTTY8BJeWuRdosB61uOrCGxg7H+SdfqKxhrMsy9PQs2GpjhlqSmFZj3E1dV7ddZnAffwp7x9Glq1i34CzW5G/uC4MOa0EQKk3THxjS2lGqEzmzqtsjoYNPt4/8A02y4meFAEoIkFvPZcKdJ7M8Wu/c4BSzAyKGvaXhpe23pO3W3/VxQ9ePTsxCIpx36i0KwWAq6Rzx4qvyoDwjyjWRWOylGEzqYzsHvHwdG0dB+mQybSz/wzd2gukqki5lbO7ZgOh8Qm4g9R9USIigeeSFutGxSRgjIL+4jcHtQlU2tlXEdKY3hoghDA==
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SZa3/Scc8BtiK5YCCMgSDLnNysJq47CvK8iZs1HFngGcQH9vF33yvE3WrGhjkrvpgaFfysdIxeYf563CjOvLLEzd3Fyzj9gWVUm0859SGOph3pzwP0wdYrdGPyEmT8sId2NZaEkz7JoeKYM0JD8KUnXqEmjkKzktQLyZlxrcN8U0ZImjmiijeYwnnKZAIpUM+ECPG6Tv+iSOm8JtjMWDwPOVnu2u6wClGiBh64Bg5pflwNOBYvYd+b+U1ypJLzGig6YzKikPwa+AC/BibDIsa5+AQmw/qzlA6vyhS+6F2Q7ivnEs3MzUyhN1iT7VGHDd1EZAjZHgeDio/m0LQo69SlvS/L0cxy3o7dW3whgjw7Ywz6MDxnadvceDy4X7szKTm/QKazBA+HFqvL6zSU2TvBv2JEKVlvfy7qXNvLDjoXy0fU24SX36ML9d6Y67OL/VIHYLL+i7Q19sPKBaIHtEgjX7UKTBDuqFndOd1WSxMx3d4RwqDVDfQDRw+eNNU5U4x/LTy2DCWFIbLg/RJIN+x+C8wUo6DLZ0OxDj7rxm0cT3DSkzE5ZGGQ0vvt8XSsdxtS6vh79umCoWx1SuD39zG0v4taMn6+I1GqrDxYxP4BNK2GtNPlS/oGU2hAgPC+jSmS0h4+DbUA2Bxg3Mr75xuQ==
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?EZM3yqpMN46Zg63GR6CHlhkQPK23pB5Lzg+W6oO0BpcQ3y5W9uZXdm9coYzH?=
+ =?us-ascii?Q?wysewvs/ifaJf6FV2XHgOlMSk4mAzhHleULdTmyZjX3ZbGY1bQwttO2aqnq8?=
+ =?us-ascii?Q?z3SoUjeQmDUE/0sTRPHgw/2KhncIeK4Vjif60XvqKRA+E2UPqLGrBRcSM8ka?=
+ =?us-ascii?Q?krJbE5jRDM4wuh1BRwuacL9Nlmu8MbXJXfE37LTzxac6qXasSbB3K9spoi8T?=
+ =?us-ascii?Q?pPlvCA198/yCpAVj4tBPdUStvJgEapBbvl/Y/rc2Sr9CF6kbPgHRPISDviqT?=
+ =?us-ascii?Q?Nk++mFX8X2k4Sr3WzwTvbO6YilU2RyCiUevahO6xqsXiNZ9hsT/AAn7WwFxe?=
+ =?us-ascii?Q?bmOn/xwoGXYuQQj/574zXFZcu/c7j2+GVBP95uowA5+uG3iSr1Amgkw8g3ca?=
+ =?us-ascii?Q?DQO3rAzbWObVqUPM4Gb+2sY3z74p2QBmmuikvTfVEaffLZCCw0GRoZfPvDI5?=
+ =?us-ascii?Q?bQzYswDgy29Rb2Fov9lLXd5hXreV+qGPiqXwK89CQRmwQXkeage4rd6QLwN5?=
+ =?us-ascii?Q?MAjPqLzd2jHuaTXavs8NepsGusBeWVXDv9+Fr4vWP580aSAPBQAvBjujkJyR?=
+ =?us-ascii?Q?Y/+Gs1LLKNgCZI5eG3vhee+yxZoBs2TB4RKF829wO2uWWUQOJ34DSrnlB60l?=
+ =?us-ascii?Q?CBTKLc5KJvfrzz2HvvYrPmvBv8+ANRJ9Ez7GJyCn7Q+d4dgZyhnTmXVZ8qhq?=
+ =?us-ascii?Q?ykCCwfL9ailjgorw2SwtbuRzsyv+IRTbqvJIYIK3nWtcTNw9uF+6jOcerLK4?=
+ =?us-ascii?Q?DyeT2D+Oz4jfiHv2Qm/EDez5h0mun6Jkn0bCPNXCZe4LakM7/R95A0s4pWWR?=
+ =?us-ascii?Q?O+wZ/JjUmwE6eFiqeQCGPhV20fv7hPlQmlcT+u3ffvTkwfBMHGt/Z1UbX/b+?=
+ =?us-ascii?Q?2uTlkAMmJ4hZzFVPNwubWABb/XHPppEFatnciJTDrckPPJKA/bGtvKs+qJU7?=
+ =?us-ascii?Q?T38GVZzw6OacNucoqyred1qu7ll6kCKfjYSlBkxY7dr6tukvbPRtpzYCdpt1?=
+ =?us-ascii?Q?wOD7ivNPxvBQnP8yKeRwgbHyY+7UXeDi2AW1klQUYFI7NSqYzfJJxboMudx7?=
+ =?us-ascii?Q?c5SN5oS5G9uYqYj5vpmcS1rrT9S6KSyH5LZmlnWeQgCxkoodYhzci3eqCNxY?=
+ =?us-ascii?Q?mF4EvnRif9SVRz7N3h2kXRcN/vJ1Knak3v4k8X3sg8J86wwtit9FMqT/qin3?=
+ =?us-ascii?Q?1ZZERiXuyrnJd14j6gHV3PfBvn1SzUtfDkUl22yPcpnHhArmJAbVsqUA1wNB?=
+ =?us-ascii?Q?mt+GbXi1YgdOMS53Qr8Q09egM+T69NIVIhozLx8WtA=3D=3D?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 386957fb-cc0d-4fbc-e01c-08da9bf0d7b8
+X-MS-Exchange-CrossTenant-AuthSource: TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Sep 2022 16:46:34.2676
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYWP286MB2683
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add I2C GPIO bus recovery support by adding scl-gpios and sda-gpios for the
-various I2C busses on Gateworks Venice boards.
+This patch includes changes below:
+1) pin_user_pages() is unsafe without protection of mmap_lock,
+   fix it by calling mmap_read_lock() & mmap_read_unlock().
+2) fix & refactor the incorrect exception handling procedure in
+   vmw_mksstat_add_ioctl().
 
-Signed-off-by: Tim Harvey <tharvey@gateworks.com>
+based-on branch: vmwgfx/drm-misc-fixes
+based commit: d8a79c03054911c375a2252627a429c9bc4615b6
+
+Signed-off-by: Dawei Li <set_pte_at@outlook.com>
 ---
- .../dts/freescale/imx8mm-venice-gw700x.dtsi   | 24 +++++++++-
- .../dts/freescale/imx8mm-venice-gw7901.dts    | 48 +++++++++++++++++--
- .../dts/freescale/imx8mm-venice-gw7902.dts    | 48 +++++++++++++++++--
- .../dts/freescale/imx8mm-venice-gw7903.dts    | 36 ++++++++++++--
- .../dts/freescale/imx8mm-venice-gw7904.dts    | 48 +++++++++++++++++--
- .../dts/freescale/imx8mn-venice-gw7902.dts    | 48 +++++++++++++++++--
- .../dts/freescale/imx8mp-venice-gw74xx.dts    | 48 +++++++++++++++++--
- 7 files changed, 275 insertions(+), 25 deletions(-)
+ drivers/gpu/drm/vmwgfx/vmwgfx_msg.c | 24 +++++++++++++++---------
+ 1 file changed, 15 insertions(+), 9 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw700x.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw700x.dtsi
-index 66a0d103c90f..c305e325d007 100644
---- a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw700x.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw700x.dtsi
-@@ -119,8 +119,11 @@ ethphy0: ethernet-phy@0 {
+diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_msg.c b/drivers/gpu/drm/vmwgfx/vmwgfx_msg.c
+index 2aceac7856e2..ec40a3364e0a 100644
+--- a/drivers/gpu/drm/vmwgfx/vmwgfx_msg.c
++++ b/drivers/gpu/drm/vmwgfx/vmwgfx_msg.c
+@@ -1020,9 +1020,9 @@ int vmw_mksstat_add_ioctl(struct drm_device *dev, void *data,
+ 	const size_t num_pages_info = PFN_UP(arg->info_len);
+ 	const size_t num_pages_strs = PFN_UP(arg->strs_len);
+ 	long desc_len;
+-	long nr_pinned_stat;
+-	long nr_pinned_info;
+-	long nr_pinned_strs;
++	long nr_pinned_stat = 0;
++	long nr_pinned_info = 0;
++	long nr_pinned_strs = 0;
+ 	struct page *pages_stat[ARRAY_SIZE(pdesc->statPPNs)];
+ 	struct page *pages_info[ARRAY_SIZE(pdesc->infoPPNs)];
+ 	struct page *pages_strs[ARRAY_SIZE(pdesc->strsPPNs)];
+@@ -1076,6 +1076,7 @@ int vmw_mksstat_add_ioctl(struct drm_device *dev, void *data,
  
- &i2c1 {
- 	clock-frequency = <100000>;
--	pinctrl-names = "default";
-+	pinctrl-names = "default", "gpio";
- 	pinctrl-0 = <&pinctrl_i2c1>;
-+	pinctrl-1 = <&pinctrl_i2c1_gpio>;
-+	scl-gpios = <&gpio5 14 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-+	sda-gpios = <&gpio5 15 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
- 	status = "okay";
+ 	if (desc_len < 0) {
+ 		atomic_set(&dev_priv->mksstat_user_pids[slot], 0);
++		__free_page(page);
+ 		return -EFAULT;
+ 	}
  
- 	gsc: gsc@20 {
-@@ -365,8 +368,11 @@ ldo4 {
+@@ -1083,28 +1084,33 @@ int vmw_mksstat_add_ioctl(struct drm_device *dev, void *data,
+ 	reset_ppn_array(pdesc->infoPPNs, ARRAY_SIZE(pdesc->infoPPNs));
+ 	reset_ppn_array(pdesc->strsPPNs, ARRAY_SIZE(pdesc->strsPPNs));
  
- &i2c2 {
- 	clock-frequency = <400000>;
--	pinctrl-names = "default";
-+	pinctrl-names = "default", "gpio";
- 	pinctrl-0 = <&pinctrl_i2c2>;
-+	pinctrl-1 = <&pinctrl_i2c2_gpio>;
-+	scl-gpios = <&gpio5 16 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-+	sda-gpios = <&gpio5 17 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
- 	status = "okay";
- 
- 	eeprom@52 {
-@@ -435,6 +441,13 @@ MX8MM_IOMUXC_I2C1_SDA_I2C1_SDA		0x400001c3
- 		>;
- 	};
- 
-+	pinctrl_i2c1_gpio: i2c1gpiogrp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_I2C1_SCL_GPIO5_IO14	0x400001c3
-+			MX8MM_IOMUXC_I2C1_SDA_GPIO5_IO15	0x400001c3
-+		>;
-+	};
++	/* pin_user_pages() needs protection of mmap_lock */
++	mmap_read_lock(current->mm);
 +
- 	pinctrl_i2c2: i2c2grp {
- 		fsl,pins = <
- 			MX8MM_IOMUXC_I2C2_SCL_I2C2_SCL		0x400001c3
-@@ -442,6 +455,13 @@ MX8MM_IOMUXC_I2C2_SDA_I2C2_SDA		0x400001c3
- 		>;
- 	};
+ 	/* Pin mksGuestStat user pages and store those in the instance descriptor */
+ 	nr_pinned_stat = pin_user_pages(arg->stat, num_pages_stat, FOLL_LONGTERM, pages_stat, NULL);
+ 	if (num_pages_stat != nr_pinned_stat)
+-		goto err_pin_stat;
++		goto __err_pin_pages;
  
-+	pinctrl_i2c2_gpio: i2c2gpiogrp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_I2C2_SCL_GPIO5_IO16	0x400001c3
-+			MX8MM_IOMUXC_I2C2_SDA_GPIO5_IO17	0x400001c3
-+		>;
-+	};
+ 	for (i = 0; i < num_pages_stat; ++i)
+ 		pdesc->statPPNs[i] = page_to_pfn(pages_stat[i]);
+ 
+ 	nr_pinned_info = pin_user_pages(arg->info, num_pages_info, FOLL_LONGTERM, pages_info, NULL);
+ 	if (num_pages_info != nr_pinned_info)
+-		goto err_pin_info;
++		goto __err_pin_pages;
+ 
+ 	for (i = 0; i < num_pages_info; ++i)
+ 		pdesc->infoPPNs[i] = page_to_pfn(pages_info[i]);
+ 
+ 	nr_pinned_strs = pin_user_pages(arg->strs, num_pages_strs, FOLL_LONGTERM, pages_strs, NULL);
+ 	if (num_pages_strs != nr_pinned_strs)
+-		goto err_pin_strs;
++		goto __err_pin_pages;
+ 
+ 	for (i = 0; i < num_pages_strs; ++i)
+ 		pdesc->strsPPNs[i] = page_to_pfn(pages_strs[i]);
+ 
++	mmap_read_unlock(current->mm);
 +
- 	pinctrl_uart2: uart2grp {
- 		fsl,pins = <
- 			MX8MM_IOMUXC_UART2_RXD_UART2_DCE_RX	0x140
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7901.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7901.dts
-index d3ee6fc4baab..826627bd4503 100644
---- a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7901.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7901.dts
-@@ -326,8 +326,11 @@ &gpu_3d {
+ 	/* Send the descriptor to the host via a hypervisor call. The mksGuestStat
+ 	   pages will remain in use until the user requests a matching remove stats
+ 	   or a stats reset occurs. */
+@@ -1119,15 +1125,15 @@ int vmw_mksstat_add_ioctl(struct drm_device *dev, void *data,
  
- &i2c1 {
- 	clock-frequency = <100000>;
--	pinctrl-names = "default";
-+	pinctrl-names = "default", "gpio";
- 	pinctrl-0 = <&pinctrl_i2c1>;
-+	pinctrl-1 = <&pinctrl_i2c1_gpio>;
-+	scl-gpios = <&gpio5 14 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-+	sda-gpios = <&gpio5 15 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
- 	status = "okay";
+ 	return 0;
  
- 	gsc: gsc@20 {
-@@ -477,8 +480,11 @@ rtc@68 {
- 
- &i2c2 {
- 	clock-frequency = <400000>;
--	pinctrl-names = "default";
-+	pinctrl-names = "default", "gpio";
- 	pinctrl-0 = <&pinctrl_i2c2>;
-+	pinctrl-1 = <&pinctrl_i2c2_gpio>;
-+	scl-gpios = <&gpio5 16 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-+	sda-gpios = <&gpio5 17 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
- 	status = "okay";
- 
- 	pmic@4b {
-@@ -600,8 +606,11 @@ LDO6 {
- 
- &i2c3 {
- 	clock-frequency = <400000>;
--	pinctrl-names = "default";
-+	pinctrl-names = "default", "gpio";
- 	pinctrl-0 = <&pinctrl_i2c3>;
-+	pinctrl-1 = <&pinctrl_i2c3_gpio>;
-+	scl-gpios = <&gpio5 18 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-+	sda-gpios = <&gpio5 19 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
- 	status = "okay";
- 
- 	leds_gpio: gpio@20 {
-@@ -673,8 +682,11 @@ crypto@60 {
- 
- &i2c4 {
- 	clock-frequency = <400000>;
--	pinctrl-names = "default";
-+	pinctrl-names = "default", "gpio";
- 	pinctrl-0 = <&pinctrl_i2c4>;
-+	pinctrl-1 = <&pinctrl_i2c4_gpio>;
-+	scl-gpios = <&gpio5 20 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-+	sda-gpios = <&gpio5 21 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
- 	status = "okay";
- };
- 
-@@ -852,6 +864,13 @@ MX8MM_IOMUXC_I2C1_SDA_I2C1_SDA		0x400001c3
- 		>;
- 	};
- 
-+	pinctrl_i2c1_gpio: i2c1gpiogrp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_I2C1_SCL_GPIO5_IO14	0x400001c3
-+			MX8MM_IOMUXC_I2C1_SDA_GPIO5_IO15	0x400001c3
-+		>;
-+	};
+-err_pin_strs:
++__err_pin_pages:
++	mmap_read_unlock(current->mm);
 +
- 	pinctrl_i2c2: i2c2grp {
- 		fsl,pins = <
- 			MX8MM_IOMUXC_I2C2_SCL_I2C2_SCL		0x400001c3
-@@ -859,6 +878,13 @@ MX8MM_IOMUXC_I2C2_SDA_I2C2_SDA		0x400001c3
- 		>;
- 	};
+ 	if (nr_pinned_strs > 0)
+ 		unpin_user_pages(pages_strs, nr_pinned_strs);
  
-+	pinctrl_i2c2_gpio: i2c2gpiogrp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_I2C2_SCL_GPIO5_IO16	0x400001c3
-+			MX8MM_IOMUXC_I2C2_SDA_GPIO5_IO17	0x400001c3
-+		>;
-+	};
-+
- 	pinctrl_i2c3: i2c3grp {
- 		fsl,pins = <
- 			MX8MM_IOMUXC_I2C3_SCL_I2C3_SCL		0x400001c3
-@@ -866,6 +892,13 @@ MX8MM_IOMUXC_I2C3_SDA_I2C3_SDA		0x400001c3
- 		>;
- 	};
+-err_pin_info:
+ 	if (nr_pinned_info > 0)
+ 		unpin_user_pages(pages_info, nr_pinned_info);
  
-+	pinctrl_i2c3_gpio: i2c3gpiogrp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_I2C3_SCL_GPIO5_IO18	0x400001c3
-+			MX8MM_IOMUXC_I2C3_SDA_GPIO5_IO19	0x400001c3
-+		>;
-+	};
-+
- 	pinctrl_i2c4: i2c4grp {
- 		fsl,pins = <
- 			MX8MM_IOMUXC_I2C4_SCL_I2C4_SCL		0x400001c3
-@@ -873,6 +906,13 @@ MX8MM_IOMUXC_I2C4_SDA_I2C4_SDA		0x400001c3
- 		>;
- 	};
+-err_pin_stat:
+ 	if (nr_pinned_stat > 0)
+ 		unpin_user_pages(pages_stat, nr_pinned_stat);
  
-+	pinctrl_i2c4_gpio: i2c4gpiogrp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_I2C4_SCL_GPIO5_IO20	0x400001c3
-+			MX8MM_IOMUXC_I2C4_SDA_GPIO5_IO21	0x400001c3
-+		>;
-+	};
-+
- 	pinctrl_ksz: kszgrp {
- 		fsl,pins = <
- 			MX8MM_IOMUXC_SAI1_TXD6_GPIO4_IO18	0x41
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7902.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7902.dts
-index 203f1cb75f27..df5fa3975ba1 100644
---- a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7902.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7902.dts
-@@ -298,8 +298,11 @@ &gpio5 {
- 
- &i2c1 {
- 	clock-frequency = <100000>;
--	pinctrl-names = "default";
-+	pinctrl-names = "default", "gpio";
- 	pinctrl-0 = <&pinctrl_i2c1>;
-+	pinctrl-1 = <&pinctrl_i2c1_gpio>;
-+	scl-gpios = <&gpio5 14 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-+	sda-gpios = <&gpio5 15 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
- 	status = "okay";
- 
- 	gsc: gsc@20 {
-@@ -566,8 +569,11 @@ rtc@68 {
- 
- &i2c2 {
- 	clock-frequency = <400000>;
--	pinctrl-names = "default";
-+	pinctrl-names = "default", "gpio";
- 	pinctrl-0 = <&pinctrl_i2c2>;
-+	pinctrl-1 = <&pinctrl_i2c2_gpio>;
-+	scl-gpios = <&gpio5 16 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-+	sda-gpios = <&gpio5 17 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
- 	status = "okay";
- 
- 	accelerometer@19 {
-@@ -585,16 +591,22 @@ accelerometer@19 {
- /* off-board header */
- &i2c3 {
- 	clock-frequency = <400000>;
--	pinctrl-names = "default";
-+	pinctrl-names = "default", "gpio";
- 	pinctrl-0 = <&pinctrl_i2c3>;
-+	pinctrl-1 = <&pinctrl_i2c3_gpio>;
-+	scl-gpios = <&gpio5 18 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-+	sda-gpios = <&gpio5 19 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
- 	status = "okay";
- };
- 
- /* off-board header */
- &i2c4 {
- 	clock-frequency = <400000>;
--	pinctrl-names = "default";
-+	pinctrl-names = "default", "gpio";
- 	pinctrl-0 = <&pinctrl_i2c4>;
-+	pinctrl-1 = <&pinctrl_i2c4_gpio>;
-+	scl-gpios = <&gpio5 20 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-+	sda-gpios = <&gpio5 21 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
- 	status = "okay";
- };
- 
-@@ -800,6 +812,13 @@ MX8MM_IOMUXC_I2C1_SDA_I2C1_SDA		0x400001c3
- 		>;
- 	};
- 
-+	pinctrl_i2c1_gpio: i2c1gpiogrp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_I2C1_SCL_GPIO5_IO14	0x400001c3
-+			MX8MM_IOMUXC_I2C1_SDA_GPIO5_IO15	0x400001c3
-+		>;
-+	};
-+
- 	pinctrl_i2c2: i2c2grp {
- 		fsl,pins = <
- 			MX8MM_IOMUXC_I2C2_SCL_I2C2_SCL		0x400001c3
-@@ -807,6 +826,13 @@ MX8MM_IOMUXC_I2C2_SDA_I2C2_SDA		0x400001c3
- 		>;
- 	};
- 
-+	pinctrl_i2c2_gpio: i2c2gpiogrp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_I2C2_SCL_GPIO5_IO16	0x400001c3
-+			MX8MM_IOMUXC_I2C2_SDA_GPIO5_IO17	0x400001c3
-+		>;
-+	};
-+
- 	pinctrl_i2c3: i2c3grp {
- 		fsl,pins = <
- 			MX8MM_IOMUXC_I2C3_SCL_I2C3_SCL		0x400001c3
-@@ -814,6 +840,13 @@ MX8MM_IOMUXC_I2C3_SDA_I2C3_SDA		0x400001c3
- 		>;
- 	};
- 
-+	pinctrl_i2c3_gpio: i2c3gpiogrp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_I2C3_SCL_GPIO5_IO18	0x400001c3
-+			MX8MM_IOMUXC_I2C3_SDA_GPIO5_IO19	0x400001c3
-+		>;
-+	};
-+
- 	pinctrl_i2c4: i2c4grp {
- 		fsl,pins = <
- 			MX8MM_IOMUXC_I2C4_SCL_I2C4_SCL		0x400001c3
-@@ -821,6 +854,13 @@ MX8MM_IOMUXC_I2C4_SDA_I2C4_SDA		0x400001c3
- 		>;
- 	};
- 
-+	pinctrl_i2c4_gpio: i2c4gpiogrp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_I2C4_SCL_GPIO5_IO20	0x400001c3
-+			MX8MM_IOMUXC_I2C4_SDA_GPIO5_IO21	0x400001c3
-+		>;
-+	};
-+
- 	pinctrl_gpio_leds: gpioledgrp {
- 		fsl,pins = <
- 			MX8MM_IOMUXC_SAI5_RXD0_GPIO3_IO21	0x19
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7903.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7903.dts
-index 19f6d2943d26..1ec91c5c6a49 100644
---- a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7903.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7903.dts
-@@ -265,8 +265,11 @@ &gpio5 {
- 
- &i2c1 {
- 	clock-frequency = <100000>;
--	pinctrl-names = "default";
-+	pinctrl-names = "default", "gpio";
- 	pinctrl-0 = <&pinctrl_i2c1>;
-+	pinctrl-1 = <&pinctrl_i2c1_gpio>;
-+	scl-gpios = <&gpio5 14 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-+	sda-gpios = <&gpio5 15 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
- 	status = "okay";
- 
- 	gsc: gsc@20 {
-@@ -397,8 +400,11 @@ rtc@68 {
- 
- &i2c2 {
- 	clock-frequency = <400000>;
--	pinctrl-names = "default";
-+	pinctrl-names = "default", "gpio";
- 	pinctrl-0 = <&pinctrl_i2c2>;
-+	pinctrl-1 = <&pinctrl_i2c2_gpio>;
-+	scl-gpios = <&gpio5 16 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-+	sda-gpios = <&gpio5 17 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
- 	status = "okay";
- 
- 	pmic@4b {
-@@ -520,8 +526,11 @@ LDO6 {
- 
- &i2c3 {
- 	clock-frequency = <400000>;
--	pinctrl-names = "default";
-+	pinctrl-names = "default", "gpio";
- 	pinctrl-0 = <&pinctrl_i2c3>;
-+	pinctrl-1 = <&pinctrl_i2c3_gpio>;
-+	scl-gpios = <&gpio5 18 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-+	sda-gpios = <&gpio5 19 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
- 	status = "okay";
- 
- 	accelerometer@19 {
-@@ -681,6 +690,13 @@ MX8MM_IOMUXC_I2C1_SDA_I2C1_SDA		0x400001c3
- 		>;
- 	};
- 
-+	pinctrl_i2c1_gpio: i2c1gpiogrp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_I2C1_SCL_GPIO5_IO14	0x400001c3
-+			MX8MM_IOMUXC_I2C1_SDA_GPIO5_IO15	0x400001c3
-+		>;
-+	};
-+
- 	pinctrl_i2c2: i2c2grp {
- 		fsl,pins = <
- 			MX8MM_IOMUXC_I2C2_SCL_I2C2_SCL		0x400001c3
-@@ -688,6 +704,13 @@ MX8MM_IOMUXC_I2C2_SDA_I2C2_SDA		0x400001c3
- 		>;
- 	};
- 
-+	pinctrl_i2c2_gpio: i2c2gpiogrp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_I2C2_SCL_GPIO5_IO16	0x400001c3
-+			MX8MM_IOMUXC_I2C2_SDA_GPIO5_IO17	0x400001c3
-+		>;
-+	};
-+
- 	pinctrl_i2c3: i2c3grp {
- 		fsl,pins = <
- 			MX8MM_IOMUXC_I2C3_SCL_I2C3_SCL		0x400001c3
-@@ -695,6 +718,13 @@ MX8MM_IOMUXC_I2C3_SDA_I2C3_SDA		0x400001c3
- 		>;
- 	};
- 
-+	pinctrl_i2c3_gpio: i2c3gpiogrp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_I2C3_SCL_GPIO5_IO18	0x400001c3
-+			MX8MM_IOMUXC_I2C3_SDA_GPIO5_IO19	0x400001c3
-+		>;
-+	};
-+
- 	pinctrl_gpio_leds: gpioledgrp {
- 		fsl,pins = <
- 			MX8MM_IOMUXC_SPDIF_EXT_CLK_GPIO5_IO5	0x19
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7904.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7904.dts
-index a67771d02146..93c9651c315d 100644
---- a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7904.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7904.dts
-@@ -315,8 +315,11 @@ &gpio5 {
- 
- &i2c1 {
- 	clock-frequency = <100000>;
--	pinctrl-names = "default";
-+	pinctrl-names = "default", "gpio";
- 	pinctrl-0 = <&pinctrl_i2c1>;
-+	pinctrl-1 = <&pinctrl_i2c1_gpio>;
-+	scl-gpios = <&gpio5 14 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-+	sda-gpios = <&gpio5 15 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
- 	status = "okay";
- 
- 	gsc: gsc@20 {
-@@ -441,8 +444,11 @@ rtc@68 {
- 
- &i2c2 {
- 	clock-frequency = <400000>;
--	pinctrl-names = "default";
-+	pinctrl-names = "default", "gpio";
- 	pinctrl-0 = <&pinctrl_i2c2>;
-+	pinctrl-1 = <&pinctrl_i2c2_gpio>;
-+	scl-gpios = <&gpio5 16 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-+	sda-gpios = <&gpio5 17 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
- 	status = "okay";
- 
- 	pmic@4b {
-@@ -564,8 +570,11 @@ LDO6 {
- 
- &i2c3 {
- 	clock-frequency = <400000>;
--	pinctrl-names = "default";
-+	pinctrl-names = "default", "gpio";
- 	pinctrl-0 = <&pinctrl_i2c3>;
-+	pinctrl-1 = <&pinctrl_i2c3_gpio>;
-+	scl-gpios = <&gpio5 18 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-+	sda-gpios = <&gpio5 19 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
- 	status = "okay";
- 
- 	accelerometer@19 {
-@@ -582,8 +591,11 @@ accelerometer@19 {
- 
- &i2c4 {
- 	clock-frequency = <400000>;
--	pinctrl-names = "default";
-+	pinctrl-names = "default", "gpio";
- 	pinctrl-0 = <&pinctrl_i2c4>;
-+	pinctrl-1 = <&pinctrl_i2c4_gpio>;
-+	scl-gpios = <&gpio5 20 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-+	sda-gpios = <&gpio5 21 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
- 	status = "okay";
- 
- 	gpioled: gpio@27 {
-@@ -738,6 +750,13 @@ MX8MM_IOMUXC_I2C1_SDA_I2C1_SDA		0x400001c3
- 		>;
- 	};
- 
-+	pinctrl_i2c1_gpio: i2c1gpiogrp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_I2C1_SCL_GPIO5_IO14	0x400001c3
-+			MX8MM_IOMUXC_I2C1_SDA_GPIO5_IO15	0x400001c3
-+		>;
-+	};
-+
- 	pinctrl_i2c2: i2c2grp {
- 		fsl,pins = <
- 			MX8MM_IOMUXC_I2C2_SCL_I2C2_SCL		0x400001c3
-@@ -745,6 +764,13 @@ MX8MM_IOMUXC_I2C2_SDA_I2C2_SDA		0x400001c3
- 		>;
- 	};
- 
-+	pinctrl_i2c2_gpio: i2c2gpiogrp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_I2C2_SCL_GPIO5_IO16	0x400001c3
-+			MX8MM_IOMUXC_I2C2_SDA_GPIO5_IO17	0x400001c3
-+		>;
-+	};
-+
- 	pinctrl_i2c3: i2c3grp {
- 		fsl,pins = <
- 			MX8MM_IOMUXC_I2C3_SCL_I2C3_SCL		0x400001c3
-@@ -752,6 +778,13 @@ MX8MM_IOMUXC_I2C3_SDA_I2C3_SDA		0x400001c3
- 		>;
- 	};
- 
-+	pinctrl_i2c3_gpio: i2c3gpiogrp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_I2C3_SCL_GPIO5_IO18	0x400001c3
-+			MX8MM_IOMUXC_I2C3_SDA_GPIO5_IO19	0x400001c3
-+		>;
-+	};
-+
- 	pinctrl_i2c4: i2c4grp {
- 		fsl,pins = <
- 			MX8MM_IOMUXC_I2C4_SCL_I2C4_SCL		0x400001c3
-@@ -759,6 +792,13 @@ MX8MM_IOMUXC_I2C4_SDA_I2C4_SDA		0x400001c3
- 		>;
- 	};
- 
-+	pinctrl_i2c4_gpio: i2c4gpiogrp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_I2C4_SCL_GPIO5_IO20	0x400001c3
-+			MX8MM_IOMUXC_I2C4_SDA_GPIO5_IO21	0x400001c3
-+		>;
-+	};
-+
- 	pinctrl_pcie0: pciegrp {
- 		fsl,pins = <
- 			MX8MM_IOMUXC_ECSPI2_MOSI_GPIO5_IO11	0x41
-diff --git a/arch/arm64/boot/dts/freescale/imx8mn-venice-gw7902.dts b/arch/arm64/boot/dts/freescale/imx8mn-venice-gw7902.dts
-index dd4302ac1de4..187e0410b87d 100644
---- a/arch/arm64/boot/dts/freescale/imx8mn-venice-gw7902.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8mn-venice-gw7902.dts
-@@ -297,8 +297,11 @@ &gpu {
- 
- &i2c1 {
- 	clock-frequency = <100000>;
--	pinctrl-names = "default";
-+	pinctrl-names = "default", "gpio";
- 	pinctrl-0 = <&pinctrl_i2c1>;
-+	pinctrl-1 = <&pinctrl_i2c1_gpio>;
-+	scl-gpios = <&gpio5 14 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-+	sda-gpios = <&gpio5 15 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
- 	status = "okay";
- 
- 	gsc: gsc@20 {
-@@ -565,8 +568,11 @@ rtc@68 {
- 
- &i2c2 {
- 	clock-frequency = <400000>;
--	pinctrl-names = "default";
-+	pinctrl-names = "default", "gpio";
- 	pinctrl-0 = <&pinctrl_i2c2>;
-+	pinctrl-1 = <&pinctrl_i2c2_gpio>;
-+	scl-gpios = <&gpio5 16 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-+	sda-gpios = <&gpio5 17 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
- 	status = "okay";
- 
- 	accelerometer@19 {
-@@ -584,16 +590,22 @@ accelerometer@19 {
- /* off-board header */
- &i2c3 {
- 	clock-frequency = <400000>;
--	pinctrl-names = "default";
-+	pinctrl-names = "default", "gpio";
- 	pinctrl-0 = <&pinctrl_i2c3>;
-+	pinctrl-1 = <&pinctrl_i2c3_gpio>;
-+	scl-gpios = <&gpio5 18 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-+	sda-gpios = <&gpio5 19 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
- 	status = "okay";
- };
- 
- /* off-board header */
- &i2c4 {
- 	clock-frequency = <400000>;
--	pinctrl-names = "default";
-+	pinctrl-names = "default", "gpio";
- 	pinctrl-0 = <&pinctrl_i2c4>;
-+	pinctrl-1 = <&pinctrl_i2c4_gpio>;
-+	scl-gpios = <&gpio5 20 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-+	sda-gpios = <&gpio5 21 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
- 	status = "okay";
- };
- 
-@@ -744,6 +756,13 @@ MX8MN_IOMUXC_I2C1_SDA_I2C1_SDA		0x400001c3
- 		>;
- 	};
- 
-+	pinctrl_i2c1_gpio: i2c1gpiogrp {
-+		fsl,pins = <
-+			MX8MN_IOMUXC_I2C1_SCL_GPIO5_IO14	0x400001c3
-+			MX8MN_IOMUXC_I2C1_SDA_GPIO5_IO15	0x400001c3
-+		>;
-+	};
-+
- 	pinctrl_i2c2: i2c2grp {
- 		fsl,pins = <
- 			MX8MN_IOMUXC_I2C2_SCL_I2C2_SCL		0x400001c3
-@@ -751,6 +770,13 @@ MX8MN_IOMUXC_I2C2_SDA_I2C2_SDA		0x400001c3
- 		>;
- 	};
- 
-+	pinctrl_i2c2_gpio: i2c2gpiogrp {
-+		fsl,pins = <
-+			MX8MN_IOMUXC_I2C2_SCL_GPIO5_IO16	0x400001c3
-+			MX8MN_IOMUXC_I2C2_SDA_GPIO5_IO17	0x400001c3
-+		>;
-+	};
-+
- 	pinctrl_i2c3: i2c3grp {
- 		fsl,pins = <
- 			MX8MN_IOMUXC_I2C3_SCL_I2C3_SCL		0x400001c3
-@@ -758,6 +784,13 @@ MX8MN_IOMUXC_I2C3_SDA_I2C3_SDA		0x400001c3
- 		>;
- 	};
- 
-+	pinctrl_i2c3_gpio: i2c3gpiogrp {
-+		fsl,pins = <
-+			MX8MN_IOMUXC_I2C3_SCL_GPIO5_IO18	0x400001c3
-+			MX8MN_IOMUXC_I2C3_SDA_GPIO5_IO19	0x400001c3
-+		>;
-+	};
-+
- 	pinctrl_i2c4: i2c4grp {
- 		fsl,pins = <
- 			MX8MN_IOMUXC_I2C4_SCL_I2C4_SCL		0x400001c3
-@@ -765,6 +798,13 @@ MX8MN_IOMUXC_I2C4_SDA_I2C4_SDA		0x400001c3
- 		>;
- 	};
- 
-+	pinctrl_i2c4_gpio: i2c4gpiogrp {
-+		fsl,pins = <
-+			MX8MN_IOMUXC_I2C4_SCL_GPIO5_IO20	0x400001c3
-+			MX8MN_IOMUXC_I2C4_SDA_GPIO5_IO21	0x400001c3
-+		>;
-+	};
-+
- 	pinctrl_gpio_leds: gpioledgrp {
- 		fsl,pins = <
- 			MX8MN_IOMUXC_SAI5_RXD0_GPIO3_IO21	0x19
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts b/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts
-index 06b4c93c5876..ceeca4966fc5 100644
---- a/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts
-@@ -253,8 +253,11 @@ &gpio5 {
- 
- &i2c1 {
- 	clock-frequency = <100000>;
--	pinctrl-names = "default";
-+	pinctrl-names = "default", "gpio";
- 	pinctrl-0 = <&pinctrl_i2c1>;
-+	pinctrl-1 = <&pinctrl_i2c1_gpio>;
-+	scl-gpios = <&gpio5 14 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-+	sda-gpios = <&gpio5 15 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
- 	status = "okay";
- 
- 	gsc: gsc@20 {
-@@ -477,8 +480,11 @@ rtc@68 {
- 
- &i2c2 {
- 	clock-frequency = <400000>;
--	pinctrl-names = "default";
-+	pinctrl-names = "default", "gpio";
- 	pinctrl-0 = <&pinctrl_i2c2>;
-+	pinctrl-1 = <&pinctrl_i2c2_gpio>;
-+	scl-gpios = <&gpio5 16 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-+	sda-gpios = <&gpio5 17 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
- 	status = "okay";
- 
- 	accelerometer@19 {
-@@ -556,16 +562,22 @@ fixed-link {
- /* off-board header */
- &i2c3 {
- 	clock-frequency = <400000>;
--	pinctrl-names = "default";
-+	pinctrl-names = "default", "gpio";
- 	pinctrl-0 = <&pinctrl_i2c3>;
-+	pinctrl-1 = <&pinctrl_i2c3_gpio>;
-+	scl-gpios = <&gpio5 18 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-+	sda-gpios = <&gpio5 19 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
- 	status = "okay";
- };
- 
- /* off-board header */
- &i2c4 {
- 	clock-frequency = <400000>;
--	pinctrl-names = "default";
-+	pinctrl-names = "default", "gpio";
- 	pinctrl-0 = <&pinctrl_i2c4>;
-+	pinctrl-1 = <&pinctrl_i2c4_gpio>;
-+	scl-gpios = <&gpio5 20 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-+	sda-gpios = <&gpio5 21 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
- 	status = "okay";
- };
- 
-@@ -800,6 +812,13 @@ MX8MP_IOMUXC_I2C1_SDA__I2C1_SDA		0x400001c2
- 		>;
- 	};
- 
-+	pinctrl_i2c1_gpio: i2c1gpiogrp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_I2C1_SCL__GPIO5_IO14	0x400001c2
-+			MX8MP_IOMUXC_I2C1_SDA__GPIO5_IO15	0x400001c2
-+		>;
-+	};
-+
- 	pinctrl_i2c2: i2c2grp {
- 		fsl,pins = <
- 			MX8MP_IOMUXC_I2C2_SCL__I2C2_SCL		0x400001c2
-@@ -807,6 +826,13 @@ MX8MP_IOMUXC_I2C2_SDA__I2C2_SDA		0x400001c2
- 		>;
- 	};
- 
-+	pinctrl_i2c2_gpio: i2c2gpiogrp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_I2C2_SCL__GPIO5_IO16	0x400001c3
-+			MX8MP_IOMUXC_I2C2_SDA__GPIO5_IO17	0x400001c3
-+		>;
-+	};
-+
- 	pinctrl_i2c3: i2c3grp {
- 		fsl,pins = <
- 			MX8MP_IOMUXC_I2C3_SCL__I2C3_SCL		0x400001c2
-@@ -814,6 +840,13 @@ MX8MP_IOMUXC_I2C3_SDA__I2C3_SDA		0x400001c2
- 		>;
- 	};
- 
-+	pinctrl_i2c3_gpio: i2c3gpiogrp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_I2C3_SCL__GPIO5_IO18	0x400001c3
-+			MX8MP_IOMUXC_I2C3_SDA__GPIO5_IO19	0x400001c3
-+		>;
-+	};
-+
- 	pinctrl_i2c4: i2c4grp {
- 		fsl,pins = <
- 			MX8MP_IOMUXC_I2C4_SCL__I2C4_SCL		0x400001c2
-@@ -821,6 +854,13 @@ MX8MP_IOMUXC_I2C4_SDA__I2C4_SDA		0x400001c2
- 		>;
- 	};
- 
-+	pinctrl_i2c4_gpio: i2c4gpiogrp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_I2C4_SCL__GPIO5_IO20	0x400001c3
-+			MX8MP_IOMUXC_I2C4_SDA__GPIO5_IO21	0x400001c3
-+		>;
-+	};
-+
- 	pinctrl_ksz: kszgrp {
- 		fsl,pins = <
- 			MX8MP_IOMUXC_SAI3_RXC__GPIO4_IO29	0x150 /* IRQ# */
 -- 
 2.25.1
 
