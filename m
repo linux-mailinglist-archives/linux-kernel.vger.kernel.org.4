@@ -2,53 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF3175C00FD
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:19:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C1755C00FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:19:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230072AbiIUPTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 11:19:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52386 "EHLO
+        id S229960AbiIUPTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 11:19:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbiIUPTc (ORCPT
+        with ESMTP id S229522AbiIUPTc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 21 Sep 2022 11:19:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED60B33E
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 08:19:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A5886B8304F
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 15:19:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 275CDC433C1;
-        Wed, 21 Sep 2022 15:19:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663773566;
-        bh=dbFiBb96XQe4U0eDZ+uXd3wxcpqjYtrh6LsgsTTGho0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MPCgfALMkZMmrCpvLjMnb44QHoCKH55Z7hBvgBWNEX8T7NtvVuFFgpxyyuqVIZfTk
-         2ZF5WpTBGufJ/KRLGDuNlpZ4FtW7jWJoFnm7xHIzqSznBcYX8pJTsBAX7FVf5cGhem
-         t/a4srQMQNtpXPZ6a6XEn7Gql/oz4OjT/sPt7M56GW/vAUXRNoDNXcoS4lFuEoOcFA
-         8zohy5kQhU9WqapK5dtERlOjEJ1gBQWxAdoZzCQyWO8szqFLSkGAaC/znVgbcwoC5W
-         J1HJwHSPUKppX3cuAgwczPwn/nEbPsJD116nq0xDSDhu83GJ8lesjhimNef+4lH7P1
-         h3j4br5CKHM1w==
-Date:   Wed, 21 Sep 2022 18:19:12 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64/mm: fold check for KFENCE into can_set_direct_map()
-Message-ID: <YysrcNmdz5t30cQQ@kernel.org>
-References: <20220921074841.382615-1-rppt@kernel.org>
- <1a87b8a4-46f0-69c9-83ec-10cce8f0aa72@arm.com>
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 544AFE8D
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 08:19:30 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id s6so9779718lfo.7
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 08:19:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=0OQNwidXfglALVVRMIJX0eA8njvh8tvja1lgxaI+Bb8=;
+        b=URPgkLc1/gEOLl+n4W6SG44A8sW0ivmUThd6wN1YUN4N6g3JnC2/j/1QYSftU7xaaz
+         2a+TEBvw2H3iWYXTihvWlTi4WbCu0Vx0ykuJev8WVHbHOupHTP1OpyE7hsGIraPkOlzE
+         VL/eSNVkW8icU54So/jIoYxDwNz3+ICSus9RWWpHKwAbNdbDH4f+4A5KZx24rWjM2cfe
+         DC43cw4b0n7Jc7ymx+0uemUcdX+w2/LCn/uF/sKKhaOD0DhlUjHfOEvxQcnjglcQSp+l
+         wtLLoC6MS7jOht05JoAdVj4CwHafjJHlKGcXfrpHPgggnfD4HBk9MZSlVf6TRuYVkLme
+         efaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=0OQNwidXfglALVVRMIJX0eA8njvh8tvja1lgxaI+Bb8=;
+        b=e4JLzNiNjOGlP8hpTH1iklRMJHFtQGIOgox0i2ePsv0gSqFQUCjbKXhAbtHySlrBIU
+         DhBoxNk+mm2iYIDZ9BQaGmBH15oIrpTqhIeZYRsF0aC0E1NmbiOnvU2TFu9Zvx7rnoVt
+         5cf6Rz48yD9YEN1x0KS90Y5U5Ch3Aw4ByqKW/tDbqHWVbLBQwyztE6SoiJClUjOUseiS
+         jzUsqbLbkp3g8ErPb2BTUlhBgW2dm/ImOCuMb0us2+Oc9ojYmy/xaXNxrlkqJQxglNt9
+         FpT+FnbmMloUFnun+9V4HQzUUQMlqHv+Uo76KIIHi+mCkXzONdrJY+ooGIGoJO9Gm6X2
+         SEYQ==
+X-Gm-Message-State: ACrzQf2P37847qjGglgXA/YnvLRlWSiLFx5KE4uqwGzqr3D4f+gTct1r
+        vJYbU8qD6cGEz/Ft1qI90rDfFQ==
+X-Google-Smtp-Source: AMsMyM5W8d7QEhX0GyaMcafFqQFoeDrLIcJcGcKbJeXZ90zLpEd3zhpdII+hyLJ5GGWSp/H+vapy2Q==
+X-Received: by 2002:a05:6512:3b8e:b0:49a:d2f4:6b7d with SMTP id g14-20020a0565123b8e00b0049ad2f46b7dmr9680650lfv.627.1663773567480;
+        Wed, 21 Sep 2022 08:19:27 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id m6-20020a056512114600b004896ed8dce3sm485158lfg.2.2022.09.21.08.19.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Sep 2022 08:19:27 -0700 (PDT)
+Message-ID: <5e34eadc-ef6a-abeb-6bce-347593c275b7@linaro.org>
+Date:   Wed, 21 Sep 2022 17:19:26 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1a87b8a4-46f0-69c9-83ec-10cce8f0aa72@arm.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 1/2] ASoC: wcd9335: fix order of Slimbus unprepare/disable
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, Vinod Koul <vkoul@kernel.org>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org
+References: <20220921145354.1683791-1-krzysztof.kozlowski@linaro.org>
+ <20916c9d-3598-7c40-ee77-1148c3d2e4b1@linux.intel.com>
+ <af3bd3f4-dcd9-8f6c-6323-de1b53301225@linaro.org>
+ <9a210b04-2ff2-df98-ad1a-89e9d8b0f686@linaro.org>
+ <fd74e77c-f3d3-1f09-2e5a-0a94e2a3eeea@linux.intel.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <fd74e77c-f3d3-1f09-2e5a-0a94e2a3eeea@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,92 +84,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Anshuman,
+On 21/09/2022 17:11, Pierre-Louis Bossart wrote:
+>>>> /**
+>>>>  * slim_stream_unprepare() - Un-prepare a SLIMbus Stream
+>>>>  *
+>>>>  * @stream: instance of slim stream runtime to unprepare
+>>>>  *
+>>>>  * This API will un allocate all the ports and channels associated with
+>>>>  * SLIMbus stream
+>>>
+>>> You mean this piece of doc? Indeed looks inaccurate. I'll update it.
+>>
+>> Wait, no, this is correct. Please point to what is wrong in kernel doc.
+>> I don't see it. :(
+> 
+> the TRIGGER_STOP and TRIGGER_PAUSE_PUSH do the same thing. There is no
+> specific mapping of disable() to TRIGGER_STOP and unprepare() to
+> TRIGGER_PAUSE_PUSH as the documentation hints at.
 
-On Wed, Sep 21, 2022 at 05:09:19PM +0530, Anshuman Khandual wrote:
-> 
-> 
-> On 9/21/22 13:18, Mike Rapoport wrote:
-> > From: Mike Rapoport <rppt@linux.ibm.com>
-> > 
-> > KFENCE requires linear map to be mapped at page granularity, so that it
-> > is possible to protect/unprotect single pages, just like with
-> > rodata_full and DEBUG_PAGEALLOC.
-> > 
-> > Instead of repating
-> > 
-> > 	can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE)
-> > 
-> > make can_set_direct_map() handle the KFENCE case.
-> > 
-> > This also prevents potential false positives in kernel_page_present()
-> > that may return true for non-present page if CONFIG_KFENCE is enabled.
-> > 
-> > Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> > ---
-> >  arch/arm64/mm/mmu.c      | 8 ++------
-> >  arch/arm64/mm/pageattr.c | 8 +++++++-
-> >  2 files changed, 9 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
-> > index e7ad44585f40..c5065abec55a 100644
-> > --- a/arch/arm64/mm/mmu.c
-> > +++ b/arch/arm64/mm/mmu.c
-> > @@ -535,7 +535,7 @@ static void __init map_mem(pgd_t *pgdp)
-> >  	 */
-> >  	BUILD_BUG_ON(pgd_index(direct_map_end - 1) == pgd_index(direct_map_end));
-> >  
-> > -	if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE))
-> > +	if (can_set_direct_map())
-> >  		flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
-> >  
-> >  	/*
-> > @@ -1547,11 +1547,7 @@ int arch_add_memory(int nid, u64 start, u64 size,
-> >  
-> >  	VM_BUG_ON(!mhp_range_allowed(start, size, true));
-> >  
-> > -	/*
-> > -	 * KFENCE requires linear map to be mapped at page granularity, so that
-> > -	 * it is possible to protect/unprotect single pages in the KFENCE pool.
-> > -	 */
-> > -	if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE))
-> > +	if (can_set_direct_map())
-> >  		flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
-> >  
-> >  	__create_pgd_mapping(swapper_pg_dir, start, __phys_to_virt(start),
-> > diff --git a/arch/arm64/mm/pageattr.c b/arch/arm64/mm/pageattr.c
-> > index 64e985eaa52d..d107c3d434e2 100644
-> > --- a/arch/arm64/mm/pageattr.c
-> > +++ b/arch/arm64/mm/pageattr.c
-> > @@ -21,7 +21,13 @@ bool rodata_full __ro_after_init = IS_ENABLED(CONFIG_RODATA_FULL_DEFAULT_ENABLED
-> >  
-> >  bool can_set_direct_map(void)
-> >  {
-> > -	return rodata_full || debug_pagealloc_enabled();
-> > +	/*
-> > +	 * rodata_full, DEBUG_PAGEALLOC and KFENCE require linear map to be
-> > +	 * mapped at page granularity, so that it is possible to
-> > +	 * protect/unprotect single pages.
-> > +	 */
-> > +	return rodata_full || debug_pagealloc_enabled() ||
-> > +		IS_ENABLED(CONFIG_KFENCE);
-> >  }
-> 
-> Changing can_set_direct_map() also changes behaviour for other functions such as 
-> 
-> set_direct_map_default_noflush()
-> set_direct_map_invalid_noflush()
-> __kernel_map_pages()
-> 
-> Is that okay ?
- 
-Yes. Since KFENCE disables block mappings, these will actually change the
-page tables.
-Actually, before this change the test for can_set_direct_map() in these
-functions was false negative when CONFIG_KFENCE=y
-  
-> >  static int change_page_range(pte_t *ptep, unsigned long addr, void *data)
+Which TRIGGER_STOP and TRIGGER_PAUSE_PUSH? In one specific codec driver?
+If yes, I don't think Slimbus documentation should care how actual users
+implement it (e.g. coalesce states).
 
--- 
-Sincerely yours,
-Mike.
+Best regards,
+Krzysztof
+
