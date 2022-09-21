@@ -2,267 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 353F55BFEE5
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 15:23:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 616255BFEE8
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 15:24:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230345AbiIUNXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 09:23:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43594 "EHLO
+        id S229503AbiIUNYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 09:24:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230107AbiIUNXW (ORCPT
+        with ESMTP id S229819AbiIUNYH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 09:23:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C17293535
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 06:23:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663766600;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8doRy3Tl9duFaqpT4x4KIGruvUlzYzIUxZbJ5Ad4nHc=;
-        b=QoKTnbCfkdPaqn63B67ugMXS8goJAhCLvvjVXKDP8fKM/wpTnU+Rje1tskAPPoMAAYiDPM
-        a3AzOQKzfqct3+K+F4Q0gxz+IhaA+Ib/VjU8a2mm6y/YWL62oySPaBplD7q18NPb0wg94U
-        /DIYfKhzdq9KqBAnvRqrDeSkYR0YwjQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-479-nOCfVYZRN2SReAZKKgUxyQ-1; Wed, 21 Sep 2022 09:23:16 -0400
-X-MC-Unique: nOCfVYZRN2SReAZKKgUxyQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D265487B2A4;
-        Wed, 21 Sep 2022 13:23:15 +0000 (UTC)
-Received: from llong.com (dhcp-17-215.bos.redhat.com [10.18.17.215])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9AD3839D7C;
-        Wed, 21 Sep 2022 13:23:15 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org, Waiman Long <longman@redhat.com>
-Subject: [PATCH 2/2] tracing: Use proper do_arch_spin_lock() API
-Date:   Wed, 21 Sep 2022 09:21:52 -0400
-Message-Id: <20220921132152.1622616-3-longman@redhat.com>
-In-Reply-To: <20220921132152.1622616-1-longman@redhat.com>
-References: <20220921132152.1622616-1-longman@redhat.com>
+        Wed, 21 Sep 2022 09:24:07 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2082.outbound.protection.outlook.com [40.107.223.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 243059353A;
+        Wed, 21 Sep 2022 06:24:06 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jAEhFRUjA2RDl48TgXW0Y1JdCNH/uuH8SVleVC+PzfKnnYWBVJHTETVl5SLUsAak/DhDMHrWtAigFpM8pj/xnHflmeET5f/oSJDxAhRcld3p2YtXPUULbtni5S8jL8PJ/3J1uK5EI6toyu60N6Vo1EpYxTd4hf3hXn0/mMwXCA/kT2mcu6MhttOlYwUMHrNkJXK2llfJtqxqHCkNv+IljslyAW9xJ3CSiNdvpwEv749ORKPLIrz2wRdHuwO3CMTJ938L0rEIsfZwbB4ub79ZTFAzextqzCsXRgVapuyw5Aj1WQdnt6iL6oUaFSM+sGywrG+NFCebh0uNUR2hRuBnog==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZREIf7PqrhyD4QbRkrBicUw1IoR/QLyuVPso1ZnwYbQ=;
+ b=hIrBdjjOqkWLA3Fo58rbAOZn9ESjAKk5LGfn+5hnVMAxU8tfTg0MhQOlEzA6ToNdcy2Y36pdAYw+TX5ZsXAuTYnd/n8MvKHnV3rkN7ObNBrvSBZN5KzwNaluPA5yov6/+0sJdnOPXJTMPY8E2qoHmGUtqwglXyO3tEmUZHpqqmW+g9mrDoEQ9xaWYn25q2U27uBXLutduA1nU0uucxXDJckBDDlom9nEwSgRrvUFmSC3yIi2d2FU8Ne4NnEieQbf0R4uK1wgZsL3VffmjhENbxOPXJQQFZFG36voiAz02PCCaw2+gFXwXDslG1PIBLnKmwLBqBWNnsGq2pUsFajISA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZREIf7PqrhyD4QbRkrBicUw1IoR/QLyuVPso1ZnwYbQ=;
+ b=VKKKaQlGYtcAtS7eSq7QMmafnDPBXEXEeXOZ+FLOPee9B9SWTFAT0hA+WrF2esrK7hVyB1Rraf3S/XJQUJD9MxcDN3RBeNApGBS1QKkZOumEe8WNW7aWuiBSt+r4YL5dUYmKta2Itrbq/cnijap+43wyX90gmnjXZjpoPdiNQjbWJCur61KpzJTPYbR8KPvYF1ut6WLi6XyvK4eFT/3Ns7UcSRGvBa+jPcChrAo2GFAg3VPTaJJsA531h62d3uUBQhzV6EK+USfgPvqIOYqgGT2E4F27BMQ022yy8AMH1gstos11PkZ3cauG4r/S9JSrOITuXZ0KELoa3nOoXhIpew==
+Received: from CH2PR12MB3895.namprd12.prod.outlook.com (2603:10b6:610:2a::13)
+ by SJ0PR12MB5610.namprd12.prod.outlook.com (2603:10b6:a03:423::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.19; Wed, 21 Sep
+ 2022 13:24:04 +0000
+Received: from CH2PR12MB3895.namprd12.prod.outlook.com
+ ([fe80::7129:e05:131a:b109]) by CH2PR12MB3895.namprd12.prod.outlook.com
+ ([fe80::7129:e05:131a:b109%5]) with mapi id 15.20.5654.017; Wed, 21 Sep 2022
+ 13:24:04 +0000
+From:   Asmaa Mnebhi <asmaa@nvidia.com>
+To:     Asmaa Mnebhi <asmaa@nvidia.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        "robh@kernel.org" <robh@kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: RE: [PATCH v5 0/8] i2c: i2c-mlxbf.c: bug fixes and new feature
+ support
+Thread-Topic: [PATCH v5 0/8] i2c: i2c-mlxbf.c: bug fixes and new feature
+ support
+Thread-Index: AQHYzRkmhNx/4tIlJ0at8rY3SZEbQa3p39YQ
+Date:   Wed, 21 Sep 2022 13:24:04 +0000
+Message-ID: <CH2PR12MB38957C25C9DA618D7E101DDBD74F9@CH2PR12MB3895.namprd12.prod.outlook.com>
+References: <20220920174736.9766-1-asmaa@nvidia.com>
+In-Reply-To: <20220920174736.9766-1-asmaa@nvidia.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CH2PR12MB3895:EE_|SJ0PR12MB5610:EE_
+x-ms-office365-filtering-correlation-id: 5f97c6a9-12b1-42af-defa-08da9bd48df1
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 3pq9Ak7sTm0zZGXcxMb264GUiGSygxIxwhXLI2IWwxgKNWcq0q+1eRA46EBuo8Yb06hWpNpTSrM+rA60hFTqwCp5EXgLFCgoODu/8Ol4GTMcnchFnXuU2XuzhfsvjS7Sah6xnlOKK/vfW7ekEJkYjmiDXr4M7N/y//qoyaoVftPMVIhW0lq4XfHoi9L33CQ++PLenNM+aj9b9+M5c/VedUDL23vdhh/JbeOBGBK5pireSA9Ayk4kfrWlh0DLt1mxCr4ueNOQLTRpz6AX803kEXa2cuT2bXnKfGVCIDiB4KuBsok8+42yhCp/njJ5X+IY0pNsdAdkDZbsdL5b7H0/i+mYowAhTdr8m7OkolR8zqPYz4coKik86lq044qBSaFqgurW5igLqFXv3heuJ6pvjN1PDJeWSz77bot8c7ofXXwNuyg2GF4mxxaXlaXdwbLqBHtD5YzqYYShJD88olx+pYheOZao06XviS/6LrRmOBJKHjJrcM5M57X3bZl0EVscBm5XZzxDgCdlNNlv5mF5IroxHUzRrvi7/tB5oi/TqbCIhs9fbICgDFYDzG6JAvEyTEJCFfPGCAOr2GokQot/jyi7bQphZaCUyQRyiVwvpudgu4SEvL7YJP5nxl3eBKxbcl44rZAUcMwIHdzajIjfsYR6OVBJY3MEXr2dmS05juNB8jEYeohjkAXLLZ9Ebl8iRBeCIR3dUYNCOPHnzK1m3pXaaYe9cAHPbJ+dj33rmXi30wVm8owIKG0g93F8j97TwV4GoUKoPyoJyfgLnMWgeQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR12MB3895.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(39860400002)(376002)(346002)(136003)(396003)(451199015)(9686003)(6506007)(7696005)(53546011)(26005)(110136005)(38070700005)(478600001)(2906002)(5660300002)(38100700002)(64756008)(66446008)(66476007)(86362001)(33656002)(122000001)(55016003)(186003)(66556008)(41300700001)(71200400001)(83380400001)(76116006)(66946007)(8936002)(52536014)(316002)(8676002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?tzL1/gp1sHUi1BXEp4MtJTzunMOkCtk+dbhfHyZ7Y+XqNySRR4EhExM1wqf1?=
+ =?us-ascii?Q?MbQ6XgR8nRI6YUxqaZVc5/rOOn4koztJyfuDLcK5K4apTXNIW+umvinzO96U?=
+ =?us-ascii?Q?HqS98hTaVkY2HQOgRiTELQcBqXKRnUNvkKe/huOj2Dv9g5N4u2iuCU2tIvCP?=
+ =?us-ascii?Q?g7hbv95+8SB0bT5tgHHJX+RHk7n1nylMXoUh6Ww2MHj6Td4quWOm7qBZ1/bw?=
+ =?us-ascii?Q?ADE0mUFctJ91LMqWkGIsxUtGh0zKXwtVEoPmE06X5x6pq/JwwPzoM2LM6omQ?=
+ =?us-ascii?Q?8yRsMZSifNr35XCWlW3+kg0zHZO65qCHX82tX/PEcUWF/vDjhA+S3N6KrJ3z?=
+ =?us-ascii?Q?W6FePKuxncxKulbru7XJxBx7hkUbRH8n8FKUERFw/atWLa1mmWfziOFpBYXj?=
+ =?us-ascii?Q?Wb/rbqFjmAVkWILCUcP4qElkyVDOtSXpni+VfYqjSx8vKQGPsEMAL55Zmxze?=
+ =?us-ascii?Q?rMrmkTIuhud1B9usgSrj4jr8agbxF3SBNEnEln3f3Sjj5BMk8e3R755sL+gP?=
+ =?us-ascii?Q?0i0h80eNxmQWosPzZHe5p6ji+7MZ0enGrgEzQTPgwda0xt4bCyTBBDRfB/w2?=
+ =?us-ascii?Q?ymnzripV2OHoG1Ksm/D5lHCmbdDtoo5TzwfZB26SvzlavCQXXYPIae+kXR0O?=
+ =?us-ascii?Q?bUtSAqG5laIIczBFMgNDX+/oDtpqfmRUdiE0kiRu9tuVeIjHZFQybWYYmuB3?=
+ =?us-ascii?Q?yAF0BBbOZ7IcZkwHqo/5wb7cwd2e4deG/HpLnEbIq7JeolLN2doy4Tdvcf7Z?=
+ =?us-ascii?Q?lHbUjVEPCZukhmKgn7sp8twf5HrGGxpf/y3h5DkNoRuiuY2jILFHhdU7QtD3?=
+ =?us-ascii?Q?BjtGeZMfQ5XafBVg8OeopNGi/d+F2PjtR2pMDeUkw72iCZHVfF+LGwuZvnIp?=
+ =?us-ascii?Q?pYxlQRNExmXbPCynKmtuDhHOG8s4p+wG2lNT/ty+qZAtTbgwkhanHxWbBwI3?=
+ =?us-ascii?Q?Nc/uLz0ISS+iULpa/NClIabuNS66OxeKoTEqeWZ4oVS4Mwf8oqBgNAdKzg+f?=
+ =?us-ascii?Q?UdaVk5uyaH7Jn6fbTRuwrEaXBAcwJaV2NJk3q7hwYAthR6c0pQAV9wWFtR43?=
+ =?us-ascii?Q?nTJaA4Awx2nm1ZHylbZ+0MwThK+aUg+L6SPRFG+t85srBKRRlywiRvqSc5WI?=
+ =?us-ascii?Q?EfPycOCn+XDIJJeT51Oe/ZeNn153MeqJC01VzF6yQtqQjwMpc2w+VWwQT8WR?=
+ =?us-ascii?Q?vQSOsNiylKvD8SE9+3giMm1ycjr0x36YcfSQqa7AX8dpqZ1rrOCProV49p1L?=
+ =?us-ascii?Q?ujeR1V6axJ3LJPjFvqqBffMH43pQWkz6eIxqgpJp13ZcQg57RjdXIdpNB5Mp?=
+ =?us-ascii?Q?oxQwuk8pix/4NxpuwhFOGlP+8FnGHJtQANVXenALkE+LmkjBsF+2IR0o0fQs?=
+ =?us-ascii?Q?up4a44SA48ldNilf8ukihI7Kly5KGM1UP1uOtYKDzDaem5mPgcLi0NujMLwh?=
+ =?us-ascii?Q?fUvL8/j4lms/Ra2TrjpWUkk7eaUuJidwgMWMc5rirTFkHT69cky2XcNqFMMK?=
+ =?us-ascii?Q?JTOpD+9mTrcgjDy49uPyv0yb7jYG7vNidr16XHmDv73U7EfKRA65tHuH6zg3?=
+ =?us-ascii?Q?lrYqNREBKL6xZj7Zm3A=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB3895.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5f97c6a9-12b1-42af-defa-08da9bd48df1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Sep 2022 13:24:04.2844
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: IyQoLFXtH+LHb1CjPH0utZCu0pYtDP4iYmaHIRI4/lcm2wpV+obsVkIDQHwM9iloC2jubj1eadMQO4D72lr6pg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5610
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It was found that some tracing functions acquire a arch_spinlock_t with
-preemption and irqs enabled.  That can be problematic in case preemption
-happens after acquiring the lock. Use the proper do_arch_spin_lock()
-API with preemption disabled to make sure that this won't happen unless
-it is obvious that either preemption or irqs has been disabled .
+Hi Wolfram,
 
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- kernel/trace/trace.c | 52 ++++++++++++++++++++------------------------
- 1 file changed, 24 insertions(+), 28 deletions(-)
+Is there any requirement to support DTs in i2c drivers?
+I would like to remove it in the v6 series because we don't support device =
+tree, only ACPI.
 
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index d3005279165d..cbb8520842ad 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -1193,12 +1193,12 @@ void *tracing_cond_snapshot_data(struct trace_array *tr)
- {
- 	void *cond_data = NULL;
- 
--	arch_spin_lock(&tr->max_lock);
-+	do_arch_spin_lock(&tr->max_lock);
- 
- 	if (tr->cond_snapshot)
- 		cond_data = tr->cond_snapshot->cond_data;
- 
--	arch_spin_unlock(&tr->max_lock);
-+	do_arch_spin_unlock(&tr->max_lock);
- 
- 	return cond_data;
- }
-@@ -1334,9 +1334,9 @@ int tracing_snapshot_cond_enable(struct trace_array *tr, void *cond_data,
- 		goto fail_unlock;
- 	}
- 
--	arch_spin_lock(&tr->max_lock);
-+	do_arch_spin_lock(&tr->max_lock);
- 	tr->cond_snapshot = cond_snapshot;
--	arch_spin_unlock(&tr->max_lock);
-+	do_arch_spin_unlock(&tr->max_lock);
- 
- 	mutex_unlock(&trace_types_lock);
- 
-@@ -1363,7 +1363,7 @@ int tracing_snapshot_cond_disable(struct trace_array *tr)
- {
- 	int ret = 0;
- 
--	arch_spin_lock(&tr->max_lock);
-+	do_arch_spin_lock(&tr->max_lock);
- 
- 	if (!tr->cond_snapshot)
- 		ret = -EINVAL;
-@@ -1372,7 +1372,7 @@ int tracing_snapshot_cond_disable(struct trace_array *tr)
- 		tr->cond_snapshot = NULL;
- 	}
- 
--	arch_spin_unlock(&tr->max_lock);
-+	do_arch_spin_unlock(&tr->max_lock);
- 
- 	return ret;
- }
-@@ -1819,7 +1819,7 @@ update_max_tr(struct trace_array *tr, struct task_struct *tsk, int cpu,
- 		return;
- 	}
- 
--	arch_spin_lock(&tr->max_lock);
-+	do_arch_spin_lock(&tr->max_lock);
- 
- 	/* Inherit the recordable setting from array_buffer */
- 	if (ring_buffer_record_is_set_on(tr->array_buffer.buffer))
-@@ -1836,7 +1836,7 @@ update_max_tr(struct trace_array *tr, struct task_struct *tsk, int cpu,
- 	__update_max_tr(tr, tsk, cpu);
- 
-  out_unlock:
--	arch_spin_unlock(&tr->max_lock);
-+	do_arch_spin_unlock(&tr->max_lock);
- }
- 
- /**
-@@ -1862,7 +1862,7 @@ update_max_tr_single(struct trace_array *tr, struct task_struct *tsk, int cpu)
- 		return;
- 	}
- 
--	arch_spin_lock(&tr->max_lock);
-+	do_arch_spin_lock(&tr->max_lock);
- 
- 	ret = ring_buffer_swap_cpu(tr->max_buffer.buffer, tr->array_buffer.buffer, cpu);
- 
-@@ -1880,7 +1880,7 @@ update_max_tr_single(struct trace_array *tr, struct task_struct *tsk, int cpu)
- 	WARN_ON_ONCE(ret && ret != -EAGAIN && ret != -EBUSY);
- 
- 	__update_max_tr(tr, tsk, cpu);
--	arch_spin_unlock(&tr->max_lock);
-+	do_arch_spin_unlock(&tr->max_lock);
- }
- #endif /* CONFIG_TRACER_MAX_TRACE */
- 
-@@ -2413,7 +2413,7 @@ static int trace_save_cmdline(struct task_struct *tsk)
- 	 * nor do we want to disable interrupts,
- 	 * so if we miss here, then better luck next time.
- 	 */
--	if (!arch_spin_trylock(&trace_cmdline_lock))
-+	if (!do_arch_spin_trylock(&trace_cmdline_lock))
- 		return 0;
- 
- 	idx = savedcmd->map_pid_to_cmdline[tpid];
-@@ -2427,7 +2427,7 @@ static int trace_save_cmdline(struct task_struct *tsk)
- 	savedcmd->map_cmdline_to_pid[idx] = tsk->pid;
- 	set_cmdline(idx, tsk->comm);
- 
--	arch_spin_unlock(&trace_cmdline_lock);
-+	do_arch_spin_unlock(&trace_cmdline_lock);
- 
- 	return 1;
- }
-@@ -2461,13 +2461,11 @@ static void __trace_find_cmdline(int pid, char comm[])
- 
- void trace_find_cmdline(int pid, char comm[])
- {
--	preempt_disable();
--	arch_spin_lock(&trace_cmdline_lock);
-+	do_arch_spin_lock(&trace_cmdline_lock);
- 
- 	__trace_find_cmdline(pid, comm);
- 
--	arch_spin_unlock(&trace_cmdline_lock);
--	preempt_enable();
-+	do_arch_spin_unlock(&trace_cmdline_lock);
- }
- 
- static int *trace_find_tgid_ptr(int pid)
-@@ -5829,8 +5827,7 @@ static void *saved_cmdlines_start(struct seq_file *m, loff_t *pos)
- 	void *v;
- 	loff_t l = 0;
- 
--	preempt_disable();
--	arch_spin_lock(&trace_cmdline_lock);
-+	do_arch_spin_lock(&trace_cmdline_lock);
- 
- 	v = &savedcmd->map_cmdline_to_pid[0];
- 	while (l <= *pos) {
-@@ -5844,8 +5841,7 @@ static void *saved_cmdlines_start(struct seq_file *m, loff_t *pos)
- 
- static void saved_cmdlines_stop(struct seq_file *m, void *v)
- {
--	arch_spin_unlock(&trace_cmdline_lock);
--	preempt_enable();
-+	do_arch_spin_unlock(&trace_cmdline_lock);
- }
- 
- static int saved_cmdlines_show(struct seq_file *m, void *v)
-@@ -5890,9 +5886,9 @@ tracing_saved_cmdlines_size_read(struct file *filp, char __user *ubuf,
- 	char buf[64];
- 	int r;
- 
--	arch_spin_lock(&trace_cmdline_lock);
-+	do_arch_spin_lock(&trace_cmdline_lock);
- 	r = scnprintf(buf, sizeof(buf), "%u\n", savedcmd->cmdline_num);
--	arch_spin_unlock(&trace_cmdline_lock);
-+	do_arch_spin_unlock(&trace_cmdline_lock);
- 
- 	return simple_read_from_buffer(ubuf, cnt, ppos, buf, r);
- }
-@@ -5917,10 +5913,10 @@ static int tracing_resize_saved_cmdlines(unsigned int val)
- 		return -ENOMEM;
- 	}
- 
--	arch_spin_lock(&trace_cmdline_lock);
-+	do_arch_spin_lock(&trace_cmdline_lock);
- 	savedcmd_temp = savedcmd;
- 	savedcmd = s;
--	arch_spin_unlock(&trace_cmdline_lock);
-+	do_arch_spin_unlock(&trace_cmdline_lock);
- 	free_saved_cmdlines_buffer(savedcmd_temp);
- 
- 	return 0;
-@@ -6373,10 +6369,10 @@ int tracing_set_tracer(struct trace_array *tr, const char *buf)
- 
- #ifdef CONFIG_TRACER_SNAPSHOT
- 	if (t->use_max_tr) {
--		arch_spin_lock(&tr->max_lock);
-+		do_arch_spin_lock(&tr->max_lock);
- 		if (tr->cond_snapshot)
- 			ret = -EBUSY;
--		arch_spin_unlock(&tr->max_lock);
-+		do_arch_spin_unlock(&tr->max_lock);
- 		if (ret)
- 			goto out;
- 	}
-@@ -7436,10 +7432,10 @@ tracing_snapshot_write(struct file *filp, const char __user *ubuf, size_t cnt,
- 		goto out;
- 	}
- 
--	arch_spin_lock(&tr->max_lock);
-+	do_arch_spin_lock(&tr->max_lock);
- 	if (tr->cond_snapshot)
- 		ret = -EBUSY;
--	arch_spin_unlock(&tr->max_lock);
-+	do_arch_spin_unlock(&tr->max_lock);
- 	if (ret)
- 		goto out;
- 
--- 
-2.31.1
+Thank you,
+Asmaa
+
+-----Original Message-----
+From: Asmaa Mnebhi <asmaa@nvidia.com>=20
+Sent: Tuesday, September 20, 2022 1:47 PM
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>; robh@kernel.org; linux=
+-i2c@vger.kernel.org; linux-kernel@vger.kernel.org; devicetree@vger.kernel.=
+org
+Cc: Asmaa Mnebhi <asmaa@nvidia.com>
+Subject: [PATCH v5 0/8] i2c: i2c-mlxbf.c: bug fixes and new feature support
+
+This is a series of patches fixing several bugs and implementing new featur=
+es.
+
+Bug fixes:
+1) Fix the frequency calculation
+2) Fix incorrect base address passed during io write
+3) prevent stack overflow in mlxbf_i2c_smbus_start_transaction()
+4) Support lock mechanism to avoid race condition between entities
+   using the i2c bus
+
+Cleanup:
+5) remove IRQF_ONESHOT flag as it is no longer needed.
+
+Features:
+6) Support multi slave functionality
+7) Support BlueField-3 SoC
+8) Update binding devicetree
+
+What has changed from v4->v5:
+Fix build error in the mellanox i2c device tree documentation
+
+Asmaa Mnebhi (8):
+  i2c: i2c-mlxbf.c: Fix frequency calculation
+  i2c: i2c-mlxbf.c: remove IRQF_ONESHOT
+  i2c: i2c-mlxbf.c: incorrect base address passed during io write
+  i2c: i2c-mlxbf: prevent stack overflow in
+    mlxbf_i2c_smbus_start_transaction()
+  i2c: i2c-mlxbf.c: support lock mechanism
+  i2c: i2c-mlxbf: add multi slave functionality
+  i2c: i2c-mlxbf.c: support BlueField-3 SoC
+  i2c: i2c-mlxbf.c: Update binding devicetree
+
+ .../bindings/i2c/mellanox,i2c-mlxbf.yaml      |  48 +-
+ MAINTAINERS                                   |   1 +
+ drivers/i2c/busses/i2c-mlxbf.c                | 862 ++++++++++--------
+ 3 files changed, 521 insertions(+), 390 deletions(-)
+
+--
+2.30.1
 
