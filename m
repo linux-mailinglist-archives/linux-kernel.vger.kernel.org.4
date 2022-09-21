@@ -2,70 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1408D5BFCA0
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 12:55:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82C0D5BFCA3
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 12:56:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbiIUKzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 06:55:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38074 "EHLO
+        id S229992AbiIUK4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 06:56:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbiIUKzi (ORCPT
+        with ESMTP id S229936AbiIUK4J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 06:55:38 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A3990186;
-        Wed, 21 Sep 2022 03:55:37 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 874626602028;
-        Wed, 21 Sep 2022 11:55:35 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1663757736;
-        bh=9ajDDjf4XIDJ5mfE/Ipbc+msyJHbTMeaxbL2UlQiUpo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=EelxG/lbMgLGqVhHOXY9iMKIoKj0+8g2oA2/04MqRuA+GZqvKcionDPdLdI7ftcBn
-         zFgGYu/xluP4hNHAnta2eIl4iglNpjIfi/lRg98OkwsjP1M29/49T4NxIiI9oMKJXw
-         LJ2741FYnxzNeUbycBCP+5H2ipdQ2G73MJF72kNbSu+Xa3nMUYHIH5SkjSqfQxkMBf
-         MW2G8d0BCpyASLjAYm6eR/weITAl72bAwmSuGRiQucpHSEctmrTluqfA/SdQ16XLlm
-         ya31QFweHxLpOp3sfoHGjwxtCjR8tRBR069YxAYZFaffi8moW0RQFoSwy//SqP9XR0
-         bkHCTuaYlyQNw==
-Message-ID: <3cab86eb-2c5d-f6ec-a326-e34e63eabb24@collabora.com>
-Date:   Wed, 21 Sep 2022 12:55:32 +0200
+        Wed, 21 Sep 2022 06:56:09 -0400
+Received: from mail-4319.protonmail.ch (mail-4319.protonmail.ch [185.70.43.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12FD190C57
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 03:56:08 -0700 (PDT)
+Date:   Wed, 21 Sep 2022 10:55:57 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1663757767; x=1664016967;
+        bh=ghRWy/e90VWRHHDbxBAs0t0Nb9qsu1i8ost31cToLGU=;
+        h=Date:To:From:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+         Subject:Reply-To:Feedback-ID:Message-ID;
+        b=KqV05N021s1uRIPAZb0hxE5nLPPfhlVtsnoRQifU415XatpOHiU8V8Vwv4h8dRG8t
+         ac9tWNmeMG6i1omV/8iBBIkGznTVT9mTEJbdyURMqM1kr+pRpOyNJqQleD8bVJ3aLn
+         GfZlZtzAIs+lFwJWMbY+pf1sATzFrBGWLekv0EwUKpdTY3zSIWS1hYS4dXA0RWLVtD
+         LVXPQ8KFrIVU8PPTvWhw1QeRdoGhH0UWBhaIsEPTv5lu8j7iDP/4j7gj/hBFI2kPs9
+         +SfCLu2Z5TeTdNF+H2CBGlLzFhRgp3Od1ijdda5UeYaa5/R4vGa+h3jgXSPbmjBL4d
+         bPLYmoKZSoAtA==
+To:     "Daniel J. Ogorchock" <djogorchock@gmail.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+From:   Johnothan King <johnothanking@protonmail.com>
+Subject: [PATCH v4] HID: nintendo: check analog user calibration for plausibility
+Message-ID: <gvpL2G6VwXGJPvxX5KRiu9pVjvTivgayug_jdKDY6zfuAaAqncP9BkKLosjwUXNlgVVTMfJSKfwPF1K79cKAkwGComyC21vCV3q9B3EXNkE=@protonmail.com>
+Feedback-ID: 1750573:user:proton
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH 1/4] dt-bindings: pinctrl: Combine MediaTek MT67xx pinctrl
- binding docs
-Content-Language: en-US
-To:     yassine.oudjana@gmail.com
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        Andy Teng <andy.teng@mediatek.com>,
-        Yassine Oudjana <y.oudjana@protonmail.com>,
-        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20220919170115.94873-1-y.oudjana@protonmail.com>
- <20220919170115.94873-2-y.oudjana@protonmail.com>
- <4c425cf8-f9ca-969c-f8ed-688410bfb922@collabora.com>
- <1860b0ff-5544-5e74-ccfc-beda18824927@linaro.org>
- <YQZJIR.QQOJU0071T1J1@gmail.com>
- <0c2ef56e-5dab-fb79-fead-adb4acef4cc6@collabora.com>
- <H82KIR.LT5P242T2PJ72@gmail.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <H82KIR.LT5P242T2PJ72@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,91 +48,143 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 21/09/22 12:24, yassine.oudjana@gmail.com ha scritto:
-> 
-> 
-> On Wed, Sep 21 2022 at 11:45:41 AM +0200, AngeloGioacchino Del Regno 
-> <angelogioacchino.delregno@collabora.com> wrote:
->> Il 21/09/22 11:30, yassine.oudjana@gmail.com ha scritto:
->>>
->>>
->>> On Wed, Sep 21 2022 at 09:11:12 AM +0200, Krzysztof Kozlowski 
->>> <krzysztof.kozlowski@linaro.org> wrote:
->>>> On 20/09/2022 10:06, AngeloGioacchino Del Regno wrote:
->>>>>  Il 19/09/22 19:01, Yassine Oudjana ha scritto:
->>>>>>  From: Yassine Oudjana <y.oudjana@protonmail.com>
->>>>>>
->>>>>>  Documents for MT6779, MT6795 and MT6797 that currently exist share
->>>>>>  most properties, and each one has slightly differently worded
->>>>>>  descriptions for those properties. Combine all three documents into
->>>>>>  one common document for all MT67xx SoC pin controllers, picking a few
->>>>>>  parts from each and accounting for differences such as items in reg
->>>>>>  and reg-names properties. Also document the MT6765 pin controller
->>>>>>  which currently has a driver but no DT binding documentation. It should
->>>>>>  be possible to also include bindings for MT8183 and MT8188, but these
->>>>>>  have some additional properties that might complicate things a bit,
->>>>>>  so they are left alone for now.
->>>>>>
->>>>>>  Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
->>>>>>  ---
->>>>>>    .../pinctrl/mediatek,mt6779-pinctrl.yaml      | 207 ------------------
->>>>>>    .../pinctrl/mediatek,mt6797-pinctrl.yaml      | 176 ---------------
->>>>>>    ...6795.yaml => mediatek,mt67xx-pinctrl.yaml} | 181 +++++++++++----
->>>>>
->>>>>  Hello Yassine,
->>>>>  nice cleanup over here!
->>>>>
->>>>>  There's a catch though: as far as I know, wildcards are not permitted... so you
->>>>>  should, at this point, merge all of these in mediatek,mt6779-pinctrl.yaml 
->>>>> instead.
->>>>>
->>>>>  Before jumping to that, though... Krzysztof, can you please confirm (or deny)?
->>>>
->>>> Wildcards are not allowed in compatibles. In filename wildcards or
->>>> family name could work if they are really going to match the devices. I
->>>> have doubts here. 67xx is quite a lot of different devices, so I am not
->>>> sure this will cover them all.
->>>>
->>>> I would prefer one name (oldest SoC or lowest number).
->>>
->>> Lowest number (and probably oldest too but not sure since mediatek naming 
->>> conventions are a bit weird) currently documented is mt6779, but mt6765 gets 
->>> documented in this patch and mt6735 (this one I know for sure is older than the 
->>> rest) in a following patch, so do I just stick with mt6779 or do I change it in 
->>> the following patches documenting mt6765 and mt6735?
->>>
->>
->> I see the sequence as:
->>
->> 1. You merge mediatek,mt6797-pinctrl.yaml into mediatek,mt6779-pinctrl.yaml; then
-> 
-> And mediatek,pinctrl-mt6795 gets merged here too I assume?
-> 
+Arne Wendt writes:
+  Cheap clone controllers may (falsely) report as having a user
+  calibration for the analog sticks in place, but return
+  wrong/impossible values for the actual calibration data.
+  In the present case at mine, the controller reports having a
+  user calibration in place and successfully executes the read
+  commands. The reported user calibration however is
+  min =3D center =3D max =3D 0.
 
-Yeah sorry about forgetting that one. Anyway, obviously, do one merge operation
-per commit!
+  This pull request addresses problems of this kind by checking the
+  provided user calibration-data for plausibility (min < center < max)
+  and falling back to the default values if implausible.
 
+I'll note that I was experiencing a crash because of this bug when using
+the GuliKit KingKong 2 controller. The crash manifests as a divide by
+zero error in the kernel logs:
+kernel: divide error: 0000 [#1] PREEMPT SMP NOPTI
 
->> 2. Adding MT6765 documentation to mediatek,mt6779-pinctrl.yaml; then
->> 3. Adding support for MT6735, documentation goes again to 6779-pinctrl.
->>
->> This means that you're working with mediatek,mt6779-pinctrl.yaml :-)
->>
->> P.S.: That was also a suggestion about how to split things per-commit!
->>
->> Cheers,
->> Angelo
->>
->>> Thanks,
->>> Yassine
->>>
->>>>
->>>> Best regards,
->>>> Krzysztof
->>>
->>>
->>
-> 
-> 
+Link: https://github.com/nicman23/dkms-hid-nintendo/pull/25
+Link: https://github.com/DanielOgorchock/linux/issues/36
+Co-authored-by: Arne Wendt <arne.wendt@tuhh.de>
+Signed-off-by: Johnothan King <johnothanking@protonmail.com>
+---
+Changes in v2:
+ - Move the plausibility check to joycon_read_stick_calibration() and
+   have that function return -EINVAL if the check fails.
+ - In the plausibility check, change >=3D to =3D=3D. hid_field_extract() ne=
+ver
+   returns a negative value, so a scenario involving min > center or
+   center > max is impossible.
+ - To reduce code duplication, move the code for setting default
+   calibration values into a single function called
+   joycon_use_default_calibration().
+
+Changes in v3:
+ - Unbreak warning string to conform to coding style.
+ - Change joycon_use_default_calibration() to accept a struct hid_device
+   pointer instead of a struct joycon_ctlr pointer.
+
+Changes in v4:
+ - Reformat joycon_use_default_calibration() another time to move stick
+   and ret onto the same line.
+ - Revert =3D=3D to >=3D change to account for rollover.
+ - Additional minor change to comment for value check.
+
+ drivers/hid/hid-nintendo.c | 55 +++++++++++++++++++++-----------------
+ 1 file changed, 30 insertions(+), 25 deletions(-)
+
+diff --git a/drivers/hid/hid-nintendo.c b/drivers/hid/hid-nintendo.c
+index 5cb5a1d53b71..71e2a9a0882a 100644
+--- a/drivers/hid/hid-nintendo.c
++++ b/drivers/hid/hid-nintendo.c
+@@ -760,12 +760,31 @@ static int joycon_read_stick_calibration(struct joyco=
+n_ctlr *ctlr, u16 cal_addr,
+ =09cal_y->max =3D cal_y->center + y_max_above;
+ =09cal_y->min =3D cal_y->center - y_min_below;
+=20
+-=09return 0;
++=09/* check if calibration values are plausible */
++=09if (cal_x->min >=3D cal_x->center || cal_x->center >=3D cal_x->max ||
++=09    cal_y->min >=3D cal_y->center || cal_y->center >=3D cal_y->max)
++=09=09ret =3D -EINVAL;
++
++=09return ret;
+ }
+=20
+ static const u16 DFLT_STICK_CAL_CEN =3D 2000;
+ static const u16 DFLT_STICK_CAL_MAX =3D 3500;
+ static const u16 DFLT_STICK_CAL_MIN =3D 500;
++static void joycon_use_default_calibration(struct hid_device *hdev,
++=09=09=09=09=09   struct joycon_stick_cal *cal_x,
++=09=09=09=09=09   struct joycon_stick_cal *cal_y,
++=09=09=09=09=09   const char *stick, int ret)
++{
++=09hid_warn(hdev,
++=09=09 "Failed to read %s stick cal, using defaults; e=3D%d\n",
++=09=09 stick, ret);
++
++=09cal_x->center =3D cal_y->center =3D DFLT_STICK_CAL_CEN;
++=09cal_x->max =3D cal_y->max =3D DFLT_STICK_CAL_MAX;
++=09cal_x->min =3D cal_y->min =3D DFLT_STICK_CAL_MIN;
++}
++
+ static int joycon_request_calibration(struct joycon_ctlr *ctlr)
+ {
+ =09u16 left_stick_addr =3D JC_CAL_FCT_DATA_LEFT_ADDR;
+@@ -793,38 +812,24 @@ static int joycon_request_calibration(struct joycon_c=
+tlr *ctlr)
+ =09=09=09=09=09    &ctlr->left_stick_cal_x,
+ =09=09=09=09=09    &ctlr->left_stick_cal_y,
+ =09=09=09=09=09    true);
+-=09if (ret) {
+-=09=09hid_warn(ctlr->hdev,
+-=09=09=09 "Failed to read left stick cal, using dflts; e=3D%d\n",
+-=09=09=09 ret);
+-
+-=09=09ctlr->left_stick_cal_x.center =3D DFLT_STICK_CAL_CEN;
+-=09=09ctlr->left_stick_cal_x.max =3D DFLT_STICK_CAL_MAX;
+-=09=09ctlr->left_stick_cal_x.min =3D DFLT_STICK_CAL_MIN;
+=20
+-=09=09ctlr->left_stick_cal_y.center =3D DFLT_STICK_CAL_CEN;
+-=09=09ctlr->left_stick_cal_y.max =3D DFLT_STICK_CAL_MAX;
+-=09=09ctlr->left_stick_cal_y.min =3D DFLT_STICK_CAL_MIN;
+-=09}
++=09if (ret)
++=09=09joycon_use_default_calibration(ctlr->hdev,
++=09=09=09=09=09       &ctlr->left_stick_cal_x,
++=09=09=09=09=09       &ctlr->left_stick_cal_y,
++=09=09=09=09=09       "left", ret);
+=20
+ =09/* read the right stick calibration data */
+ =09ret =3D joycon_read_stick_calibration(ctlr, right_stick_addr,
+ =09=09=09=09=09    &ctlr->right_stick_cal_x,
+ =09=09=09=09=09    &ctlr->right_stick_cal_y,
+ =09=09=09=09=09    false);
+-=09if (ret) {
+-=09=09hid_warn(ctlr->hdev,
+-=09=09=09 "Failed to read right stick cal, using dflts; e=3D%d\n",
+-=09=09=09 ret);
+-
+-=09=09ctlr->right_stick_cal_x.center =3D DFLT_STICK_CAL_CEN;
+-=09=09ctlr->right_stick_cal_x.max =3D DFLT_STICK_CAL_MAX;
+-=09=09ctlr->right_stick_cal_x.min =3D DFLT_STICK_CAL_MIN;
+=20
+-=09=09ctlr->right_stick_cal_y.center =3D DFLT_STICK_CAL_CEN;
+-=09=09ctlr->right_stick_cal_y.max =3D DFLT_STICK_CAL_MAX;
+-=09=09ctlr->right_stick_cal_y.min =3D DFLT_STICK_CAL_MIN;
+-=09}
++=09if (ret)
++=09=09joycon_use_default_calibration(ctlr->hdev,
++=09=09=09=09=09       &ctlr->right_stick_cal_x,
++=09=09=09=09=09       &ctlr->right_stick_cal_y,
++=09=09=09=09=09       "right", ret);
+=20
+ =09hid_dbg(ctlr->hdev, "calibration:\n"
+ =09=09=09    "l_x_c=3D%d l_x_max=3D%d l_x_min=3D%d\n"
+--=20
+2.37.3
 
 
