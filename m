@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA9375C02D2
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:55:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AB1D5C0303
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:58:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231977AbiIUPze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 11:55:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40528 "EHLO
+        id S232126AbiIUP6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 11:58:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232029AbiIUPx7 (ORCPT
+        with ESMTP id S232100AbiIUP5g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 11:53:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD179DF89;
-        Wed, 21 Sep 2022 08:50:24 -0700 (PDT)
+        Wed, 21 Sep 2022 11:57:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE41A025A;
+        Wed, 21 Sep 2022 08:51:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 01C66B830B7;
-        Wed, 21 Sep 2022 15:49:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6632CC433C1;
-        Wed, 21 Sep 2022 15:49:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 922BE6313C;
+        Wed, 21 Sep 2022 15:51:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83E46C433D6;
+        Wed, 21 Sep 2022 15:51:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663775391;
-        bh=twmucRWLWBA5JA6EpwBqMb0aNPgZceHCV2b5nbdmFUA=;
+        s=korg; t=1663775491;
+        bh=/svY6D8V5JfD8BnwrmWDILcFtql5BiIckjIaZs3HME4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LHHQLoi2delNFp+D+8moE6oM3sKu2HEYPurjjCP/mWaul7A2BffcjLmqcCsmhMddr
-         gSmHoOckrSjdjo8zYuETGz8JoDjOgYdxxhx5LfPTH6NSdzqbctDAj4PlD2+q0hkDAM
-         228C7vEJBFAnaFxDrBpUOaZsW7UDq34FRSat46Zs=
+        b=nePOkMx/r8QfHiGHtgwp5tP7kTBUL0Nb/c2+bxbpL3LL6U0SJwqHwdfWSUZAUPQ3C
+         1xAU8QU0aMvafLl9Ki7/u0swdaQHuaMGvLArEqKym8MA0ZP6v7xVr64xerz4cAU/jk
+         raW9CMEOlM7AhfPmg3ds0tuFLLYeKrcr/YL0QSGc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Alexander Sverdlin <alexander.sverdlin@nokia.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 38/45] MIPS: OCTEON: irq: Fix octeon_irq_force_ciu_mapping()
-Date:   Wed, 21 Sep 2022 17:46:28 +0200
-Message-Id: <20220921153648.216170861@linuxfoundation.org>
+        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Stefan Ghinea <stefan.ghinea@windriver.com>
+Subject: [PATCH 5.10 24/39] video: fbdev: i740fb: Error out if pixclock equals zero
+Date:   Wed, 21 Sep 2022 17:46:29 +0200
+Message-Id: <20220921153646.522403400@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220921153646.931277075@linuxfoundation.org>
-References: <20220921153646.931277075@linuxfoundation.org>
+In-Reply-To: <20220921153645.663680057@linuxfoundation.org>
+References: <20220921153645.663680057@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,61 +54,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Sverdlin <alexander.sverdlin@nokia.com>
+From: Zheyu Ma <zheyuma97@gmail.com>
 
-[ Upstream commit ba912afbd611d3a5f22af247721a071ad1d5b9e0 ]
+commit 15cf0b82271b1823fb02ab8c377badba614d95d5 upstream.
 
-For irq_domain_associate() to work the virq descriptor has to be
-pre-allocated in advance. Otherwise the following happens:
+The userspace program could pass any values to the driver through
+ioctl() interface. If the driver doesn't check the value of 'pixclock',
+it may cause divide error.
 
-WARNING: CPU: 0 PID: 0 at .../kernel/irq/irqdomain.c:527 irq_domain_associate+0x298/0x2e8
-error: virq128 is not allocated
-Modules linked in:
-CPU: 0 PID: 0 Comm: swapper/0 Not tainted 4.19.78-... #1
-        ...
+Fix this by checking whether 'pixclock' is zero in the function
+i740fb_check_var().
+
+The following log reveals it:
+
+divide error: 0000 [#1] PREEMPT SMP KASAN PTI
+RIP: 0010:i740fb_decode_var drivers/video/fbdev/i740fb.c:444 [inline]
+RIP: 0010:i740fb_set_par+0x272f/0x3bb0 drivers/video/fbdev/i740fb.c:739
 Call Trace:
-[<ffffffff801344c4>] show_stack+0x9c/0x130
-[<ffffffff80769550>] dump_stack+0x90/0xd0
-[<ffffffff801576d0>] __warn+0x118/0x130
-[<ffffffff80157734>] warn_slowpath_fmt+0x4c/0x70
-[<ffffffff801b83c0>] irq_domain_associate+0x298/0x2e8
-[<ffffffff80a43bb8>] octeon_irq_init_ciu+0x4c8/0x53c
-[<ffffffff80a76cbc>] of_irq_init+0x1e0/0x388
-[<ffffffff80a452cc>] init_IRQ+0x4c/0xf4
-[<ffffffff80a3cc00>] start_kernel+0x404/0x698
+    fb_set_var+0x604/0xeb0 drivers/video/fbdev/core/fbmem.c:1036
+    do_fb_ioctl+0x234/0x670 drivers/video/fbdev/core/fbmem.c:1112
+    fb_ioctl+0xdd/0x130 drivers/video/fbdev/core/fbmem.c:1191
+    vfs_ioctl fs/ioctl.c:51 [inline]
+    __do_sys_ioctl fs/ioctl.c:874 [inline]
 
-Use irq_alloc_desc_at() to avoid the above problem.
-
-Signed-off-by: Alexander Sverdlin <alexander.sverdlin@nokia.com>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
+Signed-off-by: Stefan Ghinea <stefan.ghinea@windriver.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/mips/cavium-octeon/octeon-irq.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/video/fbdev/i740fb.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/mips/cavium-octeon/octeon-irq.c b/arch/mips/cavium-octeon/octeon-irq.c
-index be5d4afcd30f..353dfeee0a6d 100644
---- a/arch/mips/cavium-octeon/octeon-irq.c
-+++ b/arch/mips/cavium-octeon/octeon-irq.c
-@@ -127,6 +127,16 @@ static void octeon_irq_free_cd(struct irq_domain *d, unsigned int irq)
- static int octeon_irq_force_ciu_mapping(struct irq_domain *domain,
- 					int irq, int line, int bit)
- {
-+	struct device_node *of_node;
-+	int ret;
-+
-+	of_node = irq_domain_get_of_node(domain);
-+	if (!of_node)
-+		return -EINVAL;
-+	ret = irq_alloc_desc_at(irq, of_node_to_nid(of_node));
-+	if (ret < 0)
-+		return ret;
-+
- 	return irq_domain_associate(domain, irq, line << 6 | bit);
- }
+--- a/drivers/video/fbdev/i740fb.c
++++ b/drivers/video/fbdev/i740fb.c
+@@ -662,6 +662,9 @@ static int i740fb_decode_var(const struc
  
--- 
-2.35.1
-
+ static int i740fb_check_var(struct fb_var_screeninfo *var, struct fb_info *info)
+ {
++	if (!var->pixclock)
++		return -EINVAL;
++
+ 	switch (var->bits_per_pixel) {
+ 	case 8:
+ 		var->red.offset	= var->green.offset = var->blue.offset = 0;
 
 
