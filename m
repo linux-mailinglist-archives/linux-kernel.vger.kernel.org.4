@@ -2,88 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A49BD5C01F2
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:45:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3040C5C01FC
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 17:46:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbiIUPpc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 11:45:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48244 "EHLO
+        id S230454AbiIUPqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 11:46:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbiIUPpa (ORCPT
+        with ESMTP id S230342AbiIUPqa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 11:45:30 -0400
-Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62CF961130;
-        Wed, 21 Sep 2022 08:45:29 -0700 (PDT)
-Received: by mail-vk1-xa2d.google.com with SMTP id k9so3408186vke.4;
-        Wed, 21 Sep 2022 08:45:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=BGlo6ay9T/5m0qNzyNn7Ta7yrBuOkYbaACoZggjAvrE=;
-        b=AQCgqIT5AXYbiCLzzlr4Y0jdkYglbGAALygN9T6mwxUzAXf5fKKvf95SQhvmr4MSF1
-         A7w2YIP3kgqvVpnHFY0KWYNKo/CekJvRx3dYgOjE9rMpvsAk6l/qbHW6Fe2ORSUA4Icl
-         8yF4gPIuvtFXPiYCLWGk5PDj9AY6SFSBEXvYk6mCQvCBVZRzf87/TGTDrm2o5vrW7j+1
-         vbk8KXXntpi/SeMVCg9IpzL3NoUgwyVIlfgWh9WrSDjblY/fJEcvMNP0+gL4jwpH81Dt
-         5MlR32tdTcI956Nw2P3hXrL+lSEeULE6MZLPgGeQWqVi6AgJZb+txR1oIaEcK/rNWDds
-         HcWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=BGlo6ay9T/5m0qNzyNn7Ta7yrBuOkYbaACoZggjAvrE=;
-        b=GszgaZlDLvbFxX/Okm+gdtLW//C86grQ4V3pzg1waBiukYhg/fHW9Cha3ztbMVLH1O
-         AKtA4lFlNSCO6q7H7nzR58nSTChLahDm56FZrJrrkYdq2O9Wu0817vW+WGskxHXBK5Tp
-         1ZrsllFOSVnnrT3VKn3DaWKRqnbDLQBRMmcUiIeGnPX0+EUJBlvt74qNLWcyI+SKSLcK
-         nwcGeEW6AI39bbu+8J3yKRCdnkdpvu7nAzSvLISd9sNUzMPQPyxXGhLWwq5qtv3POalG
-         nzfGKbak4xkxwfzyTjAeAk/KLkR4CeP163pGGtKILycgmyKXFC8wuXAjC1EYgoFk/9TO
-         wn0A==
-X-Gm-Message-State: ACrzQf1vvIDfX3Gm2j+4g5KEfg0lyH5kM4YA11yIlH61cc+aWubLvxFg
-        8cvIuRoNqumZm0TBVC2SswZxTeJlV0iNRJj09DvA1zfcYT+TvmIDRjk=
-X-Google-Smtp-Source: AMsMyM7J2G57PxjKJzMKxGHuLzogv8GwiLBgt6a04q5nbjsnhy67K9WyLz/uO7VMKg4BDIcz5rzUWgQWWYAJX03haVU=
-X-Received: by 2002:a1f:249:0:b0:3a1:e0fb:5402 with SMTP id
- 70-20020a1f0249000000b003a1e0fb5402mr10605185vkc.24.1663775128439; Wed, 21
- Sep 2022 08:45:28 -0700 (PDT)
+        Wed, 21 Sep 2022 11:46:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C0946E2EC;
+        Wed, 21 Sep 2022 08:46:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 053DF630B2;
+        Wed, 21 Sep 2022 15:46:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF44CC433C1;
+        Wed, 21 Sep 2022 15:46:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1663775188;
+        bh=CdanpR2DhJAU3KV5QrMSlmMJxGW/N+H5oCOHqL4nk44=;
+        h=From:To:Cc:Subject:Date:From;
+        b=BqlFTNpl/j1lqM6eKn0YsKxullt6vClQCFXtXcpZZNEfW3DvSVSoWpsGHDK1s6jwY
+         5ujIjnHTA0pYoEqADyl5WD5GJ8N8U9Vvty9Qx6XWrZNssd47HGhkmX9f8mmWYg/3ml
+         fdNPvzPvVRTXfrCm0Rkg20zYhXh8b//4IAhXzYPs=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+Subject: [PATCH 5.19 00/38] 5.19.11-rc1 review
+Date:   Wed, 21 Sep 2022 17:45:44 +0200
+Message-Id: <20220921153646.298361220@linuxfoundation.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-References: <CAB7eexKhQeqgpMaZoT=JD2EMwn=qTw4sWzF7hdU9XDFVsz3ooA@mail.gmail.com>
- <YynnT7/mnzJVn7iz@kroah.com>
-In-Reply-To: <YynnT7/mnzJVn7iz@kroah.com>
-From:   Rondreis <linhaoguo86@gmail.com>
-Date:   Wed, 21 Sep 2022 23:45:17 +0800
-Message-ID: <CAB7eexKKeOxgZ6uh7WXJcui71_uOMeYr8+=Hfb0-Gi4h8JMmEw@mail.gmail.com>
-Subject: Re: KASAN: use-after-free Write in keyspan_close
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        johan@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: quilt/0.67
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.11-rc1.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-5.19.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 5.19.11-rc1
+X-KernelTest-Deadline: 2022-09-23T15:36+00:00
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank you for your reply!
+This is the start of the stable review cycle for the 5.19.11 release.
+There are 38 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-This is a =E2=80=9Cfake=E2=80=9D device. We emulated some functions with th=
-e built-in
-gadget module as a virtual device side for fuzzing. It can pass through
-the matching phase and, to some extent the probing phase.
-As you said, the configuration options are correct.
+Responses should be made by Fri, 23 Sep 2022 15:36:33 +0000.
+Anything received after that time might be too late.
 
-After a successful attachment, we extracted the file_operations
-of the device files on both sides to find the corresponding system calls.
-Later, by fuzzing the dual-sided device with system calls, it is
-equivalent to considering data threats from both peripheral and user space.
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.11-rc1.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
+and the diffstat can be found below.
 
-We are open to any suggestions and hope to submit a patch capable
-of fixing this bug in the near future.
+thanks,
 
-Best Regards,
-Rondreis
+greg k-h
+
+-------------
+Pseudo-Shortlog of commits:
+
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 5.19.11-rc1
+
+Takashi Iwai <tiwai@suse.de>
+    ALSA: hda/sigmatel: Fix unused variable warning for beep power change
+
+Takashi Iwai <tiwai@suse.de>
+    ALSA: hda/sigmatel: Keep power up while beep is enabled
+
+Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+    cgroup: Add missing cpus_read_lock() to cgroup_attach_task_all()
+
+Janne Grunau <j@jannau.net>
+    dt-bindings: apple,aic: Fix required item "apple,fiq-index" in affinity description
+
+sewookseo <sewookseo@google.com>
+    net: Find dst with sk's xfrm policy not ctl_sk
+
+Alex Deucher <alexander.deucher@amd.com>
+    drm/amdgpu: move nbio sdma_doorbell_range() into sdma code for vega
+
+Alex Deucher <alexander.deucher@amd.com>
+    drm/amdgpu: move nbio ih_doorbell_range() into ih code for vega
+
+Lijo Lazar <lijo.lazar@amd.com>
+    drm/amdgpu: Don't enable LTR if not supported
+
+Alex Deucher <alexander.deucher@amd.com>
+    drm/amdgpu: make sure to init common IP before gmc
+
+Nirmoy Das <nirmoy.das@intel.com>
+    drm/i915: Set correct domains values at _i915_vma_move_to_active
+
+Ashutosh Dixit <ashutosh.dixit@intel.com>
+    drm/i915/gt: Fix perf limit reasons bit positions
+
+Ben Hutchings <benh@debian.org>
+    tools/include/uapi: Fix <asm/errno.h> for parisc and xtensa
+
+Helge Deller <deller@gmx.de>
+    parisc: Allow CONFIG_64BIT with ARCH=parisc
+
+Mikulas Patocka <mpatocka@redhat.com>
+    blk-lib: fix blkdev_issue_secure_erase
+
+Stefan Metzmacher <metze@samba.org>
+    cifs: always initialize struct msghdr smb_msg completely
+
+Stefan Metzmacher <metze@samba.org>
+    cifs: don't send down the destination address to sendmsg for a SOCK_STREAM
+
+Ronnie Sahlberg <lsahlber@redhat.com>
+    cifs: revalidate mapping when doing direct writes
+
+Jens Axboe <axboe@kernel.dk>
+    io_uring/msg_ring: check file type before putting
+
+Thierry Reding <treding@nvidia.com>
+    of/device: Fix up of_dma_configure_id() stub
+
+Yang Yingliang <yangyingliang@huawei.com>
+    parisc: ccio-dma: Add missing iounmap in error path in ccio_probe()
+
+Stefan Roesch <shr@fb.com>
+    block: blk_queue_enter() / __bio_queue_enter() must return -EAGAIN for nowait
+
+Umesh Nerlige Ramappa <umesh.nerlige.ramappa@intel.com>
+    drm/i915/guc: Cancel GuC engine busyness worker synchronously
+
+Alan Previn <alan.previn.teres.alexis@intel.com>
+    drm/i915/guc: Don't update engine busyness stats too frequently
+
+Ankit Nautiyal <ankit.k.nautiyal@intel.com>
+    drm/i915/vdsc: Set VDSC PIC_HEIGHT before using for DP DSC
+
+Sascha Hauer <s.hauer@pengutronix.de>
+    drm/rockchip: vop2: Fix eDP/HDMI sync polarities
+
+Stuart Menefy <stuart.menefy@mathembedded.com>
+    drm/meson: Fix OSD1 RGB to YCbCr coefficient
+
+Stuart Menefy <stuart.menefy@mathembedded.com>
+    drm/meson: Correct OSD1 global alpha value
+
+Chen-Yu Tsai <wenst@chromium.org>
+    drm/panel-edp: Fix delays for Innolux N116BCA-EA1
+
+Dan Aloni <dan.aloni@vastdata.com>
+    Revert "SUNRPC: Remove unreachable error condition"
+
+Anna Schumaker <Anna.Schumaker@Netapp.com>
+    NFSv4.2: Update mode bits after ALLOCATE and DEALLOCATE
+
+Pali Rohár <pali@kernel.org>
+    gpio: mpc8xxx: Fix support for IRQ_TYPE_LEVEL_LOW flow_type in mpc85xx
+
+Trond Myklebust <trond.myklebust@hammerspace.com>
+    NFSv4: Turn off open-by-filehandle and NFS re-export for NFSv4.0
+
+Trond Myklebust <trond.myklebust@hammerspace.com>
+    SUNRPC: Fix call completion races with call_decode()
+
+Michael Wu <michael@allwinnertech.com>
+    pinctrl: sunxi: Fix name for A100 R_PIO
+
+João H. Spies <jhlspies@gmail.com>
+    pinctrl: rockchip: Enhance support for IRQ_TYPE_EDGE_BOTH
+
+Molly Sophia <mollysophia379@gmail.com>
+    pinctrl: qcom: sc8180x: Fix wrong pin numbers
+
+Molly Sophia <mollysophia379@gmail.com>
+    pinctrl: qcom: sc8180x: Fix gpio_wakeirq_map
+
+Sergey Shtylyov <s.shtylyov@omp.ru>
+    of: fdt: fix off-by-one error in unflatten_dt_nodes()
+
+
+-------------
+
+Diffstat:
+
+ .../bindings/interrupt-controller/apple,aic.yaml   |  2 +-
+ Makefile                                           |  4 ++--
+ arch/parisc/Kconfig                                | 12 +++++++++-
+ block/blk-core.c                                   |  4 ++--
+ block/blk-lib.c                                    | 11 ++++++---
+ drivers/gpio/gpio-mpc8xxx.c                        |  1 +
+ drivers/gpio/gpio-rockchip.c                       |  4 ++--
+ drivers/gpu/drm/amd/amdgpu/amdgpu_device.c         | 14 ++++++++---
+ drivers/gpu/drm/amd/amdgpu/nbio_v2_3.c             |  9 +++++++-
+ drivers/gpu/drm/amd/amdgpu/nbio_v6_1.c             |  9 +++++++-
+ drivers/gpu/drm/amd/amdgpu/nbio_v7_4.c             |  9 +++++++-
+ drivers/gpu/drm/amd/amdgpu/sdma_v4_0.c             |  5 ++++
+ drivers/gpu/drm/amd/amdgpu/soc15.c                 | 25 --------------------
+ drivers/gpu/drm/amd/amdgpu/vega10_ih.c             |  4 ++++
+ drivers/gpu/drm/amd/amdgpu/vega20_ih.c             |  4 ++++
+ drivers/gpu/drm/i915/display/icl_dsi.c             |  2 ++
+ drivers/gpu/drm/i915/display/intel_dp.c            |  1 +
+ drivers/gpu/drm/i915/display/intel_vdsc.c          |  1 -
+ drivers/gpu/drm/i915/gt/uc/intel_guc.h             |  8 +++++++
+ drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c  | 20 +++++++++++++++-
+ drivers/gpu/drm/i915/i915_reg.h                    | 16 ++++++-------
+ drivers/gpu/drm/i915/i915_vma.c                    |  3 ++-
+ drivers/gpu/drm/meson/meson_plane.c                |  2 +-
+ drivers/gpu/drm/meson/meson_viu.c                  |  2 +-
+ drivers/gpu/drm/panel/panel-edp.c                  |  3 ++-
+ drivers/gpu/drm/rockchip/rockchip_drm_vop2.c       |  4 ++++
+ drivers/of/fdt.c                                   |  2 +-
+ drivers/parisc/ccio-dma.c                          |  1 +
+ drivers/pinctrl/qcom/pinctrl-sc8180x.c             | 10 ++++----
+ drivers/pinctrl/sunxi/pinctrl-sun50i-a100-r.c      |  2 +-
+ fs/cifs/connect.c                                  | 11 +++------
+ fs/cifs/file.c                                     |  3 +++
+ fs/cifs/transport.c                                |  6 +----
+ fs/nfs/internal.h                                  | 25 ++++++++++++++++++++
+ fs/nfs/nfs42proc.c                                 |  9 ++++++--
+ fs/nfs/super.c                                     | 27 ++++++++++++++--------
+ fs/nfs/write.c                                     | 25 --------------------
+ include/linux/of_device.h                          |  5 ++--
+ include/net/xfrm.h                                 |  2 ++
+ io_uring/io_uring.c                                |  3 ++-
+ kernel/cgroup/cgroup-v1.c                          |  2 ++
+ net/ipv4/ip_output.c                               |  2 +-
+ net/ipv4/tcp_ipv4.c                                |  2 ++
+ net/ipv6/tcp_ipv6.c                                |  5 +++-
+ net/sunrpc/clnt.c                                  |  3 +++
+ net/sunrpc/xprt.c                                  |  8 +++----
+ sound/pci/hda/patch_sigmatel.c                     | 24 +++++++++++++++++++
+ tools/include/uapi/asm/errno.h                     |  4 ++--
+ 48 files changed, 237 insertions(+), 123 deletions(-)
+
+
