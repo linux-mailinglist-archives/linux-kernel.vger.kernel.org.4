@@ -2,89 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2333C5BF364
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 04:17:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62E0C5BF370
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 04:23:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230237AbiIUCRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Sep 2022 22:17:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40312 "EHLO
+        id S230179AbiIUCW5 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 20 Sep 2022 22:22:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbiIUCRe (ORCPT
+        with ESMTP id S229518AbiIUCWz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Sep 2022 22:17:34 -0400
-Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0EA5459AB;
-        Tue, 20 Sep 2022 19:17:33 -0700 (PDT)
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 57F571A6830;
-        Wed, 21 Sep 2022 04:17:32 +0200 (CEST)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 0ED141A6837;
-        Wed, 21 Sep 2022 04:17:32 +0200 (CEST)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id A2D481820F5D;
-        Wed, 21 Sep 2022 10:17:30 +0800 (+08)
-From:   Shengjiu Wang <shengjiu.wang@nxp.com>
-To:     andersson@kernel.org, mathieu.poirier@linaro.org,
-        arnaud.pouliquen@foss.st.com
-Cc:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        shengjiu.wang@gmail.com
-Subject: [PATCH v2] rpmsg: char: Avoid double destroy of default endpoint
-Date:   Wed, 21 Sep 2022 09:58:43 +0800
-Message-Id: <1663725523-6514-1-git-send-email-shengjiu.wang@nxp.com>
-X-Mailer: git-send-email 2.7.4
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 20 Sep 2022 22:22:55 -0400
+X-Greylist: delayed 598 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 20 Sep 2022 19:22:53 PDT
+Received: from relay.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9529C49B79;
+        Tue, 20 Sep 2022 19:22:53 -0700 (PDT)
+Received: from omf11.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay02.hostedemail.com (Postfix) with ESMTP id 4A97C120DD9;
+        Wed, 21 Sep 2022 02:06:59 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf11.hostedemail.com (Postfix) with ESMTPA id 4158C2003A;
+        Wed, 21 Sep 2022 02:06:54 +0000 (UTC)
+Message-ID: <19451295e1563de5e6628e51fa8222b843f55eed.camel@perches.com>
+Subject: Re: [PATCH v2 1/3] MAINTAINERS: add maintainer for thermal driver
+ for loongson2 SoCs
+From:   Joe Perches <joe@perches.com>
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     zhanghongchen <zhanghongchen@loongson.cn>
+Date:   Tue, 20 Sep 2022 19:06:55 -0700
+In-Reply-To: <20220921015605.17078-1-zhuyinbo@loongson.cn>
+References: <20220921015605.17078-1-zhuyinbo@loongson.cn>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+MIME-Version: 1.0
+X-Rspamd-Queue-Id: 4158C2003A
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Stat-Signature: at3trdms4184ip35153phfm8wty56ds6
+X-Rspamd-Server: rspamout05
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX18vk2v0h79TMwArk0zyIJjHZvYwoZxRoW0=
+X-HE-Tag: 1663726014-147625
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The rpmsg_dev_remove() in rpmsg_core is the place for releasing
-this default endpoint.
+On Wed, 2022-09-21 at 09:56 +0800, Yinbo Zhu wrote:
+> Add zhanghongchen and myself as maintainer of the loongson2 SoC
+> series thermal driver.
+[]
+> diff --git a/MAINTAINERS b/MAINTAINERS
+[]
+> @@ -11899,6 +11899,14 @@ F:	drivers/*/*loongarch*
+>  F:	Documentation/loongarch/
+>  F:	Documentation/translations/zh_CN/loongarch/
+>  
+> +LOONGSON2 SOC SERIES THERMAL DRIVER
+> +M:	zhanghongchen <zhanghongchen@loongson.cn>
+> +M:	Yinbo Zhu <zhuyinbo@loongson.cn>
+> +L:	linux-pm@vger.kernel.org
+> +S:	Maintained
+> +F:	Documentation/devicetree/bindings/thermal/loongson2-thermal.yaml
+> +F:	drivers/thermal/loongson2_thermal.c
+> +
+>  LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
+>  M:	Sathya Prakash <sathya.prakash@broadcom.com>
+>  M:	Sreekanth Reddy <sreekanth.reddy@broadcom.com>
 
-So need to avoid destroying the default endpoint in
-rpmsg_chrdev_eptdev_destroy(), this should be the same as
-rpmsg_eptdev_release(). Otherwise there will be double destroy
-issue that ept->refcount report warning:
+From the MAINTAINERS headers:
 
-refcount_t: underflow; use-after-free.
+	S: *Status*, one of the following:
+	   Supported:	Someone is actually paid to look after this.
+	   Maintained:	Someone actually looks after it.
 
-Call trace:
- refcount_warn_saturate+0xf8/0x150
- virtio_rpmsg_destroy_ept+0xd4/0xec
- rpmsg_dev_remove+0x60/0x70
+If you both are being paid to maintain this driver,
+this S: entry should be Supported.
 
-The issue can be reproduced by stopping remoteproc before
-closing the /dev/rpmsgX.
-
-Fixes: bea9b79c2d10 ("rpmsg: char: Add possibility to use default endpoint of the rpmsg device")
-Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
-Reviewed-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
----
-changes in v2:
-- Add comments
-
- drivers/rpmsg/rpmsg_char.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
-index 0850ae34fb88..3e0b8f3496ed 100644
---- a/drivers/rpmsg/rpmsg_char.c
-+++ b/drivers/rpmsg/rpmsg_char.c
-@@ -76,7 +76,9 @@ int rpmsg_chrdev_eptdev_destroy(struct device *dev, void *data)
- 
- 	mutex_lock(&eptdev->ept_lock);
- 	if (eptdev->ept) {
--		rpmsg_destroy_ept(eptdev->ept);
-+		/* The default endpoint is released by the rpmsg core */
-+		if (!eptdev->default_ept)
-+			rpmsg_destroy_ept(eptdev->ept);
- 		eptdev->ept = NULL;
- 	}
- 	mutex_unlock(&eptdev->ept_lock);
--- 
-2.34.1
 
