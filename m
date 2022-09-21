@@ -2,157 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D42A5BFBA0
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 11:49:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94CED5BFBA4
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Sep 2022 11:49:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231324AbiIUJtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 05:49:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44842 "EHLO
+        id S231748AbiIUJt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 05:49:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231976AbiIUJsw (ORCPT
+        with ESMTP id S232000AbiIUJsz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 05:48:52 -0400
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 446BB97B38;
-        Wed, 21 Sep 2022 02:46:24 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4MXYPW3fjcz6PjxM;
-        Wed, 21 Sep 2022 17:43:11 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP2 (Coremail) with SMTP id Syh0CgD3SXMk3SpjoJ6tBA--.14569S3;
-        Wed, 21 Sep 2022 17:45:09 +0800 (CST)
-Subject: Re: [PATCH -next] blk-wbt: call rq_qos_add() after wb_normal is
- initialized
-To:     Yu Kuai <yukuai1@huaweicloud.com>, axboe@kernel.dk
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20220913105749.3086243-1-yukuai1@huaweicloud.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <eef13e74-9f5b-23d9-07d8-7ee8f5e30012@huaweicloud.com>
-Date:   Wed, 21 Sep 2022 17:45:08 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Wed, 21 Sep 2022 05:48:55 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F65397D6B;
+        Wed, 21 Sep 2022 02:46:39 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id C7FAC660202C;
+        Wed, 21 Sep 2022 10:45:43 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1663753544;
+        bh=9ji1SJvfdXYebHWHKsGj8bj+sMSEq74pzAp6Nbn4WWM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=CQ13WHYIS9frO3QW4TLXbP+zllrNOekCNYslUt32DxeL8LgiWbziNNxXOHW40TnBO
+         XQ8sMohQ/jRnrtvh234ZD1fLlLA+2pQ/3LI+46OCU4017X0ZpySHtGur4hjvy8+8Vk
+         SUJbnwzxy4+xYsuMbFm6Z2nktJsxF3/RM2/0Qhzee7rGywwOeTlLDdPapCez7P0K8s
+         cik6AH29MKZTU8r/gXBYI1/a+14po/EwWVQDGdIWR1Mh3EBODL19MxJz9YNZlF9Hvb
+         PyTpUr4CaziU6zYnWI4ErS5dsPYzyWhwRMQ6gMmaGH7dW5Vra8kpWAoIJPlZGhd4xG
+         JIz+KykszkSsw==
+Message-ID: <0c2ef56e-5dab-fb79-fead-adb4acef4cc6@collabora.com>
+Date:   Wed, 21 Sep 2022 11:45:41 +0200
 MIME-Version: 1.0
-In-Reply-To: <20220913105749.3086243-1-yukuai1@huaweicloud.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH 1/4] dt-bindings: pinctrl: Combine MediaTek MT67xx pinctrl
+ binding docs
+To:     yassine.oudjana@gmail.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        Andy Teng <andy.teng@mediatek.com>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20220919170115.94873-1-y.oudjana@protonmail.com>
+ <20220919170115.94873-2-y.oudjana@protonmail.com>
+ <4c425cf8-f9ca-969c-f8ed-688410bfb922@collabora.com>
+ <1860b0ff-5544-5e74-ccfc-beda18824927@linaro.org>
+ <YQZJIR.QQOJU0071T1J1@gmail.com>
+Content-Language: en-US
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <YQZJIR.QQOJU0071T1J1@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgD3SXMk3SpjoJ6tBA--.14569S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxuryUuryfJF47WF47Xr13urg_yoW5GF4xpa
-        yIkFW3tayjgr4v93Z7Jr47ZFWfGws5tr1xury3G34YvF93Cr1j9anYkF15W3s5ArWkCF45
-        JF1FyFsxCFyUC3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
-        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
-        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkG
-        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AKxVWUJVW8
-        JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUoOJ5UU
-        UUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Il 21/09/22 11:30, yassine.oudjana@gmail.com ha scritto:
+> 
+> 
+> On Wed, Sep 21 2022 at 09:11:12 AM +0200, Krzysztof Kozlowski 
+> <krzysztof.kozlowski@linaro.org> wrote:
+>> On 20/09/2022 10:06, AngeloGioacchino Del Regno wrote:
+>>>  Il 19/09/22 19:01, Yassine Oudjana ha scritto:
+>>>>  From: Yassine Oudjana <y.oudjana@protonmail.com>
+>>>>
+>>>>  Documents for MT6779, MT6795 and MT6797 that currently exist share
+>>>>  most properties, and each one has slightly differently worded
+>>>>  descriptions for those properties. Combine all three documents into
+>>>>  one common document for all MT67xx SoC pin controllers, picking a few
+>>>>  parts from each and accounting for differences such as items in reg
+>>>>  and reg-names properties. Also document the MT6765 pin controller
+>>>>  which currently has a driver but no DT binding documentation. It should
+>>>>  be possible to also include bindings for MT8183 and MT8188, but these
+>>>>  have some additional properties that might complicate things a bit,
+>>>>  so they are left alone for now.
+>>>>
+>>>>  Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+>>>>  ---
+>>>>    .../pinctrl/mediatek,mt6779-pinctrl.yaml      | 207 ------------------
+>>>>    .../pinctrl/mediatek,mt6797-pinctrl.yaml      | 176 ---------------
+>>>>    ...6795.yaml => mediatek,mt67xx-pinctrl.yaml} | 181 +++++++++++----
+>>>
+>>>  Hello Yassine,
+>>>  nice cleanup over here!
+>>>
+>>>  There's a catch though: as far as I know, wildcards are not permitted... so you
+>>>  should, at this point, merge all of these in mediatek,mt6779-pinctrl.yaml instead.
+>>>
+>>>  Before jumping to that, though... Krzysztof, can you please confirm (or deny)?
+>>
+>> Wildcards are not allowed in compatibles. In filename wildcards or
+>> family name could work if they are really going to match the devices. I
+>> have doubts here. 67xx is quite a lot of different devices, so I am not
+>> sure this will cover them all.
+>>
+>> I would prefer one name (oldest SoC or lowest number).
+> 
+> Lowest number (and probably oldest too but not sure since mediatek naming 
+> conventions are a bit weird) currently documented is mt6779, but mt6765 gets 
+> documented in this patch and mt6735 (this one I know for sure is older than the 
+> rest) in a following patch, so do I just stick with mt6779 or do I change it in the 
+> following patches documenting mt6765 and mt6735?
+> 
 
-在 2022/09/13 18:57, Yu Kuai 写道:
-> From: Yu Kuai <yukuai3@huawei.com>
+I see the sequence as:
+
+1. You merge mediatek,mt6797-pinctrl.yaml into mediatek,mt6779-pinctrl.yaml; then
+2. Adding MT6765 documentation to mediatek,mt6779-pinctrl.yaml; then
+3. Adding support for MT6735, documentation goes again to 6779-pinctrl.
+
+This means that you're working with mediatek,mt6779-pinctrl.yaml :-)
+
+P.S.: That was also a suggestion about how to split things per-commit!
+
+Cheers,
+Angelo
+
+> Thanks,
+> Yassine
 > 
-> Our test found a problem that wbt inflight counter is negative, which
-> will cause io hang(noted that this problem doesn't exist in mainline):
+>>
+>> Best regards,
+>> Krzysztof
 > 
-> t1: device create	t2: issue io
-> add_disk
->   blk_register_queue
->    wbt_enable_default
->     wbt_init
->      rq_qos_add
->      // wb_normal is still 0
-> 			/*
-> 			 * in mainline, disk can't be opened before
-> 			 * bdev_add(), however, in old kernels, disk
-> 			 * can be opened before blk_register_queue().
-> 			 */
-> 			blkdev_issue_flush
->                          // disk size is 0, however, it's not checked
->                           submit_bio_wait
->                            submit_bio
->                             blk_mq_submit_bio
->                              rq_qos_throttle
->                               wbt_wait
-> 			      bio_to_wbt_flags
->                                 rwb_enabled
-> 			       // wb_normal is 0, inflight is not increased
-> 
->      wbt_queue_depth_changed(&rwb->rqos);
->       wbt_update_limits
->       // wb_normal is initialized
->                              rq_qos_track
->                               wbt_track
->                                rq->wbt_flags |= bio_to_wbt_flags(rwb, bio);
-> 			      // wb_normal is not 0，wbt_flags will be set
-> t3: io completion
-> blk_mq_free_request
->   rq_qos_done
->    wbt_done
->     wbt_is_tracked
->     // return true
->     __wbt_done
->      wbt_rqw_done
->       atomic_dec_return(&rqw->inflight);
->       // inflight is decreased
-> 
-> commit 8235b5c1e8c1 ("block: call bdev_add later in device_add_disk") can
-> avoid this problem, however it's better to fix this problem in wbt:
-> 
-> 1) Lower kernel can't backport this patch due to lots of refactor.
-> 2) Root cause is that wbt call rq_qos_add() before wb_normal is
-> initialized.
-> 
-friendly ping ...
-> Fixes: e34cbd307477 ("blk-wbt: add general throttling mechanism")
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-> ---
->   block/blk-wbt.c | 9 ++++-----
->   1 file changed, 4 insertions(+), 5 deletions(-)
-> 
-> diff --git a/block/blk-wbt.c b/block/blk-wbt.c
-> index a9982000b667..246467926253 100644
-> --- a/block/blk-wbt.c
-> +++ b/block/blk-wbt.c
-> @@ -843,6 +843,10 @@ int wbt_init(struct request_queue *q)
->   	rwb->enable_state = WBT_STATE_ON_DEFAULT;
->   	rwb->wc = 1;
->   	rwb->rq_depth.default_depth = RWB_DEF_DEPTH;
-> +	rwb->min_lat_nsec = wbt_default_latency_nsec(q);
-> +
-> +	wbt_queue_depth_changed(&rwb->rqos);
-> +	wbt_set_write_cache(q, test_bit(QUEUE_FLAG_WC, &q->queue_flags));
->   
->   	/*
->   	 * Assign rwb and add the stats callback.
-> @@ -853,11 +857,6 @@ int wbt_init(struct request_queue *q)
->   
->   	blk_stat_add_callback(q, rwb->cb);
->   
-> -	rwb->min_lat_nsec = wbt_default_latency_nsec(q);
-> -
-> -	wbt_queue_depth_changed(&rwb->rqos);
-> -	wbt_set_write_cache(q, test_bit(QUEUE_FLAG_WC, &q->queue_flags));
-> -
->   	return 0;
->   
->   err_free:
 > 
 
