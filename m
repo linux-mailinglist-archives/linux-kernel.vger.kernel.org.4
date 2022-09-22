@@ -2,105 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D9345E5EBA
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 11:37:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 885EA5E5EBB
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 11:38:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230442AbiIVJhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 05:37:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57158 "EHLO
+        id S229927AbiIVJiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 05:38:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbiIVJhf (ORCPT
+        with ESMTP id S229518AbiIVJiP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 05:37:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A1F0D432B;
-        Thu, 22 Sep 2022 02:37:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3C0DDB801BD;
-        Thu, 22 Sep 2022 09:37:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC277C433D6;
-        Thu, 22 Sep 2022 09:37:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663839451;
-        bh=68ySCIxRmNzmM3z0fmeMnKAIKzjyC2S4WAIN1dwhsLE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=d1jHtW3mtP+b15+EV6oWLDdp5rpoT/hgiDRlnSDv0fF1VtacDZ4PilkCUW1KTO43j
-         aVPL8tAGNCQXcHHleoTCzclUdLpCzTgiVMoI2EsV39JkEJlXCJfGNM1Zc2ZkCpVrw3
-         nFnG4iY2VI0Cu0v845RF8tk3AzNbZuTDDMiMX6hMODHQRt4baJ2o9GN6DD7nS7fe6Q
-         +Q56lC3mycM55r2xrWb9H5lCRabIYuBAhsBUzX6x2d0Fcm3wSQXeWYQlAYFPPu/WoO
-         xG7KjmNFTGkpOjNR8RuzIjH421Rm8XZfK3L34GQjpf3OJC7n2prRzjwmcR8hm8ydm/
-         VYhfiiytl2KIg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1obIeG-0001V7-6V; Thu, 22 Sep 2022 11:37:36 +0200
-Date:   Thu, 22 Sep 2022 11:37:36 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Sean Young <sean@mess.org>, linux-media@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Oliver Neukum <oneukum@suse.com>, stable@vger.kernel.org,
-        Dongliang Mu <mudongliangabcd@gmail.com>
-Subject: Re: [PATCH RESEND] media: flexcop-usb: fix endpoint type check
-Message-ID: <Yyws4Pd4bAl3iq2e@hovoldconsulting.com>
-References: <20220822151027.27026-1-johan@kernel.org>
- <YymBM1wJLAsBDU4E@hovoldconsulting.com>
- <YywfxwBmdmvQ0i21@kroah.com>
+        Thu, 22 Sep 2022 05:38:15 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E9E7D4336
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 02:38:14 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 520B7E000D;
+        Thu, 22 Sep 2022 09:38:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1663839491;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=R0xAyR/z9kzEyc6l4rQYrC2hkKALiKd5mU2hx/nI+Uk=;
+        b=mvM1T46YqDoRduskd3WW4ydTPEiu+tRk5QHmT2YgEMf6m2zHsANT2rbNiOI6pOoi62SZpo
+        MLD6aeFF2ag2jC8LHR+cSotskK3Ms3Or7YBBj/dUCa/P/VUMI65O5khV4J2Vh2GdtJYrx7
+        WHR8aYYeJ7FxAsIm7oHf4/m1/TS9DIW+lVIsnscD1E9TricLminKpeYDO8dbATfXLeybUd
+        Y42swM5TVprnhsiSZmqNe2UY6N8TW227V+16VxfI4Yrw9FGEYRGwvSh9aK2l71RxSzkhdn
+        uR9E/vkW0hyU9guFbME31iR0bW85xmlL9UQZQPhIuQbF/Jg/2BucZEIopPu0Lg==
+Date:   Thu, 22 Sep 2022 11:38:09 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     "Arnd Bergmann" <arnd@arndb.de>
+Cc:     "Valentin Korenblit" <vkorenblit@sequans.com>,
+        "kernel test robot" <lkp@intel.com>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: Re: [mtd:nand/next 11/31]
+ drivers/mtd/nand/raw/cadence-nand-controller.c:1893:4: error: implicit
+ declaration of function 'ioread64_rep' is invalid in C99
+Message-ID: <20220922113809.0a4d3d35@xps-13>
+In-Reply-To: <b7e5ebb4-0de8-4958-9bc4-fe06ec4c3635@www.fastmail.com>
+References: <202209210641.MziHAbW7-lkp@intel.com>
+        <20220921104002.226ff3f6@xps-13>
+        <ffde44bc-d4ae-4052-c60c-35c8775a5101@sequans.com>
+        <7074197c-aa8d-f763-cb0f-03ea5335b923@sequans.com>
+        <20220921164720.6bbc56d5@xps-13>
+        <ef9a2618-2dd0-4d1b-b9d2-37d59506f004@www.fastmail.com>
+        <20220921183807.241e2518@xps-13>
+        <b7e5ebb4-0de8-4958-9bc4-fe06ec4c3635@www.fastmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YywfxwBmdmvQ0i21@kroah.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 10:41:43AM +0200, Greg Kroah-Hartman wrote:
-> On Tue, Sep 20, 2022 at 11:00:35AM +0200, Johan Hovold wrote:
-> > Mauro and Hans,
-> > 
-> > On Mon, Aug 22, 2022 at 05:10:27PM +0200, Johan Hovold wrote:
-> > > Commit d725d20e81c2 ("media: flexcop-usb: sanity checking of endpoint
-> > > type") tried to add an endpoint type sanity check for the single
-> > > isochronous endpoint but instead broke the driver by checking the wrong
-> > > descriptor or random data beyond the last endpoint descriptor.
-> > > 
-> > > Make sure to check the right endpoint descriptor.
-> > > 
-> > > Fixes: d725d20e81c2 ("media: flexcop-usb: sanity checking of endpoint type")
-> > > Cc: Oliver Neukum <oneukum@suse.com>
-> > > Cc: stable@vger.kernel.org	# 5.9
-> > > Reported-by: Dongliang Mu <mudongliangabcd@gmail.com>
-> > > Signed-off-by: Johan Hovold <johan@kernel.org>
-> > > ---
-> > > 
-> > > It's been two months and two completely ignored reminders so resending.
-> > > 
-> > > Can someone please pick this fix up and let me know when that has been
-> > > done?
-> > 
-> > It's been another month so sending yet another reminder. This driver as
-> > been broken since 5.9 and I posted this fix almost four months ago and
-> > have sent multiple reminders since.
-> > 
-> > Can someone please pick this one and the follow-up cleanups up?
-> 
-> I've taken this one in my tree now.  Which one were the "follow-up"
-> cleanups?
+Hi Arnd,
 
-Thanks. These are the follow-up cleanups:
+> > ioread64_rep is then only defined if CONFIG_64BIT. As it is based
+> > on readsq/writesq() and those must be defined (as you said), I don't get
+> > why the *64_rep() helpers are not defined in all cases. Maybe because no
+> > 32-bit system _should_ need them? But then compile testing gets more
+> > difficult. =20
+>=20
+> Both readsq/writesq and ioread64_rep/iowrite64_rep must be defined
+> for 64-bit architectures and cannot be defined for 32-bit ones.
 
-	https://lore.kernel.org/lkml/20220822151456.27178-1-johan@kernel.org/
+Yeah, ok.
 
-Perhaps we should start taking USB related changes like this through the
-USB tree by default. Posting patches to the media subsystem feels like
-shooting patches at a black hole.
+> >> - For a FIFO, you cannot use readq() but have to use __raw_readq()
+> >>   to get the correct endianness. You cannot use this for an
+> >>   MMIO register with side-effects though, as this needs the byteswap
+> >>   and the barrier in readsl(). =20
+> >
+> > I'm not sure about the true definition of "FIFO" as you say. I guess
+> > you just mean reading from a BE device?
+> >
+> > In this case I guess we need the barrier+byteswap helpers. =20
+>=20
+> The difference is that a register has a fixed length, and gets
+> accessed with a device specific endianness, which may have to
+> be swapped if the device and the CPU disagree.
+>=20
+> A FIFO register is what you use for transferring a stream of
+> bytes, such as reading a file system block from disk. The
+> first byte in the register corresponds to the first byte in
+> memory later, so there must not be any byteswap while copying
+> to/from memory. If the data itself is structured (i.e. an
+> on-disk inode or a network packet), then the byteswap will
+> happen if necessary while interpreting the data.
 
-Johan
+Ok, I fully get what you mean, I was just not used to the word FIFO for
+this definition as I use it as a more generic term, but it completely
+makes sense. Thanks for taking the time to explain.
+
+Thanks,
+Miqu=C3=A8l
