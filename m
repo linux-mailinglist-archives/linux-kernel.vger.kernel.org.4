@@ -2,143 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0836C5E646F
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 15:57:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F5685E6482
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 15:59:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229918AbiIVN5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 09:57:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51120 "EHLO
+        id S230493AbiIVN7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 09:59:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231790AbiIVN5i (ORCPT
+        with ESMTP id S231209AbiIVN7M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 09:57:38 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8944FF1D7F
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 06:57:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663855056;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/F0qe1lhItT1A+QcYyxTHDycUT0wDP1KvrB5Oq141AY=;
-        b=RInpn4A6Qda9ZJ9VJW6/Fd5UhjXEmL0BvWqMmPpls5r9FeNDWNGMmOG05cLUKVnw64tcO4
-        5EOD99R7rVuaDfVRDrUmET6Cc+952ocdDmHUp8qUnP7pWKHbuMFW9MyiXe0hTM74iKRwAE
-        vYZFKYkvCFFzBhxr7LzDF3v7NK2OXE8=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-571-_nFJB_afO66E1lTcOfKQEQ-1; Thu, 22 Sep 2022 09:57:33 -0400
-X-MC-Unique: _nFJB_afO66E1lTcOfKQEQ-1
-Received: by mail-ej1-f69.google.com with SMTP id qa33-20020a17090786a100b0077a69976d24so4497544ejc.7
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 06:57:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=/F0qe1lhItT1A+QcYyxTHDycUT0wDP1KvrB5Oq141AY=;
-        b=GAX0oPFjPAfO4fEfnwIPzIOFWl/il+RbbZyJi8ZxsmA/38VnZ47kyGTrl/3otgQzH4
-         y/to+ybZXS1xJNA2VJAuqI+g0L/1hRCLm0+YnWqKsl7BlNptkFqEW/7KzSyBe3m6EoGQ
-         bNu/OOJ1DFuulaZYi3izHJVD24Stdkufc3ryuNmxCVLyx70BG1JhqsLqs3j0vS6E42F2
-         cSUL4JCDSJp6NiWQx6zt+btyJmr0gOo8t85tOKFVvEc/7x9+SvdrcIS9c25p2q76vTNQ
-         bTZ7w0k0iFkcpmX4injpzA5GGaak29QjIQGIO+ZuUiVxYJPWZ5VvZdc9wjRkEO/t4vET
-         cRMg==
-X-Gm-Message-State: ACrzQf3rh3ZnkJUvgVOe4niFt2ZnS1ATLjUOonrWWX/q+wZleQ+RgFbm
-        k+M7OFn1k+mk0o0Zgxaq3IvVNPs09o3i0gpWhWjpw2FQg8HW+7UT56HGrMF9htImgfI33yYCdYd
-        bFbcU2RQ8pHdGKmPbWcaUn8Dx
-X-Received: by 2002:aa7:cada:0:b0:452:5b04:efd9 with SMTP id l26-20020aa7cada000000b004525b04efd9mr3435386edt.84.1663855052305;
-        Thu, 22 Sep 2022 06:57:32 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM49qWeDZP8dA2XXuveEm+WIRAT3ogxF0rDK3RDs+SUl20U3xJvkUDVGlBizM+8GdCjgH0OlTg==
-X-Received: by 2002:aa7:cada:0:b0:452:5b04:efd9 with SMTP id l26-20020aa7cada000000b004525b04efd9mr3435373edt.84.1663855052124;
-        Thu, 22 Sep 2022 06:57:32 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id w1-20020aa7da41000000b0044629b54b00sm3692048eds.46.2022.09.22.06.57.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Sep 2022 06:57:31 -0700 (PDT)
-Message-ID: <98f0ba5f-d702-c45a-c95b-0ae2320fb769@redhat.com>
-Date:   Thu, 22 Sep 2022 15:57:31 +0200
+        Thu, 22 Sep 2022 09:59:12 -0400
+Received: from relay04.th.seeweb.it (relay04.th.seeweb.it [5.144.164.165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28D6FEF087
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 06:59:10 -0700 (PDT)
+Received: from localhost.localdomain (95.49.29.188.neoplus.adsl.tpnet.pl [95.49.29.188])
+        by m-r1.th.seeweb.it (Postfix) with ESMTPA id EBAC11FF07;
+        Thu, 22 Sep 2022 15:59:06 +0200 (CEST)
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+To:     ~postmarketos/upstreaming@lists.sr.ht
+Cc:     martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/2] dt-bindings: display/panel: Add Sony Tama TD4353 JDI display panel
+Date:   Thu, 22 Sep 2022 15:58:59 +0200
+Message-Id: <20220922135902.129760-1-konrad.dybcio@somainline.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH] platform/x86: hp-wmi: Support touchpad on/off
-Content-Language: en-US
-To:     Daniel Houldsworth <dhould3@gmail.com>, markgross@kernel.org
-Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220922115459.6511-1-dhould3@gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220922115459.6511-1-dhould3@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Add bindings for the display panel used on some Sony Xperia XZ2 and XZ2
+Compact smartphones.
 
-On 9/22/22 13:54, Daniel Houldsworth wrote:
-> Add scancodes reported by the touchpad on/off button. The actual disabling
-> and enabling is done in hardware, and this just reports that change to
-> userspace.
-> 
-> Signed-off-by: Daniel Houldsworth <dhould3@gmail.com>
+Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+---
+Changes since v1:
+- remove device-specific compatibles in favour of panel-common
+height/width-mm properties
+- fix indentation in the example
+ .../display/panel/sony,td4353-jdi.yaml        | 82 +++++++++++++++++++
+ 1 file changed, 82 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/display/panel/sony,td4353-jdi.yaml
 
-Thank you for your patch, I've applied this patch to my review-hans 
-branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
-
-Note it will show up in my review-hans branch once I've pushed my
-local branch there, which might take a while.
-
-Once I've run some tests on this branch the patches there will be
-added to the platform-drivers-x86/for-next branch and eventually
-will be included in the pdx86 pull-request to Linus for the next
-merge-window.
-
-Regards,
-
-Hans
-
-
-> ---
->  drivers/platform/x86/hp-wmi.c | 20 +++++++++++---------
->  1 file changed, 11 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/platform/x86/hp-wmi.c b/drivers/platform/x86/hp-wmi.c
-> index bc7020e9d..496c137d3 100644
-> --- a/drivers/platform/x86/hp-wmi.c
-> +++ b/drivers/platform/x86/hp-wmi.c
-> @@ -206,15 +206,17 @@ struct bios_rfkill2_state {
->  };
->  
->  static const struct key_entry hp_wmi_keymap[] = {
-> -	{ KE_KEY, 0x02,   { KEY_BRIGHTNESSUP } },
-> -	{ KE_KEY, 0x03,   { KEY_BRIGHTNESSDOWN } },
-> -	{ KE_KEY, 0x20e6, { KEY_PROG1 } },
-> -	{ KE_KEY, 0x20e8, { KEY_MEDIA } },
-> -	{ KE_KEY, 0x2142, { KEY_MEDIA } },
-> -	{ KE_KEY, 0x213b, { KEY_INFO } },
-> -	{ KE_KEY, 0x2169, { KEY_ROTATE_DISPLAY } },
-> -	{ KE_KEY, 0x216a, { KEY_SETUP } },
-> -	{ KE_KEY, 0x231b, { KEY_HELP } },
-> +	{ KE_KEY, 0x02,    { KEY_BRIGHTNESSUP } },
-> +	{ KE_KEY, 0x03,    { KEY_BRIGHTNESSDOWN } },
-> +	{ KE_KEY, 0x20e6,  { KEY_PROG1 } },
-> +	{ KE_KEY, 0x20e8,  { KEY_MEDIA } },
-> +	{ KE_KEY, 0x2142,  { KEY_MEDIA } },
-> +	{ KE_KEY, 0x213b,  { KEY_INFO } },
-> +	{ KE_KEY, 0x2169,  { KEY_ROTATE_DISPLAY } },
-> +	{ KE_KEY, 0x216a,  { KEY_SETUP } },
-> +	{ KE_KEY, 0x21a9,  { KEY_TOUCHPAD_OFF } },
-> +	{ KE_KEY, 0x121a9, { KEY_TOUCHPAD_ON } },
-> +	{ KE_KEY, 0x231b,  { KEY_HELP } },
->  	{ KE_END, 0 }
->  };
->  
+diff --git a/Documentation/devicetree/bindings/display/panel/sony,td4353-jdi.yaml b/Documentation/devicetree/bindings/display/panel/sony,td4353-jdi.yaml
+new file mode 100644
+index 000000000000..7915c993e83e
+--- /dev/null
++++ b/Documentation/devicetree/bindings/display/panel/sony,td4353-jdi.yaml
+@@ -0,0 +1,82 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/display/panel/sony,td4353-jdi.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Sony TD4353 JDI 5 / 5.7" 2160x1080 MIPI-DSI Panel
++
++maintainers:
++  - Konrad Dybcio <konrad.dybcio@somainline.org>
++
++description: |
++  The Sony TD4353 JDI is a 5 (XZ2c) / 5.7 (XZ2) inch 2160x1080
++  MIPI-DSI panel, used in Xperia XZ2 and XZ2 Compact smartphones.
++
++allOf:
++  - $ref: panel-common.yaml#
++
++properties:
++  compatible:
++    const: sony,td4353-jdi-tama
++
++  reg: true
++
++  backlight: true
++
++  vddio-supply:
++    description: VDDIO 1.8V supply
++
++  vsp-supply:
++    description: Positive 5.5V supply
++
++  vsn-supply:
++    description: Negative 5.5V supply
++
++  preset-gpios:
++    description: Display panel reset pin
++
++  treset-gpios:
++    description: Touch panel reset pin
++
++  port: true
++
++required:
++  - compatible
++  - reg
++  - vddio-supply
++  - vsp-supply
++  - vsn-supply
++  - preset-gpios
++  - treset-gpios
++  - port
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++
++    dsi {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        panel: panel@0 {
++            compatible = "sony,td4353-jdi-tama";
++            reg = <0>;
++
++            backlight = <&pmi8998_wled>;
++            vddio-supply = <&vreg_l14a_1p8>;
++            vsp-supply = <&lab>;
++            vsn-supply = <&ibb>;
++            preset-gpios = <&tlmm 6 GPIO_ACTIVE_HIGH>;
++            treset-gpios = <&tlmm 99 GPIO_ACTIVE_HIGH>;
++
++            port {
++                panel_in: endpoint {
++                    remote-endpoint = <&dsi0_out>;
++                };
++            };
++        };
++    };
++...
+-- 
+2.37.3
 
