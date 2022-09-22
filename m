@@ -2,93 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FE955E6083
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 13:10:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77E685E604F
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 13:00:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230088AbiIVLK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 07:10:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49114 "EHLO
+        id S230095AbiIVLAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 07:00:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbiIVLKW (ORCPT
+        with ESMTP id S229563AbiIVLAW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 07:10:22 -0400
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5C782776;
-        Thu, 22 Sep 2022 04:10:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1663844391;
-        bh=MhEKuSHvpyw2ASMRkqrxGVeTk47bClxhV5jeTCTkWdg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FNxc5kzPJ3Fj9M0h+vIGyBhZyeA4WWCac/nbJBh9D+VtkEbJzdPBgxaP1ttR8W7Ej
-         VdwY6JBnhjXiDbhJnvLIUlOjphoIwbDNZl66N0v4zw3yQ3lHWgFBVz7TfFy4sz2c7b
-         wGoX8NcwRoZHs1W92Rh3eJ+dhIXD9PuMwaXDaR8pmfg6YLRVj15Ayeh7fMO7dGyrUP
-         5UdBHdV8ph6tuT2C/j9GOIXDiv4422AgoAj7Vy08Qu5VXcQ0PyfBDABKLVhCK0jhZF
-         ParlFkMspWiMkwgA++MlGHrzal1qp03ew8dESu73Z6ylNpahD9vlPTkUztVoVIqoCI
-         iYm7q9kWXWnjg==
-Received: from localhost.localdomain (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4MYC3W0fGZzNr9;
-        Thu, 22 Sep 2022 06:59:51 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
-        linux-api@vger.kernel.org, Christian Brauner <brauner@kernel.org>,
-        Florian Weimer <fw@deneb.enyo.de>, David.Laight@ACULAB.COM,
-        carlos@redhat.com, Peter Oskolkov <posk@posk.io>,
-        Alexander Mikhalitsyn <alexander@mihalicyn.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH v4 25/25] tracing/rseq: Add mm_vcpu_id field to rseq_update
-Date:   Thu, 22 Sep 2022 06:59:40 -0400
-Message-Id: <20220922105941.237830-26-mathieu.desnoyers@efficios.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220922105941.237830-1-mathieu.desnoyers@efficios.com>
-References: <20220922105941.237830-1-mathieu.desnoyers@efficios.com>
+        Thu, 22 Sep 2022 07:00:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A18B86894;
+        Thu, 22 Sep 2022 04:00:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DBCE661378;
+        Thu, 22 Sep 2022 11:00:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 415C4C433C1;
+        Thu, 22 Sep 2022 11:00:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663844415;
+        bh=/nDuAkxffLxwSnNaChsoOns5y5I+Tn66KG5BIB3vunM=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=XbeADh0LG1F7g19cPXtkCmmqDLfNqOh3xNEbNFGlc1m3mknxNkNbHsACD4zI/uMmS
+         MnagftY2MLnajfybYYG+9dx90rYIRJ92LlyWN5Hl8LS4CUYFyQyAU6V2vRX+nPdZgh
+         X5ohozo/yOlANRBLL2TfhbGbqULtV5E7oBeamFx09y24AHxGVmdBtDSXukQAd/K/eX
+         021/wSd0YIk7jtMBq9Mkt3LCcSLyv/H5knJyDTCtB78GLs3W2DHKs8zVUTvxJft4P2
+         DyuamhSknHvzJoRxODbp9L6ZPRbXI/jwZssHHS0eZzZV9BxJla+PDEheXCdYBy9QmR
+         uyCWFV3FcHhTg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 241BCE4D03C;
+        Thu, 22 Sep 2022 11:00:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH net] net/smc: Stop the CLC flow if no link to map buffers on
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166384441514.19700.3392239951153800895.git-patchwork-notify@kernel.org>
+Date:   Thu, 22 Sep 2022 11:00:15 +0000
+References: <1663656189-32090-1-git-send-email-guwen@linux.alibaba.com>
+In-Reply-To: <1663656189-32090-1-git-send-email-guwen@linux.alibaba.com>
+To:     Wen Gu <guwen@linux.alibaba.com>
+Cc:     kgraul@linux.ibm.com, wenjia@linux.ibm.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the mm_vcpu_id field to the rseq_update event, allowing tracers to
-follow which vcpu_id is observed by user-space, and whether negative
-vcpu_id values are visible in case of internal scheduler implementation
-issues.
+Hello:
 
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
----
- include/trace/events/rseq.h | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+This patch was applied to netdev/net.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
 
-diff --git a/include/trace/events/rseq.h b/include/trace/events/rseq.h
-index 6bd442697354..10b236fc047a 100644
---- a/include/trace/events/rseq.h
-+++ b/include/trace/events/rseq.h
-@@ -17,14 +17,17 @@ TRACE_EVENT(rseq_update,
- 	TP_STRUCT__entry(
- 		__field(s32, cpu_id)
- 		__field(s32, node_id)
-+		__field(s32, mm_vcpu_id)
- 	),
- 
- 	TP_fast_assign(
- 		__entry->cpu_id = raw_smp_processor_id();
- 		__entry->node_id = cpu_to_node(raw_smp_processor_id());
-+		__entry->mm_vcpu_id = t->mm_vcpu;
- 	),
- 
--	TP_printk("cpu_id=%d node_id=%d", __entry->cpu_id, __entry->node_id)
-+	TP_printk("cpu_id=%d node_id=%d mm_vcpu_id=%d", __entry->cpu_id,
-+		  __entry->node_id, __entry->mm_vcpu_id)
- );
- 
- TRACE_EVENT(rseq_ip_fixup,
+On Tue, 20 Sep 2022 14:43:09 +0800 you wrote:
+> There might be a potential race between SMC-R buffer map and
+> link group termination.
+> 
+> smc_smcr_terminate_all()     | smc_connect_rdma()
+> --------------------------------------------------------------
+>                              | smc_conn_create()
+> for links in smcibdev        |
+>         schedule links down  |
+>                              | smc_buf_create()
+>                              |  \- smcr_buf_map_usable_links()
+>                              |      \- no usable links found,
+>                              |         (rmb->mr = NULL)
+>                              |
+>                              | smc_clc_send_confirm()
+>                              |  \- access conn->rmb_desc->mr[]->rkey
+>                              |     (panic)
+> 
+> [...]
+
+Here is the summary with links:
+  - [net] net/smc: Stop the CLC flow if no link to map buffers on
+    https://git.kernel.org/netdev/net/c/e738455b2c6d
+
+You are awesome, thank you!
 -- 
-2.25.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
