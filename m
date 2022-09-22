@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B1825E6C32
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 21:54:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B44A5E6C37
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 21:55:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231939AbiIVTyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 15:54:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53892 "EHLO
+        id S232287AbiIVTzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 15:55:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232498AbiIVTyl (ORCPT
+        with ESMTP id S232563AbiIVTy5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 15:54:41 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D21B030F43
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 12:54:39 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id a8so16384398lff.13
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 12:54:39 -0700 (PDT)
+        Thu, 22 Sep 2022 15:54:57 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C86C7C1F2
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 12:54:52 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id k10so16451994lfm.4
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 12:54:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=OjwZCqtCWqNmy6fBlsSqFzKD3bCEsVFc8uYZ8NecXtA=;
-        b=cR1wX2FyrChyeXiQTbsumMufekbEXq//32J9TUANOOvMEPcLZBAnvdJkN5/dOTPFhW
-         YDzxuQBUWoM8O+Ji2t/YzyJES7V01wIFwoDljjbUsfMqbKEr+FsO2QpGX7GhL2/Mp4G4
-         mON4wkSqvEa57udsnvbN4U4OpI1WBslnFDc6d1PdQDr6yJLEe2WZ8OHPXEFigl1J0xw3
-         b6XSaWYhGmBtfvo3PjAqcFcVUcnANXhRnP4+5lIbYIDCqnyNSgMZUJtB8fHlA6AehCax
-         fMemAtVkjVnrgnonlx+vH3cCQc+KK2iIA9bjL7VaxYEEbI2M6aePGQ0YpGae/k2DGaZq
-         QTKQ==
+        bh=lgBFTMVMXCZBAFp0oMr/KQtqKqlUry12+72uOs2o5A0=;
+        b=gSuteSplG8PxA49wHgjUw1l+i4kCCFrGl4lWahQKdlgu+JZaE4fiOWlEQzX7g4xqgy
+         wrtBDvfRLRV8AweCZ6WU3wvh+jHN+g/sFqlQWZCi6KqGKKE2rrGWTqIdzeTXBpG8fTj3
+         khnOpoLjT0PTdn98YaEk6J1EVqLuA7AwZ0TTzqOSLTRzgJZFaUWo4FRqMY1Rn/zOB2Yl
+         jF2IGGbDkpjLMYyp6it3c9Vcct8liYd78+UVr+5cXt9bYkBCobdPOwpWxAL1s5VxhGnJ
+         cixDkto0Rm1H3pmavVasqrRLFbpiYOCBL2zhCZHtcKMuM+ntXZq/51jD4I73Jkv9MUw1
+         SiUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=OjwZCqtCWqNmy6fBlsSqFzKD3bCEsVFc8uYZ8NecXtA=;
-        b=vPAgqYa9MySSiiGC2YbsdvtXt0BN6olmhCc8UfUs6LbrWTXey+bEVAEy4MfG7LQL8v
-         S9Xb0gY65Gkq2g9XyBOVRa6lcdk/KXOt83Am3XvCx45QeiTS4lx+yEbcYm5WeJ6aS+j9
-         Ik62pvEZgeacEFUIeVvaT4IEmk4WZsqpQMJbE4CvNpyFTY35U5NhMSRr/h6jbYo4RuBV
-         ulEZhjMKSWHhymBwJ6f5tqXh9+JvdE5Ix2SvjROlifbcS9H05PEKslZ8OL57BQyUoW9n
-         N/cbtQrh7cmNPk9rFf/REa/PDofEFKiB0fvt3OLmGBYsZjFBw381TmMt8ZORBbldbq9j
-         tkFw==
-X-Gm-Message-State: ACrzQf0pgaDdk+HYzRP0yXV9hnL+YZyHpP7iW9Utul+Uh+5lfD71r5Mq
-        AXdHpWfb6xzRXRh+mo+maEbaJg==
-X-Google-Smtp-Source: AMsMyM6i0a3Z4JYmUOIVUA71gmZPtBQq55ndJesQ2D0Yuq+Npbif2fuRodqYcIhyrWi8eBAEzx2g+A==
-X-Received: by 2002:a05:6512:ac6:b0:4a0:2b26:3ab3 with SMTP id n6-20020a0565120ac600b004a02b263ab3mr1551875lfu.154.1663876478067;
-        Thu, 22 Sep 2022 12:54:38 -0700 (PDT)
+        bh=lgBFTMVMXCZBAFp0oMr/KQtqKqlUry12+72uOs2o5A0=;
+        b=aywnb0EcNo1n2hMNdANiUVjcULwWUUep3eZAmur3UfR8Kq9xXf8BFmTsPDcSSOUQzG
+         RlZc3n+E2IcISDs3frac8tCcMJB3k94gdTGhiMCK/w2AKUOZMXaJMiyZj127tEHYvDnk
+         bT/d+VRgBUe5Xe7qQlOzIXBGPEfvsQTeWUFS4snG0pH4Pk2VcCfyS2S4bd7AtQ5buMiu
+         xY9QnilAbRIjazZTAJQag7Qz9ao/wVxnddt5WaP747oP5+uaj+Jlf4OVUPkMmvyi3zWn
+         PGRJ8GVeMlExlV1GeD+HhUu42ER/K3gF/hO1ztzLpnT7HE9y+l69ZQlNt7cfe1j3lWce
+         dE/A==
+X-Gm-Message-State: ACrzQf2mXUEdyM9lzuhhx5S8I+PxllbNoCUMgZktxD+4t/DWiP0AzyQI
+        FxGnCkPczQ8Cx1b1o2OCZaD+jA==
+X-Google-Smtp-Source: AMsMyM5x3xQZZsL6AGUzGPXrbBo4Ibfz8nqXqjAm+Dm7MKd8knG6P7UyBb3rGXUpNlKV3qXe4/G2Dw==
+X-Received: by 2002:a19:f716:0:b0:498:aa7f:32f7 with SMTP id z22-20020a19f716000000b00498aa7f32f7mr1984433lfe.3.1663876492136;
+        Thu, 22 Sep 2022 12:54:52 -0700 (PDT)
 Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id q8-20020a056512210800b00499b726508csm1072325lfr.250.2022.09.22.12.54.37
+        by smtp.gmail.com with ESMTPSA id z13-20020a056512370d00b00497a3e2a191sm1083605lfr.112.2022.09.22.12.54.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Sep 2022 12:54:37 -0700 (PDT)
-Message-ID: <39ae31b2-48f1-4c30-851c-17276ce55e25@linaro.org>
-Date:   Thu, 22 Sep 2022 22:54:37 +0300
+        Thu, 22 Sep 2022 12:54:51 -0700 (PDT)
+Message-ID: <8964f7c1-817d-fbd0-69c2-329a442ae5e7@linaro.org>
+Date:   Thu, 22 Sep 2022 22:54:51 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.2
-Subject: Re: [PATCH v2 03/10] drm/msm/dsi: fix memory corruption with too many
- bridges
+Subject: Re: [PATCH v2 04/10] drm/msm/hdmi: fix memory corruption with too
+ many bridges
 Content-Language: en-GB
 To:     Johan Hovold <johan+linaro@kernel.org>,
         Douglas Anderson <dianders@chromium.org>,
@@ -78,14 +78,15 @@ Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
         freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         stable@vger.kernel.org
 References: <20220913085320.8577-1-johan+linaro@kernel.org>
- <20220913085320.8577-4-johan+linaro@kernel.org>
+ <20220913085320.8577-5-johan+linaro@kernel.org>
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220913085320.8577-4-johan+linaro@kernel.org>
+In-Reply-To: <20220913085320.8577-5-johan+linaro@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -97,13 +98,12 @@ On 13/09/2022 11:53, Johan Hovold wrote:
 > data beyond the fixed-sized bridge array in case there are ever more
 > than eight bridges.
 > 
-> Fixes: a689554ba6ed ("drm/msm: Initial add DSI connector support")
-> Cc: stable@vger.kernel.org	# 4.1
+> Fixes: a3376e3ec81c ("drm/msm: convert to drm_bridge")
+> Cc: stable@vger.kernel.org	# 3.12
 > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 > ---
->   drivers/gpu/drm/msm/dsi/dsi.c | 6 ++++++
->   1 file changed, 6 insertions(+)
-> 
+>   drivers/gpu/drm/msm/hdmi/hdmi.c | 5 +++++
+>   1 file changed, 5 insertions(+)
 
 Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
