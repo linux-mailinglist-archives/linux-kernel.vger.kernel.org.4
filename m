@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 110E65E6FE9
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 00:46:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EBBB5E6FEC
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 00:46:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230418AbiIVWqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 18:46:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44226 "EHLO
+        id S230456AbiIVWqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 18:46:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiIVWq1 (ORCPT
+        with ESMTP id S229543AbiIVWqg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 18:46:27 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E21EBEEB40
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 15:46:25 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id iv17so3071856wmb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 15:46:25 -0700 (PDT)
+        Thu, 22 Sep 2022 18:46:36 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6CBBEFF75
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 15:46:35 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id z13-20020a7bc7cd000000b003b5054c6f9bso1708585wmk.2
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 15:46:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=9NBOmFwgDwIdBLiWSI0vBgFaF0v0AI90lxVKJOJ5Ing=;
-        b=gIqzT0NTDMVsZAZhX+AYLhrA/sESmquVV0GrhxVDC6enW2fSgXB13bZ5kjxb16gDaW
-         UEhKkrc06/3NzeszcAyZSFZCaOsGArqxgY28ce6hz08+RaNK/OUBXvJrS6yQVCK25gEX
-         /qXlv4UfMEq755VwRGHAOeYyGj4FmeIe6E5UYO9mdICwyq2BqEGAbPMwN4w7NXk7FlA2
-         dEPOC5BDXVYVX7JnJgZAlDVTFfaWvBRsVz3UfK0WQIUCz8HkgDgtAUs9ETtORsIdCAPH
-         /RAMjhRHHvF/WYUZ9PjbjkOSUuzQOJ6Dq0+icePqqZs84+FJEZiPSLRuHbP2Q84YBva5
-         B5IA==
+        bh=ltYapkC4HEBqKjWDViSVjlQMW2DX4S8eveyX3l0P/5c=;
+        b=G9W6En7uyuKdNbxwzw6cBEYBnJzigpgiRDHcQLoIBzimpoUBp/JwfY4Atk0L7QlkXL
+         i1UaV/K5F5qcv/B4fPMbems6DwV/bFs5KqJWwPw9bHJqtFBqtCZMga7gTVFC6Lvryu7V
+         uneDBbV0quDX7i5cC3pFQDUQIayQ/eybZ5FQQuVJFO8d/xTPyKrcgqliqBqy3lVLgpNz
+         EczuxYDt4NZ0p4QjOA7JSY4YVEQov+S5insBwLbmmwThDRzvL7fB9bBPlmBozeqhRFBX
+         gVkoKuL7eWTqSKBo+ay7ETLyeTP2GWrk0j18Fhs4ex/p6rqWXYvP8CCaAXoNXTM7xkUG
+         n22w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=9NBOmFwgDwIdBLiWSI0vBgFaF0v0AI90lxVKJOJ5Ing=;
-        b=DSFpP2tDz5IRNRImmJtTnLi2k4vn9EA6ZpHYCmfBaHEYAsZVjgk1bS3qrnLElhOHK8
-         9XLRhyO2flZg9gx6wgt/h/08f8jFol7RgG3FNI/tATKRUdyaH5u29rJT/8Fvw+POXY6r
-         vnhDYPAQnUyxz1t1DSrrFBCFq+ti1pfJC/oYyJZMzDv3oCX6Haf4hgxhlFeJyzm4CcnJ
-         zV0bc9xjA/HpKs/uXTSZfgfwzA5PF+LzSZnHXSz6hh6IM/+YkWTElplq4VTIWieQsY5Z
-         WjTjHYZ0lqEfxGubsOU/9Em7inEg7SRD+pIHfiQ6Y4H+1nADS3th4xU2PkU1VsyexhQi
-         QcPQ==
-X-Gm-Message-State: ACrzQf2wGX3nWmtGLmBvHQYYsg+52vG7/v29U/2E4HEtaQZQKMUrYcVm
-        gtosuQTU6kxJuZ5JoFxIYDOmsQ==
-X-Google-Smtp-Source: AMsMyM65ZCCXDuvwFblml7L1ikCPk7sKLZy9MUJgq57DjgG2vmc/jvtSJpghWJw4XCnMN0goFO4S1A==
-X-Received: by 2002:a05:600c:3d8e:b0:3b4:a61c:52cc with SMTP id bi14-20020a05600c3d8e00b003b4a61c52ccmr11438448wmb.7.1663886784439;
-        Thu, 22 Sep 2022 15:46:24 -0700 (PDT)
+        bh=ltYapkC4HEBqKjWDViSVjlQMW2DX4S8eveyX3l0P/5c=;
+        b=jE2OJQGMFmx35YYNfaLDhd784QhrhrT4W0CCljdLiB2NElI3V1Z6WxMjFyLeCS5nbY
+         oDTcboQ3E6FkpF4MGn9MjLDkoktv0t3cC3wa1Z1cyX1/J8tK2iD0vcc9AiaCxbmvBz50
+         eoXPjz1mu7inTBNNek+Iubk/3fJuvTFUi4eDZ5tPY+tzdIO5mlOxmyzKJ+A75Gd2n771
+         GX4cp1XbG007ctvoHu5zZNntc+raJL8RbZsJJV6syglUZzTiMVZyKW+QcGukxkHKqsH9
+         BfUg+kMZl1x5B9+VsfpLlPm3bOW4loUVzK34QZqovC2CVFCJJFJe3WL8tWnyUDkIcilS
+         9qSw==
+X-Gm-Message-State: ACrzQf0GTYunjh0QaAWkUa1bg3787JyFmKaBvMbPNoXn3Pog7AJ3RsBF
+        seXQZFB2DhV6+c+ZJHTxn01x1Q==
+X-Google-Smtp-Source: AMsMyM6UtONCf1PBYt31tN03JHyVUgivr2gCgw/qVochMXs9/wGLnXQvd7RyJGYB49cW7AtCJzKshQ==
+X-Received: by 2002:a05:600c:198d:b0:3b4:b6b6:6fa with SMTP id t13-20020a05600c198d00b003b4b6b606famr11039067wmq.110.1663886794380;
+        Thu, 22 Sep 2022 15:46:34 -0700 (PDT)
 Received: from [192.168.86.238] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.googlemail.com with ESMTPSA id bn27-20020a056000061b00b0022762b0e2a2sm6704105wrb.6.2022.09.22.15.46.23
+        by smtp.googlemail.com with ESMTPSA id l20-20020a05600c089400b003a845621c5bsm661523wmp.34.2022.09.22.15.46.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Sep 2022 15:46:23 -0700 (PDT)
-Message-ID: <92b58775-2a2c-b6be-557d-10e3852a9e80@linaro.org>
-Date:   Thu, 22 Sep 2022 23:46:22 +0100
+        Thu, 22 Sep 2022 15:46:33 -0700 (PDT)
+Message-ID: <e4bd1b5c-2676-3cd7-db3b-1f34a305e9ec@linaro.org>
+Date:   Thu, 22 Sep 2022 23:46:32 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH 2/3] misc: fastrpc: Don't remove map on creater_process
- and device_release
+Subject: Re: [PATCH 1/3] misc: fastrpc: Fix use-after-free and race in
+ fastrpc_map_find
 Content-Language: en-US
 To:     Abel Vesa <abel.vesa@linaro.org>,
         Amol Maheshwari <amahesh@qti.qualcomm.com>,
@@ -68,9 +68,8 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Ola Jeppsson <ola@snap.com>
 References: <20220902151423.3351414-1-abel.vesa@linaro.org>
- <20220902151423.3351414-2-abel.vesa@linaro.org>
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20220902151423.3351414-2-abel.vesa@linaro.org>
+In-Reply-To: <20220902151423.3351414-1-abel.vesa@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -85,15 +84,17 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 On 02/09/2022 16:14, Abel Vesa wrote:
-> Do not remove the map from the list on error path in
-> fastrpc_init_create_process, instead call fastrpc_map_put, to avoid
-> use-after-free. Do not remove it on fastrpc_device_release either,
-> call fastrpc_map_put instead.
+> Currently, there is a race window between the point when the mutex is
+> unlocked in fastrpc_map_lookup and the reference count increasing
+> (fastrpc_map_get) in fastrpc_map_find, which can also lead to
+> use-after-free.
 > 
-> The fastrpc_free_map is the only proper place to remove the map.
-> This is called only after the reference count is 0.
+> So lets merge fastrpc_map_find into fastrpc_map_lookup which allows us
+> to both protect the maps list by also taking the &fl->lock spinlock and
+> the reference count, since the spinlock will be released only after.
+> Add take_ref argument to make this suitable for all callers.
 > 
-> Fixes: b49f6d83e290f ("misc: fastrpc: Fix a possible double free")
+> Fixes: 8f6c1d8c4f0c ("misc: fastrpc: Add fdlist implementation")
 > Co-developed-by: Ola Jeppsson <ola@snap.com>
 > Signed-off-by: Ola Jeppsson <ola@snap.com>
 > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
@@ -101,50 +102,78 @@ On 02/09/2022 16:14, Abel Vesa wrote:
 
 Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 
->   drivers/misc/fastrpc.c | 18 +++++++++---------
->   1 file changed, 9 insertions(+), 9 deletions(-)
+>   drivers/misc/fastrpc.c | 41 +++++++++++++++++++++--------------------
+>   1 file changed, 21 insertions(+), 20 deletions(-)
 > 
 > diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
-> index 0c816a11eeec..50c17f5da3a8 100644
+> index 93ebd174d848..0c816a11eeec 100644
 > --- a/drivers/misc/fastrpc.c
 > +++ b/drivers/misc/fastrpc.c
-> @@ -316,6 +316,13 @@ static void fastrpc_free_map(struct kref *ref)
->   		dma_buf_put(map->buf);
->   	}
+> @@ -333,30 +333,31 @@ static void fastrpc_map_get(struct fastrpc_map *map)
 >   
-> +	if (map->fl) {
-> +		spin_lock(&map->fl->lock);
-> +		list_del(&map->node);
-> +		spin_unlock(&map->fl->lock);
-> +		map->fl = NULL;
+>   
+>   static int fastrpc_map_lookup(struct fastrpc_user *fl, int fd,
+> -			    struct fastrpc_map **ppmap)
+> +			    struct fastrpc_map **ppmap, bool take_ref)
+>   {
+> +	struct fastrpc_session_ctx *sess = fl->sctx;
+>   	struct fastrpc_map *map = NULL;
+> +	int ret = -ENOENT;
+>   
+> -	mutex_lock(&fl->mutex);
+> +	spin_lock(&fl->lock);
+>   	list_for_each_entry(map, &fl->maps, node) {
+> -		if (map->fd == fd) {
+> -			*ppmap = map;
+> -			mutex_unlock(&fl->mutex);
+> -			return 0;
+> -		}
+> -	}
+> -	mutex_unlock(&fl->mutex);
+> -
+> -	return -ENOENT;
+> -}
+> +		if (map->fd != fd)
+> +			continue;
+>   
+> -static int fastrpc_map_find(struct fastrpc_user *fl, int fd,
+> -			    struct fastrpc_map **ppmap)
+> -{
+> -	int ret = fastrpc_map_lookup(fl, fd, ppmap);
+> +		if (take_ref) {
+> +			ret = fastrpc_map_get(map);
+> +			if (ret) {
+> +				dev_dbg(sess->dev, "%s: Failed to get map fd=%d ret=%d\n",
+> +					__func__, fd, ret);
+> +				break;
+> +			}
+> +		}
+>   
+> -	if (!ret)
+> -		fastrpc_map_get(*ppmap);
+> +		*ppmap = map;
+> +		ret = 0;
+> +		break;
 > +	}
-> +
->   	kfree(map);
+> +	spin_unlock(&fl->lock);
+>   
+>   	return ret;
 >   }
+> @@ -703,7 +704,7 @@ static int fastrpc_map_create(struct fastrpc_user *fl, int fd,
+>   	struct fastrpc_map *map = NULL;
+>   	int err = 0;
 >   
-> @@ -1266,12 +1273,7 @@ static int fastrpc_init_create_process(struct fastrpc_user *fl,
->   	fl->init_mem = NULL;
->   	fastrpc_buf_free(imem);
->   err_alloc:
-> -	if (map) {
-> -		spin_lock(&fl->lock);
-> -		list_del(&map->node);
-> -		spin_unlock(&fl->lock);
-> -		fastrpc_map_put(map);
-> -	}
-> +	fastrpc_map_put(map);
->   err:
->   	kfree(args);
+> -	if (!fastrpc_map_find(fl, fd, ppmap))
+> +	if (!fastrpc_map_lookup(fl, fd, ppmap, true))
+>   		return 0;
 >   
-> @@ -1347,10 +1349,8 @@ static int fastrpc_device_release(struct inode *inode, struct file *file)
->   		fastrpc_context_put(ctx);
+>   	map = kzalloc(sizeof(*map), GFP_KERNEL);
+> @@ -1026,7 +1027,7 @@ static int fastrpc_put_args(struct fastrpc_invoke_ctx *ctx,
+>   	for (i = 0; i < FASTRPC_MAX_FDLIST; i++) {
+>   		if (!fdlist[i])
+>   			break;
+> -		if (!fastrpc_map_lookup(fl, (int)fdlist[i], &mmap))
+> +		if (!fastrpc_map_lookup(fl, (int)fdlist[i], &mmap, false))
+>   			fastrpc_map_put(mmap);
 >   	}
 >   
-> -	list_for_each_entry_safe(map, m, &fl->maps, node) {
-> -		list_del(&map->node);
-> +	list_for_each_entry_safe(map, m, &fl->maps, node)
->   		fastrpc_map_put(map);
-> -	}
->   
->   	list_for_each_entry_safe(buf, b, &fl->mmaps, node) {
->   		list_del(&buf->node);
