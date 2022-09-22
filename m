@@ -2,81 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA2905E63B6
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 15:35:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 997CD5E63AA
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 15:35:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231774AbiIVNfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 09:35:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35660 "EHLO
+        id S231378AbiIVNe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 09:34:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231655AbiIVNfV (ORCPT
+        with ESMTP id S229794AbiIVNe4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 09:35:21 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C978E990;
-        Thu, 22 Sep 2022 06:35:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=B6ccnQNtEUaB0ueDsfRYZRXgSdTI2hBeAmgJaqGNlrQ=; b=nbCgwfzCZBiVCd73mEtHLIpBeb
-        hZyapg4sqOKKXxyqKoi5FVmZaMOKf3wvGxyPxmEnctVhhZT4M4W2lEbY+gNk0wU3CPO5ag3cIjmb1
-        wcvsD0s3tfCFBUguB9gGQtjT8OtUYkgO6gQ/s+hBtu2Twq93guH4b2RCicPYPJI2TNUH0Fj6RCssu
-        xU+Kg2Sm0ir2dBEdFNamBlmCYBj/3KhsoYsinOCTZr5YPpPzoU/wmCovXPRlGKKSEtbNrdWCd5aT6
-        jHnDyGnGmAwbMFjACndCBwk6kW2fUGCEYuYxxZeCw7j/jEAH+ywoRREVSBNJi46DccIG/UUIqx4GV
-        NIUVvjfQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1obMLs-00Ey8h-Ms; Thu, 22 Sep 2022 13:34:53 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C7D79300023;
-        Thu, 22 Sep 2022 15:34:51 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 9A0832BBA39BD; Thu, 22 Sep 2022 15:34:51 +0200 (CEST)
-Date:   Thu, 22 Sep 2022 15:34:51 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Wang, Wei W" <wei.w.wang@intel.com>
-Cc:     "Liang, Kan" <kan.liang@linux.intel.com>,
-        "Li, Xiaoyao" <xiaoyao.li@intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
-Subject: Re: [RFC PATCH v2 2/3] perf/x86/intel/pt: Introduce and export
- pt_get_curr_event()
-Message-ID: <Yyxke/IO+AP4EWwT@hirez.programming.kicks-ass.net>
-References: <20220921164521.2858932-1-xiaoyao.li@intel.com>
- <20220921164521.2858932-3-xiaoyao.li@intel.com>
- <175b518c-d202-644e-a3a7-67e877852548@linux.intel.com>
- <DS0PR11MB6373C84139621DC447D3F466DC4E9@DS0PR11MB6373.namprd11.prod.outlook.com>
+        Thu, 22 Sep 2022 09:34:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028F9481E7;
+        Thu, 22 Sep 2022 06:34:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9C618B836C9;
+        Thu, 22 Sep 2022 13:34:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E72BC433D6;
+        Thu, 22 Sep 2022 13:34:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663853691;
+        bh=+My+Fy2IEDmbNTy7T8HNxYYgJowz92MhqyGRMiqJV6o=;
+        h=Date:From:To:Cc:Subject:From;
+        b=DnbzjENuc3OsMdOKj1NBCvu0nD5yXopwHjgT1w9EoUFOXUvcliNFiRL0BeqRQ7etA
+         nqKcojqalTNfYbWYmVLnRCEIf0OUKGJtQZsLADdi7RD8JtILZ5nJCm4hVK1D2mFo6c
+         4tPgPnJepTYCQdE+OHIjfGYux8UmExUSBvYUOs6mDthRwr20HP2LQ7Peq/Vj7Bq8Sl
+         AsCgwYvq1TDwG0wm0bgv7zU0JivNl/jLSTZbXzjtXBnI/HjR3IKcn/6LVw8mnuZszH
+         CJ/nC4h9GzU0ptNhFWfDcaPiIP6xonarxL8foqEAsw+64Vk3fII2YB81p4EhD+ZKNp
+         vEP3aTZvNvo5A==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1obMLw-0005Fb-PD; Thu, 22 Sep 2022 15:34:56 +0200
+Date:   Thu, 22 Sep 2022 15:34:56 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] USB-serial fixes for 6.0-rc7
+Message-ID: <YyxkgPNrbp7g/+w5@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <DS0PR11MB6373C84139621DC447D3F466DC4E9@DS0PR11MB6373.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 12:58:49PM +0000, Wang, Wei W wrote:
+The following changes since commit 7e18e42e4b280c85b76967a9106a13ca61c16179:
 
-> Add a function to expose the current running PT event to users. One usage is in KVM,
-> it needs to get and disable the running host PT event before VMEnter to the guest and
-> resumes the event after VMexit to host.
+  Linux 6.0-rc4 (2022-09-04 13:10:01 -0700)
 
-You cannot just kill a host event like that. If there is a host event,
-the guest looses out.
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-6.0-rc7
+
+for you to fetch changes up to d640c4cb8f2f933c0ca896541f9de7fb1ae245f4:
+
+  USB: serial: option: add Quectel RM520N (2022-09-13 14:40:59 +0200)
+
+----------------------------------------------------------------
+USB-serial fixes for 6.0-rc7
+
+Here are some new modem device ids.
+
+All have been in linux-next with no reported issues.
+
+----------------------------------------------------------------
+Carl Yin(殷张成) (1):
+      USB: serial: option: add Quectel BG95 0x0203 composition
+
+jerry meng (1):
+      USB: serial: option: add Quectel RM520N
+
+ drivers/usb/serial/option.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
