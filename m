@@ -2,161 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A590E5E5986
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 05:19:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2559B5E598B
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 05:22:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231352AbiIVDSk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 23:18:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59542 "EHLO
+        id S230144AbiIVDV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 23:21:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231320AbiIVDSB (ORCPT
+        with ESMTP id S230520AbiIVDV0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 23:18:01 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F894B07F8
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 20:12:53 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id e10-20020a05600c4e4a00b003b4eff4ab2cso446809wmq.4
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 20:12:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=Wd9ftuEwHwKbDkxBGNbylsY5yCJ2iRQCnP9zwsuCZ2o=;
-        b=ho7NgWD6lzDtWBRZynC6jNXepKfnr4YDUc2Vy9tfDSm9siA8edqz+K/5LRwPk0Ld3y
-         GIIxG6xZ5NHfqE+X0Ts3vTCAja/8jU5FRKBRUhmQXfnIi38SF5wx3qfMdtXm6pDBWeGk
-         Fj6cWcJB56pEPdNOoZJNK+CXlbiB1m/x0m8Vgs3Idj6dF9Xh2aFqIvwemkD0WxRPw/ku
-         ED9AX3x/RoMZoFbUhGDUkjuS+QUDJhIw7DLDWayxwz1/6FOQzSVjEl8WfHyp8sRN9gND
-         1bvSR0fvCs78hWrm+MRs/gT5Fx5P/C+IK2Tfru2f89vXZFDJbfNpVx+y2e/k66XXCXrM
-         vSaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=Wd9ftuEwHwKbDkxBGNbylsY5yCJ2iRQCnP9zwsuCZ2o=;
-        b=Ts6yUNCaPJD/QgS3S2auWEF4D8XuABCSYf68znuXhrfW87IY3EwL35Z9iCq5RGJqM6
-         IUz5dPi8yLsaN/EoO+9sSQrwgykGsf8AKbOst8rHFDQ9gOhlS7nljmpQ0g3HmZ8qHbZs
-         riQqvjfBWRvQekd9zOQcCmgyCmaxAtn8y5eqn+KFJcSRQiBsrFGZQemjYWsefOPGcf36
-         FxJcQdBMtU3gkIDPdyoIbSWA+1+D2H18RE8D6gFNPMq5StFj5P9fe7ZOPLngLFS45tFV
-         XDTmsrMFIUEC9+1d/PtWbOO27oyfP2QYAUGB0hRQ9W8kSLAr3pav4cdBYs8PDInb0uud
-         aGNw==
-X-Gm-Message-State: ACrzQf3ICxrziw/8N/lseC5Kbn4SumEoVcvQVUxHu3FTCr5v4MDuSfVO
-        +Tpp8y9cW4EBM6JzQP4CEsgbqUza2RjRaUX2QsZWZw==
-X-Google-Smtp-Source: AMsMyM5t3vz/zrrCjjUxW+dnrpnqbYfj/aN9ERUd+QxRtCvGtx2SmkY/F223oIAmZppSgJrYDSFCwDhJv/vwfrJYMp0=
-X-Received: by 2002:a7b:c048:0:b0:3b4:fb26:f0f3 with SMTP id
- u8-20020a7bc048000000b003b4fb26f0f3mr3650986wmc.115.1663816371685; Wed, 21
- Sep 2022 20:12:51 -0700 (PDT)
+        Wed, 21 Sep 2022 23:21:26 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AD15B2CE0
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 20:16:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663816563; x=1695352563;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=WDQYd5NoPzJU06WFgr960N6AUT6WCRXurMT8EYj8CwQ=;
+  b=D/qHnCqfdPwIVUMW85Ptj0gQns3N6IFTa+fQFOIShpIf5liD3i0iGpVT
+   mMXdxrGcp9l/B4Rd+Kjr0vyNug4l0d2APBGI9ksXM0GokDUTphYmBH5Az
+   v9iU6C5xo/28WQ/frRJdl1tUmz8USCQoKVAwwMqodSd7nVyvBL0N8AER8
+   SIBE1gNC7ZsxmjjL8Odfb8tOOXWXhv0NF6B4BQnReAby6P7foho08jQxs
+   SvaloQqU1Jkl2AW5WbLsXt5zf1aSqVvBhbYz8cthnW6QMLst1hrsQPH+X
+   p1eaaHWiVqFzz4wO6HhMyz+IPrXcv8EDYQf6uNx+k/IbRUQvLhj6R0s1i
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="287262330"
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="287262330"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 20:15:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="597257824"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 21 Sep 2022 20:15:57 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1obCgv-0004FA-0D;
+        Thu, 22 Sep 2022 03:15:57 +0000
+Date:   Thu, 22 Sep 2022 11:15:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: arch/arm/mach-mmp/pm-pxa910.c:132:6: warning: no previous prototype
+ for 'pxa910_pm_enter_lowpower_mode'
+Message-ID: <202209221119.rhKR3xdI-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220922014904.3665674-1-zhengjun.xing@linux.intel.com>
-In-Reply-To: <20220922014904.3665674-1-zhengjun.xing@linux.intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 21 Sep 2022 20:12:38 -0700
-Message-ID: <CAP-5=fUecPUJ-Z5WwbjVgA6b6r3-MmmfpjE+iw_pAK_K+rhxMA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] perf print-events: Fix "perf list" can not display
- the PMU prefix for some hybrid cache events
-To:     zhengjun.xing@linux.intel.com
-Cc:     acme@kernel.org, peterz@infradead.org, mingo@redhat.com,
-        alexander.shishkin@intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, ak@linux.intel.com,
-        kan.liang@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 21, 2022 at 6:47 PM <zhengjun.xing@linux.intel.com> wrote:
->
-> From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
->
-> Some hybrid hardware cache events are only available on one CPU PMU. For
-> example, 'L1-dcache-load-misses' is only available on cpu_core. We have
-> supported in the perf list clearly reporting this info, the function works
-> fine before but recently the argument "config" in API is_event_supported()
-> is changed from "u64" to "unsigned int" which caused a regression, the
-> "perf list" then can not display the PMU prefix for some hybrid cache
-> events. For the hybrid systems, the PMU type ID is stored at config[63:32],
-> define config to "unsigned int" will miss the PMU type ID information, then
-> the regression happened, the config should be defined as "u64".
->
-> Before:
->  # ./perf list |grep "Hardware cache event"
->   L1-dcache-load-misses                              [Hardware cache event]
->   L1-dcache-loads                                    [Hardware cache event]
->   L1-dcache-stores                                   [Hardware cache event]
->   L1-icache-load-misses                              [Hardware cache event]
->   L1-icache-loads                                    [Hardware cache event]
->   LLC-load-misses                                    [Hardware cache event]
->   LLC-loads                                          [Hardware cache event]
->   LLC-store-misses                                   [Hardware cache event]
->   LLC-stores                                         [Hardware cache event]
->   branch-load-misses                                 [Hardware cache event]
->   branch-loads                                       [Hardware cache event]
->   dTLB-load-misses                                   [Hardware cache event]
->   dTLB-loads                                         [Hardware cache event]
->   dTLB-store-misses                                  [Hardware cache event]
->   dTLB-stores                                        [Hardware cache event]
->   iTLB-load-misses                                   [Hardware cache event]
->   node-load-misses                                   [Hardware cache event]
->   node-loads                                         [Hardware cache event]
->
-> After:
->  # ./perf list |grep "Hardware cache event"
->   L1-dcache-loads                                    [Hardware cache event]
->   L1-dcache-stores                                   [Hardware cache event]
->   L1-icache-load-misses                              [Hardware cache event]
->   LLC-load-misses                                    [Hardware cache event]
->   LLC-loads                                          [Hardware cache event]
->   LLC-store-misses                                   [Hardware cache event]
->   LLC-stores                                         [Hardware cache event]
->   branch-load-misses                                 [Hardware cache event]
->   branch-loads                                       [Hardware cache event]
->   cpu_atom/L1-icache-loads/                          [Hardware cache event]
->   cpu_core/L1-dcache-load-misses/                    [Hardware cache event]
->   cpu_core/node-load-misses/                         [Hardware cache event]
->   cpu_core/node-loads/                               [Hardware cache event]
->   dTLB-load-misses                                   [Hardware cache event]
->   dTLB-loads                                         [Hardware cache event]
->   dTLB-store-misses                                  [Hardware cache event]
->   dTLB-stores                                        [Hardware cache event]
->   iTLB-load-misses                                   [Hardware cache event]
->
-> Fixes: 9b7c7728f4e4 ("perf parse-events: Break out tracepoint and printing")
-> Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
-> Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+Hi Arnd,
 
-Acked-by: Ian Rogers <irogers@google.com>
+First bad commit (maybe != root cause):
 
-Sorry for this breakage, I suspect that a long review on the
-refactoring CL meant that I missed the intervening fix. Can we add a
-test on this? It would need to be hybrid specific and skip otherwise.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   dc164f4fb00a0abebdfff132f8bc7291a28f5401
+commit: a3102fafdce6f150e5a46e1725bb1732f8953a01 ARM: iop32x: enable multiplatform support
+date:   6 months ago
+config: arm-randconfig-r036-20220921 (https://download.01.org/0day-ci/archive/20220922/202209221119.rhKR3xdI-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a3102fafdce6f150e5a46e1725bb1732f8953a01
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout a3102fafdce6f150e5a46e1725bb1732f8953a01
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-Thanks,
-Ian
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-> ---
->  tools/perf/util/print-events.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/perf/util/print-events.c b/tools/perf/util/print-events.c
-> index ba1ab5134685..04050d4f6db8 100644
-> --- a/tools/perf/util/print-events.c
-> +++ b/tools/perf/util/print-events.c
-> @@ -239,7 +239,7 @@ void print_sdt_events(const char *subsys_glob, const char *event_glob,
->         strlist__delete(sdtlist);
->  }
->
-> -static bool is_event_supported(u8 type, unsigned int config)
-> +static bool is_event_supported(u8 type, u64 config)
->  {
->         bool ret = true;
->         int open_return;
-> --
-> 2.25.1
->
+All warnings (new ones prefixed by >>):
+
+>> arch/arm/mach-mmp/pm-pxa910.c:132:6: warning: no previous prototype for 'pxa910_pm_enter_lowpower_mode' [-Wmissing-prototypes]
+     132 | void pxa910_pm_enter_lowpower_mode(int state)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/pxa910_pm_enter_lowpower_mode +132 arch/arm/mach-mmp/pm-pxa910.c
+
+902ca2297180fe Chao Xie            2012-05-07  131  
+902ca2297180fe Chao Xie            2012-05-07 @132  void pxa910_pm_enter_lowpower_mode(int state)
+902ca2297180fe Chao Xie            2012-05-07  133  {
+902ca2297180fe Chao Xie            2012-05-07  134  	uint32_t idle_cfg, apcr;
+902ca2297180fe Chao Xie            2012-05-07  135  
+902ca2297180fe Chao Xie            2012-05-07  136  	idle_cfg = __raw_readl(APMU_MOH_IDLE_CFG);
+902ca2297180fe Chao Xie            2012-05-07  137  	apcr = __raw_readl(MPMU_APCR);
+902ca2297180fe Chao Xie            2012-05-07  138  
+902ca2297180fe Chao Xie            2012-05-07  139  	apcr &= ~(MPMU_APCR_DDRCORSD | MPMU_APCR_APBSD | MPMU_APCR_AXISD
+902ca2297180fe Chao Xie            2012-05-07  140  		| MPMU_APCR_VCTCXOSD | MPMU_APCR_STBYEN);
+902ca2297180fe Chao Xie            2012-05-07  141  	idle_cfg &= ~(APMU_MOH_IDLE_CFG_MOH_IDLE
+902ca2297180fe Chao Xie            2012-05-07  142  		| APMU_MOH_IDLE_CFG_MOH_PWRDWN);
+902ca2297180fe Chao Xie            2012-05-07  143  
+902ca2297180fe Chao Xie            2012-05-07  144  	switch (state) {
+902ca2297180fe Chao Xie            2012-05-07  145  	case POWER_MODE_UDR:
+902ca2297180fe Chao Xie            2012-05-07  146  		/* only shutdown APB in UDR */
+902ca2297180fe Chao Xie            2012-05-07  147  		apcr |= MPMU_APCR_STBYEN | MPMU_APCR_APBSD;
+df561f6688fef7 Gustavo A. R. Silva 2020-08-23  148  		fallthrough;
+902ca2297180fe Chao Xie            2012-05-07  149  	case POWER_MODE_SYS_SLEEP:
+902ca2297180fe Chao Xie            2012-05-07  150  		apcr |= MPMU_APCR_SLPEN;		/* set the SLPEN bit */
+902ca2297180fe Chao Xie            2012-05-07  151  		apcr |= MPMU_APCR_VCTCXOSD;		/* set VCTCXOSD */
+df561f6688fef7 Gustavo A. R. Silva 2020-08-23  152  		fallthrough;
+902ca2297180fe Chao Xie            2012-05-07  153  	case POWER_MODE_APPS_SLEEP:
+902ca2297180fe Chao Xie            2012-05-07  154  		apcr |= MPMU_APCR_DDRCORSD;		/* set DDRCORSD */
+df561f6688fef7 Gustavo A. R. Silva 2020-08-23  155  		fallthrough;
+902ca2297180fe Chao Xie            2012-05-07  156  	case POWER_MODE_APPS_IDLE:
+902ca2297180fe Chao Xie            2012-05-07  157  		apcr |= MPMU_APCR_AXISD;		/* set AXISDD bit */
+df561f6688fef7 Gustavo A. R. Silva 2020-08-23  158  		fallthrough;
+902ca2297180fe Chao Xie            2012-05-07  159  	case POWER_MODE_CORE_EXTIDLE:
+902ca2297180fe Chao Xie            2012-05-07  160  		idle_cfg |= APMU_MOH_IDLE_CFG_MOH_IDLE;
+902ca2297180fe Chao Xie            2012-05-07  161  		idle_cfg |= APMU_MOH_IDLE_CFG_MOH_PWRDWN;
+902ca2297180fe Chao Xie            2012-05-07  162  		idle_cfg |= APMU_MOH_IDLE_CFG_MOH_PWR_SW(3)
+902ca2297180fe Chao Xie            2012-05-07  163  			| APMU_MOH_IDLE_CFG_MOH_L2_PWR_SW(3);
+df561f6688fef7 Gustavo A. R. Silva 2020-08-23  164  		fallthrough;
+902ca2297180fe Chao Xie            2012-05-07  165  	case POWER_MODE_CORE_INTIDLE:
+902ca2297180fe Chao Xie            2012-05-07  166  		break;
+902ca2297180fe Chao Xie            2012-05-07  167  	}
+902ca2297180fe Chao Xie            2012-05-07  168  
+902ca2297180fe Chao Xie            2012-05-07  169  	/* program the memory controller hardware sleep type and auto wakeup */
+902ca2297180fe Chao Xie            2012-05-07  170  	idle_cfg |= APMU_MOH_IDLE_CFG_MOH_DIS_MC_SW_REQ;
+902ca2297180fe Chao Xie            2012-05-07  171  	idle_cfg |= APMU_MOH_IDLE_CFG_MOH_MC_WAKE_EN;
+902ca2297180fe Chao Xie            2012-05-07  172  	__raw_writel(0x0, APMU_MC_HW_SLP_TYPE);		/* auto refresh */
+902ca2297180fe Chao Xie            2012-05-07  173  
+902ca2297180fe Chao Xie            2012-05-07  174  	/* set DSPSD, DTCMSD, BBSD, MSASLPEN */
+902ca2297180fe Chao Xie            2012-05-07  175  	apcr |= MPMU_APCR_DSPSD | MPMU_APCR_DTCMSD | MPMU_APCR_BBSD
+902ca2297180fe Chao Xie            2012-05-07  176  		| MPMU_APCR_MSASLPEN;
+902ca2297180fe Chao Xie            2012-05-07  177  
+902ca2297180fe Chao Xie            2012-05-07  178  	/*always set SLEPEN bit mainly for MSA*/
+902ca2297180fe Chao Xie            2012-05-07  179  	apcr |= MPMU_APCR_SLPEN;
+902ca2297180fe Chao Xie            2012-05-07  180  
+902ca2297180fe Chao Xie            2012-05-07  181  	/* finally write the registers back */
+902ca2297180fe Chao Xie            2012-05-07  182  	__raw_writel(idle_cfg, APMU_MOH_IDLE_CFG);
+902ca2297180fe Chao Xie            2012-05-07  183  	__raw_writel(apcr, MPMU_APCR);
+902ca2297180fe Chao Xie            2012-05-07  184  
+
+:::::: The code at line 132 was first introduced by commit
+:::::: 902ca2297180fe97f840427c114cc6dc7e77375e ARM: mmp: add pm support for pxa910
+
+:::::: TO: Chao Xie <chao.xie@marvell.com>
+:::::: CC: Haojian Zhuang <haojian.zhuang@gmail.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
