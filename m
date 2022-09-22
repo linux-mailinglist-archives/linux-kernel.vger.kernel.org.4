@@ -2,116 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46C5E5E5ACD
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 07:40:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA69B5E5ACF
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 07:41:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229638AbiIVFka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 01:40:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32906 "EHLO
+        id S229635AbiIVFk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 01:40:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbiIVFk1 (ORCPT
+        with ESMTP id S229554AbiIVFk5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 01:40:27 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9046792CC;
-        Wed, 21 Sep 2022 22:40:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663825226; x=1695361226;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=BPS+ESxaTVs7XbbUOFDIyCZOlnp1McZ+5nVCjg/VZ/g=;
-  b=G99SWonB6UGkBLVAYvojpZvqR924TTpFMPEpNn58CkJoZqQItV8rxLnT
-   xhs1W6654nKPmmBoEOBbYKmPiPhN4YBucwAikjX2vUQvKqye+cNGk3JkJ
-   i7aRP7Epfb10QjHH4uGanJowapwZKSmo9lia3CfgcbnKJgGW4wbYnNaPd
-   xylNcY2sk0GNmFHyzJkbBnG/FVBDMkFk1SwjjMx1DF/KSNU7pYdFk6NUn
-   vwbIZ6Snf+/K9X0nfZ/yEmUQckIZ6cgvrTOSQnXQvx9Ibx3nD4DmCIZtW
-   91migEinQ4tBJp1mhHcaHXJD40O97Z4H+GLFjBlcWOUfvdl5Y+uM0yFTE
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="301609845"
-X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
-   d="scan'208";a="301609845"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 22:40:26 -0700
-X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
-   d="scan'208";a="615076595"
-Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.255.28.71]) ([10.255.28.71])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 22:40:22 -0700
-Message-ID: <7611e818-9e81-1974-1dfa-330a6380c5da@intel.com>
-Date:   Thu, 22 Sep 2022 13:40:20 +0800
+        Thu, 22 Sep 2022 01:40:57 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E13AD81B0A;
+        Wed, 21 Sep 2022 22:40:54 -0700 (PDT)
+X-UUID: 802ff2ee5b574f9095d791aa7211dc99-20220922
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=V/4+Moo1S3nQcLY9jDjtjnWEDd9L/Kw2aufNRHGosCA=;
+        b=Zo90xoefOKJHvtfEFcDTAqWFMMlSWhYdihn9YUwakBoC7hSj65xFQOnkygZWjRWo+0MaOfGzMIuyKHdO04SqksKYo04Q/Ql+ZbID6f3GpTsr00YT5rq3AD7qAoZiR0Fhzx7za2FPjitpJ6vUJJ8lOcjWUAYbbUvnHd5+FHK+MKU=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:93a320cb-2d0a-420e-a931-84fcd3502661,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:45
+X-CID-INFO: VERSION:1.1.11,REQID:93a320cb-2d0a-420e-a931-84fcd3502661,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+        elease,TS:45
+X-CID-META: VersionHash:39a5ff1,CLOUDID:696eb1a2-dc04-435c-b19b-71e131a5fc35,B
+        ulkID:2209221340524T07RBDH,BulkQuantity:1,Recheck:0,SF:28|17|19|48|823|824
+        ,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:40,QS:nil,BEC:nil,COL:
+        0
+X-UUID: 802ff2ee5b574f9095d791aa7211dc99-20220922
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <jing-ting.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1364894657; Thu, 22 Sep 2022 13:40:48 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 22 Sep 2022 13:40:47 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 22 Sep 2022 13:40:47 +0800
+Message-ID: <93f4ce9486ec4b856ba0f3bfe956fc9b2d3cb4cf.camel@mediatek.com>
+Subject: Re: BUG: HANG_DETECT waiting for migration_cpu_stop() complete
+From:   Jing-Ting Wu <jing-ting.wu@mediatek.com>
+To:     Hillf Danton <hdanton@sina.com>
+CC:     Peter Zijlstra <peterz@infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        Waiman Long <longman@redhat.com>,
+        ValentinSchneider <vschneid@redhat.com>,
+        TejunHeo <tj@kernel.org>, <wsd_upstream@mediatek.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Jonathan.JMChen@mediatek.com>,
+        "chris.redpath@arm.com" <chris.redpath@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        "Vincent Donnefort" <vdonnefort@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Christian Brauner <brauner@kernel.org>,
+        <cgroups@vger.kernel.org>, <lixiong.liu@mediatek.com>,
+        <wenju.xu@mediatek.com>
+Date:   Thu, 22 Sep 2022 13:40:47 +0800
+In-Reply-To: <20220907000741.2496-1-hdanton@sina.com>
+References: <20220907000741.2496-1-hdanton@sina.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.2.2
-Subject: Re: [PATCH] kvm/x86: reserve bit
- KVM_HINTS_PHYS_ADDRESS_SIZE_DATA_VALID
-Content-Language: en-US
-To:     Jim Mattson <jmattson@google.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Gerd Hoffmann <kraxel@redhat.com>, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
-        <linux-kernel@vger.kernel.org>
-References: <20220908114146.473630-1-kraxel@redhat.com>
- <YxoBtD+3sgEEiaFF@google.com>
- <20220909050224.rzlt4x7tjrespw3k@sirius.home.kraxel.org>
- <20220921134246.xibospqoktp4wjie@sirius.home.kraxel.org>
- <Yysm8/Nkt6EUI5+k@google.com>
- <CALMp9eRkXPPWbPfm16onV9+ondg0x7_RG5ku7hCpBAODLWpSgw@mail.gmail.com>
-From:   Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <CALMp9eRkXPPWbPfm16onV9+ondg0x7_RG5ku7hCpBAODLWpSgw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/22/2022 12:32 AM, Jim Mattson wrote:
-> On Wed, Sep 21, 2022 at 8:00 AM Sean Christopherson <seanjc@google.com> wrote:
->>
->> On Wed, Sep 21, 2022, Gerd Hoffmann wrote:
->>> On Fri, Sep 09, 2022 at 07:02:24AM +0200, Gerd Hoffmann wrote:
->>>> On Thu, Sep 08, 2022 at 02:52:36PM +0000, Sean Christopherson wrote:
->>>>> On Thu, Sep 08, 2022, Gerd Hoffmann wrote:
->>>>>> -#define KVM_HINTS_REALTIME      0
->>>>>> +#define KVM_HINTS_REALTIME                      0
->>>>>> +#define KVM_HINTS_PHYS_ADDRESS_SIZE_DATA_VALID  1
->>>>>
->>>>> Why does KVM need to get involved?  This is purely a userspace problem.
->>>>
->>>> It doesn't.  I only need reserve a hints bit, and the canonical source
->>>> for that happens to live in the kernel.  That's why this patch doesn't
->>>> touch any actual code ;)
->>
->> The issue is that this "hint" effectively breaks other VMMs that already provide
->> an accurate guest.MAXPHYADDR.
+On Wed, 2022-09-07 at 08:07 +0800, Hillf Danton wrote:
+> On 5 Sep 2022 10:47:36 +0800 Jing-Ting Wu <jing-ting.wu@mediatek.com>
+> wrote
+> > 
+> > We meet the HANG_DETECT happened in T SW version with kernel-5.15.
+> > Many tasks have been blocked for a long time.
+> > 
+> > Root cause:
+> > migration_cpu_stop() is not complete due to
+> > is_migration_disabled(p) is
+> > true, complete is false and complete_all() never get executed.
+> > It let other task wait the rwsem.
 > 
-> Any VMM that doesn't provide an accurate guest.MAXPHYADDR is broken.
+> See if handing task over to stopper again in case of migration
+> disabled
+> could survive your tests.
+> 
+> Hillf
+> 
+> --- linux-5.15/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -2322,9 +2322,7 @@ static int migration_cpu_stop(void *data
+>  	 * holding rq->lock, if p->on_rq == 0 it cannot get enqueued
+> because
+>  	 * we're holding p->pi_lock.
+>  	 */
+> -	if (task_rq(p) == rq) {
+> -		if (is_migration_disabled(p))
+> -			goto out;
+> +	if (task_rq(p) == rq && !is_migration_disabled(p)) {
+>  
+>  		if (pending) {
+>  			p->migration_pending = NULL;
 
-I stand for it as well.
+Because Peter have some concern for patch by Waiman.
+We add Hillf's patch to our stability test.
+But there are side effects after patched.
+The warning appear once < two weeks. 
 
-To me, it looks an old QEMU bug and firmware provided a workaround for 
-the bug that doesn't trust guest's CPUID.0x80000008. IMHO, (guest) 
-firmware should always trust CPUID and error out if MAXPHYADDR reported 
-from CPUID is broken to force VMM fixing itself to provide correct CPUID 
-info. But letting firmware drop the workaround surely breaks backwards 
-compatibility.
+Backtrace as follows:
+[name:panic&]WARNING: CPU: 6 PID: 32583 at affine_move_task
+pc : affine_move_task
+lr : __set_cpus_allowed_ptr_locked
+Call trace:
+affine_move_task
+__set_cpus_allowed_ptr_locked
+migrate_enable
+__cgroup_bpf_run_filter_skb
+ip_finish_output
+ip_output
 
-> Why do we need a "hint" that the virtual processor works?
+
+The root cause is when is_migration_disabled(p) is true，the patched
+version will set p->migration_pending to NULL by migration_cpu_stop.
+And in affine_move_task will raise a WARN_ON_ONCE(!pending).
+
+Kernel-5.15/kernel/sched/core.c:
+static int affine_move_task(struct rq *rq, struct task_struct *p,
+struct rq_flags *rf, int dest_cpu, unsigned int flags) {
+...
+	If (WARN_ON_ONCE(!pending)) {
+ 	  Task_rq_unlock(rq,p,fr);
+  	  return -EINVAL;
+	}
+...
+}
+
+But the tasks have not been migrated to the new affinity CPU, so there
+should be pending tasks to be processed, so p->migration_pending should
+not be NULL.
 
 
 
+Without patch:
+When is_migration_disabled is true, then goto out and not set p-
+>migration_pending to NULL.
+
+static int migration_cpu_stop(void *data) {
+...
+	If (task_rq(p) == rq) {
+        	     if (is_migration_disabled(p))
+                	           goto out;
+	}
+...
+}
+
+
+With patch:
+When is_migration_disabled is true and pending is true, goto else if
+flow. Because p->cpus_ptr not updated when migrate_disable, so this
+condition is always true and p->migration_pending will set to NULL.
+
+static int migration_cpu_stop(void *data) {
+...
+	If (task_rq(p) == rq && !is_migration_disabled(p) ) {
+ 	  ...
+	} else if (pending) {
+	  ...
+	  If (cpumask_test_cpu(task_cpu(p), p-> cpus_ ptr)) { 
+        	p->migration_pending = NULL;
+      		 complete = true;
+      		 goto out;
+	}
+...
+}
+
+
+
+
+
+
+Best regards,
+Jing-Ting Wu
 
 
