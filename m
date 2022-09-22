@@ -2,148 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FBAD5E5C83
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 09:34:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C28DD5E5C84
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 09:35:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230467AbiIVHe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 03:34:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33636 "EHLO
+        id S230523AbiIVHe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 03:34:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbiIVHeW (ORCPT
+        with ESMTP id S229803AbiIVHey (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 03:34:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCAE2A0614;
-        Thu, 22 Sep 2022 00:34:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 349EFB834B9;
-        Thu, 22 Sep 2022 07:34:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04135C43470;
-        Thu, 22 Sep 2022 07:34:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663832058;
-        bh=UWNZukf959vr7tV71IoN5iXMlrYZ0jCCkoXyUvbqGDw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=tAPudcycVT75c9OdQbx/TXABgMYTqm1yO9MX1HbbKq8pe9I+lRCrq04kp4tornltH
-         Q/P0Q/uvAUf/GMjGfg5U5EjVeO05oAhMgaWKb+dYWxexeF3oK0h3jIMkk8I1biG+1U
-         SPk1rZLPsy68STuDSVhH5yW23huPIpGKMHb+GwJkjTDEO4JhudjUMoU7navs9G5WOY
-         JHWhqh30JQEpd8xC1iJUZEIQfLIBVVp3u3CwJRrqZT8/BN4p0ph1Em45apct975uOq
-         pA2+qXgPqVonDct1B/+9UvYRzh65/YfRO+ZFRVhJLQY3dcpaHTdIMGzVgYiX99eEf6
-         irewgSOjTRClw==
-Received: by mail-lf1-f47.google.com with SMTP id w8so13199826lft.12;
-        Thu, 22 Sep 2022 00:34:17 -0700 (PDT)
-X-Gm-Message-State: ACrzQf0aBRF9+swgU8e046oL5KkFUXP9Gh3169gXlUwELNz/8SBr6ySe
-        s1vRarGsuH6OkTv7TWrY883mrKIgHzVg0B9HNxc=
-X-Google-Smtp-Source: AMsMyM7Ob46JJiYPZyBbHV3AQ/n88iL6T8+iJh07RAQ95rvs6j4Th6jDsnwnC+malWy9LRmG3Vk3fv1xa7hCIvSRzLM=
-X-Received: by 2002:a05:6512:150e:b0:492:d9fd:9bdf with SMTP id
- bq14-20020a056512150e00b00492d9fd9bdfmr691871lfb.583.1663832055899; Thu, 22
- Sep 2022 00:34:15 -0700 (PDT)
+        Thu, 22 Sep 2022 03:34:54 -0400
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADED24A13D
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 00:34:50 -0700 (PDT)
+Received: (Authenticated sender: alex@ghiti.fr)
+        by mail.gandi.net (Postfix) with ESMTPSA id AD1C3100002;
+        Thu, 22 Sep 2022 07:34:40 +0000 (UTC)
+Message-ID: <48082184-93ea-8564-5a69-ff00350c0201@ghiti.fr>
+Date:   Thu, 22 Sep 2022 09:34:40 +0200
 MIME-Version: 1.0
-References: <20220904165321.1140894-1-Jason@zx2c4.com>
-In-Reply-To: <20220904165321.1140894-1-Jason@zx2c4.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Thu, 22 Sep 2022 09:34:04 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXGL4OV_Dpgtk+kQtDN0AHQBnwHwOQ-v76NkLFOVHirnRQ@mail.gmail.com>
-Message-ID: <CAMj1kXGL4OV_Dpgtk+kQtDN0AHQBnwHwOQ-v76NkLFOVHirnRQ@mail.gmail.com>
-Subject: Re: [PATCH] efi: x86: Wipe setup_data on pure EFI boot
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        x86@kernel.org, bp@alien8.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 2/2] riscv: Move cast inside kernel_mapping_[pv]a_to_[vp]a
+Content-Language: en-US
+To:     Samuel Holland <samuel@sholland.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org
+Cc:     Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-kernel@vger.kernel.org,
+        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Nick Kossifidis <mick@ics.forth.gr>,
+        Qinglin Pan <panqinglin2020@iscas.ac.cn>,
+        Tong Tiangen <tongtiangen@huawei.com>
+References: <20220922054743.30159-1-samuel@sholland.org>
+ <20220922054743.30159-2-samuel@sholland.org>
+From:   Alexandre Ghiti <alex@ghiti.fr>
+In-Reply-To: <20220922054743.30159-2-samuel@sholland.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 4 Sept 2022 at 18:53, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
->
-> From: Ard Biesheuvel <ardb@kernel.org>
->
-> When booting the x86 kernel via EFI using the LoadImage/StartImage boot
-> services [as opposed to the deprecated EFI handover protocol], the setup
-> header is taken from the image directly, and given that EFI's LoadImage
-> has no Linux/x86 specific knowledge regarding struct bootparams or
-> struct setup_header, any absolute addresses in the setup header must
-> originate from the file and not from a prior loading stage.
->
-> Since we cannot generally predict where LoadImage() decides to load an
-> image (*), such absolute addresses must be treated as suspect: even if a
-> prior boot stage intended to make them point somewhere inside the
-> [signed] image, there is no way to validate that, and if they point at
-> an arbitrary location in memory, the setup_data nodes will not be
-> covered by any signatures or TPM measurements either, and could be made
-> to contain an arbitrary sequence of SETUP_xxx nodes, which could
-> interfere quite badly with the early x86 boot sequence.
->
-> (*) Note that, while LoadImage() does take a buffer/size tuple in
-> addition to a device path, which can be used to provide the image
-> contents directly, it will re-allocate such images, as the memory
-> footprint of an image is generally larger than the PE/COFF file
-> representation.
->
-> Next, in order to allow hypervisors to still use setup_data in scenarios
-> where it may be useful, bump the x86 boot protocol version, so that
-> hypervisors, e.g. QEMU in the linked patch, can do the right thing
-> automatically depending on whether it is safe.
->
-> Link: https://lore.kernel.org/qemu-devel/20220904165058.1140503-1-Jason@zx2c4.com/
-> Coauthored-by: Ard Biesheuvel <ardb@kernel.org>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 
-Now that we've fixed this on the QEMU end without the need for a boot
-protocol version bump [0], I am going to merge just the x86-stub.c
-change as a fix for EFI.
+On 9/22/22 07:47, Samuel Holland wrote:
+> Before commit 44c922572952 ("RISC-V: enable XIP"), these macros cast
+> their argument to unsigned long. That commit moved the cast after an
+> assignment to an unsigned long variable, rendering it ineffectual.
+> Move the cast back, so we can remove the cast at each call site.
+>
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> ---
+>
+>   arch/riscv/errata/thead/errata.c |  4 ++--
+>   arch/riscv/include/asm/page.h    | 18 +++++++++---------
+>   arch/riscv/mm/init.c             | 16 ++++++++--------
+>   3 files changed, 19 insertions(+), 19 deletions(-)
+>
+> diff --git a/arch/riscv/errata/thead/errata.c b/arch/riscv/errata/thead/errata.c
+> index 83174f13783e..38c2c6b0f6b8 100644
+> --- a/arch/riscv/errata/thead/errata.c
+> +++ b/arch/riscv/errata/thead/errata.c
+> @@ -76,8 +76,8 @@ void __init_or_module thead_errata_patch_func(struct alt_entry *begin, struct al
+>   		if (cpu_req_errata & tmp) {
+>   			/* On vm-alternatives, the mmu isn't running yet */
+>   			if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
+> -				memcpy((void *)kernel_mapping_va_to_pa((unsigned long)alt->old_ptr),
+> -				       (void *)kernel_mapping_va_to_pa((unsigned long)alt->alt_ptr),
+> +				memcpy((void *)kernel_mapping_va_to_pa(alt->old_ptr),
+> +				       (void *)kernel_mapping_va_to_pa(alt->alt_ptr),
+>   				       alt->alt_len);
+>   			else
+>   				patch_text_nosync(alt->old_ptr, alt->alt_ptr, alt->alt_len);
+> diff --git a/arch/riscv/include/asm/page.h b/arch/riscv/include/asm/page.h
+> index ac70b0fd9a9a..9f432c1b5289 100644
+> --- a/arch/riscv/include/asm/page.h
+> +++ b/arch/riscv/include/asm/page.h
+> @@ -123,20 +123,20 @@ extern phys_addr_t phys_ram_base;
+>   	((x) >= PAGE_OFFSET && (!IS_ENABLED(CONFIG_64BIT) || (x) < PAGE_OFFSET + KERN_VIRT_SIZE))
+>   
+>   #define linear_mapping_pa_to_va(x)	((void *)((unsigned long)(x) + kernel_map.va_pa_offset))
+> -#define kernel_mapping_pa_to_va(y)	({						\
+> -	unsigned long _y = y;								\
+> -	(IS_ENABLED(CONFIG_XIP_KERNEL) && _y < phys_ram_base) ?					\
+> -		(void *)((unsigned long)(_y) + kernel_map.va_kernel_xip_pa_offset) :		\
+> -		(void *)((unsigned long)(_y) + kernel_map.va_kernel_pa_offset + XIP_OFFSET);	\
+> +#define kernel_mapping_pa_to_va(y)	({					\
+> +	unsigned long _y = (unsigned long)(y);					\
+> +	(IS_ENABLED(CONFIG_XIP_KERNEL) && _y < phys_ram_base) ?			\
+> +		(void *)(_y + kernel_map.va_kernel_xip_pa_offset) :		\
+> +		(void *)(_y + kernel_map.va_kernel_pa_offset + XIP_OFFSET);	\
+>   	})
+>   #define __pa_to_va_nodebug(x)		linear_mapping_pa_to_va(x)
+>   
+>   #define linear_mapping_va_to_pa(x)	((unsigned long)(x) - kernel_map.va_pa_offset)
+>   #define kernel_mapping_va_to_pa(y) ({						\
+> -	unsigned long _y = y;							\
+> -	(IS_ENABLED(CONFIG_XIP_KERNEL) && _y < kernel_map.virt_addr + XIP_OFFSET) ?	\
+> -		((unsigned long)(_y) - kernel_map.va_kernel_xip_pa_offset) :		\
+> -		((unsigned long)(_y) - kernel_map.va_kernel_pa_offset - XIP_OFFSET);	\
+> +	unsigned long _y = (unsigned long)(y);					\
+> +	(IS_ENABLED(CONFIG_XIP_KERNEL) && _y < kernel_map.virt_addr + XIP_OFFSET) ? \
+> +		(_y - kernel_map.va_kernel_xip_pa_offset) :			\
+> +		(_y - kernel_map.va_kernel_pa_offset - XIP_OFFSET);		\
+>   	})
+>   
+>   #define __va_to_pa_nodebug(x)	({						\
+> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+> index b56a0a75533f..7d59516ce6b3 100644
+> --- a/arch/riscv/mm/init.c
+> +++ b/arch/riscv/mm/init.c
+> @@ -927,15 +927,15 @@ static void __init pt_ops_set_early(void)
+>    */
+>   static void __init pt_ops_set_fixmap(void)
+>   {
+> -	pt_ops.alloc_pte = kernel_mapping_pa_to_va((uintptr_t)alloc_pte_fixmap);
+> -	pt_ops.get_pte_virt = kernel_mapping_pa_to_va((uintptr_t)get_pte_virt_fixmap);
+> +	pt_ops.alloc_pte = kernel_mapping_pa_to_va(alloc_pte_fixmap);
+> +	pt_ops.get_pte_virt = kernel_mapping_pa_to_va(get_pte_virt_fixmap);
+>   #ifndef __PAGETABLE_PMD_FOLDED
+> -	pt_ops.alloc_pmd = kernel_mapping_pa_to_va((uintptr_t)alloc_pmd_fixmap);
+> -	pt_ops.get_pmd_virt = kernel_mapping_pa_to_va((uintptr_t)get_pmd_virt_fixmap);
+> -	pt_ops.alloc_pud = kernel_mapping_pa_to_va((uintptr_t)alloc_pud_fixmap);
+> -	pt_ops.get_pud_virt = kernel_mapping_pa_to_va((uintptr_t)get_pud_virt_fixmap);
+> -	pt_ops.alloc_p4d = kernel_mapping_pa_to_va((uintptr_t)alloc_p4d_fixmap);
+> -	pt_ops.get_p4d_virt = kernel_mapping_pa_to_va((uintptr_t)get_p4d_virt_fixmap);
+> +	pt_ops.alloc_pmd = kernel_mapping_pa_to_va(alloc_pmd_fixmap);
+> +	pt_ops.get_pmd_virt = kernel_mapping_pa_to_va(get_pmd_virt_fixmap);
+> +	pt_ops.alloc_pud = kernel_mapping_pa_to_va(alloc_pud_fixmap);
+> +	pt_ops.get_pud_virt = kernel_mapping_pa_to_va(get_pud_virt_fixmap);
+> +	pt_ops.alloc_p4d = kernel_mapping_pa_to_va(alloc_p4d_fixmap);
+> +	pt_ops.get_p4d_virt = kernel_mapping_pa_to_va(get_p4d_virt_fixmap);
+>   #endif
+>   }
+>   
+
+
+Indeed, the inner cast was useless:
+
+Reviewed-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
 
 Thanks,
-Ard.
 
-[0] https://lore.kernel.org/all/166383158063.107920.1563965268305325639.b4-ty@redhat.com/
+Alex
 
-
-
-
-> ---
->  arch/x86/boot/header.S                  | 2 +-
->  drivers/firmware/efi/libstub/x86-stub.c | 7 +++++++
->  2 files changed, 8 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/x86/boot/header.S b/arch/x86/boot/header.S
-> index f912d7770130..e4e2d6e33924 100644
-> --- a/arch/x86/boot/header.S
-> +++ b/arch/x86/boot/header.S
-> @@ -307,7 +307,7 @@ _start:
->         # Part 2 of the header, from the old setup.S
->
->                 .ascii  "HdrS"          # header signature
-> -               .word   0x020f          # header version number (>= 0x0105)
-> +               .word   0x0210          # header version number (>= 0x0105)
->                                         # or else old loadlin-1.5 will fail)
->                 .globl realmode_swtch
->  realmode_swtch:        .word   0, 0            # default_switch, SETUPSEG
-> diff --git a/drivers/firmware/efi/libstub/x86-stub.c b/drivers/firmware/efi/libstub/x86-stub.c
-> index 05ae8bcc9d67..9780f32a9f24 100644
-> --- a/drivers/firmware/efi/libstub/x86-stub.c
-> +++ b/drivers/firmware/efi/libstub/x86-stub.c
-> @@ -517,6 +517,13 @@ efi_status_t __efiapi efi_pe_entry(efi_handle_t handle,
->         hdr->ramdisk_image = 0;
->         hdr->ramdisk_size = 0;
->
-> +       /*
-> +        * Disregard any setup data that was provided by the bootloader:
-> +        * setup_data could be pointing anywhere, and we have no way of
-> +        * authenticating or validating the payload.
-> +        */
-> +       hdr->setup_data = 0;
-> +
->         efi_stub_entry(handle, sys_table_arg, boot_params);
->         /* not reached */
->
-> --
-> 2.37.3
->
