@@ -2,68 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8557D5E64DD
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 16:13:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C5A85E64E0
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 16:14:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231593AbiIVONh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 10:13:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52820 "EHLO
+        id S231586AbiIVOOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 10:14:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230266AbiIVONd (ORCPT
+        with ESMTP id S231424AbiIVOOL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 10:13:33 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94CD18768F
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 07:13:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=aBYt055UUb+wOT56a3sdr9XVeyIyRkejUmbCDc/HXxg=; b=DpBfyDE6gE7AgC2KPFHBpJ1mVC
-        wZZBmX7IqjyQTk8DC+j36L39onORsqtHEWUdOHVPCXLPMNjg3Zb1qym0yGMmdwj1PcuvR4M0z1lZh
-        ZLwt4MW4GR/6STPP/ccvugTnPnhjd6+iCw6Sa4K3u5ffPp6mx1I9FzBn5S47H01iYqT11q8UtDD8b
-        CM7dbEKh7VVgbyaSNA6M4xyPZdF/J4ogcXMUh9/8ynakeX3k5lf42XN59FxlHm8tdHvkNOa0DwZfH
-        eS5ZzF7HNWhiRXJiO0raB6NiscsZivORxJO1/p2ZcLss5TGAX00xgv93sEmZIL5I2dDd8NVFHhH4T
-        YxauYXzg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1obMx9-00EyWa-5c; Thu, 22 Sep 2022 14:13:23 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 727FE300169;
-        Thu, 22 Sep 2022 16:13:22 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 598772BBFE78A; Thu, 22 Sep 2022 16:13:22 +0200 (CEST)
-Date:   Thu, 22 Sep 2022 16:13:22 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, ndesaulniers@google.com
-Subject: Re: [peterz-queue:sched/idle 45/48] vmlinux.o: warning: objtool:
- enter_s2idle_proper+0x78: call to ct_cpuidle_exit() leaves .noinstr.text
- section
-Message-ID: <Yyxtgs/jRYcyH43f@hirez.programming.kicks-ass.net>
-References: <202209220456.cXRrGXs7-lkp@intel.com>
+        Thu, 22 Sep 2022 10:14:11 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF1BF3119;
+        Thu, 22 Sep 2022 07:14:10 -0700 (PDT)
+Received: from fraeml741-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MYHG86tvcz689lY;
+        Thu, 22 Sep 2022 22:09:20 +0800 (CST)
+Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
+ fraeml741-chm.china.huawei.com (10.206.15.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 22 Sep 2022 16:14:08 +0200
+Received: from [10.195.244.8] (10.195.244.8) by lhrpeml500003.china.huawei.com
+ (7.191.162.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 22 Sep
+ 2022 15:14:07 +0100
+Message-ID: <650e35b7-9d90-fe03-7d92-48207644536b@huawei.com>
+Date:   Thu, 22 Sep 2022 15:14:06 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202209220456.cXRrGXs7-lkp@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH 1/7] scsi: libsas: introduce sas address conversion and
+ comparation helpers
+To:     Jason Yan <yanaijie@huawei.com>, <martin.petersen@oracle.com>,
+        <jejb@linux.ibm.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <hare@suse.com>, <hch@lst.de>, <bvanassche@acm.org>,
+        <jinpu.wang@cloud.ionos.com>
+References: <20220917104311.1878250-1-yanaijie@huawei.com>
+ <20220917104311.1878250-2-yanaijie@huawei.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <20220917104311.1878250-2-yanaijie@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.195.244.8]
+X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
+ lhrpeml500003.china.huawei.com (7.191.162.67)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 04:34:47AM +0800, kernel test robot wrote:
+On 17/09/2022 11:43, Jason Yan wrote:
+> Sas address conversion and comparation is widely used in libsas and
+> drivers. However they are all opencoded and to avoid the line spill over
+> 80 columns, are mostly split into multi-lines. Introduce some helpers to
+> prepare some refactor.
+> 
+> Signed-off-by: Jason Yan <yanaijie@huawei.com>
+> ---
+>   include/scsi/libsas.h | 32 ++++++++++++++++++++++++++++++++
+>   1 file changed, 32 insertions(+)
+> 
+> diff --git a/include/scsi/libsas.h b/include/scsi/libsas.h
+> index 2dbead74a2af..382aedf31fa4 100644
+> --- a/include/scsi/libsas.h
+> +++ b/include/scsi/libsas.h
+> @@ -648,6 +648,38 @@ static inline bool sas_is_internal_abort(struct sas_task *task)
+>   	return task->task_proto == SAS_PROTOCOL_INTERNAL_ABORT;
+>   }
+>   
+> +static inline unsigned long long ex_phy_addr(struct ex_phy *phy)
 
-> >> vmlinux.o: warning: objtool: enter_s2idle_proper+0x78: call to ct_cpuidle_exit() leaves .noinstr.text section
-> >> vmlinux.o: warning: objtool: cpuidle_enter_state+0x111: call to ct_cpuidle_exit() leaves .noinstr.text section
+This is a public header, so I would hope that any function would have 
+"sas_" prefix
 
-include/linux/cpuidle.h:static __always_inline void ct_cpuidle_exit(void)
+> +{
+> +	return SAS_ADDR(phy->attached_sas_addr);
+> +}
+> +
+> +static inline unsigned long long dev_addr(struct domain_device *dev)
+> +{
+> +	return SAS_ADDR(dev->sas_addr);
+> +}
+> +
+> +static inline unsigned long long port_addr(struct asd_sas_port *port)
+> +{
+> +	return SAS_ADDR(port->sas_addr);
 
-Dear LLVM folks, ... WTF ?!?
+As below, I don't really see how these simple functions help much
+
+> +}
+> +
+> +static inline bool dev_and_phy_addr_same(struct domain_device *dev,
+> +					 struct ex_phy *phy)
+> +{
+> +	return dev_addr(dev) == ex_phy_addr(phy);
+> +}
+> +
+> +static inline bool port_and_phy_addr_same(struct asd_sas_port *port,
+> +					  struct ex_phy *phy)
+
+I'd say sas_phy_match_port_addr() could be a better name.
+
+> +{
+> +	return port_addr(port) == ex_phy_addr(phy);
+
+I think the following is just as good:
+
+	return SAS_ADDR(port->sas_addr) == SAS_ADDR(phy->attached_sas_addr)
+
+port_addr() is only used once AFAICS, so the code would not be less concise
+
+> +}
+> +
+> +static inline bool ex_phy_addr_same(struct ex_phy *phy1, struct ex_phy *phy2)
+> +{
+> +	return  ex_phy_addr(phy1) ==  ex_phy_addr(phy2);
+
+nit: 2x double whitespace
+
+> +}
+> +
+>   struct sas_domain_function_template {
+>   	/* The class calls these to notify the LLDD of an event. */
+>   	void (*lldd_port_formed)(struct asd_sas_phy *);
+
+Thanks,
+John
