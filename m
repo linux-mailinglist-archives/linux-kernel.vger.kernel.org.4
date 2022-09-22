@@ -2,40 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E218F5E5F07
+	by mail.lfdr.de (Postfix) with ESMTP id 4136A5E5F05
 	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 11:54:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231285AbiIVJyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 05:54:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49068 "EHLO
+        id S230523AbiIVJyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 05:54:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231233AbiIVJxk (ORCPT
+        with ESMTP id S231244AbiIVJxk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 22 Sep 2022 05:53:40 -0400
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35878D58A9;
-        Thu, 22 Sep 2022 02:53:27 -0700 (PDT)
-Received: from fraeml736-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MY9TL4Ff9z689t8;
-        Thu, 22 Sep 2022 17:48:38 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08F7BD58AD;
+        Thu, 22 Sep 2022 02:53:29 -0700 (PDT)
+Received: from fraeml737-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MY9Xr4Hmnz67kTG;
+        Thu, 22 Sep 2022 17:51:40 +0800 (CST)
 Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml736-chm.china.huawei.com (10.206.15.217) with Microsoft SMTP Server
+ fraeml737-chm.china.huawei.com (10.206.15.218) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 22 Sep 2022 11:53:25 +0200
+ 15.1.2375.31; Thu, 22 Sep 2022 11:53:27 +0200
 Received: from localhost.localdomain (10.69.192.58) by
  lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 22 Sep 2022 10:53:22 +0100
+ 15.1.2375.31; Thu, 22 Sep 2022 10:53:25 +0100
 From:   John Garry <john.garry@huawei.com>
 To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
         <jinpu.wang@cloud.ionos.com>, <damien.lemoal@opensource.wdc.com>
 CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linuxarm@huawei.com>, <yangxingui@huawei.com>,
         John Garry <john.garry@huawei.com>
-Subject: [PATCH v4 0/7] libsas and drivers: NCQ error handling
-Date:   Thu, 22 Sep 2022 17:46:51 +0800
-Message-ID: <1663840018-50161-1-git-send-email-john.garry@huawei.com>
+Subject: [PATCH v4 1/7] scsi: libsas: Add sas_ata_device_link_abort()
+Date:   Thu, 22 Sep 2022 17:46:52 +0800
+Message-ID: <1663840018-50161-2-git-send-email-john.garry@huawei.com>
 X-Mailer: git-send-email 2.8.1
+In-Reply-To: <1663840018-50161-1-git-send-email-john.garry@huawei.com>
+References: <1663840018-50161-1-git-send-email-john.garry@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.69.192.58]
@@ -51,79 +53,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As reported in [0], the pm8001 driver NCQ error handling more or less
-duplicates what libata does in link error handling, as follows:
-- abort all commands
-- do autopsy with read log ext 10 command
-- reset the target to recover, if necessary
+Similar to how AHCI handles NCQ errors in ahci_error_intr() ->
+ata_port_abort() -> ata_do_link_abort(), add an NCQ error handler for LLDDs
+to call to initiate a link abort.
 
-Indeed for the hisi_sas driver we want to add similar handling for NCQ
-errors.
+This will mark all outstanding QCs as failed and kick-off EH.
 
-This series add a new libsas API - sas_ata_device_link_abort() - to handle
-host NCQ errors, and fixes up pm8001 and hisi_sas drivers to use it.
+Note:
+A "force reset" argument is added for drivers which require the ATA error
+handling to always reset the device.
 
-A difference in the pm8001 driver NCQ error handling is that we send
-SATA_ABORT per-task prior to read log ext10, but I feel that this should
-not make a difference to the error handling.
+A driver may require this feature for when SATA device per-SCSI cmnd
+resources are only released during reset for ATA EH. As such, we need an
+option to force reset to be done, regardless of what any EH autopsy
+decides.
 
-Damien kindly tested previous the series for pm8001, but any further pm8001
-testing would be appreciated as I have since tweaked pm8001 handling again.
-This is because the pm8001 driver hangs on my arm64 machine read log ext10
-command.
+Suggested-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: John Garry <john.garry@huawei.com>
+Tested-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+---
+ drivers/scsi/libsas/sas_ata.c | 12 ++++++++++++
+ include/scsi/sas_ata.h        |  6 ++++++
+ 2 files changed, 18 insertions(+)
 
-Finally with these changes we can make the libsas task alloc/free APIs
-private, which they should always have been.
-
-Based on mkp-scsi @ 6.1/scsi-staging 7f615c1b5986 ("scsi:
-scsi_transport_fc: Use %u for dev_loss_tmo")
-
-[0] https://lore.kernel.org/linux-scsi/8fb3b093-55f0-1fab-81f4-e8519810a978@huawei.com/
-
-Changes since v3:
-- Add Damien's tags (thanks)
-- Modify hisi_sas processing as follows:
-  - use sas_task_abort() for rejected IO
-  - Modify abort task processing to issue softreset in certain circumstances
-- rebase
-
-Changes since v2:
-- Stop sending SATA_ABORT all for pm8001 handling
-- Make "reset" optional in sas_ata_device_link_abort()
-- Drop Jack's ACK
-
-Changes since v1:
-- Rename sas_ata_link_abort() -> sas_ata_device_link_abort()
-- Set EH RESET flag in sas_ata_device_link_abort()
-- Add Jack's Ack tags
-- Rebase
-
-John Garry (5):
-  scsi: libsas: Add sas_ata_device_link_abort()
-  scsi: hisi_sas: Move slot variable definition in hisi_sas_abort_task()
-  scsi: pm8001: Modify task abort handling for SATA task
-  scsi: pm8001: Use sas_ata_device_link_abort() to handle NCQ errors
-  scsi: libsas: Make sas_{alloc, alloc_slow, free}_task() private
-
-Xingui Yang (2):
-  scsi: hisi_sas: Add SATA_DISK_ERR bit handling for v3 hw
-  scsi: hisi_sas: Modify v3 HW SATA disk error state completion
-    processing
-
- drivers/scsi/hisi_sas/hisi_sas.h       |   1 +
- drivers/scsi/hisi_sas/hisi_sas_main.c  |  26 +++-
- drivers/scsi/hisi_sas/hisi_sas_v3_hw.c |  53 ++++++-
- drivers/scsi/libsas/sas_ata.c          |  12 ++
- drivers/scsi/libsas/sas_init.c         |   3 -
- drivers/scsi/libsas/sas_internal.h     |   4 +
- drivers/scsi/pm8001/pm8001_hwi.c       | 188 ++++---------------------
- drivers/scsi/pm8001/pm8001_sas.c       |   8 ++
- drivers/scsi/pm8001/pm8001_sas.h       |   4 -
- drivers/scsi/pm8001/pm80xx_hwi.c       | 177 +++--------------------
- include/scsi/libsas.h                  |   4 -
- include/scsi/sas_ata.h                 |   6 +
- 12 files changed, 143 insertions(+), 343 deletions(-)
-
+diff --git a/drivers/scsi/libsas/sas_ata.c b/drivers/scsi/libsas/sas_ata.c
+index d35c9296f738..bdffb6852dcf 100644
+--- a/drivers/scsi/libsas/sas_ata.c
++++ b/drivers/scsi/libsas/sas_ata.c
+@@ -861,6 +861,18 @@ void sas_ata_wait_eh(struct domain_device *dev)
+ 	ata_port_wait_eh(ap);
+ }
+ 
++void sas_ata_device_link_abort(struct domain_device *device, bool force_reset)
++{
++	struct ata_port *ap = device->sata_dev.ap;
++	struct ata_link *link = &ap->link;
++
++	link->eh_info.err_mask |= AC_ERR_DEV;
++	if (force_reset)
++		link->eh_info.action |= ATA_EH_RESET;
++	ata_link_abort(link);
++}
++EXPORT_SYMBOL_GPL(sas_ata_device_link_abort);
++
+ int sas_execute_ata_cmd(struct domain_device *device, u8 *fis, int force_phy_id)
+ {
+ 	struct sas_tmf_task tmf_task = {};
+diff --git a/include/scsi/sas_ata.h b/include/scsi/sas_ata.h
+index a1df4f9d57a3..e47f0aec0722 100644
+--- a/include/scsi/sas_ata.h
++++ b/include/scsi/sas_ata.h
+@@ -32,6 +32,7 @@ void sas_probe_sata(struct asd_sas_port *port);
+ void sas_suspend_sata(struct asd_sas_port *port);
+ void sas_resume_sata(struct asd_sas_port *port);
+ void sas_ata_end_eh(struct ata_port *ap);
++void sas_ata_device_link_abort(struct domain_device *dev, bool force_reset);
+ int sas_execute_ata_cmd(struct domain_device *device, u8 *fis,
+ 			int force_phy_id);
+ int sas_ata_wait_after_reset(struct domain_device *dev, unsigned long deadline);
+@@ -87,6 +88,11 @@ static inline void sas_ata_end_eh(struct ata_port *ap)
+ {
+ }
+ 
++static inline void sas_ata_device_link_abort(struct domain_device *dev,
++					     bool force_reset)
++{
++}
++
+ static inline int sas_execute_ata_cmd(struct domain_device *device, u8 *fis,
+ 				      int force_phy_id)
+ {
 -- 
 2.35.3
 
