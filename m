@@ -2,106 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 864D65E62D4
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 14:52:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA41A5E62E8
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 14:54:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231579AbiIVMwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 08:52:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56300 "EHLO
+        id S231821AbiIVMyI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 08:54:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231478AbiIVMwH (ORCPT
+        with ESMTP id S231749AbiIVMxm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 08:52:07 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA2BE11D5
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 05:52:06 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id h3so10898863lja.1
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 05:52:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=PNn1OQ2Plf4WVBh8wbrS607nOaHGst3TaPaRJYK7Aak=;
-        b=CVGA+9eYGLDgWkSPKlFtUYW7Io1/rFSCvwEMKB7Gs/8EG6JZbR6Klv1N/Ssdfs+JO6
-         3Kr1a01uH9k/kaacPBCO4DpAJ4HrfKFcCD7ZgKpoPkG6YHm7RaUDrQB1ciLK6fvi23F+
-         LAe8eD4drDrtN1FtQURTmtvpR2coeGjD+xWZt61UNnAOy4+gomuZPUYs+X0rgsqOlE89
-         1mk4T0wlxkGlScUZZk+4wtbPpL+LnUTrsbMSOGutcLpxe9NwTsPY9IopfBRrBg1XEaBZ
-         ML0D2CDd32mohuD8Xstavzd0cUwk3sfurhLWThgIctivIdhfRmfWDtlydGQS3DGOysSh
-         V8tA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=PNn1OQ2Plf4WVBh8wbrS607nOaHGst3TaPaRJYK7Aak=;
-        b=7xDVBTp41nnGdXuaivagKrSRGHH6bATzoC5U24k51v2EpimgYbEvDrpJ/MCyB4rPPH
-         3K89EDqc0dCUEsjM86gGdSdqlYyVBK76dpHuvMKSLZBeikRAtwQ8mvwk+jAsfeo8auIX
-         51zBUwTDRvfggHU7mAj+qRZU2rMmChYEcKhlZFGNRWbRKMswtBysVMw+R9dlVGTmuz9U
-         3XW1/UA5Q5SMoktMosm+bmz77K5fGLQXKYJQPe8JsgS3qrY5d/Yr+wnwI0mMT3EUKcXT
-         SebuIgJ2Kw9iyFsd7v7/aaHPqQXxqi+74eNAzQBdGh6ZT9IxhmhBZhww90gE26elyJGQ
-         F/gQ==
-X-Gm-Message-State: ACrzQf0pdyRdf+T0oberUPPCqYGaxPdHEIbyD42/N3kk0RO3wGX1dSCf
-        7C5B6zYw88800Q2o/Pr05VbPWg==
-X-Google-Smtp-Source: AMsMyM5673D4f9tuM/pxeZPs6CGF5k+tgPEYNZ/c3GXJJnsbfS77mWqxFlfpPqoIXPaNAY62naOkMg==
-X-Received: by 2002:a2e:b712:0:b0:26a:d1d9:f8d1 with SMTP id j18-20020a2eb712000000b0026ad1d9f8d1mr1100753ljo.271.1663851124500;
-        Thu, 22 Sep 2022 05:52:04 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id t7-20020a05651c204700b0026acd11cd51sm904641ljo.59.2022.09.22.05.52.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Sep 2022 05:52:04 -0700 (PDT)
-Message-ID: <179bc9a0-8d11-cc3e-80f6-25bb15325e35@linaro.org>
-Date:   Thu, 22 Sep 2022 14:52:02 +0200
+        Thu, 22 Sep 2022 08:53:42 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AFE3E99A0
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 05:53:23 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28MCkSBx031015;
+        Thu, 22 Sep 2022 12:53:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type : subject :
+ from : in-reply-to : date : cc : message-id : references : to :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=EMMrbPpnVu2KIeviMqn2ADJFSOeRHY+vjNS+Z/uUL4g=;
+ b=Djw/J0RTUtlMq8mAjXvAx3MVmmMLny0h0S+g1V6verBy6VY/jiwayzQonrNN0TwTI0Ti
+ 9hWxFgbBZq3u/vDW/K8cnnEz8a4JNoA1Rarcp2LWzAPfg7q57+9LpGiwuZZJvl9SVL4Z
+ HC6p9z/6L+H2JNOfaWWWTZQCkE8SW9n/JhjGoOKVnT58R1H5HwOwVaxfyCOLDrMNUYSF
+ ugEHOqGyMhMILexidplyEXvzvQVUBAWdPG/bL7NRhE0ggfNjnKC8HWOdWY1QXJ9i4i8P
+ VjUO75V3nP7Ty3vSEnsP8vAgeOZZlNN4HiZwq5X61jFvj7zJYLT40HbYGkky12Kt0d0f RA== 
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jrptcaghj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Sep 2022 12:53:13 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28MCq1vE031346;
+        Thu, 22 Sep 2022 12:53:11 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06fra.de.ibm.com with ESMTP id 3jn5ghmyv5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Sep 2022 12:53:11 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28MCr91F30081364
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 22 Sep 2022 12:53:09 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5DE7CA4051;
+        Thu, 22 Sep 2022 12:53:09 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5597CA404D;
+        Thu, 22 Sep 2022 12:53:08 +0000 (GMT)
+Received: from smtpclient.apple (unknown [9.43.115.178])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 22 Sep 2022 12:53:08 +0000 (GMT)
+Content-Type: text/plain;
+        charset=us-ascii
+Subject: Re: [powerpc] Kernel crash with THP tests (next-20220920)
+From:   Sachin Sant <sachinp@linux.ibm.com>
+In-Reply-To: <YyuhD+7N022PgRA+@monkey>
+Date:   Thu, 22 Sep 2022 18:23:04 +0530
+Cc:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, linux-mm@kvack.org,
+        open list <linux-kernel@vger.kernel.org>
+Message-Id: <5B4296E1-922B-4B01-A16D-CB427761FD2E@linux.ibm.com>
+References: <C2C8DA4F-F00F-43E9-ACD8-2A8BACA55893@linux.ibm.com>
+ <YyuhD+7N022PgRA+@monkey>
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: egoh55Pn-Vyx9HaWGHlKKX99qDCQ2z8X
+X-Proofpoint-ORIG-GUID: egoh55Pn-Vyx9HaWGHlKKX99qDCQ2z8X
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v1 03/17] dt-bindings: phy: mediatek: hdmi-phy: Add mt8195
- compatible
-Content-Language: en-US
-To:     Guillaume Ranquet <granquet@baylibre.com>,
-        Vinod Koul <vkoul@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        CK Hu <ck.hu@mediatek.com>, Jitao shi <jitao.shi@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-mediatek@lists.infradead.org,
-        dri-devel@lists.freedesktop.org,
-        Pablo Sun <pablo.sun@mediatek.com>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org
-References: <20220919-v1-0-4844816c9808@baylibre.com>
- <20220919-v1-3-4844816c9808@baylibre.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220919-v1-3-4844816c9808@baylibre.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-22_08,2022-09-22_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
+ mlxscore=0 impostorscore=0 lowpriorityscore=0 mlxlogscore=999
+ clxscore=1015 priorityscore=1501 suspectscore=0 spamscore=0 adultscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209220083
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/09/2022 18:56, Guillaume Ranquet wrote:
-> Add a compatible for the HDMI PHY on MT8195
-> 
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> 
 
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> On 22-Sep-2022, at 5:11 AM, Mike Kravetz <mike.kravetz@oracle.com> wrote:
+>=20
+> On 09/21/22 12:00, Sachin Sant wrote:
+>> While running transparent huge page tests [1] against 6.0.0-rc6-next-202=
+20920
+>> following crash is seen on IBM Power server.
+>=20
+> Thanks Sachin,
+>=20
+> Naoya reported this, with my analysis here:
+> https://lore.kernel.org/linux-mm/YyqCS6+OXAgoqI8T@monkey/
+>=20
 
-Best regards,
-Krzysztof
+Thanks Mike for the pointer.
 
+> An updated version of the patch was posted here,
+> https://lore.kernel.org/linux-mm/20220921202702.106069-1-mike.kravetz@ora=
+cle.com/
+>=20
+This updated patch works for me. The test runs to completion without any
+issues.
+
+- Sachin=
