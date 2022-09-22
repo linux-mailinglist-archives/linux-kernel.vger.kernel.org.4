@@ -2,184 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAF4B5E6C46
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 21:56:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C073D5E6C4D
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 21:57:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231459AbiIVT4o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 15:56:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59348 "EHLO
+        id S232377AbiIVT5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 15:57:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229841AbiIVT4l (ORCPT
+        with ESMTP id S229841AbiIVT5C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 15:56:41 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA9B1DCCF2;
-        Thu, 22 Sep 2022 12:56:40 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28MJIpOF020737;
-        Thu, 22 Sep 2022 19:56:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=ZTkz8vQtvEkZ4vLdSZN+/b90HRPomAuoAiLsUZcB2Ps=;
- b=PW/alb1xPAP6ya97a9ryc5lU/Zia4MPWt5OC3UERyrOzSvB9clsdHejfqJD6cPIIoK74
- grlzcQWemhuidMOtgUeC4SBs8laUjsf8fRFVsWKv6ehWqyavjblPkNQLN8bKUOgBz/PK
- FYE0bqDAE4SAHz5p7CkL7F0XsE35HJS1dG0rXlIYRLE/Ko26+t/q1rGi4KUaoabzQWPL
- 9d2O4RfB/neS5XsG74WDt0LyH3AZPapYRwVzOS24md7jD9QDfxFgZb3P/zF5V786B8R9
- qe+lBY1AOB2KasrKhUeadljmiLAf5sSiwwDt4v0JxKzwcJkRgHyGh/Av0xBS/htRwlo5 7Q== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jr85v3eav-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Sep 2022 19:56:29 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28MJuSAi028017
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Sep 2022 19:56:28 GMT
-Received: from [10.110.101.161] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Thu, 22 Sep
- 2022 12:56:27 -0700
-Message-ID: <a77be457-7009-02bc-6a67-33b2cd22429a@quicinc.com>
-Date:   Thu, 22 Sep 2022 12:56:26 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [Freedreno] [PATCH v2 07/10] drm/msm/dp: fix bridge lifetime
-Content-Language: en-US
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        "Rob Clark" <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>
-CC:     <dri-devel@lists.freedesktop.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        <linux-arm-msm@vger.kernel.org>,
+        Thu, 22 Sep 2022 15:57:02 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FE3BE3EEE
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 12:56:58 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id f9so16458615lfr.3
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 12:56:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=fU7aBgbNyNLK4wEELvIvKb9NKSAL12dAtC5uKY+2RK8=;
+        b=e+164a1tcJKv/LFCGbEZc4CxkM3g65yzCqrU3YXmMnXbvXIm3KsgsBthIJ7tpsrHaQ
+         YkY3UWjOu6SwusuJr2eL38kaLmbBnjesYwJTFsRlgtKSn1XaeVaPugGDe+EwmllingBo
+         C+Rl/xb8iS5RutJ346WSm3F+a3Na3u51IEUym/ar4toPLRKvukY5iU71DOnlCQTxV0b4
+         SZCCHZl7d3AfY8JJChVoauQAn7i9XWJ+jEi15nRYSgsM84DWa6LMHwg7x9dmoj+/9erv
+         o87hqe6N05br+iDB3IfXFRLfXV+M6IgCyxWoLPAX2gmuMI1I5n9shU+RyGdqJl0ie+83
+         2V6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=fU7aBgbNyNLK4wEELvIvKb9NKSAL12dAtC5uKY+2RK8=;
+        b=HpT9TUi6HzOE38tLzqlhPFFWEK7LF5z4kzUL8rtf9bia+Wsr8KL9RZgaD1JweY7sxo
+         gZtXH2SnrhxfL+n9HGDrpGIhK/kpkhHdycOUKQsgKAj2QA2+a5f/zLDy9QtDrgKAtWPf
+         sKtVlSumJH41no4ToXhHwAXYltUI/OlFHrr1t7LK0KXy6vT8Y5TrqQGUst7C4lTe0P2L
+         qRkmZULQ8APsLa8ivDSDPT4OjDvUuG5gES13hINEuG5HBZ8HsWjoVI2GgUIyS1VTP3jI
+         3RHOpKpzgmOD4nxPx4vkvRxLtTzwnAAbNqOO8sotMe2uatBvnb2jVPIQQkNhHFttzPiF
+         2V7w==
+X-Gm-Message-State: ACrzQf3Mhrbw3QwpMOF7MzJ0RtPrNImpy+52BFnzEBuWwXgLl97nN3gh
+        QmdrLvZqQr4yjNH10BPFWP5/4w==
+X-Google-Smtp-Source: AMsMyM4GoDXnUR1lV3LkbkrO3xMdxw9zaXYH2OwtKxAKiiW+/iAdZWizWIhEL/bqgKyb3uRgiSlHkQ==
+X-Received: by 2002:a05:6512:3da2:b0:499:d70a:e6bc with SMTP id k34-20020a0565123da200b00499d70ae6bcmr2011507lfv.191.1663876616363;
+        Thu, 22 Sep 2022 12:56:56 -0700 (PDT)
+Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id x15-20020a19e00f000000b00498fc3d4d15sm1079375lfg.190.2022.09.22.12.56.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Sep 2022 12:56:55 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        <stable@vger.kernel.org>, Sean Paul <sean@poorly.run>,
-        Steev Klimaszewski <steev@kali.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-References: <20220913085320.8577-1-johan+linaro@kernel.org>
- <20220913085320.8577-8-johan+linaro@kernel.org>
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-In-Reply-To: <20220913085320.8577-8-johan+linaro@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: RSoy-A_-_wUjoXoPl7b3HuMZTwxrR_V-
-X-Proofpoint-GUID: RSoy-A_-_wUjoXoPl7b3HuMZTwxrR_V-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-22_14,2022-09-22_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
- malwarescore=0 phishscore=0 lowpriorityscore=0 mlxscore=0 adultscore=0
- mlxlogscore=999 clxscore=1015 priorityscore=1501 suspectscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209220129
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 00/12] pinctrl/arm64: qcom: continued - fix Qualcomm LPASS pinctrl schema warnings
+Date:   Thu, 22 Sep 2022 21:56:39 +0200
+Message-Id: <20220922195651.345369-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-On 9/13/2022 1:53 AM, Johan Hovold wrote:
-> Device-managed resources allocated post component bind must be tied to
-> the lifetime of the aggregate DRM device or they will not necessarily be
-> released when binding of the aggregate device is deferred.
->
-> This can lead resource leaks or failure to bind the aggregate device
-> when binding is later retried and a second attempt to allocate the
-> resources is made.
->
-> For the DP bridges, previously allocated bridges will leak on probe
-> deferral.
->
-> Fix this by amending the DP parser interface and tying the lifetime of
-> the bridge device to the DRM device rather than DP platform device.
->
-> Fixes: c3bf8e21b38a ("drm/msm/dp: Add eDP support via aux_bus")
-> Cc: stable@vger.kernel.org      # 5.19
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+Set of fixes for LPASS (audio) pin controller bindings and DTS.
 
-Tested-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+Dependencies
+============
+1. dt-bindings are independent of DTS patches.
 
-Reviewed-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+Best regards,
+Krzysztof
 
-> ---
->   drivers/gpu/drm/msm/dp/dp_display.c | 2 +-
->   drivers/gpu/drm/msm/dp/dp_parser.c  | 6 +++---
->   drivers/gpu/drm/msm/dp/dp_parser.h  | 5 +++--
->   3 files changed, 7 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-> index 4b0a2d4bb61e..808a516e84c5 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_display.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
-> @@ -1586,7 +1586,7 @@ static int dp_display_get_next_bridge(struct msm_dp *dp)
->   	 * For DisplayPort interfaces external bridges are optional, so
->   	 * silently ignore an error if one is not present (-ENODEV).
->   	 */
-> -	rc = dp_parser_find_next_bridge(dp_priv->parser);
-> +	rc = devm_dp_parser_find_next_bridge(dp->drm_dev->dev, dp_priv->parser);
->   	if (!dp->is_edp && rc == -ENODEV)
->   		return 0;
->   
-> diff --git a/drivers/gpu/drm/msm/dp/dp_parser.c b/drivers/gpu/drm/msm/dp/dp_parser.c
-> index dd732215d55b..dcbe893d66d7 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_parser.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_parser.c
-> @@ -240,12 +240,12 @@ static int dp_parser_clock(struct dp_parser *parser)
->   	return 0;
->   }
->   
-> -int dp_parser_find_next_bridge(struct dp_parser *parser)
-> +int devm_dp_parser_find_next_bridge(struct device *dev, struct dp_parser *parser)
->   {
-> -	struct device *dev = &parser->pdev->dev;
-> +	struct platform_device *pdev = parser->pdev;
->   	struct drm_bridge *bridge;
->   
-> -	bridge = devm_drm_of_get_bridge(dev, dev->of_node, 1, 0);
-> +	bridge = devm_drm_of_get_bridge(dev, pdev->dev.of_node, 1, 0);
->   	if (IS_ERR(bridge))
->   		return PTR_ERR(bridge);
->   
-> diff --git a/drivers/gpu/drm/msm/dp/dp_parser.h b/drivers/gpu/drm/msm/dp/dp_parser.h
-> index 866c1a82bf1a..d30ab773db46 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_parser.h
-> +++ b/drivers/gpu/drm/msm/dp/dp_parser.h
-> @@ -138,8 +138,9 @@ struct dp_parser {
->   struct dp_parser *dp_parser_get(struct platform_device *pdev);
->   
->   /**
-> - * dp_parser_find_next_bridge() - find an additional bridge to DP
-> + * devm_dp_parser_find_next_bridge() - find an additional bridge to DP
->    *
-> + * @dev: device to tie bridge lifetime to
->    * @parser: dp_parser data from client
->    *
->    * This function is used to find any additional bridge attached to
-> @@ -147,6 +148,6 @@ struct dp_parser *dp_parser_get(struct platform_device *pdev);
->    *
->    * Return: 0 if able to get the bridge, otherwise negative errno for failure.
->    */
-> -int dp_parser_find_next_bridge(struct dp_parser *parser);
-> +int devm_dp_parser_find_next_bridge(struct device *dev, struct dp_parser *parser);
->   
->   #endif
+Krzysztof Kozlowski (12):
+  dt-bindings: pinctrl: qcom,sc8280xp-lpass-lpi: fix gpio pattern
+  dt-bindings: pinctrl: qcom,sm8450-lpass-lpi: fix gpio pattern
+  dt-bindings: pinctrl: qcom,sc7280-lpass-lpi: fix matching pin config
+  dt-bindings: pinctrl: qcom,sc8280xp-lpass-lpi: fix matching pin config
+  dt-bindings: pinctrl: qcom,sm8250-lpass-lpi: fix matching pin config
+  dt-bindings: pinctrl: qcom,sm8450-lpass-lpi: fix matching pin config
+  dt-bindings: pinctrl: qcom,sc7280-lpass-lpi: add bias-bus-hold
+  dt-bindings: pinctrl: qcom,sm8250-lpass-lpi: add bias-bus-hold and
+    input-enable
+  arm64: dts: qcom: sc7280: drop clock-cells from LPASS TLMM
+  arm64: dts: qcom: sc7280: align LPASS pin configuration with DT schema
+  arm64: dts: qcom: sm8250: correct LPASS pin pull down
+  arm64: dts: qcom: sm8250: align LPASS pin configuration with DT schema
+
+ .../qcom,sc7280-lpass-lpi-pinctrl.yaml        | 34 +++++++++++---
+ .../qcom,sc8280xp-lpass-lpi-pinctrl.yaml      | 31 +++++++++++--
+ .../qcom,sm8250-lpass-lpi-pinctrl.yaml        | 42 ++++++++++++++---
+ .../qcom,sm8450-lpass-lpi-pinctrl.yaml        | 38 +++++++++++++--
+ arch/arm64/boot/dts/qcom/sc7280.dtsi          | 34 +++++++-------
+ arch/arm64/boot/dts/qcom/sm8250.dtsi          | 46 +++++++++----------
+ 6 files changed, 166 insertions(+), 59 deletions(-)
+
+-- 
+2.34.1
+
