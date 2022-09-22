@@ -2,164 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B30F75E5A3F
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 06:37:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 358095E5A4E
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 06:40:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbiIVEhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 00:37:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55892 "EHLO
+        id S229776AbiIVEka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 00:40:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbiIVEg4 (ORCPT
+        with ESMTP id S229512AbiIVEk0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 00:36:56 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEB987C74A
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 21:36:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663821415; x=1695357415;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=1XucKgX++zuNVJG9PPzZiYcNFHesLtT/2vAEDgaYSFU=;
-  b=ae5zo0Q9lU8zgOzlWptkXLJjbceQvTP72kVngwMfTrmn7fkhYexgUW+Q
-   4TwQl5WiWDNoZJgWPfg2o1GfGNHZ7Ft+zjWfdBvbgRpi0TID983EtMH4y
-   VpL4Xo0x46uXittsOwCTBMfBRW71Jtq6y+gTjoCP5XWvWZmEMWuBwjILn
-   jbF30aKzyTHsz2lVIQz/W+vYB8YJdzD23m67SuwgICsC7LhALNfEp/CcH
-   wt80hiWpxGuQ4CsZwoPbCXs2xl4Y04JihHbWU8U25qjKL5j8X56N341rt
-   lCWaKsimsL518uwKn62gSESxhBYDdSKDU5FFCEnleY3HcV36XeAEh2Cc7
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="361959487"
-X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
-   d="scan'208";a="361959487"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 21:36:55 -0700
-X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
-   d="scan'208";a="570816471"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 21:36:53 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     haoxin <xhao@linux.alibaba.com>
-Cc:     Zi Yan <ziy@nvidia.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        "Matthew Wilcox" <willy@infradead.org>
-Subject: Re: [RFC 0/6] migrate_pages(): batch TLB flushing
-References: <20220921060616.73086-1-ying.huang@intel.com>
-        <FE41BDA8-F7EC-4FBC-9647-A5A835CDECB0@nvidia.com>
-        <4117f7f5-8156-d8c7-9e48-55a1b632f83d@linux.alibaba.com>
-Date:   Thu, 22 Sep 2022 12:36:45 +0800
-In-Reply-To: <4117f7f5-8156-d8c7-9e48-55a1b632f83d@linux.alibaba.com>
-        (haoxin's message of "Thu, 22 Sep 2022 11:47:41 +0800")
-Message-ID: <87tu50ja8y.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Thu, 22 Sep 2022 00:40:26 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39250883C9;
+        Wed, 21 Sep 2022 21:40:26 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id x1so7685551plv.5;
+        Wed, 21 Sep 2022 21:40:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date;
+        bh=2zbl9tgj4NFm7PKmvB7l9G8vYBtZS9R+8WUfma5ExAI=;
+        b=DDA0pYsyC5qYwF9YM2ZWl5MdN+7D9C/mok35NucRg7vcjW92j/ateO/hg/Ppsqrj4f
+         tTkGNqUHzu1ME/j+1KW+UX/Mq8Wfi1exK1r7ovbZ2Wp3dr3UC+CWC5eXxhU3XVaywvoF
+         x0KWWUbHhesCBSKWMhkEd/y0yawVrvdmLUDZt5NolHjsYMGxwhk2tKU5A/TyMpVciHoG
+         P69EJSCzCpzsDpVuXEQPZ6xsWRyI7XsbWABMB8i6DujvwmUurdhFxTfMnYfe45rwd4gq
+         trEAtYlOWNigxdbiC0/+zlvXJTvCqsJgWER8cVIiIX2NIB4/Rk7OEoGY7FK/J9mIwUV+
+         eMQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date;
+        bh=2zbl9tgj4NFm7PKmvB7l9G8vYBtZS9R+8WUfma5ExAI=;
+        b=xxS7ed/DHV6vyNq9mU36Mghna211Tc2sSrjiVDSj09+dSCUS0bfBbhio+NWFgweB7O
+         GG7pHGp6ejEEXX/a5uMLbtcPQV91kMpvoD7Oj5RpQEeRIl9owenHLLapqnP+1+008Hzo
+         NGanE0qGBC0Vb3slOfK77vi4+6iUAPZgEKym023w3zDKk554vcaFHVC7ETcunXkrcpIN
+         MvwKLSXIAPyDUnshKdhwRTbigteZvC7Kogb/T6NI+y8NMtTqsu2X5nOJb4g02ISPVkxP
+         sDdnyvWJ7c/VJxkXm+NFgKiTL2T0lY4I0E1UdrKAlQ4TvPqGXMKi9pZ+ct73ZZd2c6N5
+         Oo0A==
+X-Gm-Message-State: ACrzQf0v3L7bytixqpwryq8u6piNPXhD/deVUPNz7EnZf28p2tw3RqUS
+        WlTiA5k1ETMsq+M+VoqCzyXSfmn0S4w=
+X-Google-Smtp-Source: AMsMyM6wrlwxHyHurrkjoPuow6mGwsc8PMAfGjNdtWn7WGiVInHdHgDaBVr6v3pesSu6JSe+8by7Dg==
+X-Received: by 2002:a17:902:7887:b0:178:5e8a:e84e with SMTP id q7-20020a170902788700b001785e8ae84emr1600930pll.64.1663821625529;
+        Wed, 21 Sep 2022 21:40:25 -0700 (PDT)
+Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:1040:796c:caf8:4dcf:320d])
+        by smtp.gmail.com with ESMTPSA id 207-20020a6215d8000000b00537a6b81bb7sm3183996pfv.148.2022.09.21.21.40.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Sep 2022 21:40:25 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, Song Liu <songliubraving@fb.com>,
+        bpf@vger.kernel.org
+Subject: [PATCH v2] perf tools: Get a perf cgroup more portably in BPF
+Date:   Wed, 21 Sep 2022 21:40:23 -0700
+Message-Id: <20220922044023.718774-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.37.3.968.ga6b4b080e4-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-haoxin <xhao@linux.alibaba.com> writes:
+The perf_event_cgrp_id can be different on other configurations.
+To be more portable as CO-RE, it needs to get the cgroup subsys id
+using the bpf_core_enum_value() helper.
 
-> Hi Huang,
->
-> This is an exciting change, but on ARM64 machine the TLB
-> flushing are not through IPI, it depends on 'vale1is'
->
-> instructionso I'm wondering if there's also a benefit on arm64,
-> and I'm going to test it on an ARM64 machine.
+Suggested-by: Ian Rogers <irogers@google.com>
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+v2 changes)
+ * fix off_cpu.bpf.c too
+ * get perf_subsys_id only once
 
-We have no arm64 machine to test and I know very little about arm64.
-Thanks for information and testing.
+ tools/perf/util/bpf_skel/bperf_cgroup.bpf.c |  6 +++++-
+ tools/perf/util/bpf_skel/off_cpu.bpf.c      | 12 ++++++++----
+ 2 files changed, 13 insertions(+), 5 deletions(-)
 
-Best Regards,
-Huang, Ying
+diff --git a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
+index 292c430768b5..9223e4b87fe9 100644
+--- a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
++++ b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
+@@ -48,6 +48,7 @@ const volatile __u32 num_cpus = 1;
+ 
+ int enabled = 0;
+ int use_cgroup_v2 = 0;
++int perf_subsys_id = -1;
+ 
+ static inline int get_cgroup_v1_idx(__u32 *cgrps, int size)
+ {
+@@ -58,7 +59,10 @@ static inline int get_cgroup_v1_idx(__u32 *cgrps, int size)
+ 	int level;
+ 	int cnt;
+ 
+-	cgrp = BPF_CORE_READ(p, cgroups, subsys[perf_event_cgrp_id], cgroup);
++	if (perf_subsys_id == -1)
++		perf_subsys_id = bpf_core_enum_value(enum cgroup_subsys_id, perf_event_cgrp_id);
++
++	cgrp = BPF_CORE_READ(p, cgroups, subsys[perf_subsys_id], cgroup);
+ 	level = BPF_CORE_READ(cgrp, level);
+ 
+ 	for (cnt = 0; i < MAX_LEVELS; i++) {
+diff --git a/tools/perf/util/bpf_skel/off_cpu.bpf.c b/tools/perf/util/bpf_skel/off_cpu.bpf.c
+index c4ba2bcf179f..e917ef7b8875 100644
+--- a/tools/perf/util/bpf_skel/off_cpu.bpf.c
++++ b/tools/perf/util/bpf_skel/off_cpu.bpf.c
+@@ -94,6 +94,8 @@ const volatile bool has_prev_state = false;
+ const volatile bool needs_cgroup = false;
+ const volatile bool uses_cgroup_v1 = false;
+ 
++int perf_subsys_id = -1;
++
+ /*
+  * Old kernel used to call it task_struct->state and now it's '__state'.
+  * Use BPF CO-RE "ignored suffix rule" to deal with it like below:
+@@ -119,11 +121,13 @@ static inline __u64 get_cgroup_id(struct task_struct *t)
+ {
+ 	struct cgroup *cgrp;
+ 
+-	if (uses_cgroup_v1)
+-		cgrp = BPF_CORE_READ(t, cgroups, subsys[perf_event_cgrp_id], cgroup);
+-	else
+-		cgrp = BPF_CORE_READ(t, cgroups, dfl_cgrp);
++	if (!uses_cgroup_v1)
++		return BPF_CORE_READ(t, cgroups, dfl_cgrp, kn, id);
++
++	if (perf_subsys_id == -1)
++		perf_subsys_id = bpf_core_enum_value(enum cgroup_subsys_id, perf_event_cgrp_id);
+ 
++	cgrp = BPF_CORE_READ(t, cgroups, subsys[perf_subsys_id], cgroup);
+ 	return BPF_CORE_READ(cgrp, kn, id);
+ }
+ 
+-- 
+2.37.3.968.ga6b4b080e4-goog
 
->
-> ( 2022/9/21 H11:47, Zi Yan S:
->> On 21 Sep 2022, at 2:06, Huang Ying wrote:
->>
->>> From: "Huang, Ying" <ying.huang@intel.com>
->>>
->>> Now, migrate_pages() migrate pages one by one, like the fake code as
->>> follows,
->>>
->>>    for each page
->>>      unmap
->>>      flush TLB
->>>      copy
->>>      restore map
->>>
->>> If multiple pages are passed to migrate_pages(), there are
->>> opportunities to batch the TLB flushing and copying.  That is, we can
->>> change the code to something as follows,
->>>
->>>    for each page
->>>      unmap
->>>    for each page
->>>      flush TLB
->>>    for each page
->>>      copy
->>>    for each page
->>>      restore map
->>>
->>> The total number of TLB flushing IPI can be reduced considerably.  And
->>> we may use some hardware accelerator such as DSA to accelerate the
->>> page copying.
->>>
->>> So in this patch, we refactor the migrate_pages() implementation and
->>> implement the TLB flushing batching.  Base on this, hardware
->>> accelerated page copying can be implemented.
->>>
->>> If too many pages are passed to migrate_pages(), in the naive batched
->>> implementation, we may unmap too many pages at the same time.  The
->>> possibility for a task to wait for the migrated pages to be mapped
->>> again increases.  So the latency may be hurt.  To deal with this
->>> issue, the max number of pages be unmapped in batch is restricted to
->>> no more than HPAGE_PMD_NR.  That is, the influence is at the same
->>> level of THP migration.
->>>
->>> We use the following test to measure the performance impact of the
->>> patchset,
->>>
->>> On a 2-socket Intel server,
->>>
->>>   - Run pmbench memory accessing benchmark
->>>
->>>   - Run `migratepages` to migrate pages of pmbench between node 0 and
->>>     node 1 back and forth.
->>>
->>> With the patch, the TLB flushing IPI reduces 99.1% during the test and
->>> the number of pages migrated successfully per second increases 291.7%.
->> Thank you for the patchset. Batching page migration will definitely
->> improve its throughput from my past experiments[1] and starting with
->> TLB flushing is a good first step.
->>
->> BTW, what is the rationality behind the increased page migration
->> success rate per second?
->>
->>> This patchset is based on v6.0-rc5 and the following patchset,
->>>
->>> [PATCH -V3 0/8] migrate_pages(): fix several bugs in error path
->>> https://lore.kernel.org/lkml/20220817081408.513338-1-ying.huang@intel.com/
->>>
->>> The migrate_pages() related code is converting to folio now. So this
->>> patchset cannot apply recent akpm/mm-unstable branch.  This patchset
->>> is used to check the basic idea.  If it is OK, I will rebase the
->>> patchset on top of folio changes.
->>>
->>> Best Regards,
->>> Huang, Ying
->>
->> [1] https://lwn.net/Articles/784925/
->>
->> --
->> Best Regards,
->> Yan, Zi
