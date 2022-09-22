@@ -2,70 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 878055E5D94
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 10:36:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 223265E5D97
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 10:37:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230040AbiIVIgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 04:36:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59766 "EHLO
+        id S230092AbiIVIhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 04:37:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229985AbiIVIga (ORCPT
+        with ESMTP id S229448AbiIVIhQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 04:36:30 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DCADA61D1;
-        Thu, 22 Sep 2022 01:36:29 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id c7so8432201pgt.11;
-        Thu, 22 Sep 2022 01:36:29 -0700 (PDT)
+        Thu, 22 Sep 2022 04:37:16 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C49C6A0612
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 01:37:15 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id y3so19413884ejc.1
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 01:37:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=MhRarJ6HsClW27b7vtuGGO9+1qjL4ewcJiYtQp85NVs=;
-        b=PupQ1VxaalBQAbhKNzbtAp0aIhcecxHqTumsawCvdkP4elLO+RYGH0ybVsanFd5sIX
-         mmEqUFLUXcybEAKVaOPAr+KdXlORbLX4DOCGO0/siKbxw4UgzygAAV73hGyXt6UGRvoD
-         qWqmI0K3gGelI+TD3fxNbdhas53GDkJNvA9Qiq2HfmXLy5jy+Fo92DvQyEAx/y+E0mYy
-         opg2pA8aNRd+OHsrxx8EoqHD0P6uwxXgFwSqtpyuGeiFZBA+ni1zn0VJsDlmgCoxmE88
-         Om8rh1QFhLnDtSIs8eQM3gbl6ualXSf52fKJZQAspuSeLz02nyy18bA6YHWRifMcYzbi
-         9tFg==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=TwVaZJkLdwmom6Stee69RLiTEJKn72psfncdzouODpI=;
+        b=jdxAJwiTAFGS0B//ixBkSccbSUKqSmHlo7dcQGhPy0FAOjJQPeqG0s8qNE6vwXngsd
+         Sx18XH3h/nVh3UKgU0cvSlBmvr/z2TyRoG3ptmTNRK7o5QMLyfKSG0NMAN8+CNSnrysp
+         odOzxlwAzfZfZDBLxLhGiWXdSrZJuOD66dWxlnUOEowakrWXUjs19IsxP6WsH4kBGJqG
+         9oCdbtZkjfkKD8tEft8Dk1bslOuxZ0x30lce+IyVpKyg78G86X+4fShmiJEiUEdZ+48M
+         KUAc3k/KZ3oFWs8dBRycJQFgUM81d/pIrCLHY8xRG1UGlF2jkwaU2+2a5A95K9zxSfms
+         +j4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=MhRarJ6HsClW27b7vtuGGO9+1qjL4ewcJiYtQp85NVs=;
-        b=lVQR1nUwp0EXcavXNPr9K9jZGoBXUIGA+sqDBPAn9ptU1A/N//XS24uF484ffYeqOl
-         1eWbKDreBeiniSMTCxRpeSbJbuwVuAPJXpzj/bHqaKbtNESY0ScNqDhmhGWoKwInREzb
-         ddrnUOvibyNfZ8riuTDG0BfrsFGDif914IV1gMObt5WzrJmidQIAYkOjz3IS29hdaLt0
-         ioPl4r8djEYpd+c18lWZkmzsYrwYGUvm2xoQr1jTkFhUAZwHg+eQTRbpd1b0rMazXiI+
-         MwozDXBwr3r1CfXXSuIDGJUk6LBk/dixzSRoj52skdi02q40sRJXCw0tuqc6xrzH76vb
-         yjdg==
-X-Gm-Message-State: ACrzQf0FFBcfTedKklJ9ozFtSS4GdBDqQjGraAeTUohent0mrzeZFe4q
-        HiuJVUEeDScaG/J7YN3jPTE=
-X-Google-Smtp-Source: AMsMyM6mk+Yf7RFgk2KXxVPzP22QjA+djcokpAoyZFs5lc3NU+vZL0sr3+rtx+PSS7EDWQBPGRebZQ==
-X-Received: by 2002:a63:a501:0:b0:434:ff77:1fda with SMTP id n1-20020a63a501000000b00434ff771fdamr2131551pgf.310.1663835788995;
-        Thu, 22 Sep 2022 01:36:28 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id f15-20020aa7968f000000b00543a098a6ffsm3631338pfk.212.2022.09.22.01.36.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 01:36:28 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: xu.panda@zte.com.cn
-To:     brendan.higgins@linux.dev
-Cc:     davidgow@google.com, paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, skhan@linuxfoundation.org,
-        dlatypov@google.com, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Xu Panda <xu.panda@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] kunit: tool: use absolute path for wget
-Date:   Thu, 22 Sep 2022 08:36:11 +0000
-Message-Id: <20220922083610.235936-1-xu.panda@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=TwVaZJkLdwmom6Stee69RLiTEJKn72psfncdzouODpI=;
+        b=wWTMI+rrBfm9lvdkRj2hYqa6uc4E2hoju1E6TQgCUY96kyW1vD/vjpJV4wnIdAKXKf
+         4OiJ6MOSnQv1BVjvTSFhjR56LxS6BcVk92GCpIUUkOu+1OvR9KhhSkmSXtG3HAu0GtW+
+         YT+lmPR4DrJJ2coQjbvHzQfeXxtYq3Ke0PUFmPQIgcfoTPYR5DeXs1RG2XRj7mKWYjBG
+         xWcvdsEC+m8nuZipsCts2Ixxp4YytgAvWInpzO5mNwEfPwnMUo6ddg1psU8n04dTyDHR
+         fvWfF+uZrYbpoOUmHpBY2YI68mvFtV3wxJiHNfBAOXe2YEEZxahwl4K9K2z3QXNFpECA
+         0+aA==
+X-Gm-Message-State: ACrzQf3VcQe5ZAOQl8+n0iDkGlg3vFyDKulIVkfwP8vKucOWP2kkeawB
+        ztsz5LSEDBatsHcFPmsKhVU0TRfcbY+ZWuYNgUOR7Q==
+X-Google-Smtp-Source: AMsMyM70aN5WdtKZVMkYxt4MFoCnTTjO1UEouE/n+cIuMmbkZXDhle7VhmG91bHu0r0RObEWsdg/5pI21oePMCVrOm0=
+X-Received: by 2002:a17:907:9807:b0:781:feee:f87c with SMTP id
+ ji7-20020a170907980700b00781feeef87cmr1812708ejc.101.1663835834350; Thu, 22
+ Sep 2022 01:37:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20220905145555.674800-1-etienne.carriere@linaro.org>
+In-Reply-To: <20220905145555.674800-1-etienne.carriere@linaro.org>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Thu, 22 Sep 2022 10:37:03 +0200
+Message-ID: <CAMRc=Mcq3u+1JjvXJ2X774vknq-LOeCfE7hLj2As7Q5A13tx0w@mail.gmail.com>
+Subject: Re: [PATCH v3] dt-binding: gpio: publish binding IDs under dual license
+To:     Etienne Carriere <etienne.carriere@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-gpio@vger.kernel.org, Stephen Warren <swarren@nvidia.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,29 +74,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xu Panda <xu.panda@zte.com.cn>
+On Mon, Sep 5, 2022 at 4:57 PM Etienne Carriere
+<etienne.carriere@linaro.org> wrote:
+>
+> Changes gpio.h DT binding header file to be published under GPLv2 or
+> BSD-2-Clause license terms. This change allows this GPIO generic
+> bindings header file to be used in software components as bootloaders
+> and OSes that are not published under GPLv2 terms.
+>
+> All contributors to gpio.h file in copy.
+>
+> Cc: Stephen Warren <swarren@nvidia.com>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Laxman Dewangan <ldewangan@nvidia.com>
+> Cc: Andrew Jeffery <andrew@aj.id.au>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Nuno S=C3=A1 <nuno.sa@analog.com>
+> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+>
+> Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+> ---
 
-Not using absolute path when invoking wget can lead to serious
-security issues.
+Applied, thanks!
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
----
- tools/testing/kunit/qemu_configs/riscv.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/kunit/qemu_configs/riscv.py b/tools/testing/kunit/qemu_configs/riscv.py
-index 6207be146d26..c3dcd654ca15 100644
---- a/tools/testing/kunit/qemu_configs/riscv.py
-+++ b/tools/testing/kunit/qemu_configs/riscv.py
-@@ -11,7 +11,7 @@ if not os.path.isfile(OPENSBI_FILE):
-              'Would you like me to download it for you from:\n' + GITHUB_OPENSBI_URL + ' ?\n')
-        response = input('yes/[no]: ')
-        if response.strip() == 'yes':
--               os.system('wget ' + GITHUB_OPENSBI_URL)
-+               os.system('/usr/bin/wget ' + GITHUB_OPENSBI_URL)
-        else:
-                sys.exit()
-
--- 
-2.15.2
+Bart
