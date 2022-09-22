@@ -2,95 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DE8F5E667E
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 17:09:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61F425E6681
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 17:10:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231805AbiIVPJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 11:09:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56136 "EHLO
+        id S230212AbiIVPKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 11:10:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231791AbiIVPI5 (ORCPT
+        with ESMTP id S229718AbiIVPKS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 11:08:57 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F04C4E11AB
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 08:08:55 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id p5so11308726ljc.13
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 08:08:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=XMagaWj+qsBFjnLrI8sBIja14veXFKrlDQYG7XtfNWE=;
-        b=DzHeHLFn//JTk6UMm4OPpr3veynEUt1p2tLF3kaAVSP7dhi51cuhKTE8BKS/jNHgju
-         G77Ldz5TYdPY4501O0mvoOWrjRKHaDvf79vQr9UAcGAnaVmYZe1+c4oze5GJnMLO3sdb
-         0ocnadIuQIcTB6XmIkT0xruxTHb/LUYjvXN248PkKjx2QUKIIT6yrM2t26YxVV+MVr0S
-         J5BHjtdYX935OrxlaGMSJbHRcy4SdJgoZfAoyv3rkJ/QLqHXVz0WiNtLts7slfYBfsRk
-         YTJALdwyX/ACqmJUvQiUoJZ/FgKzGR/9V3WMDAH7rxTR5RsMc0SQRrobCJ4bTrlcHdSL
-         NkXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=XMagaWj+qsBFjnLrI8sBIja14veXFKrlDQYG7XtfNWE=;
-        b=yqVtbkw9qwJxQpUP4IlF3wENjGhwDARjd0dH4SWer6dRtXVgLQA9rkiRnAoGJkFW1I
-         ibxt2oLrKnETz2EXaI1yq5c7STQx5Pbe3a6WYKL6EaafowUewnRydS1CKyPtBGp/QEuF
-         3+kM+zrnS5/+WWdUcgYUBSoWoBpy4jOwrSF8k0prBylFTPa865f6BLqN8KQxoq11Lzga
-         wAEqOYOIcNZHL3UnkV5qCmbAsp7AWARlw87hEGw2qpg7lE+VPHFLACvHyoff+BV/bO3E
-         2U4ImEVHOEebGweMOwTD0L4ew+V658zewuEdJFH3mg+N++6UidL6dwQCKZgDln5n0VJN
-         wmHA==
-X-Gm-Message-State: ACrzQf1tWwuXG+JPE8/T2CYm2wWV1Ig2Vt/ZDf0LENGZv0QxaKzy5VkU
-        X104Sry3FmO/PrjARzpagcutbw==
-X-Google-Smtp-Source: AMsMyM6Edu7WLfsqQrPewr8KMaHpm8Q9cLMq8zru4YXuHBvZo74OAhVg37Deu8WkRBA+V2L3rckbCA==
-X-Received: by 2002:a2e:a7c7:0:b0:26c:4fa4:47f6 with SMTP id x7-20020a2ea7c7000000b0026c4fa447f6mr1266324ljp.171.1663859334226;
-        Thu, 22 Sep 2022 08:08:54 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id b22-20020a05651c033600b00268bfa6ffacsm919565ljp.108.2022.09.22.08.08.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Sep 2022 08:08:53 -0700 (PDT)
-Message-ID: <29d54940-997a-865a-b9d0-c043a8c9ce99@linaro.org>
-Date:   Thu, 22 Sep 2022 17:08:52 +0200
+        Thu, 22 Sep 2022 11:10:18 -0400
+Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E69AE86B;
+        Thu, 22 Sep 2022 08:10:16 -0700 (PDT)
+Received: from in02.mta.xmission.com ([166.70.13.52]:41196)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1obNqA-00FwmU-6k; Thu, 22 Sep 2022 09:10:14 -0600
+Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:34042 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1obNq9-00GQDv-36; Thu, 22 Sep 2022 09:10:13 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     cambda@linux.alibaba.com
+Cc:     linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Dust Li <dust.li@linux.alibaba.com>,
+        Tony Lu <tonylu@linux.alibaba.com>
+References: <69E17223-F0CA-4A4C-AAD7-065D6E6266D9@linux.alibaba.com>
+Date:   Thu, 22 Sep 2022 10:09:42 -0500
+In-Reply-To: <69E17223-F0CA-4A4C-AAD7-065D6E6266D9@linux.alibaba.com>
+        (cambda@linux.alibaba.com's message of "Thu, 22 Sep 2022 17:11:12
+        +0800")
+Message-ID: <87pmfn5tu1.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v1 1/2] dt-bindings: rng: nuvoton,npcm-rng: Add npcm845
- compatible string
-Content-Language: en-US
-To:     Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
-        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com, olivia@selenic.com,
-        herbert@gondor.apana.org.au, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     openbmc@lists.ozlabs.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220922142216.17581-1-tmaimon77@gmail.com>
- <20220922142216.17581-2-tmaimon77@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220922142216.17581-2-tmaimon77@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1obNq9-00GQDv-36;;;mid=<87pmfn5tu1.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX18RaDoF8sElgMZrxR9EIeZmKMHLv4zyg+s=
+X-SA-Exim-Connect-IP: 68.110.29.46
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: *;cambda@linux.alibaba.com
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 533 ms - load_scoreonly_sql: 0.04 (0.0%),
+        signal_user_changed: 11 (2.0%), b_tie_ro: 9 (1.7%), parse: 0.90 (0.2%),
+         extract_message_metadata: 3.5 (0.7%), get_uri_detail_list: 1.38
+        (0.3%), tests_pri_-1000: 3.7 (0.7%), tests_pri_-950: 1.33 (0.3%),
+        tests_pri_-900: 1.00 (0.2%), tests_pri_-90: 131 (24.7%), check_bayes:
+        130 (24.3%), b_tokenize: 6 (1.1%), b_tok_get_all: 5 (1.0%),
+        b_comp_prob: 1.89 (0.4%), b_tok_touch_all: 110 (20.7%), b_finish: 3.0
+        (0.6%), tests_pri_0: 351 (66.0%), check_dkim_signature: 1.09 (0.2%),
+        check_dkim_adsp: 4.0 (0.7%), poll_dns_idle: 0.58 (0.1%), tests_pri_10:
+        3.5 (0.7%), tests_pri_500: 17 (3.1%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: Syscall kill() can send signal to thread ID
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/09/2022 16:22, Tomer Maimon wrote:
-> Add a compatible string for Nuvoton BMC NPCM845 RNG.
-> 
-> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
-> ---
->  Documentation/devicetree/bindings/rng/nuvoton,npcm-rng.yaml | 4 +++-
+cambda@linux.alibaba.com writes:
 
+> I found syscall kill() can send signal to a thread id, which is
+> not the TGID. But the Linux manual page kill(2) said:
+>
+> "The kill() system call can be used to send any signal to any
+> process group or process."
+>
+> And the Linux manual page tkill(2) said:
+>
+> "tgkill() sends the signal sig to the thread with the thread ID
+> tid in the thread group tgid.  (By contrast, kill(2) can be used
+> to send a signal only to a process (i.e., thread group) as a
+> whole, and the signal will be delivered to an arbitrary thread
+> within that process.)"
+>
+> I don't know whether the meaning of this 'process' should be
+> the TGID? Because I found kill(tid, 0) will return ESRCH on FreeBSD,
+> while Linux sends signal to the thread group that the thread belongs
+> to.
+>
+> If this is as expected, should we add a notice to the Linux manual
+> page? Because it's a syscall and the pids not equal to tgid are not
+> listed under /proc. This may be a little confusing, I guess.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+This is as expected.
 
-Best regards,
-Krzysztof
+The bit about is /proc is interesting.  On linux try
+"cd /proc; cd tid" and see what happens.
 
+Using the thread id in kill(2) is used to select the process, and the
+delivery happens just the same as if the TGID had been used.
+
+It is one of those odd behaviors that we could potentially remove.  It
+would require hunting through all of the userspace applications to see
+if something happens to depend upon that behavior.  Unless it becomes
+expensive to maintain I don't expect we will ever do that.
+
+For the same reason we probably don't want to document it as we don't
+want to encourage anyone to use that strange corner case.  As it is when
+we break it by accident and noone notices for a couple of years we can
+remove the behavior as that will have proved that no one uses it ;)
+
+Eric
