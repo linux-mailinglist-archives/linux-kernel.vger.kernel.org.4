@@ -2,107 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 449DB5E5B76
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 08:36:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E80C5E5B78
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 08:36:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbiIVGgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 02:36:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44278 "EHLO
+        id S230167AbiIVGg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 02:36:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229905AbiIVGgP (ORCPT
+        with ESMTP id S230108AbiIVGgV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 02:36:15 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B773FB602B
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 23:36:13 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id z25so13075962lfr.2
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 23:36:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=/sdjh02mE/SwIBy9BvwTWzCrb2uaUdQhgWPujtLokpI=;
-        b=jDX5A4bzS6ImCNWPXKQIbzs984rLqA8YysFxfSRnRDcn3CzqXbW4jMLq3JC4h6hBh5
-         kKui7pP5Q+YbOpqzjDnCHCvQWbRnHbmNe319BJrUU6pWzZ2EZXClOjUiilupN/o7kkio
-         8hXkRs5c2CnKWvPu395WLgBdFUa+LNUaOPxR5U9IrT/q3E8MJT65eDGQYlU4zGpgJuzb
-         eHHODAlppEs7ve0NuXo4ULr6ao5YTUQG35eqzMxK/TGXb2nnZGVeGM/11NjoW1hMMNdw
-         aSl5BAoCStMkRmz5tLZDlNn/zD6h511AmZNTURFphRtQtP4WwPFWRHAt4p+m35U1yOhy
-         Qn3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=/sdjh02mE/SwIBy9BvwTWzCrb2uaUdQhgWPujtLokpI=;
-        b=HC+98BfJO1umoV9ExEuGWfY5ikAQXoJi5GiBi0zB1QydOhk5ZD5HaxkuzYPJn51qQj
-         iBtrZ7yMrrDYRZolFOyDdHI/557JloAt962lvZ8PAuP9T/kVJVaHXfprIfbbly3cVrHF
-         ZTNK47aBqNvNbZD0CK6llqRNSQxQ/7M84P5BqL9GfCRReQ+R063k/hJzG2okcuuRFQ0R
-         PtT3GPIuQQ54jkILcOEeJSm4/Q3iQbR1+zAnU66uZq1zHP1GO7KHVLh1YLkRIvXrTBAq
-         Ich/xekZbAYmDSw4eov8mxM6O2ubw1807fD9J1H+RWmpmGM6RhhDI0pfut9Gkxe6sR7f
-         a+/w==
-X-Gm-Message-State: ACrzQf0ivfcFBs8Ck2SM8Uv0L4Q8cJDYJVK47FeWnnP7z+UIyhEN+fUe
-        kdZ2ZOiMBfVm2BFiq7i/b/9VcA==
-X-Google-Smtp-Source: AMsMyM7eMr3Jw/nqeC8AFHLZsJf1omxJggP3TBkTPQDhdmwYiKmFT0oUiIBa+iv5nrnw7FzDDHn44A==
-X-Received: by 2002:a05:6512:150e:b0:492:d9fd:9bdf with SMTP id bq14-20020a056512150e00b00492d9fd9bdfmr619586lfb.583.1663828571965;
-        Wed, 21 Sep 2022 23:36:11 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id o17-20020ac24e91000000b0049964f68457sm773293lfr.262.2022.09.21.23.36.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Sep 2022 23:36:10 -0700 (PDT)
-Message-ID: <10415506-306f-6090-feae-b255c810d462@linaro.org>
-Date:   Thu, 22 Sep 2022 08:36:10 +0200
+        Thu, 22 Sep 2022 02:36:21 -0400
+Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8BB6B6D02
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 23:36:19 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VQRI4-C_1663828576;
+Received: from 30.97.48.87(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VQRI4-C_1663828576)
+          by smtp.aliyun-inc.com;
+          Thu, 22 Sep 2022 14:36:17 +0800
+Message-ID: <e6b4d43d-eea1-5748-bfe3-56f6c9addc7f@linux.alibaba.com>
+Date:   Thu, 22 Sep 2022 14:36:34 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] dt-bindings: firmware: document Qualcomm SM6375 SCM
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        ~postmarketos/upstreaming@lists.sr.ht
-Cc:     martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Robert Marko <robimarko@gmail.com>,
-        Das Srinagesh <quic_gurus@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220921001020.55307-1-konrad.dybcio@somainline.org>
- <95fb2bfb-6eb8-012d-88f8-c739d229ef70@linaro.org>
- <8faecd72-0cfd-18eb-d07a-53b3a23ed05a@somainline.org>
- <f997cd3d-95c6-972f-032a-7646855371e1@linaro.org>
- <df1e64e8-93e4-48e9-f49d-d85360ac006f@somainline.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <df1e64e8-93e4-48e9-f49d-d85360ac006f@somainline.org>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [RFC 2/6] mm/migrate_pages: split unmap_and_move() to _unmap()
+ and _move()
+To:     Huang Ying <ying.huang@intel.com>, linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Zi Yan <ziy@nvidia.com>, Yang Shi <shy828301@gmail.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Matthew Wilcox <willy@infradead.org>
+References: <20220921060616.73086-1-ying.huang@intel.com>
+ <20220921060616.73086-3-ying.huang@intel.com>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <20220921060616.73086-3-ying.huang@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-13.6 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/09/2022 23:07, Konrad Dybcio wrote:
->>>> allOf needs to be updated.
->>> Does it? I did not define this compatible in the driver, so it does
->>> not consume any clocks.
->>
->> It's about hardware, not driver. Hardware has some clocks. If it does
->> not, then you need allOf disallowing it. Otherwise what do you expect in
->> the clock entries?
-> Ok, so if I understand correctly then, all the compatibles that are in
-> the long long list in /properties/compatible/enum: should also be added
-> somewhere in the allOf: tree?
 
-Yes, because the clocks must be specific/fixed.
 
-Best regards,
-Krzysztof
+On 9/21/2022 2:06 PM, Huang Ying wrote:
+> This is a preparation patch to batch the page unmapping and moving
+> for the normal pages and THP.
+> 
+> In this patch, unmap_and_move() is split to migrate_page_unmap() and
+> migrate_page_move().  So, we can batch _unmap() and _move() in
+> different loops later.  To pass some information between unmap and
+> move, the original unused newpage->mapping and newpage->private are
+> used.
+> 
+> Signed-off-by: "Huang, Ying" <ying.huang@intel.com> > Cc: Zi Yan <ziy@nvidia.com>
+> Cc: Yang Shi <shy828301@gmail.com>
+> Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
+> Cc: Oscar Salvador <osalvador@suse.de>
+> Cc: Matthew Wilcox <willy@infradead.org>
+> ---
 
+Looks good to me.
+Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
