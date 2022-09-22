@@ -2,134 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC5B75E5B7B
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 08:38:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB1335E5B7F
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 08:39:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229777AbiIVGiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 02:38:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45716 "EHLO
+        id S229873AbiIVGjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 02:39:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230097AbiIVGiL (ORCPT
+        with ESMTP id S229712AbiIVGjH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 02:38:11 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 718F1B656D
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 23:38:10 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id z20so9799278ljq.3
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 23:38:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=qyfZU/JafD8o6/SPahDQv0jUqUXGqfaIFI7Q3Ul2auI=;
-        b=kkd99uZxOdiNalyDhr8+He7hgk7NzeStc8HhuMSENnPjGg5C366/cLNg/a268b7aRY
-         5FH1wAENXzz80lUMaNZ306V8yotqdPqE3YxE+wPwcPDhlDX/Zson0A40UeuKXDaEEa8F
-         L7cQi8UJTDRbBnqgd8I43iHQZPLkC8E1iJvC343ZOsrcQJgik38mGMuP4nTykKe/bWc8
-         MuLJQaf1ByHh9wK7CDMgHOOgCCSwedl+graYTN5ROFJPlNKdnT3ku8gDe/hJj6le1JEZ
-         x3O5F/7rOwOxuRpFUxaZtGUBvdU10MfGNNDWhMvU/GmoKsV259wsEZWxn1a4tklEHtk2
-         xwIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=qyfZU/JafD8o6/SPahDQv0jUqUXGqfaIFI7Q3Ul2auI=;
-        b=uN18Tu1zot1a88WFH6r7e6kn25fmZGrfwzkT3soBEg87hcgKDBCgK2ILv2Zbk2qvO2
-         FLDqqpPvxP/Vc56N2Npujw3/QEfsKy2FL9POiqqxjWJ84OQjDYYL5U/LRl9OUV9PmCxF
-         Aiiwb96z/NJYKWAYBuBF/WyK1ojh7CUFsDwX6GMrENGH9lvr3t+rmmmewUIx9f5vI3VK
-         ONmS1IHHUYiDtVofgYIM8BwElt8rLRNQNPHWToT5ZGn7/KSOWiG+iPvsrcB9KFa6DnL9
-         gLqf8a0araltsgdOKRgI5sRN78Y10JTdpBUVTU7mBE93j4Qcti7QAIR6Hb+QScozQBfT
-         kFmw==
-X-Gm-Message-State: ACrzQf2JyWxq6rcfOaBhn2IFiFb84gLwzbD/sJWzBMNhESGCF1kju5PT
-        37iL8Z0OSHQzkXMsWhNNPDf4Vg==
-X-Google-Smtp-Source: AMsMyM74j0aPxMSIE9NbVNKhB5RET6Vu035qf1/l0Aypj5PElvYZATE6ZCJU/M40ykreSuiv5OANYw==
-X-Received: by 2002:a2e:84d6:0:b0:26b:dce5:2fe5 with SMTP id q22-20020a2e84d6000000b0026bdce52fe5mr529732ljh.12.1663828688613;
-        Wed, 21 Sep 2022 23:38:08 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id b1-20020a056512070100b00493014c3d7csm767484lfs.309.2022.09.21.23.38.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Sep 2022 23:38:07 -0700 (PDT)
-Message-ID: <821b3c30-6f1f-17c1-061c-8d3b3add0238@linaro.org>
-Date:   Thu, 22 Sep 2022 08:38:06 +0200
+        Thu, 22 Sep 2022 02:39:07 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3146B6D00;
+        Wed, 21 Sep 2022 23:39:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663828746; x=1695364746;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=obk4N+2lv46lmCRfrPLcAtsdnjc8XXyT+8+jHw3SMic=;
+  b=YU/TiJHkLKv1984Y/ziaVByCK2ngNc0ucKYHfv91KHgYi6qxi7eSZuc/
+   tsV0vKUktYLFx6xcPYPXkD4CbfUjWYcPZDwW91wkxVo40T7o1i6dKQ1io
+   hj78ITCp52qT45crNAWjeuCCvGCFGe5chIR+OogAjpuWE6kXM8qE2ZOI4
+   z2/55hsIjkfHwOwjLOz2QqTluU7e2lGWj7ZA3F7QhTXPA1k7inj16NVuA
+   jrxhg1UtwYE15dq+Uf4lttIONUJPcrTHbdNx8AuDbRZ9lWJUrApqCmO4+
+   ropdX6oZ3o2p459F8bjYYD2Fqf3rRnPhYqcTjo7V4z7O6B+8q9hZy8wdR
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="300199744"
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="300199744"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 23:39:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="650394136"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 21 Sep 2022 23:39:04 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1obFrT-0004OO-2X;
+        Thu, 22 Sep 2022 06:39:03 +0000
+Date:   Thu, 22 Sep 2022 14:38:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yanteng Si <siyanteng@loongson.cn>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>, Alex Shi <alexs@kernel.org>,
+        linux-doc@vger.kernel.org
+Subject: htmldocs: Warning:
+ Documentation/translations/zh_CN/devicetree/changesets.rst references a file
+ that doesn't exist: Documentation/Devicetree/changesets.rst
+Message-ID: <202209221415.peH8XStP-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v3 2/2] dt-bindings: net: snps,dwmac: add clk_csr property
-Content-Language: en-US
-To:     Jianguo Zhang <jianguo.zhang@mediatek.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Biao Huang <biao.huang@mediatek.com>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20220921070721.19516-1-jianguo.zhang@mediatek.com>
- <20220921070721.19516-3-jianguo.zhang@mediatek.com>
- <bd460cfd-7114-b200-ab99-16fa3e2cff50@linaro.org>
- <d231f64e494f4badf8bbe23130b25594376c9882.camel@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <d231f64e494f4badf8bbe23130b25594376c9882.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/09/2022 04:15, Jianguo Zhang wrote:
-> Dear Krzysztof,
-> 
-> 	Thanks for your comment.
-> 
-> On Wed, 2022-09-21 at 10:24 +0200, Krzysztof Kozlowski wrote:
->> On 21/09/2022 09:07, Jianguo Zhang wrote:
->>> Add clk_csr property for snps,dwmac
->>>
->>> Signed-off-by: Jianguo Zhang <jianguo.zhang@mediatek.com>
->>> ---
->>>  Documentation/devicetree/bindings/net/snps,dwmac.yaml | 5 +++++
->>>  1 file changed, 5 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
->>> b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
->>> index 491597c02edf..8cff30a8125d 100644
->>> --- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
->>> +++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
->>> @@ -288,6 +288,11 @@ properties:
->>>        is supported. For example, this is used in case of SGMII and
->>>        MAC2MAC connection.
->>>  
->>> +  clk_csr:
->>
->> No underscores in node names. Missing vendor prefix.
->>
-> We will remane the property name 'clk_csr' as 'snps,clk-csr' and
-> another driver patch is needed to align the name used in driver with
-> the new name. 
+tree:   git://git.lwn.net/linux.git docs-next
+head:   a8249d62a611f398fafebbb8f6129888e98d5354
+commit: 702f436ab07b88a778ced4561ad62dadb7c919c9 docs/zh_CN: add dt changesets translation
+date:   10 hours ago
+reproduce:
+        git remote add lwn git://git.lwn.net/linux.git
+        git fetch --no-tags lwn docs-next
+        git checkout 702f436ab07b88a778ced4561ad62dadb7c919c9
+        make menuconfig
+        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
+        make htmldocs
 
-You did not say anything that you document existing property. Commit msg
-*must* explain why you are doing stuff in commit body.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-We should not be asking for this and for reason of clk_csr.
+All warnings (new ones prefixed by >>):
 
-Best regards,
-Krzysztof
+>> Warning: Documentation/translations/zh_CN/devicetree/changesets.rst references a file that doesn't exist: Documentation/Devicetree/changesets.rst
 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
