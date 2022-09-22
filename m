@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D7635E6098
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 13:11:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FE955E6083
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 13:10:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231128AbiIVLLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 07:11:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49224 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbiIVLK1 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S230088AbiIVLK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 22 Sep 2022 07:10:27 -0400
-Received: from smtpout.efficios.com (smtpout.efficios.com [IPv6:2607:5300:203:5aae::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C33FE9CCC4;
-        Thu, 22 Sep 2022 04:10:24 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49114 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229590AbiIVLKW (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 22 Sep 2022 07:10:22 -0400
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5C782776;
+        Thu, 22 Sep 2022 04:10:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
         s=smtpout1; t=1663844391;
-        bh=ghI6w5m/fBuPawbc/R5A+f4FNxklkEyjIEUh4Xg9S2w=;
+        bh=MhEKuSHvpyw2ASMRkqrxGVeTk47bClxhV5jeTCTkWdg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZeNNG0+c965RQbK9u1D1aNoPqc2b8MiqVflVLt4SPijocc/RBd5etYGT2cFRdKVmm
-         pStqOBWB93+W9y76HuMLQKjk5I+W4loxSpVwqboqNRXgqfwgSZibFt674Wo/VRqWln
-         74xkxCm8BiRWauX9OPj4Lm0SED3Wuef+lGT4UI8sSc26snYHr8ARyJyDrKRC9u+fF4
-         DxtmWJQnhOGdj/26NyomtKe04YaNq64KiMZSF5OLoWTWqgrv+n9zDhVWJYKSQXY6bn
-         xUKRO4JwYNgvKffEKQSfxClh2fKf9OI1G0Lx4I2AvBiPLVAN+NhjwcExeAdQhgRPPq
-         PkH9djc7wcIXg==
+        b=FNxc5kzPJ3Fj9M0h+vIGyBhZyeA4WWCac/nbJBh9D+VtkEbJzdPBgxaP1ttR8W7Ej
+         VdwY6JBnhjXiDbhJnvLIUlOjphoIwbDNZl66N0v4zw3yQ3lHWgFBVz7TfFy4sz2c7b
+         wGoX8NcwRoZHs1W92Rh3eJ+dhIXD9PuMwaXDaR8pmfg6YLRVj15Ayeh7fMO7dGyrUP
+         5UdBHdV8ph6tuT2C/j9GOIXDiv4422AgoAj7Vy08Qu5VXcQ0PyfBDABKLVhCK0jhZF
+         ParlFkMspWiMkwgA++MlGHrzal1qp03ew8dESu73Z6ylNpahD9vlPTkUztVoVIqoCI
+         iYm7q9kWXWnjg==
 Received: from localhost.localdomain (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4MYC3V5VN7zNF9;
-        Thu, 22 Sep 2022 06:59:50 -0400 (EDT)
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4MYC3W0fGZzNr9;
+        Thu, 22 Sep 2022 06:59:51 -0400 (EDT)
 From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
@@ -39,9 +39,9 @@ Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
         carlos@redhat.com, Peter Oskolkov <posk@posk.io>,
         Alexander Mikhalitsyn <alexander@mihalicyn.com>,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH v4 24/25] selftests/rseq: parametrized test: Report/abort on negative cpu id
-Date:   Thu, 22 Sep 2022 06:59:39 -0400
-Message-Id: <20220922105941.237830-25-mathieu.desnoyers@efficios.com>
+Subject: [PATCH v4 25/25] tracing/rseq: Add mm_vcpu_id field to rseq_update
+Date:   Thu, 22 Sep 2022 06:59:40 -0400
+Message-Id: <20220922105941.237830-26-mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220922105941.237830-1-mathieu.desnoyers@efficios.com>
 References: <20220922105941.237830-1-mathieu.desnoyers@efficios.com>
@@ -56,30 +56,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Report and abort when a negative cpu id value is observed by the
-spinlock test.
+Add the mm_vcpu_id field to the rseq_update event, allowing tracers to
+follow which vcpu_id is observed by user-space, and whether negative
+vcpu_id values are visible in case of internal scheduler implementation
+issues.
 
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- tools/testing/selftests/rseq/param_test.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ include/trace/events/rseq.h | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/rseq/param_test.c b/tools/testing/selftests/rseq/param_test.c
-index f3687a90ec0c..1c86b45bd579 100644
---- a/tools/testing/selftests/rseq/param_test.c
-+++ b/tools/testing/selftests/rseq/param_test.c
-@@ -410,6 +410,11 @@ static int rseq_this_cpu_lock(struct percpu_lock *lock)
- 		int ret;
+diff --git a/include/trace/events/rseq.h b/include/trace/events/rseq.h
+index 6bd442697354..10b236fc047a 100644
+--- a/include/trace/events/rseq.h
++++ b/include/trace/events/rseq.h
+@@ -17,14 +17,17 @@ TRACE_EVENT(rseq_update,
+ 	TP_STRUCT__entry(
+ 		__field(s32, cpu_id)
+ 		__field(s32, node_id)
++		__field(s32, mm_vcpu_id)
+ 	),
  
- 		cpu = get_current_cpu_id();
-+		if (cpu < 0) {
-+			fprintf(stderr, "pid: %d: tid: %d, cpu: %d: Observing vcpu id %d\n",
-+					getpid(), (int) rseq_gettid(), rseq_current_cpu_raw(), cpu);
-+			abort();
-+		}
- 		ret = rseq_cmpeqv_storev(RSEQ_MO_RELAXED, RSEQ_PERCPU,
- 					 &lock->c[cpu].v,
- 					 0, 1, cpu);
+ 	TP_fast_assign(
+ 		__entry->cpu_id = raw_smp_processor_id();
+ 		__entry->node_id = cpu_to_node(raw_smp_processor_id());
++		__entry->mm_vcpu_id = t->mm_vcpu;
+ 	),
+ 
+-	TP_printk("cpu_id=%d node_id=%d", __entry->cpu_id, __entry->node_id)
++	TP_printk("cpu_id=%d node_id=%d mm_vcpu_id=%d", __entry->cpu_id,
++		  __entry->node_id, __entry->mm_vcpu_id)
+ );
+ 
+ TRACE_EVENT(rseq_ip_fixup,
 -- 
 2.25.1
 
