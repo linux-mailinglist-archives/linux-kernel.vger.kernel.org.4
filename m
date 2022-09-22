@@ -2,86 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9FBC5E6A78
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 20:14:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAEAD5E6A7E
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 20:15:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232204AbiIVSOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 14:14:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49170 "EHLO
+        id S231820AbiIVSP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 14:15:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232332AbiIVSN7 (ORCPT
+        with ESMTP id S232528AbiIVSPG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 14:13:59 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B651F6F72
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 11:13:58 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-1278a61bd57so15052199fac.7
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 11:13:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=dkVRxV4I7PRv0MPIkVzG//6n2SRR1vW4Iw6tfZvXO/Q=;
-        b=FBOenVp5aH9X3CrUtLiquxr3kaSJbtIVoLUYfQ7rl6ER/kZflhaBvE6UcKAv/XzAKq
-         +4V1KeJ4aRW0ixoTj0+nNnoM1P5NTQuQC74SGgKlbtCWcoHapIFa//0vox5YbieVbBH4
-         j8Iqb5tNaEkW6g/9EhujwNlLr7pCOcOim5/NA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=dkVRxV4I7PRv0MPIkVzG//6n2SRR1vW4Iw6tfZvXO/Q=;
-        b=see9fFmgzX9Q+/FbaQY8ugBmM2Ue2BcXKmetwRsOc6FBNW7dOqLJ++poIQ0sRMV/cl
-         7OQIy5BWcddXnb/slqjm+hLqoO6PaQLxUF5Acjjf+gYVyDdh8rC6fqhhJmOmYppvGtAc
-         B5V3LuuSg0p6MZGyXrbwsMVdPEN0ZjybUCFku2BhmgotdUj3V8silnUH7eEXlnQjpyjV
-         JNFw5T4NY8sL1RJu2mzukaoNmh/cB83aTwjHx7YfAs5dZrpJzKs/7w+jU2aejrklF5sb
-         TvtdByRbPgn5Sew2gsPBj/hqcKc90vprGIgqB5yqsgpBwqYwYxn2h1XhMtxq11LbdegU
-         BAtQ==
-X-Gm-Message-State: ACrzQf3c+WVuMAQDHJeiz/Elz8GmghtWWfcZvKsyqk/u22ElDErYAqvZ
-        iwqc8tRedN2bFL3wyg46XbUz6HZDslSHIA==
-X-Google-Smtp-Source: AMsMyM4yrUOnaFaedCOFCZN/MaNXP7gqxdnKuDpBZ55gPq/+/Bsne/9yVda/iQg2LQUG1NtJ1mIOpg==
-X-Received: by 2002:a05:6870:e615:b0:12d:943e:256a with SMTP id q21-20020a056870e61500b0012d943e256amr5124606oag.83.1663870437228;
-        Thu, 22 Sep 2022 11:13:57 -0700 (PDT)
-Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com. [209.85.167.182])
-        by smtp.gmail.com with ESMTPSA id cd8-20020a056830620800b00639443424f8sm3110909otb.8.2022.09.22.11.13.55
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Sep 2022 11:13:56 -0700 (PDT)
-Received: by mail-oi1-f182.google.com with SMTP id o184so13356161oif.13
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 11:13:55 -0700 (PDT)
-X-Received: by 2002:a05:6808:2012:b0:34f:ca73:ee55 with SMTP id
- q18-20020a056808201200b0034fca73ee55mr2388937oiw.229.1663870435647; Thu, 22
- Sep 2022 11:13:55 -0700 (PDT)
-MIME-Version: 1.0
-References: <acdecda4-b11a-4e15-9ac9-6d2696218012@www.fastmail.com> <87427dd0-7307-57b2-4008-2ffb839a099a@gmail.com>
-In-Reply-To: <87427dd0-7307-57b2-4008-2ffb839a099a@gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 22 Sep 2022 11:13:39 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiux9J6zi8sEHyLBVYc7zsWe6JwYOf7ggF+Oowc6fp4tQ@mail.gmail.com>
-Message-ID: <CAHk-=wiux9J6zi8sEHyLBVYc7zsWe6JwYOf7ggF+Oowc6fp4tQ@mail.gmail.com>
-Subject: Re: [GIT PULL] ARM: SoC fixes for 6.0-rc6
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, soc@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Thu, 22 Sep 2022 14:15:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8401F43627;
+        Thu, 22 Sep 2022 11:15:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 38540B839C7;
+        Thu, 22 Sep 2022 18:15:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 00452C433C1;
+        Thu, 22 Sep 2022 18:15:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663870501;
+        bh=GI/QxPt+QyjHICWT2YeAeZh/4G8AdCEzeszTisas9hk=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=Qx4oBrqod4c+pKBZL9oNufTPmKwB5RNZeLe5k61ChRnuFj4u2id4S1UoMvYn3vflX
+         TEF7a0YO+KtKcuFb/+0sH/RvegsjttedDXIP6zQHB9OML7Fm1Nt4FXAnov3kFDLyN3
+         6kfy+cHyLZceK7zzcJRH3s9qJwLyV+ZHQwu1uQ1QbyduZzVqJl8ZfgYuzh8SlycW1s
+         tNNxTgl1WrWFRppPh02rAfBiAK4zVwyWiZxBQgidLJnOx7u7naFeTHNNcOfyeds6O0
+         Pxs1zU9aRrQHeYFsD/3MTABvl9SomseIdZ73MEF1Vl7AlDuEL1+iPrl9m8BI9x+OpB
+         GrVjr+fsYVOng==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E0F05E21ED1;
+        Thu, 22 Sep 2022 18:15:00 +0000 (UTC)
+Subject: Re: [GIT PULL] gpio: fixes for v6.0-rc7
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220922101614.118590-1-brgl@bgdev.pl>
+References: <20220922101614.118590-1-brgl@bgdev.pl>
+X-PR-Tracked-List-Id: <linux-gpio.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220922101614.118590-1-brgl@bgdev.pl>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git tags/gpio-fixes-for-v6.0-rc7
+X-PR-Tracked-Commit-Id: 69bef19d6b9700e96285f4b4e28691cda3dcd0d1
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 5e0a93e42756fa93b69fe8848cf8dda7cee5d13a
+Message-Id: <166387050091.24554.4518458579542642534.pr-tracker-bot@kernel.org>
+Date:   Thu, 22 Sep 2022 18:15:00 +0000
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 10:19 AM Florian Fainelli <f.fainelli@gmail.com> wrote:
->
-> In case Linus has not had a chance to pull it just yet, could you amend
-> it?
+The pull request you sent on Thu, 22 Sep 2022 12:16:14 +0200:
 
-I did see this email, but as I expect to be AFK for the next few
-hours, I took Arnd's pull request as-is.
+> git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git tags/gpio-fixes-for-v6.0-rc7
 
-I could pull your Broadcom fixes directly on top if you/Arnd would
-prefer that as a solution?
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/5e0a93e42756fa93b69fe8848cf8dda7cee5d13a
 
-              Linus
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
