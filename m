@@ -2,111 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A4325E629B
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 14:40:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 520005E62A1
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 14:41:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbiIVMkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 08:40:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40248 "EHLO
+        id S229712AbiIVMlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 08:41:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbiIVMki (ORCPT
+        with ESMTP id S229791AbiIVMlR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 08:40:38 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C018AE21C9
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 05:40:36 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id l12so10815747ljg.9
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 05:40:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=X48sd6dwxZB1SHayzPjumz0owiqRGtUb8ur+bpMGAg8=;
-        b=WXKZhJOk8u61LgkuMC0We/AD6NplRu0uaHwhluHODR4xHt/Xqpu1uwP2yulqPUmM+q
-         DwBuSZLRc6mdzwwf1pl3AgSTDqXGCVPAzeSmhpCDpGOVNeiXidNycACuhfuCcbi3mlDu
-         5iMEs+raPOawyUlBHPvG/tbVY6OEp9mWgKUT3r3+wiMIaG9GqoAcxSgvCGKcb2nm2NW8
-         ZWOOU9i3fqiqx4+eUN7Koz/brBZ6UE+4L518JsdF/s0pdM6AXs+lD9ZyLNP5w27Nj3N+
-         Sh6rVpHqwdTiVBuvXyBju7H/rQvXU7tHtaFkq4uItxwHHOl8QxHl0R9aWa905NfF6niD
-         ZDZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=X48sd6dwxZB1SHayzPjumz0owiqRGtUb8ur+bpMGAg8=;
-        b=7nO0Rbnp7nrMolFzmW8NL4jKrGgpxju/BKREvdE5024yEzUeqYQwDkP4/sLeZv5QW7
-         4Cxzr/b/deZUH/lUE/SXrbhoJyyUa7/hq3hF5ShrcWqCwJVWexhpR7M7uPrt8gOr4BsW
-         YcQnsQf1FxSnQCP53VPfL9eYy0uDY1JHVzpnBRGMUEiSjOu3amh6oWBYGKDgKzMD7lIO
-         jrxcXPMfG72UZykFr4OuWsAQmGMYLVyu5OtAJ0lSZ+p/LFYFK7wlFWXnP8belO35jCYa
-         vdunJ4l3PZrSbYZOx27JG5RjU60hyLHiYtDlQVJNCMHjh0UIniWy6kN2HbsbL00rdHJi
-         TE4g==
-X-Gm-Message-State: ACrzQf3kUFT4IZCyLSdkcS4MIGO/kNe1uhl6YLkP/j+DrkFd2Ff8LSBm
-        x4MOeVa3DKsELYN9QfwOl1xTlA==
-X-Google-Smtp-Source: AMsMyM5GU5VnXjFq1PwcBumh0Recos9Z+6aWQqFn881YTtujDAgRbzky9brsJOY7DLZHz+/aqrolgg==
-X-Received: by 2002:a2e:9547:0:b0:26b:fb41:f60a with SMTP id t7-20020a2e9547000000b0026bfb41f60amr1040224ljh.295.1663850435003;
-        Thu, 22 Sep 2022 05:40:35 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id x15-20020a19e00f000000b00498fc3d4d15sm921127lfg.190.2022.09.22.05.40.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Sep 2022 05:40:34 -0700 (PDT)
-Message-ID: <6e6c1ef6-b15e-ea50-a627-9dc56aa4b806@linaro.org>
-Date:   Thu, 22 Sep 2022 14:40:33 +0200
+        Thu, 22 Sep 2022 08:41:17 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5DA1E7239;
+        Thu, 22 Sep 2022 05:41:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663850475; x=1695386475;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=2XrBvsqAS2iekK6smQOUXQvJir1/aMIF8ljeQsISlsI=;
+  b=gJsM8dQ+Ntn2gjkXVqqeZxDr3FFrJ01zJuWOA5p1DkQxThaXN979S1vp
+   lUiH3ghias5vZVNd4ztXVK8Cr7w4PetGm98S+nKzOhOcYwBlC+LkvwwDo
+   +G9nSjJEhDzdx44a/d/k+umsoAwuhBgOKH2+7Dj5RC1jAW9kkZlgPevHZ
+   cFG+tkO+F90x8Ah/RMgo1XweN77N7H2wgMSSIY0b6CegEboQEOFHtncQT
+   ZdAfq9aP6/Nvq5QTenjTFCRAi+sz0HqYpdvX+RWkPaA9A/tJfLMTL4sEm
+   EG6Z4cIEh//DDH67nNoXgPfgsyTyy6KOjog4OA4MNK/GUg+DtBohArsvn
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="287365286"
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="287365286"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 05:41:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="688279050"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga004.fm.intel.com with ESMTP; 22 Sep 2022 05:41:15 -0700
+Received: from [10.252.210.171] (kliang2-mobl1.ccr.corp.intel.com [10.252.210.171])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id 78829580AD7;
+        Thu, 22 Sep 2022 05:41:13 -0700 (PDT)
+Message-ID: <e354250c-cfb6-a48d-73cd-b703f670af57@linux.intel.com>
+Date:   Thu, 22 Sep 2022 08:41:12 -0400
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.2
-Subject: =?UTF-8?Q?Re=3a_=5bPATCH_3/3=5d_dt-bindings=3a_arm=3a_rockchip=3a_a?=
- =?UTF-8?Q?dd_Theobroma_Systems_PX30-=c2=b5Q7_=28Ringneck=29_with_Haikou?=
+Subject: Re: [PATCH v2 1/2] perf/x86/intel: Expose EPT-friendly PEBS for SPR
+ and future models
 Content-Language: en-US
-To:     Quentin Schulz <foss+kernel@0leil.net>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        heiko@sntech.de, dmitry.torokhov@gmail.com,
-        klaus.goger@theobroma-systems.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-input@vger.kernel.org,
-        Quentin Schulz <quentin.schulz@theobroma-systems.com>
-References: <20220922101211.3215888-1-foss+kernel@0leil.net>
- <20220922101211.3215888-4-foss+kernel@0leil.net>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220922101211.3215888-4-foss+kernel@0leil.net>
+To:     Like Xu <like.xu.linux@gmail.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Jim Mattson <jmattson@google.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-perf-users@vger.kernel.org
+References: <20220922051929.89484-1-likexu@tencent.com>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <20220922051929.89484-1-likexu@tencent.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/09/2022 12:12, Quentin Schulz wrote:
-> From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+
+
+On 2022-09-22 1:19 a.m., Like Xu wrote:
+> From: Like Xu <likexu@tencent.com>
 > 
-> Add entry for the Theobroma Systems PX30-µQ7 (Ringneck) with Haikou
-> devkit.
+> According to Intel SDM, the EPT-friendly PEBS is supported by all the
+> platforms after ICX, ADL and the future platforms with PEBS format 5.
 > 
-> Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+> Currently the only in-kernel user of this capability is KVM, which has
+> very limited support for hybrid core pmu, so ADL and its successors do
+> not currently expose this capability. When both hybrid core and PEBS
+> format 5 are present, KVM will decide on its own merits.
+> 
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: linux-perf-users@vger.kernel.org
+> Suggested-by: Kan Liang <kan.liang@linux.intel.com>
+> Signed-off-by: Like Xu <likexu@tencent.com>
+
+
+Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+
+Thanks,
+Kan
+
 > ---
->  Documentation/devicetree/bindings/arm/rockchip.yaml | 5 +++++
->  1 file changed, 5 insertions(+)
+> V1 -> V2 Changelog:
+> - the perf part should be a separate patch; (Kan)
+> - apply PEBS format 5 to avoid patching every future model; (Kan)
 > 
-> diff --git a/Documentation/devicetree/bindings/arm/rockchip.yaml b/Documentation/devicetree/bindings/arm/rockchip.yaml
-> index 7811ba64149c..f2aa5ddb76d2 100644
-> --- a/Documentation/devicetree/bindings/arm/rockchip.yaml
-> +++ b/Documentation/devicetree/bindings/arm/rockchip.yaml
-> @@ -658,6 +658,11 @@ properties:
->            - const: rockchip,rv1108-evb
->            - const: rockchip,rv1108
+>  arch/x86/events/intel/core.c | 1 +
+>  arch/x86/events/intel/ds.c   | 4 +++-
+>  2 files changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
+> index 2db93498ff71..804540ba4599 100644
+> --- a/arch/x86/events/intel/core.c
+> +++ b/arch/x86/events/intel/core.c
+> @@ -6288,6 +6288,7 @@ __init int intel_pmu_init(void)
+>  		x86_pmu.pebs_constraints = intel_spr_pebs_event_constraints;
+>  		x86_pmu.extra_regs = intel_spr_extra_regs;
+>  		x86_pmu.limit_period = spr_limit_period;
+> +		x86_pmu.pebs_ept = 1;
+>  		x86_pmu.pebs_aliases = NULL;
+>  		x86_pmu.pebs_prec_dist = true;
+>  		x86_pmu.pebs_block = true;
+> diff --git a/arch/x86/events/intel/ds.c b/arch/x86/events/intel/ds.c
+> index ba60427caa6d..4e937f685cdc 100644
+> --- a/arch/x86/events/intel/ds.c
+> +++ b/arch/x86/events/intel/ds.c
+> @@ -2253,8 +2253,10 @@ void __init intel_ds_init(void)
+>  			x86_pmu.large_pebs_flags |= PERF_SAMPLE_TIME;
+>  			break;
 >  
-> +      - description: Theobroma Systems PX30-µQ7 with Haikou baseboard
-> +        items:
-> +          - const: tsd,px30-ringneck-haikou
-> +          - const: rockchip,px30
-
-This should be somewhere around other px30 systems.
-
-Best regards,
-Krzysztof
-
+> -		case 4:
+>  		case 5:
+> +			x86_pmu.pebs_ept = 1;
+> +			fallthrough;
+> +		case 4:
+>  			x86_pmu.drain_pebs = intel_pmu_drain_pebs_icl;
+>  			x86_pmu.pebs_record_size = sizeof(struct pebs_basic);
+>  			if (x86_pmu.intel_cap.pebs_baseline) {
