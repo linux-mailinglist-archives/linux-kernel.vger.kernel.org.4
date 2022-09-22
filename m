@@ -2,68 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D40A5E658B
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 16:29:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7C3C5E658E
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 16:30:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229924AbiIVO3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 10:29:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48092 "EHLO
+        id S230383AbiIVOaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 10:30:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229641AbiIVO3h (ORCPT
+        with ESMTP id S230073AbiIVO37 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 10:29:37 -0400
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24D172AE7
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 07:29:33 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 49BE944C65;
-        Thu, 22 Sep 2022 14:29:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1663856972; bh=uspIl9LGe96i3dV8zEjsYdGYA7mcTRqfeZXjm1Wudnc=;
-        h=Date:To:Cc:From:Subject;
-        b=egSgGta2kLf3JeKvnzk7n65+B2MVdyVOo2U1UZVRvGFf1r0XMLyJHrgHxJZ69LaL8
-         Tf9yeLmmqovT0PeiHiQ9DmVjD6yEjBzEcTQKXId16A12+Ttw/4bGIaS7IvD41u1uxO
-         XhPxGPIe1C8O5zyXfhzf9XsVo2BbtxkcCfpcecf3zd6iqBMoYMI91NOiAOJevObjSZ
-         o6OIUZcl5VMwrWeiP8Ge+oYumyjgmSF8UPONSY33X3nFtiFqIrn6zGyatnidJ6S0YQ
-         dfdJnQ1n2eTg7VByKTexVMc+U4PSgw0oTzAie7CkqVtOEEecoKkdi5nuHXOCGVmWMN
-         CkWLLLe+f43IQ==
-Message-ID: <2159b672-4db7-5add-8046-ed5354dd5343@marcan.st>
-Date:   Thu, 22 Sep 2022 23:29:29 +0900
+        Thu, 22 Sep 2022 10:29:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D54A48E9C
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 07:29:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663856997;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HxUZD2Yl2mBpvSCeHuLxWU5WRH+vQvCPB+MlfCo1+9o=;
+        b=Z2cdjgjPZ1Mfg8vLKOZomAHiYA9xazQRbG8PxhDSAnMprSPaNMeX5n4dYi3AIK6L5Lm9J9
+        Uba7qdpCqlIzMgT68VjoSlMoYbC98lxgRxXvPCgdFjg5eWrOtiOiAD4tze2AoLh6pwV3Qe
+        DUS8HQAm9dBpggBc1aIkXKOfPXD9u8I=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-609-BXlUBpjDMraxqB1MpLLubg-1; Thu, 22 Sep 2022 10:29:56 -0400
+X-MC-Unique: BXlUBpjDMraxqB1MpLLubg-1
+Received: by mail-ed1-f69.google.com with SMTP id x5-20020a05640226c500b00451ec193793so6835732edd.16
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 07:29:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=HxUZD2Yl2mBpvSCeHuLxWU5WRH+vQvCPB+MlfCo1+9o=;
+        b=qAnOoeZ+Fhf7BohHq39YETLmgz5aKIQHZSc/e10BeNR8XjMa5KHyxBgQ/1/C2L/GZg
+         HI3hS6ija7ZvmsGhITC8kSrGQAIWFw4qZz5s0IOBCVIWPfO1o9yu2istOaLwbjipjUhs
+         vp0+Riu5dGhDt1HKXLzQHcXT+PgD0u9jQrZGGFCIkZAxdxmXvHihnDLwv6RQzkT8BJ/c
+         i+E2m7e1ZeDuCsorCbX3h7v96TClxSE9mBaACmO4uGaPiMm/cfE0Cmxb5oO7pqpKJEqz
+         06B2Yjbi5tbJpXSTD428BJyy8q8Cz2BaSr4H4xalX1Ij4iuVV32TCqmEnxVLhRQ0umC4
+         2tWA==
+X-Gm-Message-State: ACrzQf1NzdhZhGJhBdh8uIgx0g+mTzlDbRcKs6QzuZlVz3wAMF/4Hf6M
+        kjpkZ+Ms7UeuJkf0wcgoOyzycyjScsHqjnjG5OZzYsxHEovUt+RLALfPE8hWSiNg6uQPXNuTgwt
+        d0iuh5/ZQLpSlzS2yd0aO6VVO
+X-Received: by 2002:a05:6402:b85:b0:44e:dad7:3e24 with SMTP id cf5-20020a0564020b8500b0044edad73e24mr3735585edb.264.1663856995243;
+        Thu, 22 Sep 2022 07:29:55 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4l8lECvy6PMwCYStm+cgZl11MwkmMGRaeAGqyGbBE309vaTKtONvLrrdPR8+tf4wDo2exwQw==
+X-Received: by 2002:a05:6402:b85:b0:44e:dad7:3e24 with SMTP id cf5-20020a0564020b8500b0044edad73e24mr3735559edb.264.1663856995055;
+        Thu, 22 Sep 2022 07:29:55 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id o6-20020a170906768600b007386a8b90c9sm2788398ejm.13.2022.09.22.07.29.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Sep 2022 07:29:54 -0700 (PDT)
+Message-ID: <33d5cc27-474b-fdec-a6b0-84ac16f7d386@redhat.com>
+Date:   Thu, 22 Sep 2022 16:29:53 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Content-Language: es-ES
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Asahi Linux <asahi@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>
-From:   Hector Martin <marcan@marcan.st>
-Subject: Please add asahi-soc to linux-next
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH -next 1/2] i2c: designware: Switch from using MMIO access
+ to SMN access
+Content-Language: en-US
+To:     Borislav Petkov <bp@suse.de>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "Limonciello, Mario" <mario.limonciello@amd.com>,
+        =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        jarkko.nikula@linux.intel.com, wsa@kernel.org,
+        rrangel@chromium.org, upstream@semihalf.com,
+        Muralidhara M K <muralimk@amd.com>,
+        Naveen Krishna Chatradhi <nchatrad@amd.com>
+References: <20220916131854.687371-1-jsd@semihalf.com>
+ <20220916131854.687371-2-jsd@semihalf.com>
+ <eafc7bb5-a406-132b-4b7d-167917cdab05@amd.com>
+ <CAOtMz3Pgh+cERiXVetDZJrQa9C0kUUbZ9dRRhdghgm5Or8kwhg@mail.gmail.com>
+ <YytwNvSyhq380YNT@zn.tnic> <60a52348-7d50-1056-a596-e154f87c99d2@amd.com>
+ <Yyt5LSxSz+6QeWF1@zn.tnic> <YywvmueFj/ibyZdf@smile.fi.intel.com>
+ <YywwEvkZK1R9mJfE@smile.fi.intel.com>
+ <c0c8bdce-26a0-ad3f-749b-7585d947608b@redhat.com> <YyxrdpUyc+kp48kX@zn.tnic>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <YyxrdpUyc+kp48kX@zn.tnic>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen,
+Hi,
 
-Could you add the asahi-soc trees to linux-next? We are downstream from
-SoC and would benefit from testing in linux-next before I send out PRs.
+On 9/22/22 16:04, Borislav Petkov wrote:
+> On Thu, Sep 22, 2022 at 03:48:07PM +0200, Hans de Goede wrote:
+>> Right, thank you for Cc-ing me. At least on X86 there are several platforms
+>> (and 100-s of device models) which use a PMIC connected to the i2c-designware
+>> controller and this PMIC gets poked directly from ACPI _S0 and _S3
+>> (power on/off) methods. So the I2C bus driver needs to *bind* to the controller
+>> as soon as we find its description in ACPI, otherwise we get a whole bunch
+>> of failed ACPI OpRegion access errors as well as various actual really issues.
+> 
+> Thanks for explaining - I couldn't find the reason why it has to be a
+> subsys_initcall.
+> 
+>> So please keep this as a subsys initcall.
+> 
+> Which means, init_amd_nbs() would have to be sorted to run before
+> dw_i2c_init_driver()...
 
-URLs:
-https://github.com/AsahiLinux/linux.git asahi-soc/fixes
-https://github.com/AsahiLinux/linux.git asahi-soc/for-next
+Yes if possible. One solution might be to make it a arch_initcall_sync()
+which AFAIK runs after regular arch_initcall()-s but before subsys_initcall()-s.
 
-(Right now we have no fixes, and some DT changes in for-next)
+Regards,
 
-Thanks!
+Hans
 
-- Hector
+
