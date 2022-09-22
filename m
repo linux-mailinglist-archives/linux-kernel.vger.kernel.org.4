@@ -2,68 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE78B5E5C2F
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 09:19:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC3985E5C33
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 09:19:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230388AbiIVHTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 03:19:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40922 "EHLO
+        id S230415AbiIVHTz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 03:19:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230353AbiIVHTl (ORCPT
+        with ESMTP id S230397AbiIVHTr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 03:19:41 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 959BB6359
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 00:19:39 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id s10so9877228ljp.5
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 00:19:39 -0700 (PDT)
+        Thu, 22 Sep 2022 03:19:47 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F018317593
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 00:19:45 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id j16so13215917lfg.1
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 00:19:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=Iq5Fm6kb4l/9l7hrrqLF7wzKUoBamfvADToHUOZBGpQ=;
-        b=iU6d4nPD3iOlCMrWY+mCzqpv4+7GawgyDaLXYuSKkLeD9ZV7XlytBSr9BDbcDJJ3tv
-         KgcZxYyj58ByN15K3UgzL1md55VbbdONrdZFPIUSAo503eCJit9cn9T1ihGK6dPWvYTj
-         cZGinXYus7GDZAo3Ww+cTS23x+Cuk4c1iUmsYfaUZIUsE73egxEkvx5Fodw21b10WJu6
-         JqITB08nNP6g4yQ/JO3DM3h/aclC5sqNklewB8UVng/2l4MDbamPvfd4jd9XxE9Ef3U8
-         OGfszrthqGBzrs6bJk4w+F1e66/+udREweWVosA1OjV5C7nZ9lqKMlf74IZL4uhmm31y
-         9MHA==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=L0CcexYvr50ry0k5LCLuUVWFoXYl8KApJv3vLCHXZiI=;
+        b=b4OPSMZB6A6D9dbVJDjiKqN/SOqiPbLIKzOQK3629IC/ZBvZuPkd9QczfXkA0JnkWU
+         zzJIGX/7zmeF5SFpWKqdQpqqnoExVWZwXAVE64zz8A1GRanmjz/aESunHQ1HzOPB/Gw3
+         8fVd9+1Ao3KwZ2P9EbUcYA6/KV4EbKk2szlEDbf0lbcc3W9PTSkSWpSw8FtpSrAKHlel
+         YoPdkZFHGs6iD18Dm0SSbHIZ6dDOcDd0g40OoocVuQZm5KO73C43Wmaiz7fwpNC03qyj
+         MBXysfSJBOqJw3VH5bYZ5urmfkOip6gjcBqWVLqJTA9bi+M3qaMT/IkGPWcEJXngzIkR
+         GS1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=Iq5Fm6kb4l/9l7hrrqLF7wzKUoBamfvADToHUOZBGpQ=;
-        b=aYKJVgmJN/Hh/qq27/A2whEu6HXm7APUqMQDSYD4nRqYC38nUOmej9jBCfx3QHJ5he
-         I/LD08avUo0PXGMV4jCa/bjiMvV10dIO+2N+33OjFQRU2kD6aXpuRNMYxnr8rz1SMZD6
-         aPqUtjcVC0X3e52wBYzmH5XexlXo2PoxaXv5XDiVh1dULO713ZKLT3y2wWQDkjq+Z4A3
-         33hJx9e7e8BcdpiKnmfztJ+G5gQ2YR+hPItBeYefCNKDiwYA3YD5ZEnCGRoYUp0kXUph
-         EyFYUGtFKSWeYmGL9v9HcoZiCE5MwfoXtlWwWQlzkKmdzZOMUcaEsYKAr62Wy2DrwKG7
-         GLKA==
-X-Gm-Message-State: ACrzQf2SSNA9X8MicO8jaNdJ2vy3ouDOQsqmph6abFM37Uvp713QJb8P
-        Biw2mzXfJpEzBK4r6xwAa346BMwkGC3/Cx91eqqJLQ==
-X-Google-Smtp-Source: AMsMyM4cAqH9Rqf1mtnGT4JF3CyFhM+N7tZZ1thnpOyhPnIk0E4uonInBLTDcOPzqnnmQPyN/oSncEFytC5v1ylHfYM=
-X-Received: by 2002:a2e:bf21:0:b0:266:2be3:61e8 with SMTP id
- c33-20020a2ebf21000000b002662be361e8mr570118ljr.383.1663831177837; Thu, 22
- Sep 2022 00:19:37 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=L0CcexYvr50ry0k5LCLuUVWFoXYl8KApJv3vLCHXZiI=;
+        b=7MPH3IzKGrjjikR6QeErNqKdgQaNYTC/4qZ/bqQxUwomy3DTigEbY8d+pCaDKs50b8
+         wtVTkbvBUwFy8H5YIoEaS6/HoQ//klBNsbZHxIlTVcLY4FBZezfw0rkR2IGSLVa8qMi5
+         Svv4oMGrf0yuzWNLZ1obLnQgvHzHLGKOQQnKvZgtaoOFQSQMy9UcPoqdF8oLyiVaZyDG
+         MMXG2Hp/ZGhcpMSEMpUYs/yqyISmgx41bKC1S2AlSiErCzsFVtBP7Wi+qMMyNmnBj39a
+         pYWBLNaFXyShBj2YC1Pc4h+9kxQ01Vj1lg0GSbDJk7igc2c/DkyFNEriX9ZmJ+UksLjO
+         4FdQ==
+X-Gm-Message-State: ACrzQf1S51Nqno3u+H40ADX3XLQWvu+LR94TPvLhkS9VCIfIC6kBPIL5
+        3/QwUCf99pvRIRBvgF/BTpB1EA==
+X-Google-Smtp-Source: AMsMyM4gLReXsZlISFiuSW1XgfW0GpMeZQMBFVw9foI7xJCo01KU0HcjadDByu18kEXVa3VsgiXg9g==
+X-Received: by 2002:a05:6512:1055:b0:49a:de51:5458 with SMTP id c21-20020a056512105500b0049ade515458mr671284lfb.585.1663831184180;
+        Thu, 22 Sep 2022 00:19:44 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id t2-20020a05651c204200b00261e8e4e381sm775206ljo.2.2022.09.22.00.19.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Sep 2022 00:19:43 -0700 (PDT)
+Message-ID: <5a857097-30c2-3b37-6134-57cb942113ca@linaro.org>
+Date:   Thu, 22 Sep 2022 09:19:42 +0200
 MIME-Version: 1.0
-References: <20220916080305.29574-1-vincent.guittot@linaro.org> <20220921160834.4a2s3733vlr4rqfh@wubuntu>
-In-Reply-To: <20220921160834.4a2s3733vlr4rqfh@wubuntu>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Thu, 22 Sep 2022 09:19:26 +0200
-Message-ID: <CAKfTPtBWZ+BH+TmM-hcG8_StdNSP8JYmD7JX_ch7L-XEU6htOA@mail.gmail.com>
-Subject: Re: [PATCH v4 0/8] Add latency priority for CFS class
-To:     Qais Yousef <qais.yousef@arm.com>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, parth@linux.ibm.com,
-        chris.hyser@oracle.com, valentin.schneider@arm.com,
-        patrick.bellasi@matbug.net, David.Laight@aculab.com,
-        pjt@google.com, pavel@ucw.cz, tj@kernel.org, qperret@google.com,
-        tim.c.chen@linux.intel.com, joshdon@google.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v1 06/17] dt-bindings: mediatek: set the hdmi to be
+ compatible with syscon
+Content-Language: en-US
+To:     Guillaume Ranquet <granquet@baylibre.com>,
+        Vinod Koul <vkoul@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Rob Herring <robh+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        CK Hu <ck.hu@mediatek.com>, Jitao shi <jitao.shi@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-mediatek@lists.infradead.org,
+        dri-devel@lists.freedesktop.org,
+        Pablo Sun <pablo.sun@mediatek.com>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org
+References: <20220919-v1-0-4844816c9808@baylibre.com>
+ <20220919-v1-6-4844816c9808@baylibre.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220919-v1-6-4844816c9808@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,72 +93,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 21 Sept 2022 at 18:08, Qais Yousef <qais.yousef@arm.com> wrote:
->
-> Hi Vincent
->
-> On 09/16/22 10:02, Vincent Guittot wrote:
-> > This patchset restarts the work about adding a latency priority to describe
-> > the latency tolerance of cfs tasks.
-> >
-> > The patches [1-4] have been done by Parth:
-> > https://lore.kernel.org/lkml/20200228090755.22829-1-parth@linux.ibm.com/
-> >
-> > I have just rebased and moved the set of latency priority outside the
-> > priority update. I have removed the reviewed tag because the patches
-> > are 2 years old.
-> >
-> > The patch [5] uses latency nice priority to define a latency offset
-> > and then to decide if a cfs task can preempt the current running task. The
-> > patch gives some tests results with cyclictests and hackbench to highlight
-> > the benefit of latency priority for short interactive task or
-> > long intensive tasks.
-> >
-> > Patch [6] adds the support of latency_offset to task group by adding a
-> > cpu.latency field. There were discussions for the last version about
-> > using a real unit for the field so I decided to expose directly the
-> > latency offset which reflects the time up to which we can preempt when the
-> > value is negative, or up to which we can defer the preemption when the
-> > value is positive.
-> > The range is [-sysctl_sched_latency:sysctl_sched_latency]
-> >
-> > Patch [7] makes sched_core taking into account the latency offset.
-> >
-> > Patch [8] adds a rb tree to cover some corner cases where the latency
-> > sensitive task is preempted by high priority task (RT/DL) or fails to
-> > preempt them. This patch ensures that tasks will have at least a
-> > slice of sched_min_granularity in priority at wakeup. The patch gives
-> > results to show the benefit in addition to patch 5
-> >
-> > I have also backported the patchset on a dragonboard RB3 with an android
-> > mainline kernel based on v5.18 for a quick test. I have used
-> > the TouchLatency app which is part of AOSP and described to be very good
-> > test to highlight jitter and jank frame sources of a system [1].
-> > In addition to the app, I have added some short running tasks waking-up
-> > regularly (to use the 8 cpus for 4 ms every 37777us) to stress the system
-> > without overloading it (and disabling EAS). The 1st results shows that the
-> > patchset helps to reduce the missed deadline frames from 5% to less than
-> > 0.1% when the cpu.latency of task group are set.
-> >
-> > [1] https://source.android.com/docs/core/debug/eval_perf#touchlatency
->
-> One thing that still confuses me is whether this proposal is supposed to be the
-> only consumer of this interface or we still expect other users to be able to
-> use this hint to optimize other sources of latency in the scheduler? Last
-> discussion [1] raised issues on the interface and I haven't seen any
-> discussions on the suitability of the interface to enable future consumers.
->
-> I might have missed something. What's the current state on this?
+On 19/09/2022 18:56, Guillaume Ranquet wrote:
+> In order to share register with a dedicated ddc driver, set the hdmi
+> compatible to syscon.
+> 
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> 
+> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.yaml
+> index abb231a0694b..86297b7eb7f7 100644
+> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.yaml
+> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.yaml
+> @@ -16,12 +16,14 @@ description: |
+>  
+>  properties:
+>    compatible:
+> -    enum:
+> -      - mediatek,mt2701-hdmi
+> -      - mediatek,mt7623-hdmi
+> -      - mediatek,mt8167-hdmi
+> -      - mediatek,mt8173-hdmi
+> -      - mediatek,mt8195-hdmi
+> +    items:
+> +      - enum:
+> +          - mediatek,mt2701-hdmi
+> +          - mediatek,mt7623-hdmi
+> +          - mediatek,mt8167-hdmi
+> +          - mediatek,mt8173-hdmi
+> +      - const: syscon
 
-Nothing has changed since the discussion in March:
-https://lore.kernel.org/lkml/CAKfTPtBCKyqa-472Z7LtiWTq+Yirq6=jSrkzJtNbkdKXnwP-mA@mail.gmail.com/T/
+So you just broke all DTS and I do not see patches fixing them...
 
->
->
-> [1] https://lwn.net/Articles/820659/
->
->
-> Thanks
->
-> --
-> Qais Yousef
+Best regards,
+Krzysztof
+
