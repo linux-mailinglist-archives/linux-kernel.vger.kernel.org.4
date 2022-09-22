@@ -2,98 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FFC25E56FB
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 02:07:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5CAA5E570E
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 02:14:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229996AbiIVAHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 20:07:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47768 "EHLO
+        id S229962AbiIVAOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 20:14:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229909AbiIVAH2 (ORCPT
+        with ESMTP id S229815AbiIVAOf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 20:07:28 -0400
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E68B6A6AEF
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 17:07:27 -0700 (PDT)
-Received: by mail-ot1-x32b.google.com with SMTP id t8-20020a9d5908000000b0063b41908168so5099620oth.8
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 17:07:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date;
-        bh=FcyQcUXi9xALQQ6Lm7VNXiWYStBjH/LCUTADg6v4m+k=;
-        b=d+EIuUmfXkEsKT2YNjQagsUmNpqExC1p28C7sIdNOnlcvS2azLWqYLQIYmwLxuC7Ro
-         92gweJAjoVJhdwSRTP0pjmKgX35cfrWe5N0xGY3Wxq+Z+BNJ7dzFCvxJLnWEgVlS/wJU
-         vY+dundowmxk557ov3mfkbQsAECeyKzbwBK57oK4CF3Zvoux2vvl7DPWhd0pRFi08qLK
-         GqQ1YVysbRbQMK6B/eCFvvrCsvokBTuOZjwICdBEFeQQvhzJWwKzo+A0xB2My01PwS72
-         CVvfF7HqMJCDiEiYCz3tjiG/o5KXHybBmOf0zZiPpCYToXBVEZRi9PUYPeIHI6nAy4O5
-         JTBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=FcyQcUXi9xALQQ6Lm7VNXiWYStBjH/LCUTADg6v4m+k=;
-        b=FlCohfpQ5ncyGxVxrHixUR+44eaCXh5iRQeTayfZfA0gpu35gPvhl0rMwhXeTGovSq
-         VktDO4Y01qQ2jilthAhfxd641VGsFMXx8STU8gPb1tiKP0lHJmR3sR9oxHcrSnFAO8tK
-         L2k2vKhlHwuaqjahmjbIYuJ0koeGCFzVSUExobODfvf4TeQ5JJG1PG+vVuBOC2rXqmW6
-         r4YDxTs5QGoAbJR2LobXVZlhDJSo+pYl7PRDXD9opEB5OAsqsoBF1B3PQsRROECWaZhI
-         esnqxPwxe1eQR9wUFQPs0pMQckqNVjRqwHHeD/9aHHA51iNUNouihDAoxzpsPcIPgYJM
-         bXpw==
-X-Gm-Message-State: ACrzQf2n3YKQr64dbj0lHppYPKCTjwWnzZuDo5Xj5UMdfzb1IjD+5vC+
-        zVbRQuyZuZImVkAjh4eK2Kdnj4I8BcXkO/jDavQ=
-X-Google-Smtp-Source: AMsMyM5nUMnbw47qOZtHwEA3dPmHbEZWPnVXhqr5U3ldql0dDYDAfnw+xvVwBs83TWPapvaKEgSpzTwDiAQGcWT3h7E=
-X-Received: by 2002:a05:6830:1642:b0:655:ade9:2a90 with SMTP id
- h2-20020a056830164200b00655ade92a90mr366051otr.19.1663805247314; Wed, 21 Sep
- 2022 17:07:27 -0700 (PDT)
+        Wed, 21 Sep 2022 20:14:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B436425;
+        Wed, 21 Sep 2022 17:14:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A1E9D632DE;
+        Thu, 22 Sep 2022 00:14:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDD59C433C1;
+        Thu, 22 Sep 2022 00:14:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663805672;
+        bh=AqQ9r6jKKEdIP1KLMG+7Lq7QqqeArJ/0yKpA4jI6foM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GWXzjieCObHHLAI7eAidV1+pSLEjUgOnbjmxVnfaqwrQgaFRxrIwMzD92BBTiDmNp
+         Lvljc+9ApYsP2PVl0HFUD5UKwHJYOn/MkzcRfRU2Xd+G6YIc7L2rraiXnOzfkb77Et
+         aNiyAAY48lW95eG4NnMbgCIe4VlHsZVQiyGXDKHXnAtim5Boc68pbVGMJZgRuStimz
+         HERLh/vDN/9eNZ80FuLF3fUJy2yWACyfYnqtpTMllOV+Fh0Vk/u/98UGJgHO1BRVTV
+         mloqMmODCZrGdOrLJPSXUZJ0CPFJxUGRWlEK/gCCR8LV9XpDqgcwNKOm2Xd89yZh/Q
+         tidsaAe9FepsA==
+Date:   Wed, 21 Sep 2022 19:14:29 -0500
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/7] dt-bindings: msm/dp: Add SDM845 and SC8280XP
+ compatibles
+Message-ID: <20220922001429.zqfap3clprvlo6jo@builder.lan>
+References: <20220916200028.25009-1-quic_bjorande@quicinc.com>
+ <20220916200028.25009-2-quic_bjorande@quicinc.com>
+ <1641e41c-08c7-859b-644a-28d966fb00f3@linaro.org>
+ <20220919211832.6b3buqxrnfp6yjjg@builder.lan>
+ <6b242b44-b657-c7a6-63ca-465c7031376f@linaro.org>
 MIME-Version: 1.0
-Received: by 2002:a05:6802:1e0d:0:0:0:0 with HTTP; Wed, 21 Sep 2022 17:07:27
- -0700 (PDT)
-Reply-To: linadavid0089@gmail.com
-From:   Lina David <tinaevan26@gmail.com>
-Date:   Thu, 22 Sep 2022 01:07:27 +0100
-Message-ID: <CACU_YNNoD9un0X2g0PXEivMn8cJc01DBPJO+_H9ZCNf0rB-HLw@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:32b listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4997]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [tinaevan26[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [linadavid0089[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [tinaevan26[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  3.0 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6b242b44-b657-c7a6-63ca-465c7031376f@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hello,
-how are you?
+On Tue, Sep 20, 2022 at 09:09:13AM +0200, Krzysztof Kozlowski wrote:
+> On 19/09/2022 23:18, Bjorn Andersson wrote:
+> > On Sat, Sep 17, 2022 at 06:03:27PM +0100, Krzysztof Kozlowski wrote:
+> >> On 16/09/2022 21:00, Bjorn Andersson wrote:
+> >>> From: Bjorn Andersson <bjorn.andersson@linaro.org>
+> >>>
+> >>> Add compatibles for the DisplayPort and Embedded DisplayPort blocks in
+> >>> Qualcomm SDM845 and SC8280XP platforms.
+> >>>
+> >>> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> >>> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> >>
+> >> No need for quicinc SoB (unless you also take ownership).
+> >>
+> > 
+> > It's my understanding that both needs to be there. Bjorn @ Linaro
+> > authored the patch and the author must certify its origin, but as the
+> > submitter I must certify its origin.
+> 
+> It's the same person. There are no two Bjorns (unless there are :) ), so
+> you certify with old email. SoB chain is coming from people, not email
+> addresses.
+> 
+
+IANAL, but I don't think it's the same person. I can't use my old
+signature to certify the origin in a contribution today and I can't
+claim authorship of something Linaro did.
+
+> And it is not only my understanding of SoB chain.
+> https://lore.kernel.org/all/YuKcBO5JatwRYQJ3@kroah.com/
+> 
+
+Again, IANAL, but I think the situation is different given AMD and
+Xilinx relationship.
+
+> > 
+> > I'm not entirely sure what you mean about taking ownership, 
+> 
+> I meant you to be the author of the commit.
+> 
+
+As mentioned above, I can't do that.
+
+Regards,
+Bjorn
+
+> > I am going
+> > to pursue getting these patches landed. But it wouldn't be correct for
+> > new me to claim I authored them.
+> 
+> Yeah, that's true.
+> 
+> 
+> Best regards,
+> Krzysztof
