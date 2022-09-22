@@ -2,146 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8086A5E6DC2
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 23:11:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51BA05E6DCB
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 23:14:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230472AbiIVVLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 17:11:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58436 "EHLO
+        id S230463AbiIVVOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 17:14:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230456AbiIVVK5 (ORCPT
+        with ESMTP id S229810AbiIVVOJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 17:10:57 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 414A6D33FA;
-        Thu, 22 Sep 2022 14:10:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=oZtCrzlU8zHljgr1R2j9cDX6UybGiJ/h68xP7q8dY5c=; b=xO8rnVeZFkIlPWN5B0GOmOrTrV
-        4OUxEC4juRUuOEFhDl/HilDs5jY/dBNVBOu9cbN7apobfsdv5r+kcM/4JoCPkOMyZO/MZQFXtZGKG
-        iWLK0QLZQsmGq8V7gFcTmgPxQCZRgyMztSRyeSAQlg7nqk4W7hS81wJYTCGint3a52SM=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1obTT2-00HZVa-Ku; Thu, 22 Sep 2022 23:10:44 +0200
-Date:   Thu, 22 Sep 2022 23:10:44 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Mauri Sandberg <maukka@ext.kapsi.fi>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        arnd@arndb.de, olof@lixom.net, sebastian.hesselbarth@gmail.com,
-        gregory.clement@bootlin.com, linux@armlinux.org.uk,
-        pali@kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 3/3] ARM: orion5x: Add D-Link DNS-323 based on Device
- Tree
-Message-ID: <YyzPVMrfcOkvngxl@lunn.ch>
-References: <20220427162123.110458-1-maukka@ext.kapsi.fi>
- <20220922202458.7592-1-maukka@ext.kapsi.fi>
- <20220922202458.7592-4-maukka@ext.kapsi.fi>
+        Thu, 22 Sep 2022 17:14:09 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC38ADDDBA
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 14:14:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=EC05pt9zmG4/8UJJui2h2xqvEJmD
+        uZx3ATVSlZERjTY=; b=BbsKkzr1Pf86q809dZtf+5ICSexBfcF18KBiSw15Xlkm
+        CGIG7BA5eaNErPygsCwozA95kT8KkeVUGKvqxkw29ifH4a+uBf/NP/b/extI8kpv
+        /pJUy9MJBcPMqLtAPPEu7Lhi0GUhWpAZPTGJTOAV1rfUJZTavgiM4hvTn73fzAw=
+Received: (qmail 1784186 invoked from network); 22 Sep 2022 23:14:02 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 22 Sep 2022 23:14:02 +0200
+X-UD-Smtp-Session: l3s3148p1@Ez8yikrp5uUgAwDtxwncAPgJb5TsabMI
+Date:   Thu, 22 Sep 2022 23:13:58 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-renesas-soc@vger.kernel.org
+Cc:     Rob Herring <robh@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2] dt-bindings: timer: renesas,tmu: Add r8a779f0 support
+Message-ID: <YyzQFheOv2Lg0t6F@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-renesas-soc@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220830104921.7532-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="2h2rjwr6S8Iuje0Q"
 Content-Disposition: inline
-In-Reply-To: <20220922202458.7592-4-maukka@ext.kapsi.fi>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220830104921.7532-1-wsa+renesas@sang-engineering.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +static void __init dns323_dt_eth_fixup(void)
-> +{
-> +	struct device_node *np;
-> +	u8 addr[ETH_ALEN];
-> +	int ret;
-> +
-> +	/*
-> +	 * The ethernet interfaces forget the MAC address assigned by u-boot
-> +	 * if the clocks are turned off. Usually, u-boot on orion boards
-> +	 * has no DT support to properly set local-mac-address property.
-> +	 * As a workaround, we get the MAC address that is stored in flash
-> +	 * and update the port device node if no valid MAC address is set.
-> +	 */
 
-This is true for Kirkwood, but orion5x does not have any clocks to
-gate. So i'm pretty sure this is not true. You copied this code for a
-different reason. Please document here the real reason for this code.
+--2h2rjwr6S8Iuje0Q
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> +	ret = dns323_read_mac_addr(addr);
-> +
-> +	if (ret) {
-> +		pr_warn("Unable to find MAC address in flash memory\n");
-> +		return;
-> +	}
-> +
-> +	np = of_find_compatible_node(NULL, NULL, "marvell,orion-eth-port");
-> +
-> +	if (!IS_ERR(np)) {
-> +		struct device_node *pnp = of_get_parent(np);
-> +		struct clk *clk;
-> +		struct property *pmac;
-> +		u8 tmpmac[ETH_ALEN];
-> +		u8 *macaddr;
-> +		int i;
-> +
-> +		if (!pnp)
-> +			return;
-> +
-> +		/* skip disabled nodes or nodes with valid MAC address*/
-> +		if (!of_device_is_available(pnp) ||
-> +		    !of_get_mac_address(np, tmpmac))
-> +			goto eth_fixup_skip;
-> +
-> +		clk = of_clk_get(pnp, 0);
-> +		if (IS_ERR(clk))
-> +			goto eth_fixup_skip;
-> +
-> +		/* ensure port clock is not gated to not hang CPU */
-> +		clk_prepare_enable(clk);
+On Tue, Aug 30, 2022 at 12:49:21PM +0200, Wolfram Sang wrote:
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Acked-by: Rob Herring <robh@kernel.org>
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
 
-I'm pretty sure this clock stuff is not needed. Please comment it out
-and see if the machine locks up. Kirkwood just stops dead if you
-access registers when there clocks are disabled. For Orion5x, the
-ethernet should always have a clock.
+Can we have this simple patch in 6.1 please? Otherwise DT build warnings
+will show up. Or is there something I could help with?
 
-> +
-> +		/* store MAC address register contents in local-mac-address */
-> +		pmac = kzalloc(sizeof(*pmac) + 6, GFP_KERNEL);
-> +		if (!pmac)
-> +			goto eth_fixup_no_mem;
-> +
-> +		pmac->value = pmac + 1;
-> +		pmac->length = ETH_ALEN;
-> +		pmac->name = kstrdup("local-mac-address", GFP_KERNEL);
-> +		if (!pmac->name) {
-> +			kfree(pmac);
-> +			goto eth_fixup_no_mem;
-> +		}
-> +
-> +		macaddr = pmac->value;
-> +		for (i = 0; i < ETH_ALEN; i++)
-> +			macaddr[i] = addr[i];
-> +
-> +		of_update_property(np, pmac);
-> +
-> +eth_fixup_no_mem:
-> +		clk_disable_unprepare(clk);
-> +		clk_put(clk);
-> +eth_fixup_skip:
-> +		of_node_put(pnp);
-> +	}
-> +}
-> +
-> +void __init dns323_init_dt(void)
-> +{
-> +	if (of_machine_is_compatible("dlink,dns323a1")) {
-> +		writel(0, MPP_DEV_CTRL);		/* DEV_D[31:16] */
+>=20
+> Change since v1: added tags
+>=20
+>  Documentation/devicetree/bindings/timer/renesas,tmu.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/timer/renesas,tmu.yaml b/D=
+ocumentation/devicetree/bindings/timer/renesas,tmu.yaml
+> index c57169118b68..60f4c059bcff 100644
+> --- a/Documentation/devicetree/bindings/timer/renesas,tmu.yaml
+> +++ b/Documentation/devicetree/bindings/timer/renesas,tmu.yaml
+> @@ -37,6 +37,7 @@ properties:
+>            - renesas,tmu-r8a77990 # R-Car E3
+>            - renesas,tmu-r8a77995 # R-Car D3
+>            - renesas,tmu-r8a779a0 # R-Car V3U
+> +          - renesas,tmu-r8a779f0 # R-Car S4-8
+>        - const: renesas,tmu
+> =20
+>    reg:
+> --=20
+> 2.35.1
+>=20
 
-I spotted this in dns323-setup.c as well. Do you have any idea what it
-does?
+--2h2rjwr6S8Iuje0Q
+Content-Type: application/pgp-signature; name="signature.asc"
 
-	Andrew
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMs0BEACgkQFA3kzBSg
+KbYhHxAApKB5ESn8IEeajJ3288k7/7FZayqH6oOk4dPuUytQajJs6TKugSR4agWA
+fUTJ46GB6JxK1i/hkgdnzgpPw/ImWDcJ4MiH+t2Z+TOVMI0MY/7AlIWZtC8i1oel
+oIOqNRMK1+KdTGPwUw5bnxFXpfJpBg9L/VmPdHflTktyn3f8OcRfQNKH5IOL2bUz
+FxglC4+suePuR7dB5vmH2Oj9qZn+dGJVYq6YbdASl9LjsUgjFy4cYmJp0E6RFxg6
+KUBEeFASLk3YkM/BEbxbcYpI3BpICYbocQkrFVCLtVRfCGyldmlKWOS7sCLKviKj
+YJL1Tce4KIJv4nhszI4HqcypSiECoVeanUD9CJKw7I0WpgaIwg53KghuaCjD+d9w
+BT5KeZtBtjr85oGjVSadmAybvQy3C57lPzpag9Mhb8EAqL/uqTliLxc72pZ2l5M5
+Xy38EezZ1NGedeUHgWDRnfYvYytv8jFkl2ldAlyw/Kgh6a9bjv5uecLwrq+bcjO4
+xoT2+kTGPup1wPTRUn2RGhIo4Zwh3omcGAOGkQj9BThT4Kmt2tfyBYEd6e5JeDnV
+9amW7rCo0FeIUXl629SJNPJZbQSmPaoJIqPlgntH5iG0X0S8JkXWLtcsa7tAXb28
+wdSE2GSzfSicXk/povUfq3ESAF5u4LLKpYpGEBF7od8R0TStRUs=
+=n+45
+-----END PGP SIGNATURE-----
+
+--2h2rjwr6S8Iuje0Q--
