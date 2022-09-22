@@ -2,104 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C92AC5E6D64
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 22:53:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B972F5E6D66
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 22:53:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230207AbiIVUxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 16:53:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59652 "EHLO
+        id S230005AbiIVUxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 16:53:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbiIVUw7 (ORCPT
+        with ESMTP id S229871AbiIVUxF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 16:52:59 -0400
-Received: from mail-vs1-xe44.google.com (mail-vs1-xe44.google.com [IPv6:2607:f8b0:4864:20::e44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FB3710AB14
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 13:52:59 -0700 (PDT)
-Received: by mail-vs1-xe44.google.com with SMTP id m65so11690659vsc.1
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 13:52:59 -0700 (PDT)
+        Thu, 22 Sep 2022 16:53:05 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D65F710E5D4;
+        Thu, 22 Sep 2022 13:53:04 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id e67so4230944pgc.12;
+        Thu, 22 Sep 2022 13:53:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date;
-        bh=/VLGmsMauVfG+enZTZu/ewj+085KfTugYFPfY4C++4U=;
-        b=FKHuP3kx2dSmeS53qNFlBDDwPNgR+ULn8Tt6E9tycRj10FW37nqVHXGd26vfGCwutu
-         zmdshTAGZdWvatcJO5A11DsnmJ+WKg681biAnDhm/b5bkJ1rAln6jax+48D8TCnIj6e6
-         VRoQWFhpKw+CypaV6BcxEBWpnZAC3TsDf/93belIUxvzCeJZZbXdOyHGwNEB3py2yHpX
-         hnPTGzUq5wHs6oMqcfTrKKK+talLdkIdLXQ0A7jReJwiB+daZPfWvH30u1FsMZ3ykWzX
-         tjfJiQg7N+w0axj2jOpsWfPxIC+5rDeSCpS3wT0rElqF2YK8xCXV8cCyqwEIYv9zZfQj
-         p4Dw==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date;
+        bh=OEiYqQ5XMiZEsacnAM3U6vllLLEEWGSHG5V5hJfSBLU=;
+        b=Dm/XGtOHUuh9qDFLOe7p4DdAUZO7iM314X5cc4JpfK9kYIOYoM1b4UF7mBai7qihfs
+         N/Z2XL5t6WdMEdNl3ABr5A23WTkr9hJkIReoHglVx/hUMs7KXd6KQF/5vte33u5h+LER
+         PVgMc0Bpch4I05li8IE1FJuH04tEyK5zdLRl2Rlyb5Xcljo6tPP8OrPLlwW7IIJ2hO1S
+         h75uS1/IFW2pRnHwfOYSygVKjoljOg0N7yzlqKiWKE3ohvLQLcA2MTD1A1KuWdINWWYn
+         WBcxh6XyRTkPgXC3EWozvnlwZxB/KTcH2zhThrw8HzgIISzrYfrzz8b8tyvT4jPPkB+7
+         yzUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=/VLGmsMauVfG+enZTZu/ewj+085KfTugYFPfY4C++4U=;
-        b=7/e3FN5jdIzmfEtyyyc2aA1JcMpSWRNzujA+HJ0ke/G+HsMy/0B/X9NecCDujF4Fqj
-         52YKp6D9hXDoXj86L9MBX0ATmwrx8vk+WC+VUx/E2eeQbw2ryBfiN5IJXpnOlmyOXbGL
-         f17FR26uRzDgmipjxlVfv6x++LLhU6z26KSI6yQsmzLHSYKsPHEl9eZ2XGL85pYakAa2
-         2hWdBtA82jSB+i2siaYrP/SRu/SX/tjVUT/4YzbkQLrQqdfhPU7FcbD4dw3U4lXSmUfP
-         SadvbiHJNwZUaDvjB7Rud4R0B3nf6pwpAxU4L98oK5/1OmV97IRi/DswhWK+O2V8OJy6
-         HztQ==
-X-Gm-Message-State: ACrzQf3iNcwjtO6LBgjIT74H56M2HLb/7QR1B+WpveV0rB2clk7c1pP/
-        kbCDzb/GzKaRtd43QrViIF+xImz3wk4sTpMBhpk=
-X-Google-Smtp-Source: AMsMyM70mpluaV/GdkqtBWAF0NNM3dq/STc6PPYFsKg1I8l4e5EoTyNwY4pngIxGXyFi772Pz6TwLCKbgjVCqQcVMGs=
-X-Received: by 2002:a67:b80f:0:b0:398:9de6:2d6b with SMTP id
- i15-20020a67b80f000000b003989de62d6bmr2343627vsf.1.1663879978025; Thu, 22 Sep
- 2022 13:52:58 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date;
+        bh=OEiYqQ5XMiZEsacnAM3U6vllLLEEWGSHG5V5hJfSBLU=;
+        b=q4CsjS24y+400Z9uNcWddaqsW9nXdluYg+hrOsaHGL1mM04t4EBsyPZO9hdS+vyGbj
+         z01NcG/XvmK/xp40GIIBNsGT6RnPgEYQzk2JwTGyCjNgYgQqdiXI4qRSgjHIKHTZSgXI
+         ZcUjzKUdmPcokDFEc5Ba5dAIaY9KvPvEAmzbBg9RoixVMEQSTrRsmCeK16rVOhnHXMaj
+         LJxCsM3doN2X2Qs82sl0A8oXfRCljD4xcSyXt41yA6gFZz58QbYux5NvRBW3kAz0GEWU
+         38xNtFGXSl5MkFialjpy0OiTsvHQm6HsjFNEXO1BMZIz1iJNbqwcvc3+ivqBtMPQlpNm
+         VEgw==
+X-Gm-Message-State: ACrzQf00YzGuuGoD/cPY5tdVq4s+vaDMxu+CbDmT6qR1Ajp/G/ZnjXPv
+        MYvoYvVzw0oaZFxoCSgdMao=
+X-Google-Smtp-Source: AMsMyM6ayFSD3xpD5oqX2Zh/XuTEcTs+sreA32ohXSExSoLYAy9gzsn+WpsB/hhUxCGNXhHlhoFDog==
+X-Received: by 2002:a63:6905:0:b0:43c:d4:eef4 with SMTP id e5-20020a636905000000b0043c00d4eef4mr4513265pgc.126.1663879984312;
+        Thu, 22 Sep 2022 13:53:04 -0700 (PDT)
+Received: from balhae.corp.google.com ([2620:0:1000:1610:206:3611:6db0:fc8f])
+        by smtp.gmail.com with ESMTPSA id y7-20020a623207000000b0053f9466b1b2sm4889916pfy.35.2022.09.22.13.53.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Sep 2022 13:53:03 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, Song Liu <songliubraving@fb.com>,
+        Hao Luo <haoluo@google.com>, bpf@vger.kernel.org
+Subject: [PATCH v3] perf tools: Get a perf cgroup more portably in BPF
+Date:   Thu, 22 Sep 2022 13:53:02 -0700
+Message-Id: <20220922205302.749274-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.37.3.998.g577e59143f-goog
 MIME-Version: 1.0
-Received: by 2002:a59:dc0e:0:b0:2f8:b755:422 with HTTP; Thu, 22 Sep 2022
- 13:52:57 -0700 (PDT)
-Reply-To: jsmth8080@gmail.com
-From:   Jan Smith <maureencabrera633@gmail.com>
-Date:   Thu, 22 Sep 2022 22:52:57 +0200
-Message-ID: <CALH0pJw6Coy3B51mmqKorai6yq621Ls1bstW8Sed+YpKm9P=hQ@mail.gmail.com>
-Subject: Please Read
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.9 required=5.0 tests=BAYES_60,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:e44 listed in]
-        [list.dnswl.org]
-        *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
-        *      [score: 0.7397]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [jsmth8080[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [maureencabrera633[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [maureencabrera633[at]gmail.com]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Good Day,
+The perf_event_cgrp_id can be different on other configurations.
+To be more portable as CO-RE, it needs to get the cgroup subsys id
+using the bpf_core_enum_value() helper.
 
-I've viewed your profile on Linkedin regarding a proposal that has
-something in common with you, kindly reply back for more details on my
-private email: jsmth8080@gmail.com
+Suggested-by: Ian Rogers <irogers@google.com>
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+v3 changes)
+ * check compiler features for enum value
 
-Thanks,
-Jan Smith,
-jsmth8080@gmail.com
+v2 changes)
+ * fix off_cpu.bpf.c too
+ * get perf_subsys_id only once
+
+ tools/perf/util/bpf_skel/bperf_cgroup.bpf.c | 11 ++++++++++-
+ tools/perf/util/bpf_skel/off_cpu.bpf.c      | 12 ++++++++----
+ 2 files changed, 18 insertions(+), 5 deletions(-)
+
+diff --git a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
+index 292c430768b5..8e7520e273db 100644
+--- a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
++++ b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
+@@ -48,6 +48,7 @@ const volatile __u32 num_cpus = 1;
+ 
+ int enabled = 0;
+ int use_cgroup_v2 = 0;
++int perf_subsys_id = -1;
+ 
+ static inline int get_cgroup_v1_idx(__u32 *cgrps, int size)
+ {
+@@ -58,7 +59,15 @@ static inline int get_cgroup_v1_idx(__u32 *cgrps, int size)
+ 	int level;
+ 	int cnt;
+ 
+-	cgrp = BPF_CORE_READ(p, cgroups, subsys[perf_event_cgrp_id], cgroup);
++	if (perf_subsys_id == -1) {
++#if __has_builtin(__builtin_preserve_enum_value)
++		perf_subsys_id = bpf_core_enum_value(enum cgroup_subsys_id,
++						     perf_event_cgrp_id);
++#else
++		perf_subsys_id = perf_event_cgrp_id;
++#endif
++	}
++	cgrp = BPF_CORE_READ(p, cgroups, subsys[perf_subsys_id], cgroup);
+ 	level = BPF_CORE_READ(cgrp, level);
+ 
+ 	for (cnt = 0; i < MAX_LEVELS; i++) {
+diff --git a/tools/perf/util/bpf_skel/off_cpu.bpf.c b/tools/perf/util/bpf_skel/off_cpu.bpf.c
+index c4ba2bcf179f..e917ef7b8875 100644
+--- a/tools/perf/util/bpf_skel/off_cpu.bpf.c
++++ b/tools/perf/util/bpf_skel/off_cpu.bpf.c
+@@ -94,6 +94,8 @@ const volatile bool has_prev_state = false;
+ const volatile bool needs_cgroup = false;
+ const volatile bool uses_cgroup_v1 = false;
+ 
++int perf_subsys_id = -1;
++
+ /*
+  * Old kernel used to call it task_struct->state and now it's '__state'.
+  * Use BPF CO-RE "ignored suffix rule" to deal with it like below:
+@@ -119,11 +121,13 @@ static inline __u64 get_cgroup_id(struct task_struct *t)
+ {
+ 	struct cgroup *cgrp;
+ 
+-	if (uses_cgroup_v1)
+-		cgrp = BPF_CORE_READ(t, cgroups, subsys[perf_event_cgrp_id], cgroup);
+-	else
+-		cgrp = BPF_CORE_READ(t, cgroups, dfl_cgrp);
++	if (!uses_cgroup_v1)
++		return BPF_CORE_READ(t, cgroups, dfl_cgrp, kn, id);
++
++	if (perf_subsys_id == -1)
++		perf_subsys_id = bpf_core_enum_value(enum cgroup_subsys_id, perf_event_cgrp_id);
+ 
++	cgrp = BPF_CORE_READ(t, cgroups, subsys[perf_subsys_id], cgroup);
+ 	return BPF_CORE_READ(cgrp, kn, id);
+ }
+ 
+-- 
+2.37.3.998.g577e59143f-goog
+
