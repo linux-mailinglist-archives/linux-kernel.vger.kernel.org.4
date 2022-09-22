@@ -2,90 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 109955E5C2C
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 09:19:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE78B5E5C2F
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 09:19:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231130AbiIVHSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 03:18:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40232 "EHLO
+        id S230388AbiIVHTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 03:19:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230400AbiIVHSx (ORCPT
+        with ESMTP id S230353AbiIVHTl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 03:18:53 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 072B5B776B
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 00:18:52 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id k10so13192567lfm.4
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 00:18:51 -0700 (PDT)
+        Thu, 22 Sep 2022 03:19:41 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 959BB6359
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 00:19:39 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id s10so9877228ljp.5
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 00:19:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=ln6ZeHzfzIh7ZyAvFY4CPd7Whze3jXvv2P2xFSPlMGQ=;
-        b=ErecUnfehksu48GfFXY1dB5cjHTxnXqpVDD2eczsRIHNXp0+fJGKID0aaV7oXQ+xM1
-         7UzGFYZkEODN1QvfiSBIgr2dlG1gSVGBXkfNyZhTWIky0TloopA9PS41gknISZvJWgdo
-         QOK/0CIOeWjFvLaLoww1LRicmQ3cwIddX6Gocz2h7pRmKyxD+qR0Q5uvuys1dFSs+hJk
-         XfdKZr+7mkvgKE75usGv6nSPF1edW0PsXbToJ70O5MZXvT51FnFdZcXi9LzwtjvjJlgY
-         C8aNoEY+6FTSxr0nEmsUcvgeMg0XhqVHnZF0/zZ3ESBQqElajl9A8qvfwjQvbTWOnYbF
-         Hqwg==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=Iq5Fm6kb4l/9l7hrrqLF7wzKUoBamfvADToHUOZBGpQ=;
+        b=iU6d4nPD3iOlCMrWY+mCzqpv4+7GawgyDaLXYuSKkLeD9ZV7XlytBSr9BDbcDJJ3tv
+         KgcZxYyj58ByN15K3UgzL1md55VbbdONrdZFPIUSAo503eCJit9cn9T1ihGK6dPWvYTj
+         cZGinXYus7GDZAo3Ww+cTS23x+Cuk4c1iUmsYfaUZIUsE73egxEkvx5Fodw21b10WJu6
+         JqITB08nNP6g4yQ/JO3DM3h/aclC5sqNklewB8UVng/2l4MDbamPvfd4jd9XxE9Ef3U8
+         OGfszrthqGBzrs6bJk4w+F1e66/+udREweWVosA1OjV5C7nZ9lqKMlf74IZL4uhmm31y
+         9MHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=ln6ZeHzfzIh7ZyAvFY4CPd7Whze3jXvv2P2xFSPlMGQ=;
-        b=5Vz2l+acevlpf4m5X0DQNh9PMbBdy/AQu0T2lBgoW/yXNzjrM++RF1qqeuKEaKYYE4
-         NVlZEsg5ral2pEb+LJsjrgZUbu2hccZ1PVLI0WfhSZqhgOfr7r7WS2XwWpo0BKbaCByc
-         Xt0mKtmRQuuu8m1L475zXoKnsmbRPEf1Zkbi0tFzxoD48MrbzE/AL+hGO9agmKAZAPar
-         jsvlQg+X1ii3OnbF6e84UySUy6XcNfGi9i0xerlnpP9js+90b1VEXr7cI19TkwnvzSkh
-         KnvEOiJAhbeu2ZMkyY8tKyRqFgUwNe3Tpq11RFW8I5oPRUBcesv0a4VmWAAas8FpjbIX
-         gR3Q==
-X-Gm-Message-State: ACrzQf1XbeppLiuJPeXisYct+/gRoAM8cGsVSB3NjgR9A0T0xVZcQ2nD
-        hww714OH5EMbgw20BiKo5WMVxg==
-X-Google-Smtp-Source: AMsMyM47YFDCy8AwIT5M8sGMUa+EUaCIIo1zk4WZ+rlWlbFfVtDdWjoBH6LrVg/wiXrtgWAh0UwMAA==
-X-Received: by 2002:a05:6512:11e9:b0:49f:d530:9f25 with SMTP id p9-20020a05651211e900b0049fd5309f25mr749322lfs.533.1663831130309;
-        Thu, 22 Sep 2022 00:18:50 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id a7-20020a19f807000000b0048b256bb005sm804039lff.49.2022.09.22.00.18.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Sep 2022 00:18:49 -0700 (PDT)
-Message-ID: <260bb17f-efc8-1287-3e03-f9b8e79a6e31@linaro.org>
-Date:   Thu, 22 Sep 2022 09:18:47 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=Iq5Fm6kb4l/9l7hrrqLF7wzKUoBamfvADToHUOZBGpQ=;
+        b=aYKJVgmJN/Hh/qq27/A2whEu6HXm7APUqMQDSYD4nRqYC38nUOmej9jBCfx3QHJ5he
+         I/LD08avUo0PXGMV4jCa/bjiMvV10dIO+2N+33OjFQRU2kD6aXpuRNMYxnr8rz1SMZD6
+         aPqUtjcVC0X3e52wBYzmH5XexlXo2PoxaXv5XDiVh1dULO713ZKLT3y2wWQDkjq+Z4A3
+         33hJx9e7e8BcdpiKnmfztJ+G5gQ2YR+hPItBeYefCNKDiwYA3YD5ZEnCGRoYUp0kXUph
+         EyFYUGtFKSWeYmGL9v9HcoZiCE5MwfoXtlWwWQlzkKmdzZOMUcaEsYKAr62Wy2DrwKG7
+         GLKA==
+X-Gm-Message-State: ACrzQf2SSNA9X8MicO8jaNdJ2vy3ouDOQsqmph6abFM37Uvp713QJb8P
+        Biw2mzXfJpEzBK4r6xwAa346BMwkGC3/Cx91eqqJLQ==
+X-Google-Smtp-Source: AMsMyM4cAqH9Rqf1mtnGT4JF3CyFhM+N7tZZ1thnpOyhPnIk0E4uonInBLTDcOPzqnnmQPyN/oSncEFytC5v1ylHfYM=
+X-Received: by 2002:a2e:bf21:0:b0:266:2be3:61e8 with SMTP id
+ c33-20020a2ebf21000000b002662be361e8mr570118ljr.383.1663831177837; Thu, 22
+ Sep 2022 00:19:37 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v1 04/17] dt-bindings: display: mediatek: add MT8195 hdmi
- bindings
-Content-Language: en-US
-To:     Guillaume Ranquet <granquet@baylibre.com>,
-        Vinod Koul <vkoul@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        CK Hu <ck.hu@mediatek.com>, Jitao shi <jitao.shi@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-mediatek@lists.infradead.org,
-        dri-devel@lists.freedesktop.org,
-        Pablo Sun <pablo.sun@mediatek.com>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org
-References: <20220919-v1-0-4844816c9808@baylibre.com>
- <20220919-v1-4-4844816c9808@baylibre.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220919-v1-4-4844816c9808@baylibre.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20220916080305.29574-1-vincent.guittot@linaro.org> <20220921160834.4a2s3733vlr4rqfh@wubuntu>
+In-Reply-To: <20220921160834.4a2s3733vlr4rqfh@wubuntu>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Thu, 22 Sep 2022 09:19:26 +0200
+Message-ID: <CAKfTPtBWZ+BH+TmM-hcG8_StdNSP8JYmD7JX_ch7L-XEU6htOA@mail.gmail.com>
+Subject: Re: [PATCH v4 0/8] Add latency priority for CFS class
+To:     Qais Yousef <qais.yousef@arm.com>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, parth@linux.ibm.com,
+        chris.hyser@oracle.com, valentin.schneider@arm.com,
+        patrick.bellasi@matbug.net, David.Laight@aculab.com,
+        pjt@google.com, pavel@ucw.cz, tj@kernel.org, qperret@google.com,
+        tim.c.chen@linux.intel.com, joshdon@google.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,213 +71,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/09/2022 18:56, Guillaume Ranquet wrote:
-> Add mt8195 SoC bindings for hdmi and hdmi-ddc
-> 
-> Make port1 optional for mt8195 as it only supports HDMI tx for now.
-> Requires a ddc-i2c-bus phandle.
-> Requires a power-domains phandle.
-> 
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> 
-> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.yaml
-> index bdaf0b51e68c..abb231a0694b 100644
-> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.yaml
-> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.yaml
-> @@ -21,6 +21,10 @@ properties:
->        - mediatek,mt7623-hdmi
->        - mediatek,mt8167-hdmi
->        - mediatek,mt8173-hdmi
-> +      - mediatek,mt8195-hdmi
-> +
-> +  clocks: true
-> +  clock-names: true
+On Wed, 21 Sept 2022 at 18:08, Qais Yousef <qais.yousef@arm.com> wrote:
+>
+> Hi Vincent
+>
+> On 09/16/22 10:02, Vincent Guittot wrote:
+> > This patchset restarts the work about adding a latency priority to describe
+> > the latency tolerance of cfs tasks.
+> >
+> > The patches [1-4] have been done by Parth:
+> > https://lore.kernel.org/lkml/20200228090755.22829-1-parth@linux.ibm.com/
+> >
+> > I have just rebased and moved the set of latency priority outside the
+> > priority update. I have removed the reviewed tag because the patches
+> > are 2 years old.
+> >
+> > The patch [5] uses latency nice priority to define a latency offset
+> > and then to decide if a cfs task can preempt the current running task. The
+> > patch gives some tests results with cyclictests and hackbench to highlight
+> > the benefit of latency priority for short interactive task or
+> > long intensive tasks.
+> >
+> > Patch [6] adds the support of latency_offset to task group by adding a
+> > cpu.latency field. There were discussions for the last version about
+> > using a real unit for the field so I decided to expose directly the
+> > latency offset which reflects the time up to which we can preempt when the
+> > value is negative, or up to which we can defer the preemption when the
+> > value is positive.
+> > The range is [-sysctl_sched_latency:sysctl_sched_latency]
+> >
+> > Patch [7] makes sched_core taking into account the latency offset.
+> >
+> > Patch [8] adds a rb tree to cover some corner cases where the latency
+> > sensitive task is preempted by high priority task (RT/DL) or fails to
+> > preempt them. This patch ensures that tasks will have at least a
+> > slice of sched_min_granularity in priority at wakeup. The patch gives
+> > results to show the benefit in addition to patch 5
+> >
+> > I have also backported the patchset on a dragonboard RB3 with an android
+> > mainline kernel based on v5.18 for a quick test. I have used
+> > the TouchLatency app which is part of AOSP and described to be very good
+> > test to highlight jitter and jank frame sources of a system [1].
+> > In addition to the app, I have added some short running tasks waking-up
+> > regularly (to use the 8 cpus for 4 ms every 37777us) to stress the system
+> > without overloading it (and disabling EAS). The 1st results shows that the
+> > patchset helps to reduce the missed deadline frames from 5% to less than
+> > 0.1% when the cpu.latency of task group are set.
+> >
+> > [1] https://source.android.com/docs/core/debug/eval_perf#touchlatency
+>
+> One thing that still confuses me is whether this proposal is supposed to be the
+> only consumer of this interface or we still expect other users to be able to
+> use this hint to optimize other sources of latency in the scheduler? Last
+> discussion [1] raised issues on the interface and I haven't seen any
+> discussions on the suitability of the interface to enable future consumers.
+>
+> I might have missed something. What's the current state on this?
 
-????
-Why is this moved?
+Nothing has changed since the discussion in March:
+https://lore.kernel.org/lkml/CAKfTPtBCKyqa-472Z7LtiWTq+Yirq6=jSrkzJtNbkdKXnwP-mA@mail.gmail.com/T/
 
->  
->    reg:
->      maxItems: 1
-> @@ -28,20 +32,6 @@ properties:
->    interrupts:
->      maxItems: 1
->  
-> -  clocks:
-> -    items:
-> -      - description: Pixel Clock
-> -      - description: HDMI PLL
-> -      - description: Bit Clock
-> -      - description: S/PDIF Clock
-> -
-> -  clock-names:
-> -    items:
-> -      - const: pixel
-> -      - const: pll
-> -      - const: bclk
-> -      - const: spdif
-
-Clock definition with constraints should stay here. You just customize
-it per variant.
-
-> -
->    phys:
->      maxItems: 1
->  
-> @@ -58,6 +48,16 @@ properties:
->      description: |
->        phandle link and register offset to the system configuration registers.
->  
-> +  ddc-i2c-bus:
-> +    $ref: '/schemas/types.yaml#/definitions/phandle'
-
-Drop quotes
-
-> +    description: Phandle to the ddc-i2c device
-
-Isn't this property of panel?
-
-> +
-> +  power-domains:
-> +    description:
-> +      A phandle and PM domain specifier as defined by bindings
-> +      of the power controller specified by phandle. See
-> +      Documentation/devicetree/bindings/power/power-domain.yaml for details.
-
-No need for this text. This is standard property. You miss maxItems.
-
-
-> +
->    ports:
->      $ref: /schemas/graph.yaml#/properties/ports
->  
-> @@ -76,7 +76,6 @@ properties:
->  
->      required:
->        - port@0
-> -      - port@1
->  
->  required:
->    - compatible
-> @@ -86,9 +85,55 @@ required:
->    - clock-names
->    - phys
->    - phy-names
-> -  - mediatek,syscon-hdmi
->    - ports
->  
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: mediatek,mt8195-hdmi
-> +    then:
-> +      properties:
-> +        clocks:
-> +          items:
-> +            - description: APB
-> +            - description: HDCP
-> +            - description: HDCP 24M
-> +            - description: Split HDMI
-> +        clock-names:
-> +          items:
-> +            - const: hdmi_apb_sel
-> +            - const: hdcp_sel
-> +            - const: hdcp24_sel
-> +            - const: split_hdmi
-
-Clocks are entirely different. I am not sure there is benefit in keeping
-these devices in one bindings.
-
-> +
-> +      required:
-> +        - power-domains
-> +        - ddc-i2c-bus
-
-Blank line,
-
-> +    else:
-> +      properties:
-> +        clocks:
-> +          items:
-> +            - description: Pixel Clock
-> +            - description: HDMI PLL
-> +            - description: Bit Clock
-> +            - description: S/PDIF Clock
-> +
-> +        clock-names:
-> +          items:
-> +            - const: pixel
-> +            - const: pll
-> +            - const: bclk
-> +            - const: spdif
-> +
-> +        ports:
-> +          required:
-> +            - port@1
-> +
-> +      required:
-> +        - mediatek,syscon-hdmi
-> +
->  additionalProperties: false
->  
->  examples:
-> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,mt8195-hdmi-ddc.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,mt8195-hdmi-ddc.yaml
-> new file mode 100644
-> index 000000000000..3c80bcebe6d3
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,mt8195-hdmi-ddc.yaml
-> @@ -0,0 +1,45 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/display/mediatek/mediatek,mt8195-hdmi-ddc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Mediatek HDMI DDC Device Tree Bindings for mt8195
-
-Drop Device Tree Bindings
-
-> +
-> +maintainers:
-> +  - CK Hu <ck.hu@mediatek.com>
-> +  - Jitao shi <jitao.shi@mediatek.com>
-> +
-> +description: |
-> +  The HDMI DDC i2c controller is used to interface with the HDMI DDC pins.
-
-Why is this different than existing ddc bindings?
-
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - mediatek,mt8195-hdmi-ddc
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  clock-names:
-> +    items:
-> +      - const: ddc-i2c
-> +
-> +required:
-> +  - compatible
-> +  - clocks
-> +  - clock-names
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    hdmiddc0: ddc_i2c {
-
-No underscores in node names. Generic node names.
-
-
-Best regards,
-Krzysztof
-
+>
+>
+> [1] https://lwn.net/Articles/820659/
+>
+>
+> Thanks
+>
+> --
+> Qais Yousef
