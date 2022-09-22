@@ -2,170 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7D785E6778
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 17:46:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F7125E677B
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 17:46:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231916AbiIVPqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 11:46:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55562 "EHLO
+        id S231809AbiIVPqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 11:46:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231872AbiIVPpj (ORCPT
+        with ESMTP id S231468AbiIVPp6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 11:45:39 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D11C42BD0
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 08:45:21 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1obONw-00085T-PU; Thu, 22 Sep 2022 17:45:08 +0200
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Samuel Holland <samuel@sholland.org>
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@rivosinc.com>, Dao Lu <daolu@rivosinc.com>,
-        Guo Ren <guoren@kernel.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] riscv: Fix build with CONFIG_CC_OPTIMIZE_FOR_SIZE=y
-Date:   Thu, 22 Sep 2022 17:45:07 +0200
-Message-ID: <2546376.ElGaqSPkdT@phil>
-In-Reply-To: <20220922060958.44203-1-samuel@sholland.org>
-References: <20220922060958.44203-1-samuel@sholland.org>
+        Thu, 22 Sep 2022 11:45:58 -0400
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3037AD98EE;
+        Thu, 22 Sep 2022 08:45:47 -0700 (PDT)
+Received: by mail-qv1-xf2c.google.com with SMTP id z9so7057441qvn.9;
+        Thu, 22 Sep 2022 08:45:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date;
+        bh=npCtthBeHly+tK7/LJyNLYN+91l67LV+vAHpLBuptm0=;
+        b=jZh1ryPqTFflrdzw1pVlOBIrpK2YtgyDcB43ieQ0TmlO/RJkKmAW4mfUIhezSS2RDy
+         TwYFpZ4ye8A0vjI5RBOzYbeYDUn/Rn1vsVQS3e7t40fi+pFNc82f6YtKOwkLS3wmwqB4
+         5m01nTy6773hdEbZTxVNsJdxp7rPE2coKUQMzePp11tSDsJMonmVJ6n5Cqp1wN+jPDNB
+         W+IoV6UwwgUIVasEElPwC78kPne4iLtopXSLaRfoLeX7HiasafOvmPQ/HQ/D3nDq3u8j
+         MHctb7NFaeBuFIieVHmuRkVmLXR8HkWApn5MU4Cuq2oK83IlHvjvSbCSUk1PHKIhV5sm
+         cWrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=npCtthBeHly+tK7/LJyNLYN+91l67LV+vAHpLBuptm0=;
+        b=em5qdqd7IEO+zcIuO0WMzM0z4ytl1Aqais5LqLwHaJ52A1+9eCu946lXD+C+CTGNF4
+         e4Jgc6RVJyQPfvscfizPcpGON2FENZZBXZ2TVieH6YmJELzBiB7Jd4c0ZemtVeF6MKyB
+         cZg4A5uzKLI+N12kKtBygLv6FVLGKhbx8C1pspqAyH0fUTeQX99xTiuURjo4jXo5KxJg
+         TQKHilMu4Weor6VsMo3CoUXaj3hs1zBNHe5keO3C1/PAxqBo5SR9K5mQdoxBEpGG3j0J
+         AFZTFHrlOHmzKESFgQxSK92nXueq6GGq83mhKy23CjRXjpVzQ/IbKPtb/qYnKhkNnD2C
+         kxdQ==
+X-Gm-Message-State: ACrzQf3ItmxfcrOac94YMHBqI1ZREeJV41lTYMFF2NEBCWPnA07ylALX
+        8cUDaR5lEiWyR8Qbg6Sqdy0=
+X-Google-Smtp-Source: AMsMyM7ODZpkGJ9MFeGSpV5Uyg7XrOb85sRdI09evkS7bhaTMIIDnMsZXgl8/8MN8Ryu4ETbLYChAw==
+X-Received: by 2002:ad4:5e86:0:b0:4aa:b556:6447 with SMTP id jl6-20020ad45e86000000b004aab5566447mr3197935qvb.121.1663861545918;
+        Thu, 22 Sep 2022 08:45:45 -0700 (PDT)
+Received: from [192.168.1.102] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id bb4-20020a05622a1b0400b0035cf2995ad8sm3493460qtb.51.2022.09.22.08.45.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Sep 2022 08:45:45 -0700 (PDT)
+Message-ID: <f7b97263-d68f-7368-e723-2db31495402b@gmail.com>
+Date:   Thu, 22 Sep 2022 08:45:43 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Subject: Re: [PATCH 5.19 00/39] 5.19.11-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220921164741.757857192@linuxfoundation.org>
+Content-Language: en-US
+In-Reply-To: <20220921164741.757857192@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Donnerstag, 22. September 2022, 08:09:58 CEST schrieb Samuel Holland:
-> commit 8eb060e10185 ("arch/riscv: add Zihintpause support") broke
-> building with CONFIG_CC_OPTIMIZE_FOR_SIZE enabled (gcc 11.1.0):
+On 9/21/22 09:47, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.19.11 release.
+> There are 39 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
->   CC      arch/riscv/kernel/vdso/vgettimeofday.o
-> In file included from <command-line>:
-> ./arch/riscv/include/asm/jump_label.h: In function 'cpu_relax':
-> ././include/linux/compiler_types.h:285:33: warning: 'asm' operand 0 probably does not match constraints
->   285 | #define asm_volatile_goto(x...) asm goto(x)
->       |                                 ^~~
-> ./arch/riscv/include/asm/jump_label.h:41:9: note: in expansion of macro 'asm_volatile_goto'
->    41 |         asm_volatile_goto(
->       |         ^~~~~~~~~~~~~~~~~
-> ././include/linux/compiler_types.h:285:33: error: impossible constraint in 'asm'
->   285 | #define asm_volatile_goto(x...) asm goto(x)
->       |                                 ^~~
-> ./arch/riscv/include/asm/jump_label.h:41:9: note: in expansion of macro 'asm_volatile_goto'
->    41 |         asm_volatile_goto(
->       |         ^~~~~~~~~~~~~~~~~
-> make[1]: *** [scripts/Makefile.build:249: arch/riscv/kernel/vdso/vgettimeofday.o] Error 1
-> make: *** [arch/riscv/Makefile:128: vdso_prepare] Error 2
+> Responses should be made by Fri, 23 Sep 2022 16:47:28 +0000.
+> Anything received after that time might be too late.
 > 
-> Having a static branch in cpu_relax() is problematic because that
-> function is widely inlined, including in some quite complex functions
-> like in the VDSO. A quick measurement shows this static branch is
-> responsible by itself for around 40% of the jump table.
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.11-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
+> and the diffstat can be found below.
 > 
-> Drop the static branch, which ends up being the same number of
-> instructions anyway. If Zihintpause is supported, we trade the nop from
-> the static branch for a div. If Zihintpause is unsupported, we trade the
-> jump from the static branch for (what gets interpreted as) a nop.
+> thanks,
 > 
-> Fixes: 8eb060e10185 ("arch/riscv: add Zihintpause support")
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
-> ---
-> 
->  arch/riscv/include/asm/hwcap.h          |  3 ---
->  arch/riscv/include/asm/vdso/processor.h | 25 ++++++++++---------------
->  2 files changed, 10 insertions(+), 18 deletions(-)
-> 
-> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
-> index 6f59ec64175e..b21d46e68386 100644
-> --- a/arch/riscv/include/asm/hwcap.h
-> +++ b/arch/riscv/include/asm/hwcap.h
-> @@ -68,7 +68,6 @@ enum riscv_isa_ext_id {
->   */
->  enum riscv_isa_ext_key {
->  	RISCV_ISA_EXT_KEY_FPU,		/* For 'F' and 'D' */
-> -	RISCV_ISA_EXT_KEY_ZIHINTPAUSE,
->  	RISCV_ISA_EXT_KEY_MAX,
->  };
->  
-> @@ -88,8 +87,6 @@ static __always_inline int riscv_isa_ext2key(int num)
->  		return RISCV_ISA_EXT_KEY_FPU;
->  	case RISCV_ISA_EXT_d:
->  		return RISCV_ISA_EXT_KEY_FPU;
-> -	case RISCV_ISA_EXT_ZIHINTPAUSE:
-> -		return RISCV_ISA_EXT_KEY_ZIHINTPAUSE;
->  	default:
->  		return -EINVAL;
->  	}
-> diff --git a/arch/riscv/include/asm/vdso/processor.h b/arch/riscv/include/asm/vdso/processor.h
-> index 1e4f8b4aef79..789bdb8211a2 100644
-> --- a/arch/riscv/include/asm/vdso/processor.h
-> +++ b/arch/riscv/include/asm/vdso/processor.h
-> @@ -4,30 +4,25 @@
->  
->  #ifndef __ASSEMBLY__
->  
-> -#include <linux/jump_label.h>
->  #include <asm/barrier.h>
-> -#include <asm/hwcap.h>
->  
->  static inline void cpu_relax(void)
->  {
-> -	if (!static_branch_likely(&riscv_isa_ext_keys[RISCV_ISA_EXT_KEY_ZIHINTPAUSE])) {
->  #ifdef __riscv_muldiv
-> -		int dummy;
-> -		/* In lieu of a halt instruction, induce a long-latency stall. */
-> -		__asm__ __volatile__ ("div %0, %0, zero" : "=r" (dummy));
-> +	int dummy;
-> +	/* In lieu of a halt instruction, induce a long-latency stall. */
-> +	__asm__ __volatile__ ("div %0, %0, zero" : "=r" (dummy));
->  #endif
-> -	} else {
-> -		/*
-> -		 * Reduce instruction retirement.
-> -		 * This assumes the PC changes.
-> -		 */
-> +	/*
-> +	 * Reduce instruction retirement.
-> +	 * This assumes the PC changes.
-> +	 */
->  #ifdef __riscv_zihintpause
-> -		__asm__ __volatile__ ("pause");
-> +	__asm__ __volatile__ ("pause");
->  #else
-> -		/* Encoding of the pause instruction */
-> -		__asm__ __volatile__ (".4byte 0x100000F");
-> +	/* Encoding of the pause instruction */
-> +	__asm__ __volatile__ (".4byte 0x100000F");
->  #endif
+> greg k-h
 
-hmm, though before this part of the code was only ever accessed
-when the zhintpause extension was really available on the running
-machine while now the pause instruction is called every time.
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
 
-So I'm just wondering, can't this run into some "illegal instruction"
-thingy on machines not supporting the extension?
-
-Heiko
-
-> -	}
->  	barrier();
->  }
->  
-> 
-
-
-
-
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
