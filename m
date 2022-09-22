@@ -2,49 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D47525E62E5
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 14:54:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B77DD5E6321
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 15:05:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231488AbiIVMyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 08:54:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56982 "EHLO
+        id S230124AbiIVNFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 09:05:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231454AbiIVMxd (ORCPT
+        with ESMTP id S231622AbiIVNEx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 08:53:33 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E1AEE99B1;
-        Thu, 22 Sep 2022 05:53:29 -0700 (PDT)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MYFTn424mzlXKy;
-        Thu, 22 Sep 2022 20:49:17 +0800 (CST)
-Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 22 Sep 2022 20:53:24 +0800
-Received: from huawei.com (10.175.127.227) by kwepemm600013.china.huawei.com
- (7.193.23.68) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 22 Sep
- 2022 20:53:20 +0800
-From:   Zhihao Cheng <chengzhihao1@huawei.com>
-To:     <jack@suse.com>, <tytso@mit.edu>, <brauner@kernel.org>
-CC:     <linux-fsdevel@vger.kernel.org>, <linux-ext4@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <chengzhihao1@huawei.com>,
-        <yukuai3@huawei.com>
-Subject: [PATCH v2 3/3] quota: Add more checking after reading from quota file
-Date:   Thu, 22 Sep 2022 21:04:01 +0800
-Message-ID: <20220922130401.1792256-4-chengzhihao1@huawei.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220922130401.1792256-1-chengzhihao1@huawei.com>
-References: <20220922130401.1792256-1-chengzhihao1@huawei.com>
+        Thu, 22 Sep 2022 09:04:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B15E85756C;
+        Thu, 22 Sep 2022 06:04:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0B77BB834B3;
+        Thu, 22 Sep 2022 13:04:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FB68C433D6;
+        Thu, 22 Sep 2022 13:04:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1663851888;
+        bh=KaSg9G4h33gJKbfeaNf1KpNs5s0DJSyscXsrY/WEgjM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BBHCNR6U5k3BybJsK++GmcOCVODMwvYoLgxAt9XdBKXuwafv+X8z5jucsNKQKvyQo
+         ShJkAIj2fP3gFWBmP++Nxj9ij+0kC5or0nXSUKs1sFD5VRuA/lQ7w1lX/KDAW8xp6q
+         yZvT43L8I2n64FkWV9sdemk506ApnU7OASMQwWSY=
+Date:   Thu, 22 Sep 2022 15:04:45 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     eadavis@sina.com
+Cc:     linhaoguo86@gmail.com, balbi@kernel.org, john@metanate.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb/gadget: Annotate midi lock nesting
+Message-ID: <YyxdbRhl7HGDDZZM@kroah.com>
+References: <CAB7eexKfentLRraPRR8kwqY3NRN9WTTijLW8SrKwAPzOzouxDg@mail.gmail.com>
+ <20220918035037.4160095-1-eadavis@sina.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220918035037.4160095-1-eadavis@sina.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,130 +51,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It would be better to do more sanity checking (eg. dqdh_entries,
-block no.) for the content read from quota file, which can prevent
-corrupting the quota file.
+On Sun, Sep 18, 2022 at 11:50:37AM +0800, eadavis@sina.com wrote:
+> From: Edward Adam Davis <eadavis@sina.com>
+> 
+> ============================================
+> WARNING: possible recursive locking detected
+> 6.0.0-rc4+ #20 Not tainted
+> --------------------------------------------
+> kworker/0:1H/9 is trying to acquire lock:
+> ffff888057ed9228 (&midi->transmit_lock){....}-{2:2}, at:
+> f_midi_transmit+0x18c/0x1460 drivers/usb/gadget/function/f_midi.c:683
+> 
+> but task is already holding lock:
+> ffff888057ed9228 (&midi->transmit_lock){....}-{2:2}, at:
+> f_midi_transmit+0x18c/0x1460 drivers/usb/gadget/function/f_midi.c:683
+> 
+> other info that might help us debug this:
+>  Possible unsafe locking scenario:
+> 
+>        CPU0
+>        ----
+>   lock(&midi->transmit_lock);
+>   lock(&midi->transmit_lock);
+> 
+>  *** DEADLOCK ***
+> 
+>  May be due to missing lock nesting notation
+> 
+> 3 locks held by kworker/0:1H/9:
+>  #0: ffff888011c65138 ((wq_completion)events_highpri){+.+.}-{0:0}, at:
+> arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+>  #0: ffff888011c65138 ((wq_completion)events_highpri){+.+.}-{0:0}, at:
+> arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
+>  #0: ffff888011c65138 ((wq_completion)events_highpri){+.+.}-{0:0}, at:
+> atomic_long_set include/linux/atomic/atomic-instrumented.h:1280
+> [inline]
+>  #0: ffff888011c65138 ((wq_completion)events_highpri){+.+.}-{0:0}, at:
+> set_work_data kernel/workqueue.c:636 [inline]
+>  #0: ffff888011c65138 ((wq_completion)events_highpri){+.+.}-{0:0}, at:
+> set_work_pool_and_clear_pending kernel/workqueue.c:663 [inline]
+>  #0: ffff888011c65138 ((wq_completion)events_highpri){+.+.}-{0:0}, at:
+> process_one_work+0x8b0/0x1650 kernel/workqueue.c:2260
+>  #1: ffffc900003afdb0 ((work_completion)(&midi->work)){+.+.}-{0:0},
+> at: process_one_work+0x8e4/0x1650 kernel/workqueue.c:2264
+>  #2: ffff888057ed9228 (&midi->transmit_lock){....}-{2:2}, at:
+> f_midi_transmit+0x18c/0x1460 drivers/usb/gadget/function/f_midi.c:683
+> 
+> stack backtrace:
+> CPU: 0 PID: 9 Comm: kworker/0:1H Not tainted 6.0.0-rc4+ #20
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+> 1.13.0-1ubuntu1.1 04/01/2014
+> Workqueue: events_highpri f_midi_in_work
+> Call Trace:
+>  <TASK>
+>  __dump_stack lib/dump_stack.c:88 [inline]
+>  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+>  print_deadlock_bug kernel/locking/lockdep.c:2988 [inline]
+>  check_deadlock kernel/locking/lockdep.c:3031 [inline]
+>  validate_chain kernel/locking/lockdep.c:3816 [inline]
+>  __lock_acquire.cold+0x152/0x3c3 kernel/locking/lockdep.c:5053
+>  lock_acquire kernel/locking/lockdep.c:5666 [inline]
+>  lock_acquire+0x1ab/0x580 kernel/locking/lockdep.c:5631
+>  __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+>  _raw_spin_lock_irqsave+0x39/0x50 kernel/locking/spinlock.c:162
+>  f_midi_transmit+0x18c/0x1460 drivers/usb/gadget/function/f_midi.c:683
+>  f_midi_complete+0x1bb/0x480 drivers/usb/gadget/function/f_midi.c:285
+>  dummy_queue+0x84a/0xb20 drivers/usb/gadget/udc/dummy_hcd.c:736
+>  usb_ep_queue+0xe8/0x3b0 drivers/usb/gadget/udc/core.c:288
+>  f_midi_do_transmit drivers/usb/gadget/function/f_midi.c:658 [inline]
+>  f_midi_transmit+0x7e4/0x1460 drivers/usb/gadget/function/f_midi.c:686
+>  process_one_work+0x9c7/0x1650 kernel/workqueue.c:2289
+>  worker_thread+0x623/0x1070 kernel/workqueue.c:2436
+>  kthread+0x2e9/0x3a0 kernel/kthread.c:376
+>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+>  </TASK>
+> Use nested notation for the spin_lock to avoid this warning.
+> 
+> Signed-off-by: Edward Adam Davis <eadavis@sina.com>
+> ---
+>  drivers/usb/gadget/function/f_midi.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/gadget/function/f_midi.c b/drivers/usb/gadget/function/f_midi.c
+> index fddf539008a9..ad745fbd549e 100644
+> --- a/drivers/usb/gadget/function/f_midi.c
+> +++ b/drivers/usb/gadget/function/f_midi.c
+> @@ -680,7 +680,8 @@ static void f_midi_transmit(struct f_midi *midi)
+>  	if (!ep || !ep->enabled)
+>  		goto drop_out;
+>  
+> -	spin_lock_irqsave(&midi->transmit_lock, flags);
+> +	spin_lock_irqsave_nested(&midi->transmit_lock, flags, 
+> +			SINGLE_DEPTH_NESTING);
 
-Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
----
- fs/quota/quota_tree.c | 43 +++++++++++++++++++++++++++++++++----------
- 1 file changed, 33 insertions(+), 10 deletions(-)
+This feels wrong (and you added a checkpatch warning at the same time.)
 
-diff --git a/fs/quota/quota_tree.c b/fs/quota/quota_tree.c
-index 47711e739ddb..54fe4ad71de5 100644
---- a/fs/quota/quota_tree.c
-+++ b/fs/quota/quota_tree.c
-@@ -71,12 +71,12 @@ static ssize_t write_blk(struct qtree_mem_dqinfo *info, uint blk, char *buf)
- 	return ret;
- }
- 
--static inline int do_check_range(struct super_block *sb, uint val,
--				 uint min_val, uint max_val)
-+static inline int do_check_range(struct super_block *sb, const char *val_name,
-+				 uint val, uint min_val, uint max_val)
- {
- 	if (val < min_val || val >= max_val) {
--		quota_error(sb, "Getting block %u out of range %u-%u",
--			    val, min_val, max_val);
-+		quota_error(sb, "Getting %s %u out of range %u-%u",
-+			    val_name, val, min_val, max_val);
- 		return -EUCLEAN;
- 	}
- 
-@@ -90,11 +90,13 @@ static int check_dquot_block_header(struct qtree_mem_dqinfo *info,
- 	uint nextblk, prevblk;
- 
- 	nextblk = le32_to_cpu(dh->dqdh_next_free);
--	err = do_check_range(info->dqi_sb, nextblk, 0, info->dqi_blocks);
-+	err = do_check_range(info->dqi_sb, "dqdh_next_free", nextblk, 0,
-+			     info->dqi_blocks);
- 	if (err)
- 		return err;
- 	prevblk = le32_to_cpu(dh->dqdh_prev_free);
--	err = do_check_range(info->dqi_sb, prevblk, 0, info->dqi_blocks);
-+	err = do_check_range(info->dqi_sb, "dqdh_prev_free", prevblk, 0,
-+			     info->dqi_blocks);
- 	if (err)
- 		return err;
- 
-@@ -268,6 +270,11 @@ static uint find_free_dqentry(struct qtree_mem_dqinfo *info,
- 		*err = check_dquot_block_header(info, dh);
- 		if (*err)
- 			goto out_buf;
-+		*err = do_check_range(info->dqi_sb, "dqdh_entries",
-+				      le16_to_cpu(dh->dqdh_entries), 0,
-+				      qtree_dqstr_in_blk(info));
-+		if (*err)
-+			goto out_buf;
- 	} else {
- 		blk = get_free_dqblk(info);
- 		if ((int)blk < 0) {
-@@ -349,6 +356,10 @@ static int do_insert_tree(struct qtree_mem_dqinfo *info, struct dquot *dquot,
- 	}
- 	ref = (__le32 *)buf;
- 	newblk = le32_to_cpu(ref[get_index(info, dquot->dq_id, depth)]);
-+	ret = do_check_range(dquot->dq_sb, "block", newblk, 0,
-+			     info->dqi_blocks);
-+	if (ret)
-+		goto out_buf;
- 	if (!newblk)
- 		newson = 1;
- 	if (depth == info->dqi_qtree_depth - 1) {
-@@ -461,6 +472,11 @@ static int free_dqentry(struct qtree_mem_dqinfo *info, struct dquot *dquot,
- 	}
- 	dh = (struct qt_disk_dqdbheader *)buf;
- 	ret = check_dquot_block_header(info, dh);
-+	if (ret)
-+		goto out_buf;
-+	ret = do_check_range(info->dqi_sb, "dqdh_entries",
-+			     le16_to_cpu(dh->dqdh_entries), 1,
-+			     qtree_dqstr_in_blk(info) + 1);
- 	if (ret)
- 		goto out_buf;
- 	le16_add_cpu(&dh->dqdh_entries, -1);
-@@ -519,7 +535,7 @@ static int remove_tree(struct qtree_mem_dqinfo *info, struct dquot *dquot,
- 		goto out_buf;
- 	}
- 	newblk = le32_to_cpu(ref[get_index(info, dquot->dq_id, depth)]);
--	ret = do_check_range(dquot->dq_sb, newblk, QT_TREEOFF,
-+	ret = do_check_range(dquot->dq_sb, "block", newblk, QT_TREEOFF,
- 			     info->dqi_blocks);
- 	if (ret)
- 		goto out_buf;
-@@ -623,7 +639,8 @@ static loff_t find_tree_dqentry(struct qtree_mem_dqinfo *info,
- 	blk = le32_to_cpu(ref[get_index(info, dquot->dq_id, depth)]);
- 	if (!blk)	/* No reference? */
- 		goto out_buf;
--	ret = do_check_range(dquot->dq_sb, blk, QT_TREEOFF, info->dqi_blocks);
-+	ret = do_check_range(dquot->dq_sb, "block", blk, QT_TREEOFF,
-+			     info->dqi_blocks);
- 	if (ret)
- 		goto out_buf;
- 
-@@ -739,7 +756,13 @@ static int find_next_id(struct qtree_mem_dqinfo *info, qid_t *id,
- 		goto out_buf;
- 	}
- 	for (i = __get_index(info, *id, depth); i < epb; i++) {
--		if (ref[i] == cpu_to_le32(0)) {
-+		uint blk_no = le32_to_cpu(ref[i]);
-+
-+		ret = do_check_range(info->dqi_sb, "block", blk_no, 0,
-+				     info->dqi_blocks);
-+		if (ret)
-+			goto out_buf;
-+		if (blk_no == 0) {
- 			*id += level_inc;
- 			continue;
- 		}
-@@ -747,7 +770,7 @@ static int find_next_id(struct qtree_mem_dqinfo *info, qid_t *id,
- 			ret = 0;
- 			goto out_buf;
- 		}
--		ret = find_next_id(info, id, le32_to_cpu(ref[i]), depth + 1);
-+		ret = find_next_id(info, id, blk_no, depth + 1);
- 		if (ret != -ENOENT)
- 			break;
- 	}
--- 
-2.31.1
+If this is correct, please document this really really well why this is
+the correct solution and we just don't really have a lockdep issue here
+with the code itself.
 
+thanks,
+
+greg k-h
