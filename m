@@ -2,70 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD8925E6A08
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 19:56:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 008EB5E6A0B
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 19:57:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232170AbiIVR4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 13:56:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48736 "EHLO
+        id S232177AbiIVR5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 13:57:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230002AbiIVR4C (ORCPT
+        with ESMTP id S229713AbiIVR5C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 13:56:02 -0400
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A37EC542
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 10:56:00 -0700 (PDT)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-11eab59db71so14926774fac.11
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 10:56:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=t9sywruqcuKyY9MOVDQxFF5A99e42M9asDqWWcnjP1g=;
-        b=f8iOwOZDaGvsk1kJiLcpnxW5pf3fBnQTVD4woOnEBJl8xrz9zaeBzsYIIXyAyd16SS
-         Gpr1A/Ix7iTMV3G0SuFqbxyIN6X3AbRMV8WZ8TPSNcEvHOx6vqLgITW6IRFsaglvo4LR
-         y6XNHmxAqOnQZWFs/nr0MC3Xo8xfGqRQQIdG1GwKZPLX7HqHuarB21OBhZQL+5v4/9Z8
-         hRXy4HFv6pSrQWpcrBHlx5yFCmEW3n75JLHwCkW1twjNgvmutCpYituv1dpM9FFQlsMZ
-         wbDvvT6OcIxkZBd3EkwdDiMmolcKMmtSGp83g0J/nNba7d8eGkFXOooP5OZC5KdwOywo
-         cRBQ==
+        Thu, 22 Sep 2022 13:57:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2305F3726
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 10:57:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663869420;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tzpm52sa8CSvL/F/FPIEyeRtTCXujozZJ/MwFvUSN40=;
+        b=T4RNswjMlcYUJtfREq/C4g8T1YBYFvkoKhdk5J0N+E40WTH17RYCEYcuWpFrnBUBSBy7GU
+        bzIsrNOUYKgft3G05uRUVRMnnq0JnSvQvlorNsRf/H+WNX+HeFDcyOxfo1IdaErEgke35f
+        vdcdn5J4h6pP0ge/50ALPZrdCjzwsak=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-21-PAPI9SbWMcmzjyVzJrZjwA-1; Thu, 22 Sep 2022 13:56:59 -0400
+X-MC-Unique: PAPI9SbWMcmzjyVzJrZjwA-1
+Received: by mail-wm1-f70.google.com with SMTP id d5-20020a05600c34c500b003b4fb42ccdeso1445088wmq.8
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 10:56:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=t9sywruqcuKyY9MOVDQxFF5A99e42M9asDqWWcnjP1g=;
-        b=mOnr5CEgPFSCO02chI21myIQZmj/QG6NXDH0w+IjXT8JAAk8h4aMK/zBY3t+gYKTfJ
-         vld3J6DPMdHkxBbbMlvAAE/sf3g/7yGjRGtah1ZOSMegEME3B7/XJ3eeJlIvYL97ZOAD
-         //NvJAbgSbhDWYv6ngl3EeA8NGI9S1cPIvbFWvCWVSHg0TL3NjVyBBrqwFdBkLwhq9jn
-         8xB+8hLt+rx2YDol9yRRRgWfQpnc3fMKIRBIRVVSI5rqXGFD4Z95H/GW/Jv081MwGoS8
-         gLTk/LQN26UCzBeIE0sH26irBYdzNkLQypN2moL64WlVQfrMiWAyuPU0ZNbuqzZDX+S0
-         KDGQ==
-X-Gm-Message-State: ACrzQf1ajy7vIsBm+8+o27u5kRTz+h9WvzZugcLCju3BSpNKzGRmJWWM
-        +xPGKlslUllzh3M3aYYetUqxhGbToh1QJT9X+vc+wA==
-X-Google-Smtp-Source: AMsMyM4f7HZsorZh9Oc9dnMigbdijdeZCWk/IN1jZJHRpTNiH4MjQiAYgzR8hOZ6mUUDLZ/VbEGM6NB97xPlvZUhZs8=
-X-Received: by 2002:a05:6870:580c:b0:12a:f136:a8f5 with SMTP id
- r12-20020a056870580c00b0012af136a8f5mr8779885oap.269.1663869359794; Thu, 22
- Sep 2022 10:55:59 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=tzpm52sa8CSvL/F/FPIEyeRtTCXujozZJ/MwFvUSN40=;
+        b=qG0c+BeqCjMiBApeJceQ8x2fsa4eneYK5GpeXQCakLtiSWZeAiaZiMVHGoKL6BXn/e
+         ZR0rBbdGzcxpyMBWYks2NZY/ypqBx0h4SeJT6ypYX6PEJNe4/spCnXkmij2ysPjlIGNY
+         bv3KMPo2vumILlX1o9t85H9KsUiuRsFKdWTfqb6BulQLUpYI9R/MrfjaKH2JnsqnDgeS
+         fzi2qF0RWc4is3KM861iwI5JifNMI7e0n+XDWZwCXTMl6nWOS5Se4GxZSbD25lsSr3VZ
+         yE6NOdsoa/hQzt970vu6ZuUmxYuc3ceh0WAVDc643xxnPvnMYiN+UxidHaREDsvmlbcO
+         5c2A==
+X-Gm-Message-State: ACrzQf3/8rMug1N5TKUwhZokosupcaugxC709lJkUnJko5D6+SK8GyNz
+        D93JDuU4XnSMtahv7l9Gkb3S1SRwVQJupO85Wf+wNY7zTbt9aHYekKNqpzXR7vF8jhLASoM/zTd
+        Gt3lFfkKYGEGVQ6O3ajye2eB2
+X-Received: by 2002:adf:de0b:0:b0:22a:c7f7:8eb4 with SMTP id b11-20020adfde0b000000b0022ac7f78eb4mr2828732wrm.195.1663869418105;
+        Thu, 22 Sep 2022 10:56:58 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6OGCTJHunJL+DqcDW3fRlbR463/+1YhbnxMqKIz9UcWqkxpEEN923uRrQHr3cvs6ppcOpo+Q==
+X-Received: by 2002:adf:de0b:0:b0:22a:c7f7:8eb4 with SMTP id b11-20020adfde0b000000b0022ac7f78eb4mr2828722wrm.195.1663869417843;
+        Thu, 22 Sep 2022 10:56:57 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c708:2200:d595:cc20:2e3a:fc5f? (p200300cbc7082200d595cc202e3afc5f.dip0.t-ipconnect.de. [2003:cb:c708:2200:d595:cc20:2e3a:fc5f])
+        by smtp.gmail.com with ESMTPSA id q17-20020a5d61d1000000b00228b3ff1f5dsm6297845wrv.117.2022.09.22.10.56.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Sep 2022 10:56:57 -0700 (PDT)
+Message-ID: <f0675fe8-14dc-7890-357b-565c0a706932@redhat.com>
+Date:   Thu, 22 Sep 2022 19:56:55 +0200
 MIME-Version: 1.0
-References: <20220922143655.3721218-1-vkuznets@redhat.com> <20220922143655.3721218-3-vkuznets@redhat.com>
- <CALMp9eSVQSMKbYKr0n-t3JP58hLGA8ZHJZAX34-E4YWUa+VYHA@mail.gmail.com> <YyyhBTXdj96crwbZ@google.com>
-In-Reply-To: <YyyhBTXdj96crwbZ@google.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Thu, 22 Sep 2022 10:55:49 -0700
-Message-ID: <CALMp9eSwFYX67OL3rTNR4-nDT1i5cD36B4KcPh-RHM2UmXBMNw@mail.gmail.com>
-Subject: Re: [PATCH v4 2/6] KVM: x86: Introduce CPUID_8000_0007_EDX
- 'scattered' leaf
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH v3 1/8] cgroup/cpuset: use hotplug_memory_notifier()
+ directly
+Content-Language: en-US
+To:     Liu Shixin <liushixin2@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Waiman Long <longman@redhat.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Christoph Lameter <cl@linux.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+References: <20220922141904.3245505-1-liushixin2@huawei.com>
+ <20220922141904.3245505-2-liushixin2@huawei.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220922141904.3245505-2-liushixin2@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,28 +88,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 10:53 AM Sean Christopherson <seanjc@google.com> wrote:
->
-> On Thu, Sep 22, 2022, Jim Mattson wrote:
-> > Why do we need a new 'scattered' leaf? We are only using two bits in
-> > the first one, right? And now we're only going to use one bit in the
-> > second one?
-> >
-> > I thought the point of the 'scattered' leaves was to collect a bunch
-> > of feature bits from different CPUID leaves in a single feature word.
-> >
-> > Allocating a new feature word for one or two bits seems extravagant.
->
-> Ah, these leafs aren't scattered from KVM's perspective.
->
-> The scattered terminology comes from the kernel side, where the KVM-only leafs
-> _may_ be used to deal with features that are scattered by the kernel.  But there
-> is no requirement that KVM-only leafs _must_ be scattered by the kernel, e.g. we
-> can and should use this for leafs that KVM wants to expose to the guest, but are
-> completely ignored by the kernel.  Intel's PSFD feature flag is a good example.
->
-> A better shortlog would be:
->
->   KVM: x86: Add a KVM-only leaf for CPUID_8000_0007_EDX
+On 22.09.22 16:18, Liu Shixin wrote:
+> Since patch 316346243be6 has already updated the minimum gcc version to 5.1.
+> The previous problem mentioned in patch f02c69680088 is not existed. So we
+> can now revert to use hotplug_memory_notifier() directly rather than
+> register_hotmemory_notifier().
+> 
+> Signed-off-by: Liu Shixin <liushixin2@huawei.com>
+> ---
+>   kernel/cgroup/cpuset.c | 7 +------
+>   1 file changed, 1 insertion(+), 6 deletions(-)
+> 
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index b474289c15b8..0c6db6a4f427 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -3630,11 +3630,6 @@ static int cpuset_track_online_nodes(struct notifier_block *self,
+>   	return NOTIFY_OK;
+>   }
+>   
+> -static struct notifier_block cpuset_track_online_nodes_nb = {
+> -	.notifier_call = cpuset_track_online_nodes,
+> -	.priority = 10,		/* ??! */
+> -};
+> -
+>   /**
+>    * cpuset_init_smp - initialize cpus_allowed
+>    *
+> @@ -3652,7 +3647,7 @@ void __init cpuset_init_smp(void)
+>   	cpumask_copy(top_cpuset.effective_cpus, cpu_active_mask);
+>   	top_cpuset.effective_mems = node_states[N_MEMORY];
+>   
+> -	register_hotmemory_notifier(&cpuset_track_online_nodes_nb);
+> +	hotplug_memory_notifier(cpuset_track_online_nodes, 10);
+>   
+>   	cpuset_migrate_mm_wq = alloc_ordered_workqueue("cpuset_migrate_mm", 0);
+>   	BUG_ON(!cpuset_migrate_mm_wq);
 
-Thanks. The 'scattered' terminology seems more confusing than enlightening.
+
+Please don't drop Reviewed-by or Acked-by tags. Otherwise reviewers have 
+no clue which patch they already reviewed -- and they always have little 
+time ;)
+
+-- 
+Thanks,
+
+David / dhildenb
+
