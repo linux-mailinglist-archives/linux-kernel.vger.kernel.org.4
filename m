@@ -2,161 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 719425E6BC3
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 21:35:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED1095E6BC7
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 21:36:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231197AbiIVTfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 15:35:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53700 "EHLO
+        id S231947AbiIVTgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 15:36:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbiIVTe6 (ORCPT
+        with ESMTP id S229864AbiIVTgN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 15:34:58 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D693EE1185
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 12:34:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663875297; x=1695411297;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=gMA139Nz1+YsImIs/o9xGleu/LUno1XeYEqdI+HbTD4=;
-  b=R7uh0VadZHxxeSWcrvOLfra58ZlayBor4BFyRMXcMcV7NxhQXj9R4ewh
-   r4BTtCi4EST3eudTNU9GaIq7T+I9dksZuNK1mu9NeviwbKDqhM6PSCoiQ
-   jmIqTG9rrftK6ERXY/2ZeWGyTsEKqsjzN+yg0EelEWiuCQzqt7K7OukMS
-   PcP+ErsvoHM+wfIGW+zPG5erXwX7Ud1Mkm+apV+6gqkPI17nu1bBgOZNR
-   txp3uL22U4cVzsRD39uPvJR7JhmVzRxTvD7elsqYtOYj8D+RDYdBcjMa+
-   xffwphF/yBD21Nwy9N+Pq4B7J41cykhnyqMV7ysHXRpU3Z2MfpICcwwo7
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="298009831"
-X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="298009831"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 12:34:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="709023707"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by FMSMGA003.fm.intel.com with ESMTP; 22 Sep 2022 12:34:56 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id A53F7F7; Thu, 22 Sep 2022 22:35:13 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Yury Norov <yury.norov@gmail.com>, linux-kernel@vger.kernel.org
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Phil Auld <pauld@redhat.com>
-Subject: [PATCH v1 1/1] cpumask: Don't waste memory for sysfs cpulist nodes
-Date:   Thu, 22 Sep 2022 22:34:47 +0300
-Message-Id: <20220922193447.88123-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Thu, 22 Sep 2022 15:36:13 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6104E10B204
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 12:36:10 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id p69so14371079yba.0
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 12:36:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=B+gga6ltJtUAel3yll8VCzI2wh4t47DgPA/bbeueEV4=;
+        b=LGw6RoWIJhTtjzyWPFyoOKWj2PALb/UK9cMieG1EswUK8uncGsTKcX9GOT90bFqJCY
+         zxjAEudl4ROGfcjGQySHHEM4eM3g5Rdayzz+sbVQRpHc+v4SEspoyjoGm3dUPlhjJ2i/
+         l+RZN9qaEGfJLJNwZwDvDLDBT8y3FrqJP40VTeBaVNBEARp6hksHQ3Ff4oxXTt7PS16o
+         zXeM0mf/BuhhK9PO25w6zjlb2zxTmppYIQ42mjn9ddbgHz9v6upXky0rjTFzDBck3iYy
+         g/W6wREdY/00bB45gfdGxdAnaRsyZNQd3r/+lk9aeTuHTw9dqm0p8fPDdBEGZwqXnSsn
+         Bdsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=B+gga6ltJtUAel3yll8VCzI2wh4t47DgPA/bbeueEV4=;
+        b=JSVzYBtUIdwLknidGr0v5GNXMJGax4x8NyyBKNE0UrJ6dTr8GjU+jFjDsG7xUQ3aZt
+         CspX2X+cVMd1ZrAJewHldF2ABT47pc5Ilgvcm8/MenrMmUABLVnBzRgC2BCcYcaAu+9v
+         vVxNIxXG9h/HaUVcV93ZtIReDwKdExmBCcmKgiLHtKrNPKzJBJLQow7mxCOQ2+MzSEz+
+         QADlPHT7DdB3Qi1GYA7qvLM1hw+iHZiHHgBbB5H/hG/R5bFMQw2au0qKCWCsVs89IWox
+         eg3dTL+VcDQALn4aEQJfOsDZE8gwN4zk6Ju0DNyFhIJx1EtYnJlmIo1bkUGvArTEDsot
+         v4Qw==
+X-Gm-Message-State: ACrzQf1Qkh3o+r4e6OUUUasnkkRhI/5E182swgFuZIj6rDj/nyXQksDV
+        zH5wtuFeH2+ImLG7bfEHrafWuK+V6cdg4uD2f/RidA==
+X-Google-Smtp-Source: AMsMyM5B26rqF5aDDU+4uPkZq44P4q/L62syhM0LGixbAJaHbFp8dTKOynRG64pCiD4+nr40BnT8apLy+md/oSRK3Xk=
+X-Received: by 2002:a25:8b10:0:b0:6b0:58a:f8f5 with SMTP id
+ i16-20020a258b10000000b006b0058af8f5mr5294000ybl.524.1663875369520; Thu, 22
+ Sep 2022 12:36:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220922044023.718774-1-namhyung@kernel.org>
+In-Reply-To: <20220922044023.718774-1-namhyung@kernel.org>
+From:   Hao Luo <haoluo@google.com>
+Date:   Thu, 22 Sep 2022 12:35:58 -0700
+Message-ID: <CA+khW7gQPqoBSi5bSQXFdnkVyjMpu4A=vzFXRLvWDjZww0brEA@mail.gmail.com>
+Subject: Re: [PATCH v2] perf tools: Get a perf cgroup more portably in BPF
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, Song Liu <songliubraving@fb.com>,
+        bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently the approximation is used which wastes the more memory
-the more CPUs are present on the system. Proposed change calculates
-the exact maximum needed in the worst case:
+On Wed, Sep 21, 2022 at 9:40 PM Namhyung Kim <namhyung@kernel.org> wrote:
+>
+> The perf_event_cgrp_id can be different on other configurations.
+> To be more portable as CO-RE, it needs to get the cgroup subsys id
+> using the bpf_core_enum_value() helper.
+>
 
-  NR_CPUS	old		new
-  -------	---		---
-  1 .. 1860	4096		4096
-  ...		...		...
-  2*4096	28672		19925
-  4*4096	57344		43597
-  8*4096	114688		92749
-  16*4096	229376		191053
-  32*4096	458752		403197
-  64*4096	917504		861949
-  128*4096	1835008		1779453
-  256*4096	3670016		3670016
+I remember using bpf_core_enum_value requires a compiler built-in. So
+the build will fail on old compiler such as clang-11. See [1]. Maybe
+we should surround it with #if
+__has_builtin(__builtin_preserve_enum_value) to be sure.
 
-Under the hood the reccurent formula is being used:
-  (5 - 0) * 2 +
-    (50 - 5) * 3 +
-      (500 - 50) * 4 +
-        (5000 - 500) * 5 +
-          ...
-            (X[i] - X[i-1]) * i
+[1]  https://www.spinics.net/lists/bpf/msg30859.html
 
-which allows to count the exact maximum length in the worst case,
-i.e. when each second CPU is being listed. For less than 1861 and
-more than 1 million CPUs the old is being used.
-
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- include/linux/cpumask.h | 45 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
-
-diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
-index 1b442fb2001f..7c6416fa038d 100644
---- a/include/linux/cpumask.h
-+++ b/include/linux/cpumask.h
-@@ -1122,6 +1122,18 @@ cpumap_print_list_to_buf(char *buf, const struct cpumask *mask,
-  *
-  * for cpumap NR_CPUS * 9/32 - 1 should be an exact length.
-  *
-+ * for cpulist the reccurent formula is being used:
-+ *   (5 - 0) * 2 +
-+ *     (50 - 5) * 3 +
-+ *       (500 - 50) * 4 +
-+ *         (5000 - 500) * 5 +
-+ *           ...
-+ *             (X[i] - X[i-1]) * i
-+ *
-+ * which allows to count the exact maximum length in the worst case,
-+ * i.e. when each second CPU is being listed. For less than 1861 and
-+ * more than 1 million CPUs the old is being used as described below:
-+ *
-  * For cpulist 7 is (ceil(log10(NR_CPUS)) + 1) allowing for NR_CPUS to be up
-  * to 2 orders of magnitude larger than 8192. And then we divide by 2 to
-  * cover a worst-case of every other cpu being on one of two nodes for a
-@@ -1132,6 +1144,39 @@ cpumap_print_list_to_buf(char *buf, const struct cpumask *mask,
-  */
- #define CPUMAP_FILE_MAX_BYTES  (((NR_CPUS * 9)/32 > PAGE_SIZE) \
- 					? (NR_CPUS * 9)/32 - 1 : PAGE_SIZE)
-+
-+#define __CPULIST_FOR_10(x)		(((x + 1) / 2 - 0)     * 2)
-+#define __CPULIST_FOR_100(x)		(((x + 1) / 2 - 5)     * 3)
-+#define __CPULIST_FOR_1000(x)		(((x + 1) / 2 - 50)    * 4)
-+#define __CPULIST_FOR_10000(x)		(((x + 1) / 2 - 500)   * 5)
-+#define __CPULIST_FOR_100000(x)		(((x + 1) / 2 - 5000)  * 6)
-+#define __CPULIST_FOR_1000000(x)	(((x + 1) / 2 - 50000) * 7)
-+
-+#if NR_CPUS < 1861
-+#define CPULIST_FILE_MAX_BYTES	PAGE_SIZE
-+#elif NR_CPUS < 10000
-+#define CPULIST_FILE_MAX_BYTES			\
-+	 (__CPULIST_FOR_10(10) +		\
-+	  __CPULIST_FOR_100(100) +		\
-+	  __CPULIST_FOR_1000(1000) +		\
-+	  __CPULIST_FOR_10000(NR_CPUS))
-+#elif NR_CPUS < 100000
-+#define CPULIST_FILE_MAX_BYTES			\
-+	 (__CPULIST_FOR_10(10) +		\
-+	  __CPULIST_FOR_100(100) +		\
-+	  __CPULIST_FOR_1000(1000) +		\
-+	  __CPULIST_FOR_10000(10000) +		\
-+	  __CPULIST_FOR_100000(NR_CPUS))
-+#elif NR_CPUS < 1000000
-+#define CPULIST_FILE_MAX_BYTES			\
-+	 (__CPULIST_FOR_10(10) +		\
-+	  __CPULIST_FOR_100(100) +		\
-+	  __CPULIST_FOR_1000(1000) +		\
-+	  __CPULIST_FOR_10000(10000) +		\
-+	  __CPULIST_FOR_100000(100000) +	\
-+	  __CPULIST_FOR_1000000(NR_CPUS))
-+#else
- #define CPULIST_FILE_MAX_BYTES  (((NR_CPUS * 7)/2 > PAGE_SIZE) ? (NR_CPUS * 7)/2 : PAGE_SIZE)
-+#endif
- 
- #endif /* __LINUX_CPUMASK_H */
--- 
-2.35.1
-
+> Suggested-by: Ian Rogers <irogers@google.com>
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> ---
+[...]
