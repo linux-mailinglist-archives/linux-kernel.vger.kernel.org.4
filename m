@@ -2,206 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BF7D5E7021
+	by mail.lfdr.de (Postfix) with ESMTP id A95A35E7022
 	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 01:16:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230520AbiIVXNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 19:13:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44172 "EHLO
+        id S230129AbiIVXOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 19:14:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230100AbiIVXNw (ORCPT
+        with ESMTP id S231144AbiIVXOc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 19:13:52 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A854D1138E9;
-        Thu, 22 Sep 2022 16:13:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663888429; x=1695424429;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YYJtZOcit6qkgm5ch3A2v2ShoL6n5q9+tFdrt48fuV4=;
-  b=SSFu5f2X0MVzVi0SWzL7ciIOgKtunBjAN+mS4+PZCGttNG/8FwUZ20V+
-   nljPoBXMiHteiKFHn8yeesuXyWhe6v2WG8UWXt8mAPNv1w8mobtP9unIg
-   KLVvgo6BJvtb2nHK20GdIEO2iV8pqkON9Pg8QhMSkgZ9hLcrTHv68Upim
-   HO0k3ULd2xV/jzCu+F8/w1KlLle1bMfpuUdXds/YLjMg8f8r/PKGOc6FO
-   SYW2UqNb+MAHoyPqGuKoQPTOhmqBuDrJY+betFjQmc9GJMD99b30rUcxQ
-   m2f6EJQqQXEtBGbsDW+z/NdT9oITlNXCgdb4rjNW4orrjVAtDG7UL4CEV
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="362263336"
-X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="362263336"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 16:13:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="653187817"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 22 Sep 2022 16:13:46 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1obVO5-00054D-2w;
-        Thu, 22 Sep 2022 23:13:45 +0000
-Date:   Fri, 23 Sep 2022 07:13:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yihao Han <hanyihao@vivo.com>, Nilesh Javali <njavali@marvell.com>,
-        GR-QLogic-Storage-Upstream@marvell.com,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, Yihao Han <hanyihao@vivo.com>
-Subject: Re: [PATCH] scsi: qla2xxx: fix excluded_middle.cocci warnings
-Message-ID: <202209230711.vQKIDdtE-lkp@intel.com>
-References: <20220920024554.2606-1-hanyihao@vivo.com>
+        Thu, 22 Sep 2022 19:14:32 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FD96DDB
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 16:14:31 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id cj27so7407719qtb.7
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 16:14:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=mgFYnY1RdRGyspxYgyA20AVsPMGDCNSztuoVIa2jt1Y=;
+        b=Q2he6+yxlkaDq4CUH97E1DzltZLwL3xOzRh/bSc6Ji13ZjmqEQaAcvHP/OvwuriJpc
+         MdnFXLVdHWMiHMBbJbd1GcXCjx4mJ+EZ3fUYCifjZr53/irUafcEQQXeqxdGfC7D93py
+         8j3AFtKjVhjdtaKFrrD6RgFLs9mI/KNyodxlApcyNkze+9Ug6yHT8X4Iw7bXnXxpLfuM
+         9SDiyPRx2EL4c+w397FmAjWCcBIAwIteiZL/CiQCWhgbOh5dK9qYUzohtocos9q3i8ib
+         HrZyiAASO9QKecD5xLxxNAQx+sbWEo5pZIRJZxhvd74IVb8XI2sEk7b4Fd/g8wBPeqUI
+         xPnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=mgFYnY1RdRGyspxYgyA20AVsPMGDCNSztuoVIa2jt1Y=;
+        b=a0D7czPAAvQ6q7wCQLRB7mAgBsf4jIV5NTx8QlUGDjODy7BjF/JMhIegMH7uB7JqTN
+         fPU7zLEnqLIvSvo0zAoVfoiUhElxrekwIHpMKX272OOHGhSFRAjDw2t6e8C4Opifb19f
+         nsRFwgTXOCqYiSQsBkx6aeHaewqQSCwmxPsVSL+a1W0XJPSW32LRZRuZuXN5d7SjJ8fG
+         KsTxqo6a/i5I6TY9uOTSpYK9TQzwdIYJOVVZClKPChO6RMYpB3FPAzbhHVVjggnwj7W6
+         ADsOZ32w5lN4JtDyiM9qBKU/5jEjpqf4a+vnzbs3gDCNBl4WP69us0pi3t3YPRsESGgi
+         2X4w==
+X-Gm-Message-State: ACrzQf1AEJzveCY9MBIc5ty8wk6Z2OWSmhTfbyZanwa7dAdZOxjc52nS
+        VSYM2+bXv8f/GoqTDqmkMYU=
+X-Google-Smtp-Source: AMsMyM5Q8Xv8RIOWfBcgbIGfXDkaa9DDYJtjJIhk4bs3mCpL99XI74671Nl33Q61ZaAkXP2xIpjwHw==
+X-Received: by 2002:a05:622a:13cf:b0:35b:bb29:c1e6 with SMTP id p15-20020a05622a13cf00b0035bbb29c1e6mr5059822qtk.687.1663888470462;
+        Thu, 22 Sep 2022 16:14:30 -0700 (PDT)
+Received: from [10.69.40.226] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id d8-20020ac85348000000b003445b83de67sm4219209qto.3.2022.09.22.16.14.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Sep 2022 16:14:29 -0700 (PDT)
+Message-ID: <ac30dbee-59d4-1b65-5a88-a8f19f0601c4@gmail.com>
+Date:   Thu, 22 Sep 2022 16:14:27 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220920024554.2606-1-hanyihao@vivo.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH 0/3] mm/hugetlb: hugepage migration enhancements
+Content-Language: en-US
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Michal Hocko <mhocko@suse.com>,
+        David Hildenbrand <david@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20220921223639.1152392-1-opendmb@gmail.com>
+ <YyzEz4snl2x51iTY@monkey>
+From:   Doug Berger <opendmb@gmail.com>
+In-Reply-To: <YyzEz4snl2x51iTY@monkey>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yihao,
+On 9/22/2022 1:25 PM, Mike Kravetz wrote:
+> On 09/21/22 15:36, Doug Berger wrote:
+>> This patch set was included as patches [04/21-06/21] in my
+>> previous patch set to introduce Designated Movable Blocks [1].
+>> They were included there for context, but they have value on
+>> their own and are being resubmitted here for consideration on
+>> their own merits.
+>>
+>> The alloc_contig_range() function attempts to isolate the free
+>> pages within the range and migrate the data from non-free pages
+>> within the range to allow those pages to become isolated free
+>> pages. If all of the pages in the range are on isolated free
+>> page lists they can be allocated to the caller.
+>>
+>> When free hugepages are encountered in the range an attempt is
+>> made to allocate a new compound page to become a replacement
+>> hugepage and to dissolve the free hugepage so that its pages
+>> within isolated pageblocks can be added to the isolated free
+>> page lists. Hugepages that are not free and encountered within
+>> the range must be migrated out of the range and dissolved to
+>> allow the underlying pages to be added to the isolated free
+>> page lists.
+>>
+>> Moving the data from hugepages within the range and freeing the
+>> hugepages is not sufficient since the allocation of migration
+>> target hugepages is allowed to come from free hugepages that may
+>> contain isolated pageblocks and freed hugepages will not be on
+>> isolated free page lists so the alloc_contig_range() will fail.
+> 
+> Thanks for looking into this!  I am adding Oscar, Michal and David on
+> Cc: as they have looked at similar issues in the past.
+Thanks for helping to get the right eyeballs looking at this.
 
-Thank you for the patch! Yet something to improve:
+> 
+> Before jumping into the details of your changes, I just want to make one
+> observation.  When migrating (or dissolving) hugetlb pages that are in a
+> range operated on by alloc_contig_range(), we should not change the number
+> of hugetlb pages available as noted here.  This includes the number of
+> total huge pages and the number of huge pages on the node.  Therefore,
+> we should allocate another huge page from buddy either as the migration
+> target or to take the place of the dissolved page.
+> 
+> For free huge pages, we do this via alloc_and_dissolve_huge_page.  IIUC,
+> there are no issues with this code path?
+Yes, I did not observe any issue with the the free hugepage handling 
+except that your recent improvements with freezing allocated pages 
+(thanks for those) will make merging patch 1 more difficult ;).
 
-[auto build test ERROR on jejb-scsi/for-next]
-[also build test ERROR on mkp-scsi/for-next linus/master v6.0-rc6 next-20220921]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> As noted above, for pages to be migrated we first try to use an existing
+> free huge page as the target.  Quite some time ago, Michal added code to
+> allocate a new page from buddy as the target if no free huge pages were
+> available.  This change also included a special flag to dissolve the
+> source huge page when it is freed.  It seems like this is the exact
+> behavior we want here?  I wonder if it might be easier just to use this
+> existing code?
+Yes, the temporary page flag can be made to work here and I did 
+experiment with it, but it is dependent on the current design decisions.
+I decided to move to the approach suggested here because I believe it 
+could conceivably scale if support for migrating gigantic pages is 
+desired in the future. The circular dependency on alloc_contig_range 
+will likely keep that from happening, but that was my thinking.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yihao-Han/scsi-qla2xxx-fix-excluded_middle-cocci-warnings/20220920-104643
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
-config: microblaze-randconfig-r032-20220922 (https://download.01.org/0day-ci/archive/20220923/202209230711.vQKIDdtE-lkp@intel.com/config)
-compiler: microblaze-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/81672bb39d1900d22e851a7cfb0b9a0aa35df8af
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Yihao-Han/scsi-qla2xxx-fix-excluded_middle-cocci-warnings/20220920-104643
-        git checkout 81672bb39d1900d22e851a7cfb0b9a0aa35df8af
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=microblaze SHELL=/bin/bash drivers/scsi/qla2xxx/
+Thanks for taking the time,
+-Doug
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All error/warnings (new ones prefixed by >>):
-
-   drivers/scsi/qla2xxx/qla_target.c: In function 'qlt_free_session_done':
->> drivers/scsi/qla2xxx/qla_target.c:7409:2: error: unterminated argument list invoking macro "if"
-    7409 | }
-         |  ^
->> drivers/scsi/qla2xxx/qla_target.c:7410: error: expected '(' at end of input
-   drivers/scsi/qla2xxx/qla_target.c:1030:17: note: '-Wmisleading-indentation' is disabled from this point onwards, since column-tracking was disabled due to the size of the code/headers
-    1030 |                 if (ha->flags.edif_enabled &&
-         |                 ^~
-   drivers/scsi/qla2xxx/qla_target.c:1030:17: note: adding '-flarge-source-files' will allow for more column-tracking support, at the expense of compilation time and memory
->> drivers/scsi/qla2xxx/qla_target.c:1030:17: error: expected declaration or statement at end of input
->> drivers/scsi/qla2xxx/qla_target.c:1030:17: error: expected declaration or statement at end of input
-   drivers/scsi/qla2xxx/qla_target.c:971:26: warning: unused variable 'base_vha' [-Wunused-variable]
-     971 |         scsi_qla_host_t *base_vha = pci_get_drvdata(ha->pdev);
-         |                          ^~~~~~~~
->> drivers/scsi/qla2xxx/qla_target.c:970:14: warning: variable 'logout_started' set but not used [-Wunused-but-set-variable]
-     970 |         bool logout_started = false;
-         |              ^~~~~~~~~~~~~~
-   drivers/scsi/qla2xxx/qla_target.c:969:23: warning: unused variable 'flags' [-Wunused-variable]
-     969 |         unsigned long flags;
-         |                       ^~~~~
-   drivers/scsi/qla2xxx/qla_target.c:966:25: warning: unused variable 'tgt' [-Wunused-variable]
-     966 |         struct qla_tgt *tgt = sess->tgt;
-         |                         ^~~
-   drivers/scsi/qla2xxx/qla_target.c: At top level:
->> drivers/scsi/qla2xxx/qla_target.c:101:13: warning: 'qlt_24xx_atio_pkt' used but never defined
-     101 | static void qlt_24xx_atio_pkt(struct scsi_qla_host *ha,
-         |             ^~~~~~~~~~~~~~~~~
->> drivers/scsi/qla2xxx/qla_target.c:103:13: warning: 'qlt_response_pkt' used but never defined
-     103 | static void qlt_response_pkt(struct scsi_qla_host *ha, struct rsp_que *rsp,
-         |             ^~~~~~~~~~~~~~~~
-   drivers/scsi/qla2xxx/qla_target.c:105:12: warning: 'qlt_issue_task_mgmt' declared 'static' but never defined [-Wunused-function]
-     105 | static int qlt_issue_task_mgmt(struct fc_port *sess, u64 lun,
-         |            ^~~~~~~~~~~~~~~~~~~
->> drivers/scsi/qla2xxx/qla_target.c:107:13: warning: 'qlt_send_term_exchange' used but never defined
-     107 | static void qlt_send_term_exchange(struct qla_qpair *, struct qla_tgt_cmd
-         |             ^~~~~~~~~~~~~~~~~~~~~~
-   drivers/scsi/qla2xxx/qla_target.c:109:13: warning: 'qlt_alloc_qfull_cmd' declared 'static' but never defined [-Wunused-function]
-     109 | static void qlt_alloc_qfull_cmd(struct scsi_qla_host *vha,
-         |             ^~~~~~~~~~~~~~~~~~~
-   drivers/scsi/qla2xxx/qla_target.c:111:13: warning: 'qlt_disable_vha' declared 'static' but never defined [-Wunused-function]
-     111 | static void qlt_disable_vha(struct scsi_qla_host *vha);
-         |             ^~~~~~~~~~~~~~~
-   drivers/scsi/qla2xxx/qla_target.c:112:13: warning: 'qlt_clear_tgt_db' declared 'static' but never defined [-Wunused-function]
-     112 | static void qlt_clear_tgt_db(struct qla_tgt *tgt);
-         |             ^~~~~~~~~~~~~~~~
-   drivers/scsi/qla2xxx/qla_target.c:113:13: warning: 'qlt_send_notify_ack' declared 'static' but never defined [-Wunused-function]
-     113 | static void qlt_send_notify_ack(struct qla_qpair *qpair,
-         |             ^~~~~~~~~~~~~~~~~~~
->> drivers/scsi/qla2xxx/qla_target.c:117:13: warning: 'qlt_send_term_imm_notif' used but never defined
-     117 | static void qlt_send_term_imm_notif(struct scsi_qla_host *vha,
-         |             ^~~~~~~~~~~~~~~~~~~~~~~
->> drivers/scsi/qla2xxx/qla_target.c:119:24: warning: 'qlt_create_sess' used but never defined
-     119 | static struct fc_port *qlt_create_sess(struct scsi_qla_host *vha,
-         |                        ^~~~~~~~~~~~~~~
->> drivers/scsi/qla2xxx/qla_target.c:122:13: warning: 'qlt_24xx_handle_abts' used but never defined
-     122 | static void qlt_24xx_handle_abts(struct scsi_qla_host *,
-         |             ^~~~~~~~~~~~~~~~~~~~
-   drivers/scsi/qla2xxx/qla_target.c:124:13: warning: 'qlt_send_busy' declared 'static' but never defined [-Wunused-function]
-     124 | static void qlt_send_busy(struct qla_qpair *, struct atio_from_isp *,
-         |             ^~~~~~~~~~~~~
-   drivers/scsi/qla2xxx/qla_target.c:126:12: warning: 'qlt_check_reserve_free_req' declared 'static' but never defined [-Wunused-function]
-     126 | static int qlt_check_reserve_free_req(struct qla_qpair *qpair, uint32_t);
-         |            ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/scsi/qla2xxx/qla_target.c:127:24: warning: 'qlt_make_handle' declared 'static' but never defined [-Wunused-function]
-     127 | static inline uint32_t qlt_make_handle(struct qla_qpair *);
-         |                        ^~~~~~~~~~~~~~~
-   drivers/scsi/qla2xxx/qla_target.c:793:1: warning: 'qlt_plogi_ack_find_add' defined but not used [-Wunused-function]
-     793 | qlt_plogi_ack_find_add(struct scsi_qla_host *vha, port_id_t *id,
-         | ^~~~~~~~~~~~~~~~~~~~~~
-   drivers/scsi/qla2xxx/qla_target.c:332:13: warning: 'qlt_24xx_atio_pkt_all_vps' defined but not used [-Wunused-function]
-     332 | static bool qlt_24xx_atio_pkt_all_vps(struct scsi_qla_host *vha,
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/scsi/qla2xxx/qla_target.c:139:20: warning: 'prot_op_str' defined but not used [-Wunused-function]
-     139 | static const char *prot_op_str(u32 prot_op)
-         |                    ^~~~~~~~~~~
-   drivers/scsi/qla2xxx/qla_target.c:135:33: warning: 'qla_tgt_wq' defined but not used [-Wunused-variable]
-     135 | static struct workqueue_struct *qla_tgt_wq;
-         |                                 ^~~~~~~~~~
-   drivers/scsi/qla2xxx/qla_target.c:134:19: warning: 'qla_tgt_mgmt_cmd_mempool' defined but not used [-Wunused-variable]
-     134 | static mempool_t *qla_tgt_mgmt_cmd_mempool;
-         |                   ^~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/scsi/qla2xxx/qla_target.c:132:27: warning: 'qla_tgt_mgmt_cmd_cachep' defined but not used [-Wunused-variable]
-     132 | static struct kmem_cache *qla_tgt_mgmt_cmd_cachep;
-         |                           ^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/scsi/qla2xxx/qla_target.c:61:12: warning: 'tc_sam_status' defined but not used [-Wunused-variable]
-      61 | static int tc_sam_status = SAM_STAT_TASK_SET_FULL; /* target core */
-         |            ^~~~~~~~~~~~~
-   drivers/scsi/qla2xxx/qla_target.c:60:12: warning: 'qla_sam_status' defined but not used [-Wunused-variable]
-      60 | static int qla_sam_status = SAM_STAT_BUSY;
-         |            ^~~~~~~~~~~~~~
-
-
-vim +/if +7409 drivers/scsi/qla2xxx/qla_target.c
-
-2d70c103fd2a066 Nicholas Bellinger 2012-05-15  7399  
-2d70c103fd2a066 Nicholas Bellinger 2012-05-15  7400  void qlt_exit(void)
-2d70c103fd2a066 Nicholas Bellinger 2012-05-15  7401  {
-2d70c103fd2a066 Nicholas Bellinger 2012-05-15  7402  	if (!QLA_TGT_MODE_ENABLED())
-2d70c103fd2a066 Nicholas Bellinger 2012-05-15  7403  		return;
-2d70c103fd2a066 Nicholas Bellinger 2012-05-15  7404  
-2d70c103fd2a066 Nicholas Bellinger 2012-05-15  7405  	destroy_workqueue(qla_tgt_wq);
-2d70c103fd2a066 Nicholas Bellinger 2012-05-15  7406  	mempool_destroy(qla_tgt_mgmt_cmd_mempool);
-b7bd104e6f1c3be Alexei Potashnik   2015-12-17  7407  	kmem_cache_destroy(qla_tgt_plogi_cachep);
-2d70c103fd2a066 Nicholas Bellinger 2012-05-15  7408  	kmem_cache_destroy(qla_tgt_mgmt_cmd_cachep);
-2d70c103fd2a066 Nicholas Bellinger 2012-05-15 @7409  }
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
