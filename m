@@ -2,159 +2,342 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66CF05E5FC2
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 12:22:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5724C5E5FD3
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 12:24:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231467AbiIVKWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 06:22:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41404 "EHLO
+        id S231503AbiIVKYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 06:24:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231463AbiIVKWC (ORCPT
+        with ESMTP id S231494AbiIVKY2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 06:22:02 -0400
-Received: from relay07.th.seeweb.it (relay07.th.seeweb.it [IPv6:2001:4b7a:2000:18::168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C150D824F
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 03:21:59 -0700 (PDT)
-Received: from [192.168.1.101] (95.49.29.188.neoplus.adsl.tpnet.pl [95.49.29.188])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 9E44F4018D;
-        Thu, 22 Sep 2022 12:21:55 +0200 (CEST)
-Message-ID: <7fd077c5-83f8-02e2-03c1-900a47f05dc1@somainline.org>
-Date:   Thu, 22 Sep 2022 12:21:54 +0200
+        Thu, 22 Sep 2022 06:24:28 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FDDBD8264
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 03:24:26 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28MAJJCl032261;
+        Thu, 22 Sep 2022 10:24:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type :
+ content-transfer-encoding; s=pp1;
+ bh=LvEAKl8kX9qm/Uj0Dpw49BCiEQqAVeKHlo1TRLg0jZE=;
+ b=pVmj1cuGCF/MrkWAMN/KMXWTD0agisJ/eugkvcuhSRz2vVWPL0HVCdEsx72BCCNYFbjI
+ dLqJi8kTHu1pG8I66lvxgmwb/RYs1KO6i0aiD8qPepucMyfbmajqPtklFFepNY6Ppq17
+ aTEi3SBfxNYWuM6xTRYeQ9YOptJXHc2CYwE75ZKqtK6WrbLzvPYHtATwTAO0tqNYIfs5
+ aP6O5eERFSgE75vDdlk+Y62YnN3Bx1z6SGRvjc+HdGaDNbL4RqJmcOb0+qfSznzaqM7P
+ LvZ7bHqHFkP3Xf+x8f8tYZGuTuh7wL5xuJzr8rvcdrreT+AqUp8mjZtfImSIZiaeqJsw BQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jrnus03rb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Sep 2022 10:24:02 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28MAJvwq002921;
+        Thu, 22 Sep 2022 10:24:01 GMT
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jrnus03qr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Sep 2022 10:24:01 +0000
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28MAK1pm005291;
+        Thu, 22 Sep 2022 10:24:00 GMT
+Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
+        by ppma01wdc.us.ibm.com with ESMTP id 3jn5v9r2hd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Sep 2022 10:24:00 +0000
+Received: from smtpav01.dal12v.mail.ibm.com ([9.208.128.133])
+        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28MANwJU57672100
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 22 Sep 2022 10:23:58 GMT
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0ADFE5805D;
+        Thu, 22 Sep 2022 10:23:59 +0000 (GMT)
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7B50158094;
+        Thu, 22 Sep 2022 10:23:52 +0000 (GMT)
+Received: from skywalker.ibmuc.com (unknown [9.43.81.76])
+        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 22 Sep 2022 10:23:52 +0000 (GMT)
+From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+To:     linux-mm@kvack.org, akpm@linux-foundation.org
+Cc:     Wei Xu <weixugc@google.com>, Huang Ying <ying.huang@intel.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com,
+        Bharata B Rao <bharata@amd.com>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+Subject: [PATCH v4] mm/demotion: Expose memory tier details via sysfs
+Date:   Thu, 22 Sep 2022 15:52:01 +0530
+Message-Id: <20220922102201.62168-1-aneesh.kumar@linux.ibm.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2] brcmfmac: Add support for BCM43596 PCIe Wi-Fi
-Content-Language: en-US
-To:     Hector Martin <marcan@marcan.st>,
-        ~postmarketos/upstreaming@lists.sr.ht
-Cc:     martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        =?UTF-8?Q?Alvin_=c5=a0ipraga?= <alsi@bang-olufsen.dk>,
-        Marek Vasut <marex@denx.de>,
-        "Zhao, Jiaqing" <jiaqing.zhao@intel.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Soontak Lee <soontak.lee@cypress.com>,
-        linux-wireless@vger.kernel.org,
-        brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220921001630.56765-1-konrad.dybcio@somainline.org>
- <83b90478-3974-28e6-cf13-35fc4f62e0db@marcan.st>
- <13b8c67c-399c-d1a6-4929-61aea27aa57d@somainline.org>
- <0e65a8b2-0827-af1e-602c-76d9450e3d11@marcan.st>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <0e65a8b2-0827-af1e-602c-76d9450e3d11@marcan.st>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: zfsEOlJzj79dnGV1WKmZOfa_hKVZXtT-
+X-Proofpoint-GUID: gQj8yYoL1-H9mFNLbPn4eyR7Nm61HZQ3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-22_06,2022-09-22_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
+ priorityscore=1501 mlxscore=0 lowpriorityscore=0 spamscore=0
+ mlxlogscore=999 adultscore=0 phishscore=0 impostorscore=0 clxscore=1011
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209220063
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch adds /sys/devices/virtual/memory_tiering/ where all memory tier
+related details can be found. All allocated memory tiers will be listed
+there as /sys/devices/virtual/memory_tiering/memory_tierN/
 
+The nodes which are part of a specific memory tier can be listed via
+/sys/devices/virtual/memory_tiering/memory_tierN/nodes
 
-On 22.09.2022 08:40, Hector Martin wrote:
-> On 22/09/2022 06.26, Konrad Dybcio wrote:
->>
->>
->> On 21.09.2022 06:37, Hector Martin wrote:
->>> On 21/09/2022 09.16, Konrad Dybcio wrote:
->>>> Add support for BCM43596 dual-band AC chip, found in
->>>> SONY Xperia X Performance, XZ and XZs smartphones (and
->>>> *possibly* other devices from other manufacturers).
->>>> The chip doesn't require any special handling and seems to work
->>>> just fine OOTB.
->>>>
->>>> PCIe IDs taken from: https://github.com/sonyxperiadev/kernel/commit/9e43fefbac8e43c3d7792e73ca52a052dd86d7e3.patch
->>>>
->>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
->>>> ---
->>>> Changes since v1:
->>>> - rebased the patch against -next
->>>>
->>>>  drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c       | 2 ++
->>>>  drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c       | 4 ++++
->>>>  drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h | 4 ++++
->>>>  3 files changed, 10 insertions(+)
->>>>
->>> [...]
->>>> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
->>>> index f98641bb1528..2e7fc66adf31 100644
->>>> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
->>>> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
->>>> @@ -81,6 +81,7 @@ static const struct brcmf_firmware_mapping brcmf_pcie_fwnames[] = {
->>>>  	BRCMF_FW_ENTRY(BRCM_CC_43570_CHIP_ID, 0xFFFFFFFF, 43570),
->>>>  	BRCMF_FW_ENTRY(BRCM_CC_4358_CHIP_ID, 0xFFFFFFFF, 4358),
->>>>  	BRCMF_FW_ENTRY(BRCM_CC_4359_CHIP_ID, 0xFFFFFFFF, 4359),
->>>> +	BRCMF_FW_ENTRY(BRCM_CC_43596_CHIP_ID, 0xFFFFFFFF, 4359),
->>>
->>> So this works with the same firmware as 4359? That sounds a bit off. Is
->>> that really the case?
->>>
->>> brcmfmac4359-pcie isn't in linux-firmware, but presumably there is
->>> *some* semi-canonical firmware you can find for that chip that other
->>> people are already using. If that works on 43596 *and* you plan on using
->>> that firmware or some other firmware marked 4359, then this is fine. If
->>> you are using separate firmware that shipped with a 43596 device and
->>> isn't itself marked 4359, please make it a separate firmware entry. We
->>> can always symlink the firmwares if it later turns out there is no
->>> reason to have different ones for each chip.
->> The firmware that SONY originally gave us for the devices that we know use
->> this chip seems to be marked 4359 [1]. That said, I have no other info
->> about the relation between the two models.
->>
->> [1] https://github.com/sonyxperiadev/device-sony-kagura/tree/q-mr1/rootdir/vendor/firmware
-> 
-> That link seems to have the nvram file and Bluetooth firmware, but not
-> WLAN firmware. I think if you run `strings` on the WLAN firmware you'll
-> get a build ID with the chip name in it, that might be a good indication
-> of what the firmware name should be.
-Riight, sorry about that.. This is the correct link [1]
+A directory hierarchy looks like
+:/sys/devices/virtual/memory_tiering$ tree memory_tier4/
+memory_tier4/
+├── nodes
+├── subsystem -> ../../../../bus/memory_tiering
+└── uevent
 
-Running strings on fw_bcmdhd.bin (which I renamed to brcmfmac4359-pcie.bin for
-mainline firwmare name matching purposes) outputs:
+:/sys/devices/virtual/memory_tiering$ cat memory_tier4/nodes
+0,2
 
-43596a0-roml/pcie-wl11u-ve-mfp-tdls-sr-die3-wepso-wnm-pfn-olpc-mobfd-rcc-ccx-noccxaka-clm_43xx_somc_mimo-fmc-phyflags-rscanf-murx-ltecx-rpi-txpwrctrls-dpo-proxd-hs20sta-linkstat-gscan-rmon-pfnanqpo-dpm Version: 9.75.119.15 (r691661) CRC: 46ae3900 Date: Fri 2017-03-24 13:22:28 KST Ucode Ver: 1060.20542 FWID: 01-a0d2ee7a
+Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+---
+Changes from v3:
+* drop toptier_nodes from sysfs
 
-However, as you can see, the directory is named bcm4359 and not bcm43596, so my
-best guess is that it's probably part of the same chip family with minor
-differences.
+ .../ABI/testing/sysfs-kernel-mm-memory-tiers  |  25 ++++
+ mm/memory-tiers.c                             | 109 ++++++++++++++----
+ 2 files changed, 112 insertions(+), 22 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-kernel-mm-memory-tiers
 
-Also worth noting is the 'somc' bit, meaning there are probably *some* SONY
-customizations, but that's also just a guess.
+diff --git a/Documentation/ABI/testing/sysfs-kernel-mm-memory-tiers b/Documentation/ABI/testing/sysfs-kernel-mm-memory-tiers
+new file mode 100644
+index 000000000000..45985e411f13
+--- /dev/null
++++ b/Documentation/ABI/testing/sysfs-kernel-mm-memory-tiers
+@@ -0,0 +1,25 @@
++What:		/sys/devices/virtual/memory_tiering/
++Date:		August 2022
++Contact:	Linux memory management mailing list <linux-mm@kvack.org>
++Description:	A collection of all the memory tiers allocated.
++
++		Individual memory tier details are contained in subdirectories
++		named by the abstract distance of the memory tier.
++
++		/sys/devices/virtual/memory_tiering/memory_tierN/
++
++
++What:		/sys/devices/virtual/memory_tiering/memory_tierN/
++		/sys/devices/virtual/memory_tiering/memory_tierN/nodes
++Date:		August 2022
++Contact:	Linux memory management mailing list <linux-mm@kvack.org>
++Description:	Directory with details of a specific memory tier
++
++		This is the directory containing information about a particular
++		memory tier, memtierN, where N is derived based on abstract distance.
++
++		A smaller value of N implies a higher (faster) memory tier in the
++		hierarchy.
++
++		nodes: NUMA nodes that are part of this memory tier.
++
+diff --git a/mm/memory-tiers.c b/mm/memory-tiers.c
+index c82eb0111383..f116b7b6333e 100644
+--- a/mm/memory-tiers.c
++++ b/mm/memory-tiers.c
+@@ -19,6 +19,7 @@ struct memory_tier {
+ 	 * adistance_start .. adistance_start + MEMTIER_CHUNK_SIZE
+ 	 */
+ 	int adistance_start;
++	struct device dev;
+ 	/* All the nodes that are part of all the lower memory tiers. */
+ 	nodemask_t lower_tier_mask;
+ };
+@@ -36,6 +37,12 @@ static DEFINE_MUTEX(memory_tier_lock);
+ static LIST_HEAD(memory_tiers);
+ static struct node_memory_type_map node_memory_types[MAX_NUMNODES];
+ static struct memory_dev_type *default_dram_type;
++
++static struct bus_type memory_tier_subsys = {
++	.name = "memory_tiering",
++	.dev_name = "memory_tier",
++};
++
+ #ifdef CONFIG_MIGRATION
+ static int top_tier_adistance;
+ /*
+@@ -98,8 +105,63 @@ static int top_tier_adistance;
+ static struct demotion_nodes *node_demotion __read_mostly;
+ #endif /* CONFIG_MIGRATION */
+ 
++static inline struct memory_tier *to_memory_tier(struct device *device)
++{
++	return container_of(device, struct memory_tier, dev);
++}
++
++static __always_inline nodemask_t get_memtier_nodemask(struct memory_tier *memtier)
++{
++	nodemask_t nodes = NODE_MASK_NONE;
++	struct memory_dev_type *memtype;
++
++	list_for_each_entry(memtype, &memtier->memory_types, tier_sibiling)
++		nodes_or(nodes, nodes, memtype->nodes);
++
++	return nodes;
++}
++
++static void memory_tier_device_release(struct device *dev)
++{
++	struct memory_tier *tier = to_memory_tier(dev);
++	/*
++	 * synchronize_rcu in clear_node_memory_tier makes sure
++	 * we don't have rcu access to this memory tier.
++	 */
++	kfree(tier);
++}
++
++static ssize_t nodes_show(struct device *dev,
++			  struct device_attribute *attr, char *buf)
++{
++	int ret;
++	nodemask_t nmask;
++
++	mutex_lock(&memory_tier_lock);
++	nmask = get_memtier_nodemask(to_memory_tier(dev));
++	ret = sysfs_emit(buf, "%*pbl\n", nodemask_pr_args(&nmask));
++	mutex_unlock(&memory_tier_lock);
++	return ret;
++}
++static DEVICE_ATTR_RO(nodes);
++
++static struct attribute *memtier_dev_attrs[] = {
++	&dev_attr_nodes.attr,
++	NULL
++};
++
++static const struct attribute_group memtier_dev_group = {
++	.attrs = memtier_dev_attrs,
++};
++
++static const struct attribute_group *memtier_dev_groups[] = {
++	&memtier_dev_group,
++	NULL
++};
++
+ static struct memory_tier *find_create_memory_tier(struct memory_dev_type *memtype)
+ {
++	int ret;
+ 	bool found_slot = false;
+ 	struct memory_tier *memtier, *new_memtier;
+ 	int adistance = memtype->adistance;
+@@ -123,15 +185,14 @@ static struct memory_tier *find_create_memory_tier(struct memory_dev_type *memty
+ 
+ 	list_for_each_entry(memtier, &memory_tiers, list) {
+ 		if (adistance == memtier->adistance_start) {
+-			list_add(&memtype->tier_sibiling, &memtier->memory_types);
+-			return memtier;
++			goto link_memtype;
+ 		} else if (adistance < memtier->adistance_start) {
+ 			found_slot = true;
+ 			break;
+ 		}
+ 	}
+ 
+-	new_memtier = kmalloc(sizeof(struct memory_tier), GFP_KERNEL);
++	new_memtier = kzalloc(sizeof(struct memory_tier), GFP_KERNEL);
+ 	if (!new_memtier)
+ 		return ERR_PTR(-ENOMEM);
+ 
+@@ -142,8 +203,23 @@ static struct memory_tier *find_create_memory_tier(struct memory_dev_type *memty
+ 		list_add_tail(&new_memtier->list, &memtier->list);
+ 	else
+ 		list_add_tail(&new_memtier->list, &memory_tiers);
+-	list_add(&memtype->tier_sibiling, &new_memtier->memory_types);
+-	return new_memtier;
++
++	new_memtier->dev.id = adistance >> MEMTIER_CHUNK_BITS;
++	new_memtier->dev.bus = &memory_tier_subsys;
++	new_memtier->dev.release = memory_tier_device_release;
++	new_memtier->dev.groups = memtier_dev_groups;
++
++	ret = device_register(&new_memtier->dev);
++	if (ret) {
++		list_del(&memtier->list);
++		put_device(&memtier->dev);
++		return ERR_PTR(ret);
++	}
++	memtier = new_memtier;
++
++link_memtype:
++	list_add(&memtype->tier_sibiling, &memtier->memory_types);
++	return memtier;
+ }
+ 
+ static struct memory_tier *__node_get_memory_tier(int node)
+@@ -275,17 +351,6 @@ static void disable_all_demotion_targets(void)
+ 	synchronize_rcu();
+ }
+ 
+-static __always_inline nodemask_t get_memtier_nodemask(struct memory_tier *memtier)
+-{
+-	nodemask_t nodes = NODE_MASK_NONE;
+-	struct memory_dev_type *memtype;
+-
+-	list_for_each_entry(memtype, &memtier->memory_types, tier_sibiling)
+-		nodes_or(nodes, nodes, memtype->nodes);
+-
+-	return nodes;
+-}
+-
+ /*
+  * Find an automatic demotion target for all memory
+  * nodes. Failing here is OK.  It might just indicate
+@@ -433,11 +498,7 @@ static struct memory_tier *set_node_memory_tier(int node)
+ static void destroy_memory_tier(struct memory_tier *memtier)
+ {
+ 	list_del(&memtier->list);
+-	/*
+-	 * synchronize_rcu in clear_node_memory_tier makes sure
+-	 * we don't have rcu access to this memory tier.
+-	 */
+-	kfree(memtier);
++	device_unregister(&memtier->dev);
+ }
+ 
+ static bool clear_node_memory_tier(int node)
+@@ -566,9 +627,13 @@ static int __meminit memtier_hotplug_callback(struct notifier_block *self,
+ 
+ static int __init memory_tier_init(void)
+ {
+-	int node;
++	int ret, node;
+ 	struct memory_tier *memtier;
+ 
++	ret = subsys_virtual_register(&memory_tier_subsys, NULL);
++	if (ret)
++		panic("%s() failed to register memory tier subsystem\n", __func__);
++
+ #ifdef CONFIG_MIGRATION
+ 	node_demotion = kcalloc(nr_node_ids, sizeof(struct demotion_nodes),
+ 				GFP_KERNEL);
+-- 
+2.37.3
 
-
-I did also find this [2] fw for 4359 which contains:
-
-4359b1-roml/pcie-wl11u-mfp-nvramadj-sr-die3-pwrofs-wnm-pfn-pwrstats-olpc-mobfd-txbf-mimopscan-slna-wapi-nsslimit-lpc-wepso-pspretend-apbs-apcs-spurcan-clm_min-obss-fbt-idsup-idauth Version: 9.40.109 (r710128 CY) CRC: e4b3d019 Date: Wed 2019-02-20 18:09:51 PST Ucode Ver: 1043.20426 FWID 01-848095d2
-
-So I suppose I will respin this series to make 43596 use its own fw, since - while
-probably similar - the two are in fact distinct.
-
-Konrad
-
-[1] https://github.com/sonyxperiadev/vendor-broadcom-wlan/tree/master/bcmdhd/firmware/bcm4359
-[2] https://github.com/NXP/imx-firmware/tree/master/cyw-wifi-bt/1FD_CYW4359
-> 
-> I would suggest trying to find some other 4359 firmware and testing your
-> device with it. If it works, then it's definitely fine to use the same
-> firmware name. If it doesn't, then you might need different firmware
-> names, or it might just be a case for board-specific firmwares.
-> 
-> - Hector
