@@ -2,114 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 791AA5E5E79
+	by mail.lfdr.de (Postfix) with ESMTP id C4AB85E5E7A
 	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 11:25:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230317AbiIVJYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 05:24:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37670 "EHLO
+        id S230257AbiIVJYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 05:24:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230265AbiIVJYH (ORCPT
+        with ESMTP id S230352AbiIVJYh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 05:24:07 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 569765F9A8
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 02:24:05 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id j6-20020a17090a694600b00200bba67dadso1504968pjm.5
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 02:24:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=igel-co-jp.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=9Z9yPSyc6+khx5jUdo6dOi29lzFmWOZWB0sb02RmgsQ=;
-        b=kj6pJGO5Y/moxtWM7HndQV5eZSroGtOIl8X840LQrtBjfUpyrlIqIo3O9pYNAV+C50
-         CRbItabzk9BTHzgj0RyXZ4TzjRNLwMaEHyx4v149IpN8wZeQSthIMFXVOX/OHD/li26Q
-         zq19vpPl/AInUNH5anlKn2iXacx2hhIneCFkXWQD5cVnE12G0ZOGQ/si6ulY4NtFsT66
-         ApBliiQZcu5B0CMjyLNFILuyF903JrB8eyVTpqQ0nseedSRh4gC1Xu9NxxZ+NGn9vvNW
-         flW4rw9gF4d3DMYqp4Zw6+9kC9BkcWQEeXDg3WBHAgZUHAZAw196XGRgv075hThCggi+
-         s+mQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=9Z9yPSyc6+khx5jUdo6dOi29lzFmWOZWB0sb02RmgsQ=;
-        b=h0HFEH0RTgY+lAO5gNIeS/iyA7gMhN1xLXngbjcL2rRIJezOio9lqGVycUoPzZY88Q
-         oWF8RXY74zteTrlGfxbIFacOv8/n7DdUEGjZgqMK/yeBYXiBgp+o3Fc68eCj0IOisxe7
-         xLMmUSdWsWELhVHNLhs/fcbMufay6/HNFxxPIuaRMJ2h40TXLDy8yQPOvaa2Zccq1pXz
-         ycL3IkzrNr0jRnmCmSX4JiLx1cylj8e0i3WFDPY5ClhZTsgcCN6B9+uUlPoXGPJxr1oT
-         zdkBDY9hBkebKPGPfykOCEWd+KoWpQbRrYxzLRAiatJS5fTUoxH7t9w+1Wz7skW6lFY7
-         sCew==
-X-Gm-Message-State: ACrzQf1LQD+s6k1GLtMSaU1vaSsbPn+BJ2Eq826uiIdSiCih3cC5IzSP
-        10CsvH++j2xCn4GvpGzDqqt0Hlc5w1eVTwjp
-X-Google-Smtp-Source: AMsMyM63x/ngMQSxKqooTncWKscwUzeMa9LoEy7hBxh6sONYbvEL/JdwiA2ruZ5pW1eceE0HPc8Dgg==
-X-Received: by 2002:a17:903:4112:b0:178:29d8:6d56 with SMTP id r18-20020a170903411200b0017829d86d56mr2478509pld.143.1663838644615;
-        Thu, 22 Sep 2022 02:24:04 -0700 (PDT)
-Received: from tyrell.hq.igel.co.jp (napt.igel.co.jp. [219.106.231.132])
-        by smtp.gmail.com with ESMTPSA id f135-20020a62388d000000b00555ba949f96sm28190pfa.157.2022.09.22.02.24.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 02:24:03 -0700 (PDT)
-From:   Shunsuke Mie <mie@igel.co.jp>
-To:     Jon Mason <jdmason@kudzu.us>
-Cc:     Dave Jiang <dave.jiang@intel.com>, Allen Hubbe <allenbh@gmail.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, ntb@lists.linux.dev,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shunsuke Mie <mie@igel.co.jp>
-Subject: [PATCH v2] PCI: endpoint: pci-epf-{,v}ntb: fix a check for no epc alignment constraint
-Date:   Thu, 22 Sep 2022 18:23:57 +0900
-Message-Id: <20220922092357.123732-1-mie@igel.co.jp>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 22 Sep 2022 05:24:37 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45BD6E9A;
+        Thu, 22 Sep 2022 02:24:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663838671; x=1695374671;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4rHLvmUqFVt4gfxqMwdL+4dyQc082zWVkAFCrM4mv+g=;
+  b=OXE40tCr7sCVNAyQ/lJn1yCQM/epA0vOCofLAcce3X1CD/oC6q5ukYkx
+   3UCrQ1JyKjM2tgE1YbXaYwdnqV2FqIH1myGpa2pMw1n77dmL7sVUiSkVg
+   mLRJ5GitPlx31ug6eE3i9YsoxU7MyDqKIZbfYnO96FUR6WwlpE/Q0pfZ7
+   HqKIFJXHAFDWsT+KdcvmqlxmHx9aUFAAe45sJAeR8VjDv7I6tr9crRBM+
+   ERygTA0mwjvsdvOACGwwwfy/lWANXF2hHSoLsbbfzkoMbbxe2BSh+BM4h
+   V/6933IieKLegRO0dYN2xKckRmYuDkann1Hv2KP9qfVlx1yuqmGpJY0PV
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="386537136"
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="386537136"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 02:24:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="762114086"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 22 Sep 2022 02:24:28 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 22 Sep 2022 12:24:27 +0300
+Date:   Thu, 22 Sep 2022 12:24:27 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Ren Zhijie <renzhijie2@huawei.com>
+Cc:     gregkh@linuxfoundation.org, xji@analogixsemi.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] usb: typec: anx7411: Fix build error without
+ CONFIG_POWER_SUPPLY
+Message-ID: <Yywpy8X2YuqB1qdQ@kuha.fi.intel.com>
+References: <20220920084431.196258-1-renzhijie2@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220920084431.196258-1-renzhijie2@huawei.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some PCI endpoint controllers have no alignment constraints, and the
-epc_features->align becomes 0. In this case, IS_ALIGNED() in
-epf_ntb_config_spad_bar_alloc() doesn't work well. Check for this before
-IS_ALIGNED().
+On Tue, Sep 20, 2022 at 04:44:31PM +0800, Ren Zhijie wrote:
+> Building without CONFIG_POWER_SUPPLY will fail:
+> 
+> drivers/usb/typec/anx7411.o: In function `anx7411_detect_power_mode':
+> anx7411.c:(.text+0x527): undefined reference to `power_supply_changed'
+> drivers/usb/typec/anx7411.o: In function `anx7411_psy_set_prop':
+> anx7411.c:(.text+0x90d): undefined reference to `power_supply_get_drvdata'
+> anx7411.c:(.text+0x930): undefined reference to `power_supply_changed'
+> drivers/usb/typec/anx7411.o: In function `anx7411_psy_get_prop':
+> anx7411.c:(.text+0x94d): undefined reference to `power_supply_get_drvdata'
+> drivers/usb/typec/anx7411.o: In function `anx7411_i2c_probe':
+> anx7411.c:(.text+0x111d): undefined reference to
+> `devm_power_supply_register'
+> drivers/usb/typec/anx7411.o: In function `anx7411_work_func':
+> anx7411.c:(.text+0x167c): undefined reference to `power_supply_changed'
+> anx7411.c:(.text+0x1b55): undefined reference to `power_supply_changed'
+> 
+> Add POWER_SUPPLY dependency to Kconfig.
+> 
+> Fixes: fe6d8a9c8e64 ("usb: typec: anx7411: Add Analogix PD ANX7411 support")
+> Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
 
-Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
----
-Changes in v2:
-* Fix the commit message in phrasings and words.
----
----
- drivers/pci/endpoint/functions/pci-epf-ntb.c  | 2 +-
- drivers/pci/endpoint/functions/pci-epf-vntb.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-diff --git a/drivers/pci/endpoint/functions/pci-epf-ntb.c b/drivers/pci/endpoint/functions/pci-epf-ntb.c
-index 9a00448c7e61..f74155ee8d72 100644
---- a/drivers/pci/endpoint/functions/pci-epf-ntb.c
-+++ b/drivers/pci/endpoint/functions/pci-epf-ntb.c
-@@ -1021,7 +1021,7 @@ static int epf_ntb_config_spad_bar_alloc(struct epf_ntb *ntb,
- 	peer_size = peer_epc_features->bar_fixed_size[peer_barno];
- 
- 	/* Check if epc_features is populated incorrectly */
--	if ((!IS_ALIGNED(size, align)))
-+	if (align && (!IS_ALIGNED(size, align)))
- 		return -EINVAL;
- 
- 	spad_count = ntb->spad_count;
-diff --git a/drivers/pci/endpoint/functions/pci-epf-vntb.c b/drivers/pci/endpoint/functions/pci-epf-vntb.c
-index 0ea85e1d292e..5e346c0a0f05 100644
---- a/drivers/pci/endpoint/functions/pci-epf-vntb.c
-+++ b/drivers/pci/endpoint/functions/pci-epf-vntb.c
-@@ -418,7 +418,7 @@ static int epf_ntb_config_spad_bar_alloc(struct epf_ntb *ntb)
- 	size = epc_features->bar_fixed_size[barno];
- 	align = epc_features->align;
- 
--	if ((!IS_ALIGNED(size, align)))
-+	if (align && !IS_ALIGNED(size, align))
- 		return -EINVAL;
- 
- 	spad_count = ntb->spad_count;
+> ---
+>  drivers/usb/typec/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/usb/typec/Kconfig b/drivers/usb/typec/Kconfig
+> index 5defdfead653..831e7049977d 100644
+> --- a/drivers/usb/typec/Kconfig
+> +++ b/drivers/usb/typec/Kconfig
+> @@ -56,6 +56,7 @@ config TYPEC_ANX7411
+>  	tristate "Analogix ANX7411 Type-C DRP Port controller driver"
+>  	depends on I2C
+>  	depends on USB_ROLE_SWITCH
+> +	depends on POWER_SUPPLY
+>  	help
+>  	  Say Y or M here if your system has Analogix ANX7411 Type-C DRP Port
+>  	  controller driver.
+> -- 
+> 2.17.1
+
 -- 
-2.17.1
-
+heikki
