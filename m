@@ -2,94 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C6605E6C85
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 22:00:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97CE15E6C88
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 22:00:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229496AbiIVUAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 16:00:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60316 "EHLO
+        id S232242AbiIVUAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 16:00:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232663AbiIVT7h (ORCPT
+        with ESMTP id S232777AbiIVUAC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 15:59:37 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 131D8110B1A;
-        Thu, 22 Sep 2022 12:58:57 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28MJuB6S019797;
-        Thu, 22 Sep 2022 19:58:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=NkEh91jlWbl+wAZPUzvDUb7z/Or52lv3BjB3tJmIBUA=;
- b=nZwPAwVOabc+pQGgBdyldQ3bBHq18vz7dT0GJUXhA2viJc4/KKuYhq89ChxlJaV9xTZs
- ijPwgynujwGYm1/lbvzB+XtrWWv6uZTPzZMc+8lRiR5DNAeDtKV/49V6vfNDnWfGqbi+
- KddZgMVbMITos47ZDyHIK4TSsGhJTlCNoaSTfByVwwDkapyB2naE1Fyfmy+32GmTjY/w
- VUVHcyz7TneU8VpIIx4abFxyzBXF4veq6xLWDzh+MW/112yV2j0MfdGXkg884RghY2bH
- pNw4yJqFxkNZBD+WLHE1BzYCViNDZRC/jMrsXnhkN25OtEscyHLut1558xm8BN1e2zcB EQ== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jr85v3egv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Sep 2022 19:58:26 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28MJwPcs000527
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Sep 2022 19:58:25 GMT
-Received: from [10.110.101.161] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Thu, 22 Sep
- 2022 12:58:23 -0700
-Message-ID: <5cd4c767-c2e6-6325-5e13-06748295b3f3@quicinc.com>
-Date:   Thu, 22 Sep 2022 12:58:23 -0700
+        Thu, 22 Sep 2022 16:00:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C963410D65D;
+        Thu, 22 Sep 2022 12:59:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0562D6115C;
+        Thu, 22 Sep 2022 19:59:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D93D5C433D6;
+        Thu, 22 Sep 2022 19:59:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663876750;
+        bh=8JkOYZR01lEo18px3jH97GFzQcOf/gCjHG8IRSVX1fU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=XqD4FqSFIjqiAe81OoGf1PfmzuoB+cr3bVp1YYPbi5L7/NcHt9anCQ67kDQQCCJ0O
+         ryrAXvo7W1bx18KmSkfb49iKDOjlxsUJ2MKc2l/see7ALYK2Oikc7CNnrZyUdcIpQr
+         eu5wEeYyzJ9PquSp/IiVSpHz4za5WmoKO1q4Zd2adv8bA2kv9+hqHLOaXp5EeHSMMR
+         BQFAgqM8xIv7SXj6A8Ff/aTfCCYLpqbBnRhFRPsBXU0H8GARpX9yraG3KX9mDd6YEy
+         15V9wdyQCzgn70Hg+aD8dg88ZYT/R18FrRnh/wh1eAxJ388FbYhffAck14JVroy3gT
+         kqy3+K9synnAg==
+Date:   Thu, 22 Sep 2022 12:59:08 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Matthieu Baerts <matthieu.baerts@tessares.net>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Benjamin Poirier <bpoirier@nvidia.com>,
+        Hangbin Liu <liuhangbin@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        MPTCP Upstream <mptcp@lists.linux.dev>
+Subject: Re: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <20220922125908.28efd4b4@kernel.org>
+In-Reply-To: <2b4722a2-04cd-5e8f-ee09-c01c55aee7a7@tessares.net>
+References: <20220921110437.5b7dbd82@canb.auug.org.au>
+        <2b4722a2-04cd-5e8f-ee09-c01c55aee7a7@tessares.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [Freedreno] [PATCH v2 10/10] drm/msm/dsi: drop modeset sanity
- checks
-Content-Language: en-US
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        "Rob Clark" <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>
-CC:     <dri-devel@lists.freedesktop.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        <linux-arm-msm@vger.kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Sean Paul <sean@poorly.run>,
-        "Steev Klimaszewski" <steev@kali.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-References: <20220913085320.8577-1-johan+linaro@kernel.org>
- <20220913085320.8577-11-johan+linaro@kernel.org>
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-In-Reply-To: <20220913085320.8577-11-johan+linaro@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: _eK-m_UMhWG69NYm6OAx3pPxNN55XKp6
-X-Proofpoint-GUID: _eK-m_UMhWG69NYm6OAx3pPxNN55XKp6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-22_14,2022-09-22_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
- malwarescore=0 phishscore=0 lowpriorityscore=0 mlxscore=0 adultscore=0
- mlxlogscore=999 clxscore=1015 priorityscore=1501 suspectscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209220129
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,36 +60,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 21 Sep 2022 11:18:17 +0200 Matthieu Baerts wrote:
+> Hi Stephen,
+> 
+> On 21/09/2022 03:04, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > Today's linux-next merge of the net-next tree got a conflict in:
+> > 
+> >   tools/testing/selftests/drivers/net/bonding/Makefile
+> > 
+> > between commit:
+> > 
+> >   bbb774d921e2 ("net: Add tests for bonding and team address list management")
+> > 
+> > from the net tree and commit:
+> > 
+> >   152e8ec77640 ("selftests/bonding: add a test for bonding lladdr target")
+> > 
+> > from the net-next tree.
+> > 
+> > I fixed it up (see below) and can carry the fix as necessary.  
+> Thank you for sharing this fix (and all the others!).
+> 
+> I also had this conflict on my side[1] and I resolved it differently,
+> more like what is done in the -net tree I think, please see the patch
+> attached to this email.
+> 
+> I guess I should probably use your version. It is just I saw it after
+> having resolved the conflict on my side :)
+> I will check later how the network maintainers will resolve this
+> conflict and update my tree if needed.
 
-On 9/13/2022 1:53 AM, Johan Hovold wrote:
-> Drop the overly defensive modeset sanity checks of function parameters
-> which have already been checked or used by the callers.
->
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-Tested-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-Reviewed-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-> ---
->   drivers/gpu/drm/msm/dsi/dsi.c | 7 +------
->   1 file changed, 1 insertion(+), 6 deletions(-)
->
-> diff --git a/drivers/gpu/drm/msm/dsi/dsi.c b/drivers/gpu/drm/msm/dsi/dsi.c
-> index 8a95c744972a..31fdee2052be 100644
-> --- a/drivers/gpu/drm/msm/dsi/dsi.c
-> +++ b/drivers/gpu/drm/msm/dsi/dsi.c
-> @@ -211,14 +211,9 @@ void __exit msm_dsi_unregister(void)
->   int msm_dsi_modeset_init(struct msm_dsi *msm_dsi, struct drm_device *dev,
->   			 struct drm_encoder *encoder)
->   {
-> -	struct msm_drm_private *priv;
-> +	struct msm_drm_private *priv = dev->dev_private;
->   	int ret;
->   
-> -	if (WARN_ON(!encoder) || WARN_ON(!msm_dsi) || WARN_ON(!dev))
-> -		return -EINVAL;
-> -
-> -	priv = dev->dev_private;
-> -
->   	if (priv->num_bridges == ARRAY_SIZE(priv->bridges)) {
->   		DRM_DEV_ERROR(dev->dev, "too many bridges\n");
->   		return -ENOSPC;
+I took this opportunity to sort 'em:
+
+- TEST_PROGS := bond-break-lacpdu-tx.sh
+- TEST_PROGS += bond-lladdr-target.sh
+ -TEST_PROGS := bond-break-lacpdu-tx.sh \
+ -            dev_addr_lists.sh \
+ -            bond-arp-interval-causes-panic.sh
+++TEST_PROGS := \
+++      bond-arp-interval-causes-panic.sh \
+++      bond-break-lacpdu-tx.sh \
+++      dev_addr_lists.sh
++ 
++ TEST_FILES := lag_lib.sh
+
+Here's to hoping there are no more bond selftests before final..
