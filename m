@@ -2,117 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AFEE5E6191
+	by mail.lfdr.de (Postfix) with ESMTP id A1EAF5E6193
 	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 13:44:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231609AbiIVLoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 07:44:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46688 "EHLO
+        id S231694AbiIVLoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 07:44:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231661AbiIVLn2 (ORCPT
+        with ESMTP id S231668AbiIVLnd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 07:43:28 -0400
-Received: from gproxy4-pub.mail.unifiedlayer.com (gproxy4-pub.mail.unifiedlayer.com [69.89.23.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C4DE3EEB
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 04:43:09 -0700 (PDT)
-Received: from cmgw12.mail.unifiedlayer.com (unknown [10.0.90.127])
-        by progateway6.mail.pro1.eigbox.com (Postfix) with ESMTP id 496E410047D6F
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 11:42:58 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id bKbZoUolJ9QuVbKbZocLbx; Thu, 22 Sep 2022 11:42:58 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=eIrWMFl1 c=1 sm=1 tr=0 ts=632c4a42
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=xOM3xZuef0cA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Imf6IfHGtkP/4sw/nFiRH/xsZftDLRctRzMEVr6dPLU=; b=qtn+ShjRGxqXXEaUA6rGg+lYPc
-        LMYceXic2rddouOqpNK+z6Ck1su77Runpe5uyLYaknxclSl3nu5bYWyF4SofwOKRK5L/TBqhyT9KT
-        Yv77UNGXPk9y/YpnQejUwWrrFMDG79YyjCuWWK63ckRoBPgbJ/ndBl8JqHMz8UfNPDIIrlolHe2LO
-        tXzWAegEbl9BQFB8XPB6MOvhgpGGx2ZVlCvXwSiBoKuQ848F0TeIPEkTBtKWkL1IKY0ej/7x0Z7dU
-        OqdgnoHXLMRWdyYZSlaSDoKirBl07Z9gsrwZNyb4SUz6w2pwXlD72gu13KWEhDbh1fk6+8vjgfjlf
-        pDRwMIPg==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:45774 helo=[10.0.1.48])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1obKbX-002Tis-8o;
-        Thu, 22 Sep 2022 05:42:55 -0600
-Subject: Re: [PATCH 5.19 00/39] 5.19.11-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220921164741.757857192@linuxfoundation.org>
-In-Reply-To: <20220921164741.757857192@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <bd907a2d-76ad-f350-5f15-d5656f6edf15@w6rz.net>
-Date:   Thu, 22 Sep 2022 04:42:47 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Thu, 22 Sep 2022 07:43:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 257DD9B84A;
+        Thu, 22 Sep 2022 04:43:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B061762D10;
+        Thu, 22 Sep 2022 11:43:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53630C433D7;
+        Thu, 22 Sep 2022 11:43:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663846990;
+        bh=Mt1LmaPy1kmdHUWpVIaEnQs3jZ8cHI0aSQlLWzzmn6U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=W/vDVHh6CcVgYhTaXIubIoJmnHhH47qzbaDmu6X5ThWAYku/IosBbrHeMKtAK7x3K
+         peS2ZrRVyPKten45dPEqXY4MpRJBKPVF1Q09bk4HNGtMgMrt6sWV4RhKQriINvCSpN
+         gAVcAKxeNfbjeHlKEIImumAE7M2OzGtHnXZCCHej0zmS+NUj7L5DfUhLZ2BehrjdXd
+         hDN0VtZyMvF0we7VWMvJ0Ez7P+W2YWBpmvoBqgfdsWKmpf3duwGUc95uFFmGg8LLVn
+         TsLGrH2UnmM+Tq7rGXC9jZ4YxKr0FwEVwO7nFajtMXvJtGJgXyUkbQkM6te7kkcNKO
+         7qQVF6r0OXozQ==
+Date:   Thu, 22 Sep 2022 12:43:06 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Chunyan Zhang <zhang.lyra@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Chunyan Zhang <chunyan.zhang@unisoc.com>,
+        LKML <linux-kernel@vger.kernel.org>, Lee Jones <lee@kernel.org>
+Subject: Re: [PATCH v2 2/2] dt-bindings: regulator: Add bindings for Unisoc's
+ SC2730 regulator
+Message-ID: <YyxKSjMPlGPfegpJ@sirena.org.uk>
+References: <20211008031953.339461-1-zhang.lyra@gmail.com>
+ <20211008031953.339461-3-zhang.lyra@gmail.com>
+ <YY5wPh0rwRvFjSRG@sirena.org.uk>
+ <CAAfSe-uA3iowafC25zRqoTSaub1PbOzUvQgukLm=szEge_abvw@mail.gmail.com>
+ <Yyw2nAAjN6NxmS09@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1obKbX-002Tis-8o
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:45774
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 2
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="udX+hJO9s5cT5HSG"
+Content-Disposition: inline
+In-Reply-To: <Yyw2nAAjN6NxmS09@google.com>
+X-Cookie: One FISHWICH coming up!!
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/21/22 9:47 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.19.11 release.
-> There are 39 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 23 Sep 2022 16:47:28 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.11-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+--udX+hJO9s5cT5HSG
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Tested-by: Ron Economos <re@w6rz.net>
+On Thu, Sep 22, 2022 at 11:19:08AM +0100, Lee Jones wrote:
+> On Thu, 22 Sep 2022, Chunyan Zhang wrote:
 
+> > I understand your point. But like I described previously [1], if we
+> > still use the current solution (i.e. use devm_of_platform_populate()
+> > to register MFD subdevices), a compatible string is required. I'm open
+> > to switching to other solutions, do you have some suggestions?
+>=20
+> Many IPs encompassing multiple functions are described that way in
+> DT.  I don't have the details for *this* device to hand, so my
+> comments here aren't specific to this use-case, but describing each
+> function individually does describe the H/W accurately, which is all
+> DT calls for.
+
+If people want to describe the individual regulators that'd be
+less of an issue, it's mainly when you're nesting what's
+effectively another MFD within a parent MFD that it's just noise
+that's being added to the DT.
+
+> Can you imagine describing an SoC, which can be considered as a huge
+> MFD, with only a single node?
+
+Honestly we should be arranging things so they're more like that,
+at least using overlays for the internals of the SoC so you don't
+have to rebuild the whole DT for updates to the SoC internals.
+
+--udX+hJO9s5cT5HSG
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMsSkkACgkQJNaLcl1U
+h9ADIgf/XyrCnfbvHQW+GuVjIQWh4YtsBqREfURkbTJq/thjgMK2mxMdQSZCgC5V
++eS59XsXPUaJlJTyfiY71s67Ebow79uicYK7OlSvc+fHJOBwo77E3b1a4dOl4wlJ
+K2UY3K/kNhEz6kFDusdiOZHejTP2EJMZznojRfbFE+WcljCIj+1V9BhDTg1UkjxM
+fHquLPs2O91UyDJdbjJ9K63UVgh2erco3aAsJDECltUezGHxE0qEa83pgZjABDFj
+KUcHne6v8xRsbmNNNG/K1EgAyqhAlcdRkx2xpKhzpR7jSsVH4j/RHm8Zzat0cZAJ
+jbDt2QBb4yMKHQwBiyo9actml29DwQ==
+=xOVL
+-----END PGP SIGNATURE-----
+
+--udX+hJO9s5cT5HSG--
