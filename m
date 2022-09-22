@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 018F45E5D44
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 10:18:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECD645E5D41
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 10:18:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbiIVIRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 04:17:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59376 "EHLO
+        id S230137AbiIVIRq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 04:17:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbiIVIRb (ORCPT
+        with ESMTP id S229744AbiIVIRc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 04:17:31 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E558AA370
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 01:17:30 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id z13so81192ejp.6
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 01:17:30 -0700 (PDT)
+        Thu, 22 Sep 2022 04:17:32 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D64DAE877
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 01:17:31 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id e18so12467326edj.3
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 01:17:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=melexis.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=kGmdgZAxEzWsZ+lVFMydjFzpxJ4LCN+30EELj9QAOus=;
-        b=V3Z6FvGW5QWr4F2CFl2J+wE/HRBkYyUI71Ng6h+eAhC/96ZrYKgv4fnEuenrl/6545
-         IjX9ReGKe58WagVbHLzZZPivZDtSk0pTVesdItw3NTynAePbbGLn15m8QWs0XdEMtli+
-         h4qEoAcqER5g7R0EAjsMgzWt6upWNEldDWS2onFL/YZTcpfGFs97UgL4Irn1sjReNGiw
-         l8+uSYdPDN0JerPFi4Ozc7FEUj0/oPdNAJ/aQZ6FN4599ejay0+nGAY/8eS9TQok+he5
-         n+ObUN30nDxffoJ2oHZBODgWG4uek6Xb8qonK268i0VUnGnVmu50Q9Yw16D7iGEMQcCv
-         owtw==
+        bh=1k72TxQk2XInW+TFTqOgkqy7p+VetIyc10AJO+4jvxc=;
+        b=pX/jVSaLO9K//GiJQijoGuDJTP9IxasXFTRyHrfMFk2i4E2LZmDQHlElFkV7v/xOIl
+         ww+aKiLw3vmS2M4gM/u5d3pXWompUKAkdx934gRs33YCbQDLUos539B/9CGvf0X15ri4
+         t88YdklfYK09MCzR11+QR/XKpaZYic9+h4QuNEzkv20m+1zUarpL004FOtK//GFazim3
+         B+dzS7wG6VeIHODGtqiVOFMnjrady8jAkHCfRg0OUM/cxCLVevxX731F/jCEQyjnKJzv
+         18VACQUsXvW+2xMgKD7K0IBTqjfals8MBylV7paJHLuU3xRL/E0pUxRX/ePVtZr4MYXj
+         UVUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=kGmdgZAxEzWsZ+lVFMydjFzpxJ4LCN+30EELj9QAOus=;
-        b=fkVU42ZnyOBZdqOHilCm5QYmoRfyTZdH5XsJ4mRMZCGmdHH17ZwWZmuA9DlNZtDMuO
-         08PFK7wvmRJ/8zttEBVM7E49+SDIHFWMsub5MGxFVhyzfJ6y9SML/Q32Ti5ctzOE8iFM
-         dCC1kgxQDBBtFP+tqOWzTPLzvjLcjPIpyjnI9/2gku1GmrgTMywK13+vcrCWjfdUp2Xd
-         f+u/r8OQpidcpz0nlDYBoN58l/u/MQj8E7ujxw1pPjIf3/DGGE0QKrx/577FmjjySH0a
-         wVEKYh180+LEnWY0t3dubs5mRrnjrXgDH3yWcmALAOpaLaXSAJyZmIIjFO24A3YgSmY9
-         TqJg==
-X-Gm-Message-State: ACrzQf0YkW3M/W8DTPKNErRQ7iP8MdDeZOC+aP4jv5huU/C9BWtfQvPN
-        ev2zRQlqZQP7dATVaikUh/5hQJyH3f3nnA==
-X-Google-Smtp-Source: AMsMyM61Bsc48N5hFrtxDMTWbwNEpxL8efYBx7AzksRGEjLcdS3EiAofxqMkLuvp4K4/nDpohV2RZg==
-X-Received: by 2002:a17:907:7607:b0:770:7ec4:fb41 with SMTP id jx7-20020a170907760700b007707ec4fb41mr1655028ejc.685.1663834649047;
-        Thu, 22 Sep 2022 01:17:29 -0700 (PDT)
+        bh=1k72TxQk2XInW+TFTqOgkqy7p+VetIyc10AJO+4jvxc=;
+        b=eF+FG88mwasbvVxz09d4vmsGd51mBaBJsTqu0fz85Wj0ko0Ma6VXoGdO4L6aekVZGW
+         jZBPEGBgD657oGyNGYclOoFT4KERfToUQllSCVM+f8BRNk7+Ri+Wpg/Y3MYMAwoBdPRO
+         iV3eLmBQYiP32X/IeHw7taFgD0omOnAa/lMXNLirVM2pZO9DhUiRYLQqBLA1X1H5xdgM
+         4Po/iujjxuN9soHS4TVrZnRv7aqTXwYDWsHrvjVWY1Z4WxQ+g9YP2parD2d43jCJHll7
+         KFSFfLmvxMcKZnYh87T+h0llF+Gi7taiRKiTnp+SVMqYuIdtEOAEqBRn9XHuwloGKdQ4
+         wFQw==
+X-Gm-Message-State: ACrzQf2PrHdtGvttHmaecK11YZhdgYUcQ19j00SIwyzv8gu34GGTsois
+        ydW44n6T30En195vCnwFmXWUKYOk1vvI2w==
+X-Google-Smtp-Source: AMsMyM6Zlfb7U2V7ivSXl/LJl3Y62UGKjZAQVMzdMdEjj88VgzW2VCHB0Nzk+iFQvjYEgrKVeUc4cA==
+X-Received: by 2002:a05:6402:380a:b0:451:ae08:7a6c with SMTP id es10-20020a056402380a00b00451ae087a6cmr1960322edb.161.1663834650083;
+        Thu, 22 Sep 2022 01:17:30 -0700 (PDT)
 Received: from cmo-ThinkPad-T495.tess.elex.be ([194.150.35.21])
-        by smtp.gmail.com with ESMTPSA id b10-20020aa7df8a000000b0044e01e2533asm3301303edy.43.2022.09.22.01.17.28
+        by smtp.gmail.com with ESMTPSA id b10-20020aa7df8a000000b0044e01e2533asm3301303edy.43.2022.09.22.01.17.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 01:17:28 -0700 (PDT)
+        Thu, 22 Sep 2022 01:17:29 -0700 (PDT)
 From:   cmo@melexis.com
 To:     Jonathan Cameron <jic23@kernel.org>
 Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
         Andy Shevchenko <andy.shevchenko@gmail.com>,
         Crt Mori <cmo@melexis.com>
-Subject: [PATCH v6 2/3] iio: temperature: mlx90632 Read sampling frequency
-Date:   Thu, 22 Sep 2022 10:13:23 +0200
-Message-Id: <0bd6d6d665b4bd39e4565f6f44cb1bdc03386e23.1663834141.git.cmo@melexis.com>
+Subject: [PATCH v6 3/3] iio: temperature: mlx90632 Change return value of sensor measurement channel
+Date:   Thu, 22 Sep 2022 10:13:24 +0200
+Message-Id: <565d4df2592d751dc0f40908f2569b7c9af8e56e.1663834141.git.cmo@melexis.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1663834141.git.cmo@melexis.com>
 References: <cover.1663834141.git.cmo@melexis.com>
@@ -73,124 +73,31 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Crt Mori <cmo@melexis.com>
 
-Allow users to read sensor sampling frequency to better plan the
-application measurement requests.
+The current EINVAL value is more applicable to embedded library, where
+user can actually put the fixed value to the sensor. In case of the
+driver if the value of the channel is invalid it is better in inform
+userspace that Channel was out of range as that implies more to internal
+driver error than invalid input. It also makes for easier debugging of
+where the error comes from during the development.
 
 Signed-off-by: Crt Mori <cmo@melexis.com>
 ---
- drivers/iio/temperature/mlx90632.c | 59 ++++++++++++++++++++++++++++++
- 1 file changed, 59 insertions(+)
+ drivers/iio/temperature/mlx90632.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/iio/temperature/mlx90632.c b/drivers/iio/temperature/mlx90632.c
-index 71130d237a69..081803940261 100644
+index 081803940261..224db7513baa 100644
 --- a/drivers/iio/temperature/mlx90632.c
 +++ b/drivers/iio/temperature/mlx90632.c
-@@ -81,6 +81,9 @@
- #define MLX90632_PWR_STATUS_CONTINUOUS MLX90632_PWR_STATUS(3) /* continuous */
- 
- #define MLX90632_EE_RR GENMASK(10, 8) /* Only Refresh Rate bits */
-+#define MLX90632_REFRESH_RATE(ee_val) FIELD_GET(MLX90632_EE_RR, ee_val)
-+					/* Extract Refresh Rate from ee register */
-+#define MLX90632_REFRESH_RATE_STATUS(refresh_rate) (refresh_rate << 8)
- 
- /* Measurement types */
- #define MLX90632_MTYP_MEDICAL 0
-@@ -914,6 +917,32 @@ static int mlx90632_calc_ambient_dsp105(struct mlx90632_data *data, int *val)
- 	return ret;
- }
- 
-+static int mlx90632_get_refresh_rate(struct mlx90632_data *data,
-+				     int *refresh_rate)
-+{
-+	unsigned int meas1;
-+	int ret;
-+
-+	ret = regmap_read(data->regmap, MLX90632_EE_MEDICAL_MEAS1, &meas1);
-+	if (ret < 0)
-+		return ret;
-+
-+	*refresh_rate = MLX90632_REFRESH_RATE(meas1);
-+
-+	return ret;
-+}
-+
-+static const int mlx90632_freqs[][2] = {
-+	{0, 500000},
-+	{1, 0},
-+	{2, 0},
-+	{4, 0},
-+	{8, 0},
-+	{16, 0},
-+	{32, 0},
-+	{64, 0}
-+};
-+
- /**
-  * mlx90632_pm_interraction_wakeup() - Measure time between user interactions to change powermode
-  * @data: pointer to mlx90632_data object containing interaction_ts information
-@@ -992,6 +1021,15 @@ static int mlx90632_read_raw(struct iio_dev *indio_dev,
- 		*val = data->object_ambient_temperature;
- 		ret = IIO_VAL_INT;
+@@ -435,7 +435,7 @@ static int mlx90632_channel_new_select(int perform_ret, uint8_t *channel_new,
+ 		*channel_old = 1;
  		break;
-+	case IIO_CHAN_INFO_SAMP_FREQ:
-+		ret = mlx90632_get_refresh_rate(data, &cr);
-+		if (ret < 0)
-+			goto mlx90632_read_raw_pm;
-+
-+		*val = mlx90632_freqs[cr][0];
-+		*val2 = mlx90632_freqs[cr][1];
-+		ret = IIO_VAL_INT_PLUS_MICRO;
-+		break;
  	default:
- 		ret = -EINVAL;
- 		break;
-@@ -1025,12 +1063,30 @@ static int mlx90632_write_raw(struct iio_dev *indio_dev,
+-		return -EINVAL;
++		return -ECHRNG;
  	}
- }
  
-+static int mlx90632_read_avail(struct iio_dev *indio_dev,
-+			       struct iio_chan_spec const *chan,
-+			       const int **vals, int *type, int *length,
-+			       long mask)
-+{
-+	switch (mask) {
-+	case IIO_CHAN_INFO_SAMP_FREQ:
-+		*vals = (int *)mlx90632_freqs;
-+		*type = IIO_VAL_INT_PLUS_MICRO;
-+		*length = 2 * ARRAY_SIZE(mlx90632_freqs);
-+		return IIO_AVAIL_LIST;
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
- static const struct iio_chan_spec mlx90632_channels[] = {
- 	{
- 		.type = IIO_TEMP,
- 		.modified = 1,
- 		.channel2 = IIO_MOD_TEMP_AMBIENT,
- 		.info_mask_separate = BIT(IIO_CHAN_INFO_PROCESSED),
-+		.info_mask_shared_by_all = BIT(IIO_CHAN_INFO_SAMP_FREQ),
-+		.info_mask_shared_by_all_available = BIT(IIO_CHAN_INFO_SAMP_FREQ),
- 	},
- 	{
- 		.type = IIO_TEMP,
-@@ -1038,12 +1094,15 @@ static const struct iio_chan_spec mlx90632_channels[] = {
- 		.channel2 = IIO_MOD_TEMP_OBJECT,
- 		.info_mask_separate = BIT(IIO_CHAN_INFO_PROCESSED) |
- 			BIT(IIO_CHAN_INFO_CALIBEMISSIVITY) | BIT(IIO_CHAN_INFO_CALIBAMBIENT),
-+		.info_mask_shared_by_all = BIT(IIO_CHAN_INFO_SAMP_FREQ),
-+		.info_mask_shared_by_all_available = BIT(IIO_CHAN_INFO_SAMP_FREQ),
- 	},
- };
- 
- static const struct iio_info mlx90632_info = {
- 	.read_raw = mlx90632_read_raw,
- 	.write_raw = mlx90632_write_raw,
-+	.read_avail = mlx90632_read_avail,
- };
- 
- static void mlx90632_sleep(void *_data)
+ 	return 0;
 -- 
 2.34.1
 
