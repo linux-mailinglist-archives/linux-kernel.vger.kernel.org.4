@@ -2,179 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D634C5E5EE9
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 11:49:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 006D55E5EEC
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 11:49:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230502AbiIVJtb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 05:49:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40778 "EHLO
+        id S229899AbiIVJtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 05:49:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230076AbiIVJtS (ORCPT
+        with ESMTP id S230089AbiIVJtV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 05:49:18 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01608D4AB1;
-        Thu, 22 Sep 2022 02:49:18 -0700 (PDT)
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5AB706602220;
-        Thu, 22 Sep 2022 10:49:16 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1663840156;
-        bh=wJr++mgtlB0haCHpsGcU+/sZxX7EhT3lTzKcLP5Sa+s=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=my13z2QCQ8ScWdhB1vhyZRsI+1ungf5aAE9eQB5FnsrX8JmyqTjOqLlkOqL54P/w9
-         hwMsDnsIGWpQrAJuM/lDuFNGaN53YvjZG4D67yd/2yvbl/GXsUbXOQsYX5NT3faYQR
-         L0wutPj8FEcMVdbNYzfndu3g3rkeMNp0S3ToETcOI+jMGldcUpZB4v5LnkaWas7SgO
-         1PiYEyooESo0x/wz79FHNCKjsfI4a0owXfS0TXPSSCd3XYjA9NZIgNVnFWc8b0n3yj
-         rPOtrHV/Uq9tl6gg9APb0J/yPYI1IRgeEVgOL3avTo9og1zecBxyUG7ZPg411MNDTP
-         XNfwiDB0SWPvg==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     matthias.bgg@gmail.com
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, wenst@chromium.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH 4/4] arm64: dts: mediatek: cherry: Add sound card configuration
-Date:   Thu, 22 Sep 2022 11:49:08 +0200
-Message-Id: <20220922094908.41623-5-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220922094908.41623-1-angelogioacchino.delregno@collabora.com>
-References: <20220922094908.41623-1-angelogioacchino.delregno@collabora.com>
+        Thu, 22 Sep 2022 05:49:21 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B478D4A83;
+        Thu, 22 Sep 2022 02:49:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663840160; x=1695376160;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PtTn3jAAofls4r1A5/hrcN2Oo4KvnVnzpDIgzM2G1js=;
+  b=CLOBKyjFAsVfgLrrN1lUIW5GJ/AoPX7AtPy5ZgTj4+xvkp7XIUgiUqoj
+   H+1Czc7gHz6LJVLA7FCL0HfKkdKg/IOdyErQo4ucLAIaf7njfusi5c7wt
+   8T78g4Y4mn0u8AMmC8iTvUZ3aKEkhWU6XluX7nwPv+HtVmqxIxZ/86Np0
+   M2yhna39JfIasFLpk7w+1oqhbGpi3P+CZpJsTb2UwAauQx0aMLWEWagDG
+   yjnr8kX8BdUCn5fjgzMV2AzEQqQq8VIIrULM19wbfhisJsfvYiOfqMVEG
+   ZxO3t0durCsafLm31dlzRm09jttbjH+/izxD6DCe2AAkvvgeNCd2vaPmR
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="362020733"
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="362020733"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 02:49:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="650455823"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga008.jf.intel.com with ESMTP; 22 Sep 2022 02:49:17 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1obIpX-005ww7-04;
+        Thu, 22 Sep 2022 12:49:15 +0300
+Date:   Thu, 22 Sep 2022 12:49:14 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Borislav Petkov <bp@suse.de>
+Cc:     "Limonciello, Mario" <mario.limonciello@amd.com>,
+        Jan =?utf-8?B?RMSFYnJvxZs=?= <jsd@semihalf.com>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        jarkko.nikula@linux.intel.com, wsa@kernel.org,
+        rrangel@chromium.org, upstream@semihalf.com,
+        Muralidhara M K <muralimk@amd.com>,
+        Naveen Krishna Chatradhi <nchatrad@amd.com>
+Subject: Re: [PATCH -next 1/2] i2c: designware: Switch from using MMIO access
+ to SMN access
+Message-ID: <YywvmueFj/ibyZdf@smile.fi.intel.com>
+References: <20220916131854.687371-1-jsd@semihalf.com>
+ <20220916131854.687371-2-jsd@semihalf.com>
+ <eafc7bb5-a406-132b-4b7d-167917cdab05@amd.com>
+ <CAOtMz3Pgh+cERiXVetDZJrQa9C0kUUbZ9dRRhdghgm5Or8kwhg@mail.gmail.com>
+ <YytwNvSyhq380YNT@zn.tnic>
+ <60a52348-7d50-1056-a596-e154f87c99d2@amd.com>
+ <Yyt5LSxSz+6QeWF1@zn.tnic>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yyt5LSxSz+6QeWF1@zn.tnic>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Configure the sound card on all MT8195 Cherry Tomato devices to
-enable audio support.
+On Wed, Sep 21, 2022 at 10:50:53PM +0200, Borislav Petkov wrote:
+> On Wed, Sep 21, 2022 at 03:19:26PM -0500, Limonciello, Mario wrote:
+> > Jan mentioned this in the commit message:
+> > 
+> > > The function which registers i2c-designware-platdrv is a
+> > > subsys_initcall that is executed before fs_initcall (when enumeration > of
+> > NB descriptors occurs).
+> > 
+> > So if it's not exported again, then it means that we somehow
+> > need to get i2c-designware-platdrv to register earlier too.
+> 
+> So I have this there:
+> 
+> /* This has to go after the PCI subsystem */
+> fs_initcall(init_amd_nbs);
+> 
+> as I need PCI. It itself does
+> 
+> arch_initcall(pci_arch_init);
+> 
+> so I guess init_amd_nbs() could be a subsys_initcall...
+> 
+> Or why is
+> 
+> subsys_initcall(dw_i2c_init_driver);
+> 
+> a subsys initcall in the first place?
+> 
+> Looking at
+> 
+>   104522806a7d ("i2c: designware: dw_i2c_init_driver as subsys initcall")
+> 
+> I don't see a particular reason why it should be a subsys_initcall...
+> 
+> In any case, this should be fixed without an export which was crap in
+> the first place.
+> 
+> Hm.
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- .../dts/mediatek/mt8195-cherry-tomato-r1.dts  |  5 +++
- .../dts/mediatek/mt8195-cherry-tomato-r2.dts  |  5 +++
- .../dts/mediatek/mt8195-cherry-tomato-r3.dts  |  5 +++
- .../boot/dts/mediatek/mt8195-cherry.dtsi      | 40 +++++++++++++++++++
- 4 files changed, 55 insertions(+)
+I'm speculating here, but IIRC the I2C controllers may serve PMICs on some
+platform that are required to be present earlier due to some ACPI code
+accessing them. This Hans de Goede can confirm or correct me.
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r1.dts b/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r1.dts
-index 3767b49ea896..2d5e8f371b6d 100644
---- a/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r1.dts
-+++ b/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r1.dts
-@@ -15,6 +15,11 @@ &audio_codec {
- 	realtek,btndet-delay = <16>;
- };
- 
-+&sound {
-+	compatible = "mediatek,mt8195_mt6359_rt1019_rt5682";
-+	model = "mt8195_r1019_5682";
-+};
-+
- &ts_10 {
- 	status = "okay";
- };
-diff --git a/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r2.dts b/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r2.dts
-index 0ed83a79d680..2586c32ce6e6 100644
---- a/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r2.dts
-+++ b/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r2.dts
-@@ -35,6 +35,11 @@ pins-low-power-pcie0-disable {
- 	};
- };
- 
-+&sound {
-+	compatible = "mediatek,mt8195_mt6359_rt1019_rt5682";
-+	model = "mt8195_r1019_5682";
-+};
-+
- &ts_10 {
- 	status = "okay";
- };
-diff --git a/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r3.dts b/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r3.dts
-index c47b341e98fb..f54f9477b99d 100644
---- a/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r3.dts
-+++ b/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r3.dts
-@@ -36,6 +36,11 @@ pins-low-power-pcie0-disable {
- 	};
- };
- 
-+&sound {
-+	compatible = "mediatek,mt8195_mt6359_rt1019_rt5682";
-+	model = "m8195_r1019_5682s";
-+};
-+
- &ts_10 {
- 	status = "okay";
- };
-diff --git a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
-index 95e93b791432..3410e16d7e99 100644
---- a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
-@@ -526,6 +526,34 @@ &pio {
- 		"AP_SPI_FLASH_MOSI",
- 		"AP_SPI_FLASH_MISO";
- 
-+	aud_pins_default: audio-default-pins {
-+		pins-cmd-dat {
-+		    pinmux = <PINMUX_GPIO69__FUNC_AUD_CLK_MOSI>,
-+			     <PINMUX_GPIO70__FUNC_AUD_SYNC_MOSI>,
-+			     <PINMUX_GPIO71__FUNC_AUD_DAT_MOSI0>,
-+			     <PINMUX_GPIO72__FUNC_AUD_DAT_MOSI1>,
-+			     <PINMUX_GPIO73__FUNC_AUD_DAT_MISO0>,
-+			     <PINMUX_GPIO74__FUNC_AUD_DAT_MISO1>,
-+			     <PINMUX_GPIO75__FUNC_AUD_DAT_MISO2>,
-+			     <PINMUX_GPIO0__FUNC_TDMIN_MCK>,
-+			     <PINMUX_GPIO1__FUNC_TDMIN_DI>,
-+			     <PINMUX_GPIO2__FUNC_TDMIN_LRCK>,
-+			     <PINMUX_GPIO3__FUNC_TDMIN_BCK>,
-+			     <PINMUX_GPIO60__FUNC_I2SO2_D0>,
-+			     <PINMUX_GPIO49__FUNC_I2SIN_D0>,
-+			     <PINMUX_GPIO50__FUNC_I2SO1_MCK>,
-+			     <PINMUX_GPIO51__FUNC_I2SO1_BCK>,
-+			     <PINMUX_GPIO52__FUNC_I2SO1_WS>,
-+			     <PINMUX_GPIO53__FUNC_I2SO1_D0>;
-+		};
-+
-+		pins-hp-jack-int-odl {
-+			pinmux = <PINMUX_GPIO89__FUNC_GPIO89>;
-+			input-enable;
-+			bias-pull-up = <MTK_PUPD_SET_R1R0_01>;
-+		};
-+	};
-+
- 	cr50_int: cr50-irq-default-pins {
- 		pins-gsc-ap-int-odl {
- 			pinmux = <PINMUX_GPIO88__FUNC_GPIO88>;
-@@ -833,6 +861,18 @@ cros-ec-rpmsg {
- 	};
- };
- 
-+&sound {
-+	status = "okay";
-+
-+	mediatek,adsp = <&adsp>;
-+	mediatek,dai-link =
-+		"DL10_FE", "DPTX_BE", "ETDM1_IN_BE", "ETDM2_IN_BE",
-+		"ETDM1_OUT_BE", "ETDM2_OUT_BE","UL_SRC1_BE",
-+		"AFE_SOF_DL2", "AFE_SOF_DL3", "AFE_SOF_UL4", "AFE_SOF_UL5";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&aud_pins_default>;
-+};
-+
- &spi0 {
- 	status = "okay";
- 
+Another case comes to my mind is that I2C framework wants to initialize I2C
+peripherals which were supplied via struct i2c_board_info on earlier stages.
+And again comes to the specifics of the certain peripherals that needs for
+power / reset / etc control, i.o.w. critical hardware for the platforms.
+
+But it's still what I remember and I can be mistaken.
+
 -- 
-2.37.2
+With Best Regards,
+Andy Shevchenko
+
 
