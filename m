@@ -2,102 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16ED15E6372
+	by mail.lfdr.de (Postfix) with ESMTP id C605A5E6374
 	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 15:19:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231244AbiIVNS0 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 22 Sep 2022 09:18:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39804 "EHLO
+        id S231310AbiIVNTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 09:19:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231255AbiIVNSL (ORCPT
+        with ESMTP id S231823AbiIVNSy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 09:18:11 -0400
-Received: from mail-vk1-f180.google.com (mail-vk1-f180.google.com [209.85.221.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3125DECCE2;
-        Thu, 22 Sep 2022 06:18:10 -0700 (PDT)
-Received: by mail-vk1-f180.google.com with SMTP id v192so4909025vkv.7;
-        Thu, 22 Sep 2022 06:18:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=FmC3Wnd/dYfP2uqwVfxKzutzBThKJES4nPc9HEeo7QQ=;
-        b=J06j6o0MXCQP79avP20hWcMOmr+9RUIwA65iEYK1TDKGJ5Pkt4ivky+PNfPf0ptbKQ
-         e9cOZbzfe2EKgMQrxeiuHP1iwqX2jQn7OCZxn9ox7kLXzFmDCitxzBY1yW7ClW5f3InW
-         D7I/8VdZJ9SaWeWA0iRbx2u2P5uE9C9bQHJMotaeZTs22t54R28NWWNt5nJ+EkX4DeYc
-         f7sMTqlMbBO70GYj88PVVZpbiwv5xTzzIDp/45cwMwW03LyEVq/2s6BIrOsxRx1eZNu+
-         WYAFtgy6cnM0Jaf72W4XSS5Nuz1DbZlN/Ngb2ua9LrAnt5/vhu8XGKUWsWUgqzN3NjXk
-         jVJQ==
-X-Gm-Message-State: ACrzQf18+i3lKb/ifowgiSu+9kuzaWXCFq1v4R64n0Azlf7zVcTsFLQg
-        ftqib/F5TPy1JE/jhOLtMVaH+zgZ2HAIER0/2Ds=
-X-Google-Smtp-Source: AMsMyM5hAS5sGeCyGhDs3JB8ybhSoe0SBFugJqR9UWsYlOLvGt3tSKkrbx2I2RYfB9/ZOUlHboLppHif1VOrjItnvws=
-X-Received: by 2002:a05:6122:10dc:b0:3a3:4904:2941 with SMTP id
- l28-20020a05612210dc00b003a349042941mr1265866vko.24.1663852689165; Thu, 22
- Sep 2022 06:18:09 -0700 (PDT)
+        Thu, 22 Sep 2022 09:18:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BA9EECCE5
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 06:18:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663852732;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=e2KiW8ubxj4itDHVmzCDT6sx86ivO/DdDP0BaFbVWv8=;
+        b=dSxPVKGDsu0/X7ZjKIDIZhSWNC5HkoPENFZzkQGj2e06pIaOijrNH9Fquecm1PO6zgiCGA
+        4cgK413sc2MK8PBFWnM2Lkh38rRgnrMG6/sb5i34z4fRtmLbKvKI4py0EKcedxeP8yfRSw
+        OiTZWKOr2plAx4eH+P3xvxuKb11ExzU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-150-Ava7A5KsMAyNiHjAgYi4Xg-1; Thu, 22 Sep 2022 09:18:49 -0400
+X-MC-Unique: Ava7A5KsMAyNiHjAgYi4Xg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F344186E926;
+        Thu, 22 Sep 2022 13:18:48 +0000 (UTC)
+Received: from lorien.usersys.redhat.com (unknown [10.22.33.123])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id BAF0C2027061;
+        Thu, 22 Sep 2022 13:18:48 +0000 (UTC)
+Date:   Thu, 22 Sep 2022 09:18:47 -0400
+From:   Phil Auld <pauld@redhat.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Petr =?utf-8?Q?=C5=A0tetiar?= <ynezz@true.cz>,
+        linux-kernel@vger.kernel.org, yury.norov@gmail.com,
+        rafael@kernel.org
+Subject: Re: aarch64 5.15.68 regression in topology/thread_siblings (huge
+ file size and no content)
+Message-ID: <Yyxgtx/Vr6Ar1xEe@lorien.usersys.redhat.com>
+References: <20220922113217.GA90426@meh.true.cz>
+ <YyxVytqQDbGWPa+6@lorien.usersys.redhat.com>
+ <YyxXoPmtTZHCr5pR@kroah.com>
 MIME-Version: 1.0
-References: <20220921003201.1441511-1-seanjc@google.com> <20220921003201.1441511-12-seanjc@google.com>
-In-Reply-To: <20220921003201.1441511-12-seanjc@google.com>
-From:   =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>
-Date:   Thu, 22 Sep 2022 15:17:56 +0200
-Message-ID: <CAAdtpL4yFdh3V0Be05OKxUFBTSgFs6oTy9U5FjSRGwOhi=tDMQ@mail.gmail.com>
-Subject: Re: [PATCH v4 11/12] KVM: mips, x86: do not rely on KVM_REQ_UNHALT
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Atish Patra <atishp@atishpatra.org>,
-        David Hildenbrand <david@redhat.com>,
-        kvm <kvm@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        kvmarm@lists.cs.columbia.edu,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Maxim Levitsky <mlevitsk@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YyxXoPmtTZHCr5pR@kroah.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 21, 2022 at 2:34 AM Sean Christopherson <seanjc@google.com> wrote:
+On Thu, Sep 22, 2022 at 02:40:00PM +0200 Greg Kroah-Hartman wrote:
+> On Thu, Sep 22, 2022 at 08:32:10AM -0400, Phil Auld wrote:
+> > On Thu, Sep 22, 2022 at 01:32:17PM +0200 Petr Štetiar wrote:
+> > > Hi,
+> > > 
+> > > we've got a recent bug report[1], that lscpu segfaults on aarch64 board running
+> > > 5.15.y kernel. It is working fine on 5.10.y kernel. 
+> > > 
+> > > I've tracked it down[2] to the issue with `topology/thread_siblings` which
+> > > apart from very strange file size returns empty content. I assume, that it's
+> > > somehow related to the changes done in commit bb9ec13d156e ("topology: use
+> > > bin_attribute to break the size limitation of cpumap ABI"), but I didn't tried
+> > > to revert it yet to verify it.
+> > >
+> > 
+> > This is actually due to a fix for that since returning 0 size breaks
+> > things as well.
+> > 
+> >   7ee951acd31a drivers/base: fix userspace break from using bin_attributes for cpumap and cpulist
+> > 
+> > The fix for small number of cpus as you have is now in Greg's driver core tree
+> > 
+> >   d7f06bdd6ee8 drivers/base: Fix unsigned comparison to -1 in CPUMAP_FILE_MAX_BYTES
+> > 
+> > and should work it's way back to stable trees soon.
+> 
+> That should fix up the file size issue.
+> 
+> The main problem being reported here is:
+> 
+> > > Kernel 5.15.68:
+> > > 
+> > >   root@OpenWrt:/# uname -a
+> > >   Linux OpenWrt 5.15.68 #0 SMP Wed Sep 21 05:54:21 2022 aarch64 GNU/Linux
+> > > 
+> > >   root@OpenWrt:/# find /sys -name thread_siblings -exec ls -al {} \;
+> > >   -r--r--r--    1 root     root     18446744073709551615 Sep 22 08:37 /sys/devices/system/cpu/cpu1/topology/thread_siblings
+> > >   -r--r--r--    1 root     root     18446744073709551615 Sep 22 08:37 /sys/devices/system/cpu/cpu0/topology/thread_siblings
+> > > 
+> > >   root@OpenWrt:/# find /sys -name thread_siblings -exec cat {} \;
+> > >   root@OpenWrt:/# 
+> 
+> Nothing in the file in 5.15, yet 5.10:
+> 
+> > > 
+> > > Kernel 5.10.138:
+> > > 
+> > >   root@OpenWrt:/# uname -a
+> > >   Linux OpenWrt 5.10.138 #0 SMP Sat Sep 3 02:55:34 2022 aarch64 GNU/Linux
+> > > 
+> > >   root@OpenWrt:/# find /sys -name thread_siblings -exec cat {} \;
+> > >   2
+> > >   1
+> 
+> Has data in the files.
 >
-> From: Paolo Bonzini <pbonzini@redhat.com>
->
-> KVM_REQ_UNHALT is a weird request that simply reports the value of
-> kvm_arch_vcpu_runnable() on exit from kvm_vcpu_halt().  Only
-> MIPS and x86 are looking at it, the others just clear it.  Check
-> the state of the vCPU directly so that the request is handled
-> as a nop on all architectures.
->
-> No functional change intended, except for corner cases where an
-> event arrive immediately after a signal become pending or after
-> another similar host-side event.
->
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  arch/mips/kvm/emulate.c | 7 +++----
->  arch/x86/kvm/x86.c      | 9 ++++++++-
->  2 files changed, 11 insertions(+), 5 deletions(-)
 
-Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
+Good point. My eyes latched on to that huge file size for some reason ;)
+
+> What caused that change?
+
+I've seen the size cause problems for tools. Are we sure that it's the empty file and not
+the size causing issues?  Maybe something is treating that as signed again for a count of
+-1 bytes (which seems like it would be a bug anyway)?
+
+
+Cheers,
+Phil
+
+>
+> thanks,
+> 
+> greg k-h
+> 
+
+-- 
+
