@@ -2,157 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72D365E5A3E
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 06:36:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B30F75E5A3F
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 06:37:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbiIVEgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 00:36:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55516 "EHLO
+        id S229895AbiIVEhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 00:37:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbiIVEf7 (ORCPT
+        with ESMTP id S229677AbiIVEg4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 00:35:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7EEE7C74A
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 21:35:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 65688B8239B
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 04:35:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07B5FC433D6;
-        Thu, 22 Sep 2022 04:35:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663821355;
-        bh=pyeFh9s8VF6usTdLZxp7Y3s3vv8L4E2Hw3/+Q8rJiUc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sOV5alI5m0Gd7fkLhqPYfZ/a2lR0KXiK6AQR2aWP/H117uu8S8KaPY62ngNevxdmO
-         PRR3STFQkfxpnuE6XDjH0grcisI42ZEPFMH7gdqlGjnso69C4hHboADShgjJvSr+yH
-         MR9vMh1MJ89zT0PG8THMcyXWwCvBUJYAF+lvjm6OxS3d/iLopUDlzg3sMJb4X11ocd
-         VD7+41UQXBaxS6KIucWGM9ShoJDUSPiayK+YASv5IrO+tkX90FSzneioJ107mVkXLP
-         L6rdO0lt0MDKasH1u4PpJ1yLDAtHFbVly+tYdNxlTLboRnP3J6uxHaCh+KTargMJTs
-         gJbcxJGA6v96Q==
-Date:   Thu, 22 Sep 2022 07:35:41 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64/mm: fold check for KFENCE into can_set_direct_map()
-Message-ID: <YyvmHT9TCwuxqD/t@kernel.org>
-References: <20220921074841.382615-1-rppt@kernel.org>
- <1a87b8a4-46f0-69c9-83ec-10cce8f0aa72@arm.com>
- <YysrcNmdz5t30cQQ@kernel.org>
- <a9c04a95-a12a-2b10-b923-d90d9e5f4ac2@arm.com>
+        Thu, 22 Sep 2022 00:36:56 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEB987C74A
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 21:36:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663821415; x=1695357415;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=1XucKgX++zuNVJG9PPzZiYcNFHesLtT/2vAEDgaYSFU=;
+  b=ae5zo0Q9lU8zgOzlWptkXLJjbceQvTP72kVngwMfTrmn7fkhYexgUW+Q
+   4TwQl5WiWDNoZJgWPfg2o1GfGNHZ7Ft+zjWfdBvbgRpi0TID983EtMH4y
+   VpL4Xo0x46uXittsOwCTBMfBRW71Jtq6y+gTjoCP5XWvWZmEMWuBwjILn
+   jbF30aKzyTHsz2lVIQz/W+vYB8YJdzD23m67SuwgICsC7LhALNfEp/CcH
+   wt80hiWpxGuQ4CsZwoPbCXs2xl4Y04JihHbWU8U25qjKL5j8X56N341rt
+   lCWaKsimsL518uwKn62gSESxhBYDdSKDU5FFCEnleY3HcV36XeAEh2Cc7
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="361959487"
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="361959487"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 21:36:55 -0700
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="570816471"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 21:36:53 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     haoxin <xhao@linux.alibaba.com>
+Cc:     Zi Yan <ziy@nvidia.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        "Matthew Wilcox" <willy@infradead.org>
+Subject: Re: [RFC 0/6] migrate_pages(): batch TLB flushing
+References: <20220921060616.73086-1-ying.huang@intel.com>
+        <FE41BDA8-F7EC-4FBC-9647-A5A835CDECB0@nvidia.com>
+        <4117f7f5-8156-d8c7-9e48-55a1b632f83d@linux.alibaba.com>
+Date:   Thu, 22 Sep 2022 12:36:45 +0800
+In-Reply-To: <4117f7f5-8156-d8c7-9e48-55a1b632f83d@linux.alibaba.com>
+        (haoxin's message of "Thu, 22 Sep 2022 11:47:41 +0800")
+Message-ID: <87tu50ja8y.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a9c04a95-a12a-2b10-b923-d90d9e5f4ac2@arm.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 08:21:38AM +0530, Anshuman Khandual wrote:
-> 
-> On 9/21/22 20:49, Mike Rapoport wrote:
-> > Hi Anshuman,
-> > 
-> > On Wed, Sep 21, 2022 at 05:09:19PM +0530, Anshuman Khandual wrote:
-> >>
-> >>
-> >> On 9/21/22 13:18, Mike Rapoport wrote:
-> >>> From: Mike Rapoport <rppt@linux.ibm.com>
-> >>>
-> >>> KFENCE requires linear map to be mapped at page granularity, so that it
-> >>> is possible to protect/unprotect single pages, just like with
-> >>> rodata_full and DEBUG_PAGEALLOC.
-> >>>
-> >>> Instead of repating
-> >>>
-> >>> 	can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE)
-> >>>
-> >>> make can_set_direct_map() handle the KFENCE case.
-> >>>
-> >>> This also prevents potential false positives in kernel_page_present()
-> >>> that may return true for non-present page if CONFIG_KFENCE is enabled.
-> >>>
-> >>> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> >>> ---
-> >>>  arch/arm64/mm/mmu.c      | 8 ++------
-> >>>  arch/arm64/mm/pageattr.c | 8 +++++++-
-> >>>  2 files changed, 9 insertions(+), 7 deletions(-)
-> >>>
-> >>> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
-> >>> index e7ad44585f40..c5065abec55a 100644
-> >>> --- a/arch/arm64/mm/mmu.c
-> >>> +++ b/arch/arm64/mm/mmu.c
-> >>> @@ -535,7 +535,7 @@ static void __init map_mem(pgd_t *pgdp)
-> >>>  	 */
-> >>>  	BUILD_BUG_ON(pgd_index(direct_map_end - 1) == pgd_index(direct_map_end));
-> >>>  
-> >>> -	if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE))
-> >>> +	if (can_set_direct_map())
-> >>>  		flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
-> >>>  
-> >>>  	/*
-> >>> @@ -1547,11 +1547,7 @@ int arch_add_memory(int nid, u64 start, u64 size,
-> >>>  
-> >>>  	VM_BUG_ON(!mhp_range_allowed(start, size, true));
-> >>>  
-> >>> -	/*
-> >>> -	 * KFENCE requires linear map to be mapped at page granularity, so that
-> >>> -	 * it is possible to protect/unprotect single pages in the KFENCE pool.
-> >>> -	 */
-> >>> -	if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE))
-> >>> +	if (can_set_direct_map())
-> >>>  		flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
-> >>>  
-> >>>  	__create_pgd_mapping(swapper_pg_dir, start, __phys_to_virt(start),
-> >>> diff --git a/arch/arm64/mm/pageattr.c b/arch/arm64/mm/pageattr.c
-> >>> index 64e985eaa52d..d107c3d434e2 100644
-> >>> --- a/arch/arm64/mm/pageattr.c
-> >>> +++ b/arch/arm64/mm/pageattr.c
-> >>> @@ -21,7 +21,13 @@ bool rodata_full __ro_after_init = IS_ENABLED(CONFIG_RODATA_FULL_DEFAULT_ENABLED
-> >>>  
-> >>>  bool can_set_direct_map(void)
-> >>>  {
-> >>> -	return rodata_full || debug_pagealloc_enabled();
-> >>> +	/*
-> >>> +	 * rodata_full, DEBUG_PAGEALLOC and KFENCE require linear map to be
-> >>> +	 * mapped at page granularity, so that it is possible to
-> >>> +	 * protect/unprotect single pages.
-> >>> +	 */
-> >>> +	return rodata_full || debug_pagealloc_enabled() ||
-> >>> +		IS_ENABLED(CONFIG_KFENCE);
-> >>>  }
-> >>
-> >> Changing can_set_direct_map() also changes behaviour for other functions such as 
-> >>
-> >> set_direct_map_default_noflush()
-> >> set_direct_map_invalid_noflush()
-> >> __kernel_map_pages()
-> >>
-> >> Is that okay ?
-> >  
-> > Yes. Since KFENCE disables block mappings, these will actually change the
-> > page tables.
-> > Actually, before this change the test for can_set_direct_map() in these
-> > functions was false negative when CONFIG_KFENCE=y
-> 
-> Okay but then should not this have a "Fixes:" tag as well ?
- 
-I feel that this is more of a theoretical bug and it's not worth
-backporting to stable.
-   
-> >>>  static int change_page_range(pte_t *ptep, unsigned long addr, void *data)
-> > 
+haoxin <xhao@linux.alibaba.com> writes:
 
--- 
-Sincerely yours,
-Mike.
+> Hi Huang,
+>
+> This is an exciting change, but on ARM64 machine the TLB
+> flushing are not through IPI, it depends on 'vale1is'
+>
+> instructionso I'm wondering if there's also a benefit on arm64,
+> and I'm going to test it on an ARM64 machine.
+
+We have no arm64 machine to test and I know very little about arm64.
+Thanks for information and testing.
+
+Best Regards,
+Huang, Ying
+
+>
+> ( 2022/9/21 H11:47, Zi Yan S:
+>> On 21 Sep 2022, at 2:06, Huang Ying wrote:
+>>
+>>> From: "Huang, Ying" <ying.huang@intel.com>
+>>>
+>>> Now, migrate_pages() migrate pages one by one, like the fake code as
+>>> follows,
+>>>
+>>>    for each page
+>>>      unmap
+>>>      flush TLB
+>>>      copy
+>>>      restore map
+>>>
+>>> If multiple pages are passed to migrate_pages(), there are
+>>> opportunities to batch the TLB flushing and copying.  That is, we can
+>>> change the code to something as follows,
+>>>
+>>>    for each page
+>>>      unmap
+>>>    for each page
+>>>      flush TLB
+>>>    for each page
+>>>      copy
+>>>    for each page
+>>>      restore map
+>>>
+>>> The total number of TLB flushing IPI can be reduced considerably.  And
+>>> we may use some hardware accelerator such as DSA to accelerate the
+>>> page copying.
+>>>
+>>> So in this patch, we refactor the migrate_pages() implementation and
+>>> implement the TLB flushing batching.  Base on this, hardware
+>>> accelerated page copying can be implemented.
+>>>
+>>> If too many pages are passed to migrate_pages(), in the naive batched
+>>> implementation, we may unmap too many pages at the same time.  The
+>>> possibility for a task to wait for the migrated pages to be mapped
+>>> again increases.  So the latency may be hurt.  To deal with this
+>>> issue, the max number of pages be unmapped in batch is restricted to
+>>> no more than HPAGE_PMD_NR.  That is, the influence is at the same
+>>> level of THP migration.
+>>>
+>>> We use the following test to measure the performance impact of the
+>>> patchset,
+>>>
+>>> On a 2-socket Intel server,
+>>>
+>>>   - Run pmbench memory accessing benchmark
+>>>
+>>>   - Run `migratepages` to migrate pages of pmbench between node 0 and
+>>>     node 1 back and forth.
+>>>
+>>> With the patch, the TLB flushing IPI reduces 99.1% during the test and
+>>> the number of pages migrated successfully per second increases 291.7%.
+>> Thank you for the patchset. Batching page migration will definitely
+>> improve its throughput from my past experiments[1] and starting with
+>> TLB flushing is a good first step.
+>>
+>> BTW, what is the rationality behind the increased page migration
+>> success rate per second?
+>>
+>>> This patchset is based on v6.0-rc5 and the following patchset,
+>>>
+>>> [PATCH -V3 0/8] migrate_pages(): fix several bugs in error path
+>>> https://lore.kernel.org/lkml/20220817081408.513338-1-ying.huang@intel.com/
+>>>
+>>> The migrate_pages() related code is converting to folio now. So this
+>>> patchset cannot apply recent akpm/mm-unstable branch.  This patchset
+>>> is used to check the basic idea.  If it is OK, I will rebase the
+>>> patchset on top of folio changes.
+>>>
+>>> Best Regards,
+>>> Huang, Ying
+>>
+>> [1] https://lwn.net/Articles/784925/
+>>
+>> --
+>> Best Regards,
+>> Yan, Zi
