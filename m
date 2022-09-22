@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4136A5E5F05
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 11:54:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68A515E5F08
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 11:54:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230523AbiIVJyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 05:54:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49226 "EHLO
+        id S231348AbiIVJyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 05:54:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231244AbiIVJxk (ORCPT
+        with ESMTP id S231287AbiIVJxn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 05:53:40 -0400
+        Thu, 22 Sep 2022 05:53:43 -0400
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08F7BD58AD;
-        Thu, 22 Sep 2022 02:53:29 -0700 (PDT)
-Received: from fraeml737-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MY9Xr4Hmnz67kTG;
-        Thu, 22 Sep 2022 17:51:40 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39621D588C;
+        Thu, 22 Sep 2022 02:53:32 -0700 (PDT)
+Received: from fraeml735-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MY9Yh4symz6883d;
+        Thu, 22 Sep 2022 17:52:24 +0800 (CST)
 Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml737-chm.china.huawei.com (10.206.15.218) with Microsoft SMTP Server
+ fraeml735-chm.china.huawei.com (10.206.15.216) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 22 Sep 2022 11:53:27 +0200
+ 15.1.2375.31; Thu, 22 Sep 2022 11:53:29 +0200
 Received: from localhost.localdomain (10.69.192.58) by
  lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 22 Sep 2022 10:53:25 +0100
+ 15.1.2375.31; Thu, 22 Sep 2022 10:53:27 +0100
 From:   John Garry <john.garry@huawei.com>
 To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
         <jinpu.wang@cloud.ionos.com>, <damien.lemoal@opensource.wdc.com>
 CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linuxarm@huawei.com>, <yangxingui@huawei.com>,
         John Garry <john.garry@huawei.com>
-Subject: [PATCH v4 1/7] scsi: libsas: Add sas_ata_device_link_abort()
-Date:   Thu, 22 Sep 2022 17:46:52 +0800
-Message-ID: <1663840018-50161-2-git-send-email-john.garry@huawei.com>
+Subject: [PATCH v4 2/7] scsi: hisi_sas: Move slot variable definition in hisi_sas_abort_task()
+Date:   Thu, 22 Sep 2022 17:46:53 +0800
+Message-ID: <1663840018-50161-3-git-send-email-john.garry@huawei.com>
 X-Mailer: git-send-email 2.8.1
 In-Reply-To: <1663840018-50161-1-git-send-email-john.garry@huawei.com>
 References: <1663840018-50161-1-git-send-email-john.garry@huawei.com>
@@ -53,76 +53,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Similar to how AHCI handles NCQ errors in ahci_error_intr() ->
-ata_port_abort() -> ata_do_link_abort(), add an NCQ error handler for LLDDs
-to call to initiate a link abort.
+Each branch currently defines a slot variable independently, and it is
+neater to move it to the function head.
 
-This will mark all outstanding QCs as failed and kick-off EH.
-
-Note:
-A "force reset" argument is added for drivers which require the ATA error
-handling to always reset the device.
-
-A driver may require this feature for when SATA device per-SCSI cmnd
-resources are only released during reset for ATA EH. As such, we need an
-option to force reset to be done, regardless of what any EH autopsy
-decides.
-
-Suggested-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Xingui Yang <yangxingui@huawei.com>
 Signed-off-by: John Garry <john.garry@huawei.com>
-Tested-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 ---
- drivers/scsi/libsas/sas_ata.c | 12 ++++++++++++
- include/scsi/sas_ata.h        |  6 ++++++
- 2 files changed, 18 insertions(+)
+ drivers/scsi/hisi_sas/hisi_sas_main.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/scsi/libsas/sas_ata.c b/drivers/scsi/libsas/sas_ata.c
-index d35c9296f738..bdffb6852dcf 100644
---- a/drivers/scsi/libsas/sas_ata.c
-+++ b/drivers/scsi/libsas/sas_ata.c
-@@ -861,6 +861,18 @@ void sas_ata_wait_eh(struct domain_device *dev)
- 	ata_port_wait_eh(ap);
- }
+diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
+index 699b07abb6b0..8303aa5eaf25 100644
+--- a/drivers/scsi/hisi_sas/hisi_sas_main.c
++++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
+@@ -1547,6 +1547,7 @@ static int hisi_sas_abort_task(struct sas_task *task)
+ 	struct hisi_sas_internal_abort_data internal_abort_data = { false };
+ 	struct domain_device *device = task->dev;
+ 	struct hisi_sas_device *sas_dev = device->lldd_dev;
++	struct hisi_sas_slot *slot = task->lldd_task;
+ 	struct hisi_hba *hisi_hba;
+ 	struct device *dev;
+ 	int rc = TMF_RESP_FUNC_FAILED;
+@@ -1560,7 +1561,6 @@ static int hisi_sas_abort_task(struct sas_task *task)
  
-+void sas_ata_device_link_abort(struct domain_device *device, bool force_reset)
-+{
-+	struct ata_port *ap = device->sata_dev.ap;
-+	struct ata_link *link = &ap->link;
-+
-+	link->eh_info.err_mask |= AC_ERR_DEV;
-+	if (force_reset)
-+		link->eh_info.action |= ATA_EH_RESET;
-+	ata_link_abort(link);
-+}
-+EXPORT_SYMBOL_GPL(sas_ata_device_link_abort);
-+
- int sas_execute_ata_cmd(struct domain_device *device, u8 *fis, int force_phy_id)
- {
- 	struct sas_tmf_task tmf_task = {};
-diff --git a/include/scsi/sas_ata.h b/include/scsi/sas_ata.h
-index a1df4f9d57a3..e47f0aec0722 100644
---- a/include/scsi/sas_ata.h
-+++ b/include/scsi/sas_ata.h
-@@ -32,6 +32,7 @@ void sas_probe_sata(struct asd_sas_port *port);
- void sas_suspend_sata(struct asd_sas_port *port);
- void sas_resume_sata(struct asd_sas_port *port);
- void sas_ata_end_eh(struct ata_port *ap);
-+void sas_ata_device_link_abort(struct domain_device *dev, bool force_reset);
- int sas_execute_ata_cmd(struct domain_device *device, u8 *fis,
- 			int force_phy_id);
- int sas_ata_wait_after_reset(struct domain_device *dev, unsigned long deadline);
-@@ -87,6 +88,11 @@ static inline void sas_ata_end_eh(struct ata_port *ap)
- {
- }
+ 	spin_lock_irqsave(&task->task_state_lock, flags);
+ 	if (task->task_state_flags & SAS_TASK_STATE_DONE) {
+-		struct hisi_sas_slot *slot = task->lldd_task;
+ 		struct hisi_sas_cq *cq;
  
-+static inline void sas_ata_device_link_abort(struct domain_device *dev,
-+					     bool force_reset)
-+{
-+}
-+
- static inline int sas_execute_ata_cmd(struct domain_device *device, u8 *fis,
- 				      int force_phy_id)
- {
+ 		if (slot) {
+@@ -1578,8 +1578,7 @@ static int hisi_sas_abort_task(struct sas_task *task)
+ 	task->task_state_flags |= SAS_TASK_STATE_ABORTED;
+ 	spin_unlock_irqrestore(&task->task_state_lock, flags);
+ 
+-	if (task->lldd_task && task->task_proto & SAS_PROTOCOL_SSP) {
+-		struct hisi_sas_slot *slot = task->lldd_task;
++	if (slot && task->task_proto & SAS_PROTOCOL_SSP) {
+ 		u16 tag = slot->idx;
+ 		int rc2;
+ 
+@@ -1613,9 +1612,8 @@ static int hisi_sas_abort_task(struct sas_task *task)
+ 			hisi_sas_dereg_device(hisi_hba, device);
+ 			rc = hisi_sas_softreset_ata_disk(device);
+ 		}
+-	} else if (task->lldd_task && task->task_proto & SAS_PROTOCOL_SMP) {
++	} else if (slot && task->task_proto & SAS_PROTOCOL_SMP) {
+ 		/* SMP */
+-		struct hisi_sas_slot *slot = task->lldd_task;
+ 		u32 tag = slot->idx;
+ 		struct hisi_sas_cq *cq = &hisi_hba->cq[slot->dlvry_queue];
+ 
 -- 
 2.35.3
 
