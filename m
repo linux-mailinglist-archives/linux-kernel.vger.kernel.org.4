@@ -2,176 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DEF85E5FAF
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 12:19:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D24E75E5FB1
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 12:19:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231430AbiIVKSc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 06:18:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34442 "EHLO
+        id S229974AbiIVKT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 06:19:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230125AbiIVKS1 (ORCPT
+        with ESMTP id S229918AbiIVKTQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 06:18:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70697DC127;
-        Thu, 22 Sep 2022 03:18:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0CCA062B00;
-        Thu, 22 Sep 2022 10:18:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35CF4C433C1;
-        Thu, 22 Sep 2022 10:18:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663841905;
-        bh=unHNLjgsxiDp0S08RPmDJfG3btH8Okc+VlSD5IufLJI=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=M1OQe0cNsUxh7Q+Z8ii8q5aOdDgyIr1XG8dnke5SmJWCwHFnkij36gn/docRxA4yM
-         MuSoMVc/vYqYek/J5ljXykCsW/Yt2ds9nyIixqYhufxTMhY6oJxNVFkoWFncYeK0m3
-         B/nJNnHLSEQTDexJE9j9Vb3wh8FEM9lYjwpjP2gyi9PXGutwpEZWhrE3k508Za1OgR
-         LZ40Tq/pBypLlYOgS1YZq0P5n9qlmjmKTHq0R5Mvvb+Y1DgbfstiLRyhIFCk4NhAXp
-         9g4LRA9fYfU87UeWRmcF5b0izvQ9a6mwlwm75HPt8ZDaOPLnhtBnw+emqSPML4Jk0r
-         GZZonnTYPze8Q==
-Message-ID: <e04e349170bc227b330556556d0592a53692b5b5.camel@kernel.org>
-Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
- STATX_INO_VERSION field
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Theodore Ts'o <tytso@mit.edu>, NeilBrown <neilb@suse.de>,
-        Trond Myklebust <trondmy@hammerspace.com>,
-        "bfields@fieldses.org" <bfields@fieldses.org>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "djwong@kernel.org" <djwong@kernel.org>,
-        "brauner@kernel.org" <brauner@kernel.org>,
-        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "chuck.lever@oracle.com" <chuck.lever@oracle.com>,
-        "linux-man@vger.kernel.org" <linux-man@vger.kernel.org>,
-        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
-        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
-        "jack@suse.cz" <jack@suse.cz>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "xiubli@redhat.com" <xiubli@redhat.com>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "adilger.kernel@dilger.ca" <adilger.kernel@dilger.ca>,
-        "lczerner@redhat.com" <lczerner@redhat.com>,
-        "ceph-devel@vger.kernel.org" <ceph-devel@vger.kernel.org>,
-        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>
-Date:   Thu, 22 Sep 2022 06:18:21 -0400
-In-Reply-To: <20220921214124.GS3600936@dread.disaster.area>
-References: <166328063547.15759.12797959071252871549@noble.neil.brown.name>
-         <YyQdmLpiAMvl5EkU@mit.edu>
-         <7027d1c2923053fe763e9218d10ce8634b56e81d.camel@kernel.org>
-         <24005713ad25370d64ab5bd0db0b2e4fcb902c1c.camel@kernel.org>
-         <20220918235344.GH3600936@dread.disaster.area>
-         <87fb43b117472c0a4c688c37a925ac51738c8826.camel@kernel.org>
-         <20220920001645.GN3600936@dread.disaster.area>
-         <5832424c328ea427b5c6ecdaa6dd53f3b99c20a0.camel@kernel.org>
-         <20220921000032.GR3600936@dread.disaster.area>
-         <93b6d9f7cf997245bb68409eeb195f9400e55cd0.camel@kernel.org>
-         <20220921214124.GS3600936@dread.disaster.area>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        Thu, 22 Sep 2022 06:19:16 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28A31DCCE7
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 03:19:12 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id n35-20020a05600c502300b003b4924c6868so3587248wmr.1
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 03:19:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=Ju6BSMep2KJyGnXzsed5+vjZslhWJvx3S4Wq5/v4xCw=;
+        b=SUzZ8/4LQ4z00agprzqQeqMQLmjUXi2wsNvMkS8ormVPl6wY8bqlkFmPrSOEZLelmN
+         Qz7hfA5Me6aZW1tPo3cjvgDzPdn94oBcjCv3CCyOO8iVWqve6ksrMFi4slrgPXRK+1PZ
+         +u3ITed68JlvQLhmeUkCjPh4qYLfkzNsyk8BZyWNo6qii9435XtirTue6McBo9COeZTe
+         XAG1B0zphCcLCRCXNmFUYjWKppoQ3zdqPcXpnd3etpE8iY3PzVE1lGn7m0xRAox5B1rj
+         zOep1puhY+R4piUYjcxzwW9UeyQqtnbtu4U6+scj0oED1JQk4uofgsAggHeNDVcV3l9d
+         Dohg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=Ju6BSMep2KJyGnXzsed5+vjZslhWJvx3S4Wq5/v4xCw=;
+        b=DAQS/aLpH8NdyR4EEVIh/CoWzn5B5uwooQiVc36cjchP51qoCJ4wUpvKWARuasra6n
+         +7/OHNBwgVmpiNS2H/Qz4N7n5YKIVU2Z8p3lbmMxY/6fvA6kdoRV/expJgg74zkeIub3
+         x7YWbEOStcIjQ56EYJYk4jIM25bqR+UK3kIfwR7ZNJfQ4x96JqgT2UXQzlrFOZbtOX8k
+         PykO7OitYMlTqOViQt1f0lYeZhkH3MHxKnQqnRDuDAqyrRcj4GbQJHIEG8Di6zeiWlVp
+         ieXvl/VBeloTm1B1ixpQHqjrzkVVIF6SjqEF+kIy3tbZGIhQLgX08dFp5Hh4o4WA51o7
+         9Esw==
+X-Gm-Message-State: ACrzQf02sPDoDa54w2V2DGAvdSa0sj1JcLavOxqidaHup+tVOJdYSJhX
+        P8Va40Oa7SL2BkC57mXJf+12Zw==
+X-Google-Smtp-Source: AMsMyM4OscS0C1jykeo4QICxF2cHBCMYygPB7nFReh7fcMsWjdX9Dluta8CohpeAWrA95czQeAow/w==
+X-Received: by 2002:a05:600c:42d4:b0:3b3:3de1:7564 with SMTP id j20-20020a05600c42d400b003b33de17564mr1831131wme.152.1663841950631;
+        Thu, 22 Sep 2022 03:19:10 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id c17-20020a7bc851000000b003b47575d304sm6500817wml.32.2022.09.22.03.19.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Sep 2022 03:19:10 -0700 (PDT)
+Date:   Thu, 22 Sep 2022 11:19:08 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Chunyan Zhang <zhang.lyra@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Chunyan Zhang <chunyan.zhang@unisoc.com>,
+        LKML <linux-kernel@vger.kernel.org>, Lee Jones <lee@kernel.org>
+Subject: Re: [PATCH v2 2/2] dt-bindings: regulator: Add bindings for Unisoc's
+ SC2730 regulator
+Message-ID: <Yyw2nAAjN6NxmS09@google.com>
+References: <20211008031953.339461-1-zhang.lyra@gmail.com>
+ <20211008031953.339461-3-zhang.lyra@gmail.com>
+ <YY5wPh0rwRvFjSRG@sirena.org.uk>
+ <CAAfSe-uA3iowafC25zRqoTSaub1PbOzUvQgukLm=szEge_abvw@mail.gmail.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAfSe-uA3iowafC25zRqoTSaub1PbOzUvQgukLm=szEge_abvw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-09-22 at 07:41 +1000, Dave Chinner wrote:
-> On Wed, Sep 21, 2022 at 06:33:28AM -0400, Jeff Layton wrote:
-> > On Wed, 2022-09-21 at 10:00 +1000, Dave Chinner wrote:
-> > > > How do we determine what that offset should be? Your last email
-> > > > suggested that there really is no limit to the number of i_version =
-bumps
-> > > > that can happen in memory before one of them makes it to disk. What=
- can
-> > > > we do to address that?
-> > >=20
-> > > <shrug>
-> > >=20
-> > > I'm just pointing out problems I see when defining this as behaviour
-> > > for on-disk format purposes. If we define it as part of the on-disk
-> > > format, then we have to be concerned about how it may be used
-> > > outside the scope of just the NFS server application.=20
-> > >=20
-> > > However, If NFS keeps this metadata and functionaly entirely
-> > > contained at the application level via xattrs, I really don't care
-> > > what algorithm NFS developers decides to use for their crash
-> > > sequencing. It's not my concern at this point, and that's precisely
-> > > why NFS should be using xattrs for this NFS specific functionality.
-> > >=20
-> >=20
-> > I get it: you'd rather not have to deal with what you see as an NFS
-> > problem, but I don't get how what you're proposing solves anything. We
-> > might be able to use that scheme to detect crashes, but that's only par=
-t
-> > of the problem (and it's a relatively simple part of the problem to
-> > solve, really).
-> >=20
-> > Maybe you can clarify it for me:
-> >=20
-> > Suppose we go with what you're saying and store some information in
-> > xattrs that allows us to detect crashes in some fashion. The server
-> > crashes and comes back up and we detect that there was a crash earlier.
-> >=20
-> > What does nfsd need to do now to ensure that it doesn't hand out a
-> > duplicate change attribute?=20
->=20
-> As I've already stated, the NFS server can hold the persistent NFS
-> crash counter value in a second xattr that it bumps whenever it
-> detects a crash and hence we take the local filesystem completely
-> out of the equation.  How the crash counter is then used by the nfsd
-> to fold it into the NFS protocol change attribute is a nfsd problem,
-> not a local filesystem problem.
->=20
+On Thu, 22 Sep 2022, Chunyan Zhang wrote:
 
-Ok, assuming you mean put this in an xattr that lives at the root of the
-export? We only need this for IS_I_VERSION filesystems (btrfs, xfs, and
-ext4), and they all support xattrs so this scheme should work.
+> Hi Mark,
+> 
+> Sorry for the late response.
+> [1] is the v1 on which we had some discussion. I hope that can help
+> recall the issue below.
+> 
+> On Fri, 12 Nov 2021 at 21:46, Mark Brown <broonie@kernel.org> wrote:
+> >
+> > On Fri, Oct 08, 2021 at 11:19:53AM +0800, Chunyan Zhang wrote:
+> >
+> > > +properties:
+> > > +  compatible:
+> > > +    const: sprd,sc2730-regulator
+> >
+> > I still don't understand why this MFD subfunction for a specific device
+> > is a separate binding with a separate compatible string, the issues I
+> > mentioned previously with this just encoding current Linux internals
+> > into the DT rather than describing the device still apply.
+> 
+> I understand your point. But like I described previously [1], if we
+> still use the current solution (i.e. use devm_of_platform_populate()
+> to register MFD subdevices), a compatible string is required. I'm open
+> to switching to other solutions, do you have some suggestions?
 
-> If you're worried about maximum number of writes outstanding vs
-> i_version bumps that are held in memory, then *bound the maximum
-> number of uncommitted i_version changes that the NFS server will
-> allow to build up in memory*. By moving the crash counter to being a
-> NFS server only function, the NFS server controls the entire
-> algorithm and it doesn't have to care about external 3rd party
-> considerations like local filesystems have to.
->=20
+Many IPs encompassing multiple functions are described that way in
+DT.  I don't have the details for *this* device to hand, so my
+comments here aren't specific to this use-case, but describing each
+function individually does describe the H/W accurately, which is all
+DT calls for.
 
-Yeah, this is the bigger consideration.
+Can you imagine describing an SoC, which can be considered as a huge
+MFD, with only a single node?
 
-> e.g. The NFS server can track the i_version values when the NFSD
-> syncs/commits a given inode. The nfsd can sample i_version it when
-> calls ->commit_metadata or flushed data on the inode, and then when
-> it peeks at i_version when gathering post-op attrs (or any other
-> getattr op) it can decide that there is too much in-memory change
-> (e.g. 10,000 counts since last sync) and sync the inode.
->=20
-> i.e. the NFS server can trivially cap the maximum number of
-> uncommitted NFS change attr bumps it allows to build up in memory.
-> At that point, the NFS server has a bound "maximum write count" that
-> can be used in conjunction with the xattr based crash counter to
-> determine how the change_attr is bumped by the crash counter.
+Does the regulator functionality have it's own bank of registers?
 
-Well, not "trivially". This is the bit where we have to grow struct
-inode (or the fs-specific inode), as we'll need to know what the latest
-on-disk value is for the inode.
-
-I'm leaning toward doing this on the query side. Basically, when nfsd
-goes to query the i_version, it'll check the delta between the current
-version and the latest one on disk. If it's bigger than X then we'd just
-return NFS4ERR_DELAY to the client.
-
-If the delta is >X/2, maybe it can kick off a workqueue job or something
-that calls write_inode with WB_SYNC_ALL to try to get the thing onto the
-platter ASAP.
---=20
-Jeff Layton <jlayton@kernel.org>
+-- 
+DEPRECATED: Please use lee@kernel.org
