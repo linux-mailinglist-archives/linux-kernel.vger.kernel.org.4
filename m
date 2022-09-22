@@ -2,112 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA4B65E62CC
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 14:51:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 651B45E62D0
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 14:51:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231480AbiIVMvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 08:51:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55542 "EHLO
+        id S231499AbiIVMvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 08:51:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231394AbiIVMvT (ORCPT
+        with ESMTP id S229644AbiIVMvl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 08:51:19 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 559BFE7C03
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 05:51:16 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id c7so10832098ljm.12
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 05:51:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=AcReqp2gEJDplwIiqlXdRZl1+dQuLiAN6jLoyy64CrI=;
-        b=vniiXCPYi2uHVswmxrHaLfifuGnTgh31cEiXXDrVozUBpdvgG1p2hAl0Iuww/tOgJC
-         51g7fQ3iDc/taoVV7V4GHA31OjtWbcgJMDX+hUwoS5rCcH8Dl+8Stfx1M/7mE1+2Bd5A
-         FS/3RYRQ2KRYMI6qPadyS/zKUJ0TBby48SUTUC1KBsX5KZbvKo+hEWmsvOh2eFQKBdcC
-         lOXsuuZFZ01TsN9IObctd00VrMglSMuCMpC2mBh7+57odvkGvsZJc7Hl12+6BMPhz4h0
-         VlXKpbLhfEODyJm8qT4XpB00JjoItgQhb2I/QFcMCOxYSwJH/kgC8yWpEJ4swhQZGhR5
-         5V7g==
+        Thu, 22 Sep 2022 08:51:41 -0400
+Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1F8E11D5;
+        Thu, 22 Sep 2022 05:51:40 -0700 (PDT)
+Received: by mail-qv1-f45.google.com with SMTP id c6so6702881qvn.6;
+        Thu, 22 Sep 2022 05:51:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=AcReqp2gEJDplwIiqlXdRZl1+dQuLiAN6jLoyy64CrI=;
-        b=gt6NwcYXVyZdvFQimSZidxh9tw8qTfD8XZ0wBQowlWuAQUU5AGTYXnEldGNvIprI6D
-         IPmtHWyq5Sui3+TxLNUfNVcUsnpAYH3Pw9Su8Ei27qO5z2Pq8LV/TqhJ+9+zWpbdXmr5
-         NImUErXVEhJISUslhsQefRMtKAjnGFVzPBneY/6Yo3PImJkPQLKYL7x1x2/oPf0Cb7Ql
-         KnjSd4AS60IsFNhm49/qeMWjPfzAa0zE9sahx9SOcE+3h8Bvb9I9UiIVXUhQvb6xnvNg
-         CCqQKfIFRwaAQj8qC44BGapMSsqopGx+amuKH/VWejYri2CCtIKswgnKqmP/c3Q1fE0q
-         UG5w==
-X-Gm-Message-State: ACrzQf2wR1XB9QzuTHAMCeflcQCVBo7oBD0WRneAqOnkqbcbdi5wJ69q
-        14pwrvf6+gLA7BxX78dma1fM1w==
-X-Google-Smtp-Source: AMsMyM6zFmrBuzTnD7uKlfv9Cfe4AuqBZFpoTZEtb1B6RSpxjj2qH9pnzETt4sbwd+x+Txnu7oQFsg==
-X-Received: by 2002:a2e:bf0c:0:b0:260:3df:1bce with SMTP id c12-20020a2ebf0c000000b0026003df1bcemr1096075ljr.117.1663851074490;
-        Thu, 22 Sep 2022 05:51:14 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id k20-20020a2eb754000000b0026c64fd8f0csm845872ljo.71.2022.09.22.05.51.13
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=1IX5rDJUB9B6ypTnX4DvDDFVPLxK4WN5mvStRFZFjD0=;
+        b=xBKfamC7vby92JRWleg62eNt5uMcOo+UXTESUt9WP5nU6IjHc0AKcoC2Y/6udybgV7
+         CM0SAIRebr2TM/ikU6bjvnDJ4NEmvu48A+IASeIdGs8P+nIGUGBBUG1esXjdFrL4FkEt
+         aRtLzzIedho/SpyzS0waf5a9HR4qpqfbgcde6OGXH/A50yDc39r+vKwbK/gmBZu0Z+aT
+         lA7RQ/oHKSRrUXuLl45DI+saiG3bJ0n1Rsbrbw6bpQm5ubp2AmaZ/F9hJ+LYu4tTORPF
+         yqIWaL3yipgvZvZrQB1OF7JWub+EgIK86guQg0GFdBY5wJRJjq2wzObcWJU5ofuW+kTY
+         uDXA==
+X-Gm-Message-State: ACrzQf0nexWtbU2snwfCRvKl6uRwpln5AMBSqoc+hYMNrm3kTT914Cg1
+        y+WSy7uQNQrKWJKMcDFa6jqzQr5CiGqbWw==
+X-Google-Smtp-Source: AMsMyM4oSAp6q1umZdNWOg5TiQlj2G6FOZ8MJ8k8TiyMF0oeNpasv1R1mGT7EPzvspfUjMcpeZJpIA==
+X-Received: by 2002:a05:6214:27c6:b0:4ac:94f9:c727 with SMTP id ge6-20020a05621427c600b004ac94f9c727mr2246920qvb.51.1663851099473;
+        Thu, 22 Sep 2022 05:51:39 -0700 (PDT)
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
+        by smtp.gmail.com with ESMTPSA id y17-20020a37f611000000b006b5cc25535fsm3589864qkj.99.2022.09.22.05.51.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Sep 2022 05:51:14 -0700 (PDT)
-Message-ID: <98e33290-b571-221a-75cd-386ab39a4819@linaro.org>
-Date:   Thu, 22 Sep 2022 14:51:12 +0200
+        Thu, 22 Sep 2022 05:51:39 -0700 (PDT)
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-3452214cec6so97752927b3.1;
+        Thu, 22 Sep 2022 05:51:38 -0700 (PDT)
+X-Received: by 2002:a0d:de43:0:b0:349:31bd:e8d5 with SMTP id
+ h64-20020a0dde43000000b0034931bde8d5mr2797113ywe.283.1663851098623; Thu, 22
+ Sep 2022 05:51:38 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v1 01/17] dt-bindings: clk: mediatek: Add MT8195 DPI
- clocks
-Content-Language: en-US
-To:     Guillaume Ranquet <granquet@baylibre.com>,
-        Vinod Koul <vkoul@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        David Airlie <airlied@linux.ie>,
+References: <20220905230406.30801-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220905230406.30801-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <Yys4CRNnKP3LXyAO@pendragon.ideasonboard.com> <CA+V-a8uiT9rV=T6LmFovRwULf3SO=JKdqr1yacAqN8gJmv9VPw@mail.gmail.com>
+ <YyxWOuWOrYmMexNj@paasikivi.fi.intel.com>
+In-Reply-To: <YyxWOuWOrYmMexNj@paasikivi.fi.intel.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 22 Sep 2022 14:51:27 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXKz56jxw56fXa7CMh_y4MVYiUT25dqRntJw6481s1FWw@mail.gmail.com>
+Message-ID: <CAMuHMdXKz56jxw56fXa7CMh_y4MVYiUT25dqRntJw6481s1FWw@mail.gmail.com>
+Subject: Re: [PATCH v2 3/4] media: platform: Add Renesas RZ/G2L MIPI CSI-2
+ receiver driver
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        CK Hu <ck.hu@mediatek.com>, Jitao shi <jitao.shi@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-mediatek@lists.infradead.org,
-        dri-devel@lists.freedesktop.org,
-        Pablo Sun <pablo.sun@mediatek.com>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org
-References: <20220919-v1-0-4844816c9808@baylibre.com>
- <20220919-v1-1-4844816c9808@baylibre.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220919-v1-1-4844816c9808@baylibre.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/09/2022 18:55, Guillaume Ranquet wrote:
-> From: Pablo Sun <pablo.sun@mediatek.com>
-> 
-> Expand dt-bindings slot for VDOSYS1 of MT8195.
-> This clock is required by the DPI1 hardware
-> and is a downstream of the HDMI pixel clock.
-> 
-> Signed-off-by: Pablo Sun <pablo.sun@mediatek.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
+On Thu, Sep 22, 2022 at 2:34 PM Sakari Ailus
+<sakari.ailus@linux.intel.com> wrote:
+> On Thu, Sep 22, 2022 at 01:08:33PM +0100, Lad, Prabhakar wrote:
+> > > > * Switched to manually turn ON/OFF the clocks instead of pm_runtime so that
+> > > >   the mipi/dhpy initialization happens as per the HW manual
+> > >
+> > > That doesn't look right. The driver doesn't use runtime PM anymore, so
+> > > power domains may not be handled properly. What was the problem with
+> > > clock handling using runtime PM ?
+> > >
+> > If we use the runtime PM all the clocks will be turned ON when we call
+> > pm_runtime_resume_and_get() which I dont want to. As per the "Starting
+> > reception for MIPI CSI-2 Input" section 35.3.1 for example we first
+> > need to turn ON all the clocks and later further down the line we need
+> > to just turn OFF VCLK -> Enable Link -> turn ON VCLK. Due to such
+> > cases I have switched to individual clock handling.
+>
+> If that is the case, then you should control just that clock directly,
+> outside runtime PM callbacks.
+>
+> Runtime PM may be needed e.g. for resuming a parent device.
 
+Exactly.
+So probably you should not consider R9A07G044_CRU_VCLK a PM clock,
+i.e. you need changes to rzg2l_cpg_is_pm_clk() to exclude it.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Gr{oetje,eeting}s,
 
-Best regards,
-Krzysztof
+                        Geert
 
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
