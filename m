@@ -2,116 +2,322 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84ECC5E587E
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 04:19:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74F875E5883
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 04:21:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230418AbiIVCTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 22:19:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48726 "EHLO
+        id S229911AbiIVCVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 22:21:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbiIVCTm (ORCPT
+        with ESMTP id S229794AbiIVCVH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 22:19:42 -0400
-Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B989FE6
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 19:19:36 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R481e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VQQFgdF_1663813171;
-Received: from localhost.localdomain(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0VQQFgdF_1663813171)
-          by smtp.aliyun-inc.com;
-          Thu, 22 Sep 2022 10:19:32 +0800
-From:   Xin Hao <xhao@linux.alibaba.com>
-To:     mike.kravetz@oracle.com
-Cc:     akpm@linux-foundation.org, songmuchun@bytedance.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v5] mm/hugetlb: add available_huge_pages() func
-Date:   Thu, 22 Sep 2022 10:19:29 +0800
-Message-Id: <20220922021929.98961-1-xhao@linux.alibaba.com>
-X-Mailer: git-send-email 2.31.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 21 Sep 2022 22:21:07 -0400
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 142E970E5B
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 19:21:05 -0700 (PDT)
+Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220922022100epoutp03ef5a0a20c8fe7fc4af60824beb5241d0~XDVhk5Uwc2894428944epoutp034
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 02:21:00 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220922022100epoutp03ef5a0a20c8fe7fc4af60824beb5241d0~XDVhk5Uwc2894428944epoutp034
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1663813260;
+        bh=IzYKUMJMz1SOuLrQwo03HvM/j9w6HxFH2Gbg2lnVnmk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nmGVEt/p1jY8ziJOfWfIs5SVNZIRtHRXtMVxfMato/75GebwsFGDMw1t9NFlCzO5Y
+         0+B5d6JrIBn3x1poITZgnQXfRAOrwWZ4GmnzoU/S6nAc1gND+GpuqSeST/731kdzNu
+         s3sL+VZ4KUpEEqvWkwedKKuoNYE9kmIPTHTlTw70=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
+        20220922022100epcas1p4455e5c35a91d32b703f71552eb083e8f~XDVhIaC4k0554705547epcas1p4D;
+        Thu, 22 Sep 2022 02:21:00 +0000 (GMT)
+Received: from epsmges1p2.samsung.com (unknown [182.195.38.232]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4MXzXp4pdCz4x9Q3; Thu, 22 Sep
+        2022 02:20:58 +0000 (GMT)
+Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
+        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        43.5A.51827.886CB236; Thu, 22 Sep 2022 11:20:56 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220922022056epcas1p1c95a2fbb5bd55e254387c2c457732b13~XDVdlG5z70207302073epcas1p1d;
+        Thu, 22 Sep 2022 02:20:56 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220922022056epsmtrp185b0b87135b10315d964d258804e9509~XDVdj9eUY2543925439epsmtrp1G;
+        Thu, 22 Sep 2022 02:20:56 +0000 (GMT)
+X-AuditID: b6c32a36-72a32a800000ca73-30-632bc6889860
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        C2.68.18644.886CB236; Thu, 22 Sep 2022 11:20:56 +0900 (KST)
+Received: from jiho-chu04.tn.corp.samsungelectronics.net (unknown
+        [10.113.112.236]) by epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220922022056epsmtip274389d8678a4e23ae4addce2032c92cf~XDVdWHAWw3124431244epsmtip2u;
+        Thu, 22 Sep 2022 02:20:56 +0000 (GMT)
+Date:   Thu, 22 Sep 2022 11:20:55 +0900
+From:   Jiho Chu <jiho.chu@samsung.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     gregkh@linuxfoundation.org, arnd@arndb.de, ogabbay@kernel.org,
+        broonie@kernel.org, linux-kernel@vger.kernel.org,
+        yelini.jeong@samsung.com, myungjoo.ham@samsung.com
+Subject: Re: [PATCH v2 13/13] dt-bindings: arm: Add Samsung Trinity bindings
+Message-Id: <20220922112055.46c1e55453d16383666ebe27@samsung.com>
+In-Reply-To: <68a87470-2946-cdd0-f1a4-0c0bac906e8c@linaro.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprOJsWRmVeSWpSXmKPExsWy7bCmvm7HMe1kgw3NahZ/Jx1jt5j68Amb
+        RfPi9WwW77t3M1vsfb2V3eLyrjlsFrcbV7BZ7Ov5yGjxfNp1FgdOj9+/JjF6bFrVyeZx59oe
+        No/9c9ewe/RtWcXo8XmTXABbVLZNRmpiSmqRQmpecn5KZl66rZJ3cLxzvKmZgaGuoaWFuZJC
+        XmJuqq2Si0+ArltmDtBVSgpliTmlQKGAxOJiJX07m6L80pJUhYz84hJbpdSClJwC0wK94sTc
+        4tK8dL281BIrQwMDI1OgwoTsjCf/rrMU3DCo2HC+vIFxhUoXIyeHhICJxJ1l05m7GLk4hAR2
+        MEoc+XmOCcL5xChxqGMRVOYzo8ScQ/9ZYVoaV2xhh0jsYpRo2LSAFcLpYJI4eXgzM0gVi4Cq
+        RMPhdywgNhuQPXPGGnYQW0TAQmLxhoVgDcwCqxkl9k5dBDZWWMBH4uO552DNvAKOEs93fGMC
+        sTkF7CT+XX3ACLHaQuJuzwqgeg6gGkGJvzuEQcLMAvIS29/OATtVQmAih0TLludsIDUSAi4S
+        vU8TIVqFJV4d38IOYUtJvOxvg7KzJaZ0LGKBsAskzj3fygzRaixxcUUKiMksoCmxfpc+RIWi
+        xM7fcxkhtvJJvPvawwpRzSvR0SYEUaIkseTPYajhEhJTZ0D8ISHgIfGg+z2YLSTwjVFi5zum
+        CYwKsxBemYXklVkIexcwMq9iFEstKM5NTy02LDCCx25yfu4mRnAK1TLbwTjp7Qe9Q4xMHIyH
+        GCU4mJVEeGff0UwW4k1JrKxKLcqPLyrNSS0+xGgKjJiJzFKiyfnAJJ5XEm9oYmlgYmZkbGJh
+        aGaoJM7bMEMrWUggPbEkNTs1tSC1CKaPiYNTqoFpSXhrW9138UK9Z1G7q/41chacnLnwlZZY
+        6K7jwXvrZGNblpz86sSiyea+yteLrTDR6G6faHhQ+rIVa0+cW7rSZ2MYd276DMG7V5dp7X/n
+        yZagnri19dCDPv6bzyxPtjArx0Z8lueaIeHrcejZ8q0vcrdFPHP7vZehwcHcV+5jSvDCU7nr
+        z7Euyg1+nr9USXVK5Wb9FxUXl2SbqovpvFLZvmjb7NOf5XYUqnbZsRl7vUlKijl+VDzo6eIL
+        DbcEmP1/u35g5DrG9rG55HdN7cnKWYLPJ0qsv+0z+0hNCNOXTds3uMkFXHnQHXExf+XqA9Xn
+        ZMOzjjxklWNNbwpZt8b2+6eJzaqJeQaZ/aru+cuUWIozEg21mIuKEwHR8Wx7KgQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrFLMWRmVeSWpSXmKPExsWy7bCSvG7HMe1kg9UH+Cz+TjrGbjH14RM2
+        i+bF69ks3nfvZrbY+3oru8XlXXPYLG43rmCz2NfzkdHi+bTrLA6cHr9/TWL02LSqk83jzrU9
+        bB77565h9+jbsorR4/MmuQC2KC6blNSczLLUIn27BK6MJ/+usxTcMKjYcL68gXGFShcjJ4eE
+        gIlE44ot7F2MXBxCAjsYJfY/amCGSEhIbLq3HMjmALKFJQ4fLgYJCwm0MUl8eswDYrMIqEo0
+        HH7HAmKzAdkzZ6xhB7FFBCwkFm9YyAoyk1lgNaPExLbJTCAJYQEfiY/nnoPN5xVwlHi+4xtY
+        nFPATuLf1QeMEAu+MUrsfMcEcYOFxN2eFawgN/AKCEr83SEMEmYW0JJ4+OsWC4QtL7H97Rzm
+        CYyCsxCqZiGpmoWkagEj8ypGydSC4tz03GLDAqO81HK94sTc4tK8dL3k/NxNjODo0NLawbhn
+        1Qe9Q4xMHIyHGCU4mJVEeGff0UwW4k1JrKxKLcqPLyrNSS0+xCjNwaIkznuh62S8kEB6Yklq
+        dmpqQWoRTJaJg1OqgUl+/WbZs+H2DdIr7jSEPqoxnP/6tZJn14lYX+bYi2erb/cf+vJAskqQ
+        xa315WVlZXPxtE9Wmqo7PC8f9Wg/NmUbb0y+/ordtn9sv/l/auM2Ohvkynv26e8by+dkb+ue
+        vPzf40Wr/4uvVDdmeFEg28q3uvMEc/iG/VdWbGPdJMDyOLBvVVJ6stTDR2ffNK5f4mCUzvDW
+        +59wkmGq8VzPEn1vz/ZbPpMkMqU3rCioi0jYuyN9e9HGC41TT+iUSPVpz3vCselO/D3jyReX
+        McWdmlYjK7rYwkNctbzWL3NR59ry9V9s3qeKuwWm74rzO5Z3k8fk61WDOv0HiSIeDOaL2mrj
+        9p1m+t3kOzuda5nIUiWW4oxEQy3mouJEAA6gOnD9AgAA
+X-CMS-MailID: 20220922022056epcas1p1c95a2fbb5bd55e254387c2c457732b13
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220917072358epcas1p15d18d4cf27694f894332f975bb971bef
+References: <20220917072356.2255620-1-jiho.chu@samsung.com>
+        <CGME20220917072358epcas1p15d18d4cf27694f894332f975bb971bef@epcas1p1.samsung.com>
+        <20220917072356.2255620-14-jiho.chu@samsung.com>
+        <68a87470-2946-cdd0-f1a4-0c0bac906e8c@linaro.org>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In hugetlb.c file, there are several places to compare the values of
-'h->free_huge_pages' and 'h->resv_huge_pages', it looks a bit messy, so
-there add a new available_huge_pages() func to do these.
+On Wed, 21 Sep 2022 20:42:35 +0200
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
-Signed-off-by: Xin Hao <xhao@linux.alibaba.com>
-Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
-Reviewed-by: David Hildenbrand <david@redhat.com>
-Reviewed-by: Oscar Salvador <osalvador@suse.de>
----
-Changes from v4
-(https://lore.kernel.org/lkml/20220920015122.68064-1-xhao@linux.alibaba.com/)
-- Add Reviewed-by other reviewers.
+> On 17/09/2022 09:23, Jiho Chu wrote:
+> > The Trinity Neural Processing Unit (NPU) is a hardware IP for providing
+> > hardware acceleration for neural network processing workloads. It has
+> > own virtual ISA decoder unit, and controlled by memory mapped control
+> > registers. The IP is composed of Common Processor (CP), Digital Signal
+> > Processor (DSP) and Deep Learning Accelerator (DLA). ComBox is register
+> > set to control IRQ or check overall status of the IP.
+> > 
+> > Signed-off-by: Jiho Chu <jiho.chu@samsung.com>
+> > Signed-off-by: Yelin Jeong <yelini.jeong@samsung.com>
+> > Signed-off-by: MyungJoo Ham <myungjoo.ham@samsung.com>
+> > ---
+> >  .../bindings/arm/samsung,trinity.yaml         | 115 ++++++++++++++++++
+> >  1 file changed, 115 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/arm/samsung,trinity.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/arm/samsung,trinity.yaml b/Documentation/devicetree/bindings/arm/samsung,trinity.yaml
+> > new file mode 100644
+> > index 000000000000..cd79ec040162
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/arm/samsung,trinity.yaml
+> > @@ -0,0 +1,115 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: https://protect2.fireeye.com/v1/url?k=d6ad487f-b7d0a003-d6acc330-74fe485cc33c-c18489118cc5693c&q=1&e=e1fcd741-e7bc-4610-b982-e9d1481f4eb1&u=http%3A%2F%2Fdevicetree.org%2Fschemas%2Farm%2Fsamsung%2Ctrinity.yaml%23
+> > +$schema: https://protect2.fireeye.com/v1/url?k=eceeef8d-8d9307f1-ecef64c2-74fe485cc33c-c540319d368eacda&q=1&e=e1fcd741-e7bc-4610-b982-e9d1481f4eb1&u=http%3A%2F%2Fdevicetree.org%2Fmeta-schemas%2Fcore.yaml%23
+> > +
+> > +title: Samsung Trinity NPU Family
+> > +
+> > +maintainers:
+> > +  - Jiho Chu <jiho.chu@samsung.com>
+> > +
+> > +description: |
+> > +  The Trinity Neural Processing Unit (NPU) is a hardware IP for providing
+> > +  hardware acceleration for neural network processing workloads. It has
+> > +  own virtual ISA decoder unit, and controlled by memory mapped control
+> > +  registers. The IP is composed of Common Processor (CP), Digital Signal
+> > +  Processor (DSP) and Deep Learning Accelerator (DLA). ComBox is register
+> > +  set to control IRQ or check overall status of the IP.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: samsung,trinity
+> > +
+> > +  samsung,trinity-type:
+> > +    description: type of trinity family
+> > +    enum: ['triv2']
+> 
+> No, we have compatible for this.
+> 
 
-Changes from v3
-(https://lore.kernel.org/lkml/20220917011528.11331-1-xhao@linux.alibaba.com/)
-- add Reviewed-by Mike Kravetz <mike.kravetz@oracle.com>
+This property will be removed.
 
-Changes from v2
-(https://lore.kernel.org/linux-mm/20220916064127.1904-1-xhao@linux.alibaba.com/)
-- Convert is_resv_equal_free() to available_huge_pages()
+> > +
+> > +  samsung,tops:
+> > +    description: Performance metric (Tera Operation Per Seconds)
+> > +    enum: [2, 8]
+> 
+> What piece of hardware this describes?
+> 
 
- mm/hugetlb.c | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+This is related to HW internal structure, but it can be matched from
+compotible property. I'll add more value for compitable, and this
+will be removed. 
 
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 9b8526d27c29..99dc961d131a 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -1191,6 +1191,11 @@ static struct page *dequeue_huge_page_nodemask(struct hstate *h, gfp_t gfp_mask,
- 	return NULL;
- }
 
-+static unsigned long available_huge_pages(struct hstate *h)
-+{
-+	return h->free_huge_pages - h->resv_huge_pages;
-+}
-+
- static struct page *dequeue_huge_page_vma(struct hstate *h,
- 				struct vm_area_struct *vma,
- 				unsigned long address, int avoid_reserve,
-@@ -1207,12 +1212,11 @@ static struct page *dequeue_huge_page_vma(struct hstate *h,
- 	 * have no page reserves. This check ensures that reservations are
- 	 * not "stolen". The child may still get SIGKILLed
- 	 */
--	if (!vma_has_reserves(vma, chg) &&
--			h->free_huge_pages - h->resv_huge_pages == 0)
-+	if (!vma_has_reserves(vma, chg) && !available_huge_pages(h))
- 		goto err;
+> > +
+> > +  samsung,idu_cp:
+> 
+> No underscores in names.
+> 
+> Missing ref/type. Missing description. I am not sure that this belongs
+> to DT.
+> 
+> 
+> > +    items:
+> > +      - description: Address of zero data of CP
+> > +      - description: Address of IDU data of CP
+> > +      - description: Maximum size of CP's IDU binary
+> 
+> > +
+> > +  samsung,idu_dsp:
+> 
+> The same.
+> 
 
- 	/* If reserves cannot be used, ensure enough pages are in the pool */
--	if (avoid_reserve && h->free_huge_pages - h->resv_huge_pages == 0)
-+	if (avoid_reserve && !available_huge_pages(h))
- 		goto err;
+underscore will be fixed like (samsung,idu,xxxx)
 
- 	gfp_mask = htlb_alloc_mask(h);
-@@ -2124,7 +2128,7 @@ int dissolve_free_huge_page(struct page *page)
- 	if (!page_count(page)) {
- 		struct page *head = compound_head(page);
- 		struct hstate *h = page_hstate(head);
--		if (h->free_huge_pages - h->resv_huge_pages == 0)
-+		if (!available_huge_pages(h))
- 			goto out;
+> > +    items:
+> > +      - description: Address of zero data of DSP
+> > +      - description: Address of IDU data of DSP
+> > +      - description: Maximum size of DSP's IDU binary
+> > +
+> > +  samsung,dspm:
+> > +    description: The size of Data Scratch-Pad Memory
+> > +
+> > +  memory-region:
+> > +    description:
+> > +      phandle to the reserved memory node to be associated
+> > +      with the trinity device. The reserved memory node
+> > +      can be a CMA memory node.
+> > +      Documentation/devicetree/bindings/reserved-memory/reserved-memory.yaml
+> > +
+> > +  dma-coherent: true
+> > +
+> > +  reg:
+> > +    items:
+> > +      - description: Memory mapped register of CP
+> > +      - description: Memory mapped register of DSP
+> > +      - description: Memory mapped register of ComBox
+> > +
+> > +  reg-names:
+> > +    items:
+> > +      - const: cp-mmreg
+> > +      - const: dsp-mmreg
+> > +      - const: cbox-mmreg
+> 
+> Drop "reg" suffixes.
+> 
 
- 		/*
-@@ -2311,7 +2315,7 @@ struct page *alloc_huge_page_nodemask(struct hstate *h, int preferred_nid,
- 		nodemask_t *nmask, gfp_t gfp_mask)
- {
- 	spin_lock_irq(&hugetlb_lock);
--	if (h->free_huge_pages - h->resv_huge_pages > 0) {
-+	if (available_huge_pages(h)) {
- 		struct page *page;
+OK.
 
- 		page = dequeue_huge_page_nodemask(h, gfp_mask, preferred_nid, nmask);
---
-2.31.0
+> > +
+> > +  interrupts:
+> > +    description: workload complete interrupt
+> > +    maxItems: 1
+> > +
+> > +required:
+> > +  - compatible
+> > +  - samsung,trinity-type
+> > +  - samsung,tops
+> > +  - samsung,idu_cp
+> > +  - samsung,idu_dsp
+> > +  - samsung,dspm
+> > +  - memory-region
+> > +  - dma-coherent
+> > +  - reg
+> > +  - reg-names
+> > +  - interrupts
+> > +
+> > +examples:
+> > +  - |
+> > +    reserved-memory {
+> > +        #address-cells = <2>;
+> > +        #size-cells = <1>;
+> > +        trinity_dram_0: memory@80000000 {
+> > +            compatible = "shared-dma-pool";
+> > +            no-map;
+> > +            reg = <0x0 0x80000000 0x10000000>;
+> > +        };
+> > +    };
+> 
+> Drop this part - it is fairly obvious.
+> 
+
+OK.
+
+> > +
+> > +    triv2@0x30C00000 {
+> > +        compatible = "samsung,trinity";
+> > +        samsung,trinity-type = "triv2";
+> > +        samsung,tops = <8>;
+> > +        samsung,idu_cp = /bits/ 64 <0x30400000 0x30400010 0x10000>;
+> > +        samsung,idu_dsp = /bits/ 64 <0x30500000 0x30500010 0x10000>;
+> > +        samsung,dspm = <0x40000>;
+> > +
+> > +        memory-region = <&trinity_dram_0>
+> > +
+> > +        dma-coherent;
+> > +
+> > +        reg =   <0x0 0x30C10000 0x0 0x10000>, /* CP MMREG base */
+> > +                <0x0 0x30D40000 0x0 0x10000>, /* DSP MMREG base */
+> > +                <0x0 0x30DF0000 0x0 0x01000>; /* ComBox MMREG base */
+> 
+> 
+> reg and reg-names go after compatible.
+> 
+
+OK.
+
+> > +        reg-names = "cp-mmreg", "dsp-mmreg", "cbox-mmreg";
+> > +
+> > +        interrupts = <GIC_SPI 111 IRQ_TYPE_LEVEL_HIGH>;
+> > +    };
+> 
+> Best regards,
+> Krzysztof
+> 
+> 
+
+Hi, Krzysztof
+Thanks for your review.
+
+Best regards,
+Jiho Chu
+
+
+
+
