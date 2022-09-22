@@ -2,157 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B972F5E6D66
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 22:53:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51BC65E6D68
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 22:53:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230005AbiIVUxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 16:53:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59814 "EHLO
+        id S230204AbiIVUxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 16:53:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbiIVUxF (ORCPT
+        with ESMTP id S229612AbiIVUxk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 16:53:05 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D65F710E5D4;
-        Thu, 22 Sep 2022 13:53:04 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id e67so4230944pgc.12;
-        Thu, 22 Sep 2022 13:53:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date;
-        bh=OEiYqQ5XMiZEsacnAM3U6vllLLEEWGSHG5V5hJfSBLU=;
-        b=Dm/XGtOHUuh9qDFLOe7p4DdAUZO7iM314X5cc4JpfK9kYIOYoM1b4UF7mBai7qihfs
-         N/Z2XL5t6WdMEdNl3ABr5A23WTkr9hJkIReoHglVx/hUMs7KXd6KQF/5vte33u5h+LER
-         PVgMc0Bpch4I05li8IE1FJuH04tEyK5zdLRl2Rlyb5Xcljo6tPP8OrPLlwW7IIJ2hO1S
-         h75uS1/IFW2pRnHwfOYSygVKjoljOg0N7yzlqKiWKE3ohvLQLcA2MTD1A1KuWdINWWYn
-         WBcxh6XyRTkPgXC3EWozvnlwZxB/KTcH2zhThrw8HzgIISzrYfrzz8b8tyvT4jPPkB+7
-         yzUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date;
-        bh=OEiYqQ5XMiZEsacnAM3U6vllLLEEWGSHG5V5hJfSBLU=;
-        b=q4CsjS24y+400Z9uNcWddaqsW9nXdluYg+hrOsaHGL1mM04t4EBsyPZO9hdS+vyGbj
-         z01NcG/XvmK/xp40GIIBNsGT6RnPgEYQzk2JwTGyCjNgYgQqdiXI4qRSgjHIKHTZSgXI
-         ZcUjzKUdmPcokDFEc5Ba5dAIaY9KvPvEAmzbBg9RoixVMEQSTrRsmCeK16rVOhnHXMaj
-         LJxCsM3doN2X2Qs82sl0A8oXfRCljD4xcSyXt41yA6gFZz58QbYux5NvRBW3kAz0GEWU
-         38xNtFGXSl5MkFialjpy0OiTsvHQm6HsjFNEXO1BMZIz1iJNbqwcvc3+ivqBtMPQlpNm
-         VEgw==
-X-Gm-Message-State: ACrzQf00YzGuuGoD/cPY5tdVq4s+vaDMxu+CbDmT6qR1Ajp/G/ZnjXPv
-        MYvoYvVzw0oaZFxoCSgdMao=
-X-Google-Smtp-Source: AMsMyM6ayFSD3xpD5oqX2Zh/XuTEcTs+sreA32ohXSExSoLYAy9gzsn+WpsB/hhUxCGNXhHlhoFDog==
-X-Received: by 2002:a63:6905:0:b0:43c:d4:eef4 with SMTP id e5-20020a636905000000b0043c00d4eef4mr4513265pgc.126.1663879984312;
-        Thu, 22 Sep 2022 13:53:04 -0700 (PDT)
-Received: from balhae.corp.google.com ([2620:0:1000:1610:206:3611:6db0:fc8f])
-        by smtp.gmail.com with ESMTPSA id y7-20020a623207000000b0053f9466b1b2sm4889916pfy.35.2022.09.22.13.53.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 13:53:03 -0700 (PDT)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org, Song Liu <songliubraving@fb.com>,
-        Hao Luo <haoluo@google.com>, bpf@vger.kernel.org
-Subject: [PATCH v3] perf tools: Get a perf cgroup more portably in BPF
-Date:   Thu, 22 Sep 2022 13:53:02 -0700
-Message-Id: <20220922205302.749274-1-namhyung@kernel.org>
-X-Mailer: git-send-email 2.37.3.998.g577e59143f-goog
+        Thu, 22 Sep 2022 16:53:40 -0400
+Received: from rcdn-iport-7.cisco.com (rcdn-iport-7.cisco.com [173.37.86.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC20110D65D;
+        Thu, 22 Sep 2022 13:53:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=cisco.com; i=@cisco.com; l=214; q=dns/txt; s=iport;
+  t=1663880019; x=1665089619;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Sqs253CY96Q1O/q/QDBGUIXsu2oS9qGI4DV9xBwjf8E=;
+  b=E/DHIpW5TvtuTY82S1G/awxGaFthpihgFtMyW7l/vjLrWcVT6Hg9VuaS
+   1aPEfqfwfLEh8ltDRS/UNUkrf8URVtpSgEPhMUx8J8n5jKUJ3DytdpEPQ
+   Wk0Fym9WrzFkj33hpwus9YWgt5I0gcLpROrJKel9/O+x6Y/r5eqUBk9Jx
+   Q=;
+IronPort-Data: =?us-ascii?q?A9a23=3A+QmIHqlUxhL975HU6NU2Mt/o5gwRJ0RdPkR7X?=
+ =?us-ascii?q?Q2eYbSJt1+Wr1GztxIbWmqDMqncYGKje90jO4y28k9Q7ZXdnYJiHgVt+Hs8F?=
+ =?us-ascii?q?VtH+JHPbTi7wugcHM8zwvUuxyuL1u1GAjX7BJ1yHya0SiuFaOC79yEhjP/QH?=
+ =?us-ascii?q?9IQNcadUsxPbV48IMseoUoLd94R2uaEsPDha++/kYqaT/73YDdJ7wVJ3lc8s?=
+ =?us-ascii?q?Mpvnv/AUMPa41v0tnRmDRxCUcS3e3M9VPrzLonpR5f0rxU9IwK0ewrD5OnRE?=
+ =?us-ascii?q?mLx5RwhDJaulaz2NxZMSb/JNg/IgX1TM0SgqkEd/WppjeBqb7xFNBs/Zzahx?=
+ =?us-ascii?q?7idzP1BvJqxRAM2N4XHmf8WVF9TFCQW0ahuoeeZeSnh6ZfCniUqdFOpmZ2CF?=
+ =?us-ascii?q?noeOYwe5/YyDG9P3eIXJSpLbR2Zge+yhrWhRYFEgsUlMdmuP4kCu3Vs5S/WA?=
+ =?us-ascii?q?OxgQp3ZRajOo9hC018Yis1QHP3Te9AUZBJxYxnaJR5CIFEaDNQ5hujArn3+d?=
+ =?us-ascii?q?SBI7VGYv6w650DNwwFrlrvgKtzYfpqNX8o9tkKZoH/Wum3jB1QZOcaZxD6t9?=
+ =?us-ascii?q?nO3mvSJnCX1QoseGbS0sPlwjzW7xnQaIA8HSVyh5/K+jyaWX9NZNlwM4iFro?=
+ =?us-ascii?q?aUs3EiqVcXmGRqqpHeOpVgbQdU4O+k77hydj6/V+x2xGGcJVHhCZcYguctwQ?=
+ =?us-ascii?q?iYlvneZz43BBjF1trCRD3WH+d+8pDCqPAARLGkfdWoKShYD79D/oYY1yBXVQ?=
+ =?us-ascii?q?b5LHKezj9DxMT7xxiiHqCUghr4Ty9UC0eC151nBiDO3rZ+PRQdz+x6/dnii5?=
+ =?us-ascii?q?ANRZ4O/YYGsr1/B4p5oJ4aDT0Kdu2AElo6a4foJHLmGjyOXR/gVWry0j96aM?=
+ =?us-ascii?q?TnYqV1iBZ8s83Kq4XHLVZtd6Tc4LUFlP9wffjnBe0LYvkVa45o7AZcARcebe?=
+ =?us-ascii?q?KqrAMgsiKPnD9mgDbbfb8FFZd56cwrvwc2nXmbIt0iFraTmufhX1U+nTPuR?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3A0OKxI6lzC6qbR1gI60DyR8DKK4jpDfIp3D?=
+ =?us-ascii?q?Abv31ZSRFFG/FwWfrAoB0+726QtN9xYgBDpTnuAsO9qB/nmKKdpLNhWYtKPz?=
+ =?us-ascii?q?OW21dATrsC0WKK+VSJcBEWtNQ86U4KScZD4bPLYWSTSa3BkW+F+xFK+qjhzJ?=
+ =?us-ascii?q?yV?=
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-Anti-Spam-Result: =?us-ascii?q?A0AkBgBDbIJi/5pdJa1aHQI9BQUECRa?=
+ =?us-ascii?q?BTwKCKYFLPUOTNIIokUeLHYF8CwEBAQ0BARIwBAEBgU6DNAKFPgIlNAkOAQI?=
+ =?us-ascii?q?EAQEBEgEBBQEBAQIBBwSBCROFdYZDAQU6PxALGC5XBhOGFatWeIEzgQGIGYF?=
+ =?us-ascii?q?lJIEYAY5fJxyBSUSEPz6KfwSVYzsDVIEFEoEhcQEIBgYHCgUyBgIMGBQEAhM?=
+ =?us-ascii?q?SUx4CEwwKHA5UGQwPAxIDEQEHAgsSCBUsCAMCAwgDAgMjCwIDGAkHCgMdCAo?=
+ =?us-ascii?q?cEhAUAgQTHwsIAxofLQkCBA4DQwgLCgMRBAMTGAsWCBAEBgMJLw0oCwMUDwE?=
+ =?us-ascii?q?GAwYCBQUBAyADFAMFJwcDIQcLJg0NBBwHHQMDBSYDAgIbBwICAwIGFwYCAnE?=
+ =?us-ascii?q?KKA0IBAgEHB4lEwUCBzEFBC8CHgQFBhEJAhYCBgQFAgQEFgICEggCCCcbBxY?=
+ =?us-ascii?q?2GQEFXQYLCSMcLAsGBQYWAyZSBiIBsVONGJ4qg1aBQ54tSxGDUgGkc5Zmpn4?=
+ =?us-ascii?q?CBAYFAhaBYTyBWTMaCBsVgyNRGQ+dECQxOwIGCwEBAwmRGgEB?=
+X-IronPort-AV: E=Sophos;i="5.91,230,1647302400"; 
+   d="scan'208";a="1060960399"
+Received: from rcdn-core-3.cisco.com ([173.37.93.154])
+  by rcdn-iport-7.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 22 Sep 2022 20:53:37 +0000
+Received: from zorba ([10.25.129.98])
+        by rcdn-core-3.cisco.com (8.15.2/8.15.2) with ESMTPS id 28MKrYsJ003891
+        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Thu, 22 Sep 2022 20:53:36 GMT
+Date:   Thu, 22 Sep 2022 13:53:34 -0700
+From:   Daniel Walker <danielwa@cisco.com>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     Will Deacon <will@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Rob Herring <robh@kernel.org>,
+        Daniel Gimpelevich <daniel@gimpelevich.san-francisco.ca.us>,
+        Andrew Morton <akpm@linux-foundation.org>, x86@kernel.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-efi@vger.kernel.org
+Subject: Re: [PATCH 0/8] generic command line v4
+Message-ID: <20220922205334.GV4320@zorba>
+References: <20210416040924.2882771-1-danielwa@cisco.com>
+ <b517fac5-2fdc-a8c9-75d0-174c67f5a2de@seco.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b517fac5-2fdc-a8c9-75d0-174c67f5a2de@seco.com>
+X-Outbound-SMTP-Client: 10.25.129.98, [10.25.129.98]
+X-Outbound-Node: rcdn-core-3.cisco.com
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIMWL_WL_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The perf_event_cgrp_id can be different on other configurations.
-To be more portable as CO-RE, it needs to get the cgroup subsys id
-using the bpf_core_enum_value() helper.
+On Thu, Sep 22, 2022 at 04:45:01PM -0400, Sean Anderson wrote:
+> 
+> 
+> 
+> For an arm64 platform (after rebasing):
+> 
+> Tested-by: Sean Anderson <sean.anderson@seco.com>
 
-Suggested-by: Ian Rogers <irogers@google.com>
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
----
-v3 changes)
- * check compiler features for enum value
+Maybe I'll re-submit it.
 
-v2 changes)
- * fix off_cpu.bpf.c too
- * get perf_subsys_id only once
-
- tools/perf/util/bpf_skel/bperf_cgroup.bpf.c | 11 ++++++++++-
- tools/perf/util/bpf_skel/off_cpu.bpf.c      | 12 ++++++++----
- 2 files changed, 18 insertions(+), 5 deletions(-)
-
-diff --git a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
-index 292c430768b5..8e7520e273db 100644
---- a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
-+++ b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
-@@ -48,6 +48,7 @@ const volatile __u32 num_cpus = 1;
- 
- int enabled = 0;
- int use_cgroup_v2 = 0;
-+int perf_subsys_id = -1;
- 
- static inline int get_cgroup_v1_idx(__u32 *cgrps, int size)
- {
-@@ -58,7 +59,15 @@ static inline int get_cgroup_v1_idx(__u32 *cgrps, int size)
- 	int level;
- 	int cnt;
- 
--	cgrp = BPF_CORE_READ(p, cgroups, subsys[perf_event_cgrp_id], cgroup);
-+	if (perf_subsys_id == -1) {
-+#if __has_builtin(__builtin_preserve_enum_value)
-+		perf_subsys_id = bpf_core_enum_value(enum cgroup_subsys_id,
-+						     perf_event_cgrp_id);
-+#else
-+		perf_subsys_id = perf_event_cgrp_id;
-+#endif
-+	}
-+	cgrp = BPF_CORE_READ(p, cgroups, subsys[perf_subsys_id], cgroup);
- 	level = BPF_CORE_READ(cgrp, level);
- 
- 	for (cnt = 0; i < MAX_LEVELS; i++) {
-diff --git a/tools/perf/util/bpf_skel/off_cpu.bpf.c b/tools/perf/util/bpf_skel/off_cpu.bpf.c
-index c4ba2bcf179f..e917ef7b8875 100644
---- a/tools/perf/util/bpf_skel/off_cpu.bpf.c
-+++ b/tools/perf/util/bpf_skel/off_cpu.bpf.c
-@@ -94,6 +94,8 @@ const volatile bool has_prev_state = false;
- const volatile bool needs_cgroup = false;
- const volatile bool uses_cgroup_v1 = false;
- 
-+int perf_subsys_id = -1;
-+
- /*
-  * Old kernel used to call it task_struct->state and now it's '__state'.
-  * Use BPF CO-RE "ignored suffix rule" to deal with it like below:
-@@ -119,11 +121,13 @@ static inline __u64 get_cgroup_id(struct task_struct *t)
- {
- 	struct cgroup *cgrp;
- 
--	if (uses_cgroup_v1)
--		cgrp = BPF_CORE_READ(t, cgroups, subsys[perf_event_cgrp_id], cgroup);
--	else
--		cgrp = BPF_CORE_READ(t, cgroups, dfl_cgrp);
-+	if (!uses_cgroup_v1)
-+		return BPF_CORE_READ(t, cgroups, dfl_cgrp, kn, id);
-+
-+	if (perf_subsys_id == -1)
-+		perf_subsys_id = bpf_core_enum_value(enum cgroup_subsys_id, perf_event_cgrp_id);
- 
-+	cgrp = BPF_CORE_READ(t, cgroups, subsys[perf_subsys_id], cgroup);
- 	return BPF_CORE_READ(cgrp, kn, id);
- }
- 
--- 
-2.37.3.998.g577e59143f-goog
-
+Daniel
