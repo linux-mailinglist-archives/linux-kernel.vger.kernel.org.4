@@ -2,38 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8097C5E6E52
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 23:20:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03EE95E6E54
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 23:20:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229971AbiIVVUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 17:20:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41506 "EHLO
+        id S231160AbiIVVUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 17:20:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229950AbiIVVUF (ORCPT
+        with ESMTP id S231143AbiIVVUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 17:20:05 -0400
-X-Greylist: delayed 1797 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 22 Sep 2022 14:20:04 PDT
+        Thu, 22 Sep 2022 17:20:15 -0400
 Received: from mailserv1.kapsi.fi (mailserv1.kapsi.fi [IPv6:2001:67c:1be8::25:1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B0A67392C
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 14:20:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58980895E9
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 14:20:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=ext.kapsi.fi; s=20161220; h=Subject:Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=O7e54tlWgB76SoCN972Y6YFdmLgXzAJ3uMklXqY+FDw=; b=fFzlMH1MTBIpL7d6WtnKwbXfMs
-        tzq5IidGD1XOgGkKStkwqZCHAI9h7M5cXbTbDVKtPaOIeLiDsdH0AXR69rS/+oAHqtuFGjUpm+5oA
-        Y+d+pShnxo3eDUUpfQ137yGJYlyRtAjJLQlloM5A9ZeymcopfPkf0n/dWNHyAVS0sS+AV6KDPWH6q
-        X9MuUxawtIS9tuDkKktqZOuaX6mUG0KigtWi0H/t3q+4yqdjIRCVcHtXWSLeBI+a44f4k2ALSfYJg
-        l5vJFzsLuPBJ0DdzglK+AQVzQvF3jIXNEMWqVb+RuTDLtAfHJ9ECRHGUgvqAuC5XLTigJA2WelT2J
-        fSp1Rg8g==;
-Received: from a88-85-156-139.mpynet.fi ([88.85.156.139]:50263 helo=localhost)
+        bh=Z8b9AhT/nSURE/TV3uWrzdWY2/dP2r9AWOoz9sV+VBk=; b=wZmPxPZX+Vn6J6Ntjuxj5PVf51
+        Q54cbHdQzaObVEBpQSxjFOhcEIrObBRJt9MElkBh9uvGz/TjsvxwA8hrp8l6nTuc2nJ91+WP9lwFi
+        iRhbTxrnBn675ZiIyp5sKUFfJweAZ7Esdh9ABCr7vBvitvpzSY3jeuu0wb5HPNQvBRiM5W88BocFA
+        vbSSFVOPw6DfwLfGcA3Np9DdGxuC5GjueuyeMv4Ckmj89WXCysUujGwbX9khY4mOjTQ6uDN2jRulN
+        K7KVnJ/POFVoqDOlLCXoNioqh+DogpP7D7T3wCmFg9sJiW6KezQGFQgx+LL8otOs0tjUut87CeTwR
+        R+YV5nUA==;
+Received: from a88-85-156-139.mpynet.fi ([88.85.156.139]:50264 helo=localhost)
         by mailserv1.kapsi.fi with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <maukka@ext.kapsi.fi>)
-        id 1obSlj-008pZu-1I; Thu, 22 Sep 2022 23:26:00 +0300
-Received: by localhost (sSMTP sendmail emulation); Thu, 22 Sep 2022 23:25:56 +0300
+        id 1obSlt-008paI-FV; Thu, 22 Sep 2022 23:26:11 +0300
+Received: by localhost (sSMTP sendmail emulation); Thu, 22 Sep 2022 23:26:05 +0300
 From:   Mauri Sandberg <maukka@ext.kapsi.fi>
 To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         arnd@arndb.de, olof@lixom.net, andrew@lunn.ch,
@@ -42,8 +41,8 @@ To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
 Cc:     pali@kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Mauri Sandberg <maukka@ext.kapsi.fi>
-Date:   Thu, 22 Sep 2022 23:24:57 +0300
-Message-Id: <20220922202458.7592-3-maukka@ext.kapsi.fi>
+Date:   Thu, 22 Sep 2022 23:24:58 +0300
+Message-Id: <20220922202458.7592-4-maukka@ext.kapsi.fi>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220922202458.7592-1-maukka@ext.kapsi.fi>
 References: <20220427162123.110458-1-maukka@ext.kapsi.fi>
@@ -58,451 +57,304 @@ X-Spam-Level:
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
-Subject: [PATCH v2 2/3] ARM: dts: orion5x: Add D-Link DNS-323 Device Tree
+Subject: [PATCH v2 3/3] ARM: orion5x: Add D-Link DNS-323 based on Device Tree
 X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
 X-SA-Exim-Scanned: Yes (on mailserv1.kapsi.fi)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a device tree for D-Link DNS-323. The device has three different
-variants; A1, B1 and C1. Common parts are included in a .dtsi file
-and each hardware variant has its own .dts file.
+Add D-Link DNS-323 that is based on Device Tree.
 
 Signed-off-by: Mauri Sandberg <maukka@ext.kapsi.fi>
 ---
 changes from v1
- - split patches, this one adds the device tree
- - set pciec and pcie1 nodes to 'okay'
+ - split patches, this one modifies source code
+ - add DT based dns323 board file
+ - don't remove any existing code
 ---
- arch/arm/boot/dts/Makefile                   |   3 +
- arch/arm/boot/dts/orion5x-dlink-dns323.dtsi  | 215 +++++++++++++++++++
- arch/arm/boot/dts/orion5x-dlink-dns323a1.dts |  44 ++++
- arch/arm/boot/dts/orion5x-dlink-dns323b1.dts |  39 ++++
- arch/arm/boot/dts/orion5x-dlink-dns323c1.dts |  81 +++++++
- 5 files changed, 382 insertions(+)
- create mode 100644 arch/arm/boot/dts/orion5x-dlink-dns323.dtsi
- create mode 100644 arch/arm/boot/dts/orion5x-dlink-dns323a1.dts
- create mode 100644 arch/arm/boot/dts/orion5x-dlink-dns323b1.dts
- create mode 100644 arch/arm/boot/dts/orion5x-dlink-dns323c1.dts
+ arch/arm/mach-orion5x/Kconfig        |   7 +
+ arch/arm/mach-orion5x/Makefile       |   1 +
+ arch/arm/mach-orion5x/board-dns323.c | 208 +++++++++++++++++++++++++++
+ arch/arm/mach-orion5x/board-dt.c     |   3 +
+ arch/arm/mach-orion5x/common.h       |   6 +
+ 5 files changed, 225 insertions(+)
+ create mode 100644 arch/arm/mach-orion5x/board-dns323.c
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 05d8aef6e5d2..bc41749cd889 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -997,6 +997,9 @@ dtb-$(CONFIG_SOC_DRA7XX) += \
- 	dra71-evm.dtb \
- 	dra76-evm.dtb
- dtb-$(CONFIG_ARCH_ORION5X) += \
-+	orion5x-dlink-dns323a1.dtb \
-+	orion5x-dlink-dns323b1.dtb \
-+	orion5x-dlink-dns323c1.dtb \
- 	orion5x-kuroboxpro.dtb \
- 	orion5x-lacie-d2-network.dtb \
- 	orion5x-lacie-ethernet-disk-mini-v2.dtb \
-diff --git a/arch/arm/boot/dts/orion5x-dlink-dns323.dtsi b/arch/arm/boot/dts/orion5x-dlink-dns323.dtsi
+diff --git a/arch/arm/mach-orion5x/Kconfig b/arch/arm/mach-orion5x/Kconfig
+index 0044b2823710..1ee0d7e06828 100644
+--- a/arch/arm/mach-orion5x/Kconfig
++++ b/arch/arm/mach-orion5x/Kconfig
+@@ -68,6 +68,13 @@ config MACH_DNS323
+ 	  Say 'Y' here if you want your kernel to support the
+ 	  D-Link DNS-323 platform.
+ 
++config MACH_DNS323_DT
++	bool "D-Link DNS-323 (Flattened Device Tree)"
++	select ARCH_ORION5X_DT
++	help
++	  Say 'Y' here if you want your kernel to support the
++	  D-Link DNS-323 platform.
++
+ config MACH_TS209
+ 	bool "QNAP TS-109/TS-209"
+ 	depends on ATAGS
+diff --git a/arch/arm/mach-orion5x/Makefile b/arch/arm/mach-orion5x/Makefile
+index 1a585a62d5e6..2ed6bafa7acb 100644
+--- a/arch/arm/mach-orion5x/Makefile
++++ b/arch/arm/mach-orion5x/Makefile
+@@ -22,5 +22,6 @@ obj-$(CONFIG_MACH_RD88F6183AP_GE)	+= rd88f6183ap-ge-setup.o
+ 
+ obj-$(CONFIG_ARCH_ORION5X_DT)		+= board-dt.o
+ obj-$(CONFIG_MACH_D2NET_DT)	+= board-d2net.o
++obj-$(CONFIG_MACH_DNS323_DT)	+= board-dns323.o
+ obj-$(CONFIG_MACH_MSS2_DT)	+= board-mss2.o
+ obj-$(CONFIG_MACH_RD88F5182_DT)	+= board-rd88f5182.o
+diff --git a/arch/arm/mach-orion5x/board-dns323.c b/arch/arm/mach-orion5x/board-dns323.c
 new file mode 100644
-index 000000000000..05b0b134edb3
+index 000000000000..72a1f3e228b3
 --- /dev/null
-+++ b/arch/arm/boot/dts/orion5x-dlink-dns323.dtsi
-@@ -0,0 +1,215 @@
++++ b/arch/arm/mach-orion5x/board-dns323.c
+@@ -0,0 +1,208 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
 + * Copyright (C) 2022 Mauri Sandberg <maukka@ext.kapsi.fi>
 + *
-+ */
-+
-+/ {
-+	model = "D-Link DNS-323";
-+	compatible = "dlink,dns323", "marvell,orion5x";
-+
-+	aliases {
-+		serial0 = &uart0;
-+	};
-+
-+	memory {
-+		device_type = "memory";
-+		reg = <0x00000000 0x4000000>; /* 64 MB */
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+		bootargs = "console=ttyS0,115200n8 earlyprintk";
-+	};
-+
-+	soc {
-+		ranges = <MBUS_ID(0xf0, 0x01) 0 0xf1000000 0x100000>,  /* on-chip peripheral registers */
-+			 <MBUS_ID(0x09, 0x00) 0 0xf2200000 0x800>,     /* SRAM for crypto */
-+			 <MBUS_ID(0x01, 0x0f) 0 0xf4000000 0x800000>;  /* device bus mapping (boot) */
-+	};
-+
-+	gpio-keys {
-+		compatible = "gpio-keys";
-+		pinctrl-0 = <&pmx_gpio_keys>;
-+		pinctrl-names = "default";
-+
-+		key-0 {
-+			label = "Power button";
-+			linux,code = <KEY_POWER>;
-+			gpios = <&gpio0 9 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		key-1 {
-+			label = "Reset button";
-+			linux,code = <KEY_RESTART>;
-+			gpios = <&gpio0 10 GPIO_ACTIVE_LOW>;
-+		};
-+	};
-+
-+	gpio-leds {
-+		compatible = "gpio-leds";
-+		pinctrl-0 = <&pmx_gpio_leds>;
-+		pinctrl-names = "default";
-+
-+		led-0 {
-+			label = "amber:right";
-+			gpios = <&gpio0 1 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		led-1 {
-+			label = "amber:left";
-+			gpios = <&gpio0 2 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		led-2 {
-+			label = "blue:power";
-+			gpios = <&gpio0 5 GPIO_ACTIVE_LOW>;
-+			default-state = "on";
-+		};
-+	};
-+
-+	gpio-poweroff {
-+		compatible = "gpio-poweroff";
-+		pinctrl-0 = <&pmx_power_off>;
-+		pinctrl-names = "default";
-+
-+		gpios = <&gpio0 8 GPIO_ACTIVE_HIGH>;
-+		timeout-ms = <3000>;
-+	};
-+};
-+
-+&devbus_bootcs {
-+	status = "okay";
-+	devbus,keep-config;
-+
-+	flash@0 {
-+		compatible = "cfi-flash";
-+		reg = <0 0x800000>;
-+		bank-width = <1>;
-+
-+		partitions {
-+			compatible = "fixed-partitions";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+
-+			partition@0 {
-+				label = "MTD1";
-+				reg = <0x000000 0x010000>;
-+				read-only;
-+			};
-+
-+			partition@10000 {
-+				label = "MTD2";
-+				reg = <0x010000 0x010000>;
-+				read-only;
-+			};
-+
-+			partition@20000 {
-+				label = "Linux Kernel";
-+				reg = <0x020000 0x180000>;
-+			};
-+
-+			partition@1a0000 {
-+				label = "File System";
-+				reg = <0x1a0000 0x630000>;
-+			};
-+
-+			uboot: partition@7d0000 {
-+				label = "U-boot";
-+				reg = <0x7d0000 0x030000>;
-+				read-only;
-+			};
-+		};
-+	};
-+};
-+
-+&ehci0 {
-+	status = "okay";
-+};
-+
-+&i2c {
-+	status = "okay";
-+	clock-frequency = <100000>;
-+
-+	/* fan speed PWM */
-+	fan@3e {
-+		compatible = "g760a";
-+		reg = <0x3e>;
-+	};
-+
-+	/* temp sensor and thermal watchdog */
-+	temperature-sensor@48 {
-+		compatible = "gmt,g751";
-+		reg = <0x48>;
-+	};
-+
-+	/* RTC w/ alarm */
-+	rtc@68 {
-+		compatible = "st,m41t80";
-+		reg = <0x68>;
-+	};
-+};
-+
-+&mdio {
-+	status = "okay";
-+
-+	ethphy: ethernet-phy {
-+		reg = <8>;
-+	};
-+};
-+
-+&eth {
-+	status = "okay";
-+	pinctrl-0 = <&pmx_ge>;
-+	pinctrl-names = "default";
-+	clocks = <&core_clk 0>;
-+};
-+
-+&ethport {
-+	phy-handle = <&ethphy>;
-+};
-+
-+&uart0 {
-+	status = "okay";
-+};
-+
-+&pinctrl {
-+	pmx_gpio_leds: pmx-gpio-leds {
-+		marvell,pins = "mpp1", "mpp2", "mpp5";
-+		marvell,function = "gpio";
-+	};
-+
-+	pmx_gpio_misc: pmx-gpio-misc {
-+		/* set marvell,pins in board file */
-+		marvell,function = "gpio";
-+	};
-+
-+	pmx_power_off: pmx-power-off {
-+		marvell,pins = "mpp8";
-+		marvell,function = "gpio";
-+	};
-+
-+	pmx_gpio_keys: pmx-gpio-keys {
-+		marvell,pins = "mpp9", "mpp10";
-+		marvell,function = "gpio";
-+	};
-+
-+	pmx_ge: pmx-ge {
-+		marvell,function = "ge";
-+	};
-+};
-+
-+&sata {
-+	pinctrl-0 = <&pmx_sata0 &pmx_sata1>;
-+	pinctrl-names = "default";
-+	status = "okay";
-+	nr-ports = <2>;
-+};
-+
-+&pciec {
-+	status = "okay";
-+};
-+
-+&pcie0 {
-+	status = "okay";
-+};
-diff --git a/arch/arm/boot/dts/orion5x-dlink-dns323a1.dts b/arch/arm/boot/dts/orion5x-dlink-dns323a1.dts
-new file mode 100644
-index 000000000000..235cc842f289
---- /dev/null
-+++ b/arch/arm/boot/dts/orion5x-dlink-dns323a1.dts
-@@ -0,0 +1,44 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2022 Mauri Sandberg <maukka@ext.kapsi.fi>
++ * Flattened Device Tree board initialization
 + *
++ * This is adapted from existing mach files and most of the source code is
++ * originally written by:
++ *  Copyright (C) 2007 Herbert Valerio Riedel <hvr@gnu.org>
++ *  Copyright (C) 2010 Benjamin Herrenschmidt <benh@kernel.crashing.org>
++ *  Copyright 2012 (C), Jason Cooper <jason@lakedaemon.net>
 + */
 +
-+/dts-v1/;
++#include <linux/of.h>
++#include <linux/phy.h>
++#include <linux/marvell_phy.h>
++#include <linux/of_net.h>
++#include <linux/clk.h>
++#include "bridge-regs.h"
 +
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/input/input.h>
-+#include <dt-bindings/leds/common.h>
-+#include <dt-bindings/interrupt-controller/irq.h>
-+#include "orion5x-mv88f5181.dtsi"
-+#include "orion5x-dlink-dns323.dtsi"
-+
-+/ {
-+	model = "D-Link DNS-323 rev A1";
-+	compatible = "dlink,dns323a1", "dlink,dns323", "marvell,orion5x-88f5181",
-+		     "marvell,orion5x";
++/* Exposed to userspace, do not change */
++enum {
++	DNS323_REV_A1,	/* 0 */
++	DNS323_REV_B1,	/* 1 */
++	DNS323_REV_C1,	/* 2 */
 +};
 +
-+/delete-node/ &sata;
-+
-+&gpio0 {
-+	pinctrl-0 = <&pmx_gpio_misc>;
-+	pinctrl-names = "default";
-+
-+	/* The DNS323 rev A1 power LED requires GPIO 4 to be low. */
-+	pin_gpio0_4 {
-+		gpio-hog;
-+		gpios = <4 GPIO_ACTIVE_LOW>;
-+		output-high;
-+		line-name = "Power led enable";
-+	};
-+};
-+
-+&pmx_gpio_misc {
-+	marvell,pins = "mpp4";
-+};
-+
-+&pmx_ge {
-+	marvell,pins = "mpp11", "mpp12", "mpp13", "mpp14", "mpp15",
-+		       "mpp16", "mpp17", "mpp18", "mpp19";
-+};
-diff --git a/arch/arm/boot/dts/orion5x-dlink-dns323b1.dts b/arch/arm/boot/dts/orion5x-dlink-dns323b1.dts
-new file mode 100644
-index 000000000000..e01ba809ffca
---- /dev/null
-+++ b/arch/arm/boot/dts/orion5x-dlink-dns323b1.dts
-@@ -0,0 +1,39 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2022 Mauri Sandberg <maukka@ext.kapsi.fi>
-+ *
++/****************************************************************************
++ * Fix-ups
 + */
 +
-+/dts-v1/;
++static int dns323c_phy_fixup(struct phy_device *phy)
++{
++	phy->dev_flags |= MARVELL_PHY_M1118_DNS323_LEDS;
 +
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/input/input.h>
-+#include <dt-bindings/leds/common.h>
-+#include "orion5x-mv88f5182.dtsi"
-+#include "orion5x-dlink-dns323.dtsi"
++	return 0;
++}
 +
-+/ {
-+	model = "D-Link DNS-323 rev B1";
-+	compatible = "dlink,dns323b1", "dlink,dns323", "marvell,orion5x-88f5182",
-+		     "marvell,orion5x";
-+};
++/****************************************************************************
++ * Ethernet
++ */
 +
-+&gpio0 {
-+	pinctrl-0 = <&pmx_gpio_misc>;
-+	pinctrl-names = "default";
++/* dns323_parse_hex_*() taken from tsx09-common.c; should a common copy of these
++ * functions be kept somewhere?
++ */
++static int __init dns323_parse_hex_nibble(char n)
++{
++	if (n >= '0' && n <= '9')
++		return n - '0';
 +
-+	/* The rev B1 has a flag to indicate the system is up.
-+	 * Without this flag set, power LED will flash and cannot be
-+	 * controlled via gpio-leds.
++	if (n >= 'A' && n <= 'F')
++		return n - 'A' + 10;
++
++	if (n >= 'a' && n <= 'f')
++		return n - 'a' + 10;
++
++	return -1;
++}
++
++static int __init dns323_parse_hex_byte(const char *b)
++{
++	int hi;
++	int lo;
++
++	hi = dns323_parse_hex_nibble(b[0]);
++	lo = dns323_parse_hex_nibble(b[1]);
++
++	if (hi < 0 || lo < 0)
++		return -1;
++
++	return (hi << 4) | lo;
++}
++
++#define DNS323_NOR_BOOT_BASE 0xf4000000
++
++static int __init dns323_read_mac_addr(u8 *addr)
++{
++	int i;
++	char *mac_page;
++
++	/* MAC address is stored as a regular ol' string in /dev/mtdblock4
++	 * (0x007d0000-0x00800000) starting at offset 196480 (0x2ff80).
 +	 */
-+	pin_gpio0_3 {
-+		gpio-hog;
-+		gpios = <3 GPIO_ACTIVE_LOW>;
-+		output-high;
-+		line-name = "System up";
-+	};
-+};
++	mac_page = ioremap(DNS323_NOR_BOOT_BASE + 0x7d0000 + 196480, 1024);
++	if (!mac_page)
++		return -ENOMEM;
 +
-+&pmx_gpio_misc {
-+	marvell,pins = "mpp3";
-+};
-diff --git a/arch/arm/boot/dts/orion5x-dlink-dns323c1.dts b/arch/arm/boot/dts/orion5x-dlink-dns323c1.dts
-new file mode 100644
-index 000000000000..c24da08bdc8f
---- /dev/null
-+++ b/arch/arm/boot/dts/orion5x-dlink-dns323c1.dts
-@@ -0,0 +1,81 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2022 Mauri Sandberg <maukka@ext.kapsi.fi>
-+ *
-+ */
++	/* Sanity check the string we're looking at */
++	for (i = 0; i < 5; i++) {
++		if (*(mac_page + (i * 3) + 2) != ':')
++			goto error_fail;
++	}
 +
-+/dts-v1/;
++	for (i = 0; i < ETH_ALEN; i++)	{
++		int byte;
 +
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/input/input.h>
-+#include <dt-bindings/leds/common.h>
-+#include "orion5x-mv88f5182.dtsi"
-+#include "orion5x-dlink-dns323.dtsi"
++		byte = dns323_parse_hex_byte(mac_page + (i * 3));
++		if (byte < 0)
++			goto error_fail;
 +
-+/ {
-+	model = "D-Link DNS-323 rev C1";
-+	compatible = "dlink,dns323c1", "dlink,dns323", "marvell,orion5x-88f5182",
-+		     "marvell,orion5x";
++		addr[i] = byte;
++	}
 +
-+	fan {
-+		compatible = "gpio-fan";
-+		pinctrl-0 = <&pmx_gpio_fan>;
-+		pinctrl-names = "default";
++	iounmap(mac_page);
 +
-+		gpios = <&gpio0 19 GPIO_ACTIVE_LOW
-+			 &gpio0 18 GPIO_ACTIVE_LOW>;
++	return 0;
 +
-+		gpio-fan,speed-map = <0    0
-+				      1000 1
-+				      2000 2>;
-+		alarm-gpios = <&gpio0 10 GPIO_ACTIVE_HIGH>;
-+	};
++error_fail:
++	iounmap(mac_page);
++	return -EINVAL;
++}
 +
-+	gpio-keys {
-+		/delete-node/ key-1;
++static void __init dns323_dt_eth_fixup(void)
++{
++	struct device_node *np;
++	u8 addr[ETH_ALEN];
++	int ret;
 +
-+		key-0 {
-+			gpios = <&gpio0 1 GPIO_ACTIVE_HIGH>;
-+		};
-+	};
++	/*
++	 * The ethernet interfaces forget the MAC address assigned by u-boot
++	 * if the clocks are turned off. Usually, u-boot on orion boards
++	 * has no DT support to properly set local-mac-address property.
++	 * As a workaround, we get the MAC address that is stored in flash
++	 * and update the port device node if no valid MAC address is set.
++	 */
++	ret = dns323_read_mac_addr(addr);
 +
-+	gpio-leds {
-+		led-0 {
-+			gpios = <&gpio0 8 GPIO_ACTIVE_LOW>;
-+		};
++	if (ret) {
++		pr_warn("Unable to find MAC address in flash memory\n");
++		return;
++	}
 +
-+		led-1 {
-+			gpios = <&gpio0 9 GPIO_ACTIVE_LOW>;
-+		};
++	np = of_find_compatible_node(NULL, NULL, "marvell,orion-eth-port");
 +
-+		led-2 {
-+			gpios = <&gpio0 17 GPIO_ACTIVE_LOW>;
-+		};
-+	};
++	if (!IS_ERR(np)) {
++		struct device_node *pnp = of_get_parent(np);
++		struct clk *clk;
++		struct property *pmac;
++		u8 tmpmac[ETH_ALEN];
++		u8 *macaddr;
++		int i;
 +
-+};
++		if (!pnp)
++			return;
 +
-+&i2c {
-+	/delete-node/ fan@3e;
-+};
++		/* skip disabled nodes or nodes with valid MAC address*/
++		if (!of_device_is_available(pnp) ||
++		    !of_get_mac_address(np, tmpmac))
++			goto eth_fixup_skip;
 +
-+&pinctrl {
-+	/delete-node/ pmx-gpio-misc;
++		clk = of_clk_get(pnp, 0);
++		if (IS_ERR(clk))
++			goto eth_fixup_skip;
 +
-+	pmx_gpio_fan: pmx-gpio-fan {
-+		marvell,pins = "mpp10", "mpp18", "mpp19";
-+		marvell,function = "gpio";
-+	};
-+};
++		/* ensure port clock is not gated to not hang CPU */
++		clk_prepare_enable(clk);
 +
-+&pmx_gpio_leds {
-+	marvell,pins = "mpp8", "mpp9", "mpp17";
-+};
++		/* store MAC address register contents in local-mac-address */
++		pmac = kzalloc(sizeof(*pmac) + 6, GFP_KERNEL);
++		if (!pmac)
++			goto eth_fixup_no_mem;
 +
-+&pmx_power_off {
-+	marvell,pins = "mpp2";
-+};
++		pmac->value = pmac + 1;
++		pmac->length = ETH_ALEN;
++		pmac->name = kstrdup("local-mac-address", GFP_KERNEL);
++		if (!pmac->name) {
++			kfree(pmac);
++			goto eth_fixup_no_mem;
++		}
 +
-+&pmx_gpio_keys {
-+	marvell,pins = "mpp1";
-+};
++		macaddr = pmac->value;
++		for (i = 0; i < ETH_ALEN; i++)
++			macaddr[i] = addr[i];
++
++		of_update_property(np, pmac);
++
++eth_fixup_no_mem:
++		clk_disable_unprepare(clk);
++		clk_put(clk);
++eth_fixup_skip:
++		of_node_put(pnp);
++	}
++}
++
++void __init dns323_init_dt(void)
++{
++	if (of_machine_is_compatible("dlink,dns323a1")) {
++		writel(0, MPP_DEV_CTRL);		/* DEV_D[31:16] */
++	} else if (of_machine_is_compatible("dlink,dns323c1") &&
++		IS_BUILTIN(CONFIG_PHYLIB)) {
++		/* Register fixup for the PHY LEDs */
++		phy_register_fixup_for_uid(MARVELL_PHY_ID_88E1118,
++					   MARVELL_PHY_ID_MASK,
++					   dns323c_phy_fixup);
++
++		/* Now, -this- should theorically be done by the sata_mv driver
++		 * once I figure out what's going on there. Maybe the behaviour
++		 * of the LEDs should be somewhat passed via the platform_data.
++		 * for now, just whack the register and make the LEDs happy
++		 *
++		 * Note: AFAIK, rev B1 needs the same treatement but I'll let
++		 * somebody else test it.
++		 */
++		writel(0x5, ORION5X_SATA_VIRT_BASE + 0x2c);
++	}
++
++	dns323_dt_eth_fixup();
++}
+diff --git a/arch/arm/mach-orion5x/board-dt.c b/arch/arm/mach-orion5x/board-dt.c
+index e3736ffc8347..670bff5e53f6 100644
+--- a/arch/arm/mach-orion5x/board-dt.c
++++ b/arch/arm/mach-orion5x/board-dt.c
+@@ -57,6 +57,9 @@ static void __init orion5x_dt_init(void)
+ 		cpu_idle_poll_ctrl(true);
+ 	}
+ 
++	if (of_machine_is_compatible("dlink,dns323"))
++		dns323_init_dt();
++
+ 	if (of_machine_is_compatible("maxtor,shared-storage-2"))
+ 		mss2_init();
+ 
+diff --git a/arch/arm/mach-orion5x/common.h b/arch/arm/mach-orion5x/common.h
+index eb96009e21c4..7a21f7216c65 100644
+--- a/arch/arm/mach-orion5x/common.h
++++ b/arch/arm/mach-orion5x/common.h
+@@ -75,6 +75,12 @@ extern void mss2_init(void);
+ static inline void mss2_init(void) {}
+ #endif
+ 
++#ifdef CONFIG_MACH_DNS323_DT
++extern void dns323_init_dt(void);
++#else
++static inline void dns323_init_dt(void) {}
++#endif
++
+ /*****************************************************************************
+  * Helpers to access Orion registers
+  ****************************************************************************/
 -- 
 2.25.1
 
