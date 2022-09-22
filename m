@@ -2,189 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 688FF5E6E6A
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 23:28:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7ABB5E6E6F
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 23:33:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231129AbiIVV2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 17:28:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52110 "EHLO
+        id S229900AbiIVVdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 17:33:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231193AbiIVV2c (ORCPT
+        with ESMTP id S229635AbiIVVc6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 17:28:32 -0400
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B737E111DFB
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 14:28:27 -0700 (PDT)
-Received: by mail-il1-x136.google.com with SMTP id g6so5602232ild.6
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 14:28:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=cxbQv9D2p8vN8THDF3AKAQRLlVYEVvb4qnk8cFoXNPs=;
-        b=f2cVDIpVYXuoDIP3unMWkQNMOWeE7Xo0nLUDsGCy0Gmx1AWEdw1WZBQlqjd551VySs
-         Zng1uF7z2o1k44Y3k7MnWH0L7/lT14/eFcee9EOBiYb6hsHWb2W/qOOuzgu500OfdWR+
-         SEMxH6v8T+6OOwr7ufc/ftxs4W9xNxCf0brItbND+l5/BkNmwWJN2j/mObiDZFpm31Ge
-         cgF+a00RGIdc7eDtI9JC9mfR/AUHXL4w/KAZSpBwlZ7wePJnP/Z1PO67bdMlGSQidB2h
-         4SCYmdSxMPqils9q3+qY2uSfH5V9uob9QJ2kISuZNuVx2ZNbCQTG67p4hIAmQwBDfe/3
-         PtPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=cxbQv9D2p8vN8THDF3AKAQRLlVYEVvb4qnk8cFoXNPs=;
-        b=E3cEs0puO1syO0eE3FzoT1RL7RDXrG0MjZweuiuDZnXBON2XhFgMcgaohRZNg11o7D
-         GF7pHUlprl+7chGqUBil4lEdcOtIJxfF35hRKRx3r3pR1BqPWhqZBZ0EdLSwUrPMn9S8
-         1YQ4mTVg5NEUwKn5PERjAc5aeQA2u4ti1ucWRU6fyDd9fRdcwjIJ1K3wLqGam1jd2/rM
-         CjAa6MiGhUFWSKaRNzuC1ja2Vlj6METu0Gk051vMT8O4kVMFiJdYl28f7Ood89OUVeIO
-         je0xyboFhPzyzZtP+w1VVOgqk75XN+EjS6q4UYurjxKiFuPAn6QlkgC+TZ5n98G1KTfx
-         Em9w==
-X-Gm-Message-State: ACrzQf0WnkQCvwJrwpC4JLOBWyCO0uLUk7RTqKMpXwzkpUuKJeIaKbzv
-        QzDpxUlE/4S2JOKZT6Y+LNB7Zw==
-X-Google-Smtp-Source: AMsMyM5DHG8MWDXS3rBXWbxOKugTtaSJubwnzQTPKjdSUQBz07SX2LKtCDz+cQhertW7JKH7nsVMHQ==
-X-Received: by 2002:a92:c545:0:b0:2f6:5ca9:8bc5 with SMTP id a5-20020a92c545000000b002f65ca98bc5mr2899934ilj.270.1663882106796;
-        Thu, 22 Sep 2022 14:28:26 -0700 (PDT)
-Received: from [172.22.22.4] ([98.61.227.136])
-        by smtp.googlemail.com with ESMTPSA id i7-20020a056638380700b00349d2d52f6asm2650812jav.37.2022.09.22.14.28.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Sep 2022 14:28:26 -0700 (PDT)
-Message-ID: <00eb82ca-8bf6-c744-d04d-96b97ce06b17@linaro.org>
-Date:   Thu, 22 Sep 2022 16:28:25 -0500
+        Thu, 22 Sep 2022 17:32:58 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3838D10E5D2;
+        Thu, 22 Sep 2022 14:32:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
+        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
+        In-Reply-To:References; bh=e5T5IZ2kW4KLNa3EeXF0wiTvE72Xg517TN+86OQ2OK8=; b=fI
+        RONZsrFiCsYnQcrDmmSjrRxxYhnRULyR0kCamV89ao9AeYAI4pso/wfPTlxKgpssHRIXPWTQfT8MY
+        WgibB/Fk7CQFz/t0iRzTMqG9SnTabYU+LAvmuOGwNFBQE1WWd+aYBuR8leTKLob7tBgWN+ZdqvJj3
+        iHUTKQvgzlayv0Q=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1obToM-00HZb9-6y; Thu, 22 Sep 2022 23:32:46 +0200
+Date:   Thu, 22 Sep 2022 23:32:46 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     Mauri Sandberg <maukka@ext.kapsi.fi>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, arnd@arndb.de, olof@lixom.net,
+        sebastian.hesselbarth@gmail.com, gregory.clement@bootlin.com,
+        linux@armlinux.org.uk, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 2/3] ARM: dts: orion5x: Add D-Link DNS-323 Device Tree
+Message-ID: <YyzUfs4u2z3jjiU7@lunn.ch>
+References: <20220427162123.110458-1-maukka@ext.kapsi.fi>
+ <20220922202458.7592-1-maukka@ext.kapsi.fi>
+ <20220922202458.7592-3-maukka@ext.kapsi.fi>
+ <YyzJe9+S83vByosb@lunn.ch>
+ <20220922211408.56num4k6r746kzht@pali>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [5.10 PATCH] interconnect: qcom: icc-rpmh: Add BCMs to commit
- list in pre_aggregate
-Content-Language: en-US
-To:     Douglas Anderson <dianders@chromium.org>, stable@vger.kernel.org,
-        gregkh@linuxfoundation.org
-Cc:     swboyd@chromium.org, Mike Tipton <mdtipton@codeaurora.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20220922141725.5.10.1.I791715539cae1355e21827ca738b0b523a4a0f53@changeid>
-From:   Alex Elder <elder@linaro.org>
-In-Reply-To: <20220922141725.5.10.1.I791715539cae1355e21827ca738b0b523a4a0f53@changeid>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220922211408.56num4k6r746kzht@pali>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/22/22 4:18 PM, Douglas Anderson wrote:
-> From: Mike Tipton <mdtipton@codeaurora.org>
+On Thu, Sep 22, 2022 at 11:14:08PM +0200, Pali Rohár wrote:
+> On Thursday 22 September 2022 22:45:47 Andrew Lunn wrote:
+> > > +&mdio {
+> > > +	status = "okay";
+> > > +
+> > > +	ethphy: ethernet-phy {
+> > > +		reg = <8>;
+> > 
+> > Since you have a reg value, this should be ethernet-phy@9
 > 
-> commit b95b668eaaa2574e8ee72f143c52075e9955177e upstream.
-> 
-> We're only adding BCMs to the commit list in aggregate(), but there are
-> cases where pre_aggregate() is called without subsequently calling
-> aggregate(). In particular, in icc_sync_state() when a node with initial
-> BW has zero requests. Since BCMs aren't added to the commit list in
-> these cases, we don't actually send the zero BW request to HW. So the
-> resources remain on unnecessarily.
-> 
-> Add BCMs to the commit list in pre_aggregate() instead, which is always
-> called even when there are no requests.
-> 
-> Signed-off-by: Mike Tipton <mdtipton@codeaurora.org>
-> [georgi: remove icc_sync_state for platforms with incomplete support]
-> Link: https://lore.kernel.org/r/20211125174751.25317-1-djakov@kernel.org
-> Signed-off-by: Georgi Djakov <djakov@kernel.org>
-> [dianders: dropped sm8350.c which isn't present in 5.10]
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ethernet-phy@8 no?
 
-Whoops, sorry about that.
+Yes, @8. Sorry.
 
-Acked-by: Alex Elder <elder@linaro.org>
-
-> ---
-> This should have been included in Alex Elder's request for patches
-> picked to 5.10 [1] but it was missed. Let's finally pick it up.
-> 
-> [1] https://lore.kernel.org/r/20220608205415.185248-3-elder@linaro.org
-> 
->   drivers/interconnect/qcom/icc-rpmh.c | 10 +++++-----
->   drivers/interconnect/qcom/sm8150.c   |  1 -
->   drivers/interconnect/qcom/sm8250.c   |  1 -
->   3 files changed, 5 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/interconnect/qcom/icc-rpmh.c b/drivers/interconnect/qcom/icc-rpmh.c
-> index f6fae64861ce..27cc5f03611c 100644
-> --- a/drivers/interconnect/qcom/icc-rpmh.c
-> +++ b/drivers/interconnect/qcom/icc-rpmh.c
-> @@ -20,13 +20,18 @@ void qcom_icc_pre_aggregate(struct icc_node *node)
->   {
->   	size_t i;
->   	struct qcom_icc_node *qn;
-> +	struct qcom_icc_provider *qp;
->   
->   	qn = node->data;
-> +	qp = to_qcom_provider(node->provider);
->   
->   	for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
->   		qn->sum_avg[i] = 0;
->   		qn->max_peak[i] = 0;
->   	}
-> +
-> +	for (i = 0; i < qn->num_bcms; i++)
-> +		qcom_icc_bcm_voter_add(qp->voter, qn->bcms[i]);
->   }
->   EXPORT_SYMBOL_GPL(qcom_icc_pre_aggregate);
->   
-> @@ -44,10 +49,8 @@ int qcom_icc_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
->   {
->   	size_t i;
->   	struct qcom_icc_node *qn;
-> -	struct qcom_icc_provider *qp;
->   
->   	qn = node->data;
-> -	qp = to_qcom_provider(node->provider);
->   
->   	if (!tag)
->   		tag = QCOM_ICC_TAG_ALWAYS;
-> @@ -67,9 +70,6 @@ int qcom_icc_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
->   	*agg_avg += avg_bw;
->   	*agg_peak = max_t(u32, *agg_peak, peak_bw);
->   
-> -	for (i = 0; i < qn->num_bcms; i++)
-> -		qcom_icc_bcm_voter_add(qp->voter, qn->bcms[i]);
-> -
->   	return 0;
->   }
->   EXPORT_SYMBOL_GPL(qcom_icc_aggregate);
-> diff --git a/drivers/interconnect/qcom/sm8150.c b/drivers/interconnect/qcom/sm8150.c
-> index c76b2c7f9b10..b936196c229c 100644
-> --- a/drivers/interconnect/qcom/sm8150.c
-> +++ b/drivers/interconnect/qcom/sm8150.c
-> @@ -627,7 +627,6 @@ static struct platform_driver qnoc_driver = {
->   	.driver = {
->   		.name = "qnoc-sm8150",
->   		.of_match_table = qnoc_of_match,
-> -		.sync_state = icc_sync_state,
->   	},
->   };
->   module_platform_driver(qnoc_driver);
-> diff --git a/drivers/interconnect/qcom/sm8250.c b/drivers/interconnect/qcom/sm8250.c
-> index cc558fec74e3..40820043c8d3 100644
-> --- a/drivers/interconnect/qcom/sm8250.c
-> +++ b/drivers/interconnect/qcom/sm8250.c
-> @@ -643,7 +643,6 @@ static struct platform_driver qnoc_driver = {
->   	.driver = {
->   		.name = "qnoc-sm8250",
->   		.of_match_table = qnoc_of_match,
-> -		.sync_state = icc_sync_state,
->   	},
->   };
->   module_platform_driver(qnoc_driver);
-
+     Andrew
