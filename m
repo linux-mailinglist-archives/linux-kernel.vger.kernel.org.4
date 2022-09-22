@@ -2,135 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C5A85E64E0
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 16:14:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C89705E64E3
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 16:15:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231586AbiIVOOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 10:14:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53528 "EHLO
+        id S231636AbiIVOO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 10:14:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231424AbiIVOOL (ORCPT
+        with ESMTP id S231521AbiIVOOx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 10:14:11 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF1BF3119;
-        Thu, 22 Sep 2022 07:14:10 -0700 (PDT)
-Received: from fraeml741-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MYHG86tvcz689lY;
-        Thu, 22 Sep 2022 22:09:20 +0800 (CST)
-Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml741-chm.china.huawei.com (10.206.15.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 22 Sep 2022 16:14:08 +0200
-Received: from [10.195.244.8] (10.195.244.8) by lhrpeml500003.china.huawei.com
- (7.191.162.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 22 Sep
- 2022 15:14:07 +0100
-Message-ID: <650e35b7-9d90-fe03-7d92-48207644536b@huawei.com>
-Date:   Thu, 22 Sep 2022 15:14:06 +0100
+        Thu, 22 Sep 2022 10:14:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 310CD3CBDB;
+        Thu, 22 Sep 2022 07:14:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AEFD2B8376C;
+        Thu, 22 Sep 2022 14:14:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00BACC433D6;
+        Thu, 22 Sep 2022 14:14:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663856089;
+        bh=LpDsfUiZsVGanIM4Gs2BdJkChHrUyvu7yHYD+XKozOk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=qaMsdqToEy27LU98ts7fgQHvlODXa0ihV5wE5g6iKGyI0Y3a8dOqG5rxbRYiCTFN0
+         yVkjHCUCAFyN3PXu9HWeHirwwjcMYk5Vh3dKwqEJ9kicIAm2b2fAXbRjAN+zeYvqE+
+         mJVMWpF1nDeZcbgiag3ooEjVN6fii+X16nzwr6I5iylB2puFPdAs6X7a/wkZfzDKBL
+         q3mKbzEno7nZJjjxgDGFRrTCnfqrkhlvGbkJuVm3Q1wD1v7vO+Lsa258ykGatrL/yR
+         iuLVf5Hw4WjvIqij5sx/a+bHiXSk/HIHx+fRUDDULPhZ+ZdiFjlIYpEpNTohkV/Z1F
+         0RxXxYO9oM9TQ==
+Date:   Thu, 22 Sep 2022 07:14:48 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Hangyu Hua <hbh25y@gmail.com>
+Cc:     jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        paulb@mellanox.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: sched: act_ct: fix possible refcount leak in
+ tcf_ct_init()
+Message-ID: <20220922071448.4f4eb475@kernel.org>
+In-Reply-To: <20220921090600.29673-1-hbh25y@gmail.com>
+References: <20220921090600.29673-1-hbh25y@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH 1/7] scsi: libsas: introduce sas address conversion and
- comparation helpers
-To:     Jason Yan <yanaijie@huawei.com>, <martin.petersen@oracle.com>,
-        <jejb@linux.ibm.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <hare@suse.com>, <hch@lst.de>, <bvanassche@acm.org>,
-        <jinpu.wang@cloud.ionos.com>
-References: <20220917104311.1878250-1-yanaijie@huawei.com>
- <20220917104311.1878250-2-yanaijie@huawei.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <20220917104311.1878250-2-yanaijie@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.195.244.8]
-X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
- lhrpeml500003.china.huawei.com (7.191.162.67)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/09/2022 11:43, Jason Yan wrote:
-> Sas address conversion and comparation is widely used in libsas and
-> drivers. However they are all opencoded and to avoid the line spill over
-> 80 columns, are mostly split into multi-lines. Introduce some helpers to
-> prepare some refactor.
+On Wed, 21 Sep 2022 17:06:00 +0800 Hangyu Hua wrote:
+> Subject: [PATCH] net: sched: act_ct: fix possible refcount leak in tcf_ct_init()
+
+[PATCH net] please
+
+> nf_ct_put need to be called to put the refcount got by tcf_ct_fill_params
+> to avoid possible refcount leak when tcf_ct_flow_table_get fails.
 > 
-> Signed-off-by: Jason Yan <yanaijie@huawei.com>
+> Fixes: c34b961a2492 ("net/sched: act_ct: Create nf flow table per zone")
+> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
 > ---
->   include/scsi/libsas.h | 32 ++++++++++++++++++++++++++++++++
->   1 file changed, 32 insertions(+)
+>  net/sched/act_ct.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/include/scsi/libsas.h b/include/scsi/libsas.h
-> index 2dbead74a2af..382aedf31fa4 100644
-> --- a/include/scsi/libsas.h
-> +++ b/include/scsi/libsas.h
-> @@ -648,6 +648,38 @@ static inline bool sas_is_internal_abort(struct sas_task *task)
->   	return task->task_proto == SAS_PROTOCOL_INTERNAL_ABORT;
->   }
->   
-> +static inline unsigned long long ex_phy_addr(struct ex_phy *phy)
+> diff --git a/net/sched/act_ct.c b/net/sched/act_ct.c
+> index d55afb8d14be..3646956fc717 100644
+> --- a/net/sched/act_ct.c
+> +++ b/net/sched/act_ct.c
+> @@ -1412,6 +1412,8 @@ static int tcf_ct_init(struct net *net, struct nlattr *nla,
+>  cleanup:
+>  	if (goto_ch)
+>  		tcf_chain_put_by_act(goto_ch);
+> +	if (params->tmpl)
+> +		nf_ct_put(params->tmpl);
 
-This is a public header, so I would hope that any function would have 
-"sas_" prefix
-
-> +{
-> +	return SAS_ADDR(phy->attached_sas_addr);
-> +}
-> +
-> +static inline unsigned long long dev_addr(struct domain_device *dev)
-> +{
-> +	return SAS_ADDR(dev->sas_addr);
-> +}
-> +
-> +static inline unsigned long long port_addr(struct asd_sas_port *port)
-> +{
-> +	return SAS_ADDR(port->sas_addr);
-
-As below, I don't really see how these simple functions help much
-
-> +}
-> +
-> +static inline bool dev_and_phy_addr_same(struct domain_device *dev,
-> +					 struct ex_phy *phy)
-> +{
-> +	return dev_addr(dev) == ex_phy_addr(phy);
-> +}
-> +
-> +static inline bool port_and_phy_addr_same(struct asd_sas_port *port,
-> +					  struct ex_phy *phy)
-
-I'd say sas_phy_match_port_addr() could be a better name.
-
-> +{
-> +	return port_addr(port) == ex_phy_addr(phy);
-
-I think the following is just as good:
-
-	return SAS_ADDR(port->sas_addr) == SAS_ADDR(phy->attached_sas_addr)
-
-port_addr() is only used once AFAICS, so the code would not be less concise
-
-> +}
-> +
-> +static inline bool ex_phy_addr_same(struct ex_phy *phy1, struct ex_phy *phy2)
-> +{
-> +	return  ex_phy_addr(phy1) ==  ex_phy_addr(phy2);
-
-nit: 2x double whitespace
-
-> +}
-> +
->   struct sas_domain_function_template {
->   	/* The class calls these to notify the LLDD of an event. */
->   	void (*lldd_port_formed)(struct asd_sas_phy *);
-
-Thanks,
-John
+This is buggy, params could be NULL here. Please add a new label above
+cleanup (cleanup_params for example) and make the
+tcf_ct_flow_table_get() failure path jump there instead.
