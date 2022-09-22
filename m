@@ -2,91 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 813365E6492
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 16:00:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 678D65E649B
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 16:02:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230087AbiIVOAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 10:00:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56092 "EHLO
+        id S231308AbiIVOCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 10:02:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231895AbiIVOAQ (ORCPT
+        with ESMTP id S230033AbiIVOB5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 10:00:16 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F2843634;
-        Thu, 22 Sep 2022 07:00:11 -0700 (PDT)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MYGym5t44zlX89;
-        Thu, 22 Sep 2022 21:56:00 +0800 (CST)
-Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 22 Sep 2022 22:00:09 +0800
-Received: from huawei.com (10.175.113.32) by dggpemm100009.china.huawei.com
- (7.185.36.113) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 22 Sep
- 2022 22:00:09 +0800
-From:   Liu Shixin <liushixin2@huawei.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        Liu Shixin <liushixin2@huawei.com>
-Subject: [PATCH 4/4] memory: tegra186-emc: use DEFINE_SHOW_ATTRIBUTE to simplify code
-Date:   Thu, 22 Sep 2022 22:33:44 +0800
-Message-ID: <20220922143344.3252585-5-liushixin2@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220922143344.3252585-1-liushixin2@huawei.com>
-References: <20220922143344.3252585-1-liushixin2@huawei.com>
+        Thu, 22 Sep 2022 10:01:57 -0400
+Received: from isilmar-4.linta.de (isilmar-4.linta.de [136.243.71.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62583D0795;
+        Thu, 22 Sep 2022 07:01:55 -0700 (PDT)
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+Received: from owl.dominikbrodowski.net (owl.brodo.linta [10.2.0.111])
+        by isilmar-4.linta.de (Postfix) with ESMTPSA id 304A8201342;
+        Thu, 22 Sep 2022 14:01:53 +0000 (UTC)
+Received: by owl.dominikbrodowski.net (Postfix, from userid 1000)
+        id 2B27B80607; Thu, 22 Sep 2022 15:51:05 +0200 (CEST)
+Date:   Thu, 22 Sep 2022 15:51:05 +0200
+From:   Dominik Brodowski <linux@dominikbrodowski.net>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Herbert Xu <herbert@gondor.apana.org.au>
+Subject: Re: [PATCH] random: throttle hwrng writes if no entropy is credited
+Message-ID: <YyxoSV3p0JPMMeWO@owl.dominikbrodowski.net>
+References: <20220920141438.2782446-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.32]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm100009.china.huawei.com (7.185.36.113)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220920141438.2782446-1-Jason@zx2c4.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use DEFINE_SHOW_ATTRIBUTE helper macro to simplify the code.
-No functional change.
+Hi Jason,
 
-Signed-off-by: Liu Shixin <liushixin2@huawei.com>
----
- drivers/memory/tegra/tegra186-emc.c | 15 +--------------
- 1 file changed, 1 insertion(+), 14 deletions(-)
+thanks for splitting this change out of my other patch. You can add my
+Signed-off-by, but I'd like to suggest rewriting the commit message as
+follows (please modify as needed):
 
-diff --git a/drivers/memory/tegra/tegra186-emc.c b/drivers/memory/tegra/tegra186-emc.c
-index 54b47ca33483..26e763bde92a 100644
---- a/drivers/memory/tegra/tegra186-emc.c
-+++ b/drivers/memory/tegra/tegra186-emc.c
-@@ -84,20 +84,7 @@ static int tegra186_emc_debug_available_rates_show(struct seq_file *s,
- 
- 	return 0;
- }
--
--static int tegra186_emc_debug_available_rates_open(struct inode *inode,
--						   struct file *file)
--{
--	return single_open(file, tegra186_emc_debug_available_rates_show,
--			   inode->i_private);
--}
--
--static const struct file_operations tegra186_emc_debug_available_rates_fops = {
--	.open = tegra186_emc_debug_available_rates_open,
--	.read = seq_read,
--	.llseek = seq_lseek,
--	.release = single_release,
--};
-+DEFINE_SHOW_ATTRIBUTE(tegra186_emc_debug_available_rates);
- 
- static int tegra186_emc_debug_min_rate_get(void *data, u64 *rate)
- {
--- 
-2.25.1
 
+In case a hwrng source does not provide (trusted) entropy, it cannot
+assist in initializing the CRNG. Therefore, in case
+add_hwgenerator_randomness() is called with the entropy parameter set
+to zero, go to sleep until one reseed interval has passed.
+
+While the hwrng thread currently only runs under conditions where this
+is non-zero, this change is not harmful and prepares for future updates
+to the hwrng core.
+
+
+Thanks,
+	Dominik
+
+
+
+
+Am Tue, Sep 20, 2022 at 04:14:38PM +0200 schrieb Jason A. Donenfeld:
+> This value is currently never set to zero, because the hwrng thread only
+> runs if it's going to be non-zero. This is an oversight, however, that
+> Dominik is working on fixing. In preparation for this, and so that
+> there's less coordination required between my tree and Herbert's, make
+> this currently useless, but not harmful, change here now, in hopes that
+> Dominik can make the corresponding change in the hwrng core later.
+> 
+> Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+> Cc: Herbert Xu <herbert@gondor.apana.org.au>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> ---
+>  drivers/char/random.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/char/random.c b/drivers/char/random.c
+> index 16e0c5f6cf2f..520a385c7dab 100644
+> --- a/drivers/char/random.c
+> +++ b/drivers/char/random.c
+> @@ -865,9 +865,9 @@ void add_hwgenerator_randomness(const void *buf, size_t len, size_t entropy)
+>  
+>  	/*
+>  	 * Throttle writing to once every reseed interval, unless we're not yet
+> -	 * initialized.
+> +	 * initialized or no entropy is credited.
+>  	 */
+> -	if (!kthread_should_stop() && crng_ready())
+> +	if (!kthread_should_stop() && (crng_ready() || !entropy))
+>  		schedule_timeout_interruptible(crng_reseed_interval());
+>  }
+>  EXPORT_SYMBOL_GPL(add_hwgenerator_randomness);
+> -- 
+> 2.37.3
+> 
