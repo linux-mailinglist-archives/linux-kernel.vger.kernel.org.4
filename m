@@ -2,188 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AC2D5E57AD
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 02:57:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 248645E57C1
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 03:09:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbiIVA5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 20:57:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40916 "EHLO
+        id S229518AbiIVBJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 21:09:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiIVA5i (ORCPT
+        with ESMTP id S229499AbiIVBJd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 20:57:38 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2059.outbound.protection.outlook.com [40.107.223.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB429A698
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 17:57:31 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mPFtRbpogs+zIdf51bWXibeEq6tkh41w0JE8bAIpSGCnU+Tb8Pk/XEKFWXSTN9lk8gnQqLSLJfMgvfUNenysvKPD9OGkGg7crzwfqNUxCX8j6n4NgUD7/jdoVnnzYzl2GSqkN4KXqsDTeUrgchcApctFA6dbc+M2F8g0+SkBkkW2QuDbVE0jNaY11DZ3AF2FNTZaJ+xDNW6hrMuBvnH91j0/JsmME9yiJVS9LLj2NCW607+oC4cBCsGhyuidXUrc6r1Avxx01eDOadKpYMLHfDPURpTXo3YA0RMrLDJNvvYEdWNVtzHPuPk8XJuIH2dqQ7FLXkbYmpSD1o798a4BCA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uacXZwjzh9o77Lxj4X8FEq0SUaV2h0IAO07lXUi1v2A=;
- b=DNSyjpCK3vVZG0umqPxQ0qofdaPJM867F5Ic+299f5wbUY6wsWqTnr8WKaPs80lcWCNzFXi6bI1AbI3YpLQ928wTOq5JqMVfuVxOZAlqzhzu90RKDPK7PIHYEJ3cEzHudJzQ9caDd5ShvGHTT9zdYevJa4V6zunpZpoThb5ETRD5ECsYwZg2Vk36Snw+MHgX8s/30BhkbfjiJ7WRCwRvfjybrNrm1WSw5JcMB7URT2/6BGlOqvzP6dt2ZPRXbyZceDXamKrhP8J1KgJ1mLHIDkErbGvzSXs7SuumPusz5vqlIJAc5A4EtPAutqECCaYISxcgREL5PdFYx0Ug0RPCng==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uacXZwjzh9o77Lxj4X8FEq0SUaV2h0IAO07lXUi1v2A=;
- b=XBfdwNGx8p1HiQ1jdy2dajbXlgD2hr5ZUG4MKdlzRr/5BPvRbkHhVipsVDAdc1QWQEg02KM81plTrlh7WFpFpZDOMlzJrgwTcAdMOcnoCam9scMLbD61Fg7YIMDgmjaSWPBN9qFzISao2+cPtSuMb2ZwWHqC5twS00N2F8FmiP2bZCwTeL0csoPszj6NHceFm4RjAad0JogqED24l3Rfq0+f54BSgA5K3CDY8tZ89h298cIMsnLkEYGhxgIw3xAvnTHr4DGurcNGVhml2eS8CezyOV9NWqXjQHkykMWiea4f8OY9+Hvg28vrl4mbHRurOQqZEIZVQeguzoliix2sYA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DM6PR12MB4140.namprd12.prod.outlook.com (2603:10b6:5:221::13)
- by SJ1PR12MB6313.namprd12.prod.outlook.com (2603:10b6:a03:458::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.14; Thu, 22 Sep
- 2022 00:57:29 +0000
-Received: from DM6PR12MB4140.namprd12.prod.outlook.com
- ([fe80::e0c5:bb15:a743:7ddb]) by DM6PR12MB4140.namprd12.prod.outlook.com
- ([fe80::e0c5:bb15:a743:7ddb%3]) with mapi id 15.20.5654.017; Thu, 22 Sep 2022
- 00:57:29 +0000
-Message-ID: <f48ba16b-0c2c-fa93-c8e0-e6c2adf913aa@nvidia.com>
-Date:   Wed, 21 Sep 2022 17:57:26 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] mm: hugetlb: fix UAF in hugetlb_handle_userfault
-Content-Language: en-US
-To:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Liu Shixin <liushixin2@huawei.com>
-Cc:     Liu Zixian <liuzixian4@huawei.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>
-References: <20220921083440.1267903-1-liushixin2@huawei.com>
- <YytOYH1MSo5cNoB6@monkey> <Yyuk83B4VHh+pbFp@monkey>
-From:   John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <Yyuk83B4VHh+pbFp@monkey>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR03CA0056.namprd03.prod.outlook.com
- (2603:10b6:a03:33e::31) To DM6PR12MB4140.namprd12.prod.outlook.com
- (2603:10b6:5:221::13)
+        Wed, 21 Sep 2022 21:09:33 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B60E4E;
+        Wed, 21 Sep 2022 18:09:29 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 51BAE5C00AD;
+        Wed, 21 Sep 2022 21:09:27 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Wed, 21 Sep 2022 21:09:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        invisiblethingslab.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1663808967; x=
+        1663895367; bh=htQy3Ooh2pcw6WQAzMWu1eJmwAJOudfKc06grWuOtqo=; b=J
+        ppbHTkcAFfStvVNejhrKmL8Vjr+wtGhXXvgEhHIs8h9U3iLq8cx5s9mWdr6TfLQO
+        72OvoxnG7Lge1fbuasPFvIENf2zq2PfhF4/iNw2ckSTY9EExanmQymr/ch8KZRq9
+        TYJ0eXWbnPE6kD6aNJbNkxZfhOO8s2lObaHAmiGLmQOlYAtr6/fEwlgDNi7ONJA4
+        UGs7YPJK+kq5Pfpgb7wOooDeUOeiwNlS+VX84fxdb4q2aLhI3euEFrotcwhyjY5X
+        XcMG4ABQFqiSepX79FlEg75lc5KMo7XsvoaVLAqzwA+3UPqAbMj6Tx+f/HsHNQ5t
+        6/MoM4wnh89Nxor6YHXVA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1663808967; x=1663895367; bh=htQy3Ooh2pcw6WQAzMWu1eJmwAJO
+        udfKc06grWuOtqo=; b=fi2ORdOBN0I0CWaBP5fkIsaUCTcc8JskD/lUqsRzAxIe
+        S3jXMZyJNYUiUaPM/K1aDNTKGY+YrgLIopl8gI2LaxIq8zwJCssFNEc7BhrE7TEt
+        bnhpd3Dr3SmZz47P6cML9w6JAekP6t5ejVHFGyXToDzF0JfR2Tqlfr590MP1vNL1
+        gG1srjL58zA2VpbVbWKkqS353Mgk4i6NkcYmcbx8qaKIFIaVSVDnzs1tXRTFsg/s
+        04su869qXdoiobHdKV+mXbbwR80uAH5afElVhwliNJtwONEpUha95e1Bmf8obN6z
+        lN9BUQdHTcE0h0LA9fbprTV4wCqMBeNy8ymsDCL7wg==
+X-ME-Sender: <xms:xrUrY-oqOCfAwsY8K5tUzhYvnlV3SMbx3MJmMDAwvgisyOoHxcFIsg>
+    <xme:xrUrY8qdJu1-2S85E0tuhbAD2xj-XHFQR42WIVRLa3SEHg-19LHQU2sRTj-1sdjBD
+    dIAnIDBwCAe5Jg>
+X-ME-Received: <xmr:xrUrYzMDzUQkCN0aRPJrF_hm6tATLnscVF9ltunxuY9OgXpcUlr6-BG8hGPk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeefvddggedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtjeenucfhrhhomhepffgvmhhi
+    ucforghrihgvucfqsggvnhhouhhruceouggvmhhisehinhhvihhsihgslhgvthhhihhngh
+    hslhgrsgdrtghomheqnecuggftrfgrthhtvghrnhepvdejteegkefhteduhffgteffgeff
+    gfduvdfghfffieefieekkedtheegteehffelnecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomhepuggvmhhisehinhhvihhsihgslhgvthhhihhnghhs
+    lhgrsgdrtghomh
+X-ME-Proxy: <xmx:xrUrY96aEe6N-RbSnBDICudK_fZdSMt6Yq_jjlYlQ0dfzSbfdiaGqw>
+    <xmx:xrUrY94ojrMfqmAc_RGCQZG4_d14g4aTNzqBYuBNoPx21csak4ogNA>
+    <xmx:xrUrY9h2zd0zja9pRnVvztaG15ox3LOfMjrLA0puI4IZcrH7L-gyJQ>
+    <xmx:x7UrY6seDkP0rjltPFiY8IGcJCvTrI6-dXUNdmG9Rm52sLpAJIXQUA>
+Feedback-ID: iac594737:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 21 Sep 2022 21:09:26 -0400 (EDT)
+Date:   Wed, 21 Sep 2022 21:09:21 -0400
+From:   Demi Marie Obenour <demi@invisiblethingslab.com>
+To:     Jan Beulich <jbeulich@suse.com>, Ard Biesheuvel <ardb@kernel.org>
+Cc:     Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xen-devel@lists.xenproject.org,
+        Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>
+Subject: Re: [PATCH v3] Support ESRT in Xen dom0
+Message-ID: <Yyu1xC7Tlf9sS7Ro@itl-email>
+References: <20220919193257.2031-1-demi@invisiblethingslab.com>
+ <CAMj1kXEBfJUfTQ3THqqKxsU09_S98B_TjTECKwGM0WAv_5tZaA@mail.gmail.com>
+ <7930b617-d473-94dd-c7e4-33ffa19da13e@suse.com>
+ <CAMj1kXEJ9d3-8xa7rkczY7ur2zDm9CjqM7u1eEdHHmPG=Oo=xA@mail.gmail.com>
+ <3671fd52-6034-7149-ebe4-f7560c0dc6b0@suse.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB4140:EE_|SJ1PR12MB6313:EE_
-X-MS-Office365-Filtering-Correlation-Id: ee76cf79-8b8b-4aa3-439f-08da9c356caf
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: pMpHj8tivE2dSqJnKuA46VCWTJI18Q9v7RL4IN3o+2cXTsWl5Ktr1Ajzrqw6y8kJGBTWzJ/bj5qqqJ0mchgCkJqkUEKHcPcMcOuLKnHhp9zCiblUUJ1rWtlSq0q4fD00CL73N3I8LaZXNRvabhjE0F5apWOQkRXkEg9qt5TpWGS1CLjx3wjTWFc68rx53qXLuCF/xq+Wkv5hdB/rMIrTiIN83oo6FDTU4YSvXJhfUrpsIN/DSJAPYTUJnz7k71ffYs/r1lPHgNcN8lkbGG27ONtfN8An891lQS7OOSNFf86p6IsZ/pS/DBMCgmpCR8Hcwj8Etn1NReMcQJ5hMgygqOs/jMoWQ+fgKNQSOSsbJybjeqb/kU9Jo+D2Gh/pGXxOxZidWbvLRNgCjDiEyS4rXBx/7WjyGTqLK4saiD9qvuMaMZ/gdSsBpN+n9060DJ34s6fr96oqe2e2VIZgugkejb9NjUKUFW6r/6jMaEoOUg65nlfQQon11Lh3tL7qMXjED9/JHoiC63gZyql79nNu0aSk4d3hQ4xlwyH4zHb758NYFwpD+sYaDGsmz1W6b05Cb1NLdsuDXfiNtktTUhAN9zuKPCzZZ5peyfPv2QMsKK+b7uWY7qcQPni45UYouLFAI9q1FvyETXkA0Is/G1QDELes34q9GN5bAQ4SWwlUQpFcRXrgCjDmhZO1zWBrkatTyk16FW599dBkRpNohSDZqnn6zZStDzyNead0T87wovZK7y0ew/upV7zhjuwtZen/noKN3dGZWWT4M5Ax42RxkDOzAJ/q6Dwhgh2Q7/jOpVA=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4140.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(376002)(346002)(136003)(366004)(39860400002)(451199015)(7416002)(2906002)(8936002)(5660300002)(36756003)(4326008)(8676002)(66476007)(66556008)(66946007)(66899012)(41300700001)(54906003)(6486002)(478600001)(26005)(6512007)(53546011)(6666004)(316002)(110136005)(6506007)(86362001)(31686004)(38100700002)(2616005)(31696002)(83380400001)(186003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bE5ETmpWbURpQkRiNHhuVk9PRWpGODNpTW12T3BiRkxETHhlc0xmdGNoMDQ5?=
- =?utf-8?B?cVdWQmU3SUxtclMvSGtvVE5XdHZxNVNnQlFwc2puVERzVkswb3ZiL01kdFhr?=
- =?utf-8?B?L3RhdlJyK0RTZGlmV0kvRzlUeE5ZWjVIWjRIbTBjaStPQjhvcW0vbk0vVDVu?=
- =?utf-8?B?M01lTVRDMlBiZXZKcFozLytzT3pOQk1YS3dHSGI0c0dxUnYzWGJYT0JkUnpY?=
- =?utf-8?B?RFdraDdGZU5CT3BaU1R6c3pxdEVYY2E2dUhjZHB6aDRhUGRiQVZOYTRuWklo?=
- =?utf-8?B?QVJyclBvMkpNcXg4Tm52SjlhU2tZdWUvbEJWc3dZVFI2ck9JMzlDaWNIUTAy?=
- =?utf-8?B?enJESlNYN2phenYxYnNtZlYzaEJiRE5ibHNSdldLR2xabWk3VFhSTDJvUng2?=
- =?utf-8?B?TFRnNFM0UWNhTUFJbEdqdVdCWGZNQnRQUTJ5Vk5mRnpmNWZHSXowSlhwampp?=
- =?utf-8?B?bDFmbWNMQXVDUmVxV2ZkaWpLQXpXZW02WDI3L3pLUzIxSHZaSzVlZStwNW5Y?=
- =?utf-8?B?QmdNYWxJVVBuWjdocHlBYVpNQjlxam5qTERScnd2TG5USTdnYzNwWHpCYmJy?=
- =?utf-8?B?V0lUOE1GdnNqMm5WdE5ST04zMi83dzBwdlV4ajB6WHdUWXBGOEN6YnBZdVVy?=
- =?utf-8?B?SXhINjVNYmx3OXFLOHRRL0lIQ2FSd1k0TDVla2JHSitRM2QzRjh4YU1FQjBW?=
- =?utf-8?B?R05BTlBXWkc5MDVybU1FbEtoS09tTkxnemg4cDNHaFpvc1RVZTIzTkRpR21N?=
- =?utf-8?B?MFZ2RVFGT21jNUhWRTlMMG5pbFBRUWdUZE9RTUtEMTJvT0xxVytTMmNEb0Fr?=
- =?utf-8?B?T25nRkoxOGlOTkNFYVdWb0hCWnJqbEVNSGRwbXBmR1pRTXFWblhKbG1KUlEr?=
- =?utf-8?B?MUZnSW9UR3piYVYyMmxHYlVjUVV4TU5kQjRzTlV1NUlNT016YWhtYWxoTTdL?=
- =?utf-8?B?Q2o3ZEU4d3ErdkRpYjU4WGhKUStSZkhEK1haQU1CdVdrVStzUC9kVVhMalFR?=
- =?utf-8?B?VjlnMWI4T09DVk1KNGZudnZIQmsrVnVVU2ZjNFhzR28xVkp5NDRJYmEwMTNE?=
- =?utf-8?B?OHNsVnorQWZlcFZrMmhHTjFsQmZhVXQrYkdDTFpVVkNjSnVEQ2laRU9Kcnd3?=
- =?utf-8?B?VEY1V3pybmIrbHVPcVdWY1lkelhrc1VaWjZDS1VFNU5raHdMV2tTVGkwSlRw?=
- =?utf-8?B?QmF4OE5WSFVQTmUyNkcvOFRwMHlMZHhOd1RlenpUSWxvZW9PNWhlSDBDUFVG?=
- =?utf-8?B?aTY4VWlzUkl0S0NUK2ZiSTlsWnJ2M3JocnhwNHFCSklQVkwzM09uQnVmVnRD?=
- =?utf-8?B?azhSSS9YeWRWREVQTFhseTU3VjdsdGh5WVdoYklvQnlUOEwydkZGQThVOGFp?=
- =?utf-8?B?NmxBUm4rcGlhSmZjVVRiU0xUSEs1Z3ZCRGQvM04wUHJPTTNDWWtEcGxqZzRO?=
- =?utf-8?B?QXJ4eEtYTWFweTBNZCtEQll6cC9TcnB4SHJkMWpZU0cxRkRPbnBzVkZjcm1v?=
- =?utf-8?B?U2k2VFIzOHZNYWwwM3V6UHlSYmZzZkpqaDdrNFcyb2xScmFaaFYvd1dlNTBq?=
- =?utf-8?B?blg5cEN5S2JMOU5BMHhaR0VuY2VZZm15bDFCVUNiQXd3YXJPdGRhV3dnbFhE?=
- =?utf-8?B?Q0ZFOUlIR1NaQkdrWFlpMWx3SzZjK2ROWHgxZng2S0FRR0VDQm0xWWJMK3RH?=
- =?utf-8?B?V0k2eFRFQm1rYnVWZFBEWVoxQ1lERU5uQnZSeHdpTGNPV1pxemphN3ZBdnR6?=
- =?utf-8?B?SmNFcFhhZUhKejYxZ0pIN0VCL1MvQ3JvUElyZlNUOHF6Rk94TDVGRHNOaVNB?=
- =?utf-8?B?RXhsYTdDVjFQNTB5cUZrcjd2WTZObS9LemRnUnhyNEpRSStkcHZxMmdFSzRI?=
- =?utf-8?B?Q2FzazZZVDU3T0t0Y0hQOFZXN3ZLY0NLa1hHcHNyd0ZBUHQ1M3NNc2Z4dThz?=
- =?utf-8?B?OEdNSkxIWm9hZWFKTWJWaTcrOEwzdWlSaDYrSjJmd0Zia1NTWlJaZ3ZQVHd1?=
- =?utf-8?B?cHZvUVBQY3pSMHg2RkpoeTdKOWIvR25sa3Z5L3lEWmhxSzhGTGNKSHZBVlFO?=
- =?utf-8?B?QnlzNFlmeDgrSVIvZkhoWEhIeXd2WVptNHJyRUdPNlppV1hTb1Nwbkw5enBp?=
- =?utf-8?Q?OqGEzUmVrd3Pw3i3WL2MKQvzT?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ee76cf79-8b8b-4aa3-439f-08da9c356caf
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4140.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Sep 2022 00:57:29.8533
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 0y5i02wbL80KKiUhPTavwcFfR4Rr3ynJ0oYWzZJG9zOKEpw3gupLPZGmyp9hj9omnPjpy8+IslmetrW9w2A3cg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6313
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="h6mSater0Rbyeym3"
+Content-Disposition: inline
+In-Reply-To: <3671fd52-6034-7149-ebe4-f7560c0dc6b0@suse.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/21/22 16:57, Mike Kravetz wrote:
-> On 09/21/22 10:48, Mike Kravetz wrote:
->> On 09/21/22 16:34, Liu Shixin wrote:
->>> The vma_lock and hugetlb_fault_mutex are dropped before handling
->>> userfault and reacquire them again after handle_userfault(), but
->>> reacquire the vma_lock could lead to UAF[1] due to the following
->>> race,
->>>
->>> hugetlb_fault
->>>   hugetlb_no_page
->>>     /*unlock vma_lock */
->>>     hugetlb_handle_userfault
->>>       handle_userfault
->>>         /* unlock mm->mmap_lock*/
->>>                                            vm_mmap_pgoff
->>>                                              do_mmap
->>>                                                mmap_region
->>>                                                  munmap_vma_range
->>>                                                    /* clean old vma */
->>>         /* lock vma_lock again  <--- UAF */
->>>     /* unlock vma_lock */
->>>
->>> Since the vma_lock will unlock immediately after hugetlb_handle_userfault(),
->>> let's drop the unneeded lock and unlock in hugetlb_handle_userfault() to fix
->>> the issue.
->>
->> Thank you very much!
->>
->> When I saw this report, the obvious fix was to do something like what you have
->> done below.  That looks fine with a few minor comments.
->>
->> One question I have not yet answered is, "Does this same issue apply to
->> follow_hugetlb_page()?".  I believe it does.  follow_hugetlb_page calls
->> hugetlb_fault which could result in the fault being processed by userfaultfd.
->> If we experience the race above, then the associated vma could no longer be
->> valid when returning from hugetlb_fault.  follow_hugetlb_page and callers
->> have a flag (locked) to deal with dropping mmap lock.  However, I am not sure
->> if it is handled correctly WRT userfaultfd.  I think this needs to be answered
->> before fixing.  And, if the follow_hugetlb_page code needs to be fixed it
->> should be done at the same time.
->>
-> 
-> To at least verify this code path, I added userfaultfd handling to the gup_test
-> program in kernel selftests.  When doing basic gup test on a hugetlb page in
 
-Just for those of us who are easily confused by userfaultfd cases, can you show
-what that patch is? It would help me understand this a little faster.
+--h6mSater0Rbyeym3
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 21 Sep 2022 21:09:21 -0400
+From: Demi Marie Obenour <demi@invisiblethingslab.com>
+To: Jan Beulich <jbeulich@suse.com>, Ard Biesheuvel <ardb@kernel.org>
+Cc: Juergen Gross <jgross@suse.com>,
+	Stefano Stabellini <sstabellini@kernel.org>,
+	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+	linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	xen-devel@lists.xenproject.org,
+	Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>
+Subject: Re: [PATCH v3] Support ESRT in Xen dom0
 
-Actually I'm expecting that Peter can easily answer this whole thing. :)
+On Wed, Sep 21, 2022 at 10:34:04PM +0200, Jan Beulich wrote:
+> On 20.09.2022 18:09, Ard Biesheuvel wrote:
+> > On Tue, 20 Sept 2022 at 17:54, Jan Beulich <jbeulich@suse.com> wrote:
+> >>
+> >> On 20.09.2022 17:36, Ard Biesheuvel wrote:
+> >>> On Mon, 19 Sept 2022 at 21:33, Demi Marie Obenour
+> >>> <demi@invisiblethingslab.com> wrote:
+> >>>>
+> >>>> fwupd requires access to the EFI System Resource Table (ESRT) to
+> >>>> discover which firmware can be updated by the OS.  Currently, Linux =
+does
+> >>>> not expose the ESRT when running as a Xen dom0.  Therefore, it is not
+> >>>> possible to use fwupd in a Xen dom0, which is a serious problem for =
+e.g.
+> >>>> Qubes OS.
+> >>>>
+> >>>> Before Xen 4.16, this was not fixable due to hypervisor limitations.
+> >>>> The UEFI specification requires the ESRT to be in EfiBootServicesData
+> >>>> memory, which Xen will use for whatever purposes it likes.  Therefor=
+e,
+> >>>> Linux cannot safely access the ESRT, as Xen may have overwritten it.
+> >>>>
+> >>>> Starting with Xen 4.17, Xen checks if the ESRT is in EfiBootServices=
+Data
+> >>>> or EfiRuntimeServicesData memory.  If the ESRT is in EfiBootServices=
+Data
+> >>>> memory, Xen allocates some memory of type EfiRuntimeServicesData, co=
+pies
+> >>>> the ESRT to it, and finally replaces the ESRT pointer with a pointer=
+ to
+> >>>> the copy.  Since Xen will not clobber EfiRuntimeServicesData memory,
+> >>>> this ensures that the ESRT can safely be accessed by the OS.  It is =
+safe
+> >>>> to access the ESRT under Xen if, and only if, it is in memory of type
+> >>>> EfiRuntimeServicesData.
+> >>>>
+> >>>
+> >>> Thanks for the elaborate explanation. This is really helpful.
+> >>>
+> >>> So here, you are explaining that the only way for Xen to prevent
+> >>> itself from potentially clobbering the ESRT is by creating a
+> >>> completely new allocation?
+> >>
+> >> There are surely other ways, e.g. preserving BootServices* regions
+> >> alongside RuntimeServices* ones. But as the maintainer of the EFI
+> >> code in Xen I don't view this as a reasonable approach.
+> >=20
+> > Why not?
+>=20
+> Because it's against the intentions the EFI has (or at least had)
+> for this memory type. Much more than EfiAcpiReclaimMemory this
+> type is intended for use as ordinary RAM post-boot.
 
-thanks,
+What about giving that memory to dom0?  dom0=E2=80=99s balloon driver will =
+give
+anything dom0 doesn=E2=80=99t wind up using back to Xen.
 
--- 
-John Hubbard
-NVIDIA
+> >>> TBH I still don't think this is a scalable approach. There are other
+> >>> configuration tables that may be passed in EFI boot services memory,
+> >>> and MS especially were pushing back in the UEFI forum on adding table
+> >>> types that were passed in anything other the EfiBootServicesData.
+> >>
+> >> Within Xen we might abstract the approach currently implemented in
+> >> case more such pieces of data appear.
+> >>
+> >> While I can easily believe MS might be advocating for this model,
+> >> I view it as problematic not only for Xen. How would you pass on
+> >> this information across kexec, for example, without introducing
+> >> further producer-consumer dependencies requiring separate protocols
+> >> to be followed?
+> >>
+> >=20
+> > In this case, I don't think this is unreasonable for configuration
+> > tables, which only have a GUID and a base address. If the OS knows the
+> > GUID, and knows how to interpret the contents, it can decide for
+> > itself whether or not to preserve it. If it doesn't know the GUID, the
+> > memory is just treated as available memory [after EBS()]
+> >=20
+> > I personally think reclaimable memory is more suitable for these
+> > cases, which is why I am willing to consider that as well. Note that
+> > the EFI spec now also mandates device trees on ARM to be passed via
+> > EfiAcpiReclaimMemory, simply because it is the memory type suitable
+> > for firmware tables that only the OS consumes.
+>=20
+> We do preserve EfiAcpiReclaimMemory, for the simple reason that with
+> Xen "the OS" is ambiguous: Is that Xen or Dom0? Most of ACPI is
+> handled by Dom0, so we can't very well discard the data before Dom0
+> starts. (This then also matters for what you've said in the earlier
+> paragraph. In particular the sets of known GUIDs may be dissimilar
+> for Xen and the Dom0 kernel. Considering your other remark about
+> fragmentation you might agree that preserving in-place is not very
+> desirable.)
+>=20
+> Especially with DT mandated to use EfiAcpiReclaimMemory I'm willing
+> to consider using that type for the storing of ESRT (and whatever
+> else may appear along these lines). Demi, you may want to check for
+> both types in your Linux side patch ...
+
+EfiAcpiReclaimMemory does seem like a better choice.
+--=20
+Sincerely,
+Demi Marie Obenour (she/her/hers)
+Invisible Things Lab
+
+--h6mSater0Rbyeym3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEdodNnxM2uiJZBxxxsoi1X/+cIsEFAmMrtcMACgkQsoi1X/+c
+IsF4ShAAoQ8npwnu+o4G9Co3qQBtUWUNxsL4Q0H1H63aMfkgzDXCdlhT5VMrfvBE
+Sjao2soGkDlHVDwDIjefkpjUz96lrnwPODeVAKZQYNRodi4R3XYUemgJKlclWQ93
+sHxvtqvwEPISD586PUeoQZwHl0qtZOd8A/IT+JzGRwoNkhL+2xoNzEvyFflNlSGy
+hzyTirzRW1v5CDbqG7uy6V6vmFMe8jbbLzm6WlST0IWZijg+hinjuKCzN5G12HAn
+PmSTodvi/pPoYLO8dEZz8/UnFgNy2LnProNaLhaeY4ZBpNOOcdCSTW2Ai6CayRTs
+hNwMrXbuv+JDBXsqlp60payK0QCRTgsIho/HRENHybsJtKHK1jPBjBJAkzGTPazn
+J2czQOf6uyDXzF4nZmB52Tn7YN+FIPa7UPHcjw9EWJYX/gL++Kc53Hd7uIfunogD
+ZCeoXDj8XtZKoGeywKSnqYy3wjCxdCpyaEogKrjFfGNaaDs/NXyoXasF2odiAy5j
+VoSN2p1TTPQNCup8ubzEYKxS36rtJ+FR2R4pxRHydcWXhNnIMairy2acnlSamGv5
+EaV4efRS3lAYi7PphAuNA3yGtaDL6hXl11sIEdE8re80Y1aG1NHUjTzJus8bWojk
+lBNNTSXBAosaTrOMvNowF9yYvQMkIjPMEfDeN1s9toalzvpQa38=
+=DzpQ
+-----END PGP SIGNATURE-----
+
+--h6mSater0Rbyeym3--
