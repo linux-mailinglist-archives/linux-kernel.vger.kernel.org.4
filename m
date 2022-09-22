@@ -2,169 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9FE25E5770
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 02:39:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AC0E5E5767
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 02:34:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbiIVAjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 20:39:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49342 "EHLO
+        id S229823AbiIVAet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 20:34:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbiIVAjB (ORCPT
+        with ESMTP id S229745AbiIVAep (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 20:39:01 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A2DFA98D5
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 17:39:00 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28M0EEY7015983;
-        Thu, 22 Sep 2022 00:38:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : from : subject : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=WOKnIKyfnSQpXihINowX2QmhIeEEpjddrkKFnyBcaDQ=;
- b=PnW0qtQehedV7849wzvDD0pzXZlxvWyyLSXQ6kEPqmjd8pIIEL43uYUbAPdxh09QXwMv
- uGLnQ5IQFgM6r+J2d3EF49b+wdhn4/cneeroH4Hbwwx8OueTS/P6G/TlQQmbwgTm8WHy
- nToRy8CidvUN7KCHpwujpskGV4TjCU51uBNMA9FSvWBEkET/QPJUzVyugWzwrFzscmK/
- PHam23hjy2OZGt8YrHrNsZrFoa6VpZ8VTxLk2FIVAwV9MHOiBpDvqIoIOa3nkca9kq/O
- 9kJX/YYdDL0tQq5D/t2hvTCYn4EGxVSjwgSEEefIGz3yuDvlDoSrrQt/UOv/wxYAOliU dQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jr4ge1pwf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Sep 2022 00:38:46 +0000
-Received: from pps.filterd (NALASPPMTA01.qualcomm.com [127.0.0.1])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 28M0Q3M8032182;
-        Thu, 22 Sep 2022 00:33:40 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by NALASPPMTA01.qualcomm.com (PPS) with ESMTPS id 3jnqr800b6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Sep 2022 00:33:40 +0000
-Received: from NALASPPMTA01.qualcomm.com (NALASPPMTA01.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28M0Xd0g008432;
-        Thu, 22 Sep 2022 00:33:39 GMT
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (PPS) with ESMTPS id 28M0Xdii008430
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Sep 2022 00:33:39 +0000
-Received: from [10.232.65.248] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 21 Sep
- 2022 17:33:38 -0700
-Message-ID: <feb725ce-6368-d499-a28e-db1ecdfc03d3@quicinc.com>
-Date:   Thu, 22 Sep 2022 08:33:35 +0800
+        Wed, 21 Sep 2022 20:34:45 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C862563D9;
+        Wed, 21 Sep 2022 17:34:43 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id n15so5961663wrq.5;
+        Wed, 21 Sep 2022 17:34:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=CAY1Le6iZuq4WCQqQu6cWxVZo31XqaHH/Ihp+V9i8fE=;
+        b=ISUiOO8ZXuObKHX8uOtYpsLkLYs3UTINopdD8z74xAsb/7dC7fpmIQGUDDcM/SfKKy
+         RSHcv30kyrAv7xTiA2lL0DclbnlxbwmOmDOQ00ahCgzRdpAx4OYFNb40pkq1+/UUAYk8
+         sdwnvVZpPEqK/6ub+P2GWIvGfoAM2fjd1Jnu3kCV3g/+18JsBZTJZodbjlpSO208a07K
+         8jojv2QcuFHXetQuFoO/x64tCF6Mf9flhbfQ+16xNa1aX0syLmwdTvMzzbiL52Nlda+J
+         tSUVWMU7eyv0JcSCw1be9MflIqyqMig1EF/qJ3huqFBJxS3wfGypycqZos1+zGd6gcPh
+         spiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=CAY1Le6iZuq4WCQqQu6cWxVZo31XqaHH/Ihp+V9i8fE=;
+        b=1F/P8kUhcG+pKSYl1XQJYoFHVaIzYwXrej/GhZ7szWN8MmLuRVyrO/2X4638x6q5ba
+         l800JJgck2pmuRSFJ/QIyKJwf720dPqlXyI9H3QJFvfFaG1nN4uRnCoMYNxzDjdtJ3HE
+         TXgiA/thgVQ6bi0AUqZLd3+/jvCkKXBH1lU4QmZC0F0PI3+rii3ClOc6onBWt9aiRx76
+         mE0UsM6eENmU9pDoGPwcXBxWxTVDko0B4GudPLJEew/vrOxtFACtldMWyhycrcultGwc
+         VYO5J+ICk14Av9MgFWuMbZLKkBTgBeq6T1IiDwishGY6p5ClWdEMX2jCuFOHW8n2EvOi
+         XsYQ==
+X-Gm-Message-State: ACrzQf2CoGIgIzf2McdnmsRoREbT+qI7OTxI5DPsvipP64SaZRvi13q4
+        5Dbw+E7HaRaN3/1pqLH4gapfC1e6WvgomZD9+cg=
+X-Google-Smtp-Source: AMsMyM73thTpBJgLUqh7P9IPsOlGbh/oChjYicta1vc7eihCxCo33TFEHV78aUIM3ojV+3ZGUw+njmrAwxvBZzKrm8w=
+X-Received: by 2002:a5d:4302:0:b0:225:5303:39e5 with SMTP id
+ h2-20020a5d4302000000b00225530339e5mr351125wrq.380.1663806881537; Wed, 21 Sep
+ 2022 17:34:41 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.3
-From:   Kassey Li <quic_yingangl@quicinc.com>
-Subject: Re: [PATCH] cgroup: align the comm length with TASK_COMM_LEN
-To:     <rostedt@goodmis.org>, <mingo@redhat.com>, <tj@kernel.org>,
-        <william.kucharski@oracle.com>
-CC:     <linux-kernel@vger.kernel.org>
-References: <20220920084923.18476-1-quic_yingangl@quicinc.com>
-Content-Language: en-US
-In-Reply-To: <20220920084923.18476-1-quic_yingangl@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: S2d9lGKw8KUWOXQfboA_4O-kfBG6L4KA
-X-Proofpoint-ORIG-GUID: S2d9lGKw8KUWOXQfboA_4O-kfBG6L4KA
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-21_13,2022-09-20_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- lowpriorityscore=0 mlxlogscore=677 adultscore=0 suspectscore=0
- clxscore=1015 mlxscore=0 priorityscore=1501 bulkscore=0 malwarescore=0
- phishscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209220002
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <1663294501-6377-1-git-send-email-u0084500@gmail.com> <CAJZ5v0gL_U=FwY8W-A2pGSif6wbvyFUL7WQ2jcqHFgT2ucqY6Q@mail.gmail.com>
+In-Reply-To: <CAJZ5v0gL_U=FwY8W-A2pGSif6wbvyFUL7WQ2jcqHFgT2ucqY6Q@mail.gmail.com>
+From:   ChiYuan Huang <u0084500@gmail.com>
+Date:   Thu, 22 Sep 2022 08:34:29 +0800
+Message-ID: <CADiBU39-=9n_=Kk_98y-pwJ6nyzGaaDy6SFqfnYJubY9mZ=idg@mail.gmail.com>
+Subject: Re: [RFC] PM: core: Add pm_wakeup_pending check in device suspend_noirq
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Anton Vorontsov <anton@enomsg.org>,
+        Colin Cross <ccross@android.com>,
+        Tony Luck <tony.luck@intel.com>, cy_huang@richtek.com,
+        gene_chen@richtek.com, Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hello:
-    here is the instance of the problem：
-    may you kindly review this change  ?
+Rafael J. Wysocki <rafael@kernel.org> =E6=96=BC 2022=E5=B9=B49=E6=9C=8822=
+=E6=97=A5 =E9=80=B1=E5=9B=9B =E5=87=8C=E6=99=A82:13=E5=AF=AB=E9=81=93=EF=BC=
+=9A
+>
+> On Fri, Sep 16, 2022 at 4:15 AM cy_huang <u0084500@gmail.com> wrote:
+> >
+> > From: ChiYuan Huang <cy_huang@richtek.com>
+> >
+> > In 'dpm_suspend_noirq', it will do the sychronized_irq to guarantee all
+> > irqs are all done, and then do any wakeup flag set.
+> >
+> > For some peripherial deivces like as I2C/SPI, to speed up the irq handl=
+ing,
+> > it may use 'pm_stay_awake' and really handle in another thread context =
+like
+> > as workqueue.
+> >
+> > But in mem suspend flow, after 'dpm_suspend_noirq" stage, the next
+> > 'pm_wakeup_pending' check will be at 'syscore_suspend'.
+> >
+> > The checkpoint seems too late and cause I2C/SPI fail during 'noirq' to
+> > 'syscore_suspend'
+>
+> What exactly do you mean by "fail" here?
+For the below case
+Once the adapter is marked as 'Suspend', any i2c_xfer or spi_xfer will
+directly return 'ESHUTDOWN".
+There's no real I/O transferred, only the direct returned error code.
 
-Unable to handle kernel write to read-only memory at virtual address 
-ffffffbcf7450000
-
-Call trace:
-  dump_backtrace.cfi_jt+0x0/0x4
-  show_stack+0x14/0x1c
-  dump_stack+0xa0/0xd8
-  die_callback+0x248/0x24c
-  notify_die+0x7c/0xf8
-  die+0xac/0x290
-  die_kernel_fault+0x88/0x98
-  die_kernel_fault+0x0/0x98
-  do_page_fault+0xa0/0x544
-  do_mem_abort+0x60/0x10c
-  el1_da+0x1c/0xc4
-  trace_event_raw_event_cgroup_migrate+0x124/0x170
-  cgroup_attach_task+0x2e8/0x41c
-  __cgroup1_procs_write+0x114/0x1ec
-  cgroup1_tasks_write+0x10/0x18
-  cgroup_file_write+0xa4/0x208
-  kernfs_fop_write+0x1f0/0x2f4
-  __vfs_write+0x5c/0x200
-  vfs_write+0xe0/0x1a0
-  ksys_write+0x74/0xdc
-  __arm64_sys_write+0x18/0x20
-  el0_svc_common+0xc0/0x1a4
-  el0_svc_compat_handler+0x18/0x20
-  el0_svc_compat+0x8/0x2c
-
-
-
-On 9/20/2022 4:49 PM, Kassey Li wrote:
-> __string could get a dst string with length less than
-> TASK_COMM_LEN.
-> 
-> a task->comm possbile change dynamic that can cause
-> out of bounds access for the dst string buffer.
-> 
-> change it as arrary with same length TASK_COMM_LEN,
-> this aligns the same usage of include/trace on task->comm.
-> 
-> Signed-off-by: Kassey Li <quic_yingangl@quicinc.com>
-> ---
->   include/trace/events/cgroup.h | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/include/trace/events/cgroup.h b/include/trace/events/cgroup.h
-> index dd7d7c9efecd..d0c5f93e3611 100644
-> --- a/include/trace/events/cgroup.h
-> +++ b/include/trace/events/cgroup.h
-> @@ -130,7 +130,7 @@ DECLARE_EVENT_CLASS(cgroup_migrate,
->   		__field(	u64,		dst_id			)
->   		__field(	int,		pid			)
->   		__string(	dst_path,	path			)
-> -		__string(	comm,		task->comm		)
-> +		__array(char,   comm, TASK_COMM_LEN)
->   	),
->   
->   	TP_fast_assign(
-> @@ -139,12 +139,12 @@ DECLARE_EVENT_CLASS(cgroup_migrate,
->   		__entry->dst_level = dst_cgrp->level;
->   		__assign_str(dst_path, path);
->   		__entry->pid = task->pid;
-> -		__assign_str(comm, task->comm);
-> +		memcpy(__entry->comm, task->comm, TASK_COMM_LEN);
->   	),
->   
->   	TP_printk("dst_root=%d dst_id=%llu dst_level=%d dst_path=%s pid=%d comm=%s",
->   		  __entry->dst_root, __entry->dst_id, __entry->dst_level,
-> -		  __get_str(dst_path), __entry->pid, __get_str(comm))
-> +		  __get_str(dst_path), __entry->pid, __entry->comm)
->   );
->   
->   DEFINE_EVENT(cgroup_migrate, cgroup_attach_task,
+>
+> >. But some adapter was already be marked as 'suspended'
+> > at 'noirq' callback, any I2C/SPI xfer will return the error flag '-ESHU=
+TDOWN'.
+> >
+> > After the code trace, it seems all device callback will do 'pm_wakeup_p=
+ending'
+> > check, except 'noirq'.
+> >
+> > This patch is to add 'pm_wakeup_pending' check in 'noirq' sage to preve=
+nt this
+> > kind of usage.
+> >
+> > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> > ---
+> > Hi,
+> >
+> > Is there any rule to define when I2C/SPI host controller need to mark a=
+dapter as
+> > 'suspended'?
+> >
+> > I trace 'drivers/i2c/buses'.It seems there's no common rule, Some are '=
+suspend',
+> > others may did it at 'suspend_noirq'.
+> >
+> > ---
+> >  drivers/base/power/main.c | 5 +++++
+> >  1 file changed, 5 insertions(+)
+> >
+> > diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+> > index c501392..7cd7dc5 100644
+> > --- a/drivers/base/power/main.c
+> > +++ b/drivers/base/power/main.c
+> > @@ -1210,6 +1210,11 @@ static int __device_suspend_noirq(struct device =
+*dev, pm_message_t state, bool a
+> >         if (async_error)
+> >                 goto Complete;
+> >
+> > +       if (pm_wakeup_pending()) {
+> > +               async_error =3D -EBUSY;
+> > +               goto Complete;
+> > +       }
+> > +
+> >         if (dev->power.syscore || dev->power.direct_complete)
+> >                 goto Complete;
+> >
+> > --
+> > 2.7.4
+> >
