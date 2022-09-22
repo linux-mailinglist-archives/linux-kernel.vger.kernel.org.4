@@ -2,74 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBDD15E6A84
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 20:17:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 503C35E6A89
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 20:18:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232040AbiIVSRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 14:17:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56022 "EHLO
+        id S232447AbiIVSS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 14:18:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232373AbiIVSRR (ORCPT
+        with ESMTP id S232392AbiIVSSY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 14:17:17 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F34ECCF4
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 11:17:16 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id h21so6899367qta.3
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 11:17:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=1SnYPOYWPXNRM2Psm7rj/ZZy/4CgkkceBm/2enTCC9U=;
-        b=kScHmmvBQQeXEUoxKTYBLHOonsFqgth8+o3WQMQwdN+YZu5PkXbN9yUGeXQd/Uoaen
-         ou+HDIkcebMZWz37Ij3VqywT+0ljJkxdWyYPHd7GFjBRsmpmfkdj3CatgU6YH84/avKU
-         iXK2s46UaCJiEiNzaJ73jyvd3Yh7AIMt1ptBnGDPoW7gipMpr1+Uoslv9CVVPtajrcFL
-         68ZNfX19xJpg5RBhveqP5taX3BM8TtoAZ3zA1Ae7HvHJYLlLHjL1IsjsxzLWDuYlICN6
-         k1UbOA+zKgsnbTML41Eib94Mxwc3wqFVcp2zUS2PxmbLVp4uNk1gmD1aGcIE8klkS384
-         8Ymw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=1SnYPOYWPXNRM2Psm7rj/ZZy/4CgkkceBm/2enTCC9U=;
-        b=Qz5f65epf2L5LzN6hiQV9Ws34rQtQBbR8eOgPi86CAqk65s5WguuDn4AQ+5mCQYfpS
-         b1qeXjOt3J7H+W40/dayYxB17IsP4mWuoUQA8Rsgwy7Y/PZ7j6qbtl9XuiANzm0EG3aF
-         deEWVGabTciYWffSeD9OlJGurTiWdc9HVxwMhRqEePNvetDip47oYaMe/YKZzPHYwBbe
-         4s2sp7wINW1QpeiyPtQJ45yiFJZe329x6VMNu3zcILJlzOmuRD+BK9poUUWkmlIFbxWa
-         GObHttzmaQf1wQRycwOdQCdQi8Ow7YYGziPS4dKupDn4DGK6AObHGCXQYkTq7lbmBXrc
-         ALcQ==
-X-Gm-Message-State: ACrzQf1R0sfZMdCjXYRvQ4pqga/P+1fi8hQT8daj2qovYF4KgfSM+c+V
-        kWTavOfweObUC5FchnVxb2A=
-X-Google-Smtp-Source: AMsMyM4UtZoCgwhBcqHMe/T1MoOeSeqkKSdnQ24nY00Sf0kkYMUwS7O40wN8a3eP67aqz7mkjk2esg==
-X-Received: by 2002:a05:622a:1989:b0:35c:dd7a:4206 with SMTP id u9-20020a05622a198900b0035cdd7a4206mr4007735qtc.592.1663870635655;
-        Thu, 22 Sep 2022 11:17:15 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id d18-20020ac851d2000000b00342fa1f4a10sm3807254qtn.61.2022.09.22.11.17.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Sep 2022 11:17:15 -0700 (PDT)
-Message-ID: <8c1c4506-bd21-a35e-d6e5-3c7897715c18@gmail.com>
-Date:   Thu, 22 Sep 2022 11:17:13 -0700
+        Thu, 22 Sep 2022 14:18:24 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D86D910912A;
+        Thu, 22 Sep 2022 11:18:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663870703; x=1695406703;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=irvpxRGJNiroM1fXkhuMmUhHwaH1jS9Bj7zSfZHS2YY=;
+  b=anQvo6aPXHB1/aXMtMyd2JhzZviW6g3lc23KwKyZHqzdKSdTEPKTQGyc
+   /QUrg3MVohEdIgsoUSxWACnfkHD24Tjr3jYOLCSmGPf65zsiMD2kRZFZb
+   UywDvHf0/Ed+U2S2QM5zsc2VWBTi8K7qHDmblp08c0InFBL5AlrkwVDyy
+   9Ndx6C6EQkgq+eWaspsmTNj0sWts8YfG08UGd3lP5o1bp7mU5igLiPqvz
+   IFzo5c18+js1u1+oaB7LtQJf7LaE5qhz/0orqiUcsjd5sCwecoxcjX2Pl
+   9fmAms5qGgHCCPoTsJi7qaMUAL3TnwGEpvNg4f/2STOLDzoydUuLmOH4R
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="300371015"
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="300371015"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 11:17:55 -0700
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="682328889"
+Received: from sponnura-mobl1.amr.corp.intel.com (HELO [10.209.58.200]) ([10.209.58.200])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 11:17:53 -0700
+Message-ID: <9d3d3424-a6d4-4076-87ff-a1c216de79c6@intel.com>
+Date:   Thu, 22 Sep 2022 11:17:53 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [GIT PULL] ARM: SoC fixes for 6.0-rc6
+Subject: Re: [PATCH] ACPI: processor_idle: Skip dummy wait for processors
+ based on the Zen microarchitecture
 Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, soc@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <acdecda4-b11a-4e15-9ac9-6d2696218012@www.fastmail.com>
- <87427dd0-7307-57b2-4008-2ffb839a099a@gmail.com>
- <CAHk-=wiux9J6zi8sEHyLBVYc7zsWe6JwYOf7ggF+Oowc6fp4tQ@mail.gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <CAHk-=wiux9J6zi8sEHyLBVYc7zsWe6JwYOf7ggF+Oowc6fp4tQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "Nayak, K Prateek" <KPrateek.Nayak@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     "rafael@kernel.org" <rafael@kernel.org>,
+        "lenb@kernel.org" <lenb@kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "andi@lisas.de" <andi@lisas.de>, "puwen@hygon.cn" <puwen@hygon.cn>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rui.zhang@intel.com" <rui.zhang@intel.com>,
+        "gpiccoli@igalia.com" <gpiccoli@igalia.com>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "Narayan, Ananth" <Ananth.Narayan@amd.com>,
+        "Shenoy, Gautham Ranjal" <gautham.shenoy@amd.com>,
+        "Ong, Calvin" <Calvin.Ong@amd.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+References: <20220921063638.2489-1-kprateek.nayak@amd.com>
+ <20e78a49-25df-c83d-842e-1d624655cfd7@intel.com>
+ <0885eecb-042f-3b74-2965-7d657de59953@amd.com>
+ <88c17568-8694-940a-0f1f-9d345e8dcbdb@intel.com>
+ <MN0PR12MB610110D90985366A4B952CCCE24E9@MN0PR12MB6101.namprd12.prod.outlook.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <MN0PR12MB610110D90985366A4B952CCCE24E9@MN0PR12MB6101.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,21 +84,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/22/22 11:13, Linus Torvalds wrote:
-> On Thu, Sep 22, 2022 at 10:19 AM Florian Fainelli <f.fainelli@gmail.com> wrote:
->>
->> In case Linus has not had a chance to pull it just yet, could you amend
->> it?
+On 9/22/22 10:48, Limonciello, Mario wrote:
 > 
-> I did see this email, but as I expect to be AFK for the next few
-> hours, I took Arnd's pull request as-is.
+> 2) The title says to limit it to old intel systems, but nothing about this actually enforces that.
+> It actually is limited to all Intel systems, but effectively won't be used on anything but new
+> ones because of intel_idle.
 > 
-> I could pull your Broadcom fixes directly on top if you/Arnd would
-> prefer that as a solution?
+> As an idea for #2 you could check for CONFIG_INTEL_IDLE in the Intel case and
+> if it's not defined show a pr_notice_once() type of message trying to tell people to use
+> Intel Idle instead for better performance.
 
-Thanks for the offer, no real urgency on my side, if there is a -rc7, 
-maybe Arnd can submit a follow up for ARM SoC fixes, as there is a good 
-chance we will accumulate more of those between -rc6 and then. If not, 
-and Arnd is fine with it, yes please pull mine directly, thanks!
--- 
-Florian
+What does that have to do with *this* patch, though?
+
+If you've got CONFIG_INTEL_IDLE disabled, you'll be slow before this
+patch.  You'll also be slow after this patch.  It's entirely orthogonal.
+
+I can add a "Practically" to the subject so folks don't confuse it with
+some hard limit that is being enforced:
+
+	ACPI: processor idle: Practically limit "Dummy wait" workaround to old
+Intel systems
+
+BTW, is there seriously a strong technical reason that AMD systems are
+still using this code?  Or is it pure inertia?
