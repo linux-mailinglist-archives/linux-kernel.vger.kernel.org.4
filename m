@@ -2,276 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 085E95E5B2B
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 08:16:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 520EA5E5B24
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 08:12:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229808AbiIVGQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 02:16:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42596 "EHLO
+        id S229606AbiIVGM0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 02:12:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbiIVGQQ (ORCPT
+        with ESMTP id S229563AbiIVGMW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 02:16:16 -0400
-X-Greylist: delayed 343 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 21 Sep 2022 23:16:14 PDT
-Received: from mp-relay-02.fibernetics.ca (mp-relay-02.fibernetics.ca [208.85.217.137])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 854CDB4EAB;
-        Wed, 21 Sep 2022 23:16:14 -0700 (PDT)
-Received: from mailpool-fe-02.fibernetics.ca (mailpool-fe-02.fibernetics.ca [208.85.217.145])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mp-relay-02.fibernetics.ca (Postfix) with ESMTPS id 9C50C70C38;
-        Thu, 22 Sep 2022 06:10:29 +0000 (UTC)
-Received: from localhost (mailpool-mx-01.fibernetics.ca [208.85.217.140])
-        by mailpool-fe-02.fibernetics.ca (Postfix) with ESMTP id 8595F60907;
-        Thu, 22 Sep 2022 06:10:29 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at 
-X-Spam-Score: -0.199
-X-Spam-Level: 
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-Received: from mailpool-fe-02.fibernetics.ca ([208.85.217.145])
-        by localhost (mail-mx-01.fibernetics.ca [208.85.217.140]) (amavisd-new, port 10024)
-        with ESMTP id wCUOaCp7elQp; Thu, 22 Sep 2022 06:10:28 +0000 (UTC)
-Received: from [192.168.48.17] (host-45-78-203-98.dyn.295.ca [45.78.203.98])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        (Authenticated sender: dgilbert@interlog.com)
-        by mail.ca.inter.net (Postfix) with ESMTPSA id 65A826026F;
-        Thu, 22 Sep 2022 06:10:28 +0000 (UTC)
-Message-ID: <5a875163-097b-1ba6-3b06-dac4682d4464@interlog.com>
-Date:   Thu, 22 Sep 2022 02:10:15 -0400
+        Thu, 22 Sep 2022 02:12:22 -0400
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2086.outbound.protection.outlook.com [40.107.105.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773E1B5170;
+        Wed, 21 Sep 2022 23:12:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QH4R5pE22SQBtZ+8Sd0Isy9wFtcvniXleZCUbOnyJwBtEuSRFyoqrCf57Fux1+nwvosUXsOoZUnKIl4/7rawrItBT42pyGYO7BuAJ9FvCuewmcNM+BRxlbFd9XYNp09dPjAWZ83ccykNDFrbkyDIr4wmQElhz0M6bUcdu+EI7s8SLkX4G8HGt8j5sSS0gya/u5M7hJaolFjlGCmpHpd17MYq0EkszIS/+qlb+eZDSLV3xcLeoiViRlQVKL7CcxXt2yBj6LNlMYZmTX+Ehg+nq9C8SDQOUiPZtwmQ2vZPokJrwdrT4zfAhbh/Erz36opoBDi+E2ve0SBsrMXVJR8H4Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/WOUVXNLFDX+WoE27T33pXzOWdL2eC2PH3pSXbEjyGc=;
+ b=eFx1bV+DFc63eP/OIuThfA6YuYQWYHe7QrOGJLuDI7pqGrGBYHMnynQf6FE49IH7IG4twob1j5nSPPp0EyNYrBeFLDqbGGcskuWOos+n+lKX2wIdLMOrM9o9Hgip1NUNue7TR0nXMpc6y3GXHmka7YafnX4b85abSKSMoVZA6z3xRC+PyOPfu62Ie5oYZir8rOetb2LQXNlqLqFPEFEb8oxPxfjtUCWgnFM+DnJWOYMfg0PLJWvbyRHndtIF+deq5VMTjbAUgU+3j1A2nLEiexRz9XRylK/7bx20Ae3Q6CmP5izvz+HYjTjrWp2KpUyl+E8/ery1VUxgZpUXgQyoUQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/WOUVXNLFDX+WoE27T33pXzOWdL2eC2PH3pSXbEjyGc=;
+ b=5W3IfmBRT94noBjldJd+UXIt5hnEX3ZSnwU+UUoOiou2BxEZSlnup2jkyfSsLu60F8+FLaNYbI7nSIMIITPFJRcJ9ssMhJsuyjCPm+/lu563D5dq3owJVus/AbpCIKRt9zHK/pUq8vzI4Dro0watBwNzDAp44LGxiyRohKct/DIASHHOjgjZJ6eqhYSszaS9Lcy6eOYC6ci/O4/PXKEVAvFC7vnEnKkNw1mwcJiQiDmHg4cXMGZiElrqu9ONTgU8PUUkSQz9VM+dE/y5yhmb9TsT7+Hof6TTesVjuLZY8K3N4kR4n3Hw/uCUyBo/vfmUGsRTibSlQPBIGTQqMwzRRg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from VE1PR04MB6560.eurprd04.prod.outlook.com (2603:10a6:803:122::25)
+ by DU2PR04MB9211.eurprd04.prod.outlook.com (2603:10a6:10:2fa::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.14; Thu, 22 Sep
+ 2022 06:12:16 +0000
+Received: from VE1PR04MB6560.eurprd04.prod.outlook.com
+ ([fe80::358f:58dc:c0c2:1155]) by VE1PR04MB6560.eurprd04.prod.outlook.com
+ ([fe80::358f:58dc:c0c2:1155%7]) with mapi id 15.20.5654.016; Thu, 22 Sep 2022
+ 06:12:16 +0000
+Message-ID: <6f42a382-c5aa-ba16-f330-69a07476e2aa@suse.com>
+Date:   Thu, 22 Sep 2022 08:12:14 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v3] Support ESRT in Xen dom0
+Content-Language: en-US
+To:     Demi Marie Obenour <demi@invisiblethingslab.com>
+Cc:     Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xen-devel@lists.xenproject.org,
+        =?UTF-8?Q?Marek_Marczykowski-G=c3=b3recki?= 
+        <marmarek@invisiblethingslab.com>, Ard Biesheuvel <ardb@kernel.org>
+References: <20220919193257.2031-1-demi@invisiblethingslab.com>
+ <CAMj1kXEBfJUfTQ3THqqKxsU09_S98B_TjTECKwGM0WAv_5tZaA@mail.gmail.com>
+ <7930b617-d473-94dd-c7e4-33ffa19da13e@suse.com>
+ <CAMj1kXEJ9d3-8xa7rkczY7ur2zDm9CjqM7u1eEdHHmPG=Oo=xA@mail.gmail.com>
+ <3671fd52-6034-7149-ebe4-f7560c0dc6b0@suse.com> <Yyu1xC7Tlf9sS7Ro@itl-email>
+From:   Jan Beulich <jbeulich@suse.com>
+In-Reply-To: <Yyu1xC7Tlf9sS7Ro@itl-email>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: LO4P123CA0059.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:153::10) To VE1PR04MB6560.eurprd04.prod.outlook.com
+ (2603:10a6:803:122::25)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Reply-To: dgilbert@interlog.com
-Subject: Re: KASAN: use-after-free Read in sg_release
-Content-Language: en-CA
-To:     Rondreis <linhaoguo86@gmail.com>, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <CAB7eexK_jr1LWOO9RWrBF9as7gAS9kpHjrZFRuRrRJF=1H4W6A@mail.gmail.com>
-From:   Douglas Gilbert <dgilbert@interlog.com>
-In-Reply-To: <CAB7eexK_jr1LWOO9RWrBF9as7gAS9kpHjrZFRuRrRJF=1H4W6A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VE1PR04MB6560:EE_|DU2PR04MB9211:EE_
+X-MS-Office365-Filtering-Correlation-Id: 179652b7-3cef-462c-d480-08da9c616608
+X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: In0VVcVyhDGBjrQpfjJAQyLSU4kshi+Zvu0SMXAwGudG2etDyNT4Eyw/3fW2UeyIt+/1Nz/hzwaCmsCmqQkkfXnl5K99rC0QAS2jmu7t3CpgMw8QLNUQQWq3gtbZLNXqDZ+FxwlWGmOllMZ4lvjXrvYNKXE2OlSg26r6xBwQN6OQ5YlrxyhxZlLLkTMBk/dIerpbrKooSDjun0/Xg57cfie6tQVGOfxiqSE9OPPeml+5w13Eqx2OesRaEOiDS/PXrDLOGTjhvHofdpnIzGUdKWl2Z1j62qCsd0R38j65Nk00EgTdeeqDOTEGIIMYZCo7ddjJdQo9mZ9wAKkHgQ74XHwACawdD4fBaea+yzhQyaQwO/5I2aR8+gbc0TDtTE+DGw4DUnUPQjRBkuR2/E/PK70n6CywzDoSY0+cAd7WpYTdo6WufHu9eTkzJ7wLFfUEEegvko6qS+qnKYY8wLBR48NZmXLD22VUicU1XfCK+KES0WyYyIaokWz0Y8vfyujiZVKK46I37FZRwBdvVmRDKh9Oa0mZlt3JOlvXKOU/g4yCw4FVNhjSco9txALjeUhlg637One9OpIdPCGHsar7OfLNOb9zZaMWa+7GudFxpKUe0ldR4mjiWW7wdra+I5ZIcvQ2iNPRmPmoEv1RcYC3X13J1HNpDO6dFasExU6/jMJ36r17aAYjKIsNd7KP5Kh8JfprvFqCsPCz8kS5NWV99TEVGReXTbHDQ9a2OPXJc0LNIuR+IBDKk0LM/6PYAvHkKOlBOeSOdTAStQjvnKaoRJJNQIM5RV8Y+mpMXPeSZIU=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6560.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(376002)(366004)(136003)(396003)(346002)(451199015)(26005)(6512007)(53546011)(316002)(6916009)(54906003)(6486002)(478600001)(186003)(2616005)(83380400001)(31696002)(86362001)(38100700002)(6506007)(31686004)(5660300002)(2906002)(4326008)(66556008)(66946007)(41300700001)(66476007)(8936002)(8676002)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QTA3N2FYWEZ5dGJ2T01UMWEwd0EvU1VNbk5mQmlRNTRIRlpLMHdudEhWVmlx?=
+ =?utf-8?B?TUVWVkpEbG9EOEhzSFJOdnQraUdPd3MwZkpWMVYva2ttS0E1QklVUmxld3R4?=
+ =?utf-8?B?TENwcmdNdnR6Y3ZvSkVsRzlnY3ZFWXZPc01nTVlwVDA0d2I1eFN5VE0xSWV5?=
+ =?utf-8?B?ZDVEWjROdGF6Qm91dlRiZS9yMjM5eVVmNGluWlVzYUxXOGRXQXZVQTBsa2hS?=
+ =?utf-8?B?Ui81anlzdFUxc3pzYVZpZDJxbnB2VndNeWFJYTJSdmw0NXdQM3dwZ3hlOVFi?=
+ =?utf-8?B?M1VOb0JSSmxJSklTWnNCSHIyZnEvWnNUby9pVjYrMXJHb2ZJQkw2MlVxWDdr?=
+ =?utf-8?B?blNzZzlWeHc1L05tOTNqVXJ3aVBPN2dBMDJ5N3BiQUhIeGRXcExadzl6dU9C?=
+ =?utf-8?B?aFIvTlpFcUJZOFlwdlk4ZGdIRzJMbDZBSXN2Rm1mWS9hUXk2dkZaeGhRVXRX?=
+ =?utf-8?B?emhsalIyQUhhRk5POWNBU0N3QVpLRHArWjMxZDFkZHFPRFZXOEN5b2lmeWtp?=
+ =?utf-8?B?alJWZDFqdHN6dEJVQktzZ0JUa3VZbXBnWTJqMUcrRVpJanFYMUM5V3lMaVlD?=
+ =?utf-8?B?UjJXdWxLN2IwcVBGWUIzZll0VGoyUVlUOHZ1alEzTTZpOEdKRGIxVi90STZm?=
+ =?utf-8?B?VXVSZXBUOE4yOHc3WlNiU1lEdWxUWnRnS0FyU0l5dmdHa2xSS05LTmRlYnVz?=
+ =?utf-8?B?U2JaVkEzOXc1UW9leFRmSXN0L0pUd0trQU9TUkFKeHlFWk9sVEJYSFBndXFj?=
+ =?utf-8?B?WkhJa2FLR0ZEczA4TnJuWEVvRk93QjhXWGVySzhrQVovRUttSThRcVB4ZVkr?=
+ =?utf-8?B?dEpCN3hldWUyclF6TzRpVTY0RU5lV3pUbkNpb01jNmoyaFhBbHpHZDRodE51?=
+ =?utf-8?B?VXlDekRSVjQzQnJjM3g4SGwwZ0s2NGZqa2c0cXBlRzN4OWFGbTFRRjdyY3Ru?=
+ =?utf-8?B?bDcvdHJUajNxd2wxclplMmRKaDF3SmZHT1M2eVJvakEyT1UvbWpmNmxXdGRr?=
+ =?utf-8?B?U1IrQUxYRm5YUHZZelZDb1B0ZE9aanpBeDE0YmFyUFFIQVc5UDZzVkR5eHpi?=
+ =?utf-8?B?dmdJK2tzNG0vY1ZtUDZzcjB3c3JpRTY5VUFNT0IxdytKbVJ2Q2x0RkZWclVJ?=
+ =?utf-8?B?c0J2Z0ZPcDR6R0U2NXAyb2lMVHdEWkEvZXNXTG96L1RhR2FaQXdlSVFyUGln?=
+ =?utf-8?B?SDBHZTVmUklJcjVjTHpwcVFFNncwL1lpdmRqK3hNWGs0ZGV4NlpJbGhQMGY0?=
+ =?utf-8?B?K1VVV29YVG1sMVZqU2Z0SUJtZzU3aWJtMkJrN1puczY1QkZPMlZScThXSmht?=
+ =?utf-8?B?UTlGdkFnU3FrUFBWdGFFZFZ3c1FvK0RDMFBJOXJqWHJnOWZyZGhrZE5QV21r?=
+ =?utf-8?B?YmkzQm14UXJZTmI3VW9uQUh3bjVnT1B2clNFZHg1VjM0MVUxZXRkKzFmTnFi?=
+ =?utf-8?B?dlNaUUxJRlZnU0VZM2VSTnN3MWpNVmUwdlVrZGw2SDdrYUhxVm5LSDZ4aUxN?=
+ =?utf-8?B?UkoyeWRuSmFUZG1lRFN6ZWFWU0NTMmJKYWdQQ0NuV0F5YTNETGlpVGJJTmJZ?=
+ =?utf-8?B?Rm11c2R6cENIWkVuUS9ZRVhldEpoT1lUbENVV3dSaWhtZVVJVmtQaUNIY3F2?=
+ =?utf-8?B?QTFXZGFBNG9oUzRaMi9iUXFnZ0c2elkrMmNRdXMzSGV1SU1HOXlBUWFFVVVW?=
+ =?utf-8?B?RmNxU3hBOHduaHBqMmhWM0g4YTZjc0QyZDRYczlHRDd5SE1WK1lrN0RrVkZE?=
+ =?utf-8?B?YzhtUEJhRjNLWUZqeW9EcFh1VHhBYldlcWpHOEFsRnJFa2Y2VEZwSGFNeU83?=
+ =?utf-8?B?ZXJWTlRtT1BPS3VLdjBYb0NmbUhmcE5vbG5WZE9EMnlBRmF1NTFCY2h2UU13?=
+ =?utf-8?B?VitsUW5YcVlxK1BUSnlQaEE1a2xmZFFQZ0VXZ3VydHpSY3dJbFhjbUliWEtU?=
+ =?utf-8?B?Tm0wK3FCZVpxS01wR0RjRitNaVBzVENxU0JOWWtGVmhyQXlMWU16R2FHbG9Z?=
+ =?utf-8?B?RWZERHludU5UekhLMU9DRkZLeXR6QkhNUW9YbDJjbTEraTZJdnpYVCtYVXJu?=
+ =?utf-8?B?Y1J4Lzd3ZElsczkzMHUrak4xTG9zMHVZUUI3VUhrVmt4UUh0NUx3S0R0L2No?=
+ =?utf-8?Q?2ydeilN12m/CpRDHJtw9pLWfd?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 179652b7-3cef-462c-d480-08da9c616608
+X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6560.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Sep 2022 06:12:16.5211
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: R257653LUGO8Lm7f9D0BhbDoQviJci2HabRsUUNyXdBbgr3xl5N345XHiHEkCiusWvA4SZNw0H+SoREszMmeoQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB9211
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-20 10:46, Rondreis wrote:
-> Hello,
+On 22.09.2022 03:09, Demi Marie Obenour wrote:
+> On Wed, Sep 21, 2022 at 10:34:04PM +0200, Jan Beulich wrote:
+>> On 20.09.2022 18:09, Ard Biesheuvel wrote:
+>>> On Tue, 20 Sept 2022 at 17:54, Jan Beulich <jbeulich@suse.com> wrote:
+>>>>
+>>>> On 20.09.2022 17:36, Ard Biesheuvel wrote:
+>>>>> On Mon, 19 Sept 2022 at 21:33, Demi Marie Obenour
+>>>>> <demi@invisiblethingslab.com> wrote:
+>>>>>>
+>>>>>> fwupd requires access to the EFI System Resource Table (ESRT) to
+>>>>>> discover which firmware can be updated by the OS.  Currently, Linux does
+>>>>>> not expose the ESRT when running as a Xen dom0.  Therefore, it is not
+>>>>>> possible to use fwupd in a Xen dom0, which is a serious problem for e.g.
+>>>>>> Qubes OS.
+>>>>>>
+>>>>>> Before Xen 4.16, this was not fixable due to hypervisor limitations.
+>>>>>> The UEFI specification requires the ESRT to be in EfiBootServicesData
+>>>>>> memory, which Xen will use for whatever purposes it likes.  Therefore,
+>>>>>> Linux cannot safely access the ESRT, as Xen may have overwritten it.
+>>>>>>
+>>>>>> Starting with Xen 4.17, Xen checks if the ESRT is in EfiBootServicesData
+>>>>>> or EfiRuntimeServicesData memory.  If the ESRT is in EfiBootServicesData
+>>>>>> memory, Xen allocates some memory of type EfiRuntimeServicesData, copies
+>>>>>> the ESRT to it, and finally replaces the ESRT pointer with a pointer to
+>>>>>> the copy.  Since Xen will not clobber EfiRuntimeServicesData memory,
+>>>>>> this ensures that the ESRT can safely be accessed by the OS.  It is safe
+>>>>>> to access the ESRT under Xen if, and only if, it is in memory of type
+>>>>>> EfiRuntimeServicesData.
+>>>>>>
+>>>>>
+>>>>> Thanks for the elaborate explanation. This is really helpful.
+>>>>>
+>>>>> So here, you are explaining that the only way for Xen to prevent
+>>>>> itself from potentially clobbering the ESRT is by creating a
+>>>>> completely new allocation?
+>>>>
+>>>> There are surely other ways, e.g. preserving BootServices* regions
+>>>> alongside RuntimeServices* ones. But as the maintainer of the EFI
+>>>> code in Xen I don't view this as a reasonable approach.
+>>>
+>>> Why not?
+>>
+>> Because it's against the intentions the EFI has (or at least had)
+>> for this memory type. Much more than EfiAcpiReclaimMemory this
+>> type is intended for use as ordinary RAM post-boot.
 > 
-> When fuzzing the Linux kernel driver v6.0-rc6, the following crash was
-> triggered.
-> 
-> HEAD commit: 521a547ced6477c54b4b0cc206000406c221b4d6
-> git tree: upstream
-> 
-> kernel config: https://pastebin.com/raw/hekxU61F
-> console output: https://pastebin.com/raw/73a8RzBY
-> 
-> Sorry for failing to extract the reproducer. But on other versions of
-> Linux, I also triggered this crash.
-> 
-> I would appreciate it if you have any idea how to solve this bug.
+> What about giving that memory to dom0?  dom0’s balloon driver will give
+> anything dom0 doesn’t wind up using back to Xen.
 
-Maybe, but not without the reproducer :-)
+While perhaps in principle possible, this would require special casing
+in Xen. Except for the memory the initrd comes in, we don't directly
+hand memory to Dom0. Instead everything goes through the page allocator
+first. Plus if we really were convinced boot services memory needed
+retaining, then it would also need retaining across kexec (and hence
+shouldn't be left to Dom0 to decide what to do with it).
 
-Then check if it happens on lk 5.18.0 .
-
-Doug Gilbert
-
-> The crash report is as follows:
-> ==================================================================
-> BUG: KASAN: use-after-free in instrument_atomic_read
-> include/linux/instrumented.h:71 [inline]
-> BUG: KASAN: use-after-free in atomic_long_read
-> include/linux/atomic/atomic-instrumented.h:1265 [inline]
-> BUG: KASAN: use-after-free in __mutex_unlock_slowpath+0xac/0x610
-> kernel/locking/mutex.c:916
-> Read of size 8 at addr ffff888061b92c58 by task syz-executor.6/18641
-> 
-> CPU: 1 PID: 18641 Comm: syz-executor.6 Not tainted 6.0.0-rc4+ #20
-> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-> 1.13.0-1ubuntu1.1 04/01/2014
-> Call Trace:
-> <TASK>
-> __dump_stack lib/dump_stack.c:88 [inline]
-> dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
-> print_address_description mm/kasan/report.c:317 [inline]
-> print_report.cold+0xe5/0x66d mm/kasan/report.c:433
-> kasan_report+0x8a/0x1b0 mm/kasan/report.c:495
-> check_region_inline mm/kasan/generic.c:183 [inline]
-> kasan_check_range+0x13b/0x190 mm/kasan/generic.c:189
-> instrument_atomic_read include/linux/instrumented.h:71 [inline]
-> atomic_long_read include/linux/atomic/atomic-instrumented.h:1265 [inline]
-> __mutex_unlock_slowpath+0xac/0x610 kernel/locking/mutex.c:916
-> sg_release+0x204/0x320 drivers/scsi/sg.c:404
-> __fput+0x277/0x9d0 fs/file_table.c:320
-> task_work_run+0xe0/0x1a0 kernel/task_work.c:177
-> resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
-> exit_to_user_mode_loop kernel/entry/common.c:169 [inline]
-> exit_to_user_mode_prepare+0x25d/0x270 kernel/entry/common.c:201
-> __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
-> syscall_exit_to_user_mode+0x19/0x50 kernel/entry/common.c:294
-> do_syscall_64+0x42/0x80 arch/x86/entry/common.c:86
-> entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> RIP: 0033:0x7f492c03f60b
-> Code: 03 00 00 00 0f 05 48 3d 00 f0 ff ff 77 41 c3 48 83 ec 18 89 7c
-> 24 0c e8 63 fc ff ff 8b 7c 24 0c 41 89 c0 b8 03 00 00 00 0f 05 <48> 3d
-> 00 f0 ff ff 77 2f 44 89 c7 89 44 24 0c e8 a1 fc ff ff 8b 44
-> RSP: 002b:00007fffb71b9f80 EFLAGS: 00000293 ORIG_RAX: 0000000000000003
-> RAX: 0000000000000000 RBX: 0000000000000005 RCX: 00007f492c03f60b
-> RDX: ffffffffffffffb8 RSI: 0000001b2e8289d0 RDI: 0000000000000004
-> RBP: 00007f492c19dd4c R08: 0000000000000000 R09: 000000003acb2633
-> R10: 0000000000000000 R11: 0000000000000293 R12: 00000000000b5109
-> R13: 00007fffb71ba0c0 R14: 00007f492c19c41c R15: 00000000000b4e47
-> </TASK>
-> 
-> Allocated by task 26:
-> kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
-> kasan_set_track mm/kasan/common.c:45 [inline]
-> set_alloc_info mm/kasan/common.c:437 [inline]
-> ____kasan_kmalloc mm/kasan/common.c:516 [inline]
-> ____kasan_kmalloc mm/kasan/common.c:475 [inline]
-> __kasan_kmalloc+0xa9/0xd0 mm/kasan/common.c:525
-> kasan_kmalloc include/linux/kasan.h:234 [inline]
-> kmem_cache_alloc_trace+0x19b/0x380 mm/slub.c:3284
-> kmalloc include/linux/slab.h:600 [inline]
-> kzalloc include/linux/slab.h:733 [inline]
-> sg_alloc drivers/scsi/sg.c:1438 [inline]
-> sg_add_device+0x110/0xb10 drivers/scsi/sg.c:1507
-> device_add+0xf27/0x1da0 drivers/base/core.c:3541
-> scsi_sysfs_add_sdev+0x1ff/0x500 drivers/scsi/scsi_sysfs.c:1395
-> scsi_sysfs_add_devices drivers/scsi/scsi_scan.c:1812 [inline]
-> scsi_finish_async_scan drivers/scsi/scsi_scan.c:1897 [inline]
-> do_scan_async+0x20f/0x4f0 drivers/scsi/scsi_scan.c:1940
-> async_run_entry_fn+0x98/0x540 kernel/async.c:127
-> process_one_work+0x9c7/0x1650 kernel/workqueue.c:2289
-> worker_thread+0x623/0x1070 kernel/workqueue.c:2436
-> kthread+0x2e9/0x3a0 kernel/kthread.c:376
-> ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
-> 
-> Freed by task 2956:
-> kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
-> kasan_set_track+0x21/0x30 mm/kasan/common.c:45
-> kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
-> ____kasan_slab_free mm/kasan/common.c:367 [inline]
-> ____kasan_slab_free mm/kasan/common.c:329 [inline]
-> __kasan_slab_free+0x11d/0x1b0 mm/kasan/common.c:375
-> kasan_slab_free include/linux/kasan.h:200 [inline]
-> slab_free_hook mm/slub.c:1754 [inline]
-> slab_free_freelist_hook mm/slub.c:1780 [inline]
-> slab_free mm/slub.c:3534 [inline]
-> kfree+0xe9/0x650 mm/slub.c:4562
-> kref_put include/linux/kref.h:65 [inline]
-> sg_remove_sfp_usercontext+0x39f/0x5a0 drivers/scsi/sg.c:2243
-> process_one_work+0x9c7/0x1650 kernel/workqueue.c:2289
-> worker_thread+0x623/0x1070 kernel/workqueue.c:2436
-> kthread+0x2e9/0x3a0 kernel/kthread.c:376
-> ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
-> 
-> Last potentially related work creation:
-> kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
-> __kasan_record_aux_stack+0xbe/0xd0 mm/kasan/generic.c:348
-> insert_work+0x4a/0x390 kernel/workqueue.c:1358
-> __queue_work+0x4d4/0x1200 kernel/workqueue.c:1517
-> call_timer_fn+0x1a0/0x6b0 kernel/time/timer.c:1474
-> expire_timers kernel/time/timer.c:1514 [inline]
-> __run_timers.part.0+0x49e/0xad0 kernel/time/timer.c:1790
-> __run_timers kernel/time/timer.c:1768 [inline]
-> run_timer_softirq+0xb6/0x1d0 kernel/time/timer.c:1803
-> __do_softirq+0x1d0/0x908 kernel/softirq.c:571
-> 
-> Second to last potentially related work creation:
-> kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
-> __kasan_record_aux_stack+0xbe/0xd0 mm/kasan/generic.c:348
-> call_rcu kernel/rcu/tree.c:2793 [inline]
-> call_rcu+0x99/0x740 kernel/rcu/tree.c:2768
-> fib6_info_release include/net/ip6_fib.h:340 [inline]
-> fib6_info_release include/net/ip6_fib.h:337 [inline]
-> fixup_permanent_addr net/ipv6/addrconf.c:3472 [inline]
-> addrconf_permanent_addr net/ipv6/addrconf.c:3500 [inline]
-> addrconf_notify+0x1661/0x1ba0 net/ipv6/addrconf.c:3568
-> notifier_call_chain+0xb5/0x200 kernel/notifier.c:87
-> call_netdevice_notifiers_info net/core/dev.c:1945 [inline]
-> call_netdevice_notifiers_info+0xb5/0x130 net/core/dev.c:1930
-> call_netdevice_notifiers_extack net/core/dev.c:1983 [inline]
-> call_netdevice_notifiers net/core/dev.c:1997 [inline]
-> __dev_notify_flags+0x121/0x2c0 net/core/dev.c:8594
-> dev_change_flags+0x112/0x170 net/core/dev.c:8632
-> do_setlink+0xacc/0x3ca0 net/core/rtnetlink.c:2780
-> __rtnl_newlink+0xad1/0x16f0 net/core/rtnetlink.c:3546
-> rtnl_newlink+0x64/0xa0 net/core/rtnetlink.c:3593
-> rtnetlink_rcv_msg+0x43a/0xca0 net/core/rtnetlink.c:6090
-> netlink_rcv_skb+0x153/0x420 net/netlink/af_netlink.c:2501
-> netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
-> netlink_unicast+0x543/0x760 net/netlink/af_netlink.c:1345
-> netlink_sendmsg+0x917/0xe10 net/netlink/af_netlink.c:1921
-> sock_sendmsg_nosec net/socket.c:714 [inline]
-> sock_sendmsg net/socket.c:734 [inline]
-> sock_sendmsg+0xc3/0x120 net/socket.c:729
-> __sys_sendto+0x236/0x340 net/socket.c:2117
-> __do_sys_sendto net/socket.c:2129 [inline]
-> __se_sys_sendto net/socket.c:2125 [inline]
-> __x64_sys_sendto+0xdd/0x1b0 net/socket.c:2125
-> do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> do_syscall_64+0x35/0x80 arch/x86/entry/common.c:80
-> entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> 
-> The buggy address belongs to the object at ffff888061b92c00
-> which belongs to the cache kmalloc-512 of size 512
-> The buggy address is located 88 bytes inside of
-> 512-byte region [ffff888061b92c00, ffff888061b92e00)
-> 
-> The buggy address belongs to the physical page:
-> page:ffffea000186e400 refcount:1 mapcount:0 mapping:0000000000000000
-> index:0xffff888061b92400 pfn:0x61b90
-> head:ffffea000186e400 order:2 compound_mapcount:0 compound_pincount:0
-> flags: 0x4fff00000010200(slab|head|node=1|zone=1|lastcpupid=0x7ff)
-> raw: 04fff00000010200 ffffea0001628408 ffffea00018a2708 ffff888011c41c80
-> raw: ffff888061b92400 000000000010000b 00000001ffffffff 0000000000000000
-> page dumped because: kasan: bad access detected
-> page_owner tracks the page as allocated
-> page last allocated via order 2, migratetype Unmovable, gfp_mask
-> 0x1d20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC|__GFP_HARDWALL),
-> pid 2956, tgid 2956 (kworker/1:4), ts 243564663662, free_ts 0
-> set_page_owner include/linux/page_owner.h:31 [inline]
-> post_alloc_hook mm/page_alloc.c:2525 [inline]
-> prep_new_page+0x2c6/0x350 mm/page_alloc.c:2532
-> get_page_from_freelist+0xae9/0x3a80 mm/page_alloc.c:4283
-> __alloc_pages+0x321/0x710 mm/page_alloc.c:5515
-> alloc_pages+0x117/0x2f0 mm/mempolicy.c:2270
-> alloc_slab_page mm/slub.c:1824 [inline]
-> allocate_slab mm/slub.c:1969 [inline]
-> new_slab+0x246/0x3a0 mm/slub.c:2029
-> ___slab_alloc+0xa50/0x1060 mm/slub.c:3031
-> __slab_alloc.isra.0+0x4d/0xa0 mm/slub.c:3118
-> slab_alloc_node mm/slub.c:3209 [inline]
-> slab_alloc mm/slub.c:3251 [inline]
-> kmem_cache_alloc_trace+0x35b/0x380 mm/slub.c:3282
-> kmalloc include/linux/slab.h:600 [inline]
-> kzalloc include/linux/slab.h:733 [inline]
-> fib6_info_alloc+0xc3/0x210 net/ipv6/ip6_fib.c:156
-> ip6_route_info_create+0x33e/0x1ab0 net/ipv6/route.c:3749
-> addrconf_f6i_alloc+0x377/0x610 net/ipv6/route.c:4571
-> ipv6_add_addr+0x3a2/0x1e00 net/ipv6/addrconf.c:1105
-> addrconf_add_linklocal+0x1cf/0x3e0 net/ipv6/addrconf.c:3215
-> addrconf_addr_gen+0x396/0x3e0 net/ipv6/addrconf.c:3346
-> addrconf_dev_config+0x255/0x410 net/ipv6/addrconf.c:3391
-> addrconf_notify+0xddb/0x1ba0 net/ipv6/addrconf.c:3631
-> page_owner free stack trace missing
-> 
-> Memory state around the buggy address:
-> ffff888061b92b00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-> ffff888061b92b80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->> ffff888061b92c00: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> ^
-> ffff888061b92c80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> ffff888061b92d00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> ==================================================================
-
+Jan
