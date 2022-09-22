@@ -2,107 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB0755E6026
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 12:45:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8D745E6029
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 12:47:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230400AbiIVKpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 06:45:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45388 "EHLO
+        id S229909AbiIVKrz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 06:47:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbiIVKpX (ORCPT
+        with ESMTP id S229470AbiIVKrx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 06:45:23 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 608229FAAD
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 03:45:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663843522; x=1695379522;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=YdI1++uiLxC2Xj4VEP5Hzyp0zap97SrA0gDwOG9MvDg=;
-  b=YxxV8nufMlfY5URE3r0+9Kznci3l4qBI0OxnHnZcGwRXBfL9PJ1QKfsf
-   EXWigoEf3UN2gm1UiT/cizfD6/S9tLLWOyUx8rdfM8tI7PbzgHMGSYRkJ
-   wikeGVtoCBJ6qihFe5RGskBM6epLr3pTrl0mHq+ekgYmFEATHI88FsdIZ
-   8aCvcog6SriqqecTo/Mdq1fORZHgpCoZUAVRUkqo95H9UOO73EkriCbeR
-   mTeT4d48HTPB+QrfNWOkxd0FJLPyakMAZIFWj5w7Ok6HAdEUxHksD2Wju
-   eN02XfL/XDTFd8GxWAbkbJNW3uE/l7iR59zwGYx4uTMJ9pBXYU0Fu1j28
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="326582740"
-X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
-   d="scan'208";a="326582740"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 03:45:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
-   d="scan'208";a="650473544"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 22 Sep 2022 03:45:20 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1obJho-0004c4-0X;
-        Thu, 22 Sep 2022 10:45:20 +0000
-Date:   Thu, 22 Sep 2022 18:44:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Stafford Horne <shorne@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: drivers/pci/pci.c:4195 pci_pio_to_address() warn: always true
- condition '(pio >= (0 - 0)) => (0-u32max >= 0)'
-Message-ID: <202209221805.jXylfGcI-lkp@intel.com>
+        Thu, 22 Sep 2022 06:47:53 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07FCFCC8F8
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 03:47:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=2kibY8Nweftx04FK9m7D/xvB+s41KyG8kSahRJmzDQY=; b=jCtnGGAc5yEixTV4V7CKVVFf4z
+        p7PDW+oF3EFFQBk1Wuq0fLwjqzvbK0J4DYUW3Z10xUoKpUkkAVTQ4MOdDXUuOe0QI3fVVqIJ9O9sm
+        BoO/N/T7wPulTLsSDJQ8+obKeuzj1D4sSNtw4YqX8yWDzXMpmSGJImzz6tRR7uHtBC01r/fHA1Dgp
+        QBrJAdIaJcywC45PYPIfcPL3LckK0hQG1kdldxB5LHECyBMyAISaro5gtzK/g32Tjq3Z3eW+OAtN9
+        ugcW7SQqRFnP6+LW/v7EP5kfGbbehRJy7TkfiuE5Aac+Xbt3IkNGiHUC499ucX3Ur0sU7OkIcrXec
+        Bd77sb/A==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1obJjr-00EwKr-EN; Thu, 22 Sep 2022 10:47:27 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 72F93300074;
+        Thu, 22 Sep 2022 12:47:26 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 53FE92BB9BA7A; Thu, 22 Sep 2022 12:47:26 +0200 (CEST)
+Date:   Thu, 22 Sep 2022 12:47:26 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, Linus Torvalds <torvalds@linux-foundation.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Johannes Wikner <kwikner@ethz.ch>,
+        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
+        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
+        Joao Moreira <joao.moreira@intel.com>,
+        Joseph Nuzman <joseph.nuzman@intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Juergen Gross <jgross@suse.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        Eric Dumazet <edumazet@google.com>
+Subject: Re: [PATCH v3 32/59] objtool: Allow STT_NOTYPE -> STT_FUNC+0
+ tail-calls
+Message-ID: <Yyw9Pvo7/7YWoKds@hirez.programming.kicks-ass.net>
+References: <20220915111039.092790446@infradead.org>
+ <20220915111146.224130589@infradead.org>
+ <20220922052750.wux3iykp2pfzi75k@desk>
+ <Yyw5JqLtiXcqid3K@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Yyw5JqLtiXcqid3K@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stafford,
+On Thu, Sep 22, 2022 at 12:29:58PM +0200, Peter Zijlstra wrote:
+> I managed to reproduce with 12.2.0 -- my 12.1.0 compiler didn't
+> reproduce.
+> 
+> $ ./scripts/objdump-func vmlinux.o ftrace_replace_code
 
-First bad commit (maybe != root cause):
+> 0000 0000000000012a83 <ftrace_replace_code.cold>:
+> 0000    12a83:	48 89 de             	mov    %rbx,%rsi
+> 0003    12a86:	89 c7                	mov    %eax,%edi
+> 0005    12a88:	5b                   	pop    %rbx
+> 0006    12a89:	5d                   	pop    %rbp
+> 0007    12a8a:	41 5c                	pop    %r12
+> 0009    12a8c:	41 5d                	pop    %r13
+> 000b    12a8e:	41 5e                	pop    %r14
+> 000d    12a90:	e9 62 fd ff ff       	jmp    127f7 <ftrace_bug>
+> 
+> 
+> Seems to suggest objtool is actually right; I cannot find a reference to
+> that cold symbol.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   dc164f4fb00a0abebdfff132f8bc7291a28f5401
-commit: ded2ee36313c941f1a12b6f85cde295b575264ae openrisc: Add pci bus support
-date:   8 weeks ago
-config: openrisc-randconfig-m031-20220921 (https://download.01.org/0day-ci/archive/20220922/202209221805.jXylfGcI-lkp@intel.com/config)
-compiler: or1k-linux-gcc (GCC) 12.1.0
+Ohhhh, ftrace_replace_cold is a weak function, so it could be the
+original weak symbol had a reference to the cold thing.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-smatch warnings:
-drivers/pci/pci.c:4195 pci_pio_to_address() warn: always true condition '(pio >= (0 - 0)) => (0-u32max >= 0)'
-
-vim +4195 drivers/pci/pci.c
-
-c5076cfe768998 Tomasz Nowicki 2016-05-11  4189  
-c5076cfe768998 Tomasz Nowicki 2016-05-11  4190  phys_addr_t pci_pio_to_address(unsigned long pio)
-c5076cfe768998 Tomasz Nowicki 2016-05-11  4191  {
-c5076cfe768998 Tomasz Nowicki 2016-05-11  4192  	phys_addr_t address = (phys_addr_t)OF_BAD_ADDR;
-c5076cfe768998 Tomasz Nowicki 2016-05-11  4193  
-c5076cfe768998 Tomasz Nowicki 2016-05-11  4194  #ifdef PCI_IOBASE
-5745392e0c2b78 Zhichang Yuan  2018-03-15 @4195  	if (pio >= MMIO_UPPER_LIMIT)
-c5076cfe768998 Tomasz Nowicki 2016-05-11  4196  		return address;
-c5076cfe768998 Tomasz Nowicki 2016-05-11  4197  
-5745392e0c2b78 Zhichang Yuan  2018-03-15  4198  	address = logic_pio_to_hwaddr(pio);
-c5076cfe768998 Tomasz Nowicki 2016-05-11  4199  #endif
-c5076cfe768998 Tomasz Nowicki 2016-05-11  4200  
-c5076cfe768998 Tomasz Nowicki 2016-05-11  4201  	return address;
-c5076cfe768998 Tomasz Nowicki 2016-05-11  4202  }
-9cc742078c9a90 Jianjun Wang   2021-04-20  4203  EXPORT_SYMBOL_GPL(pci_pio_to_address);
-c5076cfe768998 Tomasz Nowicki 2016-05-11  4204  
-
-:::::: The code at line 4195 was first introduced by commit
-:::::: 5745392e0c2b78e0d73203281d5c42cbd6993194 PCI: Apply the new generic I/O management on PCI IO hosts
-
-:::::: TO: Zhichang Yuan <yuanzhichang@hisilicon.com>
-:::::: CC: Bjorn Helgaas <helgaas@kernel.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+We have some code to deal with crap like that, lemme try and figure out
+what went wrong.
