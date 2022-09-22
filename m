@@ -2,159 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1091C5E6CF0
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 22:20:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 525555E6CF8
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 22:23:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230182AbiIVUUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 16:20:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45452 "EHLO
+        id S229975AbiIVUXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 16:23:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbiIVUUs (ORCPT
+        with ESMTP id S229728AbiIVUXD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 16:20:48 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B475A103FF2
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 13:20:46 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 78so10250603pgb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 13:20:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=PEtL6tjAFEbYRFtjp67vkzxOhEzllvdETbKw+9Ze9R0=;
-        b=ir1aSAI8TTsCF88OTU4nrYSWMxKyQ+AELSor0stziM3A41GKfZAfPz+Uzg9JC7jsZP
-         Lrk77DMi0RcfeC6fCCijw9qIbve0bW6fGOTVRDMH1RJYhxlcZ4ZvncPdlSW44H+oTn5o
-         jTWhO19Trz45FI5i19P6y4H4YrHk1HwJXG/6VbHoMi6YGtA1kqG8FqS2DxJrLUf/LgUu
-         RkTn5KCZm7oHyG1N1JgdXACjqW6ULesGf1Ytm3DDyko3bTagDekSy9U3Vhhd2VinAcU8
-         fR4XdcnkzCNP+DAeYgK0tl05wMqDRMp46Yi7ruDJITJC9MC4o7wVA2nQkbtP3mJx4imI
-         iZlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=PEtL6tjAFEbYRFtjp67vkzxOhEzllvdETbKw+9Ze9R0=;
-        b=w3vsUfmipbEg5taTfJGryLZvNa0ne6mwv/O9CpI0UIpZ5sfmDo/M31CwwSWUMcvOk6
-         oZCfrcjnbkRgqTnx17OxH5tX0mzyrv9HIPFTK4NbnXLyQPmgMTwfaSWc0oKtPceZ3dg1
-         YucHXdEB1+hG8fJaCT3O9zw/OHVReyAZVoVqiOfvJ5F5vbP1g9Tl0PfPL6GkCVe8/R9g
-         CQpOMgrG7HovMgWj941jiMcXKXiC53tpnjSChYK/qoSd/ykU3WSnUwFf59vfOwfG6SRs
-         fCVycBI68yJSwxW6VUXmhoQD3DhwTYHwyDbDepth2hUaYyRwpbQzDwoDSFODDd2VgCHc
-         wBOw==
-X-Gm-Message-State: ACrzQf0fiVC86NlgoIdgFk3hCyAaWvM0YLcQUC0bLfP3aI94VserU9Ap
-        hxsIoFsdQLTewisWChOaVfFWsw==
-X-Google-Smtp-Source: AMsMyM437MyCwMVcvMLwEZGhVbqEe8gyHgLTc73/prQlCUY+5gAJJt1UK8wnFIaFkURr1k3xQd3ojw==
-X-Received: by 2002:a05:6a02:186:b0:439:49a3:479b with SMTP id bj6-20020a056a02018600b0043949a3479bmr4527133pgb.171.1663878045896;
-        Thu, 22 Sep 2022 13:20:45 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id s17-20020a170902ea1100b00176b5035045sm4515610plg.202.2022.09.22.13.20.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 13:20:45 -0700 (PDT)
-Date:   Thu, 22 Sep 2022 20:20:41 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     Vipin Sharma <vipinsh@google.com>, pbonzini@redhat.com,
-        jmattson@google.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] KVM: selftests: Check result in hyperv_features.c
- test only for successful hypercalls
-Message-ID: <YyzDmYAhWkMRt6E4@google.com>
-References: <20220922062451.2927010-1-vipinsh@google.com>
- <87fsgjol20.fsf@redhat.com>
+        Thu, 22 Sep 2022 16:23:03 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44781110EE3;
+        Thu, 22 Sep 2022 13:22:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663878179; x=1695414179;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OFzLjRJCU6cKjDYxboR7rQMxdY3lYv9nZojoR5dDW9A=;
+  b=mJ+qLuXixye9ljY6AZVoNXbJduXtszhYNO9LQgrL/+RZDyliO+fn38R8
+   BpISZCWis1VyAaE+Ivcduos5vtwKXJdN10tp/SKhsu9S6E8ParX+0Cf96
+   Zh5ddpKM8UE5O/EzL6RLFz8mmuKYyOaNu93QpIZ33+0YfGDk3MIUda16w
+   Ep9UoQ+V5hsn7axpov/5Grd4LojTG9GmC1Jj2l0P0jlgjKD+I8JN4IFYk
+   48wDY7RXqNHnJkfcHcpbZT8srPHvjK0dHpTssuXKpEoAxKGmFJ4v1jCLN
+   KnhtNfjb3CwkFgsGeGKx/LFPIxlO3iSepr5qSUBUfhy2W97DZ3iGOsncI
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="280790917"
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="280790917"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 13:22:59 -0700
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="762350047"
+Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 13:22:57 -0700
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with SMTP id C7F462007A;
+        Thu, 22 Sep 2022 23:22:54 +0300 (EEST)
+Date:   Thu, 22 Sep 2022 20:22:54 +0000
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v1 1/1] device property: Add const qualifier to
+ device_get_match_data() parameter
+Message-ID: <YyzEHk2TTcsIO0ha@paasikivi.fi.intel.com>
+References: <20220922135410.49694-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87fsgjol20.fsf@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220922135410.49694-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tweaked the shortlog to make it a wee bit shorter:
+Hi Andy,
 
-  KVM: selftests: Check result in hyperv_features for successful hypercalls
+Thanks for cc'ing me.
 
-On Thu, Sep 22, 2022, Vitaly Kuznetsov wrote:
-> Vipin Sharma <vipinsh@google.com> writes:
+On Thu, Sep 22, 2022 at 04:54:10PM +0300, Andy Shevchenko wrote:
+> Add const qualifier to the device_get_match_data() parameter.
+> Some of the future users may utilize this function without
+> forcing the type.
+
+From const to non-const? This is what this patch does, right?
+
 > 
-> > Commit cc5851c6be86 ("KVM: selftests: Use exception fixup for #UD/#GP
-> > Hyper-V MSR/hcall tests") introduced a wrong guest assert in guest_hcall().
-> > It is not checking the successful hypercall results and only checks the result
+> All the same, dev_fwnode() may be used with a const qualifier.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/base/property.c  | 4 ++--
+>  include/linux/property.h | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/base/property.c b/drivers/base/property.c
+> index ed6f449f8e5c..4d6278a84868 100644
+> --- a/drivers/base/property.c
+> +++ b/drivers/base/property.c
+> @@ -17,7 +17,7 @@
+>  #include <linux/property.h>
+>  #include <linux/phy.h>
+>  
+> -struct fwnode_handle *dev_fwnode(struct device *dev)
+> +struct fwnode_handle *dev_fwnode(const struct device *dev)
 
-Wrap changelogs at ~75 chars.  It's ok to go over for things like stack traces
-and Fixes:, where the format of the text is more important than the line length.
-But for "just words", stay under 75 chars.
+If you have const struct device pointer, then the embedded fwnode handle in
+that object sure is const, too. Isn't it?
 
-> > when a fault happens.
-> >
-> >   GUEST_ASSERT_2(!hcall->ud_expected || res == hcall->expect,
-> >                  hcall->expect, res);
-> >
-> > Correct the assertion by only checking results of the successful
-> > hypercalls.
-> >
-> > This issue was observed when this test started failing after building it
-> > in Clang. Above guest assert statement fails because "res" is not equal
-> > to "hcall->expect" when "hcall->ud_expected" is true. "res" gets some
-> > garbage value in Clang from the RAX register. In GCC, RAX is 0 because
-> > it using RAX for @output_address in the asm statement and resetting it
-> > to 0 before using it as output operand in the same asm statement. Clang
-> > is not using RAX for @output_address.
-> >
-> > Load RAX with some default input value so that the compiler cannot
-> > modify it or use it for anything else. This makes sure that KVM is
+If you really have const struct device pointer (where do you?), then I'd
+suggest to add another function, dev_fwnode_const() that is otherwise the
+same except the argument as well as the return value are const.
 
-Try to avoid pronouns as they are often ambiguous, and even when they're not, using
-pronouns can sometimes require more effort from the readers, e.g. might require the
-reader to "jump back" in the sentence to understand what "it" means.
+Or alternatively define it as a macro and use _Generic()?
 
-And for cases like this, RAX is one more char, so just type RAX.
+>  {
+>  	return IS_ENABLED(CONFIG_OF) && dev->of_node ?
+>  		of_fwnode_handle(dev->of_node) : dev->fwnode;
+> @@ -1200,7 +1200,7 @@ int fwnode_graph_parse_endpoint(const struct fwnode_handle *fwnode,
+>  }
+>  EXPORT_SYMBOL(fwnode_graph_parse_endpoint);
+>  
+> -const void *device_get_match_data(struct device *dev)
+> +const void *device_get_match_data(const struct device *dev)
+>  {
+>  	return fwnode_call_ptr_op(dev_fwnode(dev), device_get_match_data, dev);
+>  }
+> diff --git a/include/linux/property.h b/include/linux/property.h
+> index a5b429d623f6..117cc200c656 100644
+> --- a/include/linux/property.h
+> +++ b/include/linux/property.h
+> @@ -32,7 +32,7 @@ enum dev_dma_attr {
+>  	DEV_DMA_COHERENT,
+>  };
+>  
+> -struct fwnode_handle *dev_fwnode(struct device *dev);
+> +struct fwnode_handle *dev_fwnode(const struct device *dev);
+>  
+>  bool device_property_present(struct device *dev, const char *propname);
+>  int device_property_read_u8_array(struct device *dev, const char *propname,
+> @@ -387,7 +387,7 @@ bool device_dma_supported(struct device *dev);
+>  
+>  enum dev_dma_attr device_get_dma_attr(struct device *dev);
+>  
+> -const void *device_get_match_data(struct device *dev);
+> +const void *device_get_match_data(const struct device *dev);
+>  
+>  int device_get_phy_mode(struct device *dev);
+>  int fwnode_get_phy_mode(struct fwnode_handle *fwnode);
 
-> > correctly clearing up return value on successful hypercall and compiler cannot
-> > generate any false positive.
-> >
-> > Fixes: cc5851c6be86 ("KVM: selftests: Use exception fixup for #UD/#GP Hyper-V MSR/hcall tests")
-> > Signed-off-by: Vipin Sharma <vipinsh@google.com>
-> > Suggested-by: Sean Christopherson <seanjc@google.com>
-> > Reviewed-by: Jim Mattson <jmattson@google.com>
-> >
-> > ---
-> >
-> > Jim's Reviewed-by is only for the code change and not shortlog message
-> > of v1.
+-- 
+Regards,
 
-This is "working as intended".  When someone gives a conditional Reviewed-by,
-the intent is very much that _if_ you make the requested changes in good faith,
-then their review will be carried.  In other words, not adding Jim's review
-would be "wrong" from a certain perspective.
-
-> > Also, there is one change in asm which was not present in v1 and
-> > not reviewed by Jim. But I am writing his name here so that it is not missed
-> > when patch is merged.
-
-Heh, the fact that you felt compelled to write this is a very, very good indication
-that this should be two patches.
-
-The bug Vitaly encountered is exactly why it's pre
-
-> Could you please include the attached patch to your series? Thanks a bunch!
-
-Pushed both (as three patches) to branch `for_paolo/6.1` at:
-
-    https://github.com/sean-jc/linux.git
-
-> For your patch:
-> Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-
-...
-
-> Subject: [PATCH] KVM: selftests: Do not set reserved control bits when testing
->  invalid Hyper-V hypercall number
-
-I shortened this one too, 94 chars is a bit much :-)
-
-  KVM: selftests: Don't set reserved bits for invalid Hyper-V hypercall number
+Sakari Ailus
