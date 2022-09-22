@@ -2,54 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CFEF5E623A
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 14:22:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3791B5E6240
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 14:23:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231393AbiIVMW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 08:22:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41956 "EHLO
+        id S231448AbiIVMXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 08:23:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231405AbiIVMWX (ORCPT
+        with ESMTP id S231404AbiIVMX3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 08:22:23 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16FBEE6A24
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 05:22:21 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MYDnF47P4zMn1v;
-        Thu, 22 Sep 2022 20:17:37 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 22 Sep 2022 20:22:20 +0800
-Received: from [10.67.108.67] (10.67.108.67) by dggpemm500013.china.huawei.com
- (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 22 Sep
- 2022 20:22:19 +0800
-Message-ID: <316fc8ae-b96b-1fb6-4a24-b8bcc6f8b948@huawei.com>
-Date:   Thu, 22 Sep 2022 20:22:19 +0800
+        Thu, 22 Sep 2022 08:23:29 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D43FE5130
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 05:23:28 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id f23so8614443plr.6
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 05:23:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=cUVTepq3+m67yIJgU/dRWgCHiUOIyds/tKX3KYiHsPs=;
+        b=AhFiwdSAjU1lysIY5h+mIR886L1ySQovz0Z3yrXNrdGXLN8exeIOZTVbCNScj45Z+Q
+         YsN1YhzYJy+6h4WzMV/o62vT/J/1YAgH/XbxcE3MRbZ9/vD9r9DPNwitpQVVGrrVTnTW
+         gU1HoTffFPQyvU8w2kRMZrMvkiJ5nhUrTWsCz5LClKErDxBy4w+v9eJTPFy+fn727CL2
+         hGNVNv71hbOLwOlLxvEh2KqylGvpujjzBcPxhh0zdqsko1wALhWQN1Ki9U79ZmGuvIR6
+         v7PjnHn4zTEY5+0A9zK03xfkhOSH6ad5Ugjp6UCBch0kG+bKmpcWF8l9H1CEimnLtgGU
+         Eygw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=cUVTepq3+m67yIJgU/dRWgCHiUOIyds/tKX3KYiHsPs=;
+        b=0MhSDO34P+/xaT21o6PU/Rp1nVZRX8UiP6zg4Y2AeOnTmjMiLFUUOdxqGhfEeNhF9T
+         5woY6KHyrZ/kxUVRSjG5F65HiMP1ubhtLwQnu4PTYwMSv35nVNQRp2XC01I/aKyiUeVH
+         ZCC0cTIwSz0Dwh/G17x7omxNn4ijL0AamvUIi6EoFH4va9uDYxmhQSct++CHJeBsLp+x
+         dar6S8IxLKYtWMVMEt/16cnrZtn83MDbR8qSY0GW0GXBqytqw2VJzfhqgrmkWaLenuyd
+         IZ1Nz+3vWupss5x3acxInjd+Ah9CemHdNrb+xXoT8uDZZu0v3f1kDBqYURAiHcDZHEuC
+         Tmbg==
+X-Gm-Message-State: ACrzQf0VHWkZEdgFr7rYYHdB8T6S/sgba5fxZyxaE8e9HA2U7xq/JPqg
+        vc2V+AiUW81s4Q4onCU2/qM=
+X-Google-Smtp-Source: AMsMyM6GyTk7D0f4Jejh14L0qAJaymmj3EJ6gOd+L3AxiVpQ7tfid8TfmcJifhZaNbc+pz+7659kOg==
+X-Received: by 2002:a17:90b:1e07:b0:202:bb50:1963 with SMTP id pg7-20020a17090b1e0700b00202bb501963mr14923084pjb.82.1663849408018;
+        Thu, 22 Sep 2022 05:23:28 -0700 (PDT)
+Received: from uftrace.. ([14.5.161.231])
+        by smtp.gmail.com with ESMTPSA id a8-20020a170902900800b00178acc7ef16sm3942901plp.253.2022.09.22.05.23.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Sep 2022 05:23:27 -0700 (PDT)
+From:   Kang Minchul <tegongkang@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Johannes Berg <johannes.berg@intel.com>,
+        Veerendranath Jakkam <quic_vjakkam@quicinc.com>,
+        GUO Zihua <guozihua@huawei.com>,
+        Hannes Braun <hannesbraun@mail.de>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Kang Minchul <tegongkang@gmail.com>
+Subject: [PATCH 0/4] staging: rtl8723bs: cleanups for checkpatch fixes
+Date:   Thu, 22 Sep 2022 21:23:06 +0900
+Message-Id: <20220922122310.3379711-1-tegongkang@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0
-Subject: Re: [PATCH -next] kcov: Switch to use list_for_each_entry() helper
-Content-Language: en-US
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-CC:     <linux-kernel@vger.kernel.org>, <kasan-dev@googlegroups.com>,
-        <liu3101@purdue.edu>, <nogikh@google.com>, <elver@google.com>,
-        <akpm@linux-foundation.org>, <andreyknvl@gmail.com>,
-        <dvyukov@google.com>
-References: <20220922105025.119941-1-chenzhongjin@huawei.com>
- <YyxR2ErlHj6wrR6m@linutronix.de>
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-In-Reply-To: <YyxR2ErlHj6wrR6m@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.108.67]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,28 +72,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch series removes errors and warnings generated by checkpatch
 
-On 2022/9/22 20:15, Sebastian Andrzej Siewior wrote:
-> On 2022-09-22 18:50:25 [+0800], Chen Zhongjin wrote:
->> --- a/kernel/kcov.c
->> +++ b/kernel/kcov.c
->> @@ -133,10 +133,8 @@ static struct kcov_remote *kcov_remote_add(struct kcov *kcov, u64 handle)
->>   static struct kcov_remote_area *kcov_remote_area_get(unsigned int size)
->>   {
->>   	struct kcov_remote_area *area;
->> -	struct list_head *pos;
->>   
->> -	list_for_each(pos, &kcov_remote_areas) {
->> -		area = list_entry(pos, struct kcov_remote_area, list);
->> +	list_for_each_entry(pos, &kcov_remote_areas, list) {
-> so how does this work if you remove pos?
+Kang Minchul (4):
+  staging: rtl8723bs: replace code indent as tabs
+  staging: rtl8723bs: Relocate constant on the right side of test
+  staging: rtl8723bs: Make switch and case at the same indent
+  staging: rtl8723bs: Add a blank line after declarations
 
-Oops... will fix that.
+ .../staging/rtl8723bs/os_dep/ioctl_cfg80211.c | 106 +++++++++---------
+ 1 file changed, 54 insertions(+), 52 deletions(-)
 
+-- 
+2.34.1
 
-Thanks so much!
-
->>   		if (area->size == size) {
->>   			list_del(&area->list);
->>   			return area;
-> Sebastian
