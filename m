@@ -2,142 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D7DB5E5C8B
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 09:37:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A85E5E5C9F
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 09:47:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230487AbiIVHhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 03:37:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37952 "EHLO
+        id S231191AbiIVHq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 03:46:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiIVHhJ (ORCPT
+        with ESMTP id S230100AbiIVHqu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 03:37:09 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 457E7CDCE7;
-        Thu, 22 Sep 2022 00:37:05 -0700 (PDT)
-X-UUID: 76aa0398248148a1934e81a715d2cef8-20220922
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=/6bsX4RBcjvTUrrlX0LGHcO1IxWp0f22mVXpMN7I5ks=;
-        b=ar6zWAYYBLJkZehh1Rk+l9JxNQIrLSyVL2GQNAbvS3Wk2n3eoU8VOOMLDhy95+P8CTZs8U+SX9xX2t7GqghmgsdwQqE+GWxqjGzCoMQrym2Ni6jhgvVhluDc3sFgJBo5mrDrnKDxI4Xa2h6ilprOxwznIxr3rjJGyXMNvEkp4nA=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:81abf139-2e85-4b13-8fe3-165e62a61f9f,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:45
-X-CID-INFO: VERSION:1.1.11,REQID:81abf139-2e85-4b13-8fe3-165e62a61f9f,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-        elease,TS:45
-X-CID-META: VersionHash:39a5ff1,CLOUDID:a244dce3-87f9-4bb0-97b6-34957dc0fbbe,B
-        ulkID:220921162412WQNVHANJ,BulkQuantity:205,Recheck:0,SF:28|17|19|48|823|8
-        24,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:40,QS:nil,BEC:nil,CO
-        L:0
-X-UUID: 76aa0398248148a1934e81a715d2cef8-20220922
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <jianguo.zhang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 175818648; Thu, 22 Sep 2022 15:36:59 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Thu, 22 Sep 2022 15:36:57 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 22 Sep 2022 15:36:56 +0800
-Message-ID: <9c28de4cef86d706baf92813f5d32cfd1630852e.camel@mediatek.com>
-Subject: Re: [PATCH v3 2/2] dt-bindings: net: snps,dwmac: add clk_csr
- property
-From:   Jianguo Zhang <jianguo.zhang@mediatek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-CC:     Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>,
-        Biao Huang <biao.huang@mediatek.com>, <netdev@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Date:   Thu, 22 Sep 2022 15:36:56 +0800
-In-Reply-To: <821b3c30-6f1f-17c1-061c-8d3b3add0238@linaro.org>
-References: <20220921070721.19516-1-jianguo.zhang@mediatek.com>
-         <20220921070721.19516-3-jianguo.zhang@mediatek.com>
-         <bd460cfd-7114-b200-ab99-16fa3e2cff50@linaro.org>
-         <d231f64e494f4badf8bbe23130b25594376c9882.camel@mediatek.com>
-         <821b3c30-6f1f-17c1-061c-8d3b3add0238@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 22 Sep 2022 03:46:50 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9574A1A67;
+        Thu, 22 Sep 2022 00:46:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=z5Aggbtq5kMtL8XN85SGvbnyW2DMGF8v8qUQXZTPlNw=; b=hO83lSHdePal2uyPxP9ch3fVoL
+        G5dEMSI16YoDEv9LitDKb0ieAx9+e4+Eb6WX9ZQ6DB/dcmRgtV8C0iMskKxd8IfueMP/rQ5ASDcUc
+        x2+yOGVnMMdGAp8kRiB421HDfvoIvZumVlscHdO7L5jFM6GDXPY9ysUz4w5l30dLtIR/L0Er5AlNa
+        28NtDTTY0AmkiO9uio+v66lI5Ga2Mx+3oP/EYARGkK0SvQIa1yHADrgbiNno/503NPpTYBYOl9LHv
+        hiptV1dm46+zF0mgCZpOzOR3jxfDisu1DAWuy9XRuTotMzHAM/0wHaGx1L1eXmKiVJu9iLh0pYyHl
+        YBkOb9gQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1obGuk-006qzA-5F; Thu, 22 Sep 2022 07:46:30 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 65F1F300169;
+        Thu, 22 Sep 2022 09:46:26 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 1B6B92BB95D95; Thu, 22 Sep 2022 09:46:26 +0200 (CEST)
+Date:   Thu, 22 Sep 2022 09:46:26 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Dave Hansen <dave.hansen@intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        keescook@chromium.org, Sean Christopherson <seanjc@google.com>
+Subject: Re: [PATCH v2] x86/mm: Refuse W^X violations
+Message-ID: <YywS0keUorHwJJPt@hirez.programming.kicks-ass.net>
+References: <YwySW3ROc21hN7g9@hirez.programming.kicks-ass.net>
+ <20220921200726.GA3094503@roeck-us.net>
+ <4dd594ad-490a-68ee-9e32-fbd9f135bd54@intel.com>
+ <1a6e7165-cdae-6c8c-f57d-159fdb68897b@roeck-us.net>
+ <d8cd7c7e-24c1-7f70-24a9-91c77aa634af@roeck-us.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d8cd7c7e-24c1-7f70-24a9-91c77aa634af@roeck-us.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Krzysztof,
+On Wed, Sep 21, 2022 at 08:09:13PM -0700, Guenter Roeck wrote:
 
-On Thu, 2022-09-22 at 08:38 +0200, Krzysztof Kozlowski wrote:
-> On 22/09/2022 04:15, Jianguo Zhang wrote:
-> > Dear Krzysztof,
-> > 
-> > 	Thanks for your comment.
-> > 
-> > On Wed, 2022-09-21 at 10:24 +0200, Krzysztof Kozlowski wrote:
-> > > On 21/09/2022 09:07, Jianguo Zhang wrote:
-> > > > Add clk_csr property for snps,dwmac
-> > > > 
-> > > > Signed-off-by: Jianguo Zhang <jianguo.zhang@mediatek.com>
-> > > > ---
-> > > >  Documentation/devicetree/bindings/net/snps,dwmac.yaml | 5
-> > > > +++++
-> > > >  1 file changed, 5 insertions(+)
-> > > > 
-> > > > diff --git
-> > > > a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-> > > > b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-> > > > index 491597c02edf..8cff30a8125d 100644
-> > > > --- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-> > > > +++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-> > > > @@ -288,6 +288,11 @@ properties:
-> > > >        is supported. For example, this is used in case of SGMII
-> > > > and
-> > > >        MAC2MAC connection.
-> > > >  
-> > > > +  clk_csr:
-> > > 
-> > > No underscores in node names. Missing vendor prefix.
-> > > 
-> > 
-> > We will remane the property name 'clk_csr' as 'snps,clk-csr' and
-> > another driver patch is needed to align the name used in driver
-> > with
-> > the new name. 
-> 
-> You did not say anything that you document existing property. Commit
-> msg
-> *must* explain why you are doing stuff in commit body.
-> 
-> We should not be asking for this and for reason of clk_csr.
+> Oh well, that "helped" to hide one of the crashes. Here is another one.
+> This is with PAE enabled and booting through efi32.
 
-We will explain the background that why we document 'clk_csr' property
-in binding file in commit message in next version patches.
-> 
-> Best regards,
-> Krzysztof
-> 
-BRS
-Jianguo
+> [    1.086592]  efi_runtime_update_mappings+0x36/0x42
+> [    1.086717]  efi_enter_virtual_mode+0x351/0x36e
+> [    1.086860]  start_kernel+0x57d/0x60f
+> [    1.086956]  ? set_intr_gate+0x42/0x55
+> [    1.087079]  i386_start_kernel+0x43/0x45
+> [    1.087272]  startup_32_smp+0x161/0x164
 
+Does this help? Dave; perhaps we should just let i386 be i386 and let it
+bitrot :/
+
+diff --git a/arch/x86/platform/efi/efi_32.c b/arch/x86/platform/efi/efi_32.c
+index e06a199423c0..d81e379fcd43 100644
+--- a/arch/x86/platform/efi/efi_32.c
++++ b/arch/x86/platform/efi/efi_32.c
+@@ -136,6 +136,7 @@ void __init efi_runtime_update_mappings(void)
+ 			if (md->type != EFI_RUNTIME_SERVICES_CODE)
+ 				continue;
+ 
++			set_memory_ro(md->virt_addr, md->num_pages);
+ 			set_memory_x(md->virt_addr, md->num_pages);
+ 		}
+ 	}
