@@ -2,157 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C28DD5E5C84
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 09:35:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D7DB5E5C8B
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 09:37:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230523AbiIVHe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 03:34:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35154 "EHLO
+        id S230487AbiIVHhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 03:37:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229803AbiIVHey (ORCPT
+        with ESMTP id S229470AbiIVHhJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 03:34:54 -0400
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADED24A13D
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 00:34:50 -0700 (PDT)
-Received: (Authenticated sender: alex@ghiti.fr)
-        by mail.gandi.net (Postfix) with ESMTPSA id AD1C3100002;
-        Thu, 22 Sep 2022 07:34:40 +0000 (UTC)
-Message-ID: <48082184-93ea-8564-5a69-ff00350c0201@ghiti.fr>
-Date:   Thu, 22 Sep 2022 09:34:40 +0200
+        Thu, 22 Sep 2022 03:37:09 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 457E7CDCE7;
+        Thu, 22 Sep 2022 00:37:05 -0700 (PDT)
+X-UUID: 76aa0398248148a1934e81a715d2cef8-20220922
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=/6bsX4RBcjvTUrrlX0LGHcO1IxWp0f22mVXpMN7I5ks=;
+        b=ar6zWAYYBLJkZehh1Rk+l9JxNQIrLSyVL2GQNAbvS3Wk2n3eoU8VOOMLDhy95+P8CTZs8U+SX9xX2t7GqghmgsdwQqE+GWxqjGzCoMQrym2Ni6jhgvVhluDc3sFgJBo5mrDrnKDxI4Xa2h6ilprOxwznIxr3rjJGyXMNvEkp4nA=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:81abf139-2e85-4b13-8fe3-165e62a61f9f,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:45
+X-CID-INFO: VERSION:1.1.11,REQID:81abf139-2e85-4b13-8fe3-165e62a61f9f,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+        elease,TS:45
+X-CID-META: VersionHash:39a5ff1,CLOUDID:a244dce3-87f9-4bb0-97b6-34957dc0fbbe,B
+        ulkID:220921162412WQNVHANJ,BulkQuantity:205,Recheck:0,SF:28|17|19|48|823|8
+        24,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:40,QS:nil,BEC:nil,CO
+        L:0
+X-UUID: 76aa0398248148a1934e81a715d2cef8-20220922
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <jianguo.zhang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 175818648; Thu, 22 Sep 2022 15:36:59 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 22 Sep 2022 15:36:57 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 22 Sep 2022 15:36:56 +0800
+Message-ID: <9c28de4cef86d706baf92813f5d32cfd1630852e.camel@mediatek.com>
+Subject: Re: [PATCH v3 2/2] dt-bindings: net: snps,dwmac: add clk_csr
+ property
+From:   Jianguo Zhang <jianguo.zhang@mediatek.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+CC:     Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        Biao Huang <biao.huang@mediatek.com>, <netdev@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Date:   Thu, 22 Sep 2022 15:36:56 +0800
+In-Reply-To: <821b3c30-6f1f-17c1-061c-8d3b3add0238@linaro.org>
+References: <20220921070721.19516-1-jianguo.zhang@mediatek.com>
+         <20220921070721.19516-3-jianguo.zhang@mediatek.com>
+         <bd460cfd-7114-b200-ab99-16fa3e2cff50@linaro.org>
+         <d231f64e494f4badf8bbe23130b25594376c9882.camel@mediatek.com>
+         <821b3c30-6f1f-17c1-061c-8d3b3add0238@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 2/2] riscv: Move cast inside kernel_mapping_[pv]a_to_[vp]a
-Content-Language: en-US
-To:     Samuel Holland <samuel@sholland.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org
-Cc:     Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-kernel@vger.kernel.org,
-        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Nick Kossifidis <mick@ics.forth.gr>,
-        Qinglin Pan <panqinglin2020@iscas.ac.cn>,
-        Tong Tiangen <tongtiangen@huawei.com>
-References: <20220922054743.30159-1-samuel@sholland.org>
- <20220922054743.30159-2-samuel@sholland.org>
-From:   Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <20220922054743.30159-2-samuel@sholland.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Dear Krzysztof,
 
-On 9/22/22 07:47, Samuel Holland wrote:
-> Before commit 44c922572952 ("RISC-V: enable XIP"), these macros cast
-> their argument to unsigned long. That commit moved the cast after an
-> assignment to an unsigned long variable, rendering it ineffectual.
-> Move the cast back, so we can remove the cast at each call site.
->
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
-> ---
->
->   arch/riscv/errata/thead/errata.c |  4 ++--
->   arch/riscv/include/asm/page.h    | 18 +++++++++---------
->   arch/riscv/mm/init.c             | 16 ++++++++--------
->   3 files changed, 19 insertions(+), 19 deletions(-)
->
-> diff --git a/arch/riscv/errata/thead/errata.c b/arch/riscv/errata/thead/errata.c
-> index 83174f13783e..38c2c6b0f6b8 100644
-> --- a/arch/riscv/errata/thead/errata.c
-> +++ b/arch/riscv/errata/thead/errata.c
-> @@ -76,8 +76,8 @@ void __init_or_module thead_errata_patch_func(struct alt_entry *begin, struct al
->   		if (cpu_req_errata & tmp) {
->   			/* On vm-alternatives, the mmu isn't running yet */
->   			if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
-> -				memcpy((void *)kernel_mapping_va_to_pa((unsigned long)alt->old_ptr),
-> -				       (void *)kernel_mapping_va_to_pa((unsigned long)alt->alt_ptr),
-> +				memcpy((void *)kernel_mapping_va_to_pa(alt->old_ptr),
-> +				       (void *)kernel_mapping_va_to_pa(alt->alt_ptr),
->   				       alt->alt_len);
->   			else
->   				patch_text_nosync(alt->old_ptr, alt->alt_ptr, alt->alt_len);
-> diff --git a/arch/riscv/include/asm/page.h b/arch/riscv/include/asm/page.h
-> index ac70b0fd9a9a..9f432c1b5289 100644
-> --- a/arch/riscv/include/asm/page.h
-> +++ b/arch/riscv/include/asm/page.h
-> @@ -123,20 +123,20 @@ extern phys_addr_t phys_ram_base;
->   	((x) >= PAGE_OFFSET && (!IS_ENABLED(CONFIG_64BIT) || (x) < PAGE_OFFSET + KERN_VIRT_SIZE))
->   
->   #define linear_mapping_pa_to_va(x)	((void *)((unsigned long)(x) + kernel_map.va_pa_offset))
-> -#define kernel_mapping_pa_to_va(y)	({						\
-> -	unsigned long _y = y;								\
-> -	(IS_ENABLED(CONFIG_XIP_KERNEL) && _y < phys_ram_base) ?					\
-> -		(void *)((unsigned long)(_y) + kernel_map.va_kernel_xip_pa_offset) :		\
-> -		(void *)((unsigned long)(_y) + kernel_map.va_kernel_pa_offset + XIP_OFFSET);	\
-> +#define kernel_mapping_pa_to_va(y)	({					\
-> +	unsigned long _y = (unsigned long)(y);					\
-> +	(IS_ENABLED(CONFIG_XIP_KERNEL) && _y < phys_ram_base) ?			\
-> +		(void *)(_y + kernel_map.va_kernel_xip_pa_offset) :		\
-> +		(void *)(_y + kernel_map.va_kernel_pa_offset + XIP_OFFSET);	\
->   	})
->   #define __pa_to_va_nodebug(x)		linear_mapping_pa_to_va(x)
->   
->   #define linear_mapping_va_to_pa(x)	((unsigned long)(x) - kernel_map.va_pa_offset)
->   #define kernel_mapping_va_to_pa(y) ({						\
-> -	unsigned long _y = y;							\
-> -	(IS_ENABLED(CONFIG_XIP_KERNEL) && _y < kernel_map.virt_addr + XIP_OFFSET) ?	\
-> -		((unsigned long)(_y) - kernel_map.va_kernel_xip_pa_offset) :		\
-> -		((unsigned long)(_y) - kernel_map.va_kernel_pa_offset - XIP_OFFSET);	\
-> +	unsigned long _y = (unsigned long)(y);					\
-> +	(IS_ENABLED(CONFIG_XIP_KERNEL) && _y < kernel_map.virt_addr + XIP_OFFSET) ? \
-> +		(_y - kernel_map.va_kernel_xip_pa_offset) :			\
-> +		(_y - kernel_map.va_kernel_pa_offset - XIP_OFFSET);		\
->   	})
->   
->   #define __va_to_pa_nodebug(x)	({						\
-> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-> index b56a0a75533f..7d59516ce6b3 100644
-> --- a/arch/riscv/mm/init.c
-> +++ b/arch/riscv/mm/init.c
-> @@ -927,15 +927,15 @@ static void __init pt_ops_set_early(void)
->    */
->   static void __init pt_ops_set_fixmap(void)
->   {
-> -	pt_ops.alloc_pte = kernel_mapping_pa_to_va((uintptr_t)alloc_pte_fixmap);
-> -	pt_ops.get_pte_virt = kernel_mapping_pa_to_va((uintptr_t)get_pte_virt_fixmap);
-> +	pt_ops.alloc_pte = kernel_mapping_pa_to_va(alloc_pte_fixmap);
-> +	pt_ops.get_pte_virt = kernel_mapping_pa_to_va(get_pte_virt_fixmap);
->   #ifndef __PAGETABLE_PMD_FOLDED
-> -	pt_ops.alloc_pmd = kernel_mapping_pa_to_va((uintptr_t)alloc_pmd_fixmap);
-> -	pt_ops.get_pmd_virt = kernel_mapping_pa_to_va((uintptr_t)get_pmd_virt_fixmap);
-> -	pt_ops.alloc_pud = kernel_mapping_pa_to_va((uintptr_t)alloc_pud_fixmap);
-> -	pt_ops.get_pud_virt = kernel_mapping_pa_to_va((uintptr_t)get_pud_virt_fixmap);
-> -	pt_ops.alloc_p4d = kernel_mapping_pa_to_va((uintptr_t)alloc_p4d_fixmap);
-> -	pt_ops.get_p4d_virt = kernel_mapping_pa_to_va((uintptr_t)get_p4d_virt_fixmap);
-> +	pt_ops.alloc_pmd = kernel_mapping_pa_to_va(alloc_pmd_fixmap);
-> +	pt_ops.get_pmd_virt = kernel_mapping_pa_to_va(get_pmd_virt_fixmap);
-> +	pt_ops.alloc_pud = kernel_mapping_pa_to_va(alloc_pud_fixmap);
-> +	pt_ops.get_pud_virt = kernel_mapping_pa_to_va(get_pud_virt_fixmap);
-> +	pt_ops.alloc_p4d = kernel_mapping_pa_to_va(alloc_p4d_fixmap);
-> +	pt_ops.get_p4d_virt = kernel_mapping_pa_to_va(get_p4d_virt_fixmap);
->   #endif
->   }
->   
+On Thu, 2022-09-22 at 08:38 +0200, Krzysztof Kozlowski wrote:
+> On 22/09/2022 04:15, Jianguo Zhang wrote:
+> > Dear Krzysztof,
+> > 
+> > 	Thanks for your comment.
+> > 
+> > On Wed, 2022-09-21 at 10:24 +0200, Krzysztof Kozlowski wrote:
+> > > On 21/09/2022 09:07, Jianguo Zhang wrote:
+> > > > Add clk_csr property for snps,dwmac
+> > > > 
+> > > > Signed-off-by: Jianguo Zhang <jianguo.zhang@mediatek.com>
+> > > > ---
+> > > >  Documentation/devicetree/bindings/net/snps,dwmac.yaml | 5
+> > > > +++++
+> > > >  1 file changed, 5 insertions(+)
+> > > > 
+> > > > diff --git
+> > > > a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> > > > b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> > > > index 491597c02edf..8cff30a8125d 100644
+> > > > --- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> > > > +++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> > > > @@ -288,6 +288,11 @@ properties:
+> > > >        is supported. For example, this is used in case of SGMII
+> > > > and
+> > > >        MAC2MAC connection.
+> > > >  
+> > > > +  clk_csr:
+> > > 
+> > > No underscores in node names. Missing vendor prefix.
+> > > 
+> > 
+> > We will remane the property name 'clk_csr' as 'snps,clk-csr' and
+> > another driver patch is needed to align the name used in driver
+> > with
+> > the new name. 
+> 
+> You did not say anything that you document existing property. Commit
+> msg
+> *must* explain why you are doing stuff in commit body.
+> 
+> We should not be asking for this and for reason of clk_csr.
 
-
-Indeed, the inner cast was useless:
-
-Reviewed-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
-
-Thanks,
-
-Alex
+We will explain the background that why we document 'clk_csr' property
+in binding file in commit message in next version patches.
+> 
+> Best regards,
+> Krzysztof
+> 
+BRS
+Jianguo
 
