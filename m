@@ -2,75 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A4D55E598A
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 05:21:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FBC05E598D
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 05:22:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231342AbiIVDVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 23:21:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59522 "EHLO
+        id S231247AbiIVDWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 23:22:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230165AbiIVDVV (ORCPT
+        with ESMTP id S231256AbiIVDVh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 23:21:21 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E57A7AE23F;
-        Wed, 21 Sep 2022 20:15:42 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CAACE143D;
-        Wed, 21 Sep 2022 20:15:40 -0700 (PDT)
-Received: from [10.162.43.8] (unknown [10.162.43.8])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8EAB43F5A1;
-        Wed, 21 Sep 2022 20:15:24 -0700 (PDT)
-Message-ID: <0236922f-841e-c6d8-c9ee-599d72c458d3@arm.com>
-Date:   Thu, 22 Sep 2022 08:45:22 +0530
+        Wed, 21 Sep 2022 23:21:37 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F66F7FF9D
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 20:16:57 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id ay36so5937129wmb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 20:16:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=Gf5cFucll322oSi7IN8E0A7c01vWLE1t6RgRR/X3lFE=;
+        b=cyu+sMCeNI7IjveApYqHRSi0+KsjKAyddUETNdMX3OV9uWjvZqlJpDJFb5zDuwNK5w
+         4dgb8R0b6VP6+7pebIAi9nN7aeLPWD87KmtWg4jjzRlFVDQ4F+8HuSSlzpukzqfPmkuG
+         Xk1MSiayz+Tv8A+85tsaxhwdOajLA9cJqlaNXCmZpQOPdZYMZ6DQi/spS/HQFWvOZooz
+         GPatH31/kX0oZRlT8ZL/HSYfl/shQ/O/d7jA4wflde6Tj3hj6+UIr7j8aELJZOmp+bV9
+         7hGdd3kOQ+aVfSwfr7XyyQn2ydCG3f7fITlFC87Bpg1fTastJE/AoiOW4W+97NgJMi9E
+         P5sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=Gf5cFucll322oSi7IN8E0A7c01vWLE1t6RgRR/X3lFE=;
+        b=BEUXw7YPHGud0bebEtuRlgXnl8sF7tQiUiyQvWyuPbLlk/ZhA6CZrAXhKmf7Jp+Th7
+         k39rq5xaBLMeTq4SmQ6tfa8+RGXHWTuwveFF7kzgoB0WbatBKl7GdIAeOiFV9oS0sKmJ
+         0K3LiMlbbsCdMjWa+XzD7pzlC1wbHxgPxOj34rrStKbi7VnIfeiD6MMY6jvZCnndVrXJ
+         wS4zNlsL9yeYE/kqRkf2g6SOWBgdaVkBxOKL6+MaEY3jCYeyuXHjFytwjIHejaTAjn6R
+         9vz2Y63dYSO4ew4yYFMFPt5pXXYprLWMfwVpBhNznLcHaCTYDLTd9KB4Kfb2q5g25p9B
+         rFCg==
+X-Gm-Message-State: ACrzQf3nHteLvlaBc2FyAcUEB8IRW7Irae889CyBO/HPJXfBnCaDaR8Y
+        hnHNfBcBF3XKkgzZ75qldMzbTRVOYfDilbqjrhfSRA==
+X-Google-Smtp-Source: AMsMyM6OlMz7hQCdkutKhUaeJa90Iz6S8q4WliavmRN7d/qpKXh1bRqMWegNouk+R3boTk29zX8XU+AZWrgM6gwvXIA=
+X-Received: by 2002:a05:600c:2181:b0:3b4:74e4:16f8 with SMTP id
+ e1-20020a05600c218100b003b474e416f8mr712403wme.174.1663816615424; Wed, 21 Sep
+ 2022 20:16:55 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 4/4] arm64: support batched/deferred tlb shootdown
- during page reclamation
-Content-Language: en-US
-To:     Nadav Amit <namit@vmware.com>
-Cc:     Yicong Yang <yangyicong@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux MM <linux-mm@kvack.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "darren@os.amperecomputing.com" <darren@os.amperecomputing.com>,
-        "yangyicong@hisilicon.com" <yangyicong@hisilicon.com>,
-        "huzhanyuan@oppo.com" <huzhanyuan@oppo.com>,
-        "lipeifeng@oppo.com" <lipeifeng@oppo.com>,
-        "zhangshiming@oppo.com" <zhangshiming@oppo.com>,
-        "guojian@oppo.com" <guojian@oppo.com>,
-        "realmz6@gmail.com" <realmz6@gmail.com>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        Barry Song <21cnbao@gmail.com>,
-        "wangkefeng.wang@huawei.com" <wangkefeng.wang@huawei.com>,
-        "xhao@linux.alibaba.com" <xhao@linux.alibaba.com>,
-        "prime.zeng@hisilicon.com" <prime.zeng@hisilicon.com>,
-        Barry Song <v-songbaohua@oppo.com>,
-        Mel Gorman <mgorman@suse.de>
-References: <20220822082120.8347-1-yangyicong@huawei.com>
- <20220822082120.8347-5-yangyicong@huawei.com>
- <888da5f3-104c-3929-c21e-c710922d6f1e@arm.com>
- <36B9DE22-E3BC-4CB2-8E3F-B21B61434CD3@vmware.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <36B9DE22-E3BC-4CB2-8E3F-B21B61434CD3@vmware.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20220922014904.3665674-1-zhengjun.xing@linux.intel.com> <20220922014904.3665674-2-zhengjun.xing@linux.intel.com>
+In-Reply-To: <20220922014904.3665674-2-zhengjun.xing@linux.intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 21 Sep 2022 20:16:42 -0700
+Message-ID: <CAP-5=fWhPAcbbws3H=VC7F3qnXv4hkbMd3rjk4_HtsBAQHPTTg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] perf parse-events: Remove "not supported" hybrid
+ cache events
+To:     zhengjun.xing@linux.intel.com
+Cc:     acme@kernel.org, peterz@infradead.org, mingo@redhat.com,
+        alexander.shishkin@intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, ak@linux.intel.com,
+        kan.liang@linux.intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,81 +71,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Sep 21, 2022 at 6:47 PM <zhengjun.xing@linux.intel.com> wrote:
+>
+> From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+>
+> By default, we create two hybrid cache events, one is for cpu_core, and
+> another is for cpu_atom. But Some hybrid hardware cache events are only
+> available on one CPU PMU. For example, the 'L1-dcache-load-misses' is only
+> available on cpu_core, while the 'L1-icache-loads' is only available on
+> cpu_atom. We need to remove "not supported" hybrid cache events. By
+> extending is_event_supported() to global API and using it to check if the
+> hybrid cache events are supported before being created, we can remove the
+> "not supported" hybrid cache events.
+>
+> Before:
+>
+>  # ./perf stat -e L1-dcache-load-misses,L1-icache-loads -a sleep 1
+>
+>  Performance counter stats for 'system wide':
+>
+>             52,570      cpu_core/L1-dcache-load-misses/
+>    <not supported>      cpu_atom/L1-dcache-load-misses/
+>    <not supported>      cpu_core/L1-icache-loads/
+>          1,471,817      cpu_atom/L1-icache-loads/
+>
+>        1.004915229 seconds time elapsed
+>
+> After:
+>
+>  # ./perf stat -e L1-dcache-load-misses,L1-icache-loads -a sleep 1
+>
+>  Performance counter stats for 'system wide':
+>
+>             54,510      cpu_core/L1-dcache-load-misses/
+>          1,441,286      cpu_atom/L1-icache-loads/
+>
+>        1.005114281 seconds time elapsed
+>
+> Fixes: 30def61f64ba ("perf parse-events: Create two hybrid cache events")
+> Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+> Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+> ---
+>  tools/perf/util/parse-events-hybrid.c | 8 +++++++-
+>  tools/perf/util/print-events.c        | 2 +-
+>  tools/perf/util/print-events.h        | 3 ++-
+>  3 files changed, 10 insertions(+), 3 deletions(-)
+>
+> diff --git a/tools/perf/util/parse-events-hybrid.c b/tools/perf/util/parse-events-hybrid.c
+> index 284f8eabd3b9..cf2e1c2e968f 100644
+> --- a/tools/perf/util/parse-events-hybrid.c
+> +++ b/tools/perf/util/parse-events-hybrid.c
+> @@ -14,6 +14,7 @@
+>  #include "pmu.h"
+>  #include "pmu-hybrid.h"
+>  #include "perf.h"
+> +#include "print-events.h"
+>
+>  static void config_hybrid_attr(struct perf_event_attr *attr,
+>                                int type, int pmu_type)
+> @@ -48,13 +49,18 @@ static int create_event_hybrid(__u32 config_type, int *idx,
+>         __u64 config = attr->config;
+>
+>         config_hybrid_attr(attr, config_type, pmu->type);
+> +
+> +       if (attr->type == PERF_TYPE_HW_CACHE
+> +           && !is_event_supported(attr->type, attr->config))
+> +               goto out;
 
+A comment to explain this would be useful.
 
-On 9/21/22 12:47, Nadav Amit wrote:
-> On Sep 20, 2022, at 11:53 PM, Anshuman Khandual <anshuman.khandual@arm.com> wrote:
-> 
->> ⚠ External Email
->>
->> On 8/22/22 13:51, Yicong Yang wrote:
->>> +static inline void arch_tlbbatch_add_mm(struct arch_tlbflush_unmap_batch *batch,
->>> +                                     struct mm_struct *mm,
->>> +                                     unsigned long uaddr)
->>> +{
->>> +     __flush_tlb_page_nosync(mm, uaddr);
->>> +}
->>> +
->>> +static inline void arch_tlbbatch_flush(struct arch_tlbflush_unmap_batch *batch)
->>> +{
->>> +     dsb(ish);
->>> +}
->>
->> Just wondering if arch_tlbbatch_add_mm() could also detect continuous mapping
->> TLB invalidation requests on a given mm and try to generate a range based TLB
->> invalidation such as flush_tlb_range().
->>
->> struct arch_tlbflush_unmap_batch via task->tlb_ubc->arch can track continuous
->> ranges while being queued up via arch_tlbbatch_add_mm(), any range formed can
->> later be flushed in subsequent arch_tlbbatch_flush() ?
->>
->> OR
->>
->> It might not be worth the effort and complexity, in comparison to performance
->> improvement, TLB range flush brings in ?
-> 
-> So here are my 2 cents, based on my experience with Intel-x86. It is likely
-> different on arm64, but perhaps it can provide you some insight into what
-> parameters you should measure and consider.
-> 
-> In general there is a tradeoff between full TLB flushes and entry-specific
-> ones. Flushing specific entries takes more time than flushing the entire
-> TLB, but sade TLB refills.
+> +
+>         evsel = parse_events__add_event_hybrid(list, idx, attr, name, metric_id,
+>                                                pmu, config_terms);
+>         if (evsel)
+>                 evsel->pmu_name = strdup(pmu->name);
+>         else
+>                 return -ENOMEM;
 
-Right.
+For consistency should this use the "goto" pattern now? You can also
+handle the ENOMEM case for strdup.
 
-> 
-> Dave Hansen made some calculations in the past and came up with 33 as a
-> magic cutoff number, i.e., if you need to flush more than 33 entries, just
-> flush the entire TLB. I am not sure that this exact number is very
-> meaningful, since one might argue that it should’ve taken PTI into account
-> (which might require twice as many TLB invalidations).
+> -
+> +out:
+>         attr->type = type;
+>         attr->config = config;
+>         return 0;
+> diff --git a/tools/perf/util/print-events.c b/tools/perf/util/print-events.c
+> index 04050d4f6db8..fa5cc94cfcfe 100644
+> --- a/tools/perf/util/print-events.c
+> +++ b/tools/perf/util/print-events.c
+> @@ -239,7 +239,7 @@ void print_sdt_events(const char *subsys_glob, const char *event_glob,
+>         strlist__delete(sdtlist);
+>  }
+>
+> -static bool is_event_supported(u8 type, u64 config)
+> +bool is_event_supported(u8 type, u64 config)
 
-Okay.
+This makes me tempted to say this function should be in parse-events.c.
 
-> 
-> Anyhow, back to arch_tlbbatch_add_mm(). It may be possible to track ranges,
-> but the question is whether you would actually succeed in forming continuous
-> ranges that are eventually (on x86) smaller than the full TLB flush cutoff
-> (=33). Questionable (perhaps better with MGLRU?).
+Thanks,
+Ian
 
-This proposal here for arm64 does not cause a full TLB flush ever. It creates
-individual TLB flushes all the time. Hence the choice here is not between full
-TLB flush and possible range flushes. Choice is actually between individual
-TLB flushes and range/full TLB flushes.
-
-> 
-> Then, you should remember that tracking should be very efficient, since even
-> few cache misses might have greater cost than what you save by
-> selective-flushing. Finally, on x86 you would need to invoke the smp/IPI
-> layer multiple times to send different cores the relevant range they need to
-> flush.
-
-Agreed, these reasons make it much difficult to gain any more performance.
-
-> 
-> IOW: It is somewhat complicated to implement efficeintly. On x86, and
-> probably other IPI-based TLB shootdown systems, does not have clear
-> performance benefit (IMHO).
-
-Agreed, thanks for such a detailed explanation, appreciate it.
+>  {
+>         bool ret = true;
+>         int open_return;
+> diff --git a/tools/perf/util/print-events.h b/tools/perf/util/print-events.h
+> index 1da9910d83a6..ad2902fd0507 100644
+> --- a/tools/perf/util/print-events.h
+> +++ b/tools/perf/util/print-events.h
+> @@ -1,14 +1,15 @@
+>  /* SPDX-License-Identifier: GPL-2.0 */
+>  #ifndef __PERF_PRINT_EVENTS_H
+>  #define __PERF_PRINT_EVENTS_H
+> -
+>  #include <stdbool.h>
+> +#include <linux/types.h>
+>
+>  struct event_symbol;
+>
+>  void print_events(const char *event_glob, bool name_only, bool quiet_flag,
+>                   bool long_desc, bool details_flag, bool deprecated,
+>                   const char *pmu_name);
+> +bool is_event_supported(u8 type, u64 config);
+>  int print_hwcache_events(const char *event_glob, bool name_only);
+>  void print_sdt_events(const char *subsys_glob, const char *event_glob,
+>                       bool name_only);
+> --
+> 2.25.1
+>
