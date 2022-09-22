@@ -2,163 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B83D05E703F
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 01:33:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC8655E7044
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 01:43:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbiIVXdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 19:33:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37322 "EHLO
+        id S229499AbiIVXnt convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 22 Sep 2022 19:43:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbiIVXdK (ORCPT
+        with ESMTP id S229459AbiIVXnr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 19:33:10 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39323B5E70;
-        Thu, 22 Sep 2022 16:33:09 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id z13so15683464edb.13;
-        Thu, 22 Sep 2022 16:33:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=1LXt/Xl96l/h02gNxY14SP+hwlW2CW/zPqjudi4txZc=;
-        b=fqv/zq/AbEapAt+EgPEsbPLgCgTCKZ1NBLK27LsD6DzCubtAIgALh3KY6ZlKTbJ2o1
-         m3B2BDzf2agcYCMmME6LzPKdo4o4NNKlEks2Z+noR/HY72y/W8KAPKUuuhyTqh+LJdTF
-         ICzVzDLgoEegddS87mBSGb78ihj00VMB1q1fm27Mlx3PoLMMvhu25Ho2QnuS2o93fS+K
-         tdnQ5gBHb6Jwbj0t1EHvRzlu17tuQza+iEn9QIT30AdSuvJHZqZuYwTaUxUK17jggLGu
-         jwqPII8dCx+uqSjHq476mQ/x3YHqiRktPuPx79a6b0rHG7uiMMcjBchYwCtynqb4xAw2
-         IAJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=1LXt/Xl96l/h02gNxY14SP+hwlW2CW/zPqjudi4txZc=;
-        b=TPr5EqOk/oThaUoPCg6aDIDeM6Mx+WTtZwkP0p6Z9+DhtxboqQJpPf9jdRpOz1cN/u
-         oScNPhs0qNB6amYWixRAXVyLL6+NFCZfDt23aFacTryfAteuNvHbCwgNhKOUk2/yyljy
-         c8yBjEZHUacIt2HOpJWL6eyzNn/2tKqK7eI9oND557v733icZBcyjXRewXzBWtnrArTe
-         si53y8kikH7O7XYLQ49lJuWxBu52zF7IkKOtpp3hEQjlmIl3xa1Ik3tA7cFACj5eqGsZ
-         GI+oIF+XHJZU4Ko1Bnz67AUKA1KXL5C5HPcN8Jvi00Y/jdS5Al9ABKoC4WbRif0STbaJ
-         Q0zA==
-X-Gm-Message-State: ACrzQf10IpcDM5MtCo7SCJMWAVYyp/z+o4cw4TdQPJVtaWyFamaMJgrs
-        S8dea1f7tuxeRe6D8VZayvOixBcwktLnqY6SCG8=
-X-Google-Smtp-Source: AMsMyM5DiFBYbthi2FE2gsNbylvHS3uLjW2CJDgWIMSs+MGoMI7WxG6kvXEF3qzDcScXRg1BjFhd18LJR3IHxpCtG8E=
-X-Received: by 2002:a05:6402:901:b0:454:2b6d:c39 with SMTP id
- g1-20020a056402090100b004542b6d0c39mr5581802edz.50.1663889587565; Thu, 22 Sep
- 2022 16:33:07 -0700 (PDT)
+        Thu, 22 Sep 2022 19:43:47 -0400
+Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB3BF3F85
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 16:43:46 -0700 (PDT)
+Received: from omf03.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay06.hostedemail.com (Postfix) with ESMTP id F376DAB95B;
+        Thu, 22 Sep 2022 23:43:44 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf03.hostedemail.com (Postfix) with ESMTPA id 843E16000D;
+        Thu, 22 Sep 2022 23:43:43 +0000 (UTC)
+Message-ID: <8d657bcf45b23dc634e8c6fc693c166360e6539e.camel@perches.com>
+Subject: Re: [PATCH] get_maintainer: Gracefully handle files with authors
+ but no signers
+From:   Joe Perches <joe@perches.com>
+To:     David Matlack <dmatlack@google.com>
+Cc:     linux-kernel@vger.kernel.org
+Date:   Thu, 22 Sep 2022 16:43:42 -0700
+In-Reply-To: <20220922230114.3556322-1-dmatlack@google.com>
+References: <20220922230114.3556322-1-dmatlack@google.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
 MIME-Version: 1.0
-References: <20220403164907.662860-1-andrew.smirnov@gmail.com>
- <Yyw0K/hcTZ02UP+A@smile.fi.intel.com> <691c3073-5105-9a2b-e6f2-ea0a4b8aaea8@gmail.com>
-In-Reply-To: <691c3073-5105-9a2b-e6f2-ea0a4b8aaea8@gmail.com>
-From:   Andrey Smirnov <andrew.smirnov@gmail.com>
-Date:   Thu, 22 Sep 2022 16:32:55 -0700
-Message-ID: <CAHQ1cqGFFJ0gRbdN+DH0iJhcKc=eee8uNoDyfHEy00-CMgstiw@mail.gmail.com>
-Subject: Re: [PATCH v4] usb: dwc3: Don't switch OTG -> peripheral if extcon is present
-To:     Ferry Toth <fntoth@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Thinh Nguyen <thinhn@synopsys.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Rspamd-Queue-Id: 843E16000D
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Stat-Signature: gfinwzqc7ywnpfrput75684i5695qy77
+X-Rspamd-Server: rspamout02
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+xrUJJqINxFge6EflARit7FT55Z7gRvy8=
+X-HE-Tag: 1663890223-62242
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 3:23 AM Ferry Toth <fntoth@gmail.com> wrote:
->
-> Hi,
->
-> On 22-09-2022 12:08, Andy Shevchenko wrote:
->
-> On Sun, Apr 03, 2022 at 09:49:07AM -0700, Andrey Smirnov wrote:
->
-> If the extcon device exists, get the mode from the extcon device. If
-> the controller is DRD and the driver is unable to determine the mode,
-> only then default the dr_mode to USB_DR_MODE_PERIPHERAL.
->
-> According to Ferry (Cc'ed) this broke Intel Merrifield platform. Ferry, c=
-an you
-> share bisect log?
->
-> I can but not right now. But what I did was bisect between 5.18.0 (good) =
-and 5.19.0 (bad) then when I got near the culprit (~20 remaining) based on =
-the commit message I tried 0f01017191384e3962fa31520a9fd9846c3d352f "usb: d=
-wc3: Don't switch OTG -> peripheral if extcon is present" (bad) and commit =
-before that (good).
->
-> The effect of the patch is that on Merrifield (I tested with Intel Edison=
- Arduino board which has a HW switch to select between host and device mode=
-) device mode works but in host mode USB is completely not working.
->
-> Currently on host mode - when working - superfluous error messages from t=
-usb1210 appear. When host mode is not working there are no tusb1210 message=
-s in the logs / on the console at all. Seemingly tusb1210 is not probed, wh=
-ich points in the direction of a relation to extcon.
->
-> Taking into account the late cycle, I would like to revert the change. An=
-d
-> Ferry and I would help to test any other (non-regressive) approach).
->
-> I have not yet tested if a simple revert fixes the problem but will tonig=
-ht.
->
->
-> I would be happy to test other approaches too.
+On Thu, 2022-09-22 at 16:01 -0700, David Matlack wrote:
+> Gracefully handle the case where a file has no signers (e.g. has not
+> been modified within the last year) but does have authors (e.g. because
+> there are local commits that modifies the file without Signed-off-by
+> tags). This scenario could happen for developers whose workflow is to
+> add Signed-off-by tags as part of git-format-patch rather than as part
+> of git-commit.
 
+I think that's a poor process.
 
-It's a bit hard for me to suggest an alternative approach without
-knowing how things are breaking in this case. I'd love to order one of
-those boards to repro and fix this on my end, but it looks like this
-HW is EOLed and out of stock in most places. If you guys know how to
-get my hands on those boards I'm all ears.
+> Today this scenario results in the following non-sensical output from
+> get_maintainer.pl:
+> 
+>   Bad divisor in main::vcs_assign: 0
+>   "GitAuthor: David Matlack" <dmatlack@google.com> (authored:1/1=100%,added_lines:9/9=100%,removed_lines:3/3=100%)
 
-Barring that, Ferry can you dig more into this failure? E.g. is it this hun=
-k
+Interesting...
 
-@@ -85,7 +86,7 @@ static int dwc3_get_dr_mode(struct dwc3 *dwc)
-                 * mode. If the controller supports DRD but the dr_mode is =
-not
-                 * specified or set to OTG, then set the mode to peripheral=
-.
-                 */
--               if (mode =3D=3D USB_DR_MODE_OTG &&
-+               if (mode =3D=3D USB_DR_MODE_OTG && !dwc->edev &&
-                    (!IS_ENABLED(CONFIG_USB_ROLE_SWITCH) ||
-                     !device_property_read_bool(dwc->dev, "usb-role-switch"=
-)) &&
-                    !DWC3_VER_IS_PRIOR(DWC3, 330A))
-@@ -1632,6 +1633,51 @@ static void dwc3_check_params(struct dwc3 *dwc)
-        }
- }
+> There are two issues with this output: the "Bad divisor" error and the
+> garbled author name. Both stem from this line in vcs_find_signers():
+> 
+>   return (0, \@signatures, \@authors, \@stats) if !@signatures;
+[]
+> Returning 0 for the number of commits and a non-empty list for the
+> authors results in the "Bad divisor". The garbled author name comes from
+> the fact that @authors is the raw, unparsed, output line from git-log.
+> Code later in vcs_find_signers() actually parses out the name and drops
+> the "GitAuthor: " prefix.
+> 
+> Fix this by returning an empty list instead of @authors and @stats to
+> make them coherent with the fact that commits is 0.
+[]
+> diff --git a/scripts/get_maintainer.pl b/scripts/get_maintainer.pl
+[]
+> @@ -1605,7 +1605,7 @@ sub vcs_find_signers {
+>  
+>  #    print("stats: <@stats>\n");
+>  
+> -    return (0, \@signatures, \@authors, \@stats) if !@signatures;
+> +    return (0, (), (), ()) if !@signatures;
 
-that's problematic or moving
+There's probably some better mechanism, not sure what it is though
+as I don't have equivalent commits in the actual tree.
 
- static int dwc3_probe(struct platform_device *pdev)
- {
-        struct device           *dev =3D &pdev->dev;
-@@ -1744,6 +1790,13 @@ static int dwc3_probe(struct platform_device *pdev)
-                goto err2;
-        }
+And I think you need \() and not () as what's returned is a reference
+to an array and not an array or maybe use undef.
 
-+       dwc->edev =3D dwc3_get_extcon(dwc);
-+       if (IS_ERR(dwc->edev)) {
-+               ret =3D PTR_ERR(dwc->edev);
-+               dev_err_probe(dwc->dev, ret, "failed to get extcon\n");
-+               goto err3;
-+       }
-+
-        ret =3D dwc3_get_dr_mode(dwc);
-        if (ret)
-                goto err3;
+>      save_commits_by_author(@lines) if ($interactive);
+>      save_commits_by_signer(@lines) if ($interactive);
 
-to happen earlier? Does tracing the "mrfld_bcove_pwrsrc" driver (the
-excton provider in this case AFIACT) show anything interesting?
