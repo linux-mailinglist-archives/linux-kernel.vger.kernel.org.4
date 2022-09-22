@@ -2,118 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D09D75E6677
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 17:07:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2885F5E667B
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 17:08:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231411AbiIVPHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 11:07:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54866 "EHLO
+        id S231433AbiIVPIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 11:08:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230107AbiIVPHi (ORCPT
+        with ESMTP id S231733AbiIVPIi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 11:07:38 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63679E1191
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 08:07:36 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id a8so15117285lff.13
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 08:07:36 -0700 (PDT)
+        Thu, 22 Sep 2022 11:08:38 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B24D0E118B
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 08:08:37 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id b6so11334252ljr.10
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 08:08:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=AICgMCTu4ugKZVgKKYZSCEgyNXOHBsTus/rL4+rxADE=;
-        b=V6OmMtcM8HwjnmW517gvagdimCQzKh4oEk+jCZREpCpQaMRh+CUYlJnjHhWQjY+sn6
-         O2EMQ4TmRPc0YWA2AXrfK9EAIppOKDmxGDrlHPoDNfxJVW3XtHnP0Fgo5W/reRLAdYHm
-         UVYMEVijD6WYE+JDTgZ0vUoZrmyKJTJtPlgAIrAp/2bsvx+1/X6ph9K33pGARnN0DkAP
-         AgfZpohHy0hyLAk3+mnfVrclwPJDWSjxwZWLrJM9tgAB6aNIiSgHd7ef4jFxWuZMDLPK
-         KNeogYycbDYEqtFUykDyC8n5Xxzcz1p0neVIj97isWerTZuHph+kEpakzCtG+d2YcUpa
-         pKIQ==
+        bh=W3vQjpL7ZnOEsk11xcAIlC0+5dqOSVrvKlDZwfBKfy0=;
+        b=Sy4HPnU+8WeIlCPD1a3QGFYQ+B961P/HPkm5OwWMBlt94OoZG5FSmVTwp22I5HlS4b
+         ctDSD5lE9UqypAqzV3Ye2vSeu/qR6hFaWgosV5Cvs6BZR4QSNF+sJMcfgBXL6Nc+HhUH
+         rjv0UT7ps7zRElHe2o3+Bt/qJUaoHrxv9ned93Zmkiim4eW/IF7PQivZnpyU/X6TYm3x
+         Oh1ifevg6nyKn8raMVC7CsTkJZhlHoyE8tiA7A/rKM9prCbIBmaGyy05vsnNlvWs23sN
+         RuehK72x1PFy9EBkbKt+jYGu3oEHCjUeV+8nGz51JPSTnJQEPgfSdVXwlxvTp6W9g1s4
+         odrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=AICgMCTu4ugKZVgKKYZSCEgyNXOHBsTus/rL4+rxADE=;
-        b=JDL+LRvnMp1qQ38pmRdL3xv+PZlsG59IIDuyihaUZual2xdfDk73bR11mMQ7iprUNy
-         E+RBxF2w3hEVOTq7fEHZm0xhxTBzlEuV1r/cnfxYP3owuZjxrcjTT0rtefPC6AUAiBRM
-         /BoaoltdndUmxsRmAR5XK9eWWxMWtfHty0xyqRDjnrg8dNRyuUqdvyadLmbj3UW34Nlw
-         nH3CRwiPIR8A/pTGQqXEUKb6TBM7AHliYzZq8Voh9YYgtzX21Sabbt5oFot6gEUW8Q5C
-         SigLrKVGKuvu1/3K1ht3Pdrw1/QVv0Lr/ZjIbSH6o6Mjxs2XoVWELu6e1G9haLEpOiEQ
-         Uimw==
-X-Gm-Message-State: ACrzQf1bFvFwMSU+G6VVyT35PILTnngYAfH7wl/hgVXNI3R8F2XG4PRY
-        LAlg3zo0qfHJ4XhyWhle8Bel1Q==
-X-Google-Smtp-Source: AMsMyM5wWu4phY9miXzBVbKKyNmCh/6w2BSelex3t5iKGlg/9o62Y81D5nF1RPEPAveTSBkz6dR4Ww==
-X-Received: by 2002:ac2:4422:0:b0:49f:5c95:9525 with SMTP id w2-20020ac24422000000b0049f5c959525mr1506912lfl.1.1663859254520;
-        Thu, 22 Sep 2022 08:07:34 -0700 (PDT)
+        bh=W3vQjpL7ZnOEsk11xcAIlC0+5dqOSVrvKlDZwfBKfy0=;
+        b=8ChYuD7V92v1lS7bPl0HCYe26n853vy1EdqZ/9y8R/UXzngz8zeuxN24izReobYhR2
+         PVipTIOiedFyWb9KoqL24TiSwYALf6e1xGKUtjS2chZhRDNi9dfJ14Syqk37wt/MDUg+
+         F7ha6YsR0r8UBkvQgmQikvQzBDPLoptu2QQeJpCwHBErVjWAl66OZSwOvwwRoGpkcbIn
+         GfhSiWn+Q4gf9UAKOTR5d/sdtX8lKp3rc9r68xm2BIxlyy75hLYiwx33ndQ3sgcJIjSm
+         JB34TTKDTCaqD43c9AqWljLuY8baEmtDHwciQNCkYsx0NBQpQpvW4/Rsji3jYNhXyMq/
+         A8hw==
+X-Gm-Message-State: ACrzQf0FzP8mkSNGEJXiN+pMXYG1vUKDdiXPh6ZdJCn7jQeZ2udj/+wF
+        kip3azU0OjiPflYp/DT7uTQDOA==
+X-Google-Smtp-Source: AMsMyM4ZLEtwzvNmvLE0cJjaCdT/ninGxqDvzBTCYY81SoYE7F/67rI94RH0F1rBn1/sklyiISA3JQ==
+X-Received: by 2002:a2e:a228:0:b0:26c:5aa5:bdc5 with SMTP id i8-20020a2ea228000000b0026c5aa5bdc5mr1202937ljm.418.1663859316068;
+        Thu, 22 Sep 2022 08:08:36 -0700 (PDT)
 Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id u6-20020a05651220c600b0049771081b10sm986478lfr.31.2022.09.22.08.07.33
+        by smtp.gmail.com with ESMTPSA id 11-20020a05651c128b00b0026c42f67eb8sm963196ljc.7.2022.09.22.08.08.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Sep 2022 08:07:33 -0700 (PDT)
-Message-ID: <04b9e5ef-f3c7-3400-f9df-2f585a084c5d@linaro.org>
-Date:   Thu, 22 Sep 2022 17:07:32 +0200
+        Thu, 22 Sep 2022 08:08:35 -0700 (PDT)
+Message-ID: <21cc4e52-d0d9-8f07-fa74-ea62bb01432a@linaro.org>
+Date:   Thu, 22 Sep 2022 17:08:34 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.2
-Subject: Re: [resend PATCH v4 2/2] dt-bindings: net: snps,dwmac: add clk_csr
- property
+Subject: Re: [PATCH v1 2/2] hwrng: npcm: Add NPCM8XX support
 Content-Language: en-US
-To:     Jianguo Zhang <jianguo.zhang@mediatek.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Biao Huang <biao.huang@mediatek.com>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Christophe Roullier <christophe.roullier@st.com>
-References: <20220922092743.22824-1-jianguo.zhang@mediatek.com>
- <20220922092743.22824-3-jianguo.zhang@mediatek.com>
+To:     Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
+        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
+        yuenn@google.com, benjaminfair@google.com, olivia@selenic.com,
+        herbert@gondor.apana.org.au, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     openbmc@lists.ozlabs.org, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220922142216.17581-1-tmaimon77@gmail.com>
+ <20220922142216.17581-3-tmaimon77@gmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220922092743.22824-3-jianguo.zhang@mediatek.com>
+In-Reply-To: <20220922142216.17581-3-tmaimon77@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/09/2022 11:27, Jianguo Zhang wrote:
-> The clk_csr property is parsed in driver for generating MDC clock
-> with correct frequency. A warning('clk_csr' was unexpeted) is reported
-> when runing 'make_dtbs_check' because the clk_csr property
-> has been not documented in the binding file.
-> 
+On 22/09/2022 16:22, Tomer Maimon wrote:
+>  static int npcm_rng_read(struct hwrng *rng, void *buf, size_t max, bool wait)
+> @@ -102,6 +103,11 @@ static int npcm_rng_probe(struct platform_device *pdev)
+>  	pm_runtime_use_autosuspend(&pdev->dev);
+>  	pm_runtime_enable(&pdev->dev);
+>  
+> +	if (of_device_is_compatible(pdev->dev.of_node, "nuvoton,npcm750-rng"))
+> +		priv->clkp = NPCM_RNG_CLK_SET_25MHZ;
+> +	if (of_device_is_compatible(pdev->dev.of_node, "nuvoton,npcm845-rng"))
+> +		priv->clkp = NPCM_RNG_CLK_SET_62_5MHZ;
 
-You did not describe the case, but apparently this came with
-81311c03ab4d ("net: ethernet: stmmac: add management of clk_csr
-property") which never brought the bindings change.
+No, don't sprinkle compatibles here and there. Driver data is for this.
 
-Therefore the property was never part of bindings documentation and
-bringing them via driver is not the correct process. It bypasses the
-review and such bypass cannot be an argument to bring the property to
-bindings. It's not how new properties can be added.
 
-Therefore I don't agree. Please make it a property matching bindings, so
-vendor prefix, no underscores in node names.
-
-Driver and DTS need updates.
 
 Best regards,
 Krzysztof
