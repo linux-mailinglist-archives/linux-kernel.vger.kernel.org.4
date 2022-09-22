@@ -2,111 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51BC65E6D68
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 22:53:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 775225E6D6C
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 22:56:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230204AbiIVUxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 16:53:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60394 "EHLO
+        id S229644AbiIVU42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 16:56:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbiIVUxk (ORCPT
+        with ESMTP id S229503AbiIVU4Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 16:53:40 -0400
-Received: from rcdn-iport-7.cisco.com (rcdn-iport-7.cisco.com [173.37.86.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC20110D65D;
-        Thu, 22 Sep 2022 13:53:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=cisco.com; i=@cisco.com; l=214; q=dns/txt; s=iport;
-  t=1663880019; x=1665089619;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Sqs253CY96Q1O/q/QDBGUIXsu2oS9qGI4DV9xBwjf8E=;
-  b=E/DHIpW5TvtuTY82S1G/awxGaFthpihgFtMyW7l/vjLrWcVT6Hg9VuaS
-   1aPEfqfwfLEh8ltDRS/UNUkrf8URVtpSgEPhMUx8J8n5jKUJ3DytdpEPQ
-   Wk0Fym9WrzFkj33hpwus9YWgt5I0gcLpROrJKel9/O+x6Y/r5eqUBk9Jx
-   Q=;
-IronPort-Data: =?us-ascii?q?A9a23=3A+QmIHqlUxhL975HU6NU2Mt/o5gwRJ0RdPkR7X?=
- =?us-ascii?q?Q2eYbSJt1+Wr1GztxIbWmqDMqncYGKje90jO4y28k9Q7ZXdnYJiHgVt+Hs8F?=
- =?us-ascii?q?VtH+JHPbTi7wugcHM8zwvUuxyuL1u1GAjX7BJ1yHya0SiuFaOC79yEhjP/QH?=
- =?us-ascii?q?9IQNcadUsxPbV48IMseoUoLd94R2uaEsPDha++/kYqaT/73YDdJ7wVJ3lc8s?=
- =?us-ascii?q?Mpvnv/AUMPa41v0tnRmDRxCUcS3e3M9VPrzLonpR5f0rxU9IwK0ewrD5OnRE?=
- =?us-ascii?q?mLx5RwhDJaulaz2NxZMSb/JNg/IgX1TM0SgqkEd/WppjeBqb7xFNBs/Zzahx?=
- =?us-ascii?q?7idzP1BvJqxRAM2N4XHmf8WVF9TFCQW0ahuoeeZeSnh6ZfCniUqdFOpmZ2CF?=
- =?us-ascii?q?noeOYwe5/YyDG9P3eIXJSpLbR2Zge+yhrWhRYFEgsUlMdmuP4kCu3Vs5S/WA?=
- =?us-ascii?q?OxgQp3ZRajOo9hC018Yis1QHP3Te9AUZBJxYxnaJR5CIFEaDNQ5hujArn3+d?=
- =?us-ascii?q?SBI7VGYv6w650DNwwFrlrvgKtzYfpqNX8o9tkKZoH/Wum3jB1QZOcaZxD6t9?=
- =?us-ascii?q?nO3mvSJnCX1QoseGbS0sPlwjzW7xnQaIA8HSVyh5/K+jyaWX9NZNlwM4iFro?=
- =?us-ascii?q?aUs3EiqVcXmGRqqpHeOpVgbQdU4O+k77hydj6/V+x2xGGcJVHhCZcYguctwQ?=
- =?us-ascii?q?iYlvneZz43BBjF1trCRD3WH+d+8pDCqPAARLGkfdWoKShYD79D/oYY1yBXVQ?=
- =?us-ascii?q?b5LHKezj9DxMT7xxiiHqCUghr4Ty9UC0eC151nBiDO3rZ+PRQdz+x6/dnii5?=
- =?us-ascii?q?ANRZ4O/YYGsr1/B4p5oJ4aDT0Kdu2AElo6a4foJHLmGjyOXR/gVWry0j96aM?=
- =?us-ascii?q?TnYqV1iBZ8s83Kq4XHLVZtd6Tc4LUFlP9wffjnBe0LYvkVa45o7AZcARcebe?=
- =?us-ascii?q?KqrAMgsiKPnD9mgDbbfb8FFZd56cwrvwc2nXmbIt0iFraTmufhX1U+nTPuR?=
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3A0OKxI6lzC6qbR1gI60DyR8DKK4jpDfIp3D?=
- =?us-ascii?q?Abv31ZSRFFG/FwWfrAoB0+726QtN9xYgBDpTnuAsO9qB/nmKKdpLNhWYtKPz?=
- =?us-ascii?q?OW21dATrsC0WKK+VSJcBEWtNQ86U4KScZD4bPLYWSTSa3BkW+F+xFK+qjhzJ?=
- =?us-ascii?q?yV?=
-X-IronPort-Anti-Spam-Filtered: true
-X-IronPort-Anti-Spam-Result: =?us-ascii?q?A0AkBgBDbIJi/5pdJa1aHQI9BQUECRa?=
- =?us-ascii?q?BTwKCKYFLPUOTNIIokUeLHYF8CwEBAQ0BARIwBAEBgU6DNAKFPgIlNAkOAQI?=
- =?us-ascii?q?EAQEBEgEBBQEBAQIBBwSBCROFdYZDAQU6PxALGC5XBhOGFatWeIEzgQGIGYF?=
- =?us-ascii?q?lJIEYAY5fJxyBSUSEPz6KfwSVYzsDVIEFEoEhcQEIBgYHCgUyBgIMGBQEAhM?=
- =?us-ascii?q?SUx4CEwwKHA5UGQwPAxIDEQEHAgsSCBUsCAMCAwgDAgMjCwIDGAkHCgMdCAo?=
- =?us-ascii?q?cEhAUAgQTHwsIAxofLQkCBA4DQwgLCgMRBAMTGAsWCBAEBgMJLw0oCwMUDwE?=
- =?us-ascii?q?GAwYCBQUBAyADFAMFJwcDIQcLJg0NBBwHHQMDBSYDAgIbBwICAwIGFwYCAnE?=
- =?us-ascii?q?KKA0IBAgEHB4lEwUCBzEFBC8CHgQFBhEJAhYCBgQFAgQEFgICEggCCCcbBxY?=
- =?us-ascii?q?2GQEFXQYLCSMcLAsGBQYWAyZSBiIBsVONGJ4qg1aBQ54tSxGDUgGkc5Zmpn4?=
- =?us-ascii?q?CBAYFAhaBYTyBWTMaCBsVgyNRGQ+dECQxOwIGCwEBAwmRGgEB?=
-X-IronPort-AV: E=Sophos;i="5.91,230,1647302400"; 
-   d="scan'208";a="1060960399"
-Received: from rcdn-core-3.cisco.com ([173.37.93.154])
-  by rcdn-iport-7.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 22 Sep 2022 20:53:37 +0000
-Received: from zorba ([10.25.129.98])
-        by rcdn-core-3.cisco.com (8.15.2/8.15.2) with ESMTPS id 28MKrYsJ003891
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Thu, 22 Sep 2022 20:53:36 GMT
-Date:   Thu, 22 Sep 2022 13:53:34 -0700
-From:   Daniel Walker <danielwa@cisco.com>
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     Will Deacon <will@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Rob Herring <robh@kernel.org>,
-        Daniel Gimpelevich <daniel@gimpelevich.san-francisco.ca.us>,
-        Andrew Morton <akpm@linux-foundation.org>, x86@kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-efi@vger.kernel.org
-Subject: Re: [PATCH 0/8] generic command line v4
-Message-ID: <20220922205334.GV4320@zorba>
-References: <20210416040924.2882771-1-danielwa@cisco.com>
- <b517fac5-2fdc-a8c9-75d0-174c67f5a2de@seco.com>
+        Thu, 22 Sep 2022 16:56:25 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12BA2ABF1D
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 13:56:25 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id rt12so8548787pjb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 13:56:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date;
+        bh=QYiPAZGQUdjLQ3pC/Y7rWGlodnle4eRBsTkmkurUbzo=;
+        b=lqSG5BzEvEvQU7McBt7G4mD1rCaFTU/Kc5I5IVy5RA2IBKHUOKsYh/+wU8uCn58JGV
+         p2NvvzXULI/270cBuJo7UCngbrWnlRLns/i4A5xN6fQ5gYVBLroWvafOK4KWmgT+Evtt
+         AqUGsh0wz5vPm9kKcu+X4h55wC+l1Syd7nXE6QgmV0JLujXIwvA/13XxG5Qn/LT6ly3B
+         jtb2cqsP/WRbnEIWDvIII4d3ApHw1WzDnFkGh7Fo8zTjXkYKHdDvgdAhwDUoA0DY5AVi
+         0Y2jECZRqbqNA4ZxO35ehR9BY8aoLks1A1FKPx+53XRYUyeR8GMu0LCtvLUJL+Z5DKUD
+         Sacg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+         :to:cc:subject:date;
+        bh=QYiPAZGQUdjLQ3pC/Y7rWGlodnle4eRBsTkmkurUbzo=;
+        b=cpIREYSEJ5Z1YgnLkOjVbSpSt9u8v6fXYS4CZ4TG0WuNroFFIAIBQnC0NVvRtm/pdT
+         A3MjBmlAiEFwXkAtD2d+eh7h4Yd8C5iJN0nXHmkpq1hQM8Nk1A97vkojSMHFS9lDPR/J
+         zGgCe23J4dpvwnYF4b+00tdPy9OH6kmbrmzxdIH5uQgmlpjuIWLC9VmQqffKyJ/nNyJv
+         ouBSF7VxMVclZxc3XIJVPcNcPGtYtQhYyAzsx3e9iOeAGYsy8lOCWr7wWbgyijMsObwa
+         TGhOX5u9mMoQC8f4J9SrT3OZUrNnOcPXBaG/45mWrAigCILpoGqCxdLhPLXvl+1nAWXi
+         Gl4Q==
+X-Gm-Message-State: ACrzQf3GC18e1aIJwMy4RijSVHx/JlK5BKqhcZzzhrA9rQhaYwBR6Tum
+        7ZUULpWTr+kTb0twKLNMbDE=
+X-Google-Smtp-Source: AMsMyM7PCv78LN7wMcq4HEuJmZ7Kaj3Nzdprzc8QTqLhOuoeUpzGmwpcicKjya63pDVrjUv/aoey1g==
+X-Received: by 2002:a17:90b:4c10:b0:203:bef9:987b with SMTP id na16-20020a17090b4c1000b00203bef9987bmr5720977pjb.9.1663880184497;
+        Thu, 22 Sep 2022 13:56:24 -0700 (PDT)
+Received: from youngsil.svl.corp.google.com ([2620:15c:2d4:203:48bc:f6f4:1035:cf16])
+        by smtp.gmail.com with ESMTPSA id d13-20020a170903230d00b0016d295888e3sm4479515plh.241.2022.09.22.13.56.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Sep 2022 13:56:24 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Stephane Eranian <eranian@google.com>,
+        Kan Liang <kan.liang@linux.intel.com>
+Subject: [PATCH] perf: Change the layout of perf_sample_data
+Date:   Thu, 22 Sep 2022 13:55:50 -0700
+Message-Id: <20220922205550.3094090-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.37.3.998.g577e59143f-goog
+In-Reply-To: <CAM9d7cgDTy96eeCAARufSKZJFMvAAo6QSLAoEQv_zUFD-Rf+Lw@mail.gmail.com>
+References: <CAM9d7cgDTy96eeCAARufSKZJFMvAAo6QSLAoEQv_zUFD-Rf+Lw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b517fac5-2fdc-a8c9-75d0-174c67f5a2de@seco.com>
-X-Outbound-SMTP-Client: 10.25.129.98, [10.25.129.98]
-X-Outbound-Node: rcdn-core-3.cisco.com
-X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIMWL_WL_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 04:45:01PM -0400, Sean Anderson wrote:
-> 
-> 
-> 
-> For an arm64 platform (after rebasing):
-> 
-> Tested-by: Sean Anderson <sean.anderson@seco.com>
+With recent change, it can set fields only if it's actually used.
+Change the data layout so that it can have commonly used fields together
+in a cache line boundary.  The main user (the perf tools) sets the
+IP, TID, TIME, PERIOD always.  Also group relevant fields like addr,
+phys_addr and data_page_size.
 
-Maybe I'll re-submit it.
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+ include/linux/perf_event.h | 35 +++++++++++++++++------------------
+ 1 file changed, 17 insertions(+), 18 deletions(-)
 
-Daniel
+diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
+index e9b151cde491..8c16dae6e6bb 100644
+--- a/include/linux/perf_event.h
++++ b/include/linux/perf_event.h
+@@ -1023,25 +1023,13 @@ extern u64 perf_event_read_value(struct perf_event *event,
+ 
+ 
+ struct perf_sample_data {
+-	/*
+-	 * Fields set by perf_sample_data_init(), group so as to
+-	 * minimize the cachelines touched.
+-	 */
+ 	u64				sample_flags;
+ 	u64				period;
+-
++	u64				type;
+ 	/*
+-	 * The other fields, optionally {set,used} by
+-	 * perf_{prepare,output}_sample().
++	 * Fields set commonly by perf tools, group so as to
++	 * minimize the cachelines touched.
+ 	 */
+-	struct perf_branch_stack	*br_stack;
+-	union perf_sample_weight	weight;
+-	union  perf_mem_data_src	data_src;
+-	u64				txn;
+-	u64				addr;
+-	struct perf_raw_record		*raw;
+-
+-	u64				type;
+ 	u64				ip;
+ 	struct {
+ 		u32	pid;
+@@ -1049,22 +1037,33 @@ struct perf_sample_data {
+ 	}				tid_entry;
+ 	u64				time;
+ 	u64				id;
+-	u64				stream_id;
+ 	struct {
+ 		u32	cpu;
+ 		u32	reserved;
+ 	}				cpu_entry;
++
++	/*
++	 * The other fields, optionally {set,used} by
++	 * perf_{prepare,output}_sample().
++	 */
+ 	struct perf_callchain_entry	*callchain;
+-	u64				aux_size;
++	struct perf_raw_record		*raw;
++	struct perf_branch_stack	*br_stack;
++	union perf_sample_weight	weight;
++	union  perf_mem_data_src	data_src;
++	u64				txn;
+ 
+ 	struct perf_regs		regs_user;
+ 	struct perf_regs		regs_intr;
+ 	u64				stack_user_size;
+ 
+-	u64				phys_addr;
++	u64				stream_id;
+ 	u64				cgroup;
++	u64				addr;
++	u64				phys_addr;
+ 	u64				data_page_size;
+ 	u64				code_page_size;
++	u64				aux_size;
+ } ____cacheline_aligned;
+ 
+ /* default value for data source */
+-- 
+2.37.3.998.g577e59143f-goog
+
