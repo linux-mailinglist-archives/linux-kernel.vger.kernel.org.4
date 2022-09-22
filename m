@@ -2,205 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23F1F5E5BBE
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 09:00:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F260D5E5BC6
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 09:02:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229935AbiIVHAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 03:00:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44710 "EHLO
+        id S230108AbiIVHCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 03:02:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbiIVHAt (ORCPT
+        with ESMTP id S230019AbiIVHCP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 03:00:49 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 347637757C;
-        Thu, 22 Sep 2022 00:00:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663830048; x=1695366048;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=pDByM+4EvL9jGznxlWX5L9b0tuoSXIGd5gx3VxbZxGE=;
-  b=P8J7rUgPAE+PS07jW+8Gaxhh8IUeWmJbjeELBJXuYaxScQFxxuFpcm9a
-   zqmA2MLMWmJ13jngNTL/Xh200qRGkQVWGqa+eMxCrFH14qXt8OPSGd21b
-   lGimXaHkm5OmYIPn+RwFPMbeJEfeNTmNiOXzlQIZXK7259ERsUBhncCih
-   gchQtO3mwBiQOE1Eu0r9Q86ckF2OOXFAQBSQP9klDv+W3KYMNsxUIpTKc
-   a+yRkE/F/j4eBxEhfCwpL2GP+wraAzFCHHHaNi0BuA+0tnou8h3UFb354
-   sGYmRpCIrisinxNn9K9x8w/2VCMBbNkf2ryAGjkd1wi6At8nvB9LYeVY9
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="298934345"
-X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
-   d="scan'208";a="298934345"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 00:00:47 -0700
-X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
-   d="scan'208";a="688181506"
-Received: from lsundin-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.58.180])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 00:00:44 -0700
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Lennert Buytenhek <buytenh@wantstofly.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
+        Thu, 22 Sep 2022 03:02:15 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69BE887091;
+        Thu, 22 Sep 2022 00:02:14 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 0CEE21F8DA;
+        Thu, 22 Sep 2022 07:02:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1663830133; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Tql28FEDZR5AkUvGYGik2Z9q+G8l9Q/77SR1ki9LMrQ=;
+        b=PH+m9CqbfIp2VhPw8ZAkmo/lYuHiFjjeHa9aaM0FkmuBHRQD8dO/uUMS96IjSwLOQbN/9l
+        HECqR9Iyk/cqDsHEr4fnSm7NjVnZLzfSgd7g6Oc3j50FpmhcW2mh94UtLCDc5k3M/3QtuX
+        oXQ/0XbeGK8JTqh+lweIQubnqUWa7js=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id D0F222C141;
+        Thu, 22 Sep 2022 07:02:12 +0000 (UTC)
+Date:   Thu, 22 Sep 2022 09:02:09 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Alex Williamson <alex.williamson@hp.com>,
-        Aristeu Sergio Rozanski Filho <aris@cathedrallabs.org>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Lennert Buytenhek <buytenh@arista.com>
-Subject: [PATCH v4 1/1] serial: 8250: Toggle IER bits on only after irq has been set up
-Date:   Thu, 22 Sep 2022 10:00:05 +0300
-Message-Id: <20220922070005.2965-1-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
+        Luis Chamberlain <mcgrof@kernel.org>,
+        linux-modules@vger.kernel.org
+Subject: Re: [PATCH v4 4/8] kallsyms: Improve the performance of
+ kallsyms_lookup_name()
+Message-ID: <YywIcQzaGmV43zr6@alley>
+References: <20220920071317.1787-1-thunder.leizhen@huawei.com>
+ <20220920071317.1787-5-thunder.leizhen@huawei.com>
+ <Yyss3SWM0nTVnjT7@alley>
+ <3c86335e-c5b8-b291-d0c2-9b69f912f900@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3c86335e-c5b8-b291-d0c2-9b69f912f900@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Invoking TIOCVHANGUP on 8250_mid port on Ice Lake-D and then reopening
-the port triggers these faults during serial8250_do_startup():
+On Thu 2022-09-22 10:15:22, Leizhen (ThunderTown) wrote:
+> 
+> 
+> On 2022/9/21 23:25, Petr Mladek wrote:
+> > On Tue 2022-09-20 15:13:13, Zhen Lei wrote:
+> >> Currently, to search for a symbol, we need to expand the symbols in
+> >> 'kallsyms_names' one by one, and then use the expanded string for
+> >> comparison. This process can be optimized.
+> >>
+> >> And now scripts/kallsyms no longer compresses the symbol types, each
+> >> symbol type always occupies one byte. So we can first compress the
+> >> searched symbol and then make a quick comparison based on the compressed
+> >> length and content. In this way, for entries with mismatched lengths,
+> >> there is no need to expand and compare strings. And for those matching
+> >> lengths, there's no need to expand the symbol. This saves a lot of time.
+> >> According to my test results, the average performance of
+> >> kallsyms_lookup_name() can be improved by 20 to 30 times.
+> >>
+> >> The pseudo code of the test case is as follows:
+> >> static int stat_find_name(...)
+> >> {
+> >> 	start = sched_clock();
+> >> 	(void)kallsyms_lookup_name(name);
+> >> 	end = sched_clock();
+> >> 	//Update min, max, cnt, sum
+> >> }
+> >>
+> >> /*
+> >>  * Traverse all symbols in sequence and collect statistics on the time
+> >>  * taken by kallsyms_lookup_name() to lookup each symbol.
+> >>  */
+> >> kallsyms_on_each_symbol(stat_find_name, NULL);
+> >>
+> >> The test results are as follows (twice):
+> >> After : min=5250, max=  726560, avg= 302132
+> >> After : min=5320, max=  726850, avg= 301978
+> >> Before: min=170,  max=15949190, avg=7553906
+> >> Before: min=160,  max=15877280, avg=7517784
+> >>
+> >> The average time consumed is only 4.01% and the maximum time consumed is
+> >> only 4.57% of the time consumed before optimization.
+> >>
+> >> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> >> ---
+> >>  kernel/kallsyms.c | 79 +++++++++++++++++++++++++++++++++++++++++++++--
+> >>  1 file changed, 76 insertions(+), 3 deletions(-)
+> >>
+> >> diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+> >> index 3e7e2c2ad2f75ef..2d76196cfe89f34 100644
+> >> --- a/kernel/kallsyms.c
+> >> +++ b/kernel/kallsyms.c
+> >> @@ -87,6 +87,71 @@ static unsigned int kallsyms_expand_symbol(unsigned int off,
+> >> +{
+> >> +	int i, j, k, n;
+> >> +	int len, token_len;
+> >> +	const char *token;
+> >> +	unsigned char token_idx[KSYM_NAME_LEN];
+> >> +	unsigned char token_bak[KSYM_NAME_LEN];
+> > 
+> > Why do we need two buffers? It should be possible to compress the name
+> > in the same buffer as it is done in compress_symbols() in scripts/callsyms.c.
+> 
+> Because the performance would be a little better. Now this function takes
+> just over a microsecond. Currently, it takes about 250 microseconds on
+> average to lookup a symbol, so adding a little more time to this function
+> doesn't affect the overall picture. I'll modify and test it as you suggest
+> below.
 
-  DMAR: DRHD: handling fault status reg 3
-  DMAR: [DMA Write NO_PASID] Request device [00:1a.0] fault addr 0x0 [fault reason 0x05] PTE Write access is not set
+We need to be careful about a stack overflow. I have seen that
+KSYM_NAME_LEN might need to be increased to 512 because of
+Rust support, see
+https://lore.kernel.org/r/20220805154231.31257-6-ojeda@kernel.org
 
-If the IRQ hasn't been set up yet, the UART will have zeroes in its MSI
-address/data registers. Disabling the IRQ at the interrupt controller
-won't stop the UART from performing a DMA write to the address programmed
-in its MSI address register (zero) when it wants to signal an interrupt.
+> >> @@ -192,20 +257,28 @@ unsigned long kallsyms_lookup_name(const char *name)
+> >>  	for (i = 0, off = 0; i < kallsyms_num_syms; i++) {
+> >>  		off = kallsyms_expand_symbol(off, namebuf, ARRAY_SIZE(namebuf));
+> >>  
+> >> -		if (strcmp(namebuf, name) == 0)
+> >> -			return kallsyms_sym_address(i);
+> >> -
+> >>  		if (cleanup_symbol_name(namebuf) && strcmp(namebuf, name) == 0)
+> >>  			return kallsyms_sym_address(i);
+> > 
+> > Hmm, it means that the speedup is not usable when kernel is compiled LLVM?
+> > It might actually slow down the search because we would need to use
+> > both fast and slow search?
+> 
+> Theoretically, I don't think so. A string comparison was removed from the
+> slow search. "if (name_len != len)" is faster than
+> "if (strcmp(namebuf, name) == 0)". Even if they're equal,
+> kallsyms_compress_symbol_name() only takes 1-2us, it doesn't affect the
+> overall picture. The average lookup time before optimization is
+> millisecond-level.
+>
+> Before: min=170,  max=15949190, avg=7553906
 
-The UARTs (in Ice Lake-D) implement PCI 2.1 style MSI without masking
-capability, so there is no way to mask the interrupt at the source PCI
-function level, except disabling the MSI capability entirely, but that
-would cause it to fall back to INTx# assertion, and the PCI specification
-prohibits disabling the MSI capability as a way to mask a function's
-interrupt service request.
+Good point! I agree that the potential extra overhead is negligible
+when using the old code as a fallback.
 
-The MSI address register is zeroed by the hangup as the irq is freed.
-The interrupt is signalled during serial8250_do_startup() performing a
-THRE test that temporarily toggles THRI in IER. The THRE test currently
-occurs before UART's irq (and MSI address) is properly set up.
-
-Refactor serial8250_do_startup() such that irq is set up before the
-THRE test. The current irq setup code is intermixed with the timer
-setup code. As THRE test must be performed prior to the timer setup,
-extract it into own function and call it only after the THRE test.
-
-The ->setup_timer() needs to be part of the struct uart_8250_ops in
-order to not create circular dependency between 8250 and 8250_base
-modules.
-
-Reported-by: Lennert Buytenhek <buytenh@arista.com>
-Tested-by: Lennert Buytenhek <buytenh@arista.com>
-Fixes: 40b36daad0ac ("[PATCH] 8250 UART backup timer")
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
----
-v4:
-- Add setup_timer() to univ8250_driver_ops to avoid circular module dependency
-
-v3:
-- Improved the commit with Lennert's superior descriptions.
-- Added Andy's Rev-by
-
-v2:
-- Remove unnecessary changes to comments & newlines
-- Change Lennert's email & add Tested-by
-- Improve description of the problem (thank to Lennert's explanation)
-
- drivers/tty/serial/8250/8250_core.c | 16 +++++++++++-----
- drivers/tty/serial/8250/8250_port.c |  8 +++++---
- include/linux/serial_8250.h         |  1 +
- 3 files changed, 17 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/tty/serial/8250/8250_core.c b/drivers/tty/serial/8250/8250_core.c
-index 2e83e7367441..94fbf0add2ce 100644
---- a/drivers/tty/serial/8250/8250_core.c
-+++ b/drivers/tty/serial/8250/8250_core.c
-@@ -298,10 +298,9 @@ static void serial8250_backup_timeout(struct timer_list *t)
- 		jiffies + uart_poll_timeout(&up->port) + HZ / 5);
- }
- 
--static int univ8250_setup_irq(struct uart_8250_port *up)
-+static void univ8250_setup_timer(struct uart_8250_port *up)
- {
- 	struct uart_port *port = &up->port;
--	int retval = 0;
- 
- 	/*
- 	 * The above check will only give an accurate result the first time
-@@ -322,10 +321,16 @@ static int univ8250_setup_irq(struct uart_8250_port *up)
- 	 */
- 	if (!port->irq)
- 		mod_timer(&up->timer, jiffies + uart_poll_timeout(port));
--	else
--		retval = serial_link_irq_chain(up);
-+}
- 
--	return retval;
-+static int univ8250_setup_irq(struct uart_8250_port *up)
-+{
-+	struct uart_port *port = &up->port;
-+
-+	if (port->irq)
-+		return serial_link_irq_chain(up);
-+
-+	return 0;
- }
- 
- static void univ8250_release_irq(struct uart_8250_port *up)
-@@ -381,6 +386,7 @@ static struct uart_ops univ8250_port_ops;
- static const struct uart_8250_ops univ8250_driver_ops = {
- 	.setup_irq	= univ8250_setup_irq,
- 	.release_irq	= univ8250_release_irq,
-+	.setup_timer	= univ8250_setup_timer,
- };
- 
- static struct uart_8250_port serial8250_ports[UART_NR];
-diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-index 39b35a61958c..cfc022529e60 100644
---- a/drivers/tty/serial/8250/8250_port.c
-+++ b/drivers/tty/serial/8250/8250_port.c
-@@ -2294,6 +2294,10 @@ int serial8250_do_startup(struct uart_port *port)
- 	if (port->irq && (up->port.flags & UPF_SHARE_IRQ))
- 		up->port.irqflags |= IRQF_SHARED;
- 
-+	retval = up->ops->setup_irq(up);
-+	if (retval)
-+		goto out;
-+
- 	if (port->irq && !(up->port.flags & UPF_NO_THRE_TEST)) {
- 		unsigned char iir1;
- 
-@@ -2336,9 +2340,7 @@ int serial8250_do_startup(struct uart_port *port)
- 		}
- 	}
- 
--	retval = up->ops->setup_irq(up);
--	if (retval)
--		goto out;
-+	up->ops->setup_timer(up);
- 
- 	/*
- 	 * Now, initialize the UART
-diff --git a/include/linux/serial_8250.h b/include/linux/serial_8250.h
-index 8c7b793aa4d7..16e3d75a324c 100644
---- a/include/linux/serial_8250.h
-+++ b/include/linux/serial_8250.h
-@@ -74,6 +74,7 @@ struct uart_8250_port;
- struct uart_8250_ops {
- 	int		(*setup_irq)(struct uart_8250_port *);
- 	void		(*release_irq)(struct uart_8250_port *);
-+	void		(*setup_timer)(struct uart_8250_port *);
- };
- 
- struct uart_8250_em485 {
--- 
-2.30.2
-
+Best Regards,
+Petr
