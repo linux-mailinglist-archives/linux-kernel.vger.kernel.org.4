@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5EB75E61E1
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 14:00:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F55E5E61C9
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 13:54:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230346AbiIVMA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 08:00:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42972 "EHLO
+        id S231596AbiIVLx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 07:53:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbiIVMAW (ORCPT
+        with ESMTP id S230235AbiIVLxv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 08:00:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81D63B774C;
-        Thu, 22 Sep 2022 05:00:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BF3160A69;
-        Thu, 22 Sep 2022 12:00:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02025C433C1;
-        Thu, 22 Sep 2022 12:00:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663848019;
-        bh=5fCXJLvYDQcpKwWgLwdXuoVu9a9+BgW/1T/mDq3Sa74=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PuIlBZEwHEEWj8lkLtJIqrP22o5/KGC59oNMa68fAkTpKECRUg2qw547udDvRZBlf
-         jqoMa8O+q2gW1WGAzXbshYXGx3jDhbO9Y4j5O+q0LDezrypr1jbbartqljzXvwiN+r
-         DvNZajgZrg3i4542Bwv25U9J2laZGuMBTIJai45Y=
-Date:   Thu, 22 Sep 2022 14:00:16 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jens Glathe <jens.glathe@oldschoolsolutions.biz>
-Cc:     mathias.nyman@intel.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fix: add XHCI_SPURIOUS_SUCCESS to ASM1042 despite being
- a V0.96 controller
-Message-ID: <YyxOUCE35G8q+6nA@kroah.com>
-References: <20220830160035.10333-1-jens.glathe@oldschoolsolutions.biz>
+        Thu, 22 Sep 2022 07:53:51 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 426299752A;
+        Thu, 22 Sep 2022 04:53:50 -0700 (PDT)
+Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MYDCF4mg8zHp14;
+        Thu, 22 Sep 2022 19:51:37 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by dggpeml500021.china.huawei.com
+ (7.185.36.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 22 Sep
+ 2022 19:53:47 +0800
+From:   Baokun Li <libaokun1@huawei.com>
+To:     <linux-ext4@vger.kernel.org>
+CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>, <jack@suse.cz>,
+        <ritesh.list@gmail.com>, <lczerner@redhat.com>,
+        <enwlinux@gmail.com>, <linux-kernel@vger.kernel.org>,
+        <yi.zhang@huawei.com>, <yebin10@huawei.com>,
+        <chengzhihao1@huawei.com>, <yukuai3@huawei.com>,
+        <libaokun1@huawei.com>, <stable@vger.kernel.org>
+Subject: [PATCH v2] ext4: fix use-after-free in ext4_ext_shift_extents
+Date:   Thu, 22 Sep 2022 20:04:34 +0800
+Message-ID: <20220922120434.1294789-1-libaokun1@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220830160035.10333-1-jens.glathe@oldschoolsolutions.biz>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500021.china.huawei.com (7.185.36.21)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,66 +49,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 06:00:35PM +0200, Jens Glathe wrote:
-> only if it reports as a V0.96 XHCI controller. Appears to fix the errors
-> "xhci_hcd <address>; ERROR Transfer event TRB DMA ptr not part of current TD ep_index 2 comp_code 13"
-> that appear spuriously (or pretty often) when using a r8152 USB3 ethernet adapter with integrated hub.
-> ---
->  drivers/usb/host/xhci-pci.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-> index dce6c0ec8d34..035229bc6d29 100644
-> --- a/drivers/usb/host/xhci-pci.c
-> +++ b/drivers/usb/host/xhci-pci.c
-> @@ -306,8 +306,14 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
->  	}
->  
->  	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
-> -		pdev->device == PCI_DEVICE_ID_ASMEDIA_1042_XHCI)
-> +		pdev->device == PCI_DEVICE_ID_ASMEDIA_1042_XHCI) {
-> +    /* try to tame the ASMedia 1042 controller which is 0.96 
-> +    */
-> +	  if (xhci->hci_version == 0x96) {
-> +      xhci->quirks |= XHCI_SPURIOUS_SUCCESS;
-> +    }
->  		xhci->quirks |= XHCI_BROKEN_STREAMS;
-> +	}
->  	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
->  		pdev->device == PCI_DEVICE_ID_ASMEDIA_1042A_XHCI) {
->  		xhci->quirks |= XHCI_TRUST_TX_LENGTH;
-> -- 
-> 2.25.1
-> 
+If the starting position of our insert range happens to be in the hole
+between the two ext4_extent_idx, because the lblk of the ext4_extent in
+the previous ext4_extent_idx is always less than the start, which leads
+to the "extent" variable access across the boundary, the following UAF is
+triggered:
+==================================================================
+BUG: KASAN: use-after-free in ext4_ext_shift_extents+0x257/0x790
+Read of size 4 at addr ffff88819807a008 by task fallocate/8010
+CPU: 3 PID: 8010 Comm: fallocate Tainted: G            E     5.10.0+ #492
+Call Trace:
+ dump_stack+0x7d/0xa3
+ print_address_description.constprop.0+0x1e/0x220
+ kasan_report.cold+0x67/0x7f
+ ext4_ext_shift_extents+0x257/0x790
+ ext4_insert_range+0x5b6/0x700
+ ext4_fallocate+0x39e/0x3d0
+ vfs_fallocate+0x26f/0x470
+ ksys_fallocate+0x3a/0x70
+ __x64_sys_fallocate+0x4f/0x60
+ do_syscall_64+0x33/0x40
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+==================================================================
 
+For right shifts, we can divide them into the following situations：
 
-Hi,
+1. When the first ee_block of ext4_extent_idx is greater than or equal to
+   start, make right shifts directly from the first ee_block.
+    1) If it is greater than start, we need to continue searching in the
+       previous ext4_extent_idx.
+    2) If it is equal to start, we can exit the loop (iterator=NULL).
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+2. When the first ee_block of ext4_extent_idx is less than start, then
+   traverse from the last extent to find the first extent whose ee_block
+   is less than start.
+    1) If extent is still the last extent after traversal, it means that
+       the last ee_block of ext4_extent_idx is less than start, that is,
+       start is located in the hole between idx and (idx+1), so we can
+       exit the loop directly (break) without right shifts.
+    2) Otherwise, make right shifts at the corresponding position of the
+       found extent, and then exit the loop (iterator=NULL).
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+Fixes: 331573febb6a ("ext4: Add support FALLOC_FL_INSERT_RANGE for fallocate")
+Cc: stable@vger.kernel.org # v4.2+
+Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
+Signed-off-by: Baokun Li <libaokun1@huawei.com>
+---
+V1->V2:
+  Initialize "ret" after the "again:" label to avoid return value mismatch.
+  Refactoring reduces cycles and makes code more readable.
 
-- Your patch contains warnings and/or errors noticed by the
-  scripts/checkpatch.pl tool.
+ fs/ext4/extents.c | 18 +++++++++++++-----
+ 1 file changed, 13 insertions(+), 5 deletions(-)
 
-- Your patch does not have a Signed-off-by: line.  Please read the
-  kernel file, Documentation/SubmittingPatches and resend it after
-  adding that line.  Note, the line needs to be in the body of the
-  email, before the patch, not at the bottom of the patch or in the
-  email signature.
+diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
+index c148bb97b527..39c9f87de0be 100644
+--- a/fs/ext4/extents.c
++++ b/fs/ext4/extents.c
+@@ -5179,6 +5179,7 @@ ext4_ext_shift_extents(struct inode *inode, handle_t *handle,
+ 	 * and it is decreased till we reach start.
+ 	 */
+ again:
++	ret = 0;
+ 	if (SHIFT == SHIFT_LEFT)
+ 		iterator = &start;
+ 	else
+@@ -5222,14 +5223,21 @@ ext4_ext_shift_extents(struct inode *inode, handle_t *handle,
+ 					ext4_ext_get_actual_len(extent);
+ 		} else {
+ 			extent = EXT_FIRST_EXTENT(path[depth].p_hdr);
+-			if (le32_to_cpu(extent->ee_block) > 0)
++			if (le32_to_cpu(extent->ee_block) > start)
+ 				*iterator = le32_to_cpu(extent->ee_block) - 1;
+-			else
+-				/* Beginning is reached, end of the loop */
++			else if (le32_to_cpu(extent->ee_block) == start)
+ 				iterator = NULL;
+-			/* Update path extent in case we need to stop */
+-			while (le32_to_cpu(extent->ee_block) < start)
++			else {
++				extent = EXT_LAST_EXTENT(path[depth].p_hdr);
++				while (le32_to_cpu(extent->ee_block) >= start)
++					extent--;
++
++				if (extent == EXT_LAST_EXTENT(path[depth].p_hdr))
++					break;
++
+ 				extent++;
++				iterator = NULL;
++			}
+ 			path[depth].p_ext = extent;
+ 		}
+ 		ret = ext4_ext_shift_path_extents(path, shift, inode,
+-- 
+2.31.1
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
