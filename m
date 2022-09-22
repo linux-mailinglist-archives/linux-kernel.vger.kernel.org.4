@@ -2,393 +2,270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5F835E6774
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 17:45:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1826D5E6777
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 17:45:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231700AbiIVPpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 11:45:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53098 "EHLO
+        id S231553AbiIVPpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 11:45:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231613AbiIVPo3 (ORCPT
+        with ESMTP id S231920AbiIVPom (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 11:44:29 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C22F4EEB4E
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 08:44:08 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id v1so9137142plo.9
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 08:44:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=NpyPMjzwtKQ4w+0odjsEFihdg4KtQVQ3rpmkouPDohM=;
-        b=dW37y8AN0pwrvhwV7kSpnkxlH4uRaI3RxfoqrOFjo0/MI8rHPpupF4kVWiGMaefQhB
-         xiq0+5q9QZuKOGxoeTvK9uuwowqAKAR6rZO3AO0FMcvs4poig96f8fZPKYoAIv8tXzPi
-         4FmfMiwHGVRUI2QkHAsu6hDvFX1sfoRdndE0s=
+        Thu, 22 Sep 2022 11:44:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B13DBEE1E
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 08:44:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663861473;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RHodpV7EhpaXu4aRtMhZB8p3sn/BG8brHG4TYIiiWwM=;
+        b=g5PNmi9NIb93y4PypYPQUtUdAbCwrJLHTGaa1z51onGO1mPMdJoRnfTKfRXYwd6Utu8IKW
+        wJty8RCXjyeyD4inYFKSWxJ9jg99XC0CpXT9/gs4PAx8eHBsT0BFPW5nr0ydUQ+GLUNqR/
+        8PZw892SfR2NiQzeOsLwrROJ+GXHqhM=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-330-m0tJne7CMrSRJuPCTjOPmA-1; Thu, 22 Sep 2022 11:44:31 -0400
+X-MC-Unique: m0tJne7CMrSRJuPCTjOPmA-1
+Received: by mail-ed1-f72.google.com with SMTP id y1-20020a056402358100b00451b144e23eso6909691edc.18
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 08:44:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=NpyPMjzwtKQ4w+0odjsEFihdg4KtQVQ3rpmkouPDohM=;
-        b=2LF3Ne1DrB7k4ug6VFpHrQ7kZ/yIDVQJT9ld9FHp1fAkUkva9RemOhzv9GDo6Js9PY
-         0N26bEuI/khsaHLkq0iVead4pMo3WOpaG6kMx/J/zL2k0QfEZGsp949LK3kzSTyeEAn/
-         7B0f0mJtl8dWru3nkT9LAB1kRfoxFsfBqymWHRDocDJ/HbqitfITL2v67k9RNE1o1zUH
-         ZMsDp6404fv4KMCutLRh6TSf22a3BLDuwAqySH/yp1cgZ5VwTkm1JJVnsXn1/fLkcPic
-         2tUredbRYOMh0oWXwDFB98wwPk4nIV2wFt47JuiD+D0QMkUTgCWjH6MUo3d2m5a+3eGL
-         QZGA==
-X-Gm-Message-State: ACrzQf1hSdvyN1Go2mCcxxe9G27a7+Njg5sUit1Y7pQh/PsAzga9tbW2
-        Kbtqgc1P9q6z7wTxvc2efkM7L+PvVcB5Lw==
-X-Google-Smtp-Source: AMsMyM4XKRlVx4UCagdXcjE6UiEGv+nHjxsCwSVRGgWYODG1SUSakSsYUykkeMGaIGt0d26WS/9WxA==
-X-Received: by 2002:a17:90b:3b91:b0:202:91d7:6a5d with SMTP id pc17-20020a17090b3b9100b0020291d76a5dmr4277529pjb.101.1663861448468;
-        Thu, 22 Sep 2022 08:44:08 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:5321:6ad9:3932:13d8])
-        by smtp.gmail.com with ESMTPSA id a19-20020a621a13000000b0053e8fe8a705sm4685492pfa.17.2022.09.22.08.44.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 08:44:07 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     rafael@kernel.org, sboyd@kernel.org
-Cc:     pavel@ucw.cz, linux-pm@vger.kernel.org, len.brown@intel.com,
-        linux-clk@vger.kernel.org, gregkh@linuxfoundation.org,
-        Douglas Anderson <dianders@chromium.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 2/2] clk: core: Avoid potential deadlock when disabling unused clocks
-Date:   Thu, 22 Sep 2022 08:43:54 -0700
-Message-Id: <20220922084322.RFC.2.I375b6b9e0a0a5348962f004beb3dafee6a12dfbb@changeid>
-X-Mailer: git-send-email 2.37.3.968.ga6b4b080e4-goog
-In-Reply-To: <20220922154354.2486595-1-dianders@chromium.org>
-References: <20220922154354.2486595-1-dianders@chromium.org>
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=RHodpV7EhpaXu4aRtMhZB8p3sn/BG8brHG4TYIiiWwM=;
+        b=FgnKLpsRYZo8l8PgYrL356gsdWp52YsZNHRMJ6PCn36vaEIDSyKB2IltP0z1n0NAsl
+         POTwkrY+Q5tGbaIr0ltWROiqL7ifRFBZPAVjufYVBBAT0YTGj7kG4zlrKhxs1WEu18kg
+         urKMxvk4tGkV6ag/Yx6Wa45fPXzTqIC8GYls2p75JPdtT5WCATS30FhHKpwMtAKTZnOO
+         EWsT2y2o0hXtQiSv+2mNYyoiWvTNZToWeva4aZZbHWlwJ14xTM8Juy2gjMxLiaVJc+qi
+         AUsTjaMlptMQMttMh1rBxBOnveD+zaVd0VGTgidkHRdBqgqxVYm1/yozt1g7s0pBTXg4
+         mi4w==
+X-Gm-Message-State: ACrzQf0f92HsJf0izOD2ra1yNMBP+FgTqxexci2YY0vehFDZi9TT0xUB
+        I2jYSsJ8yLH2y02pnX0oQawSz0C1r1WEU2q+GCQ6EdEaMjL6VBKBC/YSUbDhw467eDOOrPCds8Y
+        +/Gzvu7aXBngwey8FEi4xip8+
+X-Received: by 2002:a05:6402:d47:b0:454:e621:3b3f with SMTP id ec7-20020a0564020d4700b00454e6213b3fmr3985267edb.5.1663861470798;
+        Thu, 22 Sep 2022 08:44:30 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6SpdK/PURq+X8cfXm0UH59zJ6jwrvbA2mVx1spGsqNnfrCFxza1apEtPYQDr3CbKYztRe/NA==
+X-Received: by 2002:a05:6402:d47:b0:454:e621:3b3f with SMTP id ec7-20020a0564020d4700b00454e6213b3fmr3985246edb.5.1663861470594;
+        Thu, 22 Sep 2022 08:44:30 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id a10-20020a50ff0a000000b00454546561cfsm3777921edu.82.2022.09.22.08.44.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Sep 2022 08:44:30 -0700 (PDT)
+Message-ID: <7b5ca374-4d54-9848-f059-f76a8e1fc3c6@redhat.com>
+Date:   Thu, 22 Sep 2022 17:44:29 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH] platform/x86/amd: pmc: Fix build without debugfs
+To:     Nathan Chancellor <nathan@kernel.org>,
+        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Mark Gross <markgross@kernel.org>
+Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev
+References: <20220922153100.324922-1-nathan@kernel.org>
+Content-Language: en-US
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220922153100.324922-1-nathan@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While booting up my system, I seem to have hit the lucky jackpot and
-my system was consistently deadlocking from an issue that seems to
-have been possible for a long time. Analysis via kgdb made it obvious
-what was happening.
+Hi,
 
-The quick summary is here (gory details below):
-* Task A:
-  - running clk_disable_unused() which holds the prepare lock.
-  - doing a synchronous runtime resume on a device; blocked waiting
-    for the device which is marked as midway through suspending.
-* Task B:
-  - midway through suspending the same device on a work thread.
-  - trying to unprepare a clock and grab the prepare lock.
+On 9/22/22 17:31, Nathan Chancellor wrote:
+> Without CONFIG_DEBUG_FS, the following build error occurs:
+> 
+>   drivers/platform/x86/amd/pmc.c:984:17: error: use of undeclared identifier 'pmc_groups'; did you mean 'set_groups'?
+>                   .dev_groups = pmc_groups,
+>                                 ^~~~~~~~~~
+>                                 set_groups
+>   ./include/linux/cred.h:65:13: note: 'set_groups' declared here
+>   extern void set_groups(struct cred *, struct group_info *);
+>               ^
+>   drivers/platform/x86/amd/pmc.c:984:17: error: incompatible pointer types initializing 'const struct attribute_group **' with an expression of type 'void (struct cred *, struct group_info *)' [-Werror,-Wincompatible-pointer-types]
+>                   .dev_groups = pmc_groups,
+>                                 ^~~~~~~~~~
+>   2 errors generated.
+> 
+> pmc_groups was only defined inside a CONFIG_DEBUG_FS block but
+> commit 7f1ea75d499a ("platform/x86/amd: pmc: Add sysfs files for SMU")
+> intended for these sysfs files to be available outside of debugfs.
+> Shuffle the necessary functions out of the CONFIG_DEBUG_FS block so that
+> the file always builds.
+> 
+> Fixes: 7f1ea75d499a ("platform/x86/amd: pmc: Add sysfs files for SMU")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-That's a pretty clear deadlock.
+Thank you for your patch, I've applied this patch to my review-hans 
+branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
 
-Fixing the deadlock isn't amazingly straightforward. It should be
-pretty clear that a random device's PM Runtime callbacks should be
-able to prepare/unprepare clocks, so pretty much the only action would
-be to drop the "prepare" lock while disabling unused clocks. That's
-not super safe, though.
+Note it will show up in my review-hans branch once I've pushed my
+local branch there, which might take a while.
 
-Instead of rejiggering the locking design of the whole clock
-framework, let's use the following observations to fix this:
-1. Disabling unused clocks is not terribly urgent. It can be delayed
-   for a bit.
-2. Disabling unused clocks can be retried. In other words, at any
-   point in time we can stop, drop the prepare lock, and start all
-   over again from the beginning.
-This means that we can "fix" the problem by just backing off, delaying
-a bit, and trying again.
+Once I've run some tests on this branch the patches there will be
+added to the platform-drivers-x86/for-next branch and eventually
+will be included in the pdx86 pull-request to Linus for the next
+merge-window.
 
-At the moment we'll do an exponential type backoff (start at 1 ms and
-double each time) and try at most 10 times. These numbers were picked
-arbitrarily but seem like they'll work.
+Regards,
 
-Gory detail of the analysis follow. This was from the chromeos-5.15
-kernel, not pure upstream. The race hits as part of a lucky jackpot of
-timings so I had to analyze it on the kernel I was on, but as far as I
-know everything about this analysis applies to upstream:
+Hans
 
-Task A stack crawl (doing the clk_disable_unused()):
-  task:swapper/0 state:D stack: 0 pid: 1 ppid: 0 flags:0x00000008
-  Call trace:
-   schedule()
-   rpm_resume()
-   __pm_runtime_resume()
-   clk_pm_runtime_get()
-   clk_disable_unused_subtree()
-   clk_disable_unused_subtree()
-   clk_disable_unused_subtree()
-   clk_disable_unused_subtree()
-   clk_disable_unused()
-   do_one_initcall()
 
-In kgdb you can see the "dev" being resumed:
-(gdb) frame 4
-    at .../drivers/base/power/runtime.c:819
-819                             schedule();
-(gdb) print dev->driver
-$2 = (struct device_driver *) 0x... <lpass_aon_cc_sc7280_driver+40>
 
-Task B stack crawl
-   schedule()
-   schedule_preempt_disabled()
-   __mutex_lock_common()
-   mutex_lock_nested()
-   clk_prepare_lock()
-   clk_unprepare()
-   pm_clk_suspend()
-   pm_generic_runtime_suspend()
-   __rpm_callback()
-   rpm_callback()
-   rpm_suspend()
-   pm_runtime_work()
-   process_one_work()
-   worker_thread()
-   kthread()
-
-In kgdb you can see the "dev" being suspended
-(gdb) frame 15
-    at .../drivers/base/power/runtime.c:522
-522                     retval = __rpm_callback(cb, dev);
-(gdb) print dev->driver
-$3 = (struct device_driver *) 0x... <lpass_aon_cc_sc7280_driver+40>
-
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
-
- drivers/clk/clk.c | 137 +++++++++++++++++++++++++++++++++++++---------
- 1 file changed, 110 insertions(+), 27 deletions(-)
-
-diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index bd0b35cac83e..723e57a9d60d 100644
---- a/drivers/clk/clk.c
-+++ b/drivers/clk/clk.c
-@@ -9,6 +9,7 @@
- #include <linux/clk.h>
- #include <linux/clk-provider.h>
- #include <linux/clk/clk-conf.h>
-+#include <linux/delay.h>
- #include <linux/module.h>
- #include <linux/mutex.h>
- #include <linux/spinlock.h>
-@@ -114,6 +115,22 @@ static int clk_pm_runtime_get(struct clk_core *core)
- 	return pm_runtime_resume_and_get(core->dev);
- }
- 
-+static int clk_pm_runtime_try_get(struct clk_core *core)
-+{
-+	int ret;
-+
-+	if (!core->rpm_enabled)
-+		return 0;
-+
-+	ret = pm_runtime_try_get_sync(core->dev);
-+	if (ret < 0) {
-+		pm_runtime_put_noidle(core->dev);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
- static void clk_pm_runtime_put(struct clk_core *core)
- {
- 	if (!core->rpm_enabled)
-@@ -122,6 +139,14 @@ static void clk_pm_runtime_put(struct clk_core *core)
- 	pm_runtime_put_sync(core->dev);
- }
- 
-+static void clk_pm_runtime_put_async(struct clk_core *core)
-+{
-+	if (!core->rpm_enabled)
-+		return;
-+
-+	pm_runtime_put(core->dev);
-+}
-+
- /***           locking             ***/
- static void clk_prepare_lock(void)
- {
-@@ -1217,23 +1242,31 @@ static void clk_core_disable_unprepare(struct clk_core *core)
- 	clk_core_unprepare_lock(core);
- }
- 
--static void __init clk_unprepare_unused_subtree(struct clk_core *core)
-+static int __init clk_unprepare_unused_subtree(struct clk_core *core)
- {
- 	struct clk_core *child;
-+	int ret;
- 
- 	lockdep_assert_held(&prepare_lock);
- 
--	hlist_for_each_entry(child, &core->children, child_node)
--		clk_unprepare_unused_subtree(child);
-+	hlist_for_each_entry(child, &core->children, child_node) {
-+		ret = clk_unprepare_unused_subtree(child);
-+		if (ret)
-+			return ret;
-+	}
- 
- 	if (core->prepare_count)
--		return;
-+		return 0;
- 
- 	if (core->flags & CLK_IGNORE_UNUSED)
--		return;
-+		return 0;
- 
--	if (clk_pm_runtime_get(core))
--		return;
-+	/* Backoff if the device is busy; see clk_disable_unused_subtree() */
-+	ret = clk_pm_runtime_try_get(core);
-+	if (ret == -EINPROGRESS)
-+		return -EAGAIN;
-+	else if (ret)
-+		return ret;
- 
- 	if (clk_core_is_prepared(core)) {
- 		trace_clk_unprepare(core);
-@@ -1244,23 +1277,39 @@ static void __init clk_unprepare_unused_subtree(struct clk_core *core)
- 		trace_clk_unprepare_complete(core);
- 	}
- 
--	clk_pm_runtime_put(core);
-+	clk_pm_runtime_put_async(core);
-+
-+	return 0;
- }
- 
--static void __init clk_disable_unused_subtree(struct clk_core *core)
-+static int __init clk_disable_unused_subtree(struct clk_core *core)
- {
- 	struct clk_core *child;
- 	unsigned long flags;
-+	int ret;
- 
- 	lockdep_assert_held(&prepare_lock);
- 
--	hlist_for_each_entry(child, &core->children, child_node)
--		clk_disable_unused_subtree(child);
-+	hlist_for_each_entry(child, &core->children, child_node) {
-+		ret = clk_disable_unused_subtree(child);
-+		if (ret)
-+			return ret;
-+	}
- 
- 	if (core->flags & CLK_OPS_PARENT_ENABLE)
- 		clk_core_prepare_enable(core->parent);
- 
--	if (clk_pm_runtime_get(core))
-+	/*
-+	 * If the device is already busy resuming / suspending then we need
-+	 * to back off and try the whole subtree disable again. This is because
-+	 * the resume / suspend may be happening on another CPU. The resume /
-+	 * suspend code on the other CPU might be trying to prepare a clock, but
-+	 * we're already holding the lock. That's deadlock unless we stand down.
-+	 */
-+	ret = clk_pm_runtime_try_get(core);
-+	if (ret == -EINPROGRESS)
-+		ret = -EAGAIN;
-+	if (ret)
- 		goto unprepare_out;
- 
- 	flags = clk_enable_lock();
-@@ -1287,10 +1336,12 @@ static void __init clk_disable_unused_subtree(struct clk_core *core)
- 
- unlock_out:
- 	clk_enable_unlock(flags);
--	clk_pm_runtime_put(core);
-+	clk_pm_runtime_put_async(core);
- unprepare_out:
- 	if (core->flags & CLK_OPS_PARENT_ENABLE)
- 		clk_core_disable_unprepare(core->parent);
-+
-+	return ret;
- }
- 
- static bool clk_ignore_unused __initdata;
-@@ -1301,32 +1352,64 @@ static int __init clk_ignore_unused_setup(char *__unused)
- }
- __setup("clk_ignore_unused", clk_ignore_unused_setup);
- 
--static int __init clk_disable_unused(void)
-+static int __init _clk_disable_unused(void)
- {
- 	struct clk_core *core;
-+	int ret;
-+
-+	hlist_for_each_entry(core, &clk_root_list, child_node) {
-+		ret = clk_disable_unused_subtree(core);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	hlist_for_each_entry(core, &clk_orphan_list, child_node) {
-+		ret = clk_disable_unused_subtree(core);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	hlist_for_each_entry(core, &clk_root_list, child_node) {
-+		ret = clk_unprepare_unused_subtree(core);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	hlist_for_each_entry(core, &clk_orphan_list, child_node) {
-+		ret = clk_unprepare_unused_subtree(core);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int __init clk_disable_unused(void)
-+{
-+	int ret;
-+	int backoff_ms = 1;
-+	int tries_left;
- 
- 	if (clk_ignore_unused) {
- 		pr_warn("clk: Not disabling unused clocks\n");
- 		return 0;
- 	}
- 
--	clk_prepare_lock();
-+	for (tries_left = 10; tries_left; tries_left--) {
-+		clk_prepare_lock();
-+		ret = _clk_disable_unused();
-+		clk_prepare_unlock();
- 
--	hlist_for_each_entry(core, &clk_root_list, child_node)
--		clk_disable_unused_subtree(core);
--
--	hlist_for_each_entry(core, &clk_orphan_list, child_node)
--		clk_disable_unused_subtree(core);
--
--	hlist_for_each_entry(core, &clk_root_list, child_node)
--		clk_unprepare_unused_subtree(core);
-+		if (ret != -EAGAIN)
-+			return ret;
- 
--	hlist_for_each_entry(core, &clk_orphan_list, child_node)
--		clk_unprepare_unused_subtree(core);
-+		msleep(backoff_ms);
-+		backoff_ms *= 2;
-+	}
- 
--	clk_prepare_unlock();
-+	pr_warn("clk: Failed to disable unused clocks\n");
- 
--	return 0;
-+	return ret;
- }
- late_initcall_sync(clk_disable_unused);
- 
--- 
-2.37.3.968.ga6b4b080e4-goog
+> ---
+>  drivers/platform/x86/amd/pmc.c | 116 ++++++++++++++++-----------------
+>  1 file changed, 58 insertions(+), 58 deletions(-)
+> 
+> diff --git a/drivers/platform/x86/amd/pmc.c b/drivers/platform/x86/amd/pmc.c
+> index 0616ef8ce64c..e47e54b095af 100644
+> --- a/drivers/platform/x86/amd/pmc.c
+> +++ b/drivers/platform/x86/amd/pmc.c
+> @@ -371,6 +371,64 @@ static void amd_pmc_validate_deepest(struct amd_pmc_dev *pdev)
+>  }
+>  #endif
+>  
+> +static int amd_pmc_get_smu_version(struct amd_pmc_dev *dev)
+> +{
+> +	int rc;
+> +	u32 val;
+> +
+> +	rc = amd_pmc_send_cmd(dev, 0, &val, SMU_MSG_GETSMUVERSION, 1);
+> +	if (rc)
+> +		return rc;
+> +
+> +	dev->smu_program = (val >> 24) & GENMASK(7, 0);
+> +	dev->major = (val >> 16) & GENMASK(7, 0);
+> +	dev->minor = (val >> 8) & GENMASK(7, 0);
+> +	dev->rev = (val >> 0) & GENMASK(7, 0);
+> +
+> +	dev_dbg(dev->dev, "SMU program %u version is %u.%u.%u\n",
+> +		dev->smu_program, dev->major, dev->minor, dev->rev);
+> +
+> +	return 0;
+> +}
+> +
+> +static ssize_t smu_fw_version_show(struct device *d, struct device_attribute *attr,
+> +				   char *buf)
+> +{
+> +	struct amd_pmc_dev *dev = dev_get_drvdata(d);
+> +
+> +	if (!dev->major) {
+> +		int rc = amd_pmc_get_smu_version(dev);
+> +
+> +		if (rc)
+> +			return rc;
+> +	}
+> +	return sysfs_emit(buf, "%u.%u.%u\n", dev->major, dev->minor, dev->rev);
+> +}
+> +
+> +static ssize_t smu_program_show(struct device *d, struct device_attribute *attr,
+> +				   char *buf)
+> +{
+> +	struct amd_pmc_dev *dev = dev_get_drvdata(d);
+> +
+> +	if (!dev->major) {
+> +		int rc = amd_pmc_get_smu_version(dev);
+> +
+> +		if (rc)
+> +			return rc;
+> +	}
+> +	return sysfs_emit(buf, "%u\n", dev->smu_program);
+> +}
+> +
+> +static DEVICE_ATTR_RO(smu_fw_version);
+> +static DEVICE_ATTR_RO(smu_program);
+> +
+> +static struct attribute *pmc_attrs[] = {
+> +	&dev_attr_smu_fw_version.attr,
+> +	&dev_attr_smu_program.attr,
+> +	NULL,
+> +};
+> +ATTRIBUTE_GROUPS(pmc);
+> +
+>  #ifdef CONFIG_DEBUG_FS
+>  static int smu_fw_info_show(struct seq_file *s, void *unused)
+>  {
+> @@ -437,64 +495,6 @@ static int s0ix_stats_show(struct seq_file *s, void *unused)
+>  }
+>  DEFINE_SHOW_ATTRIBUTE(s0ix_stats);
+>  
+> -static int amd_pmc_get_smu_version(struct amd_pmc_dev *dev)
+> -{
+> -	int rc;
+> -	u32 val;
+> -
+> -	rc = amd_pmc_send_cmd(dev, 0, &val, SMU_MSG_GETSMUVERSION, 1);
+> -	if (rc)
+> -		return rc;
+> -
+> -	dev->smu_program = (val >> 24) & GENMASK(7, 0);
+> -	dev->major = (val >> 16) & GENMASK(7, 0);
+> -	dev->minor = (val >> 8) & GENMASK(7, 0);
+> -	dev->rev = (val >> 0) & GENMASK(7, 0);
+> -
+> -	dev_dbg(dev->dev, "SMU program %u version is %u.%u.%u\n",
+> -		dev->smu_program, dev->major, dev->minor, dev->rev);
+> -
+> -	return 0;
+> -}
+> -
+> -static ssize_t smu_fw_version_show(struct device *d, struct device_attribute *attr,
+> -				   char *buf)
+> -{
+> -	struct amd_pmc_dev *dev = dev_get_drvdata(d);
+> -
+> -	if (!dev->major) {
+> -		int rc = amd_pmc_get_smu_version(dev);
+> -
+> -		if (rc)
+> -			return rc;
+> -	}
+> -	return sysfs_emit(buf, "%u.%u.%u\n", dev->major, dev->minor, dev->rev);
+> -}
+> -
+> -static ssize_t smu_program_show(struct device *d, struct device_attribute *attr,
+> -				   char *buf)
+> -{
+> -	struct amd_pmc_dev *dev = dev_get_drvdata(d);
+> -
+> -	if (!dev->major) {
+> -		int rc = amd_pmc_get_smu_version(dev);
+> -
+> -		if (rc)
+> -			return rc;
+> -	}
+> -	return sysfs_emit(buf, "%u\n", dev->smu_program);
+> -}
+> -
+> -static DEVICE_ATTR_RO(smu_fw_version);
+> -static DEVICE_ATTR_RO(smu_program);
+> -
+> -static struct attribute *pmc_attrs[] = {
+> -	&dev_attr_smu_fw_version.attr,
+> -	&dev_attr_smu_program.attr,
+> -	NULL,
+> -};
+> -ATTRIBUTE_GROUPS(pmc);
+> -
+>  static int amd_pmc_idlemask_show(struct seq_file *s, void *unused)
+>  {
+>  	struct amd_pmc_dev *dev = s->private;
+> 
+> base-commit: 401199ffa9b69baf3fd1f9ad082aa65c10910585
 
