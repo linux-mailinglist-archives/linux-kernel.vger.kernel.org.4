@@ -2,92 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D74F45E6CC7
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 22:10:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A76005E6CD8
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 22:14:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232648AbiIVUKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 16:10:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58126 "EHLO
+        id S232200AbiIVUN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 16:13:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbiIVUK1 (ORCPT
+        with ESMTP id S232065AbiIVUNz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 16:10:27 -0400
-X-Greylist: delayed 1684 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 22 Sep 2022 13:10:23 PDT
-Received: from rhlx01.hs-esslingen.de (rhlx01.hs-esslingen.de [129.143.116.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CF1BC995D;
-        Thu, 22 Sep 2022 13:10:22 -0700 (PDT)
-Received: by rhlx01.hs-esslingen.de (Postfix, from userid 102)
-        id 17836277FBA8; Thu, 22 Sep 2022 22:10:21 +0200 (CEST)
-Date:   Thu, 22 Sep 2022 22:10:21 +0200
-From:   Andreas Mohr <andi@lisas.de>
-To:     Andreas Mohr <andi@lisas.de>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        K Prateek Nayak <kprateek.nayak@amd.com>,
-        linux-kernel@vger.kernel.org, rafael@kernel.org, lenb@kernel.org,
-        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-        dave.hansen@linux.intel.com, bp@alien8.de, tglx@linutronix.de,
-        puwen@hygon.cn, mario.limonciello@amd.com, peterz@infradead.org,
-        rui.zhang@intel.com, gpiccoli@igalia.com,
-        daniel.lezcano@linaro.org, ananth.narayan@amd.com,
-        gautham.shenoy@amd.com, Calvin Ong <calvin.ong@amd.com>,
-        stable@vger.kernel.org, regressions@lists.linux.dev
-Subject: Re: [PATCH] ACPI: processor_idle: Skip dummy wait for processors
- based on the Zen microarchitecture
-Message-ID: <YyzBLc+OFIN2BMz5@rhlx01.hs-esslingen.de>
-References: <20220921063638.2489-1-kprateek.nayak@amd.com>
- <20e78a49-25df-c83d-842e-1d624655cfd7@intel.com>
- <0885eecb-042f-3b74-2965-7d657de59953@amd.com>
- <88c17568-8694-940a-0f1f-9d345e8dcbdb@intel.com>
- <Yyy6l94G0O2B7Yh1@rhlx01.hs-esslingen.de>
+        Thu, 22 Sep 2022 16:13:55 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E48DC110B10
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 13:13:53 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 8AAC321A5D;
+        Thu, 22 Sep 2022 20:13:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1663877631; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=1W6wFEitTt/nhSdHj7yZiLv4d1qoZb6zO8/D6IdlseI=;
+        b=qDvQiWrDOyear9G46F/Ssx9IaXcMM2dSt/Kdolj43zZhDoLZDkGAWAdmvzLxJiuaS+tgxa
+        KaHnSgSV9z/iu0CviUQwCyNLOXq7noDFSI4K90x0LFhnl8QRu4j45RA1JZQm31+grMwxqa
+        HkRy5vLKr0i6kCI8O0iqVuCbs6FJghE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1663877631;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=1W6wFEitTt/nhSdHj7yZiLv4d1qoZb6zO8/D6IdlseI=;
+        b=BoJgUNn5AFEN+F+Jx/Dfh+xV4c/l84Ibg9dVksUKrtF4jgLr2kyL21qLbSMWdf2JEco27q
+        /DJapVf3iVPC2vCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 593FC13AA5;
+        Thu, 22 Sep 2022 20:13:51 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id tSuDFP/BLGMOFwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 22 Sep 2022 20:13:51 +0000
+Message-ID: <9c0abd9f-5976-31e2-8802-e40270ad0014@suse.cz>
+Date:   Thu, 22 Sep 2022 22:13:51 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Yyy6l94G0O2B7Yh1@rhlx01.hs-esslingen.de>
-X-Priority: none
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+From:   Vlastimil Babka <vbabka@suse.cz>
+Subject: [GIT PULL] slab fix for 6.0-rc7
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 09:42:15PM +0200, Andreas Mohr wrote:
-> So one can see where my profiling effort went
-> (*optimizing* things, not degrading them)
-> --> hints that current Zen3-originating effort is not
-> about a regression in the "regression bug" sense -
-> merely a (albeit rather appreciable/sizeable... congrats!)
-> performance deterioration vs.
-> an optimal (currently non-achieved) software implementation state
-> (also: of PORT-based handling [vs. MWAIT], mind you!).
+Linus,
 
-I'd like to add a word of caution here:
+please pull the latest slab changes from
 
-AFAIK power management (here: ACPI Cx) handling generally is
-about a painful *tradeoff* between
-achieving best-possible performance (that's
-the respectable Zen3 32MB/s vs. 33MB/s argument) and
-achieving maximum power savings.
-We all know that one can configure the system for
-non-idle mode (idle=poll cmdline?) and
-achieve record numbers in performance (...*and* power consumption - ouch!).
+  git://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git tags/slab-for-6.0-rc7
 
-Current decision/implementation aspects AFAICS:
-- why is the Zen3 config used here choosing
-  less-favourable(?) PORT-based operation mode?
-- Zen3 is said to not have the STPCLK# issue
-  (- but then what about other more modern chipsets?)
+======================================
 
---> we need to achieve (hopefully sufficiently precisely) a solution which
-takes into account Zen3 STPCLK# improvements while
-preserving "accepted" behaviour/requirements on *all* STPCLK#-hampered chipsets
-("STPCLK# I/O wait is default/traditional handling"?).
+- Fix a possible use-after-free in SLUB's kmem_cache removal, introduced in
+  this cycle, by Feng Tang.
 
-Greetings
+- WQ_MEM_RECLAIM dependency fix for the workqueue-based cpu slab flushing
+  introduced in 5.15, by Maurizio Lombardi.
 
-Andreas Mohr
+- Add missing KASAN hooks in two kmalloc entry paths, by Peter Collingbourne.
 
--- 
-GNU/Linux. It's not the software that's free, it's you.
+- A BUG_ON() removal in SLUB's kmem_cache creation when allocation fails (too
+  small to possibly happen in practice, syzbot used fault injection), by Chao
+  Yu.
+
+Thanks,
+Vlastimil
+----------------------------------------------------------------
+Chao Yu (1):
+      mm/slub: fix to return errno if kmalloc() fails
+
+Feng Tang (1):
+      mm/slab_common: fix possible double free of kmem_cache
+
+Maurizio Lombardi (1):
+      mm: slub: fix flush_cpu_slab()/__free_slab() invocations in task context.
+
+Peter Collingbourne (1):
+      kasan: call kasan_malloc() from __kmalloc_*track_caller()
+
+ mm/slab_common.c |  5 ++++-
+ mm/slub.c        | 18 ++++++++++++++++--
+ 2 files changed, 20 insertions(+), 3 deletions(-)
