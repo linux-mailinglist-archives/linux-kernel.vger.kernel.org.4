@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59C205E6AEE
+	by mail.lfdr.de (Postfix) with ESMTP id A50DF5E6AEF
 	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 20:30:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232641AbiIVSa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 14:30:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51778 "EHLO
+        id S232653AbiIVSab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 14:30:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232677AbiIVS1x (ORCPT
+        with ESMTP id S232925AbiIVS3F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 14:27:53 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C1F10AB1A
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 11:26:11 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id q3so10631594pjg.3
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 11:26:10 -0700 (PDT)
+        Thu, 22 Sep 2022 14:29:05 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14A4E1114C2
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 11:26:57 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id u69so9983092pgd.2
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 11:26:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=6ndWWjbbbJbtQHr06Dm1GUglIQIf8G1xTgr/LwYJzos=;
-        b=Vt37OBIxIAoP+1nYlOTRHn8ZSBf7oCj94pnn6Q1iKL2/s4Jb08SQV36JYQcoe/kkEs
-         3Trd+FHP3ZV7ru81ZK4wjagBY1/FN4BluDoKw/JWW11fZppqTj2gCSDpLbWMUlcXB/5V
-         2jEiI4f3jIbIpI0GKWNr2AD094Amfii1FUxIIwL8Qoddf3/Qx/qUaFan6cfLfVr037b8
-         UfyKdmHeDLsrO9JgF/j/UP9viZ3ELgCP9CeIsMmXO1AxUyMNEkz3cLEC/oRrQmlSpeom
-         MqJWbcaZV9A5HP1KxHy0t/08l4SJHhT9vTceCGGrIN9yKvd76w8O61tjg7XfKxRE4iKL
-         EEaQ==
+        bh=x/KOEzvs5/HZ3ITyDMwqUGxQmeTcr0AR1wyo8XABotg=;
+        b=oAxyP8tCqeYuU1oeTTDzPYwAqW0TWMjBk4MNm/Q9k1jDviJ2qcMy7OceSjh3XrlXt+
+         WrJ+yOR5ex/qDj8dt7tlnl2XGCAvoZO8td+AMezzfYRVUPdslh8eBR95OmSePwMdsY5w
+         3xtyQTxmWE5Q4RNdohSNfkLFDqoCcD6ufLevaPyBO+DVdoEXzu0mo/PRJJWJFqFvcSwK
+         sGOo1/zyIuhLmTPgLaKUvqllYvtcrC4IFp5CsofhcgxRVcvSocTW/e6ptYefbqGssPoJ
+         jRCb4UK8zF68zyaR3bjkUAx621UjF9YuaXrpLkf2noW4zTj6hS6l28jZypsbhXvdHYQg
+         ZfJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=6ndWWjbbbJbtQHr06Dm1GUglIQIf8G1xTgr/LwYJzos=;
-        b=cRohXqaMQlTbLx/DP2FSGXwKuEeLfelO2lbBhRY0WnNR0rxvXNlaVG2ECYXFeXPdOM
-         p2XudySZF6LUdK2okTsevYR4MNQIPDvKwCsp9lYfbmwKvdo13cbUBQR/Yd4VZCtSlOT2
-         QVJ0nfU30DrgjBdT+TybwQmP0TmjKZ1gltukz3jRPGL9v9oY8o0T0S8x8bw0GmDwQG2z
-         2+OQmOjmM6snPduhFusLcyttwH6EF493WW2b15nBDE8nIYFIEnd/vtkMztr8nI5y1p7k
-         xsKj2c1wQtEDrfszsRosEooP5EKoCovSwRdSedBTYi6Oo+cKCmL2lNHrBhV1yVMOxfpO
-         9knw==
-X-Gm-Message-State: ACrzQf2pp1by8qnb8EbO94L3e7skiKP54gubKuT2mTDvO+Iy5OwOxUyL
-        Z1O3XC+ti7vWMOqLnSs9z2pvW8BiaVr1IMHklb4=
-X-Google-Smtp-Source: AMsMyM5A0gbdIv5p/pFowpErC6zyBs0v4TwJ6PjlbF/1s9bKPd9uxN9Xt0n5K4vT9iJ2TyrqS4iMymarA9qzXi+nUXQ=
-X-Received: by 2002:a17:902:8346:b0:178:a33f:89cf with SMTP id
- z6-20020a170902834600b00178a33f89cfmr4466192pln.9.1663871087164; Thu, 22 Sep
- 2022 11:24:47 -0700 (PDT)
+        bh=x/KOEzvs5/HZ3ITyDMwqUGxQmeTcr0AR1wyo8XABotg=;
+        b=3ErSGq7emEO/OJahwivt8eNRqI5YA2C9rIeDF8RVRpOAdLsCPwxxLZiLqlofz9PytY
+         vlOejYD0uaz3kmLSQzNAw4LG47/tSSDvnVflEPMFznrbRlZ7KsqwBfhAKC6cY0R6WR1h
+         IzgOE+fBtaBmYkshodBvLL9uhX6N1i0qqRooaGmtl4CXzDJQvNNwQqPHaGuvHUZLc95C
+         Cg+cCHYpEGVPo+wudyb1zAfY1ZjhLZgU4olUv/H8D3camMkrzdFH6xTHj/+mIN5srieN
+         OvgHPS87SethIXq7sG9goF8A6hPfLbNxgfCuSiB+z7Y/NAooB/8f+aVa8ixcmb3QT6QQ
+         eloQ==
+X-Gm-Message-State: ACrzQf0jbV60PPmHgARtuAGrinrbdE8LdQ3Mm9tbLTo0+zOnJaHJBWUS
+        Z4OcgvYDhpDT6mv7JsKVfmyET+sv6UTln3CABT0=
+X-Google-Smtp-Source: AMsMyM7SjLqOheQS7Tgisez4lt6X6IFltXK5bMjjFxT+e/IvOiU4nqQZoLfrUtCqjnkJetnfbLjFO+igd7zFPPgDyZs=
+X-Received: by 2002:a63:1f49:0:b0:43b:a2df:857 with SMTP id
+ q9-20020a631f49000000b0043ba2df0857mr4244126pgm.137.1663871165524; Thu, 22
+ Sep 2022 11:26:05 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220922124306.34729-1-dev@pschenker.ch> <20220922124306.34729-2-dev@pschenker.ch>
-In-Reply-To: <20220922124306.34729-2-dev@pschenker.ch>
+References: <20220922124306.34729-1-dev@pschenker.ch> <20220922124306.34729-3-dev@pschenker.ch>
+In-Reply-To: <20220922124306.34729-3-dev@pschenker.ch>
 From:   Adrien Grassein <adrien.grassein@gmail.com>
-Date:   Thu, 22 Sep 2022 20:24:36 +0200
-Message-ID: <CABkfQAHcphPs=stWuT8XAFfbZnhx8sp9E_8i0nTgcMxoJp7agQ@mail.gmail.com>
-Subject: Re: [PATCH 1/4] drm/bridge: lt8912b: add vsync hsync
+Date:   Thu, 22 Sep 2022 20:25:54 +0200
+Message-ID: <CABkfQAFLAMtj2yV3tCrjcVN70K2F4y4R31mHqm49oeoPcs3KHQ@mail.gmail.com>
+Subject: Re: [PATCH 2/4] drm/bridge: lt8912b: set hdmi or dvi mode
 To:     Philippe Schenker <dev@pschenker.ch>
 Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
@@ -82,60 +82,32 @@ Le jeu. 22 sept. 2022 =C3=A0 14:43, Philippe Schenker <dev@pschenker.ch> a =
 >
 > From: Philippe Schenker <philippe.schenker@toradex.com>
 >
-> Currently the bridge driver does not take care whether or not the display
-> needs positive/negative vertical/horizontal syncs. Pass these two flags
-> to the bridge from the EDID that was read out from the display.
+> The Lontium LT8912 does have a setting for DVI or HDMI. This patch reads
+> from EDID what the display needs and sets it accordingly.
 >
 > Fixes: 30e2ae943c26 ("drm/bridge: Introduce LT8912B DSI to HDMI bridge")
 > Signed-off-by: Philippe Schenker <philippe.schenker@toradex.com>
 Acked-by: Adrien Grassein <adrien.grassein@gmail.com>
->
 > ---
 >
->  drivers/gpu/drm/bridge/lontium-lt8912b.c | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
+>  drivers/gpu/drm/bridge/lontium-lt8912b.c | 2 ++
+>  1 file changed, 2 insertions(+)
 >
 > diff --git a/drivers/gpu/drm/bridge/lontium-lt8912b.c b/drivers/gpu/drm/b=
 ridge/lontium-lt8912b.c
-> index 28bad30dc4e5..0fd3472e767c 100644
+> index 0fd3472e767c..6a4bb7422176 100644
 > --- a/drivers/gpu/drm/bridge/lontium-lt8912b.c
 > +++ b/drivers/gpu/drm/bridge/lontium-lt8912b.c
-> @@ -268,7 +268,7 @@ static int lt8912_video_setup(struct lt8912 *lt)
->         u32 hactive, h_total, hpw, hfp, hbp;
->         u32 vactive, v_total, vpw, vfp, vbp;
->         u8 settle =3D 0x08;
-> -       int ret;
-> +       int ret, hsync_activehigh, vsync_activehigh;
+> @@ -323,6 +323,8 @@ static int lt8912_video_setup(struct lt8912 *lt)
+>                                   vsync_activehigh ? BIT(0) : 0);
+>         ret |=3D regmap_update_bits(lt->regmap[I2C_MAIN], 0xab, BIT(1),
+>                                   hsync_activehigh ? BIT(1) : 0);
+> +       ret |=3D regmap_update_bits(lt->regmap[I2C_MAIN], 0xb2, BIT(0),
+> +                                 lt->connector.display_info.is_hdmi ? BI=
+T(0) : 0);
 >
->         if (!lt)
->                 return -EINVAL;
-> @@ -278,12 +278,14 @@ static int lt8912_video_setup(struct lt8912 *lt)
->         hpw =3D lt->mode.hsync_len;
->         hbp =3D lt->mode.hback_porch;
->         h_total =3D hactive + hfp + hpw + hbp;
-> +       hsync_activehigh =3D lt->mode.flags & DISPLAY_FLAGS_HSYNC_HIGH;
->
->         vactive =3D lt->mode.vactive;
->         vfp =3D lt->mode.vfront_porch;
->         vpw =3D lt->mode.vsync_len;
->         vbp =3D lt->mode.vback_porch;
->         v_total =3D vactive + vfp + vpw + vbp;
-> +       vsync_activehigh =3D lt->mode.flags & DISPLAY_FLAGS_VSYNC_HIGH;
->
->         if (vactive <=3D 600)
->                 settle =3D 0x04;
-> @@ -317,6 +319,11 @@ static int lt8912_video_setup(struct lt8912 *lt)
->         ret |=3D regmap_write(lt->regmap[I2C_CEC_DSI], 0x3e, hfp & 0xff);
->         ret |=3D regmap_write(lt->regmap[I2C_CEC_DSI], 0x3f, hfp >> 8);
->
-> +       ret |=3D regmap_update_bits(lt->regmap[I2C_MAIN], 0xab, BIT(0),
-> +                                 vsync_activehigh ? BIT(0) : 0);
-> +       ret |=3D regmap_update_bits(lt->regmap[I2C_MAIN], 0xab, BIT(1),
-> +                                 hsync_activehigh ? BIT(1) : 0);
-> +
 >         return ret;
 >  }
->
 > --
 > 2.37.3
 >
