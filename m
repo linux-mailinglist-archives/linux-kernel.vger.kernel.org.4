@@ -2,145 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F55E5E61C9
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 13:54:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6CA65E61E9
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 14:02:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231596AbiIVLx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 07:53:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33708 "EHLO
+        id S230441AbiIVMCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 08:02:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230235AbiIVLxv (ORCPT
+        with ESMTP id S229663AbiIVMCV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 07:53:51 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 426299752A;
-        Thu, 22 Sep 2022 04:53:50 -0700 (PDT)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MYDCF4mg8zHp14;
-        Thu, 22 Sep 2022 19:51:37 +0800 (CST)
-Received: from huawei.com (10.175.127.227) by dggpeml500021.china.huawei.com
- (7.185.36.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 22 Sep
- 2022 19:53:47 +0800
-From:   Baokun Li <libaokun1@huawei.com>
-To:     <linux-ext4@vger.kernel.org>
-CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>, <jack@suse.cz>,
-        <ritesh.list@gmail.com>, <lczerner@redhat.com>,
-        <enwlinux@gmail.com>, <linux-kernel@vger.kernel.org>,
-        <yi.zhang@huawei.com>, <yebin10@huawei.com>,
-        <chengzhihao1@huawei.com>, <yukuai3@huawei.com>,
-        <libaokun1@huawei.com>, <stable@vger.kernel.org>
-Subject: [PATCH v2] ext4: fix use-after-free in ext4_ext_shift_extents
-Date:   Thu, 22 Sep 2022 20:04:34 +0800
-Message-ID: <20220922120434.1294789-1-libaokun1@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Thu, 22 Sep 2022 08:02:21 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 566B4B774C
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 05:02:19 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id d82so9034144pfd.10
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 05:02:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=C6tsbrRVYpziVZpZ64ENw678okAOPxpIMURgtxNPHU4=;
+        b=OL/rBWhbb9z7Wr2dZ6wvklE5QwIsBFnHIYRF3Lwq4PGZDanCnZUOJiOJVP6EInZ6yy
+         4oQQuqxjlqqFpNgNxPNCeOsU+6mGsBh0sh0eFMdDa0uzKLxILuKV6EZ8Xk+Pm3htDLbt
+         Y+HDubgmei3HXDmCeWWfeurAnIUDuoWcsVe46p4JD2d5B3Pqi9ukGD++OCO/4AJb4dfG
+         jGi5QZ/UmxN8Y8bpbblIhZ9pttUgs/aH//zy5HGCFfy4XeqSEHR0L82dNGzLsM8F8+k2
+         7GYARfMweL8eUEtEiUWJiczaeK0BfuaxfZSRuMtnGycj5nGw+0Nity76d3oalYRLmlY8
+         EGuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=C6tsbrRVYpziVZpZ64ENw678okAOPxpIMURgtxNPHU4=;
+        b=hPtpat3AEzmSRfQc3ZeiFWqilyWcnycOGBIsiY/hX3YiVEg0UJYHMdTlEQmv7RvYui
+         iMlXNn8I3G4nzpkXPrkJemJMuN/qLJzufFJ17xYlFWE6egvFv66h/25ib4L1fDXj6fHR
+         0QbpVfCYGjxV/vYfif+H5P7YIhnaplNqkoWwKpS985Qc5Smtqx3adp6qiga1Wd8DbDD3
+         YtH3/jIPCFl9BZvt+krLHcgwN6JKUuCpo9aCtlDyjbgKDoAMdp2LJsOQKgZSL0ef4sUC
+         AdGvGKl+MT2kaem3Su6U4A5EdoMmA/UsZRx+MdjRCj6x9Y4axl+/4L7ktgllE9B3jegw
+         r3rA==
+X-Gm-Message-State: ACrzQf0aPiN+smKW5nwrBA4n5bN++v0CT+FlhH6w6TIB/js6jXljFfR2
+        ED81tEEfSxSFtfzgHA+zi0UZncPuONM=
+X-Google-Smtp-Source: AMsMyM6qM8wqPpNqekpiz2+mEBHcYzqAdi7bw4mr6gGBNSpJP4ZhrV2dQSQ1RlmNSCTq1DtXnR6YgQ==
+X-Received: by 2002:a63:87c8:0:b0:43a:c2e4:efcc with SMTP id i191-20020a6387c8000000b0043ac2e4efccmr2786759pge.410.1663848138535;
+        Thu, 22 Sep 2022 05:02:18 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id z4-20020a1709027e8400b00176c6738d13sm3912064pla.169.2022.09.22.05.02.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Sep 2022 05:02:18 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: xu.panda@zte.com.cn
+To:     linux-kernel@vger.kernel.org
+Cc:     Xu Panda <xu.panda@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH linux-next] scripts/get_dvb_firmware: use absolute path when using system()
+Date:   Thu, 22 Sep 2022 11:47:17 +0000
+Message-Id: <20220922114715.237279-1-xu.panda@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500021.china.huawei.com (7.185.36.21)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the starting position of our insert range happens to be in the hole
-between the two ext4_extent_idx, because the lblk of the ext4_extent in
-the previous ext4_extent_idx is always less than the start, which leads
-to the "extent" variable access across the boundary, the following UAF is
-triggered:
-==================================================================
-BUG: KASAN: use-after-free in ext4_ext_shift_extents+0x257/0x790
-Read of size 4 at addr ffff88819807a008 by task fallocate/8010
-CPU: 3 PID: 8010 Comm: fallocate Tainted: G            E     5.10.0+ #492
-Call Trace:
- dump_stack+0x7d/0xa3
- print_address_description.constprop.0+0x1e/0x220
- kasan_report.cold+0x67/0x7f
- ext4_ext_shift_extents+0x257/0x790
- ext4_insert_range+0x5b6/0x700
- ext4_fallocate+0x39e/0x3d0
- vfs_fallocate+0x26f/0x470
- ksys_fallocate+0x3a/0x70
- __x64_sys_fallocate+0x4f/0x60
- do_syscall_64+0x33/0x40
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-==================================================================
+From: Xu Panda <xu.panda@zte.com.cn>
 
-For right shifts, we can divide them into the following situations：
-
-1. When the first ee_block of ext4_extent_idx is greater than or equal to
-   start, make right shifts directly from the first ee_block.
-    1) If it is greater than start, we need to continue searching in the
-       previous ext4_extent_idx.
-    2) If it is equal to start, we can exit the loop (iterator=NULL).
-
-2. When the first ee_block of ext4_extent_idx is less than start, then
-   traverse from the last extent to find the first extent whose ee_block
-   is less than start.
-    1) If extent is still the last extent after traversal, it means that
-       the last ee_block of ext4_extent_idx is less than start, that is,
-       start is located in the hole between idx and (idx+1), so we can
-       exit the loop directly (break) without right shifts.
-    2) Otherwise, make right shifts at the corresponding position of the
-       found extent, and then exit the loop (iterator=NULL).
-
-Fixes: 331573febb6a ("ext4: Add support FALLOC_FL_INSERT_RANGE for fallocate")
-Cc: stable@vger.kernel.org # v4.2+
-Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
-Signed-off-by: Baokun Li <libaokun1@huawei.com>
+Not using absolute path when using system() which can lead to serious
+security issues.
 ---
-V1->V2:
-  Initialize "ret" after the "again:" label to avoid return value mismatch.
-  Refactoring reduces cycles and makes code more readable.
+FYI:
+We have to abide by strict rules. When we send out emails, it
+will be forwarded by the unified mailbox. When we want to send emails in
+personal name to anyone outside the company, we must apply for it, which
+is far more difficult than modifying patches. I'm really sorry I can't
+reply to you guys.
+I used ./scripts/get_maintainer.pl scripts/get_dvb_firmware and only got
+linux-kernel@vger.kernel.org (open list), so I didn't add -cc.
+Can cause serious problems when using system(), maybe there's a better
+way than using absolute paths, but there's no reason for a serious bug
+to stay in the kernel.
+Please give me some inspiration, thanks a lot.
+---
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
+---
+ scripts/get_dvb_firmware | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
- fs/ext4/extents.c | 18 +++++++++++++-----
- 1 file changed, 13 insertions(+), 5 deletions(-)
-
-diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
-index c148bb97b527..39c9f87de0be 100644
---- a/fs/ext4/extents.c
-+++ b/fs/ext4/extents.c
-@@ -5179,6 +5179,7 @@ ext4_ext_shift_extents(struct inode *inode, handle_t *handle,
- 	 * and it is decreased till we reach start.
- 	 */
- again:
-+	ret = 0;
- 	if (SHIFT == SHIFT_LEFT)
- 		iterator = &start;
- 	else
-@@ -5222,14 +5223,21 @@ ext4_ext_shift_extents(struct inode *inode, handle_t *handle,
- 					ext4_ext_get_actual_len(extent);
- 		} else {
- 			extent = EXT_FIRST_EXTENT(path[depth].p_hdr);
--			if (le32_to_cpu(extent->ee_block) > 0)
-+			if (le32_to_cpu(extent->ee_block) > start)
- 				*iterator = le32_to_cpu(extent->ee_block) - 1;
--			else
--				/* Beginning is reached, end of the loop */
-+			else if (le32_to_cpu(extent->ee_block) == start)
- 				iterator = NULL;
--			/* Update path extent in case we need to stop */
--			while (le32_to_cpu(extent->ee_block) < start)
-+			else {
-+				extent = EXT_LAST_EXTENT(path[depth].p_hdr);
-+				while (le32_to_cpu(extent->ee_block) >= start)
-+					extent--;
-+
-+				if (extent == EXT_LAST_EXTENT(path[depth].p_hdr))
-+					break;
-+
- 				extent++;
-+				iterator = NULL;
-+			}
- 			path[depth].p_ext = extent;
- 		}
- 		ret = ext4_ext_shift_path_extents(path, shift, inode,
+diff --git a/scripts/get_dvb_firmware b/scripts/get_dvb_firmware
+index 1a90802410bc..4ca5aef4203b 100755
+--- a/scripts/get_dvb_firmware
++++ b/scripts/get_dvb_firmware
+@@ -807,19 +807,19 @@ sub si2165 {
+ # Utilities
+ 
+ sub checkstandard {
+-    if (system("which unzip > /dev/null 2>&1")) {
++    if (system("/usr/bin/which unzip > /dev/null 2>&1")) {
+ 	die "This firmware requires the unzip command - see ftp://ftp.info-zip.org/pub/infozip/UnZip.html\n";
+     }
+-    if (system("which md5sum > /dev/null 2>&1")) {
++    if (system("/usr/bin/which md5sum > /dev/null 2>&1")) {
+ 	die "This firmware requires the md5sum command - see http://www.gnu.org/software/coreutils/\n";
+     }
+-    if (system("which wget > /dev/null 2>&1")) {
++    if (system("/usr/bin/which wget > /dev/null 2>&1")) {
+ 	die "This firmware requires the wget command - see http://wget.sunsite.dk/\n";
+     }
+ }
+ 
+ sub checkunshield {
+-    if (system("which unshield > /dev/null 2>&1")) {
++    if (system("/usr/bin/which unshield > /dev/null 2>&1")) {
+ 	die "This firmware requires the unshield command - see http://sourceforge.net/projects/synce/\n";
+     }
+ }
+@@ -828,14 +828,14 @@ sub wgetfile {
+     my ($sourcefile, $url) = @_;
+ 
+     if (! -f $sourcefile) {
+-	system("wget -O \"$sourcefile\" \"$url\"") and die "wget failed - unable to download firmware";
++	system("/usr/bin/wget -O \"$sourcefile\" \"$url\"") and die "wget failed - unable to download firmware";
+     }
+ }
+ 
+ sub unzip {
+     my ($sourcefile, $todir) = @_;
+ 
+-    $status = system("unzip -q -o -d \"$todir\" \"$sourcefile\" 2>/dev/null" );
++    $status = system("/usr/bin/unzip -q -o -d \"$todir\" \"$sourcefile\" 2>/dev/null" );
+     if ((($status >> 8) > 2) || (($status & 0xff) != 0)) {
+ 	die ("unzip failed - unable to extract firmware");
+     }
+@@ -862,7 +862,7 @@ sub verify {
+ sub copy {
+     my ($from, $to) = @_;
+ 
+-    system("cp -f \"$from\" \"$to\"") and die ("cp failed");
++    system("/usr/bin/cp -f \"$from\" \"$to\"") and die ("cp failed");
+ }
+ 
+ sub extract {
 -- 
-2.31.1
-
+2.15.2     
