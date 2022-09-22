@@ -2,225 +2,479 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC45F5E5B5F
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 08:26:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29C565E5B63
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 08:28:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230200AbiIVG0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 02:26:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57574 "EHLO
+        id S229880AbiIVG20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 02:28:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230146AbiIVG0Z (ORCPT
+        with ESMTP id S229718AbiIVG2X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 02:26:25 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8E64B6D11
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 23:26:04 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id x27so13116360lfu.0
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 23:26:04 -0700 (PDT)
+        Thu, 22 Sep 2022 02:28:23 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14B66AC258
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 23:28:21 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id fs14so8753255pjb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 23:28:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=j9o4S3xAPFpmBmxWsJ5oAgRxe68Y0HDCIkMi/9Ynf0E=;
-        b=KnhHr0NmUiWCiVlkPmJPCSvk/WwvJ/NRpVNv1DrdMycHjYqRCYm3BXiT9WBf1znGww
-         5sw/niP3mcHaSFXVIRl5MFu/wFko0ETxyVO5jBqbZgoMePBChPhCDnxFHkM3oGzc7+Zr
-         uRDRP9r4pGB6A3OPL7caTh9eD+Q1lYzffSZ+DU2zBo95rsi7rC9Vj/8GSjYf9BeXnQpZ
-         gMyZAdlA1qxB2rOGBlYJFuumPOLptcKyXLzFpNMX0GLVSCkZo8P9Sq6FWJHjLDcj+Ogr
-         xMMDg6bw8aSDO7ZMk+0zlw0sCYtw0rksxZChpvaZrGYj1WSC6m7V/ID8aZXyRcBx5k7N
-         AJaw==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=ZqCkXEiXsKRAIDO6WEKfcC5h6w7aUTtWegAghzKUio4=;
+        b=iTmM9cu2pPbNrOxZ45H918i6P/mCZqABd+wswr/ZllFVx+47h02KrRcecrXco9asp8
+         WdazGn5Qd6Zl8y0aN8xBnLQOERxlGHbDZOhZO6t71cbt9p/mIPRdZyQ0AAenl41PTbxb
+         qRMlDgqkMUR0EM3z2Cr6p+jT0QbeoqDVQc+7k=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=j9o4S3xAPFpmBmxWsJ5oAgRxe68Y0HDCIkMi/9Ynf0E=;
-        b=M+9f1KqnwjHvOUb6DdLJBSOUXMKDfPmFWcQDSSswIfVrls2YoldQd0psdR4GAkbza5
-         5/aOEWu5Dt3ZSoPP8e/5qqpoi5ODjpMOyZNiJ2pxl1ZMjREHmGVndmChG1Nkx9GO32Np
-         esPs5k44lGJx3oKeGMxJSZT146P+4e3ce6iZkWoIa+JTuX03prMy0uwWxIN+Ur7ff27n
-         w1sJjICG20DhZneioho5mCrOg+yhqy2QwoYNuQkMOInCoNScGhCsJsM0hO3JEexwzE+H
-         yfobTHxSHGP/uAFEGXPye+5Bgoh5RzJ34hT1XgtH+mHy482y6Kr201Nt3tU0r8nh04h/
-         qPiA==
-X-Gm-Message-State: ACrzQf1EWnK8+kq3Mvkl+9HMjawDSAk0TRiXUvSeg6SQvZD6tGsYT5mc
-        tRm75yBfqUJ4UjINRnEpFngSoA==
-X-Google-Smtp-Source: AMsMyM7KiveS5KCOAc2WDOmn5Dl9stufRrBsuoO4rforSU4OhRZ+XqVxTff1BIdobYEfi8fFzuNKQA==
-X-Received: by 2002:a05:6512:224b:b0:49f:9e09:584e with SMTP id i11-20020a056512224b00b0049f9e09584emr654473lfu.524.1663827961590;
-        Wed, 21 Sep 2022 23:26:01 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id b24-20020ac24118000000b00497a879e552sm763315lfi.291.2022.09.21.23.26.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Sep 2022 23:26:00 -0700 (PDT)
-Message-ID: <0d2fce98-6744-69af-44a2-702f4927b626@linaro.org>
-Date:   Thu, 22 Sep 2022 08:25:59 +0200
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=ZqCkXEiXsKRAIDO6WEKfcC5h6w7aUTtWegAghzKUio4=;
+        b=pqJq+XFvY1uYiqUCz5Mj7c1sT+tuHZ6M3P49J5CEDWTTh8lkowsCPGHrzIBFx2GkzP
+         KKdwNbkjskQvboGtAMjdmvWBk/Mc/hbeVGuJeCXl2Fiq7Ec7fZRFaCZl24A3XrdiPjHx
+         m31dstARrNUFiVM1gh6+Y+fpNABdwR6ERcQ+v+Zfg2H5qxfhGqQkW7b2qFcc5NPIzPuD
+         VMqChK+H1OLSTpEkLYDc/Ela8WjyX7E0vu2OBjCaZUqZX7M5sVsJYjyW+V6J/DCKxdgb
+         X5l5KnUy6JTO2wtxLG4MlgK+UAN4HsceXd2gBcBxJEQLz1Dj9GjUdvHma7/Tn4E+wyGj
+         RCig==
+X-Gm-Message-State: ACrzQf1pcJTeoyVbI0C8eFGDLaQSE8BHoeKDGo84kOg3C4GWEZ5TI5by
+        LG4Jw9sCqhZNsVWWg3rPXw1N/HUY1lY5oQ==
+X-Google-Smtp-Source: AMsMyM7mhsOtmag6+PB6ytQqVOEoYzZeMicf6CoyRxontMJ1cxDJA25D3l9LzEHJJCIDesuHgdyovQ==
+X-Received: by 2002:a17:90b:33c9:b0:200:9ec2:f2eb with SMTP id lk9-20020a17090b33c900b002009ec2f2ebmr2095377pjb.29.1663828100335;
+        Wed, 21 Sep 2022 23:28:20 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id e186-20020a621ec3000000b0053b2681b0e0sm3397654pfe.39.2022.09.21.23.28.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Sep 2022 23:28:19 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: [PATCH] string: Rewrite and add more kern-doc for the str*() functions
+Date:   Wed, 21 Sep 2022 23:28:17 -0700
+Message-Id: <20220922062817.2283352-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2 2/3] dt-bindings: thermal: Convert loongson2 to
- json-schema
-Content-Language: en-US
-To:     =?UTF-8?B?5pyx6ZO25rOi?= <zhuyinbo@loongson.cn>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhanghongchen <zhanghongchen@loongson.cn>
-References: <20220921015605.17078-1-zhuyinbo@loongson.cn>
- <20220921015605.17078-2-zhuyinbo@loongson.cn>
- <fb901889-d769-ba56-d4cb-2d9d8b50f74f@linaro.org>
- <28a78a10.a7dd.1835f5aaf90.Coremail.zhuyinbo@loongson.cn>
- <a44244f2-fb96-0483-b529-d0f2b0b7e5d8@linaro.org>
- <4febe7e4.a96c.18362d997e3.Coremail.zhuyinbo@loongson.cn>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <4febe7e4.a96c.18362d997e3.Coremail.zhuyinbo@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=15450; h=from:subject; bh=XNGoI+v3Lo37a41PSmNFVl58a5vuww1oZHEVITu0DvA=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjLACBpSeu11Er/+oHBwcJo79z7pCzFp2vAuMU9ssO FWMUvJ+JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYywAgQAKCRCJcvTf3G3AJugpD/ 9+qD1bsYNyTyhZpj4f6qzt/ixWhOoHAO/w9V0g4SnAAEEANo07732aa2yhegAzlhsLnJCJ8RFMWebd 5ISjM4EbqHE4y6FrWNwWcyjrbl2B91dchshQaMQRWddqRIwydEZPQyk9B4VGamDrANHLHmfJl/8dG/ JrLCLmLizw01bw0M2Fa9CxbGajV/6ifrV2puAzQjsP3nkWZo8dAfjk0VTGTtCqVi12SyOiz4HIz+4A wyDePro9WHDQ0uzACxDsy4TS+NBiPL9EPTYiJdYeB2GjxWIk9eguqxmeUR+5S3IttBXL6lrRyLUVPO FB1AbWIXdzpvZXm+lj7bG/y4FlMa5lBt47wJAZKwE5MGegTqkw7O6NYDY+xjqICNJ+zQKkywAgG14J aJinrE/HUwIJS6vywC2cbPT6tMC9nEATe6nqGGSaidgTV+5EExnkGcNxIOA19LKlHY2ABdWQSk/YwS wI9Z0b6HmC/44+SdL+C6KU8oekduRc9LDiELqBYUc42kpfJUTW/dCnJdDy3pqO9elkso727e75+5YE 2/+RxWg5wHC+1qNs1dahuIxJLiZGfv5RL4P9FszQ1uyVkf/doixrpB5mmWOX1uOR6i+s8zuoTvEIGM RImT6rz3hX5NdUTW07rqjkKih4325vpBXSHVUAXgxONfHaMXqIefMSzKkB2Q==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/09/2022 03:39, 朱银波 wrote:
-> 
-> 
-> 
->> -----原始邮件-----
->> 发件人: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
->> 发送时间:2022-09-21 17:31:11 (星期三)
->> 收件人: "朱银波" <zhuyinbo@loongson.cn>
->> 抄送: "Rafael J . Wysocki" <rafael@kernel.org>, "Daniel Lezcano" <daniel.lezcano@linaro.org>, "Amit Kucheria" <amitk@kernel.org>, "Zhang Rui" <rui.zhang@intel.com>, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, zhanghongchen <zhanghongchen@loongson.cn>
->> 主题: Re: [PATCH v2 2/3] dt-bindings: thermal: Convert loongson2 to json-schema
->>
->> On 21/09/2022 11:22, 朱银波 wrote:
->>>> -----原始邮件-----
->>>> 发件人: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
->>>> 发送时间:2022-09-21 15:05:00 (星期三)
->>>> 收件人: "Yinbo Zhu" <zhuyinbo@loongson.cn>, "Rafael J . Wysocki" <rafael@kernel.org>, "Daniel Lezcano" <daniel.lezcano@linaro.org>, "Amit Kucheria" <amitk@kernel.org>, "Zhang Rui" <rui.zhang@intel.com>, "Rob Herring" <robh+dt@kernel.org>, "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
->>>> 抄送: zhanghongchen <zhanghongchen@loongson.cn>
->>>> 主题: Re: [PATCH v2 2/3] dt-bindings: thermal: Convert loongson2 to json-schema
->>>>
->>>> On 21/09/2022 03:56, Yinbo Zhu wrote:
->>>>> Convert the loongson2 thermal binding to DT schema format using
->>>>> json-schema.
->>>>
->>>> Incorrect subject and incorrect commit msg. There is no conversion here.
->>> Our soc architecture is the loongson2 series, so we will modify it accordingly.
->>
->> How the soc architecture is related to my comment that you do not
->> perform conversion?
-> I got it, and I will aad a conversion.
->>
->>>
->>>>
->>>>>
->>>>> Signed-off-by: Yinbo Zhu <c>
->>>>> ---
->>>>> Change in v2:
->>>>> 		1. Add description and type about the "id".	
->>>>> 		2. Make the filename was based on compatible.
->>>>>
->>>>>  .../bindings/thermal/loongson2-thermal.yaml   | 52 +++++++++++++++++++
->>>>>  1 file changed, 52 insertions(+)
->>>>>  create mode 100644 Documentation/devicetree/bindings/thermal/loongson2-thermal.yaml
->>>>>
->>>>> diff --git a/Documentation/devicetree/bindings/thermal/loongson2-thermal.yaml b/Documentation/devicetree/bindings/thermal/loongson2-thermal.yaml
->>>>> new file mode 100644
->>>>> index 000000000000..2994ae3a56aa
->>>>> --- /dev/null
->>>>> +++ b/Documentation/devicetree/bindings/thermal/loongson2-thermal.yaml
->>>>
->>>>
->>>> No improvements here. You ignore my comments, so I am going to NAK it.
->>> I don't get your point, that dts compatible is "loongson,loongson2-thermal", so this driver file name is named
->>> loongson2-thermal that according what you said about "Filename based on compatible."
->>> If what I understand is not what you expect, please tell me how to modify it.
->>
->>
->> Filename must match the compatible, so: loongson,loongson2-thermal.yaml
-> I got it, and I will add a conversion.
->>
->>>>
->>>>
->>>>> @@ -0,0 +1,52 @@
->>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>>>> +%YAML 1.2
->>>>> +---
->>>>> +$id: http://devicetree.org/schemas/thermal/loongson2-thermal.yaml#
->>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>>> +
->>>>> +title: Thermal sensors on loongson2 SoCs
->>>>> +
->>>>> +maintainers:
->>>>> +  - zhanghongchen <zhanghongchen@loongson.cn>
->>>>> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
->>>>> +
->>>>> +properties:
->>>>> +  compatible:
->>>>> +    const: loongson,loongson2-thermal
->>>>> +
->>>>> +  reg:
->>>>> +    maxItems: 1
->>>>> +
->>>>> +  id:
->>>>> +    $ref: '//schemas/types.yaml#/definitions/uint32'
->>>>
->>>> No improvements here, so let me be specific - you need to really justify
->>>> such property or it cannot go to schema.
->>> The loongson2_thermal.c driver need parse this "id" property.
->>
->> This is not reason to add properties to DT. DT describes the hardware,
->> not driver behavior.
->>
->> Why hardware needs arbitrary, additional addressing number instead of
->> standard unit address?
-> The loongson2 series soc supports up to four sensors, but the 2K1000 has only one sensor, so the ID must be 0. 
-> For the 2K1000, in order to distinguish the differences between different hardware in the Loongson2 SoC series,
-> the ID is added to the dts
+While there were varying degrees of kern-doc for various str*()-family
+functions, many needed updating and clarification, or to just be
+entirely written. Update (and relocate) existing kern-doc and add missing
+functions, sadly shaking my head at how many times I have written "Do
+not use this function". Include the results in the core kernel API doc.
 
-That's not an explanation at all. All other SoCs have multiple sensors
-and we do not have such "id" fields.
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+Follow up to https://lore.kernel.org/lkml/20220902223507.2537469-1-keescook@chromium.org
+Note that this is on top of my recent fortify-string.h series:
+https://lore.kernel.org/lkml/20220920192202.190793-1-keescook@chromium.org/
+---
+ Documentation/core-api/kernel-api.rst |   3 +
+ include/linux/fortify-string.h        | 133 ++++++++++++++++++++++++--
+ lib/string.c                          |  82 ----------------
+ scripts/kernel-doc                    |   4 +
+ 4 files changed, 130 insertions(+), 92 deletions(-)
 
->>
->>>>
->>>>> +    description: |
->>>>> +      Specify the thermal sensor id.
->>>>> +    minimum: 0
->>>>> +    maximum: 3
->>>>> +
->>>>> +  interrupts:
->>>>> +    maxItems: 1
->>>>> +
->>>>> +  "#thermal-sensor-cells":
->>>>> +    const: 1
->>>>> +
->>>>> +required:
->>>>> +  - compatible
->>>>> +  - reg
->>>>> +  - id
->>>>> +  - interrupt-parent
->>>>
->>>> Why?
->>> The interrupts of our dts do not specify an interrupt parent,
->>> eg. interrupts = <7 IRQ_TYPE_LEVEL_LOW>
->>> so we need to add an interrupt parent property.
->>
->> You can add but I am asking why is it required?
-> Since there is more than one interrupt controller in the Loongson2 series soc, that need to specify the interrupt 
-> controller in the dts, that is, the interrupt parent.   If different interrupt parents are used in dts, the interrupt 
-> numbers are different.
-
-You describe now the overall SoC, but this is a schema for a device, not
-entire SoC. I still do not see why interrupt-parent is necessary for
-this device.
-
-> This email and its attachments contain confidential information from Loongson Technology , which is intended only for the person or entity whose address is listed above. Any use of the information contained herein in any way (including, but not limited to, total or partial disclosure, reproduction or dissemination) by persons other than the intended recipient(s) is prohibited. If you receive this email in error, please notify the sender by phone or email immediately and delete it. 
-
-You keep ignoring this one.
-
-Best regards,
-Krzysztof
+diff --git a/Documentation/core-api/kernel-api.rst b/Documentation/core-api/kernel-api.rst
+index 0793c400d4b0..20569f26dde1 100644
+--- a/Documentation/core-api/kernel-api.rst
++++ b/Documentation/core-api/kernel-api.rst
+@@ -36,6 +36,9 @@ String Conversions
+ String Manipulation
+ -------------------
+ 
++.. kernel-doc:: include/linux/fortify-string.h
++   :internal:
++
+ .. kernel-doc:: lib/string.c
+    :export:
+ 
+diff --git a/include/linux/fortify-string.h b/include/linux/fortify-string.h
+index b62c90cfafaf..a2e06ad47479 100644
+--- a/include/linux/fortify-string.h
++++ b/include/linux/fortify-string.h
+@@ -106,13 +106,13 @@ extern char *__underlying_strncpy(char *p, const char *q, __kernel_size_t size)
+  * Instead, please choose an alternative, so that the expectation
+  * of @p's contents is unambiguous:
+  *
+- * +--------------------+-----------------+------------+
+- * | @p needs to be:    | padded to @size | not padded |
+- * +====================+=================+============+
+- * |     NUL-terminated | strscpy_pad()   | strscpy()  |
+- * +--------------------+-----------------+------------+
+- * | not NUL-terminated | strtomem_pad()  | strtomem() |
+- * +--------------------+-----------------+------------+
++ * +--------------------+--------------------+------------+
++ * | **p** needs to be: | padded to **size** | not padded |
++ * +====================+====================+============+
++ * |     NUL-terminated | strscpy_pad()      | strscpy()  |
++ * +--------------------+--------------------+------------+
++ * | not NUL-terminated | strtomem_pad()     | strtomem() |
++ * +--------------------+--------------------+------------+
+  *
+  * Note strscpy*()'s differing return values for detecting truncation,
+  * and strtomem*()'s expectation that the destination is marked with
+@@ -131,6 +131,21 @@ char *strncpy(char * const POS p, const char *q, __kernel_size_t size)
+ 	return __underlying_strncpy(p, q, size);
+ }
+ 
++/**
++ * strcat - Append a string to an existing string
++ *
++ * @p: pointer to NUL-terminated string to append to
++ * @q: pointer to NUL-terminated source string to append from
++ *
++ * Do not use this function. While FORTIFY_SOURCE tries to avoid
++ * read and write overflows, this is only possible when the
++ * destination buffer size is known to the compiler. Prefer
++ * building the string with formatting, via scnprintf() or similar.
++ * At the very least, use strncat().
++ *
++ * Returns @p.
++ *
++ */
+ __FORTIFY_INLINE __diagnose_as(__builtin_strcat, 1, 2)
+ char *strcat(char * const POS p, const char *q)
+ {
+@@ -144,6 +159,16 @@ char *strcat(char * const POS p, const char *q)
+ }
+ 
+ extern __kernel_size_t __real_strnlen(const char *, __kernel_size_t) __RENAME(strnlen);
++/**
++ * strnlen - Return bounded count of characters in a NUL-terminated string
++ *
++ * @p: pointer to NUL-terminated string to count.
++ * @maxlen: maximum number of characters to count.
++ *
++ * Returns number of characters in @p (NOT including the final NUL), or
++ * @maxlen, if no NUL has been found up to there.
++ *
++ */
+ __FORTIFY_INLINE __kernel_size_t strnlen(const char * const POS p, __kernel_size_t maxlen)
+ {
+ 	size_t p_size = __member_size(p);
+@@ -169,6 +194,19 @@ __FORTIFY_INLINE __kernel_size_t strnlen(const char * const POS p, __kernel_size
+  * possible for strlen() to be used on compile-time strings for use in
+  * static initializers (i.e. as a constant expression).
+  */
++/**
++ * strlen - Return count of characters in a NUL-terminated string
++ *
++ * @p: pointer to NUL-terminated string to count.
++ *
++ * Do not use this function unless the string length is known at
++ * compile-time. When @p is unterminated, this function may crash
++ * or return unexpected counts that could lead to memory content
++ * exposures. Prefer strnlen().
++ *
++ * Returns number of characters in @p (NOT including the final NUL).
++ *
++ */
+ #define strlen(p)							\
+ 	__builtin_choose_expr(__is_constexpr(__builtin_strlen(p)),	\
+ 		__builtin_strlen(p), __fortify_strlen(p))
+@@ -187,8 +225,26 @@ __kernel_size_t __fortify_strlen(const char * const POS p)
+ 	return ret;
+ }
+ 
+-/* defined after fortified strlen to reuse it */
++/* Defined after fortified strlen() to reuse it. */
+ extern size_t __real_strlcpy(char *, const char *, size_t) __RENAME(strlcpy);
++/**
++ * strlcpy - Copy a string into another string buffer
++ *
++ * @p: pointer to destination of copy
++ * @q: pointer to NUL-terminated source string to copy
++ * @size: maximum number of bytes to write at @p
++ *
++ * If strlen(@q) >= @size, the copy of @q will be truncated at
++ * @size - 1 bytes. @p will always be NUL-terminated.
++ *
++ * Do not use this function. While FORTIFY_SOURCE tries to avoid
++ * over-reads when calculating strlen(@q), it is still possible.
++ * Prefer strscpy(), though note its different return values for
++ * detecting truncation.
++ *
++ * Returns total number of bytes written to @p, including terminating NUL.
++ *
++ */
+ __FORTIFY_INLINE size_t strlcpy(char * const POS p, const char * const POS q, size_t size)
+ {
+ 	size_t p_size = __member_size(p);
+@@ -214,8 +270,32 @@ __FORTIFY_INLINE size_t strlcpy(char * const POS p, const char * const POS q, si
+ 	return q_len;
+ }
+ 
+-/* defined after fortified strnlen to reuse it */
++/* Defined after fortified strnlen() to reuse it. */
+ extern ssize_t __real_strscpy(char *, const char *, size_t) __RENAME(strscpy);
++/**
++ * strscpy - Copy a C-string into a sized buffer
++ *
++ * @p: Where to copy the string to
++ * @q: Where to copy the string from
++ * @size: Size of destination buffer
++ *
++ * Copy the source string @p, or as much of it as fits, into the destination
++ * @q buffer. The behavior is undefined if the string buffers overlap. The
++ * destination @p buffer is always NUL terminated, unless it's zero-sized.
++ *
++ * Preferred to strlcpy() since the API doesn't require reading memory
++ * from the source @q string beyond the specified @size bytes, and since
++ * the return value is easier to error-check than strlcpy()'s.
++ * In addition, the implementation is robust to the string changing out
++ * from underneath it, unlike the current strlcpy() implementation.
++ *
++ * Preferred to strncpy() since it always returns a valid string, and
++ * doesn't unnecessarily force the tail of the destination buffer to be
++ * zero padded. If padding is desired please use strscpy_pad().
++ *
++ * Returns the number of characters copied in @p (not including the
++ * trailing %NUL) or -E2BIG if @size is 0 or the copy of @q was truncated.
++ */
+ __FORTIFY_INLINE ssize_t strscpy(char * const POS p, const char * const POS q, size_t size)
+ {
+ 	size_t len;
+@@ -261,7 +341,26 @@ __FORTIFY_INLINE ssize_t strscpy(char * const POS p, const char * const POS q, s
+ 	return __real_strscpy(p, q, len);
+ }
+ 
+-/* defined after fortified strlen and strnlen to reuse them */
++/**
++ * strncat - Append a string to an existing string
++ *
++ * @p: pointer to NUL-terminated string to append to
++ * @q: pointer to source string to append from
++ * @count: Maximum bytes to read from @q
++ *
++ * Appends at most @count bytes from @q (stopping at the first
++ * NUL byte) after the NUL-terminated string at @p. @p will be
++ * NUL-terminated.
++ *
++ * Do not use this function. While FORTIFY_SOURCE tries to avoid
++ * read and write overflows, this is only possible when the sizes
++ * of @p and @q are known to the compiler. Prefer building the
++ * string with formatting, via scnprintf() or similar.
++ *
++ * Returns @p.
++ *
++ */
++/* Defined after fortified strlen() and strnlen() to reuse them. */
+ __FORTIFY_INLINE __diagnose_as(__builtin_strncat, 1, 2, 3)
+ char *strncat(char * const POS p, const char * const POS q, __kernel_size_t count)
+ {
+@@ -565,6 +664,20 @@ __FORTIFY_INLINE void *kmemdup(const void * const POS0 p, size_t size, gfp_t gfp
+ 	return __real_kmemdup(p, size, gfp);
+ }
+ 
++/**
++ * strcpy - Copy a string into another string buffer
++ *
++ * @p: pointer to destination of copy
++ * @q: pointer to NUL-terminated source string to copy
++ *
++ * Do not use this function. While FORTIFY_SOURCE tries to avoid
++ * overflows, this is only possible when the sizes of @q and @p are
++ * known to the compiler. Prefer strscpy(), though note its different
++ * return values for detecting truncation.
++ *
++ * Returns @p.
++ *
++ */
+ /* Defined after fortified strlen to reuse it. */
+ __FORTIFY_INLINE __diagnose_as(__builtin_strcpy, 1, 2)
+ char *strcpy(char * const POS p, const char * const POS q)
+diff --git a/lib/string.c b/lib/string.c
+index 6f334420f687..6045124c2195 100644
+--- a/lib/string.c
++++ b/lib/string.c
+@@ -76,11 +76,6 @@ EXPORT_SYMBOL(strcasecmp);
+ #endif
+ 
+ #ifndef __HAVE_ARCH_STRCPY
+-/**
+- * strcpy - Copy a %NUL terminated string
+- * @dest: Where to copy the string to
+- * @src: Where to copy the string from
+- */
+ char *strcpy(char *dest, const char *src)
+ {
+ 	char *tmp = dest;
+@@ -93,19 +88,6 @@ EXPORT_SYMBOL(strcpy);
+ #endif
+ 
+ #ifndef __HAVE_ARCH_STRNCPY
+-/**
+- * strncpy - Copy a length-limited, C-string
+- * @dest: Where to copy the string to
+- * @src: Where to copy the string from
+- * @count: The maximum number of bytes to copy
+- *
+- * The result is not %NUL-terminated if the source exceeds
+- * @count bytes.
+- *
+- * In the case where the length of @src is less than  that  of
+- * count, the remainder of @dest will be padded with %NUL.
+- *
+- */
+ char *strncpy(char *dest, const char *src, size_t count)
+ {
+ 	char *tmp = dest;
+@@ -122,17 +104,6 @@ EXPORT_SYMBOL(strncpy);
+ #endif
+ 
+ #ifndef __HAVE_ARCH_STRLCPY
+-/**
+- * strlcpy - Copy a C-string into a sized buffer
+- * @dest: Where to copy the string to
+- * @src: Where to copy the string from
+- * @size: size of destination buffer
+- *
+- * Compatible with ``*BSD``: the result is always a valid
+- * NUL-terminated string that fits in the buffer (unless,
+- * of course, the buffer size is zero). It does not pad
+- * out the result like strncpy() does.
+- */
+ size_t strlcpy(char *dest, const char *src, size_t size)
+ {
+ 	size_t ret = strlen(src);
+@@ -148,30 +119,6 @@ EXPORT_SYMBOL(strlcpy);
+ #endif
+ 
+ #ifndef __HAVE_ARCH_STRSCPY
+-/**
+- * strscpy - Copy a C-string into a sized buffer
+- * @dest: Where to copy the string to
+- * @src: Where to copy the string from
+- * @count: Size of destination buffer
+- *
+- * Copy the string, or as much of it as fits, into the dest buffer.  The
+- * behavior is undefined if the string buffers overlap.  The destination
+- * buffer is always NUL terminated, unless it's zero-sized.
+- *
+- * Preferred to strlcpy() since the API doesn't require reading memory
+- * from the src string beyond the specified "count" bytes, and since
+- * the return value is easier to error-check than strlcpy()'s.
+- * In addition, the implementation is robust to the string changing out
+- * from underneath it, unlike the current strlcpy() implementation.
+- *
+- * Preferred to strncpy() since it always returns a valid string, and
+- * doesn't unnecessarily force the tail of the destination buffer to be
+- * zeroed.  If zeroing is desired please use strscpy_pad().
+- *
+- * Returns:
+- * * The number of characters copied (not including the trailing %NUL)
+- * * -E2BIG if count is 0 or @src was truncated.
+- */
+ ssize_t strscpy(char *dest, const char *src, size_t count)
+ {
+ 	const struct word_at_a_time constants = WORD_AT_A_TIME_CONSTANTS;
+@@ -258,11 +205,6 @@ char *stpcpy(char *__restrict__ dest, const char *__restrict__ src)
+ EXPORT_SYMBOL(stpcpy);
+ 
+ #ifndef __HAVE_ARCH_STRCAT
+-/**
+- * strcat - Append one %NUL-terminated string to another
+- * @dest: The string to be appended to
+- * @src: The string to append to it
+- */
+ char *strcat(char *dest, const char *src)
+ {
+ 	char *tmp = dest;
+@@ -277,15 +219,6 @@ EXPORT_SYMBOL(strcat);
+ #endif
+ 
+ #ifndef __HAVE_ARCH_STRNCAT
+-/**
+- * strncat - Append a length-limited, C-string to another
+- * @dest: The string to be appended to
+- * @src: The string to append to it
+- * @count: The maximum numbers of bytes to copy
+- *
+- * Note that in contrast to strncpy(), strncat() ensures the result is
+- * terminated.
+- */
+ char *strncat(char *dest, const char *src, size_t count)
+ {
+ 	char *tmp = dest;
+@@ -306,12 +239,6 @@ EXPORT_SYMBOL(strncat);
+ #endif
+ 
+ #ifndef __HAVE_ARCH_STRLCAT
+-/**
+- * strlcat - Append a length-limited, C-string to another
+- * @dest: The string to be appended to
+- * @src: The string to append to it
+- * @count: The size of the destination buffer.
+- */
+ size_t strlcat(char *dest, const char *src, size_t count)
+ {
+ 	size_t dsize = strlen(dest);
+@@ -476,10 +403,6 @@ EXPORT_SYMBOL(strnchr);
+ #endif
+ 
+ #ifndef __HAVE_ARCH_STRLEN
+-/**
+- * strlen - Find the length of a string
+- * @s: The string to be sized
+- */
+ size_t strlen(const char *s)
+ {
+ 	const char *sc;
+@@ -492,11 +415,6 @@ EXPORT_SYMBOL(strlen);
+ #endif
+ 
+ #ifndef __HAVE_ARCH_STRNLEN
+-/**
+- * strnlen - Find the length of a length-limited string
+- * @s: The string to be sized
+- * @count: The maximum number of bytes to search
+- */
+ size_t strnlen(const char *s, size_t count)
+ {
+ 	const char *sc;
+diff --git a/scripts/kernel-doc b/scripts/kernel-doc
+index 8bb89deb9a91..adbc4d307770 100755
+--- a/scripts/kernel-doc
++++ b/scripts/kernel-doc
+@@ -1448,6 +1448,8 @@ sub create_parameterlist($$$$) {
+     foreach my $arg (split($splitter, $args)) {
+ 	# strip comments
+ 	$arg =~ s/\/\*.*\*\///;
++	# ignore argument attributes
++	$arg =~ s/\sPOS0?\s/ /;
+ 	# strip leading/trailing spaces
+ 	$arg =~ s/^\s*//;
+ 	$arg =~ s/\s*$//;
+@@ -1657,6 +1659,7 @@ sub dump_function($$) {
+     $prototype =~ s/^__inline +//;
+     $prototype =~ s/^__always_inline +//;
+     $prototype =~ s/^noinline +//;
++    $prototype =~ s/^__FORTIFY_INLINE +//;
+     $prototype =~ s/__init +//;
+     $prototype =~ s/__init_or_module +//;
+     $prototype =~ s/__deprecated +//;
+@@ -1667,6 +1670,7 @@ sub dump_function($$) {
+     $prototype =~ s/__sched +//;
+     $prototype =~ s/__printf\s*\(\s*\d*\s*,\s*\d*\s*\) +//;
+     $prototype =~ s/__(?:re)?alloc_size\s*\(\s*\d+\s*(?:,\s*\d+\s*)?\) +//;
++    $prototype =~ s/__diagnose_as\s*\(\s*\S+\s*(?:,\s*\d+\s*)*\) +//;
+     my $define = $prototype =~ s/^#\s*define\s+//; #ak added
+     $prototype =~ s/__attribute_const__ +//;
+     $prototype =~ s/__attribute__\s*\(\(
+-- 
+2.34.1
 
