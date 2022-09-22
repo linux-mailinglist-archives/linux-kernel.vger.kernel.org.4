@@ -2,155 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 180BD5E6403
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 15:46:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDFA25E640E
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 15:47:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231742AbiIVNpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 09:45:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53336 "EHLO
+        id S231844AbiIVNra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 09:47:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231352AbiIVNpZ (ORCPT
+        with ESMTP id S231839AbiIVNq7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 09:45:25 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 271215D0CB
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 06:45:23 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id d17so6127784qko.13
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 06:45:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ieee.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=lTLxj593wgb0rSkyx/kVpkcZN0XitEmW0vMjErWHotA=;
-        b=FyJaKv2cOaRg6P7yvu8zs1jVRm/8RMTbc6dfECJ+ZO5o/HmyZWXx30/9G58nVbrc5b
-         uilHyUda0dD/kYG1qtguthEwDaL9y8JeP+HPCBHfMWclRlKZoOK/NXZxzGUfoaxervvy
-         D0TcePhLr6rEHe3E5Hlf5A5QN/T9th71F+ymU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=lTLxj593wgb0rSkyx/kVpkcZN0XitEmW0vMjErWHotA=;
-        b=oVwJB/VigfjQSdCDlgDuSIayharIJUjpNlTRit/rgLYDLWqN4WWkdviI8ng4aGd2Lr
-         7GMrasz38aDgA6+vAg36x5VuP0aJM8XwvkX7EUDLc+Nl/e+667qb01gPbpXlolyY1lRF
-         zHmJG93FTaYxXvGy8QlTMA2pkO839QM7AWbecMOX2EIA07ZZ4vH/7VtoDtIDUYLiuyWX
-         oUl+2Uhw9Rxkm3BZNbKkDclPMMSB5WSHPsW10pS882kZt8hbnMe6HRgObMgwPesKVSKp
-         YTCORpNL18JSmUpwmDGwRsPvc172iqlNlTpIxHY/1NJi6eu31lsvn+rNqfHAQf4I3W/C
-         YCEQ==
-X-Gm-Message-State: ACrzQf3PbKjQRKZyALeLn65FS2vsMK+wmlZVAEDhmdJZp2vWrDE08RBW
-        i9Zr2lmfqzAU/7mcR+vqJDd6mw==
-X-Google-Smtp-Source: AMsMyM6DBqbYqDsHBnddfGDZuwycGpoIY7LinhBIG4+l+K0bdEu/uf1UKptO3KnL1trAn9LU6bZY/Q==
-X-Received: by 2002:a05:620a:f15:b0:6cf:2130:88e3 with SMTP id v21-20020a05620a0f1500b006cf213088e3mr2093263qkl.519.1663854322211;
-        Thu, 22 Sep 2022 06:45:22 -0700 (PDT)
-Received: from [172.22.22.4] ([98.61.227.136])
-        by smtp.googlemail.com with ESMTPSA id w7-20020ac857c7000000b0035bbb6268e2sm3902332qta.67.2022.09.22.06.45.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Sep 2022 06:45:21 -0700 (PDT)
-Message-ID: <4d75a9fd-1b94-7208-9de8-5a0102223e68@ieee.org>
-Date:   Thu, 22 Sep 2022 08:45:19 -0500
+        Thu, 22 Sep 2022 09:46:59 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4866B2CF9;
+        Thu, 22 Sep 2022 06:46:32 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id DAD356BE;
+        Thu, 22 Sep 2022 15:46:29 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1663854390;
+        bh=4PHTA7WJvRzkt2WYaKYBpZNp5g1S5sLG94TzQnuL42E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=b0CKFH/qiOdwbJ0Nkzn8UvIK+aiNAKkFrGvXtEM9+s9f6ZosHkHM6IRKCgSzlFr++
+         e2gbTTwZmgpsZK9Fcj7KI164PtJu4cSKqLHQ4GTbxA9y3g6H80Bq0njmSsuFUijbQn
+         O4wRK3mE4FMPpGha89+jx0AOJ+dUv0HWobaKNJX0=
+Date:   Thu, 22 Sep 2022 16:46:15 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Subject: Re: [PATCH v2 2/4] media: dt-bindings: Document Renesas RZ/G2L CRU
+ block
+Message-ID: <YyxnJ/Ho5rZQzDDN@pendragon.ideasonboard.com>
+References: <20220905230406.30801-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220905230406.30801-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <29d456ed-620c-8dc9-01f0-54f96b670b94@linaro.org>
+ <YysHAkWBfTTAJF3E@pendragon.ideasonboard.com>
+ <ba436dd5-2ea2-b2e0-7056-5bae6b4c7bb4@linaro.org>
+ <YytJ/oJK9s2mfqPL@pendragon.ideasonboard.com>
+ <bba1ed72-d691-b51c-dce8-ab9a2e45fe86@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 03/12] net: ipa: Proactively round up to kmalloc bucket
- size
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>, Vlastimil Babka <vbabka@suse.cz>
-Cc:     Alex Elder <elder@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Daniel Micay <danielmicay@gmail.com>,
-        Yonghong Song <yhs@fb.com>, Marco Elver <elver@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Jacob Shin <jacob.shin@amd.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-btrfs@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-fsdevel@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, dev@openvswitch.org,
-        x86@kernel.org, linux-wireless@vger.kernel.org,
-        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-References: <20220922031013.2150682-1-keescook@chromium.org>
- <20220922031013.2150682-4-keescook@chromium.org>
-From:   Alex Elder <elder@ieee.org>
-In-Reply-To: <20220922031013.2150682-4-keescook@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <bba1ed72-d691-b51c-dce8-ab9a2e45fe86@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/21/22 10:10 PM, Kees Cook wrote:
-> Instead of discovering the kmalloc bucket size _after_ allocation, round
-> up proactively so the allocation is explicitly made for the full size,
-> allowing the compiler to correctly reason about the resulting size of
-> the buffer through the existing __alloc_size() hint.
+On Wed, Sep 21, 2022 at 08:58:26PM +0200, Krzysztof Kozlowski wrote:
+> On 21/09/2022 19:29, Laurent Pinchart wrote:
+> >>>>> +  clock-names:
+> >>>>> +    items:
+> >>>>> +      - const: vclk
+> >>>>> +      - const: pclk
+> >>>>> +      - const: aclk
+> >>>>
+> >>>> Drop the "clk" suffixes. Remaining names could be made a bit more readable.
+> >>>
+> >>> These names come from the documentation, isn't it better to match the
+> >>> datasheet ?
+> >>
+> >> If datasheet calls it "vclk_really_clk_it_is_clk_clk", it's not the
+> >> reason to use it. :)
+> >>
+> >> The "clk" is redundant even if the hardware engineer thought different.
+> >>
+> >> The same for IRQs ("tx" not "txirq"), for dmas ("tx" not "txdma").
+> > 
+> > I'd argue that naming clocks "v", "p" and "a" would be less readable and
+> > more confusing. Is this a new rule ?
 > 
-> Cc: Alex Elder <elder@kernel.org>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: netdev@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->   drivers/net/ipa/gsi_trans.c | 7 +++++--
->   1 file changed, 5 insertions(+), 2 deletions(-)
+> Not really, but also it's only a style issue.
 > 
-> diff --git a/drivers/net/ipa/gsi_trans.c b/drivers/net/ipa/gsi_trans.c
-> index 18e7e8c405be..cec968854dcf 100644
-> --- a/drivers/net/ipa/gsi_trans.c
-> +++ b/drivers/net/ipa/gsi_trans.c
-> @@ -89,6 +89,7 @@ int gsi_trans_pool_init(struct gsi_trans_pool *pool, size_t size, u32 count,
->   			u32 max_alloc)
->   {
->   	void *virt;
-> +	size_t allocate;
+> Indeed "v" and "p" are not much better... but still "vclk" does not
+> bring any additional information over "v". It's redundant.
+> 
+> You can also drop entire entry - unless it helps in particular
+> implementation.
 
-I don't care about this but the reverse Christmas tree
-convention would put the "allocate" variable definition
-above "virt".
+There are multiple clocks, so I think names are better than indices. If
+you really insist we could name them "v", "p" and "a", but I think the
+clk suffix here improves readability. If those clocks were named
+"videoclk", "pixelclk" and "axiclk" I'd be fine dropping the suffix, but
+that's not the case here.
 
-Whether you fix that or not, this patch looks good to me.
+> https://lore.kernel.org/all/20220517175958.GA1321687-robh@kernel.org/
+> https://lore.kernel.org/all/20210815133926.22860-1-biju.das.jz@bp.renesas.com/
+> https://lore.kernel.org/all/YYFCaHI%2FDASUz+Vu@robh.at.kernel.org/
+> https://lore.kernel.org/all/20220830182540.GA1797396-robh@kernel.org/
 
-Reviewed-by: Alex Elder <elder@linaro.org>
+-- 
+Regards,
 
->   	if (!size)
->   		return -EINVAL;
-> @@ -104,13 +105,15 @@ int gsi_trans_pool_init(struct gsi_trans_pool *pool, size_t size, u32 count,
->   	 * If there aren't enough entries starting at the free index,
->   	 * we just allocate free entries from the beginning of the pool.
->   	 */
-> -	virt = kcalloc(count + max_alloc - 1, size, GFP_KERNEL);
-> +	allocate = size_mul(count + max_alloc - 1, size);
-> +	allocate = kmalloc_size_roundup(allocate);
-> +	virt = kzalloc(allocate, GFP_KERNEL);
->   	if (!virt)
->   		return -ENOMEM;
->   
->   	pool->base = virt;
->   	/* If the allocator gave us any extra memory, use it */
-> -	pool->count = ksize(pool->base) / size;
-> +	pool->count = allocate / size;
->   	pool->free = 0;
->   	pool->max_alloc = max_alloc;
->   	pool->size = size;
-
+Laurent Pinchart
