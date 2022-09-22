@@ -2,105 +2,358 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C2CD5E5C0E
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 09:14:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2120D5E5C15
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 09:15:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230510AbiIVHN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 03:13:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57052 "EHLO
+        id S230307AbiIVHPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 03:15:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231126AbiIVHNc (ORCPT
+        with ESMTP id S230424AbiIVHOk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 03:13:32 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2232EB774E
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 00:12:50 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id s6so13164767lfo.7
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 00:12:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=rwfoTSI2+bODt184zqvk6o5KksPyLZOSxRrSre7m3nU=;
-        b=MhBkMtNFvRKB+E48vrLoICpKm9sgw+cleIPWAZdLL/Zi1TbaAIdQ95hT//NfG41w3e
-         CI4FfhpaK1pwUNjEUDFFqLN2WW4uCqaJy2iaA0/BhawC0nYmq58tsVXzRIn2D14awddP
-         mHTBZAtcEBQJF6I9/XNAchneT562u5ZnnDjlX/uJ16P4/th4pGWksVDx6vpENafmdGhg
-         ieVTp393OQtS6QAxqdIfc8g2WjzUdqt/5lMb5W56Nyxsh4LMRw1sKV5eN3a1PRZoNwmb
-         H5f2yYPHjs0GnoIDHP4T8bY/lcFFUJ4rYUnDPPvGbWNK3chXy+JlrWlultv+vJjBPnDi
-         qYfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=rwfoTSI2+bODt184zqvk6o5KksPyLZOSxRrSre7m3nU=;
-        b=2vZSnFyxR8SnATIgukad78xn27QmWJmn9YR70I5JaQYogtpmCgOlz0t6i8xDIJmyXm
-         uInUvA/AuVClyXrkBT2P0PZqZO4coQVK11kqulEP5mUxIWOV5vCQEVpggn34+dH9obt2
-         DaOnGvU/o1W00WJjOj4ghHaBYZH2WzMR5bMZPycF3e6ZK48Vwc+iGk4XIAj5Lwcx0Tau
-         srKu2+GpfEwMGix+HNg223lGgFF+xDIEF8jzCOiAJU7Dd7SSBB4lS74CF/2dAXPJHrWX
-         54AXWiIDywmbF/GGtlQXNzCFlc///Dhp0RrSpNLLQYwYLknu2M/0hQxyNG0B4mcghA0t
-         v0Rw==
-X-Gm-Message-State: ACrzQf0DAaYF8zj4CPVj+itK6mCuMHOED/PqMnX4v6PyiiUgsojkv20p
-        hubn/wau9KVicTaekPLGBdU5Uw==
-X-Google-Smtp-Source: AMsMyM7tSmDdOf9yUwEBPNVo4LJveoksYmGyeRKCvdI8La3tpcO4vDQdzuT8eLiZWZvV10EZkCS7KA==
-X-Received: by 2002:a05:6512:260d:b0:492:df5a:e4f9 with SMTP id bt13-20020a056512260d00b00492df5ae4f9mr667074lfb.90.1663830768385;
-        Thu, 22 Sep 2022 00:12:48 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id z12-20020a056512370c00b0048a8c907fe9sm794191lfr.167.2022.09.22.00.12.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Sep 2022 00:12:47 -0700 (PDT)
-Message-ID: <e583c9d1-b936-3c19-ab6c-8fab4704ca45@linaro.org>
-Date:   Thu, 22 Sep 2022 09:12:46 +0200
+        Thu, 22 Sep 2022 03:14:40 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 672B0B7EE7;
+        Thu, 22 Sep 2022 00:14:11 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MY60V5yjlzHqKH;
+        Thu, 22 Sep 2022 15:11:54 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 22 Sep 2022 15:14:05 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 22 Sep 2022 15:14:04 +0800
+Subject: Re: [PATCH v4 4/8] kallsyms: Improve the performance of
+ kallsyms_lookup_name()
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+To:     Petr Mladek <pmladek@suse.com>
+CC:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Masahiro Yamada" <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        <linux-modules@vger.kernel.org>
+References: <20220920071317.1787-1-thunder.leizhen@huawei.com>
+ <20220920071317.1787-5-thunder.leizhen@huawei.com> <Yyss3SWM0nTVnjT7@alley>
+ <3c86335e-c5b8-b291-d0c2-9b69f912f900@huawei.com>
+Message-ID: <e380a283-b726-d1ea-f3f5-ef80987d880a@huawei.com>
+Date:   Thu, 22 Sep 2022 15:14:04 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v1 03/17] dt-bindings: phy: mediatek: hdmi-phy: Add mt8195
- compatible
+In-Reply-To: <3c86335e-c5b8-b291-d0c2-9b69f912f900@huawei.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-To:     Guillaume Ranquet <granquet@baylibre.com>,
-        Vinod Koul <vkoul@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        CK Hu <ck.hu@mediatek.com>, Jitao shi <jitao.shi@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-mediatek@lists.infradead.org,
-        dri-devel@lists.freedesktop.org,
-        Pablo Sun <pablo.sun@mediatek.com>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org
-References: <20220919-v1-0-4844816c9808@baylibre.com>
- <20220919-v1-3-4844816c9808@baylibre.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220919-v1-3-4844816c9808@baylibre.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/09/2022 18:56, Guillaume Ranquet wrote:
-> Add a compatible for the HDMI PHY on MT8195
+
+
+On 2022/9/22 10:15, Leizhen (ThunderTown) wrote:
 > 
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> 
+> On 2022/9/21 23:25, Petr Mladek wrote:
+>> On Tue 2022-09-20 15:13:13, Zhen Lei wrote:
+>>> Currently, to search for a symbol, we need to expand the symbols in
+>>> 'kallsyms_names' one by one, and then use the expanded string for
+>>> comparison. This process can be optimized.
+>>>
+>>> And now scripts/kallsyms no longer compresses the symbol types, each
+>>> symbol type always occupies one byte. So we can first compress the
+>>> searched symbol and then make a quick comparison based on the compressed
+>>> length and content. In this way, for entries with mismatched lengths,
+>>> there is no need to expand and compare strings. And for those matching
+>>> lengths, there's no need to expand the symbol. This saves a lot of time.
+>>> According to my test results, the average performance of
+>>> kallsyms_lookup_name() can be improved by 20 to 30 times.
+>>>
+>>> The pseudo code of the test case is as follows:
+>>> static int stat_find_name(...)
+>>> {
+>>> 	start = sched_clock();
+>>> 	(void)kallsyms_lookup_name(name);
+>>> 	end = sched_clock();
+>>> 	//Update min, max, cnt, sum
+>>> }
+>>>
+>>> /*
+>>>  * Traverse all symbols in sequence and collect statistics on the time
+>>>  * taken by kallsyms_lookup_name() to lookup each symbol.
+>>>  */
+>>> kallsyms_on_each_symbol(stat_find_name, NULL);
+>>>
+>>> The test results are as follows (twice):
+>>> After : min=5250, max=  726560, avg= 302132
+>>> After : min=5320, max=  726850, avg= 301978
+>>> Before: min=170,  max=15949190, avg=7553906
+>>> Before: min=160,  max=15877280, avg=7517784
+>>>
+>>> The average time consumed is only 4.01% and the maximum time consumed is
+>>> only 4.57% of the time consumed before optimization.
+>>>
+>>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+>>> ---
+>>>  kernel/kallsyms.c | 79 +++++++++++++++++++++++++++++++++++++++++++++--
+>>>  1 file changed, 76 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+>>> index 3e7e2c2ad2f75ef..2d76196cfe89f34 100644
+>>> --- a/kernel/kallsyms.c
+>>> +++ b/kernel/kallsyms.c
+>>> @@ -87,6 +87,71 @@ static unsigned int kallsyms_expand_symbol(unsigned int off,
+>>>  	return off;
+>>>  }
+>>>  
+>>> +static int kallsyms_name_to_tokens(const char *name, char *buf)
+>>
+>> This is not safe API. It is always needed to pass the size of the
+>> buffer.
+> 
+> OK
+> 
+>>
+>> Also it should be called "compress". "token" is just an implementation
+>> detail.
+>>
+>> I would do:
+>>
+>> static int kallsyms_compress_symbol_name(const char *name,
+>> 					 char *buf, size_t size)
+> 
+> This's a wonderful name. Thanks.
+> 
+>>
+>>
+>>> +{
+>>> +	int i, j, k, n;
+>>> +	int len, token_len;
+>>> +	const char *token;
+>>> +	unsigned char token_idx[KSYM_NAME_LEN];
+>>> +	unsigned char token_bak[KSYM_NAME_LEN];
+>>
+>> Why do we need two buffers? It should be possible to compress the name
+>> in the same buffer as it is done in compress_symbols() in scripts/callsyms.c.
+> 
+> Because the performance would be a little better. Now this function takes
+> just over a microsecond. Currently, it takes about 250 microseconds on
+> average to lookup a symbol, so adding a little more time to this function
+> doesn't affect the overall picture. I'll modify and test it as you suggest
+> below.
+> 
+>>
+>>> +
+>>> +	/*
+>>> +	 * n, number of tokens in the string name.
+>>> +	 * token_idx[i], the start index of the ith token.
+>>> +	 * token_idx[n] is used to calculate the length of the last token.
+>>> +	 */
+>>> +	n = strlen(name);
+>>> +	if (n >= KSYM_NAME_LEN) {
+>>> +		buf[0] = 0;
+>>> +		return 0;
+>>> +	}
+>>> +	for (i = 0; i <= n; i++)
+>>> +		token_idx[i] = (unsigned char)i;
+>>> +
+>>> +	/*
+>>> +	 * For tokens whose token_len >= 2, a larger index value indicates
+>>> +	 * a higher occurrence frequency. See scripts/kallsyms.c
+>>> +	 */
+>>> +	for (i = 255; i >= 0; i--) {
+>>> +		token = &kallsyms_token_table[kallsyms_token_index[i]];
+>>> +		token_len = strlen(token);
+>>> +		if (token_len <= 1)
+>>> +			continue;
+>>> +
+>>> +		/*
+>>> +		 * Find and merge two tokens into one.
+>>> +		 *
+>>> +		 *                |<-- new_token -->|
+>>> +		 *                | token1 | token2 |
+>>> +		 * token_idx[]:   j       j+1      j+2
+>>> +		 */
+>>> +		for (j = 0; j < n - 1; j++) {
+>>> +			len = token_idx[j + 2] - token_idx[j];
+>>> +			if (len == token_len &&
+>>> +			    !strncmp(name + token_idx[j], token, len)) {
+>>> +				token_bak[token_idx[j]] = (unsigned char)i;
+>>> +				for (k = j + 1; k < n; k++)
+>>> +					token_idx[k] = token_idx[k + 1];
+>>> +				n--;
+>>> +			}
+>>> +		}
+>>> +	}
+>>> +
+>>> +	for (j = 0; j < n; j++) {
+>>> +		len = token_idx[j + 1] - token_idx[j];
+>>> +		if (len <= 1) {
+>>> +			buf[j] = name[token_idx[j]];
+>>> +			continue;
+>>> +		}
+>>> +
+>>> +		buf[j] = token_bak[token_idx[j]];
+>>
+>> Maybe, I do not understand the compression format correctly but
+>> this code looks too complicated. Honestly, I even did not try to
+>> understand it.
+>>
+>> My understanding is the we just need to find all tokens and
+>> replace them with index.
+>>
+>> It should be even easier than compress_symbols() in scripts/callsyms.c.
+>> The token_table already exists and we do not need to handle the token_profit...
+>>
+>> The following looks more strigtforward (not even compile tested):
+> 
+> OK, I will try this one. Or refer to compress_symbols() in scripts/callsyms.c.
 
-The same... maybe it works, maybe not, I don't know. Any reason not
-using standard tools and producing standard patches?
+This method won't work. Because the tokens in kallsyms_token_table[] have
+been expanded. For example: name = "nfs_fs_proc_net_init"
+kallsyms_token_table[0xf3] = "s_",  raw token = 73 5f
+kallsyms_token_table[0x9f] = "fs_", raw token = 66 f3
 
-Best regards,
-Krzysztof
+After "s_" have been replaced with f3, there is no "fs_" substring in namebuf.
+That's why I wrote a new piece of code. Due to I didn't want to add a variable
+like kallsyms_token_table[].
 
+Now, I will add kallsyms_best_token_table[], kallsyms_best_token_table_len;
+kallsyms_best_token_table[] does not store tokens that contain only one
+character. And index=0 is the token with the highest frequency.
+
+
+> 
+>>
+>> 	ssize_t len, size;
+>>
+>> 	len = strscpy(buf, symname, size);
+>> 	if (WARN_ON_ONCE(len < 0))
+>> 		return -EINVAL;
+>>
+>> 	/* the tokens with higher index are used first */
+>> 	for (idx = 255; idx >= 0; idx--) {
+>> 		token =	&kallsyms_token_table[kallsyms_token_index[i]];
+>> 		token_len = strlen(token);
+>>
+>> 		p1 = buf;
+>> 		/* length of the remaining symname including the trailing '\0' */
+>> 		remaining = len + 1;
+>>
+>> 		/* find the token in the symbol name */
+>> 		p2 = strstr(token, p1);
+>>
+>> 		while (p2) {
+>> 			/* replace token with index */
+>> 			*p2 = idx;
+>> 			remaining -= ((p2 - p1) + token_len);
+>> 			memmove(p2 + 1, p2 + token_len, remaining);
+>> 			len -= (token_len - 1);
+>> 			p1 = p2;
+>>
+>> 			/* find the token in the rest of the symbol name */
+>> 			p2 = strstr(token, p1);
+>> 		}
+>> 	}
+>>
+>> 	return len;
+>>
+>>> +	}
+>>> +	buf[n] = 0;
+>>> +
+>>> +	return n;
+>>> +}
+>>> +
+>>>  /*
+>>>   * Get symbol type information. This is encoded as a single char at the
+>>>   * beginning of the symbol name.
+>>> @@ -192,20 +257,28 @@ unsigned long kallsyms_lookup_name(const char *name)
+>>>  	char namebuf[KSYM_NAME_LEN];
+>>>  	unsigned long i;
+>>>  	unsigned int off;
+>>> +	int len;
+>>>  
+>>>  	/* Skip the search for empty string. */
+>>>  	if (!*name)
+>>>  		return 0;
+>>>  
+>>> +	len = kallsyms_name_to_tokens(name, namebuf);
+>>> +	for (i = 0, off = 0; len && i < kallsyms_num_syms; i++) {
+>>> +		if (kallsyms_names[off] == len + 1 &&
+>>> +		    !memcmp(&kallsyms_names[off + 2], namebuf, len))
+>>> +			return kallsyms_sym_address(i);
+>>> +
+>>> +		off += kallsyms_names[off] + 1;
+>>
+>> These complicated checks are hard to review. The following looks much
+>> more readable to me:
+> 
+> Yes, it looks well.
+> 
+>>
+>> 	for (i = 0, off = 0; len && i < kallsyms_num_syms; i++) {
+>> 		/* the stored symbol name is prefixed by symbol type */
+>> 		name_len = kallsyms_names[off] - 1;
+>> 		name = &kallsyms_names[off + 2];
+>> 		off += name_len + 2;
+>>
+>> 		if (name_len != len)
+>> 			continue;
+>>
+>> 		if (!memcmp(name, namebuf, len))
+>> 			return kallsyms_sym_address(i);
+>> 	}
+>>
+>>
+>>> +	}
+>>> +
+>>>  	for (i = 0, off = 0; i < kallsyms_num_syms; i++) {
+>>>  		off = kallsyms_expand_symbol(off, namebuf, ARRAY_SIZE(namebuf));
+>>>  
+>>> -		if (strcmp(namebuf, name) == 0)
+>>> -			return kallsyms_sym_address(i);
+>>> -
+>>>  		if (cleanup_symbol_name(namebuf) && strcmp(namebuf, name) == 0)
+>>>  			return kallsyms_sym_address(i);
+>>
+>> Hmm, it means that the speedup is not usable when kernel is compiled LLVM?
+>> It might actually slow down the search because we would need to use
+>> both fast and slow search?
+> 
+> Theoretically, I don't think so. A string comparison was removed from the
+> slow search. "if (name_len != len)" is faster than
+> "if (strcmp(namebuf, name) == 0)". Even if they're equal,
+> kallsyms_compress_symbol_name() only takes 1-2us, it doesn't affect the
+> overall picture. The average lookup time before optimization is
+> millisecond-level. To allay your concerns, I can run a test.
+> 
+> Before: min=170,  max=15949190, avg=7553906
+> 
+>>
+>> Best Regards,
+>> Petr
+>> .
+>>
+> 
+
+-- 
+Regards,
+  Zhen Lei
