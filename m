@@ -2,178 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EBBB5E6FEC
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 00:46:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 510375E6FED
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 00:46:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230456AbiIVWqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 18:46:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44586 "EHLO
+        id S230484AbiIVWqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 18:46:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbiIVWqg (ORCPT
+        with ESMTP id S230454AbiIVWqk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 18:46:36 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6CBBEFF75
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 15:46:35 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id z13-20020a7bc7cd000000b003b5054c6f9bso1708585wmk.2
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 15:46:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=ltYapkC4HEBqKjWDViSVjlQMW2DX4S8eveyX3l0P/5c=;
-        b=G9W6En7uyuKdNbxwzw6cBEYBnJzigpgiRDHcQLoIBzimpoUBp/JwfY4Atk0L7QlkXL
-         i1UaV/K5F5qcv/B4fPMbems6DwV/bFs5KqJWwPw9bHJqtFBqtCZMga7gTVFC6Lvryu7V
-         uneDBbV0quDX7i5cC3pFQDUQIayQ/eybZ5FQQuVJFO8d/xTPyKrcgqliqBqy3lVLgpNz
-         EczuxYDt4NZ0p4QjOA7JSY4YVEQov+S5insBwLbmmwThDRzvL7fB9bBPlmBozeqhRFBX
-         gVkoKuL7eWTqSKBo+ay7ETLyeTP2GWrk0j18Fhs4ex/p6rqWXYvP8CCaAXoNXTM7xkUG
-         n22w==
+        Thu, 22 Sep 2022 18:46:40 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA70F277F
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 15:46:39 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id l18-20020a056e02067200b002f6af976994so1932498ilt.16
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 15:46:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=ltYapkC4HEBqKjWDViSVjlQMW2DX4S8eveyX3l0P/5c=;
-        b=jE2OJQGMFmx35YYNfaLDhd784QhrhrT4W0CCljdLiB2NElI3V1Z6WxMjFyLeCS5nbY
-         oDTcboQ3E6FkpF4MGn9MjLDkoktv0t3cC3wa1Z1cyX1/J8tK2iD0vcc9AiaCxbmvBz50
-         eoXPjz1mu7inTBNNek+Iubk/3fJuvTFUi4eDZ5tPY+tzdIO5mlOxmyzKJ+A75Gd2n771
-         GX4cp1XbG007ctvoHu5zZNntc+raJL8RbZsJJV6syglUZzTiMVZyKW+QcGukxkHKqsH9
-         BfUg+kMZl1x5B9+VsfpLlPm3bOW4loUVzK34QZqovC2CVFCJJFJe3WL8tWnyUDkIcilS
-         9qSw==
-X-Gm-Message-State: ACrzQf0GTYunjh0QaAWkUa1bg3787JyFmKaBvMbPNoXn3Pog7AJ3RsBF
-        seXQZFB2DhV6+c+ZJHTxn01x1Q==
-X-Google-Smtp-Source: AMsMyM6UtONCf1PBYt31tN03JHyVUgivr2gCgw/qVochMXs9/wGLnXQvd7RyJGYB49cW7AtCJzKshQ==
-X-Received: by 2002:a05:600c:198d:b0:3b4:b6b6:6fa with SMTP id t13-20020a05600c198d00b003b4b6b606famr11039067wmq.110.1663886794380;
-        Thu, 22 Sep 2022 15:46:34 -0700 (PDT)
-Received: from [192.168.86.238] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.googlemail.com with ESMTPSA id l20-20020a05600c089400b003a845621c5bsm661523wmp.34.2022.09.22.15.46.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Sep 2022 15:46:33 -0700 (PDT)
-Message-ID: <e4bd1b5c-2676-3cd7-db3b-1f34a305e9ec@linaro.org>
-Date:   Thu, 22 Sep 2022 23:46:32 +0100
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=DstbwuRbU9Zs5mZ8iPhqCuzdcXoC67eAx2pXtIDC/MA=;
+        b=h3X5eQFLhdHMcvVfPPpj/tt53urlkcWE25spc1bRM3BKWTZ5jxeRwN1yf/ma5gm5GP
+         bIAH28QGTDSW36Qc5riZBPBI3r36zaSEjf9W4n/Su7/8HSfVR5LVkcGq2iIsWUizxIjM
+         bpbIrnz26VywL06dN7FttT11X6oLlK1oLV99HhNzUDs5FPNlfv4HdNsMyydlNbTB7Lq7
+         CMHpBlBlethCsHK2K97aAeUQWFdJjD3pQc5/fmcksz74gyxD/eJ2fUyshwighhGAFIRh
+         fsDTlZI1AGdwIarnYxipjvCqkEyQwgVZQ/ZJfwYlHQLoprBb3qSkJUer+rX8Qs8xJQU/
+         8MyA==
+X-Gm-Message-State: ACrzQf0Sq/AdsChhgNdbtU/ml5yww8UFqt2o+4sTvbBXYbwXwBvVgwKT
+        4zYqu668BdgdRUpLmcCaWuwLl+s3ntVpo5XOH+bT2HHCzHF+
+X-Google-Smtp-Source: AMsMyM6WwhA8yqOdf1QF+8Ykr3OdsTH0qoCnUC3BI6S5NcP0cCU0e+9PeV3sqDsWoL5lVospjISWHFRKS+rZUlxoFaLYMp++YNWY
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/3] misc: fastrpc: Fix use-after-free and race in
- fastrpc_map_find
-Content-Language: en-US
-To:     Abel Vesa <abel.vesa@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Ekansh Gupta <ekangupt@qti.qualcomm.com>,
-        Vamsi Krishna Gattupalli <quic_vgattupa@quicinc.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ola Jeppsson <ola@snap.com>
-References: <20220902151423.3351414-1-abel.vesa@linaro.org>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20220902151423.3351414-1-abel.vesa@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:cd19:0:b0:356:75ad:bdb9 with SMTP id
+ g25-20020a02cd19000000b0035675adbdb9mr3209860jaq.161.1663886798438; Thu, 22
+ Sep 2022 15:46:38 -0700 (PDT)
+Date:   Thu, 22 Sep 2022 15:46:38 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000009145fc05e94bd5c3@google.com>
+Subject: [syzbot] KASAN: slab-out-of-bounds Read in run_unpack
+From:   syzbot <syzbot+8d6fbb27a6aded64b25b@syzkaller.appspotmail.com>
+To:     almaz.alexandrovich@paragon-software.com,
+        linux-kernel@vger.kernel.org, ntfs3@lists.linux.dev,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    38eddeedbbea Merge tag 'io_uring-6.0-2022-09-18' of git://..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=144e5144880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=98a30118ec9215e9
+dashboard link: https://syzkaller.appspot.com/bug?extid=8d6fbb27a6aded64b25b
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13cee66f080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10fa23bf080000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+8d6fbb27a6aded64b25b@syzkaller.appspotmail.com
+
+loop0: detected capacity change from 0 to 4119
+ntfs3: loop0: Different NTFS' sector size (2048) and media sector size (512)
+==================================================================
+BUG: KASAN: slab-out-of-bounds in run_unpack+0x8b7/0x970 fs/ntfs3/run.c:944
+Read of size 1 at addr ffff88801bbdff02 by task syz-executor131/3611
+
+CPU: 0 PID: 3611 Comm: syz-executor131 Not tainted 6.0.0-rc5-syzkaller-00097-g38eddeedbbea #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:317 [inline]
+ print_report.cold+0x2ba/0x719 mm/kasan/report.c:433
+ kasan_report+0xb1/0x1e0 mm/kasan/report.c:495
+ run_unpack+0x8b7/0x970 fs/ntfs3/run.c:944
+ run_unpack_ex+0xb0/0x7c0 fs/ntfs3/run.c:1057
+ ntfs_read_mft fs/ntfs3/inode.c:368 [inline]
+ ntfs_iget5+0xc20/0x3280 fs/ntfs3/inode.c:501
+ ntfs_loadlog_and_replay+0x124/0x5d0 fs/ntfs3/fsntfs.c:272
+ ntfs_fill_super+0x1eff/0x37f0 fs/ntfs3/super.c:1018
+ get_tree_bdev+0x440/0x760 fs/super.c:1323
+ vfs_get_tree+0x89/0x2f0 fs/super.c:1530
+ do_new_mount fs/namespace.c:3040 [inline]
+ path_mount+0x1326/0x1e20 fs/namespace.c:3370
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount fs/namespace.c:3568 [inline]
+ __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f94002c539a
+Code: 83 c4 08 5b 5d c3 66 2e 0f 1f 84 00 00 00 00 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fff9faa50f8 EFLAGS: 00000286 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 00007fff9faa5150 RCX: 00007f94002c539a
+RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007fff9faa5110
+RBP: 00007fff9faa5110 R08: 00007fff9faa5150 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000286 R12: 0000000020000338
+R13: 0000000000000003 R14: 0000000000000004 R15: 000000000000000d
+ </TASK>
+
+Allocated by task 3184:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track mm/kasan/common.c:45 [inline]
+ set_alloc_info mm/kasan/common.c:437 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:516 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:475 [inline]
+ __kasan_kmalloc+0xa9/0xd0 mm/kasan/common.c:525
+ kmalloc include/linux/slab.h:600 [inline]
+ rtnl_newlink+0x46/0xa0 net/core/rtnetlink.c:3589
+ rtnetlink_rcv_msg+0x43a/0xca0 net/core/rtnetlink.c:6090
+ netlink_rcv_skb+0x153/0x420 net/netlink/af_netlink.c:2501
+ netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
+ netlink_unicast+0x543/0x7f0 net/netlink/af_netlink.c:1345
+ netlink_sendmsg+0x917/0xe10 net/netlink/af_netlink.c:1921
+ sock_sendmsg_nosec net/socket.c:714 [inline]
+ sock_sendmsg+0xcf/0x120 net/socket.c:734
+ ____sys_sendmsg+0x6eb/0x810 net/socket.c:2482
+ ___sys_sendmsg+0x110/0x1b0 net/socket.c:2536
+ __sys_sendmsg+0xf3/0x1c0 net/socket.c:2565
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+The buggy address belongs to the object at ffff88801bbdf000
+ which belongs to the cache kmalloc-2k of size 2048
+The buggy address is located 1794 bytes to the right of
+ 2048-byte region [ffff88801bbdf000, ffff88801bbdf800)
+
+The buggy address belongs to the physical page:
+page:ffffea00006ef600 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1bbd8
+head:ffffea00006ef600 order:3 compound_mapcount:0 compound_pincount:0
+flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000010200 ffffea00005da800 dead000000000002 ffff888011842000
+raw: 0000000000000000 0000000080080008 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 3, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 1, tgid 1 (swapper/0), ts 5567869789, free_ts 0
+ prep_new_page mm/page_alloc.c:2532 [inline]
+ get_page_from_freelist+0x109b/0x2ce0 mm/page_alloc.c:4283
+ __alloc_pages+0x1c7/0x510 mm/page_alloc.c:5515
+ alloc_page_interleave+0x1e/0x200 mm/mempolicy.c:2103
+ alloc_pages+0x22f/0x270 mm/mempolicy.c:2265
+ alloc_slab_page mm/slub.c:1824 [inline]
+ allocate_slab+0x27e/0x3d0 mm/slub.c:1969
+ new_slab mm/slub.c:2029 [inline]
+ ___slab_alloc+0x7f1/0xe10 mm/slub.c:3031
+ __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3118
+ slab_alloc_node mm/slub.c:3209 [inline]
+ slab_alloc mm/slub.c:3251 [inline]
+ kmem_cache_alloc_trace+0x323/0x3e0 mm/slub.c:3282
+ kmalloc include/linux/slab.h:600 [inline]
+ kzalloc include/linux/slab.h:733 [inline]
+ virtio_pci_probe+0x44/0x410 drivers/virtio/virtio_pci_common.c:524
+ local_pci_probe+0xe1/0x1a0 drivers/pci/pci-driver.c:324
+ pci_call_probe drivers/pci/pci-driver.c:392 [inline]
+ __pci_device_probe drivers/pci/pci-driver.c:417 [inline]
+ pci_device_probe+0x298/0x740 drivers/pci/pci-driver.c:460
+ call_driver_probe drivers/base/dd.c:560 [inline]
+ really_probe+0x249/0xb90 drivers/base/dd.c:639
+ __driver_probe_device+0x1df/0x4d0 drivers/base/dd.c:778
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:808
+ __driver_attach+0x1d0/0x550 drivers/base/dd.c:1190
+ bus_for_each_dev+0x147/0x1d0 drivers/base/bus.c:301
+page_owner free stack trace missing
+
+Memory state around the buggy address:
+ ffff88801bbdfe00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff88801bbdfe80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>ffff88801bbdff00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+                   ^
+ ffff88801bbdff80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff88801bbe0000: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
 
 
-On 02/09/2022 16:14, Abel Vesa wrote:
-> Currently, there is a race window between the point when the mutex is
-> unlocked in fastrpc_map_lookup and the reference count increasing
-> (fastrpc_map_get) in fastrpc_map_find, which can also lead to
-> use-after-free.
-> 
-> So lets merge fastrpc_map_find into fastrpc_map_lookup which allows us
-> to both protect the maps list by also taking the &fl->lock spinlock and
-> the reference count, since the spinlock will be released only after.
-> Add take_ref argument to make this suitable for all callers.
-> 
-> Fixes: 8f6c1d8c4f0c ("misc: fastrpc: Add fdlist implementation")
-> Co-developed-by: Ola Jeppsson <ola@snap.com>
-> Signed-off-by: Ola Jeppsson <ola@snap.com>
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> ---
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-
->   drivers/misc/fastrpc.c | 41 +++++++++++++++++++++--------------------
->   1 file changed, 21 insertions(+), 20 deletions(-)
-> 
-> diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
-> index 93ebd174d848..0c816a11eeec 100644
-> --- a/drivers/misc/fastrpc.c
-> +++ b/drivers/misc/fastrpc.c
-> @@ -333,30 +333,31 @@ static void fastrpc_map_get(struct fastrpc_map *map)
->   
->   
->   static int fastrpc_map_lookup(struct fastrpc_user *fl, int fd,
-> -			    struct fastrpc_map **ppmap)
-> +			    struct fastrpc_map **ppmap, bool take_ref)
->   {
-> +	struct fastrpc_session_ctx *sess = fl->sctx;
->   	struct fastrpc_map *map = NULL;
-> +	int ret = -ENOENT;
->   
-> -	mutex_lock(&fl->mutex);
-> +	spin_lock(&fl->lock);
->   	list_for_each_entry(map, &fl->maps, node) {
-> -		if (map->fd == fd) {
-> -			*ppmap = map;
-> -			mutex_unlock(&fl->mutex);
-> -			return 0;
-> -		}
-> -	}
-> -	mutex_unlock(&fl->mutex);
-> -
-> -	return -ENOENT;
-> -}
-> +		if (map->fd != fd)
-> +			continue;
->   
-> -static int fastrpc_map_find(struct fastrpc_user *fl, int fd,
-> -			    struct fastrpc_map **ppmap)
-> -{
-> -	int ret = fastrpc_map_lookup(fl, fd, ppmap);
-> +		if (take_ref) {
-> +			ret = fastrpc_map_get(map);
-> +			if (ret) {
-> +				dev_dbg(sess->dev, "%s: Failed to get map fd=%d ret=%d\n",
-> +					__func__, fd, ret);
-> +				break;
-> +			}
-> +		}
->   
-> -	if (!ret)
-> -		fastrpc_map_get(*ppmap);
-> +		*ppmap = map;
-> +		ret = 0;
-> +		break;
-> +	}
-> +	spin_unlock(&fl->lock);
->   
->   	return ret;
->   }
-> @@ -703,7 +704,7 @@ static int fastrpc_map_create(struct fastrpc_user *fl, int fd,
->   	struct fastrpc_map *map = NULL;
->   	int err = 0;
->   
-> -	if (!fastrpc_map_find(fl, fd, ppmap))
-> +	if (!fastrpc_map_lookup(fl, fd, ppmap, true))
->   		return 0;
->   
->   	map = kzalloc(sizeof(*map), GFP_KERNEL);
-> @@ -1026,7 +1027,7 @@ static int fastrpc_put_args(struct fastrpc_invoke_ctx *ctx,
->   	for (i = 0; i < FASTRPC_MAX_FDLIST; i++) {
->   		if (!fdlist[i])
->   			break;
-> -		if (!fastrpc_map_lookup(fl, (int)fdlist[i], &mmap))
-> +		if (!fastrpc_map_lookup(fl, (int)fdlist[i], &mmap, false))
->   			fastrpc_map_put(mmap);
->   	}
->   
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
