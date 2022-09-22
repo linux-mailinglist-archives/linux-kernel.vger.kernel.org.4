@@ -2,60 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 962B65E60F7
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 13:28:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F8205E60FD
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 13:28:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230450AbiIVL15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 07:27:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51194 "EHLO
+        id S229619AbiIVL2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 07:28:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231567AbiIVL1m (ORCPT
+        with ESMTP id S231576AbiIVL2C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 07:27:42 -0400
-Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 451E2DF395
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 04:27:34 -0700 (PDT)
-Received: by mail-ua1-x92b.google.com with SMTP id e1so3543066uaa.1
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 04:27:34 -0700 (PDT)
+        Thu, 22 Sep 2022 07:28:02 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A203DF3B2;
+        Thu, 22 Sep 2022 04:27:59 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id b5so684933pgb.6;
+        Thu, 22 Sep 2022 04:27:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date;
-        bh=mAoDj4ep5b4DdYirxS8ZiAug5lh0QKuvBGMb+pTe42A=;
-        b=CoDB1oRAr9XjxSYeZ2C7+TgmwS47epkOIFXv5hLFh9OiZzlOsLsJQdvG9d/7wGnUk9
-         M70HzDIgWbTvhNMtXds8WQhoDy+AtC6vEHNGGI91uDTi0yVbfgrvsIu1eSrkSlpaP5VR
-         w4Te7PFn8KwkIGJUPG3yPgDcqGCn4T0ctr1ZP7i9g6+1sP5FnIzSz1F3DBa/pMwBpQZn
-         7uY92Mfp0Ql42O4To2trysGWiLmwKwrYum67FL29VzVIgyt4DrL8elMdxGoc51n6jiAU
-         xZFP8ymJGi82pbtBfA3Y7vdViFduM1tcCTd27kJAuQZTSIJJqVJziRKknviCOCrPGAUr
-         362A==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=kkfx7Fevmf9ZuILb+byihiERfjDZD0PuCn1s3gjuL4I=;
+        b=WoOxf7cWwNlJN6Lk6O8ZjbQq20/N9c13Ufw6DEN+6C1oPUT2WNqr3s5hVsKtFiP9AR
+         BTmBhvl2pYdOCNxSDhabQd6aoPPNsRqu9G3wl0JMnvrhCyP85uxYABNk3ix+Zu6Vpz8S
+         mgCDSvIf6bh3ThSdLy1xeNPrhRmj8a7LDr0AV9bvHrEVFwW7MXhNiERvpweRfUsZVBCv
+         zBBiU16tbJMm8YcuGYk8/xR6bRoRtu/RwpRcHTDu83NKATIf9yPh5KSQ3HygD51J6mzy
+         gi0pKkGuw1fK0VmO1VonD9T/i/7Y/LitpFDA6b/qzCVnGJgKorCaXIqhc0RrncyFD8yi
+         N5Eg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=mAoDj4ep5b4DdYirxS8ZiAug5lh0QKuvBGMb+pTe42A=;
-        b=0A5s7Iym4cR9f7IsFt4gWNhuzawQrauiGcex2+BQNC0fwoztBActA1KxSWg0BI/c6x
-         kS6lQKQYSVfUoIrllO0Oy/s2IX8PjH3KksWuOj7UUGqFl0JidniJY2qIeKmO3zGFaxSC
-         Axn+sohIpTtUeTxdgMaVcQrpv8NtKnFqmHH47BHUKLyyUGAM4pVX9IFSGSVtxrgjirba
-         KJWJ/MNMLh+SMyPKr1K3RE58MXohj5K6S2Bles61WypdnnJKgsRnRLj02E0mPxWPEQBu
-         xaaF5QT+3KiGkwpYiKJNCu+5uqJqtgY3abus6INhMhF9WG82E0UMPSS5Tk8C/j5+tPV6
-         L0YQ==
-X-Gm-Message-State: ACrzQf3ZnYxAMD8MmbYOZHn0OxheqVX/lVUiPvZvzwaPHTzlyHiw8HB9
-        FEmX92dmf2JXkoxMS0Btc6ORPwauALqSRt1f3uH0Qtp7/LXErUtH08c=
-X-Google-Smtp-Source: AMsMyM6JwiS97BGDTzHKF/xA2Osi3SKf0lJr85BdXoaUbfhSr+kWzzt8D07cN3vZdsRako3YUGx12q7oXvDPuD0gKBs=
-X-Received: by 2002:a05:6130:c13:b0:39f:58bb:d51c with SMTP id
- cg19-20020a0561300c1300b0039f58bbd51cmr1010534uab.104.1663846053627; Thu, 22
- Sep 2022 04:27:33 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=kkfx7Fevmf9ZuILb+byihiERfjDZD0PuCn1s3gjuL4I=;
+        b=sVAcAOYFln/rFtZ5Vntia8uyqopOPqEI4wa/1+eR7omhHT8KMZLIQm76tW3kVu8dmp
+         89MlWSmLNELEe8YLsFltBZV44Ec7QFkI0vv9sc5JJKuz5CNQrckCTUTly3FdpUw7HiMF
+         QiL6WpjGRa+2e5UQ1YgsMhan/IAWWRS0rnV3u6YnXjdHGWqm5iNWspX4LkU+Pn58xaZx
+         WjTET/QF4/SCuvR6Vuj+S0NAq2cDNPCKH+CJNLhlYDmr2qbJJETQUo2hiloGU/q2o+JJ
+         ROYhnOmwQ88TnVaWx5yb53mUDA+oCS0kLD/CAs4fDSCodIMHn/jQnFwgk7ACJmNkrsko
+         LyTg==
+X-Gm-Message-State: ACrzQf2zBd9S0SLF579oxV0sjUn5wdM65pg9NOZs0nEw/5LJlqrlPW3B
+        PpQX/0SPlRzIzGNItgYyy8jDfnJRFoY=
+X-Google-Smtp-Source: AMsMyM45zgWaG9FK2QT0v34YBHhIAhx5q6fXw7CMlhT9AFIOiNSfiN/qCn/rR1vf80BiTXn5gQMN9w==
+X-Received: by 2002:a63:a14:0:b0:439:e41a:6646 with SMTP id 20-20020a630a14000000b00439e41a6646mr2605351pgk.513.1663846078282;
+        Thu, 22 Sep 2022 04:27:58 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id n8-20020a170902e54800b0016c0b0fe1c6sm3871321plf.73.2022.09.22.04.27.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Sep 2022 04:27:57 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: ye.xingchen@zte.com.cn
+To:     herbert@gondor.apana.org.au
+Cc:     davem@davemloft.net, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ye xingchen <ye.xingchen@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH linux-next] crypto: zip - remove the unneeded result variable
+Date:   Thu, 22 Sep 2022 11:27:53 +0000
+Message-Id: <20220922112753.236815-1-ye.xingchen@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-From:   Rondreis <linhaoguo86@gmail.com>
-Date:   Thu, 22 Sep 2022 19:27:22 +0800
-Message-ID: <CAB7eex+Xh9otK9RF5wnAo+tQrs8B4AJfx3N8xz2-FjPM5XH8zw@mail.gmail.com>
-Subject: KASAN: use-after-free Write in snd_rawmidi_receive
-To:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        perex@perex.cz, tiwai@suse.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,262 +70,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
-When fuzzing the Linux kernel driver v5.18.0, the following crash was
-triggered.
+Return the value directly instead of storing it in another redundant
+variable.
 
-HEAD commit: 4b0986a3613c92f4ec1bdc7f60ec66fea135991f
-git tree: upstream
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+---
+ drivers/crypto/cavium/zip/zip_crypto.c | 30 ++++++--------------------
+ 1 file changed, 6 insertions(+), 24 deletions(-)
 
-kernel config: https://pastebin.com/raw/KecL2gaG
-console output: https://pastebin.com/raw/aJGZYGs4
-
-Sorry for failing to extract the reproducer. But on other versions of
-Linux, I also triggered this crash.
-
-I would appreciate it if you have any idea how to solve this bug.
-
-The crash report is as follows:
-==================================================================
-BUG: KASAN: use-after-free in snd_rawmidi_receive+0x2f6/0xe70
-sound/core/rawmidi.c:1097
-Write of size 3 at addr ffff88803cf1a05a by task kworker/u8:6/13973
-
-CPU: 3 PID: 13973 Comm: kworker/u8:6 Not tainted 5.18.0 #2
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-1.13.0-1ubuntu1.1 04/01/2014
-Workqueue: bat_events batadv_nc_worker
-Call Trace:
-<IRQ>
-__dump_stack lib/dump_stack.c:88 [inline]
-dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
-print_address_description mm/kasan/report.c:313 [inline]
-print_report.cold+0xe5/0x659 mm/kasan/report.c:429
-kasan_report+0x8a/0x1b0 mm/kasan/report.c:491
-check_region_inline mm/kasan/generic.c:183 [inline]
-kasan_check_range+0x13b/0x190 mm/kasan/generic.c:189
-memcpy+0x39/0x60 mm/kasan/shadow.c:66
-snd_rawmidi_receive+0x2f6/0xe70 sound/core/rawmidi.c:1097
-f_midi_read_data drivers/usb/gadget/function/f_midi.c:253 [inline]
-f_midi_handle_out_data.isra.0+0x1ee/0x290
-drivers/usb/gadget/function/f_midi.c:265
-f_midi_complete+0x3b7/0x480 drivers/usb/gadget/function/f_midi.c:280
-transfer drivers/usb/gadget/udc/dummy_hcd.c:1516 [inline]
-dummy_timer+0x1866/0x33b0 drivers/usb/gadget/udc/dummy_hcd.c:1972
-call_timer_fn+0x1a5/0x6b0 kernel/time/timer.c:1421
-expire_timers kernel/time/timer.c:1466 [inline]
-__run_timers kernel/time/timer.c:1737 [inline]
-__run_timers kernel/time/timer.c:1710 [inline]
-run_timer_softirq+0x1084/0x16d0 kernel/time/timer.c:1750
-__do_softirq+0x1d0/0x908 kernel/softirq.c:558
-invoke_softirq kernel/softirq.c:432 [inline]
-__irq_exit_rcu kernel/softirq.c:637 [inline]
-irq_exit_rcu+0xf2/0x130 kernel/softirq.c:649
-sysvec_apic_timer_interrupt+0x93/0xc0 arch/x86/kernel/apic/apic.c:1097
-</IRQ>
-<TASK>
-asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:645
-RIP: 0010:lock_release+0x3f0/0x670 kernel/locking/lockdep.c:5649
-Code: 7e 83 f8 01 0f 85 59 01 00 00 9c 58 f6 c4 02 0f 85 44 01 00 00
-48 f7 04 24 00 02 00 00 74 01 fb 48 b8 00 00 00 00 00 fc ff df <48> 01
-c5 48 c7 45 00 00 00 00 00 c7 45 08 00 00 00 00 48 8b 84 24
-RSP: 0018:ffffc90008a0fb90 EFLAGS: 00000206
-RAX: dffffc0000000000 RBX: c422640388757846 RCX: 0000000000000000
-RDX: 1ffff11007b1f892 RSI: 0000000000000000 RDI: 0000000000000000
-RBP: 1ffff92001141f74 R08: 0000000000000001 R09: fffffbfff1ce851b
-R10: ffffffff8e7428d7 R11: fffffbfff1ce851a R12: 0000000000000002
-R13: ffff88803d8fc498 R14: 0000000000000003 R15: ffff88803d8fba80
-rcu_lock_release include/linux/rcupdate.h:273 [inline]
-rcu_read_unlock include/linux/rcupdate.h:727 [inline]
-batadv_nc_process_nc_paths.part.0+0x235/0x3c0
-net/batman-adv/network-coding.c:699
-batadv_nc_process_nc_paths net/batman-adv/network-coding.c:679 [inline]
-batadv_nc_worker+0x54f/0x770 net/batman-adv/network-coding.c:728
-process_one_work+0x9cc/0x1650 kernel/workqueue.c:2289
-worker_thread+0x623/0x1070 kernel/workqueue.c:2436
-kthread+0x2e9/0x3a0 kernel/kthread.c:376
-ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
-</TASK>
-
-Allocated by task 17441:
-kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
-kasan_set_track mm/kasan/common.c:45 [inline]
-set_alloc_info mm/kasan/common.c:436 [inline]
-____kasan_kmalloc mm/kasan/common.c:515 [inline]
-____kasan_kmalloc mm/kasan/common.c:474 [inline]
-__kasan_kmalloc+0xa9/0xd0 mm/kasan/common.c:524
-kasan_kmalloc include/linux/kasan.h:234 [inline]
-__kmalloc_node+0x1fc/0x450 mm/slub.c:4462
-kmalloc_node include/linux/slab.h:604 [inline]
-kvmalloc_node+0x3e/0x190 mm/util.c:580
-kvmalloc include/linux/slab.h:731 [inline]
-kvzalloc include/linux/slab.h:739 [inline]
-snd_rawmidi_runtime_create sound/core/rawmidi.c:162 [inline]
-open_substream+0x340/0x8b0 sound/core/rawmidi.c:306
-rawmidi_open_priv+0x2e8/0x6f0 sound/core/rawmidi.c:352
-snd_rawmidi_kernel_open+0x1b5/0x270 sound/core/rawmidi.c:392
-midisynth_subscribe+0xf2/0x380 sound/core/seq/seq_midi.c:171
-subscribe_port sound/core/seq/seq_ports.c:412 [inline]
-check_and_subscribe_port+0x5be/0x810 sound/core/seq/seq_ports.c:495
-snd_seq_port_connect+0x2e6/0x520 sound/core/seq/seq_ports.c:576
-snd_seq_ioctl_subscribe_port+0x1df/0x310 sound/core/seq/seq_clientmgr.c:1492
-snd_seq_kernel_client_ctl+0x105/0x1b0 sound/core/seq/seq_clientmgr.c:2369
-snd_seq_oss_midi_open+0x3f4/0x670 sound/core/seq/oss/seq_oss_midi.c:368
-snd_seq_oss_synth_reset+0x462/0x890 sound/core/seq/oss/seq_oss_synth.c:407
-snd_seq_oss_reset+0x6f/0x290 sound/core/seq/oss/seq_oss_init.c:435
-snd_seq_oss_release+0x79/0x160 sound/core/seq/oss/seq_oss_init.c:412
-odev_release+0x4f/0x70 sound/core/seq/oss/seq_oss.c:144
-__fput+0x277/0x9d0 fs/file_table.c:317
-task_work_run+0xe0/0x1a0 kernel/task_work.c:164
-resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
-exit_to_user_mode_loop kernel/entry/common.c:169 [inline]
-exit_to_user_mode_prepare+0x253/0x260 kernel/entry/common.c:201
-__syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
-syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:294
-do_syscall_64+0x42/0x80 arch/x86/entry/common.c:86
-entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-Freed by task 17441:
-kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
-kasan_set_track+0x21/0x30 mm/kasan/common.c:45
-kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
-____kasan_slab_free mm/kasan/common.c:366 [inline]
-____kasan_slab_free mm/kasan/common.c:328 [inline]
-__kasan_slab_free+0x11d/0x190 mm/kasan/common.c:374
-kasan_slab_free include/linux/kasan.h:200 [inline]
-slab_free_hook mm/slub.c:1728 [inline]
-slab_free_freelist_hook mm/slub.c:1754 [inline]
-slab_free mm/slub.c:3510 [inline]
-kfree+0xec/0x4b0 mm/slub.c:4552
-kvfree+0x42/0x50 mm/util.c:622
-snd_rawmidi_runtime_free sound/core/rawmidi.c:176 [inline]
-close_substream.part.0+0x18e/0x650 sound/core/rawmidi.c:528
-close_substream sound/core/rawmidi.c:507 [inline]
-rawmidi_release_priv+0xd3/0x270 sound/core/rawmidi.c:543
-snd_rawmidi_kernel_release+0x39/0xd0 sound/core/rawmidi.c:564
-midisynth_unsubscribe+0x3b/0x70 sound/core/seq/seq_midi.c:203
-unsubscribe_port sound/core/seq/seq_ports.c:437 [inline]
-__delete_and_unsubscribe_port+0x279/0x4e0 sound/core/seq/seq_ports.c:537
-delete_and_unsubscribe_port+0x59/0x80 sound/core/seq/seq_ports.c:549
-snd_seq_port_disconnect+0x1ee/0x270 sound/core/seq/seq_ports.c:627
-snd_seq_ioctl_unsubscribe_port+0x1df/0x310 sound/core/seq/seq_clientmgr.c:1537
-snd_seq_kernel_client_ctl+0x105/0x1b0 sound/core/seq/seq_clientmgr.c:2369
-snd_seq_oss_midi_close+0x2ff/0x470 sound/core/seq/oss/seq_oss_midi.c:410
-snd_seq_oss_synth_cleanup+0x32c/0x480 sound/core/seq/oss/seq_oss_synth.c:307
-snd_seq_oss_release+0x81/0x160 sound/core/seq/oss/seq_oss_init.c:414
-odev_release+0x4f/0x70 sound/core/seq/oss/seq_oss.c:144
-__fput+0x277/0x9d0 fs/file_table.c:317
-task_work_run+0xe0/0x1a0 kernel/task_work.c:164
-resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
-exit_to_user_mode_loop kernel/entry/common.c:169 [inline]
-exit_to_user_mode_prepare+0x253/0x260 kernel/entry/common.c:201
-__syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
-syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:294
-do_syscall_64+0x42/0x80 arch/x86/entry/common.c:86
-entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-The buggy address belongs to the object at ffff88803cf1a000
-which belongs to the cache kmalloc-4k of size 4096
-The buggy address is located 90 bytes inside of
-4096-byte region [ffff88803cf1a000, ffff88803cf1b000)
-
-The buggy address belongs to the physical page:
-page:ffffea0000f3c600 refcount:1 mapcount:0 mapping:0000000000000000
-index:0x0 pfn:0x3cf18
-head:ffffea0000f3c600 order:3 compound_mapcount:0 compound_pincount:0
-flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000010200 0000000000000000 dead000000000122 ffff888011843040
-raw: 0000000000000000 0000000000040004 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 3, migratetype Unmovable, gfp_mask
-0x1d20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC|__GFP_HARDWALL),
-pid 17441, tgid 17441 (syz-executor.0), ts 589072773595, free_ts
-589014752799
-set_page_owner include/linux/page_owner.h:31 [inline]
-post_alloc_hook mm/page_alloc.c:2434 [inline]
-prep_new_page+0x297/0x330 mm/page_alloc.c:2441
-get_page_from_freelist+0x210e/0x3ab0 mm/page_alloc.c:4182
-__alloc_pages+0x30c/0x6e0 mm/page_alloc.c:5408
-alloc_pages+0x119/0x250 mm/mempolicy.c:2272
-alloc_slab_page mm/slub.c:1799 [inline]
-allocate_slab mm/slub.c:1944 [inline]
-new_slab+0x2a9/0x3f0 mm/slub.c:2004
-___slab_alloc+0xc62/0x1080 mm/slub.c:3005
-__slab_alloc.isra.0+0x4d/0xa0 mm/slub.c:3092
-slab_alloc_node mm/slub.c:3183 [inline]
-__kmalloc_node+0x340/0x450 mm/slub.c:4458
-kmalloc_node include/linux/slab.h:604 [inline]
-kvmalloc_node+0x3e/0x190 mm/util.c:580
-kvmalloc include/linux/slab.h:731 [inline]
-kvzalloc include/linux/slab.h:739 [inline]
-snd_rawmidi_runtime_create sound/core/rawmidi.c:162 [inline]
-open_substream+0x340/0x8b0 sound/core/rawmidi.c:306
-rawmidi_open_priv+0x592/0x6f0 sound/core/rawmidi.c:357
-snd_rawmidi_kernel_open+0x1b5/0x270 sound/core/rawmidi.c:392
-midisynth_use+0xee/0x270 sound/core/seq/seq_midi.c:215
-subscribe_port sound/core/seq/seq_ports.c:412 [inline]
-check_and_subscribe_port+0x5be/0x810 sound/core/seq/seq_ports.c:495
-snd_seq_port_connect+0x382/0x520 sound/core/seq/seq_ports.c:581
-snd_seq_ioctl_subscribe_port+0x1df/0x310 sound/core/seq/seq_clientmgr.c:1492
-page last free stack trace:
-reset_page_owner include/linux/page_owner.h:24 [inline]
-free_pages_prepare mm/page_alloc.c:1356 [inline]
-free_pcp_prepare+0x51f/0xd00 mm/page_alloc.c:1406
-free_unref_page_prepare mm/page_alloc.c:3328 [inline]
-free_unref_page+0x19/0x5b0 mm/page_alloc.c:3423
-__unfreeze_partials+0x3d2/0x3f0 mm/slub.c:2523
-do_slab_free mm/slub.c:3498 [inline]
-___cache_free+0x12c/0x140 mm/slub.c:3517
-qlink_free mm/kasan/quarantine.c:157 [inline]
-qlist_free_all+0x6a/0x170 mm/kasan/quarantine.c:176
-kasan_quarantine_reduce+0x13d/0x180 mm/kasan/quarantine.c:283
-__kasan_slab_alloc+0xa2/0xc0 mm/kasan/common.c:446
-kasan_slab_alloc include/linux/kasan.h:224 [inline]
-slab_post_alloc_hook+0x4d/0x4f0 mm/slab.h:749
-slab_alloc_node mm/slub.c:3217 [inline]
-slab_alloc mm/slub.c:3225 [inline]
-__kmem_cache_alloc_lru mm/slub.c:3232 [inline]
-kmem_cache_alloc+0x1be/0x460 mm/slub.c:3242
-getname_flags fs/namei.c:138 [inline]
-getname_flags+0xd2/0x5b0 fs/namei.c:128
-vfs_fstatat+0x73/0xb0 fs/stat.c:254
-__do_sys_newfstatat+0x91/0x110 fs/stat.c:425
-do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-do_syscall_64+0x35/0x80 arch/x86/entry/common.c:80
-entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-Memory state around the buggy address:
-ffff88803cf19f00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-ffff88803cf19f80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->ffff88803cf1a000: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-^
-ffff88803cf1a080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-ffff88803cf1a100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
-----------------
-Code disassembly (best guess):
-0: 7e 83 jle 0xffffff85
-2: f8 clc
-3: 01 0f add %ecx,(%rdi)
-5: 85 59 01 test %ebx,0x1(%rcx)
-8: 00 00 add %al,(%rax)
-a: 9c pushfq
-b: 58 pop %rax
-c: f6 c4 02 test $0x2,%ah
-f: 0f 85 44 01 00 00 jne 0x159
-15: 48 f7 04 24 00 02 00 testq $0x200,(%rsp)
-1c: 00
-1d: 74 01 je 0x20
-1f: fb sti
-20: 48 b8 00 00 00 00 00 movabs $0xdffffc0000000000,%rax
-27: fc ff df
-* 2a: 48 01 c5 add %rax,%rbp <-- trapping instruction
-2d: 48 c7 45 00 00 00 00 movq $0x0,0x0(%rbp)
-34: 00
-35: c7 45 08 00 00 00 00 movl $0x0,0x8(%rbp)
-3c: 48 rex.W
-3d: 8b .byte 0x8b
-3e: 84 .byte 0x84
-3f: 24 .byte 0x24
+diff --git a/drivers/crypto/cavium/zip/zip_crypto.c b/drivers/crypto/cavium/zip/zip_crypto.c
+index 7df71fcebe8f..1046a746d36f 100644
+--- a/drivers/crypto/cavium/zip/zip_crypto.c
++++ b/drivers/crypto/cavium/zip/zip_crypto.c
+@@ -198,22 +198,16 @@ static int zip_decompress(const u8 *src, unsigned int slen,
+ /* Legacy Compress framework start */
+ int zip_alloc_comp_ctx_deflate(struct crypto_tfm *tfm)
+ {
+-	int ret;
+ 	struct zip_kernel_ctx *zip_ctx = crypto_tfm_ctx(tfm);
+ 
+-	ret = zip_ctx_init(zip_ctx, 0);
+-
+-	return ret;
++	return zip_ctx_init(zip_ctx, 0);
+ }
+ 
+ int zip_alloc_comp_ctx_lzs(struct crypto_tfm *tfm)
+ {
+-	int ret;
+ 	struct zip_kernel_ctx *zip_ctx = crypto_tfm_ctx(tfm);
+ 
+-	ret = zip_ctx_init(zip_ctx, 1);
+-
+-	return ret;
++	return zip_ctx_init(zip_ctx, 1);
+ }
+ 
+ void zip_free_comp_ctx(struct crypto_tfm *tfm)
+@@ -227,24 +221,18 @@ int  zip_comp_compress(struct crypto_tfm *tfm,
+ 		       const u8 *src, unsigned int slen,
+ 		       u8 *dst, unsigned int *dlen)
+ {
+-	int ret;
+ 	struct zip_kernel_ctx *zip_ctx = crypto_tfm_ctx(tfm);
+ 
+-	ret = zip_compress(src, slen, dst, dlen, zip_ctx);
+-
+-	return ret;
++	return zip_compress(src, slen, dst, dlen, zip_ctx);
+ }
+ 
+ int  zip_comp_decompress(struct crypto_tfm *tfm,
+ 			 const u8 *src, unsigned int slen,
+ 			 u8 *dst, unsigned int *dlen)
+ {
+-	int ret;
+ 	struct zip_kernel_ctx *zip_ctx = crypto_tfm_ctx(tfm);
+ 
+-	ret = zip_decompress(src, slen, dst, dlen, zip_ctx);
+-
+-	return ret;
++	return zip_decompress(src, slen, dst, dlen, zip_ctx);
+ } /* Legacy compress framework end */
+ 
+ /* SCOMP framework start */
+@@ -298,22 +286,16 @@ int zip_scomp_compress(struct crypto_scomp *tfm,
+ 		       const u8 *src, unsigned int slen,
+ 		       u8 *dst, unsigned int *dlen, void *ctx)
+ {
+-	int ret;
+ 	struct zip_kernel_ctx *zip_ctx  = ctx;
+ 
+-	ret = zip_compress(src, slen, dst, dlen, zip_ctx);
+-
+-	return ret;
++	return zip_compress(src, slen, dst, dlen, zip_ctx);
+ }
+ 
+ int zip_scomp_decompress(struct crypto_scomp *tfm,
+ 			 const u8 *src, unsigned int slen,
+ 			 u8 *dst, unsigned int *dlen, void *ctx)
+ {
+-	int ret;
+ 	struct zip_kernel_ctx *zip_ctx = ctx;
+ 
+-	ret = zip_decompress(src, slen, dst, dlen, zip_ctx);
+-
+-	return ret;
++	return zip_decompress(src, slen, dst, dlen, zip_ctx);
+ } /* SCOMP framework end */
+-- 
+2.25.1
