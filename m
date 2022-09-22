@@ -2,165 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED6355E6B3F
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 20:49:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33CD25E6B43
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 20:52:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232155AbiIVSto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 14:49:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55512 "EHLO
+        id S229861AbiIVSw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 14:52:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231764AbiIVStj (ORCPT
+        with ESMTP id S231508AbiIVSw0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 14:49:39 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00661DFAA
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 11:49:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663872577; x=1695408577;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=P5juiKu7bYpxXj/gSrKPExTLTh/mH9tKD2hsvFIFKLA=;
-  b=BNpTD+0vMGOIkBlucoXPpbgSVZgncwXbIXTPf4xLNJwKNFG6vBOk9kaH
-   76kxyOfDn65zJtaJHN8l6n3UU0P+3rltE/B+UHW1wZ/5nw0pjelJZxOHA
-   1nCMS1xozsiZHJv3882w7Ua1Gjc2b0etcIk900Tm8H6c4BwyWkh++hW6q
-   hSemWLwTlfJRBHGIeZHQxmVd093I9qjXLRXhuzTvWvd6XZKsBNl/DlWZt
-   gIQl+nhiKs8jXfcVle+wMJnw4/wMTa4OE4OKJyrQ3hk7SISeUG0AB/Dvk
-   fE7CBzROVOwt4aV7j6KCej3Uy8bWwu+D5h59qPYOsc7Zpk17+sInE++I/
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="280121641"
-X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="280121641"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 11:49:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="597563254"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 22 Sep 2022 11:49:36 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1obRGR-0004sb-2C;
-        Thu, 22 Sep 2022 18:49:35 +0000
-Date:   Fri, 23 Sep 2022 02:48:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [dvyukov:dvyukov-perf-debugging 1/1]
- arch/x86/kernel/hw_breakpoint.c:101:29: warning: variable 'copy' set but not
- used
-Message-ID: <202209230213.4NtxMTaN-lkp@intel.com>
+        Thu, 22 Sep 2022 14:52:26 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC67DE62D6
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 11:52:25 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id v4so10004051pgi.10
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 11:52:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date;
+        bh=Il1n+p4EYijj6sMX+qTskkavLcV+LCxu/c4N5YGuAz8=;
+        b=2K4/5gRHOw+nUVM6Q0jlqIaxrwXepL/8XbhbHtaGBxUIxiEIS3jSiRB6a7G3n4aX6s
+         SwqblsFwJZxCUCnK6vPdKIBm071K9yD7o5Ib4nKbD99l37gftYjkjNaGV+IxZA6X/uKM
+         cdlmS3FOvAtL0IkjVAJv5Bek2QUSSS4BKxgie8P7lpntt8PNNj/fnzzWqmdQm/gQCH7X
+         IQg+s4k6vKpnvJQo8IqtyHl0jsLDhBMCh8BI0zDCSdBbIAt0ssXBR9ezhs+WckhQkvED
+         QVavzuyE+YzR1ebk7P7YMDYh//duMfSjordbUO7Clid1RNVbpBbarVwzqT4Nxy8jKmaQ
+         EI9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date;
+        bh=Il1n+p4EYijj6sMX+qTskkavLcV+LCxu/c4N5YGuAz8=;
+        b=doV4qyFobIBRPpXPDz2kiifYHQ14tFxXJsis0u+hPMMZUczMh37B/pMwB4lLqpTcuU
+         F5oSLaOzjSG8e1VfmmZ1zJRCBRccrUrMMNkm5De2RUJAVtus+O7qmRRiSoCJ0X+Blanp
+         /XiFzo6K5po54WUfbwMD7EQIMXcRDr19LVN4u876V0EyPRhVx7Tsvxx9ab71tsNhV1ke
+         M7Qv/t6xeZEbxAQjrP1bvhxSShVlWfx7jqb7am2fqeIPn0ne1VKzed6tyEnEc4kZYPPI
+         dKUgbhpt10WpoSvCz4O5v7vkuD4inmJjHvrGvvKGAVvwc6kDVz8FAH7RDBMyajV/Xsbi
+         okhg==
+X-Gm-Message-State: ACrzQf3C1923Poi+nOe15uq/LXhvVMunTovAo/dpmo7oO7Rytl2j3Vl4
+        /SKoT+e9j7/GxnaYYy2h7hChQA==
+X-Google-Smtp-Source: AMsMyM5GN8+12qE4fTmSo6QHNROyAl191fsN/T0krzY3LYnwrkSKgfbUNjXRj5Vy9FjgBJd23x040A==
+X-Received: by 2002:a63:5a5e:0:b0:434:b739:206f with SMTP id k30-20020a635a5e000000b00434b739206fmr4188149pgm.82.1663872745268;
+        Thu, 22 Sep 2022 11:52:25 -0700 (PDT)
+Received: from [10.255.231.119] ([139.177.225.235])
+        by smtp.gmail.com with ESMTPSA id b7-20020a170902650700b001754fa42065sm4441763plk.143.2022.09.22.11.52.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Sep 2022 11:52:24 -0700 (PDT)
+Message-ID: <db791538-0af2-b7c0-986a-6a9492d0495e@bytedance.com>
+Date:   Fri, 23 Sep 2022 02:52:19 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.3.0
+Subject: Re: [RESEND PATCH v3] iommu/iova: Optimize alloc_iova with
+ rbtree_augmented
+To:     joro@8bytes.org, will@kernel.org
+Cc:     wangjie125@huawei.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, robin.murphy@arm.com,
+        haifeng.zhao@linux.intel.com, john.garry@huawei.com
+References: <20220922183114.15135-1-zhangpeng.00@bytedance.com>
+From:   Peng Zhang <zhangpeng.00@bytedance.com>
+In-Reply-To: <20220922183114.15135-1-zhangpeng.00@bytedance.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/dvyukov/linux dvyukov-perf-debugging
-head:   62267cd404c44bbb18a96c108839c99e7ba6f9bd
-commit: 62267cd404c44bbb18a96c108839c99e7ba6f9bd [1/1] perf: debugging of missed breakpoints
-config: i386-tinyconfig (https://download.01.org/0day-ci/archive/20220923/202209230213.4NtxMTaN-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/dvyukov/linux/commit/62267cd404c44bbb18a96c108839c99e7ba6f9bd
-        git remote add dvyukov https://github.com/dvyukov/linux
-        git fetch --no-tags dvyukov dvyukov-perf-debugging
-        git checkout 62267cd404c44bbb18a96c108839c99e7ba6f9bd
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kernel/ kernel/events/
+Hello everyone,
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+Compared with v2, v3 mainly updated the commit message,
+and set the upper limit when scanning the linked list.
 
-All warnings (new ones prefixed by >>):
+In the normal case, the performance of this algorithm
+is almost the same as before. In extreme cases, this
+algorithm is much better than before. And this algorithm
+does not bring additional memory overhead.
 
-   arch/x86/kernel/hw_breakpoint.c: In function 'arch_install_hw_breakpoint':
->> arch/x86/kernel/hw_breakpoint.c:101:29: warning: variable 'copy' set but not used [-Wunused-but-set-variable]
-     101 |         unsigned long *dr7, copy;
-         |                             ^~~~
-   arch/x86/kernel/hw_breakpoint.c: In function 'arch_uninstall_hw_breakpoint':
-   arch/x86/kernel/hw_breakpoint.c:151:28: warning: variable 'copy' set but not used [-Wunused-but-set-variable]
-     151 |         unsigned long dr7, copy;
-         |                            ^~~~
-   arch/x86/kernel/hw_breakpoint.c: In function 'hw_breakpoint_handler':
->> arch/x86/kernel/hw_breakpoint.c:578:37: warning: suggest braces around empty body in an 'if' statement [-Wempty-body]
-     578 |                 LOG("HIT not found");
-         |                                     ^
---
-   kernel/events/core.c: In function 'perf_event_disable_inatomic':
->> kernel/events/core.c:2474:74: warning: suggest braces around empty body in an 'if' statement [-Wempty-body]
-    2474 |                 LOG("perf_event_disable_inatomic: irq_work_queue FAILED");
-         |                                                                          ^
-   kernel/events/core.c: In function 'merge_sched_in':
->> kernel/events/core.c:3739:53: warning: suggest braces around empty body in an 'else' statement [-Wempty-body]
-    3739 |                         LOG("group_sched_in failed");
-         |                                                     ^
-   kernel/events/core.c: In function 'perf_bp_event':
-   kernel/events/core.c:10191:45: warning: suggest braces around empty body in an 'else' statement [-Wempty-body]
-   10191 |                 LOG("perf_bp_event: ignore");
-         |                                             ^
+Comments welcome.
 
-
-vim +/copy +101 arch/x86/kernel/hw_breakpoint.c
-
-    88	
-    89	/*
-    90	 * Install a perf counter breakpoint.
-    91	 *
-    92	 * We seek a free debug address register and use it for this
-    93	 * breakpoint. Eventually we enable it in the debug control register.
-    94	 *
-    95	 * Atomic: we hold the counter->ctx->lock and we only handle variables
-    96	 * and registers local to this cpu.
-    97	 */
-    98	int arch_install_hw_breakpoint(struct perf_event *bp)
-    99	{
-   100		struct arch_hw_breakpoint *info = counter_arch_bp(bp);
- > 101		unsigned long *dr7, copy;
-   102		int i;
-   103	
-   104		lockdep_assert_irqs_disabled();
-   105	
-   106		for (i = 0; i < HBP_NUM; i++) {
-   107			struct perf_event **slot = this_cpu_ptr(&bp_per_reg[i]);
-   108	
-   109			if (!*slot) {
-   110				*slot = bp;
-   111				break;
-   112			}
-   113		}
-   114	
-   115		if (WARN_ONCE(i == HBP_NUM, "Can't find any breakpoint slot"))
-   116			return -EBUSY;
-   117	
-   118		set_debugreg(info->address, i);
-   119		__this_cpu_write(cpu_debugreg[i], info->address);
-   120	
-   121		dr7 = this_cpu_ptr(&cpu_dr7);
-   122		copy = *dr7;
-   123		*dr7 |= encode_dr7(i, info->len, info->type);
-   124		//LOG("INSTALL slot=%d event=%p", i, bp);
-   125	
-   126		/*
-   127		 * Ensure we first write cpu_dr7 before we set the DR7 register.
-   128		 * This ensures an NMI never see cpu_dr7 0 when DR7 is not.
-   129		 */
-   130		barrier();
-   131	
-   132		set_debugreg(*dr7, 7);
-   133		if (info->mask)
-   134			set_dr_addr_mask(info->mask, i);
-   135	
-   136		return 0;
-   137	}
-   138	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks.
+Peng
