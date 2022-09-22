@@ -2,127 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 701DE5E6052
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 13:00:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84EEC5E6057
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 13:02:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231347AbiIVLAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 07:00:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34060 "EHLO
+        id S230479AbiIVLCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 07:02:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231375AbiIVLAg (ORCPT
+        with ESMTP id S229590AbiIVLCG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 07:00:36 -0400
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [IPv6:2001:4b98:dc4:8::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D614AB1A9
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 04:00:33 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 9C663200012;
-        Thu, 22 Sep 2022 11:00:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1663844431;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2+nyFk2NJkNoRqs5e6/bwgAMbNi2C5Vm0aE+Pl9rCjE=;
-        b=MDAG17QzbvHP42JmcgWqzsOvs/qxifFFrqjd+GElfynyKohV5yjQnVzFvEXgHQUjrYFupm
-        T1me0476TdqxUe6/AO2tOJzmamFhTXBBCm6+rbFJeO/7LuqzPNHLfp+5ii+Ell3cvHHqfw
-        /3skeryiskRlj+LjQAYq+N1bpy2V8jL+lj1HrBnYcAmB7l0GwcyJjZzS54xG4sa9sN/+8q
-        BYKKX542XJ2j7bsnUdy3veWQUlaVdR38hZAheWW38B+o7PTyj/xGxPK1VHCzxPKelv18QD
-        C6O+9J63+i2gR5sH95uKoNEvy3s5NsOZbZXUbnTrDJ3E4LnOyGOLF7Nc5SYXYg==
-Date:   Thu, 22 Sep 2022 13:00:28 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     "Arnd Bergmann" <arnd@arndb.de>
-Cc:     "Valentin Korenblit" <vkorenblit@sequans.com>,
-        "kernel test robot" <lkp@intel.com>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: Re: [mtd:nand/next 11/31]
- drivers/mtd/nand/raw/cadence-nand-controller.c:1893:4: error: implicit
- declaration of function 'ioread64_rep' is invalid in C99
-Message-ID: <20220922130028.67657957@xps-13>
-In-Reply-To: <01210adb-ff77-4ec5-8d10-ab56ae986d58@www.fastmail.com>
-References: <202209210641.MziHAbW7-lkp@intel.com>
-        <20220921104002.226ff3f6@xps-13>
-        <ffde44bc-d4ae-4052-c60c-35c8775a5101@sequans.com>
-        <7074197c-aa8d-f763-cb0f-03ea5335b923@sequans.com>
-        <20220921164720.6bbc56d5@xps-13>
-        <ef9a2618-2dd0-4d1b-b9d2-37d59506f004@www.fastmail.com>
-        <20220921183807.241e2518@xps-13>
-        <b7e5ebb4-0de8-4958-9bc4-fe06ec4c3635@www.fastmail.com>
-        <6b5a2b19-39c6-5116-60c2-d292ae2e7bae@sequans.com>
-        <20220922113613.4d7273c8@xps-13>
-        <01210adb-ff77-4ec5-8d10-ab56ae986d58@www.fastmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Thu, 22 Sep 2022 07:02:06 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B66219DB51
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 04:02:05 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1obJxf-0000pp-8W; Thu, 22 Sep 2022 13:01:43 +0200
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1obJxe-0007J2-58; Thu, 22 Sep 2022 13:01:42 +0200
+Date:   Thu, 22 Sep 2022 13:01:42 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        devicetree@vger.kernel.org, jacopo@jmondi.org,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        kieran.bingham+renesas@ideasonboard.com,
+        linux-kernel@vger.kernel.org, kishon@ti.com, hverkuil@xs4all.nl,
+        vkoul@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-phy@lists.infradead.org,
+        mchehab@kernel.org, kernel@pengutronix.de,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH v2 3/4] media: dt-bindings: add bindings for Toshiba
+ TC358746
+Message-ID: <20220922110142.qnx6w3qbb6h6grvh@pengutronix.de>
+References: <20220916134535.128131-4-m.felsch@pengutronix.de>
+ <YyZTCsflWtUbo2ld@pendragon.ideasonboard.com>
+ <20220919100844.bb7tzbql2vpk76xz@pengutronix.de>
+ <YyhDO4ohv47uIij2@paasikivi.fi.intel.com>
+ <YyhKoDxFoobY9vBd@pendragon.ideasonboard.com>
+ <20220920152632.mjpgpmelvx4ya4k7@pengutronix.de>
+ <Yyn5MqqKYH7VpFhw@pendragon.ideasonboard.com>
+ <74b6b670-747a-f326-44ea-7588c3989b0e@linaro.org>
+ <20220921083513.drt4rggqj7tpaygr@pengutronix.de>
+ <8e54e03e-105a-cf3e-242f-796bef77bfe1@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8e54e03e-105a-cf3e-242f-796bef77bfe1@linaro.org>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+On 22-09-21, Krzysztof Kozlowski wrote:
+> On 21/09/2022 10:35, Marco Felsch wrote:
+> > On 22-09-21, Krzysztof Kozlowski wrote:
+> >> On 20/09/2022 19:32, Laurent Pinchart wrote:
+> >>>>>
+> >>>>> Explicit bus types in DT indeed makes it easier for drivers, so if a
+> >>>>> device can support multiple bus types (even if not implemented yet in
+> >>>>> the corresponding drivers), the property should be there.
+> >>>>
+> >>>> Okay, I will make it required.
+> >>>>
+> >>>>>> Why do you have hsync-active and vsync-active if both are always zero? Can
+> >>>>>> the hardware not support other configuration?
+> >>>>
+> >>>> Sure the device supports toggling the logic but it is not implemented.
+> >>>> So the bindings needs to enforce it to 0 right now. As soon as it is
+> >>>> implemented & tested, we can say that both is supported :)
+> >>>
+> >>> Bindings are not supposed to be limited by the existing driver
+> >>> implementation, so you can already allow both polarities, and just
+> >>> reject the unsupported options in the driver at probe time. Future
+> >>> updates to the driver won't require a binding change.
+> >>>
+> >>
+> >> +1
+> > 
+> > I don't wanna do that because this let the binding user assume that
+> > this mode is already supported. 
+> 
+> What do you mean by "not supported"? By which system? By which firmware
+> element? Bindings are used by several operating systems and several
+> projects.
 
-arnd@arndb.de wrote on Thu, 22 Sep 2022 12:52:36 +0200:
+And they can use it and of course extend it, since the propery is
+available.
 
-> On Thu, Sep 22, 2022, at 11:36 AM, Miquel Raynal wrote:
-> > vkorenblit@sequans.com wrote on Thu, 22 Sep 2022 10:18:46 +0200: =20
-> >>=20
-> >> Correct, this was my initial idea. However, this driver should work
-> >> with every architecture or do we limit the scope to arm/arm64/x86_64? =
-=20
-> >
-> > The driver should work on ARM and aarch64, I'm not aware of other
-> > architectures with this IP.
-> >
-> > The driver should compile when COMPILE_TEST=3Dy. =20
->=20
-> It should also be written in a way that makes it plausible to
-> use elsewhere. Since this is just a licensed IP core, there is
-> a good chance that someone reused it on mips or riscv, or
-> anything else.
+> That's not the argument.
+> 
+> Bindings should be complete. Lack of knowledge and datasheets is a good
+> exception from this rule. Looking at Linux driver is not good exception.
 
-Fair enough.
+So if I get you right, you are saying that the bindings should always be
+complete and describe all ever possible combinations? I am on your side
+that the properties should be there from day one. But listing all
+possible values regardless of the support.. I don't know and yes, I know
+that other projects using these bindings as well. But if those other
+projects support more than now, they can extend it and send patches.
+Since this is a new binding, the only user is Linux and listing all
+possible values can lead into erroneous assumption. No system-integrator
+wants to check the driver why a listed property is not supported instead
+most the time it is the other way. If it is listed, than it should be
+supported.
 
-> >> >> I believe what Valentin wanted to achieve in the first place, was to
-> >> >> use 64-bit accesses when relevant (otherwise it does not work).   =
-=20
-> >> > The width is read from a device specific register at
-> >> > runtime, it is not related to the architecture you are
-> >> > running on, presumably this is hardwired during the
-> >> > design of an SoC, based on the capabilities of the DMA
-> >> > engine: =20
-> >
-> > Well, yes, but in the mean time 64-bit DMA width will never be
-> > used on 32-bit platforms. =20
->=20
-> Why? Most architectures (including x86 and arm) allow you to
-> run a 32-bit kernel on a 64-bit SoC. While this is almost always
-> a bad idea to actually do, a driver should be written to
-> work correctly in this setup.
+Anyway I don't wanna make a big deal out of it. I will add all possible
+values to the binding if that is what you want :)
 
-Oh right, I forgot about that.
+Regards,
+  Marco
 
-> >> > This usually means the largest access that is valid for
-> >> > reading from the FIFO, but usually smaller accesses work
-> >> > as well, just slower.   =20
-> >
-> > Mmh, ok, that's interesting, thanks for the pointer.
-> >
-> > But in the mean time I am only half satisfied, because we plan to do
-> > twice more accesses than needed _just_ because of a the COMPILE_TEST
-> > constraint. =20
->=20
-> In my example, I had an #ifdef so it would only fall back
-> to 32-bit accesses on the 64-bit register when running an
-> actual 32-bit kernel, but leaving the 64-bit case efficient.
-
-All right, thanks for all your valuable feedback Arnd!
-
-Cheers,
-Miqu=C3=A8l
+> > Adapting a binding is just 1 commit and
+> > since the property is already existing, there is no breaking change.
+> Best regards,
+> Krzysztof
+> 
+> 
