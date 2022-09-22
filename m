@@ -2,55 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC15E5E6CCE
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 22:11:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2425D5E6CA0
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 22:03:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232783AbiIVUKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 16:10:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58584 "EHLO
+        id S231949AbiIVUDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 16:03:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232672AbiIVUKm (ORCPT
+        with ESMTP id S229777AbiIVUCW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 16:10:42 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25229F372B
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 13:10:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663877441; x=1695413441;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=6q+7YG95fTQJu0XBlZybDpu+Be16ol9OqAsEH3PK4pM=;
-  b=H1MT/OUVF0uoXngJbfk2cTij3OBp/blTIdzxIeX01qlIwP3eg6LAK0ab
-   cLpA0A/hNxCWEp6OzWwCIuoNmsj2995oztnizm8ypiXJZN8jwXwTHVXym
-   7o6Q+SIuTM9ewnAAC/ZISyFrNXWkVpUeGX1R8UtvVQIbNaav3wv9cNr7V
-   JG8OA+DsYjs/9RA4D5Fo/aOcivsOMD+CUYLEWtPUhM3vzTT0rmTimGmse
-   0M/8ZWNJt5cLO1HEdZV24xHkm09YpbQT1SM8aslTR5BpaSXapP8LNkj4s
-   YyXvf/FRnY6x9Oy0QBR611ehr9tJDatWzQXW+nQ4IBJxtV9AgarDPolod
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="300404299"
-X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="300404299"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 13:10:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="597592015"
-Received: from chang-linux-3.sc.intel.com ([172.25.66.173])
-  by orsmga006.jf.intel.com with ESMTP; 22 Sep 2022 13:10:38 -0700
-From:   "Chang S. Bae" <chang.seok.bae@intel.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     x86@kernel.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, avagin@gmail.com,
-        seanjc@google.com, chang.seok.bae@intel.com
-Subject: [PATCH v2 4/4] x86/fpu: Correct the legacy state offset and size information
-Date:   Thu, 22 Sep 2022 13:00:34 -0700
-Message-Id: <20220922200034.23759-5-chang.seok.bae@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220922200034.23759-1-chang.seok.bae@intel.com>
-References: <20220922200034.23759-1-chang.seok.bae@intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        Thu, 22 Sep 2022 16:02:22 -0400
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AE3B2F647;
+        Thu, 22 Sep 2022 13:02:20 -0700 (PDT)
+Received: from pps.filterd (m0150241.ppops.net [127.0.0.1])
+        by mx0a-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28MHCnSr018532;
+        Thu, 22 Sep 2022 20:01:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pps0720;
+ bh=hrmDoxXNnaoMzX0uDj4vrE4mN2zUsUoIEygEbT+8Fgg=;
+ b=ggzTAojvzWg9UuHd2E3gGj0AQolEZFYj69pwstnwr6PXevDpRAlZwN7ReF8PZlgNKyvF
+ R5451w6y5HL6y9H51iz+Sos6TTt7WpsRjbNczX1rSVKxh4LTo+00R7ZWPkvwI1FCKK5c
+ JrXddx9GBriQmOqL3uA9kb1yeHz8iTJ9L2pK+XkMMwht4LnCxyAgV1vs45wtZSbiMuhY
+ o1r7OMwPYSnh4HRoqRXLHroaWpwbZ6kTDMYFdPEuPQ0L81ZJX+BC6IK8hgW6V7t+XKfy
+ Kj+8shhPat0PRxjRO5mmIZpXJFleYWEegUHvgXepsPZbkMjSmgobeM5z14XCjtk6/kZD yg== 
+Received: from p1lg14880.it.hpe.com (p1lg14880.it.hpe.com [16.230.97.201])
+        by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3jruwbhb07-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Sep 2022 20:01:41 +0000
+Received: from p1lg14885.dc01.its.hpecorp.net (unknown [10.119.18.236])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by p1lg14880.it.hpe.com (Postfix) with ESMTPS id 382EE801AD4;
+        Thu, 22 Sep 2022 20:01:40 +0000 (UTC)
+Received: from dog.eag.rdlabs.hpecorp.net (unknown [16.231.227.36])
+        by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTP id E0EF9807672;
+        Thu, 22 Sep 2022 20:01:37 +0000 (UTC)
+From:   Mike Travis <mike.travis@hpe.com>
+To:     Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Steve Wahl <steve.wahl@hpe.com>, x86@kernel.org
+Cc:     Mike Travis <mike.travis@hpe.com>,
+        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
+        stable@vger.kernel.org, Andy Shevchenko <andy@infradead.org>,
+        Darren Hart <dvhart@infradead.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Russ Anderson <russ.anderson@hpe.com>,
+        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org
+Subject: [PATCH v2] x86/platform/uv: Dont use smp_processor_id while preemptible
+Date:   Thu, 22 Sep 2022 15:00:35 -0500
+Message-Id: <20220922200035.94823-1-mike.travis@hpe.com>
+X-Mailer: git-send-email 2.26.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: hHU9eJaViupHQ3IJVxCe-wNB3pgRoexl
+X-Proofpoint-ORIG-GUID: hHU9eJaViupHQ3IJVxCe-wNB3pgRoexl
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-22_14,2022-09-22_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
+ adultscore=0 clxscore=1011 phishscore=0 mlxscore=0 priorityscore=1501
+ spamscore=0 malwarescore=0 mlxlogscore=999 suspectscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209220129
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,65 +78,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MXCSR is architecturally part of the SSE state. But, the kernel code
-presumes it as part of the FP component. Adjust the offset and size for
-these legacy states.
+To avoid a "BUG: using smp_processor_id() in preemptible" debug warning
+message, disable preemption around use of the processor id.  This code
+sequence merely decides which portal that this CPU uses to read the RTC.
+It does this to avoid thrashing the cache but even if preempted it still
+reads the same time from the single RTC clock.
 
-Notably, each legacy component area is not contiguous, unlike extended
-components. Add a warning message when these offset and size are
-referenced.
-
-Fixes: ac73b27aea4e ("x86/fpu/xstate: Fix xstate_offsets, xstate_sizes for non-extended xstates")
-Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
-Cc: x86@kernel.org
-Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Mike Travis <mike.travis@hpe.com>
+Reviewed-by: Steve Wahl <steve.wahl@hpe.com>
+Reviewed-by: Dimitri Sivanich <dimitri.sivanich@hpe.com>
+Cc: stable@vger.kernel.org
 ---
- arch/x86/kernel/fpu/xstate.c | 21 +++++++++++++++------
- 1 file changed, 15 insertions(+), 6 deletions(-)
+v2: modify patch description, add Cc:stable tag
+---
+ arch/x86/platform/uv/uv_time.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
-index a3f7045d1f8e..ac2ec5d6e7e4 100644
---- a/arch/x86/kernel/fpu/xstate.c
-+++ b/arch/x86/kernel/fpu/xstate.c
-@@ -143,8 +143,13 @@ static unsigned int xfeature_get_offset(u64 xcomp_bv, int xfeature)
- 	 * offsets.
- 	 */
- 	if (!cpu_feature_enabled(X86_FEATURE_XCOMPACTED) ||
--	    xfeature <= XFEATURE_SSE)
-+	    xfeature <= XFEATURE_SSE) {
-+		if (xfeature <= XFEATURE_SSE)
-+			pr_warn("The legacy state (%d) is discontiguously located.\n",
-+				xfeature);
-+
- 		return xstate_offsets[xfeature];
-+	}
+diff --git a/arch/x86/platform/uv/uv_time.c b/arch/x86/platform/uv/uv_time.c
+index 54663f3e00cb..094190814a28 100644
+--- a/arch/x86/platform/uv/uv_time.c
++++ b/arch/x86/platform/uv/uv_time.c
+@@ -275,14 +275,17 @@ static int uv_rtc_unset_timer(int cpu, int force)
+  */
+ static u64 uv_read_rtc(struct clocksource *cs)
+ {
+-	unsigned long offset;
++	unsigned long offset, time;
++	unsigned int cpu = get_cpu();
  
- 	/*
- 	 * Compacted format offsets depend on the actual content of the
-@@ -217,14 +222,18 @@ static void __init setup_xstate_cache(void)
- 	 * The FP xstates and SSE xstates are legacy states. They are always
- 	 * in the fixed offsets in the xsave area in either compacted form
- 	 * or standard form.
-+	 *
-+	 * But, while MXCSR is part of the SSE state, it is located in
-+	 * between the FP states. Note that it is erroneous assuming that
-+	 * each legacy area is contiguous.
- 	 */
- 	xstate_offsets[XFEATURE_FP]	= 0;
--	xstate_sizes[XFEATURE_FP]	= offsetof(struct fxregs_state,
--						   xmm_space);
-+	xstate_sizes[XFEATURE_FP]	= offsetof(struct fxregs_state, mxcsr) +
-+					  sizeof_field(struct fxregs_state, st_space);
+ 	if (uv_get_min_hub_revision_id() == 1)
+ 		offset = 0;
+ 	else
+-		offset = (uv_blade_processor_id() * L1_CACHE_BYTES) % PAGE_SIZE;
++		offset = (uv_cpu_blade_processor_id(cpu) * L1_CACHE_BYTES) % PAGE_SIZE;
  
--	xstate_offsets[XFEATURE_SSE]	= xstate_sizes[XFEATURE_FP];
--	xstate_sizes[XFEATURE_SSE]	= sizeof_field(struct fxregs_state,
--						       xmm_space);
-+	xstate_offsets[XFEATURE_SSE]	= offsetof(struct fxregs_state, mxcsr);
-+	xstate_sizes[XFEATURE_SSE]	= MXCSR_AND_FLAGS_SIZE +
-+					  sizeof_field(struct fxregs_state, xmm_space);
+-	return (u64)uv_read_local_mmr(UVH_RTC | offset);
++	time = (u64)uv_read_local_mmr(UVH_RTC | offset);
++	put_cpu();
++	return time;
+ }
  
- 	for_each_extended_xfeature(i, fpu_kernel_cfg.max_features) {
- 		cpuid_count(XSTATE_CPUID, i, &eax, &ebx, &ecx, &edx);
+ /*
 -- 
-2.17.1
+2.26.2
 
