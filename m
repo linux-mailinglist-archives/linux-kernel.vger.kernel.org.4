@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CBE95E6D3C
+	by mail.lfdr.de (Postfix) with ESMTP id 547E35E6D3D
 	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 22:42:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbiIVUmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 16:42:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44216 "EHLO
+        id S230110AbiIVUmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 16:42:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229978AbiIVUmC (ORCPT
+        with ESMTP id S229942AbiIVUmC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 22 Sep 2022 16:42:02 -0400
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E2552BE01;
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E55292BE03;
         Thu, 22 Sep 2022 13:42:01 -0700 (PDT)
 Received: from meer.lwn.net (unknown [IPv6:2601:281:8300:73::5f6])
-        by ms.lwn.net (Postfix) with ESMTPA id BBA087F8;
-        Thu, 22 Sep 2022 20:42:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net BBA087F8
+        by ms.lwn.net (Postfix) with ESMTPA id 56A42846;
+        Thu, 22 Sep 2022 20:42:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 56A42846
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1663879321; bh=pjEqGsC3o1cCyVpcxwjXhbptLW8M3DxLII6MXHLKxx4=;
+        t=1663879321; bh=6sP6TgEn0oAnSqDQCNMm+wTqmFofLWhnY9PfhVjPR6Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iWbxNZ1XAipsse42nS+MNazVPJlCC7b34fZWJxBpwzReFOUFFM4i1f5/7aQZNXkTq
-         6yXrURAPxiLLTti3nYhSEg3Nqxi3mycUcXKQuQzTgGYzfen4TgK4pyH85jkONumqIY
-         wzXvv6Hy7pQFgLCAMxl3cWBDslrmUubZTt4ppSnDIhUGV2QdUCUceKm/9/U6y+Q26A
-         +XeWD/x5RZnFc08kYTCbwBoZ6NrxUPgsxWlH4dBwnZCUL61I7JGrelXIYuY+tK+3Da
-         Dmvezp+UkU4vLurABReZjxVMBiXkidy7jdOGApP8VXNbsxoBtuPZVmmmu/fSZl18Ac
-         C9vRbxVkf/aCA==
+        b=bA1vQkR7rycquO3nVRijtKMGdn4y5OwIK6pzfTYrRw8Rj+QOJzmu6R84dbo+V1vuj
+         Q7ZOnZ6pS5A9d3jsqL9L0+iZeI3u8FYeCOp00V4DWJUPQTCZ4SbeeegsnuawtTNWU+
+         b1WaT6Il7y/pahhKPWzeNivOi9k6nyam+l/pNFa4vYu3gMb8MXVLi7EvDxdQKZATTn
+         P1cOAoHgJxn6cJYbucV1MlsdJ/Ef5M8KX9XWTcijZyVTSwwPVbdWMpaIGQqcqnzUVo
+         MAWTWIdnweJ0EiV2omLmXvhTJxSA30GGDZjJzqeXPJgirUUcMOXPjDvuP6ZM1LFkWW
+         c+NJ40kKvg/UQ==
 From:   Jonathan Corbet <corbet@lwn.net>
 To:     linux-doc@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org,
@@ -35,48 +35,47 @@ Cc:     linux-kernel@vger.kernel.org,
         Kees Cook <keescook@chromium.org>,
         Jani Nikula <jani.nikula@linux.intel.com>,
         Jonathan Corbet <corbet@lwn.net>
-Subject: [PATCH v2 3/7] docs: reconfigure the HTML left column
-Date:   Thu, 22 Sep 2022 14:41:34 -0600
-Message-Id: <20220922204138.153146-4-corbet@lwn.net>
+Subject: [PATCH v2 4/7] docs: remove some index.rst cruft
+Date:   Thu, 22 Sep 2022 14:41:35 -0600
+Message-Id: <20220922204138.153146-5-corbet@lwn.net>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220922204138.153146-1-corbet@lwn.net>
 References: <20220922204138.153146-1-corbet@lwn.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the html_sidebars directive to get a more useful set of links in the
-left column.
-
-Unfortunately, this is a no-op with the default RTD theme, but others
-observe it.
+There is some useless boilerplate text that was added by sphinx when this
+file was first created; take it out.
 
 Signed-off-by: Jonathan Corbet <corbet@lwn.net>
 ---
- Documentation/conf.py | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ Documentation/index.rst | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/Documentation/conf.py b/Documentation/conf.py
-index 78dd6d1e7b88..22c9d4df1967 100644
---- a/Documentation/conf.py
-+++ b/Documentation/conf.py
-@@ -370,7 +370,8 @@ html_static_path = ['sphinx-static']
- html_use_smartypants = False
+diff --git a/Documentation/index.rst b/Documentation/index.rst
+index e0b593486e7d..7f63f70bb8d6 100644
+--- a/Documentation/index.rst
++++ b/Documentation/index.rst
+@@ -1,11 +1,5 @@
+ .. SPDX-License-Identifier: GPL-2.0
  
- # Custom sidebar templates, maps document names to template names.
--#html_sidebars = {}
-+# Note that the RTD theme ignores this
-+html_sidebars = { '**': ['searchbox.html', 'localtoc.html', 'sourcelink.html']}
+-
+-.. The Linux Kernel documentation master file, created by
+-   sphinx-quickstart on Fri Feb 12 13:51:46 2016.
+-   You can adapt this file completely to your liking, but it should at least
+-   contain the root `toctree` directive.
+-
+ .. _linux_doc:
  
- # Additional templates that should be rendered to pages, maps page names to
- # template names.
+ The Linux Kernel documentation
 -- 
 2.37.2
 
