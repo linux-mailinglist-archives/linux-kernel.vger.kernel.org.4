@@ -2,140 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B3C45E6EE4
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 23:56:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C6995E6EE9
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 23:57:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230079AbiIVV4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 17:56:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34318 "EHLO
+        id S230227AbiIVV51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 17:57:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229993AbiIVV4K (ORCPT
+        with ESMTP id S229993AbiIVV5Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 17:56:10 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DC37C10AB07
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 14:56:08 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id C603B92009C; Thu, 22 Sep 2022 23:56:06 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id B734292009B;
-        Thu, 22 Sep 2022 22:56:06 +0100 (BST)
-Date:   Thu, 22 Sep 2022 22:56:06 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] RISC-V: Make port I/O string accessors actually work
-Message-ID: <alpine.DEB.2.21.2209220223080.29493@angie.orcam.me.uk>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Thu, 22 Sep 2022 17:57:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D40CA109779
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 14:57:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8C123B835BE
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 21:57:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 982C0C433C1;
+        Thu, 22 Sep 2022 21:57:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663883841;
+        bh=kqodCzuwqlqJ5UyM36OG0YSUsgR4TArBAX8DBB1ASFU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=PTfjnG2iEDg1ssayJZVxAqy0W9aPqVt10MfyjVKPXoq11fVr6Q8RDDgZVcATF8mMO
+         J25acTm6gBUiDZq/PE2jfd/pRhvYJFD3vm8teudftvby2xL8x4+SjrTulp0thVal0w
+         Z40GVwbDH4KH3HK2tiBxGjQAYP8+e4EcP7/uDYoKc3rkxzg9X4qpfnvJcQYGKF+tc8
+         g7CohjrrX6CtoWDIGECvqeZvaHnSpx2jAuUvxJP89BMvduMqwa2PPApe3D4DRxwxQF
+         LKIjQBbuEG3mg4yCfLaiXmLour9jOhiQ2T6RMxdlR8wi6GvufleDAnheAQ3pozGrQW
+         OBFbcYDXMjRkA==
+From:   Will Deacon <will@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Will Deacon <will@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Mohan Rao .vanimina" <mailtoc.mohanrao@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH] vmlinux.lds.h: CFI: Reduce alignment of jump-table to function alignment
+Date:   Thu, 22 Sep 2022 22:57:15 +0100
+Message-Id: <20220922215715.13345-1-will@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,HDRS_LCASE,
-        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix port I/O string accessors such as `insb', `outsb', etc. which use 
-the physical PCI port I/O address rather than the corresponding memory 
-mapping to get at the requested location, which in turn breaks at least 
-accesses made by our parport driver to a PCIe parallel port such as:
+Due to undocumented, hysterical raisins on x86, the CFI jump-table
+sections in .text are needlessly aligned to PMD_SIZE in the vmlinux
+linker script. When compiling a CFI-enabled arm64 kernel with a 64KiB
+page-size, a PMD maps 512MiB of virtual memory and so the .text section
+increases to a whopping 940MiB and blows the final Image up to 960MiB.
+Others report a link failure.
 
-PCI parallel port detected: 1415:c118, I/O at 0x1000(0x1008), IRQ 20
-parport0: PC-style at 0x1000 (0x1008), irq 20, using FIFO [PCSPP,TRISTATE,COMPAT,EPP,ECP]
+Since the CFI jump-table requires only instruction alignment, reduce the
+alignment directives to function alignment for parity with other parts
+of the .text section. This reduces the size of the .text section for the
+aforementioned 64KiB page size arm64 kernel to 19MiB for a much more
+reasonable total Image size of 39MiB.
 
-causing a memory access fault:
-
-Unable to handle kernel access to user memory without uaccess routines at virtual address 0000000000001008
-Oops [#1]
-Modules linked in:
-CPU: 1 PID: 350 Comm: cat Not tainted 6.0.0-rc2-00283-g10d4879f9ef0-dirty #23
-Hardware name: SiFive HiFive Unmatched A00 (DT)
-epc : parport_pc_fifo_write_block_pio+0x266/0x416
- ra : parport_pc_fifo_write_block_pio+0xb4/0x416
-epc : ffffffff80542c3e ra : ffffffff80542a8c sp : ffffffd88899fc60
- gp : ffffffff80fa2700 tp : ffffffd882b1e900 t0 : ffffffd883d0b000
- t1 : ffffffffff000002 t2 : 4646393043330a38 s0 : ffffffd88899fcf0
- s1 : 0000000000001000 a0 : 0000000000000010 a1 : 0000000000000000
- a2 : ffffffd883d0a010 a3 : 0000000000000023 a4 : 00000000ffff8fbb
- a5 : ffffffd883d0a001 a6 : 0000000100000000 a7 : ffffffc800000000
- s2 : ffffffffff000002 s3 : ffffffff80d28880 s4 : ffffffff80fa1f50
- s5 : 0000000000001008 s6 : 0000000000000008 s7 : ffffffd883d0a000
- s8 : 0004000000000000 s9 : ffffffff80dc1d80 s10: ffffffd8807e4000
- s11: 0000000000000000 t3 : 00000000000000ff t4 : 393044410a303930
- t5 : 0000000000001000 t6 : 0000000000040000
-status: 0000000200000120 badaddr: 0000000000001008 cause: 000000000000000f
-[<ffffffff80543212>] parport_pc_compat_write_block_pio+0xfe/0x200
-[<ffffffff8053bbc0>] parport_write+0x46/0xf8
-[<ffffffff8050530e>] lp_write+0x158/0x2d2
-[<ffffffff80185716>] vfs_write+0x8e/0x2c2
-[<ffffffff80185a74>] ksys_write+0x52/0xc2
-[<ffffffff80185af2>] sys_write+0xe/0x16
-[<ffffffff80003770>] ret_from_syscall+0x0/0x2
----[ end trace 0000000000000000 ]---
-
-For simplicity address the problem by adding PCI_IOBASE to the physical 
-address requested in the respective wrapper macros only, observing that 
-the raw accessors such as `__insb', `__outsb', etc. are not supposed to 
-be used other than by said macros.  Remove the cast to `long' that is no 
-longer needed on `addr' now that it is used as an offset from PCI_IOBASE 
-and add parentheses around `addr' needed for predictable evaluation in 
-macro expansion.  No need to make said adjustments in separate changes 
-given that current code is gravely broken and does not ever work.
-
-Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
-Fixes: fab957c11efe2 ("RISC-V: Atomic and Locking Code")
-Cc: stable@vger.kernel.org # v4.15+
+Cc: Sami Tolvanen <samitolvanen@google.com>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: "Mohan Rao .vanimina" <mailtoc.mohanrao@gmail.com>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Link: https://lore.kernel.org/all/CAL_GTzigiNOMYkOPX1KDnagPhJtFNqSK=1USNbS0wUL4PW6-Uw@mail.gmail.com/
+Fixes: cf68fffb66d60 ("add support for Clang CFI")
+Signed-off-by: Will Deacon <will@kernel.org>
 ---
- arch/riscv/include/asm/io.h |   16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ include/asm-generic/vmlinux.lds.h | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-linux-riscv-ins-outs-pci-iobase.diff
-Index: linux-macro/arch/riscv/include/asm/io.h
-===================================================================
---- linux-macro.orig/arch/riscv/include/asm/io.h
-+++ linux-macro/arch/riscv/include/asm/io.h
-@@ -101,9 +101,9 @@ __io_reads_ins(reads, u32, l, __io_br(),
- __io_reads_ins(ins,  u8, b, __io_pbr(), __io_par(addr))
- __io_reads_ins(ins, u16, w, __io_pbr(), __io_par(addr))
- __io_reads_ins(ins, u32, l, __io_pbr(), __io_par(addr))
--#define insb(addr, buffer, count) __insb((void __iomem *)(long)addr, buffer, count)
--#define insw(addr, buffer, count) __insw((void __iomem *)(long)addr, buffer, count)
--#define insl(addr, buffer, count) __insl((void __iomem *)(long)addr, buffer, count)
-+#define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, count)
-+#define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
-+#define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
- 
- __io_writes_outs(writes,  u8, b, __io_bw(), __io_aw())
- __io_writes_outs(writes, u16, w, __io_bw(), __io_aw())
-@@ -115,22 +115,22 @@ __io_writes_outs(writes, u32, l, __io_bw
- __io_writes_outs(outs,  u8, b, __io_pbw(), __io_paw())
- __io_writes_outs(outs, u16, w, __io_pbw(), __io_paw())
- __io_writes_outs(outs, u32, l, __io_pbw(), __io_paw())
--#define outsb(addr, buffer, count) __outsb((void __iomem *)(long)addr, buffer, count)
--#define outsw(addr, buffer, count) __outsw((void __iomem *)(long)addr, buffer, count)
--#define outsl(addr, buffer, count) __outsl((void __iomem *)(long)addr, buffer, count)
-+#define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
-+#define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
-+#define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
- 
- #ifdef CONFIG_64BIT
- __io_reads_ins(reads, u64, q, __io_br(), __io_ar(addr))
- #define readsq(addr, buffer, count) __readsq(addr, buffer, count)
- 
- __io_reads_ins(ins, u64, q, __io_pbr(), __io_par(addr))
--#define insq(addr, buffer, count) __insq((void __iomem *)addr, buffer, count)
-+#define insq(addr, buffer, count) __insq(PCI_IOBASE + (addr), buffer, count)
- 
- __io_writes_outs(writes, u64, q, __io_bw(), __io_aw())
- #define writesq(addr, buffer, count) __writesq(addr, buffer, count)
- 
- __io_writes_outs(outs, u64, q, __io_pbr(), __io_paw())
--#define outsq(addr, buffer, count) __outsq((void __iomem *)addr, buffer, count)
-+#define outsq(addr, buffer, count) __outsq(PCI_IOBASE + (addr), buffer, count)
- #endif
- 
- #include <asm-generic/io.h>
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index 7515a465ec03..7c90b1ab3e00 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -543,10 +543,9 @@
+  */
+ #ifdef CONFIG_CFI_CLANG
+ #define TEXT_CFI_JT							\
+-		. = ALIGN(PMD_SIZE);					\
++		ALIGN_FUNCTION();					\
+ 		__cfi_jt_start = .;					\
+ 		*(.text..L.cfi.jumptable .text..L.cfi.jumptable.*)	\
+-		. = ALIGN(PMD_SIZE);					\
+ 		__cfi_jt_end = .;
+ #else
+ #define TEXT_CFI_JT
+-- 
+2.37.3.998.g577e59143f-goog
+
