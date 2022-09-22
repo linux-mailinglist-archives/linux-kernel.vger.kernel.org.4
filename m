@@ -2,109 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FA9D5E6247
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 14:24:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3E6C5E6249
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 14:24:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231627AbiIVMYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 08:24:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43406 "EHLO
+        id S231651AbiIVMYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 08:24:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231697AbiIVMYL (ORCPT
+        with ESMTP id S231641AbiIVMYi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 08:24:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DB9CEA58E
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 05:24:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663849449;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8e2m2BIJ4Jf3Uy1uaFM/1F4XDeTAJFxAGEpCMvvXt30=;
-        b=YkZ438xB/1wRJDzSkCSlCKzezK2jObLqYepnHjXfb9t88a5SO2/OqRunwBZFqZViB37n0A
-        ya3AtuT5UrA7Kur0oyy+niGI5FZU5Uv5+zNpU4ahc1C39iAgfqiyWgt+pew3nsSthTcRNT
-        uy/flfBIBOKW9ui4OPa8+2YdZuZBn04=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-490-4juCjIGeOy6BJPjFE4Yxjg-1; Thu, 22 Sep 2022 08:24:08 -0400
-X-MC-Unique: 4juCjIGeOy6BJPjFE4Yxjg-1
-Received: by mail-ej1-f70.google.com with SMTP id sb32-20020a1709076da000b0077faea20701so4390606ejc.10
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 05:24:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=8e2m2BIJ4Jf3Uy1uaFM/1F4XDeTAJFxAGEpCMvvXt30=;
-        b=FvZFwFMBK2Ss3xuBuz+fTMRK4qRFgPDP0yorbJ3jS7VYW3pzAk9c7q/iTjEF0mzfiD
-         Afa1qCGcplEoO/20iaDvbE/hg0aWOG102R1Ayj4x/cO2D4BZlz0oNvEPsDrL9qjN8T4v
-         YRl+LprKB5WqQnP7Kv0TBlWwUXJWlKefLYr0L0j4YcfuRaPHXIWvbcVqYf6UxWROmBT7
-         CLjU2s9uci/49yXhRi5L7a4cG1k3mm44bYqMZZcuSdS2TNEkYmODrPSRP3JQtWpdWVFk
-         2+dB0Rl67JA05X4rwKDAfzWFXu81pvX0cYBEoM6KSnr74tP/alo9iBd1mKPXQq/Y7y6U
-         h2mg==
-X-Gm-Message-State: ACrzQf1ogj2kBLy1F/aH0gVZmYJtI/oTZGEa2vcC53A3MdCN/7xXNq3S
-        LFQvKTXqHG1jx1zE8PhqCd2WunXw11rYQPFp4DG5XLDLerK9thA+7Kf79Cv0OXXTl+XpKzQ73kr
-        aNW/sYVSk/dUEKKQW48wFFz/z
-X-Received: by 2002:a17:906:9c83:b0:779:c14c:55e4 with SMTP id fj3-20020a1709069c8300b00779c14c55e4mr2511287ejc.619.1663849446754;
-        Thu, 22 Sep 2022 05:24:06 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4tWYiTyufR0wbEleDRnc2xWoYUYa/ttq8hBl5FeRce4HU7msDjXoA/W9b+dN1gzhhiGgen6w==
-X-Received: by 2002:a17:906:9c83:b0:779:c14c:55e4 with SMTP id fj3-20020a1709069c8300b00779c14c55e4mr2511269ejc.619.1663849446511;
-        Thu, 22 Sep 2022 05:24:06 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
-        by smtp.googlemail.com with ESMTPSA id p16-20020a1709060e9000b007707ec25071sm2491540ejf.220.2022.09.22.05.24.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Sep 2022 05:24:05 -0700 (PDT)
-Message-ID: <2db45546-d504-d006-ce3c-65f832b5a70a@redhat.com>
-Date:   Thu, 22 Sep 2022 14:24:04 +0200
+        Thu, 22 Sep 2022 08:24:38 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E68F9BC02
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 05:24:31 -0700 (PDT)
+Received: from [10.130.0.135] (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx_2v+UyxjhBwgAA--.53094S3;
+        Thu, 22 Sep 2022 20:24:30 +0800 (CST)
+Subject: Re: [PATCH 2/4] LoongArch: Add kretprobe support
+To:     Jinyang He <hejinyang@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+References: <1663645034-967-1-git-send-email-yangtiezhu@loongson.cn>
+ <1663645034-967-3-git-send-email-yangtiezhu@loongson.cn>
+ <27e77068-012b-ef7d-986f-818c651ba853@loongson.cn>
+Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <75a96701-0760-3b27-8c83-ed0ee19a0273@loongson.cn>
+Date:   Thu, 22 Sep 2022 20:24:30 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH] kvm/x86: reserve bit
- KVM_HINTS_PHYS_ADDRESS_SIZE_DATA_VALID
-To:     Jim Mattson <jmattson@google.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Gerd Hoffmann <kraxel@redhat.com>, kvm@vger.kernel.org,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
-        <linux-kernel@vger.kernel.org>
-References: <20220908114146.473630-1-kraxel@redhat.com>
- <YxoBtD+3sgEEiaFF@google.com>
- <20220909050224.rzlt4x7tjrespw3k@sirius.home.kraxel.org>
- <20220921134246.xibospqoktp4wjie@sirius.home.kraxel.org>
- <Yysm8/Nkt6EUI5+k@google.com>
- <CALMp9eRkXPPWbPfm16onV9+ondg0x7_RG5ku7hCpBAODLWpSgw@mail.gmail.com>
-Content-Language: en-US
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <CALMp9eRkXPPWbPfm16onV9+ondg0x7_RG5ku7hCpBAODLWpSgw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <27e77068-012b-ef7d-986f-818c651ba853@loongson.cn>
+Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8Dx_2v+UyxjhBwgAA--.53094S3
+X-Coremail-Antispam: 1UD129KBjvdXoWrZrW7tw48KFyUWw47ur4Durg_yoWxZFc_Gw
+        17WryxC3y8WF4fX3W2g3y5ZFZrGayfWan8Jr9rXw4xCwn5t3y8JFs8WrnxZFWfGrWfGrsI
+        kFW8ZasIvF1j9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbIAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+        Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+        jxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr
+        1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7Mxk0xIA0c2IEe2xFo4CEbIxv
+        r21lc2xSY4AK67AK6ryUMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI
+        8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AK
+        xVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI
+        8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280
+        aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyT
+        uYvjfU1L0eDUUUU
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/21/22 18:32, Jim Mattson wrote:
->> The issue is that this "hint" effectively breaks other VMMs that already provide
->> an accurate guest.MAXPHYADDR.
+
+
+On 09/21/2022 04:22 PM, Jinyang He wrote:
+> On 09/20/2022 11:37 AM, Tiezhu Yang wrote:
 >
-> Any VMM that doesn't provide an accurate guest.MAXPHYADDR is broken.
-> Why do we need a "hint" that the virtual processor works?
+>> Use the generic kretprobe trampoline handler to add kretprobe
+>> support for LoongArch.
+>>
+>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+>> ---
+>>   arch/loongarch/Kconfig          |  1 +
+>>   arch/loongarch/kernel/kprobes.c | 49
 
-I agree.  Since old (and current) versions of QEMU wouldn't get the bit 
-anyway, just fix the next one.  I'll follow up on the QEMU mailing list.
+...
 
-Paolo
+>>   int __init arch_init_kprobes(void)
+>>   {
+>> -    return 0;
+>> +    return register_kprobe(&trampoline_p);
+> Hi, Tiezhu,
+>
+> For kretprobe, we can do things like arm64/riscv... did. It avoid
+> the break exception when function return.
+>
+
+OK, looks reasonable, let me try, thank you.
+I will wait for some more review comments and then send v2.
+
+Thanks,
+Tiezhu
 
