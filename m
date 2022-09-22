@@ -2,162 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52DFA5E6608
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 16:42:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C7095E660E
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 16:43:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231377AbiIVOmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 10:42:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38000 "EHLO
+        id S230409AbiIVOnI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 10:43:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231968AbiIVOl4 (ORCPT
+        with ESMTP id S230101AbiIVOnF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 10:41:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 809C858B7D
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 07:41:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663857714;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=D/9pBsgmOfMIOWdQk6MlBb5rIEq71XELNQZdnKY333M=;
-        b=PRngVALWt0fiLbd1zdMqclsBCY6QG3jlvaBKCmXLhhYZeoBk7XDCd8h8KEjefdGQkrfaNo
-        8rhUxlp3Ax9KH3hLD0oMw5VN5SkRWtXqB7J4hkA7fMB2aF8KfxrHfI+2cu4FtejqEXJUud
-        DOnJ2fxcCcmdfvh/CzB7utyF2EPiWRU=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-639-03_lwKTwNlyFfKtvFa1Gbw-1; Thu, 22 Sep 2022 10:41:52 -0400
-X-MC-Unique: 03_lwKTwNlyFfKtvFa1Gbw-1
-Received: by mail-wm1-f71.google.com with SMTP id 5-20020a05600c028500b003b4d2247d3eso2749403wmk.0
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 07:41:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=D/9pBsgmOfMIOWdQk6MlBb5rIEq71XELNQZdnKY333M=;
-        b=Jzp4UY+d4gWVJdOBEdH6I/no0xxuZ0zubrG+bCPh8qp5J9vFfHuXelQo1D7f+oJRT9
-         7am4H3UqwlNWOX7jPiODwIgSZM9a6mMnIsHLMt2LeEfrC8rMTIwggW7JaxF9uRLDMfWY
-         KjECDRPQmYU1PVFe0nIUmJixMZmocWpJxnil9F3R945Jh/MfTjq57k8RlcX2XTuUkMC4
-         qkVIE9LqCJ/0vH87yGTV1iiXpoWy+MNLtXNbGxEg6fwQ5E2M3E8Xi2L7i39x41IUqKRQ
-         O1pMyHbim/5hbRa/3QY7JXBoagr8xAPBo6xJ+7LZKSc0He3/0ZUC/uhxJPSn0UPH8e1H
-         DHRA==
-X-Gm-Message-State: ACrzQf2hGKQGhOAhve+1p+idq9HRzrOKN8+jauhNntupkop82PmnFt1l
-        l3unzIRJAEfeCSL4idw+Ca+3PrtGHLPTDB3/nV112HH5vLQEv4QPpqUOheI4zgcLaUfCxEho0BF
-        gOzqSaidKhKjGpU0siHMTcGwy
-X-Received: by 2002:adf:fb0a:0:b0:225:265d:493 with SMTP id c10-20020adffb0a000000b00225265d0493mr2315214wrr.394.1663857711758;
-        Thu, 22 Sep 2022 07:41:51 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7s2pVMK50HQj4mxZLRHO2jsgVJQFzFTuu2Qp94Zer8UgJMh/RaCJ3PGvdhnjto9D+jNlkhFA==
-X-Received: by 2002:adf:fb0a:0:b0:225:265d:493 with SMTP id c10-20020adffb0a000000b00225265d0493mr2315185wrr.394.1663857711445;
-        Thu, 22 Sep 2022 07:41:51 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c708:2200:d595:cc20:2e3a:fc5f? (p200300cbc7082200d595cc202e3afc5f.dip0.t-ipconnect.de. [2003:cb:c708:2200:d595:cc20:2e3a:fc5f])
-        by smtp.gmail.com with ESMTPSA id bv3-20020a0560001f0300b0022b014fb0b7sm5493369wrb.110.2022.09.22.07.41.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Sep 2022 07:41:50 -0700 (PDT)
-Message-ID: <9fc9759d-ac74-ca8f-874c-5058758c3ea1@redhat.com>
-Date:   Thu, 22 Sep 2022 16:41:49 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
+        Thu, 22 Sep 2022 10:43:05 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 480ED12746;
+        Thu, 22 Sep 2022 07:43:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663857784; x=1695393784;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=YKsvm0LRelM0isX75PAVux3PKFxa70t/lWZV+/kdnCY=;
+  b=lqhWwgDaJv0tvg0ogTNQq9D9rF8KihHB0FsaLQzGMUXjyxVfUS5k7pV7
+   bCRRY623VAa9mxRRfF5dDTqxvPEz/OFBX4iScc2u/InB13LQB2j3us9ar
+   L8CjHsw/T8sJ++AzFz15/o+LUwtaw2MLZnvtQvYwVlXD0DeIZreBvdq9x
+   kqSCgWozjEdPs6tQ30lcqOIx7vK+TlR11zwpPJ7EgoI3ptdR7eYd9r//x
+   0/CjcBXak5hFxkwDEzAB1ynJ9aIu4Yp/e2TWjnKyhNNO2R5JS5MJpX4BA
+   Gc3QIsB0re4FsHg54wc9N7BebJGhLSsp/JIjzy+Xe6w5Be9DWf1LMOmuQ
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="301162022"
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="301162022"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 07:43:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="864879200"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmsmga006.fm.intel.com with ESMTP; 22 Sep 2022 07:43:03 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 22 Sep 2022 07:43:03 -0700
+Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 22 Sep 2022 07:43:02 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Thu, 22 Sep 2022 07:43:02 -0700
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.170)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Thu, 22 Sep 2022 07:43:02 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=beV1/oZLgyEXu9qU+oXo6zdfY6LhTpywXIqPtoMbCzaQbRrpXu7Cu906hRpIMsRLv/Vk+xZ+caAr3+7bXTsIFX+idl4CXt4shQK1XATrdmFlRGLU0k6cOC0E9CpHaCmrp0tWsBhMoX7OyMHs3SjZPQpiwCk7+27M4PHmcL44VsinFhgVgO7l99D8rgZkPm+5NQpnHjM2bNVh6LlcwjqOPpUxRlrw74JTvNy3OfihuhS1W4Vco6DuzDBt6GC9Vqq3rEyzsA/Lv+qUZ83KwKxsBztcwN+q3Gu1MmkG43o5uqWuvM+I+W73esmyiDZi6sydEFBSz1R12oAsIOi7bxbg1Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2ouKe7Mlkpkb1J1l2pq94MjT+blxs6lL2T96ARp+1SU=;
+ b=fvKr1kEFvWKkY3EKnwsHCLPbH1pM+BJpSSpRqzEfQU4dGhaEZqP2eYSH1ghQslKsflOIPZ9ekJ2yF0Vkb3eBtLotZENrNaNhw0tU/9TuZj22OGetSnX9nudD6z+otWnve96sBLjbsGDiql0HIdWPe96MWvbagfmxauRssMsLc22tvHDym1SUvLpKZnCfauFZIKIFL2PP1/HibST0nhxZSqeOiz+z5URf56v0IsViS+N+zyo28yr7x77jJs0DidThRDxWF3BVlNDlQZBsqAHb7PT2FpMBAxh8Fm4tWO6CRTWDgKU4lf6FGs1NH/ASOiPwZMTTFD/x/wNyvLrTTEaIwQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from DS0PR11MB6373.namprd11.prod.outlook.com (2603:10b6:8:cb::20) by
+ CO6PR11MB5588.namprd11.prod.outlook.com (2603:10b6:303:13c::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.17; Thu, 22 Sep
+ 2022 14:42:55 +0000
+Received: from DS0PR11MB6373.namprd11.prod.outlook.com
+ ([fe80::817a:fd68:f270:1ea0]) by DS0PR11MB6373.namprd11.prod.outlook.com
+ ([fe80::817a:fd68:f270:1ea0%7]) with mapi id 15.20.5654.016; Thu, 22 Sep 2022
+ 14:42:54 +0000
+From:   "Wang, Wei W" <wei.w.wang@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+CC:     "Liang, Kan" <kan.liang@linux.intel.com>,
+        "Li, Xiaoyao" <xiaoyao.li@intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        "Arnaldo Carvalho de Melo" <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Alexander Shishkin" <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
+Subject: RE: [RFC PATCH v2 2/3] perf/x86/intel/pt: Introduce and export
+ pt_get_curr_event()
+Thread-Topic: [RFC PATCH v2 2/3] perf/x86/intel/pt: Introduce and export
+ pt_get_curr_event()
+Thread-Index: AQHYzdmZiDfxfKVenUORyjhoUz2tZ63rY3WAgAAA7VCAABAZgIAAAWLQgAAITwCAAAOJIA==
+Date:   Thu, 22 Sep 2022 14:42:54 +0000
+Message-ID: <DS0PR11MB63730A85E00683AB7F6F3E26DC4E9@DS0PR11MB6373.namprd11.prod.outlook.com>
+References: <20220921164521.2858932-1-xiaoyao.li@intel.com>
+ <20220921164521.2858932-3-xiaoyao.li@intel.com>
+ <175b518c-d202-644e-a3a7-67e877852548@linux.intel.com>
+ <DS0PR11MB6373C84139621DC447D3F466DC4E9@DS0PR11MB6373.namprd11.prod.outlook.com>
+ <Yyxke/IO+AP4EWwT@hirez.programming.kicks-ass.net>
+ <DS0PR11MB637346E9F224C5330CDEF3BFDC4E9@DS0PR11MB6373.namprd11.prod.outlook.com>
+ <YyxsnAFYMLn2U9BT@hirez.programming.kicks-ass.net>
+In-Reply-To: <YyxsnAFYMLn2U9BT@hirez.programming.kicks-ass.net>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Akira Yokosawa <akiyks@gmail.com>
-Cc:     David.Laight@ACULAB.COM, akpm@linux-foundation.org,
-        apw@canonical.com, bhe@redhat.com, christophe.leroy@csgroup.eu,
-        corbet@lwn.net, dwaipayanray1@gmail.com, dyoung@redhat.com,
-        jani.nikula@linux.intel.com, joe@perches.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
-        lukas.bulwahn@gmail.com, mingo@kernel.org, mpe@ellerman.id.au,
-        npiggin@gmail.com, torvalds@linux-foundation.org, vgoyal@redhat.com
-References: <20220920122302.99195-2-david@redhat.com>
- <93343c05-f31e-cfbe-6650-8ea8d79e6d55@gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v1 1/3] coding-style.rst: document BUG() and WARN() rules
- ("do not crash the kernel")
-In-Reply-To: <93343c05-f31e-cfbe-6650-8ea8d79e6d55@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.6.500.17
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DS0PR11MB6373:EE_|CO6PR11MB5588:EE_
+x-ms-office365-filtering-correlation-id: 3eaecb68-13c4-493d-b525-08da9ca8bba3
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: pMW18vyWt5TppvONtxwqGK6LMgEE6PefeN1lmV78AnnYfHVPuCQHCjltpqvycSLUDpMmjB8y4r0isEeW6X5TbBteybdMEcdB1W6acDfuLnY7JYKescDq1zxiG0W+aKfA4jgFGfEFYmuPPdi7+RWLgzGIsRQs4UUYv0HWcfWk8ILjvbLC7pZ4McxTZjqRRuEVhNCFGdarjrVbaiY2vSGs5cHuXzcXNpsHbu5azsAl4V8A9seKaHCDGjL/MlUBXGVCswm6MDUaQhnech/anu/pe5joMs0rvG6oJDOdYsTt+sejwhkvzHrjuUSi56K4F19IJLsblW0ru25uiSL75pJujYpzeSnqa0ih+pJYJ4PSCIKIckRzQOAC+OiMQ1xRt3pgyN0LjdGRNYqydBKA7DCBIOGJfS2nIUPzXjFt9gLudqm4T6vFnCJzGTS1AwTZquarNrmtkAeY6hzFPkaEn5+YQQAW+BrXpWj48vFNrt1g9lrvNSIl4BsCgpYCLOyzwGoD/epsY8xK4eYdYUn7pLS5e7DOivXDOxYvLHCsmL/TxnJa1oYXR4bGWy9hNupJLIinoXJIb+a4BFfYY0azcAlf2qdhZVA4yfu8fnQRC+/X0G69tbu47Nlhu8fYGhbR97ZZz1b8hOnbpur/u6NgHq7AZggyJzueza2NViewbckULvoute+ncadSL+0Qkuw/GwtAYFAHdEMrGZl08OPMXfzEJ3e/g3Mi40Q6jWfp6Nz28vJclhXawrOeDknCSV2ealCzqU360ihqrDGKIjs8t3e7ew==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB6373.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(366004)(346002)(376002)(396003)(136003)(451199015)(53546011)(52536014)(6506007)(7696005)(6916009)(54906003)(9686003)(8936002)(66476007)(64756008)(2906002)(76116006)(316002)(66446008)(4326008)(26005)(8676002)(66946007)(66556008)(478600001)(122000001)(71200400001)(82960400001)(86362001)(38070700005)(55016003)(33656002)(38100700002)(41300700001)(186003)(5660300002)(7416002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?YAXrStvP2qdkPn+wH6qV30t0BqQ7HRxmQxfxjxUCPPn7b9Ltv9UnNhR1yU5r?=
+ =?us-ascii?Q?x7KXVggescfD4Ah4r1GOg5KjfOJzkk+VMINgzxmB3mn7B3d/XNZ1qhbXoMUb?=
+ =?us-ascii?Q?1iW6V+moQ4R/bTIRlMvvZaq9A6muCe3E/exmo7K716XBSSUNiMDSjv0w+0iC?=
+ =?us-ascii?Q?yyqIXNXJ8qp4M7ENk61TMsNpLDM9Tyqzgo+Rw61Rrx8YLM9jMpOx1MfolCAv?=
+ =?us-ascii?Q?ETzfRhcIufv0alaoQwR3S6l1Z1/dq8r4NqdBIiwdSegibf7G9EIu5dHzQBUp?=
+ =?us-ascii?Q?YtGPAebDTq02xj17ZkyqZiSD2OxY3U0vZIt+ATTOjq+TWTWtFVApF/qUVFEq?=
+ =?us-ascii?Q?vdsaErFaYo+zdewiBsgnivsAYx55zEJRUpmaAjk9MVhk/b+8fGsHjnRGjuvE?=
+ =?us-ascii?Q?tUgECX1F3x5aALKp1Wb8s6tUCOfBoQCCrfVxK5aeMIcWBfwJoijuuaWjihQo?=
+ =?us-ascii?Q?Jc8APGU7ztR57b93HLsxdjeoG2nq5Hi2HyDHZETfq3979mdXifzwl2Y3jYbV?=
+ =?us-ascii?Q?+OZM1kbJMTbvsFfqjbmPF6TjkNWcf4Sf/S/vPU2O6gDUra9hxL6SY24a1rc5?=
+ =?us-ascii?Q?kiL+8SYhLb8XyKDzhO7mSlQ+H2bssV0OO9sYICN/t/3peBRL1kXoN3KTIV1U?=
+ =?us-ascii?Q?KbzujQ5LnrqYPW6+NPoaS0rgsjqw2Wlx0JigL5XCG2v3QN4U3XakJyXYlWuR?=
+ =?us-ascii?Q?njSV2yS9VfLQzYKtLqhnRdFouiLo96sMprMiLuqOMnJNUmuGOgKP2Y50Ivdv?=
+ =?us-ascii?Q?cfFEEtFshlKaiNYvXM72ekt0bv/NblIpUYEfsAzwQ55556gHJpJpYTXV83r+?=
+ =?us-ascii?Q?jRsoG+OC17hfOBymOwRUqIfNnDqRCKm9C0/gPzyPCf7cBu6lmHKCecOz/wre?=
+ =?us-ascii?Q?zAtXuqn17YI/C+zOGnFKHK3eL3N/HGyWyFW6mejj8LJi4QB6IQTWMBqV0kKK?=
+ =?us-ascii?Q?j2pizOBYS7n4V9kAVHuvaAiGKSNS+Zcb6q2BZh2sbiMZeYzCfI29k4nbKoVt?=
+ =?us-ascii?Q?UnIvEMxCo3dANjKSrb5xXey1W6f+hyMV6pWSgkgOT7UzUtQYj/ghwuexO4ow?=
+ =?us-ascii?Q?kIVM5m7xCv28fBzb6ApHPeIxWYxD9QXLDLlMhgVW5eY5WZbNh4SaBOhaf8BE?=
+ =?us-ascii?Q?v64C4Crzo9NzE6q8UxXYifzOYZYY5FKw120IrkUkJ98EjAgjSzH6oQOguj01?=
+ =?us-ascii?Q?tYgQJ7ZfSatOysAPoV/XK0q51x34nRU3tpz0jHF3YCpIuLhe6FP3TjlfOA7F?=
+ =?us-ascii?Q?Y/CAUPU9kZAwzM/yaa6UkYSo8eNoQldzfMw1q1oIWdZ4E9Ci5Xpm1FXU3FzL?=
+ =?us-ascii?Q?1bJkwZ5o1auz+lJLsW/NDFRo6sDHgoxObzGFbra/h1dsEBD4CZVuUTRDk7+7?=
+ =?us-ascii?Q?BcV7c/erWGjMW+kFhYYoHpf+fMgGF6IQdj6F1MYc2UyP66n7XwZUngn0tdIx?=
+ =?us-ascii?Q?b22b5PitR0VVBXr85suvgzOD1ZDzj7LiIcBqjYSN+v217eEx2nvXrgL2YEpC?=
+ =?us-ascii?Q?MWDSmEjbD71QTfGl2cmwL+wZYcyAOVy9lcg+t81MCjrgHsaTPcG5NRFmSsoD?=
+ =?us-ascii?Q?kBuPQ2oj5xHzsHiJ8Zx9RK73ijV/VBG8dPWufZk+?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB6373.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3eaecb68-13c4-493d-b525-08da9ca8bba3
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Sep 2022 14:42:54.2228
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: JAEJhFdmIEJErC5NpvLn3djizmU0Dm3q9zrHtRctQggV85HQO9qRaJRyMoOqj7fI2pcOyQ08fDUFixx5BtJ6ww==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR11MB5588
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->>   
->> +22) Do not crash the kernel
->> +---------------------------
->> +
->> +In general, it is not the kernel developer's decision to crash the kernel.
->> +
->> +Avoid panic()
->> +=============
-> This looks to me like a subsection-level title.  The adornment symbol
-> needs to be:
-> 
->     *************
-> 
->> +
->> +panic() should be used with care and primarily only during system boot.
->> +panic() is, for example, acceptable when running out of memory during boot and
->> +not being able to continue.
->> +
->> +Use WARN() rather than BUG()
->> +============================
-> Ditto.
-> 
->> +
->> +Do not add new code that uses any of the BUG() variants, such as BUG(),
->> +BUG_ON(), or VM_BUG_ON(). Instead, use a WARN*() variant, preferably
->> +WARN_ON_ONCE(), and possibly with recovery code. Recovery code is not
->> +required if there is no reasonable way to at least partially recover.
->> +
->> +"I'm too lazy to do error handling" is not an excuse for using BUG(). Major
->> +internal corruptions with no way of continuing may still use BUG(), but need
->> +good justification.
->> +
->> +Use WARN_ON_ONCE() rather than WARN() or WARN_ON()
->> +**************************************************
-> These wrong adornment symbol confuse ReST parser of Sphinx and results in
-> the build error from "make htmldocs" at this title (long message folded):
+On Thursday, September 22, 2022 10:10 PM, Peter Zijlstra wrote:
+> On Thu, Sep 22, 2022 at 01:59:53PM +0000, Wang, Wei W wrote:
+> > On Thursday, September 22, 2022 9:35 PM, Peter Zijlstra
+> > > On Thu, Sep 22, 2022 at 12:58:49PM +0000, Wang, Wei W wrote:
+> > >
+> > > > Add a function to expose the current running PT event to users.
+> > > > One usage is in KVM, it needs to get and disable the running host
+> > > > PT event before VMEnter to the guest and resumes the event after
+> VMexit to host.
+> > >
+> > > You cannot just kill a host event like that. If there is a host
+> > > event, the guest looses out.
+> >
+> > OK. The intention was to pause the event (that only profiles host
+> > info) when switching to guest, and resume when switching back to host.
+>=20
+> If the even doesn't profile guest context, then yes. If it does profile g=
+uest
+> context, you can't.
 
+Seems better to add this one:
 
-Thanks,
-
-the following on top should do the trick:
-
-
-diff --git a/Documentation/process/coding-style.rst b/Documentation/process/coding-style.rst
-index e05899cbfd49..9efde65ac2f3 100644
---- a/Documentation/process/coding-style.rst
-+++ b/Documentation/process/coding-style.rst
-@@ -1192,14 +1192,14 @@ expression used.  For instance:
-  In general, it is not the kernel developer's decision to crash the kernel.
-  
-  Avoid panic()
--=============
-+*************
-  
-  panic() should be used with care and primarily only during system boot.
-  panic() is, for example, acceptable when running out of memory during boot and
-  not being able to continue.
-  
-  Use WARN() rather than BUG()
--============================
-+****************************
-  
-  Do not add new code that uses any of the BUG() variants, such as BUG(),
-  BUG_ON(), or VM_BUG_ON(). Instead, use a WARN*() variant, preferably
-
-
--- 
-Thanks,
-
-David / dhildenb
++int perf_event_disable_local_exclude_guest(struct perf_event *event)
++{
++       struct perf_event_attr *attr =3D &event->attr;
++
++       if (!attr->exclude_guest)
++               return -EPERM;
++
++       event_function_local(event, __perf_event_disable, NULL);
++
++       return 0;
++}
++EXPORT_SYMBOL_GPL(perf_event_disable_local_exclude_guest);
 
