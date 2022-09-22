@@ -2,199 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E547D5E65DD
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 16:37:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76FD05E65EA
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 16:38:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231994AbiIVOhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 10:37:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36548 "EHLO
+        id S231905AbiIVOiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 10:38:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231928AbiIVOh3 (ORCPT
+        with ESMTP id S231974AbiIVOhc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 10:37:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42DD8F8581
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 07:37:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663857435;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/zrypfLadsgmoWO/aeH7ONEmAKrjPpL5W4JR9RYjiP8=;
-        b=hLE+etIXKyQESxUia1ncwyfBkM9Qk3JYpcgKgRBmfXaiu2Eof5vVQlhq1fyTxaiOMEcwUM
-        Hu0Xiy24KP4SPDvFQh80urYUNW31BtEB/XCNbc2iQ3bMeLgIPs16c9HZOWg9K2jhmuNxA0
-        I7XIOB6EDBUvqmPAN7/wzHPWLqitzO4=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-47-f-Yws2UNN4Wh8U0Zh5jvCw-1; Thu, 22 Sep 2022 10:37:11 -0400
-X-MC-Unique: f-Yws2UNN4Wh8U0Zh5jvCw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2C72E3C0F682;
-        Thu, 22 Sep 2022 14:37:11 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.40.194.242])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 99D8B4048D9A;
-        Thu, 22 Sep 2022 14:37:09 +0000 (UTC)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 6/6] KVM: selftests: Test Hyper-V invariant TSC control
-Date:   Thu, 22 Sep 2022 16:36:55 +0200
-Message-Id: <20220922143655.3721218-7-vkuznets@redhat.com>
-In-Reply-To: <20220922143655.3721218-1-vkuznets@redhat.com>
-References: <20220922143655.3721218-1-vkuznets@redhat.com>
+        Thu, 22 Sep 2022 10:37:32 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C63E3F85A4;
+        Thu, 22 Sep 2022 07:37:21 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id 3so9329119pga.1;
+        Thu, 22 Sep 2022 07:37:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date;
+        bh=uhHJO/Q7MKuqbAWsd+TDN9NUVDqnM2of5dIeopNe4UE=;
+        b=D5tld7lTKIhAQBke03/geeqtfqWYB2aVt2EFWB3737gpUeNRVYTWveZmrAhMK5jLJ/
+         E2mMuaivMTYnfPvm75u5AmJU7OjhVW2Oc+SdHhXRsRa0LyfxWjwjnGpkgNfsNsn1QXZV
+         RPw5EdoFbJNC4L35/UW/QitVUO0XsAt06itsKLqzT3NZq2uFp7LbEVHazeQTRn4LsrNs
+         EsdAskhzJRlLQuCvvcI7iVS9qRr3X+WlEtuN9ieu/fX/PZJoV5JMsoDMtsEJJKBtGLQ0
+         8nzDU0YBhqEqcsOdgVKVDg+q+I1ZhkfP6PgA0pH5QaS+aRhDqvDcWTS+KF+mrcqsMrhp
+         kapw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date;
+        bh=uhHJO/Q7MKuqbAWsd+TDN9NUVDqnM2of5dIeopNe4UE=;
+        b=mJj1b2HEtINkwYK9zfZN0a3hJ8T8bJok4FJxWos7IaWmfSHeH0c07u8i7mbOqEbtan
+         0l8t85jkKc0C65izZC3Hsz3ihU9C5PoWCZuz29ndRLQ+BkoPT+/lt5Lt0dY6RBDdE0jJ
+         MO1GwabYWFCpx9s2I8Gx6aFtC+wsuekVRZHAUPnttM2KdFrGTvJrVu0Lr5G6Mnu/GdmF
+         k7gagASkrYrwBlBTcjVMZNP78dAEwU9ubwLnvQepFyywv8I2ddPIe/+ArDMaqDjWvDMp
+         eXBVAwt4XefnmQI08fib+vTisgq9rWPNq+hqkfHgM2WJmD8sr+v+whLPAvMQbB2MlkBL
+         EdXQ==
+X-Gm-Message-State: ACrzQf2NM1OlFjfrnmvO+k9r574vxB3W4UEcRccSN7mlfVVJq7QNUXTT
+        +hysB7E78eXvK7h70Qa29k0=
+X-Google-Smtp-Source: AMsMyM4C21WgzIRahWmNt/PuVBN9kqw+VqKK86oixqjJAbJhyN7wprwnxB0zMaA/wgcMvg40QjVIPw==
+X-Received: by 2002:a05:6a00:14ce:b0:544:1ec7:2567 with SMTP id w14-20020a056a0014ce00b005441ec72567mr3846781pfu.24.1663857440057;
+        Thu, 22 Sep 2022 07:37:20 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id p4-20020a170902bd0400b0016f057b88c9sm4187564pls.26.2022.09.22.07.37.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Sep 2022 07:37:18 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <052ab7b7-ef09-a751-bb03-2cd5742083af@roeck-us.net>
+Date:   Thu, 22 Sep 2022 07:37:16 -0700
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v6] watchdog: add driver for StreamLabs USB watchdog
+ device
+Content-Language: en-US
+To:     Alexey Klimov <klimov.linux@gmail.com>, wim@linux-watchdog.org
+Cc:     linux-watchdog@vger.kernel.org, gregkh@linuxfoundation.org,
+        oneukum@suse.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, atishp@rivosinc.com,
+        atishp@atishpatra.org, yury.norov@gmail.com, aklimov@redhat.com,
+        atomlin@redhat.com, stern@rowland.harvard.edu
+References: <20220917030534.363192-1-klimov.linux@gmail.com>
+ <20220917031502.372319-1-klimov.linux@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220917031502.372319-1-klimov.linux@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a test for the newly introduced Hyper-V invariant TSC control feature:
-- HV_X64_MSR_TSC_INVARIANT_CONTROL is not available without
- HV_ACCESS_TSC_INVARIANT CPUID bit set and available with it.
-- BIT(0) of HV_X64_MSR_TSC_INVARIANT_CONTROL controls the filtering of
-architectural invariant TSC (CPUID.80000007H:EDX[8]) bit.
+On 9/16/22 20:15, Alexey Klimov wrote:
+> Hi Wim/Guenter,
+> 
+> For me it seems that there could be a potential race condition. I have to rely
+> on watchdog_active(&streamlabs_wdt->wdt_dev) function which tests the WDOG_ACTIVE
+> bit in struct watchdog_device->status member.
+> The watchdog_dev changes the state of the device with ->start() or ->ping() and
+> ->stop() methods and updates the WDOG_ACTIVE accordingly.
+> In {pre,post}_reset methods here I have to change the state of the device from
+> running to stopped and back to running conditionally, however WDOG_ACTIVE bit
+> could be updated in between these callbacks execution or starting/stopping
+> the device can race.
+> For instance, I see the potential dangerous race like this:
+> 
+> 	CPUX					CPUY
+> 
+> 	..				watchdog_stop() {
+> 	..					if (wdd->ops->stop) {
+> 							...
+> 							err = wdd->ops->stop(wdd)
+> 						}
+> usb_streamlabs_wdt_pre_reset() {
+> 	if (watchdog_active())
+> 		stop_command();			/* WDOG_ACTIVE bit is still set
+> 	...					 here indicating that watchdog is
+> }						 started, but ->stop() has already
+> 						 finished */
+> 	...
+> usb_streamlabs_wdt_post_reset() {
+> 	if (watchdog_active())
+> 		start_command();
+> }
+> 	...					/* WDOG_ACTIVE is updated here */
+> 						clear_bit(WDOG_ACTIVE, &wdd->status);
+> 					}
+> 
+> As a result, the watchdog subsystem "thinks" that watchdog is not active and should
+> not be pinged. However, the driver observed using watchdog_active() that watchdog
+> was active during {pre,post}_reset and restarted the device which will lead to
+> unexpected reset. It is very unlikely race to happen but consequence is fatal.
+> In other words, there are two independent paths leading to driver changing
+> the state of the watchdog device and one path relies on status that can be changed
+> by another path.
+> 
+> Thinking about that I see the following approaches:
+> 
+> 1. Introduce a variable in struct streamlabs_wdt that tracks the state of the
+> watchdog device itself and checking/updating the state of a device happens under
+> semaphore lock.
+> Obviously, this "internal" to the driver state variable should be used in
+> {pre,post}_reset. In case there will be other drivers (say, USB ones) they also
+> need to implement this.
+> 
+> or
+> 
+> 2. The updates to wdd->status should happen under wd_data->lock.
+> Currently, it is mutex-based. The acquiring and releasing the lock could be
+> exported for the drivers to use. The mutex lock probably should be switched
+> to a binary semaphore for that.
+> 
+> In such case, in pre_reset() for example, I would need to do:
+> static int pre_reset()
+> {
+> 	lock_wdd();
+> 	acquire_internal_driver_lock();
+> 	
+> 	if (watchdog_active())
+> 		stop_command();
+> }
+> 
+> static int post_reset()
+> {
+> 
+> 	if (watchdog_active())
+> 		start_command();
+> 
+> 	release_internal_driver_lock();
+> 	unlock_wdd();
+> }
+> 
+> There should be an order that we have to acquire subsystem wdd lock first, then
+> internal driver lock. Otherwise there could be deadlocks.
+> 
+> This could be done if you think it's more wiser move.
+> 
+> or
+> 
+> 3. The {pre,post}_reset callbacks should execute watchdog_dev.c subsystem functions
+> (not sure which functions exactly). Eventually, it will look similar to what is
+> described in the previous point with respect to locks order.
+> I meant something like this:
+> 
+> static int pre_reset()
+> {
+> 	watchdog_dev_pre_reset_prepare();
+> }
+> 
+> static int post_reset()
+> {
+> 	watchdog_dev_post_reset_done();
+> }
+> 
+> In watchdog_dev.c:
+> void watchdog_dev_pre_reset_prepare()
+> {
+> 	mutex_lock(&wd_data->lock);	<-- should be changed to semaphore too?
+> 
+> 	watchdog_stop(wdd);		<-- without updating WDOG_ACTIVE bit?
+> 					 or there should be a way to indicate
+> 					 to watchdog_dev_post_reset_done() if
+> 					 watchdog should be started or not
+> }
+> 
+> void watchdog_dev_post_reset_done()
+> {
+> 	if (watchdog_active())
+> 		watchdog_start(wdd);
+> 
+>          mutex_unlock(&wd_data->lock);
+> }
+> 
+> I didn't really thought about point 3 yet. For me personally the point 2 seems
+> the like right way to go but you have more experience with that. The exported
+> locks could be re-used by other drivers if needed in future.
+> In case of point 1 each USB driver should deal with {pre,post}_reset by themselves.
+> 
+> Any thoughts?
+> 
 
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
----
- .../selftests/kvm/include/x86_64/hyperv.h     |  3 +
- .../selftests/kvm/include/x86_64/processor.h  |  1 +
- .../selftests/kvm/x86_64/hyperv_features.c    | 58 +++++++++++++++++--
- 3 files changed, 58 insertions(+), 4 deletions(-)
+Please go with 1). pre_reset/post_reset functionality is a first in the watchdog
+subsystem and the first to require locking outside the scope of a function or set
+of functions. I'd rather avoid having to deal with the potential consequences
+in the watchdog core. We can do that if/when it becomes more common and after
+we have a good understanding of the potential consequences.
 
-diff --git a/tools/testing/selftests/kvm/include/x86_64/hyperv.h b/tools/testing/selftests/kvm/include/x86_64/hyperv.h
-index 843748dde1ff..8368d65afbe4 100644
---- a/tools/testing/selftests/kvm/include/x86_64/hyperv.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/hyperv.h
-@@ -232,4 +232,7 @@
- /* hypercall options */
- #define HV_HYPERCALL_FAST_BIT		BIT(16)
- 
-+/* HV_X64_MSR_TSC_INVARIANT_CONTROL bits */
-+#define HV_INVARIANT_TSC_EXPOSED               BIT_ULL(0)
-+
- #endif /* !SELFTEST_KVM_HYPERV_H */
-diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
-index 0cbc71b7af50..8d106380b0af 100644
---- a/tools/testing/selftests/kvm/include/x86_64/processor.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-@@ -128,6 +128,7 @@ struct kvm_x86_cpu_feature {
- #define	X86_FEATURE_GBPAGES		KVM_X86_CPU_FEATURE(0x80000001, 0, EDX, 26)
- #define	X86_FEATURE_RDTSCP		KVM_X86_CPU_FEATURE(0x80000001, 0, EDX, 27)
- #define	X86_FEATURE_LM			KVM_X86_CPU_FEATURE(0x80000001, 0, EDX, 29)
-+#define	X86_FEATURE_INVTSC		KVM_X86_CPU_FEATURE(0x80000007, 0, EDX, 8)
- #define	X86_FEATURE_RDPRU		KVM_X86_CPU_FEATURE(0x80000008, 0, EBX, 4)
- #define	X86_FEATURE_AMD_IBPB		KVM_X86_CPU_FEATURE(0x80000008, 0, EBX, 12)
- #define	X86_FEATURE_NPT			KVM_X86_CPU_FEATURE(0x8000000A, 0, EDX, 0)
-diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_features.c b/tools/testing/selftests/kvm/x86_64/hyperv_features.c
-index d4bd18bc580d..18b44450dfb8 100644
---- a/tools/testing/selftests/kvm/x86_64/hyperv_features.c
-+++ b/tools/testing/selftests/kvm/x86_64/hyperv_features.c
-@@ -46,20 +46,33 @@ struct hcall_data {
- 
- static void guest_msr(struct msr_data *msr)
- {
--	uint64_t ignored;
-+	uint64_t msr_val = 0;
- 	uint8_t vector;
- 
- 	GUEST_ASSERT(msr->idx);
- 
--	if (!msr->write)
--		vector = rdmsr_safe(msr->idx, &ignored);
--	else
-+	if (!msr->write) {
-+		vector = rdmsr_safe(msr->idx, &msr_val);
-+	} else {
- 		vector = wrmsr_safe(msr->idx, msr->write_val);
-+		if (!vector)
-+			msr_val = msr->write_val;
-+	}
- 
- 	if (msr->fault_expected)
- 		GUEST_ASSERT_2(vector == GP_VECTOR, msr->idx, vector);
- 	else
- 		GUEST_ASSERT_2(!vector, msr->idx, vector);
-+
-+	/* Invariant TSC bit appears when TSC invariant control MSR is written to */
-+	if (msr->idx == HV_X64_MSR_TSC_INVARIANT_CONTROL) {
-+		if (!this_cpu_has(HV_ACCESS_TSC_INVARIANT))
-+			GUEST_ASSERT(this_cpu_has(X86_FEATURE_INVTSC));
-+		else
-+			GUEST_ASSERT(this_cpu_has(X86_FEATURE_INVTSC) ==
-+				     !!(msr_val & HV_INVARIANT_TSC_EXPOSED));
-+	}
-+
- 	GUEST_DONE();
- }
- 
-@@ -114,6 +127,7 @@ static void guest_test_msrs_access(void)
- 	int stage = 0;
- 	vm_vaddr_t msr_gva;
- 	struct msr_data *msr;
-+	bool has_invtsc = kvm_cpu_has(X86_FEATURE_INVTSC);
- 
- 	while (true) {
- 		vm = vm_create_with_one_vcpu(&vcpu, guest_msr);
-@@ -425,6 +439,42 @@ static void guest_test_msrs_access(void)
- 			break;
- 
- 		case 44:
-+			/* MSR is not available when CPUID feature bit is unset */
-+			if (!has_invtsc)
-+				continue;
-+			msr->idx = HV_X64_MSR_TSC_INVARIANT_CONTROL;
-+			msr->write = 0;
-+			msr->fault_expected = 1;
-+			break;
-+		case 45:
-+			/* MSR is vailable when CPUID feature bit is set */
-+			if (!has_invtsc)
-+				continue;
-+			vcpu_set_cpuid_feature(vcpu, HV_ACCESS_TSC_INVARIANT);
-+			msr->idx = HV_X64_MSR_TSC_INVARIANT_CONTROL;
-+			msr->write = 0;
-+			msr->fault_expected = 0;
-+			break;
-+		case 46:
-+			/* Writing bits other than 0 is forbidden */
-+			if (!has_invtsc)
-+				continue;
-+			msr->idx = HV_X64_MSR_TSC_INVARIANT_CONTROL;
-+			msr->write = 1;
-+			msr->write_val = 0xdeadbeef;
-+			msr->fault_expected = 1;
-+			break;
-+		case 47:
-+			/* Setting bit 0 enables the feature */
-+			if (!has_invtsc)
-+				continue;
-+			msr->idx = HV_X64_MSR_TSC_INVARIANT_CONTROL;
-+			msr->write = 1;
-+			msr->write_val = 1;
-+			msr->fault_expected = 0;
-+			break;
-+
-+		default:
- 			kvm_vm_free(vm);
- 			return;
- 		}
--- 
-2.37.3
+Thanks,
+Guenter
+
+> Thanks,
+> Alexey
 
