@@ -2,101 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 223265E5D97
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 10:37:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45E095E5D9C
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 10:38:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230092AbiIVIhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 04:37:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60234 "EHLO
+        id S230124AbiIVIiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 04:38:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiIVIhQ (ORCPT
+        with ESMTP id S229641AbiIVIiU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 04:37:16 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C49C6A0612
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 01:37:15 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id y3so19413884ejc.1
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 01:37:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=TwVaZJkLdwmom6Stee69RLiTEJKn72psfncdzouODpI=;
-        b=jdxAJwiTAFGS0B//ixBkSccbSUKqSmHlo7dcQGhPy0FAOjJQPeqG0s8qNE6vwXngsd
-         Sx18XH3h/nVh3UKgU0cvSlBmvr/z2TyRoG3ptmTNRK7o5QMLyfKSG0NMAN8+CNSnrysp
-         odOzxlwAzfZfZDBLxLhGiWXdSrZJuOD66dWxlnUOEowakrWXUjs19IsxP6WsH4kBGJqG
-         9oCdbtZkjfkKD8tEft8Dk1bslOuxZ0x30lce+IyVpKyg78G86X+4fShmiJEiUEdZ+48M
-         KUAc3k/KZ3oFWs8dBRycJQFgUM81d/pIrCLHY8xRG1UGlF2jkwaU2+2a5A95K9zxSfms
-         +j4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=TwVaZJkLdwmom6Stee69RLiTEJKn72psfncdzouODpI=;
-        b=wWTMI+rrBfm9lvdkRj2hYqa6uc4E2hoju1E6TQgCUY96kyW1vD/vjpJV4wnIdAKXKf
-         4OiJ6MOSnQv1BVjvTSFhjR56LxS6BcVk92GCpIUUkOu+1OvR9KhhSkmSXtG3HAu0GtW+
-         YT+lmPR4DrJJ2coQjbvHzQfeXxtYq3Ke0PUFmPQIgcfoTPYR5DeXs1RG2XRj7mKWYjBG
-         xWcvdsEC+m8nuZipsCts2Ixxp4YytgAvWInpzO5mNwEfPwnMUo6ddg1psU8n04dTyDHR
-         fvWfF+uZrYbpoOUmHpBY2YI68mvFtV3wxJiHNfBAOXe2YEEZxahwl4K9K2z3QXNFpECA
-         0+aA==
-X-Gm-Message-State: ACrzQf3VcQe5ZAOQl8+n0iDkGlg3vFyDKulIVkfwP8vKucOWP2kkeawB
-        ztsz5LSEDBatsHcFPmsKhVU0TRfcbY+ZWuYNgUOR7Q==
-X-Google-Smtp-Source: AMsMyM70aN5WdtKZVMkYxt4MFoCnTTjO1UEouE/n+cIuMmbkZXDhle7VhmG91bHu0r0RObEWsdg/5pI21oePMCVrOm0=
-X-Received: by 2002:a17:907:9807:b0:781:feee:f87c with SMTP id
- ji7-20020a170907980700b00781feeef87cmr1812708ejc.101.1663835834350; Thu, 22
- Sep 2022 01:37:14 -0700 (PDT)
+        Thu, 22 Sep 2022 04:38:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70149A59B6;
+        Thu, 22 Sep 2022 01:38:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 25346B83134;
+        Thu, 22 Sep 2022 08:38:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F6B2C433D6;
+        Thu, 22 Sep 2022 08:38:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1663835896;
+        bh=ZXqrm8nedeHyjJHSE+1GJ5DZF7ttxhR/iupCB+jykP4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sLVTqeua8VBBS9O2uBUp1F+RCRb3jzgT/qYn8/Erj5crjgRsyAtxSy76D5wqSuehI
+         ky9/I44ksfKvi5sSHy7PazF5U81CS9thdVN+6Zzm6o2+vNMFMFDT7elLAZup43khua
+         W/eR3vgb0Y3Make/VdghCWlJmdQ8796Skliks+5Q=
+Date:   Thu, 22 Sep 2022 10:38:14 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Logan Gunthorpe <logang@deltatee.com>,
+        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-mm@kvack.org, Dan Williams <dan.j.williams@intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Don Dutile <ddutile@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Minturn Dave B <dave.b.minturn@intel.com>,
+        Jason Ekstrand <jason@jlekstrand.net>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Xiong Jianxin <jianxin.xiong@intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Martin Oliveira <martin.oliveira@eideticom.com>,
+        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Stephen Bates <sbates@raithlin.com>
+Subject: Re: [PATCH v9 7/8] PCI/P2PDMA: Allow userspace VMA allocations
+ through sysfs
+Message-ID: <Yywe9rBMB6hlUwqw@kroah.com>
+References: <20220825152425.6296-8-logang@deltatee.com>
+ <YxDb2MyRx6o/wDAz@kroah.com>
+ <4a4bca1e-bebf-768f-92d4-92eb8ae714e1@deltatee.com>
+ <YxDhEO9ycZDTnbZm@kroah.com>
+ <cc9a24a8-dd3a-9d21-d9a7-5ee4b0ad7a57@deltatee.com>
+ <YxD7uZYaV75gJS9d@kroah.com>
+ <fb9d7948-43fe-87c5-5275-70f280181ad1@deltatee.com>
+ <YxGad5h2Nn/Ejslc@kroah.com>
+ <db8cd049-c78b-1aa0-dcd0-0feb8c6cb25c@deltatee.com>
+ <20220920064613.GB17325@lst.de>
 MIME-Version: 1.0
-References: <20220905145555.674800-1-etienne.carriere@linaro.org>
-In-Reply-To: <20220905145555.674800-1-etienne.carriere@linaro.org>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 22 Sep 2022 10:37:03 +0200
-Message-ID: <CAMRc=Mcq3u+1JjvXJ2X774vknq-LOeCfE7hLj2As7Q5A13tx0w@mail.gmail.com>
-Subject: Re: [PATCH v3] dt-binding: gpio: publish binding IDs under dual license
-To:     Etienne Carriere <etienne.carriere@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-gpio@vger.kernel.org, Stephen Warren <swarren@nvidia.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220920064613.GB17325@lst.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 5, 2022 at 4:57 PM Etienne Carriere
-<etienne.carriere@linaro.org> wrote:
->
-> Changes gpio.h DT binding header file to be published under GPLv2 or
-> BSD-2-Clause license terms. This change allows this GPIO generic
-> bindings header file to be used in software components as bootloaders
-> and OSes that are not published under GPLv2 terms.
->
-> All contributors to gpio.h file in copy.
->
-> Cc: Stephen Warren <swarren@nvidia.com>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Laxman Dewangan <ldewangan@nvidia.com>
-> Cc: Andrew Jeffery <andrew@aj.id.au>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Nuno S=C3=A1 <nuno.sa@analog.com>
-> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
->
-> Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-> ---
+On Tue, Sep 20, 2022 at 08:46:13AM +0200, Christoph Hellwig wrote:
+> On Fri, Sep 02, 2022 at 12:46:54PM -0600, Logan Gunthorpe wrote:
+> > See the diff at the bottom of this email. I can apply it on top of this
+> > patch, but IMO it is neither easier to follow nor maintain. Unless you 
+> > have a different suggestion...
+> 
+> Greg, can you chime in on this?  Besides this item we just have a few
+> cosmetic bits left I think, and I'd really like to get the series into
+> this merge window.
+> 
 
-Applied, thanks!
+I don't seem to have this in my inbox at all anymore, sorry.
 
-Bart
+The original should be fine, Logan, thanks for trying to split it out a
+bit more.  So this can be taken as-is for 6.1-rc1.
+
+thanks,
+
+greg k-h
