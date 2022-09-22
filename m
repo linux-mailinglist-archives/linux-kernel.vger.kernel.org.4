@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41CB75E60ED
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 13:26:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA7275E60EB
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 13:26:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229687AbiIVLZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 07:25:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46022 "EHLO
+        id S231402AbiIVLZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 07:25:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231402AbiIVLZS (ORCPT
+        with ESMTP id S231549AbiIVLZS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 22 Sep 2022 07:25:18 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 889E3ABD6D;
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9C87AE9E3;
         Thu, 22 Sep 2022 04:25:16 -0700 (PDT)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MYCYX3FQ4zpVCp;
-        Thu, 22 Sep 2022 19:22:24 +0800 (CST)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MYCWN3jdRzMpM5;
+        Thu, 22 Sep 2022 19:20:32 +0800 (CST)
 Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 22 Sep 2022 19:25:14 +0800
+ 15.1.2375.31; Thu, 22 Sep 2022 19:25:15 +0800
 Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
  (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 22 Sep
- 2022 19:25:13 +0800
+ 2022 19:25:14 +0800
 From:   Yu Kuai <yukuai3@huawei.com>
 To:     <jack@suse.cz>, <paolo.valente@linaro.org>, <axboe@kernel.dk>
 CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <yukuai3@huawei.com>, <yukuai1@huaweicloud.com>,
         <yi.zhang@huawei.com>
-Subject: [PATCH v3 4/5] blk-wbt: don't enable throttling if default elevator is bfq
-Date:   Thu, 22 Sep 2022 19:35:57 +0800
-Message-ID: <20220922113558.1085314-5-yukuai3@huawei.com>
+Subject: [PATCH v3 5/5] elevator: remove redundant code in elv_unregister_queue()
+Date:   Thu, 22 Sep 2022 19:35:58 +0800
+Message-ID: <20220922113558.1085314-6-yukuai3@huawei.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220922113558.1085314-1-yukuai3@huawei.com>
 References: <20220922113558.1085314-1-yukuai3@huawei.com>
@@ -52,92 +52,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit b5dc5d4d1f4f ("block,bfq: Disable writeback throttling") tries to
-disable wbt for bfq, it's done by calling wbt_disable_default() in
-bfq_init_queue(). However, wbt is still enabled if default elevator is
-bfq:
-
-device_add_disk
- elevator_init_mq
-  bfq_init_queue
-   wbt_disable_default -> done nothing
-
- blk_register_queue
-  wbt_enable_default -> wbt is enabled
-
-Fix the problem by adding a new flag ELEVATOR_FLAG_DISBALE_WBT, bfq
-will set the flag in bfq_init_queue, and following wbt_enable_default()
-won't enable wbt while the flag is set.
+"elevator_queue *e" is already declared and initialized in the beginning
+of elv_unregister_queue().
 
 Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 ---
- block/bfq-iosched.c | 2 ++
- block/blk-wbt.c     | 8 +++++++-
- block/elevator.h    | 3 ++-
- 3 files changed, 11 insertions(+), 2 deletions(-)
+ block/elevator.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-index fec52968fe07..f67ed271baa9 100644
---- a/block/bfq-iosched.c
-+++ b/block/bfq-iosched.c
-@@ -7037,6 +7037,7 @@ static void bfq_exit_queue(struct elevator_queue *e)
+diff --git a/block/elevator.c b/block/elevator.c
+index 7cb61820cfa0..0a72d6fbbdcc 100644
+--- a/block/elevator.c
++++ b/block/elevator.c
+@@ -524,8 +524,6 @@ void elv_unregister_queue(struct request_queue *q)
+ 	lockdep_assert_held(&q->sysfs_lock);
  
- #ifdef CONFIG_BFQ_GROUP_IOSCHED
- 	blkcg_deactivate_policy(bfqd->queue, &blkcg_policy_bfq);
-+	clear_bit(ELEVATOR_FLAG_DISABLE_WBT, &e->flags);
- 	wbt_enable_default(bfqd->queue);
- #else
- 	spin_lock_irq(&bfqd->lock);
-@@ -7191,6 +7192,7 @@ static int bfq_init_queue(struct request_queue *q, struct elevator_type *e)
- 	blk_queue_flag_set(QUEUE_FLAG_SQ_SCHED, q);
- 
- #ifdef CONFIG_BFQ_GROUP_IOSCHED
-+	set_bit(ELEVATOR_FLAG_DISABLE_WBT, &eq->flags);
- 	wbt_disable_default(q);
- #endif
- 	blk_stat_enable_accounting(q);
-diff --git a/block/blk-wbt.c b/block/blk-wbt.c
-index 68851c2c02d2..279f8dc1e952 100644
---- a/block/blk-wbt.c
-+++ b/block/blk-wbt.c
-@@ -27,6 +27,7 @@
- 
- #include "blk-wbt.h"
- #include "blk-rq-qos.h"
-+#include "elevator.h"
- 
- #define CREATE_TRACE_POINTS
- #include <trace/events/wbt.h>
-@@ -645,9 +646,14 @@ void wbt_set_write_cache(struct request_queue *q, bool write_cache_on)
-  */
- void wbt_enable_default(struct request_queue *q)
- {
--	struct rq_qos *rqos = wbt_rq_qos(q);
-+	struct rq_qos *rqos;
-+
-+	if (q->elevator &&
-+	    test_bit(ELEVATOR_FLAG_DISABLE_WBT, &q->elevator->flags))
-+		return;
- 
- 	/* Throttling already enabled? */
-+	rqos = wbt_rq_qos(q);
- 	if (rqos) {
- 		if (RQWB(rqos)->enable_state == WBT_STATE_OFF_DEFAULT)
- 			RQWB(rqos)->enable_state = WBT_STATE_ON_DEFAULT;
-diff --git a/block/elevator.h b/block/elevator.h
-index ed574bf3e629..75382471222d 100644
---- a/block/elevator.h
-+++ b/block/elevator.h
-@@ -104,7 +104,8 @@ struct elevator_queue
- 	DECLARE_HASHTABLE(hash, ELV_HASH_BITS);
- };
- 
--#define ELEVATOR_FLAG_REGISTERED 0
-+#define ELEVATOR_FLAG_REGISTERED	0
-+#define ELEVATOR_FLAG_DISABLE_WBT	1
- 
- /*
-  * block elevator interface
+ 	if (e && test_and_clear_bit(ELEVATOR_FLAG_REGISTERED, &e->flags)) {
+-		struct elevator_queue *e = q->elevator;
+-
+ 		kobject_uevent(&e->kobj, KOBJ_REMOVE);
+ 		kobject_del(&e->kobj);
+ 	}
 -- 
 2.31.1
 
