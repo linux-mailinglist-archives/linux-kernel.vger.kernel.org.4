@@ -2,83 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A96B85E705D
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 01:56:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3786C5E7061
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 01:59:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbiIVX4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 19:56:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58124 "EHLO
+        id S229624AbiIVX7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 19:59:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbiIVX4N (ORCPT
+        with ESMTP id S229521AbiIVX7I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 19:56:13 -0400
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D637AFAC0;
-        Thu, 22 Sep 2022 16:56:12 -0700 (PDT)
-Received: by mail-pl1-f175.google.com with SMTP id w13so10293329plp.1;
-        Thu, 22 Sep 2022 16:56:12 -0700 (PDT)
+        Thu, 22 Sep 2022 19:59:08 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75AFA10F71E
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 16:59:07 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id a5-20020a17090aa50500b002008eeb040eso6562190pjq.1
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 16:59:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=jm63ZFlCF83VQksqmhDH0eSFayNoZCWcO8SHr0tn98E=;
+        b=H9ODMIeIS2kVC20Ym4nsBzAbyNxkF5who3jm54e5N/VCcHIuvoShYmWdcmk/x3idGR
+         ictEjUGxq4S+Nh1fAr9br09TyWZoq3NMEVTbcHXM6fxtCymLKdpgucc/DBdu9hzfjSYe
+         yIEUh7eFr4YhoBE5EU4Qg42XuDlzWYIyy2ssEsLSwW0UZJcykjhR4UuZGtYBJCyag4Y7
+         xHEQusUdJMZR6egB5rsqdcChRTez5k2RmPQuE0We3CrQb/Ds44mdaXnkmC8I5L+gMlc4
+         mAisi2yI/4dOSGDdiIMmSUK31oVK/wGOtJccXnlSHDeRNc5+S32xfmKnISlEclb2pceO
+         4oUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=W2+hY5lHfF8Yuo41plQsF/0eXxPmqJupnSDFH4YELL4=;
-        b=mVRR4aZJ5g4MCHjpo4FP5u3OBVgKIEPrZtKX2L4xHqoi0Ur2e63hq9FvaowJAy7kWQ
-         jnLqufVdqloRtEM+eYE+y4MOmy1+dlo0RxtVgdSUtMYtItd7lvscp7aYAEb47cyJ/I/1
-         DQvHNO0UiANbq0iEnjs4IxBjshM9X6dIabZUBo5Dq/aLikTSROX1hPYeifO/3WDC6BJt
-         kCU6S0fvjPo971XxYN1fxa9zWRBfND/X2dnCvrDbYttpqbr1WwMlat196gZ2bSVl2oTy
-         QGTyKPJcpYyigGfVHnJreSBnJjusNmuayjmchvndoSWQlJ2wlXoy9G7+9WhBLlhtort3
-         j63Q==
-X-Gm-Message-State: ACrzQf2m0wEP9Ai1snI8wqYcWcASikRsfSNlPmbcwCqVXcibtKQn/2QC
-        IdBzIyd2FJOKkzol2FHy1gg=
-X-Google-Smtp-Source: AMsMyM7DnGl8Usys7cprZQSwOFa/NlnQp69DKqLnRIqNLOSTU/oMTFEKEH4OrfofFw1WRmQVRwtsKg==
-X-Received: by 2002:a17:902:d58f:b0:179:b756:6f5e with SMTP id k15-20020a170902d58f00b00179b7566f5emr4818263plh.1.1663890971926;
-        Thu, 22 Sep 2022 16:56:11 -0700 (PDT)
-Received: from [192.168.3.219] ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id u10-20020a170903124a00b001782a0d3eeasm4698194plh.115.2022.09.22.16.56.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Sep 2022 16:56:10 -0700 (PDT)
-Message-ID: <8fd1d8b1-9f43-eb03-4a7f-187723d1c483@acm.org>
-Date:   Thu, 22 Sep 2022 16:56:08 -0700
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=jm63ZFlCF83VQksqmhDH0eSFayNoZCWcO8SHr0tn98E=;
+        b=ky89C6IOI4wDJ+s2r9aog/6uNMB0UKc5pAohHzKfjnqnlylai9QSrLa9IfcOoNpe3q
+         rKaMXT7Wz8dOaw6sWLrRbrT5j14kTEjUL6K3jIoFlAa/OCC7hOer53T55C5gG9pd+Fhe
+         H5/7fbe2kN+wDkAV2arD/xDbW+5CcB8mBEdsvIjqcCGMcpfXqqY/tUC7ydDPEJaZArjH
+         GCy9p49RLfO55AlA5wajXIDIvz4lFYdfaaHjcUqS6nsSBlkTgn1JXmM0Z1F8QF4Ao/vi
+         QGw0l6yDmV0ECNPGXX9YVmkmG7dFKjmZgNaIiMtkKuYJCUsxBLnc7nty3zSOXytwT2bz
+         porg==
+X-Gm-Message-State: ACrzQf2odWxV4SChEMHThe72yjfw8k4bMyFvnH47nAOoQ5XFGos5RoHA
+        jzGYLJoPqCjqGJiAjcclMfJ6Eg==
+X-Google-Smtp-Source: AMsMyM7TFMK3isA+fp7iIw4EoPDYXSb+wg12181ltiBDNGXSmwYGIpaDxLSwOrwPn3dWTn0BpVpbMA==
+X-Received: by 2002:a17:90b:2802:b0:1fb:4efd:a1ca with SMTP id qb2-20020a17090b280200b001fb4efda1camr6382460pjb.198.1663891146753;
+        Thu, 22 Sep 2022 16:59:06 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id h6-20020aa79f46000000b00540ffb28da0sm5214850pfr.91.2022.09.22.16.59.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Sep 2022 16:59:06 -0700 (PDT)
+Date:   Thu, 22 Sep 2022 23:59:03 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>
+Subject: Re: [PATCH v3 5/7] KVM: x86/pmu: Defer counter emulated overflow via
+ pmc->prev_counter
+Message-ID: <Yyz2x5bSR/7ZTV0R@google.com>
+References: <20220831085328.45489-1-likexu@tencent.com>
+ <20220831085328.45489-6-likexu@tencent.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: Please further explain Linux's "zoned storage" roadmap [was: Re:
- [PATCH v14 00/13] support zoned block devices with non-power-of-2 zone sizes]
-Content-Language: en-US
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Mike Snitzer <snitzer@redhat.com>,
-        Pankaj Raghav <p.raghav@samsung.com>
-Cc:     agk@redhat.com, snitzer@kernel.org, axboe@kernel.dk, hch@lst.de,
-        pankydev8@gmail.com, gost.dev@samsung.com,
-        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, dm-devel@redhat.com,
-        Johannes.Thumshirn@wdc.com, jaegeuk@kernel.org,
-        matias.bjorling@wdc.com
-References: <CGME20220920091120eucas1p2c82c18f552d6298d24547cba2f70b7fc@eucas1p2.samsung.com>
- <20220920091119.115879-1-p.raghav@samsung.com> <YytJhEywBhqcr7MX@redhat.com>
- <7dd9dbc0-b08b-fa47-5452-d448d86ca56b@opensource.wdc.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <7dd9dbc0-b08b-fa47-5452-d448d86ca56b@opensource.wdc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220831085328.45489-6-likexu@tencent.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/21/22 16:55, Damien Le Moal wrote:
-> But again, that all depends on if Pankaj patch series is accepted, that
-> is, on everybody accepting that we lift the power-of-2 zone size constraint.
+On Wed, Aug 31, 2022, Like Xu wrote:
+> diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
+> index 7f391750ebd3..3c42df3a55ff 100644
+> --- a/arch/x86/kvm/pmu.c
+> +++ b/arch/x86/kvm/pmu.c
+> @@ -349,6 +349,10 @@ void kvm_pmu_handle_event(struct kvm_vcpu *vcpu)
+>  		}
+>  
+>  		reprogram_counter(pmc);
+> +
+> +		if (pmc->counter < pmc->prev_counter)
+> +			__kvm_perf_overflow(pmc, false);
 
-The companies that are busy with implementing zoned storage for UFS 
-devices are asking for kernel support for non-power-of-2 zone sizes.
+I would prefer to stick this in repgrogram_counter(), after pausing the counter
+and checking that the event is enabled, but before the actual programming/resume.
 
-Thanks,
+I don't think false positives are actually possible, especially without my fixes
+for clearing reprogram_pmi bits (incoming), but I don't like the twisty logic
+that's required to suss out that prev_counter can be non-zero if and only if the
+PMC is enabled.
 
-Bart.
+The bigger issue is that calling __kvm_perf_overflow() here can get false negatives.
+If reprogramming fails due to contention, the reprogram_pmi bit will be left set
+and so this check in __kvm_perf_overflow() will suppress the PMI.
+
+	if (test_and_set_bit(pmc->idx, pmu->reprogram_pmi))
+		return;
+
+And the related issue is that because __kvm_perf_overflow() sets the bit and
+makes another KVM_REQ_PMU, overflow will cause KVM to reprogram the counter a
+second time.  That's especially inefficient since KVM will get quite far into the
+VM-Enter flow before detecting the new event.
+
+So, I think this? (goes on top of patches I'm about to post)
+
+static void reprogram_counter(struct kvm_pmc *pmc)
+{
+	struct kvm_pmu *pmu = pmc_to_pmu(pmc);
+	u64 eventsel = pmc->eventsel;
+	u64 new_config = eventsel;
+	u8 fixed_ctr_ctrl;
+
+	pmc_pause_counter(pmc);
+
+	if (!pmc_speculative_in_use(pmc) || !pmc_is_enabled(pmc))
+		goto reprogram_complete;
+
+	if (!check_pmu_event_filter(pmc))
+		goto reprogram_complete;
+
+	if (pmc->counter < pmc->prev_counter)
+		__kvm_perf_overflow(pmc, false);
+
+	if (eventsel & ARCH_PERFMON_EVENTSEL_PIN_CONTROL)
+		printk_once("kvm pmu: pin control bit is ignored\n");
+
+	if (pmc_is_fixed(pmc)) {
+		fixed_ctr_ctrl = fixed_ctrl_field(pmu->fixed_ctr_ctrl,
+						  pmc->idx - INTEL_PMC_IDX_FIXED);
+		if (fixed_ctr_ctrl & 0x1)
+			eventsel |= ARCH_PERFMON_EVENTSEL_OS;
+		if (fixed_ctr_ctrl & 0x2)
+			eventsel |= ARCH_PERFMON_EVENTSEL_USR;
+		if (fixed_ctr_ctrl & 0x8)
+			eventsel |= ARCH_PERFMON_EVENTSEL_INT;
+		new_config = (u64)fixed_ctr_ctrl;
+	}
+
+	if (pmc->current_config == new_config && pmc_resume_counter(pmc))
+		goto reprogram_complete;
+
+	pmc_release_perf_event(pmc);
+
+	pmc->current_config = new_config;
+
+	/*
+	 * If reprogramming fails, e.g. due to contention, leave the counter's
+	 * regprogram bit set, i.e. opportunistically try again on the next PMU
+	 * refresh.  Don't make a new request as doing so can stall the guest
+	 * if reprogramming repeatedly fails.
+	 */
+	if (pmc_reprogram_counter(pmc, PERF_TYPE_RAW,
+				  (eventsel & pmu->raw_event_mask),
+				  !(eventsel & ARCH_PERFMON_EVENTSEL_USR),
+				  !(eventsel & ARCH_PERFMON_EVENTSEL_OS),
+				  eventsel & ARCH_PERFMON_EVENTSEL_INT))
+		return;
+
+reprogram_complete:
+	clear_bit(pmc->idx, (unsigned long *)&pmc_to_pmu(pmc)->reprogram_pmi);
+	pmc->prev_counter = 0;
+}
+
+
+static inline void __kvm_perf_overflow(struct kvm_pmc *pmc, bool in_pmi)
+{
+	struct kvm_pmu *pmu = pmc_to_pmu(pmc);
+	bool skip_pmi = false;
+
+	if (pmc->perf_event && pmc->perf_event->attr.precise_ip) {
+		if (!in_pmi) {
+			/*
+			 * TODO: KVM is currently _choosing_ to not generate records
+			 * for emulated instructions, avoiding BUFFER_OVF PMI when
+			 * there are no records. Strictly speaking, it should be done
+			 * as well in the right context to improve sampling accuracy.
+			 */
+			skip_pmi = true;
+		} else {
+			/* Indicate PEBS overflow PMI to guest. */
+			skip_pmi = __test_and_set_bit(GLOBAL_STATUS_BUFFER_OVF_BIT,
+						      (unsigned long *)&pmu->global_status);
+		}
+	} else {
+		__set_bit(pmc->idx, (unsigned long *)&pmu->global_status);
+	}
+
+	if (!pmc->intr || skip_pmi)
+		return;
+
+	/*
+	 * Inject PMI. If vcpu was in a guest mode during NMI PMI
+	 * can be ejected on a guest mode re-entry. Otherwise we can't
+	 * be sure that vcpu wasn't executing hlt instruction at the
+	 * time of vmexit and is not going to re-enter guest mode until
+	 * woken up. So we should wake it, but this is impossible from
+	 * NMI context. Do it from irq work instead.
+	 */
+	if (in_pmi && !kvm_handling_nmi_from_guest(pmc->vcpu))
+		irq_work_queue(&pmc_to_pmu(pmc)->irq_work);
+	else
+		kvm_make_request(KVM_REQ_PMI, pmc->vcpu);
+}
+
+static void kvm_perf_overflow(struct perf_event *perf_event,
+			      struct perf_sample_data *data,
+			      struct pt_regs *regs)
+{
+	struct kvm_pmc *pmc = perf_event->overflow_handler_context;
+
+	/*
+	 * Ignore overflow events for counters that are scheduled to be
+	 * reprogrammed, e.g. if a PMI for the previous event races with KVM's
+	 * handling of a related guest WRMSR.
+	 */
+	if (test_and_set_bit(pmc->idx, pmc_to_pmu(pmc)->reprogram_pmi))
+		return;
+
+	__kvm_perf_overflow(pmc, true);
+
+	kvm_make_request(KVM_REQ_PMU, pmc->vcpu);
+}
+
