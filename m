@@ -2,107 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C73E5E6162
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 13:41:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14F0E5E6178
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 13:42:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231469AbiIVLli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 07:41:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44372 "EHLO
+        id S231642AbiIVLmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 07:42:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230143AbiIVLlc (ORCPT
+        with ESMTP id S231544AbiIVLmk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 07:41:32 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EDE2D6911;
-        Thu, 22 Sep 2022 04:41:30 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id r7so15116210wrm.2;
-        Thu, 22 Sep 2022 04:41:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=rIDRC4Nj+ZNFkv/Gc+nXqgppwjKrH0iBitRrKcSv1L4=;
-        b=UWvZ0PJi7tgJOd1sE7DPqHIK/KKrPT1bjEj3WKjxP6Hml7SBUpJut8/f5jwcyZ5KC8
-         h2FRKu1JN94JW/SYi0oQ3mcCxylKOoz+EQPP8dCY4tWgjIXCW/qCJBJxB69wS2eDyC3X
-         92si/mFf95Rp511Usq6OCFZWMAtspKojBzI/6IOP/+wL8FPrBWmYC1FKR65nJU6zr/gL
-         03QQYoD4iozWnJXAOyyGSj5JzvcaQFynm+RK8md9yzn5lYdJVyzxms6zoeFhvtkZqip5
-         zqZ851fPwWjVjLVk5mGzb1D8JhrbLrPpwLSiGVUTKNDsPOJX5s7/zyNRtkiMBGYfJ/zB
-         Aw1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=rIDRC4Nj+ZNFkv/Gc+nXqgppwjKrH0iBitRrKcSv1L4=;
-        b=dglRsZWxa6MQPvJ5ir+TYD0apQzoEVL2C1qcQxx7dcfMZXHSsXIKMVY55tMGRMm8vx
-         Fe/Kv/9q+AnWdpdBglDwb/Q9JaeUELbHgOQXC5HxE9VB+BK7jYN24CiPcqlaIS3K7Dy3
-         xR244VRczknJok3nHqQkY72m4MjSvsbI0FTM62no1hbjvFrn3tO/7jN8edFF8su5m2tC
-         OKpDeJal9J5P6gvE9DPbQtw2ALATOe0eTahSzYHfnM3E3TUrLFyzEOlgRtq3Ont998my
-         xEWfmMMLLJfJNZ2UyUBmfj4dVIbOPdS1Gko+E/q08aY2Xuqj5T69kJdwxrt1BDAKgTMA
-         WnRg==
-X-Gm-Message-State: ACrzQf2MOgfabUHlUkhxYPrNhvS3T7FiFTAYRJBuQO8L9sc5TC8DkEvB
-        UeVi63n0cMuE66eLmQ/8JEY=
-X-Google-Smtp-Source: AMsMyM7ICzvm8GZjO4En0ZR/EiftwPrVh2tH/GPJmvd26zpAw0pSaSjscb64sIsBWJ0eXJQxvVrxkQ==
-X-Received: by 2002:a5d:6d81:0:b0:226:e0a4:a023 with SMTP id l1-20020a5d6d81000000b00226e0a4a023mr1691166wrs.660.1663846888418;
-        Thu, 22 Sep 2022 04:41:28 -0700 (PDT)
-Received: from felia.fritz.box (200116b826ee9d002d7918fb932a6deb.dip.versatel-1u1.de. [2001:16b8:26ee:9d00:2d79:18fb:932a:6deb])
-        by smtp.gmail.com with ESMTPSA id h2-20020adffa82000000b0022584c82c80sm4761903wrr.19.2022.09.22.04.41.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 04:41:27 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Benjamin Poirier <bpoirier@nvidia.com>,
-        "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org
-Cc:     Jiri Pirko <jiri@resnulli.us>, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] MAINTAINERS: rectify file entry in TEAM DRIVER
-Date:   Thu, 22 Sep 2022 13:40:53 +0200
-Message-Id: <20220922114053.10883-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 22 Sep 2022 07:42:40 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58ADE9B85E;
+        Thu, 22 Sep 2022 04:42:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663846951; x=1695382951;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=V13C94xekIQZ8YQVuEe807wmoeTFJXbUhciBFGunQ78=;
+  b=OOjezHmT45MbcXUtDzuS5VwO8tCL6YrPdlS2CzOUsTKzAvDAW46GfCFv
+   PhJYikeqiNNHXKyW31OlFCfzDkT9NSgRawE40qZ9VGqzq8NpyzecIc5g1
+   ey4PXgpmdp8h7jKEEpUknrCE6NERXND2kIOWdF8Q2t1Ax4AOQHXIfJU4w
+   cdmEnxu+giSxF0Yst0msXUrha707ovylqjoCBvAFDRMKXGNBtkkD7CxL4
+   swOBflx0Yf9WJ29l3pmO1quox0MmHirafLke3AkTjPF/KvhmvI+nCWRuZ
+   3LBVH5npLwmJICu4lBLryl33mDf0SZLbww/qR4eC4+dGC5DImZizZumVU
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="301120150"
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="301120150"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 04:42:30 -0700
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="652935976"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.59.41])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 04:42:27 -0700
+Message-ID: <abac9b14-ca2f-210e-5a09-3c4f56846a9b@intel.com>
+Date:   Thu, 22 Sep 2022 14:42:23 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v3 1/4] mmc: sdhci-tegra: Separate Tegra194 and Tegra234
+ SoC data
+Content-Language: en-US
+To:     Prathamesh Shete <pshete@nvidia.com>, ulf.hansson@linaro.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        p.zabel@pengutronix.de, linux-mmc@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     anrao@nvidia.com, smangipudi@nvidia.com, kyarlagadda@nvidia.com
+References: <20220920123752.21027-1-pshete@nvidia.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20220920123752.21027-1-pshete@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit bbb774d921e2 ("net: Add tests for bonding and team address list
-management") adds the net team driver tests in the directory:
+On 20/09/22 15:37, Prathamesh Shete wrote:
+> Create new SoC data structure for Tegra234 platforms.
+> Additional features, tap value configurations are added/
+> updated for Tegra234 platform hence separate Tegra194 and
+> Tegra234 SoC data.
+> 
+> Signed-off-by: Aniruddha Tvs Rao <anrao@nvidia.com>
+> Signed-off-by: Prathamesh Shete <pshete@nvidia.com>
 
-  tools/testing/selftests/drivers/net/team/
+Acked-by: Adrian Hunter <adrian.hunter@intel.com>
 
-The file entry in MAINTAINERS for the TEAM DRIVER however refers to:
-
-  tools/testing/selftests/net/team/
-
-Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
-broken file pattern.
-
-Repair this file entry in TEAM DRIVER.
-
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
-Benjamin, please ack.
-
-David, please pick this minor clean-up patch on top of the commit above.
-
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index c9e8c850e0b8..635094fc523b 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -20099,7 +20099,7 @@ S:	Supported
- F:	drivers/net/team/
- F:	include/linux/if_team.h
- F:	include/uapi/linux/if_team.h
--F:	tools/testing/selftests/net/team/
-+F:	tools/testing/selftests/drivers/net/team/
- 
- TECHNOLOGIC SYSTEMS TS-5500 PLATFORM SUPPORT
- M:	"Savoir-faire Linux Inc." <kernel@savoirfairelinux.com>
--- 
-2.17.1
+> ---
+>  drivers/mmc/host/sdhci-tegra.c | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+> 
+> diff --git a/drivers/mmc/host/sdhci-tegra.c b/drivers/mmc/host/sdhci-tegra.c
+> index 2d2d8260c681..a6c5bbae77b4 100644
+> --- a/drivers/mmc/host/sdhci-tegra.c
+> +++ b/drivers/mmc/host/sdhci-tegra.c
+> @@ -1556,7 +1556,21 @@ static const struct sdhci_tegra_soc_data soc_data_tegra194 = {
+>  	.max_tap_delay = 139,
+>  };
+>  
+> +static const struct sdhci_tegra_soc_data soc_data_tegra234 = {
+> +	.pdata = &sdhci_tegra186_pdata,
+> +	.dma_mask = DMA_BIT_MASK(39),
+> +	.nvquirks = NVQUIRK_NEEDS_PAD_CONTROL |
+> +		    NVQUIRK_HAS_PADCALIB |
+> +		    NVQUIRK_DIS_CARD_CLK_CONFIG_TAP |
+> +		    NVQUIRK_ENABLE_SDR50 |
+> +		    NVQUIRK_ENABLE_SDR104 |
+> +		    NVQUIRK_HAS_TMCLK,
+> +	.min_tap_delay = 95,
+> +	.max_tap_delay = 111,
+> +};
+> +
+>  static const struct of_device_id sdhci_tegra_dt_match[] = {
+> +	{ .compatible = "nvidia,tegra234-sdhci", .data = &soc_data_tegra234 },
+>  	{ .compatible = "nvidia,tegra194-sdhci", .data = &soc_data_tegra194 },
+>  	{ .compatible = "nvidia,tegra186-sdhci", .data = &soc_data_tegra186 },
+>  	{ .compatible = "nvidia,tegra210-sdhci", .data = &soc_data_tegra210 },
 
