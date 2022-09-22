@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CA115E6241
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 14:23:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C2DF5E6242
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 14:23:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231486AbiIVMXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 08:23:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42792 "EHLO
+        id S231540AbiIVMXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 08:23:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231404AbiIVMXq (ORCPT
+        with ESMTP id S231571AbiIVMXu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 08:23:46 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BF51E62F0
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 05:23:45 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id c198so9076587pfc.13
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 05:23:45 -0700 (PDT)
+        Thu, 22 Sep 2022 08:23:50 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71FFDE6A1C
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 05:23:49 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 3so8961473pga.1
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 05:23:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=5Tt/tIulRoph59HSsZcBGgumIsznklodaysHOlPKr0k=;
-        b=SHInNbWb1WVa2bFi0BWWcCO9YTvKmcxoR2gf/VzD+jcZKWniKd86SSeAreuNN2ojx0
-         MzW/xUKPaZ8dyuBUDPO2PI1jtaaM+CiT9cld5WfLph0gRNCOZE7CVq/RMXBO4zrK2z3z
-         pVteUH2vNxH9p3v9IXUCvUcxUJW1+B4OAvbUKhER/muR5uUIaOgcZwpB3dD6NOz6G46N
-         64Hi1NknmjMBoHgFgD0su9YCYFmGbp7gRHHL3Yv1rtU+GgyI2LIIRUlgD6A4J4Faf3v0
-         A18O7yiWPLptzOk7J9Twpp9g9Eho7Y+a8+GGy8wPI+lXVV0AuqblHneur5I3Be/KzYm0
-         hkJw==
+        bh=U+6yX/qL9eQnP62oUvmHlt75mBd1RKvsBzmfNC68kSA=;
+        b=kl0fo0SXgVdVViMhnIiDH/KNznnbPPn7tf5oM7XQrET6Yrf5e/gKHwQDjHCqJNAq6v
+         j6ATbG3cqnDW+Yc4K/55WcLfnerYruQUaMJCRtrGxYToEjkcVdC8jLkrkKCuMfLCKifd
+         yxz26/uzQiCqDrXCo82FLVxiH+/a1/SFfLfWmCuAYDSdFLwcwJIbmtcCkHN4GJN0L8k7
+         gMwpXZgMem6eldQL2SxQe+XPmf8ApRcDX4yMZcNU4CWL0oHEN2WMgV+Jbf9+DxGpAZKm
+         I5j1W65UCzhXSZ0IMaEYvQ/IvHzRNz/4Q/nQch3IbLDvecImb0mwvpQZ9XXjFIXf80aK
+         r/uw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=5Tt/tIulRoph59HSsZcBGgumIsznklodaysHOlPKr0k=;
-        b=art6mA6w3ylGjmPzVLGECzjFQgK9lZeV8uve/4SQDaNSCG/4iUnXbmtzEVHjoFRT3v
-         k212TlyQcs74lcl5ovINJse3GZcW0Mf3b1rj+fe40dOsJGAcpnJc2efy0LCw7Qtje70A
-         ECtJ2tvgcOnATFGYlUb2kkls1F/7LGVzmZVQZ0HioQKf2b1YCNDCCKvSg0GKTzr1In6S
-         QTIE0JoaEv0wPQH5UytsedLOlfWbLscgIlN15tUimkztYK51BEWNpB/penmDZRXgkq75
-         agvj2TEipwNbTQz2dCWumwFuHgaR3XPxXPcvuB5nd1wv8nwH3SQg2NzZAnSOMo2La/QW
-         WFrQ==
-X-Gm-Message-State: ACrzQf1Z2SpZlWJlt5vnht9Rp+PVE9IypC2UISyRt24F3QOfO1a9hhhn
-        9D9pZYqJc/GzwKOT3K3gV4M=
-X-Google-Smtp-Source: AMsMyM4h0vR2uMnhsJ308Tg16YNjL0RW8t2PDnG1Jp7GaGAZZheN2eABv73SHU5TTd/4MRklxe73sA==
-X-Received: by 2002:a05:6a00:238c:b0:544:c42d:8a67 with SMTP id f12-20020a056a00238c00b00544c42d8a67mr3363687pfc.21.1663849424696;
-        Thu, 22 Sep 2022 05:23:44 -0700 (PDT)
+        bh=U+6yX/qL9eQnP62oUvmHlt75mBd1RKvsBzmfNC68kSA=;
+        b=Mr8K29mK53ULnIhdrQc94mapm8oFl3uJJadqchJP8bmo5M0VZ+iINEigVK+b766++f
+         U1qSMZi86pbTuPAM31FRnAreYOUbEjhWHYxt0MgDPfbIoKhSChGzrxCawB5pbyjvEitT
+         iK9AXNWW6qTRAJahfgKaYhl9RWWjw6Ot5Q2Zg8px1o9hcz+SgsJuvpkaM8vVJHWsB1sM
+         FUAlEfoZF+duNwRzZB3VnI/5a7Woxr9wMED3n+XDACrhqbj0Mi4NffoCCntuh4suvezK
+         bsEZ8yDMkG0qGV/erL3IQTLSYe1R/c6Tr4y+ZKAK9tyqocuccEq/Ma5//VPrVqTsrqfL
+         6LVQ==
+X-Gm-Message-State: ACrzQf37uD/q2rv+oDCi9pxeuSub8KXgAsH+LLvA6cwGkiFMxjZ9E3rr
+        LLROSKIqcMIT3z2r2ptER7s=
+X-Google-Smtp-Source: AMsMyM4yk1XAzrMBA+qGrKKQLxuvu1ANUfWJp825Y47bnWgmGuCOXFnTwtx4XENYL6id2ZC/ZTtaQw==
+X-Received: by 2002:a65:4c85:0:b0:43b:f860:98f9 with SMTP id m5-20020a654c85000000b0043bf86098f9mr2778883pgt.368.1663849428579;
+        Thu, 22 Sep 2022 05:23:48 -0700 (PDT)
 Received: from uftrace.. ([14.5.161.231])
-        by smtp.gmail.com with ESMTPSA id a8-20020a170902900800b00178acc7ef16sm3942901plp.253.2022.09.22.05.23.42
+        by smtp.gmail.com with ESMTPSA id a8-20020a170902900800b00178acc7ef16sm3942901plp.253.2022.09.22.05.23.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 05:23:44 -0700 (PDT)
+        Thu, 22 Sep 2022 05:23:48 -0700 (PDT)
 From:   Kang Minchul <tegongkang@gmail.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Johannes Berg <johannes.berg@intel.com>,
@@ -57,9 +57,9 @@ Cc:     Johannes Berg <johannes.berg@intel.com>,
         Hannes Braun <hannesbraun@mail.de>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Kang Minchul <tegongkang@gmail.com>
-Subject: [PATCH 2/4] staging: rtl8723bs: Relocate constant on the right side of test
-Date:   Thu, 22 Sep 2022 21:23:08 +0900
-Message-Id: <20220922122310.3379711-3-tegongkang@gmail.com>
+Subject: [PATCH 3/4] staging: rtl8723bs: Make switch and case at the same indent
+Date:   Thu, 22 Sep 2022 21:23:09 +0900
+Message-Id: <20220922122310.3379711-4-tegongkang@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220922122310.3379711-1-tegongkang@gmail.com>
 References: <20220922122310.3379711-1-tegongkang@gmail.com>
@@ -75,73 +75,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch fixes following warning generated by checkpatch:
+This patch fixes switch and case as linux kernel coding style
+and amend this error generated by checkpatch:
 
-  WARNING: Comparisons should place the constant on the right side of the test
+  ERROR: switch and case should be at the same indent
 
 Signed-off-by: Kang Minchul <tegongkang@gmail.com>
 ---
- drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ .../staging/rtl8723bs/os_dep/ioctl_cfg80211.c | 80 +++++++++----------
+ 1 file changed, 40 insertions(+), 40 deletions(-)
 
 diff --git a/drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c b/drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c
-index 2c6f4b5ab101..b66e8789885c 100644
+index b66e8789885c..57a68f9edec7 100644
 --- a/drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c
 +++ b/drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c
-@@ -1066,7 +1066,7 @@ static int cfg80211_rtw_change_iface(struct wiphy *wiphy,
- 		}
+@@ -1500,49 +1500,49 @@ static int rtw_cfg80211_set_wpa_ie(struct adapter *padapter, u8 *pie, size_t iel
+ 		pairwise_cipher = WPA_CIPHER_NONE;
+ 
+ 	switch (group_cipher) {
+-		case WPA_CIPHER_NONE:
+-			padapter->securitypriv.dot118021XGrpPrivacy = _NO_PRIVACY_;
+-			padapter->securitypriv.ndisencryptstatus = Ndis802_11EncryptionDisabled;
+-			break;
+-		case WPA_CIPHER_WEP40:
+-			padapter->securitypriv.dot118021XGrpPrivacy = _WEP40_;
+-			padapter->securitypriv.ndisencryptstatus = Ndis802_11Encryption1Enabled;
+-			break;
+-		case WPA_CIPHER_TKIP:
+-			padapter->securitypriv.dot118021XGrpPrivacy = _TKIP_;
+-			padapter->securitypriv.ndisencryptstatus = Ndis802_11Encryption2Enabled;
+-			break;
+-		case WPA_CIPHER_CCMP:
+-			padapter->securitypriv.dot118021XGrpPrivacy = _AES_;
+-			padapter->securitypriv.ndisencryptstatus = Ndis802_11Encryption3Enabled;
+-			break;
+-		case WPA_CIPHER_WEP104:
+-			padapter->securitypriv.dot118021XGrpPrivacy = _WEP104_;
+-			padapter->securitypriv.ndisencryptstatus = Ndis802_11Encryption1Enabled;
+-			break;
++	case WPA_CIPHER_NONE:
++		padapter->securitypriv.dot118021XGrpPrivacy = _NO_PRIVACY_;
++		padapter->securitypriv.ndisencryptstatus = Ndis802_11EncryptionDisabled;
++		break;
++	case WPA_CIPHER_WEP40:
++		padapter->securitypriv.dot118021XGrpPrivacy = _WEP40_;
++		padapter->securitypriv.ndisencryptstatus = Ndis802_11Encryption1Enabled;
++		break;
++	case WPA_CIPHER_TKIP:
++		padapter->securitypriv.dot118021XGrpPrivacy = _TKIP_;
++		padapter->securitypriv.ndisencryptstatus = Ndis802_11Encryption2Enabled;
++		break;
++	case WPA_CIPHER_CCMP:
++		padapter->securitypriv.dot118021XGrpPrivacy = _AES_;
++		padapter->securitypriv.ndisencryptstatus = Ndis802_11Encryption3Enabled;
++		break;
++	case WPA_CIPHER_WEP104:
++		padapter->securitypriv.dot118021XGrpPrivacy = _WEP104_;
++		padapter->securitypriv.ndisencryptstatus = Ndis802_11Encryption1Enabled;
++		break;
  	}
  
--	if (_FAIL == rtw_pwr_wakeup(padapter)) {
-+	if (rtw_pwr_wakeup(padapter) == _FAIL) {
- 		ret = -EPERM;
- 		goto exit;
- 	}
-@@ -1240,7 +1240,7 @@ static int cfg80211_rtw_scan(struct wiphy *wiphy
+ 	switch (pairwise_cipher) {
+-		case WPA_CIPHER_NONE:
+-			padapter->securitypriv.dot11PrivacyAlgrthm = _NO_PRIVACY_;
+-			padapter->securitypriv.ndisencryptstatus = Ndis802_11EncryptionDisabled;
+-			break;
+-		case WPA_CIPHER_WEP40:
+-			padapter->securitypriv.dot11PrivacyAlgrthm = _WEP40_;
+-			padapter->securitypriv.ndisencryptstatus = Ndis802_11Encryption1Enabled;
+-			break;
+-		case WPA_CIPHER_TKIP:
+-			padapter->securitypriv.dot11PrivacyAlgrthm = _TKIP_;
+-			padapter->securitypriv.ndisencryptstatus = Ndis802_11Encryption2Enabled;
+-			break;
+-		case WPA_CIPHER_CCMP:
+-			padapter->securitypriv.dot11PrivacyAlgrthm = _AES_;
+-			padapter->securitypriv.ndisencryptstatus = Ndis802_11Encryption3Enabled;
+-			break;
+-		case WPA_CIPHER_WEP104:
+-			padapter->securitypriv.dot11PrivacyAlgrthm = _WEP104_;
+-			padapter->securitypriv.ndisencryptstatus = Ndis802_11Encryption1Enabled;
+-			break;
++	case WPA_CIPHER_NONE:
++		padapter->securitypriv.dot11PrivacyAlgrthm = _NO_PRIVACY_;
++		padapter->securitypriv.ndisencryptstatus = Ndis802_11EncryptionDisabled;
++		break;
++	case WPA_CIPHER_WEP40:
++		padapter->securitypriv.dot11PrivacyAlgrthm = _WEP40_;
++		padapter->securitypriv.ndisencryptstatus = Ndis802_11Encryption1Enabled;
++		break;
++	case WPA_CIPHER_TKIP:
++		padapter->securitypriv.dot11PrivacyAlgrthm = _TKIP_;
++		padapter->securitypriv.ndisencryptstatus = Ndis802_11Encryption2Enabled;
++		break;
++	case WPA_CIPHER_CCMP:
++		padapter->securitypriv.dot11PrivacyAlgrthm = _AES_;
++		padapter->securitypriv.ndisencryptstatus = Ndis802_11Encryption3Enabled;
++		break;
++	case WPA_CIPHER_WEP104:
++		padapter->securitypriv.dot11PrivacyAlgrthm = _WEP104_;
++		padapter->securitypriv.ndisencryptstatus = Ndis802_11Encryption1Enabled;
++		break;
  	}
  
- 	rtw_ps_deny(padapter, PS_DENY_SCAN);
--	if (_FAIL == rtw_pwr_wakeup(padapter)) {
-+	if (rtw_pwr_wakeup(padapter) == _FAIL) {
- 		need_indicate_scan_done = true;
- 		goto check_need_indicate_scan_done;
- 	}
-@@ -1583,7 +1583,7 @@ static int cfg80211_rtw_join_ibss(struct wiphy *wiphy, struct net_device *ndev,
- 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
- 	int ret = 0;
- 
--	if (_FAIL == rtw_pwr_wakeup(padapter)) {
-+	if (rtw_pwr_wakeup(padapter) == _FAIL) {
- 		ret = -EPERM;
- 		goto exit;
- 	}
-@@ -1674,7 +1674,7 @@ static int cfg80211_rtw_connect(struct wiphy *wiphy, struct net_device *ndev,
- 	}
- 
- 	rtw_ps_deny(padapter, PS_DENY_JOIN);
--	if (_FAIL == rtw_pwr_wakeup(padapter)) {
-+	if (rtw_pwr_wakeup(padapter) == _FAIL) {
- 		ret = -EPERM;
- 		goto exit;
- 	}
-@@ -2468,7 +2468,7 @@ static int	cfg80211_rtw_dump_station(struct wiphy *wiphy, struct net_device *nde
- 	spin_lock_bh(&pstapriv->asoc_list_lock);
- 	psta = rtw_sta_info_get_by_idx(idx, pstapriv);
- 	spin_unlock_bh(&pstapriv->asoc_list_lock);
--	if (NULL == psta) {
-+	if (psta == NULL) {
- 		ret = -ENOENT;
- 		goto exit;
- 	}
-@@ -2603,7 +2603,7 @@ static int cfg80211_rtw_mgmt_tx(struct wiphy *wiphy,
- 		goto exit;
- 
- 	rtw_ps_deny(padapter, PS_DENY_MGNT_TX);
--	if (_FAIL == rtw_pwr_wakeup(padapter)) {
-+	if (rtw_pwr_wakeup(padapter) == _FAIL) {
- 		ret = -EFAULT;
- 		goto cancel_ps_deny;
- 	}
+ 	{/* handle wps_ie */
 -- 
 2.34.1
 
