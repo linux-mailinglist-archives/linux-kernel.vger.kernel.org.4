@@ -2,79 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 352515E5EA2
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 11:31:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8566F5E5EA7
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 11:33:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbiIVJb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 05:31:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50322 "EHLO
+        id S230221AbiIVJdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 05:33:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbiIVJbz (ORCPT
+        with ESMTP id S229710AbiIVJdP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 05:31:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52860CD1D2
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 02:31:54 -0700 (PDT)
+        Thu, 22 Sep 2022 05:33:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B69CC8EC
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 02:33:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663839113;
+        s=mimecast20190719; t=1663839193;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ybr30fZlUaDoYeaIa2plwZCg6mJWBOhhUXmFI2EBX4M=;
-        b=GZJm31ulU9qRqPBoEe9Udm7xUB7XECvc16gl0YrWmVhyZTtXRIMKBB8SxDR+4Yz3ofDlTy
-        wQnfkv64Ag9v0LhgkDBuMm265UqqI1yRO0rAOJGVtzqzm1YTTFbOS7lds5ZFrwc0sEZYki
-        9DpKH83ExIziPbYlpGEWZqOjERZ9JAc=
+        bh=zAzZ4b2xCwJUs3fed+WhbNmI9QSD0ajnVVgLX9sfbQQ=;
+        b=az6gVCuC32VLv2e+pJ6IjBu7MSec5NRnJV0LFxrYBmS1bxWOm/qSIzFNl9JCbjFAZnY0uR
+        HrzhC7jyUr5wvZ3UQ8nOoTNWwywy2VzI97gmWApGg5mDlRdXQLJ3mBnsCs+P9bBZgSEapO
+        4s5eRO0iSsw5nh2uo7yW/ukVfwISwPA=
 Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
  [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-364-wxAbrn1_N1OTJd9PWdVdiA-1; Thu, 22 Sep 2022 05:31:52 -0400
-X-MC-Unique: wxAbrn1_N1OTJd9PWdVdiA-1
-Received: by mail-wm1-f71.google.com with SMTP id v62-20020a1cac41000000b003b4fca0e80cso1707050wme.0
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 02:31:52 -0700 (PDT)
+ us-mta-413-C081mpycNRmhPS6tV3RLNQ-1; Thu, 22 Sep 2022 05:33:12 -0400
+X-MC-Unique: C081mpycNRmhPS6tV3RLNQ-1
+Received: by mail-wm1-f71.google.com with SMTP id ay21-20020a05600c1e1500b003b45fd14b53so2415790wmb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 02:33:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date;
-        bh=ybr30fZlUaDoYeaIa2plwZCg6mJWBOhhUXmFI2EBX4M=;
-        b=5S8AggfLfdB64exixOH/FU7nW9rtpm4tvRAt4HX2dlP5kysSyVKrFRpFpIUPNA09qS
-         m1QVv3j9BJGZg0Z4TMBOVJxp5/04f4EWBqtrtF9jNyGvEsi/cj7KA4KBx1vgLDRDQC3h
-         kirhwXRaoiAZYq5AJKRGh/K+qJKyzSKBiwD/QCZVttrgmp5PeRzl3eWK04mI3KlCy+5V
-         v35ITRnR/0Bl5xHyNvyCHsCs4ty0KbwAlf3gOjcc8R9jAkceHl0LQykE9GGoAKHByI6S
-         ttTNi8ri5O2usUVywK+JvP9dHf/kXDb8a47ExoBC5nlfCyBg3TNUrMebTEPitN6gPWIw
-         Wr3A==
-X-Gm-Message-State: ACrzQf3eJqPco3H4lZQzYgF7pPRFA7mixbiVrXuh2yyqvcQes6gozHTF
-        xhFOT0PxhMlZ4fZ+XpHKars/ZdlaYdVTwEyjlhWE+WCvEL0gf7LXkn/mq1Hz8FlagcpSAWYxaDF
-        hAg3xnMST7RZwWPIAgEhX5V9Hjg6s0fUOxx2zccZk+2bVKV9XXTlvhVmGbX5+RRTYmhRRXCLlR7
-        yO
-X-Received: by 2002:a5d:58da:0:b0:22a:c3cb:e3cb with SMTP id o26-20020a5d58da000000b0022ac3cbe3cbmr1419608wrf.34.1663839111243;
-        Thu, 22 Sep 2022 02:31:51 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM78NQ7fwohH1SuTimErCoGoVCo7k9Iba3RybxqQVWr2qdfj2Ej25Kl7QG6g24EzWCBG/KqDow==
-X-Received: by 2002:a5d:58da:0:b0:22a:c3cb:e3cb with SMTP id o26-20020a5d58da000000b0022ac3cbe3cbmr1419586wrf.34.1663839110913;
-        Thu, 22 Sep 2022 02:31:50 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id m16-20020a05600c4f5000b003b4a68645e9sm5672064wmq.34.2022.09.22.02.31.49
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=zAzZ4b2xCwJUs3fed+WhbNmI9QSD0ajnVVgLX9sfbQQ=;
+        b=TZTStRlvs9hWgtwasYDoVMtwxNPqUrbDeLctdBaX8G+R4aXS1EXcaIzBoEo6zBZo0W
+         Yk2ADttGYGfUXzJPT/k7xz1geocmhpJVHohUqpHorWZxIO9LG5OYO1wB/Zh2m7YlF5oe
+         sbZASYs2+6JfOq3UaXOhlje0hrt8CvveZwEUPEEKY76+hM6bS6aHJbDn9s1w8YVwNdov
+         PaME8Ks1iImtd86WxQz0VrRt3QCmy0rCw1dwVFgeyD52EKMjkRx2B1cSjw/rxpi9GLaS
+         R/0RwPCMTFlYrRBCdh/JZ/K517uBi1VcjwiABysXtCFl5Q8aw1riibkXuY3Wbix2Mjns
+         0AOg==
+X-Gm-Message-State: ACrzQf1kWWq3RhK+fEqryxJmOdl/CWBpnrWk25KnbPEx4ScfqINOe3oI
+        awMPGVaqQ9O3oGu9+ai0IALjCalMcVDBqMN4KvCo/rLgSKKhdkdfo2+XPsMwAaxL0XFzfuuxM6h
+        cAMq6fbrN2ZjlDZzOsB3eRfIf
+X-Received: by 2002:a05:600c:3546:b0:3b4:b7da:d8e2 with SMTP id i6-20020a05600c354600b003b4b7dad8e2mr1706420wmq.188.1663839191127;
+        Thu, 22 Sep 2022 02:33:11 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4H2AvKwfjzXmU575/WbPmpQEkzcirG3TvXmTVnoQD84Z4jeYRFidKb0Nb+O6oKjyJVoDUYzw==
+X-Received: by 2002:a05:600c:3546:b0:3b4:b7da:d8e2 with SMTP id i6-20020a05600c354600b003b4b7dad8e2mr1706404wmq.188.1663839190908;
+        Thu, 22 Sep 2022 02:33:10 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-104-76.dyn.eolo.it. [146.241.104.76])
+        by smtp.gmail.com with ESMTPSA id l30-20020a05600c1d1e00b003a62400724bsm6330347wms.0.2022.09.22.02.33.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 02:31:50 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        Yuan Yao <yuan.yao@linux.intel.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v10 02/39] KVM: x86: hyper-v: Resurrect dedicated
- KVM_REQ_HV_TLB_FLUSH flag
-In-Reply-To: <Yys6b1ZqYbw9Umyu@google.com>
-References: <20220921152436.3673454-1-vkuznets@redhat.com>
- <20220921152436.3673454-3-vkuznets@redhat.com>
- <Yys6b1ZqYbw9Umyu@google.com>
-Date:   Thu, 22 Sep 2022 11:31:48 +0200
-Message-ID: <877d1voiuz.fsf@redhat.com>
+        Thu, 22 Sep 2022 02:33:10 -0700 (PDT)
+Message-ID: <b9bbe03d801d6224c8cec9700d22cec19346cebf.camel@redhat.com>
+Subject: Re: [PATCH net-next v5 2/9] net: marvell: prestera: Add cleanup of
+ allocated fib_nodes
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Yevhen Orlov <yevhen.orlov@plvision.eu>, netdev@vger.kernel.org
+Cc:     Volodymyr Mytnyk <volodymyr.mytnyk@plvision.eu>,
+        Taras Chornyi <taras.chornyi@plvision.eu>,
+        Mickey Rachamim <mickeyr@marvell.com>,
+        Serhiy Pshyk <serhiy.pshyk@plvision.eu>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        linux-kernel@vger.kernel.org, Taras Chornyi <tchornyi@marvell.com>,
+        Oleksandr Mazur <oleksandr.mazur@plvision.eu>
+Date:   Thu, 22 Sep 2022 11:33:09 +0200
+In-Reply-To: <20220908225211.31482-3-yevhen.orlov@plvision.eu>
+References: <20220908225211.31482-1-yevhen.orlov@plvision.eu>
+         <20220908225211.31482-3-yevhen.orlov@plvision.eu>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
@@ -85,70 +89,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sean Christopherson <seanjc@google.com> writes:
+On Fri, 2022-09-09 at 01:52 +0300, Yevhen Orlov wrote:
+> Do explicity cleanup on router_hw_fini, to ensure, that all allocated
+> objects cleaned. This will be used in cases,
+> when upper layer (cache) is not mapped to router_hw layer.
+> 
+> Co-developed-by: Taras Chornyi <tchornyi@marvell.com>
+> Signed-off-by: Taras Chornyi <tchornyi@marvell.com>
+> Co-developed-by: Oleksandr Mazur <oleksandr.mazur@plvision.eu>
+> Signed-off-by: Oleksandr Mazur <oleksandr.mazur@plvision.eu>
+> Signed-off-by: Yevhen Orlov <yevhen.orlov@plvision.eu>
+> ---
+>  .../marvell/prestera/prestera_router_hw.c     | 23 +++++++++++++++++++
+>  1 file changed, 23 insertions(+)
+> 
+> diff --git a/drivers/net/ethernet/marvell/prestera/prestera_router_hw.c b/drivers/net/ethernet/marvell/prestera/prestera_router_hw.c
+> index db9d2e9d9904..1b9feb396811 100644
+> --- a/drivers/net/ethernet/marvell/prestera/prestera_router_hw.c
+> +++ b/drivers/net/ethernet/marvell/prestera/prestera_router_hw.c
+> @@ -56,6 +56,7 @@ static int prestera_nexthop_group_set(struct prestera_switch *sw,
+>  static bool
+>  prestera_nexthop_group_util_hw_state(struct prestera_switch *sw,
+>  				     struct prestera_nexthop_group *nh_grp);
+> +static void prestera_fib_node_destroy_ht(struct prestera_switch *sw);
+>  
+>  /* TODO: move to router.h as macros */
+>  static bool prestera_nh_neigh_key_is_valid(struct prestera_nh_neigh_key *key)
+> @@ -97,6 +98,7 @@ int prestera_router_hw_init(struct prestera_switch *sw)
+>  
+>  void prestera_router_hw_fini(struct prestera_switch *sw)
+>  {
+> +	prestera_fib_node_destroy_ht(sw);
+>  	WARN_ON(!list_empty(&sw->router->vr_list));
+>  	WARN_ON(!list_empty(&sw->router->rif_entry_list));
+>  	rhashtable_destroy(&sw->router->fib_ht);
+> @@ -605,6 +607,27 @@ void prestera_fib_node_destroy(struct prestera_switch *sw,
+>  	kfree(fib_node);
+>  }
+>  
+> +static void prestera_fib_node_destroy_ht(struct prestera_switch *sw)
+> +{
+> +	struct prestera_fib_node *node;
+> +	struct rhashtable_iter iter;
+> +
+> +	while (1) {
+> +		rhashtable_walk_enter(&sw->router->fib_ht, &iter);
+> +		rhashtable_walk_start(&iter);
+> +		node = rhashtable_walk_next(&iter);
+> +		rhashtable_walk_stop(&iter);
+> +		rhashtable_walk_exit(&iter);
+> +
+> +		if (!node)
+> +			break;
+> +		else if (IS_ERR(node))
+> +			continue;
+> +		else if (node)
+> +			prestera_fib_node_destroy(sw, node);
+> +	}
+> +}
 
-> On Wed, Sep 21, 2022, Vitaly Kuznetsov wrote:
->> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
->> index f62d5799fcd7..86504a8bfd9a 100644
->> --- a/arch/x86/kvm/x86.c
->> +++ b/arch/x86/kvm/x86.c
->> @@ -3418,11 +3418,17 @@ static inline void kvm_vcpu_flush_tlb_current(struct kvm_vcpu *vcpu)
->>   */
->>  void kvm_service_local_tlb_flush_requests(struct kvm_vcpu *vcpu)
->>  {
->> -	if (kvm_check_request(KVM_REQ_TLB_FLUSH_CURRENT, vcpu))
->> +	if (kvm_check_request(KVM_REQ_TLB_FLUSH_CURRENT, vcpu)) {
->>  		kvm_vcpu_flush_tlb_current(vcpu);
->> +		kvm_clear_request(KVM_REQ_HV_TLB_FLUSH, vcpu);
->
-> This isn't correct, flush_tlb_current() flushes "host" TLB entries, i.e. guest-physical
-> mappings in Intel terminology, where flush_tlb_guest() and (IIUC) Hyper-V's paravirt
-> TLB flush both flesh "guest" TLB entries, i.e. linear and combined
-> mappings.
+You should use instead rhashtable_free_and_destroy(), providing a
+callback which just frees the node, without removing it from the hash
+table.
 
-(Honestly, I was waiting for this comment when I first brought this, I
-even put it in a separate patch with a provokative "KVM: x86:
-KVM_REQ_TLB_FLUSH_CURRENT is a superset of KVM_REQ_HV_TLB_FLUSH too"
-name but AFAIR the only comment I got was "please merge with the patch
-which clears KVM_REQ_TLB_FLUSH_GUEST" so started thinking this was the
-right thing to do :) Jokes aside,
+The same in the next patch
 
-This small optimization was done for nSVM case. When switching from L1
-to L2 and vice versa, the code does nested_svm_transition_tlb_flush()
-which is
+Cheers,
 
-	kvm_make_request(KVM_REQ_MMU_SYNC, vcpu);
-	kvm_make_request(KVM_REQ_TLB_FLUSH_CURRENT, vcpu);
-
-On AMD, both KVM_REQ_TLB_FLUSH_CURRENT and KVM_REQ_TLB_FLUSH_GUEST are
-the same thing (.flush_tlb_current == .flush_tlb_guest ==
-svm_flush_tlb_current()) flushing the whole ASID so processing Hyper-V
-TLB flush requests is ceratainly redundant.
-
-Now let's get to VMX and the point of my confusion (and thanks in
-advance for educating me!):
-AFAIU, when EPT is in use:
- KVM_REQ_TLB_FLUSH_CURRENT == invept
- KVM_REQ_TLB_FLUSH_GUEST = invvpid
-
-For "normal" mappings (which are mapped on both stages) this is the same
-thing as they're 'tagged' with both VPID and 'EPT root'. The question is
-what's left. Given your comment, do I understand correctly that in case
-of an invalid mapping in the guest (GVA doesn't resolve to a GPA), this
-will only be tagged with VPID but not with 'EPT root' (as the CPU never
-reached to the second translation stage)? We certainly can't ignore
-these. Another (probably pure theoretical question) is what are the
-mappings which are tagged with 'EPT root' but don't have a VPID tag? Are
-these the mapping which happen when e.g. vCPU has paging disabled? These
-are probably unrelated to Hyper-V TLB flushing.
-
-To preserve the 'small' optimization, we can probably move 
- kvm_clear_request(KVM_REQ_HV_TLB_FLUSH, vcpu);
-
-to nested_svm_transition_tlb_flush() or, in case this sounds too
-hackish, we can drop it for now and add it to the (already overfull)
-bucket of the "optimize nested_svm_transition_tlb_flush()".
-
--- 
-Vitaly
+Paolo
 
