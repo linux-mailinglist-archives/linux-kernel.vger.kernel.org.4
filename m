@@ -2,42 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB8725E6C98
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 22:02:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E80A75E6C99
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 22:02:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230113AbiIVUCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 16:02:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59580 "EHLO
+        id S232632AbiIVUC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 16:02:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232629AbiIVUBx (ORCPT
+        with ESMTP id S231616AbiIVUCG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 16:01:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 453F533373;
-        Thu, 22 Sep 2022 13:01:45 -0700 (PDT)
+        Thu, 22 Sep 2022 16:02:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D862EF1C
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 13:01:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 77DB3B83A6D;
-        Thu, 22 Sep 2022 20:01:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CA69C433D6;
-        Thu, 22 Sep 2022 20:01:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CD83B614B7
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 20:01:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24BECC433C1;
+        Thu, 22 Sep 2022 20:01:53 +0000 (UTC)
 From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Evgenii Stepanov <eugenis@google.com>,
-        Peter Collingbourne <pcc@google.com>
-Cc:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Kenny Root <kroot@google.com>, Mark Brown <broonie@kernel.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>, stable@vger.kernel.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v5] arm64: mte: move register initialization to C
-Date:   Thu, 22 Sep 2022 21:01:37 +0100
-Message-Id: <166387689171.428844.17569339789321559720.b4-ty@arm.com>
+To:     Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: mm: handle ARM64_KERNEL_USES_PMD_MAPS in vmemmap_populate()
+Date:   Thu, 22 Sep 2022 21:01:46 +0100
+Message-Id: <166387689171.428844.8846017248785700372.b4-ty@arm.com>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220915222053.3484231-1-eugenis@google.com>
-References: <20220915222053.3484231-1-eugenis@google.com>
+In-Reply-To: <20220920014951.196191-1-wangkefeng.wang@huawei.com>
+References: <20220920014951.196191-1-wangkefeng.wang@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -50,23 +45,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Sep 2022 15:20:53 -0700, Evgenii Stepanov wrote:
-> From: Peter Collingbourne <pcc@google.com>
+On Tue, 20 Sep 2022 09:49:51 +0800, Kefeng Wang wrote:
+> Directly check ARM64_SWAPPER_USES_SECTION_MAPS to choose base page
+> or PMD level huge page mapping in vmemmap_populate() to simplify
+> code a bit.
 > 
-> If FEAT_MTE2 is disabled via the arm64.nomte command line argument on a
-> CPU that claims to support FEAT_MTE2, the kernel will use Tagged Normal
-> in the MAIR. If we interpret arm64.nomte to mean that the CPU does not
-> in fact implement FEAT_MTE2, setting the system register like this may
-> lead to UNSPECIFIED behavior. Fix it by arranging for MAIR to be set
-> in the C function cpu_enable_mte which is called based on the sanitized
-> version of the system register.
 > 
-> [...]
 
 Applied to arm64 (for-next/misc), thanks!
 
-[1/1] arm64: mte: move register initialization to C
-      https://git.kernel.org/arm64/c/973b9e373306
+[1/1] arm64: mm: handle ARM64_KERNEL_USES_PMD_MAPS in vmemmap_populate()
+      https://git.kernel.org/arm64/c/739e49e0fc80
 
 -- 
 Catalin
