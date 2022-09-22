@@ -2,122 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFBF55E6B33
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 20:45:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A5855E6B67
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 21:03:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231561AbiIVSp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 14:45:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50834 "EHLO
+        id S232223AbiIVTDT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 15:03:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231415AbiIVSpZ (ORCPT
+        with ESMTP id S230241AbiIVTDO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 14:45:25 -0400
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EAC7D01F6
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 11:45:24 -0700 (PDT)
-Received: by mail-il1-x12d.google.com with SMTP id j7so4596886ilu.7
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 11:45:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=Sckvs0FTvGyjC/ju9lFywFrSTF78gTiQEzpAFikyqII=;
-        b=grnT8CgZ1gQuEDOPJTlzBomCgI4eVGDOtVSRW4oxEgOy/f2NoelS/Ta7NvlEk6LbRX
-         gzhUDV71pkz1woX43jN0dWObCEw9lU8dWhiRfx15iMSrLhUu5GH4dwwtQCLgugTvX1z2
-         8AU9g2XA10kmW48eSrBKewQqFDDowhwFDMlFo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Sckvs0FTvGyjC/ju9lFywFrSTF78gTiQEzpAFikyqII=;
-        b=LsWRMY5vOfUjExFadl32oGMOIVwOcpADVbpFMn9frBRQ7goNPskvMfKqbe97lA1emT
-         7kdoMPOkgi3rOLTWGT84ZgknIPEk3+Bab7Xb7kslbP1bK/jZunGnomkYDr18F7G3fWQk
-         AL9t25MTFHO+wnRtrek3Jh+xWQMYjQlAIRRbFUbLZ12SFV3LY3KoJOUsqs4G5J/JxQjH
-         Zy1C37NoUWZUJ/oiFyfM47et6esiZrG5ae5MTp1UWTupNIYRF5KERQ2yz6PAP15v1YhK
-         qFqD75SY+yauf1VS6pt4KoGxyiHOgTiNikt/22dD6IURR3/IpE5eBbOW8phrpoHJtk4k
-         nOgg==
-X-Gm-Message-State: ACrzQf072x6vFRffkuLP8jUbdoN+duT2w05MWb7g/O07YqA75y8GD7La
-        E8WjDuvvP5Ngc7I5Hg2yzJaN9Q==
-X-Google-Smtp-Source: AMsMyM4NsHBKiHG3MQq+rQeymQb3KkMESDFz+18LaQ6uVvnQyA4knTwpE59RihAuxGRr3IGvxsamFw==
-X-Received: by 2002:a05:6e02:b45:b0:2f5:9ee6:4ff4 with SMTP id f5-20020a056e020b4500b002f59ee64ff4mr2467698ilu.101.1663872323713;
-        Thu, 22 Sep 2022 11:45:23 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id c3-20020a0566022d0300b006849ee78e1bsm2619529iow.34.2022.09.22.11.45.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Sep 2022 11:45:23 -0700 (PDT)
-Message-ID: <b9044b55-1498-3309-4db5-70ca2c20b3f7@linuxfoundation.org>
-Date:   Thu, 22 Sep 2022 12:45:22 -0600
+        Thu, 22 Sep 2022 15:03:14 -0400
+X-Greylist: delayed 600 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 22 Sep 2022 12:03:12 PDT
+Received: from letterbox.kde.org (letterbox.kde.org [46.43.1.242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B35BFB300;
+        Thu, 22 Sep 2022 12:03:12 -0700 (PDT)
+Received: from vertex.localdomain (pool-173-49-113-140.phlapa.fios.verizon.net [173.49.113.140])
+        (Authenticated sender: zack)
+        by letterbox.kde.org (Postfix) with ESMTPSA id 68B6B33CA5E;
+        Thu, 22 Sep 2022 19:45:29 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kde.org; s=users;
+        t=1663872330; bh=KXR8aFo7IH4MA/ibI65C7sV8IgOxAzdBucUz3STBYMM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Wzq8w4AZNvIbdNn4rk/xDh84qL1TfMVadvxauUIhNwLpn3o4LW1oYVbM4c0sk2mJm
+         kEP9lU8cqqdVUZ3ehX4kZbGtqdQDv4hleu646pjsfY0uKFPjPRByZ3TBhoFkCTtDUw
+         +03D8PjyYTBYzn2cBFHG1mYAO770Co+jehX+ybDG4YIg/EW/aHIlY7DFFT+9YYrQSL
+         RTEdZLTHFTLGgD4LyU8rbC5rzrpIZHuLNSCC7tuAA3FgnT0nigr/FYE6+MO5/cldzb
+         Mk4Z414+ofgPrn7qUw2Wx32Bk93tJsnbGVU28coR8TWc05GdGk+aUpMrVMHDWeJjpQ
+         FtHwIylLSiCOw==
+From:   Zack Rusin <zack@kde.org>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Zack Rusin <zackr@vmware.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] kbuild: Add an option to skip vmlinux.bz2 in the rpm's
+Date:   Thu, 22 Sep 2022 14:45:25 -0400
+Message-Id: <20220922184525.3021522-1-zack@kde.org>
+X-Mailer: git-send-email 2.34.1
+Reply-To: Zack Rusin <zackr@vmware.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH linux-next] KVM: selftests: remove redundant variable
- tsc_val
-Content-Language: en-US
-To:     cgel.zte@gmail.com, pbonzini@redhat.com, shuah@kernel.org,
-        seanjc@google.com, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     dmatlack@google.com, jmattson@google.com, peterx@redhat.com,
-        oupton@google.com, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jinpeng Cui <cui.jinpeng2@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-References: <20220831143150.304406-1-cui.jinpeng2@zte.com.cn>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20220831143150.304406-1-cui.jinpeng2@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/31/22 08:31, cgel.zte@gmail.com wrote:
-> From: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
-> 
-> Return value directly from expression instead of
-> getting value from redundant variable tsc_val.
-> 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
-> ---
->   tools/testing/selftests/kvm/include/x86_64/processor.h | 5 ++---
->   1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
-> index 0cbc71b7af50..75920678f34d 100644
-> --- a/tools/testing/selftests/kvm/include/x86_64/processor.h
-> +++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-> @@ -237,7 +237,6 @@ static inline uint64_t get_desc64_base(const struct desc64 *desc)
->   static inline uint64_t rdtsc(void)
->   {
->   	uint32_t eax, edx;
-> -	uint64_t tsc_val;
->   	/*
->   	 * The lfence is to wait (on Intel CPUs) until all previous
->   	 * instructions have been executed. If software requires RDTSC to be
-> @@ -245,8 +244,8 @@ static inline uint64_t rdtsc(void)
->   	 * execute LFENCE immediately after RDTSC
->   	 */
->   	__asm__ __volatile__("lfence; rdtsc; lfence" : "=a"(eax), "=d"(edx));
-> -	tsc_val = ((uint64_t)edx) << 32 | eax;
-> -	return tsc_val;
-> +
-> +	return ((uint64_t)edx) << 32 | eax;
->   }
->   
->   static inline uint64_t rdtscp(uint32_t *aux)
+From: Zack Rusin <zackr@vmware.com>
 
-My understanding is that this patch isn't coming from individuals that work
-for ZTE. We won't be able to accept these patches. Refer to the following
-for reasons why we can't accept these patches.
+The debug vmlinux takes up the vast majority of space in the built
+rpm's. While having it enabled by default is a good idea because it
+makes debugging easier, having an option to skip it is highly valuable
+for CI/CD systems where small packages are a lot easier to deal with
+e.g. kernel rpm built using binrpm-pkg on Fedora 36 default 5.19.8 kernel
+config and localmodconfig goes from 255MB to 65MB which is an almost
+4x difference.
 
-https://patchwork.kernel.org/project/linux-kselftest/patch/20220920063202.215088-1-ye.xingchen@zte.com.cn/
+To skip adding vmlinux.bz2 to the built rpm add SKIP_RPM_VMLINUX
+environment variable which when set to "y", e.g. via
+"SKIP_RPM_VMLINUX=y make binrpm-pkg" won't include vmlinux.bz2 in the
+built rpm.
 
-thanks,
--- Shuah
+Signed-off-by: Zack Rusin <zackr@vmware.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Michal Marek <michal.lkml@markovi.net>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: linux-kbuild@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+ scripts/package/mkspec | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/scripts/package/mkspec b/scripts/package/mkspec
+index 7c477ca7dc98..5a71fc0852b0 100755
+--- a/scripts/package/mkspec
++++ b/scripts/package/mkspec
+@@ -23,6 +23,12 @@ else
+ 	M=DEL
+ fi
+ 
++if [ "$RPM_SKIP_VMLINUX" = y ]; then
++	D=DEL
++else
++	D=
++fi
++
+ if grep -q CONFIG_DRM=y .config; then
+ 	PROVIDES=kernel-drm
+ fi
+@@ -94,8 +100,8 @@ $M	$MAKE %{?_smp_mflags} INSTALL_MOD_PATH=%{buildroot} modules_install
+ 	$MAKE %{?_smp_mflags} INSTALL_HDR_PATH=%{buildroot}/usr headers_install
+ 	cp System.map %{buildroot}/boot/System.map-$KERNELRELEASE
+ 	cp .config %{buildroot}/boot/config-$KERNELRELEASE
+-	bzip2 -9 --keep vmlinux
+-	mv vmlinux.bz2 %{buildroot}/boot/vmlinux-$KERNELRELEASE.bz2
++$D	bzip2 -9 --keep vmlinux
++$D	mv vmlinux.bz2 %{buildroot}/boot/vmlinux-$KERNELRELEASE.bz2
+ $S$M	rm -f %{buildroot}/lib/modules/$KERNELRELEASE/build
+ $S$M	rm -f %{buildroot}/lib/modules/$KERNELRELEASE/source
+ $S$M	mkdir -p %{buildroot}/usr/src/kernels/$KERNELRELEASE
+-- 
+2.34.1
+
