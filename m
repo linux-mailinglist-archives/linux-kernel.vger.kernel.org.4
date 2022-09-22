@@ -2,179 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B290F5E69BD
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 19:38:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A4815E69C3
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 19:40:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231721AbiIVRiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 13:38:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50918 "EHLO
+        id S230479AbiIVRkL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 13:40:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229641AbiIVRh6 (ORCPT
+        with ESMTP id S229641AbiIVRkI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 13:37:58 -0400
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60EB4EFA6B;
-        Thu, 22 Sep 2022 10:37:57 -0700 (PDT)
-Received: by mail-qt1-f171.google.com with SMTP id y2so6806265qtv.5;
-        Thu, 22 Sep 2022 10:37:57 -0700 (PDT)
+        Thu, 22 Sep 2022 13:40:08 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFBB157260
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 10:40:06 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d24so9462966pls.4
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 10:40:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=b4sJcP3BMvfK2lj3kZNN/gN51EYUtxkqzF+/QB85KVw=;
+        b=LmxVbYRy9Vz8pds5VkW/DMBdVcJKsdkgj+IujFbTRIK8ILw2DDiZzW3F/fSpD38HlT
+         CvIf2gijwIYT3TNdiu8gsy0jTl1sDUS18QfpBYKeHWF8z3SekjcFxSy8oU3cCQKlalrV
+         flQMLv1pf9p9u8Z/ObT4hzv/GoOPtYPo4WrxWvcUmJDdfXXZpa7bzMDDLrqaHqXbl3z5
+         pfy7KdhK1+fGRSKdVSXc6RNgTZyr4iqgw/f170jjlLQlnq2O/r9AT3jwiivWab84aFzD
+         JJmd2H8MX9fRchtnKnDBzaHa9g6BQg5OQvssa4KKgOtJbGTXc0TO82edrsk2QubAi5nJ
+         B7vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=6pAvVwOh4ZfT/Ucve1wlzLE+jEzpV7GwW5c9s60CJWs=;
-        b=kXK0A6cYEwOO+exNlZ8/rhUEnao+cVpxAwytmXszf59qJ/aPLpOIpZnlSG/3kjCCPD
-         CYZtX2J8uocflMK/DGNgI0nuAsXOsfEeOVpsTlWy1/5NzKAHtwxE/xX5xfCGL5qVhLyb
-         l3M9gD4k1fi4l2A52rVsdsozdnLvDALtsSHzxWSjeEBnZpdCScylYqWiMFw0IyQyuO/8
-         i+O/1jNnZGW3hHkRwHB2b0kB5LNFmwphvxd6M/t1hvGBZnngI5Hw7C8M6kGjq6woAdCQ
-         ZdheNC3wRW0K7rKu7aenXKKYUf1P4KZs+FQh7KXXeUOj/w/l0OBbg0ey1YpGi+KL6arS
-         VH/Q==
-X-Gm-Message-State: ACrzQf33jJnOcLhJEjRhRAEVQUQy1z7COPb4/MCP8IA1B4TXFf7J0ZTU
-        WACtIZAxXInqtrKzMiBN7TI3cPJrSdXafVKB/9k=
-X-Google-Smtp-Source: AMsMyM7oJUv/e5eLNmYRYH9UIAPBgONumGMf9ftsxHabwEuRhRQxJkefuSMppjDfDY8cdMwfaNo5SX/iiTJaraJFhKw=
-X-Received: by 2002:a05:622a:620a:b0:35c:bf9e:8748 with SMTP id
- hj10-20020a05622a620a00b0035cbf9e8748mr3892292qtb.494.1663868276478; Thu, 22
- Sep 2022 10:37:56 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=b4sJcP3BMvfK2lj3kZNN/gN51EYUtxkqzF+/QB85KVw=;
+        b=YcWzi4osx+cBbuEGWGV6c/0TXXAc2/5D8rZJcon4nn/USvg1xrKKVa6aHe9p7tF8cm
+         CyFAJp6DCmnj9ZVlgu3AxOT//K703uiG/H7c87/VrR+7dSC6f2F3xARDDO9NsYzRYl/7
+         4I6PB0mTr/uueaYAHCfU0vmy1kBkCUW4DtyFtNzgv5YydvuZq4thzP3aby/aAtFXtsuR
+         z/pH/BWePr/UCl8ARrolG8k4SMwB6ak36YrooeXaVNgrYZbJUErynIfCQjxf018Nd2tE
+         /DO8if48vt5KUSFWx2A7s2HXiU43M7DjKQosGfKd3eDrZW8CTKpgO8yj70z8Aobgf77v
+         1Qvw==
+X-Gm-Message-State: ACrzQf2zNuxmj92vFRA+73SIaNe6zLInlkbHgO2mp/FaQVP87/rVcwPQ
+        ToPcjCFWRW3AD+cBnRMoVkZW6g==
+X-Google-Smtp-Source: AMsMyM464aLMS0sqrk0u9Upnudsae+q8fCdLhT44F0KsUa29837krHy2WbCruxPZYm9LW4bvL5rb8Q==
+X-Received: by 2002:a17:902:ec83:b0:178:39e5:abee with SMTP id x3-20020a170902ec8300b0017839e5abeemr4301865plg.84.1663868406158;
+        Thu, 22 Sep 2022 10:40:06 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id ik27-20020a170902ab1b00b001732a019dddsm4370610plb.174.2022.09.22.10.40.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Sep 2022 10:40:05 -0700 (PDT)
+Date:   Thu, 22 Sep 2022 17:40:01 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     David Matlack <dmatlack@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Jones <andrew.jones@linux.dev>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Oliver Upton <oliver.upton@linux.dev>
+Subject: Re: [PATCH 1/5] KVM: selftests: Implement memcmp(), memcpy(), and
+ memset() for guest use
+Message-ID: <Yyyd8UN+ZO1Yf/Co@google.com>
+References: <20220908233134.3523339-1-seanjc@google.com>
+ <20220908233134.3523339-2-seanjc@google.com>
+ <Yyybg3DxgLt4NVn+@google.com>
 MIME-Version: 1.0
-References: <20220922154354.2486595-1-dianders@chromium.org> <20220922084322.RFC.1.Iaa18b24fef0c8e88f0b82502f7fa0a70565b64d2@changeid>
-In-Reply-To: <20220922084322.RFC.1.Iaa18b24fef0c8e88f0b82502f7fa0a70565b64d2@changeid>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 22 Sep 2022 19:37:45 +0200
-Message-ID: <CAJZ5v0j+5ZJ3Za5pTiPe9NCRa3CV_KpaBX833vL=WH0tsTBF1g@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/2] PM: runtime: Add pm_runtime_try_put_sync() and pm_runtime_try_get_sync()
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yyybg3DxgLt4NVn+@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 5:44 PM Douglas Anderson <dianders@chromium.org> wrote:
->
-> In some cases, a caller may wish to synchronously get or put the PM
-> Runtime state of a device but the caller may also be holding a
-> resource that the runtime suspend or runtime resume of the device
-> needs. Obviously this can lead to deadlock.
->
-> A case in point is the clock framework. While running
-> clk_disable_unused() the clock framework holds the global clock
-> "prepare" lock. The clock framework then goes through and does PM
-> Runtime actions. It should be no surprise to anyone that some devices
-> need to prepare or unprepare clocks are part of their PM Runtime
-> actions. Things generally work OK because of the "recursive" nature of
-> the global clock "prepare" lock, but if we get unlucky and the PM
-> Runtime action is happening in another task then we can end up
-> deadlocking.
->
-> Let's add a "try" version of the synchronous PM Runtime routines.
-> This version will return -EINPROGRESS rather than waiting. To
-> implement this we'll add a new flag: RPM_TRY.
->
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
->
->  drivers/base/power/runtime.c |  7 +++++--
->  include/linux/pm_runtime.h   | 28 ++++++++++++++++++++++++++++
->  2 files changed, 33 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-> index 997be3ac20a7..67cc6a620b12 100644
-> --- a/drivers/base/power/runtime.c
-> +++ b/drivers/base/power/runtime.c
-> @@ -609,7 +609,7 @@ static int rpm_suspend(struct device *dev, int rpmflags)
->         if (dev->power.runtime_status == RPM_SUSPENDING) {
->                 DEFINE_WAIT(wait);
->
-> -               if (rpmflags & (RPM_ASYNC | RPM_NOWAIT)) {
-> +               if (rpmflags & (RPM_ASYNC | RPM_NOWAIT | RPM_TRY)) {
->                         retval = -EINPROGRESS;
->                         goto out;
->                 }
-> @@ -791,7 +791,10 @@ static int rpm_resume(struct device *dev, int rpmflags)
->             || dev->power.runtime_status == RPM_SUSPENDING) {
->                 DEFINE_WAIT(wait);
->
-> -               if (rpmflags & (RPM_ASYNC | RPM_NOWAIT)) {
-> +               if (rpmflags & RPM_TRY) {
-> +                       retval = -EINPROGRESS;
+On Thu, Sep 22, 2022, David Matlack wrote:
+> > +LIBKVM_STRING += lib/kvm_string.c
+> 
+> Can this file be named lib/string.c instead? This file has nothing to do
+> with KVM per-se.
 
-Returning -EINPROGRESS from here may be misleading, because the device
-may not be resuming.
+Yes and no.  I deliberately chose kvm_string to avoid confusion with
+tools/lib/string.c and tools/include/nolibc/string.h.  The implementations
+themselves aren't KVM specific, but the reason the file _exists_ is 100% unique
+to KVM as there is no other environment where tools and/or selftests link to
+glibc but need to override the string ops.
 
-Besides, I'm not sure why a new flag is needed.  What about using
-RPM_NOWAIT instead?
+I'm not completely opposed to calling it string.c, but my preference is to keep
+it kvm_string.c so that it's slightly more obvious that KVM selftests are a
+special snowflake.
 
+> > diff --git a/tools/testing/selftests/kvm/lib/kvm_string.c b/tools/testing/selftests/kvm/lib/kvm_string.c
+> > new file mode 100644
+> > index 000000000000..a60d56d4e5b8
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/kvm/lib/kvm_string.c
+> > @@ -0,0 +1,33 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +#include "kvm_util.h"
+> 
+> Is this include necesary?
 
+Nope, I added the include because I also added declarations in kvm_util_base.h,
+but that's unnecessary because stddef.h also provides the declarations, and those
+_must_ match the prototypes of the definitions.  So yeah, this is better written as:
 
-> +                       goto out;
-> +               } else if (rpmflags & (RPM_ASYNC | RPM_NOWAIT)) {
->                         if (dev->power.runtime_status == RPM_SUSPENDING)
->                                 dev->power.deferred_resume = true;
->                         else
-> diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
-> index 0a41b2dcccad..c68baa63f0e7 100644
-> --- a/include/linux/pm_runtime.h
-> +++ b/include/linux/pm_runtime.h
-> @@ -21,6 +21,8 @@
->  #define RPM_GET_PUT            0x04    /* Increment/decrement the
->                                             usage_count */
->  #define RPM_AUTO               0x08    /* Use autosuspend_delay */
-> +#define RPM_TRY                        0x10    /* Try to be synchronous but fail
-> +                                           with an error if we can't. */
->
->  /*
->   * Use this for defining a set of PM operations to be used in all situations
-> @@ -425,6 +427,19 @@ static inline int pm_runtime_get_sync(struct device *dev)
->         return __pm_runtime_resume(dev, RPM_GET_PUT);
->  }
->
-> +/**
-> + * pm_runtime_try_get_sync - Like pm_runtime_get_sync() but err if blocking
-> + * @dev: Target device.
-> + *
-> + * This function works just like pm_runtime_get_sync() except that if the
-> + * device in question is currently in the process of suspending or resuming
-> + * that it will return with -EINPROGRESS instead of blocking.
-> + */
-> +static inline int pm_runtime_try_get_sync(struct device *dev)
-> +{
-> +       return __pm_runtime_resume(dev, RPM_GET_PUT | RPM_TRY);
-> +}
-> +
->  /**
->   * pm_runtime_resume_and_get - Bump up usage counter of a device and resume it.
->   * @dev: Target device.
-> @@ -489,6 +504,19 @@ static inline int pm_runtime_put_sync(struct device *dev)
->         return __pm_runtime_idle(dev, RPM_GET_PUT);
->  }
->
-> +/**
-> + * pm_runtime_try_put_sync - Like pm_runtime_put_sync() but err if blocking
-> + * @dev: Target device.
-> + *
-> + * This function works just like pm_runtime_put_sync() except that if the
-> + * device in question is currently in the process of suspending that it will
-> + * return with -EINPROGRESS instead of blocking.
-> + */
-> +static inline int pm_runtime_try_put_sync(struct device *dev)
-> +{
-> +       return __pm_runtime_idle(dev, RPM_GET_PUT | RPM_TRY);
-> +}
-> +
->  /**
->   * pm_runtime_put_sync_suspend - Drop device usage counter and suspend if 0.
->   * @dev: Target device.
-> --
-> 2.37.3.968.ga6b4b080e4-goog
->
+// SPDX-License-Identifier: GPL-2.0-only
+#include <stddef.h>
+
+/*
+ * Override the "basic" built-in string helpers so that they can be used in
+ * guest code.  KVM selftests don't support dynamic loading in guest code and
+ * will jump into the weeds if the compiler decides to insert an out-of-line
+ * call via the PLT.
+ */
+int memcmp(const void *cs, const void *ct, size_t count)
+{
+	const unsigned char *su1, *su2;
+	int res = 0;
+
+	for (su1 = cs, su2 = ct; 0 < count; ++su1, ++su2, count--) {
+		if ((res = *su1 - *su2) != 0)
+			break;
+	}
+	return res;
+}
+
+void *memcpy(void *dest, const void *src, size_t count)
+{
+	char *tmp = dest;
+	const char *s = src;
+
+	while (count--)
+		*tmp++ = *s++;
+	return dest;
+}
+
+void *memset(void *s, int c, size_t count)
+{
+	char *xs = s;
+
+	while (count--)
+		*xs++ = c;
+	return s;
+}
