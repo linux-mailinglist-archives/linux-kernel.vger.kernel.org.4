@@ -2,175 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B991D5E705B
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 01:55:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A96B85E705D
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 01:56:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229741AbiIVXzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 19:55:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56572 "EHLO
+        id S229905AbiIVX4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 19:56:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbiIVXzR (ORCPT
+        with ESMTP id S229677AbiIVX4N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 19:55:17 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18E77AB4F9
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 16:55:16 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id t7so17856715wrm.10
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 16:55:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=pEWu0cZtC5bQpAC76TrU39sQH99ByOhozrqgLO6bDiY=;
-        b=VbDDokghUbDy1JsHhqfa5yfdgJSLZ3Zmy3hLc51e8fTubphxO+9Kx5uT6HpTyl07XU
-         mvn/zOgEdbQiQE46fEE3ttFLIJmdlsVwErTFarnQwHzO98VEgaTaM901wB/JzYkndOpJ
-         xtT/rLZIpPXY3j/re8io1Od+IgjlvCkpjnN/dleCybU1IpQ52MjVAtgnBvGB/nuRTa6n
-         A8GDTTnWnWUO7eIFSDkWkYNjLhe+HXfcOuTeHMHrTvRYB4wvORri4cjFF5rvEeRI32ET
-         0XshsKczKYPZY2prXjhbOpJSDkagtNXdQ3BP740Tr1Iui75SwL2L8AyQFHz5vESZHBaW
-         MNEg==
+        Thu, 22 Sep 2022 19:56:13 -0400
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D637AFAC0;
+        Thu, 22 Sep 2022 16:56:12 -0700 (PDT)
+Received: by mail-pl1-f175.google.com with SMTP id w13so10293329plp.1;
+        Thu, 22 Sep 2022 16:56:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=pEWu0cZtC5bQpAC76TrU39sQH99ByOhozrqgLO6bDiY=;
-        b=3ib14KHdbcVsIMfk6ZPa1b8ZC3NFX24xke8wAwOh5nn+iDmCwd6eCAWLI9FNllXduU
-         dAohrH5MgCeDzRbsy9cr9qeePZLb6r/8vWVfWYF1zxFszSaxxooaWqoc8CDmTeHP1UXb
-         5vd4Io/RaD1unHqFt96HFc5jZrQ2yLe+P8BbgA7GiNbrSPFeAXaVRYyUtqGq/W2MYfaC
-         h58J2+uo7G3gAoOgzbdR+cvIjmIwjdGEeSxrFFdCYVU7tJpRz/3Kp+aaUQl7kc1wnSfC
-         aqSuTwgc87NyuDrkfFChM410SztIYGgBrZrxRQjxt4EZ5NE8VvbojpjC9DRJbIx0qHiI
-         MLlA==
-X-Gm-Message-State: ACrzQf0qtfbacAtMyTjgw1Ykt8Yel67RCslxLy5t1TczKuF5u8j18jNC
-        DVkgWzZKGwiD0Pmt8QQLZuS4X4P15QMIkdirnYDW8A==
-X-Google-Smtp-Source: AMsMyM5Qi2LT6ix2nu/U4IhNet2x4RTrWqRtFFV77MrwTaOEvv3GkW+VUYr+2y0IZOBSSUdcGRhIJcxQVyOgcFdbwc4=
-X-Received: by 2002:adf:e4ca:0:b0:228:d8b7:48a7 with SMTP id
- v10-20020adfe4ca000000b00228d8b748a7mr3377917wrm.300.1663890914444; Thu, 22
- Sep 2022 16:55:14 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=W2+hY5lHfF8Yuo41plQsF/0eXxPmqJupnSDFH4YELL4=;
+        b=mVRR4aZJ5g4MCHjpo4FP5u3OBVgKIEPrZtKX2L4xHqoi0Ur2e63hq9FvaowJAy7kWQ
+         jnLqufVdqloRtEM+eYE+y4MOmy1+dlo0RxtVgdSUtMYtItd7lvscp7aYAEb47cyJ/I/1
+         DQvHNO0UiANbq0iEnjs4IxBjshM9X6dIabZUBo5Dq/aLikTSROX1hPYeifO/3WDC6BJt
+         kCU6S0fvjPo971XxYN1fxa9zWRBfND/X2dnCvrDbYttpqbr1WwMlat196gZ2bSVl2oTy
+         QGTyKPJcpYyigGfVHnJreSBnJjusNmuayjmchvndoSWQlJ2wlXoy9G7+9WhBLlhtort3
+         j63Q==
+X-Gm-Message-State: ACrzQf2m0wEP9Ai1snI8wqYcWcASikRsfSNlPmbcwCqVXcibtKQn/2QC
+        IdBzIyd2FJOKkzol2FHy1gg=
+X-Google-Smtp-Source: AMsMyM7DnGl8Usys7cprZQSwOFa/NlnQp69DKqLnRIqNLOSTU/oMTFEKEH4OrfofFw1WRmQVRwtsKg==
+X-Received: by 2002:a17:902:d58f:b0:179:b756:6f5e with SMTP id k15-20020a170902d58f00b00179b7566f5emr4818263plh.1.1663890971926;
+        Thu, 22 Sep 2022 16:56:11 -0700 (PDT)
+Received: from [192.168.3.219] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id u10-20020a170903124a00b001782a0d3eeasm4698194plh.115.2022.09.22.16.56.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Sep 2022 16:56:10 -0700 (PDT)
+Message-ID: <8fd1d8b1-9f43-eb03-4a7f-187723d1c483@acm.org>
+Date:   Thu, 22 Sep 2022 16:56:08 -0700
 MIME-Version: 1.0
-References: <20220922205302.749274-1-namhyung@kernel.org>
-In-Reply-To: <20220922205302.749274-1-namhyung@kernel.org>
-From:   Ian Rogers <irogers@google.com>
-Date:   Thu, 22 Sep 2022 16:55:02 -0700
-Message-ID: <CAP-5=fXAS+QpkncLqLeS=MOeqOyrFy3Gev=F8vet4r6xjmCJ4g@mail.gmail.com>
-Subject: Re: [PATCH v3] perf tools: Get a perf cgroup more portably in BPF
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org, Song Liu <songliubraving@fb.com>,
-        Hao Luo <haoluo@google.com>, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: Please further explain Linux's "zoned storage" roadmap [was: Re:
+ [PATCH v14 00/13] support zoned block devices with non-power-of-2 zone sizes]
+Content-Language: en-US
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Mike Snitzer <snitzer@redhat.com>,
+        Pankaj Raghav <p.raghav@samsung.com>
+Cc:     agk@redhat.com, snitzer@kernel.org, axboe@kernel.dk, hch@lst.de,
+        pankydev8@gmail.com, gost.dev@samsung.com,
+        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-block@vger.kernel.org, dm-devel@redhat.com,
+        Johannes.Thumshirn@wdc.com, jaegeuk@kernel.org,
+        matias.bjorling@wdc.com
+References: <CGME20220920091120eucas1p2c82c18f552d6298d24547cba2f70b7fc@eucas1p2.samsung.com>
+ <20220920091119.115879-1-p.raghav@samsung.com> <YytJhEywBhqcr7MX@redhat.com>
+ <7dd9dbc0-b08b-fa47-5452-d448d86ca56b@opensource.wdc.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <7dd9dbc0-b08b-fa47-5452-d448d86ca56b@opensource.wdc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 1:53 PM Namhyung Kim <namhyung@kernel.org> wrote:
->
-> The perf_event_cgrp_id can be different on other configurations.
-> To be more portable as CO-RE, it needs to get the cgroup subsys id
-> using the bpf_core_enum_value() helper.
->
-> Suggested-by: Ian Rogers <irogers@google.com>
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> ---
-> v3 changes)
->  * check compiler features for enum value
->
-> v2 changes)
->  * fix off_cpu.bpf.c too
->  * get perf_subsys_id only once
->
->  tools/perf/util/bpf_skel/bperf_cgroup.bpf.c | 11 ++++++++++-
->  tools/perf/util/bpf_skel/off_cpu.bpf.c      | 12 ++++++++----
->  2 files changed, 18 insertions(+), 5 deletions(-)
->
-> diff --git a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
-> index 292c430768b5..8e7520e273db 100644
-> --- a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
-> +++ b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
-> @@ -48,6 +48,7 @@ const volatile __u32 num_cpus = 1;
->
->  int enabled = 0;
->  int use_cgroup_v2 = 0;
-> +int perf_subsys_id = -1;
->
->  static inline int get_cgroup_v1_idx(__u32 *cgrps, int size)
->  {
-> @@ -58,7 +59,15 @@ static inline int get_cgroup_v1_idx(__u32 *cgrps, int size)
->         int level;
->         int cnt;
->
-> -       cgrp = BPF_CORE_READ(p, cgroups, subsys[perf_event_cgrp_id], cgroup);
-> +       if (perf_subsys_id == -1) {
-> +#if __has_builtin(__builtin_preserve_enum_value)
-> +               perf_subsys_id = bpf_core_enum_value(enum cgroup_subsys_id,
-> +                                                    perf_event_cgrp_id);
-> +#else
-> +               perf_subsys_id = perf_event_cgrp_id;
-> +#endif
-> +       }
-> +       cgrp = BPF_CORE_READ(p, cgroups, subsys[perf_subsys_id], cgroup);
->         level = BPF_CORE_READ(cgrp, level);
->
->         for (cnt = 0; i < MAX_LEVELS; i++) {
-> diff --git a/tools/perf/util/bpf_skel/off_cpu.bpf.c b/tools/perf/util/bpf_skel/off_cpu.bpf.c
-> index c4ba2bcf179f..e917ef7b8875 100644
-> --- a/tools/perf/util/bpf_skel/off_cpu.bpf.c
-> +++ b/tools/perf/util/bpf_skel/off_cpu.bpf.c
-> @@ -94,6 +94,8 @@ const volatile bool has_prev_state = false;
->  const volatile bool needs_cgroup = false;
->  const volatile bool uses_cgroup_v1 = false;
->
-> +int perf_subsys_id = -1;
-> +
->  /*
->   * Old kernel used to call it task_struct->state and now it's '__state'.
->   * Use BPF CO-RE "ignored suffix rule" to deal with it like below:
-> @@ -119,11 +121,13 @@ static inline __u64 get_cgroup_id(struct task_struct *t)
->  {
->         struct cgroup *cgrp;
->
-> -       if (uses_cgroup_v1)
-> -               cgrp = BPF_CORE_READ(t, cgroups, subsys[perf_event_cgrp_id], cgroup);
-> -       else
-> -               cgrp = BPF_CORE_READ(t, cgroups, dfl_cgrp);
-> +       if (!uses_cgroup_v1)
-> +               return BPF_CORE_READ(t, cgroups, dfl_cgrp, kn, id);
-> +
-> +       if (perf_subsys_id == -1)
-> +               perf_subsys_id = bpf_core_enum_value(enum cgroup_subsys_id, perf_event_cgrp_id);
+On 9/21/22 16:55, Damien Le Moal wrote:
+> But again, that all depends on if Pankaj patch series is accepted, that
+> is, on everybody accepting that we lift the power-of-2 zone size constraint.
 
-Should the "#if __has_builtin(__builtin_preserve_enum_value)" test also be here?
-
-It feels a shame that bpf_core_enum_value isn't defined something like:
-
-#if __has_builtin(__builtin_preserve_enum_value)
-#define bpf_core_enum_value(enum_type, enum_value) \
-__builtin_preserve_enum_value(*(typeof(enum_type) *)enum_value,
-BPF_ENUMVAL_VALUE)
-#else
-#define bpf_core_enum_value(enum_type, enum_value) enum_value
-#endif
-
-for backward clang compatibility, but I could see why an error would
-be preferable.
+The companies that are busy with implementing zoned storage for UFS 
+devices are asking for kernel support for non-power-of-2 zone sizes.
 
 Thanks,
-Ian
 
->
-> +       cgrp = BPF_CORE_READ(t, cgroups, subsys[perf_subsys_id], cgroup);
->         return BPF_CORE_READ(cgrp, kn, id);
->  }
->
-> --
-> 2.37.3.998.g577e59143f-goog
->
+Bart.
