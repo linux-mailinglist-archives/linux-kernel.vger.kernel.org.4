@@ -2,152 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 063125E6AF0
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 20:30:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D16025E6AF4
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 20:31:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232192AbiIVSag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 14:30:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49764 "EHLO
+        id S232644AbiIVSbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 14:31:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233163AbiIVS3u (ORCPT
+        with ESMTP id S232635AbiIVSaW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 14:29:50 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3A6510D0CD
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 11:27:30 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id iw17so9631291plb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 11:27:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=P2G+h7SMpgZAj0ir+cJJ3OrD93Kkyvw6av5m2/MqFrU=;
-        b=EPPhzxlxohXjUEfjcoxBXBc2UpUI4B+r6Z/jngunTL0ICZiBTmGkOrX14rPtWysqEm
-         hS2JQF9VSOQDmp1k32CpZI96IrRwOz7OtAaxDQnZMVDOQssBj/cEdTIzXFPP7WVQ+9sY
-         9kwPJ8ZWPySmPsQ0rHoNML0SmSq+1q9CMp1gdems2EGTmYmxSlF5UYyZiX2Ckq+/gc8E
-         OWZOUEdOWI/4UjRA7zo+Kbeen9ns9/AJsRS56rWLrae9D0IF3yHpa8vNkdeY6QIyQr6q
-         rBCx4Skwvgy/b6Tx7Gk7XQLKEMV9S9mCh5EvC5ut/FVRcESOAKGAwHxt1k+4hviHkKZh
-         Qk1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=P2G+h7SMpgZAj0ir+cJJ3OrD93Kkyvw6av5m2/MqFrU=;
-        b=gB2xnPLJrkx1p5Im9/7TynaGAqda/7bE3uuUEJhL4H2kmaIMK4wCkbiXTapEdWSRVR
-         K1ecJw0RAvVjreoHtxPS6ti/142PIQI3DylQBfmFObBRCoHpBg9gtvuNcjojzALX9vl7
-         kpv0DPqmf52x1OQkKV5NDM3AZ2QFzYx2Jh449LJkLirGwNd9WE6CcfktklzExfBDHDa6
-         /3FgU7NcryWjssCAK/9r1CrSKrWbLAMQYtmaNCAzCYQjqUiXccGnbryIcIFxqn+Vg79+
-         ITI6HC0TdTgRzLjKwiuJ/5ooZV2IxfTV1eiHlsVQy7wWex6aw8MjE/08bdczx+/V+FAo
-         4DbA==
-X-Gm-Message-State: ACrzQf1W+auCSx7q8uL3sWsrr5TN/LvcOOD5Z70bFSfTxHQ62qrjUEG3
-        fYgSuhls7k843LHFAoTr0VA1lUFYija37woAwjs=
-X-Google-Smtp-Source: AMsMyM47BxQFdeBclVFiRtxk1u1ErC3IOjGokQDFqiBDOYs8TbykT/gHzd/h2/dPblMPFgtU0qos6JQnYOYYO3L4acg=
-X-Received: by 2002:a17:902:7e83:b0:177:e667:7841 with SMTP id
- z3-20020a1709027e8300b00177e6677841mr4505384pla.18.1663871225158; Thu, 22 Sep
- 2022 11:27:05 -0700 (PDT)
+        Thu, 22 Sep 2022 14:30:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20B0E10AB30;
+        Thu, 22 Sep 2022 11:27:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6052563759;
+        Thu, 22 Sep 2022 18:27:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 797E5C433C1;
+        Thu, 22 Sep 2022 18:27:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663871258;
+        bh=8xWBJ6Sj6BfVo4gfoi/4G8CBQ6Jx/wBwvklLiTjCFyM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=s69F1omKgr2HrO0nTiXgJhVXfkTHk5wTJUcaIeSmJ0XajGhhyPnrb1bU/nv2iQqnN
+         W3caY/I9YU693aup6abaVXXxOFAj5HnEaV+f+mW+USOTiKdT5VDbo4vuDdzlh8z/UU
+         /aynRJSNuS5OFlAEr08CcXQvqXNzvH82QeBvZ+svaWrWgwoCxBjDhgoTF3HxxGsr2B
+         RHfBlVJJXlQsVDWYkXMPCMh5RNtGs9PdgdSwZvN31BFVKmmjE2hbJ0hP4xDdk1DbDF
+         q+MOFeJrCKHHXBIH9N+ZEVDqAQyriFbate7Mnvp6ebI677UzOy6UvVkYaYR7jIvUKc
+         AWYISuH7tO4Gw==
+Date:   Thu, 22 Sep 2022 13:27:37 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Logan Gunthorpe <logang@deltatee.com>
+Cc:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-mm@kvack.org, Christoph Hellwig <hch@lst.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Don Dutile <ddutile@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Minturn Dave B <dave.b.minturn@intel.com>,
+        Jason Ekstrand <jason@jlekstrand.net>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Xiong Jianxin <jianxin.xiong@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Martin Oliveira <martin.oliveira@eideticom.com>,
+        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Stephen Bates <sbates@raithlin.com>
+Subject: Re: [PATCH v10 7/8] PCI/P2PDMA: Allow userspace VMA allocations
+ through sysfs
+Message-ID: <20220922182737.GA1326059@bhelgaas>
 MIME-Version: 1.0
-References: <20220922124306.34729-1-dev@pschenker.ch> <20220922124306.34729-5-dev@pschenker.ch>
-In-Reply-To: <20220922124306.34729-5-dev@pschenker.ch>
-From:   Adrien Grassein <adrien.grassein@gmail.com>
-Date:   Thu, 22 Sep 2022 20:26:54 +0200
-Message-ID: <CABkfQAEZ1Dyqz=rh2yssq0=4sZrt9GRXJCseCQT-in7+cVrh4g@mail.gmail.com>
-Subject: Re: [PATCH 4/4] drm/bridge: lt8912b: clarify lvds output status
-To:     Philippe Schenker <dev@pschenker.ch>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Robert Foss <robert.foss@linaro.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Philippe Schenker <philippe.schenker@toradex.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220922163926.7077-8-logang@deltatee.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le jeu. 22 sept. 2022 =C3=A0 14:43, Philippe Schenker <dev@pschenker.ch> a =
-=C3=A9crit :
->
-> From: Francesco Dolcini <francesco.dolcini@toradex.com>
->
-> Add comments on the lt8912_write_lvds_config() config to document the
-> current settings and to make it clear that this is a hardcoded
-> configuration not relevant for the HDMI output (could be removed without
-> affecting the HDMI port).
->
-> No changes on the actual register writes.
->
-> Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
-> Signed-off-by: Philippe Schenker <philippe.schenker@toradex.com>
-Acked-by: Adrien Grassein <adrien.grassein@gmail.com>
+On Thu, Sep 22, 2022 at 10:39:25AM -0600, Logan Gunthorpe wrote:
+> Create a sysfs bin attribute called "allocate" under the existing
+> "p2pmem" group. The only allowable operation on this file is the mmap()
+> call.
+> 
+> When mmap() is called on this attribute, the kernel allocates a chunk of
+> memory from the genalloc and inserts the pages into the VMA. The
+> dev_pagemap .page_free callback will indicate when these pages are no
+> longer used and they will be put back into the genalloc.
+> 
+> On device unbind, remove the sysfs file before the memremap_pages are
+> cleaned up. This ensures unmap_mapping_range() is called on the files
+> inode and no new mappings can be created.
+> 
+> Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
+
+Not sure which tree this should go through, so:
+
+Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+
 > ---
->
->  drivers/gpu/drm/bridge/lontium-lt8912b.c | 26 ++++++++++++++++--------
->  1 file changed, 17 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/gpu/drm/bridge/lontium-lt8912b.c b/drivers/gpu/drm/b=
-ridge/lontium-lt8912b.c
-> index 5968f4af190b..3e870d45f881 100644
-> --- a/drivers/gpu/drm/bridge/lontium-lt8912b.c
-> +++ b/drivers/gpu/drm/bridge/lontium-lt8912b.c
-> @@ -165,24 +165,32 @@ static int lt8912_write_rxlogicres_config(struct lt=
-8912 *lt)
->         return ret;
+>  drivers/pci/p2pdma.c | 124 +++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 124 insertions(+)
+> 
+> diff --git a/drivers/pci/p2pdma.c b/drivers/pci/p2pdma.c
+> index 4496a7c5c478..a6ed6bbca214 100644
+> --- a/drivers/pci/p2pdma.c
+> +++ b/drivers/pci/p2pdma.c
+> @@ -89,6 +89,90 @@ static ssize_t published_show(struct device *dev, struct device_attribute *attr,
+>  }
+>  static DEVICE_ATTR_RO(published);
+>  
+> +static int p2pmem_alloc_mmap(struct file *filp, struct kobject *kobj,
+> +		struct bin_attribute *attr, struct vm_area_struct *vma)
+> +{
+> +	struct pci_dev *pdev = to_pci_dev(kobj_to_dev(kobj));
+> +	size_t len = vma->vm_end - vma->vm_start;
+> +	struct pci_p2pdma *p2pdma;
+> +	struct percpu_ref *ref;
+> +	unsigned long vaddr;
+> +	void *kaddr;
+> +	int ret;
+> +
+> +	/* prevent private mappings from being established */
+> +	if ((vma->vm_flags & VM_MAYSHARE) != VM_MAYSHARE) {
+> +		pci_info_ratelimited(pdev,
+> +				     "%s: fail, attempted private mapping\n",
+> +				     current->comm);
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (vma->vm_pgoff) {
+> +		pci_info_ratelimited(pdev,
+> +				     "%s: fail, attempted mapping with non-zero offset\n",
+> +				     current->comm);
+> +		return -EINVAL;
+> +	}
+> +
+> +	rcu_read_lock();
+> +	p2pdma = rcu_dereference(pdev->p2pdma);
+> +	if (!p2pdma) {
+> +		ret = -ENODEV;
+> +		goto out;
+> +	}
+> +
+> +	kaddr = (void *)gen_pool_alloc_owner(p2pdma->pool, len, (void **)&ref);
+> +	if (!kaddr) {
+> +		ret = -ENOMEM;
+> +		goto out;
+> +	}
+> +
+> +	/*
+> +	 * vm_insert_page() can sleep, so a reference is taken to mapping
+> +	 * such that rcu_read_unlock() can be done before inserting the
+> +	 * pages
+> +	 */
+> +	if (unlikely(!percpu_ref_tryget_live_rcu(ref))) {
+> +		ret = -ENODEV;
+> +		goto out_free_mem;
+> +	}
+> +	rcu_read_unlock();
+> +
+> +	for (vaddr = vma->vm_start; vaddr < vma->vm_end; vaddr += PAGE_SIZE) {
+> +		ret = vm_insert_page(vma, vaddr, virt_to_page(kaddr));
+> +		if (ret) {
+> +			gen_pool_free(p2pdma->pool, (uintptr_t)kaddr, len);
+> +			return ret;
+> +		}
+> +		percpu_ref_get(ref);
+> +		put_page(virt_to_page(kaddr));
+> +		kaddr += PAGE_SIZE;
+> +		len -= PAGE_SIZE;
+> +	}
+> +
+> +	percpu_ref_put(ref);
+> +
+> +	return 0;
+> +out_free_mem:
+> +	gen_pool_free(p2pdma->pool, (uintptr_t)kaddr, len);
+> +out:
+> +	rcu_read_unlock();
+> +	return ret;
+> +}
+> +
+> +static struct bin_attribute p2pmem_alloc_attr = {
+> +	.attr = { .name = "allocate", .mode = 0660 },
+> +	.mmap = p2pmem_alloc_mmap,
+> +	/*
+> +	 * Some places where we want to call mmap (ie. python) will check
+> +	 * that the file size is greater than the mmap size before allowing
+> +	 * the mmap to continue. To work around this, just set the size
+> +	 * to be very large.
+> +	 */
+> +	.size = SZ_1T,
+> +};
+> +
+>  static struct attribute *p2pmem_attrs[] = {
+>  	&dev_attr_size.attr,
+>  	&dev_attr_available.attr,
+> @@ -96,11 +180,32 @@ static struct attribute *p2pmem_attrs[] = {
+>  	NULL,
 >  };
->
-> +/* enable LVDS output with some hardcoded configuration, not required fo=
-r the HDMI output */
->  static int lt8912_write_lvds_config(struct lt8912 *lt)
+>  
+> +static struct bin_attribute *p2pmem_bin_attrs[] = {
+> +	&p2pmem_alloc_attr,
+> +	NULL,
+> +};
+> +
+>  static const struct attribute_group p2pmem_group = {
+>  	.attrs = p2pmem_attrs,
+> +	.bin_attrs = p2pmem_bin_attrs,
+>  	.name = "p2pmem",
+>  };
+>  
+> +static void p2pdma_page_free(struct page *page)
+> +{
+> +	struct pci_p2pdma_pagemap *pgmap = to_p2p_pgmap(page->pgmap);
+> +	struct percpu_ref *ref;
+> +
+> +	gen_pool_free_owner(pgmap->provider->p2pdma->pool,
+> +			    (uintptr_t)page_to_virt(page), PAGE_SIZE,
+> +			    (void **)&ref);
+> +	percpu_ref_put(ref);
+> +}
+> +
+> +static const struct dev_pagemap_ops p2pdma_pgmap_ops = {
+> +	.page_free = p2pdma_page_free,
+> +};
+> +
+>  static void pci_p2pdma_release(void *data)
 >  {
->         const struct reg_sequence seq[] =3D {
-> +               // lvds power up
->                 {0x44, 0x30},
->                 {0x51, 0x05},
-> -               {0x50, 0x24},
-> -               {0x51, 0x2d},
-> -               {0x52, 0x04},
-> -               {0x69, 0x0e},
+>  	struct pci_dev *pdev = data;
+> @@ -152,6 +257,19 @@ static int pci_p2pdma_setup(struct pci_dev *pdev)
+>  	return error;
+>  }
+>  
+> +static void pci_p2pdma_unmap_mappings(void *data)
+> +{
+> +	struct pci_dev *pdev = data;
 > +
-> +               // core pll bypass
-> +               {0x50, 0x24}, // cp=3D50uA
-> +               {0x51, 0x2d}, // Pix_clk as reference, second order passi=
-ve LPF PLL
-> +               {0x52, 0x04}, // loopdiv=3D0, use second-order PLL
-> +               {0x69, 0x0e}, // CP_PRESET_DIV_RATIO
->                 {0x69, 0x8e},
->                 {0x6a, 0x00},
-> -               {0x6c, 0xb8},
-> +               {0x6c, 0xb8}, // RGD_CP_SOFT_K_EN,RGD_CP_SOFT_K[13:8]
->                 {0x6b, 0x51},
-> -               {0x04, 0xfb},
+> +	/*
+> +	 * Removing the alloc attribute from sysfs will call
+> +	 * unmap_mapping_range() on the inode, teardown any existing userspace
+> +	 * mappings and prevent new ones from being created.
+> +	 */
+> +	sysfs_remove_file_from_group(&pdev->dev.kobj, &p2pmem_alloc_attr.attr,
+> +				     p2pmem_group.name);
+> +}
 > +
-> +               {0x04, 0xfb}, // core pll reset
->                 {0x04, 0xff},
-> -               {0x7f, 0x00},
-> -               {0xa8, 0x13},
-> -               {0x02, 0xf7},
+>  /**
+>   * pci_p2pdma_add_resource - add memory for use as p2p memory
+>   * @pdev: the device to add the memory to
+> @@ -198,6 +316,7 @@ int pci_p2pdma_add_resource(struct pci_dev *pdev, int bar, size_t size,
+>  	pgmap->range.end = pgmap->range.start + size - 1;
+>  	pgmap->nr_range = 1;
+>  	pgmap->type = MEMORY_DEVICE_PCI_P2PDMA;
+> +	pgmap->ops = &p2pdma_pgmap_ops;
+>  
+>  	p2p_pgmap->provider = pdev;
+>  	p2p_pgmap->bus_offset = pci_bus_address(pdev, bar) -
+> @@ -209,6 +328,11 @@ int pci_p2pdma_add_resource(struct pci_dev *pdev, int bar, size_t size,
+>  		goto pgmap_free;
+>  	}
+>  
+> +	error = devm_add_action_or_reset(&pdev->dev, pci_p2pdma_unmap_mappings,
+> +					 pdev);
+> +	if (error)
+> +		goto pages_free;
 > +
-> +               // scaler bypass
-> +               {0x7f, 0x00}, // disable scaler
-> +               {0xa8, 0x13}, // 0x13: JEIDA, 0x33: VESA
-> +
-> +               {0x02, 0xf7}, // lvds pll reset
->                 {0x02, 0xff},
->                 {0x03, 0xcf},
->                 {0x03, 0xff},
-> --
-> 2.37.3
->
+>  	p2pdma = rcu_dereference_protected(pdev->p2pdma, 1);
+>  	error = gen_pool_add_owner(p2pdma->pool, (unsigned long)addr,
+>  			pci_bus_address(pdev, bar) + offset,
+> -- 
+> 2.30.2
+> 
