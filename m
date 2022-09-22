@@ -2,111 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D10E5E5A09
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 06:08:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45C8B5E5A0E
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 06:14:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231182AbiIVEIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 00:08:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55816 "EHLO
+        id S229831AbiIVEOm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 00:14:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230011AbiIVEHm (ORCPT
+        with ESMTP id S229789AbiIVEOj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 00:07:42 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C14B1B94;
-        Wed, 21 Sep 2022 21:06:03 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d24so7633226pls.4;
-        Wed, 21 Sep 2022 21:06:03 -0700 (PDT)
+        Thu, 22 Sep 2022 00:14:39 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B39C7DFD2;
+        Wed, 21 Sep 2022 21:14:38 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id d64-20020a17090a6f4600b00202ce056566so918949pjk.4;
+        Wed, 21 Sep 2022 21:14:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=6dB2S/sZUaTFjTdxFO8rQ+foHYbjpvQ1FYodQpGLqtE=;
-        b=X/Orp/fi8+eVfqSuSIyivUe5yWAUKYF55niV5ayYyP00LpYGctI0Wq4EUCCFwDmJEM
-         /a3wwKMkPVv1SLifch7DZSYFgkW359rqt6pb/Cdg03SF6Yxi9uMIjzySTplianUvB30T
-         uRSfDo9cTafmyAtUs/w1P0gsogfHm30cR4aShqUFcHDkytKEGmqxHvdMY1WzX+A55xnD
-         W8VTC1HBs255kE5UW9wRmb6AML6LIXcs/mgGmgJKs9ZIgUc0QM7OaJovHUu60N0Qbrte
-         PrU5iREUyKhLgHXCRi9iudQllNqmws5Ai/hSBOKaStQ4xZPPA2KBUxGvQ1hUYNc6wyiJ
-         FZ5Q==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date;
+        bh=z8K8JabQHxvWke1wLuSNQQKC0Zp7p6L1teN9v6xkDP8=;
+        b=GZpjOi0ytaP2Q0bSJ8LGmg2pmd5KvjScrRWewswVinGIz3c/zhvb+1l/h2psEwXYaB
+         rkShb2F5lWekTtP+LgZDTxg/pbOKMJWns05QG0lgHnwch5fCx0x5MstVObxATaeeFrw7
+         lMg1vYE2HDHCqKbxqTeG+KIZlrwSfd+gSnxqUL/VxJAz1TLnACv0ommsz0DE04xROqJw
+         EV+zodAOmFwbyqfZpBTpL5Fo8GqljGs583mTwmEvMiwZdeapXtJCQHHniv5KC1ONVs71
+         /k1jbqX2Lf9MLz7KlT8Hyddd6h8YFEhEkSx0EGXYcNusCziPsYfnBb8M21UnUzOcxbtD
+         1Dog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=6dB2S/sZUaTFjTdxFO8rQ+foHYbjpvQ1FYodQpGLqtE=;
-        b=mc1tlTvXYCL9SkzB33H036j7uzNt/pDYV5pRLJaQ69m/Bq0K3CuLK1cS230Dq7S5Mg
-         6T6zzcAH1wxXqpvkdxfk/kUIFtQp4g+gbEdrRy7EAaK46Q/dEtyrpI64paKE7PvOZMB7
-         Zkjtou2S4mBFjrAv+uCdyN6+byMt3pdfK4LjJiP2uKXBCHkFj7A9V7YlA/3zI2Dmzgcg
-         VGb29NyfG+zP1osFCeJMPpWVW6Pb/EAYP0BrPDkJeG0HWqao+3PXmcOJag+JOc7TCVTi
-         Age2Hi+9FPY3XHiS798Tb4onmTkrrvHSSA35pIKR8xv38ujd1Q7YEDR/DlSFHj0vZ3e+
-         +ONw==
-X-Gm-Message-State: ACrzQf0uJ+xoiQR8d9s9TBBtq9UBdTE/qvBebcPPuMkw8Y8p+vAMhA51
-        HqSRFXGWUB6rWNd8df6Y+fc=
-X-Google-Smtp-Source: AMsMyM7/Aifkgl9VHuqXDGnLg0qQkcZfSaMunAwDbPNYI7EVQMRIqeDoVofrst3CYzPwbpxuciiKDA==
-X-Received: by 2002:a17:90a:71c9:b0:203:c9b0:3722 with SMTP id m9-20020a17090a71c900b00203c9b03722mr1586154pjs.119.1663819555096;
-        Wed, 21 Sep 2022 21:05:55 -0700 (PDT)
-Received: from debian.me (subs28-116-206-12-54.three.co.id. [116.206.12.54])
-        by smtp.gmail.com with ESMTPSA id jc6-20020a17090325c600b00176b63535adsm2790794plb.260.2022.09.21.21.05.53
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+         :to:cc:subject:date;
+        bh=z8K8JabQHxvWke1wLuSNQQKC0Zp7p6L1teN9v6xkDP8=;
+        b=WIxMUyNS0xKvZZtBeXTgXatQnHl6n/L4+Z450m5KIarX3FxDrvnt3Izn9AHdI8T1dF
+         O1XZvnvc7Eyu8L3b6QH3nwQh2dD8C3QmL94/zNKxtYBR+dxAKUrWzBwNElEs1sMZmWxD
+         78YW4izboxMyxvgwALgJlNP1kJytxWa021TvNk1JaJbgXZYiKbAnYFxqNP0NxMYjSls5
+         V2fPL+/epVJR/K+q0t3ey3nVGFvKhBwFG296TfL5k/xuGEPKLai/XL4bZMjPe6YrJaP3
+         tW/IDgZlErs5ZDtHvNKFciCz8nrV0LcAtvuqgNfOKkHvY5kEsGF0AfsSyYxJLHGQwIFl
+         xGKw==
+X-Gm-Message-State: ACrzQf0oMp8sTez+l7/GQ6K1DpUYAzOHNWYN50Qc8zx2WPli7wK6fWPW
+        ZraCZotqBn/uQ46G75r3DdE=
+X-Google-Smtp-Source: AMsMyM6H9DykUZ5nykAuy1NSDpqTlkI7yB2pKbDL1MY31zpOGgU2hatPthfJuE6yM2AFSIdUilvhAg==
+X-Received: by 2002:a17:902:f644:b0:172:b074:d1f5 with SMTP id m4-20020a170902f64400b00172b074d1f5mr1407085plg.29.1663820078037;
+        Wed, 21 Sep 2022 21:14:38 -0700 (PDT)
+Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:1040:796c:caf8:4dcf:320d])
+        by smtp.gmail.com with ESMTPSA id lp5-20020a17090b4a8500b002006f15ad4fsm2749152pjb.10.2022.09.21.21.14.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Sep 2022 21:05:53 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 2D8AC1038F1; Thu, 22 Sep 2022 11:05:50 +0700 (WIB)
-Date:   Thu, 22 Sep 2022 11:05:49 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.15 00/45] 5.15.70-rc1 review
-Message-ID: <YyvfHSBe5ui8PQ6+@debian.me>
-References: <20220921153646.931277075@linuxfoundation.org>
+        Wed, 21 Sep 2022 21:14:37 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>
+Cc:     cgroups@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org, Song Liu <songliubraving@fb.com>,
+        bpf@vger.kernel.org
+Subject: [PATCH] perf stat: Support old kernels for bperf cgroup counting
+Date:   Wed, 21 Sep 2022 21:14:35 -0700
+Message-Id: <20220922041435.709119-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.37.3.968.ga6b4b080e4-goog
+In-Reply-To: <CAM9d7cjQ20a01YoZi=o-_7HT6TzR0TZgtpscKNvRrMq2yqV1Og@mail.gmail.com>
+References: <CAM9d7cjQ20a01YoZi=o-_7HT6TzR0TZgtpscKNvRrMq2yqV1Og@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="MJhhS+EG0jqWe+Rr"
-Content-Disposition: inline
-In-Reply-To: <20220921153646.931277075@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The recent change in the cgroup will break the backward compatiblity in
+the BPF program.  It should support both old and new kernels using BPF
+CO-RE technique.
 
---MJhhS+EG0jqWe+Rr
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Like the task_struct->__state handling in the offcpu analysis, we can
+check the field name in the cgroup struct.
 
-On Wed, Sep 21, 2022 at 05:45:50PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.70 release.
-> There are 45 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+Arnaldo, I think this should go through the cgroup tree since it depends
+on the earlier change there.  I don't think it'd conflict with other
+perf changes but please let me know if you see any trouble, thanks!
 
-Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
-powerpc (ps3_defconfig, GCC 12.1.0).
+ tools/perf/util/bpf_skel/bperf_cgroup.bpf.c | 29 ++++++++++++++++++++-
+ 1 file changed, 28 insertions(+), 1 deletion(-)
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+diff --git a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
+index 488bd398f01d..4fe61043de04 100644
+--- a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
++++ b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
+@@ -43,12 +43,39 @@ struct {
+ 	__uint(value_size, sizeof(struct bpf_perf_event_value));
+ } cgrp_readings SEC(".maps");
+ 
++/* new kernel cgroup definition */
++struct cgroup___new {
++	int level;
++	struct cgroup *ancestors[];
++} __attribute__((preserve_access_index));
++
++/* old kernel cgroup definition */
++struct cgroup___old {
++	int level;
++	u64 ancestor_ids[];
++} __attribute__((preserve_access_index));
++
+ const volatile __u32 num_events = 1;
+ const volatile __u32 num_cpus = 1;
+ 
+ int enabled = 0;
+ int use_cgroup_v2 = 0;
+ 
++static inline __u64 get_cgroup_v1_ancestor_id(struct cgroup *cgrp, int level)
++{
++	/* recast pointer to capture new type for compiler */
++	struct cgroup___new *cgrp_new = (void *)cgrp;
++
++	if (bpf_core_field_exists(cgrp_new->ancestors)) {
++		return BPF_CORE_READ(cgrp_new, ancestors[level], kn, id);
++	} else {
++		/* recast pointer to capture old type for compiler */
++		struct cgroup___old *cgrp_old = (void *)cgrp;
++
++		return BPF_CORE_READ(cgrp_old, ancestor_ids[level]);
++	}
++}
++
+ static inline int get_cgroup_v1_idx(__u32 *cgrps, int size)
+ {
+ 	struct task_struct *p = (void *)bpf_get_current_task();
+@@ -70,7 +97,7 @@ static inline int get_cgroup_v1_idx(__u32 *cgrps, int size)
+ 			break;
+ 
+ 		// convert cgroup-id to a map index
+-		cgrp_id = BPF_CORE_READ(cgrp, ancestors[i], kn, id);
++		cgrp_id = get_cgroup_v1_ancestor_id(cgrp, i);
+ 		elem = bpf_map_lookup_elem(&cgrp_idx, &cgrp_id);
+ 		if (!elem)
+ 			continue;
+-- 
+2.37.3.968.ga6b4b080e4-goog
 
---=20
-An old man doll... just what I always wanted! - Clara
-
---MJhhS+EG0jqWe+Rr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCYyvfGAAKCRD2uYlJVVFO
-oyZtAQCagZo86cpuqmwuPCh/xItGMtiS1NKE3EnQ78PFbkeNjQD/YfWZhRN+j6YY
-AIZBjK5N0QQUDr6ARczt8Xhug+ve0w4=
-=1Fhu
------END PGP SIGNATURE-----
-
---MJhhS+EG0jqWe+Rr--
