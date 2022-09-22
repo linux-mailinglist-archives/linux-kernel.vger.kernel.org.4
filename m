@@ -2,84 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F066C5E5FB4
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 12:20:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F148F5E5FB7
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 12:20:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230220AbiIVKUc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 06:20:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38878 "EHLO
+        id S231274AbiIVKUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 06:20:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbiIVKU2 (ORCPT
+        with ESMTP id S231391AbiIVKUp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 06:20:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECD78ABD76;
-        Thu, 22 Sep 2022 03:20:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 22 Sep 2022 06:20:45 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E80B2D8C;
+        Thu, 22 Sep 2022 03:20:44 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 71E54612D5;
-        Thu, 22 Sep 2022 10:20:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 480A8C433C1;
-        Thu, 22 Sep 2022 10:20:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663842026;
-        bh=Tc3FJ+kvPCra3uvSRT0MqM78GUuFNuRgTyRBDiLAt2Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WC19bm7yDjv6Fv4q7W2qd50dSl5fONXIiqQ7aLs5DKICZZL/WOedMxdWyY4QdNKA6
-         edSWtEYH63uYGoX2MqtJroCZ96MfTte2rEwLJ21lVT6PvBqAIBc+kpTUBQV457oMMK
-         ufpc07/tEAsgyMGHiuNbe5VjMb8Zfx00XxDnuZXc=
-Date:   Thu, 22 Sep 2022 12:20:16 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     David Gow <davidgow@google.com>
-Cc:     cgel.zte@gmail.com, Brendan Higgins <brendan.higgins@linux.dev>,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, Shuah Khan <skhan@linuxfoundation.org>,
-        Daniel Latypov <dlatypov@google.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MYBBL0pPCz4xG5;
+        Thu, 22 Sep 2022 20:20:41 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1663842042;
+        bh=isWspzlR4F4+tBY1FRpoKraSXHtPSMkwmApxBzjChiU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Zvj6xOgnRrw2gm7zi78LqxK4VcpFtH7rSEVW7RpxK1GyO6zFr4XjbYiAErDFTRwcJ
+         Kh12uM2OFi4FQll0FopFKApCDLjC+ybML1rrQfaehnM2lizXFFa0FPAH/Uvc7dtkDI
+         g3NJoL74F+BdiDzlvEDvCJ55sS9q8g4JXK7nfXx5KPuIka7fLYBff6dwjEMeiqxnSY
+         dZxq68LqLEiEf++RDMf6z48Zlp7Q0fmnwX3WMo3fBB48Q+UpTmeNjL7ECpp6IWgiRw
+         JPI7uSma6Dvj6iudMo+ugM6DW5rdGxSZfhtJ4V+ABhbrRFuW1A04BfaaXA3cwaoRCB
+         Rl9ShCT4yAa/w==
+Date:   Thu, 22 Sep 2022 20:20:39 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Eliav Farber <farbere@amazon.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Xu Panda <xu.panda@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH linux-next] kunit: tool: use absolute path for wget
-Message-ID: <Yyw24J7YFVtxsnJ7@kroah.com>
-References: <20220922083610.235936-1-xu.panda@zte.com.cn>
- <CABVgOSkjmuWDVwOW5PQRAtDYJGjHjcc_8Gg4JjhiT41Kez1rcw@mail.gmail.com>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the hwmon-staging tree
+Message-ID: <20220922202039.211372a6@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CABVgOSkjmuWDVwOW5PQRAtDYJGjHjcc_8Gg4JjhiT41Kez1rcw@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/GVc9ufpE6PA.IYfdVf6oaJt";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 06:09:28PM +0800, David Gow wrote:
-> On Thu, Sep 22, 2022 at 4:36 PM <cgel.zte@gmail.com> wrote:
-> >
-> > From: Xu Panda <xu.panda@zte.com.cn>
-> >
-> > Not using absolute path when invoking wget can lead to serious
-> > security issues.
-> >
-> > Reported-by: Zeal Robot <zealci@zte.com.cn>
-> > Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
-> > ---
-> 
-> This seems mostly okay to me -- we'd be abandoning people who have
-> wget in an unusual location, but I don't think there are many people
-> who want to run KUnit under RISC-V, have wget in a non-standard
-> location, and can't acquire the bios file themselves.
-> 
-> So this is:
-> Reviewed-by: David Gow <davidgow@google.com>
+--Sig_/GVc9ufpE6PA.IYfdVf6oaJt
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Please no, at this point in time, submissions from this gmail "alias"
-are going to have to be rejected from the kernel.
+Hi all,
 
-greg k-h
+In commit
+
+  103974b11176 ("hwmon: (mr75203) fix undefined reference to `__divdi3'")
+
+Fixes tag
+
+  Fixes: 381a86c545f1 ("hwmon: (mr75203) modify the temperature equation ac=
+cording to series 5 datasheet")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant:
+
+Fixes: 94c025b6f735 ("hwmon: (mr75203) modify the temperature equation acco=
+rding to series 5 datasheet")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/GVc9ufpE6PA.IYfdVf6oaJt
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMsNvcACgkQAVBC80lX
+0GwlLgf/ZzjY2cMzz41Tzi/P1cJiWZYpV9/hc3uitQr9gpOcjbK7Ya0peV/RJnKJ
+r2KRL5wBRQaCTF6WRn82pmrY6E70sYf91c34+roN/wWS433tsFtLMTcdGzSiTrbM
+Nre/17UyrDCfaep8LFKAKSUi6KnlC3ujw+xpu0TgWDFfKwo7Dy+1sWlTsMk1pLCs
+5xxI3T6wud0UUgsf+pxTy4WG1ksyl9ZmEGouWpIH8SlsXtr87cqBf23q2qeoN/7O
+pxgt7XQGAosqV5amvo+FPyBq8hd58rXbcC4ZOtboRIKDrvf9bEzEKOMNEiqpUTzo
+C1dCoka2TzZw9PQ8qjLzwgk3LyJ2bg==
+=R+7Y
+-----END PGP SIGNATURE-----
+
+--Sig_/GVc9ufpE6PA.IYfdVf6oaJt--
