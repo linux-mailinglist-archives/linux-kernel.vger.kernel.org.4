@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 775A45E63FB
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 15:45:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA0CE5E6408
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 15:46:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231629AbiIVNpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 09:45:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53150 "EHLO
+        id S231552AbiIVNps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 09:45:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231204AbiIVNpV (ORCPT
+        with ESMTP id S231295AbiIVNpW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 09:45:21 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 104B43D58D
+        Thu, 22 Sep 2022 09:45:22 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B0BD33E1D
         for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 06:45:21 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MYGd03bb4zMp4g;
-        Thu, 22 Sep 2022 21:40:36 +0800 (CST)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MYGgw6yTFzHqKS;
+        Thu, 22 Sep 2022 21:43:08 +0800 (CST)
 Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.31; Thu, 22 Sep 2022 21:45:19 +0800
 Received: from huawei.com (10.175.113.32) by dggpemm100009.china.huawei.com
  (7.185.36.113) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 22 Sep
- 2022 21:45:18 +0800
+ 2022 21:45:19 +0800
 From:   Liu Shixin <liushixin2@huawei.com>
 To:     Andrew Morton <akpm@linux-foundation.org>,
         David Hildenbrand <david@redhat.com>,
@@ -35,9 +35,9 @@ To:     Andrew Morton <akpm@linux-foundation.org>,
 CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         Liu Shixin <liushixin2@huawei.com>,
         Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: [PATCH v3 2/8] fs/proc/kcore.c: use hotplug_memory_notifier() directly
-Date:   Thu, 22 Sep 2022 22:18:58 +0800
-Message-ID: <20220922141904.3245505-3-liushixin2@huawei.com>
+Subject: [PATCH v3 3/8] mm/slub.c: use hotplug_memory_notifier() directly
+Date:   Thu, 22 Sep 2022 22:18:59 +0800
+Message-ID: <20220922141904.3245505-4-liushixin2@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220922141904.3245505-1-liushixin2@huawei.com>
 References: <20220922141904.3245505-1-liushixin2@huawei.com>
@@ -63,41 +63,34 @@ register_hotmemory_notifier().
 
 Signed-off-by: Liu Shixin <liushixin2@huawei.com>
 ---
- fs/proc/kcore.c | 7 +------
+ mm/slub.c | 7 +------
  1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/fs/proc/kcore.c b/fs/proc/kcore.c
-index dff921f7ca33..7692a360972d 100644
---- a/fs/proc/kcore.c
-+++ b/fs/proc/kcore.c
-@@ -18,7 +18,6 @@
- #include <linux/capability.h>
- #include <linux/elf.h>
- #include <linux/elfcore.h>
--#include <linux/notifier.h>
- #include <linux/vmalloc.h>
- #include <linux/highmem.h>
- #include <linux/printk.h>
-@@ -638,10 +637,6 @@ static int __meminit kcore_callback(struct notifier_block *self,
- 	return NOTIFY_OK;
+diff --git a/mm/slub.c b/mm/slub.c
+index 234bf0e44262..9a0853e01fd7 100644
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -4698,11 +4698,6 @@ static int slab_memory_callback(struct notifier_block *self,
+ 	return ret;
  }
  
--static struct notifier_block kcore_callback_nb __meminitdata = {
--	.notifier_call = kcore_callback,
--	.priority = 0,
+-static struct notifier_block slab_memory_callback_nb = {
+-	.notifier_call = slab_memory_callback,
+-	.priority = SLAB_CALLBACK_PRI,
 -};
+-
+ /********************************************************************
+  *			Basic setup of slabs
+  *******************************************************************/
+@@ -4768,7 +4763,7 @@ void __init kmem_cache_init(void)
+ 	create_boot_cache(kmem_cache_node, "kmem_cache_node",
+ 		sizeof(struct kmem_cache_node), SLAB_HWCACHE_ALIGN, 0, 0);
  
- static struct kcore_list kcore_vmalloc;
+-	register_hotmemory_notifier(&slab_memory_callback_nb);
++	hotplug_memory_notifier(slab_memory_callback, SLAB_CALLBACK_PRI);
  
-@@ -694,7 +689,7 @@ static int __init proc_kcore_init(void)
- 	add_modules_range();
- 	/* Store direct-map area from physical memory map */
- 	kcore_update_ram();
--	register_hotmemory_notifier(&kcore_callback_nb);
-+	hotplug_memory_notifier(kcore_callback, 0);
- 
- 	return 0;
- }
+ 	/* Able to allocate the per node structures */
+ 	slab_state = PARTIAL;
 -- 
 2.25.1
 
