@@ -2,239 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 429525E5DBE
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 10:44:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D942E5E5DD0
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 10:47:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229825AbiIVIoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 04:44:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42958 "EHLO
+        id S230467AbiIVIqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 04:46:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230352AbiIVIoe (ORCPT
+        with ESMTP id S229677AbiIVIpT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 04:44:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B69BB89
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 01:44:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663836268;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VaYXNrEhF9SkCIvAw0+lUOkeDauzgEyAxcBo51EhDMk=;
-        b=eCI/QJgq3ZOP8MLDV2EmN8CDAgwRKU2Nww5WXtz7q8gGYDF6KaZSx4jccF86jAnN/sltkT
-        x0x4ggmVIr1XFSUEsp9jC97WYp8y7bFHwZF+3PCzhd2tGDP1pOSl6NzwDxeXtWl4Qhssn4
-        OfJl856vP4x/khcxz/dAylHVnRFkpXs=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-59-JcHudLLTPGa0HVuiQ-87eg-1; Thu, 22 Sep 2022 04:44:27 -0400
-X-MC-Unique: JcHudLLTPGa0HVuiQ-87eg-1
-Received: by mail-ej1-f69.google.com with SMTP id sa15-20020a1709076d0f00b00781d793f51fso1339656ejc.18
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 01:44:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date;
-        bh=VaYXNrEhF9SkCIvAw0+lUOkeDauzgEyAxcBo51EhDMk=;
-        b=paBrrSFUYbVkiEvOn15+HhjjgKoxX9/tNvwxuxwIzn17bLCIZDQPXZXcV0Oy/vzLTW
-         4/xV/D9uZUtHzPFxFyHHud8F1AvB3Fw4qvJHPJNcTZ+5uJzC43qMEC3g+cm2jzNCbC+7
-         XOoVKUe844olOkJcg9huEs2IFId1w+WtJ7yxRdvGaEO+5duYf6EAcPx9h4dJJNZ8vviq
-         9XOTvHl+Um4QfWyXe0IYMhxFwKPn8eJWgOVe/Pz/IQyva492ZQRg625A/SNb5I1/GvaT
-         z3v/u6n19mKDQ8FGStaoExXsZdFC/oF51/ic7aCFVnQX8pB3eDv3Divvh2BCzu2jxErf
-         vVBw==
-X-Gm-Message-State: ACrzQf3gF/wwOf/0TbBho423qVZTlTLxeFs3rfUx6ZQXW/u+1Pjx0Nfo
-        rhPl+7WE6Fsjy8HZJ2Y01eGToK7rAehCEIRAVdDfgd79OZ0hJmLYQ8LDsW4P6PrxF/xY44gMkDz
-        nk8twt14q7alaEO+J/Jzf+Mqs
-X-Received: by 2002:a05:6402:2489:b0:454:11de:7698 with SMTP id q9-20020a056402248900b0045411de7698mr2148315eda.214.1663836266310;
-        Thu, 22 Sep 2022 01:44:26 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM76AWfqa75dHov8UHe5lqSOhHZZZIH/7vxvIY4ZYiDmZ1kn4bxKpOY1qNt2GfoMjYC9JRiqUQ==
-X-Received: by 2002:a05:6402:2489:b0:454:11de:7698 with SMTP id q9-20020a056402248900b0045411de7698mr2148300eda.214.1663836266053;
-        Thu, 22 Sep 2022 01:44:26 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id b20-20020a17090630d400b007262a5e2204sm2305509ejb.153.2022.09.22.01.44.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 01:44:24 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Vipin Sharma <vipinsh@google.com>, seanjc@google.com,
-        pbonzini@redhat.com
-Cc:     jmattson@google.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Vipin Sharma <vipinsh@google.com>
-Subject: Re: [PATCH v2] KVM: selftests: Check result in hyperv_features.c
- test only for successful hypercalls
-In-Reply-To: <20220922062451.2927010-1-vipinsh@google.com>
-References: <20220922062451.2927010-1-vipinsh@google.com>
-Date:   Thu, 22 Sep 2022 10:44:23 +0200
-Message-ID: <87fsgjol20.fsf@redhat.com>
+        Thu, 22 Sep 2022 04:45:19 -0400
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2069.outbound.protection.outlook.com [40.107.96.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F25DB6035;
+        Thu, 22 Sep 2022 01:45:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QMZOW0MXkTSacKt/7C29DE5VNsrfQSlQvPTdZmg/LQJRjIZgkBm4x4+EoiVlEo5Gmo4wpngnhdjJ0ZPQbdJjwkkikCBkMLMeIBwm1VNs7MkCCmfSFIourhJ/Pcprq/HS1U4xxXE2WEE+jtJr4HIeZGmD8YFOs4mZoezdtAFut8IEb2Fxm0vBSt7VwEMpyqbpR5Xe9tC4csq45gVDnQ7xeKaZBOPWwyyflnxwEzEyukXED5/JsEqWHIflQVJy/eBhhMpO8dl3S96ke1koZ+3RWL1HW1BQ8O9SX0rTvf97v0//m7ln+hWFiNORltxJ23kBXo6bLPLpinAi9yYbEecf/g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=q4YTHG/L7dRcbuJm23/DNad/lFQtDhFMxvz9GaSfaf4=;
+ b=GVZevW63CUhqn00znX514oZ6EifGIKoq+iqnIAudyq16Xh7XBRNuHyl7JzIfrMOjm3P+/Lg0mtsC54wz4ux2zOgnw9Wotz7LQXbz8cyvtugk7Y+511mQWo6wqw8EmNTkuWlv+PpOoCRI/kCeTKwgB6KcFgFfRCdXDGQe/WrHc/UylPAOh20wnSbcbJE4CTxG8pHgrvEF+zGDhyky+XBh0RKtm6rZTZk+90hsZ5tTJJSG1xPD3ILAXAtqOPmy2mCgUNVcd5z64mI82g9b9SNFdG02mO9tMnC1YMGuFpBwrjGVsvVo1Fp8Cj85pV86lvsXEFN9VpQj6daWWVNG9BX1Lg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=amd.com smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=q4YTHG/L7dRcbuJm23/DNad/lFQtDhFMxvz9GaSfaf4=;
+ b=sZUd20wxMg1llXd7H+1q8GBU1MmszRGyur+XuMjfpi46CZM1JW4CBSeAU6bmfO2s+XBB6woe3lmLmfCqockV+/YsFiunJ6tOtTbyv0K9ZHHl8FX8dO869TYujvg08z8DtMjcdLTqUWpKfjjPAyH6P0KFKk2VOQw57IvK6JZGcnc=
+Received: from BN8PR16CA0027.namprd16.prod.outlook.com (2603:10b6:408:4c::40)
+ by PH0PR02MB8568.namprd02.prod.outlook.com (2603:10b6:510:103::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.17; Thu, 22 Sep
+ 2022 08:45:16 +0000
+Received: from BN1NAM02FT016.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:408:4c:cafe::2f) by BN8PR16CA0027.outlook.office365.com
+ (2603:10b6:408:4c::40) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.18 via Frontend
+ Transport; Thu, 22 Sep 2022 08:45:16 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com; pr=C
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ BN1NAM02FT016.mail.protection.outlook.com (10.13.2.133) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5654.14 via Frontend Transport; Thu, 22 Sep 2022 08:45:15 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 22 Sep 2022 01:45:15 -0700
+Received: from smtp.xilinx.com (172.19.127.95) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2507.9 via Frontend Transport; Thu, 22 Sep 2022 01:45:15 -0700
+Envelope-to: michal.simek@amd.com,
+ radhey.shyam.pandey@amd.com,
+ shubhrajyoti.datta@amd.com,
+ srinivas.goud@amd.com,
+ linux-arm-kernel@lists.infradead.org,
+ linux-i2c@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Received: from [172.23.64.6] (port=54834 helo=xhdvnc106.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <manikanta.guntupalli@xilinx.com>)
+        id 1obHpO-0000mq-Kz; Thu, 22 Sep 2022 01:45:03 -0700
+Received: by xhdvnc106.xilinx.com (Postfix, from userid 90444)
+        id 959876102B; Thu, 22 Sep 2022 14:15:01 +0530 (IST)
+From:   Manikanta Guntupalli <manikanta.guntupalli@xilinx.com>
+To:     <michal.simek@xilinx.com>, <michal.simek@amd.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <radhey.shyam.pandey@amd.com>, <srinivas.goud@amd.com>,
+        <shubhrajyoti.datta@amd.com>,
+        Manikanta Guntupalli <manikanta.guntupalli@xilinx.com>
+Subject: [PATCH V2 0/9] Added Standard mode and SMBus support.
+Date:   Thu, 22 Sep 2022 14:14:45 +0530
+Message-ID: <1663836294-5698-1-git-send-email-manikanta.guntupalli@xilinx.com>
+X-Mailer: git-send-email 2.1.1
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="=-=-="
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN1NAM02FT016:EE_|PH0PR02MB8568:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7e9cb597-f9d1-4081-7b22-08da9c76c58c
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: dQOV9fOtXevSVG2MOsMauYj4qKjev3MujDgwvD3unZVcivaOpd8z1CeHXMao6VuR/JUx6X5vpZznsARslejHpv6EggBm9OLrSbmtF29Ya69d7C+xEGJkaDaHMBJSJ9ybUnc9gQLki/lMDZvRcJVQxxH8ftcucbXoeT7PeV5tcnk1m3KcIBZThjMn21sWVBOvtKYHHgbibLf4jPlHwcQ/LT+MFMxF735+dNxhOD7owWsNxBpm/VMvTMRQqp6KsAxR1/xUP75qEus67FihKK8T5eXXwh4uYwJFyTHI0wQeHabThyQ4M+hCXfh15p1EIZJkRlPrfVg3ti6eKY/KX9RgEsmWv4W28HeCtDn6sqTOzxWE/Kdmi5jgjx+i3K7bYvmbXywKaXX/DKDBTxOe6Iez3Xnnstzr1UTAG2MfGH92feynOq4lCFxQcZFwWq5rPHNV7HB8ISiIeV0enoyd95TTk/ovH6IoTLZoZZDYcyw4/ZY8yqLlN4h8ReyxTM5G8OUPJfF8yFYJ0JQN4zwdm8MUI3zEAOE7z9RGpmtRg4J3/JGdEO6fCnbpE69vb0KHAt+17SK9f/wwXR0ScxOaIAETkrIgEx5SkCbLChpoH8DeSNNM2zq3J6xsZ0fpaMs3bFgphyQwjy2htuuRIhVaq0fjMQaQqW5TRTYpCy6h24CPjRGAPq/ZWl1gx2OnMGIR1gyIIqBWYdID4Cb90FA6k6l4whJ1AzCzqd+hdk1plBjSlGDuoLRScb6tAwBj+YX1/iEi0/2ijnkkG0fP/Oc0Lh0xWM/zbe5u8jdaeK1leeUt7g34mLuyFZ0SmW2gAeKPqr84az6Zc8dfJK/DgXe7jiJwwHoenPryp9SB/1So95TGczI=
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(396003)(39860400002)(136003)(451199015)(36840700001)(40470700004)(46966006)(83380400001)(47076005)(82740400003)(4744005)(44832011)(70206006)(2906002)(966005)(426003)(356005)(110136005)(478600001)(107886003)(6666004)(4326008)(8676002)(70586007)(54906003)(82310400005)(186003)(8936002)(2616005)(336012)(40460700003)(26005)(41300700001)(316002)(5660300002)(6266002)(7636003)(36756003)(42186006)(36860700001)(40480700001)(102446001)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Sep 2022 08:45:15.9176
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7e9cb597-f9d1-4081-7b22-08da9c76c58c
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT016.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR02MB8568
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
+-Added standard mode for AXI I2C controller.
+-Added Smbus block read support to xiic driver.
+-Added 'xlnx,axi-iic-2.1' new IP version support.
+-Added dynamic SCL frequency configuration support.
+-Removed 'local_irq_save/restore' calls as discussed
+ here: https://www.spinics.net/lists/linux-i2c/msg46483.html.
 
-Vipin Sharma <vipinsh@google.com> writes:
+Raviteja Narayanam (9):
+  i2c: xiic: Add standard mode support for > 255 byte read transfers
+  i2c: xiic: Fix Rx and Tx paths in standard mode repeated start
+  i2c: xiic: Switch to Xiic standard mode for i2c-read
+  i2c: xiic: Add wait for FIFO empty in send_tx
+  i2c: xiic: Add smbus_block_read functionality
+  i2c: xiic: Remove interrupt enable/disable in Rx path
+  dt-bindings: i2c: xiic: Add 'xlnx,axi-iic-2.1' to compatible
+  i2c: xiic: Update compatible with new IP version
+  i2c: xiic: Add SCL frequency configuration support
 
-> Commit cc5851c6be86 ("KVM: selftests: Use exception fixup for #UD/#GP
-> Hyper-V MSR/hcall tests") introduced a wrong guest assert in guest_hcall().
-> It is not checking the successful hypercall results and only checks the result
-> when a fault happens.
->
->   GUEST_ASSERT_2(!hcall->ud_expected || res == hcall->expect,
->                  hcall->expect, res);
->
-> Correct the assertion by only checking results of the successful
-> hypercalls.
->
-> This issue was observed when this test started failing after building it
-> in Clang. Above guest assert statement fails because "res" is not equal
-> to "hcall->expect" when "hcall->ud_expected" is true. "res" gets some
-> garbage value in Clang from the RAX register. In GCC, RAX is 0 because
-> it using RAX for @output_address in the asm statement and resetting it
-> to 0 before using it as output operand in the same asm statement. Clang
-> is not using RAX for @output_address.
->
-> Load RAX with some default input value so that the compiler cannot
-> modify it or use it for anything else. This makes sure that KVM is
-> correctly clearing up return value on successful hypercall and compiler cannot
-> generate any false positive.
->
-> Fixes: cc5851c6be86 ("KVM: selftests: Use exception fixup for #UD/#GP Hyper-V MSR/hcall tests")
-> Signed-off-by: Vipin Sharma <vipinsh@google.com>
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Reviewed-by: Jim Mattson <jmattson@google.com>
->
-> ---
->
-> Jim's Reviewed-by is only for the code change and not shortlog message
-> of v1. Also, there is one change in asm which was not present in v1 and
-> not reviewed by Jim. But I am writing his name here so that it is not missed
-> when patch is merged.
->
-> v2:
-> - Updated the shortlog message.
-> - Using RAX register in hypercall asm as input operand also and
->   initializing it with -EFAULT
->
-> v1:
-> https://lore.kernel.org/lkml/20220921231151.2321058-1-vipinsh@google.com/
->
->  tools/testing/selftests/kvm/x86_64/hyperv_features.c | 11 ++++++-----
->  1 file changed, 6 insertions(+), 5 deletions(-)
->
-> diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_features.c b/tools/testing/selftests/kvm/x86_64/hyperv_features.c
-> index 79ab0152d281..4d55e038c2d7 100644
-> --- a/tools/testing/selftests/kvm/x86_64/hyperv_features.c
-> +++ b/tools/testing/selftests/kvm/x86_64/hyperv_features.c
-> @@ -26,7 +26,8 @@ static inline uint8_t hypercall(u64 control, vm_vaddr_t input_address,
->  		     : "=a" (*hv_status),
->  		       "+c" (control), "+d" (input_address),
->  		       KVM_ASM_SAFE_OUTPUTS(vector)
-> -		     : [output_address] "r"(output_address)
-> +		     : [output_address] "r"(output_address),
-> +		       "a" (-EFAULT)
->  		     : "cc", "memory", "r8", KVM_ASM_SAFE_CLOBBERS);
->  	return vector;
->  }
-> @@ -81,13 +82,13 @@ static void guest_hcall(vm_vaddr_t pgs_gpa, struct hcall_data *hcall)
->  	}
->  
->  	vector = hypercall(hcall->control, input, output, &res);
-> -	if (hcall->ud_expected)
-> +	if (hcall->ud_expected) {
->  		GUEST_ASSERT_2(vector == UD_VECTOR, hcall->control, vector);
-> -	else
-> +	} else {
->  		GUEST_ASSERT_2(!vector, hcall->control, vector);
-> +		GUEST_ASSERT_2(res == hcall->expect, hcall->expect, res);
-> +	}
->  
-> -	GUEST_ASSERT_2(!hcall->ud_expected || res == hcall->expect,
-> -			hcall->expect, res);
->  	GUEST_DONE();
->  }
-
-And this immediately discovers a problem in the test!
-
-$ ./x86_64/hyperv_features 
-Testing access to Hyper-V specific MSRs
-Testing access to Hyper-V hypercalls
-==== Test Assertion Failure ====
-  x86_64/hyperv_features.c:622: false
-  pid=3683520 tid=3683520 errno=4 - Interrupted system call
-     1	0x0000000000402832: guest_test_hcalls_access at hyperv_features.c:622
-     2	 (inlined by) main at hyperv_features.c:642
-     3	0x00007f546503feaf: ?? ??:0
-     4	0x00007f546503ff5f: ?? ??:0
-     5	0x0000000000402eb4: _start at ??:?
-  Failed guest assert: res == hcall->expect at x86_64/hyperv_features.c:89
-arg1 = 2, arg2 = 3
-
-The root cause is: we're trying to test an invalid hypercall code but we
-set 'control' wrong, i.e.:
-
-	hcall->control = 0xdeadbeef;
-	hcall->expect = HV_STATUS_INVALID_HYPERCALL_CODE;
-
-as '0xdeadbeef' contains reserved bits 27 through 31 and we're getting
-HV_STATUS_INVALID_HYPERCALL_INPUT instead.
-
-Could you please include the attached patch to your series? Thanks a bunch!
-
-For your patch:
-Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+ .../bindings/i2c/xlnx,xps-iic-2.00.a.yaml     |   7 +-
+ drivers/i2c/busses/i2c-xiic.c                 | 582 ++++++++++++++++--
+ 2 files changed, 537 insertions(+), 52 deletions(-)
 
 -- 
-Vitaly
-
-
---=-=-=
-Content-Type: text/x-patch
-Content-Disposition: inline;
- filename=0001-KVM-selftests-Do-not-set-reserved-control-bits-when-.patch
-
-From d0670e7d7ed4c4a00f46c1f0b69e1e06eae06c8f Mon Sep 17 00:00:00 2001
-From: Vitaly Kuznetsov <vkuznets@redhat.com>
-Date: Thu, 22 Sep 2022 10:39:41 +0200
-Subject: [PATCH] KVM: selftests: Do not set reserved control bits when testing
- invalid Hyper-V hypercall number
-Content-Type: text/plain
-
-Bits 27 through 31 in Hyper-V hypercall 'control' are reserved (see
-HV_HYPERCALL_RSVD0_MASK) but '0xdeadbeef' includes them. This causes
-KVM to return HV_STATUS_INVALID_HYPERCALL_INPUT instead of the expected
-HV_STATUS_INVALID_HYPERCALL_CODE.
-
-The test doesn't currently fail as the problem is masked by the wrong check
-of the hypercall return code, this is going to be fixed separately.
-
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
----
- tools/testing/selftests/kvm/x86_64/hyperv_features.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_features.c b/tools/testing/selftests/kvm/x86_64/hyperv_features.c
-index 79ab0152d281..d71b5cd4b74b 100644
---- a/tools/testing/selftests/kvm/x86_64/hyperv_features.c
-+++ b/tools/testing/selftests/kvm/x86_64/hyperv_features.c
-@@ -507,7 +507,7 @@ static void guest_test_hcalls_access(void)
- 		switch (stage) {
- 		case 0:
- 			feat->eax |= HV_MSR_HYPERCALL_AVAILABLE;
--			hcall->control = 0xdeadbeef;
-+			hcall->control = 0xbeef;
- 			hcall->expect = HV_STATUS_INVALID_HYPERCALL_CODE;
- 			break;
- 
--- 
-2.37.3
-
-
---=-=-=--
+2.25.1
 
