@@ -2,168 +2,360 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B1C25E66FB
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 17:24:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64FAD5E6700
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 17:25:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232111AbiIVPXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 11:23:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49342 "EHLO
+        id S232105AbiIVPYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 11:24:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231431AbiIVPXu (ORCPT
+        with ESMTP id S232020AbiIVPYo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 11:23:50 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2943AF3F90
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 08:23:49 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id l10so9074073plb.10
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 08:23:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=4hng9hD+p8EXRULnhypgit8nkIBrMiyFlLkFJQuqnXc=;
-        b=hAZG3ucwHKwhSmqY9M0JepTbrCdrwuxIOlZAN4MIln08/ZYtOmSZIrjXhu83r9WToT
-         cL4m3YiaaRpB5np/geOW4TqgYMpojuvlBsmci8MYwYZRR/YxSAJkQsub7kwBn51uAC7E
-         RQODedh13sgSTsAKYla0DDIkncCfopXkXlxRG2iT8OMqVnIZmcTmodDqPFA8iJ7Sant6
-         DsSxnevUh4wBlBFd6KOZhMUaa15TaA7/eHJOPNUg1f5o9mcjWHnSAqrXWD/M4shdG+rk
-         LKY1oOltcI5nJuGYX8cloZDuOJJnEvd3MfSvLe5rOZYYAVszuwj0Z/bQW0FGrOJbfcSc
-         tRdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=4hng9hD+p8EXRULnhypgit8nkIBrMiyFlLkFJQuqnXc=;
-        b=tkt8VJyfY8UoeHODGzQ4RFoJ076s43/1XXIUWujgLOeD6Dh1bNFHgUXOds38bA25SV
-         1/m9uie6C1PRIRN95zFdq0aX/GPKHj6Q7Xa7nJhgCZB2NJMoDmWezQ5MKkQOuHJcrgCt
-         sjCzpzt9LmgaVO+heRcdex8Z6V1zuQ3K6FEplUtwhyYMBdTQBlURwZKT37ja7stJIKqv
-         YAVoXGgZ2lA8SF8gyle4sH5e2qOnHio4g1e3JdsMot/bOH7pG1LxyxD07x2sTDcJTNIC
-         J7/9hVGmBgkh+IMsPq2p4X46M4nIRauELR/scVMd5Knr8kLWxcTnLhZn1BnIvU2KaGWo
-         621Q==
-X-Gm-Message-State: ACrzQf0nRsrvZRy09FTBCybDNiZm/EN63b6uePWjTAgTLuBNfcTA1DDD
-        o5gCQvt0ohuBPDJk4TPLzawyRg==
-X-Google-Smtp-Source: AMsMyM6D+AGe91n2NZ575lPSmGsw6EyKNHU4hFvUJeis6VvODRCrcbGL9qsraoDtCgAxRQCSlX7f5w==
-X-Received: by 2002:a17:902:f394:b0:176:b7b7:2 with SMTP id f20-20020a170902f39400b00176b7b70002mr3709012ple.57.1663860228501;
-        Thu, 22 Sep 2022 08:23:48 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id 13-20020a62140d000000b0053e93aa8fb9sm4579212pfu.71.2022.09.22.08.23.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 08:23:48 -0700 (PDT)
-Date:   Thu, 22 Sep 2022 15:23:44 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        Yuan Yao <yuan.yao@linux.intel.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v10 02/39] KVM: x86: hyper-v: Resurrect dedicated
- KVM_REQ_HV_TLB_FLUSH flag
-Message-ID: <Yyx+AJLacVzOdtBr@google.com>
-References: <20220921152436.3673454-1-vkuznets@redhat.com>
- <20220921152436.3673454-3-vkuznets@redhat.com>
- <Yys6b1ZqYbw9Umyu@google.com>
- <877d1voiuz.fsf@redhat.com>
+        Thu, 22 Sep 2022 11:24:44 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E1322B1AF;
+        Thu, 22 Sep 2022 08:24:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1663860281; x=1695396281;
+  h=from:to:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=+K1IIKBAColBuSmX3F5oRjok4O1iU/y3CYweE7B1otI=;
+  b=hcNv8atFbuE16HLM/ZbRdsRU58seN3CXw6JK9f5mW4Qhun+WOYWW1olY
+   SEJjJZVhbMxJCkAV/bm22HgE51waf58kiORwV6vmL9ckytNmfotkyYIAs
+   FxvYj8xjsXm8knIhKGouXlz2kmTx8Z906rO0wDRFLD0UIsTGEntlB3pFp
+   LnT4AscYwzvtNWUByAkkDYVBe/cj4QVPqzsythLQ0yV4oVATXO2qhCRC/
+   6FbMt4snvJds4PnRuCaq4S3VZQqsqViqutzp8MpXomSYhMf+lpxRiidkp
+   ahU5Yaydq3sHpWYp4V9PX53sfIdWMmyJu36lUXUugtPGd6dxyCsJTQvHv
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="192053280"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 Sep 2022 08:24:39 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Thu, 22 Sep 2022 08:24:40 -0700
+Received: from ATX-DK-C33025.microchip.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Thu, 22 Sep 2022 08:24:38 -0700
+From:   Jerry Ray <jerry.ray@microchip.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Jerry Ray <jerry.ray@microchip.com>
+Subject: [internal][PATCH] dt-bindings: dsa: lan9303: Add lan9303 yaml
+Date:   Thu, 22 Sep 2022 10:24:38 -0500
+Message-ID: <20220922152438.350-1-jerry.ray@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <877d1voiuz.fsf@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022, Vitaly Kuznetsov wrote:
-> Now let's get to VMX and the point of my confusion (and thanks in
-> advance for educating me!):
-> AFAIU, when EPT is in use:
->  KVM_REQ_TLB_FLUSH_CURRENT == invept
->  KVM_REQ_TLB_FLUSH_GUEST = invvpid
-> 
-> For "normal" mappings (which are mapped on both stages) this is the same
-> thing as they're 'tagged' with both VPID and 'EPT root'. The question is
-> what's left. Given your comment, do I understand correctly that in case
-> of an invalid mapping in the guest (GVA doesn't resolve to a GPA), this
-> will only be tagged with VPID but not with 'EPT root' (as the CPU never
-> reached to the second translation stage)? We certainly can't ignore
-> these. Another (probably pure theoretical question) is what are the
-> mappings which are tagged with 'EPT root' but don't have a VPID tag?
+Adding the dt binding yaml for the lan9303 3-port ethernet switch.
+The microchip lan9354 3-port ethernet switch will also use the
+same binding.
 
-Intel puts mappings into three categories, which for non-root mode equates to:
+Signed-off-by: Jerry Ray <jerry.ray@microchip.com>
+---
+ .../devicetree/bindings/net/dsa/lan9303.txt   | 100 +-----------
+ .../bindings/net/dsa/microchip,lan9303.yaml   | 143 ++++++++++++++++++
+ MAINTAINERS                                   |   8 +
+ 3 files changed, 152 insertions(+), 99 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/dsa/microchip,lan9303.yaml
 
-  linear         == GVA => GPA
-  guest-physical == GPA => HPA
-  combined       == GVA => HPA
-
-and essentially the categories that consume the GVA are tagged with the VPID
-(linear and combined), and categories that consume the GPA are tagged with the
-EPTP address (guest-physical and combined).
-
-> Are these the mapping which happen when e.g. vCPU has paging disabled?
-
-No, these mappings can be created at all times.  Even with CR0.PG=1, the guest
-can generate GPAs without going through a GVA=>GPA translation, e.g. the page tables
-themselves, RTIT (Intel PT) addresses, etc...  And even for combined/full
-translations, the CPU can insert TLB entries for just the GPA=>HPA part.
-
-E.g. when a page is allocated by/for userspace, the kernel will zero the page using
-the kernel's direct map, but userspace will access the page via a different GVA.
-I.e. the guest effectively aliases GPA(x) with GVA(k) and GVA(u).  By inserting
-the GPA(x) => HPA(y) into the TLB, when guest userspace access GVA(u), the CPU
-encounters a TLB miss on GVA(u) => GPA(x), but gets a TLB hit on GPA(x) => HPA(y).
-
-Separating EPT flushes from VPID (and PCID) flushes allows the CPU to retain
-the partial TLB entries, e.g. a host change in the EPT tables will result in the
-guest-physical and combined mappings being invalidated, but linear mappings can
-be kept.
-
-I'm 99% certain AMD also caches partial entries, e.g. see the blurb on INVLPGA
-not affecting NPT translations, AMD just doesn't provide a way for the host to
-flush _only_ NPT translations.  Maybe the performance benefits weren't significant
-enough to justify the extra complexity?
-
-> These are probably unrelated to Hyper-V TLB flushing.
-> 
-> To preserve the 'small' optimization, we can probably move 
->  kvm_clear_request(KVM_REQ_HV_TLB_FLUSH, vcpu);
-> 
-> to nested_svm_transition_tlb_flush() or, in case this sounds too
-> hackish
-
-Move it to svm_flush_tlb_current(), because the justification is that on SVM,
-flushing "current" TLB entries also flushes "guest" TLB entries due to the more
-coarse-grained ASID-based TLB flush.  E.g.
-
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index dd599afc85f5..a86b41503723 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -3737,6 +3737,13 @@ static void svm_flush_tlb_current(struct kvm_vcpu *vcpu)
- {
-        struct vcpu_svm *svm = to_svm(vcpu);
+diff --git a/Documentation/devicetree/bindings/net/dsa/lan9303.txt b/Documentation/devicetree/bindings/net/dsa/lan9303.txt
+index 464d6bf87605..44d1882530b1 100644
+--- a/Documentation/devicetree/bindings/net/dsa/lan9303.txt
++++ b/Documentation/devicetree/bindings/net/dsa/lan9303.txt
+@@ -1,102 +1,4 @@
+ SMSC/MicroChip LAN9303 three port ethernet switch
+ -------------------------------------------------
  
-+       /*
-+        * Unlike VMX, SVM doesn't provide a way to flush only NPT TLB entries.
-+        * A TLB flush for the current ASID flushes both "host" and "guest" TLB
-+        * entries, and thus is a superset of Hyper-V's fine grained flushing.
-+        */
-+       kvm_hv_vcpu_purge_flush_tlb(vcpu);
+-Required properties:
+-
+-- compatible: should be
+-  - "smsc,lan9303-i2c" for I2C managed mode
+-    or
+-  - "smsc,lan9303-mdio" for mdio managed mode
+-
+-Optional properties:
+-
+-- reset-gpios: GPIO to be used to reset the whole device
+-- reset-duration: reset duration in milliseconds, defaults to 200 ms
+-
+-Subnodes:
+-
+-The integrated switch subnode should be specified according to the binding
+-described in dsa/dsa.txt. The CPU port of this switch is always port 0.
+-
+-Note: always use 'reg = <0/1/2>;' for the three DSA ports, even if the device is
+-configured to use 1/2/3 instead. This hardware configuration will be
+-auto-detected and mapped accordingly.
+-
+-Example:
+-
+-I2C managed mode:
+-
+-	master: masterdevice@X {
+-
+-		fixed-link { /* RMII fixed link to LAN9303 */
+-			speed = <100>;
+-			full-duplex;
+-		};
+-	};
+-
+-	switch: switch@a {
+-		compatible = "smsc,lan9303-i2c";
+-		reg = <0xa>;
+-		reset-gpios = <&gpio7 6 GPIO_ACTIVE_LOW>;
+-		reset-duration = <200>;
+-
+-		ports {
+-			#address-cells = <1>;
+-			#size-cells = <0>;
+-
+-			port@0 { /* RMII fixed link to master */
+-				reg = <0>;
+-				label = "cpu";
+-				ethernet = <&master>;
+-			};
+-
+-			port@1 { /* external port 1 */
+-				reg = <1>;
+-				label = "lan1";
+-			};
+-
+-			port@2 { /* external port 2 */
+-				reg = <2>;
+-				label = "lan2";
+-			};
+-		};
+-	};
+-
+-MDIO managed mode:
+-
+-	master: masterdevice@X {
+-		phy-handle = <&switch>;
+-
+-		mdio {
+-			#address-cells = <1>;
+-			#size-cells = <0>;
+-
+-			switch: switch-phy@0 {
+-				compatible = "smsc,lan9303-mdio";
+-				reg = <0>;
+-				reset-gpios = <&gpio7 6 GPIO_ACTIVE_LOW>;
+-				reset-duration = <100>;
+-
+-				ports {
+-					#address-cells = <1>;
+-					#size-cells = <0>;
+-
+-					port@0 {
+-						reg = <0>;
+-						label = "cpu";
+-						ethernet = <&master>;
+-					};
+-
+-					port@1 { /* external port 1 */
+-						reg = <1>;
+-						label = "lan1";
+-					};
+-
+-					port@2 { /* external port 2 */
+-						reg = <2>;
+-						label = "lan2";
+-					};
+-				};
+-			};
+-		};
+-	};
++See Documentation/devicetree/bindings/net/dsa/microchip,lan9303.yaml for the documentation.
+diff --git a/Documentation/devicetree/bindings/net/dsa/microchip,lan9303.yaml b/Documentation/devicetree/bindings/net/dsa/microchip,lan9303.yaml
+new file mode 100644
+index 000000000000..aefec1dad601
+--- /dev/null
++++ b/Documentation/devicetree/bindings/net/dsa/microchip,lan9303.yaml
+@@ -0,0 +1,143 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/net/dsa/microchip,lan9303.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-        /*
-         * Flush only the current ASID even if the TLB flush was invoked via
-         * kvm_flush_remote_tlbs().  Although flushing remote TLBs requires all
++title: LAN9303 Ethernet Switch Series Tree Bindings
++
++allOf:
++  - $ref: "dsa.yaml#"
++
++maintainers:
++  - UNGLinuxDriver@microchip.com
++
++properties:
++  compatible:
++    oneOf:
++      - enum:
++          - smsc,lan9303-mdio
++          - microchip,lan9354-mdio
++      - enum:
++          - smsc,lan9303-i2c
++
++  reg:
++    maxItems: 1
++
++  reset-gpios:
++    description: Optional gpio specifier for a reset line
++    maxItems: 1
++
++  reset-duration:
++    description: Reset duration in milliseconds, defaults to 200 ms
++
++required:
++  - compatible
++  - reg
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++
++    //Ethernet switch connected via mdio to the host
++    ethernet0 {
++        #address-cells = <1>;
++        #size-cells = <0>;
++        phy-handle = <&lan9303switch>;
++        phy-mode = "rmii";
++        fixed-link {
++            speed = <100>;
++            full-duplex;
++        };
++        mdio {
++            #address-cells = <1>;
++            #size-cells = <0>;
++            lan9303switch: switch@0 {
++                compatible = "smsc,lan9303-mdio";
++                dsa,member = <0 0>;
++                reg = <0>;
++                ethernet-ports {
++                    #address-cells = <1>;
++                    #size-cells = <0>;
++                        port@0 {
++                            reg = <0>;
++                            phy-mode = "rmii";
++                            ethernet = <&ethernet>;
++                            label = "cpu";
++                            fixed-link {
++                                speed = <100>;
++                                full-duplex;
++                            };
++                        };
++                        port@1 {
++                            reg = <1>;
++                            label = "lan1";
++                        };
++                        port@2 {
++                            reg = <2>;
++                            label = "lan2";
++                        };
++                    };
++                };
++            };
++        };
++
++    //Ethernet switch connected via i2c to the host
++    ethernet1 {
++        #address-cells = <1>;
++        #size-cells = <0>;
++        phy-mode = "rmii";
++        fixed-link {
++            speed = <100>;
++            full-duplex;
++        };
++    };
++
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        lan9303: switch@0 {
++            compatible = "smsc,lan9303-i2c";
++            reg = <0>;
++
++            ethernet-ports {
++                #address-cells = <1>;
++                #size-cells = <0>;
++                port@0 {
++                    reg = <0>;
++                    label = "cpu";
++                    phy-mode = "rmii";
++                    ethernet = <&ethernet>;
++                    fixed-link {
++                        speed = <100>;
++                        full-duplex;
++                    };
++                };
++                port@1 {
++                    reg = <1>;
++                    label = "lan1";
++                };
++                port@2 {
++                    reg = <2>;
++                    label = "lan2";
++                };
++            };
++            mdio {
++                #address-cells = <1>;
++                #size-cells = <0>;
++
++                phy0: ethernet-switch@0{
++                    reg = <0x0>;
++                };
++                phy1: ethernet-switch@1{
++                    reg = <0x1>;
++                };
++                phy2: ethernet-switch@2{
++                    reg = <0x2>;
++                };
++            };
++        };
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 74036b51911d..d9abe66092be 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -13385,6 +13385,14 @@ L:	netdev@vger.kernel.org
+ S:	Maintained
+ F:	drivers/net/ethernet/microchip/lan743x_*
+ 
++MICROCHIP LAN9303/LAN9354 ETHERNET SWITCH DRIVER
++M:	Jerry Ray <jerry.ray@microchip.com>
++M:	UNGLinuxDriver@microchip.com
++L:	netdev@vger.kernel.org
++S:	Maintained
++F:	Documentation/devicetree/bindings/net/dsa/microchip,lan9303.yaml
++F:	drivers/net/dsa/lan9303*
++
+ MICROCHIP LAN966X ETHERNET DRIVER
+ M:	Horatiu Vultur <horatiu.vultur@microchip.com>
+ M:	UNGLinuxDriver@microchip.com
+-- 
+2.25.1
 
-> we can drop it for now and add it to the (already overfull)
-> bucket of the "optimize nested_svm_transition_tlb_flush()".
-
-I think even long term, purging Hyper-V's FIFO in svm_flush_tlb_current() is the
-correct/desired behavior.  This doesn't really have anything to do with nSVM,
-it's all about SVM not providing a way to flush only NPT entries.
