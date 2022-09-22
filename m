@@ -2,109 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4E715E6EC5
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 23:49:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5FF85E6EC8
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 23:49:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231501AbiIVVsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 17:48:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51442 "EHLO
+        id S231504AbiIVVtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 17:49:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231462AbiIVVsb (ORCPT
+        with ESMTP id S231195AbiIVVtM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 17:48:31 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B533FF8C35;
-        Thu, 22 Sep 2022 14:48:30 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id w13so10068306plp.1;
-        Thu, 22 Sep 2022 14:48:30 -0700 (PDT)
+        Thu, 22 Sep 2022 17:49:12 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70738F8F99
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 14:49:11 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id fs14so11111931pjb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 14:49:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=vFFY3rh84yOuYPuVnI3lRYvTzhLEPqFEznPPwuwFY3M=;
-        b=mQYrehBkW0Tp8m8Z92J+sUWuoHaNyKSJGsM63/CbKHcRsyDKdNSeJ0FIyTyvU+hCU5
-         kICwerayKtM6cRjpG+iPR2H7kvi+FTeNkS7uqlQjYGuMLRd2ICn0lUVnorO8jlyok8ng
-         WEUFogy2xra3ii0ZfvdhERRdNb/H+ObezXLvAQBWAU5Fq0I3PIV3+9jjjny+LA3nUwML
-         hbh0LLe06bHG5EKft3uyDA+TfGNJt76Lj3XfZLDxOyQe9NLgL8eISn8QUUI7a60aYqD+
-         Ea1zulRIFsTuesGYc4guku+yFDiqOUmveLAcsDeSB/ZpUT25Bm6fnCRDZr/ZUtL9AwZA
-         yS1w==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date;
+        bh=HR7XDnra6aPtamhjv2ZebPHNXJTov7JqNOvsimryjio=;
+        b=SzXIxv6C1tCw5E3cmrWDJ/hT6jlBfbW+dFuRj81LBsGuMMA1AsgUJRpxwVsVSvwR2s
+         HjojE3kOc43go5tDIXGrMTl5j+2eCPTyOeyLkDKEdQ6zWs58EaHgr7cs3m2ezx/7gyPH
+         QYSAs2hvSa7UX6V/rYFn8OuKvubD7Tx83ZZcc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=vFFY3rh84yOuYPuVnI3lRYvTzhLEPqFEznPPwuwFY3M=;
-        b=5QJl3fyWQ5ZdGF4GyiUx1lRLa7pWlPD6FfAvi1tMs5NlPLxeRX622ki2UGeL009Ecf
-         6/eQZbu2z82DZ3VW9qJTrP6WBnhajBUgb2D7iIHx7xtU0+yMt1KqtbNXwo5KcPEYucuO
-         BGbiuZWCEkFzeKJWuI6sNU4FwIyQAAuPX6dsHWN2hnfgKiyxGI+mVUuQSWSkzdL37hfM
-         /aaDZf4UTBUWB6Ul8svWBIZ/TjmSEZgJoY/GkxQWzm/YCXfwc2TrdExaohTSxq19EySo
-         0yX6jUm8uRAlvPvL8mn02kUj5+5HCEQm8mz8OcHexGdJlJMW5PlRcs1zzQx08reQW7ig
-         Ah3g==
-X-Gm-Message-State: ACrzQf0599jwu8851fA7Ob8t98pxFsZyoQt3bqZp1Kr+/N1r/5fZRNkM
-        Vvbs9zjgJfLd+WRahQt2Vzk=
-X-Google-Smtp-Source: AMsMyM7Tl5x3qq3rpo9H8vHIvgajXbO3mDq3Rl+jvxpGF1uRvjW0c9A26/fvCDdGQ27LMj3HQvb+Sg==
-X-Received: by 2002:a17:902:b7c5:b0:178:a207:d789 with SMTP id v5-20020a170902b7c500b00178a207d789mr5241220plz.70.1663883310074;
-        Thu, 22 Sep 2022 14:48:30 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:c558:d894:7bf:3842])
-        by smtp.gmail.com with ESMTPSA id cp2-20020a170902e78200b00178b77b7e71sm4478027plb.188.2022.09.22.14.48.29
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=HR7XDnra6aPtamhjv2ZebPHNXJTov7JqNOvsimryjio=;
+        b=EY7vXqf308vWQKFeNLEufjHGU2L6kRy5SoBrryTcrq/DrHYXPZvSe5u03uX/9gRwy7
+         /KITDHaCDyBoS/SSEXw95tlS0Uw5w3yLmZjGKJiCeoqhhGFe8gkdjQ7wVLku65cng7PB
+         53GAhUvBiGDYUYMUQXci7tRpmycWjYE9vsYDpHt/8imS4jQkK0482Sk7ZXPoo72yVxA2
+         qGZWEIMG97Vhrd5YhD2xqtHQZbX/jCj2QWw0XxobE5kqNcT4RNbUQxMjx7YKwIv31okL
+         QphygKI23E3p3telaRP7tCXKl+qUwVSGVX0O9imx+bN7oqoRv1nd2EmDDtBORSOkTF2J
+         1Fvg==
+X-Gm-Message-State: ACrzQf17+3L3azP+SGbsWZ+6l/EwNmgBdrMOyxgCnGISyF48PvS7tgE+
+        Tx589Zbq289aYMPyaFYuRZOUuQ==
+X-Google-Smtp-Source: AMsMyM7EVCvewBY8ReI9lCX0qEaIkOeoxfNJfZf95NgQUB74fHJwtUZioqBUOFwe31SWjNTGJEPjqg==
+X-Received: by 2002:a17:902:d2d2:b0:177:4940:cc0f with SMTP id n18-20020a170902d2d200b001774940cc0fmr5257349plc.4.1663883350927;
+        Thu, 22 Sep 2022 14:49:10 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id j6-20020a170902da8600b00176acc23a73sm4597636plx.281.2022.09.22.14.49.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 14:48:29 -0700 (PDT)
-Date:   Thu, 22 Sep 2022 14:48:26 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
-Cc:     linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org
-Subject: Re: [PATCH v1 0/3] Get rid of
- devm_fwnode_get_[index_]gpiod_from_child()
-Message-ID: <YyzYKmsjKflqT1xZ@google.com>
-References: <20220902-get_gpiod_from_child-remove-v1-0-1e47125df20f@gmail.com>
+        Thu, 22 Sep 2022 14:49:10 -0700 (PDT)
+Date:   Thu, 22 Sep 2022 14:49:08 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Feng Tang <feng.tang@intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Alex Elder <elder@kernel.org>,
+        Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Daniel Micay <danielmicay@gmail.com>,
+        Yonghong Song <yhs@fb.com>, Marco Elver <elver@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, netdev@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-fsdevel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        dev@openvswitch.org, x86@kernel.org,
+        linux-wireless@vger.kernel.org, llvm@lists.linux.dev,
+        linux-hardening@vger.kernel.org,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Subject: Re: [PATCH 00/12] slab: Introduce kmalloc_size_roundup()
+Message-ID: <202209221446.5E90AEED@keescook>
+References: <20220922031013.2150682-1-keescook@chromium.org>
+ <673e425d-1692-ef47-052b-0ff2de0d9c1d@amd.com>
+ <202209220845.2F7A050@keescook>
+ <cb38655c-2107-bda6-2fa8-f5e1e97eab14@suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220902-get_gpiod_from_child-remove-v1-0-1e47125df20f@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <cb38655c-2107-bda6-2fa8-f5e1e97eab14@suse.cz>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Pavel, Marek,
+On Thu, Sep 22, 2022 at 11:05:47PM +0200, Vlastimil Babka wrote:
+> On 9/22/22 17:55, Kees Cook wrote:
+> > On Thu, Sep 22, 2022 at 09:10:56AM +0200, Christian König wrote:
+> > [...]
+> > > So when this patch set is about to clean up this use case it should probably
+> > > also take care to remove ksize() or at least limit it so that it won't be
+> > > used for this use case in the future.
+> > 
+> > Yeah, my goal would be to eliminate ksize(), and it seems possible if
+> > other cases are satisfied with tracking their allocation sizes directly.
+> 
+> I think we could leave ksize() to determine the size without a need for
+> external tracking, but from now on forbid callers from using that hint to
+> overflow the allocation size they actually requested? Once we remove the
+> kasan/kfence hooks in ksize() that make the current kinds of usage possible,
+> we should be able to catch any offenders of the new semantics that would appear?
 
-On Fri, Sep 02, 2022 at 05:55:24PM -0700, Dmitry Torokhov wrote:
-> This drops the last uses of devm_fwnode_get_[index_]gpiod_from_child()
-> from the tree and drops the stubs implementing this API on top of
-> devm_fwnode_gpiod_get_index().
-> 
-> Note that the bulk of users were converted in 2019, the couple of LED
-> drivers are all that have remained.
-> 
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> 
-> ---
-> Dmitry Torokhov (3):
->       leds: gpio: switch to using devm_fwnode_gpiod_get()
->       leds: lgm-sso: switch to using devm_fwnode_gpiod_get()
->       gpiolib: remove devm_fwnode_get_[index_]gpiod_from_child()
-> 
->  drivers/leds/blink/leds-lgm-sso.c |  5 ++---
->  drivers/leds/leds-gpio.c          |  5 ++---
->  include/linux/gpio/consumer.h     | 21 ---------------------
->  3 files changed, 4 insertions(+), 27 deletions(-)
-> ---
-> base-commit: 7fd22855300e693668c3397771b3a2b3948f827a
-> change-id: 20220902-get_gpiod_from_child-remove-a62638849e91
-> 
+That's correct. I spent the morning working my way through the rest of
+the ksize() users I didn't clean up yesterday, and in several places I
+just swapped in __ksize(). But that wouldn't even be needed if we just
+removed the kasan unpoisoning from ksize(), etc.
 
-Could you please consider picking this up for 6.1? Or would you be OK
-with this going through other tree (GPIO maybe)?
-
-Thanks.
+I am tempted to leave it __ksize(), though, just to reinforce that it's
+not supposed to be used "normally". What do you think?
 
 -- 
-Dmitry
+Kees Cook
