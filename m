@@ -2,148 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F64F5E6B38
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 20:47:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED6355E6B3F
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 20:49:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232178AbiIVSq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 14:46:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52962 "EHLO
+        id S232155AbiIVSto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 14:49:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230526AbiIVSqw (ORCPT
+        with ESMTP id S231764AbiIVStj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 14:46:52 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC19E6A0F;
-        Thu, 22 Sep 2022 11:46:52 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id p1-20020a17090a2d8100b0020040a3f75eso3082683pjd.4;
-        Thu, 22 Sep 2022 11:46:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date;
-        bh=v3Ah9fb1qrCwQR4d12eExOef95OCxNIN++esA2IIF80=;
-        b=Q//n0kW/Vxd52O+tZTElmxgRlsNH8mpg5vvKHQZ7tfO47xTeLDnT2F+ZqPvMxHtl9P
-         QQkTNqpEnZoLpZBjQ6UZr3htLwKjNQOo7GuhIBKhr40PLylaw2CGEK4oObrItwnZI4Xr
-         Pc0pX6OsoS3YDlXGv/OkC1DaJK4vAW75HN0De7QSlpopk3G5NEsEQbB1V548uNXdeASI
-         Sy3F20G2Wkpreh73rcvK6qeiwh/tuJS2r+g7r6QAgbtUAeMP0iOisbGg9qVV9pwIbjRV
-         z5A/MWdU5wFf+7zdS7JShq9P7q0/zeTPZm3Utt+tBzn+2IepwLWSjt999Jwnei9Lw96Z
-         3woQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date;
-        bh=v3Ah9fb1qrCwQR4d12eExOef95OCxNIN++esA2IIF80=;
-        b=5N1V1/moVbW4AaUbTGC5K8EpQaLhTc0QFvu+9czBaADiT2mUTpO8o3dHFZV3Osvozo
-         EM6ksL3mwUSsSMHjxFjmwsWLOsx/XgZ1yGc9MZfEAmFSCdkJJQZSOq//Ej8TSa4yyR+f
-         OG8/pg+s2JwshoYugSseb9WHSA6hX1HkaGIQq6ujUg4Nj+X43DCfYOzkzIxGKK64uDYl
-         41lspaPmZadKL75TFFaWK/F28lHZ3GyUp9o5JJalDEiEeyxcDO6+o5sGZF2qWIjxC3B8
-         ACR6+SCWovQfZOdd7g8L7KTOA2msYQOOLkJ3rWD/g9KcLb3Y6peR4/mejcNqGZCg8DWv
-         o9Lw==
-X-Gm-Message-State: ACrzQf2VrH4/8wkTHW1Y1NyH+18tA6MyhKD5jbKLSvbEiqqKCqa60xhq
-        dwe6EuHF/EQGZ2oqP7tbkw0=
-X-Google-Smtp-Source: AMsMyM7Z7+pDQSvVDGJRV52sWwM9wqk8zW95hc9sSvTRWf0JgvdpLXaeBviPsUdR211xhXYLYZNHdg==
-X-Received: by 2002:a17:903:230b:b0:177:e667:7862 with SMTP id d11-20020a170903230b00b00177e6677862mr4579570plh.154.1663872411741;
-        Thu, 22 Sep 2022 11:46:51 -0700 (PDT)
-Received: from localhost ([98.97.34.132])
-        by smtp.gmail.com with ESMTPSA id w128-20020a626286000000b0053e20a0333fsm4782822pfb.93.2022.09.22.11.46.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 11:46:51 -0700 (PDT)
-Date:   Thu, 22 Sep 2022 11:46:49 -0700
-From:   John Fastabend <john.fastabend@gmail.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        John Fastabend <john.fastabend@gmail.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Qiao Ma <mqaio@linux.alibaba.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
-        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Message-ID: <632cad99e05c2_3c2b22088@john.notmuch>
-In-Reply-To: <CAEf4BzbqdDUY-1mpGUBk-CpMLAC7jvgRV7rNbgvxr=5nMOsj2Q@mail.gmail.com>
-References: <38269a1610deebf8d51127f15b1c55d00caa4283.1661392989.git.mqaio@linux.alibaba.com>
- <CAADnVQKm-TGJxjwByaMBcvFA_7g+wC2hB+cqkZKhSc83a2H0Pg@mail.gmail.com>
- <6308f39ddfecc_75c920884@john.notmuch>
- <CAEf4BzbqdDUY-1mpGUBk-CpMLAC7jvgRV7rNbgvxr=5nMOsj2Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: fix incorrect fcntl call
- (test_sockmap.c)
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 22 Sep 2022 14:49:39 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00661DFAA
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 11:49:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663872577; x=1695408577;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=P5juiKu7bYpxXj/gSrKPExTLTh/mH9tKD2hsvFIFKLA=;
+  b=BNpTD+0vMGOIkBlucoXPpbgSVZgncwXbIXTPf4xLNJwKNFG6vBOk9kaH
+   76kxyOfDn65zJtaJHN8l6n3UU0P+3rltE/B+UHW1wZ/5nw0pjelJZxOHA
+   1nCMS1xozsiZHJv3882w7Ua1Gjc2b0etcIk900Tm8H6c4BwyWkh++hW6q
+   hSemWLwTlfJRBHGIeZHQxmVd093I9qjXLRXhuzTvWvd6XZKsBNl/DlWZt
+   gIQl+nhiKs8jXfcVle+wMJnw4/wMTa4OE4OKJyrQ3hk7SISeUG0AB/Dvk
+   fE7CBzROVOwt4aV7j6KCej3Uy8bWwu+D5h59qPYOsc7Zpk17+sInE++I/
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="280121641"
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="280121641"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 11:49:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="597563254"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 22 Sep 2022 11:49:36 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1obRGR-0004sb-2C;
+        Thu, 22 Sep 2022 18:49:35 +0000
+Date:   Fri, 23 Sep 2022 02:48:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [dvyukov:dvyukov-perf-debugging 1/1]
+ arch/x86/kernel/hw_breakpoint.c:101:29: warning: variable 'copy' set but not
+ used
+Message-ID: <202209230213.4NtxMTaN-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Andrii Nakryiko wrote:
-> On Fri, Aug 26, 2022 at 9:24 AM John Fastabend <john.fastabend@gmail.com> wrote:
-> >
-> > Alexei Starovoitov wrote:
-> > > On Wed, Aug 24, 2022 at 7:11 PM Qiao Ma <mqaio@linux.alibaba.com> wrote:
-> > > >
-> > > > In test_sockmap.c, the testcase sets socket nonblock first, and then
-> > > > calls select() and recvmsg() to receive data.
-> > > > If some error occur, nonblock setting will make recvmsg() return
-> > > > immediately, rather than blocking forever.
-> > > >
-> > > > However, the way to call fcntl() to set nonblock is wrong.
-> > > > To set socket noblock, we need to use
-> > > > > fcntl(fd, F_SETFL, O_NONBLOCK);
-> > > > rather than:
-> > > > > fcntl(fd, O_NONBLOCK);
-> > > >
-> > > > Signed-off-by: Qiao Ma <mqaio@linux.alibaba.com>
-> > > > ---
-> > > >  tools/testing/selftests/bpf/test_sockmap.c | 7 ++++++-
-> > > >  1 file changed, 6 insertions(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/tools/testing/selftests/bpf/test_sockmap.c b/tools/testing/selftests/bpf/test_sockmap.c
-> > > > index 0fbaccdc8861..abb4102f33b0 100644
-> > > > --- a/tools/testing/selftests/bpf/test_sockmap.c
-> > > > +++ b/tools/testing/selftests/bpf/test_sockmap.c
-> > > > @@ -598,7 +598,12 @@ static int msg_loop(int fd, int iov_count, int iov_length, int cnt,
-> > > >                 struct timeval timeout;
-> > > >                 fd_set w;
-> > > >
-> > > > -               fcntl(fd, fd_flags);
-> > > > +               err = fcntl(fd, F_SETFL, fd_flags);
-> > > > +               if (err < 0) {
-> > > > +                       perror("fcntl failed");
-> > > > +                       goto out_errno;
-> > > > +               }
-> > > > +
-> > >
-> > > John, Jakub,
-> > >
-> > > Please review this.
-> > > Unfortunately test_sockmap (and sockmap kernel) is broken
-> > > before and after this patch,
-> > > so I'm hesitant to apply it not to make thing harder to debug.
-> > > Here is what I see:
-> > > # ./test_sockmap
+tree:   https://github.com/dvyukov/linux dvyukov-perf-debugging
+head:   62267cd404c44bbb18a96c108839c99e7ba6f9bd
+commit: 62267cd404c44bbb18a96c108839c99e7ba6f9bd [1/1] perf: debugging of missed breakpoints
+config: i386-tinyconfig (https://download.01.org/0day-ci/archive/20220923/202209230213.4NtxMTaN-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/dvyukov/linux/commit/62267cd404c44bbb18a96c108839c99e7ba6f9bd
+        git remote add dvyukov https://github.com/dvyukov/linux
+        git fetch --no-tags dvyukov dvyukov-perf-debugging
+        git checkout 62267cd404c44bbb18a96c108839c99e7ba6f9bd
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kernel/ kernel/events/
 
-[...]
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-> > > and test_sockmap 'hangs' (or doing something for long time) after
-> > > #31/ 6 sockhash:ktls:txmsg test drop:OK
-> >
-> > Thanks for spotting I'll take a look.
-> 
-> Friendly ping. John, did you get a chance to look at this? This patch
-> is still marked as "Needs ACK" in Patchworks.
+All warnings (new ones prefixed by >>):
+
+   arch/x86/kernel/hw_breakpoint.c: In function 'arch_install_hw_breakpoint':
+>> arch/x86/kernel/hw_breakpoint.c:101:29: warning: variable 'copy' set but not used [-Wunused-but-set-variable]
+     101 |         unsigned long *dr7, copy;
+         |                             ^~~~
+   arch/x86/kernel/hw_breakpoint.c: In function 'arch_uninstall_hw_breakpoint':
+   arch/x86/kernel/hw_breakpoint.c:151:28: warning: variable 'copy' set but not used [-Wunused-but-set-variable]
+     151 |         unsigned long dr7, copy;
+         |                            ^~~~
+   arch/x86/kernel/hw_breakpoint.c: In function 'hw_breakpoint_handler':
+>> arch/x86/kernel/hw_breakpoint.c:578:37: warning: suggest braces around empty body in an 'if' statement [-Wempty-body]
+     578 |                 LOG("HIT not found");
+         |                                     ^
+--
+   kernel/events/core.c: In function 'perf_event_disable_inatomic':
+>> kernel/events/core.c:2474:74: warning: suggest braces around empty body in an 'if' statement [-Wempty-body]
+    2474 |                 LOG("perf_event_disable_inatomic: irq_work_queue FAILED");
+         |                                                                          ^
+   kernel/events/core.c: In function 'merge_sched_in':
+>> kernel/events/core.c:3739:53: warning: suggest braces around empty body in an 'else' statement [-Wempty-body]
+    3739 |                         LOG("group_sched_in failed");
+         |                                                     ^
+   kernel/events/core.c: In function 'perf_bp_event':
+   kernel/events/core.c:10191:45: warning: suggest braces around empty body in an 'else' statement [-Wempty-body]
+   10191 |                 LOG("perf_bp_event: ignore");
+         |                                             ^
 
 
-Yep thanks. We are tracking a couple fixes internally around this so should
-have something pop out soon. I think we want the fix and test to go in at
-the same time.
+vim +/copy +101 arch/x86/kernel/hw_breakpoint.c
 
-.John
+    88	
+    89	/*
+    90	 * Install a perf counter breakpoint.
+    91	 *
+    92	 * We seek a free debug address register and use it for this
+    93	 * breakpoint. Eventually we enable it in the debug control register.
+    94	 *
+    95	 * Atomic: we hold the counter->ctx->lock and we only handle variables
+    96	 * and registers local to this cpu.
+    97	 */
+    98	int arch_install_hw_breakpoint(struct perf_event *bp)
+    99	{
+   100		struct arch_hw_breakpoint *info = counter_arch_bp(bp);
+ > 101		unsigned long *dr7, copy;
+   102		int i;
+   103	
+   104		lockdep_assert_irqs_disabled();
+   105	
+   106		for (i = 0; i < HBP_NUM; i++) {
+   107			struct perf_event **slot = this_cpu_ptr(&bp_per_reg[i]);
+   108	
+   109			if (!*slot) {
+   110				*slot = bp;
+   111				break;
+   112			}
+   113		}
+   114	
+   115		if (WARN_ONCE(i == HBP_NUM, "Can't find any breakpoint slot"))
+   116			return -EBUSY;
+   117	
+   118		set_debugreg(info->address, i);
+   119		__this_cpu_write(cpu_debugreg[i], info->address);
+   120	
+   121		dr7 = this_cpu_ptr(&cpu_dr7);
+   122		copy = *dr7;
+   123		*dr7 |= encode_dr7(i, info->len, info->type);
+   124		//LOG("INSTALL slot=%d event=%p", i, bp);
+   125	
+   126		/*
+   127		 * Ensure we first write cpu_dr7 before we set the DR7 register.
+   128		 * This ensures an NMI never see cpu_dr7 0 when DR7 is not.
+   129		 */
+   130		barrier();
+   131	
+   132		set_debugreg(*dr7, 7);
+   133		if (info->mask)
+   134			set_dr_addr_mask(info->mask, i);
+   135	
+   136		return 0;
+   137	}
+   138	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
