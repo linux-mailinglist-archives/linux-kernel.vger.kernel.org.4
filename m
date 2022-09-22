@@ -2,86 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC8AF5E5D6E
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 10:27:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A23575E5D71
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 10:28:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229986AbiIVI1H convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 22 Sep 2022 04:27:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45824 "EHLO
+        id S230161AbiIVI2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 04:28:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229774AbiIVI1F (ORCPT
+        with ESMTP id S229960AbiIVI2t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 04:27:05 -0400
-Received: from relay.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A65F6A6C47;
-        Thu, 22 Sep 2022 01:27:04 -0700 (PDT)
-Received: from omf06.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay10.hostedemail.com (Postfix) with ESMTP id 259E6C061F;
-        Thu, 22 Sep 2022 08:27:03 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf06.hostedemail.com (Postfix) with ESMTPA id 8CEE52000F;
-        Thu, 22 Sep 2022 08:26:53 +0000 (UTC)
-Message-ID: <e4852207ed36662a7c53e36fbbc31a71c5a3396e.camel@perches.com>
-Subject: Re: Linux 4.14.294
-From:   Joe Perches <joe@perches.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org, stable@vger.kernel.org, lwn@lwn.net,
-        jslaby@suse.cz, Jason Wang <wangborong@cdjrlc.com>
-Date:   Thu, 22 Sep 2022 01:26:59 -0700
-In-Reply-To: <YywGcg/Qgf8B8wEj@kroah.com>
-References: <1663669061118192@kroah.com> <1663669061138255@kroah.com>
-         <e9863ed5576cb93a6fd9b59cd19be9b71fda597d.camel@perches.com>
-         <445878e0-d8c9-558f-73b7-8d39fa1a5cde@gmail.com>
-         <YywGcg/Qgf8B8wEj@kroah.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
-MIME-Version: 1.0
-X-Stat-Signature: bjrms6qdzbj3dhwgd3ebncaj9d97ht5r
-X-Rspamd-Server: rspamout08
-X-Rspamd-Queue-Id: 8CEE52000F
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1+NdiIdZEbtLJlhSoSwTaZfYWxLK19czDc=
-X-HE-Tag: 1663835213-739647
+        Thu, 22 Sep 2022 04:28:49 -0400
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0305AB04B
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 01:28:47 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R971e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=liusong@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VQRkoi7_1663835274;
+Received: from localhost(mailfrom:liusong@linux.alibaba.com fp:SMTPD_---0VQRkoi7_1663835274)
+          by smtp.aliyun-inc.com;
+          Thu, 22 Sep 2022 16:28:45 +0800
+From:   Liu Song <liusong@linux.alibaba.com>
+To:     hch@lst.de
+Cc:     axboe@kernel.dk, kbusch@kernel.org, linux-kernel@vger.kernel.org,
+        linux-nvme@lists.infradead.org, liusong@linux.alibaba.com,
+        sagi@grimberg.me
+Subject: [RFC PATCH v2] blk-mq: hctx has only one ctx mapping is no need to redirect the completion
+Date:   Thu, 22 Sep 2022 16:27:54 +0800
+Message-Id: <1663835274-3703-1-git-send-email-liusong@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <20220922062010.GA27946@lst.de>
+References: <20220922062010.GA27946@lst.de>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-09-22 at 08:53 +0200, Greg Kroah-Hartman wrote:
-> On Thu, Sep 22, 2022 at 11:02:21AM +0700, Bagas Sanjaya wrote:
-> > On 9/22/22 01:03, Joe Perches wrote:
-> > > On Tue, 2022-09-20 at 12:17 +0200, Greg Kroah-Hartman wrote:
-> > > []
-> > > > diff --git a/drivers/hid/intel-ish-hid/ishtp-hid.h b/drivers/hid/intel-ish-hid/ishtp-hid.h
-> > > []
-> > > > @@ -118,7 +118,7 @@ struct report_list {
-> > > >   * @multi_packet_cnt:	Count of fragmented packet count
-> > > >   *
-> > > >   * This structure is used to store completion flags and per client data like
-> > > > - * like report description, number of HID devices etc.
-> > > > + * report description, number of HID devices etc.
-> > > >   */
-> > > >  struct ishtp_cl_data {
-> > > >  	/* completion flags */
-> > > 
-> > > Needless backporting of typo fixes reduces confidence in the
-> > > backport process.
-> > > 
-> > 
-> > The upstream commit 94553f8a218540 ("HID: ishtp-hid-clientHID: ishtp-hid-client:
-> > Fix comment typo") didn't Cc: stable, but got AUTOSELed [1].
-> > 
-> > I think we should only AUTOSEL patches that have explicit Cc: stable.
-> 
-> That's not how AUTOSEL works or why it is there at all, sorry.
+From: Liu Song <liusong@linux.alibaba.com>
 
-Perhaps not, but why is AUTOSEL choosing this and why is
-this being applied without apparent human review?
+High-performance NVMe devices usually support a larger number of hw queue,
+which ensures a 1:1 mapping of hctx and ctx. In this case there will be no
+remote request, so we don't need to care about it.
+
+Signed-off-by: Liu Song <liusong@linux.alibaba.com>
+---
+ block/blk-mq.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/block/blk-mq.c b/block/blk-mq.c
+index c11949d..7f9be13 100644
+--- a/block/blk-mq.c
++++ b/block/blk-mq.c
+@@ -1093,10 +1093,11 @@ bool blk_mq_complete_request_remote(struct request *rq)
+ 	WRITE_ONCE(rq->state, MQ_RQ_COMPLETE);
+ 
+ 	/*
+-	 * For a polled request, always complete locally, it's pointless
+-	 * to redirect the completion.
++	 * If the request's hctx has only one ctx mapping,
++	 * or is a polled request, both always complete locally,
++	 * it's pointless to redirect the completion.
+ 	 */
+-	if (rq->cmd_flags & REQ_POLLED)
++	if (rq->mq_hctx->nr_ctx == 1 || rq->cmd_flags & REQ_POLLED)
+ 		return false;
+ 
+ 	if (blk_mq_complete_need_ipi(rq)) {
+-- 
+1.8.3.1
 
