@@ -2,101 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A33C55E64AD
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 16:06:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A85EF5E64BA
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 16:10:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230329AbiIVOGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 10:06:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41268 "EHLO
+        id S230365AbiIVOJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 10:09:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiIVOGe (ORCPT
+        with ESMTP id S229448AbiIVOJz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 10:06:34 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C426ED5DD;
-        Thu, 22 Sep 2022 07:06:33 -0700 (PDT)
-Received: from canpemm500004.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MYH8N4jJnzHpt6;
-        Thu, 22 Sep 2022 22:04:20 +0800 (CST)
-Received: from [10.174.179.14] (10.174.179.14) by
- canpemm500004.china.huawei.com (7.192.104.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 22 Sep 2022 22:06:30 +0800
-Subject: Re: [PATCH] scsi: libsas: fix use-after-free bug in
- smp_execute_task_sg
-To:     Duoming Zhou <duoming@zju.edu.cn>, <linux-kernel@vger.kernel.org>
-CC:     <linux-scsi@vger.kernel.org>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <kuba@kernel.org>,
-        <john.garry@huawei.com>, <gregkh@linuxfoundation.org>,
-        <davem@davemloft.net>
-References: <20220920144213.10536-1-duoming@zju.edu.cn>
-From:   Jason Yan <yanaijie@huawei.com>
-Message-ID: <9cd0b0ae-c6c7-a5bc-a834-a84010702bbc@huawei.com>
-Date:   Thu, 22 Sep 2022 22:06:30 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        Thu, 22 Sep 2022 10:09:55 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3B329803;
+        Thu, 22 Sep 2022 07:09:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=zNhQCtxWvF8Q4IPC7y5tVcrAmAIZN451YsFdgUZWDIc=; b=A7i7iCjsZIyacHXjYkAX/Is2WG
+        nYl2smRxQ+vg/w0NtHXTN7nsAwptTVQa/DD1mchpHaecIYUzSLH5c/MsTtcQWrBeUYySiIEOyiZOB
+        RgOmu9kVpSOQ0sZJtg96+sm7Oo+XBI1e12tZ5ZCEi6BKQBaLUGeP5jmyJnLBkd2wHmqFUSKs77Vsg
+        REVJNeT6iicS4GQtsyq8D+KNONDTXnpD7I7/K1STaqFNTyaqpwGMK0+Y7NINryPQW47137XE38kV5
+        kvdSiP5bVt2kJW0S684xSdn5XRTV6ST7vbr2njJUPR2SQ6hqZ9NEVqCi3LpTYppAPNk9ZDpHRQdAn
+        i8eeZB0A==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1obMtR-00EyUS-GE; Thu, 22 Sep 2022 14:09:33 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 85E89300169;
+        Thu, 22 Sep 2022 16:09:32 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 61E3B2BBF7EBF; Thu, 22 Sep 2022 16:09:32 +0200 (CEST)
+Date:   Thu, 22 Sep 2022 16:09:32 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Wang, Wei W" <wei.w.wang@intel.com>
+Cc:     "Liang, Kan" <kan.liang@linux.intel.com>,
+        "Li, Xiaoyao" <xiaoyao.li@intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
+Subject: Re: [RFC PATCH v2 2/3] perf/x86/intel/pt: Introduce and export
+ pt_get_curr_event()
+Message-ID: <YyxsnAFYMLn2U9BT@hirez.programming.kicks-ass.net>
+References: <20220921164521.2858932-1-xiaoyao.li@intel.com>
+ <20220921164521.2858932-3-xiaoyao.li@intel.com>
+ <175b518c-d202-644e-a3a7-67e877852548@linux.intel.com>
+ <DS0PR11MB6373C84139621DC447D3F466DC4E9@DS0PR11MB6373.namprd11.prod.outlook.com>
+ <Yyxke/IO+AP4EWwT@hirez.programming.kicks-ass.net>
+ <DS0PR11MB637346E9F224C5330CDEF3BFDC4E9@DS0PR11MB6373.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-In-Reply-To: <20220920144213.10536-1-duoming@zju.edu.cn>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.14]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500004.china.huawei.com (7.192.104.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DS0PR11MB637346E9F224C5330CDEF3BFDC4E9@DS0PR11MB6373.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Sep 22, 2022 at 01:59:53PM +0000, Wang, Wei W wrote:
+> On Thursday, September 22, 2022 9:35 PM, Peter Zijlstra
+> > On Thu, Sep 22, 2022 at 12:58:49PM +0000, Wang, Wei W wrote:
+> > 
+> > > Add a function to expose the current running PT event to users. One
+> > > usage is in KVM, it needs to get and disable the running host PT event
+> > > before VMEnter to the guest and resumes the event after VMexit to host.
+> > 
+> > You cannot just kill a host event like that. If there is a host event, the guest
+> > looses out.
+> 
+> OK. The intention was to pause the event (that only profiles host info) when switching to guest,
+> and resume when switching back to host.
 
-On 2022/9/20 22:42, Duoming Zhou wrote:
-> When executing SMP task failed, the smp_execute_task_sg()
-> calls del_timer() to delete the "slow_task->timer". However,
-> if the timer handler sas_task_internal_timedout() is running,
-> the del_timer() in smp_execute_task_sg() will not stop it
-> and the UAF bug will happen. The process is shown below:
-> 
->        (thread 1)               |        (thread 2)
-> smp_execute_task_sg()          | sas_task_internal_timedout()
->   ...                           |
->   del_timer()                   |
->   ...                           |  ...
->   sas_free_task(task)           |
->    kfree(task->slow_task) //FREE|
->                                 |  task->slow_task->... //USE
-> 
-> Fix by calling del_timer_sync() in smp_execute_task_sg(),
-> which makes sure the timer handler have finished before
-> the "task->slow_task" is deallocated.
-> 
-> Fixes: 2908d778ab3e ("[SCSI] aic94xx: new driver")
-> Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-> ---
->   drivers/scsi/libsas/sas_expander.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/scsi/libsas/sas_expander.c b/drivers/scsi/libsas/sas_expander.c
-> index fa2209080cc..5ce25183010 100644
-> --- a/drivers/scsi/libsas/sas_expander.c
-> +++ b/drivers/scsi/libsas/sas_expander.c
-> @@ -67,7 +67,7 @@ static int smp_execute_task_sg(struct domain_device *dev,
->   		res = i->dft->lldd_execute_task(task, GFP_KERNEL);
->   
->   		if (res) {
-> -			del_timer(&task->slow_task->timer);
-> +			del_timer_sync(&task->slow_task->timer);
->   			pr_notice("executing SMP task failed:%d\n", res);
->   			break;
->   		}
-> 
-
-The timer should be triggered 10 seconds later. I am curious why we stay
-this long before del_timer().
-
-However this change looks good to me.
-Reviewed-by: Jason Yan <yanaijie@huawei.com>
+If the even doesn't profile guest context, then yes. If it does profile
+guest context, you can't.
