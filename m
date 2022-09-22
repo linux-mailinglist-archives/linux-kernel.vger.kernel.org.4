@@ -2,49 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E396D5E57ED
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 03:17:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4887E5E57F7
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 03:20:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229437AbiIVBRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 21:17:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38448 "EHLO
+        id S230205AbiIVBUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 21:20:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiIVBRg (ORCPT
+        with ESMTP id S230046AbiIVBUb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 21:17:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56FCDDE7;
-        Wed, 21 Sep 2022 18:17:36 -0700 (PDT)
+        Wed, 21 Sep 2022 21:20:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D409598D00;
+        Wed, 21 Sep 2022 18:20:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 12509B81A97;
-        Thu, 22 Sep 2022 01:17:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60E6DC433D6;
-        Thu, 22 Sep 2022 01:17:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4C24BB81DDD;
+        Thu, 22 Sep 2022 01:20:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46437C433C1;
+        Thu, 22 Sep 2022 01:20:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663809453;
-        bh=JMPgI51DpBrQcNwGIdUMSMjRvDmbd5dzyNZBmm4sXEU=;
+        s=k20201202; t=1663809627;
+        bh=S0pYd9pePfNLzzjVw6IuGapX4viErIn2aDKs7zQI7sk=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=U5ADaUtCk2qo3xg97uXRVTz1gypm1L6pl7NsDJ5nxRYSCpC6oR/JfRkbpTSRlAFKV
-         qfPCR+aM2kq6CpymkAITFGkVRaZXjj2Am9Z3GUjy9dIxXTzsItm8NJygSJi2SOnAGF
-         GCZMaM4YoTCC7kQ9UTdH/fdvPgMaXWyK+gQ+kYHgFPg3U1KsAqKf5BnhlBUChiGYrs
-         dVx01AMhnCPoT80xikdeh375ZQBzNjohLvChUiMbGPG4YcSyPA3GwHbewlXl3Zx6UH
-         WWE0o+JdI5y/8KHj1wFqOm+oSDoX82ijtSVgQ3IHV7p1Rzw/7EYBRq0AAb/IHa2AoN
-         64V9w+VzUxOfw==
-Date:   Wed, 21 Sep 2022 18:17:31 -0700
+        b=pIz2g6kZKroSipINZM8ZZQRKYDYMbEa3HrRUVklPcOxwUrcJZ7hzQeu+9kSW+AvgT
+         SpMhMWc2HAJgDVKl76WXRmU1dZhSIMpESDAJLtbNETL/UkeQhTnqks+Ee34pzkb49x
+         jSRuDwCggPqsQwK/s1fvTyNIzlTnvmEPghRtB5NSTU+iRGaaTHNbCTGq30O+4uvU2A
+         DVplYGsjtJVRU6uGaWKVDJmYiPVulw71rZQJ15MakJuHmZZBpzecA+2gQo8aCSaTCp
+         SoBg8Syd2YXIn5pNG3Ny0DzBJKr7NoStjWn/fxNfq7HwRE3F6tz0SCSaFGskxJdHqW
+         mwb7gZLS4Ttzw==
+Date:   Wed, 21 Sep 2022 18:20:24 -0700
 From:   Jakub Kicinski <kuba@kernel.org>
-To:     Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
-Cc:     <netdev@vger.kernel.org>, <davem@davemloft.net>,
-        <linux-kernel@vger.kernel.org>, <bryan.whitehead@microchip.com>,
-        <richardcochran@gmail.com>, <UNGLinuxDriver@microchip.com>,
-        <Ian.Saturley@microchip.com>
-Subject: Re: [PATCH net-next V1 2/2] net: lan743x: Add support to SGMII
- register dump for PCI11010/PCI11414 chips
-Message-ID: <20220921181731.7d107d64@kernel.org>
-In-Reply-To: <20220916115758.73560-3-Raju.Lakkaraju@microchip.com>
-References: <20220916115758.73560-1-Raju.Lakkaraju@microchip.com>
-        <20220916115758.73560-3-Raju.Lakkaraju@microchip.com>
+To:     Alexander Couzens <lynxis@fe80.eu>
+Cc:     Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net v2 0/2] net: mt7531: pll & reset fixes
+Message-ID: <20220921182024.27e33b09@kernel.org>
+In-Reply-To: <20220917000734.520253-1-lynxis@fe80.eu>
+References: <20220917000734.520253-1-lynxis@fe80.eu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
@@ -57,8 +63,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 16 Sep 2022 17:27:58 +0530 Raju Lakkaraju wrote:
-> Add support to SGMII register dump
+On Sat, 17 Sep 2022 02:07:32 +0200 Alexander Couzens wrote:
+> v1 -> v2:
+>  - commit message: add Fixes: tag
+>  - add missing target branch in subject
 
-Switching between dumps based on a private flag is not gonna cut it.
-Please use ethtool -w / ethtool -W or devlink regions.
+Landen, DENG, Sean - please review.
