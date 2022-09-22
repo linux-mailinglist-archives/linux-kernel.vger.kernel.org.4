@@ -2,268 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F27D5E7039
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 01:27:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB17A5E7037
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 01:27:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231191AbiIVX1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 19:27:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59612 "EHLO
+        id S230487AbiIVX1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 19:27:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230070AbiIVX12 (ORCPT
+        with ESMTP id S229940AbiIVX1Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 19:27:28 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3B1010BB3D;
-        Thu, 22 Sep 2022 16:27:26 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 6DA355C009E;
-        Thu, 22 Sep 2022 19:27:24 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Thu, 22 Sep 2022 19:27:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        invisiblethingslab.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1663889244; x=
-        1663975644; bh=NATz2eZd4ruDPDhqkThpsKKoxTGUAMa5GGSs6QDuXBM=; b=k
-        M0+o2rmNRaO8Mzt5yuSVbbU3gVbZMLMe+o2BRK7d6nkWMApDczUi8bReVTTHjp/3
-        8jmAAmfEMaKBoBr7xpaG110ZWvf+vIUZu+12MPQii/wMtp6ccsG4KrHmdNZdCSXu
-        kcIxa89ai2MZ9k+W5rKkVB2d4gVM3p01zbYEjU1odt/vUs8/nyCmBadO43xKfs/K
-        Vq2/SlJSAyBpI9TIyQH5JPRHzIkwgFFkgZiO1UWVQJ9R08yDPsIqDXXwlTwB94bX
-        BjEbnqFAIUk7O97JELpzRNkh9dencuaGWyKt4arvdFJ1I0GiKs/XKo7KKVsCSdvk
-        rSHitjkVb9cpqYCqbOaWg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1663889244; x=1663975644; bh=NATz2eZd4ruDPDhqkThpsKKoxTGU
-        AMa5GGSs6QDuXBM=; b=GJS2pqK3vOu+LYXtm2bNPC1WyCBSzfiafb3ggDbTdmfG
-        YefNCO1IaWxCeOHqDDAbwMzWYjExEZ5IUO9FigiZ1VfXq6O9fnTiMP2nMii8VIdN
-        K/1AJLCjd22SGD5SNGlOyoo5jbLt4D2tklCLAItQESe7yO83sxU3J8rfS38A1nP/
-        stqiFV2Ff6yEfRJrEtRSNvRs7LdMCwLHaB3oPWewc+A8wdQXuizA/WNe3idEk82w
-        yxLRyKBoeoXQbHqWot7mhLF2orGdkz3v7so+T0h/LUO6A5uX/4NsMaKq9SGFVwaB
-        oZLXb4V4AOIoHzptRPaMdy4oswZTdfokGvL9ip6mCw==
-X-ME-Sender: <xms:XO8sY_fxQNNFuDGrwxwftT8oArpLGxGILdG9oVcuf2sBL19ikbETmg>
-    <xme:XO8sY1MMtdW5M5qiFJizRKrQcXoNQsXoDie4lW3rNH3Om12CXBa1WuvteB3NhQqV3
-    GtDsu9Ebv7wb1o>
-X-ME-Received: <xmr:XO8sY4gpDfXPfUtcXb251V2jM5wdquM-4wphTlul3MjfSbkBaSRC1WSTIQdk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeefhedgvdefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtjeenucfhrhhomhepffgvmhhi
-    ucforghrihgvucfqsggvnhhouhhruceouggvmhhisehinhhvihhsihgslhgvthhhihhngh
-    hslhgrsgdrtghomheqnecuggftrfgrthhtvghrnhepvdejteegkefhteduhffgteffgeff
-    gfduvdfghfffieefieekkedtheegteehffelnecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomhepuggvmhhisehinhhvihhsihgslhgvthhhihhnghhs
-    lhgrsgdrtghomh
-X-ME-Proxy: <xmx:XO8sYw9LLqirQzTLsEYBvKS8rT4MD3FErmSloiYOD8idsaivxlWKWw>
-    <xmx:XO8sY7szPaNVr5irpcqPtohMr70fKnGjhxnkZU7ovPJYuNjTf-jujw>
-    <xmx:XO8sY_Gk09hhmmeIIWzrTj48Vt7j9XOZ-Hpp6C3gln9h7OCZIE3fMA>
-    <xmx:XO8sY_jCuhQLoEAkS4nllisd1lQLjczzEZD4F6KhftqBjq90LyhVpg>
-Feedback-ID: iac594737:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 22 Sep 2022 19:27:23 -0400 (EDT)
-Date:   Thu, 22 Sep 2022 19:25:32 -0400
-From:   Demi Marie Obenour <demi@invisiblethingslab.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Jan Beulich <jbeulich@suse.com>, Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xen-devel@lists.xenproject.org,
-        Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>
-Subject: Re: [PATCH v3] Support ESRT in Xen dom0
-Message-ID: <YyzvWmcvvGq+TQ/R@itl-email>
-References: <CAMj1kXEBfJUfTQ3THqqKxsU09_S98B_TjTECKwGM0WAv_5tZaA@mail.gmail.com>
- <7930b617-d473-94dd-c7e4-33ffa19da13e@suse.com>
- <CAMj1kXEJ9d3-8xa7rkczY7ur2zDm9CjqM7u1eEdHHmPG=Oo=xA@mail.gmail.com>
- <3671fd52-6034-7149-ebe4-f7560c0dc6b0@suse.com>
- <Yyu1xC7Tlf9sS7Ro@itl-email>
- <6f42a382-c5aa-ba16-f330-69a07476e2aa@suse.com>
- <Yyx3hlE/MDBeEdtu@itl-email>
- <CAMj1kXFoyTRKfGH2nMpi-EJRqLz9T_p+ZMM0x09UNJ-34-kS_Q@mail.gmail.com>
- <YyylgVqDMi9SDptq@itl-email>
- <CAMj1kXE8ZPxHS2BEEKyJNUKut0Peb2kb3CWMwuxxeyFhJk1DZw@mail.gmail.com>
+        Thu, 22 Sep 2022 19:27:16 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA7610BB3D
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 16:27:15 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id s18so7425342qtx.6
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 16:27:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=/85pqBD6V1IDX7Z4khIsy5d7kZgs4wG5xtK0jD0vbnk=;
+        b=SMnYmEZ8bKvLcyZXF4aCTXE+fTnaOXy7Y7KL/hT9H8MBRoJsh+2tWbTYtqpu9roM3W
+         c/EJgnAOocWwXvjIceFEJKY09LczYh92xb52Y/3SFD2ZWZnNnbFQga5Ho5KceykS76Pb
+         dYyqyz1izT2eK+nwAOAbbnmHztngYPszDJXLdqoK/eBYeoNot8IwQX/NolcXbzsqLIK6
+         kZHcIlfSkDC469X/gUZ68y8znEnUGMwmjwE3BUskvP9cJnSxFPJoaghyTIFaAs3DE8jg
+         /+0J1CQ/bC00nm4F4LA3qoDfxUnwXo/31dCz8ZF32l54u/ZfyjwF53FcUQod44xCA7JI
+         hBwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=/85pqBD6V1IDX7Z4khIsy5d7kZgs4wG5xtK0jD0vbnk=;
+        b=fqy32hqHlZSJKHOTNOAN+KvZYoQYrF1vPF+90uMYmuhGcpZVXjG3oXRMtQzv7ODmW2
+         jzCKC4BPO51ndOy2jfjq3M8+v7f8//1/kmD7iPWdhqQaF6xLLtZWZQc9m6RJWO+bHQoK
+         Op1KtZWSKTL5KcWM8qMXHL7mZYcq6WdeMKnn4bSZ74FGe3idrZLSmXeuUsPLRUN/iDOn
+         MCqIaIHTWMry/NrrXwdhpR2maB/TLsbIYw130jzgnUCOCTuxzG5fQodOFBxtigcKKhFH
+         70XYkGeohXhWeMRDw5ISjWQtFdVk7Jn5xJLSr9Q2gNhJWKwfc5BmVmLolnyOnJ1/jlZR
+         qDRw==
+X-Gm-Message-State: ACrzQf22xtFDnYUn912mOf2yTL9ANIdZ8vXaAM4qJceb2jOxzBMcmiMv
+        DMQsZPZwOQzIqGkTL70yGAE=
+X-Google-Smtp-Source: AMsMyM6EUNxlqgVpdg2aIxTEvH+EfRC4e3A02T6Wuh0uPFEYC6rKGxKEMyOsRUkB5le9W4JFyZV/CA==
+X-Received: by 2002:a05:622a:315:b0:35c:f6b2:f740 with SMTP id q21-20020a05622a031500b0035cf6b2f740mr5018915qtw.521.1663889234427;
+        Thu, 22 Sep 2022 16:27:14 -0700 (PDT)
+Received: from [10.69.40.226] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id bx5-20020a05622a090500b0035bb152d414sm4139811qtb.94.2022.09.22.16.27.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Sep 2022 16:27:13 -0700 (PDT)
+Message-ID: <829c3fe1-54a2-53ba-9448-d80196b5ebf0@gmail.com>
+Date:   Thu, 22 Sep 2022 16:27:11 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="GRcGP6sBkPbgCb0x"
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXE8ZPxHS2BEEKyJNUKut0Peb2kb3CWMwuxxeyFhJk1DZw@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH 0/3] mm/hugetlb: hugepage migration enhancements
+Content-Language: en-US
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Michal Hocko <mhocko@suse.com>,
+        David Hildenbrand <david@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20220921223639.1152392-1-opendmb@gmail.com>
+ <YyzEz4snl2x51iTY@monkey> <YyzkoGJsIXVFW6ZL@monkey>
+From:   Doug Berger <opendmb@gmail.com>
+In-Reply-To: <YyzkoGJsIXVFW6ZL@monkey>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 9/22/2022 3:41 PM, Mike Kravetz wrote:
+> On 09/22/22 13:25, Mike Kravetz wrote:
+>> On 09/21/22 15:36, Doug Berger wrote:
+>>
+>> As noted above, for pages to be migrated we first try to use an existing
+>> free huge page as the target.  Quite some time ago, Michal added code to
+>> allocate a new page from buddy as the target if no free huge pages were
+>> available.  This change also included a special flag to dissolve the
+>> source huge page when it is freed.  It seems like this is the exact
+>> behavior we want here?  I wonder if it might be easier just to use this
+>> existing code?
+> 
+> Totally untested, but I believe the patch below would accomplish this.
+> 
+>  From aa8fc11bb67bc9e67e3b6b280fab339afce37759 Mon Sep 17 00:00:00 2001
+> From: Mike Kravetz <mike.kravetz@oracle.com>
+> Date: Thu, 22 Sep 2022 15:32:10 -0700
+> Subject: [PATCH] hugetlb: force alloc_contig_range hugetlb migrations to
+>   allocate new pages
+> 
+> When migrating hugetlb pages as the result of an alloc_contig_range
+> operation, allocate a new page from buddy for the migration target.
+> This guarantees that the number of hugetlb pages is not decreased by
+> the operation.  In addition, this will result in the special HPageTemporary
+> flag being set in the source page so that it will be dissolved when
+> freed.
+> 
+> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+> ---
+>   include/linux/hugetlb.h |  5 +++--
+>   mm/hugetlb.c            | 12 ++++++++++--
+>   mm/internal.h           |  1 +
+>   mm/migrate.c            |  3 ++-
+>   mm/page_alloc.c         |  1 +
+>   5 files changed, 17 insertions(+), 5 deletions(-)
+> 
+> diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+> index cfe15b32e2d4..558831bf1087 100644
+> --- a/include/linux/hugetlb.h
+> +++ b/include/linux/hugetlb.h
+> @@ -702,7 +702,8 @@ int isolate_or_dissolve_huge_page(struct page *page, struct list_head *list);
+>   struct page *alloc_huge_page(struct vm_area_struct *vma,
+>   				unsigned long addr, int avoid_reserve);
+>   struct page *alloc_huge_page_nodemask(struct hstate *h, int preferred_nid,
+> -				nodemask_t *nmask, gfp_t gfp_mask);
+> +				nodemask_t *nmask, gfp_t gfp_mask,
+> +				bool temporary);
+>   struct page *alloc_huge_page_vma(struct hstate *h, struct vm_area_struct *vma,
+>   				unsigned long address);
+>   int hugetlb_add_to_page_cache(struct page *page, struct address_space *mapping,
+> @@ -1003,7 +1004,7 @@ static inline struct page *alloc_huge_page(struct vm_area_struct *vma,
+>   
+>   static inline struct page *
+>   alloc_huge_page_nodemask(struct hstate *h, int preferred_nid,
+> -			nodemask_t *nmask, gfp_t gfp_mask)
+> +			nodemask_t *nmask, gfp_t gfp_mask, bool temporary)
+>   {
+>   	return NULL;
+>   }
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index 8bcaf66defc5..19de8ae79ec8 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -2308,8 +2308,11 @@ struct page *alloc_buddy_huge_page_with_mpol(struct hstate *h,
+>   
+>   /* page migration callback function */
+>   struct page *alloc_huge_page_nodemask(struct hstate *h, int preferred_nid,
+> -		nodemask_t *nmask, gfp_t gfp_mask)
+> +		nodemask_t *nmask, gfp_t gfp_mask, bool temporary)
+>   {
+> +	if (temporary)
+> +		goto temporary_alloc;
+> +
+>   	spin_lock_irq(&hugetlb_lock);
+>   	if (h->free_huge_pages - h->resv_huge_pages > 0) {
+>   		struct page *page;
+> @@ -2322,6 +2325,11 @@ struct page *alloc_huge_page_nodemask(struct hstate *h, int preferred_nid,
+>   	}
+>   	spin_unlock_irq(&hugetlb_lock);
+>   
+> +temporary_alloc:
+> +	/*
+> +	 * Try to allocate a fresh page that with special HPageTemporary
+> +	 * characteristics
+> +	 */
+>   	return alloc_migrate_huge_page(h, gfp_mask, preferred_nid, nmask);
+>   }
+>   
+> @@ -2337,7 +2345,7 @@ struct page *alloc_huge_page_vma(struct hstate *h, struct vm_area_struct *vma,
+>   
+>   	gfp_mask = htlb_alloc_mask(h);
+>   	node = huge_node(vma, address, gfp_mask, &mpol, &nodemask);
+> -	page = alloc_huge_page_nodemask(h, node, nodemask, gfp_mask);
+> +	page = alloc_huge_page_nodemask(h, node, nodemask, gfp_mask, false);
+>   	mpol_cond_put(mpol);
+>   
+>   	return page;
+> diff --git a/mm/internal.h b/mm/internal.h
+> index b3002e03c28f..3ebf8885e24f 100644
+> --- a/mm/internal.h
+> +++ b/mm/internal.h
+> @@ -800,6 +800,7 @@ struct migration_target_control {
+>   	int nid;		/* preferred node id */
+>   	nodemask_t *nmask;
+>   	gfp_t gfp_mask;
+> +	bool alloc_contig;	/* alloc_contig_range allocation */
+>   };
+>   
+>   /*
+> diff --git a/mm/migrate.c b/mm/migrate.c
+> index c228afba0963..6505ba2070d7 100644
+> --- a/mm/migrate.c
+> +++ b/mm/migrate.c
+> @@ -1610,7 +1610,8 @@ struct page *alloc_migration_target(struct page *page, unsigned long private)
+>   		struct hstate *h = page_hstate(&folio->page);
+>   
+>   		gfp_mask = htlb_modify_alloc_mask(h, gfp_mask);
+> -		return alloc_huge_page_nodemask(h, nid, mtc->nmask, gfp_mask);
+> +		return alloc_huge_page_nodemask(h, nid, mtc->nmask, gfp_mask,
+> +						mtc->alloc_contig);
+>   	}
+>   
+>   	if (folio_test_large(folio)) {
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index d7b20bf09c1c..2b8a5a2b51cd 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -9166,6 +9166,7 @@ int __alloc_contig_migrate_range(struct compact_control *cc,
+>   	struct migration_target_control mtc = {
+>   		.nid = zone_to_nid(cc->zone),
+>   		.gfp_mask = GFP_USER | __GFP_MOVABLE | __GFP_RETRY_MAYFAIL,
+> +		.alloc_contig = true,
+>   	};
+>   
+>   	lru_cache_disable();
+I believe I exposed alloc_migrate_huge_page() and conditionally invoked 
+it from alloc_migration_target() when in alloc_contig, which is roughly 
+equivalent. I didn't consider modifying the mtc to pass the information 
+so my logic in alloc_migration_target() was a little kludgy.
 
---GRcGP6sBkPbgCb0x
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 22 Sep 2022 19:25:32 -0400
-From: Demi Marie Obenour <demi@invisiblethingslab.com>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: Jan Beulich <jbeulich@suse.com>, Juergen Gross <jgross@suse.com>,
-	Stefano Stabellini <sstabellini@kernel.org>,
-	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-	linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	xen-devel@lists.xenproject.org,
-	Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>
-Subject: Re: [PATCH v3] Support ESRT in Xen dom0
+Like I said, this can be made to work and I'm happy to accept an 
+alternative if others agree. I think the isolation test of patch 3 is 
+also still desirable.
 
-On Fri, Sep 23, 2022 at 12:14:50AM +0200, Ard Biesheuvel wrote:
-> On Thu, 22 Sept 2022 at 20:12, Demi Marie Obenour
-> <demi@invisiblethingslab.com> wrote:
-> >
-> > On Thu, Sep 22, 2022 at 05:05:43PM +0200, Ard Biesheuvel wrote:
-> > > On Thu, 22 Sept 2022 at 16:56, Demi Marie Obenour
-> > > <demi@invisiblethingslab.com> wrote:
-> > > >
-> > > > On Thu, Sep 22, 2022 at 08:12:14AM +0200, Jan Beulich wrote:
-> > > > > On 22.09.2022 03:09, Demi Marie Obenour wrote:
-> > > > > > On Wed, Sep 21, 2022 at 10:34:04PM +0200, Jan Beulich wrote:
-> > > > > >> On 20.09.2022 18:09, Ard Biesheuvel wrote:
-> > > > > >>> On Tue, 20 Sept 2022 at 17:54, Jan Beulich <jbeulich@suse.com=
-> wrote:
-> > > > > >>>>
-> > > > > >>>> On 20.09.2022 17:36, Ard Biesheuvel wrote:
-> > > > > >>>>> On Mon, 19 Sept 2022 at 21:33, Demi Marie Obenour
-> > > > > >>>>> <demi@invisiblethingslab.com> wrote:
-> > > > > >>>>>>
-> > > > > >>>>>> fwupd requires access to the EFI System Resource Table (ES=
-RT) to
-> > > > > >>>>>> discover which firmware can be updated by the OS.  Current=
-ly, Linux does
-> > > > > >>>>>> not expose the ESRT when running as a Xen dom0.  Therefore=
-, it is not
-> > > > > >>>>>> possible to use fwupd in a Xen dom0, which is a serious pr=
-oblem for e.g.
-> > > > > >>>>>> Qubes OS.
-> > > > > >>>>>>
-> > > > > >>>>>> Before Xen 4.16, this was not fixable due to hypervisor li=
-mitations.
-> > > > > >>>>>> The UEFI specification requires the ESRT to be in EfiBootS=
-ervicesData
-> > > > > >>>>>> memory, which Xen will use for whatever purposes it likes.=
-  Therefore,
-> > > > > >>>>>> Linux cannot safely access the ESRT, as Xen may have overw=
-ritten it.
-> > > > > >>>>>>
-> > > > > >>>>>> Starting with Xen 4.17, Xen checks if the ESRT is in EfiBo=
-otServicesData
-> > > > > >>>>>> or EfiRuntimeServicesData memory.  If the ESRT is in EfiBo=
-otServicesData
-> > > > > >>>>>> memory, Xen allocates some memory of type EfiRuntimeServic=
-esData, copies
-> > > > > >>>>>> the ESRT to it, and finally replaces the ESRT pointer with=
- a pointer to
-> > > > > >>>>>> the copy.  Since Xen will not clobber EfiRuntimeServicesDa=
-ta memory,
-> > > > > >>>>>> this ensures that the ESRT can safely be accessed by the O=
-S.  It is safe
-> > > > > >>>>>> to access the ESRT under Xen if, and only if, it is in mem=
-ory of type
-> > > > > >>>>>> EfiRuntimeServicesData.
-> > > > > >>>>>>
-> > > > > >>>>>
-> > > > > >>>>> Thanks for the elaborate explanation. This is really helpfu=
-l.
-> > > > > >>>>>
-> > > > > >>>>> So here, you are explaining that the only way for Xen to pr=
-event
-> > > > > >>>>> itself from potentially clobbering the ESRT is by creating a
-> > > > > >>>>> completely new allocation?
-> > > > > >>>>
-> > > > > >>>> There are surely other ways, e.g. preserving BootServices* r=
-egions
-> > > > > >>>> alongside RuntimeServices* ones. But as the maintainer of th=
-e EFI
-> > > > > >>>> code in Xen I don't view this as a reasonable approach.
-> > > > > >>>
-> > > > > >>> Why not?
-> > > > > >>
-> > > > > >> Because it's against the intentions the EFI has (or at least h=
-ad)
-> > > > > >> for this memory type. Much more than EfiAcpiReclaimMemory this
-> > > > > >> type is intended for use as ordinary RAM post-boot.
-> > > > > >
-> > > > > > What about giving that memory to dom0?  dom0=E2=80=99s balloon =
-driver will give
-> > > > > > anything dom0 doesn=E2=80=99t wind up using back to Xen.
-> > > > >
-> > > > > While perhaps in principle possible, this would require special c=
-asing
-> > > > > in Xen. Except for the memory the initrd comes in, we don't direc=
-tly
-> > > > > hand memory to Dom0. Instead everything goes through the page all=
-ocator
-> > > > > first. Plus if we really were convinced boot services memory need=
-ed
-> > > > > retaining, then it would also need retaining across kexec (and he=
-nce
-> > > > > shouldn't be left to Dom0 to decide what to do with it).
-> > > >
-> > > > So how should dom0 handle the various EFI tables other than the ESR=
-T?
-> > > > Right now most uses of these tables in Linux are not guarded by any
-> > > > checks for efi_enabled(EFI_MEMMAP) or similar.  If some of them are=
- in
-> > > > EfiBootServicesData memory, they might be corrupted before Linux ge=
-ts
-> > > > them.
-> > >
-> > > Yes, this is an annoying oversight of the EFI design: the config
-> > > tables are <guid, address> tuples, and the size of the table is
-> > > specific to each table type. So without knowing the GUID, there is no
-> > > way you can reserve the right size.
-> > >
-> > > Perhaps you could implement something like a hypercall in
-> > > efi_arch_mem_reserve(), which is called by the EFI code to reserve
-> > > regions that are in boot services memory but need to remain reserved?
-> > > This is used for all config tables that it knows or cares about.
-> >
-> > On versions of Xen that support spawning multiple domains at boot
-> > (instead of just dom0) this will be racy.  What about refusing to use
-> > tables in EfiBootServicesData when running under Xen unless a hypercall
-> > indicates that Xen has reserved all EfiBootServicesData memory?  Where
-> > could such a check be placed?
->=20
-> You could stick a check inside the for loop in
-> efi_config_parse_tables() to cross reference every table address
-> against the memory map when running on Xen, and disregard it if it
-> doesn't meet your criteria.
->=20
-> I take it the issue is not limited to x86?
-
-Indeed the issue is cross-platform.  For Qubes OS, I wonder if a safer
-approach would be to reserve all EfiBootServicesData memory by default.
---=20
-Sincerely,
-Demi Marie Obenour (she/her/hers)
-Invisible Things Lab
-
---GRcGP6sBkPbgCb0x
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEEdodNnxM2uiJZBxxxsoi1X/+cIsEFAmMs71kACgkQsoi1X/+c
-IsGs/g//UTu+abXay03rXZ2nW5p6CsJQWGwF+Es58U0c1hJHgmp+nLyZdttBRgnt
-49nGc43rbHCNODqXZu/R9TyK6gef1ZqaAiZyV2vHFitnhrbLz2VZFMNUwmpz6zbi
-MA1SGQjYmfbIU5wU/6Nym8sF51CridQs8+UqVh9h3dbog6RWw9qvYYiz4xEe9cCi
-w7alXoYFT2JdorwNX+heUDX2/TkaYtrzsVRUMJ+bOedGPOgqtw1f6AhicUJV1KZ/
-ztszH/HxcdTO4c8rdYaIH6CKN8LIdQex6V/WNmio+dMq6fD5tDSVB9OBRqXZUbzk
-sbEdnsJSL1/lwab5C6f/kP4+GDILJBU1747758MbviUtZ9zXaAj3G9o3ymYtnUuN
-NcK2nneVI5Thz2Obmt3RRA7zWjJt827fzxQzIAl6bsSgiUHtg8eD5TUx7yxJIXgL
-3F3J1ieo54ARic4+q4+9Bj7CIWFV+nN6CQgDpf5z16f2utgG+Y7Bi9iZ8z0j+TjE
-uuaMqZpTMA5MYhaJZc0V12PEkSxj4mOSDm5MWH8mDWthOMp4qiRvuFOUKc2ok0Dq
-joZl/hFN/zVa77+T687aPewkfPNc2m5ldag/04aZnyXC+jhP0dl9QRCotZyq+FYT
-lQnxoN7KeQpBQn5D+qkNyHZtm1z4Wo7llrNFYVayXN+tQTSz6sQ=
-=El6T
------END PGP SIGNATURE-----
-
---GRcGP6sBkPbgCb0x--
+Thanks again!
+-Doug
