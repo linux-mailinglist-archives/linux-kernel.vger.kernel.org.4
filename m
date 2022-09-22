@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99FEC5E7069
+	by mail.lfdr.de (Postfix) with ESMTP id 4E5EB5E7068
 	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 02:00:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230064AbiIWAA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 20:00:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33802 "EHLO
+        id S230203AbiIWAAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 20:00:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230046AbiIWAAQ (ORCPT
+        with ESMTP id S230092AbiIWAAR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 20:00:16 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F2A29C2CE
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 17:00:08 -0700 (PDT)
+        Thu, 22 Sep 2022 20:00:17 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 756ACB08AC
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 17:00:10 -0700 (PDT)
 Received: from notapiano.myfiosgateway.com (unknown [71.190.76.4])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id D83D56602239;
-        Fri, 23 Sep 2022 01:00:05 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id AD38B660223D;
+        Fri, 23 Sep 2022 01:00:07 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1663891207;
-        bh=4W7RqvT+c8OW56kJzLV7Sc/CQ72XqC5XURtmz6cKxB8=;
+        s=mail; t=1663891209;
+        bh=CvJeb17W9oXXmIkOz4RxpDIvAsD9k0w+VI709NtMMlk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cbePx0+8KHszAj8rs78HcGfthzz3DzfHTPIWjGNyeo43Y/hJYLTZGfLPhnkBGuZtW
-         nABoilHcoJ0h9aDZt9ceefksz44jlR98aYm35A/pp/9K/Q5k1h3kAqZfwlpc/bvnJg
-         4HCnO0ybTZ58O97Tuwd+9qLEGhSkriilKwksQ64vx2yC0TfTyu9H0sWZFage0dufsy
-         NJhLZlWM6S4txisEGk+NpYwVSVkrGC3rGnkgfZO2SAuTY++VJnN+D8QIaYDm6jyEC4
-         bVxYAzCPHGQaIoQEGqZbRwQtOS8xyUSauuJNX3a6FC6xhvIMTi4yvGC11CNe/844s4
-         PVHi9P83ylapw==
+        b=fRZ6ih9LwAkI0KXAq2usOAZaS/JKkOsXjNJQiqFL6MvMycujfmHoLhpRPnYIsAYUb
+         JN6+jRUWFl3nd2BSqCi61le6PTkTpJdq9qR0W/D//oFkmgnLcCZNo8J7WyM/NtXs++
+         sBZgSR11QFLMmr/H0Ty30LBkVlDPPwzPKa4QuZG1nDaokWB6Od8pOG9nl8GuztcN0D
+         FvSsKsTRm2nllEOk0Fd8dhqbQxwwyMpT+mqSVsQYe47tKBKSkWxWquq+PngTUcwKKW
+         oW8RjISu/pOsqgy6A/vkJqRr5QQMd6EAZyC1KXhVc/ICDaQR5zh4hv/mh4gUghFOxj
+         a/KU4vusoG6sQ==
 From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
         <nfraprado@collabora.com>
 To:     Mark Brown <broonie@kernel.org>
@@ -46,9 +46,9 @@ Cc:     AngeloGioacchino Del Regno
         "chunxu.li" <chunxu.li@mediatek.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-mediatek@lists.infradead.org
-Subject: [PATCH 5/6] ASoC: mediatek: mt8186-rt5682: Add headset widgets with switches
-Date:   Thu, 22 Sep 2022 19:59:50 -0400
-Message-Id: <20220922235951.252532-6-nfraprado@collabora.com>
+Subject: [PATCH 6/6] ASoC: mediatek: mt8186-rt5682: Expose individual headset jack pins
+Date:   Thu, 22 Sep 2022 19:59:51 -0400
+Message-Id: <20220922235951.252532-7-nfraprado@collabora.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220922235951.252532-1-nfraprado@collabora.com>
 References: <20220922235951.252532-1-nfraprado@collabora.com>
@@ -64,49 +64,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add DAPM widgets for headphones and headset microphone, with matching
-switches, to allow toggling these paths based on the jack connection
-status.
+The rt5682 codec is able to distinguish between two event types:
+headphone insertion/removal and headset microphone insertion/removal.
+However, currently, the mt8186-rt5682 driver exposes a single kcontrol
+for the headset jack, so userspace isn't able to differentiate between
+the two events.
+
+Add a definition for the headset jack pins, so that a separate jack
+kcontrol is created for each one, allowing userspace to track and handle
+them individually.
 
 Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 ---
 
- sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ .../mt8186/mt8186-mt6366-rt1019-rt5682s.c       | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
 
 diff --git a/sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c b/sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c
-index 247f20f594d9..4360871bfc44 100644
+index 4360871bfc44..2414c5b77233 100644
 --- a/sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c
 +++ b/sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c
-@@ -926,6 +926,8 @@ static struct snd_soc_dai_link mt8186_mt6366_rt1019_rt5682s_dai_links[] = {
- static const struct snd_soc_dapm_widget
- mt8186_mt6366_rt1019_rt5682s_widgets[] = {
- 	SND_SOC_DAPM_SPK("Speakers", NULL),
-+	SND_SOC_DAPM_HP("Headphone", NULL),
-+	SND_SOC_DAPM_MIC("Headset Mic", NULL),
- 	SND_SOC_DAPM_OUTPUT("HDMI1"),
- 	SND_SOC_DAPM_MIXER(SOF_DMA_DL1, SND_SOC_NOPM, 0, 0, NULL, 0),
- 	SND_SOC_DAPM_MIXER(SOF_DMA_DL2, SND_SOC_NOPM, 0, 0, NULL, 0),
-@@ -937,6 +939,10 @@ static const struct snd_soc_dapm_route
- mt8186_mt6366_rt1019_rt5682s_routes[] = {
- 	/* SPK */
- 	{ "Speakers", NULL, "Speaker" },
-+	/* Headset */
-+	{ "Headphone", NULL, "HPOL" },
-+	{ "Headphone", NULL, "HPOR" },
-+	{ "IN1P", NULL, "Headset Mic" },
- 	/* HDMI */
- 	{ "HDMI1", NULL, "TX" },
- 	/* SOF Uplink */
-@@ -952,6 +958,8 @@ mt8186_mt6366_rt1019_rt5682s_routes[] = {
- static const struct snd_kcontrol_new
- mt8186_mt6366_rt1019_rt5682s_controls[] = {
- 	SOC_DAPM_PIN_SWITCH("Speakers"),
-+	SOC_DAPM_PIN_SWITCH("Headphone"),
-+	SOC_DAPM_PIN_SWITCH("Headset Mic"),
- 	SOC_DAPM_PIN_SWITCH("HDMI1"),
+@@ -41,6 +41,18 @@ struct mt8186_mt6366_rt1019_rt5682s_priv {
+ 	struct snd_soc_jack headset_jack, hdmi_jack;
  };
  
++/* Headset jack detection DAPM pins */
++static struct snd_soc_jack_pin mt8186_jack_pins[] = {
++	{
++		.pin = "Headphone",
++		.mask = SND_JACK_HEADPHONE,
++	},
++	{
++		.pin = "Headset Mic",
++		.mask = SND_JACK_MICROPHONE,
++	},
++};
++
+ static struct snd_soc_codec_conf mt8186_mt6366_rt1019_rt5682s_codec_conf[] = {
+ 	{
+ 		.dlc = COMP_CODEC_CONF("mt6358-sound"),
+@@ -75,11 +87,12 @@ static int mt8186_rt5682s_init(struct snd_soc_pcm_runtime *rtd)
+ 		return ret;
+ 	}
+ 
+-	ret = snd_soc_card_jack_new(rtd->card, "Headset Jack",
++	ret = snd_soc_card_jack_new_pins(rtd->card, "Headset Jack",
+ 				    SND_JACK_HEADSET | SND_JACK_BTN_0 |
+ 				    SND_JACK_BTN_1 | SND_JACK_BTN_2 |
+ 				    SND_JACK_BTN_3,
+-				    jack);
++				    jack, mt8186_jack_pins,
++				    ARRAY_SIZE(mt8186_jack_pins));
+ 	if (ret) {
+ 		dev_err(rtd->dev, "Headset Jack creation failed: %d\n", ret);
+ 		return ret;
 -- 
 2.37.3
 
