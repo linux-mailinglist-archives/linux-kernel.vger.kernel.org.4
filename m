@@ -2,108 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ABF35E6309
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 15:00:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B7065E630D
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 15:00:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231335AbiIVNAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 09:00:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40254 "EHLO
+        id S229907AbiIVNAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 09:00:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231693AbiIVM7r (ORCPT
+        with ESMTP id S231325AbiIVNAj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 08:59:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCE4E25C59
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 05:59:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7DD36B83645
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 12:59:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04B48C433D6;
-        Thu, 22 Sep 2022 12:59:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663851583;
-        bh=09koZeVSGebO2PnQHAwVgSzAwlSrsdXFkaq3SF5x/3M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Pgs1NMeZO7bc6MfzR7opEttjGCZsF0e15D7Z8mdkSBrUwO8a0ZXxdYUV0ykJ12x5l
-         zRxMcWYJxgYkLUv4jXkVQ5qbDiZqZLI4oEI7Hnm8U7TvWweOz6dRy/XVP6O5LdPJSv
-         JQW8k39CEbwy4J3DBYKdwHWgUM3X4oht58Iiwk0w7rMfhi+OtKNRnWoRCFF3eAparw
-         8qKqnB4fwQZCVCJ/hgfonplKXjqQIUS5LCW3PCWAIZEsQI5txOkIuYvj0nd89ubBCU
-         38K7ebJ9xj3rttNPCYZKRtgJcb6I+E7xLIVHLv0MG3pNoOO/vjIkD/uWi7JUFpuC9f
-         vXMPgeBQF4D6A==
-Received: by pali.im (Postfix)
-        id A4315858; Thu, 22 Sep 2022 14:59:40 +0200 (CEST)
-Date:   Thu, 22 Sep 2022 14:59:40 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] powerpc: dts: turris1x.dts: Fix NOR partitions labels
-Message-ID: <20220922125940.6bmrr7mnddz3ddgb@pali>
-References: <20220830225500.8856-1-pali@kernel.org>
+        Thu, 22 Sep 2022 09:00:39 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D72197B2B7;
+        Thu, 22 Sep 2022 06:00:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663851637; x=1695387637;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=5QBetHFsi1eFZ6sWcQbYQYznjr0Mg44JGGwnlV+QUQw=;
+  b=Ihefzx6FPMeSpBBUjF09/pqMOaeZ6Zf9Ndf68WgawZBcBUD4gbDVg4+s
+   j+0FNdepKSTsoUDhp9KXm+kFpJKBB3vYlD8T/TBKSkUwquy6oExrSXwDs
+   x/I/hMat3fzY9/Rafhd4qD9M3mq1RCSPmWkQ2kgTzebcvU9PNEd/4xUB9
+   7xl2Yy6BLnx9GVUhM3s0NcK8+TcrDUtLlJCDoUl9AnSiFNGz6adD6Qyg1
+   Q7xREfqxmqpTkPxBQFgSLQRDn1n6sB50neKY2GUiUI3PscEVanlDVUxH/
+   UfBxqf1mbeqIzMMo4Jf0Wt7iq96iPAH4GZ0zkiExgGUmEu0JfY2pPus5x
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="301134951"
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="301134951"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 06:00:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="762173737"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga001.fm.intel.com with ESMTP; 22 Sep 2022 06:00:35 -0700
+Message-ID: <6b5a45f1-caf3-4259-77da-e36788f5b8a9@linux.intel.com>
+Date:   Thu, 22 Sep 2022 16:01:58 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220830225500.8856-1-pali@kernel.org>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Content-Language: en-US
+To:     Longfang Liu <liulongfang@huawei.com>, gregkh@linuxfoundation.org,
+        mathias.nyman@intel.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yisen.zhuang@huawei.com
+References: <20220915011134.58400-1-liulongfang@huawei.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH] xhci: print warning when HCE was set
+In-Reply-To: <20220915011134.58400-1-liulongfang@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wednesday 31 August 2022 00:55:00 Pali Rohár wrote:
-> Partition partition@20000 contains generic kernel image and it does not
-> have to be used only for rescue purposes. Partition partition@1c0000
-> contains bootable rescue system and partition partition@340000 contains
-> factory image/data for restoring to NAND. So change partition labels to
-> better fit their purpose by removing possible misleading substring "rootfs"
-> from these labels.
-> 
-> Fixes: 54c15ec3b738 ("powerpc: dts: Add DTS file for CZ.NIC Turris 1.x routers")
-> Signed-off-by: Pali Rohár <pali@kernel.org>
+Hi
 
-Ping?
+On 15.9.2022 4.11, Longfang Liu wrote:
+> When HCE(Host Controller Error) is set, it means that the xhci hardware
+> controller has an error at this time, but the current xhci driver
+> software does not log this event.
+> 
+> By adding an HCE event detection in the xhci interrupt processing
+> interface, a warning log is output to the system, which is convenient
+> for system device status tracking.
+> 
 
-> ---
->  arch/powerpc/boot/dts/turris1x.dts | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/arch/powerpc/boot/dts/turris1x.dts b/arch/powerpc/boot/dts/turris1x.dts
-> index b7635f0b87a9..64c0dd733e40 100644
-> --- a/arch/powerpc/boot/dts/turris1x.dts
-> +++ b/arch/powerpc/boot/dts/turris1x.dts
-> @@ -263,21 +263,21 @@
->  				};
->  
->  				partition@20000 {
-> -					/* 1.7 MB for Rescue Linux Kernel Image */
-> +					/* 1.7 MB for Linux Kernel Image */
->  					reg = <0x00020000 0x001a0000>;
-> -					label = "rescue-kernel";
-> +					label = "kernel";
->  				};
->  
->  				partition@1c0000 {
->  					/* 1.5 MB for Rescue JFFS2 Root File System */
->  					reg = <0x001c0000 0x00180000>;
-> -					label = "rescue-rootfs";
-> +					label = "rescue";
->  				};
->  
->  				partition@340000 {
-> -					/* 11 MB for TAR.XZ Backup with content of NAND Root File System */
-> +					/* 11 MB for TAR.XZ Archive with Factory content of NAND Root File System */
->  					reg = <0x00340000 0x00b00000>;
-> -					label = "backup-rootfs";
-> +					label = "factory";
->  				};
->  
->  				partition@e40000 {
-> -- 
-> 2.20.1
-> 
+xHC should cease all activity when it sets HCE, and is probably not
+generating interrupts anymore.
+
+Would probably be more useful to check for HCE at timeouts than in the
+interrupt handler.
+
+If this is something seen on actual hardware then it makes sense to add it.
+
+Thanks
+-Mathias
