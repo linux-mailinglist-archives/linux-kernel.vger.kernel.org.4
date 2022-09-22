@@ -2,53 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E7495E6B89
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 21:10:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24D165E6B92
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 21:13:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232508AbiIVTKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 15:10:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54800 "EHLO
+        id S231875AbiIVTNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 15:13:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232108AbiIVTKa (ORCPT
+        with ESMTP id S232636AbiIVTNh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 15:10:30 -0400
-Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2925DAB1B9;
-        Thu, 22 Sep 2022 12:10:28 -0700 (PDT)
-Received: by mail-qk1-f179.google.com with SMTP id q11so6867416qkc.12;
-        Thu, 22 Sep 2022 12:10:27 -0700 (PDT)
+        Thu, 22 Sep 2022 15:13:37 -0400
+Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB44106A1D;
+        Thu, 22 Sep 2022 12:13:36 -0700 (PDT)
+Received: by mail-qv1-f48.google.com with SMTP id i15so7547060qvp.5;
+        Thu, 22 Sep 2022 12:13:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=i2fFh03PmN9dsDrlqa6Na6TJ/xoZxneYKaZlpWqCHQA=;
-        b=QXRkaQZFyhXLSP5u4FyY7F18yANkzZ8nSltCmZB3/cuc4AkIWpkFrquPxrf8zo/RVN
-         SmVo+nB6TMUh/mNq7uN5P8+FSOWNin5j6D8gzWOrK1iecICBwAx8AiRrVqATXQlcze5M
-         GBOP107yUe90vIwkQl9OX16UW+bxunOMQPzheyGe376ZgDfU8eeJfwyTTeJSXbe+h65u
-         DGrpTwg5QSImJsIu9ey0qiezvAvKG2XnjOkXLkxjYBGDqGyiuTBNBGcLIJVPnWaV+Fvn
-         6kif2bfTDDRf06e0+dHgfsq205RS8aZluoR8QqPowxopCSj/v3+kbFtOTQMjKl+iu/Tw
-         sdNg==
-X-Gm-Message-State: ACrzQf1e4n4kjBhMzuuSYy5rgPY1qpyZQCjv7PXKVEWYInSLEyR278nP
-        6XUpDJ6eDvHFahZsfPT+MbWIdNSDLAiykKkPil0=
-X-Google-Smtp-Source: AMsMyM7/jpbQTYmB0SMqjZX3zyneGSbRIfxLeeAiexcVjm9d+NWw6CU5BB3SivnMJxe5iDQC8ZGJLwBWnhHx8IuCV54=
-X-Received: by 2002:a05:620a:46ac:b0:6ce:3e55:fc21 with SMTP id
- bq44-20020a05620a46ac00b006ce3e55fc21mr3205441qkb.285.1663873826996; Thu, 22
- Sep 2022 12:10:26 -0700 (PDT)
+        bh=4SC2lpclsApuwnvv9v4FOQnC9TCXLCDA7rskDl0X8oQ=;
+        b=4RXJGxrGX5X5Z80FXXfTB9gbmLokUMJvd8alC6/0XfWmICYTcqzEKqUhKDU63HG+uc
+         Xh2SNIkoJDLmcbNgk+4paD5pP5Q16JQXUUBPx6p03cX2lUeF0a3/E1BpDibkazvDP1vT
+         ZnzF/yMnJ85+qSUUzOxu6gaXQgGrNtHTjORwAwsORxSQP1Sjl9IZ2+MIRmZ1YfpeKIkd
+         DRt36MPeav1kDaWMU1Gv5kP/L4gZ6dDc+20UPpv1CPjnrLLAZkUlFTrQunSXT/nLVjFP
+         Cvsyu1mqTMnAOA21hJLTc8TgyIvG5leDjHQbVhEuIGdnLMxPNDxQvc9AbeL9zEAVDS4Y
+         rlLA==
+X-Gm-Message-State: ACrzQf0d4SNx2D0P7U9URV7OxsIALOqiYcNhvvgO/5/HYQ8C2WAQ1yLO
+        vjrMeM6ySsLllCmKQx4pqN5GdhVVYIEyYg==
+X-Google-Smtp-Source: AMsMyM548HrAEqlLjyib+W1FVYo4U5HB+ZBnj1F3h2wYRCNU6LhpBN1knHIT6DJTM9syde57c2gJnQ==
+X-Received: by 2002:a0c:f445:0:b0:4a6:9f4a:9a66 with SMTP id h5-20020a0cf445000000b004a69f4a9a66mr4001052qvm.65.1663874015231;
+        Thu, 22 Sep 2022 12:13:35 -0700 (PDT)
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
+        by smtp.gmail.com with ESMTPSA id o2-20020ae9f502000000b006b640efe6dasm4041930qkg.132.2022.09.22.12.13.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Sep 2022 12:13:33 -0700 (PDT)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-3452214cec6so109751637b3.1;
+        Thu, 22 Sep 2022 12:13:33 -0700 (PDT)
+X-Received: by 2002:a0d:dd09:0:b0:344:fca5:9b44 with SMTP id
+ g9-20020a0ddd09000000b00344fca59b44mr4793428ywe.358.1663874013318; Thu, 22
+ Sep 2022 12:13:33 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220920094500.11283-1-lihuisong@huawei.com> <20220920094500.11283-3-lihuisong@huawei.com>
- <20220921154319.bsczh2nftuypeucs@bogus>
-In-Reply-To: <20220921154319.bsczh2nftuypeucs@bogus>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 22 Sep 2022 21:10:16 +0200
-Message-ID: <CAJZ5v0gfMCw3N1VJmtNU6WPuzrgen-8OiZYFiZkZowo6cFzHwA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] ACPI: PCC: fix Tx done interface in handler
-To:     Sudeep Holla <sudeep.holla@arm.com>,
-        Huisong Li <lihuisong@huawei.com>
-Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rafael Wysocki <rafael.j.wysocki@intel.com>,
-        wanghuiqiang@huawei.com, huangdaode@huawei.com
+References: <20220905230406.30801-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220905230406.30801-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <Yys4CRNnKP3LXyAO@pendragon.ideasonboard.com> <CA+V-a8uiT9rV=T6LmFovRwULf3SO=JKdqr1yacAqN8gJmv9VPw@mail.gmail.com>
+ <YyxWOuWOrYmMexNj@paasikivi.fi.intel.com> <CAMuHMdXKz56jxw56fXa7CMh_y4MVYiUT25dqRntJw6481s1FWw@mail.gmail.com>
+ <CA+V-a8sW=a6auFH-1WqwK+o2MZGCQk+MAO4+cWKm1M+YrQE+CA@mail.gmail.com>
+In-Reply-To: <CA+V-a8sW=a6auFH-1WqwK+o2MZGCQk+MAO4+cWKm1M+YrQE+CA@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 22 Sep 2022 21:13:21 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdU9LpSQ9-M49JC+wKk9=fsvX=cxTZwSQxU=CKcCRRU0Sg@mail.gmail.com>
+Message-ID: <CAMuHMdU9LpSQ9-M49JC+wKk9=fsvX=cxTZwSQxU=CKcCRRU0Sg@mail.gmail.com>
+Subject: Re: [PATCH v2 3/4] media: platform: Add Renesas RZ/G2L MIPI CSI-2
+ receiver driver
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -60,40 +80,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 21, 2022 at 5:43 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
->
-> On Tue, Sep 20, 2022 at 05:45:00PM +0800, Huisong Li wrote:
-> > A error, "Client can't run the TX ticker", is printed even if PCC command
-> > executed successfully. This root cause is that PCC handler calls
-> > 'mbox_client_txdone()' which depands on the client can received 'ACK'
-> > packet. But PCC handler detects whether the command is complete through
-> > the Tx ACK interrupt. So this patch fix it.
+Hi Prabhakar,
+
+On Thu, Sep 22, 2022 at 3:27 PM Lad, Prabhakar
+<prabhakar.csengg@gmail.com> wrote:
+> On Thu, Sep 22, 2022 at 1:51 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > On Thu, Sep 22, 2022 at 2:34 PM Sakari Ailus
+> > <sakari.ailus@linux.intel.com> wrote:
+> > > On Thu, Sep 22, 2022 at 01:08:33PM +0100, Lad, Prabhakar wrote:
+> > > > > > * Switched to manually turn ON/OFF the clocks instead of pm_runtime so that
+> > > > > >   the mipi/dhpy initialization happens as per the HW manual
+> > > > >
+> > > > > That doesn't look right. The driver doesn't use runtime PM anymore, so
+> > > > > power domains may not be handled properly. What was the problem with
+> > > > > clock handling using runtime PM ?
+> > > > >
+> > > > If we use the runtime PM all the clocks will be turned ON when we call
+> > > > pm_runtime_resume_and_get() which I dont want to. As per the "Starting
+> > > > reception for MIPI CSI-2 Input" section 35.3.1 for example we first
+> > > > need to turn ON all the clocks and later further down the line we need
+> > > > to just turn OFF VCLK -> Enable Link -> turn ON VCLK. Due to such
+> > > > cases I have switched to individual clock handling.
+> > >
+> > > If that is the case, then you should control just that clock directly,
+> > > outside runtime PM callbacks.
+> > >
+> > > Runtime PM may be needed e.g. for resuming a parent device.
 > >
+> > Exactly.
+> > So probably you should not consider R9A07G044_CRU_VCLK a PM clock,
+> > i.e. you need changes to rzg2l_cpg_is_pm_clk() to exclude it.
+> >
+> Thanks for the pointer. In that case we will have to consider
+> R9A07G044_CRU_VCLK and R9A07G044_CRU_SYSCLK as not PM clocks.
 >
-> Thanks for fixing this. Someone mentioned about the error and it was in
-> my TODO list.
+> Does the below sound good?
+> - DEF_NO_PM() macro
+> - bool is_pm_clk in struct rzg2l_mod_clk.
 >
-> I would prefer to reword the subject and commit message as below:
-> "
-> ACPI: PCC: Fix Tx acknowledge in the PCC address space handler
->
-> Currently, mbox_client_txdone() is called from the PCC address space
-> handler and that expects the user the Tx state machine to be controlled
-> by the client which is not the case and the below warning is thrown:
->
->   | PCCT: Client can't run the TX ticker
->
-> Let the controller run the state machine and the end of Tx can be
-> acknowledge by calling mbox_chan_txdone() instead.
-> "
->
-> With that:
->
-> Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+> I still have to implement it, just wanted your opinion beforehand.
 
-Applied as 6.1 material along with the [1/2].
+LGTM. Thanks!
 
-I used the above text in quotes as the subject and changelog instead
-of the original pieces.
+Gr{oetje,eeting}s,
 
-Thanks!
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
