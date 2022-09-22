@@ -2,116 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E8135E6878
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 18:32:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 204F85E687E
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 18:33:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbiIVQcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 12:32:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34420 "EHLO
+        id S230213AbiIVQd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 12:33:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiIVQcT (ORCPT
+        with ESMTP id S230335AbiIVQdY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 12:32:19 -0400
-Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B77F253D30
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 09:32:18 -0700 (PDT)
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-127ba06d03fso14652084fac.3
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 09:32:18 -0700 (PDT)
+        Thu, 22 Sep 2022 12:33:24 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719CD4454E
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 09:33:22 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id q21so14381703edc.9
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 09:33:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=hHrtnzL79eYFEPjEF2yi096AMyC1QbuWRhmXoAyygq8=;
+        b=E62MrqC3zOFBmFTKp4oTrZM/z66KQ4CtKhMc2j6L40FWedjqY5X2kE0XK83hQj29ua
+         E0ImPDNsXVMBpE45yGGoqoYfZBi5TXdevSXameDBsxFPmEN/dxbtcS0uKjMwnI2sjHNs
+         nODz6eNmWN6bpNR1mbiggJufeDZtbZba0MrfI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=+3TzsNVY7iYdcanfUV/aboTbt4XNfCYgLErrvCARcKs=;
-        b=464R1CC8EcxRXFtVzWyF+61ZLIRNkDnbNfhEt7MmgITRGVK5SJtOh4iANzQGh0YinR
-         tAGhYLSwMTxorhek/zq7zVbmaKIM11L0vaaN0xgphO4yT/K4uezmMeIhiJwxM7o04vnJ
-         Ah3uI1q3CmDivDsjrW7antOoUO+WMn+jya9yipNzmYTVt/Yog7EBTrylsD4msQlTv2+Q
-         NgcgPNOcTakFgU0fnKV3ePtttICkvVa+EJs7L2qZhqcAwFq9dMlgd5fbFCQC07DL2i1G
-         rQWeKMmE8XWIRpK7EjaZD2LKxYfjRFIWhUclIAnLtwSjCAUFfCZxtWaf1e3qId5Rhj6w
-         Yriw==
-X-Gm-Message-State: ACrzQf2/aRHzBlRlaW7V8LCrUymUhNCkCCm3WdqUOQCMPMhYZktyr/+K
-        n0PNwt9RPk43zsUTQBxQbBPA+Zhe9cFYebLLBG0L3e8s
-X-Google-Smtp-Source: AMsMyM7VNeJ/Ys1k7t9r01h732ovkdaitK51eWp+JLmVs8TC6w5HvZMUOWwXee84ySD5qKsHT+VhFphip945OwFNxkg=
-X-Received: by 2002:a05:6870:524b:b0:12c:cfd2:81c0 with SMTP id
- o11-20020a056870524b00b0012ccfd281c0mr2476748oai.209.1663864337974; Thu, 22
- Sep 2022 09:32:17 -0700 (PDT)
+        bh=hHrtnzL79eYFEPjEF2yi096AMyC1QbuWRhmXoAyygq8=;
+        b=4CebgLr7AyOLeCPye/FhNuoGSG5dQA9+PkyNWsA20OfjdM08CcHt/1mwyf7nbnIQM/
+         0kim55ydLv31sRDwZrwROhlkaXowbucmOHoUE1haaRL6qq4bq92UjJuDGnB6kkH0Vx7Y
+         D+gFiGJB9vqtPyGWtmN5artMpkKKTX9X9x4vSDRzPcYx8DZLs7yvfO5410C7/TRlNnSJ
+         M4ha08LBL42vQSdcXizj/XQ2CXHO0JaKbc338ZpuuzzhGf1xLL+GEMDuAGlvcdoJbBJ7
+         FakHVwMvewJ7WIAxOA3hvb4KfYlwZTc8cl8fS70sta7jSD37SZC53/I3T1YtTkyQu+P+
+         9mMg==
+X-Gm-Message-State: ACrzQf1fhVo/dE3IC+0GzhEHclcEbnpH8e8d5DGyJfY1ykDYL18mox3f
+        Lcb4Mf3RwdMVBTzBsuwqY07ZUd0G0zcBKnJN
+X-Google-Smtp-Source: AMsMyM4u8N/JGGd8wIWm8QiO9kfbC4Mp20AdWY4aDD0sUkna/fkaUiQKyHVx1Wtonf/Fo3Rkr2NO4g==
+X-Received: by 2002:a05:6402:e01:b0:442:dd7e:f49d with SMTP id h1-20020a0564020e0100b00442dd7ef49dmr4220388edh.355.1663864400725;
+        Thu, 22 Sep 2022 09:33:20 -0700 (PDT)
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com. [209.85.128.49])
+        by smtp.gmail.com with ESMTPSA id v15-20020a50d58f000000b0044eb5b922bdsm3987251edi.24.2022.09.22.09.33.18
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Sep 2022 09:33:18 -0700 (PDT)
+Received: by mail-wm1-f49.google.com with SMTP id r133-20020a1c448b000000b003b494ffc00bso1724804wma.0
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 09:33:18 -0700 (PDT)
+X-Received: by 2002:a05:600c:5488:b0:3b5:634:731 with SMTP id
+ iv8-20020a05600c548800b003b506340731mr1759364wmb.188.1663864397810; Thu, 22
+ Sep 2022 09:33:17 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220921220032.2858517-1-namhyung@kernel.org> <Yyx1wv06cL0pkQ6H@hirez.programming.kicks-ass.net>
-In-Reply-To: <Yyx1wv06cL0pkQ6H@hirez.programming.kicks-ass.net>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Thu, 22 Sep 2022 09:32:06 -0700
-Message-ID: <CAM9d7cgDTy96eeCAARufSKZJFMvAAo6QSLAoEQv_zUFD-Rf+Lw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] perf: Use sample_flags for addr
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Stephane Eranian <eranian@google.com>,
-        Kan Liang <kan.liang@linux.intel.com>
+References: <20220922101813.v4.1.I3aa360986c0e7377ea5e96c116f014ff1ab8c968@changeid>
+In-Reply-To: <20220922101813.v4.1.I3aa360986c0e7377ea5e96c116f014ff1ab8c968@changeid>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 22 Sep 2022 09:33:05 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=XWhf2nfs-+5JhTjWxwUUmvfPkO8VwBi=d9SM8Zr+Pq=A@mail.gmail.com>
+Message-ID: <CAD=FV=XWhf2nfs-+5JhTjWxwUUmvfPkO8VwBi=d9SM8Zr+Pq=A@mail.gmail.com>
+Subject: Re: [PATCH v4 1/4] dt-bindings: arm: qcom: Document additional skus
+ for sc7180 pazquel360
+To:     Yunlong Jia <ecs.beijing2022@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Yunlong Jia <yunlong.jia@ecs.com.tw>,
+        Henry Sun <henrysun@google.com>,
+        Bob Moragues <moragues@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@codeaurora.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peter,
+Hi,
 
-On Thu, Sep 22, 2022 at 7:48 AM Peter Zijlstra <peterz@infradead.org> wrote:
+On Thu, Sep 22, 2022 at 3:21 AM Yunlong Jia <ecs.beijing2022@gmail.com> wrote:
 >
-> On Wed, Sep 21, 2022 at 03:00:31PM -0700, Namhyung Kim wrote:
-> > Use the new sample_flags to indicate whether the addr field is filled by
-> > the PMU driver.  As most PMU drivers pass 0, it can set the flag only if
-> > it has a non-zero value.  And use 0 in perf_sample_output() if it's not
-> > filled already.
+> pazquel360 is an extension project based on pazquel.
+> We create 3 sku on pazquel360:
+>    sku 20 for LTE with physical SIM _and_ eSIM and WiFi
+>    sku 21 for WiFi only
+>    sku 22 for LTE with only a physical SIM
+>  Both sku20 and sku22 are LTE SKUs.
+>  One has the eSIM stuffed and one doesn't.
+>  There is a single shared device tree for the two.
 >
-> So no objection to the general idea; just a question
+> Signed-off-by: Yunlong Jia <ecs.beijing2022@gmail.com>
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
 >
-> > diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-> > index 368bdc4f563f..f4a13579b0e8 100644
-> > --- a/include/linux/perf_event.h
-> > +++ b/include/linux/perf_event.h
-> > @@ -1028,7 +1028,6 @@ struct perf_sample_data {
-> >        * minimize the cachelines touched.
-> >        */
-> >       u64                             sample_flags;
-> > -     u64                             addr;
-> >       struct perf_raw_record          *raw;
-> >       u64                             period;
-> >
-> > @@ -1040,6 +1039,7 @@ struct perf_sample_data {
-> >       union perf_sample_weight        weight;
-> >       union  perf_mem_data_src        data_src;
-> >       u64                             txn;
-> > +     u64                             addr;
-> >
-> >       u64                             type;
-> >       u64                             ip;
+> ---
 >
-> Is there a reason you placed the variable where you did?
+> Changes in v4:
+>  1. Adjust the 'Signed-off-by'.
+>
+> Changes in v3:
+>  1. Adjust the format of the changelog.
+>
+>  Documentation/devicetree/bindings/arm/qcom.yaml | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
 
-No I just followed the previous change.
+You should have carried the Ack that you had on v3 [1]. Please send a
+v5 with that fixed. AKA:
 
->
-> I'm thinking we should look at what perf-tool thinks is the common set
-> of SAMPLE flags and make sure those fields are grouped in as little
-> cachelines as possible.
->
-> Things like @ip and @type, which are basically *always* set, should
-> definitely be on top, no?
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Yes, you're right.  With this change we can move the optional fields
-and group the common fields on top - like ip, period, pid and so on.
-
-Will send a patch to do the move on top of this, ok?
-
-Thanks,
-Namhyung
+[1] https://lore.kernel.org/r/20220901024827.v3.1.I3aa360986c0e7377ea5e96c116f014ff1ab8c968@changeid/
