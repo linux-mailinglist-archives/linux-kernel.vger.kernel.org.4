@@ -2,265 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EE985E60A7
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 13:14:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AACC5E60AD
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 13:15:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231489AbiIVLNE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 07:13:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54098 "EHLO
+        id S230418AbiIVLPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 07:15:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231486AbiIVLMx (ORCPT
+        with ESMTP id S231486AbiIVLOv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 07:12:53 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32CB775CC3;
-        Thu, 22 Sep 2022 04:12:34 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id q15-20020a17090a304f00b002002ac83485so1804462pjl.0;
-        Thu, 22 Sep 2022 04:12:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=RZ+48UnAa8eecJxdZq6BiMyqwT/Ym9f2NYlp6Dy1smw=;
-        b=G+jaEnK2EsNrSXni7xo2A5prc1siifdzoFue4z79INVmISHoJzmEC9GR9nYFQgsDIb
-         I+dMTg2A+izoX3axTWSo/iYs6MjIzCmcdzB7dXax8chtAJiUZBX99VUNdhdppKGneXWq
-         kYGXC1GYOzs1VjWq4+vqWobAy7LlMsBZFdMkrUYk942Mo7xIHHo97tyiWe9mlgU2Ni4u
-         sX/UfkevtZ8mMh6n5HaMsQp+ivfAaex3bVTBLEN+6BskHMGics2YtdYw6Rq+h1kBbGkY
-         geXieByTrSvc7tahia6awNomWGRXvkXfKN0rMilgYg11CJ2HrHEklB8Oi0KpiF2sgY/f
-         QqoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=RZ+48UnAa8eecJxdZq6BiMyqwT/Ym9f2NYlp6Dy1smw=;
-        b=NylJybG90Qv8xOglTOtx+WPSbBNyCIXbU9gRbjBTPrUmf7AkqGHImkZSe3jryaFhh0
-         Yk7lnODz4uXMNE7xVyDO7ZdvgX7usNZaEjOJcGbceNGQCI28iHdk/Kl6R5ntPb5dGHw7
-         BL2vFkj5bMCv0btE3qtEo10Y5Jg544tYtHtJz96Ok8rOumvS953z/4AuticIGJPyN0RZ
-         WaxJ0DjnrqlzkL/01K8BSlKW69sa7aHarXZI1fN8zDO2u+RmT4dYRDhTF6Z4XwVU/foU
-         N9vr5NZlROodyKingUo+4340frmAuu944QEkW0BmjKM3v5nPUCIDrLHgyetLv8WOzKOU
-         2zLw==
-X-Gm-Message-State: ACrzQf04IIF0dgKFBM9RT7CutuW8K4zPjFkDyI5uv3JS9JePB1j5Ym8G
-        NWGWVZG+NLVwEFZSz+7fL5E=
-X-Google-Smtp-Source: AMsMyM71qTO+0u9YewSNaiOe7OR50cbfyQkUWC6xIKoR/xE2vrqrOeMi/1IfaO5sjL4VCWr3VgDTkw==
-X-Received: by 2002:a17:90a:e513:b0:200:2275:2d27 with SMTP id t19-20020a17090ae51300b0020022752d27mr3211649pjy.162.1663845152925;
-        Thu, 22 Sep 2022 04:12:32 -0700 (PDT)
-Received: from hyeyoo ([114.29.91.56])
-        by smtp.gmail.com with ESMTPSA id p189-20020a62d0c6000000b00541196bd2d9sm4098278pfg.68.2022.09.22.04.12.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 04:12:32 -0700 (PDT)
-Date:   Thu, 22 Sep 2022 20:12:21 +0900
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        Pekka Enberg <penberg@kernel.org>,
-        Feng Tang <feng.tang@intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Alex Elder <elder@kernel.org>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Daniel Micay <danielmicay@gmail.com>,
-        Yonghong Song <yhs@fb.com>, Marco Elver <elver@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Jacob Shin <jacob.shin@amd.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-fsdevel@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, dev@openvswitch.org,
-        x86@kernel.org, linux-wireless@vger.kernel.org,
-        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 01/12] slab: Introduce kmalloc_size_roundup()
-Message-ID: <YyxDFfKmSNNkHBFi@hyeyoo>
-References: <20220922031013.2150682-1-keescook@chromium.org>
- <20220922031013.2150682-2-keescook@chromium.org>
+        Thu, 22 Sep 2022 07:14:51 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C28D8DE0D4
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 04:14:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663845266; x=1695381266;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=i5JTykQjkQrnv8/srjhrjiQdqD23bv6meNMcD41b40Y=;
+  b=JXmlWq7iEiddEWAV6bLmuZAeQQ1FatDtXALu6AawT6SpnepjRVBkc+sP
+   pc1eW44Z/LdNUnNRrcHh+pWjEqhnSP2lupeRsDgdGB8nxBJt4KN2wYgci
+   SQQQ5lFy1TsATbCtRO5e7DzcXKvZIvJbt7gG+ytVnHvxO0Ga1mirOqQcR
+   fEnDfwnMkyPCF5EcE6T+vMH65QS0LNmGFNHPiLq/H6OQ/v3z/TscEBMaY
+   +hd0r1CB906kYQXjL+F8luf5+6UixBzo/KOx9n2VnuWYUoImlG/plL/Yi
+   7y7dkgLByOJN7MhO7e4RtPRtgte9nf7aosvEaO7OJyiDOf2C7AwjijVkU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="301677556"
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="301677556"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 04:14:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="762144417"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 22 Sep 2022 04:14:16 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 22 Sep 2022 14:14:15 +0300
+Date:   Thu, 22 Sep 2022 14:14:15 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Won Chung <wonchung@google.com>
+Cc:     bleung@google.com, pmalani@chromium.org, imre.deak@intel.com,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, airlied@linux.ie, daniel@ffwll.ch,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm/sysfs: Link DRM connectors to corresponding Type-C
+ connectors
+Message-ID: <YyxDh1CZ+oHJqND4@kuha.fi.intel.com>
+References: <20220921182637.4056670-1-wonchung@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220922031013.2150682-2-keescook@chromium.org>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220921182637.4056670-1-wonchung@google.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 21, 2022 at 08:10:02PM -0700, Kees Cook wrote:
-> In the effort to help the compiler reason about buffer sizes, the
-> __alloc_size attribute was added to allocators. This improves the scope
-> of the compiler's ability to apply CONFIG_UBSAN_BOUNDS and (in the near
-> future) CONFIG_FORTIFY_SOURCE. For most allocations, this works well,
-> as the vast majority of callers are not expecting to use more memory
-> than what they asked for.
-> 
-> There is, however, one common exception to this: anticipatory resizing
-> of kmalloc allocations. These cases all use ksize() to determine the
-> actual bucket size of a given allocation (e.g. 128 when 126 was asked
-> for). This comes in two styles in the kernel:
-> 
-> 1) An allocation has been determined to be too small, and needs to be
->    resized. Instead of the caller choosing its own next best size, it
->    wants to minimize the number of calls to krealloc(), so it just uses
->    ksize() plus some additional bytes, forcing the realloc into the next
->    bucket size, from which it can learn how large it is now. For example:
-> 
-> 	data = krealloc(data, ksize(data) + 1, gfp);
-> 	data_len = ksize(data);
-> 
-> 2) The minimum size of an allocation is calculated, but since it may
->    grow in the future, just use all the space available in the chosen
->    bucket immediately, to avoid needing to reallocate later. A good
->    example of this is skbuff's allocators:
-> 
-> 	data = kmalloc_reserve(size, gfp_mask, node, &pfmemalloc);
-> 	...
-> 	/* kmalloc(size) might give us more room than requested.
-> 	 * Put skb_shared_info exactly at the end of allocated zone,
-> 	 * to allow max possible filling before reallocation.
-> 	 */
-> 	osize = ksize(data);
->         size = SKB_WITH_OVERHEAD(osize);
-> 
-> In both cases, the "how large is the allocation?" question is answered
-> _after_ the allocation, where the compiler hinting is not in an easy place
-> to make the association any more. This mismatch between the compiler's
-> view of the buffer length and the code's intention about how much it is
-> going to actually use has already caused problems[1]. It is possible to
-> fix this by reordering the use of the "actual size" information.
-> 
-> We can serve the needs of users of ksize() and still have accurate buffer
-> length hinting for the compiler by doing the bucket size calculation
-> _before_ the allocation. Code can instead ask "how large an allocation
-> would I get for a given size?".
-> 
-> Introduce kmalloc_size_roundup(), to serve this function so we can start
-> replacing the "anticipatory resizing" uses of ksize().
->
+Hi Won,
 
-Cc-ing Feng Tang who may welcome this series ;)
-
-> [1] https://github.com/ClangBuiltLinux/linux/issues/1599
->     https://github.com/KSPP/linux/issues/183
+On Wed, Sep 21, 2022 at 06:26:37PM +0000, Won Chung wrote:
+> Create a symlink pointing to USB Type-C connector for DRM connectors
+> when they are created. The link will be created only if the firmware is
+> able to describe the connection beween the two connectors.
 > 
-> Cc: Vlastimil Babka <vbabka@suse.cz>
-> Cc: Pekka Enberg <penberg@kernel.org>
-> Cc: David Rientjes <rientjes@google.com>
-> Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: linux-mm@kvack.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+> Signed-off-by: Won Chung <wonchung@google.com>
 > ---
->  include/linux/slab.h | 31 +++++++++++++++++++++++++++++++
->  mm/slab_common.c     | 17 +++++++++++++++++
->  2 files changed, 48 insertions(+)
+>  drivers/gpu/drm/drm_sysfs.c | 42 +++++++++++++++++++++++++++++++++++++
+>  1 file changed, 42 insertions(+)
 > 
-> diff --git a/include/linux/slab.h b/include/linux/slab.h
-> index 0fefdf528e0d..4fc41e4ed4a2 100644
-> --- a/include/linux/slab.h
-> +++ b/include/linux/slab.h
-> @@ -188,7 +188,21 @@ void * __must_check krealloc(const void *objp, size_t new_size, gfp_t flags) __a
->  void kfree(const void *objp);
->  void kfree_sensitive(const void *objp);
->  size_t __ksize(const void *objp);
-> +
-> +/**
-> + * ksize - Report actual allocation size of associated object
-> + *
-> + * @objp: Pointer returned from a prior kmalloc()-family allocation.
-> + *
-> + * This should not be used for writing beyond the originally requested
-> + * allocation size. Either use krealloc() or round up the allocation size
-> + * with kmalloc_size_roundup() prior to allocation. If this is used to
-> + * access beyond the originally requested allocation size, UBSAN_BOUNDS
-> + * and/or FORTIFY_SOURCE may trip, since they only know about the
-> + * originally allocated size via the __alloc_size attribute.
-> + */
->  size_t ksize(const void *objp);
-
-When users call ksize(), slab expects that it may access
-beyond the originally requested allocation size.
-
-(i.e. KASAN unpoisons the whole object.)
-Maybe don't let KASAN unpoison to catch such users?
-
-> +
->  #ifdef CONFIG_PRINTK
->  bool kmem_valid_obj(void *object);
->  void kmem_dump_obj(void *object);
-> @@ -779,6 +793,23 @@ extern void kvfree(const void *addr);
->  extern void kvfree_sensitive(const void *addr, size_t len);
+> diff --git a/drivers/gpu/drm/drm_sysfs.c b/drivers/gpu/drm/drm_sysfs.c
+> index 430e00b16eec..8270b02e6783 100644
+> --- a/drivers/gpu/drm/drm_sysfs.c
+> +++ b/drivers/gpu/drm/drm_sysfs.c
+> @@ -11,12 +11,14 @@
+>   */
 >  
->  unsigned int kmem_cache_size(struct kmem_cache *s);
-> +
-> +/**
-> + * kmalloc_size_roundup - Report allocation bucket size for the given size
-> + *
-> + * @size: Number of bytes to round up from.
-> + *
-> + * This returns the number of bytes that would be available in a kmalloc()
-> + * allocation of @size bytes. For example, a 126 byte request would be
-> + * rounded up to the next sized kmalloc bucket, 128 bytes. (This is strictly
-> + * for the general-purpose kmalloc()-based allocations, and is not for the
-> + * pre-sized kmem_cache_alloc()-based allocations.)
-> + *
-> + * Use this to kmalloc() the full bucket size ahead of time instead of using
-> + * ksize() to query the size after an allocation.
-> + */
-> +unsigned int kmalloc_size_roundup(size_t size);
-> +
->  void __init kmem_cache_init_late(void);
+>  #include <linux/acpi.h>
+> +#include <linux/component.h>
+>  #include <linux/device.h>
+>  #include <linux/err.h>
+>  #include <linux/export.h>
+>  #include <linux/gfp.h>
+>  #include <linux/i2c.h>
+>  #include <linux/kdev_t.h>
+> +#include <linux/property.h>
+>  #include <linux/slab.h>
 >  
->  #if defined(CONFIG_SMP) && defined(CONFIG_SLAB)
-> diff --git a/mm/slab_common.c b/mm/slab_common.c
-> index 17996649cfe3..132d91a0f8c7 100644
-> --- a/mm/slab_common.c
-> +++ b/mm/slab_common.c
-> @@ -721,6 +721,23 @@ struct kmem_cache *kmalloc_slab(size_t size, gfp_t flags)
->  	return kmalloc_caches[kmalloc_type(flags)][index];
+>  #include <drm/drm_connector.h>
+> @@ -95,6 +97,36 @@ static char *drm_devnode(struct device *dev, umode_t *mode)
+>  	return kasprintf(GFP_KERNEL, "dri/%s", dev_name(dev));
 >  }
 >  
-> +unsigned int kmalloc_size_roundup(size_t size)
+> +static int typec_connector_bind(struct device *dev,
+> +	struct device *typec_connector, void *data)
 > +{
-> +	struct kmem_cache *c;
+> +	int ret;
 > +
-> +	/* Short-circuit the 0 size case. */
-> +	if (size == 0)
-> +		return 0;
-> +	/* Above the smaller buckets, size is a multiple of page size. */
-> +	if (size > KMALLOC_MAX_CACHE_SIZE)
-> +		return PAGE_SIZE << get_order(size);
+> +	ret = sysfs_create_link(&dev->kobj, &typec_connector->kobj,
+> +		"typec_connector");
+
+One line is enough.
+
+> +	if (ret)
+> +		return ret;
 > +
-> +	/* The flags don't matter since size_index is common to all. */
-> +	c = kmalloc_slab(size, GFP_KERNEL);
-> +	return c ? c->object_size : 0;
+> +	ret = sysfs_create_link(&typec_connector->kobj, &dev->kobj,
+> +		"drm_connector");
+
+Ditto.
+
+> +	if (ret)
+> +		sysfs_remove_link(&dev->kobj, "typec_connector");
+> +
+> +	return ret;
 > +}
-> +EXPORT_SYMBOL(kmalloc_size_roundup);
-
-This looks okay.
-
-Thanks!
-
 > +
->  #ifdef CONFIG_ZONE_DMA
->  #define KMALLOC_DMA_NAME(sz)	.name[KMALLOC_DMA] = "dma-kmalloc-" #sz,
->  #else
+> +static void typec_connector_unbind(struct device *dev,
+> +	struct device *typec_connector, void *data)
+> +{
+> +	sysfs_remove_link(&typec_connector->kobj, "drm_connector");
+> +	sysfs_remove_link(&dev->kobj, "typec_connector");
+> +}
+> +
+> +static const struct component_ops typec_connector_ops = {
+> +	.bind = typec_connector_bind,
+> +	.unbind = typec_connector_unbind,
+> +};
+> +
+>  static CLASS_ATTR_STRING(version, S_IRUGO, "drm 1.1.0 20060810");
+>  
+>  /**
+> @@ -355,6 +387,13 @@ int drm_sysfs_connector_add(struct drm_connector *connector)
+>  	if (connector->ddc)
+>  		return sysfs_create_link(&connector->kdev->kobj,
+>  				 &connector->ddc->dev.kobj, "ddc");
+> +
+> +	if (dev_fwnode(kdev)) {
+> +		r = component_add(kdev, &typec_connector_ops);
+> +		if (r)
+> +			drm_err(dev, "failed to add component\n");
+> +	}
+> +
+>  	return 0;
+>  
+>  err_free:
+> @@ -367,6 +406,9 @@ void drm_sysfs_connector_remove(struct drm_connector *connector)
+>  	if (!connector->kdev)
+>  		return;
+>  
+> +	if (dev_fwnode(connector->kdev))
+> +		component_del(connector->kdev, &typec_connector_ops);
+> +
+>  	if (connector->ddc)
+>  		sysfs_remove_link(&connector->kdev->kobj, "ddc");
+>  
 > -- 
-> 2.34.1
-> 
-> 
+> 2.37.2.789.g6183377224-goog
 
 -- 
-Thanks,
-Hyeonggon
+heikki
