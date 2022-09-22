@@ -2,77 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB17A5E7037
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 01:27:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B83D05E703F
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 01:33:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230487AbiIVX1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 19:27:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59434 "EHLO
+        id S229804AbiIVXdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 19:33:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbiIVX1Q (ORCPT
+        with ESMTP id S229499AbiIVXdK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 19:27:16 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA7610BB3D
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 16:27:15 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id s18so7425342qtx.6
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 16:27:15 -0700 (PDT)
+        Thu, 22 Sep 2022 19:33:10 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39323B5E70;
+        Thu, 22 Sep 2022 16:33:09 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id z13so15683464edb.13;
+        Thu, 22 Sep 2022 16:33:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=/85pqBD6V1IDX7Z4khIsy5d7kZgs4wG5xtK0jD0vbnk=;
-        b=SMnYmEZ8bKvLcyZXF4aCTXE+fTnaOXy7Y7KL/hT9H8MBRoJsh+2tWbTYtqpu9roM3W
-         c/EJgnAOocWwXvjIceFEJKY09LczYh92xb52Y/3SFD2ZWZnNnbFQga5Ho5KceykS76Pb
-         dYyqyz1izT2eK+nwAOAbbnmHztngYPszDJXLdqoK/eBYeoNot8IwQX/NolcXbzsqLIK6
-         kZHcIlfSkDC469X/gUZ68y8znEnUGMwmjwE3BUskvP9cJnSxFPJoaghyTIFaAs3DE8jg
-         /+0J1CQ/bC00nm4F4LA3qoDfxUnwXo/31dCz8ZF32l54u/ZfyjwF53FcUQod44xCA7JI
-         hBwA==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=1LXt/Xl96l/h02gNxY14SP+hwlW2CW/zPqjudi4txZc=;
+        b=fqv/zq/AbEapAt+EgPEsbPLgCgTCKZ1NBLK27LsD6DzCubtAIgALh3KY6ZlKTbJ2o1
+         m3B2BDzf2agcYCMmME6LzPKdo4o4NNKlEks2Z+noR/HY72y/W8KAPKUuuhyTqh+LJdTF
+         ICzVzDLgoEegddS87mBSGb78ihj00VMB1q1fm27Mlx3PoLMMvhu25Ho2QnuS2o93fS+K
+         tdnQ5gBHb6Jwbj0t1EHvRzlu17tuQza+iEn9QIT30AdSuvJHZqZuYwTaUxUK17jggLGu
+         jwqPII8dCx+uqSjHq476mQ/x3YHqiRktPuPx79a6b0rHG7uiMMcjBchYwCtynqb4xAw2
+         IAJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=/85pqBD6V1IDX7Z4khIsy5d7kZgs4wG5xtK0jD0vbnk=;
-        b=fqy32hqHlZSJKHOTNOAN+KvZYoQYrF1vPF+90uMYmuhGcpZVXjG3oXRMtQzv7ODmW2
-         jzCKC4BPO51ndOy2jfjq3M8+v7f8//1/kmD7iPWdhqQaF6xLLtZWZQc9m6RJWO+bHQoK
-         Op1KtZWSKTL5KcWM8qMXHL7mZYcq6WdeMKnn4bSZ74FGe3idrZLSmXeuUsPLRUN/iDOn
-         MCqIaIHTWMry/NrrXwdhpR2maB/TLsbIYw130jzgnUCOCTuxzG5fQodOFBxtigcKKhFH
-         70XYkGeohXhWeMRDw5ISjWQtFdVk7Jn5xJLSr9Q2gNhJWKwfc5BmVmLolnyOnJ1/jlZR
-         qDRw==
-X-Gm-Message-State: ACrzQf22xtFDnYUn912mOf2yTL9ANIdZ8vXaAM4qJceb2jOxzBMcmiMv
-        DMQsZPZwOQzIqGkTL70yGAE=
-X-Google-Smtp-Source: AMsMyM6EUNxlqgVpdg2aIxTEvH+EfRC4e3A02T6Wuh0uPFEYC6rKGxKEMyOsRUkB5le9W4JFyZV/CA==
-X-Received: by 2002:a05:622a:315:b0:35c:f6b2:f740 with SMTP id q21-20020a05622a031500b0035cf6b2f740mr5018915qtw.521.1663889234427;
-        Thu, 22 Sep 2022 16:27:14 -0700 (PDT)
-Received: from [10.69.40.226] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id bx5-20020a05622a090500b0035bb152d414sm4139811qtb.94.2022.09.22.16.27.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Sep 2022 16:27:13 -0700 (PDT)
-Message-ID: <829c3fe1-54a2-53ba-9448-d80196b5ebf0@gmail.com>
-Date:   Thu, 22 Sep 2022 16:27:11 -0700
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=1LXt/Xl96l/h02gNxY14SP+hwlW2CW/zPqjudi4txZc=;
+        b=TPr5EqOk/oThaUoPCg6aDIDeM6Mx+WTtZwkP0p6Z9+DhtxboqQJpPf9jdRpOz1cN/u
+         oScNPhs0qNB6amYWixRAXVyLL6+NFCZfDt23aFacTryfAteuNvHbCwgNhKOUk2/yyljy
+         c8yBjEZHUacIt2HOpJWL6eyzNn/2tKqK7eI9oND557v733icZBcyjXRewXzBWtnrArTe
+         si53y8kikH7O7XYLQ49lJuWxBu52zF7IkKOtpp3hEQjlmIl3xa1Ik3tA7cFACj5eqGsZ
+         GI+oIF+XHJZU4Ko1Bnz67AUKA1KXL5C5HPcN8Jvi00Y/jdS5Al9ABKoC4WbRif0STbaJ
+         Q0zA==
+X-Gm-Message-State: ACrzQf10IpcDM5MtCo7SCJMWAVYyp/z+o4cw4TdQPJVtaWyFamaMJgrs
+        S8dea1f7tuxeRe6D8VZayvOixBcwktLnqY6SCG8=
+X-Google-Smtp-Source: AMsMyM5DiFBYbthi2FE2gsNbylvHS3uLjW2CJDgWIMSs+MGoMI7WxG6kvXEF3qzDcScXRg1BjFhd18LJR3IHxpCtG8E=
+X-Received: by 2002:a05:6402:901:b0:454:2b6d:c39 with SMTP id
+ g1-20020a056402090100b004542b6d0c39mr5581802edz.50.1663889587565; Thu, 22 Sep
+ 2022 16:33:07 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH 0/3] mm/hugetlb: hugepage migration enhancements
-Content-Language: en-US
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Michal Hocko <mhocko@suse.com>,
-        David Hildenbrand <david@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20220921223639.1152392-1-opendmb@gmail.com>
- <YyzEz4snl2x51iTY@monkey> <YyzkoGJsIXVFW6ZL@monkey>
-From:   Doug Berger <opendmb@gmail.com>
-In-Reply-To: <YyzkoGJsIXVFW6ZL@monkey>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+References: <20220403164907.662860-1-andrew.smirnov@gmail.com>
+ <Yyw0K/hcTZ02UP+A@smile.fi.intel.com> <691c3073-5105-9a2b-e6f2-ea0a4b8aaea8@gmail.com>
+In-Reply-To: <691c3073-5105-9a2b-e6f2-ea0a4b8aaea8@gmail.com>
+From:   Andrey Smirnov <andrew.smirnov@gmail.com>
+Date:   Thu, 22 Sep 2022 16:32:55 -0700
+Message-ID: <CAHQ1cqGFFJ0gRbdN+DH0iJhcKc=eee8uNoDyfHEy00-CMgstiw@mail.gmail.com>
+Subject: Re: [PATCH v4] usb: dwc3: Don't switch OTG -> peripheral if extcon is present
+To:     Ferry Toth <fntoth@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Thinh Nguyen <thinhn@synopsys.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,149 +73,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/22/2022 3:41 PM, Mike Kravetz wrote:
-> On 09/22/22 13:25, Mike Kravetz wrote:
->> On 09/21/22 15:36, Doug Berger wrote:
->>
->> As noted above, for pages to be migrated we first try to use an existing
->> free huge page as the target.  Quite some time ago, Michal added code to
->> allocate a new page from buddy as the target if no free huge pages were
->> available.  This change also included a special flag to dissolve the
->> source huge page when it is freed.  It seems like this is the exact
->> behavior we want here?  I wonder if it might be easier just to use this
->> existing code?
-> 
-> Totally untested, but I believe the patch below would accomplish this.
-> 
->  From aa8fc11bb67bc9e67e3b6b280fab339afce37759 Mon Sep 17 00:00:00 2001
-> From: Mike Kravetz <mike.kravetz@oracle.com>
-> Date: Thu, 22 Sep 2022 15:32:10 -0700
-> Subject: [PATCH] hugetlb: force alloc_contig_range hugetlb migrations to
->   allocate new pages
-> 
-> When migrating hugetlb pages as the result of an alloc_contig_range
-> operation, allocate a new page from buddy for the migration target.
-> This guarantees that the number of hugetlb pages is not decreased by
-> the operation.  In addition, this will result in the special HPageTemporary
-> flag being set in the source page so that it will be dissolved when
-> freed.
-> 
-> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
-> ---
->   include/linux/hugetlb.h |  5 +++--
->   mm/hugetlb.c            | 12 ++++++++++--
->   mm/internal.h           |  1 +
->   mm/migrate.c            |  3 ++-
->   mm/page_alloc.c         |  1 +
->   5 files changed, 17 insertions(+), 5 deletions(-)
-> 
-> diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-> index cfe15b32e2d4..558831bf1087 100644
-> --- a/include/linux/hugetlb.h
-> +++ b/include/linux/hugetlb.h
-> @@ -702,7 +702,8 @@ int isolate_or_dissolve_huge_page(struct page *page, struct list_head *list);
->   struct page *alloc_huge_page(struct vm_area_struct *vma,
->   				unsigned long addr, int avoid_reserve);
->   struct page *alloc_huge_page_nodemask(struct hstate *h, int preferred_nid,
-> -				nodemask_t *nmask, gfp_t gfp_mask);
-> +				nodemask_t *nmask, gfp_t gfp_mask,
-> +				bool temporary);
->   struct page *alloc_huge_page_vma(struct hstate *h, struct vm_area_struct *vma,
->   				unsigned long address);
->   int hugetlb_add_to_page_cache(struct page *page, struct address_space *mapping,
-> @@ -1003,7 +1004,7 @@ static inline struct page *alloc_huge_page(struct vm_area_struct *vma,
->   
->   static inline struct page *
->   alloc_huge_page_nodemask(struct hstate *h, int preferred_nid,
-> -			nodemask_t *nmask, gfp_t gfp_mask)
-> +			nodemask_t *nmask, gfp_t gfp_mask, bool temporary)
->   {
->   	return NULL;
->   }
-> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index 8bcaf66defc5..19de8ae79ec8 100644
-> --- a/mm/hugetlb.c
-> +++ b/mm/hugetlb.c
-> @@ -2308,8 +2308,11 @@ struct page *alloc_buddy_huge_page_with_mpol(struct hstate *h,
->   
->   /* page migration callback function */
->   struct page *alloc_huge_page_nodemask(struct hstate *h, int preferred_nid,
-> -		nodemask_t *nmask, gfp_t gfp_mask)
-> +		nodemask_t *nmask, gfp_t gfp_mask, bool temporary)
->   {
-> +	if (temporary)
-> +		goto temporary_alloc;
-> +
->   	spin_lock_irq(&hugetlb_lock);
->   	if (h->free_huge_pages - h->resv_huge_pages > 0) {
->   		struct page *page;
-> @@ -2322,6 +2325,11 @@ struct page *alloc_huge_page_nodemask(struct hstate *h, int preferred_nid,
->   	}
->   	spin_unlock_irq(&hugetlb_lock);
->   
-> +temporary_alloc:
-> +	/*
-> +	 * Try to allocate a fresh page that with special HPageTemporary
-> +	 * characteristics
-> +	 */
->   	return alloc_migrate_huge_page(h, gfp_mask, preferred_nid, nmask);
->   }
->   
-> @@ -2337,7 +2345,7 @@ struct page *alloc_huge_page_vma(struct hstate *h, struct vm_area_struct *vma,
->   
->   	gfp_mask = htlb_alloc_mask(h);
->   	node = huge_node(vma, address, gfp_mask, &mpol, &nodemask);
-> -	page = alloc_huge_page_nodemask(h, node, nodemask, gfp_mask);
-> +	page = alloc_huge_page_nodemask(h, node, nodemask, gfp_mask, false);
->   	mpol_cond_put(mpol);
->   
->   	return page;
-> diff --git a/mm/internal.h b/mm/internal.h
-> index b3002e03c28f..3ebf8885e24f 100644
-> --- a/mm/internal.h
-> +++ b/mm/internal.h
-> @@ -800,6 +800,7 @@ struct migration_target_control {
->   	int nid;		/* preferred node id */
->   	nodemask_t *nmask;
->   	gfp_t gfp_mask;
-> +	bool alloc_contig;	/* alloc_contig_range allocation */
->   };
->   
->   /*
-> diff --git a/mm/migrate.c b/mm/migrate.c
-> index c228afba0963..6505ba2070d7 100644
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-> @@ -1610,7 +1610,8 @@ struct page *alloc_migration_target(struct page *page, unsigned long private)
->   		struct hstate *h = page_hstate(&folio->page);
->   
->   		gfp_mask = htlb_modify_alloc_mask(h, gfp_mask);
-> -		return alloc_huge_page_nodemask(h, nid, mtc->nmask, gfp_mask);
-> +		return alloc_huge_page_nodemask(h, nid, mtc->nmask, gfp_mask,
-> +						mtc->alloc_contig);
->   	}
->   
->   	if (folio_test_large(folio)) {
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index d7b20bf09c1c..2b8a5a2b51cd 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -9166,6 +9166,7 @@ int __alloc_contig_migrate_range(struct compact_control *cc,
->   	struct migration_target_control mtc = {
->   		.nid = zone_to_nid(cc->zone),
->   		.gfp_mask = GFP_USER | __GFP_MOVABLE | __GFP_RETRY_MAYFAIL,
-> +		.alloc_contig = true,
->   	};
->   
->   	lru_cache_disable();
-I believe I exposed alloc_migrate_huge_page() and conditionally invoked 
-it from alloc_migration_target() when in alloc_contig, which is roughly 
-equivalent. I didn't consider modifying the mtc to pass the information 
-so my logic in alloc_migration_target() was a little kludgy.
+On Thu, Sep 22, 2022 at 3:23 AM Ferry Toth <fntoth@gmail.com> wrote:
+>
+> Hi,
+>
+> On 22-09-2022 12:08, Andy Shevchenko wrote:
+>
+> On Sun, Apr 03, 2022 at 09:49:07AM -0700, Andrey Smirnov wrote:
+>
+> If the extcon device exists, get the mode from the extcon device. If
+> the controller is DRD and the driver is unable to determine the mode,
+> only then default the dr_mode to USB_DR_MODE_PERIPHERAL.
+>
+> According to Ferry (Cc'ed) this broke Intel Merrifield platform. Ferry, c=
+an you
+> share bisect log?
+>
+> I can but not right now. But what I did was bisect between 5.18.0 (good) =
+and 5.19.0 (bad) then when I got near the culprit (~20 remaining) based on =
+the commit message I tried 0f01017191384e3962fa31520a9fd9846c3d352f "usb: d=
+wc3: Don't switch OTG -> peripheral if extcon is present" (bad) and commit =
+before that (good).
+>
+> The effect of the patch is that on Merrifield (I tested with Intel Edison=
+ Arduino board which has a HW switch to select between host and device mode=
+) device mode works but in host mode USB is completely not working.
+>
+> Currently on host mode - when working - superfluous error messages from t=
+usb1210 appear. When host mode is not working there are no tusb1210 message=
+s in the logs / on the console at all. Seemingly tusb1210 is not probed, wh=
+ich points in the direction of a relation to extcon.
+>
+> Taking into account the late cycle, I would like to revert the change. An=
+d
+> Ferry and I would help to test any other (non-regressive) approach).
+>
+> I have not yet tested if a simple revert fixes the problem but will tonig=
+ht.
+>
+>
+> I would be happy to test other approaches too.
 
-Like I said, this can be made to work and I'm happy to accept an 
-alternative if others agree. I think the isolation test of patch 3 is 
-also still desirable.
 
-Thanks again!
--Doug
+It's a bit hard for me to suggest an alternative approach without
+knowing how things are breaking in this case. I'd love to order one of
+those boards to repro and fix this on my end, but it looks like this
+HW is EOLed and out of stock in most places. If you guys know how to
+get my hands on those boards I'm all ears.
+
+Barring that, Ferry can you dig more into this failure? E.g. is it this hun=
+k
+
+@@ -85,7 +86,7 @@ static int dwc3_get_dr_mode(struct dwc3 *dwc)
+                 * mode. If the controller supports DRD but the dr_mode is =
+not
+                 * specified or set to OTG, then set the mode to peripheral=
+.
+                 */
+-               if (mode =3D=3D USB_DR_MODE_OTG &&
++               if (mode =3D=3D USB_DR_MODE_OTG && !dwc->edev &&
+                    (!IS_ENABLED(CONFIG_USB_ROLE_SWITCH) ||
+                     !device_property_read_bool(dwc->dev, "usb-role-switch"=
+)) &&
+                    !DWC3_VER_IS_PRIOR(DWC3, 330A))
+@@ -1632,6 +1633,51 @@ static void dwc3_check_params(struct dwc3 *dwc)
+        }
+ }
+
+that's problematic or moving
+
+ static int dwc3_probe(struct platform_device *pdev)
+ {
+        struct device           *dev =3D &pdev->dev;
+@@ -1744,6 +1790,13 @@ static int dwc3_probe(struct platform_device *pdev)
+                goto err2;
+        }
+
++       dwc->edev =3D dwc3_get_extcon(dwc);
++       if (IS_ERR(dwc->edev)) {
++               ret =3D PTR_ERR(dwc->edev);
++               dev_err_probe(dwc->dev, ret, "failed to get extcon\n");
++               goto err3;
++       }
++
+        ret =3D dwc3_get_dr_mode(dwc);
+        if (ret)
+                goto err3;
+
+to happen earlier? Does tracing the "mrfld_bcove_pwrsrc" driver (the
+excton provider in this case AFIACT) show anything interesting?
