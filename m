@@ -2,125 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE73A5E68D5
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 18:53:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BF205E68D9
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 18:54:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231622AbiIVQxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 12:53:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40638 "EHLO
+        id S231487AbiIVQyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 12:54:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231614AbiIVQxc (ORCPT
+        with ESMTP id S229578AbiIVQyA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 12:53:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 560C2EB124;
-        Thu, 22 Sep 2022 09:53:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 08DB4B83916;
-        Thu, 22 Sep 2022 16:53:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 265F7C433D6;
-        Thu, 22 Sep 2022 16:53:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663865608;
-        bh=Tb8Ym6SKz0DJBU5P9QYR//IAXv6Q6jQSGIGCbpUCXyY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rV/iE1vfsm1ImiHzuXh7DCL9kB78ZiP71qIOnppVKd+fnxdrlpVnkcDC3nGt53YL2
-         hh0tEEFw18AJEMfMAJEghWWU1AwgN9kg1O2B8KQM896qmeahg4IVSdYVYRH5QtnNew
-         O5q1LS2PnVhjZAu8nxvT7zEIVE2hq1RBFu1ci45HFaRu4bFd2gcmYbI4B93GLs9vLr
-         PoD9AqtwGziH+cJlorgn2IQzjTzBzknNc74C4itROgN8Urwo2SY6A9GRg28S991U3A
-         N/W/oC4aEITNJ/MhSDIrmYc/i1IQxZfiSeGGBC3EQQTMv2afY+9YpzGjCH8Wpr8pF3
-         Vnt1FaTUcBd9w==
-Date:   Thu, 22 Sep 2022 11:53:23 -0500
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     HighPoint Linux Team <linux@highpoint-tech.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH 1/2][next] scsi: hptiop: Replace one-element array with
- flexible-array member
-Message-ID: <6238ccf37798e36d783f5ce5e483e6837e98be79.1663865333.git.gustavoars@kernel.org>
-References: <cover.1663865333.git.gustavoars@kernel.org>
+        Thu, 22 Sep 2022 12:54:00 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C518EB132;
+        Thu, 22 Sep 2022 09:53:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663865639; x=1695401639;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=0tb64t9et9lz0+8sWEy9iCYzjX3AhOgWoGQQhACry9w=;
+  b=jUSKaHHwwZbmaAEhj665dSoSt/C4Q4KRDoKbISSPgsffx4+w/PH7G84D
+   6l1RGeDSPu4rJ64hq5+gHQhaP9JDm1WxIoK7hhSEirOL0NppFJ7x0I8gW
+   tuBjsvgABkQFJ9xaTU4RLnHn2zfh3NcnjAlCzOP27gNTktlPMnZqYE5AD
+   U78qolWtpPLTZbEmr4SlxFy2/GpCFpB97e1Htk5B1NRZZ68if0zgsamz5
+   0ud6ZOz70BHlTY9pprcn7+N/xdWeU4K8pKWT4rKbLLCOniRgCVIp+s6iu
+   HaGvRjT3cq77poEBLBmz7OtEZPNxtvZVptUgnPELqJ5hybkttWjpFYH/u
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="283412772"
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="283412772"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 09:53:43 -0700
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="619868865"
+Received: from sponnura-mobl1.amr.corp.intel.com (HELO [10.209.58.200]) ([10.209.58.200])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 09:53:43 -0700
+Message-ID: <5af2d8bb-8591-78f6-8102-6f7d0df33d98@intel.com>
+Date:   Thu, 22 Sep 2022 09:53:43 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1663865333.git.gustavoars@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH V3 0/8] x86/topology: Improve CPUID.1F handling
+Content-Language: en-US
+To:     Zhang Rui <rui.zhang@intel.com>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-hwmon@vger.kernel.org
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, peterz@infradead.org,
+        corbet@lwn.net, fenghua.yu@intel.com, jdelvare@suse.com,
+        linux@roeck-us.net, len.brown@intel.com
+References: <20220922133800.12918-1-rui.zhang@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20220922133800.12918-1-rui.zhang@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-One-element arrays are deprecated, and we are replacing them with flexible
-array members instead. So, replace one-element array with flexible-array
-member in struct hpt_iop_request_scsi_command and refactor the rest of the
-code, accordingly.
+> Changes since V2:
+>  - changelog improvements based on Peter' feedback
+>  - Remove combined tags
 
-The following pieces of code suggest that the one element of array sg_list
-in struct hpt_iop_request_scsi_command is not taken into account when
-calculating the total size for both struct hpt_iop_request_scsi_command
-and the maximum number of elements sg_list will contain:
+I fixed those up and started testing your v2 yesterday.  Can you
+double-check that this:
 
-1047         req->header.size = cpu_to_le32(
-1048                                 sizeof(struct hpt_iop_request_scsi_command)
-1049                                  - sizeof(struct hpt_iopsg)
-1050                                  + sg_count * sizeof(struct hpt_iopsg));
+	https://git.kernel.org/pub/scm/linux/kernel/git/daveh/devel.git/log/?h=cpuid1f
 
-1400         req_size = sizeof(struct hpt_iop_request_scsi_command)                            1401                 + sizeof(struct hpt_iopsg) * (hba->max_sg_descriptors - 1);
-
-So it's safe to replace the one-element array with a flexible-array
-member and update the code above, accordingly: now we don't need to
-subtract sizeof(struct hpt_iopsg) from sizeof(struct hpt_iop_request_scsi_command)
-because this is implicitly done by the flex-array transformation.
-
-Link: https://github.com/KSPP/linux/issues/79
-Link: https://github.com/KSPP/linux/issues/205
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
- drivers/scsi/hptiop.c | 3 +--
- drivers/scsi/hptiop.h | 2 +-
- 2 files changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/scsi/hptiop.c b/drivers/scsi/hptiop.c
-index f18b770626e6..cfc6546e35a6 100644
---- a/drivers/scsi/hptiop.c
-+++ b/drivers/scsi/hptiop.c
-@@ -1046,7 +1046,6 @@ static int hptiop_queuecommand_lck(struct scsi_cmnd *scp)
- 	req->lun = scp->device->lun;
- 	req->header.size = cpu_to_le32(
- 				sizeof(struct hpt_iop_request_scsi_command)
--				 - sizeof(struct hpt_iopsg)
- 				 + sg_count * sizeof(struct hpt_iopsg));
- 
- 	memcpy(req->cdb, scp->cmnd, sizeof(req->cdb));
-@@ -1398,7 +1397,7 @@ static int hptiop_probe(struct pci_dev *pcidev, const struct pci_device_id *id)
- 	host->max_cmd_len = 16;
- 
- 	req_size = sizeof(struct hpt_iop_request_scsi_command)
--		+ sizeof(struct hpt_iopsg) * (hba->max_sg_descriptors - 1);
-+		+ sizeof(struct hpt_iopsg) * hba->max_sg_descriptors;
- 	if ((req_size & 0x1f) != 0)
- 		req_size = (req_size + 0x1f) & ~0x1f;
- 
-diff --git a/drivers/scsi/hptiop.h b/drivers/scsi/hptiop.h
-index 363d5a16243f..ef2f2aca598c 100644
---- a/drivers/scsi/hptiop.h
-+++ b/drivers/scsi/hptiop.h
-@@ -228,7 +228,7 @@ struct hpt_iop_request_scsi_command {
- 	u8     pad1;
- 	u8     cdb[16];
- 	__le32 dataxfer_length;
--	struct hpt_iopsg sg_list[1];
-+	struct hpt_iopsg sg_list[];
- };
- 
- struct hpt_iop_request_ioctl_command {
--- 
-2.34.1
-
+Looks the same as your v3?
