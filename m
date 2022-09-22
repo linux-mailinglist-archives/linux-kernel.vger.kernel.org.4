@@ -2,65 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D26845E68C6
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 18:45:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E62F05E68CD
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 18:50:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231418AbiIVQps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 12:45:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33146 "EHLO
+        id S231468AbiIVQub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 12:50:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbiIVQpp (ORCPT
+        with ESMTP id S229901AbiIVQu2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 12:45:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3237F9E2DF;
-        Thu, 22 Sep 2022 09:45:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C0A16636A9;
-        Thu, 22 Sep 2022 16:45:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BEAEC433D6;
-        Thu, 22 Sep 2022 16:45:43 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="YjmEGxm6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1663865141;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qIiaOcRx5bVWqVXMbg0MBYV+EUTIZZiWQtV5u1WQL3o=;
-        b=YjmEGxm6RKC5i9AQrfoyJ0hN1/XDCaEwRrPALAuC7Ey3+yrMCDZ3/tr7d3vFpIWQWRX/JX
-        N7nIAyTKXE+Gg716h73kX62/i1/byltX7kxqwSuBywsqVgvQKlktCRdB5UXnBX0Bf2vCPn
-        4pCPLAOZDyo63fKEJ6RDljseavSWs7c=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 536c23f5 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Thu, 22 Sep 2022 16:45:41 +0000 (UTC)
-Date:   Thu, 22 Sep 2022 18:45:37 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Sherry Yang <sherry.yang@oracle.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rt-users@vger.kernel.org,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Sebastian Siewior <bigeasy@linutronix.de>,
-        Jack Vogel <jack.vogel@oracle.com>,
-        Tariq Toukan <tariqt@nvidia.com>, sultan@kerneltoast.com
-Subject: Re: 10% regression in qperf tcp latency after introducing commit
- "4a61bf7f9b18 random: defer fast pool mixing to worker"
-Message-ID: <YyyRMam6Eu8nmeCd@zx2c4.com>
-References: <B1BC4DB8-8F40-4975-B8E7-9ED9BFF1D50E@oracle.com>
- <CAHmME9rUn0b5FKNFYkxyrn5cLiuW_nOxUZi3mRpPaBkUo9JWEQ@mail.gmail.com>
- <04044E39-B150-4147-A090-3D942AF643DF@oracle.com>
- <CAHmME9oKcqceoFpKkooCp5wriLLptpN=+WrrG0KcDWjBahM0bQ@mail.gmail.com>
- <BD03BFF6-C369-4D34-A38B-49653F1CBC53@oracle.com>
- <YyuREcGAXV9828w5@zx2c4.com>
- <YyukQ/oU/jkp0OXA@slm.duckdns.org>
+        Thu, 22 Sep 2022 12:50:28 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CD7C0B5A5E
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 09:50:27 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7DC9416F8;
+        Thu, 22 Sep 2022 09:50:33 -0700 (PDT)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BD58A3F5A1;
+        Thu, 22 Sep 2022 09:50:23 -0700 (PDT)
+Message-ID: <0a437c9e-299d-574e-a393-f589c78ba2c7@arm.com>
+Date:   Thu, 22 Sep 2022 18:50:00 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YyukQ/oU/jkp0OXA@slm.duckdns.org>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4 5/8] sched/fair: Take into account latency priority at
+ wakeup
+Content-Language: en-US
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, parth@linux.ibm.com,
+        qais.yousef@arm.com, chris.hyser@oracle.com,
+        valentin.schneider@arm.com, patrick.bellasi@matbug.net,
+        David.Laight@aculab.com, pjt@google.com, pavel@ucw.cz,
+        tj@kernel.org, qperret@google.com, tim.c.chen@linux.intel.com,
+        joshdon@google.com
+References: <20220916080305.29574-1-vincent.guittot@linaro.org>
+ <20220916080305.29574-6-vincent.guittot@linaro.org>
+ <073938c4-ab23-2270-8e60-291f2901e230@arm.com>
+ <CAKfTPtCWE5O4TeTBG8hgar8w56-WzvmX7aR9D7dXN_vJ5LCLyQ@mail.gmail.com>
+ <b02452b2-900c-89da-c7b7-40a61268065e@arm.com>
+ <CAKfTPtDvWsq8YUEzK=xm+S22p=f1kR87a4hT38Ni_t4ZfZ0Zag@mail.gmail.com>
+ <04c65f4f-5072-2a07-cbe0-63046a7bc58f@arm.com>
+ <CAKfTPtA1UFRGsDRVRNn_M2OEQ2G8A5MzWP_3GpmSsf1=B9+DdA@mail.gmail.com>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <CAKfTPtA1UFRGsDRVRNn_M2OEQ2G8A5MzWP_3GpmSsf1=B9+DdA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,37 +60,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tejun,
+On 22/09/2022 09:12, Vincent Guittot wrote:
+> On Thu, 22 Sept 2022 at 00:41, Dietmar Eggemann
+> <dietmar.eggemann@arm.com> wrote:
+>>
+>> On 20/09/2022 17:49, Vincent Guittot wrote:
+>>> On Tue, 20 Sept 2022 at 15:18, Dietmar Eggemann
+>>> <dietmar.eggemann@arm.com> wrote:
+>>>>
+>>>> On 19/09/2022 17:39, Vincent Guittot wrote:
+>>>>> On Mon, 19 Sept 2022 at 12:05, Dietmar Eggemann
+>>>>> <dietmar.eggemann@arm.com> wrote:
+>>>>>>
+>>>>>> On 16/09/2022 10:03, Vincent Guittot wrote:
 
-On Wed, Sep 21, 2022 at 01:54:43PM -1000, Tejun Heo wrote:
-> Hello,
+[...]
+
+> I thought you were speaking about priority 0 vs [1..19] as you made a
+> difference in your previous comment below
 > 
-> On Thu, Sep 22, 2022 at 12:32:49AM +0200, Jason A. Donenfeld wrote:
-> > What are our options? Investigate queue_work_on() bottlenecks? Move back
-> > to the original pattern, but use raw spinlocks? Some thing else?
+>>
+>> (1) p = 10 curr =  19 -> wakeup_latency_gran() returns 12ms
+>>
+>> (2) p = 10 curr = -10 -> wakeup_latency_gran() returns 24ms
+>>
+>> In (1) only p's own latency counts whereas in (2) we take the diff,
 > 
-> I doubt it's queue_work_on() itself if it's called at very high frequency as
-> the duplicate calls would just fail to claim the PENDING bit and return but
-> if it's being called at a high frequency, it'd be waking up a kthread over
-> and over again, which can get pretty expensive. Maybe that ends competing
-> with softirqd which is handling net rx or sth?
+> Yes because  curr is latency sensitive in (2) whereas it's not in (1)
+> 
+>>
+>> In (A) we 'punish' p even though it competes against curr which has an
+>> even lower latency requirement than p,
+> 
+> What is (A) ?  Assuming you meant (1), having a positive nice latency
 
-Huh, yea, interesting theory. Orrr, the one time that it _does_ pass the
-test_and_set_bit check, the extra overhead here is enough to screw up
-the latency? Both theories sound at least plausible.
+Sorry, yes I meant (1).
 
-> So, yeah, I'd try something which doesn't always involve scheduling and a
-> context switch whether that's softirq, tasklet, or irq work.
+> means that you don't have latency requirement but you are tolerant to
+> scheduling delay so we don't 'punish' p. P will preempt curr is we are
+> above the tolerance
 
-Alright, I'll do that. I posted a diff for Sherry to try, and I'll make
-that into a real patch and wait for her test.
+wakeup_preempt_entity() {
 
-> I probably am
-> mistaken but I thought RT kernel pushes irq handling to threads so that
-> these things can be handled sanely. Is this some special case?
+    vdiff = curr->vruntime - se->vruntime
 
-It does mostly. But there's still a hard IRQ handler, somewhere, because
-IRQs gotta IRQ, and the RNG benefits from getting a timestamp exactly
-when that happens. So here we are.
+    vdiff -= wakeup_latency_gran(curr, se)   <-- (3)
 
-Jason
+    if (vdiff <= 0)
+        return -1;
+
+    ...
+}
+
+Wouldn't it be more suitable to return 0 from wakeup_latency_gran() if
+both have latency_nice >=0 in this case instead of se->latency_offset?
+
+By `punish` I mean that vdiff (3) gets smaller in case we return (the
+positive) `se->latency_offset` even `latency nice of curr` > `latency
+nice of p`.
+
+[...]
+
+>> With p = -19 and curr = -19 we would take the diff, so 0ms.
+>>
+>> With p = 19 and curr = 19, if we would use `latency_offset -=
+>> curr->latency_offset` wakeup_latency_gran() would return 973/1024*24ms -
+>> 973/1024*24ms = 0ms and nothing will shift.
+>>
+>> OTHA, in case (1) wakeup_latency_gran() would return 512/1024*24ms -
+>> 973/1024*24ms = - 10.80ms. So p would gain an advantage here instead of
+>> a penalty.
+> 
+> And that's all the point. A priority >= 0 means that you don't care
+> about scheduling delays so there is no reason to be more aggressive
+> with a task that is also latency tolerant. We only have to ensure that
+> the delay stays in the acceptable range
+
+OK, I understand you model here but I'm still not convinced. Might be
+interesting to hear what others think.
