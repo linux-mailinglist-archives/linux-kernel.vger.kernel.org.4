@@ -2,142 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 556C25E5D27
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 10:14:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90B1C5E5D30
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 10:16:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbiIVIOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 04:14:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54318 "EHLO
+        id S229657AbiIVIQl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 04:16:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbiIVIOE (ORCPT
+        with ESMTP id S229489AbiIVIQi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 04:14:04 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAA3567CB2;
-        Thu, 22 Sep 2022 01:14:03 -0700 (PDT)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MY7Kf6d7jzHply;
-        Thu, 22 Sep 2022 16:11:50 +0800 (CST)
-Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 22 Sep 2022 16:14:01 +0800
-Received: from [10.174.178.46] (10.174.178.46) by
- kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 22 Sep 2022 16:14:00 +0800
-Subject: Re: [PATCH 1/3] quota: Check next/prev free block number after
- reading from quota file
-To:     Jan Kara <jack@suse.cz>
-CC:     <jack@suse.com>, <tytso@mit.edu>, <brauner@kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-ext4@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yukuai3@huawei.com>
-References: <20220820110514.881373-1-chengzhihao1@huawei.com>
- <20220820110514.881373-2-chengzhihao1@huawei.com>
- <20220921133715.7tesk3qylombwmyk@quack3>
-From:   Zhihao Cheng <chengzhihao1@huawei.com>
-Message-ID: <41578612-d582-79ea-bb8e-89fa19d4406e@huawei.com>
-Date:   Thu, 22 Sep 2022 16:13:59 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        Thu, 22 Sep 2022 04:16:38 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0EB7AA354
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 01:16:37 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id BBC5B660205F;
+        Thu, 22 Sep 2022 09:16:35 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1663834596;
+        bh=1RPw6QEhmeD3uutob+4PAGTRuDEf55q3mdwLBBZoPEg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=f2mrfVlj93fK0lW82/gtmpmoFUXkhFWMnwXpFf++NotCJIsOUL7+2YC4+cZvrTPuc
+         FetPCCCubueb3DS3J9trdKM3nPX/Mw8s0LoAos9Jx0HlEOUyQbejnLcHkjhp/m+ZJs
+         8EO0qizKHvQswd2wkqRFqZ9vVZdX5jwf5cnH14roUuJgQR0Yy1+4vb6BDOvYPM5BRT
+         i5U5p44Q31sN+dgiv0sftHNGxscy5aNG+2qn3D8QS0i0xEUAuvtPlqjW2kXdNyp0D/
+         kuTQZ9jT94dRYvkYI2W+1+2SUrbAM9oUNc/wpQQ2Ar2z7YjdXJAzolkWoH9QTLQJ6M
+         7lLadE2ZjkGnA==
+Message-ID: <02bcd7f8-488a-75ec-badb-e62944c3d4e8@collabora.com>
+Date:   Thu, 22 Sep 2022 10:16:33 +0200
 MIME-Version: 1.0
-In-Reply-To: <20220921133715.7tesk3qylombwmyk@quack3>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.46]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v7,1/3] soc: mediatek: Add mmsys func to adapt to dpi
+ output for MT8186
+Content-Language: en-US
+To:     xinlei.lee@mediatek.com, matthias.bgg@gmail.com,
+        jason-jh.lin@mediatek.com, rex-bc.chen@mediatek.com,
+        ck.hu@mediatek.com, p.zabel@pengutronix.de, airlied@linux.ie,
+        daniel@ffwll.ch
+Cc:     dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        jitao.shi@mediatek.com
+References: <1663831764-18169-1-git-send-email-xinlei.lee@mediatek.com>
+ <1663831764-18169-2-git-send-email-xinlei.lee@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <1663831764-18169-2-git-send-email-xinlei.lee@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ÔÚ 2022/9/21 21:37, Jan Kara Ð´µÀ:
-Hi Jan,
-> On Sat 20-08-22 19:05:12, Zhihao Cheng wrote:
->> Following process:
-[...]
->>
->> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216372
->> Fixes: 1da177e4c3f4152 ("Linux-2.6.12-rc2")
+Il 22/09/22 09:29, xinlei.lee@mediatek.com ha scritto:
+> From: Xinlei Lee <xinlei.lee@mediatek.com>
 > 
-> It's better to just have:
+> The difference between MT8186 and other ICs is that when modifying the
+> output format, we need to modify the mmsys_base+0x400 register to take
+> effect.
+> So when setting the dpi output format, we need to call mmsys_func to set
+> it to MT8186 synchronously.
 > 
-> CC: stable@vger.kernel.org
+> Co-developed-by: Jitao Shi <jitao.shi@mediatek.com>
+> Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
+> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
+> ---
+>   drivers/soc/mediatek/mt8186-mmsys.h    |  8 +++++++
+>   drivers/soc/mediatek/mtk-mmsys.c       | 32 ++++++++++++++++++++++++++
+>   include/linux/soc/mediatek/mtk-mmsys.h |  9 ++++++++
+>   3 files changed, 49 insertions(+)
 > 
-> here. Fixes tag pointing to kernel release is not very useful.
-Will add in v2.
-> 
->> --- a/fs/quota/quota_tree.c
->> +++ b/fs/quota/quota_tree.c
->> @@ -71,6 +71,35 @@ static ssize_t write_blk(struct qtree_mem_dqinfo *info, uint blk, char *buf)
->>   	return ret;
->>   }
->>   
->> +static inline int do_check_range(struct super_block *sb, uint val, uint max_val)
->> +{
->> +	if (val >= max_val) {
->> +		quota_error(sb, "Getting block too big (%u >= %u)",
->> +			    val, max_val);
->> +		return -EUCLEAN;
->> +	}
->> +
->> +	return 0;
->> +}
-> 
-> I'd already provide min_val and the string for the message here as well (as
-> you do in patch 2). It is less churn in the next patch and free blocks
-> checking actually needs that as well. See below.
-> 
->> +
->> +static int check_free_block(struct qtree_mem_dqinfo *info,
->> +			    struct qt_disk_dqdbheader *dh)
->> +{
->> +	int err = 0;
->> +	uint nextblk, prevblk;
->> +
->> +	nextblk = le32_to_cpu(dh->dqdh_next_free);
->> +	err = do_check_range(info->dqi_sb, nextblk, info->dqi_blocks);
->> +	if (err)
->> +		return err;
->> +	prevblk = le32_to_cpu(dh->dqdh_prev_free);
->> +	err = do_check_range(info->dqi_sb, prevblk, info->dqi_blocks);
->> +	if (err)
->> +		return err;
-> 
-> The free block should actually be > QT_TREEOFF so I'd add the check to
-> do_check_range().
+> diff --git a/drivers/soc/mediatek/mt8186-mmsys.h b/drivers/soc/mediatek/mt8186-mmsys.h
+> index eb1ad9c37a9c..536005d1cc55 100644
+> --- a/drivers/soc/mediatek/mt8186-mmsys.h
+> +++ b/drivers/soc/mediatek/mt8186-mmsys.h
+> @@ -3,6 +3,14 @@
+>   #ifndef __SOC_MEDIATEK_MT8186_MMSYS_H
+>   #define __SOC_MEDIATEK_MT8186_MMSYS_H
+>   
+> +/* Values for DPI configuration in MMSYS address space */
+> +#define MT8186_MMSYS_DPI_OUTPUT_FORMAT		0x400
+> +#define DPI_FORMAT_MASK					0x3
 
-'dh->dqdh_next_free' may be updated when quota entry removed, 
-'dh->dqdh_next_free' can be used for next new quota entris.
-Before sending v2, I found 'dh->dqdh_next_free' and 'dh->dqdh_prev_free' 
-can easily be zero in newly allocated blocks when continually creating 
-files onwed by different users:
-find_free_dqentry
-   get_free_dqblk
-     write_blk(info, info->dqi_blocks, buf)  // zero'd qt_disk_dqdbheader
-     blk = info->dqi_blocks++   // allocate new one block
-   info->dqi_free_entry = blk   // will be used for new quota entries
+This is GENMASK(1, 0)
 
-find_free_dqentry
-   if (info->dqi_free_entry)
-     blk = info->dqi_free_entry
-     read_blk(info, blk, buf)   // dh->dqdh_next_free = 
-dh->dqdh_prev_free = 0
+> +#define DPI_RGB888_SDR_CON				0
+> +#define DPI_RGB888_DDR_CON				1
+> +#define DPI_RGB565_SDR_CON				2
+> +#define DPI_RGB565_DDR_CON				3
+> +
+>   #define MT8186_MMSYS_OVL_CON			0xF04
+>   #define MT8186_MMSYS_OVL0_CON_MASK			0x3
+>   #define MT8186_MMSYS_OVL0_2L_CON_MASK			0xC
+> diff --git a/drivers/soc/mediatek/mtk-mmsys.c b/drivers/soc/mediatek/mtk-mmsys.c
+> index 06d8e83a2cb5..0857806206dc 100644
+> --- a/drivers/soc/mediatek/mtk-mmsys.c
+> +++ b/drivers/soc/mediatek/mtk-mmsys.c
+> @@ -227,6 +227,38 @@ void mtk_mmsys_ddp_disconnect(struct device *dev,
+>   }
+>   EXPORT_SYMBOL_GPL(mtk_mmsys_ddp_disconnect);
+>   
+> +static void mtk_mmsys_update_bits(struct mtk_mmsys *mmsys, u32 offset, u32 mask, u32 val)
+> +{
+> +	u32 tmp;
+> +
+> +	tmp = readl_relaxed(mmsys->regs + offset);
+> +	tmp = (tmp & ~mask) | val;
+> +	writel_relaxed(tmp, mmsys->regs + offset);
+> +}
+> +
+> +void mtk_mmsys_ddp_dpi_fmt_config(struct device *dev, u32 val)
+> +{
+> +	switch (val) {
 
-I think it's normal when 'dh->dqdh_next_free' or 'dh->dqdh_prev_free' 
-equals to 0.
-> 
-> Also rather than having check_free_block(), I'd provide a helper function
-> like check_dquot_block_header() which will check only free blocks pointers
-> now and in later patches you can add other checks there.
-OK, will be updated in v2.
-> 
-> 								Honza
-> 
+You're not handling the MTK_DPI_RGB888_SDR_CON case.
+
+> +	case MTK_DPI_RGB888_DDR_CON: > +		mtk_mmsys_update_bits(dev_get_drvdata(dev), MT8186_MMSYS_DPI_OUTPUT_FORMAT,
+
+Are there any other (future, past, present) MTK SoCs having a MMSYS
+DPI_OUTPUT_FORMAT register?
+
+I don't like seeing this kind of model-agnostic function in a not model-agnostic
+driver, especially when this is only because of a register address.
+That would change if no other future (or present) MediaTek SoCs have this register.
+
+> +				      DPI_FORMAT_MASK, DPI_RGB888_DDR_CON);
+> +		break;
+> +	case MTK_DPI_RGB565_SDR_CON:
+> +		mtk_mmsys_update_bits(dev_get_drvdata(dev), MT8186_MMSYS_DPI_OUTPUT_FORMAT,
+> +				      DPI_FORMAT_MASK, DPI_RGB565_SDR_CON);
+> +		break;
+> +	case MTK_DPI_RGB565_DDR_CON:
+> +		mtk_mmsys_update_bits(dev_get_drvdata(dev), MT8186_MMSYS_DPI_OUTPUT_FORMAT,
+> +				      DPI_FORMAT_MASK, DPI_RGB565_DDR_CON);
+> +		break;
+
+This goes here...
+
+	case MTK_DPI_RGB888_DDR_CON:
+> +	default:
+> +		mtk_mmsys_update_bits(dev_get_drvdata(dev), MT8186_MMSYS_DPI_OUTPUT_FORMAT,
+> +				      DPI_FORMAT_MASK, DPI_RGB888_DDR_CON);
+> +		break;
+> +	}
+> +}
+> +EXPORT_SYMBOL_GPL(mtk_mmsys_ddp_dpi_fmt_config);
+> +
+>   static int mtk_mmsys_reset_update(struct reset_controller_dev *rcdev, unsigned long id,
+>   				  bool assert)
+>   {
+> diff --git a/include/linux/soc/mediatek/mtk-mmsys.h b/include/linux/soc/mediatek/mtk-mmsys.h
+> index 59117d970daf..b85f66db33e1 100644
+> --- a/include/linux/soc/mediatek/mtk-mmsys.h
+> +++ b/include/linux/soc/mediatek/mtk-mmsys.h
+> @@ -9,6 +9,13 @@
+>   enum mtk_ddp_comp_id;
+>   struct device;
+>   
+> +enum mtk_dpi_out_format_con {
+> +	MTK_DPI_RGB888_SDR_CON,
+> +	MTK_DPI_RGB888_DDR_CON,
+> +	MTK_DPI_RGB565_SDR_CON,
+> +	MTK_DPI_RGB565_DDR_CON
+> +};
+> +
+>   enum mtk_ddp_comp_id {
+>   	DDP_COMPONENT_AAL0,
+>   	DDP_COMPONENT_AAL1,
+> @@ -65,4 +72,6 @@ void mtk_mmsys_ddp_disconnect(struct device *dev,
+>   			      enum mtk_ddp_comp_id cur,
+>   			      enum mtk_ddp_comp_id next);
+>   
+> +void mtk_mmsys_ddp_dpi_fmt_config(struct device *dev, u32 val);
+> +
+>   #endif /* __MTK_MMSYS_H */
 
