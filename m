@@ -2,98 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8149B5E5A15
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 06:18:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9F1B5E5A1B
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 06:19:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbiIVESs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 00:18:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37272 "EHLO
+        id S230286AbiIVETL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 00:19:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiIVESq (ORCPT
+        with ESMTP id S230247AbiIVETG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 00:18:46 -0400
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 448E2A221D;
-        Wed, 21 Sep 2022 21:18:41 -0700 (PDT)
-Received: by mail-oi1-f175.google.com with SMTP id c81so8696225oif.3;
-        Wed, 21 Sep 2022 21:18:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=BiJDFb1egZj2DilXc36Z+uvFDZtpiZX1P8hB3PYHb6E=;
-        b=MXtoWWJvauDzGZZCb8+0hA+QcgwPTkgePefSM8tiLPWcOIK2saVb+HTUHf42+X1Oro
-         YfxyoV1qPANYH3z9ZEymRJVNNniD3wRdo0Jgv67OzxaFoqFTMnQm9NOvmmFpBS9wFJCh
-         LRQ7HilyDgOB24WS9tS3tXTPhS1PwPoxeXsR8f/vZfC86L+wAMpmkIXj/RHenwS/0Dd/
-         YBZ8H0Hy3Cv1oIJJwU/pxFiW9qgKGjTpvJ9RBE492Zjtrd8wFhJDnl91pZTiP7eEIzLC
-         qGQcPQep567/wqCB0jf/MG/IefFGMWVPmbYE11ZTtHwnJnkYUsZLmPzYRpGHZx1nfHzv
-         fB5A==
-X-Gm-Message-State: ACrzQf3VWAiIiaK71me+qoRXNXO5esBUdCyHVyMbrolvSFHmQRfcvQJo
-        t6MqqdAskE5na7UGyGtrpzsaO4groJDt8C2ZVjFYGGNb
-X-Google-Smtp-Source: AMsMyM7OPwbTse8PTpi/MDsKPxQX5nAosf2sgYG6nBP8E/QbNxyGBEeIDZWhP+9dn1sBQdGzj6E+pbE+qdlEbI6iW+U=
-X-Received: by 2002:a05:6808:181e:b0:350:e92a:9ab1 with SMTP id
- bh30-20020a056808181e00b00350e92a9ab1mr695222oib.209.1663820320490; Wed, 21
- Sep 2022 21:18:40 -0700 (PDT)
+        Thu, 22 Sep 2022 00:19:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35995A221B;
+        Wed, 21 Sep 2022 21:19:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C0F2D62FAD;
+        Thu, 22 Sep 2022 04:19:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C3BEC433D6;
+        Thu, 22 Sep 2022 04:18:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663820344;
+        bh=8xodEWMTndBecZO1JG0sANGtdcIZJhdCKz1ZoOkxjMk=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=uW+exXsXSGrew87ZojaTnnu2Pv1UtGXzQqjjLX2b7oGph4+PQelJUJX11FgjpqatQ
+         ELoqv5pR8bSV3/7535PDpBw6BVY4bi59s4BaKlJSIYVXzNRY6aDLmLKhJLPFtzieTO
+         iB7297vU052/FKz0Dc21FYTixE1ykO1VrtaDUUK3SkYuK3biSXS0J7OKhhQjo/eWra
+         7mj2sPUPAmfSHWCc1MV6VYkGtcRnMWzr/LNBb6lPibVdaMWLqUzHsztksp0W4hjZYv
+         zIN6846mujkb0CwMdnKoomN+OWU5pYCeMqp4QWw7CJvtecSieKja+ya7GWiRyAj90B
+         2nqT/vaz2aB1w==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Vlastimil Babka <vbabka@suse.cz>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Alex Elder <elder@kernel.org>,
+        Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?utf-8?Q?K=C3=B6nig?= <christian.koenig@amd.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Daniel Micay <danielmicay@gmail.com>,
+        Yonghong Song <yhs@fb.com>, Marco Elver <elver@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Jacob Shin <jacob.shin@amd.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-btrfs@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-fsdevel@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org, dev@openvswitch.org,
+        x86@kernel.org, llvm@lists.linux.dev,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 10/12] iwlwifi: Track scan_cmd allocation size explicitly
+References: <20220922031013.2150682-1-keescook@chromium.org>
+        <20220922031013.2150682-11-keescook@chromium.org>
+Date:   Thu, 22 Sep 2022 07:18:51 +0300
+In-Reply-To: <20220922031013.2150682-11-keescook@chromium.org> (Kees Cook's
+        message of "Wed, 21 Sep 2022 20:10:11 -0700")
+Message-ID: <87fsgk6nys.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20220922033349.2908447-1-namhyung@kernel.org> <CAP-5=fW5aDW0_t-u9tOy_-AgDQdz5ybOjMVUXqA-Hm0R8sSSSg@mail.gmail.com>
-In-Reply-To: <CAP-5=fW5aDW0_t-u9tOy_-AgDQdz5ybOjMVUXqA-Hm0R8sSSSg@mail.gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Wed, 21 Sep 2022 21:18:29 -0700
-Message-ID: <CAM9d7ch9iSKYwqT_oV-X2-Yr9rSjKB2R_qFS+t7ro8xMm-VPKg@mail.gmail.com>
-Subject: Re: [PATCH] perf stat: Get a perf cgroup more portably in BPF
-To:     Ian Rogers <irogers@google.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        Song Liu <songliubraving@fb.com>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ian,
+Kees Cook <keescook@chromium.org> writes:
 
-On Wed, Sep 21, 2022 at 8:54 PM Ian Rogers <irogers@google.com> wrote:
+> In preparation for reducing the use of ksize(), explicitly track the
+> size of scan_cmd allocations. This also allows for noticing if the scan
+> size changes unexpectedly. Note that using ksize() was already incorrect
+> here, in the sense that ksize() would not match the actual allocation
+> size, which would trigger future run-time allocation bounds checking.
+> (In other words, memset() may know how large scan_cmd was allocated for,
+> but ksize() will return the upper bounds of the actually allocated memory,
+> causing a run-time warning about an overflow.)
 >
-> On Wed, Sep 21, 2022 at 8:33 PM Namhyung Kim <namhyung@kernel.org> wrote:
-> >
-> > The perf_event_cgrp_id can be different on other configurations.
-> > To be more portable as CO-RE, it needs to get the cgroup subsys id
-> > using the bpf_core_enum_value() helper.
-> >
-> > Suggested-by: Ian Rogers <irogers@google.com>
-> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> > ---
-> >  tools/perf/util/bpf_skel/bperf_cgroup.bpf.c | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
-> > index c72f8ad96f75..35a8e38d3ee3 100644
-> > --- a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
-> > +++ b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
-> > @@ -57,8 +57,10 @@ static inline int get_cgroup_v1_idx(__u32 *cgrps, int size)
-> >         __u32 *elem;
-> >         int level;
-> >         int cnt;
-> > +       int perf_id;
-> >
-> > -       cgrp = BPF_CORE_READ(p, cgroups, subsys[perf_event_cgrp_id], cgroup);
-> > +       perf_id = bpf_core_enum_value(enum cgroup_subsys_id, perf_event_cgrp_id);
-> > +       cgrp = BPF_CORE_READ(p, cgroups, subsys[perf_id], cgroup);
->
-> LGTM, do we need the same fix in off cpu?
-> https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/util/bpf_skel/off_cpu.bpf.c?h=perf/core#n123
+> Cc: Gregory Greenman <gregory.greenman@intel.com>
+> Cc: Kalle Valo <kvalo@kernel.org>
+> Cc: Johannes Berg <johannes.berg@intel.com>
+> Cc: linux-wireless@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-Right, will send v2.
+Via which tree is this iwlwifi patch going? Normally via wireless-next
+or something else?
 
-Thanks,
-Namhyung
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
