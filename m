@@ -2,145 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2C5B5E6D59
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 22:47:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C92AC5E6D64
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 22:53:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230000AbiIVUrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 16:47:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54022 "EHLO
+        id S230207AbiIVUxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 16:53:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbiIVUrS (ORCPT
+        with ESMTP id S229578AbiIVUw7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 16:47:18 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0264410AB31
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 13:47:16 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 30D5B21A1B;
-        Thu, 22 Sep 2022 20:47:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1663879635; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=G91bghnzz5qsrAZ1KwKzy4Is49Fx+R+59WwLRAB/H7c=;
-        b=LD5f5mRsPBBGv/unmS6PKW+8j11tQoCJyDUIk5V1s2vWTiFyabHvrtykwnhRBcbqBaTR+d
-        di6/nPRJUx4b/EhRF1K/dzkLmo5Dx7PpP7tl9ZRbKqNz0K7m1h1fwozP3PEua41K74uaJB
-        8e+i8oYCm95dB7pVQ413LQLI4Kc2pIQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1663879635;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=G91bghnzz5qsrAZ1KwKzy4Is49Fx+R+59WwLRAB/H7c=;
-        b=bqkZQTDBGGe6kA9+RxsH35mSaR2qMh34fY0Dbv/LZvMMd/n/OzSrhrllMdPYaaSfAK3Okt
-        ezS9Mvx2iP6vmVBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EB6EA13AA5;
-        Thu, 22 Sep 2022 20:47:14 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 44fJONLJLGO6IQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Thu, 22 Sep 2022 20:47:14 +0000
-Message-ID: <719a7ea0-c152-af03-8f6c-7dda702d1863@suse.cz>
-Date:   Thu, 22 Sep 2022 22:47:14 +0200
+        Thu, 22 Sep 2022 16:52:59 -0400
+Received: from mail-vs1-xe44.google.com (mail-vs1-xe44.google.com [IPv6:2607:f8b0:4864:20::e44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FB3710AB14
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 13:52:59 -0700 (PDT)
+Received: by mail-vs1-xe44.google.com with SMTP id m65so11690659vsc.1
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 13:52:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date;
+        bh=/VLGmsMauVfG+enZTZu/ewj+085KfTugYFPfY4C++4U=;
+        b=FKHuP3kx2dSmeS53qNFlBDDwPNgR+ULn8Tt6E9tycRj10FW37nqVHXGd26vfGCwutu
+         zmdshTAGZdWvatcJO5A11DsnmJ+WKg681biAnDhm/b5bkJ1rAln6jax+48D8TCnIj6e6
+         VRoQWFhpKw+CypaV6BcxEBWpnZAC3TsDf/93belIUxvzCeJZZbXdOyHGwNEB3py2yHpX
+         hnPTGzUq5wHs6oMqcfTrKKK+talLdkIdLXQ0A7jReJwiB+daZPfWvH30u1FsMZ3ykWzX
+         tjfJiQg7N+w0axj2jOpsWfPxIC+5rDeSCpS3wT0rElqF2YK8xCXV8cCyqwEIYv9zZfQj
+         p4Dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=/VLGmsMauVfG+enZTZu/ewj+085KfTugYFPfY4C++4U=;
+        b=7/e3FN5jdIzmfEtyyyc2aA1JcMpSWRNzujA+HJ0ke/G+HsMy/0B/X9NecCDujF4Fqj
+         52YKp6D9hXDoXj86L9MBX0ATmwrx8vk+WC+VUx/E2eeQbw2ryBfiN5IJXpnOlmyOXbGL
+         f17FR26uRzDgmipjxlVfv6x++LLhU6z26KSI6yQsmzLHSYKsPHEl9eZ2XGL85pYakAa2
+         2hWdBtA82jSB+i2siaYrP/SRu/SX/tjVUT/4YzbkQLrQqdfhPU7FcbD4dw3U4lXSmUfP
+         SadvbiHJNwZUaDvjB7Rud4R0B3nf6pwpAxU4L98oK5/1OmV97IRi/DswhWK+O2V8OJy6
+         HztQ==
+X-Gm-Message-State: ACrzQf3iNcwjtO6LBgjIT74H56M2HLb/7QR1B+WpveV0rB2clk7c1pP/
+        kbCDzb/GzKaRtd43QrViIF+xImz3wk4sTpMBhpk=
+X-Google-Smtp-Source: AMsMyM70mpluaV/GdkqtBWAF0NNM3dq/STc6PPYFsKg1I8l4e5EoTyNwY4pngIxGXyFi772Pz6TwLCKbgjVCqQcVMGs=
+X-Received: by 2002:a67:b80f:0:b0:398:9de6:2d6b with SMTP id
+ i15-20020a67b80f000000b003989de62d6bmr2343627vsf.1.1663879978025; Thu, 22 Sep
+ 2022 13:52:58 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] mm/slub: clean up create_unique_id()
-Content-Language: en-US
-To:     Chao Yu <chao@kernel.org>, Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Hugh Dickins <hugh@veritas.com>
-Cc:     Chao Yu <chao.yu@oppo.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Christoph Lameter <clameter@sgi.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20220918092146.4060783-1-chao@kernel.org>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20220918092146.4060783-1-chao@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a59:dc0e:0:b0:2f8:b755:422 with HTTP; Thu, 22 Sep 2022
+ 13:52:57 -0700 (PDT)
+Reply-To: jsmth8080@gmail.com
+From:   Jan Smith <maureencabrera633@gmail.com>
+Date:   Thu, 22 Sep 2022 22:52:57 +0200
+Message-ID: <CALH0pJw6Coy3B51mmqKorai6yq621Ls1bstW8Sed+YpKm9P=hQ@mail.gmail.com>
+Subject: Please Read
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.9 required=5.0 tests=BAYES_60,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:e44 listed in]
+        [list.dnswl.org]
+        *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
+        *      [score: 0.7397]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [jsmth8080[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [maureencabrera633[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [maureencabrera633[at]gmail.com]
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/18/22 11:21, Chao Yu wrote:
-> From: Chao Yu <chao.yu@oppo.com>
-> 
-> As Christophe JAILLET suggested:
-> 
-> In create_unique_id(),
-> 
-> "looks that ID_STR_LENGTH could even be reduced to 32 or 16.
-> 
-> The 2nd BUG_ON at the end of the function could certainly be just
-> removed as well or remplaced by a:
->         if (p > name + ID_STR_LENGTH - 1) {
->                 kfree(name);
->                 return -E<something>;
->         }
-> "
-> 
-> According to above suggestion, let's do below cleanups:
-> 1. reduce ID_STR_LENGTH to 32, as the buffer size should be enough;
-> 2. remove BUG_ON() and return error if check condition is true.
+Good Day,
 
-I'd leave a WARN_ON there as we really don't expect this to happen, so if it
-does, we should be loud about it and not silently fail.
+I've viewed your profile on Linkedin regarding a proposal that has
+something in common with you, kindly reply back for more details on my
+private email: jsmth8080@gmail.com
 
-> Link: https://lore.kernel.org/linux-mm/2025305d-16db-abdf-6cd3-1fb93371c2b4@wanadoo.fr/
-> Suggested-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> Fixes: 81819f0fc828 ("SLUB core")
-> Signed-off-by: Chao Yu <chao.yu@oppo.com>
-> ---
->  mm/slub.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/mm/slub.c b/mm/slub.c
-> index 5ba6db62a5ab..a045c1ca8772 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -5883,7 +5883,7 @@ static inline struct kset *cache_kset(struct kmem_cache *s)
->  	return slab_kset;
->  }
->  
-> -#define ID_STR_LENGTH 64
-> +#define ID_STR_LENGTH 32
->  
->  /* Create a unique string id for a slab cache:
->   *
-> @@ -5919,7 +5919,10 @@ static char *create_unique_id(struct kmem_cache *s)
->  		*p++ = '-';
->  	p += sprintf(p, "%07u", s->size);
-
-Hm but sprintf() will happily overflow, so if we only detect that
-afterwards, it's kinda too late to gracefully fail.
-Should use snprintf() then?
-
-> -	BUG_ON(p > name + ID_STR_LENGTH - 1);
-> +	if (p > name + ID_STR_LENGTH - 1) {
-> +		kfree(name);
-> +		return ERR_PTR(-EINVAL);
-> +	}
->  	return name;
->  }
->  
-
+Thanks,
+Jan Smith,
+jsmth8080@gmail.com
