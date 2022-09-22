@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C14D15E606C
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 13:05:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE8CE5E6075
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 13:06:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230340AbiIVLF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 07:05:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39902 "EHLO
+        id S230211AbiIVLGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 07:06:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230164AbiIVLFT (ORCPT
+        with ESMTP id S230419AbiIVLFX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 07:05:19 -0400
+        Thu, 22 Sep 2022 07:05:23 -0400
 Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A6BD5890;
-        Thu, 22 Sep 2022 04:05:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5960D5776;
+        Thu, 22 Sep 2022 04:05:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
         s=smtpout1; t=1663844382;
-        bh=9PF0WUXMXJr4ttYYrn5/dDzZ2ytq5f5D8QAghnmoM+c=;
-        h=From:To:Cc:Subject:Date:From;
-        b=jNyaRej48gUWXI8j9oE4gbDoTTzz4+7KxYjeoUwxGWNpaZiXQ3Te4w6uPATKKimEg
-         EB6EYgxwxZoxMq38DbQ22Q8zDOIy3rTSQXQuxchxJhJASIm2KaIL+4tTARnyxHORjG
-         nJL2P9rnXyukJA7k/it47FSjm0s/SEMrzgmhkBd84oUK6OphEe8Adomi9+FFGU51sO
-         u6zh5MC8Z6ogM3+D9Br+GiJ03ntOJXu8lWMK9jvhfHRtuQJ1t/WJrKPdeTcLLfaEin
-         whIj5NzRPgp2ceXYlFgyyvAlwoMm3anqUVieM7Eb1DliWebkPdC7LVw1TQGBG/Qfe2
-         +ZTlwKjs0uvRQ==
+        bh=3FQzak7NFQCeQ17sM6xyWBPLJooy+CEjUwRxboNNo2U=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=X+/AbbML2/P0quyAJOv6FkyBz9aZksNSvQzjsfyfY11DV7G6AO+/jMRcaoOAixu3h
+         4Rvo2+dCvbyx47fwJNBoEz3xP7P+IYQn5qnKAFEF/5siZ0R7HOnhooLH6nTyP0Q4av
+         P3E7FFGSfYZpcFqsUNpk26qX6awghy/8QS6LL4KetWWxZ7UjSO+ZG2yBsu8tsEToC/
+         x+gTwrH1YE7j0k+t/Vbi7NZfxpEb9tN5VSJPyyUblxZUBn0D34EU9doL5YsjPpSj2C
+         3PDNZgaJc2YHBhVft1bcFw8cBSzUBCQZn8D3/I+eLq/uGZmfxjPsI1DfRHO/gsk7fN
+         fM6Joea+Ixd4w==
 Received: from localhost.localdomain (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4MYC3L0tXczNlJ;
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4MYC3L3KNkzNL5;
         Thu, 22 Sep 2022 06:59:42 -0400 (EDT)
 From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To:     Peter Zijlstra <peterz@infradead.org>
@@ -39,12 +39,13 @@ Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
         carlos@redhat.com, Peter Oskolkov <posk@posk.io>,
         Alexander Mikhalitsyn <alexander@mihalicyn.com>,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH v4 00/25] RSEQ node id and virtual cpu id extensions
-Date:   Thu, 22 Sep 2022 06:59:15 -0400
-Message-Id: <20220922105941.237830-1-mathieu.desnoyers@efficios.com>
+Subject: [PATCH v4 01/25] rseq: Introduce feature size and alignment ELF auxiliary vector entries
+Date:   Thu, 22 Sep 2022 06:59:16 -0400
+Message-Id: <20220922105941.237830-2-mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220922105941.237830-1-mathieu.desnoyers@efficios.com>
+References: <20220922105941.237830-1-mathieu.desnoyers@efficios.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
@@ -55,112 +56,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Extend the rseq ABI to expose a NUMA node ID and a vm_vcpu_id field.
+Export the rseq feature size supported by the kernel as well as the
+required allocation alignment for the rseq per-thread area to user-space
+through ELF auxiliary vector entries.
 
-The NUMA node ID field allows implementing a faster getcpu(2) in libc.
+This is part of the extensible rseq ABI.
 
-The virtual cpu id allows ideal scaling (down or up) of user-space
-per-cpu data structures. The virtual cpu ids allocated within a memory
-space are tracked by the scheduler, which takes into account the number
-of concurrently running threads, thus implicitly considering the number
-of threads, the cpu affinity, the cpusets applying to those threads, and
-the number of logical cores on the system.
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+---
+ fs/binfmt_elf.c             | 5 +++++
+ include/uapi/linux/auxvec.h | 2 ++
+ include/uapi/linux/rseq.h   | 5 +++++
+ 3 files changed, 12 insertions(+)
 
-This series is based on the v5.19 tag.
-
-Thanks,
-
-Mathieu
-
-Mathieu Desnoyers (25):
-  rseq: Introduce feature size and alignment ELF auxiliary vector
-    entries
-  rseq: Introduce extensible rseq ABI
-  rseq: Extend struct rseq with numa node id
-  selftests/rseq: Use ELF auxiliary vector for extensible rseq
-  selftests/rseq: Implement rseq numa node id field selftest
-  lib: Invert _find_next_bit source arguments
-  lib: Implement find_{first,next}_{zero,one}_and_zero_bit
-  cpumask: Implement cpumask_{first,next}_{zero,one}_and_zero
-  sched: Introduce per memory space current virtual cpu id
-  rseq: Extend struct rseq with per memory space vcpu id
-  selftests/rseq: Remove RSEQ_SKIP_FASTPATH code
-  selftests/rseq: Implement rseq vm_vcpu_id field support
-  selftests/rseq: x86: Template memory ordering and percpu access mode
-  selftests/rseq: arm: Template memory ordering and percpu access mode
-  selftests/rseq: arm64: Template memory ordering and percpu access mode
-  selftests/rseq: mips: Template memory ordering and percpu access mode
-  selftests/rseq: ppc: Template memory ordering and percpu access mode
-  selftests/rseq: s390: Template memory ordering and percpu access mode
-  selftests/rseq: riscv: Template memory ordering and percpu access mode
-  selftests/rseq: Implement basic percpu ops vm_vcpu_id test
-  selftests/rseq: Implement parametrized vm_vcpu_id test
-  selftests/rseq: x86: Implement rseq_load_u32_u32
-  selftests/rseq: Implement numa node id vs vm_vcpu_id invariant test
-  selftests/rseq: parametrized test: Report/abort on negative cpu id
-  tracing/rseq: Add mm_vcpu_id field to rseq_update
-
- fs/binfmt_elf.c                               |    5 +
- fs/exec.c                                     |    6 +
- include/linux/cpumask.h                       |   86 ++
- include/linux/find.h                          |  123 +-
- include/linux/mm.h                            |   25 +
- include/linux/mm_types.h                      |  110 +-
- include/linux/sched.h                         |    9 +
- include/trace/events/rseq.h                   |    7 +-
- include/uapi/linux/auxvec.h                   |    2 +
- include/uapi/linux/rseq.h                     |   22 +
- init/Kconfig                                  |    4 +
- kernel/fork.c                                 |   11 +-
- kernel/ptrace.c                               |    2 +-
- kernel/rseq.c                                 |   61 +-
- kernel/sched/core.c                           |   49 +
- kernel/sched/sched.h                          |  166 +++
- kernel/signal.c                               |    2 +
- lib/find_bit.c                                |   17 +-
- tools/include/linux/find.h                    |    9 +-
- tools/lib/find_bit.c                          |   17 +-
- tools/testing/selftests/rseq/.gitignore       |    5 +
- tools/testing/selftests/rseq/Makefile         |   20 +-
- .../testing/selftests/rseq/basic_numa_test.c  |  117 ++
- .../selftests/rseq/basic_percpu_ops_test.c    |   46 +-
- tools/testing/selftests/rseq/basic_test.c     |    4 +
- tools/testing/selftests/rseq/compiler.h       |    6 +
- tools/testing/selftests/rseq/param_test.c     |  157 ++-
- tools/testing/selftests/rseq/rseq-abi.h       |   22 +
- tools/testing/selftests/rseq/rseq-arm-bits.h  |  505 +++++++
- tools/testing/selftests/rseq/rseq-arm.h       |  701 +---------
- .../testing/selftests/rseq/rseq-arm64-bits.h  |  392 ++++++
- tools/testing/selftests/rseq/rseq-arm64.h     |  520 +------
- .../testing/selftests/rseq/rseq-bits-reset.h  |   10 +
- .../selftests/rseq/rseq-bits-template.h       |   39 +
- tools/testing/selftests/rseq/rseq-mips-bits.h |  462 +++++++
- tools/testing/selftests/rseq/rseq-mips.h      |  646 +--------
- tools/testing/selftests/rseq/rseq-ppc-bits.h  |  454 +++++++
- tools/testing/selftests/rseq/rseq-ppc.h       |  617 +--------
- .../testing/selftests/rseq/rseq-riscv-bits.h  |  410 ++++++
- tools/testing/selftests/rseq/rseq-riscv.h     |  529 +-------
- tools/testing/selftests/rseq/rseq-s390-bits.h |  474 +++++++
- tools/testing/selftests/rseq/rseq-s390.h      |  495 +------
- tools/testing/selftests/rseq/rseq-skip.h      |   65 -
- tools/testing/selftests/rseq/rseq-x86-bits.h  | 1036 ++++++++++++++
- tools/testing/selftests/rseq/rseq-x86.h       | 1193 +----------------
- tools/testing/selftests/rseq/rseq.c           |   86 +-
- tools/testing/selftests/rseq/rseq.h           |  229 +++-
- .../testing/selftests/rseq/run_param_test.sh  |    5 +
- 48 files changed, 5286 insertions(+), 4692 deletions(-)
- create mode 100644 tools/testing/selftests/rseq/basic_numa_test.c
- create mode 100644 tools/testing/selftests/rseq/rseq-arm-bits.h
- create mode 100644 tools/testing/selftests/rseq/rseq-arm64-bits.h
- create mode 100644 tools/testing/selftests/rseq/rseq-bits-reset.h
- create mode 100644 tools/testing/selftests/rseq/rseq-bits-template.h
- create mode 100644 tools/testing/selftests/rseq/rseq-mips-bits.h
- create mode 100644 tools/testing/selftests/rseq/rseq-ppc-bits.h
- create mode 100644 tools/testing/selftests/rseq/rseq-riscv-bits.h
- create mode 100644 tools/testing/selftests/rseq/rseq-s390-bits.h
- delete mode 100644 tools/testing/selftests/rseq/rseq-skip.h
- create mode 100644 tools/testing/selftests/rseq/rseq-x86-bits.h
-
+diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
+index 63c7ebb0da89..04fca1e4cbd2 100644
+--- a/fs/binfmt_elf.c
++++ b/fs/binfmt_elf.c
+@@ -46,6 +46,7 @@
+ #include <linux/cred.h>
+ #include <linux/dax.h>
+ #include <linux/uaccess.h>
++#include <linux/rseq.h>
+ #include <asm/param.h>
+ #include <asm/page.h>
+ 
+@@ -288,6 +289,10 @@ create_elf_tables(struct linux_binprm *bprm, const struct elfhdr *exec,
+ 	if (bprm->have_execfd) {
+ 		NEW_AUX_ENT(AT_EXECFD, bprm->execfd);
+ 	}
++#ifdef CONFIG_RSEQ
++	NEW_AUX_ENT(AT_RSEQ_FEATURE_SIZE, offsetof(struct rseq, end));
++	NEW_AUX_ENT(AT_RSEQ_ALIGN, __alignof__(struct rseq));
++#endif
+ #undef NEW_AUX_ENT
+ 	/* AT_NULL is zero; clear the rest too */
+ 	memset(elf_info, 0, (char *)mm->saved_auxv +
+diff --git a/include/uapi/linux/auxvec.h b/include/uapi/linux/auxvec.h
+index c7e502bf5a6f..6991c4b8ab18 100644
+--- a/include/uapi/linux/auxvec.h
++++ b/include/uapi/linux/auxvec.h
+@@ -30,6 +30,8 @@
+ 				 * differ from AT_PLATFORM. */
+ #define AT_RANDOM 25	/* address of 16 random bytes */
+ #define AT_HWCAP2 26	/* extension of AT_HWCAP */
++#define AT_RSEQ_FEATURE_SIZE	27	/* rseq supported feature size */
++#define AT_RSEQ_ALIGN		28	/* rseq allocation alignment */
+ 
+ #define AT_EXECFN  31	/* filename of program */
+ 
+diff --git a/include/uapi/linux/rseq.h b/include/uapi/linux/rseq.h
+index 77ee207623a9..05d3c4cdeb40 100644
+--- a/include/uapi/linux/rseq.h
++++ b/include/uapi/linux/rseq.h
+@@ -130,6 +130,11 @@ struct rseq {
+ 	 *     this thread.
+ 	 */
+ 	__u32 flags;
++
++	/*
++	 * Flexible array member at end of structure, after last feature field.
++	 */
++	char end[];
+ } __attribute__((aligned(4 * sizeof(__u64))));
+ 
+ #endif /* _UAPI_LINUX_RSEQ_H */
 -- 
 2.25.1
 
