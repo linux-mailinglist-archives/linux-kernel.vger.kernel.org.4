@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCB545E584A
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 03:54:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B3C35E5850
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 03:58:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229967AbiIVBy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 21:54:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51770 "EHLO
+        id S230190AbiIVB6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 21:58:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229909AbiIVByX (ORCPT
+        with ESMTP id S229566AbiIVB6m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 21:54:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2A1DA99EA
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 18:54:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2778F62E03
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 01:54:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E545C433D6;
-        Thu, 22 Sep 2022 01:54:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663811660;
-        bh=daKmN7uJuDeH1R9QVXhts08inJKQ5l61NyNLAVl0mw8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=P2BbwMgGbIs43cgBkNNo0FkR8WQutLBQUetMagrS+69fFNB11WgGFnCchJ3YWd3c1
-         jvhTnp5j4u6fQrPODLUgmdpe3VdY0S8vexR7eoQbKpMy++YSfAhoPi1vSBdwCO7M3D
-         qPkZPQ/5MnRy1KoUJL13g39/9HY8rKPWA7PftAYKIGNIAMgcD2wQREmlIk/Y7oT6ci
-         JGMgDxaIpd75TtxD/xz7E5aenj2kwR6ftOvRVnVtgD4P2/ilCOISRSyAFoM6A8DEur
-         TOvX33449C40W6rKb3q7kYC0ETljarGWcl/rOI6JFIfi7e8nUV9QJitfmAGQpZb3ps
-         RiCY75RhVNw8A==
-Message-ID: <44a1eca6-568b-a752-ef01-06de489eb466@kernel.org>
-Date:   Thu, 22 Sep 2022 09:54:16 +0800
+        Wed, 21 Sep 2022 21:58:42 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C88A3D06
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 18:58:41 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MXz0X74vszHqH1;
+        Thu, 22 Sep 2022 09:56:28 +0800 (CST)
+Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 22 Sep 2022 09:58:39 +0800
+Received: from [10.174.179.24] (10.174.179.24) by
+ dggpemm100009.china.huawei.com (7.185.36.113) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 22 Sep 2022 09:58:38 +0800
+Subject: Re: [PATCH] mm: hugetlb: fix UAF in hugetlb_handle_userfault
+To:     Andrew Morton <akpm@linux-foundation.org>
+References: <20220921083440.1267903-1-liushixin2@huawei.com>
+ <20220921120748.79f3255fa0a06b182576f497@linux-foundation.org>
+CC:     Liu Zixian <liuzixian4@huawei.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+From:   Liu Shixin <liushixin2@huawei.com>
+Message-ID: <ced8f78a-1f86-ee63-cc48-caed243ce197@huawei.com>
+Date:   Thu, 22 Sep 2022 09:58:38 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.7.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v3] f2fs: fix to detect corrupted meta ino
-Content-Language: en-US
-To:     jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-References: <20220913074812.2300528-1-chao@kernel.org>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20220913074812.2300528-1-chao@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <20220921120748.79f3255fa0a06b182576f497@linux-foundation.org>
+Content-Type: text/plain; charset="windows-1252"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Originating-IP: [10.174.179.24]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm100009.china.huawei.com (7.185.36.113)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,76 +57,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ping,
 
-On 2022/9/13 15:48, Chao Yu wrote:
-> It is possible that ino of dirent or orphan inode is corrupted in a
-> fuzzed image, occasionally, if corrupted ino is equal to meta ino:
-> meta_ino, node_ino or compress_ino, caller of f2fs_iget() from below
-> call paths will get meta inode directly, it's not allowed, let's
-> add sanity check to detect such cases.
-> 
-> case #1
-> - recover_dentry
->   - __f2fs_find_entry
->   - f2fs_iget_retry
-> 
-> case #2
-> - recover_orphan_inode
->   - f2fs_iget_retry
-> 
-> Signed-off-by: Chao Yu <chao@kernel.org>
-> ---
-> v3:
-> - update commit title/message
-> - change logic inside f2fs_iget() rather than its caller
->   fs/f2fs/inode.c | 25 ++++++++++++++++++-------
->   1 file changed, 18 insertions(+), 7 deletions(-)
-> 
-> diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
-> index cde0a3dc80c3..1baac6056733 100644
-> --- a/fs/f2fs/inode.c
-> +++ b/fs/f2fs/inode.c
-> @@ -487,6 +487,12 @@ static int do_read_inode(struct inode *inode)
->   	return 0;
->   }
->   
-> +static bool is_meta_ino(struct f2fs_sb_info *sbi, unsigned int ino)
-> +{
-> +	return ino == F2FS_NODE_INO(sbi) || ino == F2FS_META_INO(sbi) ||
-> +		ino == F2FS_COMPRESS_INO(sbi);
-> +}
-> +
->   struct inode *f2fs_iget(struct super_block *sb, unsigned long ino)
->   {
->   	struct f2fs_sb_info *sbi = F2FS_SB(sb);
-> @@ -497,17 +503,22 @@ struct inode *f2fs_iget(struct super_block *sb, unsigned long ino)
->   	if (!inode)
->   		return ERR_PTR(-ENOMEM);
->   
-> +	if (is_meta_ino(sbi, ino)) {
-> +		if (!(inode->i_state & I_NEW)) {
-> +			f2fs_err(sbi, "detect corrupted inode no:%lu, run fsck to repair", ino);
-> +			set_sbi_flag(sbi, SBI_NEED_FSCK);
-> +			ret = -EFSCORRUPTED;
-> +			trace_f2fs_iget_exit(inode, ret);
-> +			iput(inode);
-> +			return ERR_PTR(ret);
-> +		}
-> +		goto make_now;
-> +	}
-> +
->   	if (!(inode->i_state & I_NEW)) {
->   		trace_f2fs_iget(inode);
->   		return inode;
->   	}
-> -	if (ino == F2FS_NODE_INO(sbi) || ino == F2FS_META_INO(sbi))
-> -		goto make_now;
-> -
-> -#ifdef CONFIG_F2FS_FS_COMPRESSION
-> -	if (ino == F2FS_COMPRESS_INO(sbi))
-> -		goto make_now;
-> -#endif
->   
->   	ret = do_read_inode(inode);
->   	if (ret)
+
+On 2022/9/22 3:07, Andrew Morton wrote:
+> On Wed, 21 Sep 2022 16:34:40 +0800 Liu Shixin <liushixin2@huawei.com> wrote:
+>
+>> The vma_lock and hugetlb_fault_mutex are dropped before handling
+>> userfault and reacquire them again after handle_userfault(), but
+>> reacquire the vma_lock could lead to UAF[1] due to the following
+>> race,
+>>
+>> hugetlb_fault
+>>   hugetlb_no_page
+>>     /*unlock vma_lock */
+>>     hugetlb_handle_userfault
+>>       handle_userfault
+>>         /* unlock mm->mmap_lock*/
+>>                                            vm_mmap_pgoff
+>>                                              do_mmap
+>>                                                mmap_region
+>>                                                  munmap_vma_range
+>>                                                    /* clean old vma */
+>>         /* lock vma_lock again  <--- UAF */
+>>     /* unlock vma_lock */
+>>
+>> Since the vma_lock will unlock immediately after hugetlb_handle_userfault(),
+>> let's drop the unneeded lock and unlock in hugetlb_handle_userfault() to fix
+>> the issue.
+>>
+>> @@ -5508,17 +5507,12 @@ static inline vm_fault_t hugetlb_handle_userfault(struct vm_area_struct *vma,
+>>  
+>>  	/*
+>>  	 * vma_lock and hugetlb_fault_mutex must be
+>> -	 * dropped before handling userfault.  Reacquire
+>> -	 * after handling fault to make calling code simpler.
+>> +	 * dropped before handling userfault.
+>>  	 */
+>>  	hugetlb_vma_unlock_read(vma);
+>>  	hash = hugetlb_fault_mutex_hash(mapping, idx);
+>>  	mutex_unlock(&hugetlb_fault_mutex_table[hash]);
+>> -	ret = handle_userfault(&vmf, reason);
+>> -	mutex_lock(&hugetlb_fault_mutex_table[hash]);
+>> -	hugetlb_vma_lock_read(vma);
+>> -
+>> -	return ret;
+>> +	return handle_userfault(&vmf, reason);
+>>  }
+> Current code is rather different from this.  So if the bug still exists
+> in current code, please verify this and redo the patch appropriately?
+>
+> And hang on to this version to help with the -stable backporting.
+>
+> Thanks.
+> .
+This patch conflicts with patch series "hugetlb: Use new vma lock for huge pmd sharing synchronization".
+So I reproduce the problem on next-20220920 and this patch is based on next-20220920 instead of mainline.
+This problem is existed since v4.11. I will send the stable version later.
+
