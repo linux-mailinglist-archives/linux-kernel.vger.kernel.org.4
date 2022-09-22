@@ -2,103 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AE875E6B81
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 21:08:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 919F55E6B86
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 21:08:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232327AbiIVTIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 15:08:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49836 "EHLO
+        id S232502AbiIVTIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 15:08:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232294AbiIVTIF (ORCPT
+        with ESMTP id S232278AbiIVTIw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 15:08:05 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38040100A81;
-        Thu, 22 Sep 2022 12:08:03 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id 78so10053856pgb.13;
-        Thu, 22 Sep 2022 12:08:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=DvLvACHlAehE0+/VISWaqhZ6RLsIF/LLtwXH5V+If6Y=;
-        b=I3mXtIhfq/vSa3NTg9CoLzXQ4wtZVzpkQp4NFGSLsGHabPDFNmdDQhjyHZNrA1OgTk
-         pWJaRnAyD3Ifad+db9xlYczOmpeVFRVLSh2dfe6AKDry63Lg+WCDmv2K3GfmPfEv2beM
-         XTNX3BXFx8VAYtLQpp5zpoPNdxyvFG41hNXWU/9IKYPzIG7jUdXAseS6TR+C1indYYr7
-         wEoZwGA7DkPFttTQ0hTeIAKJrzIrBrJEffyEU3na7PJUGkFqejc80iapPhMRAwyA8R9l
-         xOBt/YBpqs9lfKSx0R3TmKlOGxft9wmmx7QupyLi+TNkgWF6HCbtudeBA4PnZlK3OxgF
-         s3tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=DvLvACHlAehE0+/VISWaqhZ6RLsIF/LLtwXH5V+If6Y=;
-        b=28UZ1UTc+SQBywy0g24VgNqZi8zRE+UKynZ8xN6ri0WTEVRPKA+p4utSuiW+GuAi+1
-         z8YY3/NICvum7x3D78gUNYAXVI3pNsPzEyd2azwcAlhRjALrFcsssrot6Ls9S8dxb8Av
-         GdkOMPIQtPe8kRYDXXQiK2Wnpr0aZOptZRfBKeYcfaEFpYuMjB4YTVfOS5md8xQFxZlS
-         YM4xL+t5UBi1xAip9saRikt7orpvI+yIVh9HLLXZGWokf4Q4NYDLgyNfhVkfBFolav2B
-         8w5IAkyUz0EiW//iAjom4CXZWWQ+Hz/+YXnjFSg5RnrsxJFX0UjlM6n4oa/1m7S2eK4W
-         +qYA==
-X-Gm-Message-State: ACrzQf0Mpr6LC7K0QuoCtVJVQz/xPhQXHxyU/jTMJ2t5+/5K8iJ2Y6ow
-        lSgMXcRYtdhKyM0oHK1S3K0=
-X-Google-Smtp-Source: AMsMyM7LHAIy4I7fv30uoFplBqBIc93VYZkJZR/ze72izqH9c5B+bkVQdsnkKY3Pw9+o0FEQXVrWdQ==
-X-Received: by 2002:a05:6a00:1c98:b0:540:d461:f9d8 with SMTP id y24-20020a056a001c9800b00540d461f9d8mr5137009pfw.29.1663873683096;
-        Thu, 22 Sep 2022 12:08:03 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id w190-20020a6282c7000000b0053b723a74f7sm4818105pfd.90.2022.09.22.12.08.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 12:08:02 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 22 Sep 2022 09:08:01 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Kristen Carlson Accardi <kristen@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
-        cgroups@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: Re: [RFC PATCH 00/20] Add Cgroup support for SGX EPC memory
-Message-ID: <YyyykUJQtYbPVctn@slm.duckdns.org>
-References: <20220922171057.1236139-1-kristen@linux.intel.com>
- <YyyeSVSk/lWdo/W4@slm.duckdns.org>
- <4b8605533e5deade739249bfb341ab9c06d56a1e.camel@linux.intel.com>
+        Thu, 22 Sep 2022 15:08:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 507A4FCA70;
+        Thu, 22 Sep 2022 12:08:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DF34663792;
+        Thu, 22 Sep 2022 19:08:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 996B5C433D7;
+        Thu, 22 Sep 2022 19:08:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663873730;
+        bh=RvoDarC6U/fJABhMRerQJHoq4Ys6450eyjNtBdNlByk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Qp8tGMn8EsST1hu+HRRx8YpEJqMvJSGxm2n68qULxO7b0Au25DDkHLpqI7P3v/zQa
+         en7biq6cVEUKGmy9aaxgqbOU0N36ML/sg/CeHFzOoViBhyXKitDTyhvfmaSOIvypcX
+         9sAsUjBqkSGKfGpPfp5KJe0HUJhtoOE3OBhKMwyYU8Zd9bCovV21SWb77cUZZzKKrC
+         z2OKXi/rOFf31CkXUm85AMwvhvXZX2DU3Y3EEyBae507rAAbQeW0BlDWGPOuJLK25A
+         xAkUKlQzyjvwGlcBfw6IB35jewCqv41ykEAK8u74QHQgrMTDeG07hxWvHwgpWIGm2V
+         qNwLCBbKjJPHA==
+Date:   Thu, 22 Sep 2022 14:08:44 -0500
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Adam Radford <aradford@gmail.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH][next] scsi: 3w-xxxx: Replace one-element array with
+ flexible-array member
+Message-ID: <YyyyvB30jnjRaw/F@work>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4b8605533e5deade739249bfb341ab9c06d56a1e.camel@linux.intel.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+One-element arrays are deprecated, and we are replacing them with flexible
+array members instead. So, replace one-element array with flexible-array
+member in struct TAG_TW_New_Ioctl and refactor the rest of the code,
+accordingly.
 
-On Thu, Sep 22, 2022 at 11:59:14AM -0700, Kristen Carlson Accardi wrote:
-> Thanks for your question. The SGX EPC memory is a global shared
-> resource that can be over committed. The SGX EPC controller should be
-> used similarly to the normal memory controller. Normally when there is
-> pressure on EPC memory, the reclaimer thread will write out pages from
-> EPC memory to a backing RAM that is allocated per enclave. It is
-> possible currently for even a single enclave to force all the other
-> enclaves to have their epc pages written to backing RAM by allocating
-> all the available system EPC memory. This can cause performance issues
-> for the enclaves when they have to fault to load pages page in.
+Notice that, in multiple places, the subtraction of 1 from
+sizeof(TW_New_Ioctl) is removed, as this operation is now implicit
+after the flex-array transformation.
 
-Can you please give more concrete examples? I'd love to hear how the SGX EPC
-memory is typically used in what amounts and what's the performance
-implications when they get reclaimed and so on. ie. Please describe a
-realistic usage scenario of contention with sufficient details on how the
-system is set up, what the applications are using the SGX EPC memory for and
-how much, how the contention on memory affects the users and so on.
+Link: https://github.com/KSPP/linux/issues/79
+Link: https://github.com/KSPP/linux/issues/206
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+ drivers/scsi/3w-xxxx.c | 14 +++++++-------
+ drivers/scsi/3w-xxxx.h |  2 +-
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-Thank you.
-
+diff --git a/drivers/scsi/3w-xxxx.c b/drivers/scsi/3w-xxxx.c
+index a853c5497af6..ffdecb12d654 100644
+--- a/drivers/scsi/3w-xxxx.c
++++ b/drivers/scsi/3w-xxxx.c
+@@ -912,7 +912,7 @@ static long tw_chrdev_ioctl(struct file *file, unsigned int cmd, unsigned long a
+ 	data_buffer_length_adjusted = (data_buffer_length + 511) & ~511;
+ 
+ 	/* Now allocate ioctl buf memory */
+-	cpu_addr = dma_alloc_coherent(&tw_dev->tw_pci_dev->dev, data_buffer_length_adjusted+sizeof(TW_New_Ioctl) - 1, &dma_handle, GFP_KERNEL);
++	cpu_addr = dma_alloc_coherent(&tw_dev->tw_pci_dev->dev, data_buffer_length_adjusted + sizeof(TW_New_Ioctl), &dma_handle, GFP_KERNEL);
+ 	if (cpu_addr == NULL) {
+ 		retval = -ENOMEM;
+ 		goto out;
+@@ -921,7 +921,7 @@ static long tw_chrdev_ioctl(struct file *file, unsigned int cmd, unsigned long a
+ 	tw_ioctl = (TW_New_Ioctl *)cpu_addr;
+ 
+ 	/* Now copy down the entire ioctl */
+-	if (copy_from_user(tw_ioctl, argp, data_buffer_length + sizeof(TW_New_Ioctl) - 1))
++	if (copy_from_user(tw_ioctl, argp, data_buffer_length + sizeof(TW_New_Ioctl)))
+ 		goto out2;
+ 
+ 	passthru = (TW_Passthru *)&tw_ioctl->firmware_command;
+@@ -966,15 +966,15 @@ static long tw_chrdev_ioctl(struct file *file, unsigned int cmd, unsigned long a
+ 			/* Load the sg list */
+ 			switch (TW_SGL_OUT(tw_ioctl->firmware_command.opcode__sgloffset)) {
+ 			case 2:
+-				tw_ioctl->firmware_command.byte8.param.sgl[0].address = dma_handle + sizeof(TW_New_Ioctl) - 1;
++				tw_ioctl->firmware_command.byte8.param.sgl[0].address = dma_handle + sizeof(TW_New_Ioctl);
+ 				tw_ioctl->firmware_command.byte8.param.sgl[0].length = data_buffer_length_adjusted;
+ 				break;
+ 			case 3:
+-				tw_ioctl->firmware_command.byte8.io.sgl[0].address = dma_handle + sizeof(TW_New_Ioctl) - 1;
++				tw_ioctl->firmware_command.byte8.io.sgl[0].address = dma_handle + sizeof(TW_New_Ioctl);
+ 				tw_ioctl->firmware_command.byte8.io.sgl[0].length = data_buffer_length_adjusted;
+ 				break;
+ 			case 5:
+-				passthru->sg_list[0].address = dma_handle + sizeof(TW_New_Ioctl) - 1;
++				passthru->sg_list[0].address = dma_handle + sizeof(TW_New_Ioctl);
+ 				passthru->sg_list[0].length = data_buffer_length_adjusted;
+ 				break;
+ 			}
+@@ -1017,12 +1017,12 @@ static long tw_chrdev_ioctl(struct file *file, unsigned int cmd, unsigned long a
+ 	}
+ 
+ 	/* Now copy the response to userspace */
+-	if (copy_to_user(argp, tw_ioctl, sizeof(TW_New_Ioctl) + data_buffer_length - 1))
++	if (copy_to_user(argp, tw_ioctl, sizeof(TW_New_Ioctl) + data_buffer_length))
+ 		goto out2;
+ 	retval = 0;
+ out2:
+ 	/* Now free ioctl buf memory */
+-	dma_free_coherent(&tw_dev->tw_pci_dev->dev, data_buffer_length_adjusted+sizeof(TW_New_Ioctl) - 1, cpu_addr, dma_handle);
++	dma_free_coherent(&tw_dev->tw_pci_dev->dev, data_buffer_length_adjusted + sizeof(TW_New_Ioctl), cpu_addr, dma_handle);
+ out:
+ 	mutex_unlock(&tw_dev->ioctl_lock);
+ 	mutex_unlock(&tw_mutex);
+diff --git a/drivers/scsi/3w-xxxx.h b/drivers/scsi/3w-xxxx.h
+index e8f3f081b7d8..120a087bdf3c 100644
+--- a/drivers/scsi/3w-xxxx.h
++++ b/drivers/scsi/3w-xxxx.h
+@@ -348,7 +348,7 @@ typedef struct TAG_TW_New_Ioctl {
+ 	unsigned int data_buffer_length;
+ 	unsigned char padding [508];
+ 	TW_Command firmware_command;
+-	char data_buffer[1];
++	char data_buffer[];
+ } TW_New_Ioctl;
+ 
+ /* GetParam descriptor */
 -- 
-tejun
+2.34.1
+
