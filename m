@@ -2,219 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58F8F5E5EDB
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 11:46:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E218F5E5F07
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 11:54:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230047AbiIVJqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 05:46:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39964 "EHLO
+        id S231285AbiIVJyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 05:54:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbiIVJqo (ORCPT
+        with ESMTP id S231233AbiIVJxk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 05:46:44 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05EAFD4336
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 02:46:43 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id z13so559771ejp.6
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 02:46:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=hRCYYiumHAcy2FWq/eEk3hZ9Y8DhnwA96ZLwPN5poIw=;
-        b=UhGC0K24D+JVH9cAnZJSXjoL45ev1hjyRmMKYjNgy0sc2jKka0MvBA41oMpIPHjz2l
-         XT1LRUAfA8mTujnSNwMlu09Mj2WsGN0HBAe87Ui7otCVpbbQUaaDFTqt40u9HdNAp1u9
-         gf13B57mfGHbI2dU3VMI7dclaKBQxfmxljubSdLR430DqpWfHNwrgi4dVOGfLBtBVwTS
-         vL5QY8QmLW+kmF9gBXGN+BwwU2WCl9U9R6PQI2e0C3oT/33SAkbaBV4864DsvfS5IcZ0
-         r4wCDALVqBW7QM/g2dJMkPTdvq0Y5XiweNEaxhMN3ArofRZeaspWNvnB6BSuknzBYM/P
-         T/Qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=hRCYYiumHAcy2FWq/eEk3hZ9Y8DhnwA96ZLwPN5poIw=;
-        b=hxEfw/sQkN8xNsxoxWCWrZRpuOjhEV+c+CMHExFA7sNQxqc+ra0UObvdJhgmjFWN0Z
-         70bO//77fHkT522G8FiIaTvYgqz8ZbnkuFNRUEqvShMTZxEVCaBba4TGJkVGYv91oy8s
-         3g+NQh2oK1xkvNBvhH/ixpK/Gu8TQp3LXIJbLHgL0ucnxLdU0k2sXFBq7AWrbi44rEzM
-         h8RKAzQ3QHIYREWhYNVGyXpr+Ofrq9aJLvTQfKPxyyY5e0SS/Y5NLcKTUW4V7x44AdFC
-         nD8r/VU3i/C8IDSh9kFGsORvdtgYwDXtexpa1iQ8S49/0O472ECGG7Ig3ibIgLNkjWkf
-         TuqQ==
-X-Gm-Message-State: ACrzQf2WsKdtrSXG9wX0Txh3aWM+K9cFkjDdHEL7s4dLrf4z+ASdDtoL
-        wX/nmW1Q1OeXNXz5vnA4Pw6Ql/BJbvW60TLiTEth9w==
-X-Google-Smtp-Source: AMsMyM58IsyFu6NnF5lyhXrKJpDPlbxi9jxWGVJGhWUlhbtnDf/HM/nzbCdBHuF8TxFmPkiwsIchAn3qB3Ir602YR1E=
-X-Received: by 2002:a17:906:fe46:b0:73d:939a:ec99 with SMTP id
- wz6-20020a170906fe4600b0073d939aec99mr2039353ejb.169.1663840001362; Thu, 22
- Sep 2022 02:46:41 -0700 (PDT)
+        Thu, 22 Sep 2022 05:53:40 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35878D58A9;
+        Thu, 22 Sep 2022 02:53:27 -0700 (PDT)
+Received: from fraeml736-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MY9TL4Ff9z689t8;
+        Thu, 22 Sep 2022 17:48:38 +0800 (CST)
+Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
+ fraeml736-chm.china.huawei.com (10.206.15.217) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 22 Sep 2022 11:53:25 +0200
+Received: from localhost.localdomain (10.69.192.58) by
+ lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 22 Sep 2022 10:53:22 +0100
+From:   John Garry <john.garry@huawei.com>
+To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <jinpu.wang@cloud.ionos.com>, <damien.lemoal@opensource.wdc.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linuxarm@huawei.com>, <yangxingui@huawei.com>,
+        John Garry <john.garry@huawei.com>
+Subject: [PATCH v4 0/7] libsas and drivers: NCQ error handling
+Date:   Thu, 22 Sep 2022 17:46:51 +0800
+Message-ID: <1663840018-50161-1-git-send-email-john.garry@huawei.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
-References: <20220921153645.663680057@linuxfoundation.org>
-In-Reply-To: <20220921153645.663680057@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 22 Sep 2022 15:16:29 +0530
-Message-ID: <CA+G9fYtS97fKxEP1ZSUDOBsa8c0ktC8nGKPSxWjDNbBHwpE7Hw@mail.gmail.com>
-Subject: Re: [PATCH 5.10 00/39] 5.10.145-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.58]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ lhrpeml500003.china.huawei.com (7.191.162.67)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 21 Sept 2022 at 21:22, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.10.145 release.
-> There are 39 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 23 Sep 2022 15:36:33 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.10.145-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.10.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+As reported in [0], the pm8001 driver NCQ error handling more or less
+duplicates what libata does in link error handling, as follows:
+- abort all commands
+- do autopsy with read log ext 10 command
+- reset the target to recover, if necessary
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Indeed for the hisi_sas driver we want to add similar handling for NCQ
+errors.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+This series add a new libsas API - sas_ata_device_link_abort() - to handle
+host NCQ errors, and fixes up pm8001 and hisi_sas drivers to use it.
 
-NOTE:
-As we have already reported from the previous stable rc review
-about the gpiod test runs causing kernel crash on 5.19. 5.15 and 5.10
+A difference in the pm8001 driver NCQ error handling is that we send
+SATA_ABORT per-task prior to read log ext10, but I feel that this should
+not make a difference to the error handling.
 
-This is caused by commit 303e6da99429 ("gpio: mockup: remove gpio
-debugfs when remove device")
+Damien kindly tested previous the series for pm8001, but any further pm8001
+testing would be appreciated as I have since tweaked pm8001 handling again.
+This is because the pm8001 driver hangs on my arm64 machine read log ext10
+command.
 
-Crash log:
----------
+Finally with these changes we can make the libsas task alloc/free APIs
+private, which they should always have been.
 
-+ cd ./automated/linux/gpiod
-+ ./gpiod.sh /opt/libgpiod/bin/
-[INFO]  libgpiod test suite
-[INFO]  117 tests registered
-[INFO]  checking the linux kernel version
-[INFO]  kernel release is v5.10.145 - ok to run tests
-[INFO]  using gpio-tools from '/usr/bin'
-[   12.960531] Unable to handle kernel NULL pointer dereference at
-virtual address 00000000000000a0
-[   12.961269] Mem abort info:
-[   12.961490]   ESR =3D 0x96000006
-[   12.961749]   EC =3D 0x25: DABT (current EL), IL =3D 32 bits
-[   12.962164]   SET =3D 0, FnV =3D 0
-[   12.962389]   EA =3D 0, S1PTW =3D 0
-[   12.962652] Data abort info:
-[   12.962881]   ISV =3D 0, ISS =3D 0x00000006
-[   12.963163]   CM =3D 0, WnR =3D 0
-[   12.963749] user pgtable: 4k pages, 48-bit VAs, pgdp=3D000000010460c000
-[   12.964233] [00000000000000a0] pgd=3D0000000104421003,
-p4d=3D0000000104421003, pud=3D00000001045cf003, pmd=3D0000000000000000
-[   12.965008] Internal error: Oops: 96000006 [#1] PREEMPT SMP
-[   12.965413] Modules linked in: gpio_mockup(-) cfg80211 bluetooth
-rfkill crct10dif_ce drm fuse
-[   12.966052] CPU: 3 PID: 369 Comm: gpiod-test Not tainted 5.10.145-rc1 #1
-[   12.966533] Hardware name: linux,dummy-virt (DT)
-[   12.966868] pstate: 60400005 (nZCv daif +PAN -UAO -TCO BTYPE=3D--)
-[   12.967317] pc : down_write+0x24/0x70
-[   12.967603] lr : simple_recursive_removal+0x58/0x274
+Based on mkp-scsi @ 6.1/scsi-staging 7f615c1b5986 ("scsi:
+scsi_transport_fc: Use %u for dev_loss_tmo")
 
-https://lore.kernel.org/lkml/CAMRc=3DMc_DkKN0qM9dBj_Pz2LeEhmT29GwmVf0tbunGk=
-aOaYUqA@mail.gmail.com/
+[0] https://lore.kernel.org/linux-scsi/8fb3b093-55f0-1fab-81f4-e8519810a978@huawei.com/
 
-## Build
-* kernel: 5.10.145-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.10.y
-* git commit: ca8291e3d06f6d6be2c539455efd2c40cb2bfbab
-* git describe: v5.10.144-40-gca8291e3d06f
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
-.144-40-gca8291e3d06f
+Changes since v3:
+- Add Damien's tags (thanks)
+- Modify hisi_sas processing as follows:
+  - use sas_task_abort() for rejected IO
+  - Modify abort task processing to issue softreset in certain circumstances
+- rebase
 
-## No Test Regressions (compared to v5.10.144)
+Changes since v2:
+- Stop sending SATA_ABORT all for pm8001 handling
+- Make "reset" optional in sas_ata_device_link_abort()
+- Drop Jack's ACK
 
-## No Metric Regressions (compared to v5.10.144)
+Changes since v1:
+- Rename sas_ata_link_abort() -> sas_ata_device_link_abort()
+- Set EH RESET flag in sas_ata_device_link_abort()
+- Add Jack's Ack tags
+- Rebase
 
-## No Test Fixes (compared to v5.10.144)
+John Garry (5):
+  scsi: libsas: Add sas_ata_device_link_abort()
+  scsi: hisi_sas: Move slot variable definition in hisi_sas_abort_task()
+  scsi: pm8001: Modify task abort handling for SATA task
+  scsi: pm8001: Use sas_ata_device_link_abort() to handle NCQ errors
+  scsi: libsas: Make sas_{alloc, alloc_slow, free}_task() private
 
-## No Metric Fixes (compared to v5.10.144)
+Xingui Yang (2):
+  scsi: hisi_sas: Add SATA_DISK_ERR bit handling for v3 hw
+  scsi: hisi_sas: Modify v3 HW SATA disk error state completion
+    processing
 
-## Test result summary
-total: 101642, pass: 89442, fail: 765, skip: 11240, xfail: 195
+ drivers/scsi/hisi_sas/hisi_sas.h       |   1 +
+ drivers/scsi/hisi_sas/hisi_sas_main.c  |  26 +++-
+ drivers/scsi/hisi_sas/hisi_sas_v3_hw.c |  53 ++++++-
+ drivers/scsi/libsas/sas_ata.c          |  12 ++
+ drivers/scsi/libsas/sas_init.c         |   3 -
+ drivers/scsi/libsas/sas_internal.h     |   4 +
+ drivers/scsi/pm8001/pm8001_hwi.c       | 188 ++++---------------------
+ drivers/scsi/pm8001/pm8001_sas.c       |   8 ++
+ drivers/scsi/pm8001/pm8001_sas.h       |   4 -
+ drivers/scsi/pm8001/pm80xx_hwi.c       | 177 +++--------------------
+ include/scsi/libsas.h                  |   4 -
+ include/scsi/sas_ata.h                 |   6 +
+ 12 files changed, 143 insertions(+), 343 deletions(-)
 
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 333 total, 333 passed, 0 failed
-* arm64: 65 total, 63 passed, 2 failed
-* i386: 55 total, 53 passed, 2 failed
-* mips: 56 total, 56 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 60 total, 55 passed, 5 failed
-* riscv: 27 total, 27 passed, 0 failed
-* s390: 24 total, 24 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 58 total, 56 passed, 2 failed
+-- 
+2.35.3
 
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kunit
-* kvm-unit-tests
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
