@@ -2,102 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECD645E5D41
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 10:18:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 556C25E5D27
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 10:14:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230137AbiIVIRq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 04:17:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59370 "EHLO
+        id S229749AbiIVIOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 04:14:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbiIVIRc (ORCPT
+        with ESMTP id S229819AbiIVIOE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 04:17:32 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D64DAE877
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 01:17:31 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id e18so12467326edj.3
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 01:17:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=melexis.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=1k72TxQk2XInW+TFTqOgkqy7p+VetIyc10AJO+4jvxc=;
-        b=pX/jVSaLO9K//GiJQijoGuDJTP9IxasXFTRyHrfMFk2i4E2LZmDQHlElFkV7v/xOIl
-         ww+aKiLw3vmS2M4gM/u5d3pXWompUKAkdx934gRs33YCbQDLUos539B/9CGvf0X15ri4
-         t88YdklfYK09MCzR11+QR/XKpaZYic9+h4QuNEzkv20m+1zUarpL004FOtK//GFazim3
-         B+dzS7wG6VeIHODGtqiVOFMnjrady8jAkHCfRg0OUM/cxCLVevxX731F/jCEQyjnKJzv
-         18VACQUsXvW+2xMgKD7K0IBTqjfals8MBylV7paJHLuU3xRL/E0pUxRX/ePVtZr4MYXj
-         UVUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=1k72TxQk2XInW+TFTqOgkqy7p+VetIyc10AJO+4jvxc=;
-        b=eF+FG88mwasbvVxz09d4vmsGd51mBaBJsTqu0fz85Wj0ko0Ma6VXoGdO4L6aekVZGW
-         jZBPEGBgD657oGyNGYclOoFT4KERfToUQllSCVM+f8BRNk7+Ri+Wpg/Y3MYMAwoBdPRO
-         iV3eLmBQYiP32X/IeHw7taFgD0omOnAa/lMXNLirVM2pZO9DhUiRYLQqBLA1X1H5xdgM
-         4Po/iujjxuN9soHS4TVrZnRv7aqTXwYDWsHrvjVWY1Z4WxQ+g9YP2parD2d43jCJHll7
-         KFSFfLmvxMcKZnYh87T+h0llF+Gi7taiRKiTnp+SVMqYuIdtEOAEqBRn9XHuwloGKdQ4
-         wFQw==
-X-Gm-Message-State: ACrzQf2PrHdtGvttHmaecK11YZhdgYUcQ19j00SIwyzv8gu34GGTsois
-        ydW44n6T30En195vCnwFmXWUKYOk1vvI2w==
-X-Google-Smtp-Source: AMsMyM6Zlfb7U2V7ivSXl/LJl3Y62UGKjZAQVMzdMdEjj88VgzW2VCHB0Nzk+iFQvjYEgrKVeUc4cA==
-X-Received: by 2002:a05:6402:380a:b0:451:ae08:7a6c with SMTP id es10-20020a056402380a00b00451ae087a6cmr1960322edb.161.1663834650083;
-        Thu, 22 Sep 2022 01:17:30 -0700 (PDT)
-Received: from cmo-ThinkPad-T495.tess.elex.be ([194.150.35.21])
-        by smtp.gmail.com with ESMTPSA id b10-20020aa7df8a000000b0044e01e2533asm3301303edy.43.2022.09.22.01.17.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 01:17:29 -0700 (PDT)
-From:   cmo@melexis.com
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Crt Mori <cmo@melexis.com>
-Subject: [PATCH v6 3/3] iio: temperature: mlx90632 Change return value of sensor measurement channel
-Date:   Thu, 22 Sep 2022 10:13:24 +0200
-Message-Id: <565d4df2592d751dc0f40908f2569b7c9af8e56e.1663834141.git.cmo@melexis.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1663834141.git.cmo@melexis.com>
-References: <cover.1663834141.git.cmo@melexis.com>
+        Thu, 22 Sep 2022 04:14:04 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAA3567CB2;
+        Thu, 22 Sep 2022 01:14:03 -0700 (PDT)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MY7Kf6d7jzHply;
+        Thu, 22 Sep 2022 16:11:50 +0800 (CST)
+Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 22 Sep 2022 16:14:01 +0800
+Received: from [10.174.178.46] (10.174.178.46) by
+ kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 22 Sep 2022 16:14:00 +0800
+Subject: Re: [PATCH 1/3] quota: Check next/prev free block number after
+ reading from quota file
+To:     Jan Kara <jack@suse.cz>
+CC:     <jack@suse.com>, <tytso@mit.edu>, <brauner@kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-ext4@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <yukuai3@huawei.com>
+References: <20220820110514.881373-1-chengzhihao1@huawei.com>
+ <20220820110514.881373-2-chengzhihao1@huawei.com>
+ <20220921133715.7tesk3qylombwmyk@quack3>
+From:   Zhihao Cheng <chengzhihao1@huawei.com>
+Message-ID: <41578612-d582-79ea-bb8e-89fa19d4406e@huawei.com>
+Date:   Thu, 22 Sep 2022 16:13:59 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
+In-Reply-To: <20220921133715.7tesk3qylombwmyk@quack3>
+Content-Type: text/plain; charset="gbk"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.178.46]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Crt Mori <cmo@melexis.com>
+ÔÚ 2022/9/21 21:37, Jan Kara Ð´µÀ:
+Hi Jan,
+> On Sat 20-08-22 19:05:12, Zhihao Cheng wrote:
+>> Following process:
+[...]
+>>
+>> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216372
+>> Fixes: 1da177e4c3f4152 ("Linux-2.6.12-rc2")
+> 
+> It's better to just have:
+> 
+> CC: stable@vger.kernel.org
+> 
+> here. Fixes tag pointing to kernel release is not very useful.
+Will add in v2.
+> 
+>> --- a/fs/quota/quota_tree.c
+>> +++ b/fs/quota/quota_tree.c
+>> @@ -71,6 +71,35 @@ static ssize_t write_blk(struct qtree_mem_dqinfo *info, uint blk, char *buf)
+>>   	return ret;
+>>   }
+>>   
+>> +static inline int do_check_range(struct super_block *sb, uint val, uint max_val)
+>> +{
+>> +	if (val >= max_val) {
+>> +		quota_error(sb, "Getting block too big (%u >= %u)",
+>> +			    val, max_val);
+>> +		return -EUCLEAN;
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+> 
+> I'd already provide min_val and the string for the message here as well (as
+> you do in patch 2). It is less churn in the next patch and free blocks
+> checking actually needs that as well. See below.
+> 
+>> +
+>> +static int check_free_block(struct qtree_mem_dqinfo *info,
+>> +			    struct qt_disk_dqdbheader *dh)
+>> +{
+>> +	int err = 0;
+>> +	uint nextblk, prevblk;
+>> +
+>> +	nextblk = le32_to_cpu(dh->dqdh_next_free);
+>> +	err = do_check_range(info->dqi_sb, nextblk, info->dqi_blocks);
+>> +	if (err)
+>> +		return err;
+>> +	prevblk = le32_to_cpu(dh->dqdh_prev_free);
+>> +	err = do_check_range(info->dqi_sb, prevblk, info->dqi_blocks);
+>> +	if (err)
+>> +		return err;
+> 
+> The free block should actually be > QT_TREEOFF so I'd add the check to
+> do_check_range().
 
-The current EINVAL value is more applicable to embedded library, where
-user can actually put the fixed value to the sensor. In case of the
-driver if the value of the channel is invalid it is better in inform
-userspace that Channel was out of range as that implies more to internal
-driver error than invalid input. It also makes for easier debugging of
-where the error comes from during the development.
+'dh->dqdh_next_free' may be updated when quota entry removed, 
+'dh->dqdh_next_free' can be used for next new quota entris.
+Before sending v2, I found 'dh->dqdh_next_free' and 'dh->dqdh_prev_free' 
+can easily be zero in newly allocated blocks when continually creating 
+files onwed by different users:
+find_free_dqentry
+   get_free_dqblk
+     write_blk(info, info->dqi_blocks, buf)  // zero'd qt_disk_dqdbheader
+     blk = info->dqi_blocks++   // allocate new one block
+   info->dqi_free_entry = blk   // will be used for new quota entries
 
-Signed-off-by: Crt Mori <cmo@melexis.com>
----
- drivers/iio/temperature/mlx90632.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+find_free_dqentry
+   if (info->dqi_free_entry)
+     blk = info->dqi_free_entry
+     read_blk(info, blk, buf)   // dh->dqdh_next_free = 
+dh->dqdh_prev_free = 0
 
-diff --git a/drivers/iio/temperature/mlx90632.c b/drivers/iio/temperature/mlx90632.c
-index 081803940261..224db7513baa 100644
---- a/drivers/iio/temperature/mlx90632.c
-+++ b/drivers/iio/temperature/mlx90632.c
-@@ -435,7 +435,7 @@ static int mlx90632_channel_new_select(int perform_ret, uint8_t *channel_new,
- 		*channel_old = 1;
- 		break;
- 	default:
--		return -EINVAL;
-+		return -ECHRNG;
- 	}
- 
- 	return 0;
--- 
-2.34.1
+I think it's normal when 'dh->dqdh_next_free' or 'dh->dqdh_prev_free' 
+equals to 0.
+> 
+> Also rather than having check_free_block(), I'd provide a helper function
+> like check_dquot_block_header() which will check only free blocks pointers
+> now and in later patches you can add other checks there.
+OK, will be updated in v2.
+> 
+> 								Honza
+> 
 
