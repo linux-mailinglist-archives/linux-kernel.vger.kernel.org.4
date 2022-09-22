@@ -2,75 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8C9C5E6BE8
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 21:41:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D382A5E6C90
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 22:01:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232439AbiIVTlV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 15:41:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34624 "EHLO
+        id S232310AbiIVUBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 16:01:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232414AbiIVTlR (ORCPT
+        with ESMTP id S229667AbiIVUBW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 15:41:17 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FD1F109770
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 12:41:16 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id g1-20020a17090a708100b00203c1c66ae3so3242127pjk.2
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 12:41:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=RYB6BGJvPvJGjlYGwc1124XJvSRMSlT6Ie4vSqCbQu8=;
-        b=NXNO7E7T+Eyi3WutyeW9ldUi9IoU9NNBJMhaTF0dVVd0vk8qpu3V4Gk5o1s+REoJBv
-         nMcvvb/RC6hRdTTXC9QTfK5ElqaoOjz91EccsETrFSLv1bmQsdZUJgaxtuXU3wRMTTWm
-         zXcAb3TAUVeLw9qFSdkggVM7eoBeTibVNtY9ZSSGm3JgIosnbXWMF8r5eiHxPL7pcz8W
-         FwDTQyPQvJWznbCcE0gTCQFaH9jYKKyQcuYpwD1OtQYoAJmuS/QdQHdbkTsLgpji8KVI
-         qnGEAytavQzjikZ8+gL8CInhjTbDuHOJeDGw5aYG22h7QJX7FS2L1/FkW09VAtxFQ62l
-         oHhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=RYB6BGJvPvJGjlYGwc1124XJvSRMSlT6Ie4vSqCbQu8=;
-        b=ba9EerL3+YDhCBfygZBZbEJF32L9cd+OBWyioRS9aIdROiLGJGi/z0TG+KYDZ7V2wr
-         JLgge8qPMI6axYGyRpExk5SjuDSuBE4Ol1EN0pXYFJv3gaGii6CFT0INt34XlMDjvYvX
-         ntrbXRMfhtFOJYReKYtx2ZRxgaTS+R42aqPHqMa/C2Jqm5Bqlvohii6fCY2j34Zr3pfk
-         0+4B8baBrtXKdOijapDKE0/8JhRzrgmHgp4XMtYS4POoU/n83oPO620FaFEUyA/W00E5
-         +2VtmvXVYg52iAcH9M3rxvkZluOM9rPf62sEtHb95VmrsdKnoqXCzfYGFkAmjhJThP3w
-         nqmg==
-X-Gm-Message-State: ACrzQf0jUXhxwLekOcX42bE9KQ60Na3N611Ean/klvdTHhlZXVjruTqf
-        bWamYf1TQFicW7iZzIfAEGXcjg==
-X-Google-Smtp-Source: AMsMyM6XM0Ni4PvQQLJgk+M0su4MCNPn4YnN2e4DGaaMICBByIDPbg1bMi1yQ96V9IntdeRL18JRlA==
-X-Received: by 2002:a17:902:b194:b0:176:d229:83bd with SMTP id s20-20020a170902b19400b00176d22983bdmr4740841plr.174.1663875675538;
-        Thu, 22 Sep 2022 12:41:15 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id u8-20020a170902e5c800b0017300ec80b0sm4618456plf.308.2022.09.22.12.41.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 12:41:15 -0700 (PDT)
-Date:   Thu, 22 Sep 2022 19:41:11 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     cgel.zte@gmail.com, pbonzini@redhat.com, shuah@kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        dmatlack@google.com, jmattson@google.com, peterx@redhat.com,
-        oupton@google.com, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jinpeng Cui <cui.jinpeng2@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH linux-next] KVM: selftests: remove redundant variable
- tsc_val
-Message-ID: <Yyy6VxMhhua1mj7P@google.com>
-References: <20220831143150.304406-1-cui.jinpeng2@zte.com.cn>
- <b9044b55-1498-3309-4db5-70ca2c20b3f7@linuxfoundation.org>
+        Thu, 22 Sep 2022 16:01:22 -0400
+X-Greylist: delayed 604 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 22 Sep 2022 13:00:30 PDT
+Received: from rhlx01.hs-esslingen.de (rhlx01.hs-esslingen.DE [IPv6:2001:7c0:700::10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DA0836781;
+        Thu, 22 Sep 2022 13:00:30 -0700 (PDT)
+Received: by rhlx01.hs-esslingen.de (Postfix, from userid 102)
+        id A8BA6277FBA8; Thu, 22 Sep 2022 21:42:15 +0200 (CEST)
+Date:   Thu, 22 Sep 2022 21:42:15 +0200
+From:   Andreas Mohr <andi@lisas.de>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     K Prateek Nayak <kprateek.nayak@amd.com>,
+        linux-kernel@vger.kernel.org, rafael@kernel.org, lenb@kernel.org,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        dave.hansen@linux.intel.com, bp@alien8.de, tglx@linutronix.de,
+        andi@lisas.de, puwen@hygon.cn, mario.limonciello@amd.com,
+        peterz@infradead.org, rui.zhang@intel.com, gpiccoli@igalia.com,
+        daniel.lezcano@linaro.org, ananth.narayan@amd.com,
+        gautham.shenoy@amd.com, Calvin Ong <calvin.ong@amd.com>,
+        stable@vger.kernel.org, regressions@lists.linux.dev
+Subject: Re: [PATCH] ACPI: processor_idle: Skip dummy wait for processors
+ based on the Zen microarchitecture
+Message-ID: <Yyy6l94G0O2B7Yh1@rhlx01.hs-esslingen.de>
+References: <20220921063638.2489-1-kprateek.nayak@amd.com>
+ <20e78a49-25df-c83d-842e-1d624655cfd7@intel.com>
+ <0885eecb-042f-3b74-2965-7d657de59953@amd.com>
+ <88c17568-8694-940a-0f1f-9d345e8dcbdb@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <b9044b55-1498-3309-4db5-70ca2c20b3f7@linuxfoundation.org>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+In-Reply-To: <88c17568-8694-940a-0f1f-9d345e8dcbdb@intel.com>
+X-Priority: none
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_NONE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,21 +51,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022, Shuah Khan wrote:
-> On 8/31/22 08:31, cgel.zte@gmail.com wrote:
-> > From: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
-> > 
-> > Return value directly from expression instead of
-> > getting value from redundant variable tsc_val.
-> > 
-> > Reported-by: Zeal Robot <zealci@zte.com.cn>
-> > Signed-off-by: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
-> > ---
+Hi,
 
-...
+On Thu, Sep 22, 2022 at 10:01:46AM -0700, Dave Hansen wrote:
+> diff --git a/drivers/acpi/processor_idle.c b/drivers/acpi/processor_idle.c
+> index 16a1663d02d4..9f40917c49ef 100644
+> --- a/drivers/acpi/processor_idle.c
+> +++ b/drivers/acpi/processor_idle.c
+> @@ -531,10 +531,27 @@ static void wait_for_freeze(void)
+>  	/* No delay is needed if we are in guest */
+>  	if (boot_cpu_has(X86_FEATURE_HYPERVISOR))
+>  		return;
+> +	/*
+> +	 * Modern (>=Nehalem) Intel systems use ACPI via intel_idle,
+> +	 * not this code.  Assume that any Intel systems using this
+> +	 * are ancient and may need the dummy wait.  This also assumes
+> +	 * that the motivating chipset issue was Intel-only.
+> +	 */
+> +	if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL)
+> +		return;
+>  #endif
+> -	/* Dummy wait op - must do something useless after P_LVL2 read
+> -	   because chipsets cannot guarantee that STPCLK# signal
+> -	   gets asserted in time to freeze execution properly. */
 
-> My understanding is that this patch isn't coming from individuals that work
-> for ZTE. We won't be able to accept these patches. Refer to the following
-> for reasons why we can't accept these patches.
+16 years ago,
+I did my testing on a VIA 8233/8235 chipset (AMD Athlon/Duron) system......
+(plus reading VIA spec PDFs which mentioned "STPCLK#" etc.).
 
-Ouch.  Thanks much for the heads up!
+
+
+
+AFAIR I was doing kernel profiling (via oprofile, IIRC)
+for painful performance hotspots (read: I/O accesses etc.), and
+this was one resulting place which I stumbled over.
+And if I'm not completely mistaken,
+that dummy wait I/O op *was* needed (else "nice" effects)
+on my system (put loud and clear: *non*-Intel).
+
+
+
+So one can see where my profiling effort went
+(*optimizing* things, not degrading them)
+--> hints that current Zen3-originating effort is not
+about a regression in the "regression bug" sense -
+merely a (albeit rather appreciable/sizeable... congrats!)
+performance deterioration vs.
+an optimal (currently non-achieved) software implementation state
+(also: of PORT-based handling [vs. MWAIT], mind you!).
+
+
+I still have that VIA hardware, but inactive
+(had the oh-so-usual capacitors issue :( ).
+
+
+Sorry for sabotaging your current fix efforts ;-) -
+but thank you very much for your work/discussion
+in this very central/hotpath area! (this extends to all of you...)
+
+Greetings
+
+Andreas Mohr
