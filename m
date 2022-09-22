@@ -2,99 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14B2F5E5B89
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 08:41:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 204DE5E5B94
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 08:44:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbiIVGlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 02:41:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51018 "EHLO
+        id S229612AbiIVGoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 02:44:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230189AbiIVGk4 (ORCPT
+        with ESMTP id S229603AbiIVGoU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 02:40:56 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B31EB6D6D
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 23:40:50 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id j16so13084234lfg.1
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 23:40:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=CzXRCK2IG+QiEk8VkCDJeJkkF52iVy5YTfg9HZImjvY=;
-        b=ws6HG2eAZetPyUECyjfgZiIzihmvBuQRn5Rlc3G7bw+z6eb19FZOsdT5dKIccwNUwY
-         dzW0+tmsxJekFSO3u6QnyzFi8u+aA3Pc3rEvE2BA3QR5xNjV+WxRz07OgNuSY+0mbLg5
-         A2dkBe9SKw3fzofiyuHGNH6vCbz/4geAspeD7U4THOB8+1X9XgP1Y8eviTEVH+ccUDq3
-         K0ukQCzwzTM40scUwHb+mM9L48FQDikcuyw0sSIPH5qND0fHLy2yVq2PGbs95iFHOXln
-         rKe/epApKCYa3pKY+3vXd7lx1UW+4pjS2bTRHfuZXAz3K940F10+peefMy4RCllt2kKC
-         4C9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=CzXRCK2IG+QiEk8VkCDJeJkkF52iVy5YTfg9HZImjvY=;
-        b=qnnypi7V83NrsnlFlGx8U/lmDsbt45gMDhwmKdt95jD7lTo2NpleDs7bYWJ14SrvPU
-         tnS3sjH1HaXq9pkHiVnvEBStyE8o+fIfiy8HMpwB1+GqaeM+6stl+DrwNX3VYyMfpJLm
-         sjco8t2XdTZ6C8h1EB5F0zkN2OJscuiNtZj/5GpAWhDRWHEgU4CS0Qq/4GRNUIXineyT
-         I4sP+VoUpv6r18DshJiQ06qLrznGejUIqwECAhHGKLPpFHPFjlZEHt/b+N5C1ZYbVcjw
-         tyIBcWGxSUN1RK8u72Jz50eyZCTveUYZY6/dkvk5grY7eflccDUsoqmZpEw9+R4GOnMN
-         spuQ==
-X-Gm-Message-State: ACrzQf1joO2PtQWDF6O9xlW4x3186Uf0lzU23lmeunnWSRZkPe1/fpBC
-        QTX1MXtFzL+dbVReLX3ZeCTe8tXhAZNor2SqzWypwA==
-X-Google-Smtp-Source: AMsMyM47CNyVKKtlB6i2kN5jbR/KyanyUMb96Q6n6vzqQv7PziSjblfyht55TZQVrjTgqz81gkDkRFaFQnvYsnPPsdM=
-X-Received: by 2002:a19:490b:0:b0:49f:52cf:aeaf with SMTP id
- w11-20020a19490b000000b0049f52cfaeafmr630419lfa.46.1663828848225; Wed, 21 Sep
- 2022 23:40:48 -0700 (PDT)
+        Thu, 22 Sep 2022 02:44:20 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B835EB6D4F;
+        Wed, 21 Sep 2022 23:44:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663829059; x=1695365059;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=YI6R/Fbd3ccV4vt0qaxDC0nMu1Hi71Zek1sN+E5/XWg=;
+  b=Jpr3y+b/J/7JDm9gvWnD+3omSAkWFE18a+wM3pO+D0H4Vl7UmWYfm6K8
+   sRkCk7dJ3uxt5N8v4dtyS3pf5Di7JJTu9zHE4j2PUdK8iNOYWY7NbXBnn
+   L0MbgfJAFT5x/YLQ2paQwkibKSRuwnM3WNZw5ABOPkKu3E7xWO9NPTzgb
+   M576bFjeXT5gVNrx+e5ZllPkB9B/59CVnPHdSnJjGBafWXNkisXNQh1EY
+   68h8jV0yA6aGxPGfgxAemKaG0DqWDDuzI8hC17U5bVmlP6ToqAFsaFIvN
+   imtOz0N1DU0kRgJcI8QNX4ggA03i/kB76r0ZUqjjIcbM3wehr4xwK51d4
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="297815098"
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="297815098"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 23:44:19 -0700
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="619674962"
+Received: from xingzhen-mobl.ccr.corp.intel.com (HELO [10.238.4.231]) ([10.238.4.231])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 23:44:11 -0700
+Message-ID: <f43d235b-2d74-c95b-c0c1-613239032c2d@linux.intel.com>
+Date:   Thu, 22 Sep 2022 14:44:09 +0800
 MIME-Version: 1.0
-References: <20220916080305.29574-1-vincent.guittot@linaro.org>
- <20220916080305.29574-7-vincent.guittot@linaro.org> <000c2893-feb4-373d-2234-2ca74be94714@arm.com>
- <CAKfTPtASminP4ogVRhcvQ4R3-x-E+UUzuMaEu-xQU_MtLr9+Xg@mail.gmail.com>
- <YyioI4iBFq8ib9JT@slm.duckdns.org> <20220921155521.qb3jb74nbjoenau6@airbuntu>
- <YytAa9a8DSyuJWhT@slm.duckdns.org> <CAKfTPtBCUu80dpGneyhsZneTtcqcm3DrVVoqv6rH60oX_vEz+Q@mail.gmail.com>
- <YytF7MoZxeZ6tpCM@slm.duckdns.org>
-In-Reply-To: <YytF7MoZxeZ6tpCM@slm.duckdns.org>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Thu, 22 Sep 2022 08:40:36 +0200
-Message-ID: <CAKfTPtD1P0oTf6drOW9XwVnQ8MsCihs0rV6j+L2HV93JP-U9Lg@mail.gmail.com>
-Subject: Re: [PATCH v4 6/8] sched/fair: Add sched group latency support
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Qais Yousef <qais.yousef@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com, rostedt@goodmis.org,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, linux-kernel@vger.kernel.org,
-        parth@linux.ibm.com, chris.hyser@oracle.com,
-        valentin.schneider@arm.com, patrick.bellasi@matbug.net,
-        David.Laight@aculab.com, pjt@google.com, pavel@ucw.cz,
-        qperret@google.com, tim.c.chen@linux.intel.com, joshdon@google.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH 1/2] perf print-events: Fix "perf list" can not display
+ the PMU prefix for some hybrid cache events
+Content-Language: en-US
+To:     Ian Rogers <irogers@google.com>
+Cc:     acme@kernel.org, peterz@infradead.org, mingo@redhat.com,
+        alexander.shishkin@intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, ak@linux.intel.com,
+        kan.liang@linux.intel.com
+References: <20220922014904.3665674-1-zhengjun.xing@linux.intel.com>
+ <CAP-5=fUecPUJ-Z5WwbjVgA6b6r3-MmmfpjE+iw_pAK_K+rhxMA@mail.gmail.com>
+From:   Xing Zhengjun <zhengjun.xing@linux.intel.com>
+In-Reply-To: <CAP-5=fUecPUJ-Z5WwbjVgA6b6r3-MmmfpjE+iw_pAK_K+rhxMA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 21 Sept 2022 at 19:12, Tejun Heo <tj@kernel.org> wrote:
->
-> On Wed, Sep 21, 2022 at 07:02:57PM +0200, Vincent Guittot wrote:
-> > > One option could be just using the same mapping as cpu.weight so that 100
-> > > maps to neutral, 10000 maps close to -20, 1 maps close to 19. It isn't great
-> > > that the value can't be interpreted in any intuitive way (e.g. a time
-> > > duration based interface would be a lot easier to grok even if it still is
-> > > best effort) but if that's what the per-task interface is gonna be, it'd be
-> > > best to keep cgroup interface in line.
-> >
-> > I would prefer a signed range like the [-1000:1000] as the behavior is
-> > different for sensitive and non sensitive task unlike the cpu.weight
-> > which is reflect that a bigger value get more
->
-> How about just sticking with .nice?
 
-Looks good to me. I will just implement the cpu.latency.nice
 
->
-> --
-> tejun
+On 9/22/2022 11:12 AM, Ian Rogers wrote:
+> On Wed, Sep 21, 2022 at 6:47 PM <zhengjun.xing@linux.intel.com> wrote:
+>>
+>> From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+>>
+>> Some hybrid hardware cache events are only available on one CPU PMU. For
+>> example, 'L1-dcache-load-misses' is only available on cpu_core. We have
+>> supported in the perf list clearly reporting this info, the function works
+>> fine before but recently the argument "config" in API is_event_supported()
+>> is changed from "u64" to "unsigned int" which caused a regression, the
+>> "perf list" then can not display the PMU prefix for some hybrid cache
+>> events. For the hybrid systems, the PMU type ID is stored at config[63:32],
+>> define config to "unsigned int" will miss the PMU type ID information, then
+>> the regression happened, the config should be defined as "u64".
+>>
+>> Before:
+>>   # ./perf list |grep "Hardware cache event"
+>>    L1-dcache-load-misses                              [Hardware cache event]
+>>    L1-dcache-loads                                    [Hardware cache event]
+>>    L1-dcache-stores                                   [Hardware cache event]
+>>    L1-icache-load-misses                              [Hardware cache event]
+>>    L1-icache-loads                                    [Hardware cache event]
+>>    LLC-load-misses                                    [Hardware cache event]
+>>    LLC-loads                                          [Hardware cache event]
+>>    LLC-store-misses                                   [Hardware cache event]
+>>    LLC-stores                                         [Hardware cache event]
+>>    branch-load-misses                                 [Hardware cache event]
+>>    branch-loads                                       [Hardware cache event]
+>>    dTLB-load-misses                                   [Hardware cache event]
+>>    dTLB-loads                                         [Hardware cache event]
+>>    dTLB-store-misses                                  [Hardware cache event]
+>>    dTLB-stores                                        [Hardware cache event]
+>>    iTLB-load-misses                                   [Hardware cache event]
+>>    node-load-misses                                   [Hardware cache event]
+>>    node-loads                                         [Hardware cache event]
+>>
+>> After:
+>>   # ./perf list |grep "Hardware cache event"
+>>    L1-dcache-loads                                    [Hardware cache event]
+>>    L1-dcache-stores                                   [Hardware cache event]
+>>    L1-icache-load-misses                              [Hardware cache event]
+>>    LLC-load-misses                                    [Hardware cache event]
+>>    LLC-loads                                          [Hardware cache event]
+>>    LLC-store-misses                                   [Hardware cache event]
+>>    LLC-stores                                         [Hardware cache event]
+>>    branch-load-misses                                 [Hardware cache event]
+>>    branch-loads                                       [Hardware cache event]
+>>    cpu_atom/L1-icache-loads/                          [Hardware cache event]
+>>    cpu_core/L1-dcache-load-misses/                    [Hardware cache event]
+>>    cpu_core/node-load-misses/                         [Hardware cache event]
+>>    cpu_core/node-loads/                               [Hardware cache event]
+>>    dTLB-load-misses                                   [Hardware cache event]
+>>    dTLB-loads                                         [Hardware cache event]
+>>    dTLB-store-misses                                  [Hardware cache event]
+>>    dTLB-stores                                        [Hardware cache event]
+>>    iTLB-load-misses                                   [Hardware cache event]
+>>
+>> Fixes: 9b7c7728f4e4 ("perf parse-events: Break out tracepoint and printing")
+>> Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+>> Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+> 
+> Acked-by: Ian Rogers <irogers@google.com>
+> 
+> Sorry for this breakage, I suspect that a long review on the
+> refactoring CL meant that I missed the intervening fix. Can we add a
+> test on this? It would need to be hybrid specific and skip otherwise.
+
+Thanks. I will add a test case for hybrid-specific later.
+> 
+> Thanks,
+> Ian
+> 
+>> ---
+>>   tools/perf/util/print-events.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/tools/perf/util/print-events.c b/tools/perf/util/print-events.c
+>> index ba1ab5134685..04050d4f6db8 100644
+>> --- a/tools/perf/util/print-events.c
+>> +++ b/tools/perf/util/print-events.c
+>> @@ -239,7 +239,7 @@ void print_sdt_events(const char *subsys_glob, const char *event_glob,
+>>          strlist__delete(sdtlist);
+>>   }
+>>
+>> -static bool is_event_supported(u8 type, unsigned int config)
+>> +static bool is_event_supported(u8 type, u64 config)
+>>   {
+>>          bool ret = true;
+>>          int open_return;
+>> --
+>> 2.25.1
+>>
+
+-- 
+Zhengjun Xing
