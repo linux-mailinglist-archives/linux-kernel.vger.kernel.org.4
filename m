@@ -2,98 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 535C85E6326
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 15:05:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A57E15E632C
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 15:07:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229884AbiIVNFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 09:05:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51484 "EHLO
+        id S230206AbiIVNHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 09:07:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbiIVNFq (ORCPT
+        with ESMTP id S230266AbiIVNHi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 09:05:46 -0400
-Received: from smtp-fw-33001.amazon.com (smtp-fw-33001.amazon.com [207.171.190.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F448E6A3E;
-        Thu, 22 Sep 2022 06:05:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1663851946; x=1695387946;
-  h=message-id:date:mime-version:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:subject;
-  bh=jde3lYab1cgEqi5kdLQjfYu3v4kqudgRikp9yDWVE8U=;
-  b=QJhtmfftJPUIkpCaiVm1P9XylPESbOuG//+iDFUqYdIpR2ML/qD+1VjQ
-   fzzsTv1zVRirj7eGePZlvdovyicLVwFuuK7OUhM7nkAMnHbuJFtrpuwSV
-   p5h0X0qsp0oV9QPxzkQT1Hx2cGCh5xFMKTHKyui31hCW3at41a8oLF02Y
-   M=;
-X-IronPort-AV: E=Sophos;i="5.93,335,1654560000"; 
-   d="scan'208";a="227801747"
-Subject: Re: linux-next: Fixes tag needs some work in the hwmon-staging tree
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-1f9d5b26.us-west-2.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-33001.sea14.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 13:05:30 +0000
-Received: from EX13D43EUA002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2b-1f9d5b26.us-west-2.amazon.com (Postfix) with ESMTPS id 5E53745444;
-        Thu, 22 Sep 2022 13:05:29 +0000 (UTC)
-Received: from EX19D044EUA001.ant.amazon.com (10.252.50.83) by
- EX13D43EUA002.ant.amazon.com (10.43.165.108) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Thu, 22 Sep 2022 13:05:28 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
- EX19D044EUA001.ant.amazon.com (10.252.50.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
- Thu, 22 Sep 2022 13:05:27 +0000
-Received: from [10.220.236.67] (10.220.236.67) by mail-relay.amazon.com
- (10.43.161.249) with Microsoft SMTP Server id 15.0.1497.38 via Frontend
- Transport; Thu, 22 Sep 2022 13:05:25 +0000
-Message-ID: <4e81be21-b027-cdaf-be69-423e32976269@amazon.com>
-Date:   Thu, 22 Sep 2022 16:05:24 +0300
+        Thu, 22 Sep 2022 09:07:38 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04967EBBC0;
+        Thu, 22 Sep 2022 06:07:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663852058; x=1695388058;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NIiUludhaEiP1q42HoGcIondmm0hwzStdN7EzNx6+6k=;
+  b=juv2hUjjNUBf4hGN3jCWrj+OGEyUqHH/JOjHd8wX+Et4J0X/c6pwPRNu
+   BeMqHTFWXrQgupHexAC/a5mT5cyW4BK246oAUapzBKPMJmymhXfvsijdm
+   Y08t0iLKhlvECFIDjRC5wmAYm3hHqts8rFX9DjPhXyxu4Y8K8OBqbB/JY
+   GeMA9rJPCOnYnLmDLXPQjkDy4U6+lXvlmd3W+GAwbLJB4atGQSJIDOs5z
+   Kyg/Z3lkBtNBgdyfXZXzLRjP2F6EvGQl26CHNuUUn0wSg8QIja6Pqp5mW
+   Ygiul2CNI+I+uiptVVl2VenLLLniH4zdrNw5YG2X35SIbS/GykNvOEREl
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="283343169"
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="283343169"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 06:06:31 -0700
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="688286472"
+Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 06:06:26 -0700
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with SMTP id 88E4320075;
+        Thu, 22 Sep 2022 16:06:24 +0300 (EEST)
+Date:   Thu, 22 Sep 2022 13:06:24 +0000
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        Wang Yating <yating.wang@intel.com>,
+        Christoph Jechlitschek <christoph.jechlitschek@intel.com>,
+        Hao Yao <hao.yao@intel.com>, Andy Yeh <andy.yeh@intel.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Tianshu Qiu <tian.shu.qiu@intel.com>,
+        linux-media@vger.kernel.org, Mark Pearson <markpearson@lenovo.com>,
+        Dell.Client.Kernel@dell.com, linux-kernel@vger.kernel.org,
+        Guenter Roeck <groeck@google.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andy Whitcroft <apw@canonical.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Christian Schaller <cschalle@redhat.com>,
+        Wouter Bolsterlee <wouter@bolsterl.ee>,
+        Miguel Palhas <mpalhas@gmail.com>, it+linux-media@molgen.mpg.de
+Subject: Re: Missing MIPI IPU6 camera driver for Intel Alder Lake laptops
+Message-ID: <Yyxd0BJw5syjVsvm@paasikivi.fi.intel.com>
+References: <52c87d91-422d-fca0-4dd5-bbaa559c81b6@molgen.mpg.de>
+ <YvUKLbv/pOfbbeL+@pendragon.ideasonboard.com>
+ <YvUaEDMbZD70x+hD@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Guenter Roeck <linux@roeck-us.net>
-CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Linux Next Mailing List" <linux-next@vger.kernel.org>,
-        "Farber, Eliav" <farbere@amazon.com>
-References: <20220922202039.211372a6@canb.auug.org.au>
-From:   "Farber, Eliav" <farbere@amazon.com>
-In-Reply-To: <20220922202039.211372a6@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-13.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YvUaEDMbZD70x+hD@kroah.com>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/22/2022 1:20 PM, Stephen Rothwell wrote:
-> Hi all,
->
-> In commit
->
->  103974b11176 ("hwmon: (mr75203) fix undefined reference to `__divdi3'")
->
-> Fixes tag
->
->  Fixes: 381a86c545f1 ("hwmon: (mr75203) modify the temperature 
-> equation according to series 5 datasheet")
->
-> has these problem(s):
->
->  - Target SHA1 does not exist
->
-> Maybe you meant:
->
-> Fixes: 94c025b6f735 ("hwmon: (mr75203) modify the temperature equation 
-> according to series 5 datasheet")
+Hi Greg, others,
 
+On Thu, Aug 11, 2022 at 05:02:40PM +0200, Greg KH wrote:
+> On Thu, Aug 11, 2022 at 04:54:53PM +0300, Laurent Pinchart wrote:
+> > For the time being, I agree with your recommendation to not buy these
+> > devices if you care about camera support.
+> 
+> I second this, don't buy these devices if the vendor is not willing to
+> get their drivers upstreamed properly.
 
-Correct, it should be 94c025b6f73.
+I can now confirm that IPU6 driver upstreaming is now planned, with IPU6
+input system driver to be upstreamed first. The intent is that we would
+have patches for review on LMML around the end of the year.
 
---
-Regards, Eliav
+The processing system driver will need more work to replace the custom
+interface. For a fully functional camera stack, also libcamera support for
+IPU6 will be needed.
 
+I think I can say a major factor for why we're here is that the original
+intent was to use a different interface for upstream but as we don't have
+one yet and probably won't for quite some time, this doesn't really seem
+like a viable option anymore.
 
+So I'm afraid I can't promise a quick fix but at the same time I can say
+work is being done to address this.
+
+-- 
+Kind regards,
+
+Sakari Ailus
