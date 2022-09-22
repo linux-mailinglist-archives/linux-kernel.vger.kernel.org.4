@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F39D65E63AD
+	by mail.lfdr.de (Postfix) with ESMTP id CD0CF5E63AC
 	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 15:35:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231508AbiIVNfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 09:35:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34344 "EHLO
+        id S231577AbiIVNfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 09:35:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231325AbiIVNe6 (ORCPT
+        with ESMTP id S231516AbiIVNfC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 09:34:58 -0400
+        Thu, 22 Sep 2022 09:35:02 -0400
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 260EC543C1;
-        Thu, 22 Sep 2022 06:34:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E76760EF;
+        Thu, 22 Sep 2022 06:35:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663853698; x=1695389698;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=0YqEgmScZ7iCevfwtvTs2m+pgaAQ/CAZCiyAmFzqCHE=;
-  b=QsWs8cn4Vw6n/gjbJNMquKBY/CmFT/Db9QnJsLnFR4Rl5d+gnv/WrjbD
-   kgxBxBoVZEb8c3McGZpdLDDXNoEdGWon0EaCBGtE4qPYX5A/2jqFdD3KM
-   Buk6IKkWqgvpFsd0pEiBpFUJBSV/B0/QH1DDoFtwhtESWBVragr6L+Jh1
-   KIJFNmwCJhZW18DkrokCVOOi59789nanOaO2RcUyG34mNrcY5JxDV//jW
-   GQEcJ8UwaT1XKheHW0rW+MWkioIrsff/WPYBBts5JT12j0E3273ZUhkaU
-   TpjseR9bs3ZLaaugDHyzAD8GcIvVcA0v1bNRScjjFrqZWStmK/su3woNd
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="297894084"
+  t=1663853702; x=1695389702;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references;
+  bh=zDRjOn0bNlzHygZ+Y/AQDCZ7jTp+MJset84jKlggh44=;
+  b=Dig47Rh4igi2ufHozJ8YRt3f2k0xH4mskSCW/Bz4aL4udRGT5mL5h+oY
+   5prF5pTDzMZvLQyBKFzcNsEt2Ey3LpoAwqrMwHRWeA277e7ZKQzAv5YN9
+   K+Yh+nnuGk0MsRESF86NtYv36/mr7eHuYcqKlrZ8SCZwkin4P3fiiy7uM
+   0RJXKLA3M4LkOsMonSj2UT7myNJpMIw8cMqLwGDzKtVf6WpHqovVZnpc+
+   M1N4BbOemzDbhRpuKK1VxuwZ7RGmsMJjSnu3n1rozvFFKtRUvIOCMU9En
+   TrpLfEMSjY1AQ7YOT+DdiMlhYBDgHRZMb3BgdplOzOrPL27uvoaSvduow
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="297894097"
 X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
-   d="scan'208";a="297894084"
+   d="scan'208";a="297894097"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 06:34:57 -0700
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 06:35:01 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
-   d="scan'208";a="619793786"
+   d="scan'208";a="619793823"
 Received: from power-sh.sh.intel.com ([10.239.183.122])
-  by orsmga002.jf.intel.com with ESMTP; 22 Sep 2022 06:34:54 -0700
+  by orsmga002.jf.intel.com with ESMTP; 22 Sep 2022 06:34:57 -0700
 From:   Zhang Rui <rui.zhang@intel.com>
 To:     linux-kernel@vger.kernel.org, x86@kernel.org,
         linux-hwmon@vger.kernel.org
@@ -45,13 +45,12 @@ Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
         dave.hansen@linux.intel.com, hpa@zytor.com, peterz@infradead.org,
         corbet@lwn.net, fenghua.yu@intel.com, jdelvare@suse.com,
         linux@roeck-us.net, len.brown@intel.com, rui.zhang@intel.com
-Subject: [PATCH V3 0/8] x86/topology: Improve CPUID.1F handling
-Date:   Thu, 22 Sep 2022 21:37:52 +0800
-Message-Id: <20220922133800.12918-1-rui.zhang@intel.com>
+Subject: [PATCH V3 1/8] perf/x86/intel/P4: Unify logic for detecting HT
+Date:   Thu, 22 Sep 2022 21:37:53 +0800
+Message-Id: <20220922133800.12918-2-rui.zhang@intel.com>
 X-Mailer: git-send-email 2.17.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220922133800.12918-1-rui.zhang@intel.com>
+References: <20220922133800.12918-1-rui.zhang@intel.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -61,36 +60,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Intel AlderLake-N platforms where there are Ecores only, the Ecore
-Module topology is enumerated via CPUID.1F Module level, which has not
-been supported by Linux kernel yet.
+Any value larger than 1 suggests HT is supported.
 
-This exposes two issues in current CPUID.1F handling code.
-1. Linux interprets the Module ID bits as package ID and erroneously
-   reports a multi module system as a multi-package system.
-2. Linux excludes the unknown Module ID bits from the core ID, and results
-   in duplicate core ID’s shown in a package after the first issue solved.
+Although smp_num_siblings cannot be larger than 2 on P4 platform, it is
+better to keep the logic consistent across the kernel.
 
-Plus that, a third problem is observed on Intel Hybrid ADL-S/P platforms.
-The return value of CPUID.1F SMT level EBX (number of siblings) differs on
-Pcore CPUs and Ecore CPUs, and results in inconsistent smp_num_siblings
-value based on the Pcore/Ecore CPU enumeration order. This could bring
-some potential issues although we have not observed any functionalities
-issues so far.
-
-This patch series fixes these three problems in CPUID.1F handling code,
-together with some related fixes and document updates.
-
-thanks,
--rui
-
+Reviewed-by: Len Brown <len.brown@intel.com>
+Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 ---
-Changes since V2:
- - changelog improvements based on Peter' feedback
- - Remove combined tags
+ arch/x86/include/asm/perf_event_p4.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Changes since V1:
- - fix/improve changelog/comment wording issues
- - reorder the patches to eliminate bisection breakage window
- - add a new patch for coretemp driver variable renaming
- - update coretemp driver patch to fix a case of ida_free(&ida, -2)
+diff --git a/arch/x86/include/asm/perf_event_p4.h b/arch/x86/include/asm/perf_event_p4.h
+index 94de1a05aeba..b14e9a20a7c0 100644
+--- a/arch/x86/include/asm/perf_event_p4.h
++++ b/arch/x86/include/asm/perf_event_p4.h
+@@ -189,7 +189,7 @@ static inline int p4_ht_active(void)
+ static inline int p4_ht_thread(int cpu)
+ {
+ #ifdef CONFIG_SMP
+-	if (smp_num_siblings == 2)
++	if (smp_num_siblings > 1)
+ 		return cpu != cpumask_first(this_cpu_cpumask_var_ptr(cpu_sibling_map));
+ #endif
+ 	return 0;
+-- 
+2.25.1
+
