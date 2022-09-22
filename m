@@ -2,160 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F29165E5EEE
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 11:51:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E06235E5EF0
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 11:51:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229961AbiIVJvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 05:51:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45878 "EHLO
+        id S231159AbiIVJv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 05:51:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbiIVJvQ (ORCPT
+        with ESMTP id S229713AbiIVJvV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 05:51:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE4C7D4AB0
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 02:51:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663840274;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=17uXSgfBSz8VOl61mGa12Lw4z5xbVJY4l5ZjuYmcfvo=;
-        b=LfK7oDwt3CR9crNEOESBv1FLlfC/t7fVpkGfVpVLhhXC9XQQP8eFvf03fbWRHTMGF0AdZ6
-        e7LA+XhAaDytnBF9v7Yv3hwcgRa2ZwLA+6pNa7yeirzvuhfka2sYArMD8eucaworcpYH3t
-        YIAkfKQIAm1MoN7i/BCwiMwcoZf52rU=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-567-7l1SAhS9PrmU1xv-D9xKcA-1; Thu, 22 Sep 2022 05:51:13 -0400
-X-MC-Unique: 7l1SAhS9PrmU1xv-D9xKcA-1
-Received: by mail-wm1-f71.google.com with SMTP id b5-20020a05600c4e0500b003b499f99aceso846310wmq.1
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 02:51:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date;
-        bh=17uXSgfBSz8VOl61mGa12Lw4z5xbVJY4l5ZjuYmcfvo=;
-        b=SV+LW+c/eo09l/2Xu0Kjt3dVdahx3UZewB+w7QZOUWVNIHD3Fok7gsj+Afwb4zmwpd
-         FNgzzuh2WpHSQMT+4YI/jy9sXjLjNjTBZeDega80QbfCEByH2+2/978CuTlOSC2W5OaI
-         ML2x0SwkoTPQ6Q8rX62MxSRENf/LgLYx85ZDysIydT0qJqq7C5Ay6Lm9uG223ylCW9Y2
-         entFHt6NYTHsHh/VQ9axtvLWP3uCGawi1p588YQJ6tgO9jG1la2fT6YSCIppaDlTyWeJ
-         vVlgr0nh0E8zt4vLElKG90jERUZRuqpyaj/AgRYjSI6Ong57iSLBLULRbbQV3qGcsH5B
-         Zaww==
-X-Gm-Message-State: ACrzQf3UwfpQWbu8FbvzB5tVxJM7FBLbUnC6uUFLEUEbWlaBzyTgr1Yr
-        L6Vo59cAgqXTNq1cixpuL2ikbvAgVYKpju3OTLdtf/JBOyNXRilVDWT1JadiAT66qouUBV5xLWP
-        FSTqQne+L791WcFtg5MWCQ3ZbvcG986X/mGqMGKSMIeiwLmHYua+B6O7zub3gE796PeI3u5suqU
-        Iv
-X-Received: by 2002:adf:a28e:0:b0:22a:7428:3b04 with SMTP id s14-20020adfa28e000000b0022a74283b04mr1481615wra.75.1663840272603;
-        Thu, 22 Sep 2022 02:51:12 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7zLZL8RAAX4U5+E3rMsNI8F9kayZUCyiTUu7cy/V1gn1HLvX9q9YbarSNcobG7D5s96P9KWw==
-X-Received: by 2002:adf:a28e:0:b0:22a:7428:3b04 with SMTP id s14-20020adfa28e000000b0022a74283b04mr1481588wra.75.1663840272256;
-        Thu, 22 Sep 2022 02:51:12 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id z18-20020adff752000000b0022860e8ae7csm4682086wrp.77.2022.09.22.02.51.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 02:51:11 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        Yuan Yao <yuan.yao@linux.intel.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v10 14/39] KVM: nSVM: Keep track of Hyper-V
- hv_vm_id/hv_vp_id
-In-Reply-To: <Yyt/Nrh4aoLrNt11@google.com>
-References: <20220921152436.3673454-1-vkuznets@redhat.com>
- <20220921152436.3673454-15-vkuznets@redhat.com>
- <Yyt/Nrh4aoLrNt11@google.com>
-Date:   Thu, 22 Sep 2022 11:51:10 +0200
-Message-ID: <87y1ubn3e9.fsf@redhat.com>
+        Thu, 22 Sep 2022 05:51:21 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4624D6921;
+        Thu, 22 Sep 2022 02:51:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663840280; x=1695376280;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tTaBK+DjBfucGFWPWzGuutlagPaerU/MshiXq/Ty9nM=;
+  b=fUZ8jP7Iqqe483VQaKB0v0QLDqMCDq6Wo/pfuLKA9yEulp3JCMHsypYs
+   dCP9Dr95qGIGYFxeGHd/bmgXMpMhXyWyxNuEXrcuFHvJ/JzTKl8+ZRMVd
+   OEin7seiknpr6Y18jWLYYyf0fgixDh/7SMTEUVdZp0Tjqw/Gt38nFCYK6
+   1ya0t0xrpJVobL/7PxQyHnmmMOn0uhxR3Fk6QEwFNEzapfUE+FTahv7co
+   NaaYoCt25J2EHNORnC/u3Ci6uRMc14gATrYo2++d6PQ35Im9+1N2IpUBj
+   dxzxwOtMVKBILG8O4nCiodbauY8sjCm0hinZAkrMUP8Y8TnQamlLg6c8/
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="283306198"
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="283306198"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 02:51:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="650456489"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga008.jf.intel.com with ESMTP; 22 Sep 2022 02:51:17 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1obIrT-005wxh-0K;
+        Thu, 22 Sep 2022 12:51:15 +0300
+Date:   Thu, 22 Sep 2022 12:51:14 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Borislav Petkov <bp@suse.de>, Hans de Goede <hdegoede@redhat.com>
+Cc:     "Limonciello, Mario" <mario.limonciello@amd.com>,
+        Jan =?utf-8?B?RMSFYnJvxZs=?= <jsd@semihalf.com>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        jarkko.nikula@linux.intel.com, wsa@kernel.org,
+        rrangel@chromium.org, upstream@semihalf.com,
+        Muralidhara M K <muralimk@amd.com>,
+        Naveen Krishna Chatradhi <nchatrad@amd.com>
+Subject: Re: [PATCH -next 1/2] i2c: designware: Switch from using MMIO access
+ to SMN access
+Message-ID: <YywwEvkZK1R9mJfE@smile.fi.intel.com>
+References: <20220916131854.687371-1-jsd@semihalf.com>
+ <20220916131854.687371-2-jsd@semihalf.com>
+ <eafc7bb5-a406-132b-4b7d-167917cdab05@amd.com>
+ <CAOtMz3Pgh+cERiXVetDZJrQa9C0kUUbZ9dRRhdghgm5Or8kwhg@mail.gmail.com>
+ <YytwNvSyhq380YNT@zn.tnic>
+ <60a52348-7d50-1056-a596-e154f87c99d2@amd.com>
+ <Yyt5LSxSz+6QeWF1@zn.tnic>
+ <YywvmueFj/ibyZdf@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YywvmueFj/ibyZdf@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sean Christopherson <seanjc@google.com> writes:
++Cc: Hans (mentioned your name and was under impression that you are in Cc list already)
 
-> On Wed, Sep 21, 2022, Vitaly Kuznetsov wrote:
->> Similar to nSVM, KVM needs to know L2's VM_ID/VP_ID and Partition
->> assist page address to handle L2 TLB flush requests.
->> 
->> Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
->> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
->> ---
->>  arch/x86/kvm/svm/hyperv.h | 16 ++++++++++++++++
->>  arch/x86/kvm/svm/nested.c |  2 ++
->>  2 files changed, 18 insertions(+)
->> 
->> diff --git a/arch/x86/kvm/svm/hyperv.h b/arch/x86/kvm/svm/hyperv.h
->> index 7d6d97968fb9..8cf702fed7e5 100644
->> --- a/arch/x86/kvm/svm/hyperv.h
->> +++ b/arch/x86/kvm/svm/hyperv.h
->> @@ -9,6 +9,7 @@
->>  #include <asm/mshyperv.h>
->>  
->>  #include "../hyperv.h"
->> +#include "svm.h"
->>  
->>  /*
->>   * Hyper-V uses the software reserved 32 bytes in VMCB
->> @@ -32,4 +33,19 @@ struct hv_enlightenments {
->>   */
->>  #define VMCB_HV_NESTED_ENLIGHTENMENTS VMCB_SW
->>  
->> +static inline void nested_svm_hv_update_vm_vp_ids(struct kvm_vcpu *vcpu)
->> +{
->> +	struct vcpu_svm *svm = to_svm(vcpu);
->> +	struct hv_enlightenments *hve =
->> +		(struct hv_enlightenments *)svm->nested.ctl.reserved_sw;
->
-> Eww :-)
->
-> I posted a small series to fix the casting[*], and as noted in the cover letter it's
-> going to conflict mightily.  Ignoring merge order for the moment, looking at the
-> series as a whole, if the Hyper-V definitions are moved to hyperv-tlfs.h, then I'm
-> tempted to say there's no need for svm/hyperv.h.
->
-> There should never be users of this stuff outside of svm/nested.c, and IMO there's
-> not enough stuff to warrant a separate set of files.  nested_svm_hv_update_vp_assist()
-> isn't SVM specific and fits better alongside kvm_hv_get_assist_page().
->
-> That leaves three functions and ~40 lines of code, which can easily go directly
-> into svm/nested.c.
->
-> I'm definitely not dead set against having hyperv.{ch}, but unless there's a high
-> probability of SVM+Hyper-V getting to eVMCS levels of enlightenment, my vote is
-> to put these helpers in svm/nested.c and move then if/when we do end up accumulating
-> more SVM+Hyper-V code.
-
-Well, there's more on the TODO list :-) There are even nSVM-only
-features like "enlightened TLB" (to split ASID invalidations into two
-stages) so I don't want to pollute 'nested.c'. In fact, I was thinking
-about renaming vmx/evmcs.{ch} into vmx/hyperv.{ch} as we're doing more
-than eVMCS there already. Also, having separate files help with the
-newly introduces 'KVM X86 HYPER-V (KVM/hyper-v)' MAINTAINERS entry. Does
-this sound like a good enough justification for keeping hyperv.{ch}?
-
->   
-> As for merge order, I don't think there's a need for this series to take a
-> dependency on the cleanup, especially if these helpers land in nested.c.  Fixing
-> up the casting and s/hv_enlightenments/hv_vmcb_enlightenments is straightforward.
->
-> [*] https://lore.kernel.org/all/20220921201607.3156750-1-seanjc@google.com
->
-
-I'll take a look, thanks!
+On Thu, Sep 22, 2022 at 12:49:15PM +0300, Andy Shevchenko wrote:
+> On Wed, Sep 21, 2022 at 10:50:53PM +0200, Borislav Petkov wrote:
+> > On Wed, Sep 21, 2022 at 03:19:26PM -0500, Limonciello, Mario wrote:
+> > > Jan mentioned this in the commit message:
+> > > 
+> > > > The function which registers i2c-designware-platdrv is a
+> > > > subsys_initcall that is executed before fs_initcall (when enumeration > of
+> > > NB descriptors occurs).
+> > > 
+> > > So if it's not exported again, then it means that we somehow
+> > > need to get i2c-designware-platdrv to register earlier too.
+> > 
+> > So I have this there:
+> > 
+> > /* This has to go after the PCI subsystem */
+> > fs_initcall(init_amd_nbs);
+> > 
+> > as I need PCI. It itself does
+> > 
+> > arch_initcall(pci_arch_init);
+> > 
+> > so I guess init_amd_nbs() could be a subsys_initcall...
+> > 
+> > Or why is
+> > 
+> > subsys_initcall(dw_i2c_init_driver);
+> > 
+> > a subsys initcall in the first place?
+> > 
+> > Looking at
+> > 
+> >   104522806a7d ("i2c: designware: dw_i2c_init_driver as subsys initcall")
+> > 
+> > I don't see a particular reason why it should be a subsys_initcall...
+> > 
+> > In any case, this should be fixed without an export which was crap in
+> > the first place.
+> > 
+> > Hm.
+> 
+> I'm speculating here, but IIRC the I2C controllers may serve PMICs on some
+> platform that are required to be present earlier due to some ACPI code
+> accessing them. This Hans de Goede can confirm or correct me.
+> 
+> Another case comes to my mind is that I2C framework wants to initialize I2C
+> peripherals which were supplied via struct i2c_board_info on earlier stages.
+> And again comes to the specifics of the certain peripherals that needs for
+> power / reset / etc control, i.o.w. critical hardware for the platforms.
+> 
+> But it's still what I remember and I can be mistaken.
 
 -- 
-Vitaly
+With Best Regards,
+Andy Shevchenko
+
 
