@@ -2,66 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6E545E5A96
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 07:19:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CF485E5A99
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 07:19:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230197AbiIVFTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 01:19:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33564 "EHLO
+        id S230212AbiIVFTz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 01:19:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbiIVFS6 (ORCPT
+        with ESMTP id S229788AbiIVFTv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 01:18:58 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3929DB02AC
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 22:18:55 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id 63so11191075ybq.4
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 22:18:55 -0700 (PDT)
+        Thu, 22 Sep 2022 01:19:51 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C81474DF;
+        Wed, 21 Sep 2022 22:19:51 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id o99-20020a17090a0a6c00b002039c4fce53so1054293pjo.2;
+        Wed, 21 Sep 2022 22:19:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=Rw64NwZx/B8h2jFhpGLG8OI96ufQiWMUmu8+tiGiOLc=;
-        b=C603rccb6hId4BzesiorvaGb5PNIyamx2XoxD8sd4G6BPwbslwM22eIC9Z5V2GveT5
-         8TWyvQMuxPIavUHFp+MS9JsfijeyCUZtCKzBIUHE04wEyqWYdEITh0TkY+KQRy8ciCgN
-         Oe679nA/lXPLOMlX4MHbqzV6HQ4830ksgLkTJRhXqpCkZGUCZV26RcO7VmltTCn10CNp
-         GySk3IGm8ecl7PAndEcFpEejsGblL9JLSwV0qHNbCGS1hv0XFoZnHz2xRz5f0h6VKsBb
-         xUZE2eUmLVBjugFf/Ln3uRPS2ebjECy9VPJhMjQ2cmMDnFLd8iJP8/h+PVR/vWZ+xOBP
-         HKxw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=GMkU1fcxIyUL21eoHYe2jKHkE16Hr771WCkqjLcwYtQ=;
+        b=a/O4rKKT7Kv3eslRbh+88BtpBD0P8l4ruNM3RRxvb6HZGewie2O3XXjTpv6THavl8t
+         q0ro46K08595GLN2FI/Ecc+9Kkp5eFswR5hsKMiDIfHD+kaiEP/biv8JF33TRPJsFHnB
+         SF3eIyTpAb3YGoCx+t5QSwGVa/0un+b12HG/sRV2C+Te/DiaunPMC2MbaoHXR1XqoKWY
+         IXHgN0aIGoJC1CDwDGe8SoGcn0ymBAhwQeyiecI9NMzxDUCXAbvJWmV5GlbokXfabJjf
+         y75/5rENdR2VVDHRtE/N1BpfgBXGh4Wdg6j/NPmAKMweRMcnLPoc+1vDJA4zBv8exuHs
+         Gwng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=Rw64NwZx/B8h2jFhpGLG8OI96ufQiWMUmu8+tiGiOLc=;
-        b=mcctHxLhFBMR8oRVasnlrPeIoCuO67E3Bu53mOv+ReIwEiEc5ar9MMFL/OzthEhIMq
-         9nO4rrKHWqZM+L6T+Wx1uymkAb0NEI/b6JhadexS7rtoM5mGttlWzrMEo/rww3MWv0bv
-         74GNMefI5xWIu92VDTeyBw0hLpHuE0jdbw0ia9jHN6KkpgitZwZM/sZiA0pexAW3G4d6
-         5Ql8mpGhoVD43WO+3ETvPJV3oru92DLlLD6gV+hcRerymlOltXNqWy23KbSYF2QDPE3j
-         TD/BR5fphfo8FaJhk+Z5+q6jR2PzVRg4VnMbXBMTt7wuU4H7FFCpk6yivHpyqxvlUEDb
-         xUiw==
-X-Gm-Message-State: ACrzQf2XkrfPCMxVe9WXZkNhczeRoI3O0GnhnbewJmzlAXsu/UoYujMc
-        KZ+/aVDw+cJkQhLsOoT8DOSI75nJHn1Ff7A2O6STCQ==
-X-Google-Smtp-Source: AMsMyM4W0O7FKQabSwFaZxcGeNQBHEU6hV0wOKadzkCSBB7fZKVDoK5ObmijiK7LZEIw4gqkjULTjtn5ZziZ6CUsxxc=
-X-Received: by 2002:a25:4045:0:b0:6ae:b15a:cd81 with SMTP id
- n66-20020a254045000000b006aeb15acd81mr1852113yba.340.1663823934172; Wed, 21
- Sep 2022 22:18:54 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=GMkU1fcxIyUL21eoHYe2jKHkE16Hr771WCkqjLcwYtQ=;
+        b=kFe0wCdAl+OtMkNmMZzUbbYWttUe38me5wn6FnJBI1/ujH1LfNl1mM417fZcun/Ulj
+         G7ac6ON+Xclm3yl4SbuQZ819ZkYHEEicZtPn7/5FiOynjBS/XgWvPWxf+McXjjpWsQZF
+         JzCD6k5t4o9tGd6ZB726ZTQACFhtC20qeMZYq6Mg5mdGUqAZSPclp6JnIUS7N8PLW34x
+         2nXJIHljo3mdQ3S3jqJB2yUQJVstyMnd8CIz/zzLGaw8SU6ACOlS5svwmK/zJUSo/wtz
+         cPYiG0iUP2AsXKw6P5VPWOL0a7aXspotHx1LEKjUCcvwJaG1F5at4obFe+fffwDI7Bx4
+         2otw==
+X-Gm-Message-State: ACrzQf3Un6/+XxEQSwEWWjc5LgRmHWDEUF1nF84M8UjiMvzgCMtXSTMB
+        P9+Pp8nMy9X8CBwMviy3eYAD4UfA0mS3fQ==
+X-Google-Smtp-Source: AMsMyM574gPz7vjNosZQoXrztx9lPl1MgEp7iRPI9JGASkpN+LI/pxLffmg8+/92XqFPR6iFooH7Pw==
+X-Received: by 2002:a17:90a:4502:b0:202:7a55:558f with SMTP id u2-20020a17090a450200b002027a55558fmr13175584pjg.108.1663823990416;
+        Wed, 21 Sep 2022 22:19:50 -0700 (PDT)
+Received: from localhost.localdomain ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id b7-20020a170903228700b001780a528540sm3045067plh.93.2022.09.21.22.19.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Sep 2022 22:19:49 -0700 (PDT)
+From:   Like Xu <like.xu.linux@gmail.com>
+X-Google-Original-From: Like Xu <likexu@tencent.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Jim Mattson <jmattson@google.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Kan Liang <kan.liang@linux.intel.com>
+Subject: [PATCH v2 1/2] perf/x86/intel: Expose EPT-friendly PEBS for SPR and future models
+Date:   Thu, 22 Sep 2022 13:19:28 +0800
+Message-Id: <20220922051929.89484-1-likexu@tencent.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-References: <20220919072356.GA29069@haolee.io>
-In-Reply-To: <20220919072356.GA29069@haolee.io>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 21 Sep 2022 22:18:42 -0700
-Message-ID: <CAJuCfpF592xFTKP8x-qgRVJ0y3kxJZZk3u8MGM3cBPoPVXYxWg@mail.gmail.com>
-Subject: Re: [PATCH v2] psi: fix possible missing or delayed pending event
-To:     Hao Lee <haolee.swjtu@gmail.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,46 +73,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 12:23 AM Hao Lee <haolee.swjtu@gmail.com> wrote:
->
-> When a pending event exists and growth is less than the threshold, the
-> current logic is to skip this trigger without generating event. However,
-> from e6df4ead85d9 ("psi: fix possible trigger missing in the window"),
-> our purpose is to generate event as long as pending event exists and the
-> rate meets the limit, no matter what growth is.
-> This patch handles this case properly.
->
-> Fixes: e6df4ead85d9 ("psi: fix possible trigger missing in the window")
-> Signed-off-by: Hao Lee <haolee.swjtu@gmail.com>
+From: Like Xu <likexu@tencent.com>
 
-Acked-by: Suren Baghdasaryan <surenb@google.com>
+According to Intel SDM, the EPT-friendly PEBS is supported by all the
+platforms after ICX, ADL and the future platforms with PEBS format 5.
 
-Thanks!
+Currently the only in-kernel user of this capability is KVM, which has
+very limited support for hybrid core pmu, so ADL and its successors do
+not currently expose this capability. When both hybrid core and PEBS
+format 5 are present, KVM will decide on its own merits.
 
-> ---
->  kernel/sched/psi.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
->
-> diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-> index 9711827e3..7d305d0e0 100644
-> --- a/kernel/sched/psi.c
-> +++ b/kernel/sched/psi.c
-> @@ -539,10 +539,12 @@ static u64 update_triggers(struct psi_group *group, u64 now)
->
->                         /* Calculate growth since last update */
->                         growth = window_update(&t->win, now, total[t->state]);
-> -                       if (growth < t->threshold)
-> -                               continue;
-> +                       if (!t->pending_event) {
-> +                               if (growth < t->threshold)
-> +                                       continue;
->
-> -                       t->pending_event = true;
-> +                               t->pending_event = true;
-> +                       }
->                 }
->                 /* Limit event signaling to once per window */
->                 if (now < t->last_event_time + t->win.size)
-> --
-> 2.21.0
->
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: linux-perf-users@vger.kernel.org
+Suggested-by: Kan Liang <kan.liang@linux.intel.com>
+Signed-off-by: Like Xu <likexu@tencent.com>
+---
+V1 -> V2 Changelog:
+- the perf part should be a separate patch; (Kan)
+- apply PEBS format 5 to avoid patching every future model; (Kan)
+
+ arch/x86/events/intel/core.c | 1 +
+ arch/x86/events/intel/ds.c   | 4 +++-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
+index 2db93498ff71..804540ba4599 100644
+--- a/arch/x86/events/intel/core.c
++++ b/arch/x86/events/intel/core.c
+@@ -6288,6 +6288,7 @@ __init int intel_pmu_init(void)
+ 		x86_pmu.pebs_constraints = intel_spr_pebs_event_constraints;
+ 		x86_pmu.extra_regs = intel_spr_extra_regs;
+ 		x86_pmu.limit_period = spr_limit_period;
++		x86_pmu.pebs_ept = 1;
+ 		x86_pmu.pebs_aliases = NULL;
+ 		x86_pmu.pebs_prec_dist = true;
+ 		x86_pmu.pebs_block = true;
+diff --git a/arch/x86/events/intel/ds.c b/arch/x86/events/intel/ds.c
+index ba60427caa6d..4e937f685cdc 100644
+--- a/arch/x86/events/intel/ds.c
++++ b/arch/x86/events/intel/ds.c
+@@ -2253,8 +2253,10 @@ void __init intel_ds_init(void)
+ 			x86_pmu.large_pebs_flags |= PERF_SAMPLE_TIME;
+ 			break;
+ 
+-		case 4:
+ 		case 5:
++			x86_pmu.pebs_ept = 1;
++			fallthrough;
++		case 4:
+ 			x86_pmu.drain_pebs = intel_pmu_drain_pebs_icl;
+ 			x86_pmu.pebs_record_size = sizeof(struct pebs_basic);
+ 			if (x86_pmu.intel_cap.pebs_baseline) {
+-- 
+2.37.3
+
