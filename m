@@ -2,209 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63BFF5E5CD4
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 10:04:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69DBB5E5CDE
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 10:04:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbiIVIEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 04:04:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38544 "EHLO
+        id S230011AbiIVIEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 04:04:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbiIVIEI (ORCPT
+        with ESMTP id S229546AbiIVIEt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 04:04:08 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B82D20368;
-        Thu, 22 Sep 2022 01:04:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663833846; x=1695369846;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=swqLIFUJLee+tTUNcuKbWi4nltLV2M9jqpih8qTBSjc=;
-  b=L6cS3v8xQ9C3OuvniTgIIx9mpZhQr/suDJSMKSrRVZD6XtfdWI7S+NbM
-   HNhri8Gg6heid9Zr08WbElQtWIQVVvTYyAPMfwUnMMrArErxR93bsZ5ew
-   2ko9ivVKffybdi2cPe35MzexcFVR4olr0DUKW4UrKglAWSPeUERBakPF0
-   MjbiQoLJcVisy1RzjIndnadOgkd2PPOJtvszKAFVgyjOYkl15eIef6ljx
-   j1BxweC6Mnjxs0UXXyb+4hXa3pMPufElattyFT30daNlWA7m/tqPO3Vsc
-   KPkVNNI0wiw8JWXeo2CS9Uoq/MivDmtsrmBa0g20OVaERYwPMl/A3GNiF
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="326551134"
-X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
-   d="scan'208";a="326551134"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 01:04:05 -0700
-X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
-   d="scan'208";a="622002962"
-Received: from xingzhen-mobl.ccr.corp.intel.com (HELO [10.238.4.231]) ([10.238.4.231])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 01:04:03 -0700
-Message-ID: <7837075e-54cf-3e59-f60f-eb62fca4a3c5@linux.intel.com>
-Date:   Thu, 22 Sep 2022 16:04:01 +0800
+        Thu, 22 Sep 2022 04:04:49 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE1D2F38A
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 01:04:46 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id dv25so19103315ejb.12
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 01:04:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=bQFLgTcLz9TuLH0amhPimE3+FHgwiRo1jLNErCwcRKI=;
+        b=IM2aVBVTrkJYH3pfIZPMyJlT72QqAUw1tL+UQniAlh0tq2VK1yij83nhocGtFr29gg
+         QioKbP7UrRVnotT3R6tcEREUzqMKx3e16n+IfUX1D5oC98ihoOnDcTsSXXJmXqQ7jXIq
+         WUpSJiKl+tzTr2j+VU7Bnkmqu0jf5X8dcC2SQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=bQFLgTcLz9TuLH0amhPimE3+FHgwiRo1jLNErCwcRKI=;
+        b=lKUIKqtnKyyJkUSRQ+KyZ+9mr0NpLFPi5OIWZHY4MUujTRfpCPfXjDmVfJvU7u2Lpw
+         VQPnVC4+CMMwAjR1c3zUbLP53NSabOEe7IVnk60ltWWHJjyxVZC7vPzNlYKu4/WLv3wX
+         zl3xFgNlDax2s2KxKJ6h16XosNq82T/xyuPrIeNVzccm1GbyewPRQ3LRKfiH1xE6GbEk
+         hvPShq0v16hvieqvBnLq1qfDDSPMWq/9LgTZ2J9EeaStwYKQQOo/xNTf34gEXYi2mEhI
+         RnhT6EW3HFoXy4iRzaStOAFWKVaQV7LVJpN/WnieduQtL/JVXVqhktSUvnZV7t2XWcu6
+         gAoA==
+X-Gm-Message-State: ACrzQf1e+f4Od/J9e6d/44PdzN/6wRG9q6LUN7AkUj65pNQ+pXOz0qAB
+        OnO0sKSRIjIvaEsMnBrYS/LPacfvsPZ/t72qooeCdA==
+X-Google-Smtp-Source: AMsMyM65W61199SNxMqK09DcJ8Cd+xiA/j5JaId5SNxyXyYW8/axB0uzEetY87KS6GvcJQCtWboffhiIXBtl4fzF85I=
+X-Received: by 2002:a17:907:968d:b0:782:66dc:4b89 with SMTP id
+ hd13-20020a170907968d00b0078266dc4b89mr466943ejc.386.1663833885268; Thu, 22
+ Sep 2022 01:04:45 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH 2/2] perf parse-events: Remove "not supported" hybrid
- cache events
-Content-Language: en-US
-To:     Ian Rogers <irogers@google.com>
-Cc:     acme@kernel.org, peterz@infradead.org, mingo@redhat.com,
-        alexander.shishkin@intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, ak@linux.intel.com,
-        kan.liang@linux.intel.com
-References: <20220922014904.3665674-1-zhengjun.xing@linux.intel.com>
- <20220922014904.3665674-2-zhengjun.xing@linux.intel.com>
- <CAP-5=fWhPAcbbws3H=VC7F3qnXv4hkbMd3rjk4_HtsBAQHPTTg@mail.gmail.com>
-From:   Xing Zhengjun <zhengjun.xing@linux.intel.com>
-In-Reply-To: <CAP-5=fWhPAcbbws3H=VC7F3qnXv4hkbMd3rjk4_HtsBAQHPTTg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220915164826.1396245-1-sarthakkukreti@google.com>
+ <20220915164826.1396245-5-sarthakkukreti@google.com> <YyRkd8YAH1lal8/N@bfoster>
+ <CAG9=OMNL1Z3DiO-usdH0k90NDsDkDQ7A7CHc4Nu6MCXKNKjWdw@mail.gmail.com> <YyswI57JH7gcs9+S@bfoster>
+In-Reply-To: <YyswI57JH7gcs9+S@bfoster>
+From:   Sarthak Kukreti <sarthakkukreti@chromium.org>
+Date:   Thu, 22 Sep 2022 01:04:33 -0700
+Message-ID: <CAG9=OMPEoShYMx6A+p97-tw4MuLpgOEpy7aFs5CH6wTedptALQ@mail.gmail.com>
+Subject: Re: [PATCH RFC 4/8] fs: Introduce FALLOC_FL_PROVISION
+To:     Brian Foster <bfoster@redhat.com>
+Cc:     dm-devel@redhat.com, linux-block@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Jens Axboe <axboe@kernel.dk>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Bart Van Assche <bvanassche@google.com>,
+        Daniil Lunev <dlunev@google.com>,
+        Evan Green <evgreen@google.com>,
+        Gwendal Grignou <gwendal@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Sep 21, 2022 at 8:39 AM Brian Foster <bfoster@redhat.com> wrote:
+>
+> On Fri, Sep 16, 2022 at 02:02:31PM -0700, Sarthak Kukreti wrote:
+> > On Fri, Sep 16, 2022 at 4:56 AM Brian Foster <bfoster@redhat.com> wrote:
+> > >
+> > > On Thu, Sep 15, 2022 at 09:48:22AM -0700, Sarthak Kukreti wrote:
+> > > > From: Sarthak Kukreti <sarthakkukreti@chromium.org>
+> > > >
+> > > > FALLOC_FL_PROVISION is a new fallocate() allocation mode that
+> > > > sends a hint to (supported) thinly provisioned block devices to
+> > > > allocate space for the given range of sectors via REQ_OP_PROVISION.
+> > > >
+> > > > Signed-off-by: Sarthak Kukreti <sarthakkukreti@chromium.org>
+> > > > ---
+> > > >  block/fops.c                | 7 ++++++-
+> > > >  include/linux/falloc.h      | 3 ++-
+> > > >  include/uapi/linux/falloc.h | 8 ++++++++
+> > > >  3 files changed, 16 insertions(+), 2 deletions(-)
+> > > >
+> > > > diff --git a/block/fops.c b/block/fops.c
+> > > > index b90742595317..a436a7596508 100644
+> > > > --- a/block/fops.c
+> > > > +++ b/block/fops.c
+> > > ...
+> > > > @@ -661,6 +662,10 @@ static long blkdev_fallocate(struct file *file, int mode, loff_t start,
+> > > >               error = blkdev_issue_discard(bdev, start >> SECTOR_SHIFT,
+> > > >                                            len >> SECTOR_SHIFT, GFP_KERNEL);
+> > > >               break;
+> > > > +     case FALLOC_FL_PROVISION:
+> > > > +             error = blkdev_issue_provision(bdev, start >> SECTOR_SHIFT,
+> > > > +                                            len >> SECTOR_SHIFT, GFP_KERNEL);
+> > > > +             break;
+> > > >       default:
+> > > >               error = -EOPNOTSUPP;
+> > > >       }
+> > >
+> > > Hi Sarthak,
+> > >
+> > > Neat mechanism.. I played with something very similar in the past (that
+> > > was much more crudely hacked up to target dm-thin) to allow filesystems
+> > > to request a thinly provisioned device to allocate blocks and try to do
+> > > a better job of avoiding inactivation when overprovisioned.
+> > >
+> > > One thing I'm a little curious about here.. what's the need for a new
+> > > fallocate mode? On a cursory glance, the provision mode looks fairly
+> > > analogous to normal (mode == 0) allocation mode with the exception of
+> > > sending the request down to the bdev. blkdev_fallocate() already maps
+> > > some of the logical falloc modes (i.e. punch hole, zero range) to
+> > > sending write sames or discards, etc., and it doesn't currently look
+> > > like it supports allocation mode, so could it not map such requests to
+> > > the underlying REQ_OP_PROVISION op?
+> > >
+> > > I guess the difference would be at the filesystem level where we'd
+> > > probably need to rely on a mount option or some such to control whether
+> > > traditional fallocate issues provision ops (like you've implemented for
+> > > ext4) vs. the specific falloc command, but that seems fairly consistent
+> > > with historical punch hole/discard behavior too. Hm? You might want to
+> > > cc linux-fsdevel in future posts in any event to get some more feedback
+> > > on how other filesystems might want to interact with such a thing.
+> > >
+> > Thanks for the feedback!
+> > Argh, I completely forgot that I should add linux-fsdevel. Let me
+> > re-send this with linux-fsdevel cc'd
+> >
+> > There's a slight distinction is that the current filesystem-level
+> > controls are usually for default handling, but userspace can still
+> > call the relevant functions manually if they need to. For example, for
+> > ext4, the 'discard' mount option dictates whether free blocks are
+> > discarded, but it doesn't set the policy to allow/disallow userspace
+> > from manually punching holes into files even if the mount opt is
+> > 'nodiscard'. FALLOC_FL_PROVISION is similar in that regard; it adds a
+> > manual mechanism for users to provision the files' extents, that is
+> > separate from the filesystems' default handling of provisioning files.
+> >
+>
+> What I'm trying to understand is why not let blkdev_fallocate() issue a
+> provision based on the default mode (i.e. mode == 0) of fallocate(),
+> which is already defined to mean "perform allocation?" It currently
+> issues discards or write zeroes based on variants of
+> FALLOC_FL_PUNCH_HOLE without the need for a separate FALLOC_FL_DISCARD
+> mode, for example.
+>
+It's mostly to keep the block device fallocate() semantics in-line and
+consistent with the file-specific modes: I added the separate
+filesystem fallocate() mode under the assumption that we'd want to
+keep the traditional handling for filesystems intact with (mode == 0).
+And for block devices, I didn't map the requests to mode == 0 so that
+it's less confusing to describe (eg. mode == 0 on block devices will
+issue provision; mode == 0 on files will not). It would complicate
+loopback devices, for instance; if the loop device is backed by a
+file, it would need to use (mode == FALLOC_FL_PROVISION) but if the
+loop device is backed by another block device, then the fallocate()
+call would need to switch to (mode == 0).
 
+With the separate mode, we can describe the semantics of falllcate()
+modes a bit more cleanly, and it is common for both files and block
+devices:
 
-On 9/22/2022 11:16 AM, Ian Rogers wrote:
-> On Wed, Sep 21, 2022 at 6:47 PM <zhengjun.xing@linux.intel.com> wrote:
->>
->> From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
->>
->> By default, we create two hybrid cache events, one is for cpu_core, and
->> another is for cpu_atom. But Some hybrid hardware cache events are only
->> available on one CPU PMU. For example, the 'L1-dcache-load-misses' is only
->> available on cpu_core, while the 'L1-icache-loads' is only available on
->> cpu_atom. We need to remove "not supported" hybrid cache events. By
->> extending is_event_supported() to global API and using it to check if the
->> hybrid cache events are supported before being created, we can remove the
->> "not supported" hybrid cache events.
->>
->> Before:
->>
->>   # ./perf stat -e L1-dcache-load-misses,L1-icache-loads -a sleep 1
->>
->>   Performance counter stats for 'system wide':
->>
->>              52,570      cpu_core/L1-dcache-load-misses/
->>     <not supported>      cpu_atom/L1-dcache-load-misses/
->>     <not supported>      cpu_core/L1-icache-loads/
->>           1,471,817      cpu_atom/L1-icache-loads/
->>
->>         1.004915229 seconds time elapsed
->>
->> After:
->>
->>   # ./perf stat -e L1-dcache-load-misses,L1-icache-loads -a sleep 1
->>
->>   Performance counter stats for 'system wide':
->>
->>              54,510      cpu_core/L1-dcache-load-misses/
->>           1,441,286      cpu_atom/L1-icache-loads/
->>
->>         1.005114281 seconds time elapsed
->>
->> Fixes: 30def61f64ba ("perf parse-events: Create two hybrid cache events")
->> Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
->> Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
->> ---
->>   tools/perf/util/parse-events-hybrid.c | 8 +++++++-
->>   tools/perf/util/print-events.c        | 2 +-
->>   tools/perf/util/print-events.h        | 3 ++-
->>   3 files changed, 10 insertions(+), 3 deletions(-)
->>
->> diff --git a/tools/perf/util/parse-events-hybrid.c b/tools/perf/util/parse-events-hybrid.c
->> index 284f8eabd3b9..cf2e1c2e968f 100644
->> --- a/tools/perf/util/parse-events-hybrid.c
->> +++ b/tools/perf/util/parse-events-hybrid.c
->> @@ -14,6 +14,7 @@
->>   #include "pmu.h"
->>   #include "pmu-hybrid.h"
->>   #include "perf.h"
->> +#include "print-events.h"
->>
->>   static void config_hybrid_attr(struct perf_event_attr *attr,
->>                                 int type, int pmu_type)
->> @@ -48,13 +49,18 @@ static int create_event_hybrid(__u32 config_type, int *idx,
->>          __u64 config = attr->config;
->>
->>          config_hybrid_attr(attr, config_type, pmu->type);
->> +
->> +       if (attr->type == PERF_TYPE_HW_CACHE
->> +           && !is_event_supported(attr->type, attr->config))
->> +               goto out;
-> 
-> A comment to explain this would be useful.
+1. mode == 0: allocation at the same layer, will not provision on the
+underlying device/filesystem (unsupported for block devices).
+2. mode == FALLOC_FL_PROVISION, allocation at the layer, will
+provision on the underlying device/filesystem.
 
-Thanks, I will add a comment in the next version.
-> 
->> +
->>          evsel = parse_events__add_event_hybrid(list, idx, attr, name, metric_id,
->>                                                 pmu, config_terms);
->>          if (evsel)
->>                  evsel->pmu_name = strdup(pmu->name);
->>          else
->>                  return -ENOMEM;
-> 
-> For consistency should this use the "goto" pattern now? You can also
-> handle the ENOMEM case for strdup.
-> 
-  Yes, I will add a strdup check in the next version.
->> -
->> +out:
->>          attr->type = type;
->>          attr->config = config;
->>          return 0;
->> diff --git a/tools/perf/util/print-events.c b/tools/perf/util/print-events.c
->> index 04050d4f6db8..fa5cc94cfcfe 100644
->> --- a/tools/perf/util/print-events.c
->> +++ b/tools/perf/util/print-events.c
->> @@ -239,7 +239,7 @@ void print_sdt_events(const char *subsys_glob, const char *event_glob,
->>          strlist__delete(sdtlist);
->>   }
->>
->> -static bool is_event_supported(u8 type, u64 config)
->> +bool is_event_supported(u8 type, u64 config)
-> 
-> This makes me tempted to say this function should be in parse-events.c.
-> 
-"is_event_supported" move to parse-events.c should be better, I will do 
-it in the next version.
+Block devices don't technically need to use a separate mode, but it
+makes it much less confusing if filesystems are already using a
+separate mode for provision.
 
-> Thanks,
-> Ian
-> 
->>   {
->>          bool ret = true;
->>          int open_return;
->> diff --git a/tools/perf/util/print-events.h b/tools/perf/util/print-events.h
->> index 1da9910d83a6..ad2902fd0507 100644
->> --- a/tools/perf/util/print-events.h
->> +++ b/tools/perf/util/print-events.h
->> @@ -1,14 +1,15 @@
->>   /* SPDX-License-Identifier: GPL-2.0 */
->>   #ifndef __PERF_PRINT_EVENTS_H
->>   #define __PERF_PRINT_EVENTS_H
->> -
->>   #include <stdbool.h>
->> +#include <linux/types.h>
->>
->>   struct event_symbol;
->>
->>   void print_events(const char *event_glob, bool name_only, bool quiet_flag,
->>                    bool long_desc, bool details_flag, bool deprecated,
->>                    const char *pmu_name);
->> +bool is_event_supported(u8 type, u64 config);
->>   int print_hwcache_events(const char *event_glob, bool name_only);
->>   void print_sdt_events(const char *subsys_glob, const char *event_glob,
->>                        bool name_only);
->> --
->> 2.25.1
->>
+Best
+Sarthak
 
--- 
-Zhengjun Xing
+> Brian
+>
+> > > BTW another thing that might be useful wrt to dm-thin is to support
+> > > FALLOC_FL_UNSHARE. I.e., it looks like the previous dm-thin patch only
+> > > checks that blocks are allocated, but not whether those blocks are
+> > > shared (re: lookup_result.shared). It might be useful to do the COW in
+> > > such cases if the caller passes down a REQ_UNSHARE or some such flag.
+> > >
+> > That's an interesting idea! There's a few more things on the TODO list
+> > for this patch series but I think we can follow up with a patch to
+> > handle that as well.
+> >
+> > Sarthak
+> >
+> > > Brian
+> > >
+> > > > diff --git a/include/linux/falloc.h b/include/linux/falloc.h
+> > > > index f3f0b97b1675..a0e506255b20 100644
+> > > > --- a/include/linux/falloc.h
+> > > > +++ b/include/linux/falloc.h
+> > > > @@ -30,7 +30,8 @@ struct space_resv {
+> > > >                                        FALLOC_FL_COLLAPSE_RANGE |     \
+> > > >                                        FALLOC_FL_ZERO_RANGE |         \
+> > > >                                        FALLOC_FL_INSERT_RANGE |       \
+> > > > -                                      FALLOC_FL_UNSHARE_RANGE)
+> > > > +                                      FALLOC_FL_UNSHARE_RANGE |                          \
+> > > > +                                      FALLOC_FL_PROVISION)
+> > > >
+> > > >  /* on ia32 l_start is on a 32-bit boundary */
+> > > >  #if defined(CONFIG_X86_64)
+> > > > diff --git a/include/uapi/linux/falloc.h b/include/uapi/linux/falloc.h
+> > > > index 51398fa57f6c..2d323d113eed 100644
+> > > > --- a/include/uapi/linux/falloc.h
+> > > > +++ b/include/uapi/linux/falloc.h
+> > > > @@ -77,4 +77,12 @@
+> > > >   */
+> > > >  #define FALLOC_FL_UNSHARE_RANGE              0x40
+> > > >
+> > > > +/*
+> > > > + * FALLOC_FL_PROVISION acts as a hint for thinly provisioned devices to allocate
+> > > > + * blocks for the range/EOF.
+> > > > + *
+> > > > + * FALLOC_FL_PROVISION can only be used with allocate-mode fallocate.
+> > > > + */
+> > > > +#define FALLOC_FL_PROVISION          0x80
+> > > > +
+> > > >  #endif /* _UAPI_FALLOC_H_ */
+> > > > --
+> > > > 2.31.0
+> > > >
+> > >
+> >
+>
