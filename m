@@ -2,168 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 462095E6BFD
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 21:49:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52C4B5E6C14
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 21:52:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232394AbiIVTtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 15:49:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44706 "EHLO
+        id S232543AbiIVTwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 15:52:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232430AbiIVTtn (ORCPT
+        with ESMTP id S232521AbiIVTvy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 15:49:43 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B9A2316E
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 12:49:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663876182; x=1695412182;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=/8lVvT4s7GIthRd7iR4yh43Ja2mwMI0mXbrx3ril/iQ=;
-  b=ZbfMywHKkNyYdSTns0sYK22DFAzDUOGOzUgeSuRIuTppikGy3AnLaBmt
-   5GemNMVTwcYO2TPSpDJejyvPMk4mKEXO5N/+tK+PkhBNJnpZ9Z+w5Kvlg
-   WKAiiMBnid4xtWAc3d5UVjCGvoJ6dj0lWX3cxOahIxN7My8hRQfimZtDc
-   cx6AXERkJ/mEkPPtFTAj8myjy+X5losxxGr8MieYKnKvnc41joNpGVkQi
-   xQIB4w4qp/P3Ta0CMfaoo5HykoMA/ARMqyn4niSor2taAAQt4UFbLM8zL
-   ecwNbRsX8ird0iQksLjmcvAKYijF/rDyvt9aPIBR+JZHyCryShXKbFk/F
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="280783036"
-X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="280783036"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 12:49:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="682371974"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga008.fm.intel.com with ESMTP; 22 Sep 2022 12:49:40 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id DF2D8F7; Thu, 22 Sep 2022 22:49:57 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Yury Norov <yury.norov@gmail.com>, linux-kernel@vger.kernel.org
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Phil Auld <pauld@redhat.com>
-Subject: [PATCH v2 1/1] cpumask: Don't waste memory for sysfs cpulist nodes
-Date:   Thu, 22 Sep 2022 22:49:54 +0300
-Message-Id: <20220922194954.1078-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Thu, 22 Sep 2022 15:51:54 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF8CC10C79E;
+        Thu, 22 Sep 2022 12:51:52 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28MJSdiU008780;
+        Thu, 22 Sep 2022 19:51:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=MeoXkz9mJl2AQmTSrUtOL5D8P9mX9ccoJPSYpxHElW8=;
+ b=Fcf156UgEckpsu/QPBn5R+oSuwFFAJOEtoJXYmYRt4S0ohaZwOG4psErIf0BmKoiug72
+ 93P5Jdfu61Dicwrk1T7v1NkfuAXDmsdbqt4QBaOJvduyt1ctHU3TSkhTZtE4Amo1pDBA
+ vem5Qnyam+Ao1+K1tJOIynOtAYd35xzD5TnnASGN3UfwgvgjA3vERjUQSbnZxK1JY8DE
+ 9Txc93KRbnLp07raiGYZBdPWWGlGR9g4A76Jcf0hjioDaWncQMqoqJ4JFBHzE4P3eMCJ
+ oytl/OkirpFCfELLeFNyRB4S1cdgE8W1wEzNLGxICvCgZaFvZjUdlWL/8teUxltpzc0n DQ== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jrdnmjpwh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Sep 2022 19:51:33 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28MJpW3C023827
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Sep 2022 19:51:32 GMT
+Received: from [10.110.101.161] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Thu, 22 Sep
+ 2022 12:51:30 -0700
+Message-ID: <71bb7201-b308-46ac-dd1d-3452b0682b21@quicinc.com>
+Date:   Thu, 22 Sep 2022 12:51:29 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [Freedreno] [PATCH v2 02/10] drm/msm/dp: fix memory corruption
+ with too many bridges
+Content-Language: en-US
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        "Rob Clark" <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>
+CC:     <dri-devel@lists.freedesktop.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        <linux-arm-msm@vger.kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        <stable@vger.kernel.org>, Sean Paul <sean@poorly.run>,
+        Steev Klimaszewski <steev@kali.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+References: <20220913085320.8577-1-johan+linaro@kernel.org>
+ <20220913085320.8577-3-johan+linaro@kernel.org>
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+In-Reply-To: <20220913085320.8577-3-johan+linaro@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: pU-2E6eRyuaABlIsxVu02wOy7by2xgII
+X-Proofpoint-GUID: pU-2E6eRyuaABlIsxVu02wOy7by2xgII
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-22_14,2022-09-22_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ lowpriorityscore=0 suspectscore=0 bulkscore=0 priorityscore=1501
+ spamscore=0 impostorscore=0 phishscore=0 clxscore=1015 adultscore=0
+ mlxscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209220129
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently the approximation is used which wastes the more memory
-the more CPUs are present on the system. Proposed change calculates
-the exact maximum needed in the worst case:
 
-  NR_CPUS	old		new
-  -------	---		---
-  1 .. 1170	4096		4096
-  1171 .. 1860	4098 ..	6510	4096
-  ...		...		...
-  2*4096	28672		19925
-  4*4096	57344		43597
-  8*4096	114688		92749
-  16*4096	229376		191053
-  32*4096	458752		403197
-  64*4096	917504		861949
-  128*4096	1835008		1779453
-  256*4096	3670016		3670016
-
-Under the hood the reccurent formula is being used:
-  (5 - 0) * 2 +
-    (50 - 5) * 3 +
-      (500 - 50) * 4 +
-        (5000 - 500) * 5 +
-          ...
-            (X[i] - X[i-1]) * i
-
-which allows to count the exact maximum length in the worst case,
-i.e. when each second CPU is being listed. For backward compatibility
-for more than 1170 and less than 1861 CPUs the page size is preserved.
-
-For less than 1171 and more than 1 million CPUs the old is being used.
-
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v2: described better the advantage for 1171..1860 CPUs cases
- include/linux/cpumask.h | 48 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
-
-diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
-index 1b442fb2001f..12cf0905ca74 100644
---- a/include/linux/cpumask.h
-+++ b/include/linux/cpumask.h
-@@ -1122,6 +1122,21 @@ cpumap_print_list_to_buf(char *buf, const struct cpumask *mask,
-  *
-  * for cpumap NR_CPUS * 9/32 - 1 should be an exact length.
-  *
-+ * for cpulist the reccurent formula is being used:
-+ *   (5 - 0) * 2 +
-+ *     (50 - 5) * 3 +
-+ *       (500 - 50) * 4 +
-+ *         (5000 - 500) * 5 +
-+ *           ...
-+ *             (X[i] - X[i-1]) * i
-+ *
-+ * which allows to count the exact maximum length in the worst case,
-+ * i.e. when each second CPU is being listed. For backward compatibility
-+ * for more than 1170 and less than 1861 CPUs the page size is preserved.
-+ *
-+ * For less than 1171 and more than 1 million CPUs the old is being used
-+ * as described below:
-+ *
-  * For cpulist 7 is (ceil(log10(NR_CPUS)) + 1) allowing for NR_CPUS to be up
-  * to 2 orders of magnitude larger than 8192. And then we divide by 2 to
-  * cover a worst-case of every other cpu being on one of two nodes for a
-@@ -1132,6 +1147,39 @@ cpumap_print_list_to_buf(char *buf, const struct cpumask *mask,
-  */
- #define CPUMAP_FILE_MAX_BYTES  (((NR_CPUS * 9)/32 > PAGE_SIZE) \
- 					? (NR_CPUS * 9)/32 - 1 : PAGE_SIZE)
-+
-+#define __CPULIST_FOR_10(x)		(((x + 1) / 2 - 0)     * 2)
-+#define __CPULIST_FOR_100(x)		(((x + 1) / 2 - 5)     * 3)
-+#define __CPULIST_FOR_1000(x)		(((x + 1) / 2 - 50)    * 4)
-+#define __CPULIST_FOR_10000(x)		(((x + 1) / 2 - 500)   * 5)
-+#define __CPULIST_FOR_100000(x)		(((x + 1) / 2 - 5000)  * 6)
-+#define __CPULIST_FOR_1000000(x)	(((x + 1) / 2 - 50000) * 7)
-+
-+#if NR_CPUS < 1861
-+#define CPULIST_FILE_MAX_BYTES	PAGE_SIZE
-+#elif NR_CPUS < 10000
-+#define CPULIST_FILE_MAX_BYTES			\
-+	 (__CPULIST_FOR_10(10) +		\
-+	  __CPULIST_FOR_100(100) +		\
-+	  __CPULIST_FOR_1000(1000) +		\
-+	  __CPULIST_FOR_10000(NR_CPUS))
-+#elif NR_CPUS < 100000
-+#define CPULIST_FILE_MAX_BYTES			\
-+	 (__CPULIST_FOR_10(10) +		\
-+	  __CPULIST_FOR_100(100) +		\
-+	  __CPULIST_FOR_1000(1000) +		\
-+	  __CPULIST_FOR_10000(10000) +		\
-+	  __CPULIST_FOR_100000(NR_CPUS))
-+#elif NR_CPUS < 1000000
-+#define CPULIST_FILE_MAX_BYTES			\
-+	 (__CPULIST_FOR_10(10) +		\
-+	  __CPULIST_FOR_100(100) +		\
-+	  __CPULIST_FOR_1000(1000) +		\
-+	  __CPULIST_FOR_10000(10000) +		\
-+	  __CPULIST_FOR_100000(100000) +	\
-+	  __CPULIST_FOR_1000000(NR_CPUS))
-+#else
- #define CPULIST_FILE_MAX_BYTES  (((NR_CPUS * 7)/2 > PAGE_SIZE) ? (NR_CPUS * 7)/2 : PAGE_SIZE)
-+#endif
- 
- #endif /* __LINUX_CPUMASK_H */
--- 
-2.35.1
-
+On 9/13/2022 1:53 AM, Johan Hovold wrote:
+> Add the missing sanity check on the bridge counter to avoid corrupting
+> data beyond the fixed-sized bridge array in case there are ever more
+> than eight bridges.
+>
+> Fixes: 8a3b4c17f863 ("drm/msm/dp: employ bridge mechanism for display enable and disable")
+> Cc: stable@vger.kernel.org	# 5.17
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+Tested-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+Reviewed-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> ---
+>   drivers/gpu/drm/msm/dp/dp_display.c | 6 ++++++
+>   1 file changed, 6 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+> index 3e284fed8d30..fbe950edaefe 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+> @@ -1604,6 +1604,12 @@ int msm_dp_modeset_init(struct msm_dp *dp_display, struct drm_device *dev,
+>   		return -EINVAL;
+>   
+>   	priv = dev->dev_private;
+> +
+> +	if (priv->num_bridges == ARRAY_SIZE(priv->bridges)) {
+> +		DRM_DEV_ERROR(dev->dev, "too many bridges\n");
+> +		return -ENOSPC;
+> +	}
+> +
+>   	dp_display->drm_dev = dev;
+>   
+>   	dp_priv = container_of(dp_display, struct dp_display_private, dp_display);
