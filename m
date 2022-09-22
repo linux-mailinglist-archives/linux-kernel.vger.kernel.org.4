@@ -2,102 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7617E5E6BB9
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 21:31:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F4B85E6BBC
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 21:32:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231216AbiIVTbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 15:31:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48112 "EHLO
+        id S231570AbiIVTcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 15:32:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbiIVTbL (ORCPT
+        with ESMTP id S229864AbiIVTcA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 15:31:11 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D472E6B0
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 12:31:08 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id r20so7025716qtn.12
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 12:31:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=NWcgMuOu/DRb30hVDSf+gjGKztVe28VznYCH2jRwr2w=;
-        b=Uv1U0RJbEpqFZrbA9uyr91kswnGSB3cjK6Aj9EXiOeZ7e0XWQub4bxwG+sbRw5QAA4
-         44JMp1BuOrUDUJ0uP0C6KSA8VHC/IuXF6Kqv6lVLWrpR8Nw200fkrYzWK0LLM3GfbgbA
-         NCqH1+i21BykwSS/x2OqgxCdNhFdsFfsXRuCs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=NWcgMuOu/DRb30hVDSf+gjGKztVe28VznYCH2jRwr2w=;
-        b=1tMz4mfydoD9V+htGEp6mRSswsPIfv1DLmlGjXo1UsJDgmf9fEXJu9hWx/+/6ysNG3
-         /1rf214vg5RgFMLi6Iasmelj2NvGhM22yieHOH1rpfJ0G6PJC8fJK1J7bAE5EoBN32NI
-         dPZnlQ+FLTIreCiih+TmEdOc8JxjR5nmi+rQgz3h/WvwJyuWI3UdHkZPNUEPhENUzfXz
-         DfBcUzBfLjq/IrfddwRjxhWAFIaoSAgWN45G52DG7dv6tKPFfZ1ltO0BfhLliG94/nPB
-         q876Bml/1PMygrLgNrj22Vx6nCA6fqY/GD3uO4OgcNToc0VoL1nMvpXbIrV+clgw7g5S
-         joWg==
-X-Gm-Message-State: ACrzQf39KWVHEFJLXr+nhMSR2WisHRp/3KhT2AoBlKhJAuX+bnUlQtJD
-        AvXqeau3CaO/QsyXZUFM82XTaQ==
-X-Google-Smtp-Source: AMsMyM5X3spJySOGhlhXn9TKeJ1vUC4PQaWa4xgYswhH4zjD3fT+v5idDUvkA6X33EHtGeHu/7U0ag==
-X-Received: by 2002:ac8:5c0b:0:b0:35c:e066:998d with SMTP id i11-20020ac85c0b000000b0035ce066998dmr4195776qti.336.1663875067117;
-        Thu, 22 Sep 2022 12:31:07 -0700 (PDT)
-Received: from meerkat.local (bras-base-mtrlpq5031w-grc-33-142-113-79-147.dsl.bell.ca. [142.113.79.147])
-        by smtp.gmail.com with ESMTPSA id i12-20020a05620a404c00b006b8d1914504sm5393430qko.22.2022.09.22.12.31.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 12:31:06 -0700 (PDT)
-Date:   Thu, 22 Sep 2022 15:31:04 -0400
-From:   Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Guillaume Ranquet <granquet@baylibre.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        CK Hu <ck.hu@mediatek.com>, Jitao shi <jitao.shi@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Bo-Chen Chen <rex-bc.chen@mediatek.com>,
-        linux-mediatek@lists.infradead.org,
-        dri-devel@lists.freedesktop.org,
-        Pablo Sun <pablo.sun@mediatek.com>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v1 01/17] dt-bindings: clk: mediatek: Add MT8195 DPI
- clocks
-Message-ID: <20220922193104.4qminv6adrajkhw2@meerkat.local>
-References: <20220919-v1-0-4844816c9808@baylibre.com>
- <20220919-v1-1-4844816c9808@baylibre.com>
- <d01e4a03-1d6d-9616-45ca-1c927f2d8237@linaro.org>
- <CABnWg9uZ=FrumgUzyUoUiS6T51nZTEf5JZ-1KF0-Ra9Ood5ufA@mail.gmail.com>
- <6b24be8f-94d7-6973-6f35-18cb15fc8cd4@linaro.org>
+        Thu, 22 Sep 2022 15:32:00 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 495C810808D;
+        Thu, 22 Sep 2022 12:31:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663875119; x=1695411119;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=/E9F/kZe4totps/FwCcYM7Ti55I6luWBRPyLjUFn72o=;
+  b=ZQgftMtfowvhSGHpSN8CSHt8Q+EvOdVUTiaxzaiQGvAqYRggeumO+5Q5
+   jcYoH/WG/7Cn+7PoXvHRJyMeR5AiVIbe8pP8B2xh9Q+Q4sv+Q+2mqPZ3x
+   UJ9fzAbGx5h1dUgaEDdqo/bqWJ4RAa+tRinl3uaF/W8FwAwQXv7Y1dif0
+   NhJ2bPYW793K/vKqAaoELBDf7guj8H/sK6C6ar57yNCY/cmy9PxJ2y+Ii
+   9fqX4iD9K5vYYKEw3q6/zxWQxxtZyXzblP2zn3uH9QbcJ9DRbX9yIjTM9
+   aZ4i7cP20ea024L3eiamKTXU9BcndRLNPIko/bduY4BJaJmRVe9xMTh13
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="283497918"
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="283497918"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 12:31:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="688445664"
+Received: from viggo.jf.intel.com (HELO ray2.amr.corp.intel.com) ([10.54.77.144])
+  by fmsmga004.fm.intel.com with ESMTP; 22 Sep 2022 12:31:57 -0700
+From:   Dave Hansen <dave.hansen@linux.intel.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, linux-efi@vger.kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: [PATCH] x86/mm+efi: Avoid creating W+X mappings
+Date:   Thu, 22 Sep 2022 12:31:57 -0700
+Message-Id: <20220922193157.1673623-1-dave.hansen@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <08906193-246b-c874-8bac-1d98d2313ac4@roeck-us.net>
+References: <08906193-246b-c874-8bac-1d98d2313ac4@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <6b24be8f-94d7-6973-6f35-18cb15fc8cd4@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 02:51:00PM +0200, Krzysztof Kozlowski wrote:
-> Thanks for explanation! Probably your patches are perfectly fine and
-> should apply, although I must admit diffstat is often useful.
+From: Peter Zijlstra <peterz@infradead.org>
 
-Krzysztof:
+I'm planning on sticking this in x86/mm so that it goes upstream
+along with the W+X detection code.
 
-The patches should indeed apply without problems and there's a fix for the
-missing diffstat already in place.
+--
 
-Best regards,
-Konstantin
+A recent x86/mm change warns and refuses to create W+X mappings.
+
+The 32-bit EFI code tries to create such a mapping and trips over
+the new W+X refusal.
+
+Make the EFI_RUNTIME_SERVICES_CODE mapping read-only to fix it.
+
+Reported-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Peter Zijlstra <peterz@infradead.org>
+Tested-by: Guenter Roeck <linux@roeck-us.net>
+Cc: Ard Biesheuvel <ardb@kernel.org>
+Cc: Darren Hart <dvhart@infradead.org>
+Cc: Andy Shevchenko <andy@infradead.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: x86@kernel.org
+Cc: linux-efi@vger.kernel.org
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Link: https://lore.kernel.org/all/d8cd7c7e-24c1-7f70-24a9-91c77aa634af@roeck-us.net/
+---
+ arch/x86/platform/efi/efi_32.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/x86/platform/efi/efi_32.c b/arch/x86/platform/efi/efi_32.c
+index e06a199423c0..d81e379fcd43 100644
+--- a/arch/x86/platform/efi/efi_32.c
++++ b/arch/x86/platform/efi/efi_32.c
+@@ -136,6 +136,7 @@ void __init efi_runtime_update_mappings(void)
+ 			if (md->type != EFI_RUNTIME_SERVICES_CODE)
+ 				continue;
+ 
++			set_memory_ro(md->virt_addr, md->num_pages);
+ 			set_memory_x(md->virt_addr, md->num_pages);
+ 		}
+ 	}
+-- 
+2.34.1
+
