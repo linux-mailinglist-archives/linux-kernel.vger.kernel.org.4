@@ -2,114 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF18C5E5C42
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 09:21:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B3EF5E5C45
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 09:22:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230506AbiIVHVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 03:21:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45478 "EHLO
+        id S230478AbiIVHWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 03:22:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231154AbiIVHU6 (ORCPT
+        with ESMTP id S230350AbiIVHWC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 03:20:58 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A6DCBAEF
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 00:20:50 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id u18so13170663lfo.8
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 00:20:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=TPd1M8oBjHnNozp05d671P5pFiuRlsalsS4w6miNryU=;
-        b=DEJqWRMQjOJQ8++nLzN9KbMQNg31pNbXrNYPjUYeHJxeulmWbiO3uwjEydrBT8enpx
-         5sS2fPSXu9nqh8I/U4KFSjfV3G927s/rv1tqmj11Z2hF3kMbAnVU2AD+yP09o57fyrB4
-         3cJUgnwaYKiaus3XEQp1bZ/IX9OrFDM730VMEIsL18ne6cBc8bpe+z91516vR0rgCpTP
-         AiRjBaf+dMkrbqac4f8myV0JWSpk4Ag1fPfLQclSe47PPYVhP9hqgVE/2t3wrtFREca9
-         Dd1w0tMisqyJRSHK931fl/LPYRhJH7/SXY2e8WeY+Ypjx66EOWYGyniBFn6hR7Q3Zlzw
-         uVSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=TPd1M8oBjHnNozp05d671P5pFiuRlsalsS4w6miNryU=;
-        b=st00rsQR5obSqQivfDESAn/1MCKxGyKtaCsEuWvCsXj0UwqK4WwMygKzLesQ0FylwK
-         wO4kNgGw43cbmDKs/OFYc5YnGwFIDFyh5FN7YNoogu9ZaIdSV34SJGL929MKiglmUhFO
-         8Y7tlKlQxuj9pG7+FnWV3lNXSWTjdfV1I3CHPYhzXe8r3H0w3c51Gp7AxjItJCGgiLkh
-         0P8urcA4KXtlCK1+rMJdnL4ZoFzt7Ay/XRYmoCKM+ocHF0o0mCeqJWMk1T2E+hLUyzRZ
-         GYKsterQtF0eFrTQUMHrX5Cxt8tQZ0M1sKHjB/0YjXbr4JqZLoF1SzE68ulslVPT3VAL
-         Jc+g==
-X-Gm-Message-State: ACrzQf3eodZ5mP9xoJrReNwwGabb+JbA95xAN6EhkW9megg9tMGOzToJ
-        0PJjVrnL6NK4rpgOSjNl6Yipag==
-X-Google-Smtp-Source: AMsMyM55t1rNZFbd9M//L345bj9ZqSPstb512C/ND5LsTPVxSfYeiy0p88QI81OjW4xD1dRYCtEUEg==
-X-Received: by 2002:a05:6512:3187:b0:49e:6607:3a75 with SMTP id i7-20020a056512318700b0049e66073a75mr681890lfe.28.1663831249033;
-        Thu, 22 Sep 2022 00:20:49 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id u9-20020a199209000000b00492e570e036sm801300lfd.54.2022.09.22.00.20.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Sep 2022 00:20:48 -0700 (PDT)
-Message-ID: <a0a3c427-c851-ae5d-4010-e94740bf9f6e@linaro.org>
-Date:   Thu, 22 Sep 2022 09:20:47 +0200
+        Thu, 22 Sep 2022 03:22:02 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227723844C;
+        Thu, 22 Sep 2022 00:22:01 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MY69c2YdwzHqK2;
+        Thu, 22 Sep 2022 15:19:48 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 22 Sep 2022 15:21:58 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 22 Sep 2022 15:21:58 +0800
+Subject: Re: [PATCH v4 4/8] kallsyms: Improve the performance of
+ kallsyms_lookup_name()
+To:     Petr Mladek <pmladek@suse.com>
+CC:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Masahiro Yamada" <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        <linux-modules@vger.kernel.org>
+References: <20220920071317.1787-1-thunder.leizhen@huawei.com>
+ <20220920071317.1787-5-thunder.leizhen@huawei.com> <Yyss3SWM0nTVnjT7@alley>
+ <3c86335e-c5b8-b291-d0c2-9b69f912f900@huawei.com> <YywIcQzaGmV43zr6@alley>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <ba8979fb-df77-c387-3c7b-cf5c46050c43@huawei.com>
+Date:   Thu, 22 Sep 2022 15:21:57 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v1 17/17] drm/mediatek: Add mt8195-dpi support to drm_drv
+In-Reply-To: <YywIcQzaGmV43zr6@alley>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-To:     Guillaume Ranquet <granquet@baylibre.com>,
-        Vinod Koul <vkoul@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        CK Hu <ck.hu@mediatek.com>, Jitao shi <jitao.shi@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-mediatek@lists.infradead.org,
-        dri-devel@lists.freedesktop.org,
-        Pablo Sun <pablo.sun@mediatek.com>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org
-References: <20220919-v1-0-4844816c9808@baylibre.com>
- <20220919-v1-17-4844816c9808@baylibre.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220919-v1-17-4844816c9808@baylibre.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/09/2022 18:56, Guillaume Ranquet wrote:
-> Add dpi support to enable the HDMI path.
+
+
+On 2022/9/22 15:02, Petr Mladek wrote:
+> On Thu 2022-09-22 10:15:22, Leizhen (ThunderTown) wrote:
+>>
+>>
+>> On 2022/9/21 23:25, Petr Mladek wrote:
+>>> On Tue 2022-09-20 15:13:13, Zhen Lei wrote:
+>>>> Currently, to search for a symbol, we need to expand the symbols in
+>>>> 'kallsyms_names' one by one, and then use the expanded string for
+>>>> comparison. This process can be optimized.
+>>>>
+>>>> And now scripts/kallsyms no longer compresses the symbol types, each
+>>>> symbol type always occupies one byte. So we can first compress the
+>>>> searched symbol and then make a quick comparison based on the compressed
+>>>> length and content. In this way, for entries with mismatched lengths,
+>>>> there is no need to expand and compare strings. And for those matching
+>>>> lengths, there's no need to expand the symbol. This saves a lot of time.
+>>>> According to my test results, the average performance of
+>>>> kallsyms_lookup_name() can be improved by 20 to 30 times.
+>>>>
+>>>> The pseudo code of the test case is as follows:
+>>>> static int stat_find_name(...)
+>>>> {
+>>>> 	start = sched_clock();
+>>>> 	(void)kallsyms_lookup_name(name);
+>>>> 	end = sched_clock();
+>>>> 	//Update min, max, cnt, sum
+>>>> }
+>>>>
+>>>> /*
+>>>>  * Traverse all symbols in sequence and collect statistics on the time
+>>>>  * taken by kallsyms_lookup_name() to lookup each symbol.
+>>>>  */
+>>>> kallsyms_on_each_symbol(stat_find_name, NULL);
+>>>>
+>>>> The test results are as follows (twice):
+>>>> After : min=5250, max=  726560, avg= 302132
+>>>> After : min=5320, max=  726850, avg= 301978
+>>>> Before: min=170,  max=15949190, avg=7553906
+>>>> Before: min=160,  max=15877280, avg=7517784
+>>>>
+>>>> The average time consumed is only 4.01% and the maximum time consumed is
+>>>> only 4.57% of the time consumed before optimization.
+>>>>
+>>>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+>>>> ---
+>>>>  kernel/kallsyms.c | 79 +++++++++++++++++++++++++++++++++++++++++++++--
+>>>>  1 file changed, 76 insertions(+), 3 deletions(-)
+>>>>
+>>>> diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+>>>> index 3e7e2c2ad2f75ef..2d76196cfe89f34 100644
+>>>> --- a/kernel/kallsyms.c
+>>>> +++ b/kernel/kallsyms.c
+>>>> @@ -87,6 +87,71 @@ static unsigned int kallsyms_expand_symbol(unsigned int off,
+>>>> +{
+>>>> +	int i, j, k, n;
+>>>> +	int len, token_len;
+>>>> +	const char *token;
+>>>> +	unsigned char token_idx[KSYM_NAME_LEN];
+>>>> +	unsigned char token_bak[KSYM_NAME_LEN];
+>>>
+>>> Why do we need two buffers? It should be possible to compress the name
+>>> in the same buffer as it is done in compress_symbols() in scripts/callsyms.c.
+>>
+>> Because the performance would be a little better. Now this function takes
+>> just over a microsecond. Currently, it takes about 250 microseconds on
+>> average to lookup a symbol, so adding a little more time to this function
+>> doesn't affect the overall picture. I'll modify and test it as you suggest
+>> below.
 > 
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> We need to be careful about a stack overflow. I have seen that
+> KSYM_NAME_LEN might need to be increased to 512 because of
+> Rust support, see
+> https://lore.kernel.org/r/20220805154231.31257-6-ojeda@kernel.org
+
+OK. Thanks for your information. I decided to add kallsyms_best_token_table[],
+kallsyms_best_token_table_len, so that we only need one namebuf[], like
+kallsyms_expand_symbol().
+
 > 
-> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-> index 72049a530ae1..27f029ca760b 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-> @@ -820,6 +820,8 @@ static const struct of_device_id mtk_ddp_comp_dt_ids[] = {
->  	  .data = (void *)MTK_DPI },
->  	{ .compatible = "mediatek,mt8192-dpi",
->  	  .data = (void *)MTK_DPI },
-> +	{ .compatible = "mediatek,mt8195-dpi",
-> +	  .data = (void *)MTK_DPI },
+>>>> @@ -192,20 +257,28 @@ unsigned long kallsyms_lookup_name(const char *name)
+>>>>  	for (i = 0, off = 0; i < kallsyms_num_syms; i++) {
+>>>>  		off = kallsyms_expand_symbol(off, namebuf, ARRAY_SIZE(namebuf));
+>>>>  
+>>>> -		if (strcmp(namebuf, name) == 0)
+>>>> -			return kallsyms_sym_address(i);
+>>>> -
+>>>>  		if (cleanup_symbol_name(namebuf) && strcmp(namebuf, name) == 0)
+>>>>  			return kallsyms_sym_address(i);
+>>>
+>>> Hmm, it means that the speedup is not usable when kernel is compiled LLVM?
+>>> It might actually slow down the search because we would need to use
+>>> both fast and slow search?
+>>
+>> Theoretically, I don't think so. A string comparison was removed from the
+>> slow search. "if (name_len != len)" is faster than
+>> "if (strcmp(namebuf, name) == 0)". Even if they're equal,
+>> kallsyms_compress_symbol_name() only takes 1-2us, it doesn't affect the
+>> overall picture. The average lookup time before optimization is
+>> millisecond-level.
+>>
+>> Before: min=170,  max=15949190, avg=7553906
+> 
+> Good point! I agree that the potential extra overhead is negligible
+> when using the old code as a fallback.
+> 
+> Best Regards,
+> Petr
+> .
+> 
 
-It's compatible with the others. You don't need more compatibles.
-
-Best regards,
-Krzysztof
-
+-- 
+Regards,
+  Zhen Lei
