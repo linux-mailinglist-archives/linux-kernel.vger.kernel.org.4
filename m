@@ -2,51 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C89705E64E3
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 16:15:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0BFE5E64E6
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 16:15:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231636AbiIVOO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 10:14:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55164 "EHLO
+        id S230119AbiIVOPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 10:15:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231521AbiIVOOx (ORCPT
+        with ESMTP id S231407AbiIVOPS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 10:14:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 310CD3CBDB;
-        Thu, 22 Sep 2022 07:14:52 -0700 (PDT)
+        Thu, 22 Sep 2022 10:15:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A612113DC2;
+        Thu, 22 Sep 2022 07:15:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AEFD2B8376C;
-        Thu, 22 Sep 2022 14:14:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00BACC433D6;
-        Thu, 22 Sep 2022 14:14:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663856089;
-        bh=LpDsfUiZsVGanIM4Gs2BdJkChHrUyvu7yHYD+XKozOk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=qaMsdqToEy27LU98ts7fgQHvlODXa0ihV5wE5g6iKGyI0Y3a8dOqG5rxbRYiCTFN0
-         yVkjHCUCAFyN3PXu9HWeHirwwjcMYk5Vh3dKwqEJ9kicIAm2b2fAXbRjAN+zeYvqE+
-         mJVMWpF1nDeZcbgiag3ooEjVN6fii+X16nzwr6I5iylB2puFPdAs6X7a/wkZfzDKBL
-         q3mKbzEno7nZJjjxgDGFRrTCnfqrkhlvGbkJuVm3Q1wD1v7vO+Lsa258ykGatrL/yR
-         iuLVf5Hw4WjvIqij5sx/a+bHiXSk/HIHx+fRUDDULPhZ+ZdiFjlIYpEpNTohkV/Z1F
-         0RxXxYO9oM9TQ==
-Date:   Thu, 22 Sep 2022 07:14:48 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Hangyu Hua <hbh25y@gmail.com>
-Cc:     jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        paulb@mellanox.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: sched: act_ct: fix possible refcount leak in
- tcf_ct_init()
-Message-ID: <20220922071448.4f4eb475@kernel.org>
-In-Reply-To: <20220921090600.29673-1-hbh25y@gmail.com>
-References: <20220921090600.29673-1-hbh25y@gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4CEF0634FB;
+        Thu, 22 Sep 2022 14:15:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D136C433C1;
+        Thu, 22 Sep 2022 14:15:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1663856116;
+        bh=tl/32hl140pijmlck7q2wJ41zq0TYCte/Mh0P254N+I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=zxGA49KR1iDZvATG+lu+ezRBJqwTIA3dF6v+6KPcbAmbDMlqIqMrDE9YA9B0tgmGl
+         mhNCFfRRXVcBbYcTmn6CjwEClE6Ssm/rzSeHgQsZrO3hFKoAdvqf8pv/Lm+7qruYmJ
+         O6OA278VMJR/M396ADaQ223QW4K48q9tT7oC2lQU=
+Date:   Thu, 22 Sep 2022 16:15:14 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jiri Slaby <jslaby@suse.cz>
+Cc:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>, Johan Hovold <johan@kernel.org>,
+        "Russell King (Oracle)" <linux@armlinux.org.uk>
+Subject: Re: [PATCH v4 00/10] tty: TX helpers
+Message-ID: <Yyxt8iv+ERbyXBR4@kroah.com>
+References: <20220920052049.20507-1-jslaby@suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220920052049.20507-1-jslaby@suse.cz>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -56,31 +52,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 21 Sep 2022 17:06:00 +0800 Hangyu Hua wrote:
-> Subject: [PATCH] net: sched: act_ct: fix possible refcount leak in tcf_ct_init()
-
-[PATCH net] please
-
-> nf_ct_put need to be called to put the refcount got by tcf_ct_fill_params
-> to avoid possible refcount leak when tcf_ct_flow_table_get fails.
+On Tue, Sep 20, 2022 at 07:20:40AM +0200, Jiri Slaby wrote:
+> This series introduces uart_port_tx() + uart_port_tx_limited() TX
+> helpers. See PATCH 8/10 for the details. Comments welcome.
 > 
-> Fixes: c34b961a2492 ("net/sched: act_ct: Create nf flow table per zone")
-> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-> ---
->  net/sched/act_ct.c | 2 ++
->  1 file changed, 2 insertions(+)
+> First the series performs simple cleanups, so that the later patches are
+> easier to follow.
 > 
-> diff --git a/net/sched/act_ct.c b/net/sched/act_ct.c
-> index d55afb8d14be..3646956fc717 100644
-> --- a/net/sched/act_ct.c
-> +++ b/net/sched/act_ct.c
-> @@ -1412,6 +1412,8 @@ static int tcf_ct_init(struct net *net, struct nlattr *nla,
->  cleanup:
->  	if (goto_ch)
->  		tcf_chain_put_by_act(goto_ch);
-> +	if (params->tmpl)
-> +		nf_ct_put(params->tmpl);
+> Then it switches drivers to use them. First, to uart_port_tx() in 9/10
+> and then uart_port_tx_limited() in 10/10.
+> 
+> The diffstat of patches 9+10 is as follows:
+>  26 files changed, 145 insertions(+), 740 deletions(-)
+> which appears to be nice.
 
-This is buggy, params could be NULL here. Please add a new label above
-cleanup (cleanup_params for example) and make the
-tcf_ct_flow_table_get() failure path jump there instead.
+I've queued up the first 7 patches here, as they were the preparation /
+cleanup patches and deserved to go in no matter what.
+
+thanks,
+
+greg k-h
