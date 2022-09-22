@@ -2,236 +2,371 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52C5E5E621B
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 14:16:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1B365E6222
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 14:17:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231203AbiIVMQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 08:16:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34336 "EHLO
+        id S230171AbiIVMRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 08:17:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230472AbiIVMQR (ORCPT
+        with ESMTP id S229907AbiIVMRF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 08:16:17 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0CAFE512A;
-        Thu, 22 Sep 2022 05:16:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663848975; x=1695384975;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=RSIkUqwF1ZnzWy+6H43tRHwMk0WUs/RiAvPGzP9Q7Ss=;
-  b=oFocfaMPi9DBt6f/UpFngA8iS3y5z4SBzpQrVCQP1OZbdbYPsqxba2Q8
-   wWzuQIXupSLbLdy7yFGmg1f5BFllmY5NRUYmbh8yHxTk+1JEXAeTDJ0Ea
-   1L6CSL0G83eBDIgkNU4C+im2kXRRiFTsJSTAKxVBTCEkBHGiHU8S0JsF4
-   wJNX9+PsistQqKPvl3l3q/z+PVE0inut6R4no2dR+tOfjjK6ElCxvA3NF
-   GquYk44Mp1lTT5jcjOoca/yNEc3D/GU4fK5Q9F6fcbXrdwpli8I/ztra7
-   Wz9/TnMIH6IWgKus/0QOkwEgBIkJctEiNTJZVrAQlBIEpbmliQP2GLGCH
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="280649017"
-X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
-   d="scan'208";a="280649017"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 05:16:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
-   d="scan'208";a="570939552"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by orsmga003.jf.intel.com with ESMTP; 22 Sep 2022 05:16:14 -0700
-Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 22 Sep 2022 05:16:14 -0700
-Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
- ORSMSX607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 22 Sep 2022 05:16:13 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Thu, 22 Sep 2022 05:16:13 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.109)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Thu, 22 Sep 2022 05:16:13 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Xl/W8fVyZXpjRLVkrQS19qVVEoZqfatXPnubzYfFTZON66cWzGaHIgqKuXoo/JATFVgrR22UJM8hOMUEMa8CAbIznpo7mEdeyZ2OvyZNVAjpl9gbYUvQTt/VAz4kzX0UPsvQMeNipPzgmsW2da6NYMT86KwW+Tzqe3SgaSYAeSMz2v8JSyJ5tuLop7FSsThgmTzsZudG2h0tx1z4XrMDxOPe1VoZ7O7n8Zpn0BP9WOiE9TXBxuSDJ45hPeDLp9YFvdcXCLyJdXlcIJ5s9OINdwEB+XEadXxhI5iPL15zioNztG/aRrytj2f/BilgFNlXZmmbpKC29oXFTeaogJbcpw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=O1aXRaHb54blRgUlqHqSiuS7FID0RwMTlGweY2tYkQQ=;
- b=Pi/VDYHq/uCCzOBa/6Rkf2gnpqKCRexJDCtX30gHk95ZAoa1/QTZqeMCFqLrbRdqeYrOhvia935NFdvUYdsOEU/KHUqMChqk+44zFA5p5+WpHfFtotektvwiHz9ArSxN3beGnfKXSi1WrdyUB6bFtnst2egSTmmCCd83sQw3DMRnn155rL/Gvo64ytqRDqEtYbYPz7HBIURbv5Zlcf/GVuixVDb0LV1oZzCi2dtBBJgcFA6/VO63wPoOcmZcuB0Kxk3CG+Dr39knMOCcjpBOExuM9CUqVLumL7AxM+02qKp9xu8PZvhqrmqftdH8y5VH3Yot/EQNZmWwN9RWguF05A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from DS0PR11MB6373.namprd11.prod.outlook.com (2603:10b6:8:cb::20) by
- IA0PR11MB7188.namprd11.prod.outlook.com (2603:10b6:208:440::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.18; Thu, 22 Sep
- 2022 12:16:10 +0000
-Received: from DS0PR11MB6373.namprd11.prod.outlook.com
- ([fe80::817a:fd68:f270:1ea0]) by DS0PR11MB6373.namprd11.prod.outlook.com
- ([fe80::817a:fd68:f270:1ea0%7]) with mapi id 15.20.5654.016; Thu, 22 Sep 2022
- 12:16:10 +0000
-From:   "Wang, Wei W" <wei.w.wang@intel.com>
-To:     "Li, Xiaoyao" <xiaoyao.li@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        "Arnaldo Carvalho de Melo" <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Alexander Shishkin" <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "kan.liang@linux.intel.com" <kan.liang@linux.intel.com>
-CC:     "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
-Subject: RE: [RFC PATCH v2 1/3] perf/core: Expose
- perf_event_{en,dis}able_local()
-Thread-Topic: [RFC PATCH v2 1/3] perf/core: Expose
- perf_event_{en,dis}able_local()
-Thread-Index: AQHYzdmS5cJRyY6p6kagl/IIgs8y763q3Zkw
-Date:   Thu, 22 Sep 2022 12:16:10 +0000
-Message-ID: <DS0PR11MB6373E03E51A593E1AE74B259DC4E9@DS0PR11MB6373.namprd11.prod.outlook.com>
-References: <20220921164521.2858932-1-xiaoyao.li@intel.com>
- <20220921164521.2858932-2-xiaoyao.li@intel.com>
-In-Reply-To: <20220921164521.2858932-2-xiaoyao.li@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.500.17
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DS0PR11MB6373:EE_|IA0PR11MB7188:EE_
-x-ms-office365-filtering-correlation-id: 712d2630-3c2c-44a0-5eca-08da9c943c3f
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: invQlhGskbX6bzHHbFHp4f6pAWu4fHsRHO+1etVaeIbFOEYyXNfuJb5li1UBUPfa+v7G4Lfo7F3sWFYH6485BVXEqK0eHAvWQYCJ99wGFSzMx5VYlvbbV2dNARGCAldfaOcnGPRQz1mxslITaQb4ZTtPjxzAkPeFqHaLwKpgIgQZFGtPMRxEJjTl/R3CEC0J9UR7QfMpi1deamvhePqFIGS6LbkhXMPNXYR84QTHgcx5KrHVmLkMiuQffXVwx2j3Y7+TbYWY5qvpzrkBeaGBbQttTdPniIzaQeS08LdKS7upjsN8c84l5KmjuBN0FSTcbx2AYcuWOCcG4hrOeNs7vX0mgri2onAwyGpugh4uJ1PzzXijD/HpuaoYR+ClZaypfh508I2wPTo6IIgmoNMv02jMeoAeN8LN87W0BypD9A/YR61XJiSaTrjSDNvuM1B5nAfnUqNJXbd/3fb/w1PeEc56JuxoGrxJVfyiRjvLkvKbmhUQh2K9fz+FCLL2OXtjf3GNL9xz8I2cCwuWPx1eA8XNkwSmZHXLCq0Ew6pVVMcPWdmppRJe5wkvCiXcA4eWZ54bJc58ztr4cErHmDstDQCWv/b+7G//DU5RW05ctCmVqp0qg7gjcxzgUPdMFRiesk6KnjlY4d+lZGyHQj+Z8thY9VW11S+rnBRfSDoHjUFPa7vmewc7iT28m1wSgG5DTdYoYY3ql45iEH8JKRM33wGO1VS3jB+4RG1X+WaGYOzprnyqeFWn0r19C7npH+XGHcl5nns3nJlWkx20ii7cGAGus4Oc6gSbAYwbmL1ieIE=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB6373.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(376002)(366004)(396003)(39860400002)(346002)(451199015)(76116006)(64756008)(66946007)(5660300002)(66476007)(8676002)(52536014)(316002)(66556008)(4326008)(478600001)(8936002)(66446008)(9686003)(26005)(53546011)(7696005)(33656002)(7416002)(41300700001)(2906002)(38070700005)(6506007)(921005)(38100700002)(82960400001)(122000001)(55016003)(86362001)(186003)(71200400001)(110136005)(54906003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?hGtsllanZxIp7ul3PSuyp2Vxv4VgbuKKqT1A25j/Q6/4h0NZTg71QvQCsJHi?=
- =?us-ascii?Q?YFV+QhAzQUQj+YnImteAMaXK3TRp42eQNQH7VvVnGlt9ijDX3rrb8WPMnRzX?=
- =?us-ascii?Q?FiscjaD9wcTfaEjY10t3g4XrmRu5oE0XHJ98P73hLdpWI3yxwK67lQy+4drF?=
- =?us-ascii?Q?Vm+st9FU2xtbapeonslkLr802aH/H0exTe4R1KjnlMbuJgsEmZGcl0Qet/C7?=
- =?us-ascii?Q?N/q65EgZe6hNjD8ZXyZ1+L9soaoydvTJi9XbBuRYjKZBEvOxKHpZyw/Gq4ck?=
- =?us-ascii?Q?r1WkS1tolKgluhIOXDlSfKQNtagE5SgW+T/D8mmN28SLrVuEJ71Y8lY0IWsa?=
- =?us-ascii?Q?GaotfuKgnM9mcxp13Amu50cw3h1TnvJQnlR+9nLvnrceWZ+YyC2oXFJ9/ixN?=
- =?us-ascii?Q?Z3KQA/E1yl97gtvHTKTIRozM8IN5oF4C28YpZeisi6TLq04uo0cbCLKE3MXl?=
- =?us-ascii?Q?EMCyg+LnbAEVuwfg0zBNPYs0s5vDOrjgDpT8QwSJtMt4GOxNkuw3Rmt3JELO?=
- =?us-ascii?Q?fxV6p3M/tpgdouzSsbVMlBtTmfj11vkRYlkafOBLRurEM25fg9flHn9Dzp/J?=
- =?us-ascii?Q?qeij65/3MzAL94xV6wGbYe/+8lrwv5rdTBHVjlY2qyhKSCYx+Ks1un3umMQm?=
- =?us-ascii?Q?Qb5GEHhXjfT8Jpw64GD5QHatVPGEncK/jO1aflCRo8w6J7saHQl9RvGCJD/c?=
- =?us-ascii?Q?aM0I7IxLXQJ2ADlHYenUC7ikh6VqWxktqnJA//wilul07hUB8GXmwqPDcD+5?=
- =?us-ascii?Q?LZK+UuS8vw5rK2YHTp92qwQRWPlnhOeNMKA+iIutvhsxOOXsNvXgVoT87fts?=
- =?us-ascii?Q?ecw8PAO8LSAZCJ1b4ZVaIrPu4tPcqegoAdEcx9bwTmg595zXfrjRxiXxUmre?=
- =?us-ascii?Q?0RGzo3Tuo0jLyXdnp2e7d2LFX8FDFpD5mVmI0NJXvyhv40pZvhZIp7Nqm3eN?=
- =?us-ascii?Q?Li9WAf/cZCDu/YNs7FUQO4Y7/80a3OdjkBJ9YhKhrDH6crjJKaDrgaM4gAqz?=
- =?us-ascii?Q?+rDlz3x/x6BEoqlRMYou+mG/nTlZUxbEZIXlZnTY682LErnyYphK2aE9Zwgy?=
- =?us-ascii?Q?rTlH9+OAsE0v/f2cLp47/F58qGXQp0PIHdgd6zhftcZ7xfLzIgVqmkznFWhd?=
- =?us-ascii?Q?bKuc1a7wRy76uXIIBsGhYaSpnlEc0ZIDIdVWxI4dE/m/c7JfWKEhx2YU/C9j?=
- =?us-ascii?Q?qXVZGvporGUYJvbPOHuJBmjx95VbMVj1rezfsffpYaNhA/OH+lCIH2rAfIAR?=
- =?us-ascii?Q?waoS/3jIkxjPbz6vXp5MVzBHhdQks5VBpxTRn4sGuzfsDcbqUhVWv1oRHNI6?=
- =?us-ascii?Q?7H9UVVl0zvDV67cTeCOvjEohEgiEh42+jr1xWpfXYJTPBbUeXavyI8kUBkpA?=
- =?us-ascii?Q?fJrBMlwEIL/pGPNZp76vc3fXXMNXRJnha0ui0KZ7H+6+mL/nWFfkX76BKx4V?=
- =?us-ascii?Q?5lxFx3o0LvTbU4RHf9+8tkKouvzPKudM6JEaCiO7osbGiMrRZzRsv0MwU/3U?=
- =?us-ascii?Q?4xCgLuD162+5oZLziVVJemvPiA+uwRn3+ynPEBMXjmfUFymGDgZRpbGaLiHg?=
- =?us-ascii?Q?hKgHgudA80+EmfdCrcZfJEYJv18mrFw9SKEClAc4?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 22 Sep 2022 08:17:05 -0400
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82AB0E4DB5
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 05:17:01 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220922121656euoutp025ab72e83b68e172395ca82b3c8424a25~XLd1rtwFD2319323193euoutp02n
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 12:16:56 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220922121656euoutp025ab72e83b68e172395ca82b3c8424a25~XLd1rtwFD2319323193euoutp02n
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1663849016;
+        bh=JP1CCC83ecikgKhB1aKVTL+wH4Cqu3wMuMPaOL07y84=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=bFPMqKrl+5sXV786zC/fMvKVwd3Hpqvz+zH6TJyqlvGk/WbGYNTZRi9B3+2JGmnVf
+         9wRWAVm5RXWBEgaF2Cu6C7khVAjjk0qwbx3Y4ySqFFosQ2gnsAppGki1rev9fcfFXT
+         dIerIysekAKJeteY/J9siDwLweWYxdax6Bd05Cco=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20220922121656eucas1p1ddd26a1feb35304a35d7d401fd0a73e3~XLd1bwg9D1887618876eucas1p1e;
+        Thu, 22 Sep 2022 12:16:56 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 90.8E.07817.7325C236; Thu, 22
+        Sep 2022 13:16:55 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220922121655eucas1p11822db5dbd1455bcbdba901f543b8e6b~XLd1GHWOc0058200582eucas1p15;
+        Thu, 22 Sep 2022 12:16:55 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220922121655eusmtrp2349ac1d1a632d8b1739a89777d731071~XLd1FeCim1231712317eusmtrp2I;
+        Thu, 22 Sep 2022 12:16:55 +0000 (GMT)
+X-AuditID: cbfec7f4-893ff70000011e89-4e-632c5237d5d7
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id FE.62.10862.7325C236; Thu, 22
+        Sep 2022 13:16:55 +0100 (BST)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220922121655eusmtip25a77a22399ad270aefada98b441cce24~XLd0psA-D1374613746eusmtip26;
+        Thu, 22 Sep 2022 12:16:55 +0000 (GMT)
+Message-ID: <8e70837d-d859-dfb2-bf7f-83f8b31467bc@samsung.com>
+Date:   Thu, 22 Sep 2022 14:16:55 +0200
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB6373.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 712d2630-3c2c-44a0-5eca-08da9c943c3f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Sep 2022 12:16:10.6069
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: CpsKR3AADwW4LqhHRzW/mC5nu7wOL2T36kdtBrB3hoy4QdrKQVbwGkiPW6D8z20KWij8By5pq0Vpod3Md8IUtg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR11MB7188
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
+        Gecko/20100101 Thunderbird/91.13.0
+Subject: Re: [PATCH v2 3/8] kbuild: move core-y and drivers-y to ./Kbuild
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-scsi <linux-scsi@vger.kernel.org>
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <20220921043946.GA1355561@roeck-us.net>
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupnleLIzCtJLcpLzFFi42LZduznOV3zIJ1kg+t3rC06dn1lsfizaweT
+        xeVdc9gsuq/vYLN4svAMk8XDBzdYHdg8Nq3qZPPY+b2B3ePzJrkA5igum5TUnMyy1CJ9uwSu
+        jN6fV5gKWrIq9s5uZGxgnBbZxcjJISFgIjHvzH2WLkYuDiGBFYwSWw9eYoNwvjBKrJr5nQmk
+        SkjgM6PEge1lMB1P1p1hhihaziix7PINKOcjo8S/P8vYQap4Bewk7s5qZAGxWQRUJTZca4aK
+        C0qcnPkELC4qkCwx69gxRhBbWMBT4uySTjYQm1lAXOLWk/lAmzk4RAQCJK4tiACZzyzQyigx
+        8cwKsF42AUOJrrddYPWcQBft3LeNHaJXXqJ562ywgyQEDnBIvPm4kR3ibBeJ/rswtrDEq+Nb
+        oGwZif87QZaBNLQzSiz4fR/KmcAo0fD8FiNElbXEnXO/2EBOYhbQlFi/Sx8i7Cjx4vdDVpCw
+        hACfxI23ghBH8ElM2jadGSLMK9HRJgRRrSYx6/g6uLUHL1xinsCoNAspWGYheX8WkndmIexd
+        wMiyilE8tbQ4Nz212CgvtVyvODG3uDQvXS85P3cTIzDNnP53/MsOxuWvPuodYmTiYDzEKMHB
+        rCTCO/uOZrIQb0piZVVqUX58UWlOavEhRmkOFiVxXrYZWslCAumJJanZqakFqUUwWSYOTqkG
+        poX3/X6/P8jstslyVUs1856+3Bd/f2TapP/J4n9nfOO6wpZ36YlrG62XnHm4NfdmcbdKZ3PF
+        fTNlBbfcksOK27gPJVY+Yrj7Y1u5X/DU50cc2yfklCT5+6wVzA4DeuPxpBnt/Ev1HqXZ+BzV
+        2aMhERUWNqnJ/Y6Cxet1D1eGH3Aq2Km3IGGzyevigin747x+afdfkay/ovSlmtH711LD62zp
+        QQEMGxpubpJRTTB6e2bX6TJV5roDZed/nnVy/PLqX93kbR+O62qucZokeaLriQtnZuMzrvUR
+        ibbp0Xse8+Qv+FA2abkoM2ub0WeeM9fjrD5EM2Ss7gt6eehgRdzss898ls26sX3/4QOWn95e
+        U2Ipzkg01GIuKk4EAD7CNkCiAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrEIsWRmVeSWpSXmKPExsVy+t/xe7rmQTrJBm+6NSw6dn1lsfizaweT
+        xeVdc9gsuq/vYLN4svAMk8XDBzdYHdg8Nq3qZPPY+b2B3ePzJrkA5ig9m6L80pJUhYz84hJb
+        pWhDCyM9Q0sLPSMTSz1DY/NYKyNTJX07m5TUnMyy1CJ9uwS9jN6fV5gKWrIq9s5uZGxgnBbZ
+        xcjJISFgIvFk3RnmLkYuDiGBpYwST09tY4JIyEicnNbACmELS/y51sUGUfSeUaKzaxVYEa+A
+        ncTdWY0sIDaLgKrEhmvN7BBxQYmTM5+AxUUFkiWWNNwHGyQs4ClxdkknG4jNLCAucevJfLA5
+        IgJ+EgeWdbNCxFsZJU7vcIRYNp1Rou3oYWaQBJuAoUTX2y6wZk6gs3fu28YO0WAm0bW1ixHC
+        lpdo3jqbeQKj0Cwkd8xCsm8WkpZZSFoWMLKsYhRJLS3OTc8tNtIrTswtLs1L10vOz93ECIys
+        bcd+btnBuPLVR71DjEwcjIcYJTiYlUR4Z9/RTBbiTUmsrEotyo8vKs1JLT7EaAoMjInMUqLJ
+        +cDYziuJNzQzMDU0MbM0MLU0M1YS5/Us6EgUEkhPLEnNTk0tSC2C6WPi4JRqYFr6oWbiezkp
+        h0anpQGCQd+/6RedDH7w6sC7tW8c3qxfGvYwTeeXFu/l8J2vbAyuCK9xC1j/y3jJTX7Oncuk
+        tpv/89jQtsFK2e5noX3EOYlJntJWydv363UahMpy9G9WmM9msZm3/bXOha3Z8Z0XyyVCi9SZ
+        LnAu+38zkf223Bre9xPzjx08eHrLjHe6825712X56aULtr3uU/FtUxE00z5na1i1+cRPX+s/
+        O6xrRU6XXp4n7t26PUVn6bcIOzZzt8UBbtyXTnyQep0rXiYuovzEn6E5NY3xCd/GuIcO6g9c
+        0mY02xdX7XrIWsOTPXfir5kVPj3zTEqsCyK1s3vn1M7fLhoVv4fr+kGL9/XGSizFGYmGWsxF
+        xYkApP+U4TUDAAA=
+X-CMS-MailID: 20220922121655eucas1p11822db5dbd1455bcbdba901f543b8e6b
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20220922121655eucas1p11822db5dbd1455bcbdba901f543b8e6b
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220922121655eucas1p11822db5dbd1455bcbdba901f543b8e6b
+References: <20220906061313.1445810-1-masahiroy@kernel.org>
+        <20220906061313.1445810-4-masahiroy@kernel.org>
+        <20220921043946.GA1355561@roeck-us.net>
+        <CGME20220922121655eucas1p11822db5dbd1455bcbdba901f543b8e6b@eucas1p1.samsung.com>
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,SUSPICIOUS_RECIPS autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thursday, September 22, 2022 12:45 AM, Li, Xiaoyao wrote:
-> KVM needs them to disable/enable an Intel PT perf event before vm-entry/a=
-fter
-> vm-exit.
+Hi All,
 
-I would explain more in the commit here:
+On 21.09.2022 06:39, Guenter Roeck wrote:
+> On Tue, Sep 06, 2022 at 03:13:08PM +0900, Masahiro Yamada wrote:
+>> Use the ordinary obj-y to list subdirectories.
+>>
+>> Note1:
+>> GNU Make seems to transform './.modules.order' to '.modules.order'
+>> before matching it against the target pattern. Split ./.modules.order
+>> to a dedicated rule to avoid "doesn't match the target pattern"
+>> warning. [1]
+>>
+>> Note2:
+>> Previously, the link order of lib-y depended on CONFIG_MODULES; lib-y
+>> was linked before drivers-y when CONFIG_MODULES=y, otherwise after
+>> drivers-y. This was a bug of commit 7273ad2b08f8 ("kbuild: link lib-y
+>> objects to vmlinux forcibly when CONFIG_MODULES=y"), but it was not a
+>> big deal after all. Now, libs-y (all objects that come from lib/ and
+>> arch/*/lib/) is linked last, irrespective of CONFIG_MODULES.
+>>
+>> Note3:
+>> Now, the single target build in arch/*/lib/ works correctly. There was
+>> a bug report about this. [2]
+>>
+>>    $ make ARCH=arm arch/arm/lib/findbit.o
+>>      CALL    scripts/checksyscalls.sh
+>>      AS      arch/arm/lib/findbit.o
+>>
+>> [1]: https://lists.gnu.org/archive/html/bug-make/2022-08/msg00059.html
+>> [2]: https://lore.kernel.org/linux-kbuild/YvUQOwL6lD4%2F5%2FU6@shell.armlinux.org.uk/
+>>
+>> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> With this patch in place, all parisc images crash during boot with the
+> crash dump below. Bisect on next-20220920 points to this patch.
+> Crash and bisect logs are attached.
+>
+> Loking through boot logs, the same problem (same backtrace) is seen
+> with various boot tests on alpha. There may be more, but -next
+> crashes all over the place right now so it is difficult to determine
+> the platforms affected by a specicfic problem.
 
-Export perf_event_disable_local and perf_event_enable_local for perf users =
-to disable
-and enable perf events on the current local CPU. One usage is in PT virtual=
-ization
-by KVM:
-- before VMEnter to guest, KVM calls perf_event_disable_local to disable th=
-e host PT event
-running on the current CPU, and this reuses the PT driver to save the relat=
-ed h/w states.=20
-- after VMExit to host, KVM calls perf_event_enable_local to resume the hos=
-t PT event on
-the current CPU by having the PT driver load the previously saved states in=
-to h/w.
+I confirm this. I've observed similar issue recently (from time to time) 
+on the ARM 32bit based Exynos5250-based Arndale board. 'git bisect' lead 
+me also to this change. A short investigation revealed that the issue is 
+caused by the NULL sgp->pool in lib/sg_pool.c:sg_pool_alloc() function. 
+Sometimes it works fine, sometimes not. It looks that there is a race in 
+the sg_pools and scsi initialization somehow after this patch.
 
->=20
-> Signed-off-by: Xiaoyao Li <xiaoyao.li@intel.com>
+To confirm that this change is really responsible for the issue I've 
+tried to revert it on top of linux-next. This is however hard due to the 
+dependencies. Instead I've only did:
+
+# git revert -m1 6fb5a32d95a9b1a9d4a6e135404468a8d74cfde6
+
+on top of the linux next-20220921 and resolved the conflict (trivial to 
+resolve). After that the kernel boots fine and I was not able to 
+reproduce the issue.
+
+The issue I've observed was:
+
+ata1: SATA link up 3.0 Gbps (SStatus 123 SControl 300)
+ata1.00: HPA detected: current 117229295, native 117231408
+ata1.00: ATA-8: Corsair CSSD-F60GB2, 1.1, max UDMA/133
+ata1.00: 117229295 sectors, multi 1: LBA48 NCQ (depth 32)
+ata1.00: configured for UDMA/133
+scsi 0:0:0:0: Direct-Access     ATA      Corsair CSSD-F60 1.1  PQ: 0 ANSI: 5
+sd 0:0:0:0: [sda] 117229295 512-byte logical blocks: (60.0 GB/55.9 GiB)
+sd 0:0:0:0: Attached scsi generic sg0 type 0
+sd 0:0:0:0: [sda] Write Protect is off
+sd 0:0:0:0: [sda] Preferred minimum I/O size 512 bytes
+8<--- cut here ---
+Unable to handle kernel NULL pointer dereference at virtual address 00000034
+usb3503 usb-hub: switched to HUB mode
+[00000034] *pgd=00000000
+usb3503 usb-hub: usb3503_probe: probed in hub mode
+UDC core: g_ether: couldn't find an available UDC
+
+Internal error: Oops: 5 [#1] PREEMPT SMP ARM
+Modules linked in:
+CPU: 0 PID: 7 Comm: kworker/0:0H Not tainted 
+6.0.0-rc5-00016-g10d1d4b75525 #12835
+Hardware name: Samsung Exynos (Flattened Device Tree)
+Workqueue: kblockd blk_mq_run_work_fn
+PC is at mempool_alloc+0x48/0x14c
+LR is at mempool_alloc+0x2c/0x14c
+pc : [<c0267a2c>]    lr : [<c0267a10>]    psr: 40000013
+...
+Flags: nZcv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
+Control: 10c5387d  Table: 4000406a  DAC: 00000051
+...
+Process kworker/0:0H (pid: 7, stack limit = 0x(ptrval))
+Stack: (0xf0839cc8 to 0xf083a000)
+...
+  mempool_alloc from __sg_alloc_table+0x120/0x160
+  __sg_alloc_table from sg_alloc_table_chained+0x5c/0xc0
+  sg_alloc_table_chained from scsi_alloc_sgtables+0x5c/0x294
+  scsi_alloc_sgtables from sd_init_command+0x118/0x908
+  sd_init_command from scsi_queue_rq+0x360/0xbe0
+  scsi_queue_rq from blk_mq_dispatch_rq_list+0x1d8/0x8c8
+  blk_mq_dispatch_rq_list from blk_mq_do_dispatch_sched+0x2e0/0x338
+  blk_mq_do_dispatch_sched from __blk_mq_sched_dispatch_requests+0xa8/0x150
+  __blk_mq_sched_dispatch_requests from 
+blk_mq_sched_dispatch_requests+0x34/0x5c
+  blk_mq_sched_dispatch_requests from __blk_mq_run_hw_queue+0x88/0x22c
+  __blk_mq_run_hw_queue from process_one_work+0x288/0x778
+  process_one_work from worker_thread+0x44/0x504
+  worker_thread from kthread+0xf0/0x124
+  kthread from ret_from_fork+0x14/0x2c
+Exception stack(0xf0839fb0 to 0xf0839ff8)
+9fa0:                                     00000000 00000000 00000000 
+00000000
+9fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 
+00000000
+9fe0: 00000000 00000000 00000000 00000000 00000013 00000000
+Code: e30ea764 e3c44d11 e34ca017 e3844a92 (e5953034)
+---[ end trace 0000000000000000 ]---
+
+
+>
+> Guenter
+>
 > ---
->  include/linux/perf_event.h | 1 +
->  kernel/events/core.c       | 7 +++++++
->  2 files changed, 8 insertions(+)
->=20
-> diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h inde=
-x
-> ee8b9ecdc03b..fc5f3952d6a2 100644
-> --- a/include/linux/perf_event.h
-> +++ b/include/linux/perf_event.h
-> @@ -1472,6 +1472,7 @@ extern int
-> perf_swevent_get_recursion_context(void);
->  extern void perf_swevent_put_recursion_context(int rctx);  extern u64
-> perf_swevent_set_period(struct perf_event *event);  extern void
-> perf_event_enable(struct perf_event *event);
-> +extern void perf_event_enable_local(struct perf_event *event);
->  extern void perf_event_disable(struct perf_event *event);  extern void
-> perf_event_disable_local(struct perf_event *event);  extern void
-> perf_event_disable_inatomic(struct perf_event *event); diff --git
-> a/kernel/events/core.c b/kernel/events/core.c index
-> 2621fd24ad26..8324bb99c6bf 100644
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
-> @@ -2446,6 +2446,7 @@ void perf_event_disable_local(struct perf_event
-> *event)  {
->  	event_function_local(event, __perf_event_disable, NULL);  }
-> +EXPORT_SYMBOL_GPL(perf_event_disable_local);
->=20
->  /*
->   * Strictly speaking kernel users cannot create groups and therefore thi=
-s @@
-> -2984,6 +2985,12 @@ static void _perf_event_enable(struct perf_event *eve=
-nt)
->  	event_function_call(event, __perf_event_enable, NULL);  }
->=20
-> +void perf_event_enable_local(struct perf_event *event) {
-> +	event_function_local(event, __perf_event_enable, NULL); }
-> +EXPORT_SYMBOL_GPL(perf_event_enable_local);
-> +
->  /*
->   * See perf_event_disable();
->   */
-> --
-> 2.27.0
+> # bad: [ef08d387bbbc20df740ced8caee0ffac835869ac] Add linux-next specific files for 20220920
+> # good: [521a547ced6477c54b4b0cc206000406c221b4d6] Linux 6.0-rc6
+> git bisect start 'HEAD' 'v6.0-rc6'
+> # bad: [df970c033333b10c728198606fe787535e08ab8a] Merge branch 'drm-next' of git://git.freedesktop.org/git/drm/drm.git
+> git bisect bad df970c033333b10c728198606fe787535e08ab8a
+> # bad: [0120f1228dc162c1e00ac24b788a67cc669ff56f] Merge branch 'docs-next' of git://git.lwn.net/linux.git
+> git bisect bad 0120f1228dc162c1e00ac24b788a67cc669ff56f
+> # bad: [ed1b38e88a53a328673e1fffdd6bb69e02c34af1] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap.git
+> git bisect bad ed1b38e88a53a328673e1fffdd6bb69e02c34af1
+> # bad: [4dd0700db9ab87d345d989c7589077d858a1f387] Merge branch 'for-next/core' of git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux
+> git bisect bad 4dd0700db9ab87d345d989c7589077d858a1f387
+> # good: [61aa10c4f088adac94f88ba967db44ffab627aef] Merge branch 'fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/uml/linux.git
+> git bisect good 61aa10c4f088adac94f88ba967db44ffab627aef
+> # bad: [94c23f8f94b27223a557c88075ea063c70afc0ae] Merge branch 'perf/core' of git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git
+> git bisect bad 94c23f8f94b27223a557c88075ea063c70afc0ae
+> # good: [6357b3bb80d81a4ad5fe1d15f50ebe5de6c9cab2] perf intel-pt: Support itrace option flag d+e to log on error
+> git bisect good 6357b3bb80d81a4ad5fe1d15f50ebe5de6c9cab2
+> # bad: [d2ed1be371b80f97d2141cfcb0c4ecd02e550180] scripts: remove unused argument 'type'
+> git bisect bad d2ed1be371b80f97d2141cfcb0c4ecd02e550180
+> # good: [a521c97e2a63490c238865763fc86942dce8d6bb] kbuild: rewrite check-local-export in sh/awk
+> git bisect good a521c97e2a63490c238865763fc86942dce8d6bb
+> # bad: [165b718fdd8c5a9165b4485019729c0cd8728120] kbuild: unify two modpost invocations
+> git bisect bad 165b718fdd8c5a9165b4485019729c0cd8728120
+> # bad: [10d1d4b75525f3172c6930fb20445f669762ea95] kbuild: move core-y and drivers-y to ./Kbuild
+> git bisect bad 10d1d4b75525f3172c6930fb20445f669762ea95
+> # good: [fd5f5437264c05b9fc0fff4349f0564f474bdf5e] kbuild: rename modules.order in sub-directories to .modules.order
+> git bisect good fd5f5437264c05b9fc0fff4349f0564f474bdf5e
+> # first bad commit: [10d1d4b75525f3172c6930fb20445f669762ea95] kbuild: move core-y and drivers-y to ./Kbuild
+>
+> ---
+> [    1.812993] sym53c8xx 0000:00:00.0: enabling SERR and PARITY (0107 -> 0147)
+> [    1.816056] sym0: <895a> rev 0x0 at pci 0000:00:00.0 irq 19
+> [    1.823635] sym0: PA-RISC Firmware, ID 7, Fast-40, LVD, parity checking
+> [    1.827770] sym0: SCSI BUS has been reset.
+> [    1.833713] scsi host0: sym-2.2.3
+> [    1.845265] Backtrace:
+> [    1.845750]  [<10b83400>] sg_pool_alloc+0xac/0xc0
+> [    1.846512]  [<10ac8ba8>] __sg_alloc_table+0x16c/0x1c0
+> [    1.846728]  [<10b83540>] sg_alloc_table_chained+0x6c/0xec
+> [    1.846911]  [<106ff470>] scsi_alloc_sgtables+0x8c/0x268
+> [    1.847129]  [<10703d5c>] scsi_queue_rq+0xae4/0xb3c
+> [    1.847296]  [<1060f62c>] blk_mq_dispatch_rq_list+0x1e4/0xa2c
+> [    1.847538]  [<10617184>] __blk_mq_sched_dispatch_requests+0xb4/0x188
+> [    1.847758]  [<10617334>] blk_mq_sched_dispatch_requests+0x58/0x84
+> [    1.847787]  [<1060b6bc>] __blk_mq_run_hw_queue+0x78/0x108
+> [    1.847787]  [<1060d968>] __blk_mq_delay_run_hw_queue+0x114/0x1e0
+> [    1.847787]  [<1060dc64>] blk_mq_run_hw_queue+0xb0/0x12c
+> [    1.847787]  [<10617600>] blk_mq_sched_insert_request+0x12c/0x158
+> [    1.847787]  [<1060ad9c>] blk_execute_rq+0x9c/0x194
+> [    1.847787]  [<10700a1c>] __scsi_execute+0x130/0x1f4
+> [    1.847787]  [<10704d70>] scsi_probe_and_add_lun+0x214/0xc60
+> [    1.847787]  [<10706144>] __scsi_scan_target+0x164/0x5b4
+> [    1.847787]  [<10706804>] scsi_scan_host_selected+0x138/0x23c
+> [    1.847787]  [<107069d8>] do_scsi_scan_host+0xd0/0xf0
+> [    1.847787]  [<10706b98>] scsi_scan_host+0x1a0/0x1f0
+> [    1.847787]  [<10716ba0>] sym2_probe+0x824/0x850
+> [    1.847787]  [<10656110>] pci_device_probe+0x9c/0x148
+> [    1.847787]  [<106deee0>] really_probe+0xc4/0x34c
+> [    1.847787]  [<106df1c4>] __driver_probe_device+0x5c/0xbc
+> [    1.847787]  [<106df2c0>] driver_probe_device+0x9c/0x188
+> [    1.847787]  [<106dfb50>] __driver_attach+0xac/0x194
+> [    1.847787]  [<106dc784>] bus_for_each_dev+0x78/0xb8
+> [    1.847787]  [<106de698>] driver_attach+0x28/0x38
+> [    1.847787]  [<106de144>] bus_add_driver+0x198/0x224
+> [    1.847787]  [<106e05e0>] driver_register+0x98/0x168
+> [    1.847787]  [<106555d0>] __pci_register_driver+0x80/0x94
+> [    1.847787]
+> [    1.847787]
+> [    1.847787] Kernel Fault: Code=26 (Data memory access rights trap) at addr 0000002c
+> [    1.847787] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.0.0-rc6-next-20220920-32bit #1
+> [    1.847787] Hardware name: 9000/778/B160L
+> [    1.847787]
+> [    1.847787]      YZrvWESTHLNXBCVMcbcbcbcbOGFRQPDI
+> [    1.847787] PSW: 00000000000001001011111100001111 Not tainted
+> [    1.847787] r00-03  0004bf0f 1183d400 10b83400 1183d440
+> [    1.847787] r04-07  00000000 00092820 00092820 00000080
+> [    1.847787] r08-11  00000000 00000034 00000002 11830000
+> [    1.847787] r12-15  000001f4 10db0000 1204f128 00000001
+> [    1.847787] r16-19  11beb200 1204f038 1183d0c8 00000080
+> [    1.847787] r20-23  00000820 00000001 10b83354 00000000
+> [    1.847787] r24-27  00000080 00000820 00000000 10e42e18
+> [    1.847787] r28-31  00092000 0000000f 1183d4c0 10ac8ba8
+> [    1.847787] sr00-03  00000000 00000000 00000000 00000000
+> [    1.847787] sr04-07  00000000 00000000 00000000 00000000
+> [    1.847787]
+> [    1.847787] IASQ: 00000000 00000000 IAOQ: 102bce5c 102bce60
+> [    1.847787]  IIR: 48960058    ISR: 00000000  IOR: 0000002c
+> [    1.847787]  CPU:        0   CR30: 11830000 CR31: 00000000
+> [    1.847787]  ORIG_R28: 86b51896
+> [    1.847787]  IAOQ[0]: mempool_alloc+0x78/0x1a8
+> [    1.847787]  IAOQ[1]: mempool_alloc+0x7c/0x1a8
+> [    1.847787]  RP(r2): sg_pool_alloc+0xac/0xc0
+> [    1.847787] Backtrace:
+> [    1.847787]  [<10b83400>] sg_pool_alloc+0xac/0xc0
+> [    1.847787]  [<10ac8ba8>] __sg_alloc_table+0x16c/0x1c0
+> [    1.847787]  [<10b83540>] sg_alloc_table_chained+0x6c/0xec
+> [    1.847787]  [<106ff470>] scsi_alloc_sgtables+0x8c/0x268
+> [    1.847787]  [<10703d5c>] scsi_queue_rq+0xae4/0xb3c
+> [    1.847787]  [<1060f62c>] blk_mq_dispatch_rq_list+0x1e4/0xa2c
+> [    1.847787]  [<10617184>] __blk_mq_sched_dispatch_requests+0xb4/0x188
+> [    1.847787]  [<10617334>] blk_mq_sched_dispatch_requests+0x58/0x84
+> [    1.847787]  [<1060b6bc>] __blk_mq_run_hw_queue+0x78/0x108
+> [    1.847787]  [<1060d968>] __blk_mq_delay_run_hw_queue+0x114/0x1e0
+> [    1.847787]  [<1060dc64>] blk_mq_run_hw_queue+0xb0/0x12c
+> [    1.847787]  [<10617600>] blk_mq_sched_insert_request+0x12c/0x158
+> [    1.847787]  [<1060ad9c>] blk_execute_rq+0x9c/0x194
+> [    1.847787]  [<10700a1c>] __scsi_execute+0x130/0x1f4
+> [    1.847787]  [<10704d70>] scsi_probe_and_add_lun+0x214/0xc60
+> [    1.847787]  [<10706144>] __scsi_scan_target+0x164/0x5b4
+> [    1.847787]  [<10706804>] scsi_scan_host_selected+0x138/0x23c
+> [    1.847787]  [<107069d8>] do_scsi_scan_host+0xd0/0xf0
+> [    1.847787]  [<10706b98>] scsi_scan_host+0x1a0/0x1f0
+> [    1.847787]  [<10716ba0>] sym2_probe+0x824/0x850
+> [    1.847787]  [<10656110>] pci_device_probe+0x9c/0x148
+> [    1.847787]  [<106deee0>] really_probe+0xc4/0x34c
+> [    1.847787]  [<106df1c4>] __driver_probe_device+0x5c/0xbc
+> [    1.847787]  [<106df2c0>] driver_probe_device+0x9c/0x188
+> [    1.847787]  [<106dfb50>] __driver_attach+0xac/0x194
+> [    1.847787]  [<106dc784>] bus_for_each_dev+0x78/0xb8
+> [    1.847787]  [<106de698>] driver_attach+0x28/0x38
+> [    1.847787]  [<106de144>] bus_add_driver+0x198/0x224
+> [    1.847787]  [<106e05e0>] driver_register+0x98/0x168
+> [    1.847787]  [<106555d0>] __pci_register_driver+0x80/0x94
+> [    1.847787]
+> [    1.847787] Kernel panic - not syncing: Kernel Fault
+>
+>
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
