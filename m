@@ -2,163 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02F975E666F
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 17:06:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C33595E6672
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 17:06:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230490AbiIVPGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 11:06:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53260 "EHLO
+        id S231263AbiIVPGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 11:06:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230379AbiIVPGB (ORCPT
+        with ESMTP id S231210AbiIVPGO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 11:06:01 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CDBFDF3B3;
-        Thu, 22 Sep 2022 08:05:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id DEF15CE2242;
-        Thu, 22 Sep 2022 15:05:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50AFEC43470;
-        Thu, 22 Sep 2022 15:05:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663859156;
-        bh=1uM16sAEsFRpmXqJh3o8KDbSU5Vn6VywW/jmOdA6aNc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=R5Xni3kApssHFwBpX23u9FqbIoOrfFW9Eh+DXpawBWt83eJ2txweva4gjv1WcnATf
-         7IEz087ER/3ndPQ9bonJoS2RZV28gl54xgcODjILPpOuh7MG6GjSGBjsd3hdzL+bZI
-         /TQTj13hizyHTFlb5cTaOPaJmzPGme2l93biRkvnNEpZRc98RBilPbaEIN/wsE1icU
-         X0wh/90FYlcTObNdAHcpm+fouiLSO/Ef1uhXv5X/ox6u4OyXBR2ZOvsv1mvenvHdeF
-         i9NO19Wutl6RrOaY1MvHKbo84tVMreipSnQOyYUxfRqAMrqmzFar/xsPAyqbFwiHcc
-         0LZ7VF4CZzVSA==
-Received: by mail-lj1-f173.google.com with SMTP id a14so11347275ljj.8;
-        Thu, 22 Sep 2022 08:05:56 -0700 (PDT)
-X-Gm-Message-State: ACrzQf3UOr9LVLok5EHsGaXoTu9xDdsOUtYGt5y2DRRR80yM8z069POI
-        3+HikaK5qAP2S13gMtEoM7JCmwcAc5Z/jfN7RKA=
-X-Google-Smtp-Source: AMsMyM4SN/XP/Ju64WkB2EIWy6dKCCftvHdMN498Tlfzs6TU3Iv+ia7oWel8dcPZRPgNVsqFNV7TsgyKzSOdBFgMzXk=
-X-Received: by 2002:a2e:9115:0:b0:26a:c086:5138 with SMTP id
- m21-20020a2e9115000000b0026ac0865138mr1173829ljg.189.1663859154235; Thu, 22
- Sep 2022 08:05:54 -0700 (PDT)
+        Thu, 22 Sep 2022 11:06:14 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2121.outbound.protection.outlook.com [40.107.223.121])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7556E119A
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 08:06:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FJEKZ9eI/wrnLAoJsR8wOlfFtYwW6hWEq0ndLj/Ze9iGDfKtTZ/KLAwGDiHuGFkTfCiQIoXY3aendff1tFnZKDokqOr6THAZpJzGVcz9MCAe/9Z0jdN1ICvTeMWaAmq3b/sh7qSDxuxqDpbIHSEt0OArXQq+W0l4N3E1IPCKmKHPRfYRtV3I0/aQVB0Yto+5n1LtfjijWICQdPSfiFPLAmHTvgMZeNCfpjcWc3W0+vtO0tOPpCNcd5Ly+Gjm+mPxFGwwX4t8x95xSoH6QVY/a68qri2pymB/YzTnbT9gtMxDZhBSJVSYF1pSgUDZhilEEJd2WpWNssoc3WBTew/lcg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fWmqRfEnr4gzs5yD4Rb+bu5exfv+115r5BwzDV6CEZs=;
+ b=BVpO+hffxYCTxJAgR0xTaiJwQ/jTFlcrmOeL0jR1k0s2l48Re6+TFzeTRVLPuwLqaMrNS7IzcFlIV0qZIX0lFe7XeXslhta36NFEZa9yz/FuzDLxIpBnLaMFIPmEayabb8EtgtOtPOLQbux3e500wZ77ixY7QY+NK3egHIU3CIdK+xIjUTa3AAcVLaO5Z48GiX2Mh8QuUUr8o++yRLSbS6kk2cSfYIRMd362cpAug+PFfOM/6UVpfVnLwS3eX9dhoVqJ024h40crCbOR8ZRUCoJgsdxsfWxiT8mJO9S3RbhaVdwaS+l9UvSztUMpiFEOJWt9ooljty4I27mE18qAjQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=in-advantage.com; dmarc=pass action=none
+ header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fWmqRfEnr4gzs5yD4Rb+bu5exfv+115r5BwzDV6CEZs=;
+ b=xjREro2/W8MeyL5odDVIgCsbPJ4gCof7NX/Wqwt6oG5inyPC747ogQZNaNo4drZ0Lk9t2C2nDBDpeHnE+FWSUJt6rMf6rnV5uCMjabETRtQwo7elVWKkeFMao//sHl4wA6YFs4sTvzRXXerl63I7ItgIlZMgLqOChYkP2cMWD7s=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=in-advantage.com;
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37) by CO1PR10MB4674.namprd10.prod.outlook.com
+ (2603:10b6:303:9c::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.19; Thu, 22 Sep
+ 2022 15:06:08 +0000
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::b417:2ac7:1925:8f69]) by MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::b417:2ac7:1925:8f69%4]) with mapi id 15.20.5654.019; Thu, 22 Sep 2022
+ 15:06:08 +0000
+Date:   Thu, 22 Sep 2022 08:06:05 -0700
+From:   Colin Foster <colin.foster@in-advantage.com>
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, lee@kernel.org
+Subject: Re: [PATCH -next] mfd: ocelot-spi: Add missing MODULE_DEVICE_TABLE
+Message-ID: <Yyx53bfj9pIBGKOK@euler>
+References: <20220922103703.1731266-1-yangyingliang@huawei.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220922103703.1731266-1-yangyingliang@huawei.com>
+X-ClientProxiedBy: BY3PR05CA0003.namprd05.prod.outlook.com
+ (2603:10b6:a03:254::8) To MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37)
 MIME-Version: 1.0
-References: <20220919193257.2031-1-demi@invisiblethingslab.com>
- <CAMj1kXEBfJUfTQ3THqqKxsU09_S98B_TjTECKwGM0WAv_5tZaA@mail.gmail.com>
- <7930b617-d473-94dd-c7e4-33ffa19da13e@suse.com> <CAMj1kXEJ9d3-8xa7rkczY7ur2zDm9CjqM7u1eEdHHmPG=Oo=xA@mail.gmail.com>
- <3671fd52-6034-7149-ebe4-f7560c0dc6b0@suse.com> <Yyu1xC7Tlf9sS7Ro@itl-email>
- <6f42a382-c5aa-ba16-f330-69a07476e2aa@suse.com> <Yyx3hlE/MDBeEdtu@itl-email>
-In-Reply-To: <Yyx3hlE/MDBeEdtu@itl-email>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Thu, 22 Sep 2022 17:05:43 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXFoyTRKfGH2nMpi-EJRqLz9T_p+ZMM0x09UNJ-34-kS_Q@mail.gmail.com>
-Message-ID: <CAMj1kXFoyTRKfGH2nMpi-EJRqLz9T_p+ZMM0x09UNJ-34-kS_Q@mail.gmail.com>
-Subject: Re: [PATCH v3] Support ESRT in Xen dom0
-To:     Demi Marie Obenour <demi@invisiblethingslab.com>
-Cc:     Jan Beulich <jbeulich@suse.com>, Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xen-devel@lists.xenproject.org,
-        =?UTF-8?Q?Marek_Marczykowski=2DG=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MWHPR1001MB2351:EE_|CO1PR10MB4674:EE_
+X-MS-Office365-Filtering-Correlation-Id: df5c8f89-5eee-4bf0-afc4-08da9cabfa5c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: xzU8x1Yy9DpuL8Ct1qFVfKfKUwvc2YYdvi47d2CFokmirXxS85EShAYrMFYxZh/adAkKv9Ni22bm0iMoOJsMFyUJvIwdhIPY8YEZ4mS+uv5f/cekPqpGuwEZPrhBU7/3yLMyfkN6OaeCgh++Fit+aXc132VIwu63fF2x2BYErsrV4pLHZ8TuRlAtAbgoK2YSQEMi1av5fOuwF+D0sNS8QAquq8pCGGY5QCYjEVZATVTprFemIzk40AfnV2SB/lUR80bNGW/msyJcIv+uDMkbvueco3RfhWIAO8yee2JCEKV8OE+BhZSOGK1YRRsmJs1m4Zzk4CcmTyI6G7I4n1iyALr2rVb/+0f7PWbuqk2j6vZZ1ySBbtdcueSrTD/aBIJyX+kNn8sfdA0ICVdESYoYnL6AD92F3oVndvFc34uo+R6zPdaOwhd/w783ma/zHOU5ccC/rlAQeBrPbyfg9OKV755qoKmXM6wA9hCBrjfwsm0BX49yv01OTpv1AmvA8lsXWm1of/+FCOpUjVkT78zROX/s8IPpfKFRlMkst1ebqbBgYkRcNzkEn8YXKaBvhnuDQWVfAQWzS7CCygUD8B1LbX/Sq3J942y/I66GHPg8jlcTuf2RZ2QR8Z02y3VotsObTg5EL1TFgLhCt1vSI5ObPfbhCHlnU7gaJbUXnsQc/hcHJXhuL33u1n84Cas+w9k5coj3fvol4gs0jNxzjoCIlw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(346002)(376002)(396003)(39840400004)(136003)(366004)(451199015)(316002)(6512007)(66946007)(26005)(8936002)(9686003)(478600001)(6666004)(6506007)(6486002)(38100700002)(6916009)(186003)(86362001)(33716001)(44832011)(2906002)(4326008)(41300700001)(66556008)(66476007)(8676002)(5660300002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dQAYeawHXW1xBjP2sD6Ae6CtyixVsQciycnuuBhqZeGGQXE4LUVqF7y0hgyF?=
+ =?us-ascii?Q?dbmZItwKFB/THlT27tyHuufYmfqb30pd+JE5sPCxVbV6kYJkanGb7lPvIFzo?=
+ =?us-ascii?Q?bELhKkJksyNrxPRRvZPFCS8JsDbMaoFYVQPBZ2vrHyr3EN8s14FsNK1E8eYu?=
+ =?us-ascii?Q?/EpkDuUJ7IyY1mHAwuTtXeHI2qCBy0fi+EekLYLJ8HquKO1yERmipeJxkTcb?=
+ =?us-ascii?Q?tlMDulqK71AzokdO6V/Vn3/RaSt+cY0F46TAQM1bvMc9s+o7r64VqIF8XzWR?=
+ =?us-ascii?Q?J05mOtAWn7mSf2aCnb3Y0VQ5fQhRmLO/bjtjWxj6OTycVdYsyoWMAci2IaZJ?=
+ =?us-ascii?Q?ivE+M+EVNVGsUyoU94BPILqP8Qg6fOZQkfQLguM0CHmw1GDDbBP3dKsgMzC3?=
+ =?us-ascii?Q?k92afu/LtV4XRPc9SineU3Jykj2UjmHZU76AlJjs694d9P80cA/OR5iZldU/?=
+ =?us-ascii?Q?1v8DAkoX/toayM+wHx7Fa68IXJk1ltlFI+2JiRtJButgfUzpe8XzuixjNcrU?=
+ =?us-ascii?Q?60l/bwGdOkijRE4q+CjSkiVHOY4Na2uaPcUGZXbEFCyyc+uYpQipd49Iu0rc?=
+ =?us-ascii?Q?kD99Pw01cdxDBfDe7pykKxNGLiD3ctfVn1UI49sLacGuqpnz89XRadC3uqtp?=
+ =?us-ascii?Q?QuqlT8IsIjp2RHlxoRs5n9Ge/Bl4/9yUEYJ+a6pUOdLlkkaQD8WpYIizbgBk?=
+ =?us-ascii?Q?uEqvT4i7806HFFRXz84EV2IDVkzCTmfiZSVf6LCZdWAqSxCTuc8gbkbOdjoH?=
+ =?us-ascii?Q?oMJriv0IrwvvF5ZEgUxXyxAfSW3uzjbRkc05hEO7LAIscLFSSorw961nzN2D?=
+ =?us-ascii?Q?SUWQ8Ihqa188KpKWKkXlqDcP84HYy35+fhV+ZpbUJ2HnF1l8rIgjslgiE10z?=
+ =?us-ascii?Q?v87Cnqq1s+3ONsNUvWkuY3vBkgklPK+SCIxmlTJeytWdNh83Ccd1JnMHYEs4?=
+ =?us-ascii?Q?8NEYLJOM3MwmpEDwmDp0igegYnjoubdd1r+yLNDUpAOcvJaRaTcHOLgoq0Es?=
+ =?us-ascii?Q?WZH6RazBtB7+YrATASXCIadrUmjgXcNYd/SGrxN38Xc1h9NnP5A2SHCq1lvj?=
+ =?us-ascii?Q?Zth+SCf+w6ysPtpL9nykIZWFASj5556NSakfAqk1Yn3JKS70ZFOuuC1EyxWf?=
+ =?us-ascii?Q?pEuC4HMl6HTFCLFCKOkDmNm8WFYGxSqAWlETmiI00goUFEEpDWwRSu4zSeIQ?=
+ =?us-ascii?Q?aE1Q/esjKZJTbW/J7YK17CcdU1kZV3VnGlOmUZI66jJ7WajovFaXH/klBY4W?=
+ =?us-ascii?Q?5wBQGpAtMYANij5jCuGZXwM0pna6zxdbUfV4uTkUTIIGhbUkiJj7Z0WuH4SY?=
+ =?us-ascii?Q?8WcRPAF+uyhanTXbncqdbnQACOusS9tEZ3rpxvxdzF7Dx72jpckFhMNw43Oz?=
+ =?us-ascii?Q?I3Z8C+OkSMXYLaxJSGlj9SJCkmzg5bZlwfaTrR0zpBFtClKySXR5PmwpcK+K?=
+ =?us-ascii?Q?kVFxJH1P5wpMi+yBjIpm47XdAAGNYLEIOcU3T9wbLwmYgNLmn33JyF9pWHuo?=
+ =?us-ascii?Q?1Bum4plWSKabJD5BbemeCIWBKtVJ8I0lqtfAS5N3+7nvOtgjgGeDXKX3ub5f?=
+ =?us-ascii?Q?DhpMXx931AW5bB+f0FQvI3OMdjwxcGTOTzrl6rYrEz57huPsmaIoqDWJ9axj?=
+ =?us-ascii?Q?bTuS3GX/ZtWGq5voZmo4eMo=3D?=
+X-OriginatorOrg: in-advantage.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: df5c8f89-5eee-4bf0-afc4-08da9cabfa5c
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Sep 2022 15:06:08.2565
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: stTmTPc3YgRD+NovKACfPbQEoKYwA+DvrFZSpRu/lnqM6II0zkBblUaD8YAmK1HZabjxC0KN0bNBFdysL4b5B5gBDbcNGw78ORhKDiYLR/4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR10MB4674
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 22 Sept 2022 at 16:56, Demi Marie Obenour
-<demi@invisiblethingslab.com> wrote:
->
-> On Thu, Sep 22, 2022 at 08:12:14AM +0200, Jan Beulich wrote:
-> > On 22.09.2022 03:09, Demi Marie Obenour wrote:
-> > > On Wed, Sep 21, 2022 at 10:34:04PM +0200, Jan Beulich wrote:
-> > >> On 20.09.2022 18:09, Ard Biesheuvel wrote:
-> > >>> On Tue, 20 Sept 2022 at 17:54, Jan Beulich <jbeulich@suse.com> wrot=
-e:
-> > >>>>
-> > >>>> On 20.09.2022 17:36, Ard Biesheuvel wrote:
-> > >>>>> On Mon, 19 Sept 2022 at 21:33, Demi Marie Obenour
-> > >>>>> <demi@invisiblethingslab.com> wrote:
-> > >>>>>>
-> > >>>>>> fwupd requires access to the EFI System Resource Table (ESRT) to
-> > >>>>>> discover which firmware can be updated by the OS.  Currently, Li=
-nux does
-> > >>>>>> not expose the ESRT when running as a Xen dom0.  Therefore, it i=
-s not
-> > >>>>>> possible to use fwupd in a Xen dom0, which is a serious problem =
-for e.g.
-> > >>>>>> Qubes OS.
-> > >>>>>>
-> > >>>>>> Before Xen 4.16, this was not fixable due to hypervisor limitati=
-ons.
-> > >>>>>> The UEFI specification requires the ESRT to be in EfiBootService=
-sData
-> > >>>>>> memory, which Xen will use for whatever purposes it likes.  Ther=
-efore,
-> > >>>>>> Linux cannot safely access the ESRT, as Xen may have overwritten=
- it.
-> > >>>>>>
-> > >>>>>> Starting with Xen 4.17, Xen checks if the ESRT is in EfiBootServ=
-icesData
-> > >>>>>> or EfiRuntimeServicesData memory.  If the ESRT is in EfiBootServ=
-icesData
-> > >>>>>> memory, Xen allocates some memory of type EfiRuntimeServicesData=
-, copies
-> > >>>>>> the ESRT to it, and finally replaces the ESRT pointer with a poi=
-nter to
-> > >>>>>> the copy.  Since Xen will not clobber EfiRuntimeServicesData mem=
-ory,
-> > >>>>>> this ensures that the ESRT can safely be accessed by the OS.  It=
- is safe
-> > >>>>>> to access the ESRT under Xen if, and only if, it is in memory of=
- type
-> > >>>>>> EfiRuntimeServicesData.
-> > >>>>>>
-> > >>>>>
-> > >>>>> Thanks for the elaborate explanation. This is really helpful.
-> > >>>>>
-> > >>>>> So here, you are explaining that the only way for Xen to prevent
-> > >>>>> itself from potentially clobbering the ESRT is by creating a
-> > >>>>> completely new allocation?
-> > >>>>
-> > >>>> There are surely other ways, e.g. preserving BootServices* regions
-> > >>>> alongside RuntimeServices* ones. But as the maintainer of the EFI
-> > >>>> code in Xen I don't view this as a reasonable approach.
-> > >>>
-> > >>> Why not?
-> > >>
-> > >> Because it's against the intentions the EFI has (or at least had)
-> > >> for this memory type. Much more than EfiAcpiReclaimMemory this
-> > >> type is intended for use as ordinary RAM post-boot.
-> > >
-> > > What about giving that memory to dom0?  dom0=E2=80=99s balloon driver=
- will give
-> > > anything dom0 doesn=E2=80=99t wind up using back to Xen.
-> >
-> > While perhaps in principle possible, this would require special casing
-> > in Xen. Except for the memory the initrd comes in, we don't directly
-> > hand memory to Dom0. Instead everything goes through the page allocator
-> > first. Plus if we really were convinced boot services memory needed
-> > retaining, then it would also need retaining across kexec (and hence
-> > shouldn't be left to Dom0 to decide what to do with it).
->
-> So how should dom0 handle the various EFI tables other than the ESRT?
-> Right now most uses of these tables in Linux are not guarded by any
-> checks for efi_enabled(EFI_MEMMAP) or similar.  If some of them are in
-> EfiBootServicesData memory, they might be corrupted before Linux gets
-> them.
+Hi Yang,
 
-Yes, this is an annoying oversight of the EFI design: the config
-tables are <guid, address> tuples, and the size of the table is
-specific to each table type. So without knowing the GUID, there is no
-way you can reserve the right size.
+On Thu, Sep 22, 2022 at 06:37:03PM +0800, Yang Yingliang wrote:
+> This patch adds missing MODULE_DEVICE_TABLE definition which generates
+> correct modalias for automatic loading of this driver when it is built
+> as an external module.
+> 
+> Fixes: f3e893626abe ("mfd: ocelot: Add support for the vsc7512 chip via spi")
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> ---
+>  drivers/mfd/ocelot-spi.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/mfd/ocelot-spi.c b/drivers/mfd/ocelot-spi.c
+> index 0f097f4829d1..2ecd271de2fb 100644
+> --- a/drivers/mfd/ocelot-spi.c
+> +++ b/drivers/mfd/ocelot-spi.c
+> @@ -276,6 +276,7 @@ static const struct spi_device_id ocelot_spi_ids[] = {
+>  	{ "vsc7512", 0 },
+>  	{ }
+>  };
+> +MODULE_DEVICE_TABLE(spi, ocelot_spi_ids);
+>  
+>  static const struct of_device_id ocelot_spi_of_match[] = {
+>  	{ .compatible = "mscc,vsc7512" },
+> -- 
+> 2.25.1
+> 
 
-Perhaps you could implement something like a hypercall in
-efi_arch_mem_reserve(), which is called by the EFI code to reserve
-regions that are in boot services memory but need to remain reserved?
-This is used for all config tables that it knows or cares about.
+Good catch. I just tested running ocelot-soc as a module and it worked
+without your patch. Do you know how I can test the case where it fails?
+
+Thanks
+
+Colin Foster
