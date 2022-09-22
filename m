@@ -2,110 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECBE85E5753
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 02:30:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9FE25E5770
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 02:39:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbiIVAaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 20:30:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40674 "EHLO
+        id S230103AbiIVAjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 20:39:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbiIVAaH (ORCPT
+        with ESMTP id S229745AbiIVAjB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 20:30:07 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB477AC30;
-        Wed, 21 Sep 2022 17:30:05 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id y17so17480871ejo.6;
-        Wed, 21 Sep 2022 17:30:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=4rURt1DFOtISyLJtoae819CeZa5xS4/hkXaK4AZO9qU=;
-        b=Ix0VX7eQU7Mv7prm3r1CmEPl5iN5WTGOTanC8yFr4H+P/snjCzc2MjLKBEuCZMsIqu
-         5iQv6oyuMbbnjsVWEP8vlhSYNS/3RucwMOX1Zwyj50yPD7FjpZeezoKmlkJO6pjIif9b
-         XzlTDmonQTCrdcHtdUUp5NzAnbuREoGMf+HHASkIY7MqAoBl4C3tTer8DmaXs6IzFhJz
-         I0XHNiqXzPRqoN6mmex9Rl/unSx8SJbHl+mTwN2zabxqX53tawOyvvweUEV2fUkgd1SV
-         GdqD87D7J+1BSjC2tH2qiJ8akSG9z1wKq7FKrNVj38MNiVc/oBRvNgw0titgSQlQP0b0
-         yXRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=4rURt1DFOtISyLJtoae819CeZa5xS4/hkXaK4AZO9qU=;
-        b=jJ3IX33ixvbntu7YhpLDLMqKUIuI4DPwPHs9DSbE/+bqgiEaA8smUucHjasCoam2B7
-         5pkaMOE9GdVgzHlNymnN/MCOFV6I1OJN4oERMOywmRNqRAQjiYBjIvGf7byoDCFIDq3H
-         U3BPYAagyRIHnLAyF467OL9vY1oOOIFn8M9sF4Nwrtawyuy/V5IZysJvoL8eBPI6loVJ
-         7+PUHMapClITfkOaYxRHmlCiyNIXhqNS84OYGpRSZVH8i1J174HK7nfcR6YaUkrSqu7v
-         s/ThjOCvQ1AYLGuvapemjAV0/Uk8asjE2289cpNmVO6FikeRSYBMd3maYgNUYMh00c6J
-         VsZg==
-X-Gm-Message-State: ACrzQf121j8KKuECWGkz5YxiT06uoVcsV3d7eqW2n3fBqQb0olaJCmQP
-        tMROLvg8XPtWRqu6+BYSecbQMNlMZ4hwvhN9R2P2h4xp
-X-Google-Smtp-Source: AMsMyM7+I+Hycyrz36s/LjHcujOEHaIb/PBiXwMFLCmdnBFbCqwzxv2P5VoosmOMNh2D1oZxUNQoGOFsFt1bDpp39o0=
-X-Received: by 2002:a17:907:96a3:b0:780:633:2304 with SMTP id
- hd35-20020a17090796a300b0078006332304mr666798ejc.115.1663806604116; Wed, 21
- Sep 2022 17:30:04 -0700 (PDT)
+        Wed, 21 Sep 2022 20:39:01 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A2DFA98D5
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 17:39:00 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28M0EEY7015983;
+        Thu, 22 Sep 2022 00:38:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : from : subject : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=WOKnIKyfnSQpXihINowX2QmhIeEEpjddrkKFnyBcaDQ=;
+ b=PnW0qtQehedV7849wzvDD0pzXZlxvWyyLSXQ6kEPqmjd8pIIEL43uYUbAPdxh09QXwMv
+ uGLnQ5IQFgM6r+J2d3EF49b+wdhn4/cneeroH4Hbwwx8OueTS/P6G/TlQQmbwgTm8WHy
+ nToRy8CidvUN7KCHpwujpskGV4TjCU51uBNMA9FSvWBEkET/QPJUzVyugWzwrFzscmK/
+ PHam23hjy2OZGt8YrHrNsZrFoa6VpZ8VTxLk2FIVAwV9MHOiBpDvqIoIOa3nkca9kq/O
+ 9kJX/YYdDL0tQq5D/t2hvTCYn4EGxVSjwgSEEefIGz3yuDvlDoSrrQt/UOv/wxYAOliU dQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jr4ge1pwf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Sep 2022 00:38:46 +0000
+Received: from pps.filterd (NALASPPMTA01.qualcomm.com [127.0.0.1])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 28M0Q3M8032182;
+        Thu, 22 Sep 2022 00:33:40 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by NALASPPMTA01.qualcomm.com (PPS) with ESMTPS id 3jnqr800b6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Sep 2022 00:33:40 +0000
+Received: from NALASPPMTA01.qualcomm.com (NALASPPMTA01.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28M0Xd0g008432;
+        Thu, 22 Sep 2022 00:33:39 GMT
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (PPS) with ESMTPS id 28M0Xdii008430
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Sep 2022 00:33:39 +0000
+Received: from [10.232.65.248] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 21 Sep
+ 2022 17:33:38 -0700
+Message-ID: <feb725ce-6368-d499-a28e-db1ecdfc03d3@quicinc.com>
+Date:   Thu, 22 Sep 2022 08:33:35 +0800
 MIME-Version: 1.0
-References: <3f59fb5a345d2e4f10e16fe9e35fbc4c03ecaa3e.1662999860.git.chentao.kernel@linux.alibaba.com>
- <d4ef24e4-0bbb-3d24-e033-e3935d791fb9@fb.com>
-In-Reply-To: <d4ef24e4-0bbb-3d24-e033-e3935d791fb9@fb.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 21 Sep 2022 17:29:52 -0700
-Message-ID: <CAEf4BzYTXPhiXYDoqDgU5o4rPWZ-OXo0f4xtuJdi22tHYyWrqA@mail.gmail.com>
-Subject: Re: [PATCH v2] libbpf: Support raw btf placed in the default path
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Tao Chen <chentao.kernel@linux.alibaba.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.3
+From:   Kassey Li <quic_yingangl@quicinc.com>
+Subject: Re: [PATCH] cgroup: align the comm length with TASK_COMM_LEN
+To:     <rostedt@goodmis.org>, <mingo@redhat.com>, <tj@kernel.org>,
+        <william.kucharski@oracle.com>
+CC:     <linux-kernel@vger.kernel.org>
+References: <20220920084923.18476-1-quic_yingangl@quicinc.com>
+Content-Language: en-US
+In-Reply-To: <20220920084923.18476-1-quic_yingangl@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: S2d9lGKw8KUWOXQfboA_4O-kfBG6L4KA
+X-Proofpoint-ORIG-GUID: S2d9lGKw8KUWOXQfboA_4O-kfBG6L4KA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-21_13,2022-09-20_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 mlxlogscore=677 adultscore=0 suspectscore=0
+ clxscore=1015 mlxscore=0 priorityscore=1501 bulkscore=0 malwarescore=0
+ phishscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209220002
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 8:40 PM Yonghong Song <yhs@fb.com> wrote:
->
->
->
-> On 9/12/22 9:43 AM, Tao Chen wrote:
-> > Now only elf btf can be placed in the default path(/boot), raw
-> > btf should also can be there.
->
-> There are more default paths than just /boot. Also some grammer
-> issues in the above like 'should also can be'.
->
-> Maybe the commit message can be changed like below.
->
-> Currently, the default vmlinux files at '/boot/vmlinux-*',
-> '/lib/modules/*/vmlinux-*' etc. are parsed with 'btf__parse_elf'
-> to extract BTF. It is possible that these files are actually
-> raw BTF files similar to /sys/kernel/btf/vmlinux. So parse
-> these files with 'btf__parse' which tries both raw format and
-> ELF format.
->
+hello:
+    here is the instance of the problem：
+    may you kindly review this change  ?
 
-Thanks, Yonghong, I used this description verbatim when applying. Also
-added a sentence on why users might use this instead of providing the
-btf_custom_path option.
+Unable to handle kernel write to read-only memory at virtual address 
+ffffffbcf7450000
 
-> It would be great if you can add more information on why
-> '/boot/vmlinux-*' or '/lib/modules/*/vmlinux-*' might be
-> a raw BTF file in your system.
->
-> >
-> > Signed-off-by: Tao Chen <chentao.kernel@linux.alibaba.com>
->
-> Ack with some commit message changes in the above.
->
-> Acked-by: Yonghong Song <yhs@fb.com>
+Call trace:
+  dump_backtrace.cfi_jt+0x0/0x4
+  show_stack+0x14/0x1c
+  dump_stack+0xa0/0xd8
+  die_callback+0x248/0x24c
+  notify_die+0x7c/0xf8
+  die+0xac/0x290
+  die_kernel_fault+0x88/0x98
+  die_kernel_fault+0x0/0x98
+  do_page_fault+0xa0/0x544
+  do_mem_abort+0x60/0x10c
+  el1_da+0x1c/0xc4
+  trace_event_raw_event_cgroup_migrate+0x124/0x170
+  cgroup_attach_task+0x2e8/0x41c
+  __cgroup1_procs_write+0x114/0x1ec
+  cgroup1_tasks_write+0x10/0x18
+  cgroup_file_write+0xa4/0x208
+  kernfs_fop_write+0x1f0/0x2f4
+  __vfs_write+0x5c/0x200
+  vfs_write+0xe0/0x1a0
+  ksys_write+0x74/0xdc
+  __arm64_sys_write+0x18/0x20
+  el0_svc_common+0xc0/0x1a4
+  el0_svc_compat_handler+0x18/0x20
+  el0_svc_compat+0x8/0x2c
+
+
+
+On 9/20/2022 4:49 PM, Kassey Li wrote:
+> __string could get a dst string with length less than
+> TASK_COMM_LEN.
+> 
+> a task->comm possbile change dynamic that can cause
+> out of bounds access for the dst string buffer.
+> 
+> change it as arrary with same length TASK_COMM_LEN,
+> this aligns the same usage of include/trace on task->comm.
+> 
+> Signed-off-by: Kassey Li <quic_yingangl@quicinc.com>
+> ---
+>   include/trace/events/cgroup.h | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/include/trace/events/cgroup.h b/include/trace/events/cgroup.h
+> index dd7d7c9efecd..d0c5f93e3611 100644
+> --- a/include/trace/events/cgroup.h
+> +++ b/include/trace/events/cgroup.h
+> @@ -130,7 +130,7 @@ DECLARE_EVENT_CLASS(cgroup_migrate,
+>   		__field(	u64,		dst_id			)
+>   		__field(	int,		pid			)
+>   		__string(	dst_path,	path			)
+> -		__string(	comm,		task->comm		)
+> +		__array(char,   comm, TASK_COMM_LEN)
+>   	),
+>   
+>   	TP_fast_assign(
+> @@ -139,12 +139,12 @@ DECLARE_EVENT_CLASS(cgroup_migrate,
+>   		__entry->dst_level = dst_cgrp->level;
+>   		__assign_str(dst_path, path);
+>   		__entry->pid = task->pid;
+> -		__assign_str(comm, task->comm);
+> +		memcpy(__entry->comm, task->comm, TASK_COMM_LEN);
+>   	),
+>   
+>   	TP_printk("dst_root=%d dst_id=%llu dst_level=%d dst_path=%s pid=%d comm=%s",
+>   		  __entry->dst_root, __entry->dst_id, __entry->dst_level,
+> -		  __get_str(dst_path), __entry->pid, __get_str(comm))
+> +		  __get_str(dst_path), __entry->pid, __entry->comm)
+>   );
+>   
+>   DEFINE_EVENT(cgroup_migrate, cgroup_attach_task,
