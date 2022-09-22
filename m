@@ -2,108 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2479F5E5F83
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 12:12:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AE905E5F8D
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 12:13:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbiIVKMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 06:12:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51814 "EHLO
+        id S230414AbiIVKNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 06:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiIVKM3 (ORCPT
+        with ESMTP id S231292AbiIVKMx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 06:12:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1278D58A6;
-        Thu, 22 Sep 2022 03:12:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 22 Sep 2022 06:12:53 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E568ABF20;
+        Thu, 22 Sep 2022 03:12:49 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6EBF862AF2;
-        Thu, 22 Sep 2022 10:12:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75089C433C1;
-        Thu, 22 Sep 2022 10:12:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663841546;
-        bh=v+Uci2d8FhQSAzpo1oW4eL5doTYbscRDuPgbPTJydJM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=V0+VkoGlaRwfJiSryLl1g6JQOCWRXw4xsuwoPGTdwaB97Zcyb3QeZYju7QPyO1Yak
-         5UWNyQHtw/4nQhoE8itsp39lvwbA9KyeM3GUvtPaXHdeENBTBtPctKJyX67lKARoVs
-         bl6Ag2Ng+ppJQzpnNYg6xHckwYXwH6rtUdlpNNW4=
-Date:   Thu, 22 Sep 2022 12:12:24 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Sean Young <sean@mess.org>, linux-media@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Oliver Neukum <oneukum@suse.com>, stable@vger.kernel.org,
-        Dongliang Mu <mudongliangabcd@gmail.com>
-Subject: Re: [PATCH RESEND] media: flexcop-usb: fix endpoint type check
-Message-ID: <Yyw1CJgv6nreCtB9@kroah.com>
-References: <20220822151027.27026-1-johan@kernel.org>
- <YymBM1wJLAsBDU4E@hovoldconsulting.com>
- <YywfxwBmdmvQ0i21@kroah.com>
- <Yyws4Pd4bAl3iq2e@hovoldconsulting.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MYB1C1zNcz4xGQ;
+        Thu, 22 Sep 2022 20:12:47 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1663841567;
+        bh=XLwibGIv5BGINbco3o0NTpDvOVxYtnFFJ1tpHSj24+A=;
+        h=Date:From:To:Cc:Subject:From;
+        b=svYnTi8DfTg6hR/2uszT3CEzNdS3ZBat2y+zDedrHDw1/EfhlIQiVQDrqaZ1kZIYr
+         Mb61Vyz3Mn9rbEX+adGxSQyfwa/brld06CjqJaGgg/KweRs+dq/ekKrvNd/uOt0Ek/
+         5egYX3Babzy/GBAMhBt0eYuUIGSNZY+MfLprrSaHdjFa9ldzjIxUHUNWtV84RlVXDi
+         ML/JqQuUgrQTJ2ZFfFTTcIaVOIW/M6YFiQH5dxZydR5+wRVxoxugakhJIND6WF/x3W
+         XKv7M9s63pZvLbw4pt507NIrV2mh86w/DBlC+aIqRuXEvnoXs0bzWJO4s1zJiVo/qY
+         KTcxCuehOjxJg==
+Date:   Thu, 22 Sep 2022 20:12:35 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the rcu tree
+Message-ID: <20220922201222.01e0f2f5@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yyws4Pd4bAl3iq2e@hovoldconsulting.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_//oOtkijRZwFS49YEhzDM_kS";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 11:37:36AM +0200, Johan Hovold wrote:
-> On Thu, Sep 22, 2022 at 10:41:43AM +0200, Greg Kroah-Hartman wrote:
-> > On Tue, Sep 20, 2022 at 11:00:35AM +0200, Johan Hovold wrote:
-> > > Mauro and Hans,
-> > > 
-> > > On Mon, Aug 22, 2022 at 05:10:27PM +0200, Johan Hovold wrote:
-> > > > Commit d725d20e81c2 ("media: flexcop-usb: sanity checking of endpoint
-> > > > type") tried to add an endpoint type sanity check for the single
-> > > > isochronous endpoint but instead broke the driver by checking the wrong
-> > > > descriptor or random data beyond the last endpoint descriptor.
-> > > > 
-> > > > Make sure to check the right endpoint descriptor.
-> > > > 
-> > > > Fixes: d725d20e81c2 ("media: flexcop-usb: sanity checking of endpoint type")
-> > > > Cc: Oliver Neukum <oneukum@suse.com>
-> > > > Cc: stable@vger.kernel.org	# 5.9
-> > > > Reported-by: Dongliang Mu <mudongliangabcd@gmail.com>
-> > > > Signed-off-by: Johan Hovold <johan@kernel.org>
-> > > > ---
-> > > > 
-> > > > It's been two months and two completely ignored reminders so resending.
-> > > > 
-> > > > Can someone please pick this fix up and let me know when that has been
-> > > > done?
-> > > 
-> > > It's been another month so sending yet another reminder. This driver as
-> > > been broken since 5.9 and I posted this fix almost four months ago and
-> > > have sent multiple reminders since.
-> > > 
-> > > Can someone please pick this one and the follow-up cleanups up?
-> > 
-> > I've taken this one in my tree now.  Which one were the "follow-up"
-> > cleanups?
-> 
-> Thanks. These are the follow-up cleanups:
-> 
-> 	https://lore.kernel.org/lkml/20220822151456.27178-1-johan@kernel.org/
+--Sig_//oOtkijRZwFS49YEhzDM_kS
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks, I'll take them after the first one was merged into Linus's tree.
+Hi all,
 
-> Perhaps we should start taking USB related changes like this through the
-> USB tree by default. Posting patches to the media subsystem feels like
-> shooting patches at a black hole.
+Commit
 
-I agree, there's been a bunch of patches sent there (some with security
-fixes) that are not getting responded to :(
+  a3450c5ce1df ("Revert "rcu: Simplify rcu_init_nohz() cpumask handling"")
 
-thanks,
+is missing a Signed-off-by from its author and committer.
 
-greg k-h
+Reverts are commits, too.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_//oOtkijRZwFS49YEhzDM_kS
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMsNRMACgkQAVBC80lX
+0GxuJAf/QAWaCb/vlI5+WWU29I5Pwn6YcCRkGGMJsnhqMoAaF3/+t5I6q9CT+dAL
+knsG8kuZElUU77Z3nIexlgiIKwESko4QyH2QZfom3UoW0ED+AkiMlfkmMim5dsuD
+xJAdzdHYEkPWoYGIDf2nudxuELzDCqxGAO2541ZblMvK/ByTrpStbCy+xOX06UqL
+OL/aE/1VT68RwveB2/xVFPKqQCXUzZzTdx50LwWuxvEJSg9JsuzAOBwgr5HwfTgj
+eDOt/96d0W3RPqOWXMuI+N5XyIrGYv7pMYklA8HSnCUrZkG9FVIBG24jGpET9Rji
+Zv2ZHARI2UR/QT87Wo4IqHM2Ny5LwA==
+=fPKl
+-----END PGP SIGNATURE-----
+
+--Sig_//oOtkijRZwFS49YEhzDM_kS--
