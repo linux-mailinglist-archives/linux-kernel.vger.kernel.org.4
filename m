@@ -2,146 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 639815E5B0E
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 08:04:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72E985E5B16
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 08:08:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229566AbiIVGDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 02:03:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56338 "EHLO
+        id S229810AbiIVGIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 02:08:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbiIVGDs (ORCPT
+        with ESMTP id S229598AbiIVGIc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 02:03:48 -0400
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C459B4431
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 23:03:41 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R401e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VQQzvIj_1663826617;
-Received: from 30.97.48.87(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VQQzvIj_1663826617)
-          by smtp.aliyun-inc.com;
-          Thu, 22 Sep 2022 14:03:39 +0800
-Message-ID: <0a41c051-7d7e-cb1b-8273-192252e74b94@linux.alibaba.com>
-Date:   Thu, 22 Sep 2022 14:03:55 +0800
+        Thu, 22 Sep 2022 02:08:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B839B4E9E;
+        Wed, 21 Sep 2022 23:08:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CE4266332B;
+        Thu, 22 Sep 2022 06:08:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46B58C433C1;
+        Thu, 22 Sep 2022 06:08:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663826911;
+        bh=QTMWKodiFD1OVfN40NEf/oeWD34w3O1mm/VtSDdvc+w=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=A0YEHViZnYsdRv16QyeuYWEBYm38bd8X4lA9yaC6XHPq0poMJ3DrNkZREjGZJkMHI
+         gXELoNiO1s+7lMzaw37KxSw2+ZXJWWpFNzDPojvW5/kvsy/0Nwro9iTZm+6vvjJjlT
+         RmnlG7u6UGiIkgmaxU4nsur52CGVXEXafpocrl6CVathJl1xjojSAFePOdH6GBXCJy
+         uB2cf9sOSgi0sSTsimbUAlYrmeAT5DbUvUX5ysgV+yTnCWLRgQD64KW8eK85YiB16f
+         bymcaJBB14lddhOfUp9xR7F1gQW7E69WRxZaDg/te4+ztM1/VTYJajY7tpdZduPKnG
+         Kx3iVefT2bghw==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [RFC 1/6] mm/migrate_pages: separate huge page and normal pages
- migration
-To:     Huang Ying <ying.huang@intel.com>, linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Zi Yan <ziy@nvidia.com>, Yang Shi <shy828301@gmail.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Matthew Wilcox <willy@infradead.org>
-References: <20220921060616.73086-1-ying.huang@intel.com>
- <20220921060616.73086-2-ying.huang@intel.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20220921060616.73086-2-ying.huang@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-13.6 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v8 2/2 RESEND] mwifiex: fix sleep in atomic context bugs
+ caused by dev_coredumpv
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <5cfa5c473ff6d069cb67760ffa04a2f84ef450a8.1661252818.git.duoming@zju.edu.cn>
+References: <5cfa5c473ff6d069cb67760ffa04a2f84ef450a8.1661252818.git.duoming@zju.edu.cn>
+To:     Duoming Zhou <duoming@zju.edu.cn>
+Cc:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
+        briannorris@chromium.org, johannes@sipsolutions.net,
+        rafael@kernel.org, amitkarwar@gmail.com, ganapathi017@gmail.com,
+        sharvari.harisangam@nxp.com, huxinming820@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <166382690326.9021.14393283458097744964.kvalo@kernel.org>
+Date:   Thu, 22 Sep 2022 06:08:27 +0000 (UTC)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Duoming Zhou <duoming@zju.edu.cn> wrote:
 
-
-On 9/21/2022 2:06 PM, Huang Ying wrote:
-> This is a preparation patch to batch the page unmapping and moving for
-> the normal pages and THPs.  Based on that we can batch the TLB
-> shootdown during the page migration and make it possible to use some
-> hardware accelerator for the page copying.
+> There are sleep in atomic context bugs when uploading device dump
+> data in mwifiex. The root cause is that dev_coredumpv could not
+> be used in atomic contexts, because it calls dev_set_name which
+> include operations that may sleep. The call tree shows execution
+> paths that could lead to bugs:
 > 
-> In this patch the huge page (PageHuge()) and normal page and THP
-> migration is separated in migrate_pages() to make it easy to change
-> the normal page and THP migration implementation.
+>    (Interrupt context)
+> fw_dump_timer_fn
+>   mwifiex_upload_device_dump
+>     dev_coredumpv(..., GFP_KERNEL)
+>       dev_coredumpm()
+>         kzalloc(sizeof(*devcd), gfp); //may sleep
+>         dev_set_name
+>           kobject_set_name_vargs
+>             kvasprintf_const(GFP_KERNEL, ...); //may sleep
+>             kstrdup(s, GFP_KERNEL); //may sleep
 > 
-> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
-> Cc: Zi Yan <ziy@nvidia.com>
-> Cc: Yang Shi <shy828301@gmail.com>
-> Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
-> Cc: Oscar Salvador <osalvador@suse.de>
-> Cc: Matthew Wilcox <willy@infradead.org>
-> ---
->   mm/migrate.c | 73 +++++++++++++++++++++++++++++++++++++++++++++-------
->   1 file changed, 64 insertions(+), 9 deletions(-)
+> The corresponding fail log is shown below:
 > 
-> diff --git a/mm/migrate.c b/mm/migrate.c
-> index 571d8c9fd5bc..117134f1c6dc 100644
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-> @@ -1414,6 +1414,66 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->   
->   	trace_mm_migrate_pages_start(mode, reason);
->   
-> +	for (pass = 0; pass < 10 && retry; pass++) {
-> +		retry = 0;
-> +
-> +		list_for_each_entry_safe(page, page2, from, lru) {
-> +			nr_subpages = compound_nr(page);
-> +			cond_resched();
-> +
-> +			if (!PageHuge(page))
-> +				continue;
-> +
-> +			rc = unmap_and_move_huge_page(get_new_page,
-> +						put_new_page, private, page,
-> +						pass > 2, mode, reason,
-> +						&ret_pages);
-> +			/*
-> +			 * The rules are:
-> +			 *	Success: hugetlb page will be put back
-> +			 *	-EAGAIN: stay on the from list
-> +			 *	-ENOMEM: stay on the from list
-> +			 *	-ENOSYS: stay on the from list
-> +			 *	Other errno: put on ret_pages list then splice to
-> +			 *		     from list
-> +			 */
-> +			switch(rc) {
-> +			case -ENOSYS:
-> +				/* Hugetlb migration is unsupported */
-> +				nr_failed++;
-> +				nr_failed_pages += nr_subpages;
-> +				list_move_tail(&page->lru, &ret_pages);
-> +				break;
-> +			case -ENOMEM:
-> +				/*
-> +				 * When memory is low, don't bother to try to migrate
-> +				 * other pages, just exit.
-> +				 */
-> +				nr_failed++;
-> +				nr_failed_pages += nr_subpages + nr_retry_pages;
-> +				goto out;
-> +			case -EAGAIN:
-> +				retry++;
-> +				nr_retry_pages += nr_subpages;
-> +				break;
-> +			case MIGRATEPAGE_SUCCESS:
-> +				nr_succeeded += nr_subpages;
-> +				break;
-> +			default:
-> +				/*
-> +				 * Permanent failure (-EBUSY, etc.):
-> +				 * unlike -EAGAIN case, the failed page is
-> +				 * removed from migration page list and not
-> +				 * retried in the next outer loop.
-> +				 */
-> +				nr_failed++;
-> +				nr_failed_pages += nr_subpages;
-> +				break;
-> +			}
-> +		}
-> +	}
-> +	nr_failed += retry;
+> [  135.275938] usb 1-1: == mwifiex dump information to /sys/class/devcoredump start
+> [  135.281029] BUG: sleeping function called from invalid context at include/linux/sched/mm.h:265
+> ...
+> [  135.293613] Call Trace:
+> [  135.293613]  <IRQ>
+> [  135.293613]  dump_stack_lvl+0x57/0x7d
+> [  135.293613]  __might_resched.cold+0x138/0x173
+> [  135.293613]  ? dev_coredumpm+0xca/0x2e0
+> [  135.293613]  kmem_cache_alloc_trace+0x189/0x1f0
+> [  135.293613]  ? devcd_match_failing+0x30/0x30
+> [  135.293613]  dev_coredumpm+0xca/0x2e0
+> [  135.293613]  ? devcd_freev+0x10/0x10
+> [  135.293613]  dev_coredumpv+0x1c/0x20
+> [  135.293613]  ? devcd_match_failing+0x30/0x30
+> [  135.293613]  mwifiex_upload_device_dump+0x65/0xb0
+> [  135.293613]  ? mwifiex_dnld_fw+0x1b0/0x1b0
+> [  135.293613]  call_timer_fn+0x122/0x3d0
+> [  135.293613]  ? msleep_interruptible+0xb0/0xb0
+> [  135.293613]  ? lock_downgrade+0x3c0/0x3c0
+> [  135.293613]  ? __next_timer_interrupt+0x13c/0x160
+> [  135.293613]  ? lockdep_hardirqs_on_prepare+0xe/0x220
+> [  135.293613]  ? mwifiex_dnld_fw+0x1b0/0x1b0
+> [  135.293613]  __run_timers.part.0+0x3f8/0x540
+> [  135.293613]  ? call_timer_fn+0x3d0/0x3d0
+> [  135.293613]  ? arch_restore_msi_irqs+0x10/0x10
+> [  135.293613]  ? lapic_next_event+0x31/0x40
+> [  135.293613]  run_timer_softirq+0x4f/0xb0
+> [  135.293613]  __do_softirq+0x1c2/0x651
+> ...
+> [  135.293613] RIP: 0010:default_idle+0xb/0x10
+> [  135.293613] RSP: 0018:ffff888006317e68 EFLAGS: 00000246
+> [  135.293613] RAX: ffffffff82ad8d10 RBX: ffff888006301cc0 RCX: ffffffff82ac90e1
+> [  135.293613] RDX: ffffed100d9ff1b4 RSI: ffffffff831ad140 RDI: ffffffff82ad8f20
+> [  135.293613] RBP: 0000000000000003 R08: 0000000000000000 R09: ffff88806cff8d9b
+> [  135.293613] R10: ffffed100d9ff1b3 R11: 0000000000000001 R12: ffffffff84593410
+> [  135.293613] R13: 0000000000000000 R14: 0000000000000000 R15: 1ffff11000c62fd2
+> ...
+> [  135.389205] usb 1-1: == mwifiex dump information to /sys/class/devcoredump end
+> 
+> This patch uses delayed work to replace timer and moves the operations
+> that may sleep into a delayed work in order to mitigate bugs, it was
+> tested on Marvell 88W8801 chip whose port is usb and the firmware is
+> usb8801_uapsta.bin. The following is the result after using delayed
+> work to replace timer.
+> 
+> [  134.936453] usb 1-1: == mwifiex dump information to /sys/class/devcoredump start
+> [  135.043344] usb 1-1: == mwifiex dump information to /sys/class/devcoredump end
+> 
+> As we can see, there is no bug now.
+> 
+> Fixes: f5ecd02a8b20 ("mwifiex: device dump support for usb interface")
+> Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+> Reviewed-by: Brian Norris <briannorris@chromium.org>
+> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-Seems we should also record the nr_retry_pages? since the second loop 
-will reset the nr_retry_pages.
+Patch applied to wireless-next.git, thanks.
 
-nr_failed_pages += nr_retry_pages;
+551e4745c7f2 mwifiex: fix sleep in atomic context bugs caused by dev_coredumpv
 
-Besides, I also agree with Zi Yan's comment to simplify this larger 
-function.
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/5cfa5c473ff6d069cb67760ffa04a2f84ef450a8.1661252818.git.duoming@zju.edu.cn/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+
