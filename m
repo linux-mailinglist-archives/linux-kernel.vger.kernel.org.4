@@ -2,219 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC1975E5E60
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 11:19:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 484D55E5E64
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 11:21:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230296AbiIVJTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 05:19:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57250 "EHLO
+        id S229774AbiIVJVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 05:21:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230150AbiIVJTZ (ORCPT
+        with ESMTP id S229449AbiIVJVA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 05:19:25 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F317D1E8F;
-        Thu, 22 Sep 2022 02:19:13 -0700 (PDT)
-X-UUID: b9e4dc4136694cdd871de9b874bf9821-20220922
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=DvwuvMPR+HiPCrZor2sUODVehSPwfTD03G3Wkp5HJcQ=;
-        b=XyHmNSx8jhuoc9iyBIqVLctrGouS23Iqm5SnAZGFFoSWvTL2hUm+jvXvfFMjRGggvkxOLFK56+NELMVBqtkb75gL1JjXlagwBFHnaTvE6Kt1TazgFNr7CqPXSJug1Vx/daNK19Lj3IexiINt2bEP0UbKVfE+HxCbZ51UzzEz+gM=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:db478aea-6084-4233-9740-ed6fc05c0612,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-        ON:release,TS:70
-X-CID-INFO: VERSION:1.1.11,REQID:db478aea-6084-4233-9740-ed6fc05c0612,IP:0,URL
-        :0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
-        ON:quarantine,TS:70
-X-CID-META: VersionHash:39a5ff1,CLOUDID:f0beab06-1cee-4c38-b21b-a45f9682fdc0,B
-        ulkID:220922171908DVFSXOBT,BulkQuantity:0,Recheck:0,SF:28|17|19|48,TC:nil,
-        Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: b9e4dc4136694cdd871de9b874bf9821-20220922
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
-        (envelope-from <miles.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 2082868035; Thu, 22 Sep 2022 17:19:05 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Thu, 22 Sep 2022 17:19:04 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Thu, 22 Sep 2022 17:19:04 +0800
-From:   Miles Chen <miles.chen@mediatek.com>
-To:     Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     <linux-kernel@vger.kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        Miles Chen <miles.chen@mediatek.com>,
-        <linux-clk@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Subject: [PATCH 7/7] clk: mediatek: mt8192: add mtk_clk_simple_remove
-Date:   Thu, 22 Sep 2022 17:18:35 +0800
-Message-ID: <20220922091841.4099-8-miles.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220922091841.4099-1-miles.chen@mediatek.com>
-References: <20220922091841.4099-1-miles.chen@mediatek.com>
+        Thu, 22 Sep 2022 05:21:00 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D25611164;
+        Thu, 22 Sep 2022 02:20:58 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id 63so11887459ybq.4;
+        Thu, 22 Sep 2022 02:20:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=2+S7HlEBuVCJM6F80dB4f4rhA0eBwB5EJEsljjj7oEQ=;
+        b=R61FC6aLSg96pCV7GEgkVJaRSMSzV4HdLoxaGeQqb6KMHlOElwQFntvX2tiU8aHuSr
+         kuY33t90hDFNARwlj4HAGOOK/Ragw8GM1WaZ63Y/q213syPamW2RSRhyJ0uSIw2kzXPp
+         r7AshXemKH5rGdmvklR/pmijvIjz/3i1eE4EkfaPDBPQVEww4AJMw9tLMJ/7oWHs/70u
+         6JnJzh2bcBv2FFftlv2rhJfFM0G4ZsYjf0+I6q7anQT3JW6tEYYCtLcrM2do2JT2tknk
+         23glncEimVMOmnZmFtNlprQj2K/M+2dMZUf2NmXO59pcScVGS+YobiNU9Q4xL9Q00V4q
+         KVIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=2+S7HlEBuVCJM6F80dB4f4rhA0eBwB5EJEsljjj7oEQ=;
+        b=nFOd1zpqVKsxqXeILdrwwFM1AJjhl4g58zPk5mPK4q0nz2ggSv/Xs4C6t7n2A0irEB
+         H0uQknpP6pjAaYdTpj1YWB7vmTOqSLZeIO3yXFYh/QpUqe5W1j34X2Laq0eoZ/Fmwrst
+         N2aQ5jqfD43qYhivNxT31wUz5uW/dm7bysmykvsF43lRQRPyAXKJQqSb2cdgoqVX4Ix0
+         36HPzmIXSrHaCzpLVS+7QTBTHN2wwVtM/LD/+bQZ9OBS2eKYtfJJFzb0pUG88xIntwW7
+         GtItHcdcvOX+i/MWciNS+q+BcQqNKNr+JgPEpByvtkJ71NpszbI+i4SVuaVHIspV9fe7
+         OQSw==
+X-Gm-Message-State: ACrzQf2D+4Xy+FUytauXou6zw99W5knIPZ5wG4AX/icgRMG2OSDGBE3b
+        HU7YuGcJSL/ENrCOpNKfPsjc3OxkFhO2Zwh0y28=
+X-Google-Smtp-Source: AMsMyM5EyN7u4n8EdbXrBjCRzmUqkG32AKx0gm9gp4ayEyX1apBgRrSArCx2QDVBntwIADukECOsIoP/EiUdHpNR/MM=
+X-Received: by 2002:a25:bd52:0:b0:6b4:22fa:8226 with SMTP id
+ p18-20020a25bd52000000b006b422fa8226mr2621525ybm.31.1663838457943; Thu, 22
+ Sep 2022 02:20:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220919060342.26400-1-lukas.bulwahn@gmail.com> <202209192252.T6IGLNqC-lkp@intel.com>
+In-Reply-To: <202209192252.T6IGLNqC-lkp@intel.com>
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Date:   Thu, 22 Sep 2022 11:20:47 +0200
+Message-ID: <CAKXUXMy=1_AvqwhjEzaov5jj4sCiB5vB67QsXA395-J7N2Vtqg@mail.gmail.com>
+Subject: Re: [PATCH] crypto: add rsize config to .config only if lib_poly1305
+ is set
+To:     kernel test robot <lkp@intel.com>
+Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        linux-crypto@vger.kernel.org, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-mt8192 is already using mtk_clk_simple_probe,
-but not mtk_clk_simple_remove.
+On Mon, Sep 19, 2022 at 5:10 PM kernel test robot <lkp@intel.com> wrote:
+>
+> Hi Lukas,
+>
+> I love your patch! Yet something to improve:
 
-Let's add mtk_clk_simple_remove for mt8192.
+Thanks, kernel test robot ;)
 
-Signed-off-by: Miles Chen <miles.chen@mediatek.com>
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/clk/mediatek/clk-mt8192-cam.c          | 1 +
- drivers/clk/mediatek/clk-mt8192-img.c          | 1 +
- drivers/clk/mediatek/clk-mt8192-imp_iic_wrap.c | 1 +
- drivers/clk/mediatek/clk-mt8192-ipe.c          | 1 +
- drivers/clk/mediatek/clk-mt8192-mdp.c          | 1 +
- drivers/clk/mediatek/clk-mt8192-mfg.c          | 1 +
- drivers/clk/mediatek/clk-mt8192-msdc.c         | 1 +
- drivers/clk/mediatek/clk-mt8192-scp_adsp.c     | 1 +
- drivers/clk/mediatek/clk-mt8192-vdec.c         | 1 +
- drivers/clk/mediatek/clk-mt8192-venc.c         | 1 +
- 10 files changed, 10 insertions(+)
+Okay, I see that I need to reiterate on this patch. The crypto caam
+driver pulls in a number of headers without a dependency with Kconfig
+on the corresponding config symbol here. I will check if I find a good
+solution for that.
 
-diff --git a/drivers/clk/mediatek/clk-mt8192-cam.c b/drivers/clk/mediatek/clk-mt8192-cam.c
-index fc74cd80b4b0..90b57d46eef7 100644
---- a/drivers/clk/mediatek/clk-mt8192-cam.c
-+++ b/drivers/clk/mediatek/clk-mt8192-cam.c
-@@ -98,6 +98,7 @@ static const struct of_device_id of_match_clk_mt8192_cam[] = {
- 
- static struct platform_driver clk_mt8192_cam_drv = {
- 	.probe = mtk_clk_simple_probe,
-+	.remove = mtk_clk_simple_remove,
- 	.driver = {
- 		.name = "clk-mt8192-cam",
- 		.of_match_table = of_match_clk_mt8192_cam,
-diff --git a/drivers/clk/mediatek/clk-mt8192-img.c b/drivers/clk/mediatek/clk-mt8192-img.c
-index 7ce3abe42577..da82d65a7650 100644
---- a/drivers/clk/mediatek/clk-mt8192-img.c
-+++ b/drivers/clk/mediatek/clk-mt8192-img.c
-@@ -61,6 +61,7 @@ static const struct of_device_id of_match_clk_mt8192_img[] = {
- 
- static struct platform_driver clk_mt8192_img_drv = {
- 	.probe = mtk_clk_simple_probe,
-+	.remove = mtk_clk_simple_remove,
- 	.driver = {
- 		.name = "clk-mt8192-img",
- 		.of_match_table = of_match_clk_mt8192_img,
-diff --git a/drivers/clk/mediatek/clk-mt8192-imp_iic_wrap.c b/drivers/clk/mediatek/clk-mt8192-imp_iic_wrap.c
-index 700356ac6a58..ff8e20bb44bb 100644
---- a/drivers/clk/mediatek/clk-mt8192-imp_iic_wrap.c
-+++ b/drivers/clk/mediatek/clk-mt8192-imp_iic_wrap.c
-@@ -110,6 +110,7 @@ static const struct of_device_id of_match_clk_mt8192_imp_iic_wrap[] = {
- 
- static struct platform_driver clk_mt8192_imp_iic_wrap_drv = {
- 	.probe = mtk_clk_simple_probe,
-+	.remove = mtk_clk_simple_remove,
- 	.driver = {
- 		.name = "clk-mt8192-imp_iic_wrap",
- 		.of_match_table = of_match_clk_mt8192_imp_iic_wrap,
-diff --git a/drivers/clk/mediatek/clk-mt8192-ipe.c b/drivers/clk/mediatek/clk-mt8192-ipe.c
-index 730d91b64b3f..0225abe4170a 100644
---- a/drivers/clk/mediatek/clk-mt8192-ipe.c
-+++ b/drivers/clk/mediatek/clk-mt8192-ipe.c
-@@ -48,6 +48,7 @@ static const struct of_device_id of_match_clk_mt8192_ipe[] = {
- 
- static struct platform_driver clk_mt8192_ipe_drv = {
- 	.probe = mtk_clk_simple_probe,
-+	.remove = mtk_clk_simple_remove,
- 	.driver = {
- 		.name = "clk-mt8192-ipe",
- 		.of_match_table = of_match_clk_mt8192_ipe,
-diff --git a/drivers/clk/mediatek/clk-mt8192-mdp.c b/drivers/clk/mediatek/clk-mt8192-mdp.c
-index 93c87ae2f332..4675788d7816 100644
---- a/drivers/clk/mediatek/clk-mt8192-mdp.c
-+++ b/drivers/clk/mediatek/clk-mt8192-mdp.c
-@@ -73,6 +73,7 @@ static const struct of_device_id of_match_clk_mt8192_mdp[] = {
- 
- static struct platform_driver clk_mt8192_mdp_drv = {
- 	.probe = mtk_clk_simple_probe,
-+	.remove = mtk_clk_simple_remove,
- 	.driver = {
- 		.name = "clk-mt8192-mdp",
- 		.of_match_table = of_match_clk_mt8192_mdp,
-diff --git a/drivers/clk/mediatek/clk-mt8192-mfg.c b/drivers/clk/mediatek/clk-mt8192-mfg.c
-index 3bbc7469f0e4..24108229793d 100644
---- a/drivers/clk/mediatek/clk-mt8192-mfg.c
-+++ b/drivers/clk/mediatek/clk-mt8192-mfg.c
-@@ -41,6 +41,7 @@ static const struct of_device_id of_match_clk_mt8192_mfg[] = {
- 
- static struct platform_driver clk_mt8192_mfg_drv = {
- 	.probe = mtk_clk_simple_probe,
-+	.remove = mtk_clk_simple_remove,
- 	.driver = {
- 		.name = "clk-mt8192-mfg",
- 		.of_match_table = of_match_clk_mt8192_mfg,
-diff --git a/drivers/clk/mediatek/clk-mt8192-msdc.c b/drivers/clk/mediatek/clk-mt8192-msdc.c
-index 635f7a0b629a..a72e1b73fce8 100644
---- a/drivers/clk/mediatek/clk-mt8192-msdc.c
-+++ b/drivers/clk/mediatek/clk-mt8192-msdc.c
-@@ -55,6 +55,7 @@ static const struct of_device_id of_match_clk_mt8192_msdc[] = {
- 
- static struct platform_driver clk_mt8192_msdc_drv = {
- 	.probe = mtk_clk_simple_probe,
-+	.remove = mtk_clk_simple_remove,
- 	.driver = {
- 		.name = "clk-mt8192-msdc",
- 		.of_match_table = of_match_clk_mt8192_msdc,
-diff --git a/drivers/clk/mediatek/clk-mt8192-scp_adsp.c b/drivers/clk/mediatek/clk-mt8192-scp_adsp.c
-index 58725d79dd13..18a8679108b8 100644
---- a/drivers/clk/mediatek/clk-mt8192-scp_adsp.c
-+++ b/drivers/clk/mediatek/clk-mt8192-scp_adsp.c
-@@ -41,6 +41,7 @@ static const struct of_device_id of_match_clk_mt8192_scp_adsp[] = {
- 
- static struct platform_driver clk_mt8192_scp_adsp_drv = {
- 	.probe = mtk_clk_simple_probe,
-+	.remove = mtk_clk_simple_remove,
- 	.driver = {
- 		.name = "clk-mt8192-scp_adsp",
- 		.of_match_table = of_match_clk_mt8192_scp_adsp,
-diff --git a/drivers/clk/mediatek/clk-mt8192-vdec.c b/drivers/clk/mediatek/clk-mt8192-vdec.c
-index b1d95cfbf22a..e149962dbbf9 100644
---- a/drivers/clk/mediatek/clk-mt8192-vdec.c
-+++ b/drivers/clk/mediatek/clk-mt8192-vdec.c
-@@ -85,6 +85,7 @@ static const struct of_device_id of_match_clk_mt8192_vdec[] = {
- 
- static struct platform_driver clk_mt8192_vdec_drv = {
- 	.probe = mtk_clk_simple_probe,
-+	.remove = mtk_clk_simple_remove,
- 	.driver = {
- 		.name = "clk-mt8192-vdec",
- 		.of_match_table = of_match_clk_mt8192_vdec,
-diff --git a/drivers/clk/mediatek/clk-mt8192-venc.c b/drivers/clk/mediatek/clk-mt8192-venc.c
-index c0d867bff09e..80b8bb170996 100644
---- a/drivers/clk/mediatek/clk-mt8192-venc.c
-+++ b/drivers/clk/mediatek/clk-mt8192-venc.c
-@@ -44,6 +44,7 @@ static const struct of_device_id of_match_clk_mt8192_venc[] = {
- 
- static struct platform_driver clk_mt8192_venc_drv = {
- 	.probe = mtk_clk_simple_probe,
-+	.remove = mtk_clk_simple_remove,
- 	.driver = {
- 		.name = "clk-mt8192-venc",
- 		.of_match_table = of_match_clk_mt8192_venc,
--- 
-2.18.0
+For now, this patch can be ignored until I find time to send out a patch v2.
 
+Lukas
+
+>
+> [auto build test ERROR on herbert-cryptodev-2.6/master]
+> [also build test ERROR on herbert-crypto-2.6/master linus/master v6.0-rc6 next-20220919]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Lukas-Bulwahn/crypto-add-rsize-config-to-config-only-if-lib_poly1305-is-set/20220919-140531
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git master
+> config: arm-defconfig (https://download.01.org/0day-ci/archive/20220919/202209192252.T6IGLNqC-lkp@intel.com/config)
+> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install arm cross compiling tool for clang build
+>         # apt-get install binutils-arm-linux-gnueabi
+>         # https://github.com/intel-lab-lkp/linux/commit/c1954797e493eabf02f354e290fe380ace0633e4
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Lukas-Bulwahn/crypto-add-rsize-config-to-config-only-if-lib_poly1305-is-set/20220919-140531
+>         git checkout c1954797e493eabf02f354e290fe380ace0633e4
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/crypto/caam/
+>
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> All errors (new ones prefixed by >>):
+>
+>    In file included from drivers/crypto/caam/ctrl.c:15:
+>    In file included from drivers/crypto/caam/compat.h:41:
+> >> include/crypto/poly1305.h:56:32: error: use of undeclared identifier 'CONFIG_CRYPTO_LIB_POLY1305_RSIZE'
+>                    struct poly1305_key opaque_r[CONFIG_CRYPTO_LIB_POLY1305_RSIZE];
+>                                                 ^
+>    1 error generated.
+>
+>
+> vim +/CONFIG_CRYPTO_LIB_POLY1305_RSIZE +56 include/crypto/poly1305.h
+>
+> 878afc35cd28bc Eric Biggers       2018-11-16  40
+> 2546f811ef45fc Martin Willi       2015-07-16  41  struct poly1305_desc_ctx {
+> 2546f811ef45fc Martin Willi       2015-07-16  42        /* partial buffer */
+> 2546f811ef45fc Martin Willi       2015-07-16  43        u8 buf[POLY1305_BLOCK_SIZE];
+> 2546f811ef45fc Martin Willi       2015-07-16  44        /* bytes used in partial buffer */
+> 2546f811ef45fc Martin Willi       2015-07-16  45        unsigned int buflen;
+> ad8f5b88383ea6 Ard Biesheuvel     2019-11-08  46        /* how many keys have been set in r[] */
+> ad8f5b88383ea6 Ard Biesheuvel     2019-11-08  47        unsigned short rset;
+> ad8f5b88383ea6 Ard Biesheuvel     2019-11-08  48        /* whether s[] has been set */
+> 2546f811ef45fc Martin Willi       2015-07-16  49        bool sset;
+> ad8f5b88383ea6 Ard Biesheuvel     2019-11-08  50        /* finalize key */
+> ad8f5b88383ea6 Ard Biesheuvel     2019-11-08  51        u32 s[4];
+> ad8f5b88383ea6 Ard Biesheuvel     2019-11-08  52        /* accumulator */
+> ad8f5b88383ea6 Ard Biesheuvel     2019-11-08  53        struct poly1305_state h;
+> ad8f5b88383ea6 Ard Biesheuvel     2019-11-08  54        /* key */
+> 1c08a104360f3e Jason A. Donenfeld 2020-01-05  55        union {
+> 1c08a104360f3e Jason A. Donenfeld 2020-01-05 @56                struct poly1305_key opaque_r[CONFIG_CRYPTO_LIB_POLY1305_RSIZE];
+> 1c08a104360f3e Jason A. Donenfeld 2020-01-05  57                struct poly1305_core_key core_r;
+> 1c08a104360f3e Jason A. Donenfeld 2020-01-05  58        };
+> 2546f811ef45fc Martin Willi       2015-07-16  59  };
+> 2546f811ef45fc Martin Willi       2015-07-16  60
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://01.org/lkp
