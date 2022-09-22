@@ -2,76 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CA185E6F5E
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 00:07:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E3A55E6F61
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 00:08:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231124AbiIVWHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 18:07:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50514 "EHLO
+        id S230306AbiIVWIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 18:08:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230402AbiIVWHb (ORCPT
+        with ESMTP id S230352AbiIVWH5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 18:07:31 -0400
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4A63D589D
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 15:07:26 -0700 (PDT)
-Received: by mail-qk1-x729.google.com with SMTP id d17so7169174qko.13
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 15:07:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date;
-        bh=RSrfC6iDeLJRy+w8inJJOMo+GqNrp14f2E1CDHLvDAE=;
-        b=l0RvQBVs/pyfALrtVePf/EGYaAZzGyoDu0AwQ/D970EY8SM9Ha2zzQisHo7Ec597ky
-         8Sa1NApvHvZVk58G/RmSusc0bp8gdU5LWnwmxXbnOmFtLTXaiBD8vAxV/zmB/GaPn/qK
-         GTrIMLEsNKAWRHIQpIDO+Z6HjtXMwTiB3kWZ3ycBMkPRdYJb1U/489uyEkjta/yfaNGt
-         bINUiIa0Lx20Bu3vWFE1sXLNPNPSH5S6fX0VzlEjcXSnzdQT3Rdv1p9qFSrYAVvumT6w
-         RzwCD83XoXvqOTAE2hwfGiG+BgQErqBVdC3rHAj+v60ZC1clBp2md6llAPyJkd95Bdnk
-         h23A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=RSrfC6iDeLJRy+w8inJJOMo+GqNrp14f2E1CDHLvDAE=;
-        b=V2WpgiUWhIUGMJtxqoPJpxvgeCH3Z5+Cpf6IG2mM0c3h0Vfzkt/RnsdInBIUuJfk/6
-         MHKJbwJly51cHyLAj9eN7/1r/Tw9VK5t8ySi8pHlZ3iClnFMYttdTPYxx1BMvaCHBTCw
-         +Lt48tgPZRp5LDHlXdrw4MFOoGwnh0f3GuTjQqTFOsifLMg+TCAnqbp7xObMWzsUz2fq
-         38COnXv+dkXbOSZyikp10hVT2MrwaRHmV96tty9eL/qO8vKTl1HckjF9gpa/GfjpHGDG
-         pyTDFh3lliwNYlNk4HlUm3V+JmJjUspxDvZOE4IBLW+jAOXEXMgqlMnsJoVrj12IB/L6
-         8A1w==
-X-Gm-Message-State: ACrzQf18dK2xuesjVI0s/o8MDQJZwyXsCZHoyrgdU8WVETY2/s15s7wj
-        7eHyunnSihUIHcNmb0q4XgA=
-X-Google-Smtp-Source: AMsMyM5BIsxxS2nNRzLnW9+dsXYPs0brTlQb+JN0shBWrO27WoSQi5gEfXPosvOZoAPIGIkvREaWdg==
-X-Received: by 2002:a05:620a:11ba:b0:6ce:1a71:9887 with SMTP id c26-20020a05620a11ba00b006ce1a719887mr3675339qkk.550.1663884445295;
-        Thu, 22 Sep 2022 15:07:25 -0700 (PDT)
-Received: from localhost ([2601:4c1:c100:2270:f638:4026:f978:9c7])
-        by smtp.gmail.com with ESMTPSA id cf14-20020a05622a400e00b0031f41ea94easm4097043qtb.28.2022.09.22.15.07.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 15:07:25 -0700 (PDT)
-Date:   Thu, 22 Sep 2022 15:07:23 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Phil Auld <pauld@redhat.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Petr =?utf-8?Q?=C5=A0tetiar?= <ynezz@true.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v2 1/1] cpumask: Don't waste memory for sysfs cpulist
- nodes
-Message-ID: <Yyzcm2TEEPKziFj8@yury-laptop>
-References: <20220922194954.1078-1-andriy.shevchenko@linux.intel.com>
- <YyzIhDDEiemWjLgI@yury-laptop>
- <YyzXCtX5tadKnOhq@lorien.usersys.redhat.com>
+        Thu, 22 Sep 2022 18:07:57 -0400
+Received: from na01-obe.outbound.protection.outlook.com (mail-centralusazon11021025.outbound.protection.outlook.com [52.101.62.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C91C811264F;
+        Thu, 22 Sep 2022 15:07:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=h/GF8IZAKUPYwYRefdBo/auUYLQX/eob0mhrub9hywB0w4Uok8673t3LXn//EDZyA9UQQT3vmG+BcnwVgy2npdMTJkPmbIgv3j0mrLeV+An84uAIzfZFRSDgANnF+MlBzdYSKkNnhUoFOWkVkPiD56dzOfLIPvUU5H8TJFQmdEuxMqbio3DOn9KIEhN9WTa4XcoHbUjBqibocZ1mBgYC62VLp6Ya0AZ2wNi2ncmakMesSoWmFSHJrMhejV4oYa9mQgII/F5Cv189bYbjF994+b5daN518/oe4jrLjXXwLr3iZf96sthkYZ2e393BIiGjT1CW9LT9a9nS9B6KzPH+rA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tTg0cm5Zm2kMHXsZJnVKOiY0MnVTibLuQyV203W2y7E=;
+ b=Ne+vZpCF72bOTuXUaZjL3i083q97Ccpwl0y2wl+eWNahCIpIQ2/h0vdI98+tNDLt6Gowlf8uMsXoHG4YwexvZ7GT9FBFFfePuXrdg3uNgLLL8EsBQM2YbC6ztJ0F1JznzUBNI0j/29nOVd3+Ikx1CflXEz+3nOAqc2yP70Y6n5bw4X2ULhit2HGmP/akE/fmgB08duR+ofEN1RWleQNUQbcoZCtolWQP/zAu5yyf5XCOrR0Sw9X8WZBFIHzA7Ss5ljlftkxhCb6ZggpvJJTXwAeoKQYoPDZciMjo6yQsaB7ku+RWoa0HSsUEFD79UyUGUoHvxBeVpY6yVg351E6goQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tTg0cm5Zm2kMHXsZJnVKOiY0MnVTibLuQyV203W2y7E=;
+ b=JrZoK68yHG0BEKa7YkI8/9S5Th0tNLx6+OF64/Um96+LSPbNPPKym9V75iw72xw9dBM8gdUJQ0EaME4IjLbRkzCi6Z1RDfXCFqfT8vhE25maR7lUP1n9j1mMk0zQJYia3n+gyPqWRa21EkzN7LDXIWS7mwV8raGzApZuDcU4jdc=
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
+ by SJ0PR21MB1952.namprd21.prod.outlook.com (2603:10b6:a03:296::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.9; Thu, 22 Sep
+ 2022 22:07:53 +0000
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::17f5:70e:721f:df7e]) by BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::17f5:70e:721f:df7e%4]) with mapi id 15.20.5676.007; Thu, 22 Sep 2022
+ 22:07:53 +0000
+From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+CC:     Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v4 1/6] x86/hyperv: Add HV_INVARIANT_TSC_EXPOSED define
+Thread-Topic: [PATCH v4 1/6] x86/hyperv: Add HV_INVARIANT_TSC_EXPOSED define
+Thread-Index: AQHYzpDKJa06rsbw7UK7JOfTvccOoK3sANvA
+Date:   Thu, 22 Sep 2022 22:07:53 +0000
+Message-ID: <BYAPR21MB16883BE5057ECC1BB99B4170D74E9@BYAPR21MB1688.namprd21.prod.outlook.com>
+References: <20220922143655.3721218-1-vkuznets@redhat.com>
+ <20220922143655.3721218-2-vkuznets@redhat.com>
+In-Reply-To: <20220922143655.3721218-2-vkuznets@redhat.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=07d209c6-37fa-4274-9c6b-05786e3535c8;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-09-22T22:02:23Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|SJ0PR21MB1952:EE_
+x-ms-office365-filtering-correlation-id: 4ce9463a-df28-453a-9b59-08da9ce6e5b4
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ZysxVmx+ErDYmsPii+OgExxBfXrXAslJdJoyTm8yUyT1En0nfWyMqNMKhG1YTBGuEOzIEZwXgaQ6WXnBWnZil8GwWk3iCXLRD/CDvp3b/Gk5yLw1d0eUDh3+wqwrzgeBtiP2FSRS8sSGBfSgPkIziMN60sULtA+sTltp21WHdeT5PVR4Zh8/23hoK86BBd5wML2kZ2oAHl9NqynJRWVV0IhEBPs50bGRn26BXYz3mXAfsCxU55GZD1g2VLUMvfGYtOgfOOv7WQynzI59kV+GL1qPRgH0QY+lthfF8ydgWEhWnSGL8M2rCtuz4SYOoDbGDLlBKgmIKHVeQvqqJQO7VS9Z8hRK9YW+MFUwjU0/Q/pJeJ4v81RnwQFYZiqdoeDI61wW10o6pzCs5FegOWYwDO8mNdCMUSuZKsgFb7fUQC6ld06mu1UnftQmIRXrM9QX9WJv+bLtWj3kgWLt47qfTzvcNv77Dl6HPe76qVV74AFakiWYGooRLz8RfOWTMrEBIfgde/Ek/18PqtGpdW238XE3THy/4s1IUh9Uea/4UNxa4LTmddFOtMIbPM4HwU6cvZhCPWOdvimvfkqEwf9tRqjyvuB+uLoYkclbJYxtQr5eHQ9DWN5L3PoIhWeH+Wo9vFUbMlemWdtO0nGmxrWKqV4PK06vE2qQPLo6QxJi0Wq2XlEqvyXSJQLehDPkMAT6kdWzXMLAQHYOGiRW5+ul1oieNUE+fwciT8l6R6G4SGRsV8SnzeXSkeiD9YlbfwBcYRc6zdz/rpc1bFCO7vLB7nGbidvzH6gSRaWFHDX/sPoyJgPc+GtJQV1AOCg8iQsl
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(346002)(366004)(376002)(396003)(451199015)(26005)(316002)(9686003)(33656002)(478600001)(6506007)(10290500003)(54906003)(110136005)(71200400001)(122000001)(38100700002)(7696005)(38070700005)(82950400001)(82960400001)(83380400001)(186003)(55016003)(76116006)(86362001)(8990500004)(2906002)(4326008)(66446008)(8936002)(5660300002)(52536014)(8676002)(64756008)(41300700001)(66556008)(66946007)(66476007);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?3RaJod+28rqaozwpTXnLUe/VmiKuPTNzQLmwCny4BbktDKsJS+Wd+Q/7Jt63?=
+ =?us-ascii?Q?e12dNv8/LMiQ2XMo1zd4xm2Mu8hpCVIn+/jsDoCUdPKvZ3Qb+pzDzQBdqLe1?=
+ =?us-ascii?Q?1XL+hqLhd+ZD0OOhK8imkNX0Tm6nYqwEX+ZX0Nr+aDyeRWqpEaGGeCSZvXmd?=
+ =?us-ascii?Q?jDYYLn4IKbAVPwXMvHXhauJrNIk2KZ3ox/i6hKKuOyHWym4sj+SYlC6NDHse?=
+ =?us-ascii?Q?XVO2JAd6Tqnq2Im7cwjUa9OZSjYl/1VF7oUk7B85pNp2J5YhVIXJ+H00iMIH?=
+ =?us-ascii?Q?hcpBtgxP3Qv421ajcHz4+VXK2J45HOSB0z+djKP/R5yi6rG7dQTBx6k5egOw?=
+ =?us-ascii?Q?QtrPPt1u0LyWCbcZvPvLsJbKLMKvdiFPmFmATNcBSniFQhw7TJPGtH+0jy2b?=
+ =?us-ascii?Q?KXHN+Ec+2V/vgdq3x36Q3rqGWN1xZlnksdCJmXzQ6h6mXacH7O2dGymE8D71?=
+ =?us-ascii?Q?rhrQneTeRtW+2FcTKlfqrC+U9LOH7NhMUqtuI7l85h48BwGn3wSlUhkmlqRt?=
+ =?us-ascii?Q?ik+t/V59Ja86kiUNpOp4hQv8qdQirs/MSC4AcVkWkmc2HL2TlLQpOqRMs+4e?=
+ =?us-ascii?Q?1aw4XVAuZD9FT9fqqts4WCWZwZnDv6tvX5Xa+H7e8D9WEhKbu1EXmXTX/Ae+?=
+ =?us-ascii?Q?ZEYaRSSYgM7bBTHZqLCcZzh/LrQISZwZPXaPVxw3i6rOw6PZ1Q4ZiQIVMISH?=
+ =?us-ascii?Q?UulmfHExIPXHMvNlMVDl2Z3eznqYO0237+XzNAhtoHPLyKeVHJ0tXKL/q28b?=
+ =?us-ascii?Q?izwV92xwhemIwA+Rdx7cbUMM5JvU8kq8vXOElDB98TpkhG0g4kKcAlOskSET?=
+ =?us-ascii?Q?cefZXZSFZ6lKqoeOIhuMcDnE+b+ujZkSIAO/p19hqa6+xMhKgbxh+qil5CgA?=
+ =?us-ascii?Q?svdYkoC+cBvpMpQ8Jp3dVKZ8WE0AXeE+Rt5fZVW0rhxl1DCJUuVwEx1rCpnd?=
+ =?us-ascii?Q?8uvRlvZPlzCNXRxm3QXRUexF3ORVGKM4scMuTcagonXx9ArxyvBpNu384/Jz?=
+ =?us-ascii?Q?FLZzgM8K4/SVc4yxOGYMCfrVlvteEBN4PpSuuXDQKpnE4sGO2F8TQ0qrJmtg?=
+ =?us-ascii?Q?ncsEVQ6za+NzaZcdh46+Ere+xPgCHLJPVEut+FxiuP6cSzTbebTM3OvnBZ0T?=
+ =?us-ascii?Q?i/XGx8HSWXmDTAm0oU4WOH2vFmGiw0H3Mtz8Mjvb6/j0tLgXjj2rXSW06zo5?=
+ =?us-ascii?Q?Q9vSTGxizxsmFFiExjsRc6YP9q3x8A3PNjj43EaFDqePtpPG7VXFDTQz6vMD?=
+ =?us-ascii?Q?iRLTC9M4icGlpFrRAZT7MGZneiJUs50P8uzyXp+u6GWYl65JAhos3fkxkoQD?=
+ =?us-ascii?Q?Kmd5AewC3cnRlZ2aMo3bVaGVZ/fQJQCUuHoTH4LoAzLWCT/uc6h7cvWc+OqD?=
+ =?us-ascii?Q?FmebVpDpZflp8Vkr2fhhMNs6f/Zhc1bRzsBns6DzzACFOEVL6KfAyzoxDVfT?=
+ =?us-ascii?Q?Brh9DwzKLv6iRNG8mI1Ze53Ny0hHCxyI1A50nJggrcgq6BvE2UvrPIw35osl?=
+ =?us-ascii?Q?YAS/GLCIKVnkbGDb22THUgxhpQj92h/e/fghzcOoBFUcAddB6T9FDo6AoDUO?=
+ =?us-ascii?Q?pnRRke8Rlji/uMNK0LIUloG7uBZn2/OsEVOX1h58usWXiNaeLwnMUcqEcghD?=
+ =?us-ascii?Q?gQ=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YyzXCtX5tadKnOhq@lorien.usersys.redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4ce9463a-df28-453a-9b59-08da9ce6e5b4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Sep 2022 22:07:53.5951
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: wND9PbNDh3O0nEEaRLmKKj37LSiVg7obuWVKmE5YDcqYZYB86F/3E8T8eQU/Riq1SYwdxnBoqrBgGByifYbKa1Tk+rLaIZahh/84VuMqepM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR21MB1952
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,165 +125,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 05:43:38PM -0400, Phil Auld wrote:
-> On Thu, Sep 22, 2022 at 01:41:40PM -0700 Yury Norov wrote:
-> >  + Petr Štetiar <ynezz@true.cz>,
-> >  + Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > 
-> > On Thu, Sep 22, 2022 at 10:49:54PM +0300, Andy Shevchenko wrote:
-> > > Currently the approximation is used which wastes the more memory
-> > > the more CPUs are present on the system. Proposed change calculates
-> > > the exact maximum needed in the worst case:
-> > > 
-> > >   NR_CPUS	old		new
-> > >   -------	---		---
-> > >   1 .. 1170	4096		4096
-> > >   1171 .. 1860	4098 ..	6510	4096
-> > >   ...		...		...
-> > >   2*4096	28672		19925
-> > >   4*4096	57344		43597
-> > >   8*4096	114688		92749
-> > >   16*4096	229376		191053
-> > >   32*4096	458752		403197
-> > >   64*4096	917504		861949
-> > >   128*4096	1835008		1779453
-> > >   256*4096	3670016		3670016
-> > > 
-> > > Under the hood the reccurent formula is being used:
-> > >   (5 - 0) * 2 +
-> > >     (50 - 5) * 3 +
-> > >       (500 - 50) * 4 +
-> > >         (5000 - 500) * 5 +
-> > >           ...
-> > >             (X[i] - X[i-1]) * i
-> > > 
-> > > which allows to count the exact maximum length in the worst case,
-> > > i.e. when each second CPU is being listed. For backward compatibility
-> > > for more than 1170 and less than 1861 CPUs the page size is preserved.
-> > > 
-> > > For less than 1171 and more than 1 million CPUs the old is being used.
-> > 
-> > 1861
-> > 
-> > > 
-> > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > > ---
-> > > v2: described better the advantage for 1171..1860 CPUs cases
-> > >  include/linux/cpumask.h | 48 +++++++++++++++++++++++++++++++++++++++++
-> > >  1 file changed, 48 insertions(+)
-> > > 
-> > > diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
-> > > index 1b442fb2001f..12cf0905ca74 100644
-> > > --- a/include/linux/cpumask.h
-> > > +++ b/include/linux/cpumask.h
-> > > @@ -1122,6 +1122,21 @@ cpumap_print_list_to_buf(char *buf, const struct cpumask *mask,
-> > >   *
-> > >   * for cpumap NR_CPUS * 9/32 - 1 should be an exact length.
-> > >   *
-> > > + * for cpulist the reccurent formula is being used:
-> > > + *   (5 - 0) * 2 +
-> > > + *     (50 - 5) * 3 +
-> > > + *       (500 - 50) * 4 +
-> > > + *         (5000 - 500) * 5 +
-> > > + *           ...
-> > > + *             (X[i] - X[i-1]) * i
-> > > + *
-> > > + * which allows to count the exact maximum length in the worst case,
-> > > + * i.e. when each second CPU is being listed. For backward compatibility
-> > > + * for more than 1170 and less than 1861 CPUs the page size is preserved.
-> > > + *
-> > > + * For less than 1171 and more than 1 million CPUs the old is being used
-> > > + * as described below:
-> > > + *
-> > >   * For cpulist 7 is (ceil(log10(NR_CPUS)) + 1) allowing for NR_CPUS to be up
-> > >   * to 2 orders of magnitude larger than 8192. And then we divide by 2 to
-> > >   * cover a worst-case of every other cpu being on one of two nodes for a
-> > > @@ -1132,6 +1147,39 @@ cpumap_print_list_to_buf(char *buf, const struct cpumask *mask,
-> > >   */
-> > >  #define CPUMAP_FILE_MAX_BYTES  (((NR_CPUS * 9)/32 > PAGE_SIZE) \
-> > >  					? (NR_CPUS * 9)/32 - 1 : PAGE_SIZE)
-> > > +
-> > > +#define __CPULIST_FOR_10(x)		(((x + 1) / 2 - 0)     * 2)
-> > > +#define __CPULIST_FOR_100(x)		(((x + 1) / 2 - 5)     * 3)
-> > > +#define __CPULIST_FOR_1000(x)		(((x + 1) / 2 - 50)    * 4)
-> > > +#define __CPULIST_FOR_10000(x)		(((x + 1) / 2 - 500)   * 5)
-> > > +#define __CPULIST_FOR_100000(x)		(((x + 1) / 2 - 5000)  * 6)
-> > > +#define __CPULIST_FOR_1000000(x)	(((x + 1) / 2 - 50000) * 7)
-> > 
-> > The defs below will be nicer if you make it like this:
-> > 
-> >   #define __CPULIST_FOR_10(x)  (((x + 1) / 2 - 0)     * 2)
-> >   #define __CPULIST_FOR_100(x) __CPULIST_FOR_10(10) + (((x + 1) / 2 - 5) * 3)
-> >   #define __CPULIST_FOR_1000(x)	__CPULIST_FOR_100(100) + (((x + 1) / 2 - 50) * 4)
-> >   ...
-> > 
-> > 
-> > 
-> > > +#if NR_CPUS < 1861
-> > > +#define CPULIST_FILE_MAX_BYTES	PAGE_SIZE
-> > 
-> > The comment says:
-> >   for more than 1170 and less than 1861 CPUs the page size is preserved.
-> > 
-> > Which doesn't look correct. Looks like it should be:
-> >   for less than 1861 CPUs the page size is preserved.
-> > 
-> > Or I miss something?
-> > 
-> > > +#elif NR_CPUS < 10000
-> > > +#define CPULIST_FILE_MAX_BYTES			\
-> > > +	 (__CPULIST_FOR_10(10) +		\
-> > > +	  __CPULIST_FOR_100(100) +		\
-> > > +	  __CPULIST_FOR_1000(1000) +		\
-> > > +	  __CPULIST_FOR_10000(NR_CPUS))
-> > > +#elif NR_CPUS < 100000
-> > > +#define CPULIST_FILE_MAX_BYTES			\
-> > > +	 (__CPULIST_FOR_10(10) +		\
-> > > +	  __CPULIST_FOR_100(100) +		\
-> > > +	  __CPULIST_FOR_1000(1000) +		\
-> > > +	  __CPULIST_FOR_10000(10000) +		\
-> > > +	  __CPULIST_FOR_100000(NR_CPUS))
-> > > +#elif NR_CPUS < 1000000
-> > > +#define CPULIST_FILE_MAX_BYTES			\
-> > > +	 (__CPULIST_FOR_10(10) +		\
-> > > +	  __CPULIST_FOR_100(100) +		\
-> > > +	  __CPULIST_FOR_1000(1000) +		\
-> > > +	  __CPULIST_FOR_10000(10000) +		\
-> > > +	  __CPULIST_FOR_100000(100000) +	\
-> > > +	  __CPULIST_FOR_1000000(NR_CPUS))
-> > > +#else
-> > >  #define CPULIST_FILE_MAX_BYTES  (((NR_CPUS * 7)/2 > PAGE_SIZE) ? (NR_CPUS * 7)/2 : PAGE_SIZE)
-> > > +#endif
-> > >  
-> > >  #endif /* __LINUX_CPUMASK_H */
-> > > -- 
-> > > 2.35.1
-> > 
-> > I'm OK to take this in replace for Phil's version, but the commit that
-> > introduces CPULIST_FILE_MAX_BYTES is already in mainline: 7ee951acd31a8
-> > ("drivers/base: fix userspace break from using bin_attributes for cpumap
-> > and cpulist"). Can you rebase it on top of v6.0-rc6?
-> > 
-> > Greg, since Andy's version is more precise, I'd like to send a pull
-> > request with it in -rc7. Can you drop Phil's patch so I'll go with
-> > this one?
-> >
-> 
-> This changes the other of the 2 macros and looks like it is already on
-> top of the fix to CPUMAP_FILE_MAX_BYTES.
-> 
-> It should be able to go right on top of a tree with that one in it, I think.
+From: Vitaly Kuznetsov <vkuznets@redhat.com> Sent: Thursday, September 22, =
+2022 7:37 AM
+>=20
+> Avoid open coding BIT(0) of HV_X64_MSR_TSC_INVARIANT_CONTROL by adding
+> a dedicated define. While there's only one user at this moment, the
+> upcoming KVM implementation of Hyper-V Invariant TSC feature will need
+> to use it as well.
+>=20
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> ---
+>  arch/x86/include/asm/hyperv-tlfs.h | 3 +++
+>  arch/x86/kernel/cpu/mshyperv.c     | 2 +-
+>  2 files changed, 4 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hy=
+perv-tlfs.h
+> index 3089ec352743..4849f879948d 100644
+> --- a/arch/x86/include/asm/hyperv-tlfs.h
+> +++ b/arch/x86/include/asm/hyperv-tlfs.h
+> @@ -253,6 +253,9 @@ enum hv_isolation_type {
+>  /* TSC invariant control */
+>  #define HV_X64_MSR_TSC_INVARIANT_CONTROL	0x40000118
+>=20
+> +/* HV_X64_MSR_TSC_INVARIANT_CONTROL bits */
+> +#define HV_INVARIANT_TSC_EXPOSED		BIT_ULL(0)
 
-Indeed. (I reviewed it from a phone and missed that.)
- 
-> With the comment fixed up as you note above I'll git Reviewed-by:
-> and Tested-by: shortly.
-> 
-> This one is a refinement of 7ee951acd31a8 though and is not a critical as
-> the one Greg was talking about and Petr hit. 
+Nit:  This name sounds like a value that is read from some register,
+to find out if an Invariant TSC is exposed.  But it's actually a value that
+is written to make something happen.  So my brain wants to name it
+something more like HV_EXPOSE_INVARIANT_TSC.   Not a big
+enough issue to respin for, but if you do respin then maybe change
+it.
 
-OK with that. Let's see what Greg will say about how to handle it
-better. I'm OK with both ways.
+> +
+>  /* Register name aliases for temporary compatibility */
+>  #define HV_X64_MSR_STIMER0_COUNT	HV_REGISTER_STIMER0_COUNT
+>  #define HV_X64_MSR_STIMER0_CONFIG	HV_REGISTER_STIMER0_CONFIG
+> diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyper=
+v.c
+> index 831613959a92..3716c358da98 100644
+> --- a/arch/x86/kernel/cpu/mshyperv.c
+> +++ b/arch/x86/kernel/cpu/mshyperv.c
+> @@ -388,7 +388,7 @@ static void __init ms_hyperv_init_platform(void)
+>  		 * setting of this MSR bit should happen before init_intel()
+>  		 * is called.
+>  		 */
+> -		wrmsrl(HV_X64_MSR_TSC_INVARIANT_CONTROL, 0x1);
+> +		wrmsrl(HV_X64_MSR_TSC_INVARIANT_CONTROL, HV_INVARIANT_TSC_EXPOSED);
+>  		setup_force_cpu_cap(X86_FEATURE_TSC_RELIABLE);
+>  	}
+>=20
+> --
+> 2.37.3
 
-Thanks,
-Yury
+Reviewed-by: Michael Kelley <mikelley@microsoft.com>
