@@ -2,111 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0DA95E6031
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 12:51:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE2105E6035
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 12:53:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbiIVKvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 06:51:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51310 "EHLO
+        id S230122AbiIVKxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 06:53:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbiIVKvM (ORCPT
+        with ESMTP id S230422AbiIVKxE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 06:51:12 -0400
-Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6337BD01F6
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 03:51:11 -0700 (PDT)
-Received: by mail-vs1-xe2a.google.com with SMTP id q26so9818916vsr.7
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 03:51:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=+8RVBpvMoPFWmhGcL4H8dYuUDziDEsgkdhPy3XBz2I4=;
-        b=ALXZwDuV3TsTjfRdY2r0nlIayYwKQkpAssa3cAxmHzh9FzEHyxGQJoM8/rFAa0rjWq
-         pjnAg5AUJb2jZRCc0XBK5lc/K3e4n58QS7EfbIApkoV2lHESNKqvd9TaFEzQrfc48vbd
-         wlSVh2GkkPC2rmyZsR3UPcfCIYTgN5JVeLlv2RX6V5tIqo6hugIJAd3e1erxwLljHY7j
-         5yRf4vMzMttEiQAFCpG1mZeB2WQf8tSaPlgUeLsFIlcm8ALSevfBh+oDCj3FH3/u5xcO
-         M/uwg+9E2b8LN1MeN6YJma7VTwCVcZo7L8PggzNdqcKu4py2kew8N3TnAgkeS/8W6ujF
-         p//w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=+8RVBpvMoPFWmhGcL4H8dYuUDziDEsgkdhPy3XBz2I4=;
-        b=rbe0Hz7kc1mQ9Wwvi9MTixfCywi1v3+4g7KrWEjwPG5QRn6WHvmoRobh4cleO1XbVp
-         XqGpSllNO1Qxs8jvNSrmp49zZz7V3JpiPqM2v1/4bMydIehrb2CqE6FH2QOvN9MaVkuA
-         elnC/QWRd/ov67CHzgf8FjHoM8op38ZGia0KDvDJDKveNfNM8/5Ejsgxy0NZYXqQa8z9
-         XrM/1IpSaRYA7yhNelpr5pU13UnfDp7v23l4+CUINekbPHat6r8d0nwlXc8gNbfIJb7f
-         abcXe00G5sbs2BHiZh1a0xU5B1RmHIjphy9p1E6ItEGNucVsifSjLdJFagIcqowldjsn
-         DGZw==
-X-Gm-Message-State: ACrzQf0ZmjKoyA71fDhpEGSw5kJbo55zvNjvfhxkb4OXD9/P2eMUop3m
-        BMFwy+yzQuzAvX3IS+uGvQFD92P3qCOMuDHTo7iezg==
-X-Google-Smtp-Source: AMsMyM5ux/GTkwPJINb2jtUbdLbNx0AxJBCoraABepK6fxresVoILEuZIdOMa7gE8zQETeOy6f8ctYKKFt9G9jS7mFw=
-X-Received: by 2002:a67:d211:0:b0:398:3cfd:5a34 with SMTP id
- y17-20020a67d211000000b003983cfd5a34mr899669vsi.35.1663843870401; Thu, 22 Sep
- 2022 03:51:10 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220922083610.235936-1-xu.panda@zte.com.cn> <CABVgOSkjmuWDVwOW5PQRAtDYJGjHjcc_8Gg4JjhiT41Kez1rcw@mail.gmail.com>
- <Yyw24J7YFVtxsnJ7@kroah.com>
-In-Reply-To: <Yyw24J7YFVtxsnJ7@kroah.com>
-From:   David Gow <davidgow@google.com>
-Date:   Thu, 22 Sep 2022 18:50:59 +0800
-Message-ID: <CABVgOSmDn8aVz=LEE6HnLTH8FJ0Civ7gsqejVfhnizFiAWF6jw@mail.gmail.com>
-Subject: Re: [PATCH linux-next] kunit: tool: use absolute path for wget
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     cgel.zte@gmail.com, Brendan Higgins <brendan.higgins@linux.dev>,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, Shuah Khan <skhan@linuxfoundation.org>,
-        Daniel Latypov <dlatypov@google.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Xu Panda <xu.panda@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 22 Sep 2022 06:53:04 -0400
+Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D681ED12F3
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 03:53:02 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.west.internal (Postfix) with ESMTP id C28772B059A3;
+        Thu, 22 Sep 2022 06:52:59 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Thu, 22 Sep 2022 06:53:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1663843979; x=1663847579; bh=cSRj8m6//S
+        4nzmuhOOEsOKmR8Il0fc1BoRQKLeM0xek=; b=dz6wqdl4kZMoMtAMLClFD0INx0
+        7BAEmvn72swpQTyghCbvkZB4LYJNkruxi/ppf7Lrwgm8vb1W4+LbllC1KGbzaWY2
+        PE86tTzsN1ewHNSHAymcLdhaw+XwGN7gTNvXvjN87lYMHQ1DemnYCPdWivehLCbz
+        87RaN5hSObbN1oarfbyiJS8/4NxFy1MrrtZ0T12r3H5x8TRNGZzOIh5rnp1xat+G
+        Xl3FCpDrl5swixCJG1iWh23LQPyurL9bPPo2xbFHYN6VdrC7euXNngVQ7jrNBYoP
+        e927ZI2w4ox5WspWtg5lSPjMKWzIoeP18UMNfiDGldIIU7MswNZN8xo7tqlQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1663843979; x=1663847579; bh=cSRj8m6//S4nzmuhOOEsOKmR8Il0
+        fc1BoRQKLeM0xek=; b=R3d+pTy37CMSCYZ3dpdDqVRJxPO0PC54qMOr35F2FIbl
+        yPTw1pLoLZn57bz9vTy2+rpBenU3LvxYfvL/Ve8fNz1nEosK0wBntg0XNS9/V/6d
+        uhxPOBJv8IMxSArMS2SB+uhTbaulBzhAOKo1t7D4L6KgP1+aKRI6kh80zamNE4s4
+        saBPddd42SmNnq+FrpLbPGaeA/IoPgXHMI5u+ThXFeOjKMRBezQ2htdUNDyiYLal
+        BLq1ZSJwtzwoh/uDUCy2wU0Wi8pOZT9mRP3EUspE/AS13Igz3EzpDD+tQIriHk4x
+        uLSHCIEwIYDbf1dUxsOM1Ert01YC5XFJn0dDyvSCBQ==
+X-ME-Sender: <xms:ij4sY1qlCUU4DRf2BNE8Nfb4CfJrmnGtkLLOQmD_8jZPX_xYl0bioQ>
+    <xme:ij4sY3pfmNILoMPn1zUPGDBJ0lPbQ0KnBB_XTd8ggJ6iX_8c9PFN054hNDIeDAPRY
+    307bxklvBewlk_faVE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeffedgfedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:ij4sYyObgFgEWFxQGj8z7jtbkPn5IY458-A4LuIWaoBfeWv-RksRlQ>
+    <xmx:ij4sYw7sSt3sRE4VFq-kJO3H1CDrIj4hyhj6zBkA3LxrauWIUDpT-A>
+    <xmx:ij4sY07aJoYTu8ZfC-269EayKROvMw7PH1y6Js9s-0bS1rsOoHhDDA>
+    <xmx:iz4sYyny0aUeTm686xh9w0JAkjcbGN2VDR3Gos9uDYNVIkMn_sLLNGYJVX4>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 68050B60086; Thu, 22 Sep 2022 06:52:58 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-935-ge4ccd4c47b-fm-20220914.001-ge4ccd4c4
+Mime-Version: 1.0
+Message-Id: <01210adb-ff77-4ec5-8d10-ab56ae986d58@www.fastmail.com>
+In-Reply-To: <20220922113613.4d7273c8@xps-13>
+References: <202209210641.MziHAbW7-lkp@intel.com>
+ <20220921104002.226ff3f6@xps-13>
+ <ffde44bc-d4ae-4052-c60c-35c8775a5101@sequans.com>
+ <7074197c-aa8d-f763-cb0f-03ea5335b923@sequans.com>
+ <20220921164720.6bbc56d5@xps-13>
+ <ef9a2618-2dd0-4d1b-b9d2-37d59506f004@www.fastmail.com>
+ <20220921183807.241e2518@xps-13>
+ <b7e5ebb4-0de8-4958-9bc4-fe06ec4c3635@www.fastmail.com>
+ <6b5a2b19-39c6-5116-60c2-d292ae2e7bae@sequans.com>
+ <20220922113613.4d7273c8@xps-13>
+Date:   Thu, 22 Sep 2022 12:52:36 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Miquel Raynal" <miquel.raynal@bootlin.com>,
+        "Valentin Korenblit" <vkorenblit@sequans.com>
+Cc:     "kernel test robot" <lkp@intel.com>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: Re: [mtd:nand/next 11/31]
+ drivers/mtd/nand/raw/cadence-nand-controller.c:1893:4: error: implicit
+ declaration of function 'ioread64_rep' is invalid in C99
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 6:20 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+On Thu, Sep 22, 2022, at 11:36 AM, Miquel Raynal wrote:
+> vkorenblit@sequans.com wrote on Thu, 22 Sep 2022 10:18:46 +0200:
+>> 
+>> Correct, this was my initial idea. However, this driver should work
+>> with every architecture or do we limit the scope to arm/arm64/x86_64?
 >
-> On Thu, Sep 22, 2022 at 06:09:28PM +0800, David Gow wrote:
-> > On Thu, Sep 22, 2022 at 4:36 PM <cgel.zte@gmail.com> wrote:
-> > >
-> > > From: Xu Panda <xu.panda@zte.com.cn>
-> > >
-> > > Not using absolute path when invoking wget can lead to serious
-> > > security issues.
-> > >
-> > > Reported-by: Zeal Robot <zealci@zte.com.cn>
-> > > Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
-> > > ---
-> >
-> > This seems mostly okay to me -- we'd be abandoning people who have
-> > wget in an unusual location, but I don't think there are many people
-> > who want to run KUnit under RISC-V, have wget in a non-standard
-> > location, and can't acquire the bios file themselves.
-> >
-> > So this is:
-> > Reviewed-by: David Gow <davidgow@google.com>
+> The driver should work on ARM and aarch64, I'm not aware of other
+> architectures with this IP.
 >
-> Please no, at this point in time, submissions from this gmail "alias"
-> are going to have to be rejected from the kernel.
+> The driver should compile when COMPILE_TEST=y.
+
+It should also be written in a way that makes it plausible to
+use elsewhere. Since this is just a licensed IP core, there is
+a good chance that someone reused it on mips or riscv, or
+anything else.
+
+>> >> I believe what Valentin wanted to achieve in the first place, was to
+>> >> use 64-bit accesses when relevant (otherwise it does not work).  
+>> > The width is read from a device specific register at
+>> > runtime, it is not related to the architecture you are
+>> > running on, presumably this is hardwired during the
+>> > design of an SoC, based on the capabilities of the DMA
+>> > engine:
 >
+> Well, yes, but in the mean time 64-bit DMA width will never be
+> used on 32-bit platforms.
 
-Good to know, thanks.
+Why? Most architectures (including x86 and arm) allow you to
+run a 32-bit kernel on a 64-bit SoC. While this is almost always
+a bad idea to actually do, a driver should be written to
+work correctly in this setup.
 
-This isn't queued anyway, as I think that getting rid of the code to
-download the BIOS (and instead relying on the user's distro to provide
-it) is probably a better solution.
+>> > This usually means the largest access that is valid for
+>> > reading from the FIFO, but usually smaller accesses work
+>> > as well, just slower.  
+>
+> Mmh, ok, that's interesting, thanks for the pointer.
+>
+> But in the mean time I am only half satisfied, because we plan to do
+> twice more accesses than needed _just_ because of a the COMPILE_TEST
+> constraint.
 
-Cheers,
--- David
+In my example, I had an #ifdef so it would only fall back
+to 32-bit accesses on the 64-bit register when running an
+actual 32-bit kernel, but leaving the 64-bit case efficient.
+
+    Arnd
