@@ -2,120 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C47975E58E2
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 04:52:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28D8F5E58E7
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 04:55:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229657AbiIVCwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 22:52:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56446 "EHLO
+        id S229791AbiIVCzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 22:55:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbiIVCwK (ORCPT
+        with ESMTP id S229540AbiIVCzA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 22:52:10 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 50B38AD9A9
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 19:52:08 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3A06C143D;
-        Wed, 21 Sep 2022 19:52:14 -0700 (PDT)
-Received: from [10.162.43.8] (unknown [10.162.43.8])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9AD7B3F5A1;
-        Wed, 21 Sep 2022 19:52:05 -0700 (PDT)
-Message-ID: <076cf45a-f1e8-8e42-af78-58460f7344f2@arm.com>
-Date:   Thu, 22 Sep 2022 08:22:03 +0530
+        Wed, 21 Sep 2022 22:55:00 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 461A713F04
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 19:54:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663815299; x=1695351299;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=1FvRcBVjSThU+ZLj/LthgVh6DAUV3SAXF87hiv2RbA8=;
+  b=EwEzRGpR4awWePcP1wx/p/wZD36StzqYtmkVu4QabfkdXf7C0l9nTSew
+   JE+Xbmfbq0EtV6+z9pkcXlSpdQqc/AvusSyJg5T9/CLOLIoEwYA1dVvuV
+   Kn132lCBoBdiTKyhbeaSsOUXuhkkv3Eiutv5ybps2XIEwuJLejZekS19o
+   lxXwJsjIhZOAuxDACREiXrPTHSK5EuHDHkE3fdOzl0GorU6zXd4Jd0ycH
+   i2YQXzvIl4rjhZl/P5tJoREQ/bqQYg7596tmcvEZr7Jv58amcU5AYT+cQ
+   A/1Q+HZEufC/mf3y0ozgECVRPnd6hi3wgmggFRhrAFRA+FF4Z/K6eNbJs
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="361943786"
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="361943786"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 19:54:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="745211443"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 21 Sep 2022 19:54:57 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1obCMa-0004Ee-2b;
+        Thu, 22 Sep 2022 02:54:56 +0000
+Date:   Thu, 22 Sep 2022 10:54:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Max Filippov <jcmvbkbc@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [jcmvbkbc-xtensa:xtensa-6.0-esp32 7/12]
+ drivers/tty/serial/esp32_uart.c:33:6: warning: no previous prototype for
+ 'dbg_echo'
+Message-ID: <202209221041.VOST58aJ-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] arm64/mm: fold check for KFENCE into can_set_direct_map()
-Content-Language: en-US
-To:     Mike Rapoport <rppt@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Mike Rapoport <rppt@linux.ibm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220921074841.382615-1-rppt@kernel.org>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <20220921074841.382615-1-rppt@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://github.com/jcmvbkbc/linux-xtensa xtensa-6.0-esp32
+head:   513fb5af258c5311c5e0684c21db9aeb48e981e8
+commit: a17e7b31fc865c922149feb5c560bc4c497b8c34 [7/12] WIP: drivers/tty/serial: add driver for ESP32 UART
+config: parisc-allyesconfig (https://download.01.org/0day-ci/archive/20220922/202209221041.VOST58aJ-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/jcmvbkbc/linux-xtensa/commit/a17e7b31fc865c922149feb5c560bc4c497b8c34
+        git remote add jcmvbkbc-xtensa https://github.com/jcmvbkbc/linux-xtensa
+        git fetch --no-tags jcmvbkbc-xtensa xtensa-6.0-esp32
+        git checkout a17e7b31fc865c922149feb5c560bc4c497b8c34
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=parisc SHELL=/bin/bash drivers/clk/ drivers/net/wireless/realtek/rtw89/ drivers/scsi/qla2xxx/ drivers/tty/serial/ drivers/ufs/core/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/tty/serial/esp32_uart.c:33:6: warning: no previous prototype for 'dbg_echo' [-Wmissing-prototypes]
+      33 | void dbg_echo(const char *s)
+         |      ^~~~~~~~
+>> drivers/tty/serial/esp32_uart.c:48:6: warning: no previous prototype for 'dbg_printf' [-Wmissing-prototypes]
+      48 | void dbg_printf(const char *fmt, ...)
+         |      ^~~~~~~~~~
+   drivers/tty/serial/esp32_uart.c: In function 'dbg_printf':
+   drivers/tty/serial/esp32_uart.c:54:9: warning: function 'dbg_printf' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+      54 |         vsnprintf(buf, sizeof(buf), fmt, ap);
+         |         ^~~~~~~~~
 
 
-On 9/21/22 13:18, Mike Rapoport wrote:
-> From: Mike Rapoport <rppt@linux.ibm.com>
-> 
-> KFENCE requires linear map to be mapped at page granularity, so that it
-> is possible to protect/unprotect single pages, just like with
-> rodata_full and DEBUG_PAGEALLOC.
-> 
-> Instead of repating
-> 
-> 	can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE)
-> 
-> make can_set_direct_map() handle the KFENCE case.
-> 
-> This also prevents potential false positives in kernel_page_present()
-> that may return true for non-present page if CONFIG_KFENCE is enabled.
-> 
-> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+vim +/dbg_echo +33 drivers/tty/serial/esp32_uart.c
 
-Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
+    32	
+  > 33	void dbg_echo(const char *s)
+    34	{
+    35		volatile void __iomem *base = (volatile void __iomem *)0x3ff40000;
+    36	
+    37		while ((readl(base + UART_STATUS_REG) & UART_TXFIFO_CNT_MASK) != 0)
+    38			;
+    39	
+    40		while (*s) {
+    41			if (*s == '\n')
+    42				writel('\r', base + UART_FIFO_REG);
+    43			writel(*s, base + UART_FIFO_REG);
+    44			++s;
+    45		}
+    46	}
+    47	
+  > 48	void dbg_printf(const char *fmt, ...)
+    49	{
+    50		va_list ap;
+    51		char buf[256];
+    52	
+    53		va_start(ap, fmt);
+    54		vsnprintf(buf, sizeof(buf), fmt, ap);
+    55		va_end(ap);
+    56		dbg_echo(buf);
+    57	}
+    58	
 
-> ---
->  arch/arm64/mm/mmu.c      | 8 ++------
->  arch/arm64/mm/pageattr.c | 8 +++++++-
->  2 files changed, 9 insertions(+), 7 deletions(-)
-> 
-> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
-> index e7ad44585f40..c5065abec55a 100644
-> --- a/arch/arm64/mm/mmu.c
-> +++ b/arch/arm64/mm/mmu.c
-> @@ -535,7 +535,7 @@ static void __init map_mem(pgd_t *pgdp)
->  	 */
->  	BUILD_BUG_ON(pgd_index(direct_map_end - 1) == pgd_index(direct_map_end));
->  
-> -	if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE))
-> +	if (can_set_direct_map())
->  		flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
->  
->  	/*
-> @@ -1547,11 +1547,7 @@ int arch_add_memory(int nid, u64 start, u64 size,
->  
->  	VM_BUG_ON(!mhp_range_allowed(start, size, true));
->  
-> -	/*
-> -	 * KFENCE requires linear map to be mapped at page granularity, so that
-> -	 * it is possible to protect/unprotect single pages in the KFENCE pool.
-> -	 */
-> -	if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE))
-> +	if (can_set_direct_map())
->  		flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
->  
->  	__create_pgd_mapping(swapper_pg_dir, start, __phys_to_virt(start),
-> diff --git a/arch/arm64/mm/pageattr.c b/arch/arm64/mm/pageattr.c
-> index 64e985eaa52d..d107c3d434e2 100644
-> --- a/arch/arm64/mm/pageattr.c
-> +++ b/arch/arm64/mm/pageattr.c
-> @@ -21,7 +21,13 @@ bool rodata_full __ro_after_init = IS_ENABLED(CONFIG_RODATA_FULL_DEFAULT_ENABLED
->  
->  bool can_set_direct_map(void)
->  {
-> -	return rodata_full || debug_pagealloc_enabled();
-> +	/*
-> +	 * rodata_full, DEBUG_PAGEALLOC and KFENCE require linear map to be
-> +	 * mapped at page granularity, so that it is possible to
-> +	 * protect/unprotect single pages.
-> +	 */
-> +	return rodata_full || debug_pagealloc_enabled() ||
-> +		IS_ENABLED(CONFIG_KFENCE);
->  }
->  
->  static int change_page_range(pte_t *ptep, unsigned long addr, void *data)
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
