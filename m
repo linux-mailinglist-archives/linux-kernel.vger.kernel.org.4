@@ -2,72 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7ABB5E6E6F
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 23:33:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD7675E6E70
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 23:34:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbiIVVdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 17:33:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57244 "EHLO
+        id S229954AbiIVVeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 17:34:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbiIVVc6 (ORCPT
+        with ESMTP id S229635AbiIVVd7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 17:32:58 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3838D10E5D2;
-        Thu, 22 Sep 2022 14:32:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
-        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
-        In-Reply-To:References; bh=e5T5IZ2kW4KLNa3EeXF0wiTvE72Xg517TN+86OQ2OK8=; b=fI
-        RONZsrFiCsYnQcrDmmSjrRxxYhnRULyR0kCamV89ao9AeYAI4pso/wfPTlxKgpssHRIXPWTQfT8MY
-        WgibB/Fk7CQFz/t0iRzTMqG9SnTabYU+LAvmuOGwNFBQE1WWd+aYBuR8leTKLob7tBgWN+ZdqvJj3
-        iHUTKQvgzlayv0Q=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1obToM-00HZb9-6y; Thu, 22 Sep 2022 23:32:46 +0200
-Date:   Thu, 22 Sep 2022 23:32:46 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Mauri Sandberg <maukka@ext.kapsi.fi>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, arnd@arndb.de, olof@lixom.net,
-        sebastian.hesselbarth@gmail.com, gregory.clement@bootlin.com,
-        linux@armlinux.org.uk, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 2/3] ARM: dts: orion5x: Add D-Link DNS-323 Device Tree
-Message-ID: <YyzUfs4u2z3jjiU7@lunn.ch>
-References: <20220427162123.110458-1-maukka@ext.kapsi.fi>
- <20220922202458.7592-1-maukka@ext.kapsi.fi>
- <20220922202458.7592-3-maukka@ext.kapsi.fi>
- <YyzJe9+S83vByosb@lunn.ch>
- <20220922211408.56num4k6r746kzht@pali>
+        Thu, 22 Sep 2022 17:33:59 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D8110E5DC
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 14:33:55 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id s14so15546265wro.0
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 14:33:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=Q5fUsS2POKT7bY911VJ/Wt7tGJ/YQWRogJHUZto//1w=;
+        b=ppkT1rg43HrQIGR2J8hEUzy243BynZG/T6ZH/A9oNF2F3w+ZecfPOeR/b8OKBS7JNY
+         nYP6RPiag2fGPqpWZsRc6yHlcnLkVnEv1GbDw4ITO1pIRSQjC/YymHdLvtwOn33R0W6O
+         G/R6K0mDMY5zrYxv2WgK4vmgiyhhjsczeWJaCumH3LKfrQgqOIFDNY/9GWZtG3I203I8
+         jPy/eTqmxqT5JiG/wYmGnjh5YpxtSbPEyl7dNcPUEzOBZUGCOMZaAsKGMmU279usZd9R
+         X2haXG4OVXVikQBrKtQOw1E7Wb+qmO2xPr9Sl/F1+xaBTCvR00cdAVVuBrXB1/Ge9SME
+         /nmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=Q5fUsS2POKT7bY911VJ/Wt7tGJ/YQWRogJHUZto//1w=;
+        b=qTIsi+OoNSmFy0+Tn77EmQsebakL7QTGsDl/R43I2hhluLC5iDmcPsFD5P7/+8iyUC
+         krnuN2YhHJTDhhvCONxcjbxPogqYCFlL4vly569ULwmRgJNGUmOpvhxTXfkgv/vL3z64
+         NR5uqZCl4hZXEt0k+ipsU0sxjwX9K4J6J26zAusiBJ1PksjpIHVGkRI/cs8RGMzOvJrf
+         OxdraREjzMF5iwBrIbNgN29jrkCG4Iqk9Ya43sLga9PRQ7WVk5E1Kbe+AgzYQqcQCwxV
+         1Pcd2sDqxj/5ajLnvq2aHAJD9WHHb32CsECmwB4cU+nxGZwhxBIq0c+ajlyDnbyXpld5
+         DCpQ==
+X-Gm-Message-State: ACrzQf2C58o1y0FQWCct777YGqnDwvzinwxnKQi9MvR83dcCPdfpJufy
+        TYd4sRBkEf3ztoqHMDEKWDRVNg==
+X-Google-Smtp-Source: AMsMyM5bjEWUOxUwWDcPsPc1rZbKgkAK8krSoC+qREwuhDJE/gYfi4ZAJbSJG7oHlZerhd3k3YFjhw==
+X-Received: by 2002:a5d:528a:0:b0:225:4a8e:221e with SMTP id c10-20020a5d528a000000b002254a8e221emr3139358wrv.145.1663882434431;
+        Thu, 22 Sep 2022 14:33:54 -0700 (PDT)
+Received: from [192.168.86.238] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.googlemail.com with ESMTPSA id r21-20020a05600c425500b003b47e8a5d22sm583576wmm.23.2022.09.22.14.33.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Sep 2022 14:33:53 -0700 (PDT)
+Message-ID: <d1d07787-129d-e363-12d4-17f7858ab255@linaro.org>
+Date:   Thu, 22 Sep 2022 22:33:52 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: Exposing nvmem cells to userspace?
+Content-Language: en-US
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Robert Marko <robert.marko@sartura.hr>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        linux-kernel@vger.kernel.org
+References: <20220922122347.1866f758@xps-13>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20220922122347.1866f758@xps-13>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220922211408.56num4k6r746kzht@pali>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 11:14:08PM +0200, Pali Roh·r wrote:
-> On Thursday 22 September 2022 22:45:47 Andrew Lunn wrote:
-> > > +&mdio {
-> > > +	status = "okay";
-> > > +
-> > > +	ethphy: ethernet-phy {
-> > > +		reg = <8>;
-> > 
-> > Since you have a reg value, this should be ethernet-phy@9
+
+
+On 22/09/2022 11:23, Miquel Raynal wrote:
+> Hello Srinivas,
 > 
-> ethernet-phy@8 no?
+> I am currently looking at the Open Compute Project ONIE Tlv tables in
+> modern networking hardware. Thanks to the specification being available
+> for many years and rather easy to implement, those tables are already
+> present in many switches. Manufacturers just have to provide a small
+> storage medium exposing factory-related information (manufacturer, date,
+> serial#, mac addresses, etc) in Type-Length-Value fields, as well
+> as their own extensions if they want. These tables are common, but
+> there is currently no shared decoding logic, each provider maintaining
+> its own internally.
+> 
+> I am currently looking for upstreaming an nvmem layout driver for
+> exposing the standard nvmem cells. This way, Ethernet drivers might eg.
+> take the base MAC address from there. But I feel like there is
+> something missing, because the vendor name, the device version, the
+> serial number or any other information available in these tables might
+> also very well be used by the userspace rather than the kernel drivers
+> only.
 
-Yes, @8. Sorry.
+Could you explain the userspace side use-case?
 
-     Andrew
+> 
+> Thus, I was wondering if there was some ongoing work to make these
+> cells available to userspace (in /sys maybe?) or if this had already
+> been discussed somewhere. Otherwise, would you be open to such a
+
+we had this discussed this in many instances and this is some thing we 
+would desire to have but we never got it moving forward.
+
+> contribution? I guess it would also be a useful debug tool anyway (and
+> might very well be moved somewhere else than in /sys).
+
+getting sysfs working correctly in sync with userspace might be tricky 
+in this particular case as we will be creating cells after the provider 
+driver is created.
+
+debugfs on the other hand is more doable.
+
+--srini
+> 
+> Thanks for your time,
+> Miqu√®l
