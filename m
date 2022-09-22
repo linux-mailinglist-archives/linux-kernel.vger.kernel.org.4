@@ -2,74 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0A7C5E6C79
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 21:58:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5605A5E6C81
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 21:59:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232776AbiIVT6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 15:58:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59730 "EHLO
+        id S232425AbiIVT7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 15:59:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232654AbiIVT5U (ORCPT
+        with ESMTP id S232820AbiIVT6k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 15:57:20 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A9A610D651
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 12:57:12 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id a10so12356790ljq.0
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 12:57:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=4+1bZaIVoOr4/FZ9DpEoNNyvB6I9uDIqPPe+8PG5bQg=;
-        b=ngETRjRzjtPvlf5pcMgID63FO4eB3Tydqa2WjHh1PgNSkBh7Q5mjuW9m4str2wGJbu
-         WRI+ox7m6u7bp64OBzTDT9BmVFjDPNwVWGf3N4xvuPKTthy5uCveuxY+Rp4mI2TuFrUW
-         OXUfg+XQhjR047NsrF/tB524qHsomDOfbqkE1mJySGo3lkeulNRQ0HzxRBbLt72LVsrR
-         fBNOTz1yA7wFhih7D/ShWQfJfNmhaLA9Gn9aUO2zTgEJ8S3Ap9ME7ny+5kNy89j0yJnb
-         ziVQfPjexNHRjvzNynH3H02dHa3/U206dWjWWxlyi42LJR35xyEHtVlrxVa3rC5jHUme
-         lkJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=4+1bZaIVoOr4/FZ9DpEoNNyvB6I9uDIqPPe+8PG5bQg=;
-        b=oOf7IR5+aK/o68jm4xND1BgRhA22TMGvxkGm7IZTBwdM/wS2MkSrufYgZX1lE97ZaR
-         X1l3ZnsFugN0mXNOjEPN+hOjLUkpnl8GbFipuCbO4BSmU7P8RBnRlR+A9UiAldm0AUxY
-         kyikzQ8xtiUKADZcISbKK0jPYYbEuSkuKNVB6lawtVBAWK13VgRCZABPyuvKJqmWohWL
-         F/TPAYDlYG63rqWn1ojFfcmwedm9y0iJgnIX+/C3y1UXd8g/y8NA/LTDgFnR3LCyp1FO
-         Sm2GM14G42NoCX6Z/bmc8m2tj0HYDSf3eTaW6Bx14ovqccVDpD2AhUTfNEi1vnAn1l9J
-         HB5A==
-X-Gm-Message-State: ACrzQf2IG1K1l0dsPnw3c9L+a/0EaEikchOg/vDqnKjJ9GSsblt25nsz
-        S3Bljc0tkGXZNAbXQTmy/D6N4A==
-X-Google-Smtp-Source: AMsMyM5PrsNRRmX0jGoM9yqKuUVpGppVcSCrfKB3LZmEue+6v1BD7Vi48/U6wEpKjUbr7aZoGtsLcA==
-X-Received: by 2002:a05:651c:1786:b0:26c:5a70:cf21 with SMTP id bn6-20020a05651c178600b0026c5a70cf21mr1604722ljb.347.1663876632381;
-        Thu, 22 Sep 2022 12:57:12 -0700 (PDT)
-Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id x15-20020a19e00f000000b00498fc3d4d15sm1079375lfg.190.2022.09.22.12.57.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 12:57:11 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 12/12] arm64: dts: qcom: sm8250: align LPASS pin configuration with DT schema
-Date:   Thu, 22 Sep 2022 21:56:51 +0200
-Message-Id: <20220922195651.345369-13-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220922195651.345369-1-krzysztof.kozlowski@linaro.org>
-References: <20220922195651.345369-1-krzysztof.kozlowski@linaro.org>
+        Thu, 22 Sep 2022 15:58:40 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE8C71114CA;
+        Thu, 22 Sep 2022 12:58:11 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28MJ4pUa012294;
+        Thu, 22 Sep 2022 19:57:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=EFB/oG7xctaHu/TFNGSunfM203C+Yp91vGio9K53928=;
+ b=MQrEcE1L5n1ldeuh2U8ydyHd9kpersTF93wqm1nkzwXVF+74+6dk2wVQuErbSgV7jnW1
+ WPlaJz2oVoFqbQ1v4G0u28baXLI+U1MrORSmU+V3EplXK3Zz5BqSdLmEZGFkrWg0MdNg
+ HDEi4KYqkeBQ6V/7IIS7PhTQhC5G1wgZW2pMDB5rXHznJ/rWarHZWqP6sIW76Znw/lEl
+ 4DzJTMWmj2S6gOMLqcMLt8Bd/xocztSS2PHtJDQ+qAxJ/TMfn4FxXobA0RnA5nGmnzOV
+ zD99+oUHVROg1Xx/8DcW7IYh9CxsXHbAQVKpPOThPHIBQ7H7Be323RoDedi5ej5aRxqo gA== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jrq4r9ea0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Sep 2022 19:57:46 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28MJvjRn028774
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Sep 2022 19:57:45 GMT
+Received: from [10.110.101.161] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Thu, 22 Sep
+ 2022 12:57:44 -0700
+Message-ID: <fb6c00c1-014b-e43f-07ad-3d7cf2e18a8e@quicinc.com>
+Date:   Thu, 22 Sep 2022 12:57:43 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 09/10] drm/msm/dp: drop modeset sanity checks
+Content-Language: en-US
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        "Rob Clark" <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>
+CC:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        "Laurent Pinchart" <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Sean Paul <sean@poorly.run>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Manivannan Sadhasivam" <manivannan.sadhasivam@linaro.org>,
+        Steev Klimaszewski <steev@kali.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+References: <20220913085320.8577-1-johan+linaro@kernel.org>
+ <20220913085320.8577-10-johan+linaro@kernel.org>
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+In-Reply-To: <20220913085320.8577-10-johan+linaro@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: USs8M68t3y-7rKQZ-5jaytD9fjTckn9o
+X-Proofpoint-ORIG-GUID: USs8M68t3y-7rKQZ-5jaytD9fjTckn9o
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-22_14,2022-09-22_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 adultscore=0
+ mlxlogscore=999 bulkscore=0 suspectscore=0 phishscore=0 mlxscore=0
+ priorityscore=1501 malwarescore=0 clxscore=1015 impostorscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209220129
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,165 +94,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DT schema expects LPASS pin configuration nodes to be named with
-'-state' suffix and their optional children with '-pins' suffix.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm8250.dtsi | 44 ++++++++++++++--------------
- 1 file changed, 22 insertions(+), 22 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-index 8f402b912c62..e0416d611b66 100644
---- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-@@ -2388,8 +2388,8 @@ lpass_tlmm: pinctrl@33c0000{
- 				<&q6afecc LPASS_HW_DCODEC_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>;
- 			clock-names = "core", "audio";
- 
--			wsa_swr_active: wsa-swr-active-pins {
--				clk {
-+			wsa_swr_active: wsa-swr-active-state {
-+				clk-pins {
- 					pins = "gpio10";
- 					function = "wsa_swr_clk";
- 					drive-strength = <2>;
-@@ -2397,7 +2397,7 @@ clk {
- 					bias-disable;
- 				};
- 
--				data {
-+				data-pins {
- 					pins = "gpio11";
- 					function = "wsa_swr_data";
- 					drive-strength = <2>;
-@@ -2407,8 +2407,8 @@ data {
- 				};
- 			};
- 
--			wsa_swr_sleep: wsa-swr-sleep-pins {
--				clk {
-+			wsa_swr_sleep: wsa-swr-sleep-state {
-+				clk-pins {
- 					pins = "gpio10";
- 					function = "wsa_swr_clk";
- 					drive-strength = <2>;
-@@ -2416,7 +2416,7 @@ clk {
- 					bias-pull-down;
- 				};
- 
--				data {
-+				data-pins {
- 					pins = "gpio11";
- 					function = "wsa_swr_data";
- 					drive-strength = <2>;
-@@ -2426,14 +2426,14 @@ data {
- 				};
- 			};
- 
--			dmic01_active: dmic01-active-pins {
--				clk {
-+			dmic01_active: dmic01-active-state {
-+				clk-pins {
- 					pins = "gpio6";
- 					function = "dmic1_clk";
- 					drive-strength = <8>;
- 					output-high;
- 				};
--				data {
-+				data-pins {
- 					pins = "gpio7";
- 					function = "dmic1_data";
- 					drive-strength = <8>;
-@@ -2441,8 +2441,8 @@ data {
- 				};
- 			};
- 
--			dmic01_sleep: dmic01-sleep-pins {
--				clk {
-+			dmic01_sleep: dmic01-sleep-state {
-+				clk-pins {
- 					pins = "gpio6";
- 					function = "dmic1_clk";
- 					drive-strength = <2>;
-@@ -2450,7 +2450,7 @@ clk {
- 					output-low;
- 				};
- 
--				data {
-+				data-pins {
- 					pins = "gpio7";
- 					function = "dmic1_data";
- 					drive-strength = <2>;
-@@ -2459,8 +2459,8 @@ data {
- 				};
- 			};
- 
--			rx_swr_active: rx_swr-active-pins {
--				clk {
-+			rx_swr_active: rx-swr-active-state {
-+				clk-pins {
- 					pins = "gpio3";
- 					function = "swr_rx_clk";
- 					drive-strength = <2>;
-@@ -2468,7 +2468,7 @@ clk {
- 					bias-disable;
- 				};
- 
--				data {
-+				data-pins {
- 					pins = "gpio4", "gpio5";
- 					function = "swr_rx_data";
- 					drive-strength = <2>;
-@@ -2477,8 +2477,8 @@ data {
- 				};
- 			};
- 
--			tx_swr_active: tx_swr-active-pins {
--				clk {
-+			tx_swr_active: tx-swr-active-state {
-+				clk-pins {
- 					pins = "gpio0";
- 					function = "swr_tx_clk";
- 					drive-strength = <2>;
-@@ -2486,7 +2486,7 @@ clk {
- 					bias-disable;
- 				};
- 
--				data {
-+				data-pins {
- 					pins = "gpio1", "gpio2";
- 					function = "swr_tx_data";
- 					drive-strength = <2>;
-@@ -2495,8 +2495,8 @@ data {
- 				};
- 			};
- 
--			tx_swr_sleep: tx_swr-sleep-pins {
--				clk {
-+			tx_swr_sleep: tx-swr-sleep-state {
-+				clk-pins {
- 					pins = "gpio0";
- 					function = "swr_tx_clk";
- 					drive-strength = <2>;
-@@ -2504,7 +2504,7 @@ clk {
- 					bias-pull-down;
- 				};
- 
--				data1 {
-+				data1-pins {
- 					pins = "gpio1";
- 					function = "swr_tx_data";
- 					drive-strength = <2>;
-@@ -2512,7 +2512,7 @@ data1 {
- 					bias-bus-hold;
- 				};
- 
--				data2 {
-+				data2-pins {
- 					pins = "gpio2";
- 					function = "swr_tx_data";
- 					drive-strength = <2>;
--- 
-2.34.1
-
+On 9/13/2022 1:53 AM, Johan Hovold wrote:
+> Drop the overly defensive modeset sanity checks of function parameters
+> which have already been checked or used by the callers.
+>
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+Tested-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+Reviewed-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> ---
+>   drivers/gpu/drm/msm/dp/dp_display.c | 7 +------
+>   1 file changed, 1 insertion(+), 6 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+> index 808a516e84c5..33daec11f813 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+> @@ -1607,15 +1607,10 @@ static int dp_display_get_next_bridge(struct msm_dp *dp)
+>   int msm_dp_modeset_init(struct msm_dp *dp_display, struct drm_device *dev,
+>   			struct drm_encoder *encoder)
+>   {
+> -	struct msm_drm_private *priv;
+> +	struct msm_drm_private *priv = dev->dev_private;
+>   	struct dp_display_private *dp_priv;
+>   	int ret;
+>   
+> -	if (WARN_ON(!encoder) || WARN_ON(!dp_display) || WARN_ON(!dev))
+> -		return -EINVAL;
+> -
+> -	priv = dev->dev_private;
+> -
+>   	if (priv->num_bridges == ARRAY_SIZE(priv->bridges)) {
+>   		DRM_DEV_ERROR(dev->dev, "too many bridges\n");
+>   		return -ENOSPC;
