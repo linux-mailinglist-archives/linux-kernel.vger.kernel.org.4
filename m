@@ -2,130 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52C4B5E6C14
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 21:52:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B7825E6C11
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 21:52:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232543AbiIVTwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 15:52:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49408 "EHLO
+        id S231645AbiIVTwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 15:52:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232521AbiIVTvy (ORCPT
+        with ESMTP id S232312AbiIVTvs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 15:51:54 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF8CC10C79E;
-        Thu, 22 Sep 2022 12:51:52 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28MJSdiU008780;
-        Thu, 22 Sep 2022 19:51:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=MeoXkz9mJl2AQmTSrUtOL5D8P9mX9ccoJPSYpxHElW8=;
- b=Fcf156UgEckpsu/QPBn5R+oSuwFFAJOEtoJXYmYRt4S0ohaZwOG4psErIf0BmKoiug72
- 93P5Jdfu61Dicwrk1T7v1NkfuAXDmsdbqt4QBaOJvduyt1ctHU3TSkhTZtE4Amo1pDBA
- vem5Qnyam+Ao1+K1tJOIynOtAYd35xzD5TnnASGN3UfwgvgjA3vERjUQSbnZxK1JY8DE
- 9Txc93KRbnLp07raiGYZBdPWWGlGR9g4A76Jcf0hjioDaWncQMqoqJ4JFBHzE4P3eMCJ
- oytl/OkirpFCfELLeFNyRB4S1cdgE8W1wEzNLGxICvCgZaFvZjUdlWL/8teUxltpzc0n DQ== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jrdnmjpwh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Sep 2022 19:51:33 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28MJpW3C023827
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Sep 2022 19:51:32 GMT
-Received: from [10.110.101.161] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Thu, 22 Sep
- 2022 12:51:30 -0700
-Message-ID: <71bb7201-b308-46ac-dd1d-3452b0682b21@quicinc.com>
-Date:   Thu, 22 Sep 2022 12:51:29 -0700
+        Thu, 22 Sep 2022 15:51:48 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1508E10C78E;
+        Thu, 22 Sep 2022 12:51:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663876307; x=1695412307;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=1Dio6FuAowFSRZXpVJEI0kJ8UFwvjWovjlQsBMPapkk=;
+  b=DVsai5c1GpFcgrO2K9GFywrgT3u3exlF3Tw1Fv8w29M1TSHv73nmk1EF
+   LmP5bAVZCw4HC562Y+yyIw8FRwfUV5uq1CzsvOs/It792ysFJeUY3fxO6
+   szdT5QEXU5aPgKskw3vMGEMMEfl94jbloJTRXmDWXOyjTkdPI7apZPZJE
+   /ldw2R/BXfGWuBJ8acT85hMiOyaHP63eEFC+ahQnQLhHhP9I+YVMXignw
+   T/ni1rNtWwikW92CXUNcLSzta2iUDIfd3gBSi0enufARHKHajQDKWZWrz
+   h/dYMC6mrLPWT3jTbcNd2gf3Qi5jycjDIXEuAPi3ICPx/jI9bnxxrVEH5
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="280783420"
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="280783420"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 12:51:45 -0700
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="622246712"
+Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 12:51:45 -0700
+From:   Tony Luck <tony.luck@intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Yazen Ghannam <yazen.ghannam@amd.com>,
+        Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
+        Carlos Bilbao <carlos.bilbao@amd.com>, x86@kernel.org,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tony Luck <tony.luck@intel.com>
+Subject: [PATCH 0/2] Dump stack after certain machine checks
+Date:   Thu, 22 Sep 2022 12:51:34 -0700
+Message-Id: <20220922195136.54575-1-tony.luck@intel.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [Freedreno] [PATCH v2 02/10] drm/msm/dp: fix memory corruption
- with too many bridges
-Content-Language: en-US
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        "Rob Clark" <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>
-CC:     <dri-devel@lists.freedesktop.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        <linux-arm-msm@vger.kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        <stable@vger.kernel.org>, Sean Paul <sean@poorly.run>,
-        Steev Klimaszewski <steev@kali.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-References: <20220913085320.8577-1-johan+linaro@kernel.org>
- <20220913085320.8577-3-johan+linaro@kernel.org>
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-In-Reply-To: <20220913085320.8577-3-johan+linaro@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: pU-2E6eRyuaABlIsxVu02wOy7by2xgII
-X-Proofpoint-GUID: pU-2E6eRyuaABlIsxVu02wOy7by2xgII
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-22_14,2022-09-22_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- lowpriorityscore=0 suspectscore=0 bulkscore=0 priorityscore=1501
- spamscore=0 impostorscore=0 phishscore=0 clxscore=1015 adultscore=0
- mlxscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209220129
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In general it isn't very useful to dump the kernel stack in the panic
+from a fatal machine check. The problem is almost always hardware
+related, so knowing how the kernel got to the routine that triggered the
+machine check isn't useful.
 
-On 9/13/2022 1:53 AM, Johan Hovold wrote:
-> Add the missing sanity check on the bridge counter to avoid corrupting
-> data beyond the fixed-sized bridge array in case there are ever more
-> than eight bridges.
->
-> Fixes: 8a3b4c17f863 ("drm/msm/dp: employ bridge mechanism for display enable and disable")
-> Cc: stable@vger.kernel.org	# 5.17
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-Tested-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-Reviewed-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-> ---
->   drivers/gpu/drm/msm/dp/dp_display.c | 6 ++++++
->   1 file changed, 6 insertions(+)
->
-> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-> index 3e284fed8d30..fbe950edaefe 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_display.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
-> @@ -1604,6 +1604,12 @@ int msm_dp_modeset_init(struct msm_dp *dp_display, struct drm_device *dev,
->   		return -EINVAL;
->   
->   	priv = dev->dev_private;
-> +
-> +	if (priv->num_bridges == ARRAY_SIZE(priv->bridges)) {
-> +		DRM_DEV_ERROR(dev->dev, "too many bridges\n");
-> +		return -ENOSPC;
-> +	}
-> +
->   	dp_display->drm_dev = dev;
->   
->   	dp_priv = container_of(dp_display, struct dp_display_private, dp_display);
+But Linux now has the capability to recover from most user mode and a
+few kernel mode memory related machine checks. Validation folks are
+testing that out and occasionally bring a kernel log like this to me:
+
+[69608.047771] mce: [Hardware Error]: Machine check: Data load in unrecoverable area of kernel
+[69608.021729] mce: [Hardware Error]: TSC 7874eb580177 ADDR 43bb84bd00 MISC 86 PPIN 9f061818e1a92082 
+[69608.047773] Kernel panic - not syncing: Fatal local machine check
+[69608.021720] mce: [Hardware Error]: RIP 10:<ffffffff8b767517> {copy_page+0x7/0x10}
+
+All I can tell them is that Linux was copying a page and hit poison in
+the source of the copy. But there are lots of reasons why Linux may be
+copying a page. A stack trace would help figure out if:
+1) the test was bad and just injected an error into the wrong location
+2) an injected error sat around in memory and was later consumed
+
+Case 2 will help identify places where Linux might use a "safe" copy
+function that returns an error to the caller which may attempt some sort
+of recovery.
+
+Patch 1 cleans up the Intel severity calculation by using a new severity
+table entry instead of some, now dubious, code to adjust the severity
+for errors in kernel context.
+
+Patch 2 adds a new severity level that triggers printing a stack trace.
+
+I've only updated the Intel severity calculation to use this new
+severity level. I'm not sure if AMD also has situations where this would
+be useful. If so, then mce_severity_amd() would need to be updated too
+to return different severity for IN_KERNEL and IN_KERNEL_RECOV cases.
+
+I've tested this out on systems that do both broadcast and local machine
+checks.
+
+Tony Luck (2):
+  x86/mce: Use severity table to handle uncorrected errors in kernel
+  x86/mce: Dump the stack for recoverable machine checks in kernel
+    context
+
+ arch/x86/kernel/cpu/mce/internal.h |  1 +
+ arch/x86/kernel/cpu/mce/core.c     | 11 +++++++++--
+ arch/x86/kernel/cpu/mce/severity.c | 10 ++++++----
+ 3 files changed, 16 insertions(+), 6 deletions(-)
+
+
+base-commit: 521a547ced6477c54b4b0cc206000406c221b4d6
+-- 
+2.37.3
+
