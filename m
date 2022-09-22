@@ -2,80 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 689765E643B
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 15:51:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8DCE5E6437
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 15:51:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231836AbiIVNvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 09:51:46 -0400
+        id S231823AbiIVNvm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 09:51:42 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231655AbiIVNvk (ORCPT
+        with ESMTP id S231689AbiIVNvi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 09:51:40 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B187EBBFE;
-        Thu, 22 Sep 2022 06:51:25 -0700 (PDT)
-Received: from canpemm500004.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MYGpB0jFDzpV1c;
-        Thu, 22 Sep 2022 21:48:34 +0800 (CST)
-Received: from [10.174.179.14] (10.174.179.14) by
- canpemm500004.china.huawei.com (7.192.104.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 22 Sep 2022 21:51:23 +0800
-Subject: Re: [PATCH v4 1/7] scsi: libsas: Add sas_ata_device_link_abort()
-To:     John Garry <john.garry@huawei.com>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <jinpu.wang@cloud.ionos.com>,
-        <damien.lemoal@opensource.wdc.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@huawei.com>, <yangxingui@huawei.com>
-References: <1663840018-50161-1-git-send-email-john.garry@huawei.com>
- <1663840018-50161-2-git-send-email-john.garry@huawei.com>
-From:   Jason Yan <yanaijie@huawei.com>
-Message-ID: <8f336809-d594-8ee5-f3bd-4393730cd01a@huawei.com>
-Date:   Thu, 22 Sep 2022 21:51:23 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        Thu, 22 Sep 2022 09:51:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25813A00E9
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 06:51:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 90B53633A0
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 13:51:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00D88C433D6;
+        Thu, 22 Sep 2022 13:51:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663854683;
+        bh=NeGFrtEIpiL1PLwuDIJMKm/T/v2XPcFsQQ14kOP7FDE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=NACEWJNjKrFxKYyQoerCShxXAfiQsdIQqJPcellArOHyFf+H+fh9rSBt1eFI8iTEi
+         jklQW68n0rFowTQPTHy4NlE5t/vMz+aVht+rNagduZGf0zHN/XQeJAxYKThdkDCdte
+         RtaBdQGLmwXurVbh0SnPp6Z4rOkYIKwKClhYbHpPXKM7I323hhKQdV5/+ghLNe+LPr
+         wKugHyIfpZ09zrd6ZFlv+u1QBHNPLxL3tuE/c8+6ncqShXmC5fOCbfnbvlEXoUWi+K
+         ueiC/6IH9qxxu6VF6SFNhWTotPP+H72GMkSYrWUVoEkWGk3isJyzA0j31OhYR0IyAB
+         I2dvTTZTRReSg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1obMbw-0005NX-N7; Thu, 22 Sep 2022 15:51:28 +0200
+Date:   Thu, 22 Sep 2022 15:51:28 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [GIT PULL] GNSS updates for 6.1-rc1
+Message-ID: <YyxoYMIT4lMw/O5f@hovoldconsulting.com>
 MIME-Version: 1.0
-In-Reply-To: <1663840018-50161-2-git-send-email-john.garry@huawei.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.14]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500004.china.huawei.com (7.192.104.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following changes since commit a111daf0c53ae91e71fd2bfe7497862d14132e3e:
 
-On 2022/9/22 17:46, John Garry wrote:
-> Similar to how AHCI handles NCQ errors in ahci_error_intr() ->
-> ata_port_abort() -> ata_do_link_abort(), add an NCQ error handler for LLDDs
-> to call to initiate a link abort.
-> 
-> This will mark all outstanding QCs as failed and kick-off EH.
-> 
-> Note:
-> A "force reset" argument is added for drivers which require the ATA error
-> handling to always reset the device.
-> 
-> A driver may require this feature for when SATA device per-SCSI cmnd
-> resources are only released during reset for ATA EH. As such, we need an
-> option to force reset to be done, regardless of what any EH autopsy
-> decides.
-> 
-> Suggested-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-> Signed-off-by: John Garry <john.garry@huawei.com>
-> Tested-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-> ---
->   drivers/scsi/libsas/sas_ata.c | 12 ++++++++++++
->   include/scsi/sas_ata.h        |  6 ++++++
->   2 files changed, 18 insertions(+)
+  Linux 5.19-rc3 (2022-06-19 15:06:47 -0500)
 
-Reviewed-by: Jason Yan <yanaijie@huawei.com>
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/johan/gnss.git tags/gnss-6.1-rc1
+
+for you to fetch changes up to c0c725d7350ec8b8453257676a440bb4b2df2422:
+
+  gnss: replace ida_simple API (2022-06-21 09:30:36 +0200)
+
+----------------------------------------------------------------
+GNSS updates for 6.1-rc1
+
+Here are the GNSS updates for 6.1-rc1, which includes a single IDA API
+cleanup.
+
+Everything has been in linux-next with no reported issues.
+
+----------------------------------------------------------------
+Bo Liu (1):
+      gnss: replace ida_simple API
+
+ drivers/gnss/core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
