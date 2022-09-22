@@ -2,60 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E08495E6F3E
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 00:01:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B36B5E6F40
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 00:01:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbiIVWBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 18:01:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39896 "EHLO
+        id S231447AbiIVWBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 18:01:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230021AbiIVWB3 (ORCPT
+        with ESMTP id S230175AbiIVWBb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 18:01:29 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE349F8F9F
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 15:01:28 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id b23so7293448qtr.13
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 15:01:28 -0700 (PDT)
+        Thu, 22 Sep 2022 18:01:31 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 122DF101965
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 15:01:30 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id i3so7212069qkl.3
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 15:01:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=joelfernandes.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=zIWTRfnvBQN5vTCxbMIC47LGFoMDr9nrugSvdFV6LqQ=;
-        b=gUN22foRH9YYHKT9UteEYRTA+owayfilXutUXe3Zk13WvNcaCda8c21NFVdilPC1jx
-         N+5tQb1HODwuk6YQWLhWfrrTSgo+5nDRdpPNNSZDNu4MMOany9YsQdKeKyDWdyUo/5p5
-         m5cscoZ65fgawWZwXKCUNz5m+EZKuCholMDXg=
+        bh=B0XQyn7nJk8icZHRVUAbtruFw6kr1vhii64N8EO85w4=;
+        b=obIE1rAS1C/o65gwmG1qn02DAb4k8F+UbmURCeF7jPGY33vwjXFpzfF0PxhbdTO54u
+         TrDjjXL49ljYT810xWc+ZhPZEn7SGlMWqJRHp1O+GELXMgOLvS8YV3PFN8Tk8f9JKV8l
+         wTnLcS7hd9U2nnBDQPmq8rOf173B8D1qpBPuc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=zIWTRfnvBQN5vTCxbMIC47LGFoMDr9nrugSvdFV6LqQ=;
-        b=VXbraio3C+/isgdmzwBj0JTxDJ/0TdQFLqzdTqSJ2zwkJFGbChZqQ5tFXLkzZsy4ka
-         2bkjCoRaxkn8yGyhOjW+Ti+tAClTQrnO5KdHFfyCULlLbOdNz6f2U24R1ks4LYnpz6bO
-         wJXejJqPz6JhEoWmfMV75zwq4recaCPGu5jBlWra68omm/rKGEzmMhbHJ8/sBRHc31pF
-         U+S59CxHcmJOBR/EQUt21tlcawRxIzZuq6BM+dSVjf4KyxsmbuA7cZyy+5Lek9N8ULbc
-         /6vDUhEr0AMSZ6DdimIcKYSW8VDFlVbfdR/wJLlklNO1aiUFNX8BmVWSvOpVi/QmskVk
-         IKHA==
-X-Gm-Message-State: ACrzQf3/60qhL09lOi47fRZTBWaJqxrX9gC/cQAO46GnCJcDz6dZHYw5
-        uZ0W9/Cfjin+8pBf2xipUxEU2A==
-X-Google-Smtp-Source: AMsMyM4bB5yLNsDEX8+uaXcyDCoP0jgWLZBaeOJw2x0V4bRfyYrRh6IHLLk/Er3Lp8Yj5rrWanyR8Q==
-X-Received: by 2002:a05:622a:1909:b0:344:9f41:9477 with SMTP id w9-20020a05622a190900b003449f419477mr4599043qtc.619.1663884088046;
-        Thu, 22 Sep 2022 15:01:28 -0700 (PDT)
+        bh=B0XQyn7nJk8icZHRVUAbtruFw6kr1vhii64N8EO85w4=;
+        b=lcsAwmVI181N/9W4NecY2FTP/geQSGMCwLSxCQp65Up2DUBM0tB/oZdR+tj7lFDnwg
+         bvhA9+iviMb6xRXG8gr2CGOgx4YcdLuWPnf9NG3ZGrqpGBfDtPA19lH0MmxWlfwArP30
+         nUjrL8RJLLQTbJiHswdEFZN2XZ50WcWLJcWkRRMWF96ZgMzlYNzjzJYtBdIjtk+fKr+O
+         PJ17fbUddROOX5JNuu0Vu1bxLxNUYpYOUR7gr7pTKaIScTZ05YeivMt4ujRK16L1S6b6
+         nwr4uYI3PLEtfnYkc+T2AhvD3FVqwyigURqOrSPeGRtn8Nt7vO+7Z+cohqqRR20VqpDF
+         AQAg==
+X-Gm-Message-State: ACrzQf1vudvFwqswov0wuqt9sNJ1CYjhuOlapbzgITSVL/Nmlh+d/cFZ
+        850Pf2UhGFBbv0LKyeEe125ScQ==
+X-Google-Smtp-Source: AMsMyM5W580IcuarDtexq6SFQIE5t986Srjk7Qxuc5IvNhVy43mWq/MX6UE31zpWmmABFdgkEWT0yg==
+X-Received: by 2002:a05:620a:4081:b0:6ce:6253:b90c with SMTP id f1-20020a05620a408100b006ce6253b90cmr3745912qko.172.1663884089154;
+        Thu, 22 Sep 2022 15:01:29 -0700 (PDT)
 Received: from joelboxx.c.googlers.com.com (48.230.85.34.bc.googleusercontent.com. [34.85.230.48])
-        by smtp.gmail.com with ESMTPSA id z12-20020ac87f8c000000b0035ba7012724sm4465833qtj.70.2022.09.22.15.01.27
+        by smtp.gmail.com with ESMTPSA id z12-20020ac87f8c000000b0035ba7012724sm4465833qtj.70.2022.09.22.15.01.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 15:01:27 -0700 (PDT)
+        Thu, 22 Sep 2022 15:01:28 -0700 (PDT)
 From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, rushikesh.s.kadam@intel.com,
         urezki@gmail.com, neeraj.iitr10@gmail.com, frederic@kernel.org,
         paulmck@kernel.org, rostedt@goodmis.org,
-        Vineeth Pillai <vineeth@bitbyteword.org>,
-        Joel Fernandes <joel@joelfernandes.org>
-Subject: [PATCH v6 2/4] rcu: shrinker for lazy rcu
-Date:   Thu, 22 Sep 2022 22:01:02 +0000
-Message-Id: <20220922220104.2446868-3-joel@joelfernandes.org>
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Subject: [PATCH v6 3/4] rcuscale: Add laziness and kfree tests
+Date:   Thu, 22 Sep 2022 22:01:03 +0000
+Message-Id: <20220922220104.2446868-4-joel@joelfernandes.org>
 X-Mailer: git-send-email 2.37.3.998.g577e59143f-goog
 In-Reply-To: <20220922220104.2446868-1-joel@joelfernandes.org>
 References: <20220922220104.2446868-1-joel@joelfernandes.org>
@@ -70,88 +69,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vineeth Pillai <vineeth@bitbyteword.org>
+We add 2 tests to rcuscale, first one is a startup test to check whether
+we are not too lazy or too hard working. Two, emulate kfree_rcu() itself
+to use call_rcu() and check memory pressure. In my testing, the new
+call_rcu() does well to keep memory pressure under control, similar
+to kfree_rcu().
 
-The shrinker is used to speed up the free'ing of memory potentially held
-by RCU lazy callbacks. RCU kernel module test cases show this to be
-effective. Test is introduced in a later patch.
-
-Signed-off-by: Vineeth Pillai <vineeth@bitbyteword.org>
 Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 ---
- kernel/rcu/tree_nocb.h | 52 ++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
+ kernel/rcu/rcuscale.c | 65 ++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 64 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-index 661c685aba3f..1a182b9c4f6c 100644
---- a/kernel/rcu/tree_nocb.h
-+++ b/kernel/rcu/tree_nocb.h
-@@ -1332,6 +1332,55 @@ int rcu_nocb_cpu_offload(int cpu)
- }
- EXPORT_SYMBOL_GPL(rcu_nocb_cpu_offload);
+diff --git a/kernel/rcu/rcuscale.c b/kernel/rcu/rcuscale.c
+index 3ef02d4a8108..027b7c1e7613 100644
+--- a/kernel/rcu/rcuscale.c
++++ b/kernel/rcu/rcuscale.c
+@@ -95,6 +95,7 @@ torture_param(int, verbose, 1, "Enable verbose debugging printk()s");
+ torture_param(int, writer_holdoff, 0, "Holdoff (us) between GPs, zero to disable");
+ torture_param(int, kfree_rcu_test, 0, "Do we run a kfree_rcu() scale test?");
+ torture_param(int, kfree_mult, 1, "Multiple of kfree_obj size to allocate.");
++torture_param(int, kfree_by_call_rcu, 0, "Use call_rcu() to emulate kfree_rcu()?");
  
-+static unsigned long
-+lazy_rcu_shrink_count(struct shrinker *shrink, struct shrink_control *sc)
+ static char *scale_type = "rcu";
+ module_param(scale_type, charp, 0444);
+@@ -659,6 +660,14 @@ struct kfree_obj {
+ 	struct rcu_head rh;
+ };
+ 
++/* Used if doing RCU-kfree'ing via call_rcu(). */
++static void kfree_call_rcu(struct rcu_head *rh)
 +{
-+	int cpu;
-+	unsigned long count = 0;
++	struct kfree_obj *obj = container_of(rh, struct kfree_obj, rh);
 +
-+	/* Snapshot count of all CPUs */
-+	for_each_possible_cpu(cpu) {
-+		struct rcu_data *rdp = per_cpu_ptr(&rcu_data, cpu);
-+
-+		count +=  READ_ONCE(rdp->lazy_len);
-+	}
-+
-+	return count ? count : SHRINK_EMPTY;
++	kfree(obj);
 +}
 +
-+static unsigned long
-+lazy_rcu_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
-+{
-+	int cpu;
-+	unsigned long flags;
-+	unsigned long count = 0;
-+
-+	/* Snapshot count of all CPUs */
-+	for_each_possible_cpu(cpu) {
-+		struct rcu_data *rdp = per_cpu_ptr(&rcu_data, cpu);
-+		int _count = READ_ONCE(rdp->lazy_len);
-+
-+		if (_count == 0)
-+			continue;
-+		rcu_nocb_lock_irqsave(rdp, flags);
-+		WRITE_ONCE(rdp->lazy_len, 0);
-+		rcu_nocb_unlock_irqrestore(rdp, flags);
-+		wake_nocb_gp(rdp, false);
-+		sc->nr_to_scan -= _count;
-+		count += _count;
-+		if (sc->nr_to_scan <= 0)
-+			break;
-+	}
-+	return count ? count : SHRINK_STOP;
-+}
-+
-+static struct shrinker lazy_rcu_shrinker = {
-+	.count_objects = lazy_rcu_shrink_count,
-+	.scan_objects = lazy_rcu_shrink_scan,
-+	.batch = 0,
-+	.seeks = DEFAULT_SEEKS,
-+};
-+
- void __init rcu_init_nohz(void)
+ static int
+ kfree_scale_thread(void *arg)
  {
- 	int cpu;
-@@ -1362,6 +1411,9 @@ void __init rcu_init_nohz(void)
- 	if (!rcu_state.nocb_is_setup)
- 		return;
+@@ -696,6 +705,11 @@ kfree_scale_thread(void *arg)
+ 			if (!alloc_ptr)
+ 				return -ENOMEM;
  
-+	if (register_shrinker(&lazy_rcu_shrinker, "rcu-lazy"))
-+		pr_err("Failed to register lazy_rcu shrinker!\n");
++			if (kfree_by_call_rcu) {
++				call_rcu(&(alloc_ptr->rh), kfree_call_rcu);
++				continue;
++			}
 +
- 	if (!cpumask_subset(rcu_nocb_mask, cpu_possible_mask)) {
- 		pr_info("\tNote: kernel parameter 'rcu_nocbs=', 'nohz_full', or 'isolcpus=' contains nonexistent CPUs.\n");
- 		cpumask_and(rcu_nocb_mask, cpu_possible_mask,
+ 			// By default kfree_rcu_test_single and kfree_rcu_test_double are
+ 			// initialized to false. If both have the same value (false or true)
+ 			// both are randomly tested, otherwise only the one with value true
+@@ -767,11 +781,58 @@ kfree_scale_shutdown(void *arg)
+ 	return -EINVAL;
+ }
+ 
++// Used if doing RCU-kfree'ing via call_rcu().
++static unsigned long jiffies_at_lazy_cb;
++static struct rcu_head lazy_test1_rh;
++static int rcu_lazy_test1_cb_called;
++static void call_rcu_lazy_test1(struct rcu_head *rh)
++{
++	jiffies_at_lazy_cb = jiffies;
++	WRITE_ONCE(rcu_lazy_test1_cb_called, 1);
++}
++
+ static int __init
+ kfree_scale_init(void)
+ {
+ 	long i;
+ 	int firsterr = 0;
++	unsigned long orig_jif, jif_start;
++
++	// Also, do a quick self-test to ensure laziness is as much as
++	// expected.
++	if (kfree_by_call_rcu && !IS_ENABLED(CONFIG_RCU_LAZY)) {
++		pr_alert("CONFIG_RCU_LAZY is disabled, falling back to kfree_rcu() "
++			 "for delayed RCU kfree'ing\n");
++		kfree_by_call_rcu = 0;
++	}
++
++	if (kfree_by_call_rcu) {
++		/* do a test to check the timeout. */
++		orig_jif = rcu_lazy_get_jiffies_till_flush();
++
++		rcu_lazy_set_jiffies_till_flush(2 * HZ);
++		rcu_barrier();
++
++		jif_start = jiffies;
++		jiffies_at_lazy_cb = 0;
++		call_rcu(&lazy_test1_rh, call_rcu_lazy_test1);
++
++		smp_cond_load_relaxed(&rcu_lazy_test1_cb_called, VAL == 1);
++
++		rcu_lazy_set_jiffies_till_flush(orig_jif);
++
++		if (WARN_ON_ONCE(jiffies_at_lazy_cb - jif_start < 2 * HZ)) {
++			pr_alert("ERROR: call_rcu() CBs are not being lazy as expected!\n");
++			WARN_ON_ONCE(1);
++			return -1;
++		}
++
++		if (WARN_ON_ONCE(jiffies_at_lazy_cb - jif_start > 3 * HZ)) {
++			pr_alert("ERROR: call_rcu() CBs are being too lazy!\n");
++			WARN_ON_ONCE(1);
++			return -1;
++		}
++	}
+ 
+ 	kfree_nrealthreads = compute_real(kfree_nthreads);
+ 	/* Start up the kthreads. */
+@@ -784,7 +845,9 @@ kfree_scale_init(void)
+ 		schedule_timeout_uninterruptible(1);
+ 	}
+ 
+-	pr_alert("kfree object size=%zu\n", kfree_mult * sizeof(struct kfree_obj));
++	pr_alert("kfree object size=%zu, kfree_by_call_rcu=%d\n",
++			kfree_mult * sizeof(struct kfree_obj),
++			kfree_by_call_rcu);
+ 
+ 	kfree_reader_tasks = kcalloc(kfree_nrealthreads, sizeof(kfree_reader_tasks[0]),
+ 			       GFP_KERNEL);
 -- 
 2.37.3.998.g577e59143f-goog
 
