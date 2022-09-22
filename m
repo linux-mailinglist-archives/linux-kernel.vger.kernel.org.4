@@ -2,104 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B78AA5E6BF7
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 21:47:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 471745E6C02
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 21:50:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231519AbiIVTrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 15:47:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43008 "EHLO
+        id S232388AbiIVTuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 15:50:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232504AbiIVTq5 (ORCPT
+        with ESMTP id S232490AbiIVTtz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 15:46:57 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F9310BB1D
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 12:46:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663876012; x=1695412012;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CRIm3bvGTl6E2GyZwdHdv1SQnq73SIXScDS+be11evo=;
-  b=A4jQ+mllCZVaCerEmk2yaAfumKKPvSRHGffKmsJN9mfiu2fxuP9siZ5H
-   EZCFmyMFz5As9wNWoePKlF3kaRp/cWM+EZ3yUbQnHGHW2wsy6+K2uTaCi
-   BhVwYUj1yZ33Gnb5UH2yTgkrb6OtfVPhIwEz9q3geC9maE5X75YxLnE6T
-   TLL06ds3JlrD5D5AWxhFCV/yfe6/elsfLkSMmCW+h7o8kzYTkgIzk1Ia1
-   Fvxl1X1I3e23NTHiHfB9XkAXr1EMLiqxRgnMFRqfeY+Zy2zvOfzfvs3Yc
-   5Wgz78N5VHGzDhPJheoNWeFzy9A2DxCLO34U99dFf9vOBu4R/sk1Use1t
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="283501319"
-X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="283501319"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 12:46:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="688450399"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004.fm.intel.com with ESMTP; 22 Sep 2022 12:46:50 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1obS9p-006BDJ-0m;
-        Thu, 22 Sep 2022 22:46:49 +0300
-Date:   Thu, 22 Sep 2022 22:46:48 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Yury Norov <yury.norov@gmail.com>, linux-kernel@vger.kernel.org
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Phil Auld <pauld@redhat.com>
-Subject: Re: [PATCH v1 1/1] cpumask: Don't waste memory for sysfs cpulist
- nodes
-Message-ID: <Yyy7qPXmIrL2TraY@smile.fi.intel.com>
-References: <20220922193447.88123-1-andriy.shevchenko@linux.intel.com>
+        Thu, 22 Sep 2022 15:49:55 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA4B92C11B;
+        Thu, 22 Sep 2022 12:49:51 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28MJk0oL027564;
+        Thu, 22 Sep 2022 19:49:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=AJNwSWYhPDM+mTEDrbxNPzoDZcYGtMDN77+331lqXFU=;
+ b=MRBzVieHOfip1Wn8UUEPaJDI5EiZs4hsYBZD5tnmAoQevvSN3oW8CZytMUsx3hmVf+uH
+ NBaW1RdlYkCiD3cXvaSUQqokyLsYRccJZVjal1fTEDYIdFD5Pu+Hz89dqSrhBFX4zNuj
+ yCkZf42M6DctULE32LqbwCcgFcpFWFtxe1JwQeN5SfISMVahuY5d+65LlrDwPNfJ1r9x
+ izHnqNBnvQbzVCvhkI1bcvjdHjxquoesvKI4Ds8X5x1mnP3SXtngDdut8T/4GIao8cTv
+ W7SjNHWCuk2ydzxoUzpWLZB68gtMBH6Iz1FPAXqQb3nfrgx0aMplZS6WhzNbyIU/y/J4 2g== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jrg4ctecf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Sep 2022 19:49:01 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28MJmxE4029024
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Sep 2022 19:48:59 GMT
+Received: from [10.110.101.161] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Thu, 22 Sep
+ 2022 12:48:58 -0700
+Message-ID: <668ebc3a-b731-cd0c-0f60-ba9faabbf978@quicinc.com>
+Date:   Thu, 22 Sep 2022 12:48:49 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220922193447.88123-1-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [Freedreno] [PATCH v2 01/10] drm/msm: fix use-after-free on probe
+ deferral
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        "Rob Clark" <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>
+CC:     <dri-devel@lists.freedesktop.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        <linux-arm-msm@vger.kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        <stable@vger.kernel.org>, Sean Paul <sean@poorly.run>,
+        Steev Klimaszewski <steev@kali.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+References: <20220913085320.8577-1-johan+linaro@kernel.org>
+ <20220913085320.8577-2-johan+linaro@kernel.org>
+Content-Language: en-US
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+In-Reply-To: <20220913085320.8577-2-johan+linaro@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: XFS2v7F2z7Z4grplLaqVY6tfI2QTR_EF
+X-Proofpoint-ORIG-GUID: XFS2v7F2z7Z4grplLaqVY6tfI2QTR_EF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-22_14,2022-09-22_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 suspectscore=0 phishscore=0 spamscore=0 mlxlogscore=999
+ clxscore=1011 lowpriorityscore=0 adultscore=0 malwarescore=0 mlxscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209220128
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 10:34:47PM +0300, Andy Shevchenko wrote:
-> Currently the approximation is used which wastes the more memory
-> the more CPUs are present on the system. Proposed change calculates
-> the exact maximum needed in the worst case:
-> 
->   NR_CPUS	old		new
->   -------	---		---
->   1 .. 1860	4096		4096
->   ...		...		...
->   2*4096	28672		19925
->   4*4096	57344		43597
->   8*4096	114688		92749
->   16*4096	229376		191053
->   32*4096	458752		403197
->   64*4096	917504		861949
->   128*4096	1835008		1779453
->   256*4096	3670016		3670016
-> 
-> Under the hood the reccurent formula is being used:
->   (5 - 0) * 2 +
->     (50 - 5) * 3 +
->       (500 - 50) * 4 +
->         (5000 - 500) * 5 +
->           ...
->             (X[i] - X[i-1]) * i
-> 
-> which allows to count the exact maximum length in the worst case,
-> i.e. when each second CPU is being listed. For less than 1861 and
-> more than 1 million CPUs the old is being used.
 
-Scratch this because for the range 1171..1860 the new is better,
-I'll update commit message and comment in v2 sending soon.
+On 9/13/2022 1:53 AM, Johan Hovold wrote:
+> The bridge counter was never reset when tearing down the DRM device so
+> that stale pointers to deallocated structures would be accessed on the
+> next tear down (e.g. after a second late bind deferral).
+>
+> Given enough bridges and a few probe deferrals this could currently also
+> lead to data beyond the bridge array being corrupted.
+>
+> Fixes: d28ea556267c ("drm/msm: properly add and remove internal bridges")
+> Fixes: a3376e3ec81c ("drm/msm: convert to drm_bridge")
+> Cc: stable@vger.kernel.org      # 3.12
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+Tested-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+Reviewed-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+> ---
+>   drivers/gpu/drm/msm/msm_drv.c | 1 +
+>   1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
+> index 391d86b54ded..d254fe2507ec 100644
+> --- a/drivers/gpu/drm/msm/msm_drv.c
+> +++ b/drivers/gpu/drm/msm/msm_drv.c
+> @@ -241,6 +241,7 @@ static int msm_drm_uninit(struct device *dev)
+>   
+>   	for (i = 0; i < priv->num_bridges; i++)
+>   		drm_bridge_remove(priv->bridges[i]);
+> +	priv->num_bridges = 0;
+>   
+>   	pm_runtime_get_sync(dev);
+>   	msm_irq_uninstall(ddev);
