@@ -2,209 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11B095E5EAE
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 11:35:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F165D5E5EB2
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 11:36:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbiIVJfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 05:35:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54208 "EHLO
+        id S230333AbiIVJgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 05:36:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbiIVJfP (ORCPT
+        with ESMTP id S229729AbiIVJgT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 05:35:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2490D6EF3D
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 02:35:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663839313;
+        Thu, 22 Sep 2022 05:36:19 -0400
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACAD378BCD
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 02:36:17 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 237324000A;
+        Thu, 22 Sep 2022 09:36:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1663839376;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=gUGcqCxSDMCIAUrOuyN8xRMwYFQcavVb0le1znZCWqA=;
-        b=DGLNpWtz4aK1iLaAm7tGit5M1KpRY+OoInVV5PagNRigttkE/N8QbWABvflsR8Ievt32ZC
-        AIhgklML5AW89N/+xl/o5qeqEtCs6emaSdtF0tfYlh4tp4GVLU/fPOmTSXrrRnwKviQCwh
-        7+/XhOQSsd9JWZoFREYQfYZXKSDbP8w=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-52-igfs_n-LNsm1C3gMsonLWg-1; Thu, 22 Sep 2022 05:35:12 -0400
-X-MC-Unique: igfs_n-LNsm1C3gMsonLWg-1
-Received: by mail-wm1-f71.google.com with SMTP id n7-20020a1c2707000000b003a638356355so3829874wmn.2
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 02:35:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date;
-        bh=gUGcqCxSDMCIAUrOuyN8xRMwYFQcavVb0le1znZCWqA=;
-        b=3rwVZmlWer3/Lb/Hx+Bshj1IL0ggnJLh6F17zC6GV17Xs+2krYrv/gEt1OYDus3BUq
-         6wIrB/w95ZyywRcrTl46Vph/uj86hmcoIMLUNG6zxsaiJabiVoziVxIVO5+Ewhfmbqbu
-         UOW0dBSB+F/gBm1xxA6wWqfZOTu4zfa3R4HkfcqkX/8wLC/9oCNBc3Nja0xXxxBEPfvw
-         spbh3BIzunRfixW5bkeXq/ORE5E9hh5XrI9UvWVGP8zWPbTqnRTs311LpSnFC7neswjV
-         09Cur4v/00a9VRfSs2jspVjnskmJYYpmflYJKaJa7gMjggxlX6GY1qUaTpN8J+h/q5BS
-         CQuA==
-X-Gm-Message-State: ACrzQf1NLUzx+XdHQRA+L7KaWbnuTTASUe9h+wreFOSHL3+/Im3cDqDv
-        mKhXsfjSORqShG7i9wfajvZAELKkFC4x8UzoUzD+Xjh0pg1Uuex3IBbv3UaIw4r7uWfkby0QjGq
-        2AhWHjvPkQGJc3K97mWR+rVLbFsMUjtA+X0OzsPVsYm2ixiDJHPTy5HEv4vVC15vqqZred4mJEE
-        iu
-X-Received: by 2002:a05:600c:221a:b0:3b4:75b8:3f7f with SMTP id z26-20020a05600c221a00b003b475b83f7fmr1622601wml.175.1663839311034;
-        Thu, 22 Sep 2022 02:35:11 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7VWzhc4WjoiR+pNf0jAsiBDn/PgLRNqXLh5/KQS3L2ehVURiYx0K1Ybl1BCLIgh2g79fnzlw==
-X-Received: by 2002:a05:600c:221a:b0:3b4:75b8:3f7f with SMTP id z26-20020a05600c221a00b003b475b83f7fmr1622579wml.175.1663839310728;
-        Thu, 22 Sep 2022 02:35:10 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id i7-20020a5d5587000000b0021badf3cb26sm5468427wrv.63.2022.09.22.02.35.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 02:35:09 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        Yuan Yao <yuan.yao@linux.intel.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v10 02/39] KVM: x86: hyper-v: Resurrect dedicated
- KVM_REQ_HV_TLB_FLUSH flag
-In-Reply-To: <Yys/pv0d+8ywcbUy@google.com>
-References: <20220921152436.3673454-1-vkuznets@redhat.com>
- <20220921152436.3673454-3-vkuznets@redhat.com>
- <Yys6b1ZqYbw9Umyu@google.com> <Yys/pv0d+8ywcbUy@google.com>
-Date:   Thu, 22 Sep 2022 11:35:08 +0200
-Message-ID: <874jwzoipf.fsf@redhat.com>
+        bh=3UZbUFLMgSY77Odqcq2d806tX5yHgFe2O1KsF+0D9E8=;
+        b=m0WkdLUM8KvCsVpgsSZlDTQXT1zLGABp4WPf/YdvMmR/eeHsKkBj5cIQLRPeQS0fml+9rK
+        XdDWQb2yZGWSV0+BqMdCuNc5JQlZenWVw2PAOfdKF/mIllYOG2OaeDhqwBkJILuPEwi7W7
+        6HXIYBbg0TyUYSl/YV2XWgNLfSivL+bRNpGZzNfKyAyzcOF8//vn95hMIWy09EvONl3tww
+        9z/3ikC4Gd2IzYQVVkcM2ABX2lrIcgQ5vfF3g7NSUSYD6sIjFdT9pGsjrfVCotSobDN2M7
+        oqX2kqGyj+Yj6JKj1Jd9TsH6OKF/8fzsY/y8ilppCY5vvXPIm3dmuBUnignObw==
+Date:   Thu, 22 Sep 2022 11:36:13 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Valentin Korenblit <vkorenblit@sequans.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, kernel test robot <lkp@intel.com>,
+        llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [mtd:nand/next 11/31]
+ drivers/mtd/nand/raw/cadence-nand-controller.c:1893:4: error: implicit
+ declaration of function 'ioread64_rep' is invalid in C99
+Message-ID: <20220922113613.4d7273c8@xps-13>
+In-Reply-To: <6b5a2b19-39c6-5116-60c2-d292ae2e7bae@sequans.com>
+References: <202209210641.MziHAbW7-lkp@intel.com>
+        <20220921104002.226ff3f6@xps-13>
+        <ffde44bc-d4ae-4052-c60c-35c8775a5101@sequans.com>
+        <7074197c-aa8d-f763-cb0f-03ea5335b923@sequans.com>
+        <20220921164720.6bbc56d5@xps-13>
+        <ef9a2618-2dd0-4d1b-b9d2-37d59506f004@www.fastmail.com>
+        <20220921183807.241e2518@xps-13>
+        <b7e5ebb4-0de8-4958-9bc4-fe06ec4c3635@www.fastmail.com>
+        <6b5a2b19-39c6-5116-60c2-d292ae2e7bae@sequans.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sean Christopherson <seanjc@google.com> writes:
+Hi Valentin,
 
-> On Wed, Sep 21, 2022, Sean Christopherson wrote:
->> On Wed, Sep 21, 2022, Vitaly Kuznetsov wrote:
->> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
->> > index f62d5799fcd7..86504a8bfd9a 100644
->> > --- a/arch/x86/kvm/x86.c
->> > +++ b/arch/x86/kvm/x86.c
->> > @@ -3418,11 +3418,17 @@ static inline void kvm_vcpu_flush_tlb_current(struct kvm_vcpu *vcpu)
->> >   */
->> >  void kvm_service_local_tlb_flush_requests(struct kvm_vcpu *vcpu)
->> >  {
->> > -	if (kvm_check_request(KVM_REQ_TLB_FLUSH_CURRENT, vcpu))
->> > +	if (kvm_check_request(KVM_REQ_TLB_FLUSH_CURRENT, vcpu)) {
->> >  		kvm_vcpu_flush_tlb_current(vcpu);
->> > +		kvm_clear_request(KVM_REQ_HV_TLB_FLUSH, vcpu);
->> 
->> This isn't correct, flush_tlb_current() flushes "host" TLB entries, i.e. guest-physical
->> mappings in Intel terminology, where flush_tlb_guest() and (IIUC) Hyper-V's paravirt
->> TLB flush both flesh "guest" TLB entries, i.e. linear and combined mappings.
->> 
->> Amusing side topic, apparently I like arm's stage-2 terminology better than "TDP",
->> because I actually typed out "stage-2" first.
->> 
->> > +	}
->> >  
->> > -	if (kvm_check_request(KVM_REQ_TLB_FLUSH_GUEST, vcpu))
->> > +	if (kvm_check_request(KVM_REQ_TLB_FLUSH_GUEST, vcpu)) {
->> > +		kvm_vcpu_flush_tlb_guest(vcpu);
->> > +		kvm_clear_request(KVM_REQ_HV_TLB_FLUSH, vcpu);
->
-> Looking at future patches where KVM needs to reset the FIFO when doing a "guest"
-> TLB flush, i.e. needs to do more than just clearing the request, what about putting
-> this in kvm_vcpu_flush_tlb_guest() right away?
+vkorenblit@sequans.com wrote on Thu, 22 Sep 2022 10:18:46 +0200:
 
-Will do.
+> Hi Arnd, Miquel,
+>=20
+> On 9/21/22 22:01, Arnd Bergmann wrote:
+> > On Wed, Sep 21, 2022, at 6:38 PM, Miquel Raynal wrote: =20
+> >> arnd@arndb.de  wrote on Wed, 21 Sep 2022 17:49:11 +0200: =20
+> >>> On Wed, Sep 21, 2022, at 4:47 PM, Miquel Raynal wrote:
+> >>> - every architecture should provide readsq()/readsl()/readsw()/readsb=
+()
+> >>>    these days, regardless of CONFIG_GENERIC_IOMAP. If x86 does
+> >>>    not have that, we should fix asm-generic/io.h. =20
+> >> ARM does not seem to define readsq/writesq. Should it be fixed? =20
+> > 64-bit Arm should get it from include/asm-generic/io.h. If it does
+> > not, this should be fixed. 32-bit Arm obviously cannot define them
+> > in a generic way. =20
+>=20
+> This is ok for 64-bit arm.
+>=20
+> > =20
+> >>> - CONFIG_GENERIC_IOMAP just means an architecture uses the generic
+> >>>    ioread32_rep() style wrapper around readsl()/insl(). On most
+> >>>    architectures (not x86), insl() is implemented as a wrapper around
+> >>>    readsl() itself, so readsl() and ioread32_rep() should be identica=
+l. =20
+> >> Ok. But if CONFIG_GENERIC_IOMAP=3Dn (ARM, aarch64, x86_64), =20
+> > x86_64 has GENERIC_IOMAP=3Dy
+> > =20
+> >> ioread64_rep is then only defined if CONFIG_64BIT. As it is based
+> >> on readsq/writesq() and those must be defined (as you said), I don't g=
+et
+> >> why the *64_rep() helpers are not defined in all cases. Maybe because =
+no
+> >> 32-bit system _should_ need them? But then compile testing gets more
+> >> difficult. =20
+> > Both readsq/writesq and ioread64_rep/iowrite64_rep must be defined
+> > for 64-bit architectures and cannot be defined for 32-bit ones. =20
+>=20
+> So the first issue here is that they are not defined for x86_64
+> (CONFIG_64BIT=3Dy).
 
->
-> Ah, and there's already a second caller to kvm_vcpu_flush_tlb_guest().  I doubt
-> KVM's paravirt TLB flush will ever collide with Hyper-V's paravirt TLB flush,
-> but logically a "guest" flush that is initiated through KVM's paravirt interface
-> should also clear Hyper-V's queue/request.
+I would say this is not very important as long as we could use
+readsq/writesq() for the same purpose.
 
-I ignored this as a case which is not worth optimizing for,
-i.e. over-flushing is always correct.
+> >>> - For a FIFO, you cannot use readq() but have to use __raw_readq()
+> >>>    to get the correct endianness. You cannot use this for an
+> >>>    MMIO register with side-effects though, as this needs the byteswap
+> >>>    and the barrier in readsl(). =20
+> >> I'm not sure about the true definition of "FIFO" as you say. I guess
+> >> you just mean reading from a BE device?
+> >>
+> >> In this case I guess we need the barrier+byteswap helpers. =20
+> > The difference is that a register has a fixed length, and gets
+> > accessed with a device specific endianness, which may have to
+> > be swapped if the device and the CPU disagree.
+> >
+> > A FIFO register is what you use for transferring a stream of
+> > bytes, such as reading a file system block from disk. The
+> > first byte in the register corresponds to the first byte in
+> > memory later, so there must not be any byteswap while copying
+> > to/from memory. If the data itself is structured (i.e. an
+> > on-disk inode or a network packet), then the byteswap will
+> > happen if necessary while interpreting the data.
+> > =20
+> >> I don't think this is actually what we want. My understanding is
+> >> (Valentin, please correct me if I'm wrong):
+> >> - on ARM: we will always use 32-bit accesses
+> >> - on aarch64: we may use either 32-bit or 64-bit accesses
+> >> - on other architectures: we only want to compile test =20
+>=20
+> Correct, this was my initial idea. However, this driver should work
+> with every architecture or do we limit the scope to arm/arm64/x86_64?
 
->
-> And for consistency, slot this in before this patch:
->
+The driver should work on ARM and aarch64, I'm not aware of other
+architectures with this IP.
 
-Will do, thanks!
+The driver should compile when COMPILE_TEST=3Dy.
 
-> From: Sean Christopherson <seanjc@google.com>
-> Date: Wed, 21 Sep 2022 09:35:34 -0700
-> Subject: [PATCH] KVM: x86: Move clearing of TLB_FLUSH_CURRENT to
->  kvm_vcpu_flush_tlb_all()
->
-> Clear KVM_REQ_TLB_FLUSH_CURRENT in kvm_vcpu_flush_tlb_all() instead of in
-> its sole caller that processes KVM_REQ_TLB_FLUSH.  Regardless of why/when
-> kvm_vcpu_flush_tlb_all() is called, flushing "all" TLB entries also
-> flushes "current" TLB entries.
->
-> Ideally, there will never be another caller of kvm_vcpu_flush_tlb_all(),
-> and moving the handling "requires" extra work to document the ordering
-> requirement, but future Hyper-V paravirt TLB flushing support will add
-> similar logic for flush "guest" (Hyper-V can flush a subset of "guest"
-> entries).  And in the Hyper-V case, KVM needs to do more than just clear
-> the request, the queue of GPAs to flush also needs to purged, and doing
-> all only in the request path is undesirable as kvm_vcpu_flush_tlb_guest()
-> does have multiple callers (though it's unlikely KVM's paravirt TLB flush
-> will coincide with Hyper-V's paravirt TLB flush).
->
-> Move the logic even though it adds extra "work" so that KVM will be
-> consistent with how flush requests are processed when the Hyper-V support
-> lands.
->
-> No functional change intended.
->
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  arch/x86/kvm/x86.c | 15 ++++++++++-----
->  1 file changed, 10 insertions(+), 5 deletions(-)
->
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index f62d5799fcd7..3ea2e51a8cb5 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -3383,6 +3383,9 @@ static void kvm_vcpu_flush_tlb_all(struct kvm_vcpu *vcpu)
->  {
->  	++vcpu->stat.tlb_flush;
->  	static_call(kvm_x86_flush_tlb_all)(vcpu);
-> +
-> +	/* Flushing all ASIDs flushes the current ASID... */
-> +	kvm_clear_request(KVM_REQ_TLB_FLUSH_CURRENT, vcpu);
->  }
->  
->  static void kvm_vcpu_flush_tlb_guest(struct kvm_vcpu *vcpu)
-> @@ -10462,12 +10465,14 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
->  			kvm_mmu_sync_roots(vcpu);
->  		if (kvm_check_request(KVM_REQ_LOAD_MMU_PGD, vcpu))
->  			kvm_mmu_load_pgd(vcpu);
-> -		if (kvm_check_request(KVM_REQ_TLB_FLUSH, vcpu)) {
-> +
-> +		/*
-> +		 * Note, the order matters here, as flushing "all" TLB entries
-> +		 * also flushes the "current" TLB entries, i.e. servicing the
-> +		 * flush "all" will clear any request to flush "current".
-> +		 */
-> +		if (kvm_check_request(KVM_REQ_TLB_FLUSH, vcpu))
->  			kvm_vcpu_flush_tlb_all(vcpu);
-> -
-> -			/* Flushing all ASIDs flushes the current ASID... */
-> -			kvm_clear_request(KVM_REQ_TLB_FLUSH_CURRENT, vcpu);
-> -		}
->  		kvm_service_local_tlb_flush_requests(vcpu);
->  
->  		if (kvm_check_request(KVM_REQ_REPORT_TPR_ACCESS, vcpu)) {
->
-> base-commit: ed102fe0b59586397b362a849bd7fb32582b77d8
+> >> I believe what Valentin wanted to achieve in the first place, was to
+> >> use 64-bit accesses when relevant (otherwise it does not work). =20
+> > The width is read from a device specific register at
+> > runtime, it is not related to the architecture you are
+> > running on, presumably this is hardwired during the
+> > design of an SoC, based on the capabilities of the DMA
+> > engine:
 
--- 
-Vitaly
+Well, yes, but in the mean time 64-bit DMA width will never be
+used on 32-bit platforms.
 
+> >          reg =3D readl_relaxed(cdns_ctrl->reg + CTRL_FEATURES);
+> >          if (FIELD_GET(CTRL_FEATURES_DMA_DWITH64, reg))
+> >                  cdns_ctrl->caps2.data_dma_width =3D 8;
+> >          else
+> >                  cdns_ctrl->caps2.data_dma_width =3D 4;
+> >
+> > This usually means the largest access that is valid for
+> > reading from the FIFO, but usually smaller accesses work
+> > as well, just slower. =20
+
+Mmh, ok, that's interesting, thanks for the pointer.
+
+But in the mean time I am only half satisfied, because we plan to do
+twice more accesses than needed _just_ because of a the COMPILE_TEST
+constraint.
+
+> Thanks for all the info. I can check if consecutive smaller accesses
+> trigger sdma_err interrupt. The datasheet only specifies: "if host sends =
+an
+> unsupported transaction to slave interface, the slave dma ignores
+> this access and sets sdma_err flag in intr_status register.
+>=20
+> Valentin
+
+Thanks,
+Miqu=C3=A8l
