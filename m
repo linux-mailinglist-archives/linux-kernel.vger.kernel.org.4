@@ -2,96 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9CFB5E5CE2
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 10:05:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63E995E5CE7
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 10:06:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229760AbiIVIFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 04:05:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40254 "EHLO
+        id S229718AbiIVIGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 04:06:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229851AbiIVIEu (ORCPT
+        with ESMTP id S229783AbiIVIFo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 04:04:50 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFFE1C29;
-        Thu, 22 Sep 2022 01:04:48 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id x18so8161962wrm.7;
-        Thu, 22 Sep 2022 01:04:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=zi7UhzBBoawVZbsqCfFPCg7VnpB6tq6adFaLB65QOv8=;
-        b=BGHilbCbUvVM/l1cum80tSQfW2USk/eDCElhmvok5aZedIcyUE+jYwkXQK6LqDQAB1
-         zXz19u+p6p7jz4wKrFXj/vSLkXJNGvcTgXQ2hmJcdevj9SvmgknFUg67anFdjl1wiW3l
-         XR7+1R3Aw0lcAzdHg5S433i4btiQOGRczkBvaq+vws8l+un+hIcqIYSu+2wY6lSaEt2q
-         sxhf/x+OqTIR+jH/tpaP2LQgykB7hbvOnuMpMl65ArmegLp6uGOrGEyKpjOdjsqlm2kZ
-         RrdA5cWN4zjupAU/127shLVMbBMkAPhBb82CURSH8EhUsd3+GJzS7nHv7OodizEOYViV
-         Ebtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=zi7UhzBBoawVZbsqCfFPCg7VnpB6tq6adFaLB65QOv8=;
-        b=vjoSQFDP7An33x3RK0MHp2x6JHPFknhJ2Z+Ra5gZ/WpmpP9ARdQ4K+cYkQ8v8cx2So
-         9htzf13GH4t5ubSOM4uQjwcdMN7t7Tu3QHyk5zdcrEYoDy4chDq0bZc82Ao5wpMBFPYm
-         epTy5o6FXO3jrg1UMJsr/TzNRaLHjB4GYjCzacQqJE0lON3WXso2jULssDQ99/hIMkrQ
-         m2OldHGeSTxgfnS+lhLvqU8NMaupJC8K3ZX3wlYfJ6K01DXaCXqkAi/MUaCOlCR2VRhm
-         HFbwcvEpC/4nus+rPfphi9P66aitg157qnCwu7kYYsv0Hx69+WGfgVsH8rbsefQaxfw/
-         S4Yg==
-X-Gm-Message-State: ACrzQf3S93oS9Axgqcs8/jlYiwZUF6HYVK2CkyMfsRO3JaWxSmKFxhmI
-        glGEH98wSjKXkLg/QplVxD4=
-X-Google-Smtp-Source: AMsMyM66eNPo8hZsj24TA8ZIwyuPGzmdbhZrqAPWvNczWEqkWcgpbYYj0T9ssKm0bunZQ3QP9G+SNQ==
-X-Received: by 2002:adf:fa83:0:b0:205:c0cb:33c6 with SMTP id h3-20020adffa83000000b00205c0cb33c6mr1182135wrr.39.1663833887336;
-        Thu, 22 Sep 2022 01:04:47 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id v125-20020a1cac83000000b003a845621c5bsm5102518wme.34.2022.09.22.01.04.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 01:04:46 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] regmap: mmio: replace return 0 with break in switch statement
-Date:   Thu, 22 Sep 2022 09:04:45 +0100
-Message-Id: <20220922080445.818020-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        Thu, 22 Sep 2022 04:05:44 -0400
+Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A654D47B9F;
+        Thu, 22 Sep 2022 01:05:36 -0700 (PDT)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id 6FDB4124B;
+        Thu, 22 Sep 2022 10:05:34 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1663833934;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TpzBNG5UwdogbiC6mYdoQl1YRb9gRLtmngkK9Bob73I=;
+        b=HMHyK+0h27R4POjRSpnqWkXxQIhda7BTUJ9xT4KhdmGDBspERK4EvFkuAMoVqz+13+ygt1
+        B98WODZj4WNACvX2jh0KDkLeHg1swxTjk/6m4k/rZf00AoIVrOqEQUwI18KOFzE2OiNyZw
+        lOi95CvwGNU0MaUqy0nXX4vhq9uYyss9nv972GTI6Ejt88UX4HL8q8aok7vc15mlJ8FxO9
+        AXiJzzW+ix6W7JwThYh8+GyTc2PKfxEPyJ9wriFC3IO0CAE4t87MavkDAFZysqBSFb+7sd
+        q/rU0LcWLoA6cvHvUYcC4e+3yZrrUNLJyPJfobh5nR++WYfx7iRiq9usy1ZghQ==
+From:   Michael Walle <michael@walle.cc>
+To:     marcus.carlberg@axis.com
+Cc:     andrew@lunn.ch, davem@davemloft.net, devicetree@vger.kernel.org,
+        edumazet@google.com, hkallweit1@gmail.com, kernel@axis.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux@armlinux.org.uk, lxu@maxlinear.com, netdev@vger.kernel.org,
+        pabeni@redhat.com, Michael Walle <michael@walle.cc>
+Subject: Re: [PATCH net-next 0/2] net: phy: mxl-gpy: Add mode for 2 leds
+Date:   Thu, 22 Sep 2022 10:05:29 +0200
+Message-Id: <20220922080529.928823-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220920151411.12523-1-marcus.carlberg@axis.com>
+References: <20220920151411.12523-1-marcus.carlberg@axis.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Variable min_stride is assigned a value that is never read, fix this by
-replacing the return 0 with a break statement. This also makes the case
-statement consistent with the other cases in the switch statement.
+Hi,
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/base/regmap/regmap-mmio.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> GPY211 phy default to using all four led pins.
+> Hardwares using only two leds where led0 is used as the high
+> network speed led and led1 the low network speed led will not
+> get the correct behaviour since 1Gbit and 2.5Gbit will not be
+> represented at all in the existing leds.
 
-diff --git a/drivers/base/regmap/regmap-mmio.c b/drivers/base/regmap/regmap-mmio.c
-index 8bd8d42de3fe..3ccdd86a97e7 100644
---- a/drivers/base/regmap/regmap-mmio.c
-+++ b/drivers/base/regmap/regmap-mmio.c
-@@ -48,7 +48,7 @@ static int regmap_mmio_get_min_stride(size_t val_bits)
- 	case 8:
- 		/* The core treats 0 as 1 */
- 		min_stride = 0;
--		return 0;
-+		break;
- 	case 16:
- 		min_stride = 2;
- 		break;
--- 
-2.37.1
+I might be wrong, but PHY LED bindings should be integrated with/using
+the LED subsystem. Although I didn't see any development regarding this
+for a long time.
 
+That being said, it seems you are adding a new (DT) property which
+just matches your particular hardware design, no?
+
+-michael
