@@ -2,294 +2,638 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC8605E6B09
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 20:32:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F6145E6B0C
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 20:34:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230167AbiIVScf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 14:32:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58910 "EHLO
+        id S232158AbiIVSeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 14:34:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232712AbiIVScA (ORCPT
+        with ESMTP id S232666AbiIVSeB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 14:32:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C40413EBE
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 11:29:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663871382;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=S6tJUCgYaZdA91WGecG3Omdxk6C0Sput3VYlk3b1RhA=;
-        b=Gt2JtkcpHh1qeMaekK+43dkXaj9hFWeU7xf2Bw28Yy3A65Jas3m4NO/sRr2xOzxV6xfLV9
-        zvhrKYL2x76+d1EVCHUMFFjZ9KzszrimWN2dDM5UVTohK7FCl4kJ7QzALgMdcCaIHouZvk
-        fF86+Y6g4rTDVq7Fo8Z5Un4i6mBXSeA=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-460-BzrM4yDKM_WoocdgxVjdLQ-1; Thu, 22 Sep 2022 14:29:41 -0400
-X-MC-Unique: BzrM4yDKM_WoocdgxVjdLQ-1
-Received: by mail-qk1-f198.google.com with SMTP id i7-20020a05620a404700b006ced0d02b68so7268620qko.10
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 11:29:41 -0700 (PDT)
+        Thu, 22 Sep 2022 14:34:01 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF6D310D0EC
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 11:31:57 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id c7so9967332pgt.11
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 11:31:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=QCY+Ve0GmwSK4E8jgplpUYH3SP9D0/JevojggP7tHEs=;
+        b=bDCFNN0m5fWbAqCRu1Jqgsj5WxKMlVRgce6Era4TBU6XXOQOvFzOpqjLk93UNFZZgA
+         gWFw5yM1JVE164nuwoGPoO9LRwd9TbeUJSEtCEcHqRvYuImibE6eclsj5iBo0VPypoqo
+         BS5Fid2fm3BvNSKaO++1p+lguvM6S1qZucXJ8XoLxwVy46VvH/0H0x9xW06a+VxGVDTi
+         ytirWljfyZjDz8mZYluPiSXDVaNW6stoTYclBRDwI2F59RtEZpK8jxJ9QLgwU3CCEE5h
+         KHHX0zgWLfUityKN1ajD1KgGF9VQqUPhWTctiIP/yrgcokLzB/XMbTncUgJmElfOG4ta
+         v3kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=S6tJUCgYaZdA91WGecG3Omdxk6C0Sput3VYlk3b1RhA=;
-        b=6TehCBCAwvNaofhvZh4KcYDT7D+Di+VPA6cERsIYavQQS2TSvMzfPf/zsL61mA8ZwH
-         7zj+mnxtMULB6Xex+AmXk2mrCkNSXY+jo7/SIhUpMuoiKbKZwCyk+6TUthGIrIOn7AUf
-         hk/V9gRro/zhBGrfs1sUwQPXEzJ1WEeogzYiFh+LRKOAeBvwwRLMEPcdiI0zR4yOduga
-         hw8VzH9qzBEW3aCtbe0ctaVVOYLnheSfa8bJiZ/24p3kGwsV6HiGpKJgwHCHjQmDAVQa
-         OimGPKxtCMduwnEKqp70/isDyOuH23jCSfh3QTrY/PP2Fn/IXrFrnYJb2S4TbnO1Il71
-         tepQ==
-X-Gm-Message-State: ACrzQf2RiOuNWKE9jo93AlfBXrWdO69dbaUpDUd4g1OLY1e5QumHgThl
-        fWRQ1F+QrGhlEQY+UH51omyKHiVdQs1BU7wAIOZud/HuYHrGNt4Xy9uHp9emqHjoLKt+pd8JMFs
-        dqOg8s51LIErupWjukt1A6Jdp
-X-Received: by 2002:a05:6214:29e4:b0:4ad:8c96:178b with SMTP id jv4-20020a05621429e400b004ad8c96178bmr1931457qvb.29.1663871380597;
-        Thu, 22 Sep 2022 11:29:40 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5RkWlQl2NY4VBbaFM/3H818tEmhHbxLx0HPIsYfjbny4kxcAOERW2vdVGtdqk3/xGNqUrABA==
-X-Received: by 2002:a05:6214:29e4:b0:4ad:8c96:178b with SMTP id jv4-20020a05621429e400b004ad8c96178bmr1931418qvb.29.1663871380242;
-        Thu, 22 Sep 2022 11:29:40 -0700 (PDT)
-Received: from bfoster (c-24-61-119-116.hsd1.ma.comcast.net. [24.61.119.116])
-        by smtp.gmail.com with ESMTPSA id n12-20020a05620a294c00b006ce63901d27sm4470061qkp.4.2022.09.22.11.29.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 11:29:39 -0700 (PDT)
-Date:   Thu, 22 Sep 2022 14:29:36 -0400
-From:   Brian Foster <bfoster@redhat.com>
-To:     Sarthak Kukreti <sarthakkukreti@chromium.org>
-Cc:     dm-devel@redhat.com, linux-block@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Jens Axboe <axboe@kernel.dk>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Bart Van Assche <bvanassche@google.com>,
-        Daniil Lunev <dlunev@google.com>,
-        Evan Green <evgreen@google.com>,
-        Gwendal Grignou <gwendal@google.com>
-Subject: Re: [PATCH RFC 4/8] fs: Introduce FALLOC_FL_PROVISION
-Message-ID: <YyypkOr3l2lx4Odi@bfoster>
-References: <20220915164826.1396245-1-sarthakkukreti@google.com>
- <20220915164826.1396245-5-sarthakkukreti@google.com>
- <YyRkd8YAH1lal8/N@bfoster>
- <CAG9=OMNL1Z3DiO-usdH0k90NDsDkDQ7A7CHc4Nu6MCXKNKjWdw@mail.gmail.com>
- <YyswI57JH7gcs9+S@bfoster>
- <CAG9=OMPEoShYMx6A+p97-tw4MuLpgOEpy7aFs5CH6wTedptALQ@mail.gmail.com>
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=QCY+Ve0GmwSK4E8jgplpUYH3SP9D0/JevojggP7tHEs=;
+        b=0zgYmCaa5WumArrzWaAfBwsvjbtq7+AAuDhUwuY+OiPH1cKYDttvPVgKXZOhHznH6l
+         07b+g01rOi30lO2WajFXIzy6Rek0mnd3cL0hxF5P5qfgAmu5VP9m6ahCgJVGqAe0ZqSQ
+         7CYcMCxanraR3lKH1g0pBT0aLd0kMxu6CoW9Ejr0zZsUWOZfKA6cbpBh4lXzCFUUeWhR
+         oFL6BNv+f5XBtNivhIE3y3/nO1cP3YXRdFkg2/FdZ86ZSzExBppT/golzXPGpoCphgoJ
+         /xrB/3ePoN9uTr4OFfGy2TJ72b14eVRkZkWG/MOvQ6FUflTggbW5dZL+Nq12o6JQVw2h
+         DsWw==
+X-Gm-Message-State: ACrzQf3Itogro3A27T/I3qm0KCzg024HzwVmMK7m+KETs28W/KpWS6ET
+        H7DdpZbhI8LCK6gjIRikdv1Www==
+X-Google-Smtp-Source: AMsMyM669iF33adwjZmy1KQFNxlLtrwvYu3QKJfILmLyepy9WgFD5CNf/2XPFL/wuxJD6JApnu6XbQ==
+X-Received: by 2002:a63:26c3:0:b0:439:9496:dd90 with SMTP id m186-20020a6326c3000000b004399496dd90mr4204309pgm.38.1663871517066;
+        Thu, 22 Sep 2022 11:31:57 -0700 (PDT)
+Received: from localhost.localdomain ([139.177.225.235])
+        by smtp.gmail.com with ESMTPSA id b23-20020a63cf57000000b00434651f9a96sm4049759pgj.15.2022.09.22.11.31.53
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Thu, 22 Sep 2022 11:31:56 -0700 (PDT)
+From:   Peng Zhang <zhangpeng.00@bytedance.com>
+To:     joro@8bytes.org, will@kernel.org
+Cc:     wangjie125@huawei.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, robin.murphy@arm.com,
+        haifeng.zhao@linux.intel.com, john.garry@huawei.com,
+        Peng Zhang <zhangpeng.00@bytedance.com>
+Subject: [RESEND PATCH v3] iommu/iova: Optimize alloc_iova with rbtree_augmented
+Date:   Fri, 23 Sep 2022 02:31:14 +0800
+Message-Id: <20220922183114.15135-1-zhangpeng.00@bytedance.com>
+X-Mailer: git-send-email 2.32.1 (Apple Git-133)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAG9=OMPEoShYMx6A+p97-tw4MuLpgOEpy7aFs5CH6wTedptALQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 01:04:33AM -0700, Sarthak Kukreti wrote:
-> On Wed, Sep 21, 2022 at 8:39 AM Brian Foster <bfoster@redhat.com> wrote:
-> >
-> > On Fri, Sep 16, 2022 at 02:02:31PM -0700, Sarthak Kukreti wrote:
-> > > On Fri, Sep 16, 2022 at 4:56 AM Brian Foster <bfoster@redhat.com> wrote:
-> > > >
-> > > > On Thu, Sep 15, 2022 at 09:48:22AM -0700, Sarthak Kukreti wrote:
-> > > > > From: Sarthak Kukreti <sarthakkukreti@chromium.org>
-> > > > >
-> > > > > FALLOC_FL_PROVISION is a new fallocate() allocation mode that
-> > > > > sends a hint to (supported) thinly provisioned block devices to
-> > > > > allocate space for the given range of sectors via REQ_OP_PROVISION.
-> > > > >
-> > > > > Signed-off-by: Sarthak Kukreti <sarthakkukreti@chromium.org>
-> > > > > ---
-> > > > >  block/fops.c                | 7 ++++++-
-> > > > >  include/linux/falloc.h      | 3 ++-
-> > > > >  include/uapi/linux/falloc.h | 8 ++++++++
-> > > > >  3 files changed, 16 insertions(+), 2 deletions(-)
-> > > > >
-> > > > > diff --git a/block/fops.c b/block/fops.c
-> > > > > index b90742595317..a436a7596508 100644
-> > > > > --- a/block/fops.c
-> > > > > +++ b/block/fops.c
-> > > > ...
-> > > > > @@ -661,6 +662,10 @@ static long blkdev_fallocate(struct file *file, int mode, loff_t start,
-> > > > >               error = blkdev_issue_discard(bdev, start >> SECTOR_SHIFT,
-> > > > >                                            len >> SECTOR_SHIFT, GFP_KERNEL);
-> > > > >               break;
-> > > > > +     case FALLOC_FL_PROVISION:
-> > > > > +             error = blkdev_issue_provision(bdev, start >> SECTOR_SHIFT,
-> > > > > +                                            len >> SECTOR_SHIFT, GFP_KERNEL);
-> > > > > +             break;
-> > > > >       default:
-> > > > >               error = -EOPNOTSUPP;
-> > > > >       }
-> > > >
-> > > > Hi Sarthak,
-> > > >
-> > > > Neat mechanism.. I played with something very similar in the past (that
-> > > > was much more crudely hacked up to target dm-thin) to allow filesystems
-> > > > to request a thinly provisioned device to allocate blocks and try to do
-> > > > a better job of avoiding inactivation when overprovisioned.
-> > > >
-> > > > One thing I'm a little curious about here.. what's the need for a new
-> > > > fallocate mode? On a cursory glance, the provision mode looks fairly
-> > > > analogous to normal (mode == 0) allocation mode with the exception of
-> > > > sending the request down to the bdev. blkdev_fallocate() already maps
-> > > > some of the logical falloc modes (i.e. punch hole, zero range) to
-> > > > sending write sames or discards, etc., and it doesn't currently look
-> > > > like it supports allocation mode, so could it not map such requests to
-> > > > the underlying REQ_OP_PROVISION op?
-> > > >
-> > > > I guess the difference would be at the filesystem level where we'd
-> > > > probably need to rely on a mount option or some such to control whether
-> > > > traditional fallocate issues provision ops (like you've implemented for
-> > > > ext4) vs. the specific falloc command, but that seems fairly consistent
-> > > > with historical punch hole/discard behavior too. Hm? You might want to
-> > > > cc linux-fsdevel in future posts in any event to get some more feedback
-> > > > on how other filesystems might want to interact with such a thing.
-> > > >
-> > > Thanks for the feedback!
-> > > Argh, I completely forgot that I should add linux-fsdevel. Let me
-> > > re-send this with linux-fsdevel cc'd
-> > >
-> > > There's a slight distinction is that the current filesystem-level
-> > > controls are usually for default handling, but userspace can still
-> > > call the relevant functions manually if they need to. For example, for
-> > > ext4, the 'discard' mount option dictates whether free blocks are
-> > > discarded, but it doesn't set the policy to allow/disallow userspace
-> > > from manually punching holes into files even if the mount opt is
-> > > 'nodiscard'. FALLOC_FL_PROVISION is similar in that regard; it adds a
-> > > manual mechanism for users to provision the files' extents, that is
-> > > separate from the filesystems' default handling of provisioning files.
-> > >
-> >
-> > What I'm trying to understand is why not let blkdev_fallocate() issue a
-> > provision based on the default mode (i.e. mode == 0) of fallocate(),
-> > which is already defined to mean "perform allocation?" It currently
-> > issues discards or write zeroes based on variants of
-> > FALLOC_FL_PUNCH_HOLE without the need for a separate FALLOC_FL_DISCARD
-> > mode, for example.
-> >
-> It's mostly to keep the block device fallocate() semantics in-line and
-> consistent with the file-specific modes: I added the separate
-> filesystem fallocate() mode under the assumption that we'd want to
-> keep the traditional handling for filesystems intact with (mode == 0).
-> And for block devices, I didn't map the requests to mode == 0 so that
-> it's less confusing to describe (eg. mode == 0 on block devices will
-> issue provision; mode == 0 on files will not). It would complicate
-> loopback devices, for instance; if the loop device is backed by a
-> file, it would need to use (mode == FALLOC_FL_PROVISION) but if the
-> loop device is backed by another block device, then the fallocate()
-> call would need to switch to (mode == 0).
-> 
+The current algorithm of alloc_iova is to scan all iovas until it finds
+a gap that satisfies the condition to allocate. This can be very slow in
+some scenarios. We can optimize alloc_iova() from time complexity O(n)
+to O(log(n)).
 
-I would expect the loopback scenario for provision to behave similar to
-how discards are handled. I.e., loopback receives a provision request
-and translates that to fallocate(mode = 0). If the backing device is
-block, blkdev_fallocate(mode = 0) translates that to another provision
-request.  If the backing device is a file, the associated fallocate
-handler allocs/maps, if necessary, and then issues a provision on
-allocation, if enabled by the fs.
+In what scenarios will it be slow? Consider allocating some iova from a
+completely empty address space. These iova are being used and not
+released. The order of allocation is from high address to low address,
+and a whole segment of space is in use. The cached node points to the
+last allocated iova. An iova is released at this point, and the cached
+node will be updated to the next iova of the released iova. If an
+allocation is made at this time, it will be fast because there is a free
+space before the cached node. But doing a second allocation, it will
+probably be slow because finding a free space requires traversing the
+long in-use space.
 
-AFAICT there's no need for FL_PROVISION at all in that scenario. Is
-there a functional purpose to FL_PROVISION? Is the intent to try and
-guarantee that a provision request propagates down the I/O stack? If so,
-what happens if blocks were already preallocated in the backing file (in
-the loopback file example)?
+Bugs that may be triggered in reality:
+The version of kernel is 5.4.56.
+[Wed May 25 05:27:59 2022] watchdog: BUG:
+soft lockup - CPU#58 stuck for 23s! [ksoftirqd/58:302]
+[Wed May 25 05:27:59 2022] Call Trace:
+[Wed May 25 05:27:59 2022]  alloc_iova+0xf2/0x140
+[Wed May 25 05:27:59 2022]  alloc_iova_fast+0x56/0x251
+[Wed May 25 05:27:59 2022]  dma_ops_alloc_iova.isra.27+0x4b/0x70
+[Wed May 25 05:27:59 2022]  __map_single.isra.28+0x4a/0x1d0
+[Wed May 25 05:27:59 2022]  mlx5e_sq_xmit+0x98d/0x12b0 [mlx5_core]
 
-BTW, an unrelated thing I noticed is that blkdev_fallocate()
-unconditionally calls truncate_bdev_range(), which probably doesn't make
-sense for any sort of alloc mode.
+A single-threaded test that calls alloc_iova() and remove_iova() directly:
+1. Initialize iova_domain with a 4k granule
+2. Allocate iova of size 1 300000 times (limit = 2^48 / 2^12 -1)
+Loop step 3,4 1000 times.
+3. Randomly free an allocated iova
+4. Allocate a new iova of size 1
 
-> With the separate mode, we can describe the semantics of falllcate()
-> modes a bit more cleanly, and it is common for both files and block
-> devices:
-> 
-> 1. mode == 0: allocation at the same layer, will not provision on the
-> underlying device/filesystem (unsupported for block devices).
-> 2. mode == FALLOC_FL_PROVISION, allocation at the layer, will
-> provision on the underlying device/filesystem.
-> 
+Before optimization:
+________________________________________________________________________
+Tracing 1 functions for "alloc_iova"...
+  nsecs               : count     distribution
+    256 -> 511        : 524      |                                     |
+    512 -> 1023       : 295065   |*************************************|
+   1024 -> 2047       : 4309     |                                     |
+   2048 -> 4095       : 368      |                                     |
+   4096 -> 8191       : 240      |                                     |
+   8192 -> 16383      : 0        |                                     |
+  16384 -> 32767      : 6        |                                     |
+  32768 -> 65535      : 6        |                                     |
+  65536 -> 131071     : 13       |                                     |
+ 131072 -> 262143     : 28       |                                     |
+ 262144 -> 524287     : 65       |                                     |
+ 524288 -> 1048575    : 77       |                                     |
+1048576 -> 2097151    : 144      |                                     |
+2097152 -> 4194303    : 149      |                                     |
+4194304 -> 8388607    : 6        |                                     |
+avg = 3164 nsecs, total: 952408420 nsecs, count: 301000
 
-I think I see why you make the distinction, since the block layer
-doesn't have a "this layer only" mode, but IMO it's also quite confusing
-to say that mode == FL_PROVISION can allocate at the current and
-underlying layer(s) but mode == 0 to that underlying layer cannot.
+Tracing 1 functions for "remove_iova"...
+nsecs             : count     distribution
+  256 -> 511      : 279402   |****************************************|
+  512 -> 1023     : 21468    |***                                     |
+ 1024 -> 2047     : 127      |                                        |
+ 2048 -> 4095     : 3        |                                        |
+avg = 433 nsecs, total: 130344721 nsecs, count: 301000
+________________________________________________________________________
 
-Either way, if you want to propose a new falloc mode/modifier, it
-probably warrants a more detailed commit log with more explanation of
-the purpose, examples of behavior, perhaps some details on how the mode
-might be documented in man pages, etc.
+Optimized:
+________________________________________________________________________
+Tracing 1 functions for "alloc_iova"...
+ nsecs            : count     distribution
+   512 -> 1023    : 296014   |****************************************|
+  1024 -> 2047    : 4328     |                                        |
+  2048 -> 4095    : 517      |                                        |
+  4096 -> 8191    : 141      |                                        |
+avg = 661 nsecs, total: 198961817 nsecs, count: 301000
 
-Brian
+Tracing 1 functions for "remove_iova"...
+ nsecs            : count     distribution
+   256 -> 511     : 252871   |****************************************|
+   512 -> 1023    : 47934    |*******                                 |
+  1024 -> 2047    : 193      |                                        |
+  2048 -> 4095    : 2        |                                        |
+avg = 469 nsecs, total: 141258450 nsecs, count: 301000
+________________________________________________________________________
 
-> Block devices don't technically need to use a separate mode, but it
-> makes it much less confusing if filesystems are already using a
-> separate mode for provision.
-> 
-> Best
-> Sarthak
-> 
-> > Brian
-> >
-> > > > BTW another thing that might be useful wrt to dm-thin is to support
-> > > > FALLOC_FL_UNSHARE. I.e., it looks like the previous dm-thin patch only
-> > > > checks that blocks are allocated, but not whether those blocks are
-> > > > shared (re: lookup_result.shared). It might be useful to do the COW in
-> > > > such cases if the caller passes down a REQ_UNSHARE or some such flag.
-> > > >
-> > > That's an interesting idea! There's a few more things on the TODO list
-> > > for this patch series but I think we can follow up with a patch to
-> > > handle that as well.
-> > >
-> > > Sarthak
-> > >
-> > > > Brian
-> > > >
-> > > > > diff --git a/include/linux/falloc.h b/include/linux/falloc.h
-> > > > > index f3f0b97b1675..a0e506255b20 100644
-> > > > > --- a/include/linux/falloc.h
-> > > > > +++ b/include/linux/falloc.h
-> > > > > @@ -30,7 +30,8 @@ struct space_resv {
-> > > > >                                        FALLOC_FL_COLLAPSE_RANGE |     \
-> > > > >                                        FALLOC_FL_ZERO_RANGE |         \
-> > > > >                                        FALLOC_FL_INSERT_RANGE |       \
-> > > > > -                                      FALLOC_FL_UNSHARE_RANGE)
-> > > > > +                                      FALLOC_FL_UNSHARE_RANGE |                          \
-> > > > > +                                      FALLOC_FL_PROVISION)
-> > > > >
-> > > > >  /* on ia32 l_start is on a 32-bit boundary */
-> > > > >  #if defined(CONFIG_X86_64)
-> > > > > diff --git a/include/uapi/linux/falloc.h b/include/uapi/linux/falloc.h
-> > > > > index 51398fa57f6c..2d323d113eed 100644
-> > > > > --- a/include/uapi/linux/falloc.h
-> > > > > +++ b/include/uapi/linux/falloc.h
-> > > > > @@ -77,4 +77,12 @@
-> > > > >   */
-> > > > >  #define FALLOC_FL_UNSHARE_RANGE              0x40
-> > > > >
-> > > > > +/*
-> > > > > + * FALLOC_FL_PROVISION acts as a hint for thinly provisioned devices to allocate
-> > > > > + * blocks for the range/EOF.
-> > > > > + *
-> > > > > + * FALLOC_FL_PROVISION can only be used with allocate-mode fallocate.
-> > > > > + */
-> > > > > +#define FALLOC_FL_PROVISION          0x80
-> > > > > +
-> > > > >  #endif /* _UAPI_FALLOC_H_ */
-> > > > > --
-> > > > > 2.31.0
-> > > > >
-> > > >
-> > >
-> >
-> 
+Test results from  Jie Wang <wangjie125@huawei.com>:
+________________________________________________________________________
+nic's rx performance in large-capacity scenarios:
+"before" row is the result of 5.19 rc4. "after" row means 5.19 rc4 with
+this patch, the unit is Mbits/s.
+          1     2     3     4     5     6     7     8
+before  55430 76701 84194 77560 88292 90106 87770 77273
+after   92770 92767 92792 92764 92742 92696 92781 92756
+________________________________________________________________________
+
+Introduce the improved algorithm:
+
+------------------------------------------------------------------------
+| gap1  |iova1| gap2 |iova2| gap3 |iova3|   gap4  |iova4| gap5  |anchor|
+------------------------------------------------------------------------
+
+let A = allocatable_size
+let B = max_allocatable_size
+                    ____________
+                  /    iova2     \      B = max( left_child->B,
+                 |       A        |              right_child->B,
+                  \      B       /               A)
+                    ------------
+                   /            \
+                  /              \
+    ____________                    ____________
+  /    iova1     \                /    iova4     \
+ |       A        |              |       A        |
+  \      B       /                \      B        /
+    ------------                    ------------
+                                   /            \
+                                  /              \
+                    ____________                    ____________
+                  /    iova3     \                /    anchor    \
+                 |       A        |              |       A        |
+                  \      B       /                \      B        /
+                    ------------                    ------------
+
+Define the gap of a iova is the gap between the iova and it's previous
+iova. Such as the gap of iova3 is gap3.This gap can be used to allocate.
+
+Add three variables to struct iova.
+prev_iova:
+         point to the previous iova, sush as iova3->prev_iova point to
+         iova2.
+
+allocatable_size:
+         allocatable_size is the max size can be allocated from a gap.
+         It is not the length of a gap because the allocated address
+         may need to be aligned.
+
+max_allocatable_size:
+         max_allocatable_size is the max allocatable_size of all iova's
+         gap in the subtree.
+
+         max_allocatable_size = max( left_child->max_allocatable_size,
+                                     right_child->max_allocatable_size,
+                                     allocatable_size)
+
+We can use rbtree_augmented to maintain max_allocatable_size in time
+complexity O(log(n)).
+
+In the rbtree, with the max_allocatable_size and allocatable_size,
+searching the gap to allocate is fast and the time complexity is
+O(log(n)).
+
+Signed-off-by: Peng Zhang <zhangpeng.00@bytedance.com>
+Reviewed-by: Ethan Zhao <haifeng.zhao@linux.intel.com>
+Tested-by: Jie Wang <wangjie125@huawei.com>
+---
+ drivers/iommu/iova.c | 277 +++++++++++++++++++++++++++++++++----------
+ include/linux/iova.h |  10 +-
+ 2 files changed, 221 insertions(+), 66 deletions(-)
+
+diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
+index db77aa675145..44f9deee9ef4 100644
+--- a/drivers/iommu/iova.c
++++ b/drivers/iommu/iova.c
+@@ -43,6 +43,60 @@ static struct iova *to_iova(struct rb_node *node)
+ 	return rb_entry(node, struct iova, node);
+ }
+ 
++/*
++ * We can't judge whether it can be allocated only by a given interval length
++ * because the address may be aligned.
++ * This function computes the max allocatable size for a given interval.
++ * The time complexity of this function is O(log(n)).
++ */
++static unsigned long __compute_allocatable_size(unsigned long lo,
++						unsigned long hi)
++{
++	unsigned long allocatable_size = 0;
++
++	if (lo == 0)
++		return hi;
++	while (lo < hi) {
++		/*
++		 * delta is the max size can be allocated from lo.
++		 * The address may be aligned so it isn't (hi - lo).
++		 */
++		unsigned long delta = 1UL << __ffs64(lo);
++
++		if (hi - lo <= delta) {
++			allocatable_size = max(allocatable_size, hi - lo);
++			break;
++		}
++		allocatable_size = max(allocatable_size, delta);
++		lo += delta;
++	}
++	return allocatable_size;
++}
++
++static inline unsigned long prev_iova_high(struct iova *iova)
++{
++	return iova->prev_iova ? iova->prev_iova->pfn_hi + 1 : 0;
++}
++
++static inline unsigned long iova_compute_allocatable_size(struct iova *iova)
++{
++	return __compute_allocatable_size(prev_iova_high(iova), iova->pfn_lo);
++}
++
++static inline unsigned long iova_get_allocatable_size(struct iova *iova)
++{
++	return iova->allocatable_size;
++}
++
++RB_DECLARE_CALLBACKS_MAX(static, iova_gap_callbacks, struct iova, node,
++			 unsigned long, max_allocatable_size,
++			 iova_get_allocatable_size)
++
++static inline void iova_max_allocatable_size_update(struct iova *iova)
++{
++	iova_gap_callbacks_propagate(&iova->node, NULL);
++}
++
+ void
+ init_iova_domain(struct iova_domain *iovad, unsigned long granule,
+ 	unsigned long start_pfn)
+@@ -63,8 +117,16 @@ init_iova_domain(struct iova_domain *iovad, unsigned long granule,
+ 	iovad->dma_32bit_pfn = 1UL << (32 - iova_shift(iovad));
+ 	iovad->max32_alloc_size = iovad->dma_32bit_pfn;
+ 	iovad->anchor.pfn_lo = iovad->anchor.pfn_hi = IOVA_ANCHOR;
++	iovad->anchor.prev_iova = NULL;
++	iovad->anchor.allocatable_size =
++				__compute_allocatable_size(0, IOVA_ANCHOR);
++	iovad->anchor.max_allocatable_size  = iovad->anchor.allocatable_size;
++
+ 	rb_link_node(&iovad->anchor.node, NULL, &iovad->rbroot.rb_node);
+ 	rb_insert_color(&iovad->anchor.node, &iovad->rbroot);
++
++	if (start_pfn)
++		reserve_iova(iovad, 0, start_pfn - 1);
+ }
+ EXPORT_SYMBOL_GPL(init_iova_domain);
+ 
+@@ -87,7 +149,8 @@ __cached_rbnode_insert_update(struct iova_domain *iovad, struct iova *new)
+ }
+ 
+ static void
+-__cached_rbnode_delete_update(struct iova_domain *iovad, struct iova *free)
++__cached_rbnode_delete_update(struct iova_domain *iovad, struct iova *free,
++			      struct rb_node *next)
+ {
+ 	struct iova *cached_iova;
+ 
+@@ -95,51 +158,32 @@ __cached_rbnode_delete_update(struct iova_domain *iovad, struct iova *free)
+ 	if (free == cached_iova ||
+ 	    (free->pfn_hi < iovad->dma_32bit_pfn &&
+ 	     free->pfn_lo >= cached_iova->pfn_lo))
+-		iovad->cached32_node = rb_next(&free->node);
++		iovad->cached32_node = next;
+ 
+ 	if (free->pfn_lo < iovad->dma_32bit_pfn)
+ 		iovad->max32_alloc_size = iovad->dma_32bit_pfn;
+ 
+ 	cached_iova = to_iova(iovad->cached_node);
+ 	if (free->pfn_lo >= cached_iova->pfn_lo)
+-		iovad->cached_node = rb_next(&free->node);
++		iovad->cached_node = next;
+ }
+ 
+-static struct rb_node *iova_find_limit(struct iova_domain *iovad, unsigned long limit_pfn)
++static struct rb_node *iova_find_limit(struct iova_domain *iovad,
++				       unsigned long limit_pfn)
+ {
+-	struct rb_node *node, *next;
+-	/*
+-	 * Ideally what we'd like to judge here is whether limit_pfn is close
+-	 * enough to the highest-allocated IOVA that starting the allocation
+-	 * walk from the anchor node will be quicker than this initial work to
+-	 * find an exact starting point (especially if that ends up being the
+-	 * anchor node anyway). This is an incredibly crude approximation which
+-	 * only really helps the most likely case, but is at least trivially easy.
+-	 */
+-	if (limit_pfn > iovad->dma_32bit_pfn)
+-		return &iovad->anchor.node;
+-
+-	node = iovad->rbroot.rb_node;
+-	while (to_iova(node)->pfn_hi < limit_pfn)
+-		node = node->rb_right;
+-
+-search_left:
+-	while (node->rb_left && to_iova(node->rb_left)->pfn_lo >= limit_pfn)
+-		node = node->rb_left;
+-
+-	if (!node->rb_left)
+-		return node;
+-
+-	next = node->rb_left;
+-	while (next->rb_right) {
+-		next = next->rb_right;
+-		if (to_iova(next)->pfn_lo >= limit_pfn) {
+-			node = next;
+-			goto search_left;
+-		}
+-	}
++	struct rb_node *curr = iovad->rbroot.rb_node;
++
++	while (curr) {
++		struct iova *iova = to_iova(curr);
+ 
+-	return node;
++		if (limit_pfn - 1 > iova->pfn_hi)
++			curr = curr->rb_right;
++		else if (limit_pfn <= prev_iova_high(iova))
++			curr = curr->rb_left;
++		else
++			break;
++	}
++	return curr;
+ }
+ 
+ /* Insert the iova into domain rbtree by holding writer lock */
+@@ -148,6 +192,7 @@ iova_insert_rbtree(struct rb_root *root, struct iova *iova,
+ 		   struct rb_node *start)
+ {
+ 	struct rb_node **new, *parent = NULL;
++	struct iova *next_iova;
+ 
+ 	new = (start) ? &start : &(root->rb_node);
+ 	/* Figure out where to put new node */
+@@ -166,61 +211,151 @@ iova_insert_rbtree(struct rb_root *root, struct iova *iova,
+ 		}
+ 	}
+ 	/* Add new node and rebalance tree. */
++
+ 	rb_link_node(&iova->node, parent, new);
+-	rb_insert_color(&iova->node, root);
++
++	next_iova = to_iova(rb_next(&iova->node));
++	iova->prev_iova = next_iova->prev_iova;
++	next_iova->prev_iova = iova;
++
++	iova->allocatable_size = iova_compute_allocatable_size(iova);
++	next_iova->allocatable_size = iova_compute_allocatable_size(next_iova);
++
++	/*
++	 * Do't swap the following two lines, because next_iova is the ancestor
++	 * of iova and updating iova first is faster.
++	 */
++	iova_max_allocatable_size_update(iova);
++	iova_max_allocatable_size_update(next_iova);
++
++	rb_insert_augmented(&iova->node, root, &iova_gap_callbacks);
++}
++
++static inline bool check_interval(unsigned long lo, unsigned long hi,
++				  unsigned long limit_pfn, unsigned long size,
++				  unsigned long align_mask)
++{
++	hi = min(hi, limit_pfn);
++	if (lo >= hi)
++		return false;
++	if (hi >= size && ((hi - size) & align_mask) >= lo)
++		return true;
++	return false;
+ }
+ 
+ static int __alloc_and_insert_iova_range(struct iova_domain *iovad,
+ 		unsigned long size, unsigned long limit_pfn,
+ 			struct iova *new, bool size_aligned)
+ {
+-	struct rb_node *curr, *prev;
+-	struct iova *curr_iova;
+ 	unsigned long flags;
+-	unsigned long new_pfn, retry_pfn;
++	struct rb_node *curr;
++	struct rb_node *parent;
++	struct iova *curr_iova;
+ 	unsigned long align_mask = ~0UL;
+-	unsigned long high_pfn = limit_pfn, low_pfn = iovad->start_pfn;
++	bool ignore = false;
+ 
+ 	if (size_aligned)
+ 		align_mask <<= fls_long(size - 1);
+ 
+-	/* Walk the tree backwards */
+ 	spin_lock_irqsave(&iovad->iova_rbtree_lock, flags);
++
+ 	if (limit_pfn <= iovad->dma_32bit_pfn &&
+ 			size >= iovad->max32_alloc_size)
+ 		goto iova32_full;
+ 
+ 	curr = __get_cached_rbnode(iovad, limit_pfn);
+ 	curr_iova = to_iova(curr);
+-	retry_pfn = curr_iova->pfn_hi + 1;
+ 
+-retry:
+-	do {
+-		high_pfn = min(high_pfn, curr_iova->pfn_lo);
+-		new_pfn = (high_pfn - size) & align_mask;
+-		prev = curr;
+-		curr = rb_prev(curr);
+-		curr_iova = to_iova(curr);
+-	} while (curr && new_pfn <= curr_iova->pfn_hi && new_pfn >= low_pfn);
+-
+-	if (high_pfn < size || new_pfn < low_pfn) {
+-		if (low_pfn == iovad->start_pfn && retry_pfn < limit_pfn) {
+-			high_pfn = limit_pfn;
+-			low_pfn = retry_pfn;
+-			curr = iova_find_limit(iovad, limit_pfn);
+-			curr_iova = to_iova(curr);
+-			goto retry;
++	if (check_interval(prev_iova_high(curr_iova),
++			   curr_iova->pfn_lo, limit_pfn,
++			   size, align_mask))
++		goto found;
++
++	/* If limit_pfn > dma_32bit_pfn, searching list could be faster? */
++	if (limit_pfn > iovad->dma_32bit_pfn) {
++		int count = 0;
++
++		curr_iova = to_iova(&iovad->anchor.node);
++		while (curr_iova) {
++			if (check_interval(prev_iova_high(curr_iova),
++					   curr_iova->pfn_lo, limit_pfn,
++					   size, align_mask))
++				goto found;
++			/* If try many times, break it. */
++			if (++count >= 32)
++				goto search_rbtree;
++			curr_iova = curr_iova->prev_iova;
+ 		}
+ 		iovad->max32_alloc_size = size;
+ 		goto iova32_full;
+ 	}
+ 
++search_rbtree:
++	curr = iova_find_limit(iovad, limit_pfn);
++	curr_iova = to_iova(curr);
++
++	if (check_interval(prev_iova_high(curr_iova),
++			   curr_iova->pfn_lo, limit_pfn,
++			   size, align_mask))
++		goto found;
++
++	while (true) {
++		/* Check left subtree */
++		if (!ignore && curr->rb_left) {
++			curr_iova = to_iova(curr->rb_left);
++			if (curr_iova->max_allocatable_size >= size)
++				goto check_subtree;
++		}
++
++		parent = rb_parent(curr);
++		if (parent == NULL)
++			break;
++		/*
++		 * If current node is the left child of it's parent,
++		 * the parent node and the parent's right sub_tree should not
++		 * to be checked because they exceed the limit_pfn.
++		 */
++		ignore = parent->rb_left == curr;
++		/* Goto parent */
++		curr = parent;
++
++		/* Check current node. */
++		if (!ignore) {
++			curr_iova = to_iova(curr);
++			if (curr_iova->allocatable_size >= size)
++				goto found;
++		}
++	}
++	if (limit_pfn >= iovad->dma_32bit_pfn)
++		iovad->max32_alloc_size = size;
++	goto iova32_full;
++
++check_subtree:
++	/* It should be must successfully found here */
++	while (true) {
++		if (curr_iova->allocatable_size >= size)
++			goto found;
++
++		curr = &curr_iova->node;
++		if (curr->rb_right &&
++			to_iova(curr->rb_right)->max_allocatable_size >= size) {
++			curr_iova = to_iova(curr->rb_right);
++			continue;
++		}
++		WARN_ON(curr->rb_left == NULL);
++		curr_iova = to_iova(curr->rb_left);
++	}
++
++found:
+ 	/* pfn_lo will point to size aligned address if size_aligned is set */
+-	new->pfn_lo = new_pfn;
++	new->pfn_lo = (min(curr_iova->pfn_lo, limit_pfn) - size) & align_mask;
+ 	new->pfn_hi = new->pfn_lo + size - 1;
+ 
+-	/* If we have 'prev', it's a valid place to start the insertion. */
+-	iova_insert_rbtree(&iovad->rbroot, new, prev);
++	/*
++	 * If we have 'prev' or 'next',
++	 * it's a valid place to start the insertion.
++	 */
++	iova_insert_rbtree(&iovad->rbroot, new, &curr_iova->node);
+ 	__cached_rbnode_insert_update(iovad, new);
+ 
+ 	spin_unlock_irqrestore(&iovad->iova_rbtree_lock, flags);
+@@ -352,9 +487,18 @@ private_find_iova(struct iova_domain *iovad, unsigned long pfn)
+ 
+ static void remove_iova(struct iova_domain *iovad, struct iova *iova)
+ {
++	struct rb_node *next;
++	struct iova *next_iova;
+ 	assert_spin_locked(&iovad->iova_rbtree_lock);
+-	__cached_rbnode_delete_update(iovad, iova);
+-	rb_erase(&iova->node, &iovad->rbroot);
++
++	next = rb_next(&iova->node);
++	__cached_rbnode_delete_update(iovad, iova, next);
++
++	next_iova = to_iova(next);
++	next_iova->prev_iova = iova->prev_iova;
++	next_iova->allocatable_size = iova_compute_allocatable_size(next_iova);
++	iova_max_allocatable_size_update(next_iova);
++	rb_erase_augmented(&iova->node, &iovad->rbroot, &iova_gap_callbacks);
+ }
+ 
+ /**
+@@ -554,8 +698,11 @@ static void
+ __adjust_overlap_range(struct iova *iova,
+ 	unsigned long *pfn_lo, unsigned long *pfn_hi)
+ {
+-	if (*pfn_lo < iova->pfn_lo)
++	if (*pfn_lo < iova->pfn_lo) {
+ 		iova->pfn_lo = *pfn_lo;
++		iova->allocatable_size = iova_compute_allocatable_size(iova);
++		iova_max_allocatable_size_update(iova);
++	}
+ 	if (*pfn_hi > iova->pfn_hi)
+ 		*pfn_lo = iova->pfn_hi + 1;
+ }
+diff --git a/include/linux/iova.h b/include/linux/iova.h
+index 320a70e40233..8eb9ea339289 100644
+--- a/include/linux/iova.h
++++ b/include/linux/iova.h
+@@ -11,7 +11,7 @@
+ 
+ #include <linux/types.h>
+ #include <linux/kernel.h>
+-#include <linux/rbtree.h>
++#include <linux/rbtree_augmented.h>
+ #include <linux/dma-mapping.h>
+ 
+ /* iova structure */
+@@ -19,6 +19,14 @@ struct iova {
+ 	struct rb_node	node;
+ 	unsigned long	pfn_hi; /* Highest allocated pfn */
+ 	unsigned long	pfn_lo; /* Lowest allocated pfn */
++	struct iova	*prev_iova;
++	/*
++	 * The max size of iova can be allocated from a gap between this iova
++	 * and previous iova.
++	 */
++	unsigned long	allocatable_size;
++	/* The maximum value of all allocatable_size in the subtree. */
++	unsigned long	max_allocatable_size;
+ };
+ 
+ 
+-- 
+2.20.1
 
