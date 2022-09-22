@@ -2,137 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 547375E5DAC
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 10:41:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B69F5E5DB2
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 10:42:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230301AbiIVIlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 04:41:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38884 "EHLO
+        id S230204AbiIVIlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 04:41:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbiIVIlS (ORCPT
+        with ESMTP id S229717AbiIVIlt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 04:41:18 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3FCCCDCD7
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 01:41:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663836077; x=1695372077;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XQUe670CShxlWUDBqu1z+myoybYpLDIoh+28QXjCsow=;
-  b=GaFRPgClEHaWx12EiNUqBVla+crH26D6WAwMMOYbfNsW4RQN+PlPf74E
-   zqngTvVXf45CM+IX32yggx5H+wkPrzum/sao24tnwitLti5H/NGELACBp
-   ofy/+872utR64rcWm+1dNNwtaL8yBhxrO7F+HVxVLI6ytofMSY8uJzi5j
-   Ps6C5bnCbb21kI47wRlBe6F1xBmS95amXoTjrmdaOnQe2UdnbdMSBGiUG
-   dbsU3k+rgKjV4nfnfFBu6ayaKis2VwyD+8Nw0lUroRnCf67rOiVozPCn2
-   971dk7FVyFja4stMKmAAY+rIlhAkwfFPwhkLmc2CxOsq4Ei78VM0ZvF6r
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="362006875"
-X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
-   d="scan'208";a="362006875"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 01:41:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
-   d="scan'208";a="652883646"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 22 Sep 2022 01:41:14 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1obHlh-0004VQ-17;
-        Thu, 22 Sep 2022 08:41:13 +0000
-Date:   Thu, 22 Sep 2022 16:40:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Binglei Wang <l3b2w1@gmail.com>, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu,
-        naveen.n.rao@linux.ibm.com, anil.s.keshavamurthy@intel.com,
-        davem@davemloft.net, hiramat@kernel.org
-Cc:     kbuild-all@lists.01.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Binglei Wang <l3b2w1@gmail.com>
-Subject: Re: [PATCH] rethook: add riscv rethook implementation.
-Message-ID: <202209221624.rWsWQbRt-lkp@intel.com>
-References: <20220922040443.605175-1-l3b2w1@gmail.com>
+        Thu, 22 Sep 2022 04:41:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFAB5CDCCF;
+        Thu, 22 Sep 2022 01:41:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 11F0D611DF;
+        Thu, 22 Sep 2022 08:41:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B4DBC433C1;
+        Thu, 22 Sep 2022 08:41:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1663836106;
+        bh=0eoFjcQopkDVXGcndNRjQDg5nJ3lKUmDPXyMxFGOeHo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iX6RKUvT1p92sezDzPubezh1aonVxG6Swuk58miPNcurs6dHVCCYWP2RuGqh8HQaj
+         UGn1AfTG1Bn5Gx2ukwC64vlAWHwOh9BVYg83bh2AuAnosLatGqCrYAZLwZxYU8lBKy
+         FfjJS/enFgr6FKW43CxE+XjK/YH3vnuYmhAxtj0o=
+Date:   Thu, 22 Sep 2022 10:41:43 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Sean Young <sean@mess.org>, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Oliver Neukum <oneukum@suse.com>, stable@vger.kernel.org,
+        Dongliang Mu <mudongliangabcd@gmail.com>
+Subject: Re: [PATCH RESEND] media: flexcop-usb: fix endpoint type check
+Message-ID: <YywfxwBmdmvQ0i21@kroah.com>
+References: <20220822151027.27026-1-johan@kernel.org>
+ <YymBM1wJLAsBDU4E@hovoldconsulting.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220922040443.605175-1-l3b2w1@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YymBM1wJLAsBDU4E@hovoldconsulting.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Binglei,
+On Tue, Sep 20, 2022 at 11:00:35AM +0200, Johan Hovold wrote:
+> Mauro and Hans,
+> 
+> On Mon, Aug 22, 2022 at 05:10:27PM +0200, Johan Hovold wrote:
+> > Commit d725d20e81c2 ("media: flexcop-usb: sanity checking of endpoint
+> > type") tried to add an endpoint type sanity check for the single
+> > isochronous endpoint but instead broke the driver by checking the wrong
+> > descriptor or random data beyond the last endpoint descriptor.
+> > 
+> > Make sure to check the right endpoint descriptor.
+> > 
+> > Fixes: d725d20e81c2 ("media: flexcop-usb: sanity checking of endpoint type")
+> > Cc: Oliver Neukum <oneukum@suse.com>
+> > Cc: stable@vger.kernel.org	# 5.9
+> > Reported-by: Dongliang Mu <mudongliangabcd@gmail.com>
+> > Signed-off-by: Johan Hovold <johan@kernel.org>
+> > ---
+> > 
+> > It's been two months and two completely ignored reminders so resending.
+> > 
+> > Can someone please pick this fix up and let me know when that has been
+> > done?
+> 
+> It's been another month so sending yet another reminder. This driver as
+> been broken since 5.9 and I posted this fix almost four months ago and
+> have sent multiple reminders since.
+> 
+> Can someone please pick this one and the follow-up cleanups up?
 
-Thank you for the patch! Yet something to improve:
+I've taken this one in my tree now.  Which one were the "follow-up"
+cleanups?
 
-[auto build test ERROR on rostedt-trace/for-next]
-[also build test ERROR on linus/master v6.0-rc6 next-20220921]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+thanks,
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Binglei-Wang/rethook-add-riscv-rethook-implementation/20220922-120748
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git for-next
-config: arc-defconfig (https://download.01.org/0day-ci/archive/20220922/202209221624.rWsWQbRt-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/3f86f610d114317cd7f7a7a1c9116fa0b916667a
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Binglei-Wang/rethook-add-riscv-rethook-implementation/20220922-120748
-        git checkout 3f86f610d114317cd7f7a7a1c9116fa0b916667a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from arch/arc/kernel/kprobes.c:7:
-   include/linux/kprobes.h: In function 'arch_prepare_kretprobe':
-   include/linux/kprobes.h:225:49: error: 'struct pt_regs' has no member named 'ra'; did you mean 'r0'?
-     225 |         ri->ret_addr = (kprobe_opcode_t *)regs->ra;
-         |                                                 ^~
-         |                                                 r0
-   include/linux/kprobes.h:227:15: error: 'struct pt_regs' has no member named 'ra'; did you mean 'r0'?
-     227 |         regs->ra = (unsigned long) &__kretprobe_trampoline;
-         |               ^~
-         |               r0
-   arch/arc/kernel/kprobes.c: At top level:
-   arch/arc/kernel/kprobes.c:193:15: warning: no previous prototype for 'arc_kprobe_handler' [-Wmissing-prototypes]
-     193 | int __kprobes arc_kprobe_handler(unsigned long addr, struct pt_regs *regs)
-         |               ^~~~~~~~~~~~~~~~~~
->> arch/arc/kernel/kprobes.c:371:16: error: redefinition of 'arch_prepare_kretprobe'
-     371 | void __kprobes arch_prepare_kretprobe(struct kretprobe_instance *ri,
-         |                ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/kprobes.h:222:29: note: previous definition of 'arch_prepare_kretprobe' with type 'void(struct kretprobe_instance *, struct pt_regs *)'
-     222 | static nokprobe_inline void arch_prepare_kretprobe(struct kretprobe_instance *ri,
-         |                             ^~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/arch_prepare_kretprobe +371 arch/arc/kernel/kprobes.c
-
-4d86dfbbda09b3 Vineet Gupta     2013-01-22  370  
-4d86dfbbda09b3 Vineet Gupta     2013-01-22 @371  void __kprobes arch_prepare_kretprobe(struct kretprobe_instance *ri,
-4d86dfbbda09b3 Vineet Gupta     2013-01-22  372  				      struct pt_regs *regs)
-4d86dfbbda09b3 Vineet Gupta     2013-01-22  373  {
-4d86dfbbda09b3 Vineet Gupta     2013-01-22  374  
-4d86dfbbda09b3 Vineet Gupta     2013-01-22  375  	ri->ret_addr = (kprobe_opcode_t *) regs->blink;
-f75dd136b65ccc Masami Hiramatsu 2020-08-29  376  	ri->fp = NULL;
-4d86dfbbda09b3 Vineet Gupta     2013-01-22  377  
-4d86dfbbda09b3 Vineet Gupta     2013-01-22  378  	/* Replace the return addr with trampoline addr */
-adf8a61a940c49 Masami Hiramatsu 2021-09-14  379  	regs->blink = (unsigned long)&__kretprobe_trampoline;
-4d86dfbbda09b3 Vineet Gupta     2013-01-22  380  }
-4d86dfbbda09b3 Vineet Gupta     2013-01-22  381  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+greg k-h
