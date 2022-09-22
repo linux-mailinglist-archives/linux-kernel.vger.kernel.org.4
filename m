@@ -2,105 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00C8A5E6503
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 16:21:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7920B5E64F8
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 16:20:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231755AbiIVOVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 10:21:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35916 "EHLO
+        id S229805AbiIVOUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 10:20:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231828AbiIVOUp (ORCPT
+        with ESMTP id S230335AbiIVOUS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 10:20:45 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 91C85895F5;
-        Thu, 22 Sep 2022 07:20:43 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E72BD22BE;
-        Thu, 22 Sep 2022 07:20:49 -0700 (PDT)
-Received: from donnerap.arm.com (donnerap.cambridge.arm.com [10.1.197.42])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CD3B53F73B;
-        Thu, 22 Sep 2022 07:20:41 -0700 (PDT)
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Liviu Dudau <liviu.dudau@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Grant Likely <grant.likely@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Pawel Moll <Pawel.Moll@arm.com>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] arm64: dts: arm: add copyright messages (Linaro)
-Date:   Thu, 22 Sep 2022 15:20:10 +0100
-Message-Id: <20220922142010.1412640-4-andre.przywara@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220922142010.1412640-1-andre.przywara@arm.com>
-References: <20220922142010.1412640-1-andre.przywara@arm.com>
+        Thu, 22 Sep 2022 10:20:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D34AF83051;
+        Thu, 22 Sep 2022 07:20:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8E066B8378E;
+        Thu, 22 Sep 2022 14:20:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3B593C433D6;
+        Thu, 22 Sep 2022 14:20:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663856415;
+        bh=Z5KklAxJJjnZ2bt/Zb2GDJC3FTImU2unFl2S6/hePIY=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=lq12is0of7Ve3Jk4KC1OuR0ZShoYkMbjNoZOpGQU3IXo6IQaPDmwKY/sqIH6jLvlt
+         kySQn3mU3Pu0OWqKHBIDisbIN7Zbz/bQFI8+pL2dsv0bqOT4gDV7Qo8XgoaZfbsiZL
+         /SDNUZJBRKb/vDLcl8lyXoYeCLzuidrBm4SqX1Nmp2tXZABPPFMjljvyOxm/DWMRmc
+         5/VlNPVaaEzTJUg1pPRflj35WrEOsXJCiubhXW5K7enP7vrK1vdQUiZNklFYZNboN0
+         cKZokey6aMXyBcXHAg9F5rHooBWdHni+Lzr11A5fAXjBBKbBWbVYErWZJVJFqLJowf
+         pFUt0rP0e0+Vg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1ADB6E4D03D;
+        Thu, 22 Sep 2022 14:20:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2] net: sched: fix possible refcount leak in tc_new_tfilter()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166385641510.9882.16423342832094915476.git-patchwork-notify@kernel.org>
+Date:   Thu, 22 Sep 2022 14:20:15 +0000
+References: <20220921092734.31700-1-hbh25y@gmail.com>
+In-Reply-To: <20220921092734.31700-1-hbh25y@gmail.com>
+To:     Hangyu Hua <hbh25y@gmail.com>
+Cc:     jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, vladbu@mellanox.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, vladbu@nvidia.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The GPL license seems to require an explicit copyright statement.
+Hello:
 
-Add the appropriate line into files which were lacking this. This
-assigns the copyright to Linaro, for files which were originally
-contributed by Linaro employees or assignees.
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
----
- arch/arm64/boot/dts/arm/fvp-base-revc.dts            | 2 ++
- arch/arm64/boot/dts/arm/juno-cs-r1r2.dtsi            | 5 +++++
- arch/arm64/boot/dts/arm/rtsm_ve-motherboard-rs2.dtsi | 2 ++
- 3 files changed, 9 insertions(+)
+On Wed, 21 Sep 2022 17:27:34 +0800 you wrote:
+> tfilter_put need to be called to put the refount got by tp->ops->get to
+> avoid possible refcount leak when chain->tmplt_ops != NULL and
+> chain->tmplt_ops != tp->ops.
+> 
+> Fixes: 7d5509fa0d3d ("net: sched: extend proto ops with 'put' callback")
+> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+> Reviewed-by: Vlad Buslov <vladbu@nvidia.com>
+> 
+> [...]
 
-diff --git a/arch/arm64/boot/dts/arm/fvp-base-revc.dts b/arch/arm64/boot/dts/arm/fvp-base-revc.dts
-index 45cef48378d07..9d0d1a39b9c31 100644
---- a/arch/arm64/boot/dts/arm/fvp-base-revc.dts
-+++ b/arch/arm64/boot/dts/arm/fvp-base-revc.dts
-@@ -2,6 +2,8 @@
- /*
-  * ARM Ltd. Fast Models
-  *
-+ * Copyright (c) 2017-2022 Linaro Ltd.
-+ *
-  * Architecture Envelope Model (AEM) ARMv8-A
-  * ARMAEMv8AMPCT
-  *
-diff --git a/arch/arm64/boot/dts/arm/juno-cs-r1r2.dtsi b/arch/arm64/boot/dts/arm/juno-cs-r1r2.dtsi
-index 4299287e1e284..e9f2eb53712d8 100644
---- a/arch/arm64/boot/dts/arm/juno-cs-r1r2.dtsi
-+++ b/arch/arm64/boot/dts/arm/juno-cs-r1r2.dtsi
-@@ -1,4 +1,9 @@
- // SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+/*
-+ * Arm Juno board common Coresight definitions
-+ *
-+ * Copyright (c) 2017-2022 Linaro Ltd.
-+ */
- / {
- 	funnel@20130000 { /* cssys1 */
- 		compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-diff --git a/arch/arm64/boot/dts/arm/rtsm_ve-motherboard-rs2.dtsi b/arch/arm64/boot/dts/arm/rtsm_ve-motherboard-rs2.dtsi
-index 9dd155ef09ab3..44a6e7ad287c3 100644
---- a/arch/arm64/boot/dts/arm/rtsm_ve-motherboard-rs2.dtsi
-+++ b/arch/arm64/boot/dts/arm/rtsm_ve-motherboard-rs2.dtsi
-@@ -2,6 +2,8 @@
- /*
-  * ARM Ltd. Fast Models
-  *
-+ * Copyright (c) 2017-2022 Linaro Ltd.
-+ *
-  * "rs2" extension for the v2m motherboard
-  */
- / {
+Here is the summary with links:
+  - [v2] net: sched: fix possible refcount leak in tc_new_tfilter()
+    https://git.kernel.org/netdev/net/c/c2e1cfefcac3
+
+You are awesome, thank you!
 -- 
-2.25.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
