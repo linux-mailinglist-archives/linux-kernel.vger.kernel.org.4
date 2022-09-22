@@ -2,190 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31EB35E57FB
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 03:27:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC5835E57FF
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 03:28:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230257AbiIVB04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 21:26:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47842 "EHLO
+        id S230289AbiIVB24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 21:28:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbiIVB0y (ORCPT
+        with ESMTP id S229637AbiIVB2x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 21:26:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F04C9DF9D;
-        Wed, 21 Sep 2022 18:26:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DD369B81E1A;
-        Thu, 22 Sep 2022 01:26:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8772AC43145;
-        Thu, 22 Sep 2022 01:26:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663810010;
-        bh=6OvF45eCl5d2FjxziCWsCcjLdCsAYOFNQse2WIemCjQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=iDuwNAKIcR9nkcBbRDkDpjI9/guVnVBkMqVocMaBR6eZPP4O3tNIzJGYFoqk5qlOB
-         T7kXk17eMshImBvw91L9+uk7kj+rNqzlZFAafvDz0lPgAJxI4PnvyGAkCr0U1+kI7X
-         cMSNdQW1QOfQoi81TM2o/9/OK4IIbE1Ge3emToO0KwC3emoXcOdU81e9r7eoA+sqvd
-         eJ7Illgs4SWf91dAn02emRLgcn9kI65JxSIjGn91YIKLJyxlrVkJEJ3SWPCOF+l/hU
-         ySvsvLratHV3Q1BSq4xUvhUsPmRse/JUXGP+Au6rWsbk9hZbvuuBiMos6y4xkNsupp
-         HXjiJUbqr3Q2g==
-Received: by mail-ot1-f48.google.com with SMTP id j17-20020a9d7f11000000b0065a20212349so5206522otq.12;
-        Wed, 21 Sep 2022 18:26:50 -0700 (PDT)
-X-Gm-Message-State: ACrzQf2u9YNFGyxFpUtvvLy7cS4SxudTQKys4cpjDIrLiGhm0iHkt3nc
-        byIGcDZYs6gSXAXTxz+zgfKV2iENRk60NWv2Psc=
-X-Google-Smtp-Source: AMsMyM7sUE7ECUkudO8TSiHPeKKpJfG4rB1Npzrr8yg2CelDFVDUFYydQ/U0cLV7L/t1G7ZtbXSsham+YdjuDi0Aqx0=
-X-Received: by 2002:a05:6830:1213:b0:65a:9a2:daf3 with SMTP id
- r19-20020a056830121300b0065a09a2daf3mr483252otp.308.1663810009513; Wed, 21
- Sep 2022 18:26:49 -0700 (PDT)
+        Wed, 21 Sep 2022 21:28:53 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C486A346F;
+        Wed, 21 Sep 2022 18:28:53 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id 78so7654040pgb.13;
+        Wed, 21 Sep 2022 18:28:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=p7OsaPgDaE8pzyhnEYEnbmNVT1iMG/0i7m3psJG5hJU=;
+        b=JTg+FuIUoN7QXGLTOc5pFww5WflXJmVGLsZtoOkE8i4YVlX+2yEb0PC/sVFsJRhJho
+         UIW979soJAyYIY53vQ+rtvJ4GZKWxhAHeFvtiiJVI+AhXYihOTKxgddzL8iIl+zSZ7/6
+         EhdpcEdGioqkfb0JkoPx/zDyRPjyUdTiPK6DJSHS+BwjTlQ0YnfIgeh8cx4564eVRycc
+         NyKRSaT7xwW9CUd05TgKl+EJo9xsLgvRS+YStkMUEBOC4UAvfKyOfoB286al5ZNpRYX5
+         b7e4Q0AekBec0P0pVmOtxhql8zqNehth6WuR1/D4T7tA0rb7s/qwj/P35AHJgPL6qxMT
+         GYLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=p7OsaPgDaE8pzyhnEYEnbmNVT1iMG/0i7m3psJG5hJU=;
+        b=qlbgmdUD+TU9dRuNOVWcgnwB2/5QEn6iYBm5xlgmWSl89D7esf8DGtT5Xuv4dFK8fO
+         yqudTrdMJ7SuEz77aRBAdEsiwiYabKJ1gbAPXr/bIf5QZ25l33sXupgGRWm7mfI3chC+
+         NhJNYGmicjxQeUM6bV88LcdW3ZNnTiPHQE5GSRpP+0GA1Zpr8eKnVDcL33j58+TBr0Jh
+         b6MeSqH9uPHQD63e03vEMqxsLcP1ZyuQlT4aPE1RcHOZ3qL7KTNp/5evp2CBcK8WXT5p
+         47Kq+KlWa2qLkvbNPgqZORARq7azioHPAbGC6/rCQnGvG0w/8HBxc9RBqTU4TrVLAGYg
+         jlUA==
+X-Gm-Message-State: ACrzQf39uloB8go5oU7L26UnSq3iBJ/JoLDtqAER83yelgD2n60crk+U
+        VY5nVj+AEbRB6kfgAiNpUtI=
+X-Google-Smtp-Source: AMsMyM6nUMugRddL+PWON7kDYamD0thDUMiqTGYmaKTyTlskgOnK1xqjv/gp7Ub/ZEbPIiOVj2O9rA==
+X-Received: by 2002:a63:5d5b:0:b0:439:e032:4198 with SMTP id o27-20020a635d5b000000b00439e0324198mr940633pgm.398.1663810132100;
+        Wed, 21 Sep 2022 18:28:52 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id b124-20020a636782000000b00439dfe09770sm2503724pgc.12.2022.09.21.18.28.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Sep 2022 18:28:51 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: ye.xingchen@zte.com.cn
+To:     acme@kernel.org
+Cc:     mingo@redhat.com, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, adrian.hunter@intel.com, irogers@google.com,
+        ak@linux.intel.com, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ye xingchen <ye.xingchen@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH linux-next] perf auxtrace: use strscpy() is more robust and safer
+Date:   Thu, 22 Sep 2022 01:28:46 +0000
+Message-Id: <20220922012846.232684-1-ye.xingchen@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220918155246.1203293-1-guoren@kernel.org> <20220918155246.1203293-9-guoren@kernel.org>
- <afa17bdd-2d11-4015-6e2a-7a39db931d09@huawei.com> <CAJF2gTRMt4zDQcvBOxge-4+6o1mqhWds_AiFKamdCzKJZfoKPw@mail.gmail.com>
- <df9590bc-1a61-28c0-55eb-9f9539d03144@huawei.com>
-In-Reply-To: <df9590bc-1a61-28c0-55eb-9f9539d03144@huawei.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Thu, 22 Sep 2022 09:26:37 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTSZmqW-KnL5oFrCMsf+FSyqn=W6GCtPs6983e26it8Qug@mail.gmail.com>
-Message-ID: <CAJF2gTSZmqW-KnL5oFrCMsf+FSyqn=W6GCtPs6983e26it8Qug@mail.gmail.com>
-Subject: Re: [PATCH V5 08/11] riscv: Support HAVE_IRQ_EXIT_ON_IRQ_STACK
-To:     Chen Zhongjin <chenzhongjin@huawei.com>
-Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
-        peterz@infradead.org, luto@kernel.org, conor.dooley@microchip.com,
-        heiko@sntech.de, jszhang@kernel.org, lazyparser@gmail.com,
-        falcon@tinylab.org, chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, mark.rutland@arm.com,
-        zouyipeng@huawei.com, bigeasy@linutronix.de,
-        David.Laight@aculab.com, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 21, 2022 at 7:56 PM Chen Zhongjin <chenzhongjin@huawei.com> wrote:
->
-> Hi,
->
-> Sorry to bother again, I just finished the test with your patches on
-> mine patch set.
->
-> On 2022/9/21 17:53, Guo Ren wrote:
-> > On Wed, Sep 21, 2022 at 4:34 PM Chen Zhongjin <chenzhongjin@huawei.com> wrote:
-> >> Hi,
-> >>
-> >> On 2022/9/18 23:52, guoren@kernel.org wrote:
-> >>> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-> >>> index 5f49517cd3a2..426529b84db0 100644
-> >>> --- a/arch/riscv/kernel/entry.S
-> >>> +++ b/arch/riscv/kernel/entry.S
-> >>> @@ -332,6 +332,33 @@ ENTRY(ret_from_kernel_thread)
-> >>>        tail syscall_exit_to_user_mode
-> >>>    ENDPROC(ret_from_kernel_thread)
-> >>>
-> >>> +#ifdef CONFIG_IRQ_STACKS
-> >>> +ENTRY(call_on_stack)
-> >>> +     /* Create a frame record to save our ra and fp */
-> >>> +     addi    sp, sp, -RISCV_SZPTR
-> >>> +     REG_S   ra, (sp)
-> >>> +     addi    sp, sp, -RISCV_SZPTR
-> >>> +     REG_S   fp, (sp)
-> >>> +
-> >>> +     /* Save sp in fp */
-> >>> +     move    fp, sp
-> >>> +
->
-> Considering that s0 points to previous sp normally, I think here we
-> should have 'addi fp, sp, 2*RISCV_SZPTR'.
->
-> An example below:
->
->      addi    sp, sp, -16
->      sd  ra, 8(sp)
->      sd  s0, 0(sp)
->      addi    s0, sp, 16    <- s0 is set to previous sp
->      ...
->
->      ld  ra,8(sp)
->      ld  s0,0(sp)
->      addi    sp,sp,16
->
-> So maybe it's better to save the stack frame as below:
->
->      addi    sp, sp, -2*RISCV_SZPTR
->      REG_S   ra, RISCV_SZPTR(sp)
->      REG_S   s0, (sp)
->
->      /* Save sp in fp */
->      addi    s0, sp, 2*RISCV_SZPTR
->
->      ...
->
->      /*
->       * Restore sp from prev fp, and fp, ra from the frame
->       */
->      addi    sp, s0, -2*RISCV_SZPTR
->      REG_L   ra, RISCV_SZPTR(sp)
->      REG_L   s0, (sp)
->      addi    sp, sp, 2*RISCV_SZPTR
->
->
-> Anyway, lets set fp as sp + 2 * RISCV_SZPTR, so that unwinder can
-> connect two stacks same as normal function.
->
-> I tested this with my patch and the unwinder works properly.
-Thx, you got it. My patch broke the fp chain. I would fix it in the
-next version.
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
->
->
-> Thanks for your time!
->
-> Best,
->
-> Chen
->
-> >>> +     /* Move to the new stack and call the function there */
-> >>> +     li      a3, IRQ_STACK_SIZE
-> >>> +     add     sp, a1, a3
-> >>> +     jalr    a2
-> >>> +
-> >>> +     /*
-> >>> +      * Restore sp from prev fp, and fp, ra from the frame
-> >>> +      */
-> >>> +     move    sp, fp
-> >>> +     REG_L   fp, (sp)
-> >>> +     addi    sp, sp, RISCV_SZPTR
-> >>> +     REG_L   ra, (sp)
-> >>> +     addi    sp, sp, RISCV_SZPTR
-> >>> +     ret
-> >>> +ENDPROC(call_on_stack)
-> >>> +#endif
-> >> Seems my compiler (riscv64-linux-gnu-gcc 8.4.0, cross compiling from
-> >> x86) cannot recognize the register `fp`.
-> > The whole entry.S uses s0 instead of fp, so I approve of your advice. Thx.
-> >
-> >> After I changed it to `s0` this can pass compiling.
-> >>
-> >>
-> >> Seems there is nowhere else using `fp`, can this just using `s0` instead?
-> >>
-> >> Best,
-> >>
-> >> Chen
-> >>
-> >>
+The implementation of strscpy() is more robust and safer.
 
+That's now the recommended way to copy NUL terminated strings.
 
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+---
+ tools/perf/util/auxtrace.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/tools/perf/util/auxtrace.c b/tools/perf/util/auxtrace.c
+index b59c278fe9ed..81ee28983071 100644
+--- a/tools/perf/util/auxtrace.c
++++ b/tools/perf/util/auxtrace.c
+@@ -1208,7 +1208,7 @@ void auxtrace_synth_guest_error(struct perf_record_auxtrace_error *auxtrace_erro
+ 	auxtrace_error->fmt = 1;
+ 	auxtrace_error->ip = ip;
+ 	auxtrace_error->time = timestamp;
+-	strlcpy(auxtrace_error->msg, msg, MAX_AUXTRACE_ERROR_MSG);
++	strscpy(auxtrace_error->msg, msg, MAX_AUXTRACE_ERROR_MSG);
+ 	if (machine_pid) {
+ 		auxtrace_error->fmt = 2;
+ 		auxtrace_error->machine_pid = machine_pid;
 -- 
-Best Regards
- Guo Ren
+2.25.1
