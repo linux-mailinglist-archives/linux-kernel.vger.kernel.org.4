@@ -2,208 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5AC85E6647
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 16:58:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DAD45E6648
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 16:58:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231724AbiIVO6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 10:58:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40708 "EHLO
+        id S231612AbiIVO6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 10:58:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229936AbiIVO60 (ORCPT
+        with ESMTP id S231820AbiIVO6b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 10:58:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12BCAD74D7
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 07:58:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663858704;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OK/XFudofQFEusH3ahNjOSEDQytO8VdgrYW6bk7g+q4=;
-        b=Sko+fu7KFgbYzu2uP0OnSB4TrPP8YV8zf51noIfRXFIx+eJZtdmZwfuDsj0NzpOA2NT4Bo
-        7AaAwjU7rZqloczj29m+cN2qTV5ZfZ8/zb0QFmZg+rrpNxXoFP0jQ530sMQtyaGElEC7E4
-        yEPzu749aW8PYv3ClEuEPNgUbOGzIyI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-536-WzR14NKQNeuozaK5z6xvlw-1; Thu, 22 Sep 2022 10:58:22 -0400
-X-MC-Unique: WzR14NKQNeuozaK5z6xvlw-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 75B92101E148;
-        Thu, 22 Sep 2022 14:58:22 +0000 (UTC)
-Received: from llong.com (unknown [10.22.33.6])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 28C52492CA5;
-        Thu, 22 Sep 2022 14:58:22 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org, Waiman Long <longman@redhat.com>
-Subject: [Resend PATCH v2] tracing: Disable interrupt or preemption before acquiring arch_spinlock_t
-Date:   Thu, 22 Sep 2022 10:56:22 -0400
-Message-Id: <20220922145622.1744826-1-longman@redhat.com>
-In-Reply-To: <20220922133158.1731333-1-longman@redhat.com>
-References: <20220922133158.1731333-1-longman@redhat.com>
+        Thu, 22 Sep 2022 10:58:31 -0400
+Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E646D74D7;
+        Thu, 22 Sep 2022 07:58:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:From:References:Cc:To:
+        MIME-Version:Date:Message-ID:content-disposition;
+        bh=lIqeYmIYKdZ39Sv7iKx98PZ/aFncvZ/B1l8HysQoIhk=; b=I75dP8r9MX4OiRESuJQ15NM69H
+        E7EPt6dmj1RLUSLfLdHSdQgN1mX1Mps+QUyXlvHfee+UqpkHTb6XVDmWWJmc+SsSXElXncswhSea/
+        n7ClPcuX8C+GwiXwMt/bA9+YVdTDgHYaqcPfaUTSE2PgJgFZGhE5WKHVUC+x9lJkdalVuklY4Xq8n
+        nEI+f/4MSCesrWAsHDl7LEYeD/yhSatwrHa4riE/CQsWfphlfqxmoZ49pmeUh05ZlrdcurIihp0za
+        NSFZ6gpSHMV26d1luCPA7bAblBb7vBlDXKICtG6AtRLly1VcBQJPVRZYaHZ6jleuswBvQRteHobdp
+        Z4DBeTVg==;
+Received: from s0106a84e3fe8c3f3.cg.shawcable.net ([24.64.144.200] helo=[192.168.0.10])
+        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <logang@deltatee.com>)
+        id 1obNef-00848L-ST; Thu, 22 Sep 2022 08:58:22 -0600
+Message-ID: <0074a009-9ece-6617-b66d-d003593d153e@deltatee.com>
+Date:   Thu, 22 Sep 2022 08:58:16 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Content-Language: en-CA
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christoph Hellwig <hch@lst.de>
+Cc:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-mm@kvack.org, Dan Williams <dan.j.williams@intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Don Dutile <ddutile@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Minturn Dave B <dave.b.minturn@intel.com>,
+        Jason Ekstrand <jason@jlekstrand.net>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Xiong Jianxin <jianxin.xiong@intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Martin Oliveira <martin.oliveira@eideticom.com>,
+        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Stephen Bates <sbates@raithlin.com>
+References: <20220825152425.6296-8-logang@deltatee.com>
+ <YxDb2MyRx6o/wDAz@kroah.com>
+ <4a4bca1e-bebf-768f-92d4-92eb8ae714e1@deltatee.com>
+ <YxDhEO9ycZDTnbZm@kroah.com>
+ <cc9a24a8-dd3a-9d21-d9a7-5ee4b0ad7a57@deltatee.com>
+ <YxD7uZYaV75gJS9d@kroah.com>
+ <fb9d7948-43fe-87c5-5275-70f280181ad1@deltatee.com>
+ <YxGad5h2Nn/Ejslc@kroah.com>
+ <db8cd049-c78b-1aa0-dcd0-0feb8c6cb25c@deltatee.com>
+ <20220920064613.GB17325@lst.de> <Yywe9rBMB6hlUwqw@kroah.com>
+From:   Logan Gunthorpe <logang@deltatee.com>
+In-Reply-To: <Yywe9rBMB6hlUwqw@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 24.64.144.200
+X-SA-Exim-Rcpt-To: gregkh@linuxfoundation.org, hch@lst.de, linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org, linux-block@vger.kernel.org, linux-pci@vger.kernel.org, linux-mm@kvack.org, dan.j.williams@intel.com, jgg@ziepe.ca, christian.koenig@amd.com, jhubbard@nvidia.com, ddutile@redhat.com, willy@infradead.org, daniel.vetter@ffwll.ch, dave.b.minturn@intel.com, jason@jlekstrand.net, dave.hansen@linux.intel.com, jianxin.xiong@intel.com, helgaas@kernel.org, ira.weiny@intel.com, robin.murphy@arm.com, martin.oliveira@eideticom.com, ckulkarnilinux@gmail.com, rcampbell@nvidia.com, sbates@raithlin.com
+X-SA-Exim-Mail-From: logang@deltatee.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v9 7/8] PCI/P2PDMA: Allow userspace VMA allocations
+ through sysfs
+X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
+X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It was found that some tracing functions in kernel/trace/trace.c acquire
-an arch_spinlock_t with preemption and irqs enabled. An example is the
-tracing_saved_cmdlines_size_read() function which intermittently causes
-a "BUG: using smp_processor_id() in preemptible" warning when the LTP
-read_all_proc test is run.
 
-That can be problematic in case preemption happens after acquiring the
-lock. Add the necessary preemption or interrupt disabling code in the
-appropriate places before acquiring an arch_spinlock_t.
 
-The convention here is to disable preemption for trace_cmdline_lock and
-interupt for max_lock.
+On 2022-09-22 02:38, Greg Kroah-Hartman wrote:
+> On Tue, Sep 20, 2022 at 08:46:13AM +0200, Christoph Hellwig wrote:
+>> On Fri, Sep 02, 2022 at 12:46:54PM -0600, Logan Gunthorpe wrote:
+>>> See the diff at the bottom of this email. I can apply it on top of this
+>>> patch, but IMO it is neither easier to follow nor maintain. Unless you 
+>>> have a different suggestion...
+>>
+>> Greg, can you chime in on this?  Besides this item we just have a few
+>> cosmetic bits left I think, and I'd really like to get the series into
+>> this merge window.
+>>
+> 
+> I don't seem to have this in my inbox at all anymore, sorry.
+> 
+> The original should be fine, Logan, thanks for trying to split it out a
+> bit more.  So this can be taken as-is for 6.1-rc1.
 
-Fixes: a35873a0993b ("tracing: Add conditional snapshot")
-Fixes: 939c7a4f04fc ("tracing: Introduce saved_cmdlines_size file")
-Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- kernel/trace/trace.c | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+Thanks Greg,
 
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index d3005279165d..aed7ea6e6045 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -1193,12 +1193,14 @@ void *tracing_cond_snapshot_data(struct trace_array *tr)
- {
- 	void *cond_data = NULL;
- 
-+	local_irq_disable();
- 	arch_spin_lock(&tr->max_lock);
- 
- 	if (tr->cond_snapshot)
- 		cond_data = tr->cond_snapshot->cond_data;
- 
- 	arch_spin_unlock(&tr->max_lock);
-+	local_irq_enable();
- 
- 	return cond_data;
- }
-@@ -1334,9 +1336,11 @@ int tracing_snapshot_cond_enable(struct trace_array *tr, void *cond_data,
- 		goto fail_unlock;
- 	}
- 
-+	local_irq_disable();
- 	arch_spin_lock(&tr->max_lock);
- 	tr->cond_snapshot = cond_snapshot;
- 	arch_spin_unlock(&tr->max_lock);
-+	local_irq_enable();
- 
- 	mutex_unlock(&trace_types_lock);
- 
-@@ -1363,6 +1367,7 @@ int tracing_snapshot_cond_disable(struct trace_array *tr)
- {
- 	int ret = 0;
- 
-+	local_irq_disable();
- 	arch_spin_lock(&tr->max_lock);
- 
- 	if (!tr->cond_snapshot)
-@@ -1373,6 +1378,7 @@ int tracing_snapshot_cond_disable(struct trace_array *tr)
- 	}
- 
- 	arch_spin_unlock(&tr->max_lock);
-+	local_irq_enable();
- 
- 	return ret;
- }
-@@ -2200,6 +2206,11 @@ static size_t tgid_map_max;
- 
- #define SAVED_CMDLINES_DEFAULT 128
- #define NO_CMDLINE_MAP UINT_MAX
-+/*
-+ * Preemption must be disabled before acquiring trace_cmdline_lock.
-+ * The various trace_arrays' max_lock must be acquired in a context
-+ * where interrupt is disabled.
-+ */
- static arch_spinlock_t trace_cmdline_lock = __ARCH_SPIN_LOCK_UNLOCKED;
- struct saved_cmdlines_buffer {
- 	unsigned map_pid_to_cmdline[PID_MAX_DEFAULT+1];
-@@ -2412,7 +2423,11 @@ static int trace_save_cmdline(struct task_struct *tsk)
- 	 * the lock, but we also don't want to spin
- 	 * nor do we want to disable interrupts,
- 	 * so if we miss here, then better luck next time.
-+	 *
-+	 * This is called within the scheduler and wake up, so interrupts
-+	 * had better been disabled and run queue lock been held.
- 	 */
-+	lockdep_assert_preemption_disabled();
- 	if (!arch_spin_trylock(&trace_cmdline_lock))
- 		return 0;
- 
-@@ -5890,9 +5905,11 @@ tracing_saved_cmdlines_size_read(struct file *filp, char __user *ubuf,
- 	char buf[64];
- 	int r;
- 
-+	preempt_disable();
- 	arch_spin_lock(&trace_cmdline_lock);
- 	r = scnprintf(buf, sizeof(buf), "%u\n", savedcmd->cmdline_num);
- 	arch_spin_unlock(&trace_cmdline_lock);
-+	preempt_enable();
- 
- 	return simple_read_from_buffer(ubuf, cnt, ppos, buf, r);
- }
-@@ -5917,10 +5934,12 @@ static int tracing_resize_saved_cmdlines(unsigned int val)
- 		return -ENOMEM;
- 	}
- 
-+	preempt_disable();
- 	arch_spin_lock(&trace_cmdline_lock);
- 	savedcmd_temp = savedcmd;
- 	savedcmd = s;
- 	arch_spin_unlock(&trace_cmdline_lock);
-+	preempt_enable();
- 	free_saved_cmdlines_buffer(savedcmd_temp);
- 
- 	return 0;
-@@ -6373,10 +6392,12 @@ int tracing_set_tracer(struct trace_array *tr, const char *buf)
- 
- #ifdef CONFIG_TRACER_SNAPSHOT
- 	if (t->use_max_tr) {
-+		local_irq_disable();
- 		arch_spin_lock(&tr->max_lock);
- 		if (tr->cond_snapshot)
- 			ret = -EBUSY;
- 		arch_spin_unlock(&tr->max_lock);
-+		local_irq_enable();
- 		if (ret)
- 			goto out;
- 	}
-@@ -7436,10 +7457,12 @@ tracing_snapshot_write(struct file *filp, const char __user *ubuf, size_t cnt,
- 		goto out;
- 	}
- 
-+	local_irq_disable();
- 	arch_spin_lock(&tr->max_lock);
- 	if (tr->cond_snapshot)
- 		ret = -EBUSY;
- 	arch_spin_unlock(&tr->max_lock);
-+	local_irq_enable();
- 	if (ret)
- 		goto out;
- 
--- 
-2.31.1
+I'll send a v10 with changes from the other feedback later today.
 
+Logan
