@@ -2,147 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 525555E6CF8
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 22:23:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E99DC5E6CFC
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 22:24:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229975AbiIVUXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 16:23:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47984 "EHLO
+        id S230106AbiIVUYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 16:24:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbiIVUXD (ORCPT
+        with ESMTP id S229908AbiIVUX6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 16:23:03 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44781110EE3;
-        Thu, 22 Sep 2022 13:22:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663878179; x=1695414179;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OFzLjRJCU6cKjDYxboR7rQMxdY3lYv9nZojoR5dDW9A=;
-  b=mJ+qLuXixye9ljY6AZVoNXbJduXtszhYNO9LQgrL/+RZDyliO+fn38R8
-   BpISZCWis1VyAaE+Ivcduos5vtwKXJdN10tp/SKhsu9S6E8ParX+0Cf96
-   Zh5ddpKM8UE5O/EzL6RLFz8mmuKYyOaNu93QpIZ33+0YfGDk3MIUda16w
-   Ep9UoQ+V5hsn7axpov/5Grd4LojTG9GmC1Jj2l0P0jlgjKD+I8JN4IFYk
-   48wDY7RXqNHnJkfcHcpbZT8srPHvjK0dHpTssuXKpEoAxKGmFJ4v1jCLN
-   KnhtNfjb3CwkFgsGeGKx/LFPIxlO3iSepr5qSUBUfhy2W97DZ3iGOsncI
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="280790917"
-X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="280790917"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 13:22:59 -0700
-X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="762350047"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 13:22:57 -0700
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id C7F462007A;
-        Thu, 22 Sep 2022 23:22:54 +0300 (EEST)
-Date:   Thu, 22 Sep 2022 20:22:54 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v1 1/1] device property: Add const qualifier to
- device_get_match_data() parameter
-Message-ID: <YyzEHk2TTcsIO0ha@paasikivi.fi.intel.com>
-References: <20220922135410.49694-1-andriy.shevchenko@linux.intel.com>
+        Thu, 22 Sep 2022 16:23:58 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E7D3110EFF;
+        Thu, 22 Sep 2022 13:23:57 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id g3so17244756wrq.13;
+        Thu, 22 Sep 2022 13:23:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=+2wEh3WqE1UPPivBT67hsuwj5Z+xEmJEnWlrZNS8rx8=;
+        b=ikd5Szt2FhwWcMNJrGCDBjLEqoe8jIj2NTahYdL87VRwuKYQ7xOQO109lgWAwIuZKI
+         hu6acIBgwi9Ma0KIK86FeJv0iUWz1DlVGZqlGoN0/U3IFvsBKCMNbPbKMvs7zyemoDHE
+         6BfdGMN3FHIyKeqj4n5Jerg0Rxe0hTZ1BR0MVSRz88Xkx82BcaQGGbhxTCOqucPvjeBy
+         e2hiPoYDUAGUoPbdNQXrDzI0XXn0yqTrMcplQZMZFH0KmbKscuimYZi7exKTHFpOqJwM
+         hTrKfxNAEYX8gG+knfTf/7QfwfZ57ckavFcpaEqnK59gZ0noO3Snqz+f8MIA+Rq954tS
+         jOzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=+2wEh3WqE1UPPivBT67hsuwj5Z+xEmJEnWlrZNS8rx8=;
+        b=j6N8Fab+wqdqrWg6BtUIWMIx9k1Go7UtjrWf/thupUQJRg/RLK0IhvGdk3OKflaB2n
+         L3LU6nUwu4P+dPW/z6v4uUvhOfk32w3TajRIFijetsdPmZFT0WhRCXimdmMkc1mprCB6
+         eHCxK7H29pwDYcNArm/Lj+uenMrTeZBvREk0M92z8TFsEMOHOfcr+r7aWr58EsqqKLC7
+         9b3Kw4ddUnSq0GcA6muU/AYi2JIaUVlWXM2IF/qLCegVcZCB0ppBrJnQP1i8ATAgLeLr
+         OfaEHwpkBnIztqrfTPnQcEZSBUOEc9vbuJiwqU1sWpAeatE5uB0AWAvJ4Jr8w3JSVsEA
+         Ks6w==
+X-Gm-Message-State: ACrzQf3rX3Tdd+97SEsHu0Z0y92IsyaaU6uJuIfV6VnTrPUEI8HzccLb
+        b8pNHY/WXS1j8Xa+DRMzgvQ=
+X-Google-Smtp-Source: AMsMyM4a0qwhA26q6LRWbALbKOZ/AtCsNhByKmT//UDEz8gzuLR3JMTbyexpEdapXxLDTZJWzV6nqQ==
+X-Received: by 2002:adf:9795:0:b0:22a:f421:5d0f with SMTP id s21-20020adf9795000000b0022af4215d0fmr3117691wrb.644.1663878235728;
+        Thu, 22 Sep 2022 13:23:55 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id bg34-20020a05600c3ca200b003b4ff30e566sm5092355wmb.3.2022.09.22.13.23.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Sep 2022 13:23:55 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] drm: Remove redundant assignments to variable count
+Date:   Thu, 22 Sep 2022 21:23:54 +0100
+Message-Id: <20220922202354.2465482-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220922135410.49694-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+The variable count is assigned a value but it is never read. The
+assignment is redundant and can be removed.
 
-Thanks for cc'ing me.
+Cleans up two clang scan build warnings:
+warning: Value stored to 'count' is never read [deadcode.DeadStores]
 
-On Thu, Sep 22, 2022 at 04:54:10PM +0300, Andy Shevchenko wrote:
-> Add const qualifier to the device_get_match_data() parameter.
-> Some of the future users may utilize this function without
-> forcing the type.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/gpu/drm/drm_crtc_helper.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-From const to non-const? This is what this patch does, right?
-
-> 
-> All the same, dev_fwnode() may be used with a const qualifier.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/base/property.c  | 4 ++--
->  include/linux/property.h | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/base/property.c b/drivers/base/property.c
-> index ed6f449f8e5c..4d6278a84868 100644
-> --- a/drivers/base/property.c
-> +++ b/drivers/base/property.c
-> @@ -17,7 +17,7 @@
->  #include <linux/property.h>
->  #include <linux/phy.h>
->  
-> -struct fwnode_handle *dev_fwnode(struct device *dev)
-> +struct fwnode_handle *dev_fwnode(const struct device *dev)
-
-If you have const struct device pointer, then the embedded fwnode handle in
-that object sure is const, too. Isn't it?
-
-If you really have const struct device pointer (where do you?), then I'd
-suggest to add another function, dev_fwnode_const() that is otherwise the
-same except the argument as well as the return value are const.
-
-Or alternatively define it as a macro and use _Generic()?
-
->  {
->  	return IS_ENABLED(CONFIG_OF) && dev->of_node ?
->  		of_fwnode_handle(dev->of_node) : dev->fwnode;
-> @@ -1200,7 +1200,7 @@ int fwnode_graph_parse_endpoint(const struct fwnode_handle *fwnode,
->  }
->  EXPORT_SYMBOL(fwnode_graph_parse_endpoint);
->  
-> -const void *device_get_match_data(struct device *dev)
-> +const void *device_get_match_data(const struct device *dev)
->  {
->  	return fwnode_call_ptr_op(dev_fwnode(dev), device_get_match_data, dev);
->  }
-> diff --git a/include/linux/property.h b/include/linux/property.h
-> index a5b429d623f6..117cc200c656 100644
-> --- a/include/linux/property.h
-> +++ b/include/linux/property.h
-> @@ -32,7 +32,7 @@ enum dev_dma_attr {
->  	DEV_DMA_COHERENT,
->  };
->  
-> -struct fwnode_handle *dev_fwnode(struct device *dev);
-> +struct fwnode_handle *dev_fwnode(const struct device *dev);
->  
->  bool device_property_present(struct device *dev, const char *propname);
->  int device_property_read_u8_array(struct device *dev, const char *propname,
-> @@ -387,7 +387,7 @@ bool device_dma_supported(struct device *dev);
->  
->  enum dev_dma_attr device_get_dma_attr(struct device *dev);
->  
-> -const void *device_get_match_data(struct device *dev);
-> +const void *device_get_match_data(const struct device *dev);
->  
->  int device_get_phy_mode(struct device *dev);
->  int fwnode_get_phy_mode(struct fwnode_handle *fwnode);
-
+diff --git a/drivers/gpu/drm/drm_crtc_helper.c b/drivers/gpu/drm/drm_crtc_helper.c
+index 457448cc60f7..2467df7a7a95 100644
+--- a/drivers/gpu/drm/drm_crtc_helper.c
++++ b/drivers/gpu/drm/drm_crtc_helper.c
+@@ -632,7 +632,6 @@ int drm_crtc_helper_set_config(struct drm_mode_set *set,
+ 	}
+ 
+ 	/* a) traverse passed in connector list and get encoders for them */
+-	count = 0;
+ 	drm_connector_list_iter_begin(dev, &conn_iter);
+ 	drm_for_each_connector_iter(connector, &conn_iter) {
+ 		const struct drm_connector_helper_funcs *connector_funcs =
+@@ -678,7 +677,6 @@ int drm_crtc_helper_set_config(struct drm_mode_set *set,
+ 		goto fail;
+ 	}
+ 
+-	count = 0;
+ 	drm_connector_list_iter_begin(dev, &conn_iter);
+ 	drm_for_each_connector_iter(connector, &conn_iter) {
+ 		if (!connector->encoder)
 -- 
-Regards,
+2.37.1
 
-Sakari Ailus
