@@ -2,200 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CDE35E6D15
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 22:35:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D9F35E6D16
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 22:35:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbiIVUfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 16:35:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34346 "EHLO
+        id S229536AbiIVUf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 16:35:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbiIVUfM (ORCPT
+        with ESMTP id S229551AbiIVUfS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 16:35:12 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3C22F67E;
-        Thu, 22 Sep 2022 13:35:05 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 26825188497F;
-        Thu, 22 Sep 2022 20:35:03 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 18FB6250007B;
-        Thu, 22 Sep 2022 20:35:03 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id ECB6C9EC0002; Thu, 22 Sep 2022 20:35:02 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Thu, 22 Sep 2022 16:35:18 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE178A3472;
+        Thu, 22 Sep 2022 13:35:16 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id e18so15292870edj.3;
+        Thu, 22 Sep 2022 13:35:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=HyErV8xzsYibE84V0H3iRbBpF8z8RVZNEiwzTBCN7y8=;
+        b=dR5kGZWPEu0mY1SwV2krcuJ29s6VMwWy2Fjz7MTSx3JiJXUbCr2djLhSfBQCKuPy1Z
+         Iz5K9E84fSg4kBed2amDxKbFM383ileuE0lf32qDeOp5GF62bezJUe5AoO/rs4pIORPS
+         TFwzdgegNF4ulHHfJGIOPBfwDXiQVQaRUP0Fj0GBbb72iPiXk6VGJqz02Hfndma8ldev
+         jvZBUxi91+v8V8BX66xzNcNAuKIsArtdxZGTmv6mlHyNMfkbB+YZd6o6flttJm+zKtIL
+         ZLV1zcghLU3kYZD65mS+73PtoeTf17cEvruPAF4b8kZEH7zkrPVxPzB9sYEKwTbuQ8VM
+         ih2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=HyErV8xzsYibE84V0H3iRbBpF8z8RVZNEiwzTBCN7y8=;
+        b=GSELlHqfFztH7fEjy67zfns0C63UFb/zOcJFovtWpMP9Ox48u483G7+vfX5v9ls3G4
+         gxXiL6RcnVKAi0koVriH9tnbqGiqOOndxf0rjZ6CJZePRO/RKzd4xbB8La3jN6kIsAd0
+         loC349z6f5vIHmipKc4hwR1ZGdkASOABcmUQr76dlG4ep/D0XiNPhUnCwZUDqgrJrOOa
+         AnOoVK2RcTqGekHrdm7ubG/UpbtQFyxzSKvxBschkj8ChzkGVTNxSVW9nrPTGFZgXwVw
+         gKnbsU7m14bdSqfBl7F1FJrUjtYG5RrCo0Ni3gvPBIwl/s25HNfPTtNWcFrZapyPOhNG
+         OU1Q==
+X-Gm-Message-State: ACrzQf1PAXTH3fAfush/YESq10LsSMCNhawsW4BG+H6UtjxfBg9aB/3Z
+        IepnLwO4vYaTGHNTckBHXPc=
+X-Google-Smtp-Source: AMsMyM7TCDplKaoppNc0fQRqs9Wvg+rXdawvxHSw7cwzvbEMrZuLVj0QUV528L+JVLxybOeU/mu1Tw==
+X-Received: by 2002:a05:6402:1704:b0:44e:b523:585d with SMTP id y4-20020a056402170400b0044eb523585dmr5200704edu.22.1663878915153;
+        Thu, 22 Sep 2022 13:35:15 -0700 (PDT)
+Received: from ?IPV6:2a02:a466:68ed:1:14be:21e4:7385:ae7b? (2a02-a466-68ed-1-14be-21e4-7385-ae7b.fixed6.kpn.net. [2a02:a466:68ed:1:14be:21e4:7385:ae7b])
+        by smtp.gmail.com with ESMTPSA id t22-20020a056402021600b00443d657d8a4sm4191694edv.61.2022.09.22.13.35.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Sep 2022 13:35:14 -0700 (PDT)
+Message-ID: <580eb9fe-db26-ddd4-6368-c763bb4ebdba@gmail.com>
+Date:   Thu, 22 Sep 2022 22:35:14 +0200
 MIME-Version: 1.0
-Date:   Thu, 22 Sep 2022 22:35:02 +0200
-From:   netdev@kapio-technology.com
-To:     Ido Schimmel <idosch@nvidia.com>
-Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 net-next 6/6] selftests: forwarding: add test of
- MAC-Auth Bypass to locked port tests
-In-Reply-To: <Yyq6BnUfctLeerqE@shredder>
-References: <YxNo/0+/Sbg9svid@shredder>
- <5cee059b65f6f7671e099150f9da79c1@kapio-technology.com>
- <Yxmgs7Du62V1zyjK@shredder>
- <8dfc9b525f084fa5ad55019f4418a35e@kapio-technology.com>
- <20220908112044.czjh3xkzb4r27ohq@skbuf>
- <152c0ceadefbd742331c340bec2f50c0@kapio-technology.com>
- <20220911001346.qno33l47i6nvgiwy@skbuf>
- <15ee472a68beca4a151118179da5e663@kapio-technology.com>
- <Yx73FOpN5uhPQhFl@shredder>
- <086704ce7f323cc1b3cca78670b42095@kapio-technology.com>
- <Yyq6BnUfctLeerqE@shredder>
-User-Agent: Gigahost Webmail
-Message-ID: <d559df70d75b3f5db2815f3038be3e3a@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v4] usb: dwc3: Don't switch OTG -> peripheral if extcon is
+ present
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Thinh Nguyen <thinhn@synopsys.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+References: <20220403164907.662860-1-andrew.smirnov@gmail.com>
+ <Yyw0K/hcTZ02UP+A@smile.fi.intel.com>
+ <691c3073-5105-9a2b-e6f2-ea0a4b8aaea8@gmail.com>
+ <YyxjJxnbhroflkH6@smile.fi.intel.com>
+Content-Language: en-US
+From:   Ferry Toth <fntoth@gmail.com>
+In-Reply-To: <YyxjJxnbhroflkH6@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-21 09:15, Ido Schimmel wrote:
-> On Tue, Sep 20, 2022 at 11:29:12PM +0200, netdev@kapio-technology.com 
-> wrote:
->> I have made a blackhole selftest, which looks like this:
->> 
->> test_blackhole_fdb()
->> {
->>         RET=0
->> 
->>         check_blackhole_fdb_support || return 0
->> 
->>         tcpdump_start $h2
->>         $MZ $h1 -q -t udp -a $h1 -b $h2
-> 
-> I don't think you can give an interface name to '-a' and '-b'?
-> 
->>         tcpdump_stop
->>         tcpdump_show | grep -q udp
->>         check_err $? "test_blackhole_fdb: No packet seen on initial"
->>         tcpdump_cleanup
->> 
->>         bridge fdb add `mac_get $h2` dev br0 blackhole
->>         bridge fdb show dev br0 | grep -q "blackhole"
-> 
-> Make this grep more specific so that we are sure it is the entry user
-> space installed. Something like this:
-> 
-> bridge fdb get `mac_get $h2` br br0 | grep -q blackhole
-> 
->>         check_err $? "test_blackhole_fdb: No blackhole FDB entry 
->> found"
->> 
->>         tcpdump_start $h2
->>         $MZ $h1 -q -t udp -a $h1 -b $h2
->>         tcpdump_stop
->>         tcpdump_show | grep -q udp
->>         check_fail $? "test_blackhole_fdb: packet seen with blackhole 
->> fdb
->> entry"
->>         tcpdump_cleanup
-> 
-> The tcpdump filter is not specific enough. It can catch other UDP
-> packets (e.g., multicast) being received by $h2. Anyway, to be sure the
-> feature works as expected we need to make sure that the packets are not
-> even egressing $swp2. Checking that they are not received by $h2 is not
-> enough. See this (untested) suggestion [1] that uses a tc filter on the
-> egress of $swp2.
-> 
->> 
->>         bridge fdb del `mac_get $h2` dev br0 blackhole
->>         bridge fdb show dev br0 | grep -q "blackhole"
->>         check_fail $? "test_blackhole_fdb: Blackhole FDB entry not 
->> deleted"
->> 
->>         tcpdump_start $h2
->>         $MZ $h1 -q -t udp -a $h1 -b $h2
->>         tcpdump_stop
->>         tcpdump_show | grep -q udp
->>         check_err $? "test_blackhole_fdb: No packet seen after 
->> removing
->> blackhole FDB entry"
->>         tcpdump_cleanup
->> 
->>         log_test "Blackhole FDB entry test"
->> }
->> 
->> the setup is simple and is the same as in bridge_sticky_fdb.sh.
->> 
->> Does the test look sound or is there obvious mistakes?
-> 
-> [1]
-> blackhole_fdb()
-> {
-> 	RET=0
-> 
-> 	tc filter add dev $swp2 egress protocol ip pref 1 handle 1 flower \
-> 		dst_ip 192.0.2.2 ip_proto udp dst_port 12345 action pass
-> 
-> 	$MZ $h1 -c 1 -p 128 -t udp "sp=54321,dp=12345" \
-> 		-a own -b `mac_get $h2` -A 192.0.2.1 -B 192.0.2.2 -q
-> 
-> 	tc_check_packets "dev $swp2 egress" 1 1
-> 	check_err $? "Packet not seen on egress before adding blackhole entry"
-> 
-> 	bridge fdb add `mac_get $h2` dev br0 blackhole
-> 	bridge fdb get `mac_get $h2` br br0 | grep -q blackhole
-> 	check_err $? "Blackhole entry not found"
-> 
-> 	$MZ $h1 -c 1 -p 128 -t udp "sp=54321,dp=12345" \
-> 		-a own -b `mac_get $h2` -A 192.0.2.1 -B 192.0.2.2 -q
-> 
-> 	tc_check_packets "dev $swp2 egress" 1 1
-> 	check_err $? "Packet seen on egress after adding blackhole entry"
-> 
-> 	# Check blackhole entries can be replaced.
-> 	bridge fdb replace `mac_get $h2` dev $swp2 master static
-> 	bridge fdb get `mac_get $h2` br br0 | grep -q blackhole
-> 	check_fail $? "Blackhole entry found after replacement"
-> 
-> 	$MZ $h1 -c 1 -p 128 -t udp "sp=54321,dp=12345" \
-> 		-a own -b `mac_get $h2` -A 192.0.2.1 -B 192.0.2.2 -q
-> 
-> 	tc_check_packets "dev $swp2 egress" 1 2
-> 	check_err $? "Packet not seen on egress after replacing blackhole 
-> entry"
-> 
-> 	bridge fdb del `mac_get $h2` dev $swp2 master static
-> 	tc filter del dev $swp2 egress protocol ip pref 1 handle 1 flower
-> 
-> 	log_test "Blackhole FDB entry"
-> }
+Hi,
 
-Thx, looks good.
-I have tried to run the test as far as I can manually, but I don't seem 
-to have 'busywait' in the system, which tc_check_packets() depends on, 
-and I couldn't find any 'busywait' in Buildroot.
+Op 22-09-2022 om 15:29 schreef Andy Shevchenko:
+> On Thu, Sep 22, 2022 at 12:23:04PM +0200, Ferry Toth wrote:
+>> On 22-09-2022 12:08, Andy Shevchenko wrote:
+>>> On Sun, Apr 03, 2022 at 09:49:07AM -0700, Andrey Smirnov wrote:
+>>>> If the extcon device exists, get the mode from the extcon device. If
+>>>> the controller is DRD and the driver is unable to determine the mode,
+>>>> only then default the dr_mode to USB_DR_MODE_PERIPHERAL.
+>>> According to Ferry (Cc'ed) this broke Intel Merrifield platform. Ferry, can you
+>>> share bisect log?
+git bisect start
+# bad: [3d7cb6b04c3f3115719235cc6866b10326de34cd] Linux 5.19
+git bisect bad 3d7cb6b04c3f3115719235cc6866b10326de34cd
+# good: [4b0986a3613c92f4ec1bdc7f60ec66fea135991f] Linux 5.18
+git bisect good 4b0986a3613c92f4ec1bdc7f60ec66fea135991f
+# good: [c011dd537ffe47462051930413fed07dbdc80313] Merge tag 
+'arm-soc-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
+git bisect good c011dd537ffe47462051930413fed07dbdc80313
+# good: [5d4af9c1f04ab0411ba5818baad9a68e87f33099] Merge branch 
+'mv88e6xxx-fixes-for-reading-serdes-state'
+git bisect good 5d4af9c1f04ab0411ba5818baad9a68e87f33099
+# bad: [7a68065eb9cd194cf03f135c9211eeb2d5c4c0a0] Merge tag 
+'gpio-fixes-for-v5.19-rc2' of 
+git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux
+git bisect bad 7a68065eb9cd194cf03f135c9211eeb2d5c4c0a0
+# bad: [54c2cc79194c961a213c1d375fe3aa4165664cc4] Merge tag 
+'usb-5.19-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb
+git bisect bad 54c2cc79194c961a213c1d375fe3aa4165664cc4
+# good: [6a31a95135da0bb2c5349e49e37d76e9909ab7ea] staging: r8188eu: 
+remove include/rtw_debug.h
+git bisect good 6a31a95135da0bb2c5349e49e37d76e9909ab7ea
+# good: [04d93b2b8bc7a68ec45a6a156f34a611ede5aa60] Merge tag 
+'spdx-5.19-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/spdx
+git bisect good 04d93b2b8bc7a68ec45a6a156f34a611ede5aa60
+# good: [c069d2756c01ed36121fae6a42c14fdf1325c71d] serial: sifive: 
+Sanitize CSIZE and c_iflag
+git bisect good c069d2756c01ed36121fae6a42c14fdf1325c71d
+# bad: [3120aac6d0ecd9accf56894aeac0e265f74d3d5a] usb: dwc2: gadget: 
+don't reset gadget's driver->bus
+git bisect bad 3120aac6d0ecd9accf56894aeac0e265f74d3d5a
+# bad: [0f01017191384e3962fa31520a9fd9846c3d352f] usb: dwc3: Don't 
+switch OTG -> peripheral if extcon is present
+git bisect bad 0f01017191384e3962fa31520a9fd9846c3d352f
+# good: [b8a19881337678c02bb3d72ae821602e1a4c377d] usb: gadget: u_audio: 
+clean up some inconsistent indenting
+git bisect good b8a19881337678c02bb3d72ae821602e1a4c377d
+# good: [424bef51fa530389b0b9008c9e144e40c10e8458] usb: musb: Fix 
+missing of_node_put() in omap2430_probe
+git bisect good 424bef51fa530389b0b9008c9e144e40c10e8458
+
+>>> I can but not right now. But what I did was bisect between 5.18.0 (good) and
+>>> 5.19.0 (bad) then when I got near the culprit (~20 remaining) based on the
+>>> commit message I tried 0f01017191384e3962fa31520a9fd9846c3d352f "usb: dwc3:
+>>> Don't switch OTG -> peripheral if extcon is present" (bad) and commit before
+>>> that (good).
+5c29e864999763baec9eedb9ea5bd557aa4cbd77
+>>> The effect of the patch is that on Merrifield (I tested with Intel Edison
+>>> Arduino board which has a HW switch to select between host and device mode)
+>>> device mode works but in host mode USB is completely not working.
+>>>
+>>> Currently on host mode - when working - superfluous error messages from
+>>> tusb1210 appear. When host mode is not working there are no tusb1210
+>>> messages in the logs / on the console at all. Seemingly tusb1210 is not
+>>> probed, which points in the direction of a relation to extcon.
+>>>
+>>> Taking into account the late cycle, I would like to revert the change. And
+>>> Ferry and I would help to test any other (non-regressive) approach).
+>> I have not yet tested if a simple revert fixes the problem but will tonight.
+> For clean revert you might need to revert the merge conflict fixes first:
+> 8bd6b8c4b100 ("USB: fixup for merge issue with "usb: dwc3: Don't switch
+> OTG -> peripheral if extcon is present"").
+
+Tested successfully on Intel Merrifield with v6.0-rc6 with reverted:
+
+8bd6b8c4 ("USB: fixup for merge issue with "usb: dwc3: Don't switch OTG -> peripheral if extcon is present"")
+
+0f010171 ("usb: dwc3: Don't switch OTG -> peripheral if extcon is present")
+
+I also tested on v5.19 which in addition requires a back port of
+
+d4a0a189 ("phy: ti: tusb1210: Don't check for write errors when powering 
+on")
+
+>> I would be happy to test other approaches too.
