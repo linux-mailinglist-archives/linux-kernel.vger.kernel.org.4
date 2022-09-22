@@ -2,71 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D671F5E6D79
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 22:59:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63AB15E6D7D
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 23:00:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230161AbiIVU74 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 16:59:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40238 "EHLO
+        id S229640AbiIVVAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 17:00:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbiIVU7x (ORCPT
+        with ESMTP id S230235AbiIVVAV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 16:59:53 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E3D2B25F;
-        Thu, 22 Sep 2022 13:59:51 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id q11so7079515qkc.12;
-        Thu, 22 Sep 2022 13:59:51 -0700 (PDT)
+        Thu, 22 Sep 2022 17:00:21 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A0C7B3B3E;
+        Thu, 22 Sep 2022 14:00:18 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id m22so1967442lfg.0;
+        Thu, 22 Sep 2022 14:00:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=rWCJQafKC5srG5W+g/FDRgvvE8Of+cROu+pWkLvdSiw=;
-        b=Y8APGnFcacZwnXOqualGrMnLCYo1wvUvXYBDIwpWwT8A+4DFU52KXs6kXYHr5Eckba
-         xQHyiv/z+vz97Sbz/ILM5hDaG4jvsLp1otGc2EYn9pkdoVOGZoarp5lvFhllS365ZZOo
-         2Bn0AjMlJKJOKtTcIkaRJW9ZFQsP08xaBLy9j3yicBvjsnFHL/mvTPpsxRjTP0EMztSn
-         VkFWTJx+DqHSX0lwLNzHWl5mnsdHvZcKWs8vfBPmOcueD5E2B3GW29ILwuKAbAROWLvA
-         HzFWi3UFnDhq1rp99gI8eA6zPk8LVRdRPiWtaNWjZhMYVQNGcWnPyMzTpEXZI65nSYem
-         X7sA==
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date;
+        bh=y9ZryuHbz2n1RmlIcr6kYgVVPHmzSeh1TTQ2UPMCWZ8=;
+        b=dY2Oab+4GOPR7pWtxem4R5vYkh4AslUQFYkkJSZA9wYVABohYQsRfHaMSfOISC8HZV
+         3/U1psa699fCt+rPm8D5XobgDqNuVujopn75z+fGDEDtXEVX1mb5hkqWxqNFFkuj2ohY
+         mtO+UIlQdXHLPREJVqwW15YLN7lMoXZ8T9RGM9BmOm1ZeteJQKODGOI+hNYb8YbkkYR3
+         BXopDdfXSPvyZfT8PpFJb7uURdDnWpIdnqyIko8AYHaO7wfjC510ty85cjN/fDMUQ7w1
+         sZez98f3sNyX+ryRsSZJoAsDLOf8BjnE56+Qd5gGBY1babtvC0HdkzS0nU7Em9a3WaxJ
+         LO/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=rWCJQafKC5srG5W+g/FDRgvvE8Of+cROu+pWkLvdSiw=;
-        b=0SlRyRahPgdkWoDcKeZK7M0fQ7+gZXNgMZy9hFrb1/gKvXarrLKvQVmrC/NaFg/woF
-         QjMs80v+XRI401cro9eeomphjR8QPKHn5f0B2MADBRUcZ58DPLM1Ap8aOjh5s6LqqUmr
-         CD6dN0LC4h1yp17idhWx9Want5V9sgsETttlz/QzZTyhnccYO99rRg4bu3+UdCPdysMl
-         zt1lI1PgWKC8RBdLOI/o9D/5X5zC0ogKM4AghDWLH18rPu9stoz85QKT5uoeI/u7bS9Y
-         6Brjy6eexDOFqZ4z9/f+CGDs3gd/6d4DQELWySvdjIbULqGnborfVh8WINX0Tcm4Q8WM
-         M85Q==
-X-Gm-Message-State: ACrzQf0xIgR0fZcIQjOB4+8IWvZawUhN1sTCxjY4gp/LGxAYF5VanYol
-        tgerGHxugEijn4cgH5uL1al06paEKUu3abjF9ps=
-X-Google-Smtp-Source: AMsMyM77i6N0lhLTuSbbf2dZRYbwCRxgSVll80ZFP+hwBNEp4Gw+WC4zaRTP1a1cI7K6j+0woN8tF8qYXten+qGTF30=
-X-Received: by 2002:a05:620a:4454:b0:6ce:bfbf:7e3f with SMTP id
- w20-20020a05620a445400b006cebfbf7e3fmr3567761qkp.748.1663880390542; Thu, 22
- Sep 2022 13:59:50 -0700 (PDT)
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=y9ZryuHbz2n1RmlIcr6kYgVVPHmzSeh1TTQ2UPMCWZ8=;
+        b=qzzN6ft8JvRSZtOcN4vWFsXOOTkDuldQGq6dhMB2+2ycd4UEqkbS2nqDIZVedqYD/W
+         woqx83JjvMEbwH1jFgxLWPq7ozYEKGjt/7g/rCHel1JQY/yIQmVNCqdy0gP7UnjK9Z/F
+         GJie7EoR7Ear1P5wkcu9RRJpQK9JzcOjOau7bFV1LNuAhLsQhlPqNdncdS8WDL/Tbude
+         pAOh3U0oGMyPxWKFKKpBrfj6Pq1gW4jTEWPjHeBI+UsxRusbiN36qUgHahp6IrzTmkHH
+         oVh4NVXlex4HJqRTtX6v+Ml4LRXIE8JxzpIT+dtSYlgLQ+/9H5GHSQW2cHzF3M7y1uwe
+         1yDA==
+X-Gm-Message-State: ACrzQf1uQ3ZdkVz5P5yke2FDxTV9lrko24+GHCSVrkm8webdW2KKKUbZ
+        3DFt8eBWrEay0rKTUMNRb0k=
+X-Google-Smtp-Source: AMsMyM54g87IkTa0vToTSQ0FfSnK9InN+XNBh4lGnMLzJjCjQbR/uvSQhAkDZuZAYVi6kQeWZn5zmg==
+X-Received: by 2002:a05:6512:a86:b0:499:f794:5cc2 with SMTP id m6-20020a0565120a8600b00499f7945cc2mr1877553lfu.100.1663880416252;
+        Thu, 22 Sep 2022 14:00:16 -0700 (PDT)
+Received: from [192.168.1.103] ([178.176.79.119])
+        by smtp.gmail.com with ESMTPSA id h2-20020ac250c2000000b00497aa190523sm1095333lfm.248.2022.09.22.14.00.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Sep 2022 14:00:15 -0700 (PDT)
+Subject: Re: [PATCH] usb: gadget: rndis: Avoid dereference before NULL check
+To:     Greg KH <gregkh@linuxfoundation.org>, Jim Lin <jilin@nvidia.com>
+Cc:     balbi@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Aniruddha TVS Rao <anrao@nvidia.com>
+References: <20220908175615.5095-1-jilin@nvidia.com>
+ <YxrRPxeh/iCeCW4R@kroah.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <7493474c-beba-5abd-1647-2690829e3d27@gmail.com>
+Date:   Fri, 23 Sep 2022 00:00:14 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-References: <20220922200035.94823-1-mike.travis@hpe.com>
-In-Reply-To: <20220922200035.94823-1-mike.travis@hpe.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 22 Sep 2022 23:59:13 +0300
-Message-ID: <CAHp75VeVKUxnERF0bA_ivBuvb9JsME3b4MgX=TxHhtvghF1w6A@mail.gmail.com>
-Subject: Re: [PATCH v2] x86/platform/uv: Dont use smp_processor_id while preemptible
-To:     Mike Travis <mike.travis@hpe.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steve Wahl <steve.wahl@hpe.com>, x86@kernel.org,
-        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
-        stable@vger.kernel.org, Andy Shevchenko <andy@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Russ Anderson <russ.anderson@hpe.com>,
-        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+In-Reply-To: <YxrRPxeh/iCeCW4R@kroah.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,30 +76,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 11:01 PM Mike Travis <mike.travis@hpe.com> wrote:
->
-> To avoid a "BUG: using smp_processor_id() in preemptible" debug warning
-> message, disable preemption around use of the processor id.  This code
-> sequence merely decides which portal that this CPU uses to read the RTC.
-> It does this to avoid thrashing the cache but even if preempted it still
-> reads the same time from the single RTC clock.
+Hello!
 
-...
+On 9/9/22 8:38 AM, Greg KH wrote:
 
-> Signed-off-by: Mike Travis <mike.travis@hpe.com>
-> Reviewed-by: Steve Wahl <steve.wahl@hpe.com>
-> Reviewed-by: Dimitri Sivanich <dimitri.sivanich@hpe.com>
-> Cc: stable@vger.kernel.org
+>> NULL check is performed after params->dev is dereferenced in
+>> dev_get_stats.
+> 
+> I do not understand this statement.
+> 
+>> Fixed by adding a NULL check before dereferencing params->dev and
+>> removing subsequent NULL checks for it.
+>>
+>> Signed-off-by: Aniruddha TVS Rao <anrao@nvidia.com>
+>> Signed-off-by: Jim Lin <jilin@nvidia.com>
+>> ---
+>>  drivers/usb/gadget/function/rndis.c | 37 ++++++++++++-----------------
+>>  1 file changed, 15 insertions(+), 22 deletions(-)
+>>
+>> diff --git a/drivers/usb/gadget/function/rndis.c b/drivers/usb/gadget/function/rndis.c
+>> index 64de9f1b874c..d2f18f34c8e5 100644
+>> --- a/drivers/usb/gadget/function/rndis.c
+>> +++ b/drivers/usb/gadget/function/rndis.c
+>> @@ -198,6 +198,9 @@ static int gen_ndis_query_resp(struct rndis_params *params, u32 OID, u8 *buf,
+>>  	outbuf = (__le32 *)&resp[1];
+>>  	resp->InformationBufferOffset = cpu_to_le32(16);
+>>  
+>> +	if (!params->dev)
+>> +		return -ENODEV;
+>> +
+> 
+> As Sergey points out, this check is useless and the ones below should
+> also be removed.
 
-No kernel version? No Fixes tag?
+   Would you accept this patch modulo the above check then? If not,
+I'll just resolve the corresponding SVACE checker as "won't fix" here. :-)
 
-...
+> But, why make this check at all, how did you trigger a problem with the
+> current code?
 
-> -               offset = (uv_blade_processor_id() * L1_CACHE_BYTES) % PAGE_SIZE;
-> +               offset = (uv_cpu_blade_processor_id(cpu) * L1_CACHE_BYTES) % PAGE_SIZE;
+   There's no problem, just the redundant NULL checks...
 
-Perhaps it can be transformed to use offset_in_page() at the same time.
+> Are you using this driver?  If so, why?  It is totally broken (as per
+> the specification) and we really really need to just delete it from the
+> tree to prevent anyone else from ever using it.
 
--- 
-With Best Regards,
-Andy Shevchenko
+   Well, delete it then... :-)
+
+> thanks,
+> 
+> greg k-h
+
+MBR, Sergey
