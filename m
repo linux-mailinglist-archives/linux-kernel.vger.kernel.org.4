@@ -2,76 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E87105E6B6F
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 21:05:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79F255E6B76
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 21:06:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231656AbiIVTFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 15:05:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45796 "EHLO
+        id S229631AbiIVTGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 15:06:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231608AbiIVTFO (ORCPT
+        with ESMTP id S231392AbiIVTGu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 15:05:14 -0400
-Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 192CE2B636;
-        Thu, 22 Sep 2022 12:05:14 -0700 (PDT)
-Received: by mail-qv1-f44.google.com with SMTP id mi14so7426930qvb.12;
-        Thu, 22 Sep 2022 12:05:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=ahbFpac96DIxJDNsT74ohI/EcNOmPFJD8vZZOD/pVR0=;
-        b=MWRru5VHDy3uZXKNvdviT4Ai/1xgYm+PHxeqxh3+vG8QkDO7BpQiZncO42EPKTgfdn
-         A12ylGyuTlPLqhe5lTwjvc/zf8y4upE/kJKVeqdwd0G1dYJcEwlQ63jBdUjxQRPyzJtr
-         Yfk4vw4UIiQvNolIKE7vJzwc1LMWC3CXYd2VI4acWdnYWJkCpibZgOZrYppts8tiU6pe
-         hRi8MrL54Ll4DUgagw790bXwV32x49BviLsyJIyYJyh915IP/HgJGpBk3N69UaKXdUKA
-         CVcm0qfUH0BLqpbK1gt3TmdVzeVsEiqIVFoPU7ktBhTTCCzWoUvx5hexLw73LmSc2xrx
-         24ag==
-X-Gm-Message-State: ACrzQf34BI8F9qoppmLsl1G69Vj0SncCSlny7RrWT8Hzm9+xHNCHqMN9
-        wSdp4iyPaOjOxAZa8tvyGNNoT9kVIbVcB3qppO0=
-X-Google-Smtp-Source: AMsMyM47/YRA5/bDBgDm9lD9SchalpTWOGgGcjGDjsK5X4lbbyLnDpSg3SUimsOQSuyA770Jfdr/QRkM6mDxaM1Pkys=
-X-Received: by 2002:a05:6214:1cc9:b0:496:aa2c:c927 with SMTP id
- g9-20020a0562141cc900b00496aa2cc927mr3867063qvd.15.1663873513249; Thu, 22 Sep
- 2022 12:05:13 -0700 (PDT)
+        Thu, 22 Sep 2022 15:06:50 -0400
+Received: from smtp.smtpout.orange.fr (smtp-20.smtpout.orange.fr [80.12.242.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92636EBBDA
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 12:06:48 -0700 (PDT)
+Received: from pop-os.home ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id bRWzoFS7XOizNbRWzoX4NW; Thu, 22 Sep 2022 21:06:46 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Thu, 22 Sep 2022 21:06:46 +0200
+X-ME-IP: 90.11.190.129
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     ulf.hansson@linaro.org, cjb@laptop.org, dan.carpenter@oracle.com
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mmc@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH v2] mmc: wmt-sdmmc: Fix an error handling path in wmt_mci_probe()
+Date:   Thu, 22 Sep 2022 21:06:40 +0200
+Message-Id: <53fc6ffa5d1c428fefeae7d313cf4a669c3a1e98.1663873255.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220909153320.501347-1-rafaelmendsr@gmail.com> <20220912082017.iuo35tyzwvq3dqfn@bogus>
-In-Reply-To: <20220912082017.iuo35tyzwvq3dqfn@bogus>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 22 Sep 2022 21:05:02 +0200
-Message-ID: <CAJZ5v0i=q2v3W5COBHQ8nhwFEkJ0CE107YMXF-kPWtHuV5yYLQ@mail.gmail.com>
-Subject: Re: [PATCH v2] ACPI: PCC: Release resources on address space setup
- failure path
-To:     Sudeep Holla <sudeep.holla@arm.com>,
-        Rafael Mendonca <rafaelmendsr@gmail.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 10:20 AM Sudeep Holla <sudeep.holla@arm.com> wrote:
->
-> On Fri, Sep 09, 2022 at 12:33:19PM -0300, Rafael Mendonca wrote:
-> > The allocated memory for the pcc_data struct doesn't get freed under an
-> > error path in pcc_mbox_request_channel() or acpi_os_ioremap(). Also, the
-> > PCC mailbox channel doesn't get freed under an error path in
-> > acpi_os_ioremap().
-> >
->
-> Thanks!
->
-> Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
->
+A dma_free_coherent() call is missing in the error handling path of the
+probe, as already done in the remove function.
 
-Applied as 6.1 material, thanks!
+Fixes: 3a96dff0f828 ("mmc: SD/MMC Host Controller for Wondermedia WM8505/WM8650")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+Changes since v1:
+  * Add and use the (ugly named) 'fail5_and_a_half' label   [Dan Carpenter <dan.carpenter@oracle.com>]
+
+v1: https://lore.kernel.org/all/bf2e2e69226b20d173cce66287f59488fd47474b.1646588375.git.christophe.jaillet@wanadoo.fr/
+---
+ drivers/mmc/host/wmt-sdmmc.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/mmc/host/wmt-sdmmc.c b/drivers/mmc/host/wmt-sdmmc.c
+index 163ac9df8cca..9b5c503e3a3f 100644
+--- a/drivers/mmc/host/wmt-sdmmc.c
++++ b/drivers/mmc/host/wmt-sdmmc.c
+@@ -846,7 +846,7 @@ static int wmt_mci_probe(struct platform_device *pdev)
+ 	if (IS_ERR(priv->clk_sdmmc)) {
+ 		dev_err(&pdev->dev, "Error getting clock\n");
+ 		ret = PTR_ERR(priv->clk_sdmmc);
+-		goto fail5;
++		goto fail5_and_a_half;
+ 	}
+ 
+ 	ret = clk_prepare_enable(priv->clk_sdmmc);
+@@ -863,6 +863,9 @@ static int wmt_mci_probe(struct platform_device *pdev)
+ 	return 0;
+ fail6:
+ 	clk_put(priv->clk_sdmmc);
++fail5_and_a_half:
++	dma_free_coherent(&pdev->dev, mmc->max_blk_count * 16,
++			  priv->dma_desc_buffer, priv->dma_desc_device_addr);
+ fail5:
+ 	free_irq(dma_irq, priv);
+ fail4:
+-- 
+2.34.1
+
