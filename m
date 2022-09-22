@@ -2,243 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 465655E5A92
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 07:18:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6E545E5A96
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 07:19:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbiIVFSm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 01:18:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33244 "EHLO
+        id S230197AbiIVFTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 01:19:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbiIVFSi (ORCPT
+        with ESMTP id S229667AbiIVFS6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 01:18:38 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 910D6B029E;
-        Wed, 21 Sep 2022 22:18:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663823917; x=1695359917;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=6bzUv1ohjixZI3/O+9rkkyN3hUgzljtfwmBugvgQmI8=;
-  b=XXZpIaKZ8hLwGG94qIDZo1M2AeZ2tiC9zTGgKgmqDpuCEV6Uflae63S0
-   CRsJFag+n9ke8gqstT8Rtk4L1mrnRNgLEG1r39tnBznvyo01s+5Zdtpq5
-   FGVEEIXuZUKXfiKyY/8a6blyXTT7aIsr1PFYDZ4GckZMflLnjTh2cx0a6
-   R3Dm+gYp5Vcb6st/uQSO8XkDQp2jCUxCegWxOJIJmfk5cQcoFThbi/dNl
-   cvpZX4bxX564nsYMBMSynKtVyvTDn4x9o5Y+w7dSiVoRwOZOycDOcenX6
-   cTq5cOAVdXM1+5DikilKo2ycLIWpPoQ2N6OUPlQBju1YW+PDkU96q+Uqw
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="279922339"
-X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
-   d="scan'208";a="279922339"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 22:18:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
-   d="scan'208";a="682066016"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmsmga008.fm.intel.com with ESMTP; 21 Sep 2022 22:18:36 -0700
-Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 21 Sep 2022 22:18:36 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Wed, 21 Sep 2022 22:18:36 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.106)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Wed, 21 Sep 2022 22:18:35 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Z+sfDWMZSmqCvGGjnPjz/ChO5guJOVWrd77BfQJJf8M1VTUYYbhoJIZ9Ruq+hD5Gwwsw2X2+nBhEX81XI4iWkm9KVyRtYVuyZfXmNjt5LkQGsP9Sc9qtYC4CfAxcp64ag4TunvETnGGvrF5Zepb+Nizz3EDjzLSb+ZztMU5ll4A4W5wYPPA4iAcNP0zCYmWej16Mm+COB/7Tj4u01wXvqzd5DuOAzXUe5xhxSeo1+ScrNWe958rh/33POEqH4k7TFP6Jgmt0w0ByxIiCFlV3xfNX8+5yZ0EZmCKz6qBmuj8z8RWioMDO9YbIcHW3ZNeye3dWr6TADn9CGUtRP2iCCQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Y8Y9cH2F24v2GMjyCqj6ZceWd47WaqknHR/Ln/mfoiY=;
- b=DF4emeGZCctG1eJgKOPmW0lxdMZHU5ZfVxzlk4aXVeRTNl9meSbMCqyFbxDdlH0fJo7GS/+WqE1CP4zLGhF2clagm0zH3r9z6SK5/U3jAfhZWqafYkIbuMe+OLSYrducVyJoHUVYHAzrkSQdS2yOmWm7yabqq3hZ+qL4aOVwDXvDIlK9ntfiTMpbuBJu3zS+BFgmCcEg/O1qd37JIBH5cfw1Yxlqf7YcuS8gWnV8T9dXSVwRSpQnw9jMPG4SlDKaYIth36E+uq44U9SX4NmARNYUK+gZQdHqUc+HqfHL+6yQaNpKFNA8lU39j/suTROnV97YmdaTVsKSnWTj7eL8mQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by SA1PR11MB7088.namprd11.prod.outlook.com (2603:10b6:806:2b7::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.21; Thu, 22 Sep
- 2022 05:18:34 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::a435:3eff:aa83:73d7]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::a435:3eff:aa83:73d7%6]) with mapi id 15.20.5654.016; Thu, 22 Sep 2022
- 05:18:34 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-CC:     Alex Williamson <alex.williamson@redhat.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        "Wang, Zhi A" <zhi.a.wang@intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Eric Farman <farman@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        "Peter Oberparleiter" <oberpar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Tony Krowiak <akrowiak@linux.ibm.com>,
-        Jason Herne <jjherne@linux.ibm.com>,
-        Harald Freudenberger <freude@linux.ibm.com>,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        "Cornelia Huck" <cohuck@redhat.com>,
-        Longfang Liu <liulongfang@huawei.com>,
-        "Shameer Kolothum" <shameerali.kolothum.thodi@huawei.com>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Kirti Wankhede <kwankhede@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Abhishek Sahu <abhsahu@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        "intel-gvt-dev@lists.freedesktop.org" 
-        <intel-gvt-dev@lists.freedesktop.org>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Liu, Yi L" <yi.l.liu@intel.com>
-Subject: RE: [PATCH v3 15/15] vfio: Add struct device to vfio_device
-Thread-Topic: [PATCH v3 15/15] vfio: Add struct device to vfio_device
-Thread-Index: AQHYw/kWx/ZcHkFOHU+t8x4U9WUM+a3o1qGAgAAo6+CAASHXgIAA2nvQ
-Date:   Thu, 22 Sep 2022 05:18:34 +0000
-Message-ID: <BN9PR11MB527652CF1116B185E4311FDF8C4E9@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20220909102247.67324-1-kevin.tian@intel.com>
- <20220909102247.67324-16-kevin.tian@intel.com>
- <20220920142639.29b1bdc2.alex.williamson@redhat.com>
- <BN9PR11MB5276484952784F5E336814BD8C4C9@BN9PR11MB5276.namprd11.prod.outlook.com>
- <Yys3dZS5ZUByiXin@ziepe.ca>
-In-Reply-To: <Yys3dZS5ZUByiXin@ziepe.ca>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|SA1PR11MB7088:EE_
-x-ms-office365-filtering-correlation-id: f566ff25-801f-4475-ed00-08da9c59e589
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: XHKUY8InvkMxB/A5H4i1gWmCePpSRzBc9GOJeGoPlxt4MRpep/xuDlM+bnLhhbvZ0qYq0UyHahXlJBtNHTkQvyvs86wj5Xs77oG36KuDczlD2N55sK2LdxqkzS2e+RYwplDEzJNTp865TrTz8jqSFhQw6thouykCiNGmYns8Yn7UTu1VqqFfTMJvaJPk9CaPo46pWI611KHlRDUL5w4IwbbRqfau9NEbcz32Zh6hb/fAHO8P/HBU2aQu9ijHA7YwaNePnYZTJ4Tuahsr2xafR5SUgKTdOPwWG9VwHu4GS9A6rzO8jyHOK0xs+Irk8VPz6us0Pj40utsf1B5zBlgMwuEAWqsgivv93Jd1+gxxBZcxcVwEbFMsqu+zlwWUgBNJApN77SgyBKAFS4Tgx/PL3crcPxB5QZNgLrfJguRO/Z4OeoNGpInBiGOfD+4Ec0rB2s4Mo6NYZWXhQILgokeBtjSRC6Mu7PWWSGpFx08trtRs86cGHcHWmTSMZb0s3n8TgvgFI/RSQGRF2Z0iumaAGmjg5QW3rIHlsLLWuSoEUcZJ420kfEg0pJFWAK7LQxb5Cb5paALTcow2am7vsPEROq9oQF8teHBXnuK9H304g/eHDV0c3SG4vonO5/J05/nqV3UN6sV2BTtMl90iGY+IguMjU5EGjM4RgqqaRPikDyoZw8ZEolkZmSXLndD6wUgFOjS0XHf8U8pBxiOFFqKnfYaRL1rUQHbwH5j7l/DDJ22iOx5wn4Ro6w+BqXGFrZtFrmohVphumrsXsZZQUEB5bw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(346002)(366004)(39860400002)(136003)(396003)(451199015)(2906002)(55016003)(316002)(82960400001)(33656002)(38100700002)(66446008)(66946007)(52536014)(66476007)(8676002)(8936002)(7416002)(5660300002)(6916009)(64756008)(7406005)(76116006)(86362001)(4326008)(66556008)(186003)(38070700005)(478600001)(9686003)(122000001)(26005)(54906003)(83380400001)(71200400001)(7696005)(41300700001)(6506007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?pfLEVQ7Asmksu/BPuqyqMwJ6jx6suUm77UJCed6Pl9alwqiCAFhWrjVJ1LQQ?=
- =?us-ascii?Q?aDcGJInqAl5mkeHbKC8VMzbEGxnvhvsxzHwXRFwpQjBambTK1/zTfADrHdjm?=
- =?us-ascii?Q?TaRju662U2ALsElj+ZkCe0VXLOL2PHx0mOSwp7y4qHRYRW+XcBa6zQ0mOp6d?=
- =?us-ascii?Q?/uniVYDK7BN848TauJPgFwWjZ5R7zaCtNdasBkBb0OpGC09xxscQJ02LaxDl?=
- =?us-ascii?Q?7Nw1a120bEs6sEYoxRCjk9Ias1eKNYHkUQ1Xu/dIadEE/CCKJulxeUtdK61O?=
- =?us-ascii?Q?9kDxUJbSFxQcJGFCotmgvDlqjihTorzp3UABIjRXKteSePn+AD07zbtzj8hl?=
- =?us-ascii?Q?tdHHeU+YF8e0ErQt6KA7wLtjxHABFAqok55UQDWzREffsgtmYH/I4a1foovE?=
- =?us-ascii?Q?gi0KRmW+qWGZpL/Pry50Rk2HyyVrLc/YrSWxFDzw76KxhKxqYuQPBzbP3UYB?=
- =?us-ascii?Q?TwfhaYcrDkENMAEX6K2jf5TJfBLyB+QDfMZlSqJMFYprdbGKa0RJaiQLNS/N?=
- =?us-ascii?Q?a1KkJUD3gggwJNigtOz7og2rcvd6+eZAJPwQfm1xKSjI/yyiLS12zz3GC/jU?=
- =?us-ascii?Q?CPYRn+S6pO4N5vYQu3cMVK/1Wyuow7ubR7nMdWhrmLTYuc4X03zoIfsI3Xm5?=
- =?us-ascii?Q?Y2iXBad0EdjqgUXW4whYCJTSH/91Kn048clKX28o6z8uQYq9nMXqzq15YrKg?=
- =?us-ascii?Q?zuXblZcR72xmoT7ePPrQhrCbtW119iZUUfuC3t8tGHLKuXjzlkydfJNJcYey?=
- =?us-ascii?Q?VY3XfiF4l+fATMzbknbVRuBK0hnAoNQrC8MVOqdojPaLGLInLcAGnBK6T+JW?=
- =?us-ascii?Q?KFz6HQnER+vxSxULjGlsDoFVsh/fNqf5mMlpPstCPEI6owXECfdOcfRaBghr?=
- =?us-ascii?Q?dP7s3oNvTOvXBfhZ2GS05XyASbB3sTYWHpo+rEqra3kRYbatVZ299YjBO49W?=
- =?us-ascii?Q?hkhc5Z4wFY/QJhMxQPHYYFlziUrlc5e3H0wbyczs+u5kcq+xxZ+wD0y1dzLd?=
- =?us-ascii?Q?dIwqcUxWvlI0f5ca5aErNZ6D/ioQXxP9stoZsbGa/hvdveDCRbFeXCX8OxTq?=
- =?us-ascii?Q?O95lARbbFU7Uq8qQTTCrfwEV6s4bOCEJToy8AcbPb0ybfRAken1gHlg1YFDz?=
- =?us-ascii?Q?EU5W8MYCKqDb2rBFGOLcSUZwUouBdwcrAtIKcfJXBT6UMb/2oG8HNupqUCK2?=
- =?us-ascii?Q?LgLW2CDf88VhJqSYNzUT2N8yJHIfNksSYmvdg62o3O25FX5DSpeoUxWBn1z5?=
- =?us-ascii?Q?D/I5IoF+MAaVaBlisbdSla/YRZC9oQwj2j6qZu+3SeIUUZEwiNZHzLrQtV/P?=
- =?us-ascii?Q?9rzPXv6s7FTkW6Dv/57x9d3a+/N+uYFTg0HPrHsPsi8ZdUSNO5t9jUvNvzgz?=
- =?us-ascii?Q?KRkO2zAZeYFj8QMDMyyP0DYXtY78PN5ICIU4U0WpioPHSK8w3ufnP26MXWQE?=
- =?us-ascii?Q?WWYzw2nbiHfiQDReYg4S5O1VZhZY0YN2TpOY31BvpSfzAApjGaCPfKDi/2SQ?=
- =?us-ascii?Q?eqS49Qdv0HyDjTs+OP9vMe0UhWdHO8KyAmoWLcVARlo0M5TsyeIf08Gr8nFZ?=
- =?us-ascii?Q?/rCM60IA0rUZjukmjQzA7vZ4l5wB3zmivw8wS+/F?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 22 Sep 2022 01:18:58 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3929DB02AC
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 22:18:55 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id 63so11191075ybq.4
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 22:18:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=Rw64NwZx/B8h2jFhpGLG8OI96ufQiWMUmu8+tiGiOLc=;
+        b=C603rccb6hId4BzesiorvaGb5PNIyamx2XoxD8sd4G6BPwbslwM22eIC9Z5V2GveT5
+         8TWyvQMuxPIavUHFp+MS9JsfijeyCUZtCKzBIUHE04wEyqWYdEITh0TkY+KQRy8ciCgN
+         Oe679nA/lXPLOMlX4MHbqzV6HQ4830ksgLkTJRhXqpCkZGUCZV26RcO7VmltTCn10CNp
+         GySk3IGm8ecl7PAndEcFpEejsGblL9JLSwV0qHNbCGS1hv0XFoZnHz2xRz5f0h6VKsBb
+         xUZE2eUmLVBjugFf/Ln3uRPS2ebjECy9VPJhMjQ2cmMDnFLd8iJP8/h+PVR/vWZ+xOBP
+         HKxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=Rw64NwZx/B8h2jFhpGLG8OI96ufQiWMUmu8+tiGiOLc=;
+        b=mcctHxLhFBMR8oRVasnlrPeIoCuO67E3Bu53mOv+ReIwEiEc5ar9MMFL/OzthEhIMq
+         9nO4rrKHWqZM+L6T+Wx1uymkAb0NEI/b6JhadexS7rtoM5mGttlWzrMEo/rww3MWv0bv
+         74GNMefI5xWIu92VDTeyBw0hLpHuE0jdbw0ia9jHN6KkpgitZwZM/sZiA0pexAW3G4d6
+         5Ql8mpGhoVD43WO+3ETvPJV3oru92DLlLD6gV+hcRerymlOltXNqWy23KbSYF2QDPE3j
+         TD/BR5fphfo8FaJhk+Z5+q6jR2PzVRg4VnMbXBMTt7wuU4H7FFCpk6yivHpyqxvlUEDb
+         xUiw==
+X-Gm-Message-State: ACrzQf2XkrfPCMxVe9WXZkNhczeRoI3O0GnhnbewJmzlAXsu/UoYujMc
+        KZ+/aVDw+cJkQhLsOoT8DOSI75nJHn1Ff7A2O6STCQ==
+X-Google-Smtp-Source: AMsMyM4W0O7FKQabSwFaZxcGeNQBHEU6hV0wOKadzkCSBB7fZKVDoK5ObmijiK7LZEIw4gqkjULTjtn5ZziZ6CUsxxc=
+X-Received: by 2002:a25:4045:0:b0:6ae:b15a:cd81 with SMTP id
+ n66-20020a254045000000b006aeb15acd81mr1852113yba.340.1663823934172; Wed, 21
+ Sep 2022 22:18:54 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f566ff25-801f-4475-ed00-08da9c59e589
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Sep 2022 05:18:34.2921
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: wUoB4gXmFHggZ1bXabSeKme7tU99XOA3MWT5w7MbZCxem5YeT2HCNZecHTMyhTGGrBLnSaRKkc7HjeatuA6vCg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB7088
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220919072356.GA29069@haolee.io>
+In-Reply-To: <20220919072356.GA29069@haolee.io>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Wed, 21 Sep 2022 22:18:42 -0700
+Message-ID: <CAJuCfpF592xFTKP8x-qgRVJ0y3kxJZZk3u8MGM3cBPoPVXYxWg@mail.gmail.com>
+Subject: Re: [PATCH v2] psi: fix possible missing or delayed pending event
+To:     Hao Lee <haolee.swjtu@gmail.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Jason Gunthorpe <jgg@ziepe.ca>
-> Sent: Thursday, September 22, 2022 12:10 AM
->=20
-> On Tue, Sep 20, 2022 at 10:55:40PM +0000, Tian, Kevin wrote:
-> > > From: Alex Williamson <alex.williamson@redhat.com>
-> > > Sent: Wednesday, September 21, 2022 4:27 AM
-> > >
-> > > On Fri,  9 Sep 2022 18:22:47 +0800
-> > > Kevin Tian <kevin.tian@intel.com> wrote:
-> > >
-> > > > From: Yi Liu <yi.l.liu@intel.com>
-> > > >
-> > > > and replace kref. With it a 'vfio-dev/vfioX' node is created under =
-the
-> > > > sysfs path of the parent, indicating the device is bound to a vfio
-> > > > driver, e.g.:
-> > > >
-> > > > /sys/devices/pci0000\:6f/0000\:6f\:01.0/vfio-dev/vfio0
-> > > >
-> > > > It is also a preparatory step toward adding cdev for supporting fut=
-ure
-> > > > device-oriented uAPI.
-> > > >
-> > > > Add Documentation/ABI/testing/sysfs-devices-vfio-dev.
-> > > >
-> > > > Also take this chance to rename chardev 'vfio' to 'vfio-group' in
-> > > > /proc/devices.
-> > >
-> > > What's the risk/reward here, is this just more aesthetically pleasing
-> > > symmetry vs 'vfio-dev'?  The char major number to name association in
-> > > /proc/devices seems pretty obscure, but what due diligence have we
-> done
-> > > to make sure this doesn't break anyone?  Thanks,
-> >
-> > I'm not sure whether the content of /proc/devices is considered as ABI.
-> >
-> > @Jason?
->=20
-> Ah, I've forgotten why we got here - didn't we have a naming conflict
-> with the new stuff that is being introduced?
+On Mon, Sep 19, 2022 at 12:23 AM Hao Lee <haolee.swjtu@gmail.com> wrote:
+>
+> When a pending event exists and growth is less than the threshold, the
+> current logic is to skip this trigger without generating event. However,
+> from e6df4ead85d9 ("psi: fix possible trigger missing in the window"),
+> our purpose is to generate event as long as pending event exists and the
+> rate meets the limit, no matter what growth is.
+> This patch handles this case properly.
+>
+> Fixes: e6df4ead85d9 ("psi: fix possible trigger missing in the window")
+> Signed-off-by: Hao Lee <haolee.swjtu@gmail.com>
 
-No, we don't have. There is no new char dev introduced in this series.
+Acked-by: Suren Baghdasaryan <surenb@google.com>
 
-Later when device cdev is added a new device major will be allocated for
-'vfio-dev'. It's at that time renaming existing 'vfio' to 'vfio-group' is p=
-robably
-clearer, which is what I understood from your earlier suggestion.
+Thanks!
 
->=20
-> ABI wise it is not a problem unless there is a real user, I'm not
-> aware of anything scanning /proc, that has been obsoleted by sysfs a
-> long time ago.
->=20
-
-This is a good news.
+> ---
+>  kernel/sched/psi.c | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
+>
+> diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+> index 9711827e3..7d305d0e0 100644
+> --- a/kernel/sched/psi.c
+> +++ b/kernel/sched/psi.c
+> @@ -539,10 +539,12 @@ static u64 update_triggers(struct psi_group *group, u64 now)
+>
+>                         /* Calculate growth since last update */
+>                         growth = window_update(&t->win, now, total[t->state]);
+> -                       if (growth < t->threshold)
+> -                               continue;
+> +                       if (!t->pending_event) {
+> +                               if (growth < t->threshold)
+> +                                       continue;
+>
+> -                       t->pending_event = true;
+> +                               t->pending_event = true;
+> +                       }
+>                 }
+>                 /* Limit event signaling to once per window */
+>                 if (now < t->last_event_time + t->win.size)
+> --
+> 2.21.0
+>
