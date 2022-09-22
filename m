@@ -2,102 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9B205E6C20
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 21:53:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E40CA5E6C28
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 21:54:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232540AbiIVTxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 15:53:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50372 "EHLO
+        id S231919AbiIVTyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 15:54:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232571AbiIVTwr (ORCPT
+        with ESMTP id S229777AbiIVTyS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 15:52:47 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B2C710C79E
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 12:52:46 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id i15-20020a17090a4b8f00b0020073b4ac27so3265834pjh.3
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 12:52:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=wMNXJ8tFxE5zdbCt/8NlY898zBIrwCziYNXTEkeFtOE=;
-        b=osmH1rZrpkJ6s76hQuUAEjFLexMUXotkjlIrkAHzJLLxfMjT4VOxIIq7LsqQygOh1U
-         MoPViL9Sh3S3Qf6Ig3abH0WuEvy3q7FJqIZkhBpXAk5dtG45kC6WW06TWbRtFiRcwIZA
-         +/V/HjoJfQPK57rx8trhI7mrhNdKAf1dRseLhJKopMegcnOL2hYPoKiiOZZR0tGrcgUK
-         S/vrE7BpLzym8cvD4FET/cPLMF8VJlHGakNccZ6Putz3DmOWcdPJWkLOuClFVeSCBlZE
-         IfLPei+StKU1CMKK9+vrHZfyN+5Qv06CZ3dDS/Y6m7OFbLzYA9ARkbF6avZezHx5q+Gp
-         F1ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=wMNXJ8tFxE5zdbCt/8NlY898zBIrwCziYNXTEkeFtOE=;
-        b=WYFqrdUCaO/KUTYukOQ1REVpIVuRRT92GR5AZUHe2NtP/TM5A74GZYSQSKl03f8nMJ
-         D6gWVMXnew/R7csEth0Hnov5vqHxiiNjXyS1CUFbjDOjeQRU7u//n5idgkt4UJ+PrDAJ
-         /Wid05ye5V5gnqFtigjyfWz/zfD1H3snXggHZrPbG+NyOkyu0LTWsDuh0yKbHcsFVu4r
-         YLUHnuibyQEBFsW+LHHHrI6RnaM/pwA4kCH1T8G8suX/686l3omaB6am1WY6NBI7rI9O
-         5oa7f0FhI9l1IDWrlhfxOWoN/GEEDx4ZXGJej71e8Zphl45ilipUCol9pTJxQKKrzr4D
-         okVA==
-X-Gm-Message-State: ACrzQf0FIoyTWf931l4YY40FK43PmTPPUc1CBU9yeApP6UwvFnouLKwF
-        zPSIq40ym6dX4rC1o3xRvXbqzA==
-X-Google-Smtp-Source: AMsMyM5BdUqTDuToI93vzvlISEbaqCLJ8dQf04fko/C0BcWQFqgd8LAFO+L9G1jawdpz47TT0G+T8g==
-X-Received: by 2002:a17:902:b089:b0:178:54cf:d692 with SMTP id p9-20020a170902b08900b0017854cfd692mr4732453plr.1.1663876365741;
-        Thu, 22 Sep 2022 12:52:45 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id u16-20020a632350000000b004277f43b736sm4180327pgm.92.2022.09.22.12.52.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 12:52:44 -0700 (PDT)
-Date:   Thu, 22 Sep 2022 19:52:40 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        Yuan Yao <yuan.yao@linux.intel.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v10 14/39] KVM: nSVM: Keep track of Hyper-V
- hv_vm_id/hv_vp_id
-Message-ID: <Yyy9CH9CgCsZ3m3V@google.com>
-References: <20220921152436.3673454-1-vkuznets@redhat.com>
- <20220921152436.3673454-15-vkuznets@redhat.com>
- <Yyt/Nrh4aoLrNt11@google.com>
- <87y1ubn3e9.fsf@redhat.com>
+        Thu, 22 Sep 2022 15:54:18 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9B5C10CA40;
+        Thu, 22 Sep 2022 12:54:17 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28MJrfeq013982;
+        Thu, 22 Sep 2022 19:54:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=juEmjHmuZ3ZebWBOD13w/A2IRQORtasctzW9YtDtUb4=;
+ b=dJDX3g1maRwYatcDLuGiqTAd56CcPt4LttrJq0qJTSAUuZKb07MdfYePyTsWs8QEB3HO
+ Gfcmw7BaArub8L3lJ1+QW66+plG/uUpgUDMO/bjbbgPU22aaOR4THYnb+PPJyJA0huAw
+ DcnxXT5hGbMLjyE82AyvjN7a/3FeXi3lsVEZW9vJRoWC/1h3OQC/EFErEz1MuqnU+Wbw
+ zoSBuRS60WwOANtI/tIN6rzQdOkDE+ejvAQ1C6TsxlPqm7OBmQwtRFG+QgWIFDgn0UuC
+ VnZqrvbGbk48f2fYEo2NbW/T21eXDzQ2UTn97SN8kSrD98tUiMEUTh8tOofhJKlvUSiy kw== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jr85v3e04-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Sep 2022 19:54:06 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28MJs4BR017027
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Sep 2022 19:54:04 GMT
+Received: from [10.110.101.161] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Thu, 22 Sep
+ 2022 12:54:03 -0700
+Message-ID: <c8584da1-43b6-f008-f5b0-d27e6516b59b@quicinc.com>
+Date:   Thu, 22 Sep 2022 12:54:02 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87y1ubn3e9.fsf@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [Freedreno] [PATCH v2 05/10] drm/msm/dp: fix IRQ lifetime
+Content-Language: en-US
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        "Rob Clark" <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>
+CC:     <dri-devel@lists.freedesktop.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        <linux-arm-msm@vger.kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        <stable@vger.kernel.org>, Sean Paul <sean@poorly.run>,
+        Steev Klimaszewski <steev@kali.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+References: <20220913085320.8577-1-johan+linaro@kernel.org>
+ <20220913085320.8577-6-johan+linaro@kernel.org>
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+In-Reply-To: <20220913085320.8577-6-johan+linaro@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: XAvMUbnJ2nqau0YFa3JkhFeKuChldZT4
+X-Proofpoint-GUID: XAvMUbnJ2nqau0YFa3JkhFeKuChldZT4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-22_14,2022-09-22_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
+ malwarescore=0 phishscore=0 lowpriorityscore=0 mlxscore=0 adultscore=0
+ mlxlogscore=999 clxscore=1015 priorityscore=1501 suspectscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209220129
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022, Vitaly Kuznetsov wrote:
-> Sean Christopherson <seanjc@google.com> writes:
-> > I'm definitely not dead set against having hyperv.{ch}, but unless there's a high
-> > probability of SVM+Hyper-V getting to eVMCS levels of enlightenment, my vote is
-> > to put these helpers in svm/nested.c and move then if/when we do end up accumulating
-> > more SVM+Hyper-V code.
-> 
-> Well, there's more on the TODO list :-) There are even nSVM-only
-> features like "enlightened TLB" (to split ASID invalidations into two
-> stages) so I don't want to pollute 'nested.c'. In fact, I was thinking
-> about renaming vmx/evmcs.{ch} into vmx/hyperv.{ch} as we're doing more
-> than eVMCS there already. Also, having separate files help with the
-> newly introduces 'KVM X86 HYPER-V (KVM/hyper-v)' MAINTAINERS entry.
 
-Ya, there is that.
+On 9/13/2022 1:53 AM, Johan Hovold wrote:
+> Device-managed resources allocated post component bind must be tied to
+> the lifetime of the aggregate DRM device or they will not necessarily be
+> released when binding of the aggregate device is deferred.
+>
+> This is specifically true for the DP IRQ, which will otherwise remain
+> requested so that the next bind attempt fails when requesting the IRQ a
+> second time.
+>
+> Since commit c3bf8e21b38a ("drm/msm/dp: Add eDP support via aux_bus")
+> this can happen when the aux-bus panel driver has not yet been loaded so
+> that probe is deferred.
+>
+> Fix this by tying the device-managed lifetime of the DP IRQ to the DRM
+> device so that it is released when bind fails.
+>
+> Fixes: c943b4948b58 ("drm/msm/dp: add displayPort driver support")
+> Cc: stable@vger.kernel.org      # 5.10
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+Tested-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+Reviewed-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
 
-> Does this sound like a good enough justification for keeping hyperv.{ch}?
-
-Your call, I'm totally ok either way.  If we do add svm/hyperv.{ch}, my vote is
-to also rename vmx/evmcs.{ch} as you suggested.  I like symmetry :-)
+> ---
+>   drivers/gpu/drm/msm/dp/dp_display.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+> index fbe950edaefe..ba557328710a 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+> @@ -1258,7 +1258,7 @@ int dp_display_request_irq(struct msm_dp *dp_display)
+>   		return -EINVAL;
+>   	}
+>   
+> -	rc = devm_request_irq(&dp->pdev->dev, dp->irq,
+> +	rc = devm_request_irq(dp_display->drm_dev->dev, dp->irq,
+>   			dp_display_irq_handler,
+>   			IRQF_TRIGGER_HIGH, "dp_display_isr", dp);
+>   	if (rc < 0) {
