@@ -2,106 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 212F05E61EE
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 14:05:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F24215E61F0
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 14:07:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231173AbiIVMFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 08:05:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49440 "EHLO
+        id S231187AbiIVMHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 08:07:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiIVMFk (ORCPT
+        with ESMTP id S229470AbiIVMG6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 08:05:40 -0400
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E1A18983F;
-        Thu, 22 Sep 2022 05:05:37 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Thu, 22 Sep 2022 08:06:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123AC9F8DD;
+        Thu, 22 Sep 2022 05:06:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 1B1E541F72;
-        Thu, 22 Sep 2022 12:05:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1663848335; bh=4C8tp/J+vzOZn+IcAaj/31/YtIQ4NN2UYPR9Bjo1AeE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=CAfX13+M95AnsYhz9cVsQBzaOhx6+6ISasDwrrP3gj5STGV7rtNESHmOPgB6STuU8
-         53JKtUGFgFNIhqcCLQiERuC0dMjF/H4ABwFXSH/EpI7eXvXaD552fso8yPliiBQiiu
-         EHJ3gx6Lo8P3d29D28RCV8tI1FeUCBex2/WtcPuOCktjW/8Oz/dM+v+SFqvquCiQ93
-         cZNu0p1QGz/ABUCpPUmqo0h5TloLjosCIcoIMacPHLvWcog/e4mf7evxb6tdnWDdj4
-         6cXoMrfI5vS3WTvRsiFsJ72/pd3OZozBAeAqyGMzxaZiUTchpgFZQb5w7apCCN1Hki
-         vPbqTLYOmSXQQ==
-Message-ID: <0f2a1930-9d43-60e8-5f6e-55779248bee5@marcan.st>
-Date:   Thu, 22 Sep 2022 21:05:28 +0900
+        by ams.source.kernel.org (Postfix) with ESMTPS id A0351B8360C;
+        Thu, 22 Sep 2022 12:06:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C60BFC433C1;
+        Thu, 22 Sep 2022 12:06:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1663848414;
+        bh=U2FQCGpW2S4AWxNLxSUcRKT+ddcF0bch37vmQjieYEQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EQchzc3SrUNZyGJTqnA2oI+bXUjI9AdznthkDYuobz2nls1cs5TqhRBcdgIbs5Sxd
+         fuZrWPzOekK1kbndrFOj+AtBS+Y7ph5O4y91WnTl5jHCDLyKMN4DOJ/HQX7f98lTcf
+         kc1ZStK4t8lz6JXLtioWp+GK8at4pFtplH1G898M=
+Date:   Thu, 22 Sep 2022 14:06:51 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Ray Chi <raychi@google.com>
+Cc:     stern@rowland.harvard.edu, mchehab+huawei@kernel.org,
+        albertccwang@google.com, badhri@google.com, pumahsu@google.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [Patch v3] usb: core: stop USB enumeration if too many retries
+Message-ID: <YyxP2/GLgyp5Cq66@kroah.com>
+References: <20220908104019.3080989-1-raychi@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v5 1/5] dt-bindings: iommu: dart: add t6000 compatible
-Content-Language: es-ES
-To:     Janne Grunau <j@jannau.net>, iommu@lists.linux.dev
-Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        asahi@lists.linux.dev, Sven Peter <sven@svenpeter.dev>,
-        Rob Herring <robh@kernel.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Joerg Roedel <joro@8bytes.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Will Deacon <will@kernel.org>, devicetree@vger.kernel.org,
-        iommu@lists.linux-foundation.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220916094152.87137-1-j@jannau.net>
- <20220916094152.87137-2-j@jannau.net>
-From:   Hector Martin <marcan@marcan.st>
-In-Reply-To: <20220916094152.87137-2-j@jannau.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220908104019.3080989-1-raychi@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/09/2022 18.41, Janne Grunau wrote:
-> From: Sven Peter <sven@svenpeter.dev>
+On Thu, Sep 08, 2022 at 06:40:19PM +0800, Ray Chi wrote:
+> When a broken USB accessory connects to a USB host, usbcore might
+> keep doing enumeration retries. If the host has a watchdog mechanism,
+> the kernel panic will happen on the host.
 > 
-> The M1 Max/Pro SoCs come with a new DART variant that is incompatible with
-> the previous one. Add a new compatible for those.
+> The patch provide a attribute to limit the numbers of retries and
+> timeout lengths.
+
+This is per-port, right?  Please say that here.
+
+> In addition, it also adds a function to stop the
+> port initialization and ignore events on the port if the broken
+> accessory is still connected.
+
+So this should be 2 patches?  Remember, only do one logical thing per
+patch please.
+
 > 
-> Signed-off-by: Sven Peter <sven@svenpeter.dev>
-> Acked-by: Rob Herring <robh@kernel.org>
-> 
-> Signed-off-by: Janne Grunau <j@jannau.net>
+> Signed-off-by: Ray Chi <raychi@google.com>
 > ---
+> Changes since v2:
+>  - replace the quirk with the attribute
+>  - Document the attribute
+>  - modify hub_port_stop_enumerate() position in port_event()
+>  - modify the changelog
 > 
-> (no changes since v2)
+> Changes since v1:
+>  - remove usb_hub_set_port_power()
+>  - add a variable ignore_connect into struct port_dev
+>  - modify hub_port_stop_enumerate() and set ignore_connect in
+>    this function
+>  - avoid calling hub_port_connect_change() in port_event()
+> ---
+>  Documentation/ABI/testing/sysfs-bus-usb |  9 ++++++
+>  drivers/usb/core/hub.c                  | 39 +++++++++++++++++++++++++
+>  drivers/usb/core/hub.h                  |  4 +++
+>  drivers/usb/core/port.c                 | 23 +++++++++++++++
+>  4 files changed, 75 insertions(+)
 > 
-> Changes in v2:
-> - added Rob's Acked-by:
-> 
->  Documentation/devicetree/bindings/iommu/apple,dart.yaml | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/iommu/apple,dart.yaml b/Documentation/devicetree/bindings/iommu/apple,dart.yaml
-> index 82ad669feef7..06af2bacbe97 100644
-> --- a/Documentation/devicetree/bindings/iommu/apple,dart.yaml
-> +++ b/Documentation/devicetree/bindings/iommu/apple,dart.yaml
-> @@ -22,7 +22,9 @@ description: |+
+> diff --git a/Documentation/ABI/testing/sysfs-bus-usb b/Documentation/ABI/testing/sysfs-bus-usb
+> index 568103d3376e..d44c8aaef929 100644
+> --- a/Documentation/ABI/testing/sysfs-bus-usb
+> +++ b/Documentation/ABI/testing/sysfs-bus-usb
+> @@ -264,6 +264,15 @@ Description:
+>  		attached to the port will not be detected, initialized,
+>  		or enumerated.
 >  
->  properties:
->    compatible:
-> -    const: apple,t8103-dart
-> +    enum:
-> +      - apple,t8103-dart
-> +      - apple,t6000-dart
+> +What:		/sys/bus/usb/devices/.../<hub_interface>/port<X>/quick_init
+> +Date:		Sep 2022
+> +Contact:	Ray Chi <raychi@google.com>
+> +Description:
+> +		Some USB hosts have some watchdog mechanisms so that the device
+> +		may enter ramdump if it takes a long time during port initialization.
+> +		This attribute limits the numbers of retries and timeout lengths once
+> +		an initialization of the port meets failures.
+
+The text here is very odd, maybe it's just a translation issue.  A port
+can not "meet" a failure.  And this really has nothing to do with any
+watchdog, it's just a "we want to fail broken devices quickly instead of
+giving them lots of time to connect" type of issue, right?
+
+And we already have different init schemes, "quick" is an odd way to
+phrase this, but I can't think of anything else at the moment.
+
+
+> +
+>  What:		/sys/bus/usb/devices/.../power/usb2_lpm_l1_timeout
+>  Date:		May 2013
+>  Contact:	Mathias Nyman <mathias.nyman@linux.intel.com>
+> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> index d4b1e70d1498..f22caa133274 100644
+> --- a/drivers/usb/core/hub.c
+> +++ b/drivers/usb/core/hub.c
+> @@ -3081,6 +3081,29 @@ static int hub_port_reset(struct usb_hub *hub, int port1,
+>  	return status;
+>  }
 >  
->    reg:
->      maxItems: 1
+> +/* Check whether a hub would stop enumeration or ignore events on the port. */
 
-I'm taking this one via the Asahi-SoC tree, since it unblocks the t6000
-DT series and it is already reviewed and ready to go. Thanks!
+Based on what?  Retries?  Time of day?  Phase of moon?  :)
 
-- Hector
+> +static bool hub_port_stop_enumerate(struct usb_hub *hub, int port1, int retries)
+> +{
+> +	struct usb_port *port_dev = hub->ports[port1 - 1];
+> +
+> +	if (port_dev->quick_init) {
+> +		if (port_dev->ignore_connect)
+> +			return true;
+> +
+> +		/*
+> +		 * Since some normal devices will be timeout in the first attempt,
+> +		 * set the condition to half of the retries
+> +		 */
+> +		if (retries < (PORT_INIT_TRIES - 1) / 2)
+> +			return false;
+> +
+> +		port_dev->ignore_connect = true;
+> +	} else
+> +		port_dev->ignore_connect = false;
+
+So this function modifies a port_dev value, AND returns it to the
+caller?  Why not document that somewhere?  Why do both?
+
+And if quick_init is false then it always set ignore_connect to false
+and returns false always?
+
+> +
+> +	return port_dev->ignore_connect;
+> +}
+> +
+>  /* Check if a port is power on */
+>  int usb_port_is_power_on(struct usb_hub *hub, unsigned int portstatus)
+>  {
+> @@ -4855,6 +4878,11 @@ hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
+>  					buf->bMaxPacketSize0;
+>  			kfree(buf);
+>  
+> +			if (r < 0 && port_dev->quick_init) {
+> +				retval = r;
+> +				goto fail;
+> +			}
+> +
+>  			retval = hub_port_reset(hub, port1, udev, delay, false);
+>  			if (retval < 0)		/* error or disconnect */
+>  				goto fail;
+> @@ -5387,6 +5415,9 @@ static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
+>  		if ((status == -ENOTCONN) || (status == -ENOTSUPP))
+>  			break;
+>  
+> +		if (hub_port_stop_enumerate(hub, port1, i))
+> +			break;
+> +
+>  		/* When halfway through our retry count, power-cycle the port */
+>  		if (i == (PORT_INIT_TRIES - 1) / 2) {
+>  			dev_info(&port_dev->dev, "attempt power cycle\n");
+> @@ -5614,6 +5645,9 @@ static void port_event(struct usb_hub *hub, int port1)
+>  	if (!pm_runtime_active(&port_dev->dev))
+>  		return;
+>  
+> +	if (hub_port_stop_enumerate(hub, port1, 0))
+> +		return;
+> +
+>  	if (hub_handle_remote_wakeup(hub, port1, portstatus, portchange))
+>  		connect_change = 1;
+>  
+> @@ -5934,6 +5968,9 @@ static int usb_reset_and_verify_device(struct usb_device *udev)
+>  		ret = hub_port_init(parent_hub, udev, port1, i);
+>  		if (ret >= 0 || ret == -ENOTCONN || ret == -ENODEV)
+>  			break;
+> +
+> +		if (hub_port_stop_enumerate(parent_hub, port1, i))
+> +			goto stop_enumerate;
+>  	}
+>  	mutex_unlock(hcd->address0_mutex);
+>  
+> @@ -6022,6 +6059,8 @@ static int usb_reset_and_verify_device(struct usb_device *udev)
+>  	udev->bos = bos;
+>  	return 0;
+>  
+> +stop_enumerate:
+> +	mutex_unlock(hcd->address0_mutex);
+>  re_enumerate:
+>  	usb_release_bos_descriptor(udev);
+>  	udev->bos = bos;
+> diff --git a/drivers/usb/core/hub.h b/drivers/usb/core/hub.h
+> index b2925856b4cb..57995ec3af58 100644
+> --- a/drivers/usb/core/hub.h
+> +++ b/drivers/usb/core/hub.h
+> @@ -90,6 +90,8 @@ struct usb_hub {
+>   * @is_superspeed cache super-speed status
+>   * @usb3_lpm_u1_permit: whether USB3 U1 LPM is permitted.
+>   * @usb3_lpm_u2_permit: whether USB3 U2 LPM is permitted.
+> + * @ignore_connect: ignore the connection or not.
+
+Which connection?  Any future connection?  Or the one that is currently
+connected?
+
+> + * @quick_init: limit the numbers of retries for port initialization
+
+Limit it to what?
+
+>   */
+>  struct usb_port {
+>  	struct usb_device *child;
+> @@ -103,6 +105,8 @@ struct usb_port {
+>  	u32 over_current_count;
+>  	u8 portnum;
+>  	u32 quirks;
+> +	bool ignore_connect;
+> +	bool quick_init;
+
+Why are these bool, when:
+
+>  	unsigned int is_superspeed:1;
+>  	unsigned int usb3_lpm_u1_permit:1;
+>  	unsigned int usb3_lpm_u2_permit:1;
+
+Those are all bits?
+
+Be consistent please.
+
+thanks,
+
+greg k-h
