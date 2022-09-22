@@ -2,108 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D95A5E6BC2
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 21:34:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 719425E6BC3
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 21:35:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231838AbiIVTeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 15:34:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51824 "EHLO
+        id S231197AbiIVTfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 15:35:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbiIVTd7 (ORCPT
+        with ESMTP id S229864AbiIVTe6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 15:33:59 -0400
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D3F310808F;
-        Thu, 22 Sep 2022 12:33:59 -0700 (PDT)
-Received: by mail-qk1-f182.google.com with SMTP id i3so6952288qkl.3;
-        Thu, 22 Sep 2022 12:33:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=78jrB9R8LhZta3Yc8UK1hR35xlhpQqfZTT/+lbOX8Yk=;
-        b=4xN9XK3D0iGLkUuC+GeEVvf6C7Bi0ugAkKcGvPBKQaLxkc8EYQtLC4YvRkWwuPCL+b
-         VhPulO860KPclkv/4tjk+R1hDSU9Foiar59G6BXjyj8gd+ZxQdp4p+8rEtjJiUDqz6eR
-         gtln4y9Kukj0pWZZe/4vhvP2ynGgZ/Tbfi0Rrc2TbCmiialaNKyyEYImi+PaOMUQnhhX
-         UO7D7psejIR2QZA5xYf2VV6z/lrofH7zXvJA7VVRLGw0EZCNcoDwiSznxiuHLtcP4ycM
-         nqXtVE7ZcKCImdXzUGgNDcnOnrpPDnLkko7g4wvoZDHPzwGwBsNSVJw/clO2XhwQvxns
-         qZUw==
-X-Gm-Message-State: ACrzQf1ZEQe8VlGJxi+LvpphQLxZ0sR5h6cygErEdF+q2a8KGQODsKhy
-        CUC7xem8ARzCJI9VmWXY012uAJ+vVYhUuCjtn2Q=
-X-Google-Smtp-Source: AMsMyM7ngD1AJj+UvGF8kpbszbolKMB1I6oZLrvHGxZuXk/9cWTG7nRVuM3+y3nfmr9YT+JKtD4D8UKTgCejCfU22ZQ=
-X-Received: by 2002:a05:620a:2988:b0:6ce:cc3f:73b9 with SMTP id
- r8-20020a05620a298800b006cecc3f73b9mr3329578qkp.9.1663875238228; Thu, 22 Sep
- 2022 12:33:58 -0700 (PDT)
+        Thu, 22 Sep 2022 15:34:58 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D693EE1185
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 12:34:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663875297; x=1695411297;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=gMA139Nz1+YsImIs/o9xGleu/LUno1XeYEqdI+HbTD4=;
+  b=R7uh0VadZHxxeSWcrvOLfra58ZlayBor4BFyRMXcMcV7NxhQXj9R4ewh
+   r4BTtCi4EST3eudTNU9GaIq7T+I9dksZuNK1mu9NeviwbKDqhM6PSCoiQ
+   jmIqTG9rrftK6ERXY/2ZeWGyTsEKqsjzN+yg0EelEWiuCQzqt7K7OukMS
+   PcP+ErsvoHM+wfIGW+zPG5erXwX7Ud1Mkm+apV+6gqkPI17nu1bBgOZNR
+   txp3uL22U4cVzsRD39uPvJR7JhmVzRxTvD7elsqYtOYj8D+RDYdBcjMa+
+   xffwphF/yBD21Nwy9N+Pq4B7J41cykhnyqMV7ysHXRpU3Z2MfpICcwwo7
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="298009831"
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="298009831"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 12:34:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="709023707"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by FMSMGA003.fm.intel.com with ESMTP; 22 Sep 2022 12:34:56 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id A53F7F7; Thu, 22 Sep 2022 22:35:13 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Yury Norov <yury.norov@gmail.com>, linux-kernel@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Phil Auld <pauld@redhat.com>
+Subject: [PATCH v1 1/1] cpumask: Don't waste memory for sysfs cpulist nodes
+Date:   Thu, 22 Sep 2022 22:34:47 +0300
+Message-Id: <20220922193447.88123-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <12079576.O9o76ZdvQC@kreacher> <Yyy4O/NUMSRtCmhI@rowland.harvard.edu>
-In-Reply-To: <Yyy4O/NUMSRtCmhI@rowland.harvard.edu>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 22 Sep 2022 21:33:47 +0200
-Message-ID: <CAJZ5v0huvrHrk_8Jh3vWSEx-MEEZcZop_XCZeQ1FcNmD+7xZBQ@mail.gmail.com>
-Subject: Re: [PATCH] PM: runtime: Return -EINPROGRESS from rpm_resume() in the
- RPM_NOWAIT case
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 9:32 PM Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Thu, Sep 22, 2022 at 08:04:40PM +0200, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > The prospective callers of rpm_resume() passing RPM_NOWAIT to it may
-> > be confused when it returns 0 without actually resuming the device
-> > which may happen if the device is suspending at the given time and it
-> > will only resume when the suspend in progress has completed.  To avoid
-> > that confusion, return -EINPROGRESS from rpm_resume() in that case.
-> >
-> > Since none of the current callers passing RPM_NOWAIT to rpm_resume()
-> > check its return value, this change has no functional impact.
-> >
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >  drivers/base/power/runtime.c |    7 +++++--
-> >  1 file changed, 5 insertions(+), 2 deletions(-)
-> >
-> > Index: linux-pm/drivers/base/power/runtime.c
-> > ===================================================================
-> > --- linux-pm.orig/drivers/base/power/runtime.c
-> > +++ linux-pm/drivers/base/power/runtime.c
-> > @@ -792,10 +792,13 @@ static int rpm_resume(struct device *dev
-> >               DEFINE_WAIT(wait);
-> >
-> >               if (rpmflags & (RPM_ASYNC | RPM_NOWAIT)) {
->
-> Hmmm, and what if a caller sets both of these flags?  I guess in that
-> case he gets what he deserves.
+Currently the approximation is used which wastes the more memory
+the more CPUs are present on the system. Proposed change calculates
+the exact maximum needed in the worst case:
 
-Exactly.
+  NR_CPUS	old		new
+  -------	---		---
+  1 .. 1860	4096		4096
+  ...		...		...
+  2*4096	28672		19925
+  4*4096	57344		43597
+  8*4096	114688		92749
+  16*4096	229376		191053
+  32*4096	458752		403197
+  64*4096	917504		861949
+  128*4096	1835008		1779453
+  256*4096	3670016		3670016
 
-> > -                     if (dev->power.runtime_status == RPM_SUSPENDING)
-> > +                     if (dev->power.runtime_status == RPM_SUSPENDING) {
-> >                               dev->power.deferred_resume = true;
-> > -                     else
-> > +                             if (rpmflags & RPM_NOWAIT)
-> > +                                     retval = -EINPROGRESS;
-> > +                     } else {
-> >                               retval = -EINPROGRESS;
-> > +                     }
-> >                       goto out;
-> >               }
->
-> Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Under the hood the reccurent formula is being used:
+  (5 - 0) * 2 +
+    (50 - 5) * 3 +
+      (500 - 50) * 4 +
+        (5000 - 500) * 5 +
+          ...
+            (X[i] - X[i-1]) * i
 
-Thanks!
+which allows to count the exact maximum length in the worst case,
+i.e. when each second CPU is being listed. For less than 1861 and
+more than 1 million CPUs the old is being used.
+
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ include/linux/cpumask.h | 45 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+
+diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
+index 1b442fb2001f..7c6416fa038d 100644
+--- a/include/linux/cpumask.h
++++ b/include/linux/cpumask.h
+@@ -1122,6 +1122,18 @@ cpumap_print_list_to_buf(char *buf, const struct cpumask *mask,
+  *
+  * for cpumap NR_CPUS * 9/32 - 1 should be an exact length.
+  *
++ * for cpulist the reccurent formula is being used:
++ *   (5 - 0) * 2 +
++ *     (50 - 5) * 3 +
++ *       (500 - 50) * 4 +
++ *         (5000 - 500) * 5 +
++ *           ...
++ *             (X[i] - X[i-1]) * i
++ *
++ * which allows to count the exact maximum length in the worst case,
++ * i.e. when each second CPU is being listed. For less than 1861 and
++ * more than 1 million CPUs the old is being used as described below:
++ *
+  * For cpulist 7 is (ceil(log10(NR_CPUS)) + 1) allowing for NR_CPUS to be up
+  * to 2 orders of magnitude larger than 8192. And then we divide by 2 to
+  * cover a worst-case of every other cpu being on one of two nodes for a
+@@ -1132,6 +1144,39 @@ cpumap_print_list_to_buf(char *buf, const struct cpumask *mask,
+  */
+ #define CPUMAP_FILE_MAX_BYTES  (((NR_CPUS * 9)/32 > PAGE_SIZE) \
+ 					? (NR_CPUS * 9)/32 - 1 : PAGE_SIZE)
++
++#define __CPULIST_FOR_10(x)		(((x + 1) / 2 - 0)     * 2)
++#define __CPULIST_FOR_100(x)		(((x + 1) / 2 - 5)     * 3)
++#define __CPULIST_FOR_1000(x)		(((x + 1) / 2 - 50)    * 4)
++#define __CPULIST_FOR_10000(x)		(((x + 1) / 2 - 500)   * 5)
++#define __CPULIST_FOR_100000(x)		(((x + 1) / 2 - 5000)  * 6)
++#define __CPULIST_FOR_1000000(x)	(((x + 1) / 2 - 50000) * 7)
++
++#if NR_CPUS < 1861
++#define CPULIST_FILE_MAX_BYTES	PAGE_SIZE
++#elif NR_CPUS < 10000
++#define CPULIST_FILE_MAX_BYTES			\
++	 (__CPULIST_FOR_10(10) +		\
++	  __CPULIST_FOR_100(100) +		\
++	  __CPULIST_FOR_1000(1000) +		\
++	  __CPULIST_FOR_10000(NR_CPUS))
++#elif NR_CPUS < 100000
++#define CPULIST_FILE_MAX_BYTES			\
++	 (__CPULIST_FOR_10(10) +		\
++	  __CPULIST_FOR_100(100) +		\
++	  __CPULIST_FOR_1000(1000) +		\
++	  __CPULIST_FOR_10000(10000) +		\
++	  __CPULIST_FOR_100000(NR_CPUS))
++#elif NR_CPUS < 1000000
++#define CPULIST_FILE_MAX_BYTES			\
++	 (__CPULIST_FOR_10(10) +		\
++	  __CPULIST_FOR_100(100) +		\
++	  __CPULIST_FOR_1000(1000) +		\
++	  __CPULIST_FOR_10000(10000) +		\
++	  __CPULIST_FOR_100000(100000) +	\
++	  __CPULIST_FOR_1000000(NR_CPUS))
++#else
+ #define CPULIST_FILE_MAX_BYTES  (((NR_CPUS * 7)/2 > PAGE_SIZE) ? (NR_CPUS * 7)/2 : PAGE_SIZE)
++#endif
+ 
+ #endif /* __LINUX_CPUMASK_H */
+-- 
+2.35.1
+
