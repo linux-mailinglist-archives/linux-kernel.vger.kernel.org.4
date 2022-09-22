@@ -2,139 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DBE15E6D6E
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 22:57:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D01B25E6D70
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 22:57:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230217AbiIVU5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 16:57:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37074 "EHLO
+        id S229688AbiIVU5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 16:57:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbiIVU5L (ORCPT
+        with ESMTP id S229606AbiIVU5Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 16:57:11 -0400
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8B110AB27;
-        Thu, 22 Sep 2022 13:57:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1663880228;
-        bh=3c1251MbYAYeP1Aj1gKZxrClFdNw2kDmGsEK8qXCXFQ=;
-        h=Message-ID:Subject:From:To:Date:From;
-        b=KhwK3PIZ/pUcExHHvC01S3BsQSyQxzioKuYpjMx6DhnJ2OiekPebDtsikwPT9OuL2
-         sFYe5tL9lGYgqrASyOvGWKnY/dNV+tbT+KLtRe5JTQA4ZpF7qqfpPFuR0HWUeCpQ/u
-         ZQ97NnfyPWJD9ntnzNYZR8/lfjteAx0FyWgWNfOM=
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 7B48C12888B5;
-        Thu, 22 Sep 2022 16:57:08 -0400 (EDT)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id mf4IfM0RzzKe; Thu, 22 Sep 2022 16:57:08 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1663880228;
-        bh=3c1251MbYAYeP1Aj1gKZxrClFdNw2kDmGsEK8qXCXFQ=;
-        h=Message-ID:Subject:From:To:Date:From;
-        b=KhwK3PIZ/pUcExHHvC01S3BsQSyQxzioKuYpjMx6DhnJ2OiekPebDtsikwPT9OuL2
-         sFYe5tL9lGYgqrASyOvGWKnY/dNV+tbT+KLtRe5JTQA4ZpF7qqfpPFuR0HWUeCpQ/u
-         ZQ97NnfyPWJD9ntnzNYZR8/lfjteAx0FyWgWNfOM=
-Received: from [IPv6:2601:5c4:4300:c551:a71:90ff:fec2:f05b] (unknown [IPv6:2601:5c4:4300:c551:a71:90ff:fec2:f05b])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id C5B6D12888AF;
-        Thu, 22 Sep 2022 16:57:07 -0400 (EDT)
-Message-ID: <72da0a69339074e2bad5295fe54a291c1e5cd206.camel@HansenPartnership.com>
-Subject: [GIT PULL] SCSI fixes for 6.0-rc6
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Thu, 22 Sep 2022 16:57:06 -0400
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        Thu, 22 Sep 2022 16:57:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79D812C67A;
+        Thu, 22 Sep 2022 13:57:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DA255610A1;
+        Thu, 22 Sep 2022 20:57:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6EF7C433D6;
+        Thu, 22 Sep 2022 20:57:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663880234;
+        bh=JB3NDJEV/v85Ow5DEPOCDDWd8yYDXhteqm8hggXtLjw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ip9U3VRghsga/8UYTkwEoAVDxTnoiqrGLKjXLviuuQdWr6amJkSJ3Dy4pPlTtyK4n
+         G0ST06gN3wXWlp4tweScZbxgAbWC1168z0cTLPlBTowYMNTgmgXGs4vkBIB+4OYPJD
+         LCaztbwWkdv6V770fSPwsVAtgdBBMRkF6JhJcWhbiaGmvepzKWfMelp5oxSJtTsNhk
+         poXdiRO/rmwFc3mWJjTXqMzwooKo5N1dwqInrPPHnpABu2t3s9vl1VWeXcVdNpcPlh
+         And0lwmev0+nvtK5HJamjSRsMzlyuI4TAvnM0TPnO25VGgJBKcpLDmgsafbGa7yvlj
+         33a75XLO85+0w==
+Date:   Thu, 22 Sep 2022 21:57:08 +0100
+From:   Will Deacon <will@kernel.org>
+To:     James Clark <james.clark@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, broonie@kernel.org,
+        acme@kernel.org, leo.yan@linaro.org, john.garry@huawei.com,
+        catalin.marinas@arm.com, Jonathan Corbet <corbet@lwn.net>,
+        Mark Rutland <mark.rutland@arm.com>, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v3 0/2] perf: arm64: Kernel support for Dwarf unwinding
+ through SVE functions
+Message-ID: <20220922205707.GB12945@willie-the-truck>
+References: <20220901132658.1024635-1-james.clark@arm.com>
+ <20220922140406.GG12095@willie-the-truck>
+ <d6eaa797-380b-e8ae-f928-54843dd596f2@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d6eaa797-380b-e8ae-f928-54843dd596f2@arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Three small and pretty obvious fixes, all in drivers.
+On Thu, Sep 22, 2022 at 03:31:20PM +0100, James Clark wrote:
+> 
+> 
+> On 22/09/2022 15:04, Will Deacon wrote:
+> > On Thu, Sep 01, 2022 at 02:26:56PM +0100, James Clark wrote:
+> >> I'm resubmitting this with a few of the changes suggested by Will on V2.
+> >>
+> >> I haven't made any changes regarding the open questions about the
+> >> discoverability or saving the new reg and passing to output_sample()
+> >> because I think it's best to be consistent with the implementations on
+> >> other platforms first. I have explained in more detail on v2 [1].
+> >>
+> >> [1]: https://lore.kernel.org/lkml/5fcf1a6f-c8fb-c296-992e-18aae8874095@arm.com/
+> > 
+> > Fair enough, I can't argue against being consistent.
+> > 
+> > Given that this exposes subtle new user ABI, do we have any coverage in
+> > the selftests? If not, please could you add something?
+> > 
+> 
+> Thanks, I will do that. I assume you mean the self tests in
+> tools/perf/tests and not some non Perf tests?
 
-The patch is available here:
+I hadn't thought much about it, so wherever is best. It would just be nice
+to have something we can run to make sure that this continues to work as
+intended.
 
-git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
-
-The short changelog is:
-
-Letu Ren (1):
-      scsi: qedf: Fix a UAF bug in __qedf_probe()
-
-Rafael Mendonca (1):
-      scsi: qla2xxx: Fix memory leak in __qlt_24xx_handle_abts()
-
-Sreekanth Reddy (1):
-      scsi: mpt3sas: Fix return value check of dma_get_required_mask()
-
-And the diffstat:
-
- drivers/scsi/mpt3sas/mpt3sas_base.c | 2 +-
- drivers/scsi/qedf/qedf_main.c       | 5 -----
- drivers/scsi/qla2xxx/qla_target.c   | 4 +++-
- 3 files changed, 4 insertions(+), 7 deletions(-)
-
-With full diff below.
-
-James
-
----
-
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
-index 565339a0811d..331e896d8225 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_base.c
-+++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
-@@ -2993,7 +2993,7 @@ _base_config_dma_addressing(struct MPT3SAS_ADAPTER *ioc, struct pci_dev *pdev)
- 
- 	if (ioc->is_mcpu_endpoint ||
- 	    sizeof(dma_addr_t) == 4 || ioc->use_32bit_dma ||
--	    dma_get_required_mask(&pdev->dev) <= 32)
-+	    dma_get_required_mask(&pdev->dev) <= DMA_BIT_MASK(32))
- 		ioc->dma_mask = 32;
- 	/* Set 63 bit DMA mask for all SAS3 and SAS35 controllers */
- 	else if (ioc->hba_mpi_version_belonged > MPI2_VERSION)
-diff --git a/drivers/scsi/qedf/qedf_main.c b/drivers/scsi/qedf/qedf_main.c
-index 3d6b137314f3..bbc4d5890ae6 100644
---- a/drivers/scsi/qedf/qedf_main.c
-+++ b/drivers/scsi/qedf/qedf_main.c
-@@ -3686,11 +3686,6 @@ static int __qedf_probe(struct pci_dev *pdev, int mode)
- err1:
- 	scsi_host_put(lport->host);
- err0:
--	if (qedf) {
--		QEDF_INFO(&qedf->dbg_ctx, QEDF_LOG_DISC, "Probe done.\n");
--
--		clear_bit(QEDF_PROBING, &qedf->flags);
--	}
- 	return rc;
- }
- 
-diff --git a/drivers/scsi/qla2xxx/qla_target.c b/drivers/scsi/qla2xxx/qla_target.c
-index 62666df1a59e..4acff4e84b90 100644
---- a/drivers/scsi/qla2xxx/qla_target.c
-+++ b/drivers/scsi/qla2xxx/qla_target.c
-@@ -2151,8 +2151,10 @@ static int __qlt_24xx_handle_abts(struct scsi_qla_host *vha,
- 
- 	abort_cmd = ha->tgt.tgt_ops->find_cmd_by_tag(sess,
- 				le32_to_cpu(abts->exchange_addr_to_abort));
--	if (!abort_cmd)
-+	if (!abort_cmd) {
-+		mempool_free(mcmd, qla_tgt_mgmt_cmd_mempool);
- 		return -EIO;
-+	}
- 	mcmd->unpacked_lun = abort_cmd->se_cmd.orig_fe_lun;
- 
- 	if (abort_cmd->qpair) {
-
+Will
