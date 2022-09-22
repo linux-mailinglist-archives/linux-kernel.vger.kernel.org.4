@@ -2,109 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69BE05E6E5A
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 23:22:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B02435E6E65
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 23:28:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbiIVVW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 17:22:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45576 "EHLO
+        id S229968AbiIVV2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 17:28:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbiIVVWY (ORCPT
+        with ESMTP id S229645AbiIVV2J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 17:22:24 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9325410F72D
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 14:22:22 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id r7so17545354wrm.2
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 14:22:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=js/5oTRugoQUYKiAkaMc0Wr4v083F951SM+zFeysBRc=;
-        b=kOmpyQR0sC0aLPXqU/SaAlZvRiczPLKEvueA69by3IY5Iq3flK830ktzUfIgf4JQTE
-         e9DziPS/vdUnv9DtWtr6PROybAMNwm+GP639aoDgYLNMEUpqIke+2n5J6sPXEghstq4E
-         VGxzZCDn9V8W8zABUZ+Zm5PAu6AO3oBhXfQ/zjAueeR3MpN5W/TuDexdjNBR7jB3ohKi
-         ysvcQy7IHRFS3ZKWztHLJ3RumbkqsL072exPD2C3ZrjlZGXkUjMeIrUlK4IUdqt/2elO
-         /+ubFvnkyLhWNCQiy5aRuylFG4FiAwxs4HVzyT20DbJUwurfG1dougBZjdgaS4dwY6JB
-         AnSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=js/5oTRugoQUYKiAkaMc0Wr4v083F951SM+zFeysBRc=;
-        b=Kkh7lEFhqGegXcoEVb34c1aZnfFDHtdGUkCRhr9KQAt4UtC5IMKeBNGgOSyek3+nta
-         VhZ1JyX3vu6v7tFfm4FqyyuQeYzZvjutIUAEUKWXUOIp2hOrRsz/vWURMiJ9t2Lew/qp
-         bAbX3j9iNOuSQuUo9oFSTXXgzAQxL+KXIXvCempQ2jcinoHCnRVO0s2Dz6W6b1nZXu0h
-         oIJhj/zcIv8MI4sMpOM5UtEMmdSirByd1a8l1gK1P54hQzzU7yCwEHBblZFM95X7J2LO
-         I+ySM3qFxNLsRfOCVY+SQaITlhhNhnQxC+JI76qgsS7xuVNzV0OhV0FXCx42Smj7/YvE
-         J7tQ==
-X-Gm-Message-State: ACrzQf353XpCbEgi2EwOZgYqWxLZHmuUICy74x2ctIOVNs2/kWpFvnnw
-        sSXmC9g5HV1OrskXuXmldLdzqQ==
-X-Google-Smtp-Source: AMsMyM7WdWinUK+JlpX9DEv0QsSlne/dIOCkLeNnQqueMPqOPMiLhB+SfIDWl6uCJmTendCxS37cdg==
-X-Received: by 2002:adf:e4cc:0:b0:22a:d755:aaf7 with SMTP id v12-20020adfe4cc000000b0022ad755aaf7mr3231150wrm.692.1663881740992;
-        Thu, 22 Sep 2022 14:22:20 -0700 (PDT)
-Received: from [192.168.86.238] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.googlemail.com with ESMTPSA id r14-20020a0560001b8e00b0022afcc11f65sm5813935wru.47.2022.09.22.14.22.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Sep 2022 14:22:20 -0700 (PDT)
-Message-ID: <1dca4a7f-f4d7-9fd7-69f0-5b0aec51bdef@linaro.org>
-Date:   Thu, 22 Sep 2022 22:22:17 +0100
+        Thu, 22 Sep 2022 17:28:09 -0400
+X-Greylist: delayed 325 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 22 Sep 2022 14:28:09 PDT
+Received: from mail.manjaro.org (mail.manjaro.org [IPv6:2a01:4f8:c0c:51f3::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07C9610F736
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 14:28:08 -0700 (PDT)
+Message-ID: <659fc2fe-f820-04ad-8a4f-224b4d4bd97b@manjaro.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manjaro.org; s=2021;
+        t=1663881758;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZYMCYi0P3f0uCs3zXu9KgEbi+wTwz81X89dKXGgBfIo=;
+        b=JnAKBACcsruAYDfVZcI5L8Dy8qhkZQMYhEYqqFRu9iscTDdGVSeRbyM8Kz4e3GNO4lw5pt
+        +iO2qmp2N8Hn/QtGZSuQEA8vyz7IoTTYWGqWV8RJCTjIFB3+4PMvUe/07xIsRw6mF2V7jZ
+        6zmBseXq2OyciOnMA7dGCRKJuWikOTE1jd5ny0RR0SYXEvrZGlnpZFWjiTr7RwUxvPD8IT
+        IegQIlu948/Dc0zokruQrCou/TT5IQaP4I7tsftNRMGrG5SUNn64ZkYqyD0wsAt8JI5Zzm
+        zwCLXLEO6aLXmPEaWWmpjX7koyZRCcdy1UufqQTShmgB3Xp6A47Oq2+k387m/g==
+Date:   Thu, 22 Sep 2022 23:22:37 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 00/20] nvmem: core: introduce NVMEM layouts
-Content-Language: en-US
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Michael Walle <michael@walle.cc>
-Cc:     Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
+Subject: Re: [PATCH] arm64: dts: rockchip: Enable HDMI and GPU on quartz64-b
+Content-Language: da-DK
+To:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Robert Marko <robert.marko@sartura.hr>
-References: <20220901221857.2600340-1-michael@walle.cc>
- <20220921115813.208ff789@xps-13>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20220921115813.208ff789@xps-13>
+        Heiko Stuebner <heiko@sntech.de>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220920143446.633956-1-frattaroli.nicolas@gmail.com>
+From:   Dan Johansen <strit@manjaro.org>
+Organization: Manjaro ARM
+In-Reply-To: <20220920143446.633956-1-frattaroli.nicolas@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Authentication-Results: ORIGINATING;
+        auth=pass smtp.auth=strit@manjaro.org smtp.mailfrom=strit@manjaro.org
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This seems to be based against linux-next and not mainline. It fails to 
+apply on mainline for me.
 
-
-On 21/09/2022 10:58, Miquel Raynal wrote:
-> 
-> Srinivas, can you give us an update on what you think about this
-> series (not a commitment, just how you feel it overall)?
-> 
-Overall this is going in right direction, there are few bindings related 
-comments once those are sorted out it should be good to go.
-
- From NVMEM side am happy with this feature, which has been a long 
-pending one.
-
-We have few discussions on ONIE standard before, layouts would fit in 
-nicely.
-
-
---srini
-
-> Michael, is there a v3 in preparation? I'll try to write something on
-> top of your v2 otherwise.
+Den 20.09.2022 kl. 16.34 skrev Nicolas Frattaroli:
+> This enables the GPU and HDMI output (including HDMI audio) on
+> the PINE64 Quartz64 Model B single board computer.
+>
+> Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+> ---
+>   .../boot/dts/rockchip/rk3566-quartz64-b.dts   | 60 +++++++++++++++++++
+>   1 file changed, 60 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts
+> index 0f623198970f..77b179cd20e7 100644
+> --- a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts
+> +++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts
+> @@ -4,6 +4,7 @@
+>   
+>   #include <dt-bindings/gpio/gpio.h>
+>   #include <dt-bindings/pinctrl/rockchip.h>
+> +#include <dt-bindings/soc/rockchip,vop2.h>
+>   #include "rk3566.dtsi"
+>   
+>   / {
+> @@ -28,6 +29,17 @@ gmac1_clkin: external-gmac1-clock {
+>   		#clock-cells = <0>;
+>   	};
+>   
+> +	hdmi-con {
+> +		compatible = "hdmi-connector";
+> +		type = "a";
+> +
+> +		port {
+> +			hdmi_con_in: endpoint {
+> +				remote-endpoint = <&hdmi_out_con>;
+> +			};
+> +		};
+> +	};
+> +
+>   	leds {
+>   		compatible = "gpio-leds";
+>   
+> @@ -183,6 +195,33 @@ &gmac1m1_clkinout
+>   	status = "okay";
+>   };
+>   
+> +&gpu {
+> +	mali-supply = <&vdd_gpu>;
+> +	status = "okay";
+> +};
+> +
+> +&hdmi {
+> +	avdd-0v9-supply = <&vdda0v9_image>;
+> +	avdd-1v8-supply = <&vcca1v8_image>;
+> +	status = "okay";
+> +};
+> +
+> +&hdmi_in {
+> +	hdmi_in_vp0: endpoint {
+> +		remote-endpoint = <&vp0_out_hdmi>;
+> +	};
+> +};
+> +
+> +&hdmi_out {
+> +	hdmi_out_con: endpoint {
+> +		remote-endpoint = <&hdmi_con_in>;
+> +	};
+> +};
+> +
+> +&hdmi_sound {
+> +	status = "okay";
+> +};
+> +
+>   &i2c0 {
+>   	status = "okay";
+>   
+> @@ -456,6 +495,10 @@ &i2c5 {
+>   	status = "disabled";
+>   };
+>   
+> +&i2s0_8ch {
+> +	status = "okay";
+> +};
+> +
+>   &i2s1_8ch {
+>   	pinctrl-names = "default";
+>   	pinctrl-0 = <&i2s1m0_sclktx
+The above part does not seem to exist in the current mainline (rc6) git 
+repo.
+> @@ -677,3 +720,20 @@ &usb_host0_ehci {
+>   &usb_host0_ohci {
+>   	status = "okay";
+>   };
+> +
+> +&vop {
+> +	assigned-clocks = <&cru DCLK_VOP0>, <&cru DCLK_VOP1>;
+> +	assigned-clock-parents = <&pmucru PLL_HPLL>, <&cru PLL_VPLL>;
+> +	status = "okay";
+> +};
+> +
+> +&vop_mmu {
+> +	status = "okay";
+> +};
+> +
+> +&vp0 {
+> +	vp0_out_hdmi: endpoint@ROCKCHIP_VOP2_EP_HDMI0 {
+> +		reg = <ROCKCHIP_VOP2_EP_HDMI0>;
+> +		remote-endpoint = <&hdmi_in_vp0>;
+> +	};
+> +};
+-- 
+Kind regards
+*Dan Johansen*
+Project lead of the *Manjaro ARM* project
+Manjaro-ARM <https://manjaro.org>
