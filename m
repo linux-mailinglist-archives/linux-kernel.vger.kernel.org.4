@@ -2,185 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE3725E5AC1
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 07:33:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFC215E5AC5
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 07:35:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229437AbiIVFdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 01:33:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50806 "EHLO
+        id S229575AbiIVFfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 01:35:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbiIVFdJ (ORCPT
+        with ESMTP id S229471AbiIVFfH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 01:33:09 -0400
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 996AEB14CE;
-        Wed, 21 Sep 2022 22:33:07 -0700 (PDT)
-Received: by mail-oi1-x22b.google.com with SMTP id c81so8856693oif.3;
-        Wed, 21 Sep 2022 22:33:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=5sVpTjiX8PDcq85GSFzudWH5HXyQnSsOhJdWBSFi2rM=;
-        b=F/COc8Lpjinzm1Gpy8ZWNozb7DhrHGtef9IaP86dJIysTTl+fslNV5MJrM1Vj8tMCp
-         Bqemt1nda/AhguSA/BBe++D1MjZYIaNsDEChdezGsKGMonk7gLKAMIlF52d/JJS1VBfS
-         zLTxZyIgVun8jROUf3E6MvaRISb7FWh5YWdOZWWUrcRbSuIoFQeCpihUTet2AB8Nv4CD
-         aGo5sc7a11CXe27HZ/lv4iXaL9ve4ip8h2VChQ5uxszRbJ8rRVVvZBtdvU43JGLDK2wM
-         afDZ792+vFIfaIM2Gq+6Gs4fpJaWRCQjEj/cVF5BQzwolbRNR7Nok3/MpR3il8eOitRT
-         zRYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=5sVpTjiX8PDcq85GSFzudWH5HXyQnSsOhJdWBSFi2rM=;
-        b=AcvGAyZwGiM+cEAAct8HOQon/nYkfZuRKYkO1PrEQum5ChmMsIBcsK/7bALGDhJ8Vm
-         cqlrZPbSfTkgekIULrjt3PzSV+IHA/1xQjesMjnqL0b0QSOz869mGI0GTTamZiOB+sf/
-         wlqacfyfJyS5peNM0g+7ppgzg4nDli8O2D5CEGhPzo3exjYLa8+Qa3yAlAR2q3q2iGdA
-         xYHWtS2ptz2yWcV65eJF091/sW9omr16NrbDhzIwbhi7pjunorr0PcOk5FUc5WdHntPg
-         d5KinChA/LOrLFSDupinRZ2xilPTCaNRaK4G3wFt4cAWLyZta2YHInTr13BqTBuGz2/J
-         Jf/w==
-X-Gm-Message-State: ACrzQf2D7pDv4JPVCjfGxxwUPBrSg55frbLCCDa94wfcf8n9/TSmeMw+
-        pEnGhBY9TxQQCV/aFjPxf5A=
-X-Google-Smtp-Source: AMsMyM5kw+GX4j+RvtO3CffIFSTsA9LuEtzc0KHe1l+5MOlDkLG6qHQSPuYdyaJ76oYnAKs33kJG4A==
-X-Received: by 2002:a05:6808:159d:b0:350:4f51:890 with SMTP id t29-20020a056808159d00b003504f510890mr5659409oiw.281.1663824786766;
-        Wed, 21 Sep 2022 22:33:06 -0700 (PDT)
-Received: from macondo.. ([2804:431:e7cc:3499:2e9e:5862:e0eb:f33b])
-        by smtp.gmail.com with ESMTPSA id w19-20020a056870231300b00118281a1227sm2570957oao.39.2022.09.21.22.33.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Sep 2022 22:33:06 -0700 (PDT)
-From:   Rafael Mendonca <rafaelmendsr@gmail.com>
-To:     Raju Rangoju <rajur@chelsio.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rahul Lakkireddy <rahul.lakkireddy@chelsio.com>
-Cc:     Rafael Mendonca <rafaelmendsr@gmail.com>, netdev@vger.kernel.org,
+        Thu, 22 Sep 2022 01:35:07 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41FF3AE859;
+        Wed, 21 Sep 2022 22:35:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663824905; x=1695360905;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WbsPdoDDj+mIs1fxH99tKp0beojLYTi0zXyU5RR6UfY=;
+  b=WhpWmG4zTXCAKqse5BdRGCXbjFzTHuOmAOW4AmR0mQamk97pWgUaYzU0
+   VSeWqEIbAYdd/EBfafIgfqm6tH9ZvbX8/wzGklI3EQe/PV/z4CPsn4YxP
+   JlxbeJl6quUNBM2SBFVRR8V5LWBinmb6d+NU7cV58CgIB0x3MtVx6rpVi
+   b3OGNEAxKuEFCsyuXD9hzwj0EIaYPk3ucPGeo2jEplz2raUqOxqn6Lnzx
+   azhFPOFIEPs/oCQuIVgbsS4GXxYgQ2r6Oc+/Yx7aOxaNVQVp6O6xouHX+
+   /L/tlEF6uoMqhCZdobR56Wn5u0KK1LPtedOXqVHJABdoxT/CPT7PBAOtr
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="326520943"
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="326520943"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 22:35:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="762045591"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 21 Sep 2022 22:35:02 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1obErW-0004Ly-16;
+        Thu, 22 Sep 2022 05:35:02 +0000
+Date:   Thu, 22 Sep 2022 13:34:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [RFC PATCH net-next 1/1] cxgb4: fix missing unlock on ETHOFLD desc collect fail path
-Date:   Thu, 22 Sep 2022 02:32:36 -0300
-Message-Id: <20220922053237.750832-2-rafaelmendsr@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220922053237.750832-1-rafaelmendsr@gmail.com>
-References: <20220922053237.750832-1-rafaelmendsr@gmail.com>
+Cc:     kbuild-all@lists.01.org, Wei Yongjun <weiyongjun@huaweicloud.com>,
+        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v1 1/1] spi: Introduce spi_get_device_match_data() helper
+Message-ID: <202209221302.UKxElkNH-lkp@intel.com>
+References: <20220921204520.23984-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220921204520.23984-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The label passed to the QDESC_GET for the ETHOFLD TXQ, RXQ, and FLQ, is the
-'out' one, which skips the 'out_unlock' label, and thus doesn't unlock the
-'uld_mutex' before returning. Additionally, since commit 5148e5950c67
-("cxgb4: add EOTID tracking and software context dump"), the access to
-these ETHOFLD hardware queues should be protected by the 'mqprio_mutex'
-instead.
+Hi Andy,
 
-Fixes: 2d0cb84dd973 ("cxgb4: add ETHOFLD hardware queue support")
-Fixes: 5148e5950c67 ("cxgb4: add EOTID tracking and software context dump")
-Signed-off-by: Rafael Mendonca <rafaelmendsr@gmail.com>
----
- .../net/ethernet/chelsio/cxgb4/cudbg_lib.c    | 28 +++++++++++++------
- 1 file changed, 19 insertions(+), 9 deletions(-)
+I love your patch! Perhaps something to improve:
 
-diff --git a/drivers/net/ethernet/chelsio/cxgb4/cudbg_lib.c b/drivers/net/ethernet/chelsio/cxgb4/cudbg_lib.c
-index a7f291c89702..557c591a6ce3 100644
---- a/drivers/net/ethernet/chelsio/cxgb4/cudbg_lib.c
-+++ b/drivers/net/ethernet/chelsio/cxgb4/cudbg_lib.c
-@@ -14,6 +14,7 @@
- #include "cudbg_entity.h"
- #include "cudbg_lib.h"
- #include "cudbg_zlib.h"
-+#include "cxgb4_tc_mqprio.h"
- 
- static const u32 t6_tp_pio_array[][IREG_NUM_ELEM] = {
- 	{0x7e40, 0x7e44, 0x020, 28}, /* t6_tp_pio_regs_20_to_3b */
-@@ -3458,7 +3459,7 @@ int cudbg_collect_qdesc(struct cudbg_init *pdbg_init,
- 			for (i = 0; i < utxq->ntxq; i++)
- 				QDESC_GET_TXQ(&utxq->uldtxq[i].q,
- 					      cudbg_uld_txq_to_qtype(j),
--					      out_unlock);
-+					      out_unlock_uld);
- 		}
- 	}
- 
-@@ -3475,7 +3476,7 @@ int cudbg_collect_qdesc(struct cudbg_init *pdbg_init,
- 			for (i = 0; i < urxq->nrxq; i++)
- 				QDESC_GET_RXQ(&urxq->uldrxq[i].rspq,
- 					      cudbg_uld_rxq_to_qtype(j),
--					      out_unlock);
-+					      out_unlock_uld);
- 		}
- 
- 		/* ULD FLQ */
-@@ -3487,7 +3488,7 @@ int cudbg_collect_qdesc(struct cudbg_init *pdbg_init,
- 			for (i = 0; i < urxq->nrxq; i++)
- 				QDESC_GET_FLQ(&urxq->uldrxq[i].fl,
- 					      cudbg_uld_flq_to_qtype(j),
--					      out_unlock);
-+					      out_unlock_uld);
- 		}
- 
- 		/* ULD CIQ */
-@@ -3500,29 +3501,34 @@ int cudbg_collect_qdesc(struct cudbg_init *pdbg_init,
- 			for (i = 0; i < urxq->nciq; i++)
- 				QDESC_GET_RXQ(&urxq->uldrxq[base + i].rspq,
- 					      cudbg_uld_ciq_to_qtype(j),
--					      out_unlock);
-+					      out_unlock_uld);
- 		}
- 	}
-+	mutex_unlock(&uld_mutex);
-+
-+	if (!padap->tc_mqprio)
-+		goto out;
- 
-+	mutex_lock(&padap->tc_mqprio->mqprio_mutex);
- 	/* ETHOFLD TXQ */
- 	if (s->eohw_txq)
- 		for (i = 0; i < s->eoqsets; i++)
- 			QDESC_GET_TXQ(&s->eohw_txq[i].q,
--				      CUDBG_QTYPE_ETHOFLD_TXQ, out);
-+				      CUDBG_QTYPE_ETHOFLD_TXQ, out_unlock_mqprio);
- 
- 	/* ETHOFLD RXQ and FLQ */
- 	if (s->eohw_rxq) {
- 		for (i = 0; i < s->eoqsets; i++)
- 			QDESC_GET_RXQ(&s->eohw_rxq[i].rspq,
--				      CUDBG_QTYPE_ETHOFLD_RXQ, out);
-+				      CUDBG_QTYPE_ETHOFLD_RXQ, out_unlock_mqprio);
- 
- 		for (i = 0; i < s->eoqsets; i++)
- 			QDESC_GET_FLQ(&s->eohw_rxq[i].fl,
--				      CUDBG_QTYPE_ETHOFLD_FLQ, out);
-+				      CUDBG_QTYPE_ETHOFLD_FLQ, out_unlock_mqprio);
- 	}
- 
--out_unlock:
--	mutex_unlock(&uld_mutex);
-+out_unlock_mqprio:
-+	mutex_unlock(&padap->tc_mqprio->mqprio_mutex);
- 
- out:
- 	qdesc_info->qdesc_entry_size = sizeof(*qdesc_entry);
-@@ -3559,6 +3565,10 @@ int cudbg_collect_qdesc(struct cudbg_init *pdbg_init,
- #undef QDESC_GET
- 
- 	return rc;
-+
-+out_unlock_uld:
-+	mutex_unlock(&uld_mutex);
-+	goto out;
- }
- 
- int cudbg_collect_flash(struct cudbg_init *pdbg_init,
+[auto build test WARNING on broonie-spi/for-next]
+[also build test WARNING on linus/master v6.0-rc6 next-20220921]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/spi-Introduce-spi_get_device_match_data-helper/20220922-044658
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+config: s390-randconfig-s031-20220921 (https://download.01.org/0day-ci/archive/20220922/202209221302.UKxElkNH-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/4d7a10e29738f98137b08b2dcc0297535dd92a11
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Andy-Shevchenko/spi-Introduce-spi_get_device_match_data-helper/20220922-044658
+        git checkout 4d7a10e29738f98137b08b2dcc0297535dd92a11
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=s390 SHELL=/bin/bash drivers/spi/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+sparse warnings: (new ones prefixed by >>)
+>> drivers/spi/spi.c:367:40: sparse: sparse: incorrect type in argument 1 (different modifiers) @@     expected struct device *dev @@     got struct device const * @@
+   drivers/spi/spi.c:367:40: sparse:     expected struct device *dev
+   drivers/spi/spi.c:367:40: sparse:     got struct device const *
+
+vim +367 drivers/spi/spi.c
+
+   362	
+   363	const void *spi_get_device_match_data(const struct spi_device *sdev)
+   364	{
+   365		const void *match;
+   366	
+ > 367		match = device_get_match_data(&sdev->dev);
+   368		if (match)
+   369			return match;
+   370	
+   371		return (const void *)spi_get_device_id(sdev)->driver_data;
+   372	}
+   373	EXPORT_SYMBOL_GPL(spi_get_device_match_data);
+   374	
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
