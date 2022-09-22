@@ -2,88 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1468E5E582E
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 03:40:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CDBA5E5836
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 03:45:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230504AbiIVBki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 21:40:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38318 "EHLO
+        id S231150AbiIVBpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 21:45:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230437AbiIVBkY (ORCPT
+        with ESMTP id S229789AbiIVBpQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 21:40:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14EB17B297;
-        Wed, 21 Sep 2022 18:40:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A1F02B832D4;
-        Thu, 22 Sep 2022 01:40:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 27BA3C433B5;
-        Thu, 22 Sep 2022 01:40:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663810817;
-        bh=+pbXaovXEyZF6fqekCm4UyEw6yPZrVj8IXtW9wqsmkQ=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=JeH5mgG2PNR6CVxTlqPM0xog+MD+a0O8olnoyeNeb/lccbIClkm2YPI6oCBY28c8H
-         25zH/nPcwCHYkt0x4FMlv9QIqvrQz8QGT5crGSDe2UI2QcyIj35BgI0ZtQrxU9ktX7
-         WiTLRIHxraB+s7DAT4Eu0VtZEdk95CNlLr2aK6HoYKX9Yj2yOORuT12Co1alXORVJf
-         9DjHAKUdCUbH5TuQST0itsWRqiRzFgJ/ldzfxvtdLbBRQh4z+JqSQHQCZHEA6lvKK7
-         Z9zJV7xGiDfvoElTXjwlgg63TThM+RzOs/URS0nglvhAO79vPj7GJ9SXjZaye3ZsjP
-         9jMBd2ngyLL8Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 03F98E21ECF;
-        Thu, 22 Sep 2022 01:40:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 21 Sep 2022 21:45:16 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E93A0301
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 18:45:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663811114; x=1695347114;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=cP0K3eAQqdbj1b/k8WOSKUEnweFpdWclpBELpkHlMOs=;
+  b=MijQxvtvN2gpoPY+Ddjo5mjGOTv8WsO4voag8Hjz8aNa8nIksp9BaIUL
+   dETZWEAJMIWDB287xIfoCWOeURulAvpk2aNO4iI2G+Ua4yr57LzSjUF4c
+   PlGY7XSTo17mV2liqOzUKiDLXt2/f6qEmwndF66ece80EpJr++GHu1mYY
+   kwjSlfWpstwEtTGTnijr8lXTWPpESDgdNxAxfKZLVHYvHFxe6e2Fk3n0x
+   PeI1NPWVPii+WGQ/n3zIhcgXTlwhCnislDrjGneEXkLPJ+d8zuyE3E8FO
+   EcikUzukq6L9puu6t7D8NXF4po3o5ZjM+g9Y6b9xyZmBEBJczIjFVsPn0
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="279893248"
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="279893248"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 18:45:14 -0700
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="570774254"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 18:45:12 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Zi Yan <ziy@nvidia.com>
+Cc:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        "Matthew Wilcox" <willy@infradead.org>
+Subject: Re: [RFC 0/6] migrate_pages(): batch TLB flushing
+References: <20220921060616.73086-1-ying.huang@intel.com>
+        <FE41BDA8-F7EC-4FBC-9647-A5A835CDECB0@nvidia.com>
+Date:   Thu, 22 Sep 2022 09:45:11 +0800
+In-Reply-To: <FE41BDA8-F7EC-4FBC-9647-A5A835CDECB0@nvidia.com> (Zi Yan's
+        message of "Wed, 21 Sep 2022 11:47:38 -0400")
+Message-ID: <878rmckwrc.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v1 net-next 0/2] clean up ocelot_reset() routine
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166381081701.5452.11098307943209592493.git-patchwork-notify@kernel.org>
-Date:   Thu, 22 Sep 2022 01:40:17 +0000
-References: <20220917175127.161504-1-colin.foster@in-advantage.com>
-In-Reply-To: <20220917175127.161504-1-colin.foster@in-advantage.com>
-To:     Colin Foster <colin.foster@in-advantage.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, kuba@kernel.org, edumazet@google.com,
-        davem@davemloft.net, UNGLinuxDriver@microchip.com,
-        alexandre.belloni@bootlin.com, claudiu.manoil@nxp.com,
-        vladimir.oltean@nxp.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Zi Yan <ziy@nvidia.com> writes:
 
-This series was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+> On 21 Sep 2022, at 2:06, Huang Ying wrote:
+>
+>> From: "Huang, Ying" <ying.huang@intel.com>
+>>
+>> Now, migrate_pages() migrate pages one by one, like the fake code as
+>> follows,
+>>
+>>   for each page
+>>     unmap
+>>     flush TLB
+>>     copy
+>>     restore map
+>>
+>> If multiple pages are passed to migrate_pages(), there are
+>> opportunities to batch the TLB flushing and copying.  That is, we can
+>> change the code to something as follows,
+>>
+>>   for each page
+>>     unmap
+>>   for each page
+>>     flush TLB
+>>   for each page
+>>     copy
+>>   for each page
+>>     restore map
+>>
+>> The total number of TLB flushing IPI can be reduced considerably.  And
+>> we may use some hardware accelerator such as DSA to accelerate the
+>> page copying.
+>>
+>> So in this patch, we refactor the migrate_pages() implementation and
+>> implement the TLB flushing batching.  Base on this, hardware
+>> accelerated page copying can be implemented.
+>>
+>> If too many pages are passed to migrate_pages(), in the naive batched
+>> implementation, we may unmap too many pages at the same time.  The
+>> possibility for a task to wait for the migrated pages to be mapped
+>> again increases.  So the latency may be hurt.  To deal with this
+>> issue, the max number of pages be unmapped in batch is restricted to
+>> no more than HPAGE_PMD_NR.  That is, the influence is at the same
+>> level of THP migration.
+>>
+>> We use the following test to measure the performance impact of the
+>> patchset,
+>>
+>> On a 2-socket Intel server,
+>>
+>>  - Run pmbench memory accessing benchmark
+>>
+>>  - Run `migratepages` to migrate pages of pmbench between node 0 and
+>>    node 1 back and forth.
+>>
+>> With the patch, the TLB flushing IPI reduces 99.1% during the test and
+>> the number of pages migrated successfully per second increases 291.7%.
+>
+> Thank you for the patchset. Batching page migration will definitely
+> improve its throughput from my past experiments[1] and starting with
+> TLB flushing is a good first step.
 
-On Sat, 17 Sep 2022 10:51:25 -0700 you wrote:
-> ocelot_reset() will soon be exported to a common library to be used by
-> the ocelot_ext system. This will make error values from regmap calls
-> possible, so they must be checked. Additionally, readx_poll_timeout()
-> can be substituted for the custom loop, as a simple cleanup.
-> 
-> I don't have hardware to verify this set directly, but there shouldn't
-> be any functional changes.
-> 
-> [...]
+Thanks for the pointer, the patch description provides valuable information
+for me already!
 
-Here is the summary with links:
-  - [v2,net-next,1/2] net: mscc: ocelot: utilize readx_poll_timeout() for chip reset
-    https://git.kernel.org/netdev/net-next/c/21bb08cd2cda
-  - [v2,net-next,2/2] net: mscc: ocelot: check return values of writes during reset
-    https://git.kernel.org/netdev/net-next/c/fa1d90b048c2
+> BTW, what is the rationality behind the increased page migration
+> success rate per second?
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+From perf profiling data, in the base kernel,
 
+  migrate_pages.migrate_to_node.do_migrate_pages.kernel_migrate_pages.__x64_sys_migrate_pages:	2.87
+  ptep_clear_flush.try_to_migrate_one.rmap_walk_anon.try_to_migrate.__unmap_and_move:           2.39
 
+Because pmbench run in the system too, the CPU cycles of migrate_pages()
+is about 2.87%.  While the CPU cycles for TLB flushing is 2.39%.  That
+is, 2.39/2.87 = 83.3% CPU cycles of migrate_pages() are used for TLB
+flushing.
+
+After batching the TLB flushing, the perf profiling data becomes,
+
+  migrate_pages.migrate_to_node.do_migrate_pages.kernel_migrate_pages.__x64_sys_migrate_pages:	2.77
+  move_to_new_folio.migrate_pages_batch.migrate_pages.migrate_to_node.do_migrate_pages:         1.68
+  copy_page.folio_copy.migrate_folio.move_to_new_folio.migrate_pages_batch:                     1.21
+
+1.21/2.77 = 43.7% CPU cycles of migrate_pages() are used for page
+copying now.
+
+  try_to_migrate_one:	0.23
+
+The CPU cycles of unmapping and TLB flushing becomes 0.23/2.77 = 8.3% of
+migrate_pages().
+
+All in all, after the optimization, we do much less TLB flushing, which
+consumes a lot of CPU cycles before the optimization.  So the throughput
+of migrate_pages() increases greatly.
+
+I will add these data in the next version of patch.
+
+Best Regards,
+Huang, Ying
+
+>>
+>> This patchset is based on v6.0-rc5 and the following patchset,
+>>
+>> [PATCH -V3 0/8] migrate_pages(): fix several bugs in error path
+>> https://lore.kernel.org/lkml/20220817081408.513338-1-ying.huang@intel.com/
+>>
+>> The migrate_pages() related code is converting to folio now. So this
+>> patchset cannot apply recent akpm/mm-unstable branch.  This patchset
+>> is used to check the basic idea.  If it is OK, I will rebase the
+>> patchset on top of folio changes.
+>>
+>> Best Regards,
+>> Huang, Ying
+>
+>
+> [1] https://lwn.net/Articles/784925/
+>
+> --
+> Best Regards,
+> Yan, Zi
