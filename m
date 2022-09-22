@@ -2,133 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24D165E6B92
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 21:13:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A70E5E6B9C
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 21:18:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231875AbiIVTNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 15:13:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57336 "EHLO
+        id S232267AbiIVTSK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 15:18:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232636AbiIVTNh (ORCPT
+        with ESMTP id S230216AbiIVTSH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 15:13:37 -0400
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB44106A1D;
-        Thu, 22 Sep 2022 12:13:36 -0700 (PDT)
-Received: by mail-qv1-f48.google.com with SMTP id i15so7547060qvp.5;
-        Thu, 22 Sep 2022 12:13:36 -0700 (PDT)
+        Thu, 22 Sep 2022 15:18:07 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2743106A10
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 12:18:06 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id w20so9684016ply.12
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 12:18:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date;
+        bh=6I54Hmibv9NNEON21MI/khC1j473zoH5sNcGiz/IqMA=;
+        b=jUjTeh5wzF9Ni5HL8rTLkQmxNzQ3yiyS8+wNt2SvUGZ7nGR9TOlyMyCEWezk93KVou
+         ou2QevkOksC6VOZRj8jeW+2+DYXWx2J6QAZhW+ATh67Uxw4MyS9azJq4UHyOMKdiQtRL
+         KOAB4SghBAL72PCXfYFb8JlkczkehRvHXlchTMaaeJ+yZ6C/nefzrjZXIzptjNLOJQUN
+         LwbiXyZgpUtQmTa6axgSgPmAp9DYre7MlUt66vZXtKwxzpLoXuY8BeG6QuthtCJzEUzX
+         52/bqPUPaJgJ4wazvClsHtrdj6IHUINvjXnc3KpprM7N+v1MNUlksFtyf7vOwH+qASqZ
+         PEJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=4SC2lpclsApuwnvv9v4FOQnC9TCXLCDA7rskDl0X8oQ=;
-        b=4RXJGxrGX5X5Z80FXXfTB9gbmLokUMJvd8alC6/0XfWmICYTcqzEKqUhKDU63HG+uc
-         Xh2SNIkoJDLmcbNgk+4paD5pP5Q16JQXUUBPx6p03cX2lUeF0a3/E1BpDibkazvDP1vT
-         ZnzF/yMnJ85+qSUUzOxu6gaXQgGrNtHTjORwAwsORxSQP1Sjl9IZ2+MIRmZ1YfpeKIkd
-         DRt36MPeav1kDaWMU1Gv5kP/L4gZ6dDc+20UPpv1CPjnrLLAZkUlFTrQunSXT/nLVjFP
-         Cvsyu1mqTMnAOA21hJLTc8TgyIvG5leDjHQbVhEuIGdnLMxPNDxQvc9AbeL9zEAVDS4Y
-         rlLA==
-X-Gm-Message-State: ACrzQf0d4SNx2D0P7U9URV7OxsIALOqiYcNhvvgO/5/HYQ8C2WAQ1yLO
-        vjrMeM6ySsLllCmKQx4pqN5GdhVVYIEyYg==
-X-Google-Smtp-Source: AMsMyM548HrAEqlLjyib+W1FVYo4U5HB+ZBnj1F3h2wYRCNU6LhpBN1knHIT6DJTM9syde57c2gJnQ==
-X-Received: by 2002:a0c:f445:0:b0:4a6:9f4a:9a66 with SMTP id h5-20020a0cf445000000b004a69f4a9a66mr4001052qvm.65.1663874015231;
-        Thu, 22 Sep 2022 12:13:35 -0700 (PDT)
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
-        by smtp.gmail.com with ESMTPSA id o2-20020ae9f502000000b006b640efe6dasm4041930qkg.132.2022.09.22.12.13.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Sep 2022 12:13:33 -0700 (PDT)
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-3452214cec6so109751637b3.1;
-        Thu, 22 Sep 2022 12:13:33 -0700 (PDT)
-X-Received: by 2002:a0d:dd09:0:b0:344:fca5:9b44 with SMTP id
- g9-20020a0ddd09000000b00344fca59b44mr4793428ywe.358.1663874013318; Thu, 22
- Sep 2022 12:13:33 -0700 (PDT)
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date;
+        bh=6I54Hmibv9NNEON21MI/khC1j473zoH5sNcGiz/IqMA=;
+        b=6Fu77+DeKbnRKSIztFg0lisy7AdS+2as2geKIqiZDLlKALClp58xJj+Wf+XPIoyWZK
+         eGWJxaklXVP+NqP8ZExD6ye4wo7BIEhNip+gXKnwcZX5j/Y+9HYI77EYT9Y7lgd6ViyA
+         5XVmzuVoP7xBi+VrNbXxPPG4ayviItr6/5q5HVWE4HF4NrMthf2TsT3qWmONwyQzV29Q
+         3VtdlMECy1mQAMknifEtllbZF/IxMpuzNaO/qSMgrO2LSPHgegIjrYo/KDs6tkUkRWj3
+         nm/Tg168jsXCStA+TWi4Ty70BBpfLGzcSh4X2zdUPYZlmC1XBtGzbG+jrEiq7kWkeU8C
+         k1LA==
+X-Gm-Message-State: ACrzQf0PqaYm8AM8gIuuF/HAForxv2tSdXQ0MowJo5ENdRrxsNsacTpZ
+        Ae71XioiD1ZTIaMiBpjHfdGMmQ==
+X-Google-Smtp-Source: AMsMyM489NoZHSzA5ZWkq2GQjXZlU0u91w/tPVdZgrkMTT1zpV5yRKNyvag9xLDJ7g9apnER9eiEVg==
+X-Received: by 2002:a17:90a:ab91:b0:202:a520:56c9 with SMTP id n17-20020a17090aab9100b00202a52056c9mr17319196pjq.1.1663874285912;
+        Thu, 22 Sep 2022 12:18:05 -0700 (PDT)
+Received: from [2620:15c:29:203:63de:fb65:f8a7:416b] ([2620:15c:29:203:63de:fb65:f8a7:416b])
+        by smtp.gmail.com with ESMTPSA id a8-20020a170902900800b00178acc7ef16sm4459509plp.253.2022.09.22.12.18.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Sep 2022 12:18:04 -0700 (PDT)
+Date:   Thu, 22 Sep 2022 12:18:04 -0700 (PDT)
+From:   David Rientjes <rientjes@google.com>
+To:     Gang Li <ligang.bdlg@bytedance.com>
+cc:     Zefan Li <lizefan.x@bytedance.com>, Tejun Heo <tj@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [RFC PATCH v1] mm: oom: introduce cpuset oom
+In-Reply-To: <20220921064710.89663-1-ligang.bdlg@bytedance.com>
+Message-ID: <18621b07-256b-7da1-885a-c96dfc8244b6@google.com>
+References: <20220921064710.89663-1-ligang.bdlg@bytedance.com>
 MIME-Version: 1.0
-References: <20220905230406.30801-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220905230406.30801-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <Yys4CRNnKP3LXyAO@pendragon.ideasonboard.com> <CA+V-a8uiT9rV=T6LmFovRwULf3SO=JKdqr1yacAqN8gJmv9VPw@mail.gmail.com>
- <YyxWOuWOrYmMexNj@paasikivi.fi.intel.com> <CAMuHMdXKz56jxw56fXa7CMh_y4MVYiUT25dqRntJw6481s1FWw@mail.gmail.com>
- <CA+V-a8sW=a6auFH-1WqwK+o2MZGCQk+MAO4+cWKm1M+YrQE+CA@mail.gmail.com>
-In-Reply-To: <CA+V-a8sW=a6auFH-1WqwK+o2MZGCQk+MAO4+cWKm1M+YrQE+CA@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 22 Sep 2022 21:13:21 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdU9LpSQ9-M49JC+wKk9=fsvX=cxTZwSQxU=CKcCRRU0Sg@mail.gmail.com>
-Message-ID: <CAMuHMdU9LpSQ9-M49JC+wKk9=fsvX=cxTZwSQxU=CKcCRRU0Sg@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] media: platform: Add Renesas RZ/G2L MIPI CSI-2
- receiver driver
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
+On Wed, 21 Sep 2022, Gang Li wrote:
 
-On Thu, Sep 22, 2022 at 3:27 PM Lad, Prabhakar
-<prabhakar.csengg@gmail.com> wrote:
-> On Thu, Sep 22, 2022 at 1:51 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > On Thu, Sep 22, 2022 at 2:34 PM Sakari Ailus
-> > <sakari.ailus@linux.intel.com> wrote:
-> > > On Thu, Sep 22, 2022 at 01:08:33PM +0100, Lad, Prabhakar wrote:
-> > > > > > * Switched to manually turn ON/OFF the clocks instead of pm_runtime so that
-> > > > > >   the mipi/dhpy initialization happens as per the HW manual
-> > > > >
-> > > > > That doesn't look right. The driver doesn't use runtime PM anymore, so
-> > > > > power domains may not be handled properly. What was the problem with
-> > > > > clock handling using runtime PM ?
-> > > > >
-> > > > If we use the runtime PM all the clocks will be turned ON when we call
-> > > > pm_runtime_resume_and_get() which I dont want to. As per the "Starting
-> > > > reception for MIPI CSI-2 Input" section 35.3.1 for example we first
-> > > > need to turn ON all the clocks and later further down the line we need
-> > > > to just turn OFF VCLK -> Enable Link -> turn ON VCLK. Due to such
-> > > > cases I have switched to individual clock handling.
-> > >
-> > > If that is the case, then you should control just that clock directly,
-> > > outside runtime PM callbacks.
-> > >
-> > > Runtime PM may be needed e.g. for resuming a parent device.
-> >
-> > Exactly.
-> > So probably you should not consider R9A07G044_CRU_VCLK a PM clock,
-> > i.e. you need changes to rzg2l_cpg_is_pm_clk() to exclude it.
-> >
-> Thanks for the pointer. In that case we will have to consider
-> R9A07G044_CRU_VCLK and R9A07G044_CRU_SYSCLK as not PM clocks.
->
-> Does the below sound good?
-> - DEF_NO_PM() macro
-> - bool is_pm_clk in struct rzg2l_mod_clk.
->
-> I still have to implement it, just wanted your opinion beforehand.
+> cpuset confine processes to processor and memory node subsets.
+> When a process in cpuset triggers oom, it may kill a completely
+> irrelevant process on another numa node, which will not release any
+> memory for this cpuset.
+> 
+> It seems that `CONSTRAINT_CPUSET` is not really doing much these
+> days. Using CONSTRAINT_CPUSET, we can easily achieve node aware oom
+> killing by selecting victim from the cpuset which triggers oom.
+> 
+> Suggested-by: Michal Hocko <mhocko@suse.com>
+> Signed-off-by: Gang Li <ligang.bdlg@bytedance.com>
 
-LGTM. Thanks!
+Hmm, is this the right approach?
 
-Gr{oetje,eeting}s,
+If a cpuset results in a oom condition, is there a reason why we'd need to 
+find a process from within that cpuset to kill?  I think the idea is to 
+free memory on the oom set of nodes (cpuset.mems) and that can happen by 
+killing a process that is not a member of this cpuset.
 
-                        Geert
+I understand the challenges of creating a NUMA aware oom killer to target 
+memory that is actually resident on an oom node, but this approach doesn't 
+seem right and could actually lead to pathological cases where a small 
+process trying to fork in an otherwise empty cpuset is repeatedly oom 
+killing when we'd actually prefer to kill a single large process.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> ---
+> This idea comes from a previous patch:
+> mm, oom: Introduce per numa node oom for CONSTRAINT_MEMORY_POLICY
+> https://lore.kernel.org/all/YoJ%2FioXwGTdCywUE@dhcp22.suse.cz/
+> 
+> Any comments are welcome.
+> ---
+>  include/linux/cpuset.h |  6 ++++++
+>  kernel/cgroup/cpuset.c | 17 +++++++++++++++++
+>  mm/oom_kill.c          |  4 ++++
+>  3 files changed, 27 insertions(+)
+> 
+> diff --git a/include/linux/cpuset.h b/include/linux/cpuset.h
+> index d58e0476ee8e..7475f613ab90 100644
+> --- a/include/linux/cpuset.h
+> +++ b/include/linux/cpuset.h
+> @@ -178,6 +178,8 @@ static inline void set_mems_allowed(nodemask_t nodemask)
+>  	task_unlock(current);
+>  }
+>  
+> +int cpuset_cgroup_scan_tasks(int (*fn)(struct task_struct *, void *), void *arg);
+> +
+>  #else /* !CONFIG_CPUSETS */
+>  
+>  static inline bool cpusets_enabled(void) { return false; }
+> @@ -299,6 +301,10 @@ static inline bool read_mems_allowed_retry(unsigned int seq)
+>  	return false;
+>  }
+>  
+> +static inline int cpuset_cgroup_scan_tasks(int (*fn)(struct task_struct *, void *), void *arg)
+> +{
+> +	return 0;
+> +}
+>  #endif /* !CONFIG_CPUSETS */
+>  
+>  #endif /* _LINUX_CPUSET_H */
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index b474289c15b8..1f1238b4276d 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -3943,6 +3943,23 @@ void cpuset_print_current_mems_allowed(void)
+>  	rcu_read_unlock();
+>  }
+>  
+> +int cpuset_cgroup_scan_tasks(int (*fn)(struct task_struct *, void *), void *arg)
+> +{
+> +	int ret = 0;
+> +	struct cgroup *cgrp;
+> +	struct css_task_iter it;
+> +	struct task_struct *task;
+> +
+> +	rcu_read_lock();
+> +	css_task_iter_start(&(task_cs(current)->css), CSS_TASK_ITER_PROCS, &it);
+> +	while (!ret && (task = css_task_iter_next(&it)))
+> +		ret = fn(task, arg);
+> +	css_task_iter_end(&it);
+> +	rcu_read_unlock();
+> +
+> +	return ret;
+> +}
+> +
+>  /*
+>   * Collection of memory_pressure is suppressed unless
+>   * this flag is enabled by writing "1" to the special
+> diff --git a/mm/oom_kill.c b/mm/oom_kill.c
+> index 46e7e073f137..8cea787b359c 100644
+> --- a/mm/oom_kill.c
+> +++ b/mm/oom_kill.c
+> @@ -367,6 +367,8 @@ static void select_bad_process(struct oom_control *oc)
+>  
+>  	if (is_memcg_oom(oc))
+>  		mem_cgroup_scan_tasks(oc->memcg, oom_evaluate_task, oc);
+> +	else if (oc->constraint == CONSTRAINT_CPUSET)
+> +		cpuset_cgroup_scan_tasks(oom_evaluate_task, oc);
+>  	else {
+>  		struct task_struct *p;
+>  
+> @@ -427,6 +429,8 @@ static void dump_tasks(struct oom_control *oc)
+>  
+>  	if (is_memcg_oom(oc))
+>  		mem_cgroup_scan_tasks(oc->memcg, dump_task, oc);
+> +	else if (oc->constraint == CONSTRAINT_CPUSET)
+> +		cpuset_cgroup_scan_tasks(dump_task, oc);
+>  	else {
+>  		struct task_struct *p;
+>  
+> -- 
+> 2.20.1
+> 
+> 
+> 
