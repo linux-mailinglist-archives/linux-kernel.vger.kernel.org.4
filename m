@@ -2,176 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96A195E5A9A
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 07:20:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D8445E5AA1
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 07:26:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230348AbiIVFUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 01:20:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35338 "EHLO
+        id S230287AbiIVF0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 01:26:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230081AbiIVFTy (ORCPT
+        with ESMTP id S229475AbiIVF0a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 01:19:54 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 396B74E619;
-        Wed, 21 Sep 2022 22:19:53 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id t3so7756449ply.2;
-        Wed, 21 Sep 2022 22:19:53 -0700 (PDT)
+        Thu, 22 Sep 2022 01:26:30 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF60A1D19
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 22:26:29 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id e68so8208954pfe.1
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 22:26:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=lwvggzHyTS5axyKbN+bmLBr4VnTTCkXswCqpGXL48kI=;
-        b=ZlAM/FZymHarMeFJIxTjntGYBGmKN0Bgk4vK+P1f68ClXWIA7k2xtGgYUeXdNi36zi
-         jxYhGLgODBpa2a15lNOFR72oJfddF7Jb6vGgVas3CnDNH2KrFiUTkH33hrmFkinvmPmc
-         a0uVteJVwSqrsRCPzDnwHliPo6+GhhfiAbSUI3RIWOkct7F48g2U1jS961+QHhYpnkwD
-         bJ3yin5tf5NWauBqgDHVdfAEuVxe5p6+jpOTa+HBoVVAfNkgYtM/vcTlxgPEeRkeXkyN
-         7HA3RIudY6VUU2VusvVZlJBbLXrKjab1OdByV7OUMGCWKBK1dErEyVTK7zNRhXcRInas
-         O5uQ==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=1AAj0jz/3WOf/ZinmBg4e5WZyKIExnDIP+4ApRXDWXk=;
+        b=E6vw8sjIHY/i68R43dGnMLa/5LLUaNZd7XsoFQWcc3w5wUJdtXNsxsEfsPht7kxdNG
+         JJ1tXBTf3XQqnlgOex/RZ+o0XMhSMgfcjsVoIr6koV6H3KyiaZ1lUXPNyODzP4yferwZ
+         bLRSqfuB8yrx2QNr5YGtL8EgG0hPZHJq7V7xk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=lwvggzHyTS5axyKbN+bmLBr4VnTTCkXswCqpGXL48kI=;
-        b=oTxDftTVWjzAl+Ejv0elQA48AITpOyMC2Su5z6l/c57nL0kNhDJkDRcSSO+TNfECiv
-         Vvh5mt/e4Gthl9RxrLWxpEk9kRZlaHp0HF7OyDegNVO5kq/HxvFTH7liB8VDVC36YjEY
-         OXUl1a/Z1z3I7OCfYtNugYWBQqqx9+8bZNr3t+O5FrI5bqn0cWjFVdYfsllwY5pNV9l3
-         2uBY6pKFAA8FgGgLFoNXbnoUfdpFhXQGPEQ0wMGI/KQHyuZourmM+lgKbIV2QCw2zkR5
-         AAVHkOMZcstf6ievQyRy2F24f1oxvPtsoHq1Ui4i8jK30dftDAow1UCvq8uy5rUTp0Kl
-         YYTw==
-X-Gm-Message-State: ACrzQf1SJJn+NlOkW+85coOlP1fwfAC3x0eEsjjdotx0VaYUkdfSdzSS
-        bIQE9SJ3vVdyh50IOGt8PNU=
-X-Google-Smtp-Source: AMsMyM6g+5gE+c+OCuSiTwzzgHJXkzOC6n3qVCt9cbcT8NRvSXZ4LRKfSbyWxRktoZxvAcC0NSvzHg==
-X-Received: by 2002:a17:902:a416:b0:178:a030:5f94 with SMTP id p22-20020a170902a41600b00178a0305f94mr1585722plq.162.1663823992741;
-        Wed, 21 Sep 2022 22:19:52 -0700 (PDT)
-Received: from localhost.localdomain ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id b7-20020a170903228700b001780a528540sm3045067plh.93.2022.09.21.22.19.50
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=1AAj0jz/3WOf/ZinmBg4e5WZyKIExnDIP+4ApRXDWXk=;
+        b=d4bsugSbQwDNnmKVQhclD1vXrv4f6Way0tmDuogSFX+PIic2PP+5Q8fLXH9jSw/MFS
+         SrxVnvB7JJMA8FYBFpdv/3/H38ZmCyYxtv5DIMJNzDyztGsVVKrabuC7y8a5AWphyJts
+         IAyNw+5H/tgyFsfOGmjSmEGW/FOcyuMPPiqtAgY6YPLdectcJ6sX6pfEYD7pRkb6ckrO
+         D8BT2716XT4m56tB/10EUspIW7AT2vT1ByQpZggWQ9ZMBtr4TA1KDYaWDY645VyvowHU
+         SMhZ6LyZ/IBoAgHemQwHzcg7sJb8hfzt8ITb2zkOXZ0aNQBBzovS0qgvP+lw++DcoYJn
+         w3SA==
+X-Gm-Message-State: ACrzQf3Ym4PLYc7EfNiFntP0qrdLdlFvPQNzMshffRZRFatSaHH30CFC
+        SxN/akaoZE9djF3LAweODT8HLg==
+X-Google-Smtp-Source: AMsMyM4a+GHcnQt0UeqKstHRefYZ2pfi5aegxBG+GRLeLtm77LwF22DDWI605QZJjTDKHxZFsdcd6w==
+X-Received: by 2002:a63:cf56:0:b0:439:41ed:78fc with SMTP id b22-20020a63cf56000000b0043941ed78fcmr1597609pgj.419.1663824388949;
+        Wed, 21 Sep 2022 22:26:28 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id l10-20020a170903120a00b0016f196209c9sm3102876plh.123.2022.09.21.22.26.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Sep 2022 22:19:52 -0700 (PDT)
-From:   Like Xu <like.xu.linux@gmail.com>
-X-Google-Original-From: Like Xu <likexu@tencent.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Jim Mattson <jmattson@google.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: [PATCH v2 2/2] KVM: x86/pmu: Add PEBS support for SPR and future non-hybird models
-Date:   Thu, 22 Sep 2022 13:19:29 +0800
-Message-Id: <20220922051929.89484-2-likexu@tencent.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220922051929.89484-1-likexu@tencent.com>
-References: <20220922051929.89484-1-likexu@tencent.com>
+        Wed, 21 Sep 2022 22:26:28 -0700 (PDT)
+Date:   Wed, 21 Sep 2022 22:26:27 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Kalle Valo <kvalo@kernel.org>
+Cc:     Vlastimil Babka <vbabka@suse.cz>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Alex Elder <elder@kernel.org>,
+        Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Daniel Micay <danielmicay@gmail.com>,
+        Yonghong Song <yhs@fb.com>, Marco Elver <elver@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Jacob Shin <jacob.shin@amd.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-btrfs@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-fsdevel@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org, dev@openvswitch.org,
+        x86@kernel.org, llvm@lists.linux.dev,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 10/12] iwlwifi: Track scan_cmd allocation size explicitly
+Message-ID: <202209212224.A2F1DB798@keescook>
+References: <20220922031013.2150682-1-keescook@chromium.org>
+ <20220922031013.2150682-11-keescook@chromium.org>
+ <87fsgk6nys.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87fsgk6nys.fsf@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Like Xu <likexu@tencent.com>
+On Thu, Sep 22, 2022 at 07:18:51AM +0300, Kalle Valo wrote:
+> Kees Cook <keescook@chromium.org> writes:
+> 
+> > In preparation for reducing the use of ksize(), explicitly track the
+> > size of scan_cmd allocations. This also allows for noticing if the scan
+> > size changes unexpectedly. Note that using ksize() was already incorrect
+> > here, in the sense that ksize() would not match the actual allocation
+> > size, which would trigger future run-time allocation bounds checking.
+> > (In other words, memset() may know how large scan_cmd was allocated for,
+> > but ksize() will return the upper bounds of the actually allocated memory,
+> > causing a run-time warning about an overflow.)
+> >
+> > Cc: Gregory Greenman <gregory.greenman@intel.com>
+> > Cc: Kalle Valo <kvalo@kernel.org>
+> > Cc: Johannes Berg <johannes.berg@intel.com>
+> > Cc: linux-wireless@vger.kernel.org
+> > Cc: netdev@vger.kernel.org
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> 
+> Via which tree is this iwlwifi patch going? Normally via wireless-next
+> or something else?
 
-Virtualization support for SPR PEBS has officially available in the
-Intel SDM (June 2022) and has been validated on late stepping machines:
+This doesn't depend on the kmalloc_size_roundup() helper at all, so I
+would be happy for it to go via wireless-next if the patch seems
+reasonable.
 
-Compared to Ice Lake Server, the PDIR counter available (Fixed 0) on SPR
-is unchanged, but the capability is enhanced to Instruction-Accurate PDIR
-(PDIR++), where PEBS is taken on the next instruction after the one that
-caused the overflow. Also, it introduces a new Precise Distribution (PDist)
-facility that eliminates the skid when a precise event is programmed
-on general programmable counter 0.
-
-For guest usage, KVM will require the max precise level in both cases
-mentioned above (other conditions may apply later), requesting the
-correct hardware counter (PRIR++ or PDist) from host perf as usual.
-
-Signed-off-by: Like Xu <likexu@tencent.com>
----
-Previous:
-https://lore.kernel.org/kvm/20220921064827.936-1-likexu@tencent.com/
-
-V1 -> V2 Changelog:
-- move the check into a function; (Kan)
-
- arch/x86/kvm/pmu.c              | 25 ++++++++++++++++++++++---
- arch/x86/kvm/vmx/capabilities.h |  4 +++-
- 2 files changed, 25 insertions(+), 4 deletions(-)
-
-diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
-index 02f9e4f245bd..5e9b0b3ea42d 100644
---- a/arch/x86/kvm/pmu.c
-+++ b/arch/x86/kvm/pmu.c
-@@ -28,9 +28,18 @@
- struct x86_pmu_capability __read_mostly kvm_pmu_cap;
- EXPORT_SYMBOL_GPL(kvm_pmu_cap);
- 
--static const struct x86_cpu_id vmx_icl_pebs_cpu[] = {
-+/* Precise Distribution of Instructions Retired (PDIR) */
-+static const struct x86_cpu_id vmx_pebs_pdir_cpu[] = {
- 	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_D, NULL),
- 	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_X, NULL),
-+	/* Instruction-Accurate PDIR (PDIR++) */
-+	X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X, NULL),
-+	{}
-+};
-+
-+/* Precise Distribution (PDist) */
-+static const struct x86_cpu_id vmx_pebs_pdist_cpu[] = {
-+	X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X, NULL),
- 	{}
- };
- 
-@@ -140,6 +149,16 @@ static void kvm_perf_overflow(struct perf_event *perf_event,
- 	__kvm_perf_overflow(pmc, true);
- }
- 
-+static bool need_max_precise(struct kvm_pmc *pmc)
-+{
-+	if (pmc->idx == 0 && x86_match_cpu(vmx_pebs_pdist_cpu))
-+		return true;
-+	if (pmc->idx == 32 && x86_match_cpu(vmx_pebs_pdir_cpu))
-+		return true;
-+
-+	return false;
-+}
-+
- static void pmc_reprogram_counter(struct kvm_pmc *pmc, u32 type,
- 				  u64 config, bool exclude_user,
- 				  bool exclude_kernel, bool intr)
-@@ -181,11 +200,11 @@ static void pmc_reprogram_counter(struct kvm_pmc *pmc, u32 type,
- 		 * the accuracy of the PEBS profiling result, because the "event IP"
- 		 * in the PEBS record is calibrated on the guest side.
- 		 *
--		 * On Icelake everything is fine. Other hardware (GLC+, TNT+) that
-+		 * On Icelake everything is fine. Other hardware (TNT+) that
- 		 * could possibly care here is unsupported and needs changes.
- 		 */
- 		attr.precise_ip = 1;
--		if (x86_match_cpu(vmx_icl_pebs_cpu) && pmc->idx == 32)
-+		if (need_max_precise(pmc))
- 			attr.precise_ip = 3;
- 	}
- 
-diff --git a/arch/x86/kvm/vmx/capabilities.h b/arch/x86/kvm/vmx/capabilities.h
-index c5e5dfef69c7..4dc4bbe18821 100644
---- a/arch/x86/kvm/vmx/capabilities.h
-+++ b/arch/x86/kvm/vmx/capabilities.h
-@@ -398,7 +398,9 @@ static inline bool vmx_pt_mode_is_host_guest(void)
- 
- static inline bool vmx_pebs_supported(void)
- {
--	return boot_cpu_has(X86_FEATURE_PEBS) && kvm_pmu_cap.pebs_ept;
-+	return boot_cpu_has(X86_FEATURE_PEBS) &&
-+		!boot_cpu_has(X86_FEATURE_HYBRID_CPU) &&
-+		kvm_pmu_cap.pebs_ept;
- }
- 
- static inline u64 vmx_get_perf_capabilities(void)
 -- 
-2.37.3
-
+Kees Cook
