@@ -2,105 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CB885E686F
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 18:30:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4175D5E686C
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 18:30:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231893AbiIVQai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 12:30:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60342 "EHLO
+        id S232100AbiIVQaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 12:30:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232040AbiIVQaP (ORCPT
+        with ESMTP id S231528AbiIVQaM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 12:30:15 -0400
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE5845055;
-        Thu, 22 Sep 2022 09:30:04 -0700 (PDT)
+        Thu, 22 Sep 2022 12:30:12 -0400
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 515D23DF3C;
+        Thu, 22 Sep 2022 09:30:03 -0700 (PDT)
 Received: from toolbox.toradex.int ([31.10.206.125]) by mrelay.perfora.net
- (mreueus004 [74.208.5.2]) with ESMTPSA (Nemesis) id 1N9dHN-1pMx9W08WL-015XQB;
- Thu, 22 Sep 2022 18:29:35 +0200
+ (mreueus004 [74.208.5.2]) with ESMTPSA (Nemesis) id 1N6tSF-1pLISL0qD9-018HVp;
+ Thu, 22 Sep 2022 18:29:38 +0200
 From:   Marcel Ziswiler <marcel@ziswiler.com>
 To:     linux-arm-kernel@lists.infradead.org
-Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Andrejs Cainikovs <andrejs.cainikovs@toradex.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+Cc:     Max Krummenacher <max.krummenacher@toradex.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
         Fabio Estevam <festevam@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Max Krummenacher <max.krummenacher@toradex.com>,
         NXP Linux Team <linux-imx@nxp.com>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         Philippe Schenker <philippe.schenker@toradex.com>,
         Rob Herring <robh+dt@kernel.org>,
         Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Will Deacon <will@kernel.org>, devicetree@vger.kernel.org,
+        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v1 0/8] arm64: dts: verdin-imx8mm: verdin-imx8mp: pcie. et. al.
-Date:   Thu, 22 Sep 2022 18:29:17 +0200
-Message-Id: <20220922162925.2368577-1-marcel@ziswiler.com>
+Subject: [PATCH v1 1/8] arm64: dts: verdin-imx8mp: fix ctrl_sleep_moci
+Date:   Thu, 22 Sep 2022 18:29:18 +0200
+Message-Id: <20220922162925.2368577-2-marcel@ziswiler.com>
 X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220922162925.2368577-1-marcel@ziswiler.com>
+References: <20220922162925.2368577-1-marcel@ziswiler.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:4637eWeTPry5ikx6C4DgjsxAeXIpEEmMNpsVJznParNZVSKIiT/
- ew87uBY8tqpIlhLljNJJg/VO2fAWfm+tjVy2zIAYZoI0Ug75iCIgBfEKW1h15uzDblrlHis
- V8Qi8fKiQ8DU5OXAp5aH/Nks7KpSh0pZ92ItWoAqdzBSxrGWQqTF9EphPnUto/GWkgf3Yy3
- qID0RFJHVf+Wz0Pzrc7Sw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:yezxiKWF5RU=:4+Nji9/75mJFEuzdiySFDZ
- vl/7cu3pVzkat/1uTo95eX0PfR/OQSRxudjM7hQthYeiN9bEANdZK7OZYLa7tJ8sahXYWz/nP
- 0q27iJRSDZpFMjFbZfGy+DESpuy838QhLhPxp+lGuf5kA3w+fgNfZKU2sbAIkzyXDRDjkJU/x
- W/BxOM6h7U9MMU0FqtILklCUYShEfVsS2HWwXnvNxf6H0NL1y1VbEXAkVM8+OlC2MtIS5DYxj
- eLUctXh14JUiW30iY4Uz8MJVw7+Z95DarBVA+K8XZ95lU7XK6E/oqvrUU4qF9vxn4wdHxxjvx
- 7cMy1WxomP7vS7mVT28kAkrzm3RVMbSm89VT6O21dXE2stX408jyja13YEmea74z2kUAVIf45
- 32OPW3qCgble6XR9REah31M36VKLR8WVIFiwRKw6gCWHVnhJ2yt2g73AbsKjsRdE1akHgf1x9
- a14I0abk7QLYmFc38Lv01lCh+N+tfKZ8O3iBpQB1q2DlAzGkJWUFjZNaQjY4isc9T84hUh12m
- 0cNAyL+aci8tfUnWpBlTcC9LhPFX5SoxDdRw0MaYg/F/G3H8uCxbBvIV7A35a1nnVQxNp449g
- cRNdTqIcx+lx57TtVvX9iSCAIshStbXO+15bcrpo+HjkgvDhaz3mU/dII4eGLaJRpUXOTSNyM
- eQc7aX7r1bzsBkn0KWM8FvOI72YamZGIzSMT2dMtVWDydzYl2UvIrmdwoCVfZw8iGlJtVm/lk
- RaABPCgwKL0LC+bfrJSfZJd9tKRVcvx3yfJjPXk9k3e2jIIYuieIOOH6l6FWmVu1APDL7Uj/l
- ZGnrW7G
+X-Provags-ID: V03:K1:rCx/OIPa6XgOO7VW/1IdwU6W5BGuuyzdlYGSVYza4FCLLrCljmS
+ anONKl0ZX5mJEcj0OR4gFkVDMK74OhcSjRsDfqUazp+unmfPGrNMcyJFGy4aDZiEohTpjM2
+ siAyxNIAw51bL1Fb2s9fjpLRs6aGqzdXfZMxtp341v11jjnnOUuke6uO7gJT0yQVeldKL5B
+ mnlYZjg5I7E0AkvXpoaRA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:fkA2NXvifQs=:GoxWYMVAdSujuFkmDkJwps
+ HmXKyD7Z9SQsf9fjfJ9kSqf8pWALzC9XcSVMb/5KL/Uojy3tTKyt49ktmNGx6Q7agTuTjA+xS
+ r3rbqdUMspTJMfJ9iNm+MccL61Xk+M2lbBUzw+4U8uY8Be7KLjeXUMfxulhY4DkfJ7+jCYU32
+ RuNAGeygUKVswwslMgrkFfR421yeOCREGyoSevTXOHbnoEkFpPNpEEoJTrZAIjNwmBNcUEm1L
+ ZNNA5mOL9zHe+T7ythVGj0RcKPuTRDIJzyatgQwc6Vk4musIADnG7V5n9cIme/Z06H9qLD8jn
+ oHIFGOrjoDAcJycYwanENF77p81AH+aMPDGYIoYy1gTPTuQ/nzferfRdmoUYTiIcwn0jKRQss
+ fI+Lc6CFwbLmAD4QWMQgMziDsZ4RuOoQNLNo4M5IVJ9aDDY8aSTC4oqoprOxxbhs3yiXTWPFa
+ BpZs+upAfp08kEXplkkdN2YBoib3Bz6YwWD/bnrQSB6sXBhGvtfQNF22t0pCl1bvwbL6rOE6G
+ cJMXHQudsB796RgW0/FnB2GGbTjrWgHyHdYhSGSk26Q/IyIxnMLycoYWHmZM7EWFWSoUWu+Fc
+ MbRE9T7OomcB/T4lhsVc3/RPm2He1aqic/e2WBBZ1bxfp+SY9O0pPCX1bPo+UtCp0Kaefd3+f
+ RVg72ax1ea2yLMabBnDjZtXAIZC3Xr8dA13wPB/VVBq0QLrISPagmk5GQzXeAov0bcTOGtcMH
+ 5MlAJCDpC/K6uZU7HTbP4dsJ+XReQnJxX8DfTLXzoLjorZ9qOUwY2V3WRj0xTkm0Vhkhheq0Y
+ DClhvB9
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+From: Max Krummenacher <max.krummenacher@toradex.com>
 
+The GPIO signaling ctrl_sleep_moci is currently handled as a gpio hog.
+But the gpio-hog node is made a child of the wrong gpio controller.
+Move it to the node representing gpio4 so that it actually works.
 
-This series contains Verdin iMX8M Plus PCIe enablement and a few other
-improvements for the Verdin iMX8M Mini and Plus (and Colibri iMX8X for
-that matter).
+Without this carrier board components jumpered to use the signal are
+unconditionally switched off.
 
+Fixes: 1d8df9c74bff ("arm64: dts: freescale: add initial support for verdin imx8m plus")
+Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
+Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+---
 
-Marcel Ziswiler (7):
-  arm64: dts: verdin-imx8mm: verdin-imx8mp: improve include notation
-  arm64: dts: colibri-imx8x: improve include notation
-  arm64: dts: verdin-imx8mm: verdin-imx8mp: rename sn65dsi83 to
-    sn65dsi84
-  arm64: dts: verdin-imx8mm: improve pcie node
-  arm64: dts: verdin-imx8mp: add pcie support
-  arm64: defconfig: enable snvs lpgpr support
-  arm64: defconfig: enable i.mx 8m plus specific interconnect support
+ .../boot/dts/freescale/imx8mp-verdin.dtsi     | 20 +++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
-Max Krummenacher (1):
-  arm64: dts: verdin-imx8mp: fix ctrl_sleep_moci
-
- .../boot/dts/freescale/imx8mm-verdin.dtsi     | 10 ++--
- .../dts/freescale/imx8mp-verdin-dahlia.dtsi   |  9 +++-
- .../boot/dts/freescale/imx8mp-verdin.dtsi     | 51 +++++++++++++------
- .../freescale/imx8qxp-colibri-eval-v3.dtsi    |  2 +-
- arch/arm64/configs/defconfig                  |  2 +
- 5 files changed, 53 insertions(+), 21 deletions(-)
-
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
+index 1c74c6a19449..360be51a3527 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
+@@ -339,16 +339,6 @@ &gpio2 {
+ 			  "SODIMM_82",
+ 			  "SODIMM_70",
+ 			  "SODIMM_72";
+-
+-	ctrl-sleep-moci-hog {
+-		gpio-hog;
+-		/* Verdin CTRL_SLEEP_MOCI# (SODIMM 256) */
+-		gpios = <29 GPIO_ACTIVE_HIGH>;
+-		line-name = "CTRL_SLEEP_MOCI#";
+-		output-high;
+-		pinctrl-names = "default";
+-		pinctrl-0 = <&pinctrl_ctrl_sleep_moci>;
+-	};
+ };
+ 
+ &gpio3 {
+@@ -417,6 +407,16 @@ &gpio4 {
+ 			  "SODIMM_256",
+ 			  "SODIMM_48",
+ 			  "SODIMM_44";
++
++	ctrl-sleep-moci-hog {
++		gpio-hog;
++		/* Verdin CTRL_SLEEP_MOCI# (SODIMM 256) */
++		gpios = <29 GPIO_ACTIVE_HIGH>;
++		line-name = "CTRL_SLEEP_MOCI#";
++		output-high;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_ctrl_sleep_moci>;
++	};
+ };
+ 
+ /* On-module I2C */
 -- 
 2.36.1
 
