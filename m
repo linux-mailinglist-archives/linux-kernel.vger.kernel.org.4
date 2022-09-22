@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC9D35E5819
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 03:35:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E155A5E581B
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 03:36:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230426AbiIVBfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 21:35:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59734 "EHLO
+        id S230447AbiIVBgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 21:36:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230424AbiIVBfT (ORCPT
+        with ESMTP id S229459AbiIVBgQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 21:35:19 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87ADF7E82F;
-        Wed, 21 Sep 2022 18:35:17 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id o99-20020a17090a0a6c00b002039c4fce53so661412pjo.2;
-        Wed, 21 Sep 2022 18:35:17 -0700 (PDT)
+        Wed, 21 Sep 2022 21:36:16 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 812F498C8B;
+        Wed, 21 Sep 2022 18:36:15 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id w13so7399308plp.1;
+        Wed, 21 Sep 2022 18:36:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date;
-        bh=HXQzwn8pzI8ZSAXB6BAQnLBK8XLxqnKwtGmeoW7IQn4=;
-        b=gMwWv4KvncJ8ULBzpwvbnYjRCw+DzwFm6rlY/BbhgVbo1vH1UabtD2ayqX3VUerEwZ
-         msZ/BLvU8SeTqLMAkQ8oQvfdBzrAdxTGjefcAVQMPl64vDL13dUhJLMSsaVwwEm1ZtIO
-         cKE+Y+ydpKHd8wFjaaRCSZHcky8ZmJLXNsU5KQvKQnvDgWwb9nAtgZHElOLGY5We684Z
-         RzJ8Pd/vovD1CrT/QWsRRAhLlQcwiqm9/G9nQX6RKN8fPlOSBreD3CAfWitB4F9Ba/Ql
-         tFYN6yBHOTJYtQ/wQkqSYSwAh+Ry43WqAnDsuPnHCmgQd/MzkB9g6fQ8bJVRdOOkLn1D
-         eNfg==
+        bh=7O4m8cnVq8WWnJoS2DEBavHRbdH+17ihkVjS04pYNls=;
+        b=hYPe/lXlNw3QzwSqwWf8lKjQciQa2qM5TlM7jMgOOMbplAj3inE7bUmP+NpedAtrQg
+         SCE2jnRp/SqYXc6moWnu3KwD1m1s0WjgHcWpYiY6ylNvxeNkxEXR8rCYMVDSl88nUYVK
+         cd++XxqryKoBN6+XCnCxP0aJIOQpOKxFL0siJML1oGRledhBfb+nZGWN04lUAZ3eaiw3
+         cfBtHEoJT8RoJaL8+T6jBxppP+vYeAyHdldgYvbkTZ1X6A9wnLzsHAfMDR7XsabpoMmS
+         tN50iJNloInnYXsPFR9od5KnMmNq514ea6HRI4IyeOoKHIvu24GADoUnBH9dX2xxDVUx
+         I5DA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=HXQzwn8pzI8ZSAXB6BAQnLBK8XLxqnKwtGmeoW7IQn4=;
-        b=cKr59bA2ejf1+fjzoHzPGdH6O1Kn9NdBLYdDJv5YFOWsPckUwDszqFZHt6rV+nYDId
-         9sl07oxO+o0FEQRj9bAzXh/cp9XQCXTKlb2K/ahYgOxyNIAEbQ5J7doQgXS8fvj0BxwO
-         hE5+z/HzYtGGPub++03BlBNKB04vFHGl7+L8zn4/LrGOS71esPo/B8rihG2Zw/qmYcle
-         St1IBuuW0zDRBlUNtmupHxGIcoNjximcAAINMSZQrtUb2tBQLMbsKnDoRDDRx9qaaZmY
-         2OtrgxRiImU5wedYWAtActi3NYbt740x4dYF+G995CW6qEUWJS3k4+QL09uSMg7mT5I9
-         xs8g==
-X-Gm-Message-State: ACrzQf23U4Q3v+a0WOmvwEm8Ub3owUtYERRqKlgKO+m7nXRgauJ2WIPG
-        xx3I2+zbini2lJI0Ats3nLCDQ++/Y1s=
-X-Google-Smtp-Source: AMsMyM5bzL9ktblfLClCoSvrZGFhkgcNceRQgK8iJSPTNC++O0PjJnBSLzOZd8hsfPEpfuvPG+g36w==
-X-Received: by 2002:a17:90b:17c7:b0:202:95a2:e30f with SMTP id me7-20020a17090b17c700b0020295a2e30fmr12335931pjb.28.1663810517090;
-        Wed, 21 Sep 2022 18:35:17 -0700 (PDT)
+        bh=7O4m8cnVq8WWnJoS2DEBavHRbdH+17ihkVjS04pYNls=;
+        b=Gd8f3ML1BtjL5IxSBuSVdsTxLz5Juy7SmYNJJzVmREZf5SCbzVlYin+XcSQ9iRviVB
+         FijOO+nqkNj8kBJrLFQVDqRrnQmhn796if2VuGmfBVRffvjInjg8TaHjNLmENbsHIpw7
+         B2BgMzQZrfZ5M+CSo6OOuVSCVeShIe/bIN02As/jSrp0BRvLSkMtXOJEQEE7GVRd3m1k
+         PuxZMWZTMkwIH2G61MDs1ReDONUuv5HSQ8ELpSOpD42XcaxTO/gYU7A/+nHitUojapYu
+         6rYNueKbzj0PGkz0b2QT30SMYjVud9Ox8AOl10uywYa7noH4bOJ9Foma4xTFAiA5ecrN
+         bU3g==
+X-Gm-Message-State: ACrzQf3BnKvhskm5Q1DcRiMzq17/oPIMK9HlEu6c+McyKVmnauBEBi9A
+        IH45M5znIzD7YDND6E0PJfQ=
+X-Google-Smtp-Source: AMsMyM732w0THghPR3BV0YGsjE9w2A16g73sTkNY4o1Rz/5bBCcLGFPDIbQK6qPtq7pvvSbPRvTQbQ==
+X-Received: by 2002:a17:90b:38ca:b0:203:64d2:dac5 with SMTP id nn10-20020a17090b38ca00b0020364d2dac5mr1041433pjb.209.1663810574984;
+        Wed, 21 Sep 2022 18:36:14 -0700 (PDT)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id w62-20020a623041000000b0053e156e9475sm2865137pfw.182.2022.09.21.18.35.14
+        by smtp.gmail.com with ESMTPSA id u10-20020a170903124a00b001782a0d3eeasm2670964plh.115.2022.09.21.18.36.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Sep 2022 18:35:16 -0700 (PDT)
+        Wed, 21 Sep 2022 18:36:14 -0700 (PDT)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: ye.xingchen@zte.com.cn
 To:     acme@kernel.org
@@ -57,9 +57,9 @@ Cc:     mingo@redhat.com, mark.rutland@arm.com,
         linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
         ye xingchen <ye.xingchen@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] perf tools: use strscpy() is more robust and safer
-Date:   Thu, 22 Sep 2022 01:35:12 +0000
-Message-Id: <20220922013512.233108-1-ye.xingchen@zte.com.cn>
+Subject: [PATCH linux-next] perf test: use strscpy() is more robust and safer
+Date:   Thu, 22 Sep 2022 01:35:56 +0000
+Message-Id: <20220922013556.233163-1-ye.xingchen@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -82,21 +82,21 @@ That's now the recommended way to copy NUL terminated strings.
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 ---
- tools/perf/arch/x86/util/event.c | 2 +-
+ tools/perf/tests/dlfilter-test.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/perf/arch/x86/util/event.c b/tools/perf/arch/x86/util/event.c
-index e670f3547581..a7d3bfde0c7b 100644
---- a/tools/perf/arch/x86/util/event.c
-+++ b/tools/perf/arch/x86/util/event.c
-@@ -61,7 +61,7 @@ int perf_event__synthesize_extra_kmaps(struct perf_tool *tool,
- 		event->mmap.pgoff = pos->pgoff;
- 		event->mmap.pid   = machine->pid;
+diff --git a/tools/perf/tests/dlfilter-test.c b/tools/perf/tests/dlfilter-test.c
+index 84352d55347d..bbb79e98294c 100644
+--- a/tools/perf/tests/dlfilter-test.c
++++ b/tools/perf/tests/dlfilter-test.c
+@@ -233,7 +233,7 @@ static int get_dlfilters_path(char *buf, size_t sz)
+ 		if (access(path, R_OK))
+ 			return -1;
+ 	}
+-	strlcpy(buf, dirname(path), sz);
++	strscpy(buf, dirname(path), sz);
+ 	return 0;
+ }
  
--		strlcpy(event->mmap.filename, kmap->name, PATH_MAX);
-+		strscpy(event->mmap.filename, kmap->name, PATH_MAX);
- 
- 		if (perf_tool__process_synth_event(tool, event, machine,
- 						   process) != 0) {
 -- 
 2.25.1
