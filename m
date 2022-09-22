@@ -2,70 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E80C5E5B78
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 08:36:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC5B75E5B7B
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 08:38:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230167AbiIVGg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 02:36:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44470 "EHLO
+        id S229777AbiIVGiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 02:38:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230108AbiIVGgV (ORCPT
+        with ESMTP id S230097AbiIVGiL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 02:36:21 -0400
-Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8BB6B6D02
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 23:36:19 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VQRI4-C_1663828576;
-Received: from 30.97.48.87(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VQRI4-C_1663828576)
-          by smtp.aliyun-inc.com;
-          Thu, 22 Sep 2022 14:36:17 +0800
-Message-ID: <e6b4d43d-eea1-5748-bfe3-56f6c9addc7f@linux.alibaba.com>
-Date:   Thu, 22 Sep 2022 14:36:34 +0800
+        Thu, 22 Sep 2022 02:38:11 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 718F1B656D
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 23:38:10 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id z20so9799278ljq.3
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 23:38:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=qyfZU/JafD8o6/SPahDQv0jUqUXGqfaIFI7Q3Ul2auI=;
+        b=kkd99uZxOdiNalyDhr8+He7hgk7NzeStc8HhuMSENnPjGg5C366/cLNg/a268b7aRY
+         5FH1wAENXzz80lUMaNZ306V8yotqdPqE3YxE+wPwcPDhlDX/Zson0A40UeuKXDaEEa8F
+         L7cQi8UJTDRbBnqgd8I43iHQZPLkC8E1iJvC343ZOsrcQJgik38mGMuP4nTykKe/bWc8
+         MuLJQaf1ByHh9wK7CDMgHOOgCCSwedl+graYTN5ROFJPlNKdnT3ku8gDe/hJj6le1JEZ
+         x3O5F/7rOwOxuRpFUxaZtGUBvdU10MfGNNDWhMvU/GmoKsV259wsEZWxn1a4tklEHtk2
+         xwIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=qyfZU/JafD8o6/SPahDQv0jUqUXGqfaIFI7Q3Ul2auI=;
+        b=uN18Tu1zot1a88WFH6r7e6kn25fmZGrfwzkT3soBEg87hcgKDBCgK2ILv2Zbk2qvO2
+         FLDqqpPvxP/Vc56N2Npujw3/QEfsKy2FL9POiqqxjWJ84OQjDYYL5U/LRl9OUV9PmCxF
+         Aiiwb96z/NJYKWAYBuBF/WyK1ojh7CUFsDwX6GMrENGH9lvr3t+rmmmewUIx9f5vI3VK
+         ONmS1IHHUYiDtVofgYIM8BwElt8rLRNQNPHWToT5ZGn7/KSOWiG+iPvsrcB9KFa6DnL9
+         gLqf8a0araltsgdOKRgI5sRN78Y10JTdpBUVTU7mBE93j4Qcti7QAIR6Hb+QScozQBfT
+         kFmw==
+X-Gm-Message-State: ACrzQf2JyWxq6rcfOaBhn2IFiFb84gLwzbD/sJWzBMNhESGCF1kju5PT
+        37iL8Z0OSHQzkXMsWhNNPDf4Vg==
+X-Google-Smtp-Source: AMsMyM74j0aPxMSIE9NbVNKhB5RET6Vu035qf1/l0Aypj5PElvYZATE6ZCJU/M40ykreSuiv5OANYw==
+X-Received: by 2002:a2e:84d6:0:b0:26b:dce5:2fe5 with SMTP id q22-20020a2e84d6000000b0026bdce52fe5mr529732ljh.12.1663828688613;
+        Wed, 21 Sep 2022 23:38:08 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id b1-20020a056512070100b00493014c3d7csm767484lfs.309.2022.09.21.23.38.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Sep 2022 23:38:07 -0700 (PDT)
+Message-ID: <821b3c30-6f1f-17c1-061c-8d3b3add0238@linaro.org>
+Date:   Thu, 22 Sep 2022 08:38:06 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [RFC 2/6] mm/migrate_pages: split unmap_and_move() to _unmap()
- and _move()
-To:     Huang Ying <ying.huang@intel.com>, linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Zi Yan <ziy@nvidia.com>, Yang Shi <shy828301@gmail.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Matthew Wilcox <willy@infradead.org>
-References: <20220921060616.73086-1-ying.huang@intel.com>
- <20220921060616.73086-3-ying.huang@intel.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20220921060616.73086-3-ying.huang@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v3 2/2] dt-bindings: net: snps,dwmac: add clk_csr property
+Content-Language: en-US
+To:     Jianguo Zhang <jianguo.zhang@mediatek.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Biao Huang <biao.huang@mediatek.com>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20220921070721.19516-1-jianguo.zhang@mediatek.com>
+ <20220921070721.19516-3-jianguo.zhang@mediatek.com>
+ <bd460cfd-7114-b200-ab99-16fa3e2cff50@linaro.org>
+ <d231f64e494f4badf8bbe23130b25594376c9882.camel@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <d231f64e494f4badf8bbe23130b25594376c9882.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-13.6 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 9/21/2022 2:06 PM, Huang Ying wrote:
-> This is a preparation patch to batch the page unmapping and moving
-> for the normal pages and THP.
+On 22/09/2022 04:15, Jianguo Zhang wrote:
+> Dear Krzysztof,
 > 
-> In this patch, unmap_and_move() is split to migrate_page_unmap() and
-> migrate_page_move().  So, we can batch _unmap() and _move() in
-> different loops later.  To pass some information between unmap and
-> move, the original unused newpage->mapping and newpage->private are
-> used.
+> 	Thanks for your comment.
 > 
-> Signed-off-by: "Huang, Ying" <ying.huang@intel.com> > Cc: Zi Yan <ziy@nvidia.com>
-> Cc: Yang Shi <shy828301@gmail.com>
-> Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
-> Cc: Oscar Salvador <osalvador@suse.de>
-> Cc: Matthew Wilcox <willy@infradead.org>
-> ---
+> On Wed, 2022-09-21 at 10:24 +0200, Krzysztof Kozlowski wrote:
+>> On 21/09/2022 09:07, Jianguo Zhang wrote:
+>>> Add clk_csr property for snps,dwmac
+>>>
+>>> Signed-off-by: Jianguo Zhang <jianguo.zhang@mediatek.com>
+>>> ---
+>>>  Documentation/devicetree/bindings/net/snps,dwmac.yaml | 5 +++++
+>>>  1 file changed, 5 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+>>> b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+>>> index 491597c02edf..8cff30a8125d 100644
+>>> --- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+>>> +++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+>>> @@ -288,6 +288,11 @@ properties:
+>>>        is supported. For example, this is used in case of SGMII and
+>>>        MAC2MAC connection.
+>>>  
+>>> +  clk_csr:
+>>
+>> No underscores in node names. Missing vendor prefix.
+>>
+> We will remane the property name 'clk_csr' as 'snps,clk-csr' and
+> another driver patch is needed to align the name used in driver with
+> the new name. 
 
-Looks good to me.
-Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+You did not say anything that you document existing property. Commit msg
+*must* explain why you are doing stuff in commit body.
+
+We should not be asking for this and for reason of clk_csr.
+
+Best regards,
+Krzysztof
+
