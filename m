@@ -2,115 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B3C35E5850
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 03:58:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE88C5E5864
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 04:08:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230190AbiIVB6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 21:58:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56520 "EHLO
+        id S231138AbiIVCIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 22:08:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbiIVB6m (ORCPT
+        with ESMTP id S230391AbiIVCIs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 21:58:42 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C88A3D06
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 18:58:41 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MXz0X74vszHqH1;
-        Thu, 22 Sep 2022 09:56:28 +0800 (CST)
-Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 22 Sep 2022 09:58:39 +0800
-Received: from [10.174.179.24] (10.174.179.24) by
- dggpemm100009.china.huawei.com (7.185.36.113) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 22 Sep 2022 09:58:38 +0800
-Subject: Re: [PATCH] mm: hugetlb: fix UAF in hugetlb_handle_userfault
-To:     Andrew Morton <akpm@linux-foundation.org>
-References: <20220921083440.1267903-1-liushixin2@huawei.com>
- <20220921120748.79f3255fa0a06b182576f497@linux-foundation.org>
-CC:     Liu Zixian <liuzixian4@huawei.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>
-From:   Liu Shixin <liushixin2@huawei.com>
-Message-ID: <ced8f78a-1f86-ee63-cc48-caed243ce197@huawei.com>
-Date:   Thu, 22 Sep 2022 09:58:38 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.7.1
+        Wed, 21 Sep 2022 22:08:48 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A06BFA1A77;
+        Wed, 21 Sep 2022 19:08:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663812527; x=1695348527;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=1fDpa6Vp9wv2YOhKIYkfzYhHIef9thojyzjgWC31CW0=;
+  b=aLL3TzERhUsCeCycGJ6DUqxPx2pnpQ+ivEAKsTefw9H1r+Z1M03a3n5N
+   TGBB61YgOodl7L6EKv3ZBtYWuiFAxKZm6urq5wCbz1aGrVeXXlvrw4Lj2
+   qB652AQT53OpIdH8aENJZ81l4S/jBV8ZzkSa53fiOdCdgBFBzr3UGshg3
+   7Xi4RXk4QlQcFLtOMwajFmjRwBlplz2e7E2egzND2zVTMIHu25ixBSi0z
+   WXAxSepHz0m8SwBsD1ri/K0k58Asy2BgZLEm9QRHh7YjDxs5EKqV2Mmt/
+   Cwxu3LuV+KXHfjpXH9sq+ggKM5GFfCMbXVw9yY70s6XSYY5z7oU5N0ywb
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="280544783"
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="280544783"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 19:08:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="794907643"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
+  by orsmga005.jf.intel.com with ESMTP; 21 Sep 2022 19:08:37 -0700
+Message-ID: <73008702-87e1-688f-b194-c259c9c03caa@linux.intel.com>
+Date:   Thu, 22 Sep 2022 10:02:42 +0800
 MIME-Version: 1.0
-In-Reply-To: <20220921120748.79f3255fa0a06b182576f497@linux-foundation.org>
-Content-Type: text/plain; charset="windows-1252"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Cc:     baolu.lu@linux.intel.com, jgg@nvidia.com, kevin.tian@intel.com,
+        konrad.dybcio@somainline.org, yong.wu@mediatek.com,
+        thierry.reding@gmail.com, vdumpa@nvidia.com, jonathanh@nvidia.com,
+        tglx@linutronix.de, shameerali.kolothum.thodi@huawei.com,
+        christophe.jaillet@wanadoo.fr, thunder.leizhen@huawei.com,
+        quic_saipraka@quicinc.com, jon@solid-run.com,
+        yangyingliang@huawei.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-tegra@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH v4 3/6] iommu: Add return value rules to attach_dev op and
+ APIs
+Content-Language: en-US
+To:     Nicolin Chen <nicolinc@nvidia.com>, joro@8bytes.org,
+        suravee.suthikulpanit@amd.com, will@kernel.org,
+        robin.murphy@arm.com, robdclark@gmail.com, dwmw2@infradead.org,
+        agross@kernel.org, bjorn.andersson@linaro.org,
+        matthias.bgg@gmail.com, orsonzhai@gmail.com,
+        baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com,
+        jean-philippe@linaro.org, sricharan@codeaurora.org
+References: <cover.1663744983.git.nicolinc@nvidia.com>
+ <8c3dbf153b63a3002a46bab6e707c63fd8635bb8.1663744983.git.nicolinc@nvidia.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <8c3dbf153b63a3002a46bab6e707c63fd8635bb8.1663744983.git.nicolinc@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.24]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm100009.china.huawei.com (7.185.36.113)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 9/21/22 4:23 PM, Nicolin Chen wrote:
+> Cases like VFIO wish to attach a device to an existing domain that was
+> not allocated specifically from the device. This raises a condition
+> where the IOMMU driver can fail the domain attach because the domain and
+> device are incompatible with each other.
+> 
+> This is a soft failure that can be resolved by using a different domain.
+> 
+> Provide a dedicated errno EINVAL from the IOMMU driver during attach that
+> the reason why the attach failed is because of domain incompatibility.
+> 
+> VFIO can use this to know that the attach is a soft failure and it should
+> continue searching. Otherwise, the attach will be a hard failure and VFIO
+> will return the code to userspace.
+> 
+> Update kdocs to add rules of return value to the attach_dev op and APIs.
+> 
+> Suggested-by: Jason Gunthorpe<jgg@nvidia.com>
+> Signed-off-by: Nicolin Chen<nicolinc@nvidia.com>
+> ---
+>   drivers/iommu/iommu.c | 22 ++++++++++++++++++++++
+>   include/linux/iommu.h | 12 ++++++++++++
+>   2 files changed, 34 insertions(+)
+> 
+> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+> index 3a808146b50f..1d1e32aeaae6 100644
+> --- a/drivers/iommu/iommu.c
+> +++ b/drivers/iommu/iommu.c
+> @@ -1975,6 +1975,17 @@ static int __iommu_attach_device(struct iommu_domain *domain,
+>   	return ret;
+>   }
+>   
+> +/**
+> + * iommu_attach_device - Attach a device to an IOMMU domain
 
+Normally we say "attach an iommu domain to a device/group ...".
 
-On 2022/9/22 3:07, Andrew Morton wrote:
-> On Wed, 21 Sep 2022 16:34:40 +0800 Liu Shixin <liushixin2@huawei.com> wrote:
->
->> The vma_lock and hugetlb_fault_mutex are dropped before handling
->> userfault and reacquire them again after handle_userfault(), but
->> reacquire the vma_lock could lead to UAF[1] due to the following
->> race,
->>
->> hugetlb_fault
->>   hugetlb_no_page
->>     /*unlock vma_lock */
->>     hugetlb_handle_userfault
->>       handle_userfault
->>         /* unlock mm->mmap_lock*/
->>                                            vm_mmap_pgoff
->>                                              do_mmap
->>                                                mmap_region
->>                                                  munmap_vma_range
->>                                                    /* clean old vma */
->>         /* lock vma_lock again  <--- UAF */
->>     /* unlock vma_lock */
->>
->> Since the vma_lock will unlock immediately after hugetlb_handle_userfault(),
->> let's drop the unneeded lock and unlock in hugetlb_handle_userfault() to fix
->> the issue.
->>
->> @@ -5508,17 +5507,12 @@ static inline vm_fault_t hugetlb_handle_userfault(struct vm_area_struct *vma,
->>  
->>  	/*
->>  	 * vma_lock and hugetlb_fault_mutex must be
->> -	 * dropped before handling userfault.  Reacquire
->> -	 * after handling fault to make calling code simpler.
->> +	 * dropped before handling userfault.
->>  	 */
->>  	hugetlb_vma_unlock_read(vma);
->>  	hash = hugetlb_fault_mutex_hash(mapping, idx);
->>  	mutex_unlock(&hugetlb_fault_mutex_table[hash]);
->> -	ret = handle_userfault(&vmf, reason);
->> -	mutex_lock(&hugetlb_fault_mutex_table[hash]);
->> -	hugetlb_vma_lock_read(vma);
->> -
->> -	return ret;
->> +	return handle_userfault(&vmf, reason);
->>  }
-> Current code is rather different from this.  So if the bug still exists
-> in current code, please verify this and redo the patch appropriately?
->
-> And hang on to this version to help with the -stable backporting.
->
-> Thanks.
-> .
-This patch conflicts with patch series "hugetlb: Use new vma lock for huge pmd sharing synchronization".
-So I reproduce the problem on next-20220920 and this patch is based on next-20220920 instead of mainline.
-This problem is existed since v4.11. I will send the stable version later.
-
+Best regards,
+baolu
