@@ -2,86 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AE905E5F8D
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 12:13:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E9205E5F95
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 12:15:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230414AbiIVKNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 06:13:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53034 "EHLO
+        id S229977AbiIVKO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 06:14:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231292AbiIVKMx (ORCPT
+        with ESMTP id S229787AbiIVKOt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 06:12:53 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E568ABF20;
-        Thu, 22 Sep 2022 03:12:49 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MYB1C1zNcz4xGQ;
-        Thu, 22 Sep 2022 20:12:47 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1663841567;
-        bh=XLwibGIv5BGINbco3o0NTpDvOVxYtnFFJ1tpHSj24+A=;
-        h=Date:From:To:Cc:Subject:From;
-        b=svYnTi8DfTg6hR/2uszT3CEzNdS3ZBat2y+zDedrHDw1/EfhlIQiVQDrqaZ1kZIYr
-         Mb61Vyz3Mn9rbEX+adGxSQyfwa/brld06CjqJaGgg/KweRs+dq/ekKrvNd/uOt0Ek/
-         5egYX3Babzy/GBAMhBt0eYuUIGSNZY+MfLprrSaHdjFa9ldzjIxUHUNWtV84RlVXDi
-         ML/JqQuUgrQTJ2ZFfFTTcIaVOIW/M6YFiQH5dxZydR5+wRVxoxugakhJIND6WF/x3W
-         XKv7M9s63pZvLbw4pt507NIrV2mh86w/DBlC+aIqRuXEvnoXs0bzWJO4s1zJiVo/qY
-         KTcxCuehOjxJg==
-Date:   Thu, 22 Sep 2022 20:12:35 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the rcu tree
-Message-ID: <20220922201222.01e0f2f5@canb.auug.org.au>
+        Thu, 22 Sep 2022 06:14:49 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 777521E71D;
+        Thu, 22 Sep 2022 03:14:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663841686; x=1695377686;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=x32tm762eYRcO0hneA/oJ5/kFu+e00pw3Fm2BAzUBI0=;
+  b=g2dnpIAQZdYov0kK0IvE8CSMolkc+0TzWSDzom++nmu2EyS9srnxPpQC
+   2GCCOIwqiicY7dzqf82fLxafPHxfbw9n0Pp4arWK2AxC0FBxtHuCCHyMR
+   W1j6fRp3UnxSeHbe0fJmsPB3bSbOOnOFsWzqBkQzlGtKME8YDqndBxxfB
+   8Zx1vu5D4XpKy/uayiMjuGp/c4KaCnME289vip+7IcXWZbmV9zClsgkc0
+   YQhhQkYEfIJrTxb5PKsN3CyC5/nVQd+GTcG3oKyDBTNmpD6IH1ymK4Or6
+   UYX/mcZjLtQXd7x/AILJWmoktq/OXq53OBwYgAGAhBRcyLK3cqgLjGG4b
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="300243189"
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="300243189"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 03:14:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="597375856"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga006.jf.intel.com with ESMTP; 22 Sep 2022 03:14:41 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1obJE7-005xPE-1j;
+        Thu, 22 Sep 2022 13:14:39 +0300
+Date:   Thu, 22 Sep 2022 13:14:39 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Vadim Fedorenko <vfedorenko@novek.ru>
+Cc:     Jonathan Lemon <jonathan.lemon@gmail.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Vadim Fedorenko <vadfed@fb.com>,
+        Richard Cochran <richardcochran@gmail.com>
+Subject: Re: [PATCH v1 1/1] ptp_ocp: use device_find_any_child() instead of
+ custom approach
+Message-ID: <Yyw1j7f7p8PIdVq1@smile.fi.intel.com>
+References: <20220921141005.2443-1-andriy.shevchenko@linux.intel.com>
+ <b7536b94-b37c-9e8a-363f-cbca652f1cbd@novek.ru>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_//oOtkijRZwFS49YEhzDM_kS";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b7536b94-b37c-9e8a-363f-cbca652f1cbd@novek.ru>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_//oOtkijRZwFS49YEhzDM_kS
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Sep 21, 2022 at 09:52:15PM +0100, Vadim Fedorenko wrote:
+> On 21.09.2022 15:10, Andy Shevchenko wrote:
+> > We have already a helper to get the first child device, use it and
+> > drop custom approach.
+> 
+> LGTM. This patch should go to net-next, I believe.
 
-Hi all,
+Yes, I forgot to add the 'net-next' to the Subject line.
 
-Commit
+> Acked-by: Vadim Fedorenko <vadfed@fb.com>
 
-  a3450c5ce1df ("Revert "rcu: Simplify rcu_init_nohz() cpumask handling"")
+Thanks!
 
-is missing a Signed-off-by from its author and committer.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Reverts are commits, too.
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_//oOtkijRZwFS49YEhzDM_kS
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMsNRMACgkQAVBC80lX
-0GxuJAf/QAWaCb/vlI5+WWU29I5Pwn6YcCRkGGMJsnhqMoAaF3/+t5I6q9CT+dAL
-knsG8kuZElUU77Z3nIexlgiIKwESko4QyH2QZfom3UoW0ED+AkiMlfkmMim5dsuD
-xJAdzdHYEkPWoYGIDf2nudxuELzDCqxGAO2541ZblMvK/ByTrpStbCy+xOX06UqL
-OL/aE/1VT68RwveB2/xVFPKqQCXUzZzTdx50LwWuxvEJSg9JsuzAOBwgr5HwfTgj
-eDOt/96d0W3RPqOWXMuI+N5XyIrGYv7pMYklA8HSnCUrZkG9FVIBG24jGpET9Rji
-Zv2ZHARI2UR/QT87Wo4IqHM2Ny5LwA==
-=fPKl
------END PGP SIGNATURE-----
-
---Sig_//oOtkijRZwFS49YEhzDM_kS--
