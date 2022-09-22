@@ -2,131 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AE4B5E574E
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 02:28:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECBE85E5753
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 02:30:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbiIVA2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 20:28:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38328 "EHLO
+        id S229716AbiIVAaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 20:30:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbiIVA2S (ORCPT
+        with ESMTP id S229637AbiIVAaH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 20:28:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BF32A8976
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 17:28:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663806496;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Lt38D7nlLrIvQpx45B0YYUAs54VyUIvE6crk8DTFCbE=;
-        b=KGLcJ3d1gaGgCAIvu0x3k5Ff1RNzgEcsEcg+9XNeaw/9yjNHZwNpQerijh5SVOITtY6SPz
-        amQ1nZdMoydzbe1OW4KJHyLEpSkoA4HZOtzHfAFhFLzPsRPukD6+w40+ueZeRCQ4HGjcmi
-        ezRAdIcHUWHpnlIOnGMjoQ2bplLWW1k=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-631-F7ASIG0lN362IjjVOS6T5w-1; Wed, 21 Sep 2022 20:28:13 -0400
-X-MC-Unique: F7ASIG0lN362IjjVOS6T5w-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B8E5D80029D;
-        Thu, 22 Sep 2022 00:28:12 +0000 (UTC)
-Received: from T590 (ovpn-8-16.pek2.redhat.com [10.72.8.16])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 60FD140C2064;
-        Thu, 22 Sep 2022 00:28:06 +0000 (UTC)
-Date:   Thu, 22 Sep 2022 08:28:01 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     ZiyangZhang <ZiyangZhang@linux.alibaba.com>
-Cc:     axboe@kernel.dk, xiaoguang.wang@linux.alibaba.com,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        joseph.qi@linux.alibaba.com
-Subject: Re: [PATCH V4 4/8] ublk_drv: requeue rqs with recovery feature
- enabled
-Message-ID: <YyuqV1sauPRUjug8@T590>
-References: <20220921095849.84988-1-ZiyangZhang@linux.alibaba.com>
- <20220921095849.84988-5-ZiyangZhang@linux.alibaba.com>
+        Wed, 21 Sep 2022 20:30:07 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB477AC30;
+        Wed, 21 Sep 2022 17:30:05 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id y17so17480871ejo.6;
+        Wed, 21 Sep 2022 17:30:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=4rURt1DFOtISyLJtoae819CeZa5xS4/hkXaK4AZO9qU=;
+        b=Ix0VX7eQU7Mv7prm3r1CmEPl5iN5WTGOTanC8yFr4H+P/snjCzc2MjLKBEuCZMsIqu
+         5iQv6oyuMbbnjsVWEP8vlhSYNS/3RucwMOX1Zwyj50yPD7FjpZeezoKmlkJO6pjIif9b
+         XzlTDmonQTCrdcHtdUUp5NzAnbuREoGMf+HHASkIY7MqAoBl4C3tTer8DmaXs6IzFhJz
+         I0XHNiqXzPRqoN6mmex9Rl/unSx8SJbHl+mTwN2zabxqX53tawOyvvweUEV2fUkgd1SV
+         GdqD87D7J+1BSjC2tH2qiJ8akSG9z1wKq7FKrNVj38MNiVc/oBRvNgw0titgSQlQP0b0
+         yXRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=4rURt1DFOtISyLJtoae819CeZa5xS4/hkXaK4AZO9qU=;
+        b=jJ3IX33ixvbntu7YhpLDLMqKUIuI4DPwPHs9DSbE/+bqgiEaA8smUucHjasCoam2B7
+         5pkaMOE9GdVgzHlNymnN/MCOFV6I1OJN4oERMOywmRNqRAQjiYBjIvGf7byoDCFIDq3H
+         U3BPYAagyRIHnLAyF467OL9vY1oOOIFn8M9sF4Nwrtawyuy/V5IZysJvoL8eBPI6loVJ
+         7+PUHMapClITfkOaYxRHmlCiyNIXhqNS84OYGpRSZVH8i1J174HK7nfcR6YaUkrSqu7v
+         s/ThjOCvQ1AYLGuvapemjAV0/Uk8asjE2289cpNmVO6FikeRSYBMd3maYgNUYMh00c6J
+         VsZg==
+X-Gm-Message-State: ACrzQf121j8KKuECWGkz5YxiT06uoVcsV3d7eqW2n3fBqQb0olaJCmQP
+        tMROLvg8XPtWRqu6+BYSecbQMNlMZ4hwvhN9R2P2h4xp
+X-Google-Smtp-Source: AMsMyM7+I+Hycyrz36s/LjHcujOEHaIb/PBiXwMFLCmdnBFbCqwzxv2P5VoosmOMNh2D1oZxUNQoGOFsFt1bDpp39o0=
+X-Received: by 2002:a17:907:96a3:b0:780:633:2304 with SMTP id
+ hd35-20020a17090796a300b0078006332304mr666798ejc.115.1663806604116; Wed, 21
+ Sep 2022 17:30:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220921095849.84988-5-ZiyangZhang@linux.alibaba.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <3f59fb5a345d2e4f10e16fe9e35fbc4c03ecaa3e.1662999860.git.chentao.kernel@linux.alibaba.com>
+ <d4ef24e4-0bbb-3d24-e033-e3935d791fb9@fb.com>
+In-Reply-To: <d4ef24e4-0bbb-3d24-e033-e3935d791fb9@fb.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 21 Sep 2022 17:29:52 -0700
+Message-ID: <CAEf4BzYTXPhiXYDoqDgU5o4rPWZ-OXo0f4xtuJdi22tHYyWrqA@mail.gmail.com>
+Subject: Re: [PATCH v2] libbpf: Support raw btf placed in the default path
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Tao Chen <chentao.kernel@linux.alibaba.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 21, 2022 at 05:58:45PM +0800, ZiyangZhang wrote:
-> With recovery feature enabled, in ublk_queue_rq or task work
-> (in exit_task_work or fallback wq), we requeue rqs instead of
-> ending(aborting) them. Besides, No matter recovery feature is enabled
-> or disabled, we schedule monitor_work immediately.
-> 
-> Signed-off-by: ZiyangZhang <ZiyangZhang@linux.alibaba.com>
-> ---
->  drivers/block/ublk_drv.c | 31 +++++++++++++++++++++++++++++--
->  1 file changed, 29 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
-> index 3bdac4bdf46f..b940e490ebab 100644
-> --- a/drivers/block/ublk_drv.c
-> +++ b/drivers/block/ublk_drv.c
-> @@ -655,6 +655,19 @@ static void ubq_complete_io_cmd(struct ublk_io *io, int res)
->  
->  #define UBLK_REQUEUE_DELAY_MS	3
->  
-> +static inline void __ublk_abort_rq_in_task_work(struct ublk_queue *ubq,
-> +		struct request *rq)
-> +{
-> +	pr_devel("%s: %s q_id %d tag %d io_flags %x.\n", __func__,
-> +			(ublk_queue_can_use_recovery(ubq)) ? "requeue" : "abort",
-> +			ubq->q_id, rq->tag, ubq->ios[rq->tag].flags);
-> +	/* We cannot process this rq so just requeue it. */
-> +	if (ublk_queue_can_use_recovery(ubq))
-> +		blk_mq_requeue_request(rq, false);
-> +	else
-> +		blk_mq_end_request(rq, BLK_STS_IOERR);
-> +}
-> +
->  static inline void __ublk_rq_task_work(struct request *req)
->  {
->  	struct ublk_queue *ubq = req->mq_hctx->driver_data;
-> @@ -677,7 +690,7 @@ static inline void __ublk_rq_task_work(struct request *req)
->  	 * (2) current->flags & PF_EXITING.
->  	 */
->  	if (unlikely(current != ubq->ubq_daemon || current->flags & PF_EXITING)) {
-> -		blk_mq_end_request(req, BLK_STS_IOERR);
-> +		__ublk_abort_rq_in_task_work(ubq, req);
->  		mod_delayed_work(system_wq, &ub->monitor_work, 0);
->  		return;
->  	}
-> @@ -752,6 +765,20 @@ static void ublk_rq_task_work_fn(struct callback_head *work)
->  	__ublk_rq_task_work(req);
->  }
->  
-> +static inline blk_status_t __ublk_abort_rq(struct ublk_queue *ubq,
-> +		struct request *rq)
-> +{
-> +	pr_devel("%s: %s q_id %d tag %d io_flags %x.\n", __func__,
-> +			(ublk_queue_can_use_recovery(ubq)) ? "requeue" : "abort",
-> +			ubq->q_id, rq->tag, ubq->ios[rq->tag].flags);
-> +	/* We cannot process this rq so just requeue it. */
-> +	if (ublk_queue_can_use_recovery(ubq)) {
-> +		blk_mq_requeue_request(rq, false);
-> +		return BLK_STS_OK;
-> +	}
-> +	return BLK_STS_IOERR;
-> +}
-> +
+On Mon, Sep 19, 2022 at 8:40 PM Yonghong Song <yhs@fb.com> wrote:
+>
+>
+>
+> On 9/12/22 9:43 AM, Tao Chen wrote:
+> > Now only elf btf can be placed in the default path(/boot), raw
+> > btf should also can be there.
+>
+> There are more default paths than just /boot. Also some grammer
+> issues in the above like 'should also can be'.
+>
+> Maybe the commit message can be changed like below.
+>
+> Currently, the default vmlinux files at '/boot/vmlinux-*',
+> '/lib/modules/*/vmlinux-*' etc. are parsed with 'btf__parse_elf'
+> to extract BTF. It is possible that these files are actually
+> raw BTF files similar to /sys/kernel/btf/vmlinux. So parse
+> these files with 'btf__parse' which tries both raw format and
+> ELF format.
+>
 
-Please remove the two added logging, otherwise this patch looks fine.
+Thanks, Yonghong, I used this description verbatim when applying. Also
+added a sentence on why users might use this instead of providing the
+btf_custom_path option.
 
-Thanks,
-Ming
-
+> It would be great if you can add more information on why
+> '/boot/vmlinux-*' or '/lib/modules/*/vmlinux-*' might be
+> a raw BTF file in your system.
+>
+> >
+> > Signed-off-by: Tao Chen <chentao.kernel@linux.alibaba.com>
+>
+> Ack with some commit message changes in the above.
+>
+> Acked-by: Yonghong Song <yhs@fb.com>
