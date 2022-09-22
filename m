@@ -2,234 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A41815E688F
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 18:37:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C65CD5E6893
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 18:38:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231368AbiIVQhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 12:37:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44978 "EHLO
+        id S229488AbiIVQiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 12:38:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbiIVQhA (ORCPT
+        with ESMTP id S229659AbiIVQiN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 12:37:00 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDBB3D1EA4;
-        Thu, 22 Sep 2022 09:36:58 -0700 (PDT)
-Received: from [IPV6:2804:431:c7c2:b4b6:f87:da96:9bc3:d98b] (unknown [IPv6:2804:431:c7c2:b4b6:f87:da96:9bc3:d98b])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dwlsalmeida)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 228D66601E58;
-        Thu, 22 Sep 2022 17:36:50 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1663864617;
-        bh=9qk4Re4yFBcAUV8l7PYU2Z7VB5bihult7d9If/n3XpE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=DfzqEV4qZ/ihOi/bd9W6MOgz4zvoLmC7kGSNwCX1KvPfmSkkovxu67SQpOJYBv3PS
-         n+r5b5G4OjVl2VQ9BhyCXgbEaR35UrFP7STucYhqy1oDzuviVRK9HAaJPipiX41bH/
-         z+OfcHq4Uf+tWALIixErvkUe9LbAMst6LYM8eNUi4Fk8C2WrT0O8+BmXB2yc6BY3YQ
-         Sk7myOK1VudgA2a4XluK09TyqYJILdYPx4N1GZzpcTbFiiYRO66g5z3Fb7VTgO3INz
-         DYQ+QDjA0VjR7aXAHHbGGFsVk2EuclSm7+60exYREi1IGp9BW4nkQ/vpT+2rI3J96I
-         etPD1OTqk0yZQ==
-Message-ID: <927f95dd-283a-a3c0-6c2f-41a36bcc42ef@collabora.com>
-Date:   Thu, 22 Sep 2022 13:36:46 -0300
+        Thu, 22 Sep 2022 12:38:13 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3563E9CEC;
+        Thu, 22 Sep 2022 09:38:12 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id 9so9805938pfz.12;
+        Thu, 22 Sep 2022 09:38:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date;
+        bh=GYVA9dhWLYw3cKT6ukVmQvAv0tAmMjYUmL351DKMTVk=;
+        b=niDazrOiE+nYpoMrWICBy3Q36Bk6ofTWkgYwgJ+JLtiVhRQLrBUH1GJzG0o0MC4sl2
+         7gv/az63fBDy2dMMhVswYB8fvf5p3EJKOaFjWietN2lvOpVUUMJ2Hvkw0bm8iAQShYnr
+         CWZXLiuXUZaRm+IeKZ8uOPa34FayieIvMc/kVNmk+HTawm+Jh7FSDE52rFTI3d7xQ4y7
+         Swcd2IUTfzEnKaSG5ThMMxVjj7vwlXtjRfpp1G0Ng7gRJTWII5l3heuGuyAOhn9vk8uM
+         dLMYUKMyPcdnjo/jyPXuzMc5L1NrKzRBFJRA04TWHzDEQRWoNiSld73LX1rasLns8L6T
+         vLEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=GYVA9dhWLYw3cKT6ukVmQvAv0tAmMjYUmL351DKMTVk=;
+        b=m7gPmQVr3+Nf6GuVJDK82TPIFqPstXXQwfVgmiy16vEFqBh/IspuE2QghnxzdRTHHT
+         HMEhwR1LWJyPUDO95/VhYQndo9/WF8hpsw5hozdLk1DuCcJxvN+9jzQ3BurziO4F0rA1
+         fsTeGsFvG/3v9VK6NX44hkHlgyHYqHvYY2AIKeXjLxlRuho9qBSD6p4XABN9nbNW7qdz
+         lhTBFhlLKbzwYepC02Bh48AMQwCFD21HFUD9dEE9w4Bf6y4YrAooYbtRZ/DaDixr5THv
+         EgXOG5+Se0ycdm1pObm9XUcNSCtmSPPYDn8USS/3D8pKp3N6gY3OUpJqkRVdBDTN28Pm
+         NgYw==
+X-Gm-Message-State: ACrzQf2w0+02fvvJ5zQIWfg9dFST9JZWPeHPStnPpvaxNNCVzy/2WPWb
+        alBRTbWGhr55b8LCc4ctrs4=
+X-Google-Smtp-Source: AMsMyM7qElevn6mPLVmd2qjYk/rYax+/dQlnBYFRj2E8k3zHqMsQ+UW/W/P7OYIscwp2jlQshGu8bg==
+X-Received: by 2002:a05:6a02:186:b0:431:25fb:f1fe with SMTP id bj6-20020a056a02018600b0043125fbf1femr3858533pgb.130.1663864692439;
+        Thu, 22 Sep 2022 09:38:12 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id i65-20020a628744000000b0053812f35a41sm4624244pfe.194.2022.09.22.09.38.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Sep 2022 09:38:11 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <ec8b8775-7e87-a1c4-5cac-b593e0921e3a@roeck-us.net>
+Date:   Thu, 22 Sep 2022 09:38:09 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [RFC PATCH v3] media: mediatek: vcodec: support stateless AV1
- decoder
-To:     Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>
-Cc:     Irui Wang <irui.wang@mediatek.com>,
-        George Sun <george.sun@mediatek.com>,
-        Steve Cho <stevecho@chromium.org>, srv_heupstream@mediatek.com,
-        devicetree@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-kernel@vger.kernel.org,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-mediatek@lists.infradead.org,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org
-References: <20220901110416.21191-1-xiaoyong.lu@mediatek.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
 Content-Language: en-US
-From:   Daniel Almeida <daniel.almeida@collabora.com>
-In-Reply-To: <20220901110416.21191-1-xiaoyong.lu@mediatek.com>
+To:     Dave Hansen <dave.hansen@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org, keescook@chromium.org,
+        Sean Christopherson <seanjc@google.com>
+References: <YwySW3ROc21hN7g9@hirez.programming.kicks-ass.net>
+ <20220921200726.GA3094503@roeck-us.net>
+ <4dd594ad-490a-68ee-9e32-fbd9f135bd54@intel.com>
+ <1a6e7165-cdae-6c8c-f57d-159fdb68897b@roeck-us.net>
+ <d8cd7c7e-24c1-7f70-24a9-91c77aa634af@roeck-us.net>
+ <YywS0keUorHwJJPt@hirez.programming.kicks-ass.net>
+ <44b4b20a-550c-6337-3f7d-8283498f76f2@intel.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v2] x86/mm: Refuse W^X violations
+In-Reply-To: <44b4b20a-550c-6337-3f7d-8283498f76f2@intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Xiaoyong.
+On 9/22/22 08:00, Dave Hansen wrote:
+> On 9/22/22 00:46, Peter Zijlstra wrote:
+>> On Wed, Sep 21, 2022 at 08:09:13PM -0700, Guenter Roeck wrote:
+>>
+>>> Oh well, that "helped" to hide one of the crashes. Here is another one.
+>>> This is with PAE enabled and booting through efi32.
+>>
+>>> [    1.086592]  efi_runtime_update_mappings+0x36/0x42
+>>> [    1.086717]  efi_enter_virtual_mode+0x351/0x36e
+>>> [    1.086860]  start_kernel+0x57d/0x60f
+>>> [    1.086956]  ? set_intr_gate+0x42/0x55
+>>> [    1.087079]  i386_start_kernel+0x43/0x45
+>>> [    1.087272]  startup_32_smp+0x161/0x164
+>>
+>> Does this help? Dave; perhaps we should just let i386 be i386 and let it
+>> bitrot :/
+> 
+> How about we just turn off enforcement for now so that the poor i386
+> folks can at least boot?  I have the feeling we're going to get bored
+> with even the warnings if they persist for too long, though.
+> 
 
-Comments below (other code removed for brevity)
+Problem with unfixed warnings is that they hide other problems if persistent,
+and they result in warnings to be seen just as useless noise.
 
-+/**
-+ * struct vdec_av1_slice_slot - slot info need save in global instance
-+ * @frame_info: frame info for each slot
-+ * @timestamp:  time stamp info
-+ */
-+struct vdec_av1_slice_slot {
-+	struct vdec_av1_slice_frame_info frame_info[AV1_MAX_FRAME_BUF_COUNT];
-+	u64 timestamp[AV1_MAX_FRAME_BUF_COUNT];
-+};
+Case in point: In ChromeOS, we get literally hundreds of thousands of warning
+reports each day (most from drm and wireless drivers). Those originate from
+upstream code. No one really cares, and none ever get fixed. Please don't add
+more if you don't plan to fix them.
 
-nit: slot info that needs to be saved in the global instance
-
-+static int vdec_av1_slice_get_qindex(struct 
-vdec_av1_slice_uncompressed_header *uh,
-+				     int segmentation_id)
-+{
-+	struct vdec_av1_slice_seg *seg = &uh->seg;
-+	struct vdec_av1_slice_quantization *quant = &uh->quant;
-+	int data = 0, qindex = 0;
-+
-+	if (seg->segmentation_enabled &&
-+	    (seg->feature_enabled_mask[segmentation_id] & BIT(0))) {
-+		data = seg->feature_data[segmentation_id][0];
-
-
-Maybe you should replace the 0 above by SEG_LVL_ALT_Q to be more 
-explicit. Same goes for BIT(0).
-
-+static void vdec_av1_slice_setup_lr(struct vdec_av1_slice_lr *lr,
-+				    struct v4l2_av1_loop_restoration  *ctrl_lr)
-+{
-+	int i;
-+
-+	for (i = 0; i < V4L2_AV1_NUM_PLANES_MAX; i++) {
-+		lr->frame_restoration_type[i] = ctrl_lr->frame_restoration_type[i];
-+		lr->loop_restoration_size[i] = ctrl_lr->loop_restoration_size[i];
-+	}
-+	lr->use_lr = !!lr->frame_restoration_type[0];
-+	lr->use_chroma_lr = !!lr->frame_restoration_type[1];
-+}
-
- From a first glance, this looks a bit divergent from the spec?
-
-for ( i = 0; i < NumPlanes; i++ ) {
-     lr_type
-     FrameRestorationType[i] = Remap_Lr_Type[lr_type]
-     if ( FrameRestorationType[i] != RESTORE_NONE ) {
-         UsesLr = 1
-         if ( i > 0 ) {
-             usesChromaLr = 1
-         }
-     }
-}
-
-I will include these two variables in the next iteration of the uapi if 
-computing them in the driver is problematic.
-
-+static void vdec_av1_slice_setup_lf(struct vdec_av1_slice_loop_filter *lf,
-+				    struct v4l2_av1_loop_filter *ctrl_lf)
-+{
-+	int i;
-+
-+	for (i = 0; i < 4; i++)
-+		lf->loop_filter_level[i] = ctrl_lf->level[i];
-+
-+	for (i = 0; i < V4L2_AV1_TOTAL_REFS_PER_FRAME; i++)
-+		lf->loop_filter_ref_deltas[i] = ctrl_lf->ref_deltas[i];
-+
-+	for (i = 0; i < 2; i++)
-+		lf->loop_filter_mode_deltas[i] = ctrl_lf->mode_deltas[i];
-+
-+	lf->loop_filter_sharpness = ctrl_lf->sharpness;
-+	lf->loop_filter_delta_enabled =
-+		   BIT_FLAG(ctrl_lf, V4L2_AV1_LOOP_FILTER_FLAG_DELTA_ENABLED);
-+}
-
-Maybe ARRAY_SIZE can be of use in the loop indices here?
-
-+static void vdec_av1_slice_setup_cdef(struct vdec_av1_slice_cdef *cdef,
-+				      struct v4l2_av1_cdef *ctrl_cdef)
-+{
-+	int i;
-+
-+	cdef->cdef_damping = ctrl_cdef->damping_minus_3 + 3;
-+	cdef->cdef_bits = ctrl_cdef->bits;
-+
-+	for (i = 0; i < V4L2_AV1_CDEF_MAX; i++) {
-+		if (ctrl_cdef->y_sec_strength[i] == 4)
-+			ctrl_cdef->y_sec_strength[i] -= 1;
-+
-+		if (ctrl_cdef->uv_sec_strength[i] == 4)
-+			ctrl_cdef->uv_sec_strength[i] -= 1;
-+
-+		cdef->cdef_y_strength[i] = ctrl_cdef->y_pri_strength[i] << 2 |
-+					   ctrl_cdef->y_sec_strength[i];
-+		cdef->cdef_uv_strength[i] = ctrl_cdef->uv_pri_strength[i] << 2 |
-+					    ctrl_cdef->uv_sec_strength[i];
-+	}
-+}
-
-Maybe:
-
-#define SECONDARY_FILTER_STRENGTH_NUM_BITS 2
-
-+		cdef->cdef_y_strength[i] = ctrl_cdef->y_pri_strength[i] << 
-SECONDARY_FILTER_STRENGTH_NUM_BITS |
-+					   ctrl_cdef->y_sec_strength[i];
-+		cdef->cdef_uv_strength[i] = ctrl_cdef->uv_pri_strength[i] << 
-SECONDARY_FILTER_STRENGTH_NUM_BITS |
-+					    ctrl_cdef->uv_sec_strength[i];
-
-This should make it clearer.
-
-+		sb_boundary_x_m1 =
-+			(tile->mi_col_starts[tile_col + 1] - tile->mi_col_starts[tile_col] - 
-1) &
-+			0x3F;
-+		sb_boundary_y_m1 =
-+			(tile->mi_row_starts[tile_row + 1] - tile->mi_row_starts[tile_row] - 
-1) &
-+			0x1FF;
-+
-
-IIRC there's a preference for lower case hex values in the media subsystem.
-
-+static void vdec_av1_slice_get_dpb_size(struct vdec_av1_slice_instance 
-*instance, u32 *dpb_sz)
-+{
-+	/* refer av1 specification */
-+	*dpb_sz = 9;
-+}
-
-That's actually defined as 8 in the spec, i.e.:
-
-NUM_REF_FRAMES 8 Number of frames that can be stored for future
-reference.
-
-It's helpful to indicate the section if you reference the specification, 
-as it makes it easier for the reviewer to cross check.
-
-+	/* get buffer address from vb2buf */
-+	for (i = 0; i < V4L2_AV1_REFS_PER_FRAME; i++) {
-+		struct vdec_av1_slice_fb *vref = &vsi->ref[i];
-+		int idx = vb2_find_timestamp(vq, pfc->ref_idx[i], 0);
-
-Needs to be converted to vb2_find_buffer in light of 
-https://lore.kernel.org/lkml/20220706182657.210650-3-ezequiel@vanguardiasur.com.ar/T/
-
--- Daniel
-
+Thanks,
+Guenter
