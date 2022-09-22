@@ -2,146 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 492175E65D8
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 16:37:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21BA45E65E9
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 16:38:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231858AbiIVOhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 10:37:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36268 "EHLO
+        id S232014AbiIVOhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 10:37:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231707AbiIVOhI (ORCPT
+        with ESMTP id S231962AbiIVOhb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 10:37:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF933F6869
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 07:37:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663857426;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pIfJ3bPCmkG+z995PI+eIkSYghOocG6/MToO8whN5Us=;
-        b=ZiKCNzvcyGoj7FTj1/vyR29IEZMd/YcIKo4vlCM69IKQRz99YRCskvdPCIjQdzdCgVkNy2
-        wuGWM5I0Dxf33cSGegjMT3yTEcSSBBBu4AmM5bcE3RcjmjrA4wg+CKwyvWcoMeS6dQKU0S
-        TK5wkU17uIyEQSRxo8HOdBXcDDkwHD0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-400-mPiFwrYuOSCQoyiUSwiszg-1; Thu, 22 Sep 2022 10:37:03 -0400
-X-MC-Unique: mPiFwrYuOSCQoyiUSwiszg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 063F1811E81;
-        Thu, 22 Sep 2022 14:37:03 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.40.194.242])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 261AB4048D87;
-        Thu, 22 Sep 2022 14:37:01 +0000 (UTC)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 2/6] KVM: x86: Introduce CPUID_8000_0007_EDX 'scattered' leaf
-Date:   Thu, 22 Sep 2022 16:36:51 +0200
-Message-Id: <20220922143655.3721218-3-vkuznets@redhat.com>
-In-Reply-To: <20220922143655.3721218-1-vkuznets@redhat.com>
-References: <20220922143655.3721218-1-vkuznets@redhat.com>
+        Thu, 22 Sep 2022 10:37:31 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3301FF8592;
+        Thu, 22 Sep 2022 07:37:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=PnZrxUy9P5w7rj/UPAer5HPpUVVqgQM8T4IHUrrMARE=; b=O7Uf24ePDbCW3jV0DTEkbSSKYV
+        bNiC//IcuLghSDMf1uFDPey4RLVLwwCExs21sumSsTXYpYORgU/MicluPYCOVTW1mvwXGxbHoUoyb
+        hvFqRT9d5TfP8fIU6zKHuYi6PXuDzliIxGLb2IQfA3s0ynJtZBb8Jv9VIne13C04DE5XVQb9h/52c
+        ya9BAq7upUONaIemf1jZZnpjTXDvLIIgYS48eqPW7VgIiGjewfoZPXY6TLKJwcighU/a5igF7Im+I
+        Ike3xVTI4+UN4EM7aNEe7DRcPuEO+kmLbq/9t/mfrlniEimUkLt7/v7drU6tlGY0lvzfihrTSJZtA
+        UNsO2dog==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1obNJs-002RKQ-1W;
+        Thu, 22 Sep 2022 14:36:52 +0000
+Date:   Thu, 22 Sep 2022 15:36:52 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Jan Kara <jack@suse.cz>, John Hubbard <jhubbard@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        "Darrick J . Wong" <djwong@kernel.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 4/7] iov_iter: new iov_iter_pin_pages*() routines
+Message-ID: <YyxzBPZRp/uulRmf@ZenIV>
+References: <20220831041843.973026-1-jhubbard@nvidia.com>
+ <20220831041843.973026-5-jhubbard@nvidia.com>
+ <YxbtF1O8+kXhTNaj@infradead.org>
+ <103fe662-3dc8-35cb-1a68-dda8af95c518@nvidia.com>
+ <Yxb7YQWgjHkZet4u@infradead.org>
+ <20220906102106.q23ovgyjyrsnbhkp@quack3>
+ <YxhaJktqtHw3QTSG@infradead.org>
+ <YyFPtTtxYozCuXvu@ZenIV>
+ <YyxxyMk0IR2hMjgv@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YyxxyMk0IR2hMjgv@infradead.org>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CPUID_8000_0007_EDX may come handy when X86_FEATURE_CONSTANT_TSC
-needs to be checked.
+On Thu, Sep 22, 2022 at 07:31:36AM -0700, Christoph Hellwig wrote:
+> On Wed, Sep 14, 2022 at 04:51:17AM +0100, Al Viro wrote:
+> > Unless I'm misreading Jan, the question is whether they should get or
+> > pin.
+> 
+> And I think the answer is:  inside ->read_iter or ->write_iter they
+> should neither get or pin.  The callers of it need to pin the pages
+> if they are pagecache pages that can potentially be written to through
+> shared mappings, else a get would be enough.  But the method instance
+> should not have to care and just be able to rely on the caller making
+> sure they do not go away.
 
-No functional change intended.
+The interesting part, AFAICS, is where do we _unpin_ them and how do
+we keep track which pages (obtained from iov_iter_get_pages et.al.)
+need to be unpinned.
 
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
----
- arch/x86/kvm/cpuid.c         | 8 ++++++--
- arch/x86/kvm/reverse_cpuid.h | 9 ++++++++-
- 2 files changed, 14 insertions(+), 3 deletions(-)
+> > I'm really tempted to slap
+> > 	if (WARN_ON(i->data_source))
+> > 		return 0;
+> > into copy_to_iter() et.al., along with its opposite for copy_from_iter().
+> 
+> Ys, I think that would be useful.  And we could use something more
+> descriptive than READ/WRITE to start with.
 
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index ffdc28684cb7..b95a4b7489ec 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -685,6 +685,10 @@ void kvm_set_cpu_caps(void)
- 	if (!tdp_enabled && IS_ENABLED(CONFIG_X86_64))
- 		kvm_cpu_cap_set(X86_FEATURE_GBPAGES);
- 
-+	kvm_cpu_cap_init_scattered(CPUID_8000_0007_EDX,
-+		SF(CONSTANT_TSC)
-+	);
-+
- 	kvm_cpu_cap_mask(CPUID_8000_0008_EBX,
- 		F(CLZERO) | F(XSAVEERPTR) |
- 		F(WBNOINVD) | F(AMD_IBPB) | F(AMD_IBRS) | F(AMD_SSBD) | F(VIRT_SSBD) |
-@@ -1137,8 +1141,8 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
- 		/* L2 cache and TLB: pass through host info. */
- 		break;
- 	case 0x80000007: /* Advanced power management */
--		/* invariant TSC is CPUID.80000007H:EDX[8] */
--		entry->edx &= (1 << 8);
-+		cpuid_entry_override(entry, CPUID_8000_0007_EDX);
-+
- 		/* mask against host */
- 		entry->edx &= boot_cpu_data.x86_power;
- 		entry->eax = entry->ebx = entry->ecx = 0;
-diff --git a/arch/x86/kvm/reverse_cpuid.h b/arch/x86/kvm/reverse_cpuid.h
-index a19d473d0184..a5514c89dc29 100644
---- a/arch/x86/kvm/reverse_cpuid.h
-+++ b/arch/x86/kvm/reverse_cpuid.h
-@@ -12,7 +12,8 @@
-  * "bug" caps, but KVM doesn't use those.
-  */
- enum kvm_only_cpuid_leafs {
--	CPUID_12_EAX	 = NCAPINTS,
-+	CPUID_12_EAX		= NCAPINTS,
-+	CPUID_8000_0007_EDX	= NCAPINTS + 1,
- 	NR_KVM_CPU_CAPS,
- 
- 	NKVMCAPINTS = NR_KVM_CPU_CAPS - NCAPINTS,
-@@ -24,6 +25,9 @@ enum kvm_only_cpuid_leafs {
- #define KVM_X86_FEATURE_SGX1		KVM_X86_FEATURE(CPUID_12_EAX, 0)
- #define KVM_X86_FEATURE_SGX2		KVM_X86_FEATURE(CPUID_12_EAX, 1)
- 
-+/* CPUID level 0x80000007 (EDX). */
-+#define KVM_X86_FEATURE_CONSTANT_TSC	KVM_X86_FEATURE(CPUID_8000_0007_EDX, 8)
-+
- struct cpuid_reg {
- 	u32 function;
- 	u32 index;
-@@ -48,6 +52,7 @@ static const struct cpuid_reg reverse_cpuid[] = {
- 	[CPUID_7_1_EAX]       = {         7, 1, CPUID_EAX},
- 	[CPUID_12_EAX]        = {0x00000012, 0, CPUID_EAX},
- 	[CPUID_8000_001F_EAX] = {0x8000001f, 0, CPUID_EAX},
-+	[CPUID_8000_0007_EDX] = {0x80000007, 0, CPUID_EDX},
- };
- 
- /*
-@@ -78,6 +83,8 @@ static __always_inline u32 __feature_translate(int x86_feature)
- 		return KVM_X86_FEATURE_SGX1;
- 	else if (x86_feature == X86_FEATURE_SGX2)
- 		return KVM_X86_FEATURE_SGX2;
-+	else if (x86_feature == X86_FEATURE_CONSTANT_TSC)
-+		return KVM_X86_FEATURE_CONSTANT_TSC;
- 
- 	return x86_feature;
- }
--- 
-2.37.3
-
+See #work.iov_iter; done, but it took a bit of fixing the places that
+create iov_iter instances.
