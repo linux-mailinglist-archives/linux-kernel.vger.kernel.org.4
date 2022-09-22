@@ -2,134 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D56B5E5E67
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 11:22:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBAE35E5E69
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 11:22:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230007AbiIVJWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 05:22:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36090 "EHLO
+        id S230091AbiIVJW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 05:22:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229842AbiIVJWQ (ORCPT
+        with ESMTP id S229842AbiIVJW0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 05:22:16 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1357917ABF
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 02:22:15 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id z13so12588618edb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 02:22:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=zu/La+x+mpg9RbS6KzOiMcR3Pzz+/DF7NsH0TJMll3E=;
-        b=4GmtMp8FS4kvV0sC8dJyAlSDdoTr1eiE/h4eGi4dV/y09UuLkhNz/89eshTv3e7P/k
-         2V1+eOSeMA0zSuM2uyK7YJtLi/rzzSEIayVF4gsIsl5q4yl1Dz2ixLhLksmkZ08FI1Lv
-         LxnAnQl0jcwEee3LMsL0+nwnZdsuaG+n9AisksQwaxxOIGXWmjANoQTY3jDB33RBx+q9
-         bbVE44ETrWCPfv/WqnTWb+47gmrBYbi6TlUimKfetw5MncPt3TTckIObv2xxTPhumvZd
-         LSj/dmKL8n4glxLubXrrCb1WAujcZcFcOxZB+uT1JdyFbHNqJKK1qxg+gnj3848dG4LT
-         GpSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=zu/La+x+mpg9RbS6KzOiMcR3Pzz+/DF7NsH0TJMll3E=;
-        b=8HcSKuQftr5fCLMwLKDqLYaYzmAfrGaXuhwy9VRT9T7X1vokC1nLOuk+D3bpbhgL6i
-         deJ7LTh2gXBuOWztzCuut0dGejLC5KeIks9dJPTst04PagRrdAhbBjTFulIxP+hV5Vm2
-         O4o6wN3W7N1W4hYvkqA9MWpqNify813gVKUaGp9iWIXBMAVEEMe7abJ4/hlXUHQGofr8
-         OyJSdmxSL0IqLv1GFTAo3qhSjrGogcbLSW4HvBLDDf8Ndx12QW+m5krAVuI4PY2htwUA
-         0CEYQTA0ReK6Df+UlI8RZKQK8hC0Oi4DGLAdKH4COrIrrBt1cG2B4fcj5oCe1upZfh70
-         ST1Q==
-X-Gm-Message-State: ACrzQf00GJB98j71pzdQpcVODj1C15R443HUZ9q6lT9Q0Qehn/RT4eUL
-        mExrr5OroQAEHMcABUNScbhwNCersQ2ptdbvJWBdMQ==
-X-Google-Smtp-Source: AMsMyM6t0dzsEN8zI2x07k/UlGz3qtD6DQMIpEajWDiAzlPr9fzEqxhzzQWYxEuyJ6uMgW/USf5taysjv/4DflS4r0I=
-X-Received: by 2002:aa7:dd02:0:b0:44e:f7af:b996 with SMTP id
- i2-20020aa7dd02000000b0044ef7afb996mr2311635edv.422.1663838533258; Thu, 22
- Sep 2022 02:22:13 -0700 (PDT)
+        Thu, 22 Sep 2022 05:22:26 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A68D11164;
+        Thu, 22 Sep 2022 02:22:24 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 01E4E1C0004;
+        Thu, 22 Sep 2022 09:22:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1663838542;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5sNNs6mkshJUfVhodqkvh+WxLUvE+EftG/ZXnoTujoc=;
+        b=n5mx3gyqVEaoFkx7UXA7ki7OtX+uxGsMbc77DZthlrjl8y/RK5vXVhKyfF/i0vsqdpNPlQ
+        gPXxlfSfnevJDDlJQ7CagKDHZTsRkpwdu7KScFjxsTukzyNRlcWz7KmVrDYQiUF2LWlJpL
+        DE8LHAOJPnD0Z/IwUFXWFVy0h/s/StHPzTi5xNQlFalHt2xr7KXwsQxUhtcnaGli4m91pl
+        f8PeEA92OPVkPfqkilNbcHYb0sT/HXgwYLjSxpXp6rtE5F0/kHVLqSB5T0v+l312Nq2K7R
+        0xyPr4mvGNO9wHycYtu3jvGHgHkgPtkOmTYk3uzptfbFB75H1ZUPUrNAHk11Fw==
+Date:   Thu, 22 Sep 2022 11:22:18 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Rob Herring <robh@kernel.org>, Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Frank Rowand <frowand.list@gmail.com>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Robert Marko <robert.marko@sartura.hr>
+Subject: Re: [PATCH v2 15/20] dt-bindings: nvmem: add YAML schema for the
+ sl28 vpd layout
+Message-ID: <20220922112218.3aff146f@xps-13>
+In-Reply-To: <aa53a858e362ae747a2cbd28caa3fa78@walle.cc>
+References: <20220901221857.2600340-1-michael@walle.cc>
+        <20220901221857.2600340-16-michael@walle.cc>
+        <20220912192038.GA1661550-robh@kernel.org>
+        <aa53a858e362ae747a2cbd28caa3fa78@walle.cc>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220921155436.235371-1-sashal@kernel.org> <20220921155436.235371-2-sashal@kernel.org>
- <fec2e2e2e74d680d5f9de6d68fb5fe18@kernel.org> <CAMRc=MexqLhu3ZWt1AbzBestswqmHNpct1LQiif0JGECTjHz4Q@mail.gmail.com>
- <87illfkbtk.wl-maz@kernel.org>
-In-Reply-To: <87illfkbtk.wl-maz@kernel.org>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 22 Sep 2022 11:22:02 +0200
-Message-ID: <CAMRc=Md9JKdW8wmbun_0_1y2RQbck7q=vzOkdw6n+FBgpf0h8w@mail.gmail.com>
-Subject: Re: [PATCH AUTOSEL 5.4 2/5] gpio: ixp4xx: Make irqchip immutable
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
-        linusw@kernel.org, kaloz@openwrt.org, khalasa@piap.pl,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 11:17 AM Marc Zyngier <maz@kernel.org> wrote:
->
-> Hi Bartosz,
->
-> On Wed, 21 Sep 2022 21:04:27 +0100,
-> Bartosz Golaszewski <brgl@bgdev.pl> wrote:
-> >
-> > On Wed, Sep 21, 2022 at 6:57 PM Marc Zyngier <maz@kernel.org> wrote:
-> > >
-> > > On 2022-09-21 16:54, Sasha Levin wrote:
-> > > > From: Linus Walleij <linus.walleij@linaro.org>
-> > > >
-> > > > [ Upstream commit 94e9bc73d85aa6ecfe249e985ff57abe0ab35f34 ]
-> > > >
-> > > > This turns the IXP4xx GPIO irqchip into an immutable
-> > > > irqchip, a bit different from the standard template due
-> > > > to being hierarchical.
-> > > >
-> > > > Tested on the IXP4xx which uses drivers/ata/pata_ixp4xx_cf.c
-> > > > for a rootfs on compact flash with IRQs from this GPIO
-> > > > block to the CF ATA controller.
-> > > >
-> > > > Cc: Marc Zyngier <maz@kernel.org>
-> > > > Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> > > > Acked-by: Marc Zyngier <maz@kernel.org>
-> > > > Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
-> > > > Signed-off-by: Sasha Levin <sashal@kernel.org>
-> > >
-> > > Why? The required dependencies are only in 5,19, and are
-> > > definitely NOT a stable candidate...
-> > >
-> > > This isn't a fix by any stretch of the imagination.
-> > >
-> >
-> > Hi Marc,
-> >
-> > While I didn't mark it for stable (and it shouldn't go into any branch
-> > earlier than 5.19.x), I did send the patches making the irqchips
-> > immutable to Linus Torvalds as fixes as they technically do *fix* the
-> > warning emitted by gpiolib and make the implementation correct.
-> >
-> > I think these patches should still be part of the v5.19.x stable branch.
->
-> 5.19, sure. All the dependencies are there, and tightening the driver
-> implementations is a valuable goal.
->
-> However, targeting all the other stable releases (5.4, 5.10, 5.15)
-> makes little sense. It won't even compile! Do the dependencies need to
-> be backported? I don't think it is worthwhile, as this is a long
-> series containing multiple related changes spread all over the tree.
-> This would defeat the very purpose of a stable tree.
->
+Hello Rob & Krzysztof,
 
-That's what I'm saying. All the conversions to immutable irqchips
-should go to v5.19 but nowhere else.
+michael@walle.cc wrote on Tue, 13 Sep 2022 16:21:24 +0200:
 
-I thought that by saying "This isn't a fix by any stretch of the
-imagination." you meant it should go like regular feature patches into
-the next merge window only.
+> Am 2022-09-12 21:20, schrieb Rob Herring:
+>=20
+> >> +  base-mac-address:
+> >> +    type: object
+> >> +    description:
+> >> +      Base MAC address for all on-module network interfaces. The >> f=
+irst
+> >> +      argument of the phandle will be treated as an offset.
+> >> +
+> >> +    properties:
+> >> +      "#nvmem-cell-cells": =20
+> >=20
+> > You can't just add a new #.*-cells buried in a device binding. I'm fine
+> > with the concept though having more than 1 user would be nice. =20
+>=20
+> I was under the impression the tooling will handle it, but as you
+> pointed out below, this isn't the case for a missing default. The
+> statement above should only be to validate that there is one
+> additional argument if the base-mac-address node is used in a
+> phandle.
+>=20
+> > Any case that doesn't match foos->#foo-cells or has a default # of
+> > cells if missing (as this does) has to be added to dtschema to decode >=
+ it
+> > properly. It won't really matter until there's a user with 2 or more
+> > entries. I'm happy to do update the dtschema part, but I'd prefer to > =
+see
+> > the schema in dtschema rather than the kernel. =20
+>=20
+> Ok, but I'm not sure I understand you correctly here. You will
+> update the dtschema tooling (I guess it's about fixup_phandles() in
+> dtb.py) and which schema should be in dtschema? nvmem.yaml
+> and/or nvmem-consumer.yaml? The entire schema or only a
+> subset of it?
 
-Sasha: can you drop this from all branches earlier than v5.19?
+I currently see this as the main "blocking point", although Rob told he
+was happy with the overall idea, so let's try to move forward together.
+
+We discussed on IRC with Michael, I guess what's remaining is:
+- Michael: Move #nvmem-cell-cells to nvmem.yaml in the core dtschema.
+- Rob/Krzysztof: Add the necessary tooling to use this new
+  property and enforce the right # of cells cells (may be added later
+  as anyway for now we only have single consumer cases).
+
+Is this what you meant?
 
 Thanks,
-Bartosz
+Miqu=C3=A8l
