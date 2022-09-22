@@ -2,197 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA8C75E587F
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 04:20:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14FD85E586F
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 04:15:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229453AbiIVCUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 22:20:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50510 "EHLO
+        id S231171AbiIVCPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 22:15:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbiIVCUU (ORCPT
+        with ESMTP id S229512AbiIVCPi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 22:20:20 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0015C5F6D
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 19:20:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663813218; x=1695349218;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=/ZCkZ9qbjMv6wNMGQi+YkA+SN2H5Rof2Wg8t+DjEiZA=;
-  b=jB/Pm1a+to2AC811x7gaaJDGFsgB2EjHox9n1N18Iy0skSLc4PE3UB9i
-   JiHz/wDzX3tmk9JUyHjvZVqqXy5iDYiwS+D/JwPLk2DFS3z7HR5MnDWoa
-   +PZCYpVxtyZxrKB7O2oBUwDKLSSRDM9ezDOyHt3eDs3ni6N365UUJY3Wo
-   mDU9IrJf6ePTJllWn5i4JY7Tyx+ZxfMUpLFTcoEv94jKvjEcFwjx0ausI
-   E7v3bTtdrT0TIEyWs5nFxZzgiJEsMV3nTa6DheO5uwuDoP8SaIKwWAjMD
-   bTPKcDdfVIFoiflXespOxHrd6d5RWq6fGSlqJJfkGmrSTzuva7LFsCEtx
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="364153204"
-X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
-   d="scan'208";a="364153204"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 19:20:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
-   d="scan'208";a="794910032"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
-  by orsmga005.jf.intel.com with ESMTP; 21 Sep 2022 19:20:15 -0700
-Message-ID: <01645bfa-a897-05cd-9934-a057e1d79fff@linux.intel.com>
-Date:   Thu, 22 Sep 2022 10:14:19 +0800
+        Wed, 21 Sep 2022 22:15:38 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B8D24D81F;
+        Wed, 21 Sep 2022 19:15:29 -0700 (PDT)
+X-UUID: 9b8d627815ab4ea886bbf3e4b68af9d5-20220922
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=jSyECJmHSA/82hGI9rjL6xr8zQtVBlH0c/3uRbHeI0I=;
+        b=p+lf44+Lio1fo5R0xsSI1aO1zk+It3e1WbfJLnCdI6QJBcdjStsbwMdGKuzdWkvAOgWy6YUE3NqpH58xbWFd+r3h6LSehecE9dYYRe/Zv26JQGpu1+6S2aRVXvjh3WXJjNthAT7sbpkquuGHNPhBuye7sVc90Vzg3/HAUENerKQ=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:0a4cf8f8-7e6b-4b1d-b486-22acb43fa813,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:39a5ff1,CLOUDID:97a739f7-6e85-48d9-afd8-0504bbfe04cb,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 9b8d627815ab4ea886bbf3e4b68af9d5-20220922
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+        (envelope-from <jianguo.zhang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1125236732; Thu, 22 Sep 2022 10:15:24 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Thu, 22 Sep 2022 10:15:23 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Thu, 22 Sep 2022 10:15:22 +0800
+Message-ID: <d231f64e494f4badf8bbe23130b25594376c9882.camel@mediatek.com>
+Subject: Re: [PATCH v3 2/2] dt-bindings: net: snps,dwmac: add clk_csr
+ property
+From:   Jianguo Zhang <jianguo.zhang@mediatek.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+CC:     Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Biao Huang <biao.huang@mediatek.com>, <netdev@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Date:   Thu, 22 Sep 2022 10:15:22 +0800
+In-Reply-To: <bd460cfd-7114-b200-ab99-16fa3e2cff50@linaro.org>
+References: <20220921070721.19516-1-jianguo.zhang@mediatek.com>
+         <20220921070721.19516-3-jianguo.zhang@mediatek.com>
+         <bd460cfd-7114-b200-ab99-16fa3e2cff50@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Cc:     baolu.lu@linux.intel.com, jgg@nvidia.com, kevin.tian@intel.com,
-        iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 4/6] iommu: Regulate EINVAL in ->attach_dev callback
- functions
-Content-Language: en-US
-To:     Nicolin Chen <nicolinc@nvidia.com>, joro@8bytes.org,
-        will@kernel.org, robin.murphy@arm.com, dwmw2@infradead.org,
-        yong.wu@mediatek.com, matthias.bgg@gmail.com
-References: <cover.1663744983.git.nicolinc@nvidia.com>
- <6c48822600154314778157ab7f72a7b55f5e2c65.1663744983.git.nicolinc@nvidia.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <6c48822600154314778157ab7f72a7b55f5e2c65.1663744983.git.nicolinc@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,T_SPF_TEMPERROR,
+        UNPARSEABLE_RELAY,URIBL_CSS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/21/22 4:23 PM, Nicolin Chen wrote:
-> Following the new rules in include/linux/iommu.h kdocs, EINVAL now can be
-> used to indicate that domain and device are incompatible by a caller that
-> treats it as a soft failure and tries attaching to another domain.
-> 
-> On the other hand, there are ->attach_dev callback functions returning it
-> for obvious device-specific errors. They will result in some inefficiency
-> in the caller handling routine.
-> 
-> Update these places to corresponding errnos following the new rules.
-> 
-> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-> ---
->   drivers/iommu/fsl_pamu.c        | 2 +-
->   drivers/iommu/fsl_pamu_domain.c | 4 ++--
->   drivers/iommu/intel/pasid.c     | 6 ++++--
->   drivers/iommu/mtk_iommu.c       | 2 +-
->   drivers/iommu/omap-iommu.c      | 4 ++--
->   drivers/iommu/virtio-iommu.c    | 2 +-
->   6 files changed, 11 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/iommu/fsl_pamu.c b/drivers/iommu/fsl_pamu.c
-> index 0d03f837a5d4..2eb3211c8167 100644
-> --- a/drivers/iommu/fsl_pamu.c
-> +++ b/drivers/iommu/fsl_pamu.c
-> @@ -211,7 +211,7 @@ int pamu_config_ppaace(int liodn, u32 omi, u32 stashid, int prot)
->   		ppaace->op_encode.index_ot.omi = omi;
->   	} else if (~omi != 0) {
->   		pr_debug("bad operation mapping index: %d\n", omi);
-> -		return -EINVAL;
-> +		return -ENODEV;
->   	}
->   
->   	/* configure stash id */
-> diff --git a/drivers/iommu/fsl_pamu_domain.c b/drivers/iommu/fsl_pamu_domain.c
-> index 011f9ab7f743..b4a1c0f79c3e 100644
-> --- a/drivers/iommu/fsl_pamu_domain.c
-> +++ b/drivers/iommu/fsl_pamu_domain.c
-> @@ -258,7 +258,7 @@ static int fsl_pamu_attach_device(struct iommu_domain *domain,
->   	liodn = of_get_property(dev->of_node, "fsl,liodn", &len);
->   	if (!liodn) {
->   		pr_debug("missing fsl,liodn property at %pOF\n", dev->of_node);
-> -		return -EINVAL;
-> +		return -ENODEV;
->   	}
->   
->   	spin_lock_irqsave(&dma_domain->domain_lock, flags);
-> @@ -267,7 +267,7 @@ static int fsl_pamu_attach_device(struct iommu_domain *domain,
->   		if (liodn[i] >= PAACE_NUMBER_ENTRIES) {
->   			pr_debug("Invalid liodn %d, attach device failed for %pOF\n",
->   				 liodn[i], dev->of_node);
-> -			ret = -EINVAL;
-> +			ret = -ENODEV;
->   			break;
->   		}
->   
-> diff --git a/drivers/iommu/intel/pasid.c b/drivers/iommu/intel/pasid.c
-> index c5e7e8b020a5..aff1a9caa496 100644
-> --- a/drivers/iommu/intel/pasid.c
-> +++ b/drivers/iommu/intel/pasid.c
-> @@ -101,8 +101,10 @@ int intel_pasid_alloc_table(struct device *dev)
->   
->   	might_sleep();
->   	info = dev_iommu_priv_get(dev);
-> -	if (WARN_ON(!info || !dev_is_pci(dev) || info->pasid_table))
-> -		return -EINVAL;
-> +	if (WARN_ON(!info || !dev_is_pci(dev)))
-> +		return -ENODEV;
-> +	if (WARN_ON(info->pasid_table))
-> +		return -EEXIST;
->   
->   	pasid_table = kzalloc(sizeof(*pasid_table), GFP_KERNEL);
->   	if (!pasid_table)
-> diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-> index 7e363b1f24df..be1a7d1cc630 100644
-> --- a/drivers/iommu/mtk_iommu.c
-> +++ b/drivers/iommu/mtk_iommu.c
-> @@ -607,7 +607,7 @@ static int mtk_iommu_domain_finalise(struct mtk_iommu_domain *dom,
->   	dom->iop = alloc_io_pgtable_ops(ARM_V7S, &dom->cfg, data);
->   	if (!dom->iop) {
->   		dev_err(data->dev, "Failed to alloc io pgtable\n");
-> -		return -EINVAL;
-> +		return -ENOMEM;
->   	}
->   
->   	/* Update our support page sizes bitmap */
-> diff --git a/drivers/iommu/omap-iommu.c b/drivers/iommu/omap-iommu.c
-> index d9cf2820c02e..447e40d55918 100644
-> --- a/drivers/iommu/omap-iommu.c
-> +++ b/drivers/iommu/omap-iommu.c
-> @@ -1414,7 +1414,7 @@ static int omap_iommu_attach_init(struct device *dev,
->   
->   	odomain->num_iommus = omap_iommu_count(dev);
->   	if (!odomain->num_iommus)
-> -		return -EINVAL;
-> +		return -ENODEV;
->   
->   	odomain->iommus = kcalloc(odomain->num_iommus, sizeof(*iommu),
->   				  GFP_ATOMIC);
-> @@ -1464,7 +1464,7 @@ omap_iommu_attach_dev(struct iommu_domain *domain, struct device *dev)
->   
->   	if (!arch_data || !arch_data->iommu_dev) {
->   		dev_err(dev, "device doesn't have an associated iommu\n");
-> -		return -EINVAL;
-> +		return -ENODEV;
->   	}
->   
->   	spin_lock(&omap_domain->lock);
-> diff --git a/drivers/iommu/virtio-iommu.c b/drivers/iommu/virtio-iommu.c
-> index 80151176ba12..4c652773fd6c 100644
-> --- a/drivers/iommu/virtio-iommu.c
-> +++ b/drivers/iommu/virtio-iommu.c
-> @@ -669,7 +669,7 @@ static int viommu_domain_finalise(struct viommu_endpoint *vdev,
->   		dev_err(vdev->dev,
->   			"granule 0x%lx larger than system page size 0x%lx\n",
->   			viommu_page_size, PAGE_SIZE);
-> -		return -EINVAL;
-> +		return -ENODEV;
->   	}
->   
->   	ret = ida_alloc_range(&viommu->domain_ids, viommu->first_domain,
+Dear Krzysztof,
 
-For iommu/vt-d changes:
+	Thanks for your comment.
 
-Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
+On Wed, 2022-09-21 at 10:24 +0200, Krzysztof Kozlowski wrote:
+> On 21/09/2022 09:07, Jianguo Zhang wrote:
+> > Add clk_csr property for snps,dwmac
+> > 
+> > Signed-off-by: Jianguo Zhang <jianguo.zhang@mediatek.com>
+> > ---
+> >  Documentation/devicetree/bindings/net/snps,dwmac.yaml | 5 +++++
+> >  1 file changed, 5 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> > b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> > index 491597c02edf..8cff30a8125d 100644
+> > --- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> > +++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> > @@ -288,6 +288,11 @@ properties:
+> >        is supported. For example, this is used in case of SGMII and
+> >        MAC2MAC connection.
+> >  
+> > +  clk_csr:
+> 
+> No underscores in node names. Missing vendor prefix.
+> 
+We will remane the property name 'clk_csr' as 'snps,clk-csr' and
+another driver patch is needed to align the name used in driver with
+the new name. 
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +    description:
+> > +      Frequency division factor for MDC clock.
+> 
+> Can't common clock framework do the job? What is the MDC clock?
+> 
+MDC clock is used for ethernet MAC accessing PHY register by MDIO bus.
+There is frequency divider designed in ethernet internal HW to ensure
+that ethernet can get correct frequency of MDC colck and the vlaue of
+frequency divider can be got from DTS.
+> Best regards,
+> Krzysztof
 
-Best regards,
-baolu
+BRS
+Jianguo
+
