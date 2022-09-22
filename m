@@ -2,108 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD98C5E5D7C
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 10:30:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 380975E5D88
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 10:31:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230214AbiIVI3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 04:29:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47402 "EHLO
+        id S230130AbiIVIbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 04:31:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbiIVI33 (ORCPT
+        with ESMTP id S230366AbiIVIa6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 04:29:29 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD4A2AB04B;
-        Thu, 22 Sep 2022 01:29:24 -0700 (PDT)
-X-UUID: 8edb971777fb4ae2a3f48569ff29212b-20220922
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=lzrjHkBPFj0GI6SmNTkiwUGTEKIZ8kvjJWTZ+sfsK88=;
-        b=VPtonN2SMt3Ui8sDVm6nKo2aod76QI6rMAHtArfR7XYJdAclIraiVWVTqzZRfydnVaUmP6eU3qUhtw9Y/lIbfA8eO9bQr9kzW0WFYkpY96t/06TsO91o3St4GgAU+4Pc45up8Nmpi1df4td+zM0Ju+EfOLkgivrc9fVdHvQebbk=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:545c0ce2-0917-428c-94e4-dca3b39426b5,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:-5
-X-CID-META: VersionHash:39a5ff1,CLOUDID:cee1a906-1cee-4c38-b21b-a45f9682fdc0,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 8edb971777fb4ae2a3f48569ff29212b-20220922
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <jianguo.zhang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1223909938; Thu, 22 Sep 2022 16:29:19 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Thu, 22 Sep 2022 16:29:18 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Thu, 22 Sep 2022 16:29:17 +0800
-From:   Jianguo Zhang <jianguo.zhang@mediatek.com>
-To:     "David S . Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-CC:     Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Biao Huang <biao.huang@mediatek.com>, <netdev@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Jianguo Zhang <jianguo.zhang@mediatek.com>
-Subject: [PATCH v4 2/2] dt-bindings: net: snps,dwmac: add clk_csr property
-Date:   Thu, 22 Sep 2022 16:29:06 +0800
-Message-ID: <20220922082906.800-3-jianguo.zhang@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220922082906.800-1-jianguo.zhang@mediatek.com>
-References: <20220922082906.800-1-jianguo.zhang@mediatek.com>
+        Thu, 22 Sep 2022 04:30:58 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C64E89CF8
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 01:30:42 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id t14so14255528wrx.8
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 01:30:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=yMyeJjCdNNiGUuThqHk0PauP+dgra8U1iiTiP5AqZ5s=;
+        b=3Drg2x6qOY2JRZezvdAW9KcV8FcwbDOaUIrBMpW9GG7FsWPDjLfbvkFF1yDS1r5Wsx
+         Xu92RIDguJF6Gs/BKA2fclza5UCghMSfS0otTIa2HC92/P6OIItDMj3I9cKy6wqHXKPB
+         GJdVa7Nxo8nsLwFaff9QWpdPDg4cn6Ibg0A5VVzdCcgKD4wkFhuf09vNvyLKIRM2OqjD
+         CVLpwHSZxXXjxMCwbwIRzTb7HsRYlj+yUt/5ktbTQ/Of8zOcnrV+OXdKcm1AZFgGqhuo
+         Yl2UUPvgdxVv+lQGQCAxjtKsE/Q2orLjzSgeKQP78loMzUORZbfycZ7tGRxOwJStP6Uc
+         l0kA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=yMyeJjCdNNiGUuThqHk0PauP+dgra8U1iiTiP5AqZ5s=;
+        b=S85cN7fVNHqKNUNWAaOU/jGTdCR20tJjJRWPFdqgxClgpsmA6AjWu22yqZzFGU8xJS
+         kgXgZarmdsQAd+kkCmtQoCsmyks10jZldensA8RiZ2rz67dzbymcJS+nCHRIbGV2pFrr
+         XggN0rdPQYAv5runuOG5N3y/FFMxwC5u6rJD3z9eDux99/nE8jYx1Bm+DXbWb4BS5UJT
+         5Ng8XhM0PQaFHf10eSfOCHN4XEfYzAjgAOSIAuwKN19o1fM9ykpEOEoQOgbn8/MAyn8N
+         jLjuWTgDczNaxiMu3Xjy0DOdlns6XCAFeun4LQLT7mB2OrVgPUBZYQu53ihiSeZDENpc
+         l2LQ==
+X-Gm-Message-State: ACrzQf0DYBUSs8aN46PDZdOvknZBqt9l/3gDw78BzzrBWnKdUj4PYfRZ
+        a/K8JbXOCjR1fGhHZbSMvppBNqX+lDEcHg==
+X-Google-Smtp-Source: AMsMyM4AN39EDQ8ZS/jGzwQpomifGBPbh2W14gq6R14hh7MkoDjso8KCm3hHFeC7Y9mYAlo0edsnYQ==
+X-Received: by 2002:a5d:5887:0:b0:22b:107e:7e39 with SMTP id n7-20020a5d5887000000b0022b107e7e39mr1250324wrf.694.1663835441133;
+        Thu, 22 Sep 2022 01:30:41 -0700 (PDT)
+Received: from otso.. (212095005231.public.telering.at. [212.95.5.231])
+        by smtp.gmail.com with ESMTPSA id q17-20020a5d61d1000000b00228b3ff1f5dsm5088476wrv.117.2022.09.22.01.30.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Sep 2022 01:30:40 -0700 (PDT)
+From:   Luca Weiss <luca.weiss@fairphone.com>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Luca Weiss <luca.weiss@fairphone.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Lee Jones <lee.jones@linaro.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 1/2] soc: qcom: spmi-pmic: convert hex numbers to lowercase
+Date:   Thu, 22 Sep 2022 10:29:22 +0200
+Message-Id: <20220922082925.17975-1-luca.weiss@fairphone.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The clk_csr property is parsed in driver for generating MDC clock
-with correct frequency. A warning('clk_csr' was unexpeted) is reported
-when runing 'make_dtbs_check' because the clk_csr property
-has been not documented in the binding file.
+There are some IDs that are written in uppercase. For consistency
+convert them to lowercase.
 
-Signed-off-by: Jianguo Zhang <jianguo.zhang@mediatek.com>
+Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Reviewed-by: Caleb Connolly <caleb.connolly@linaro.org>
 ---
- Documentation/devicetree/bindings/net/snps,dwmac.yaml | 5 +++++
- 1 file changed, 5 insertions(+)
+Changes since v3:
+* reword subject
+* pick up tags
 
-diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-index 491597c02edf..8cff30a8125d 100644
---- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-+++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-@@ -288,6 +288,11 @@ properties:
-       is supported. For example, this is used in case of SGMII and
-       MAC2MAC connection.
- 
-+  clk_csr:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description:
-+      Frequency division factor for MDC clock.
-+
-   mdio:
-     $ref: mdio.yaml#
-     unevaluatedProperties: false
+ include/soc/qcom/qcom-spmi-pmic.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/include/soc/qcom/qcom-spmi-pmic.h b/include/soc/qcom/qcom-spmi-pmic.h
+index 72398ff44719..fde0148d0077 100644
+--- a/include/soc/qcom/qcom-spmi-pmic.h
++++ b/include/soc/qcom/qcom-spmi-pmic.h
+@@ -29,9 +29,9 @@
+ #define PM8998_SUBTYPE		0x14
+ #define PMI8998_SUBTYPE		0x15
+ #define PM8005_SUBTYPE		0x18
+-#define PM660L_SUBTYPE		0x1A
+-#define PM660_SUBTYPE		0x1B
+-#define PM8150_SUBTYPE		0x1E
++#define PM660L_SUBTYPE		0x1a
++#define PM660_SUBTYPE		0x1b
++#define PM8150_SUBTYPE		0x1e
+ #define PM8150L_SUBTYPE		0x1f
+ #define PM8150B_SUBTYPE		0x20
+ #define PMK8002_SUBTYPE		0x21
 -- 
-2.25.1
+2.37.3
 
