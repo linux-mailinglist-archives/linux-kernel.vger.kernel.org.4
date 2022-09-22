@@ -2,155 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88ED85E636D
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 15:18:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16ED15E6372
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 15:19:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230453AbiIVNRw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 09:17:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39680 "EHLO
+        id S231244AbiIVNS0 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 22 Sep 2022 09:18:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231415AbiIVNRm (ORCPT
+        with ESMTP id S231255AbiIVNSL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 09:17:42 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D5FDECCD3;
-        Thu, 22 Sep 2022 06:17:38 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id C8DB121982;
-        Thu, 22 Sep 2022 13:17:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1663852656; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5VxXvVs0YdYO3sD0aUgYp7qqqpQnVQA/2ZsAJ0zdeDo=;
-        b=j0srfyICy6WIjrVcwpembz4gXsiclktb0/Y4yfVYyjSCvgiHG0V8LjrcAbAsJxlmP8takY
-        lqv4S7533VbkvX/ASvFYXBMDXxevueLbwuVtMA4UJgnuZdYR9tygho367XX0Jrp7WQ+VC9
-        WfB8xm7VcGw/Lmnwv00UpIiFZF/VLCw=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id C68262C141;
-        Thu, 22 Sep 2022 13:17:32 +0000 (UTC)
-Date:   Thu, 22 Sep 2022 15:17:33 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        linux-modules@vger.kernel.org
-Subject: Re: [PATCH v4 4/8] kallsyms: Improve the performance of
- kallsyms_lookup_name()
-Message-ID: <YyxgbZBORARoOIWf@alley>
-References: <20220920071317.1787-1-thunder.leizhen@huawei.com>
- <20220920071317.1787-5-thunder.leizhen@huawei.com>
- <Yyss3SWM0nTVnjT7@alley>
- <3c86335e-c5b8-b291-d0c2-9b69f912f900@huawei.com>
- <YywIcQzaGmV43zr6@alley>
- <ba8979fb-df77-c387-3c7b-cf5c46050c43@huawei.com>
+        Thu, 22 Sep 2022 09:18:11 -0400
+Received: from mail-vk1-f180.google.com (mail-vk1-f180.google.com [209.85.221.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3125DECCE2;
+        Thu, 22 Sep 2022 06:18:10 -0700 (PDT)
+Received: by mail-vk1-f180.google.com with SMTP id v192so4909025vkv.7;
+        Thu, 22 Sep 2022 06:18:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=FmC3Wnd/dYfP2uqwVfxKzutzBThKJES4nPc9HEeo7QQ=;
+        b=J06j6o0MXCQP79avP20hWcMOmr+9RUIwA65iEYK1TDKGJ5Pkt4ivky+PNfPf0ptbKQ
+         e9cOZbzfe2EKgMQrxeiuHP1iwqX2jQn7OCZxn9ox7kLXzFmDCitxzBY1yW7ClW5f3InW
+         D7I/8VdZJ9SaWeWA0iRbx2u2P5uE9C9bQHJMotaeZTs22t54R28NWWNt5nJ+EkX4DeYc
+         f7sMTqlMbBO70GYj88PVVZpbiwv5xTzzIDp/45cwMwW03LyEVq/2s6BIrOsxRx1eZNu+
+         WYAFtgy6cnM0Jaf72W4XSS5Nuz1DbZlN/Ngb2ua9LrAnt5/vhu8XGKUWsWUgqzN3NjXk
+         jVJQ==
+X-Gm-Message-State: ACrzQf18+i3lKb/ifowgiSu+9kuzaWXCFq1v4R64n0Azlf7zVcTsFLQg
+        ftqib/F5TPy1JE/jhOLtMVaH+zgZ2HAIER0/2Ds=
+X-Google-Smtp-Source: AMsMyM5hAS5sGeCyGhDs3JB8ybhSoe0SBFugJqR9UWsYlOLvGt3tSKkrbx2I2RYfB9/ZOUlHboLppHif1VOrjItnvws=
+X-Received: by 2002:a05:6122:10dc:b0:3a3:4904:2941 with SMTP id
+ l28-20020a05612210dc00b003a349042941mr1265866vko.24.1663852689165; Thu, 22
+ Sep 2022 06:18:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ba8979fb-df77-c387-3c7b-cf5c46050c43@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220921003201.1441511-1-seanjc@google.com> <20220921003201.1441511-12-seanjc@google.com>
+In-Reply-To: <20220921003201.1441511-12-seanjc@google.com>
+From:   =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>
+Date:   Thu, 22 Sep 2022 15:17:56 +0200
+Message-ID: <CAAdtpL4yFdh3V0Be05OKxUFBTSgFs6oTy9U5FjSRGwOhi=tDMQ@mail.gmail.com>
+Subject: Re: [PATCH v4 11/12] KVM: mips, x86: do not rely on KVM_REQ_UNHALT
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Atish Patra <atishp@atishpatra.org>,
+        David Hildenbrand <david@redhat.com>,
+        kvm <kvm@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        kvmarm@lists.cs.columbia.edu,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org,
+        open list <linux-kernel@vger.kernel.org>,
+        Maxim Levitsky <mlevitsk@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 2022-09-22 15:21:57, Leizhen (ThunderTown) wrote:
-> 
-> 
-> On 2022/9/22 15:02, Petr Mladek wrote:
-> > On Thu 2022-09-22 10:15:22, Leizhen (ThunderTown) wrote:
-> >>
-> >>
-> >> On 2022/9/21 23:25, Petr Mladek wrote:
-> >>> On Tue 2022-09-20 15:13:13, Zhen Lei wrote:
-> >>>> Currently, to search for a symbol, we need to expand the symbols in
-> >>>> 'kallsyms_names' one by one, and then use the expanded string for
-> >>>> comparison. This process can be optimized.
-> >>>>
-> >>>> And now scripts/kallsyms no longer compresses the symbol types, each
-> >>>> symbol type always occupies one byte. So we can first compress the
-> >>>> searched symbol and then make a quick comparison based on the compressed
-> >>>> length and content. In this way, for entries with mismatched lengths,
-> >>>> there is no need to expand and compare strings. And for those matching
-> >>>> lengths, there's no need to expand the symbol. This saves a lot of time.
-> >>>> According to my test results, the average performance of
-> >>>> kallsyms_lookup_name() can be improved by 20 to 30 times.
-> >>>>
-> >>>> The pseudo code of the test case is as follows:
-> >>>> static int stat_find_name(...)
-> >>>> {
-> >>>> 	start = sched_clock();
-> >>>> 	(void)kallsyms_lookup_name(name);
-> >>>> 	end = sched_clock();
-> >>>> 	//Update min, max, cnt, sum
-> >>>> }
-> >>>>
-> >>>> /*
-> >>>>  * Traverse all symbols in sequence and collect statistics on the time
-> >>>>  * taken by kallsyms_lookup_name() to lookup each symbol.
-> >>>>  */
-> >>>> kallsyms_on_each_symbol(stat_find_name, NULL);
-> >>>>
-> >>>> The test results are as follows (twice):
-> >>>> After : min=5250, max=  726560, avg= 302132
-> >>>> After : min=5320, max=  726850, avg= 301978
-> >>>> Before: min=170,  max=15949190, avg=7553906
-> >>>> Before: min=160,  max=15877280, avg=7517784
-> >>>>
-> >>>> The average time consumed is only 4.01% and the maximum time consumed is
-> >>>> only 4.57% of the time consumed before optimization.
-> >>>>
-> >>>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> >>>> ---
-> >>>>  kernel/kallsyms.c | 79 +++++++++++++++++++++++++++++++++++++++++++++--
-> >>>>  1 file changed, 76 insertions(+), 3 deletions(-)
-> >>>>
-> >>>> diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-> >>>> index 3e7e2c2ad2f75ef..2d76196cfe89f34 100644
-> >>>> --- a/kernel/kallsyms.c
-> >>>> +++ b/kernel/kallsyms.c
-> >>>> @@ -87,6 +87,71 @@ static unsigned int kallsyms_expand_symbol(unsigned int off,
-> >>>> +{
-> >>>> +	int i, j, k, n;
-> >>>> +	int len, token_len;
-> >>>> +	const char *token;
-> >>>> +	unsigned char token_idx[KSYM_NAME_LEN];
-> >>>> +	unsigned char token_bak[KSYM_NAME_LEN];
-> >>>
-> >>> Why do we need two buffers? It should be possible to compress the name
-> >>> in the same buffer as it is done in compress_symbols() in scripts/callsyms.c.
-> >>
-> >> Because the performance would be a little better. Now this function takes
-> >> just over a microsecond. Currently, it takes about 250 microseconds on
-> >> average to lookup a symbol, so adding a little more time to this function
-> >> doesn't affect the overall picture. I'll modify and test it as you suggest
-> >> below.
-> > 
-> > We need to be careful about a stack overflow. I have seen that
-> > KSYM_NAME_LEN might need to be increased to 512 because of
-> > Rust support, see
-> > https://lore.kernel.org/r/20220805154231.31257-6-ojeda@kernel.org
-> 
-> OK. Thanks for your information. I decided to add kallsyms_best_token_table[],
-> kallsyms_best_token_table_len, so that we only need one namebuf[], like
-> kallsyms_expand_symbol().
+On Wed, Sep 21, 2022 at 2:34 AM Sean Christopherson <seanjc@google.com> wrote:
+>
+> From: Paolo Bonzini <pbonzini@redhat.com>
+>
+> KVM_REQ_UNHALT is a weird request that simply reports the value of
+> kvm_arch_vcpu_runnable() on exit from kvm_vcpu_halt().  Only
+> MIPS and x86 are looking at it, the others just clear it.  Check
+> the state of the vCPU directly so that the request is handled
+> as a nop on all architectures.
+>
+> No functional change intended, except for corner cases where an
+> event arrive immediately after a signal become pending or after
+> another similar host-side event.
+>
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/mips/kvm/emulate.c | 7 +++----
+>  arch/x86/kvm/x86.c      | 9 ++++++++-
+>  2 files changed, 11 insertions(+), 5 deletions(-)
 
-Thanks for the effort. Adding kallsyms_best_token_table[] sounds like
-the right solution.
-
-Best Regards,
-Petr
+Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
