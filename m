@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 626185E60E2
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 13:25:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 270FA5E60F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 13:27:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231314AbiIVLZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 07:25:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45378 "EHLO
+        id S231583AbiIVL1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 07:27:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230281AbiIVLZE (ORCPT
+        with ESMTP id S231558AbiIVL0m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 07:25:04 -0400
-Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646A690196;
-        Thu, 22 Sep 2022 04:25:02 -0700 (PDT)
-Received: by mail-vk1-xa31.google.com with SMTP id k9so4736888vke.4;
-        Thu, 22 Sep 2022 04:25:02 -0700 (PDT)
+        Thu, 22 Sep 2022 07:26:42 -0400
+Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2EC4E11B3;
+        Thu, 22 Sep 2022 04:26:28 -0700 (PDT)
+Received: by mail-ua1-x92a.google.com with SMTP id i17so3523905uaq.9;
+        Thu, 22 Sep 2022 04:26:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
          :date;
-        bh=T0fV8qfFVOymVMbtoHPkEwXSMdBSnP/O9E+2YF7ZczE=;
-        b=pq3ZSRqBHHbmcBt2BYQyxoh5C+vdrw+Gw3qOlz6A1HViDG/aVfXlK8+MXnpBhets3A
-         9vuCt38X9FBzZ/yr/o8VNg+X5BOFF/b+zR0zbAsQp1XpWK2dAUye3DTI+aALNCG3Zh1H
-         vElSlYbcoQd7NYoAGKXOEgonTLWGiocEnbu/XeA/02WvnGthmC/iTnnFreGIexJr/9s/
-         pF80Uq/sfDzmyfkkmzpeNiWvgJZkFBDiRh2iXsCogUAZI/rfbmzZVqxxdGWeFBQZjmaz
-         +zHkEgqklkhopJcDFCUPk5bQ0wyf18hREcow4DWcrnDFKGyw3IEduEnWjKv8xt+rmTfM
-         CPSg==
+        bh=7/4en0JzQ3mEn0KNL06diZoNmw0KIWKD4kZ+f7UUSJ8=;
+        b=phS/M8ALltQUhVnzQAb8UIReOE7J/fjBXyGM4pma0xwURPFRxUmz2neIpChhkQ6dMA
+         N5MIxopUke3SgCUvF/oKN0IbfvwIf/jVLhs7eYbEwz7Ha37hhUcyprg2eiqdZyfcmIfO
+         kJOoY1MvCfXHXe1kHT2DxK2KMhnXm28suiRIDtjgIPrF4cxW8deL7OVIbunCrQiJqtw8
+         myDctepO1bXrIYrczqBsJsfHEiYQCl3onIwKFghA2CWCmsgkB3gOKVT2b0yg9iW8TQIU
+         Fgi0Tm/P+tu6dZD3bNjcqituCxOMjHMLpouWc9RlgmyhxqF0TTZ9jiedyL71KPK5K+8y
+         dakQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:subject:message-id:date:from:mime-version:x-gm-message-state
          :from:to:cc:subject:date;
-        bh=T0fV8qfFVOymVMbtoHPkEwXSMdBSnP/O9E+2YF7ZczE=;
-        b=YJ2JBRnT8cFsrfFVEuOzuWjeP3hrvbsWHGIg5hWsF18wW1BoIpPoD2O4ssY6lkQZsO
-         bheAmGqeWSpoRqN1jwwYlfhxwhe6/JkC1W6YA3IhsbTPnsfcjXQMyIKdAZA51XOLde1U
-         sIe+LhUEvtnYcQ9I3Vk2bbNd8IfMgO5coBGieDTdYjZ/ydSGl0hVifE1FMes0eI3EzGk
-         NHQ8PFUyxF5Ig94Js7bbnooNF1QKWqV0xWFpDIPY6BCPhSHpWG/acow4IJnBdLIMFLOl
-         RZkYU0NB6eeUiEmIwx3q5jE9qvyz3X8yQGodhvSSxyqY4PBVr5LY6Dili1NDA7u824fY
-         kSIQ==
-X-Gm-Message-State: ACrzQf1pNc3t9u2vZ7KrNSeRTFX6ukOKWVP4v+20QthlPcc/p1ny/771
-        H6LELd9sf2OU+LVTQoAngavOXCxM6gCiy1/WXqNCNMjQDZnGKFSfc58=
-X-Google-Smtp-Source: AMsMyM6fDKSnkXD0qtULBSBnik+q17FtRPF3CHQ9CNV+a1C2X25oRZoJtCq+edxKrcYqUMzp669A4tBohRg9omdfNqQ=
-X-Received: by 2002:a1f:90c9:0:b0:3a4:281f:62b8 with SMTP id
- s192-20020a1f90c9000000b003a4281f62b8mr405627vkd.24.1663845901502; Thu, 22
- Sep 2022 04:25:01 -0700 (PDT)
+        bh=7/4en0JzQ3mEn0KNL06diZoNmw0KIWKD4kZ+f7UUSJ8=;
+        b=bZr67ENHHD5M04MrXRNSezUJiajGD7iB/06oG5cr4ttf0mA4jZFXieOmFpL9IMRHY4
+         iydij6LaQhp4OztDJJEatqXXOwxyTZe3VR77aNzU2zbq//cpKDHvYxGdCkZky0VDSsw8
+         nEoKK0SGQM8nHJ8bFJF0KISL3ehMpQOMO0LGqWjOvscCiAzf5eisomBj2hkvsw8UfJYt
+         F9FGYe780BnfnxE0HvpjzF0Ik/OYCNwgGthejiX+djY2LSgqNrUnEcV6WgrUocN2Dhik
+         M646WgzLmmdxlAS5RszpiNVJWQO9CJx9i2zjjWmPm4HlWKEGDx+vZ8AQim5b8mfPayBI
+         sibg==
+X-Gm-Message-State: ACrzQf1Q3nOhoh5L1cf3MrGz1IGC2lGbkTtYe/lKXNYDs3JfwCjGnGp5
+        x5cdZpRU9f2JduelVKFr+exTrrhmnHjrZSj2lcWR930nRiRuaIGbRcg=
+X-Google-Smtp-Source: AMsMyM4iYhUDqtESM+cGazTaWUfJaX6ciWlPVn+pTzYxye20l2lty8RhvnBvpIOGmX9HFg+3ZSbcaIwgYavljqO2yhw=
+X-Received: by 2002:a05:6130:9e:b0:3bf:2ea9:6e23 with SMTP id
+ x30-20020a056130009e00b003bf2ea96e23mr1117293uaf.26.1663845987829; Thu, 22
+ Sep 2022 04:26:27 -0700 (PDT)
 MIME-Version: 1.0
 From:   Rondreis <linhaoguo86@gmail.com>
-Date:   Thu, 22 Sep 2022 19:24:50 +0800
-Message-ID: <CAB7eex+TLOB1-dnUZ=ELwNQcj9+QN_JTZVyMmNYNvAUqrJkQZg@mail.gmail.com>
-Subject: WARNING in dvb_frontend_get_event
-To:     mchehab@kernel.org, kernel@tuxforce.de,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 22 Sep 2022 19:26:16 +0800
+Message-ID: <CAB7eex+=azurdG2wbBR_2F349EqDaSSf7YDSvjkBYjw1RRHVjw@mail.gmail.com>
+Subject: general protection fault in digitv_i2c_xfer
+To:     mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
@@ -72,7 +72,7 @@ HEAD commit: 521a547ced6477c54b4b0cc206000406c221b4d6
 git tree: upstream
 
 kernel config: https://pastebin.com/raw/hekxU61F
-console output: https://pastebin.com/raw/r045maxd
+console output: https://pastebin.com/raw/eQmbXagT
 
 Sorry for failing to extract the reproducer. But on other versions of
 Linux, I also triggered this crash.
@@ -80,40 +80,32 @@ Linux, I also triggered this crash.
 I would appreciate it if you have any idea how to solve this bug.
 
 The crash report is as follows:
-------------[ cut here ]------------
-do not call blocking ops when !TASK_RUNNING; state=1 set at
-[<ffffffff815b0c88>] prepare_to_wait_event+0x68/0x680
-kernel/sched/wait.c:329
-WARNING: CPU: 0 PID: 20443 at kernel/sched/core.c:9815
-__might_sleep+0x105/0x150 kernel/sched/core.c:9815
-Modules linked in:
-CPU: 0 PID: 20443 Comm: syz-executor.2 Not tainted 6.0.0-rc6+ #3
+general protection fault, probably for non-canonical address
+0xdffffc0000000002: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000010-0x0000000000000017]
+CPU: 3 PID: 14711 Comm: syz-executor.2 Not tainted 6.0.0-rc6+ #3
 Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
 1.13.0-1ubuntu1.1 04/01/2014
-RIP: 0010:__might_sleep+0x105/0x150 kernel/sched/core.c:9815
-Code: 6f 02 00 48 8d bb c8 16 00 00 48 89 fa 48 c1 ea 03 80 3c 02 00
-75 34 48 8b 93 c8 16 00 00 48 c7 c7 60 22 cc 89 e8 ce 04 d5 07 <0f> 0b
-e9 75 ff ff ff e8 3f 7d 76 00 e9 26 ff ff ff 89 34 24 e8 42
-RSP: 0018:ffffc90003537ac8 EFLAGS: 00010282
-RAX: 0000000000000000 RBX: ffff888041fcd7c0 RCX: 0000000000000000
-RDX: ffffc9000f67a000 RSI: ffff888041fcd7c0 RDI: fffff520006a6f4b
-RBP: ffffffff89cc8840 R08: ffffffff816154d8 R09: 0000000000000000
-R10: 0000000000000005 R11: ffffed1005984f2d R12: 000000000000003a
-R13: 0000000000000000 R14: 0000000000000000 R15: ffff888061936260
-FS: 00007ff9a1382700(0000) GS:ffff88802cc00000(0000) knlGS:0000000000000000
+RIP: 0010:digitv_i2c_xfer+0xf2/0x3b0 drivers/media/usb/dvb-usb/digitv.c:67
+Code: 5c 24 08 48 8d 7b 08 48 89 f8 48 c1 e8 03 42 80 3c 30 00 0f 85
+6f 02 00 00 48 8b 6b 08 48 89 e8 48 89 ea 48 c1 e8 03 83 e2 07 <42> 0f
+b6 04 30 38 d0 7f 08 84 c0 0f 85 40 02 00 00 0f b6 45 00 44
+RSP: 0018:ffffc90006db7cd0 EFLAGS: 00010246
+RAX: 0000000000000002 RBX: ffff8880005140e0 RCX: 0000000000040000
+RDX: 0000000000000000 RSI: ffff8880180bba80 RDI: ffff8880005140e8
+RBP: 0000000000000010 R08: ffffffff861bedfa R09: 0000000000000000
+R10: 0000000000000005 R11: fffffbfff1d34d22 R12: 0000000000000000
+R13: 0000000000000001 R14: dffffc0000000000 R15: 0000000000000001
+FS: 00007fa593c8e700(0000) GS:ffff88807ed00000(0000) knlGS:0000000000000000
 CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fbdcc616000 CR3: 0000000052e2c000 CR4: 0000000000350ef0
+CR2: 00007fa593471b30 CR3: 0000000024995000 CR4: 0000000000350ee0
 Call Trace:
 <TASK>
-down+0x19/0x90 kernel/locking/semaphore.c:58
-dvb_frontend_test_event drivers/media/dvb-core/dvb_frontend.c:277 [inline]
-dvb_frontend_get_event.isra.0+0x523/0x670
-drivers/media/dvb-core/dvb_frontend.c:301
-dvb_frontend_handle_ioctl+0x1bf4/0x2f00
-drivers/media/dvb-core/dvb_frontend.c:2715
-dvb_frontend_do_ioctl+0x1c0/0x2e0 drivers/media/dvb-core/dvb_frontend.c:2089
-dvb_usercopy+0xb9/0x270 drivers/media/dvb-core/dvbdev.c:941
-dvb_frontend_ioctl+0x55/0x80 drivers/media/dvb-core/dvb_frontend.c:2103
+__i2c_transfer drivers/i2c/i2c-core-base.c:2109 [inline]
+__i2c_transfer+0x4c2/0x16a0 drivers/i2c/i2c-core-base.c:2074
+i2c_transfer+0x1e6/0x3e0 drivers/i2c/i2c-core-base.c:2170
+i2cdev_ioctl_rdwr.isra.0+0x2ea/0x6a0 drivers/i2c/i2c-dev.c:297
+i2cdev_ioctl+0x488/0x7b0 drivers/i2c/i2c-dev.c:458
 vfs_ioctl fs/ioctl.c:51 [inline]
 __do_sys_ioctl fs/ioctl.c:870 [inline]
 __se_sys_ioctl fs/ioctl.c:856 [inline]
@@ -121,14 +113,50 @@ __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
 do_syscall_x64 arch/x86/entry/common.c:50 [inline]
 do_syscall_64+0x35/0x80 arch/x86/entry/common.c:80
 entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7ff9a0ca80fd
+RIP: 0033:0x7fa5934a80fd
 Code: 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 f3 0f 1e fa 48 89 f8 48
 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ff9a1381bf8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007ff9a0d9c410 RCX: 00007ff9a0ca80fd
-RDX: 00000000200001c0 RSI: 0000000080286f4e RDI: 0000000000000003
-RBP: 00007ff9a0d0b606 R08: 0000000000000000 R09: 0000000000000000
+RSP: 002b:00007fa593c8dbf8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007fa59359c340 RCX: 00007fa5934a80fd
+RDX: 0000000020000640 RSI: 0000000000000707 RDI: 0000000000000003
+RBP: 00007fa59350b606 R08: 0000000000000000 R09: 0000000000000000
 R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffc30899fcf R14: 00007ffc3089a170 R15: 00007ff9a1381d80
+R13: 00007ffea1fefa1f R14: 00007ffea1fefbc0 R15: 00007fa593c8dd80
 </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:digitv_i2c_xfer+0xf2/0x3b0 drivers/media/usb/dvb-usb/digitv.c:67
+Code: 5c 24 08 48 8d 7b 08 48 89 f8 48 c1 e8 03 42 80 3c 30 00 0f 85
+6f 02 00 00 48 8b 6b 08 48 89 e8 48 89 ea 48 c1 e8 03 83 e2 07 <42> 0f
+b6 04 30 38 d0 7f 08 84 c0 0f 85 40 02 00 00 0f b6 45 00 44
+RSP: 0018:ffffc90006db7cd0 EFLAGS: 00010246
+RAX: 0000000000000002 RBX: ffff8880005140e0 RCX: 0000000000040000
+RDX: 0000000000000000 RSI: ffff8880180bba80 RDI: ffff8880005140e8
+RBP: 0000000000000010 R08: ffffffff861bedfa R09: 0000000000000000
+R10: 0000000000000005 R11: fffffbfff1d34d22 R12: 0000000000000000
+R13: 0000000000000001 R14: dffffc0000000000 R15: 0000000000000001
+FS: 00007fa593c8e700(0000) GS:ffff88802cc00000(0000) knlGS:0000000000000000
+CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fa59359d060 CR3: 0000000024995000 CR4: 0000000000350ef0
+----------------
+Code disassembly (best guess):
+0: 5c pop %rsp
+1: 24 08 and $0x8,%al
+3: 48 8d 7b 08 lea 0x8(%rbx),%rdi
+7: 48 89 f8 mov %rdi,%rax
+a: 48 c1 e8 03 shr $0x3,%rax
+e: 42 80 3c 30 00 cmpb $0x0,(%rax,%r14,1)
+13: 0f 85 6f 02 00 00 jne 0x288
+19: 48 8b 6b 08 mov 0x8(%rbx),%rbp
+1d: 48 89 e8 mov %rbp,%rax
+20: 48 89 ea mov %rbp,%rdx
+23: 48 c1 e8 03 shr $0x3,%rax
+27: 83 e2 07 and $0x7,%edx
+* 2a: 42 0f b6 04 30 movzbl (%rax,%r14,1),%eax <-- trapping instruction
+2f: 38 d0 cmp %dl,%al
+31: 7f 08 jg 0x3b
+33: 84 c0 test %al,%al
+35: 0f 85 40 02 00 00 jne 0x27b
+3b: 0f b6 45 00 movzbl 0x0(%rbp),%eax
+3f: 44 rex.R
