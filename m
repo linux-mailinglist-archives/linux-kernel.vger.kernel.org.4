@@ -2,85 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7920B5E64F8
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 16:20:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E2A25E65F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 16:40:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbiIVOUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 10:20:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34712 "EHLO
+        id S231955AbiIVOkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 10:40:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230335AbiIVOUS (ORCPT
+        with ESMTP id S231947AbiIVOjg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 10:20:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D34AF83051;
-        Thu, 22 Sep 2022 07:20:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8E066B8378E;
-        Thu, 22 Sep 2022 14:20:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3B593C433D6;
-        Thu, 22 Sep 2022 14:20:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663856415;
-        bh=Z5KklAxJJjnZ2bt/Zb2GDJC3FTImU2unFl2S6/hePIY=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=lq12is0of7Ve3Jk4KC1OuR0ZShoYkMbjNoZOpGQU3IXo6IQaPDmwKY/sqIH6jLvlt
-         kySQn3mU3Pu0OWqKHBIDisbIN7Zbz/bQFI8+pL2dsv0bqOT4gDV7Qo8XgoaZfbsiZL
-         /SDNUZJBRKb/vDLcl8lyXoYeCLzuidrBm4SqX1Nmp2tXZABPPFMjljvyOxm/DWMRmc
-         5/VlNPVaaEzTJUg1pPRflj35WrEOsXJCiubhXW5K7enP7vrK1vdQUiZNklFYZNboN0
-         cKZokey6aMXyBcXHAg9F5rHooBWdHni+Lzr11A5fAXjBBKbBWbVYErWZJVJFqLJowf
-         pFUt0rP0e0+Vg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1ADB6E4D03D;
-        Thu, 22 Sep 2022 14:20:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 22 Sep 2022 10:39:36 -0400
+Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 020F4F8593;
+        Thu, 22 Sep 2022 07:38:33 -0700 (PDT)
+Received: from NTHCCAS04.nuvoton.com (NTHCCAS04.nuvoton.com [10.1.8.29])
+        by maillog.nuvoton.com (Postfix) with ESMTP id 2661B1C8116E;
+        Thu, 22 Sep 2022 22:22:32 +0800 (CST)
+Received: from NTHCCAS02.nuvoton.com (10.1.9.121) by NTHCCAS04.nuvoton.com
+ (10.1.8.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Thu, 22
+ Sep 2022 22:22:31 +0800
+Received: from NTHCCAS04.nuvoton.com (10.1.8.29) by NTHCCAS02.nuvoton.com
+ (10.1.9.121) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2176.2; Thu, 22 Sep
+ 2022 22:22:19 +0800
+Received: from taln60.nuvoton.co.il (10.191.1.180) by NTHCCAS04.nuvoton.com
+ (10.1.12.25) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
+ Transport; Thu, 22 Sep 2022 22:22:19 +0800
+Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
+        id A394E637C4; Thu, 22 Sep 2022 17:22:18 +0300 (IDT)
+From:   Tomer Maimon <tmaimon77@gmail.com>
+To:     <avifishman70@gmail.com>, <tali.perry1@gmail.com>,
+        <joel@jms.id.au>, <venture@google.com>, <yuenn@google.com>,
+        <benjaminfair@google.com>, <olivia@selenic.com>,
+        <herbert@gondor.apana.org.au>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <openbmc@lists.ozlabs.org>, <linux-crypto@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Tomer Maimon <tmaimon77@gmail.com>
+Subject: [PATCH v1 0/2] rng: npcm: add Arbel NPCM8XX support
+Date:   Thu, 22 Sep 2022 17:22:14 +0300
+Message-ID: <20220922142216.17581-1-tmaimon77@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] net: sched: fix possible refcount leak in tc_new_tfilter()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166385641510.9882.16423342832094915476.git-patchwork-notify@kernel.org>
-Date:   Thu, 22 Sep 2022 14:20:15 +0000
-References: <20220921092734.31700-1-hbh25y@gmail.com>
-In-Reply-To: <20220921092734.31700-1-hbh25y@gmail.com>
-To:     Hangyu Hua <hbh25y@gmail.com>
-Cc:     jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, vladbu@mellanox.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, vladbu@nvidia.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+This patch set adds Arbel NPCM8XX Random Number Generator(RNG) support 
+to RNG NPCM driver.
 
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+The NPCM8XX RNG uses different prescalar clock value.
 
-On Wed, 21 Sep 2022 17:27:34 +0800 you wrote:
-> tfilter_put need to be called to put the refount got by tp->ops->get to
-> avoid possible refcount leak when chain->tmplt_ops != NULL and
-> chain->tmplt_ops != tp->ops.
-> 
-> Fixes: 7d5509fa0d3d ("net: sched: extend proto ops with 'put' callback")
-> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-> Reviewed-by: Vlad Buslov <vladbu@nvidia.com>
-> 
-> [...]
+The NPCM RNG driver was tested on the NPCM845 evaluation board.
 
-Here is the summary with links:
-  - [v2] net: sched: fix possible refcount leak in tc_new_tfilter()
-    https://git.kernel.org/netdev/net/c/c2e1cfefcac3
+Tomer Maimon (2):
+  dt-bindings: rng: nuvoton,npcm-rng: Add npcm845 compatible string
+  hwrng: npcm: Add NPCM8XX support
 
-You are awesome, thank you!
+ .../bindings/rng/nuvoton,npcm-rng.yaml        |  4 +++-
+ drivers/char/hw_random/npcm-rng.c             | 21 ++++++++++++-------
+ 2 files changed, 17 insertions(+), 8 deletions(-)
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.33.0
 
