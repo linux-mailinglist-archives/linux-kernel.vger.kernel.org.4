@@ -2,111 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23A115E605D
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 13:04:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DE085E6077
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 13:06:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230238AbiIVLEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 07:04:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37116 "EHLO
+        id S230372AbiIVLG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 07:06:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbiIVLEM (ORCPT
+        with ESMTP id S231263AbiIVLGh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 07:04:12 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A4123B56CB;
-        Thu, 22 Sep 2022 04:04:10 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EDD85ED1;
-        Thu, 22 Sep 2022 04:04:16 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 148303F73B;
-        Thu, 22 Sep 2022 04:04:08 -0700 (PDT)
-Date:   Thu, 22 Sep 2022 12:04:06 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Dien Pham <dien.pham.ry@renesas.com>,
-        Gaku Inami <gaku.inami.xh@renesas.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        linux-arm-kernel@lists.infradead.org, Peng Fan <peng.fan@nxp.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Nicolas Pitre <npitre@baylibre.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] Revert "firmware: arm_scmi: Add clock management to the
- SCMI power domain"
-Message-ID: <20220922110406.cuovmxtw2jkn4f4h@bogus>
-References: <20220919122033.86126-1-ulf.hansson@linaro.org>
- <20220921155634.owr5lncydsfpo7ua@bogus>
- <CAPDyKFpgHDzc5Rv+0Tn4zegDTrc_wuymez02XLEdVUaEOornNw@mail.gmail.com>
+        Thu, 22 Sep 2022 07:06:37 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C486DE0F8
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 04:05:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1663844759; x=1695380759;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4khpOzJ+xAoEzXavzdtwAPfYs0FdBngUJHQblA2ykV0=;
+  b=0A+XTVN7H0ckKHt8nwA/1nMMdOkivkaxbuqv7BpT8LX/YRO1fe/WhRXr
+   t/DlbhfuLKhxKOwwjv+Eq8IrhRIqYeLOJyZznRd9R3I7u1tfJPR5PO3Nc
+   7KXzIqiqIFj7c32wVJPD5JWgM2Al1Vy8LdH26dJIaSsXcHbPcSBQwQQpC
+   MqKL4ycYi4+mK6uyhC8MwpwbNmyiKuE2RZDykpDnJ0nlD4g7XqmIMio6v
+   0m+pW7cdr3kCIAZUlUv+P7E6ubcIp4bdnopRJZcWXTBmRnN60IEvpwxEn
+   CRYDCFo7t8iZncURmfvWdqc1BRFLSgl8+0zYjoIgwtgISSZd6U0KCX6Cq
+   g==;
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="181501572"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 Sep 2022 04:05:54 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Thu, 22 Sep 2022 04:05:42 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
+ Transport; Thu, 22 Sep 2022 04:05:41 -0700
+Date:   Thu, 22 Sep 2022 12:05:19 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     <cgel.zte@gmail.com>
+CC:     <linux-kernel@vger.kernel.org>, Xu Panda <xu.panda@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>, <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH linux-next] scripts/extract_xc3028: use absolute path for
+ which
+Message-ID: <YyxBb63/8MdaxxvC@wendy>
+References: <20220922102624.236308-1-xu.panda@zte.com.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <CAPDyKFpgHDzc5Rv+0Tn4zegDTrc_wuymez02XLEdVUaEOornNw@mail.gmail.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220922102624.236308-1-xu.panda@zte.com.cn>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 21, 2022 at 08:46:21PM +0200, Ulf Hansson wrote:
-> On Wed, 21 Sept 2022 at 17:56, Sudeep Holla <sudeep.holla@arm.com> wrote:
-> >
-> > Hi Dien, Gaku,
-> >
-> > On Mon, Sep 19, 2022 at 02:20:33PM +0200, Ulf Hansson wrote:
-> > > This reverts commit a3b884cef873 ("firmware: arm_scmi: Add clock management
-> > > to the SCMI power domain").
-> > >
-> > > Using the GENPD_FLAG_PM_CLK tells genpd to gate/ungate the consumer
-> > > device's clock(s) during runtime suspend/resume through the PM clock API.
-> > > More precisely, in genpd_runtime_resume() the clock(s) for the consumer
-> > > device would become ungated prior to the driver-level ->runtime_resume()
-> > > callbacks gets invoked.
-> > >
-> > > This behaviour isn't a good fit for all platforms/drivers. For example, a
-> > > driver may need to make some preparations of its device in its
-> > > ->runtime_resume() callback, like calling clk_set_rate() before the
-> > > clock(s) should be ungated. In these cases, it's easier to let the clock(s)
-> > > to be managed solely by the driver, rather than at the PM domain level.
-> > >
-> > > For these reasons, let's drop the use GENPD_FLAG_PM_CLK for the SCMI PM
-> > > domain, as to enable it to be more easily adopted across ARM platforms.
-> > >
-> > > Fixes: a3b884cef873 ("firmware: arm_scmi: Add clock management to the SCMI power domain")
-> > > Cc: Nicolas Pitre <npitre@baylibre.com>
-> > > Cc: stable@vger.kernel.org
-> > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > > ---
-> > >
-> > > To get some more background to $subject patch, please have a look at the
-> > > lore-link below.
-> > >
-> > > https://lore.kernel.org/all/DU0PR04MB94173B45A2CFEE3BF1BD313A88409@DU0PR04MB9417.eurprd04.prod.outlook.com/
-> > >
-> >
-> > If you have any objections, this is your last chance to speak up before
-> > the original change gets reverted in the mainline with this patch.
-> >
-> > Hi Ulf,
-> >
-> > I don't have any other SCMI changes for v6.0 fixes or v6.1
-> > I am fine if you are happy to take this via your tree or I can send it
-> > to SoC team. Let me know. I will give final one or 2 days for Renesas
-> > to get back if they really care much.
+On Thu, Sep 22, 2022 at 10:26:25AM +0000, cgel.zte@gmail.com wrote:
+> From: Xu Panda <xu.panda@zte.com.cn>
+
+Hey Xu Panda,
+I accidentally found this patch while looking for your RISC-V one on
+lore.
+
+You've not CC'ed any maintainers so I am not sure who you expect to pick
+this patch up, but seeing as Greg has NACKed the patch you sent to the
+RISC-V list [0] earlier doing the same thing I figure it is a moot
+point... maybe engaging with maintainers rather than sending more
+patches would be a more successful strategy for you here :(
+
+Either way, you'll likely have to resend this with a maintainer CCed for
+someone to be able to apply your patch once you've resolved the email
+issues.
+
+Thanks,
+Conor.
+
+0 - https://lore.kernel.org/all/Yyw24J7YFVtxsnJ7@kroah.com/
 > 
-> I have a slew of fixes for mmc that I intend to send next week, I can
-> funnel them through that pull request.
+> Not using absolute path when invoking which can lead to serious security
+> issues.
 > 
-> Assuming, Renesas folkz are okay, I consider that as an ack from you, right?
->
-
-Yes for official reasons, here is the formal :)
-
-Acked-by: Sudeep Holla <sudeep.holla@arm.com>
-
-in case you manage to get this in via your tree.
-
---
-Regards,
-Sudeep
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
+> ---
+>  scripts/extract_xc3028.pl | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/scripts/extract_xc3028.pl b/scripts/extract_xc3028.pl
+> index e1c9af25a595..c9ddcba07550 100755
+> --- a/scripts/extract_xc3028.pl
+> +++ b/scripts/extract_xc3028.pl
+> @@ -29,7 +29,7 @@ sub verify ($$)
+>         my ($filename, $hash) = @_;
+>         my ($testhash);
+> 
+> -       if (system("which md5sum > /dev/null 2>&1")) {
+> +       if (system("/usr/bin/which md5sum > /dev/null 2>&1")) {
+>                 die "This firmware requires the md5sum command - see http://www.gnu.org/software/coreutils/\n";
+>         }
+> 
+> -- 
+> 2.15.2
+> 
