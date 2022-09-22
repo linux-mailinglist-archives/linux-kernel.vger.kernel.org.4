@@ -2,175 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1450D5E66F4
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 17:23:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CB0A5E668E
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 17:15:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231756AbiIVPWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 11:22:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48104 "EHLO
+        id S231180AbiIVPPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 11:15:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231149AbiIVPWr (ORCPT
+        with ESMTP id S229676AbiIVPO5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 11:22:47 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7796BF3934;
-        Thu, 22 Sep 2022 08:22:46 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id k10so15262855lfm.4;
-        Thu, 22 Sep 2022 08:22:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
-         :subject:cc:to:from:user-agent:references:from:to:cc:subject:date;
-        bh=msyaATLtpUDfZvwVWC8ZPLCBwSZQGSHnshMVyhYGes8=;
-        b=kZi/1Hv/G80W/rHq3+4jlNbJ54Kb8VvUwidktU21hyNMMWbM6m6VZWiKKtJp06Ca1V
-         +QqzRrfhRxw+2fUvorfvCClcoayBC5qjPokuYTs+WlXYAYN+IgTfOSMl8mEr+3ojd2q3
-         mmF/dXLAV29hOkX1Bx/kKNpGUMThI/ug9eY09Dgq1Ug7ltdUIt6rNKu+mlUYxpnf7I5z
-         a5b8oD5bMz8DNzCyMCG+Vls9raG8KqF7+frfhttVgFdkg7yUkEL9TgX+af7JJUDLHx0W
-         UB9UHbF/IQdfGd8GvbeQHtAvlNB7Jwff324OgmpI0G0snephKghrxThrgqc/ESEGJ+UX
-         84YA==
+        Thu, 22 Sep 2022 11:14:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1606477EBF
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 08:14:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663859695;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Qjp7gSqru1V14obi6EFQxvOUgdoMmkmY1jvpy9DdMTw=;
+        b=YfZW4/jfWm8oROa+zKk93r/4aLcp6aNrsiIrBg0CpL5O+z6md89JpocNwmu2rRTDCSY5ce
+        tlMNDlTBg4PjNSXF+oRH6Vv0BvtSFshEBci2+p7XYLaLjlW9KwIs2H714z7ZnJ2VUIIu7I
+        Ccy1m7N0XV+gkTBYqNx0gma754IHi6k=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-445-uainvANjNPKVvfvhgcfvuA-1; Thu, 22 Sep 2022 11:14:53 -0400
+X-MC-Unique: uainvANjNPKVvfvhgcfvuA-1
+Received: by mail-qt1-f197.google.com with SMTP id j25-20020ac84c99000000b0035bb13ed4ffso6690305qtv.23
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 08:14:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
-         :subject:cc:to:from:user-agent:references:x-gm-message-state:from:to
-         :cc:subject:date;
-        bh=msyaATLtpUDfZvwVWC8ZPLCBwSZQGSHnshMVyhYGes8=;
-        b=FaNKrCM/PkLaQrYpNLQ/auJ5j+v8KQWlvqJltm4rZ1o0p35LVg1o9Zkh+7LQO8fwB8
-         DlnKra2UmB+bijDioSorgSv1LqQFuAq8ZvIjcYB8yk91yy7N0JH9IjszdsFECFeEfv+v
-         oOK5wWWJn6XDYEkR8dCQrAHnYSE8OKkGcINcSF4bFkLfTdDL0si3L7J6c2doHhpuajgO
-         /wToqO0B5zcxaNwYDzNi7eWy3p3fnl/hMrG+a9DTgBX9lpU0D1wN4ujgoBPfrkZl4ZJH
-         lGdz47zOGMrE54jZxpySvBhUr/Dl5xqeUvgeLmLchfETaG2om/s1gp3o5B/Y4DWSwVPP
-         U1AA==
-X-Gm-Message-State: ACrzQf0k+llrs2h/l3TPYvVMFleeKgo+Bfzq5wupa+r4XvXZu4k3Pq27
-        +X57c4lxJrdU0ASpbHRohMSc6u6ybHgEQg==
-X-Google-Smtp-Source: AMsMyM5uD/lskGwm00pj4BjSg1rG5nNlBcm71CQRBDo9usmvSH4VzWDnEdqkKBASaOSefSI8eWkIZg==
-X-Received: by 2002:a19:dc1a:0:b0:494:903a:1fa8 with SMTP id t26-20020a19dc1a000000b00494903a1fa8mr1456167lfg.55.1663860164315;
-        Thu, 22 Sep 2022 08:22:44 -0700 (PDT)
-Received: from razdolb (95-31-185-216.broadband.corbina.ru. [95.31.185.216])
-        by smtp.gmail.com with ESMTPSA id a7-20020a19f807000000b0048b256bb005sm991307lff.49.2022.09.22.08.22.42
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=Qjp7gSqru1V14obi6EFQxvOUgdoMmkmY1jvpy9DdMTw=;
+        b=GYzt+gvnlwqAwO/dlkjl4kFqYo8sGqVGW4LsZ6Zy6dNouHQFziMsm7KyrEb92HGuoU
+         RM8d/BkPldmfuAGdq6MHCZ1DUYEg66N4uw8cBmcTX7mMxVJvZgwzbdax5wsW3vkwPPaa
+         02KbIqixkPkttAOCl6dNpINIy89DpZd4PZG+qIShEPD9ykMBWMyy5ouIVAsVfebjFEL9
+         Be7qOHdgkySLYQ9W+bIIhZSLskWTrad5nQUYEO9iM/LplNQU6CUn6fVu+5d3cRFGEz7H
+         uszDSnrIjHj5+26VBZj2Vdjs+Tx7+MZik4yvX6V3QlX7AG6AojmELV/O87ajHtKF4I9q
+         81nQ==
+X-Gm-Message-State: ACrzQf2jMgijfggrXgzsA+LlXPRS3I/FhMWPYafRKWW/eB5WlRzEIlfx
+        +sigMMKgfOznZwkhrJ/YBcNeaYqQKyLWR54fJLExS1gOCs3vHyzfDSi2b7N8jgoSbj/eqjkQX3F
+        moU3x378eF3VEM0MNtI9IdFua
+X-Received: by 2002:a05:620a:462b:b0:6ce:7dce:82d6 with SMTP id br43-20020a05620a462b00b006ce7dce82d6mr2502598qkb.476.1663859692935;
+        Thu, 22 Sep 2022 08:14:52 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM64Y1dl6PNU7Z1b6oFSNnzd8HcoaFOTopooptpW4R0paiaMW1ijLneOM1S44vEwHsDY/ok6qQ==
+X-Received: by 2002:a05:620a:462b:b0:6ce:7dce:82d6 with SMTP id br43-20020a05620a462b00b006ce7dce82d6mr2502579qkb.476.1663859692674;
+        Thu, 22 Sep 2022 08:14:52 -0700 (PDT)
+Received: from xz-m1.local (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id c3-20020a37e103000000b006ce3fcee2bdsm3851025qkm.50.2022.09.22.08.14.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 08:22:43 -0700 (PDT)
-References: <20220911200147.375198-1-mike.rudenko@gmail.com>
- <YywwqFi+2Nah2RpY@paasikivi.fi.intel.com>
- <CAPY8ntAvos4Et4c5mAiw=6Wb4b53p2PLRX_Jw03bHckpD+e-sg@mail.gmail.com>
-User-agent: mu4e 1.9.0; emacs 28.2
-From:   Mikhail Rudenko <mike.rudenko@gmail.com>
-To:     Dave Stevenson <dave.stevenson@raspberrypi.com>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Shawn Tu <shawnx.tu@intel.com>, Jimmy Su <jimmy.su@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>, Arec Kao <arec.kao@intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Marek Vasut <marex@denx.de>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] Add Omnivision OV4689 image sensor driver
-Date:   Thu, 22 Sep 2022 18:13:27 +0300
-In-reply-to: <CAPY8ntAvos4Et4c5mAiw=6Wb4b53p2PLRX_Jw03bHckpD+e-sg@mail.gmail.com>
-Message-ID: <87a66rjuwt.fsf@gmail.com>
+        Thu, 22 Sep 2022 08:14:52 -0700 (PDT)
+Date:   Thu, 22 Sep 2022 11:14:51 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     Liu Shixin <liushixin2@huawei.com>,
+        Liu Zixian <liuzixian4@huawei.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        David Hildenbrand <david@redhat.com>
+Subject: Re: [PATCH] mm: hugetlb: fix UAF in hugetlb_handle_userfault
+Message-ID: <Yyx76wt2LYWSKLUs@xz-m1.local>
+References: <20220921083440.1267903-1-liushixin2@huawei.com>
+ <YytOYH1MSo5cNoB6@monkey>
+ <Yyuk83B4VHh+pbFp@monkey>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <Yyuk83B4VHh+pbFp@monkey>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Sep 21, 2022 at 04:57:39PM -0700, Mike Kravetz wrote:
+> On 09/21/22 10:48, Mike Kravetz wrote:
+> > On 09/21/22 16:34, Liu Shixin wrote:
+> > > The vma_lock and hugetlb_fault_mutex are dropped before handling
+> > > userfault and reacquire them again after handle_userfault(), but
+> > > reacquire the vma_lock could lead to UAF[1] due to the following
+> > > race,
+> > > 
+> > > hugetlb_fault
+> > >   hugetlb_no_page
+> > >     /*unlock vma_lock */
+> > >     hugetlb_handle_userfault
+> > >       handle_userfault
+> > >         /* unlock mm->mmap_lock*/
+> > >                                            vm_mmap_pgoff
+> > >                                              do_mmap
+> > >                                                mmap_region
+> > >                                                  munmap_vma_range
+> > >                                                    /* clean old vma */
+> > >         /* lock vma_lock again  <--- UAF */
+> > >     /* unlock vma_lock */
+> > > 
+> > > Since the vma_lock will unlock immediately after hugetlb_handle_userfault(),
+> > > let's drop the unneeded lock and unlock in hugetlb_handle_userfault() to fix
+> > > the issue.
+> > 
+> > Thank you very much!
+> > 
+> > When I saw this report, the obvious fix was to do something like what you have
+> > done below.  That looks fine with a few minor comments.
+> > 
+> > One question I have not yet answered is, "Does this same issue apply to
+> > follow_hugetlb_page()?".  I believe it does.  follow_hugetlb_page calls
+> > hugetlb_fault which could result in the fault being processed by userfaultfd.
+> > If we experience the race above, then the associated vma could no longer be
+> > valid when returning from hugetlb_fault.  follow_hugetlb_page and callers
+> > have a flag (locked) to deal with dropping mmap lock.  However, I am not sure
+> > if it is handled correctly WRT userfaultfd.  I think this needs to be answered
+> > before fixing.  And, if the follow_hugetlb_page code needs to be fixed it
+> > should be done at the same time.
+> > 
+> 
+> To at least verify this code path, I added userfaultfd handling to the gup_test
+> program in kernel selftests.
 
-Hi Dave,
+IIRC vm/userfaultfd should already have GUP tested with pthread mutexes
+(which iiuc uses futex, and futex uses GUP).
 
-On 2022-09-22 at 11:43 +01, Dave Stevenson <dave.stevenson@raspberrypi.com>=
- wrote:
+But indeed I didn't trigger any GUP paths after a quick run..  I agree we
+should have some unit test that can at least cover GUP with userfaultfd.
+I'll further check it up from vm/userfaultfd side later.
 
-> Hi Mikhail & Sakari
->
-> On Thu, 22 Sept 2022 at 10:55, Sakari Ailus
-> <sakari.ailus@linux.intel.com> wrote:
->>
->> Hi Mikhail,
->>
->> On Sun, Sep 11, 2022 at 11:01:33PM +0300, Mikhail Rudenko wrote:
->> > Hello,
->> >
->> > this series implements support for Omnivision OV4689 image
->> > sensor. The Omnivision OV4689 is a high performance, 1/3-inch, 4
->> > megapixel image sensor. Ihis chip supports high frame rate speeds up
->> > to 90 fps at 2688x1520 resolution. It is programmable through an I2C
->> > interface, and sensor output is sent via 1/2/4 lane MIPI CSI-2
->> > connection.
->> >
->> > The driver is based on Rockchip BSP kernel [1]. It implements 4-lane C=
-SI-2
->> > and single 2688x1520 @ 30 fps mode. The driver was tested on Rockchip
->> > 3399-based FriendlyElec NanoPi M4 board with MCAM400 camera module.
->> >
->> > While porting the driver, I stumbled upon two issues:
->> >
->> > (1) In the original driver, horizontal total size (HTS) was set to a
->> > value (2584) lower then the frame width (2688), resulting in negative
->> > hblank. In this driver, I increased HTS to 2688, but fps dropped from
->> > 29.88 to 28.73. What is the preferred way to handle this?
->>
->> If horizontal total size is less than the frame width, something is
->> certainly wrong there. You can't have negative horizontal blanking. Neit=
-her
->> it can be zero.
->
-> Something certainly seems odd.
->
-> To continue my thoughts from earlier in this patch set, Omnivision's
-> Product Brief [1] states:
-> The 1/3-inch OV4689 can capture full-resolution 4-megapixel high
-> definition (HD) video at 90 frames per second (fps), 1080p HD at 120
-> fps, and binned 720p HD at 180 fps
->
-> The datasheet section 2.1 states:
-> The OV4689 color image sensor is a high performance, 4 megapixel RAW
-> image sensor that delivers 2688x1520 at 90 fps using OmniBSI-2=E2=84=A2 p=
-ixel
-> technology.
->
-> So 4MP 90fps or 1080p120 should be achievable somehow.
->
-> 2688x1520 @ 90fps is 367.7MPix/s, and that tallies quite nicely with
-> table 2-9 listing the DAC PLL speed limitation of 360-378MHz. Exactly
-> how that is then converted into PCLK or SCLK is unclear.
-> Ideally you'd be able to contact an Omnivision FAE to confirm, but
-> that means you need to be buying modules directly from them or
-> otherwise have a business relationship.
-> I do note that there is an NVidia Tegra driver for OV4689 at [2]. I
-> wonder if analysis of that would reveal anything.
->
-> I have just been looking at the ov9282 driver and the timings don't
-> tally there either - configure it for 60fps and you get 30fps. The
-> TIMING_HTS register appears to be in units of 2 pixels. The default is
-> 0x2d8 (728 decimal) on a 1280x720 mode, but consider it as units of 2
-> pixels and HTS of 1456 (1280 active and hblank of 176) does match up.
-> It works in the general case too.
->
-> Looking at the OV4689 datasheet again, the default for TIMING_HTS
-> (0x380c/d) is 0x5f8 (1528 decimal) when HOUTPUT_SIZE (0x3808/9) is
-> 0x1200 (4608 decimal). Whilst there are no guarantees that default
-> register settings will stream in any sensible form, it does imply
-> TIMING_HTS is not in units of 1 pixel, and potentially 4 pixels.
-> From the Rockchip BSP driver it plainly does stream at 30 (or 29.88)
-> fps with TIMING_HTS < HOUTPUT_SIZE, so a quick test of reducing it
-> further would be worthwhile. What does the default of 0x2d8 give you
-> as a frame rate, and are the images correct?
+> When doing basic gup test on a hugetlb page in
+> a userfaultfd registered range, I hit this warning:
+> 
+> [ 6939.867796] FAULT_FLAG_ALLOW_RETRY missing 1
+> [ 6939.871503] CPU: 2 PID: 5720 Comm: gup_test Not tainted 6.0.0-rc6-next-20220921+ #72
+> [ 6939.874562] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.15.0-1.fc35 04/01/2014
+> [ 6939.877707] Call Trace:
+> [ 6939.878745]  <TASK>
+> [ 6939.879779]  dump_stack_lvl+0x6c/0x9f
+> [ 6939.881199]  handle_userfault.cold+0x14/0x1e
+> [ 6939.882830]  ? find_held_lock+0x2b/0x80
+> [ 6939.884370]  ? __mutex_unlock_slowpath+0x45/0x280
+> [ 6939.886145]  hugetlb_handle_userfault+0x90/0xf0
+> [ 6939.887936]  hugetlb_fault+0xb7e/0xda0
+> [ 6939.889409]  ? vprintk_emit+0x118/0x3a0
+> [ 6939.890903]  ? _printk+0x58/0x73
+> [ 6939.892279]  follow_hugetlb_page.cold+0x59/0x145
+> [ 6939.894116]  __get_user_pages+0x146/0x750
+> [ 6939.895580]  __gup_longterm_locked+0x3e9/0x680
+> [ 6939.897023]  ? seqcount_lockdep_reader_access.constprop.0+0xa5/0xb0
+> [ 6939.898939]  ? lockdep_hardirqs_on+0x7d/0x100
+> [ 6939.901243]  gup_test_ioctl+0x320/0x6e0
+> [ 6939.902202]  __x64_sys_ioctl+0x87/0xc0
+> [ 6939.903220]  do_syscall_64+0x38/0x90
+> [ 6939.904233]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> [ 6939.905423] RIP: 0033:0x7fbb53830f7b
+> 
+> This is because userfaultfd is expecting FAULT_FLAG_ALLOW_RETRY which is not
+> set in this path.
+> 
+> Adding John, Peter and David on Cc: as they are much more fluent in all the
+> fault and FOLL combinations and might have immediate suggestions.  It is going
+> to take me a little while to figure out:
+> 1) How to make sure we get the right flags passed to handle_userfault
 
-Thanks for sharing this! Actually, I'm going to do some experimentation
-with these registers next weekend, and post the result here.
+As David mentioned, one way is to have "locked" passed in with non-NULL.
 
-> Just some thoughts.
->   Dave
+The other way is to have FOLL_NOWAIT even if locked==NULL.
 
---
-Best regards,
-Mikhail Rudenko
+Here IIUC the trick is when the GUP caller neither wants to release the
+mmap lock, nor does it want to stop quickly (i.e. it wants to wait for the
+page fault with mmap lock held), then we'll have both locked==NULL and
+!FOLL_NOWAIT.  Userfaultfd currently doesn't think it's wise so generated
+that warning with CONFIG_DEBUG_VM.
+
+> 2) How to modify follow_hugetlb_page as userfaultfd can certainly drop
+>    mmap_lock.  So we can not assume vma still exists upon return.
+
+I think FOLL_NOWAIT flag might work if the only thing we want to do is to
+trigger handle_userfault() path.  But I'll also look into vm/userfaultfd as
+mentioned above to make sure we'll have GUP covered there too.  I'll update
+if I found anything useful there.
+
+Off-topic a bit: the whole discussion reminded me something on whether
+userfaultfd is doing correctly here.  E.g., here userfaultfd should really
+look like the case when a swap in is needed for a file.  FOLL_NOWAIT on
+swap-in will mean:
+
+#define FOLL_NOWAIT	0x20	/* if a disk transfer is needed, start the IO
+				 * and return without waiting upon it */
+
+Now userfaultfd returns VM_FAULT_RETRY immediately with FOLL_NOWAIT.  I'm
+wondering whether it should really generate the message before doing that,
+to match with the semantics of initial use of FOLL_NOWAIT on swapping.
+
+Thanks,
+
+-- 
+Peter Xu
+
