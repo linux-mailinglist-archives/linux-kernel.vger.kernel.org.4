@@ -2,103 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B2645E69B9
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 19:37:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B290F5E69BD
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 19:38:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbiIVRhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 13:37:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50386 "EHLO
+        id S231721AbiIVRiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 13:38:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231392AbiIVRhB (ORCPT
+        with ESMTP id S229641AbiIVRh6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 13:37:01 -0400
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A1EE8D9E;
-        Thu, 22 Sep 2022 10:36:59 -0700 (PDT)
-Received: from pps.filterd (m0134422.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28MGaMXu026300;
-        Thu, 22 Sep 2022 17:36:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=date : from : to : cc :
- subject : message-id : reply-to : references : content-type : in-reply-to
- : mime-version; s=pps0720;
- bh=E9lc6cW2y39I1SUIBZrNbhAdKSaA4WDnEKCo98UTRNA=;
- b=BL8AIgjsQaJ6iFhMLsEoeXYys9SKHwAf4dSzS3akbiN3XaP+WBnAM+XSl8sLCcgPaBj8
- 3MkyRsMcqaEtITeFoS1NeIa+uoN3h0bsSpnEibFfKUxQVTkbfLTfzzyhGBhq/dL0dFez
- MyG8lHXrzi1RCWZsvdllU4cISSvgAAr9RXS9eCzsOz0D4bFbaQNwdwLxLX416i0MpuHW
- NT3LtO8e9+e/nUVBOjRLyoQceFhv3AdiHjR+eRadeuZkY7H4AGjH82LuB8f48ObVRzCB
- u03al+tTIXGpxWF3hTalo/7dGRthoHzq3HtTtCQ5LVxcljrhBsJMhQLS0a+tiPvW8cpo SA== 
-Received: from p1lg14881.it.hpe.com (p1lg14881.it.hpe.com [16.230.97.202])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3jru2m0nnm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Sep 2022 17:36:40 +0000
-Received: from p1lg14885.dc01.its.hpecorp.net (unknown [10.119.18.236])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by p1lg14881.it.hpe.com (Postfix) with ESMTPS id DDE73802097;
-        Thu, 22 Sep 2022 17:36:38 +0000 (UTC)
-Received: from rfwz62 (unknown [16.231.227.36])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTPS id EAA4680764C;
-        Thu, 22 Sep 2022 17:36:37 +0000 (UTC)
-Date:   Thu, 22 Sep 2022 11:36:35 -0600
-From:   rwright@hpe.com
-To:     Vladimir Panteleev <git@vladimir.panteleev.md>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] watchdog: sp5100_tco: Add "action" module parameter
-Message-ID: <20220922173635.GJ18783@rfwz62>
-Reply-To: rwright@hpe.com
-References: <20220920092721.7686-1-git@vladimir.panteleev.md>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220920092721.7686-1-git@vladimir.panteleev.md>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-GUID: F9eC5488Np6eNV2FsM_-fW94Ne62opkY
-X-Proofpoint-ORIG-GUID: F9eC5488Np6eNV2FsM_-fW94Ne62opkY
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Thu, 22 Sep 2022 13:37:58 -0400
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60EB4EFA6B;
+        Thu, 22 Sep 2022 10:37:57 -0700 (PDT)
+Received: by mail-qt1-f171.google.com with SMTP id y2so6806265qtv.5;
+        Thu, 22 Sep 2022 10:37:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=6pAvVwOh4ZfT/Ucve1wlzLE+jEzpV7GwW5c9s60CJWs=;
+        b=kXK0A6cYEwOO+exNlZ8/rhUEnao+cVpxAwytmXszf59qJ/aPLpOIpZnlSG/3kjCCPD
+         CYZtX2J8uocflMK/DGNgI0nuAsXOsfEeOVpsTlWy1/5NzKAHtwxE/xX5xfCGL5qVhLyb
+         l3M9gD4k1fi4l2A52rVsdsozdnLvDALtsSHzxWSjeEBnZpdCScylYqWiMFw0IyQyuO/8
+         i+O/1jNnZGW3hHkRwHB2b0kB5LNFmwphvxd6M/t1hvGBZnngI5Hw7C8M6kGjq6woAdCQ
+         ZdheNC3wRW0K7rKu7aenXKKYUf1P4KZs+FQh7KXXeUOj/w/l0OBbg0ey1YpGi+KL6arS
+         VH/Q==
+X-Gm-Message-State: ACrzQf33jJnOcLhJEjRhRAEVQUQy1z7COPb4/MCP8IA1B4TXFf7J0ZTU
+        WACtIZAxXInqtrKzMiBN7TI3cPJrSdXafVKB/9k=
+X-Google-Smtp-Source: AMsMyM7oJUv/e5eLNmYRYH9UIAPBgONumGMf9ftsxHabwEuRhRQxJkefuSMppjDfDY8cdMwfaNo5SX/iiTJaraJFhKw=
+X-Received: by 2002:a05:622a:620a:b0:35c:bf9e:8748 with SMTP id
+ hj10-20020a05622a620a00b0035cbf9e8748mr3892292qtb.494.1663868276478; Thu, 22
+ Sep 2022 10:37:56 -0700 (PDT)
 MIME-Version: 1.0
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-22_12,2022-09-22_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 suspectscore=0
- bulkscore=0 malwarescore=0 clxscore=1011 priorityscore=1501
- lowpriorityscore=0 phishscore=0 mlxlogscore=999 impostorscore=0 mlxscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209220116
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220922154354.2486595-1-dianders@chromium.org> <20220922084322.RFC.1.Iaa18b24fef0c8e88f0b82502f7fa0a70565b64d2@changeid>
+In-Reply-To: <20220922084322.RFC.1.Iaa18b24fef0c8e88f0b82502f7fa0a70565b64d2@changeid>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 22 Sep 2022 19:37:45 +0200
+Message-ID: <CAJZ5v0j+5ZJ3Za5pTiPe9NCRa3CV_KpaBX833vL=WH0tsTBF1g@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/2] PM: runtime: Add pm_runtime_try_put_sync() and pm_runtime_try_get_sync()
+To:     Douglas Anderson <dianders@chromium.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 09:27:21AM +0000, Vladimir Panteleev wrote:
-> Allow configuring the "action" bit, as documented in [1].
-> 
-> Previously, the only action supported by this module was to reset the
-> system (0).  It can now be configured to power off (1) instead.
-> 
-> [1]: https://www.amd.com/system/files/TechDocs/44413.pdf
+On Thu, Sep 22, 2022 at 5:44 PM Douglas Anderson <dianders@chromium.org> wrote:
+>
+> In some cases, a caller may wish to synchronously get or put the PM
+> Runtime state of a device but the caller may also be holding a
+> resource that the runtime suspend or runtime resume of the device
+> needs. Obviously this can lead to deadlock.
+>
+> A case in point is the clock framework. While running
+> clk_disable_unused() the clock framework holds the global clock
+> "prepare" lock. The clock framework then goes through and does PM
+> Runtime actions. It should be no surprise to anyone that some devices
+> need to prepare or unprepare clocks are part of their PM Runtime
+> actions. Things generally work OK because of the "recursive" nature of
+> the global clock "prepare" lock, but if we get unlucky and the PM
+> Runtime action is happening in another task then we can end up
+> deadlocking.
+>
+> Let's add a "try" version of the synchronous PM Runtime routines.
+> This version will return -EINPROGRESS rather than waiting. To
+> implement this we'll add a new flag: RPM_TRY.
+>
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
+>
+>  drivers/base/power/runtime.c |  7 +++++--
+>  include/linux/pm_runtime.h   | 28 ++++++++++++++++++++++++++++
+>  2 files changed, 33 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
+> index 997be3ac20a7..67cc6a620b12 100644
+> --- a/drivers/base/power/runtime.c
+> +++ b/drivers/base/power/runtime.c
+> @@ -609,7 +609,7 @@ static int rpm_suspend(struct device *dev, int rpmflags)
+>         if (dev->power.runtime_status == RPM_SUSPENDING) {
+>                 DEFINE_WAIT(wait);
+>
+> -               if (rpmflags & (RPM_ASYNC | RPM_NOWAIT)) {
+> +               if (rpmflags & (RPM_ASYNC | RPM_NOWAIT | RPM_TRY)) {
+>                         retval = -EINPROGRESS;
+>                         goto out;
+>                 }
+> @@ -791,7 +791,10 @@ static int rpm_resume(struct device *dev, int rpmflags)
+>             || dev->power.runtime_status == RPM_SUSPENDING) {
+>                 DEFINE_WAIT(wait);
+>
+> -               if (rpmflags & (RPM_ASYNC | RPM_NOWAIT)) {
+> +               if (rpmflags & RPM_TRY) {
+> +                       retval = -EINPROGRESS;
 
-The referenced AMD document 44413 is over 10 years old, and I'm
-concerned when I try to line that document up against the newer versions
-that are implemented in AMD's EPYC processors, that the bit being
-manipulated as SP5100_WDT_ACTION_RESET is effectively reserved in the
-newer references, for example:
+Returning -EINPROGRESS from here may be misleading, because the device
+may not be resuming.
 
-   https://www.amd.com/system/files/TechDocs/55772-A1-PUB.zip
+Besides, I'm not sure why a new flag is needed.  What about using
+RPM_NOWAIT instead?
 
-Is Core::X86::Msr::CpuWdtCfg in the newer document is the same as
-WatchDogControl in the cited 44413.pdf? If so, then I would point out
-that bit 2 is now included in what is called, CpuWdtTimeBase where
-values 2-3H are reserved,  meaning bit 2 effectively must be zero.
 
--- 
-Randy Wright            Hewlett Packard Enterprise
-Phone: (970) 898-0998   Mail: rwright@hpe.com
+
+> +                       goto out;
+> +               } else if (rpmflags & (RPM_ASYNC | RPM_NOWAIT)) {
+>                         if (dev->power.runtime_status == RPM_SUSPENDING)
+>                                 dev->power.deferred_resume = true;
+>                         else
+> diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
+> index 0a41b2dcccad..c68baa63f0e7 100644
+> --- a/include/linux/pm_runtime.h
+> +++ b/include/linux/pm_runtime.h
+> @@ -21,6 +21,8 @@
+>  #define RPM_GET_PUT            0x04    /* Increment/decrement the
+>                                             usage_count */
+>  #define RPM_AUTO               0x08    /* Use autosuspend_delay */
+> +#define RPM_TRY                        0x10    /* Try to be synchronous but fail
+> +                                           with an error if we can't. */
+>
+>  /*
+>   * Use this for defining a set of PM operations to be used in all situations
+> @@ -425,6 +427,19 @@ static inline int pm_runtime_get_sync(struct device *dev)
+>         return __pm_runtime_resume(dev, RPM_GET_PUT);
+>  }
+>
+> +/**
+> + * pm_runtime_try_get_sync - Like pm_runtime_get_sync() but err if blocking
+> + * @dev: Target device.
+> + *
+> + * This function works just like pm_runtime_get_sync() except that if the
+> + * device in question is currently in the process of suspending or resuming
+> + * that it will return with -EINPROGRESS instead of blocking.
+> + */
+> +static inline int pm_runtime_try_get_sync(struct device *dev)
+> +{
+> +       return __pm_runtime_resume(dev, RPM_GET_PUT | RPM_TRY);
+> +}
+> +
+>  /**
+>   * pm_runtime_resume_and_get - Bump up usage counter of a device and resume it.
+>   * @dev: Target device.
+> @@ -489,6 +504,19 @@ static inline int pm_runtime_put_sync(struct device *dev)
+>         return __pm_runtime_idle(dev, RPM_GET_PUT);
+>  }
+>
+> +/**
+> + * pm_runtime_try_put_sync - Like pm_runtime_put_sync() but err if blocking
+> + * @dev: Target device.
+> + *
+> + * This function works just like pm_runtime_put_sync() except that if the
+> + * device in question is currently in the process of suspending that it will
+> + * return with -EINPROGRESS instead of blocking.
+> + */
+> +static inline int pm_runtime_try_put_sync(struct device *dev)
+> +{
+> +       return __pm_runtime_idle(dev, RPM_GET_PUT | RPM_TRY);
+> +}
+> +
+>  /**
+>   * pm_runtime_put_sync_suspend - Drop device usage counter and suspend if 0.
+>   * @dev: Target device.
+> --
+> 2.37.3.968.ga6b4b080e4-goog
+>
