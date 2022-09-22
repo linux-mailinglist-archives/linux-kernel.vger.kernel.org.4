@@ -2,98 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C0BA5E65BF
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 16:34:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB3BC5E65C0
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 16:34:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231911AbiIVOeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 10:34:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57278 "EHLO
+        id S231961AbiIVOeX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 10:34:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231514AbiIVOdw (ORCPT
+        with ESMTP id S231745AbiIVOd4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 10:33:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E0BF5099;
-        Thu, 22 Sep 2022 07:33:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 841E1B837D2;
-        Thu, 22 Sep 2022 14:33:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF6D5C433C1;
-        Thu, 22 Sep 2022 14:33:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663857228;
-        bh=sqCQwtDVxfkOzLY4nfTpRMTNCFqteOOYmhW/5ec8LJs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sz5zKyo5DHM0u8L95KThgscgfTQnjeJzTdglMX22Oi91oMQIBf9f9a9yubR8iqW4+
-         X/dYMsw7T1UUMKADgJGBtEs7yQ9fvlMTgwojkrVdBqbR4/dUs6Ur4gtbiwB++BRrx/
-         YKAjna9JJkBBqvMZewaiOjs87zsM0o8VuXVsPmzo=
-Date:   Thu, 22 Sep 2022 16:33:45 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Subject: Re: [PATCH v1 1/1] serial: 8250_dma: Convert to use
- uart_xmit_advance()
-Message-ID: <YyxySWYgJ7ceavcM@kroah.com>
-References: <20220909091102.58941-1-andriy.shevchenko@linux.intel.com>
- <Yyxs8o7tB6BVS0Kt@kroah.com>
- <1ae6a32c-9f3d-ee56-a26a-7a90b4ee2bfe@linux.intel.com>
+        Thu, 22 Sep 2022 10:33:56 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8092DF2740
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 07:33:55 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id a3so14981592lfk.9
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 07:33:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=JxU3uKVUWz+9uazTKxzXKSZw/vdNYr+DWen17yUI8Jk=;
+        b=UzRNr1HH172T/6Hta/GANHerNgkfJHmBMe9uw+ywAaTpTi2qPayhfmmRTtUZNWBxdS
+         +qt1hjin1V8oFIv3vkfFXaeAon/rqqNm9dB8ANbt+O+/6vW0BC/hWtKV/iJnxZ5AP9g1
+         jxC1QSjg7FIqU+lJlPq6gJXdz0VKO5XdnAqoBJHIjI81/4y0326iUeioV0TljBBlqGkD
+         Dh4/n3phj6QmamyVgATL9y0RC6bpZBJFcCDdf+sRWEnvTawA4HqwRlI6dCOLD2K5oCHe
+         iQlN5ArVdox5uwSC/vqFm3k8AsKFpraHMHrtzAs7cDm26O1DIAhRZPg467B5pMlsTXWM
+         +m1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=JxU3uKVUWz+9uazTKxzXKSZw/vdNYr+DWen17yUI8Jk=;
+        b=Hh8iN0B6pbBgiyShI+RK3l4QVoeYP+SGUJRlf2Dp/9B4j5ugp7x2EgfdPMTEMwcWaQ
+         CwFyZHUZKoWFk1bfYXKwQnWWFcxvoBYf1w/eW57y91n5VlDqtE5Vkjp09Y9TLzC8Egx9
+         DYZCwVBjgRevlakRCliWqT5xVib6m7CABQnT3CTzq5w7nVApCVKUHt41pnmDOZuoEkcO
+         17wz4dZqNyX91DoADlV/94XH7rqKj7xAOhxx4c68xtuN55Krl9nKCeO6xaHeO/7aaIvU
+         vK35VN5KvN9s3sgi1UBWMdIauvcXWlv8y/EIvQlE8JGZkg/9F2KoGgQCSfAcgU1b/g9i
+         Cm5g==
+X-Gm-Message-State: ACrzQf2SifK3Hg2gT0D0NCvhPIB5BUS6DBVPCXCPzdE0eyxQ3X8kYEVQ
+        N/btfP1sYS0f1RSYHMk3WQrY8A==
+X-Google-Smtp-Source: AMsMyM4NGpSqJPgoG+mfWgdzhFHm14FMjK4eGJDPejgN+ufox6PMD6+NsIo0h3SwZCrkBLk3uRDaJg==
+X-Received: by 2002:a05:6512:409:b0:49a:eadb:5ec9 with SMTP id u9-20020a056512040900b0049aeadb5ec9mr1285259lfk.253.1663857233608;
+        Thu, 22 Sep 2022 07:33:53 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id d4-20020a05651233c400b004994c190581sm960728lfg.123.2022.09.22.07.33.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Sep 2022 07:33:53 -0700 (PDT)
+Message-ID: <f3f740c7-1463-28fa-bd64-4da6612e3f09@linaro.org>
+Date:   Thu, 22 Sep 2022 17:33:52 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1ae6a32c-9f3d-ee56-a26a-7a90b4ee2bfe@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 04/17] phy: qcom-qmp-usb: drop unused type from config
+Content-Language: en-GB
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20220920073826.20811-1-johan+linaro@kernel.org>
+ <20220920073826.20811-5-johan+linaro@kernel.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220920073826.20811-5-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 05:24:55PM +0300, Ilpo Järvinen wrote:
-> On Thu, 22 Sep 2022, Greg Kroah-Hartman wrote:
+On 20/09/2022 10:38, Johan Hovold wrote:
+> The configuration PHY type is no longer needed since the QMP driver
+> split so drop it from the configuration and suspend callbacks.
 > 
-> > On Fri, Sep 09, 2022 at 12:11:02PM +0300, Andy Shevchenko wrote:
-> > > uart_xmit_advance() provides a common way on how to advance
-> > > the Tx queue. Use it for the sake of unification and robustness.
-> > > 
-> > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > > ---
-> > >  drivers/tty/serial/8250/8250_dma.c | 4 +---
-> > >  1 file changed, 1 insertion(+), 3 deletions(-)
-> > > 
-> > > diff --git a/drivers/tty/serial/8250/8250_dma.c b/drivers/tty/serial/8250/8250_dma.c
-> > > index d99020fd3427..b85c82616e8c 100644
-> > > --- a/drivers/tty/serial/8250/8250_dma.c
-> > > +++ b/drivers/tty/serial/8250/8250_dma.c
-> > > @@ -26,9 +26,7 @@ static void __dma_tx_complete(void *param)
-> > >  
-> > >  	dma->tx_running = 0;
-> > >  
-> > > -	xmit->tail += dma->tx_size;
-> > > -	xmit->tail &= UART_XMIT_SIZE - 1;
-> > > -	p->port.icount.tx += dma->tx_size;
-> > > +	uart_xmit_advance(&p->port, dma->tx_size);
-> > >  
-> > >  	if (uart_circ_chars_pending(xmit) < WAKEUP_CHARS)
-> > >  		uart_write_wakeup(&p->port);
-> > > -- 
-> > > 2.35.1
-> > > 
-> > 
-> > Breaks the build :(
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>   drivers/phy/qualcomm/phy-qcom-qmp-usb.c | 26 -------------------------
+>   1 file changed, 26 deletions(-)
 > 
-> I'd guess it's because uart_xmit_advance() is current only in tty-linus, 
-> not in tty-next.
 
-Probably, can someone resend this when 6.1-rc1 is out?
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-thanks,
+-- 
+With best wishes
+Dmitry
 
-greg k-h
