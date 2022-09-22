@@ -2,187 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 809595E6386
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 15:25:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F8C95E6387
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 15:26:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231153AbiIVNZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 09:25:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50324 "EHLO
+        id S231392AbiIVNZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 09:25:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230051AbiIVNZn (ORCPT
+        with ESMTP id S231228AbiIVNZx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 09:25:43 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16BFCED5D6
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 06:25:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1663853141; x=1695389141;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cidiMQOO2/CtvRETpS3xh6wH67slG7ERsjd5cZuGqpU=;
-  b=LDkssFbz87uTP5w6fwVgqXWWUnxqbBB+OnWDdPtfEUOiVUdAODhBuDzm
-   /jZL6GcHSS6yBldqjTZyC39y4a4DfCX7vvGW5uTrLshQ8rhSygtplyWu4
-   0Nb5A0/cXrAvUgiy/Ap2vRYbEyfU2gaYpsl7lr3GZ+ho3gGyLELyhVLFL
-   35Vl8cXUDb73CRz7V42KJyXRdyjBncXho2ikzCedhNaRLDzAdxN1ZNr6b
-   GtRzOI494aCa5U8+IbVqaPOEhCCRSIAmtSScIyMTG76GL+8FqjX7tt46A
-   sd0+iLLn8TEpBgqyUFHEQkB/DBvp6mRTTmyviEcx1NMaLZmelOP6bt8Fb
-   A==;
-X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
-   d="scan'208";a="181533061"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 Sep 2022 06:25:40 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Thu, 22 Sep 2022 06:25:39 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
- Transport; Thu, 22 Sep 2022 06:25:37 -0700
-Date:   Thu, 22 Sep 2022 14:25:15 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Samuel Holland <samuel@sholland.org>
-CC:     Palmer Dabbelt <palmer@dabbelt.com>,
-        <linux-riscv@lists.infradead.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@rivosinc.com>, Dao Lu <daolu@rivosinc.com>,
-        Guo Ren <guoren@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] riscv: Fix build with CONFIG_CC_OPTIMIZE_FOR_SIZE=y
-Message-ID: <YyxiO0OHvloqJEK6@wendy>
-References: <20220922060958.44203-1-samuel@sholland.org>
+        Thu, 22 Sep 2022 09:25:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E00EED5F4
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 06:25:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E1765633E2
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 13:25:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93862C43470;
+        Thu, 22 Sep 2022 13:25:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663853150;
+        bh=dzNyds4GT/pUOPUdrgeZ/5PR+45cCizJBsKcIdHDvgA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qX+hn2QN6R82tAOdEhP+bRamuCodQekl+DKlnqVCF+tKWutNqWfKGEutp8P7wdZrt
+         lTMyJX0TGZ4L8qpqpfp9+O+TtWw9ZNhy3EtsIKkrQBZgz3KrJN6Gie4lHmPOixOIiy
+         JGQy9TosqPRm9ktrlQcgQxuwuqOKUVsK9Z25NMELYeHkl9VwIOMcxzpZ0uwjZJwtUx
+         NeBHC1aen5whFJ3ouo7Bys8K1AwMEfJF1uddITAUroHE39OO+g1pOkspXD32OyQ6uj
+         j4+H464lMrdVjyRDKjpqHtPgqIFsxmC4eszyZ8djI+X9pN26BLuhnqFd50tGwhi95D
+         cOPoyV0yCSwBg==
+Date:   Thu, 22 Sep 2022 14:25:44 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Shuai Xue <xueshuai@linux.alibaba.com>
+Cc:     Jonathan.Cameron@Huawei.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, rdunlap@infradead.org,
+        robin.murphy@arm.com, mark.rutland@arm.com,
+        baolin.wang@linux.alibaba.com, zhuo.song@linux.alibaba.com
+Subject: Re: [PATCH v1 1/3] docs: perf: Add description for Synopsys
+ DesignWare PCIe PMU driver
+Message-ID: <20220922132543.GA12095@willie-the-truck>
+References: <20220917121036.14864-1-xueshuai@linux.alibaba.com>
+ <20220917121036.14864-2-xueshuai@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220922060958.44203-1-samuel@sholland.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220917121036.14864-2-xueshuai@linux.alibaba.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 01:09:58AM -0500, Samuel Holland wrote:
-> commit 8eb060e10185 ("arch/riscv: add Zihintpause support") broke
-> building with CONFIG_CC_OPTIMIZE_FOR_SIZE enabled (gcc 11.1.0):
-
-clang-15 chucks a fit too..
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-
+On Sat, Sep 17, 2022 at 08:10:34PM +0800, Shuai Xue wrote:
+> Alibaba's T-Head Yitan 710 SoC is built on Synopsys' widely deployed and
+> silicon-proven DesignWare Core PCIe controller which implements PMU for
+> performance and functional debugging to facilitate system maintenance.
+> Document it to provide guidance on how to use it.
 > 
->   CC      arch/riscv/kernel/vdso/vgettimeofday.o
-> In file included from <command-line>:
-> ./arch/riscv/include/asm/jump_label.h: In function 'cpu_relax':
-> ././include/linux/compiler_types.h:285:33: warning: 'asm' operand 0 probably does not match constraints
->   285 | #define asm_volatile_goto(x...) asm goto(x)
->       |                                 ^~~
-> ./arch/riscv/include/asm/jump_label.h:41:9: note: in expansion of macro 'asm_volatile_goto'
->    41 |         asm_volatile_goto(
->       |         ^~~~~~~~~~~~~~~~~
-> ././include/linux/compiler_types.h:285:33: error: impossible constraint in 'asm'
->   285 | #define asm_volatile_goto(x...) asm goto(x)
->       |                                 ^~~
-> ./arch/riscv/include/asm/jump_label.h:41:9: note: in expansion of macro 'asm_volatile_goto'
->    41 |         asm_volatile_goto(
->       |         ^~~~~~~~~~~~~~~~~
-> make[1]: *** [scripts/Makefile.build:249: arch/riscv/kernel/vdso/vgettimeofday.o] Error 1
-> make: *** [arch/riscv/Makefile:128: vdso_prepare] Error 2
-> 
-> Having a static branch in cpu_relax() is problematic because that
-> function is widely inlined, including in some quite complex functions
-> like in the VDSO. A quick measurement shows this static branch is
-> responsible by itself for around 40% of the jump table.
-> 
-> Drop the static branch, which ends up being the same number of
-> instructions anyway. If Zihintpause is supported, we trade the nop from
-> the static branch for a div. If Zihintpause is unsupported, we trade the
-> jump from the static branch for (what gets interpreted as) a nop.
-> 
-> Fixes: 8eb060e10185 ("arch/riscv: add Zihintpause support")
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
 > ---
+>  .../admin-guide/perf/dwc_pcie_pmu.rst         | 61 +++++++++++++++++++
+>  Documentation/admin-guide/perf/index.rst      |  1 +
+>  2 files changed, 62 insertions(+)
+>  create mode 100644 Documentation/admin-guide/perf/dwc_pcie_pmu.rst
 > 
->  arch/riscv/include/asm/hwcap.h          |  3 ---
->  arch/riscv/include/asm/vdso/processor.h | 25 ++++++++++---------------
->  2 files changed, 10 insertions(+), 18 deletions(-)
-> 
-> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
-> index 6f59ec64175e..b21d46e68386 100644
-> --- a/arch/riscv/include/asm/hwcap.h
-> +++ b/arch/riscv/include/asm/hwcap.h
-> @@ -68,7 +68,6 @@ enum riscv_isa_ext_id {
->   */
->  enum riscv_isa_ext_key {
->  	RISCV_ISA_EXT_KEY_FPU,		/* For 'F' and 'D' */
-> -	RISCV_ISA_EXT_KEY_ZIHINTPAUSE,
->  	RISCV_ISA_EXT_KEY_MAX,
->  };
->  
-> @@ -88,8 +87,6 @@ static __always_inline int riscv_isa_ext2key(int num)
->  		return RISCV_ISA_EXT_KEY_FPU;
->  	case RISCV_ISA_EXT_d:
->  		return RISCV_ISA_EXT_KEY_FPU;
-> -	case RISCV_ISA_EXT_ZIHINTPAUSE:
-> -		return RISCV_ISA_EXT_KEY_ZIHINTPAUSE;
->  	default:
->  		return -EINVAL;
->  	}
-> diff --git a/arch/riscv/include/asm/vdso/processor.h b/arch/riscv/include/asm/vdso/processor.h
-> index 1e4f8b4aef79..789bdb8211a2 100644
-> --- a/arch/riscv/include/asm/vdso/processor.h
-> +++ b/arch/riscv/include/asm/vdso/processor.h
-> @@ -4,30 +4,25 @@
->  
->  #ifndef __ASSEMBLY__
->  
-> -#include <linux/jump_label.h>
->  #include <asm/barrier.h>
-> -#include <asm/hwcap.h>
->  
->  static inline void cpu_relax(void)
->  {
-> -	if (!static_branch_likely(&riscv_isa_ext_keys[RISCV_ISA_EXT_KEY_ZIHINTPAUSE])) {
->  #ifdef __riscv_muldiv
-> -		int dummy;
-> -		/* In lieu of a halt instruction, induce a long-latency stall. */
-> -		__asm__ __volatile__ ("div %0, %0, zero" : "=r" (dummy));
-> +	int dummy;
-> +	/* In lieu of a halt instruction, induce a long-latency stall. */
-> +	__asm__ __volatile__ ("div %0, %0, zero" : "=r" (dummy));
->  #endif
-> -	} else {
-> -		/*
-> -		 * Reduce instruction retirement.
-> -		 * This assumes the PC changes.
-> -		 */
-> +	/*
-> +	 * Reduce instruction retirement.
-> +	 * This assumes the PC changes.
-> +	 */
->  #ifdef __riscv_zihintpause
-> -		__asm__ __volatile__ ("pause");
-> +	__asm__ __volatile__ ("pause");
->  #else
-> -		/* Encoding of the pause instruction */
-> -		__asm__ __volatile__ (".4byte 0x100000F");
-> +	/* Encoding of the pause instruction */
-> +	__asm__ __volatile__ (".4byte 0x100000F");
->  #endif
-> -	}
->  	barrier();
->  }
->  
-> -- 
-> 2.35.1
-> 
-> 
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+> diff --git a/Documentation/admin-guide/perf/dwc_pcie_pmu.rst b/Documentation/admin-guide/perf/dwc_pcie_pmu.rst
+> new file mode 100644
+> index 000000000000..fbcbf10b23b7
+> --- /dev/null
+> +++ b/Documentation/admin-guide/perf/dwc_pcie_pmu.rst
+> @@ -0,0 +1,61 @@
+> +======================================================================
+> +Synopsys DesignWare Cores (DWC) PCIe Performance Monitoring Unit (PMU)
+> +======================================================================
+> +
+> +DesignWare Cores (DWC) PCIe PMU
+> +===============================
+> +
+> +To facilitate collection of statistics, Synopsys DesignWare Cores PCIe
+> +controller provides the following two features:
+> +
+> +- Time Based Analysis (RX/TX data throughput and time spent in each
+> +  low-power LTSSM state)
+> +- Lane Event counters (Error and Non-Error for lanes)
+> +
+> +The PMU is not a PCIe Root Complex integrated End Point (RCiEP) device but
+> +only register counters provided by each PCIe Root Port.
+> +
+> +Time Based Analysis
+> +-------------------
+> +
+> +Using this feature you can obtain information regarding RX/TX data
+> +throughput and time spent in each low-power LTSSM state by the controller.
+> +
+> +The counters are 64-bit width and measure data in two categories,
+> +
+> +- percentage of time does the controller stay in LTSSM state in a
+> +  configurable duration. The measurement range of each Event in Group#0.
+> +- amount of data processed (Units of 16 bytes). The measurement range of
+> +  each Event in Group#1.
+> +
+> +Lane Event counters
+> +-------------------
+> +
+> +Using this feature you can obtain Error and Non-Error information in
+> +specific lane by the controller.
+> +
+> +The counters are 32-bit width and the measured event is select by:
+> +
+> +- Group i
+> +- Event j within the Group i
+> +- and Lank k
+> +
+> +Some of the event counters only exist for specific configurations.
+> +
+> +DesignWare Cores (DWC) PCIe PMU Driver
+> +=======================================
+> +
+> +This driver add PMU devices for each PCIe Root Port. And the PMU device is
+> +named based the BDF of Root Port. For example,
+> +
+> +    10:00.0 PCI bridge: Device 1ded:8000 (rev 01)
+> +
+> +the PMU device name for this Root Port is pcie_bdf_100000.
+> +
+> +Example usage of counting PCIe RX TLP data payload (Units of 16 bytes)::
+> +
+> +    $# perf stat -a -e pcie_bdf_200/Rx_PCIe_TLP_Data_Payload/
+
+Do you really need to expose a separate PMU instance to userspace for each
+BDF? I think it would be much cleaner if you could follow the approach used
+by hisilicon/hisi_pcie_pmu.c and hide these details in the driver, exposing
+a `bdf=' selector to userspace instead.
+
+Will
