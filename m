@@ -2,160 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC2EC5E5A05
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 06:04:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B4435E5A06
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 06:05:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230236AbiIVEEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 00:04:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43260 "EHLO
+        id S231129AbiIVEEy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 00:04:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230386AbiIVEEC (ORCPT
+        with ESMTP id S230081AbiIVEEE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 00:04:02 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2106.outbound.protection.outlook.com [40.107.223.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D72C3AF48E;
-        Wed, 21 Sep 2022 21:02:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Rgk1kyYT5AY3V+soItT8SKhc6zIX5HI8wDgUXcwfv8SxbZ3Gwofq+PdOuPVYWGybNc1nJmxIRKISd6z1UaSIUvpVuCVrU31ULzbgfw6PXq/DRTvH0lDEAnIoZDlVjtPX9PC305SDN8rlxiXdrHjmjsv2/j3KZ09Bjbt2MF+uwb6Nk2rGgT6FHRoItasmd8CX6S4lB1CfgFB65jBCoz4OI+0hacxDSljYwy/8P/Po5nMiCl1CzpAUDlF/wl215RFdcPJdldijxOZ1FwAra+CrOH125E5PomUdLFKstttoygjPZKtZEcApI9n7Tj1pZD5Nv0CmKiq0Bpn6RWiu+SHlYQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2/n8RK0v98+d7c0SY9gkcOV6pbpiXqD6OzHjwmVs/J4=;
- b=UURB3USGYVnggrBmiBjuiI4UvU5Rqd/1Y9EeguI6oLO6MQAmNQ3u/XLwX5PRP7T1+/vQCeEFFU0tm1fvG39eIzTzjlP2oAj1ss3p8+SaUyXEzC3kgQzmEkL4f+HRL3UYM5iciFpwfHB0ebIMS5wI98irlhcCSy9tl6/ew5qx91L5xZiF8lDONivCsnbH/MCGJRruXpShST3WBIE82xBYZ7yrytCAeVmcAMvJODpzwJPr7ENxnnYQ0LDbQaSJGZpHvD/OVCGlh5yyzCVxdcQJVb9P3xbb72WlTVBt2MhYHITnIpu/flwYkdqIlIqH3zvBCKDu5y/owt/k2Vv3mlir1A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=in-advantage.com; dmarc=pass action=none
- header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
+        Thu, 22 Sep 2022 00:04:04 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11376AF4A4;
+        Wed, 21 Sep 2022 21:02:38 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id f23so7619988plr.6;
+        Wed, 21 Sep 2022 21:02:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2/n8RK0v98+d7c0SY9gkcOV6pbpiXqD6OzHjwmVs/J4=;
- b=aeCWbU9fppzm/Wqu181W0TS5U/7buWr/3Ptre51qp+cwmrRC//KB5CFpwYLP21anRo+w8mvUHtBbZ+9O8rIsi+9yjMCnrJ+spkaqh4jPcU/qrteALqKZgPSA0TmZToxn3rExvmS6fBdPoWwAJec3puR6sYXButVVItPOXUrViDY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=in-advantage.com;
-Received: from DM5PR1001MB2345.namprd10.prod.outlook.com (2603:10b6:4:2d::31)
- by SA2PR10MB4412.namprd10.prod.outlook.com (2603:10b6:806:117::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.16; Thu, 22 Sep
- 2022 04:01:41 +0000
-Received: from DM5PR1001MB2345.namprd10.prod.outlook.com
- ([fe80::b594:405e:50f0:468e]) by DM5PR1001MB2345.namprd10.prod.outlook.com
- ([fe80::b594:405e:50f0:468e%5]) with mapi id 15.20.5654.014; Thu, 22 Sep 2022
- 04:01:41 +0000
-From:   Colin Foster <colin.foster@in-advantage.com>
-To:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        UNGLinuxDriver@microchip.com,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Lee Jones <lee@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>
-Subject: [PATCH v2 net-next 14/14] mfd: ocelot: add external ocelot switch control
-Date:   Wed, 21 Sep 2022 21:01:02 -0700
-Message-Id: <20220922040102.1554459-15-colin.foster@in-advantage.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220922040102.1554459-1-colin.foster@in-advantage.com>
-References: <20220922040102.1554459-1-colin.foster@in-advantage.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BYAPR05CA0009.namprd05.prod.outlook.com
- (2603:10b6:a03:c0::22) To DM5PR1001MB2345.namprd10.prod.outlook.com
- (2603:10b6:4:2d::31)
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=UGQQRO32II6TD/xGERxjlGRI57xmZxRC4vM9QR9B5uI=;
+        b=W1c2w0lg/ZJ671DcHDRUumlwKGkq9/GSXT331/7RySB5hye8SSGSWHtrfBv/X5rR/Y
+         uSc27k1qSXbXw3q3/exwJfOVncI3LaCb+H6mqYPz/bGc8YLdNwWJ1vTaitaNbzF04vXQ
+         M0zONt88ZzGfd0RKVqLOxXf9Qknl/2BKutz+88rnTkxOo8HJtkdcAWyhxKOXDqPUY8LY
+         YUyDU4aDGihgFxTqbL3oniy+q3TqG6dCNzRmtOzLjyQSsCpcR+p7sIQH3PYmjThoZ29W
+         4MylO5qEYdJ/ZplMI7B9vBCDCGairixzNllFPckTIi9Z6y94GhTWLlAM0nDUMFcnZ5BH
+         8r8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=UGQQRO32II6TD/xGERxjlGRI57xmZxRC4vM9QR9B5uI=;
+        b=BmQsj93BrHx1cQb3BI57kCBBU4eeJ0BpHQ5GuJh04lCV5sLL95BUbuVoCRCjZuA12s
+         d7TRt5GA9GnaDF5Yf1A5DoLkl3CbZFWcgipFBOPRzqxlnvtusEjhAZj2EV8k8fxvq7ZJ
+         HhRdDIuZJsecLV6OS0pyvpKHR7YJnfwl8UTEWFTphZQu8pQSKAImA29vm1PGtqLUoWiE
+         F0npbg/vcfm/CLxv/edyCXH/CYk5sVJHxy7kagX4JE6cQmjYpSnuN09lf1nPDNs6EqCe
+         XlCNI4bYFnAdR4gtpynKlVKboSK2EkBlpoIw2rZKL7e6IkaEX/2UJD6kItxtm+BdvDtN
+         vSeQ==
+X-Gm-Message-State: ACrzQf1LzZmj+qG64Hbq2E96EdOV+1Gjs5Ib7Nv/gqrGnoJ5gcO0IuSz
+        ypPGWTX9R327i3MYOhnXfOg=
+X-Google-Smtp-Source: AMsMyM4miMb2cX9pcNVnCXoWkK996EOIDIOtjJ/lQQLwLEeFzlVjRUC+lWoBo56kfJAo6qLIUZ0MzA==
+X-Received: by 2002:a17:90b:1c09:b0:203:af4d:ed6 with SMTP id oc9-20020a17090b1c0900b00203af4d0ed6mr12684679pjb.243.1663819348802;
+        Wed, 21 Sep 2022 21:02:28 -0700 (PDT)
+Received: from [192.168.43.80] (subs28-116-206-12-54.three.co.id. [116.206.12.54])
+        by smtp.gmail.com with ESMTPSA id p63-20020a625b42000000b0053e80618a23sm3080737pfb.34.2022.09.21.21.02.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Sep 2022 21:02:27 -0700 (PDT)
+Message-ID: <445878e0-d8c9-558f-73b7-8d39fa1a5cde@gmail.com>
+Date:   Thu, 22 Sep 2022 11:02:21 +0700
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM5PR1001MB2345:EE_|SA2PR10MB4412:EE_
-X-MS-Office365-Filtering-Correlation-Id: a731b424-cf7e-49ff-2967-08da9c4f280d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: UOi699KGPr9jzPD+alRqSYZcxLiWuloNJS+2lZWuBitU/xYMF2ac2Ys3lkEMsWYWCBT08rjba9fdgUQMORos+lYvEumpoGD+CzrLKLmmHMg3ZnODYYnSgLXDSghnfhqWe+HxkHrqpdG2elAB2Ws8KDt2dXnBGJJ50WhNVcaGlLpH/DLmFvxAWANpjzlKcZiOx4gpa5F1Pqh/J0T3jJCPWGcK4j6t84rhNdiUc96yrqzIej5VV4sOGuikfU7qR1Z9IJncPRaSrJgDaY5F8pLntD/u70UQA3w1rfSX+z7MQaTjHGdVVpm5gwV2l6JYi1wKrRUgktARIGo814G5gWicmGkbN2UAcaoqEwSqxvDwjT1YRcNLiqqj4NHQqeM3OoQ0/wZCGyjrEzvp0Zckv2BwjgZVdeL6e+tst3WigMrRiyiqL9nutxY7Z9a/pYzc6Uvp+AcajccdUjAZT+0ZDwDnRnxG218GqqHt+J/R+RF0uw9YhnFZpA+8jcKAEXm0Vl8nC/qZvPSJ5mWQ8EABUl/h3d1cgfxjLnSVflDLuDm752A3AfbHHMujWPg9F7H4rI9OcRO8kMpfV8ApmDqIjmYFqmEedEq9I/8oy2eGq5d2O0ZYixfyQHql5OJO1hS7dj5Rtt3wz/1fxOdYUojOgp9rJo9nvCnhLletFbS+5z+fPxGy1PxAdM73Vp70lIeneeObOpXu6QL6OeihJtqOfC7TF3MpTb2guiqJQNW8KnvYwbAD2Hik9HiABFhUcdsq/FbRqOmdpSXV+7J5r/VKIJBKdw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR1001MB2345.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(376002)(396003)(346002)(136003)(39830400003)(451199015)(36756003)(6506007)(6666004)(52116002)(6512007)(26005)(86362001)(66476007)(66556008)(54906003)(4326008)(66946007)(41300700001)(8676002)(6486002)(38350700002)(38100700002)(2616005)(186003)(478600001)(1076003)(2906002)(316002)(5660300002)(7416002)(44832011)(4744005)(8936002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?nwNkTbTtJC/bzKYQpcVlFaVbK0/3ZmfwHeSvFghemCY6jXC9lq514Zd48UG0?=
- =?us-ascii?Q?tvrrBwA0jFdO26I2nQNZZcT5RX3zpscC6zIWDXunWQYDe7tWrhRSxdP4lfMR?=
- =?us-ascii?Q?kHqOV4G1iOOVDKqCsIz4cjyoKjSU+EBOoSHAW7EQxxm3ix/LUoDJ+VyKvgFc?=
- =?us-ascii?Q?4H+FL5rPRxQsW8rMgCLvtnS/uuFeD83meqCr16BsFyPZtJia0WN1aai3cE54?=
- =?us-ascii?Q?JeuJqOcRsLTzcrUgm9AgNepCG68Usg17+5cp8zxIG+rH3wRJT8EvsMSOxXVC?=
- =?us-ascii?Q?18YpAjiy5OaHcviTl9xnNP6u0YY7+fvwmRxjAgnpQXngbxJiYnzRVlPGqPjC?=
- =?us-ascii?Q?BjtWlTTfuNAutWcfws89KExtAC3xRyzb4y3WO9BliV7gS1o4GtcgoC1XcCio?=
- =?us-ascii?Q?gyCKzdppg1pomo54XHE9ibgp0AhglptK08qI2EaXewmtF7jusrmOpa1EYneP?=
- =?us-ascii?Q?7y5PQrggb6Wlpy7CpNc/XIVstlrfQRV6ZfEzclPBpz0JJeH/SyX9WTWIdHlD?=
- =?us-ascii?Q?O4EEn0aRTcOqs/bpty1uhynzWh2m2HomWtpqsurJ5XJ1xcTW0EcnwKyF+pMi?=
- =?us-ascii?Q?tK8NIQvLCIJqXASBYUsXU4T/foHg45O+T30J3guqC9dhP55FIpbCrQMf+xCh?=
- =?us-ascii?Q?SEbBSnqMxTi/tG4Q8Z2geEKOSk6nJjJehsyCQXehZ5avoflbjf4O6YmUtaLg?=
- =?us-ascii?Q?gcEMZg9Dd0x9APLzjd2G5hRY5TXlbNXojSiv27dI27ZvngcdV1rsHy/4RQex?=
- =?us-ascii?Q?iNPTe0on4wCmosj9qN52vZ+IchWfoxyKTZp3k1013qdJQbQDOwtPQHO+ToUy?=
- =?us-ascii?Q?XpxdsKET6sPxLbY7f6yk7VpLWF2NEwzbLP3ZIQrpEU4syYuGqgbj5iUnBpz8?=
- =?us-ascii?Q?32LVDKEcvrxzbqjGVbXFIhnWb9Btt1AXZeJQamrI4IbsjObrCoJX92Boys5G?=
- =?us-ascii?Q?OLYRCXkBQvpXOZ/fmGdGBuNjP2e9dOSz19ab0aPRDebp0vpBxWWa8aSyo20x?=
- =?us-ascii?Q?nwr5yVoo9btZTA1lmz89NicpMnJGnUrjvrah1oCQeG1iXtQedo8dxK1l+T0P?=
- =?us-ascii?Q?tRRgTaCCKLh7f1DiaWGsrAAeOIDc2IhtUSyiSk0fzeU2yJGDz1B4gajH1G5j?=
- =?us-ascii?Q?MOwx1Ymumw5x8SIDkrv0uaGzvzU7DtGaNvVkWORzuGZ2CACiAV3p8VABiJc9?=
- =?us-ascii?Q?Gp79UdbKfCsoriS3BG/L2ifO0ebHYCPZ0BzpDveoFJx9/wv6rnoA+zib50re?=
- =?us-ascii?Q?rMkpyGfXsH0eAJsy2SrpkO66DzoL/rrsmId0eDcNvLMOeyCTUuk0TGu1jP+C?=
- =?us-ascii?Q?RgsbxQPrH2wdYsru+5IXteJUlx4fCnhNspGCA+DWX9kyxbRjWqu2BaP/f6cq?=
- =?us-ascii?Q?TSB8PYA5IUMM260dWFde+Oy7vstW2voUSAyPax+AeAo8AXfmrxr44/6+RYfP?=
- =?us-ascii?Q?dTpffIBqEVfYaD3htGMkybiHkHAgIauJ7SirjS43Bp8+P5uACRgL0JlgNBQ1?=
- =?us-ascii?Q?8VuF8w2xWT88ftm6UOR3c/IEkVsjZQwJJVUsLm05Tfdsa3bh3Mk+SfpU/HnL?=
- =?us-ascii?Q?ROUMQURNQFkd4v9nu/x0ZVAxcncskA2ZtX5mhqeA1pbz9ouIrjQNEz7yaUaL?=
- =?us-ascii?Q?Yi7aAF6QEd6F/yaLjcvNDGM=3D?=
-X-OriginatorOrg: in-advantage.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a731b424-cf7e-49ff-2967-08da9c4f280d
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR1001MB2345.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Sep 2022 04:01:41.6365
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4sUdL+VEoDkOuKLm7Nl5S5vpus9Ze9lfdSz2AF3/bPyiG2BLAehEEvOuUVjYYDVbS9FyYlPJUfZksYhbT78JP9HoP7BKiyFKLq72xxGEvEQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR10MB4412
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: Linux 4.14.294
+Content-Language: en-US
+To:     Joe Perches <joe@perches.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org
+Cc:     lwn@lwn.net, jslaby@suse.cz, Jason Wang <wangborong@cdjrlc.com>
+References: <1663669061118192@kroah.com> <1663669061138255@kroah.com>
+ <e9863ed5576cb93a6fd9b59cd19be9b71fda597d.camel@perches.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <e9863ed5576cb93a6fd9b59cd19be9b71fda597d.camel@perches.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Utilize the existing ocelot MFD interface to add switch functionality to
-the Microsemi VSC7512 chip.
+On 9/22/22 01:03, Joe Perches wrote:
+> On Tue, 2022-09-20 at 12:17 +0200, Greg Kroah-Hartman wrote:
+> []
+>> diff --git a/drivers/hid/intel-ish-hid/ishtp-hid.h b/drivers/hid/intel-ish-hid/ishtp-hid.h
+> []
+>> @@ -118,7 +118,7 @@ struct report_list {
+>>   * @multi_packet_cnt:	Count of fragmented packet count
+>>   *
+>>   * This structure is used to store completion flags and per client data like
+>> - * like report description, number of HID devices etc.
+>> + * report description, number of HID devices etc.
+>>   */
+>>  struct ishtp_cl_data {
+>>  	/* completion flags */
+> 
+> Needless backporting of typo fixes reduces confidence in the
+> backport process.
+> 
 
-Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
----
+The upstream commit 94553f8a218540 ("HID: ishtp-hid-clientHID: ishtp-hid-client:
+Fix comment typo") didn't Cc: stable, but got AUTOSELed [1].
 
-v2
-    * New patch, broken out from a previous one
+I think we should only AUTOSEL patches that have explicit Cc: stable.
 
----
- drivers/mfd/ocelot-core.c | 3 +++
- 1 file changed, 3 insertions(+)
+[1]: https://lore.kernel.org/stable/20220910211938.70997-2-sashal@kernel.org/
 
-diff --git a/drivers/mfd/ocelot-core.c b/drivers/mfd/ocelot-core.c
-index 702555fbdcc5..8b4d813d3139 100644
---- a/drivers/mfd/ocelot-core.c
-+++ b/drivers/mfd/ocelot-core.c
-@@ -190,6 +190,9 @@ static const struct mfd_cell vsc7512_devs[] = {
- 		.use_of_reg = true,
- 		.num_resources = ARRAY_SIZE(vsc7512_miim1_resources),
- 		.resources = vsc7512_miim1_resources,
-+	}, {
-+		.name = "ocelot-switch",
-+		.of_compatible = "mscc,vsc7512-switch",
- 	},
- };
- 
 -- 
-2.25.1
-
+An old man doll... just what I always wanted! - Clara
