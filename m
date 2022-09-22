@@ -2,85 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B47025E6D82
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 23:01:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 712725E6D88
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 23:02:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230235AbiIVVBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 17:01:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43352 "EHLO
+        id S230253AbiIVVCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 17:02:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229810AbiIVVBJ (ORCPT
+        with ESMTP id S229745AbiIVVCv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 17:01:09 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D8E2D69F5;
-        Thu, 22 Sep 2022 14:01:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 22 Sep 2022 17:02:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61640DF3BB
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 14:02:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663880570;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cyh9GNwkSeiWX8VVWJet6cmrStrv1Y1BhHYKMAKCy08=;
+        b=HnVTHiWZCquz1jilcQ0jdqJq+YLVVakMKqGd5vA/EDOBlm8lYJtoQI/OL9iEa1QQASaa9m
+        pSJtAc+w/+rmMohL3WMCXWenITjxXOSDN38434+15MdHThe33whbIP3G+ryaZ/uOr52caq
+        g6HISCo/GIYpdxcvi1YYNrsi6lDg2E8=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-655-ppuYT2wFMpO7pEllyHQYNg-1; Thu, 22 Sep 2022 17:02:46 -0400
+X-MC-Unique: ppuYT2wFMpO7pEllyHQYNg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A1248CE2346;
-        Thu, 22 Sep 2022 21:01:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CEF7C433D6;
-        Thu, 22 Sep 2022 21:01:01 +0000 (UTC)
-Date:   Thu, 22 Sep 2022 17:02:04 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Arun Easi <aeasi@marvell.com>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-next@vger.kernel.org>,
-        <GR-QLogic-Storage-Upstream@marvell.com>
-Subject: Re: [PATCH v3 1/1] tracing: Fix compile error in trace_array calls
- when TRACING is disabled
-Message-ID: <20220922170204.08f91a68@gandalf.local.home>
-In-Reply-To: <yq15yho3y0s.fsf@ca-mkp.ca.oracle.com>
-References: <20220907233308.4153-1-aeasi@marvell.com>
-        <20220907233308.4153-2-aeasi@marvell.com>
-        <yq15yho3y0s.fsf@ca-mkp.ca.oracle.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EDA833817964;
+        Thu, 22 Sep 2022 21:02:45 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2D96C40C2086;
+        Thu, 22 Sep 2022 21:02:45 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     Jinrong Liang <ljr.kernel@gmail.com>
+Cc:     Wanpeng Li <wanpengli@tencent.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jinrong Liang <cloudliang@tencent.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests: kvm: Fix a compile error in selftests/kvm/rseq_test.c
+Date:   Thu, 22 Sep 2022 17:02:43 -0400
+Message-Id: <20220922210243.1743612-1-pbonzini@redhat.com>
+In-Reply-To: <20220802071240.84626-1-cloudliang@tencent.com>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Sep 2022 21:32:59 -0400
-"Martin K. Petersen" <martin.petersen@oracle.com> wrote:
+Queued, thanks.
 
-> Steven,
-> 
-> Can you please review Arun's patch?
+Paolo
 
-Sorry, was busy running a conference ;-)
 
-> 
-> > Fix this compilation error seen when CONFIG_TRACING is not enabled:
-> >
-> > drivers/scsi/qla2xxx/qla_os.c: In function 'qla_trace_init':
-> > drivers/scsi/qla2xxx/qla_os.c:2854:25: error: implicit declaration of function
-> > 'trace_array_get_by_name'; did you mean 'trace_array_set_clr_event'?
-> > [-Werror=implicit-function-declaration]
-> >  2854 |         qla_trc_array = trace_array_get_by_name("qla2xxx");
-> >       |                         ^~~~~~~~~~~~~~~~~~~~~~~
-> >       |                         trace_array_set_clr_event
-> >
-> > drivers/scsi/qla2xxx/qla_os.c: In function 'qla_trace_uninit':
-> > drivers/scsi/qla2xxx/qla_os.c:2869:9: error: implicit declaration of function
-> > 'trace_array_put' [-Werror=implicit-function-declaration]
-> >  2869 |         trace_array_put(qla_trc_array);
-> >       |         ^~~~~~~~~~~~~~~
-> >  
-> 
-
-The patch looks good to me.
-
-Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-
--- Steve
