@@ -2,74 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 837125E5F8E
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 12:13:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2479F5E5F83
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 12:12:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231414AbiIVKNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 06:13:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52782 "EHLO
+        id S230193AbiIVKMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 06:12:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231274AbiIVKMw (ORCPT
+        with ESMTP id S229489AbiIVKM3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 06:12:52 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 581CE17E21;
-        Thu, 22 Sep 2022 03:12:50 -0700 (PDT)
-Received: (Authenticated sender: foss@0leil.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id 8625A4000F;
-        Thu, 22 Sep 2022 10:12:46 +0000 (UTC)
-From:   Quentin Schulz <foss+kernel@0leil.net>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        heiko@sntech.de, dmitry.torokhov@gmail.com,
-        klaus.goger@theobroma-systems.com, foss+kernel@0leil.net,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-input@vger.kernel.org,
-        Quentin Schulz <quentin.schulz@theobroma-systems.com>
-Subject: [PATCH 3/3] =?UTF-8?q?dt-bindings:=20arm:=20rockchip:=20add=20The?= =?UTF-8?q?obroma=20Systems=20PX30-=C2=B5Q7=20(Ringneck)=20with=20Haikou?=
-Date:   Thu, 22 Sep 2022 12:12:11 +0200
-Message-Id: <20220922101211.3215888-4-foss+kernel@0leil.net>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220922101211.3215888-1-foss+kernel@0leil.net>
-References: <20220922101211.3215888-1-foss+kernel@0leil.net>
+        Thu, 22 Sep 2022 06:12:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1278D58A6;
+        Thu, 22 Sep 2022 03:12:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6EBF862AF2;
+        Thu, 22 Sep 2022 10:12:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75089C433C1;
+        Thu, 22 Sep 2022 10:12:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1663841546;
+        bh=v+Uci2d8FhQSAzpo1oW4eL5doTYbscRDuPgbPTJydJM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=V0+VkoGlaRwfJiSryLl1g6JQOCWRXw4xsuwoPGTdwaB97Zcyb3QeZYju7QPyO1Yak
+         5UWNyQHtw/4nQhoE8itsp39lvwbA9KyeM3GUvtPaXHdeENBTBtPctKJyX67lKARoVs
+         bl6Ag2Ng+ppJQzpnNYg6xHckwYXwH6rtUdlpNNW4=
+Date:   Thu, 22 Sep 2022 12:12:24 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Sean Young <sean@mess.org>, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Oliver Neukum <oneukum@suse.com>, stable@vger.kernel.org,
+        Dongliang Mu <mudongliangabcd@gmail.com>
+Subject: Re: [PATCH RESEND] media: flexcop-usb: fix endpoint type check
+Message-ID: <Yyw1CJgv6nreCtB9@kroah.com>
+References: <20220822151027.27026-1-johan@kernel.org>
+ <YymBM1wJLAsBDU4E@hovoldconsulting.com>
+ <YywfxwBmdmvQ0i21@kroah.com>
+ <Yyws4Pd4bAl3iq2e@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yyws4Pd4bAl3iq2e@hovoldconsulting.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+On Thu, Sep 22, 2022 at 11:37:36AM +0200, Johan Hovold wrote:
+> On Thu, Sep 22, 2022 at 10:41:43AM +0200, Greg Kroah-Hartman wrote:
+> > On Tue, Sep 20, 2022 at 11:00:35AM +0200, Johan Hovold wrote:
+> > > Mauro and Hans,
+> > > 
+> > > On Mon, Aug 22, 2022 at 05:10:27PM +0200, Johan Hovold wrote:
+> > > > Commit d725d20e81c2 ("media: flexcop-usb: sanity checking of endpoint
+> > > > type") tried to add an endpoint type sanity check for the single
+> > > > isochronous endpoint but instead broke the driver by checking the wrong
+> > > > descriptor or random data beyond the last endpoint descriptor.
+> > > > 
+> > > > Make sure to check the right endpoint descriptor.
+> > > > 
+> > > > Fixes: d725d20e81c2 ("media: flexcop-usb: sanity checking of endpoint type")
+> > > > Cc: Oliver Neukum <oneukum@suse.com>
+> > > > Cc: stable@vger.kernel.org	# 5.9
+> > > > Reported-by: Dongliang Mu <mudongliangabcd@gmail.com>
+> > > > Signed-off-by: Johan Hovold <johan@kernel.org>
+> > > > ---
+> > > > 
+> > > > It's been two months and two completely ignored reminders so resending.
+> > > > 
+> > > > Can someone please pick this fix up and let me know when that has been
+> > > > done?
+> > > 
+> > > It's been another month so sending yet another reminder. This driver as
+> > > been broken since 5.9 and I posted this fix almost four months ago and
+> > > have sent multiple reminders since.
+> > > 
+> > > Can someone please pick this one and the follow-up cleanups up?
+> > 
+> > I've taken this one in my tree now.  Which one were the "follow-up"
+> > cleanups?
+> 
+> Thanks. These are the follow-up cleanups:
+> 
+> 	https://lore.kernel.org/lkml/20220822151456.27178-1-johan@kernel.org/
 
-Add entry for the Theobroma Systems PX30-µQ7 (Ringneck) with Haikou
-devkit.
+Thanks, I'll take them after the first one was merged into Linus's tree.
 
-Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
----
- Documentation/devicetree/bindings/arm/rockchip.yaml | 5 +++++
- 1 file changed, 5 insertions(+)
+> Perhaps we should start taking USB related changes like this through the
+> USB tree by default. Posting patches to the media subsystem feels like
+> shooting patches at a black hole.
 
-diff --git a/Documentation/devicetree/bindings/arm/rockchip.yaml b/Documentation/devicetree/bindings/arm/rockchip.yaml
-index 7811ba64149c..f2aa5ddb76d2 100644
---- a/Documentation/devicetree/bindings/arm/rockchip.yaml
-+++ b/Documentation/devicetree/bindings/arm/rockchip.yaml
-@@ -658,6 +658,11 @@ properties:
-           - const: rockchip,rv1108-evb
-           - const: rockchip,rv1108
- 
-+      - description: Theobroma Systems PX30-µQ7 with Haikou baseboard
-+        items:
-+          - const: tsd,px30-ringneck-haikou
-+          - const: rockchip,px30
-+
-       - description: Theobroma Systems RK3368-uQ7 with Haikou baseboard
-         items:
-           - const: tsd,rk3368-lion-haikou
--- 
-2.37.3
+I agree, there's been a bunch of patches sent there (some with security
+fixes) that are not getting responded to :(
 
+thanks,
+
+greg k-h
