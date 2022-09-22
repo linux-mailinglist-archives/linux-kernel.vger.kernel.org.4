@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 723D45E57DB
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 03:13:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F33B05E57DD
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 03:13:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230024AbiIVBNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 21:13:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56780 "EHLO
+        id S230096AbiIVBNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 21:13:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbiIVBNA (ORCPT
+        with ESMTP id S229896AbiIVBNC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 21:13:00 -0400
+        Wed, 21 Sep 2022 21:13:02 -0400
 Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86865AA36A
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 18:12:58 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id E5FC35C00DC;
-        Wed, 21 Sep 2022 21:12:57 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 038C94CA09
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 18:13:01 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 94EF55C0151;
+        Wed, 21 Sep 2022 21:12:59 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Wed, 21 Sep 2022 21:12:57 -0400
+  by compute5.internal (MEProxy); Wed, 21 Sep 2022 21:12:59 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sent.com; h=cc
         :cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1663809177; x=
-        1663895577; bh=nBAxwy7mmxae2g4ruRqIT/WlkqUizN+JnMmmOsyX9Nw=; b=O
-        F+CFPoueSRToSVY24ff+BNtiDFR9srx8WZZbBDeaTKzjrs7eC6/BhuDCAszmbOU8
-        516R5WZ0C/DfnvJqa2eY3j+yPo5Zy4NfILyraWApldfgRubYrXcGWg9UtH7u66JH
-        m7MbURBBajPXRL6W6FUrBUnnqz8EAYKzrJ0mrkvdXNPqKy2Mg6R308YYI/ECmU4R
-        NuLOUgzIaABnzxvkFoOoZNZerNErJBFvBOjFNVXnziQ5QzhoUzGbxRnPkk8g8MTD
-        khCWSjKYKhoZdRof68nShQsBeGPJ4wDA6B39vvcAc/w6uLePhNble7OBUx7vJ21j
-        ub7eGy3Q46o3h6QNNGt0g==
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1663809179; x=
+        1663895579; bh=qknF5tcmy+B2CeTlFoEm9W1xIUxKlOolFzMt14jmfpk=; b=X
+        2bHIeLYGPhTCPgQDwNnhPXIt7MWjcmMCp5OZlT5Mkm1hwHTtIYOmhhbvBieCR2yv
+        q3SIY3EojmIMybIMbpb2TbtdtHpVmAqudy1+WlKTAhPVj+ID2hiclyag1lu/20ZH
+        7uHC/UM84HyHFhP7ynvU21zoJ6I3LRzuQ4PtCVKEGH06hM93mc9d9Gd9WYZ7CuIe
+        WXlQUwqxKDZjl1BG4x2M114vZ2zfvcs1LDkLhzDirl+qFkSEsHybRnJDpDlSxaFD
+        waoQM8AM5KSyj4asoHtK4OqmtjaY2pS54OBbBP6Q5x7FM+szqG5zo7YA8wObOG8s
+        T3rQEqILXpkiz/nglpygg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:reply-to:sender
         :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
-        :x-me-sender:x-sasl-enc; s=fm2; t=1663809177; x=1663895577; bh=n
-        BAxwy7mmxae2g4ruRqIT/WlkqUizN+JnMmmOsyX9Nw=; b=Dn0n8KLAOSyWbD2wa
-        PYpDxYjWEp1fA7VZSNKS/JDLv+UgfQZqKaIHH4DxhKmCkjhx/5yAkXhasoQfA6Ym
-        lQLA185JXhuqGYD0feLJ5JNmTSOimSofFZwpy7THBes232KpXfbilVa9wGztbivE
-        JJsTd3xpE+n8eItJLVqur0tkVh8gWLQwjaSuKYBjOWz422k1krey7FSubEjlOmD2
-        3AemdmQ84WSMksz6EmJC3fTCEuaKASwsK60CHa/jS+zkvv9DlrWlGe3uiw6P/vKo
-        avJciDxBHEm8Nu7RYCL9r+Wz2QkCRFPgDQNfXoprfY/OhNvkOMVuktqrnjdAQj/+
-        lNd8Q==
-X-ME-Sender: <xms:mbYrY9_UH72Ifz19z24afFAkAI3rzu5wDLvnjJzI2NC-2uOPST95eg>
-    <xme:mbYrYxsZWAdxeNmk1IbLJJQTUB7Pq4kziuHmXAQhuGv6as-Jspu5abomVaNQCb2jT
-    q2am_8RqC3L9jdmGA>
-X-ME-Received: <xmr:mbYrY7BKVc2hjJdgDx9_jw3GbH8F8POzm5Eg9PSCXVLE2lG-1mG9KyTbskNHIBlxF3CbIJ8jbRG7B4UW-Q>
+        :x-me-sender:x-sasl-enc; s=fm2; t=1663809179; x=1663895579; bh=q
+        knF5tcmy+B2CeTlFoEm9W1xIUxKlOolFzMt14jmfpk=; b=Mk7vLLrcqb21dqzZS
+        mmBHP6QqHTSiDjdqwagKJmEE+MDzrCh/m1bOcoJqTg4rm5jSgxOoWwHynF8QRfhY
+        05Bw4XyuEEscpaGL26H3lyMmqa3aATo5Q+jEypMQQh2QgYhgWx23C4h2DiR9b5uu
+        8jz2JW2gKKuEXz6qVRcOTVzJ6D0cd4584SY7Qwnx+NO4HYVtPOQe90HK9HO++8AU
+        ADkUgyFMJg4XozOd1dWNNP1jTlrCWkkKBr4J7e4M/uBG6wkybp4n+y04I85ERQ3l
+        onFNvIy7Vh6iUyxKD+MYI7uGfihdCGLDHD9bE11uEevG7TyHELtqNw+rUWM1UxxM
+        1Jr4Q==
+X-ME-Sender: <xms:mrYrY-V6t4LdY9CT-s4vx8vkBQpcXUxDifnzC-jvtlQn8nu0xyNoWA>
+    <xme:mrYrY6ktm6ky3_VtPMFI_DM4rVTeKABPygaq2kFdLG19TKrG36yeRKvII-UvZGoZ5
+    nMDjGIzXmOsNBpMNQ>
+X-ME-Received: <xmr:mrYrYyafRD9HKvYc4cOi-CkJCJ2NkUlwWy4FN8Kgl2TRqYxxeGoshsNJaHBucVNDq_a9qxnjKdSgFVMrIQ>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeefvddggeefucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
@@ -56,10 +56,10 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeefvddggeefucetufdoteggod
     ehudfgudduvdelheehteegledtteeiveeuhfffveekhfevueefieeijeegvdenucevlhhu
     shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpeiiihdrhigrnhessh
     gvnhhtrdgtohhm
-X-ME-Proxy: <xmx:mbYrYxdZjs2PBWY7MlDhw8Se1z1ZAv6gNQvP3OpEWdz0In6QgSGxVg>
-    <xmx:mbYrYyNdHrlejDwU69R9nYlb4SysVt-WQec-WQQrjFbuPx4tFaYy8Q>
-    <xmx:mbYrYzm2xdCsXDK1fupwh5KThuV72x4arm7lGCZdbgaOws3SX0aFfg>
-    <xmx:mbYrY8uiUOsmO8LRPgiok_bWIjflGKvab4XIOxzIPv2Ob-6HhPbLOA>
+X-ME-Proxy: <xmx:mrYrY1VTH4eYIqK7Kr_nelbSrl02-JWl6B6xPpJA1b02QaauLFuV1g>
+    <xmx:mrYrY4md1HF8NWqGj-NmsFKk1wzAL2m4Q1pysVnTrFjoFqCxnKa13Q>
+    <xmx:mrYrY6fFQgaFuBObutVB4u0HrF4lEZsM9BR4snwKwuqYPrUJtnl-0w>
+    <xmx:m7YrY2mGtgGEIJ0VXRyHL2thll6cY_JpABe5czid2O_5RDc02fXvtw>
 Feedback-ID: iccd040f4:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
  21 Sep 2022 21:12:57 -0400 (EDT)
@@ -78,9 +78,9 @@ Cc:     Zi Yan <ziy@nvidia.com>, David Hildenbrand <david@redhat.com>,
         Muchun Song <songmuchun@bytedance.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v1 04/12] mm: prevent pageblock size being larger than section size.
-Date:   Wed, 21 Sep 2022 21:12:44 -0400
-Message-Id: <20220922011252.2266780-5-zi.yan@sent.com>
+Subject: [PATCH v1 05/12] fs: proc: use pageblock_nr_pages for reschedule period in read_kcore()
+Date:   Wed, 21 Sep 2022 21:12:45 -0400
+Message-Id: <20220922011252.2266780-6-zi.yan@sent.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220922011252.2266780-1-zi.yan@sent.com>
 References: <20220922011252.2266780-1-zi.yan@sent.com>
@@ -99,40 +99,40 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Zi Yan <ziy@nvidia.com>
 
-Only physical pages from a section can be guaranteed to be contiguous
-and so far a pageblock can only group contiguous physical pages by
-design. Set pageblock_order properly to prevent pageblock going beyond
-section size.
+MAX_ORDER_NR_PAGES can be increased when it becomes a boot time parameter
+in later commits. To make sure read_kcore() reschedule its work in a
+constant period, use pageblock_nr_pages instead for reschedule period,
+since pageblock_nr_pages is a constant and either the same or half of
+MAX_ORDER_NR_PAGES.
 
+Reviewed-by: David Hildenbrand <david@redhat.com>
 Signed-off-by: Zi Yan <ziy@nvidia.com>
-Cc: Wei Yang <richard.weiyang@linux.alibaba.com>
-Cc: Vlastimil Babka <vbabka@suse.cz>
-Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc: Mike Rapoport <rppt@kernel.org>
+Cc: David Hildenbrand <david@redhat.com>
+Cc: Oscar Salvador <osalvador@suse.de>
+Cc: Ying Chen <chenying.kernel@bytedance.com>
+Cc: Feng Zhou <zhoufeng.zf@bytedance.com>
+Cc: linux-fsdevel@vger.kernel.org
 Cc: linux-mm@kvack.org
 Cc: linux-kernel@vger.kernel.org
 ---
- include/linux/pageblock-flags.h | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ fs/proc/kcore.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/pageblock-flags.h b/include/linux/pageblock-flag=
-s.h
-index e83c4c095041..95589b24fff9 100644
---- a/include/linux/pageblock-flags.h
-+++ b/include/linux/pageblock-flags.h
-@@ -47,8 +47,11 @@ extern unsigned int pageblock_order;
+diff --git a/fs/proc/kcore.c b/fs/proc/kcore.c
+index dff921f7ca33..7dc09d211b48 100644
+--- a/fs/proc/kcore.c
++++ b/fs/proc/kcore.c
+@@ -491,7 +491,7 @@ read_kcore(struct file *file, char __user *buffer, size=
+_t buflen, loff_t *fpos)
+ 			}
+ 		}
 =20
- #else /* CONFIG_HUGETLB_PAGE */
-=20
--/* If huge pages are not used, group by MAX_ORDER_NR_PAGES */
--#define pageblock_order		MAX_ORDER
-+/*
-+ * If huge pages are not used, group by MAX_ORDER_NR_PAGES or
-+ * PAGES_PER_SECTION when MAX_ORDER_NR_PAGES is larger.
-+ */
-+#define pageblock_order		(min(PFN_SECTION_SHIFT, MAX_ORDER))
-=20
- #endif /* CONFIG_HUGETLB_PAGE */
-=20
+-		if (page_offline_frozen++ % MAX_ORDER_NR_PAGES =3D=3D 0) {
++		if (page_offline_frozen++ % pageblock_nr_pages =3D=3D 0) {
+ 			page_offline_thaw();
+ 			cond_resched();
+ 			page_offline_freeze();
 --=20
 2.35.1
 
