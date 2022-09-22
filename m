@@ -2,113 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4E6A5E636E
+	by mail.lfdr.de (Postfix) with ESMTP id 88ED85E636D
 	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 15:18:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231154AbiIVNRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 09:17:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39546 "EHLO
+        id S230453AbiIVNRw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 09:17:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230514AbiIVNRY (ORCPT
+        with ESMTP id S231415AbiIVNRm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 09:17:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11A1AECCF9;
-        Thu, 22 Sep 2022 06:17:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Thu, 22 Sep 2022 09:17:42 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D5FDECCD3;
+        Thu, 22 Sep 2022 06:17:38 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id C8DB121982;
+        Thu, 22 Sep 2022 13:17:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1663852656; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5VxXvVs0YdYO3sD0aUgYp7qqqpQnVQA/2ZsAJ0zdeDo=;
+        b=j0srfyICy6WIjrVcwpembz4gXsiclktb0/Y4yfVYyjSCvgiHG0V8LjrcAbAsJxlmP8takY
+        lqv4S7533VbkvX/ASvFYXBMDXxevueLbwuVtMA4UJgnuZdYR9tygho367XX0Jrp7WQ+VC9
+        WfB8xm7VcGw/Lmnwv00UpIiFZF/VLCw=
+Received: from suse.cz (unknown [10.100.208.146])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8790B63383;
-        Thu, 22 Sep 2022 13:17:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB225C433D7;
-        Thu, 22 Sep 2022 13:17:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663852641;
-        bh=x9EZseEA0PIBQdEf8joKTvvbD5nJbC3PTH3Wh3WrbXQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=uPNbRC2HKIPvUhAP9prxhTxQaJzsQNl1L7xgfCFWTwJ7pAWN86OMYoNdM31Xuz1AQ
-         Aiej/HWDhE7mKe3XzEIqO/c3grUzbBn9j/HWkSt0HmDDhGXHYUZHyjOtaPzJXVP1Ho
-         Zvp6F8EGu96G6oPJij9C8YaprqjoH8p5IKgTR4YBVmXoSJwZ0sAafVN4g1Rrfglwbo
-         kKU5Obvso02WvQr+3BQ9DMPBE5x1UWJoZGZsMpCwldplYI7UrIolDa9xVEkdhcObzl
-         tHNf9TV/yTRwDE4Y48b9YUfJmTVR7Yr6RMYSd434MITAvxj4cTNBJ7nPAeo/0YtN5u
-         B5lF/gCfOJzCg==
-Received: by mail-lj1-f179.google.com with SMTP id a14so10950433ljj.8;
-        Thu, 22 Sep 2022 06:17:20 -0700 (PDT)
-X-Gm-Message-State: ACrzQf2YeMBYgUmKsSNLpCAf9P/9wO1B/p31YSMxERyaTrlXv5quDEtX
-        HonbvKHO0NakWT9LF1sG0/bF2G2bxoXRn7vRNVc=
-X-Google-Smtp-Source: AMsMyM6q3bBLBY2OjqmXgTbgtxJ7IhRQqk58EtZ9+ZiyWfMOCOSN3Wd6huyQ/rfigeiPhnyFyUZfn79+676BO0lVmNI=
-X-Received: by 2002:a2e:9115:0:b0:26a:c086:5138 with SMTP id
- m21-20020a2e9115000000b0026ac0865138mr1001036ljg.189.1663852639014; Thu, 22
- Sep 2022 06:17:19 -0700 (PDT)
+        by relay2.suse.de (Postfix) with ESMTPS id C68262C141;
+        Thu, 22 Sep 2022 13:17:32 +0000 (UTC)
+Date:   Thu, 22 Sep 2022 15:17:33 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        linux-modules@vger.kernel.org
+Subject: Re: [PATCH v4 4/8] kallsyms: Improve the performance of
+ kallsyms_lookup_name()
+Message-ID: <YyxgbZBORARoOIWf@alley>
+References: <20220920071317.1787-1-thunder.leizhen@huawei.com>
+ <20220920071317.1787-5-thunder.leizhen@huawei.com>
+ <Yyss3SWM0nTVnjT7@alley>
+ <3c86335e-c5b8-b291-d0c2-9b69f912f900@huawei.com>
+ <YywIcQzaGmV43zr6@alley>
+ <ba8979fb-df77-c387-3c7b-cf5c46050c43@huawei.com>
 MIME-Version: 1.0
-References: <20220922130452.233323-1-chenzhongjin@huawei.com> <20220922130452.233323-3-chenzhongjin@huawei.com>
-In-Reply-To: <20220922130452.233323-3-chenzhongjin@huawei.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Thu, 22 Sep 2022 15:17:07 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXFtx0OZozwedDsUJotfPi8Ugrcy2J+ee_YH4nb=36W2dQ@mail.gmail.com>
-Message-ID: <CAMj1kXFtx0OZozwedDsUJotfPi8Ugrcy2J+ee_YH4nb=36W2dQ@mail.gmail.com>
-Subject: Re: [PATCH -next 2/3] arm64: head: Mark constants as data
-To:     Chen Zhongjin <chenzhongjin@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, herbert@gondor.apana.org.au,
-        davem@davemloft.net, catalin.marinas@arm.com, will@kernel.org,
-        broonie@kernel.org, maz@kernel.org, mark.rutland@arm.com,
-        anshuman.khandual@arm.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ba8979fb-df77-c387-3c7b-cf5c46050c43@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 22 Sept 2022 at 15:08, Chen Zhongjin <chenzhongjin@huawei.com> wrote:
->
-> Add data annotations to constants part of the image header.
->
-> Signed-off-by: Julien Thierry <jthierry@redhat.com>
-> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
-> Reviewed-by: Mark Brown <broonie@kernel.org>
-> ---
->  arch/arm64/kernel/head.S | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/arm64/kernel/head.S b/arch/arm64/kernel/head.S
-> index 814b6587ccb7..f298e88e2d23 100644
-> --- a/arch/arm64/kernel/head.S
-> +++ b/arch/arm64/kernel/head.S
-> @@ -57,9 +57,10 @@
->         /*
->          * DO NOT MODIFY. Image header expected by Linux boot-loaders.
->          */
-> -       efi_signature_nop                       // special NOP to identity as PE/COFF executable
-> +SYM_DATA_LOCAL(efi_nop, efi_signature_nop)     // special NOP to identity as PE/COFF executable
+On Thu 2022-09-22 15:21:57, Leizhen (ThunderTown) wrote:
+> 
+> 
+> On 2022/9/22 15:02, Petr Mladek wrote:
+> > On Thu 2022-09-22 10:15:22, Leizhen (ThunderTown) wrote:
+> >>
+> >>
+> >> On 2022/9/21 23:25, Petr Mladek wrote:
+> >>> On Tue 2022-09-20 15:13:13, Zhen Lei wrote:
+> >>>> Currently, to search for a symbol, we need to expand the symbols in
+> >>>> 'kallsyms_names' one by one, and then use the expanded string for
+> >>>> comparison. This process can be optimized.
+> >>>>
+> >>>> And now scripts/kallsyms no longer compresses the symbol types, each
+> >>>> symbol type always occupies one byte. So we can first compress the
+> >>>> searched symbol and then make a quick comparison based on the compressed
+> >>>> length and content. In this way, for entries with mismatched lengths,
+> >>>> there is no need to expand and compare strings. And for those matching
+> >>>> lengths, there's no need to expand the symbol. This saves a lot of time.
+> >>>> According to my test results, the average performance of
+> >>>> kallsyms_lookup_name() can be improved by 20 to 30 times.
+> >>>>
+> >>>> The pseudo code of the test case is as follows:
+> >>>> static int stat_find_name(...)
+> >>>> {
+> >>>> 	start = sched_clock();
+> >>>> 	(void)kallsyms_lookup_name(name);
+> >>>> 	end = sched_clock();
+> >>>> 	//Update min, max, cnt, sum
+> >>>> }
+> >>>>
+> >>>> /*
+> >>>>  * Traverse all symbols in sequence and collect statistics on the time
+> >>>>  * taken by kallsyms_lookup_name() to lookup each symbol.
+> >>>>  */
+> >>>> kallsyms_on_each_symbol(stat_find_name, NULL);
+> >>>>
+> >>>> The test results are as follows (twice):
+> >>>> After : min=5250, max=  726560, avg= 302132
+> >>>> After : min=5320, max=  726850, avg= 301978
+> >>>> Before: min=170,  max=15949190, avg=7553906
+> >>>> Before: min=160,  max=15877280, avg=7517784
+> >>>>
+> >>>> The average time consumed is only 4.01% and the maximum time consumed is
+> >>>> only 4.57% of the time consumed before optimization.
+> >>>>
+> >>>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> >>>> ---
+> >>>>  kernel/kallsyms.c | 79 +++++++++++++++++++++++++++++++++++++++++++++--
+> >>>>  1 file changed, 76 insertions(+), 3 deletions(-)
+> >>>>
+> >>>> diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+> >>>> index 3e7e2c2ad2f75ef..2d76196cfe89f34 100644
+> >>>> --- a/kernel/kallsyms.c
+> >>>> +++ b/kernel/kallsyms.c
+> >>>> @@ -87,6 +87,71 @@ static unsigned int kallsyms_expand_symbol(unsigned int off,
+> >>>> +{
+> >>>> +	int i, j, k, n;
+> >>>> +	int len, token_len;
+> >>>> +	const char *token;
+> >>>> +	unsigned char token_idx[KSYM_NAME_LEN];
+> >>>> +	unsigned char token_bak[KSYM_NAME_LEN];
+> >>>
+> >>> Why do we need two buffers? It should be possible to compress the name
+> >>> in the same buffer as it is done in compress_symbols() in scripts/callsyms.c.
+> >>
+> >> Because the performance would be a little better. Now this function takes
+> >> just over a microsecond. Currently, it takes about 250 microseconds on
+> >> average to lookup a symbol, so adding a little more time to this function
+> >> doesn't affect the overall picture. I'll modify and test it as you suggest
+> >> below.
+> > 
+> > We need to be careful about a stack overflow. I have seen that
+> > KSYM_NAME_LEN might need to be increased to 512 because of
+> > Rust support, see
+> > https://lore.kernel.org/r/20220805154231.31257-6-ojeda@kernel.org
+> 
+> OK. Thanks for your information. I decided to add kallsyms_best_token_table[],
+> kallsyms_best_token_table_len, so that we only need one namebuf[], like
+> kallsyms_expand_symbol().
 
-This is an instruction not data
+Thanks for the effort. Adding kallsyms_best_token_table[] sounds like
+the right solution.
 
->         b       primary_entry                   // branch to kernel start, magic
-> -       .quad   0                               // Image load offset from start of RAM, little-endian
-> +SYM_DATA_LOCAL(_zero_reserved, .quad   0)      // Image load offset from start of RAM, little-endian
-
-Why convert this quad? And why does it need a symbol?
-
-> +SYM_DATA_START_LOCAL(_arm64_common_header)
->         le64sym _kernel_size_le                 // Effective size of kernel image, little-endian
->         le64sym _kernel_flags_le                // Informative flags, little-endian
->         .quad   0                               // reserved
-
-But not this one?
-
-> @@ -67,6 +68,7 @@
->         .quad   0                               // reserved
->         .ascii  ARM64_IMAGE_MAGIC               // Magic number
->         .long   .Lpe_header_offset              // Offset to the PE header.
-> +SYM_DATA_END(_arm64_common_header)
->
->         __EFI_PE_HEADER
->
-> --
-> 2.17.1
->
+Best Regards,
+Petr
