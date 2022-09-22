@@ -2,48 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBABD5E6002
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 12:38:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB3E25E6004
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 12:38:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230000AbiIVKh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 06:37:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35416 "EHLO
+        id S230253AbiIVKiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 06:38:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbiIVKhz (ORCPT
+        with ESMTP id S230368AbiIVKiC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 06:37:55 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3DCEA9C3E
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 03:37:54 -0700 (PDT)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MYBWf0hMXzHplf;
-        Thu, 22 Sep 2022 18:35:42 +0800 (CST)
-Received: from [10.67.110.112] (10.67.110.112) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 22 Sep 2022 18:37:52 +0800
-Subject: Re: [PATCH] rv/monitor: add __init/__exit annotations to module
- init/exit funcs
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <rostedt@goodmis.org>,
-        <mingo@redhat.com>
-References: <20220911030418.94609-1-xiujianfeng@huawei.com>
- <d0c8336b-bdaa-8e57-38fa-f570c3d696b8@kernel.org>
-From:   xiujianfeng <xiujianfeng@huawei.com>
-Message-ID: <468b3d61-a1a9-a49b-b737-c2d39ca22a4e@huawei.com>
-Date:   Thu, 22 Sep 2022 18:37:52 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.1
-MIME-Version: 1.0
-In-Reply-To: <d0c8336b-bdaa-8e57-38fa-f570c3d696b8@kernel.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.110.112]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500023.china.huawei.com (7.185.36.114)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Thu, 22 Sep 2022 06:38:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7968DB5146
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 03:38:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA4CE61314
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 10:37:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DF09C433D6;
+        Thu, 22 Sep 2022 10:37:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663843079;
+        bh=xgmLw7d4PE2k0XeJU9Rnum0/i9pq4y604yrZhPEmnuk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=QeHYxLtVg98xO9Y+iSy4BPTafwdVMe0uKgoanxKK/iwKumJ+bh9zB8QDyNmQMnwJ/
+         otXRniCKuGbasENbzAYabZLD1/T0Wi1lf6LK5yA6e9ff4T8iA5GB6Q5Pmm8kFRtoxF
+         VRf04HcGjyyGER3VdOSa8TjqjX8XbrCxFYj9X1NkldLFSyJrz0rDqg1dOGfW2GIc3D
+         EGhmWg4IzA4IOo8iLID2pqd6GQgGpoyf0CNbQoNogzoiMab8cPtujyxAhA3XPey+C9
+         MJo5EfLEmLVYC09hOKBGHsvqGYMQIIFCdxG7BwWvZc23+z8y98PUMJNpycLOt1G5z9
+         n6/Lajas+8W+g==
+Received: from 185-176-101-241.host.sccbroadband.ie ([185.176.101.241] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1obJae-00BsHQ-W9;
+        Thu, 22 Sep 2022 11:37:57 +0100
+Date:   Thu, 22 Sep 2022 11:37:55 +0100
+Message-ID: <87h70zk83g.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Denis Nikitin <denik@chromium.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Manoj Gupta <manojgupta@google.com>,
+        David Brazdil <dbrazdil@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] KVM: arm64: nvhe: Fix build with profile optimization
+In-Reply-To: <20220922053145.944786-1-denik@chromium.org>
+References: <20220920082005.2459826-1-denik@chromium.org>
+        <20220922053145.944786-1-denik@chromium.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.176.101.241
+X-SA-Exim-Rcpt-To: denik@chromium.org, catalin.marinas@arm.com, will@kernel.org, james.morse@arm.com, alexandru.elisei@arm.com, ndesaulniers@google.com, manojgupta@google.com, dbrazdil@google.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,31 +74,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, 22 Sep 2022 06:31:45 +0100,
+Denis Nikitin <denik@chromium.org> wrote:
+> 
+> Kernel build with clang and KCFLAGS=-fprofile-sample-use fails with:
+> 
+> error: arch/arm64/kvm/hyp/nvhe/kvm_nvhe.tmp.o: Unexpected SHT_REL
+> section ".rel.llvm.call-graph-profile"
+> 
+> Starting from 13.0.0 llvm can generate SHT_REL section, see
+> https://reviews.llvm.org/rGca3bdb57fa1ac98b711a735de048c12b5fdd8086.
+> gen-hyprel does not support SHT_REL relocation section.
+> 
+> Remove ".llvm.call-graph-profile" SHT_REL relocation from kvm_nvhe
+> to fix the build.
+> 
+> Signed-off-by: Denis Nikitin <denik@chromium.org>
+> ---
+> V1 -> V2: Remove the relocation instead of disabling the profile-use flags.
+> ---
+>  arch/arm64/kvm/hyp/nvhe/Makefile | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/kvm/hyp/nvhe/Makefile b/arch/arm64/kvm/hyp/nvhe/Makefile
+> index b5c5119c7396..49ec950ac57b 100644
+> --- a/arch/arm64/kvm/hyp/nvhe/Makefile
+> +++ b/arch/arm64/kvm/hyp/nvhe/Makefile
+> @@ -78,8 +78,10 @@ $(obj)/kvm_nvhe.o: $(obj)/kvm_nvhe.rel.o FORCE
+>  
+>  # The HYPREL command calls `gen-hyprel` to generate an assembly file with
+>  # a list of relocations targeting hyp code/data.
+> +# Starting from 13.0.0 llvm emits SHT_REL section '.llvm.call-graph-profile'
+> +# when profile optimization is applied. gen-hyprel does not support SHT_REL.
+>  quiet_cmd_hyprel = HYPREL  $@
+> -      cmd_hyprel = $(obj)/gen-hyprel $< > $@
+> +	cmd_hyprel = $(OBJCOPY) -R .llvm.call-graph-profile $<; $(obj)/gen-hyprel $< > $@
 
-在 2022/9/22 17:25, Daniel Bristot de Oliveira 写道:
-> Hi Xiu
-> 
-> The first char after the subsys: must be capital, i.e.,
-> 
-> [PATCH] rv/monitor: Add __init/__exit annotations to module init/exit funcs
-> 
-> On 9/11/22 05:04, Xiu Jianfeng wrote:
->> Add missing __init/__exit annotations to module init/exit funcs.
-> 
-> Please, also add these tags to the monitor templates here:
-> 
-> 
-> tools/verification/dot2/dot2k_templates/main_global.c
-> tools/verification/dot2/dot2k_templates/main_per_cpu.c
-> tools/verification/dot2/dot2k_templates/main_per_task.c
-> 
-> So the fix is propagated to future monitors.
+I was really hoping that you'd just drop the flags from the CFLAGS
+instead of removing the generated section. Something like:
 
-Thanks for the review, will do in v2.
+diff --git a/arch/arm64/kvm/hyp/nvhe/Makefile b/arch/arm64/kvm/hyp/nvhe/Makefile
+index b5c5119c7396..e5b2d43925b4 100644
+--- a/arch/arm64/kvm/hyp/nvhe/Makefile
++++ b/arch/arm64/kvm/hyp/nvhe/Makefile
+@@ -88,7 +88,7 @@ quiet_cmd_hypcopy = HYPCOPY $@
+ 
+ # Remove ftrace, Shadow Call Stack, and CFI CFLAGS.
+ # This is equivalent to the 'notrace', '__noscs', and '__nocfi' annotations.
+-KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_FTRACE) $(CC_FLAGS_SCS) $(CC_FLAGS_CFI), $(KBUILD_CFLAGS))
++KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_FTRACE) $(CC_FLAGS_SCS) $(CC_FLAGS_CFI) -fprofile-sample-use, $(KBUILD_CFLAGS))
+ 
+ # KVM nVHE code is run at a different exception code with a different map, so
+ # compiler instrumentation that inserts callbacks or checks into the code may
 
-> 
-> Thanks
-> -- Daniel
-> .
-> 
+However, I even failed to reproduce your problem using LLVM 14 as
+packaged by Debian (if that matters, I'm using an arm64 build
+machine). I build the kernel with:
+
+$ make LLVM=1 KCFLAGS=-fprofile-sample-use -j8 vmlinux
+
+and the offending object only contains the following sections:
+
+arch/arm64/kvm/hyp/nvhe/kvm_nvhe.tmp.o:     file format elf64-littleaarch64
+
+Sections:
+Idx Name          Size      VMA               LMA               File off  Algn
+  0 .hyp.idmap.text 00000ae4  0000000000000000  0000000000000000  00000800  2**11
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  1 .hyp.text     0000e988  0000000000000000  0000000000000000  00001800  2**11
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  2 .hyp.data..ro_after_init 00000820  0000000000000000  0000000000000000  00010188  2**3
+                  CONTENTS, ALLOC, LOAD, DATA
+  3 .hyp.rodata   00002e70  0000000000000000  0000000000000000  000109a8  2**3
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
+  4 .hyp.data..percpu 00001ee0  0000000000000000  0000000000000000  00013820  2**4
+                  CONTENTS, ALLOC, LOAD, DATA
+  5 .hyp.bss      00001158  0000000000000000  0000000000000000  00015700  2**3
+                  ALLOC
+  6 .comment      0000001f  0000000000000000  0000000000000000  00017830  2**0
+                  CONTENTS, READONLY
+  7 .llvm_addrsig 000000b8  0000000000000000  0000000000000000  0001784f  2**0
+                  CONTENTS, READONLY, EXCLUDE
+  8 .altinstructions 00001284  0000000000000000  0000000000000000  00015700  2**0
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
+  9 __jump_table  00000960  0000000000000000  0000000000000000  00016988  2**3
+                  CONTENTS, ALLOC, LOAD, RELOC, DATA
+ 10 __bug_table   0000051c  0000000000000000  0000000000000000  000172e8  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, DATA
+ 11 __kvm_ex_table 00000028  0000000000000000  0000000000000000  00017808  2**3
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
+ 12 .note.GNU-stack 00000000  0000000000000000  0000000000000000  00027370  2**0
+                  CONTENTS, READONLY
+
+So what am I missing to trigger this issue? Does it rely on something
+like PGO, which is not upstream yet? A bit of handholding would be
+much appreciated.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
