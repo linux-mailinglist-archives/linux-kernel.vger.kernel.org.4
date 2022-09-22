@@ -2,117 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A46965E6E89
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 23:39:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C6845E6E8D
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 23:39:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231251AbiIVVjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 17:39:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34338 "EHLO
+        id S231229AbiIVVjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 17:39:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231245AbiIVVjE (ORCPT
+        with ESMTP id S229635AbiIVVjd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 17:39:04 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDA3A11264E
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 14:39:00 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id g3so17486641wrq.13
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 14:39:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=3YdjZ7VPUxdfC5sRfXwx/0L+V0iZ1cHHxou9pXPTrn0=;
-        b=LUdmXEY4WTCLFE96EnTufspOZgwzO9if4fnR/Ki/tDw4TDslehPs9KXAWqVQ90eX74
-         wr7N61D+a97NJnOs7WG5uEVR7FTjtHhiHo4C2F6126LiApGKN514zaeKrrwJnsP/zvq1
-         42Ii9hLAq4vPR27IJRA/ByOyomv5u5UI22rWwwivAzOPq5Z9/wo/h5H+5E5zxQewEhQM
-         0PYhr27vPRBTi1cbAJbZg6Uw2P37N7fKziMhHn1/AAbgWNQl2bMjevEOE+2qsA2fp87g
-         uHA6cmo+ElyOcEEobYbt8FerYREw8vDcewHJG7mCrLGH5AinoqvTG9iP7zAuB3GRXqTg
-         OlCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=3YdjZ7VPUxdfC5sRfXwx/0L+V0iZ1cHHxou9pXPTrn0=;
-        b=bs21NUNFe6pN4GSTOHyoG+ec8O0cgtng2EmodE/PhvWbm0TdpSzhso95snEhiP7Ie8
-         CQSP6O0HyTFujV6l52cW1C9Iv1x9lx5jVsE/roFeR16oPHdsaJWp1YpJQe6EiM5zG8/y
-         QQwLiaY+j8KFTyCCZX8gOMTrJ3HgdVz9gDHQ/Jf/96UC5IPUCHC9KCsBH+uINoLZIGhm
-         Nbo2t7DKqUNuICopka1MnnMzBec5OCELk7BOwro8O6yqPsER/09dZQ9QuMF95wslbBf3
-         ENsGs4fqbsSNsQWKsjovMU6h9cvxKzS625Xux17BJouJHXXrzmflVLbMBJf5KQ+NaEPX
-         +0fA==
-X-Gm-Message-State: ACrzQf3b9U6SCyuVcQXbvySSOb+5yjw7bpw73nhfpUFkpjQzUNmhVtb+
-        1wjrBJlqObmf0Z10C8tenQ3i0g==
-X-Google-Smtp-Source: AMsMyM7fIC1LBj6rLVhG2ZRjxhF1HjOWZH+eirIbrbnBVm0ST+5hrcXDL3kJ2ojgS88jH1nJ1qF0qA==
-X-Received: by 2002:adf:fa81:0:b0:224:f260:2523 with SMTP id h1-20020adffa81000000b00224f2602523mr3238333wrr.26.1663882739290;
-        Thu, 22 Sep 2022 14:38:59 -0700 (PDT)
-Received: from [192.168.86.238] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.googlemail.com with ESMTPSA id g14-20020a05600c4ece00b003b477532e66sm11907506wmq.2.2022.09.22.14.38.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Sep 2022 14:38:57 -0700 (PDT)
-Message-ID: <f6d0df7f-de0d-75b8-57a7-8a3f5c93194a@linaro.org>
-Date:   Thu, 22 Sep 2022 22:38:56 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 2/2] ASoC: wcd934x: fix order of Slimbus unprepare/disable
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, Vinod Koul <vkoul@kernel.org>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org
-References: <20220921145354.1683791-1-krzysztof.kozlowski@linaro.org>
- <20220921145354.1683791-2-krzysztof.kozlowski@linaro.org>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20220921145354.1683791-2-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Thu, 22 Sep 2022 17:39:33 -0400
+Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02549CCE;
+        Thu, 22 Sep 2022 14:39:29 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 2A95C580C35;
+        Thu, 22 Sep 2022 17:39:29 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Thu, 22 Sep 2022 17:39:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1663882769; x=1663886369; bh=rpJ5dLDrBG
+        4RU2npy0gA4zAAD6oKp0YoLCGtrhyhwEM=; b=e4zS8LqI3yZPrJ+kkUrj70ZFD4
+        pLzwXvjt8XarDbM7nDHjDrD7qKf+KoQ89l/2laVX9UfwOXPt3/YPUGWwXyMmMpDY
+        2XK4dwJwerK/r9FjarhLLJ2871v0hh/j/OEG4Ow+IsQgFC+Sn/7y+ybfiCK/JUCT
+        W+0EXiKgYsqDF1r+yfmpdauELR4CTUn2CARYSL5LV00you2XTJBJZ2b7+jFh0raF
+        ut63oi8KRVmnAXp9/pVbIfm8cAPEP4DygOPIQW8js1uCFrcpsXkiC3m5LEOilV19
+        eH+3BvPoyBjZTUNWBN6BRmQggu6BtzcGmvuwWxU3MF9WZPt03BMwdD+s0kBA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1663882769; x=1663886369; bh=rpJ5dLDrBG4RU2npy0gA4zAAD6oK
+        p0YoLCGtrhyhwEM=; b=dohe/pkCtrPN9juvk7SNrhiPPryqGHwv/LuY11IO2HYP
+        P9UJUSIo0oGRPi9TTlZlevubxSpTYyd1nUJHHpqQghC7WXs7FEDry/zBif1kVWCI
+        uSBOrLO9RBYEYsEbupgqrcAKecqApNzp/CSR1+AO2ksCP0fZB65Rr/KQQPfPzwCa
+        5R+DWCsiaay6e0+4OB8gtYqDJRdjCx4WEpQo6pQmvKrsfEKSGLBN2wYpWZZkW3B8
+        /JJM9JoEPCjyH5BaOtkTDbUpu1o1TLZ/cU2d1CDOs2gHD3Y0U5zTY7MJIU/1G9eS
+        GQkvFOdSz7cmS0tAA0GqSpAYy4f8qZI3DnOlXz6nLw==
+X-ME-Sender: <xms:ENYsYyK6Yn_0rZJ8N40D4RClChiuYBU414b9pR_BXSE-v37oNKvAlA>
+    <xme:ENYsY6LokUsFw-r2xHrLdD34qu098uEJR1Ih5mViVAmt0hUptIikBIoOvoXbVSG0a
+    lq7_2Bmf5Ga4pjxc5M>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeefhedgtdduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:ENYsYyvx2SxCsAwt62keXyaxxfbUJ0Sy_PqnAgQYhzWD9Pvqs8gJ1g>
+    <xmx:ENYsY3a9_8nKVIBF3aTNvCP2ld6b4i3_ZE1I2ApSK6Gl01r7BVaP6A>
+    <xmx:ENYsY5ZzJ_8Naxql2ueZcPSg0Q4qSiQRbwPrLVROH3asoaxUQ9dqQA>
+    <xmx:EdYsY7kn93-xv4nFI2RpnAyNrnFEJM17ZSBqDducZjim7q1EMUzwPw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 4ED65B60089; Thu, 22 Sep 2022 17:39:28 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-935-ge4ccd4c47b-fm-20220914.001-ge4ccd4c4
+Mime-Version: 1.0
+Message-Id: <89f85393-c767-4c0c-90db-d78a2927d465@www.fastmail.com>
+In-Reply-To: <20220922202458.7592-4-maukka@ext.kapsi.fi>
+References: <20220427162123.110458-1-maukka@ext.kapsi.fi>
+ <20220922202458.7592-1-maukka@ext.kapsi.fi>
+ <20220922202458.7592-4-maukka@ext.kapsi.fi>
+Date:   Thu, 22 Sep 2022 23:39:07 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Mauri Sandberg" <maukka@ext.kapsi.fi>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org,
+        "Olof Johansson" <olof@lixom.net>, "Andrew Lunn" <andrew@lunn.ch>,
+        "Sebastian Hesselbarth" <sebastian.hesselbarth@gmail.com>,
+        "Gregory Clement" <gregory.clement@bootlin.com>,
+        "Russell King" <linux@armlinux.org.uk>
+Cc:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 3/3] ARM: orion5x: Add D-Link DNS-323 based on Device Tree
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Sep 22, 2022, at 10:24 PM, Mauri Sandberg wrote:
+> +
+> +/* dns323_parse_hex_*() taken from tsx09-common.c; should a common 
+> copy of these
+> + * functions be kept somewhere?
+> + */
+> +static int __init dns323_parse_hex_nibble(char n)
+> +{
+> +	if (n >= '0' && n <= '9')
+> +		return n - '0';
+> +
+> +	if (n >= 'A' && n <= 'F')
+> +		return n - 'A' + 10;
+> +
+> +	if (n >= 'a' && n <= 'f')
+> +		return n - 'a' + 10;
+> +
+> +	return -1;
+> +}
+> +
+> +static int __init dns323_parse_hex_byte(const char *b)
+> +{
+> +	int hi;
+> +	int lo;
+> +
+> +	hi = dns323_parse_hex_nibble(b[0]);
+> +	lo = dns323_parse_hex_nibble(b[1]);
+> +
+> +	if (hi < 0 || lo < 0)
+> +		return -1;
+> +
+> +	return (hi << 4) | lo;
+> +}
+> +
 
+Can you use simple_strntoull() to parse the address into a u64 instead?
 
-On 21/09/2022 15:53, Krzysztof Kozlowski wrote:
-> Slimbus streams are first prepared and then enabled, so the cleanup path
-> should reverse it.  The unprepare sets stream->num_ports to 0 and frees
-> the stream->ports.  Calling disable after unprepare was not really
-> effective (channels was not deactivated) and could lead to further
-> issues due to making transfers on unprepared stream.
-> 
-> Fixes: a61f3b4f476e ("ASoC: wcd934x: add support to wcd9340/wcd9341 codec")
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
+> +static int __init dns323_read_mac_addr(u8 *addr)
+> +{
+> +	int i;
+> +	char *mac_page;
+> +
+> +	/* MAC address is stored as a regular ol' string in /dev/mtdblock4
+> +	 * (0x007d0000-0x00800000) starting at offset 196480 (0x2ff80).
+> +	 */
+> +	mac_page = ioremap(DNS323_NOR_BOOT_BASE + 0x7d0000 + 196480, 1024);
+> +	if (!mac_page)
+> +		return -ENOMEM;
 
-Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+It would be nicer to use of_iomap() on the nor device than a
+hardcoded physical address here, at least if that doesn't add
+too much extra complexity.
 
-
->   sound/soc/codecs/wcd934x.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/sound/soc/codecs/wcd934x.c b/sound/soc/codecs/wcd934x.c
-> index f56907d0942d..28175c746b9a 100644
-> --- a/sound/soc/codecs/wcd934x.c
-> +++ b/sound/soc/codecs/wcd934x.c
-> @@ -1913,8 +1913,8 @@ static int wcd934x_trigger(struct snd_pcm_substream *substream, int cmd,
->   	case SNDRV_PCM_TRIGGER_STOP:
->   	case SNDRV_PCM_TRIGGER_SUSPEND:
->   	case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
-> -		slim_stream_unprepare(dai_data->sruntime);
->   		slim_stream_disable(dai_data->sruntime);
-> +		slim_stream_unprepare(dai_data->sruntime);
->   		break;
->   	default:
->   		break;
+     Arnd
