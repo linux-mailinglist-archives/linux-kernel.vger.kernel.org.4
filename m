@@ -2,85 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07D615E6A7F
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 20:15:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9A825E6A82
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 20:16:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230419AbiIVSPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 14:15:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52022 "EHLO
+        id S232005AbiIVSQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 14:16:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232380AbiIVSPJ (ORCPT
+        with ESMTP id S232563AbiIVSP5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 14:15:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C6339AFDB;
-        Thu, 22 Sep 2022 11:15:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CF67863731;
-        Thu, 22 Sep 2022 18:15:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 37EAFC433C1;
-        Thu, 22 Sep 2022 18:15:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663870506;
-        bh=0w5r8c2GQVfQbllzZuIxC91o+h0ZL3f6nzlOqmGqhf4=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=I/1VoYwfl3vW8PeRHEjRHcATyG2Jie+Aw3RP5hmhDLtRMAu/3TM77w46yKG114ABS
-         Kit9yxwQF3DDKG5xe2UVr92DFvGkv6duZxlJi6mWH50jc00W1Zj8DwWQj2YqS94OHQ
-         IvS52P764xCE1dFcDpwRBJ2KBud0eutUfpOK93y21itU3SzFCxtKkw4zYZ3Jz2R2Wl
-         scf/CXuAlqfQbmJFNDu1qw5fp4naqRhWmUDpf01JkUKJlBMwIhjufYiOU7/Lc/Sq+p
-         YRDve/v8T0p5GKNfyGZ/mk9FMwBrxqhMZhnJi6O3JsopzYKiknPjFNy8PzpIP1424r
-         i+2jkwu0+YdVw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 22FECE4D03C;
-        Thu, 22 Sep 2022 18:15:06 +0000 (UTC)
-Subject: Re: [GIT PULL] perf tools changes for v6.0: 4th batch
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220921222600.29851-1-acme@kernel.org>
-References: <20220921222600.29851-1-acme@kernel.org>
-X-PR-Tracked-List-Id: <linux-perf-users.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220921222600.29851-1-acme@kernel.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git tags/perf-tools-fixes-for-v6.0-2022-09-21
-X-PR-Tracked-Commit-Id: 999e4eaa4b3691acf85d094836260ec4b66c74fd
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 9597f088c9fc0a9a1de402426f57ff0a18cd069e
-Message-Id: <166387050613.24554.2874622269056594079.pr-tracker-bot@kernel.org>
-Date:   Thu, 22 Sep 2022 18:15:06 +0000
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Clark Williams <williams@redhat.com>,
-        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Dao <dqminh@cloudflare.com>,
-        Leo Yan <leo.yan@linaro.org>, Lieven Hey <lieven.hey@kdab.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 22 Sep 2022 14:15:57 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 636DCEEE8B
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 11:15:55 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id b21so9546399plz.7
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 11:15:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=nr+7IOo73RGkvtgVJL29Z6tTdRJTDEqf8P4Dgi+ndyk=;
+        b=iCbAH699W/1jdjiG2kRIgTTGjNJ5vcrMUHEZiTItrbfKJTprZauxI3v9qa0UROhNZr
+         DZVLcgpXxGfjASMaNGvsr+48JArAMzqrKzmuUwDRSzXAO+AV38MGkuSd8IKWFWMxmq57
+         IVAlqyLz4MjUrkcJEWxDoYgZmZjildnN9Mn4b5brZXAEjMP74jepQoH/jsSRDHnHWFSL
+         keK98O4wx8P4KazUlE6D2uVkK0AZwMmyKqiIzEr19A5psRnmcVPw6zrNtA47R26O9Ux8
+         1UKArM89stdi9Sv/I+ry6iDlkr44SkIuFvhejq69GNvmuHB3Lg1fZnMH/a3LfaTzvZQu
+         jcjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=nr+7IOo73RGkvtgVJL29Z6tTdRJTDEqf8P4Dgi+ndyk=;
+        b=41NEFYW0TxCQNBrCmNzLUk90SkIbfBeOsosoNPMXjJ+7J83wNPOwuACDRaVjotGA7l
+         gPk4WlturlqjJXtnR88qu/rfHCehR+apD+Infh/8reYjZ16NroE5CJjYyQ2KdIjWbKFH
+         YhUNWLXjVWV4x5dWm72McvV8q0NT2DedkObw0OZJojjNm8/NuA+H66ucv3Q5cD/lSYvW
+         MLlvBDJ5elTK8ri7/+4jMdD/atJhMih2G6NwBA5rm2gisYbzs0ZV4uDqXxmmDjJ6q7xS
+         RwV1I+kYNJd4YmdkEY3U3briOGF7bFazICej3spef0LqF/dcsYGeevtAIM5Pc1tOXLno
+         1fJw==
+X-Gm-Message-State: ACrzQf18n4dFcMq7jOO5GGquO8CDPZpwO1SjGk0HhmnzyJ77RjQLyFoy
+        6yczMiR4AUv3Wt+jRnn+9oeyYw==
+X-Google-Smtp-Source: AMsMyM5kij3DFL/RpvWafQ7/3nGP1AgvQjnHkj47Y1XxBIToLerAFAgu3hxeiBE8fghxkrFPyShFzw==
+X-Received: by 2002:a17:90b:4b4c:b0:203:1eef:d810 with SMTP id mi12-20020a17090b4b4c00b002031eefd810mr16788791pjb.75.1663870554760;
+        Thu, 22 Sep 2022 11:15:54 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id a4-20020a170902ecc400b0016dcbdf9492sm4414118plh.92.2022.09.22.11.15.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Sep 2022 11:15:54 -0700 (PDT)
+Date:   Thu, 22 Sep 2022 18:15:50 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Jim Mattson <jmattson@google.com>
+Cc:     David Matlack <dmatlack@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        kvm list <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrew Jones <andrew.jones@linux.dev>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Oliver Upton <oliver.upton@linux.dev>
+Subject: Re: [PATCH 0/5] KVM: selftests: Fix "fix hypercall test" build errors
+Message-ID: <YyymVtI2afiKtIbN@google.com>
+References: <20220908233134.3523339-1-seanjc@google.com>
+ <CALzav=cZBsmtD3+hBko3kW6bh2+RC7j533r94576ExuPx7SgEQ@mail.gmail.com>
+ <CALMp9eTgQyj22XgO4r1MYvjh4UVC3+4KF+xMUZxV50W3iYYgVw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALMp9eTgQyj22XgO4r1MYvjh4UVC3+4KF+xMUZxV50W3iYYgVw@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Wed, 21 Sep 2022 23:26:00 +0100:
+On Thu, Sep 22, 2022, Jim Mattson wrote:
+> On Thu, Sep 22, 2022 at 10:20 AM David Matlack <dmatlack@google.com> wrote:
+> >
+> > On Thu, Sep 8, 2022 at 4:34 PM Sean Christopherson <seanjc@google.com> wrote:
+> > >
+> > > After a toolchain upgrade (I think), the x86 fix_hypercall_test started
+> > > throwing warnings due to -Werror=array-bounds rightly complaining that
+> > > the test is generating an out-of-bounds array access.
+> > >
+> > > The "obvious" fix is to replace the memcpy() with a memcmp() and compare
+> > > only the exact size of the hypercall instruction.  That worked, until I
+> > > fiddled with the code a bit more and suddenly the test started jumping into
+> > > the weeds due to gcc generating a call to the external memcmp() through the
+> > > PLT, which isn't supported in the selftests.
+> > >
+> > > To fix that mess, which has been a pitfall for quite some time, provide
+> > > implementations of memcmp(), memcpy(), and memset() to effectively override
+> > > the compiler built-ins.  My thought is to start with the helpers that are
+> > > most likely to be used in guest code, and then add more as needed.
+> >
+> > Ah ha! This also fixes an issue I've long since noticed and finally
+> > got around to debugging this morning. userspace_io_test fails for me
+> > when built with Clang but passes with GCC. It turns out Clang
+> > generates a call to <memset@plt>, whereas GCC directly generates rep
+> > stos, to clear @buffer in guest_code().
+> 
+> Hey! Did I miss a revert of commit ed290e1c20da ("KVM: selftests: Fix
+> nested SVM tests when built with clang") in that patch set?
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git tags/perf-tools-fixes-for-v6.0-2022-09-21
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/9597f088c9fc0a9a1de402426f57ff0a18cd069e
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+LOL, no, no you did not.  I'll do that in v2.
