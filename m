@@ -2,146 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AC8A5E663B
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 16:55:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C0D05E663D
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 16:56:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231661AbiIVOzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 10:55:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38604 "EHLO
+        id S230081AbiIVO4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 10:56:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229641AbiIVOzf (ORCPT
+        with ESMTP id S229969AbiIVO4N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 10:55:35 -0400
-Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AF00D74C0
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 07:55:34 -0700 (PDT)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 2613D1D4A;
-        Thu, 22 Sep 2022 16:55:32 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1663858532;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hOWRDOnllpNwbanrF29Aqs2hVKHR42wg1rNwmpJb/xQ=;
-        b=mu1g4rLkNWR9+D0ehFJ1fSNC3kQx8uuzlWeGr0dZegssaD2KkhnWdyDahKcgHUZajVsvpT
-        VYAZHhnV8DOBiXEKX49vwhuuV7XFynFKlsUjLQPmcmGzsA3V5sAQu6xFoywCsT71uIll4n
-        Y3LdLBM7tIgT9ySefC3ValDCWQ9khV75Zb2piNbCH7g6LJkcPkl6vVUfqy7ugd6A3TCycj
-        24HU1N90YFkth+VB+PtZefWlnL+im1+/4rc9NkJUY1e5KwNdY+evDk9b1E9BBiv6ShioVq
-        pN5ec6Z711vt8dZecxcffgn1Cu4H2rnVLc/buLTq6Gl0VgFmg7ALxX0AXrRA2g==
+        Thu, 22 Sep 2022 10:56:13 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F91DE0C9;
+        Thu, 22 Sep 2022 07:56:11 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id B3AB63200124;
+        Thu, 22 Sep 2022 10:56:10 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Thu, 22 Sep 2022 10:56:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        invisiblethingslab.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1663858570; x=
+        1663944970; bh=zkbm06ADn/Z0FztsvCeHV5g6JLx4lp21pgu9fNEq2/I=; b=j
+        ngIEaLE28Aml2WqeTX1u+TmlmoRdpw86O/8Ni4qYngg/B7qzA9y6kryrFgIfBxwu
+        jhLzGTA3vPWOftDXIPXrJuSl6uqgsqOmbmsW44+1MwXqLguumUY+brtCNVtQ5F4W
+        FtLL9GnLknCIxdlWsnMChlGEktvh2Jkcvz5pkF+Ks6uFLaMfLHpRzZz6sTV33h2/
+        v6KFvvB/OHhE6E3yXfIEpRQfozLycwka8rCFDH08pnsbat0bu6qhCUpTHchXt44f
+        RyKP4zqVWrx3PqiIC8y005N85eYb09UQohTS/aABXm2R7eDWsQPPRWhc1Z+Gp49J
+        zxxDVuvvCZl2d32xicFXw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1663858570; x=1663944970; bh=zkbm06ADn/Z0FztsvCeHV5g6JLx4
+        lp21pgu9fNEq2/I=; b=tUywip4W7b9b4sYdV6KEMIRYgWGRaUI48i6JEhIEd1kd
+        YawxkarPA67Sbiei4uy6W62UFCiXY33+hjd6xyhK5mANDPHhAgBNVqiE+/p2M3p+
+        cRgcHGB8UEA4itvNHT1/5+vysAaW2RmGvsDqp9U2u5tHDMDUqBvuA1SOnzCOCjhn
+        dfZ4RgnqZF19TU0TwhFROz4aEAB1cFVUUcRzP4DkxRYChadANHt0CoCCmy0fvzq6
+        n/4muytoiycONrnek2CRpgrcehcxv35+C9OnzngM/dDSOM0W/sosWzmfsV36nCZb
+        9g7zgZINwrXAlcjA7qrfeDaHR0KrivMiso6SDFwC7Q==
+X-ME-Sender: <xms:iXcsY-r9jeoDpCEdOsIPfDhqr7MlS-JYI0nxb93LFU-toBYvGx3TUQ>
+    <xme:iXcsY8p0Q7gpYeLhcPerAQVncXJF7NxLBRlQDnV23Mrgr3ZyXhIH2WFfL3IOcEcsJ
+    Fc3yZTW2xR4w9g>
+X-ME-Received: <xmr:iXcsYzOOPt2ZljHb-K8x6scWodysWPTZLih1fVeKGrgGriiBI7hso9bCupRI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeefgedgvddvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtjeenucfhrhhomhepffgvmhhi
+    ucforghrihgvucfqsggvnhhouhhruceouggvmhhisehinhhvihhsihgslhgvthhhihhngh
+    hslhgrsgdrtghomheqnecuggftrfgrthhtvghrnhepvdejteegkefhteduhffgteffgeff
+    gfduvdfghfffieefieekkedtheegteehffelnecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomhepuggvmhhisehinhhvihhsihgslhgvthhhihhnghhs
+    lhgrsgdrtghomh
+X-ME-Proxy: <xmx:iXcsY97JS_078ydi37iHEAOdjmf-jJDpnYfnFS3FnvdQqKPXx12N6w>
+    <xmx:iXcsY94rjsmv-5HyBQR6LffE9NCfTT8xd8GMKf4IvzeSnUkUQOWppg>
+    <xmx:iXcsY9i9gAL7gPm2rvF7F-DRBDeWhXzxOengiwK18SGgoWiqeW_9rg>
+    <xmx:incsY6uxfiNKihOd1IWez8jE3VI1OWb5lXRGiXbAemku3xoG_gt8ew>
+Feedback-ID: iac594737:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 22 Sep 2022 10:56:09 -0400 (EDT)
+Date:   Thu, 22 Sep 2022 10:55:40 -0400
+From:   Demi Marie Obenour <demi@invisiblethingslab.com>
+To:     Jan Beulich <jbeulich@suse.com>
+Cc:     Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xen-devel@lists.xenproject.org,
+        Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>, Ard Biesheuvel <ardb@kernel.org>
+Subject: Re: [PATCH v3] Support ESRT in Xen dom0
+Message-ID: <Yyx3hlE/MDBeEdtu@itl-email>
+References: <20220919193257.2031-1-demi@invisiblethingslab.com>
+ <CAMj1kXEBfJUfTQ3THqqKxsU09_S98B_TjTECKwGM0WAv_5tZaA@mail.gmail.com>
+ <7930b617-d473-94dd-c7e4-33ffa19da13e@suse.com>
+ <CAMj1kXEJ9d3-8xa7rkczY7ur2zDm9CjqM7u1eEdHHmPG=Oo=xA@mail.gmail.com>
+ <3671fd52-6034-7149-ebe4-f7560c0dc6b0@suse.com>
+ <Yyu1xC7Tlf9sS7Ro@itl-email>
+ <6f42a382-c5aa-ba16-f330-69a07476e2aa@suse.com>
 MIME-Version: 1.0
-Date:   Thu, 22 Sep 2022 16:55:32 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     niravkumar.l.rabara@intel.com
-Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <pratyush@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] mtd: spi-nor: macronix: Add support for mx66u1g45g
-In-Reply-To: <20220917111640.977243-1-niravkumar.l.rabara@intel.com>
-References: <20220916082215.883184-1-niravkumar.l.rabara@intel.com>
- <20220917111640.977243-1-niravkumar.l.rabara@intel.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <c09cd1c3c74582e90e3fe8633da2aaa0@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="GpPEXFLkdw7UWuLD"
+Content-Disposition: inline
+In-Reply-To: <6f42a382-c5aa-ba16-f330-69a07476e2aa@suse.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-09-17 13:16, schrieb niravkumar.l.rabara@intel.com:
-> From: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
-> 
-> The MX66U1G45G is the smaller sibling (128MB) of the MX66U2G45G (256MB)
-> that is already supported.
-> 
-> Tested on Intel N5X socdk board,
-> - random data write, erase, read   - verified erase operations
-> - random data write, read and compare  - verified write/read operations
-> 
-> Signed-off-by: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
-> ---
-> root@n5x:~# find / -iname spi-nor
-> /sys/kernel/debug/spi-nor
-> /sys/devices/platform/soc/ff8d2000.spi/spi_master/spi0/spi0.0/spi-nor
-> /sys/bus/spi/drivers/spi-nor
-> root@n5x:~# ls -al
-> /sys/devices/platform/soc/ff8d2000.spi/spi_master/spi0/spi0.0/spi-nor/
-> drwxr-xr-x    2 root     root             0 Dec 16 17:26 .
-> drwxr-xr-x    6 root     root             0 Dec 16 17:25 ..
-> -r--r--r--    1 root     root          4096 Dec 16 17:26 jedec_id
-> -r--r--r--    1 root     root          4096 Dec 16 17:26 manufacturer
-> -r--r--r--    1 root     root          4096 Dec 16 17:26 partname
-> -r--r--r--    1 root     root             0 Dec 16 17:26 sfdp
-> root@n5x:~#  cat
-> /sys/devices/platform/soc/ff8d2000.spi/spi_master/spi0/spi0.0/spi-nor/jedec_id
-> c2253b
-> root@n5x:~# cat
-> /sys/devices/platform/soc/ff8d2000.spi/spi_master/spi0/spi0.0/spi-nor/manufacturer
-> macronix
-> root@n5x:~# cat
-> /sys/devices/platform/soc/ff8d2000.spi/spi_master/spi0/spi0.0/spi-nor/partname
-> mx66u1g45g
-> root@n5x:~# cat
-> /sys/devices/platform/soc/ff8d2000.spi/spi_master/spi0/spi0.0/spi-nor/sfdp
-> > mx66u1g45g-sfdp
-> root@n5x:~# hexdump mx66u1g45g-sfdp
-> 0000000 4653 5044 0106 ff02 0600 1001 0030 ff00
-> 0000010 00c2 0401 0110 ff00 0084 0201 00c0 ff00
-> 0000020 ffff ffff ffff ffff ffff ffff ffff ffff
-> 0000030 20e5 fffb ffff 3fff eb44 6b08 3b08 bb04
-> 0000040 fffe ffff ffff ff00 ffff eb44 200c 520f
-> 0000050 d810 ff00 4987 00b5 d282 e204 0344 3867
-> 0000060 b030 b030 bdf7 5cd5 9e4a ff29 50f0 85f9
-> 0000070 ffff ffff ffff ffff ffff ffff ffff ffff
-> *
-> 00000c0 8f7f ffff 5c21 ffdc ffff ffff ffff ffff
-> 00000d0 ffff ffff ffff ffff ffff ffff ffff ffff
-> *
-> 0000110 2000 1600 f99d 64c0 cb85 ffff ffff ffff
-> 0000120
 
-md5sum of this is missing.
+--GpPEXFLkdw7UWuLD
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 22 Sep 2022 10:55:40 -0400
+From: Demi Marie Obenour <demi@invisiblethingslab.com>
+To: Jan Beulich <jbeulich@suse.com>
+Cc: Juergen Gross <jgross@suse.com>,
+	Stefano Stabellini <sstabellini@kernel.org>,
+	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+	linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	xen-devel@lists.xenproject.org,
+	Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>,
+	Ard Biesheuvel <ardb@kernel.org>
+Subject: Re: [PATCH v3] Support ESRT in Xen dom0
 
-> ---
->  drivers/mtd/spi-nor/macronix.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/mtd/spi-nor/macronix.c 
-> b/drivers/mtd/spi-nor/macronix.c
-> index d81a4cb2812b..07ace9da74b7 100644
-> --- a/drivers/mtd/spi-nor/macronix.c
-> +++ b/drivers/mtd/spi-nor/macronix.c
-> @@ -97,6 +97,10 @@ static const struct flash_info macronix_nor_parts[] 
-> = {
->  			      SPI_NOR_QUAD_READ) },
->  	{ "mx66l1g55g",  INFO(0xc2261b, 0, 64 * 1024, 2048)
->  		NO_SFDP_FLAGS(SPI_NOR_QUAD_READ) },
-> +	{ "mx66u1g45g",  INFO(0xc2253b, 0, 64 * 1024, 2048)
-> +		PARSE_SFDP
-> +		FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ)
+On Thu, Sep 22, 2022 at 08:12:14AM +0200, Jan Beulich wrote:
+> On 22.09.2022 03:09, Demi Marie Obenour wrote:
+> > On Wed, Sep 21, 2022 at 10:34:04PM +0200, Jan Beulich wrote:
+> >> On 20.09.2022 18:09, Ard Biesheuvel wrote:
+> >>> On Tue, 20 Sept 2022 at 17:54, Jan Beulich <jbeulich@suse.com> wrote:
+> >>>>
+> >>>> On 20.09.2022 17:36, Ard Biesheuvel wrote:
+> >>>>> On Mon, 19 Sept 2022 at 21:33, Demi Marie Obenour
+> >>>>> <demi@invisiblethingslab.com> wrote:
+> >>>>>>
+> >>>>>> fwupd requires access to the EFI System Resource Table (ESRT) to
+> >>>>>> discover which firmware can be updated by the OS.  Currently, Linu=
+x does
+> >>>>>> not expose the ESRT when running as a Xen dom0.  Therefore, it is =
+not
+> >>>>>> possible to use fwupd in a Xen dom0, which is a serious problem fo=
+r e.g.
+> >>>>>> Qubes OS.
+> >>>>>>
+> >>>>>> Before Xen 4.16, this was not fixable due to hypervisor limitation=
+s.
+> >>>>>> The UEFI specification requires the ESRT to be in EfiBootServicesD=
+ata
+> >>>>>> memory, which Xen will use for whatever purposes it likes.  Theref=
+ore,
+> >>>>>> Linux cannot safely access the ESRT, as Xen may have overwritten i=
+t.
+> >>>>>>
+> >>>>>> Starting with Xen 4.17, Xen checks if the ESRT is in EfiBootServic=
+esData
+> >>>>>> or EfiRuntimeServicesData memory.  If the ESRT is in EfiBootServic=
+esData
+> >>>>>> memory, Xen allocates some memory of type EfiRuntimeServicesData, =
+copies
+> >>>>>> the ESRT to it, and finally replaces the ESRT pointer with a point=
+er to
+> >>>>>> the copy.  Since Xen will not clobber EfiRuntimeServicesData memor=
+y,
+> >>>>>> this ensures that the ESRT can safely be accessed by the OS.  It i=
+s safe
+> >>>>>> to access the ESRT under Xen if, and only if, it is in memory of t=
+ype
+> >>>>>> EfiRuntimeServicesData.
+> >>>>>>
+> >>>>>
+> >>>>> Thanks for the elaborate explanation. This is really helpful.
+> >>>>>
+> >>>>> So here, you are explaining that the only way for Xen to prevent
+> >>>>> itself from potentially clobbering the ESRT is by creating a
+> >>>>> completely new allocation?
+> >>>>
+> >>>> There are surely other ways, e.g. preserving BootServices* regions
+> >>>> alongside RuntimeServices* ones. But as the maintainer of the EFI
+> >>>> code in Xen I don't view this as a reasonable approach.
+> >>>
+> >>> Why not?
+> >>
+> >> Because it's against the intentions the EFI has (or at least had)
+> >> for this memory type. Much more than EfiAcpiReclaimMemory this
+> >> type is intended for use as ordinary RAM post-boot.
+> >=20
+> > What about giving that memory to dom0?  dom0=E2=80=99s balloon driver w=
+ill give
+> > anything dom0 doesn=E2=80=99t wind up using back to Xen.
+>=20
+> While perhaps in principle possible, this would require special casing
+> in Xen. Except for the memory the initrd comes in, we don't directly
+> hand memory to Dom0. Instead everything goes through the page allocator
+> first. Plus if we really were convinced boot services memory needed
+> retaining, then it would also need retaining across kexec (and hence
+> shouldn't be left to Dom0 to decide what to do with it).
 
-With PARSE_SFDP this shouldn't be needed.
+So how should dom0 handle the various EFI tables other than the ESRT?
+Right now most uses of these tables in Linux are not guarded by any
+checks for efi_enabled(EFI_MEMMAP) or similar.  If some of them are in
+EfiBootServicesData memory, they might be corrupted before Linux gets
+them.
+--=20
+Sincerely,
+Demi Marie Obenour (she/her/hers)
+Invisible Things Lab
 
-Also, could you try with INFO(0xc2253b, 0, 0, 0), this information
-should come from the SFDP, too.
+--GpPEXFLkdw7UWuLD
+Content-Type: application/pgp-signature; name="signature.asc"
 
--michael
+-----BEGIN PGP SIGNATURE-----
 
-> +		FIXUP_FLAGS(SPI_NOR_4B_OPCODES) },
->  	{ "mx66u2g45g",	 INFO(0xc2253c, 0, 64 * 1024, 4096)
->  		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ)
->  		FIXUP_FLAGS(SPI_NOR_4B_OPCODES) },
+iQIzBAEBCgAdFiEEdodNnxM2uiJZBxxxsoi1X/+cIsEFAmMsd4cACgkQsoi1X/+c
+IsEBoA//b/usaepDm+lyniu3r0moNjjY3zaQmtdSXTMeHqFzBrABiAz5AZyBFCtr
+wzSdmzo4rlrvNR2/et8taDq0qOcjGouCgWLLS4p5pbW+PkV/0RzLPVCQaanRm+g5
+ZKeQbIFHeClEw7c4AWgY1mmlhiSdPYPCpXDdL4NCKeZgSTRykBp4J+Rg6rjwWKHD
+NAcWWs5MP6S4uVPVyZJQW4Blp087xPx3y/dFe5Fj3SeV37FDE9mvALy2+eJkDwnb
+7EPnOmczl7BSHg6L0xxClF1AFedsP7Ao/ANIs+kAR3EhbKnvczvLgANTMBRo+JUk
+Z6JST57bnRNtR4nSs8txTfjA4OqBy6RgJAwzN2lgd9zjZJnUgRVaungMKi0hmanS
+QMDtB6EGnCj8m6TaJiISxNjNeK8TQRh11GyNCcFgsUnfi7KlYbybeMnoOOWg3Hwz
+n5xXPsO9YSplCPsJ+aqfKp5yhUoE7ePskiGzyRThLBzx5HMgM/qFnXvtvi2/cY+G
+XEfQo9fWiss6Or47D3ekcw0FtYrU2EKUVsVEmRR0f8aRSJl4phCSu9mbU6aikQzK
+ADdLyxZ/Cle6oGy44fVcevif3qp/gO5/u3AxegTqBL9Xu9mtz3RyZrDxAaZoLUEh
+b6UgO0JZhueI7F9B48R4cKAfOzJ/+9srYZyIZHLQZYPzMDzOaV4=
+=tj0J
+-----END PGP SIGNATURE-----
+
+--GpPEXFLkdw7UWuLD--
