@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE22C5E619A
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 13:44:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB6E45E61A0
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 13:44:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231750AbiIVLob (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 07:44:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46752 "EHLO
+        id S231785AbiIVLoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 07:44:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231749AbiIVLni (ORCPT
+        with ESMTP id S231778AbiIVLnm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 07:43:38 -0400
+        Thu, 22 Sep 2022 07:43:42 -0400
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A338E5133;
-        Thu, 22 Sep 2022 04:43:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C67F9B875;
+        Thu, 22 Sep 2022 04:43:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1663846999; x=1695382999;
+  t=1663847006; x=1695383006;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=LcX022xRUzBf++bl2M+uwrENEsDp/g+PctVotxaJa3c=;
-  b=17WLRBSMrstz6uIvRN8n/AsuVpzV01AeN6PYourLNTu10Zk9DNZ1yqqk
-   13uEOLLr1BzNWQs1X4POH29WXPnku0tYGMJURdGsZi5DNaH8+boweu6Hr
-   0dHIY6P+5Ycv8nubWd7Gy8/zP40+JnZ5ue89KYKBv+tgm3dY0PVaG4wpD
-   +xp8hDCyTiIcGgr3FmvCLoASazduSxv4sH+uSXishzlHx8mr0GnYf8PSW
-   7bFs8RmMSrX+UWNsGCoy3P3TsPhJoZbsqoXtunzPj6C2QHRGN8JReLuPY
-   uHTOxlALzCs6/daU8U7fTphNKbBqm2Omf0vv/PhNspOqXV5BuPuXHKwl+
-   g==;
+  bh=O4zE5vDxVc9rp05PTgtTI2qIjpkr6XGF013rACtbZn8=;
+  b=Wl56XrMvIyWg0D0R2A9edjulsjp6Vyt6bvixiBSajnzYJcr+eaaOuKIz
+   XTo61fxTm/BNG9HHRf8/PSVrA7iHo4yxFPojscvcoSLNXjoZaS14qru/3
+   +q8WVvJGmhuChMCe5ov0yZq2imPtn88bHXdLqvqkvz5f4XHpRGNOACHGq
+   6bjoVylfZU3CHxTHaWxcRI6ucmoZKA7RvQ8nCfYh8W5jV87vm5he5Y7QS
+   /C4UlomPcR4hD0OJGyk0eEu1n9YYl3Rh7fPkxJA3sowbWMhhrtVhTTV6O
+   lW+R7bzqy4MyIQLITiR4ipcJwKW3vJaZp9XZf9diGUSQTKvFpCO9EKX5x
+   w==;
 X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
-   d="scan'208";a="178390576"
+   d="scan'208";a="175079053"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 Sep 2022 04:43:18 -0700
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 Sep 2022 04:43:25 -0700
 Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Thu, 22 Sep 2022 04:43:15 -0700
+ 15.1.2507.12; Thu, 22 Sep 2022 04:43:22 -0700
 Received: from ROB-ULT-M68701.amer.actel.com (10.10.115.15) by
  chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Thu, 22 Sep 2022 04:43:06 -0700
+ 15.1.2507.12 via Frontend Transport; Thu, 22 Sep 2022 04:43:16 -0700
 From:   Sergiu Moga <sergiu.moga@microchip.com>
 To:     <lee@kernel.org>, <robh+dt@kernel.org>,
         <krzysztof.kozlowski+dt@linaro.org>, <nicolas.ferre@microchip.com>,
@@ -51,9 +51,9 @@ CC:     <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
         <linux-serial@vger.kernel.org>,
         Sergiu Moga <sergiu.moga@microchip.com>
-Subject: [PATCH v5 8/9] tty: serial: atmel: Make the driver aware of the existence of GCLK
-Date:   Thu, 22 Sep 2022 14:33:46 +0300
-Message-ID: <20220922113347.144383-9-sergiu.moga@microchip.com>
+Subject: [PATCH v5 9/9] tty: serial: atmel: Use FIELD_PREP/FIELD_GET
+Date:   Thu, 22 Sep 2022 14:33:47 +0300
+Message-ID: <20220922113347.144383-10-sergiu.moga@microchip.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220922113347.144383-1-sergiu.moga@microchip.com>
 References: <20220922113347.144383-1-sergiu.moga@microchip.com>
@@ -62,190 +62,149 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_PASS,UPPERCASE_50_75 autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Previously, the atmel serial driver did not take into account the
-possibility of using the more customizable generic clock as its
-baudrate generator. Unless there is a Fractional Part available to
-increase accuracy, there is a high chance that we may be able to
-generate a baudrate closer to the desired one by using the GCLK as the
-clock source. Now, depending on the error rate between
-the desired baudrate and the actual baudrate, the serial driver will
-fallback on the generic clock. The generic clock must be provided
-in the DT node of the serial that may need a more flexible clock source.
-
-Furthermore, define the bit that represents the choice of having GCLK
-as a baudrate source clock inside the USCLKS bitmask of the Mode Register
-of USART IP's.
+Convert all open-coded instances of bitfields retrieval/setting
+to FIELD_PREP/FIELD_GET where possible.
 
 Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
 ---
 
 
-
-
-v1 -> v2:
-- take into account the different placement of the baudrate clock source
-into the IP's Mode Register (USART vs UART)
-- don't check for atmel_port->gclk != NULL
-- use clk_round_rate instead of clk_set_rate + clk_get_rate
-- remove clk_disable_unprepare from the end of the probe method
+v1 -> v5:
+- Nothing, this patch was not here before
 
 
 
-v2 -> v3:
-- add the error rate calculation function as an inline function instead of
-a macro definition
-- add `gclk_fail` goto
-- replace `goto err` with `goto err_clk_disable_unprepare;`
+ drivers/tty/serial/atmel_serial.h | 74 ++++++++++++++++---------------
+ 1 file changed, 38 insertions(+), 36 deletions(-)
 
-
-
-v3 -> v4:
-- Nothing, this was previously [PATCH 14]
-
-
-
-v4 -> v5:
-- Squashed the previous
-`[PATCH v4 6/9] tty: serial: atmel: Define GCLK as USART baudrate source clock`
-into this current commit
-- No more BRSRCCK bitmask as it is only 1 bit
-
-
-
- drivers/tty/serial/atmel_serial.c | 58 ++++++++++++++++++++++++++++++-
- drivers/tty/serial/atmel_serial.h |  1 +
- 2 files changed, 58 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/tty/serial/atmel_serial.c b/drivers/tty/serial/atmel_serial.c
-index acbf6b82d687..bd07f79a2df9 100644
---- a/drivers/tty/serial/atmel_serial.c
-+++ b/drivers/tty/serial/atmel_serial.c
-@@ -15,6 +15,7 @@
- #include <linux/init.h>
- #include <linux/serial.h>
- #include <linux/clk.h>
-+#include <linux/clk-provider.h>
- #include <linux/console.h>
- #include <linux/sysrq.h>
- #include <linux/tty_flip.h>
-@@ -110,6 +111,7 @@ struct atmel_uart_char {
- struct atmel_uart_port {
- 	struct uart_port	uart;		/* uart */
- 	struct clk		*clk;		/* uart clock */
-+	struct clk		*gclk;		/* uart generic clock */
- 	int			may_wakeup;	/* cached value of device_may_wakeup for times we need to disable it */
- 	u32			backup_imr;	/* IMR saved during suspend */
- 	int			break_active;	/* break being received */
-@@ -229,6 +231,11 @@ static inline int atmel_uart_is_half_duplex(struct uart_port *port)
- 		(port->iso7816.flags & SER_ISO7816_ENABLED);
- }
- 
-+static inline int atmel_error_rate(int desired_value, int actual_value)
-+{
-+	return 100 - (desired_value * 100) / actual_value;
-+}
-+
- #ifdef CONFIG_SERIAL_ATMEL_PDC
- static bool atmel_use_pdc_rx(struct uart_port *port)
- {
-@@ -2117,6 +2124,8 @@ static void atmel_serial_pm(struct uart_port *port, unsigned int state,
- 		 * This is called on uart_close() or a suspend event.
- 		 */
- 		clk_disable_unprepare(atmel_port->clk);
-+		if (__clk_is_enabled(atmel_port->gclk))
-+			clk_disable_unprepare(atmel_port->gclk);
- 		break;
- 	default:
- 		dev_err(port->dev, "atmel_serial: unknown pm %d\n", state);
-@@ -2132,7 +2141,9 @@ static void atmel_set_termios(struct uart_port *port,
- {
- 	struct atmel_uart_port *atmel_port = to_atmel_uart_port(port);
- 	unsigned long flags;
--	unsigned int old_mode, mode, imr, quot, baud, div, cd, fp = 0;
-+	unsigned int old_mode, mode, imr, quot, div, cd, fp = 0;
-+	unsigned int baud, actual_baud, gclk_rate;
-+	int ret;
- 
- 	/* save the current mode register */
- 	mode = old_mode = atmel_uart_readl(port, ATMEL_US_MR);
-@@ -2305,6 +2316,45 @@ static void atmel_set_termios(struct uart_port *port,
- 		cd = min_t(unsigned int, cd, ATMEL_US_CD);
- 	}
- 
-+	/*
-+	 * If there is no Fractional Part, there is a high chance that
-+	 * we may be able to generate a baudrate closer to the desired one
-+	 * if we use the GCLK as the clock source driving the baudrate
-+	 * generator.
-+	 */
-+	if (!atmel_port->has_frac_baudrate) {
-+		if (__clk_is_enabled(atmel_port->gclk))
-+			clk_disable_unprepare(atmel_port->gclk);
-+		gclk_rate = clk_round_rate(atmel_port->gclk, 16 * baud);
-+		actual_baud = clk_get_rate(atmel_port->clk) / (16 * cd);
-+		if (gclk_rate && abs(atmel_error_rate(baud, actual_baud)) >
-+		    abs(atmel_error_rate(baud, gclk_rate / 16))) {
-+			clk_set_rate(atmel_port->gclk, 16 * baud);
-+			ret = clk_prepare_enable(atmel_port->gclk);
-+			if (ret)
-+				goto gclk_fail;
-+
-+			if (atmel_port->is_usart) {
-+				mode &= ~ATMEL_US_USCLKS;
-+				mode |= ATMEL_US_USCLKS_GCLK;
-+			} else {
-+				mode |= ATMEL_UA_BRSRCCK;
-+			}
-+
-+			/*
-+			 * Set the Clock Divisor for GCLK to 1.
-+			 * Since we were able to generate the smallest
-+			 * multiple of the desired baudrate times 16,
-+			 * then we surely can generate a bigger multiple
-+			 * with the exact error rate for an equally increased
-+			 * CD. Thus no need to take into account
-+			 * a higher value for CD.
-+			 */
-+			cd = 1;
-+		}
-+	}
-+
-+gclk_fail:
- 	quot = cd | fp << ATMEL_US_FP_OFFSET;
- 
- 	if (!(port->iso7816.flags & SER_ISO7816_ENABLED))
-@@ -2900,6 +2950,12 @@ static int atmel_serial_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto err;
- 
-+	atmel_port->gclk = devm_clk_get_optional(&pdev->dev, "gclk");
-+	if (IS_ERR(atmel_port->gclk)) {
-+		ret = PTR_ERR(atmel_port->gclk);
-+		goto err_clk_disable_unprepare;
-+	}
-+
- 	ret = atmel_init_port(atmel_port, pdev);
- 	if (ret)
- 		goto err_clk_disable_unprepare;
 diff --git a/drivers/tty/serial/atmel_serial.h b/drivers/tty/serial/atmel_serial.h
-index 2a525b58e11a..0fcadbeabc6c 100644
+index 0fcadbeabc6c..87f8f7996307 100644
 --- a/drivers/tty/serial/atmel_serial.h
 +++ b/drivers/tty/serial/atmel_serial.h
-@@ -49,6 +49,7 @@
+@@ -9,6 +9,8 @@
+  * Based on AT91RM9200 datasheet revision E.
+  */
+ 
++#include <linux/bitfield.h>
++
+ #ifndef ATMEL_SERIAL_H
+ #define ATMEL_SERIAL_H
+ 
+@@ -39,42 +41,42 @@
+ 
+ #define ATMEL_US_MR		0x04	/* Mode Register */
+ #define	ATMEL_US_USMODE		GENMASK(3, 0)	/* Mode of the USART */
+-#define		ATMEL_US_USMODE_NORMAL		0
+-#define		ATMEL_US_USMODE_RS485		1
+-#define		ATMEL_US_USMODE_HWHS		2
+-#define		ATMEL_US_USMODE_MODEM		3
+-#define		ATMEL_US_USMODE_ISO7816_T0	4
+-#define		ATMEL_US_USMODE_ISO7816_T1	6
+-#define		ATMEL_US_USMODE_IRDA		8
++#define		ATMEL_US_USMODE_NORMAL		FIELD_PREP(ATMEL_US_USMODE, 0)
++#define		ATMEL_US_USMODE_RS485		FIELD_PREP(ATMEL_US_USMODE, 1)
++#define		ATMEL_US_USMODE_HWHS		FIELD_PREP(ATMEL_US_USMODE, 2)
++#define		ATMEL_US_USMODE_MODEM		FIELD_PREP(ATMEL_US_USMODE, 3)
++#define		ATMEL_US_USMODE_ISO7816_T0	FIELD_PREP(ATMEL_US_USMODE, 4)
++#define		ATMEL_US_USMODE_ISO7816_T1	FIELD_PREP(ATMEL_US_USMODE, 6)
++#define		ATMEL_US_USMODE_IRDA		FIELD_PREP(ATMEL_US_USMODE, 8)
  #define	ATMEL_US_USCLKS		GENMASK(5, 4)	/* Clock Selection */
- #define		ATMEL_US_USCLKS_MCK		(0 <<  4)
- #define		ATMEL_US_USCLKS_MCK_DIV8	(1 <<  4)
-+#define		ATMEL_US_USCLKS_GCLK		(2 <<  4)
- #define		ATMEL_US_USCLKS_SCK		(3 <<  4)
+-#define		ATMEL_US_USCLKS_MCK		(0 <<  4)
+-#define		ATMEL_US_USCLKS_MCK_DIV8	(1 <<  4)
+-#define		ATMEL_US_USCLKS_GCLK		(2 <<  4)
+-#define		ATMEL_US_USCLKS_SCK		(3 <<  4)
++#define		ATMEL_US_USCLKS_MCK		FIELD_PREP(ATMEL_US_USCLKS, 0)
++#define		ATMEL_US_USCLKS_MCK_DIV8	FIELD_PREP(ATMEL_US_USCLKS, 1)
++#define		ATMEL_US_USCLKS_GCLK		FIELD_PREP(ATMEL_US_USCLKS, 2)
++#define		ATMEL_US_USCLKS_SCK		FIELD_PREP(ATMEL_US_USCLKS, 3)
  #define	ATMEL_UA_FILTER		BIT(4)
  #define	ATMEL_US_CHRL		GENMASK(7, 6)	/* Character Length */
+-#define		ATMEL_US_CHRL_5			(0 <<  6)
+-#define		ATMEL_US_CHRL_6			(1 <<  6)
+-#define		ATMEL_US_CHRL_7			(2 <<  6)
+-#define		ATMEL_US_CHRL_8			(3 <<  6)
++#define		ATMEL_US_CHRL_5			FIELD_PREP(ATMEL_US_CHRL, 0)
++#define		ATMEL_US_CHRL_6			FIELD_PREP(ATMEL_US_CHRL, 1)
++#define		ATMEL_US_CHRL_7			FIELD_PREP(ATMEL_US_CHRL, 2)
++#define		ATMEL_US_CHRL_8			FIELD_PREP(ATMEL_US_CHRL, 3)
+ #define	ATMEL_US_SYNC		BIT(8)		/* Synchronous Mode Select */
+ #define	ATMEL_US_PAR		GENMASK(11, 9)	/* Parity Type */
+-#define		ATMEL_US_PAR_EVEN		(0 <<  9)
+-#define		ATMEL_US_PAR_ODD		(1 <<  9)
+-#define		ATMEL_US_PAR_SPACE		(2 <<  9)
+-#define		ATMEL_US_PAR_MARK		(3 <<  9)
+-#define		ATMEL_US_PAR_NONE		(4 <<  9)
+-#define		ATMEL_US_PAR_MULTI_DROP		(6 <<  9)
++#define		ATMEL_US_PAR_EVEN		FIELD_PREP(ATMEL_US_PAR, 0)
++#define		ATMEL_US_PAR_ODD		FIELD_PREP(ATMEL_US_PAR, 1)
++#define		ATMEL_US_PAR_SPACE		FIELD_PREP(ATMEL_US_PAR, 2)
++#define		ATMEL_US_PAR_MARK		FIELD_PREP(ATMEL_US_PAR, 3)
++#define		ATMEL_US_PAR_NONE		FIELD_PREP(ATMEL_US_PAR, 4)
++#define		ATMEL_US_PAR_MULTI_DROP		FIELD_PREP(ATMEL_US_PAR, 6)
+ #define	ATMEL_US_NBSTOP		GENMASK(13, 12)	/* Number of Stop Bits */
+-#define		ATMEL_US_NBSTOP_1		(0 << 12)
+-#define		ATMEL_US_NBSTOP_1_5		(1 << 12)
+-#define		ATMEL_US_NBSTOP_2		(2 << 12)
++#define		ATMEL_US_NBSTOP_1		FIELD_PREP(ATMEL_US_NBSTOP, 0)
++#define		ATMEL_US_NBSTOP_1_5		FIELD_PREP(ATMEL_US_NBSTOP, 1)
++#define		ATMEL_US_NBSTOP_2		FIELD_PREP(ATMEL_US_NBSTOP, 2)
+ #define	ATMEL_UA_BRSRCCK	BIT(12)	/* Clock Selection for UART */
+ #define	ATMEL_US_CHMODE		GENMASK(15, 14)	/* Channel Mode */
+-#define		ATMEL_US_CHMODE_NORMAL		(0 << 14)
+-#define		ATMEL_US_CHMODE_ECHO		(1 << 14)
+-#define		ATMEL_US_CHMODE_LOC_LOOP	(2 << 14)
+-#define		ATMEL_US_CHMODE_REM_LOOP	(3 << 14)
++#define		ATMEL_US_CHMODE_NORMAL		FIELD_PREP(ATMEL_US_CHMODE, 0)
++#define		ATMEL_US_CHMODE_ECHO		FIELD_PREP(ATMEL_US_CHMODE, 1)
++#define		ATMEL_US_CHMODE_LOC_LOOP	FIELD_PREP(ATMEL_US_CHMODE, 2)
++#define		ATMEL_US_CHMODE_REM_LOOP	FIELD_PREP(ATMEL_US_CHMODE, 3)
+ #define	ATMEL_US_MSBF		BIT(16)	/* Bit Order */
+ #define	ATMEL_US_MODE9		BIT(17)	/* 9-bit Character Length */
+ #define	ATMEL_US_CLKO		BIT(18)	/* Clock Output Select */
+@@ -82,7 +84,7 @@
+ #define	ATMEL_US_INACK		BIT(20)	/* Inhibit Non Acknowledge */
+ #define	ATMEL_US_DSNACK		BIT(21)	/* Disable Successive NACK */
+ #define	ATMEL_US_MAX_ITER_MASK	GENMASK(26, 24)	/* Max Iterations */
+-#define	ATMEL_US_MAX_ITER(n)	(((n) << 24) & ATMEL_US_MAX_ITER_MASK)
++#define	ATMEL_US_MAX_ITER(n)	FIELD_PREP(ATMEL_US_MAX_ITER_MASK, (n))
+ #define	ATMEL_US_FILTER		BIT(28)	/* Infrared Receive Line Filter */
+ 
+ #define ATMEL_US_IER		0x08	/* Interrupt Enable Register */
+@@ -134,19 +136,19 @@
+ 
+ #define ATMEL_US_CMPR		0x90	/* Comparaison Register */
+ #define ATMEL_US_FMR		0xa0	/* FIFO Mode Register */
+-#define	ATMEL_US_TXRDYM(data)	(((data) & 0x3) << 0)	/* TX Ready Mode */
+-#define	ATMEL_US_RXRDYM(data)	(((data) & 0x3) << 4)	/* RX Ready Mode */
++#define	ATMEL_US_TXRDYM(data)	FIELD_PREP(GENMASK(1, 0), (data))	/* TX Ready Mode */
++#define	ATMEL_US_RXRDYM(data)	FIELD_PREP(GENMASK(5, 4), (data))	/* RX Ready Mode */
+ #define		ATMEL_US_ONE_DATA	0x0
+ #define		ATMEL_US_TWO_DATA	0x1
+ #define		ATMEL_US_FOUR_DATA	0x2
+ #define	ATMEL_US_FRTSC		BIT(7)	/* FIFO RTS pin Control */
+-#define	ATMEL_US_TXFTHRES(thr)	(((thr) & 0x3f) << 8)	/* TX FIFO Threshold */
+-#define	ATMEL_US_RXFTHRES(thr)	(((thr) & 0x3f) << 16)	/* RX FIFO Threshold */
+-#define	ATMEL_US_RXFTHRES2(thr)	(((thr) & 0x3f) << 24)	/* RX FIFO Threshold2 */
++#define	ATMEL_US_TXFTHRES(thr)	FIELD_PREP(GENMASK(13, 8), (thr))	/* TX FIFO Threshold */
++#define	ATMEL_US_RXFTHRES(thr)	FIELD_PREP(GENMASK(21, 16), (thr))	/* RX FIFO Threshold */
++#define	ATMEL_US_RXFTHRES2(thr)	FIELD_PREP(GENMASK(29, 24), (thr))	/* RX FIFO Threshold2 */
+ 
+ #define ATMEL_US_FLR		0xa4	/* FIFO Level Register */
+-#define	ATMEL_US_TXFL(reg)	(((reg) >> 0) & 0x3f)	/* TX FIFO Level */
+-#define	ATMEL_US_RXFL(reg)	(((reg) >> 16) & 0x3f)	/* RX FIFO Level */
++#define	ATMEL_US_TXFL(reg)	FIELD_GET(GENMASK(5, 0), (reg))		/* TX FIFO Level */
++#define	ATMEL_US_RXFL(reg)	FIELD_GET(GENMASK(21, 16), (reg))	/* RX FIFO Level */
+ 
+ #define ATMEL_US_FIER		0xa8	/* FIFO Interrupt Enable Register */
+ #define ATMEL_US_FIDR		0xac	/* FIFO Interrupt Disable Register */
 -- 
 2.34.1
 
