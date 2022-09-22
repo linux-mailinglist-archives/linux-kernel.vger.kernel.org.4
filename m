@@ -2,97 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44B2A5E62EF
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 14:55:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D45F5E62F6
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 14:55:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231871AbiIVMzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 08:55:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59954 "EHLO
+        id S230281AbiIVMzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 08:55:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231861AbiIVMyt (ORCPT
+        with ESMTP id S231840AbiIVMz2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 08:54:49 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7B32E9CC8
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 05:54:10 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id z20so10898305ljq.3
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 05:54:10 -0700 (PDT)
+        Thu, 22 Sep 2022 08:55:28 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8459798A77
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 05:55:02 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id f14so14552621lfg.5
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 05:55:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=6iOm3ykiEYCxC1y7MhUHMQ31n65A3mybmY95lFp43lM=;
-        b=YMrrxM62da8qNRcPcsPM1f6j5pHpWSlnMRt/k9ArblV9TlykNySfRNF69BfT/CUnNS
-         d1IgmIX8cBoGeK/KzeQKLk9snEUd//Z8IiuFzwStqnPErEbT6CVnJFSzxdZtZfr7a1wo
-         ePKqfoJuLDVgA/ZdKIRApfAyd03xKvat/TKZDIeRdF9Lw65leabKONVnWVXEjKvleQ/I
-         nzsPkPsQA427uSydpgtnwZz9JVyC3GUlHDuPIOTWvjvM+7EN7Ag3dwrNpDgwfVWonYqA
-         GuhLJBaNq9DLDxKviqF9tAZ++Ad5NGIcGstVRhyOjY97y4VMRB7Mu0RBqSTLNiwVGcLX
-         Nj/g==
+        bh=XN7fgV/2m8FW879qnMRu32mCTvjCyjCSyyZpC6w7m7Y=;
+        b=bd8040yxj3B6AtxorIhc9/ygokzyW+LzXuJiltYwNzYtvMGkWjxnq6RUjSBN8+YSyn
+         tBq8XLybWMIOa0IGRhD84OT6q7nQAXNG2jVfQi/wZbnn2f0dseNmTKxXX5acp0NCDO4R
+         FP3YRjPz9M/uTwNHZPkXsDWiDE51iUCHztk1IK3Dbuan4C8sNyP6RpzRAAXN/vVST8wJ
+         tXMElj8UvBQtmcsteRYvfARwXjkyvEmLUXYq85ZsjhW7V0zgctWMvO2WUEL3qNomHCE1
+         mmnAv1lu2KTsn7Z5xjRsw09wpNt6Sr/sJKURKEaJD2sSDp+IvoVDetwf7hNF73s30ACf
+         WB+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=6iOm3ykiEYCxC1y7MhUHMQ31n65A3mybmY95lFp43lM=;
-        b=XUgQFtdJtjZi93giq31mhK5mjV0K/q+aYWL4KkIYd02Z0/o67P39ycMVUeq1F3wNcA
-         2xgPsMt5ax41Gm7MhDL0C+Ee1XxLoKANoHNnbhFvqre6D0YdhHOMMn2LvPL4/aMIqSZB
-         Zpf6zDXNVg/7lyMI690FrCYKpoIHBeNfpBYkF/B8Liemq+SPuAyX61NbWDXyax/MFMrG
-         lHPbxp/2cnb8BfspwZPML6CAZWBqNnDIRCqKzgflmmOAdJdQyK+NCUKKYvH4AWsULEFJ
-         QWKoZQY6VgJJhFsVurlQAwqIMjBy3l6uv3Yp4uYZmvP3MjR0gco7mdy84mb9tXMOrH+/
-         8UZg==
-X-Gm-Message-State: ACrzQf19/LWAFW2ml3hBrtWSXiZw1Fi+aarxIDFaXvgKBqD2Gq0gbHqS
-        7CQKlZbqOZYFPNRYkkb6sed9ww==
-X-Google-Smtp-Source: AMsMyM6o08fe7EJUEoL9IZbLm9HzdOug3LCgJEjROkmEOsMLYtujzse2VqJjxZ68Gea+MQekuYjXKQ==
-X-Received: by 2002:a2e:8496:0:b0:26b:f230:a55d with SMTP id b22-20020a2e8496000000b0026bf230a55dmr985734ljh.466.1663851248171;
-        Thu, 22 Sep 2022 05:54:08 -0700 (PDT)
+        bh=XN7fgV/2m8FW879qnMRu32mCTvjCyjCSyyZpC6w7m7Y=;
+        b=tdAAmU50WdhI/4s2FLtiGE0m5CI4zLcvoOd8IEepaddscM/H5ULC9PkYRx3LVDXdIb
+         TPzSp3ewLx7b3PJjfACQeJXWYLpxK/EKg3K9Z7TOHtq/cNqOBsKX20OwNn/L1YKUwmbP
+         0ljPxgOwMtCGuY0ZoBk1CDtH3PPyP4+9nP/U2mSHFRnUkHYKYcmNJXwrbwWoTTHT2Y58
+         TKmeaK73CI9OG25Fo6W4OINScE48dcWBJkV4s0k64uqDZph3GXldMuf8n+7fmaU4on0d
+         M75yVzEZ+DXIVzOz7ABqF3xhLTBDUuHOc2Q4Hdutcvjbq3OtnYGucW+hm1wb8vfHQiHy
+         onMQ==
+X-Gm-Message-State: ACrzQf1JKPe3hOCJVElsdqK+jlL0IEK1elrssyh1Ugn0X7+cWRNYmjyO
+        9y8+lNPuJq94vtQt6HAxwE+YMg==
+X-Google-Smtp-Source: AMsMyM7Ts2WYAUA7HLB8Cder/jargsWJeCqHAoRewDq3r0RDccZK3M1sGSZ3fGbUJYftoWM6fvW+bw==
+X-Received: by 2002:a05:6512:39c3:b0:49f:dee8:c100 with SMTP id k3-20020a05651239c300b0049fdee8c100mr1330441lfu.168.1663851300504;
+        Thu, 22 Sep 2022 05:55:00 -0700 (PDT)
 Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id u17-20020a05651220d100b0049ad2619becsm929038lfr.131.2022.09.22.05.54.07
+        by smtp.gmail.com with ESMTPSA id v21-20020a05651203b500b00497ac6b2b15sm924644lfp.157.2022.09.22.05.54.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Sep 2022 05:54:07 -0700 (PDT)
-Message-ID: <3c0c6932-89fe-5962-d1c3-57ab6ef577df@linaro.org>
-Date:   Thu, 22 Sep 2022 14:54:06 +0200
+        Thu, 22 Sep 2022 05:55:00 -0700 (PDT)
+Message-ID: <f1dd4e27-efc7-ef4c-cb30-5aeea6a55473@linaro.org>
+Date:   Thu, 22 Sep 2022 14:54:58 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.2
-Subject: Re: [PATCH] dt-bindings: iommu: arm,smmu-v3: Relax order of interrupt
- names
+Subject: Re: [PATCH v4 01/10] dt-bindings: soc: renesas: Move renesas.yaml
+ from arm to soc
 Content-Language: en-US
-To:     Jean-Philippe Brucker <jean-philippe@linaro.org>, will@kernel.org,
-        robin.murphy@arm.com
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220916133145.1910549-1-jean-philippe@linaro.org>
+To:     Prabhakar <prabhakar.csengg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Conor Dooley <conor.dooley@microchip.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+        Atish Patra <atishp@rivosinc.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20220920184904.90495-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220920184904.90495-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220916133145.1910549-1-jean-philippe@linaro.org>
+In-Reply-To: <20220920184904.90495-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/09/2022 15:31, Jean-Philippe Brucker wrote:
-> The QEMU devicetree uses a different order for SMMUv3 interrupt names,
-> and there isn't a good reason for enforcing a specific order. Since all
-> interrupt lines are optional, operating systems should not expect a
-> fixed interrupt array layout; they should instead match each interrupt
-> to its name individually. Besides, as a result of commit e4783856a2e8
-> ("dt-bindings: iommu: arm,smmu-v3: make PRI IRQ optional"), "cmdq-sync"
-> and "priq" are already permutable. Relax the interrupt-names array
-> entirely by allowing any permutation, incidentally making the schema
-> more readable.
+On 20/09/2022 20:48, Prabhakar wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > 
-> Note that dt-validate won't allow duplicate names here so we don't need
-> to specify maxItems or add additional checks, it's quite neat.
+> renesas.yaml lists out all the Renesas SoC's and the platforms/EVK's which
+> is either ARM32/ARM64. It would rather make sense if we move renesas.yaml
+> to the soc/renesas folder instead. This is in preparation for adding a new
+> SoC (RZ/Five) from Renesas which is based on RISC-V.
+> 
+> While at it drop the old entry for renesas.yaml from MAINTAINERS file and
+> there is no need to update the new file path of renesas.yaml as we already
+> have an entry for Documentation/devicetree/bindings/soc/renesas/ folder.
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Nice explanation, much appriecated!
 
 Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
