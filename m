@@ -2,54 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5424F5E5E7F
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 11:25:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 486195E5E86
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 11:26:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbiIVJZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 05:25:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42464 "EHLO
+        id S230360AbiIVJ0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 05:26:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230102AbiIVJZr (ORCPT
+        with ESMTP id S229631AbiIVJ03 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 05:25:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01801AA365
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 02:25:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 99555B82759
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 09:25:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D1F0C433C1;
-        Thu, 22 Sep 2022 09:25:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663838744;
-        bh=x9vdgttExkjV7T6N0P/+kIRGf8m3mwiWn87Z26KdTsk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Tr7km3Aj7G9vGv0PNURT0d2Qy39DlZdd3DrPD18cTJP9+bT3ppHNSqNorXg2fkqrz
-         1wx/kj8wqP4bLiiFxE7jsL0yQGE1SLGC6nFEbQvtDCZJfrSYsbdrPKIYZHUtNlmYDO
-         A86ais2krzvXgzA9NlhhFalotk3LuLJJuwAA1iLqIJtQYI3PTAdeKpYrqAA9iuDQfT
-         Fuw9iKlILDBo9L1EklKnDRLC7vJ1eSiZbVYFhZEsatHUodCjW8IZQH6LqLYTEM3EBG
-         cBeDbApytq6Wm7OeTkQBFMlQXrENcm7MX2u41DBUZbX5RwqgMO45tERKP1T3pIDTVF
-         PiEvwDIJL+Pgw==
-Message-ID: <d0c8336b-bdaa-8e57-38fa-f570c3d696b8@kernel.org>
-Date:   Thu, 22 Sep 2022 11:25:39 +0200
+        Thu, 22 Sep 2022 05:26:29 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2799DB2745
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 02:26:26 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D683D1595;
+        Thu, 22 Sep 2022 02:26:32 -0700 (PDT)
+Received: from [10.57.33.96] (unknown [10.57.33.96])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C321C3F73D;
+        Thu, 22 Sep 2022 02:26:24 -0700 (PDT)
+Message-ID: <1867fb58-cb96-5d82-2518-e7212b6849a0@arm.com>
+Date:   Thu, 22 Sep 2022 10:26:23 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH] rv/monitor: add __init/__exit annotations to module
- init/exit funcs
-To:     Xiu Jianfeng <xiujianfeng@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, rostedt@goodmis.org, mingo@redhat.com
-References: <20220911030418.94609-1-xiujianfeng@huawei.com>
-Content-Language: en-US
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-In-Reply-To: <20220911030418.94609-1-xiujianfeng@huawei.com>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.0
+Subject: Re: [PATCH 1/1] arm64: defconfig: Add Coresight as module
+To:     James Clark <james.clark@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mark Brown <broonie@kernel.org>
+Cc:     coresight@lists.linaro.org, catalin.marinas@arm.com,
+        linux-arm-kernel@lists.infradead.org, mike.leach@linaro.org,
+        leo.yan@linaro.org, linux-kernel@vger.kernel.org,
+        Will Deacon <will@kernel.org>
+References: <20220921140535.152627-1-james.clark@arm.com>
+ <20220921140535.152627-2-james.clark@arm.com>
+ <YystQ3pw3uBpi0CT@sirena.org.uk> <20220921164622.GA1124503@p14s>
+ <07d37df2-246e-70ea-4a9f-e33354d8864d@arm.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <07d37df2-246e-70ea-4a9f-e33354d8864d@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,23 +51,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Xiu
+On 22/09/2022 10:04, James Clark wrote:
+> 
+> 
+> On 21/09/2022 17:46, Mathieu Poirier wrote:
+>> On Wed, Sep 21, 2022 at 04:26:59PM +0100, Mark Brown wrote:
+>>> On Wed, Sep 21, 2022 at 03:05:35PM +0100, James Clark wrote:
+>>>
+>>>> +CONFIG_CORESIGHT_CTI=m
+>>>> +CONFIG_CORESIGHT_CTI_INTEGRATION_REGS=y
+>>>
+>>
+>> I agree - integration registers should not be enabled by default.
+>>
+>>> Do we want this turned on by default?  According to the
+>>> description it's a bit dangerous and it's exposed via sysfs
+>>> rather than debugfs.
+>>
+>>
+> 
+> Should I disable just CONFIG_CORESIGHT_CTI_INTEGRATION_REGS or
+> CONFIG_CORESIGHT_CTI as well? There are other writable registers exposed
+> via sysfs outside of these two options, so I wanted to check if it's
+> just the integration registers that are the issue.
 
-The first char after the subsys: must be capital, i.e.,
+It is good/fine to keep CORESIGHT_CTI. But you may remove the 
+INTEGRATION_REGS. They are there for "verification" of the CTI
+integration on the SoC. We added them only for the platform
+bring up purposes.
 
-[PATCH] rv/monitor: Add __init/__exit annotations to module init/exit funcs
-
-On 9/11/22 05:04, Xiu Jianfeng wrote:
-> Add missing __init/__exit annotations to module init/exit funcs.
-
-Please, also add these tags to the monitor templates here:
-
-
-tools/verification/dot2/dot2k_templates/main_global.c
-tools/verification/dot2/dot2k_templates/main_per_cpu.c
-tools/verification/dot2/dot2k_templates/main_per_task.c
-
-So the fix is propagated to future monitors.
-
-Thanks
--- Daniel
+Suzuki
