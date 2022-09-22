@@ -2,86 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 326D95E66E3
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 17:20:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 267075E66EE
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 17:21:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230285AbiIVPUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 11:20:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44332 "EHLO
+        id S231970AbiIVPVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 11:21:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230166AbiIVPUR (ORCPT
+        with ESMTP id S231603AbiIVPVe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 11:20:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 919C07C777;
-        Thu, 22 Sep 2022 08:20:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E6F561388;
-        Thu, 22 Sep 2022 15:20:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8766AC433D7;
-        Thu, 22 Sep 2022 15:20:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663860014;
-        bh=Y/UYpzSr1GDE1c2TA1atoaallVLMUhHYl0REHUJdcTY=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Eop5zedDRJJAQd6MUsKKPvVths6VaEw+SnkkVXHClXyiuYDQ2kH89N/EbgIvD7QEM
-         rlzSS1JYWkKpKkWNCOzOrgR6tM8oc1z/uU//aumUHA+JNxFgw61qdxIJhr49m7Bdl3
-         DI9P2Qo+BwQVdqQUBlM6FCpYalU1T/RXw8LG+S04sW/xoBzBW2xVtSXsl4d+lNitjw
-         l264DWja94UtiDOUFqSEnW/k9jLlt1thvA/0SXAzOn+4ObQpBVXp2iOjrZm7YfeFQM
-         3BUt2Xkb6QFPCpxUUWSh2CPWo3ouXIhCWWDJ/8z3fKxWQL1TsEsH4dGSE6XpukhUHz
-         Nwx77PCQVHTgw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6A0BCE21ED1;
-        Thu, 22 Sep 2022 15:20:14 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 22 Sep 2022 11:21:34 -0400
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FA1DF3716;
+        Thu, 22 Sep 2022 08:21:33 -0700 (PDT)
+Received: by mail-qt1-f177.google.com with SMTP id g23so6508054qtu.2;
+        Thu, 22 Sep 2022 08:21:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=5wbLjt1ptS0e2F3zuisLshb8cZoB85PXpRGachu4Ne0=;
+        b=y3RyaXtiHQ5BP60qthd/OoFNkS/CdnnHOPcThOMbIqMPK8jkeS24FnprUXjbkGHq8M
+         EUaNhhePt/20e79PcYEKNJzbcnF1z3SMPvxbiDsJpXYnKFqib680hvYkVmrUMkJg8epH
+         SzJZ3ewiDQsKdrusLSfdJgymhH5o/nd/fcF1QlStlQoKl69WhsRC+IzscIRQVVY+w45B
+         J1PMOz/mBsC/GMNKAXZaS18abjcaEIoWLBP9L2xvEl3MEd7QXQSFriJJkZS3d76zdeuA
+         3jYifiQF5+qfg8lXquED3qdGobGLtmFmP1sh121sJ/btba100Y0+75I7cmd/UysPmzdZ
+         o3nA==
+X-Gm-Message-State: ACrzQf1gfLiaq+4Rwrchpsvu5xcBQ7N5S1nk5XerGIAIq3MmI1uea764
+        49EqTANGl/81vWP9NI+QOxjAUxSWHLqZF1ukv70=
+X-Google-Smtp-Source: AMsMyM5JmyzM4Fn/yqQRqQjVZKnHwOkYTyAYwNcaYjs7UcT6AaG61yAPacMz920Hs8k7dLP3uYB83NuneFPF1cweQqI=
+X-Received: by 2002:a05:622a:11c8:b0:35c:e912:a8ea with SMTP id
+ n8-20020a05622a11c800b0035ce912a8eamr3273123qtk.17.1663860092476; Thu, 22 Sep
+ 2022 08:21:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf v3] xsk: inherit need_wakeup flag for shared sockets
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166386001443.15287.1242641673670233629.git-patchwork-notify@kernel.org>
-Date:   Thu, 22 Sep 2022 15:20:14 +0000
-References: <20220921135701.10199-1-jalal.a.mostapha@gmail.com>
-In-Reply-To: <20220921135701.10199-1-jalal.a.mostapha@gmail.com>
-To:     Jalal Mostafa <jalal.a.mostapha@gmail.com>
-Cc:     maciej.fijalkowski@intel.com, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, bjorn@kernel.org, magnus.karlsson@intel.com,
-        jonathan.lemon@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, daniel@iogearbox.net,
-        john.fastabend@gmail.com, hawk@kernel.org, ast@kernel.org,
-        linux-kernel@vger.kernel.org, jalal.mostafa@kit.edu
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220921063638.2489-1-kprateek.nayak@amd.com> <YysnE8rcZAOOj28A@hirez.programming.kicks-ass.net>
+ <YytqfVUCWfv0XyZO@zn.tnic> <YywaAcTdLSuDlRfl@hirez.programming.kicks-ass.net>
+In-Reply-To: <YywaAcTdLSuDlRfl@hirez.programming.kicks-ass.net>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 22 Sep 2022 17:21:21 +0200
+Message-ID: <CAJZ5v0i9P-srVxrSPZOkXhKVCA2vEQqm5B4ZZifS=ivpwv+A-w@mail.gmail.com>
+Subject: Re: [PATCH] ACPI: processor_idle: Skip dummy wait for processors
+ based on the Zen microarchitecture
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>, andi@lisas.de,
+        Pu Wen <puwen@hygon.cn>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        ananth.narayan@amd.com, gautham.shenoy@amd.com,
+        Calvin Ong <calvin.ong@amd.com>,
+        Stable <stable@vger.kernel.org>, regressions@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Thu, Sep 22, 2022 at 10:17 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Wed, Sep 21, 2022 at 09:48:13PM +0200, Borislav Petkov wrote:
+> > On Wed, Sep 21, 2022 at 05:00:35PM +0200, Peter Zijlstra wrote:
+> > > On Wed, Sep 21, 2022 at 12:06:38PM +0530, K Prateek Nayak wrote:
+> > > > Processors based on the Zen microarchitecture support IOPORT based deeper
+> > > > C-states.
+> > >
+> > > I've just gotta ask; why the heck are you using IO port based idle
+> > > states in 2022 ?!?! You have have MWAIT, right?
+> >
+> > They have both. And both is Intel technology. And as I'm sure you
+> > know AMD can't do their own thing - they kinda have to follow Intel.
+> > Unfortunately.
+> >
+> > Are you saying modern Intel chipsets don't do IO-based C-states anymore?
+>
+> I've no idea what they do, but Linux exclusively uses MWAIT on Intel as
+> per intel_idle.c.
 
-This patch was applied to bpf/bpf.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
+Well, it can be forced to use ACPI idle instead.
 
-On Wed, 21 Sep 2022 13:57:01 +0000 you wrote:
-> The flag for need_wakeup is not set for xsks with `XDP_SHARED_UMEM`
-> flag and of different queue ids and/or devices. They should inherit
-> the flag from the first socket buffer pool since no flags can be
-> specified once `XDP_SHARED_UMEM` is specified.
-> 
-> Fixes: b5aea28dca134 ("xsk: Add shared umem support between queue ids")
-> 
-> [...]
+> MWAIT also cuts down on IPIs because it wakes from the TIF write.
 
-Here is the summary with links:
-  - [bpf,v3] xsk: inherit need_wakeup flag for shared sockets
-    https://git.kernel.org/bpf/bpf/c/60240bc26114
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Right.
