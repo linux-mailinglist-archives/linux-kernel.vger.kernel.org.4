@@ -2,69 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67E2D5E644C
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 15:54:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5ED05E6458
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 15:55:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231958AbiIVNyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 09:54:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44286 "EHLO
+        id S231845AbiIVNzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 09:55:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231867AbiIVNyN (ORCPT
+        with ESMTP id S231814AbiIVNzj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 09:54:13 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2F13A1A48;
-        Thu, 22 Sep 2022 06:54:12 -0700 (PDT)
-Received: from canpemm500004.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MYGr544yjzWgxt;
-        Thu, 22 Sep 2022 21:50:13 +0800 (CST)
-Received: from [10.174.179.14] (10.174.179.14) by
- canpemm500004.china.huawei.com (7.192.104.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 22 Sep 2022 21:54:10 +0800
-Subject: Re: [PATCH v4 7/7] scsi: libsas: Make sas_{alloc, alloc_slow,
- free}_task() private
-To:     John Garry <john.garry@huawei.com>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <jinpu.wang@cloud.ionos.com>,
-        <damien.lemoal@opensource.wdc.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@huawei.com>, <yangxingui@huawei.com>
-References: <1663840018-50161-1-git-send-email-john.garry@huawei.com>
- <1663840018-50161-8-git-send-email-john.garry@huawei.com>
-From:   Jason Yan <yanaijie@huawei.com>
-Message-ID: <579f6aa0-4261-16b1-4d44-e3b0aeee78e6@huawei.com>
-Date:   Thu, 22 Sep 2022 21:54:10 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        Thu, 22 Sep 2022 09:55:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD9BCDF382;
+        Thu, 22 Sep 2022 06:55:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 385E7B81E5E;
+        Thu, 22 Sep 2022 13:55:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEE27C433C1;
+        Thu, 22 Sep 2022 13:55:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663854933;
+        bh=JCvHpyPsKzJCtpMbsDdiMt9Y8zlCMwuocJyYy+K7OLw=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=U61WAQaLaG/LMMhYIZAYrKwrmloJ5QrbOrtUaBZiEFwgRl0H3i5bl+QBNkBjZ3Krr
+         4MLl69B0E5FLgn4C0ft8pQb4oax4KD/DS5J+tAHcW3NJDsvTJQE5Zmfb3xf9EgEAXW
+         yqPyNhdRblQT8RVtXrygzGiCw61fRqaOVonj7ASA6VoHyPYUa5OOxQO6SeVFpFZNMF
+         rRfzJzMm3Kf0keQb24vayWOyHMvOpdyannQJucQ+J6CBqj+dx8e8+7pt226IaGU+tu
+         DoDvotGCnGynsA2xJBu4uUrjvieG26q72m3s9H5PJP+zo49Q0grmiWHi2KVgOhcSVk
+         B5SRg9dGdWvYA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id A34B45C06D0; Thu, 22 Sep 2022 06:55:32 -0700 (PDT)
+Date:   Thu, 22 Sep 2022 06:55:32 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Signed-off-by missing for commit in the rcu tree
+Message-ID: <20220922135532.GI4196@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220922201222.01e0f2f5@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <1663840018-50161-8-git-send-email-john.garry@huawei.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.14]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500004.china.huawei.com (7.192.104.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220922201222.01e0f2f5@canb.auug.org.au>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 2022/9/22 17:46, John Garry wrote:
-> We have no users outside libsas any longer, so make sas_alloc_task(),
-> sas_alloc_slow_task(), and sas_free_task() private.
+On Thu, Sep 22, 2022 at 08:12:35PM +1000, Stephen Rothwell wrote:
+> Hi all,
 > 
-> Signed-off-by: John Garry <john.garry@huawei.com>
-> Tested-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-> ---
->   drivers/scsi/libsas/sas_init.c     | 3 ---
->   drivers/scsi/libsas/sas_internal.h | 4 ++++
->   include/scsi/libsas.h              | 4 ----
->   3 files changed, 4 insertions(+), 7 deletions(-)
+> Commit
+> 
+>   a3450c5ce1df ("Revert "rcu: Simplify rcu_init_nohz() cpumask handling"")
+> 
+> is missing a Signed-off-by from its author and committer.
+> 
+> Reverts are commits, too.
 
-Reviewed-by: Jason Yan <yanaijie@huawei.com>
+Apologies, missed a rebase to drop the revert and the original commit,
+will fix!
+
+							Thanx, Paul
