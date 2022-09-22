@@ -2,101 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C6995E6EE9
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 23:57:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 656D75E6EF1
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 23:58:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230227AbiIVV51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 17:57:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34962 "EHLO
+        id S230360AbiIVV6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 17:58:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229993AbiIVV5Y (ORCPT
+        with ESMTP id S230099AbiIVV6O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 17:57:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D40CA109779
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 14:57:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8C123B835BE
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 21:57:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 982C0C433C1;
-        Thu, 22 Sep 2022 21:57:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663883841;
-        bh=kqodCzuwqlqJ5UyM36OG0YSUsgR4TArBAX8DBB1ASFU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=PTfjnG2iEDg1ssayJZVxAqy0W9aPqVt10MfyjVKPXoq11fVr6Q8RDDgZVcATF8mMO
-         J25acTm6gBUiDZq/PE2jfd/pRhvYJFD3vm8teudftvby2xL8x4+SjrTulp0thVal0w
-         Z40GVwbDH4KH3HK2tiBxGjQAYP8+e4EcP7/uDYoKc3rkxzg9X4qpfnvJcQYGKF+tc8
-         g7CohjrrX6CtoWDIGECvqeZvaHnSpx2jAuUvxJP89BMvduMqwa2PPApe3D4DRxwxQF
-         LKIjQBbuEG3mg4yCfLaiXmLour9jOhiQ2T6RMxdlR8wi6GvufleDAnheAQ3pozGrQW
-         OBFbcYDXMjRkA==
-From:   Will Deacon <will@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Will Deacon <will@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Mohan Rao .vanimina" <mailtoc.mohanrao@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH] vmlinux.lds.h: CFI: Reduce alignment of jump-table to function alignment
-Date:   Thu, 22 Sep 2022 22:57:15 +0100
-Message-Id: <20220922215715.13345-1-will@kernel.org>
-X-Mailer: git-send-email 2.20.1
+        Thu, 22 Sep 2022 17:58:14 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 939CA10AB00
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 14:58:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=myXRgbifa/hnzUH8EJNQ61gteUFK
+        O52ECTqp4X3tL+w=; b=l1EbvM2BeA6s7XlinyMbFqPlhhBc45ErLA1LQ+9sW3GA
+        vZwcpHNdvvLVkOx3BBFxFp1LPiBfOsiOyiwG3VNpdnarrP2NwvY+Kd8yArlMx+iG
+        /EbDqpaovt6q+clzdWQ8ZJf0dmr8KDG/Pw/0V7cdvZTrj3tYjE7itP0sBAuKBDs=
+Received: (qmail 1793391 invoked from network); 22 Sep 2022 23:58:10 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 22 Sep 2022 23:58:10 +0200
+X-UD-Smtp-Session: l3s3148p1@npk0KEvpcOQgAwDtxwncAPgJb5TsabMI
+Date:   Thu, 22 Sep 2022 23:58:09 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     linux-renesas-soc@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2] dt-bindings: timer: renesas,tmu: Add r8a779f0 support
+Message-ID: <YyzacQv61ga4+WkC@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-renesas-soc@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220830104921.7532-1-wsa+renesas@sang-engineering.com>
+ <YyzQFheOv2Lg0t6F@shikoro>
+ <8672aa05-0269-f8c3-50d3-e23d3793baf4@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="8l5HS+T+m8MEHXhc"
+Content-Disposition: inline
+In-Reply-To: <8672aa05-0269-f8c3-50d3-e23d3793baf4@linaro.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Due to undocumented, hysterical raisins on x86, the CFI jump-table
-sections in .text are needlessly aligned to PMD_SIZE in the vmlinux
-linker script. When compiling a CFI-enabled arm64 kernel with a 64KiB
-page-size, a PMD maps 512MiB of virtual memory and so the .text section
-increases to a whopping 940MiB and blows the final Image up to 960MiB.
-Others report a link failure.
 
-Since the CFI jump-table requires only instruction alignment, reduce the
-alignment directives to function alignment for parity with other parts
-of the .text section. This reduces the size of the .text section for the
-aforementioned 64KiB page size arm64 kernel to 19MiB for a much more
-reasonable total Image size of 39MiB.
+--8l5HS+T+m8MEHXhc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Cc: Sami Tolvanen <samitolvanen@google.com>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: "Mohan Rao .vanimina" <mailtoc.mohanrao@gmail.com>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Link: https://lore.kernel.org/all/CAL_GTzigiNOMYkOPX1KDnagPhJtFNqSK=1USNbS0wUL4PW6-Uw@mail.gmail.com/
-Fixes: cf68fffb66d60 ("add support for Clang CFI")
-Signed-off-by: Will Deacon <will@kernel.org>
----
- include/asm-generic/vmlinux.lds.h | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index 7515a465ec03..7c90b1ab3e00 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -543,10 +543,9 @@
-  */
- #ifdef CONFIG_CFI_CLANG
- #define TEXT_CFI_JT							\
--		. = ALIGN(PMD_SIZE);					\
-+		ALIGN_FUNCTION();					\
- 		__cfi_jt_start = .;					\
- 		*(.text..L.cfi.jumptable .text..L.cfi.jumptable.*)	\
--		. = ALIGN(PMD_SIZE);					\
- 		__cfi_jt_end = .;
- #else
- #define TEXT_CFI_JT
--- 
-2.37.3.998.g577e59143f-goog
+> https://git.linaro.org/people/daniel.lezcano/linux.git/commit/?h=timers/drivers/next&id=fa7fc5243f9e7d64ea7e73c247218f22499c3479
 
+Cool, thanks a lot!
+
+
+--8l5HS+T+m8MEHXhc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMs2m4ACgkQFA3kzBSg
+KbaihBAAjgxWDd9NSOsMLC2ef7JHXQGlaqy5ApHKsQjmBadbx1G1Uw+jQseHRuaM
+tmZ600zwup9I74n0rArVb1CwxqYbufKA7HcAUfG8fLLoCj9SSTU+A364t8BkGz4D
+PBbepiELSqw1ORM8s6zfTbL9VtaIgjUuUlSTNzZJzyLe553kyXRUS5n7NVnGHVYr
+Ens7exvsDQxyUhVvsVVGoHoxzsZYZVJp0BBOPHn8sMjWt2JXGgb91l8wXrv9sY/s
+V/yqi85zGE8EiYYPFpG45yyZBywiEh4VcM94b1/ImBV8EZVfHjEemgzLcYwZFZDI
+Q7EFXOlD92LUN5ypoFIP0WDnOPbC4GhyXl0iNoY1n5nff+Ikv3oxI1ge2n0fMmEs
+EmyliHNBL31FedXaxJbN7asRzeglyE/nBP4LYmxtZka4QDj4Qc6ckFZ9LjdPsE0u
+/urtNgvoS4EGfvreqE0UjEPByPD5DBq2kF4xnfc5Z7PTJDpn2AvYaMCKKIn2HWE4
+d69AmmiKRDsgdbOgFz2LgKrJCfEp8DcSYZVorizmIyViGz03lKXgAGAhOFscbOnX
+tdoGRrZYxH+xCRRLG+5o+cfoKmLNPT+lr2/AE3ygl4Hlu2VhHJk15e53hm1AGA0I
+BNTozGFgSOtT12ic39KPPSTVlXEExHbBGmDwKd23UI2IZCUOGQk=
+=8NWN
+-----END PGP SIGNATURE-----
+
+--8l5HS+T+m8MEHXhc--
