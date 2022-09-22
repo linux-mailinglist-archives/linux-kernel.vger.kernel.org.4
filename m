@@ -2,322 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74F875E5883
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 04:21:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2272F5E588B
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 04:23:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbiIVCVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 22:21:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51912 "EHLO
+        id S230107AbiIVCXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 22:23:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbiIVCVH (ORCPT
+        with ESMTP id S229803AbiIVCXL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 22:21:07 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 142E970E5B
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 19:21:05 -0700 (PDT)
-Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220922022100epoutp03ef5a0a20c8fe7fc4af60824beb5241d0~XDVhk5Uwc2894428944epoutp034
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 02:21:00 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220922022100epoutp03ef5a0a20c8fe7fc4af60824beb5241d0~XDVhk5Uwc2894428944epoutp034
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1663813260;
-        bh=IzYKUMJMz1SOuLrQwo03HvM/j9w6HxFH2Gbg2lnVnmk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=nmGVEt/p1jY8ziJOfWfIs5SVNZIRtHRXtMVxfMato/75GebwsFGDMw1t9NFlCzO5Y
-         0+B5d6JrIBn3x1poITZgnQXfRAOrwWZ4GmnzoU/S6nAc1gND+GpuqSeST/731kdzNu
-         s3sL+VZ4KUpEEqvWkwedKKuoNYE9kmIPTHTlTw70=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-        20220922022100epcas1p4455e5c35a91d32b703f71552eb083e8f~XDVhIaC4k0554705547epcas1p4D;
-        Thu, 22 Sep 2022 02:21:00 +0000 (GMT)
-Received: from epsmges1p2.samsung.com (unknown [182.195.38.232]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4MXzXp4pdCz4x9Q3; Thu, 22 Sep
-        2022 02:20:58 +0000 (GMT)
-Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
-        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        43.5A.51827.886CB236; Thu, 22 Sep 2022 11:20:56 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20220922022056epcas1p1c95a2fbb5bd55e254387c2c457732b13~XDVdlG5z70207302073epcas1p1d;
-        Thu, 22 Sep 2022 02:20:56 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220922022056epsmtrp185b0b87135b10315d964d258804e9509~XDVdj9eUY2543925439epsmtrp1G;
-        Thu, 22 Sep 2022 02:20:56 +0000 (GMT)
-X-AuditID: b6c32a36-72a32a800000ca73-30-632bc6889860
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        C2.68.18644.886CB236; Thu, 22 Sep 2022 11:20:56 +0900 (KST)
-Received: from jiho-chu04.tn.corp.samsungelectronics.net (unknown
-        [10.113.112.236]) by epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20220922022056epsmtip274389d8678a4e23ae4addce2032c92cf~XDVdWHAWw3124431244epsmtip2u;
-        Thu, 22 Sep 2022 02:20:56 +0000 (GMT)
-Date:   Thu, 22 Sep 2022 11:20:55 +0900
-From:   Jiho Chu <jiho.chu@samsung.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     gregkh@linuxfoundation.org, arnd@arndb.de, ogabbay@kernel.org,
-        broonie@kernel.org, linux-kernel@vger.kernel.org,
-        yelini.jeong@samsung.com, myungjoo.ham@samsung.com
-Subject: Re: [PATCH v2 13/13] dt-bindings: arm: Add Samsung Trinity bindings
-Message-Id: <20220922112055.46c1e55453d16383666ebe27@samsung.com>
-In-Reply-To: <68a87470-2946-cdd0-f1a4-0c0bac906e8c@linaro.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprOJsWRmVeSWpSXmKPExsWy7bCmvm7HMe1kgw3NahZ/Jx1jt5j68Amb
-        RfPi9WwW77t3M1vsfb2V3eLyrjlsFrcbV7BZ7Ov5yGjxfNp1FgdOj9+/JjF6bFrVyeZx59oe
-        No/9c9ewe/RtWcXo8XmTXABbVLZNRmpiSmqRQmpecn5KZl66rZJ3cLxzvKmZgaGuoaWFuZJC
-        XmJuqq2Si0+ArltmDtBVSgpliTmlQKGAxOJiJX07m6L80pJUhYz84hJbpdSClJwC0wK94sTc
-        4tK8dL281BIrQwMDI1OgwoTsjCf/rrMU3DCo2HC+vIFxhUoXIyeHhICJxJ1l05m7GLk4hAR2
-        MEoc+XmOCcL5xChxqGMRVOYzo8ScQ/9ZYVoaV2xhh0jsYpRo2LSAFcLpYJI4eXgzM0gVi4Cq
-        RMPhdywgNhuQPXPGGnYQW0TAQmLxhoVgDcwCqxkl9k5dBDZWWMBH4uO552DNvAKOEs93fGMC
-        sTkF7CT+XX3ACLHaQuJuzwqgeg6gGkGJvzuEQcLMAvIS29/OATtVQmAih0TLludsIDUSAi4S
-        vU8TIVqFJV4d38IOYUtJvOxvg7KzJaZ0LGKBsAskzj3fygzRaixxcUUKiMksoCmxfpc+RIWi
-        xM7fcxkhtvJJvPvawwpRzSvR0SYEUaIkseTPYajhEhJTZ0D8ISHgIfGg+z2YLSTwjVFi5zum
-        CYwKsxBemYXklVkIexcwMq9iFEstKM5NTy02LDCCx25yfu4mRnAK1TLbwTjp7Qe9Q4xMHIyH
-        GCU4mJVEeGff0UwW4k1JrKxKLcqPLyrNSS0+xGgKjJiJzFKiyfnAJJ5XEm9oYmlgYmZkbGJh
-        aGaoJM7bMEMrWUggPbEkNTs1tSC1CKaPiYNTqoFpSXhrW9138UK9Z1G7q/41chacnLnwlZZY
-        6K7jwXvrZGNblpz86sSiyea+yteLrTDR6G6faHhQ+rIVa0+cW7rSZ2MYd276DMG7V5dp7X/n
-        yZagnri19dCDPv6bzyxPtjArx0Z8lueaIeHrcejZ8q0vcrdFPHP7vZehwcHcV+5jSvDCU7nr
-        z7Euyg1+nr9USXVK5Wb9FxUXl2SbqovpvFLZvmjb7NOf5XYUqnbZsRl7vUlKijl+VDzo6eIL
-        DbcEmP1/u35g5DrG9rG55HdN7cnKWYLPJ0qsv+0z+0hNCNOXTds3uMkFXHnQHXExf+XqA9Xn
-        ZMOzjjxklWNNbwpZt8b2+6eJzaqJeQaZ/aru+cuUWIozEg21mIuKEwHR8Wx7KgQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrFLMWRmVeSWpSXmKPExsWy7bCSvG7HMe1kg9UH+Cz+TjrGbjH14RM2
-        i+bF69ks3nfvZrbY+3oru8XlXXPYLG43rmCz2NfzkdHi+bTrLA6cHr9/TWL02LSqk83jzrU9
-        bB77565h9+jbsorR4/MmuQC2KC6blNSczLLUIn27BK6MJ/+usxTcMKjYcL68gXGFShcjJ4eE
-        gIlE44ot7F2MXBxCAjsYJfY/amCGSEhIbLq3HMjmALKFJQ4fLgYJCwm0MUl8eswDYrMIqEo0
-        HH7HAmKzAdkzZ6xhB7FFBCwkFm9YyAoyk1lgNaPExLbJTCAJYQEfiY/nnoPN5xVwlHi+4xtY
-        nFPATuLf1QeMEAu+MUrsfMcEcYOFxN2eFawgN/AKCEr83SEMEmYW0JJ4+OsWC4QtL7H97Rzm
-        CYyCsxCqZiGpmoWkagEj8ypGydSC4tz03GLDAqO81HK94sTc4tK8dL3k/NxNjODo0NLawbhn
-        1Qe9Q4xMHIyHGCU4mJVEeGff0UwW4k1JrKxKLcqPLyrNSS0+xCjNwaIkznuh62S8kEB6Yklq
-        dmpqQWoRTJaJg1OqgUl+/WbZs+H2DdIr7jSEPqoxnP/6tZJn14lYX+bYi2erb/cf+vJAskqQ
-        xa315WVlZXPxtE9Wmqo7PC8f9Wg/NmUbb0y+/ordtn9sv/l/auM2Ohvkynv26e8by+dkb+ue
-        vPzf40Wr/4uvVDdmeFEg28q3uvMEc/iG/VdWbGPdJMDyOLBvVVJ6stTDR2ffNK5f4mCUzvDW
-        +59wkmGq8VzPEn1vz/ZbPpMkMqU3rCioi0jYuyN9e9HGC41TT+iUSPVpz3vCselO/D3jyReX
-        McWdmlYjK7rYwkNctbzWL3NR59ry9V9s3qeKuwWm74rzO5Z3k8fk61WDOv0HiSIeDOaL2mrj
-        9p1m+t3kOzuda5nIUiWW4oxEQy3mouJEAA6gOnD9AgAA
-X-CMS-MailID: 20220922022056epcas1p1c95a2fbb5bd55e254387c2c457732b13
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220917072358epcas1p15d18d4cf27694f894332f975bb971bef
-References: <20220917072356.2255620-1-jiho.chu@samsung.com>
-        <CGME20220917072358epcas1p15d18d4cf27694f894332f975bb971bef@epcas1p1.samsung.com>
-        <20220917072356.2255620-14-jiho.chu@samsung.com>
-        <68a87470-2946-cdd0-f1a4-0c0bac906e8c@linaro.org>
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 21 Sep 2022 22:23:11 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 277F070E5B;
+        Wed, 21 Sep 2022 19:23:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ZiPBxKPeBhyg1ydjp9NE+T7YJ8ZxnXylq6Qe68BttcM=; b=X5nKHSb5zMgYZl+FhXsP6DCn72
+        bEglB3uwj1u2ckoCMYriAyG5kPjUhImLESuKJd2vtNNiLCcrYBHeBdt3F6cQh6Wm3StOrkOcjQeJu
+        4qrCsHH5WIU26q176+DcvQKvcrbj0BY9yaqWeThAwanr0qzriUoC+LqfYejfH/Fnsff8pbPPZ71Qb
+        NjRsD6GZMQI/wiIBI5colWhci+DcZ9INZTqBN7Niz8E0f9Fh+HHg3qeHhqTiWGfHStzVjtBSLeI0K
+        W8V4q7B54U3lalSJFlSdAHcj1YZ49zmVV2ju998nI+9rCL2JEeqKV0rTw/xbrhrKpjGLwJQMEI0p/
+        suiYbjiA==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1obBrU-002FEi-1w;
+        Thu, 22 Sep 2022 02:22:48 +0000
+Date:   Thu, 22 Sep 2022 03:22:48 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Jan Kara <jack@suse.cz>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        "Darrick J . Wong" <djwong@kernel.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 4/7] iov_iter: new iov_iter_pin_pages*() routines
+Message-ID: <YyvG+Oih2A37Grcf@ZenIV>
+References: <20220831041843.973026-5-jhubbard@nvidia.com>
+ <YxbtF1O8+kXhTNaj@infradead.org>
+ <103fe662-3dc8-35cb-1a68-dda8af95c518@nvidia.com>
+ <Yxb7YQWgjHkZet4u@infradead.org>
+ <20220906102106.q23ovgyjyrsnbhkp@quack3>
+ <YxhaJktqtHw3QTSG@infradead.org>
+ <YyFPtTtxYozCuXvu@ZenIV>
+ <20220914145233.cyeljaku4egeu4x2@quack3>
+ <YyIEgD8ksSZTsUdJ@ZenIV>
+ <20220915081625.6a72nza6yq4l5etp@quack3>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220915081625.6a72nza6yq4l5etp@quack3>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 21 Sep 2022 20:42:35 +0200
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+On Thu, Sep 15, 2022 at 10:16:25AM +0200, Jan Kara wrote:
 
-> On 17/09/2022 09:23, Jiho Chu wrote:
-> > The Trinity Neural Processing Unit (NPU) is a hardware IP for providing
-> > hardware acceleration for neural network processing workloads. It has
-> > own virtual ISA decoder unit, and controlled by memory mapped control
-> > registers. The IP is composed of Common Processor (CP), Digital Signal
-> > Processor (DSP) and Deep Learning Accelerator (DLA). ComBox is register
-> > set to control IRQ or check overall status of the IP.
-> > 
-> > Signed-off-by: Jiho Chu <jiho.chu@samsung.com>
-> > Signed-off-by: Yelin Jeong <yelini.jeong@samsung.com>
-> > Signed-off-by: MyungJoo Ham <myungjoo.ham@samsung.com>
-> > ---
-> >  .../bindings/arm/samsung,trinity.yaml         | 115 ++++++++++++++++++
-> >  1 file changed, 115 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/arm/samsung,trinity.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/arm/samsung,trinity.yaml b/Documentation/devicetree/bindings/arm/samsung,trinity.yaml
-> > new file mode 100644
-> > index 000000000000..cd79ec040162
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/arm/samsung,trinity.yaml
-> > @@ -0,0 +1,115 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: https://protect2.fireeye.com/v1/url?k=d6ad487f-b7d0a003-d6acc330-74fe485cc33c-c18489118cc5693c&q=1&e=e1fcd741-e7bc-4610-b982-e9d1481f4eb1&u=http%3A%2F%2Fdevicetree.org%2Fschemas%2Farm%2Fsamsung%2Ctrinity.yaml%23
-> > +$schema: https://protect2.fireeye.com/v1/url?k=eceeef8d-8d9307f1-ecef64c2-74fe485cc33c-c540319d368eacda&q=1&e=e1fcd741-e7bc-4610-b982-e9d1481f4eb1&u=http%3A%2F%2Fdevicetree.org%2Fmeta-schemas%2Fcore.yaml%23
-> > +
-> > +title: Samsung Trinity NPU Family
-> > +
-> > +maintainers:
-> > +  - Jiho Chu <jiho.chu@samsung.com>
-> > +
-> > +description: |
-> > +  The Trinity Neural Processing Unit (NPU) is a hardware IP for providing
-> > +  hardware acceleration for neural network processing workloads. It has
-> > +  own virtual ISA decoder unit, and controlled by memory mapped control
-> > +  registers. The IP is composed of Common Processor (CP), Digital Signal
-> > +  Processor (DSP) and Deep Learning Accelerator (DLA). ComBox is register
-> > +  set to control IRQ or check overall status of the IP.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: samsung,trinity
-> > +
-> > +  samsung,trinity-type:
-> > +    description: type of trinity family
-> > +    enum: ['triv2']
+> > How would that work?  What protects the area where you want to avoid running
+> > into pinned pages from previously acceptable page getting pinned?  If "they
+> > must have been successfully unmapped" is a part of what you are planning, we
+> > really do have a problem...
 > 
-> No, we have compatible for this.
+> But this is a very good question. So far the idea was that we lock the
+> page, unmap (or writeprotect) the page, and then check pincount == 0 and
+> that is a reliable method for making sure page data is stable (until we
+> unlock the page & release other locks blocking page faults and writes). But
+> once suddently ordinary page references can be used to create pins this
+> does not work anymore. Hrm.
 > 
+> Just brainstorming ideas now: So we'd either need to obtain the pins early
+> when we still have the virtual address (but I guess that is often not
+> practical but should work e.g. for normal direct IO path) or we need some
+> way to "simulate" the page fault when pinning the page, just don't map it
+> into page tables in the end. This simulated page fault could be perhaps
+> avoided if rmap walk shows that the page is already mapped somewhere with
+> suitable permissions.
 
-This property will be removed.
+OK.  As far as I can see, the rules are along the lines of
+	* creator of ITER_BVEC/ITER_XARRAY is responsible for pages being safe.
+	  That includes
+		* page known to be locked by caller
+		* page being privately allocated and not visible to anyone else
+		* iterator being data source
+		* page coming from pin_user_pages(), possibly as the result of
+		  iov_iter_pin_pages() on ITER_IOVEC/ITER_UBUF.
+	* ITER_PIPE pages are always safe
+	* pages found in ITER_BVEC/ITER_XARRAY are safe, since the iterator
+	  had been created with such.
+My preference would be to have iov_iter_get_pages() and friends pin if and
+only if we have data-destination iov_iter that is user-backed.  For
+data-source user-backed we only need FOLL_GET, and for all other flavours
+(ITER_BVEC, etc.) we only do get_page(), if we need to grab any references
+at all.
 
-> > +
-> > +  samsung,tops:
-> > +    description: Performance metric (Tera Operation Per Seconds)
-> > +    enum: [2, 8]
-> 
-> What piece of hardware this describes?
-> 
+What I'd like to have is the understanding of the places where we drop
+the references acquired by iov_iter_get_pages().  How do we decide
+whether to unpin?  E.g. pipe_buffer carries a reference to page and no
+way to tell whether it's a pinned one; results of iov_iter_get_pages()
+on ITER_IOVEC *can* end up there, but thankfully only from data-source
+(== WRITE, aka.  ITER_SOURCE) iov_iter.  So for those we don't care.
+Then there's nfs_request; AFAICS, we do need to pin the references in
+those if they are coming from nfs_direct_read_schedule_iovec(), but
+not if they come from readpage_async_filler().  How do we deal with
+coalescence, etc.?  It's been a long time since I really looked at
+that code...  Christoph, could you give any comments on that one?
 
-This is related to HW internal structure, but it can be matched from
-compotible property. I'll add more value for compitable, and this
-will be removed. 
-
-
-> > +
-> > +  samsung,idu_cp:
-> 
-> No underscores in names.
-> 
-> Missing ref/type. Missing description. I am not sure that this belongs
-> to DT.
-> 
-> 
-> > +    items:
-> > +      - description: Address of zero data of CP
-> > +      - description: Address of IDU data of CP
-> > +      - description: Maximum size of CP's IDU binary
-> 
-> > +
-> > +  samsung,idu_dsp:
-> 
-> The same.
-> 
-
-underscore will be fixed like (samsung,idu,xxxx)
-
-> > +    items:
-> > +      - description: Address of zero data of DSP
-> > +      - description: Address of IDU data of DSP
-> > +      - description: Maximum size of DSP's IDU binary
-> > +
-> > +  samsung,dspm:
-> > +    description: The size of Data Scratch-Pad Memory
-> > +
-> > +  memory-region:
-> > +    description:
-> > +      phandle to the reserved memory node to be associated
-> > +      with the trinity device. The reserved memory node
-> > +      can be a CMA memory node.
-> > +      Documentation/devicetree/bindings/reserved-memory/reserved-memory.yaml
-> > +
-> > +  dma-coherent: true
-> > +
-> > +  reg:
-> > +    items:
-> > +      - description: Memory mapped register of CP
-> > +      - description: Memory mapped register of DSP
-> > +      - description: Memory mapped register of ComBox
-> > +
-> > +  reg-names:
-> > +    items:
-> > +      - const: cp-mmreg
-> > +      - const: dsp-mmreg
-> > +      - const: cbox-mmreg
-> 
-> Drop "reg" suffixes.
-> 
-
-OK.
-
-> > +
-> > +  interrupts:
-> > +    description: workload complete interrupt
-> > +    maxItems: 1
-> > +
-> > +required:
-> > +  - compatible
-> > +  - samsung,trinity-type
-> > +  - samsung,tops
-> > +  - samsung,idu_cp
-> > +  - samsung,idu_dsp
-> > +  - samsung,dspm
-> > +  - memory-region
-> > +  - dma-coherent
-> > +  - reg
-> > +  - reg-names
-> > +  - interrupts
-> > +
-> > +examples:
-> > +  - |
-> > +    reserved-memory {
-> > +        #address-cells = <2>;
-> > +        #size-cells = <1>;
-> > +        trinity_dram_0: memory@80000000 {
-> > +            compatible = "shared-dma-pool";
-> > +            no-map;
-> > +            reg = <0x0 0x80000000 0x10000000>;
-> > +        };
-> > +    };
-> 
-> Drop this part - it is fairly obvious.
-> 
-
-OK.
-
-> > +
-> > +    triv2@0x30C00000 {
-> > +        compatible = "samsung,trinity";
-> > +        samsung,trinity-type = "triv2";
-> > +        samsung,tops = <8>;
-> > +        samsung,idu_cp = /bits/ 64 <0x30400000 0x30400010 0x10000>;
-> > +        samsung,idu_dsp = /bits/ 64 <0x30500000 0x30500010 0x10000>;
-> > +        samsung,dspm = <0x40000>;
-> > +
-> > +        memory-region = <&trinity_dram_0>
-> > +
-> > +        dma-coherent;
-> > +
-> > +        reg =   <0x0 0x30C10000 0x0 0x10000>, /* CP MMREG base */
-> > +                <0x0 0x30D40000 0x0 0x10000>, /* DSP MMREG base */
-> > +                <0x0 0x30DF0000 0x0 0x01000>; /* ComBox MMREG base */
-> 
-> 
-> reg and reg-names go after compatible.
-> 
-
-OK.
-
-> > +        reg-names = "cp-mmreg", "dsp-mmreg", "cbox-mmreg";
-> > +
-> > +        interrupts = <GIC_SPI 111 IRQ_TYPE_LEVEL_HIGH>;
-> > +    };
-> 
-> Best regards,
-> Krzysztof
-> 
-> 
-
-Hi, Krzysztof
-Thanks for your review.
-
-Best regards,
-Jiho Chu
-
-
-
-
+Note, BTW, that nfs_request coming from readpage_async_filler() have
+pages locked by caller; the ones from nfs_direct_read_schedule_iovec()
+do not, and that's where we want them pinned.  Resulting page references
+end up (after quite a trip through data structures) stuffed into struct
+rpc_rqst ->rc_recv_buf.pages[] and when a response arrives from server,
+they get picked by xs_read_bvec() and fed to iov_iter_bvec().  In one
+case it's safe since the pages are locked; in another - since they would
+come from pin_user_pages().  The call chain at the time they are used
+has nothing to do with the originator - sunrpc is looking at the arrived
+response to READ that matches an rpc_rqst that had been created by sender
+of that request and safety is the sender's responsibility.
