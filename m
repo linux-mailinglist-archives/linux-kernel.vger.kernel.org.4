@@ -2,126 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 122115E69CD
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 19:42:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0B105E69D1
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 19:43:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232060AbiIVRlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 13:41:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55356 "EHLO
+        id S231448AbiIVRnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 13:43:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232052AbiIVRlg (ORCPT
+        with ESMTP id S229523AbiIVRnq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 13:41:36 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18556EFA48;
-        Thu, 22 Sep 2022 10:41:33 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id x1-20020a17090ab00100b001fda21bbc90so3148035pjq.3;
-        Thu, 22 Sep 2022 10:41:33 -0700 (PDT)
+        Thu, 22 Sep 2022 13:43:46 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39FDCF9601;
+        Thu, 22 Sep 2022 10:43:44 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id e5so10036033pfl.2;
+        Thu, 22 Sep 2022 10:43:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=YTw4/4H1DrZyYT8r3vAbsU7ElPYxgVDhU3+OM9JyucE=;
-        b=ElLCbl1NZGRXMxpT6v5xRjFMH5pVD8Cb811OWdYBmSUbw6+6INd7SgCM411RdFKg2D
-         3gBBwooCUeu9bguTScSkm/XZSKCxDniYvdgWCIhnkKXa/dj/aqMoxUdDf/Z4g4Z3Uyxz
-         fJktrerUAVeMdfLrhHHvN0kbmKSsQmUR4AfFzNTL/auXAiED8nOxCign4vgffb5wAAha
-         ODjUE/FYzl39vEFJ1jKVo1TaQdQR//fsoXDGhh7myPCV/CZ20tcFNpmeDfdQNQeVatLo
-         Q6WOHGCkKXqSy8yRccfb+uwAOH7duIQ8LnHnLiFE59louwT8ra/ug4luSqNxIhGSaQle
-         b8yw==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date;
+        bh=ordY5gRXnsxz2Grt9o3T/Ssy795W6cMK2+g6m4UINGc=;
+        b=D/CowdKVlkdURR9jr5hiqBMx9qntg+Cd9XXshoDJu1IJBXx13segL/ggzkXfgyFPlH
+         dxjAtvkwubANu5eqedOG5gPQKej4NqmZKn4E0mdvvukIhHr4xNw8ABIGrae6a8PLH4yQ
+         wiJTMnkCaoQy13OGAhMe7mJE5bRHCt0RT4OHMQYbuenYsa0R4rssSAD5NX90vhTrW+5l
+         rftaL/TVJvNMoGji9R/RCN0j11uCt6TxqyXlKJ3B1YqEci4AmHBCN42pCbvPw+h3S3kX
+         HJ1H0G+J2S3Lr7NM36SW/F/363Jh4MyCIW1zMocc41idXYco5ndPfJNYJ5N0FKBqMlke
+         ZESQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=YTw4/4H1DrZyYT8r3vAbsU7ElPYxgVDhU3+OM9JyucE=;
-        b=V2HLaggexGwvc31+4BvmRIWl+0T6Z1XhW9NWT1U+/DA1RcG0SkW4ms6CJ9NjC1pu9p
-         tjE6ekeYxMstIl2QW6q9wAJap0P8JBGB8w7rRgx9760AdaVDDOTSomXnSnVDs8MOwLum
-         wGNX1PVsSRLcecCXucmd8syS0cDwc1MP0DQdPAyVwruWoRzeKUmYgEfX2EN6re04ym4B
-         WAR6i5ZJCCDPN3xG0u4pIUuTLZQRwkAz5Mey9Q89VNVOjQqaCS/LZL/RkGa+LY95V/23
-         75uzCBjoPw+3oc/aeH9wqLg77sj2B7gSnavmVBfFDP7+Y13vsrIH29XpU0pUCV53SNZt
-         HgRg==
-X-Gm-Message-State: ACrzQf2D71n+0kDGnXNauMmyUYn0HmHQdAnrTbF+FXenebFChG8ZFvlU
-        MhGTBZLWg7mvedZzEGAwO742UqOMNqi+cA==
-X-Google-Smtp-Source: AMsMyM46RQnmrtmArNIqRDGJepiXlLiVqEbR8tjp1VE8FwEn++T4TpusHiOcNrt//9HfQThYvL4t+w==
-X-Received: by 2002:a17:902:e54b:b0:178:75b9:f1e9 with SMTP id n11-20020a170902e54b00b0017875b9f1e9mr4426028plf.104.1663868492316;
-        Thu, 22 Sep 2022 10:41:32 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id x128-20020a623186000000b0053e6eae9665sm4800874pfx.140.2022.09.22.10.41.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 10:41:31 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 22 Sep 2022 07:41:29 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Kristen Carlson Accardi <kristen@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
-        cgroups@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: Re: [RFC PATCH 00/20] Add Cgroup support for SGX EPC memory
-Message-ID: <YyyeSVSk/lWdo/W4@slm.duckdns.org>
-References: <20220922171057.1236139-1-kristen@linux.intel.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date;
+        bh=ordY5gRXnsxz2Grt9o3T/Ssy795W6cMK2+g6m4UINGc=;
+        b=2obyph0vHC64ZVjwPz/G4e0qK2HQIzwaoAvhFRrDpEqERWDJsoLAG6z01W1hRhHQZR
+         h5JzflhbLkSWuntHiID9s6B/BKmMOxQPtdnWZ/f1It4irLlwRPcXJeddjv2Go1qUvqhL
+         xeTBRujKtXd32W0QC98R0rCMmuU/Yn+D8YoMtfyAWJmP7uYsGBtzl+Qjt5AyszXds8dQ
+         lR/aJt5+nkBpeUcEvjSX4p3uXWmsYMkpkcDw6b8oy/lftzehs/KN5ceduK7NQajtZG91
+         F66lI3yXxx4VrLYtw8yorIBypl5UMoaOrRsJcMppTqGFiU7lVhNyy6jjB0U5WUiVD+af
+         /CXQ==
+X-Gm-Message-State: ACrzQf2Y9Eafy0AvIwY64BhZd4JYAkdf9uvubFIKfdwKyCrtz15VnnMd
+        Q6Xc3tevbmUmutDjow24+kIlBm78QcJZpQ==
+X-Google-Smtp-Source: AMsMyM4nqKeK8kOGxKQtrGSq8shZRgTMJ68F1NQjNiCIRvh792Uhi6MbOONj9A/HYBqeMcDwltLsmQ==
+X-Received: by 2002:a63:4243:0:b0:439:2031:be87 with SMTP id p64-20020a634243000000b004392031be87mr4039421pga.592.1663868623690;
+        Thu, 22 Sep 2022 10:43:43 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id g130-20020a625288000000b0053e2b61b714sm4734008pfb.114.2022.09.22.10.43.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Sep 2022 10:43:42 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <791dc5e2-4de3-1eb9-8de2-4f2904335756@roeck-us.net>
+Date:   Thu, 22 Sep 2022 10:43:41 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220922171057.1236139-1-kristen@linux.intel.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2] watchdog: sp5100_tco: Add "action" module parameter
+Content-Language: en-US
+To:     rwright@hpe.com, Vladimir Panteleev <git@vladimir.panteleev.md>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220920092721.7686-1-git@vladimir.panteleev.md>
+ <20220922173635.GJ18783@rfwz62>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220922173635.GJ18783@rfwz62>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 9/22/22 10:36, rwright@hpe.com wrote:
+> On Tue, Sep 20, 2022 at 09:27:21AM +0000, Vladimir Panteleev wrote:
+>> Allow configuring the "action" bit, as documented in [1].
+>>
+>> Previously, the only action supported by this module was to reset the
+>> system (0).  It can now be configured to power off (1) instead.
+>>
+>> [1]: https://www.amd.com/system/files/TechDocs/44413.pdf
+> 
+> The referenced AMD document 44413 is over 10 years old, and I'm
+> concerned when I try to line that document up against the newer versions
+> that are implemented in AMD's EPYC processors, that the bit being
+> manipulated as SP5100_WDT_ACTION_RESET is effectively reserved in the
+> newer references, for example:
+> 
+>     https://www.amd.com/system/files/TechDocs/55772-A1-PUB.zip
+> 
+> Is Core::X86::Msr::CpuWdtCfg in the newer document is the same as
+> WatchDogControl in the cited 44413.pdf? If so, then I would point out
+> that bit 2 is now included in what is called, CpuWdtTimeBase where
+> values 2-3H are reserved,  meaning bit 2 effectively must be zero.
+> 
 
-(cc'ing memcg folks)
+I think those may be different watchdogs. Chapter 9.2.6 ("Watchdog
+Timer (WDT) Registers") in 55772-A1-PUB still lists bit 2 of the
+control register as:
 
-On Thu, Sep 22, 2022 at 10:10:37AM -0700, Kristen Carlson Accardi wrote:
-> Add a new cgroup controller to regulate the distribution of SGX EPC memory,
-> which is a subset of system RAM that is used to provide SGX-enabled
-> applications with protected memory, and is otherwise inaccessible.
-> 
-> SGX EPC memory allocations are separate from normal RAM allocations,
-> and is managed solely by the SGX subsystem. The existing cgroup memory
-> controller cannot be used to limit or account for SGX EPC memory.
-> 
-> This patchset implements the sgx_epc cgroup controller, which will provide
-> support for stats, events, and the following interface files:
-> 
-> sgx_epc.current
-> 	A read-only value which represents the total amount of EPC
-> 	memory currently being used on by the cgroup and its descendents.
-> 
-> sgx_epc.low
-> 	A read-write value which is used to set best-effort protection
-> 	of EPC usage. If the EPC usage of a cgroup drops below this value,
-> 	then the cgroup's EPC memory will not be reclaimed if possible.
-> 
-> sgx_epc.high
-> 	A read-write value which is used to set a best-effort limit
-> 	on the amount of EPC usage a cgroup has. If a cgroup's usage
-> 	goes past the high value, the EPC memory of that cgroup will
-> 	get reclaimed back under the high limit.
-> 
-> sgx_epc.max
-> 	A read-write value which is used to set a hard limit for
-> 	cgroup EPC usage. If a cgroup's EPC usage reaches this limit,
-> 	allocations are blocked until EPC memory can be reclaimed from
-> 	the cgroup.
+WatchdogAction. Read-write. Reset: 0. 0=System reset. 1=System power off. This bit determines the action to
+be taken when the watchdog timer expires. The bit is only valid when the watchdog is enabled.
 
-I don't know how SGX uses its memory but you said in the other message that
-it's usually a really small portion of the memory and glancing the code it
-looks like its own page aging and all. Can you give some concrete examples
-on how it's used and why we need cgroup support for it? Also, do you really
-need all three control knobs here? e.g. given that .high is only really
-useful in conjunction with memory pressure and oom handling from userspace,
-I don't see how this would actually be useful for something like this.
-
-Thanks.
-
--- 
-tejun
+Guenter
