@@ -2,104 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C50B65E6DD3
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 23:15:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E5035E6E4E
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 23:19:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230125AbiIVVPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 17:15:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36904 "EHLO
+        id S229489AbiIVVTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 17:19:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230356AbiIVVPv (ORCPT
+        with ESMTP id S229950AbiIVVTQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 17:15:51 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60EE5C88B8
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 14:15:49 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id w10so9104200pll.11
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 14:15:49 -0700 (PDT)
+        Thu, 22 Sep 2022 17:19:16 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43975110B22
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 14:19:15 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id t190so10404291pgd.9
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 14:19:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gimpelevich-san-francisco-ca-us.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:disposition-notification-to
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date;
-        bh=F/fSD3tiHwAEumeXG+qiH5G3ZfY9Y6LXUkEueVgh6Fk=;
-        b=tGeOq2JWiIBsL3jWhqw00ZY4tOCMc7IQwKuz2NBmLdlz6nI72CPqI5nvU4wYA7wrSK
-         4ZtSaaYV2fWWtkk6v6ylkQsxeFK/GpQhc5Kroq/oD899bc22M7UnBHR9Kf264D7iCyFg
-         NPoBZnxVotT//5zKC5GKwBGbCnKU2NoIe0/OJHqWzMDG0yR4UwOL74fYkFPbPFTM/EZy
-         2FWS/hle0d47gTgQgX7IgjjsLEVfb3z04geb4y98if+3dNiERqjRRvZk0HyzSwRUfTWQ
-         BRQKsTwaWXeqkdmv1qnX1MPytI/80wucocrAmC2XiQFJs11GsU5g6AGI7NkC7/vFD3PI
-         B1fw==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=1TPEKw6ZfZxcb8OW9aQyQDFvakhQrH+jPbGOfotODj8=;
+        b=KhuQv1RlE5pzhaW2Ncp6oBIPecXlXGSFNtn6DBktCsSr5GPX9VKESG1uMfTxlILqzu
+         IqDd2Xik6SSw8k6Z46JnVXkRAUpvG1QxwzLaH6lulE2cccjex0siS8xDsk7hhIL/KPLY
+         JcSK/6Uz+LO8yi4QEr6UG3H3jKj0zn+PgtYV0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:disposition-notification-to
-         :references:in-reply-to:date:cc:to:from:subject:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=F/fSD3tiHwAEumeXG+qiH5G3ZfY9Y6LXUkEueVgh6Fk=;
-        b=kVWUqt/q6cePJFb2IW7kjS/swZBjepk9pgQ4NuCsioflsVet74yRit8vyFP03s/wq/
-         9p9KoUv957zPu9I0ilQxyAXzHaX+sETYECZNdIc0QlPhf7vUSpiap067pnQNVFqgTMa0
-         j4WIjkPAZCutihkr90KPnE+h/OqThqxXEGamBySl+dOyobcAGOiAngc6l2AzyGp4aaox
-         mg3zdo632zbpu/ngLmjKCODV8TfZIaXfyaLcPRaAtUakuKC6SAalaIazPKuqHDByvgBo
-         VzOAgTiPu0USbXckUVUJht9W7rgvB9FV57zVZbhKNT1VGdoRYKGHUeiOnhaOSUcuIyvr
-         Z3pQ==
-X-Gm-Message-State: ACrzQf3Rn+AcL8/AOy0zkGaiE7csS5wnK+TwbiD3U66EOH0ppjJa6noo
-        UE0SEdtFndehkyaxkZMT33P5gD7h7xxK/Q4HTUI=
-X-Google-Smtp-Source: AMsMyM5ldt2VrAPEWUNgs13BVkUvJnBv9O5XNfcE5ETCAxNGwR13fNpzdtYlY5dOXChaPEyxe5tV+Q==
-X-Received: by 2002:a17:902:7897:b0:178:9292:57b9 with SMTP id q23-20020a170902789700b00178929257b9mr5370369pll.102.1663881348801;
-        Thu, 22 Sep 2022 14:15:48 -0700 (PDT)
-Received: from [192.168.72.152] (157-131-203-68.fiber.dynamic.sonic.net. [157.131.203.68])
-        by smtp.gmail.com with ESMTPSA id d6-20020a170902b70600b00173368e9dedsm4485709pls.252.2022.09.22.14.15.47
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 22 Sep 2022 14:15:48 -0700 (PDT)
-Message-ID: <1663881344.25129.23.camel@chimera>
-Subject: Re: [PATCH 0/8] generic command line v4
-From:   Daniel Gimpelevich <daniel@gimpelevich.san-francisco.ca.us>
-To:     Daniel Walker <danielwa@cisco.com>
-Cc:     Sean Anderson <sean.anderson@seco.com>,
-        Will Deacon <will@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Rob Herring <robh@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>, x86@kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-efi@vger.kernel.org
-Date:   Thu, 22 Sep 2022 14:15:44 -0700
-In-Reply-To: <20220922211026.GW4320@zorba>
-References: <20210416040924.2882771-1-danielwa@cisco.com>
-         <b517fac5-2fdc-a8c9-75d0-174c67f5a2de@seco.com>
-         <20220922205334.GV4320@zorba>
-         <dcff9b0f-82c8-5aa7-0fff-b749a05fcb20@seco.com>
-         <20220922211026.GW4320@zorba>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=1TPEKw6ZfZxcb8OW9aQyQDFvakhQrH+jPbGOfotODj8=;
+        b=g55M8MQ+c7u6XoC2sbC/Iaa8Mn3YSzqxzWoITZokT+mbJA0dFiFLmsjf+twNm0t3E8
+         TuFDZeAVAtsSh5C0/J07PF6WZ8qdZJPLDa1wEbx8tt5LiEIaZyg0Wql1679/CmerKYKC
+         jwfuYYW6znCN7HUtlbMrxZlmucUDbmT1GboLy6BGX68nQOn+JZaGcBJN5FfoTlZmBDQL
+         B00YzCBaH5ZGnvqRcKIg8oCyPv4reXIbyFo5xOiHKLI/bzA+tD9N5HVX+lnbbkmcfpaJ
+         bafPUBjjaY6qMRcmVfv3t0lIC6zWl7KZcxRfvDcKWMUxrXTuDvX9n8+ruZe/QmwO90kA
+         4OAQ==
+X-Gm-Message-State: ACrzQf11+edUFY6Fb9+DjazpeHOftTwvN/VhJp0ZAPhBX2sJiyTGCd+k
+        o9zhiWGQ9tdzk53WDzZanr7goA==
+X-Google-Smtp-Source: AMsMyM6FtVEeH1ZubQUxEbxyq00UIUEPr3QFAZezIGRjNY1VCOqbP9csB0lrQZyDQ6RjLgknmW/sDQ==
+X-Received: by 2002:a63:6c01:0:b0:429:ea6e:486d with SMTP id h1-20020a636c01000000b00429ea6e486dmr4643809pgc.247.1663881554644;
+        Thu, 22 Sep 2022 14:19:14 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:5321:6ad9:3932:13d8])
+        by smtp.gmail.com with ESMTPSA id a7-20020a170902710700b00176ae5c0f38sm4549579pll.178.2022.09.22.14.19.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Sep 2022 14:19:14 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     stable@vger.kernel.org, gregkh@linuxfoundation.org
+Cc:     Alex Elder <elder@linaro.org>, swboyd@chromium.org,
+        Mike Tipton <mdtipton@codeaurora.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [5.10 PATCH] interconnect: qcom: icc-rpmh: Add BCMs to commit list in pre_aggregate
+Date:   Thu, 22 Sep 2022 14:18:03 -0700
+Message-Id: <20220922141725.5.10.1.I791715539cae1355e21827ca738b0b523a4a0f53@changeid>
+X-Mailer: git-send-email 2.37.3.998.g577e59143f-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-09-22 at 14:10 -0700, Daniel Walker wrote:
-> On Thu, Sep 22, 2022 at 05:03:46PM -0400, Sean Anderson wrote:
-[snip]
-> > As recently as last month, someone's patch to add such support was
-> > rejected for this reason [1].
-> > 
-> > --Sean
-> > 
-> > [1] https://lore.kernel.org/linux-arm-kernel/20220812084613.GA3107@willie-the-truck/
-> 
-> 
-> I had no idea.. Thanks for pointing that out. I guess I will re-submit in that
-> case.
-> 
-> Daniel
+From: Mike Tipton <mdtipton@codeaurora.org>
 
-This has been happening repeatedly since circa 2014, on multiple
-architectures. It's quite frustrating, really.
+commit b95b668eaaa2574e8ee72f143c52075e9955177e upstream.
+
+We're only adding BCMs to the commit list in aggregate(), but there are
+cases where pre_aggregate() is called without subsequently calling
+aggregate(). In particular, in icc_sync_state() when a node with initial
+BW has zero requests. Since BCMs aren't added to the commit list in
+these cases, we don't actually send the zero BW request to HW. So the
+resources remain on unnecessarily.
+
+Add BCMs to the commit list in pre_aggregate() instead, which is always
+called even when there are no requests.
+
+Signed-off-by: Mike Tipton <mdtipton@codeaurora.org>
+[georgi: remove icc_sync_state for platforms with incomplete support]
+Link: https://lore.kernel.org/r/20211125174751.25317-1-djakov@kernel.org
+Signed-off-by: Georgi Djakov <djakov@kernel.org>
+[dianders: dropped sm8350.c which isn't present in 5.10]
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+---
+This should have been included in Alex Elder's request for patches
+picked to 5.10 [1] but it was missed. Let's finally pick it up.
+
+[1] https://lore.kernel.org/r/20220608205415.185248-3-elder@linaro.org
+
+ drivers/interconnect/qcom/icc-rpmh.c | 10 +++++-----
+ drivers/interconnect/qcom/sm8150.c   |  1 -
+ drivers/interconnect/qcom/sm8250.c   |  1 -
+ 3 files changed, 5 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/interconnect/qcom/icc-rpmh.c b/drivers/interconnect/qcom/icc-rpmh.c
+index f6fae64861ce..27cc5f03611c 100644
+--- a/drivers/interconnect/qcom/icc-rpmh.c
++++ b/drivers/interconnect/qcom/icc-rpmh.c
+@@ -20,13 +20,18 @@ void qcom_icc_pre_aggregate(struct icc_node *node)
+ {
+ 	size_t i;
+ 	struct qcom_icc_node *qn;
++	struct qcom_icc_provider *qp;
+ 
+ 	qn = node->data;
++	qp = to_qcom_provider(node->provider);
+ 
+ 	for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
+ 		qn->sum_avg[i] = 0;
+ 		qn->max_peak[i] = 0;
+ 	}
++
++	for (i = 0; i < qn->num_bcms; i++)
++		qcom_icc_bcm_voter_add(qp->voter, qn->bcms[i]);
+ }
+ EXPORT_SYMBOL_GPL(qcom_icc_pre_aggregate);
+ 
+@@ -44,10 +49,8 @@ int qcom_icc_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
+ {
+ 	size_t i;
+ 	struct qcom_icc_node *qn;
+-	struct qcom_icc_provider *qp;
+ 
+ 	qn = node->data;
+-	qp = to_qcom_provider(node->provider);
+ 
+ 	if (!tag)
+ 		tag = QCOM_ICC_TAG_ALWAYS;
+@@ -67,9 +70,6 @@ int qcom_icc_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
+ 	*agg_avg += avg_bw;
+ 	*agg_peak = max_t(u32, *agg_peak, peak_bw);
+ 
+-	for (i = 0; i < qn->num_bcms; i++)
+-		qcom_icc_bcm_voter_add(qp->voter, qn->bcms[i]);
+-
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(qcom_icc_aggregate);
+diff --git a/drivers/interconnect/qcom/sm8150.c b/drivers/interconnect/qcom/sm8150.c
+index c76b2c7f9b10..b936196c229c 100644
+--- a/drivers/interconnect/qcom/sm8150.c
++++ b/drivers/interconnect/qcom/sm8150.c
+@@ -627,7 +627,6 @@ static struct platform_driver qnoc_driver = {
+ 	.driver = {
+ 		.name = "qnoc-sm8150",
+ 		.of_match_table = qnoc_of_match,
+-		.sync_state = icc_sync_state,
+ 	},
+ };
+ module_platform_driver(qnoc_driver);
+diff --git a/drivers/interconnect/qcom/sm8250.c b/drivers/interconnect/qcom/sm8250.c
+index cc558fec74e3..40820043c8d3 100644
+--- a/drivers/interconnect/qcom/sm8250.c
++++ b/drivers/interconnect/qcom/sm8250.c
+@@ -643,7 +643,6 @@ static struct platform_driver qnoc_driver = {
+ 	.driver = {
+ 		.name = "qnoc-sm8250",
+ 		.of_match_table = qnoc_of_match,
+-		.sync_state = icc_sync_state,
+ 	},
+ };
+ module_platform_driver(qnoc_driver);
+-- 
+2.37.3.998.g577e59143f-goog
 
