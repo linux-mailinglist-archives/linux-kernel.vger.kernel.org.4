@@ -2,90 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D1225E69FA
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 19:54:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD8925E6A08
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 19:56:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbiIVRyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 13:54:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44646 "EHLO
+        id S232170AbiIVR4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 13:56:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230457AbiIVRyL (ORCPT
+        with ESMTP id S230002AbiIVR4C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 13:54:11 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ADAA103FF5;
-        Thu, 22 Sep 2022 10:54:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 6F6C0CE22FD;
-        Thu, 22 Sep 2022 17:54:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A277DC433D7;
-        Thu, 22 Sep 2022 17:54:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663869246;
-        bh=ZqiYpReBdwU8JPuxbNH/ozBm6dAJTMrDI+mSmHWB0sk=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=tFarzA1JUquj4bSR5a7OyLP39GBKVJLLDGNrnQ8mz1mJyXXdBkxAq4f09qaujVZxN
-         4aZpzRWiEaJmds7W+SvulRIYgIMg2P4xaPUVFXJAbLaRjbwFt3FvllUqFmkMzF5tQl
-         Nvc1LBzUJJd2giShORWbfjblYdswzMdPi6639B+J4oravQYN8oApHzxwjJ5C4dZ4Up
-         07YoBe4H617nzguHQT4Z4Hl0MfmdlhRJ9hAxxBzcMmoyovqmPPcf0RDm1c3BCcsS8M
-         X/JoL5fop9m6Z7qGL5cHL4UfM5bvM4HcBppxG01q0vmMMOTvrW/DPOcnT+592jHrHc
-         H4BwRPfEGALZQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     Colin Ian King <colin.i.king@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-In-Reply-To: <20220922080445.818020-1-colin.i.king@gmail.com>
-References: <20220922080445.818020-1-colin.i.king@gmail.com>
-Subject: Re: [PATCH] regmap: mmio: replace return 0 with break in switch statement
-Message-Id: <166386924264.727940.17683368538547591702.b4-ty@kernel.org>
-Date:   Thu, 22 Sep 2022 18:54:02 +0100
+        Thu, 22 Sep 2022 13:56:02 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A37EC542
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 10:56:00 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-11eab59db71so14926774fac.11
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 10:56:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=t9sywruqcuKyY9MOVDQxFF5A99e42M9asDqWWcnjP1g=;
+        b=f8iOwOZDaGvsk1kJiLcpnxW5pf3fBnQTVD4woOnEBJl8xrz9zaeBzsYIIXyAyd16SS
+         Gpr1A/Ix7iTMV3G0SuFqbxyIN6X3AbRMV8WZ8TPSNcEvHOx6vqLgITW6IRFsaglvo4LR
+         y6XNHmxAqOnQZWFs/nr0MC3Xo8xfGqRQQIdG1GwKZPLX7HqHuarB21OBhZQL+5v4/9Z8
+         hRXy4HFv6pSrQWpcrBHlx5yFCmEW3n75JLHwCkW1twjNgvmutCpYituv1dpM9FFQlsMZ
+         wbDvvT6OcIxkZBd3EkwdDiMmolcKMmtSGp83g0J/nNba7d8eGkFXOooP5OZC5KdwOywo
+         cRBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=t9sywruqcuKyY9MOVDQxFF5A99e42M9asDqWWcnjP1g=;
+        b=mOnr5CEgPFSCO02chI21myIQZmj/QG6NXDH0w+IjXT8JAAk8h4aMK/zBY3t+gYKTfJ
+         vld3J6DPMdHkxBbbMlvAAE/sf3g/7yGjRGtah1ZOSMegEME3B7/XJ3eeJlIvYL97ZOAD
+         //NvJAbgSbhDWYv6ngl3EeA8NGI9S1cPIvbFWvCWVSHg0TL3NjVyBBrqwFdBkLwhq9jn
+         8xB+8hLt+rx2YDol9yRRRgWfQpnc3fMKIRBIRVVSI5rqXGFD4Z95H/GW/Jv081MwGoS8
+         gLTk/LQN26UCzBeIE0sH26irBYdzNkLQypN2moL64WlVQfrMiWAyuPU0ZNbuqzZDX+S0
+         KDGQ==
+X-Gm-Message-State: ACrzQf1ajy7vIsBm+8+o27u5kRTz+h9WvzZugcLCju3BSpNKzGRmJWWM
+        +xPGKlslUllzh3M3aYYetUqxhGbToh1QJT9X+vc+wA==
+X-Google-Smtp-Source: AMsMyM4f7HZsorZh9Oc9dnMigbdijdeZCWk/IN1jZJHRpTNiH4MjQiAYgzR8hOZ6mUUDLZ/VbEGM6NB97xPlvZUhZs8=
+X-Received: by 2002:a05:6870:580c:b0:12a:f136:a8f5 with SMTP id
+ r12-20020a056870580c00b0012af136a8f5mr8779885oap.269.1663869359794; Thu, 22
+ Sep 2022 10:55:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.11.0-dev-8af31
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220922143655.3721218-1-vkuznets@redhat.com> <20220922143655.3721218-3-vkuznets@redhat.com>
+ <CALMp9eSVQSMKbYKr0n-t3JP58hLGA8ZHJZAX34-E4YWUa+VYHA@mail.gmail.com> <YyyhBTXdj96crwbZ@google.com>
+In-Reply-To: <YyyhBTXdj96crwbZ@google.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Thu, 22 Sep 2022 10:55:49 -0700
+Message-ID: <CALMp9eSwFYX67OL3rTNR4-nDT1i5cD36B4KcPh-RHM2UmXBMNw@mail.gmail.com>
+Subject: Re: [PATCH v4 2/6] KVM: x86: Introduce CPUID_8000_0007_EDX
+ 'scattered' leaf
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 22 Sep 2022 09:04:45 +0100, Colin Ian King wrote:
-> Variable min_stride is assigned a value that is never read, fix this by
-> replacing the return 0 with a break statement. This also makes the case
-> statement consistent with the other cases in the switch statement.
-> 
-> 
+On Thu, Sep 22, 2022 at 10:53 AM Sean Christopherson <seanjc@google.com> wrote:
+>
+> On Thu, Sep 22, 2022, Jim Mattson wrote:
+> > Why do we need a new 'scattered' leaf? We are only using two bits in
+> > the first one, right? And now we're only going to use one bit in the
+> > second one?
+> >
+> > I thought the point of the 'scattered' leaves was to collect a bunch
+> > of feature bits from different CPUID leaves in a single feature word.
+> >
+> > Allocating a new feature word for one or two bits seems extravagant.
+>
+> Ah, these leafs aren't scattered from KVM's perspective.
+>
+> The scattered terminology comes from the kernel side, where the KVM-only leafs
+> _may_ be used to deal with features that are scattered by the kernel.  But there
+> is no requirement that KVM-only leafs _must_ be scattered by the kernel, e.g. we
+> can and should use this for leafs that KVM wants to expose to the guest, but are
+> completely ignored by the kernel.  Intel's PSFD feature flag is a good example.
+>
+> A better shortlog would be:
+>
+>   KVM: x86: Add a KVM-only leaf for CPUID_8000_0007_EDX
 
-Applied to
-
-   broonie/regmap.git for-next
-
-Thanks!
-
-[1/1] regmap: mmio: replace return 0 with break in switch statement
-      commit: 01ed230761e51f0403b3f3845c11cb67014487e2
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+Thanks. The 'scattered' terminology seems more confusing than enlightening.
