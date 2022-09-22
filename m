@@ -2,100 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 460D45E6CA6
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 22:04:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DA675E6CAA
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 22:05:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230367AbiIVUEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 16:04:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44764 "EHLO
+        id S230488AbiIVUFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 16:05:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232950AbiIVUEK (ORCPT
+        with ESMTP id S230175AbiIVUFg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 16:04:10 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 165B4B61;
-        Thu, 22 Sep 2022 13:04:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663877049; x=1695413049;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=snMZXlvHgnKICyfiYSRp0+L0NsQopjCdJqHUvJECElM=;
-  b=OhzPvIpT5wHKRKXAKyl96v8ABN6NTEQxwXxklkxeay6UEUXluO6k0SjB
-   xGo28551Ni9gwkqZPnYqEjT1ibOKmBFc1Y12mzgkBcHjv5MvzLmmBEGeF
-   8IFZm18l91EMW38Xhz3hXwy4EcEIUpayRSjVaHc5Z+1EGiNUB0wa0WJPW
-   1jWVw7lD9Enc8RIuZRc7WhylGhXLMUzQgEI9rXTRvfCDlURDDXYD2G3ZF
-   hdaMv/jbQOG3jlWe68w2yv9klpx8W79oq+cqgAuJUJuhQixBeXTHB4KBo
-   +pf867bS3pJir3Xg/etJAzWNQZ/hA7hGh7nJoEsBvEjf9yCoBc949AOvy
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="280141801"
-X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="280141801"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 13:04:08 -0700
-X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="653129114"
-Received: from sknaidu-mobl1.amr.corp.intel.com (HELO [10.212.165.187]) ([10.212.165.187])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 13:04:07 -0700
-Message-ID: <f031ac1bd6b16509f1d714cd65e6b017f054940c.camel@linux.intel.com>
-Subject: Re: [RFC PATCH 03/20] x86/sgx: Track owning enclave in VA EPC pages
-From:   Kristen Carlson Accardi <kristen@linux.intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>, linux-kernel@vger.kernel.org,
-        linux-sgx@vger.kernel.org, cgroups@vger.kernel.org,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>
-Cc:     Sean Christopherson <seanjc@google.com>
-Date:   Thu, 22 Sep 2022 13:04:06 -0700
-In-Reply-To: <1adb03c8-1274-3898-0677-03015a1f5a5d@intel.com>
-References: <20220922171057.1236139-1-kristen@linux.intel.com>
-         <20220922171057.1236139-4-kristen@linux.intel.com>
-         <1adb03c8-1274-3898-0677-03015a1f5a5d@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        Thu, 22 Sep 2022 16:05:36 -0400
+Received: from smtp-out.xnet.cz (smtp-out.xnet.cz [178.217.244.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA5AAEDA4
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 13:05:33 -0700 (PDT)
+Received: from meh.true.cz (meh.true.cz [108.61.167.218])
+        (Authenticated sender: petr@true.cz)
+        by smtp-out.xnet.cz (Postfix) with ESMTPSA id 48071361D;
+        Thu, 22 Sep 2022 22:05:30 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=true.cz; s=xnet;
+        t=1663877130; bh=ejMzlwclMrgb1layxLTSYcJCux9M8r7dblyvchErL2k=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To;
+        b=BFQqhIEj3alYb5w0DoIVOMYddN763f7SU/GrWP8CLgtaTzj/tpE5miMFeG3T7EqAJ
+         +jRWkK9Kwjue72V/OrMR2Zta3hT/BpqP7oiinLTn8xlrO6GkgywThnAt8wOISiZ+z8
+         8e95wqXw3yoBzFgJx8rb8z9tDaD+ppjBfGvpOgyE=
+Received: from localhost (meh.true.cz [local])
+        by meh.true.cz (OpenSMTPD) with ESMTPA id 6f159da1;
+        Thu, 22 Sep 2022 22:05:07 +0200 (CEST)
+Date:   Thu, 22 Sep 2022 22:05:06 +0200
+From:   Petr =?utf-8?Q?=C5=A0tetiar?= <ynezz@true.cz>
+To:     Phil Auld <pauld@redhat.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, yury.norov@gmail.com,
+        rafael@kernel.org
+Subject: Re: aarch64 5.15.68 regression in topology/thread_siblings (huge
+ file size and no content)
+Message-ID: <20220922200506.GC87797@meh.true.cz>
+Reply-To: Petr =?utf-8?Q?=C5=A0tetiar?= <ynezz@true.cz>
+References: <20220922113217.GA90426@meh.true.cz>
+ <YyxVytqQDbGWPa+6@lorien.usersys.redhat.com>
+ <YyxXoPmtTZHCr5pR@kroah.com>
+ <Yyxgtx/Vr6Ar1xEe@lorien.usersys.redhat.com>
+ <20220922140504.GA58265@meh.true.cz>
+ <YyyY1LgHzQZpQkqM@lorien.usersys.redhat.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YyyY1LgHzQZpQkqM@lorien.usersys.redhat.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-09-22 at 11:55 -0700, Dave Hansen wrote:
-> On 9/22/22 10:10, Kristen Carlson Accardi wrote:
-> > -struct sgx_epc_page *sgx_alloc_va_page(bool reclaim)
-> > +struct sgx_epc_page *sgx_alloc_va_page(struct sgx_encl *encl, bool
-> > reclaim)
-> > =C2=A0{
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct sgx_epc_page *ep=
-c_page;
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int ret;
-> > @@ -1218,6 +1219,8 @@ struct sgx_epc_page *sgx_alloc_va_page(bool
-> > reclaim)
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0return ERR_PTR(-EFAULT);
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
-> > =C2=A0
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0epc_page->owner =3D encl;
-> > +
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return epc_page;
-> > =C2=A0}
->=20
-> BTW, is there a flag or any other way to tell to what kind of object
-> ->owner points?
+Phil Auld <pauld@redhat.com> [2022-09-22 13:18:12]:
 
-The owner will only be an sgx_encl type if it is a va page, so to tell
-what kind of object owner is, you look at the epc page flags - like
-this:
-        if (epc_page->flags & SGX_EPC_PAGE_ENCLAVE)
-                encl =3D ((struct sgx_encl_page *)epc_page->owner)->encl;
-        else if (epc_page->flags & SGX_EPC_PAGE_VERSION_ARRAY)
-                encl =3D epc_page->owner;
-...
+> Then I applied the fix and the problem went away:
 
+I've just tried the same aarch64 and I can confirm, that the
+patch fixes the issue.
 
+Cheers,
+
+Petr
