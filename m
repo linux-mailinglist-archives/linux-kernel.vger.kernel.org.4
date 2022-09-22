@@ -2,205 +2,294 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE81F5E6B06
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 20:32:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC8605E6B09
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 20:32:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231794AbiIVScM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 14:32:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49634 "EHLO
+        id S230167AbiIVScf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 14:32:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230150AbiIVSbQ (ORCPT
+        with ESMTP id S232712AbiIVScA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 14:31:16 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2086.outbound.protection.outlook.com [40.107.223.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBDB210BB3A;
-        Thu, 22 Sep 2022 11:28:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ElX/Boa6ZCj+rq8Q+Udq9awW7SaiypypDTxRRC9cYJ3BmK1m+0HXsMoVWkzUOF8rw14ubleOuxvJb712rmVLEQ26zCpo3HUkj4LKEQEy7oyr4cU50gzRHFETRHPH4SOOEvvbon3y8g5DWHCCd4OExfs/rBB7B8yVFLccY9c7Kd+/oG0G6UpMzfs8tMjQG+KcyVW258S0DHcAiGNWQHmqlI0ieXeHFZ2lF546KnPB+/H6/tH5hT8Dr3c/J4eMqeXzqEVDIY/hz2qQvvreehn1WMDBU5eEyYl8NUURBj2Q8KhN3Fp1ulGoYw64Mv7YPcb2jyNL/a9qaR/S99BX3qW+vA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DScZeIXzc8B68zCX9dXyhS8SohM9vesdvsjInlklyP0=;
- b=c1Z3Br+gXLeMl8dFM5ISx49FY5yJE805vbzcScU5/ReJWrT3TwkZMKYCt05zy0uvQtVryqcI55Wc7jU8kZwjTMq5tPKaf0PCZvY45eYOMfT42hDrE/rlGxOaof6bFqaH+BJIw2WEyW3m9nlLosYnGQF4Om7e3gGP0s+XBqmLh5Qimx/BcAKwQMqVFoXirct9HN0l/xwal03PhDB5puNg1Aw9poJ+S/tApJIvyfVIsLzXLrnZukcJD91+eYOb2r+kqdWNPRLF8oH2yBFsQfPe83gsfcLVft1vW2tdRlHjrxjJHK/ASPvTwOs4B5JC5JHrO9RZ6UcXYdDL2rISGkfE6A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DScZeIXzc8B68zCX9dXyhS8SohM9vesdvsjInlklyP0=;
- b=117THGyM1bqK9WCQXG+ijQGgaI7GoFU2I4HwVOVZzEEJLhZlZzDdH0jFBJ2e8c0kNWBVC6aRBh6uqXjwKDYK7A3wAyZFDIGNRoyNCI9Kd/pwG40fDKGvdIB90gA9umn0M4taO3kcxNriQh35UPke1cybn6XBn7mfAdxS/H+zP3I=
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by CY5PR12MB6083.namprd12.prod.outlook.com (2603:10b6:930:29::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.19; Thu, 22 Sep
- 2022 18:28:48 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::76ec:6acf:dd4d:76a3]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::76ec:6acf:dd4d:76a3%7]) with mapi id 15.20.5654.017; Thu, 22 Sep 2022
- 18:28:48 +0000
-From:   "Limonciello, Mario" <Mario.Limonciello@amd.com>
-To:     Dave Hansen <dave.hansen@intel.com>,
-        "Nayak, K Prateek" <KPrateek.Nayak@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "rafael@kernel.org" <rafael@kernel.org>,
-        "lenb@kernel.org" <lenb@kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "andi@lisas.de" <andi@lisas.de>, "puwen@hygon.cn" <puwen@hygon.cn>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rui.zhang@intel.com" <rui.zhang@intel.com>,
-        "gpiccoli@igalia.com" <gpiccoli@igalia.com>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "Narayan, Ananth" <Ananth.Narayan@amd.com>,
-        "Shenoy, Gautham Ranjal" <gautham.shenoy@amd.com>,
-        "Ong, Calvin" <Calvin.Ong@amd.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-Subject: RE: [PATCH] ACPI: processor_idle: Skip dummy wait for processors
- based on the Zen microarchitecture
-Thread-Topic: [PATCH] ACPI: processor_idle: Skip dummy wait for processors
- based on the Zen microarchitecture
-Thread-Index: AQHYzYSfJnaVyId5REam4NmoMbIuNa3rqjGAgAACsYCAAAITAIAACtxAgAAKaICAAADq4A==
-Date:   Thu, 22 Sep 2022 18:28:48 +0000
-Message-ID: <MN0PR12MB6101D3B6F6FF4C5BC2208FB2E24E9@MN0PR12MB6101.namprd12.prod.outlook.com>
-References: <20220921063638.2489-1-kprateek.nayak@amd.com>
- <20e78a49-25df-c83d-842e-1d624655cfd7@intel.com>
- <0885eecb-042f-3b74-2965-7d657de59953@amd.com>
- <88c17568-8694-940a-0f1f-9d345e8dcbdb@intel.com>
- <MN0PR12MB610110D90985366A4B952CCCE24E9@MN0PR12MB6101.namprd12.prod.outlook.com>
- <9d3d3424-a6d4-4076-87ff-a1c216de79c6@intel.com>
-In-Reply-To: <9d3d3424-a6d4-4076-87ff-a1c216de79c6@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Enabled=true;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SetDate=2022-09-22T18:21:11Z;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Method=Privileged;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Name=Public-AIP 2.0;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ActionId=308b76b7-57c7-4545-ace9-a8fa0d4aa709;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ContentBits=1
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_enabled: true
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_setdate: 2022-09-22T18:28:47Z
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_method: Privileged
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_name: Public-AIP 2.0
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_actionid: 90f561a8-cf19-4439-a59b-9684169713e3
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_contentbits: 0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MN0PR12MB6101:EE_|CY5PR12MB6083:EE_
-x-ms-office365-filtering-correlation-id: 8cd30fcc-30d0-4daa-5867-08da9cc84a95
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: nKsSsB9x787nTu6ODVjoV2FrrCzeFkdJSz0543zdL0KTDlW7OUPnBnRaHn0vvzjX34FM4QoThHQDM03O22feL9ev64JPaFhjCTptDECnSj7Ak/iHVqWLD8alQKZF3IZu/bixgwIu6CQgx7tea4frB1/VZWm1jQYfRG0OZhdvje98PdzXLnsHxAR3gnT5aCNV3FzVO4E9Uxk6yhZVjpRPYh+7Luu8+UXNWY7nsYwOdO/ShXQvHQZXEO4gfWLXDBChDK5eRJ/N5lQuCx4vemtX1pgqh5SNr22XjV6uyBSiBgO2ba+g2uiTLnw2WJuXUekEGeqZEjWrChVM7RV+uUb7RvUpIQD9Tl7ZSI5mHdXfBbqbUjHs9HjVubOz0kvs8uE1KswcbxpT8SOoVqS/tsVfpM3ivDf3nAhFy9ld5CvqWeuePXd0ns8gH4HquJITNKyEcuCotXyypHucFbbm6ibFg3Y5HIZD9J0Me7WEDixIvRCFcbf2h+XJN1TVdfzNMd2DUOzqXB3H6zkTCzwBHCKdHLQVGOOU4jKl6gqzyfgCxPCEiXJGzri8BBUHYbAcbZCqDPLYeUhScCCK+Ts/KvaLGr1bxUGkq3RIUKE0dN7xyNuVbDtsW0x1zZWi90xfeXDKX29rE2DSRq2WIACqk77/R81c89VfN+aZYxxkqhILS1m5NiKiv9EgL+G0CnW4vBPpWvubqCT1BzNKdH4oDJoZklh5MO2RbJRNgQlV7b6DZja8RzwZMHnpjZppmpvlqDUOOVo+lzXl0q0hIVFzt16jjw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(39860400002)(346002)(376002)(136003)(396003)(451199015)(26005)(55016003)(53546011)(41300700001)(6506007)(38070700005)(9686003)(7696005)(86362001)(33656002)(316002)(54906003)(4326008)(8676002)(71200400001)(64756008)(66446008)(66946007)(66556008)(66476007)(110136005)(478600001)(76116006)(122000001)(83380400001)(52536014)(8936002)(186003)(2906002)(5660300002)(7416002)(38100700002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SlZVTDZUTTk0aGw4ZkphUUhvU3JOYmpISmR5WVRRZm9RWkpUK09jWkwvNURs?=
- =?utf-8?B?aVdNM1BkWTJpcm0veXF6WW1RcGc3QStXZzIwZ2R5eVJhcCtmblh2Nk5tYXJG?=
- =?utf-8?B?MHVXZ1kzUUFadnozRW1xUk9EelJtaGt6eVFWbDNZL25ja1FGZGRYN3d1dklL?=
- =?utf-8?B?SndxckVFU3MwS1VyVlorSWVvL1RBMHBIMmFRaXBZRzFXR2ZaRFF3c1ZFVWhD?=
- =?utf-8?B?L1JvNnA1MWhVVmJDVkRMTlN5elp4OHUzUGR5VGkwem8ycllZZ2pEb20vWHVn?=
- =?utf-8?B?RXd3MlFZUnRIbFl6TVBZdzFMaU5TdnR6c2tPeGJlbStIYUdXWEpBRi9lVHV5?=
- =?utf-8?B?MUx3VGVFYThkWVc0ZXpBMGFmNVlNdTJmNndVWUdlU1FucWFraTNiS09iNWU0?=
- =?utf-8?B?Nk1rUlpMNjg5NG5IQklLZHpqdkV6bFRHdU9wUzhiNHg1V2dsSmp2cU9jOSsz?=
- =?utf-8?B?NzI2OUJud3ltR0M0L1o2RkpqZEpxYjJ5NFZRd3pIblRyZmtpRVp4M1RZcHdK?=
- =?utf-8?B?dUhHQTVUMFFFRk83UU1WN3BPNWtSQTI1eUdhdE5QQjZVWEFSbVNvalVSbkVl?=
- =?utf-8?B?cFlNUDRHM0N4ZGYrM2lRSlZlb0tWN3JCck1OekI4ODVEdy9YUXQwd1RIZk9m?=
- =?utf-8?B?cVo4ekxpS3ZCY2tud0JsR1dSVzI1cFIySUM4Y1ZCK2hPc3RTcytTTHZCMHNL?=
- =?utf-8?B?bHRUMWJWb0doVXc2a0x2bTRMejM2M09QN0F3a2tDZS83TEx0WXFDaWF1a0Rn?=
- =?utf-8?B?S0JsM2F4RjZSMEUvZVZVWWZjbEtLWXVDSERsUFFleDlZUVFmN1gxeGl3UU5r?=
- =?utf-8?B?aGI1d2hWcStMdEduUHpqMU1tSytVcmRWcS9PV2FFYUl6OC9FY1h1ZjNnZDhY?=
- =?utf-8?B?c1h4L2FiNWxXaVFSb1RrdXkzVTRJdXgrc3poaU0zWWJSbXVPNGZucHl2d1l3?=
- =?utf-8?B?dlRpYmIxdklEQnhsYXhMa1FxNENUMWtWYUErYmxSZWNtR2J5M0ZyRGJDQVFq?=
- =?utf-8?B?K1lKcW40RUhsNzMrZXFpMXNZbC8zeVVFdjdnYTQvenQzMzZYK2txa3lya3VY?=
- =?utf-8?B?c0hXTHFIaTBSZzNQZXBid1YvdE1IbFM4c0sxUDBoM1U0MWVia0tuMVdrOWcr?=
- =?utf-8?B?dE1COGRPVDRqRE9CWG9YcmMrTXFwK1oxZVNJWHV5a2U1dDJMUURRU3RueFJP?=
- =?utf-8?B?MnkzTDZCbVVSNU1CUnRaQXRvWmNBaTRObDRWcC82dUFCeis0ZnhndnpGUVVU?=
- =?utf-8?B?VEVjdkFsS3VPbTNtM1g2bDBHYXZSbVhNZXNQOWc5VUhsRC8vMEpPWXpNcGpk?=
- =?utf-8?B?NUQ4VHR5a2IvMHlJRzlQTWFQbmxJOFBxNzhDQVlLdi9XSnBmY0ZPem1JdDds?=
- =?utf-8?B?M0VjTWVVeXRFUDRJYjBudldoT2ZpTXpjaTM2WmI5MEY1YkNHV2NQK1YzVUFn?=
- =?utf-8?B?WWx4MExBN0ZMNHBNSWpvTHdBaWF6RXJRZXErY1MwbDBjVFNwYm81MG1yTDB5?=
- =?utf-8?B?TUUrZkFyUHpEMk9hRFdxamVwZ0wwYzVSNjR2c0N4czk1eU81V2dEU044TjJ3?=
- =?utf-8?B?ZWxseXFKMXFyUFlYUUQ1Mm40bHVqakVXYjRqeFJOVUpZZ28zYktaK2pZMUo1?=
- =?utf-8?B?TWw5TWNiLy9LaW94aWxReGFKUzRyc013M0lsZlB6akc2S0ZqZThNM21CWW0r?=
- =?utf-8?B?d3l2S21aemJ0MVRmM1FCZEowRjFnVkppZUk0SEdRMUxybnVWQ0thNTdKZUxV?=
- =?utf-8?B?NFBnMlZCMU9wTVNaUFltYkkrakpjQXRuM3RTL2J0TnZKY3p6OUk3Syt6UU0x?=
- =?utf-8?B?UmFEdnQwUzlPMEV4SXlhT2lLNHZJNHhpZ1VLd1YrdEJ0cXRQVnQzeDZhMitw?=
- =?utf-8?B?OGtCbFhaV1M0UzJUU29LWTcwWVpzYk1maUs0RnZFTzFFUDdIenVvRjhlV1I4?=
- =?utf-8?B?ZDBIUXBJbm5HbzZSUVM2alpkZElhRzZCOUkveW9RWHhvZDBqVWprNndUQUNr?=
- =?utf-8?B?azhQMG4za2NlTlM0QnhZWlRTYjNGcjBSUFlPdkdwNWcvSTd5ZEtLVTU2bG1j?=
- =?utf-8?B?ZUtqL0FrNDRRdGQxZHlRT09GRmhac25uNzdUWnl6d0RYTlJPdHp6NU1BcGNX?=
- =?utf-8?Q?JYkc=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Thu, 22 Sep 2022 14:32:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C40413EBE
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 11:29:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663871382;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=S6tJUCgYaZdA91WGecG3Omdxk6C0Sput3VYlk3b1RhA=;
+        b=Gt2JtkcpHh1qeMaekK+43dkXaj9hFWeU7xf2Bw28Yy3A65Jas3m4NO/sRr2xOzxV6xfLV9
+        zvhrKYL2x76+d1EVCHUMFFjZ9KzszrimWN2dDM5UVTohK7FCl4kJ7QzALgMdcCaIHouZvk
+        fF86+Y6g4rTDVq7Fo8Z5Un4i6mBXSeA=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-460-BzrM4yDKM_WoocdgxVjdLQ-1; Thu, 22 Sep 2022 14:29:41 -0400
+X-MC-Unique: BzrM4yDKM_WoocdgxVjdLQ-1
+Received: by mail-qk1-f198.google.com with SMTP id i7-20020a05620a404700b006ced0d02b68so7268620qko.10
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 11:29:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=S6tJUCgYaZdA91WGecG3Omdxk6C0Sput3VYlk3b1RhA=;
+        b=6TehCBCAwvNaofhvZh4KcYDT7D+Di+VPA6cERsIYavQQS2TSvMzfPf/zsL61mA8ZwH
+         7zj+mnxtMULB6Xex+AmXk2mrCkNSXY+jo7/SIhUpMuoiKbKZwCyk+6TUthGIrIOn7AUf
+         hk/V9gRro/zhBGrfs1sUwQPXEzJ1WEeogzYiFh+LRKOAeBvwwRLMEPcdiI0zR4yOduga
+         hw8VzH9qzBEW3aCtbe0ctaVVOYLnheSfa8bJiZ/24p3kGwsV6HiGpKJgwHCHjQmDAVQa
+         OimGPKxtCMduwnEKqp70/isDyOuH23jCSfh3QTrY/PP2Fn/IXrFrnYJb2S4TbnO1Il71
+         tepQ==
+X-Gm-Message-State: ACrzQf2RiOuNWKE9jo93AlfBXrWdO69dbaUpDUd4g1OLY1e5QumHgThl
+        fWRQ1F+QrGhlEQY+UH51omyKHiVdQs1BU7wAIOZud/HuYHrGNt4Xy9uHp9emqHjoLKt+pd8JMFs
+        dqOg8s51LIErupWjukt1A6Jdp
+X-Received: by 2002:a05:6214:29e4:b0:4ad:8c96:178b with SMTP id jv4-20020a05621429e400b004ad8c96178bmr1931457qvb.29.1663871380597;
+        Thu, 22 Sep 2022 11:29:40 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5RkWlQl2NY4VBbaFM/3H818tEmhHbxLx0HPIsYfjbny4kxcAOERW2vdVGtdqk3/xGNqUrABA==
+X-Received: by 2002:a05:6214:29e4:b0:4ad:8c96:178b with SMTP id jv4-20020a05621429e400b004ad8c96178bmr1931418qvb.29.1663871380242;
+        Thu, 22 Sep 2022 11:29:40 -0700 (PDT)
+Received: from bfoster (c-24-61-119-116.hsd1.ma.comcast.net. [24.61.119.116])
+        by smtp.gmail.com with ESMTPSA id n12-20020a05620a294c00b006ce63901d27sm4470061qkp.4.2022.09.22.11.29.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Sep 2022 11:29:39 -0700 (PDT)
+Date:   Thu, 22 Sep 2022 14:29:36 -0400
+From:   Brian Foster <bfoster@redhat.com>
+To:     Sarthak Kukreti <sarthakkukreti@chromium.org>
+Cc:     dm-devel@redhat.com, linux-block@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Jens Axboe <axboe@kernel.dk>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Bart Van Assche <bvanassche@google.com>,
+        Daniil Lunev <dlunev@google.com>,
+        Evan Green <evgreen@google.com>,
+        Gwendal Grignou <gwendal@google.com>
+Subject: Re: [PATCH RFC 4/8] fs: Introduce FALLOC_FL_PROVISION
+Message-ID: <YyypkOr3l2lx4Odi@bfoster>
+References: <20220915164826.1396245-1-sarthakkukreti@google.com>
+ <20220915164826.1396245-5-sarthakkukreti@google.com>
+ <YyRkd8YAH1lal8/N@bfoster>
+ <CAG9=OMNL1Z3DiO-usdH0k90NDsDkDQ7A7CHc4Nu6MCXKNKjWdw@mail.gmail.com>
+ <YyswI57JH7gcs9+S@bfoster>
+ <CAG9=OMPEoShYMx6A+p97-tw4MuLpgOEpy7aFs5CH6wTedptALQ@mail.gmail.com>
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8cd30fcc-30d0-4daa-5867-08da9cc84a95
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Sep 2022 18:28:48.4691
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: XREqY2WvYLD5smTHdbHtWpAyz1x2MUNOOYkgt+FPaCCan43ddtVQHPiER1RBuFLHjbw3BXcIhRH3+6zt6N3fdQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6083
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAG9=OMPEoShYMx6A+p97-tw4MuLpgOEpy7aFs5CH6wTedptALQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-W1B1YmxpY10NCg0KPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBEYXZlIEhh
-bnNlbiA8ZGF2ZS5oYW5zZW5AaW50ZWwuY29tPg0KPiBTZW50OiBUaHVyc2RheSwgU2VwdGVtYmVy
-IDIyLCAyMDIyIDEzOjE4DQo+IFRvOiBMaW1vbmNpZWxsbywgTWFyaW8gPE1hcmlvLkxpbW9uY2ll
-bGxvQGFtZC5jb20+OyBOYXlhaywgSyBQcmF0ZWVrDQo+IDxLUHJhdGVlay5OYXlha0BhbWQuY29t
-PjsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZw0KPiBDYzogcmFmYWVsQGtlcm5lbC5vcmc7
-IGxlbmJAa2VybmVsLm9yZzsgbGludXgtYWNwaUB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LQ0KPiBw
-bUB2Z2VyLmtlcm5lbC5vcmc7IGRhdmUuaGFuc2VuQGxpbnV4LmludGVsLmNvbTsgYnBAYWxpZW44
-LmRlOw0KPiB0Z2x4QGxpbnV0cm9uaXguZGU7IGFuZGlAbGlzYXMuZGU7IHB1d2VuQGh5Z29uLmNu
-OyBwZXRlcnpAaW5mcmFkZWFkLm9yZzsNCj4gcnVpLnpoYW5nQGludGVsLmNvbTsgZ3BpY2NvbGlA
-aWdhbGlhLmNvbTsgZGFuaWVsLmxlemNhbm9AbGluYXJvLm9yZzsNCj4gTmFyYXlhbiwgQW5hbnRo
-IDxBbmFudGguTmFyYXlhbkBhbWQuY29tPjsgU2hlbm95LCBHYXV0aGFtIFJhbmphbA0KPiA8Z2F1
-dGhhbS5zaGVub3lAYW1kLmNvbT47IE9uZywgQ2FsdmluIDxDYWx2aW4uT25nQGFtZC5jb20+Ow0K
-PiBzdGFibGVAdmdlci5rZXJuZWwub3JnOyByZWdyZXNzaW9uc0BsaXN0cy5saW51eC5kZXYNCj4g
-U3ViamVjdDogUmU6IFtQQVRDSF0gQUNQSTogcHJvY2Vzc29yX2lkbGU6IFNraXAgZHVtbXkgd2Fp
-dCBmb3IgcHJvY2Vzc29ycw0KPiBiYXNlZCBvbiB0aGUgWmVuIG1pY3JvYXJjaGl0ZWN0dXJlDQo+
-IA0KPiBPbiA5LzIyLzIyIDEwOjQ4LCBMaW1vbmNpZWxsbywgTWFyaW8gd3JvdGU6DQo+ID4NCj4g
-PiAyKSBUaGUgdGl0bGUgc2F5cyB0byBsaW1pdCBpdCB0byBvbGQgaW50ZWwgc3lzdGVtcywgYnV0
-IG5vdGhpbmcgYWJvdXQgdGhpcw0KPiBhY3R1YWxseSBlbmZvcmNlcyB0aGF0Lg0KPiA+IEl0IGFj
-dHVhbGx5IGlzIGxpbWl0ZWQgdG8gYWxsIEludGVsIHN5c3RlbXMsIGJ1dCBlZmZlY3RpdmVseSB3
-b24ndCBiZSB1c2VkIG9uDQo+IGFueXRoaW5nIGJ1dCBuZXcNCj4gPiBvbmVzIGJlY2F1c2Ugb2Yg
-aW50ZWxfaWRsZS4NCj4gPg0KPiA+IEFzIGFuIGlkZWEgZm9yICMyIHlvdSBjb3VsZCBjaGVjayBm
-b3IgQ09ORklHX0lOVEVMX0lETEUgaW4gdGhlIEludGVsIGNhc2UNCj4gYW5kDQo+ID4gaWYgaXQn
-cyBub3QgZGVmaW5lZCBzaG93IGEgcHJfbm90aWNlX29uY2UoKSB0eXBlIG9mIG1lc3NhZ2UgdHJ5
-aW5nIHRvIHRlbGwNCj4gcGVvcGxlIHRvIHVzZQ0KPiA+IEludGVsIElkbGUgaW5zdGVhZCBmb3Ig
-YmV0dGVyIHBlcmZvcm1hbmNlLg0KPiANCj4gV2hhdCBkb2VzIHRoYXQgaGF2ZSB0byBkbyB3aXRo
-ICp0aGlzKiBwYXRjaCwgdGhvdWdoPw0KDQpJdCB3YXMganVzdCBhIHRob3VnaHQgdHJpZ2dlcmVk
-IGJ5IHlvdXIgY29tbWl0IG1lc3NhZ2UgdGl0bGUuDQoNCj4gDQo+IElmIHlvdSd2ZSBnb3QgQ09O
-RklHX0lOVEVMX0lETEUgZGlzYWJsZWQsIHlvdSdsbCBiZSBzbG93IGJlZm9yZSB0aGlzDQo+IHBh
-dGNoLiAgWW91J2xsIGFsc28gYmUgc2xvdyBhZnRlciB0aGlzIHBhdGNoLiAgSXQncyBlbnRpcmVs
-eSBvcnRob2dvbmFsLg0KPiANCg0KWWVhaCBpdCdzIG9ydGhvZ29uYWwsIGJ1dCB3aXRoIHRoaXMg
-ZGlzY3Vzc2lvbiBoYXBwZW5pbmcgYW5kIHRoZSBjb2RlIGlzDQpjaGFuZ2luZyAvYW55d2F5LyB0
-aGVuIGEgcHJfbm90aWNlX29uY2UoKSBzZWVtZWQgbGlrZSBhIG5pY2Ugd2F5IHRvDQpndWlkZSBw
-ZW9wbGUgdG93YXJkcyBpbnRlbF9pZGxlIGF0IHRoZSBzYW1lIHRpbWUgc28gdGhleSBkaWRuJ3Qg
-dHJpcCBpbnRvDQp0aGUgc2FtZSBwcm9ibGVtIEFNRCBzeXN0ZW1zIGRvIHRvZGF5Lg0KDQo+IEkg
-Y2FuIGFkZCBhICJQcmFjdGljYWxseSIgdG8gdGhlIHN1YmplY3Qgc28gZm9sa3MgZG9uJ3QgY29u
-ZnVzZSBpdCB3aXRoDQo+IHNvbWUgaGFyZCBsaW1pdCB0aGF0IGlzIGJlaW5nIGVuZm9yY2VkOg0K
-PiANCj4gCUFDUEk6IHByb2Nlc3NvciBpZGxlOiBQcmFjdGljYWxseSBsaW1pdCAiRHVtbXkgd2Fp
-dCIgd29ya2Fyb3VuZCB0bw0KPiBvbGQNCj4gSW50ZWwgc3lzdGVtcw0KDQpUaGF0IHdvcmtzLg0K
-DQo+IA0KPiBCVFcsIGlzIHRoZXJlIHNlcmlvdXNseSBhIHN0cm9uZyB0ZWNobmljYWwgcmVhc29u
-IHRoYXQgQU1EIHN5c3RlbXMgYXJlDQo+IHN0aWxsIHVzaW5nIHRoaXMgY29kZT8gIE9yIGlzIGl0
-IHB1cmUgaW5lcnRpYT8NCg0KTWF5YmUgYSBiZXR0ZXIgcXVlc3Rpb24gZm9yIEFuYW50aCBhbmQg
-UHJhdGVlayB0byBjb21tZW50IG9uLg0K
+On Thu, Sep 22, 2022 at 01:04:33AM -0700, Sarthak Kukreti wrote:
+> On Wed, Sep 21, 2022 at 8:39 AM Brian Foster <bfoster@redhat.com> wrote:
+> >
+> > On Fri, Sep 16, 2022 at 02:02:31PM -0700, Sarthak Kukreti wrote:
+> > > On Fri, Sep 16, 2022 at 4:56 AM Brian Foster <bfoster@redhat.com> wrote:
+> > > >
+> > > > On Thu, Sep 15, 2022 at 09:48:22AM -0700, Sarthak Kukreti wrote:
+> > > > > From: Sarthak Kukreti <sarthakkukreti@chromium.org>
+> > > > >
+> > > > > FALLOC_FL_PROVISION is a new fallocate() allocation mode that
+> > > > > sends a hint to (supported) thinly provisioned block devices to
+> > > > > allocate space for the given range of sectors via REQ_OP_PROVISION.
+> > > > >
+> > > > > Signed-off-by: Sarthak Kukreti <sarthakkukreti@chromium.org>
+> > > > > ---
+> > > > >  block/fops.c                | 7 ++++++-
+> > > > >  include/linux/falloc.h      | 3 ++-
+> > > > >  include/uapi/linux/falloc.h | 8 ++++++++
+> > > > >  3 files changed, 16 insertions(+), 2 deletions(-)
+> > > > >
+> > > > > diff --git a/block/fops.c b/block/fops.c
+> > > > > index b90742595317..a436a7596508 100644
+> > > > > --- a/block/fops.c
+> > > > > +++ b/block/fops.c
+> > > > ...
+> > > > > @@ -661,6 +662,10 @@ static long blkdev_fallocate(struct file *file, int mode, loff_t start,
+> > > > >               error = blkdev_issue_discard(bdev, start >> SECTOR_SHIFT,
+> > > > >                                            len >> SECTOR_SHIFT, GFP_KERNEL);
+> > > > >               break;
+> > > > > +     case FALLOC_FL_PROVISION:
+> > > > > +             error = blkdev_issue_provision(bdev, start >> SECTOR_SHIFT,
+> > > > > +                                            len >> SECTOR_SHIFT, GFP_KERNEL);
+> > > > > +             break;
+> > > > >       default:
+> > > > >               error = -EOPNOTSUPP;
+> > > > >       }
+> > > >
+> > > > Hi Sarthak,
+> > > >
+> > > > Neat mechanism.. I played with something very similar in the past (that
+> > > > was much more crudely hacked up to target dm-thin) to allow filesystems
+> > > > to request a thinly provisioned device to allocate blocks and try to do
+> > > > a better job of avoiding inactivation when overprovisioned.
+> > > >
+> > > > One thing I'm a little curious about here.. what's the need for a new
+> > > > fallocate mode? On a cursory glance, the provision mode looks fairly
+> > > > analogous to normal (mode == 0) allocation mode with the exception of
+> > > > sending the request down to the bdev. blkdev_fallocate() already maps
+> > > > some of the logical falloc modes (i.e. punch hole, zero range) to
+> > > > sending write sames or discards, etc., and it doesn't currently look
+> > > > like it supports allocation mode, so could it not map such requests to
+> > > > the underlying REQ_OP_PROVISION op?
+> > > >
+> > > > I guess the difference would be at the filesystem level where we'd
+> > > > probably need to rely on a mount option or some such to control whether
+> > > > traditional fallocate issues provision ops (like you've implemented for
+> > > > ext4) vs. the specific falloc command, but that seems fairly consistent
+> > > > with historical punch hole/discard behavior too. Hm? You might want to
+> > > > cc linux-fsdevel in future posts in any event to get some more feedback
+> > > > on how other filesystems might want to interact with such a thing.
+> > > >
+> > > Thanks for the feedback!
+> > > Argh, I completely forgot that I should add linux-fsdevel. Let me
+> > > re-send this with linux-fsdevel cc'd
+> > >
+> > > There's a slight distinction is that the current filesystem-level
+> > > controls are usually for default handling, but userspace can still
+> > > call the relevant functions manually if they need to. For example, for
+> > > ext4, the 'discard' mount option dictates whether free blocks are
+> > > discarded, but it doesn't set the policy to allow/disallow userspace
+> > > from manually punching holes into files even if the mount opt is
+> > > 'nodiscard'. FALLOC_FL_PROVISION is similar in that regard; it adds a
+> > > manual mechanism for users to provision the files' extents, that is
+> > > separate from the filesystems' default handling of provisioning files.
+> > >
+> >
+> > What I'm trying to understand is why not let blkdev_fallocate() issue a
+> > provision based on the default mode (i.e. mode == 0) of fallocate(),
+> > which is already defined to mean "perform allocation?" It currently
+> > issues discards or write zeroes based on variants of
+> > FALLOC_FL_PUNCH_HOLE without the need for a separate FALLOC_FL_DISCARD
+> > mode, for example.
+> >
+> It's mostly to keep the block device fallocate() semantics in-line and
+> consistent with the file-specific modes: I added the separate
+> filesystem fallocate() mode under the assumption that we'd want to
+> keep the traditional handling for filesystems intact with (mode == 0).
+> And for block devices, I didn't map the requests to mode == 0 so that
+> it's less confusing to describe (eg. mode == 0 on block devices will
+> issue provision; mode == 0 on files will not). It would complicate
+> loopback devices, for instance; if the loop device is backed by a
+> file, it would need to use (mode == FALLOC_FL_PROVISION) but if the
+> loop device is backed by another block device, then the fallocate()
+> call would need to switch to (mode == 0).
+> 
+
+I would expect the loopback scenario for provision to behave similar to
+how discards are handled. I.e., loopback receives a provision request
+and translates that to fallocate(mode = 0). If the backing device is
+block, blkdev_fallocate(mode = 0) translates that to another provision
+request.  If the backing device is a file, the associated fallocate
+handler allocs/maps, if necessary, and then issues a provision on
+allocation, if enabled by the fs.
+
+AFAICT there's no need for FL_PROVISION at all in that scenario. Is
+there a functional purpose to FL_PROVISION? Is the intent to try and
+guarantee that a provision request propagates down the I/O stack? If so,
+what happens if blocks were already preallocated in the backing file (in
+the loopback file example)?
+
+BTW, an unrelated thing I noticed is that blkdev_fallocate()
+unconditionally calls truncate_bdev_range(), which probably doesn't make
+sense for any sort of alloc mode.
+
+> With the separate mode, we can describe the semantics of falllcate()
+> modes a bit more cleanly, and it is common for both files and block
+> devices:
+> 
+> 1. mode == 0: allocation at the same layer, will not provision on the
+> underlying device/filesystem (unsupported for block devices).
+> 2. mode == FALLOC_FL_PROVISION, allocation at the layer, will
+> provision on the underlying device/filesystem.
+> 
+
+I think I see why you make the distinction, since the block layer
+doesn't have a "this layer only" mode, but IMO it's also quite confusing
+to say that mode == FL_PROVISION can allocate at the current and
+underlying layer(s) but mode == 0 to that underlying layer cannot.
+
+Either way, if you want to propose a new falloc mode/modifier, it
+probably warrants a more detailed commit log with more explanation of
+the purpose, examples of behavior, perhaps some details on how the mode
+might be documented in man pages, etc.
+
+Brian
+
+> Block devices don't technically need to use a separate mode, but it
+> makes it much less confusing if filesystems are already using a
+> separate mode for provision.
+> 
+> Best
+> Sarthak
+> 
+> > Brian
+> >
+> > > > BTW another thing that might be useful wrt to dm-thin is to support
+> > > > FALLOC_FL_UNSHARE. I.e., it looks like the previous dm-thin patch only
+> > > > checks that blocks are allocated, but not whether those blocks are
+> > > > shared (re: lookup_result.shared). It might be useful to do the COW in
+> > > > such cases if the caller passes down a REQ_UNSHARE or some such flag.
+> > > >
+> > > That's an interesting idea! There's a few more things on the TODO list
+> > > for this patch series but I think we can follow up with a patch to
+> > > handle that as well.
+> > >
+> > > Sarthak
+> > >
+> > > > Brian
+> > > >
+> > > > > diff --git a/include/linux/falloc.h b/include/linux/falloc.h
+> > > > > index f3f0b97b1675..a0e506255b20 100644
+> > > > > --- a/include/linux/falloc.h
+> > > > > +++ b/include/linux/falloc.h
+> > > > > @@ -30,7 +30,8 @@ struct space_resv {
+> > > > >                                        FALLOC_FL_COLLAPSE_RANGE |     \
+> > > > >                                        FALLOC_FL_ZERO_RANGE |         \
+> > > > >                                        FALLOC_FL_INSERT_RANGE |       \
+> > > > > -                                      FALLOC_FL_UNSHARE_RANGE)
+> > > > > +                                      FALLOC_FL_UNSHARE_RANGE |                          \
+> > > > > +                                      FALLOC_FL_PROVISION)
+> > > > >
+> > > > >  /* on ia32 l_start is on a 32-bit boundary */
+> > > > >  #if defined(CONFIG_X86_64)
+> > > > > diff --git a/include/uapi/linux/falloc.h b/include/uapi/linux/falloc.h
+> > > > > index 51398fa57f6c..2d323d113eed 100644
+> > > > > --- a/include/uapi/linux/falloc.h
+> > > > > +++ b/include/uapi/linux/falloc.h
+> > > > > @@ -77,4 +77,12 @@
+> > > > >   */
+> > > > >  #define FALLOC_FL_UNSHARE_RANGE              0x40
+> > > > >
+> > > > > +/*
+> > > > > + * FALLOC_FL_PROVISION acts as a hint for thinly provisioned devices to allocate
+> > > > > + * blocks for the range/EOF.
+> > > > > + *
+> > > > > + * FALLOC_FL_PROVISION can only be used with allocate-mode fallocate.
+> > > > > + */
+> > > > > +#define FALLOC_FL_PROVISION          0x80
+> > > > > +
+> > > > >  #endif /* _UAPI_FALLOC_H_ */
+> > > > > --
+> > > > > 2.31.0
+> > > > >
+> > > >
+> > >
+> >
+> 
+
