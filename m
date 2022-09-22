@@ -2,159 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAD885E6FE7
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 00:46:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 110E65E6FE9
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 00:46:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230372AbiIVWqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 18:46:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44140 "EHLO
+        id S230418AbiIVWqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 18:46:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiIVWqT (ORCPT
+        with ESMTP id S229519AbiIVWq1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 18:46:19 -0400
-Received: from na01-obe.outbound.protection.outlook.com (mail-eastus2azon11021026.outbound.protection.outlook.com [52.101.57.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC9FEEB6A;
-        Thu, 22 Sep 2022 15:46:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FwpYlHF/JR4HUXxoESKfJLWP/KO5fUTkdyPRRmu8K+ajo9tWVQ6FCbcfPZlu4JIxPBHDJfkSGjIPlTbcdcFBeKz8Nfq8lQkujJkDzMa4NJRdzp79MXOpGe3XCvRonmQh34hcQBSkBeuo28+FK65y9KNk+8R1Vk9Q2M+G+iA9sy1a0uCTijtsXQZ2hfG+yYHJE6+Q0JxHAoKXXfqz4Sa5O9VpSKEGftiEK+v7SASz/6bd9zHhTLrec8C6JGxefH6JZT5/bADwVUPAbLLTOha+uflxIGc9RzoNjpA3DgFFs/cwGKpYpGMWEmAvPIE3ECukEFOVGbZXFWJ4QbxADeydTQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ciErrPeXvmubG0f6HC5COvoekUzJIRr8wIAPrRnpd4Q=;
- b=hqaQUWYZCYm6K4VUlt5PusEQzNvREGxBfe/ieel/2P3c1PxGWK5MYCV5Ly44lXUpZwFs+ZgBop9ddhqVWhUn2acKy/8SxUUtU07UcJRgqIDFnTS+oB+jV2pfcre6bEuIFw6qcqBo4YggaoqKC6z1kjDS9f0aFJkfTWjQkCZIYU0oE3bJ/rFcfQGbMcSgYT/6iuV2q894A1jU2BXMJipSM9gSLAFu+OsFWjh+m/Ge4scBvy+U2pMzaj0fm3e5PighgdMpJD4rSreOL/2s6y8i/JCL6BdYwaVHhXI3bSOROODnSnMq3DKg3ixnxGtqD5TgI+abKBjtO8f9notoXa6vtQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ciErrPeXvmubG0f6HC5COvoekUzJIRr8wIAPrRnpd4Q=;
- b=f/3DQm88U7phVc0afKIsX4M2qGeBOKenI7YzlOo3wKppvvvogoqbbXMIpV+xUcs1QhBUoXN870OPht4psEf0Mn2c4kFk5qVXAA2g/fyP3JmEZ9HRR80LQU1bPm+QRgypvKjbp8d9q8vtqUWrhFARj+I+yU/RmMMtagokJe/BzbU=
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
- by PH0PR21MB2062.namprd21.prod.outlook.com (2603:10b6:510:ab::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.9; Thu, 22 Sep
- 2022 22:46:14 +0000
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::17f5:70e:721f:df7e]) by BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::17f5:70e:721f:df7e%4]) with mapi id 15.20.5676.007; Thu, 22 Sep 2022
- 22:46:14 +0000
-From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-To:     Saurabh Sengar <ssengar@linux.microsoft.com>,
-        Saurabh Singh Sengar <ssengar@microsoft.com>,
-        "drawat.floss@gmail.com" <drawat.floss@gmail.com>,
-        "airlied@linux.ie" <airlied@linux.ie>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] drm/hyperv: Don't overwrite dirt_needed value set by host
-Thread-Topic: [PATCH] drm/hyperv: Don't overwrite dirt_needed value set by
- host
-Thread-Index: AQHYxrzuab2WaEtpTkGefKGEEbz+BK3sHEIg
-Date:   Thu, 22 Sep 2022 22:46:13 +0000
-Message-ID: <BYAPR21MB1688F42554CEB542E760F3B5D74E9@BYAPR21MB1688.namprd21.prod.outlook.com>
-References: <1662996766-19304-1-git-send-email-ssengar@linux.microsoft.com>
-In-Reply-To: <1662996766-19304-1-git-send-email-ssengar@linux.microsoft.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=2cf5fe52-d0b9-4cef-ba0f-c6b727250160;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-09-22T22:44:26Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|PH0PR21MB2062:EE_
-x-ms-office365-filtering-correlation-id: efcfbc1f-ffe1-46ab-cff4-08da9cec40d7
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: u9+8G1NkrfI9IQQNUbretSnnt3/QjB17xyINgp3nfQdRUCv5RpZmOPW+LvnarPBRn6Y1y3L1/OO8epG/29XJutXT+4TcYy1yCXfjsYTzq1Wc4CrrJUzAvBHSB7vcDLG04icJhE+glfQAoIzWXBjXbQhWe4pra/8UhzSJja5BZCHsyzOLj/Pk5YWDc7ZCaW0TNvaLH7KskhtGvJpnDRb5+q8F/kLkWm5/4As9R5fkeleZWQPWNC5n5bbyxA95CFMNcHeqPSn3Ue1rEkHxTx3xnly7cWAU8kA4+z9Ip16wODlhjvXZhvV6jEu/qFlGLeoCnkrx8I8kOrW9TIMtcExc5QlaKU0Q5WxsTLnoQ9Ufddq+dyhuIKqPIlTHam/s8Bu/EH8nydYzNQWbo11pmuq/VsndDY9L0dmKb8riOSHKApZKpg4UHCA5CC3GO7qFjE01343iBRDwy7J2RnEs8IxsUCCaxSaVMsw7x3deVT4nr5drXZmEbhQ8wiUhms3eUG1+tFC8kNl8WOgUlEOR/hoaqVDXG4YcLOxkwdIpwUwbjhH9eRg7QotgKvTgsPtxyoivzEHcJ3ixt6ISk7GQD+AcaSR4OD0oSIp+3OUP68G25zWIy12zsGH6Ebw1So2uYpTTrk3p2CUJFibfRj32buYo0iwsa56iqUW7qwDVmpwptSqM8FTzrimKooxOJRKrdn8jHaMesBJhuEUGgKlHsBjJ023jiLSOHN4lXUi13p8os/XXY2bAAGh1nUio6nvr8cF42mc3CcU3rj5krHEzL5xHNDX2T/rKa9tCp1JwKLEkwff8vHvfAZGI3dtks9ccuNcU
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(346002)(396003)(39860400002)(136003)(376002)(451199015)(8990500004)(5660300002)(8676002)(2906002)(41300700001)(71200400001)(33656002)(6506007)(26005)(7696005)(38100700002)(66476007)(9686003)(64756008)(66556008)(66446008)(66946007)(76116006)(8936002)(52536014)(86362001)(316002)(10290500003)(38070700005)(110136005)(478600001)(82960400001)(82950400001)(55016003)(122000001)(186003)(83380400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?ODg912/8dsCA2XdB23dg6BpwH9a58vzCAwNKSlAUsLhXy005evTgfM+rYrFy?=
- =?us-ascii?Q?H7+zSdTH+ocblJLnsNha5RULIyvgKyhu4Jtkc6vj50KDlBpEc6CsqGUkWy6v?=
- =?us-ascii?Q?5dwt0u2C8/MmteGtu6Ie+SJ0vR/ZZpOHrg1sNhpQ37IkSlg2Tjh3R+wKrTa1?=
- =?us-ascii?Q?MX5q7GQff86JRMvObRrUQhBtQQdhDJxZq08QJYzwrw6gpKS+esU393JMza78?=
- =?us-ascii?Q?GQG8xNAApxLZXHu1TNadhvfGjskT229J8qWHBUWzq8WxXa1RBRTKwzLQisnV?=
- =?us-ascii?Q?TCTj9pN7yylXh6rmWZUF/cIeG+IdXwm8ifJhsKNCgMOcFaZQ+QKqzY+64KfK?=
- =?us-ascii?Q?g9FqLz6Bmj8lA2hVkP+qMpYGydIE1KOsjZZTxacPZKD449n+n4rA/5dpbGJV?=
- =?us-ascii?Q?G8KF4IoLrOvWe2M7nvKJxgBVLW69CcQD7fHUDjVdnAeVPcx+7aycd3dfbzJH?=
- =?us-ascii?Q?Ae5Neh/0U8LKrpaLAPR6hMtCJN/QPUmcIpa1gCg9eIne3AIZa3H9GbdlkdR/?=
- =?us-ascii?Q?IcamSi90XmYg7S5Me30FihRAdIKt5XChVO9Hvnx8LuIbQx+asoTUpeItF+ha?=
- =?us-ascii?Q?VZsrhSXR9pSEH18N1WcTGXZIHoog/Cs64E3Qdzb0MvSVFTaMFPKh8AmKqKJn?=
- =?us-ascii?Q?pbuz+VliTNiD5xcXNDyxOWBMZuZs+GBHi7zpLLea5FC1Pz1T07WfcVmbkzHF?=
- =?us-ascii?Q?tUMnnGnPU7qyAV++pmr0254U7FC0DhuZV7DlfHK7MLbvFI9OMLefFV+e7Dtl?=
- =?us-ascii?Q?yrRq2SfJVofRHLJVTGnfblEPqWIiYrZ29AVjcuN4CgJde90uu98xusQTuhg3?=
- =?us-ascii?Q?fE3LHujrKpPsWpAadve86CjEK6YM75cHoCGsJ4YRkDpPQpanxezy1KYdYJlM?=
- =?us-ascii?Q?zCJdyjnpjN8RrPsV4z0mgqseUTDKrBZCY2sR0X+AnnAemtCgijHmJ88vxFr4?=
- =?us-ascii?Q?smi950I2kWXlUtxFOgB2gIIon9yBtrAyVoMGR3F3I4egbDEnyCJUH3VBK1jq?=
- =?us-ascii?Q?18lNWMNPtPYMMzBFgqU0OsuJQybZZUyM9aA5dyH9Ox4QsbKQOYgwG8vHl+Ss?=
- =?us-ascii?Q?QF2ZwGsDC5P1ZhTPQNzRWmvjZT2MtGnlC3PxR/BE2HrcS//cPiD/U3SG0r84?=
- =?us-ascii?Q?OTMYLLNpGTA3N/A0vaCW6ajl+YOlviGLxOck1LWon15g6N/Z4rDAqAvgM2YH?=
- =?us-ascii?Q?Gktp/XKb4bExqpR+yJIschIDqD5CTtjXV7/P7Lyo739mJWU1l2ReMoXJqaVX?=
- =?us-ascii?Q?P0srnIppyDoudgFeiwRvh+GpOOKtMfG2VZO25Th8lFtoUwClg2C2XcVcYI7b?=
- =?us-ascii?Q?RxKZRN9iDIDcbAeaq1KA37qSWOaKjEZ25y/gpMofQ+caBjAYEuuj9nonz0rv?=
- =?us-ascii?Q?jVkqYkJVD1q7WHv3BwklTGrCwyjnIUGgAUL/P6SGJRqbMiYSJvfAL5ODfA6E?=
- =?us-ascii?Q?MCWGvG6UApfJs2xCMvZMaKzQEWYfPuO3/p+vwmgmhLYpAsNoX7zPtH+7AW62?=
- =?us-ascii?Q?ADKjMQnKfzkzu/cH/OhuEXe2SwPZXM4MoEvRSo9Ri+tPDTleBCM3lC4stUHG?=
- =?us-ascii?Q?P331l+kdcR7+boG1N9RQKBAiKmbiokSDx8hvIOa3SX3Nz4By+hnWJCnFRLHA?=
- =?us-ascii?Q?ww=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 22 Sep 2022 18:46:27 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E21EBEEB40
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 15:46:25 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id iv17so3071856wmb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 15:46:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=9NBOmFwgDwIdBLiWSI0vBgFaF0v0AI90lxVKJOJ5Ing=;
+        b=gIqzT0NTDMVsZAZhX+AYLhrA/sESmquVV0GrhxVDC6enW2fSgXB13bZ5kjxb16gDaW
+         UEhKkrc06/3NzeszcAyZSFZCaOsGArqxgY28ce6hz08+RaNK/OUBXvJrS6yQVCK25gEX
+         /qXlv4UfMEq755VwRGHAOeYyGj4FmeIe6E5UYO9mdICwyq2BqEGAbPMwN4w7NXk7FlA2
+         dEPOC5BDXVYVX7JnJgZAlDVTFfaWvBRsVz3UfK0WQIUCz8HkgDgtAUs9ETtORsIdCAPH
+         /RAMjhRHHvF/WYUZ9PjbjkOSUuzQOJ6Dq0+icePqqZs84+FJEZiPSLRuHbP2Q84YBva5
+         B5IA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=9NBOmFwgDwIdBLiWSI0vBgFaF0v0AI90lxVKJOJ5Ing=;
+        b=DSFpP2tDz5IRNRImmJtTnLi2k4vn9EA6ZpHYCmfBaHEYAsZVjgk1bS3qrnLElhOHK8
+         9XLRhyO2flZg9gx6wgt/h/08f8jFol7RgG3FNI/tATKRUdyaH5u29rJT/8Fvw+POXY6r
+         vnhDYPAQnUyxz1t1DSrrFBCFq+ti1pfJC/oYyJZMzDv3oCX6Haf4hgxhlFeJyzm4CcnJ
+         zV0bc9xjA/HpKs/uXTSZfgfwzA5PF+LzSZnHXSz6hh6IM/+YkWTElplq4VTIWieQsY5Z
+         WjTjHYZ0lqEfxGubsOU/9Em7inEg7SRD+pIHfiQ6Y4H+1nADS3th4xU2PkU1VsyexhQi
+         QcPQ==
+X-Gm-Message-State: ACrzQf2wGX3nWmtGLmBvHQYYsg+52vG7/v29U/2E4HEtaQZQKMUrYcVm
+        gtosuQTU6kxJuZ5JoFxIYDOmsQ==
+X-Google-Smtp-Source: AMsMyM65ZCCXDuvwFblml7L1ikCPk7sKLZy9MUJgq57DjgG2vmc/jvtSJpghWJw4XCnMN0goFO4S1A==
+X-Received: by 2002:a05:600c:3d8e:b0:3b4:a61c:52cc with SMTP id bi14-20020a05600c3d8e00b003b4a61c52ccmr11438448wmb.7.1663886784439;
+        Thu, 22 Sep 2022 15:46:24 -0700 (PDT)
+Received: from [192.168.86.238] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.googlemail.com with ESMTPSA id bn27-20020a056000061b00b0022762b0e2a2sm6704105wrb.6.2022.09.22.15.46.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Sep 2022 15:46:23 -0700 (PDT)
+Message-ID: <92b58775-2a2c-b6be-557d-10e3852a9e80@linaro.org>
+Date:   Thu, 22 Sep 2022 23:46:22 +0100
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: efcfbc1f-ffe1-46ab-cff4-08da9cec40d7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Sep 2022 22:46:14.0134
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: wjtZWWwBag1WieLsgr7AWmAnw0AjOVqLj7xKVh0HFk+mAz4mhEdYNPnv1Ysip+jJpz2Y1VLkmgLJyrYZmGY4s0+lpkwl/fBMYQAQyEMHs2E=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR21MB2062
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 2/3] misc: fastrpc: Don't remove map on creater_process
+ and device_release
+Content-Language: en-US
+To:     Abel Vesa <abel.vesa@linaro.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Ekansh Gupta <ekangupt@qti.qualcomm.com>,
+        Vamsi Krishna Gattupalli <quic_vgattupa@quicinc.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ola Jeppsson <ola@snap.com>
+References: <20220902151423.3351414-1-abel.vesa@linaro.org>
+ <20220902151423.3351414-2-abel.vesa@linaro.org>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20220902151423.3351414-2-abel.vesa@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Saurabh Sengar <ssengar@linux.microsoft.com> Sent: Monday, September =
-12, 2022 8:33 AM
->=20
-> Existing code is causing a race condition where dirt_needed value is
-> already set by the host and gets overwritten with default value. Remove
-> this default setting of dirt_needed, to avoid overwriting the value
-> received in the channel callback set by vmbus_open. Removing this
-> setting also means the default value for dirt_needed is changed to false
-> as it's allocated by kzalloc which is similar to legacy hyperv_fb driver.
->=20
-> Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+
+
+On 02/09/2022 16:14, Abel Vesa wrote:
+> Do not remove the map from the list on error path in
+> fastrpc_init_create_process, instead call fastrpc_map_put, to avoid
+> use-after-free. Do not remove it on fastrpc_device_release either,
+> call fastrpc_map_put instead.
+> 
+> The fastrpc_free_map is the only proper place to remove the map.
+> This is called only after the reference count is 0.
+> 
+> Fixes: b49f6d83e290f ("misc: fastrpc: Fix a possible double free")
+> Co-developed-by: Ola Jeppsson <ola@snap.com>
+> Signed-off-by: Ola Jeppsson <ola@snap.com>
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 > ---
->  drivers/gpu/drm/hyperv/hyperv_drm_drv.c | 2 --
->  1 file changed, 2 deletions(-)
->=20
-> diff --git a/drivers/gpu/drm/hyperv/hyperv_drm_drv.c
-> b/drivers/gpu/drm/hyperv/hyperv_drm_drv.c
-> index 4a8941fa0815..57d49a08b37f 100644
-> --- a/drivers/gpu/drm/hyperv/hyperv_drm_drv.c
-> +++ b/drivers/gpu/drm/hyperv/hyperv_drm_drv.c
-> @@ -198,8 +198,6 @@ static int hyperv_vmbus_probe(struct hv_device *hdev,
->  	if (ret)
->  		drm_warn(dev, "Failed to update vram location.\n");
->=20
-> -	hv->dirt_needed =3D true;
-> -
->  	ret =3D hyperv_mode_config_init(hv);
->  	if (ret)
->  		goto err_vmbus_close;
-> --
-> 2.31.1
 
-Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 
+>   drivers/misc/fastrpc.c | 18 +++++++++---------
+>   1 file changed, 9 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
+> index 0c816a11eeec..50c17f5da3a8 100644
+> --- a/drivers/misc/fastrpc.c
+> +++ b/drivers/misc/fastrpc.c
+> @@ -316,6 +316,13 @@ static void fastrpc_free_map(struct kref *ref)
+>   		dma_buf_put(map->buf);
+>   	}
+>   
+> +	if (map->fl) {
+> +		spin_lock(&map->fl->lock);
+> +		list_del(&map->node);
+> +		spin_unlock(&map->fl->lock);
+> +		map->fl = NULL;
+> +	}
+> +
+>   	kfree(map);
+>   }
+>   
+> @@ -1266,12 +1273,7 @@ static int fastrpc_init_create_process(struct fastrpc_user *fl,
+>   	fl->init_mem = NULL;
+>   	fastrpc_buf_free(imem);
+>   err_alloc:
+> -	if (map) {
+> -		spin_lock(&fl->lock);
+> -		list_del(&map->node);
+> -		spin_unlock(&fl->lock);
+> -		fastrpc_map_put(map);
+> -	}
+> +	fastrpc_map_put(map);
+>   err:
+>   	kfree(args);
+>   
+> @@ -1347,10 +1349,8 @@ static int fastrpc_device_release(struct inode *inode, struct file *file)
+>   		fastrpc_context_put(ctx);
+>   	}
+>   
+> -	list_for_each_entry_safe(map, m, &fl->maps, node) {
+> -		list_del(&map->node);
+> +	list_for_each_entry_safe(map, m, &fl->maps, node)
+>   		fastrpc_map_put(map);
+> -	}
+>   
+>   	list_for_each_entry_safe(buf, b, &fl->mmaps, node) {
+>   		list_del(&buf->node);
