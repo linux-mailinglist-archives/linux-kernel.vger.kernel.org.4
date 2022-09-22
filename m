@@ -2,145 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 919F55E6B86
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 21:08:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E7495E6B89
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 21:10:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232502AbiIVTIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 15:08:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50578 "EHLO
+        id S232508AbiIVTKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 15:10:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232278AbiIVTIw (ORCPT
+        with ESMTP id S232108AbiIVTKa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 15:08:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 507A4FCA70;
-        Thu, 22 Sep 2022 12:08:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DF34663792;
-        Thu, 22 Sep 2022 19:08:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 996B5C433D7;
-        Thu, 22 Sep 2022 19:08:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663873730;
-        bh=RvoDarC6U/fJABhMRerQJHoq4Ys6450eyjNtBdNlByk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Qp8tGMn8EsST1hu+HRRx8YpEJqMvJSGxm2n68qULxO7b0Au25DDkHLpqI7P3v/zQa
-         en7biq6cVEUKGmy9aaxgqbOU0N36ML/sg/CeHFzOoViBhyXKitDTyhvfmaSOIvypcX
-         9sAsUjBqkSGKfGpPfp5KJe0HUJhtoOE3OBhKMwyYU8Zd9bCovV21SWb77cUZZzKKrC
-         z2OKXi/rOFf31CkXUm85AMwvhvXZX2DU3Y3EEyBae507rAAbQeW0BlDWGPOuJLK25A
-         xAkUKlQzyjvwGlcBfw6IB35jewCqv41ykEAK8u74QHQgrMTDeG07hxWvHwgpWIGm2V
-         qNwLCBbKjJPHA==
-Date:   Thu, 22 Sep 2022 14:08:44 -0500
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Adam Radford <aradford@gmail.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH][next] scsi: 3w-xxxx: Replace one-element array with
- flexible-array member
-Message-ID: <YyyyvB30jnjRaw/F@work>
+        Thu, 22 Sep 2022 15:10:30 -0400
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2925DAB1B9;
+        Thu, 22 Sep 2022 12:10:28 -0700 (PDT)
+Received: by mail-qk1-f179.google.com with SMTP id q11so6867416qkc.12;
+        Thu, 22 Sep 2022 12:10:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=i2fFh03PmN9dsDrlqa6Na6TJ/xoZxneYKaZlpWqCHQA=;
+        b=QXRkaQZFyhXLSP5u4FyY7F18yANkzZ8nSltCmZB3/cuc4AkIWpkFrquPxrf8zo/RVN
+         SmVo+nB6TMUh/mNq7uN5P8+FSOWNin5j6D8gzWOrK1iecICBwAx8AiRrVqATXQlcze5M
+         GBOP107yUe90vIwkQl9OX16UW+bxunOMQPzheyGe376ZgDfU8eeJfwyTTeJSXbe+h65u
+         DGrpTwg5QSImJsIu9ey0qiezvAvKG2XnjOkXLkxjYBGDqGyiuTBNBGcLIJVPnWaV+Fvn
+         6kif2bfTDDRf06e0+dHgfsq205RS8aZluoR8QqPowxopCSj/v3+kbFtOTQMjKl+iu/Tw
+         sdNg==
+X-Gm-Message-State: ACrzQf1e4n4kjBhMzuuSYy5rgPY1qpyZQCjv7PXKVEWYInSLEyR278nP
+        6XUpDJ6eDvHFahZsfPT+MbWIdNSDLAiykKkPil0=
+X-Google-Smtp-Source: AMsMyM7/jpbQTYmB0SMqjZX3zyneGSbRIfxLeeAiexcVjm9d+NWw6CU5BB3SivnMJxe5iDQC8ZGJLwBWnhHx8IuCV54=
+X-Received: by 2002:a05:620a:46ac:b0:6ce:3e55:fc21 with SMTP id
+ bq44-20020a05620a46ac00b006ce3e55fc21mr3205441qkb.285.1663873826996; Thu, 22
+ Sep 2022 12:10:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220920094500.11283-1-lihuisong@huawei.com> <20220920094500.11283-3-lihuisong@huawei.com>
+ <20220921154319.bsczh2nftuypeucs@bogus>
+In-Reply-To: <20220921154319.bsczh2nftuypeucs@bogus>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 22 Sep 2022 21:10:16 +0200
+Message-ID: <CAJZ5v0gfMCw3N1VJmtNU6WPuzrgen-8OiZYFiZkZowo6cFzHwA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] ACPI: PCC: fix Tx done interface in handler
+To:     Sudeep Holla <sudeep.holla@arm.com>,
+        Huisong Li <lihuisong@huawei.com>
+Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rafael Wysocki <rafael.j.wysocki@intel.com>,
+        wanghuiqiang@huawei.com, huangdaode@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-One-element arrays are deprecated, and we are replacing them with flexible
-array members instead. So, replace one-element array with flexible-array
-member in struct TAG_TW_New_Ioctl and refactor the rest of the code,
-accordingly.
+On Wed, Sep 21, 2022 at 5:43 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
+>
+> On Tue, Sep 20, 2022 at 05:45:00PM +0800, Huisong Li wrote:
+> > A error, "Client can't run the TX ticker", is printed even if PCC command
+> > executed successfully. This root cause is that PCC handler calls
+> > 'mbox_client_txdone()' which depands on the client can received 'ACK'
+> > packet. But PCC handler detects whether the command is complete through
+> > the Tx ACK interrupt. So this patch fix it.
+> >
+>
+> Thanks for fixing this. Someone mentioned about the error and it was in
+> my TODO list.
+>
+> I would prefer to reword the subject and commit message as below:
+> "
+> ACPI: PCC: Fix Tx acknowledge in the PCC address space handler
+>
+> Currently, mbox_client_txdone() is called from the PCC address space
+> handler and that expects the user the Tx state machine to be controlled
+> by the client which is not the case and the below warning is thrown:
+>
+>   | PCCT: Client can't run the TX ticker
+>
+> Let the controller run the state machine and the end of Tx can be
+> acknowledge by calling mbox_chan_txdone() instead.
+> "
+>
+> With that:
+>
+> Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
 
-Notice that, in multiple places, the subtraction of 1 from
-sizeof(TW_New_Ioctl) is removed, as this operation is now implicit
-after the flex-array transformation.
+Applied as 6.1 material along with the [1/2].
 
-Link: https://github.com/KSPP/linux/issues/79
-Link: https://github.com/KSPP/linux/issues/206
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
- drivers/scsi/3w-xxxx.c | 14 +++++++-------
- drivers/scsi/3w-xxxx.h |  2 +-
- 2 files changed, 8 insertions(+), 8 deletions(-)
+I used the above text in quotes as the subject and changelog instead
+of the original pieces.
 
-diff --git a/drivers/scsi/3w-xxxx.c b/drivers/scsi/3w-xxxx.c
-index a853c5497af6..ffdecb12d654 100644
---- a/drivers/scsi/3w-xxxx.c
-+++ b/drivers/scsi/3w-xxxx.c
-@@ -912,7 +912,7 @@ static long tw_chrdev_ioctl(struct file *file, unsigned int cmd, unsigned long a
- 	data_buffer_length_adjusted = (data_buffer_length + 511) & ~511;
- 
- 	/* Now allocate ioctl buf memory */
--	cpu_addr = dma_alloc_coherent(&tw_dev->tw_pci_dev->dev, data_buffer_length_adjusted+sizeof(TW_New_Ioctl) - 1, &dma_handle, GFP_KERNEL);
-+	cpu_addr = dma_alloc_coherent(&tw_dev->tw_pci_dev->dev, data_buffer_length_adjusted + sizeof(TW_New_Ioctl), &dma_handle, GFP_KERNEL);
- 	if (cpu_addr == NULL) {
- 		retval = -ENOMEM;
- 		goto out;
-@@ -921,7 +921,7 @@ static long tw_chrdev_ioctl(struct file *file, unsigned int cmd, unsigned long a
- 	tw_ioctl = (TW_New_Ioctl *)cpu_addr;
- 
- 	/* Now copy down the entire ioctl */
--	if (copy_from_user(tw_ioctl, argp, data_buffer_length + sizeof(TW_New_Ioctl) - 1))
-+	if (copy_from_user(tw_ioctl, argp, data_buffer_length + sizeof(TW_New_Ioctl)))
- 		goto out2;
- 
- 	passthru = (TW_Passthru *)&tw_ioctl->firmware_command;
-@@ -966,15 +966,15 @@ static long tw_chrdev_ioctl(struct file *file, unsigned int cmd, unsigned long a
- 			/* Load the sg list */
- 			switch (TW_SGL_OUT(tw_ioctl->firmware_command.opcode__sgloffset)) {
- 			case 2:
--				tw_ioctl->firmware_command.byte8.param.sgl[0].address = dma_handle + sizeof(TW_New_Ioctl) - 1;
-+				tw_ioctl->firmware_command.byte8.param.sgl[0].address = dma_handle + sizeof(TW_New_Ioctl);
- 				tw_ioctl->firmware_command.byte8.param.sgl[0].length = data_buffer_length_adjusted;
- 				break;
- 			case 3:
--				tw_ioctl->firmware_command.byte8.io.sgl[0].address = dma_handle + sizeof(TW_New_Ioctl) - 1;
-+				tw_ioctl->firmware_command.byte8.io.sgl[0].address = dma_handle + sizeof(TW_New_Ioctl);
- 				tw_ioctl->firmware_command.byte8.io.sgl[0].length = data_buffer_length_adjusted;
- 				break;
- 			case 5:
--				passthru->sg_list[0].address = dma_handle + sizeof(TW_New_Ioctl) - 1;
-+				passthru->sg_list[0].address = dma_handle + sizeof(TW_New_Ioctl);
- 				passthru->sg_list[0].length = data_buffer_length_adjusted;
- 				break;
- 			}
-@@ -1017,12 +1017,12 @@ static long tw_chrdev_ioctl(struct file *file, unsigned int cmd, unsigned long a
- 	}
- 
- 	/* Now copy the response to userspace */
--	if (copy_to_user(argp, tw_ioctl, sizeof(TW_New_Ioctl) + data_buffer_length - 1))
-+	if (copy_to_user(argp, tw_ioctl, sizeof(TW_New_Ioctl) + data_buffer_length))
- 		goto out2;
- 	retval = 0;
- out2:
- 	/* Now free ioctl buf memory */
--	dma_free_coherent(&tw_dev->tw_pci_dev->dev, data_buffer_length_adjusted+sizeof(TW_New_Ioctl) - 1, cpu_addr, dma_handle);
-+	dma_free_coherent(&tw_dev->tw_pci_dev->dev, data_buffer_length_adjusted + sizeof(TW_New_Ioctl), cpu_addr, dma_handle);
- out:
- 	mutex_unlock(&tw_dev->ioctl_lock);
- 	mutex_unlock(&tw_mutex);
-diff --git a/drivers/scsi/3w-xxxx.h b/drivers/scsi/3w-xxxx.h
-index e8f3f081b7d8..120a087bdf3c 100644
---- a/drivers/scsi/3w-xxxx.h
-+++ b/drivers/scsi/3w-xxxx.h
-@@ -348,7 +348,7 @@ typedef struct TAG_TW_New_Ioctl {
- 	unsigned int data_buffer_length;
- 	unsigned char padding [508];
- 	TW_Command firmware_command;
--	char data_buffer[1];
-+	char data_buffer[];
- } TW_New_Ioctl;
- 
- /* GetParam descriptor */
--- 
-2.34.1
-
+Thanks!
