@@ -2,135 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96B6E5E6FAB
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 00:23:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 099945E6FAE
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 00:24:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231126AbiIVWXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 18:23:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40104 "EHLO
+        id S229657AbiIVWY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 18:24:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbiIVWXP (ORCPT
+        with ESMTP id S231382AbiIVWYF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 18:23:15 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD655113B5B
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 15:22:22 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id b5so2389408pgb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 15:22:22 -0700 (PDT)
+        Thu, 22 Sep 2022 18:24:05 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0143EDF6B3;
+        Thu, 22 Sep 2022 15:22:59 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id g4so7888150qvo.3;
+        Thu, 22 Sep 2022 15:22:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=aw1uFe/KmsNaxOq1kOqpDl2z0N4SrfAtYbjvbg4KNlA=;
-        b=fTDhXkfLZvNkuL4IaGwGto6ivJHDG5foWXr5fgBLomdHZi/ywaW10ym20Gfyr41fW/
-         88NnUq6bEGanHt4XE7wkcUDOp66fBEsgXVr4ZrD69bQJ4iLIjUCR9fhTsHG2L7s8yW2W
-         LjPS9U+YyX857M3y7lxVbFLz9Q76RY7/dh1tZSO6eexKvWnRib+f7yznEn0ZDBv4yP/5
-         0AzxzU3pvftuHszNx8a1zCAn82Y4eoP3M6A/8OqpGr9p4iyuQsgw3/8kvaYaiS1HFPlR
-         sgrr/g3vxZ4d9xbAp3jsc1jM8a8L+OdF6lx/WBATWRgUGpVBG5qO8QyWN4tlw8oXSbgf
-         vheQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=saa8hbo25uKBMMnwllcdWtUt/fTmT1MDVrESCvd9sc0=;
+        b=m9IYzd96OwCCGbZKlOlHILYET6GEZh8HJ7g1jfrPgeWuB/Zl3zvc9VnSS2nL/z56MF
+         vYLMEaeoSno4oWIfY6CYZx1Ld4xTGq9EgMRH31BOUDoD0t6tZwgQ8bVZQqLtwrGufge1
+         MppvjwBuvp6mAltIi1PGARevxAMYJGk0mBytrRMUE16+f2gPF96ZnTWJ7rVCMDQcVMJ8
+         gutJa/08z3G9fEixvtQgu2MpSAPXVp0vBjpvqwH+nDddtPIvNYxYiyvI5C/2EWh2OOrD
+         7puvduluaG2MDY7gSslGHnDUlJ11GfhssZnoTMOOnwcam9o6LwI+tyXJM8EOpgqhy2Tz
+         YINg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=aw1uFe/KmsNaxOq1kOqpDl2z0N4SrfAtYbjvbg4KNlA=;
-        b=F/BPCsUrLGkGZWI7fQcjmpPTZ38M8B77OrRyl+AMvemNEih7Qo1mWCQKSwzCIg8bZH
-         pPPhqmczWZIYs+z3Rc6xr4++C4jGbysplwq/hsVY7eH7aOK3c5N5Vvg+p2x6xpVE6Mkl
-         5hYJBLIqBx/BRLr9w5n7Sa6uyf9EY9Y+LE4ypvk8hAeKvb4AH8OLsbt+RneNLkGOialN
-         HCURgLtFu77MPeUI8Hs9m0ZgqQRo0lhJBxcBBQQIfnj3VypzR1Jp2cQ7fJBjOot4pE6O
-         0QT7AK3xALQCKvt/26ho5ivmbKNCOy8MkSnn+4Qx2/v7AtmFD3QLozAJ58FOudhWlKWC
-         aTDQ==
-X-Gm-Message-State: ACrzQf3JPdHl3kDIfZsYxU1//AYA7DKBcfla2tyjN15uXV94DUfWXvMS
-        OFsGz+aav2akcwzwojsc+9PhtQ==
-X-Google-Smtp-Source: AMsMyM4C0qxXvQoAPen0v6DPpFKOMgb3BmpkvduhGCN4+7foiW2UvD9UGJ8hJhBE8B2GgNaJKhUlmw==
-X-Received: by 2002:a05:6a00:170b:b0:547:3e11:914f with SMTP id h11-20020a056a00170b00b005473e11914fmr5865458pfc.34.1663885331265;
-        Thu, 22 Sep 2022 15:22:11 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id o64-20020a625a43000000b0053e9d14e51asm4953732pfb.98.2022.09.22.15.22.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 15:22:10 -0700 (PDT)
-Date:   Thu, 22 Sep 2022 22:22:07 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/4] x86/hyperv: Move VMCB enlightenment definitions to
- hyperv-tlfs.h
-Message-ID: <YyzgD0xp/Ki9a3jK@google.com>
-References: <20220921201607.3156750-1-seanjc@google.com>
- <20220921201607.3156750-2-seanjc@google.com>
- <BYAPR21MB1688D04068DBA520366DA205D74E9@BYAPR21MB1688.namprd21.prod.outlook.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=saa8hbo25uKBMMnwllcdWtUt/fTmT1MDVrESCvd9sc0=;
+        b=oe+E46kDRhv3JLf0tmvOLaHyNsMkcQZNK0laxIZ7dN4p5RA2sig3FtR+A2F08Cw43P
+         YnVgYh443YhZ13qQAReIb44X9KnlK2Dhu/EXBf1VSYcXJG3pJdWVzHx8vIjr7IE4bRxJ
+         vW3JLby60xn2L+iLusvhx4abEGgoWHzKhv1+mnDmmNSXR/8uN+Bjm8YtjAubBBeaWwIq
+         BYYSeiUHE3geKapXSnNpMwE39OarknKyQwv0Cw1MRghmFYNkOS+GB4YcZIaQiq/c2MHF
+         uWI2dlbWY0eNYqp5PUZS77c7Yf9DfU3Yu6ukNE/d4u6coAlI5YqW+GZaWuEfBOGs6wU0
+         qT6Q==
+X-Gm-Message-State: ACrzQf2NeJl7vWpqLsHRPL8WT9Ds5s6JRMBeQT1vM2g9VlV0YWNSljG2
+        cF2TyVj6HtVtnIAUTYTEErY=
+X-Google-Smtp-Source: AMsMyM4AhmVrlNhzspkffG7J1M2X5fjKSA1cZOr6DRvbJTSPZJuCxDQ9YHUwVOL15V3tpUF/YfM3vw==
+X-Received: by 2002:a05:6214:2528:b0:4ad:6fa4:4170 with SMTP id gg8-20020a056214252800b004ad6fa44170mr4491105qvb.113.1663885378872;
+        Thu, 22 Sep 2022 15:22:58 -0700 (PDT)
+Received: from [10.69.46.142] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id m17-20020a05620a291100b006cdd0939ffbsm4738880qkp.86.2022.09.22.15.22.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Sep 2022 15:22:58 -0700 (PDT)
+Message-ID: <87648374-a8fe-8830-793e-eb3c15e4ac54@gmail.com>
+Date:   Thu, 22 Sep 2022 15:22:56 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BYAPR21MB1688D04068DBA520366DA205D74E9@BYAPR21MB1688.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH] scsi: scsi_transport_fc: Adjust struct fc_nl_event flex
+ array usage
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>
+Cc:     Sachin Sant <sachinp@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+References: <20220921205155.1451649-1-keescook@chromium.org>
+From:   James Smart <jsmart2021@gmail.com>
+In-Reply-To: <20220921205155.1451649-1-keescook@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022, Michael Kelley (LINUX) wrote:
-> From: Sean Christopherson <seanjc@google.com> Sent: Wednesday, September 21, 2022 1:16 PM
-> > 
-> > Move Hyper-V's VMCB enlightenment definitions to the TLFS header; the
-> > definitions come directly from the TLFS[*], not from KVM.
-> > 
-> > No functional change intended.
-> > 
-> > [*] https://learn.microsoft.com/en-us/virtualization/hyper-v-on-windows/tlfs/datatypes/hv_svm_enlightened_vmcb_fields> 
-> > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> > ---
-> >  arch/x86/include/asm/hyperv-tlfs.h | 22 +++++++++++++++++++
-> >  arch/x86/kvm/svm/hyperv.h          | 35 ------------------------------
-> >  arch/x86/kvm/svm/svm_onhyperv.h    |  3 ++-
-> >  3 files changed, 24 insertions(+), 36 deletions(-)
-> >  delete mode 100644 arch/x86/kvm/svm/hyperv.h
-> > 
-> > diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
-> > index 0a9407dc0859..4c4f81daf5a2 100644
-> > --- a/arch/x86/include/asm/hyperv-tlfs.h
-> > +++ b/arch/x86/include/asm/hyperv-tlfs.h
-> > @@ -584,6 +584,28 @@ struct hv_enlightened_vmcs {
-> > 
-> >  #define HV_VMX_ENLIGHTENED_CLEAN_FIELD_ALL			0xFFFF
-> > 
-> > +/*
-> > + * Hyper-V uses the software reserved 32 bytes in VMCB control area to expose
-> > + * SVM enlightenments to guests.
-> > + */
-> > +struct hv_enlightenments {
-> > +	struct __packed hv_enlightenments_control {
-> > +		u32 nested_flush_hypercall:1;
-> > +		u32 msr_bitmap:1;
-> > +		u32 enlightened_npt_tlb: 1;
-> > +		u32 reserved:29;
-> > +	} __packed hv_enlightenments_control;
-> > +	u32 hv_vp_id;
-> > +	u64 hv_vm_id;
-> > +	u64 partition_assist_page;
-> > +	u64 reserved;
-> > +} __packed;
-> > +
-> > +/*
-> > + * Hyper-V uses the software reserved clean bit in VMCB.
-> > + */
-> > +#define VMCB_HV_NESTED_ENLIGHTENMENTS		31
+On 9/21/2022 1:51 PM, Kees Cook wrote:
+> In order to help the compiler reason about the destination buffer in
+> struct fc_nl_event, add a flexible array member for this purpose.
+> However, since the header is UAPI, it must not change size or layout, so
+> a union is used.
 > 
-> Is it feasible to change this identifier so it starts with HV_ like
-> everything else in this source code file, such as
-> HV_VMCB_NESTED_ENLIGHTENMENTS?  It doesn't look like it is
-> used in very many places.  
+> The allocation size calculations are also corrected (it was potentially
+> allocating an extra 8 bytes), and the padding is zeroed to avoid leaking
+> kernel heap memory contents.
+> 
+> Detected at run-time by the recently added memcpy() bounds checking:
+> 
+>    memcpy: detected field-spanning write (size 8) of single field "&event->event_data" at drivers/scsi/scsi_transport_fc.c:581 (size 4)
+> 
+> Reported-by: Sachin Sant <sachinp@linux.ibm.com>
+> Link: https://lore.kernel.org/linux-next/42404B5E-198B-4FD3-94D6-5E16CF579EF3@linux.ibm.com/
+> Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
+> Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+> Cc: linux-scsi@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
 
-Most definitely, IIRC it's used in only one spot.
+Kinda crazy way to resolve it, but looks fine.
+
+Reviewed-by: James Smart <jsmart2021@gmail.com>
+
+-- james
+
+
