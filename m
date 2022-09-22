@@ -2,67 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E9BC5E6D97
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 23:04:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB22C5E6DA3
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 23:06:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230289AbiIVVEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 17:04:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47522 "EHLO
+        id S230347AbiIVVFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 17:05:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230274AbiIVVEk (ORCPT
+        with ESMTP id S229537AbiIVVFu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 17:04:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 482CC1F9FE
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 14:04:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663880677;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
+        Thu, 22 Sep 2022 17:05:50 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2A310CA5F;
+        Thu, 22 Sep 2022 14:05:49 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 4788F1F8BD;
+        Thu, 22 Sep 2022 21:05:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1663880748; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=cyh9GNwkSeiWX8VVWJet6cmrStrv1Y1BhHYKMAKCy08=;
-        b=Cda6CZn6TKBhYiZaxsg+Qmf+xwjgSe9qK3Lmz0o/Iw7iSEQVt5p6zf3tD8mUlmvdNeK6Sa
-        GC/czz2JWc73q0qAwCHo+e7hfEt/xkGMnuEZ5DuardflXyplTsrfacz4p3UIYPNHWpR0M2
-        FOPCMmqvSm94JmLBcUwcbswAr5Cpqps=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-675-8cf7JYkpM7Wtx_8hepKodQ-1; Thu, 22 Sep 2022 17:04:34 -0400
-X-MC-Unique: 8cf7JYkpM7Wtx_8hepKodQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        bh=XKo+i59z16xYCKZljHHhrwZOK4kULyS2cn+2CLRfUM0=;
+        b=yYZqXMGxzMVH0hLKeYU8DtcEW5z+72E8D8wluVkMB38JNQ6mVtvWYW44sf9Qr+ZQm+We5X
+        ZxoqRMYTP+O1T/rNawICmYwKgqmViLi4WF8AuUeX1BOp9TwGPEwvLg1O9HhwZMa65TkR9W
+        yGHcw9EwWtJmQERB8NRzG2kYdmwST+U=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1663880748;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XKo+i59z16xYCKZljHHhrwZOK4kULyS2cn+2CLRfUM0=;
+        b=kaD9JOgsDV+IpQlfyoPslHKu+574Yw//haDJvp79fZBtXqIgPNRCscY2PniCUaAEZMnwWD
+        sPWSH1zmuGYRGABQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9EC21185A79C;
-        Thu, 22 Sep 2022 21:04:33 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6CA6440C2064;
-        Thu, 22 Sep 2022 21:04:33 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Leonardo Bras <leobras@redhat.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>
-Subject: Re: [PATCH 0/3] KVM: x86: Fix XSAVE related bugs
-Date:   Thu, 22 Sep 2022 17:04:31 -0400
-Message-Id: <20220922210431.1744112-1-pbonzini@redhat.com>
-In-Reply-To: <20220824033057.3576315-1-seanjc@google.com>
-References: 
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B86DF1346B;
+        Thu, 22 Sep 2022 21:05:47 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id QI4BLCvOLGP2JwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 22 Sep 2022 21:05:47 +0000
+Message-ID: <cb38655c-2107-bda6-2fa8-f5e1e97eab14@suse.cz>
+Date:   Thu, 22 Sep 2022 23:05:47 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 00/12] slab: Introduce kmalloc_size_roundup()
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+Cc:     Pekka Enberg <penberg@kernel.org>, Feng Tang <feng.tang@intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Alex Elder <elder@kernel.org>,
+        Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Daniel Micay <danielmicay@gmail.com>,
+        Yonghong Song <yhs@fb.com>, Marco Elver <elver@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, netdev@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-fsdevel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        dev@openvswitch.org, x86@kernel.org,
+        linux-wireless@vger.kernel.org, llvm@lists.linux.dev,
+        linux-hardening@vger.kernel.org,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Feng Tang <feng.tang@intel.com>
+References: <20220922031013.2150682-1-keescook@chromium.org>
+ <673e425d-1692-ef47-052b-0ff2de0d9c1d@amd.com>
+ <202209220845.2F7A050@keescook>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <202209220845.2F7A050@keescook>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Queued, thanks.
+On 9/22/22 17:55, Kees Cook wrote:
+> On Thu, Sep 22, 2022 at 09:10:56AM +0200, Christian König wrote:
+>> Am 22.09.22 um 05:10 schrieb Kees Cook:
+>> > Hi,
+>> > 
+>> > This series fixes up the cases where callers of ksize() use it to
+>> > opportunistically grow their buffer sizes, which can run afoul of the
+>> > __alloc_size hinting that CONFIG_UBSAN_BOUNDS and CONFIG_FORTIFY_SOURCE
+>> > use to perform dynamic buffer bounds checking.
+>> 
+>> Good cleanup, but one question: What other use cases we have for ksize()
+>> except the opportunistically growth of buffers?
+> 
+> The remaining cases all seem to be using it as a "do we need to resize
+> yet?" check, where they don't actually track the allocation size
+> themselves and want to just depend on the slab cache to answer it. This
+> is most clearly seen in the igp code:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/net/ethernet/intel/igb/igb_main.c?h=v6.0-rc6#n1204
+> 
+> My "solution" there kind of side-steps it, and leaves ksize() as-is:
+> https://lore.kernel.org/linux-hardening/20220922031013.2150682-8-keescook@chromium.org/
+> 
+> The more correct solution would be to add per-v_idx size tracking,
+> similar to the other changes I sent:
+> https://lore.kernel.org/linux-hardening/20220922031013.2150682-11-keescook@chromium.org/
+> 
+> I wonder if perhaps I should just migrate some of this code to using
+> something like struct membuf.
+> 
+>> Off hand I can't see any.
+>> 
+>> So when this patch set is about to clean up this use case it should probably
+>> also take care to remove ksize() or at least limit it so that it won't be
+>> used for this use case in the future.
+> 
+> Yeah, my goal would be to eliminate ksize(), and it seems possible if
+> other cases are satisfied with tracking their allocation sizes directly.
 
-Paolo
+I think we could leave ksize() to determine the size without a need for
+external tracking, but from now on forbid callers from using that hint to
+overflow the allocation size they actually requested? Once we remove the
+kasan/kfence hooks in ksize() that make the current kinds of usage possible,
+we should be able to catch any offenders of the new semantics that would appear?
 
+> -Kees
+> 
 
