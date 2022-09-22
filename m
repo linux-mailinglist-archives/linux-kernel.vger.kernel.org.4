@@ -2,111 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 484715E5A51
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 06:43:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6451F5E5A6E
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 07:08:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229512AbiIVEnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 00:43:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60476 "EHLO
+        id S230274AbiIVFIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 01:08:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbiIVEnN (ORCPT
+        with ESMTP id S230039AbiIVFH7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 00:43:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1721893226;
-        Wed, 21 Sep 2022 21:43:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A66D660E15;
-        Thu, 22 Sep 2022 04:43:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAD3DC433C1;
-        Thu, 22 Sep 2022 04:43:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663821792;
-        bh=PhAbgL0g6IiPTeCsm/2ov7dmC59SuI25dD03BZIxxk0=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=TY3LAUxKuiZf0lCB4i2rxsK8RJZcPtnuHNhubNMG3XhOS4LgwVH4YWlcg8YFqCyBl
-         JwtOcFLsnJ8GwbMj597NHiD982jm800vmWyGe8m+BiC5ka248IUxdOZfJ96pxHjrvr
-         lbwo3h8ReyH2gvDFbISBfRKu1N/SVhUYJGNxYsiE+eUSwuqLDC50ITYeJep77nnjcQ
-         sI3+Czi+qyS2uLNqKnu92Jh3Y+z/Z89TiE5/axdr+Y9GYoJ/COlG8PzpHLTBqUxn0r
-         wNjOYynuhrGOXYZMzh7qtV52L75kidJBcPFn2Mrjx1z611d16X+FxWHVs8lRTiTxGf
-         3cxYgzsEBwdWQ==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Alvin =?utf-8?Q?=C5=A0ipraga?= <alvin@pqrs.dk>
-Cc:     Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Syed Rafiuddeen <syed.rafiuddeen@cypress.com>,
-        Syed Rafiuddeen <syed.rafiuddeen@infineon.com>,
-        Chung-Hsien Hsu <chung-hsien.hsu@infineon.com>,
-        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
-        Alvin =?utf-8?Q?=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
-        linux-wireless@vger.kernel.org,
-        brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/6] brcmfmac: Update SSID of hidden AP while informing its bss to cfg80211 layer
-References: <20220722115632.620681-1-alvin@pqrs.dk>
-        <20220722115632.620681-7-alvin@pqrs.dk>
-Date:   Thu, 22 Sep 2022 07:43:03 +0300
-In-Reply-To: <20220722115632.620681-7-alvin@pqrs.dk> ("Alvin
- \=\?utf-8\?Q\?\=C5\=A0ipraga\=22's\?\=
-        message of "Fri, 22 Jul 2022 13:56:31 +0200")
-Message-ID: <874jx06mug.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Thu, 22 Sep 2022 01:07:59 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB1D3ABF2E
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 22:07:51 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28M4qTg6012553;
+        Thu, 22 Sep 2022 05:07:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : to : from : cc : subject : content-type :
+ content-transfer-encoding; s=qcppdkim1;
+ bh=nT3B/wMBqejh6lpCW83oSITogIn6brmx377SfiSL784=;
+ b=Bng88UVhdAxAeCGD7TDDXMvRK3L479yINS/lkf+GaYsU4kiknjhERbc630q+OQ3e/ygW
+ qii7XR8rv+WsfFwglMLuM5R52u46YkQAHd10Wp9FvSEF854FzNXBwXOk8Jds7p2SRrrF
+ U/mLDsqRRaudUaosDbcyN15x7LbMgK6T0P/it4MlMupzN9wvwrcWMmvpcXLZg36ZoUFP
+ dgo1Mt970fg+W/u5wFYeStXLcnqx8GBurCav/jpELKsCWHBgWcolohxqDo+oC7d1bBPH
+ vFLDtqOTRu/ZJeULhxe6wSp0GaLJXuMBT5KM55snbtR9qWmB+HwV7ikKixpfUcZSKFnV YA== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jqtd6n6vn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Sep 2022 05:07:40 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28M52dIi011236
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Sep 2022 05:02:39 GMT
+Received: from [10.216.24.145] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 21 Sep
+ 2022 22:02:35 -0700
+Message-ID: <cfa26ff3-c95a-1986-58fc-b49fc9be49d5@quicinc.com>
+Date:   Thu, 22 Sep 2022 10:31:47 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0
+Content-Language: en-US
+To:     <cristian.marussi@arm.com>, <sudeep.holla@arm.com>
+From:   Shivnandan Kumar <quic_kshivnan@quicinc.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <quic_rgottimu@quicinc.com>,
+        <quic_avajid@quicinc.com>
+Subject: Query regarding "firmware: arm_scmi: Free mailbox channels if probe
+ fails"
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 9kijr2JaBsrUNKjqwquqznrYt31zJDWv
+X-Proofpoint-GUID: 9kijr2JaBsrUNKjqwquqznrYt31zJDWv
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-22_02,2022-09-20_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
+ mlxlogscore=844 malwarescore=0 mlxscore=0 adultscore=0 clxscore=1011
+ priorityscore=1501 suspectscore=0 lowpriorityscore=0 impostorscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209220033
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Alvin =C5=A0ipraga <alvin@pqrs.dk> writes:
+Hi Christian,
 
-> From: Syed Rafiuddeen <syed.rafiuddeen@cypress.com>
->
-> cfg80211 layer on DUT STA is disconnecting ongoing connection attempt aft=
-er
-> receiving association response, because cfg80211 layer does not have valid
-> AP bss information. On association response event, brcmfmac communicates
-> the AP bss information to cfg80211 layer, but SSID seem to be empty in AP
-> bss information, and cfg80211 layer prints kernel warning and then
-> disconnects the ongoing connection attempt.
->
-> SSID is empty in SSID IE, but 'bi->SSID' contains a valid SSID, so
-> updating the SSID for hidden AP while informing its bss information
-> to cfg80211 layer.
->
-> Signed-off-by: Syed Rafiuddeen <syed.rafiuddeen@infineon.com>
 
-Syed's email address in From and s-o-b doesn't match.
+Do you have any update or suggestion regarding thread 
+https://lore.kernel.org/lkml/20211105094310.GI6526@e120937-lin/T/#m07993053f6f238864acad4e9bad9f08d85aeb019.
 
-> @@ -3018,6 +3019,12 @@ static s32 brcmf_inform_single_bss(struct brcmf_cf=
-g80211_info *cfg,
->  	notify_ielen =3D le32_to_cpu(bi->ie_length);
->  	bss_data.signal =3D (s16)le16_to_cpu(bi->RSSI) * 100;
->=20=20
-> +	ssid =3D brcmf_parse_tlvs(notify_ie, notify_ielen, WLAN_EID_SSID);
-> +	if (ssid && ssid->data[0] =3D=3D '\0' && ssid->len =3D=3D bi->SSID_len)=
- {
-> +		/* Update SSID for hidden AP */
-> +		memcpy((u8 *)ssid->data, bi->SSID, bi->SSID_len);
-> +	}
+We are still getting this issue and wanted to check if  there is any fix 
+that I can try.
 
-memcpy() takes a void pointer so the cast is not needed.
 
---=20
-https://patchwork.kernel.org/project/linux-wireless/list/
+Thanks,
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatc=
-hes
+Shivnandan
+
