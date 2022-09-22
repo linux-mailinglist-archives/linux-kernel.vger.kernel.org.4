@@ -2,100 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5AE15E5F7C
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 12:11:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 186B85E5F86
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 12:13:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbiIVKLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 06:11:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50356 "EHLO
+        id S229978AbiIVKMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 06:12:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbiIVKLm (ORCPT
+        with ESMTP id S230443AbiIVKMu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 06:11:42 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AFF5F12;
-        Thu, 22 Sep 2022 03:11:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663841501; x=1695377501;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qa3RLDa2tBvV/1AbLvKwOSQAPY5aFxSgOz7wVyLrl1o=;
-  b=P3KKEXpwaCljRcskQ5+Ubv4YOCdFbToBygG47KBgyyke+ciydrWoo8YJ
-   6cKoxqlRieFEwjZhaL6CbxKq6DKXiltiyCbnLWdghfTlDi7mo7aKXh2TY
-   rD70NBrmqFteuByXaJekah8Rq0WMsjpl+OwhVNDGfTMB5UDCQHYLM5vMl
-   YQLLPP0qJVj1jSpULqLpaNinQenvF5YjzmDJnhrY7+LPkRPu0j2bldhDj
-   7x7nAXsX44+wpG04IFM3gcO8PNbd7B8kPJwf1jbAAalIV26j7zZceo/dF
-   Gkz6NU/XVIYNCv8IHz5G8ncJh7XxBid47Vu1dF4RL0hBGGlspK42njv5z
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="297856692"
-X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
-   d="scan'208";a="297856692"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 03:11:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
-   d="scan'208";a="864799457"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga006.fm.intel.com with ESMTP; 22 Sep 2022 03:11:39 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1obJBB-005xLw-25;
-        Thu, 22 Sep 2022 13:11:37 +0300
-Date:   Thu, 22 Sep 2022 13:11:37 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     kernel list <linux-kernel@vger.kernel.org>, robh@kernel.org,
-        linux-serial@vger.kernel.org, ribalda@kernel.org, johan@kernel.org
-Subject: Re: Cutiepi, serdevs, and right way to handle its power button
-Message-ID: <Yyw02TpYzlVfg0op@smile.fi.intel.com>
-References: <20220920205637.GA17170@duo.ucw.cz>
- <YysjjSXao4MERCwQ@smile.fi.intel.com>
- <20220921171707.GA8443@duo.ucw.cz>
+        Thu, 22 Sep 2022 06:12:50 -0400
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F309AD62FA;
+        Thu, 22 Sep 2022 03:12:45 -0700 (PDT)
+Received: (Authenticated sender: foss@0leil.net)
+        by mail.gandi.net (Postfix) with ESMTPSA id BA06B40003;
+        Thu, 22 Sep 2022 10:12:41 +0000 (UTC)
+From:   Quentin Schulz <foss+kernel@0leil.net>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        heiko@sntech.de, dmitry.torokhov@gmail.com,
+        klaus.goger@theobroma-systems.com, foss+kernel@0leil.net,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-input@vger.kernel.org,
+        Quentin Schulz <quentin.schulz@theobroma-systems.com>
+Subject: [PATCH 1/3] Input: add `SW_BOOT_ALT`
+Date:   Thu, 22 Sep 2022 12:12:09 +0200
+Message-Id: <20220922101211.3215888-2-foss+kernel@0leil.net>
+X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20220922101211.3215888-1-foss+kernel@0leil.net>
+References: <20220922101211.3215888-1-foss+kernel@0leil.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220921171707.GA8443@duo.ucw.cz>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 21, 2022 at 07:17:07PM +0200, Pavel Machek wrote:
-> On Wed 2022-09-21 17:45:33, Andy Shevchenko wrote:
-> > On Tue, Sep 20, 2022 at 10:56:37PM +0200, Pavel Machek wrote:
-> > > Hi!
-> > > 
-> > > Cutiepie is a small handheld tablet. It has embedded controller
-> > > connected via serial to the main system, handling stuff such as power
-> > > button and battery percentage. Currently they are using userland
-> > > deamon for communication, but I believe that should eventually go into
-> > > kernel.
-> > > 
-> > > For debugging, it would be really nice to be able to attach my module
-> > > to given serdev. Is such thing possible? I see "[PATCH v2 00/19]
-> > > Dynamically load/remove serdev devices via sysfs*" series
-> > > (https://www.spinics.net/lists/linux-serial/msg30732.html) but I'm not
-> > > sure if equivalent functionality exists in mainline kernel?
-> > > 
-> > > Is there some kind of similar hardware already supported by mainline?
-> > > Using driver as a reference might be easier than starting from
-> > > scratch.
-> > 
-> > Is it arm or x86 based tablet?
-> 
-> arm64, but CPU architecture really should not matter.
+From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 
-It makes sense on the usual practices done for the platform as a whole, e.g.
-ACPI vs. DT. So, I believe this one is DT based.
+This event code represents the firmware source to use at boot.
+Value 0 means using "standard" firmware source, value 1 means using
+"alternative" firmware source.
 
+For example, some hardware has the ability to force the BOOTROM to load
+the bootloader from a secondary firmware source (say SD card) instead of
+trying with the standard first and then the secondary. This event allows
+the userspace to know which firmware source was requested *in hardware*.
+
+Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+---
+ include/linux/mod_devicetable.h        | 2 +-
+ include/uapi/linux/input-event-codes.h | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/include/linux/mod_devicetable.h b/include/linux/mod_devicetable.h
+index 549590e9c644..009e71376a61 100644
+--- a/include/linux/mod_devicetable.h
++++ b/include/linux/mod_devicetable.h
+@@ -326,7 +326,7 @@ struct pcmcia_device_id {
+ #define INPUT_DEVICE_ID_LED_MAX		0x0f
+ #define INPUT_DEVICE_ID_SND_MAX		0x07
+ #define INPUT_DEVICE_ID_FF_MAX		0x7f
+-#define INPUT_DEVICE_ID_SW_MAX		0x10
++#define INPUT_DEVICE_ID_SW_MAX		0x11
+ #define INPUT_DEVICE_ID_PROP_MAX	0x1f
+ 
+ #define INPUT_DEVICE_ID_MATCH_BUS	1
+diff --git a/include/uapi/linux/input-event-codes.h b/include/uapi/linux/input-event-codes.h
+index dff8e7f17074..8cd2b58c81d7 100644
+--- a/include/uapi/linux/input-event-codes.h
++++ b/include/uapi/linux/input-event-codes.h
+@@ -917,7 +917,8 @@
+ #define SW_MUTE_DEVICE		0x0e  /* set = device disabled */
+ #define SW_PEN_INSERTED		0x0f  /* set = pen inserted */
+ #define SW_MACHINE_COVER	0x10  /* set = cover closed */
+-#define SW_MAX			0x10
++#define SW_BOOT_ALT		0x11  /* set = alternative boot firmware source */
++#define SW_MAX			0x11
+ #define SW_CNT			(SW_MAX+1)
+ 
+ /*
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.37.3
 
