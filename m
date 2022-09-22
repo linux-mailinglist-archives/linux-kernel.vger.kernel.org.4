@@ -2,53 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BA795E60C3
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 13:18:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F18245E60C4
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 13:19:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231591AbiIVLS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 07:18:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36048 "EHLO
+        id S230443AbiIVLTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 07:19:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbiIVLSz (ORCPT
+        with ESMTP id S230331AbiIVLTQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 07:18:55 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78889DED5D;
-        Thu, 22 Sep 2022 04:18:54 -0700 (PDT)
-Received: from fraeml739-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MYCMx3fZZz688vP;
-        Thu, 22 Sep 2022 19:14:05 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml739-chm.china.huawei.com (10.206.15.220) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 22 Sep 2022 13:18:52 +0200
-Received: from localhost (10.81.208.231) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 22 Sep
- 2022 12:18:51 +0100
-Date:   Thu, 22 Sep 2022 12:18:50 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC:     Mark Brown <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Wei Yongjun <weiyongjun@huaweicloud.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        <linux-iio@vger.kernel.org>
-Subject: Re: [PATCH v1 1/1] spi: Introduce spi_get_device_match_data()
- helper
-Message-ID: <20220922121850.000006f3@huawei.com>
-In-Reply-To: <20220921204520.23984-1-andriy.shevchenko@linux.intel.com>
-References: <20220921204520.23984-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Thu, 22 Sep 2022 07:19:16 -0400
+Received: from xry111.site (xry111.site [89.208.246.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D5C7DED5D
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 04:19:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+        s=default; t=1663845554;
+        bh=flyR88Jrejjr4Zl6iHpQU5Bfe821fViP66EMnFD03eo=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=LzCfWXjfo+UUaLw6k8hFnsABgrQhNI3Cd8VL3M+rl1LBp3UwgjXbpOquHLmyWgGBC
+         ZCBhIptwfmdqF99srcVL+qKO+deY6SeIevw+5SaX1GC/W6ptKbMVVo3YivJnQeoG8w
+         vEWFp4HF4mKzg7OnsJx8kw6rj4bhGeHZdfSYEjM8=
+Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
+        (Client did not present a certificate)
+        (Authenticated sender: xry111@xry111.site)
+        by xry111.site (Postfix) with ESMTPSA id 7791C66887;
+        Thu, 22 Sep 2022 07:19:12 -0400 (EDT)
+Message-ID: <5e12ab67701adf81834dfb88fc3cb6fdf55f676d.camel@xry111.site>
+Subject: Re: [PATCH 1/3] LoongArch: tools: Add relocs tool support
+From:   Xi Ruoyao <xry111@xry111.site>
+To:     Youling Tang <tangyouling@loongson.cn>,
+        Jinyang He <hejinyang@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+        Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Date:   Thu, 22 Sep 2022 19:19:10 +0800
+In-Reply-To: <750719dc-d481-6eba-05c6-50cfdceb871b@loongson.cn>
+References: <1662113335-14282-1-git-send-email-tangyouling@loongson.cn>
+         <1662113335-14282-2-git-send-email-tangyouling@loongson.cn>
+         <c9880165f0355fc3be3ec23153b43ad33e558b5d.camel@xry111.site>
+         <4df8a26c49a35c1fce36d80c370f738fa71a2bef.camel@xry111.site>
+         <f0e77716-9533-724a-2ea9-86bc5b52066c@loongson.cn>
+         <78a4a6b0970c309daa336a2329e69d28df486552.camel@xry111.site>
+         <fffdd2ac-4ba6-8eb3-f269-b22a3d9c32f6@loongson.cn>
+         <0b2d115c42ff6cb9b8c65d852ec2f0746ca6e8d9.camel@xry111.site>
+         <d852f590-95b4-3fd1-924a-68c0a6bb1b1b@loongson.cn>
+         <29cd929b-185b-1c4b-f200-08f2a724b59d@loongson.cn>
+         <a218373f773ef193903daa528291ec8bb384ddd2.camel@xry111.site>
+         <83a7aad8-125b-29b5-715d-0061ce1b0647@loongson.cn>
+         <011b5d39-e0cb-69cc-66fd-ed46afe7695e@loongson.cn>
+         <750719dc-d481-6eba-05c6-50cfdceb871b@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.0 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.81.208.231]
-X-ClientProxiedBy: lhrpeml500005.china.huawei.com (7.191.163.240) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        SPF_HELO_PASS,SPF_PASS,T_PDS_OTHER_BAD_TLD autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,75 +68,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 21 Sep 2022 23:45:20 +0300
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+On Thu, 2022-09-08 at 16:01 +0800, Youling Tang wrote:
+> After adding KBUILD_CFLAGS_KERNEL +=3D -mdirect-extern-access, the
+> kernel
+> will not generate .got, .plt and .got.plt sections (in the new
+> toolchain), we should unexpectedly detect that the kernel has these
+> sections, maybe add similar patch [1] to detect, x86_64 has the same
+> operation.
+>=20
+> But when adding LDFLAGS_vmlinux +=3D -pie (or -shared), there will be
+> .got, .plt and .got.plt sections generated, I don't know how the
+> toolchain handles it :(?
 
-> The proposed spi_get_device_match_data() helper is for retrieving
-> a driver data associated with the ID in an ID table. First, it tries
-> to get driver data of the device enumerated by firmware interface
-> (usually Device Tree or ACPI). If none is found it falls back to
-> the SPI ID table matching.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Hi Youling,
 
+I've pulled your code and make some adjustments for it:
 
-I like this in general, but we need to keep a close eye on usecases
-that are introduced to make sure that there is alignment between the
-contents of the tables.
+https://github.com/xry111/linux/commits/xry111/la-dev/pie
 
-Perhaps the text should also explain a bit about why we would allow
-both paths (in many case, the fallback will work fine)...
-Previously a strong reason for that was that there was nothing to ensure
-that all dt table entries were mirrored in the spi_device_id table.
-As a side effect of the check to ensure module autoloading works, there
-is now a check for that.
+One adjustment is for FDT removal, another uses a static-PIE style
+LDFLAGS as the kernel is more "similar" to a static PIE than a shared
+library. In userspace, a static PIE is linked with [1]:
 
-My personal view is we should still use the more generic path, even if
-magic under the hood puts the data in spi_id->driver_data.
+ -static -pie --no-dynamic-linker -z text
 
-Jonathan
+[1]: https://gcc.gnu.org/r13-2728
 
+But we have to use "-z notext" for vmlinux. I'm not an expert on kernel
+hacking, and I guess it's because the kernel doesn't really care the RWX
+permission of itself (I heard this during some discussion about a W/X
+page warning added in Binutils-2.39 which is triggered for vmlinux).
 
-> ---
->  drivers/spi/spi.c       | 12 ++++++++++++
->  include/linux/spi/spi.h |  3 +++
->  2 files changed, 15 insertions(+)
-> 
-> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-> index ad254b94308e..a0947d63afbc 100644
-> --- a/drivers/spi/spi.c
-> +++ b/drivers/spi/spi.c
-> @@ -360,6 +360,18 @@ const struct spi_device_id *spi_get_device_id(const struct spi_device *sdev)
->  }
->  EXPORT_SYMBOL_GPL(spi_get_device_id);
->  
-> +const void *spi_get_device_match_data(const struct spi_device *sdev)
-> +{
-> +	const void *match;
-> +
-> +	match = device_get_match_data(&sdev->dev);
-> +	if (match)
-> +		return match;
-> +
-> +	return (const void *)spi_get_device_id(sdev)->driver_data;
-> +}
-> +EXPORT_SYMBOL_GPL(spi_get_device_match_data);
-> +
->  static int spi_match_device(struct device *dev, struct device_driver *drv)
->  {
->  	const struct spi_device	*spi = to_spi_device(dev);
-> diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-> index 6ea889df0813..f2565c24ef27 100644
-> --- a/include/linux/spi/spi.h
-> +++ b/include/linux/spi/spi.h
-> @@ -1510,6 +1510,9 @@ extern void spi_unregister_device(struct spi_device *spi);
->  extern const struct spi_device_id *
->  spi_get_device_id(const struct spi_device *sdev);
->  
-> +extern const void *
-> +spi_get_device_match_data(const struct spi_device *sdev);
-> +
->  static inline bool
->  spi_transfer_is_last(struct spi_controller *ctlr, struct spi_transfer *xfer)
->  {
+With "-static -pie --no-dynamic-linker -z notext" (and GCC trunk &
+Binutils trunk), .plt and .got.plt are gone.
 
+.got is still there but it only contains one entry (8 bytes).  AFAIK
+this entry (`_GLOBAL_OFFSET_TABLE_[0]`) is set to the link-time address
+of _DYNAMIC for a userspace static PIE [2], but vmlinux does not need it
+at all.  We can tell the linker to discard it IIUC.
+
+[2]:
+https://maskray.me/blog/2021-08-29-all-about-global-offset-table#global_off=
+set_table_0
+
+I've boot the kernel successfully and it seems KASLR is in-effect:
+
+$ sudo cat /proc/kallsyms | grep ' _printk$'
+90000000023b28f4 T _printk
+$ grep ' _printk$' /boot/System.map-6.0.0-rc6-pie+=20
+90000000009828f4 T _printk
+
+--=20
+Xi Ruoyao <xry111@xry111.site>
+School of Aerospace Science and Technology, Xidian University
