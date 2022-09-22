@@ -2,174 +2,372 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C6E75E5DA8
+	by mail.lfdr.de (Postfix) with ESMTP id DE2145E5DAA
 	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 10:39:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbiIVIj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 04:39:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34152 "EHLO
+        id S230294AbiIVIja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 04:39:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230247AbiIVIjS (ORCPT
+        with ESMTP id S230175AbiIVIjU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 04:39:18 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2055.outbound.protection.outlook.com [40.107.243.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76746B4EBB;
-        Thu, 22 Sep 2022 01:39:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Z9RLzyKQu2pxTj2wDoJp+9etZ4PSKMbjDrW1hlZWuInO5mQPBGqPCR1Hzky6nV1juDBw5rBffczNwHtZLfQS5xY9OEFWeQ0FhEqluO2Mn0jErr5EbCRkeUVVCIHyuFAq4hMqQVkiM7BnzzfRsr43Re7npxKt0lPhrnB7K1DffSIhwmqeXLTt1Pph5uxC5Dt1qo8OpjXn8wr5Mac0Ju1dvYLHGEUqjbf2GAXROUP1y/mD4iRRerw0lW8VZi7rxKKYrcNmrWNK5ecbbCX19+2MghtGL9fYaQNBOkgMTMoqDBAl4LykMtpL0wgKH1bz1h07Vw8apcQ43V8/p5RM9r1wzQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qpfz99XHWcxC8rKUalTz+Mpv2bUvQnYEfePhQa9lAlw=;
- b=N3bsAgJmf2NMPtGZGLUHJrK5WuoFFFX0xUm92C0duFE7tYUyMYab5RqdUJJQfiIu11809A2gDnD/idT7vpy5KAGJxnxL6ttREIWWYfvSGGOj8c3vm5mgftxXgNcg4bBuvA2Fc6YAcvmHmDmB3KF98vntrE1TQ1w2CHdElySidnqRDnqraXnzh/tZPRDX/EACaOI86rdAEr+kn1L4e6w6GNRZ1nZb8BX6CeCMEE4OTkZFxi983iKmEuZD4VEcEfXPnfw4eo2UP7R87VQ6Y8D0ijvaX/L9HpktmI83CxSnjoBVczDcVywO72XxxH707Al56AoePbXI2MXh42P4FPKPZg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qpfz99XHWcxC8rKUalTz+Mpv2bUvQnYEfePhQa9lAlw=;
- b=NrlBjWMJFnSKTQb42jMrVQTJB461+zSuUxjJb5Km/uglHu1UC1qAaVhQiRS7B7ElIUoTc4hl1ekbffR782GiYDg79xliIeG071ObUw3ePmBLC/HHhX9Li21fkJNPFOFNxQbR9ZzI+uJD3p2eHp0cGiuXvF6zyFXlZnrLFLrQbKJeWEfDI5fYd+V4MZe21P2N9oI/yiM/rDN6bAhMqbix+Ey2IM8wj7d8hAF01eIYxtFiSfT01t5iS/F2wwyv+IGZ845t5pIX3qelsXmiTh6gskybU531i3/vFIsy9lYQBWhLUzOpnwFWbZg1Iw2g9usSA502jbVi5clI24BdwrqFrg==
-Received: from BN9P223CA0019.NAMP223.PROD.OUTLOOK.COM (2603:10b6:408:10b::24)
- by BY5PR12MB4322.namprd12.prod.outlook.com (2603:10b6:a03:20a::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.14; Thu, 22 Sep
- 2022 08:39:12 +0000
-Received: from BN8NAM11FT059.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:10b:cafe::56) by BN9P223CA0019.outlook.office365.com
- (2603:10b6:408:10b::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.16 via Frontend
- Transport; Thu, 22 Sep 2022 08:39:12 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- BN8NAM11FT059.mail.protection.outlook.com (10.13.177.120) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5654.14 via Frontend Transport; Thu, 22 Sep 2022 08:39:11 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Thu, 22 Sep
- 2022 01:38:59 -0700
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Thu, 22 Sep
- 2022 01:38:58 -0700
-Received: from Asurada-Nvidia (10.127.8.11) by mail.nvidia.com (10.129.68.8)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29 via Frontend
- Transport; Thu, 22 Sep 2022 01:38:56 -0700
-Date:   Thu, 22 Sep 2022 01:38:54 -0700
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-CC:     "joro@8bytes.org" <joro@8bytes.org>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "robdclark@gmail.com" <robdclark@gmail.com>,
-        "dwmw2@infradead.org" <dwmw2@infradead.org>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-        "agross@kernel.org" <agross@kernel.org>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "orsonzhai@gmail.com" <orsonzhai@gmail.com>,
-        "baolin.wang@linux.alibaba.com" <baolin.wang@linux.alibaba.com>,
-        "zhang.lyra@gmail.com" <zhang.lyra@gmail.com>,
-        "jean-philippe@linaro.org" <jean-philippe@linaro.org>,
-        "sricharan@codeaurora.org" <sricharan@codeaurora.org>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "konrad.dybcio@somainline.org" <konrad.dybcio@somainline.org>,
-        "yong.wu@mediatek.com" <yong.wu@mediatek.com>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "vdumpa@nvidia.com" <vdumpa@nvidia.com>,
-        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
-        "thunder.leizhen@huawei.com" <thunder.leizhen@huawei.com>,
-        "quic_saipraka@quicinc.com" <quic_saipraka@quicinc.com>,
-        "jon@solid-run.com" <jon@solid-run.com>,
-        "yangyingliang@huawei.com" <yangyingliang@huawei.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>
-Subject: Re: [PATCH v4 3/6] iommu: Add return value rules to attach_dev op
- and APIs
-Message-ID: <YywfHpMG/PYhKqN1@Asurada-Nvidia>
-References: <cover.1663744983.git.nicolinc@nvidia.com>
- <8c3dbf153b63a3002a46bab6e707c63fd8635bb8.1663744983.git.nicolinc@nvidia.com>
- <BN9PR11MB527632E5F21AD412991509458C4E9@BN9PR11MB5276.namprd11.prod.outlook.com>
+        Thu, 22 Sep 2022 04:39:20 -0400
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AC8DB40F1;
+        Thu, 22 Sep 2022 01:39:17 -0700 (PDT)
+Received: by mail-vs1-xe2a.google.com with SMTP id c3so9496511vsc.6;
+        Thu, 22 Sep 2022 01:39:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=5ZdxV8Brjj/Suv2/cofeSh9Hz3MiY7b81keNWiqU8jg=;
+        b=gXw/DcDXcNKxF9c688lJpyRoRqU22AVsqSG9cthEpO/dx2E2SOyTceffeCoIfZ2mXB
+         yha4sBW9lTiZ3ltYfsv6E/jdfwKU6+oyRu2TNRnXp62QRZ8otO+x+y6qLWofCfguW5sW
+         lTi51/ReP52wbwLIKGe4eUz/09jMtUgrXPM5g0fc5jv3iNY5wsQHvqB2qDMWj4aCVLEs
+         /ArR3V+3OiFObyu8maeKFevZeU8FsMBvD6d7sEbyAJXXJkOu0fSybhx0BrfrL4l5pWYw
+         GPUapZnGt/LgGE7ZOMcRGoh9pPlJctdkmtVCVPcG337Iq0d31CxLERIxofrKa8ZJCiIg
+         dPdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=5ZdxV8Brjj/Suv2/cofeSh9Hz3MiY7b81keNWiqU8jg=;
+        b=IJzYDaty2282Ww55VcQApPpE654IhkKFZFANLV/rNpiGmYnEC9jMAGFETsylZ4hfZt
+         fAcQnj3Mll677mkI73nhVFujncWnkXUJ1pynwUzYF7dBxMfQCcQ/FogvJMiXC950apez
+         W3wm1KwVhJ8KWY3XZDboJ/JarThRGKhHZSSDis9+tANGt6gdDfi3kOT5t8+bS9TddLVh
+         FO6PKg0612uMOLvvxuHmxD4HxNHCPFEl8Z40Ch1QzBjWG351Zu+mnq3gGV/YTP5Zx7FP
+         AHzEnyb/fq46J4LqggFaSirZ+A0+QERs7EMUEUZyCgNlos8H9EPHw1dGqOMARtllHUhE
+         HOgg==
+X-Gm-Message-State: ACrzQf0M6p94Jt/0vviFZbkdhTQxXp+oaxByUW+9y0WsRk1stQne+4PM
+        JaBkAyBIRmTxJky0KEh6EcCAy5lrycFPpOdewoI=
+X-Google-Smtp-Source: AMsMyM6FA9t/VIYmOCi6QH3RWG/d9t8B52UtHahMVyx6TK8TBGvlHNuNCVbdQq4MBDKpHmn1/t34U85VwlV3z39vXeI=
+X-Received: by 2002:a67:be16:0:b0:398:c2e4:e01f with SMTP id
+ x22-20020a67be16000000b00398c2e4e01fmr679762vsq.33.1663835956410; Thu, 22 Sep
+ 2022 01:39:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <BN9PR11MB527632E5F21AD412991509458C4E9@BN9PR11MB5276.namprd11.prod.outlook.com>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT059:EE_|BY5PR12MB4322:EE_
-X-MS-Office365-Filtering-Correlation-Id: 223b8f33-97c0-4ca2-73fa-08da9c75ec85
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: k71Q93eumvnN4i8le+GNjTZLK0ALOEztJYSzELskH+mD3Gls3JuduuGmxQ4It/gLnwGkqJ7CSiemh60EBURvd6kJ2BbUn0Cwzo+OYf88oYHC9MIlil1e7Dh3WP8KG7w9VqbB1/GStjxO9i12NE3BBpIRw37MSXeKIFM2QRFiKecSJRvd2voitfE115rQYk9LuHfWiReZTQOv9PJPHNPjq1fzx6dOHznAetISKtZY1cePZ2ec93VFk6gpUbey38g55iprOnVJzWKp+7BtLS8C4myhej24FiG64mzhaH7AQQFi5126SzYaKzwicvzqrQ1PGlKybCIfbeeeWyKVuOv3RdRasOV6Om6nGbSnwZNulN5+hloSEJ4giBGb5th0xNQW2W60SueK1ohmqXYNVtIEOCB2o/lKwBUi4TxGwxThuAyo/OB7RDO/ImqdIEnMPj0HJhIHbYWUuI7QHxqiBrL/ByzKETlKr3v4bGCd/I//VCdiPx+JDi0kc3SbcDlmesdZIRpsKGIEX2Nr/+kY3KQSCb1o7dlXnVvaTJchjsoDYApkoy1XVINWI1t0zJE+3KrDikJzOm7AhmI257TPOPYLlziiLMKR3Y56Hy48/O/GVvd2K25fes0mXLC2TPbY0vzrLeeYPAa+mXgUYwWI4D6fI9ZSGQARwjnRAj4Zzvey9+MLq0jbBL0i5/4K03La9ayLnekPROeHMkqduXOGw6KFTnGjf9FEzjDP7ZLNslhg2CkrzufW4aIxScZNATZFqBLAn5Jd1bN064vLbUA+nxmpbQ==
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(346002)(136003)(396003)(376002)(39860400002)(451199015)(46966006)(40470700004)(36840700001)(33716001)(7416002)(2906002)(8936002)(5660300002)(4744005)(7406005)(70586007)(70206006)(82310400005)(4326008)(8676002)(41300700001)(6916009)(54906003)(40460700003)(36860700001)(478600001)(26005)(356005)(316002)(82740400003)(9686003)(7636003)(86362001)(426003)(40480700001)(83380400001)(186003)(336012)(55016003)(47076005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Sep 2022 08:39:11.7591
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 223b8f33-97c0-4ca2-73fa-08da9c75ec85
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT059.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4322
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <CAB7eexKe2YtpYHy0Ohyr-SXLAWUjErJGLSspSUCeEL=CWyZSKw@mail.gmail.com>
+ <YyoDZNZX2ggSuaFE@rowland.harvard.edu> <CAB7eexKT341KugNjfEKKVzFNoDJcECh5Ni2mpKSTyp7MqYjAsA@mail.gmail.com>
+ <Yys1UHJ/+XoKyR6Y@rowland.harvard.edu>
+In-Reply-To: <Yys1UHJ/+XoKyR6Y@rowland.harvard.edu>
+From:   Rondreis <linhaoguo86@gmail.com>
+Date:   Thu, 22 Sep 2022 16:39:04 +0800
+Message-ID: <CAB7eexJQbrp-ZWben6bVt7SVwYRu1cqPxQHunmsZqT0AjQH-vg@mail.gmail.com>
+Subject: Re: kernel v5.19 warn in usb_ep_queue
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     balbi@kernel.org, andriy.shevchenko@linux.intel.com,
+        jakobkoschel@gmail.com, quic_wcheng@quicinc.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 08:17:03AM +0000, Tian, Kevin wrote:
-> External email: Use caution opening links or attachments
-> 
-> 
-> > From: Nicolin Chen <nicolinc@nvidia.com>
-> > Sent: Wednesday, September 21, 2022 4:23 PM
-> >
-> >
-> > +/**
-> > + * iommu_attach_device - Attach a device to an IOMMU domain
-> > + * @domain: IOMMU domain to attach
-> > + * @dev: Device that will be attached
-> > + *
-> > + * Returns 0 on success and error code on failure
-> > + *
-> > + * Note that EINVAL may be returned as a soft failure if the domain and
-> > device
-> > + * are incompatible due to some previous configuration of the domain, in
-> > which
-> > + * case attaching the same device to a different domain may succeed.
-> 
-> Revise a bit:
-> 
->  * Note that EINVAL can be treated as a soft failure, indicating
->  * that certain configuration of the domain is incompatible with
->  * the device. In this case attaching a different domain to the
->  * device may succeed.
+I patched it again, and the output is:
 
-Done. And added all your "Reviewed-by" too. Thanks!
+[   53.871222][ T6507] cgroup: Unknown subsys name 'net'
+[   53.874463][ T6507] cgroup: Unknown subsys name 'rlimit'
+[   54.426894][   T28] audit: type=1800 audit(1663835481.621:4):
+pid=6532 uid=0 auid=0 ses=2 subj==unconfined op=collect_data
+cause=failed comm="syz-executor.0" name="UDC" dev="configfs" ino=30794
+res=0 errno=0
+[   54.435086][ T6532] using random self ethernet address
+[   54.435402][ T6532] using random host ethernet address
+[   54.436060][ T6532] Mass Storage Function, version: 2009/09/11
+[   54.436437][ T6532] LUN: removable file: (no medium)
+[   54.444557][ T6532] usb0: HOST MAC 1a:89:f1:74:ef:df
+[   54.444853][ T6532] usb0: MAC 5e:3b:64:0f:0b:ed
+[   54.721631][   T24] usb 2-1: new high-speed USB device number 2
+using dummy_hcd
+[   55.131602][   T24] usb 2-1: Dual-Role OTG device on HNP port
+[   55.151589][   T24] usb 2-1: New USB device found, idVendor=03f0,
+idProduct=0107, bcdDevice= 2.00
+[   55.151919][   T24] usb 2-1: New USB device strings: Mfr=1,
+Product=2, SerialNumber=3
+[   55.152199][   T24] usb 2-1: Product: Bar Gadget
+[   55.152374][   T24] usb 2-1: Manufacturer: Foo Inc.
+[   55.152557][   T24] usb 2-1: SerialNumber: 12345678
+[   55.171998][    C1] configfs-gadget gadget.1: Raise exception 3
+ffff88811b9ba000
+[   55.172604][ T6539] configfs-gadget gadget.1: Enable bulk in
+[   55.172884][ T6539] configfs-gadget gadget.1: Enable bulk out
+[   55.173179][ T6539] configfs-gadget gadget.1: Bulk out start ffff888115fd7c80
+[   55.173506][ T6539] CPU: 0 PID: 6539 Comm: file-storage Not tainted
+5.19.0+ #16
+[   55.173834][ T6539] Hardware name: QEMU Standard PC (i440FX + PIIX,
+1996), BIOS Arch Linux 1.16.0-3-3 04/01/2014
+[   55.174193][ T6539] Call Trace:
+[   55.174316][ T6539]  <TASK>
+[   55.174425][ T6539]  dump_stack_lvl+0xfc/0x174
+[   55.174602][ T6539]  start_out_transfer.part.0+0x7c/0x142
+[   55.174813][ T6539]  fsg_main_thread+0x375/0x1450
+[   55.175004][ T6539]  ? __kthread_parkme+0xc4/0x210
+[   55.175191][ T6539]  ? reacquire_held_locks+0x4b0/0x4b0
+[   55.175392][ T6539]  ? do_set_interface.isra.0+0x530/0x530
+[   55.175606][ T6539]  ? __kthread_parkme+0x14e/0x210
+[   55.175797][ T6539]  ? do_set_interface.isra.0+0x530/0x530
+[   55.176005][ T6539]  kthread+0x2e0/0x390
+[   55.176156][ T6539]  ? kthread_complete_and_exit+0x40/0x40
+[   55.176363][ T6539]  ret_from_fork+0x1f/0x30
+[   55.176537][ T6539]  </TASK>
+[   55.253779][   T24] cdc_eem 2-1:1.0 usb1: register 'cdc_eem' at
+usb-dummy_hcd.1-1, CDC EEM Device, c2:07:46:1b:bf:4a
+[   55.271856][   T24] usb-storage 2-1:1.1: USB Mass Storage device detected
+[   55.278904][   T24] scsi host2: usb-storage 2-1:1.1
+[   56.352122][ T6584] cdc_eem 2-1:1.0 usb1: unregister 'cdc_eem'
+usb-dummy_hcd.1-1, CDC EEM Device
+[   56.412714][ T6584] configfs-gadget gadget.1: Bulk out complete
+ffff888115fd7c80
+[   56.413545][ T6539] configfs-gadget gadget.1: Bulk out start ffff888115fd7c80
+[   56.413787][ T6584] configfs-gadget gadget.1: Disable bulk in B
+[   56.413988][ T6539] CPU: 1 PID: 6539 Comm: file-storage Not tainted
+5.19.0+ #16
+[   56.414336][ T6584] configfs-gadget gadget.1: Disable bulk out B
+[   56.414647][ T6539] Hardware name: QEMU Standard PC (i440FX + PIIX,
+1996), BIOS Arch Linux 1.16.0-3-3 04/01/2014
+[   56.414908][ T6584] configfs-gadget gadget.1: Disable bulk out B finished
+[   56.415348][ T6539] Call Trace:
+[   56.415352][ T6539]  <TASK>
+[   56.415827][ T6584] configfs-gadget gadget.1: Raise exception 3
+0000000000000000
+[   56.415969][ T6539]  dump_stack_lvl+0xfc/0x174
+[   56.416735][ T6539]  start_out_transfer.part.0+0x7c/0x142
+[   56.416989][ T6539]  fsg_main_thread+0x375/0x1450
+[   56.417256][ T6539]  ? __kthread_parkme+0xc4/0x210
+[   56.417560][ T6539]  ? reacquire_held_locks+0x4b0/0x4b0
+[   56.417885][ T6539]  ? do_set_interface.isra.0+0x530/0x530
+[   56.418231][ T6539]  ? __kthread_parkme+0x14e/0x210
+[   56.418576][ T6539]  ? do_set_interface.isra.0+0x530/0x530
+[   56.418919][ T6539]  kthread+0x2e0/0x390
+[   56.419172][ T6539]  ? kthread_complete_and_exit+0x40/0x40
+[   56.419515][ T6539]  ret_from_fork+0x1f/0x30
+[   56.419804][ T6539]  </TASK>
+[   56.420255][ T6539] ------------[ cut here ]------------
+[   56.420496][ T6539] WARNING: CPU: 1 PID: 6539 at
+drivers/usb/gadget/udc/core.c:283 usb_ep_queue+0x9b/0x3b0
+[   56.420923][ T6539] Modules linked in:
+[   56.421102][ T6539] CPU: 1 PID: 6539 Comm: file-storage Not tainted
+5.19.0+ #16
+[   56.421429][ T6539] Hardware name: QEMU Standard PC (i440FX + PIIX,
+1996), BIOS Arch Linux 1.16.0-3-3 04/01/2014
+[   56.431805][ T6539] RIP: 0010:usb_ep_queue+0x9b/0x3b0
+[   56.432129][ T6539] Code: 89 fa 83 e2 07 38 d0 7f 08 84 c0 0f 85 db
+02 00 00 44 0f b6 6b 35 31 ff 44 89 ee e8 af 41 b2 fb 45 84 ed 74 0e
+e8 55 46 b2 fb <0f> 0b bd 94 ff ff ff eb 55 e8 47 46 b2 fb 48 8d 7b 10
+0
+[   56.433208][ T6539] RSP: 0018:ffffc900047afd08 EFLAGS: 00010293
+[   56.433560][ T6539] RAX: 0000000000000000 RBX: ffff8881107d82c0
+RCX: 0000000000000000
+[   56.434009][ T6539] RDX: ffff8881196d1c00 RSI: ffffffff85c6d79b
+RDI: 0000000000000001
+[   56.434452][ T6539] RBP: 0000000000000cc0 R08: 0000000000000001
+R09: 0000000000000000
+[   56.434898][ T6539] R10: 0000000000000007 R11: 0000000000000000
+R12: ffff888113c6a210
+[   56.435350][ T6539] R13: 0000000000000007 R14: ffff8881197c9000
+R15: dffffc0000000000
+[   56.435796][ T6539] FS:  0000000000000000(0000)
+GS:ffff888128c00000(0000) knlGS:0000000000000000
+[   56.436296][ T6539] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   56.436666][ T6539] CR2: 00005611a32a2d30 CR3: 000000011b5aa000
+CR4: 00000000000006f0
+[   56.437111][ T6539] Call Trace:
+[   56.437305][ T6539]  <TASK>
+[   56.437479][ T6539]  start_transfer+0x24/0x14f
+[   56.437752][ T6539]  start_out_transfer.part.0+0xf6/0x142
+[   56.438076][ T6539]  fsg_main_thread+0x375/0x1450
+[   56.438370][ T6539]  ? __kthread_parkme+0xc4/0x210
+[   56.438660][ T6539]  ? reacquire_held_locks+0x4b0/0x4b0
+[   56.438973][ T6539]  ? do_set_interface.isra.0+0x530/0x530
+[   56.439306][ T6539]  ? __kthread_parkme+0x14e/0x210
+[   56.439604][ T6539]  ? do_set_interface.isra.0+0x530/0x530
+[   56.439932][ T6539]  kthread+0x2e0/0x390
+[   56.440171][ T6539]  ? kthread_complete_and_exit+0x40/0x40
+[   56.440497][ T6539]  ret_from_fork+0x1f/0x30
+[   56.440767][ T6539]  </TASK>
+[   56.440949][ T6539] Kernel panic - not syncing: panic_on_warn set ...
+[   56.441321][ T6539] CPU: 0 PID: 6539 Comm: file-storage Not tainted
+5.19.0+ #16
+[   56.441751][ T6539] Hardware name: QEMU Standard PC (i440FX + PIIX,
+1996), BIOS Arch Linux 1.16.0-3-3 04/01/2014
+[   56.442322][ T6539] Call Trace:
+[   56.442515][ T6539]  <TASK>
+[   56.442687][ T6539]  dump_stack_lvl+0xfc/0x174
+[   56.442959][ T6539]  panic+0x2cf/0x61f
+[   56.443194][ T6539]  ? panic_print_sys_info.part.0+0x10b/0x10b
+[   56.443545][ T6539]  ? __warn.cold+0xcd/0x2cc
+[   56.443812][ T6539]  ? usb_ep_queue+0x9b/0x3b0
+[   56.444085][ T6539]  __warn.cold+0xde/0x2cc
+[   56.444341][ T6539]  ? usb_ep_queue+0x9b/0x3b0
+[   56.444612][ T6539]  report_bug+0x1b7/0x240
+[   56.444870][ T6539]  handle_bug+0x3c/0x60
+[   56.445119][ T6539]  exc_invalid_op+0x13/0x40
+[   56.445386][ T6539]  asm_exc_invalid_op+0x16/0x20
+[   56.445671][ T6539] RIP: 0010:usb_ep_queue+0x9b/0x3b0
+[   56.445971][ T6539] Code: 89 fa 83 e2 07 38 d0 7f 08 84 c0 0f 85 db
+02 00 00 44 0f b6 6b 35 31 ff 44 89 ee e8 af 41 b2 fb 45 84 ed 74 0e
+e8 55 46 b2 fb <0f> 0b bd 94 ff ff ff eb 55 e8 47 46 b2 fb 48 8d 7b 10
+0
+[   56.447050][ T6539] RSP: 0018:ffffc900047afd08 EFLAGS: 00010293
+[   56.447400][ T6539] RAX: 0000000000000000 RBX: ffff8881107d82c0
+RCX: 0000000000000000
+[   56.447849][ T6539] RDX: ffff8881196d1c00 RSI: ffffffff85c6d79b
+RDI: 0000000000000001
+[   56.448301][ T6539] RBP: 0000000000000cc0 R08: 0000000000000001
+R09: 0000000000000000
+[   56.448752][ T6539] R10: 0000000000000007 R11: 0000000000000000
+R12: ffff888113c6a210
+[   56.449196][ T6539] R13: 0000000000000007 R14: ffff8881197c9000
+R15: dffffc0000000000
+[   56.449648][ T6539]  ? usb_ep_queue+0x9b/0x3b0
+[   56.449921][ T6539]  ? usb_ep_queue+0x9b/0x3b0
+[   56.450193][ T6539]  start_transfer+0x24/0x14f
+[   56.450468][ T6539]  start_out_transfer.part.0+0xf6/0x142
+[   56.450795][ T6539]  fsg_main_thread+0x375/0x1450
+[   56.451082][ T6539]  ? __kthread_parkme+0xc4/0x210
+[   56.451376][ T6539]  ? reacquire_held_locks+0x4b0/0x4b0
+[   56.451693][ T6539]  ? do_set_interface.isra.0+0x530/0x530
+[   56.452024][ T6539]  ? __kthread_parkme+0x14e/0x210
+[   56.452324][ T6539]  ? do_set_interface.isra.0+0x530/0x530
+[   56.452649][ T6539]  kthread+0x2e0/0x390
+[   56.452890][ T6539]  ? kthread_complete_and_exit+0x40/0x40
+[   56.453216][ T6539]  ret_from_fork+0x1f/0x30
+[   56.453489][ T6539]  </TASK>
+[   56.453826][ T6539] Kernel Offset: disabled
+[   56.454117][ T6539] Rebooting in 86400 seconds..
+
+
+On Thu, Sep 22, 2022 at 12:01 AM Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+> On Wed, Sep 21, 2022 at 11:00:41PM +0800, Rondreis wrote:
+> > Thanks for your reply!
+> > I applied this patch in v5.19 and the reproducer just attached
+> > a composite device with network and mass storage functions.
+> > The output of the kernel is as follows:
+>
+> > [ 1558.868398][ T7423] configfs-gadget gadget.1: Enable bulk in
+> > [ 1558.868675][ T7423] configfs-gadget gadget.1: Enable bulk out
+> > [ 1558.868957][ T7423] configfs-gadget gadget.1: Bulk out start ffff8881279f0b00
+> > [ 1558.952998][   T24] cdc_eem 2-1:1.0 usb1: register 'cdc_eem' at
+> > usb-dummy_hcd.1-1, CDC EEM Device, 72:47:e4:74:0b:8e
+> > [ 1558.968402][   T24] usb-storage 2-1:1.1: USB Mass Storage device detected
+> > [ 1558.976267][   T24] scsi host2: usb-storage 2-1:1.1
+> > [ 1560.028547][ T7470] cdc_eem 2-1:1.0 usb1: unregister 'cdc_eem'
+> > usb-dummy_hcd.1-1, CDC EEM Device
+> > [ 1560.078980][ T7470] configfs-gadget gadget.1: Bulk out complete
+> > ffff8881279f0b00
+> > [ 1560.080226][ T7423] configfs-gadget gadget.1: Bulk out start ffff8881279f0b00
+> > [ 1560.080617][ T7470] configfs-gadget gadget.1: Disable bulk in B
+> > [ 1560.080820][ T7423] configfs-gadget gadget.1: Bulk out start ffff8881279f0b00
+> > [ 1560.081456][ T7470] configfs-gadget gadget.1: Disable bulk out B
+> > [ 1560.081950][ T7423] configfs-gadget gadget.1: Bulk out start ffff8881279f0b00
+> > [ 1560.083056][ T7423] ------------[ cut here ]------------
+> > [ 1560.083386][ T7423] WARNING: CPU: 0 PID: 7423 at
+> > drivers/usb/gadget/udc/core.c:283 usb_ep_queue+0x9b/0x3b0
+>
+> Okay, that's not what I expected.  Can you try the same thing with
+> updated patch below?
+>
+> Alan Stern
+>
+>
+> Index: usb-devel/drivers/usb/gadget/function/f_mass_storage.c
+> ===================================================================
+> --- usb-devel.orig/drivers/usb/gadget/function/f_mass_storage.c
+> +++ usb-devel/drivers/usb/gadget/function/f_mass_storage.c
+> @@ -367,6 +367,7 @@ static void __raise_exception(struct fsg
+>  {
+>         unsigned long           flags;
+>
+> +       dev_info(&common->gadget->dev, "Raise exception %d %p\n", new_state, arg);
+>         /*
+>          * Do nothing if a higher-priority exception is already in progress.
+>          * If a lower-or-equal priority exception is in progress, preempt it
+> @@ -415,6 +416,7 @@ static void bulk_in_complete(struct usb_
+>         struct fsg_common       *common = ep->driver_data;
+>         struct fsg_buffhd       *bh = req->context;
+>
+> +       dev_info(&common->gadget->dev, "Bulk in complete %p\n", bh);
+>         if (req->status || req->actual != req->length)
+>                 DBG(common, "%s --> %d, %u/%u\n", __func__,
+>                     req->status, req->actual, req->length);
+> @@ -431,6 +433,7 @@ static void bulk_out_complete(struct usb
+>         struct fsg_common       *common = ep->driver_data;
+>         struct fsg_buffhd       *bh = req->context;
+>
+> +       dev_info(&common->gadget->dev, "Bulk out complete %p\n", bh);
+>         dump_msg(common, "bulk-out", req->buf, req->actual);
+>         if (req->status || req->actual != bh->bulk_out_intended_length)
+>                 DBG(common, "%s --> %d, %u/%u\n", __func__,
+> @@ -547,6 +550,7 @@ static bool start_in_transfer(struct fsg
+>         if (!fsg_is_set(common))
+>                 return false;
+>         bh->state = BUF_STATE_SENDING;
+> +       dev_info(&common->gadget->dev, "Bulk in start %p\n", bh);
+>         if (start_transfer(common->fsg, common->fsg->bulk_in, bh->inreq))
+>                 bh->state = BUF_STATE_EMPTY;
+>         return true;
+> @@ -557,6 +561,8 @@ static bool start_out_transfer(struct fs
+>         if (!fsg_is_set(common))
+>                 return false;
+>         bh->state = BUF_STATE_RECEIVING;
+> +       dev_info(&common->gadget->dev, "Bulk out start %p\n", bh);
+> +       dump_stack();
+>         if (start_transfer(common->fsg, common->fsg->bulk_out, bh->outreq))
+>                 bh->state = BUF_STATE_FULL;
+>         return true;
+> @@ -2310,12 +2316,15 @@ reset:
+>
+>                 /* Disable the endpoints */
+>                 if (fsg->bulk_in_enabled) {
+> +                       dev_info(&fsg->gadget->dev, "Disable bulk in A\n");
+>                         usb_ep_disable(fsg->bulk_in);
+>                         fsg->bulk_in_enabled = 0;
+>                 }
+>                 if (fsg->bulk_out_enabled) {
+> +                       dev_info(&fsg->gadget->dev, "Disable bulk out A\n");
+>                         usb_ep_disable(fsg->bulk_out);
+>                         fsg->bulk_out_enabled = 0;
+> +                       dev_info(&fsg->gadget->dev, "Disable bulk out A finished\n");
+>                 }
+>
+>                 common->fsg = NULL;
+> @@ -2333,6 +2342,7 @@ reset:
+>         rc = config_ep_by_speed(common->gadget, &(fsg->function), fsg->bulk_in);
+>         if (rc)
+>                 goto reset;
+> +       dev_info(&fsg->gadget->dev, "Enable bulk in\n");
+>         rc = usb_ep_enable(fsg->bulk_in);
+>         if (rc)
+>                 goto reset;
+> @@ -2343,6 +2353,7 @@ reset:
+>                                 fsg->bulk_out);
+>         if (rc)
+>                 goto reset;
+> +       dev_info(&fsg->gadget->dev, "Enable bulk out\n");
+>         rc = usb_ep_enable(fsg->bulk_out);
+>         if (rc)
+>                 goto reset;
+> @@ -2392,12 +2403,15 @@ static void fsg_disable(struct usb_funct
+>
+>         /* Disable the endpoints */
+>         if (fsg->bulk_in_enabled) {
+> +               dev_info(&fsg->gadget->dev, "Disable bulk in B\n");
+>                 usb_ep_disable(fsg->bulk_in);
+>                 fsg->bulk_in_enabled = 0;
+>         }
+>         if (fsg->bulk_out_enabled) {
+> +               dev_info(&fsg->gadget->dev, "Disable bulk out B\n");
+>                 usb_ep_disable(fsg->bulk_out);
+>                 fsg->bulk_out_enabled = 0;
+> +               dev_info(&fsg->gadget->dev, "Disable bulk out B finished\n");
+>         }
+>
+>         __raise_exception(fsg->common, FSG_STATE_CONFIG_CHANGE, NULL);
+>
