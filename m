@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D39E5E618D
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 13:44:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33A555E618C
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 13:43:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231628AbiIVLn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 07:43:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46710 "EHLO
+        id S231617AbiIVLny (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 07:43:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231670AbiIVLnJ (ORCPT
+        with ESMTP id S231652AbiIVLnY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 07:43:09 -0400
+        Thu, 22 Sep 2022 07:43:24 -0400
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F18E5109;
-        Thu, 22 Sep 2022 04:42:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E87F8E5127;
+        Thu, 22 Sep 2022 04:43:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1663846973; x=1695382973;
+  t=1663846981; x=1695382981;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=QKOSdHrlA3wS3tOYAGSbN64ZDlbNP+x4BlIl2OTwIls=;
-  b=VLcpppXb0udYCUiBPh35vuzWobTHHhgzXosGv2SHA+oBCTUIttrL4/20
-   urGuWI3l3jWdSE7EbG31v4FlMUPVJtAFcKancgizOub84pYnAWRCNQHN5
-   2ow/W/VocAnY47hG29j6Ez4xfj8+QmZMJPdAt17p6C6BHm6dnbOHurWVa
-   2rMYWXOKHkGA5yFvjtskqzgUUjFcFYHjTFjCgQvInHKgX68iXYaC2Q02m
-   tReq6r4okk+cj0MwJSlCxP8NymI4Hj/TEVR9RqqLoro72bPOyExu272/k
-   yqTkNH7uuX4V5Lz39K+uD1PQdaFiiv0mdaVcizWrDqGO9NP5AYTkhh0uw
+  bh=PkvW2+v4ra7Kos8RB8EjzdxzU827BFV7cqmkcNq8EWY=;
+  b=KIMc6MU4uEa2K28bTfNUvvLFMLEsOLude3k5R8mmO9CsBx3ozbUL1/dM
+   nLmWrHc1zM9MLA/Ovz1An7/gC84ZOp2gaT0frY8M5nTIbMRyHLVIFfjRK
+   chL8BM4gpEZ5ngtcXIAfy2ta8LfabS6kDPTvFPZAVGqhAS2X1XZY5WwBF
+   kgNvP7c+asLxs2IamJMSmmLUy8AiA/Thz/iBha0zCbiOcHw9CY2uOJKsU
+   V25I/OTQDK4iTPwNCyaN9fJ8PorH9zqYBAqVgoJ2GWtrrXypUlVg1e4fn
+   ZWmMUCALP0tXb4Ql11Whel7YgJ8jBQqzxxPvntsHu9D0KpEaQ0XcFxdYc
    Q==;
 X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
-   d="scan'208";a="114897484"
+   d="scan'208";a="114897503"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 Sep 2022 04:42:52 -0700
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 Sep 2022 04:43:00 -0700
 Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
  chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Thu, 22 Sep 2022 04:42:51 -0700
+ 15.1.2507.12; Thu, 22 Sep 2022 04:42:58 -0700
 Received: from ROB-ULT-M68701.amer.actel.com (10.10.115.15) by
  chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Thu, 22 Sep 2022 04:42:43 -0700
+ 15.1.2507.12 via Frontend Transport; Thu, 22 Sep 2022 04:42:52 -0700
 From:   Sergiu Moga <sergiu.moga@microchip.com>
 To:     <lee@kernel.org>, <robh+dt@kernel.org>,
         <krzysztof.kozlowski+dt@linaro.org>, <nicolas.ferre@microchip.com>,
@@ -50,11 +50,10 @@ CC:     <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
         <linux-serial@vger.kernel.org>,
-        Sergiu Moga <sergiu.moga@microchip.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v5 5/9] dt-bindings: serial: atmel,at91-usart: Add gclk as a possible USART clock
-Date:   Thu, 22 Sep 2022 14:33:43 +0300
-Message-ID: <20220922113347.144383-6-sergiu.moga@microchip.com>
+        Sergiu Moga <sergiu.moga@microchip.com>
+Subject: [PATCH v5 6/9] tty: serial: atmel: Separate mode clearing between UART and USART
+Date:   Thu, 22 Sep 2022 14:33:44 +0300
+Message-ID: <20220922113347.144383-7-sergiu.moga@microchip.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220922113347.144383-1-sergiu.moga@microchip.com>
 References: <20220922113347.144383-1-sergiu.moga@microchip.com>
@@ -70,62 +69,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Devicetree nodes for FLEXCOM's USART can also have an alternative
-clock source for the baudrate generator (other than the peripheral
-clock), namely the Generick Clock. Thus make the binding aware of
-this clock that someone may place in the clock related
-properties of the USART node.
+When clearing the mode of the serial IP inside the atmel_set_termios()
+method, make sure that the difference between the bitfields placement
+of the UART IP's and USART IP's is taken into account, as some of
+them overlap with each other. For example, ATMEL_UA_BRSRCCK overlaps
+with ATMEL_US_NBSTOP and ATMEL_US_USCLKS overlaps with ATMEL_UA_FILTER.
+
+Furthermore, add definitions for the Baud Rate Source Clock and the
+Filter bitfields of the Mode Register of UART IP's, since they were
+missing.
 
 Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
 
 
-
-v1 -> v2:
-- Nothing, this patch was not here before
-
-
-v2 -> v3:
-- Nothing, Previously this was [PATCH 13]
-
-
-v3 -> v4:
-- Add A-b tag, this was previously [PATCH 9]
+v1 -> v5:
+- This patch was not here before but it also includes the previous patch:
+`[PATCH v4 7/9] tty: serial: atmel: Define BRSRCCK bitmask of UART IP's Mode Register`
+squashed into it and define BRSRCCK as a bitfield instead of a bitmask,
+since it is only 1 bit.
 
 
 
-v4 -> v5:
-- Nothing
+ drivers/tty/serial/atmel_serial.c | 7 +++++--
+ drivers/tty/serial/atmel_serial.h | 2 ++
+ 2 files changed, 7 insertions(+), 2 deletions(-)
 
-
-
- .../devicetree/bindings/serial/atmel,at91-usart.yaml   | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml b/Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml
-index 4da642763bef..30b2131b5860 100644
---- a/Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml
-+++ b/Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml
-@@ -36,10 +36,16 @@ properties:
-     maxItems: 1
+diff --git a/drivers/tty/serial/atmel_serial.c b/drivers/tty/serial/atmel_serial.c
+index ab4a9dfae07d..e3e14cb7668b 100644
+--- a/drivers/tty/serial/atmel_serial.c
++++ b/drivers/tty/serial/atmel_serial.c
+@@ -2134,8 +2134,11 @@ static void atmel_set_termios(struct uart_port *port,
+ 	mode = old_mode = atmel_uart_readl(port, ATMEL_US_MR);
  
-   clock-names:
--    const: usart
-+    minItems: 1
-+    items:
-+      - const: usart
-+      - const: gclk
+ 	/* reset the mode, clock divisor, parity, stop bits and data size */
+-	mode &= ~(ATMEL_US_USCLKS | ATMEL_US_CHRL | ATMEL_US_NBSTOP |
+-		  ATMEL_US_PAR | ATMEL_US_USMODE);
++	if (atmel_port->is_usart)
++		mode &= ~(ATMEL_US_NBSTOP | ATMEL_US_PAR | ATMEL_US_CHRL |
++			  ATMEL_US_USCLKS | ATMEL_US_USMODE);
++	else
++		mode &= ~(ATMEL_UA_BRSRCCK | ATMEL_US_PAR | ATMEL_UA_FILTER);
  
-   clocks:
--    maxItems: 1
-+    minItems: 1
-+    items:
-+      - description: USART Peripheral Clock
-+      - description: USART Generic Clock
+ 	baud = uart_get_baud_rate(port, termios, old, 0, port->uartclk / 16);
  
-   dmas:
-     items:
+diff --git a/drivers/tty/serial/atmel_serial.h b/drivers/tty/serial/atmel_serial.h
+index 0d8a0f9cc5c3..2a525b58e11a 100644
+--- a/drivers/tty/serial/atmel_serial.h
++++ b/drivers/tty/serial/atmel_serial.h
+@@ -50,6 +50,7 @@
+ #define		ATMEL_US_USCLKS_MCK		(0 <<  4)
+ #define		ATMEL_US_USCLKS_MCK_DIV8	(1 <<  4)
+ #define		ATMEL_US_USCLKS_SCK		(3 <<  4)
++#define	ATMEL_UA_FILTER		BIT(4)
+ #define	ATMEL_US_CHRL		GENMASK(7, 6)	/* Character Length */
+ #define		ATMEL_US_CHRL_5			(0 <<  6)
+ #define		ATMEL_US_CHRL_6			(1 <<  6)
+@@ -67,6 +68,7 @@
+ #define		ATMEL_US_NBSTOP_1		(0 << 12)
+ #define		ATMEL_US_NBSTOP_1_5		(1 << 12)
+ #define		ATMEL_US_NBSTOP_2		(2 << 12)
++#define	ATMEL_UA_BRSRCCK	BIT(12)	/* Clock Selection for UART */
+ #define	ATMEL_US_CHMODE		GENMASK(15, 14)	/* Channel Mode */
+ #define		ATMEL_US_CHMODE_NORMAL		(0 << 14)
+ #define		ATMEL_US_CHMODE_ECHO		(1 << 14)
 -- 
 2.34.1
 
