@@ -2,185 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CDBA5E5836
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 03:45:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01EB55E583C
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 03:47:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231150AbiIVBpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 21:45:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43964 "EHLO
+        id S229977AbiIVBrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 21:47:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229789AbiIVBpQ (ORCPT
+        with ESMTP id S229738AbiIVBrW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 21:45:16 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E93A0301
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 18:45:14 -0700 (PDT)
+        Wed, 21 Sep 2022 21:47:22 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87218A223A;
+        Wed, 21 Sep 2022 18:47:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663811114; x=1695347114;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=cP0K3eAQqdbj1b/k8WOSKUEnweFpdWclpBELpkHlMOs=;
-  b=MijQxvtvN2gpoPY+Ddjo5mjGOTv8WsO4voag8Hjz8aNa8nIksp9BaIUL
-   dETZWEAJMIWDB287xIfoCWOeURulAvpk2aNO4iI2G+Ua4yr57LzSjUF4c
-   PlGY7XSTo17mV2liqOzUKiDLXt2/f6qEmwndF66ece80EpJr++GHu1mYY
-   kwjSlfWpstwEtTGTnijr8lXTWPpESDgdNxAxfKZLVHYvHFxe6e2Fk3n0x
-   PeI1NPWVPii+WGQ/n3zIhcgXTlwhCnislDrjGneEXkLPJ+d8zuyE3E8FO
-   EcikUzukq6L9puu6t7D8NXF4po3o5ZjM+g9Y6b9xyZmBEBJczIjFVsPn0
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="279893248"
+  t=1663811241; x=1695347241;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=FKN2yI+UVtsu9XnfpWVcIsFtljXOPyPIl7CfiOHtP8U=;
+  b=kRMPpLMcErnyBhQ8VMABB/dmLVZoqZUy9T2khTivd+ifcy5WTRsgHh6+
+   wOhgmUCZXqouIrz8Z4u0hMNHBBNitPhgrW9uI1Yn++V8uMCtD9EJ7LGiG
+   L5O4ZrTf7a3ZywsEab5JjcZM4aODSImGsSPnLlBE0YECmMWekhdWwPfzP
+   eGOTvJmZIxazCC48edeIWyRNbmXRxR9IrzF03qoVKKu90IZLuQmZs36PL
+   zZBaMkp1K+NjhF0nfFaR81WO1CPTLjgsmGY7RmnPngEBwpfrEydE1vpF9
+   vBLQyPGKq0wKCT19cC3cTI/sTeKwBmG+b+75nx9ZerBBYufQ8qSR3u3KQ
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="297771668"
 X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
-   d="scan'208";a="279893248"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 18:45:14 -0700
+   d="scan'208";a="297771668"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 18:47:21 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
-   d="scan'208";a="570774254"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 18:45:12 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Zi Yan <ziy@nvidia.com>
-Cc:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        "Matthew Wilcox" <willy@infradead.org>
-Subject: Re: [RFC 0/6] migrate_pages(): batch TLB flushing
-References: <20220921060616.73086-1-ying.huang@intel.com>
-        <FE41BDA8-F7EC-4FBC-9647-A5A835CDECB0@nvidia.com>
-Date:   Thu, 22 Sep 2022 09:45:11 +0800
-In-Reply-To: <FE41BDA8-F7EC-4FBC-9647-A5A835CDECB0@nvidia.com> (Zi Yan's
-        message of "Wed, 21 Sep 2022 11:47:38 -0400")
-Message-ID: <878rmckwrc.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+   d="scan'208";a="615029088"
+Received: from zxingrtx.sh.intel.com ([10.239.159.110])
+  by orsmga007.jf.intel.com with ESMTP; 21 Sep 2022 18:47:18 -0700
+From:   zhengjun.xing@linux.intel.com
+To:     acme@kernel.org, peterz@infradead.org, mingo@redhat.com,
+        alexander.shishkin@intel.com, jolsa@kernel.org, namhyung@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        irogers@google.com, ak@linux.intel.com, kan.liang@linux.intel.com,
+        zhengjun.xing@linux.intel.com
+Subject: [PATCH 1/2] perf print-events: Fix "perf list" can not display the PMU prefix for some hybrid cache events
+Date:   Thu, 22 Sep 2022 09:49:03 +0800
+Message-Id: <20220922014904.3665674-1-zhengjun.xing@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Zi Yan <ziy@nvidia.com> writes:
+From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
 
-> On 21 Sep 2022, at 2:06, Huang Ying wrote:
->
->> From: "Huang, Ying" <ying.huang@intel.com>
->>
->> Now, migrate_pages() migrate pages one by one, like the fake code as
->> follows,
->>
->>   for each page
->>     unmap
->>     flush TLB
->>     copy
->>     restore map
->>
->> If multiple pages are passed to migrate_pages(), there are
->> opportunities to batch the TLB flushing and copying.  That is, we can
->> change the code to something as follows,
->>
->>   for each page
->>     unmap
->>   for each page
->>     flush TLB
->>   for each page
->>     copy
->>   for each page
->>     restore map
->>
->> The total number of TLB flushing IPI can be reduced considerably.  And
->> we may use some hardware accelerator such as DSA to accelerate the
->> page copying.
->>
->> So in this patch, we refactor the migrate_pages() implementation and
->> implement the TLB flushing batching.  Base on this, hardware
->> accelerated page copying can be implemented.
->>
->> If too many pages are passed to migrate_pages(), in the naive batched
->> implementation, we may unmap too many pages at the same time.  The
->> possibility for a task to wait for the migrated pages to be mapped
->> again increases.  So the latency may be hurt.  To deal with this
->> issue, the max number of pages be unmapped in batch is restricted to
->> no more than HPAGE_PMD_NR.  That is, the influence is at the same
->> level of THP migration.
->>
->> We use the following test to measure the performance impact of the
->> patchset,
->>
->> On a 2-socket Intel server,
->>
->>  - Run pmbench memory accessing benchmark
->>
->>  - Run `migratepages` to migrate pages of pmbench between node 0 and
->>    node 1 back and forth.
->>
->> With the patch, the TLB flushing IPI reduces 99.1% during the test and
->> the number of pages migrated successfully per second increases 291.7%.
->
-> Thank you for the patchset. Batching page migration will definitely
-> improve its throughput from my past experiments[1] and starting with
-> TLB flushing is a good first step.
+Some hybrid hardware cache events are only available on one CPU PMU. For
+example, 'L1-dcache-load-misses' is only available on cpu_core. We have
+supported in the perf list clearly reporting this info, the function works
+fine before but recently the argument "config" in API is_event_supported()
+is changed from "u64" to "unsigned int" which caused a regression, the
+"perf list" then can not display the PMU prefix for some hybrid cache
+events. For the hybrid systems, the PMU type ID is stored at config[63:32],
+define config to "unsigned int" will miss the PMU type ID information, then
+the regression happened, the config should be defined as "u64".
 
-Thanks for the pointer, the patch description provides valuable information
-for me already!
+Before:
+ # ./perf list |grep "Hardware cache event"
+  L1-dcache-load-misses                              [Hardware cache event]
+  L1-dcache-loads                                    [Hardware cache event]
+  L1-dcache-stores                                   [Hardware cache event]
+  L1-icache-load-misses                              [Hardware cache event]
+  L1-icache-loads                                    [Hardware cache event]
+  LLC-load-misses                                    [Hardware cache event]
+  LLC-loads                                          [Hardware cache event]
+  LLC-store-misses                                   [Hardware cache event]
+  LLC-stores                                         [Hardware cache event]
+  branch-load-misses                                 [Hardware cache event]
+  branch-loads                                       [Hardware cache event]
+  dTLB-load-misses                                   [Hardware cache event]
+  dTLB-loads                                         [Hardware cache event]
+  dTLB-store-misses                                  [Hardware cache event]
+  dTLB-stores                                        [Hardware cache event]
+  iTLB-load-misses                                   [Hardware cache event]
+  node-load-misses                                   [Hardware cache event]
+  node-loads                                         [Hardware cache event]
 
-> BTW, what is the rationality behind the increased page migration
-> success rate per second?
+After:
+ # ./perf list |grep "Hardware cache event"
+  L1-dcache-loads                                    [Hardware cache event]
+  L1-dcache-stores                                   [Hardware cache event]
+  L1-icache-load-misses                              [Hardware cache event]
+  LLC-load-misses                                    [Hardware cache event]
+  LLC-loads                                          [Hardware cache event]
+  LLC-store-misses                                   [Hardware cache event]
+  LLC-stores                                         [Hardware cache event]
+  branch-load-misses                                 [Hardware cache event]
+  branch-loads                                       [Hardware cache event]
+  cpu_atom/L1-icache-loads/                          [Hardware cache event]
+  cpu_core/L1-dcache-load-misses/                    [Hardware cache event]
+  cpu_core/node-load-misses/                         [Hardware cache event]
+  cpu_core/node-loads/                               [Hardware cache event]
+  dTLB-load-misses                                   [Hardware cache event]
+  dTLB-loads                                         [Hardware cache event]
+  dTLB-store-misses                                  [Hardware cache event]
+  dTLB-stores                                        [Hardware cache event]
+  iTLB-load-misses                                   [Hardware cache event]
 
-From perf profiling data, in the base kernel,
+Fixes: 9b7c7728f4e4 ("perf parse-events: Break out tracepoint and printing")
+Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+---
+ tools/perf/util/print-events.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-  migrate_pages.migrate_to_node.do_migrate_pages.kernel_migrate_pages.__x64_sys_migrate_pages:	2.87
-  ptep_clear_flush.try_to_migrate_one.rmap_walk_anon.try_to_migrate.__unmap_and_move:           2.39
+diff --git a/tools/perf/util/print-events.c b/tools/perf/util/print-events.c
+index ba1ab5134685..04050d4f6db8 100644
+--- a/tools/perf/util/print-events.c
++++ b/tools/perf/util/print-events.c
+@@ -239,7 +239,7 @@ void print_sdt_events(const char *subsys_glob, const char *event_glob,
+ 	strlist__delete(sdtlist);
+ }
+ 
+-static bool is_event_supported(u8 type, unsigned int config)
++static bool is_event_supported(u8 type, u64 config)
+ {
+ 	bool ret = true;
+ 	int open_return;
+-- 
+2.25.1
 
-Because pmbench run in the system too, the CPU cycles of migrate_pages()
-is about 2.87%.  While the CPU cycles for TLB flushing is 2.39%.  That
-is, 2.39/2.87 = 83.3% CPU cycles of migrate_pages() are used for TLB
-flushing.
-
-After batching the TLB flushing, the perf profiling data becomes,
-
-  migrate_pages.migrate_to_node.do_migrate_pages.kernel_migrate_pages.__x64_sys_migrate_pages:	2.77
-  move_to_new_folio.migrate_pages_batch.migrate_pages.migrate_to_node.do_migrate_pages:         1.68
-  copy_page.folio_copy.migrate_folio.move_to_new_folio.migrate_pages_batch:                     1.21
-
-1.21/2.77 = 43.7% CPU cycles of migrate_pages() are used for page
-copying now.
-
-  try_to_migrate_one:	0.23
-
-The CPU cycles of unmapping and TLB flushing becomes 0.23/2.77 = 8.3% of
-migrate_pages().
-
-All in all, after the optimization, we do much less TLB flushing, which
-consumes a lot of CPU cycles before the optimization.  So the throughput
-of migrate_pages() increases greatly.
-
-I will add these data in the next version of patch.
-
-Best Regards,
-Huang, Ying
-
->>
->> This patchset is based on v6.0-rc5 and the following patchset,
->>
->> [PATCH -V3 0/8] migrate_pages(): fix several bugs in error path
->> https://lore.kernel.org/lkml/20220817081408.513338-1-ying.huang@intel.com/
->>
->> The migrate_pages() related code is converting to folio now. So this
->> patchset cannot apply recent akpm/mm-unstable branch.  This patchset
->> is used to check the basic idea.  If it is OK, I will rebase the
->> patchset on top of folio changes.
->>
->> Best Regards,
->> Huang, Ying
->
->
-> [1] https://lwn.net/Articles/784925/
->
-> --
-> Best Regards,
-> Yan, Zi
