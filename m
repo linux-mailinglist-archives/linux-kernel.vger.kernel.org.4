@@ -2,162 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2D115E67BD
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 17:56:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82D8C5E67C5
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 17:57:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229703AbiIVP4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 11:56:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47804 "EHLO
+        id S230497AbiIVP4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 11:56:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231622AbiIVP42 (ORCPT
+        with ESMTP id S230058AbiIVP4k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 11:56:28 -0400
-Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAAEDE5FA7
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 08:56:26 -0700 (PDT)
-Received: by mail-qv1-xf2e.google.com with SMTP id c6so7100108qvn.6
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 08:56:26 -0700 (PDT)
+        Thu, 22 Sep 2022 11:56:40 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD8B9E5FA1
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 08:56:38 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id fv3so10278600pjb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 08:56:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:reply-to
-         :message-id:subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=5FPZpJ0fRyMuZJ1L9OxeKsqck40ptxGwxidl+b3tGX4=;
-        b=Da57zXRlppFxRnO7kfk3kFe5O1RdWTzETBZtJPzoi5CO89N5ZX4zOxOuOSzOJaSvWf
-         2bX8mVhK8d9cyPXD9df+GwY/0pb0XsF2PU1qbqALZNSortKqO64KlDnvErbKNGFFAwxW
-         Y42eJt11BkHq0i7CaJXq4mXmziZF5qNZf0ZbjlAlNL0TnjQFntQf2bAHF1xAtjHA0aWP
-         EdzH41uXrjL5Yosf4bRoPU/3+RJywmUJ577i7cmqriW7i1URh5/5vanizkWmGgadifv2
-         +unsoEeyVp7Ya6HLS7SAulZ1P3XkL2bZwLdVMU5Nn5NAg/Zv3RQaR3TAIZ20+zEtm8PD
-         HXrg==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=TZpRIJCCMZKyVUgNnwboEjnHYpEIRQBSXZlSwc7OZ+0=;
+        b=lKwDDBjvYm/0Jleq+GCxBaTtwnHH7tK+nJ5dJ9Mroo7Wx2WiOGB/Kmka/kC9bYFq8z
+         aE3zrV852KZPixgDhOan1L1Vq5Tj1ydcVjIMjp+7gLHmlIsooLMnRpZ01jzKR4yf16m5
+         6AQEJMsyFTKj/8+82bO+4x4lXyaSTMa1R26kY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:reply-to
-         :message-id:subject:cc:to:from:date:sender:x-gm-message-state:from
-         :to:cc:subject:date;
-        bh=5FPZpJ0fRyMuZJ1L9OxeKsqck40ptxGwxidl+b3tGX4=;
-        b=BeqerXVwlfpbnjLo3BbTp4wBXSdHZxDCT/OVV9kd2vtJkISdZpWelooeP094BsZXud
-         olA3XJFyJB/mgAfsx6QY/zYXkgSFbWlUo62UAm5IIFXRcFNfv9C4x1wkPvPVw9WvOh88
-         9lwPdr9lhIIP5l4yY1VEb/qDd9W+J1XaveV92E886dDbrF7nv4u20/HIxOFYm7b3plXZ
-         QApI60B4tDJMAOEJnnHCycJWUr+91gP5qypzWyenIkMOYwNizBX7onG5+0JmeWU6ZeOj
-         G7CFZRUfJJzhDkGN9ZM7RVzRSSFzMOIZXEyu2Bz9x4+6TemeZta68qLYDEfz5eorqTOQ
-         Cvhg==
-X-Gm-Message-State: ACrzQf2lOhRDC3vt5JAN/Al9IMRni3li8IBIaJFTJbxvBU7++Jlqnog6
-        R/m3d0Djxgl0otlEsyUQAM+PtX3bzA==
-X-Google-Smtp-Source: AMsMyM6lo+S2hjJFpo8MoFJAXaVpld/ZiBVdMkyLYWk6HxyY4pOCBVXY1xBkeJiUULuRjVlHl1Vj2Q==
-X-Received: by 2002:a05:6214:3011:b0:4ad:82d6:d579 with SMTP id ke17-20020a056214301100b004ad82d6d579mr2326059qvb.37.1663862185767;
-        Thu, 22 Sep 2022 08:56:25 -0700 (PDT)
-Received: from serve.minyard.net (serve.minyard.net. [2001:470:b8f6:1b::1])
-        by smtp.gmail.com with ESMTPSA id dt10-20020a05620a478a00b006ce3cffa2c8sm4350348qkb.43.2022.09.22.08.56.25
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=TZpRIJCCMZKyVUgNnwboEjnHYpEIRQBSXZlSwc7OZ+0=;
+        b=R1W9IgoRiIiF+NxH9s+gZNBFLlZP3o6gr/mAJy6Mh5NmEE/odCSunLOuQzJ4WixxSO
+         B0SS3czR7vjCE9Ye7vgGO6CSS6BcZEzv30CScv/KMtWe4WaPciCo5wqGFTfU4RCmLn0q
+         8/jw7UM2bw+kPj7icy+a7Wp8iB66oYadLwY7UtI9OZzzpUMH0Qwi0dG7dr+eBFWE12ge
+         lBO10ULJWMWTgR1aiKpZobtjrYmFj357YVrasS56DkRoNrtSQdsS720W1L8dLg/Jt4Ad
+         WS+WwVQ33/k7gFHMhh0zJ+UlC8mNsqfjh7vd9HgEo1f7sWaSMoUUeTZfyKlDiZoi5EwV
+         +yDw==
+X-Gm-Message-State: ACrzQf2Udy1j4XUW3QXc6nqgIqroQCEhXrlAfuT+ORdlsNwUAj+T9GY1
+        ty+uHVOsgjsSS8SMnEmLdrSMCA==
+X-Google-Smtp-Source: AMsMyM6wj70ZRZNEGtsTQjOpU6Y4OkbiX+0Wag8Z4tUWxe6CdbDk3WijTof+igifPO84VXufZHizeQ==
+X-Received: by 2002:a17:90b:4d8e:b0:200:73b4:4da2 with SMTP id oj14-20020a17090b4d8e00b0020073b44da2mr16393990pjb.197.1663862197527;
+        Thu, 22 Sep 2022 08:56:37 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id b5-20020a170902d50500b00176ca533ea0sm4327600plg.90.2022.09.22.08.56.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 08:56:25 -0700 (PDT)
-Sender: Corey Minyard <tcminyard@gmail.com>
-Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:5d3f:d09:85d2:d6e])
-        by serve.minyard.net (Postfix) with ESMTPSA id 084AC1800BD;
-        Thu, 22 Sep 2022 15:56:24 +0000 (UTC)
-Date:   Thu, 22 Sep 2022 10:56:22 -0500
-From:   Corey Minyard <minyard@acm.org>
-To:     Xiu Jianfeng <xiujianfeng@huawei.com>
-Cc:     openipmi-developer@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ipmi: Add __init/__exit annotations to module init/exit
- funcs
-Message-ID: <YyyFphRSkO4roYlk@minyard.net>
-Reply-To: minyard@acm.org
-References: <20220922111924.36044-1-xiujianfeng@huawei.com>
+        Thu, 22 Sep 2022 08:56:36 -0700 (PDT)
+Date:   Thu, 22 Sep 2022 08:56:35 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     Vlastimil Babka <vbabka@suse.cz>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Hao Luo <haoluo@google.com>, Marco Elver <elver@google.com>,
+        linux-mm@kvack.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alex Elder <elder@kernel.org>,
+        Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Daniel Micay <danielmicay@gmail.com>,
+        Yonghong Song <yhs@fb.com>, Miguel Ojeda <ojeda@kernel.org>,
+        Feng Tang <feng.tang@intel.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-fsdevel@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org, dev@openvswitch.org,
+        x86@kernel.org, linux-wireless@vger.kernel.org,
+        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 11/12] slab: Remove __malloc attribute from realloc
+ functions
+Message-ID: <202209220855.B8DA16E@keescook>
+References: <20220922031013.2150682-1-keescook@chromium.org>
+ <20220922031013.2150682-12-keescook@chromium.org>
+ <CANiq72=m9VngFH9jE3s0RV7MpjX0a=ekJN4pZwcDksBkSRR_1w@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220922111924.36044-1-xiujianfeng@huawei.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <CANiq72=m9VngFH9jE3s0RV7MpjX0a=ekJN4pZwcDksBkSRR_1w@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 07:19:24PM +0800, Xiu Jianfeng wrote:
-> Add missing __init/__exit annotations to module init/exit funcs.
-
-Applied, thanks.
-
--corey
-
+On Thu, Sep 22, 2022 at 11:23:46AM +0200, Miguel Ojeda wrote:
+> On Thu, Sep 22, 2022 at 5:10 AM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > -#ifdef __alloc_size__
+> > -# define __alloc_size(x, ...)  __alloc_size__(x, ## __VA_ARGS__) __malloc
+> > -#else
+> > -# define __alloc_size(x, ...)  __malloc
+> > -#endif
+> > +#define __alloc_size(x, ...)   __alloc_size__(x, ## __VA_ARGS__) __malloc
+> > +#define __realloc_size(x, ...) __alloc_size__(x, ## __VA_ARGS__)
 > 
-> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
-> ---
->  drivers/char/ipmi/ipmi_ssif.c         | 4 ++--
->  drivers/char/ipmi/kcs_bmc_cdev_ipmi.c | 4 ++--
->  drivers/char/ipmi/kcs_bmc_serio.c     | 4 ++--
->  3 files changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/char/ipmi/ipmi_ssif.c b/drivers/char/ipmi/ipmi_ssif.c
-> index 13da021e7c6b..e1072809fe31 100644
-> --- a/drivers/char/ipmi/ipmi_ssif.c
-> +++ b/drivers/char/ipmi/ipmi_ssif.c
-> @@ -2098,7 +2098,7 @@ static struct platform_driver ipmi_driver = {
->  	.id_table       = ssif_plat_ids
->  };
->  
-> -static int init_ipmi_ssif(void)
-> +static int __init init_ipmi_ssif(void)
->  {
->  	int i;
->  	int rv;
-> @@ -2140,7 +2140,7 @@ static int init_ipmi_ssif(void)
->  }
->  module_init(init_ipmi_ssif);
->  
-> -static void cleanup_ipmi_ssif(void)
-> +static void __exit cleanup_ipmi_ssif(void)
->  {
->  	if (!initialized)
->  		return;
-> diff --git a/drivers/char/ipmi/kcs_bmc_cdev_ipmi.c b/drivers/char/ipmi/kcs_bmc_cdev_ipmi.c
-> index 486834a962c3..cf670e891966 100644
-> --- a/drivers/char/ipmi/kcs_bmc_cdev_ipmi.c
-> +++ b/drivers/char/ipmi/kcs_bmc_cdev_ipmi.c
-> @@ -548,7 +548,7 @@ static struct kcs_bmc_driver kcs_bmc_ipmi_driver = {
->  	.ops = &kcs_bmc_ipmi_driver_ops,
->  };
->  
-> -static int kcs_bmc_ipmi_init(void)
-> +static int __init kcs_bmc_ipmi_init(void)
->  {
->  	kcs_bmc_register_driver(&kcs_bmc_ipmi_driver);
->  
-> @@ -556,7 +556,7 @@ static int kcs_bmc_ipmi_init(void)
->  }
->  module_init(kcs_bmc_ipmi_init);
->  
-> -static void kcs_bmc_ipmi_exit(void)
-> +static void __exit kcs_bmc_ipmi_exit(void)
->  {
->  	kcs_bmc_unregister_driver(&kcs_bmc_ipmi_driver);
->  }
-> diff --git a/drivers/char/ipmi/kcs_bmc_serio.c b/drivers/char/ipmi/kcs_bmc_serio.c
-> index 7e2067628a6c..1793358be782 100644
-> --- a/drivers/char/ipmi/kcs_bmc_serio.c
-> +++ b/drivers/char/ipmi/kcs_bmc_serio.c
-> @@ -140,7 +140,7 @@ static struct kcs_bmc_driver kcs_bmc_serio_driver = {
->  	.ops = &kcs_bmc_serio_driver_ops,
->  };
->  
-> -static int kcs_bmc_serio_init(void)
-> +static int __init kcs_bmc_serio_init(void)
->  {
->  	kcs_bmc_register_driver(&kcs_bmc_serio_driver);
->  
-> @@ -148,7 +148,7 @@ static int kcs_bmc_serio_init(void)
->  }
->  module_init(kcs_bmc_serio_init);
->  
-> -static void kcs_bmc_serio_exit(void)
-> +static void __exit kcs_bmc_serio_exit(void)
->  {
->  	kcs_bmc_unregister_driver(&kcs_bmc_serio_driver);
->  }
-> -- 
-> 2.17.1
-> 
+> These look unconditional now, so we could move it to
+> `compiler_attributes.h` in a later patch (or an independent series).
+
+I wasn't sure if this "composite macro" was sane there, especially since
+it would be using __malloc before it was defined, etc. Would you prefer
+I move it?
+
+-- 
+Kees Cook
