@@ -2,110 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14F0E5E6178
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 13:42:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AFEE5E6191
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 13:44:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231642AbiIVLmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 07:42:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45916 "EHLO
+        id S231609AbiIVLoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 07:44:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231544AbiIVLmk (ORCPT
+        with ESMTP id S231661AbiIVLn2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 07:42:40 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58ADE9B85E;
-        Thu, 22 Sep 2022 04:42:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663846951; x=1695382951;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=V13C94xekIQZ8YQVuEe807wmoeTFJXbUhciBFGunQ78=;
-  b=OOjezHmT45MbcXUtDzuS5VwO8tCL6YrPdlS2CzOUsTKzAvDAW46GfCFv
-   PhJYikeqiNNHXKyW31OlFCfzDkT9NSgRawE40qZ9VGqzq8NpyzecIc5g1
-   ey4PXgpmdp8h7jKEEpUknrCE6NERXND2kIOWdF8Q2t1Ax4AOQHXIfJU4w
-   cdmEnxu+giSxF0Yst0msXUrha707ovylqjoCBvAFDRMKXGNBtkkD7CxL4
-   swOBflx0Yf9WJ29l3pmO1quox0MmHirafLke3AkTjPF/KvhmvI+nCWRuZ
-   3LBVH5npLwmJICu4lBLryl33mDf0SZLbww/qR4eC4+dGC5DImZizZumVU
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="301120150"
-X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
-   d="scan'208";a="301120150"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 04:42:30 -0700
-X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
-   d="scan'208";a="652935976"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.59.41])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 04:42:27 -0700
-Message-ID: <abac9b14-ca2f-210e-5a09-3c4f56846a9b@intel.com>
-Date:   Thu, 22 Sep 2022 14:42:23 +0300
+        Thu, 22 Sep 2022 07:43:28 -0400
+Received: from gproxy4-pub.mail.unifiedlayer.com (gproxy4-pub.mail.unifiedlayer.com [69.89.23.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C4DE3EEB
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 04:43:09 -0700 (PDT)
+Received: from cmgw12.mail.unifiedlayer.com (unknown [10.0.90.127])
+        by progateway6.mail.pro1.eigbox.com (Postfix) with ESMTP id 496E410047D6F
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 11:42:58 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id bKbZoUolJ9QuVbKbZocLbx; Thu, 22 Sep 2022 11:42:58 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=eIrWMFl1 c=1 sm=1 tr=0 ts=632c4a42
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=xOM3xZuef0cA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Imf6IfHGtkP/4sw/nFiRH/xsZftDLRctRzMEVr6dPLU=; b=qtn+ShjRGxqXXEaUA6rGg+lYPc
+        LMYceXic2rddouOqpNK+z6Ck1su77Runpe5uyLYaknxclSl3nu5bYWyF4SofwOKRK5L/TBqhyT9KT
+        Yv77UNGXPk9y/YpnQejUwWrrFMDG79YyjCuWWK63ckRoBPgbJ/ndBl8JqHMz8UfNPDIIrlolHe2LO
+        tXzWAegEbl9BQFB8XPB6MOvhgpGGx2ZVlCvXwSiBoKuQ848F0TeIPEkTBtKWkL1IKY0ej/7x0Z7dU
+        OqdgnoHXLMRWdyYZSlaSDoKirBl07Z9gsrwZNyb4SUz6w2pwXlD72gu13KWEhDbh1fk6+8vjgfjlf
+        pDRwMIPg==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:45774 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1obKbX-002Tis-8o;
+        Thu, 22 Sep 2022 05:42:55 -0600
+Subject: Re: [PATCH 5.19 00/39] 5.19.11-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220921164741.757857192@linuxfoundation.org>
+In-Reply-To: <20220921164741.757857192@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <bd907a2d-76ad-f350-5f15-d5656f6edf15@w6rz.net>
+Date:   Thu, 22 Sep 2022 04:42:47 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v3 1/4] mmc: sdhci-tegra: Separate Tegra194 and Tegra234
- SoC data
-Content-Language: en-US
-To:     Prathamesh Shete <pshete@nvidia.com>, ulf.hansson@linaro.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        p.zabel@pengutronix.de, linux-mmc@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     anrao@nvidia.com, smangipudi@nvidia.com, kyarlagadda@nvidia.com
-References: <20220920123752.21027-1-pshete@nvidia.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20220920123752.21027-1-pshete@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1obKbX-002Tis-8o
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:45774
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/09/22 15:37, Prathamesh Shete wrote:
-> Create new SoC data structure for Tegra234 platforms.
-> Additional features, tap value configurations are added/
-> updated for Tegra234 platform hence separate Tegra194 and
-> Tegra234 SoC data.
-> 
-> Signed-off-by: Aniruddha Tvs Rao <anrao@nvidia.com>
-> Signed-off-by: Prathamesh Shete <pshete@nvidia.com>
+On 9/21/22 9:47 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.19.11 release.
+> There are 39 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Fri, 23 Sep 2022 16:47:28 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.11-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-> ---
->  drivers/mmc/host/sdhci-tegra.c | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
-> 
-> diff --git a/drivers/mmc/host/sdhci-tegra.c b/drivers/mmc/host/sdhci-tegra.c
-> index 2d2d8260c681..a6c5bbae77b4 100644
-> --- a/drivers/mmc/host/sdhci-tegra.c
-> +++ b/drivers/mmc/host/sdhci-tegra.c
-> @@ -1556,7 +1556,21 @@ static const struct sdhci_tegra_soc_data soc_data_tegra194 = {
->  	.max_tap_delay = 139,
->  };
->  
-> +static const struct sdhci_tegra_soc_data soc_data_tegra234 = {
-> +	.pdata = &sdhci_tegra186_pdata,
-> +	.dma_mask = DMA_BIT_MASK(39),
-> +	.nvquirks = NVQUIRK_NEEDS_PAD_CONTROL |
-> +		    NVQUIRK_HAS_PADCALIB |
-> +		    NVQUIRK_DIS_CARD_CLK_CONFIG_TAP |
-> +		    NVQUIRK_ENABLE_SDR50 |
-> +		    NVQUIRK_ENABLE_SDR104 |
-> +		    NVQUIRK_HAS_TMCLK,
-> +	.min_tap_delay = 95,
-> +	.max_tap_delay = 111,
-> +};
-> +
->  static const struct of_device_id sdhci_tegra_dt_match[] = {
-> +	{ .compatible = "nvidia,tegra234-sdhci", .data = &soc_data_tegra234 },
->  	{ .compatible = "nvidia,tegra194-sdhci", .data = &soc_data_tegra194 },
->  	{ .compatible = "nvidia,tegra186-sdhci", .data = &soc_data_tegra186 },
->  	{ .compatible = "nvidia,tegra210-sdhci", .data = &soc_data_tegra210 },
+Tested-by: Ron Economos <re@w6rz.net>
 
