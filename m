@@ -2,114 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D9C25E69C9
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 19:41:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 122115E69CD
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 19:42:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231628AbiIVRlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 13:41:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54852 "EHLO
+        id S232060AbiIVRlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 13:41:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229641AbiIVRlV (ORCPT
+        with ESMTP id S232052AbiIVRlg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 13:41:21 -0400
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33192E11B6;
-        Thu, 22 Sep 2022 10:41:19 -0700 (PDT)
-Received: by mail-il1-x132.google.com with SMTP id d14so4205986ilf.2;
-        Thu, 22 Sep 2022 10:41:19 -0700 (PDT)
+        Thu, 22 Sep 2022 13:41:36 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18556EFA48;
+        Thu, 22 Sep 2022 10:41:33 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id x1-20020a17090ab00100b001fda21bbc90so3148035pjq.3;
+        Thu, 22 Sep 2022 10:41:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=AsxpWsr5dzcIncNfx/+Sw1HyEwfMiBKVAKBEW7wNeQA=;
-        b=HG1BCa9aD7EruuXSP8vfBpl2xSAcB9NgvDE4n3t4WegezK8iPhrhfTbs3Xxfdxp/aP
-         0j4XfOQ90rYJJLxvR5Fxutq+CKSR+3NwG5g3gHNWC0rGeSJkCPwM1qeiyt5MoX9kie1E
-         Ogc+09wvN660uSYqTrtW/DY7BHEKikOuBqjuMNkdFuICid58Qmi9sfyROy/V1LgkIpE7
-         e2Nv1gEo4Vp0GQpWl3bRqM1059jceqcIcZbW6os/ZnPJ8J1PnWKNgSi8e2+WYP/WJpYk
-         +8abyMsCFGIX1fgDuD8Pv5kCGUDjVFxUFNtnD5auEWqa0LNmLWv9bnrrUipYT443cCtB
-         +LNg==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
+        bh=YTw4/4H1DrZyYT8r3vAbsU7ElPYxgVDhU3+OM9JyucE=;
+        b=ElLCbl1NZGRXMxpT6v5xRjFMH5pVD8Cb811OWdYBmSUbw6+6INd7SgCM411RdFKg2D
+         3gBBwooCUeu9bguTScSkm/XZSKCxDniYvdgWCIhnkKXa/dj/aqMoxUdDf/Z4g4Z3Uyxz
+         fJktrerUAVeMdfLrhHHvN0kbmKSsQmUR4AfFzNTL/auXAiED8nOxCign4vgffb5wAAha
+         ODjUE/FYzl39vEFJ1jKVo1TaQdQR//fsoXDGhh7myPCV/CZ20tcFNpmeDfdQNQeVatLo
+         Q6WOHGCkKXqSy8yRccfb+uwAOH7duIQ8LnHnLiFE59louwT8ra/ug4luSqNxIhGSaQle
+         b8yw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=AsxpWsr5dzcIncNfx/+Sw1HyEwfMiBKVAKBEW7wNeQA=;
-        b=SILhDhsclPTFIm+N7bd9WIBU5yzLvANvhie9ePp8AY5zYqBcGEadNwbWw7l/Cs+S3q
-         EvYaoF8Xsrt3ocT4iVCUPYlXg9z+U7rmD6Z1as2fV8F1evoRGxejjostj01Ap7cvSrjF
-         w8az17etfgg8XmpOm5ttEBbPbaUNDy2mKkSHGsA0bWKO68SQTHev65IAxmqO9D4CEcTb
-         TCEv7VIvgZIAt4ExPOKG9Nehhmv47XOr9JRDlSwkhdFzhwv1Bzz0cJjp0HEBwJr8pbsF
-         s4wGk5lNoXdGtP1UlvzdMuAoApS2rfH7awQAzT63oukEmmNm26x6AIBEYB02sIcKDC6f
-         Bo5g==
-X-Gm-Message-State: ACrzQf3aUUJYVKFd6LpTLv/hbVKzpO6O9ne2ZCviMkpzHE0AZKe5JVJ0
-        F1HhJu1TeBJbHISbmWMGvJrQwQvSKVNSZ67IoE4=
-X-Google-Smtp-Source: AMsMyM5Iawxjt3SoOGTNllk8NVk3tyvcsl1U/lS7sz1j/GB7JoPgBuMEGvT0T6zJ1tbupUccXP7nLvzrv1dgRwQijjQ=
-X-Received: by 2002:a05:6e02:152a:b0:2f6:58ae:ff0c with SMTP id
- i10-20020a056e02152a00b002f658aeff0cmr2429401ilu.237.1663868478589; Thu, 22
- Sep 2022 10:41:18 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=YTw4/4H1DrZyYT8r3vAbsU7ElPYxgVDhU3+OM9JyucE=;
+        b=V2HLaggexGwvc31+4BvmRIWl+0T6Z1XhW9NWT1U+/DA1RcG0SkW4ms6CJ9NjC1pu9p
+         tjE6ekeYxMstIl2QW6q9wAJap0P8JBGB8w7rRgx9760AdaVDDOTSomXnSnVDs8MOwLum
+         wGNX1PVsSRLcecCXucmd8syS0cDwc1MP0DQdPAyVwruWoRzeKUmYgEfX2EN6re04ym4B
+         WAR6i5ZJCCDPN3xG0u4pIUuTLZQRwkAz5Mey9Q89VNVOjQqaCS/LZL/RkGa+LY95V/23
+         75uzCBjoPw+3oc/aeH9wqLg77sj2B7gSnavmVBfFDP7+Y13vsrIH29XpU0pUCV53SNZt
+         HgRg==
+X-Gm-Message-State: ACrzQf2D71n+0kDGnXNauMmyUYn0HmHQdAnrTbF+FXenebFChG8ZFvlU
+        MhGTBZLWg7mvedZzEGAwO742UqOMNqi+cA==
+X-Google-Smtp-Source: AMsMyM46RQnmrtmArNIqRDGJepiXlLiVqEbR8tjp1VE8FwEn++T4TpusHiOcNrt//9HfQThYvL4t+w==
+X-Received: by 2002:a17:902:e54b:b0:178:75b9:f1e9 with SMTP id n11-20020a170902e54b00b0017875b9f1e9mr4426028plf.104.1663868492316;
+        Thu, 22 Sep 2022 10:41:32 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id x128-20020a623186000000b0053e6eae9665sm4800874pfx.140.2022.09.22.10.41.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Sep 2022 10:41:31 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Thu, 22 Sep 2022 07:41:29 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Kristen Carlson Accardi <kristen@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
+        cgroups@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [RFC PATCH 00/20] Add Cgroup support for SGX EPC memory
+Message-ID: <YyyeSVSk/lWdo/W4@slm.duckdns.org>
+References: <20220922171057.1236139-1-kristen@linux.intel.com>
 MIME-Version: 1.0
-References: <20220922031013.2150682-1-keescook@chromium.org>
- <20220922031013.2150682-12-keescook@chromium.org> <CANiq72=m9VngFH9jE3s0RV7MpjX0a=ekJN4pZwcDksBkSRR_1w@mail.gmail.com>
- <202209220855.B8DA16E@keescook>
-In-Reply-To: <202209220855.B8DA16E@keescook>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Thu, 22 Sep 2022 19:41:07 +0200
-Message-ID: <CANiq72=unhDJOGTg+ja4UdVRp8sG7Wc+_rqQhvJideA=WNjbFA@mail.gmail.com>
-Subject: Re: [PATCH 11/12] slab: Remove __malloc attribute from realloc functions
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Hao Luo <haoluo@google.com>, Marco Elver <elver@google.com>,
-        linux-mm@kvack.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alex Elder <elder@kernel.org>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Daniel Micay <danielmicay@gmail.com>,
-        Yonghong Song <yhs@fb.com>, Miguel Ojeda <ojeda@kernel.org>,
-        Feng Tang <feng.tang@intel.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-fsdevel@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, dev@openvswitch.org,
-        x86@kernel.org, linux-wireless@vger.kernel.org,
-        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220922171057.1236139-1-kristen@linux.intel.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 5:56 PM Kees Cook <keescook@chromium.org> wrote:
->
-> I wasn't sure if this "composite macro" was sane there, especially since
-> it would be using __malloc before it was defined, etc. Would you prefer
-> I move it?
+Hello,
 
-Hmm... On one hand, they end up being attributes, so it could make
-sense to have them there (after all, the big advantage of that header
-is that there is no `#ifdef` nest like in others, and that it is only
-for attributes).
+(cc'ing memcg folks)
 
-On the other hand, you are right that the file so far is intended to
-be as simple as possible (`__always_inline` having an extra `inline`
-and `fallthrough` would be closest outliers), so if we do it, I would
-prefer to do so in an independent series that carries its own rationale.
+On Thu, Sep 22, 2022 at 10:10:37AM -0700, Kristen Carlson Accardi wrote:
+> Add a new cgroup controller to regulate the distribution of SGX EPC memory,
+> which is a subset of system RAM that is used to provide SGX-enabled
+> applications with protected memory, and is otherwise inaccessible.
+> 
+> SGX EPC memory allocations are separate from normal RAM allocations,
+> and is managed solely by the SGX subsystem. The existing cgroup memory
+> controller cannot be used to limit or account for SGX EPC memory.
+> 
+> This patchset implements the sgx_epc cgroup controller, which will provide
+> support for stats, events, and the following interface files:
+> 
+> sgx_epc.current
+> 	A read-only value which represents the total amount of EPC
+> 	memory currently being used on by the cgroup and its descendents.
+> 
+> sgx_epc.low
+> 	A read-write value which is used to set best-effort protection
+> 	of EPC usage. If the EPC usage of a cgroup drops below this value,
+> 	then the cgroup's EPC memory will not be reclaimed if possible.
+> 
+> sgx_epc.high
+> 	A read-write value which is used to set a best-effort limit
+> 	on the amount of EPC usage a cgroup has. If a cgroup's usage
+> 	goes past the high value, the EPC memory of that cgroup will
+> 	get reclaimed back under the high limit.
+> 
+> sgx_epc.max
+> 	A read-write value which is used to set a hard limit for
+> 	cgroup EPC usage. If a cgroup's EPC usage reaches this limit,
+> 	allocations are blocked until EPC memory can be reclaimed from
+> 	the cgroup.
 
-So I would leave the patch as it is here.
+I don't know how SGX uses its memory but you said in the other message that
+it's usually a really small portion of the memory and glancing the code it
+looks like its own page aging and all. Can you give some concrete examples
+on how it's used and why we need cgroup support for it? Also, do you really
+need all three control knobs here? e.g. given that .high is only really
+useful in conjunction with memory pressure and oom handling from userspace,
+I don't see how this would actually be useful for something like this.
 
-Cheers,
-Miguel
+Thanks.
+
+-- 
+tejun
