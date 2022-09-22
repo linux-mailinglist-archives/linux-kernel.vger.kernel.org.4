@@ -2,126 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C16D5E6051
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 13:00:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 701DE5E6052
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 13:00:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231334AbiIVLAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 07:00:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33578 "EHLO
+        id S231347AbiIVLAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 07:00:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230383AbiIVLA1 (ORCPT
+        with ESMTP id S231375AbiIVLAg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 07:00:27 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B300298A49
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 04:00:25 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A626B16F8;
-        Thu, 22 Sep 2022 04:00:31 -0700 (PDT)
-Received: from wubuntu (FVFF764EQ05P.cambridge.arm.com [10.1.27.67])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 740E73F73B;
-        Thu, 22 Sep 2022 04:00:22 -0700 (PDT)
-Date:   Thu, 22 Sep 2022 12:00:21 +0100
-From:   Qais Yousef <qais.yousef@arm.com>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, parth@linux.ibm.com,
-        chris.hyser@oracle.com, valentin.schneider@arm.com,
-        patrick.bellasi@matbug.net, David.Laight@aculab.com,
-        pjt@google.com, pavel@ucw.cz, tj@kernel.org, qperret@google.com,
-        tim.c.chen@linux.intel.com, joshdon@google.com
-Subject: Re: [PATCH v4 0/8] Add latency priority for CFS class
-Message-ID: <20220922110021.vg5uz3ampvdif5o3@wubuntu>
-References: <20220916080305.29574-1-vincent.guittot@linaro.org>
- <20220921160834.4a2s3733vlr4rqfh@wubuntu>
- <CAKfTPtBWZ+BH+TmM-hcG8_StdNSP8JYmD7JX_ch7L-XEU6htOA@mail.gmail.com>
+        Thu, 22 Sep 2022 07:00:36 -0400
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [IPv6:2001:4b98:dc4:8::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D614AB1A9
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 04:00:33 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 9C663200012;
+        Thu, 22 Sep 2022 11:00:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1663844431;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2+nyFk2NJkNoRqs5e6/bwgAMbNi2C5Vm0aE+Pl9rCjE=;
+        b=MDAG17QzbvHP42JmcgWqzsOvs/qxifFFrqjd+GElfynyKohV5yjQnVzFvEXgHQUjrYFupm
+        T1me0476TdqxUe6/AO2tOJzmamFhTXBBCm6+rbFJeO/7LuqzPNHLfp+5ii+Ell3cvHHqfw
+        /3skeryiskRlj+LjQAYq+N1bpy2V8jL+lj1HrBnYcAmB7l0GwcyJjZzS54xG4sa9sN/+8q
+        BYKKX542XJ2j7bsnUdy3veWQUlaVdR38hZAheWW38B+o7PTyj/xGxPK1VHCzxPKelv18QD
+        C6O+9J63+i2gR5sH95uKoNEvy3s5NsOZbZXUbnTrDJ3E4LnOyGOLF7Nc5SYXYg==
+Date:   Thu, 22 Sep 2022 13:00:28 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     "Arnd Bergmann" <arnd@arndb.de>
+Cc:     "Valentin Korenblit" <vkorenblit@sequans.com>,
+        "kernel test robot" <lkp@intel.com>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: Re: [mtd:nand/next 11/31]
+ drivers/mtd/nand/raw/cadence-nand-controller.c:1893:4: error: implicit
+ declaration of function 'ioread64_rep' is invalid in C99
+Message-ID: <20220922130028.67657957@xps-13>
+In-Reply-To: <01210adb-ff77-4ec5-8d10-ab56ae986d58@www.fastmail.com>
+References: <202209210641.MziHAbW7-lkp@intel.com>
+        <20220921104002.226ff3f6@xps-13>
+        <ffde44bc-d4ae-4052-c60c-35c8775a5101@sequans.com>
+        <7074197c-aa8d-f763-cb0f-03ea5335b923@sequans.com>
+        <20220921164720.6bbc56d5@xps-13>
+        <ef9a2618-2dd0-4d1b-b9d2-37d59506f004@www.fastmail.com>
+        <20220921183807.241e2518@xps-13>
+        <b7e5ebb4-0de8-4958-9bc4-fe06ec4c3635@www.fastmail.com>
+        <6b5a2b19-39c6-5116-60c2-d292ae2e7bae@sequans.com>
+        <20220922113613.4d7273c8@xps-13>
+        <01210adb-ff77-4ec5-8d10-ab56ae986d58@www.fastmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAKfTPtBWZ+BH+TmM-hcG8_StdNSP8JYmD7JX_ch7L-XEU6htOA@mail.gmail.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/22/22 09:19, Vincent Guittot wrote:
-> On Wed, 21 Sept 2022 at 18:08, Qais Yousef <qais.yousef@arm.com> wrote:
+Hi Arnd,
+
+arnd@arndb.de wrote on Thu, 22 Sep 2022 12:52:36 +0200:
+
+> On Thu, Sep 22, 2022, at 11:36 AM, Miquel Raynal wrote:
+> > vkorenblit@sequans.com wrote on Thu, 22 Sep 2022 10:18:46 +0200: =20
+> >>=20
+> >> Correct, this was my initial idea. However, this driver should work
+> >> with every architecture or do we limit the scope to arm/arm64/x86_64? =
+=20
 > >
-> > Hi Vincent
+> > The driver should work on ARM and aarch64, I'm not aware of other
+> > architectures with this IP.
 > >
-> > On 09/16/22 10:02, Vincent Guittot wrote:
-> > > This patchset restarts the work about adding a latency priority to describe
-> > > the latency tolerance of cfs tasks.
-> > >
-> > > The patches [1-4] have been done by Parth:
-> > > https://lore.kernel.org/lkml/20200228090755.22829-1-parth@linux.ibm.com/
-> > >
-> > > I have just rebased and moved the set of latency priority outside the
-> > > priority update. I have removed the reviewed tag because the patches
-> > > are 2 years old.
-> > >
-> > > The patch [5] uses latency nice priority to define a latency offset
-> > > and then to decide if a cfs task can preempt the current running task. The
-> > > patch gives some tests results with cyclictests and hackbench to highlight
-> > > the benefit of latency priority for short interactive task or
-> > > long intensive tasks.
-> > >
-> > > Patch [6] adds the support of latency_offset to task group by adding a
-> > > cpu.latency field. There were discussions for the last version about
-> > > using a real unit for the field so I decided to expose directly the
-> > > latency offset which reflects the time up to which we can preempt when the
-> > > value is negative, or up to which we can defer the preemption when the
-> > > value is positive.
-> > > The range is [-sysctl_sched_latency:sysctl_sched_latency]
-> > >
-> > > Patch [7] makes sched_core taking into account the latency offset.
-> > >
-> > > Patch [8] adds a rb tree to cover some corner cases where the latency
-> > > sensitive task is preempted by high priority task (RT/DL) or fails to
-> > > preempt them. This patch ensures that tasks will have at least a
-> > > slice of sched_min_granularity in priority at wakeup. The patch gives
-> > > results to show the benefit in addition to patch 5
-> > >
-> > > I have also backported the patchset on a dragonboard RB3 with an android
-> > > mainline kernel based on v5.18 for a quick test. I have used
-> > > the TouchLatency app which is part of AOSP and described to be very good
-> > > test to highlight jitter and jank frame sources of a system [1].
-> > > In addition to the app, I have added some short running tasks waking-up
-> > > regularly (to use the 8 cpus for 4 ms every 37777us) to stress the system
-> > > without overloading it (and disabling EAS). The 1st results shows that the
-> > > patchset helps to reduce the missed deadline frames from 5% to less than
-> > > 0.1% when the cpu.latency of task group are set.
-> > >
-> > > [1] https://source.android.com/docs/core/debug/eval_perf#touchlatency
+> > The driver should compile when COMPILE_TEST=3Dy. =20
+>=20
+> It should also be written in a way that makes it plausible to
+> use elsewhere. Since this is just a licensed IP core, there is
+> a good chance that someone reused it on mips or riscv, or
+> anything else.
+
+Fair enough.
+
+> >> >> I believe what Valentin wanted to achieve in the first place, was to
+> >> >> use 64-bit accesses when relevant (otherwise it does not work).   =
+=20
+> >> > The width is read from a device specific register at
+> >> > runtime, it is not related to the architecture you are
+> >> > running on, presumably this is hardwired during the
+> >> > design of an SoC, based on the capabilities of the DMA
+> >> > engine: =20
 > >
-> > One thing that still confuses me is whether this proposal is supposed to be the
-> > only consumer of this interface or we still expect other users to be able to
-> > use this hint to optimize other sources of latency in the scheduler? Last
-> > discussion [1] raised issues on the interface and I haven't seen any
-> > discussions on the suitability of the interface to enable future consumers.
+> > Well, yes, but in the mean time 64-bit DMA width will never be
+> > used on 32-bit platforms. =20
+>=20
+> Why? Most architectures (including x86 and arm) allow you to
+> run a 32-bit kernel on a 64-bit SoC. While this is almost always
+> a bad idea to actually do, a driver should be written to
+> work correctly in this setup.
+
+Oh right, I forgot about that.
+
+> >> > This usually means the largest access that is valid for
+> >> > reading from the FIFO, but usually smaller accesses work
+> >> > as well, just slower.   =20
 > >
-> > I might have missed something. What's the current state on this?
-> 
-> Nothing has changed since the discussion in March:
-> https://lore.kernel.org/lkml/CAKfTPtBCKyqa-472Z7LtiWTq+Yirq6=jSrkzJtNbkdKXnwP-mA@mail.gmail.com/T/
+> > Mmh, ok, that's interesting, thanks for the pointer.
+> >
+> > But in the mean time I am only half satisfied, because we plan to do
+> > twice more accesses than needed _just_ because of a the COMPILE_TEST
+> > constraint. =20
+>=20
+> In my example, I had an #ifdef so it would only fall back
+> to 32-bit accesses on the 64-bit register when running an
+> actual 32-bit kernel, but leaving the 64-bit case efficient.
 
-Okay. For my peace of mind, could you update the cover letter please to be more
-explicit that this is only one use case of potential others to come later in
-the future? The other 2 that I remember are improve load balancer search and
-modify EAS behavior. Parth had a use case to help take advantage of turbo
-frequencies, but not sure if this is still being pursued/desired.
+All right, thanks for all your valuable feedback Arnd!
 
-Your proposed use case could actually help make the EAS one unnecessary. But it
-is hard to tell at this stage and prefer to continue to consider it as
-a potential new consumer of this interface.
-
-
-Thanks!
-
---
-Qais Yousef
+Cheers,
+Miqu=C3=A8l
