@@ -2,111 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 430F75E6441
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 15:52:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A19EB5E6445
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 15:53:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231865AbiIVNwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 09:52:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40512 "EHLO
+        id S231641AbiIVNxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 09:53:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231890AbiIVNv7 (ORCPT
+        with ESMTP id S231875AbiIVNw6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 09:51:59 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A2A8EFA68;
-        Thu, 22 Sep 2022 06:51:45 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D0DE36BE;
-        Thu, 22 Sep 2022 15:51:43 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1663854704;
-        bh=uDPuHKFlxyNd6c23deR/oha4FWKGGQOVT5JIulE83wk=;
+        Thu, 22 Sep 2022 09:52:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59766DE0D7;
+        Thu, 22 Sep 2022 06:52:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D3D7B6349E;
+        Thu, 22 Sep 2022 13:52:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8740C433C1;
+        Thu, 22 Sep 2022 13:52:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1663854771;
+        bh=EXFw8APFB2TGEMNzh7PpyOxkeuxYM6y1awGndA0jKP8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GO0rSUPLZvMRR7gbcy6/hstYDPuIWntiCMcw1GZSzRrkv9DB5gXfGfLDnjLFFqlWX
-         VsRmUMNVY11ef9TxE4DkjVa4ZGRPT7hpwIkmQW6+hh5eK0lsuF/LtUNErzRUMVXad3
-         OOOJu/TafgOIH215k2TXIyqE/q8h9uVIBK1zAln4=
-Date:   Thu, 22 Sep 2022 16:51:29 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Subject: Re: [PATCH v2 3/4] media: platform: Add Renesas RZ/G2L MIPI CSI-2
- receiver driver
-Message-ID: <YyxoYSnj9llox5l1@pendragon.ideasonboard.com>
-References: <20220905230406.30801-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220905230406.30801-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <Yys4CRNnKP3LXyAO@pendragon.ideasonboard.com>
- <CA+V-a8uiT9rV=T6LmFovRwULf3SO=JKdqr1yacAqN8gJmv9VPw@mail.gmail.com>
- <YyxWOuWOrYmMexNj@paasikivi.fi.intel.com>
- <CAMuHMdXKz56jxw56fXa7CMh_y4MVYiUT25dqRntJw6481s1FWw@mail.gmail.com>
- <CA+V-a8sW=a6auFH-1WqwK+o2MZGCQk+MAO4+cWKm1M+YrQE+CA@mail.gmail.com>
+        b=GrqYDwn26ZI/9m/tp82oC0VTPVCfxqf0wcZO8KwRdafBm7gFk1Suu+g++nKzufyOn
+         h5uYw32rVWerp8oUYXRV61MmQGwyvg0TnHI7SKzGDJb4tgPWZxXcUb4rVDhhaLcVvC
+         l+S88/t0QQInmE/rQoSM0C7dF7g4kz6UCTvPS2rA=
+Date:   Thu, 22 Sep 2022 15:52:13 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] USB-serial updates for 6.1-rc1
+Message-ID: <YyxojRDiGg+ZAkwQ@kroah.com>
+References: <YyxnVZCqZekklv8V@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+V-a8sW=a6auFH-1WqwK+o2MZGCQk+MAO4+cWKm1M+YrQE+CA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YyxnVZCqZekklv8V@hovoldconsulting.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 02:27:15PM +0100, Lad, Prabhakar wrote:
-> On Thu, Sep 22, 2022 at 1:51 PM Geert Uytterhoeven wrote:
-> > On Thu, Sep 22, 2022 at 2:34 PM Sakari Ailus wrote:
-> > > On Thu, Sep 22, 2022 at 01:08:33PM +0100, Lad, Prabhakar wrote:
-> > > > > > * Switched to manually turn ON/OFF the clocks instead of pm_runtime so that
-> > > > > >   the mipi/dhpy initialization happens as per the HW manual
-> > > > >
-> > > > > That doesn't look right. The driver doesn't use runtime PM anymore, so
-> > > > > power domains may not be handled properly. What was the problem with
-> > > > > clock handling using runtime PM ?
-> > > > >
-> > > > If we use the runtime PM all the clocks will be turned ON when we call
-> > > > pm_runtime_resume_and_get() which I dont want to. As per the "Starting
-> > > > reception for MIPI CSI-2 Input" section 35.3.1 for example we first
-> > > > need to turn ON all the clocks and later further down the line we need
-> > > > to just turn OFF VCLK -> Enable Link -> turn ON VCLK. Due to such
-> > > > cases I have switched to individual clock handling.
-> > >
-> > > If that is the case, then you should control just that clock directly,
-> > > outside runtime PM callbacks.
-> > >
-> > > Runtime PM may be needed e.g. for resuming a parent device.
-> >
-> > Exactly.
-> > So probably you should not consider R9A07G044_CRU_VCLK a PM clock,
-> > i.e. you need changes to rzg2l_cpg_is_pm_clk() to exclude it.
+On Thu, Sep 22, 2022 at 03:47:01PM +0200, Johan Hovold wrote:
+> Hi Greg,
 > 
-> Thanks for the pointer. In that case we will have to consider
-> R9A07G044_CRU_VCLK and R9A07G044_CRU_SYSCLK as not PM clocks.
-
-I like when patch review discussions continue on the list without my
-involvement, and the end result is exactly what I would have advised :-)
-
-> Does the below sound good?
-> - DEF_NO_PM() macro
-> - bool is_pm_clk in struct rzg2l_mod_clk.
+> As Stephen reported the other day, there's a trivial conflict with a change in
+> the TTY tree that made one of the set_termios parameters const:
 > 
-> I still have to implement it, just wanted your opinion beforehand.
+> 	https://lore.kernel.org/lkml/20220921151109.174cad24@canb.auug.org.au/
 
-Looks good to me, but I'm no expert in this area. I trust Geert's
-advice.
+Yeah, I'll watch out for that, thanks.
 
--- 
-Regards,
+now pulled and pushed out.
 
-Laurent Pinchart
+greg k-h
