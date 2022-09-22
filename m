@@ -2,106 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DF955E5842
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 03:51:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 614BE5E5844
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 03:51:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230127AbiIVBvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 21:51:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49906 "EHLO
+        id S230527AbiIVBvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 21:51:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbiIVBvB (ORCPT
+        with ESMTP id S230263AbiIVBvP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 21:51:01 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE95AA99E2;
-        Wed, 21 Sep 2022 18:50:57 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MXynM6xDyz14QPC;
-        Thu, 22 Sep 2022 09:46:47 +0800 (CST)
-Received: from [10.174.179.191] (10.174.179.191) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 22 Sep 2022 09:50:54 +0800
-Message-ID: <e5a553e3-4138-f8a0-c4d7-ec3d9d46732e@huawei.com>
-Date:   Thu, 22 Sep 2022 09:50:54 +0800
+        Wed, 21 Sep 2022 21:51:15 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DDD0AB1B3
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 18:51:14 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id bu5-20020a17090aee4500b00202e9ca2182so4822637pjb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 18:51:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date;
+        bh=h4Kwmn7hqUwh3kMaZJNQWoMofGS1FvQqiYWd/u7nFxU=;
+        b=BGvpEJ72iO04HRJwX3rugnN64sqyRJc0JPkQRatA9hDscWi81JvPCyu7u6e8oZI9PQ
+         xLh8Hvldb7Uv7vIyzvUpp1nMVDpFnj1/423ErT+/RqgxvUmYrN8ziptaE4XAseSt2Ppn
+         coKR3X67KheCk/ab+iLKqFms8LrkY/c3wGK5AQ2pMh8O4BX2ZScuqaU3hg23+7MF+N6O
+         W18oHXUUnjioGCrnY6UWKQlobvm8g/5guw0rUNwmUCyC4pFzBAovpKB4nZLV4H1/oMvE
+         z3qkONH81esETJfzVD844k+v5Pho0JaROljiCmXDDXN/p+j0QiECXSlBGLIEPQojuFZD
+         88Ow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=h4Kwmn7hqUwh3kMaZJNQWoMofGS1FvQqiYWd/u7nFxU=;
+        b=gcvS9HoSkX49OCeSkptp9q2FRltKGKxon76yR9vAs1+lm6QxYVYcpn/BJuqKZoh3jL
+         9B62z7wPwW0jRgerESYGW1mO1bYZhsSUR0YVod8XFeBs9PpE85wuVWJAGR6xbGexwD4H
+         nnjcpbkJswlnS9Jx3akcCYr9cr4043QEdO9JVIN8mX/ti1NT8xlkUkKT9vRP3mKww/ig
+         Wm2thxaeij65wVd1yVKhdz0tvBED5U8pOA/gyFdd8XbL6xsuGqANHDuSLCVhKD9/M+kO
+         oBhprYV/tv8v9BUjsZvJCBfNsFW8UyyJub+0xwiRCz0P3t/QwMWDF7g+EpxVKF+A1a+H
+         3q9g==
+X-Gm-Message-State: ACrzQf3bz3Mtgs4NKRZ8Z1XDY8I9PB9qVcH59It6xoF5UHEiMvXUlWrY
+        KqJ5qPw2uNJEWIwYsYF2d+/rzw==
+X-Google-Smtp-Source: AMsMyM7BsrbAoYllEABjTpvMveOdZJXGgY0k0oovDDSXLpIHCBTt2Fo+4yCR/nBNSC4z8cJ05Nl7bw==
+X-Received: by 2002:a17:902:ec90:b0:178:a0eb:bc7c with SMTP id x16-20020a170902ec9000b00178a0ebbc7cmr952842plg.78.1663811473508;
+        Wed, 21 Sep 2022 18:51:13 -0700 (PDT)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id y3-20020aa793c3000000b005383988ec0fsm2846996pff.162.2022.09.21.18.51.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Sep 2022 18:51:13 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Li Jinlin <lijinlin3@huawei.com>
+Cc:     linfeilong@huawei.com, linux-kernel@vger.kernel.org,
+        linux-block@vger.kernel.org
+In-Reply-To: <20220916023241.32926-1-lijinlin3@huawei.com>
+References: <20220916023241.32926-1-lijinlin3@huawei.com>
+Subject: Re: [PATCH] block/blk-rq-qos: delete useless enmu RQ_QOS_IOPRIO
+Message-Id: <166381147269.41047.4484959473511395391.b4-ty@kernel.dk>
+Date:   Wed, 21 Sep 2022 19:51:12 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [bpf-next v3 1/2] libbpf: Add pathname_concat() helper
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-CC:     <andrii@kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
-        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
-        <haoluo@google.com>, <jolsa@kernel.org>,
-        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
-        <aou@eecs.berkeley.edu>, <davem@davemloft.net>, <kuba@kernel.org>,
-        <hawk@kernel.org>, <nathan@kernel.org>, <ndesaulniers@google.com>,
-        <trix@redhat.com>, <bpf@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <llvm@lists.linux.dev>
-References: <1663555725-17016-1-git-send-email-wangyufen@huawei.com>
- <CAEf4BzbacgBeBrJcutGrpMceD2ipYyvRgrwyKdATN0K39adg5Q@mail.gmail.com>
-From:   wangyufen <wangyufen@huawei.com>
-In-Reply-To: <CAEf4BzbacgBeBrJcutGrpMceD2ipYyvRgrwyKdATN0K39adg5Q@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.191]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Mailer: b4 0.10.0-dev-355bd
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 16 Sep 2022 10:32:41 +0800, Li Jinlin wrote:
+> Since blk-ioprio handing was converted from a rqos policy to a direct call,
+> RQ_QOS_IOPRIO is not used anymore, just delete it.
+> 
+> 
 
-在 2022/9/22 8:41, Andrii Nakryiko 写道:
-> On Sun, Sep 18, 2022 at 7:28 PM Wang Yufen <wangyufen@huawei.com> wrote:
->> Move snprintf and len check to common helper pathname_concat() to make the
->> code simpler.
->>
->> Signed-off-by: Wang Yufen <wangyufen@huawei.com>
->> ---
->>   tools/lib/bpf/libbpf.c | 76 +++++++++++++++++++-------------------------------
->>   1 file changed, 29 insertions(+), 47 deletions(-)
->>
-> [...]
->
->> @@ -8009,14 +8012,9 @@ int bpf_object__unpin_maps(struct bpf_object *obj, const char *path)
->>                  char buf[PATH_MAX];
->>
->>                  if (path) {
->> -                       int len;
->> -
->> -                       len = snprintf(buf, PATH_MAX, "%s/%s", path,
->> -                                      bpf_map__name(map));
->> -                       if (len < 0)
->> -                               return libbpf_err(-EINVAL);
->> -                       else if (len >= PATH_MAX)
->> -                               return libbpf_err(-ENAMETOOLONG);
->> +                       err = pathname_concat(path, bpf_map__name(map), buf, PATH_MAX);
->> +                       if (err)
->> +                               return err;
-> also keep libbpf_err() as well, it sets errno properly
->
->>                          sanitize_pin_path(buf);
->>                          pin_path = buf;
->>                  } else if (!map->pin_path) {
->> @@ -8034,6 +8032,7 @@ int bpf_object__unpin_maps(struct bpf_object *obj, const char *path)
->>   int bpf_object__pin_programs(struct bpf_object *obj, const char *path)
->>   {
->>          struct bpf_program *prog;
->> +       char buf[PATH_MAX];
->>          int err;
->>
->>          if (!obj)
-> [...]
+Applied, thanks!
 
+[1/1] block/blk-rq-qos: delete useless enmu RQ_QOS_IOPRIO
+      commit: 9713a67067897a9e372c52124f72f8e00b2e6031
 
-Thanks for your comments， will send v4.
+Best regards,
+-- 
+Jens Axboe
 
 
