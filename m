@@ -2,175 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6191E5E6B23
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 20:42:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E4D45E6B27
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 20:42:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232107AbiIVSmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 14:42:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45938 "EHLO
+        id S229641AbiIVSmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 14:42:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230322AbiIVSl4 (ORCPT
+        with ESMTP id S229777AbiIVSmj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 14:41:56 -0400
-Received: from smtp.smtpout.orange.fr (smtp08.smtpout.orange.fr [80.12.242.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77BB5DCCFD
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 11:41:54 -0700 (PDT)
-Received: from pop-os.home ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id bR8woJNpLeT4cbR8woCJ3a; Thu, 22 Sep 2022 20:41:52 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Thu, 22 Sep 2022 20:41:52 +0200
-X-ME-IP: 90.11.190.129
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     yhs@fb.com, Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH v2] headers: Remove some left-over license text
-Date:   Thu, 22 Sep 2022 20:41:40 +0200
-Message-Id: <88410cddd31197ea26840d7dd71612bece8c6acf.1663871981.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Thu, 22 Sep 2022 14:42:39 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F4D4DCE89;
+        Thu, 22 Sep 2022 11:42:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663872158; x=1695408158;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=JMwydWYZn7z86BpUMx/qytT3+s91mayLwEtnzlfgdiw=;
+  b=AxZOK+kdnJ8iAfRNhJ5voJgeW3qJnioWz0FIzqAMGZums03c3rxnjYoQ
+   XVGzhkMH7NF9FxEPbFqZE1i38F/gNQpVGQKBhsMj2TrTyuIPPnUCA4IhD
+   PmwkaDVc2ce8xmq8lOGVtmFeDrbEkFatiV5JiUPj5VcLzoWMeqcFGzhDo
+   Ptp2pN3Mt+Ld4qy1cuhV9Rq9CivefdplZqh7VbsMdC1E3FEKKXqd3NuxR
+   MrgtZhrVnVt1ou9vlozrF9Oh4HEiHLgS+TZdDbvq54cHRioC4gHDnRQt8
+   /29PgCR0qYzzLnT1QAnN7QrIwnWATH6uDTbvxSJdlZR6qA/NAxGVdmneX
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="326720063"
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="326720063"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 11:42:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="615325567"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga007.jf.intel.com with ESMTP; 22 Sep 2022 11:42:23 -0700
+Received: from [10.252.210.171] (kliang2-mobl1.ccr.corp.intel.com [10.252.210.171])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id C26AA580AD7;
+        Thu, 22 Sep 2022 11:42:21 -0700 (PDT)
+Message-ID: <06962580-e052-e058-eb08-6732e633241e@linux.intel.com>
+Date:   Thu, 22 Sep 2022 14:42:20 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH RFC 1/1] perf stat: do not fatal if the leader is errored
+Content-Language: en-US
+To:     Dongli Zhang <dongli.zhang@oracle.com>,
+        Like Xu <like.xu.linux@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
+        mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, joe.jin@oracle.com,
+        linux-perf-users@vger.kernel.org, kvm list <kvm@vger.kernel.org>
+References: <20220922071017.17398-1-dongli.zhang@oracle.com>
+ <ad2572d0-06b5-7250-31f2-a5efa1048cc0@gmail.com>
+ <27cb9747-8911-b3cc-25d9-9438521db832@linux.intel.com>
+ <d03d8a07-a05a-f03e-189d-a07c6aecbb8a@oracle.com>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <d03d8a07-a05a-f03e-189d-a07c6aecbb8a@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove some left-over from commit e2be04c7f995 ("License cleanup: add SPDX
-license identifier to uapi header files with a license")
 
-When the SPDX-License-Identifier tag has been added, the corresponding
-license text has not been removed.
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-Changes since v1:
-  - add tools/include/uapi/linux/tc_act/tc_bpf.h   [Yonghong Song <yhs@fb.com>]
+On 2022-09-22 2:00 p.m., Dongli Zhang wrote:
+> Hi Kan,
+> 
+> I have tested that the patch works by hiding 'slots' sysfs entries.
+> 
+> # ll /sys/bus/event_source/devices/cpu/events/
+> total 0
+> -r--r--r--. 1 root root 4096 Sep 22 17:57 branch-instructions
+> -r--r--r--. 1 root root 4096 Sep 22 17:57 branch-misses
+> -r--r--r--. 1 root root 4096 Sep 22 17:57 bus-cycles
+> -r--r--r--. 1 root root 4096 Sep 22 17:57 cache-misses
+> -r--r--r--. 1 root root 4096 Sep 22 17:57 cache-references
+> -r--r--r--. 1 root root 4096 Sep 22 17:57 cpu-cycles
+> -r--r--r--. 1 root root 4096 Sep 22 17:57 instructions
+> -r--r--r--. 1 root root 4096 Sep 22 17:57 ref-cycles
+> 
+> # perf stat
+> ^C
+>  Performance counter stats for 'system wide':
+> 
+>          19,256.20 msec cpu-clock                        #   16.025 CPUs
+> utilized
+>                179      context-switches                 #    9.296 /sec
+> 
+>                 17      cpu-migrations                   #    0.883 /sec
+> 
+>                  3      page-faults                      #    0.156 /sec
+> 
+>          7,502,294      cycles                           #    0.000 GHz
+> 
+>          2,512,587      instructions                     #    0.33  insn per
+> cycle
+>            552,989      branches                         #   28.717 K/sec
+> 
+>             15,999      branch-misses                    #    2.89% of all
+> branches
+> 
+>        1.201628129 seconds time elapsed
+> 
+> 
+> Would you send this patch to fix at the kernel side?
 
-v1: https://lore.kernel.org/all/2a15aba72497e78ff08c8b8a8bfe3cf5a3e6ee18.1662897019.git.christophe.jaillet@wanadoo.fr/
----
- include/uapi/linux/tc_act/tc_bpf.h        |  5 -----
- include/uapi/linux/tc_act/tc_skbedit.h    | 13 -------------
- include/uapi/linux/tc_act/tc_skbmod.h     |  7 +------
- include/uapi/linux/tc_act/tc_tunnel_key.h |  5 -----
- include/uapi/linux/tc_act/tc_vlan.h       |  5 -----
- tools/include/uapi/linux/tc_act/tc_bpf.h  |  5 -----
- 6 files changed, 1 insertion(+), 39 deletions(-)
+Yes, I will send it out shortly.
 
-diff --git a/include/uapi/linux/tc_act/tc_bpf.h b/include/uapi/linux/tc_act/tc_bpf.h
-index 653c4f94f76e..fe6c8f8f3e8c 100644
---- a/include/uapi/linux/tc_act/tc_bpf.h
-+++ b/include/uapi/linux/tc_act/tc_bpf.h
-@@ -1,11 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
- /*
-  * Copyright (c) 2015 Jiri Pirko <jiri@resnulli.us>
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation; either version 2 of the License, or
-- * (at your option) any later version.
-  */
- 
- #ifndef __LINUX_TC_BPF_H
-diff --git a/include/uapi/linux/tc_act/tc_skbedit.h b/include/uapi/linux/tc_act/tc_skbedit.h
-index 6cb6101208d0..64032513cc4c 100644
---- a/include/uapi/linux/tc_act/tc_skbedit.h
-+++ b/include/uapi/linux/tc_act/tc_skbedit.h
-@@ -2,19 +2,6 @@
- /*
-  * Copyright (c) 2008, Intel Corporation.
-  *
-- * This program is free software; you can redistribute it and/or modify it
-- * under the terms and conditions of the GNU General Public License,
-- * version 2, as published by the Free Software Foundation.
-- *
-- * This program is distributed in the hope it will be useful, but WITHOUT
-- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
-- * more details.
-- *
-- * You should have received a copy of the GNU General Public License along with
-- * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
-- * Place - Suite 330, Boston, MA 02111-1307 USA.
-- *
-  * Author: Alexander Duyck <alexander.h.duyck@intel.com>
-  */
- 
-diff --git a/include/uapi/linux/tc_act/tc_skbmod.h b/include/uapi/linux/tc_act/tc_skbmod.h
-index af6ef2cfbf3d..ac62c9a993ea 100644
---- a/include/uapi/linux/tc_act/tc_skbmod.h
-+++ b/include/uapi/linux/tc_act/tc_skbmod.h
-@@ -1,12 +1,7 @@
- /* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
- /*
-  * Copyright (c) 2016, Jamal Hadi Salim
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation; either version 2 of the License, or
-- * (at your option) any later version.
--*/
-+ */
- 
- #ifndef __LINUX_TC_SKBMOD_H
- #define __LINUX_TC_SKBMOD_H
-diff --git a/include/uapi/linux/tc_act/tc_tunnel_key.h b/include/uapi/linux/tc_act/tc_tunnel_key.h
-index 3f10dc4e7a4b..49ad4033951b 100644
---- a/include/uapi/linux/tc_act/tc_tunnel_key.h
-+++ b/include/uapi/linux/tc_act/tc_tunnel_key.h
-@@ -2,11 +2,6 @@
- /*
-  * Copyright (c) 2016, Amir Vadai <amir@vadai.me>
-  * Copyright (c) 2016, Mellanox Technologies. All rights reserved.
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation; either version 2 of the License, or
-- * (at your option) any later version.
-  */
- 
- #ifndef __LINUX_TC_TUNNEL_KEY_H
-diff --git a/include/uapi/linux/tc_act/tc_vlan.h b/include/uapi/linux/tc_act/tc_vlan.h
-index 5b306fe815cc..3e1f8e57cdd2 100644
---- a/include/uapi/linux/tc_act/tc_vlan.h
-+++ b/include/uapi/linux/tc_act/tc_vlan.h
-@@ -1,11 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
- /*
-  * Copyright (c) 2014 Jiri Pirko <jiri@resnulli.us>
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation; either version 2 of the License, or
-- * (at your option) any later version.
-  */
- 
- #ifndef __LINUX_TC_VLAN_H
-diff --git a/tools/include/uapi/linux/tc_act/tc_bpf.h b/tools/include/uapi/linux/tc_act/tc_bpf.h
-index 653c4f94f76e..fe6c8f8f3e8c 100644
---- a/tools/include/uapi/linux/tc_act/tc_bpf.h
-+++ b/tools/include/uapi/linux/tc_act/tc_bpf.h
-@@ -1,11 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
- /*
-  * Copyright (c) 2015 Jiri Pirko <jiri@resnulli.us>
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation; either version 2 of the License, or
-- * (at your option) any later version.
-  */
- 
- #ifndef __LINUX_TC_BPF_H
--- 
-2.34.1
 
+Thanks,
+Kan
+> 
+> Thank you very much!
+> 
+> Dongli Zhang
+> 
+> On 9/22/22 6:34 AM, Liang, Kan wrote:
+>>
+>>
+>> On 2022-09-22 4:07 a.m., Like Xu wrote:
+>>> On 22/9/2022 3:10 pm, Dongli Zhang wrote:
+>>>> There are three options to fix the issue.
+>>>>
+>>>> 1. Do not expose /sys/bus/event_source/devices/cpu/events/slots to
+>>>> userspace so that pmu_have_event(pmu->name, "slots") returns false.
+>>>
+>>> IMO, the guest PMU driver should be fixed
+>>> since it misrepresents emulated hardware capabilities in terms of slots.
+>>
+>> Yes, we need to fix the kernel to hide the slots event if it's not
+>> available.
+>>
+>> The patch as below should fix it. (Not tested yet)
+>>
+>> diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
+>> index b20e646c8205..27ee43faba32 100644
+>> --- a/arch/x86/events/intel/core.c
+>> +++ b/arch/x86/events/intel/core.c
+>> @@ -5565,6 +5565,19 @@ static struct attribute *intel_pmu_attrs[] = {
+>>  	NULL,
+>>  };
+>>
+>> +static umode_t
+>> +td_is_visible(struct kobject *kobj, struct attribute *attr, int i)
+>> +{
+>> +	/*
+>> +	 * Hide the perf metrics topdown events
+>> +	 * if the slots is not in CPUID.
+>> +	 */
+>> +	if (x86_pmu.num_topdown_events)
+>> +		return (x86_pmu.intel_ctrl & INTEL_PMC_MSK_FIXED_SLOTS) ? attr->mode : 0;
+>> +
+>> +	return attr->mode;
+>> +}
+>> +
+>>  static umode_t
+>>  tsx_is_visible(struct kobject *kobj, struct attribute *attr, int i)
+>>  {
+>> @@ -5600,6 +5613,7 @@ default_is_visible(struct kobject *kobj, struct
+>> attribute *attr, int i)
+>>
+>>  static struct attribute_group group_events_td  = {
+>>  	.name = "events",
+>> +	.is_visible = td_is_visible,
+>>  };
+>>
+>>  static struct attribute_group group_events_mem = {
+>> @@ -5758,6 +5772,23 @@ static inline int
+>> hybrid_find_supported_cpu(struct x86_hybrid_pmu *pmu)
+>>  	return (cpu >= nr_cpu_ids) ? -1 : cpu;
+>>  }
+>>
+>> +static umode_t hybrid_td_is_visible(struct kobject *kobj,
+>> +					struct attribute *attr, int i)
+>> +{
+>> +	struct device *dev = kobj_to_dev(kobj);
+>> +	struct x86_hybrid_pmu *pmu =
+>> +		 container_of(dev_get_drvdata(dev), struct x86_hybrid_pmu, pmu);
+>> +
+>> +	if (!is_attr_for_this_pmu(kobj, attr))
+>> +		return 0;
+>> +
+>> +	/* Only check the big core which supports perf metrics */
+>> +	if (pmu->cpu_type == hybrid_big)
+>> +		return (pmu->intel_ctrl & INTEL_PMC_MSK_FIXED_SLOTS) ? attr->mode : 0;
+>> +
+>> +	return attr->mode;
+>> +}
+>> +
+>>  static umode_t hybrid_tsx_is_visible(struct kobject *kobj,
+>>  				     struct attribute *attr, int i)
+>>  {
+>> @@ -5784,7 +5815,7 @@ static umode_t hybrid_format_is_visible(struct
+>> kobject *kobj,
+>>
+>>  static struct attribute_group hybrid_group_events_td  = {
+>>  	.name		= "events",
+>> -	.is_visible	= hybrid_events_is_visible,
+>> +	.is_visible	= hybrid_td_is_visible,
+>>  };
+>>
+>>  static struct attribute_group hybrid_group_events_mem = {
+>>
+>>
+>> Thanks,
+>> Kan
+>>
