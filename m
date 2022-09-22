@@ -2,170 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 895335E65C7
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 16:35:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E740A5E65CD
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 16:36:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231383AbiIVOfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 10:35:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58008 "EHLO
+        id S231587AbiIVOgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 10:36:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229893AbiIVOfW (ORCPT
+        with ESMTP id S229893AbiIVOg1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 10:35:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5D286FE4;
-        Thu, 22 Sep 2022 07:35:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 38D7663591;
-        Thu, 22 Sep 2022 14:35:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDE21C433C1;
-        Thu, 22 Sep 2022 14:35:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663857320;
-        bh=eF+JNl4spW2fK1yzMCIR+YdM7auHuj5CbkJSu8uOlzg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VSvmDaTGn/afibcwsPi4ETCKdpQP7IZCdGb+fUNAzr5lDpF0oo3clFJk8y6Iu2POX
-         /ElbgE6TFcyAWA6nX/eC410UssKFawqxHNPACd/yVUQX1YTf6PXS3vJq0Np4CK2KiQ
-         G3QcySiWVdiHQ5f+AHfXV1T/jEVcuzVptH5Teq+0=
-Date:   Thu, 22 Sep 2022 16:35:17 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     eadavis@sina.com
-Cc:     balbi@kernel.org, john@metanate.com, linhaoguo86@gmail.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb/gadget: Annotate midi lock nesting
-Message-ID: <YyxypSDXxoz7OHuw@kroah.com>
-References: <YyxdbRhl7HGDDZZM@kroah.com>
- <20220922142654.906073-1-eadavis@sina.com>
+        Thu, 22 Sep 2022 10:36:27 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8846F50A0;
+        Thu, 22 Sep 2022 07:36:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=02+QEmbVk9AVv9jEQgWKTTpXwGOiCyNcTFilArR3/C0=; b=POG8m7fdprEJLvFevbUlMRiZP0
+        1WqOY/+mhbT6uL6MLBd2M+9I++CBs1HDQYdONcZ3V0xwcZgXu+85xDEBnJHS37XJJRnqcKLU0SsWp
+        wkSvLy6u88CwMk1WkgPa4W0wmkxh4n+NUa7jKeQ0EKrIhFhPImmCug7TT8YbE/fz5n+sAqaTI7tjV
+        IztsB6PCr1wt4VGkjoE3msb8tbK0qVBl9TTz1Jl8llcH2HiRHQyAR8QuHbde3VMsu+B+rpHNxG1E9
+        Tm4Vb0V7JkeAKKqqBB4tTzV1V5LOXBmYkriDO6x65Hk/KS4XGO8woeVzT+PoapOYprl1c4tyjSBeA
+        RVCrwhGg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1obNJI-00G5Be-RS; Thu, 22 Sep 2022 14:36:16 +0000
+Date:   Thu, 22 Sep 2022 07:36:16 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@infradead.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        "Darrick J . Wong" <djwong@kernel.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 4/7] iov_iter: new iov_iter_pin_pages*() routines
+Message-ID: <Yyxy4HFMhpbU/wLu@infradead.org>
+References: <103fe662-3dc8-35cb-1a68-dda8af95c518@nvidia.com>
+ <Yxb7YQWgjHkZet4u@infradead.org>
+ <20220906102106.q23ovgyjyrsnbhkp@quack3>
+ <YxhaJktqtHw3QTSG@infradead.org>
+ <YyFPtTtxYozCuXvu@ZenIV>
+ <20220914145233.cyeljaku4egeu4x2@quack3>
+ <YyIEgD8ksSZTsUdJ@ZenIV>
+ <20220915081625.6a72nza6yq4l5etp@quack3>
+ <YyPXqfyf37CUbOf0@ZenIV>
+ <YylJU+BKw5R8u7dw@ZenIV>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220922142654.906073-1-eadavis@sina.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YylJU+BKw5R8u7dw@ZenIV>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 10:26:54PM +0800, eadavis@sina.com wrote:
-> From: Edward Adam Davis <eadavis@sina.com>
-> 
-> On Thu, 22 Sep 2022 15:04:45 +0200, Greg KH <gregkh@linuxfoundation.org> wrote:
-> > On Sun, Sep 18, 2022 at 11:50:37AM +0800, eadavis@sina.com wrote:
-> > > From: Edward Adam Davis <eadavis@sina.com>
-> > > 
-> > > ============================================
-> > > WARNING: possible recursive locking detected
-> > > 6.0.0-rc4+ #20 Not tainted
-> > > --------------------------------------------
-> > > kworker/0:1H/9 is trying to acquire lock:
-> > > ffff888057ed9228 (&midi->transmit_lock){....}-{2:2}, at:
-> > > f_midi_transmit+0x18c/0x1460 drivers/usb/gadget/function/f_midi.c:683
-> > > 
-> > > but task is already holding lock:
-> > > ffff888057ed9228 (&midi->transmit_lock){....}-{2:2}, at:
-> > > f_midi_transmit+0x18c/0x1460 drivers/usb/gadget/function/f_midi.c:683
-> > > 
-> > > other info that might help us debug this:
-> > >  Possible unsafe locking scenario:
-> > > 
-> > >        CPU0
-> > >        ----
-> > >   lock(&midi->transmit_lock);
-> > >   lock(&midi->transmit_lock);
-> > > 
-> > >  *** DEADLOCK ***
-> > > 
-> > >  May be due to missing lock nesting notation
-> > > 
-> > > 3 locks held by kworker/0:1H/9:
-> > >  #0: ffff888011c65138 ((wq_completion)events_highpri){+.+.}-{0:0}, at:
-> > > arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
-> > >  #0: ffff888011c65138 ((wq_completion)events_highpri){+.+.}-{0:0}, at:
-> > > arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
-> > >  #0: ffff888011c65138 ((wq_completion)events_highpri){+.+.}-{0:0}, at:
-> > > atomic_long_set include/linux/atomic/atomic-instrumented.h:1280
-> > > [inline]
-> > >  #0: ffff888011c65138 ((wq_completion)events_highpri){+.+.}-{0:0}, at:
-> > > set_work_data kernel/workqueue.c:636 [inline]
-> > >  #0: ffff888011c65138 ((wq_completion)events_highpri){+.+.}-{0:0}, at:
-> > > set_work_pool_and_clear_pending kernel/workqueue.c:663 [inline]
-> > >  #0: ffff888011c65138 ((wq_completion)events_highpri){+.+.}-{0:0}, at:
-> > > process_one_work+0x8b0/0x1650 kernel/workqueue.c:2260
-> > >  #1: ffffc900003afdb0 ((work_completion)(&midi->work)){+.+.}-{0:0},
-> > > at: process_one_work+0x8e4/0x1650 kernel/workqueue.c:2264
-> > >  #2: ffff888057ed9228 (&midi->transmit_lock){....}-{2:2}, at:
-> > > f_midi_transmit+0x18c/0x1460 drivers/usb/gadget/function/f_midi.c:683
-> > > 
-> > > stack backtrace:
-> > > CPU: 0 PID: 9 Comm: kworker/0:1H Not tainted 6.0.0-rc4+ #20
-> > > Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-> > > 1.13.0-1ubuntu1.1 04/01/2014
-> > > Workqueue: events_highpri f_midi_in_work
-> > > Call Trace:
-> > >  <TASK>
-> > >  __dump_stack lib/dump_stack.c:88 [inline]
-> > >  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
-> > >  print_deadlock_bug kernel/locking/lockdep.c:2988 [inline]
-> > >  check_deadlock kernel/locking/lockdep.c:3031 [inline]
-> > >  validate_chain kernel/locking/lockdep.c:3816 [inline]
-> > >  __lock_acquire.cold+0x152/0x3c3 kernel/locking/lockdep.c:5053
-> > >  lock_acquire kernel/locking/lockdep.c:5666 [inline]
-> > >  lock_acquire+0x1ab/0x580 kernel/locking/lockdep.c:5631
-> > >  __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
-> > >  _raw_spin_lock_irqsave+0x39/0x50 kernel/locking/spinlock.c:162
-> > >  f_midi_transmit+0x18c/0x1460 drivers/usb/gadget/function/f_midi.c:683
-> > >  f_midi_complete+0x1bb/0x480 drivers/usb/gadget/function/f_midi.c:285
-> > >  dummy_queue+0x84a/0xb20 drivers/usb/gadget/udc/dummy_hcd.c:736
-> > >  usb_ep_queue+0xe8/0x3b0 drivers/usb/gadget/udc/core.c:288
-> > >  f_midi_do_transmit drivers/usb/gadget/function/f_midi.c:658 [inline]
-> > >  f_midi_transmit+0x7e4/0x1460 drivers/usb/gadget/function/f_midi.c:686
-> > >  process_one_work+0x9c7/0x1650 kernel/workqueue.c:2289
-> > >  worker_thread+0x623/0x1070 kernel/workqueue.c:2436
-> > >  kthread+0x2e9/0x3a0 kernel/kthread.c:376
-> > >  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
-> > >  </TASK>
-> > > Use nested notation for the spin_lock to avoid this warning.
-> > > 
-> > > Signed-off-by: Edward Adam Davis <eadavis@sina.com>
-> > > ---
-> > >  drivers/usb/gadget/function/f_midi.c | 3 ++-
-> > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/usb/gadget/function/f_midi.c b/drivers/usb/gadget/function/f_midi.c
-> > > index fddf539008a9..ad745fbd549e 100644
-> > > --- a/drivers/usb/gadget/function/f_midi.c
-> > > +++ b/drivers/usb/gadget/function/f_midi.c
-> > > @@ -680,7 +680,8 @@ static void f_midi_transmit(struct f_midi *midi)
-> > >  	if (!ep || !ep->enabled)
-> > >  		goto drop_out;
-> > >  
-> > > -	spin_lock_irqsave(&midi->transmit_lock, flags);
-> > > +	spin_lock_irqsave_nested(&midi->transmit_lock, flags, 
-> > > +			SINGLE_DEPTH_NESTING);
-> > 
-> > This feels wrong (and you added a checkpatch warning at the same time.)
-> > 
-> > If this is correct, please document this really really well why this is
-> > the correct solution and we just don't really have a lockdep issue here
-> > with the code itself.
-> I want to assume the following scenario,
-> 
->      	CPU1
->         ----
-> spin_lock_irqsave(&midi->transmit_lock, f);          <----- Task A
-> ...
-> ...                                                  <----- raise NMI and call Task B 
->    spin_lock_irqsave(&midi->transmit_lock, f);       <----- Task B acquire same lock, OK?
+On Tue, Sep 20, 2022 at 06:02:11AM +0100, Al Viro wrote:
+> nvme target: nvme read requests end up with somebody allocating and filling
+> sglist, followed by reading from file into it (using ITER_BVEC).  Then the
+> pages are sent out, presumably
 
-Is that ok?  Can you nest a spin lock like this?  For some reason, I
-didn't think you could, but I can't find anything in the documentation
-about this, can you?
+Yes.
 
-thanks,
+> .  I would be very surprised if it turned out
+> to be anything other than anon pages allocated by the driver, but I'd like
+> to see that confirmed by nvme folks.  Probably doesn't need pinning.
 
-greg k-h
+They are anon pages allocated by the driver using sgl_alloc().
+
+> drivers/target/target_core_file.c:292:  iov_iter_bvec(&iter, is_write, aio_cmd->bvecs, sgl_nents, len);
+
+Same as nvme target.
+
+> The picture so far looks like we mostly need to take care of pinning when
+> we obtain the references from iov_iter_get_pages().  What's more, it looks
+> like ITER_BVEC/ITER_XARRAY/ITER_PIPE we really don't need to pin anything on
+> get_pages/pin_pages - they are already protected (or, in case of ITER_PIPE,
+> allocated by iov_iter itself and not reachable by anybody outside).
+
+That's what I've been trying to say for a while..
+
