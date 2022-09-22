@@ -2,50 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 321C25E6494
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 16:01:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA5155E63CC
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 15:37:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231877AbiIVOBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 10:01:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56770 "EHLO
+        id S231648AbiIVNhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 09:37:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230100AbiIVOBW (ORCPT
+        with ESMTP id S230178AbiIVNh3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 10:01:22 -0400
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D6FA52E4C
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 07:01:21 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 98106735;
-        Thu, 22 Sep 2022 14:01:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 98106735
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1663855280; bh=0X2VOXS7AEoKvoeXcivKYDt8IliGdOXuZc3Dgz7NRxE=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=Tfnhrpq7aQEk0fJVAAYA0fcLSmyMAls1dfW2SZnTfvCiqHzEx71kZfbMsO+mJt8mU
-         f39plQiLRWGBv6G+LwizVj5RPzhXGRqZSE9omqlfVtcjywwSS2DSoatPj/aG/kPkhW
-         FKEPcdnVSY3DC1Fjr5HqLRWSgO0pQq0DfR0/dA/wNLwfqKkHkljAv/vxhUdfmUlDzk
-         gLfSiXZLyo8KV5yHG+oHaT25ZbtmcbOptuVxFqSndSkifBEKYT3tWkIS7l3PzFi2bk
-         XXX4Y1OS/bPK5tsN746jBzKpuqfvXJ2fsutbXbm1CQScNd9fJbCTKpH/FWzi1nUnMu
-         naVDHKAyfus7g==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Vlastimil Babka <vbabka@suse.cz>, Chris Mason <clm@fb.com>,
-        linux-kernel@vger.kernel.org, ksummit@lists.linux.dev
-Cc:     tech-board@lists.linuxfoundation.org,
-        tab-elections@lists.linuxfoundation.org
-Subject: Re: [Tab-elections] Results from the 2022 LF TAB election
-In-Reply-To: <70136115-5e77-c00a-9c29-b06cb8fcef0d@suse.cz>
-References: <87h71984jy.fsf@meer.lwn.net>
- <9755284e-6b57-8340-dbf5-1bb50f036da3@fb.com>
- <70136115-5e77-c00a-9c29-b06cb8fcef0d@suse.cz>
-Date:   Thu, 22 Sep 2022 08:01:19 -0600
-Message-ID: <87leqbse34.fsf@meer.lwn.net>
+        Thu, 22 Sep 2022 09:37:29 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2273C95AD5
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 06:36:22 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MYGTY3MjDzHqKX;
+        Thu, 22 Sep 2022 21:34:09 +0800 (CST)
+Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 22 Sep 2022 21:36:18 +0800
+Received: from huawei.com (10.175.113.32) by dggpemm100009.china.huawei.com
+ (7.185.36.113) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 22 Sep
+ 2022 21:36:19 +0800
+From:   Liu Shixin <liushixin2@huawei.com>
+To:     Liu Zixian <liuzixian4@huawei.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        Sidhartha Kumar <sidhartha.kumar@oracle.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        "David Hildenbrand" <david@redhat.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        Liu Shixin <liushixin2@huawei.com>
+Subject: [PATCH v2] mm: hugetlb: fix UAF in hugetlb_handle_userfault
+Date:   Thu, 22 Sep 2022 22:10:02 +0800
+Message-ID: <20220922141002.3242443-1-liushixin2@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.32]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm100009.china.huawei.com (7.185.36.113)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,34 +56,140 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Vlastimil Babka <vbabka@suse.cz> writes:
+The vma_lock and hugetlb_fault_mutex are dropped before handling
+userfault and reacquire them again after handle_userfault(), but
+reacquire the vma_lock could lead to UAF[1,2] due to the following
+race,
 
-> I was wondering, as the voting is fully online now, does it have to
-> still overlap LPC exactly? For example I happened to miss the most
-> important e-mail from CIVS in my inbox during the conference, and while
-> I tried to login there by the activation code, I could only see there I
-> was invited to 2021 poll but didn't see the 2022 one (nor I can see it
-> there now; I assume the link from the CIVS mail would have worked, but
-> too late now).
->
-> Also, since it seems many of the nominations were last-minute [1] I only
-> saw two of them by Friday. So even if I didn't miss the CIVS e-mail, I
-> would have to read through the manifestos and rank the candidates
-> quickly during LPC, which wouldn't have been ideal.
->
-> So maybe the vote could be scheduler for the week before LPC? And then
-> both the new and old TAB members that happen to travel there could meet
-> there knowing the results already.
+hugetlb_fault
+  hugetlb_no_page
+    /*unlock vma_lock */
+    hugetlb_handle_userfault
+      handle_userfault
+        /* unlock mm->mmap_lock*/
+                                           vm_mmap_pgoff
+                                             do_mmap
+                                               mmap_region
+                                                 munmap_vma_range
+                                                   /* clean old vma */
+        /* lock vma_lock again  <--- UAF */
+    /* unlock vma_lock */
 
-The current charter for the TAB ties the voting to the kernel summit; in
-the move online we interpreted that as running during LPC, where what
-remains of the kernel summit is held.
+Since the vma_lock will unlock immediately after hugetlb_handle_userfault(),
+let's drop the unneeded lock and unlock in hugetlb_handle_userfault() to fix
+the issue.
 
-I don't think it has to be that way; it might be better to pick a time
-of the year when things are relatively calm and just always do the
-election then.  It would require a charter change, but that should be
-doable.
+[1] https://lore.kernel.org/linux-mm/000000000000d5e00a05e834962e@google.com/
+[2] https://lore.kernel.org/linux-mm/20220921014457.1668-1-liuzixian4@huawei.com/
+Reported-by: syzbot+193f9cee8638750b23cf@syzkaller.appspotmail.com
+Reported-by: Liu Zixian <liuzixian4@huawei.com>
+Fixes: 1a1aad8a9b7b ("userfaultfd: hugetlbfs: add userfaultfd hugetlb hook")
+CC: stable@vger.kernel.org # 4.14+
+Signed-off-by: Liu Shixin <liushixin2@huawei.com>
+Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+---
+ mm/hugetlb.c | 30 +++++++++++-------------------
+ 1 file changed, 11 insertions(+), 19 deletions(-)
 
-Thanks,
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index 9b8526d27c29..5a5d466692cf 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -5489,7 +5489,6 @@ static inline vm_fault_t hugetlb_handle_userfault(struct vm_area_struct *vma,
+ 						  unsigned long addr,
+ 						  unsigned long reason)
+ {
+-	vm_fault_t ret;
+ 	u32 hash;
+ 	struct vm_fault vmf = {
+ 		.vma = vma,
+@@ -5508,17 +5507,12 @@ static inline vm_fault_t hugetlb_handle_userfault(struct vm_area_struct *vma,
+ 
+ 	/*
+ 	 * vma_lock and hugetlb_fault_mutex must be
+-	 * dropped before handling userfault.  Reacquire
+-	 * after handling fault to make calling code simpler.
++	 * dropped before handling userfault.
+ 	 */
+ 	hugetlb_vma_unlock_read(vma);
+ 	hash = hugetlb_fault_mutex_hash(mapping, idx);
+ 	mutex_unlock(&hugetlb_fault_mutex_table[hash]);
+-	ret = handle_userfault(&vmf, reason);
+-	mutex_lock(&hugetlb_fault_mutex_table[hash]);
+-	hugetlb_vma_lock_read(vma);
+-
+-	return ret;
++	return handle_userfault(&vmf, reason);
+ }
+ 
+ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
+@@ -5537,6 +5531,7 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
+ 	unsigned long haddr = address & huge_page_mask(h);
+ 	bool new_page, new_pagecache_page = false;
+ 	bool reserve_alloc = false;
++	u32 hash = hugetlb_fault_mutex_hash(mapping, idx);
+ 
+ 	/*
+ 	 * Currently, we are forced to kill the process in the event the
+@@ -5547,7 +5542,7 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
+ 	if (is_vma_resv_set(vma, HPAGE_RESV_UNMAPPED)) {
+ 		pr_warn_ratelimited("PID %d killed due to inadequate hugepage pool\n",
+ 			   current->pid);
+-		return ret;
++		goto out;
+ 	}
+ 
+ 	/*
+@@ -5561,12 +5556,10 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
+ 		if (idx >= size)
+ 			goto out;
+ 		/* Check for page in userfault range */
+-		if (userfaultfd_missing(vma)) {
+-			ret = hugetlb_handle_userfault(vma, mapping, idx,
++		if (userfaultfd_missing(vma))
++			return hugetlb_handle_userfault(vma, mapping, idx,
+ 						       flags, haddr, address,
+ 						       VM_UFFD_MISSING);
+-			goto out;
+-		}
+ 
+ 		page = alloc_huge_page(vma, haddr, 0);
+ 		if (IS_ERR(page)) {
+@@ -5634,10 +5627,9 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
+ 		if (userfaultfd_minor(vma)) {
+ 			unlock_page(page);
+ 			put_page(page);
+-			ret = hugetlb_handle_userfault(vma, mapping, idx,
++			return hugetlb_handle_userfault(vma, mapping, idx,
+ 						       flags, haddr, address,
+ 						       VM_UFFD_MINOR);
+-			goto out;
+ 		}
+ 	}
+ 
+@@ -5695,6 +5687,8 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
+ 
+ 	unlock_page(page);
+ out:
++	hugetlb_vma_unlock_read(vma);
++	mutex_unlock(&hugetlb_fault_mutex_table[hash]);
+ 	return ret;
+ 
+ backout:
+@@ -5792,11 +5786,9 @@ vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
+ 
+ 	entry = huge_ptep_get(ptep);
+ 	/* PTE markers should be handled the same way as none pte */
+-	if (huge_pte_none_mostly(entry)) {
+-		ret = hugetlb_no_page(mm, vma, mapping, idx, address, ptep,
++	if (huge_pte_none_mostly(entry))
++		return hugetlb_no_page(mm, vma, mapping, idx, address, ptep,
+ 				      entry, flags);
+-		goto out_mutex;
+-	}
+ 
+ 	ret = 0;
+ 
+-- 
+2.25.1
 
-jon
