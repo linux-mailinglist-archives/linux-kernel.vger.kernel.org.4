@@ -2,173 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A41245E58BE
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 04:44:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED2715E58D4
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 04:49:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230382AbiIVCny (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Sep 2022 22:43:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45184 "EHLO
+        id S230182AbiIVCtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Sep 2022 22:49:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230218AbiIVCnq (ORCPT
+        with ESMTP id S229604AbiIVCtu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Sep 2022 22:43:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0698FAC272
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 19:43:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663814624;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Syxt5GyTwu4Cm93+0nDa/9iIBXMvpUt1vVK/TjLkfzw=;
-        b=JHihScajXirgkhN7QFhyGaYHnQrcwfiUERAI0nbYcTarmjBju1bELjRoCw+8LzA0Q8prub
-        yMymztLwiBWsMVLBTCf1iv4bkX2pGhLxC7wUoHLTc2KJJFKhP/AcQGFf0Nm9yEN8Za5Fe2
-        n2rK4t+pznVpCWT2wV0+DN/xZmdZzO4=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-56-IuXhpwmUP-yXDE6jNEOB6w-1; Wed, 21 Sep 2022 22:43:41 -0400
-X-MC-Unique: IuXhpwmUP-yXDE6jNEOB6w-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7C2093801F4A;
-        Thu, 22 Sep 2022 02:43:40 +0000 (UTC)
-Received: from localhost.localdomain (ovpn-13-82.pek2.redhat.com [10.72.13.82])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 00D98140EBF6;
-        Thu, 22 Sep 2022 02:43:34 +0000 (UTC)
-From:   Jason Wang <jasowang@redhat.com>
-To:     mst@redhat.com, jasowang@redhat.com
-Cc:     elic@nvidia.com, si-wei.liu@oracle.com, parav@nvidia.com,
-        wuzongyong@linux.alibaba.com,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, eperezma@redhat.com,
-        lingshan.zhu@intel.com, gdawar@xilinx.com, lulu@redhat.com,
-        xieyongji@bytedance.com
-Subject: [PATCH V2 3/3] vp_vdpa: support feature provisioning
-Date:   Thu, 22 Sep 2022 10:43:05 +0800
-Message-Id: <20220922024305.1718-4-jasowang@redhat.com>
-In-Reply-To: <20220922024305.1718-1-jasowang@redhat.com>
-References: <20220922024305.1718-1-jasowang@redhat.com>
+        Wed, 21 Sep 2022 22:49:50 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B1B665552;
+        Wed, 21 Sep 2022 19:49:48 -0700 (PDT)
+Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MY05G5SMcz14S2L;
+        Thu, 22 Sep 2022 10:45:38 +0800 (CST)
+Received: from huawei.com (10.67.175.83) by kwepemi500008.china.huawei.com
+ (7.221.188.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 22 Sep
+ 2022 10:49:46 +0800
+From:   ruanjinjie <ruanjinjie@huawei.com>
+To:     <dennis.dalessandro@cornelisnetworks.com>, <jgg@ziepe.ca>,
+        <leon@kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <ruanjinjie@huawei.com>
+Subject: [PATCH -next] IB/hfi1,PCI: Fix missing pci_disable_device() in probe and remove
+Date:   Thu, 22 Sep 2022 10:46:01 +0800
+Message-ID: <20220922024601.3643622-1-ruanjinjie@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.175.83]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemi500008.china.huawei.com (7.221.188.139)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch allows the device features to be provisioned via
-netlink. This is done by:
+Replace pci_enable_device() with pcim_enable_device(),
+pci_disable_device() and pci_release_regions() will be
+called in release automatically.
 
-1) validating the provisioned features to be a subset of the parent
-   features.
-2) clearing the features that is not wanted by the userspace
-
-For example:
-
-# vdpa mgmtdev show
-pci/0000:02:00.0:
-  supported_classes net
-  max_supported_vqs 3
-  dev_features CSUM GUEST_CSUM CTRL_GUEST_OFFLOADS MAC GUEST_TSO4
-  GUEST_TSO6 GUEST_ECN GUEST_UFO HOST_TSO4 HOST_TSO6 HOST_ECN HOST_UFO
-  MRG_RXBUF STATUS CTRL_VQ CTRL_RX CTRL_VLAN CTRL_RX_EXTRA
-  GUEST_ANNOUNCE CTRL_MAC_ADDR RING_INDIRECT_DESC RING_EVENT_IDX
-  VERSION_1 ACCESS_PLATFORM
-
-1) provision vDPA device with all features that are supported by the virtio-pci
-
-# vdpa dev add name dev1 mgmtdev pci/0000:02:00.0
-# vdpa dev config show
-dev1: mac 52:54:00:12:34:56 link up link_announce false mtu 65535
-  negotiated_features CSUM GUEST_CSUM CTRL_GUEST_OFFLOADS MAC
-  GUEST_TSO4 GUEST_TSO6 GUEST_ECN GUEST_UFO HOST_TSO4 HOST_TSO6
-  HOST_ECN HOST_UFO MRG_RXBUF STATUS CTRL_VQ CTRL_RX CTRL_VLAN
-  GUEST_ANNOUNCE CTRL_MAC_ADDR RING_INDIRECT_DESC RING_EVENT_IDX
-  VERSION_1 ACCESS_PLATFORM
-
-2) provision vDPA device with a subset of the features
-
-# vdpa dev add name dev1 mgmtdev pci/0000:02:00.0 device_features 0x300020000
-# dev1: mac 52:54:00:12:34:56 link up link_announce false mtu 65535
-  negotiated_features CTRL_VQ VERSION_1 ACCESS_PLATFORM
-
-Reviewed-by: Eli Cohen <elic@nvidia.com>
-Signed-off-by: Jason Wang <jasowang@redhat.com>
+Signed-off-by: ruanjinjie <ruanjinjie@huawei.com>
 ---
- drivers/vdpa/virtio_pci/vp_vdpa.c | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+ drivers/infiniband/hw/hfi1/pcie.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/vdpa/virtio_pci/vp_vdpa.c b/drivers/vdpa/virtio_pci/vp_vdpa.c
-index 04522077735b..4b28e0c95ba2 100644
---- a/drivers/vdpa/virtio_pci/vp_vdpa.c
-+++ b/drivers/vdpa/virtio_pci/vp_vdpa.c
-@@ -17,6 +17,7 @@
- #include <linux/virtio_ring.h>
- #include <linux/virtio_pci.h>
- #include <linux/virtio_pci_modern.h>
-+#include <uapi/linux/vdpa.h>
+diff --git a/drivers/infiniband/hw/hfi1/pcie.c b/drivers/infiniband/hw/hfi1/pcie.c
+index a0802332c8cb..45a0fb75f2d8 100644
+--- a/drivers/infiniband/hw/hfi1/pcie.c
++++ b/drivers/infiniband/hw/hfi1/pcie.c
+@@ -26,7 +26,7 @@ int hfi1_pcie_init(struct hfi1_devdata *dd)
+ 	int ret;
+ 	struct pci_dev *pdev = dd->pcidev;
  
- #define VP_VDPA_QUEUE_MAX 256
- #define VP_VDPA_DRIVER_NAME "vp_vdpa"
-@@ -35,6 +36,7 @@ struct vp_vdpa {
- 	struct virtio_pci_modern_device *mdev;
- 	struct vp_vring *vring;
- 	struct vdpa_callback config_cb;
-+	u64 device_features;
- 	char msix_name[VP_VDPA_NAME_SIZE];
- 	int config_irq;
- 	int queues;
-@@ -66,9 +68,9 @@ static struct virtio_pci_modern_device *vp_vdpa_to_mdev(struct vp_vdpa *vp_vdpa)
- 
- static u64 vp_vdpa_get_device_features(struct vdpa_device *vdpa)
+-	ret = pci_enable_device(pdev);
++	ret = pcim_enable_device(pdev);
+ 	if (ret) {
+ 		/*
+ 		 * This can happen (in theory) iff:
+@@ -78,12 +78,10 @@ int hfi1_pcie_init(struct hfi1_devdata *dd)
+  */
+ void hfi1_pcie_cleanup(struct pci_dev *pdev)
  {
--	struct virtio_pci_modern_device *mdev = vdpa_to_mdev(vdpa);
-+	struct vp_vdpa *vp_vdpa = vdpa_to_vp(vdpa);
- 
--	return vp_modern_get_features(mdev);
-+	return vp_vdpa->device_features;
+-	pci_disable_device(pdev);
+ 	/*
+ 	 * Release regions should be called after the disable. OK to
+ 	 * call if request regions has not been called or failed.
+ 	 */
+-	pci_release_regions(pdev);
  }
  
- static int vp_vdpa_set_driver_features(struct vdpa_device *vdpa, u64 features)
-@@ -475,6 +477,7 @@ static int vp_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char *name,
- 	struct pci_dev *pdev = mdev->pci_dev;
- 	struct device *dev = &pdev->dev;
- 	struct vp_vdpa *vp_vdpa = NULL;
-+	u64 device_features;
- 	int ret, i;
- 
- 	vp_vdpa = vdpa_alloc_device(struct vp_vdpa, vdpa,
-@@ -491,6 +494,14 @@ static int vp_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char *name,
- 	vp_vdpa->queues = vp_modern_get_num_queues(mdev);
- 	vp_vdpa->mdev = mdev;
- 
-+	device_features = vp_modern_get_features(mdev);
-+	if (add_config->mask & BIT_ULL(VDPA_ATTR_DEV_FEATURES)) {
-+		if (add_config->device_features & ~device_features)
-+			return -EINVAL;
-+		device_features &= add_config->device_features;
-+	}
-+	vp_vdpa->device_features = device_features;
-+
- 	ret = devm_add_action_or_reset(dev, vp_vdpa_free_irq_vectors, pdev);
- 	if (ret) {
- 		dev_err(&pdev->dev,
-@@ -599,6 +610,7 @@ static int vp_vdpa_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 	mgtdev->id_table = mdev_id;
- 	mgtdev->max_supported_vqs = vp_modern_get_num_queues(mdev);
- 	mgtdev->supported_features = vp_modern_get_features(mdev);
-+	mgtdev->config_attr_mask = (1 << VDPA_ATTR_DEV_FEATURES);
- 	pci_set_master(pdev);
- 	pci_set_drvdata(pdev, vp_vdpa_mgtdev);
- 
+ /*
 -- 
 2.25.1
 
