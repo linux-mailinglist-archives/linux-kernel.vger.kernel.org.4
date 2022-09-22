@@ -2,81 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD5685E62A5
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 14:42:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FB3D5E6293
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 14:38:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231195AbiIVMl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 08:41:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42220 "EHLO
+        id S230476AbiIVMim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 08:38:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230281AbiIVMly (ORCPT
+        with ESMTP id S231287AbiIVMii (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 08:41:54 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBD1AE7E0A
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 05:41:53 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MYFDg0TGfzWgy7;
-        Thu, 22 Sep 2022 20:37:55 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 22 Sep 2022 20:41:52 +0800
-Received: from ubuntu1804.huawei.com (10.67.175.36) by
- dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 22 Sep 2022 20:41:52 +0800
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <kasan-dev@googlegroups.com>
-CC:     <dvyukov@google.com>, <andreyknvl@gmail.com>,
-        <akpm@linux-foundation.org>, <elver@google.com>,
-        <bigeasy@linutronix.de>, <nogikh@google.com>, <liu3101@purdue.edu>,
-        <chenzhongjin@huawei.com>
-Subject: [PATCH -next v2] kcov: Switch to use list_for_each_entry() helper
-Date:   Thu, 22 Sep 2022 20:38:10 +0800
-Message-ID: <20220922123810.227015-1-chenzhongjin@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Thu, 22 Sep 2022 08:38:38 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CDF1E723B
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 05:38:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663850317;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=N8wouGppMh/lqIofR8IYJpGJSos9sXEZ5ESpwY6OiUY=;
+        b=Ivy1XiK4AfYUlk3XXi9uswkEF6K0aHyzu3bRZCFOke2xdJCQdaJOEzJ83tUHMy6JAhJtQM
+        eaC6OGHd8hkxI80RntgWA+YXF9LCXii01O9WgD30mUoJjIh7lVYwoKVPuqWZrHksWAUQTm
+        m+9X8JGFZ4T7WWcovCR9PyqP5PFvieE=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-314-XTl8e8CMN_yFI3o0dUOprg-1; Thu, 22 Sep 2022 08:38:33 -0400
+X-MC-Unique: XTl8e8CMN_yFI3o0dUOprg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 41E6A3825789;
+        Thu, 22 Sep 2022 12:38:31 +0000 (UTC)
+Received: from lorien.usersys.redhat.com (unknown [10.22.33.123])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id C0E72112131B;
+        Thu, 22 Sep 2022 12:38:29 +0000 (UTC)
+Date:   Thu, 22 Sep 2022 08:38:27 -0400
+From:   Phil Auld <pauld@redhat.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Yury Norov <yury.norov@gmail.com>, linux-kernel@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Barry Song <21cnbao@gmail.com>,
+        Tian Tao <tiantao6@hisilicon.com>,
+        feng xiangjun <fengxj325@gmail.com>, stable@vger.kernel.org
+Subject: Re: [PATCH v2] drivers/base: Fix unsigned comparison to -1 in
+ CPUMAP_FILE_MAX_BYTES
+Message-ID: <YyxXQ1iH1gwI/wP6@lorien.usersys.redhat.com>
+References: <20220906203542.1796629-1-pauld@redhat.com>
+ <Yxe0yXz1u4mjKmDe@yury-laptop>
+ <YxfHa+CBpxoXsM/d@lorien.usersys.redhat.com>
+ <YyxA1Q9SEqFJJk8Y@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.36]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YyxA1Q9SEqFJJk8Y@kroah.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use list_for_each_entry() helper instead of list_for_each() and
-list_entry() to simplify code a bit.
+On Thu, Sep 22, 2022 at 01:02:45PM +0200 Greg Kroah-Hartman wrote:
+> On Tue, Sep 06, 2022 at 06:19:23PM -0400, Phil Auld wrote:
+> > On Tue, Sep 06, 2022 at 01:59:53PM -0700 Yury Norov wrote:
+> > > On Tue, Sep 06, 2022 at 04:35:42PM -0400, Phil Auld wrote:
+> > > > As PAGE_SIZE is unsigned long, -1 > PAGE_SIZE when NR_CPUS <= 3.
+> > > > This leads to very large file sizes:
+> > > > 
+> > > > topology$ ls -l
+> > > > total 0
+> > > > -r--r--r-- 1 root root 18446744073709551615 Sep  5 11:59 core_cpus
+> > > > -r--r--r-- 1 root root                 4096 Sep  5 11:59 core_cpus_list
+> > > > -r--r--r-- 1 root root                 4096 Sep  5 10:58 core_id
+> > > > -r--r--r-- 1 root root 18446744073709551615 Sep  5 10:10 core_siblings
+> > > > -r--r--r-- 1 root root                 4096 Sep  5 11:59 core_siblings_list
+> > > > -r--r--r-- 1 root root 18446744073709551615 Sep  5 11:59 die_cpus
+> > > > -r--r--r-- 1 root root                 4096 Sep  5 11:59 die_cpus_list
+> > > > -r--r--r-- 1 root root                 4096 Sep  5 11:59 die_id
+> > > > -r--r--r-- 1 root root 18446744073709551615 Sep  5 11:59 package_cpus
+> > > > -r--r--r-- 1 root root                 4096 Sep  5 11:59 package_cpus_list
+> > > > -r--r--r-- 1 root root                 4096 Sep  5 10:58 physical_package_id
+> > > > -r--r--r-- 1 root root 18446744073709551615 Sep  5 10:10 thread_siblings
+> > > > -r--r--r-- 1 root root                 4096 Sep  5 11:59 thread_siblings_list
+> > > > 
+> > > > Adjust the inequality to catch the case when NR_CPUS is configured
+> > > > to a small value.
+> > > > 
+> > > > Fixes: 7ee951acd31a ("drivers/base: fix userspace break from using bin_attributes for cpumap and cpulist")
+> > > > Reported-by: feng xiangjun <fengxj325@gmail.com>
+> > > > Signed-off-by: Phil Auld <pauld@redhat.com>
+> > > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> > > > Cc: Yury Norov <yury.norov@gmail.com>
+> > > > Cc: stable@vger.kernel.org
+> > > > Cc: feng xiangjun <fengxj325@gmail.com>
+> > > 
+> > > Applied on bitmap-for-next. Thanks!
+> > >
+> > 
+> > Great, thanks!
+> 
+> This is hitting people already and causing problems, so I'll go add it
+> to my tree as well to get it to Linus quicker.  Here's one report of the
+> problem:
+> 	https://github.com/util-linux/util-linux/issues/1810
+>
 
-Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
----
-v1 -> v2:
-- Forgot to change pos as area, fix it.
----
- kernel/kcov.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+Arrgh! Thanks Greg. I stopped watching it when it got merged above but yeah,
+this needs to get in soon and then get into any stable trees that got the first
+one. Sorry about that!
 
-diff --git a/kernel/kcov.c b/kernel/kcov.c
-index e19c84b02452..6c94913dc3a6 100644
---- a/kernel/kcov.c
-+++ b/kernel/kcov.c
-@@ -133,10 +133,8 @@ static struct kcov_remote *kcov_remote_add(struct kcov *kcov, u64 handle)
- static struct kcov_remote_area *kcov_remote_area_get(unsigned int size)
- {
- 	struct kcov_remote_area *area;
--	struct list_head *pos;
- 
--	list_for_each(pos, &kcov_remote_areas) {
--		area = list_entry(pos, struct kcov_remote_area, list);
-+	list_for_each_entry(area, &kcov_remote_areas, list) {
- 		if (area->size == size) {
- 			list_del(&area->list);
- 			return area;
+Cheers,
+Phil
+
+
+> thanks,
+> 
+> greg k-h
+> 
+
 -- 
-2.17.1
 
