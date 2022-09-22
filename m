@@ -2,95 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 944295E5C7B
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 09:33:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FBAD5E5C83
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 09:34:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbiIVHdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 03:33:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32828 "EHLO
+        id S230467AbiIVHe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 03:34:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbiIVHdL (ORCPT
+        with ESMTP id S229749AbiIVHeW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 03:33:11 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5971879A43
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 00:33:08 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id 130so11484784ybz.9
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 00:33:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=edgeble-ai.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=vznxy9xqdRmX/+c1xfDYAdYiNLfodMVytirKxQVlqvU=;
-        b=19h0p9PeYDDwrzqyam5VPOXf99gXbD0aK5k8BfPEJenh2Jv/WjdzknPH0tUHmgiRHX
-         pggTcESbyFCz5wjPpmJSkcd/NQRRrZZiBSfJaMhq7Myfc7diCyDqoIkbuwR+vpE+NSyR
-         4tcuq0xXpQnSX0V8U1+heBDJXgld0tSC2LqBM4z3VUSaqRkZ06YHK7IIfBYqUtBTnOpH
-         8g3j2HwH0C6U9V4Dw6woPkeBBq7Y38GohOYuh8QKlknbOt7Pa+3U8VR0EHsy5/voiIZb
-         V9qFOtQMx6p07AjQGpO7hX3d+YsO1Jyuw006ghhAYb0bZNJ0/92AxLL4Vef3bOqkZOU6
-         FV4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=vznxy9xqdRmX/+c1xfDYAdYiNLfodMVytirKxQVlqvU=;
-        b=gh2ei18mRG5OkLcsgE4h/zHfchzx7AfJzwnuv553Vpyx+/cW2owKTyBXzaMzfOZYVz
-         eGn4wSs8TOOTU14A7jbpL+90G9v9NKMygTkBe2WJoo3vkgN+Js6YdJ4/xpYETmvx0kAg
-         eyShJEhM7XLtmUMiqEt36KHP48agmmFp+U39K32UGwf3PxZ/q6nEGv2H5GmuqzD3FH9k
-         avC0ZTHyGunL86CswkO0YSK1Ke33Flhn1NLH3NWrAysVG25Cv1IF7c4P6S/NTu4LzuX0
-         cwZAq2XPDEpZ5v22gNznXJrgSvx9D8eyjhXTZjfr6a1UdxAk0kiJtcZbZ3WD0jbxLYTq
-         1IgA==
-X-Gm-Message-State: ACrzQf33gQ2McwUHDHqdRl7XBPfyWQWyp4dqiLQQgzxddDzqJbMKPD/J
-        vDi1mKwAnoTvoR7ikG7C6LjDRnsyudQ3W82mT2hRfw==
-X-Google-Smtp-Source: AMsMyM68mBRWPzgSHinmacDlTcXL0xgy38F9UZIPw2GA0HUhSgygjrtVbr+Xf6Xo2IYCzPizO8zkXxrLXkUa8C1413c=
-X-Received: by 2002:a05:6902:1146:b0:6ae:72f2:62cb with SMTP id
- p6-20020a056902114600b006ae72f262cbmr2487652ybu.615.1663831987619; Thu, 22
- Sep 2022 00:33:07 -0700 (PDT)
+        Thu, 22 Sep 2022 03:34:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCAE2A0614;
+        Thu, 22 Sep 2022 00:34:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 349EFB834B9;
+        Thu, 22 Sep 2022 07:34:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04135C43470;
+        Thu, 22 Sep 2022 07:34:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663832058;
+        bh=UWNZukf959vr7tV71IoN5iXMlrYZ0jCCkoXyUvbqGDw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=tAPudcycVT75c9OdQbx/TXABgMYTqm1yO9MX1HbbKq8pe9I+lRCrq04kp4tornltH
+         Q/P0Q/uvAUf/GMjGfg5U5EjVeO05oAhMgaWKb+dYWxexeF3oK0h3jIMkk8I1biG+1U
+         SPk1rZLPsy68STuDSVhH5yW23huPIpGKMHb+GwJkjTDEO4JhudjUMoU7navs9G5WOY
+         JHWhqh30JQEpd8xC1iJUZEIQfLIBVVp3u3CwJRrqZT8/BN4p0ph1Em45apct975uOq
+         pA2+qXgPqVonDct1B/+9UvYRzh65/YfRO+ZFRVhJLQY3dcpaHTdIMGzVgYiX99eEf6
+         irewgSOjTRClw==
+Received: by mail-lf1-f47.google.com with SMTP id w8so13199826lft.12;
+        Thu, 22 Sep 2022 00:34:17 -0700 (PDT)
+X-Gm-Message-State: ACrzQf0aBRF9+swgU8e046oL5KkFUXP9Gh3169gXlUwELNz/8SBr6ySe
+        s1vRarGsuH6OkTv7TWrY883mrKIgHzVg0B9HNxc=
+X-Google-Smtp-Source: AMsMyM7Ob46JJiYPZyBbHV3AQ/n88iL6T8+iJh07RAQ95rvs6j4Th6jDsnwnC+malWy9LRmG3Vk3fv1xa7hCIvSRzLM=
+X-Received: by 2002:a05:6512:150e:b0:492:d9fd:9bdf with SMTP id
+ bq14-20020a056512150e00b00492d9fd9bdfmr691871lfb.583.1663832055899; Thu, 22
+ Sep 2022 00:34:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220907210649.12447-1-anand@edgeble.ai> <20220919115812.6cc61a8e@kernel.org>
-In-Reply-To: <20220919115812.6cc61a8e@kernel.org>
-From:   Anand Moon <anand@edgeble.ai>
-Date:   Thu, 22 Sep 2022 13:02:58 +0530
-Message-ID: <CACF1qnd0Nq7Fzi83emR=-cDscCprt2h4gwquecLRyyrbSNsm5g@mail.gmail.com>
-Subject: Re: [v2 1/2] dt-bindings: net: rockchip-dwmac: add rv1126 compatible
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        David Wu <david.wu@rock-chips.com>,
-        Jagan Teki <jagan@edgeble.ai>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220904165321.1140894-1-Jason@zx2c4.com>
+In-Reply-To: <20220904165321.1140894-1-Jason@zx2c4.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Thu, 22 Sep 2022 09:34:04 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXGL4OV_Dpgtk+kQtDN0AHQBnwHwOQ-v76NkLFOVHirnRQ@mail.gmail.com>
+Message-ID: <CAMj1kXGL4OV_Dpgtk+kQtDN0AHQBnwHwOQ-v76NkLFOVHirnRQ@mail.gmail.com>
+Subject: Re: [PATCH] efi: x86: Wipe setup_data on pure EFI boot
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        x86@kernel.org, bp@alien8.de
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jakub,
-
-On Tue, 20 Sept 2022 at 00:28, Jakub Kicinski <kuba@kernel.org> wrote:
+On Sun, 4 Sept 2022 at 18:53, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
 >
-> On Wed,  7 Sep 2022 21:06:45 +0000 Anand Moon wrote:
-> > Add compatible string for RV1126 gmac, and constrain it to
-> > be compatible with Synopsys dwmac 4.20a.
+> From: Ard Biesheuvel <ardb@kernel.org>
 >
-> Hi, these patches don't seem to apply cleanly to net-next, a 3-way
-> merge is needed. Please rebase and repost. Please put [PATCH net-next
-> v3] in the subject as you expect them to be applied to the networking
-> trees.
+> When booting the x86 kernel via EFI using the LoadImage/StartImage boot
+> services [as opposed to the deprecated EFI handover protocol], the setup
+> header is taken from the image directly, and given that EFI's LoadImage
+> has no Linux/x86 specific knowledge regarding struct bootparams or
+> struct setup_header, any absolute addresses in the setup header must
+> originate from the file and not from a prior loading stage.
+>
+> Since we cannot generally predict where LoadImage() decides to load an
+> image (*), such absolute addresses must be treated as suspect: even if a
+> prior boot stage intended to make them point somewhere inside the
+> [signed] image, there is no way to validate that, and if they point at
+> an arbitrary location in memory, the setup_data nodes will not be
+> covered by any signatures or TPM measurements either, and could be made
+> to contain an arbitrary sequence of SETUP_xxx nodes, which could
+> interfere quite badly with the early x86 boot sequence.
+>
+> (*) Note that, while LoadImage() does take a buffer/size tuple in
+> addition to a device path, which can be used to provide the image
+> contents directly, it will re-allocate such images, as the memory
+> footprint of an image is generally larger than the PE/COFF file
+> representation.
+>
+> Next, in order to allow hypervisors to still use setup_data in scenarios
+> where it may be useful, bump the x86 boot protocol version, so that
+> hypervisors, e.g. QEMU in the linked patch, can do the right thing
+> automatically depending on whether it is safe.
+>
+> Link: https://lore.kernel.org/qemu-devel/20220904165058.1140503-1-Jason@zx2c4.com/
+> Coauthored-by: Ard Biesheuvel <ardb@kernel.org>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 
-Thanks I have send the patches rebased on net-next,
-Please find the link below
+Now that we've fixed this on the QEMU end without the need for a boot
+protocol version bump [0], I am going to merge just the x86-stub.c
+change as a fix for EFI.
 
-[0] https://lore.kernel.org/all/20220920140944.2535-1-anand@edgeble.ai/
+Thanks,
+Ard.
 
-Beat Regards
+[0] https://lore.kernel.org/all/166383158063.107920.1563965268305325639.b4-ty@redhat.com/
 
--Anand
+
+
+
+> ---
+>  arch/x86/boot/header.S                  | 2 +-
+>  drivers/firmware/efi/libstub/x86-stub.c | 7 +++++++
+>  2 files changed, 8 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/x86/boot/header.S b/arch/x86/boot/header.S
+> index f912d7770130..e4e2d6e33924 100644
+> --- a/arch/x86/boot/header.S
+> +++ b/arch/x86/boot/header.S
+> @@ -307,7 +307,7 @@ _start:
+>         # Part 2 of the header, from the old setup.S
+>
+>                 .ascii  "HdrS"          # header signature
+> -               .word   0x020f          # header version number (>= 0x0105)
+> +               .word   0x0210          # header version number (>= 0x0105)
+>                                         # or else old loadlin-1.5 will fail)
+>                 .globl realmode_swtch
+>  realmode_swtch:        .word   0, 0            # default_switch, SETUPSEG
+> diff --git a/drivers/firmware/efi/libstub/x86-stub.c b/drivers/firmware/efi/libstub/x86-stub.c
+> index 05ae8bcc9d67..9780f32a9f24 100644
+> --- a/drivers/firmware/efi/libstub/x86-stub.c
+> +++ b/drivers/firmware/efi/libstub/x86-stub.c
+> @@ -517,6 +517,13 @@ efi_status_t __efiapi efi_pe_entry(efi_handle_t handle,
+>         hdr->ramdisk_image = 0;
+>         hdr->ramdisk_size = 0;
+>
+> +       /*
+> +        * Disregard any setup data that was provided by the bootloader:
+> +        * setup_data could be pointing anywhere, and we have no way of
+> +        * authenticating or validating the payload.
+> +        */
+> +       hdr->setup_data = 0;
+> +
+>         efi_stub_entry(handle, sys_table_arg, boot_params);
+>         /* not reached */
+>
+> --
+> 2.37.3
+>
