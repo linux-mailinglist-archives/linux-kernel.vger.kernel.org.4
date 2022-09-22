@@ -2,111 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C86005E5C02
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 09:13:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FD545E5C1A
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 09:15:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230362AbiIVHM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 03:12:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55884 "EHLO
+        id S231144AbiIVHPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 03:15:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230364AbiIVHMM (ORCPT
+        with ESMTP id S230459AbiIVHMq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 03:12:12 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31261C88A9;
-        Thu, 22 Sep 2022 00:11:52 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id fv3so8917405pjb.0;
-        Thu, 22 Sep 2022 00:11:52 -0700 (PDT)
+        Thu, 22 Sep 2022 03:12:46 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2492BC8886
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 00:12:33 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id l12so9844835ljg.9
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 00:12:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=7P4/MoUd89O1+A8bGYH6BhOc7UW55SCbrR2sakyuDZs=;
-        b=cDPR71YiCfI/nr6sTEi7NepjawVwGuNAy+dEFtsTyaNTl93iWIRvruUoqcdCXphb2t
-         OQfISlrtInzsol4LOPkdNT4gLwcvA10hhStRFj0ZT1/6JO5a9uPFxQDMMnQ2DQyu80WX
-         7zq1HT0DhRmBCaAdp+lG7eQfdt6cbuevQ+ymt/jppc2DxUm2kyO6ICgQ51VFRyJRnVJW
-         rE9ZApi7AvQfL/9FgsemGxItnowiFUxbayoTSNllV5S4/ltikYg9nxS2NzuFFy22nqXd
-         ICEzE+S1OtfNJZjgxm7mgcKQYkNi60RoXd7jIwjlZ0GD1qMyRvI5C7QexD99TBaTL0dg
-         lJeA==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=4qwFmOB0PsZUxn1YuAMzNGjJlPsdphw8R7+YvCnubH0=;
+        b=iGpJQHoFw4RkJ0uM0bYTb2MnQVcC7/PM9gf1/JiBbL2L5D7bcQ1uS2sQHS2Ey2LI0C
+         eWLTEnJatcH+RErg6Z39iRbzhe/cFRg9IM5YuCJBg5COFpucMSXVDbkAUOZZKRuI5QPA
+         irQV//+k0BTPSACljotoPGLCrHLzF6pXlGBxODHVCTvsPirYgx985RqxXJpwV7xjqCUe
+         4PBcau3zMUeB+Gp5Mvgx3Ppmrud+GxocH+oFwVWrU0kKyzQwx+hLuYjOGtc4aTK24AMm
+         Bw/vEXmbFaR6GCL7g3ww5HB43KEzohLWYSHIPpEOob/E59f3LhZPOONq0Zugy3Op8VHS
+         VeWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=7P4/MoUd89O1+A8bGYH6BhOc7UW55SCbrR2sakyuDZs=;
-        b=NcLbJ0Y95ZP7/JwJEj3H7w6lY7mfEsCi21smxcwf5l6/5PbE3jQHT+9IuOtrdCzZW2
-         DCoz4LCJfjhJ7IIk9KjHyHF6813uvg4o0QyZ4JVSOJS5loFJ0j/Stnhes/f14DTOcB7k
-         yKh4evvqiqGoiehUt/Omk01CBBamdn8T+A+G/KzcztLK0vGSlW1tvaEnauodD6fOe8jP
-         A4DqhKg67c9h1U6+yL57kVPQ1/r+748l+IrjKqOIrppbkemOQ1qlz59K2XpPAipS3cXa
-         P6vDz+VexmkiQcRN2/eS970k7TPEWRUcVXyLp6ZGoE64ygXr+FdIuYXYePghadlvth0C
-         LCKw==
-X-Gm-Message-State: ACrzQf1UCSmCcGmO9UzJCoS5/NbVhDLRARjT+XO2lBi8wB0CDekS/B71
-        ixWbR50qY2Ho7kBKosk3NP4=
-X-Google-Smtp-Source: AMsMyM44m8nPBgTU9GsK/fBLG7EG7voI+gWqkrcw+vUsn+mG/tB9/JXLSkLXgc8evn0Ta+BAngTujA==
-X-Received: by 2002:a17:902:d502:b0:177:f287:269d with SMTP id b2-20020a170902d50200b00177f287269dmr1905914plg.140.1663830708961;
-        Thu, 22 Sep 2022 00:11:48 -0700 (PDT)
-Received: from debian.me (subs03-180-214-233-90.three.co.id. [180.214.233.90])
-        by smtp.gmail.com with ESMTPSA id x20-20020a17090300d400b0017693722e7dsm3250581plc.6.2022.09.22.00.11.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 00:11:47 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 4C5F81002A8; Thu, 22 Sep 2022 14:11:43 +0700 (WIB)
-Date:   Thu, 22 Sep 2022 14:11:43 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.19 00/38] 5.19.11-rc1 review
-Message-ID: <YywKrx5hyO8pEZNR@debian.me>
-References: <20220921153646.298361220@linuxfoundation.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=4qwFmOB0PsZUxn1YuAMzNGjJlPsdphw8R7+YvCnubH0=;
+        b=UC7JPjrHjN4Vc8vhpf0MFq6d1fD6JcmshWnoN/k77zqll7dqctbfvRFFOi3cvcJl1D
+         YmoHCbphtZ/AwW6cJcKUmLjpLG7gDlcAE0bakh4XNPbtFhw9iAlYCadws+Z/LDUnmNDj
+         +3taZ9zXbZTmGL4Tr3JmZGY8x9OrxbxCYnzuwxJWh7gqBAaK3dho6k6VOUBSVAYHw1IM
+         re9fMwS+YyBIbJKrvnDfxCZmi2hF5gkdqgSSdyyLNYInf4od3Lt1eqEUhyj60j/l0rYo
+         jVl4TY+pacFDMwKKSjoUZfFYkIo3DeZHDN3MnqpTh9TSC5A4aNfd2o5EdyedUM606hQz
+         ZAkQ==
+X-Gm-Message-State: ACrzQf0yzQr0kv+8cXlG2BdqvOzpQXVwYBlf6EfyfLSt/GIyR8KXV0oG
+        /JOYzEFwhXvnMtT0OuRPvg/+yHYQGT2jE2WwvYgZvg==
+X-Google-Smtp-Source: AMsMyM4JYpd2n9iO3hmVepFOcLWqFkwfXgjMAL6JrMTRIg86WKiHwNCEUkx4CO5qX/hHUyDd66RCOcMoe07AHhsFXMY=
+X-Received: by 2002:a2e:bf21:0:b0:266:2be3:61e8 with SMTP id
+ c33-20020a2ebf21000000b002662be361e8mr561798ljr.383.1663830750949; Thu, 22
+ Sep 2022 00:12:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="3okefcpLheQNPjjI"
-Content-Disposition: inline
-In-Reply-To: <20220921153646.298361220@linuxfoundation.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220916080305.29574-1-vincent.guittot@linaro.org>
+ <20220916080305.29574-6-vincent.guittot@linaro.org> <073938c4-ab23-2270-8e60-291f2901e230@arm.com>
+ <CAKfTPtCWE5O4TeTBG8hgar8w56-WzvmX7aR9D7dXN_vJ5LCLyQ@mail.gmail.com>
+ <b02452b2-900c-89da-c7b7-40a61268065e@arm.com> <CAKfTPtDvWsq8YUEzK=xm+S22p=f1kR87a4hT38Ni_t4ZfZ0Zag@mail.gmail.com>
+ <04c65f4f-5072-2a07-cbe0-63046a7bc58f@arm.com>
+In-Reply-To: <04c65f4f-5072-2a07-cbe0-63046a7bc58f@arm.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Thu, 22 Sep 2022 09:12:19 +0200
+Message-ID: <CAKfTPtA1UFRGsDRVRNn_M2OEQ2G8A5MzWP_3GpmSsf1=B9+DdA@mail.gmail.com>
+Subject: Re: [PATCH v4 5/8] sched/fair: Take into account latency priority at wakeup
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, parth@linux.ibm.com,
+        qais.yousef@arm.com, chris.hyser@oracle.com,
+        valentin.schneider@arm.com, patrick.bellasi@matbug.net,
+        David.Laight@aculab.com, pjt@google.com, pavel@ucw.cz,
+        tj@kernel.org, qperret@google.com, tim.c.chen@linux.intel.com,
+        joshdon@google.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 22 Sept 2022 at 00:41, Dietmar Eggemann
+<dietmar.eggemann@arm.com> wrote:
+>
+> On 20/09/2022 17:49, Vincent Guittot wrote:
+> > On Tue, 20 Sept 2022 at 15:18, Dietmar Eggemann
+> > <dietmar.eggemann@arm.com> wrote:
+> >>
+> >> On 19/09/2022 17:39, Vincent Guittot wrote:
+> >>> On Mon, 19 Sept 2022 at 12:05, Dietmar Eggemann
+> >>> <dietmar.eggemann@arm.com> wrote:
+> >>>>
+> >>>> On 16/09/2022 10:03, Vincent Guittot wrote:
+>
+> [...]
+>
+> >>>>> +      * the idle thread and don't set next buddy as a candidate for being
+> >>>>> +      * picked in priority.
+> >>>>> +      * In case of simultaneous wakeup from idle, the latency sensitive tasks
+> >>>>> +      * lost opportunity to preempt non sensitive tasks which woke up
+> >>>>> +      * simultaneously.
+> >>>>> +      */
+> >>>>
+> >>>> The position of this comment block within this function is somehow
+> >>>> misleading since it describes the reason for the function rather then a
+> >>>> particular condition within this function. Wouldn't it be more readable
+> >>>> when it would be a function header comment instead?
+> >>>
+> >>> I put it after the usual early return tests to put the comment close
+> >>> to the useful part: the use of next buddy and __pick_first_entity()
+> >>
+> >> So you want to have the `wakeup_preempt_entity(se, pse) == 1` condition
+> >> from check_preempt_wakeup() also for cfs_task woken up by others.
+> >
+> > I wake the wakeup_preempt_entity(cfs_rq->next, left) < 1 in
+> > pick_next_entity() to pick the task with highest latency constraint
+> > when another class is running while waking up
+>
+> That's correct. This is where you potentially pick this task since it is
+> the next_buddy.
+> All I wanted to say is that check_preempt_from_others() and its `next &&
+> wakeup_preempt_entity(next, se) == 1` is the counterpart of the
+> `wakeup_preempt_entity(se, pse) == 1` in check_preempt_wakeup() to be
+> able to set next_buddy even curr is from an other class than CFS.
+>
+> [...]
+>
+> >>>> I still don't get the rationale behind why when either one (se or curr)
+> >>>> of the latency_nice values is negative, we use the diff between them but
+> >>>> if not, we only care about se's value. Why don't you always use the diff
+> >>>> between se and curr? Since we have a range [-20 ... 19] why shouldn't we
+> >>>> use the difference between let's say se = 19 and curr = 5?
+> >>>> You discussed this with Tao Zhou on the v1 but I didn't understand it fully.
+> >>>
+> >>> Let say that current has a latency nice prio of 19 and a task A with a
+> >>> latency nice of 10 wakes up. Both tasks don't care about scheduling
+> >>> latency (current more than task A). If we use the diff, the output of
+> >>> wakeup_latency_gran() would be negative (-10ms) which reflects the
+> >>> fact that the waking task is sensitive to the latency and wants to
+> >>> preempt current even if its vruntime is after. But obviously both
+> >>> current and task A don't care to preempt at wakeup.
+> >>
+> >> OK, I understand but there is a certain level of unsteadiness here.
+> >>
+> >> If p has >0 it gets treated differently in case current has >=0 and case
+> >
+> > "If p >=0"; 0 has same behavior than [1..19]
+> >
+> >> current has <0.
+>
+> Not quite. It depends on curr. With sysctl_sched_latency = 24ms:
 
---3okefcpLheQNPjjI
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I thought you were speaking about priority 0 vs [1..19] as you made a
+difference in your previous comment below
 
-On Wed, Sep 21, 2022 at 05:45:44PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.19.11 release.
-> There are 38 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
+>
+> (1) p = 10 curr =  19 -> wakeup_latency_gran() returns 12ms
+>
+> (2) p = 10 curr = -10 -> wakeup_latency_gran() returns 24ms
+>
+> In (1) only p's own latency counts whereas in (2) we take the diff,
 
-Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
-powerpc (ps3_defconfig, GCC 12.1.0).
+Yes because  curr is latency sensitive in (2) whereas it's not in (1)
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+>
+> In (A) we 'punish' p even though it competes against curr which has an
+> even lower latency requirement than p,
 
---=20
-An old man doll... just what I always wanted! - Clara
+What is (A) ?  Assuming you meant (1), having a positive nice latency
+means that you don't have latency requirement but you are tolerant to
+scheduling delay so we don't 'punish' p. P will preempt curr is we are
+above the tolerance
 
---3okefcpLheQNPjjI
-Content-Type: application/pgp-signature; name="signature.asc"
+>
+> >> Do we expect that tasks set their value to [1..19] in this case, when
+> >> the default 0 already indicates a 'don't care'?
+> >
+> > I'm not sure that I understand your concern as [0..19] are treated in
+> > the same way. Only tasks (curr or se) with offset <0 need a relative
+> > comparison to the other. If curr and se has both a latency nice of
+> > -19, se should not blindly preempt curr but only if curr already run
+> > for its amount of time
+>
+> With p = -19 and curr = -19 we would take the diff, so 0ms.
+>
+> With p = 19 and curr = 19, if we would use `latency_offset -=
+> curr->latency_offset` wakeup_latency_gran() would return 973/1024*24ms -
+> 973/1024*24ms = 0ms and nothing will shift.
+>
+> OTHA, in case (1) wakeup_latency_gran() would return 512/1024*24ms -
+> 973/1024*24ms = - 10.80ms. So p would gain an advantage here instead of
+> a penalty.
 
------BEGIN PGP SIGNATURE-----
+And that's all the point. A priority >= 0 means that you don't care
+about scheduling delays so there is no reason to be more aggressive
+with a task that is also latency tolerant. We only have to ensure that
+the delay stays in the acceptable range
 
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCYywKkgAKCRD2uYlJVVFO
-ox2sAQD9fAi9DYE3iQ31NlP7K5xWx421JILzY5doQwTjhoaksgD9ErFmX6f1PePL
-gT61pRSAEMaQOSSYlyR80ewxlSTH1wQ=
-=WclU
------END PGP SIGNATURE-----
-
---3okefcpLheQNPjjI--
+>
+> Essentially using the full [-20 .. 19] nice scope for `se vs. curr`
+> comparison.
