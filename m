@@ -2,44 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09F1D5E6EB3
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 23:41:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7B995E6EAF
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 23:41:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231330AbiIVVlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 17:41:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39208 "EHLO
+        id S231574AbiIVVlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 17:41:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231316AbiIVVko (ORCPT
+        with ESMTP id S231388AbiIVVkv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 17:40:44 -0400
-Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA418F6864;
-        Thu, 22 Sep 2022 14:40:43 -0700 (PDT)
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 5955D200A39;
-        Thu, 22 Sep 2022 23:40:42 +0200 (CEST)
-Received: from smtp.na-rdc02.nxp.com (usphx01srsp001v.us-phx01.nxp.com [134.27.49.11])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 190BB200A0A;
-        Thu, 22 Sep 2022 23:40:42 +0200 (CEST)
-Received: from right.am.freescale.net (right.am.freescale.net [10.81.116.134])
-        by usphx01srsp001v.us-phx01.nxp.com (Postfix) with ESMTP id BA9EE40AA2;
-        Thu, 22 Sep 2022 14:40:40 -0700 (MST)
-From:   Li Yang <leoyang.li@nxp.com>
-To:     shawnguo@kernel.org, devicetree@vger.kernel.org
-Cc:     robh+dt@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Pankaj Bansal <pankaj.bansal@nxp.com>,
-        Li Yang <leoyang.li@nxp.com>
-Subject: [PATCH v3 9/9] arm64: dts: ls1046a-qds: Modify the qspi flash frequency
-Date:   Thu, 22 Sep 2022 16:40:30 -0500
-Message-Id: <20220922214030.9004-10-leoyang.li@nxp.com>
-X-Mailer: git-send-email 2.25.1.377.g2d2118b
-In-Reply-To: <20220922214030.9004-1-leoyang.li@nxp.com>
-References: <20220922214030.9004-1-leoyang.li@nxp.com>
+        Thu, 22 Sep 2022 17:40:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66FAC10F72D;
+        Thu, 22 Sep 2022 14:40:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A83C063299;
+        Thu, 22 Sep 2022 21:40:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 018A9C43143;
+        Thu, 22 Sep 2022 21:40:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663882850;
+        bh=6HVl8SGe/EDQwAAYwGcRPcx03Stc2S5pnbVit6qv7O8=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=ALB0ltPmPi7VuomJQXAjJy2dfciPfaqomZjuvi1Ds0ppsqeRHR0q2z6/A00sGRn+U
+         raOyK4bzYEDhjnYgIZzL3J3bVJlssC5LxUQzefM6Z7eN07jbyDLPXC9vvT8BptH/yj
+         1KDHCXqSDZ2CIdl3kwvsR3dLjcEWgr30jN+yuqXwCJB+Y4oT/8D0XK/gBeOFfs1QPw
+         KV/oZ5nhNQziPcW0ZM4kRNlYqMIKvDFSSw3+G5uxBqx3+YInzIgahDus4OcHMRLqV2
+         4+J/fsksF+nA7mxj8323l5DloN4SsgFy3kguZGvQYccwLWTAEURR7u4YHVUHDm2wbb
+         xJdXNRUzZdrwA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D4D25E4D03E;
+        Thu, 22 Sep 2022 21:40:49 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Subject: Re: [PATCH net-next] net: phy: micrel: Fix double spaces inside
+ lan8814_config_intr
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166388284986.5692.9563993810587153824.git-patchwork-notify@kernel.org>
+Date:   Thu, 22 Sep 2022 21:40:49 +0000
+References: <20220921065444.637067-1-horatiu.vultur@microchip.com>
+In-Reply-To: <20220921065444.637067-1-horatiu.vultur@microchip.com>
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,30 +59,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pankaj Bansal <pankaj.bansal@nxp.com>
+Hello:
 
-The qspi flash in ls1046a QDS board can operate at 50MHz frequency.
-Therefore, update the maximum supported freq in dts file.
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Signed-off-by: Pankaj Bansal <pankaj.bansal@nxp.com>
-Signed-off-by: Li Yang <leoyang.li@nxp.com>
----
- arch/arm64/boot/dts/freescale/fsl-ls1046a-qds.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, 21 Sep 2022 08:54:44 +0200 you wrote:
+> Inside the function lan8814_config_intr, there are double spaces when
+> assigning the return value of phy_write to err.
+> 
+> Suggested-by: Jakub Kicinski <kuba@kernel.org>
+> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+> ---
+>  drivers/net/phy/micrel.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1046a-qds.dts b/arch/arm64/boot/dts/freescale/fsl-ls1046a-qds.dts
-index f969173fb337..b2fcbba60d3a 100644
---- a/arch/arm64/boot/dts/freescale/fsl-ls1046a-qds.dts
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls1046a-qds.dts
-@@ -182,7 +182,7 @@ qflash0: flash@0 {
- 		compatible = "spansion,m25p80";
- 		#address-cells = <1>;
- 		#size-cells = <1>;
--		spi-max-frequency = <20000000>;
-+		spi-max-frequency = <50000000>;
- 		spi-rx-bus-width = <4>;
- 		spi-tx-bus-width = <4>;
- 		reg = <0>;
+Here is the summary with links:
+  - [net-next] net: phy: micrel: Fix double spaces inside lan8814_config_intr
+    https://git.kernel.org/netdev/net-next/c/f8b2cce430d9
+
+You are awesome, thank you!
 -- 
-2.37.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
