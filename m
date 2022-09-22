@@ -2,91 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A85EF5E64BA
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 16:10:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4798E5E64BF
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 16:11:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230365AbiIVOJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 10:09:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45056 "EHLO
+        id S231278AbiIVOKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 10:10:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiIVOJz (ORCPT
+        with ESMTP id S231407AbiIVOK3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 10:09:55 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3B329803;
-        Thu, 22 Sep 2022 07:09:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=zNhQCtxWvF8Q4IPC7y5tVcrAmAIZN451YsFdgUZWDIc=; b=A7i7iCjsZIyacHXjYkAX/Is2WG
-        nYl2smRxQ+vg/w0NtHXTN7nsAwptTVQa/DD1mchpHaecIYUzSLH5c/MsTtcQWrBeUYySiIEOyiZOB
-        RgOmu9kVpSOQ0sZJtg96+sm7Oo+XBI1e12tZ5ZCEi6BKQBaLUGeP5jmyJnLBkd2wHmqFUSKs77Vsg
-        REVJNeT6iicS4GQtsyq8D+KNONDTXnpD7I7/K1STaqFNTyaqpwGMK0+Y7NINryPQW47137XE38kV5
-        kvdSiP5bVt2kJW0S684xSdn5XRTV6ST7vbr2njJUPR2SQ6hqZ9NEVqCi3LpTYppAPNk9ZDpHRQdAn
-        i8eeZB0A==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1obMtR-00EyUS-GE; Thu, 22 Sep 2022 14:09:33 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 85E89300169;
-        Thu, 22 Sep 2022 16:09:32 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 61E3B2BBF7EBF; Thu, 22 Sep 2022 16:09:32 +0200 (CEST)
-Date:   Thu, 22 Sep 2022 16:09:32 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Wang, Wei W" <wei.w.wang@intel.com>
-Cc:     "Liang, Kan" <kan.liang@linux.intel.com>,
-        "Li, Xiaoyao" <xiaoyao.li@intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
-Subject: Re: [RFC PATCH v2 2/3] perf/x86/intel/pt: Introduce and export
- pt_get_curr_event()
-Message-ID: <YyxsnAFYMLn2U9BT@hirez.programming.kicks-ass.net>
-References: <20220921164521.2858932-1-xiaoyao.li@intel.com>
- <20220921164521.2858932-3-xiaoyao.li@intel.com>
- <175b518c-d202-644e-a3a7-67e877852548@linux.intel.com>
- <DS0PR11MB6373C84139621DC447D3F466DC4E9@DS0PR11MB6373.namprd11.prod.outlook.com>
- <Yyxke/IO+AP4EWwT@hirez.programming.kicks-ass.net>
- <DS0PR11MB637346E9F224C5330CDEF3BFDC4E9@DS0PR11MB6373.namprd11.prod.outlook.com>
+        Thu, 22 Sep 2022 10:10:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 472826DFB0;
+        Thu, 22 Sep 2022 07:10:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 93DAFB83729;
+        Thu, 22 Sep 2022 14:10:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 33807C433C1;
+        Thu, 22 Sep 2022 14:10:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663855816;
+        bh=TzvR0POpCaJRrnTgwnJ2GPn3jJmBUHGSUIQxgtzE2mE=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=RmEH2QkTIYIuCUof0k1xyeEmrkPPgyQyuQi6aAZ91QYVVnvyKTPS+TvA+AMbKiCpD
+         zcAjPD8bsKef2qxG9vBf+jR8JTUT2su7uc/uNUQ5MpM0GFnzt56/1dk3Z2W6ag2uu0
+         /ROR/VwxJ32TajACzPEHFlYGyIoyha91RCnt+6Mb+bW8pFSIOOrwGWgGnf2ypd4I5R
+         vAQOmxkbnmN5JvEXYYOaVJiflHweGBNzNYDPG49/iH/CfmaZ/kT+BDvBEez5/Chu5H
+         b2O/laBPdDlNSOfMMnR1Sc7jbUoFdh1TMkML32Y6tVF6AIahF9GciQvwo4Uxtk68bq
+         bOS+X28VRHCQw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 15AA1E4D03D;
+        Thu, 22 Sep 2022 14:10:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DS0PR11MB637346E9F224C5330CDEF3BFDC4E9@DS0PR11MB6373.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] udp: Use WARN_ON_ONCE() in udp_read_skb()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166385581608.2095.10177903030009294080.git-patchwork-notify@kernel.org>
+Date:   Thu, 22 Sep 2022 14:10:16 +0000
+References: <20220921005915.2697-1-yepeilin.cs@gmail.com>
+In-Reply-To: <20220921005915.2697-1-yepeilin.cs@gmail.com>
+To:     Peilin Ye <yepeilin.cs@gmail.com>
+Cc:     edumazet@google.com, davem@davemloft.net, yoshfuji@linux-ipv6.org,
+        dsahern@kernel.org, kuba@kernel.org, pabeni@redhat.com,
+        peilin.ye@bytedance.com, cong.wang@bytedance.com,
+        kuniyu@amazon.com, ast@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 01:59:53PM +0000, Wang, Wei W wrote:
-> On Thursday, September 22, 2022 9:35 PM, Peter Zijlstra
-> > On Thu, Sep 22, 2022 at 12:58:49PM +0000, Wang, Wei W wrote:
-> > 
-> > > Add a function to expose the current running PT event to users. One
-> > > usage is in KVM, it needs to get and disable the running host PT event
-> > > before VMEnter to the guest and resumes the event after VMexit to host.
-> > 
-> > You cannot just kill a host event like that. If there is a host event, the guest
-> > looses out.
-> 
-> OK. The intention was to pause the event (that only profiles host info) when switching to guest,
-> and resume when switching back to host.
+Hello:
 
-If the even doesn't profile guest context, then yes. If it does profile
-guest context, you can't.
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Tue, 20 Sep 2022 17:59:15 -0700 you wrote:
+> From: Peilin Ye <peilin.ye@bytedance.com>
+> 
+> Prevent udp_read_skb() from flooding the syslog.
+> 
+> Suggested-by: Jakub Sitnicki <jakub@cloudflare.com>
+> Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
+> 
+> [...]
+
+Here is the summary with links:
+  - [net] udp: Use WARN_ON_ONCE() in udp_read_skb()
+    https://git.kernel.org/netdev/net/c/db39dfdc1c3b
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
