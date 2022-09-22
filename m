@@ -2,100 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC8655E7044
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 01:43:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 660615E7059
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 01:55:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229499AbiIVXnt convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 22 Sep 2022 19:43:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45568 "EHLO
+        id S229581AbiIVXy5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 19:54:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiIVXnr (ORCPT
+        with ESMTP id S229552AbiIVXyy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 19:43:47 -0400
-Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB3BF3F85
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 16:43:46 -0700 (PDT)
-Received: from omf03.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay06.hostedemail.com (Postfix) with ESMTP id F376DAB95B;
-        Thu, 22 Sep 2022 23:43:44 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf03.hostedemail.com (Postfix) with ESMTPA id 843E16000D;
-        Thu, 22 Sep 2022 23:43:43 +0000 (UTC)
-Message-ID: <8d657bcf45b23dc634e8c6fc693c166360e6539e.camel@perches.com>
-Subject: Re: [PATCH] get_maintainer: Gracefully handle files with authors
- but no signers
-From:   Joe Perches <joe@perches.com>
-To:     David Matlack <dmatlack@google.com>
-Cc:     linux-kernel@vger.kernel.org
-Date:   Thu, 22 Sep 2022 16:43:42 -0700
-In-Reply-To: <20220922230114.3556322-1-dmatlack@google.com>
-References: <20220922230114.3556322-1-dmatlack@google.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        Thu, 22 Sep 2022 19:54:54 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37C77760C0;
+        Thu, 22 Sep 2022 16:54:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663890892; x=1695426892;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=c2Fh1kRyIqO7dwRAaAYPKGtKnMyK0YH7bX5IoC7jEd0=;
+  b=T/lPzpJEoEdxDGzfK1bp3cm3xMkBfqo+VAsTxSrmUbvhRbsubcjqGgYK
+   Qht67PdbO9MaRZudDbQDouW7e8V27w1RfYwmXtJRByzC7p4z+BZvHjVhe
+   UIR8hzB6rBx9tJ3MNMTp/ScxR4W5bg6ekBHtymawlVscjLm8GJLbfcu+e
+   oCIR6k93c2O5BgFp8KlY3krlls77y9Z2gcdn8osH9UkP+bVHWeIbV5QVn
+   ii9rfFRmB5L/o1XPIb1fTT4F8pIjdGYM2qZoCBWSWKtjuXxGUjMN5Wbrv
+   xHsMdfQVOJheZHh+4fIiwiYUFCMrWObJLQMZ5D/GuaPlMCTw41a0d+TpR
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="364477843"
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="364477843"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 16:54:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="571180350"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 22 Sep 2022 16:54:48 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1obW1n-00056G-1I;
+        Thu, 22 Sep 2022 23:54:47 +0000
+Date:   Fri, 23 Sep 2022 07:54:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     hildawu@realtek.com, marcel@holtmann.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        johan.hedberg@gmail.com, luiz.dentz@gmail.com,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mmandlik@google.com, max.chou@realtek.com, alex_lu@realsil.com.cn,
+        kidman@realtek.com
+Subject: Re: [PATCH] Bluetooth: btusb: Add Realtek devcoredump support
+Message-ID: <202209230749.lLf1xA67-lkp@intel.com>
+References: <20220922103337.26167-1-hildawu@realtek.com>
 MIME-Version: 1.0
-X-Rspamd-Queue-Id: 843E16000D
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Stat-Signature: gfinwzqc7ywnpfrput75684i5695qy77
-X-Rspamd-Server: rspamout02
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1+xrUJJqINxFge6EflARit7FT55Z7gRvy8=
-X-HE-Tag: 1663890223-62242
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220922103337.26167-1-hildawu@realtek.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-09-22 at 16:01 -0700, David Matlack wrote:
-> Gracefully handle the case where a file has no signers (e.g. has not
-> been modified within the last year) but does have authors (e.g. because
-> there are local commits that modifies the file without Signed-off-by
-> tags). This scenario could happen for developers whose workflow is to
-> add Signed-off-by tags as part of git-format-patch rather than as part
-> of git-commit.
+Hi,
 
-I think that's a poor process.
+Thank you for the patch! Yet something to improve:
 
-> Today this scenario results in the following non-sensical output from
-> get_maintainer.pl:
-> 
->   Bad divisor in main::vcs_assign: 0
->   "GitAuthor: David Matlack" <dmatlack@google.com> (authored:1/1=100%,added_lines:9/9=100%,removed_lines:3/3=100%)
+[auto build test ERROR on bluetooth/master]
+[also build test ERROR on bluetooth-next/master linus/master v6.0-rc6 next-20220921]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Interesting...
+url:    https://github.com/intel-lab-lkp/linux/commits/hildawu-realtek-com/Bluetooth-btusb-Add-Realtek-devcoredump-support/20220922-183533
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth.git master
+config: hexagon-randconfig-r023-20220922 (https://download.01.org/0day-ci/archive/20220923/202209230749.lLf1xA67-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/b896c161a197fbcb019f6e4f890b667bb9d6f15e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review hildawu-realtek-com/Bluetooth-btusb-Add-Realtek-devcoredump-support/20220922-183533
+        git checkout b896c161a197fbcb019f6e4f890b667bb9d6f15e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/bluetooth/
 
-> There are two issues with this output: the "Bad divisor" error and the
-> garbled author name. Both stem from this line in vcs_find_signers():
-> 
->   return (0, \@signatures, \@authors, \@stats) if !@signatures;
-[]
-> Returning 0 for the number of commits and a non-empty list for the
-> authors results in the "Bad divisor". The garbled author name comes from
-> the fact that @authors is the raw, unparsed, output line from git-log.
-> Code later in vcs_find_signers() actually parses out the name and drops
-> the "GitAuthor: " prefix.
-> 
-> Fix this by returning an empty list instead of @authors and @stats to
-> make them coherent with the fact that commits is 0.
-[]
-> diff --git a/scripts/get_maintainer.pl b/scripts/get_maintainer.pl
-[]
-> @@ -1605,7 +1605,7 @@ sub vcs_find_signers {
->  
->  #    print("stats: <@stats>\n");
->  
-> -    return (0, \@signatures, \@authors, \@stats) if !@signatures;
-> +    return (0, (), (), ()) if !@signatures;
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-There's probably some better mechanism, not sure what it is though
-as I don't have equivalent commits in the actual tree.
+All errors (new ones prefixed by >>):
 
-And I think you need \() and not () as what's returned is a reference
-to an array and not an array or maybe use undef.
+>> drivers/bluetooth/btrtl.c:657:8: error: call to undeclared function 'hci_devcoredump_register'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           err = hci_devcoredump_register(hdev, btrtl_coredump, btrtl_dmp_hdr,
+                 ^
+   1 error generated.
 
->      save_commits_by_author(@lines) if ($interactive);
->      save_commits_by_signer(@lines) if ($interactive);
 
+vim +/hci_devcoredump_register +657 drivers/bluetooth/btrtl.c
+
+   652	
+   653	static int btrtl_register_devcoredump_support(struct hci_dev *hdev)
+   654	{
+   655		int err;
+   656	
+ > 657		err = hci_devcoredump_register(hdev, btrtl_coredump, btrtl_dmp_hdr,
+   658					       NULL);
+   659	
+   660		return err;
+   661	}
+   662	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
