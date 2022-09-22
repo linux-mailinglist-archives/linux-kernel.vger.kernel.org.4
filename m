@@ -2,183 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 316EE5E6654
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 16:59:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3D305E6657
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 17:00:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231738AbiIVO7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 10:59:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41934 "EHLO
+        id S229887AbiIVPAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 11:00:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231791AbiIVO7K (ORCPT
+        with ESMTP id S231839AbiIVPAC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 10:59:10 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADDA2E4DB5
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 07:59:05 -0700 (PDT)
-Received: from fraeml745-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MYJLF3vx3z67NJj;
-        Thu, 22 Sep 2022 22:57:57 +0800 (CST)
-Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml745-chm.china.huawei.com (10.206.15.226) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 22 Sep 2022 16:59:03 +0200
-Received: from [10.195.244.8] (10.195.244.8) by lhrpeml500003.china.huawei.com
- (7.191.162.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 22 Sep
- 2022 15:59:02 +0100
-Message-ID: <495de02c-59ce-917f-1cb4-5425a37063ed@huawei.com>
-Date:   Thu, 22 Sep 2022 15:59:01 +0100
+        Thu, 22 Sep 2022 11:00:02 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 276335F44;
+        Thu, 22 Sep 2022 08:00:00 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id u69so9404263pgd.2;
+        Thu, 22 Sep 2022 08:00:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date;
+        bh=B4Xk+BIx1noN892+bOS2pADiNJJuJegKYow8CwgOs3I=;
+        b=Jba+zR4KKcsD7I9w+UH1acIjWyRstiNuUZRnYd/qSPAnM69nlEWFroc8xjwnJdHY/H
+         EkLdMuocfy+Ypf1VrNKR4iM1fD6WOq6mdIrfk+x10ho5hE5TmRp3ii1/6nANt3KgtyNu
+         A67IpwXUbqR6KaJX8C2k8OBl/rqXWaYKgMF4FC4zI8CH8rOEIhizWf7ipSkV15jww9k5
+         UQf0lGnEDWwK/zP26EMJq2GeJtOC4lCV2aiMIeKFdkKvv+tnIqgd3W8F0styaF2H68bW
+         NOE5yNjBnmdKHlhrF9yF34p/bTPFUXOVw+ndzYspIGENXPawuJcxvrcb6KZ5WiDb7/YN
+         f+ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date;
+        bh=B4Xk+BIx1noN892+bOS2pADiNJJuJegKYow8CwgOs3I=;
+        b=DeJSfAflm1vMLNlpVrA7++b/cKLIRlc7QFvcitbHIZFzeQezW1O/cCHNd+2Us1/5Pp
+         o/EC825bMab0m3NyNLduAqPPAS5Cc38KVEyPRF3KZHnBH8822xDGpx2fZ5kISSk+th6g
+         JCQ5oqXZf3ekCt/i3Ighc4oiDtW8o9lqNQ2cHfUJznEsNZVGyLdIP7QJ22vd2YExS0YO
+         Wa3dpxNW4VU+FUDxLfI5KNjQzHm1LGDT+BoyLn2uDTzhYeszIeO75Vt3ti+TqcZc+YaU
+         5ApqiVRYWy9a6sQtJAyDbN/Pqr2ZQ11rrN/rKtTkzzKk5ogpwYSyBi3iWhXqWCxrzLBu
+         F/iQ==
+X-Gm-Message-State: ACrzQf0ZgtO3EDjrfhGNtSFzYoF/+gP77PXKLXShUXi3Szl+Aq/uwVMH
+        ZRFAOkhgl6rjx3xEkZKV7pQ=
+X-Google-Smtp-Source: AMsMyM5+cPlZPu/X2TJbdKICI88VZo9u/xABZdlRtjl6EPnLP3qZhJcQMrJPm61r/PPxrkAOqKWGng==
+X-Received: by 2002:a65:58c8:0:b0:438:aecf:5cc8 with SMTP id e8-20020a6558c8000000b00438aecf5cc8mr3393332pgu.18.1663858799514;
+        Thu, 22 Sep 2022 07:59:59 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 65-20020a621744000000b005289a50e4c2sm4586414pfx.23.2022.09.22.07.59.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Sep 2022 07:59:58 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <79675c12-00bb-849e-70d2-dca8cce210fe@roeck-us.net>
+Date:   Thu, 22 Sep 2022 07:59:57 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v2] iommu: Optimise PCI SAC address trick
-To:     Robin Murphy <robin.murphy@arm.com>, <joro@8bytes.org>
-CC:     <will@kernel.org>, <iommu@lists.linux.dev>,
-        <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <2b0ca6254dd0102bf559b2a73e9b51da089afbe3.1663764627.git.robin.murphy@arm.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <2b0ca6254dd0102bf559b2a73e9b51da089afbe3.1663764627.git.robin.murphy@arm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH V3 3/8] hwmon/coretemp: Handle large core ID value
+Content-Language: en-US
+To:     Zhang Rui <rui.zhang@intel.com>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-hwmon@vger.kernel.org
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, peterz@infradead.org,
+        corbet@lwn.net, fenghua.yu@intel.com, jdelvare@suse.com,
+        len.brown@intel.com
+References: <20220922133800.12918-1-rui.zhang@intel.com>
+ <20220922133800.12918-4-rui.zhang@intel.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220922133800.12918-4-rui.zhang@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.195.244.8]
-X-ClientProxiedBy: lhrpeml500001.china.huawei.com (7.191.163.213) To
- lhrpeml500003.china.huawei.com (7.191.162.67)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/09/2022 13:53, Robin Murphy wrote:
-> Per the reasoning in commit 4bf7fda4dce2 ("iommu/dma: Add config for
-> PCI SAC address trick") and its subsequent revert, this mechanism no
-> longer serves its original purpose, but now only works around broken
-> hardware/drivers in a way that is unfortunately too impactful to remove.
+On 9/22/22 06:37, Zhang Rui wrote:
+> The coretemp driver supports up to a hard-coded limit of 128 cores.
 > 
-> This does not, however prevent us from solving the performance impact
-> which that workaround has on large-scale systems that don't need it.
-> That kicks in once the 32-bit IOVA space fills up and we keep
-> unsuccessfully trying to allocate from it. However, if we get to that
-> point then in fact it's already the endgame. The nature of the allocator
-> is such that the first IOVA we give to a device after the 32-bit space
-> runs out will be the highest possible address for that device, ever.
-> If that works, then great, we know we can optimise for speed by always
-> allocating from the full range. And if it doesn't, then the worst has
-> already happened and any brokenness is now showing, so there's no point
-> continuing to try to hide it.
+> Today, the driver can not support a core with an ID above that limit.
+> Yet, the encoding of core ID's is arbitrary (BIOS APIC-ID) and so they
+> may be sparse and they may be large.
 > 
-> To that end, implement a flag to refine this into a per-device policy
-> that can automatically get itself out of the way if and when it stops
-> being useful.
+> Update the driver to map arbitrary core ID numbers into appropriate
+> array indexes so that 128 cores can be supported, no matter the encoding
+> of core ID's.
 > 
-> CC: Linus Torvalds <torvalds@linux-foundation.org>
-> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+> Acked-by: Len Brown <len.brown@intel.com>
+> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 
-FWIW,
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 
-Reviewed-by: John Garry <john.garry@huawei.com>
-
-2x minor comments below.
-
-Thanks,
-John
+Guenter
 
 > ---
+>   drivers/hwmon/coretemp.c | 56 +++++++++++++++++++++++++++++-----------
+>   1 file changed, 41 insertions(+), 15 deletions(-)
 > 
-> v2: Refactor to avoid CONFIG_IOMMU_DMA=n breakage (oops)
-> 
->   drivers/iommu/dma-iommu.c | 5 ++++-
->   drivers/iommu/dma-iommu.h | 8 ++++++++
->   drivers/iommu/iommu.c     | 3 +++
->   include/linux/iommu.h     | 2 ++
->   4 files changed, 17 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
-> index 9297b741f5e8..1cebb16faa33 100644
-> --- a/drivers/iommu/dma-iommu.c
-> +++ b/drivers/iommu/dma-iommu.c
-> @@ -643,9 +643,12 @@ static dma_addr_t iommu_dma_alloc_iova(struct iommu_domain *domain,
->   		dma_limit = min(dma_limit, (u64)domain->geometry.aperture_end);
+> diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
+> index bfdcfe8ccb34..291566aeb703 100644
+> --- a/drivers/hwmon/coretemp.c
+> +++ b/drivers/hwmon/coretemp.c
+> @@ -46,9 +46,6 @@ MODULE_PARM_DESC(tjmax, "TjMax value in degrees Celsius");
+>   #define TOTAL_ATTRS		(MAX_CORE_ATTRS + 1)
+>   #define MAX_CORE_DATA		(NUM_REAL_CORES + BASE_SYSFS_ATTR_NO)
 >   
->   	/* Try to get PCI devices a SAC address */
-> -	if (dma_limit > DMA_BIT_MASK(32) && !iommu_dma_forcedac && dev_is_pci(dev))
-> +	if (dma_limit > DMA_BIT_MASK(32) && dev->iommu->pci_workaround) {
->   		iova = alloc_iova_fast(iovad, iova_len,
->   				       DMA_BIT_MASK(32) >> shift, false);
-> +		if (!iova)
-> +			dev->iommu->pci_workaround = false;
-
-maybe a warn/notice log would be useful for broken systems to give a 
-hint what could have gone wrong when it breaks (if we ever get here).
-
+> -#define TO_CORE_ID(cpu)		(cpu_data(cpu).cpu_core_id)
+> -#define TO_ATTR_NO(cpu)		(TO_CORE_ID(cpu) + BASE_SYSFS_ATTR_NO)
+> -
+>   #ifdef CONFIG_SMP
+>   #define for_each_sibling(i, cpu) \
+>   	for_each_cpu(i, topology_sibling_cpumask(cpu))
+> @@ -91,6 +88,8 @@ struct temp_data {
+>   struct platform_data {
+>   	struct device		*hwmon_dev;
+>   	u16			pkg_id;
+> +	u16			cpu_map[NUM_REAL_CORES];
+> +	struct ida		ida;
+>   	struct cpumask		cpumask;
+>   	struct temp_data	*core_data[MAX_CORE_DATA];
+>   	struct device_attribute name_attr;
+> @@ -441,7 +440,7 @@ static struct temp_data *init_temp_data(unsigned int cpu, int pkg_flag)
+>   							MSR_IA32_THERM_STATUS;
+>   	tdata->is_pkg_data = pkg_flag;
+>   	tdata->cpu = cpu;
+> -	tdata->cpu_core_id = TO_CORE_ID(cpu);
+> +	tdata->cpu_core_id = topology_core_id(cpu);
+>   	tdata->attr_size = MAX_CORE_ATTRS;
+>   	mutex_init(&tdata->update_lock);
+>   	return tdata;
+> @@ -454,7 +453,7 @@ static int create_core_data(struct platform_device *pdev, unsigned int cpu,
+>   	struct platform_data *pdata = platform_get_drvdata(pdev);
+>   	struct cpuinfo_x86 *c = &cpu_data(cpu);
+>   	u32 eax, edx;
+> -	int err, attr_no;
+> +	int err, index, attr_no;
+>   
+>   	/*
+>   	 * Find attr number for sysfs:
+> @@ -462,14 +461,26 @@ static int create_core_data(struct platform_device *pdev, unsigned int cpu,
+>   	 * The attr number is always core id + 2
+>   	 * The Pkgtemp will always show up as temp1_*, if available
+>   	 */
+> -	attr_no = pkg_flag ? PKG_SYSFS_ATTR_NO : TO_ATTR_NO(cpu);
+> +	if (pkg_flag) {
+> +		attr_no = PKG_SYSFS_ATTR_NO;
+> +	} else {
+> +		index = ida_alloc(&pdata->ida, GFP_KERNEL);
+> +		if (index < 0)
+> +			return index;
+> +		pdata->cpu_map[index] = topology_core_id(cpu);
+> +		attr_no = index + BASE_SYSFS_ATTR_NO;
 > +	}
 >   
->   	if (!iova)
->   		iova = alloc_iova_fast(iovad, iova_len, dma_limit >> shift,
-> diff --git a/drivers/iommu/dma-iommu.h b/drivers/iommu/dma-iommu.h
-> index 942790009292..c7be42d4f0cf 100644
-> --- a/drivers/iommu/dma-iommu.h
-> +++ b/drivers/iommu/dma-iommu.h
-> @@ -17,6 +17,10 @@ int iommu_dma_init_fq(struct iommu_domain *domain);
->   void iommu_dma_get_resv_regions(struct device *dev, struct list_head *list);
+> -	if (attr_no > MAX_CORE_DATA - 1)
+> -		return -ERANGE;
+> +	if (attr_no > MAX_CORE_DATA - 1) {
+> +		err = -ERANGE;
+> +		goto ida_free;
+> +	}
 >   
->   extern bool iommu_dma_forcedac;
-> +static inline void iommu_dma_set_pci_workaround(struct device *dev)
-
-"pci_workaround" is quite a vague name
-
-> +{
-> +	dev->iommu->pci_workaround = !iommu_dma_forcedac;
-> +}
+>   	tdata = init_temp_data(cpu, pkg_flag);
+> -	if (!tdata)
+> -		return -ENOMEM;
+> +	if (!tdata) {
+> +		err = -ENOMEM;
+> +		goto ida_free;
+> +	}
 >   
->   #else /* CONFIG_IOMMU_DMA */
->   
-> @@ -38,5 +42,9 @@ static inline void iommu_dma_get_resv_regions(struct device *dev, struct list_he
->   {
+>   	/* Test if we can access the status register */
+>   	err = rdmsr_safe_on_cpu(cpu, tdata->status_reg, &eax, &edx);
+> @@ -505,6 +516,9 @@ static int create_core_data(struct platform_device *pdev, unsigned int cpu,
+>   exit_free:
+>   	pdata->core_data[attr_no] = NULL;
+>   	kfree(tdata);
+> +ida_free:
+> +	if (!pkg_flag)
+> +		ida_free(&pdata->ida, index);
+>   	return err;
 >   }
 >   
-> +static inline void iommu_dma_set_pci_workaround(struct device *dev)
-> +{
-> +}
-> +
->   #endif	/* CONFIG_IOMMU_DMA */
->   #endif	/* __DMA_IOMMU_H */
-> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-> index edc768bf8976..ba8afea63ef1 100644
-> --- a/drivers/iommu/iommu.c
-> +++ b/drivers/iommu/iommu.c
-> @@ -323,6 +323,9 @@ static int __iommu_probe_device(struct device *dev, struct list_head *group_list
+> @@ -524,6 +538,9 @@ static void coretemp_remove_core(struct platform_data *pdata, int index)
 >   
->   	iommu_device_link(iommu_dev, dev);
->   
-> +	if (dev_is_pci(dev))
-> +		iommu_dma_set_pci_workaround(dev);
+>   	kfree(pdata->core_data[index]);
+>   	pdata->core_data[index] = NULL;
 > +
+> +	if (index >= BASE_SYSFS_ATTR_NO)
+> +		ida_free(&pdata->ida, index - BASE_SYSFS_ATTR_NO);
+>   }
+>   
+>   static int coretemp_probe(struct platform_device *pdev)
+> @@ -537,6 +554,7 @@ static int coretemp_probe(struct platform_device *pdev)
+>   		return -ENOMEM;
+>   
+>   	pdata->pkg_id = pdev->id;
+> +	ida_init(&pdata->ida);
+>   	platform_set_drvdata(pdev, pdata);
+>   
+>   	pdata->hwmon_dev = devm_hwmon_device_register_with_groups(dev, DRVNAME,
+> @@ -553,6 +571,7 @@ static int coretemp_remove(struct platform_device *pdev)
+>   		if (pdata->core_data[i])
+>   			coretemp_remove_core(pdata, i);
+>   
+> +	ida_destroy(&pdata->ida);
 >   	return 0;
+>   }
 >   
->   out_release:
-> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-> index 79cb6eb560a8..0eb0f808109c 100644
-> --- a/include/linux/iommu.h
-> +++ b/include/linux/iommu.h
-> @@ -368,6 +368,7 @@ struct iommu_fault_param {
->    * @fwspec:	 IOMMU fwspec data
->    * @iommu_dev:	 IOMMU device this device is linked to
->    * @priv:	 IOMMU Driver private data
-> + * @pci_workaround: Limit DMA allocations to 32-bit IOVA >    *
->    * TODO: migrate other per device data pointers under iommu_dev_data, e.g.
->    *	struct iommu_group	*iommu_group;
-> @@ -379,6 +380,7 @@ struct dev_iommu {
->   	struct iommu_fwspec		*fwspec;
->   	struct iommu_device		*iommu_dev;
->   	void				*priv;
-> +	bool				pci_workaround;
->   };
+> @@ -647,7 +666,7 @@ static int coretemp_cpu_offline(unsigned int cpu)
+>   	struct platform_device *pdev = coretemp_get_pdev(cpu);
+>   	struct platform_data *pd;
+>   	struct temp_data *tdata;
+> -	int index, target;
+> +	int i, index = -1, target;
 >   
->   int iommu_device_register(struct iommu_device *iommu,
+>   	/*
+>   	 * Don't execute this on suspend as the device remove locks
+> @@ -660,12 +679,19 @@ static int coretemp_cpu_offline(unsigned int cpu)
+>   	if (!pdev)
+>   		return 0;
+>   
+> -	/* The core id is too big, just return */
+> -	index = TO_ATTR_NO(cpu);
+> -	if (index > MAX_CORE_DATA - 1)
+> +	pd = platform_get_drvdata(pdev);
+> +
+> +	for (i = 0; i < NUM_REAL_CORES; i++) {
+> +		if (pd->cpu_map[i] == topology_core_id(cpu)) {
+> +			index = i + BASE_SYSFS_ATTR_NO;
+> +			break;
+> +		}
+> +	}
+> +
+> +	/* Too many cores and this core is not populated, just return */
+> +	if (index < 0)
+>   		return 0;
+>   
+> -	pd = platform_get_drvdata(pdev);
+>   	tdata = pd->core_data[index];
+>   
+>   	cpumask_clear_cpu(cpu, &pd->cpumask);
 
