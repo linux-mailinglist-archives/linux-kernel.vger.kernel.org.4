@@ -2,197 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6219D5E5AFF
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 07:49:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D4BD5E5B00
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 07:51:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbiIVFtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 01:49:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42376 "EHLO
+        id S229907AbiIVFvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 01:51:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbiIVFs7 (ORCPT
+        with ESMTP id S229563AbiIVFvF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 01:48:59 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2026AB40FB;
-        Wed, 21 Sep 2022 22:48:59 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id v186so306676pfv.11;
-        Wed, 21 Sep 2022 22:48:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date;
-        bh=XGFyLted51/RT9xbeKBS8viSPSWXeRp6XswM//QSaRc=;
-        b=IGQTZU0ZI7mEQl/MTnVsVah5Uj55ITzawnylZ6ObJQ+gfEPLAfcIK8QZNGfiCV2/3X
-         xgjTQovvqlNhlzaXKlmVn73q8iRdLmK+Og7UHE2gj/1wb2EHl25tolWmsv2vOBvQ8YEh
-         rt1Id4k+Gv9wg1AEodH4wgXxVvIeK8qUvpXfFu0tMx6/5CNmPqnDZXI5kikDHkTF6qBB
-         MGmZzhTOWRoDsJh99uLXTy9yeHK0I/8hsfpvXIhwM/CZpjAOsXwMClcABkWi6ROxWFVU
-         Rk9FKR9XeTT41Ef1Gf3xOTzSboznutiHmXodrx1QkVKIE60Y44vJcsf3qyBfeSrKQ2E3
-         zpFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date;
-        bh=XGFyLted51/RT9xbeKBS8viSPSWXeRp6XswM//QSaRc=;
-        b=4jjZ/j68RJznXV91NkFGzI3sVcbFX1sHNm/UZ4BIbX0Pqx71FOQkjGZE8a/cEPgXpm
-         VfIgQH0CMZfBMAp1Spfozw5CZwPATVVkoN7VeROn8e0z5RvTiyWAg6GQ5ne2OP79Dxs2
-         PmXzQFXH3UPUjZOnv4B9zcAGdP0wR/o9iHJlQjYOampVIISBbQlYb+GFy2jIi9NICYLc
-         ttuV0/ZkxKYYUk1NaaQ5LeOdJT6tTrFHvCirWgBMcA+DxxOnzIRiPlIW7jEK1od7sZQu
-         N0B4CmdGKnyJfFupapN5nJdwoq/8C79Zabk9ukG+h43xg464CzxKrsO96e/b78Wfec5d
-         bh+A==
-X-Gm-Message-State: ACrzQf03g8/07U1j1H8jE51nnsAgIMbs/QCXfBS7jZV3rYBtqE/54NBF
-        wm2V1c9wtlw8vaXNWn+cXLYJKAvs1yi1Wg==
-X-Google-Smtp-Source: AMsMyM4WAOaEjjQxOqO8ijc7wC0a/CpadcLAG7ZRy2O2HSg+IXmrzYGIB4zINGB+RlNQtXs7D+h71g==
-X-Received: by 2002:a63:5915:0:b0:438:d560:c4d3 with SMTP id n21-20020a635915000000b00438d560c4d3mr1603320pgb.240.1663825738416;
-        Wed, 21 Sep 2022 22:48:58 -0700 (PDT)
-Received: from localhost ([2406:7400:61:8a0f:392d:db19:673c:627a])
-        by smtp.gmail.com with ESMTPSA id h10-20020a170902680a00b001769206a766sm3000029plk.307.2022.09.21.22.48.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Sep 2022 22:48:57 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Thu, 22 Sep 2022 11:18:49 +0530
-Message-Id: <CN2OZW7ML4AC.35WIWKCPJQ512@skynet-linux>
-Cc:     <andersson@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        "Andy Gross" <agross@kernel.org>,
-        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
-        "Konrad Dybcio" <konrad.dybcio@somainline.org>,
-        "Mathieu Poirier" <mathieu.poirier@linaro.org>,
-        "Rob Herring" <robh+dt@kernel.org>
-Subject: Re: [PATCH v4 2/4] dt-bindings: remoteproc: qcom: Convert wcnss
- documentation to YAML
-From:   "Sireesh Kodali" <sireeshkodali1@gmail.com>
-To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
-        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>,
-        <~postmarketos/upstreaming@lists.sr.ht>,
-        <linux-kernel@vger.kernel.org>
-X-Mailer: aerc 0.12.0
-References: <20220921043648.2152725-1-sireeshkodali1@gmail.com>
- <20220921043648.2152725-3-sireeshkodali1@gmail.com>
- <c241920b-c94d-83d8-d195-2cf3cc044038@linaro.org>
-In-Reply-To: <c241920b-c94d-83d8-d195-2cf3cc044038@linaro.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 22 Sep 2022 01:51:05 -0400
+Received: from spam1.phison.com (spam1.phison.com [60.249.103.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AE57B4401
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 22:51:03 -0700 (PDT)
+X-UUID: 3e1dab82188e4df9af119a6914f3938e-20220922
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:3095cd38-1ed9-4aa8-a4f5-1e8ec9751c34,IP:0,U
+        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:-5
+X-CID-META: VersionHash:39a5ff1,CLOUDID:8f1aa406-1cee-4c38-b21b-a45f9682fdc0,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 3e1dab82188e4df9af119a6914f3938e-20220922
+Received: from mail.phison.com [(192.168.1.112)] by spam1.phison.com
+        (envelope-from <ritach_lin@phison.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 236721958; Thu, 22 Sep 2022 13:50:54 +0800
+Received: from ExMBX2.phison.com (192.168.1.113) by ExMBX1.phison.com
+ (192.168.1.112) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Thu, 22 Sep
+ 2022 13:50:53 +0800
+Received: from ExMBX2.phison.com ([fe80::1518:aa7a:367f:18f7]) by
+ ExMBX2.phison.com ([fe80::1518:aa7a:367f:18f7%23]) with mapi id
+ 15.00.1497.040; Thu, 22 Sep 2022 13:50:53 +0800
+From:   Rita Lin <ritach_lin@phison.com>
+To:     Christoph Hellwig <hch@lst.de>
+CC:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        =?gb2312?B?/FPqyax8?= <redd_huang@phison.com>,
+        Tina Hsu <tina_hsu@phison.com>,
+        =?gb2312?B?Vml0YSBIc3VlaCAo0abSwdm7KQ==?= <Vita.Hsueh@quantatw.com>,
+        "Wang, Audrey" <audrey.wang@hp.com>
+Subject: RE: nvme-pci: disable write zeros support on SSDs
+Thread-Topic: nvme-pci: disable write zeros support on SSDs
+Thread-Index: AQHYzkSfe7UtL+HLHkWMegZBEIt1C63q8FPQ
+Date:   Thu, 22 Sep 2022 05:50:52 +0000
+Message-ID: <53e4a6192bf746af839d8da90917a248@ExMBX2.phison.com>
+References: <36fd82e8780742c2881f078f98110e5e@ExMBX2.phison.com>
+ <20220922053137.GA27191@lst.de>
+In-Reply-To: <20220922053137.GA27191@lst.de>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [192.168.1.3]
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu Sep 22, 2022 at 12:46 AM IST, Krzysztof Kozlowski wrote:
-> On 21/09/2022 06:36, Sireesh Kodali wrote:
-> > This is a direct conversion of the existing txt documentation to YAML.
-> > It is in preparation for the addition of pronto-v3 to the docs. This
-> > patch doesn't document any of the existing subnodes/properties that are
-> > not documented in the existing txt file. That is done in a separate
-> > patch.
-> >=20
-> > Signed-off-by: Sireesh Kodali <sireeshkodali1@gmail.com>
->
-> Thank you for your patch. There is something to discuss/improve.
-> (...)
-Thank you for the review
->
-> > +
-> > +  memory-region:
-> > +    maxItems: 1
-> > +    description: reserved-memory for the WCNSS core
-> > +
-> > +  smd-edge:
-> > +    $ref: /schemas/remoteproc/qcom,smd-edge.yaml#
-> > +    description:
-> > +      Qualcomm Shared Memory subnode which represents communication ed=
-ge,
-> > +      channels and devices related to the ADSP.
-> > +
-> > +  iris:
-> > +    type: object
-> > +    description:
-> > +      The iris subnode of the WCNSS PIL is used to describe the attach=
-ed RF module
-> > +      and its resource dependencies.
->
-> On this level of indentation (for iris):
-> additionalProperties: false
-Will be added in v5
->
-> > +
-> > +    properties:
-> > +      compatible:
-> > +        enum:
-> > +          - qcom,wcn3620
-> > +          - qcom,wcn3660
-> > +          - qcom,wcn3660b
-> > +          - qcom,wcn3680
-> > +
-> > +      clocks:
-> > +        minItems: 1
-> > +        items:
-> > +          - description: XO clock
-> > +          - description: RF clock
-> > +
-> > +      clock-names:
-> > +        minItems: 1
-> > +        items:
-> > +          - const: xo
-> > +          - const: rf
-> > +
-> > +      vddxo-supply:
-> > +        description:
-> > +          Reference to the regulator to be held on behalf of the booti=
-ng WCNSS
-> > +          core
-> > +
-> > +      vddrfa-supply:
-> > +        description:
-> > +          Reference to the regulator to be held on behalf of the booti=
-ng WCNSS
-> > +          core
-> > +
-> > +      vddpa-supply:
-> > +        description:
-> > +          Reference to the regulator to be held on behalf of the booti=
-ng WCNSS
-> > +          core
-> > +
-> > +      vdddig-supply:
-> > +        description:
-> > +          Reference to the regulator to be held on behalf of the booti=
-ng WCNSS
-> > +          core
-> > +
-> > +    required:
-> > +      - compatible
-> > +      - clocks
-> > +      - clock-names
-> > +      - vddxo-supply
-> > +      - vddrfa-supply
-> > +      - vddpa-supply
-> > +      - vdddig-supply
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - reg-names
-> > +  - interrupts-extended
->
-> You require only interrupts and interrupts-extended satisfy it, unless
-> this is a result of bug in dtschema?
-
-It should be `interrupts`, will be fixed in v5
->
-> > +  - interrupt-names
-> > +  - iris
-> > +  - vddpx-supply
-> > +  - memory-region
-> > +  - smd-edge
-> > +
-> > +additionalProperties: false
->
-> Best regards,
-> Krzysztof
+RGVhciBDaHJpc3RvcGgsDQoNClRoYW5rIHlvdSBmb3IgeW91ciByZXBseS4NClRoZXNlIFNTRHMg
+ZG8gc3VwcG9ydCB3cml0ZSAwIGNvbW1hbmQgYW5kIHRoZSBmdW5jdGlvbiB3YXMgdGVzdGVkIHdp
+dGhvdXQgaXNzdWUuDQpCdXQgc2luY2UgdGhlc2UgU1NEcyBhcmUgRFJBTWxlc3MgcHJvZHVjdHMs
+IHRoZSB3cml0ZSAwIGNvbW1hbmQgd2lsbCB0YWtlIGEgbG90IGxvbmdlciB0byBjb21wbGV0ZSB3
+aGljaCBoYWQgaW1wYWN0ZWQgdGhlIHByb2R1Y3QgcGVyZm9ybWFuY2UuDQpEdWUgdG8gdGhlIEZX
+IGhhZCBiZWVuIGZyb3plbiwgd2Ugd291bGQgbGlrZSB0byBjaGVjayBpZiB3ZSBjb3VsZCBhcHBs
+eSBDTCBmb3IgdGhlc2UgMiBwcm9kdWN0cy4NCg0KUml0YSBMaW7B1t297NMNCis4ODYtMzctNTg2
+LTg5NiBFeHQuODAwNTENCnJpdGFjaF9saW5AcGhpc29uLmNvbQ0KDQoNCi0tLS0tT3JpZ2luYWwg
+TWVzc2FnZS0tLS0tDQpGcm9tOiBDaHJpc3RvcGggSGVsbHdpZyBbbWFpbHRvOmhjaEBsc3QuZGVd
+DQpTZW50OiBUaHVyc2RheSwgU2VwdGVtYmVyIDIyLCAyMDIyIDE6MzIgUE0NClRvOiBSaXRhIExp
+biA8cml0YWNoX2xpbkBwaGlzb24uY29tPg0KQ2M6IEtlaXRoIEJ1c2NoIDxrYnVzY2hAa2VybmVs
+Lm9yZz47IEplbnMgQXhib2UgPGF4Ym9lQGZiLmNvbT47IENocmlzdG9waCBIZWxsd2lnIDxoY2hA
+bHN0LmRlPjsgU2FnaSBHcmltYmVyZyA8c2FnaUBncmltYmVyZy5tZT47IGxpbnV4LW52bWVAbGlz
+dHMuaW5mcmFkZWFkLm9yZzsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsg/FPqyax8IDxy
+ZWRkX2h1YW5nQHBoaXNvbi5jb20+OyBUaW5hIEhzdSA8dGluYV9oc3VAcGhpc29uLmNvbT47IFZp
+dGEgSHN1ZWggKNGm0sHZuykgPFZpdGEuSHN1ZWhAcXVhbnRhdHcuY29tPjsgV2FuZywgQXVkcmV5
+IDxhdWRyZXkud2FuZ0BocC5jb20+DQpTdWJqZWN0OiBSZTogbnZtZS1wY2k6IGRpc2FibGUgd3Jp
+dGUgemVyb3Mgc3VwcG9ydCBvbiBTU0RzDQoNCk9uIFRodSwgU2VwIDIyLCAyMDIyIGF0IDAyOjAz
+OjAxQU0gKzAwMDAsIFJpdGEgTGluIHdyb3RlOg0KPiBEZWFyIHJlY2VpdmVycywNCj4NCj4gV2Ug
+d291bGQgbGlrZSB0byBhcHBseSB0byBkaXNhYmxlIHdyaXRlIHplcm9zIHN1cHBvcnQgb24gUGhp
+c29uIFNTRHMuDQoNCkNhbiB5b3UgZXhwbGFpbiB3aHkgdGhlc2UgU1NEcyBkbyBjbGFpbSB3cml0
+ZSBaZXJvZXMgYnV0IGl0IGRvZXNuJ3QgYWN0dWFsbHkgd29yaywgYW5kIHdoeSB0aGlzIGlzIG5v
+dCBmaXhhYmxlIGluIGEgZmlybXdhcmUgdXBkYXRlPw0KDQoNClRoaXMgbWVzc2FnZSBhbmQgYW55
+IGF0dGFjaG1lbnRzIGFyZSBjb25maWRlbnRpYWwgYW5kIG1heSBiZSBsZWdhbGx5IHByaXZpbGVn
+ZWQuIEFueSB1bmF1dGhvcml6ZWQgcmV2aWV3LCB1c2Ugb3IgZGlzdHJpYnV0aW9uIGJ5IGFueW9u
+ZSBvdGhlciB0aGFuIHRoZSBpbnRlbmRlZCByZWNpcGllbnQgaXMgc3RyaWN0bHkgcHJvaGliaXRl
+ZC4gSWYgeW91IGFyZSBub3QgdGhlIGludGVuZGVkIHJlY2lwaWVudCwgcGxlYXNlIGltbWVkaWF0
+ZWx5IG5vdGlmeSB0aGUgc2VuZGVyLCBjb21wbGV0ZWx5IGRlbGV0ZSB0aGUgbWVzc2FnZSBhbmQg
+YW55IGF0dGFjaG1lbnRzLCBhbmQgZGVzdHJveSBhbGwgY29waWVzLiBZb3VyIGNvb3BlcmF0aW9u
+IHdpbGwgYmUgaGlnaGx5IGFwcHJlY2lhdGVkLg0K
 
