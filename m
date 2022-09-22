@@ -2,133 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E74D5E5B6D
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 08:33:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F08F5E5B70
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Sep 2022 08:35:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229896AbiIVGdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 02:33:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39330 "EHLO
+        id S229988AbiIVGfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 02:35:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbiIVGdx (ORCPT
+        with ESMTP id S229905AbiIVGfF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 02:33:53 -0400
-Received: from h3cspam01-ex.h3c.com (smtp.h3c.com [221.12.31.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4066B5A6E
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 23:33:51 -0700 (PDT)
-Received: from mail.maildlp.com ([172.25.15.155])
-        by h3cspam01-ex.h3c.com with ESMTP id 28M6WGeo051830;
-        Thu, 22 Sep 2022 14:32:16 +0800 (GMT-8)
-        (envelope-from wang.binglei@h3c.com)
-Received: from DAG2EX10-IDC.srv.huawei-3com.com (unknown [172.20.54.133])
-        by mail.maildlp.com (Postfix) with ESMTP id 4139E2011778;
-        Thu, 22 Sep 2022 14:33:22 +0800 (CST)
-Received: from DAG2EX10-IDC.srv.huawei-3com.com (172.20.54.133) by
- DAG2EX10-IDC.srv.huawei-3com.com (172.20.54.133) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 22 Sep 2022 14:32:16 +0800
-Received: from DAG2EX10-IDC.srv.huawei-3com.com ([fe80::e886:502d:5063:7e2b])
- by DAG2EX10-IDC.srv.huawei-3com.com ([fe80::e886:502d:5063:7e2b%10]) with
- mapi id 15.01.2375.017; Thu, 22 Sep 2022 14:32:16 +0800
-From:   Wangbinglei <wang.binglei@h3c.com>
-To:     Conor Dooley <conor.dooley@microchip.com>
-CC:     "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "l3b2w1@gmail.com" <l3b2w1@gmail.com>
-Subject: Re: [PATCH] rethook: add riscv rethook implementation.
-Thread-Topic: [PATCH] rethook: add riscv rethook implementation.
-Thread-Index: AdjOTPwSnSDegFjUTkauX/rKCFQbeg==
-Date:   Thu, 22 Sep 2022 06:32:16 +0000
-Message-ID: <e7fc6ce7cb7849558a0e33e4fd90485b@h3c.com>
-Accept-Language: en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.99.153.26]
-x-sender-location: DAG2
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+        Thu, 22 Sep 2022 02:35:05 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C22DD857F0
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 23:35:02 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id j16so13066257lfg.1
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Sep 2022 23:35:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=+qI9+rQLX72bUpv677NApKFZUsl1Si4g6QKxS9hfr6k=;
+        b=gKRd3YKFEb1wnfmktmXpK+Vcjba+OrX1yP0ipHjiebYFOrJ5KCzGG7AFNQ0wS2GqDz
+         17xq36E2Cv1FuT3huAQR3Yv2AE6jTENfRV9gQmf4YICgqv+z7vB49GxlUDMmXff18Hra
+         8SvJVN/M1n3zsf4eHfTj6CHLMi7j8hgGCF1gEXC3sG0b7eXvPoccNco6ZYtgdz9dYavM
+         qJ8MtovbA+8oD+2rXNsig/eGwFnTZ3o8ugN2YxtNDBs6R0rO8h5xZolZLqLq5IxxHy1j
+         JoZYQ4QHvHvfCdC2qjwj+njOUuKaFL/V7vZlTpUr95DwtZRWll2i6iGQ7RUMSiVEN2fR
+         ADgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=+qI9+rQLX72bUpv677NApKFZUsl1Si4g6QKxS9hfr6k=;
+        b=EDuX4ZaeZ+KLefyyACC2XaOUBJXbj2Co5JOig4VFBB0e4Ftyv2/SRdsbZoVmu2NMfd
+         X997XlAm7IPrlG3wFYiiW/gCeftJzPaaivkaj4DoRVzir5bIOcIO/985dVODCiLJ36gc
+         yFWCNFLPO+tnD3DMTRdfCTVKkcEL6gPtetvHTZwJLrFHzMJb3gyeWIdyq1Nk0NdkZ6Q+
+         F4+4Dth7S3XPEb0g/I+YvMoLhKmYKcvlWUV2LEuH5qd3FgKkNPjEaftHNeUkAPG9G/1v
+         fJhWGRmnxtm5+D5atjKhm3sRyWgpWQ71WCsFr0XkUYhobX9IvsYP3ueFg+9MN8Igncyd
+         fo8Q==
+X-Gm-Message-State: ACrzQf1laBsF7LuLiJ/hrX4R250e/We4aDd1+WHorMi2VO7oFwTKo/LR
+        hE013Ufp7V9xeN+FgmzktXP1ZA==
+X-Google-Smtp-Source: AMsMyM4tXO+NlnAMQmYGadrEoXSJc/Hmb/R5wv0z4OHidGqxQtojJ+ZMlNWSiqijREgPoYjetV2WFw==
+X-Received: by 2002:a05:6512:3189:b0:49c:ce4b:88ad with SMTP id i9-20020a056512318900b0049cce4b88admr652034lfe.94.1663828500977;
+        Wed, 21 Sep 2022 23:35:00 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id a1-20020a19e301000000b00492c017de43sm778465lfh.127.2022.09.21.23.34.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Sep 2022 23:35:00 -0700 (PDT)
+Message-ID: <3003378d-4283-6c05-50bf-29178c97ef8e@linaro.org>
+Date:   Thu, 22 Sep 2022 08:34:59 +0200
 MIME-Version: 1.0
-X-DNSRBL: 
-X-MAIL: h3cspam01-ex.h3c.com 28M6WGeo051830
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: Add binding for max6639
+Content-Language: en-US
+To:     Naresh Solanki <naresh.solanki@9elements.com>,
+        devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Roland Stigge <stigge@antcom.de>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Marcello Sylvester Bauer <sylv@sylv.io>
+References: <20220922050718.1079651-1-Naresh.Solanki@9elements.com>
+ <20220922050718.1079651-2-Naresh.Solanki@9elements.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220922050718.1079651-2-Naresh.Solanki@9elements.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VGhhbmtzIGZvciB5b3VyIHRpcHMsIEkgcmVzZW5kZWQgbW9kaWZpZWQgcGF0Y2ggdXNpbmcgYW5v
-dGhlciBtYWlsIGFkZHIobDNiMncxQGdtYWlsLmNvbSkuDQoNCi0tLS0t08q8/tStvP4tLS0tLQ0K
-t6K8/sjLOiBDb25vciBEb29sZXkgW21haWx0bzpjb25vci5kb29sZXlAbWljcm9jaGlwLmNvbV0N
-Creiy83KsbzkOiAyMDIyxOo51MIyMMjVIDE4OjMyDQrK1bz+yMs6IHdhbmdiaW5nbGVpIChSRCkg
-PHdhbmcuYmluZ2xlaUBoM2MuY29tPg0Ks63LzTogcGF1bC53YWxtc2xleUBzaWZpdmUuY29tOyBw
-YWxtZXJAZGFiYmVsdC5jb207IGFvdUBlZWNzLmJlcmtlbGV5LmVkdTsgbGludXgtcmlzY3ZAbGlz
-dHMuaW5mcmFkZWFkLm9yZzsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsgbDNiMncxQGdt
-YWlsLmNvbQ0K1vfM4jogUmU6IFtQQVRDSF0gcmV0aG9vazogYWRkIHJpc2N2IHJldGhvb2sgaW1w
-bGVtZW50YXRpb24uDQoNCk9uIFR1ZSwgU2VwIDIwLCAyMDIyIGF0IDA1OjM2OjMwUE0gKzA4MDAs
-IEJpbmdsZWkgV2FuZyB3cm90ZToNCj4gRnJvbTogIndhbmcuYmluZ2xlaSIgPHdhbmcuYmluZ2xl
-aUBoM2MuY29tPg0KPg0KPiBNb3N0IG9mIHRoZSBjb2RlIGNvcGllZCBmcm9tDQo+IGFyY2gvcmlz
-Y3Yva2VybmVsL3Byb2Jlcy9rcHJvYmVzX3RyYW1wb2xpbmUuUw0KDQpIZXkgV2FuZyBCaW5nbGVp
-LA0KDQpQbGVhc2UgdXNlIHRoZSBjb21taXQgbG9nIHRvIGV4cGxhaW4gdGhlIHJlYXNvbnMgYmVo
-aW5kIHRoZSBjaGFuZ2UgeW91DQphcmUgbWFraW5nOg0KaHR0cHM6Ly93d3cua2VybmVsLm9yZy9k
-b2MvaHRtbC9sYXRlc3QvcHJvY2Vzcy9zdWJtaXR0aW5nLXBhdGNoZXMuaHRtbCNkZXNjcmliZS15
-b3VyLWNoYW5nZXMNCg0KPg0KPiBTaWduZWQtb2ZmLWJ5OiB3YW5nLmJpbmdsZWkgPHdhbmcuYmlu
-Z2xlaUBoM2MuY29tPg0KDQpVbmZvcnR1bmF0ZWx5IEkgZG9uJ3Qga25vdyBtdWNoIGFib3V0IEFz
-aWFuIG5hbWluZywgYnV0IEkgYXNzdW1lIHRoYXQNCnRoZSAuIGlzIG5vdCBwYXJ0IG9mIHlvdXIg
-bmFtZT8NCg0KPiBkaWZmIC0tZ2l0IGEvYXJjaC9yaXNjdi9rZXJuZWwvcHJvYmVzL2twcm9iZXMu
-YyBiL2FyY2gvcmlzY3Yva2VybmVsL3Byb2Jlcy9rcHJvYmVzLmMNCj4gaW5kZXggZTZlOTUwYjdj
-Li4yYzE4NDc5MjEgMTAwNjQ0DQo+IC0tLSBhL2FyY2gvcmlzY3Yva2VybmVsL3Byb2Jlcy9rcHJv
-YmVzLmMNCj4gKysrIGIvYXJjaC9yaXNjdi9rZXJuZWwvcHJvYmVzL2twcm9iZXMuYw0KPiBAQCAt
-MzQ1LDYgKzM0NSw3IEBAIGludCBfX2luaXQgYXJjaF9wb3B1bGF0ZV9rcHJvYmVfYmxhY2tsaXN0
-KHZvaWQpDQo+ICAgICAgICAgcmV0dXJuIHJldDsNCj4gIH0NCj4NCj4gKyNpZm5kZWYgQ09ORklH
-X0tSRVRQUk9CRV9PTl9SRVRIT09LDQoNClRoaXMgc2VlbXMgcXVpdGUgdW51c3VhbCwgb3RoZXIg
-YXJjaHMgZG9uJ3Qgc2VlbSB0byBoYXZlIGlmZGVmLWVyeQ0KdXNpbmcgQ09ORklHX0tSRVRQUk9C
-RV9PTl9SRVRIT09LIGluIHRoZWlyIGFyY2ggY29kZSBzbyB3aHkgc2hvdWxkDQpSSVNDLVY/DQoN
-Cj4gIHZvaWQgX19rcHJvYmVzIF9fdXNlZCAqdHJhbXBvbGluZV9wcm9iZV9oYW5kbGVyKHN0cnVj
-dCBwdF9yZWdzICpyZWdzKQ0KPiAgew0KPiAgICAgICAgIHJldHVybiAodm9pZCAqKWtyZXRwcm9i
-ZV90cmFtcG9saW5lX2hhbmRsZXIocmVncywgTlVMTCk7DQo+IEBAIC0zNTcsNiArMzU4LDEyIEBA
-IHZvaWQgX19rcHJvYmVzIGFyY2hfcHJlcGFyZV9rcmV0cHJvYmUoc3RydWN0IGtyZXRwcm9iZV9p
-bnN0YW5jZSAqcmksDQo+ICAgICAgICAgcmktPmZwID0gTlVMTDsNCj4gICAgICAgICByZWdzLT5y
-YSA9ICh1bnNpZ25lZCBsb25nKSAmX19rcmV0cHJvYmVfdHJhbXBvbGluZTsNCj4gIH0NCj4gKyNl
-bHNlDQo+ICt2b2lkIF9fa3Byb2JlcyAqdHJhbXBvbGluZV9wcm9iZV9oYW5kbGVyKHN0cnVjdCBw
-dF9yZWdzICpyZWdzKQ0KPiArew0KPiArICAgICAgIHJldHVybiBOVUxMOw0KPiArfQ0KPiArI2Vu
-ZGlmDQoNCg0KPiBkaWZmIC0tZ2l0IGEvYXJjaC9yaXNjdi9rZXJuZWwvcHJvYmVzL3JldGhvb2tf
-dHJhbXBvbGluZS5TIGIvYXJjaC9yaXNjdi9rZXJuZWwvcHJvYmVzL3JldGhvb2tfdHJhbXBvbGlu
-ZS5TDQo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0DQo+IGluZGV4IDAwMDAwMDAwMC4uYWE3OTYzMGFj
-DQo+IC0tLSAvZGV2L251bGwNCj4gKysrIGIvYXJjaC9yaXNjdi9rZXJuZWwvcHJvYmVzL3JldGhv
-b2tfdHJhbXBvbGluZS5TDQo+IEBAIC0wLDAgKzEsOTQgQEANCj4gKy8qIFNQRFgtTGljZW5zZS1J
-ZGVudGlmaWVyOiBHUEwtMi4wICovDQo+ICsvKg0KPiArICogcmV0aG9vayB0cmFtcG9saW5lLg0K
-PiArICogQ29waWVkIGZyb20gYXJjaC9yaXNjdi9rZXJuZWwvcHJvYmVzL2twcm9iZXNfdHJhbXBv
-bGluZS5TDQoNCklzIHRoaXMgYSAxOjEgY29weT8gSWYgc28sIGNvdWxkIHRoZSBjb2RlIGJlIHNo
-YXJlZD8NCg0KPiBUaGlzIGUtbWFpbCBhbmQgaXRzIGF0dGFjaG1lbnRzIGNvbnRhaW4gY29uZmlk
-ZW50aWFsIGluZm9ybWF0aW9uIGZyb20gTmV3IEgzQywgd2hpY2ggaXMNCj4gaW50ZW5kZWQgb25s
-eSBmb3IgdGhlIHBlcnNvbiBvciBlbnRpdHkgd2hvc2UgYWRkcmVzcyBpcyBsaXN0ZWQgYWJvdmUu
-IEFueSB1c2Ugb2YgdGhlDQo+IGluZm9ybWF0aW9uIGNvbnRhaW5lZCBoZXJlaW4gaW4gYW55IHdh
-eSAoaW5jbHVkaW5nLCBidXQgbm90IGxpbWl0ZWQgdG8sIHRvdGFsIG9yIHBhcnRpYWwNCj4gZGlz
-Y2xvc3VyZSwgcmVwcm9kdWN0aW9uLCBvciBkaXNzZW1pbmF0aW9uKSBieSBwZXJzb25zIG90aGVy
-IHRoYW4gdGhlIGludGVuZGVkDQo+IHJlY2lwaWVudChzKSBpcyBwcm9oaWJpdGVkLiBJZiB5b3Ug
-cmVjZWl2ZSB0aGlzIGUtbWFpbCBpbiBlcnJvciwgcGxlYXNlIG5vdGlmeSB0aGUgc2VuZGVyDQo+
-IGJ5IHBob25lIG9yIGVtYWlsIGltbWVkaWF0ZWx5IGFuZCBkZWxldGUgaXQhDQoNClVoLW9oISBZ
-b3UnbGwgaGF2ZSB0byB3b3JrIHdpdGggeW91ciBJVCB0byBnZXQgdGhpcyByZW1vdmVkIGJlZm9y
-ZSB5b3VyDQpwYXRjaGVzIGNhbiBiZSBhY2NlcHRlZDoNCmh0dHBzOi8vbG9yZS5rZXJuZWwub3Jn
-L2FsbC9ZZ0VueG1EOVpFNGpWaFA1QGtyb2FoLmNvbS8NCg0KVGhlIHBhdGNoIGRvZXMgbm90IGFw
-cGx5IHRvIC1uZXh0IGZvciBtZSBlaXRoZXIuLg0KDQpUaGFua3MsDQpDb25vci4NCg0KLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLQ0Ksb7Tyrz+vLDG5Li9vP66rNPQ0MK7qsj9vK/NxbXEsaPD3NDFz6KjrL32
-z97T2reiy824+MnPw+a12Na31tDB0LP2DQq1xLj2yMu78si61+mho7371rnIzrrOxuTL+8jL0tTI
-zrrO0M7Kvcq508OjqLD8wKi1q7K7z97T2sirsr+78rK/t9a12NC5wrahori01sahog0Ku/LJorei
-o6mxvtPKvP7W0LXE0MXPoqGjyOe5+8T6tO3K1cHLsb7Tyrz+o6zH68T6waK8tLXnu7C78tPKvP7N
-qNaqt6K8/sjLsqLJvrP9sb4NCtPKvP6joQ0KVGhpcyBlLW1haWwgYW5kIGl0cyBhdHRhY2htZW50
-cyBjb250YWluIGNvbmZpZGVudGlhbCBpbmZvcm1hdGlvbiBmcm9tIE5ldyBIM0MsIHdoaWNoIGlz
-DQppbnRlbmRlZCBvbmx5IGZvciB0aGUgcGVyc29uIG9yIGVudGl0eSB3aG9zZSBhZGRyZXNzIGlz
-IGxpc3RlZCBhYm92ZS4gQW55IHVzZSBvZiB0aGUNCmluZm9ybWF0aW9uIGNvbnRhaW5lZCBoZXJl
-aW4gaW4gYW55IHdheSAoaW5jbHVkaW5nLCBidXQgbm90IGxpbWl0ZWQgdG8sIHRvdGFsIG9yIHBh
-cnRpYWwNCmRpc2Nsb3N1cmUsIHJlcHJvZHVjdGlvbiwgb3IgZGlzc2VtaW5hdGlvbikgYnkgcGVy
-c29ucyBvdGhlciB0aGFuIHRoZSBpbnRlbmRlZA0KcmVjaXBpZW50KHMpIGlzIHByb2hpYml0ZWQu
-IElmIHlvdSByZWNlaXZlIHRoaXMgZS1tYWlsIGluIGVycm9yLCBwbGVhc2Ugbm90aWZ5IHRoZSBz
-ZW5kZXINCmJ5IHBob25lIG9yIGVtYWlsIGltbWVkaWF0ZWx5IGFuZCBkZWxldGUgaXQhDQo=
+On 22/09/2022 07:07, Naresh Solanki wrote:
+> From: Marcello Sylvester Bauer <sylv@sylv.io>
+> 
+> Add Devicetree binding documentation for Maxim MAX6639 temperature
+> monitor with PWM fan-speed controller.
+> 
+> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> ---
+>  .../bindings/hwmon/maxim,max6639.yaml         | 112 ++++++++++++++++++
+>  1 file changed, 112 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+> new file mode 100644
+> index 000000000000..c845fb989af2
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+> @@ -0,0 +1,112 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +
+> +$id: http://devicetree.org/schemas/hwmon/maxim,max6639.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Maxim max6639
+> +
+> +maintainers:
+> +  - Roland Stigge <stigge@antcom.de>
+
+Ack from Roland is needed here.
+
+> +
+> +description: |
+> +  The MAX6639 is a 2-channel temperature monitor with dual, automatic, PWM
+> +  fan-speed controller.  It monitors its own temperature and one external
+> +  diode-connected transistor or the temperatures of two external diode-connected
+> +  transistors, typically available in CPUs, FPGAs, or GPUs.
+> +
+> +  Datasheets:
+> +    https://datasheets.maximintegrated.com/en/ds/MAX6639-MAX6639F.pdf
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - maxim,max6639
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  '#address-cells':
+> +    const: 1
+> +
+> +  '#size-cells':
+> +    const: 0
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - "fan@0"
+> +  - "fan@1"
+> +
+> +additionalProperties: false
+> +
+> +patternProperties:
+
+This goes after properties.
+
+> +  "^fan@[0-1]$":
+> +    type: object
+> +    description: |
+> +      Represents the two fans and their specific configuration.
+> +
+> +    properties:
+> +      reg:
+> +        description: |
+> +          The fan number.
+> +        items:
+
+Skip items.
+
+> +          minimum: 0
+> +          maximum: 1
+> +
+> +      pwm-polarity:
+
+Why is this property of fan, not of PWM source?
+
+> +        $ref: /schemas/types.yaml#/definitions/uint32
+> +        enum: [0, 1]
+
+type: boolean
+
+> +        default: 1
+> +        description:
+> +          PWM output is low at 100% duty cycle when this bit is set to zero. PWM
+> +          output is high at 100% duty cycle when this bit is set to 1.
+> +
+> +      pulses-per-revolution:
+> +        $ref: /schemas/types.yaml#/definitions/uint32
+> +        enum: [1, 2, 3, 4]
+> +        default: 2
+> +        description:
+> +          Value specifying the number of pulses per revolution of the controlled
+> +          FAN.
+> +
+> +      maxim,rpm-range:
+> +        $ref: /schemas/types.yaml#/definitions/uint32
+> +        enum: [2000, 4000, 8000, 16000]
+> +        default: 4000
+> +        description:
+> +          Scales the tachometer counter by setting the maximum (full-scale) value
+> +          of the RPM range for max6639.
+> +
+> +    required:
+> +      - reg
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +
+> +      max6639@10 {
+
+Node names should be generic.
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+
+> +        compatible = "maxim,max6639";
+> +        reg = <0x10>;
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        fan@0 {
+> +          reg = <0x0>;
+> +          pwm-polarity = <1>;
+> +          pulses-per-revolution = <2>;
+> +          maxim,rpm-range = <4000>;
+> +        };
+> +
+> +        fan@1 {
+> +          reg = <0x1>;
+> +          pwm-polarity = <1>;
+> +          pulses-per-revolution = <2>;
+> +          maxim,rpm-range = <4000>;
+> +        };
+> +      };
+> +    };
+> +...
+
+Best regards,
+Krzysztof
+
