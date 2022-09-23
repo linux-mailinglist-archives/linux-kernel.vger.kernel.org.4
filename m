@@ -2,102 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4756F5E7CE7
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 16:25:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 074115E7CED
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 16:26:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232602AbiIWOZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 10:25:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32914 "EHLO
+        id S229878AbiIWO0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 10:26:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232562AbiIWOYr (ORCPT
+        with ESMTP id S232261AbiIWOZt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 10:24:47 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 085BE62D6
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 07:24:45 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id ay36so363383wmb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 07:24:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=+gg8BqSr/XzLdS7L9X25eMkIxvQJQPxB4iU34G/4vAc=;
-        b=0o5HIGq6dar3v4a3HY80WpxudV3MLVv9VYOMg/P9uNfQmm3yLUc0AhyOSBPJMmhEhM
-         2pHPFQQTN5N662SIjzzucJaswE9h5Q34kfKGwHwt8VVCTG0NYzGnFvjot21Vk6McZRKw
-         vzs/gSWml2QOH3t+49f5hmMWetF9kc0ZfJNqdfq8y3sWR4+mcEOqWDhh4pxff4BK+EL7
-         wu7l3vzEaBKiuFNwXHrcN/OCNQQYlTFNpsZND/Om8a7KWNq0Z45pbn5C5DSyy1fc4+0T
-         Blq5XGU9UrSTxZ27ad8DbTEp7qxW8Qjc5knrqZlOprF6O8KXUZzlJvQlEV5dJnMqTCFb
-         PGOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=+gg8BqSr/XzLdS7L9X25eMkIxvQJQPxB4iU34G/4vAc=;
-        b=D4TNxAbzCzacxYYbxnUDj59JRbkLi97KpTChmXKspLX2H4XpaiPj+QTexLRL6K3vT/
-         W4vPgff2PgK+flzJ1PAG1cNaL275wAthneos2Yde5Br2s98JNGK23t75XkTdWPNlSCYM
-         uBneXu7POuzczeffytKhu8Qo99tKtT9CVAhS8JFXZNxtUAhODtFxNWYyTBu1eVw55ofB
-         pHTT+4K95A41ZZtfnam1TmLRGiZwyFeVZ0IF0TMlw/KLfxFDF238W5xFeYw4+FjYkMJk
-         Khuuu/oJpFWmI9mDpzUUSuieulMtUv2gzhj/Q2tA/t/1f313cvLAS9yUgK3sOsHJIpPN
-         tHwA==
-X-Gm-Message-State: ACrzQf2d84cdDZz+A2QQTTt4eLmTwNpQ7udCVh78jX4QlnO78pPSKI0J
-        b5OCeUE+vrX6mUZgQkOlSrOVgw==
-X-Google-Smtp-Source: AMsMyM6fAayT1ZsV+SMonrVdKJ53U4/hjl7+ExfMxROz0nMYBnnFSyl3/Mqnz4L8GUMlT0dr0Kl0UA==
-X-Received: by 2002:a05:600c:3c8e:b0:3b4:d224:addf with SMTP id bg14-20020a05600c3c8e00b003b4d224addfmr13261549wmb.132.1663943083373;
-        Fri, 23 Sep 2022 07:24:43 -0700 (PDT)
-Received: from baylibre-ThinkPad-T14s-Gen-2i.. (32.31.102.84.rev.sfr.net. [84.102.31.32])
-        by smtp.gmail.com with ESMTPSA id m18-20020a5d56d2000000b0022878c0cc5esm7444627wrw.69.2022.09.23.07.24.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 07:24:43 -0700 (PDT)
-From:   Julien Panis <jpanis@baylibre.com>
-To:     william.gray@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, mranostay@ti.com
-Subject: [PATCH v9 4/4] MAINTAINERS: add TI ECAP driver info
-Date:   Fri, 23 Sep 2022 16:24:37 +0200
-Message-Id: <20220923142437.271328-5-jpanis@baylibre.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220923142437.271328-1-jpanis@baylibre.com>
-References: <20220923142437.271328-1-jpanis@baylibre.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 23 Sep 2022 10:25:49 -0400
+Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E80D34DB2A;
+        Fri, 23 Sep 2022 07:25:27 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [10.162.98.155])
+        by mail-app4 (Coremail) with SMTP id cS_KCgDnet3LwS1jIEyIBg--.16445S2;
+        Fri, 23 Sep 2022 22:25:22 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     linux-kernel@vger.kernel.org
+Cc:     netdev@vger.kernel.org, isdn@linux-pingi.de, kuba@kernel.org,
+        Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH V2] mISDN: fix use-after-free bugs in l1oip timer handlers
+Date:   Fri, 23 Sep 2022 22:25:14 +0800
+Message-Id: <20220923142514.58838-1-duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cS_KCgDnet3LwS1jIEyIBg--.16445S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxJrykJF13tryUJw1kCr15urg_yoW8urW7pF
+        4Ygrnrtry8XrWjyF4DZrs7XFyrX3Z3tayUJF98K3yfZwn7Xr9xZr10y34FgF4UCF93XrsI
+        qF1rZr45CF98ZFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkI1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
+        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
+        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j
+        6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
+        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v
+        1sIEY20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
+        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
+        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
+        1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
+        x4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgsCAVZdtbna-QAFsv
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit adds driver info for TI ECAP used in capture operating mode.
+The l1oip_cleanup() traverses the l1oip_ilist and calls
+release_card() to cleanup module and stack. However,
+release_card() calls del_timer() to delete the timers
+such as keep_tl and timeout_tl. If the timer handler is
+running, the del_timer() will not stop it and result in
+UAF bugs. One of the processes is shown below:
 
-Signed-off-by: Julien Panis <jpanis@baylibre.com>
+    (cleanup routine)          |        (timer handler)
+release_card()                 | l1oip_timeout()
+ ...                           |
+ del_timer()                   | ...
+ ...                           |
+ kfree(hc) //FREE              |
+                               | hc->timeout_on = 0 //USE
+
+Fix by calling del_timer_sync() in release_card(), which
+makes sure the timer handlers have finished before the
+resources, such as l1oip and so on, have been deallocated.
+
+What's more, the hc->workq and hc->socket_thread can kick
+those timers right back in. We use del_timer_sync(&hc->keep_tl)
+and cancel_work_sync(&hc->keep_tl) twice to stop keep_tl timer
+and hc->workq. Then, we add del_timer_sync(&hc->timeout_tl)
+behind l1oip_socket_close() to stop timeout_tl timer.
+
+Fixes: 3712b42d4b1b ("Add layer1 over IP support")
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
 ---
- MAINTAINERS | 9 +++++++++
- 1 file changed, 9 insertions(+)
+Changes in v2:
+  - Solve the problem that timers could be restarted by other threads.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d4999f68bda8..c189117f58eb 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -20322,6 +20322,15 @@ T:	git git://linuxtv.org/mhadli/v4l-dvb-davinci_devices.git
- F:	drivers/media/platform/ti/davinci/
- F:	include/media/davinci/
+ drivers/isdn/mISDN/l1oip_core.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/isdn/mISDN/l1oip_core.c b/drivers/isdn/mISDN/l1oip_core.c
+index 2c40412466e..7b89d98a781 100644
+--- a/drivers/isdn/mISDN/l1oip_core.c
++++ b/drivers/isdn/mISDN/l1oip_core.c
+@@ -1232,17 +1232,16 @@ release_card(struct l1oip *hc)
+ {
+ 	int	ch;
  
-+TI ENHANCED CAPTURE (eCAP) DRIVER
-+M:	Vignesh Raghavendra <vigneshr@ti.com>
-+R:	Julien Panis <jpanis@baylibre.com>
-+L:	linux-iio@vger.kernel.org
-+L:	linux-omap@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/counter/ti,am62-ecap-capture.yaml
-+F:	drivers/counter/ti-ecap-capture.c
+-	if (timer_pending(&hc->keep_tl))
+-		del_timer(&hc->keep_tl);
+-
+-	if (timer_pending(&hc->timeout_tl))
+-		del_timer(&hc->timeout_tl);
+-
++	del_timer_sync(&hc->keep_tl);
++	cancel_work_sync(&hc->workq);
++	del_timer_sync(&hc->keep_tl);
+ 	cancel_work_sync(&hc->workq);
+ 
+ 	if (hc->socket_thread)
+ 		l1oip_socket_close(hc);
+ 
++	del_timer_sync(&hc->timeout_tl);
 +
- TI ENHANCED QUADRATURE ENCODER PULSE (eQEP) DRIVER
- R:	David Lechner <david@lechnology.com>
- L:	linux-iio@vger.kernel.org
+ 	if (hc->registered && hc->chan[hc->d_idx].dch)
+ 		mISDN_unregister_device(&hc->chan[hc->d_idx].dch->dev);
+ 	for (ch = 0; ch < 128; ch++) {
 -- 
-2.37.3
+2.17.1
 
