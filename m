@@ -2,134 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFB4D5E74D0
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 09:25:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27B725E74DC
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 09:28:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230491AbiIWHZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 03:25:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37094 "EHLO
+        id S230467AbiIWH2n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 03:28:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229767AbiIWHZU (ORCPT
+        with ESMTP id S230496AbiIWH2f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 03:25:20 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC63A033D;
-        Fri, 23 Sep 2022 00:25:19 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id m3so16757471eda.12;
-        Fri, 23 Sep 2022 00:25:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=cO5rS1dpYfCGe3y3g2taPmcXnwSxGvvBdzhaTW2FSK8=;
-        b=BKsgmxIELX+6q9foTzuzvmTBZPBXnOfyw7LrzBJx7JaQ0vq4gMQmg4gjXiX7vOxER8
-         f8CkcZ1hY91ciyDXwPrdCgK2SEPNdOh+ueME2O1tprlON5Q1A7Qiica4Ut63CfIHMYR/
-         lLrY53pDwmruhnhPfpBJP/EIk2do7XRhrwcnJ8Pc2+1iKkodKB/ZIcRYVhOgheaXOdAw
-         sShkrCaEqqrP9s73g07HyM2wf2kTXYG6sOt74oAp6ts04o5fZmaxlw3+bGibLA9AzVkW
-         58KsOymczEIpt5Q7Ef2PH9PxetTG6EZl2X84baILzopjXg4XvxpFab7OnYvLz1CqYB6J
-         W7rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=cO5rS1dpYfCGe3y3g2taPmcXnwSxGvvBdzhaTW2FSK8=;
-        b=bG6lrGlqKARtMh0X1iF8S4aS0drvslwKUtL0cmy4e7wFbo9VLlx/s++zR+yq4kar7J
-         0yVnpCXirzWicDpto4UhSUFchcgVHLZKChiMB/+ToxHTkoHJNxdtBDspBqaKrgzvQsHD
-         LJyZMciDAwqY6d/j1esBe8q2wEz6zcA7xTQolfUua1LcCTvFXvRQdc13nRxWFdqBskk+
-         4og/vblrXSHUTwjlxVmgffmOKSExaocuNyxINFB7fS1q/qYhDQKVnY4JB90MD48DDpRf
-         JHtP0djQmbuQSgJbQzIlUbgy1ohN6CPratsCrmFEvRIqhma7HbaXOK0tIjz32x8Vao/B
-         Rqug==
-X-Gm-Message-State: ACrzQf1yVLTTATkLmIdXWedsWWSgQhSXmM0oecTdhDa1mR3klrnqGbtv
-        +EzyMIgfh4j58DHgHGk6nSlicYiA850gjFfusflczagCBeg=
-X-Google-Smtp-Source: AMsMyM4vEP5MovWF2mKNzuevIZJumt+QjD3AID/N6sAyMInVo15N8KuLE/ZF+qrHAuNIoJCcbKltOJW4ZKwRptD7y3s=
-X-Received: by 2002:a50:ea89:0:b0:453:8b7d:12e8 with SMTP id
- d9-20020a50ea89000000b004538b7d12e8mr7063352edo.148.1663917917718; Fri, 23
- Sep 2022 00:25:17 -0700 (PDT)
+        Fri, 23 Sep 2022 03:28:35 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB60E12B4AD
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Sep 2022 00:28:33 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1obd6m-0001Cg-UD; Fri, 23 Sep 2022 09:28:24 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1obd6l-002PwT-Ts; Fri, 23 Sep 2022 09:28:22 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1obd6j-002x7p-Iu; Fri, 23 Sep 2022 09:28:21 +0200
+Date:   Fri, 23 Sep 2022 09:28:21 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     xinlei.lee@mediatek.com
+Cc:     thierry.reding@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        jitao.shi@mediatek.com, linux-pwm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@list.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH,v2] dt-bindings: pwm: Add compatible for Mediatek MT8188
+Message-ID: <20220923072821.fy732jaayqdyfeht@pengutronix.de>
+References: <1663915394-30091-1-git-send-email-xinlei.lee@mediatek.com>
 MIME-Version: 1.0
-References: <20220907132205.28021-1-andrea.merello@iit.it> <20220907132205.28021-9-andrea.merello@iit.it>
- <20220918182731.26de1a02@jic23-huawei>
-In-Reply-To: <20220918182731.26de1a02@jic23-huawei>
-Reply-To: andrea.merello@gmail.com
-From:   Andrea Merello <andrea.merello@gmail.com>
-Date:   Fri, 23 Sep 2022 09:25:06 +0200
-Message-ID: <CAN8YU5O2z+dxmtLRkKsiXjZjne8rLLdMG57xQRE3SXFMx8YUcQ@mail.gmail.com>
-Subject: Re: [v7 08/14] iio: imu: add Bosch Sensortec BNO055 core driver
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     andrea.merello@iit.it, mchehab+huawei@kernel.org,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, lars@metafoo.de, robh+dt@kernel.org,
-        andy.shevchenko@gmail.com, matt.ranostay@konsulko.com,
-        ardeleanalex@gmail.com, jacopo@jmondi.org, bagasdotme@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="7db7yim5if2sboqg"
+Content-Disposition: inline
+In-Reply-To: <1663915394-30091-1-git-send-email-xinlei.lee@mediatek.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il giorno dom 18 set 2022 alle ore 19:27 Jonathan Cameron
-<jic23@kernel.org> ha scritto:
 
-[...]
->
-> Hi Andrea,
->
-> I think this is looking to be in a good state now.
-> There is some devm handling for clks now available that should avoid
-> the need to open code that here.
->
-> I've made that change whilst applying. Please take a look to make sure
-> I didn't mess it up!
+--7db7yim5if2sboqg
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Hi, thank you for directly fixing, so that I can avoid a further
-series version :)
+Hello,
 
-I've looked at this change, and it looks good to me; also, I've run
-some tests and nothing failed.
+hint: You don't seem to know about git send-email -v2. (Or git
+format-patch -v2)
 
-Andrea
+On Fri, Sep 23, 2022 at 02:43:14PM +0800, xinlei.lee@mediatek.com wrote:
+> From: xinlei lee <xinlei.lee@mediatek.com>
+>=20
+> Add dt-binding documentation of pwm for MediaTek MT8188 SoC.
+>=20
+> Signed-off-by: xinlei lee <xinlei.lee@mediatek.com>
+> ---
 
-> Jonathan
->
-> > +
-> > +static void bno055_clk_disable(void *arg)
-> > +{
-> > +     clk_disable_unprepare(arg);
-> > +}
-> > +
-> > +int bno055_probe(struct device *dev, struct regmap *regmap,
-> > +              int xfer_burst_break_thr, bool sw_reset)
-> > +{
->
-> ...
->
-> > +     priv->reset_gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_LOW);
-> > +     if (IS_ERR(priv->reset_gpio))
-> > +             return dev_err_probe(dev, PTR_ERR(priv->reset_gpio), "Failed to get reset GPIO\n");
-> > +
-> > +     priv->clk = devm_clk_get_optional(dev, "clk");
-> > +     if (IS_ERR(priv->clk))
-> > +             return dev_err_probe(dev, PTR_ERR(priv->clk), "Failed to get CLK\n");
-> > +
-> > +     ret = clk_prepare_enable(priv->clk);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     ret = devm_add_action_or_reset(dev, bno055_clk_disable, priv->clk);
-> > +     if (ret)
-> > +             return ret;#
->
-> devm_clk_get_optional_enabled() is now available and should work here I think?
->
-> > +
-> > +     if (priv->reset_gpio) {
-> > +             usleep_range(5000, 10000);
-> > +             gpiod_set_value_cansleep(priv->reset_gpio, 1);
-> > +             usleep_range(650000, 750000);
-> > +     } else if (!sw_reset) {
-> > +             dev_warn(dev, "No usable reset method; IMU may be unreliable\n");
-> > +     }
+It is usually helpful to note what changed since v1 here. I looked it up
+myself now: Only the commit log changed, it was shortend not to mention
+development details about how this patch was created.
+
+Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--7db7yim5if2sboqg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmMtYBIACgkQwfwUeK3K
+7AkYGgf/U4i3QfL+sMDHS1hzBnjl2JNNEFmxOmB6Llcg+aW+9/nfQrKvTv+s9qOD
+iIppkKLXrPDwN2P7wprRzLOXTPLooQkXV6N0yIIefGbVu6fX8s8mYBeUW58vBVSE
+lEfuiKF8kNqCSesxSYohnRbh+A1J3eokuDp7W/2hFuzn0nFEEt0Ec2UDjtf7fmhD
++Cqq/ivOFiD9oiUQxMiarcfqy7PEahD/yRlElg8jHT5ZO9deo+NnLqSead/OqogI
+Xlz7YShR2VPQpLdnRLg6tochWd+N9HGIp7QL6BD4n459dxCmJoJQzuUD1Lw1Ft2m
+K6vpS1bvwC0CkLKGbTGQY59MLZ79BA==
+=wTGz
+-----END PGP SIGNATURE-----
+
+--7db7yim5if2sboqg--
