@@ -2,106 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBAF75E715D
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 03:25:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C85195E715E
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 03:26:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230314AbiIWBZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Sep 2022 21:25:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51938 "EHLO
+        id S229603AbiIWBZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Sep 2022 21:25:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbiIWBZB (ORCPT
+        with ESMTP id S230527AbiIWBZ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Sep 2022 21:25:01 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF51D107DF0;
-        Thu, 22 Sep 2022 18:24:59 -0700 (PDT)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MYZ971SjTzWh5r;
-        Fri, 23 Sep 2022 09:20:59 +0800 (CST)
-Received: from [10.67.110.108] (10.67.110.108) by
- kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 23 Sep 2022 09:24:56 +0800
-Message-ID: <55c32279-1a96-0a31-ca2b-ae4e34365625@huawei.com>
-Date:   Fri, 23 Sep 2022 09:24:55 +0800
+        Thu, 22 Sep 2022 21:25:56 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB131176C2
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Sep 2022 18:25:53 -0700 (PDT)
+Received: from fsav414.sakura.ne.jp (fsav414.sakura.ne.jp [133.242.250.113])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 28N1PoNm064633;
+        Fri, 23 Sep 2022 10:25:50 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav414.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav414.sakura.ne.jp);
+ Fri, 23 Sep 2022 10:25:50 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav414.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 28N1PoHS064629
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Fri, 23 Sep 2022 10:25:50 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <423b1fa6-10fa-3ff9-52bc-1262643c62d9@I-love.SAKURA.ne.jp>
+Date:   Fri, 23 Sep 2022 10:25:50 +0900
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH V2 3/3] arm64/kprobe: Optimize the performance of patching
- single-step slot
-To:     Will Deacon <will@kernel.org>
-CC:     <catalin.marinas@arm.com>, <guoren@kernel.org>,
-        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
-        <aou@eecs.berkeley.edu>, <rostedt@goodmis.org>,
-        <mhiramat@kernel.org>, <maz@kernel.org>,
-        <alexandru.elisei@arm.com>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-csky@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>
-References: <20220913033454.104519-1-liaochang1@huawei.com>
- <20220913033454.104519-4-liaochang1@huawei.com>
- <20220922133850.GC12095@willie-the-truck>
-From:   "liaochang (A)" <liaochang1@huawei.com>
-In-Reply-To: <20220922133850.GC12095@willie-the-truck>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.110.108]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemi500012.china.huawei.com (7.221.188.12)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH] fs/ntfs3: fix negative shift size in
+ true_sectors_per_clst()
+Content-Language: en-US
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Namjae Jeon <linkinjeon@kernel.org>,
+        Shigeru Yoshida <syoshida@redhat.com>,
+        Dmitry Vyukov <dvyukov@google.com>
+Cc:     syzbot <syzbot+1631f09646bc214d2e76@syzkaller.appspotmail.com>,
+        syzkaller-bugs@googlegroups.com, ntfs3@lists.linux.dev,
+        LKML <linux-kernel@vger.kernel.org>
+References: <000000000000f8b5ef05dd25b963@google.com>
+ <4b37f037-3b10-b4e4-0644-73441c8fa0af@I-love.SAKURA.ne.jp>
+ <e0173c17-3837-a619-4bcc-7a0ba4843cc4@infradead.org>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <e0173c17-3837-a619-4bcc-7a0ba4843cc4@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2022/9/22 21:38, Will Deacon 写道:
-> On Tue, Sep 13, 2022 at 11:34:54AM +0800, Liao Chang wrote:
->> Single-step slot would not be used until kprobe is enabled, that means
->> no race condition occurs on it under SMP, hence it is safe to pacth ss
->> slot without stopping machine.
->>
->> Signed-off-by: Liao Chang <liaochang1@huawei.com>
->> ---
->>  arch/arm64/kernel/probes/kprobes.c | 5 ++---
->>  1 file changed, 2 insertions(+), 3 deletions(-)
->>
->> diff --git a/arch/arm64/kernel/probes/kprobes.c b/arch/arm64/kernel/probes/kprobes.c
->> index d1d182320245..5902e33fd3b6 100644
->> --- a/arch/arm64/kernel/probes/kprobes.c
->> +++ b/arch/arm64/kernel/probes/kprobes.c
->> @@ -44,11 +44,10 @@ post_kprobe_handler(struct kprobe *, struct kprobe_ctlblk *, struct pt_regs *);
->>  static void __kprobes arch_prepare_ss_slot(struct kprobe *p)
->>  {
->>  	kprobe_opcode_t *addr = p->ainsn.api.insn;
->> -	void *addrs[] = {addr, addr + 1};
->> -	u32 insns[] = {p->opcode, BRK64_OPCODE_KPROBES_SS};
->>  
->>  	/* prepare insn slot */
->> -	aarch64_insn_patch_text(addrs, insns, 2);
->> +	aarch64_insn_write(addr, p->opcode);
->> +	aarch64_insn_write(addr + 1, BRK64_OPCODE_KPROBES_SS);
->>  
->>  	flush_icache_range((uintptr_t)addr, (uintptr_t)(addr + MAX_INSN_SIZE));
+On 2022/09/23 9:38, Randy Dunlap wrote:
+> I slightly prefer the earlier patch:
 > 
-> Hmm, so it looks like prior to your change we were doing the cache
-> maintebnance twice: once in aarch64_insn_patch_text() from stop machine
-> context and then again in the flush_icache_range() call above.
+> https://lore.kernel.org/all/20220823144625.1627736-1-syoshida@redhat.com/
 > 
-> I suppose the cleanest thing would be to drop the flush_icache_range()
-> call and then use aarch64_insn_patch_text_nosync() instead of
-> aarch64_insn_write() in your change.
-
-OK，I will improve it in next version, thanks.
-
+> but it appears that the NTFS3 maintainer is MIA again. :(
 > 
-> Will
-> .
 
--- 
-BR,
-Liao, Chang
+Shigeru Yoshida posted a patch against https://syzkaller.appspot.com/bug?extid=35b87c668935bb55e666
+and I posted a patch against https://syzkaller.appspot.com/bug?extid=1631f09646bc214d2e76 .
+We didn't realize that these are the same problem.
+
+It seems that sending to not only syzbot+XXXXXXXXXXXXXXXXXXXX@syzkaller.appspotmail.com
+but also syzkaller-bugs@googlegroups.com is required for proposed patches to be recorded
+(in order to avoid duplicated works) into a page linked from "Status:" in each bug page.
+
+Since https://syzkaller.appspot.com/upstream does not have a column for tracking intermediate
+status between "Open" and "Fixed" (e.g. cause identified, patch proposed) because it can take
+long time until patches are accepted into one of git trees syzbot is tracking, we need to
+utilize "Last activity" in the list page and a page linked from "Status:" in each bug page.
+Time to boost priority for implementing user-supplied comment column (e.g. "#syz memo:" command)
+to each bug?
+
