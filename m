@@ -2,88 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEA2A5E7A32
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 14:08:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B56045E7A2B
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 14:08:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230292AbiIWMIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 08:08:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56932 "EHLO
+        id S232261AbiIWMI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 08:08:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230448AbiIWMGN (ORCPT
+        with ESMTP id S231213AbiIWMGN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 23 Sep 2022 08:06:13 -0400
-Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C383131987;
-        Fri, 23 Sep 2022 05:00:49 -0700 (PDT)
-Received: from relayfre-01.paragon-software.com (unknown [172.30.72.12])
-        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id C96892173;
-        Fri, 23 Sep 2022 11:58:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1663934318;
-        bh=nWecK01lWlm/+fHoFjSIP0puhvwdtsZ9P4N00vH53BU=;
-        h=Date:To:CC:From:Subject;
-        b=Wi67S3Us29uKLjNU2fF9bStc8sW3/Qg9pbpsfTE3wnDd1MOr6mHX2w5kulR4kZ1pM
-         VgHUxBfRDpcYiMZvk8RC0asedkSgb+7uXH7UFQGAUaYhBoZD6JpfDfuOmAMhL5UHOr
-         XCIFDA11wHKqHIwEKRhzqwRo97SGVEI2Eu0VLuBw=
-Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
-        by relayfre-01.paragon-software.com (Postfix) with ESMTPS id B70BFDD;
-        Fri, 23 Sep 2022 12:00:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1663934447;
-        bh=nWecK01lWlm/+fHoFjSIP0puhvwdtsZ9P4N00vH53BU=;
-        h=Date:To:CC:From:Subject;
-        b=pgOx/Q2CFvwOhsvvpXltsxnXSu6qMKR/+TojPK6s3GyrnoOg2mK8AFrFIMdV0hXco
-         ga/gVYsm3Ie/thLjTNmVPqR9y1UGRe4migiObIqCjMF66KUOR9IeL+F3cGrfJeg0s4
-         Asn1jNuvgr/3tPydXs75cJnhUiRP0RBub+hFH5BI=
-Received: from [172.30.8.65] (172.30.8.65) by
- vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Fri, 23 Sep 2022 15:00:47 +0300
-Message-ID: <91c21f32-cc6f-2c2e-ebf7-d1d738090aef@paragon-software.com>
-Date:   Fri, 23 Sep 2022 15:00:46 +0300
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F78618B19;
+        Fri, 23 Sep 2022 05:01:45 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 2E9BD1884FE3;
+        Fri, 23 Sep 2022 12:01:44 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 1D698250064E;
+        Fri, 23 Sep 2022 12:01:44 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 0C3EC9EC0005; Fri, 23 Sep 2022 12:01:44 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To:     <ntfs3@lists.linux.dev>
-CC:     LKML <linux-kernel@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>
-From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-Subject: [PATCH 0/2] fs/ntfs3: Add option "nocase" and refactoring
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Date:   Fri, 23 Sep 2022 14:01:43 +0200
+From:   netdev@kapio-technology.com
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 net-next 6/6] selftests: forwarding: add test of
+ MAC-Auth Bypass to locked port tests
+In-Reply-To: <Yyq6BnUfctLeerqE@shredder>
+References: <YxNo/0+/Sbg9svid@shredder>
+ <5cee059b65f6f7671e099150f9da79c1@kapio-technology.com>
+ <Yxmgs7Du62V1zyjK@shredder>
+ <8dfc9b525f084fa5ad55019f4418a35e@kapio-technology.com>
+ <20220908112044.czjh3xkzb4r27ohq@skbuf>
+ <152c0ceadefbd742331c340bec2f50c0@kapio-technology.com>
+ <20220911001346.qno33l47i6nvgiwy@skbuf>
+ <15ee472a68beca4a151118179da5e663@kapio-technology.com>
+ <Yx73FOpN5uhPQhFl@shredder>
+ <086704ce7f323cc1b3cca78670b42095@kapio-technology.com>
+ <Yyq6BnUfctLeerqE@shredder>
+User-Agent: Gigahost Webmail
+Message-ID: <60d7733e1134dfeebf82306d44209f14@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.30.8.65]
-X-ClientProxiedBy: vobn-exch-01.paragon-software.com (172.30.72.13) To
- vdlg-exch-02.paragon-software.com (172.30.1.105)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[PATCH 0/2] fs/ntfs3: Add option "nocase" and refactoring
+On 2022-09-21 09:15, Ido Schimmel wrote:
 
-Added another option that may be useful to users.
-I've noticed in fslog.c some linebreaks, that can be fixed with
-renaming, so I've done it in second commit.
+> 	# Check blackhole entries can be replaced.
+> 	bridge fdb replace `mac_get $h2` dev $swp2 master static
+> 	bridge fdb get `mac_get $h2` br br0 | grep -q blackhole
+> 	check_fail $? "Blackhole entry found after replacement"
+> 
 
-Konstantin Komarov (2):
-   fs/ntfs3: Add option "nocase"
-   fs/ntfs3: Rename variables and add comment
-
-  fs/ntfs3/frecord.c |   1 +
-  fs/ntfs3/fslog.c   |  24 ++++----
-  fs/ntfs3/index.c   |   2 +-
-  fs/ntfs3/namei.c   | 139 +++++++++++++++++++++++++++++++++++++++++++++
-  fs/ntfs3/ntfs_fs.h |   4 ++
-  fs/ntfs3/super.c   |   6 ++
-  fs/ntfs3/upcase.c  |  12 ++++
-  7 files changed, 174 insertions(+), 14 deletions(-)
-
--- 
-2.37.0
-
-
+I am quite in doubt if the driver will be able to overwrite a blackhole 
+entry added by userspace as the replace action must be to delete and 
+then add the replacement afaics, but a NEWNEIGH event using 
+port_fdb_add() will not succeed with that using the ops I use now. 
+Otherwise it has be all with port_fb_add() with new lists keeping the 
+userspace added blackhole fdb entries.
