@@ -2,66 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7908F5E81EB
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 20:43:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 451E75E81F0
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Sep 2022 20:45:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230369AbiIWSnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Sep 2022 14:43:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41686 "EHLO
+        id S231517AbiIWSpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Sep 2022 14:45:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiIWSnf (ORCPT
+        with ESMTP id S229461AbiIWSo5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Sep 2022 14:43:35 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79FB3A99FA;
-        Fri, 23 Sep 2022 11:43:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=5XVJhTPnv/t+6fNWcKxu2IRDvTLKyajV1YnmX0URcS0=; b=rUF601aHsv9XJmACsc7heUMnrC
-        1uuGcdlc+2kBlVghvUiy48asWBYi+0u51WZOHivT6XVoLutNxPmtLmQ2v2woOqh5diAvyvqipM2VZ
-        TGG48BpdwVPuFlQqbQBqbKB09Dib/WCxFth29uzzRFK3HKijZMFisfA6Zf8v4NPJVyDA=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1obne8-0003LR-TQ; Fri, 23 Sep 2022 20:43:32 +0200
-Date:   Fri, 23 Sep 2022 20:43:32 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        vivien.didelot@gmail.com, f.fainelli@gmail.com, olteanv@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux@armlinux.org.uk,
-        Tristram.Ha@microchip.com, prasanna.vengateshan@microchip.com,
-        hkallweit1@gmail.com
-Subject: Re: [Patch net-next v4 4/6] net: dsa: microchip: move interrupt
- handling logic from lan937x to ksz_common
-Message-ID: <Yy3+VEbg7r1VRwMK@lunn.ch>
-References: <20220922071028.18012-1-arun.ramadoss@microchip.com>
- <20220922071028.18012-5-arun.ramadoss@microchip.com>
+        Fri, 23 Sep 2022 14:44:57 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F8C03ECD7;
+        Fri, 23 Sep 2022 11:44:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=KuiMXesKGfJiWErvIH2Wnk9SB3SRaAZkfT43/NCQskQ=; b=j1uLjhFi9cHkexHB5Z8HfvfvNw
+        xX30xzuhLNW3i6rlCd2wo1kevk3y5ERGIHhZgGobNi9MDbojeBXCtLn5AeVs7/f5Y+QrNrxTdcgey
+        98Cmvljqk/5BNqfszFZ0+8HJibmkGelUBz69qk09wF+oeUQrg4gbn6WZ32iE3xTQnh43rlg6gQWW7
+        OgGgEB9oJErIaQA1WZBgIRWWxyw6wVdsaqHAfTMupiLOx/Rja4K5yB739oDyAuslJHHytQFlHaPYk
+        Pycgy7J0iQJEl9uPFg+Ah6t8+2yQIQUAe6tb9N5foiH2CKWjJytkpnOPEtzgZUtHW9bjbIYEwPBpL
+        HA4AiB6Q==;
+Received: from [2601:1c2:d80:3110::a2e7]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1obnfP-005Nix-JD; Fri, 23 Sep 2022 18:44:51 +0000
+Message-ID: <a22ed923-754a-b757-e0ca-87b6d6e6e8d2@infradead.org>
+Date:   Fri, 23 Sep 2022 11:44:50 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220922071028.18012-5-arun.ramadoss@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 7/7] docs: put atomic*.txt and memory-barriers.txt into
+ the core-api book
+Content-Language: en-US
+To:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Kees Cook <keescook@chromium.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>
+References: <20220922204138.153146-1-corbet@lwn.net>
+ <20220922204138.153146-8-corbet@lwn.net>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220922204138.153146-8-corbet@lwn.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 12:40:26PM +0530, Arun Ramadoss wrote:
-> To support the phy link detection through interrupt method for ksz9477
-> based switch, the interrupt handling routines are moved from
-> lan937x_main.c to ksz_common.c. The only changes made are functions
-> names are prefixed with ksz_ instead of lan937x_.
+Hi--
+
+On 9/22/22 13:41, Jonathan Corbet wrote:
+> These files describe part of the core API, but have never been converted to
+> RST due to ... let's say local oppposition.  So, create a set of
+> special-purpose wrappers to ..include these files into a separate page so
+> that they can be a part of the htmldocs build.  Then link them into the
+> core-api manual and remove them from the "staging" dumping ground.
 > 
-> Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
+> Signed-off-by: Jonathan Corbet <corbet@lwn.net>
+> ---
+>  Documentation/core-api/index.rst              |  3 ++
+>  .../core-api/wrappers/atomic_bitops.rst       | 18 ++++++++
+>  Documentation/core-api/wrappers/atomic_t.rst  | 19 +++++++++
+>  .../core-api/wrappers/memory-barriers.rst     | 18 ++++++++
+>  Documentation/staging/index.rst               | 42 -------------------
+>  5 files changed, 58 insertions(+), 42 deletions(-)
+>  create mode 100644 Documentation/core-api/wrappers/atomic_bitops.rst
+>  create mode 100644 Documentation/core-api/wrappers/atomic_t.rst
+>  create mode 100644 Documentation/core-api/wrappers/memory-barriers.rst
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 
-    Andrew
+When I look at https://static.lwn.net/kerneldoc/,
+I want to move these 3 from "Other documentation":
+Atomic Types
+Atomic bitops
+Memory Barriers
+
+to "Internal API Manuals", then I saw this patch...
+Maybe I am misunderstanding. Is this patch supposed to move those 3 items
+from Other or not?
+
+thanks.
+-- 
+~Randy
